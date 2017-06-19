@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 public class ClusterDataSourceConfig {
 
     // 精确到 cluster 目录，以便跟其他数据源隔离
-    static final String PACKAGE = "net.fnsco.dao.cluster";
+    static final String PACKAGE = "net.fnsco.service.dao.cluster";
     static final String MAPPER_LOCATION = "classpath:mapper/cluster/*.xml";
 
     @Value("${cluster.datasource.url}")

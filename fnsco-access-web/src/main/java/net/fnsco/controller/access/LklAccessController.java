@@ -5,19 +5,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sun.tools.internal.xjc.generator.bean.ImplStructureStrategy.Result;
+
 import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.service.domain.User;
+
 @RestController
-@RequestMapping(value = "/app/lkl", method = RequestMethod.POST)
-public class LklAccessController extends BaseController{
+@RequestMapping(value = "/app/trade", method = RequestMethod.POST)
+public class LklAccessController extends BaseController {
+
     /**
-     * 根据用户名获取用户信息，包括从库的地址信息
+     * 保存拉卡拉交易数据到库
      *
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/saveTransaction", method = RequestMethod.GET)
-    public User findByName(@RequestParam(value = "userName", required = true) String userName) {
-        return null;
+    @RequestMapping(value = "/save", method = RequestMethod.GET)
+    public ResultDTO findByName(@RequestParam(value = "userName", required = true) String userName) {
+        return success();
     }
 }
