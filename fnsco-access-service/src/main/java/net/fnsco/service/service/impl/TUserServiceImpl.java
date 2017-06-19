@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.fnsco.service.impl;
+package net.fnsco.service.service.impl;
 
 import java.util.Random;
 
@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import net.fnsco.dao.master.TUserDao;
-import net.fnsco.domain.TUser;
-import net.fnsco.service.TUserService;
+import net.fnsco.service.dao.master.TUserDao;
+import net.fnsco.service.domain.TUser;
+import net.fnsco.service.service.TUserService;
 
 /**@desc 
  * @author tangliang

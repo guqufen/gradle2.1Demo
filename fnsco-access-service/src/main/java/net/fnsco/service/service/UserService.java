@@ -1,7 +1,7 @@
-package net.fnsco.service;
+package net.fnsco.service.service;
 
-import net.fnsco.domain.City;
-import net.fnsco.domain.User;
+import net.fnsco.service.domain.City;
+import net.fnsco.service.domain.User;
 
 /**
  * 用户业务接口层

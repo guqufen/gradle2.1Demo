@@ -1,9 +1,9 @@
 /**
  * 
  */
-package net.fnsco.service;
+package net.fnsco.service.service;
 
-import net.fnsco.domain.TUser;
+import net.fnsco.service.domain.TUser;
 
 /**@desc 
  * @author tangliang

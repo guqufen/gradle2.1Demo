@@ -1,4 +1,4 @@
-package net.fnsco.domain;
+package net.fnsco.service.domain;
 
 /**
  * 用户实体类

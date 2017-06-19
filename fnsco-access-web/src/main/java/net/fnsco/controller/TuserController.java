@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.fnsco.service.TUserService;
+import net.fnsco.service.service.TUserService;
 
 /**@desc 
  * @author tangliang

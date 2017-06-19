@@ -1,4 +1,4 @@
-package net.fnsco.config.ds;
+package net.fnsco.service.config.ds;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -16,27 +17,28 @@ import javax.sql.DataSource;
 
 @Configuration
 // 扫描 Mapper 接口并容器管理
-@MapperScan(basePackages = ClusterDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "clusterSqlSessionFactory")
-public class ClusterDataSourceConfig {
+@MapperScan(basePackages = MasterDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "masterSqlSessionFactory")
+public class MasterDataSourceConfig {
 
-    // 精确到 cluster 目录，以便跟其他数据源隔离
-    static final String PACKAGE = "net.fnsco.dao.cluster";
-    static final String MAPPER_LOCATION = "classpath:mapper/cluster/*.xml";
+    // 精确到 master 目录，以便跟其他数据源隔离
+    static final String PACKAGE = "net.fnsco.dao.master";
+    static final String MAPPER_LOCATION = "classpath:mapper/master/*.xml";
 
-    @Value("${cluster.datasource.url}")
+    @Value("${master.datasource.url}")
     private String url;
 
-    @Value("${cluster.datasource.username}")
+    @Value("${master.datasource.username}")
     private String user;
 
-    @Value("${cluster.datasource.password}")
+    @Value("${master.datasource.password}")
     private String password;
 
-    @Value("${cluster.datasource.driverClassName}")
+    @Value("${master.datasource.driverClassName}")
     private String driverClass;
 
-    @Bean(name = "clusterDataSource")
-    public DataSource clusterDataSource() {
+    @Bean(name = "masterDataSource")
+    @Primary
+    public DataSource masterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driverClass);
         dataSource.setUrl(url);
@@ -45,18 +47,20 @@ public class ClusterDataSourceConfig {
         return dataSource;
     }
 
-    @Bean(name = "clusterTransactionManager")
-    public DataSourceTransactionManager clusterTransactionManager() {
-        return new DataSourceTransactionManager(clusterDataSource());
+    @Bean(name = "masterTransactionManager")
+    @Primary
+    public DataSourceTransactionManager masterTransactionManager() {
+        return new DataSourceTransactionManager(masterDataSource());
     }
 
-    @Bean(name = "clusterSqlSessionFactory")
-    public SqlSessionFactory clusterSqlSessionFactory(@Qualifier("clusterDataSource") DataSource clusterDataSource)
+    @Bean(name = "masterSqlSessionFactory")
+    @Primary
+    public SqlSessionFactory masterSqlSessionFactory(@Qualifier("masterDataSource") DataSource masterDataSource)
             throws Exception {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-        sessionFactory.setDataSource(clusterDataSource);
+        sessionFactory.setDataSource(masterDataSource);
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()
-                .getResources(ClusterDataSourceConfig.MAPPER_LOCATION));
+                .getResources(MasterDataSourceConfig.MAPPER_LOCATION));
         return sessionFactory.getObject();
     }
 }

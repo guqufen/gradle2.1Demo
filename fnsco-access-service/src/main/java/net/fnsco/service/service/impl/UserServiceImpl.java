@@ -1,13 +1,13 @@
-package net.fnsco.service.impl;
+package net.fnsco.service.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.fnsco.dao.cluster.CityDao;
-import net.fnsco.dao.master.UserDao;
-import net.fnsco.domain.City;
-import net.fnsco.domain.User;
-import net.fnsco.service.UserService;
+import net.fnsco.service.dao.cluster.CityDao;
+import net.fnsco.service.dao.master.UserDao;
+import net.fnsco.service.domain.City;
+import net.fnsco.service.domain.User;
+import net.fnsco.service.service.UserService;
 
 /**
  * 用户业务实现层

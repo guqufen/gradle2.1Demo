@@ -1,9 +1,9 @@
 /**
  * 
  */
-package net.fnsco.dao.master;
+package net.fnsco.service.dao.master;
 
-import net.fnsco.domain.TUser;
+import net.fnsco.service.domain.TUser;
 
 /**@desc 
  * @author tangliang

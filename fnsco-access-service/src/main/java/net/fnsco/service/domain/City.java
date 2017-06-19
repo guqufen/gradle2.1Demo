@@ -1,4 +1,4 @@
-package net.fnsco.domain;
+package net.fnsco.service.domain;
 
 import java.io.Serializable;
 

@@ -1,9 +1,9 @@
-package net.fnsco.dao.cluster;
+package net.fnsco.service.dao.cluster;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import net.fnsco.domain.City;
+import net.fnsco.service.domain.City;
 
 /**
  * 城市 DAO 接口类

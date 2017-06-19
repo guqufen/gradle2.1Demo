@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.fnsco.domain.City;
-import net.fnsco.domain.User;
-import net.fnsco.service.UserService;
+import net.fnsco.service.domain.City;
+import net.fnsco.service.domain.User;
+import net.fnsco.service.service.UserService;
 
 /**
  * 用户控制层

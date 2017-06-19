@@ -1,9 +1,9 @@
-package net.fnsco.dao.master;
+package net.fnsco.service.dao.master;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import net.fnsco.domain.User;
+import net.fnsco.service.domain.User;
 
 /**
  * 用户 DAO 接口类
