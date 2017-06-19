@@ -5,15 +5,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sun.tools.internal.xjc.generator.bean.ImplStructureStrategy.Result;
-
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.service.domain.User;
+import net.fnsco.core.base.ResultPageDTO;
 
 @RestController
 @RequestMapping(value = "/app/trade", method = RequestMethod.POST)
-public class LklAccessController extends BaseController {
+public class TradeDataController extends BaseController {
 
     /**
      * 保存拉卡拉交易数据到库
@@ -24,5 +22,18 @@ public class LklAccessController extends BaseController {
     @RequestMapping(value = "/save", method = RequestMethod.GET)
     public ResultDTO findByName(@RequestParam(value = "userName", required = true) String userName) {
         return success();
+    }
+    
+    /**
+     * 分布查询交易流水信息
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/query", method = RequestMethod.GET)
+    public ResultDTO queryTradeDate(@RequestParam(value = "userName", required = true) String userName) {
+        ResultPageDTO resultPage = new ResultPageDTO();
+        resultPage.setTotal(90);
+        return success(resultPage);
     }
 }
