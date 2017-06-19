@@ -14,7 +14,7 @@
 		<!-- web打包用 -->
 		<module>fnsco-web</module>
 
-		<!-- 数据接入service项目 22-->
+		<!-- 数据接入service项目 33-->
 		<module>fnsco-access-service</module>
 		<!-- 数据接入web项目-->
 		<module>fnsco-access-web</module>
