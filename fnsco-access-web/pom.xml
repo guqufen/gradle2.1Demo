@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.fnsco</groupId>
-	<artifactId>fnsco-web</artifactId>
+	<artifactId>fnsco-access-web</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
-	<name>fnsco-web</name>
+	<name>fnsco-access</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
@@ -33,22 +33,23 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<!-- <dependency> <groupId>net.fnsco</groupId> <artifactId>fnsco-freamwork</artifactId> 
-			<version>0.0.1-SNAPSHOT</version> </dependency> <dependency> <groupId>net.fnsco</groupId> 
-			<artifactId>fnsco-core</artifactId> <version>0.0.1-SNAPSHOT</version> </dependency> -->
-		<dependency>
 			<groupId>net.fnsco</groupId>
 			<artifactId>fnsco-access-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		 
+ 
+        <!-- Junit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+        
 		<dependency>
-			<groupId>net.fnsco</groupId>
-			<artifactId>fnsco-access-web</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

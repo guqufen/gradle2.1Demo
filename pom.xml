@@ -8,15 +8,16 @@
 	<name>fnsco-big-data</name>
 	<modules>
 		<!-- 框架代码 -->
-		<module>fnsco-freamwork</module>
+		<module>fnsco-framework</module>
 		<!-- 核心代码 -->
 		<module>fnsco-core</module>
 		<!-- web打包用 -->
 		<module>fnsco-web</module>
 
-		<!-- 数据接入项目 -->
-		<module>fnsco-access</module>
-
+		<!-- 数据接入service项目 -->
+		<module>fnsco-access-service</module>
+		<!-- 数据接入web项目 -->
+		<module>fnsco-access-web</module>
 	</modules>
 
 </project>

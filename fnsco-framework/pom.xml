@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.fnsco</groupId>
-	<artifactId>fnsco-access</artifactId>
+	<artifactId>fnsco-framework</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>fnsco-access</name>
+	<name>fnsco-framework</name>
 	<description>Demo project for Spring Boot</description>
 
 	<parent>
