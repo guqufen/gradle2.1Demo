@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.dao.cluster.TUserDao">
+	<resultMap id="BaseResultMap" type="net.fnsco.domain.TUser">
+		<result column="id" property="id" javaType="Integer" jdbcType="INTEGER"/>
+		<result column="name" property="name" javaType="String" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<parameterMap id="TUser" type="net.fnsco.domain.TUser"/>
+
+	<sql id="Base_Column_List">
+		id, name
+	</sql>
+
+	<select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_user
+		where id = #{id}
+	</select>
+	
+	<insert id="save" parameterType="net.fnsco.domain.TUser">
+	  insert into t_user values(
+	    #{id},#{name}
+	  )
+	</insert>
+</mapper>
