@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.fnsco</groupId>
+	<artifactId>fnsco-pom-parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>fnsco-big-data</name>
+	<modules>
+		<!-- 框架代码 -->
+		<module>fnsco-freamwork</module>
+		<!-- 核心代码 -->
+		<module>fnsco-core</module>
+		<!-- web打包用 -->
+		<module>fnsco-web</module>
+
+		<!-- 数据接入项目 -->
+		<module>fnsco-access</module>
+
+	</modules>
+
+</project>
