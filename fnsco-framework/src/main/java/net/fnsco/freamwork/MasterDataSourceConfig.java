@@ -15,9 +15,9 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import com.alibaba.druid.pool.DruidDataSource;
 
-@Configuration
-//扫描 Mapper 接口并容器管理
-@MapperScan(basePackages = MasterDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "masterSqlSessionFactory")
+//@Configuration
+////扫描 Mapper 接口并容器管理
+//@MapperScan(basePackages = MasterDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "masterSqlSessionFactory")
 public class MasterDataSourceConfig {
 
  // 精确到 master 目录，以便跟其他数据源隔离
