@@ -37,9 +37,16 @@
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<!-- <dependency> <groupId>net.fnsco</groupId> <artifactId>fnsco-freamwork</artifactId> 
-			<version>0.0.1-SNAPSHOT</version> </dependency> <dependency> <groupId>net.fnsco</groupId> 
-			<artifactId>fnsco-core</artifactId> <version>0.0.1-SNAPSHOT</version> </dependency> -->
+		<dependency>
+			<groupId>net.fnsco</groupId>
+			<artifactId>fnsco-framework</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>net.fnsco</groupId>
+			<artifactId>fnsco-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>net.fnsco</groupId>
 			<artifactId>fnsco-access-service</artifactId>
