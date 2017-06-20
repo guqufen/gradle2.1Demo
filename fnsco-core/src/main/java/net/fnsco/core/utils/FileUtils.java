@@ -10,7 +10,8 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.assertj.core.util.Strings;
+import com.google.common.base.Strings;
+ 
 
 public class FileUtils {
 
