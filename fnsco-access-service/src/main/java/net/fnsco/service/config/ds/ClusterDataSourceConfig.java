@@ -1,6 +1,7 @@
 package net.fnsco.service.config.ds;
 
-import com.alibaba.druid.pool.DruidDataSource;
+import javax.sql.DataSource;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -8,11 +9,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
-import javax.sql.DataSource;
+import com.alibaba.druid.pool.DruidDataSource;
 
 @Configuration
 // 扫描 Mapper 接口并容器管理
@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 public class ClusterDataSourceConfig {
 
     // 精确到 cluster 目录，以便跟其他数据源隔离
-    static final String PACKAGE = "net.fnsco.dao.cluster";
+    static final String PACKAGE = "net.fnsco.service.dao.cluster";
     static final String MAPPER_LOCATION = "classpath:mapper/cluster/*.xml";
 
     @Value("${cluster.datasource.url}")
