@@ -57,6 +57,12 @@
 			<artifactId>fnsco-access-web</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<!-- 不重启修改类文件 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>springloaded</artifactId>
+			<version>1.2.6.RELEASE</version>
+		</dependency>
 	</dependencies>
 
 	<build>
