@@ -3,17 +3,13 @@
  */
 package net.fnsco.web;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.Constants;
@@ -56,13 +52,4 @@ public class AdminUserLoginAction extends BaseController{
 		return "forward:/";
 	}
 	
-	@RequestMapping("test")
-	@ResponseBody
-	public Map<String,Object> getsd(HttpServletRequest request){
-		Object obj =getSessionUser();
-		Object hj = getCookieUser();
-		System.out.println(hj);
-		System.out.println(obj);
-		return null;
-	}
 }

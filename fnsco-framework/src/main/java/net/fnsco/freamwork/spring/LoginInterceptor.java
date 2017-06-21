@@ -9,9 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.google.common.base.Strings;
-import com.sun.tools.internal.xjc.generator.bean.ImplStructureStrategy.Result;
 
 /**
  * 检查登录情况
