@@ -1,81 +1,217 @@
-﻿<!DOCTYPE HTML>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="renderer" content="webkit|ie-comp|ie-stand">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-<!--[if lt IE 9]>
-<script type="text/javascript" src="lib/html5shiv.js"></script>
-<script type="text/javascript" src="lib/respond.min.js"></script>
-<![endif]-->
-<link href="static/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
-<link href="static/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css" />
-<link href="static/h-ui.admin/css/style.css" rel="stylesheet" type="text/css" />
-<link href="lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
-<!--[if IE 6]>
-<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
-<script>DD_belatedPNG.fix('*');</script>
-<![endif]-->
-<title>后台登录 - H-ui.admin v3.0</title>
-<meta name="keywords" content="H-ui.admin v3.0,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
-<meta name="description" content="H-ui.admin v3.0，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+	<meta charset="UTF-8">
+	<meta name="keywords" content="法奈昇大数据平台">
+    <meta name="description" content="法奈昇大数据平台">
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/><![endif]-->
+
+    <link rel="shortcut icon" href="favicon.ico">
+	<title>法奈昇大数据平台系统登录页</title>
+	<style>
+html, body {
+	width: 100%;
+	height: 100%;
+	min-width: 1024px;
+}
+body {
+	overflow: hidden;
+	background: #656464;
+	font-family: "微软雅黑"; */
+    font-family: "HanHei SC","微软雅黑", "PingHei", "PingFang SC", "STHeitiSC-Light", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+.hide {
+	display: none;
+}
+.background-panel {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+    overflow: hidden;
+    top: 0;
+}
+
+.background-panel img {
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+}
+
+.fc-login-panel {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: table;
+	text-align: center;
+	z-index: 2;
+}
+
+.fc-logon-main {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	width: 565px;
+}
+
+.login-content {
+	width: 565px;
+	margin: auto;
+	background: #FFF;
+	position: relative;
+	padding-bottom: 60px;
+}
+
+.login-header {
+	height: 120px;
+	border-bottom: 2px solid #f5f5f5;
+	font-size: 24px;
+	color: #666;
+	padding-top: 25px;
+}
+
+.login-header .logo {
+	height: 47px;
+}
+
+.login-body .nav li {
+	float: left;
+	width: 193px;
+	height: 70px;
+	line-height: 70px;
+	margin-bottom: -2px;
+	color: #333;
+}
+
+.login-body {
+	width: 386px;
+	margin: 40px auto 0 auto;
+}
+.login-body input{
+	border: none;
+	float: right;
+	height: 20px;
+	width: 300px;
+	outline:none;
+}
+.username-input,.password-input{
+	height: 20px;
+	padding: 15px;
+	margin: 20px 0;
+	border:1px solid #ccc;
+}
+.left{
+	float: left;
+}
+.icon{
+	height: 20px;
+	padding-right: 10px;
+	margin-right: 20px;
+	border-right: 1px solid #ccc;
+}
+.login-btn{
+	height: 50px;line-height: 50px;background: #2f4050;color: #fff;cursor: pointer;border: none;width: 100%;
+}
+</style>
 </head>
 <body>
-<input type="hidden" id="TenantId" name="TenantId" value="" />
-<div class="header"></div>
-<div class="loginWraper">
-  <div id="loginform" class="loginBox">
-    <form class="form form-horizontal" action="/back_login/doLogin" method="post">
-      <div class="row cl">
-        <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
-        <div class="formControls col-xs-8">
-          <input id="username" name=username type="text" placeholder="账户" class="input-text size-L" required="required">
-        </div>
-      </div>
-      <div class="row cl">
-        <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
-        <div class="formControls col-xs-8">
-          <input id="password" name="password" type="password" placeholder="密码" class="input-text size-L" required="required">
-        </div>
-      </div>
-<!--       <div class="row cl"> -->
-<!--         <div class="formControls col-xs-8 col-xs-offset-3"> -->
-<!--           <input class="input-text size-L" type="text" placeholder="验证码" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="验证码:" style="width:150px;"> -->
-<!--           <img src=""> <a id="kanbuq" href="javascript:;">看不清，换一张</a> </div> -->
-<!--       </div> -->
-<!--       <div class="row cl"> -->
-<!--         <div class="formControls col-xs-8 col-xs-offset-3"> -->
-<!--           <label for="online"> -->
-<!--             <input type="checkbox" name="online" id="online" value=""> -->
-<!--             使我保持登录状态</label> -->
-<!--         </div> -->
-<!--       </div> -->
-      <div class="row cl">
-        <div class="formControls col-xs-8 col-xs-offset-3">
-          <input name="" type="submit" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
-          <input name="" type="reset" class="btn btn-default radius size-L" value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-<div class="footer">Copyright 你的公司名称 by H-ui.admin v3.0</div>
-<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
-<script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
-<!--此乃百度统计代码，请自行删除-->
+	<div class="background-panel"></div>
+	<div class="fc-login-panel">
+		<div class="fc-logon-main">
+			<div class="login-content" style="">
+				<div class="login-header">
+					<div class="logo">	
+						<img src="login/loginLogo.png">
+					</div>
+					<p>法奈昇大数据平台系统</p>	
+				</div>
+				<div class="login-body">					
+					<form id="login_info_form" name="login" method="post">
+						<div class="login-input-panel">
+							<div class="username-input">
+								<div class="icon left">
+									<img src="login/6-25-19.png">
+								</div>
+								<input type="text" id="account" name="account" value="" placeholder="请输入账号">
+							</div>
+							<div class="password-input">
+								<div class="icon left">
+									<img src="login/6-25-14.png">
+								</div>
+								<input type="password" id="password" name="password" value="" placeholder="请输入密码">
+							</div>
+							<button type="submit" class="login-btn">登录</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>	
+</body>
+<script type="text/javascript" src="js/bootstrap/jquery.min.js"></script>
 <script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?080836300300be57b7f34f4b3e97d911";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
+	(function() {
+    var imgs = [ 'login/bg_2.png','login/bg_3.png','login/bg_1.jpg'];
+    var $background = $('.background-panel'), i = 0, img = new Image(), zIndex = 0, $imgs = [], speed = 5000, fadeTo = 800;
+    function showBackground() {
+        if (!$imgs[i]) {
+            img.onload = function() {
+                $imgs.push($('<img class="" src="' + this.src + '" id="img_' + i + '">'))
+                $background.append($imgs[i])
+                setBackgroundImageZIndex();
+                imgAuto();
+            }
+            img.src = imgs[i];
+        } else {
+            setBackgroundImageZIndex();
+        }
+    }
+    function setBackgroundImageZIndex() {
+        $imgs[i].css({
+            'zIndex' : zIndex++
+        }).hide().fadeTo(fadeTo, 1);
+        ++i;
+        if (i == imgs.length) {
+            i = 0;
+        }
+        setTimeout(function() {
+            showBackground();
+        }, speed)
+    }
+    function imgAuto() {
+        var img = $background.find('img').eq(0);
+        if($('#background-style').length==0){
+            $('body').append('<style id="background-style"></style>')
+        }
+        if (img.width() / img.height() > $background.width() / $background.height()) {
+            $('#background-style').html('.background-panel img {height:100%;width:auto;}')
+        } else {
+            $('#background-style').html('.background-panel img {width:100%;height:auto;}')
+        }
+    }
+    showBackground();
+    $(window).resize(function() {
+        imgAuto();
+    });
 })();
 </script>
-<script type="text/javascript">
-
+<script>
+	var code;
+	function ajax(){
+		$.ajax({
+	        url:url,
+	        type:type,
+	        data:data,
+	        success:function(msg){
+	        	$(".workOrder_num").html(msg);
+	        }
+	    });
+	}
 </script>
-</body>
 </html>
