@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.service.dao.master.MerchantFileInfoDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.api.dto.MerchantFileInfoDTO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="innerCode" property="innerCode" jdbcType="VARCHAR" />
+    <result column="fileName" property="fileName" jdbcType="VARCHAR" />
+    <result column="fileType" property="fileType" jdbcType="VARCHAR" />
+    <result column="saveURL" property="saveURL" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    id, innerCode, fileName, fileType, saveURL, createTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_file
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from m_merchant_file
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="net.fnsco.api.dto.MerchantFileInfoDTO" >
+    insert into m_merchant_file (id, innerCode, fileName, 
+      fileType, saveURL, createTime
+      )
+    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+      #{fileType,jdbcType=VARCHAR}, #{saveURL,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.api.dto.MerchantFileInfoDTO" >
+    insert into m_merchant_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="innerCode != null" >
+        innerCode,
+      </if>
+      <if test="fileName != null" >
+        fileName,
+      </if>
+      <if test="fileType != null" >
+        fileType,
+      </if>
+      <if test="saveURL != null" >
+        saveURL,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="innerCode != null" >
+        #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null" >
+        #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="saveURL != null" >
+        #{saveURL,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.api.dto.MerchantFileInfoDTO" >
+    update m_merchant_file
+    <set >
+      <if test="innerCode != null" >
+        innerCode = #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        fileName = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null" >
+        fileType = #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="saveURL != null" >
+        saveURL = #{saveURL,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.api.dto.MerchantFileInfoDTO" >
+    update m_merchant_file
+    set innerCode = #{innerCode,jdbcType=VARCHAR},
+      fileName = #{fileName,jdbcType=VARCHAR},
+      fileType = #{fileType,jdbcType=VARCHAR},
+      saveURL = #{saveURL,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

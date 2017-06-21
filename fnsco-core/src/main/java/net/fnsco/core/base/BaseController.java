@@ -169,7 +169,24 @@ public class BaseController {
         }
         return map;
     }
-
+    
+    /**
+     * 获取cookie中的用户
+     * @return
+     */
+    public Object getCookieUser() {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                String name = cookie.getName();
+                if (!Strings.isNullOrEmpty(name) && name.equalsIgnoreCase(Constants.COOKIE_USER_KEY)) {
+                   return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+    
     public Object getSessionUser() {
         HttpSession session = request.getSession(false);
         if (null == session) {
