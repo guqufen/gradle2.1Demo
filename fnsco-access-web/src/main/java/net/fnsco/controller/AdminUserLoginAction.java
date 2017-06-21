@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.fnsco.web;
+package net.fnsco.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

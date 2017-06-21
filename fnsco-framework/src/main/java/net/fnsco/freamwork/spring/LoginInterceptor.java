@@ -27,7 +27,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestUrl = request.getRequestURL().toString();
         // 从配置文件中获取浙付通接口模块,不需要被拦截
-        String appModules = this.env.getProperty("app.modules");
+        String appModules = "";//SpringUtils.getProperty("app.modules");
         if (!Strings.isNullOrEmpty(appModules)) {
             String[] modules = StringUtils.split(appModules, ",");
             for (String module : modules) {
