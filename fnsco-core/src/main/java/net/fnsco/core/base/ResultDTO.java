@@ -21,43 +21,43 @@ public class ResultDTO<T extends Object> extends DTO {
         return result;
     }
     
-    public ResultDTO setError() {
+    public ResultDTO<T> setError() {
         return setError("");
     }
 
-    public ResultDTO error() {
+    public ResultDTO<T> error() {
         return setError("");
     }
 
-    public ResultDTO setError(int resultCode) {
+    public ResultDTO<T> setError(int resultCode) {
         return setError(String.valueOf(resultCode), "");
     }
 
-    public ResultDTO setError(String resultMessage) {
+    public ResultDTO<T> setError(String resultMessage) {
         return setError(String.valueOf(ERROR_CODE), resultMessage);
     }
 
-    public ResultDTO setError(int resultCode, String resultMessage) {
+    public ResultDTO<T> setError(int resultCode, String resultMessage) {
         return setError(String.valueOf(resultCode), resultMessage);
     }
 
-    public ResultDTO setError(String resultCode, String resultMessage) {
+    public ResultDTO<T> setError(String resultCode, String resultMessage) {
         setSuccess(false);
         setCode(resultCode);
         setMessage(resultMessage);
         return this;
     }
 
-    public ResultDTO success() {
+    public ResultDTO<T> success() {
         return this.setSuccess(true, "");
     }
 
 
-    public ResultDTO setSuccess(String message) {
+    public ResultDTO<T> setSuccess(String message) {
         return setSuccess(true, message);
     }
 
-    public ResultDTO setSuccess(boolean result, String message) {
+    public ResultDTO<T> setSuccess(boolean result, String message) {
         setSuccess(result);
         setMessage(message);
         return this;
