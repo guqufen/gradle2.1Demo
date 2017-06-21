@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.fnsco.web;
+package net.fnsco.controller;
 
 import java.util.Map;
 

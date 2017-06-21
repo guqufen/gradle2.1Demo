@@ -4,18 +4,28 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 
+import net.fnsco.config.TimerConfig;
+import net.fnsco.config.WebConfig;
 import net.fnsco.freamwork.log.filter.WebAccessLogFilter;
 
 @SpringBootApplication
+@ComponentScan("net.fnsco")
+@Import({ TimerConfig.class, WebConfig.class })
 public class TomcatApplication extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(TomcatApplication.class);
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(TomcatApplication.class, args);
     }
 
     @Bean
@@ -29,8 +39,11 @@ public class TomcatApplication extends SpringBootServletInitializer {
         return registration;
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(TomcatApplication.class, args);
-    }
+//    @Bean
+//    public ServletListenerRegistrationBean servletListenerRegistrationBean() {
+//        ServletListenerRegistrationBean servletListenerRegistrationBean = new ServletListenerRegistrationBean();
+//        servletListenerRegistrationBean.setListener(new IndexListener());
+//        return servletListenerRegistrationBean;
+//    }
 
 }

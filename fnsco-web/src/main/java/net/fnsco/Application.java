@@ -3,10 +3,13 @@ package net.fnsco;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 
+import net.fnsco.config.WebConfig;
 import net.fnsco.freamwork.log.filter.WebAccessLogFilter;
 
 //@SpringBootApplication
+//@Import({ WebConfig.class })
 public class Application {
     @Bean
     public FilterRegistrationBean registFilter() {
