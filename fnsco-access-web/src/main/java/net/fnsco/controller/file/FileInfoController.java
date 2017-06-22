@@ -22,11 +22,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONArray;
 
-import net.fnsco.api.dto.MerchantFileInfoDTO;
 import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.service.domain.AdminUser;
+import net.fnsco.service.domain.MerchantFile;
+import net.fnsco.service.domain.SysUser;
 /**
  * @desc 文件上传控制器
  * @author tangliang
@@ -74,7 +74,7 @@ public class FileInfoController extends BaseController{
 			// 上传文件原名
 			MultipartFile file = entity.getValue();
 
-			MerchantFileInfoDTO fileInfo = new MerchantFileInfoDTO();
+			MerchantFile fileInfo = new MerchantFile();
 			String innerCode = req.getParameter("innerCode");
 			String fileType = req.getParameter("fileTypeKey");
 			String fileName = file.getOriginalFilename();
@@ -122,7 +122,7 @@ public class FileInfoController extends BaseController{
 
 					if(!isApp){
 						newUrl = StringUtils.replace(filepath, line, "^");
-						fileInfo.setSaveURL(newUrl);
+//						fileInfo.setSaveURL(newUrl);
 					}else{
 
 						newUrl = filepath;
@@ -131,7 +131,7 @@ public class FileInfoController extends BaseController{
 							newUrl = StringUtils.replace(filepath, line, "/");
 						}
 
-						fileInfo.setSaveURL(newUrl);
+//						fileInfo.setSaveURL(newUrl);
 					}
 
 					fileInfo.setInnerCode(innerCode);
@@ -139,7 +139,7 @@ public class FileInfoController extends BaseController{
 					fileInfo.setFileType(fileType);
 					fileInfo.setFileName(fileName);
 					fileInfo.setCreateTime(new Date());
-					AdminUser loginUser = (AdminUser)getSessionUser();
+					SysUser loginUser = (SysUser)getSessionUser();
 					ResultDTO<Integer> result = merchantInfoService.doAddToDB(fileInfo,1);
 
 					if (result.isSuccess()) {

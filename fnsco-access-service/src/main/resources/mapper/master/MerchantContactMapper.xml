@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="net.fnsco.service.dao.master.MerchantContactDao" >
   <resultMap id="BaseResultMap" type="net.fnsco.service.domain.MerchantContact" >
-    <result column="id" property="id" jdbcType="INTEGER" />
-    <result column="innerCode" property="innercode" jdbcType="VARCHAR" />
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
@@ -13,14 +13,14 @@
   
   
   <sql id="Base_Column_List" >
-    id, innerCode, name, mobile, email, telphone, jobs
+    id, inner_code, name, mobile, email, telphone, jobs
   </sql>
   
   <insert id="insert" parameterType="net.fnsco.service.domain.MerchantContact" >
-    insert into m_merchant_contact (id, innerCode, name, 
+    insert into m_merchant_contact (id, inner_code, name, 
       mobile, email, telphone, 
       jobs)
-    values (#{id,jdbcType=INTEGER}, #{innercode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{telphone,jdbcType=VARCHAR}, 
       #{jobs,jdbcType=VARCHAR})
   </insert>
@@ -30,8 +30,8 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="innercode != null" >
-        innerCode,
+      <if test="innerCode != null" >
+        inner_code,
       </if>
       <if test="name != null" >
         name,
@@ -53,8 +53,8 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="innercode != null" >
-        #{innercode,jdbcType=VARCHAR},
+      <if test="innerCode != null" >
+        #{innerCode,jdbcType=VARCHAR},
       </if>
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},

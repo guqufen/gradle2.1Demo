@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.service.dao.master.MerchantBankDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.MerchantBank" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="account_type" property="accountType" jdbcType="VARCHAR" />
+    <result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="account_card_id" property="accountCardId" jdbcType="VARCHAR" />
+    <result column="sub_bank_name" property="subBankName" jdbcType="VARCHAR" />
+    <result column="open_bank_prince" property="openBankPrince" jdbcType="VARCHAR" />
+    <result column="open_bank" property="openBank" jdbcType="VARCHAR" />
+    <result column="open_bank_city" property="openBankCity" jdbcType="VARCHAR" />
+    <result column="open_bank_num" property="openBankNum" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, account_type, account_no, account_name, account_card_id, sub_bank_name, open_bank_prince, 
+    open_bank, open_bank_city, open_bank_num
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_bank
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from m_merchant_bank
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="net.fnsco.service.domain.MerchantBank" >
+    insert into m_merchant_bank (id, account_type, account_no, 
+      account_name, account_card_id, sub_bank_name, 
+      open_bank_prince, open_bank, open_bank_city, 
+      open_bank_num)
+    values (#{id,jdbcType=INTEGER}, #{accountType,jdbcType=VARCHAR}, #{accountNo,jdbcType=VARCHAR}, 
+      #{accountName,jdbcType=VARCHAR}, #{accountCardId,jdbcType=VARCHAR}, #{subBankName,jdbcType=VARCHAR}, 
+      #{openBankPrince,jdbcType=VARCHAR}, #{openBank,jdbcType=VARCHAR}, #{openBankCity,jdbcType=VARCHAR}, 
+      #{openBankNum,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.service.domain.MerchantBank" >
+    insert into m_merchant_bank
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="accountType != null" >
+        account_type,
+      </if>
+      <if test="accountNo != null" >
+        account_no,
+      </if>
+      <if test="accountName != null" >
+        account_name,
+      </if>
+      <if test="accountCardId != null" >
+        account_card_id,
+      </if>
+      <if test="subBankName != null" >
+        sub_bank_name,
+      </if>
+      <if test="openBankPrince != null" >
+        open_bank_prince,
+      </if>
+      <if test="openBank != null" >
+        open_bank,
+      </if>
+      <if test="openBankCity != null" >
+        open_bank_city,
+      </if>
+      <if test="openBankNum != null" >
+        open_bank_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="accountType != null" >
+        #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNo != null" >
+        #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountCardId != null" >
+        #{accountCardId,jdbcType=VARCHAR},
+      </if>
+      <if test="subBankName != null" >
+        #{subBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="openBankPrince != null" >
+        #{openBankPrince,jdbcType=VARCHAR},
+      </if>
+      <if test="openBank != null" >
+        #{openBank,jdbcType=VARCHAR},
+      </if>
+      <if test="openBankCity != null" >
+        #{openBankCity,jdbcType=VARCHAR},
+      </if>
+      <if test="openBankNum != null" >
+        #{openBankNum,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.MerchantBank" >
+    update m_merchant_bank
+    <set >
+      <if test="accountType != null" >
+        account_type = #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNo != null" >
+        account_no = #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountCardId != null" >
+        account_card_id = #{accountCardId,jdbcType=VARCHAR},
+      </if>
+      <if test="subBankName != null" >
+        sub_bank_name = #{subBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="openBankPrince != null" >
+        open_bank_prince = #{openBankPrince,jdbcType=VARCHAR},
+      </if>
+      <if test="openBank != null" >
+        open_bank = #{openBank,jdbcType=VARCHAR},
+      </if>
+      <if test="openBankCity != null" >
+        open_bank_city = #{openBankCity,jdbcType=VARCHAR},
+      </if>
+      <if test="openBankNum != null" >
+        open_bank_num = #{openBankNum,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.MerchantBank" >
+    update m_merchant_bank
+    set account_type = #{accountType,jdbcType=VARCHAR},
+      account_no = #{accountNo,jdbcType=VARCHAR},
+      account_name = #{accountName,jdbcType=VARCHAR},
+      account_card_id = #{accountCardId,jdbcType=VARCHAR},
+      sub_bank_name = #{subBankName,jdbcType=VARCHAR},
+      open_bank_prince = #{openBankPrince,jdbcType=VARCHAR},
+      open_bank = #{openBank,jdbcType=VARCHAR},
+      open_bank_city = #{openBankCity,jdbcType=VARCHAR},
+      open_bank_num = #{openBankNum,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

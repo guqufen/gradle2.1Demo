@@ -1,6 +1,6 @@
 package net.fnsco.service.modules.merchant;
 
-import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.api.merchant.MerchantCoreService;
+import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.domain.MerchantCore;
 
@@ -35,10 +37,35 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	public ResultDTO<Integer> doAdd(MerchantCore merchantInfo, int loginUserId) {
 		logger.info("开始添加MerchantCoreService.add,merchantInfo=" + merchantInfo.toString());
 		ResultDTO<Integer> result = new ResultDTO<>();
-		merchantInfo.setLastupdatetime(new Date());
+//		merchantInfo.setLastupdatetime(new Date());
 		// 判断用户名/手机号是否重复
 		merchantCoreDao.insertSelective(merchantInfo);
 		return result;
 	}
-
+	/**
+	 * @todo 条件分页查询
+	 * @author tangliang
+	 * @date 2017年6月22日 上午11:50:55
+	 * @see net.fnsco.api.merchant.MerchantCoreService#queryMerchantCore(net.fnsco.service.domain.MerchantCore)
+	 */
+	@Override
+	public ResultPageDTO<MerchantCore> queryMerchantCore(MerchantCore merchantCore,int currentPageNum,int perPageSize) {
+		// TODO Auto-generated method stub
+		PageDTO<MerchantCore> pages = new PageDTO<>();
+		pages.setCondition(merchantCore);
+		pages.setCurrentPageNum(currentPageNum);
+		pages.setPerPageSize(perPageSize);
+		
+		List<MerchantCore> datas = merchantCoreDao.queryPageList(pages);
+		int totalNum = merchantCoreDao.queryTotalByCondition(merchantCore);
+		ResultPageDTO<MerchantCore> result = new ResultPageDTO<MerchantCore>();
+		result.setList(datas);
+		result.setTotal(totalNum);
+		result.setCurrentPage(currentPageNum);
+		
+		return result;
+	}
+	
+	
+	
 }
