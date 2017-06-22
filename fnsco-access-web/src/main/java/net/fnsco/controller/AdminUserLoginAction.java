@@ -37,7 +37,7 @@ public class AdminUserLoginAction extends BaseController{
 	public String doLogin(HttpServletRequest req,HttpServletResponse res)
 	{
 		ResultDTO<AdminUser> result = new ResultDTO<>();
-		String username = req.getParameter("username");
+		String username = req.getParameter("account");
 		String password = req.getParameter("password");
 		if (StringUtils.isEmpty(password)) {
             result.setError("输入密码错误!");
@@ -50,6 +50,17 @@ public class AdminUserLoginAction extends BaseController{
 			CookieUtils.addCookie(res, Constants.COOKIE_USER_KEY, result.getData().toString());
 		}
 		return "forward:/";
+	}
+	
+	/**
+	 * 退出登录
+	 * @return
+	 */
+	@RequestMapping("/logout")
+	public String logOut(){
+		removeSessionUser();
+		removeCookieUser();
+		return "redirect:/";
 	}
 	
 }

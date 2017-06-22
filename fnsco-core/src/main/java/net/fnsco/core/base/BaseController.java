@@ -199,4 +199,32 @@ public class BaseController {
         HttpSession session = request.getSession();
         session.setAttribute(USER_KEY, userDO);
     }
+    /**
+     * 删除session中保存的用户信息
+     */
+    public void removeSessionUser(){
+    	HttpSession session = request.getSession(false);
+        if (null == session) {
+            return;
+        }
+        session.removeAttribute(USER_KEY);
+    }
+    /**
+     * 删除cookie中保存的用户信息
+     */
+    public void removeCookieUser(){
+    	Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                String name = cookie.getName();
+                if (!Strings.isNullOrEmpty(name) && name.equalsIgnoreCase(Constants.COOKIE_USER_KEY)) {
+                  cookie.setValue(null);
+                  cookie.setMaxAge(0);
+                  cookie.setPath("/");
+                  response.addCookie(cookie);
+                  break;
+                }
+            }
+        }
+    }
 }
