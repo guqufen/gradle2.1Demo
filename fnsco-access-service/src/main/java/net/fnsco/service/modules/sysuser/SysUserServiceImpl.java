@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.fnsco.service.modules.adminuser;
+package net.fnsco.service.modules.sysuser;
 
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import net.fnsco.service.domain.SysUser;
  * @date 2017年6月20日 下午3:07:46
  */
 @Service
-public class AdminUserServiceImpl extends BaseService implements SysUserService {
+public class SysUserServiceImpl extends BaseService implements SysUserService {
 	
 	@Autowired
 	private SysUserDao adminUserDao;
