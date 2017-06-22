@@ -2,16 +2,16 @@ package net.fnsco.service.domain;
 
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * @desc 后台管理用户实体
  * @author tangliang
  * @date 2017年6月20日 下午2:59:17
  */
-public class AdminUser {
+public class SysUser {
 	
-    private Integer id;
-
-    private Integer innercode;
+	private Integer id;
 
     private Integer type;
 
@@ -19,19 +19,23 @@ public class AdminUser {
 
     private String password;
 
-    private String realname;
+    private String realName;
 
     private String mobile;
 
     private Integer sex;
 
-    private String aliasname;
+    private String aliasName;
 
     private String department;
 
+    private Integer agentId;
+
     private String remark;
 
-    private Date lastmodifiedtime;
+    private Date modifyTime;
+
+    private Integer modifyUserId;
 
     public Integer getId() {
         return id;
@@ -39,14 +43,6 @@ public class AdminUser {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getInnercode() {
-        return innercode;
-    }
-
-    public void setInnercode(Integer innercode) {
-        this.innercode = innercode;
     }
 
     public Integer getType() {
@@ -73,12 +69,12 @@ public class AdminUser {
         this.password = password == null ? null : password.trim();
     }
 
-    public String getRealname() {
-        return realname;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setRealname(String realname) {
-        this.realname = realname == null ? null : realname.trim();
+    public void setRealName(String realName) {
+        this.realName = realName == null ? null : realName.trim();
     }
 
     public String getMobile() {
@@ -97,12 +93,12 @@ public class AdminUser {
         this.sex = sex;
     }
 
-    public String getAliasname() {
-        return aliasname;
+    public String getAliasName() {
+        return aliasName;
     }
 
-    public void setAliasname(String aliasname) {
-        this.aliasname = aliasname == null ? null : aliasname.trim();
+    public void setAliasName(String aliasName) {
+        this.aliasName = aliasName == null ? null : aliasName.trim();
     }
 
     public String getDepartment() {
@@ -113,6 +109,14 @@ public class AdminUser {
         this.department = department == null ? null : department.trim();
     }
 
+    public Integer getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(Integer agentId) {
+        this.agentId = agentId;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -121,11 +125,33 @@ public class AdminUser {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    public Date getLastmodifiedtime() {
-        return lastmodifiedtime;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
-    public void setLastmodifiedtime(Date lastmodifiedtime) {
-        this.lastmodifiedtime = lastmodifiedtime;
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public Integer getModifyUserId() {
+        return modifyUserId;
+    }
+
+    public void setModifyUserId(Integer modifyUserId) {
+        this.modifyUserId = modifyUserId;
+    }
+    
+    @Override
+    public String toString() {
+    	// TODO Auto-generated method stub
+    	return JSONObject.toJSONString(this);
+    }
+    
+    @Override
+    public int hashCode() {
+    	int result = 17;  
+        result = result * 31 + name.hashCode();  
+        result = result * 31 + id;  
+        return result;  
     }
 }

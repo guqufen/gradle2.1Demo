@@ -1,12 +1,13 @@
 /**
  * 
  */
-package net.fnsco.controller.MerChant;
+package net.fnsco.controller.merchant;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
 
 /**@desc 商户信息控制器
  * @author tangliang
@@ -20,7 +21,9 @@ public class MerchantInfoController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/merchatIndex")
-	public String merchatInfoIndex(){
+	public ResultDTO<Object> merchatInfoIndex(){
+		
+		
 		return null;
 	}
 }

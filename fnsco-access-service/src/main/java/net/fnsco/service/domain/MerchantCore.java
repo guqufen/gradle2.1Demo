@@ -17,79 +17,45 @@ public class MerchantCore extends DTO{
 
 	private Integer id;
 
-    private String innercode;
+    private String innerCode;
 
     private String name;
 
-    private String merarea;
-
-    private String signdate;
-
-    private String merenname;
-
-    private String cooporgncode;
-
-    private String registarea;
-
-    private String startbustime;
-
-    private String endbustime;
-
-    private String realbusscope;
-
-    private String merlegalperson;
-
-    private String legalpersontel;
-
-    private String legalvalidpapertype;
-
-    private String papernum;
-
-    private String papervalidtime;
-
-    private String businesslicensenum;
-
-    private String businesslicensevalidtime;
-
-    private String taxregistcode;
-
-    private String merregistaddress;
-
-    private String accounttype;
-
-    private String subbankname;
-
-    private String accountno;
-
-    private String accountname;
-
-    private String openbankprince;
-
-    private String openbank;
-
-    private String openbankcity;
-
-    private String accountholderid;
-
-    private String openbanknum;
-
-    private String closedcircle;
-
     private String abbreviation;
 
-    private Integer status;
+    private String enName;
 
-    private String mercflag;
+    private String signDate;
+
+    private String legalPerson;
+
+    private String legalPersonMobile;
+
+    private String legalPersonTel;
+
+    private String legalValidCardType;
+
+    private String cardNum;
+
+    private String cardValidTime;
+
+    private String businessLicenseNum;
+
+    private String businessLicenseValidTime;
+
+    private String taxRegistCode;
+
+    private String registAddress;
+
+    private String mercFlag;
 
     private Integer source;
 
-    private String installarea;
+    private String modifyUserId;
 
-    private String merinstallarea;
+    private Date modifyTime;
 
-    private String updateuser;
-
-    private Date lastupdatetime;
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -99,12 +65,12 @@ public class MerchantCore extends DTO{
         this.id = id;
     }
 
-    public String getInnercode() {
-        return innercode;
+    public String getInnerCode() {
+        return innerCode;
     }
 
-    public void setInnercode(String innercode) {
-        this.innercode = innercode == null ? null : innercode.trim();
+    public void setInnerCode(String innerCode) {
+        this.innerCode = innerCode == null ? null : innerCode.trim();
     }
 
     public String getName() {
@@ -115,222 +81,6 @@ public class MerchantCore extends DTO{
         this.name = name == null ? null : name.trim();
     }
 
-    public String getMerarea() {
-        return merarea;
-    }
-
-    public void setMerarea(String merarea) {
-        this.merarea = merarea == null ? null : merarea.trim();
-    }
-
-    public String getSigndate() {
-        return signdate;
-    }
-
-    public void setSigndate(String signdate) {
-        this.signdate = signdate == null ? null : signdate.trim();
-    }
-
-    public String getMerenname() {
-        return merenname;
-    }
-
-    public void setMerenname(String merenname) {
-        this.merenname = merenname == null ? null : merenname.trim();
-    }
-
-    public String getCooporgncode() {
-        return cooporgncode;
-    }
-
-    public void setCooporgncode(String cooporgncode) {
-        this.cooporgncode = cooporgncode == null ? null : cooporgncode.trim();
-    }
-
-    public String getRegistarea() {
-        return registarea;
-    }
-
-    public void setRegistarea(String registarea) {
-        this.registarea = registarea == null ? null : registarea.trim();
-    }
-
-    public String getStartbustime() {
-        return startbustime;
-    }
-
-    public void setStartbustime(String startbustime) {
-        this.startbustime = startbustime == null ? null : startbustime.trim();
-    }
-
-    public String getEndbustime() {
-        return endbustime;
-    }
-
-    public void setEndbustime(String endbustime) {
-        this.endbustime = endbustime == null ? null : endbustime.trim();
-    }
-
-    public String getRealbusscope() {
-        return realbusscope;
-    }
-
-    public void setRealbusscope(String realbusscope) {
-        this.realbusscope = realbusscope == null ? null : realbusscope.trim();
-    }
-
-    public String getMerlegalperson() {
-        return merlegalperson;
-    }
-
-    public void setMerlegalperson(String merlegalperson) {
-        this.merlegalperson = merlegalperson == null ? null : merlegalperson.trim();
-    }
-
-    public String getLegalpersontel() {
-        return legalpersontel;
-    }
-
-    public void setLegalpersontel(String legalpersontel) {
-        this.legalpersontel = legalpersontel == null ? null : legalpersontel.trim();
-    }
-
-    public String getLegalvalidpapertype() {
-        return legalvalidpapertype;
-    }
-
-    public void setLegalvalidpapertype(String legalvalidpapertype) {
-        this.legalvalidpapertype = legalvalidpapertype == null ? null : legalvalidpapertype.trim();
-    }
-
-    public String getPapernum() {
-        return papernum;
-    }
-
-    public void setPapernum(String papernum) {
-        this.papernum = papernum == null ? null : papernum.trim();
-    }
-
-    public String getPapervalidtime() {
-        return papervalidtime;
-    }
-
-    public void setPapervalidtime(String papervalidtime) {
-        this.papervalidtime = papervalidtime == null ? null : papervalidtime.trim();
-    }
-
-    public String getBusinesslicensenum() {
-        return businesslicensenum;
-    }
-
-    public void setBusinesslicensenum(String businesslicensenum) {
-        this.businesslicensenum = businesslicensenum == null ? null : businesslicensenum.trim();
-    }
-
-    public String getBusinesslicensevalidtime() {
-        return businesslicensevalidtime;
-    }
-
-    public void setBusinesslicensevalidtime(String businesslicensevalidtime) {
-        this.businesslicensevalidtime = businesslicensevalidtime == null ? null : businesslicensevalidtime.trim();
-    }
-
-    public String getTaxregistcode() {
-        return taxregistcode;
-    }
-
-    public void setTaxregistcode(String taxregistcode) {
-        this.taxregistcode = taxregistcode == null ? null : taxregistcode.trim();
-    }
-
-    public String getMerregistaddress() {
-        return merregistaddress;
-    }
-
-    public void setMerregistaddress(String merregistaddress) {
-        this.merregistaddress = merregistaddress == null ? null : merregistaddress.trim();
-    }
-
-    public String getAccounttype() {
-        return accounttype;
-    }
-
-    public void setAccounttype(String accounttype) {
-        this.accounttype = accounttype == null ? null : accounttype.trim();
-    }
-
-    public String getSubbankname() {
-        return subbankname;
-    }
-
-    public void setSubbankname(String subbankname) {
-        this.subbankname = subbankname == null ? null : subbankname.trim();
-    }
-
-    public String getAccountno() {
-        return accountno;
-    }
-
-    public void setAccountno(String accountno) {
-        this.accountno = accountno == null ? null : accountno.trim();
-    }
-
-    public String getAccountname() {
-        return accountname;
-    }
-
-    public void setAccountname(String accountname) {
-        this.accountname = accountname == null ? null : accountname.trim();
-    }
-
-    public String getOpenbankprince() {
-        return openbankprince;
-    }
-
-    public void setOpenbankprince(String openbankprince) {
-        this.openbankprince = openbankprince == null ? null : openbankprince.trim();
-    }
-
-    public String getOpenbank() {
-        return openbank;
-    }
-
-    public void setOpenbank(String openbank) {
-        this.openbank = openbank == null ? null : openbank.trim();
-    }
-
-    public String getOpenbankcity() {
-        return openbankcity;
-    }
-
-    public void setOpenbankcity(String openbankcity) {
-        this.openbankcity = openbankcity == null ? null : openbankcity.trim();
-    }
-
-    public String getAccountholderid() {
-        return accountholderid;
-    }
-
-    public void setAccountholderid(String accountholderid) {
-        this.accountholderid = accountholderid == null ? null : accountholderid.trim();
-    }
-
-    public String getOpenbanknum() {
-        return openbanknum;
-    }
-
-    public void setOpenbanknum(String openbanknum) {
-        this.openbanknum = openbanknum == null ? null : openbanknum.trim();
-    }
-
-    public String getClosedcircle() {
-        return closedcircle;
-    }
-
-    public void setClosedcircle(String closedcircle) {
-        this.closedcircle = closedcircle == null ? null : closedcircle.trim();
-    }
-
     public String getAbbreviation() {
         return abbreviation;
     }
@@ -339,20 +89,108 @@ public class MerchantCore extends DTO{
         this.abbreviation = abbreviation == null ? null : abbreviation.trim();
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getEnName() {
+        return enName;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setEnName(String enName) {
+        this.enName = enName == null ? null : enName.trim();
     }
 
-    public String getMercflag() {
-        return mercflag;
+    public String getSignDate() {
+        return signDate;
     }
 
-    public void setMercflag(String mercflag) {
-        this.mercflag = mercflag == null ? null : mercflag.trim();
+    public void setSignDate(String signDate) {
+        this.signDate = signDate == null ? null : signDate.trim();
+    }
+
+    public String getLegalPerson() {
+        return legalPerson;
+    }
+
+    public void setLegalPerson(String legalPerson) {
+        this.legalPerson = legalPerson == null ? null : legalPerson.trim();
+    }
+
+    public String getLegalPersonMobile() {
+        return legalPersonMobile;
+    }
+
+    public void setLegalPersonMobile(String legalPersonMobile) {
+        this.legalPersonMobile = legalPersonMobile == null ? null : legalPersonMobile.trim();
+    }
+
+    public String getLegalPersonTel() {
+        return legalPersonTel;
+    }
+
+    public void setLegalPersonTel(String legalPersonTel) {
+        this.legalPersonTel = legalPersonTel == null ? null : legalPersonTel.trim();
+    }
+
+    public String getLegalValidCardType() {
+        return legalValidCardType;
+    }
+
+    public void setLegalValidCardType(String legalValidCardType) {
+        this.legalValidCardType = legalValidCardType == null ? null : legalValidCardType.trim();
+    }
+
+    public String getCardNum() {
+        return cardNum;
+    }
+
+    public void setCardNum(String cardNum) {
+        this.cardNum = cardNum == null ? null : cardNum.trim();
+    }
+
+    public String getCardValidTime() {
+        return cardValidTime;
+    }
+
+    public void setCardValidTime(String cardValidTime) {
+        this.cardValidTime = cardValidTime == null ? null : cardValidTime.trim();
+    }
+
+    public String getBusinessLicenseNum() {
+        return businessLicenseNum;
+    }
+
+    public void setBusinessLicenseNum(String businessLicenseNum) {
+        this.businessLicenseNum = businessLicenseNum == null ? null : businessLicenseNum.trim();
+    }
+
+    public String getBusinessLicenseValidTime() {
+        return businessLicenseValidTime;
+    }
+
+    public void setBusinessLicenseValidTime(String businessLicenseValidTime) {
+        this.businessLicenseValidTime = businessLicenseValidTime == null ? null : businessLicenseValidTime.trim();
+    }
+
+    public String getTaxRegistCode() {
+        return taxRegistCode;
+    }
+
+    public void setTaxRegistCode(String taxRegistCode) {
+        this.taxRegistCode = taxRegistCode == null ? null : taxRegistCode.trim();
+    }
+
+    public String getRegistAddress() {
+        return registAddress;
+    }
+
+    public void setRegistAddress(String registAddress) {
+        this.registAddress = registAddress == null ? null : registAddress.trim();
+    }
+
+    public String getMercFlag() {
+        return mercFlag;
+    }
+
+    public void setMercFlag(String mercFlag) {
+        this.mercFlag = mercFlag == null ? null : mercFlag.trim();
     }
 
     public Integer getSource() {
@@ -363,35 +201,27 @@ public class MerchantCore extends DTO{
         this.source = source;
     }
 
-    public String getInstallarea() {
-        return installarea;
+    public String getModifyUserId() {
+        return modifyUserId;
     }
 
-    public void setInstallarea(String installarea) {
-        this.installarea = installarea == null ? null : installarea.trim();
+    public void setModifyUserId(String modifyUserId) {
+        this.modifyUserId = modifyUserId == null ? null : modifyUserId.trim();
     }
 
-    public String getMerinstallarea() {
-        return merinstallarea;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
-    public void setMerinstallarea(String merinstallarea) {
-        this.merinstallarea = merinstallarea == null ? null : merinstallarea.trim();
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
-    public String getUpdateuser() {
-        return updateuser;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setUpdateuser(String updateuser) {
-        this.updateuser = updateuser == null ? null : updateuser.trim();
-    }
-
-    public Date getLastupdatetime() {
-        return lastupdatetime;
-    }
-
-    public void setLastupdatetime(Date lastupdatetime) {
-        this.lastupdatetime = lastupdatetime;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

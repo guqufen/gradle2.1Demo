@@ -1,10 +1,10 @@
 /**
  * 
  */
-package net.fnsco.service.service;
+package net.fnsco.api.merchant;
 
-import net.fnsco.api.dto.MerchantFileInfoDTO;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.service.domain.MerchantFile;
 
 /**@desc 文件信息接口
  * @author tangliang
@@ -18,5 +18,5 @@ public interface MerchantInfoService {
 	 * @param loginUserId
 	 * @return
 	 */
-	public ResultDTO<Integer> doAddToDB (MerchantFileInfoDTO fileInfo,int loginUserId);
+	public ResultDTO<Integer> doAddToDB (MerchantFile fileInfo,int loginUserId);
 }

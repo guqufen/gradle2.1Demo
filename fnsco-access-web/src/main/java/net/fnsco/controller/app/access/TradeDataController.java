@@ -1,4 +1,4 @@
-package net.fnsco.controller.access;
+package net.fnsco.controller.app.access;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

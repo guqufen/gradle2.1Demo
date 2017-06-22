@@ -2,165 +2,248 @@ package net.fnsco.api.dto;
 
 import net.fnsco.core.base.DTO;
 
-public class TradeDataDTO extends DTO{
+public class TradeDataDTO extends DTO {
 
-    private String pay_tp;      //支付方式    
-    private String order_no;    //订单号 
-    private String batchbillno; //批次流水号   
-    private String time_stamp;  //交易时间戳   
-    private String reason;      //失败原因     
-    private String remark;      //附加数据    
+    private String amt;         //金额，格式为“100.01”
+    private String orderNo;     // 订单号（不唯一）
+    private String orderTime;   // 订单时间戳
+    private String orderInfo;   // 订单信息（目前用不到）
+    private String batchBillNo; // 撤销时会有
 
-    private String merid;       //  商户号
-    private String termid;      //  终端号
-    private String batchno;     //  批次号
-    private String systraceno;  //  凭证号
-    private String authcode;    //  授权号
-    private String orderid_scan;//  扫码订单号
+    private String payType;     // 支付方式
+    private String referNo;     // 检索参考号
+    private String timeStamp;   // 交易时间戳
+    private String tradeDetail; // 交易详情（JSON串）
+
+    private String merId;       // 商户号
+    private String termId;      // 终端号
+    private String batchNo;     // 批次号
+    private String sysTraceNo;  // 凭证号
+    private String authCode;    // 授权码
+    private String orderIdScan; // 扫码交易的订单号
+
     /**
-     * @return the pay_tp
+     * @return the amt
      */
-    public String getPay_tp() {
-        return pay_tp;
+    public String getAmt() {
+        return amt;
     }
+
     /**
-     * @param pay_tp the pay_tp to set
+     * @param amt the amt to set
      */
-    public void setPay_tp(String pay_tp) {
-        this.pay_tp = pay_tp;
+    public void setAmt(String amt) {
+        this.amt = amt;
     }
+
     /**
-     * @return the order_no
+     * @return the orderNo
      */
-    public String getOrder_no() {
-        return order_no;
+    public String getOrderNo() {
+        return orderNo;
     }
+
     /**
-     * @param order_no the order_no to set
+     * @param orderNo the orderNo to set
      */
-    public void setOrder_no(String order_no) {
-        this.order_no = order_no;
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
+
     /**
-     * @return the batchbillno
+     * @return the orderTime
      */
-    public String getBatchbillno() {
-        return batchbillno;
+    public String getOrderTime() {
+        return orderTime;
     }
+
     /**
-     * @param batchbillno the batchbillno to set
+     * @param orderTime the orderTime to set
      */
-    public void setBatchbillno(String batchbillno) {
-        this.batchbillno = batchbillno;
+    public void setOrderTime(String orderTime) {
+        this.orderTime = orderTime;
     }
+
     /**
-     * @return the time_stamp
+     * @return the orderInfo
      */
-    public String getTime_stamp() {
-        return time_stamp;
+    public String getOrderInfo() {
+        return orderInfo;
     }
+
     /**
-     * @param time_stamp the time_stamp to set
+     * @param orderInfo the orderInfo to set
      */
-    public void setTime_stamp(String time_stamp) {
-        this.time_stamp = time_stamp;
+    public void setOrderInfo(String orderInfo) {
+        this.orderInfo = orderInfo;
     }
+
     /**
-     * @return the reason
+     * @return the batchBillNo
      */
-    public String getReason() {
-        return reason;
+    public String getBatchBillNo() {
+        return batchBillNo;
     }
+
     /**
-     * @param reason the reason to set
+     * @param batchBillNo the batchBillNo to set
      */
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setBatchBillNo(String batchBillNo) {
+        this.batchBillNo = batchBillNo;
     }
+
     /**
-     * @return the remark
+     * @return the payType
      */
-    public String getRemark() {
-        return remark;
+    public String getPayType() {
+        return payType;
     }
+
     /**
-     * @param remark the remark to set
+     * @param payType the payType to set
      */
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
+
     /**
-     * @return the merid
+     * @return the referNo
      */
-    public String getMerid() {
-        return merid;
+    public String getReferNo() {
+        return referNo;
     }
+
     /**
-     * @param merid the merid to set
+     * @param referNo the referNo to set
      */
-    public void setMerid(String merid) {
-        this.merid = merid;
+    public void setReferNo(String referNo) {
+        this.referNo = referNo;
     }
+
     /**
-     * @return the termid
+     * @return the timeStamp
      */
-    public String getTermid() {
-        return termid;
+    public String getTimeStamp() {
+        return timeStamp;
     }
+
     /**
-     * @param termid the termid to set
+     * @param timeStamp the timeStamp to set
      */
-    public void setTermid(String termid) {
-        this.termid = termid;
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
     }
+
     /**
-     * @return the batchno
+     * @return the tradeDetail
      */
-    public String getBatchno() {
-        return batchno;
+    public String getTradeDetail() {
+        return tradeDetail;
     }
+
     /**
-     * @param batchno the batchno to set
+     * @param tradeDetail the tradeDetail to set
      */
-    public void setBatchno(String batchno) {
-        this.batchno = batchno;
+    public void setTradeDetail(String tradeDetail) {
+        this.tradeDetail = tradeDetail;
     }
+
     /**
-     * @return the systraceno
+     * @return the merId
      */
-    public String getSystraceno() {
-        return systraceno;
+    public String getMerId() {
+        return merId;
     }
+
     /**
-     * @param systraceno the systraceno to set
+     * @param merId the merId to set
      */
-    public void setSystraceno(String systraceno) {
-        this.systraceno = systraceno;
+    public void setMerId(String merId) {
+        this.merId = merId;
     }
+
     /**
-     * @return the authcode
+     * @return the termId
      */
-    public String getAuthcode() {
-        return authcode;
+    public String getTermId() {
+        return termId;
     }
+
     /**
-     * @param authcode the authcode to set
+     * @param termId the termId to set
      */
-    public void setAuthcode(String authcode) {
-        this.authcode = authcode;
+    public void setTermId(String termId) {
+        this.termId = termId;
     }
+
     /**
-     * @return the orderid_scan
+     * @return the batchNo
      */
-    public String getOrderid_scan() {
-        return orderid_scan;
+    public String getBatchNo() {
+        return batchNo;
     }
+
     /**
-     * @param orderid_scan the orderid_scan to set
+     * @param batchNo the batchNo to set
      */
-    public void setOrderid_scan(String orderid_scan) {
-        this.orderid_scan = orderid_scan;
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
     }
-    
+
+    /**
+     * @return the sysTraceNo
+     */
+    public String getSysTraceNo() {
+        return sysTraceNo;
+    }
+
+    /**
+     * @param sysTraceNo the sysTraceNo to set
+     */
+    public void setSysTraceNo(String sysTraceNo) {
+        this.sysTraceNo = sysTraceNo;
+    }
+
+    /**
+     * @return the authCode
+     */
+    public String getAuthCode() {
+        return authCode;
+    }
+
+    /**
+     * @param authCode the authCode to set
+     */
+    public void setAuthCode(String authCode) {
+        this.authCode = authCode;
+    }
+
+    /**
+     * @return the orderIdScan
+     */
+    public String getOrderIdScan() {
+        return orderIdScan;
+    }
+
+    /**
+     * @param orderIdScan the orderIdScan to set
+     */
+    public void setOrderIdScan(String orderIdScan) {
+        this.orderIdScan = orderIdScan;
+    }
+
+    //    private String pay_tp;      //支付方式    
+    //    private String order_no;    //订单号 
+    //    private String batchbillno; //批次流水号   
+    //    private String time_stamp;  //交易时间戳   
+    //    private String reason;      //失败原因     
+    //    private String remark;      //附加数据    
+    //
+    //    private String merid;       //  商户号
+    //    private String termid;      //  终端号
+    //    private String batchno;     //  批次号
+    //    private String systraceno;  //  凭证号
+    //    private String authcode;    //  授权号
+    //    private String orderid_scan;//  扫码订单号
 
 }

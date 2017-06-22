@@ -49,10 +49,10 @@
                     </a>
                     <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
                         <li>
-                            <a class="J_menuItem" href="BusinessInfo.html" data-index="0">商户信息</a>
+                            <a class="J_menuItem" href="merchatInfo.html" data-index="1">商户信息</a>
                         </li>
                         <li>
-                            <a class="J_menuItem" href="BusinessWasteBook.html" data-index="1">商户流水</a>
+                            <a class="J_menuItem" href="BusinessWasteBook.html" data-index="2">商户流水</a>
                         </li>
                         
                     </ul>
@@ -73,8 +73,11 @@
                         </li>
                     </ul>
                 </li>
+<<<<<<< HEAD
                 
 
+=======
+>>>>>>> origin/develop
             </ul>
         </div>
 
@@ -145,7 +148,7 @@
             </button>
             <nav class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
-                    <a href="javascript:;" class="active J_menuTab" data-id="index_v1.html">首页</a>
+                    <a href="javascript:;" class="active J_menuTab" data-id="BusinessInfo.html">首页</a>
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight"><i class="glyphicon glyphicon-chevron-right"></i>
@@ -489,7 +492,18 @@
 <script type="text/javascript" src="js/contabs/contabs.min.js"></script>
 <script src="js/pace/pace.min.js"></script>
 <script src="js/hplus/hplus.min.js"></script>
-
+<script type="text/javascript">
+$(function(){
+	$.ajax({
+		url:'/back_login/getCurrentUser',
+		dataType:'json',
+		type:'POST',
+		success:function(data){
+			$('.indexPageUserName').html(data.sessionUser.name);
+		}
+	});
+});
+</script>
 
 
 </body></html>
