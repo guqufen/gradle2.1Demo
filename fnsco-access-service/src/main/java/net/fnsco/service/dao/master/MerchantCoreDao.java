@@ -37,4 +37,11 @@ public interface MerchantCoreDao {
      * @return
      */
     int queryTotalByCondition(MerchantCore record);
+    
+    /**
+     * 根据条件查询所有数据
+     * @param record
+     * @return
+     */
+    List<MerchantCore> queryListByCondition(MerchantCore record);
 }

@@ -1,4 +1,4 @@
-package net.fnsco.controller.app.merchant;
+package net.fnsco.controller.app.merchat;
 
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;

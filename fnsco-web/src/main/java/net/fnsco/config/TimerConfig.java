@@ -8,7 +8,7 @@ public class TimerConfig {
     /**
      * spring boot 定时任务
      */
-    @Scheduled(cron = "0 */5 * * * ?")
+//    @Scheduled(cron = "0 */5 * * * ?")
     public void reportCurrentTime() {
         System.out.println("定时任务执行");
     }

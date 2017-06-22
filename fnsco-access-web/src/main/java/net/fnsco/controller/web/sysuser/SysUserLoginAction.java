@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.fnsco.controller;
+package net.fnsco.controller.web.sysuser;
 
 import java.util.HashMap;
 import java.util.Map;
