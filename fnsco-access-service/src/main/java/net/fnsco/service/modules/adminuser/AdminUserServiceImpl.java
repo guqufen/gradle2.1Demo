@@ -1,17 +1,18 @@
 /**
  * 
  */
-package net.fnsco.service.service.impl;
+package net.fnsco.service.modules.adminuser;
 
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import net.fnsco.api.adminuser.AdminUserService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.Md5Util;
 import net.fnsco.service.dao.master.AdminUserDao;
 import net.fnsco.service.domain.AdminUser;
-import net.fnsco.service.service.AdminUserService;
 
 /**@desc AdminUserService实现类
  * @author tangliang

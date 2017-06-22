@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.fnsco.service.service;
+package net.fnsco.api.adminuser;
 
 import javax.servlet.http.HttpServletResponse;
 

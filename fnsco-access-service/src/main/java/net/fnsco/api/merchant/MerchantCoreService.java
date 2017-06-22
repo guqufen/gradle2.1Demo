@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.fnsco.service.service;
+package net.fnsco.api.merchant;
 
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.service.domain.MerchantCore;

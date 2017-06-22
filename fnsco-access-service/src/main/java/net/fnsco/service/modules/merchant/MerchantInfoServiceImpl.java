@@ -1,15 +1,15 @@
 /**
  * 
  */
-package net.fnsco.service.service.impl;
+package net.fnsco.service.modules.merchant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.api.dto.MerchantFileInfoDTO;
+import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.service.dao.master.MerchantFileInfoDao;
-import net.fnsco.service.service.MerchantInfoService;
 
 /**@desc 文件上传实现类
  * @author tangliang
@@ -25,7 +25,7 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 	 * @todo 录入文件信息入库
 	 * @author tangliang
 	 * @date 2017年6月21日 上午10:17:44
-	 * @see net.fnsco.service.service.MerchantInfoService#doAddToDB(net.fnsco.api.dto.MerchantFileInfoDTO, int)
+	 * @see net.fnsco.api.merchant.MerchantInfoService#doAddToDB(net.fnsco.api.dto.MerchantFileInfoDTO, int)
 	 */
 	@Override
 	public ResultDTO<Integer> doAddToDB(MerchantFileInfoDTO fileInfo, int loginUserId) {

@@ -23,10 +23,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.alibaba.fastjson.JSONArray;
 
 import net.fnsco.api.dto.MerchantFileInfoDTO;
+import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.service.domain.AdminUser;
-import net.fnsco.service.service.MerchantInfoService;
 /**
  * @desc 文件上传控制器
  * @author tangliang

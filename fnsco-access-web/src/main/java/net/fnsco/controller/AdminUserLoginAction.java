@@ -15,12 +15,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import net.fnsco.api.adminuser.AdminUserService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.Constants;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CookieUtils;
 import net.fnsco.service.domain.AdminUser;
-import net.fnsco.service.service.AdminUserService;
 
 /**@desc 后台管理系统登录控制器
  * @author tangliang
