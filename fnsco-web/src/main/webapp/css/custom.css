@@ -21,10 +21,11 @@ table a.remove i,table a.redact i{
 	float: left;
 	width: 25%;
 	padding-top: 8px;
-	margin: 5px 0;
 }
 .form-group .form-control{
 	width: 75%;
 	float: left;
+}
+.form-group div{
 	margin: 5px 0;
 }
