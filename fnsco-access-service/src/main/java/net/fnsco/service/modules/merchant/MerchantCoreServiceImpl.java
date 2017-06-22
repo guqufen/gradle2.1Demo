@@ -50,17 +50,11 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	 */
 	@Override
 	public ResultPageDTO<MerchantCore> queryMerchantCore(MerchantCore merchantCore,int currentPageNum,int perPageSize) {
-		// TODO Auto-generated method stub
-		PageDTO<MerchantCore> pages = new PageDTO<>();
-		pages.setCondition(merchantCore);
-		pages.setCurrentPageNum(currentPageNum);
-		pages.setPerPageSize(perPageSize);
 		
+		PageDTO<MerchantCore> pages = new PageDTO<>(currentPageNum,perPageSize,merchantCore);
 		List<MerchantCore> datas = merchantCoreDao.queryPageList(pages);
 		int totalNum = merchantCoreDao.queryTotalByCondition(merchantCore);
-		ResultPageDTO<MerchantCore> result = new ResultPageDTO<MerchantCore>();
-		result.setList(datas);
-		result.setTotal(totalNum);
+		ResultPageDTO<MerchantCore> result = new ResultPageDTO<MerchantCore>(totalNum,datas);
 		result.setCurrentPage(currentPageNum);
 		
 		return result;

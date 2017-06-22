@@ -8,7 +8,28 @@ package net.fnsco.core.base;
  * @date 2017年6月22日 上午11:59:05
  */
 public class PageDTO<T> extends DTO {
-
+	/**
+	 * 无参构造
+	 */
+	public PageDTO() {}
+	/**
+	 * 有参构造
+	 * @param currentPageNum
+	 * @param perPageSize
+	 * @param condition
+	 */
+	public PageDTO(int currentPageNum,int perPageSize,T condition ) {
+		this.currentPageNum = currentPageNum;
+		this.perPageSize = perPageSize;
+		this.condition = condition;
+	}
+	
+	public PageDTO(int currentPageNum,int perPageSize,int totalPageNum,int totalCount,T condition ) {
+		this.currentPageNum = currentPageNum;
+		this.perPageSize = perPageSize;
+		this.condition = condition;
+	}
+	
 	/**
 	 * 
 	 */
