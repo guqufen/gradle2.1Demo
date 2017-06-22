@@ -2,6 +2,8 @@ package net.fnsco.service.domain;
 
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * @desc 后台管理用户实体
  * @author tangliang
@@ -127,5 +129,19 @@ public class AdminUser {
 
     public void setLastmodifiedtime(Date lastmodifiedtime) {
         this.lastmodifiedtime = lastmodifiedtime;
+    }
+    
+    @Override
+    public String toString() {
+    	// TODO Auto-generated method stub
+    	return JSONObject.toJSONString(this);
+    }
+    
+    @Override
+    public int hashCode() {
+    	int result = 17;  
+        result = result * 31 + name.hashCode();  
+        result = result * 31 + id;  
+        return result;  
     }
 }
