@@ -1,7 +1,5 @@
-/**
- * 
- */
-package net.fnsco.controller.merchant;
+package net.fnsco.controller.MerChant;
+
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
