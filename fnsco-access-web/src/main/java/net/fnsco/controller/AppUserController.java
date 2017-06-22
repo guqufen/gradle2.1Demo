@@ -15,8 +15,9 @@ import net.fnsco.service.service.AppUserService;
 public class AppUserController {
 	@Autowired
 	private AppUserService appUserService;
-	@RequestMapping(value = "/register", produces = "text/html;charset=UTF-8")
-	@ResponseBody
+	
+	
+	@RequestMapping(value = "/register")
 	public ResultDTO<Object> register(HttpServletRequest req){
 		 //创建实体对象
 		 AppUser appUser=new AppUser();

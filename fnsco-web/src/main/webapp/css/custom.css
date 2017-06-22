@@ -1,3 +1,31 @@
 #side-menu .glyphicon-chevron-down,#side-menu .glyphicon-chevron-up{
 	float: right;
 }
+table a.remove,table a.redact{
+	padding: 5px 10px;
+    background: #54708a;
+    color: #fff;
+    border-radius: 3px;
+}
+table a.remove i,table a.redact i{
+	margin-right: 5px;
+}
+.form-group{
+	padding: 0 10px;
+}
+.form-group .btn{
+	color: #fff;
+	background: #54708a;
+}
+.form-group .control-label{
+	float: left;
+	width: 25%;
+	padding-top: 8px;
+}
+.form-group .form-control{
+	width: 75%;
+	float: left;
+}
+.form-group div{
+	margin: 5px 0;
+}
