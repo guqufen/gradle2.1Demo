@@ -506,7 +506,18 @@
 <script type="text/javascript" src="js/contabs/contabs.min.js"></script>
 <script src="js/pace/pace.min.js"></script>
 <script src="js/hplus/hplus.min.js"></script>
-
+<script type="text/javascript">
+$(function(){
+	$.ajax({
+		url:'/back_login/getCurrentUser',
+		dataType:'json',
+		type:'POST',
+		success:function(data){
+			$('.indexPageUserName').html(data.sessionUser.name);
+		}
+	});
+});
+</script>
 
 
 </body></html>

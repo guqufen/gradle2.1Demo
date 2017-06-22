@@ -3,6 +3,9 @@
  */
 package net.fnsco.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.Constants;
@@ -47,7 +51,7 @@ public class AdminUserLoginAction extends BaseController{
 		result = adminUserService.doLogin(res, username, password);
 		if (result.isSuccess()) {
 			setSessionUser(result.getData());
-			CookieUtils.addCookie(res, Constants.COOKIE_USER_KEY, result.getData().toString());
+			CookieUtils.addCookie(res, Constants.COOKIE_USER_KEY, ((AdminUser)result.getData()).getName());
 		}
 		return "forward:/";
 	}
@@ -61,6 +65,25 @@ public class AdminUserLoginAction extends BaseController{
 		removeSessionUser();
 		removeCookieUser();
 		return "redirect:/";
+	}
+	
+	/**
+	 * 获取当前用户
+	 * @return
+	 */
+	@RequestMapping("/getCurrentUser")
+	@ResponseBody
+	public Map<String,Object> getCurrentUser(){
+		Map<String,Object> result = new HashMap<>();
+		AdminUser adminUser = (AdminUser) getSessionUser();
+		if(null == adminUser)
+		{
+			String cookie = (String) getCookieUser();
+			adminUser = new AdminUser();
+			adminUser.setName(cookie.substring(cookie.lastIndexOf("#")+1, cookie.length()));
+		}
+		result.put("sessionUser", adminUser);
+		return result;
 	}
 	
 }
