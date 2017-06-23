@@ -1,5 +1,7 @@
 package net.fnsco.service.dao.master;
 
+import java.util.List;
+
 import net.fnsco.service.domain.Alias;
 
 public interface AliasDAO {
@@ -15,4 +17,8 @@ public interface AliasDAO {
     int updateByPrimaryKeySelective(Alias record);
 
     int updateByPrimaryKey(Alias record);
+
+    List<Alias> selectByInnerCode(String innerCode);
+
+    List<Alias> selectByRandomCode(String randomCode);
 }
