@@ -59,6 +59,12 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 		
 		return result;
 	}
+	/**
+	 * @todo 条件查询
+	 * @author tangliang
+	 * @date 2017年6月23日 上午10:39:47
+	 * @see net.fnsco.api.merchant.MerchantCoreService#queryAllByCondition(net.fnsco.service.domain.MerchantCore)
+	 */
 	@Override
 	public List<MerchantCore> queryAllByCondition(MerchantCore merchantCore) {
 		// TODO Auto-generated method stub

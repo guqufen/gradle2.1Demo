@@ -44,4 +44,11 @@ public interface MerchantCoreDao {
      * @return
      */
     List<MerchantCore> queryListByCondition(MerchantCore record);
+    
+    /**
+     * 根据ID删除多个
+     * @param id
+     * @return
+     */
+    int deleteByMultipleKey(Integer[] ids);
 }

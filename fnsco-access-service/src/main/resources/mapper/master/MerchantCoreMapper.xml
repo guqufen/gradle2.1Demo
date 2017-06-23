@@ -292,7 +292,7 @@
         AND inner_code = #{condition.innerCode,jdbcType=VARCHAR}
       </if>
       <if test="condition.name != null and condition.name != ''" >
-        AND name = #{condition.name,jdbcType=VARCHAR}
+        AND name LIKE CONCAT('%', #{condition.name}, '%')
       </if>
       <if test="condition.abbreviation != null and condition.abbreviation != ''" >
         AND abbreviation = #{condition.abbreviation,jdbcType=VARCHAR},
@@ -360,7 +360,7 @@
         AND inner_code = #{innerCode,jdbcType=VARCHAR}
       </if>
       <if test="name != null and name != ''" >
-        AND name = #{name,jdbcType=VARCHAR}
+        AND name LIKE CONCAT('%', #{name}, '%')
       </if>
       <if test="abbreviation != null and abbreviation != ''" >
         AND abbreviation = #{abbreviation,jdbcType=VARCHAR}
@@ -429,7 +429,7 @@
         AND inner_code = #{innerCode,jdbcType=VARCHAR}
       </if>
       <if test="name != null" >
-        AND name = #{name,jdbcType=VARCHAR}
+        AND name LIKE CONCAT('%', #{name}, '%')
       </if>
       <if test="abbreviation != null" >
         AND abbreviation = #{abbreviation,jdbcType=VARCHAR}
@@ -487,4 +487,14 @@
       </if>
    	 </where>
   </select>
+  <!-- 根据ID批量删除 -->
+  <delete id="deleteByMultipleKey" parameterType="java.lang.Integer" >
+    delete from m_merchant_core where id in
+     <foreach collection="array" ></foreach>
+  </delete>
+  
+  
+  
+  
+  
 </mapper>
