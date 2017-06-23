@@ -16,7 +16,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.service.domain.AppUser;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/app/user")
 public class AppUserController extends BaseController{
 	@Autowired
 	private AppUserService mAppUserService;
@@ -41,19 +41,21 @@ public class AppUserController extends BaseController{
 	}
 	
 	//修改密码     旧密码和新密码
-//	@RequestMapping(value = "/modify")
-//	@ResponseBody
-//	public ResultDTO<AppUser> modify(){
-//		//创建实体对象
-//		ResultDTO<AppUser> result = new ResultDTO<>();
-//		//如果密码为空
-//		String oldPassword=request.getParameter("oldPassword");
-//		if(StringUtils.isEmpty(oldPassword)){
-//			 return result.setError("密码不能为空");
-//		 }
-////		result=mAppUserService.modify();
-//		return result;
-//	}
+	@RequestMapping(value = "/modify")
+	@ResponseBody
+	public ResultDTO<AppUser> modify(){
+		//创建实体对象
+		ResultDTO<AppUser> result = new ResultDTO<>();
+		//如果密码为空
+		String oldPassword=request.getParameter("oldPassword");
+		String mobile=request.getParameter("mobile");
+		String password=request.getParameter("password");
+		if(StringUtils.isEmpty(oldPassword)){
+			 return result.setError("密码不能为空");
+		 }
+		result=mAppUserService.modify(mobile,password,oldPassword);
+		return result;
+	}
 }
 
 
