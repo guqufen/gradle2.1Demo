@@ -27,7 +27,7 @@ import net.fnsco.service.domain.SysUser;
  * @date 2017年6月20日 下午3:11:23
  */
 @Controller
-@RequestMapping("/back_login")
+@RequestMapping("/web/back_login")
 public class SysUserLoginAction extends BaseController{
 	
 	@Autowired
