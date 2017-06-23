@@ -3,6 +3,8 @@
  */
 package net.fnsco.api.merchant;
 
+import java.util.List;
+
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.MerchantCore;
@@ -27,6 +29,13 @@ public interface MerchantCoreService {
 	 * @return
 	 */
 	public ResultPageDTO<MerchantCore> queryMerchantCore(MerchantCore merchantCore,int currentPageNum,int perPageSize);
+	
+	/**
+	 * 条件查询所有数据
+	 * @param merchantCore
+	 * @return
+	 */
+	public List<MerchantCore> queryAllByCondition(MerchantCore merchantCore);
 	
 	
 }

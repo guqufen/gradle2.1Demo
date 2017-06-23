@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.fnsco.controller;
+package net.fnsco.controller.web.sysuser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,6 +79,7 @@ public class SysUserLoginAction extends BaseController{
 		if(null == adminUser)
 		{
 			String cookie = (String) getCookieUser();
+			if(StringUtils.isEmpty(cookie))return result;
 			adminUser = new SysUser();
 			adminUser.setName(cookie.substring(cookie.lastIndexOf("#")+1, cookie.length()));
 		}

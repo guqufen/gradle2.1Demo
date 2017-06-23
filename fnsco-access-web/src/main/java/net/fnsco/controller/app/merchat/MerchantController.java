@@ -1,4 +1,4 @@
-package net.fnsco.controller.app.merchant;
+package net.fnsco.controller.app.merchat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestAttribute;
