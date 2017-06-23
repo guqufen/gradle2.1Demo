@@ -1,6 +1,7 @@
 package net.fnsco.service.dao.master;
 
 import net.fnsco.service.domain.MerchantChannel;
+
 /**
  * @desc 商户渠道DAO
  * @author tangliang
@@ -19,4 +20,6 @@ public interface MerchantChannelDao {
     int updateByPrimaryKeySelective(MerchantChannel record);
 
     int updateByPrimaryKey(MerchantChannel record);
+
+    MerchantChannel selectByMerCode(String merCode, String channelType);
 }

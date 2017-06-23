@@ -8,5 +8,5 @@ package net.fnsco.api.merchant;
  * @date 2017年6月21日 上午10:12:23
  */
 public interface MerchantService {
-
+    String getMerCode(String merNum, String channelType);
 }
