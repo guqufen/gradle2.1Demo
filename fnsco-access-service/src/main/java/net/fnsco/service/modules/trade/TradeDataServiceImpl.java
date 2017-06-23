@@ -3,9 +3,11 @@ package net.fnsco.service.modules.trade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.fnsco.api.dto.TradeDataDTO;
 import net.fnsco.api.trade.TradeDataService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.service.dao.master.trade.TradeDataDAO;
+import net.fnsco.service.domain.trade.TradeData;
 
 /**
  * 交易流水服务类
@@ -17,7 +19,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Autowired
     private TradeDataDAO tradeListDAO;
 
-    public boolean saveTradeData() {
+    public boolean saveTradeData(TradeDataDTO tradeData) {
+        TradeData tradeDataEntity = new TradeData();
+        tradeDataEntity.setAmt(tradeData.getAmt());
         return true;
     }
 }
