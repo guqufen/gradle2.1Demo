@@ -55,7 +55,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2).groupName("用户管理").genericModelSubstitutes(DeferredResult.class)
             //              .genericModelSubstitutes(ResponseEntity.class)
             .useDefaultResponseMessages(false).forCodeGeneration(false).pathMapping("/")//base
-            .select().paths(or(regex("/api/.*")))//过滤的接口
+            .select().paths(or(regex("/web/.*")))//过滤的接口
             .build().apiInfo(demoApiInfo());
     }
 
