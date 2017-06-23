@@ -134,7 +134,7 @@
                         </a>
                     </li>
                     <li class="dropdown hidden-xs">
-                        <a href="login.html" class="right-sidebar-toggle"><i class="glyphicon glyphicon-log-out"></i> 退出</a>
+                        <a href="/web/logout" class="right-sidebar-toggle"><i class="glyphicon glyphicon-log-out"></i> 退出</a>
                     </li>
                 </ul>
             </nav>
@@ -491,7 +491,7 @@
 <script type="text/javascript">
 $(function(){
 	$.ajax({
-		url:'/back_login/getCurrentUser',
+		url:'/web/getCurrentUser',
 		dataType:'json',
 		type:'POST',
 		success:function(data){
