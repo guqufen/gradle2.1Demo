@@ -490,11 +490,10 @@
   <!-- 根据ID批量删除 -->
   <delete id="deleteByMultipleKey" parameterType="java.lang.Integer" >
     delete from m_merchant_core where id in
-     <foreach collection="array" ></foreach>
+     <foreach item="item" collection="array" open="(" separator="," close=")">
+       #{item}
+     </foreach>
   </delete>
-  
-  
-  
   
   
 </mapper>
