@@ -10,5 +10,5 @@ public interface AppUserService {
 	//用户注册方法接口
 	ResultDTO<AppUser> insertAppUser(AppUser appUser);
 	//用户修改密码接口
-	ResultDTO<AppUser> modify(HttpServletResponse res,HttpServletRequest req);
+	ResultDTO<AppUser> modify(String mobile,String password,String oldPassword);
 }

@@ -22,7 +22,7 @@ public class AppUserController extends BaseController{
 	private AppUserService mAppUserService;
 	
 	@RequestMapping(value = "/register")
-	@ApiOperation(value = "用户注册")
+//	@ApiOperation(value = "用户注册")
 	@ResponseBody
 	public ResultDTO register(){
 		 String mobile=request.getParameter("mobile");
@@ -48,10 +48,12 @@ public class AppUserController extends BaseController{
 		ResultDTO<AppUser> result = new ResultDTO<>();
 		//如果密码为空
 		String oldPassword=request.getParameter("oldPassword");
+		String mobile=request.getParameter("mobile");
+		String password=request.getParameter("password");
 		if(StringUtils.isEmpty(oldPassword)){
 			 return result.setError("密码不能为空");
 		 }
-//		result=mAppUserService.modify();
+		result=mAppUserService.modify(mobile,password,oldPassword);
 		return result;
 	}
 }
