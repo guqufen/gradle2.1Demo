@@ -18,7 +18,7 @@ public class MerchantContact extends DTO{
 
 	private Integer id;
 
-    private String innercode;
+    private String innerCode;
 
     private String name;
 
@@ -38,12 +38,12 @@ public class MerchantContact extends DTO{
         this.id = id;
     }
 
-    public String getInnercode() {
-        return innercode;
+    public String getInnerCode() {
+        return innerCode;
     }
 
-    public void setInnercode(String innercode) {
-        this.innercode = innercode == null ? null : innercode.trim();
+    public void setInnerCode(String innerCode) {
+        this.innerCode = innerCode == null ? null : innerCode.trim();
     }
 
     public String getName() {

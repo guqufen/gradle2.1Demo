@@ -20,12 +20,16 @@ import net.fnsco.service.domain.AppUser;
 public class AppUserController extends BaseController{
 	@Autowired
 	private AppUserService mAppUserService;
+	
 	@RequestMapping(value = "/register")
 	@ApiOperation(value = "用户注册")
 	@ResponseBody
 	public ResultDTO register(){
 		 String mobile=request.getParameter("mobile");
 		 String password=request.getParameter("password");
+	
+	
+		 //创建实体对象
 		 AppUser appUser=new AppUser();
 		 appUser.setMobile(mobile);
 		 appUser.setPassword(password);
@@ -47,7 +51,7 @@ public class AppUserController extends BaseController{
 		if(StringUtils.isEmpty(oldPassword)){
 			 return result.setError("密码不能为空");
 		 }
-		result=mAppUserService.modify(res, req);
+//		result=mAppUserService.modify();
 		return result;
 	}
 }
