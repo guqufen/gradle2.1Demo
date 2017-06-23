@@ -35,12 +35,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 
 	//修改密码
 	@Override
-	public ResultDTO<AppUser> modify(HttpServletResponse res,HttpServletRequest req){
-		//旧密码
-		String oldPassword=req.getParameter("oldPassword");
-		//新密码
-		String password=req.getParameter("password");
-		String mobile=req.getParameter("mobile");
+	public ResultDTO<AppUser> modify(String mobile,String password,String oldPassword){
 		ResultDTO<AppUser> result=new ResultDTO<AppUser>();
 		AppUser mAppUser=new AppUser();
 		//根据手机号查询用户是否存在获取原密码
