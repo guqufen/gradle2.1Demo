@@ -1,4 +1,4 @@
-package net.fnsco.service.dao.cluster;
+package net.fnsco.service.dao.master;
 
 import net.fnsco.service.domain.AppUser;
 

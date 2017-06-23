@@ -1,4 +1,4 @@
-package net.fnsco.controller;
+package net.fnsco.controller.app.merchat;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import net.fnsco.api.merchant.AppUserService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.service.dao.cluster.AppUserDao;
+import net.fnsco.service.dao.master.AppUserDao;
 import net.fnsco.service.domain.AppUser;
 
 @Service
