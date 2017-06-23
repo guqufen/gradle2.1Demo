@@ -1,44 +1,45 @@
 package net.fnsco.service.domain;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class AppUser implements Serializable{
+public class AppUser {
     private Integer id;
 
-    private String phonenum;
+    private String userName;
+
+    private String mobile;
 
     private String password;
 
-    private String realname;
+    private String realName;
 
-    private Integer state;
+    private String deviceId;
 
-    private Date registrationtime;
+    private Integer gesState;
 
-    private String deviceid;
+    private String gesPassword;
 
-    private Date logintime;
+    private Integer gesTrail;
 
-    private Date updatetime;
+    private String payPassword;
 
-    private Integer gesstate;
+    private Integer deviceType;
 
-    private String gespassword;
+    private String deviceToken;
 
-    private String paypassword;
+    private Integer passwordErrorNum;
 
-    private Integer gestrail;
-
-    private Integer devicetype;
-
-    private String devicetoken;
-
-    private Integer passworderror;
-
-    private Date passworderrordate;
+    private Date passwordErrorDate;
 
     private String remark;
+
+    private Date regTime;
+
+    private Date lastLoginTime;
+
+    private Date modifyTime;
+
+    private Integer state;
 
     public Integer getId() {
         return id;
@@ -48,12 +49,20 @@ public class AppUser implements Serializable{
         this.id = id;
     }
 
-    public String getPhonenum() {
-        return phonenum;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setPhonenum(String phonenum) {
-        this.phonenum = phonenum == null ? null : phonenum.trim();
+    public void setUserName(String userName) {
+        this.userName = userName == null ? null : userName.trim();
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile == null ? null : mobile.trim();
     }
 
     public String getPassword() {
@@ -64,116 +73,84 @@ public class AppUser implements Serializable{
         this.password = password == null ? null : password.trim();
     }
 
-    public String getRealname() {
-        return realname;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setRealname(String realname) {
-        this.realname = realname == null ? null : realname.trim();
+    public void setRealName(String realName) {
+        this.realName = realName == null ? null : realName.trim();
     }
 
-    public Integer getState() {
-        return state;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId == null ? null : deviceId.trim();
     }
 
-    public Date getRegistrationtime() {
-        return registrationtime;
+    public Integer getGesState() {
+        return gesState;
     }
 
-    public void setRegistrationtime(Date registrationtime) {
-        this.registrationtime = registrationtime;
+    public void setGesState(Integer gesState) {
+        this.gesState = gesState;
     }
 
-    public String getDeviceid() {
-        return deviceid;
+    public String getGesPassword() {
+        return gesPassword;
     }
 
-    public void setDeviceid(String deviceid) {
-        this.deviceid = deviceid == null ? null : deviceid.trim();
+    public void setGesPassword(String gesPassword) {
+        this.gesPassword = gesPassword == null ? null : gesPassword.trim();
     }
 
-    public Date getLogintime() {
-        return logintime;
+    public Integer getGesTrail() {
+        return gesTrail;
     }
 
-    public void setLogintime(Date logintime) {
-        this.logintime = logintime;
+    public void setGesTrail(Integer gesTrail) {
+        this.gesTrail = gesTrail;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public String getPayPassword() {
+        return payPassword;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setPayPassword(String payPassword) {
+        this.payPassword = payPassword == null ? null : payPassword.trim();
     }
 
-    public Integer getGesstate() {
-        return gesstate;
+    public Integer getDeviceType() {
+        return deviceType;
     }
 
-    public void setGesstate(Integer gesstate) {
-        this.gesstate = gesstate;
+    public void setDeviceType(Integer deviceType) {
+        this.deviceType = deviceType;
     }
 
-    public String getGespassword() {
-        return gespassword;
+    public String getDeviceToken() {
+        return deviceToken;
     }
 
-    public void setGespassword(String gespassword) {
-        this.gespassword = gespassword == null ? null : gespassword.trim();
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken == null ? null : deviceToken.trim();
     }
 
-    public String getPaypassword() {
-        return paypassword;
+    public Integer getPasswordErrorNum() {
+        return passwordErrorNum;
     }
 
-    public void setPaypassword(String paypassword) {
-        this.paypassword = paypassword == null ? null : paypassword.trim();
+    public void setPasswordErrorNum(Integer passwordErrorNum) {
+        this.passwordErrorNum = passwordErrorNum;
     }
 
-    public Integer getGestrail() {
-        return gestrail;
+    public Date getPasswordErrorDate() {
+        return passwordErrorDate;
     }
 
-    public void setGestrail(Integer gestrail) {
-        this.gestrail = gestrail;
-    }
-
-    public Integer getDevicetype() {
-        return devicetype;
-    }
-
-    public void setDevicetype(Integer devicetype) {
-        this.devicetype = devicetype;
-    }
-
-    public String getDevicetoken() {
-        return devicetoken;
-    }
-
-    public void setDevicetoken(String devicetoken) {
-        this.devicetoken = devicetoken == null ? null : devicetoken.trim();
-    }
-
-    public Integer getPassworderror() {
-        return passworderror;
-    }
-
-    public void setPassworderror(Integer passworderror) {
-        this.passworderror = passworderror;
-    }
-
-    public Date getPassworderrordate() {
-        return passworderrordate;
-    }
-
-    public void setPassworderrordate(Date passworderrordate) {
-        this.passworderrordate = passworderrordate;
+    public void setPasswordErrorDate(Date passwordErrorDate) {
+        this.passwordErrorDate = passwordErrorDate;
     }
 
     public String getRemark() {
@@ -182,5 +159,37 @@ public class AppUser implements Serializable{
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Date getRegTime() {
+        return regTime;
+    }
+
+    public void setRegTime(Date regTime) {
+        this.regTime = regTime;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 }

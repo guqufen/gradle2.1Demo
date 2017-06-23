@@ -70,20 +70,102 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">新增商户信息</h4>
+                <h4 class="modal-title" id="myModalLabel">新增商户</h4>
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
-                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
-                    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">商户基本信息</a></li>
+                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">资质文件</a></li>
+                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">账户信息</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="home">...</div>
-                    <div role="tabpanel" class="tab-pane" id="profile">...</div>
-                    <div role="tabpanel" class="tab-pane" id="messages">...</div>
-                    <div role="tabpanel" class="tab-pane" id="settings">...</div>
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">商户名：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">商户名：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">商户名：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">商户名：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">商户名：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">商户名：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                        </div>
+                        <a class="nextBtn" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">下一步</a>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="profile">
+                    <table class="table table-bordered">
+                      <thead>
+                          <th>材料名称</th>
+                          <th>操作</th>
+                      </thead>
+                      <tr>
+                          <td>银行卡正面</td>
+                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"></td>
+                      </tr>
+                      <tr>
+                          <td>银行卡反面</td>
+                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"></td>
+                      </tr>
+                      <tr>
+                          <td>营业执照</td>
+                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"></td>
+                      </tr>
+                      <tr>
+                          <td>签约协议照片</td>
+                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"></td>
+                      </tr>
+                      <tr>
+                          <td>房屋租赁合同照片</td>
+                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"></td>
+                      </tr>
+                    </table>
+                        <a class="nextBtn"  href="#messages" aria-controls="messages" role="tab" data-toggle="tab">下一步</a>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="messages">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">账户信息：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">账户信息：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">账户信息：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">账户信息：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">账户信息：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label" for="txt_search_id">账户信息：</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                        </div>
+                        <a class="saveBtn">保存</a>
+                    </div>
                 </div>
             </div>
             <!-- <div class="modal-footer">
@@ -224,5 +306,10 @@
             '</a>'
         ].join('');
     }
+
+    /*弹框下一步按钮事件*/
+    $(".nextBtn").click(function(){
+        $(".nav-tabs li.active").removeClass('active').next().addClass('active');
+    })
 </script>
 </html>

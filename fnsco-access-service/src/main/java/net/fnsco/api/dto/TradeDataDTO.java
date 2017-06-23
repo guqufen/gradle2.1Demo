@@ -7,11 +7,11 @@ public class TradeDataDTO extends DTO {
     private String amt;         //金额，格式为“100.01”
     private String orderNo;     // 订单号（不唯一）
     private String orderTime;   // 订单时间戳
-    private String orderInfo;   // 订单信息（目前用不到）
-    private String batchBillNo; // 撤销时会有
+    private String orderInfo;   // 订单信息 
+    private String batchBillNo; // 撤销时会有  无用**
 
     private String payType;     // 支付方式
-    private String referNo;     // 检索参考号
+    private String referNo;     // 检索参考号 无用**
     private String timeStamp;   // 交易时间戳
     private String tradeDetail; // 交易详情（JSON串）
 
@@ -21,6 +21,66 @@ public class TradeDataDTO extends DTO {
     private String sysTraceNo;  // 凭证号
     private String authCode;    // 授权码
     private String orderIdScan; // 扫码交易的订单号
+    private String source;      //流水来源00拉卡拉机器
+    private String md5;         //参数md5值
+    private String sendTime;    //发送时间
+    private String validate;    //是否校验1验证0不验证
+
+    /**
+     * @return the source
+     */
+    public String getSource() {
+        return source;
+    }
+
+    /**
+     * @param source the source to set
+     */
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    /**
+     * @return the md5
+     */
+    public String getMd5() {
+        return md5;
+    }
+
+    /**
+     * @param md5 the md5 to set
+     */
+    public void setMd5(String md5) {
+        this.md5 = md5;
+    }
+
+    /**
+     * @return the sendTime
+     */
+    public String getSendTime() {
+        return sendTime;
+    }
+
+    /**
+     * @param sendTime the sendTime to set
+     */
+    public void setSendTime(String sendTime) {
+        this.sendTime = sendTime;
+    }
+
+    /**
+     * @return the validate
+     */
+    public String getValidate() {
+        return validate;
+    }
+
+    /**
+     * @param validate the validate to set
+     */
+    public void setValidate(String validate) {
+        this.validate = validate;
+    }
 
     /**
      * @return the amt

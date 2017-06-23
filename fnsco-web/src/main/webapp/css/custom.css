@@ -20,13 +20,13 @@ table a.remove,table a.redact{
 	background: #54708a;*/
 }
 .form-group .control-label{
-	float: left;
+	display: inline-block;
 	width: 25%;
 	padding-top: 8px;
 }
 .form-group .form-control{
-	width: 75%;
-	float: left;
+	width: 72%;
+	display: inline-block;
 }
 .form-group div{
 	margin: 5px 0;
@@ -39,8 +39,35 @@ table a.remove,table a.redact{
 .modal-body .nav-tabs>li>a{
 	border-radius:0;
 	border: none;
+	margin: 0;
 }
 .modal-body .nav>li.active>a{
 	border-radius: 0;
 	border: none;
+	background-color: #fff;
+	color: #2f4050;
 }
+.modal-body .tab-content{
+	padding:20px;
+}
+.modal-body .tab-content label{
+	margin-bottom: 2px;
+}
+.modal-body .col-sm-6{
+	margin-bottom:15px;
+}
+	/*下一步按钮*/
+	a.nextBtn,a.saveBtn{
+		margin: 10px auto;
+		width: 80px;
+		height: 35px;
+		line-height: 35px;
+		display: block;
+		text-align: center;
+		background:#2f4050;
+		color: #fff;
+		border-radius: 5px;
+	}
+	a.nextBtn:hover,a.saveBtn:hover{
+		color: #fff;
+	}
