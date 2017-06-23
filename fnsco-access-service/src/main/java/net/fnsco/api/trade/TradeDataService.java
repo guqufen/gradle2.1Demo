@@ -1,5 +1,7 @@
 package net.fnsco.api.trade;
 
+import net.fnsco.api.dto.TradeDataDTO;
+
 public interface TradeDataService {
-    boolean saveTradeData();
+    boolean saveTradeData(TradeDataDTO tradeData);
 }

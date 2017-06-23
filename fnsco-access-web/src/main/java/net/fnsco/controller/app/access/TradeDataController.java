@@ -36,7 +36,7 @@ public class TradeDataController extends BaseController {
     @ApiOperation(value = "保存交易流水")
     public ResultDTO saveTrade(@RequestBody TradeDataDTO tradeData) {
         logger.error("交易流水数据" + JSON.toJSONString(tradeData));
-        tradeDataService.saveTradeData();
+        tradeDataService.saveTradeData(tradeData);
         return success();
     }
 
