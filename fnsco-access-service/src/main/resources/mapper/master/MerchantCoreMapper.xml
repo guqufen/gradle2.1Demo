@@ -287,67 +287,68 @@
      select 
      <include refid="Base_Column_List" />
    	 from m_merchant_core
-  	 where 1=1 
-  	 <if test="condition.innerCode != null" >
-        AND inner_code = #{condition.innerCode,jdbcType=VARCHAR},
+  	<where>
+  	 <if test="condition.innerCode != null and condition.innerCode != ''" >
+        AND inner_code = #{condition.innerCode,jdbcType=VARCHAR}
       </if>
-      <if test="condition.name != null" >
-        AND name = #{condition.name,jdbcType=VARCHAR},
+      <if test="condition.name != null and condition.name != ''" >
+        AND name = #{condition.name,jdbcType=VARCHAR}
       </if>
-      <if test="condition.abbreviation != null" >
+      <if test="condition.abbreviation != null and condition.abbreviation != ''" >
         AND abbreviation = #{condition.abbreviation,jdbcType=VARCHAR},
       </if>
-      <if test="condition.enName != null" >
-        AND en_name = #{condition.enName,jdbcType=VARCHAR},
+      <if test="condition.enName != null and condition.enName != ''" >
+        AND en_name = #{condition.enName,jdbcType=VARCHAR}
       </if>
-      <if test="condition.signDate != null" >
-        AND sign_date = #{condition.signDate,jdbcType=VARCHAR},
+      <if test="condition.signDate != null and condition.signDate != ''" >
+        AND sign_date = #{condition.signDate,jdbcType=VARCHAR}
       </if>
-      <if test="condition.legalPerson != null" >
-        AND legal_person = #{condition.legalPerson,jdbcType=VARCHAR},
+      <if test="condition.legalPerson != null and condition.legalPerson != ''" >
+        AND legal_person = #{condition.legalPerson,jdbcType=VARCHAR}
       </if>
-      <if test="condition.legalPersonMobile != null" >
-        AND legal_person_mobile = #{condition.legalPersonMobile,jdbcType=VARCHAR},
+      <if test="condition.legalPersonMobile != null and condition.legalPersonMobile != ''" >
+        AND legal_person_mobile = #{condition.legalPersonMobile,jdbcType=VARCHAR}
       </if>
-      <if test="condition.legalPersonTel != null" >
-        AND legal_person_tel = #{condition.legalPersonTel,jdbcType=VARCHAR},
+      <if test="condition.legalPersonTel != null and condition.legalPersonTel != ''" >
+        AND legal_person_tel = #{condition.legalPersonTel,jdbcType=VARCHAR}
       </if>
-      <if test="condition.legalValidCardType != null" >
-        AND legal_valid_card_type = #{condition.legalValidCardType,jdbcType=VARCHAR},
+      <if test="condition.legalValidCardType != null and condition.legalValidCardType != ''" >
+        AND legal_valid_card_type = #{condition.legalValidCardType,jdbcType=VARCHAR}
       </if>
-      <if test="condition.cardNum != null" >
-        AND card_num = #{condition.cardNum,jdbcType=VARCHAR},
+      <if test="condition.cardNum != null and condition.cardNum != ''" >
+        AND card_num = #{condition.cardNum,jdbcType=VARCHAR}
       </if>
-      <if test="condition.cardValidTime != null" >
-        AND card_valid_time = #{condition.cardValidTime,jdbcType=VARCHAR},
+      <if test="condition.cardValidTime != null and condition.cardValidTime != ''" >
+        AND card_valid_time = #{condition.cardValidTime,jdbcType=VARCHAR}
       </if>
-      <if test="condition.businessLicenseNum != null" >
-        AND business_license_num = #{condition.businessLicenseNum,jdbcType=VARCHAR},
+      <if test="condition.businessLicenseNum != null and condition.businessLicenseNum != ''" >
+        AND business_license_num = #{condition.businessLicenseNum,jdbcType=VARCHAR}
       </if>
-      <if test="condition.businessLicenseValidTime != null" >
-        AND business_license_valid_time = #{condition.businessLicenseValidTime,jdbcType=VARCHAR},
+      <if test="condition.businessLicenseValidTime != null and condition.businessLicenseValidTime != ''" >
+        AND business_license_valid_time = #{condition.businessLicenseValidTime,jdbcType=VARCHAR}
       </if>
-      <if test="condition.taxRegistCode != null" >
-        AND tax_regist_code = #{condition.taxRegistCode,jdbcType=VARCHAR},
+      <if test="condition.taxRegistCode != null and condition.taxRegistCode != ''" >
+        AND tax_regist_code = #{condition.taxRegistCode,jdbcType=VARCHAR}
       </if>
-      <if test="condition.registAddress != null" >
-        AND regist_address = #{condition.registAddress,jdbcType=VARCHAR},
+      <if test="condition.registAddress != null and condition.registAddress != ''" >
+        AND regist_address = #{condition.registAddress,jdbcType=VARCHAR}
       </if>
-      <if test="condition.mercFlag != null" >
-        AND merc_flag = #{condition.mercFlag,jdbcType=VARCHAR},
+      <if test="condition.mercFlag != null and condition.mercFlag != ''" >
+        AND merc_flag = #{condition.mercFlag,jdbcType=VARCHAR}
       </if>
-      <if test="condition.source != null" >
-        AND source = #{condition.source,jdbcType=INTEGER},
+      <if test="condition.source != null and condition.source != ''" >
+        AND source = #{condition.source,jdbcType=INTEGER}
       </if>
-      <if test="condition.modifyUserId != null" >
-        AND modify_user_id = #{condition.modifyUserId,jdbcType=VARCHAR},
+      <if test="condition.modifyUserId != null and condition.modifyUserId != ''" >
+        AND modify_user_id = #{condition.modifyUserId,jdbcType=VARCHAR}
       </if>
-      <if test="condition.modifyTime != null" >
-        AND modify_time = #{condition.modifyTime,jdbcType=TIMESTAMP},
+      <if test="condition.modifyTime != null and condition.modifyTime != ''" >
+        AND modify_time = #{condition.modifyTime,jdbcType=TIMESTAMP}
       </if>
-      <if test="condition.status != null" >
-        AND status = #{condition.status,jdbcType=INTEGER},
+      <if test="condition.status != null and condition.status != ''" >
+        AND status = #{condition.status,jdbcType=INTEGER}
       </if>
+      </where>
       limit #{startRow} , #{perPageSize}
   </select>
   <!-- 条件查询总数 -->
@@ -355,66 +356,67 @@
      select count(*)  from 
      		m_merchant_core
   	 <where>
-  	 	<if test="innerCode != null" >
-        AND inner_code = #{innerCode,jdbcType=VARCHAR},
+  	 	<if test="innerCode != null and innerCode != ''" >
+        AND inner_code = #{innerCode,jdbcType=VARCHAR}
       </if>
-      <if test="name != null" >
-        AND name = #{name,jdbcType=VARCHAR},
+      <if test="name != null and name != ''" >
+        AND name = #{name,jdbcType=VARCHAR}
       </if>
-      <if test="abbreviation != null" >
-        AND abbreviation = #{abbreviation,jdbcType=VARCHAR},
+      <if test="abbreviation != null and abbreviation != ''" >
+        AND abbreviation = #{abbreviation,jdbcType=VARCHAR}
       </if>
-      <if test="enName != null" >
-        AND en_name = #{enName,jdbcType=VARCHAR},
+      <if test="enName != null and enName != ''" >
+        AND en_name = #{enName,jdbcType=VARCHAR}
       </if>
-      <if test="signDate != null" >
-        AND sign_date = #{signDate,jdbcType=VARCHAR},
+      <if test="signDate != null and signDate != ''" >
+        AND sign_date = #{signDate,jdbcType=VARCHAR}
       </if>
-      <if test="legalPerson != null" >
-        AND legal_person = #{legalPerson,jdbcType=VARCHAR},
+      <if test="legalPerson != null and legalPerson != ''" >
+        AND legal_person = #{legalPerson,jdbcType=VARCHAR}
       </if>
-      <if test="legalPersonMobile != null" >
-        AND legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR},
+      <if test="legalPersonMobile != null and legalPersonMobile != ''" >
+        AND legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR}
       </if>
-      <if test="legalPersonTel != null" >
-        AND legal_person_tel = #{legalPersonTel,jdbcType=VARCHAR},
+      <if test="legalPersonTel != null and legalPersonTel != ''" >
+        AND legal_person_tel = #{legalPersonTel,jdbcType=VARCHAR}
       </if>
-      <if test="legalValidCardType != null" >
-        AND legal_valid_card_type = #{legalValidCardType,jdbcType=VARCHAR},
+      <if test="legalValidCardType != null and legalValidCardType != ''" >
+        AND legal_valid_card_type = #{legalValidCardType,jdbcType=VARCHAR}
       </if>
-      <if test="cardNum != null" >
-        AND card_num = #{cardNum,jdbcType=VARCHAR},
+      <if test="cardNum != null and cardNum != ''" >
+        AND card_num = #{cardNum,jdbcType=VARCHAR}
       </if>
-      <if test="cardValidTime != null" >
-        AND card_valid_time = #{cardValidTime,jdbcType=VARCHAR},
+      <if test="cardValidTime != null and cardValidTime != ''" >
+        AND card_valid_time = #{cardValidTime,jdbcType=VARCHAR}
       </if>
-      <if test="businessLicenseNum != null" >
-        AND business_license_num = #{businessLicenseNum,jdbcType=VARCHAR},
+      <if test="businessLicenseNum != null and businessLicenseNum != ''" >
+        AND business_license_num = #{businessLicenseNum,jdbcType=VARCHAR}
       </if>
-      <if test="businessLicenseValidTime != null" >
-        AND business_license_valid_time = #{businessLicenseValidTime,jdbcType=VARCHAR},
+      <if test="businessLicenseValidTime != null and businessLicenseValidTime != ''" >
+        AND business_license_valid_time = #{businessLicenseValidTime,jdbcType=VARCHAR}
       </if>
-      <if test="taxRegistCode != null" >
-        AND tax_regist_code = #{taxRegistCode,jdbcType=VARCHAR},
+      <if test="taxRegistCode != null and taxRegistCode != ''" >
+        AND tax_regist_code = #{taxRegistCode,jdbcType=VARCHAR}
       </if>
-      <if test="registAddress != null" >
-        AND regist_address = #{registAddress,jdbcType=VARCHAR},
+      <if test="registAddress != null and registAddress != ''" >
+        AND regist_address = #{registAddress,jdbcType=VARCHAR}
       </if>
-      <if test="mercFlag != null" >
-        AND merc_flag = #{mercFlag,jdbcType=VARCHAR},
+      <if test="mercFlag != null and mercFlag != ''" >
+        AND merc_flag = #{mercFlag,jdbcType=VARCHAR}
       </if>
-      <if test="source != null" >
-        AND source = #{source,jdbcType=INTEGER},
+      <if test="source != null and source != ''" >
+        AND source = #{source,jdbcType=INTEGER}
       </if>
-      <if test="modifyUserId != null" >
-        AND modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+      <if test="modifyUserId != null and modifyUserId != ''" >
+        AND modify_user_id = #{modifyUserId,jdbcType=VARCHAR}
       </if>
-      <if test="modifyTime != null" >
-        AND modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      <if test="modifyTime != null and modifyTime != ''" >
+        AND modify_time = #{modifyTime,jdbcType=TIMESTAMP}
       </if>
-      <if test="status != null" >
-        AND status = #{status,jdbcType=INTEGER},
+      <if test="status != null and status != ''" >
+        AND status = #{status,jdbcType=INTEGER}
       </if>
+      
   	 </where>
   </select>
   <!-- 根据条件查询所有数据 -->
@@ -424,64 +426,64 @@
    	 from m_merchant_core
    	 <where>
    	   <if test="innerCode != null" >
-        AND inner_code = #{innerCode,jdbcType=VARCHAR},
+        AND inner_code = #{innerCode,jdbcType=VARCHAR}
       </if>
       <if test="name != null" >
-        AND name = #{name,jdbcType=VARCHAR},
+        AND name = #{name,jdbcType=VARCHAR}
       </if>
       <if test="abbreviation != null" >
-        AND abbreviation = #{abbreviation,jdbcType=VARCHAR},
+        AND abbreviation = #{abbreviation,jdbcType=VARCHAR}
       </if>
       <if test="enName != null" >
-        AND en_name = #{enName,jdbcType=VARCHAR},
+        AND en_name = #{enName,jdbcType=VARCHAR}
       </if>
       <if test="signDate != null" >
-        AND sign_date = #{signDate,jdbcType=VARCHAR},
+        AND sign_date = #{signDate,jdbcType=VARCHAR}
       </if>
       <if test="legalPerson != null" >
-        AND legal_person = #{legalPerson,jdbcType=VARCHAR},
+        AND legal_person = #{legalPerson,jdbcType=VARCHAR}
       </if>
       <if test="legalPersonMobile != null" >
-        AND legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR},
+        AND legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR}
       </if>
       <if test="legalPersonTel != null" >
-        AND legal_person_tel = #{legalPersonTel,jdbcType=VARCHAR},
+        AND legal_person_tel = #{legalPersonTel,jdbcType=VARCHAR}
       </if>
       <if test="legalValidCardType != null" >
-        AND legal_valid_card_type = #{legalValidCardType,jdbcType=VARCHAR},
+        AND legal_valid_card_type = #{legalValidCardType,jdbcType=VARCHAR}
       </if>
       <if test="cardNum != null" >
-        AND card_num = #{cardNum,jdbcType=VARCHAR},
+        AND card_num = #{cardNum,jdbcType=VARCHAR}
       </if>
       <if test="cardValidTime != null" >
-        AND card_valid_time = #{cardValidTime,jdbcType=VARCHAR},
+        AND card_valid_time = #{cardValidTime,jdbcType=VARCHAR}
       </if>
       <if test="businessLicenseNum != null" >
-        AND business_license_num = #{businessLicenseNum,jdbcType=VARCHAR},
+        AND business_license_num = #{businessLicenseNum,jdbcType=VARCHAR}
       </if>
       <if test="businessLicenseValidTime != null" >
-        AND business_license_valid_time = #{businessLicenseValidTime,jdbcType=VARCHAR},
+        AND business_license_valid_time = #{businessLicenseValidTime,jdbcType=VARCHAR}
       </if>
       <if test="taxRegistCode != null" >
-        AND tax_regist_code = #{taxRegistCode,jdbcType=VARCHAR},
+        AND tax_regist_code = #{taxRegistCode,jdbcType=VARCHAR}
       </if>
       <if test="registAddress != null" >
-        AND regist_address = #{registAddress,jdbcType=VARCHAR},
+        AND regist_address = #{registAddress,jdbcType=VARCHAR}
       </if>
       <if test="mercFlag != null" >
-        AND merc_flag = #{mercFlag,jdbcType=VARCHAR},
+        AND merc_flag = #{mercFlag,jdbcType=VARCHAR}
       </if>
       <if test="source != null" >
-        AND source = #{source,jdbcType=INTEGER},
+        AND source = #{source,jdbcType=INTEGER}
       </if>
       <if test="modifyUserId != null" >
-        AND modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
+        AND modify_user_id = #{modifyUserId,jdbcType=VARCHAR}
       </if>
       <if test="modifyTime != null" >
-        AND modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+        AND modify_time = #{modifyTime,jdbcType=TIMESTAMP}
       </if>
       <if test="status != null" >
-        AND status = #{status,jdbcType=INTEGER},
+        AND status = #{status,jdbcType=INTEGER}
       </if>
    	 </where>
   </select>

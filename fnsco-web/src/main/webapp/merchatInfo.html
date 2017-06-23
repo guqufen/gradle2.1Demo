@@ -31,7 +31,7 @@
                     <input type="text" class="form-control" id="txt_search_price">
                 </div>
                 <div class="col-sm-3" style="text-align:right;">
-                    <button type="button" id="btn_query" class="btn">查询</button>
+                    <button type="button" id="btn_query" class="btn" onclick="javascript:queryEvent();">查询</button>
                     <button type="button" id="btn_reset" class="btn">重置</button>
                 </div>
             </div>
@@ -71,11 +71,7 @@
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
 </body>
 <script type="text/javascript">
-   
-   
-//     var json =  [{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多大鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多小鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多小鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多小鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多小鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多鱼","price":"3600"},{"operate":"8080","id":"1","name":"好多小鱼","price":"3600"}];
-    getTableData();
-    
+	initTableData();
     window.operateEvents = {
         'click .redact': function (e, value, row, index) {
             alert('You click like action, row: ' + JSON.stringify(row));
@@ -98,7 +94,7 @@
         ].join('');
     }
     //初始化表格
-    function initTableData(json){
+    function initTableData(){
     	$('#table').bootstrapTable({
             sidePagination:'server',
             search: false, //是否启动搜索栏 
@@ -114,6 +110,8 @@
             pageNumber:1,   //初始化加载第一页，默认第一页
             pageSize: 15,   //每页的记录行数（*）
             pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
+            queryParams:queryParams,
+            responseHandler:responseHandler,//处理服务器返回数据
             columns: [{
                 field: 'state',
                 checkbox: true,
@@ -169,20 +167,35 @@
             }]
         });
     }
-    //获取表格数据
-    function getTableData(){
-    	var json_data =[{}];
-    	var pageNumber = 1;
-    	var pageSize = 10;
-    	$.ajax({
-    		url:'web/merchantinfo/queryList',
-    		data:{'currentPageNum':pageNumber,'pageSize':pageSize},
-    		type:'POST',
-    		dataType:'json',
-    		success:function(data){
-    			initTableData(data.data);
-    		}
-    	});
-    }
+   //组装请求参数
+   function queryParams(params)
+   {
+	   var param ={
+			   currentPageNum : this.pageNumber,
+			   pageSize : this.pageSize,
+			   name :$('#txt_search_id').val(),
+			   legalPerson:$('#txt_search_name').val(),
+			   legalPersonMobile:$('#txt_search_price').val()
+	   }
+	   return param;
+   }
+   //处理后台返回数据
+   function responseHandler(res) { 
+	    if (res) {
+	        return {
+	            "rows" : res.list,
+	            "total" : res.total
+	        };
+	    } else {
+	        return {
+	            "rows" : [],
+	            "total" : 0
+	        };
+	    }
+	}
+   //条件查询按钮事件
+   function queryEvent(){
+	   $('#table').bootstrapTable('refresh');
+   }
 </script>
 </html>

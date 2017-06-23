@@ -79,6 +79,7 @@ public class SysUserLoginAction extends BaseController{
 		if(null == adminUser)
 		{
 			String cookie = (String) getCookieUser();
+			if(StringUtils.isEmpty(cookie))return result;
 			adminUser = new SysUser();
 			adminUser.setName(cookie.substring(cookie.lastIndexOf("#")+1, cookie.length()));
 		}
