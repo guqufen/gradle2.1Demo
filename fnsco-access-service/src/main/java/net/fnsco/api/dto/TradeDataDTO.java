@@ -7,11 +7,11 @@ public class TradeDataDTO extends DTO {
     private String amt;         //金额，格式为“100.01”
     private String orderNo;     // 订单号（不唯一）
     private String orderTime;   // 订单时间戳
-    private String orderInfo;   // 订单信息（目前用不到）
-    private String batchBillNo; // 撤销时会有
+    private String orderInfo;   // 订单信息 
+    private String batchBillNo; // 撤销时会有  无用**
 
     private String payType;     // 支付方式
-    private String referNo;     // 检索参考号
+    private String referNo;     // 检索参考号 无用**
     private String timeStamp;   // 交易时间戳
     private String tradeDetail; // 交易详情（JSON串）
 
