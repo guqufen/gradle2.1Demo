@@ -16,7 +16,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.service.domain.AppUser;
 
 @RestController
-@RequestMapping("/app/user")
+@RequestMapping("/app")
 public class AppUserController extends BaseController{
 	@Autowired
 	private AppUserService mAppUserService;
