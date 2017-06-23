@@ -1,31 +1,73 @@
 #side-menu .glyphicon-chevron-down,#side-menu .glyphicon-chevron-up{
 	float: right;
 }
+table a.remove{
+	color:#999;
+}
+table a.redact{
+	color:#428bca;
+}
+
 table a.remove,table a.redact{
 	padding: 5px 10px;
-    background: #54708a;
-    color: #fff;
     border-radius: 3px;
-}
-table a.remove i,table a.redact i{
-	margin-right: 5px;
 }
 .form-group{
 	padding: 0 10px;
 }
 .form-group .btn{
-	color: #fff;
-	background: #54708a;
+/*	color: #fff;
+	background: #54708a;*/
 }
 .form-group .control-label{
-	float: left;
+	display: inline-block;
 	width: 25%;
 	padding-top: 8px;
 }
 .form-group .form-control{
-	width: 75%;
-	float: left;
+	width: 72%;
+	display: inline-block;
 }
 .form-group div{
 	margin: 5px 0;
 }
+/*弹框样式修改*/
+.modal-body{padding: 0;}
+.modal-body .nav{
+	background: #2f4050;
+}
+.modal-body .nav-tabs>li>a{
+	border-radius:0;
+	border: none;
+	margin: 0;
+}
+.modal-body .nav>li.active>a{
+	border-radius: 0;
+	border: none;
+	background-color: #fff;
+	color: #2f4050;
+}
+.modal-body .tab-content{
+	padding:20px;
+}
+.modal-body .tab-content label{
+	margin-bottom: 2px;
+}
+.modal-body .col-sm-6{
+	margin-bottom:15px;
+}
+	/*下一步按钮*/
+	a.nextBtn,a.saveBtn{
+		margin: 10px auto;
+		width: 80px;
+		height: 35px;
+		line-height: 35px;
+		display: block;
+		text-align: center;
+		background:#2f4050;
+		color: #fff;
+		border-radius: 5px;
+	}
+	a.nextBtn:hover,a.saveBtn:hover{
+		color: #fff;
+	}

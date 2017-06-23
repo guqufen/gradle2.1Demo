@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-sm-3" style="text-align:right;">
                     <button type="button" id="btn_query" class="btn" onclick="javascript:queryEvent();">查询</button>
-                    <button type="button" id="btn_reset" class="btn">重置</button>
+                    <button type="button" id="btn_reset" class="btn" onclick="javascript:resetEvent();">重置</button>
                 </div>
             </div>
         </form>
@@ -196,6 +196,10 @@
    //条件查询按钮事件
    function queryEvent(){
 	   $('#table').bootstrapTable('refresh');
+   }
+   //重置按钮事件
+   function resetEvent(){
+	   $('#formSearch')[0].reset();
    }
 </script>
 </html>
