@@ -5,71 +5,67 @@ import java.util.Date;
 public class TradeData {
     private String id;
 
-    private String innercode;
+    private String innerCode;
 
-    private String txntype;
+    private String txnType;
 
-    private String txnsubtype;
+    private String txnSubType;
 
     private String currency;
 
-    private String fronturl;
-
-    private String backurl;
-
-    private String paytimeout;
+    private String payTimeOut;
 
     private String subject;
 
     private String body;
 
-    private String customerinfo;
+    private String customerInfo;
 
     private String remark;
 
-    private String customerip;
+    private String customerIp;
 
     private String tn;
 
-    private String respcode;
+    private String respCode;
 
-    private String respmsg;
+    private String respMsg;
 
-    private String settleamount;
+    private String settleAmount;
 
-    private String settlecurrency;
+    private String settleCurrency;
 
-    private String settledate;
+    private String settleDate;
 
-    private String succtime;
+    private String succTime;
 
-    private String orgmerorderid;
+    private String orgMerOrderId;
 
-    private String canrefamt;
+    private String canRefAmt;
 
-    private String refcnt;
+    private String refCnt;
 
-    private String refamt;
+    private String refAmt;
 
-    private String bankid;
+    private String bankId;
 
-    private String ppflag;
+    private String ppFlag;
 
     private String purpose;
 
-    private String dctype;
+    private String dcType;
 
     private String certifyId;
 
     private String msgDestId;
 
-    private String customernm;
+    private String customerNm;
 
-    private String phoneno;
+    private String phoneNo;
 
-    private String subopenid;
+    private String subOpenId;
 
-    private String channeltype;
+    private String channelType;
 
     private String amt;
 
@@ -113,28 +109,28 @@ public class TradeData {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getInnercode() {
-        return innercode;
+    public String getInnerCode() {
+        return innerCode;
     }
 
-    public void setInnercode(String innercode) {
-        this.innercode = innercode == null ? null : innercode.trim();
+    public void setInnerCode(String innerCode) {
+        this.innerCode = innerCode == null ? null : innerCode.trim();
     }
 
-    public String getTxntype() {
-        return txntype;
+    public String getTxnType() {
+        return txnType;
     }
 
-    public void setTxntype(String txntype) {
-        this.txntype = txntype == null ? null : txntype.trim();
+    public void setTxnType(String txnType) {
+        this.txnType = txnType == null ? null : txnType.trim();
     }
 
-    public String getTxnsubtype() {
-        return txnsubtype;
+    public String getTxnSubType() {
+        return txnSubType;
     }
 
-    public void setTxnsubtype(String txnsubtype) {
-        this.txnsubtype = txnsubtype == null ? null : txnsubtype.trim();
+    public void setTxnSubType(String txnSubType) {
+        this.txnSubType = txnSubType == null ? null : txnSubType.trim();
     }
 
     public String getCurrency() {
@@ -145,28 +141,12 @@ public class TradeData {
         this.currency = currency == null ? null : currency.trim();
     }
 
-    public String getFronturl() {
-        return fronturl;
+    public String getPayTimeOut() {
+        return payTimeOut;
     }
 
-    public void setFronturl(String fronturl) {
-        this.fronturl = fronturl == null ? null : fronturl.trim();
-    }
-
-    public String getBackurl() {
-        return backurl;
-    }
-
-    public void setBackurl(String backurl) {
-        this.backurl = backurl == null ? null : backurl.trim();
-    }
-
-    public String getPaytimeout() {
-        return paytimeout;
-    }
-
-    public void setPaytimeout(String paytimeout) {
-        this.paytimeout = paytimeout == null ? null : paytimeout.trim();
+    public void setPayTimeOut(String payTimeOut) {
+        this.payTimeOut = payTimeOut == null ? null : payTimeOut.trim();
     }
 
     public String getSubject() {
@@ -185,12 +165,12 @@ public class TradeData {
         this.body = body == null ? null : body.trim();
     }
 
-    public String getCustomerinfo() {
-        return customerinfo;
+    public String getCustomerInfo() {
+        return customerInfo;
     }
 
-    public void setCustomerinfo(String customerinfo) {
-        this.customerinfo = customerinfo == null ? null : customerinfo.trim();
+    public void setCustomerInfo(String customerInfo) {
+        this.customerInfo = customerInfo == null ? null : customerInfo.trim();
     }
 
     public String getRemark() {
@@ -201,12 +181,12 @@ public class TradeData {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    public String getCustomerip() {
-        return customerip;
+    public String getCustomerIp() {
+        return customerIp;
     }
 
-    public void setCustomerip(String customerip) {
-        this.customerip = customerip == null ? null : customerip.trim();
+    public void setCustomerIp(String customerIp) {
+        this.customerIp = customerIp == null ? null : customerIp.trim();
     }
 
     public String getTn() {
@@ -217,100 +197,100 @@ public class TradeData {
         this.tn = tn == null ? null : tn.trim();
     }
 
-    public String getRespcode() {
-        return respcode;
+    public String getRespCode() {
+        return respCode;
     }
 
-    public void setRespcode(String respcode) {
-        this.respcode = respcode == null ? null : respcode.trim();
+    public void setRespCode(String respCode) {
+        this.respCode = respCode == null ? null : respCode.trim();
     }
 
-    public String getRespmsg() {
-        return respmsg;
+    public String getRespMsg() {
+        return respMsg;
     }
 
-    public void setRespmsg(String respmsg) {
-        this.respmsg = respmsg == null ? null : respmsg.trim();
+    public void setRespMsg(String respMsg) {
+        this.respMsg = respMsg == null ? null : respMsg.trim();
     }
 
-    public String getSettleamount() {
-        return settleamount;
+    public String getSettleAmount() {
+        return settleAmount;
     }
 
-    public void setSettleamount(String settleamount) {
-        this.settleamount = settleamount == null ? null : settleamount.trim();
+    public void setSettleAmount(String settleAmount) {
+        this.settleAmount = settleAmount == null ? null : settleAmount.trim();
     }
 
-    public String getSettlecurrency() {
-        return settlecurrency;
+    public String getSettleCurrency() {
+        return settleCurrency;
     }
 
-    public void setSettlecurrency(String settlecurrency) {
-        this.settlecurrency = settlecurrency == null ? null : settlecurrency.trim();
+    public void setSettleCurrency(String settleCurrency) {
+        this.settleCurrency = settleCurrency == null ? null : settleCurrency.trim();
     }
 
-    public String getSettledate() {
-        return settledate;
+    public String getSettleDate() {
+        return settleDate;
     }
 
-    public void setSettledate(String settledate) {
-        this.settledate = settledate == null ? null : settledate.trim();
+    public void setSettleDate(String settleDate) {
+        this.settleDate = settleDate == null ? null : settleDate.trim();
     }
 
-    public String getSucctime() {
-        return succtime;
+    public String getSuccTime() {
+        return succTime;
     }
 
-    public void setSucctime(String succtime) {
-        this.succtime = succtime == null ? null : succtime.trim();
+    public void setSuccTime(String succTime) {
+        this.succTime = succTime == null ? null : succTime.trim();
     }
 
-    public String getOrgmerorderid() {
-        return orgmerorderid;
+    public String getOrgMerOrderId() {
+        return orgMerOrderId;
     }
 
-    public void setOrgmerorderid(String orgmerorderid) {
-        this.orgmerorderid = orgmerorderid == null ? null : orgmerorderid.trim();
+    public void setOrgMerOrderId(String orgMerOrderId) {
+        this.orgMerOrderId = orgMerOrderId == null ? null : orgMerOrderId.trim();
     }
 
-    public String getCanrefamt() {
-        return canrefamt;
+    public String getCanRefAmt() {
+        return canRefAmt;
     }
 
-    public void setCanrefamt(String canrefamt) {
-        this.canrefamt = canrefamt == null ? null : canrefamt.trim();
+    public void setCanRefAmt(String canRefAmt) {
+        this.canRefAmt = canRefAmt == null ? null : canRefAmt.trim();
     }
 
-    public String getRefcnt() {
-        return refcnt;
+    public String getRefCnt() {
+        return refCnt;
     }
 
-    public void setRefcnt(String refcnt) {
-        this.refcnt = refcnt == null ? null : refcnt.trim();
+    public void setRefCnt(String refCnt) {
+        this.refCnt = refCnt == null ? null : refCnt.trim();
     }
 
-    public String getRefamt() {
-        return refamt;
+    public String getRefAmt() {
+        return refAmt;
     }
 
-    public void setRefamt(String refamt) {
-        this.refamt = refamt == null ? null : refamt.trim();
+    public void setRefAmt(String refAmt) {
+        this.refAmt = refAmt == null ? null : refAmt.trim();
     }
 
-    public String getBankid() {
-        return bankid;
+    public String getBankId() {
+        return bankId;
     }
 
-    public void setBankid(String bankid) {
-        this.bankid = bankid == null ? null : bankid.trim();
+    public void setBankId(String bankId) {
+        this.bankId = bankId == null ? null : bankId.trim();
     }
 
-    public String getPpflag() {
-        return ppflag;
+    public String getPpFlag() {
+        return ppFlag;
     }
 
-    public void setPpflag(String ppflag) {
-        this.ppflag = ppflag == null ? null : ppflag.trim();
+    public void setPpFlag(String ppFlag) {
+        this.ppFlag = ppFlag == null ? null : ppFlag.trim();
     }
 
     public String getPurpose() {
@@ -321,12 +301,12 @@ public class TradeData {
         this.purpose = purpose == null ? null : purpose.trim();
     }
 
-    public String getDctype() {
-        return dctype;
+    public String getDcType() {
+        return dcType;
     }
 
-    public void setDctype(String dctype) {
-        this.dctype = dctype == null ? null : dctype.trim();
+    public void setDcType(String dcType) {
+        this.dcType = dcType == null ? null : dcType.trim();
     }
 
     public String getCertifyId() {
@@ -345,36 +325,36 @@ public class TradeData {
         this.msgDestId = msgDestId == null ? null : msgDestId.trim();
     }
 
-    public String getCustomernm() {
-        return customernm;
+    public String getCustomerNm() {
+        return customerNm;
     }
 
-    public void setCustomernm(String customernm) {
-        this.customernm = customernm == null ? null : customernm.trim();
+    public void setCustomerNm(String customerNm) {
+        this.customerNm = customerNm == null ? null : customerNm.trim();
     }
 
-    public String getPhoneno() {
-        return phoneno;
+    public String getPhoneNo() {
+        return phoneNo;
     }
 
-    public void setPhoneno(String phoneno) {
-        this.phoneno = phoneno == null ? null : phoneno.trim();
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo == null ? null : phoneNo.trim();
     }
 
-    public String getSubopenid() {
-        return subopenid;
+    public String getSubOpenId() {
+        return subOpenId;
     }
 
-    public void setSubopenid(String subopenid) {
-        this.subopenid = subopenid == null ? null : subopenid.trim();
+    public void setSubOpenId(String subOpenId) {
+        this.subOpenId = subOpenId == null ? null : subOpenId.trim();
     }
 
-    public String getChanneltype() {
-        return channeltype;
+    public String getChannelType() {
+        return channelType;
     }
 
-    public void setChanneltype(String channeltype) {
-        this.channeltype = channeltype == null ? null : channeltype.trim();
+    public void setChannelType(String channelType) {
+        this.channelType = channelType == null ? null : channelType.trim();
     }
 
     public String getAmt() {

@@ -1,4 +1,4 @@
-package net.fnsco.controller.app.merchat;
+package net.fnsco.controller.app.comm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,21 +14,20 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 
 @RestController
-@RequestMapping(value = "/app/merchant")
-public class MerchantController extends BaseController {
+@RequestMapping(value = "/app/comm")
+public class CommonController extends BaseController {
     @Autowired
     private MerchantService merchantService;
 
     /**
-     * 保存拉卡拉交易数据到库
+     * 获取APP下载地址
      *
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getMerCode", method = RequestMethod.POST)
-    @ApiOperation(value = "获取商户编号")
+    @RequestMapping(value = "/appDownUrl", method = RequestMethod.POST)
+    @ApiOperation(value = "获取APP下载地址")
     public ResultDTO getMerCode(@RequestBody MerchantJO merchant) {
-        String randomCode = merchantService.getMerCode(merchant.getMerCode(), merchant.getChannelType());
-        return success(randomCode);
+        return success("http://www.zheft.cn/download");
     }
 }

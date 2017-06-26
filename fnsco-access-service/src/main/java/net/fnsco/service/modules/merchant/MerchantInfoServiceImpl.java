@@ -3,6 +3,9 @@
  */
 package net.fnsco.service.modules.merchant;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +34,31 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 	public ResultDTO<Integer> doAddToDB(MerchantFile fileInfo, int loginUserId) {
 		
 		ResultDTO<Integer> result = new ResultDTO<>();
-
-		int res_db = merchantFileInfoDao.insertSelective(fileInfo);
+		
+		if(StringUtils.isEmpty(fileInfo.getInnerCode()) || StringUtils.isEmpty(fileInfo.getFileType()))
+		{
+			result.setError();
+			return result.setError("添加失败");
+		}	
+		
+		MerchantFile fileInfo_con = new MerchantFile();
+		fileInfo_con.setInnerCode(fileInfo.getInnerCode());
+		fileInfo_con.setFileType(fileInfo.getFileType());
+		
+		List<MerchantFile> files = merchantFileInfoDao.queryByCondition(fileInfo_con);
+		int res_db = 0;
+		if(!files.isEmpty())
+		{
+			files.get(0).setFilePath(fileInfo.getFilePath());
+			files.get(0).setFileName(fileInfo.getFileName());
+			files.get(0).setInnerCode(fileInfo.getInnerCode());
+			res_db =merchantFileInfoDao.updateByPrimaryKeySelective(files.get(0));
+		}	
+		else
+		{
+			res_db = merchantFileInfoDao.insertSelective(fileInfo);
+		}	
+		
 		
 		if (res_db != 1) {
 			result.setError();

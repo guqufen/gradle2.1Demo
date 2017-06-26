@@ -1,5 +1,7 @@
 package net.fnsco.service.dao.master;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.service.domain.MerchantChannel;
 
 /**
@@ -21,5 +23,5 @@ public interface MerchantChannelDao {
 
     int updateByPrimaryKey(MerchantChannel record);
 
-    MerchantChannel selectByMerCode(String merCode, String channelType);
+    MerchantChannel selectByMerCode(@Param("merCode") String merCode, @Param("channelType") String channelType);
 }

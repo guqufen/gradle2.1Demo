@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.service.dao.master.trade.TTradeDataMapper" >
-  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.trade.TTradeData" >
+<mapper namespace="net.fnsco.service.dao.master.trade.TradeDataDAO" >
+  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.trade.TradeData" >
     <id column="id" property="id" jdbcType="VARCHAR" />
-    <result column="innerCode" property="innercode" jdbcType="VARCHAR" />
-    <result column="txnType" property="txntype" jdbcType="VARCHAR" />
-    <result column="txnSubType" property="txnsubtype" jdbcType="VARCHAR" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="txn_type" property="txnType" jdbcType="VARCHAR" />
+    <result column="txn_sub_type" property="txnSubType" jdbcType="VARCHAR" />
     <result column="currency" property="currency" jdbcType="VARCHAR" />
-    <result column="frontUrl" property="fronturl" jdbcType="VARCHAR" />
-    <result column="backUrl" property="backurl" jdbcType="VARCHAR" />
-    <result column="payTimeOut" property="paytimeout" jdbcType="VARCHAR" />
+    <result column="pay_time_out" property="payTimeOut" jdbcType="VARCHAR" />
     <result column="subject" property="subject" jdbcType="VARCHAR" />
     <result column="body" property="body" jdbcType="VARCHAR" />
-    <result column="customerInfo" property="customerinfo" jdbcType="VARCHAR" />
+    <result column="customer_info" property="customerInfo" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="customerIp" property="customerip" jdbcType="VARCHAR" />
+    <result column="customer_ip" property="customerIp" jdbcType="VARCHAR" />
     <result column="tn" property="tn" jdbcType="VARCHAR" />
-    <result column="respCode" property="respcode" jdbcType="VARCHAR" />
-    <result column="respMsg" property="respmsg" jdbcType="VARCHAR" />
-    <result column="settleAmount" property="settleamount" jdbcType="VARCHAR" />
-    <result column="settleCurrency" property="settlecurrency" jdbcType="VARCHAR" />
-    <result column="settleDate" property="settledate" jdbcType="VARCHAR" />
-    <result column="succTime" property="succtime" jdbcType="VARCHAR" />
-    <result column="orgMerOrderId" property="orgmerorderid" jdbcType="VARCHAR" />
-    <result column="canRefAmt" property="canrefamt" jdbcType="VARCHAR" />
-    <result column="refCnt" property="refcnt" jdbcType="VARCHAR" />
-    <result column="refAmt" property="refamt" jdbcType="VARCHAR" />
-    <result column="bankId" property="bankid" jdbcType="VARCHAR" />
-    <result column="ppFlag" property="ppflag" jdbcType="VARCHAR" />
+    <result column="resp_code" property="respCode" jdbcType="VARCHAR" />
+    <result column="resp_msg" property="respMsg" jdbcType="VARCHAR" />
+    <result column="settle_amount" property="settleAmount" jdbcType="VARCHAR" />
+    <result column="settle_currency" property="settleCurrency" jdbcType="VARCHAR" />
+    <result column="settle_date" property="settleDate" jdbcType="VARCHAR" />
+    <result column="succ_time" property="succTime" jdbcType="VARCHAR" />
+    <result column="org_mer_order_id" property="orgMerOrderId" jdbcType="VARCHAR" />
+    <result column="can_ref_amt" property="canRefAmt" jdbcType="VARCHAR" />
+    <result column="ref_cnt" property="refCnt" jdbcType="VARCHAR" />
+    <result column="ref_amt" property="refAmt" jdbcType="VARCHAR" />
+    <result column="bank_id" property="bankId" jdbcType="VARCHAR" />
+    <result column="pp_flag" property="ppFlag" jdbcType="VARCHAR" />
     <result column="purpose" property="purpose" jdbcType="VARCHAR" />
-    <result column="dcType" property="dctype" jdbcType="VARCHAR" />
+    <result column="dc_type" property="dcType" jdbcType="VARCHAR" />
     <result column="certify_id" property="certifyId" jdbcType="VARCHAR" />
     <result column="msg_dest_id" property="msgDestId" jdbcType="VARCHAR" />
-    <result column="customerNm" property="customernm" jdbcType="VARCHAR" />
-    <result column="phoneNo" property="phoneno" jdbcType="VARCHAR" />
-    <result column="subOpenId" property="subopenid" jdbcType="VARCHAR" />
-    <result column="channelType" property="channeltype" jdbcType="VARCHAR" />
+    <result column="customer_nm" property="customerNm" jdbcType="VARCHAR" />
+    <result column="phone_no" property="phoneNo" jdbcType="VARCHAR" />
+    <result column="sub_open_id" property="subOpenId" jdbcType="VARCHAR" />
+    <result column="channel_type" property="channelType" jdbcType="VARCHAR" />
     <result column="amt" property="amt" jdbcType="VARCHAR" />
     <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
     <result column="order_time" property="orderTime" jdbcType="VARCHAR" />
@@ -54,86 +52,17 @@
     <result column="send_time" property="sendTime" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
+   
   <sql id="Base_Column_List" >
-    id, innerCode, txnType, txnSubType, currency, frontUrl, backUrl, payTimeOut, subject, 
-    body, customerInfo, remark, customerIp, tn, respCode, respMsg, settleAmount, settleCurrency, 
-    settleDate, succTime, orgMerOrderId, canRefAmt, refCnt, refAmt, bankId, ppFlag, purpose, 
-    dcType, certify_id, msg_dest_id, customerNm, phoneNo, subOpenId, channelType, amt, 
-    order_no, order_time, order_info, pay_type, time_stamp, trade_detail, mer_id, term_id, 
-    batch_no, sys_trace_no, auth_code, order_id_scan, source, md5, send_time, create_time
+    id, inner_code, txn_type, txn_sub_type, currency, pay_time_out, subject, body, customer_info, 
+    remark, customer_ip, tn, resp_code, resp_msg, settle_amount, settle_currency, settle_date, 
+    succ_time, org_mer_order_id, can_ref_amt, ref_cnt, ref_amt, bank_id, pp_flag, purpose, 
+    dc_type, certify_id, msg_dest_id, customer_nm, phone_no, sub_open_id, channel_type, 
+    amt, order_no, order_time, order_info, pay_type, time_stamp, trade_detail, mer_id, 
+    term_id, batch_no, sys_trace_no, auth_code, order_id_scan, source, md5, send_time, 
+    create_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="net.fnsco.service.domain.trade.TTradeDataExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from t_trade_data
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
+   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -144,76 +73,63 @@
     delete from t_trade_data
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="net.fnsco.service.domain.trade.TTradeDataExample" >
-    delete from t_trade_data
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="net.fnsco.service.domain.trade.TTradeData" >
-    insert into t_trade_data (id, innerCode, txnType, 
-      txnSubType, currency, frontUrl, 
-      backUrl, payTimeOut, subject, 
-      body, customerInfo, remark, 
-      customerIp, tn, respCode, 
-      respMsg, settleAmount, settleCurrency, 
-      settleDate, succTime, orgMerOrderId, 
-      canRefAmt, refCnt, refAmt, 
-      bankId, ppFlag, purpose, 
-      dcType, certify_id, msg_dest_id, 
-      customerNm, phoneNo, subOpenId, 
-      channelType, amt, order_no, 
-      order_time, order_info, pay_type, 
-      time_stamp, trade_detail, mer_id, 
-      term_id, batch_no, sys_trace_no, 
-      auth_code, order_id_scan, source, 
-      md5, send_time, create_time
-      )
-    values (#{id,jdbcType=VARCHAR}, #{innercode,jdbcType=VARCHAR}, #{txntype,jdbcType=VARCHAR}, 
-      #{txnsubtype,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{fronturl,jdbcType=VARCHAR}, 
-      #{backurl,jdbcType=VARCHAR}, #{paytimeout,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, 
-      #{body,jdbcType=VARCHAR}, #{customerinfo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{customerip,jdbcType=VARCHAR}, #{tn,jdbcType=VARCHAR}, #{respcode,jdbcType=VARCHAR}, 
-      #{respmsg,jdbcType=VARCHAR}, #{settleamount,jdbcType=VARCHAR}, #{settlecurrency,jdbcType=VARCHAR}, 
-      #{settledate,jdbcType=VARCHAR}, #{succtime,jdbcType=VARCHAR}, #{orgmerorderid,jdbcType=VARCHAR}, 
-      #{canrefamt,jdbcType=VARCHAR}, #{refcnt,jdbcType=VARCHAR}, #{refamt,jdbcType=VARCHAR}, 
-      #{bankid,jdbcType=VARCHAR}, #{ppflag,jdbcType=VARCHAR}, #{purpose,jdbcType=VARCHAR}, 
-      #{dctype,jdbcType=VARCHAR}, #{certifyId,jdbcType=VARCHAR}, #{msgDestId,jdbcType=VARCHAR}, 
-      #{customernm,jdbcType=VARCHAR}, #{phoneno,jdbcType=VARCHAR}, #{subopenid,jdbcType=VARCHAR}, 
-      #{channeltype,jdbcType=VARCHAR}, #{amt,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
-      #{orderTime,jdbcType=VARCHAR}, #{orderInfo,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR}, 
-      #{timeStamp,jdbcType=VARCHAR}, #{tradeDetail,jdbcType=VARCHAR}, #{merId,jdbcType=VARCHAR}, 
-      #{termId,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, #{sysTraceNo,jdbcType=VARCHAR}, 
-      #{authCode,jdbcType=VARCHAR}, #{orderIdScan,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, 
-      #{md5,jdbcType=VARCHAR}, #{sendTime,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
-      )
+   
+  <insert id="insert" parameterType="net.fnsco.service.domain.trade.TradeData" >
+    insert into t_trade_data (id, inner_code, txn_type, 
+      txn_sub_type, currency, pay_time_out, 
+      subject, body, customer_info, 
+      remark, customer_ip, tn, 
+      resp_code, resp_msg, settle_amount, 
+      settle_currency, settle_date, succ_time, 
+      org_mer_order_id, can_ref_amt, ref_cnt, 
+      ref_amt, bank_id, pp_flag, 
+      purpose, dc_type, certify_id, 
+      msg_dest_id, customer_nm, phone_no, 
+      sub_open_id, channel_type, amt, 
+      order_no, order_time, order_info, 
+      pay_type, time_stamp, trade_detail, 
+      mer_id, term_id, batch_no, 
+      sys_trace_no, auth_code, order_id_scan, 
+      source, md5, send_time, 
+      create_time)
+    values (#{id,jdbcType=VARCHAR}, #{innerCode,jdbcType=VARCHAR}, #{txnType,jdbcType=VARCHAR}, 
+      #{txnSubType,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{payTimeOut,jdbcType=VARCHAR}, 
+      #{subject,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{customerInfo,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{customerIp,jdbcType=VARCHAR}, #{tn,jdbcType=VARCHAR}, 
+      #{respCode,jdbcType=VARCHAR}, #{respMsg,jdbcType=VARCHAR}, #{settleAmount,jdbcType=VARCHAR}, 
+      #{settleCurrency,jdbcType=VARCHAR}, #{settleDate,jdbcType=VARCHAR}, #{succTime,jdbcType=VARCHAR}, 
+      #{orgMerOrderId,jdbcType=VARCHAR}, #{canRefAmt,jdbcType=VARCHAR}, #{refCnt,jdbcType=VARCHAR}, 
+      #{refAmt,jdbcType=VARCHAR}, #{bankId,jdbcType=VARCHAR}, #{ppFlag,jdbcType=VARCHAR}, 
+      #{purpose,jdbcType=VARCHAR}, #{dcType,jdbcType=VARCHAR}, #{certifyId,jdbcType=VARCHAR}, 
+      #{msgDestId,jdbcType=VARCHAR}, #{customerNm,jdbcType=VARCHAR}, #{phoneNo,jdbcType=VARCHAR}, 
+      #{subOpenId,jdbcType=VARCHAR}, #{channelType,jdbcType=VARCHAR}, #{amt,jdbcType=VARCHAR}, 
+      #{orderNo,jdbcType=VARCHAR}, #{orderTime,jdbcType=VARCHAR}, #{orderInfo,jdbcType=VARCHAR}, 
+      #{payType,jdbcType=VARCHAR}, #{timeStamp,jdbcType=VARCHAR}, #{tradeDetail,jdbcType=VARCHAR}, 
+      #{merId,jdbcType=VARCHAR}, #{termId,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, 
+      #{sysTraceNo,jdbcType=VARCHAR}, #{authCode,jdbcType=VARCHAR}, #{orderIdScan,jdbcType=VARCHAR}, 
+      #{source,jdbcType=VARCHAR}, #{md5,jdbcType=VARCHAR}, #{sendTime,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.service.domain.trade.TTradeData" >
+  <insert id="insertSelective" parameterType="net.fnsco.service.domain.trade.TradeData" >
     insert into t_trade_data
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="innercode != null" >
-        innerCode,
+      <if test="innerCode != null" >
+        inner_code,
       </if>
-      <if test="txntype != null" >
-        txnType,
+      <if test="txnType != null" >
+        txn_type,
       </if>
-      <if test="txnsubtype != null" >
-        txnSubType,
+      <if test="txnSubType != null" >
+        txn_sub_type,
       </if>
       <if test="currency != null" >
         currency,
       </if>
-      <if test="fronturl != null" >
-        frontUrl,
-      </if>
-      <if test="backurl != null" >
-        backUrl,
-      </if>
-      <if test="paytimeout != null" >
-        payTimeOut,
+      <if test="payTimeOut != null" >
+        pay_time_out,
       </if>
       <if test="subject != null" >
         subject,
@@ -221,59 +137,59 @@
       <if test="body != null" >
         body,
       </if>
-      <if test="customerinfo != null" >
-        customerInfo,
+      <if test="customerInfo != null" >
+        customer_info,
       </if>
       <if test="remark != null" >
         remark,
       </if>
-      <if test="customerip != null" >
-        customerIp,
+      <if test="customerIp != null" >
+        customer_ip,
       </if>
       <if test="tn != null" >
         tn,
       </if>
-      <if test="respcode != null" >
-        respCode,
+      <if test="respCode != null" >
+        resp_code,
       </if>
-      <if test="respmsg != null" >
-        respMsg,
+      <if test="respMsg != null" >
+        resp_msg,
       </if>
-      <if test="settleamount != null" >
-        settleAmount,
+      <if test="settleAmount != null" >
+        settle_amount,
       </if>
-      <if test="settlecurrency != null" >
-        settleCurrency,
+      <if test="settleCurrency != null" >
+        settle_currency,
       </if>
-      <if test="settledate != null" >
-        settleDate,
+      <if test="settleDate != null" >
+        settle_date,
       </if>
-      <if test="succtime != null" >
-        succTime,
+      <if test="succTime != null" >
+        succ_time,
       </if>
-      <if test="orgmerorderid != null" >
-        orgMerOrderId,
+      <if test="orgMerOrderId != null" >
+        org_mer_order_id,
       </if>
-      <if test="canrefamt != null" >
-        canRefAmt,
+      <if test="canRefAmt != null" >
+        can_ref_amt,
       </if>
-      <if test="refcnt != null" >
-        refCnt,
+      <if test="refCnt != null" >
+        ref_cnt,
       </if>
-      <if test="refamt != null" >
-        refAmt,
+      <if test="refAmt != null" >
+        ref_amt,
       </if>
-      <if test="bankid != null" >
-        bankId,
+      <if test="bankId != null" >
+        bank_id,
       </if>
-      <if test="ppflag != null" >
-        ppFlag,
+      <if test="ppFlag != null" >
+        pp_flag,
       </if>
       <if test="purpose != null" >
         purpose,
       </if>
-      <if test="dctype != null" >
-        dcType,
+      <if test="dcType != null" >
+        dc_type,
       </if>
       <if test="certifyId != null" >
         certify_id,
@@ -281,17 +197,17 @@
       <if test="msgDestId != null" >
         msg_dest_id,
       </if>
-      <if test="customernm != null" >
-        customerNm,
+      <if test="customerNm != null" >
+        customer_nm,
       </if>
-      <if test="phoneno != null" >
-        phoneNo,
+      <if test="phoneNo != null" >
+        phone_no,
       </if>
-      <if test="subopenid != null" >
-        subOpenId,
+      <if test="subOpenId != null" >
+        sub_open_id,
       </if>
-      <if test="channeltype != null" >
-        channelType,
+      <if test="channelType != null" >
+        channel_type,
       </if>
       <if test="amt != null" >
         amt,
@@ -349,26 +265,20 @@
       <if test="id != null" >
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="innercode != null" >
-        #{innercode,jdbcType=VARCHAR},
+      <if test="innerCode != null" >
+        #{innerCode,jdbcType=VARCHAR},
       </if>
-      <if test="txntype != null" >
-        #{txntype,jdbcType=VARCHAR},
+      <if test="txnType != null" >
+        #{txnType,jdbcType=VARCHAR},
       </if>
-      <if test="txnsubtype != null" >
-        #{txnsubtype,jdbcType=VARCHAR},
+      <if test="txnSubType != null" >
+        #{txnSubType,jdbcType=VARCHAR},
       </if>
       <if test="currency != null" >
         #{currency,jdbcType=VARCHAR},
       </if>
-      <if test="fronturl != null" >
-        #{fronturl,jdbcType=VARCHAR},
-      </if>
-      <if test="backurl != null" >
-        #{backurl,jdbcType=VARCHAR},
-      </if>
-      <if test="paytimeout != null" >
-        #{paytimeout,jdbcType=VARCHAR},
+      <if test="payTimeOut != null" >
+        #{payTimeOut,jdbcType=VARCHAR},
       </if>
       <if test="subject != null" >
         #{subject,jdbcType=VARCHAR},
@@ -376,59 +286,59 @@
       <if test="body != null" >
         #{body,jdbcType=VARCHAR},
       </if>
-      <if test="customerinfo != null" >
-        #{customerinfo,jdbcType=VARCHAR},
+      <if test="customerInfo != null" >
+        #{customerInfo,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="customerip != null" >
-        #{customerip,jdbcType=VARCHAR},
+      <if test="customerIp != null" >
+        #{customerIp,jdbcType=VARCHAR},
       </if>
       <if test="tn != null" >
         #{tn,jdbcType=VARCHAR},
       </if>
-      <if test="respcode != null" >
-        #{respcode,jdbcType=VARCHAR},
+      <if test="respCode != null" >
+        #{respCode,jdbcType=VARCHAR},
       </if>
-      <if test="respmsg != null" >
-        #{respmsg,jdbcType=VARCHAR},
+      <if test="respMsg != null" >
+        #{respMsg,jdbcType=VARCHAR},
       </if>
-      <if test="settleamount != null" >
-        #{settleamount,jdbcType=VARCHAR},
+      <if test="settleAmount != null" >
+        #{settleAmount,jdbcType=VARCHAR},
       </if>
-      <if test="settlecurrency != null" >
-        #{settlecurrency,jdbcType=VARCHAR},
+      <if test="settleCurrency != null" >
+        #{settleCurrency,jdbcType=VARCHAR},
       </if>
-      <if test="settledate != null" >
-        #{settledate,jdbcType=VARCHAR},
+      <if test="settleDate != null" >
+        #{settleDate,jdbcType=VARCHAR},
       </if>
-      <if test="succtime != null" >
-        #{succtime,jdbcType=VARCHAR},
+      <if test="succTime != null" >
+        #{succTime,jdbcType=VARCHAR},
       </if>
-      <if test="orgmerorderid != null" >
-        #{orgmerorderid,jdbcType=VARCHAR},
+      <if test="orgMerOrderId != null" >
+        #{orgMerOrderId,jdbcType=VARCHAR},
       </if>
-      <if test="canrefamt != null" >
-        #{canrefamt,jdbcType=VARCHAR},
+      <if test="canRefAmt != null" >
+        #{canRefAmt,jdbcType=VARCHAR},
       </if>
-      <if test="refcnt != null" >
-        #{refcnt,jdbcType=VARCHAR},
+      <if test="refCnt != null" >
+        #{refCnt,jdbcType=VARCHAR},
       </if>
-      <if test="refamt != null" >
-        #{refamt,jdbcType=VARCHAR},
+      <if test="refAmt != null" >
+        #{refAmt,jdbcType=VARCHAR},
       </if>
-      <if test="bankid != null" >
-        #{bankid,jdbcType=VARCHAR},
+      <if test="bankId != null" >
+        #{bankId,jdbcType=VARCHAR},
       </if>
-      <if test="ppflag != null" >
-        #{ppflag,jdbcType=VARCHAR},
+      <if test="ppFlag != null" >
+        #{ppFlag,jdbcType=VARCHAR},
       </if>
       <if test="purpose != null" >
         #{purpose,jdbcType=VARCHAR},
       </if>
-      <if test="dctype != null" >
-        #{dctype,jdbcType=VARCHAR},
+      <if test="dcType != null" >
+        #{dcType,jdbcType=VARCHAR},
       </if>
       <if test="certifyId != null" >
         #{certifyId,jdbcType=VARCHAR},
@@ -436,17 +346,17 @@
       <if test="msgDestId != null" >
         #{msgDestId,jdbcType=VARCHAR},
       </if>
-      <if test="customernm != null" >
-        #{customernm,jdbcType=VARCHAR},
+      <if test="customerNm != null" >
+        #{customerNm,jdbcType=VARCHAR},
       </if>
-      <if test="phoneno != null" >
-        #{phoneno,jdbcType=VARCHAR},
+      <if test="phoneNo != null" >
+        #{phoneNo,jdbcType=VARCHAR},
       </if>
-      <if test="subopenid != null" >
-        #{subopenid,jdbcType=VARCHAR},
+      <if test="subOpenId != null" >
+        #{subOpenId,jdbcType=VARCHAR},
       </if>
-      <if test="channeltype != null" >
-        #{channeltype,jdbcType=VARCHAR},
+      <if test="channelType != null" >
+        #{channelType,jdbcType=VARCHAR},
       </if>
       <if test="amt != null" >
         #{amt,jdbcType=VARCHAR},
@@ -501,253 +411,24 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="net.fnsco.service.domain.trade.TTradeDataExample" resultType="java.lang.Integer" >
-    select count(*) from t_trade_data
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+    
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.trade.TradeData" >
     update t_trade_data
     <set >
-      <if test="record.id != null" >
-        id = #{record.id,jdbcType=VARCHAR},
+      <if test="innerCode != null" >
+        inner_code = #{innerCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.innercode != null" >
-        innerCode = #{record.innercode,jdbcType=VARCHAR},
+      <if test="txnType != null" >
+        txn_type = #{txnType,jdbcType=VARCHAR},
       </if>
-      <if test="record.txntype != null" >
-        txnType = #{record.txntype,jdbcType=VARCHAR},
-      </if>
-      <if test="record.txnsubtype != null" >
-        txnSubType = #{record.txnsubtype,jdbcType=VARCHAR},
-      </if>
-      <if test="record.currency != null" >
-        currency = #{record.currency,jdbcType=VARCHAR},
-      </if>
-      <if test="record.fronturl != null" >
-        frontUrl = #{record.fronturl,jdbcType=VARCHAR},
-      </if>
-      <if test="record.backurl != null" >
-        backUrl = #{record.backurl,jdbcType=VARCHAR},
-      </if>
-      <if test="record.paytimeout != null" >
-        payTimeOut = #{record.paytimeout,jdbcType=VARCHAR},
-      </if>
-      <if test="record.subject != null" >
-        subject = #{record.subject,jdbcType=VARCHAR},
-      </if>
-      <if test="record.body != null" >
-        body = #{record.body,jdbcType=VARCHAR},
-      </if>
-      <if test="record.customerinfo != null" >
-        customerInfo = #{record.customerinfo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.remark != null" >
-        remark = #{record.remark,jdbcType=VARCHAR},
-      </if>
-      <if test="record.customerip != null" >
-        customerIp = #{record.customerip,jdbcType=VARCHAR},
-      </if>
-      <if test="record.tn != null" >
-        tn = #{record.tn,jdbcType=VARCHAR},
-      </if>
-      <if test="record.respcode != null" >
-        respCode = #{record.respcode,jdbcType=VARCHAR},
-      </if>
-      <if test="record.respmsg != null" >
-        respMsg = #{record.respmsg,jdbcType=VARCHAR},
-      </if>
-      <if test="record.settleamount != null" >
-        settleAmount = #{record.settleamount,jdbcType=VARCHAR},
-      </if>
-      <if test="record.settlecurrency != null" >
-        settleCurrency = #{record.settlecurrency,jdbcType=VARCHAR},
-      </if>
-      <if test="record.settledate != null" >
-        settleDate = #{record.settledate,jdbcType=VARCHAR},
-      </if>
-      <if test="record.succtime != null" >
-        succTime = #{record.succtime,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orgmerorderid != null" >
-        orgMerOrderId = #{record.orgmerorderid,jdbcType=VARCHAR},
-      </if>
-      <if test="record.canrefamt != null" >
-        canRefAmt = #{record.canrefamt,jdbcType=VARCHAR},
-      </if>
-      <if test="record.refcnt != null" >
-        refCnt = #{record.refcnt,jdbcType=VARCHAR},
-      </if>
-      <if test="record.refamt != null" >
-        refAmt = #{record.refamt,jdbcType=VARCHAR},
-      </if>
-      <if test="record.bankid != null" >
-        bankId = #{record.bankid,jdbcType=VARCHAR},
-      </if>
-      <if test="record.ppflag != null" >
-        ppFlag = #{record.ppflag,jdbcType=VARCHAR},
-      </if>
-      <if test="record.purpose != null" >
-        purpose = #{record.purpose,jdbcType=VARCHAR},
-      </if>
-      <if test="record.dctype != null" >
-        dcType = #{record.dctype,jdbcType=VARCHAR},
-      </if>
-      <if test="record.certifyId != null" >
-        certify_id = #{record.certifyId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.msgDestId != null" >
-        msg_dest_id = #{record.msgDestId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.customernm != null" >
-        customerNm = #{record.customernm,jdbcType=VARCHAR},
-      </if>
-      <if test="record.phoneno != null" >
-        phoneNo = #{record.phoneno,jdbcType=VARCHAR},
-      </if>
-      <if test="record.subopenid != null" >
-        subOpenId = #{record.subopenid,jdbcType=VARCHAR},
-      </if>
-      <if test="record.channeltype != null" >
-        channelType = #{record.channeltype,jdbcType=VARCHAR},
-      </if>
-      <if test="record.amt != null" >
-        amt = #{record.amt,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderNo != null" >
-        order_no = #{record.orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderTime != null" >
-        order_time = #{record.orderTime,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderInfo != null" >
-        order_info = #{record.orderInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.payType != null" >
-        pay_type = #{record.payType,jdbcType=VARCHAR},
-      </if>
-      <if test="record.timeStamp != null" >
-        time_stamp = #{record.timeStamp,jdbcType=VARCHAR},
-      </if>
-      <if test="record.tradeDetail != null" >
-        trade_detail = #{record.tradeDetail,jdbcType=VARCHAR},
-      </if>
-      <if test="record.merId != null" >
-        mer_id = #{record.merId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.termId != null" >
-        term_id = #{record.termId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.batchNo != null" >
-        batch_no = #{record.batchNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.sysTraceNo != null" >
-        sys_trace_no = #{record.sysTraceNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.authCode != null" >
-        auth_code = #{record.authCode,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderIdScan != null" >
-        order_id_scan = #{record.orderIdScan,jdbcType=VARCHAR},
-      </if>
-      <if test="record.source != null" >
-        source = #{record.source,jdbcType=VARCHAR},
-      </if>
-      <if test="record.md5 != null" >
-        md5 = #{record.md5,jdbcType=VARCHAR},
-      </if>
-      <if test="record.sendTime != null" >
-        send_time = #{record.sendTime,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createTime != null" >
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update t_trade_data
-    set id = #{record.id,jdbcType=VARCHAR},
-      innerCode = #{record.innercode,jdbcType=VARCHAR},
-      txnType = #{record.txntype,jdbcType=VARCHAR},
-      txnSubType = #{record.txnsubtype,jdbcType=VARCHAR},
-      currency = #{record.currency,jdbcType=VARCHAR},
-      frontUrl = #{record.fronturl,jdbcType=VARCHAR},
-      backUrl = #{record.backurl,jdbcType=VARCHAR},
-      payTimeOut = #{record.paytimeout,jdbcType=VARCHAR},
-      subject = #{record.subject,jdbcType=VARCHAR},
-      body = #{record.body,jdbcType=VARCHAR},
-      customerInfo = #{record.customerinfo,jdbcType=VARCHAR},
-      remark = #{record.remark,jdbcType=VARCHAR},
-      customerIp = #{record.customerip,jdbcType=VARCHAR},
-      tn = #{record.tn,jdbcType=VARCHAR},
-      respCode = #{record.respcode,jdbcType=VARCHAR},
-      respMsg = #{record.respmsg,jdbcType=VARCHAR},
-      settleAmount = #{record.settleamount,jdbcType=VARCHAR},
-      settleCurrency = #{record.settlecurrency,jdbcType=VARCHAR},
-      settleDate = #{record.settledate,jdbcType=VARCHAR},
-      succTime = #{record.succtime,jdbcType=VARCHAR},
-      orgMerOrderId = #{record.orgmerorderid,jdbcType=VARCHAR},
-      canRefAmt = #{record.canrefamt,jdbcType=VARCHAR},
-      refCnt = #{record.refcnt,jdbcType=VARCHAR},
-      refAmt = #{record.refamt,jdbcType=VARCHAR},
-      bankId = #{record.bankid,jdbcType=VARCHAR},
-      ppFlag = #{record.ppflag,jdbcType=VARCHAR},
-      purpose = #{record.purpose,jdbcType=VARCHAR},
-      dcType = #{record.dctype,jdbcType=VARCHAR},
-      certify_id = #{record.certifyId,jdbcType=VARCHAR},
-      msg_dest_id = #{record.msgDestId,jdbcType=VARCHAR},
-      customerNm = #{record.customernm,jdbcType=VARCHAR},
-      phoneNo = #{record.phoneno,jdbcType=VARCHAR},
-      subOpenId = #{record.subopenid,jdbcType=VARCHAR},
-      channelType = #{record.channeltype,jdbcType=VARCHAR},
-      amt = #{record.amt,jdbcType=VARCHAR},
-      order_no = #{record.orderNo,jdbcType=VARCHAR},
-      order_time = #{record.orderTime,jdbcType=VARCHAR},
-      order_info = #{record.orderInfo,jdbcType=VARCHAR},
-      pay_type = #{record.payType,jdbcType=VARCHAR},
-      time_stamp = #{record.timeStamp,jdbcType=VARCHAR},
-      trade_detail = #{record.tradeDetail,jdbcType=VARCHAR},
-      mer_id = #{record.merId,jdbcType=VARCHAR},
-      term_id = #{record.termId,jdbcType=VARCHAR},
-      batch_no = #{record.batchNo,jdbcType=VARCHAR},
-      sys_trace_no = #{record.sysTraceNo,jdbcType=VARCHAR},
-      auth_code = #{record.authCode,jdbcType=VARCHAR},
-      order_id_scan = #{record.orderIdScan,jdbcType=VARCHAR},
-      source = #{record.source,jdbcType=VARCHAR},
-      md5 = #{record.md5,jdbcType=VARCHAR},
-      send_time = #{record.sendTime,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.trade.TTradeData" >
-    update t_trade_data
-    <set >
-      <if test="innercode != null" >
-        innerCode = #{innercode,jdbcType=VARCHAR},
-      </if>
-      <if test="txntype != null" >
-        txnType = #{txntype,jdbcType=VARCHAR},
-      </if>
-      <if test="txnsubtype != null" >
-        txnSubType = #{txnsubtype,jdbcType=VARCHAR},
+      <if test="txnSubType != null" >
+        txn_sub_type = #{txnSubType,jdbcType=VARCHAR},
       </if>
       <if test="currency != null" >
         currency = #{currency,jdbcType=VARCHAR},
       </if>
-      <if test="fronturl != null" >
-        frontUrl = #{fronturl,jdbcType=VARCHAR},
-      </if>
-      <if test="backurl != null" >
-        backUrl = #{backurl,jdbcType=VARCHAR},
-      </if>
-      <if test="paytimeout != null" >
-        payTimeOut = #{paytimeout,jdbcType=VARCHAR},
+      <if test="payTimeOut != null" >
+        pay_time_out = #{payTimeOut,jdbcType=VARCHAR},
       </if>
       <if test="subject != null" >
         subject = #{subject,jdbcType=VARCHAR},
@@ -755,59 +436,59 @@
       <if test="body != null" >
         body = #{body,jdbcType=VARCHAR},
       </if>
-      <if test="customerinfo != null" >
-        customerInfo = #{customerinfo,jdbcType=VARCHAR},
+      <if test="customerInfo != null" >
+        customer_info = #{customerInfo,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="customerip != null" >
-        customerIp = #{customerip,jdbcType=VARCHAR},
+      <if test="customerIp != null" >
+        customer_ip = #{customerIp,jdbcType=VARCHAR},
       </if>
       <if test="tn != null" >
         tn = #{tn,jdbcType=VARCHAR},
       </if>
-      <if test="respcode != null" >
-        respCode = #{respcode,jdbcType=VARCHAR},
+      <if test="respCode != null" >
+        resp_code = #{respCode,jdbcType=VARCHAR},
       </if>
-      <if test="respmsg != null" >
-        respMsg = #{respmsg,jdbcType=VARCHAR},
+      <if test="respMsg != null" >
+        resp_msg = #{respMsg,jdbcType=VARCHAR},
       </if>
-      <if test="settleamount != null" >
-        settleAmount = #{settleamount,jdbcType=VARCHAR},
+      <if test="settleAmount != null" >
+        settle_amount = #{settleAmount,jdbcType=VARCHAR},
       </if>
-      <if test="settlecurrency != null" >
-        settleCurrency = #{settlecurrency,jdbcType=VARCHAR},
+      <if test="settleCurrency != null" >
+        settle_currency = #{settleCurrency,jdbcType=VARCHAR},
       </if>
-      <if test="settledate != null" >
-        settleDate = #{settledate,jdbcType=VARCHAR},
+      <if test="settleDate != null" >
+        settle_date = #{settleDate,jdbcType=VARCHAR},
       </if>
-      <if test="succtime != null" >
-        succTime = #{succtime,jdbcType=VARCHAR},
+      <if test="succTime != null" >
+        succ_time = #{succTime,jdbcType=VARCHAR},
       </if>
-      <if test="orgmerorderid != null" >
-        orgMerOrderId = #{orgmerorderid,jdbcType=VARCHAR},
+      <if test="orgMerOrderId != null" >
+        org_mer_order_id = #{orgMerOrderId,jdbcType=VARCHAR},
       </if>
-      <if test="canrefamt != null" >
-        canRefAmt = #{canrefamt,jdbcType=VARCHAR},
+      <if test="canRefAmt != null" >
+        can_ref_amt = #{canRefAmt,jdbcType=VARCHAR},
       </if>
-      <if test="refcnt != null" >
-        refCnt = #{refcnt,jdbcType=VARCHAR},
+      <if test="refCnt != null" >
+        ref_cnt = #{refCnt,jdbcType=VARCHAR},
       </if>
-      <if test="refamt != null" >
-        refAmt = #{refamt,jdbcType=VARCHAR},
+      <if test="refAmt != null" >
+        ref_amt = #{refAmt,jdbcType=VARCHAR},
       </if>
-      <if test="bankid != null" >
-        bankId = #{bankid,jdbcType=VARCHAR},
+      <if test="bankId != null" >
+        bank_id = #{bankId,jdbcType=VARCHAR},
       </if>
-      <if test="ppflag != null" >
-        ppFlag = #{ppflag,jdbcType=VARCHAR},
+      <if test="ppFlag != null" >
+        pp_flag = #{ppFlag,jdbcType=VARCHAR},
       </if>
       <if test="purpose != null" >
         purpose = #{purpose,jdbcType=VARCHAR},
       </if>
-      <if test="dctype != null" >
-        dcType = #{dctype,jdbcType=VARCHAR},
+      <if test="dcType != null" >
+        dc_type = #{dcType,jdbcType=VARCHAR},
       </if>
       <if test="certifyId != null" >
         certify_id = #{certifyId,jdbcType=VARCHAR},
@@ -815,17 +496,17 @@
       <if test="msgDestId != null" >
         msg_dest_id = #{msgDestId,jdbcType=VARCHAR},
       </if>
-      <if test="customernm != null" >
-        customerNm = #{customernm,jdbcType=VARCHAR},
+      <if test="customerNm != null" >
+        customer_nm = #{customerNm,jdbcType=VARCHAR},
       </if>
-      <if test="phoneno != null" >
-        phoneNo = #{phoneno,jdbcType=VARCHAR},
+      <if test="phoneNo != null" >
+        phone_no = #{phoneNo,jdbcType=VARCHAR},
       </if>
-      <if test="subopenid != null" >
-        subOpenId = #{subopenid,jdbcType=VARCHAR},
+      <if test="subOpenId != null" >
+        sub_open_id = #{subOpenId,jdbcType=VARCHAR},
       </if>
-      <if test="channeltype != null" >
-        channelType = #{channeltype,jdbcType=VARCHAR},
+      <if test="channelType != null" >
+        channel_type = #{channelType,jdbcType=VARCHAR},
       </if>
       <if test="amt != null" >
         amt = #{amt,jdbcType=VARCHAR},
@@ -881,41 +562,39 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.trade.TTradeData" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.trade.TradeData" >
     update t_trade_data
-    set innerCode = #{innercode,jdbcType=VARCHAR},
-      txnType = #{txntype,jdbcType=VARCHAR},
-      txnSubType = #{txnsubtype,jdbcType=VARCHAR},
+    set inner_code = #{innerCode,jdbcType=VARCHAR},
+      txn_type = #{txnType,jdbcType=VARCHAR},
+      txn_sub_type = #{txnSubType,jdbcType=VARCHAR},
       currency = #{currency,jdbcType=VARCHAR},
-      frontUrl = #{fronturl,jdbcType=VARCHAR},
-      backUrl = #{backurl,jdbcType=VARCHAR},
-      payTimeOut = #{paytimeout,jdbcType=VARCHAR},
+      pay_time_out = #{payTimeOut,jdbcType=VARCHAR},
       subject = #{subject,jdbcType=VARCHAR},
       body = #{body,jdbcType=VARCHAR},
-      customerInfo = #{customerinfo,jdbcType=VARCHAR},
+      customer_info = #{customerInfo,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      customerIp = #{customerip,jdbcType=VARCHAR},
+      customer_ip = #{customerIp,jdbcType=VARCHAR},
       tn = #{tn,jdbcType=VARCHAR},
-      respCode = #{respcode,jdbcType=VARCHAR},
-      respMsg = #{respmsg,jdbcType=VARCHAR},
-      settleAmount = #{settleamount,jdbcType=VARCHAR},
-      settleCurrency = #{settlecurrency,jdbcType=VARCHAR},
-      settleDate = #{settledate,jdbcType=VARCHAR},
-      succTime = #{succtime,jdbcType=VARCHAR},
-      orgMerOrderId = #{orgmerorderid,jdbcType=VARCHAR},
-      canRefAmt = #{canrefamt,jdbcType=VARCHAR},
-      refCnt = #{refcnt,jdbcType=VARCHAR},
-      refAmt = #{refamt,jdbcType=VARCHAR},
-      bankId = #{bankid,jdbcType=VARCHAR},
-      ppFlag = #{ppflag,jdbcType=VARCHAR},
+      resp_code = #{respCode,jdbcType=VARCHAR},
+      resp_msg = #{respMsg,jdbcType=VARCHAR},
+      settle_amount = #{settleAmount,jdbcType=VARCHAR},
+      settle_currency = #{settleCurrency,jdbcType=VARCHAR},
+      settle_date = #{settleDate,jdbcType=VARCHAR},
+      succ_time = #{succTime,jdbcType=VARCHAR},
+      org_mer_order_id = #{orgMerOrderId,jdbcType=VARCHAR},
+      can_ref_amt = #{canRefAmt,jdbcType=VARCHAR},
+      ref_cnt = #{refCnt,jdbcType=VARCHAR},
+      ref_amt = #{refAmt,jdbcType=VARCHAR},
+      bank_id = #{bankId,jdbcType=VARCHAR},
+      pp_flag = #{ppFlag,jdbcType=VARCHAR},
       purpose = #{purpose,jdbcType=VARCHAR},
-      dcType = #{dctype,jdbcType=VARCHAR},
+      dc_type = #{dcType,jdbcType=VARCHAR},
       certify_id = #{certifyId,jdbcType=VARCHAR},
       msg_dest_id = #{msgDestId,jdbcType=VARCHAR},
-      customerNm = #{customernm,jdbcType=VARCHAR},
-      phoneNo = #{phoneno,jdbcType=VARCHAR},
-      subOpenId = #{subopenid,jdbcType=VARCHAR},
-      channelType = #{channeltype,jdbcType=VARCHAR},
+      customer_nm = #{customerNm,jdbcType=VARCHAR},
+      phone_no = #{phoneNo,jdbcType=VARCHAR},
+      sub_open_id = #{subOpenId,jdbcType=VARCHAR},
+      channel_type = #{channelType,jdbcType=VARCHAR},
       amt = #{amt,jdbcType=VARCHAR},
       order_no = #{orderNo,jdbcType=VARCHAR},
       order_time = #{orderTime,jdbcType=VARCHAR},
