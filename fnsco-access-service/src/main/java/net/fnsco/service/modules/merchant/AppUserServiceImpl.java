@@ -2,6 +2,7 @@ package net.fnsco.service.modules.merchant;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +25,8 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(AppUserServiceImpl.class);
 	
-	private static Map<String, String> MsgCodeMap = new HashMap<>();//存放验证码的
+	private static Map<Object, Object> MsgCodeMap = new HashMap<>();//存放验证码的
+	
 	
 	@Autowired
 	private AppUserDao MappUserDao;
@@ -38,6 +40,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		}
 		if(MappUserDao.insertSelective(appUser)){
 			result.setData(appUser);
+			result.setCode("0");
 			return result.setSuccess("注册成功");
 		}
 		return result;
@@ -52,11 +55,12 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		mAppUser=MappUserDao.selectByMobile(mobile);
 		//查到的密码和原密码做比较
 		if(!oldPassword.equals(mAppUser.getPassword())){
-			return result.setError("原密码输入错误,请重新输入");
+			return result.setError(1,"原密码输入错误,请重新输入");
 		}
 		mAppUser.setPassword(password);
 		mAppUser.setMobile(mobile);
 		if(MappUserDao.updateByPrimaryKeySelective(mAppUser)){
+			result.setCode("0");
 			result.setSuccess("修改密码成功");
 		}
 		return result;
@@ -68,9 +72,10 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		ResultDTO<String> result = new ResultDTO<>();
 		// 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        //                key    value
-        MsgCodeMap.put(mobile, code);
-        /**
+        //               key    value
+        //生产验证码时生成当前系统时间
+        MsgCodeMap.put(mobile, code+"_"+System.currentTimeMillis());
+         /**
          * 开启线程发送手机验证码
          */
         new Thread(new Runnable(){
@@ -96,6 +101,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
             }
         }).start();
         result.setData(code);
+        result.setCode("0");
         result.setSuccess("验证码生产成功");
 		return result;
 	}
@@ -104,13 +110,26 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	@Override
 	public ResultDTO<String> validateCode(String mobile, String code) {
 		ResultDTO<String> result = new ResultDTO<>();
+		
 		//从Map中根据手机号取到存入的验证码
-		String sendCode=MsgCodeMap.get(mobile);
+		String sendCode=(String) MsgCodeMap.get(mobile);
+		//验证码
+		String oldCode=sendCode.substring(0,sendCode.lastIndexOf("_"));
+		//时间
+		String missM = sendCode.substring(sendCode.lastIndexOf("_")+1, sendCode.length());
+		long oldTime = Long.valueOf(missM);
+		long newTime = System.currentTimeMillis();
+		
+		if((newTime- oldTime)/1000/60>=1){
+			result.setError(1, "验证码超过有效时间");
+		}
 		if(code==null){
 			result.setError(1, "失效的验证码");
 		}
-		if(code.equals(sendCode)){
+		if(code.equals(oldCode)){
+			//从map从移除验证码
 			MsgCodeMap.remove(mobile);
+			result.setCode("0");
 			result.setSuccess("成功");
 		}else{
 			result.setError(1, "验证码错误");
@@ -120,10 +139,41 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 
 	//根据手机号找回登录密码
 	@Override
-	public ResultDTO<String> findPassword(String mobile, String code) {
-		
-		return null;
+	public ResultDTO<String> findPassword(String mobile, String code,String password) {
+		ResultDTO<String> result = new ResultDTO<>();
+		//密码更新
+		if(MappUserDao.findPasswordByPhone(mobile,password)){
+			result.setCode("0");
+			result.setSuccess("修改密码成功");
+		}else{
+			result.setError(1, "修改密码失败");
+		}
+		return result;
 	}
+
+	//根据手机号码和密码登录
+	@Override
+	public ResultDTO<String> loginByMoblie(String mobile, String password) {
+		ResultDTO<String> result = new ResultDTO<>();
+		AppUser appUser=MappUserDao.selectByMobile(mobile);
+		if(password.equals(appUser.getPassword())){
+			result.setCode("0");
+			result.setSuccess("登录成功");
+		}else{
+			result.setError(1, "登录失败");
+		}
+		return result;
+	}
+	
+	public static void main(String[] args) {
+		String code = "564898"+"_"+System.currentTimeMillis();
+		System.out.println(code);
+		String codeStr= code.substring(0,code.indexOf("_"));
+		System.out.println(codeStr);
+		String time = code.substring(code.lastIndexOf("_")+1,code.length());
+		System.out.println(time);
+	}
+
 }
 
 
