@@ -78,9 +78,9 @@ public class AppUserController extends BaseController{
 		return result;
 	}
 	
-	//根据手机号码找回密码
+		//根据手机号码找回密码
 		@ResponseBody
-		@RequestMapping(value = "/getValidateCode", method = RequestMethod.GET)
+		@RequestMapping(value = "/getCodeByPhone", method = RequestMethod.GET)
 		@ApiOperation(value = "根据手机号码找回密码")
 		public ResultDTO findPassword(@RequestParam(value = "mobile", required = true) String mobile, @RequestParam(value = "deviceId", required = true) String deviceId){
 			 int deviceType= 0 ;//Integer.parseInt(request.getParameter("deviceType"));
