@@ -12,6 +12,7 @@
     <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
     <link href="css/style.min.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
+    <link href="js/uploadify-v3.1/uploadify.css">
 </head>
 <body class="gray-bg">
 <div class="panel-body animated fadeInRight">
@@ -56,7 +57,8 @@
         </div>
         <!-- end  -->
         <!-- model start -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <form action="/web/merchantinfo/toAdd" id="merchant_form" method="post">
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
 		    <div class="modal-dialog" role="document">
 		        <div class="modal-content">
 		            <div class="modal-header">
@@ -76,7 +78,7 @@
 		                        <div class="row">
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="name">商户名：</label>
-		                                <input type="text" class="form-control" id="name" name="name">
+		                                <input type="text" class="form-control" id="name" name="name" required="required">
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="abbreviation">简称：</label>
@@ -92,11 +94,21 @@
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="legalPersonMobile">法人手机号码：</label>
-		                                <input type="text" class="form-control" id="legalPersonMobile" name="legalPersonMobile">
+		                                <input type="number" class="form-control" id="legalPersonMobile" name="legalPersonMobile" >
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="legalPersonTel">法人电话：</label>
+		                                <input type="text" class="form-control" id="legalPersonTel" name="legalPersonTel">
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="legalValidCardType">法人有效证件类型：</label>
-		                                <input type="text" class="form-control" id="legalValidCardType" name="legalValidCardType">
+		                                <select id="legalValidCardType" name="legalValidCardType">
+		                                   <option value="0">身份证</option>
+		                                   <option value="1">护照</option>
+		                                   <option value="2">士兵证</option>
+		                                   <option value="3">军官证</option>
+		                                   <option value="4">港澳台通行证</option>
+		                                </select>
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="cardNum">证件号码：</label>
@@ -104,7 +116,7 @@
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="cardValidTime">证件有效期：</label>
-		                                <input type="text" class="form-control" id="cardValidTime" name="cardValidTime">
+		                                <input type="date" class="form-control" id="cardValidTime" name="cardValidTime">
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="businessLicenseNum">营业执照号码：</label>
@@ -112,7 +124,7 @@
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="businessLicenseValidTime">营业执照有效期：</label>
-		                                <input type="text" class="form-control" id="businessLicenseValidTime" name="businessLicenseValidTime">
+		                                <input type="date" class="form-control" id="businessLicenseValidTime" name="businessLicenseValidTime">
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="taxRegistCode">税务登记号：</label>
@@ -137,63 +149,130 @@
 		                      </thead>
 		                      <tr>
 		                          <td>银行卡正面</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="1100"></td>
+		                          <td><input type="file" name="file" id="uploadify_file1100" style="display: none">
+										<p>
+											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1100" onclick="fileUp(1100);" class="uploadify-button" style="display: none;background-color:#505050"/>
+										</p>	                          
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>银行卡反面</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="1101"></td>
+		                          <td>
+		                          	<input type="file" name="file" id="uploadify_file1101" style="display: none">
+		                          	<p>
+											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1101" onclick="fileUp(1101);" style="display: none"/>
+									</p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>手持身份证、银行卡</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="1190"></td>
+		                          <td>
+		                           		<input type="file" name="file" id="uploadify_file1190" style="display: none">
+		                           		<p>
+											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1190" onclick="fileUp(1190);" style="display: none"/>
+										</p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>营业执照</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="1"></td>
+		                          <td>
+		                          		<input type="file" name="file" id="uploadify_file1" style="display: none" />
+		                          		<p>
+											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1" onclick="fileUp(1);" style="display: none"/>
+										</p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>签约协议照片</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="2"></td>
+		                          <td>
+		                        		  <input type="file" name="file" id="uploadify_file2" style="display: none" />
+		                        		  <p>
+											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first2" onclick="fileUp(2);" style="display: none"/>
+										  </p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>入账人身份证正面</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="300"></td>
+		                          <td>
+		                          	<input type="file" name="file" id="uploadify_file300" style="display: none" >
+		                          	<p>
+											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first300" onclick="fileUp(300);" style="display: none"/>
+									</p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>入账人身份证反面</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="301"></td>
+		                          <td>
+			                          <input type="file" name="file" id="uploadify_file301" style="display: none">
+		                          	  <p>
+											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first301" onclick="fileUp(301);" style="display: none"/>
+									 </p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>房屋租赁合同照片</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="4"></td>
+		                          <td><input type="file" name="file" id="uploadify_file4" style="display: none">
+		                          	<p>
+											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first4" onclick="fileUp(4);" style="display: none"/>
+									 </p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>法人身份证照片</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="6"></td>
+		                          <td>
+		                          <input type="file" name="file" id="uploadify_file6" style="display: none" >
+		                         	 <p>
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first6" onclick="fileUp(6);" style="display: none"/>
+									 </p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>商户信息登记表照片</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="7"></td>
+		                          <td><input type="file" name="file" id="uploadify_file7" style="display: none">
+		                          	<p>
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first7" onclick="fileUp(7);" style="display: none"/>
+									 </p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>组织机构代码证照片</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="8"></td>
+		                          <td><input type="file" name="file" id="uploadify_file8" style="display: none">
+		                          	<p>
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first8" onclick="fileUp(8);" style="display: none"/>
+									 </p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>店面外景</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="900"></td>
+		                          <td><input type="file" name="file" id="uploadify_file900" style="display: none">
+		                            <p>
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first900" onclick="fileUp(900);" style="display: none"/>
+									 </p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>店面内景</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="901"></td>
+		                          <td><input type="file" name="file" id="uploadify_file901" style="display: none">
+		                           <p>
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first901" onclick="fileUp(901);" style="display: none"/>
+									 </p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>收银台照</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="902"></td>
+		                          <td><input type="file" name="file" id="uploadify_file902" style="display: none" >
+		                           <p>
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first902" onclick="fileUp(902);" style="display: none"/>
+									 </p>
+		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>税务登记证照片</td>
-		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="10"></td>
+		                          <td><input type="file" name="file" id="uploadify_file10" style="display: none">
+		                           <p>
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first10" onclick="fileUp(10);" style="display: none"/>
+									 </p>
+		                          </td>
 		                      </tr>
 		                    </table>
 		                        <a class="nextBtn"  href="#messages" aria-controls="messages" role="tab" data-toggle="tab">下一步</a>
@@ -206,7 +285,7 @@
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="contactMobile">联系人手机：</label>
-		                                <input type="text" class="form-control" id="contactMobile" name="contactMobile">
+		                                <input type="number" class="form-control" id="contactMobile" name="contactMobile">
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="contactEmail">联系人邮箱：</label>
@@ -228,7 +307,7 @@
 		                        <div class="row">
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="merchantCode">通道商户号：</label>
-		                                <input type="text" class="form-control" id="merchantCode" name="merchantCode">
+		                                <input type="text" class="form-control" id="merchantCode" name="merchantCode" required="required">
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="channelId">通道ID：</label>
@@ -277,19 +356,19 @@
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="debitCardFee">借记卡固定金额：</label>
-		                                <input type="text" class="form-control" id="debitCardFee" name="debitCardFee">
+		                                <input type="number" class="form-control" id="debitCardFee" name="debitCardFee">
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="creditCardFee">贷记卡固定金额：</label>
-		                                <input type="text" class="form-control" id=creditCardFee name="creditCardFee">
+		                                <input type="number" class="form-control" id=creditCardFee name="creditCardFee">
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="debitCardMaxFee">借记卡费率封顶值：</label>
-		                                <input type="text" class="form-control" id="debitCardMaxFee" name="debitCardMaxFee">
+		                                <input type="number" class="form-control" id="debitCardMaxFee" name="debitCardMaxFee">
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="creditCardMaxFee">贷记卡费率封顶值：</label>
-		                                <input type="text" class="form-control" id="creditCardMaxFee" name="creditCardMaxFee">
+		                                <input type="number" class="form-control" id="creditCardMaxFee" name="creditCardMaxFee">
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="dealSwitch">交易设置：</label>
@@ -302,7 +381,6 @@
 		                                  <option value="1">已绑定渠道商户</option>
 		                                  <option value="4">停用</option>
 		                                </select>
-<!-- 		                                <input type="text" class="form-control" id="recordState" name="recordState"> -->
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="termAuditState">终端审核状态：</label>
@@ -311,7 +389,6 @@
 		                                  <option value="1">已绑定渠道商户</option>
 		                                  <option value="4">停用</option>
 		                                </select>
-<!-- 		                                <input type="text" class="form-control" id="termAuditState" name="termAuditState"> -->
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="termName">终端名称：</label>
@@ -336,15 +413,15 @@
 		                        <div class="row">
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="agentId">代理商：</label>
-		                                <input type="text" class="form-control" id="agentId" name="agentId">
+		                                <input type="number" class="form-control" id="agentId" name="agentId" required="required">
 		                            </div>
 		                            <div class="col-sm-6">
-		                                <label class="control-label" for="enName">渠道商户号：</label>
-		                                <input type="text" class="form-control" id="enName" name="enName">
+		                                <label class="control-label" for="channelMerId">渠道商户号：</label>
+		                                <input type="text" class="form-control" id="channelMerId" name="channelMerId">
 		                            </div>
 		                            <div class="col-sm-6">
-		                                <label class="control-label" for="legalPerson">渠道商户key：</label>
-		                                <input type="text" class="form-control" id="legalPerson" name="legalPerson">
+		                                <label class="control-label" for="channelMerKey">渠道商户key：</label>
+		                                <input type="text" class="form-control" id="channelMerKey" name="channelMerKey">
 		                            </div>
 		                            <div class="col-sm-6">
 		                                <label class="control-label" for="channelType">渠道类型：</label>
@@ -355,10 +432,11 @@
 		                                </select>
 		                            </div>
 		                        </div>
-		                         <a class="saveBtn">保存</a>
+		                         <a class="saveBtn" id="save_btn" type="submit">保存</a>
 		                    </div>
 		                </div>
 		            </div>
+		            <input type="hidden" id="innoCode" name="innerCode">
 		            <!-- <div class="modal-footer">
 		                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		                <button type="button" class="btn btn-primary">Save changes</button>
@@ -366,6 +444,7 @@
 		        </div>
 		    </div>
 		</div>
+		</form>
 		<!-- model end -->
     </div> 
     
@@ -381,6 +460,7 @@
 <script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
 </body>
 <script type="text/javascript">
 	initTableData();
@@ -513,5 +593,80 @@
    function resetEvent(){
 	   $('#formSearch')[0].reset();
    }
+   
+   getInnerCode();
+   $('#btn_add').click(function(){
+	   var  objs=document.getElementsByName("init");
+	   for(var i= 0;i<objs.length;i++){
+		   objs[i].click();
+	   }
+   });
+  
+   function  fileUp(num){
+	   var inno_code = $('#innoCode').val();
+	   if(!inno_code)inno_code=getInnerCode();
+	 //文件上传
+	   $('#uploadify_file'+num).uploadify({
+		   //指定swf文件
+	       'swf': 'js/uploadify-v3.1/uploadify.swf',
+	       //后台处理的页面
+	       'uploader': '/fileInfo/Import', 
+	       //按钮显示的文字
+	       'buttonText': '上传图片',
+	     //在浏览窗口底部的文件类型下拉菜单中显示的文本
+	       'fileTypeDesc': 'Image Files',
+	     //允许上传的文件后缀
+	       'fileTypeExts': '*.gif; *.jpg; *.png',
+	       'auto': true,
+	       'multi': true,
+	       //参数
+	       'formData': {
+	           'fileTypeKey':num,"innerCode":inno_code
+	       },
+	       'onUploadSuccess':function ( file, response, data) {
+	    	   $('#uploadify_file'+num).hide();
+	    	   var obj = eval('(' + response + ')');
+	    	   console.log(obj.url+":"+obj.id);
+	       },
+	       'onUploadError': function(file,errorCode,errorMsg,errorString) {
+				alert(errorCode+"."+errorMsg+""+errorString);
+
+			}
+	   });
+   }
+   //点击获取innocode
+   function getInnerCode()
+   {
+	   var code = '';
+	   if(!$('#innoCode').val()){
+		   $.ajax({
+			   url:'/fileInfo/getInnoCode',
+			   type:'POST',
+			   success:function(data){
+				   $('#innoCode').val(data);
+				   code = data;
+				   return code;
+			   }
+		   });
+	   }
+   }
+   //保存表格数据
+   $('#save_btn').click(function(){
+	   $('#merchant_form').submit();
+	   $.ajax({
+		   url:'/web/merchantinfo/toAdd',
+		   data: $('#merchant_form').serialize(),
+		   type:'POST',
+		   success:function(data){
+			   if(data.success)
+			   {
+				   alert('保存成功');
+			   }	
+			   else{
+				   alert('保存失败');
+			   }
+		   }
+	   });
+   });
 </script>
 </html>

@@ -5,6 +5,8 @@ package net.fnsco.api.merchant;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.MerchantCore;
@@ -21,7 +23,7 @@ public interface MerchantCoreService {
 	 * @param loginUserId
 	 * @return
 	 */
-	public ResultDTO<Integer> doAdd(MerchantCore merchantInfo, int loginUserId);
+	public ResultDTO<Integer> doAdd(HttpServletRequest request);
 	
 	/**
 	 * 条件查询 根据商家基本信息条件分页查询

@@ -134,7 +134,7 @@
         #{innerCode,jdbcType=VARCHAR},
       </if>
       <if test="merName != null" >
-        #{mer_name,jdbcType=VARCHAR},
+        #{merName,jdbcType=VARCHAR},
       </if>
       <if test="abbreviation != null" >
         #{abbreviation,jdbcType=VARCHAR},

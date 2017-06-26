@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSONArray;
 import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.service.domain.MerchantFile;
 import net.fnsco.service.domain.SysUser;
 /**
@@ -46,7 +47,16 @@ public class FileInfoController extends BaseController{
 	public String list() {
 		return "ups/control/fileUploadView";
 	}
-
+	
+	/**
+	 * 获取innocode
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/fileInfo/getInnoCode")
+	public String getInnoCode(){
+		return CodeUtil.generateMerchantCode("F");
+	}
 
 
 	@ResponseBody
@@ -135,13 +145,12 @@ public class FileInfoController extends BaseController{
 					}
 
 					fileInfo.setInnerCode(innerCode);
-					//fileInfo.setSaveURL(newUrl);
+					fileInfo.setFilePath(newUrl);
 					fileInfo.setFileType(fileType);
 					fileInfo.setFileName(fileName);
 					fileInfo.setCreateTime(new Date());
-					SysUser loginUser = (SysUser)getSessionUser();
-					ResultDTO<Integer> result = merchantInfoService.doAddToDB(fileInfo,1);
-
+//					SysUser loginUser = (SysUser)getSessionUser();
+					ResultDTO<Integer> result = merchantInfoService.doAddToDB(fileInfo,0);
 					if (result.isSuccess()) {
 						ResultDTO<TreeMap<String, String>> appResult = new ResultDTO<>();
 						appResult.setSuccess("上传成功");
