@@ -20,15 +20,15 @@ public class MerchantContact extends DTO{
 
     private String innerCode;
 
-    private String name;
+    private String contactName;
 
-    private String mobile;
+    private String contactMobile;
 
-    private String email;
+    private String contactEmail;
 
-    private String telphone;
+    private String contactTelphone;
 
-    private String jobs;
+    private String contactJobs;
 
     public Integer getId() {
         return id;
@@ -46,46 +46,45 @@ public class MerchantContact extends DTO{
         this.innerCode = innerCode == null ? null : innerCode.trim();
     }
 
-    public String getName() {
-        return name;
+    public String getContactName() {
+        return contactName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setContactName(String contactName) {
+        this.contactName = contactName == null ? null : contactName.trim();
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getContactMobile() {
+        return contactMobile;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile == null ? null : mobile.trim();
+    public void setContactMobile(String contactMobile) {
+        this.contactMobile = contactMobile == null ? null : contactMobile.trim();
     }
 
-    public String getEmail() {
-        return email;
+    public String getContactEmail() {
+        return contactEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail == null ? null : contactEmail.trim();
     }
 
-    public String getTelphone() {
-        return telphone;
+    public String getContactTelphone() {
+        return contactTelphone;
     }
 
-    public void setTelphone(String telphone) {
-        this.telphone = telphone == null ? null : telphone.trim();
+    public void setContactTelphone(String contactTelphone) {
+        this.contactTelphone = contactTelphone == null ? null : contactTelphone.trim();
     }
 
-    public String getJobs() {
-        return jobs;
+    public String getContactJobs() {
+        return contactJobs;
     }
 
-    public void setJobs(String jobs) {
-        this.jobs = jobs == null ? null : jobs.trim();
+    public void setContactJobs(String contactJobs) {
+        this.contactJobs = contactJobs == null ? null : contactJobs.trim();
     }
-    
     @Override
     public String toString() {
     	// TODO Auto-generated method stub
@@ -101,7 +100,7 @@ public class MerchantContact extends DTO{
     @Override
     public int hashCode() {
     	int result = 17;  
-        result = result * 31 + name.hashCode();  
+        result = result * 31 + contactName.hashCode();  
         result = result * 31 + id;  
         return result;  
     }

@@ -77,6 +77,12 @@
 	      <artifactId>commons-lang3</artifactId>
 	      <version>3.4</version>
 	    </dependency>
+	    <!-- httpclient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>fluent-hc</artifactId>
+			<version>4.5.1</version>
+		</dependency>
 		<!-- Junit -->
 		<dependency>
 			<groupId>junit</groupId>
