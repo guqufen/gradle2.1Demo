@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="net.fnsco.service.domain.MerchantCore" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mer_name" property="merName" jdbcType="VARCHAR" />
     <result column="abbreviation" property="abbreviation" jdbcType="VARCHAR" />
     <result column="en_name" property="enName" jdbcType="VARCHAR" />
     <result column="sign_date" property="signDate" jdbcType="VARCHAR" />
@@ -26,7 +26,7 @@
   </resultMap>
 
   <sql id="Base_Column_List" >
-    id, inner_code, name, abbreviation, en_name, sign_date, legal_person, legal_person_mobile, 
+    id, inner_code, mer_name, abbreviation, en_name, sign_date, legal_person, legal_person_mobile, 
     legal_person_tel, legal_valid_card_type, card_num, card_valid_time, business_license_num, 
     business_license_valid_time, tax_regist_code, regist_address, merc_flag, source, 
     modify_user_id, modify_time, status
@@ -42,7 +42,7 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="net.fnsco.service.domain.MerchantCore" >
-    insert into m_merchant_core (id, inner_code, name, 
+    insert into m_merchant_core (id, inner_code, mer_name, 
       abbreviation, en_name, sign_date, 
       legal_person, legal_person_mobile, legal_person_tel, 
       legal_valid_card_type, card_num, card_valid_time, 
@@ -50,7 +50,7 @@
       tax_regist_code, regist_address, merc_flag, 
       source, modify_user_id, modify_time, 
       status)
-    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{merName,jdbcType=VARCHAR}, 
       #{abbreviation,jdbcType=VARCHAR}, #{enName,jdbcType=VARCHAR}, #{signDate,jdbcType=VARCHAR}, 
       #{legalPerson,jdbcType=VARCHAR}, #{legalPersonMobile,jdbcType=VARCHAR}, #{legalPersonTel,jdbcType=VARCHAR}, 
       #{legalValidCardType,jdbcType=VARCHAR}, #{cardNum,jdbcType=VARCHAR}, #{cardValidTime,jdbcType=VARCHAR}, 
@@ -68,8 +68,8 @@
       <if test="innerCode != null" >
         inner_code,
       </if>
-      <if test="name != null" >
-        name,
+      <if test="merName != null" >
+        mer_name,
       </if>
       <if test="abbreviation != null" >
         abbreviation,
@@ -133,8 +133,8 @@
       <if test="innerCode != null" >
         #{innerCode,jdbcType=VARCHAR},
       </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
+      <if test="merName != null" >
+        #{mer_name,jdbcType=VARCHAR},
       </if>
       <if test="abbreviation != null" >
         #{abbreviation,jdbcType=VARCHAR},
@@ -198,8 +198,8 @@
       <if test="innerCode != null" >
         inner_code = #{innerCode,jdbcType=VARCHAR},
       </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
+      <if test="merName != null" >
+        mer_name = #{merName,jdbcType=VARCHAR},
       </if>
       <if test="abbreviation != null" >
         abbreviation = #{abbreviation,jdbcType=VARCHAR},
@@ -261,7 +261,7 @@
   <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.MerchantCore" >
     update m_merchant_core
     set inner_code = #{innerCode,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
+      mer_name = #{merName,jdbcType=VARCHAR},
       abbreviation = #{abbreviation,jdbcType=VARCHAR},
       en_name = #{enName,jdbcType=VARCHAR},
       sign_date = #{signDate,jdbcType=VARCHAR},
@@ -291,8 +291,8 @@
   	 <if test="condition.innerCode != null and condition.innerCode != ''" >
         AND inner_code = #{condition.innerCode,jdbcType=VARCHAR}
       </if>
-      <if test="condition.name != null and condition.name != ''" >
-        AND name LIKE CONCAT('%', #{condition.name}, '%')
+      <if test="condition.merName != null and condition.merName != ''" >
+        AND mer_name LIKE CONCAT('%', #{condition.merName}, '%')
       </if>
       <if test="condition.abbreviation != null and condition.abbreviation != ''" >
         AND abbreviation = #{condition.abbreviation,jdbcType=VARCHAR},
@@ -304,7 +304,7 @@
         AND sign_date = #{condition.signDate,jdbcType=VARCHAR}
       </if>
       <if test="condition.legalPerson != null and condition.legalPerson != ''" >
-        AND legal_person = #{condition.legalPerson,jdbcType=VARCHAR}
+        AND legal_person LIKE CONCAT('%', #{condition.legalPerson}, '%')
       </if>
       <if test="condition.legalPersonMobile != null and condition.legalPersonMobile != ''" >
         AND legal_person_mobile = #{condition.legalPersonMobile,jdbcType=VARCHAR}
@@ -359,8 +359,8 @@
   	 	<if test="innerCode != null and innerCode != ''" >
         AND inner_code = #{innerCode,jdbcType=VARCHAR}
       </if>
-      <if test="name != null and name != ''" >
-        AND name LIKE CONCAT('%', #{name}, '%')
+      <if test="merName != null and merName != ''" >
+        AND mer_name LIKE CONCAT('%', #{merName}, '%')
       </if>
       <if test="abbreviation != null and abbreviation != ''" >
         AND abbreviation = #{abbreviation,jdbcType=VARCHAR}
@@ -372,7 +372,7 @@
         AND sign_date = #{signDate,jdbcType=VARCHAR}
       </if>
       <if test="legalPerson != null and legalPerson != ''" >
-        AND legal_person = #{legalPerson,jdbcType=VARCHAR}
+        AND legal_person LIKE CONCAT('%', #{legalPerson}, '%')
       </if>
       <if test="legalPersonMobile != null and legalPersonMobile != ''" >
         AND legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR}
@@ -428,8 +428,8 @@
    	   <if test="innerCode != null" >
         AND inner_code = #{innerCode,jdbcType=VARCHAR}
       </if>
-      <if test="name != null" >
-        AND name LIKE CONCAT('%', #{name}, '%')
+      <if test="merName != null" >
+        AND mer_name LIKE CONCAT('%', #{merName}, '%')
       </if>
       <if test="abbreviation != null" >
         AND abbreviation = #{abbreviation,jdbcType=VARCHAR}
@@ -441,7 +441,7 @@
         AND sign_date = #{signDate,jdbcType=VARCHAR}
       </if>
       <if test="legalPerson != null" >
-        AND legal_person = #{legalPerson,jdbcType=VARCHAR}
+        AND legal_person LIKE CONCAT('%', #{legalPerson}, '%') 
       </if>
       <if test="legalPersonMobile != null" >
         AND legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR}

@@ -42,10 +42,10 @@
                 <div class="row row-lg">
                     <div class="col-sm-12">
                         <div id="toolbar" class="btn-group">
-                            <button id="btn_add" type="button" class="btn btn-default">
+                            <button id="btn_add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
                             </button>
-                            <button id="btn_delete" type="button" class="btn btn-default">
+                            <button id="btn_delete" type="button" class="btn btn-danger">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>批量删除
                             </button>
                         </div>
@@ -55,6 +55,318 @@
             </div>
         </div>
         <!-- end  -->
+        <!-- model start -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		    <div class="modal-dialog" role="document">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		                <h4 class="modal-title" id="myModalLabel">新增商户</h4>
+		            </div>
+		            <div class="modal-body">
+		                <ul class="nav nav-tabs" role="tablist">
+		                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">基本信息</a></li>
+		                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">资质文件</a></li>
+		                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">联系信息</a></li>
+		                    <li role="presentation"><a href="#terminal_info" aria-controls="terminal_info" role="tab" data-toggle="tab">终端信息</a></li>
+		                    <li role="presentation"><a href="#channel_info" aria-controls="channel_info" role="tab" data-toggle="tab">渠道信息</a></li>
+		                </ul>
+		                <div class="tab-content">
+		                    <div role="tabpanel" class="tab-pane active" id="home">
+		                        <div class="row">
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="name">商户名：</label>
+		                                <input type="text" class="form-control" id="name" name="name">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="abbreviation">简称：</label>
+		                                <input type="text" class="form-control" id="abbreviation" name="abbreviation">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="enName">商户名英文名：</label>
+		                                <input type="text" class="form-control" id="enName" name="enName">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="legalPerson">商户法人姓名：</label>
+		                                <input type="text" class="form-control" id="legalPerson" name="legalPerson">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="legalPersonMobile">法人手机号码：</label>
+		                                <input type="text" class="form-control" id="legalPersonMobile" name="legalPersonMobile">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="legalValidCardType">法人有效证件类型：</label>
+		                                <input type="text" class="form-control" id="legalValidCardType" name="legalValidCardType">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="cardNum">证件号码：</label>
+		                                <input type="text" class="form-control" id="cardNum" name="cardNum">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="cardValidTime">证件有效期：</label>
+		                                <input type="text" class="form-control" id="cardValidTime" name="cardValidTime">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="businessLicenseNum">营业执照号码：</label>
+		                                <input type="text" class="form-control" id="businessLicenseNum" name="businessLicenseNum">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="businessLicenseValidTime">营业执照有效期：</label>
+		                                <input type="text" class="form-control" id="businessLicenseValidTime" name="businessLicenseValidTime">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="taxRegistCode">税务登记号：</label>
+		                                <input type="text" class="form-control" id="taxRegistCode" name="taxRegistCode">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="registAddress">商户注册地址：</label>
+		                                <input type="text" class="form-control" id="registAddress" name="registAddress">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="mercFlag">商户标签：</label>
+		                                <input type="text" class="form-control" id="mercFlag" name="mercFlag">
+		                            </div>
+		                        </div>
+		                        <a class="nextBtn" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">下一步</a>
+		                    </div>
+		                    <div role="tabpanel" class="tab-pane" id="profile">
+		                    <table class="table table-bordered">
+		                      <thead>
+		                          <th>材料名称</th>
+		                          <th>操作</th>
+		                      </thead>
+		                      <tr>
+		                          <td>银行卡正面</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="1100"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>银行卡反面</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="1101"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>手持身份证、银行卡</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="1190"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>营业执照</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="1"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>签约协议照片</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="2"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>入账人身份证正面</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="300"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>入账人身份证反面</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="301"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>房屋租赁合同照片</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="4"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>法人身份证照片</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="6"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>商户信息登记表照片</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="7"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>组织机构代码证照片</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="8"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>店面外景</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="900"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>店面内景</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="901"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>收银台照</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="902"></td>
+		                      </tr>
+		                      <tr>
+		                          <td>税务登记证照片</td>
+		                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*" data_type="10"></td>
+		                      </tr>
+		                    </table>
+		                        <a class="nextBtn"  href="#messages" aria-controls="messages" role="tab" data-toggle="tab">下一步</a>
+		                    </div>
+		                    <div role="tabpanel" class="tab-pane" id="messages">
+		                        <div class="row">
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="contactName">联系人名：</label>
+		                                <input type="text" class="form-control" id="contactName" name="contactName">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="contactMobile">联系人手机：</label>
+		                                <input type="text" class="form-control" id="contactMobile" name="contactMobile">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="contactEmail">联系人邮箱：</label>
+		                                <input type="email" class="form-control" id="contactEmail" name="contactEmail">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="contactTelphone">电话：</label>
+		                                <input type="text" class="form-control" id="contactTelphone" name="contactTelphone">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="contactJobs">职位：</label>
+		                                <input type="text" class="form-control" id="contactJobs" name="contactJobs">
+		                            </div>
+		                        </div>
+		                        <a class="nextBtn" href="#terminal_info" aria-controls="terminal_info" role="tab" data-toggle="tab">下一步</a>
+		                    </div>
+		                    <!-- 终端信息 -->
+		                    <div role="tabpanel" class="tab-pane" id="terminal_info">
+		                        <div class="row">
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="merchantCode">通道商户号：</label>
+		                                <input type="text" class="form-control" id="merchantCode" name="merchantCode">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="channelId">通道ID：</label>
+		                                <input type="text" class="form-control" id="channelId" name="channelId">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="channelName">通道名称：</label>
+		                                <input type="text" class="form-control" id="channelName" name="channelName">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="terminalCode">通道终端号：</label>
+		                                <input type="text" class="form-control" id="terminalCode" name="terminalCode">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="innerTermCode">内部终端号 10000000：</label>
+		                                <input type="text" class="form-control" id="innerTermCode" name="innerTermCode">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="snCode">POS机SN码：</label>
+		                                <input type="text" class="form-control" id="snCode" name="snCode">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="terminalBatch">终端批次号：</label>
+		                                <input type="text" class="form-control" id="terminalBatch" name="terminalBatch">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="terminalPara">终端参数：</label>
+		                                <input type="text" class="form-control" id="terminalPara" name="terminalPara">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="chargesType">收费类型：</label>
+		                                <select name="chargesType">
+		                                	<option value="1">按每笔百分比</option>
+		                                	<option value="2">按每笔固定金额</option>
+		                                	<option value="3">百分比封顶</option>
+		                                </select>
+<!-- 		                                <input type="text" class="form-control" id="chargesType" name="chargesType"> -->
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="debitCardRate">借记卡费率：</label>
+		                                <input type="text" class="form-control" id="debitCardRate" name="debitCardRate">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="creditCardRate">贷记卡费率：</label>
+		                                <input type="text" class="form-control" id="creditCardRate" name="creditCardRate">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="debitCardFee">借记卡固定金额：</label>
+		                                <input type="text" class="form-control" id="debitCardFee" name="debitCardFee">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="creditCardFee">贷记卡固定金额：</label>
+		                                <input type="text" class="form-control" id=creditCardFee name="creditCardFee">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="debitCardMaxFee">借记卡费率封顶值：</label>
+		                                <input type="text" class="form-control" id="debitCardMaxFee" name="debitCardMaxFee">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="creditCardMaxFee">贷记卡费率封顶值：</label>
+		                                <input type="text" class="form-control" id="creditCardMaxFee" name="creditCardMaxFee">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="dealSwitch">交易设置：</label>
+		                                <input type="text" class="form-control" id="dealSwitch" name="dealSwitch">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="recordState">记录状态：</label>
+		                                <select name="recordState">
+		                                  <option value="0">初始化状态</option>
+		                                  <option value="1">已绑定渠道商户</option>
+		                                  <option value="4">停用</option>
+		                                </select>
+<!-- 		                                <input type="text" class="form-control" id="recordState" name="recordState"> -->
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="termAuditState">终端审核状态：</label>
+		                                <select name="termAuditState">
+		                                  <option value="0">初始化状态</option>
+		                                  <option value="1">已绑定渠道商户</option>
+		                                  <option value="4">停用</option>
+		                                </select>
+<!-- 		                                <input type="text" class="form-control" id="termAuditState" name="termAuditState"> -->
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="termName">终端名称：</label>
+		                                <input type="text" class="form-control" id="termName" name="termName">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="posFactory">机具厂家：</label>
+		                                <input type="text" class="form-control" id="posFactory" name="posFactory">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="posType">机具型号：</label>
+		                                <input type="text" class="form-control" id="posType" name="posType">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="mercReferName">签购单参考名：</label>
+		                                <input type="text" class="form-control" id="mercReferName" name="mercReferName">
+		                            </div>
+		                        </div>
+		                        <a class="nextBtn" href="#channel_info" aria-controls="channel_info" role="tab" data-toggle="tab">下一步</a>
+		                    </div>
+		                    <div role="tabpanel" class="tab-pane" id="channel_info">
+		                        <div class="row">
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="agentId">代理商：</label>
+		                                <input type="text" class="form-control" id="agentId" name="agentId">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="enName">渠道商户号：</label>
+		                                <input type="text" class="form-control" id="enName" name="enName">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="legalPerson">渠道商户key：</label>
+		                                <input type="text" class="form-control" id="legalPerson" name="legalPerson">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="channelType">渠道类型：</label>
+		                                  <select name="channelType">
+		                                  <option value="00">爱农</option>
+		                                  <option value="01">浦发</option>
+		                                  <option value="02">拉卡拉</option>
+		                                </select>
+		                            </div>
+		                        </div>
+		                         <a class="saveBtn">保存</a>
+		                    </div>
+		                </div>
+		            </div>
+		            <!-- <div class="modal-footer">
+		                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		                <button type="button" class="btn btn-primary">Save changes</button>
+		            </div> -->
+		        </div>
+		    </div>
+		</div>
+		<!-- model end -->
     </div> 
     
 </div>
@@ -126,7 +438,7 @@
                 formatter: operateFormatter,
                 // events: operateEvents
             },{
-                field: 'name',
+                field: 'merName',
                 title: '商户名'
             }, {
                 field: 'innerCode',
@@ -173,7 +485,7 @@
 	   var param ={
 			   currentPageNum : this.pageNumber,
 			   pageSize : this.pageSize,
-			   name :$('#txt_search_id').val(),
+			   merName :$('#txt_search_id').val(),
 			   legalPerson:$('#txt_search_name').val(),
 			   legalPersonMobile:$('#txt_search_price').val()
 	   }

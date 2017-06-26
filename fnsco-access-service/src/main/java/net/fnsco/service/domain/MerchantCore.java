@@ -19,7 +19,7 @@ public class MerchantCore extends DTO{
 
     private String innerCode;
 
-    private String name;
+    private String merName;
 
     private String abbreviation;
 
@@ -73,15 +73,15 @@ public class MerchantCore extends DTO{
         this.innerCode = innerCode == null ? null : innerCode.trim();
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getMerName() {
+		return merName;
+	}
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+	public void setMerName(String merName) {
+		this.merName = merName;
+	}
 
-    public String getAbbreviation() {
+	public String getAbbreviation() {
         return abbreviation;
     }
 

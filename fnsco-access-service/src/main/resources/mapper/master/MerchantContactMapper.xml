@@ -3,26 +3,26 @@
 <mapper namespace="net.fnsco.service.dao.master.MerchantContactDao" >
   <resultMap id="BaseResultMap" type="net.fnsco.service.domain.MerchantContact" >
     <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="email" property="email" jdbcType="VARCHAR" />
-    <result column="telphone" property="telphone" jdbcType="VARCHAR" />
-    <result column="jobs" property="jobs" jdbcType="VARCHAR" />
+    <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+    <result column="contact_mobile" property="contactMobile" jdbcType="VARCHAR" />
+    <result column="contact_email" property="contactEmail" jdbcType="VARCHAR" />
+    <result column="contact_telphone" property="contactTelphone" jdbcType="VARCHAR" />
+    <result column="contact_jobs" property="contactJobs" jdbcType="VARCHAR" />
   </resultMap>
   
-  
   <sql id="Base_Column_List" >
-    id, inner_code, name, mobile, email, telphone, jobs
+    id, inner_code, contact_name, contact_mobile, contact_email, contact_telphone, contact_jobs
   </sql>
   
   <insert id="insert" parameterType="net.fnsco.service.domain.MerchantContact" >
-    insert into m_merchant_contact (id, inner_code, name, 
-      mobile, email, telphone, 
-      jobs)
-    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{telphone,jdbcType=VARCHAR}, 
-      #{jobs,jdbcType=VARCHAR})
+    insert into m_merchant_contact (id, inner_code, contact_name, 
+      contact_mobile, contact_email, contact_telphone, 
+      contact_jobs)
+    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
+      #{contactMobile,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, #{contactTelphone,jdbcType=VARCHAR}, 
+      #{contactJobs,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="net.fnsco.service.domain.MerchantContact" >
     insert into m_merchant_contact
@@ -33,20 +33,20 @@
       <if test="innerCode != null" >
         inner_code,
       </if>
-      <if test="name != null" >
-        name,
+      <if test="contactName != null" >
+        contact_name,
       </if>
-      <if test="mobile != null" >
-        mobile,
+      <if test="contactMobile != null" >
+        contact_mobile,
       </if>
-      <if test="email != null" >
-        email,
+      <if test="contactEmail != null" >
+        contact_email,
       </if>
-      <if test="telphone != null" >
-        telphone,
+      <if test="contactTelphone != null" >
+        contact_telphone,
       </if>
-      <if test="jobs != null" >
-        jobs,
+      <if test="contactJobs != null" >
+        contact_jobs,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -56,20 +56,20 @@
       <if test="innerCode != null" >
         #{innerCode,jdbcType=VARCHAR},
       </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
+      <if test="contactName != null" >
+        #{contactName,jdbcType=VARCHAR},
       </if>
-      <if test="mobile != null" >
-        #{mobile,jdbcType=VARCHAR},
+      <if test="contactMobile != null" >
+        #{contactMobile,jdbcType=VARCHAR},
       </if>
-      <if test="email != null" >
-        #{email,jdbcType=VARCHAR},
+      <if test="contactEmail != null" >
+        #{contactEmail,jdbcType=VARCHAR},
       </if>
-      <if test="telphone != null" >
-        #{telphone,jdbcType=VARCHAR},
+      <if test="contactTelphone != null" >
+        #{contactTelphone,jdbcType=VARCHAR},
       </if>
-      <if test="jobs != null" >
-        #{jobs,jdbcType=VARCHAR},
+      <if test="contactJobs != null" >
+        #{contactJobs,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
