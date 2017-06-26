@@ -18,7 +18,7 @@ public class DateUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_WEEK, dates);
         String tempStr = sf.format(calendar.getTime());
-        tempStr += "23:59:59";
+        tempStr += " 23:59:59";
         try {
             result = sf1.parse(tempStr);
         } catch (ParseException e) {

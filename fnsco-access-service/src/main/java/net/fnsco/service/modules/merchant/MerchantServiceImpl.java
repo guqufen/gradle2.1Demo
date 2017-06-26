@@ -6,7 +6,6 @@ package net.fnsco.service.modules.merchant;
 import java.util.Date;
 import java.util.List;
 
-import org.assertj.core.internal.cglib.core.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,13 +39,16 @@ public class MerchantServiceImpl implements MerchantService {
         //商户代号
         String randomCode = "";
         MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merCode, channelType);
+        if (null == merchantChannel) {
+            return randomCode;
+        }
         String innerCode = merchantChannel.getInnerCode();
         //查询所有的
         List<Alias> aliasList = aliasDAO.selectByInnerCode(innerCode);
         for (Alias alias : aliasList) {
             randomCode = alias.getRandomCode();
             Date validate = alias.getValidateTime();
-            if (validate.before(new Date())) {
+            if (validate.after(new Date())) {
                 return randomCode;
             }
         }
