@@ -9,7 +9,7 @@ public class MerchantHelper {
     public static String getMerCode() {
         StringBuffer result = new StringBuffer();
         Random random = new Random();// 定义随机类
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 6; i++) {
             int index = random.nextInt(merCodes.length - 1);
             result.append(merCodes[index]);
         }

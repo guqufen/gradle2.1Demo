@@ -2,6 +2,8 @@ package net.fnsco.service.dao.master;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.service.domain.Alias;
 
 public interface AliasDAO {
@@ -18,7 +20,7 @@ public interface AliasDAO {
 
     int updateByPrimaryKey(Alias record);
 
-    List<Alias> selectByInnerCode(String innerCode);
+    List<Alias> selectByInnerCode(@Param("innerCode") String innerCode);
 
-    List<Alias> selectByRandomCode(String randomCode);
+    List<Alias> selectByRandomCode(@Param("randomCode") String randomCode);
 }
