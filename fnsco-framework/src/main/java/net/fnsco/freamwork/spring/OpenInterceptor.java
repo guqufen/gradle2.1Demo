@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.freamwork.aop.OutWriterUtil;
 import net.fnsco.freamwork.comm.Constant;
 import net.fnsco.freamwork.comm.Md5Util;
 
@@ -34,7 +35,7 @@ public class OpenInterceptor implements HandlerInterceptor {
         // 从配置文件中获取浙付通接口模块,不需要被拦截
         String appModules = env.getProperty("app.ignore.url");
         if (!Strings.isNullOrEmpty(appModules)) {
-            String[] modules = StringUtils.split(appModules, ",");
+            String[] modules = appModules.split(",");
             for (String module : modules) {
                 if (requestUrl.indexOf(module) > -1) {
                     return true;
@@ -43,12 +44,14 @@ public class OpenInterceptor implements HandlerInterceptor {
         }
         String tokenId = request.getHeader("tokenId");
         if (Strings.isNullOrEmpty(tokenId)) {
+            OutWriterUtil.outJson(response, Constant.E_TOKEN_EMPTY);
             return false;
         }
         String identifier = request.getHeader("identifier");
         String temp = Constant.TOKEN_ID + identifier;
         String trueTokenId = Md5Util.getInstance().md5(temp);
         if (!trueTokenId.equals(tokenId)) {
+            OutWriterUtil.outJson(response, Constant.E_TOKEN_ERROR);
             return false;
         }
         return true;
