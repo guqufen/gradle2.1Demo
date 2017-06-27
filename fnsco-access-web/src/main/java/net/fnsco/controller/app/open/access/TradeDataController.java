@@ -1,4 +1,4 @@
-package net.fnsco.controller.app.access;
+package net.fnsco.controller.app.open.access;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -19,7 +19,7 @@ import net.fnsco.core.base.ResultPageDTO;
 import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-@RequestMapping(value = "/app/trade")
+@RequestMapping(value = "/open/trade")
 public class TradeDataController extends BaseController {
     @Autowired
     private Environment      env;

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
@@ -27,8 +26,8 @@ public class MerchantController extends BaseController {
      */
     @RequestMapping(value = "/getMerCode", method = RequestMethod.POST)
     @ApiOperation(value = "获取商户编号")
-    public ResultDTO getMerCode(@RequestBody MerchantJO merchant) {
+    public String getMerCode(@RequestBody MerchantJO merchant) {
         String randomCode = merchantService.getMerCode(merchant.getMerCode(), merchant.getChannelType());
-        return success(randomCode);
+        return success(randomCode).toJsonString();
     }
 }

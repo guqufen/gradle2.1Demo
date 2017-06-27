@@ -25,7 +25,7 @@
 		<mybatis-spring-boot>1.2.0</mybatis-spring-boot>
 		<mysql-connector>5.1.39</mysql-connector>
 		<druid>1.0.25</druid>
-		<fastjson.version>1.2.30</fastjson.version>
+		
 	</properties>
 
 	<dependencies>
@@ -62,11 +62,7 @@
 			<artifactId>druid</artifactId>
 			<version>${druid}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>${fastjson.version}</version>
-		</dependency>
+		 
 		<dependency>
 			<groupId>net.fnsco</groupId>
 			<artifactId>fnsco-framework</artifactId>
