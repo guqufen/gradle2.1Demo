@@ -13,5 +13,8 @@ public interface AppUserService {
 	//比对验证码
 	ResultDTO<String> validateCode(String mobile, String code);
 	//通过手机号找回登录密码
-	ResultDTO<String> findPassword(String mobile, String code);
+	ResultDTO<String> findPassword(String mobile, String code,String password);
+	//根据手机号查询用户实体
+	ResultDTO<String> loginByMoblie(String mobile,String password);
+	
 }

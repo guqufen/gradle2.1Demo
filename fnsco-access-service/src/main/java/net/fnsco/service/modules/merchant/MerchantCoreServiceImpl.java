@@ -1,18 +1,28 @@
 package net.fnsco.service.modules.merchant;
 
+import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.service.dao.master.MerchantChannelDao;
+import net.fnsco.service.dao.master.MerchantContactDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
+import net.fnsco.service.dao.master.MerchantTerminalDao;
+import net.fnsco.service.domain.MerchantChannel;
+import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
+import net.fnsco.service.domain.MerchantTerminal;
 
 /**
  * @desc 商家基本信息 实现类
@@ -27,6 +37,15 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	@Autowired
 	private MerchantCoreDao merchantCoreDao;
 	
+	@Autowired
+	private MerchantContactDao merchantContactDao;
+	
+	@Autowired
+	private MerchantTerminalDao merchantTerminalDao;
+	
+	@Autowired
+	private MerchantChannelDao merchantChannelDao;
+	
 	/**
 	 * @todo 新增加商家
 	 * @author tangliang
@@ -34,12 +53,27 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	 * @see net.fnsco.api.merchant.MerchantCoreService#doAdd(net.fnsco.service.domain.MerchantCore, int)
 	 */
 	@Override
-	public ResultDTO<Integer> doAdd(MerchantCore merchantInfo, int loginUserId) {
-		logger.info("开始添加MerchantCoreService.add,merchantInfo=" + merchantInfo.toString());
+	@Transactional
+	public ResultDTO<Integer> doAdd(HttpServletRequest request) {
+		logger.info("开始添加MerchantCoreService.add,merchantInfo=" );
 		ResultDTO<Integer> result = new ResultDTO<>();
-//		merchantInfo.setLastupdatetime(new Date());
+		
+		MerchantCore merchantInfo = getParamesFormRequest(request);
+		MerchantContact merchantContact = getParamesFormReqCont(request);
+		MerchantTerminal merchantTerminal = getParamesFormReqTerm(request);
+		MerchantChannel merchantChannel = getParamesFormReqChan(request);
+		
 		// 判断用户名/手机号是否重复
-		merchantCoreDao.insertSelective(merchantInfo);
+		int cor = merchantCoreDao.insertSelective(merchantInfo);
+		int con =merchantContactDao.insertSelective(merchantContact);
+		int ter = merchantTerminalDao.insertSelective(merchantTerminal);
+		int chan = merchantChannelDao.insertSelective(merchantChannel);
+		if(cor ==1 && con ==1 && ter == 1 && chan == 1){
+			result.setSuccess("添加商户成功");
+		}else
+		{
+			result.setError("添加失败");
+		}	
 		return result;
 	}
 	/**
@@ -71,6 +105,100 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 		return merchantCoreDao.queryListByCondition(merchantCore);
 	}
 	
+	/**
+	 * 在请求中获取该实体参数
+	 * @param request
+	 * @return
+	 */
+	private MerchantCore getParamesFormRequest(HttpServletRequest request){
+		MerchantCore merchantCore = new MerchantCore();
+		merchantCore.setInnerCode(request.getParameter("innerCode"));
+		merchantCore.setMerName(request.getParameter("name"));
+		merchantCore.setAbbreviation(request.getParameter("abbreviation"));
+		merchantCore.setEnName(request.getParameter("enName"));
+		merchantCore.setSignDate(request.getParameter("signDate"));
+		merchantCore.setLegalPerson(request.getParameter("legalPerson"));
+		merchantCore.setLegalPersonMobile(request.getParameter("legalPersonMobile"));
+		merchantCore.setLegalPersonTel(request.getParameter("legalPersonTel"));
+		merchantCore.setLegalValidCardType(request.getParameter("legalValidCardType"));
+		merchantCore.setCardNum(request.getParameter("cardNum"));
+		merchantCore.setCardValidTime(request.getParameter("cardValidTime"));
+		merchantCore.setBusinessLicenseNum(request.getParameter("businessLicenseNum"));
+		merchantCore.setBusinessLicenseValidTime(request.getParameter("businessLicenseValidTime"));
+		merchantCore.setTaxRegistCode(request.getParameter("taxRegistCode"));
+		merchantCore.setRegistAddress(request.getParameter("registAddress"));
+		merchantCore.setMercFlag(request.getParameter("mercFlag"));
+		merchantCore.setSource(0);
+		merchantCore.setModifyUserId("");//待定
+		merchantCore.setModifyTime(new Date());
+		merchantCore.setStatus(1);
+		return merchantCore;
+	}
 	
+	/**
+	 * 在请求中获取该实体参数
+	 * @param request
+	 * @return
+	 */
+	private MerchantContact getParamesFormReqCont(HttpServletRequest request){
+		MerchantContact merchantContact = new MerchantContact();
+		merchantContact.setInnerCode(request.getParameter("innerCode"));
+		merchantContact.setContactName(request.getParameter("contactName"));
+		merchantContact.setContactMobile(request.getParameter("contactMobile"));
+		merchantContact.setContactEmail(request.getParameter("contactEmail"));
+		merchantContact.setContactTelphone(request.getParameter("contactTelphone"));
+		merchantContact.setContactJobs(request.getParameter("contactJobs"));
+		return merchantContact;
+	}
 	
+	/**
+	 * 在请求中获取该实体参数
+	 * @param request
+	 * @return
+	 */
+	private MerchantTerminal getParamesFormReqTerm(HttpServletRequest request){
+		MerchantTerminal merchantTerminal = new MerchantTerminal();
+		merchantTerminal.setInnerCode(request.getParameter("innerCode"));
+		merchantTerminal.setMerchantCode(request.getParameter("merchantCode"));
+		merchantTerminal.setChannelId(Integer.valueOf(request.getParameter("channelId")));
+		merchantTerminal.setChannelName(request.getParameter("channelName"));
+		merchantTerminal.setTerminalCode(request.getParameter("terminalCode"));
+		merchantTerminal.setInnerTermCode(request.getParameter("innerTermCode"));
+		merchantTerminal.setSnCode(request.getParameter("snCode"));
+		merchantTerminal.setTerminalBatch(request.getParameter("terminalBatch"));
+		merchantTerminal.setTerminalPara(request.getParameter("terminalPara"));
+		merchantTerminal.setChargesType(Integer.valueOf(request.getParameter("chargesType")));
+		merchantTerminal.setDebitCardRate(request.getParameter("debitCardRate"));
+		merchantTerminal.setCreditCardRate(request.getParameter("creditCardRate"));
+		merchantTerminal.setDebitCardFee(Integer.valueOf(request.getParameter("debitCardFee")));
+		merchantTerminal.setCreditCardFee(Integer.valueOf(request.getParameter("creditCardFee")));
+		merchantTerminal.setDebitCardMaxFee(Integer.valueOf(request.getParameter("debitCardMaxFee")));
+		merchantTerminal.setCreditCardMaxFee(Integer.valueOf(request.getParameter("creditCardMaxFee")));
+		merchantTerminal.setDealSwitch(request.getParameter("dealSwitch"));
+		merchantTerminal.setRecordState(request.getParameter("recordState"));
+		merchantTerminal.setTermAuditState(request.getParameter("termAuditState"));
+		merchantTerminal.setTermName(request.getParameter("termName"));
+		merchantTerminal.setPosFactory(request.getParameter("posFactory"));
+		merchantTerminal.setPosType(request.getParameter("posType"));
+		merchantTerminal.setMercReferName(request.getParameter("mercReferName"));
+		return merchantTerminal;
+	}
+	
+	/**
+	 * 在请求中获取该实体参数
+	 * @param request
+	 * @return
+	 */
+	private MerchantChannel getParamesFormReqChan(HttpServletRequest request){
+		MerchantChannel merchantChannel = new MerchantChannel();
+		merchantChannel.setInnerCode(request.getParameter("innerCode"));
+		merchantChannel.setAgentId(Integer.valueOf(request.getParameter("agentId")));
+		merchantChannel.setChannelType(request.getParameter("channelType"));
+		merchantChannel.setChannelMerId(request.getParameter("channelMerId"));
+		merchantChannel.setChannelMerKey(request.getParameter("channelMerKey"));
+		merchantChannel.setCreateTime(new Date());
+		merchantChannel.setModifyTime(new Date());
+		merchantChannel.setModifyUserId(0);//待定
+		return merchantChannel;
+	}
 }

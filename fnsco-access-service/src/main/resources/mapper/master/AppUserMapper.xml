@@ -30,7 +30,19 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultType="java.lang.Integer">
     select count(*) from m_app_user  where mobile = #{mobile}
   </select>
-  <!-- 根据手机号查询用户实体 -->
+  <!-- 根据手机号更新用户 密码-->
+  <update id="findPasswordByPhone" parameterType="java.lang.String">
+  	 update m_app_user  set password = #{password,jdbcType=VARCHAR} where mobile = #{mobile,jdbcType=VARCHAR}
+  </update>
+  <!-- 根据用户手机号码查询用户id -->
+  <select id="idByPhone">
+  	 select id from m_app_user where mobile=#{mobile}
+  </select>
+  <!-- 用户登录 -->
+  <update id="login" parameterType="java.lang.String">
+  	 update m_app_user  set state = #{state,jdbcType=VARCHAR} where mobile = #{mobile,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+  </update>
+   <!-- 根据手机号查询用户实体 -->
    <select id="selectByMobile" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

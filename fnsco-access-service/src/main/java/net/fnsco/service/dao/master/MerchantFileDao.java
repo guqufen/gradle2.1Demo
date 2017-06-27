@@ -1,5 +1,7 @@
 package net.fnsco.service.dao.master;
 
+import java.util.List;
+
 import net.fnsco.service.domain.MerchantFile;
 
 /**
@@ -20,4 +22,11 @@ public interface MerchantFileDao {
     int updateByPrimaryKeySelective(MerchantFile record);
 
     int updateByPrimaryKey(MerchantFile record);
+    
+    /**
+     * 根据条件查询
+     * @param record
+     * @return
+     */
+    List<MerchantFile> queryByCondition(MerchantFile record);
 }
