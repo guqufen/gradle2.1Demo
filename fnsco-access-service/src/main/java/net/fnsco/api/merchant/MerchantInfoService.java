@@ -19,4 +19,11 @@ public interface MerchantInfoService {
 	 * @return
 	 */
 	public ResultDTO<Integer> doAddToDB (MerchantFile fileInfo,int loginUserId);
+	
+	/**
+	 * 根据ID删除文件数据
+	 * @param id
+	 * @return
+	 */
+	public boolean deleteFromDB(Integer id);
 }

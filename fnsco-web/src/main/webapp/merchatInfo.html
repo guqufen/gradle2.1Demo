@@ -691,7 +691,7 @@
 	       //指定显示的id
 	       'queueID' : 'fileQueue'+num,
 	       //后台处理的页面
-	       'uploader': '/fileInfo/Import', 
+	       'uploader': '/web/fileInfo/Import', 
 	       //按钮显示的文字
 	       'buttonText': '上传图片',
 	     //在浏览窗口底部的文件类型下拉菜单中显示的文本
@@ -705,21 +705,36 @@
 	           'fileTypeKey':num,"innerCode":inno_code
 	       },
 	       'onUploadSuccess':function ( file, response, data) {
+	    	   var obj = eval('(' + response + ')');
 				var fileName = file.name.replace(',','');
 	       		$('#view'+num).append("<div style='float:left;width:99%'><span class='float_l p_left10'>"+fileName+"</span>" +
 							"<a class='float_l p_left10'>预览</a>" +
-							"<a title='"+fileName+"' class='float_l p_left10'>删除</a><!-- 删除 -->" +
+							"<a title='"+fileName+"' class='float_l p_left10' href=javascript:deleteImage("+obj.id+",'"+obj.url+"')>删除</a><!-- 删除 -->" +
 							"</div>");
 
 	    	   	$('#uploadify_file'+num).hide();
 	    	   	$('#fileQueue'+num).html('');
-	    	   	var obj = eval('(' + response + ')');
-	    	   	console.log(obj.url+":"+obj.id);
 	       },
 	       'onUploadError': function(file,errorCode,errorMsg,errorString) {
 				alert(errorCode+"."+errorMsg+""+errorString);
 
 			}
+	   });
+   }
+   
+   //删除图片
+   function deleteImage(id,url)
+   {
+	   $.ajax({
+		   url:'/web/fileInfo/delete',
+		   data:{'id':id,'url':url},
+		   type:'POST',
+		   success:function(data){
+			   if(data)
+			   {
+				   alert('删除成功');
+			   }	   
+		   }
 	   });
    }
    //点击获取innocode
@@ -728,7 +743,7 @@
 	   var code = '';
 	   if(!$('#innoCode').val()){
 		   $.ajax({
-			   url:'/fileInfo/getInnoCode',
+			   url:'/web/fileInfo/getInnoCode',
 			   type:'POST',
 			   success:function(data){
 				   $('#innoCode').val(data);

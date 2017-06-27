@@ -70,7 +70,17 @@ public class FileInfoController extends BaseController{
 	public String appImport(HttpServletRequest req, HttpServletResponse response) {
 		return commImport(req, response, true);
 	}
-
+	
+	@RequestMapping("/delete")
+	@ResponseBody
+	public String deleteImger(Integer id){
+		boolean re = merchantInfoService.deleteFromDB(id);
+		if(re){
+			return "true";
+		}
+		return "false";
+	}
+	
 	/**
 	 * @param req
 	 * @param response
@@ -158,7 +168,7 @@ public class FileInfoController extends BaseController{
 
 						TreeMap<String, String> paras = new TreeMap<>();
 
-						paras.put("id", String.valueOf(fileInfo.getId()));
+						paras.put("id", String.valueOf(result.getData()));
 						paras.put("url", newUrl);
 						paras.put("fileType", fileType);
 
