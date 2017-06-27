@@ -2,7 +2,6 @@ package net.fnsco.service.modules.merchant;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,8 +24,8 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(AppUserServiceImpl.class);
 	
-	private static Map<Object, Object> MsgCodeMap = new HashMap<>();//存放验证码的
-	
+	private static Map<String, String> MsgCodeMap = new HashMap<>();//存放验证码的
+	private static Map<String, String> map = new HashMap<>();
 	
 	@Autowired
 	private AppUserDao MappUserDao;
@@ -110,21 +109,23 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	@Override
 	public ResultDTO<String> validateCode(String mobile, String code) {
 		ResultDTO<String> result = new ResultDTO<>();
-		
+		if(code==null){
+			result.setError(1, "输入的验证码为空");
+			return result;
+		}
 		//从Map中根据手机号取到存入的验证码
-		String sendCode=(String) MsgCodeMap.get(mobile);
+		String sendCode=MsgCodeMap.get(mobile);
 		//验证码
-		String oldCode=sendCode.substring(0,sendCode.lastIndexOf("_"));
+		String oldCode=sendCode.substring(0,sendCode.indexOf("_"));
 		//时间
 		String missM = sendCode.substring(sendCode.lastIndexOf("_")+1, sendCode.length());
 		long oldTime = Long.valueOf(missM);
 		long newTime = System.currentTimeMillis();
-		
-		if((newTime- oldTime)/1000/60>=1){
+		//验证码超过30分钟
+		if((newTime-oldTime)/1000/60>30){
 			result.setError(1, "验证码超过有效时间");
-		}
-		if(code==null){
-			result.setError(1, "失效的验证码");
+			MsgCodeMap.remove(mobile);
+			return result;
 		}
 		if(code.equals(oldCode)){
 			//从map从移除验证码
@@ -166,12 +167,26 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	}
 	
 	public static void main(String[] args) {
-		String code = "564898"+"_"+System.currentTimeMillis();
+//		String code = "564898"+"_"+System.currentTimeMillis();
+//		System.out.println(code);
+//		String codeStr= code.substring(0,code.indexOf("_"));
+//		System.out.println(codeStr);
+//		String time = code.substring(code.lastIndexOf("_")+1,code.length());
+//		System.out.println(time);
+		
+		String mobile = "mobile";
+		map.put(mobile, 125632+"_"+System.currentTimeMillis());
+		String code=map.get(mobile);
 		System.out.println(code);
-		String codeStr= code.substring(0,code.indexOf("_"));
-		System.out.println(codeStr);
-		String time = code.substring(code.lastIndexOf("_")+1,code.length());
-		System.out.println(time);
+		String oldCode=code.substring(0,code.indexOf("_"));
+		System.out.println(oldCode);
+		//时间
+		String missM = code.substring(code.lastIndexOf("_")+1, code.length());
+		System.out.println(missM);
+		long oldtime=Long.valueOf(missM);
+		//现在的时间
+		long nowtime=System.currentTimeMillis();
+		System.out.println(nowtime-oldtime);
 	}
 
 }

@@ -484,13 +484,53 @@
     };
     function operateFormatter(value, row, index) {
         return [
-            '<a class="redact" href="javascript:void(0)" title="点击编辑">',
-            '<i class="glyphicon glyphicon-pencil"></i>',
+            '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
+            '<i class="glyphicon glyphicon-pencil"></i>编辑',
             '</a>  ',
-            '<a class="remove" href="javascript:void(0)" title="点击删除">',
-            '<i class="glyphicon glyphicon glyphicon-trash"></i>',
+            '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
+            '<i class="glyphicon glyphicon glyphicon-trash"></i>删除',
             '</a>'
         ].join('');
+    }
+    //表格中删除按钮事件
+    function delete_btn_event(td_obj){
+    	var ids =[];
+    	ids[0] = td_obj;
+    	$.ajax({
+    		url:'/web/merchantinfo/delete',
+    		type:'POST',
+    		dataType : "json",
+    		data:{'ids':ids},
+    		success:function(data){
+    			console.log();
+    			if(data.success)
+    			{
+    				alert('删除成功');
+    				queryEvent();
+    			}else
+    			{
+    				alert('删除失败');
+    			}	
+    		},
+    		error:function(e)
+    		{
+    			alert('系统异常!'+e);
+    		}
+    	});
+    }
+    //表格中编辑事件
+    function editData(id)
+    {
+    	$.ajax({
+    		url:'/web/merchantinfo/queryAllById',
+    		type:'POST',
+    		dataType : "json",
+    		data:{'id':id},
+    		success:function(data){
+    			//data.data就是所有数据集
+    			console.log(data.data);
+    		}
+    	});
     }
     //初始化表格
     function initTableData(){
@@ -518,7 +558,7 @@
                 align: 'center',
                 valign: 'middle'
             },{
-                field: 'operate',
+                field: 'id',
                 title: '操作',
                 width:'10%',
                 align: 'center',
@@ -674,7 +714,6 @@
    }
    //保存表格数据
    $('#save_btn').click(function(){
-	   $('#merchant_form').submit();
 	   $.ajax({
 		   url:'/web/merchantinfo/toAdd',
 		   data: $('#merchant_form').serialize(),
@@ -683,12 +722,18 @@
 			   if(data.success)
 			   {
 				   alert('保存成功');
+				   $('#myModal').hide();
+				   queryEvent();
 			   }	
 			   else{
 				   alert('保存失败');
 			   }
 		   }
 	   });
+   });
+   //批量删除数据
+   $('#btn_delete').click(function(){
+	   
    });
 </script>
 </html>

@@ -1,4 +1,4 @@
-package net.fnsco.controller.app.merchat;
+package net.fnsco.controller.app.open;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,16 +10,15 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.controller.app.jo.MerchantJO;
 import net.fnsco.core.base.BaseController;
-import net.fnsco.core.base.ResultDTO;
 
 @RestController
-@RequestMapping(value = "/app/merchant")
+@RequestMapping(value = "/open/merchant")
 public class MerchantController extends BaseController {
     @Autowired
     private MerchantService merchantService;
 
     /**
-     * 保存拉卡拉交易数据到库
+     * 获取商户编号
      *
      * @param userName
      * @return

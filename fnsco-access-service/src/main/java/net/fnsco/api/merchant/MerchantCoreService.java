@@ -39,5 +39,17 @@ public interface MerchantCoreService {
 	 */
 	public List<MerchantCore> queryAllByCondition(MerchantCore merchantCore);
 	
+	/**
+	 * 根据ID删除数据
+	 * @param ids
+	 * @return
+	 */
+	public ResultDTO<Integer> deleteByIds(Integer[] ids);
 	
+	/**
+	 * 根据ID 查询所有数据
+	 * @param id
+	 * @return
+	 */
+	public ResultDTO<MerchantCore> queryAllById(Integer id);
 }
