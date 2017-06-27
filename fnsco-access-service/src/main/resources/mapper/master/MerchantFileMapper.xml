@@ -128,4 +128,11 @@
       </if>
      </where> 
   </select>
+  <!-- 根据innercode查询 -->
+  <select id="queryByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_file
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
 </mapper>

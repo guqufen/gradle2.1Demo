@@ -19,30 +19,37 @@
     <div class="panel panel-default">
         <form id="formSearch" class="form-horizontal">
             <div class="form-group" style="margin-top:15px">
-                <div class="col-sm-3">
-                    <label class="control-label" for="txt_search_id">商户名：</label>
-                    <input type="text" class="form-control" id="txt_search_id">
+                <div class="row col-sm-10">
+                    <div class="col-sm-4">
+                        <label class="control-label" for="txt_search_id">手机号码：</label>
+                        <input type="text" class="form-control" id="txt_search_id">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label" for="txt_search_name">商户号：</label>
+                        <input type="text" class="form-control" id="txt_search_name">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label" for="txt_search_price">交易金额：</label>
+                        <input type="text" class="form-control" id="txt_search_price">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label" for="txt_search_price">交易金额：</label>
+                        <input type="text" class="form-control" id="txt_search_price">
+                    </div>
                 </div>
-                <div class="col-sm-3">
-                    <label class="control-label" for="txt_search_name">商户法人姓名：</label>
-                    <input type="text" class="form-control" id="txt_search_name">
-                </div>
-                <div class="col-sm-3">
-                    <label class="control-label" for="txt_search_price">法人联系电话：</label>
-                    <input type="text" class="form-control" id="txt_search_price">
-                </div>
-                <div class="col-sm-3" style="text-align:right;">
-                    <button type="button" id="btn_query" class="btn" onclick="javascript:queryEvent();">查询</button>
-                    <button type="button" id="btn_reset" class="btn" onclick="javascript:resetEvent();">重置</button>
+                <div class="col-sm-2" style="text-align: right;">
+                    <button type="button" id="btn_query" class="btn btn-primary" onclick="javascript:queryEvent();"><span class="glyphicon glyphicon-search"></span>查询</button>
+                    <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent();"><span class="glyphicon glyphicon-refresh"></span>重置</button>
                 </div>
             </div>
+
         </form>
         <!-- start -->
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div class="row row-lg">
                     <div class="col-sm-12">
-                        <div id="toolbar" class="btn-group">
+                        <div id="toolbar">
                             <button id="btn_add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
                             </button>
@@ -50,7 +57,7 @@
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>批量删除
                             </button>
                         </div>
-                        <table id="table"></table>
+                        <table id="table" style="width:2400px"></table>
                     </div>
                 </div>
             </div>
@@ -76,33 +83,33 @@
 		                <div class="tab-content">
 		                    <div role="tabpanel" class="tab-pane active" id="home">
 		                        <div class="row">
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="name">商户名：</label>
 		                                <input type="text" class="form-control" id="name" name="name" required="required">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="abbreviation">简称：</label>
 		                                <input type="text" class="form-control" id="abbreviation" name="abbreviation">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="enName">商户名英文名：</label>
 		                                <input type="text" class="form-control" id="enName" name="enName">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="legalPerson">商户法人姓名：</label>
 		                                <input type="text" class="form-control" id="legalPerson" name="legalPerson">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="legalPersonMobile">法人手机号码：</label>
 		                                <input type="number" class="form-control" id="legalPersonMobile" name="legalPersonMobile" >
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="legalPersonTel">法人电话：</label>
 		                                <input type="text" class="form-control" id="legalPersonTel" name="legalPersonTel">
 		                            </div>
-		                            <div class="col-sm-6">
-		                                <label class="control-label" for="legalValidCardType">法人有效证件类型：</label>
-		                                <select id="legalValidCardType" name="legalValidCardType">
+		                            <div class="col-sm-4">
+		                                <label class="control-label " for="legalValidCardType">法人有效证件类型：</label>
+		                                <select id="legalValidCardType" name="legalValidCardType" class="form-control">
 		                                   <option value="0">身份证</option>
 		                                   <option value="1">护照</option>
 		                                   <option value="2">士兵证</option>
@@ -110,31 +117,31 @@
 		                                   <option value="4">港澳台通行证</option>
 		                                </select>
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="cardNum">证件号码：</label>
 		                                <input type="text" class="form-control" id="cardNum" name="cardNum">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="cardValidTime">证件有效期：</label>
 		                                <input type="date" class="form-control" id="cardValidTime" name="cardValidTime">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="businessLicenseNum">营业执照号码：</label>
 		                                <input type="text" class="form-control" id="businessLicenseNum" name="businessLicenseNum">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="businessLicenseValidTime">营业执照有效期：</label>
 		                                <input type="date" class="form-control" id="businessLicenseValidTime" name="businessLicenseValidTime">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="taxRegistCode">税务登记号：</label>
 		                                <input type="text" class="form-control" id="taxRegistCode" name="taxRegistCode">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="registAddress">商户注册地址：</label>
 		                                <input type="text" class="form-control" id="registAddress" name="registAddress">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="mercFlag">商户标签：</label>
 		                                <input type="text" class="form-control" id="mercFlag" name="mercFlag">
 		                            </div>
@@ -279,23 +286,23 @@
 		                    </div>
 		                    <div role="tabpanel" class="tab-pane" id="messages">
 		                        <div class="row">
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="contactName">联系人名：</label>
 		                                <input type="text" class="form-control" id="contactName" name="contactName">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="contactMobile">联系人手机：</label>
 		                                <input type="number" class="form-control" id="contactMobile" name="contactMobile">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="contactEmail">联系人邮箱：</label>
 		                                <input type="email" class="form-control" id="contactEmail" name="contactEmail">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="contactTelphone">电话：</label>
 		                                <input type="text" class="form-control" id="contactTelphone" name="contactTelphone">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="contactJobs">职位：</label>
 		                                <input type="text" class="form-control" id="contactJobs" name="contactJobs">
 		                            </div>
@@ -305,104 +312,104 @@
 		                    <!-- 终端信息 -->
 		                    <div role="tabpanel" class="tab-pane" id="terminal_info">
 		                        <div class="row">
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="merchantCode">通道商户号：</label>
 		                                <input type="text" class="form-control" id="merchantCode" name="merchantCode" required="required">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="channelId">通道ID：</label>
 		                                <input type="number" class="form-control" id="channelId" name="channelId">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="channelName">通道名称：</label>
 		                                <input type="text" class="form-control" id="channelName" name="channelName">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="terminalCode">通道终端号：</label>
 		                                <input type="text" class="form-control" id="terminalCode" name="terminalCode">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="innerTermCode">内部终端号 10000000：</label>
 		                                <input type="text" class="form-control" id="innerTermCode" name="innerTermCode">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="snCode">POS机SN码：</label>
 		                                <input type="text" class="form-control" id="snCode" name="snCode">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="terminalBatch">终端批次号：</label>
 		                                <input type="text" class="form-control" id="terminalBatch" name="terminalBatch">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="terminalPara">终端参数：</label>
 		                                <input type="text" class="form-control" id="terminalPara" name="terminalPara">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="chargesType">收费类型：</label>
-		                                <select name="chargesType">
+		                                <select name="chargesType" class="form-control">
 		                                	<option value="1">按每笔百分比</option>
 		                                	<option value="2">按每笔固定金额</option>
 		                                	<option value="3">百分比封顶</option>
 		                                </select>
 <!-- 		                                <input type="text" class="form-control" id="chargesType" name="chargesType"> -->
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="debitCardRate">借记卡费率：</label>
 		                                <input type="text" class="form-control" id="debitCardRate" name="debitCardRate">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="creditCardRate">贷记卡费率：</label>
 		                                <input type="text" class="form-control" id="creditCardRate" name="creditCardRate">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="debitCardFee">借记卡固定金额：</label>
 		                                <input type="number" class="form-control" id="debitCardFee" name="debitCardFee">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="creditCardFee">贷记卡固定金额：</label>
 		                                <input type="number" class="form-control" id=creditCardFee name="creditCardFee">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="debitCardMaxFee">借记卡费率封顶值：</label>
 		                                <input type="number" class="form-control" id="debitCardMaxFee" name="debitCardMaxFee">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="creditCardMaxFee">贷记卡费率封顶值：</label>
 		                                <input type="number" class="form-control" id="creditCardMaxFee" name="creditCardMaxFee">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="dealSwitch">交易设置：</label>
 		                                <input type="text" class="form-control" id="dealSwitch" name="dealSwitch">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="recordState">记录状态：</label>
-		                                <select name="recordState">
+		                                <select name="recordState" class="form-control">
 		                                  <option value="0">初始化状态</option>
 		                                  <option value="1">已绑定渠道商户</option>
 		                                  <option value="4">停用</option>
 		                                </select>
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="termAuditState">终端审核状态：</label>
-		                                <select name="termAuditState">
+		                                <select name="termAuditState" class="form-control">
 		                                  <option value="0">初始化状态</option>
 		                                  <option value="1">已绑定渠道商户</option>
 		                                  <option value="4">停用</option>
 		                                </select>
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="termName">终端名称：</label>
 		                                <input type="text" class="form-control" id="termName" name="termName">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="posFactory">机具厂家：</label>
 		                                <input type="text" class="form-control" id="posFactory" name="posFactory">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="posType">机具型号：</label>
 		                                <input type="text" class="form-control" id="posType" name="posType">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="mercReferName">签购单参考名：</label>
 		                                <input type="text" class="form-control" id="mercReferName" name="mercReferName">
 		                            </div>
@@ -411,21 +418,21 @@
 		                    </div>
 		                    <div role="tabpanel" class="tab-pane" id="channel_info">
 		                        <div class="row">
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="agentId">代理商：</label>
 		                                <input type="number" class="form-control" id="agentId" name="agentId" required="required">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="channelMerId">渠道商户号：</label>
 		                                <input type="text" class="form-control" id="channelMerId" name="channelMerId">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="channelMerKey">渠道商户key：</label>
 		                                <input type="text" class="form-control" id="channelMerKey" name="channelMerKey">
 		                            </div>
-		                            <div class="col-sm-6">
+		                            <div class="col-sm-4">
 		                                <label class="control-label" for="channelType">渠道类型：</label>
-		                                  <select name="channelType">
+		                                  <select name="channelType" class="form-control">
 		                                  <option value="00">爱农</option>
 		                                  <option value="01">浦发</option>
 		                                  <option value="02">拉卡拉</option>
@@ -477,13 +484,53 @@
     };
     function operateFormatter(value, row, index) {
         return [
-            '<a class="redact" href="javascript:void(0)" title="点击编辑">',
+            '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
             '<i class="glyphicon glyphicon-pencil"></i>编辑',
             '</a>  ',
-            '<a class="remove" href="javascript:void(0)" title="点击删除">',
+            '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
             '<i class="glyphicon glyphicon glyphicon-trash"></i>删除',
             '</a>'
         ].join('');
+    }
+    //表格中删除按钮事件
+    function delete_btn_event(td_obj){
+    	var ids =[];
+    	ids[0] = td_obj;
+    	$.ajax({
+    		url:'/web/merchantinfo/delete',
+    		type:'POST',
+    		dataType : "json",
+    		data:{'ids':ids},
+    		success:function(data){
+    			console.log();
+    			if(data.success)
+    			{
+    				alert('删除成功');
+    				queryEvent();
+    			}else
+    			{
+    				alert('删除失败');
+    			}	
+    		},
+    		error:function(e)
+    		{
+    			alert('系统异常!'+e);
+    		}
+    	});
+    }
+    //表格中编辑事件
+    function editData(id)
+    {
+    	$.ajax({
+    		url:'/web/merchantinfo/queryAllById',
+    		type:'POST',
+    		dataType : "json",
+    		data:{'id':id},
+    		success:function(data){
+    			//data.data就是所有数据集
+    			console.log(data.data);
+    		}
+    	});
     }
     //初始化表格
     function initTableData(){
@@ -511,7 +558,7 @@
                 align: 'center',
                 valign: 'middle'
             },{
-                field: 'operate',
+                field: 'id',
                 title: '操作',
                 width:'10%',
                 align: 'center',
@@ -667,7 +714,6 @@
    }
    //保存表格数据
    $('#save_btn').click(function(){
-	   $('#merchant_form').submit();
 	   $.ajax({
 		   url:'/web/merchantinfo/toAdd',
 		   data: $('#merchant_form').serialize(),
@@ -676,12 +722,18 @@
 			   if(data.success)
 			   {
 				   alert('保存成功');
+				   $('#myModal').hide();
+				   queryEvent();
 			   }	
 			   else{
 				   alert('保存失败');
 			   }
 		   }
 	   });
+   });
+   //批量删除数据
+   $('#btn_delete').click(function(){
+	   
    });
 </script>
 </html>
