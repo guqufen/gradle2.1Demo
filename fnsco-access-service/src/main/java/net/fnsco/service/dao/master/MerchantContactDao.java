@@ -1,5 +1,9 @@
 package net.fnsco.service.dao.master;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.service.domain.MerchantContact;
 
 /**
@@ -12,6 +16,11 @@ public interface MerchantContactDao {
     int insert(MerchantContact record);
 
     int insertSelective(MerchantContact record);
-
-   
+    
+    /**
+     * 根据innercode查询
+     * @param innerCode
+     * @return
+     */
+   List<MerchantContact> queryByInnerCode(@Param("innerCode") String innerCode);
 }

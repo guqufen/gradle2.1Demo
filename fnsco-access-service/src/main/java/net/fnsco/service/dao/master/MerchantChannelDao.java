@@ -24,4 +24,11 @@ public interface MerchantChannelDao {
     int updateByPrimaryKey(MerchantChannel record);
 
     MerchantChannel selectByMerCode(@Param("merCode") String merCode, @Param("channelType") String channelType);
+    
+    /**
+     * 根据innercode查询
+     * @param innerCode
+     * @return
+     */
+    MerchantChannel selectByInnerCode(@Param("innerCode") String innerCode);
 }

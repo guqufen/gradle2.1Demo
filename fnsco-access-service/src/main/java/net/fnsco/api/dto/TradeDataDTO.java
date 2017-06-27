@@ -25,6 +25,21 @@ public class TradeDataDTO extends DTO {
     private String md5;         //参数md5值
     private String sendTime;    //发送时间
     private String validate;    //是否校验1验证0不验证
+    private String paySubType;  //交易子类型
+
+    /**
+     * @return the paySubType
+     */
+    public String getPaySubType() {
+        return paySubType;
+    }
+
+    /**
+     * @param paySubType the paySubType to set
+     */
+    public void setPaySubType(String paySubType) {
+        this.paySubType = paySubType;
+    }
 
     /**
      * @return the source

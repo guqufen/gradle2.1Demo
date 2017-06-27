@@ -1,8 +1,5 @@
 package net.fnsco;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -15,9 +12,7 @@ import org.springframework.context.annotation.Import;
 
 import net.fnsco.config.TimerConfig;
 import net.fnsco.config.WebConfig;
-import net.fnsco.freamwork.aop.AppAuthorizeFilter;
 import net.fnsco.freamwork.log.filter.WebAccessLogFilter;
-import net.fnsco.freamwork.spring.LoginInterceptor;
 
 @SpringBootApplication
 @ComponentScan("net.fnsco")

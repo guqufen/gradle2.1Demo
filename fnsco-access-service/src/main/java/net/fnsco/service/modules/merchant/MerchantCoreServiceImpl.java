@@ -106,6 +106,42 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	}
 	
 	/**
+	 * @todo 根据ID逻辑删除数据
+	 * @author tangliang
+	 * @date 2017年6月27日 上午10:30:05
+	 * @see net.fnsco.api.merchant.MerchantCoreService#deleteByIds(java.lang.Integer[])
+	 */
+	@Override
+	public ResultDTO<Integer> deleteByIds(Integer[] ids) {
+		// TODO Auto-generated method stub
+		ResultDTO<Integer> result = new ResultDTO<Integer>();
+		int re = merchantCoreDao.updateStatusByMutipleKey(ids);
+		if(re == 1)
+		{
+			result.setSuccess("删除成功!");
+		}else
+		{
+			result.setError("删除失败");
+			logger.error("批量删除失败! ids = "+ ids);
+		}	
+		return result;
+	}
+	/**
+	 * @todo 根据ID查询出所有关联的数据
+	 * @author tangliang
+	 * @date 2017年6月27日 上午11:47:07
+	 * @see net.fnsco.api.merchant.MerchantCoreService#queryAllById(java.lang.Integer)
+	 */
+	@Override
+	public ResultDTO<MerchantCore> queryAllById(Integer id) {
+		// TODO Auto-generated method stub
+		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
+		result.setData(merchantCoreDao.queryAllById(id));
+		result.setSuccess("查询成功!");
+		return result;
+	}
+	
+	/**
 	 * 在请求中获取该实体参数
 	 * @param request
 	 * @return
@@ -201,4 +237,5 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 		merchantChannel.setModifyUserId(0);//待定
 		return merchantChannel;
 	}
+	
 }

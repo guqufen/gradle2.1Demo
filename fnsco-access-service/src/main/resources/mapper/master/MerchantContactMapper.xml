@@ -3,7 +3,6 @@
 <mapper namespace="net.fnsco.service.dao.master.MerchantContactDao" >
   <resultMap id="BaseResultMap" type="net.fnsco.service.domain.MerchantContact" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
     <result column="contact_mobile" property="contactMobile" jdbcType="VARCHAR" />
@@ -73,5 +72,10 @@
       </if>
     </trim>
   </insert>
- 
+  <select id="queryByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+     from m_merchant_contact
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
 </mapper>
