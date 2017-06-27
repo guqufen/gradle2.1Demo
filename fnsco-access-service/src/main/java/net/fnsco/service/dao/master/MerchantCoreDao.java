@@ -58,4 +58,11 @@ public interface MerchantCoreDao {
      * @return
      */
     int updateStatusByMutipleKey(Integer[] ids);
+    
+    /**
+     * 根据ID 查询出所有关联的数据
+     * @param id
+     * @return
+     */
+    MerchantCore queryAllById(Integer id);
 }

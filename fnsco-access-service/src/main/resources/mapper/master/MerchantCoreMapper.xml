@@ -24,7 +24,34 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
-
+  <!-- 所有关联数据结果集 -->
+  <resultMap id="AllResultMap" type="net.fnsco.service.domain.MerchantCore">
+  <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="mer_name" property="merName" jdbcType="VARCHAR" />
+    <result column="abbreviation" property="abbreviation" jdbcType="VARCHAR" />
+    <result column="en_name" property="enName" jdbcType="VARCHAR" />
+    <result column="sign_date" property="signDate" jdbcType="VARCHAR" />
+    <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+    <result column="legal_person_mobile" property="legalPersonMobile" jdbcType="VARCHAR" />
+    <result column="legal_person_tel" property="legalPersonTel" jdbcType="VARCHAR" />
+    <result column="legal_valid_card_type" property="legalValidCardType" jdbcType="VARCHAR" />
+    <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+    <result column="card_valid_time" property="cardValidTime" jdbcType="VARCHAR" />
+    <result column="business_license_num" property="businessLicenseNum" jdbcType="VARCHAR" />
+    <result column="business_license_valid_time" property="businessLicenseValidTime" jdbcType="VARCHAR" />
+    <result column="tax_regist_code" property="taxRegistCode" jdbcType="VARCHAR" />
+    <result column="regist_address" property="registAddress" jdbcType="VARCHAR" />
+    <result column="merc_flag" property="mercFlag" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  	<association property="terminal" column="inner_code" select="net.fnsco.service.dao.master.MerchantTerminalDao.selectByInnerCode" javaType="net.fnsco.service.domain.MerchantTerminal"/>
+  	<association property="channel" column="inner_code" select="net.fnsco.service.dao.master.MerchantChannelDao.selectByInnerCode" javaType="net.fnsco.service.domain.MerchantChannel"/>
+  	<collection property="files" column="inner_code" select="net.fnsco.service.dao.master.MerchantFileDao.queryByInnerCode"/>
+  	<collection property="contacts" column="inner_code" select="net.fnsco.service.dao.master.MerchantContactDao.queryByInnerCode" />
+  </resultMap>	
   <sql id="Base_Column_List" >
     id, inner_code, mer_name, abbreviation, en_name, sign_date, legal_person, legal_person_mobile, 
     legal_person_tel, legal_valid_card_type, card_num, card_valid_time, business_license_num, 
@@ -494,4 +521,11 @@
        #{item}
      </foreach>
   </update>
+  <!-- 根据ID查询出所有商户关联的数据 -->
+  <select id="queryAllById" parameterType="java.lang.Integer" resultMap="AllResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from m_merchant_core
+    where id = #{id,jdbcType=INTEGER}
+  </select>
 </mapper>

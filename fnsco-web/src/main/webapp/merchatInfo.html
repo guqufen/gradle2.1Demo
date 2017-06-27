@@ -477,7 +477,7 @@
     };
     function operateFormatter(value, row, index) {
         return [
-            '<a class="redact" href="javascript:void(0)" title="点击编辑" data='+value+'>',
+            '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
             '<i class="glyphicon glyphicon-pencil"></i>编辑',
             '</a>  ',
             '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
@@ -487,18 +487,40 @@
     }
     //表格中删除按钮事件
     function delete_btn_event(td_obj){
-    	var params =new Array();
-    	params[0] = td_obj;
+    	var ids =[];
+    	ids[0] = td_obj;
     	$.ajax({
     		url:'/web/merchantinfo/delete',
     		type:'POST',
-    		data:params,
+    		dataType : "json",
+    		data:{'ids':ids},
     		success:function(data){
-    			
+    			console.log();
+    			if(data.success)
+    			{
+    				alert('删除成功');
+    				queryEvent();
+    			}else
+    			{
+    				alert('删除失败');
+    			}	
     		},
     		error:function(e)
     		{
     			alert('系统异常!'+e);
+    		}
+    	});
+    }
+    //表格中编辑事件
+    function editData(id)
+    {
+    	$.ajax({
+    		url:'/web/merchantinfo/queryAllById',
+    		type:'POST',
+    		dataType : "json",
+    		data:{'id':id},
+    		success:function(data){
+    			
     		}
     	});
     }
@@ -700,6 +722,10 @@
 			   }
 		   }
 	   });
+   });
+   //批量删除数据
+   $('#btn_delete').click(function(){
+	   
    });
 </script>
 </html>

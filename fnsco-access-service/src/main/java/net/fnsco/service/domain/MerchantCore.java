@@ -1,6 +1,7 @@
 package net.fnsco.service.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import net.fnsco.core.base.DTO;
 /**
@@ -56,8 +57,49 @@ public class MerchantCore extends DTO{
     private Date modifyTime;
 
     private Integer status;
+    
+    private List<MerchantFile> files;//关联的所有文件信息
+    
+    private List<MerchantContact> contacts;//关联的联系人信息
+    
+    private MerchantTerminal terminal;//关联的终端信息
+    
+    private MerchantChannel channel;//关联的渠道信息
+    
+    
+    public List<MerchantFile> getFiles() {
+		return files;
+	}
 
-    public Integer getId() {
+	public void setFiles(List<MerchantFile> files) {
+		this.files = files;
+	}
+
+	public List<MerchantContact> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(List<MerchantContact> contacts) {
+		this.contacts = contacts;
+	}
+
+	public MerchantTerminal getTerminal() {
+		return terminal;
+	}
+
+	public void setTerminal(MerchantTerminal terminal) {
+		this.terminal = terminal;
+	}
+
+	public MerchantChannel getChannel() {
+		return channel;
+	}
+
+	public void setChannel(MerchantChannel channel) {
+		this.channel = channel;
+	}
+
+	public Integer getId() {
         return id;
     }
 

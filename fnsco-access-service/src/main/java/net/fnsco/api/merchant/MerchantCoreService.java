@@ -46,5 +46,10 @@ public interface MerchantCoreService {
 	 */
 	public ResultDTO<Integer> deleteByIds(Integer[] ids);
 	
-	
+	/**
+	 * 根据ID 查询所有数据
+	 * @param id
+	 * @return
+	 */
+	public ResultDTO<MerchantCore> queryAllById(Integer id);
 }

@@ -1,5 +1,7 @@
 package net.fnsco.service.dao.master;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.service.domain.MerchantTerminal;
 /**
  * @desc 商家终端信息DAO
@@ -19,4 +21,10 @@ public interface MerchantTerminalDao {
     int updateByPrimaryKeySelective(MerchantTerminal record);
 
     int updateByPrimaryKey(MerchantTerminal record);
+    /**
+     * 根据innercode查询出实体
+     * @param innerCode
+     * @return
+     */
+    MerchantTerminal selectByInnerCode(@Param("innerCode")String innerCode);
 }

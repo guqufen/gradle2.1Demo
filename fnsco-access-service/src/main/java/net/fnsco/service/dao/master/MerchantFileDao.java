@@ -2,6 +2,8 @@ package net.fnsco.service.dao.master;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.service.domain.MerchantFile;
 
 /**
@@ -29,4 +31,11 @@ public interface MerchantFileDao {
      * @return
      */
     List<MerchantFile> queryByCondition(MerchantFile record);
+    
+    /**
+     * 根据innercode查询
+     * @param innerCode
+     * @return
+     */
+    List<MerchantFile> queryByInnerCode(@Param("innerCode") String innerCode);
 }

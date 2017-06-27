@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.api.merchant.MerchantCoreService;
@@ -75,8 +76,20 @@ public class MerchantInfoController extends BaseController{
 	 */
 	@RequestMapping("/delete")
 	@ResponseBody
-	public ResultDTO<Integer> delete(Integer[] ids){
+	public ResultDTO<Integer> delete(@RequestParam(value="ids[]") Integer[] ids){
 		logger.info("删除商户数据ids = "+ids);
 		return merchantCoreService.deleteByIds(ids);
+	}
+	
+	/**
+	 * 根据ID 查询所有的数据
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/queryAllById")
+	@ResponseBody
+	public ResultDTO<MerchantCore> queryAllById(Integer id){
+		logger.info("查询出商户所有关联数据id = "+id);
+		return merchantCoreService.queryAllById(id);
 	}
 }
