@@ -44,10 +44,10 @@ public class TomcatApplication extends SpringBootServletInitializer {
         registration.setOrder(1);
         return registration;
     }
-    @Bean
-    AppAuthorizeFilter getAppAuthorizeFilter() {
-        return new AppAuthorizeFilter();
-    }
+//    @Bean
+//    AppAuthorizeFilter getAppAuthorizeFilter() {
+//        return new AppAuthorizeFilter();
+//    }
 //    @Bean  
 //    public FilterRegistrationBean  filterRegistrationBean() {  
 //        FilterRegistrationBean registrationBean = new FilterRegistrationBean();  

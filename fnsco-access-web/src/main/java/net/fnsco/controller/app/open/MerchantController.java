@@ -1,4 +1,4 @@
-package net.fnsco.controller.app.merchat;
+package net.fnsco.controller.app.open;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +13,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 
 @RestController
-@RequestMapping(value = "/app/merchant")
+@RequestMapping(value = "/open/merchant")
 public class MerchantController extends BaseController {
     @Autowired
     private MerchantService merchantService;

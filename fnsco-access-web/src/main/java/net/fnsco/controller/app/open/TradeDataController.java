@@ -1,4 +1,4 @@
-package net.fnsco.controller.app.open.access;
+package net.fnsco.controller.app.open;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

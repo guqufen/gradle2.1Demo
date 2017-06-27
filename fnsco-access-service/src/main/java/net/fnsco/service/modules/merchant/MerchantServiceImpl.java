@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.api.merchant.MerchantService;
+import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.service.dao.master.AliasDAO;
 import net.fnsco.service.dao.master.MerchantChannelDao;
@@ -22,7 +23,7 @@ import net.fnsco.service.modules.helper.MerchantHelper;
  * @date 2017年6月21日 上午10:15:40
  */
 @Service
-public class MerchantServiceImpl implements MerchantService {
+public class MerchantServiceImpl extends BaseService implements MerchantService {
 
     @Autowired
     private AliasDAO           aliasDAO;
@@ -40,6 +41,7 @@ public class MerchantServiceImpl implements MerchantService {
         String randomCode = "";
         MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merCode, channelType);
         if (null == merchantChannel) {
+            logger.error("渠道商户不存在" + merCode + ":" + channelType);
             return randomCode;
         }
         String innerCode = merchantChannel.getInnerCode();
