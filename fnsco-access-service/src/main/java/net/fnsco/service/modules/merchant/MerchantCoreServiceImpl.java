@@ -106,6 +106,28 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	}
 	
 	/**
+	 * @todo 根据ID逻辑删除数据
+	 * @author tangliang
+	 * @date 2017年6月27日 上午10:30:05
+	 * @see net.fnsco.api.merchant.MerchantCoreService#deleteByIds(java.lang.Integer[])
+	 */
+	@Override
+	public ResultDTO<Integer> deleteByIds(Integer[] ids) {
+		// TODO Auto-generated method stub
+		ResultDTO<Integer> result = new ResultDTO<Integer>();
+		int re = merchantCoreDao.updateStatusByMutipleKey(ids);
+		if(re == 1)
+		{
+			result.setSuccess("删除成功!");
+		}else
+		{
+			result.setError("删除失败");
+			logger.error("批量删除失败! ids = "+ ids);
+		}	
+		return result;
+	}
+	
+	/**
 	 * 在请求中获取该实体参数
 	 * @param request
 	 * @return

@@ -67,4 +67,16 @@ public class MerchantInfoController extends BaseController{
 		ResultDTO<Integer> result = merchantCoreService.doAdd(request);
 		return result;
 	}
+	
+	/**
+	 * 根据ID删除商户信息，逻辑删除（不是真正的删除数据，只是更新数据的状态）
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	@ResponseBody
+	public ResultDTO<Integer> delete(Integer[] ids){
+		logger.info("删除商户数据ids = "+ids);
+		return merchantCoreService.deleteByIds(ids);
+	}
 }
