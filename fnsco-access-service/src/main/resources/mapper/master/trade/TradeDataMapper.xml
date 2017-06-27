@@ -69,6 +69,15 @@
     from t_trade_data
     where id = #{id,jdbcType=VARCHAR}
   </select>
+  
+  <select id="selectByMd5" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_trade_data
+    where md5 = #{md5,jdbcType=VARCHAR}
+    limit 1
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from t_trade_data
     where id = #{id,jdbcType=VARCHAR}

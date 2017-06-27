@@ -1,4 +1,4 @@
-package net.fnsco.core.utils;
+package net.fnsco.freamwork.comm;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
