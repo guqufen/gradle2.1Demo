@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import net.fnsco.freamwork.spring.AppInterceptor;
 import net.fnsco.freamwork.spring.LoginInterceptor;
+import net.fnsco.freamwork.spring.OpenInterceptor;
 
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
@@ -21,10 +22,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return new AppInterceptor();
     }
 
+    @Bean
+    OpenInterceptor openInterceptor() {
+        return new OpenInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localInterceptor()).addPathPatterns("/web/**");
         registry.addInterceptor(appInterceptor()).addPathPatterns("/app/**");
+        registry.addInterceptor(openInterceptor()).addPathPatterns("/open/**");
     }
     //    @Override
     //    public void addResourceHandlers(final ResourceHandlerRegistry registry) {

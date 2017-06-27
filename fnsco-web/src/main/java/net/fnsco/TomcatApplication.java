@@ -1,5 +1,8 @@
 package net.fnsco;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -12,7 +15,9 @@ import org.springframework.context.annotation.Import;
 
 import net.fnsco.config.TimerConfig;
 import net.fnsco.config.WebConfig;
+import net.fnsco.freamwork.aop.AppAuthorizeFilter;
 import net.fnsco.freamwork.log.filter.WebAccessLogFilter;
+import net.fnsco.freamwork.spring.LoginInterceptor;
 
 @SpringBootApplication
 @ComponentScan("net.fnsco")
@@ -39,7 +44,20 @@ public class TomcatApplication extends SpringBootServletInitializer {
         registration.setOrder(1);
         return registration;
     }
-
+//    @Bean
+//    AppAuthorizeFilter getAppAuthorizeFilter() {
+//        return new AppAuthorizeFilter();
+//    }
+//    @Bean  
+//    public FilterRegistrationBean  filterRegistrationBean() {  
+//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();  
+//        registrationBean.setFilter(getAppAuthorizeFilter());  
+//        List<String> urlPatterns = new ArrayList<String>();  
+//        urlPatterns.add("/app/*");  
+//        registrationBean.setUrlPatterns(urlPatterns);  
+//        registrationBean.setOrder(2);
+//        return registrationBean;  
+//    }  
 //    @Bean
 //    public ServletListenerRegistrationBean servletListenerRegistrationBean() {
 //        ServletListenerRegistrationBean servletListenerRegistrationBean = new ServletListenerRegistrationBean();

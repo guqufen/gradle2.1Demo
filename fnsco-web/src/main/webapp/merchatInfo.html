@@ -515,7 +515,7 @@
                 title: '操作',
                 width:'10%',
                 align: 'center',
-                formatter: operateFormatter,
+                formatter: operateFormatter
                 // events: operateEvents
             },{
                 field: 'merName',
@@ -555,10 +555,25 @@
                 title: '商户标签'
             }, {
                 field: 'source',
-                title: '商户注册来源'
+                title: '商户注册来源',
+                formatter:formatSource
             }]
         });
     }
+    
+    //商户注册来源格式处理
+    function formatSource(value, row, index){
+    	if(value == '1')
+    	{
+    		return 'APP';
+    	}else if(value == '0')
+    	{
+    		return 'WEB';
+    	}else{
+    		return '其他';
+    	}	
+    }
+    
    //组装请求参数
    function queryParams(params)
    {
