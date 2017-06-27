@@ -58,31 +58,31 @@ public class AppUserController extends BaseController{
 	}
 				
 	//修改密码     旧密码和新密码
-	@RequestMapping(value = "/modify", method = RequestMethod.GET)
+	@RequestMapping(value = "/modifyPassword", method = RequestMethod.GET)
 	@ResponseBody
 	@ApiOperation(value = "修改密码")
-	public ResultDTO<AppUser> modify(@RequestParam(value = "mobile", required = true) String mobile,@RequestParam(value = "oldPassword", required = true) String oldPassword,@RequestParam(value = "password", required = true) String password){
-		ResultDTO<AppUser> result = new ResultDTO<>();
+	public ResultDTO<String> modifyPassword(@RequestParam(value = "id", required = true) int id,@RequestParam(value = "oldPassword", required = true) String oldPassword,@RequestParam(value = "password", required = true) String password){
+		ResultDTO<String> result = new ResultDTO<>();
 		//如果密码为空
 		if(StringUtils.isEmpty(oldPassword)){
 			 return result.setError("密码不能为空");
 		 }
-		result=mAppUserService.modify(mobile,password,oldPassword);
+		result=mAppUserService.modifyPassword(id,password,oldPassword);
 		return result;
 	}
 	
-		//根据手机号码找回密码
+	//根据手机号码找回密码
 		@ResponseBody
-		@RequestMapping(value = "/findPassword",method = RequestMethod.GET)
+		@RequestMapping(value = "/findPasswordByPhone",method = RequestMethod.GET)
 		@ApiOperation(value = "找回密码")
-		public ResultDTO<String> findPassword(@RequestParam(value = "mobile", required = true) String mobile, @RequestParam(value = "password", required = true) String password, @RequestParam(value = "code", required = true) String code){
+		public ResultDTO<String> findPasswordByPhone(@RequestParam(value = "mobile", required = true) String mobile, @RequestParam(value = "password", required = true) String password, @RequestParam(value = "code", required = true) String code){
 			//对比验证码
 			ResultDTO<String> regResult=mAppUserService.validateCode(mobile, code);
 			//如果错误返回错误信息
 			 if(!regResult.isSuccess()){
 				 return regResult;
 			 }
-			ResultDTO<String> result=mAppUserService.findPassword(mobile,code,password);
+			ResultDTO<String> result=mAppUserService.findPassword(mobile,password);
 			return result;
 		}
 		

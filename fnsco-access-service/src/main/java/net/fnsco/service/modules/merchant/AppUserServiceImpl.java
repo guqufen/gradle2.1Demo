@@ -25,7 +25,6 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	private static final Logger logger = LoggerFactory.getLogger(AppUserServiceImpl.class);
 	
 	private static Map<String, String> MsgCodeMap = new HashMap<>();//存放验证码的
-	private static Map<String, String> map = new HashMap<>();
 	
 	@Autowired
 	private AppUserDao MappUserDao;
@@ -33,37 +32,20 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	@Override
 	public ResultDTO<AppUser> insertAppUser(AppUser appUser) {
 		ResultDTO<AppUser> result=new ResultDTO<AppUser>();
-		int num=MappUserDao.selectByPrimaryKey(appUser.getMobile());
-		if(num!=0){
-		      return result.setError("1","该用户已经注册");
+		if(MappUserDao.getAppUserByMobile(appUser.getMobile())!=null){
+			 return result.setError("1","该用户已经注册");
 		}
 		if(MappUserDao.insertSelective(appUser)){
 			result.setData(appUser);
 			result.setCode("0");
-			return result.setSuccess("注册成功");
+			result.setSuccess("注册成功");
+		}else{
+			result.setCode("1");
+			result.setSuccess("注册失败");
 		}
 		return result;
 	}
 
-	//修改密码
-	@Override
-	public ResultDTO<AppUser> modify(String mobile,String password,String oldPassword){
-		ResultDTO<AppUser> result=new ResultDTO<AppUser>();
-		AppUser mAppUser=new AppUser();
-		//根据手机号查询用户是否存在获取原密码
-		mAppUser=MappUserDao.selectByMobile(mobile);
-		//查到的密码和原密码做比较
-		if(!oldPassword.equals(mAppUser.getPassword())){
-			return result.setError(1,"原密码输入错误,请重新输入");
-		}
-		mAppUser.setPassword(password);
-		mAppUser.setMobile(mobile);
-		if(MappUserDao.updateByPrimaryKeySelective(mAppUser)){
-			result.setCode("0");
-			result.setSuccess("修改密码成功");
-		}
-		return result;
-	}
 
 	//生产验证码
 	@Override
@@ -140,7 +122,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 
 	//根据手机号找回登录密码
 	@Override
-	public ResultDTO<String> findPassword(String mobile, String code,String password) {
+	public ResultDTO<String> findPassword(String mobile,String password) {
 		ResultDTO<String> result = new ResultDTO<>();
 		//密码更新
 		if(MappUserDao.findPasswordByPhone(mobile,password)){
@@ -152,11 +134,34 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		return result;
 	}
 
+	//修改密码
+	@Override
+	public ResultDTO<String> modifyPassword(int id,String password,String oldPassword){
+		ResultDTO<String> result=new ResultDTO<String>();
+		//根据手机号查询用户是否存在获取原密码
+		 AppUser mAppUser=MappUserDao.selectById(id);
+		//查到的密码和原密码做比较
+		if(!oldPassword.equals(mAppUser.getPassword())){
+			return result.setError(1,"原密码输入错误,请重新输入");
+		}
+		mAppUser.setPassword(password);
+		mAppUser.setId(id);
+		if(MappUserDao.updateById(mAppUser)){
+			result.setCode("0");
+			result.setSuccess("修改密码成功");
+		}else{
+			result.setCode("1");
+			result.setSuccess("修改密码失败");
+		}
+		return result;
+	}
+	
+	
 	//根据手机号码和密码登录
 	@Override
-	public ResultDTO<String> loginByMoblie(String mobile, String password) {
+	public ResultDTO<String> loginByMoblie(String mobile, String password){
 		ResultDTO<String> result = new ResultDTO<>();
-		AppUser appUser=MappUserDao.selectByMobile(mobile);
+		AppUser appUser=MappUserDao.getAppUserByMobile(mobile);
 		if(password.equals(appUser.getPassword())){
 			result.setCode("0");
 			result.setSuccess("登录成功");
@@ -165,30 +170,6 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		}
 		return result;
 	}
-	
-	public static void main(String[] args) {
-//		String code = "564898"+"_"+System.currentTimeMillis();
-//		System.out.println(code);
-//		String codeStr= code.substring(0,code.indexOf("_"));
-//		System.out.println(codeStr);
-//		String time = code.substring(code.lastIndexOf("_")+1,code.length());
-//		System.out.println(time);
-		
-		String mobile = "mobile";
-		map.put(mobile, 125632+"_"+System.currentTimeMillis());
-		String code=map.get(mobile);
-		System.out.println(code);
-		String oldCode=code.substring(0,code.indexOf("_"));
-		System.out.println(oldCode);
-		//时间
-		String missM = code.substring(code.lastIndexOf("_")+1, code.length());
-		System.out.println(missM);
-		long oldtime=Long.valueOf(missM);
-		//现在的时间
-		long nowtime=System.currentTimeMillis();
-		System.out.println(nowtime-oldtime);
-	}
-
 }
 
 
