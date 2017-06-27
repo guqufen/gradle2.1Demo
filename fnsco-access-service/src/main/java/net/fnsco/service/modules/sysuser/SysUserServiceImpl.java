@@ -4,13 +4,14 @@
 package net.fnsco.service.modules.sysuser;
 
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.api.sysuser.SysUserService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.Md5Util;
+import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.service.dao.master.SysUserDao;
 import net.fnsco.service.domain.SysUser;
 

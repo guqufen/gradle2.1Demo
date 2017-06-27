@@ -99,7 +99,22 @@ public class TradeData {
 
     private String sendTime;
 
-    private Date createTime;
+    private Date   createTime;
+    private String paySubType;    //交易子类型
+
+    /**
+     * @return the paySubType
+     */
+    public String getPaySubType() {
+        return paySubType;
+    }
+
+    /**
+     * @param paySubType the paySubType to set
+     */
+    public void setPaySubType(String paySubType) {
+        this.paySubType = paySubType;
+    }
 
     public String getId() {
         return id;

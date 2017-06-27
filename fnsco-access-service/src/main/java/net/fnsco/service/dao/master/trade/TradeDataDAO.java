@@ -12,6 +12,8 @@ public interface TradeDataDAO {
 
     TradeData selectByPrimaryKey(String id);
 
+    TradeData selectByMd5(String md5);
+
     int updateByPrimaryKeySelective(TradeData record);
 
     int updateByPrimaryKey(TradeData record);
