@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-public class Constant {
+public class ServiceConstant {
     public static String              STR_1            = "1";
     public static String              STR_0            = "1";
 

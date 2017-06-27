@@ -13,6 +13,11 @@ import net.fnsco.controller.app.jo.MerchantJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 
+/**
+ * 开放接口公共处理类
+ * @author sxf
+ *
+ */
 @RestController
 @RequestMapping(value = "/open/comm")
 public class CommonController extends BaseController {

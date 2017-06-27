@@ -13,8 +13,15 @@ import net.fnsco.api.dto.TradeDataDTO;
 import net.fnsco.api.trade.TradeDataService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.service.comm.Constant;
+import net.fnsco.service.comm.ServiceConstant;
 
+/**
+ * 交易流水处理
+ * @author sxf
+ * @since 2017-06-27
+ * Created by sxf on 2017-06-27
+ *
+ */
 @RestController
 @RequestMapping(value = "/open/trade")
 public class TradeDataOpenController extends BaseController {
@@ -34,7 +41,8 @@ public class TradeDataOpenController extends BaseController {
         String amt = tradeData.getAmt();
         amt = amt.replace("/.", "");
         tradeData.setAmt(amt);
-        /*0-刷卡
+        /*
+        0-刷卡
         1-微信
         2-支付宝
         3-银联钱包
@@ -43,8 +51,8 @@ public class TradeDataOpenController extends BaseController {
         6-拉卡拉钱包*/
 
         String payType = tradeData.getPayType();
-        tradeData.setPayType(Constant.PAY_TYPE_MAP.get(payType));
-        tradeData.setPaySubType(Constant.PAY_SUB_TYPE_MAP.get(payType));
+        tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
+        tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
         tradeDataService.saveTradeData(tradeData);
         return success();
     }

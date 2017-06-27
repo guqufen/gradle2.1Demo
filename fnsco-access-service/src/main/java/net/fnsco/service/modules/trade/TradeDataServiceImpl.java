@@ -12,7 +12,7 @@ import net.fnsco.api.dto.TradeDataDTO;
 import net.fnsco.api.trade.TradeDataService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DbUtil;
-import net.fnsco.service.comm.Constant;
+import net.fnsco.service.comm.ServiceConstant;
 import net.fnsco.service.dao.master.MerchantChannelDao;
 import net.fnsco.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.service.domain.MerchantChannel;
@@ -31,7 +31,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     private MerchantChannelDao merchantChannelDao;
 
     public boolean saveTradeData(TradeDataDTO tradeData) {
-        if (Constant.STR_1.equals(tradeData.getValidate()) && !Strings.isNullOrEmpty(tradeData.getMd5())) {
+        if (ServiceConstant.STR_1.equals(tradeData.getValidate()) && !Strings.isNullOrEmpty(tradeData.getMd5())) {
             //需要校验
             TradeData temp = tradeListDAO.selectByPrimaryKey(tradeData.getMd5());
             if (null != temp) {

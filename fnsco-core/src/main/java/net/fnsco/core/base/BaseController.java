@@ -179,7 +179,7 @@ public class BaseController {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 String name = cookie.getName();
-                if (!Strings.isNullOrEmpty(name) && name.equalsIgnoreCase(Constants.COOKIE_USER_KEY)) {
+                if (!Strings.isNullOrEmpty(name) && name.equalsIgnoreCase(CoreConstants.COOKIE_USER_KEY)) {
                    return cookie.getValue();
                 }
             }
@@ -217,7 +217,7 @@ public class BaseController {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 String name = cookie.getName();
-                if (!Strings.isNullOrEmpty(name) && name.equalsIgnoreCase(Constants.COOKIE_USER_KEY)) {
+                if (!Strings.isNullOrEmpty(name) && name.equalsIgnoreCase(CoreConstants.COOKIE_USER_KEY)) {
                   cookie.setValue(null);
                   cookie.setMaxAge(0);
                   cookie.setPath("/");

@@ -13,8 +13,13 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import springfox.documentation.annotations.ApiIgnore;
 
+/**
+ * 交易流水处理类
+ * @author sxf
+ *
+ */
 @RestController
-@RequestMapping(value = "/app/trade")
+@RequestMapping(value = "/app/trade", method = RequestMethod.POST)
 public class TradeDataController extends BaseController {
     @Autowired
     private Environment      env;
@@ -28,7 +33,7 @@ public class TradeDataController extends BaseController {
      * @return
      */
     @ApiIgnore //使用该注解忽略这个API
-    @RequestMapping(value = "/query", method = RequestMethod.GET)
+    @RequestMapping(value = "/query")
     public ResultDTO queryTradeDate(@RequestParam(value = "userName", required = true) String userName) {
         ResultPageDTO resultPage = new ResultPageDTO();
         resultPage.setTotal(90);
