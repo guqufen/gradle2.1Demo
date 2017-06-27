@@ -1,4 +1,4 @@
-package net.fnsco.controller.app.comm;
+package net.fnsco.controller.app.open;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +14,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 
 @RestController
-@RequestMapping(value = "/app/comm")
+@RequestMapping(value = "/open/comm")
 public class CommonController extends BaseController {
     @Autowired
     private MerchantService merchantService;

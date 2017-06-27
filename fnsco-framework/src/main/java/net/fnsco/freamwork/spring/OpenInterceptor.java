@@ -19,7 +19,7 @@ import com.google.common.base.Strings;
  *
  */
 @Component
-public class AppInterceptor implements HandlerInterceptor {
+public class OpenInterceptor implements HandlerInterceptor {
     private boolean     authentication = true;
     @Autowired
     private Environment env;
@@ -30,7 +30,7 @@ public class AppInterceptor implements HandlerInterceptor {
         String requestUrl = request.getRequestURL().toString();
         // 从配置文件中获取浙付通接口模块,不需要被拦截
         String appModules = "";//SpringUtils.getProperty("app.modules");
-
+        String tokenId = request.getHeader("tokenId");
         if (!Strings.isNullOrEmpty(appModules)) {
             String[] modules = StringUtils.split(appModules, ",");
             for (String module : modules) {
