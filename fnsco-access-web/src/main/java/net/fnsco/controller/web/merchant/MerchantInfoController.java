@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
-import net.fnsco.service.domain.MerchantFile;
 
 /**@desc 商户信息控制器
  * @author tangliang
@@ -66,7 +63,8 @@ public class MerchantInfoController extends BaseController{
 	 */
 	@RequestMapping("/toAdd")
 	@ResponseBody
-	public ResultPageDTO<MerchantCore> toAdd(HttpServletRequest request,MerchantCore merchantCore,MerchantFile merchantFile,MerchantContact merchantContact){
-		return null;
+	public ResultDTO<Integer> toAdd(){
+		ResultDTO<Integer> result = merchantCoreService.doAdd(request);
+		return result;
 	}
 }

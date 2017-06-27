@@ -105,4 +105,27 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 根据条件查询 -->
+  <select id="queryByCondition" parameterType="net.fnsco.service.domain.MerchantFile" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+     from m_merchant_file
+     <where>
+       <if test="innerCode != null" >
+        AND inner_code = #{innerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="fileName != null" >
+        AND file_name = #{fileName,jdbcType=VARCHAR}
+      </if>
+      <if test="fileType != null" >
+        AND file_type = #{fileType,jdbcType=VARCHAR}
+      </if>
+      <if test="filePath != null" >
+        AND file_path = #{filePath,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null" >
+        AND create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+     </where> 
+  </select>
 </mapper>

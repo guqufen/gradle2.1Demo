@@ -19,7 +19,7 @@ import com.google.common.base.Strings;
  *
  */
 @Component
-public class AppInterceptor implements HandlerInterceptor {
+public class OpenInterceptor implements HandlerInterceptor {
     private boolean     authentication = true;
     @Autowired
     private Environment env;

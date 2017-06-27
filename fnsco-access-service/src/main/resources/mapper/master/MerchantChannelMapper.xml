@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="net.fnsco.service.domain.MerchantChannel" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
     <result column="channel_type" property="channelType" jdbcType="VARCHAR" />
     <result column="channel_mer_id" property="channelMerId" jdbcType="VARCHAR" />
     <result column="channel_mer_key" property="channelMerKey" jdbcType="VARCHAR" />
@@ -12,7 +13,7 @@
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, inner_code, channel_type, channel_mer_id, channel_mer_key, create_time, modify_time, 
+    id, inner_code,agent_id, channel_type, channel_mer_id, channel_mer_key, create_time, modify_time, 
     modify_user_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -26,10 +27,10 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="net.fnsco.service.domain.MerchantChannel" >
-    insert into m_merchant_channel (id, inner_code, channel_type, 
+    insert into m_merchant_channel (id, inner_code, agent_id,channel_type, 
       channel_mer_id, channel_mer_key, create_time, 
       modify_time, modify_user_id)
-    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{channelType,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR},#{agentId}, #{channelType,jdbcType=VARCHAR}, 
       #{channelMerId,jdbcType=VARCHAR}, #{channelMerKey,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
@@ -41,6 +42,9 @@
       </if>
       <if test="innerCode != null" >
         inner_code,
+      </if>
+      <if test="agentId!= null" >
+        agent_id,
       </if>
       <if test="channelType != null" >
         channel_type,
@@ -67,6 +71,9 @@
       </if>
       <if test="innerCode != null" >
         #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=INTEGER},
       </if>
       <if test="channelType != null" >
         #{channelType,jdbcType=VARCHAR},
@@ -95,6 +102,9 @@
       <if test="innerCode != null" >
         inner_code = #{innerCode,jdbcType=VARCHAR},
       </if>
+      <if test="agentId != null" >
+       agent_id = #{agentId,jdbcType=INTEGER},
+      </if>
       <if test="channelType != null" >
         channel_type = #{channelType,jdbcType=VARCHAR},
       </if>
@@ -119,6 +129,7 @@
   <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.MerchantChannel" >
     update m_merchant_channel
     set inner_code = #{innerCode,jdbcType=VARCHAR},
+      agent_id = #{agentId,jdbcType=INTEGER},
       channel_type = #{channelType,jdbcType=VARCHAR},
       channel_mer_id = #{channelMerId,jdbcType=VARCHAR},
       channel_mer_key = #{channelMerKey,jdbcType=VARCHAR},
@@ -127,4 +138,12 @@
       modify_user_id = #{modifyUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectByMerCode" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_channel
+    where channel_type = #{channelType,jdbcType=VARCHAR} 
+    and channel_mer_id = #{merCode,jdbcType=VARCHAR} 
+    limit 1
+  </select>
 </mapper>

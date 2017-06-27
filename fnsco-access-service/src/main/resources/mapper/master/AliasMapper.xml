@@ -106,4 +106,17 @@
       random_code = #{randomCode,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="selectByInnerCode" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_alias
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByRandomCode" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_alias
+    where random_code = #{randomCode,jdbcType=VARCHAR}
+  </select>
 </mapper>
