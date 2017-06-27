@@ -17,7 +17,7 @@ import net.fnsco.service.comm.Constant;
 
 @RestController
 @RequestMapping(value = "/open/trade")
-public class TradeDataController extends BaseController {
+public class TradeDataOpenController extends BaseController {
     @Autowired
     private TradeDataService tradeDataService;
 
