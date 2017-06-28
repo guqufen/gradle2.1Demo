@@ -14,9 +14,11 @@ import net.fnsco.core.base.ResultDTO;
 
 /**
  * 
- * @desc app调用与商户相关的管理接口
- * @author sxfei
- * @date 2017年6月21日 上午10:57:41
+ * @desc 
+ * @author   sxf
+ * @version  
+ * @since    Ver 1.1
+ * @Date	 2017年6月28日 下午3:45:14
  *
  */
 @RestController
@@ -37,4 +39,5 @@ public class AppMerchantController extends BaseController {
         String randomCode = merchantService.getMerCode(merchant.getMerCode(), merchant.getChannelType());
         return success(randomCode);
     }
+
 }
