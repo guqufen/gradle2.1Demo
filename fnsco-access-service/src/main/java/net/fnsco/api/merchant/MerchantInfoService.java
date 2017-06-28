@@ -25,5 +25,5 @@ public interface MerchantInfoService {
 	 * @param id
 	 * @return
 	 */
-	public boolean deleteFromDB(Integer id);
+	public boolean deleteFromDB(Integer id,String url);
 }

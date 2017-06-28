@@ -70,11 +70,16 @@ public class FileInfoController extends BaseController{
 	public String appImport(HttpServletRequest req, HttpServletResponse response) {
 		return commImport(req, response, true);
 	}
-	
+	/**
+	 * 删除
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("/delete")
 	@ResponseBody
-	public String deleteImger(Integer id){
-		boolean re = merchantInfoService.deleteFromDB(id);
+	public String deleteImger(Integer id,String url){
+		//删除服务器已经保存的对应图片
+		boolean re = merchantInfoService.deleteFromDB(id,url);
 		if(re){
 			return "true";
 		}
