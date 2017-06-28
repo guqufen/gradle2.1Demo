@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 
-import net.fnsco.freamwork.comm.Constant;
+import net.fnsco.freamwork.comm.FrameworkConstant;
 
 public class AppAuthorizeFilter implements Filter {
     private static Logger LOGGER         = LoggerFactory.getLogger(AppAuthorizeFilter.class);
@@ -40,18 +40,18 @@ public class AppAuthorizeFilter implements Filter {
                 String body = HttpHelper.getBodyString(requestWrapper);
                 if (Strings.isNullOrEmpty(body)) {
                     LOGGER.error("非法请求, 没有APP_KEY, APP_SECRET");
-                    OutWriterUtil.outJson(HttpServletResponse, Constant.E_TOKEN_EMPTY);
+                    OutWriterUtil.outJson(HttpServletResponse, FrameworkConstant.E_TOKEN_EMPTY);
                     return;
                 }
                 JSONObject parameters = JSONObject.parseObject(body);
                 String tokenId = parameters.getString("tokenId");
                 if (Strings.isNullOrEmpty(tokenId)) {
                     LOGGER.error("非法请求, tokenId为空" + httpServletRequest.getRemoteHost() + httpServletRequest.getRequestURL());
-                    OutWriterUtil.outJson(HttpServletResponse, Constant.E_TOKEN_EMPTY);
+                    OutWriterUtil.outJson(HttpServletResponse, FrameworkConstant.E_TOKEN_EMPTY);
                     return;
                 } else if ("123".equals(tokenId)) {
                     LOGGER.error("非法请求, APP_SECRET为空, user={}");
-                    OutWriterUtil.outJson(HttpServletResponse, Constant.E_TOKEN_ERROR);
+                    OutWriterUtil.outJson(HttpServletResponse, FrameworkConstant.E_TOKEN_ERROR);
                     return;
                 }
                 chain.doFilter(requestWrapper, response);

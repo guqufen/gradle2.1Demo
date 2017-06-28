@@ -6,15 +6,15 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import net.fnsco.freamwork.spring.AppInterceptor;
-import net.fnsco.freamwork.spring.LoginInterceptor;
 import net.fnsco.freamwork.spring.OpenInterceptor;
+import net.fnsco.freamwork.spring.WebInterceptor;
 
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
-    LoginInterceptor localInterceptor() {
-        return new LoginInterceptor();
+    WebInterceptor localInterceptor() {
+        return new WebInterceptor();
     }
 
     @Bean
