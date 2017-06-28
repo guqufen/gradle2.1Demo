@@ -35,7 +35,7 @@ public class OpenInterceptor implements HandlerInterceptor {
         }
         String requestUrl = request.getRequestURL().toString();
         // 从配置文件中获取浙付通接口模块,不需要被拦截
-        String appModules = env.getProperty("app.ignore.url");
+        String appModules = env.getProperty("open.ignore.url");
         if (!Strings.isNullOrEmpty(appModules)) {
             String[] modules = appModules.split(",");
             for (String module : modules) {

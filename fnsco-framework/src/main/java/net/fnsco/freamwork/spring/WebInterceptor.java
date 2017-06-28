@@ -37,7 +37,7 @@ public class WebInterceptor implements HandlerInterceptor {
         // 从配置文件中获取浙付通接口模块,不需要被拦截
         String appModules = env.getProperty("web.ignore.url");
         if (!Strings.isNullOrEmpty(appModules)) {
-            String[] modules = StringUtils.split(appModules, ",");
+            String[] modules = appModules.split(",");
             for (String module : modules) {
                 if (requestUrl.indexOf(module) > 0) {
                     return true;
