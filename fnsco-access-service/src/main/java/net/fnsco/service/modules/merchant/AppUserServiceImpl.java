@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 
+import net.fnsco.api.dto.AppUserDTO;
+import net.fnsco.api.dto.SmsCodeDTO;
 import net.fnsco.api.merchant.AppUserService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -23,39 +25,53 @@ import net.fnsco.service.domain.AppUser;
 public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(AppUserServiceImpl.class);
-	
-	private static Map<String, String> MsgCodeMap = new HashMap<>();//存放验证码的
+			
+	private static Map<String, SmsCodeDTO> MsgCodeMap = new HashMap<>();//存放验证码的
 	
 	@Autowired
 	private AppUserDao MappUserDao;
 	//注册
 	@Override
-	public ResultDTO<AppUser> insertAppUser(AppUser appUser) {
+	public ResultDTO<AppUser> insertAppUser(AppUserDTO appUserDTO){
+		//数据库实体类
 		ResultDTO<AppUser> result=new ResultDTO<AppUser>();
-		if(MappUserDao.getAppUserByMobile(appUser.getMobile())!=null){
+		//对比验证码
+		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode());
+		if(!res.isSuccess()){
+			result.setError(1, "验证码错误");
+			return result;
+		}
+		//判断是否已经注册
+		if(MappUserDao.getAppUserByMobile(appUserDTO.getMobile())!=null){
 			 return result.setError("1","该用户已经注册");
 		}
-		if(MappUserDao.insertSelective(appUser)){
-			result.setData(appUser);
-			result.setCode("0");
-			result.setSuccess("注册成功");
-		}else{
+		AppUser appUser=new AppUser();
+		appUser.setDeviceId(appUserDTO.getDeviceId());
+		appUser.setDeviceToken(appUserDTO.getDeviceToken());
+		appUser.setMobile(appUserDTO.getMobile());
+		appUser.setDeviceType(appUserDTO.getDeviceType());
+		appUser.setPassword(appUserDTO.getPassword());
+		if(!MappUserDao.insertSelective(appUser)){
 			result.setCode("1");
-			result.setSuccess("注册失败");
+			result.setError("注册失败");
 		}
+		result.setCode("0");
+		result.setSuccess("注册成功");
 		return result;
 	}
 
 
 	//生产验证码
 	@Override
-	public ResultDTO<String> getValidateCode(String deviceId, int deviceType, String mobile) {
-		ResultDTO<String> result = new ResultDTO<>();
+	public void getValidateCode(AppUserDTO appUserDTO ) {
+		//String deviceId, int deviceType, String mobile
+		String deviceId=appUserDTO.getDeviceId();
+		String mobile=appUserDTO.getMobile();
 		// 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
         //               key    value
-        //生产验证码时生成当前系统时间
-        MsgCodeMap.put(mobile, code+"_"+System.currentTimeMillis());
+        SmsCodeDTO object=new SmsCodeDTO(code,System.currentTimeMillis());
+        MsgCodeMap.put(deviceId,object);
          /**
          * 开启线程发送手机验证码
          */
@@ -75,57 +91,48 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
                 } catch (IOException | URISyntaxException e) {
                     logger.warn("验证码" + code + "未能够发送至手机" + mobile + "错误原因:异常错误");
                     logger.error("短信发送异常 ",e);
-                    result.setCode("7");
-                    result.setMessage("发送短信异常！");
-                    result.setError();
                 }
             }
         }).start();
-        result.setData(code);
-        result.setCode("0");
-        result.setSuccess("验证码生产成功");
-		return result;
 	}
 
 	//验证码对比
 	@Override
-	public ResultDTO<String> validateCode(String mobile, String code) {
+	public ResultDTO<String> validateCode(String deviceId, String code) {
 		ResultDTO<String> result = new ResultDTO<>();
-		if(code==null){
-			result.setError(1, "输入的验证码为空");
-			return result;
-		}
 		//从Map中根据手机号取到存入的验证码
-		String sendCode=MsgCodeMap.get(mobile);
-		//验证码
-		String oldCode=sendCode.substring(0,sendCode.indexOf("_"));
+		SmsCodeDTO codeDto= MsgCodeMap.get(deviceId);
 		//时间
-		String missM = sendCode.substring(sendCode.lastIndexOf("_")+1, sendCode.length());
-		long oldTime = Long.valueOf(missM);
 		long newTime = System.currentTimeMillis();
 		//验证码超过30分钟
-		if((newTime-oldTime)/1000/60>30){
+		if((newTime-codeDto.getTime())/1000/60>30){
 			result.setError(1, "验证码超过有效时间");
-			MsgCodeMap.remove(mobile);
+			MsgCodeMap.remove(deviceId);
 			return result;
 		}
-		if(code.equals(oldCode)){
-			//从map从移除验证码
-			MsgCodeMap.remove(mobile);
-			result.setCode("0");
-			result.setSuccess("成功");
-		}else{
+		
+		if(!code.equals(codeDto.getCode())){
 			result.setError(1, "验证码错误");
 		}
+		//从map从移除验证码
+		MsgCodeMap.remove(deviceId);
+		result.setCode("0");
+		result.setSuccess("成功");
 		return result;
 	}
 
 	//根据手机号找回登录密码
 	@Override
-	public ResultDTO<String> findPassword(String mobile,String password) {
+	public ResultDTO<String> findPassword(AppUserDTO appUserDTO) {
 		ResultDTO<String> result = new ResultDTO<>();
+		//对比验证码
+		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode());
+		if(!res.isSuccess()){
+			result.setError(1, "验证码错误");
+			return result;
+		}
 		//密码更新
-		if(MappUserDao.findPasswordByPhone(mobile,password)){
+		if(MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),appUserDTO.getPassword())){
 			result.setCode("0");
 			result.setSuccess("修改密码成功");
 		}else{
@@ -136,7 +143,11 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 
 	//修改密码
 	@Override
-	public ResultDTO<String> modifyPassword(int id,String password,String oldPassword){
+	public ResultDTO<String> modifyPassword(AppUserDTO appUserDTO){
+		String password=appUserDTO.getPassword();
+		String oldPassword=appUserDTO.getOldPassword();
+		Integer id=appUserDTO.getId();
+		AppUser appUser=new AppUser();
 		ResultDTO<String> result=new ResultDTO<String>();
 		//根据手机号查询用户是否存在获取原密码
 		 AppUser mAppUser=MappUserDao.selectById(id);
@@ -144,23 +155,23 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		if(!oldPassword.equals(mAppUser.getPassword())){
 			return result.setError(1,"原密码输入错误,请重新输入");
 		}
-		mAppUser.setPassword(password);
-		mAppUser.setId(id);
-		if(MappUserDao.updateById(mAppUser)){
-			result.setCode("0");
-			result.setSuccess("修改密码成功");
-		}else{
+		appUser.setPassword(password);
+		appUser.setId(id);
+		if(!MappUserDao.updateById(appUser)){
 			result.setCode("1");
 			result.setSuccess("修改密码失败");
 		}
+		result.setCode("0");
+		result.setSuccess("修改密码成功");
 		return result;
 	}
 	
-	
 	//根据手机号码和密码登录
 	@Override
-	public ResultDTO<String> loginByMoblie(String mobile, String password){
+	public ResultDTO<String> loginByMoblie(AppUserDTO appUserDTO){
 		ResultDTO<String> result = new ResultDTO<>();
+		String mobile=appUserDTO.getMobile();
+		String password=appUserDTO.getPassword();
 		AppUser appUser=MappUserDao.getAppUserByMobile(mobile);
 		if(password.equals(appUser.getPassword())){
 			result.setCode("0");
@@ -170,6 +181,8 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		}
 		return result;
 	}
+
+
 }
 
 

@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +20,14 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.dao.master.MerchantChannelDao;
 import net.fnsco.service.dao.master.MerchantContactDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
+import net.fnsco.service.dao.master.MerchantFileDao;
+import net.fnsco.service.dao.master.MerchantFileTempDao;
 import net.fnsco.service.dao.master.MerchantTerminalDao;
 import net.fnsco.service.domain.MerchantChannel;
 import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
+import net.fnsco.service.domain.MerchantFile;
+import net.fnsco.service.domain.MerchantFileTemp;
 import net.fnsco.service.domain.MerchantTerminal;
 
 /**
@@ -46,6 +52,12 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	@Autowired
 	private MerchantChannelDao merchantChannelDao;
 	
+	@Autowired
+	private MerchantFileDao merchantFileDao;
+	
+	@Autowired
+	private MerchantFileTempDao merchantFileTempDao;
+	
 	/**
 	 * @todo 新增加商家
 	 * @author tangliang
@@ -69,6 +81,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 		int ter = merchantTerminalDao.insertSelective(merchantTerminal);
 		int chan = merchantChannelDao.insertSelective(merchantChannel);
 		if(cor ==1 && con ==1 && ter == 1 && chan == 1){
+			fileHander(request);//处理文件
 			result.setSuccess("添加商户成功");
 		}else
 		{
@@ -139,6 +152,29 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 		result.setData(merchantCoreDao.queryAllById(id));
 		result.setSuccess("查询成功!");
 		return result;
+	}
+	/**
+	 * 处理文件信息
+	 * @param request
+	 */
+	private void fileHander(HttpServletRequest request)
+	{
+		String fileIds = request.getParameter("fileIds");
+		if(!StringUtils.isEmpty(fileIds))
+		{
+			String[] ids  = fileIds.split(",");
+			for (String fileId : ids) {
+				MerchantFileTemp fileTemp = merchantFileTempDao.selectByPrimaryKey(Integer.valueOf(fileId));
+				if(null != fileTemp)
+				{
+					MerchantFile file = new MerchantFile();
+					BeanUtils.copyProperties(fileTemp, file);
+					merchantFileDao.insertSelective(file);
+					merchantFileTempDao.deleteByPrimaryKey(Integer.valueOf(fileId));
+				}	
+			}
+			
+		}	
 	}
 	
 	/**

@@ -4,7 +4,7 @@
 package net.fnsco.api.merchant;
 
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.service.domain.MerchantFile;
+import net.fnsco.service.domain.MerchantFileTemp;
 
 /**@desc 文件信息接口
  * @author tangliang
@@ -18,12 +18,12 @@ public interface MerchantInfoService {
 	 * @param loginUserId
 	 * @return
 	 */
-	public ResultDTO<Integer> doAddToDB (MerchantFile fileInfo,int loginUserId);
+	public ResultDTO<Integer> doAddToDB (MerchantFileTemp fileInfo,int loginUserId);
 	
 	/**
 	 * 根据ID删除文件数据
 	 * @param id
 	 * @return
 	 */
-	public boolean deleteFromDB(Integer id);
+	public boolean deleteFromDB(Integer id,String url);
 }

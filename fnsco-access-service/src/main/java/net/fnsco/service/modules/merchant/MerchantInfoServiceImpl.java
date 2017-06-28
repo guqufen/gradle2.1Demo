@@ -7,12 +7,14 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.service.dao.master.MerchantFileDao;
-import net.fnsco.service.domain.MerchantFile;
+import net.fnsco.core.utils.FileUtils;
+import net.fnsco.service.dao.master.MerchantFileTempDao;
+import net.fnsco.service.domain.MerchantFileTemp;
 
 /**@desc 文件上传实现类
  * @author tangliang
@@ -22,7 +24,10 @@ import net.fnsco.service.domain.MerchantFile;
 public class MerchantInfoServiceImpl implements MerchantInfoService {
 	
 	@Autowired
-	private MerchantFileDao merchantFileInfoDao;
+	private MerchantFileTempDao merchantFileInfoDao;
+	
+	@Autowired
+	private Environment env;
 	
 	/**
 	 * @todo 录入文件信息入库
@@ -31,7 +36,7 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 	 * @see net.fnsco.api.merchant.MerchantInfoService#doAddToDB(net.fnsco.service.domain.MerchantFile, int)
 	 */
 	@Override
-	public ResultDTO<Integer> doAddToDB(MerchantFile fileInfo, int loginUserId) {
+	public ResultDTO<Integer> doAddToDB(MerchantFileTemp fileInfo, int loginUserId) {
 		
 		ResultDTO<Integer> result = new ResultDTO<>();
 		
@@ -41,11 +46,11 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 			return result.setError("添加失败");
 		}	
 		
-		MerchantFile fileInfo_con = new MerchantFile();
+		MerchantFileTemp fileInfo_con = new MerchantFileTemp();
 		fileInfo_con.setInnerCode(fileInfo.getInnerCode());
 		fileInfo_con.setFileType(fileInfo.getFileType());
 		
-		List<MerchantFile> files = merchantFileInfoDao.queryByCondition(fileInfo_con);
+		List<MerchantFileTemp> files = merchantFileInfoDao.queryByCondition(fileInfo_con);
 		int res_db = 0;
 		if(!files.isEmpty())
 		{
@@ -63,7 +68,7 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 			result.setError();
 			return result.setError("添加失败");
 		}
-		List<MerchantFile> fileTemp = merchantFileInfoDao.queryByCondition(fileInfo_con);
+		List<MerchantFileTemp> fileTemp = merchantFileInfoDao.queryByCondition(fileInfo_con);
 		result.setData(fileTemp.get(0).getId());
 		return result.setSuccess("添加成功");
 	}
@@ -75,8 +80,16 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 	 * @see net.fnsco.api.merchant.MerchantInfoService#deleteFromDB(java.lang.Integer)
 	 */
 	@Override
-	public boolean deleteFromDB(Integer id) {
+	public boolean deleteFromDB(Integer id,String url) {
 		// TODO Auto-generated method stub
+		if(!StringUtils.isEmpty(url))
+		{
+			String stry = this.env.getProperty("fileUpload.url");
+			url = StringUtils.replace(url, "^", "/");
+			String filePath = stry+"/"+url;
+			FileUtils.delFile(filePath);
+		}	
+		
 		int re = merchantFileInfoDao.deleteByPrimaryKey(id);
 		
 		if(re == 1)
@@ -85,5 +98,4 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 		}	
 		return false;
 	}
-
 }
