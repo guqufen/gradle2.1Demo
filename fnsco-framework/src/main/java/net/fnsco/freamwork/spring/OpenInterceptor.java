@@ -3,10 +3,11 @@ package net.fnsco.freamwork.spring;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,12 +25,14 @@ import net.fnsco.freamwork.comm.Md5Util;
  */
 @Component
 public class OpenInterceptor implements HandlerInterceptor {
-    private boolean     isAuthor = true;
+    private boolean     isAuthor = false;
     @Autowired
     private Environment env;
+    private Logger      logger   = LoggerFactory.getLogger(OpenInterceptor.class);
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+                             Object handler) throws Exception {
         if (isAuthor) {
             return true;
         }
@@ -53,6 +56,7 @@ public class OpenInterceptor implements HandlerInterceptor {
         String temp = FrameworkConstant.TOKEN_ID + identifier;
         String trueTokenId = Md5Util.getInstance().md5(temp);
         if (!trueTokenId.equals(tokenId)) {
+            logger.error("TokenId不对", "传入id为" + tokenId + "生成后的id为" + trueTokenId);
             OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_ERROR);
             return false;
         }
@@ -60,11 +64,13 @@ public class OpenInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+                           ModelAndView modelAndView) throws Exception {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                                Object handler, Exception ex) throws Exception {
 
     }
 }
