@@ -78,10 +78,8 @@ public class BaseController {
     }
 
     private ResultDTO fail(String msgCode, String message) {
-        String code = String.valueOf(msgCode);
-        String msg = message;
         ResultDTO dto = new ResultDTO();
-        dto.setCode(code);
+        dto.setCode(msgCode);
         dto.setMessage(message);
         return dto;
     }
