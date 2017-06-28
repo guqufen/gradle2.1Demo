@@ -87,3 +87,32 @@ table a.remove,table a.redact{
 	a.nextBtn:hover,a.saveBtn:hover{
 		color: #fff;
 	}
+/*增加商户弹框修改*/
+.fileImgName{
+	padding: 5px 15px;
+    background: #f4f4f4;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+.previewfileImg{
+	padding: 5px;
+    background: #428bca;
+    color: #fff;
+    border-radius: 3px;
+    margin: 0 3px;
+}
+.deletefileImg{
+	padding: 5px;
+    background: #ed5565;
+    color: #fff;
+    border-radius: 3px;
+}
+.previewfileImg:hover,.deletefileImg:hover{
+	color: #fff;
+}
+.uploadify{
+	text-align: center;
+	background: #428bca;
+    color: #fff;
+    border-radius: 3px;
+}
