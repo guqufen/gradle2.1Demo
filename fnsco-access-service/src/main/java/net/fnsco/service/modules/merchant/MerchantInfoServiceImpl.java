@@ -7,10 +7,12 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.FileUtils;
 import net.fnsco.service.dao.master.MerchantFileTempDao;
 import net.fnsco.service.domain.MerchantFileTemp;
 
@@ -23,6 +25,9 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 	
 	@Autowired
 	private MerchantFileTempDao merchantFileInfoDao;
+	
+	@Autowired
+	private Environment env;
 	
 	/**
 	 * @todo 录入文件信息入库
@@ -75,8 +80,16 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 	 * @see net.fnsco.api.merchant.MerchantInfoService#deleteFromDB(java.lang.Integer)
 	 */
 	@Override
-	public boolean deleteFromDB(Integer id) {
+	public boolean deleteFromDB(Integer id,String url) {
 		// TODO Auto-generated method stub
+		if(!StringUtils.isEmpty(url))
+		{
+			String stry = this.env.getProperty("fileUpload.url");
+			url = StringUtils.replace(url, "^", "/");
+			String filePath = stry+"/"+url;
+			FileUtils.delFile(filePath);
+		}	
+		
 		int re = merchantFileInfoDao.deleteByPrimaryKey(id);
 		
 		if(re == 1)
@@ -85,5 +98,4 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 		}	
 		return false;
 	}
-
 }

@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.fnsco.core.constants.CoreConstants;
@@ -73,20 +74,24 @@ public class BaseController {
     }
 
     public ResultDTO fail() {
-        return this.fail("0000");
+        return this.fail(CoreConstants.E_COMM_BUSSICSS);
     }
 
     private ResultDTO fail(String msgCode, String message) {
-        String code = String.valueOf(msgCode);
-        String msg = message;
         ResultDTO dto = new ResultDTO();
-        dto.setCode(code);
+        dto.setCode(msgCode);
         dto.setMessage(message);
         return dto;
     }
 
     public ResultDTO success() {
-        return this.success("");
+        return this.success(null);
+    }
+
+    public ResultDTO success(String data) {
+        Map map = Maps.newHashMap();
+        map.put("result", data);
+        return this.success(map, "");
     }
 
     public ResultDTO success(Object data) {
@@ -100,7 +105,7 @@ public class BaseController {
     public ResultDTO success(Object data, String total, String pageId) {
         ResultDTO dto = new ResultDTO();
         dto.setSuccess(true);
-        dto.setCode("1111");
+        dto.setCode(CoreConstants.OK);
         dto.setMessage("");
         if (Strings.isNullOrEmpty(total)) {
             dto.setData(data);

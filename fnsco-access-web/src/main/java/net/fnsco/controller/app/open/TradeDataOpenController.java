@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
 
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.dto.TradeDataDTO;
@@ -39,8 +40,10 @@ public class TradeDataOpenController extends BaseController {
     public ResultDTO saveTrade(@RequestBody TradeDataDTO tradeData) {
         logger.error("交易流水数据" + JSON.toJSONString(tradeData));
         String amt = tradeData.getAmt();
-        amt = amt.replaceAll("\\.", "");
-        tradeData.setAmt(amt);
+        if (!Strings.isNullOrEmpty(amt)) {
+            amt = amt.replaceAll("\\.", "");
+            tradeData.setAmt(amt);
+        }
         /*
         0-刷卡
         1-微信

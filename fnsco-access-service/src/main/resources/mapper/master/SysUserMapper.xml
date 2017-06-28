@@ -192,4 +192,8 @@
   <select id="getIdBy" parameterType="net.fnsco.service.domain.SysUser" resultMap="BaseResultMap">
      select <include refid="Base_Column_List" /> from sys_user where name=#{name} and password=#{password}
   </select>
+  <!-- 根据用户名查询 -->
+  <select id="getUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> from sys_user where name=#{name} 
+  </select>
 </mapper>

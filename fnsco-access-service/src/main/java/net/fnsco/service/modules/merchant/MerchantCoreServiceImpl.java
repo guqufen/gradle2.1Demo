@@ -169,6 +169,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 				{
 					MerchantFile file = new MerchantFile();
 					BeanUtils.copyProperties(fileTemp, file);
+					file.setId(null);
 					merchantFileDao.insertSelective(file);
 					merchantFileTempDao.deleteByPrimaryKey(Integer.valueOf(fileId));
 				}	
