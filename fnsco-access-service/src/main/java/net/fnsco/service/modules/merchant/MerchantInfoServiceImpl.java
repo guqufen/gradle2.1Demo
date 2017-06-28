@@ -59,12 +59,31 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 			res_db = merchantFileInfoDao.insertSelective(fileInfo);
 		}	
 		
-		
 		if (res_db != 1) {
 			result.setError();
 			return result.setError("添加失败");
 		}
+		List<MerchantFile> fileTemp = merchantFileInfoDao.queryByCondition(fileInfo_con);
+		result.setData(fileTemp.get(0).getId());
 		return result.setSuccess("添加成功");
+	}
+	
+	/**
+	 * @todo 删除文件数据
+	 * @author tangliang
+	 * @date 2017年6月27日 下午5:12:40
+	 * @see net.fnsco.api.merchant.MerchantInfoService#deleteFromDB(java.lang.Integer)
+	 */
+	@Override
+	public boolean deleteFromDB(Integer id) {
+		// TODO Auto-generated method stub
+		int re = merchantFileInfoDao.deleteByPrimaryKey(id);
+		
+		if(re == 1)
+		{
+			return true;
+		}	
+		return false;
 	}
 
 }

@@ -27,13 +27,13 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.service.domain.MerchantFile;
-import net.fnsco.service.domain.SysUser;
 /**
  * @desc 文件上传控制器
  * @author tangliang
  * @date 2017年6月21日 上午10:57:41
  */
 @Controller
+@RequestMapping("/web/fileInfo")
 public class FileInfoController extends BaseController{
 
 	@Autowired
@@ -43,7 +43,7 @@ public class FileInfoController extends BaseController{
 	private MerchantInfoService merchantInfoService;
 
 	// 列表页
-	@RequestMapping("/fileInfo/list")
+	@RequestMapping("/list")
 	public String list() {
 		return "ups/control/fileUploadView";
 	}
@@ -53,14 +53,14 @@ public class FileInfoController extends BaseController{
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("/fileInfo/getInnoCode")
+	@RequestMapping("/getInnoCode")
 	public String getInnoCode(){
 		return CodeUtil.generateMerchantCode("F");
 	}
 
 
 	@ResponseBody
-	@RequestMapping(value = "/fileInfo/Import", produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/Import", produces = "text/html;charset=UTF-8")
 	public String Import(HttpServletRequest req, HttpServletResponse response) {
 		return commImport(req, response, false);
 	}
@@ -70,7 +70,17 @@ public class FileInfoController extends BaseController{
 	public String appImport(HttpServletRequest req, HttpServletResponse response) {
 		return commImport(req, response, true);
 	}
-
+	
+	@RequestMapping("/delete")
+	@ResponseBody
+	public String deleteImger(Integer id){
+		boolean re = merchantInfoService.deleteFromDB(id);
+		if(re){
+			return "true";
+		}
+		return "false";
+	}
+	
 	/**
 	 * @param req
 	 * @param response
@@ -158,7 +168,7 @@ public class FileInfoController extends BaseController{
 
 						TreeMap<String, String> paras = new TreeMap<>();
 
-						paras.put("id", String.valueOf(fileInfo.getId()));
+						paras.put("id", String.valueOf(result.getData()));
 						paras.put("url", newUrl);
 						paras.put("fileType", fileType);
 
