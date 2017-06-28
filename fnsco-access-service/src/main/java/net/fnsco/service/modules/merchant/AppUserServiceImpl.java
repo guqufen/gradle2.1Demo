@@ -18,6 +18,7 @@ import net.fnsco.api.merchant.AppUserService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.sms.JavaSmsApi;
+import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.service.dao.master.AppUserDao;
 import net.fnsco.service.domain.AppUser;
 
@@ -50,7 +51,8 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		appUser.setDeviceToken(appUserDTO.getDeviceToken());
 		appUser.setMobile(appUserDTO.getMobile());
 		appUser.setDeviceType(appUserDTO.getDeviceType());
-		appUser.setPassword(appUserDTO.getPassword());
+		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
+		appUser.setPassword(password);
 		if(!MappUserDao.insertSelective(appUser)){
 			result.setCode("1");
 			result.setError("注册失败");
@@ -125,6 +127,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	@Override
 	public ResultDTO<String> findPassword(AppUserDTO appUserDTO) {
 		ResultDTO<String> result = new ResultDTO<>();
+		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		//对比验证码
 		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode());
 		if(!res.isSuccess()){
@@ -132,7 +135,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 			return result;
 		}
 		//密码更新
-		if(MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),appUserDTO.getPassword())){
+		if(MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),password)){
 			result.setCode("0");
 			result.setSuccess("修改密码成功");
 		}else{
@@ -144,8 +147,8 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	//修改密码
 	@Override
 	public ResultDTO<String> modifyPassword(AppUserDTO appUserDTO){
-		String password=appUserDTO.getPassword();
-		String oldPassword=appUserDTO.getOldPassword();
+		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
+		String oldPassword=Md5Util.getInstance().md5(appUserDTO.getOldPassword());
 		Integer id=appUserDTO.getId();
 		AppUser appUser=new AppUser();
 		ResultDTO<String> result=new ResultDTO<String>();
@@ -171,7 +174,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	public ResultDTO<String> loginByMoblie(AppUserDTO appUserDTO){
 		ResultDTO<String> result = new ResultDTO<>();
 		String mobile=appUserDTO.getMobile();
-		String password=appUserDTO.getPassword();
+		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		AppUser appUser=MappUserDao.getAppUserByMobile(mobile);
 		if(password.equals(appUser.getPassword())){
 			result.setCode("0");
