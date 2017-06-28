@@ -20,19 +20,21 @@ import com.google.common.base.Strings;
  */
 @Component
 public class AppInterceptor implements HandlerInterceptor {
-    private boolean     authentication = true;
+    private boolean     isAuthor = true;
     @Autowired
     private Environment env;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
+        if (isAuthor) {
+            return true;
+        }
         String requestUrl = request.getRequestURL().toString();
         // 从配置文件中获取浙付通接口模块,不需要被拦截
-        String appModules = "";//SpringUtils.getProperty("app.modules");
+        String appModules = env.getProperty("app.ignore.url");
 
         if (!Strings.isNullOrEmpty(appModules)) {
-            String[] modules = StringUtils.split(appModules, ",");
+            String[] modules = appModules.split(",");
             for (String module : modules) {
                 if (requestUrl.indexOf(module) > 0) {
                     return true;

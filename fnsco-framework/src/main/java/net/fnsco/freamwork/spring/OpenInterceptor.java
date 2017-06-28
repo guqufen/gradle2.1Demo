@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.common.base.Strings;
 
 import net.fnsco.freamwork.aop.OutWriterUtil;
-import net.fnsco.freamwork.comm.Constant;
+import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.freamwork.comm.Md5Util;
 
 /**
@@ -24,16 +24,18 @@ import net.fnsco.freamwork.comm.Md5Util;
  */
 @Component
 public class OpenInterceptor implements HandlerInterceptor {
-    private boolean     authentication = true;
+    private boolean     isAuthor = true;
     @Autowired
     private Environment env;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
+        if (isAuthor) {
+            return true;
+        }
         String requestUrl = request.getRequestURL().toString();
         // 从配置文件中获取浙付通接口模块,不需要被拦截
-        String appModules = env.getProperty("app.ignore.url");
+        String appModules = env.getProperty("open.ignore.url");
         if (!Strings.isNullOrEmpty(appModules)) {
             String[] modules = appModules.split(",");
             for (String module : modules) {
@@ -44,14 +46,14 @@ public class OpenInterceptor implements HandlerInterceptor {
         }
         String tokenId = request.getHeader("tokenId");
         if (Strings.isNullOrEmpty(tokenId)) {
-            OutWriterUtil.outJson(response, Constant.E_TOKEN_EMPTY);
+            OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_EMPTY);
             return false;
         }
         String identifier = request.getHeader("identifier");
-        String temp = Constant.TOKEN_ID + identifier;
+        String temp = FrameworkConstant.TOKEN_ID + identifier;
         String trueTokenId = Md5Util.getInstance().md5(temp);
         if (!trueTokenId.equals(tokenId)) {
-            OutWriterUtil.outJson(response, Constant.E_TOKEN_ERROR);
+            OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_ERROR);
             return false;
         }
         return true;

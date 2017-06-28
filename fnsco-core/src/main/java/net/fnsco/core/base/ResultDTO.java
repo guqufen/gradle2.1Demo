@@ -2,6 +2,8 @@ package net.fnsco.core.base;
 
 import com.alibaba.fastjson.JSONObject;
 
+import net.fnsco.core.constants.CoreConstants;
+
 public class ResultDTO<T extends Object> extends DTO {
     private static final long serialVersionUID = -7387542509934814087L;
     private static final int  ERROR_CODE       = 0;
@@ -30,7 +32,7 @@ public class ResultDTO<T extends Object> extends DTO {
     }
 
     public ResultDTO<T> setError(int resultCode) {
-        return setError(String.valueOf(resultCode), "");
+        return setError(String.valueOf(resultCode), CoreConstants.ERROR_MESSGE_MAP.get(resultCode));
     }
 
     public ResultDTO<T> setError(String resultMessage) {

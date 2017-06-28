@@ -2,19 +2,25 @@ package net.fnsco.controller.app.trade;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.trade.TradeDataService;
+import net.fnsco.controller.app.jo.TradeDataJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import springfox.documentation.annotations.ApiIgnore;
 
+/**
+ * 交易流水处理类
+ * @author sxf
+ *
+ */
 @RestController
-@RequestMapping(value = "/app/trade")
+@RequestMapping(value = "/app/trade", method = RequestMethod.POST)
 public class TradeDataController extends BaseController {
     @Autowired
     private Environment      env;
@@ -27,9 +33,10 @@ public class TradeDataController extends BaseController {
      * @param userName
      * @return
      */
-    @ApiIgnore //使用该注解忽略这个API
-    @RequestMapping(value = "/query", method = RequestMethod.GET)
-    public ResultDTO queryTradeDate(@RequestParam(value = "userName", required = true) String userName) {
+    //@ApiIgnore //使用该注解忽略这个API
+    @RequestMapping(value = "/query")
+    @ApiOperation(value = "查询交易流水")
+    public ResultDTO queryTradeData(@RequestBody TradeDataJO tradeData) {
         ResultPageDTO resultPage = new ResultPageDTO();
         resultPage.setTotal(90);
         return success(resultPage);

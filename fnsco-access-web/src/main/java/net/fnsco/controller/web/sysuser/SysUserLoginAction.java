@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.api.sysuser.SysUserService;
 import net.fnsco.core.base.BaseController;
-import net.fnsco.core.base.Constants;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.CookieUtils;
 import net.fnsco.service.domain.SysUser;
 
@@ -51,7 +51,7 @@ public class SysUserLoginAction extends BaseController{
 		result = adminUserService.doLogin(res, username, password);
 		if (result.isSuccess()) {
 			setSessionUser(result.getData());
-			CookieUtils.addCookie(res, Constants.COOKIE_USER_KEY, ((SysUser)result.getData()).getName());
+			CookieUtils.addCookie(res, CoreConstants.COOKIE_USER_KEY, ((SysUser)result.getData()).getName());
 		}
 		return "forward:/";
 	}
