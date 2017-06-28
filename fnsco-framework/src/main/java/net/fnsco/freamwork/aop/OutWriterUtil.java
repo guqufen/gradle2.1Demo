@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 
 import com.alibaba.fastjson.JSON;
 
-import net.fnsco.freamwork.comm.Constant;
+import net.fnsco.freamwork.comm.FrameworkConstant;
 
 public class OutWriterUtil {
     private static Logger logger = LoggerFactory.getLogger(OutWriterUtil.class);
@@ -24,7 +24,7 @@ public class OutWriterUtil {
         try {
             Result result = new Result();
             result.setCode(code);
-            result.setMessage(Constant.ERROR_MESSGE_MAP.get(code));
+            result.setMessage(FrameworkConstant.ERROR_MESSGE_MAP.get(code));
             result.setSuccess(false);
             response.getWriter().write(JSON.toJSONString(result));
         } catch (IOException e) {

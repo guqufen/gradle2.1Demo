@@ -26,7 +26,7 @@ import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
-import net.fnsco.service.domain.MerchantFile;
+import net.fnsco.service.domain.MerchantFileTemp;
 /**
  * @desc 文件上传控制器
  * @author tangliang
@@ -94,7 +94,7 @@ public class FileInfoController extends BaseController{
 			// 上传文件原名
 			MultipartFile file = entity.getValue();
 
-			MerchantFile fileInfo = new MerchantFile();
+			MerchantFileTemp fileInfo = new MerchantFileTemp();
 			String innerCode = req.getParameter("innerCode");
 			String fileType = req.getParameter("fileTypeKey");
 			String fileName = file.getOriginalFilename();
@@ -124,7 +124,6 @@ public class FileInfoController extends BaseController{
 				logger.info("月份目录已存在");
 			}
 
-			// String str = year+"/"+month+"/";
 			String yearMonthPath = year + line + month + line;
 			String filepath = yearMonthPath + System.currentTimeMillis() + "." + prefix;
 
@@ -133,11 +132,9 @@ public class FileInfoController extends BaseController{
 			if (!file.isEmpty()) {
 				try {
 					byte[] bytes = file.getBytes();
-
 					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileURL));
 					stream.write(bytes);
 					stream.close();
-
 					String newUrl = null;
 
 					if(!isApp){
@@ -150,8 +147,6 @@ public class FileInfoController extends BaseController{
 						if(!"/".equals(line)){
 							newUrl = StringUtils.replace(filepath, line, "/");
 						}
-
-//						fileInfo.setSaveURL(newUrl);
 					}
 
 					fileInfo.setInnerCode(innerCode);
@@ -159,7 +154,6 @@ public class FileInfoController extends BaseController{
 					fileInfo.setFileType(fileType);
 					fileInfo.setFileName(fileName);
 					fileInfo.setCreateTime(new Date());
-//					SysUser loginUser = (SysUser)getSessionUser();
 					ResultDTO<Integer> result = merchantInfoService.doAddToDB(fileInfo,0);
 					if (result.isSuccess()) {
 						ResultDTO<TreeMap<String, String>> appResult = new ResultDTO<>();

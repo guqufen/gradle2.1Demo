@@ -431,6 +431,7 @@
 		                </div>
 		            </div>
 		            <input type="hidden" id="innoCode" name="innerCode">
+		            <input type="hidden" id="fileIds" name="fileIds">
 		            <!-- <div class="modal-footer">
 		                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		                <button type="button" class="btn btn-primary">Save changes</button>
@@ -679,11 +680,21 @@
 				var fileName = file.name.replace(',','');
 	       		$('#view'+num).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
 							"<a class='previewfileImg' id='previewfileImg"+obj.id+"' title='预览'><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
-							"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"')><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" +
+							"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"',"+num+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" +
+
 							"</div>");
 
 	    	   	$('#uploadify_file'+num).hide();
 	    	   	$('#fileQueue'+num).html('');
+	    	   	var fileIds = $('#fileIds').val();
+	    	   	if(fileIds)
+	    	   	{
+	    	   		$('#fileIds').val(fileIds+','+obj.id);
+	    	   	}
+	    	   	else
+	    	   	{
+	    	   		$('#fileIds').val(obj.id);
+	    	   	}	
 	       },
 	       'onUploadError': function(file,errorCode,errorMsg,errorString) {
 				alert(errorCode+"."+errorMsg+""+errorString);
@@ -693,7 +704,7 @@
    }
    
    //删除图片
-   function deleteImage(queueId,id,url)
+   function deleteImage(queueId,id,url,num)
    {
 	   $.ajax({
 		   url:'/web/fileInfo/delete',
@@ -702,6 +713,7 @@
 		   success:function(data){
 			   if(data)
 			   {
+				   $('#file'+num).remove();
 				   alert('删除成功');
 				   $(queueId).parent().parent().parent().next().find('.uploadify').show();
 				   $(queueId).parent().parent().html('');
