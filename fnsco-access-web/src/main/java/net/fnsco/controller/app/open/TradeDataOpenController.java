@@ -23,7 +23,7 @@ import net.fnsco.service.comm.ServiceConstant;
  *
  */
 @RestController
-@RequestMapping(value = "/open/trade")
+@RequestMapping(value = "/open/trade", method = RequestMethod.POST)
 public class TradeDataOpenController extends BaseController {
     @Autowired
     private TradeDataService tradeDataService;
@@ -34,12 +34,12 @@ public class TradeDataOpenController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/save")
     @ApiOperation(value = "保存交易流水")
     public ResultDTO saveTrade(@RequestBody TradeDataDTO tradeData) {
         logger.error("交易流水数据" + JSON.toJSONString(tradeData));
         String amt = tradeData.getAmt();
-        amt = amt.replace("/.", "");
+        amt = amt.replaceAll("\\.", "");
         tradeData.setAmt(amt);
         /*
         0-刷卡

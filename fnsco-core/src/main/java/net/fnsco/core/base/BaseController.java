@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
-import net.fnsco.freamwork.spring.SpringUtils;
+import net.fnsco.core.constants.CoreConstants;
 
 public class BaseController {
     protected Logger              logger   = LoggerFactory.getLogger(this.getClass());
@@ -68,26 +68,21 @@ public class BaseController {
         return userId;
     }
 
-    public ResultDTO fail(int msgCode) {
-        return this.fail(msgCode, SpringUtils.getMessage(String.valueOf(msgCode), new Object[0]));
+    public ResultDTO fail(String msgCode) {
+        return this.fail(msgCode, CoreConstants.ERROR_MESSGE_MAP.get(msgCode));
     }
 
-    public ResultDTO fail(String message) {
-        return this.fail("0000", message);
+    public ResultDTO fail() {
+        return this.fail("0000");
     }
 
-    public ResultDTO fail(int msgCode, String message) {
+    private ResultDTO fail(String msgCode, String message) {
         String code = String.valueOf(msgCode);
         String msg = message;
-
-        return this.fail(code, msg);
-    }
-
-    private ResultDTO fail(String code, String message) {
         ResultDTO dto = new ResultDTO();
         dto.setCode(code);
         dto.setMessage(message);
-        return dto;//.toJsonString();
+        return dto;
     }
 
     public ResultDTO success() {
@@ -169,7 +164,7 @@ public class BaseController {
         }
         return map;
     }
-    
+
     /**
      * 获取cookie中的用户
      * @return
@@ -180,13 +175,13 @@ public class BaseController {
             for (Cookie cookie : cookies) {
                 String name = cookie.getName();
                 if (!Strings.isNullOrEmpty(name) && name.equalsIgnoreCase(CoreConstants.COOKIE_USER_KEY)) {
-                   return cookie.getValue();
+                    return cookie.getValue();
                 }
             }
         }
         return null;
     }
-    
+
     public Object getSessionUser() {
         HttpSession session = request.getSession(false);
         if (null == session) {
@@ -199,30 +194,32 @@ public class BaseController {
         HttpSession session = request.getSession();
         session.setAttribute(USER_KEY, userDO);
     }
+
     /**
      * 删除session中保存的用户信息
      */
-    public void removeSessionUser(){
-    	HttpSession session = request.getSession(false);
+    public void removeSessionUser() {
+        HttpSession session = request.getSession(false);
         if (null == session) {
             return;
         }
         session.removeAttribute(USER_KEY);
     }
+
     /**
      * 删除cookie中保存的用户信息
      */
-    public void removeCookieUser(){
-    	Cookie[] cookies = request.getCookies();
+    public void removeCookieUser() {
+        Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 String name = cookie.getName();
                 if (!Strings.isNullOrEmpty(name) && name.equalsIgnoreCase(CoreConstants.COOKIE_USER_KEY)) {
-                  cookie.setValue(null);
-                  cookie.setMaxAge(0);
-                  cookie.setPath("/");
-                  response.addCookie(cookie);
-                  break;
+                    cookie.setValue(null);
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                    break;
                 }
             }
         }

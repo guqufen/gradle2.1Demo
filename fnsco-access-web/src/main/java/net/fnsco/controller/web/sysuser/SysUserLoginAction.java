@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.api.sysuser.SysUserService;
 import net.fnsco.core.base.BaseController;
-import net.fnsco.core.base.CoreConstants;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.CookieUtils;
 import net.fnsco.service.domain.SysUser;
 
