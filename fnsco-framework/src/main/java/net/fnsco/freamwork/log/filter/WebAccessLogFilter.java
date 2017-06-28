@@ -67,7 +67,7 @@ public class WebAccessLogFilter extends RequestContextFilter {
     /** 开关 */
     private boolean filterApplied = true;
 
-    static {
+  /*  static {
         try {
             ClassPathResource resource = new ClassPathResource(DEFAULT_STRATEGIES_PATH);
             bizParamNames = PropertiesLoaderUtils.loadProperties(resource);
@@ -80,7 +80,7 @@ public class WebAccessLogFilter extends RequestContextFilter {
         } catch (IOException ex) {
             LoggerUtils.debug(LOGGER, "Could not load 'webParameter.properties': " + ex.getMessage());
         }
-    }
+    }*/
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
