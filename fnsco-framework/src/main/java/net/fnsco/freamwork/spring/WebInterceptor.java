@@ -53,15 +53,15 @@ public class WebInterceptor implements HandlerInterceptor {
                 flag = false;
             }
         }
-        if (flag) {
-            logger.warn("未登录转入登录页面");
-            if (Strings.isNullOrEmpty(requestType)) {
-                response.sendRedirect("/login.html");
-            } else {
-                OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_EMPTY);
-            }
-            return false;
-        }
+//        if (flag) {
+//            logger.warn("未登录转入登录页面");
+//            if (Strings.isNullOrEmpty(requestType)) {
+//                response.sendRedirect("/login.html");
+//            } else {
+//                OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_EMPTY);
+//            }
+//            return false;
+//        }
         return true;
     }
 
