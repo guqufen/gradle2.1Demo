@@ -150,135 +150,122 @@
 		                    </div>
 		                    <div role="tabpanel" class="tab-pane" id="profile">
 		                    <table class="table table-bordered">
-		                      <thead>
-		                          <th>材料名称</th>
-		                          <th>操作</th>
-		                      </thead>
-		                      <tr>
-		                          <td>银行卡正面</td>
-		                          <td><input type="file" name="file" id="uploadify_file1100" style="display: none">
-										<p>
-											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1100" onclick="fileUp(1100);" class="uploadify-button" style="display: none;background-color:#505050"/>
-										</p>	                          
-		                          </td>
-		                      </tr>
-		                      <tr>
-		                          <td>银行卡反面</td>
-		                          <td>
+		                      	<thead>
+		                          	<th style="width: 30%">材料名称</th>
+		                          	<th style="width: 40%">文件名</th>
+		                          	<th style="width: 30%">操作</th>
+		                      	</thead>
+		                      	<tr>
+		                          	<td>银行卡正面</td>
+		                          	<td><div id="view1100"></div><div id="fileQueue1100"></div></td>
+		                          	<td>
+		                          		<input type="file" name="file" id="uploadify_file1100" style="display: none">
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1100" onclick="fileUp(1100);" style="display: none;"/>                          
+		                          	</td>
+		                      	</tr>
+		                      	<tr>
+									<td>银行卡反面</td>
+									<td><div id="view1101"></div><div id="fileQueue1101"></div></td>
+									<td>
 		                          	<input type="file" name="file" id="uploadify_file1101" style="display: none">
-		                          	<p>
-											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1101" onclick="fileUp(1101);" style="display: none"/>
-									</p>
+		                          	<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1101" onclick="fileUp(1101);" style="display: none"/>
 		                          </td>
-		                      </tr>
-		                      <tr>
-		                          <td>手持身份证、银行卡</td>
-		                          <td>
+		                      	</tr>
+		                      	<tr>
+		                          	<td>手持身份证、银行卡</td>
+		                          	<td><div id="view1190"></div><div id="fileQueue1190"></div></td>
+		                          	<td>
 		                           		<input type="file" name="file" id="uploadify_file1190" style="display: none">
-		                           		<p>
-											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1190" onclick="fileUp(1190);" style="display: none"/>
-										</p>
-		                          </td>
-		                      </tr>
-		                      <tr>
-		                          <td>营业执照</td>
-		                          <td>
+		                           		<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1190" onclick="fileUp(1190);" style="display: none"/>
+		                          	</td>
+		                      	</tr>
+		                      	<tr>
+		                          	<td>营业执照</td>
+		                          	<td><div id="view1"></div><div id="fileQueue1"></div></td>
+		                          	<td>
 		                          		<input type="file" name="file" id="uploadify_file1" style="display: none" />
-		                          		<p>
-											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1" onclick="fileUp(1);" style="display: none"/>
-										</p>
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1" onclick="fileUp(1);" style="display: none"/>
 		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>签约协议照片</td>
+		                          <td><div id="view2"></div><div id="fileQueue2"></div></td>
 		                          <td>
-		                        		  <input type="file" name="file" id="uploadify_file2" style="display: none" />
-		                        		  <p>
-											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first2" onclick="fileUp(2);" style="display: none"/>
-										  </p>
+		                        		<input type="file" name="file" id="uploadify_file2" style="display: none" />
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first2" onclick="fileUp(2);" style="display: none"/>
 		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>入账人身份证正面</td>
+		                          <td><div id="view300"></div><div id="fileQueue300"></div></td>
 		                          <td>
 		                          	<input type="file" name="file" id="uploadify_file300" style="display: none" >
-		                          	<p>
-											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first300" onclick="fileUp(300);" style="display: none"/>
-									</p>
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first300" onclick="fileUp(300);" style="display: none"/>
 		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>入账人身份证反面</td>
+		                          <td><div id="view301"></div><div id="fileQueue301"></div></td>
 		                          <td>
-			                          <input type="file" name="file" id="uploadify_file301" style="display: none">
-		                          	  <p>
-											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first301" onclick="fileUp(301);" style="display: none"/>
-									 </p>
+			                          	<input type="file" name="file" id="uploadify_file301" style="display: none">
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first301" onclick="fileUp(301);" style="display: none"/>
 		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>房屋租赁合同照片</td>
+		                          <td><div id="view4"></div><div id="fileQueue4"></div></td>
 		                          <td><input type="file" name="file" id="uploadify_file4" style="display: none">
-		                          	<p>
-											<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first4" onclick="fileUp(4);" style="display: none"/>
-									 </p>
+										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first4" onclick="fileUp(4);" style="display: none"/>
 		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>法人身份证照片</td>
+		                          <td><div id="view6"></div><div id="fileQueue6"></div></td>
 		                          <td>
 		                          <input type="file" name="file" id="uploadify_file6" style="display: none" >
-		                         	 <p>
 										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first6" onclick="fileUp(6);" style="display: none"/>
-									 </p>
 		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>商户信息登记表照片</td>
+		                          <td><div id="view7"></div><div id="fileQueue7"></div></td>
 		                          <td><input type="file" name="file" id="uploadify_file7" style="display: none">
-		                          	<p>
 										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first7" onclick="fileUp(7);" style="display: none"/>
-									 </p>
 		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>组织机构代码证照片</td>
+		                          <td><div id="view8"></div><div id="fileQueue8"></div></td>
 		                          <td><input type="file" name="file" id="uploadify_file8" style="display: none">
-		                          	<p>
 										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first8" onclick="fileUp(8);" style="display: none"/>
-									 </p>
 		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>店面外景</td>
+		                          <td><div id="view900"></div><div id="fileQueue900"></div></td>
 		                          <td><input type="file" name="file" id="uploadify_file900" style="display: none">
-		                            <p>
 										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first900" onclick="fileUp(900);" style="display: none"/>
-									 </p>
 		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>店面内景</td>
+		                          <td><div id="view901"></div><div id="fileQueue901"></div></td>
 		                          <td><input type="file" name="file" id="uploadify_file901" style="display: none">
-		                           <p>
 										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first901" onclick="fileUp(901);" style="display: none"/>
-									 </p>
 		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>收银台照</td>
+		                          <td><div id="view902"></div><div id="fileQueue902"></div></td>
 		                          <td><input type="file" name="file" id="uploadify_file902" style="display: none" >
-		                           <p>
 										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first902" onclick="fileUp(902);" style="display: none"/>
-									 </p>
 		                          </td>
 		                      </tr>
 		                      <tr>
 		                          <td>税务登记证照片</td>
+		                          <td><div id="view10"></div><div id="fileQueue10"></div></td>
 		                          <td><input type="file" name="file" id="uploadify_file10" style="display: none">
-		                           <p>
 										<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first10" onclick="fileUp(10);" style="display: none"/>
-									 </p>
 		                          </td>
 		                      </tr>
 		                    </table>
@@ -444,6 +431,7 @@
 		                </div>
 		            </div>
 		            <input type="hidden" id="innoCode" name="innerCode">
+		            <input type="hidden" id="fileIds" name="fileIds">
 		            <!-- <div class="modal-footer">
 		                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		                <button type="button" class="btn btn-primary">Save changes</button>
@@ -485,10 +473,10 @@
     function operateFormatter(value, row, index) {
         return [
             '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
-            '<i class="glyphicon glyphicon-pencil"></i>编辑',
+            '<i class="glyphicon glyphicon-pencil"></i>',
             '</a>  ',
             '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
-            '<i class="glyphicon glyphicon glyphicon-trash"></i>删除',
+            '<i class="glyphicon glyphicon glyphicon-trash"></i>',
             '</a>'
         ].join('');
     }
@@ -671,8 +659,10 @@
 	   $('#uploadify_file'+num).uploadify({
 		   //指定swf文件
 	       'swf': 'js/uploadify-v3.1/uploadify.swf',
+	       //指定显示的id
+	       'queueID' : 'fileQueue'+num,
 	       //后台处理的页面
-	       'uploader': '/fileInfo/Import', 
+	       'uploader': '/web/fileInfo/Import', 
 	       //按钮显示的文字
 	       'buttonText': '上传图片',
 	     //在浏览窗口底部的文件类型下拉菜单中显示的文本
@@ -686,14 +676,49 @@
 	           'fileTypeKey':num,"innerCode":inno_code
 	       },
 	       'onUploadSuccess':function ( file, response, data) {
-	    	   $('#uploadify_file'+num).hide();
-	    	   var obj = eval('(' + response + ')');
-	    	   console.log(obj.url+":"+obj.id);
+	    	   	var obj = eval('(' + response + ')');
+				var fileName = file.name.replace(',','');
+	       		$('#view'+num).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
+							"<a class='previewfileImg' id='previewfileImg"+obj.id+"' title='预览'><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
+							"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"',"+num+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" +
+
+							"</div>");
+
+	    	   	$('#uploadify_file'+num).hide();
+	    	   	$('#fileQueue'+num).html('');
+	    	   	var fileIds = $('#fileIds').val();
+	    	   	if(fileIds)
+	    	   	{
+	    	   		$('#fileIds').val(fileIds+','+obj.id);
+	    	   	}
+	    	   	else
+	    	   	{
+	    	   		$('#fileIds').val(obj.id);
+	    	   	}	
 	       },
 	       'onUploadError': function(file,errorCode,errorMsg,errorString) {
 				alert(errorCode+"."+errorMsg+""+errorString);
 
 			}
+	   });
+   }
+   
+   //删除图片
+   function deleteImage(queueId,id,url,num)
+   {
+	   $.ajax({
+		   url:'/web/fileInfo/delete',
+		   data:{'id':id,'url':url},
+		   type:'POST',
+		   success:function(data){
+			   if(data)
+			   {
+				   $('#file'+num).remove();
+				   alert('删除成功');
+				   $(queueId).parent().parent().parent().next().find('.uploadify').show();
+				   $(queueId).parent().parent().html('');
+			   }	   
+		   }
 	   });
    }
    //点击获取innocode
@@ -702,7 +727,7 @@
 	   var code = '';
 	   if(!$('#innoCode').val()){
 		   $.ajax({
-			   url:'/fileInfo/getInnoCode',
+			   url:'/web/fileInfo/getInnoCode',
 			   type:'POST',
 			   success:function(data){
 				   $('#innoCode').val(data);

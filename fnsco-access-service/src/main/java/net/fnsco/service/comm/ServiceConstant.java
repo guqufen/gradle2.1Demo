@@ -5,9 +5,9 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-public class Constant {
+public class ServiceConstant {
     public static String              STR_1            = "1";
-    public static String              STR_0            = "1";
+    public static String              STR_0            = "0";
 
     //支付类型
     public static Map<String, String> PAY_TYPE_MAP     = Maps.newHashMap();
@@ -30,8 +30,6 @@ public class Constant {
         PAY_SUB_TYPE_MAP.put("4", "04");
         PAY_SUB_TYPE_MAP.put("5", "05");
         PAY_SUB_TYPE_MAP.put("6", "06");
-        PAY_SUB_TYPE_MAP.put("", "");
-        PAY_SUB_TYPE_MAP.put(null, "");
     }
 
     public static enum PayTypeEnum {

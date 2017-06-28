@@ -12,7 +12,7 @@ import net.fnsco.controller.app.jo.MerchantJO;
 import net.fnsco.core.base.BaseController;
 
 @RestController
-@RequestMapping(value = "/open/merchant")
+@RequestMapping(value = "/open/merchant", method = RequestMethod.POST)
 public class MerchantController extends BaseController {
     @Autowired
     private MerchantService merchantService;
@@ -23,7 +23,7 @@ public class MerchantController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getMerCode", method = RequestMethod.POST)
+    @RequestMapping(value = "/getMerCode")
     @ApiOperation(value = "获取商户编号")
     public String getMerCode(@RequestBody MerchantJO merchant) {
         String randomCode = merchantService.getMerCode(merchant.getMerCode(), merchant.getChannelType());

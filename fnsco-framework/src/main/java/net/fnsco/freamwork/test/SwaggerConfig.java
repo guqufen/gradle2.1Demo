@@ -42,8 +42,8 @@ public class SwaggerConfig {
      *
      */
     @Bean
-    public Docket testApi() {
-        return new Docket(DocumentationType.SWAGGER_2).groupName("交易").genericModelSubstitutes(DeferredResult.class)
+    public Docket appApi() {
+        return new Docket(DocumentationType.SWAGGER_2).groupName("app访问").genericModelSubstitutes(DeferredResult.class)
             //                .genericModelSubstitutes(ResponseEntity.class)
             .useDefaultResponseMessages(false).forCodeGeneration(true).pathMapping("/")// base，最终调用接口后会和paths拼接在一起
             .select().paths(or(regex("/app/.*")))//过滤的接口
@@ -51,11 +51,20 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public Docket demoApi() {
-        return new Docket(DocumentationType.SWAGGER_2).groupName("用户管理").genericModelSubstitutes(DeferredResult.class)
+    public Docket webApi() {
+        return new Docket(DocumentationType.SWAGGER_2).groupName("web访问").genericModelSubstitutes(DeferredResult.class)
             //              .genericModelSubstitutes(ResponseEntity.class)
             .useDefaultResponseMessages(false).forCodeGeneration(false).pathMapping("/")//base
             .select().paths(or(regex("/web/.*")))//过滤的接口
+            .build().apiInfo(demoApiInfo());
+    }
+
+    @Bean
+    public Docket openApi() {
+        return new Docket(DocumentationType.SWAGGER_2).groupName("开放接口").genericModelSubstitutes(DeferredResult.class)
+            //              .genericModelSubstitutes(ResponseEntity.class)
+            .useDefaultResponseMessages(false).forCodeGeneration(false).pathMapping("/")//base
+            .select().paths(or(regex("/open/.*")))//过滤的接口
             .build().apiInfo(demoApiInfo());
     }
 

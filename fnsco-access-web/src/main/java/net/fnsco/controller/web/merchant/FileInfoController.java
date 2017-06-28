@@ -26,14 +26,14 @@ import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
-import net.fnsco.service.domain.MerchantFile;
-import net.fnsco.service.domain.SysUser;
+import net.fnsco.service.domain.MerchantFileTemp;
 /**
  * @desc 文件上传控制器
  * @author tangliang
  * @date 2017年6月21日 上午10:57:41
  */
 @Controller
+@RequestMapping("/web/fileInfo")
 public class FileInfoController extends BaseController{
 
 	@Autowired
@@ -43,7 +43,7 @@ public class FileInfoController extends BaseController{
 	private MerchantInfoService merchantInfoService;
 
 	// 列表页
-	@RequestMapping("/fileInfo/list")
+	@RequestMapping("/list")
 	public String list() {
 		return "ups/control/fileUploadView";
 	}
@@ -53,14 +53,14 @@ public class FileInfoController extends BaseController{
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping("/fileInfo/getInnoCode")
+	@RequestMapping("/getInnoCode")
 	public String getInnoCode(){
 		return CodeUtil.generateMerchantCode("F");
 	}
 
 
 	@ResponseBody
-	@RequestMapping(value = "/fileInfo/Import", produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "/Import", produces = "text/html;charset=UTF-8")
 	public String Import(HttpServletRequest req, HttpServletResponse response) {
 		return commImport(req, response, false);
 	}
@@ -70,7 +70,22 @@ public class FileInfoController extends BaseController{
 	public String appImport(HttpServletRequest req, HttpServletResponse response) {
 		return commImport(req, response, true);
 	}
-
+	/**
+	 * 删除
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/delete")
+	@ResponseBody
+	public String deleteImger(Integer id,String url){
+		//删除服务器已经保存的对应图片
+		boolean re = merchantInfoService.deleteFromDB(id,url);
+		if(re){
+			return "true";
+		}
+		return "false";
+	}
+	
 	/**
 	 * @param req
 	 * @param response
@@ -84,7 +99,7 @@ public class FileInfoController extends BaseController{
 			// 上传文件原名
 			MultipartFile file = entity.getValue();
 
-			MerchantFile fileInfo = new MerchantFile();
+			MerchantFileTemp fileInfo = new MerchantFileTemp();
 			String innerCode = req.getParameter("innerCode");
 			String fileType = req.getParameter("fileTypeKey");
 			String fileName = file.getOriginalFilename();
@@ -114,7 +129,6 @@ public class FileInfoController extends BaseController{
 				logger.info("月份目录已存在");
 			}
 
-			// String str = year+"/"+month+"/";
 			String yearMonthPath = year + line + month + line;
 			String filepath = yearMonthPath + System.currentTimeMillis() + "." + prefix;
 
@@ -123,11 +137,9 @@ public class FileInfoController extends BaseController{
 			if (!file.isEmpty()) {
 				try {
 					byte[] bytes = file.getBytes();
-
 					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileURL));
 					stream.write(bytes);
 					stream.close();
-
 					String newUrl = null;
 
 					if(!isApp){
@@ -140,8 +152,6 @@ public class FileInfoController extends BaseController{
 						if(!"/".equals(line)){
 							newUrl = StringUtils.replace(filepath, line, "/");
 						}
-
-//						fileInfo.setSaveURL(newUrl);
 					}
 
 					fileInfo.setInnerCode(innerCode);
@@ -149,7 +159,6 @@ public class FileInfoController extends BaseController{
 					fileInfo.setFileType(fileType);
 					fileInfo.setFileName(fileName);
 					fileInfo.setCreateTime(new Date());
-//					SysUser loginUser = (SysUser)getSessionUser();
 					ResultDTO<Integer> result = merchantInfoService.doAddToDB(fileInfo,0);
 					if (result.isSuccess()) {
 						ResultDTO<TreeMap<String, String>> appResult = new ResultDTO<>();
@@ -158,7 +167,7 @@ public class FileInfoController extends BaseController{
 
 						TreeMap<String, String> paras = new TreeMap<>();
 
-						paras.put("id", String.valueOf(fileInfo.getId()));
+						paras.put("id", String.valueOf(result.getData()));
 						paras.put("url", newUrl);
 						paras.put("fileType", fileType);
 

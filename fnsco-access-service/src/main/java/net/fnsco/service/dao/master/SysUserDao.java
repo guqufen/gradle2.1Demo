@@ -1,5 +1,7 @@
 package net.fnsco.service.dao.master;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.service.domain.SysUser;
 
 /**
@@ -27,4 +29,11 @@ public interface SysUserDao {
      * @return
      */
     SysUser getIdBy(SysUser record);
+    
+    /**
+     * 根据用户名查询实体
+     * @param name
+     * @return
+     */
+    SysUser getUserByName(@Param("name") String name);
 }
