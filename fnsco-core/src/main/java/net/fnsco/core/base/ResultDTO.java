@@ -15,7 +15,6 @@ public class ResultDTO<T extends Object> extends DTO {
     private T                 data;
 
     public ResultDTO() {
-        this.data = (T) new Object();
         this.code = "";
         this.message = "";
     }
@@ -28,7 +27,7 @@ public class ResultDTO<T extends Object> extends DTO {
     }
 
     public static ResultDTO success() {
-        return success(new Object());
+        return success(null);
     }
 
     public static ResultDTO success(String data) {
@@ -43,7 +42,7 @@ public class ResultDTO<T extends Object> extends DTO {
     }
 
     public static ResultDTO fail(String code) {
-        ResultDTO result = new ResultDTO(false, new Object(), code, CoreConstants.ERROR_MESSGE_MAP.get(code));
+        ResultDTO result = new ResultDTO(false, null, code, CoreConstants.ERROR_MESSGE_MAP.get(code));
         return result;
     }
 
