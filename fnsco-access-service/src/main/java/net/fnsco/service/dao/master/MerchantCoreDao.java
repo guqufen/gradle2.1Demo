@@ -3,6 +3,7 @@ package net.fnsco.service.dao.master;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.service.domain.MerchantCore;
@@ -65,4 +66,14 @@ public interface MerchantCoreDao {
      * @return
      */
     MerchantCore queryAllById(Integer id);
+    /**
+     * 
+     * queryAllByUseraId:(这里用一句话描述这个方法的作用) 根据登录的APPUSERID查询关联的商户实体
+     * @param userId
+     * @return    设定文件
+     * @return List<MerchantCore>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<MerchantCore> queryAllByUseraId(@Param("userId")Integer userId);
 }

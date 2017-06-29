@@ -11,29 +11,31 @@ import net.fnsco.service.dao.master.SysUserDao;
 import net.fnsco.service.domain.SysUser;
 
 @Controller
-public class IndexController extends BaseController{
-	
-	@Autowired
-	private SysUserDao sysUserDao;
-	/**
-	 * 进入首页
-	 * @param rep
-	 * @param res
-	 * @return
-	 */
+public class IndexController extends BaseController {
+
+    @Autowired
+    private SysUserDao sysUserDao;
+
+    /**
+     * 进入首页
+     * @param rep
+     * @param res
+     * @return
+     */
     @RequestMapping("/")
-    public String index(HttpServletRequest rep,HttpServletResponse res) {
-    	
-    	Object obj = getSessionUser();
-    	if(null == obj)
-    	{
-    		Object cookeiUser = getCookieUser();
-    		if(null == cookeiUser){return "redirect:/login.html";}
-    		
-    		String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#")+1, cookeiUser.toString().length());
-    		SysUser sysUser = sysUserDao.getUserByName(userName);
-    		setSessionUser(sysUser);
-    	}	
+    public String index(HttpServletRequest rep, HttpServletResponse res) {
+
+        Object obj = getSessionUser();
+        if (null == obj) {
+            Object cookeiUser = getCookieUser();
+            if (null == cookeiUser) {
+                return "redirect:/login.html";
+            }
+
+            String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#") + 1, cookeiUser.toString().length());
+            SysUser sysUser = sysUserDao.getUserByName(userName);
+            setSessionUser(sysUser);
+        }
         return "redirect:/index.html";
     }
 }

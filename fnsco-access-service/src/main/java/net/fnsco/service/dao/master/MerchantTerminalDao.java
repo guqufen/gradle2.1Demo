@@ -1,5 +1,7 @@
 package net.fnsco.service.dao.master;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.service.domain.MerchantTerminal;
@@ -27,4 +29,14 @@ public interface MerchantTerminalDao {
      * @return
      */
     MerchantTerminal selectByInnerCode(@Param("innerCode")String innerCode);
+    /**
+     * selectByUserId:(这里用一句话描述这个方法的作用) 根据用户ID查询出所有的终端信息
+     *
+     * @param userId
+     * @return    设定文件
+     * @return List<MerchantTerminal>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<MerchantTerminal> selectByUserId(@Param("userId") Integer userId);
 }

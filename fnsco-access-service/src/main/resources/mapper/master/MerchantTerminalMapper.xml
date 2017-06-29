@@ -325,4 +325,19 @@
     from m_merchant_terminal
     where inner_code = #{innerCode,jdbcType=VARCHAR}
   </select>
+  <!-- 根据userId连表查询出终端信息 -->
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+		CO.*
+		FROM
+			m_merchant_terminal CO
+		RIGHT JOIN (
+			SELECT
+				*
+			FROM
+				m_merchant_user_rel
+			WHERE
+				app_user_id = #{userId}
+		) REL ON CO.inner_code = REL.inner_code
+  </select>
 </mapper>

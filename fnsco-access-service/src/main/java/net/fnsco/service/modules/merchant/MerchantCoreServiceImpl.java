@@ -82,10 +82,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 		int chan = merchantChannelDao.insertSelective(merchantChannel);
 		if(cor ==1 && con ==1 && ter == 1 && chan == 1){
 			fileHander(request);//处理文件
-			result.success("添加商户成功");
-		}else
-		{
-			result.fail("添加失败");
+			result.success();
+		}else{
+			result.fail();
 		}	
 		return result;
 	}
@@ -149,7 +148,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	public ResultDTO<MerchantCore> queryAllById(Integer id) {
 		// TODO Auto-generated method stub
 		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
-		result.success(merchantCoreDao.queryAllById(id));
+		result.setData(merchantCoreDao.queryAllById(id));
+//		result.success(merchantCoreDao.queryAllById(id));
 		return result;
 	}
 	/**
