@@ -51,7 +51,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		//对比验证码
 		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode(),appUserDTO.getMobile());
 		if(!res.isSuccess()){
-		    return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
+		    return res;
 		}
 		//判断是否已经注册
 		if(MappUserDao.getAppUserByMobile(appUserDTO.getMobile())!=null){
@@ -74,12 +74,10 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	//生产验证码
 	@Override
 	public void getValidateCode(AppUserDTO appUserDTO ) {
-		//String deviceId, int deviceType, String mobile
 		String deviceId=appUserDTO.getDeviceId();
-		String mobile=appUserDTO.getMobile();
+		final String mobile=appUserDTO.getMobile();
 		// 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        //               key    value
         SmsCodeDTO object=new SmsCodeDTO(code,System.currentTimeMillis());
         MsgCodeMap.put(mobile+deviceId,object);
          /**
@@ -90,15 +88,14 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
             public void run() {
                 try {
                     String callback = JavaSmsApi.Code(mobile, code);
-                    JSONObject callback_json = (JSONObject) JSONObject.parse(callback);
-                    String resultCode = callback_json.getString("code");
-                    //String msg = callback_json.getString("msg");
+                    JSONObject callbackJson = (JSONObject) JSONObject.parse(callback);
+                    String resultCode = callbackJson.getString("code");
                     if ("0".equals(resultCode)) {
                         logger.warn("验证码" + code + "已经发送至手机号" + mobile + "返回详情" + callback);
                     } else {
                         logger.warn("验证码" + code + "未能够发送至手机" + mobile + "错误code" + resultCode + ";错误详情" + callback);
                     }
-                } catch (IOException | URISyntaxException e) {
+                } catch (Exception e) {
                     logger.warn("验证码" + code + "未能够发送至手机" + mobile + "错误原因:异常错误");
                     logger.error("短信发送异常 ",e);
                 }
@@ -142,7 +139,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		//对比验证码
 		ResultDTO res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode(),appUserDTO.getMobile());
 		if(!res.isSuccess()){
-		    return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
+		    return res;
 		}
 		//密码更新失败
 		if(!MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),password)){
@@ -156,7 +153,6 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	@Transactional
 	public ResultDTO<String> modifyPassword(AppUserDTO appUserDTO){
 	    Integer id=appUserDTO.getId();
-	    ResultDTO<String> result=new  ResultDTO<String>();
 	    //非空判断
 	    if(id==null){
 	        return ResultDTO.fail(ApiConstant.E_APP_ID_EMPTY);
@@ -173,14 +169,14 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		 AppUser mAppUser=MappUserDao.selectById(id);
 		//查到的密码和原密码做比较
 		if(!oldPassword.equals(mAppUser.getPassword())){
-		    return result.fail(ApiConstant.E_OLDPASSWORD_ERROR);
+		    return ResultDTO.fail(ApiConstant.E_OLDPASSWORD_ERROR);
 		}
 		appUser.setPassword(password);
 		appUser.setId(id);
 		if(!MappUserDao.updateById(appUser)){
-		    return result.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
+		    return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
 		}
-		return result.success();
+		return ResultDTO.success();
 	}
 	
 	//根据手机号码和密码登录
