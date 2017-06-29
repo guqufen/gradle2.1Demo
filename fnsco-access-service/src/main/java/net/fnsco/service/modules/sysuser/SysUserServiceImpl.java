@@ -37,11 +37,10 @@ public class SysUserServiceImpl extends BaseService implements SysUserService {
 		adminUser.setPassword(pwd);
 		SysUser auser = adminUserDao.getIdBy(adminUser);
 		if (auser == null) {
-			return result.setError("用户名或者密码不正确");
+			return result.fail("用户名或者密码不正确");
 		}
-		result.setData(auser);
 		// 写到缓存
-		return result.setSuccess("登录成功");
+		return result.success(auser);
 	}
 
 }

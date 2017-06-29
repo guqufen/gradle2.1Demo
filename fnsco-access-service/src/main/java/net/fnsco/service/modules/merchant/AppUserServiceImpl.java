@@ -5,18 +5,21 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Strings;
 
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.SmsCodeDTO;
 import net.fnsco.api.merchant.AppUserService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.sms.JavaSmsApi;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.service.dao.master.AppUserDao;
@@ -26,7 +29,7 @@ import net.fnsco.service.domain.AppUser;
 public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	
 	private static final Logger logger = LoggerFactory.getLogger(AppUserServiceImpl.class);
-			
+  			
 	private static Map<String, SmsCodeDTO> MsgCodeMap = new HashMap<>();//存放验证码的
 	
 	@Autowired
@@ -36,15 +39,24 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	public ResultDTO<AppUser> insertAppUser(AppUserDTO appUserDTO){
 		//数据库实体类
 		ResultDTO<AppUser> result=new ResultDTO<AppUser>();
+		//非空判断
+        if(Strings.isNullOrEmpty(appUserDTO.getMobile())||Strings.isNullOrEmpty(appUserDTO.getPassword())||Strings.isNullOrEmpty(appUserDTO.getCode())){
+            return result.setError(CoreConstants.E_COMM_BUSSICSS, "手机号或密码或验证码为空");
+        }
 		//对比验证码
 		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode());
 		if(!res.isSuccess()){
-			result.setError(1, "验证码错误");
+			result.fail();
 			return result;
 		}
 		//判断是否已经注册
 		if(MappUserDao.getAppUserByMobile(appUserDTO.getMobile())!=null){
-			 return result.setError("1","该用户已经注册");
+			 return result.fail();
+		    return result.setError(CoreConstants.E_COMM_BUSSICSS, "验证码错误");
+		}
+		//判断是否已经注册
+		if(MappUserDao.getAppUserByMobile(appUserDTO.getMobile())!=null){
+			return result.setError(CoreConstants.E_COMM_BUSSICSS,"该用户已经注册");
 		}
 		AppUser appUser=new AppUser();
 		appUser.setDeviceId(appUserDTO.getDeviceId());
@@ -54,11 +66,12 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		appUser.setPassword(password);
 		if(!MappUserDao.insertSelective(appUser)){
-			result.setCode("1");
-			result.setError("注册失败");
+//			result.setCode("1");
+			result.fail("注册失败");
+		    return result.setError(CoreConstants.E_COMM_BUSSICSS,"注册失败");
 		}
-		result.setCode("0");
-		result.setSuccess("注册成功");
+//		result.setCode("0");
+		result.success("注册成功");
 		return result;
 	}
 
@@ -99,8 +112,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	}
 
 	//验证码对比
-	@Override
-	public ResultDTO<String> validateCode(String deviceId, String code) {
+	private ResultDTO<String> validateCode(String deviceId, String code) {
 		ResultDTO<String> result = new ResultDTO<>();
 		//从Map中根据手机号取到存入的验证码
 		SmsCodeDTO codeDto= MsgCodeMap.get(deviceId);
@@ -108,18 +120,19 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		long newTime = System.currentTimeMillis();
 		//验证码超过30分钟
 		if((newTime-codeDto.getTime())/1000/60>30){
-			result.setError(1, "验证码超过有效时间");
+			result.fail("1");
 			MsgCodeMap.remove(deviceId);
-			return result;
+			return result.setError(CoreConstants.E_COMM_BUSSICSS, "验证码超过有效时间");
 		}
 		
 		if(!code.equals(codeDto.getCode())){
-			result.setError(1, "验证码错误");
+			result.fail( "1验证码错误");
+			return result.setError(CoreConstants.E_COMM_BUSSICSS, "验证码错误");
 		}
 		//从map从移除验证码
 		MsgCodeMap.remove(deviceId);
-		result.setCode("0");
-		result.setSuccess("成功");
+//		result.setCode("0");
+		result.success("成功");
 		return result;
 	}
 
@@ -127,45 +140,65 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	@Override
 	public ResultDTO<String> findPassword(AppUserDTO appUserDTO) {
 		ResultDTO<String> result = new ResultDTO<>();
+		//非空判断
+        if(Strings.isNullOrEmpty(appUserDTO.getDeviceId())||Strings.isNullOrEmpty(appUserDTO.getPassword())||Strings.isNullOrEmpty(appUserDTO.getCode())){
+            return result.setError(CoreConstants.E_COMM_BUSSICSS, "手机号或验证码或密码为空");
+        }
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		//对比验证码
 		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode());
 		if(!res.isSuccess()){
-			result.setError(1, "验证码错误");
+			result.fail("1");
 			return result;
 		}
 		//密码更新
 		if(MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),password)){
-			result.setCode("0");
-			result.setSuccess("修改密码成功");
+//			result.setCode("0");
+			result.success("修改密码成功");
 		}else{
-			result.setError(1, "修改密码失败");
+			result.fail("修改密码失败");
+		    return result.setError(CoreConstants.E_COMM_BUSSICSS, "验证码错误");
 		}
+		//密码更新失败
+		if(!MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),password)){
+		    return  result.setError(CoreConstants.E_COMM_BUSSICSS, "修改密码失败");
+		}
+		result.setCode("0");
+        result.setSuccess("修改密码成功");
 		return result;
 	}
 
 	//修改密码
 	@Override
 	public ResultDTO<String> modifyPassword(AppUserDTO appUserDTO){
+	    ResultDTO<String> result=new ResultDTO<String>();
+	    Integer id=appUserDTO.getId();
+	    //非空判断
+	    if(id==null){
+	        return result.setError(CoreConstants.E_COMM_BUSSICSS, "id为空");
+	    }
+        if(Strings.isNullOrEmpty(appUserDTO.getPassword())||Strings.isNullOrEmpty(appUserDTO.getOldPassword())){
+            return result.setError(CoreConstants.E_COMM_BUSSICSS, "手机号或密码为空");
+        }
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		String oldPassword=Md5Util.getInstance().md5(appUserDTO.getOldPassword());
-		Integer id=appUserDTO.getId();
 		AppUser appUser=new AppUser();
-		ResultDTO<String> result=new ResultDTO<String>();
-		//根据手机号查询用户是否存在获取原密码
+		//根据id查询用户是否存在获取原密码
 		 AppUser mAppUser=MappUserDao.selectById(id);
 		//查到的密码和原密码做比较
 		if(!oldPassword.equals(mAppUser.getPassword())){
-			return result.setError(1,"原密码输入错误,请重新输入");
+			return result.fail("原密码输入错误,请重新输入");
+			return result.setError(CoreConstants.E_COMM_BUSSICSS,"原密码输入错误,请重新输入");
 		}
 		appUser.setPassword(password);
 		appUser.setId(id);
 		if(!MappUserDao.updateById(appUser)){
-			result.setCode("1");
-			result.setSuccess("修改密码失败");
+//			result.setCode("1");
+			result.success("修改密码失败");
+		    return result.setError(CoreConstants.E_COMM_BUSSICSS, "修改密码失败");
 		}
-		result.setCode("0");
-		result.setSuccess("修改密码成功");
+//		result.setCode("0");
+		result.success("修改密码成功");
 		return result;
 	}
 	
@@ -173,18 +206,25 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	@Override
 	public ResultDTO<String> loginByMoblie(AppUserDTO appUserDTO){
 		ResultDTO<String> result = new ResultDTO<>();
-		String mobile=appUserDTO.getMobile();
+		//非空判断
+        if(Strings.isNullOrEmpty(appUserDTO.getMobile())||Strings.isNullOrEmpty(appUserDTO.getPassword())){
+            return result.setError(CoreConstants.E_COMM_BUSSICSS, "手机号或密码为空");
+        }
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		AppUser appUser=MappUserDao.getAppUserByMobile(mobile);
 		if(password.equals(appUser.getPassword())){
-			result.setCode("0");
-			result.setSuccess("登录成功");
+//			result.setCode("0");
+			result.success("登录成功");
 		}else{
-			result.setError(1, "登录失败");
+			result.fail("登录失败");
+		AppUser appUser=MappUserDao.getAppUserByMobile(appUserDTO.getMobile());
+		if(!password.equals(appUser.getPassword())){
+			return result.setError(CoreConstants.E_COMM_BUSSICSS, "登录失败");
 		}
+		result.setCode("0");
+		result.setSuccess("登录成功");
 		return result;
 	}
-
 
 }
 

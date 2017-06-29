@@ -42,8 +42,7 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 		
 		if(StringUtils.isEmpty(fileInfo.getInnerCode()) || StringUtils.isEmpty(fileInfo.getFileType()))
 		{
-			result.setError();
-			return result.setError("添加失败");
+			return result.fail();
 		}	
 		
 		MerchantFileTemp fileInfo_con = new MerchantFileTemp();
@@ -65,12 +64,10 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 		}	
 		
 		if (res_db != 1) {
-			result.setError();
-			return result.setError("添加失败");
+			return result.fail();
 		}
 		List<MerchantFileTemp> fileTemp = merchantFileInfoDao.queryByCondition(fileInfo_con);
-		result.setData(fileTemp.get(0).getId());
-		return result.setSuccess("添加成功");
+		return result.success(fileTemp.get(0).getId());
 	}
 	
 	/**

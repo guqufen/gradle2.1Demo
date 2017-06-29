@@ -1,8 +1,7 @@
-package net.fnsco.freamwork.spring;
+package net.fnsco.freamwork.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +16,7 @@ import com.google.common.base.Strings;
 
 import net.fnsco.freamwork.aop.OutWriterUtil;
 import net.fnsco.freamwork.comm.FrameworkConstant;
+import net.fnsco.freamwork.comm.Md5Util;
 
 /**
  * 检查登录情况
@@ -25,17 +25,22 @@ import net.fnsco.freamwork.comm.FrameworkConstant;
  *
  */
 @Component
-public class WebInterceptor implements HandlerInterceptor {
-    private Logger             logger   = LoggerFactory.getLogger(WebInterceptor.class);
-    public static final String USER_KEY = "SESSION_USER_KEY";
+public class AppInterceptor implements HandlerInterceptor {
+    private Logger      logger = LoggerFactory.getLogger(AppInterceptor.class);
+
     @Autowired
-    private Environment        env;
+    private Environment env;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String isAuthor = env.getProperty(FrameworkConstant.APP_IS_AUTHOR);
+        if (FrameworkConstant.IS_AUTHOR.equals(isAuthor)) {
+            return true;
+        }
         String requestUrl = request.getRequestURL().toString();
         // 从配置文件中获取浙付通接口模块,不需要被拦截
-        String appModules = env.getProperty("web.ignore.url");
+        String appModules = env.getProperty("app.ignore.url");
+
         if (!Strings.isNullOrEmpty(appModules)) {
             String[] modules = appModules.split(",");
             for (String module : modules) {
@@ -44,24 +49,19 @@ public class WebInterceptor implements HandlerInterceptor {
                 }
             }
         }
-        HttpSession session = request.getSession(false);
-        String requestType = request.getHeader("X-Requested-With");
-        boolean flag = true;
-        if (null != session) {
-            Object obj = session.getAttribute(USER_KEY);
-            if (obj != null) {
-                flag = false;
-            }
+        String tokenId = request.getHeader("tokenId");
+        if (Strings.isNullOrEmpty(tokenId)) {
+            OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_EMPTY);
+            return false;
         }
-//        if (flag) {
-//            logger.warn("未登录转入登录页面");
-//            if (Strings.isNullOrEmpty(requestType)) {
-//                response.sendRedirect("/login.html");
-//            } else {
-//                OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_EMPTY);
-//            }
-//            return false;
-//        }
+        String identifier = request.getHeader("identifier");
+        String temp = FrameworkConstant.TOKEN_ID + identifier;
+        String trueTokenId = Md5Util.getInstance().md5(temp);
+        if (!trueTokenId.equals(tokenId)) {
+            logger.error("TokenId不对", "传入id为" + tokenId + "生成后的id为" + trueTokenId);
+            OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_ERROR);
+            return false;
+        }
         return true;
     }
 
