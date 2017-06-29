@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseService;
@@ -57,7 +58,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         randomCode = MerchantHelper.getMerCode();
         while (true) {
             List<Alias> list = aliasDAO.selectByRandomCode(randomCode);
-            if (org.springframework.util.CollectionUtils.isEmpty(list)) {
+            if (CollectionUtils.isEmpty(list)) {
                 break;
             }
             randomCode = MerchantHelper.getMerCode();

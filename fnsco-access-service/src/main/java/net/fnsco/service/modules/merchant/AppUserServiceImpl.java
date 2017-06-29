@@ -46,15 +46,11 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		//对比验证码
 		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode());
 		if(!res.isSuccess()){
-		    return result.fail(CoreConstants.E_APP_CODE_ERROR);
+		    return result.fail(res.getCode());
 		}
 		//判断是否已经注册
 		if(MappUserDao.getAppUserByMobile(appUserDTO.getMobile())!=null){
 		    return result.fail(CoreConstants.E_COMM_BUSSICSS);
-		}
-		//判断是否已经注册
-		if(MappUserDao.getAppUserByMobile(appUserDTO.getMobile())!=null){
-			return result.fail(CoreConstants.E_APP_INSERT);
 		}
 		AppUser appUser=new AppUser();
 		appUser.setDeviceId(appUserDTO.getDeviceId());
@@ -115,7 +111,6 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		long newTime = System.currentTimeMillis();
 		//验证码超过30分钟
 		if((newTime-codeDto.getTime())/1000/60>30){
-			result.fail("1");
 			MsgCodeMap.remove(deviceId);
 			return result.fail(CoreConstants.E_APP_CODE_ERROR);
 		}
@@ -141,15 +136,9 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		//对比验证码
 		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode());
 		if(!res.isSuccess()){
-		    return result.fail(CoreConstants.E_APP_CODE_ERROR);
+		    return res;
 		}
 		//密码更新
-		if(MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),password)){
-			result.success("修改密码成功");
-		}else{
-		    return result.fail(CoreConstants.E_COMM_BUSSICSS);
-		}
-		//密码更新失败
 		if(!MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),password)){
 		    return result.fail(CoreConstants.E_APP_PASSWORD_ERROR);
 		}
@@ -183,7 +172,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		if(!MappUserDao.updateById(appUser)){
 		    return result.fail(CoreConstants.E_APP_MODIFYPASSWORD_ERROR);
 		}
-		result.success("修改密码成功");
+		result.success();
 		return result;
 	}
 	
@@ -197,10 +186,10 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
         }
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		AppUser appUser=MappUserDao.getAppUserByMobile(appUserDTO.getMobile());
-		if(password.equals(appUser.getPassword())){
-			result.success("登录成功");
+		if(!password.equals(appUser.getPassword())){
+			result.fail(CoreConstants.E_APP_NULLERROR);
 		}
-		result.success("登录成功");
+		result.success();
 		return result;
 	}
 

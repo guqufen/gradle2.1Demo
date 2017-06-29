@@ -75,6 +75,17 @@ public class ResultDTO<T extends Object> extends DTO {
         return data;
     }
 
+    /**
+     * code
+     *
+     * @return  the code
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getCode() {
+        return code;
+    }
+
      
     
     
