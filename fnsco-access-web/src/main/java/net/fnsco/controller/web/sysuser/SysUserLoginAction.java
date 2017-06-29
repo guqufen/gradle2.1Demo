@@ -44,7 +44,7 @@ public class SysUserLoginAction extends BaseController{
 		String username = req.getParameter("account");
 		String password = req.getParameter("password");
 		if (StringUtils.isEmpty(password)) {
-            result.setError("输入密码错误!");
+            result.fail("输入密码错误!");
             return "forward:/";
         }
 		

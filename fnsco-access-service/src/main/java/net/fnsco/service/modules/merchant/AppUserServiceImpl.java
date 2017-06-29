@@ -39,12 +39,12 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		//对比验证码
 		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode());
 		if(!res.isSuccess()){
-			result.setError(1, "验证码错误");
+			result.fail();
 			return result;
 		}
 		//判断是否已经注册
 		if(MappUserDao.getAppUserByMobile(appUserDTO.getMobile())!=null){
-			 return result.setError("1","该用户已经注册");
+			 return result.fail();
 		}
 		AppUser appUser=new AppUser();
 		appUser.setDeviceId(appUserDTO.getDeviceId());
@@ -54,11 +54,11 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		appUser.setPassword(password);
 		if(!MappUserDao.insertSelective(appUser)){
-			result.setCode("1");
-			result.setError("注册失败");
+//			result.setCode("1");
+			result.fail("注册失败");
 		}
-		result.setCode("0");
-		result.setSuccess("注册成功");
+//		result.setCode("0");
+		result.success("注册成功");
 		return result;
 	}
 
@@ -108,18 +108,18 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		long newTime = System.currentTimeMillis();
 		//验证码超过30分钟
 		if((newTime-codeDto.getTime())/1000/60>30){
-			result.setError(1, "验证码超过有效时间");
+			result.fail("1");
 			MsgCodeMap.remove(deviceId);
 			return result;
 		}
 		
 		if(!code.equals(codeDto.getCode())){
-			result.setError(1, "验证码错误");
+			result.fail( "1验证码错误");
 		}
 		//从map从移除验证码
 		MsgCodeMap.remove(deviceId);
-		result.setCode("0");
-		result.setSuccess("成功");
+//		result.setCode("0");
+		result.success("成功");
 		return result;
 	}
 
@@ -131,15 +131,15 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		//对比验证码
 		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode());
 		if(!res.isSuccess()){
-			result.setError(1, "验证码错误");
+			result.fail("1");
 			return result;
 		}
 		//密码更新
 		if(MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),password)){
-			result.setCode("0");
-			result.setSuccess("修改密码成功");
+//			result.setCode("0");
+			result.success("修改密码成功");
 		}else{
-			result.setError(1, "修改密码失败");
+			result.fail("修改密码失败");
 		}
 		return result;
 	}
@@ -156,16 +156,16 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		 AppUser mAppUser=MappUserDao.selectById(id);
 		//查到的密码和原密码做比较
 		if(!oldPassword.equals(mAppUser.getPassword())){
-			return result.setError(1,"原密码输入错误,请重新输入");
+			return result.fail("原密码输入错误,请重新输入");
 		}
 		appUser.setPassword(password);
 		appUser.setId(id);
 		if(!MappUserDao.updateById(appUser)){
-			result.setCode("1");
-			result.setSuccess("修改密码失败");
+//			result.setCode("1");
+			result.success("修改密码失败");
 		}
-		result.setCode("0");
-		result.setSuccess("修改密码成功");
+//		result.setCode("0");
+		result.success("修改密码成功");
 		return result;
 	}
 	
@@ -177,10 +177,10 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		AppUser appUser=MappUserDao.getAppUserByMobile(mobile);
 		if(password.equals(appUser.getPassword())){
-			result.setCode("0");
-			result.setSuccess("登录成功");
+//			result.setCode("0");
+			result.success("登录成功");
 		}else{
-			result.setError(1, "登录失败");
+			result.fail("登录失败");
 		}
 		return result;
 	}
