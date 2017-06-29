@@ -14,7 +14,11 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.service.domain.AppUser;
 /**
- *  by zhoujincheng
+ * @author   zhoujincheng
+ * @version  
+ * @since    Ver 1.1
+ * @Date	 2017 2017年6月28日 下午3:44:54
+ *
  */
 @RestController
 @RequestMapping(value="/app/user",method = RequestMethod.POST)
@@ -34,8 +38,9 @@ public class AppUserController extends BaseController{
 	@ResponseBody
 	@RequestMapping(value = "/getValidateCode")
 	@ApiOperation(value = "获取验证码")
-	public void getValidateCode(@RequestBody AppUserDTO appUserDTO){
+	public ResultDTO getValidateCode(@RequestBody AppUserDTO appUserDTO){
 		 appUserService.getValidateCode(appUserDTO);
+		 return success();
 	}
 				
 	//修改密码     旧密码和新密码
