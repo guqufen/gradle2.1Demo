@@ -2,14 +2,14 @@ package net.fnsco.core.base;
 
 import java.util.Map;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 
 import net.fnsco.core.constants.CoreConstants;
-
+@SuppressWarnings("unchecked")
 public class ResultDTO<T extends Object> extends DTO {
     private static final long serialVersionUID = -7387542509934814087L;
     private boolean           success;
+    
     private String            code;
     private String            message;
     private T                 data;

@@ -162,8 +162,8 @@ public class FileInfoController extends BaseController{
 					ResultDTO<Integer> result = merchantInfoService.doAddToDB(fileInfo,0);
 					if (result.isSuccess()) {
 						ResultDTO<TreeMap<String, String>> appResult = new ResultDTO<>();
-						appResult.setSuccess("上传成功");
-						appResult.setCode("200");
+//						appResult.success("上传成功");
+//						appResult.setCode("200");
 
 						TreeMap<String, String> paras = new TreeMap<>();
 
@@ -171,7 +171,7 @@ public class FileInfoController extends BaseController{
 						paras.put("url", newUrl);
 						paras.put("fileType", fileType);
 
-						appResult.setData(paras);
+						appResult.success(paras);
 
 //						String json = isApp?Result.toNewJson(appResult):Result.toNewJson(paras);//待定
 						String json = isApp?JSONArray.toJSONString(appResult):JSONArray.toJSONString(paras);
