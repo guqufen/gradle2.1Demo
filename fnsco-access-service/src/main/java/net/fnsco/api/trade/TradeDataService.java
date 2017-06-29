@@ -17,7 +17,7 @@ public interface TradeDataService {
      */
     List<TradeData> queryAllByCondition(TradeDataDTO merchantCore);
     /**
-     * queryMerchantCore:(这里用一句话描述这个方法的作用) web分页查询
+     * queryTradeData:(这里用一句话描述这个方法的作用) web分页查询
      * @param merchantCore
      * @param currentPageNum
      * @param perPageSize
@@ -26,6 +26,6 @@ public interface TradeDataService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ResultPageDTO<TradeData> queryMerchantCore(TradeDataDTO tradeDataDTO,int currentPageNum,int perPageSize);
+    ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO,int currentPageNum,int perPageSize);
 
 }

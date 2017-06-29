@@ -35,7 +35,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	@Autowired
 	private AppUserDao MappUserDao;
 	//注册
-	@Override
+    @Override
 	public ResultDTO<AppUser> insertAppUser(AppUserDTO appUserDTO){
 		//数据库实体类
 		ResultDTO<AppUser> result=new ResultDTO<AppUser>();

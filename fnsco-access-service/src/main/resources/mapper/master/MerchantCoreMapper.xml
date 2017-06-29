@@ -528,4 +528,19 @@
     from m_merchant_core
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <!-- 根据userId查询关联的商户实体 -->
+  <select id="queryAllByUseraId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+      SELECT
+			CO.*
+		FROM
+			m_merchant_core CO
+		RIGHT JOIN (
+			SELECT
+				*
+			FROM
+				m_merchant_user_rel
+			WHERE
+				app_user_id = #{userId}
+		) REL ON CO.inner_code = REL.inner_code
+  </select>
 </mapper>

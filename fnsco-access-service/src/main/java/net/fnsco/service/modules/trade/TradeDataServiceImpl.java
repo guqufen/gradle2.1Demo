@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.base.Strings;
 
 import net.fnsco.api.dto.TradeDataDTO;
 import net.fnsco.api.trade.TradeDataService;
@@ -16,11 +15,9 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DbUtil;
-import net.fnsco.service.comm.ServiceConstant;
 import net.fnsco.service.dao.master.MerchantChannelDao;
 import net.fnsco.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.service.domain.MerchantChannel;
-import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.trade.TradeData;
 
 /**
@@ -102,7 +99,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      * @date 2017年6月28日 下午5:13:54
      */
     @Override
-    public ResultPageDTO<TradeData> queryMerchantCore(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
+    public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
         
         TradeData tradeData = new TradeData();
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
