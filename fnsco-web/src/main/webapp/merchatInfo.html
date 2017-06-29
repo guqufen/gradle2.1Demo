@@ -13,6 +13,7 @@
     <link href="css/style.min.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
     <link href="js/uploadify-v3.1/uploadify.css">
+    <link rel="stylesheet" href="http://www.dowebok.com/demo/192/css/viewer.min.css">
 </head>
 <body class="gray-bg">
 <div class="panel-body animated fadeInRight">
@@ -84,8 +85,8 @@
 		                    <div role="tabpanel" class="tab-pane active" id="home">
 		                        <div class="row">
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="name">商户名：</label>
-		                                <input type="text" class="form-control" id="name" name="name" required="required">
+		                                <label class="control-label" for="merName">商户名：</label>
+		                                <input type="text" class="form-control" id="merName" name="merName" required="required">
 		                            </div>
 		                            <div class="col-sm-4">
 		                                <label class="control-label" for="abbreviation">简称：</label>
@@ -456,6 +457,7 @@
 <script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
 <script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
+<script src="http://www.dowebok.com/demo/192/js/viewer.min.js"></script>
 </body>
 <script type="text/javascript">
 	initTableData();
@@ -517,6 +519,31 @@
     		success:function(data){
     			//data.data就是所有数据集
     			console.log(data.data);
+    			var  objs=document.getElementsByName("init");
+			   	for(var i= 0;i<objs.length;i++){
+				   objs[i].click();
+			   	}
+			   	$("#myModalLabel").html("修改商户信息");
+    			$('#myModal').modal();
+    			$('input[name="name"]').val(data.data.merName);
+    			$('input[name="abbreviation"]').val(data.data.abbreviation);
+    			$('input[name="enName"]').val(data.data.enName);
+    			$('input[name="legalPerson"]').val(data.data.legalPerson);
+    			$('input[name="legalPersonMobile"]').val(data.data.legalPersonMobile);
+    			$('input[name="legalPersonTel"]').val(data.data.legalPersonTel);
+    			$('select[name="legalValidCardType"]').find("option[value="+data.data.legalValidCardType+"]").attr("selected",true);
+    			$('input[name="cardNum"]').val(data.data.cardNum);
+    			$('input[name="cardValidTime"]').val(data.data.cardValidTime);
+    			$('input[name="businessLicenseNum"]').val(data.data.businessLicenseNum);
+    			$('input[name="businessLicenseValidTime"]').val(data.data.businessLicenseValidTime);
+    			$('input[name="taxRegistCode"]').val(data.data.taxRegistCode);
+    			$('input[name="registAddress"]').val(data.data.registAddress);
+    			$('input[name="mercFlag"]').val(data.data.mercFlag);
+    			$('input[name="agentId"]').val(data.data.agentId);
+    			$('input[name="channelMerId"]').val(data.data.channelMerId);
+    			$('input[name="channelMerKey"]').val(data.data.channelMerKey);
+    			$('select[name="channelType"]').find("option[value="+data.data.channelType+"]").attr("selected",true);
+
     		}
     	});
     }
@@ -679,10 +706,17 @@
 	    	   	var obj = eval('(' + response + ')');
 				var fileName = file.name.replace(',','');
 	       		$('#view'+num).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
-							"<a class='previewfileImg' id='previewfileImg"+obj.id+"' title='预览'><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
+							"<a class='previewfileImg' id='previewfileImg"+obj.id+"' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
 							"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"',"+num+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" +
 
 							"</div>");
+	       		//预览图片
+	       		var aId='previewfileImg'+obj.id;
+				var viewer = new Viewer(document.getElementById(aId), {
+					url: 'data-original',
+					navbar: false,
+					toolbar: false
+				});
 
 	    	   	$('#uploadify_file'+num).hide();
 	    	   	$('#fileQueue'+num).html('');
@@ -760,5 +794,6 @@
    $('#btn_delete').click(function(){
 	   
    });
+
 </script>
 </html>

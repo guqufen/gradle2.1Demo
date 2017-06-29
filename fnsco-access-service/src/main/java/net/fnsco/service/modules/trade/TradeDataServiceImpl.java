@@ -3,6 +3,7 @@ package net.fnsco.service.modules.trade;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +13,14 @@ import com.google.common.base.Strings;
 import net.fnsco.api.dto.TradeDataDTO;
 import net.fnsco.api.trade.TradeDataService;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.PageDTO;
+import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DbUtil;
 import net.fnsco.service.comm.ServiceConstant;
 import net.fnsco.service.dao.master.MerchantChannelDao;
 import net.fnsco.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.service.domain.MerchantChannel;
+import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.trade.TradeData;
 
 /**
@@ -89,5 +93,27 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Override
     public List<TradeData> queryAllByCondition(TradeDataDTO merchantCore) {
         return null;
+    }
+    /**
+     * 条件分页查询
+     * (non-Javadoc)
+     * @see net.fnsco.api.trade.TradeDataService#queryMerchantCore(net.fnsco.api.dto.TradeDataDTO, int, int)
+     * @auth tangliang
+     * @date 2017年6月28日 下午5:13:54
+     */
+    @Override
+    public ResultPageDTO<TradeData> queryMerchantCore(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
+        
+        TradeData tradeData = new TradeData();
+        BeanUtils.copyProperties(tradeDataDTO, tradeData);
+        PageDTO<TradeData> pages = new PageDTO<TradeData>(currentPageNum,perPageSize,tradeData);
+        
+        List<TradeData> datas = tradeListDAO.queryPageList(pages);
+        int total = tradeListDAO.queryTotalByCondition(tradeData);
+        
+        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total,datas);
+        result.setCurrentPage(currentPageNum);
+        return result;
+        
     }
 }

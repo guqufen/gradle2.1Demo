@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.fnsco.core.constants.CoreConstants;
@@ -70,20 +69,11 @@ public class BaseController {
     }
 
     public ResultDTO fail(String msgCode) {
-        return this.fail(msgCode, CoreConstants.ERROR_MESSGE_MAP.get(msgCode));
+        return ResultDTO.fail(msgCode);
     }
 
     public ResultDTO fail() {
-        return this.fail(CoreConstants.E_COMM_BUSSICSS);
-    }
-
-    private ResultDTO fail(String msgCode, String message) {
-        String code = String.valueOf(msgCode);
-        String msg = message;
-        ResultDTO dto = new ResultDTO();
-        dto.setCode(code);
-        dto.setMessage(message);
-        return dto;
+        return ResultDTO.fail(CoreConstants.E_COMM_BUSSICSS);
     }
 
     public ResultDTO success() {
@@ -105,23 +95,17 @@ public class BaseController {
     }
 
     public ResultDTO success(Object data, String total, String pageId) {
-        ResultDTO dto = new ResultDTO();
-        dto.setSuccess(true);
-        dto.setCode(CoreConstants.OK);
-        dto.setMessage("");
         if (Strings.isNullOrEmpty(total)) {
-            dto.setData(data);
-        } else {
-            List temp = (List) data;
-            ResultPageDTO pageDTO = new ResultPageDTO();
-            pageDTO.setTotal(Integer.parseInt(total));
-            if (!Strings.isNullOrEmpty(pageId)) {
-                pageDTO.setCurrentPage(Integer.parseInt(pageId));
-            }
-            pageDTO.setList(temp);
-            dto.setData(pageDTO);
+            return ResultDTO.success(data);
         }
-        return dto;//.toJsonString();
+        List temp = (List) data;
+        ResultPageDTO pageDTO = new ResultPageDTO();
+        pageDTO.setTotal(Integer.parseInt(total));
+        if (!Strings.isNullOrEmpty(pageId)) {
+            pageDTO.setCurrentPage(Integer.parseInt(pageId));
+        }
+        pageDTO.setList(temp);
+        return ResultDTO.success(pageDTO);
     }
 
     public String getIp() {
