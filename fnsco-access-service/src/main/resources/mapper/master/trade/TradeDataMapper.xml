@@ -468,7 +468,7 @@
       <if test="condition.md5 != null and condition.md5 !=''" >
        AND  md5 = #{condition.md5,jdbcType=VARCHAR}
       </if>
-      <if test="condition.sendTime != null  and condition.sendTime !='' " >
+      <if test="condition.startSendTime != null  and condition.startSendTime !=''  and condition.endSendTime != null  and condition.endSendTime !='' " >
        AND  send_time = #{condition.sendTime,jdbcType=VARCHAR}
       </if>
       <if test="condition.createTime != null and condition.createTime !='' " >
