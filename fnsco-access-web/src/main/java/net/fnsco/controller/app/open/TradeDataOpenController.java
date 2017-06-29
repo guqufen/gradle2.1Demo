@@ -52,11 +52,11 @@ public class TradeDataOpenController extends BaseController {
         4-百度钱包
         5-京东钱包
         6-拉卡拉钱包*/
-
         String payType = tradeData.getPayType();
         tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
         tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
         tradeDataService.saveTradeData(tradeData);
+       
         return success();
     }
 

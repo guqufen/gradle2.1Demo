@@ -74,7 +74,7 @@
 			<MaxHistory>300</MaxHistory>
 		</rollingPolicy>
 		<encoder charset="UTF-8">
-			<pattern>%date [%-5level] [%thread] %logger{80} - %msg%n</pattern>
+			<pattern>%date [%-5level] [%thread] %logger{80}%line{traceId} - %msg%n</pattern>
 		</encoder>
 	</appender>
 	   
