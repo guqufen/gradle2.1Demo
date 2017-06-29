@@ -14,11 +14,20 @@ public class FrameworkConstant {
     public static String              E_TOKEN_ERROR      = "4011";
     public static String              E_NOT_LOGIN        = "4012";
     public static String              E_SYSTEM_EXCEPTION = "5000";
+    public static String              E_APP_PASSWORD_ERROR = "5101";    //密码错误
+    public static String              E_APP_MODIFYPASSWORD_ERROR = "5103";
+    public static String              E_APP_NULLERROR="5102";         //空字段
+    public static String              E_APP_CODE_ERROR="5103";        //验证码
+    public static String              E_APP_INSERT="5104";            //注册失败
     public static Map<String, String> ERROR_MESSGE_MAP   = Maps.newHashMap();
     static {
         ERROR_MESSGE_MAP.put("4010", "非法请求,没有token");
         ERROR_MESSGE_MAP.put("4011", "非法请求,token不正确");
         ERROR_MESSGE_MAP.put("4012", "请登录");
         ERROR_MESSGE_MAP.put("5000", "系统异常");
+        ERROR_MESSGE_MAP.put("5101", "密码错误");
+        ERROR_MESSGE_MAP.put("5102", "空字段错误");
+        ERROR_MESSGE_MAP.put("5103", "验证码错误");
+        ERROR_MESSGE_MAP.put("5104", "注册失败");
     }
 }

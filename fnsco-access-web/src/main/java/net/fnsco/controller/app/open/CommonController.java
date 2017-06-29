@@ -22,9 +22,7 @@ import net.fnsco.core.base.ResultDTO;
 @RestController
 @RequestMapping(value = "/open/comm", method = RequestMethod.POST)
 public class CommonController extends BaseController {
-    @Autowired
-    private MerchantService merchantService;
-
+     
     /**
      * 获取APP下载地址
      *

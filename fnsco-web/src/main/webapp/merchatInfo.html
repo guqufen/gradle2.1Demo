@@ -525,7 +525,7 @@
 			   	}
 			   	$("#myModalLabel").html("修改商户信息");
     			$('#myModal').modal();
-    			$('input[name="name"]').val(data.data.merName);
+    			$('input[name="merName"]').val(data.data.merName);
     			$('input[name="abbreviation"]').val(data.data.abbreviation);
     			$('input[name="enName"]').val(data.data.enName);
     			$('input[name="legalPerson"]').val(data.data.legalPerson);
@@ -539,11 +539,37 @@
     			$('input[name="taxRegistCode"]').val(data.data.taxRegistCode);
     			$('input[name="registAddress"]').val(data.data.registAddress);
     			$('input[name="mercFlag"]').val(data.data.mercFlag);
-    			$('input[name="agentId"]').val(data.data.agentId);
-    			$('input[name="channelMerId"]').val(data.data.channelMerId);
-    			$('input[name="channelMerKey"]').val(data.data.channelMerKey);
-    			$('select[name="channelType"]').find("option[value="+data.data.channelType+"]").attr("selected",true);
+    			// 渠道信息
+    			$('input[name="agentId"]').val(data.data.channel.agentId);
+    			$('input[name="channelMerId"]').val(data.data.channel.channelMerId);
+    			$('input[name="channelMerKey"]').val(data.data.channel.channelMerKey);
+    			$('select[name="channelType"]').find("option[value="+data.data.channel.channelType+"]").attr("selected",true);
+    			//终端
+    			$('input[name="merchantCode"]').val(data.data.terminal.merchantCode);
+    			$('input[name="channelId"]').val(data.data.terminal.channelId);
+    			$('input[name="channelName"]').val(data.data.terminal.channelName);
+    			$('input[name="terminalCode"]').val(data.data.terminal.terminalCode);
+    			$('input[name="innerTermCode"]').val(data.data.terminal.innerTermCode);
+    			$('input[name="snCode"]').val(data.data.terminal.snCode);
+    			$('input[name="terminalBatch"]').val(data.data.terminal.terminalBatch);
+    			$('input[name="terminalPara"]').val(data.data.terminal.terminalPara);
+    			$('select[name="chargesType"]').find("option[value="+data.data.terminal.chargesType+"]").attr("selected",true);
+    			$('input[name="debitCardRate"]').val(data.data.terminal.debitCardRate);
+    			$('input[name="creditCardRate"]').val(data.data.terminal.creditCardRate);
+    			$('input[name="debitCardFee"]').val(data.data.terminal.debitCardFee);
+    			$('input[name="creditCardFee"]').val(data.data.terminal.creditCardFee);
+    			$('input[name="debitCardMaxFee"]').val(data.data.terminal.debitCardMaxFee);
+    			$('input[name="creditCardMaxFee"]').val(data.data.terminal.creditCardMaxFee);
+    			$('input[name="dealSwitch"]').val(data.data.terminal.dealSwitch);
+    			$('select[name="recordState"]').find("option[value="+data.data.terminal.recordState+"]").attr("selected",true);
+    			$('select[name="termAuditState"]').find("option[value="+data.data.terminal.termAuditState+"]").attr("selected",true);
+    			$('input[name="termName"]').val(data.data.terminal.termName);
+    			$('input[name="posFactory"]').val(data.data.terminal.posFactory);
+    			$('input[name="posType"]').val(data.data.terminal.posType);
+    			$('input[name="mercReferName"]').val(data.data.terminal.mercReferName);
 
+    			console.log(data.data.files);
+    			console.log(data.data.files[0])
     		}
     	});
     }
@@ -707,9 +733,7 @@
 				var fileName = file.name.replace(',','');
 	       		$('#view'+num).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
 							"<a class='previewfileImg' id='previewfileImg"+obj.id+"' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
-							"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"',"+num+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" +
-
-							"</div>");
+							"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"',"+num+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" + "</div>");
 	       		//预览图片
 	       		var aId='previewfileImg'+obj.id;
 				var viewer = new Viewer(document.getElementById(aId), {

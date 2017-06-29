@@ -41,22 +41,16 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		ResultDTO<AppUser> result=new ResultDTO<AppUser>();
 		//非空判断
         if(Strings.isNullOrEmpty(appUserDTO.getMobile())||Strings.isNullOrEmpty(appUserDTO.getPassword())||Strings.isNullOrEmpty(appUserDTO.getCode())){
-            return result.setError(CoreConstants.E_COMM_BUSSICSS, "手机号或密码或验证码为空");
+            return result.fail(CoreConstants.E_APP_NULLERROR);
         }
 		//对比验证码
 		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode());
 		if(!res.isSuccess()){
-			result.fail();
-			return result;
+		    return result.fail(res.getCode());
 		}
 		//判断是否已经注册
 		if(MappUserDao.getAppUserByMobile(appUserDTO.getMobile())!=null){
-			 return result.fail();
-		    return result.setError(CoreConstants.E_COMM_BUSSICSS, "验证码错误");
-		}
-		//判断是否已经注册
-		if(MappUserDao.getAppUserByMobile(appUserDTO.getMobile())!=null){
-			return result.setError(CoreConstants.E_COMM_BUSSICSS,"该用户已经注册");
+		    return result.fail(CoreConstants.E_COMM_BUSSICSS);
 		}
 		AppUser appUser=new AppUser();
 		appUser.setDeviceId(appUserDTO.getDeviceId());
@@ -66,12 +60,9 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		appUser.setPassword(password);
 		if(!MappUserDao.insertSelective(appUser)){
-//			result.setCode("1");
-			result.fail("注册失败");
-		    return result.setError(CoreConstants.E_COMM_BUSSICSS,"注册失败");
+		    return result.fail(CoreConstants.E_APP_INSERT);
 		}
-//		result.setCode("0");
-		result.success("注册成功");
+		result.success(appUser);
 		return result;
 	}
 
@@ -120,18 +111,15 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		long newTime = System.currentTimeMillis();
 		//验证码超过30分钟
 		if((newTime-codeDto.getTime())/1000/60>30){
-			result.fail("1");
 			MsgCodeMap.remove(deviceId);
-			return result.setError(CoreConstants.E_COMM_BUSSICSS, "验证码超过有效时间");
+			return result.fail(CoreConstants.E_APP_CODE_ERROR);
 		}
 		
 		if(!code.equals(codeDto.getCode())){
-			result.fail( "1验证码错误");
-			return result.setError(CoreConstants.E_COMM_BUSSICSS, "验证码错误");
+			return result.fail(CoreConstants.E_APP_CODE_ERROR);
 		}
 		//从map从移除验证码
 		MsgCodeMap.remove(deviceId);
-//		result.setCode("0");
 		result.success("成功");
 		return result;
 	}
@@ -142,29 +130,19 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		ResultDTO<String> result = new ResultDTO<>();
 		//非空判断
         if(Strings.isNullOrEmpty(appUserDTO.getDeviceId())||Strings.isNullOrEmpty(appUserDTO.getPassword())||Strings.isNullOrEmpty(appUserDTO.getCode())){
-            return result.setError(CoreConstants.E_COMM_BUSSICSS, "手机号或验证码或密码为空");
+            return result.fail(CoreConstants.E_APP_NULLERROR);
         }
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		//对比验证码
 		ResultDTO<String> res=validateCode(appUserDTO.getDeviceId(),appUserDTO.getCode());
 		if(!res.isSuccess()){
-			result.fail("1");
-			return result;
+		    return res;
 		}
 		//密码更新
-		if(MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),password)){
-//			result.setCode("0");
-			result.success("修改密码成功");
-		}else{
-			result.fail("修改密码失败");
-		    return result.setError(CoreConstants.E_COMM_BUSSICSS, "验证码错误");
-		}
-		//密码更新失败
 		if(!MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),password)){
-		    return  result.setError(CoreConstants.E_COMM_BUSSICSS, "修改密码失败");
+		    return result.fail(CoreConstants.E_APP_PASSWORD_ERROR);
 		}
-		result.setCode("0");
-        result.setSuccess("修改密码成功");
+		result.success("找回密码成功");
 		return result;
 	}
 
@@ -175,10 +153,10 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	    Integer id=appUserDTO.getId();
 	    //非空判断
 	    if(id==null){
-	        return result.setError(CoreConstants.E_COMM_BUSSICSS, "id为空");
+	        return result.fail(CoreConstants.E_APP_NULLERROR);
 	    }
         if(Strings.isNullOrEmpty(appUserDTO.getPassword())||Strings.isNullOrEmpty(appUserDTO.getOldPassword())){
-            return result.setError(CoreConstants.E_COMM_BUSSICSS, "手机号或密码为空");
+            return result.fail(CoreConstants.E_APP_NULLERROR);
         }
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		String oldPassword=Md5Util.getInstance().md5(appUserDTO.getOldPassword());
@@ -187,18 +165,14 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		 AppUser mAppUser=MappUserDao.selectById(id);
 		//查到的密码和原密码做比较
 		if(!oldPassword.equals(mAppUser.getPassword())){
-			return result.fail("原密码输入错误,请重新输入");
-			return result.setError(CoreConstants.E_COMM_BUSSICSS,"原密码输入错误,请重新输入");
+		    return result.fail(CoreConstants.E_APP_PASSWORD_ERROR);
 		}
 		appUser.setPassword(password);
 		appUser.setId(id);
 		if(!MappUserDao.updateById(appUser)){
-//			result.setCode("1");
-			result.success("修改密码失败");
-		    return result.setError(CoreConstants.E_COMM_BUSSICSS, "修改密码失败");
+		    return result.fail(CoreConstants.E_APP_MODIFYPASSWORD_ERROR);
 		}
-//		result.setCode("0");
-		result.success("修改密码成功");
+		result.success();
 		return result;
 	}
 	
@@ -208,21 +182,14 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		ResultDTO<String> result = new ResultDTO<>();
 		//非空判断
         if(Strings.isNullOrEmpty(appUserDTO.getMobile())||Strings.isNullOrEmpty(appUserDTO.getPassword())){
-            return result.setError(CoreConstants.E_COMM_BUSSICSS, "手机号或密码为空");
+            return result.fail(CoreConstants.E_APP_NULLERROR);
         }
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
-		AppUser appUser=MappUserDao.getAppUserByMobile(mobile);
-		if(password.equals(appUser.getPassword())){
-//			result.setCode("0");
-			result.success("登录成功");
-		}else{
-			result.fail("登录失败");
 		AppUser appUser=MappUserDao.getAppUserByMobile(appUserDTO.getMobile());
 		if(!password.equals(appUser.getPassword())){
-			return result.setError(CoreConstants.E_COMM_BUSSICSS, "登录失败");
+			result.fail(CoreConstants.E_APP_NULLERROR);
 		}
-		result.setCode("0");
-		result.setSuccess("登录成功");
+		result.success();
 		return result;
 	}
 
