@@ -324,4 +324,308 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <!-- web端分页条件查询 -->
+  <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+   	 from t_trade_data
+   	 <where>
+   	    <if test="condition.innerCode != null and condition.innerCode !=''" >
+        AND inner_code = #{condition.innerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.txnType != null and condition.txnType !=''" >
+        AND txn_type = #{condition.txnType,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.txnSubType != null and condition.txnSubType !=''" >
+        AND txn_sub_type = #{condition.txnSubType,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.currency != null and condition.currency !=''" >
+        AND currency = #{condition.currency,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.payTimeOut != null and condition.payTimeOut !=''" >
+        AND pay_time_out = #{condition.payTimeOut,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.subject != null and condition.subject !=''" >
+        AND subject = #{condition.subject,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.body != null and condition.body !=''" >
+        AND body = #{condition.body,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.customerInfo != null and condition.customerInfo !=''" >
+        AND customer_info = #{condition.customerInfo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.remark != null and condition.remark !=''" >
+        AND remark = #{condition.remark,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.customerIp != null and condition.customerIp !=''" >
+        AND customer_ip = #{condition.customerIp,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.tn != null and condition.tn !=''" >
+        AND tn = #{condition.tn,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.respCode != null and condition.respCode !=''" >
+        AND resp_code = #{condition.respCode,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.respMsg != null and condition.respMsg !=''" >
+        AND resp_msg = #{condition.respMsg,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.settleAmount != null and condition.settleAmount !=''" >
+        AND settle_amount = #{condition.settleAmount,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.settleCurrency != null and condition.settleCurrency !=''" >
+        AND settle_currency = #{condition.settleCurrency,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.settleDate != null and condition.settleDate !=''" >
+        AND settle_date = #{condition.settleDate,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.succTime != null and condition.succTime !=''" >
+        AND succ_time = #{condition.succTime,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.orgMerOrderId != null and condition.orgMerOrderId !=''" >
+        AND org_mer_order_id = #{condition.orgMerOrderId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.canRefAmt != null and condition.canRefAmt !=''" >
+        AND can_ref_amt = #{condition.canRefAmt,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.refCnt != null and condition.refCnt !=''" >
+        AND ref_cnt = #{condition.refCnt,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.refAmt != null and condition.refAmt !=''" >
+        AND ref_amt = #{condition.refAmt,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.bankId != null and condition.bankId !=''" >
+        AND bank_id = #{condition.bankId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.ppFlag != null and condition.ppFlag !=''" >
+        AND pp_flag = #{condition.ppFlag,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.purpose != null and condition.purpose !=''" >
+        AND purpose = #{condition.purpose,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.dcType != null and condition.dcType !=''" >
+       AND  dc_type = #{condition.dcType,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.certifyId != null and condition.certifyId !=''" >
+        AND certify_id = #{condition.certifyId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.msgDestId != null and condition.msgDestId !=''" >
+        AND msg_dest_id = #{condition.msgDestId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.customerNm != null and condition.customerNm !=''" >
+        AND customer_nm = #{condition.customerNm,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.phoneNo != null and condition.phoneNo !=''" >
+        AND phone_no = #{condition.phoneNo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.subOpenId != null and condition.subOpenId !=''" >
+        AND sub_open_id = #{condition.subOpenId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.channelType != null and condition.channelType !=''" >
+        AND channel_type = #{condition.channelType,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.amt != null and condition.amt !=''" >
+       AND  amt = #{condition.amt,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.orderNo != null and condition.orderNo !=''" >
+       AND  order_no = #{condition.orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.orderTime != null and condition.orderTime !=''" >
+        AND order_time = #{condition.orderTime,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.orderInfo != null and condition.orderInfo !=''" >
+       AND  order_info = #{condition.orderInfo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.payType != null and condition.payType !=''" >
+        AND pay_type = #{condition.payType,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.timeStamp != null and condition.timeStamp !=''" >
+        AND time_stamp = #{condition.timeStamp,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.tradeDetail != null and condition.tradeDetail !=''" >
+        AND trade_detail = #{condition.tradeDetail,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.merId != null and condition.merId !=''" >
+       AND  mer_id = #{condition.merId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.termId != null and condition.termId !=''" >
+       AND  term_id = #{condition.termId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.batchNo != null and condition.batchNo !=''" >
+        AND batch_no = #{condition.batchNo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.sysTraceNo != null and condition.sysTraceNo !=''" >
+        AND sys_trace_no = #{condition.sysTraceNo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.authCode != null and condition.authCode !=''" >
+        AND auth_code = #{authCode,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.orderIdScan != null and condition.orderIdScan !=''" >
+        AND order_id_scan = #{orderIdScan,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.source != null and condition.source !=''" >
+        AND source = #{source,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.md5 != null and condition.md5 !=''" >
+       AND  md5 = #{condition.md5,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.sendTime != null  and condition.sendTime !='' " >
+       AND  send_time = #{condition.sendTime,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.createTime != null and condition.createTime !='' " >
+        AND create_time = #{condition.createTime,jdbcType=TIMESTAMP}
+      </if>
+   	 </where>
+   	 limit #{startRow} , #{perPageSize}
+  </select>
+  <!-- 条件查询总数 -->
+  <select id="queryTotalByCondition" parameterType="net.fnsco.service.domain.trade.TradeData" resultType="java.lang.Integer">
+     select count(*)  from 
+     		t_trade_data
+     <where>
+   	    <if test="innerCode != null and innerCode != ''" >
+        AND inner_code = #{innerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="txnType != null and txnType != ''" >
+        AND txn_type = #{txnType,jdbcType=VARCHAR}
+      </if>
+      <if test="txnSubType != null and txnSubType != ''" >
+        AND txn_sub_type = #{txnSubType,jdbcType=VARCHAR}
+      </if>
+      <if test="currency != null and currency != ''" >
+        AND currency = #{currency,jdbcType=VARCHAR}
+      </if>
+      <if test="payTimeOut != null and payTimeOut != ''" >
+        AND pay_time_out = #{payTimeOut,jdbcType=VARCHAR}
+      </if>
+      <if test="subject != null and subject != ''" >
+        AND subject = #{subject,jdbcType=VARCHAR}
+      </if>
+      <if test="body != null and body != ''" >
+        AND body = #{body,jdbcType=VARCHAR}
+      </if>
+      <if test="customerInfo != null and customerInfo != ''" >
+        AND customer_info = #{customerInfo,jdbcType=VARCHAR}
+      </if>
+      <if test="remark != null and remark != ''" >
+        AND remark = #{remark,jdbcType=VARCHAR}
+      </if>
+      <if test="customerIp != null and customerIp != ''" >
+        AND customer_ip = #{customerIp,jdbcType=VARCHAR}
+      </if>
+      <if test="tn != null and tn != ''" >
+        AND tn = #{tn,jdbcType=VARCHAR}
+      </if>
+      <if test="respCode != null and respCode != ''" >
+        AND resp_code = #{respCode,jdbcType=VARCHAR}
+      </if>
+      <if test="respMsg != null and respMsg != ''" >
+        AND resp_msg = #{respMsg,jdbcType=VARCHAR}
+      </if>
+      <if test="settleAmount != null and settleAmount != ''" >
+        AND settle_amount = #{settleAmount,jdbcType=VARCHAR}
+      </if>
+      <if test="settleCurrency != null and settleCurrency != ''" >
+        AND settle_currency = #{settleCurrency,jdbcType=VARCHAR}
+      </if>
+      <if test="settleDate != null and settleDate != ''" >
+        AND settle_date = #{settleDate,jdbcType=VARCHAR}
+      </if>
+      <if test="succTime != null and succTime != ''" >
+        AND succ_time = #{succTime,jdbcType=VARCHAR}
+      </if>
+      <if test="orgMerOrderId != null and orgMerOrderId != ''" >
+        AND org_mer_order_id = #{orgMerOrderId,jdbcType=VARCHAR}
+      </if>
+      <if test="canRefAmt != null and canRefAmt != ''" >
+        AND can_ref_amt = #{canRefAmt,jdbcType=VARCHAR}
+      </if>
+      <if test="refCnt != null and refCnt != ''" >
+        AND ref_cnt = #{refCnt,jdbcType=VARCHAR}
+      </if>
+      <if test="refAmt != null and refAmt != ''" >
+        AND ref_amt = #{refAmt,jdbcType=VARCHAR}
+      </if>
+      <if test="bankId != null and bankId != ''" >
+        AND bank_id = #{bankId,jdbcType=VARCHAR}
+      </if>
+      <if test="ppFlag != null and ppFlag != ''" >
+        AND pp_flag = #{ppFlag,jdbcType=VARCHAR}
+      </if>
+      <if test="purpose != null and purpose != ''" >
+        AND purpose = #{purpose,jdbcType=VARCHAR}
+      </if>
+      <if test="dcType != null and dcType != ''" >
+       AND  dc_type = #{dcType,jdbcType=VARCHAR}
+      </if>
+      <if test="certifyId != null and certifyId != ''" >
+        AND certify_id = #{certifyId,jdbcType=VARCHAR}
+      </if>
+      <if test="msgDestId != null and msgDestId != ''" >
+        AND msg_dest_id = #{msgDestId,jdbcType=VARCHAR}
+      </if>
+      <if test="customerNm != null and customerNm != ''" >
+        AND customer_nm = #{customerNm,jdbcType=VARCHAR}
+      </if>
+      <if test="phoneNo != null and phoneNo != ''" >
+        AND phone_no = #{phoneNo,jdbcType=VARCHAR}
+      </if>
+      <if test="subOpenId != null and subOpenId != ''" >
+        AND sub_open_id = #{subOpenId,jdbcType=VARCHAR}
+      </if>
+      <if test="channelType != null and channelType != ''" >
+        AND channel_type = #{channelType,jdbcType=VARCHAR}
+      </if>
+      <if test="amt != null and amt != ''" >
+       AND  amt = #{amt,jdbcType=VARCHAR}
+      </if>
+      <if test="orderNo != null and orderNo != ''" >
+       AND  order_no = #{orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="orderTime != null and orderTime != ''" >
+        AND order_time = #{orderTime,jdbcType=VARCHAR}
+      </if>
+      <if test="orderInfo != null and orderInfo != ''" >
+       AND  order_info = #{orderInfo,jdbcType=VARCHAR}
+      </if>
+      <if test="payType != null and payType != ''" >
+        AND pay_type = #{payType,jdbcType=VARCHAR}
+      </if>
+      <if test="timeStamp != null and timeStamp != ''" >
+        AND time_stamp = #{timeStamp,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeDetail != null and tradeDetail != ''" >
+        AND trade_detail = #{tradeDetail,jdbcType=VARCHAR}
+      </if>
+      <if test="merId != null and merId != ''" >
+       AND  mer_id = #{merId,jdbcType=VARCHAR}
+      </if>
+      <if test="termId != null and termId != ''" >
+       AND  term_id = #{termId,jdbcType=VARCHAR}
+      </if>
+      <if test="batchNo != null and batchNo != ''" >
+        AND batch_no = #{batchNo,jdbcType=VARCHAR}
+      </if>
+      <if test="sysTraceNo != null and sysTraceNo != ''" >
+        AND sys_trace_no = #{sysTraceNo,jdbcType=VARCHAR}
+      </if>
+      <if test="authCode != null and authCode != ''" >
+        AND auth_code = #{authCode,jdbcType=VARCHAR}
+      </if>
+      <if test="orderIdScan != null and orderIdScan != ''" >
+        AND order_id_scan = #{orderIdScan,jdbcType=VARCHAR}
+      </if>
+      <if test="source != null and source != ''" >
+        AND source = #{source,jdbcType=VARCHAR}
+      </if>
+      <if test="md5 != null and md5 != ''" >
+       AND  md5 = #{md5,jdbcType=VARCHAR}
+      </if>
+      <if test="sendTime != null and sendTime != ''" >
+       AND  send_time = #{sendTime,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null and createTime != ''" >
+        AND create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+   	 </where>		
+  </select>
 </mapper>
