@@ -7,7 +7,7 @@ import com.google.common.collect.Maps;
 import net.fnsco.core.constants.CoreConstants;
 
 public class ApiConstant extends CoreConstants {
-    public static String THIS_PROGREM_URL   = "http://www.zheft.cn/download";
+    public static String THIS_PROGREM_URL   = "app.download.url";
 
     public static String              E_APP_PASSWORD_ERROR = "5101";    //密码错误
     public static String              E_APP_MODIFYPASSWORD_ERROR = "5103";

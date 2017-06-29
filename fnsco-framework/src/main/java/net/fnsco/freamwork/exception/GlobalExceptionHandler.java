@@ -26,7 +26,6 @@ public class GlobalExceptionHandler {
         result.setCode(FrameworkConstant.E_SYSTEM_EXCEPTION);
         result.setMessage(exception.getMessage());
         result.setSuccess(false);
-        result.setData(new Object());
         return result;
     }
 }
