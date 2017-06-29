@@ -25,15 +25,14 @@ import net.fnsco.freamwork.comm.Md5Util;
  */
 @Component
 public class OpenInterceptor implements HandlerInterceptor {
-    private boolean     isAuthor = false;
     @Autowired
     private Environment env;
-    private Logger      logger   = LoggerFactory.getLogger(OpenInterceptor.class);
+    private Logger      logger = LoggerFactory.getLogger(OpenInterceptor.class);
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-                             Object handler) throws Exception {
-        if (isAuthor) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String isAuthor = env.getProperty(FrameworkConstant.OPEN_IS_AUTHOR);
+        if (FrameworkConstant.IS_AUTHOR.equals(isAuthor)) {
             return true;
         }
         String requestUrl = request.getRequestURL().toString();
@@ -64,13 +63,11 @@ public class OpenInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
-                                Object handler, Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 
     }
 }
