@@ -1,4 +1,4 @@
-package net.fnsco.freamwork.spring;
+package net.fnsco.freamwork.exception;
 
 import javax.servlet.http.HttpServletRequest;
 

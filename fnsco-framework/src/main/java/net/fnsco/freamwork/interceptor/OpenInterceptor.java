@@ -1,4 +1,4 @@
-package net.fnsco.freamwork.spring;
+package net.fnsco.freamwork.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

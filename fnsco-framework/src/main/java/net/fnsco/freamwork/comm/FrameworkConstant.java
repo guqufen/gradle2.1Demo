@@ -7,6 +7,8 @@ import com.google.common.collect.Maps;
 public class FrameworkConstant {
     public static String              IS_AUTHOR = "false";
     public static String              OPEN_IS_AUTHOR ="open.is.author";
+    public static String              WEB_IS_AUTHOR ="web.is.author";
+    public static String              APP_IS_AUTHOR ="app.is.author";
     public static String              TOKEN_ID           = "b9eccb7036f9719059b0f61076991b75";
     public static String              E_TOKEN_EMPTY      = "4010";
     public static String              E_TOKEN_ERROR      = "4011";
