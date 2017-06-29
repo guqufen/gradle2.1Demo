@@ -12,11 +12,16 @@ import org.springframework.util.CollectionUtils;
 
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.service.dao.master.AliasDAO;
 import net.fnsco.service.dao.master.MerchantChannelDao;
+import net.fnsco.service.dao.master.MerchantCoreDao;
+import net.fnsco.service.dao.master.MerchantTerminalDao;
 import net.fnsco.service.domain.Alias;
 import net.fnsco.service.domain.MerchantChannel;
+import net.fnsco.service.domain.MerchantCore;
+import net.fnsco.service.domain.MerchantTerminal;
 import net.fnsco.service.modules.helper.MerchantHelper;
 
 /**@desc 商户相关操作
@@ -30,6 +35,10 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     private AliasDAO           aliasDAO;
     @Autowired
     private MerchantChannelDao merchantChannelDao;
+    @Autowired
+    private MerchantCoreDao merchantCoreDao;
+    @Autowired
+    private MerchantTerminalDao merchantTerminalDao;
 
     /**
       * 
@@ -72,6 +81,35 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         aliasDAO.insert(alias);
 
         return randomCode;
+    }
+    
+    /**
+     * (non-Javadoc) 根据用户ID 查询商户列表
+     * @see net.fnsco.api.merchant.MerchantService#getMerchantsCoreByUserId(java.lang.Integer)
+     * @auth tangliang
+     * @date 2017年6月29日 下午2:10:31
+     */
+    @Override
+    public ResultDTO<List<MerchantCore>> getMerchantsCoreByUserId(Integer userId) {
+        ResultDTO<List<MerchantCore>> result = new ResultDTO<>();
+        List<MerchantCore> datas = merchantCoreDao.queryAllByUseraId(userId);
+        result.setData(datas);
+        return result;
+        
+    }
+    
+    /**根据用户ID 查询出终端设备信息
+     * (non-Javadoc)
+     * @see net.fnsco.api.merchant.MerchantService#getMerchantTerminalByUserId(java.lang.Integer)
+     * @auth tangliang
+     * @date 2017年6月29日 下午4:43:23
+     */
+    @Override
+    public ResultDTO<List<MerchantTerminal>> getMerchantTerminalByUserId(Integer userId) {
+        ResultDTO<List<MerchantTerminal>> result = new ResultDTO<>();
+        List<MerchantTerminal> datas = merchantTerminalDao.selectByUserId(userId);
+        result.setData(datas);
+        return result;
     }
 
 }

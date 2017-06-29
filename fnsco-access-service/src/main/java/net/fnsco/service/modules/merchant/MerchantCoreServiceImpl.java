@@ -148,7 +148,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	public ResultDTO<MerchantCore> queryAllById(Integer id) {
 		// TODO Auto-generated method stub
 		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
-		result.success(merchantCoreDao.queryAllById(id));
+		result.setData(merchantCoreDao.queryAllById(id));
+//		result.success(merchantCoreDao.queryAllById(id));
 		return result;
 	}
 	/**
