@@ -85,15 +85,9 @@ public class ResultDTO<T extends Object> extends DTO {
         return code;
     }
 
-    /**
-     * data
-     *
-     * @param   data    the data to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setData(T data) {
-        this.data = data;
+     
+    public void setData(T data){
+        this.data=data;
     }
 
     /**
@@ -107,6 +101,5 @@ public class ResultDTO<T extends Object> extends DTO {
         return message;
     }
 
-    
     
 }
