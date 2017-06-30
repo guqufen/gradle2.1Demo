@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
+import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -105,7 +106,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      * @date 2017年6月29日 下午4:43:23
      */
     @Override
-    public ResultDTO<List<MerchantTerminal>> getMerchantTerminalByUserId(Integer userId) {
+    public ResultDTO<List<MerTerminalsDTO>> getMerchantTerminalByUserId(Integer userId) {
         ResultDTO<List<MerchantTerminal>> result = new ResultDTO<>();
         List<MerchantTerminal> datas = merchantTerminalDao.selectByUserId(userId);
         result.setData(datas);

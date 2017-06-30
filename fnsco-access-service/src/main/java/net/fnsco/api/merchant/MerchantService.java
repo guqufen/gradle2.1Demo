@@ -7,8 +7,8 @@ import java.util.List;
 
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
+import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.service.domain.MerchantTerminal;
 
 /**@desc 商户相关服务接口
  * @author sxfei
@@ -37,7 +37,7 @@ public interface MerchantService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ResultDTO<List<MerchantTerminal>> getMerchantTerminalByUserId(Integer userId);
+    ResultDTO<List<MerTerminalsDTO>> getMerchantTerminalByUserId(Integer userId);
     
     /**
      * 
