@@ -77,7 +77,7 @@ public class BaseController {
     }
 
     public ResultDTO success() {
-        return this.success(new Object());
+        return this.success(null);
     }
 
     public ResultDTO success(String data) {

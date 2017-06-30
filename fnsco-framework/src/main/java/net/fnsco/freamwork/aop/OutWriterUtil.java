@@ -26,7 +26,6 @@ public class OutWriterUtil {
             result.setCode(code);
             result.setMessage(FrameworkConstant.ERROR_MESSGE_MAP.get(code));
             result.setSuccess(false);
-            result.setData(new Object());
             response.getWriter().write(JSON.toJSONString(result));
         } catch (IOException e) {
             logger.error("与客户端通讯异常:" + e.getMessage(), e);

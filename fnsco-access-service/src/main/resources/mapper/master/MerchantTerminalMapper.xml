@@ -27,7 +27,17 @@
     <result column="pos_type" property="posType" jdbcType="VARCHAR" />
     <result column="merc_refer_name" property="mercReferName" jdbcType="VARCHAR" />
   </resultMap>
-  
+  <!-- APP端使用 -->
+  <resultMap id="ListResultMap" type="net.fnsco.api.dto.TerminalsDTO">
+     <id column="id" property="id" jdbcType="INTEGER" />
+     <result column="term_name" property="termName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="DetailResultMap" type="net.fnsco.api.dto.TerminalDetailDTO" >
+     <result column="term_name" property="termName" jdbcType="VARCHAR" />
+     <result column="sn_code" property="snCode" jdbcType="VARCHAR" />
+     <result column="pos_factory" property="posFactory" jdbcType="VARCHAR" />
+     <result column="pos_type" property="posType" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, inner_code, merchant_code, channel_id, channel_name, terminal_code, inner_term_code, 
     sn_code, terminal_batch, terminal_para, charges_type, debit_card_rate, credit_card_rate, 
@@ -324,5 +334,28 @@
     <include refid="Base_Column_List" />
     from m_merchant_terminal
     where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
+  <!-- 根据userId连表查询出终端信息 -->
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+		CO.*
+		FROM
+			m_merchant_terminal CO
+		RIGHT JOIN (
+			SELECT
+				*
+			FROM
+				m_merchant_user_rel
+			WHERE
+				app_user_id = #{userId}
+		) REL ON CO.inner_code = REL.inner_code
+  </select>
+  <!-- APP端查询列表 -->
+  <select id="queryByInnerCode" parameterType="java.lang.String" resultMap="ListResultMap">
+      select * from m_merchant_terminal  where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
+  <!-- APP查询详情 -->
+  <select id="queryDetailById" parameterType="java.lang.Integer" resultMap="DetailResultMap">
+     select sn_code,term_name,pos_factory,pos_type from m_merchant_terminal where id=#{terId}
   </select>
 </mapper>

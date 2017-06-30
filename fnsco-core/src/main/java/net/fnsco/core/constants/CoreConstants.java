@@ -17,8 +17,12 @@ public class CoreConstants extends FrameworkConstant {
     public static final String COOKIE_USER_KEY = "cookie_user_key";
     public static String       OK              = "2000";
     public static String       E_COMM_BUSSICSS = "5100";
+    public static String       E_USERID_NULL = "5110";
+    public static String       E_UPDATE_FAIL = "5111";
     static {
         ERROR_MESSGE_MAP.put(OK, "处理成功");
         ERROR_MESSGE_MAP.put(E_COMM_BUSSICSS, "一般业务错误");
+        ERROR_MESSGE_MAP.put(E_USERID_NULL, "入参ID为null");
+        ERROR_MESSGE_MAP.put(E_UPDATE_FAIL, "更新失败");
     }
 }

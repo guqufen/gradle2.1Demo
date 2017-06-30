@@ -118,5 +118,6 @@
     <include refid="Base_Column_List" />
     from m_alias
     where random_code = #{randomCode,jdbcType=VARCHAR}
+    limit 1
   </select>
 </mapper>

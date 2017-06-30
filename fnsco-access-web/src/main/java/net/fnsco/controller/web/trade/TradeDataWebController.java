@@ -32,6 +32,7 @@ public class TradeDataWebController extends BaseController {
 	@ResponseBody
 	public ResultPageDTO<TradeData> query(TradeDataDTO tradeDataDTO,Integer currentPageNum,Integer pageSize){
 	    
-		return tradeDataService.queryMerchantCore(tradeDataDTO, currentPageNum, pageSize);
+		return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize);
 	}
+	
 }

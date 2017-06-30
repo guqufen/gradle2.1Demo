@@ -101,6 +101,53 @@ public class TradeData {
 
     private Date   createTime;
     private String paySubType;    //交易子类型
+    
+    private String startSendTime;//条件查询 发送开始时间
+    private String endSendTime;//条件查询 发送结束时间
+    
+    /**
+     * startSendTime
+     *
+     * @return  the startSendTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getStartSendTime() {
+        return startSendTime;
+    }
+
+    /**
+     * startSendTime
+     *
+     * @param   startSendTime    the startSendTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStartSendTime(String startSendTime) {
+        this.startSendTime = startSendTime;
+    }
+
+    /**
+     * endSendTime
+     *
+     * @return  the endSendTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getEndSendTime() {
+        return endSendTime;
+    }
+
+    /**
+     * endSendTime
+     *
+     * @param   endSendTime    the endSendTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEndSendTime(String endSendTime) {
+        this.endSendTime = endSendTime;
+    }
 
     /**
      * @return the paySubType

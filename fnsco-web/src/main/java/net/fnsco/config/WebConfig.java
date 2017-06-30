@@ -1,9 +1,16 @@
 package net.fnsco.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 
 import net.fnsco.freamwork.interceptor.AppInterceptor;
 import net.fnsco.freamwork.interceptor.OpenInterceptor;
@@ -38,4 +45,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     //        registry.addResourceHandler("/*.js/**").addResourceLocations("/ui/static/");
     //        registry.addResourceHandler("/*.css/**").addResourceLocations("/ui/static/");
     //    }
+
+//    @Override
+//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//        super.configureMessageConverters(converters);
+//        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
+//        FastJsonConfig fastJsonConfig = new FastJsonConfig();
+//        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat,SerializerFeature.WriteMapNullValue);
+//        fastConverter.setFastJsonConfig(fastJsonConfig);
+//        converters.add(fastConverter);
+//    }
 }
