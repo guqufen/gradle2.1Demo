@@ -142,13 +142,15 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	 * @todo 根据ID查询出所有关联的数据
 	 * @author tangliang
 	 * @date 2017年6月27日 上午11:47:07
-	 * @see net.fnsco.api.merchant.MerchantCoreService#queryAllById(java.lang.Integer)
+	 * @see net.fnsco.api.merchant.MerchantCoreService#
+	 * queryAllById(java.lang.Integer)
 	 */
 	@Override
 	public ResultDTO<MerchantCore> queryAllById(Integer id) {
 		// TODO Auto-generated method stub
 		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
-		result.success(merchantCoreDao.queryAllById(id));
+		result.setData(merchantCoreDao.queryAllById(id));
+	//	result.success(merchantCoreDao.queryAllById(id));
 		return result;
 	}
 	/**

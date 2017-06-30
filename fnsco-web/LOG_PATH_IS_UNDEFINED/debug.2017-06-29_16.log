@@ -1,0 +1,1 @@
+2017-06-29 16:38:05,686 [DEBUG] [main] org.springframework.core.env.PropertySourcesPropertyResolver - Found key 'logging.pattern.console' in [applicationConfigurationProperties] with type [String]

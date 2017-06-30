@@ -87,6 +87,8 @@ public class ResultDTO<T extends Object> extends DTO {
     }
 
      
-    
+    public void setData(T data){
+        this.data=data;
+    }
     
 }
