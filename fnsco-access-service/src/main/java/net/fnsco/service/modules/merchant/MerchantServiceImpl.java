@@ -5,14 +5,13 @@ package net.fnsco.service.modules.merchant;
 
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
+import com.google.common.base.Strings;
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.api.dto.MerTerminalsDTO;
+import net.fnsco.api.dto.MerchantDTO;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -34,13 +33,31 @@ import net.fnsco.service.modules.helper.MerchantHelper;
 public class MerchantServiceImpl extends BaseService implements MerchantService {
 
     @Autowired
-    private AliasDAO           aliasDAO;
+    private AliasDAO            aliasDAO;
     @Autowired
-    private MerchantChannelDao merchantChannelDao;
+    private MerchantChannelDao  merchantChannelDao;
     @Autowired
-    private MerchantCoreDao merchantCoreDao;
+    private MerchantCoreDao     merchantCoreDao;
     @Autowired
     private MerchantTerminalDao merchantTerminalDao;
+
+    @Override
+    public ResultDTO addMerChant(MerchantDTO merchantDTO) {
+        String randomCode = merchantDTO.getRandomCode();
+        if (Strings.isNullOrEmpty(randomCode)) {
+            ResultDTO.fail();//商铺码不能为空
+        }
+        if (Strings.isNullOrEmpty(merchantDTO.getUserId())) {
+            ResultDTO.fail();//用户ID不能为空
+        }
+        Alias alias= aliasDAO.selectByRandomCode(randomCode);
+        if(null ==alias){
+            
+        }
+        //此商铺码不存在，请重新输入
+        //些商铺码已过期，请到pos机查询最新的商铺码
+        return ResultDTO.success();
+    }
 
     /**
       * 
@@ -68,8 +85,8 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         }
         randomCode = MerchantHelper.getMerCode();
         while (true) {
-            List<Alias> list = aliasDAO.selectByRandomCode(randomCode);
-            if (CollectionUtils.isEmpty(list)) {
+            Alias alias = aliasDAO.selectByRandomCode(randomCode);
+            if (null == alias) {
                 break;
             }
             randomCode = MerchantHelper.getMerCode();
@@ -84,7 +101,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
 
         return randomCode;
     }
-    
+
     /**
      * (non-Javadoc) 根据用户ID 查询商户列表
      * @see net.fnsco.api.merchant.MerchantService#getMerchantsCoreByUserId(java.lang.Integer)
@@ -96,9 +113,9 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         List<MerChantCoreDTO> datas = merchantCoreDao.queryAllByUseraId(userId);
         ResultDTO<List<MerChantCoreDTO>> result = ResultDTO.success(datas);
         return result;
-        
+
     }
-    
+
     /**根据用户ID 查询出终端设备信息
      * (non-Javadoc)
      * @see net.fnsco.api.merchant.MerchantService#getMerchantTerminalByUserId(java.lang.Integer)

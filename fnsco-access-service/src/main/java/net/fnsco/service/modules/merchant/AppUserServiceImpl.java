@@ -1,7 +1,4 @@
 package net.fnsco.service.modules.merchant;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,7 +51,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		    return res;
 		}
 		//判断是否已经注册
-		if(MappUserDao.getAppUserByMobile(appUserDTO.getMobile())!=null){
+		if(MappUserDao.selectAppUserByMobile(appUserDTO.getMobile())!=null){
 		    return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
 		}
 		AppUser appUser=new AppUser();
@@ -142,7 +139,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		    return res;
 		}
 		//密码更新失败
-		if(!MappUserDao.findPasswordByPhone(appUserDTO.getMobile(),password)){
+		if(!MappUserDao.updatePasswordByPhone(appUserDTO.getMobile(),password)){
 		    return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
 		}
 		return ResultDTO.success();
@@ -166,7 +163,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		String oldPassword=Md5Util.getInstance().md5(appUserDTO.getOldPassword());
 		AppUser appUser=new AppUser();
 		//根据id查询用户是否存在获取原密码
-		 AppUser mAppUser=MappUserDao.selectById(id);
+		 AppUser mAppUser=MappUserDao.selectAppUserById(id);
 		//查到的密码和原密码做比较
 		if(!oldPassword.equals(mAppUser.getPassword())){
 		    return ResultDTO.fail(ApiConstant.E_OLDPASSWORD_ERROR);
@@ -189,7 +186,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
             return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
         }
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
-		AppUser appUser=MappUserDao.getAppUserByMobile(appUserDTO.getMobile());
+		AppUser appUser=MappUserDao.selectAppUserByMobile(appUserDTO.getMobile());
 		if(!password.equals(appUser.getPassword())){
 			return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_ERROR);
 		}

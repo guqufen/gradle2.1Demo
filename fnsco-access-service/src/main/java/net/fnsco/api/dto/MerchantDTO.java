@@ -1,9 +1,9 @@
-package net.fnsco.controller.app.jo;
+package net.fnsco.api.dto;
 
 import net.fnsco.core.base.JO;
 
-public class MerchantJO extends JO {
-    private String merCode;
+public class MerchantDTO extends JO {
+    private String randomCode;
     private String channelType;
     private String userId;     //登录用户Id
 
@@ -30,17 +30,25 @@ public class MerchantJO extends JO {
     }
 
     /**
-     * @return the merCode
-     */
-    public String getMerCode() {
-        return merCode;
+     * randomCode
+     *
+     * @return  the randomCode
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getRandomCode() {
+        return randomCode;
     }
 
     /**
-     * @param merCode the merCode to set
+     * randomCode
+     *
+     * @param   randomCode    the randomCode to set
+     * @since   CodingExample Ver 1.0
      */
-    public void setMerCode(String merCode) {
-        this.merCode = merCode;
+
+    public void setRandomCode(String randomCode) {
+        this.randomCode = randomCode;
     }
 
     /**

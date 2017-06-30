@@ -30,22 +30,13 @@
 		pay_password, device_type, device_token, password_error_num, password_error_date,
 		remark, reg_time, last_login_time, modify_time, state
 	</sql>
-	<!--根据id修改密码 -->
-	<update id="modifyPasswordById">
-		update m_app_user set password = #{password,jdbcType=VARCHAR} where id =
-		#{id,jdbcType=INTEGER}
-	</update>
 	<!-- 根据手机号更新用户 密码 -->
-	<update id="findPasswordByPhone" parameterType="java.lang.String">
+	<update id="updatePasswordByPhone" parameterType="java.lang.String">
 		update m_app_user set password = #{password,jdbcType=VARCHAR} where mobile =
 		#{mobile,jdbcType=VARCHAR}
 	</update>
-	<!-- 根据用户手机号码查询用户id -->
-	<select id="idByPhone">
-		select id from m_app_user where mobile=#{mobile}
-	</select>
 	<!-- 根据手机号查询用户实体 -->
-	<select id="getAppUserByMobile" resultMap="BaseResultMap"
+	<select id="selectAppUserByMobile" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
@@ -53,7 +44,7 @@
 		where mobile = #{mobile,jdbcType=VARCHAR}
 	</select>
 	<!-- 根据id查询用户实体 -->
-	<select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	<select id="selectAppUserById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
 		select
 		<include refid="Base_Column_List" />
 		from m_app_user

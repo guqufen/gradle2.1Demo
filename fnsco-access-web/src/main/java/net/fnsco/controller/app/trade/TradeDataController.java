@@ -34,11 +34,26 @@ public class TradeDataController extends BaseController {
      * @return
      */
     //@ApiIgnore //使用该注解忽略这个API
-    @RequestMapping(value = "/query")
+    @RequestMapping(value = "/queryList")
     @ApiOperation(value = "查询交易流水")
-    public ResultDTO queryTradeData(@RequestBody TradeDataJO tradeData) {
+    public ResultDTO queryList(@RequestBody TradeDataJO tradeData) {
         ResultPageDTO resultPage = new ResultPageDTO();
         resultPage.setTotal(90);
         return success(resultPage);
     }
+    /**
+     * 查询交易流水信息
+     *
+     * @param userName
+     * @return
+     */
+    //@ApiIgnore //使用该注解忽略这个API
+    @RequestMapping(value = "/information")
+    @ApiOperation(value = "查询交易流水")
+    public ResultDTO information(@RequestBody TradeDataJO tradeData) {
+        ResultPageDTO resultPage = new ResultPageDTO();
+        resultPage.setTotal(90);
+        return success(resultPage);
+    }
+    
 }

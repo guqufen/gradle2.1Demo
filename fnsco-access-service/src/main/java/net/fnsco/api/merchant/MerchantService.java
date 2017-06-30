@@ -8,6 +8,7 @@ import java.util.List;
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.api.dto.MerTerminalsDTO;
+import net.fnsco.api.dto.MerchantDTO;
 import net.fnsco.core.base.ResultDTO;
 
 /**@desc 商户相关服务接口
@@ -16,7 +17,9 @@ import net.fnsco.core.base.ResultDTO;
  */
 public interface MerchantService {
     String getMerCode(String merNum, String channelType);
-    
+
+    ResultDTO addMerChant(MerchantDTO merchantDTO);
+
     /**
      * getMerchantsCoreByUserId:(这里用一句话描述这个方法的作用) 根据用户ID 查询商户列表
      *
@@ -26,8 +29,9 @@ public interface MerchantService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
+
     ResultDTO<List<MerChantCoreDTO>> getMerchantsCoreByUserId(Integer userId);
-    
+
     /**
      * getMerchantTerminalByUserId:(这里用一句话描述这个方法的作用)根据用户ID 查询出关联的所有终端信息
      *
