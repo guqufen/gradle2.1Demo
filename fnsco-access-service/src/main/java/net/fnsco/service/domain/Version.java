@@ -2,7 +2,7 @@ package net.fnsco.service.domain;
 
 import java.util.Date;
 
-public class SysVersion {
+public class Version {
     private Integer id;
 
     private String appName;

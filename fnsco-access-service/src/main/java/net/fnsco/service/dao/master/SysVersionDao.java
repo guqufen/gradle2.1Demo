@@ -1,7 +1,7 @@
 package net.fnsco.service.dao.master;
 
-import net.fnsco.service.domain.SysVersion;
+import net.fnsco.service.domain.Version;
 
 public interface SysVersionDao {
-    SysVersion selectSysVersion(String appCode,String appType);
+    Version selectSysVersion(String appCode,String appType);
 }
