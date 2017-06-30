@@ -30,8 +30,8 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/register")
     @ApiOperation(value = "用户注册")
     @ResponseBody
-    public ResultDTO<AppUser> register(@RequestBody AppUserDTO appUserDTO) {
-        ResultDTO<AppUser> result = appUserService.insertAppUser(appUserDTO);
+    public ResultDTO register(@RequestBody AppUserDTO appUserDTO) {
+        ResultDTO result = appUserService.insertAppUser(appUserDTO);
         return result;
     }
 
