@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
+import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.service.domain.MerchantCore;
 /**
@@ -89,4 +90,14 @@ public interface MerchantCoreDao {
      * @since  CodingExample　Ver 1.1
      */
     MerChantCoreDetailDTO queryDetailById(@Param("merId") Integer merId);
+    /**
+     * queryMerTerminalsByUserId:(这里用一句话描述这个方法的作用) 根据用户信息查询终端列表
+     *
+     * @param userId
+     * @return    设定文件
+     * @return List<MerTerminalsDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<MerTerminalsDTO> queryMerTerminalsByUserId(@Param("userId") Integer userId);
 }

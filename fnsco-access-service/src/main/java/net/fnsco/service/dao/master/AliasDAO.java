@@ -22,5 +22,5 @@ public interface AliasDAO {
 
     List<Alias> selectByInnerCode(@Param("innerCode") String innerCode);
 
-    List<Alias> selectByRandomCode(@Param("randomCode") String randomCode);
+    Alias selectByRandomCode(@Param("randomCode") String randomCode);
 }
