@@ -1,11 +1,11 @@
 package net.fnsco.api.dto;
 
-import net.fnsco.core.base.JO;
+import net.fnsco.core.base.DTO;
 
-public class MerchantDTO extends JO {
-    private String randomCode;
-    private String channelType;
-    private String userId;     //登录用户Id
+public class MerchantDTO extends DTO {
+    private String  randomCode;
+    private String  channelType;
+    private Integer userId;     //登录用户Id
 
     /**
      * userId
@@ -14,7 +14,7 @@ public class MerchantDTO extends JO {
      * @since   CodingExample Ver 1.0
     */
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
@@ -25,7 +25,7 @@ public class MerchantDTO extends JO {
      * @since   CodingExample Ver 1.0
      */
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
