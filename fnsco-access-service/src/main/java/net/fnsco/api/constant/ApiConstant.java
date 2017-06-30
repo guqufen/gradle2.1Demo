@@ -7,7 +7,7 @@ import com.google.common.collect.Maps;
 import net.fnsco.core.constants.CoreConstants;
 
 public class ApiConstant extends CoreConstants {
-    public static String THIS_PROGREM_URL          = "http://www.zheft.cn/download";
+    public static String THIS_PROGREM_URL          = "app.download.url";
     public static String IS_AUTHOR                 = "false";
     public static String OPEN_IS_AUTHOR            = "open.is.author";
     public static String WEB_IS_AUTHOR             = "web.is.author";
