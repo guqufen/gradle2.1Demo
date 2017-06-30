@@ -25,7 +25,7 @@ public class SysVersionController extends BaseController{
     @ApiOperation(value = "版本更新")
     @ResponseBody
     public ResultDTO<Object> register(@RequestBody SysVersionDTO sysVersionDTO) {
-        ResultDTO result = sysVersionService.insertSelective(sysVersionDTO);
-        return result;
+//        ResultDTO result = sysVersionService.insertSelective(sysVersionDTO);
+        return null;
     }
 }
