@@ -59,6 +59,9 @@ table a.remove,table a.redact{
 .modal-body .nav{
 	background: #2f4050;
 }
+.modal-body .nav-tabs>li{
+	margin-bottom: 0;
+}
 .modal-body .nav-tabs>li>a{
 	border-radius:0;
 	border: none;
@@ -171,4 +174,15 @@ table a.remove,table a.redact{
 }
 .uploadify .swfupload{
 	left: 0;
+}
+
+/*修改商户信息*/
+.editBtn_edit,.editBtn_save{
+	margin-bottom: 10px;
+}
+.editBtn_save{
+	display: none;
+}
+.editBtn_edit span,.editBtn_save span{
+	margin-right: 3px;
 }
