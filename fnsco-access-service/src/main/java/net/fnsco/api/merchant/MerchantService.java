@@ -10,6 +10,7 @@ import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.api.dto.MerchantDTO;
 import net.fnsco.api.dto.TerminalDetailDTO;
+import net.fnsco.api.dto.TerminalsDTO;
 import net.fnsco.core.base.ResultDTO;
 
 /**@desc 商户相关服务接口
@@ -66,4 +67,7 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<TerminalDetailDTO> getTerminalDetailByTerId(Integer terId);
+    
+    
+    ResultDTO<TerminalsDTO> updateTerminal(TerminalsDTO terminalsDTO);
 }

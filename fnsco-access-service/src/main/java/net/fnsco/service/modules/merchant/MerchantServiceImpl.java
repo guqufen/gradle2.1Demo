@@ -6,6 +6,7 @@ package net.fnsco.service.modules.merchant;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.api.dto.MerchantDTO;
 import net.fnsco.api.dto.TerminalDetailDTO;
+import net.fnsco.api.dto.TerminalsDTO;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -27,6 +29,7 @@ import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MerchantTerminalDao;
 import net.fnsco.service.domain.Alias;
 import net.fnsco.service.domain.MerchantChannel;
+import net.fnsco.service.domain.MerchantTerminal;
 import net.fnsco.service.modules.helper.MerchantHelper;
 
 /**@desc 商户相关操作
@@ -169,6 +172,28 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         }
         TerminalDetailDTO data = merchantTerminalDao.queryDetailById(terId);
         return ResultDTO.success(data);
+    }
+    /**
+     * (non-Javadoc) 更新设备名称
+     * @see net.fnsco.api.merchant.MerchantService#updateTerminal(net.fnsco.api.dto.TerminalsDTO)
+     * @auth tangliang
+     * @date 2017年6月30日 下午2:20:24
+     */
+    @Override
+    public ResultDTO<TerminalsDTO> updateTerminal(TerminalsDTO terminalsDTO) {
+        
+        if(null == terminalsDTO.getId() ){
+            return ResultDTO.fail(CoreConstants.E_USERID_NULL);
+        }
+        MerchantTerminal terminal = new MerchantTerminal();
+        BeanUtils.copyProperties(terminalsDTO, terminal);
+        int res =merchantTerminalDao.updateByPrimaryKeySelective(terminal) ;
+        
+        if(res != 1){
+            return ResultDTO.fail(CoreConstants.E_UPDATE_FAIL);
+        }
+        return ResultDTO.success(terminalsDTO);
+        
     }
 
 }
