@@ -1,5 +1,7 @@
 package net.fnsco.service.dao.master;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.service.domain.MerchantUserRel;
 /**
  * @desc 商家跟APP用户关系DAO
@@ -12,5 +14,6 @@ public interface MerchantUserRelDao {
 
     int insertSelective(MerchantUserRel record);
 
-
+    MerchantUserRel selectByPrimaryKey(Integer id);
+    MerchantUserRel selectByUserIdInnerCode(@Param("appUserId") Integer appUserId,@Param("innerCode") String innerCode );
 }

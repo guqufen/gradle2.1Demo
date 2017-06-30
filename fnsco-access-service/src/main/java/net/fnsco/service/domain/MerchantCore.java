@@ -58,6 +58,8 @@ public class MerchantCore extends DTO{
 
     private Integer status;
     
+    private Integer agentId;
+    
     private List<MerchantFile> files;//关联的所有文件信息
     
     private List<MerchantContact> contacts;//关联的联系人信息
@@ -91,6 +93,27 @@ public class MerchantCore extends DTO{
     
     public List<MerchantTerminal> getTerminal() {
         return terminal;
+    }
+    /**
+     * agentId
+     *
+     * @return  the agentId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getAgentId() {
+        return agentId;
+    }
+
+    /**
+     * agentId
+     *
+     * @param   agentId    the agentId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setAgentId(Integer agentId) {
+        this.agentId = agentId;
     }
 
     /**

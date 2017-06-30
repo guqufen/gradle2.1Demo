@@ -170,12 +170,23 @@ function resetEvent(){
    $('#formSearch')[0].reset();
 }
 
-getInnerCode();
+
 $('#btn_add').click(function(){
-   var  objs=document.getElementsByName("init");
-   for(var i= 0;i<objs.length;i++){
-	   objs[i].click();
-   }
+   getInnerCode();
+   $.ajax({
+	   url:'/web/merchantinfo/queryAgents',
+	   success:function(data){
+		   var agtS = data.data;
+		   var html_opt = '';
+		   $.each(agtS,function(index,value){
+			   html_opt += '<option value="'+value.id+'">'+value.name+'</option>';
+		   })
+		   $('#agentId').append(html_opt);
+	   },
+	   error:function(e){
+		   alert('服务器出错');
+	   }
+   })
 });
 
 //上传文件
@@ -263,6 +274,11 @@ function getInnerCode()
 		   type:'POST',
 		   success:function(data){
 			   $('#innoCode').val(data);
+			   $("input[name='innerCode']").val(data);
+			   var  objs=document.getElementsByName("init");
+			   for(var i= 0;i<objs.length;i++){
+				   objs[i].click();
+			   }
 			   code = data;
 			   return code;
 		   }
@@ -562,3 +578,32 @@ $(".editBtn_save").click(function(){
     $(this).parent().find('select').attr('disabled',true);
 })
 
+//保存商户基本信息下一步按钮
+function saveMerCore(){
+	$.ajax({
+		   url:'/web/merchantinfo/toAddCore',
+		   data: $('#mercore_form').serialize(),
+		   type:'POST',
+		   success:function(data){
+			   if(data.success)
+			   {
+				   alert('保存成功');
+			   }	
+			   else{
+				   alert('保存失败');
+			   }
+		   }
+	   });
+}
+//保存文件信息
+function saveFile(){
+	var file_ids = $('#fileIds').val();
+	console.log(file_ids);
+	$.ajax({
+		url:'/web/fileInfo/savefiles',
+		data:{'fileIds':file_ids},
+		success:function(){
+			
+		}
+	});
+}

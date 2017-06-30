@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.api.dto.MerTerminalsDTO;
@@ -27,9 +28,11 @@ import net.fnsco.service.dao.master.AliasDAO;
 import net.fnsco.service.dao.master.MerchantChannelDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MerchantTerminalDao;
+import net.fnsco.service.dao.master.MerchantUserRelDao;
 import net.fnsco.service.domain.Alias;
 import net.fnsco.service.domain.MerchantChannel;
 import net.fnsco.service.domain.MerchantTerminal;
+import net.fnsco.service.domain.MerchantUserRel;
 import net.fnsco.service.modules.helper.MerchantHelper;
 
 /**@desc 商户相关操作
@@ -47,22 +50,35 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     private MerchantCoreDao     merchantCoreDao;
     @Autowired
     private MerchantTerminalDao merchantTerminalDao;
+    @Autowired
+    private MerchantUserRelDao  merchantUserRelDao;
 
     @Override
     public ResultDTO addMerChant(MerchantDTO merchantDTO) {
         String randomCode = merchantDTO.getRandomCode();
         if (Strings.isNullOrEmpty(randomCode)) {
-            ResultDTO.fail();//商铺码不能为空
+            return ResultDTO.fail(ApiConstant.E_MERCHANT_CODE_NULL);//商铺码不能为空
         }
-        if (Strings.isNullOrEmpty(merchantDTO.getUserId())) {
-            ResultDTO.fail();//用户ID不能为空
+        if (null == merchantDTO.getUserId() || 0 == merchantDTO.getUserId().intValue()) {
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);//用户ID不能为空
         }
-        Alias alias= aliasDAO.selectByRandomCode(randomCode);
-        if(null ==alias){
-            
+        Alias alias = aliasDAO.selectByRandomCode(randomCode);
+        if (null == alias) {
+            return ResultDTO.fail(ApiConstant.E_MERCHANT_CODE_NOT_EXIST);//此商铺码不存在，请重新输入
         }
-        //此商铺码不存在，请重新输入
-        //些商铺码已过期，请到pos机查询最新的商铺码
+        Date deadLime = alias.getDeadline();
+        Date currentDate = new Date();
+        if (currentDate.after(deadLime)) {
+            return ResultDTO.fail(ApiConstant.E_MERCHANT_CODE_OVERDUE);//些商铺码已过期，请到pos机查询最新的商铺码
+        }
+        MerchantUserRel merchantUserRel = merchantUserRelDao.selectByUserIdInnerCode(merchantDTO.getUserId(), alias.getInnerCode());
+        if (null == merchantUserRel) {
+            MerchantUserRel muRel = new MerchantUserRel();
+            muRel.setAppUserId(merchantDTO.getUserId());
+            muRel.setInnerCode(alias.getInnerCode());
+            muRel.setModefyTime(new Date());
+            merchantUserRelDao.insert(muRel);
+        }
         return ResultDTO.success();
     }
 
@@ -117,7 +133,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<List<MerChantCoreDTO>> getMerchantsCoreByUserId(Integer userId) {
-        if(null == userId){
+        if (null == userId) {
             return ResultDTO.fail(CoreConstants.E_USERID_NULL);
         }
         List<MerChantCoreDTO> datas = merchantCoreDao.queryAllByUseraId(userId);
@@ -134,14 +150,14 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<List<MerTerminalsDTO>> getMerchantTerminalByUserId(Integer userId) {
-        if(null == userId){
+        if (null == userId) {
             return ResultDTO.fail(CoreConstants.E_USERID_NULL);
         }
         List<MerTerminalsDTO> datas = merchantCoreDao.queryMerTerminalsByUserId(userId);
         ResultDTO<List<MerTerminalsDTO>> result = ResultDTO.success(datas);
         return result;
     }
-    
+
     /**
      * 查询详情
      * (non-Javadoc)
@@ -151,14 +167,15 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<MerChantCoreDetailDTO> getMerChantDetailById(Integer merId) {
-        if(null == merId){
+        if (null == merId) {
             return ResultDTO.fail(CoreConstants.E_USERID_NULL);
         }
         MerChantCoreDetailDTO datas = merchantCoreDao.queryDetailById(merId);
         ResultDTO<MerChantCoreDetailDTO> result = ResultDTO.success(datas);
         return result;
-        
+
     }
+
     /**
      * (non-Javadoc)查询设备详情
      * @see net.fnsco.api.merchant.MerchantService#getTerminalDetailByTerId(java.lang.Integer)
@@ -167,12 +184,13 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<TerminalDetailDTO> getTerminalDetailByTerId(Integer terId) {
-        if(null == terId){
+        if (null == terId) {
             return ResultDTO.fail(CoreConstants.E_USERID_NULL);
         }
         TerminalDetailDTO data = merchantTerminalDao.queryDetailById(terId);
         return ResultDTO.success(data);
     }
+
     /**
      * (non-Javadoc) 更新设备名称
      * @see net.fnsco.api.merchant.MerchantService#updateTerminal(net.fnsco.api.dto.TerminalsDTO)
@@ -181,19 +199,19 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<TerminalsDTO> updateTerminal(TerminalsDTO terminalsDTO) {
-        
-        if(null == terminalsDTO.getId() ){
+
+        if (null == terminalsDTO.getId()) {
             return ResultDTO.fail(CoreConstants.E_USERID_NULL);
         }
         MerchantTerminal terminal = new MerchantTerminal();
         BeanUtils.copyProperties(terminalsDTO, terminal);
-        int res =merchantTerminalDao.updateByPrimaryKeySelective(terminal) ;
-        
-        if(res != 1){
+        int res = merchantTerminalDao.updateByPrimaryKeySelective(terminal);
+
+        if (res != 1) {
             return ResultDTO.fail(CoreConstants.E_UPDATE_FAIL);
         }
         return ResultDTO.success(terminalsDTO);
-        
+
     }
 
 }

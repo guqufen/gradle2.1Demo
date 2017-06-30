@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="net.fnsco.service.dao.master.MerchantUserRelDao" >
   <resultMap id="BaseResultMap" type="net.fnsco.service.domain.MerchantUserRel" >
-    <result column="id" property="id" jdbcType="INTEGER" />
+    <id column="id" jdbcType="INTEGER" property="id" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
     <result column="modefy_time" property="modefyTime" jdbcType="TIMESTAMP" />
@@ -48,4 +48,18 @@
       </if>
     </trim>
   </insert>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_user_rel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserIdInnerCode" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_user_rel
+    where app_user_id = #{appUserId,jdbcType=INTEGER}
+    and inner_code = #{innerCode,jdbcType=VARCHAR}
+    limit 1
+  </select>
 </mapper>
