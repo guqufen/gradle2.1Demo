@@ -31,7 +31,7 @@ public class AppUserController extends BaseController {
     @ApiOperation(value = "用户注册")
     @ResponseBody
     public ResultDTO register(@RequestBody AppUserDTO appUserDTO) {
-        ResultDTO result = appUserService.insertAppUser(appUserDTO);
+        ResultDTO result = appUserService.insertSelective(appUserDTO);
         return result;
     }
 

@@ -51,7 +51,7 @@
 		where id = #{id,jdbcType=INTEGER}
 	</select>
 	<!-- 新增注册记录 -->
-	<insert id="insertSelective">
+	<insert id="insertSelective" parameterType="net.fnsco.service.domain.AppUser">
 		insert into m_app_user(id, user_name, mobile, password, real_name,
 		device_id, ges_state, ges_password, ges_trail,
 		pay_password, device_type, device_token, password_error_num, password_error_date,
