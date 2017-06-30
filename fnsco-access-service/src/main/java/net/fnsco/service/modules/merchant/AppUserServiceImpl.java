@@ -173,7 +173,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		}
 		appUser.setPassword(password);
 		appUser.setId(id);
-		if(!MappUserDao.updateById(appUser)){
+		if(!MappUserDao.updateByPrimaryKeySelective(appUser)){
 		    return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
 		}
 		return ResultDTO.success();
@@ -182,10 +182,6 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	//根据手机号码和密码登录
 	@Override
 	public ResultDTO loginByMoblie(AppUserDTO appUserDTO){
-	    //判断登录次数超过3次
-//	    if(LoginTimeMap.get(appUserDTO.getMobile())==3){
-//	        return ResultDTO.fail(ApiConstant.E_PASSWORDTIME_ERROR);
-//	    }
 		//非空判断
         if(Strings.isNullOrEmpty(appUserDTO.getMobile())){
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
@@ -195,9 +191,6 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		AppUser appUser=MappUserDao.getAppUserByMobile(appUserDTO.getMobile());
 		if(!password.equals(appUser.getPassword())){
-		    //登录失败
-//		    int LoginTimes=0;
-//		    LoginTimeMap.put(appUserDTO.getMobile(),++LoginTimes);
 			return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_ERROR);
 		}
 		return ResultDTO.success();

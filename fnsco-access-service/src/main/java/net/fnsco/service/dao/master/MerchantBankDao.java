@@ -1,5 +1,10 @@
 package net.fnsco.service.dao.master;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import net.fnsco.api.dto.MerChantBankDTO;
 import net.fnsco.service.domain.MerchantBank;
 /**
  * @desc 商家银行卡信息DAO
@@ -56,4 +61,14 @@ public interface MerchantBankDao {
      * @mbggenerated Thu Jun 22 15:05:54 CST 2017
      */
     int updateByPrimaryKey(MerchantBank record);
+    /**
+     * queryByInnerCode:(这里用一句话描述这个方法的作用) 根据innercode查询银行卡信息列表
+     *
+     * @param innerCode
+     * @return    设定文件
+     * @return List<MerChantBankDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<MerChantBankDTO> queryByInnerCode(@Param("innerCode") String innerCode);
 }

@@ -8,10 +8,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.api.dto.MerChantCoreDTO;
+import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.api.dto.MerchantDTO;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseService;
@@ -23,7 +24,6 @@ import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MerchantTerminalDao;
 import net.fnsco.service.domain.Alias;
 import net.fnsco.service.domain.MerchantChannel;
-import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.MerchantTerminal;
 import net.fnsco.service.modules.helper.MerchantHelper;
 
@@ -111,10 +111,9 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      * @date 2017年6月29日 下午2:10:31
      */
     @Override
-    public ResultDTO<List<MerchantCore>> getMerchantsCoreByUserId(Integer userId) {
-        ResultDTO<List<MerchantCore>> result = new ResultDTO<>();
-        List<MerchantCore> datas = merchantCoreDao.queryAllByUseraId(userId);
-        result.setData(datas);
+    public ResultDTO<List<MerChantCoreDTO>> getMerchantsCoreByUserId(Integer userId) {
+        List<MerChantCoreDTO> datas = merchantCoreDao.queryAllByUseraId(userId);
+        ResultDTO<List<MerChantCoreDTO>> result = ResultDTO.success(datas);
         return result;
 
     }
@@ -131,6 +130,21 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         List<MerchantTerminal> datas = merchantTerminalDao.selectByUserId(userId);
         result.setData(datas);
         return result;
+    }
+    
+    /**
+     * 查询详情
+     * (non-Javadoc)
+     * @see net.fnsco.api.merchant.MerchantService#getMerChantDetailById(java.lang.Integer)
+     * @auth tangliang
+     * @date 2017年6月30日 上午11:19:42
+     */
+    @Override
+    public ResultDTO<MerChantCoreDetailDTO> getMerChantDetailById(Integer merId) {
+        MerChantCoreDetailDTO datas = merchantCoreDao.queryDetailById(merId);
+        ResultDTO<MerChantCoreDetailDTO> result = ResultDTO.success(datas);
+        return result;
+        
     }
 
 }

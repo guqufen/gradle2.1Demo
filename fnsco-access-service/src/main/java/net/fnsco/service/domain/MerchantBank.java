@@ -17,8 +17,10 @@ public class MerchantBank extends DTO{
 
 	private Integer id;
 
+	private String innerCode;
+	
     private String accountType;
-
+    
     private String accountNo;
 
     private String accountName;
@@ -41,6 +43,28 @@ public class MerchantBank extends DTO{
 
     public void setId(Integer id) {
         this.id = id;
+    }
+    
+    /**
+     * innerCode
+     *
+     * @return  the innerCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getInnerCode() {
+        return innerCode;
+    }
+
+    /**
+     * innerCode
+     *
+     * @param   innerCode    the innerCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setInnerCode(String innerCode) {
+        this.innerCode = innerCode;
     }
 
     public String getAccountType() {
