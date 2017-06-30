@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
         logger.error("业务处理异常", exception);
         Result result = new Result();
         result.setCode(FrameworkConstant.E_SYSTEM_EXCEPTION);
-        result.setMessage(exception.getMessage());
+        result.setMessage(FrameworkConstant.ERROR_MESSGE_MAP.get(FrameworkConstant.E_SYSTEM_EXCEPTION)+exception.getMessage());
         result.setSuccess(false);
         return result;
     }
