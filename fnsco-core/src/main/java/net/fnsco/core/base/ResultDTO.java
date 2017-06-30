@@ -96,6 +96,17 @@ public class ResultDTO<T extends Object> extends DTO {
         this.data = data;
     }
 
+    /**
+     * message
+     *
+     * @return  the message
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getMessage() {
+        return message;
+    }
+
     
     
 }
