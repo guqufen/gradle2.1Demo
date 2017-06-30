@@ -8,6 +8,29 @@ public class TradeDataQueryDTO extends PageDTO {
     private String startDate; // 开始日期 2016-5-10
     private String endDate;   //结束日期 2016-5-10
     private String terminals; //终端号数组，所有选择的终端
+    private String tradeId;   //交易流水ID
+    
+    /**
+     * tradeId
+     *
+     * @return  the tradeId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getTradeId() {
+        return tradeId;
+    }
+
+    /**
+     * tradeId
+     *
+     * @param   tradeId    the tradeId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setTradeId(String tradeId) {
+        this.tradeId = tradeId;
+    }
 
     /**
      * userId
