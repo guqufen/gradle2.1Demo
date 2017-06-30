@@ -6,7 +6,7 @@ import net.fnsco.service.domain.AppUser;
 
 public interface AppUserDao {
 	//新增注册信息
-    AppUser insertSelective(AppUser mAppUser);
+    boolean insertSelective(AppUser appUser);
 	//根据用户手机号查询用户实体
 	AppUser selectAppUserByMobile(@Param("mobile")String mobile);
 	//根据id查询用户实体

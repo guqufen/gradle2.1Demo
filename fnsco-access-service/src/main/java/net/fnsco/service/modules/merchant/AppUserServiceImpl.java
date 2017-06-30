@@ -36,7 +36,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	//注册
 	@Override
 	@Transactional
-	public ResultDTO insertAppUser(AppUserDTO appUserDTO){
+	public ResultDTO insertSelective(AppUserDTO appUserDTO){
 	    Map<String, Integer> map = new HashMap<>();
 		//非空判断
         if(Strings.isNullOrEmpty(appUserDTO.getMobile())){
@@ -62,11 +62,11 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		appUser.setDeviceType(appUserDTO.getDeviceType());
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		appUser.setPassword(password);
-		AppUser appUserDto=MappUserDao.insertSelective(appUser);
-		if(appUserDto==null){
+		if(!MappUserDao.insertSelective(appUser)){
 		    return ResultDTO.fail(ApiConstant.E_REGISTER_ERROR);
 		}
-		map.put("appUserId",appUserDto.getId());
+		appUser=MappUserDao.selectAppUserByMobile(appUser.getMobile());
+		map.put("appUserId",appUser.getId());
 		return ResultDTO.success(map);
 	}
 
