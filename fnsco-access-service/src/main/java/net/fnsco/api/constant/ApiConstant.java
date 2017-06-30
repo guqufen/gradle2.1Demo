@@ -38,10 +38,9 @@ public class ApiConstant extends CoreConstants {
  
     public static String              E_ALREADY_LOGIN="5101";  //用户已注册
     public static String              E_REGISTER_ERROR="5102";     //注册失败
-    public static String              E_CODEOVERTIME_ERROR="5102";     //验证码超时
-    public static String              E_UPDATEPASSWORD_ERROR="5103";  //更新密码失败
-    public static String              E_OLDPASSWORD_ERROR="5104"; //  原密码错误
-    public static String              E_PASSWORDTIME_ERROR="5104"; //密码输入错误超过3次
+    public static String              E_CODEOVERTIME_ERROR="5103";     //验证码超时
+    public static String              E_UPDATEPASSWORD_ERROR="5104";  //更新密码失败
+    public static String              E_OLDPASSWORD_ERROR="5105"; //  原密码错误
     
     
     public static Map<String, String> ERROR_MESSGE_MAP   = Maps.newHashMap();
@@ -62,7 +61,13 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put("5020", "非法请求,验证码不正确");
         ERROR_MESSGE_MAP.put("5021", "非法请求,设备号为空");
         ERROR_MESSGE_MAP.put("5022", "非法请求,设备号不正确");
-    }
+        
+        ERROR_MESSGE_MAP.put("5101", "用户已注册");
+        ERROR_MESSGE_MAP.put("5102", "注册失败");
+        ERROR_MESSGE_MAP.put("5013", "验证码超时");
+        ERROR_MESSGE_MAP.put("5014", "更新密码失败");
+        ERROR_MESSGE_MAP.put("5105", "原密码错误");
+     }
   
 }
 
