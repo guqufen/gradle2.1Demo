@@ -325,14 +325,16 @@
 		            </div>
 		            <div class="modal-body">
 		                <ul class="nav nav-tabs" role="tablist">
-		                    <li role="presentation" class="active"><a>基本信息</a></li>
-		                    <li role="presentation"><a>资质文件</a></li>
-		                    <li role="presentation"><a>联系信息</a></li>
-		                    <li role="presentation"><a>终端信息</a></li>
-		                    <li role="presentation"><a>渠道信息</a></li>
+		                    <li role="presentation" class="active"><a href="#home1" aria-controls="home1" role="tab" data-toggle="tab">基本信息</a></li>
+		                    <li role="presentation"><a href="#profile1" aria-controls="profile1" role="tab" data-toggle="tab">资质文件</a></li>
+		                    <li role="presentation"><a href="#messages1" aria-controls="messages1" role="tab" data-toggle="tab">联系信息</a></li>
+		                    <li role="presentation"><a href="#terminal_info1" aria-controls="terminal_info1" role="tab" data-toggle="tab">终端信息</a></li>
+		                    <li role="presentation"><a href="#channel_info1" aria-controls="channel_info1" role="tab" data-toggle="tab">渠道信息</a></li>
 		                </ul>
 		                <div class="tab-content">
 		                    <div role="tabpanel" class="tab-pane active" id="home1">
+		                    	<a class="editBtn_edit btn btn-default"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
+		                    	<a class="editBtn_save btn btn-success" id="editBtn_merchant"><span class="glyphicon glyphicon-book"></span>保存</a>
 		                        <div class="row">
 		                            <div class="col-sm-4">
 		                                <label class="control-label" for="merName">商户名：</label>
@@ -397,7 +399,7 @@
 		                                <input type="text" class="form-control" id="mercFlag" name="mercFlag">
 		                            </div>
 		                        </div>
-		                        <a class="nextBtn" href="#profile1" aria-controls="profile1" role="tab" data-toggle="tab">下一步</a>
+		                        
 		                    </div>
 		                    <div role="tabpanel" class="tab-pane" id="profile1">
 		                    <table class="table table-bordered">
@@ -523,6 +525,8 @@
 		                        <a class="nextBtn"  href="#messages1" aria-controls="messages1" role="tab" data-toggle="tab">下一步</a>
 		                    </div>
 		                    <div role="tabpanel" class="tab-pane" id="messages1">
+		                    	<a class="editBtn_edit btn btn-default"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
+		                    	<a class="editBtn_save btn btn-success" id="editBtn_messages"><span class="glyphicon glyphicon-book"></span>保存</a>
 		                        <div class="row">
 		                            <div class="col-sm-4">
 		                                <label class="control-label" for="contactName">联系人名：</label>
@@ -545,10 +549,11 @@
 		                                <input type="text" class="form-control" id="contactJobs" name="contactJobs">
 		                            </div>
 		                        </div>
-		                        <a class="nextBtn" href="#terminal_info1" aria-controls="terminal_info1" role="tab" data-toggle="tab">下一步</a>
 		                    </div>
 		                    <!-- 终端信息 -->
 		                    <div role="tabpanel" class="tab-pane" id="terminal_info1">
+		                   	 	<a class="editBtn_edit btn btn-default"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
+		                    	<a class="editBtn_save btn btn-success" id="editBtn_terminal_info"><span class="glyphicon glyphicon-book"></span>保存</a>
 		                        <div class="row">
 		                            <div class="col-sm-4">
 		                                <label class="control-label" for="merchantCode">通道商户号：</label>
@@ -651,9 +656,10 @@
 		                                <input type="text" class="form-control" id="mercReferName" name="mercReferName">
 		                            </div>
 		                        </div>
-		                        <a class="nextBtn" href="#channel_info1" aria-controls="channel_info1" role="tab" data-toggle="tab">下一步</a>
 		                    </div>
 		                    <div role="tabpanel" class="tab-pane" id="channel_info1">
+		                    	<a class="editBtn_edit btn btn-default"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
+		                    	<a class="editBtn_save btn btn-success" id="editBtn_channel_info"><span class="glyphicon glyphicon-book"></span>保存</a>
 		                        <div class="row">
 		                            <div class="col-sm-4">
 		                                <label class="control-label" for="agentId">代理商：</label>
@@ -676,7 +682,6 @@
 		                                </select>
 		                            </div>
 		                        </div>
-		                         <a class="saveBtn" id="save_btn1" type="submit">保存</a>
 		                    </div>
 		                </div>
 		            </div>
