@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.constant.ApiConstant;
+import net.fnsco.api.dto.SysVersionDTO;
+import net.fnsco.api.merchant.SysVersionService;
 import net.fnsco.controller.app.jo.CommJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -22,7 +24,8 @@ import net.fnsco.core.base.ResultDTO;
 public class CommonController extends BaseController {
     @Autowired
     private Environment env;
-
+    @Autowired
+    private SysVersionService versionService;
     /**
      * 获取APP下载地址
      *
@@ -46,7 +49,11 @@ public class CommonController extends BaseController {
             return ResultDTO.fail();
         }
         String appCode = "lkl";
-
+        SysVersionDTO sysVersionDTO = new SysVersionDTO();
+        sysVersionDTO.setAppType(type);
+        sysVersionDTO.setVersion(version);
+        sysVersionDTO.setAppCode(appCode);
+        versionService.queryVersionInfo(sysVersionDTO);
         return ResultDTO.success();
     }
 }
