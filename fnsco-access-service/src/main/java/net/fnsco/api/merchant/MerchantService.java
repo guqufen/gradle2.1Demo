@@ -7,9 +7,11 @@ import java.util.List;
 
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
+import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.api.dto.MerchantDTO;
+import net.fnsco.api.dto.TerminalDetailDTO;
+import net.fnsco.api.dto.TerminalsDTO;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.service.domain.MerchantTerminal;
 
 /**@desc 商户相关服务接口
  * @author sxfei
@@ -41,8 +43,8 @@ public interface MerchantService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ResultDTO<List<MerchantTerminal>> getMerchantTerminalByUserId(Integer userId);
-
+    ResultDTO<List<MerTerminalsDTO>> getMerchantTerminalByUserId(Integer userId);
+    
     /**
      * 
      * getMerChantDetailById:(这里用一句话描述这个方法的作用) 根据商家ID获取商家详细信息
@@ -54,4 +56,18 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<MerChantCoreDetailDTO> getMerChantDetailById(Integer merId);
+    
+    /**
+     * getTerminalDetailByTerId:(这里用一句话描述这个方法的作用)根据设备ID查询详情
+     *
+     * @param terId
+     * @return    设定文件
+     * @return ResultDTO<TerminalDetailDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    ResultDTO<TerminalDetailDTO> getTerminalDetailByTerId(Integer terId);
+    
+    
+    ResultDTO<TerminalsDTO> updateTerminal(TerminalsDTO terminalsDTO);
 }

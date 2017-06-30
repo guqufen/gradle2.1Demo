@@ -6,7 +6,7 @@ import net.fnsco.service.domain.AppUser;
 
 public interface AppUserService {
 	//用户注册方法接口
-	ResultDTO<AppUser> insertAppUser(AppUserDTO appUserDTO);
+	ResultDTO<AppUser> insertSelective(AppUserDTO appUserDTO);
 	//用户修改密码接口
 	ResultDTO<String> modifyPassword(AppUserDTO appUserDTO);
 	//生产验证码

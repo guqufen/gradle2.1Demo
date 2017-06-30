@@ -6,6 +6,7 @@ package net.fnsco.service.modules.merchant;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +15,14 @@ import com.google.common.base.Strings;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
+import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.api.dto.MerchantDTO;
+import net.fnsco.api.dto.TerminalDetailDTO;
+import net.fnsco.api.dto.TerminalsDTO;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.service.dao.master.AliasDAO;
 import net.fnsco.service.dao.master.MerchantChannelDao;
@@ -126,6 +131,9 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<List<MerChantCoreDTO>> getMerchantsCoreByUserId(Integer userId) {
+        if(null == userId){
+            return ResultDTO.fail(CoreConstants.E_USERID_NULL);
+        }
         List<MerChantCoreDTO> datas = merchantCoreDao.queryAllByUseraId(userId);
         ResultDTO<List<MerChantCoreDTO>> result = ResultDTO.success(datas);
         return result;
@@ -139,10 +147,12 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      * @date 2017年6月29日 下午4:43:23
      */
     @Override
-    public ResultDTO<List<MerchantTerminal>> getMerchantTerminalByUserId(Integer userId) {
-        ResultDTO<List<MerchantTerminal>> result = new ResultDTO<>();
-        List<MerchantTerminal> datas = merchantTerminalDao.selectByUserId(userId);
-        result.setData(datas);
+    public ResultDTO<List<MerTerminalsDTO>> getMerchantTerminalByUserId(Integer userId) {
+        if(null == userId){
+            return ResultDTO.fail(CoreConstants.E_USERID_NULL);
+        }
+        List<MerTerminalsDTO> datas = merchantCoreDao.queryMerTerminalsByUserId(userId);
+        ResultDTO<List<MerTerminalsDTO>> result = ResultDTO.success(datas);
         return result;
     }
 
@@ -155,10 +165,49 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<MerChantCoreDetailDTO> getMerChantDetailById(Integer merId) {
+        if(null == merId){
+            return ResultDTO.fail(CoreConstants.E_USERID_NULL);
+        }
         MerChantCoreDetailDTO datas = merchantCoreDao.queryDetailById(merId);
         ResultDTO<MerChantCoreDetailDTO> result = ResultDTO.success(datas);
         return result;
 
+    }
+    /**
+     * (non-Javadoc)查询设备详情
+     * @see net.fnsco.api.merchant.MerchantService#getTerminalDetailByTerId(java.lang.Integer)
+     * @auth tangliang
+     * @date 2017年6月30日 下午1:45:17
+     */
+    @Override
+    public ResultDTO<TerminalDetailDTO> getTerminalDetailByTerId(Integer terId) {
+        if(null == terId){
+            return ResultDTO.fail(CoreConstants.E_USERID_NULL);
+        }
+        TerminalDetailDTO data = merchantTerminalDao.queryDetailById(terId);
+        return ResultDTO.success(data);
+    }
+    /**
+     * (non-Javadoc) 更新设备名称
+     * @see net.fnsco.api.merchant.MerchantService#updateTerminal(net.fnsco.api.dto.TerminalsDTO)
+     * @auth tangliang
+     * @date 2017年6月30日 下午2:20:24
+     */
+    @Override
+    public ResultDTO<TerminalsDTO> updateTerminal(TerminalsDTO terminalsDTO) {
+        
+        if(null == terminalsDTO.getId() ){
+            return ResultDTO.fail(CoreConstants.E_USERID_NULL);
+        }
+        MerchantTerminal terminal = new MerchantTerminal();
+        BeanUtils.copyProperties(terminalsDTO, terminal);
+        int res =merchantTerminalDao.updateByPrimaryKeySelective(terminal) ;
+        
+        if(res != 1){
+            return ResultDTO.fail(CoreConstants.E_UPDATE_FAIL);
+        }
+        return ResultDTO.success(terminalsDTO);
+        
     }
 
 }

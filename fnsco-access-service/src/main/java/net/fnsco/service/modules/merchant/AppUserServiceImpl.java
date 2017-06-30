@@ -36,7 +36,8 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	//注册
 	@Override
 	@Transactional
-	public ResultDTO insertAppUser(AppUserDTO appUserDTO){
+	public ResultDTO insertSelective(AppUserDTO appUserDTO){
+	    Map<String, Integer> map = new HashMap<>();
 		//非空判断
         if(Strings.isNullOrEmpty(appUserDTO.getMobile())){
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
@@ -64,7 +65,9 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		if(!MappUserDao.insertSelective(appUser)){
 		    return ResultDTO.fail(ApiConstant.E_REGISTER_ERROR);
 		}
-		return ResultDTO.success();
+		appUser=MappUserDao.selectAppUserByMobile(appUser.getMobile());
+		map.put("appUserId",appUser.getId());
+		return ResultDTO.success(map);
 	}
 
 
@@ -179,6 +182,7 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 	//根据手机号码和密码登录
 	@Override
 	public ResultDTO loginByMoblie(AppUserDTO appUserDTO){
+	    Map<String, Integer> map = new HashMap<>();
 		//非空判断
         if(Strings.isNullOrEmpty(appUserDTO.getMobile())){
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
@@ -190,7 +194,8 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 		if(!password.equals(appUser.getPassword())){
 			return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_ERROR);
 		}
-		return ResultDTO.success();
+		map.put("appUserId",appUser.getId());
+		return ResultDTO.success(map);
 	}
 
 }
