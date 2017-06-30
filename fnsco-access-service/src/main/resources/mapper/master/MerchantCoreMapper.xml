@@ -24,6 +24,13 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
+  <!-- APP商户列表实体结果集 -->
+  <resultMap  id="CoreResultMap" type="net.fnsco.api.dto.MerChantCoreDTO">
+     <id column="id" property="id" jdbcType="INTEGER" />
+     <result column="mer_name" property="merName" jdbcType="VARCHAR" />
+     <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+     <result column="regist_address" property="registAddress" jdbcType="VARCHAR" />
+  </resultMap>
   <!-- 所有关联数据结果集 -->
   <resultMap id="AllResultMap" type="net.fnsco.service.domain.MerchantCore">
   <id column="id" property="id" jdbcType="INTEGER" />
@@ -529,9 +536,9 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
   <!-- 根据userId查询关联的商户实体 -->
-  <select id="queryAllByUseraId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="queryAllByUseraId" parameterType="java.lang.Integer" resultMap="CoreResultMap">
       SELECT
-			CO.*
+			CO.id,CO.mer_name,CO.regist_address,CO.legal_person
 		FROM
 			m_merchant_core CO
 		RIGHT JOIN (

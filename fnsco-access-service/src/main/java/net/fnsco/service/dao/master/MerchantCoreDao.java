@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.service.domain.MerchantCore;
 /**
@@ -75,5 +76,5 @@ public interface MerchantCoreDao {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    List<MerchantCore> queryAllByUseraId(@Param("userId")Integer userId);
+    List<MerChantCoreDTO> queryAllByUseraId(@Param("userId")Integer userId);
 }

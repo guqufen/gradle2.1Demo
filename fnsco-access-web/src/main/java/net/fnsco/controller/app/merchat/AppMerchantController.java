@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.controller.app.jo.MerchantJO;
 import net.fnsco.controller.app.jo.UserMerchantJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.MerchantTerminal;
 
 /**
@@ -56,8 +56,14 @@ public class AppMerchantController extends BaseController {
      */
     @RequestMapping(value = "/getMerChant")
     @ApiOperation(value = "APP用户查询商家列表")
-    public ResultDTO<List<MerchantCore>> getMerChants(@RequestBody UserMerchantJO userMerchant) {
+    public ResultDTO<List<MerChantCoreDTO>> getMerChants(@RequestBody UserMerchantJO userMerchant) {
         return merchantService.getMerchantsCoreByUserId(userMerchant.getUserId());
+    }
+    
+    @RequestMapping(value = "/getMerChantDetail")
+    @ApiOperation(value = "APP用户查询商家详情")
+    public ResultDTO<List<MerChantCoreDTO>> getMerChantDetail(@RequestBody UserMerchantJO userMerchant) {
+        return null;
     }
     
     /**

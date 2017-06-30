@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -90,9 +91,9 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      * @date 2017年6月29日 下午2:10:31
      */
     @Override
-    public ResultDTO<List<MerchantCore>> getMerchantsCoreByUserId(Integer userId) {
-        ResultDTO<List<MerchantCore>> result = new ResultDTO<>();
-        List<MerchantCore> datas = merchantCoreDao.queryAllByUseraId(userId);
+    public ResultDTO<List<MerChantCoreDTO>> getMerchantsCoreByUserId(Integer userId) {
+        ResultDTO<List<MerChantCoreDTO>> result = new ResultDTO<>();
+        List<MerChantCoreDTO> datas = merchantCoreDao.queryAllByUseraId(userId);
         result.setData(datas);
         return result;
         
