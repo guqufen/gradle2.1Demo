@@ -21,6 +21,32 @@ public class UserMerchantJO extends JO{
      * app用户ID
      */
     private Integer userId;
+    
+    /**
+     * 商户ID
+     */
+    private Integer merId;
+    
+    /**
+     * merId
+     *
+     * @return  the merId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getMerId() {
+        return merId;
+    }
+    /**
+     * merId
+     *
+     * @param   merId    the merId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setMerId(Integer merId) {
+        this.merId = merId;
+    }
     /**
      * userId
      *

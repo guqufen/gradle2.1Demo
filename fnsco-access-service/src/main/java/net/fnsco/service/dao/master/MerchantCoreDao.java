@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import net.fnsco.api.dto.MerChantCoreDTO;
+import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.service.domain.MerchantCore;
 /**
@@ -75,5 +77,16 @@ public interface MerchantCoreDao {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    List<MerchantCore> queryAllByUseraId(@Param("userId")Integer userId);
+    List<MerChantCoreDTO> queryAllByUseraId(@Param("userId")Integer userId);
+    
+    /**
+     * queryDetailById:(这里用一句话描述这个方法的作用) 根据商家ID 查询详情
+     *
+     * @param merId
+     * @return    设定文件
+     * @return MerChantCoreDetailDTO    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    MerChantCoreDetailDTO queryDetailById(@Param("merId") Integer merId);
 }
