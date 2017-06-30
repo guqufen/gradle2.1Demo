@@ -3,6 +3,7 @@ package net.fnsco.api.trade;
 import java.util.List;
 
 import net.fnsco.api.dto.TradeDataDTO;
+import net.fnsco.api.dto.TradeDataQueryDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.trade.TradeData;
 
@@ -15,7 +16,7 @@ public interface TradeDataService {
      * @param merchantCore
      * @return
      */
-    List<TradeData> queryAllByCondition(TradeDataDTO merchantCore);
+    List<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore);
     /**
      * queryTradeData:(这里用一句话描述这个方法的作用) web分页查询
      * @param merchantCore
