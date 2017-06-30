@@ -24,6 +24,14 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
+  <!-- APP商家详情结果集 -->
+  <resultMap id="DetailResultMap" type="net.fnsco.api.dto.MerChantCoreDetailDTO">
+  	<id column="id" property="id" jdbcType="INTEGER" />
+     <result column="mer_name" property="merName" jdbcType="VARCHAR" />
+     <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+     <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+     <collection property="merBanks" column="inner_code" select="net.fnsco.service.dao.master.MerchantBankDao.queryByInnerCode"/>
+  </resultMap>
   <!-- APP商户列表实体结果集 -->
   <resultMap  id="CoreResultMap" type="net.fnsco.api.dto.MerChantCoreDTO">
      <id column="id" property="id" jdbcType="INTEGER" />
@@ -549,5 +557,9 @@
 			WHERE
 				app_user_id = #{userId}
 		) REL ON CO.inner_code = REL.inner_code
+  </select>
+  <!-- APP根据ID查询详情信息 -->
+  <select id="queryDetailById" parameterType="java.lang.Integer"  resultMap="DetailResultMap">
+     select id,mer_name,legal_person,card_num,inner_code  from m_merchant_core where id=#{merId}
   </select>
 </mapper>
