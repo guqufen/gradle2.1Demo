@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 
@@ -15,7 +16,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.service.dao.master.SysVersionDao;
 import net.fnsco.service.domain.Version;
-
+@Service
 public class VersionServiceImpl extends BaseService implements SysVersionService {
 
     @Autowired
@@ -66,6 +67,7 @@ public class VersionServiceImpl extends BaseService implements SysVersionService
             map.put("remark", av.getVersionDesc());
             map.put("downloadUrl", av.getDownloadUrl1());
             map.put("downloadUrl2", av.getDownloadUrl2());
+            return ResultDTO.success(map);
         }
         //第二数字比较判断
         if (Integer.valueOf(newVersionArr[1]) > Integer.valueOf(versionArr[1])) {
@@ -75,6 +77,7 @@ public class VersionServiceImpl extends BaseService implements SysVersionService
             map.put("remark", av.getVersionDesc());
             map.put("downloadUrl", av.getDownloadUrl1());
             map.put("downloadUrl2", av.getDownloadUrl2());
+            return ResultDTO.success(map);
         }
         //第三个数字比较判断
         if (Integer.valueOf(newVersionArr[2]) > Integer.valueOf(versionArr[2])) {
@@ -84,9 +87,9 @@ public class VersionServiceImpl extends BaseService implements SysVersionService
             map.put("remark", av.getVersionDesc());
             map.put("downloadUrl", av.getDownloadUrl1());
             map.put("downloadUrl2", av.getDownloadUrl2());
+            return ResultDTO.success(map);
         }
         return null;
-
     }
 
 }
