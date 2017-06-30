@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.api.dto.MerchantDTO;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.controller.app.jo.MerchantJO;
 import net.fnsco.controller.app.jo.UserMerchantJO;
@@ -33,16 +34,16 @@ public class AppMerchantController extends BaseController {
     private MerchantService merchantService;
 
     /**
-     * 获取商户编号
+     * 关联商铺
      *
      * @param userName
      * @return
      */
     @RequestMapping(value = "/addMerChant")
     @ApiOperation(value = "关联商铺")
-    public ResultDTO addMerChant(@RequestBody MerchantJO merchant) {
-        String randomCode = merchantService.getMerCode(merchant.getMerCode(), merchant.getChannelType());
-        return success(randomCode);
+    public ResultDTO addMerChant(@RequestBody MerchantDTO merchant) {
+        ResultDTO result = merchantService.addMerChant(merchant);
+        return result;
     }
 
     /**
@@ -59,7 +60,7 @@ public class AppMerchantController extends BaseController {
     public ResultDTO<List<MerchantCore>> getMerChants(@RequestBody UserMerchantJO userMerchant) {
         return merchantService.getMerchantsCoreByUserId(userMerchant.getUserId());
     }
-    
+
     /**
      * getAllTerminal:(这里用一句话描述这个方法的作用) 查询用户终端信息
      *
