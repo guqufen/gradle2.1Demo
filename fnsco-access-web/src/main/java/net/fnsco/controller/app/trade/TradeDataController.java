@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.api.dto.TradeDataQueryDTO;
 import net.fnsco.api.trade.TradeDataService;
 import net.fnsco.controller.app.jo.TradeDataJO;
 import net.fnsco.core.base.BaseController;
@@ -36,11 +37,13 @@ public class TradeDataController extends BaseController {
     //@ApiIgnore //使用该注解忽略这个API
     @RequestMapping(value = "/queryList")
     @ApiOperation(value = "查询交易流水")
-    public ResultDTO queryList(@RequestBody TradeDataJO tradeData) {
+    public ResultDTO queryList(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
+        tradeDataService.queryAllByCondition(tradeQueryDTO);
         ResultPageDTO resultPage = new ResultPageDTO();
         resultPage.setTotal(90);
         return success(resultPage);
     }
+
     /**
      * 查询交易流水信息
      *
@@ -50,10 +53,10 @@ public class TradeDataController extends BaseController {
     //@ApiIgnore //使用该注解忽略这个API
     @RequestMapping(value = "/information")
     @ApiOperation(value = "查询交易流水")
-    public ResultDTO information(@RequestBody TradeDataJO tradeData) {
+    public ResultDTO information(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
         ResultPageDTO resultPage = new ResultPageDTO();
         resultPage.setTotal(90);
         return success(resultPage);
     }
-    
+
 }
