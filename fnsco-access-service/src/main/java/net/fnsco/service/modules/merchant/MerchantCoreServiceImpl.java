@@ -17,12 +17,14 @@ import net.fnsco.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.service.dao.master.AgentDao;
 import net.fnsco.service.dao.master.MerchantChannelDao;
 import net.fnsco.service.dao.master.MerchantContactDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MerchantFileDao;
 import net.fnsco.service.dao.master.MerchantFileTempDao;
 import net.fnsco.service.dao.master.MerchantTerminalDao;
+import net.fnsco.service.domain.Agent;
 import net.fnsco.service.domain.MerchantChannel;
 import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
@@ -57,6 +59,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	
 	@Autowired
 	private MerchantFileTempDao merchantFileTempDao;
+	
+	@Autowired
+	private AgentDao agentDao;
 	
 	/**
 	 * @todo 新增加商家
@@ -152,6 +157,17 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 		result.setData(merchantCoreDao.queryAllById(id));
 		return result;
 	}
+	/**
+	 * (non-Javadoc)查询所有代理商
+	 * @see net.fnsco.api.merchant.MerchantCoreService#queryAllAgent()
+	 * @auth tangliang
+	 * @date 2017年6月30日 下午3:38:48
+	 */
+	@Override
+    public ResultDTO<List<Agent>> queryAllAgent() {
+        return ResultDTO.success(agentDao.queryAll());
+    }
+	
 	/**
 	 * 处理文件信息
 	 * @param request
@@ -273,5 +289,26 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 		merchantChannel.setModifyUserId(0);//待定
 		return merchantChannel;
 	}
+	/**
+	 * (non-Javadoc)添加商家基本信息
+	 * @see net.fnsco.api.merchant.MerchantCoreService#doAddMerCore(net.fnsco.service.domain.MerchantCore)
+	 * @auth tangliang
+	 * @date 2017年6月30日 下午4:04:57
+	 */
+    @Override
+    public ResultDTO<String> doAddMerCore(MerchantCore merchantCore) {
+        
+        merchantCore.setSource(0);
+        merchantCore.setModifyUserId("admin");//待定
+        merchantCore.setModifyTime(new Date());
+        merchantCore.setStatus(1);
+        int res = merchantCoreDao.insertSelective(merchantCore);
+        
+        if(res != 1){
+            return ResultDTO.fail();
+        }
+        return ResultDTO.success(merchantCore.getInnerCode());
+        
+    }
 	
 }

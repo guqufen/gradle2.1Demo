@@ -16,6 +16,7 @@ import net.fnsco.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.service.domain.Agent;
 import net.fnsco.service.domain.MerchantCore;
 
 /**@desc 商户信息控制器
@@ -62,10 +63,10 @@ public class MerchantInfoController extends BaseController{
 	 * @param merchantContact
 	 * @return 
 	 */
-	@RequestMapping("/toAdd")
+	@RequestMapping("/toAddCore")
 	@ResponseBody
-	public ResultDTO<Integer> toAdd(){
-		ResultDTO<Integer> result = merchantCoreService.doAdd(request);
+	public ResultDTO<String> toAdd(MerchantCore merchantCore){
+		ResultDTO<String> result = merchantCoreService.doAddMerCore(merchantCore);
 		return result;
 	}
 	
@@ -91,5 +92,19 @@ public class MerchantInfoController extends BaseController{
 	public ResultDTO<MerchantCore> queryAllById(Integer id){
 		logger.info("查询出商户所有关联数据id = "+id);
 		return merchantCoreService.queryAllById(id);
+	}
+	
+	/**
+	 * queryAllAgent:(这里用一句话描述这个方法的作用)查询所有代理商
+	 * @return    设定文件
+	 * @return ResultDTO<List<Agent>>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	@RequestMapping("/queryAgents")
+	@ResponseBody
+	public ResultDTO<List<Agent>> queryAllAgent()
+	{
+	    return merchantCoreService.queryAllAgent();
 	}
 }

@@ -22,19 +22,15 @@
             <div class="form-group" style="margin-top:15px">
                 <div class="row col-sm-10">
                     <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_id">手机号码：</label>
+                        <label class="control-label" for="txt_search_id">商户名：</label>
                         <input type="text" class="form-control" id="txt_search_id">
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_name">商户号：</label>
+                        <label class="control-label" for="txt_search_name">法人姓名：</label>
                         <input type="text" class="form-control" id="txt_search_name">
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_price">交易金额：</label>
-                        <input type="text" class="form-control" id="txt_search_price">
-                    </div>
-                    <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_price">交易金额：</label>
+                        <label class="control-label" for="txt_search_price">法人手机：</label>
                         <input type="text" class="form-control" id="txt_search_price">
                     </div>
                 </div>
@@ -43,7 +39,6 @@
                     <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent();"><span class="glyphicon glyphicon-refresh"></span>重置</button>
                 </div>
             </div>
-
         </form>
         <!-- start -->
         <div class="ibox float-e-margins">
@@ -65,7 +60,6 @@
         </div>
         <!-- end  -->
     <!-- model start -->
-    <form action="/web/merchantinfo/toAdd" id="merchant_form" method="post">
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
 		    <div class="modal-dialog" role="document">
 		        <div class="modal-content">
@@ -86,6 +80,7 @@
 		                    <li role="presentation"><a>渠道信息</a></li>
 		                </ul>
 		                <div class="tab-content">
+		                    <form action="" id="mercore_form" method="post">
 		                    <div role="tabpanel" class="tab-pane active" id="home">
 		                        <div class="row">
 		                            <div class="col-sm-4">
@@ -150,10 +145,18 @@
 		                                <label class="control-label" for="mercFlag">商户标签：</label>
 		                                <input type="text" class="form-control" id="mercFlag" name="mercFlag">
 		                            </div>
+		                            <div class="col-sm-4">
+		                                <label class="control-label" for="agentId">代理商：</label>
+		                                <select id="agentId" name="agentId">
+		                                </select>
+		                            </div>
+		                            <input  type="hidden" name="innerCode" />
 		                        </div>
-		                        <a class="nextBtn" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">保存并下一步</a>
+		                        <a class="nextBtn" href="#profile" aria-controls="profile" role="tab" data-toggle="tab" onclick="javascript:saveMerCore();">保存并下一步</a>
 		                    </div>
+		                    </form>
 		                    <div role="tabpanel" class="tab-pane" id="profile">
+		                    <form action="" id="file_form" method="post">
 		                    <table class="table table-bordered">
 		                      	<thead>
 		                          	<th style="width: 30%">材料名称</th>
@@ -274,7 +277,10 @@
 		                          </td>
 		                      </tr>
 		                    </table>
-		                        <a class="nextBtn"  href="#messages" aria-controls="messages" role="tab" data-toggle="tab">保存并下一步</a>
+		                         <input  type="hidden" name="innerCode" />
+		                         <input type="hidden" id="fileIds" name="fileIds">
+		                        <a class="nextBtn"  href="#messages" aria-controls="messages" role="tab" data-toggle="tab" onclick="javascript:saveFile();">保存并下一步</a>
+		                    </form>    
 		                    </div>
 		                    <!-- 联系信息 -->
 		                    <div role="tabpanel" class="tab-pane" id="messages">
@@ -304,11 +310,9 @@
 		                </div>
 		            </div>
 		            <input type="hidden" id="innoCode" name="innerCode">
-		            <input type="hidden" id="fileIds" name="fileIds">
 		        </div>
 		    </div>
 		</div>
-	</form>
 	<!-- model end -->
 	<!-- 修改弹框editModel start -->
     <form action="/web/merchantinfo/toAdd" id="merchant_form" method="post">
