@@ -2,6 +2,7 @@ package net.fnsco.controller.app.merchat;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,9 @@ import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.api.dto.MerchantDTO;
 import net.fnsco.api.dto.TerminalDetailDTO;
+import net.fnsco.api.dto.TerminalsDTO;
 import net.fnsco.api.merchant.MerchantService;
+import net.fnsco.controller.app.jo.TerminalJO;
 import net.fnsco.controller.app.jo.UserMerchantJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -105,5 +108,24 @@ public class AppMerchantController extends BaseController {
     @ApiOperation(value = "APP用户查询设备详情")
     public ResultDTO<TerminalDetailDTO> getTerminalDetail(@RequestBody UserMerchantJO userMerchant){
         return merchantService.getTerminalDetailByTerId(userMerchant.getTerId());
+    }
+    
+    /**
+     * updateTerName:(这里用一句话描述这个方法的作用)修改设备名称
+     *
+     * @param terminalJO
+     * @return    设定文件
+     * @return ResultDTO<String>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping("/updatetTerminalName")
+    @ApiOperation(value = "APP用户修改设备信息")
+    public ResultDTO<TerminalsDTO> updateTerName(@RequestBody TerminalJO terminalJO){
+        logger.info("APP修改设备名称操作!");
+        TerminalsDTO terminalsDTO = new TerminalsDTO();
+        terminalsDTO.setId(terminalJO.getTerId());
+        terminalsDTO.setTermName(terminalJO.getTermName());
+        return merchantService.updateTerminal(terminalsDTO);
     }
 }
