@@ -28,6 +28,32 @@ public class UserMerchantJO extends JO{
     private Integer merId;
     
     /**
+     * 终端设备ID
+     */
+    private Integer terId;
+    
+    
+    /**
+     * terId
+     *
+     * @return  the terId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getTerId() {
+        return terId;
+    }
+    /**
+     * terId
+     *
+     * @param   terId    the terId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setTerId(Integer terId) {
+        this.terId = terId;
+    }
+    /**
      * merId
      *
      * @return  the merId

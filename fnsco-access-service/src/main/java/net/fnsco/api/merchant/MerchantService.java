@@ -9,6 +9,7 @@ import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.api.dto.MerchantDTO;
+import net.fnsco.api.dto.TerminalDetailDTO;
 import net.fnsco.core.base.ResultDTO;
 
 /**@desc 商户相关服务接口
@@ -54,4 +55,15 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<MerChantCoreDetailDTO> getMerChantDetailById(Integer merId);
+    
+    /**
+     * getTerminalDetailByTerId:(这里用一句话描述这个方法的作用)根据设备ID查询详情
+     *
+     * @param terId
+     * @return    设定文件
+     * @return ResultDTO<TerminalDetailDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    ResultDTO<TerminalDetailDTO> getTerminalDetailByTerId(Integer terId);
 }

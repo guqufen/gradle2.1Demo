@@ -5,16 +5,21 @@ package net.fnsco.service.modules.merchant;
 
 import java.util.Date;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.google.common.base.Strings;
+
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.api.dto.MerchantDTO;
+import net.fnsco.api.dto.TerminalDetailDTO;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.service.dao.master.AliasDAO;
 import net.fnsco.service.dao.master.MerchantChannelDao;
@@ -22,7 +27,6 @@ import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MerchantTerminalDao;
 import net.fnsco.service.domain.Alias;
 import net.fnsco.service.domain.MerchantChannel;
-import net.fnsco.service.domain.MerchantTerminal;
 import net.fnsco.service.modules.helper.MerchantHelper;
 
 /**@desc 商户相关操作
@@ -110,6 +114,9 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<List<MerChantCoreDTO>> getMerchantsCoreByUserId(Integer userId) {
+        if(null == userId){
+            return ResultDTO.fail(CoreConstants.E_USERID_NULL);
+        }
         List<MerChantCoreDTO> datas = merchantCoreDao.queryAllByUseraId(userId);
         ResultDTO<List<MerChantCoreDTO>> result = ResultDTO.success(datas);
         return result;
@@ -124,9 +131,11 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<List<MerTerminalsDTO>> getMerchantTerminalByUserId(Integer userId) {
-        ResultDTO<List<MerchantTerminal>> result = new ResultDTO<>();
-        List<MerchantTerminal> datas = merchantTerminalDao.selectByUserId(userId);
-        result.setData(datas);
+        if(null == userId){
+            return ResultDTO.fail(CoreConstants.E_USERID_NULL);
+        }
+        List<MerTerminalsDTO> datas = merchantCoreDao.queryMerTerminalsByUserId(userId);
+        ResultDTO<List<MerTerminalsDTO>> result = ResultDTO.success(datas);
         return result;
     }
     
@@ -139,10 +148,27 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<MerChantCoreDetailDTO> getMerChantDetailById(Integer merId) {
+        if(null == merId){
+            return ResultDTO.fail(CoreConstants.E_USERID_NULL);
+        }
         MerChantCoreDetailDTO datas = merchantCoreDao.queryDetailById(merId);
         ResultDTO<MerChantCoreDetailDTO> result = ResultDTO.success(datas);
         return result;
         
+    }
+    /**
+     * (non-Javadoc)查询设备详情
+     * @see net.fnsco.api.merchant.MerchantService#getTerminalDetailByTerId(java.lang.Integer)
+     * @auth tangliang
+     * @date 2017年6月30日 下午1:45:17
+     */
+    @Override
+    public ResultDTO<TerminalDetailDTO> getTerminalDetailByTerId(Integer terId) {
+        if(null == terId){
+            return ResultDTO.fail(CoreConstants.E_USERID_NULL);
+        }
+        TerminalDetailDTO data = merchantTerminalDao.queryDetailById(terId);
+        return ResultDTO.success(data);
     }
 
 }

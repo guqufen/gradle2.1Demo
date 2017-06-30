@@ -24,6 +24,11 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
+  <!-- APP商户终端列表结果集 -->
+  <resultMap  id="TerminalResultMap" type="net.fnsco.api.dto.MerTerminalsDTO">
+    	<result column="mer_name" property="merName" jdbcType="VARCHAR" />
+    	<collection property="terminals" column="inner_code" select="net.fnsco.service.dao.master.MerchantTerminalDao.queryByInnerCode"/>
+  </resultMap>
   <!-- APP商家详情结果集 -->
   <resultMap id="DetailResultMap" type="net.fnsco.api.dto.MerChantCoreDetailDTO">
   	<id column="id" property="id" jdbcType="INTEGER" />
@@ -62,8 +67,8 @@
     <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
-  	<association property="terminal" column="inner_code" select="net.fnsco.service.dao.master.MerchantTerminalDao.selectByInnerCode" javaType="net.fnsco.service.domain.MerchantTerminal"/>
   	<association property="channel" column="inner_code" select="net.fnsco.service.dao.master.MerchantChannelDao.selectByInnerCode" javaType="net.fnsco.service.domain.MerchantChannel"/>
+  	<collection property="terminal" column="inner_code" select="net.fnsco.service.dao.master.MerchantTerminalDao.selectByInnerCode"/>
   	<collection property="files" column="inner_code" select="net.fnsco.service.dao.master.MerchantFileDao.queryByInnerCode"/>
   	<collection property="contacts" column="inner_code" select="net.fnsco.service.dao.master.MerchantContactDao.queryByInnerCode" />
   </resultMap>	
@@ -561,5 +566,21 @@
   <!-- APP根据ID查询详情信息 -->
   <select id="queryDetailById" parameterType="java.lang.Integer"  resultMap="DetailResultMap">
      select id,mer_name,legal_person,card_num,inner_code  from m_merchant_core where id=#{merId}
+  </select>
+  <!-- APP根据用户ID查询设备列表 -->
+  <select id="queryMerTerminalsByUserId" parameterType="java.lang.Integer" resultMap="TerminalResultMap">
+    SELECT
+				CO.mer_name,
+				CO.inner_code
+			FROM
+				(
+					SELECT
+						inner_code
+					FROM
+						m_merchant_user_rel
+					WHERE
+						app_user_id = #{userId}
+				) REL
+			LEFT JOIN m_merchant_core CO ON REL.inner_code = CO.inner_code
   </select>
 </mapper>
