@@ -331,6 +331,8 @@ $("#btn_addContact").click(function(){
 function removeContact(num){
 	$('.remove-contactList'+num).parent().remove();
 }
+
+
 //保存联系信息列表
 $("#btn_saveContact").click(function(){
 		var listLen=$(".contact-list").length;
@@ -342,15 +344,23 @@ $("#btn_saveContact").click(function(){
 			var contactTelphone=$(".contact-list").eq(i).find($('.contactTelphone')).val();
 			var contactJobs=$(".contact-list").eq(i).find($('.contactJobs')).val();
 			var innerCode = $('#innerCode').val();
+			if(!innerCode){
+				alert('操作错误!');return ;
+			}
 			concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
 			contactlArr=contactArr.push(concatContactArr);
 		}
-		console.log(contactArr);
 		$.ajax({
-			url:'',
-			data:{'contacts':contactArr},
+			url:'/web/merchantinfo/toAddContact',
+			dataType:"json", 
+			type:'POST',
+		    contentType:"application/json",
+			data:JSON.stringify(contactArr),
 			success:function(data){
-				
+				alert('添加成功');
+			},
+			error:function(){
+				alert('系统错误');
 			}
 		});
 })
@@ -416,7 +426,26 @@ $("#btn_saveTerminal").click(function(){
 			concatTerminalArr={merchantCode,channelId,channelName,terminalCode,snCode,terminalBatch,terminalPara,chargesType,debitCardRate,creditCardRate,debitCardMaxFee,creditCardMaxFee,dealSwitch,recordState,termName,posFactory,posType,mercReferName}
 			terminalArr=terminalArr.concat(concatTerminalArr);
 		}
+		var innerCode = $('#innerCode').val();
+		if(!innerCode){
+			alert('操作错误!');return ;
+		}
 		console.log(terminalArr);
+		//保存
+		$.ajax({
+			url:'/web/merchantinfo/toAddTerminal',
+			dataType:"json", 
+			type:'POST',
+		    contentType:"application/json",
+			data:JSON.stringify(terminalArr),
+			success:function(data){
+				alert('添加成功'+data.data);//返回innerCode
+			},
+			error:function(){
+				alert('系统错误');
+			}
+		});
+		
 })
 
 
@@ -452,7 +481,26 @@ $("#btn_saveChannel").click(function(){
 		concatChannelArrArr={agentId,channelMerId,channelMerKey,channelType}
 		channelArr=channelArr.concat(concatChannelArrArr);
 	}
+	
+	var innerCode = $('#innerCode').val();
+	if(!innerCode){
+		alert('操作错误!');return ;
+	}
 	console.log(channelArr);
+	//保存
+	$.ajax({
+		url:'/web/merchantinfo/toAddChannel',
+		dataType:"json", 
+		type:'POST',
+	    contentType:"application/json",
+		data:JSON.stringify(channelArr),
+		success:function(data){
+			alert('添加成功'+data.data);//返回innerCode
+		},
+		error:function(){
+			alert('系统错误');
+		}
+	});
 })
 
 //表格中编辑事件

@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.Agent;
+import net.fnsco.service.domain.MerchantChannel;
 import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
+import net.fnsco.service.domain.MerchantTerminal;
 
 /**@desc 商家基本信息
  * @author tangliang
@@ -47,7 +49,28 @@ public interface MerchantCoreService {
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	public ResultDTO<String> doAddMerContact(List<MerchantContact> merchantCore);
+	public ResultDTO<String> doAddMerContact(List<MerchantContact> merchantContact);
+	/**
+	 * 
+	 * doAddMerTerminal:(这里用一句话描述这个方法的作用)保存终端信息
+	 *
+	 * @param merchantTerminal
+	 * @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<String> doAddMerTerminal(List<MerchantTerminal> merchantTerminal);
+	/**
+	 * doAddChannel:(这里用一句话描述这个方法的作用)保存渠道信息
+	 *
+	 * @param merchantChannel
+	 * @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<String> doAddMerChannel(List<MerchantChannel> merchantChannel);
 	
 	/**
 	 * 条件查询 根据商家基本信息条件分页查询

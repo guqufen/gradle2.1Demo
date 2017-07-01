@@ -1,6 +1,5 @@
 package net.fnsco.service.modules.merchant;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -325,10 +324,52 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
        if(CollectionUtils.isEmpty(merchantContacts)){
            return ResultDTO.fail();
        }
+       String innerCode = "";
        for (MerchantContact merchantContact : merchantContacts) {
            merchantContactDao.insertSelective(merchantContact);
+           innerCode = merchantContact.getInnerCode();
        }
-        return ResultDTO.success();
+        return ResultDTO.success(innerCode);
+        
+    }
+    /**
+     * (non-Javadoc)保存终端信息
+     * @see net.fnsco.api.merchant.MerchantCoreService#doAddMerTerminal(java.util.List)
+     * @auth tangliang
+     * @date 2017年7月1日 上午9:51:47
+     */
+    @Override
+    public ResultDTO<String> doAddMerTerminal(List<MerchantTerminal> merchantTerminals) {
+        
+        if(CollectionUtils.isEmpty(merchantTerminals)){
+            return ResultDTO.fail();
+        }
+        String innerCode = "";
+        for (MerchantTerminal merchantTerminal : merchantTerminals) {
+            merchantTerminalDao.insertSelective(merchantTerminal);
+            innerCode = merchantTerminal.getInnerCode();
+        }
+        return ResultDTO.success(innerCode);
+        
+    }
+    /**
+     * (non-Javadoc)保存渠道信息
+     * @see net.fnsco.api.merchant.MerchantCoreService#doAddChannel(java.util.List)
+     * @auth tangliang
+     * @date 2017年7月1日 上午9:59:00
+     */
+    @Override
+    public ResultDTO<String> doAddMerChannel(List<MerchantChannel> merchantChannels) {
+        
+        if(CollectionUtils.isEmpty(merchantChannels)){
+            return ResultDTO.fail();
+        }
+        String innerCode = "";
+        for (MerchantChannel merchantChannel : merchantChannels) {
+            merchantChannelDao.insertSelective(merchantChannel);
+            innerCode = merchantChannel.getInnerCode();
+        }
+        return ResultDTO.success(innerCode);
         
     }
 	
