@@ -80,8 +80,8 @@
 		                    <li role="presentation"><a>渠道信息</a></li>
 		                </ul>
 		                <div class="tab-content">
-		                    <form action="" id="mercore_form" method="post">
 		                    <div role="tabpanel" class="tab-pane active" id="home">
+		                    	 <form action="" id="mercore_form" method="post">
 		                        <div class="row">
 		                            <div class="col-sm-4">
 		                                <label class="control-label" for="merName">商户名：</label>
@@ -147,14 +147,14 @@
 		                            </div>
 		                            <div class="col-sm-4">
 		                                <label class="control-label" for="agentId">代理商：</label>
-		                                <select id="agentId" name="agentId">
+		                                	<select id="agentId" name="agentId" class="form-control">
 		                                </select>
 		                            </div>
 		                            <input  type="hidden" name="innerCode" />
 		                        </div>
 		                        <a class="nextBtn" href="#profile" aria-controls="profile" role="tab" data-toggle="tab" onclick="javascript:saveMerCore();">保存并下一步</a>
+		                        </form>
 		                    </div>
-		                    </form>
 		                    <div role="tabpanel" class="tab-pane" id="profile">
 		                    <form action="" id="file_form" method="post">
 		                    <table class="table table-bordered">
@@ -337,32 +337,32 @@
 		                    	<a class="editBtn_save btn btn-success" id="editBtn_merchant"><span class="glyphicon glyphicon-book"></span>保存</a>
 		                        <div class="row">
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="merName">商户名：</label>
-		                                <input type="text" class="form-control" id="merName" name="merName" required="required">
+		                                <label class="control-label" for="merName1">商户名：</label>
+		                                <input type="text" class="form-control" id="merName1" name="merName1" required="required">
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="abbreviation">简称：</label>
-		                                <input type="text" class="form-control" id="abbreviation" name="abbreviation">
+		                                <label class="control-label" for="abbreviation1">简称：</label>
+		                                <input type="text" class="form-control" id="abbreviation1" name="abbreviation1">
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="enName">商户名英文名：</label>
-		                                <input type="text" class="form-control" id="enName" name="enName">
+		                                <label class="control-label" for="enName1">商户名英文名：</label>
+		                                <input type="text" class="form-control" id="enName1" name="enName1">
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="legalPerson">商户法人姓名：</label>
-		                                <input type="text" class="form-control" id="legalPerson" name="legalPerson">
+		                                <label class="control-label" for="legalPerson1">商户法人姓名：</label>
+		                                <input type="text" class="form-control" id="legalPerson1" name="legalPerson1">
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="legalPersonMobile">法人手机号码：</label>
-		                                <input type="number" class="form-control" id="legalPersonMobile" name="legalPersonMobile" >
+		                                <label class="control-label" for="legalPersonMobile1">法人手机号码：</label>
+		                                <input type="number" class="form-control" id="legalPersonMobile1" name="legalPersonMobile1" >
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="legalPersonTel">法人电话：</label>
-		                                <input type="text" class="form-control" id="legalPersonTel" name="legalPersonTel">
+		                                <label class="control-label" for="legalPersonTel1">法人电话：</label>
+		                                <input type="text" class="form-control" id="legalPersonTel1" name="legalPersonTel1">
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label " for="legalValidCardType">法人有效证件类型：</label>
-		                                <select id="legalValidCardType" name="legalValidCardType" class="form-control">
+		                                <label class="control-label " for="legalValidCardType1">法人有效证件类型：</label>
+		                                <select id="legalValidCardType1" name="legalValidCardType1" class="form-control">
 		                                   <option value="0">身份证</option>
 		                                   <option value="1">护照</option>
 		                                   <option value="2">士兵证</option>
@@ -371,32 +371,32 @@
 		                                </select>
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="cardNum">证件号码：</label>
-		                                <input type="text" class="form-control" id="cardNum" name="cardNum">
+		                                <label class="control-label" for="cardNum1">证件号码：</label>
+		                                <input type="text" class="form-control" id="cardNum1" name="cardNum1">
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="cardValidTime">证件有效期：</label>
-		                                <input type="date" class="form-control" id="cardValidTime" name="cardValidTime">
+		                                <label class="control-label" for="cardValidTime1">证件有效期：</label>
+		                                <input type="date" class="form-control" id="cardValidTime1" name="cardValidTime1">
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="businessLicenseNum">营业执照号码：</label>
-		                                <input type="text" class="form-control" id="businessLicenseNum" name="businessLicenseNum">
+		                                <label class="control-label" for="businessLicenseNum1">营业执照号码：</label>
+		                                <input type="text" class="form-control" id="businessLicenseNum1" name="businessLicenseNum1">
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="businessLicenseValidTime">营业执照有效期：</label>
-		                                <input type="date" class="form-control" id="businessLicenseValidTime" name="businessLicenseValidTime">
+		                                <label class="control-label" for="businessLicenseValidTime1">营业执照有效期：</label>
+		                                <input type="date" class="form-control" id="businessLicenseValidTime" name="businessLicenseValidTime1">
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="taxRegistCode">税务登记号：</label>
-		                                <input type="text" class="form-control" id="taxRegistCode" name="taxRegistCode">
+		                                <label class="control-label" for="taxRegistCode1">税务登记号：</label>
+		                                <input type="text" class="form-control" id="taxRegistCode1" name="taxRegistCode1">
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="registAddress">商户注册地址：</label>
-		                                <input type="text" class="form-control" id="registAddress" name="registAddress">
+		                                <label class="control-label" for="registAddress1">商户注册地址：</label>
+		                                <input type="text" class="form-control" id="registAddress1" name="registAddress1">
 		                            </div>
 		                            <div class="col-sm-4">
-		                                <label class="control-label" for="mercFlag">商户标签：</label>
-		                                <input type="text" class="form-control" id="mercFlag" name="mercFlag">
+		                                <label class="control-label" for="mercFlag1">商户标签：</label>
+		                                <input type="text" class="form-control" id="mercFlag1" name="mercFlag1">
 		                            </div>
 		                        </div>
 		                        
@@ -685,7 +685,7 @@
 		                    </div>
 		                </div>
 		            </div>
-		            <input type="hidden" id="innoCode" name="innerCode">
+		            <input type="hidden" id="innerCode" name="innerCode">
 		            <input type="hidden" id="fileIds" name="fileIds">
 		            <!-- <div class="modal-footer">
 		                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

@@ -214,11 +214,11 @@ function  fileUp(num){
            'fileTypeKey':num,"innerCode":inno_code
        },
        'onUploadSuccess':function ( file, response, data) {
-    	   	var obj = eval('(' + response + ')');
-			var fileName = file.name.replace(',','');
+    	   var obj = eval('(' + response + ')');
+			   var fileName = file.name.replace(',','');
        		$('#view'+num).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
 						"<a class='previewfileImg' id='previewfileImg"+obj.id+"' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
-						"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"',"+num+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" + "</div>");
+						"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"',"+num+")><span class='glyphicon glyphicon-trash'></span>删除</a>" + "</div>");
        		//预览图片
        		var aId='previewfileImg'+obj.id;
 			var viewer = new Viewer(document.getElementById(aId), {
@@ -424,8 +424,8 @@ $("#btn_saveTerminal").click(function(){
 			var posFactory=$(".terminal-list").eq(i).find($('.posFactory')).val();
 			var posType=$(".terminal-list").eq(i).find($('.posType')).val();
 			var mercReferName=$(".terminal-list").eq(i).find($('.mercReferName')).val();
-
-			concatTerminalArr={merchantCode,channelId,channelName,terminalCode,snCode,terminalBatch,terminalPara,chargesType,debitCardRate,creditCardRate,debitCardMaxFee,creditCardMaxFee,dealSwitch,recordState,termName,posFactory,posType,mercReferName}
+      var innerCode=$("#innerCode").val();
+			concatTerminalArr={merchantCode,channelId,channelName,terminalCode,snCode,terminalBatch,terminalPara,chargesType,debitCardRate,creditCardRate,debitCardMaxFee,creditCardMaxFee,dealSwitch,recordState,termName,posFactory,posType,mercReferName,innerCode}
 			terminalArr=terminalArr.concat(concatTerminalArr);
 		}
 		var innerCode = $('#innerCode').val();
@@ -479,8 +479,8 @@ $("#btn_saveChannel").click(function(){
 		var channelMerId=$(".channel-list").eq(i).find($('.channelMerId')).val();
 		var channelMerKey=$(".channel-list").eq(i).find($('.channelMerKey')).val();
 		var channelType=$(".channel-list").eq(i).find($('.channelType')).val();
-
-		concatChannelArrArr={agentId,channelMerId,channelMerKey,channelType}
+    var innerCode=$("#innerCode").val();
+		concatChannelArrArr={agentId,channelMerId,channelMerKey,channelType,innerCode}
 		channelArr=channelArr.concat(concatChannelArrArr);
 	}
 	
@@ -597,12 +597,12 @@ function editData(id)
 $("#editModal").find('input').attr('disabled',true);
 $("#editModal").find('select').attr('disabled',true);
 //编辑弹框点击编辑按钮事件
-$('input[name="merName"]').val("888");
-$('input[name="abbreviation"]').val("88415");
-$('input[name="enName"]').val("511154");
-$('input[name="legalPerson"]').val("data.data.legalPerson");
-$('input[name="legalPersonMobile"]').val("181212");
-$('input[name="legalPersonTel"]').val("data.data.legalPersonTel");
+$('input[name="merName1"]').val("888");
+$('input[name="abbreviation1"]').val("88415");
+$('input[name="enName1"]').val("511154");
+$('input[name="legalPerson1"]').val("data");
+$('input[name="legalPersonMobile1"]').val("181212");
+$('input[name="legalPersonTel1"]').val("data");
 $(".editBtn_edit").click(function(){
     $("#editModal .nav-tabs li a").attr('href','javascript:;');
     $("#editModal .nav-tabs li a").removeAttr('data-toggle');
@@ -637,6 +637,7 @@ function saveMerCore(){
 			   if(data.success)
 			   {
 				   alert('保存成功');
+           return true;
 			   }	
 			   else{
 				   alert('保存失败');
