@@ -333,6 +333,16 @@ $("#btn_addContact").click(function(){
 	$('#contact-con').append(contactHtml(ContactList));
 })
 function removeContact(num){
+	if(num){
+		$.ajax({
+			url:'/web/merchantinfo/deleteContact',
+			type:'POST',
+			data:{'id':num},
+			success:function(data){
+				alert('删除成功');
+			}
+		});
+	}
 	$('.remove-contactList'+num).parent().remove();
 }
 
@@ -401,6 +411,16 @@ $("#btn_addTerminal").click(function(){
 })
 //删除终端
 function removeTerminal(num){
+	if(num){
+		$.ajax({
+			url:'/web/merchantinfo/deleteTerminal',
+			type:'POST',
+			data:{'id':num},
+			success:function(data){
+				alert('删除成功');
+			}
+		});
+	}
 	$('.remove-terminalList'+num).parent().remove();
 }
 //保存终端
@@ -470,6 +490,16 @@ $("#btn_addChannel").click(function(){
 })
 //删除渠道
 function removeChannel(num){
+	if(num){
+		$.ajax({
+			url:'/web/merchantinfo/deleteChannel',
+			type:'POST',
+			data:{'id':num},
+			success:function(data){
+				alert('删除成功');
+			}
+		});
+	}
 	$('.remove-channelList'+num).parent().remove();
 }
 //保存渠道数据
@@ -490,7 +520,6 @@ $("#btn_saveChannel").click(function(){
 	if(!innerCode){
 		alert('操作错误!');return ;
 	}
-	console.log(channelArr);
 	//保存
 	$.ajax({
 		url:'/web/merchantinfo/toAddChannel',

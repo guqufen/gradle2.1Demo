@@ -112,4 +112,8 @@
      from m_merchant_contact
     where inner_code = #{innerCode,jdbcType=VARCHAR}
   </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from m_merchant_contact
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
 </mapper>

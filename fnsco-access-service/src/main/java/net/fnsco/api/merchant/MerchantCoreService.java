@@ -105,6 +105,31 @@ public interface MerchantCoreService {
 	public ResultDTO<Integer> deleteByIds(Integer[] ids);
 	
 	/**
+	 * deleteByContact:(这里用一句话描述这个方法的作用)根据ID删除联系方式
+	 *
+	 * @param id
+	 * @return    设定文件
+	 * @return ResultDTO<Integer>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<Integer> deleteByContact(Integer id);
+	/**
+	 * deleteByTerminal:(这里用一句话描述这个方法的作用)根据ID删除终端信息
+	 *
+	 * @param id
+	 * @return    设定文件
+	 * @return ResultDTO<Integer>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<Integer> deleteByTerminal(Integer id);
+	
+	public ResultDTO<Integer> deleteByChanel(Integer id);
+	
+	public ResultDTO<Integer> deleteByBank(Integer id);
+	
+	/**
 	 * 根据ID 查询所有数据
 	 * @param id
 	 * @return

@@ -423,4 +423,45 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         return ResultDTO.success(innerCode);
     }
 
+    @Override
+    public ResultDTO<Integer> deleteByContact(Integer id) {
+        
+        if(null == id){
+            return ResultDTO.fail();
+        }
+        merchantContactDao.deleteByPrimaryKey(id);
+        return ResultDTO.success(id);
+        
+    }
+
+    @Override
+    public ResultDTO<Integer> deleteByTerminal(Integer id) {
+        
+        if(null == id){
+            return ResultDTO.fail();
+        }
+        merchantTerminalDao.deleteByPrimaryKey(id);
+        return ResultDTO.success(id);
+        
+    }
+
+    @Override
+    public ResultDTO<Integer> deleteByChanel(Integer id) {
+        if(null == id){
+            return ResultDTO.fail();
+        }
+        merchantChannelDao.deleteByPrimaryKey(id);
+        return ResultDTO.success(id);
+    }
+
+    @Override
+    public ResultDTO<Integer> deleteByBank(Integer id) {
+        if(null == id){
+            return ResultDTO.fail();
+        }
+        merchantBankDao.deleteByPrimaryKey(id);
+        return ResultDTO.success(id);
+        
+    }
+
 }

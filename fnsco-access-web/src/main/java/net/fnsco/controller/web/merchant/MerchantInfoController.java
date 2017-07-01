@@ -153,6 +153,64 @@ public class MerchantInfoController extends BaseController{
 	}
 	
 	/**
+	 * deleteContact:(这里用一句话描述这个方法的作用)删除联系方式
+	 *
+	 * @param id
+	 * @return    设定文件
+	 * @return ResultDTO<Integer>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	@RequestMapping("/deleteContact")
+    @ResponseBody
+    public ResultDTO<Integer> deleteContact(@RequestParam(value="id") Integer id){
+        logger.info("删除商户联系方式数据id = "+id);
+        return merchantCoreService.deleteByContact(id);
+    }
+	/**
+	 * deleteChannel:(这里用一句话描述这个方法的作用)删除渠道信息
+	 * @param id
+	 * @return    设定文件
+	 * @return ResultDTO<Integer>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	@RequestMapping("/deleteChannel")
+    @ResponseBody
+    public ResultDTO<Integer> deleteChannel(@RequestParam(value="id") Integer id){
+        logger.info("删除商户渠道信息数据id = "+id);
+        return merchantCoreService.deleteByChanel(id);
+    }
+	/**
+	 * deleteTerminal:(这里用一句话描述这个方法的作用)删除终端信息
+	 * @param id
+	 * @return    设定文件
+	 * @return ResultDTO<Integer>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	@RequestMapping("/deleteTerminal")
+    @ResponseBody
+    public ResultDTO<Integer> deleteTerminal(@RequestParam(value="id") Integer id){
+        logger.info("删除商户终端信息数据id = "+id);
+        return merchantCoreService.deleteByTerminal(id);
+    }
+	/**
+	 * deleteBank:(这里用一句话描述这个方法的作用)删除银行卡信息
+	 *
+	 * @param id
+	 * @return    设定文件
+	 * @return ResultDTO<Integer>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	@RequestMapping("/deleteBank")
+    @ResponseBody
+    public ResultDTO<Integer> deleteBank(@RequestParam(value="id") Integer id){
+        logger.info("删除商户银行卡数据id = "+id);
+        return merchantCoreService.deleteByBank(id);
+    }
+	/**
 	 * 根据ID 查询所有的数据
 	 * @param id
 	 * @return
