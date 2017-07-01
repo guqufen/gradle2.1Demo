@@ -306,7 +306,11 @@ $('#save_btn').click(function(){
 });
 //批量删除数据
 $('#btn_delete').click(function(){
-   
+	var select_data = $('#table').bootstrapTable('getSelections');  
+	if(select_data.length == 0){alert('请选择一行删除!')}
+	
+	console.log(select_data);
+	
 });
 //弹框下一步按钮事件
 $(".nextBtn").click(function(){
@@ -653,7 +657,6 @@ function saveMerCore(){
 //保存文件信息
 function saveFile(){
 	var file_ids = $('#fileIds').val();
-	console.log(file_ids);
 	$.ajax({
 		url:'/web/fileInfo/savefiles',
 		data:{'fileIds':file_ids},
