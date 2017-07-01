@@ -65,10 +65,17 @@ public class MerchantInfoController extends BaseController{
 	 */
 	@RequestMapping("/toAddCore")
 	@ResponseBody
-	public ResultDTO<String> toAdd(MerchantCore merchantCore){
+	public ResultDTO<String> toAddCore(MerchantCore merchantCore){
 		ResultDTO<String> result = merchantCoreService.doAddMerCore(merchantCore);
 		return result;
 	}
+	
+	@RequestMapping("/toAddContact")
+    @ResponseBody
+    public ResultDTO<String> toAddContact(MerchantCore merchantCore){
+        ResultDTO<String> result = merchantCoreService.doAddMerCore(merchantCore);
+        return result;
+    }
 	
 	/**
 	 * 根据ID删除商户信息，逻辑删除（不是真正的删除数据，只是更新数据的状态）

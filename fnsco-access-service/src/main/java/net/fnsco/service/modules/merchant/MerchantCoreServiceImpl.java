@@ -1,5 +1,6 @@
 package net.fnsco.service.modules.merchant;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import net.fnsco.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.PageDTO;
@@ -308,6 +310,25 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
             return ResultDTO.fail();
         }
         return ResultDTO.success(merchantCore.getInnerCode());
+        
+    }
+    /**
+     * (non-Javadoc)保存联系信息
+     * @see net.fnsco.api.merchant.MerchantCoreService#doAddMerContact(java.util.List)
+     * @auth tangliang
+     * @date 2017年6月30日 下午6:15:20
+     */
+    @Transactional
+    @Override
+    public ResultDTO<String> doAddMerContact(List<MerchantContact> merchantContacts) {
+        
+       if(CollectionUtils.isEmpty(merchantContacts)){
+           return ResultDTO.fail();
+       }
+       for (MerchantContact merchantContact : merchantContacts) {
+           merchantContactDao.insertSelective(merchantContact);
+       }
+        return ResultDTO.success();
         
     }
 	

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.Agent;
+import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
 
 /**@desc 商家基本信息
@@ -36,6 +37,17 @@ public interface MerchantCoreService {
 	 * @since  CodingExample　Ver 1.1
 	 */
 	public ResultDTO<String> doAddMerCore(MerchantCore merchantCore);
+	
+	/**
+	 * doAddMerContact:(这里用一句话描述这个方法的作用) 保存联系方式
+	 *
+	 * @param merchantCore
+	 * @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<String> doAddMerContact(List<MerchantContact> merchantCore);
 	
 	/**
 	 * 条件查询 根据商家基本信息条件分页查询

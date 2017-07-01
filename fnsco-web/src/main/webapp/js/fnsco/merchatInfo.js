@@ -341,11 +341,18 @@ $("#btn_saveContact").click(function(){
 			var contactEmail=$(".contact-list").eq(i).find($('.contactEmail')).val();
 			var contactTelphone=$(".contact-list").eq(i).find($('.contactTelphone')).val();
 			var contactJobs=$(".contact-list").eq(i).find($('.contactJobs')).val();
-			concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs}
+			var innerCode = $('#innerCode').val();
+			concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
 			contactlArr=contactArr.push(concatContactArr);
 		}
 		console.log(contactArr);
-		//alert(contactArr[0].contactName);
+		$.ajax({
+			url:'',
+			data:{'contacts':contactArr},
+			success:function(data){
+				
+			}
+		});
 })
 
 
