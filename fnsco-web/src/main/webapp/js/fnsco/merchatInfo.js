@@ -309,8 +309,6 @@ $('#btn_delete').click(function(){
 	var select_data = $('#table').bootstrapTable('getSelections');  
 	if(select_data.length == 0){alert('请选择一行删除!')}
 	
-	console.log(select_data);
-	
 });
 //弹框下一步按钮事件
 $(".nextBtn").click(function(){
@@ -510,23 +508,15 @@ $("#btn_saveChannel").click(function(){
 //表格中编辑事件
 function editData(id)
 {
-    getInnerCode();
-    var objs=document.getElementsByName("init");
-    for(var i= 0;i<objs.length;i++){
-       objs[i].click();
-    }
-    // $.ajax({
-    //  url:'/web/merchantinfo/queryAllById',
-    //  type:'POST',
-    //  dataType : "json",
-    //  data:{'id':id},
-    //  success:function(data){
-    //      //data.data就是所有数据集
-    //      console.log(data.data);
-    //      var  objs=document.getElementsByName("init");
-    //      for(var i= 0;i<objs.length;i++){
-    //         objs[i].click();
-    //      }
+     $.ajax({
+      url:'/web/merchantinfo/queryAllById',
+      type:'POST',
+      dataType : "json",
+      data:{'id':id},
+      success:function(data){
+          //data.data就是所有数据集
+          console.log(data.data);
+      }});return;
             $('#editModal').modal();
             $("#editModal").find('.tab-pane').removeClass("active");
             $("#home1").addClass("active");
