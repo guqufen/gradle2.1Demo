@@ -190,7 +190,6 @@ $('#btn_add').click(function(){
 //上传文件
 function  fileUp(num){
    var inno_code = $('#innerCode').val();
-   console.log(inno_code);
    if(!inno_code)return;
  //文件上传
    $('#uploadify_file'+num).uploadify({
@@ -244,7 +243,6 @@ function  fileUp(num){
 		}
    });
 }
-
 //删除图片
 function deleteImage(queueId,id,url,num)
 {
@@ -279,6 +277,10 @@ function getInnerCode()
 			   for(var i= 0;i<objs.length;i++){
 			   	   objs[i].click();
 			   }	
+			   var  objs_1=document.getElementsByName("init1");
+			   for(var i= 0;i<objs_1.length;i++){
+				   objs_1[i].click();
+			   }
 			   code = data;
 			   return code;
 		   }
@@ -532,11 +534,6 @@ function removeBankCard(num){
   $('.remove-bankCardList'+num).parent().remove();
 }
 
-
-
-
-
-
 //表格中编辑事件
 function editData(id)
 {
@@ -547,83 +544,82 @@ function editData(id)
       data:{'id':id},
       success:function(data){
           //data.data就是所有数据集
-          console.log(data.data);
-      }});return;
-            $('#editModal').modal();
-            $("#editModal").find('.tab-pane').removeClass("active");
-            $("#home1").addClass("active");
-            $("#editModal .nav-tabs li").removeClass("active");
-            $("#editModal .nav-tabs li:first-child").addClass("active");
-            //基本信息
-            $('input[name="merName"]').val(data.data.merName);
-            $('input[name="abbreviation"]').val(data.data.abbreviation);
-            $('input[name="enName"]').val(data.data.enName);
-            $('input[name="legalPerson"]').val(data.data.legalPerson);
-            $('input[name="legalPersonMobile"]').val(data.data.legalPersonMobile);
-            $('input[name="legalPersonTel"]').val(data.data.legalPersonTel);
-            $('select[name="legalValidCardType"]').find("option[value="+data.data.legalValidCardType+"]").attr("selected",true);
-            $('input[name="cardNum"]').val(data.data.cardNum);
-            $('input[name="cardValidTime"]').val(data.data.cardValidTime);
-            $('input[name="businessLicenseNum"]').val(data.data.businessLicenseNum);
-            $('input[name="businessLicenseValidTime"]').val(data.data.businessLicenseValidTime);
-            $('input[name="taxRegistCode"]').val(data.data.taxRegistCode);
-            $('input[name="registAddress"]').val(data.data.registAddress);
-            $('input[name="mercFlag"]').val(data.data.mercFlag);
-            // 渠道信息
-            $('input[name="agentId"]').val(data.data.channel.agentId);
-            $('input[name="channelMerId"]').val(data.data.channel.channelMerId);
-            $('input[name="channelMerKey"]').val(data.data.channel.channelMerKey);
-            $('select[name="channelType"]').find("option[value="+data.data.channel.channelType+"]").attr("selected",true);
-            //终端
-            $('input[name="merchantCode"]').val(data.data.terminal.merchantCode);
-            $('input[name="channelId"]').val(data.data.terminal.channelId);
-            $('input[name="channelName"]').val(data.data.terminal.channelName);
-            $('input[name="terminalCode"]').val(data.data.terminal.terminalCode);
-            $('input[name="innerTermCode"]').val(data.data.terminal.innerTermCode);
-            $('input[name="snCode"]').val(data.data.terminal.snCode);
-            $('input[name="terminalBatch"]').val(data.data.terminal.terminalBatch);
-            $('input[name="terminalPara"]').val(data.data.terminal.terminalPara);
-            $('select[name="chargesType"]').find("option[value="+data.data.terminal.chargesType+"]").attr("selected",true);
-            $('input[name="debitCardRate"]').val(data.data.terminal.debitCardRate);
-            $('input[name="creditCardRate"]').val(data.data.terminal.creditCardRate);
-            $('input[name="debitCardFee"]').val(data.data.terminal.debitCardFee);
-            $('input[name="creditCardFee"]').val(data.data.terminal.creditCardFee);
-            $('input[name="debitCardMaxFee"]').val(data.data.terminal.debitCardMaxFee);
-            $('input[name="creditCardMaxFee"]').val(data.data.terminal.creditCardMaxFee);
-            $('input[name="dealSwitch"]').val(data.data.terminal.dealSwitch);
-            $('select[name="recordState"]').find("option[value="+data.data.terminal.recordState+"]").attr("selected",true);
-            $('select[name="termAuditState"]').find("option[value="+data.data.terminal.termAuditState+"]").attr("selected",true);
-            $('input[name="termName"]').val(data.data.terminal.termName);
-            $('input[name="posFactory"]').val(data.data.terminal.posFactory);
-            $('input[name="posType"]').val(data.data.terminal.posType);
-            $('input[name="mercReferName"]').val(data.data.terminal.mercReferName);
-            // 联系信息
-            $('input[name="contactName"]').val(data.data.contacts[0].contactName);
-            $('input[name="contactMobile"]').val(data.data.contacts[0].contactMobile);
-            $('input[name="contactEmail"]').val(data.data.contacts[0].contactEmail);
-            $('input[name="contactTelphone"]').val(data.data.contacts[0].contactTelphone);
-            $('input[name="contactJobs"]').val(data.data.contacts[0].contactJobs);
-            //资料文件
-            var filesLen=data.data.files.length;
-            for(var i=0;i<filesLen;i++){
-                var fileName=data.data.files[i].fileName;
-                var fileType=data.data.files[i].fileType;
-                var filePath=data.data.files[i].filePath;
-                var id=data.data.files[i].id;
-                $('#view'+fileType).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
-                        "<a class='previewfileImg' id='previewfileImg"+id+"' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
-                        "<a title='删除' class='deletefileImg' id='deletefileImg"+id+"' href=javascript:deleteImage('#deletefileImg"+id+"',"+id+",'"+filePath+"',"+fileType+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" + "</div>");
-                $('#uploadify_file'+fileType).hide();
-                //预览图片事件
-                var aId='previewfileImg'+id;
-                var viewer = new Viewer(document.getElementById(aId), {
-                    url: 'data-original',
-                    navbar: false,
-                    toolbar: false,
-                });
-            }
-    //  }
-    // });
+          $('#innerCode').val(data.data.innerCode);
+          clickFileBtn();
+          $('#editModal').modal();
+          $("#editModal").find('.tab-pane').removeClass("active");
+          $("#home1").addClass("active");
+          $("#editModal .nav-tabs li").removeClass("active");
+          $("#editModal .nav-tabs li:first-child").addClass("active");
+          //基本信息
+          $('input[name="merName"]').val(data.data.merName);
+          $('input[name="abbreviation"]').val(data.data.abbreviation);
+          $('input[name="enName"]').val(data.data.enName);
+          $('input[name="legalPerson"]').val(data.data.legalPerson);
+          $('input[name="legalPersonMobile"]').val(data.data.legalPersonMobile);
+          $('input[name="legalPersonTel"]').val(data.data.legalPersonTel);
+          $('select[name="legalValidCardType"]').find("option[value="+data.data.legalValidCardType+"]").attr("selected",true);
+          $('input[name="cardNum"]').val(data.data.cardNum);
+          $('input[name="cardValidTime"]').val(data.data.cardValidTime);
+          $('input[name="businessLicenseNum"]').val(data.data.businessLicenseNum);
+          $('input[name="businessLicenseValidTime"]').val(data.data.businessLicenseValidTime);
+          $('input[name="taxRegistCode"]').val(data.data.taxRegistCode);
+          $('input[name="registAddress"]').val(data.data.registAddress);
+          $('input[name="mercFlag"]').val(data.data.mercFlag);
+          // 渠道信息
+          $('input[name="agentId"]').val(data.data.channel.agentId);
+          $('input[name="channelMerId"]').val(data.data.channel.channelMerId);
+          $('input[name="channelMerKey"]').val(data.data.channel.channelMerKey);
+          $('select[name="channelType"]').find("option[value="+data.data.channel.channelType+"]").attr("selected",true);
+          //终端
+          $('input[name="merchantCode"]').val(data.data.terminal.merchantCode);
+          $('input[name="channelId"]').val(data.data.terminal.channelId);
+          $('input[name="channelName"]').val(data.data.terminal.channelName);
+          $('input[name="terminalCode"]').val(data.data.terminal.terminalCode);
+          $('input[name="innerTermCode"]').val(data.data.terminal.innerTermCode);
+          $('input[name="snCode"]').val(data.data.terminal.snCode);
+          $('input[name="terminalBatch"]').val(data.data.terminal.terminalBatch);
+          $('input[name="terminalPara"]').val(data.data.terminal.terminalPara);
+          $('select[name="chargesType"]').find("option[value="+data.data.terminal.chargesType+"]").attr("selected",true);
+          $('input[name="debitCardRate"]').val(data.data.terminal.debitCardRate);
+          $('input[name="creditCardRate"]').val(data.data.terminal.creditCardRate);
+          $('input[name="debitCardFee"]').val(data.data.terminal.debitCardFee);
+          $('input[name="creditCardFee"]').val(data.data.terminal.creditCardFee);
+          $('input[name="debitCardMaxFee"]').val(data.data.terminal.debitCardMaxFee);
+          $('input[name="creditCardMaxFee"]').val(data.data.terminal.creditCardMaxFee);
+          $('input[name="dealSwitch"]').val(data.data.terminal.dealSwitch);
+          $('select[name="recordState"]').find("option[value="+data.data.terminal.recordState+"]").attr("selected",true);
+          $('select[name="termAuditState"]').find("option[value="+data.data.terminal.termAuditState+"]").attr("selected",true);
+          $('input[name="termName"]').val(data.data.terminal.termName);
+          $('input[name="posFactory"]').val(data.data.terminal.posFactory);
+          $('input[name="posType"]').val(data.data.terminal.posType);
+          $('input[name="mercReferName"]').val(data.data.terminal.mercReferName);
+          // 联系信息
+          $('input[name="contactName"]').val(data.data.contacts[0].contactName);
+          $('input[name="contactMobile"]').val(data.data.contacts[0].contactMobile);
+          $('input[name="contactEmail"]').val(data.data.contacts[0].contactEmail);
+          $('input[name="contactTelphone"]').val(data.data.contacts[0].contactTelphone);
+          $('input[name="contactJobs"]').val(data.data.contacts[0].contactJobs);
+          //资料文件
+          var filesLen=data.data.files.length;
+          for(var i=0;i<filesLen;i++){
+              var fileName=data.data.files[i].fileName;
+              var fileType=data.data.files[i].fileType;
+              var filePath=data.data.files[i].filePath;
+              var id=data.data.files[i].id;
+              $('#view'+fileType).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
+                      "<a class='previewfileImg' id='previewfileImg"+id+"' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
+                      "<a title='删除' class='deletefileImg' id='deletefileImg"+id+"' href=javascript:deleteImage('#deletefileImg"+id+"',"+id+",'"+filePath+"',"+fileType+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" + "</div>");
+              $('#uploadify_file'+fileType).hide();
+              //预览图片事件
+              var aId='previewfileImg'+id;
+              var viewer = new Viewer(document.getElementById(aId), {
+                  url: 'data-original',
+                  navbar: false,
+                  toolbar: false,
+              });
+          }
+      }});
 }
 // 全部默认不可编辑
 $("#editModal").find('input').attr('disabled',true);
@@ -687,4 +683,22 @@ function saveFile(){
 			
 		}
 	});
+}
+//手动触发文件上传方法
+function clickFileBtn(){
+	 fileUp('1100_1');
+	 fileUp('1101_1');
+	 fileUp('1190_1');
+	 fileUp('1_1');
+	 fileUp('2_1');
+	 fileUp('300_1');
+	 fileUp('301_1');
+	 fileUp('4_1');
+	 fileUp('6_1');
+	 fileUp('7_1');
+	 fileUp('8_1');
+	 fileUp('900_1');
+	 fileUp('901_1');
+	 fileUp('902_1');
+	 fileUp('10_1');
 }
