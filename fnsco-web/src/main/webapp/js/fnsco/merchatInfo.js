@@ -275,10 +275,6 @@ function getInnerCode()
 		   success:function(data){
 			   $('#innoCode').val(data);
 			   $("input[name='innerCode']").val(data);
-			   var  objs=document.getElementsByName("init");
-			   for(var i= 0;i<objs.length;i++){
-				   objs[i].click();
-			   }
 			   code = data;
 			   return code;
 		   }
@@ -318,7 +314,7 @@ $(".nextBtn").click(function(){
 //添加联系信息列表
 var ContactList=1;
 function contactHtml(contactList){
-	return "<div class='contact-list'><div class='remove-icon remove-contactList remove-contactList"+ContactList+"' onclick='removeContact("+ContactList+")'><span class='glyphicon glyphicon-remove'></span></div><div class='row'>"+
+	return "<div class='contact-list'><div class='remove-icon remove-contactList"+ContactList+"' onclick='removeContact("+ContactList+")'><span class='glyphicon glyphicon-remove'></span></div><div class='row'>"+
 						"<div class='col-sm-4'><label class='control-label' for='contactName"+ContactList+"'>联系人名：</label><input type='text' class='form-control contactName' id='contactName"+ContactList+"' name='contactName"+ContactList+"'></div>"+
 						"<div class='col-sm-4'><label class='control-label' for='contactMobile"+ContactList+"'>联系人手机：</label><input type='text' class='form-control contactMobile' id='contactMobile"+ContactList+"' name='contactMobile"+ContactList+"'></div>"+
 						"<div class='col-sm-4'><label class='control-label' for='contactEmail"+ContactList+"'>联系人邮箱：</label><input type='text' class='form-control contactEmail' id='contactEmail"+ContactList+"' name='contactEmail"+ContactList+"'></div>"+
@@ -371,7 +367,7 @@ $("#btn_saveContact").click(function(){
 //添加终端信息列表
 var TerminalList=1;
 function terminalHtml(TerminalList){
-	return '<div class="terminal-list"><div class="remove-icon remove-terminalList remove-terminalList'+TerminalList+'" onclick="removeTerminal('+TerminalList+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
+	return '<div class="terminal-list"><div class="remove-icon remove-terminalList'+TerminalList+'" onclick="removeTerminal('+TerminalList+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
         '<div class="col-sm-4"><label class="control-label" for="merchantCode'+TerminalList+'">通道商户号：</label><input type="text" class="form-control merchantCode" id="merchantCode'+TerminalList+'" name="merchantCode'+TerminalList+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="channelId'+TerminalList+'">通道ID：</label><input type="text" class="form-control channelId" id="channelId'+TerminalList+'" name="channelId'+TerminalList+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="channelName'+TerminalList+'">通道名称：</label><input type="text" class="form-control channelName" id="channelName'+TerminalList+'" name="channelName'+TerminalList+'" required="required"></div>'+
@@ -454,7 +450,7 @@ $("#btn_saveTerminal").click(function(){
 //添加渠道信息列表
 var ChannellList=1;
 function channelHtml(ChannellList){
-	return '<div class="channel-list"><div class="remove-icon remove-terminalList remove-channelList'+ChannellList+'" onclick="removeChannel('+ChannellList+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
+	return '<div class="channel-list"><div class="remove-icon remove-channelList'+ChannellList+'" onclick="removeChannel('+ChannellList+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
             '<div class="col-sm-4"><label class="control-label" for="agentId'+ChannellList+'">代理商：</label><input type="number" class="form-control agentId" id="agentId'+ChannellList+'" name="agentId'+ChannellList+'" required="required"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerId'+ChannellList+'">渠道商户号：</label><input type="text" class="form-control channelMerId" id="channelMerId'+ChannellList+'" name="channelMerId'+ChannellList+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+ChannellList+'">渠道商户key：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+ChannellList+'" name="channelMerKey'+ChannellList+'"></div>'+
@@ -504,6 +500,38 @@ $("#btn_saveChannel").click(function(){
 		}
 	});
 })
+
+//添加银行卡信息列表
+var BankCardlList=1;
+function bankCardHtml(BankCardlList){
+  return '<div class="bankCard-list"><div class="remove-icon remove-bankCardList'+BankCardlList+'" onclick="removeBankCard('+BankCardlList+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
+            '<div class="col-sm-4"><label class="control-label" for="accountType'+BankCardlList+'">账户类型：</label><select name="accountType'+BankCardlList+'" class="form-control accountType"><option value="1">对公</option><option value="0">对私</option></select></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="accountName'+BankCardlList+'">账户开户名：</label><input type="text" class="form-control accountName" id="accountName'+BankCardlList+'" name="accountName'+BankCardlList+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户账号：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户人身份证号：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">结算周期：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div></div>'+
+            '<div class="row"><div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">支行名称:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" readonly="readonly" name="channelMerKey'+BankCardlList+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" disabled="disabled" name="channelMerKey'+BankCardlList+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行所在省:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" disabled="disabled" name="channelMerKey'+BankCardlList+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行所在市:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" disabled="disabled" name="channelMerKey'+BankCardlList+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行行号:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" disabled="disabled" name="channelMerKey'+BankCardlList+'"></div>'+
+            '</div></div>';
+}
+//默认添加一个银行卡信息列表
+$('#bankCard-con').append(bankCardHtml(BankCardlList));
+$("#btn_addBankCard").click(function(){
+  BankCardlList=BankCardlList+1;
+  $('#bankCard-con').append(bankCardHtml(BankCardlList));
+})
+//删除银行卡
+function removeBankCard(num){
+  $('.remove-bankCardList'+num).parent().remove();
+}
+
+
+
+
+
 
 //表格中编辑事件
 function editData(id)

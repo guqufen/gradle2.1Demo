@@ -306,7 +306,15 @@
 			                    </div>
 		                        <button id="btn_addChannel" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增渠道</button>
 		                        <!-- <a class="saveBtn" id="save_btn" type="submit">保存</a> -->
-		                        <a class="saveBtn" id="btn_saveChannel">保存</a>
+		                        <a class="nextBtn" id="btn_saveChannel" href="#bankCard_info" aria-controls="bankCard_info" role="tab" data-toggle="tab" onclick="javascript:saveChannel();">保存并下一步</a>
+		                    </div>
+		                    <div role="tabpanel" class="tab-pane" id="bankCard_info">
+		                    	<div id="bankCard-con">
+		                    		<!-- 银行卡列表默认js增加 -->
+			                    </div>
+		                        <button id="btn_addBankCard" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增银行卡信息</button>
+		                        <!-- <a class="saveBtn" id="save_btn" type="submit">保存</a> -->
+		                        <a class="saveBtn" id="btn_saveChannel"	onclick="javascript:saveBankCard();">保存</a>
 		                    </div>
 		                </div>
 		            </div>
