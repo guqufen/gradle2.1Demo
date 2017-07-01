@@ -1,5 +1,7 @@
 package net.fnsco.service.dao.master;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.service.domain.MerchantChannel;
@@ -30,5 +32,5 @@ public interface MerchantChannelDao {
      * @param innerCode
      * @return
      */
-    MerchantChannel selectByInnerCode(@Param("innerCode") String innerCode);
+    List<MerchantChannel> selectByInnerCode(@Param("innerCode") String innerCode);
 }
