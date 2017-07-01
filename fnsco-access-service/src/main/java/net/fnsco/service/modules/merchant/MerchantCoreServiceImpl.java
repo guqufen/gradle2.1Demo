@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import net.fnsco.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.PageDTO;
@@ -308,6 +309,67 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
             return ResultDTO.fail();
         }
         return ResultDTO.success(merchantCore.getInnerCode());
+        
+    }
+    /**
+     * (non-Javadoc)保存联系信息
+     * @see net.fnsco.api.merchant.MerchantCoreService#doAddMerContact(java.util.List)
+     * @auth tangliang
+     * @date 2017年6月30日 下午6:15:20
+     */
+    @Transactional
+    @Override
+    public ResultDTO<String> doAddMerContact(List<MerchantContact> merchantContacts) {
+        
+       if(CollectionUtils.isEmpty(merchantContacts)){
+           return ResultDTO.fail();
+       }
+       String innerCode = "";
+       for (MerchantContact merchantContact : merchantContacts) {
+           merchantContactDao.insertSelective(merchantContact);
+           innerCode = merchantContact.getInnerCode();
+       }
+        return ResultDTO.success(innerCode);
+        
+    }
+    /**
+     * (non-Javadoc)保存终端信息
+     * @see net.fnsco.api.merchant.MerchantCoreService#doAddMerTerminal(java.util.List)
+     * @auth tangliang
+     * @date 2017年7月1日 上午9:51:47
+     */
+    @Override
+    public ResultDTO<String> doAddMerTerminal(List<MerchantTerminal> merchantTerminals) {
+        
+        if(CollectionUtils.isEmpty(merchantTerminals)){
+            return ResultDTO.fail();
+        }
+        String innerCode = "";
+        for (MerchantTerminal merchantTerminal : merchantTerminals) {
+            merchantTerminalDao.insertSelective(merchantTerminal);
+            innerCode = merchantTerminal.getInnerCode();
+        }
+        return ResultDTO.success(innerCode);
+        
+    }
+    /**
+     * (non-Javadoc)保存渠道信息
+     * @see net.fnsco.api.merchant.MerchantCoreService#doAddChannel(java.util.List)
+     * @auth tangliang
+     * @date 2017年7月1日 上午9:59:00
+     */
+    @Override
+    public ResultDTO<String> doAddMerChannel(List<MerchantChannel> merchantChannels) {
+        
+        if(CollectionUtils.isEmpty(merchantChannels)){
+            return ResultDTO.fail();
+        }
+        String innerCode = "";
+        for (MerchantChannel merchantChannel : merchantChannels) {
+            merchantChannelDao.insertSelective(merchantChannel);
+            innerCode = merchantChannel.getInnerCode();
+        }
+        return ResultDTO.success(innerCode);
         
     }
 	
