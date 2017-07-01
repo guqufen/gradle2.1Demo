@@ -69,10 +69,11 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="agent_id" property="agentId" jdbcType="INTEGER" />
-  	<association property="channel" column="inner_code" select="net.fnsco.service.dao.master.MerchantChannelDao.selectByInnerCode" javaType="net.fnsco.service.domain.MerchantChannel"/>
+  	<collection property="channel" column="inner_code" select="net.fnsco.service.dao.master.MerchantChannelDao.selectByInnerCode" />
   	<collection property="terminal" column="inner_code" select="net.fnsco.service.dao.master.MerchantTerminalDao.selectByInnerCode"/>
   	<collection property="files" column="inner_code" select="net.fnsco.service.dao.master.MerchantFileDao.queryByInnerCode"/>
   	<collection property="contacts" column="inner_code" select="net.fnsco.service.dao.master.MerchantContactDao.queryByInnerCode" />
+  	<collection property="banks" column="inner_code" select="net.fnsco.service.dao.master.MerchantBankDao.queryWebByInnerCode" />
   </resultMap>	
   <sql id="Base_Column_List" >
     id, agent_id,inner_code, mer_name, abbreviation, en_name, sign_date, legal_person, legal_person_mobile, 
