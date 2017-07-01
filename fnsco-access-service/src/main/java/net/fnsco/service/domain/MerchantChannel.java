@@ -21,8 +21,6 @@ public class MerchantChannel extends DTO{
 
     private String innerCode;
     
-    private Integer agentId;
-    
     private String channelType;
 
     private String channelMerId;
@@ -35,15 +33,6 @@ public class MerchantChannel extends DTO{
 
     private Integer modifyUserId;
     
-    
-    public Integer getAgentId() {
-		return agentId;
-	}
-
-	public void setAgentId(Integer agentId) {
-		this.agentId = agentId;
-	}
-
 	public Integer getId() {
         return id;
     }

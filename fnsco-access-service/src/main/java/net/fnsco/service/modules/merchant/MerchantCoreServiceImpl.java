@@ -281,7 +281,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService{
 	private MerchantChannel getParamesFormReqChan(HttpServletRequest request){
 		MerchantChannel merchantChannel = new MerchantChannel();
 		merchantChannel.setInnerCode(request.getParameter("innerCode"));
-		merchantChannel.setAgentId(Integer.valueOf(request.getParameter("agentId")));
+//		merchantChannel.setAgentId(Integer.valueOf(request.getParameter("agentId")));
 		merchantChannel.setChannelType(request.getParameter("channelType"));
 		merchantChannel.setChannelMerId(request.getParameter("channelMerId"));
 		merchantChannel.setChannelMerKey(request.getParameter("channelMerKey"));

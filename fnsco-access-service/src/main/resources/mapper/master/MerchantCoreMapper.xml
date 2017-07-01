@@ -68,6 +68,7 @@
     <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
   	<association property="channel" column="inner_code" select="net.fnsco.service.dao.master.MerchantChannelDao.selectByInnerCode" javaType="net.fnsco.service.domain.MerchantChannel"/>
   	<collection property="terminal" column="inner_code" select="net.fnsco.service.dao.master.MerchantTerminalDao.selectByInnerCode"/>
   	<collection property="files" column="inner_code" select="net.fnsco.service.dao.master.MerchantFileDao.queryByInnerCode"/>
