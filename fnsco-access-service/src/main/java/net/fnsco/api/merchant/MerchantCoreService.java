@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.Agent;
+import net.fnsco.service.domain.MerchantBank;
 import net.fnsco.service.domain.MerchantChannel;
 import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
@@ -71,6 +72,16 @@ public interface MerchantCoreService {
 	 * @since  CodingExample　Ver 1.1
 	 */
 	public ResultDTO<String> doAddMerChannel(List<MerchantChannel> merchantChannel);
+	/**
+	 * doAddMerBanks:(这里用一句话描述这个方法的作用)保存银行卡信息
+	 *
+	 * @param merchantBanks
+	 * @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<String> doAddMerBanks(List<MerchantBank> merchantBanks);
 	
 	/**
 	 * 条件查询 根据商家基本信息条件分页查询

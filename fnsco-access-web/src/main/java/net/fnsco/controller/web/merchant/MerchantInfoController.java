@@ -19,6 +19,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.Agent;
+import net.fnsco.service.domain.MerchantBank;
 import net.fnsco.service.domain.MerchantChannel;
 import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
@@ -120,6 +121,22 @@ public class MerchantInfoController extends BaseController{
     public ResultDTO<String> toAddChannel(@RequestBody MerchantChannel[] channels){
         List<MerchantChannel> params = Arrays.asList(channels);
         ResultDTO<String> result = merchantCoreService.doAddMerChannel(params);
+        return result;
+    }
+	/**
+	 * toAddBank:(这里用一句话描述这个方法的作用)保存或修改银行卡信息
+	 *
+	 * @param banks
+	 * @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	@RequestMapping("/toAddBank")
+    @ResponseBody
+    public ResultDTO<String> toAddBank(@RequestBody MerchantBank[] banks){
+        List<MerchantBank> params = Arrays.asList(banks);
+        ResultDTO<String> result = merchantCoreService.doAddMerBanks(params);
         return result;
     }
 	

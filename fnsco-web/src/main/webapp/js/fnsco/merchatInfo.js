@@ -170,9 +170,8 @@ function resetEvent(){
    $('#formSearch')[0].reset();
 }
 
-
+getInnerCode();
 $('#btn_add').click(function(){
-   getInnerCode();
    $.ajax({
 	   url:'/web/merchantinfo/queryAgents',
 	   success:function(data){
@@ -188,11 +187,11 @@ $('#btn_add').click(function(){
 	   }
    })
 });
-
 //上传文件
 function  fileUp(num){
-   var inno_code = $('#innoCode').val();
-   if(!inno_code)inno_code=getInnerCode();
+   var inno_code = $('#innerCode').val();
+   console.log(inno_code);
+   if(!inno_code)return;
  //文件上传
    $('#uploadify_file'+num).uploadify({
 	   //指定swf文件
@@ -264,17 +263,22 @@ function deleteImage(queueId,id,url,num)
 	   }
    });
 }
+
 //点击获取innocode
 function getInnerCode()
 {
    var code = '';
-   if(!$('#innoCode').val()){
+   if(!$('#innerCode').val()){
 	   $.ajax({
 		   url:'/web/fileInfo/getInnoCode',
 		   type:'POST',
 		   success:function(data){
-			   $('#innoCode').val(data);
+			   $('#innerCode').val(data);
 			   $("input[name='innerCode']").val(data);
+			   var  objs=document.getElementsByName("init");
+			   for(var i= 0;i<objs.length;i++){
+			   	   objs[i].click();
+			   }	
 			   code = data;
 			   return code;
 		   }
@@ -665,7 +669,7 @@ function saveMerCore(){
 			   if(data.success)
 			   {
 				   alert('保存成功');
-           return true;
+				   return true;
 			   }	
 			   else{
 				   alert('保存失败');
