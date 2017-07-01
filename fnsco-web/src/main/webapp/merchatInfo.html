@@ -70,15 +70,16 @@
 		            <div class="modal-body">
 		                <ul class="nav nav-tabs" role="tablist">
 		                    <li role="presentation" class="active"><a>基本信息</a></li>
-		                    <!-- <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">资质文件</a></li>
+		                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">资质文件</a></li>
 		                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">联系信息</a></li>
 		                    <li role="presentation"><a href="#terminal_info" aria-controls="terminal_info" role="tab" data-toggle="tab">终端信息</a></li>
-		                    <li role="presentation"><a href="#channel_info" aria-controls="channel_info" role="tab" data-toggle="tab">渠道信息</a></li> -->
-		                    <li role="presentation"><a>资质文件</a></li>
+		                    <li role="presentation"><a href="#channel_info" aria-controls="channel_info" role="tab" data-toggle="tab">渠道信息</a></li>
+		                    <li role="presentation"><a href="#bankCard_info" aria-controls="bankCard_info" role="tab" data-toggle="tab">银行卡信息</a></li>
+		                    <!-- <li role="presentation"><a>资质文件</a></li>
 		                    <li role="presentation"><a>联系信息</a></li>
 		                    <li role="presentation"><a>终端信息</a></li>
 		                    <li role="presentation"><a>渠道信息</a></li>
-		                    <li role="presentation"><a>银行卡信息</a></li>
+		                    <li role="presentation"><a>银行卡信息</a></li> -->
 		                </ul>
 		                <div class="tab-content">
 		                    <div role="tabpanel" class="tab-pane active" id="home">
@@ -410,7 +411,7 @@
 		                        </div>
 		                        
 		                    </div>
-		                    <!-- 
+		                   	<!-- 
 		                    <div role="tabpanel" class="tab-pane" id="profile1">
 		                    <table class="table table-bordered">
 		                      	<thead>
@@ -534,164 +535,32 @@
 		                    </table>
 		                        <a class="nextBtn"  href="#messages1" aria-controls="messages1" role="tab" data-toggle="tab">下一步</a>
 		                    </div> -->
+							<!-- 联系人信息 -->
 		                    <div role="tabpanel" class="tab-pane" id="messages1">
 		                    	<a class="editBtn_edit btn btn-default"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
 		                    	<a class="editBtn_save btn btn-success" id="editBtn_messages"><span class="glyphicon glyphicon-book"></span>保存</a>
-		                        <div class="row">
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="contactName">联系人名：</label>
-		                                <input type="text" class="form-control" id="contactName" name="contactName">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="contactMobile">联系人手机：</label>
-		                                <input type="number" class="form-control" id="contactMobile" name="contactMobile">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="contactEmail">联系人邮箱：</label>
-		                                <input type="email" class="form-control" id="contactEmail" name="contactEmail">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="contactTelphone">电话：</label>
-		                                <input type="text" class="form-control" id="contactTelphone" name="contactTelphone">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="contactJobs">职位：</label>
-		                                <input type="text" class="form-control" id="contactJobs" name="contactJobs">
-		                            </div>
-		                        </div>
+	                    		<div id="contact-con1">
+			                    	<!-- js获取联系人数据 -->
+			                    </div>
+				                <button id="btn_addContact1" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增联系人</button>
 		                    </div>
 		                    <!-- 终端信息 -->
 		                    <div role="tabpanel" class="tab-pane" id="terminal_info1">
 		                   	 	<a class="editBtn_edit btn btn-default"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
 		                    	<a class="editBtn_save btn btn-success" id="editBtn_terminal_info"><span class="glyphicon glyphicon-book"></span>保存</a>
-		                        <div class="row">
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="merchantCode">通道商户号：</label>
-		                                <input type="text" class="form-control" id="merchantCode" name="merchantCode" required="required">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="channelId">通道ID：</label>
-		                                <input type="number" class="form-control" id="channelId" name="channelId">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="channelName">通道名称：</label>
-		                                <input type="text" class="form-control" id="channelName" name="channelName">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="terminalCode">通道终端号：</label>
-		                                <input type="text" class="form-control" id="terminalCode" name="terminalCode">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="innerTermCode">内部终端号 10000000：</label>
-		                                <input type="text" class="form-control" id="innerTermCode" name="innerTermCode">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="snCode">POS机SN码：</label>
-		                                <input type="text" class="form-control" id="snCode" name="snCode">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="terminalBatch">终端批次号：</label>
-		                                <input type="text" class="form-control" id="terminalBatch" name="terminalBatch">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="terminalPara">终端参数：</label>
-		                                <input type="text" class="form-control" id="terminalPara" name="terminalPara">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="chargesType">收费类型：</label>
-		                                <select name="chargesType" class="form-control">
-		                                	<option value="1">按每笔百分比</option>
-		                                	<option value="2">按每笔固定金额</option>
-		                                	<option value="3">百分比封顶</option>
-		                                </select>
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="debitCardRate">借记卡费率：</label>
-		                                <input type="text" class="form-control" id="debitCardRate" name="debitCardRate">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="creditCardRate">贷记卡费率：</label>
-		                                <input type="text" class="form-control" id="creditCardRate" name="creditCardRate">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="debitCardFee">借记卡固定金额：</label>
-		                                <input type="number" class="form-control" id="debitCardFee" name="debitCardFee">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="creditCardFee">贷记卡固定金额：</label>
-		                                <input type="number" class="form-control" id=creditCardFee name="creditCardFee">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="debitCardMaxFee">借记卡费率封顶值：</label>
-		                                <input type="number" class="form-control" id="debitCardMaxFee" name="debitCardMaxFee">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="creditCardMaxFee">贷记卡费率封顶值：</label>
-		                                <input type="number" class="form-control" id="creditCardMaxFee" name="creditCardMaxFee">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="dealSwitch">交易设置：</label>
-		                                <input type="text" class="form-control" id="dealSwitch" name="dealSwitch">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="recordState">记录状态：</label>
-		                                <select name="recordState" class="form-control">
-		                                  <option value="0">初始化状态</option>
-		                                  <option value="1">已绑定渠道商户</option>
-		                                  <option value="4">停用</option>
-		                                </select>
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="termAuditState">终端审核状态：</label>
-		                                <select name="termAuditState" class="form-control">
-		                                  <option value="0">初始化状态</option>
-		                                  <option value="1">已绑定渠道商户</option>
-		                                  <option value="4">停用</option>
-		                                </select>
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="termName">终端名称：</label>
-		                                <input type="text" class="form-control" id="termName" name="termName">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="posFactory">机具厂家：</label>
-		                                <input type="text" class="form-control" id="posFactory" name="posFactory">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="posType">机具型号：</label>
-		                                <input type="text" class="form-control" id="posType" name="posType">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="mercReferName">签购单参考名：</label>
-		                                <input type="text" class="form-control" id="mercReferName" name="mercReferName">
-		                            </div>
-		                        </div>
+		                    	<div id="terminal-con1">
+			                    	<!-- js获取终端数据 -->
+			                    </div>
+		                        <button id="btn_addTerminal1" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增联系人</button>
 		                    </div>
+		                    <!-- 渠道信息 -->
 		                    <div role="tabpanel" class="tab-pane" id="channel_info1">
 		                    	<a class="editBtn_edit btn btn-default"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
 		                    	<a class="editBtn_save btn btn-success" id="editBtn_channel_info"><span class="glyphicon glyphicon-book"></span>保存</a>
-		                        <div class="row">
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="agentId">代理商：</label>
-		                                <input type="number" class="form-control" id="agentId" name="agentId" required="required">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="channelMerId">渠道商户号：</label>
-		                                <input type="text" class="form-control" id="channelMerId" name="channelMerId">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="channelMerKey">渠道商户key：</label>
-		                                <input type="text" class="form-control" id="channelMerKey" name="channelMerKey">
-		                            </div>
-		                            <div class="col-sm-4">
-		                                <label class="control-label" for="channelType">渠道类型：</label>
-		                                  <select name="channelType" class="form-control">
-		                                  <option value="00">爱农</option>
-		                                  <option value="01">浦发</option>
-		                                  <option value="02">拉卡拉</option>
-		                                </select>
-		                            </div>
-		                        </div>
+		                        <div id="channel-con1">
+			                    	<!-- js获取终端数据 -->
+			                    </div>
+		                        <button id="btn_addChannel" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增联系人</button>
 		                    </div>
 		                </div>
 		            </div>

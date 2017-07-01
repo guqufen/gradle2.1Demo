@@ -186,6 +186,7 @@ $('#btn_add').click(function(){
 		   alert('服务器出错');
 	   }
    })
+   $(".remove-icon").show();
 });
 //上传文件
 function  fileUp(num){
@@ -317,41 +318,45 @@ $(".nextBtn").click(function(){
 
 //添加联系信息列表
 var ContactList=1;
-function contactHtml(contactList){
-	return "<div class='contact-list'><div class='remove-icon remove-contactList"+ContactList+"' onclick='removeContact("+ContactList+")'><span class='glyphicon glyphicon-remove'></span></div><div class='row'>"+
-						"<div class='col-sm-4'><label class='control-label' for='contactName"+ContactList+"'>联系人名：</label><input type='text' class='form-control contactName' id='contactName"+ContactList+"' name='contactName"+ContactList+"'></div>"+
-						"<div class='col-sm-4'><label class='control-label' for='contactMobile"+ContactList+"'>联系人手机：</label><input type='text' class='form-control contactMobile' id='contactMobile"+ContactList+"' name='contactMobile"+ContactList+"'></div>"+
-						"<div class='col-sm-4'><label class='control-label' for='contactEmail"+ContactList+"'>联系人邮箱：</label><input type='text' class='form-control contactEmail' id='contactEmail"+ContactList+"' name='contactEmail"+ContactList+"'></div>"+
-						"<div class='col-sm-4'><label class='control-label' for='contactTelphone"+ContactList+"'>电话：</label><input type='text' class='form-control contactTelphone' id='contactTelphone"+ContactList+"' name='contactTelphone"+ContactList+"'></div>"+
-						"<div class='col-sm-4'><label class='control-label' for='contactJobs"+ContactList+"'>职位：</label><input type='text' class='form-control contactJobs' id='contactJobs"+ContactList+"' name='contactJobs"+ContactList+"'></div></div></div>"
+function contactHtml(num){
+	return "<div class='contact-list'><div class='remove-icon remove-contactList"+num+"' onclick='removeContact("+num+")'><span class='glyphicon glyphicon-remove'></span></div><div class='row'>"+
+						"<div class='col-sm-4'><label class='control-label' for='contactName"+num+"'>联系人名：</label><input type='text' class='form-control contactName' id='contactName"+num+"' name='contactName"+num+"'></div>"+
+						"<div class='col-sm-4'><label class='control-label' for='contactMobile"+num+"'>联系人手机：</label><input type='text' class='form-control contactMobile' id='contactMobile"+num+"' name='contactMobile"+num+"'></div>"+
+						"<div class='col-sm-4'><label class='control-label' for='contactEmail"+num+"'>联系人邮箱：</label><input type='text' class='form-control contactEmail' id='contactEmail"+num+"' name='contactEmail"+num+"'></div>"+
+						"<div class='col-sm-4'><label class='control-label' for='contactTelphone"+num+"'>电话：</label><input type='text' class='form-control contactTelphone' id='contactTelphone"+num+"' name='contactTelphone"+num+"'></div>"+
+						"<div class='col-sm-4'><label class='control-label' for='contactJobs"+num+"'>职位：</label><input type='text' class='form-control contactJobs' id='contactJobs"+num+"' name='contactJobs"+num+"'></div></div></div>"
 }
 $('#contact-con').append(contactHtml(ContactList))
 $("#btn_addContact").click(function(){
 	ContactList=ContactList+1;
 	$('#contact-con').append(contactHtml(ContactList));
 })
-function removeContact(num){
-	$('.remove-contactList'+num).parent().remove();
+function removeContact(str){
+	$('.remove-contactList'+str).parent().remove();
 }
 
 
 //保存联系信息列表
 $("#btn_saveContact").click(function(){
-		var listLen=$(".contact-list").length;
-		var contactArr=new Array();
-		for (var i=0;i<listLen;i++){
-			var contactName=$(".contact-list").eq(i).find($('.contactName')).val();
-			var contactMobile=$(".contact-list").eq(i).find($('.contactMobile')).val();
-			var contactEmail=$(".contact-list").eq(i).find($('.contactEmail')).val();
-			var contactTelphone=$(".contact-list").eq(i).find($('.contactTelphone')).val();
-			var contactJobs=$(".contact-list").eq(i).find($('.contactJobs')).val();
-			var innerCode = $('#innerCode').val();
-			if(!innerCode){
-				alert('操作错误!');return ;
-			}
-			concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
-			contactlArr=contactArr.push(concatContactArr);
+		var listLen=$("#contact-con .contact-list").length;
+      console.log(listLen);
+    var contactArr=new Array();
+    for (var i=0;i<listLen;i++){
+      var contactName=$(".contact-list").eq(i).find($('.contactName')).val();
+      var contactMobile=$(".contact-list").eq(i).find($('.contactMobile')).val();
+      var contactEmail=$(".contact-list").eq(i).find($('.contactEmail')).val();
+      var contactTelphone=$(".contact-list").eq(i).find($('.contactTelphone')).val();
+      var contactJobs=$(".contact-list").eq(i).find($('.contactJobs')).val();
+      var innerCode = $('#innerCode').val();
+      if(!innerCode){
+        alert('操作错误!');return ;
+      }
+      concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
+      console.log(concatContactArr);
+      contactlArr=contactArr.push(concatContactArr);
+      console.log(contactlArr);
 		}
+    console.log(contactlArr);
 		$.ajax({
 			url:'/web/merchantinfo/toAddContact',
 			dataType:"json", 
@@ -370,26 +375,26 @@ $("#btn_saveContact").click(function(){
 
 //添加终端信息列表
 var TerminalList=1;
-function terminalHtml(TerminalList){
-	return '<div class="terminal-list"><div class="remove-icon remove-terminalList'+TerminalList+'" onclick="removeTerminal('+TerminalList+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
-        '<div class="col-sm-4"><label class="control-label" for="merchantCode'+TerminalList+'">通道商户号：</label><input type="text" class="form-control merchantCode" id="merchantCode'+TerminalList+'" name="merchantCode'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="channelId'+TerminalList+'">通道ID：</label><input type="text" class="form-control channelId" id="channelId'+TerminalList+'" name="channelId'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="channelName'+TerminalList+'">通道名称：</label><input type="text" class="form-control channelName" id="channelName'+TerminalList+'" name="channelName'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="terminalCode'+TerminalList+'">通道终端号：</label><input type="text" class="form-control terminalCode" id="terminalCode'+TerminalList+'" name="terminalCode'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="snCode'+TerminalList+'">POS机SN码：</label><input type="text" class="form-control snCode" id="snCode'+TerminalList+'" name="snCode'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="terminalBatch'+TerminalList+'">终端批次号：</label><input type="text" class="form-control terminalBatch" id="terminalBatch'+TerminalList+'" name="terminalBatch'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="terminalPara'+TerminalList+'">终端参数：</label><input type="text" class="form-control terminalPara" id="terminalPara'+TerminalList+'" name="terminalPara'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="chargesType'+TerminalList+'">收费类型：</label><select id="chargesType'+TerminalList+'" name="chargesType'+TerminalList+'" class="chargesType form-control" ><option value="1">按每笔百分比</option><option value="2">按每笔固定金额</option><option value="3">百分比封顶</option></select></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="debitCardRate'+TerminalList+'">贷记卡费率：</label><input type="text" class="form-control debitCardRate" id="debitCardRate'+TerminalList+'" name="debitCardRate'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="creditCardRate'+TerminalList+'">贷记卡费率：</label><input type="text" class="form-control creditCardRate" id="creditCardRate'+TerminalList+'" name="creditCardRate'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="debitCardMaxFee'+TerminalList+'">借记卡费率封顶值：</label><input type="text" class="form-control debitCardMaxFee" id="debitCardMaxFee'+TerminalList+'" name="debitCardMaxFee'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="creditCardMaxFee'+TerminalList+'">贷记卡费率封顶值：</label><input type="text" class="form-control creditCardMaxFee" id="creditCardMaxFee'+TerminalList+'" name="creditCardMaxFee'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="dealSwitch'+TerminalList+'">交易设置：</label><input type="text" class="form-control dealSwitch" id="dealSwitch'+TerminalList+'" name="dealSwitch'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="recordState'+TerminalList+'">记录状态：</label><select id="recordState'+TerminalList+'" name="recordState'+TerminalList+'" class="recordState form-control" ><option value="0">初始化状态</option><option value="1">已绑定渠道商户</option><option value="4">停用</option></select></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="termName'+TerminalList+'">终端名称：</label><input type="text" class="form-control termName" id="termName'+TerminalList+'" name="termName'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="posFactory'+TerminalList+'">机具厂家：</label><input type="text" class="form-control posFactory" id="posFactory'+TerminalList+'" name="posFactory'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="posType'+TerminalList+'">机具型号：</label><input type="text" class="form-control posType" id="posType'+TerminalList+'" name="posType'+TerminalList+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="mercReferName'+TerminalList+'">签购单参考名：</label><input type="text" class="form-control mercReferName" id="mercReferName'+TerminalList+'" name="mercReferName'+TerminalList+'" required="required"></div></div></div>';
+function terminalHtml(num){
+	return '<div class="terminal-list"><div class="remove-icon remove-terminalList'+num+'" onclick="removeTerminal('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
+        '<div class="col-sm-4"><label class="control-label" for="merchantCode'+num+'">通道商户号：</label><input type="text" class="form-control merchantCode" id="merchantCode'+num+'" name="merchantCode'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="channelId'+num+'">通道ID：</label><input type="text" class="form-control channelId" id="channelId'+num+'" name="channelId'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="channelName'+num+'">通道名称：</label><input type="text" class="form-control channelName" id="channelName'+num+'" name="channelName'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="terminalCode'+num+'">通道终端号：</label><input type="text" class="form-control terminalCode" id="terminalCode'+num+'" name="terminalCode'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="snCode'+num+'">POS机SN码：</label><input type="text" class="form-control snCode" id="snCode'+num+'" name="snCode'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="terminalBatch'+num+'">终端批次号：</label><input type="text" class="form-control terminalBatch" id="terminalBatch'+num+'" name="terminalBatch'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="terminalPara'+num+'">终端参数：</label><input type="text" class="form-control terminalPara" id="terminalPara'+num+'" name="terminalPara'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="chargesType'+num+'">收费类型：</label><select id="chargesType'+num+'" name="chargesType'+num+'" class="chargesType form-control" ><option value="1">按每笔百分比</option><option value="2">按每笔固定金额</option><option value="3">百分比封顶</option></select></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="debitCardRate'+num+'">贷记卡费率：</label><input type="text" class="form-control debitCardRate" id="debitCardRate'+num+'" name="debitCardRate'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="creditCardRate'+num+'">贷记卡费率：</label><input type="text" class="form-control creditCardRate" id="creditCardRate'+num+'" name="creditCardRate'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="debitCardMaxFee'+num+'">借记卡费率封顶值：</label><input type="text" class="form-control debitCardMaxFee" id="debitCardMaxFee'+num+'" name="debitCardMaxFee'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="creditCardMaxFee'+num+'">贷记卡费率封顶值：</label><input type="text" class="form-control creditCardMaxFee" id="creditCardMaxFee'+num+'" name="creditCardMaxFee'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="dealSwitch'+num+'">交易设置：</label><input type="text" class="form-control dealSwitch" id="dealSwitch'+num+'" name="dealSwitch'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="recordState'+num+'">记录状态：</label><select id="recordState'+num+'" name="recordState'+num+'" class="recordState form-control" ><option value="0">初始化状态</option><option value="1">已绑定渠道商户</option><option value="4">停用</option></select></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="termName'+num+'">终端名称：</label><input type="text" class="form-control termName" id="termName'+num+'" name="termName'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="posFactory'+num+'">机具厂家：</label><input type="text" class="form-control posFactory" id="posFactory'+num+'" name="posFactory'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="posType'+num+'">机具型号：</label><input type="text" class="form-control posType" id="posType'+num+'" name="posType'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="mercReferName'+num+'">签购单参考名：</label><input type="text" class="form-control mercReferName" id="mercReferName'+num+'" name="mercReferName'+num+'" required="required"></div></div></div>';
 }
 //默认添加一个终端列表
 $('#terminal-con').append(terminalHtml(TerminalList));
@@ -453,12 +458,12 @@ $("#btn_saveTerminal").click(function(){
 
 //添加渠道信息列表
 var ChannellList=1;
-function channelHtml(ChannellList){
-	return '<div class="channel-list"><div class="remove-icon remove-channelList'+ChannellList+'" onclick="removeChannel('+ChannellList+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
-            '<div class="col-sm-4"><label class="control-label" for="agentId'+ChannellList+'">代理商：</label><input type="number" class="form-control agentId" id="agentId'+ChannellList+'" name="agentId'+ChannellList+'" required="required"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerId'+ChannellList+'">渠道商户号：</label><input type="text" class="form-control channelMerId" id="channelMerId'+ChannellList+'" name="channelMerId'+ChannellList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+ChannellList+'">渠道商户key：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+ChannellList+'" name="channelMerKey'+ChannellList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelType'+ChannellList+'">渠道类型：</label><select name="channelType'+ChannellList+'" class="form-control channelType"><option value="00">爱农</option><option value="01">浦发</option><option value="02">拉卡拉</option></select></div></div></div>';
+function channelHtml(num){
+	return '<div class="channel-list"><div class="remove-icon remove-channelList'+num+'" onclick="removeChannel('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
+            '<div class="col-sm-4"><label class="control-label" for="agentId'+num+'">代理商：</label><input type="number" class="form-control agentId" id="agentId'+num+'" name="agentId'+num+'" required="required"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerId'+num+'">渠道商户号：</label><input type="text" class="form-control channelMerId" id="channelMerId'+num+'" name="channelMerId'+num+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">渠道商户key：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道类型：</label><select name="channelType'+num+'" class="form-control channelType"><option value="00">爱农</option><option value="01">浦发</option><option value="02">拉卡拉</option></select></div></div></div>';
 }
 //默认添加一个渠道信息列表
 $('#channel-con').append(channelHtml(ChannellList));
@@ -514,11 +519,11 @@ function bankCardHtml(BankCardlList){
             '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户账号：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户人身份证号：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">结算周期：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div></div>'+
-            '<div class="row"><div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">支行名称:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" readonly="readonly" name="channelMerKey'+BankCardlList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" disabled="disabled" name="channelMerKey'+BankCardlList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行所在省:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" disabled="disabled" name="channelMerKey'+BankCardlList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行所在市:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" disabled="disabled" name="channelMerKey'+BankCardlList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行行号:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" disabled="disabled" name="channelMerKey'+BankCardlList+'"></div>'+
+            '<div class="row"><div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">支行名称:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行所在省:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行所在市:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行行号:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
             '</div></div>';
 }
 //默认添加一个银行卡信息列表
@@ -548,61 +553,78 @@ function editData(id)
       success:function(data){
           //data.data就是所有数据集
           console.log(data.data);
-      }});return;
             $('#editModal').modal();
-            $("#editModal").find('.tab-pane').removeClass("active");
-            $("#home1").addClass("active");
-            $("#editModal .nav-tabs li").removeClass("active");
-            $("#editModal .nav-tabs li:first-child").addClass("active");
+            //关闭再次点开回到第一个标签
+            // $("#editModal").find('.tab-pane').removeClass("active");
+            // $("#home1").addClass("active");
+            // $("#editModal .nav-tabs li").removeClass("active");
+            // $("#editModal .nav-tabs li:first-child").addClass("active");
             //基本信息
-            $('input[name="merName"]').val(data.data.merName);
-            $('input[name="abbreviation"]').val(data.data.abbreviation);
-            $('input[name="enName"]').val(data.data.enName);
-            $('input[name="legalPerson"]').val(data.data.legalPerson);
-            $('input[name="legalPersonMobile"]').val(data.data.legalPersonMobile);
-            $('input[name="legalPersonTel"]').val(data.data.legalPersonTel);
-            $('select[name="legalValidCardType"]').find("option[value="+data.data.legalValidCardType+"]").attr("selected",true);
-            $('input[name="cardNum"]').val(data.data.cardNum);
-            $('input[name="cardValidTime"]').val(data.data.cardValidTime);
-            $('input[name="businessLicenseNum"]').val(data.data.businessLicenseNum);
-            $('input[name="businessLicenseValidTime"]').val(data.data.businessLicenseValidTime);
-            $('input[name="taxRegistCode"]').val(data.data.taxRegistCode);
-            $('input[name="registAddress"]').val(data.data.registAddress);
-            $('input[name="mercFlag"]').val(data.data.mercFlag);
-            // 渠道信息
-            $('input[name="agentId"]').val(data.data.channel.agentId);
-            $('input[name="channelMerId"]').val(data.data.channel.channelMerId);
-            $('input[name="channelMerKey"]').val(data.data.channel.channelMerKey);
-            $('select[name="channelType"]').find("option[value="+data.data.channel.channelType+"]").attr("selected",true);
-            //终端
-            $('input[name="merchantCode"]').val(data.data.terminal.merchantCode);
-            $('input[name="channelId"]').val(data.data.terminal.channelId);
-            $('input[name="channelName"]').val(data.data.terminal.channelName);
-            $('input[name="terminalCode"]').val(data.data.terminal.terminalCode);
-            $('input[name="innerTermCode"]').val(data.data.terminal.innerTermCode);
-            $('input[name="snCode"]').val(data.data.terminal.snCode);
-            $('input[name="terminalBatch"]').val(data.data.terminal.terminalBatch);
-            $('input[name="terminalPara"]').val(data.data.terminal.terminalPara);
-            $('select[name="chargesType"]').find("option[value="+data.data.terminal.chargesType+"]").attr("selected",true);
-            $('input[name="debitCardRate"]').val(data.data.terminal.debitCardRate);
-            $('input[name="creditCardRate"]').val(data.data.terminal.creditCardRate);
-            $('input[name="debitCardFee"]').val(data.data.terminal.debitCardFee);
-            $('input[name="creditCardFee"]').val(data.data.terminal.creditCardFee);
-            $('input[name="debitCardMaxFee"]').val(data.data.terminal.debitCardMaxFee);
-            $('input[name="creditCardMaxFee"]').val(data.data.terminal.creditCardMaxFee);
-            $('input[name="dealSwitch"]').val(data.data.terminal.dealSwitch);
-            $('select[name="recordState"]').find("option[value="+data.data.terminal.recordState+"]").attr("selected",true);
-            $('select[name="termAuditState"]').find("option[value="+data.data.terminal.termAuditState+"]").attr("selected",true);
-            $('input[name="termName"]').val(data.data.terminal.termName);
-            $('input[name="posFactory"]').val(data.data.terminal.posFactory);
-            $('input[name="posType"]').val(data.data.terminal.posType);
-            $('input[name="mercReferName"]').val(data.data.terminal.mercReferName);
+            $('input[name="merName1"]').val(data.data.merName);
+            $('input[name="abbreviation1"]').val(data.data.abbreviation);
+            $('input[name="enName1"]').val(data.data.enName);
+            $('input[name="legalPerson1"]').val(data.data.legalPerson);
+            $('input[name="legalPersonMobile1"]').val(data.data.legalPersonMobile);
+            $('input[name="legalPersonTel1"]').val(data.data.legalPersonTel);
+            $('select[name="legalValidCardType1"]').find("option[value="+data.data.legalValidCardType+"]").attr("selected",true);
+            $('input[name="cardNum1"]').val(data.data.cardNum);
+            $('input[name="cardValidTime1"]').val(data.data.cardValidTime);
+            $('input[name="businessLicenseNum1"]').val(data.data.businessLicenseNum);
+            $('input[name="businessLicenseValidTime1"]').val(data.data.businessLicenseValidTime);
+            $('input[name="taxRegistCode1"]').val(data.data.taxRegistCode);
+            $('input[name="registAddress1"]').val(data.data.registAddress);
+            $('input[name="mercFlag1"]').val(data.data.mercFlag);
             // 联系信息
-            $('input[name="contactName"]').val(data.data.contacts[0].contactName);
-            $('input[name="contactMobile"]').val(data.data.contacts[0].contactMobile);
-            $('input[name="contactEmail"]').val(data.data.contacts[0].contactEmail);
-            $('input[name="contactTelphone"]').val(data.data.contacts[0].contactTelphone);
-            $('input[name="contactJobs"]').val(data.data.contacts[0].contactJobs);
+            var contactsLen=data.data.contacts.length;
+            console.log(contactsLen);
+            for(var i=0;i<contactsLen;i++){
+                $("#contact-con1").append(contactHtml(data.data.contacts[i].id));
+                $('input[name="contactName'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactName);
+                $('input[name="contactMobile'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactMobile);
+                $('input[name="contactEmail'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactEmail);
+                $('input[name="contactTelphone'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactTelphone);
+                $('input[name="contactJobs'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactJobs);
+            }
+            //终端
+            var terminalsLen=data.data.terminal.length;
+            console.log(terminalsLen);
+            for(var i=0;i<terminalsLen;i++){
+                $("#terminal-con1").append(terminalHtml(data.data.terminal[i].id));
+                $('input[name="merchantCode'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].merchantCode);
+                $('input[name="channelId'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].channelId);
+                $('input[name="channelName'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].channelName);
+                $('input[name="terminalCode'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].terminalCode);
+                $('input[name="innerTermCode'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].innerTermCode);
+                $('input[name="snCode'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].snCode);
+                $('input[name="terminalBatch'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].terminalBatch);
+                $('input[name="terminalPara'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].terminalPara);
+                $('select[name="chargesType'+data.data.terminal[i].id+'"]').find("option[value="+data.data.terminal[i].chargesType+"]").attr("selected",true);
+                $('input[name="debitCardRate'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].debitCardRate);
+                $('input[name="creditCardRate'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].creditCardRate);
+                $('input[name="debitCardFee'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].debitCardFee);
+                $('input[name="creditCardFee'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].creditCardFee);
+                $('input[name="debitCardMaxFee'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].debitCardMaxFee);
+                $('input[name="creditCardMaxFee'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].creditCardMaxFee);
+                $('input[name="dealSwitch'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].dealSwitch);
+                $('select[name="recordState'+data.data.terminal[i].id+'"]').find("option[value="+data.data.terminal[i].recordState+"]").attr("selected",true);
+                $('select[name="termAuditState'+data.data.terminal[i].id+'"]').find("option[value="+data.data.terminal[i].termAuditState+"]").attr("selected",true);
+                $('input[name="termName'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].termName);
+                $('input[name="posFactory'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].posFactory);
+                $('input[name="posType'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].posType);
+                $('input[name="mercReferName'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].mercReferName);
+            }
+            // 渠道信息
+            var channelsLen=data.data.channel.length;
+            console.log(channelsLen);
+            for(var i=0;i<channelsLen;i++){
+              $("#channel-con1").append(channelHtml(data.data.channel[i].id));
+               $('input[name="agentId'+data.data.channel[i].id+'"]').val(data.data.channel[i].agentId);
+               $('input[name="channelMerId'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerId);
+               $('input[name="channelMerKey'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerKey);
+               $('input[name="channelType'+data.data.channel[i].id+'"]').find("option[value="+data.data.channel[i].channelType+"]").attr("selected",true);
+            }
+            
+
             //资料文件
             var filesLen=data.data.files.length;
             for(var i=0;i<filesLen;i++){
@@ -622,42 +644,49 @@ function editData(id)
                     toolbar: false,
                 });
             }
-    //  }
-    // });
+            // 全部默认不可编辑
+            $("#editModal").find('input').attr('disabled',true);
+            $("#editModal").find('select').attr('disabled',true);
+            $(".remove-icon").hide();
+            $("#btn_addContact1").hide();
+            //编辑弹框点击编辑按钮事件
+            $(".editBtn_edit").click(function(){
+                $(".remove-icon").show();
+                $("#btn_addContact1").show();
+                $("#editModal .nav-tabs li a").attr('href','javascript:;');
+                $("#editModal .nav-tabs li a").removeAttr('data-toggle');
+                $("#editModal .nav-tabs li a").css('cursor','no-drop');
+                $(this).next().css('display','inline-block');
+                $(this).hide();
+                $(this).parent().find('input').attr('disabled',false);
+                $(this).parent().find('select').attr('disabled',false);
+            })
+
+            $(".editBtn_save").click(function(){
+                var editModalALen=$("#editModal .nav-tabs li a").length;
+                for(var i=0;i<editModalALen;i++){
+                    var tabHref='#'+$("#editModal .nav-tabs li a").eq(i).attr('aria-controls');
+                    $("#editModal .nav-tabs li a").eq(i).attr('href',tabHref);
+                    var tabDataToggle=$("#editModal .nav-tabs li a").eq(i).attr('role');
+                    $("#editModal .nav-tabs li a").eq(i).attr('data-toggle',tabDataToggle);
+                }
+                $(this).prev().css('display','inline-block');
+                $(this).hide();
+                $(".remove-icon").hide();
+                $("#btn_addContact1").hide();
+                $("#editModal .nav-tabs li a").css('cursor','default');
+                $(this).parent().find('input').attr('disabled',true);
+                $(this).parent().find('select').attr('disabled',true);
+            })
+            //新增联系信息
+            var editContactNum=0;
+            $("#btn_addContact1").click(function(){
+              var addContactNum='-1'+(editContactNum++);
+              $('#contact-con1').append(contactHtml(addContactNum));
+            })
+      }});
 }
-// 全部默认不可编辑
-$("#editModal").find('input').attr('disabled',true);
-$("#editModal").find('select').attr('disabled',true);
-//编辑弹框点击编辑按钮事件
-$('input[name="merName1"]').val("888");
-$('input[name="abbreviation1"]').val("88415");
-$('input[name="enName1"]').val("511154");
-$('input[name="legalPerson1"]').val("data");
-$('input[name="legalPersonMobile1"]').val("181212");
-$('input[name="legalPersonTel1"]').val("data");
-$(".editBtn_edit").click(function(){
-    $("#editModal .nav-tabs li a").attr('href','javascript:;');
-    $("#editModal .nav-tabs li a").removeAttr('data-toggle');
-    $("#editModal .nav-tabs li a").css('cursor','no-drop');
-    $(this).next().css('display','inline-block');
-    $(this).hide();
-    $(this).parent().find('input').attr('disabled',false);
-    $(this).parent().find('select').attr('disabled',false);
-})
-$(".editBtn_save").click(function(){
-    var editModalALen=$("#editModal .nav-tabs li a").length;
-    for(var i=0;i<editModalALen;i++){
-        var tabHref='#'+$("#editModal .nav-tabs li a").eq(i).attr('aria-controls');
-        $("#editModal .nav-tabs li a").eq(i).attr('href',tabHref);
-        var tabDataToggle=$("#editModal .nav-tabs li a").eq(i).attr('role');
-        $("#editModal .nav-tabs li a").eq(i).attr('data-toggle',tabDataToggle);
-    }
-    $(this).prev().css('display','inline-block');
-    $(this).hide();
-    $("#editModal .nav-tabs li a").css('cursor','default');
-    $(this).parent().find('input').attr('disabled',true);
-    $(this).parent().find('select').attr('disabled',true);
-})
+
 
 //保存商户基本信息下一步按钮
 function saveMerCore(){
