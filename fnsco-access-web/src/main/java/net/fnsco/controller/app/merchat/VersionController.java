@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.VersionDTO;
-import net.fnsco.api.merchant.AppUserService;
 import net.fnsco.api.merchant.VersionService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -20,12 +18,12 @@ import net.fnsco.core.base.ResultDTO;
 public class VersionController extends BaseController{
     @Autowired
     private VersionService sysVersionService;
-
-    @RequestMapping(value = "/update")
+   
+    @RequestMapping(value = "/checkUpdate")
     @ApiOperation(value = "版本更新")
     @ResponseBody
-    public ResultDTO<Object> register(@RequestBody VersionDTO sysVersionDTO) {
-//        ResultDTO result = sysVersionService.insertSelective(sysVersionDTO);
-        return null;
+    public ResultDTO<Object> checkUpdate(@RequestBody VersionDTO sysVersionDTO) {
+      ResultDTO result = sysVersionService.checkUpdate(sysVersionDTO);
+      return result;
     }
 }
