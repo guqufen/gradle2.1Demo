@@ -14,6 +14,7 @@ import net.fnsco.api.dto.TradeDataQueryDTO;
 import net.fnsco.api.trade.TradeDataService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DbUtil;
 import net.fnsco.service.dao.master.MerchantChannelDao;
@@ -92,9 +93,17 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      * @see net.fnsco.api.trade.TradeDataService#queryAllByCondition(net.fnsco.api.dto.TradeDataQueryDTO)
      */
     @Override
-    public List<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore) {
-        return null;
+    public ResultPageDTO<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore) {
+        TradeData tradeData = new TradeData();
+        BeanUtils.copyProperties(merchantCore, tradeData);
+        PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(), merchantCore.getPerPageSize(), tradeData);
+        List<TradeData> datas = tradeListDAO.queryPageList(pages);
+        int total = tradeListDAO.queryTotalByCondition(tradeData);
+        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total, datas);
+        result.setCurrentPage(merchantCore.getCurrentPageNum());
+        return result;
     }
+
     /**
      * 条件分页查询
      * (non-Javadoc)
@@ -104,17 +113,17 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      */
     @Override
     public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
-        
+
         TradeData tradeData = new TradeData();
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
-        PageDTO<TradeData> pages = new PageDTO<TradeData>(currentPageNum,perPageSize,tradeData);
-        
+        PageDTO<TradeData> pages = new PageDTO<TradeData>(currentPageNum, perPageSize, tradeData);
+
         List<TradeData> datas = tradeListDAO.queryPageList(pages);
         int total = tradeListDAO.queryTotalByCondition(tradeData);
-        
-        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total,datas);
+
+        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total, datas);
         result.setCurrentPage(currentPageNum);
         return result;
-        
+
     }
 }
