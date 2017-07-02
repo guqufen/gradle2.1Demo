@@ -23,6 +23,7 @@
     <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
   </resultMap>
   <!-- APP商户终端列表结果集 -->
   <resultMap  id="TerminalResultMap" type="net.fnsco.api.dto.MerTerminalsDTO">
@@ -67,13 +68,15 @@
     <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
-  	<association property="channel" column="inner_code" select="net.fnsco.service.dao.master.MerchantChannelDao.selectByInnerCode" javaType="net.fnsco.service.domain.MerchantChannel"/>
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+  	<collection property="channel" column="inner_code" select="net.fnsco.service.dao.master.MerchantChannelDao.selectByInnerCode" />
   	<collection property="terminal" column="inner_code" select="net.fnsco.service.dao.master.MerchantTerminalDao.selectByInnerCode"/>
   	<collection property="files" column="inner_code" select="net.fnsco.service.dao.master.MerchantFileDao.queryByInnerCode"/>
   	<collection property="contacts" column="inner_code" select="net.fnsco.service.dao.master.MerchantContactDao.queryByInnerCode" />
+  	<collection property="banks" column="inner_code" select="net.fnsco.service.dao.master.MerchantBankDao.queryWebByInnerCode" />
   </resultMap>	
   <sql id="Base_Column_List" >
-    id, inner_code, mer_name, abbreviation, en_name, sign_date, legal_person, legal_person_mobile, 
+    id, agent_id,inner_code, mer_name, abbreviation, en_name, sign_date, legal_person, legal_person_mobile, 
     legal_person_tel, legal_valid_card_type, card_num, card_valid_time, business_license_num, 
     business_license_valid_time, tax_regist_code, regist_address, merc_flag, source, 
     modify_user_id, modify_time, status
@@ -172,6 +175,9 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="agentId != null" >
+        agent_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -236,6 +242,9 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

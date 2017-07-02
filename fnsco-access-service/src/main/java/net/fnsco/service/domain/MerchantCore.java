@@ -58,13 +58,17 @@ public class MerchantCore extends DTO{
 
     private Integer status;
     
+    private Integer agentId;
+    
     private List<MerchantFile> files;//关联的所有文件信息
     
     private List<MerchantContact> contacts;//关联的联系人信息
     
     private List<MerchantTerminal> terminal;//关联的终端信息
     
-    private MerchantChannel channel;//关联的渠道信息
+    private List<MerchantChannel> channel;//关联的渠道信息
+    
+    private List<MerchantBank> banks;//关联的银行卡信息
     
     
     public List<MerchantFile> getFiles() {
@@ -92,6 +96,27 @@ public class MerchantCore extends DTO{
     public List<MerchantTerminal> getTerminal() {
         return terminal;
     }
+    /**
+     * agentId
+     *
+     * @return  the agentId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getAgentId() {
+        return agentId;
+    }
+
+    /**
+     * agentId
+     *
+     * @param   agentId    the agentId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setAgentId(Integer agentId) {
+        this.agentId = agentId;
+    }
 
     /**
      * terminal
@@ -103,16 +128,51 @@ public class MerchantCore extends DTO{
     public void setTerminal(List<MerchantTerminal> terminal) {
         this.terminal = terminal;
     }
+	/**
+     * channel
+     *
+     * @return  the channel
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public List<MerchantChannel> getChannel() {
+        return channel;
+    }
 
-    public MerchantChannel getChannel() {
-		return channel;
-	}
+    /**
+     * channel
+     *
+     * @param   channel    the channel to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setChannel(List<MerchantChannel> channel) {
+        this.channel = channel;
+    }
 
-	public void setChannel(MerchantChannel channel) {
-		this.channel = channel;
-	}
+    /**
+     * banks
+     *
+     * @return  the banks
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public List<MerchantBank> getBanks() {
+        return banks;
+    }
 
-	public Integer getId() {
+    /**
+     * banks
+     *
+     * @param   banks    the banks to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setBanks(List<MerchantBank> banks) {
+        this.banks = banks;
+    }
+
+    public Integer getId() {
         return id;
     }
 

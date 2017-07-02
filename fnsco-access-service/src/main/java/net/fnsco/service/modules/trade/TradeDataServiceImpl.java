@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 
 import net.fnsco.api.dto.TradeDataDTO;
+import net.fnsco.api.dto.TradeDataQueryDTO;
 import net.fnsco.api.trade.TradeDataService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
@@ -86,9 +87,12 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
 
     /**
      * 
+     * @author sxf
+     * (non-Javadoc)
+     * @see net.fnsco.api.trade.TradeDataService#queryAllByCondition(net.fnsco.api.dto.TradeDataQueryDTO)
      */
     @Override
-    public List<TradeData> queryAllByCondition(TradeDataDTO merchantCore) {
+    public List<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore) {
         return null;
     }
     /**

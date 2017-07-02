@@ -59,6 +59,9 @@ table a.remove,table a.redact{
 .modal-body .nav{
 	background: #2f4050;
 }
+.modal-body .nav-tabs>li{
+	margin-bottom: 0;
+}
 .modal-body .nav-tabs>li>a{
 	border-radius:0;
 	border: none;
@@ -84,7 +87,7 @@ table a.remove,table a.redact{
 .modal-body .col-sm-4{
 	margin-bottom:15px;
 }
-.contact-list,.terminal-list,.channel-list{
+.contact-list,.terminal-list,.channel-list,.bankCard-list{
 	padding: 10px 20px 0 20px;
     background: #f4f4f4;
     margin: 10px 0;
@@ -171,4 +174,18 @@ table a.remove,table a.redact{
 }
 .uploadify .swfupload{
 	left: 0;
+}
+.form-control[readonly]{
+	background-color: #fff;
+	cursor: default;
+}
+/*修改商户信息*/
+.editBtn_edit,.editBtn_save{
+	margin-bottom: 10px;
+}
+.editBtn_save{
+	display: none;
+}
+.editBtn_edit span,.editBtn_save span{
+	margin-right: 3px;
 }

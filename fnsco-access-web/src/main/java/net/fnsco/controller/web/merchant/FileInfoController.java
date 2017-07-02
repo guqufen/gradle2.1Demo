@@ -12,9 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +28,9 @@ import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
+import net.fnsco.service.dao.master.MerchantFileDao;
+import net.fnsco.service.dao.master.MerchantFileTempDao;
+import net.fnsco.service.domain.MerchantFile;
 import net.fnsco.service.domain.MerchantFileTemp;
 /**
  * @desc 文件上传控制器
@@ -41,6 +46,12 @@ public class FileInfoController extends BaseController{
 
 	@Autowired
 	private MerchantInfoService merchantInfoService;
+	
+	@Autowired
+    private MerchantFileTempDao merchantFileTempDao;
+	
+	@Autowired
+    private MerchantFileDao merchantFileDao;
 
 	// 列表页
 	@RequestMapping("/list")
@@ -57,8 +68,40 @@ public class FileInfoController extends BaseController{
 	public String getInnoCode(){
 		return CodeUtil.generateMerchantCode("F");
 	}
-
-
+	
+	/**
+	 * saveFiles:(这里用一句话描述这个方法的作用)保存文件信息
+	 *
+	 * @param fileIds
+	 * @return    设定文件
+	 * @return String    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	@ResponseBody
+	@RequestMapping("/savefiles")
+	@Transactional
+	public String saveFiles(String fileIds){
+	    if(!StringUtils.isEmpty(fileIds))
+        {
+            String[] ids  = fileIds.split(",");
+            for (String fileId : ids) {
+                MerchantFileTemp fileTemp = merchantFileTempDao.selectByPrimaryKey(Integer.valueOf(fileId));
+                if(null != fileTemp)
+                {
+                    MerchantFile file = new MerchantFile();
+                    BeanUtils.copyProperties(fileTemp, file);
+                    file.setId(null);
+                    merchantFileDao.insertSelective(file);
+                    merchantFileTempDao.deleteByPrimaryKey(Integer.valueOf(fileId));
+                }   
+            }
+            
+        }  
+	    return "success";
+	}
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/Import", produces = "text/html;charset=UTF-8")
 	public String Import(HttpServletRequest req, HttpServletResponse response) {

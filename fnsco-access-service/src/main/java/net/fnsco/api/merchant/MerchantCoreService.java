@@ -9,7 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.service.domain.Agent;
+import net.fnsco.service.domain.MerchantBank;
+import net.fnsco.service.domain.MerchantChannel;
+import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
+import net.fnsco.service.domain.MerchantTerminal;
 
 /**@desc 商家基本信息
  * @author tangliang
@@ -24,6 +29,59 @@ public interface MerchantCoreService {
 	 * @return
 	 */
 	public ResultDTO<Integer> doAdd(HttpServletRequest request);
+	
+	/**
+	 * doAddMerCore:(这里用一句话描述这个方法的作用)添加商户基本信息
+	 *
+	 * @param merchantCore
+	 * @return    设定文件
+	 * @return ResultDTO<Integer>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<String> doAddMerCore(MerchantCore merchantCore);
+	
+	/**
+	 * doAddMerContact:(这里用一句话描述这个方法的作用) 保存联系方式
+	 *
+	 * @param merchantCore
+	 * @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<String> doAddMerContact(List<MerchantContact> merchantContact);
+	/**
+	 * 
+	 * doAddMerTerminal:(这里用一句话描述这个方法的作用)保存终端信息
+	 *
+	 * @param merchantTerminal
+	 * @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<String> doAddMerTerminal(List<MerchantTerminal> merchantTerminal);
+	/**
+	 * doAddChannel:(这里用一句话描述这个方法的作用)保存渠道信息
+	 *
+	 * @param merchantChannel
+	 * @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<String> doAddMerChannel(List<MerchantChannel> merchantChannel);
+	/**
+	 * doAddMerBanks:(这里用一句话描述这个方法的作用)保存银行卡信息
+	 *
+	 * @param merchantBanks
+	 * @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<String> doAddMerBanks(List<MerchantBank> merchantBanks);
 	
 	/**
 	 * 条件查询 根据商家基本信息条件分页查询
@@ -47,9 +105,44 @@ public interface MerchantCoreService {
 	public ResultDTO<Integer> deleteByIds(Integer[] ids);
 	
 	/**
+	 * deleteByContact:(这里用一句话描述这个方法的作用)根据ID删除联系方式
+	 *
+	 * @param id
+	 * @return    设定文件
+	 * @return ResultDTO<Integer>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<Integer> deleteByContact(Integer id);
+	/**
+	 * deleteByTerminal:(这里用一句话描述这个方法的作用)根据ID删除终端信息
+	 *
+	 * @param id
+	 * @return    设定文件
+	 * @return ResultDTO<Integer>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<Integer> deleteByTerminal(Integer id);
+	
+	public ResultDTO<Integer> deleteByChanel(Integer id);
+	
+	public ResultDTO<Integer> deleteByBank(Integer id);
+	
+	/**
 	 * 根据ID 查询所有数据
 	 * @param id
 	 * @return
 	 */
 	public ResultDTO<MerchantCore> queryAllById(Integer id);
+	
+	/**
+	 * queryAllAgent:(这里用一句话描述这个方法的作用) 查询所有代理商
+	 *
+	 * @return    设定文件
+	 * @return ResultDTO<List<Agent>>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO<List<Agent>> queryAllAgent();
 }

@@ -71,12 +71,14 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         if (currentDate.after(deadLime)) {
             return ResultDTO.fail(ApiConstant.E_MERCHANT_CODE_OVERDUE);//些商铺码已过期，请到pos机查询最新的商铺码
         }
-        merchantUserRelDao.selectByUserIdInnerCode(merchantDTO.getUserId(), alias.getInnerCode());
-        MerchantUserRel muRel = new MerchantUserRel();
-        muRel.setAppUserId(merchantDTO.getUserId());
-        muRel.setInnerCode(alias.getInnerCode());
-        muRel.setModefyTime(new Date());
-        merchantUserRelDao.insert(muRel);
+        MerchantUserRel merchantUserRel = merchantUserRelDao.selectByUserIdInnerCode(merchantDTO.getUserId(), alias.getInnerCode());
+        if (null == merchantUserRel) {
+            MerchantUserRel muRel = new MerchantUserRel();
+            muRel.setAppUserId(merchantDTO.getUserId());
+            muRel.setInnerCode(alias.getInnerCode());
+            muRel.setModefyTime(new Date());
+            merchantUserRelDao.insert(muRel);
+        }
         return ResultDTO.success();
     }
 
@@ -131,7 +133,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<List<MerChantCoreDTO>> getMerchantsCoreByUserId(Integer userId) {
-        if(null == userId){
+        if (null == userId) {
             return ResultDTO.fail(CoreConstants.E_USERID_NULL);
         }
         List<MerChantCoreDTO> datas = merchantCoreDao.queryAllByUseraId(userId);
@@ -148,7 +150,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<List<MerTerminalsDTO>> getMerchantTerminalByUserId(Integer userId) {
-        if(null == userId){
+        if (null == userId) {
             return ResultDTO.fail(CoreConstants.E_USERID_NULL);
         }
         List<MerTerminalsDTO> datas = merchantCoreDao.queryMerTerminalsByUserId(userId);
@@ -165,7 +167,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<MerChantCoreDetailDTO> getMerChantDetailById(Integer merId) {
-        if(null == merId){
+        if (null == merId) {
             return ResultDTO.fail(CoreConstants.E_USERID_NULL);
         }
         MerChantCoreDetailDTO datas = merchantCoreDao.queryDetailById(merId);
@@ -173,6 +175,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         return result;
 
     }
+
     /**
      * (non-Javadoc)查询设备详情
      * @see net.fnsco.api.merchant.MerchantService#getTerminalDetailByTerId(java.lang.Integer)
@@ -181,12 +184,13 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<TerminalDetailDTO> getTerminalDetailByTerId(Integer terId) {
-        if(null == terId){
+        if (null == terId) {
             return ResultDTO.fail(CoreConstants.E_USERID_NULL);
         }
         TerminalDetailDTO data = merchantTerminalDao.queryDetailById(terId);
         return ResultDTO.success(data);
     }
+
     /**
      * (non-Javadoc) 更新设备名称
      * @see net.fnsco.api.merchant.MerchantService#updateTerminal(net.fnsco.api.dto.TerminalsDTO)
@@ -195,19 +199,19 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public ResultDTO<TerminalsDTO> updateTerminal(TerminalsDTO terminalsDTO) {
-        
-        if(null == terminalsDTO.getId() ){
+
+        if (null == terminalsDTO.getId()) {
             return ResultDTO.fail(CoreConstants.E_USERID_NULL);
         }
         MerchantTerminal terminal = new MerchantTerminal();
         BeanUtils.copyProperties(terminalsDTO, terminal);
-        int res =merchantTerminalDao.updateByPrimaryKeySelective(terminal) ;
-        
-        if(res != 1){
+        int res = merchantTerminalDao.updateByPrimaryKeySelective(terminal);
+
+        if (res != 1) {
             return ResultDTO.fail(CoreConstants.E_UPDATE_FAIL);
         }
         return ResultDTO.success(terminalsDTO);
-        
+
     }
 
 }

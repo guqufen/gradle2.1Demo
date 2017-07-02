@@ -60,5 +60,6 @@
     from m_merchant_user_rel
     where app_user_id = #{appUserId,jdbcType=INTEGER}
     and inner_code = #{innerCode,jdbcType=VARCHAR}
+    limit 1
   </select>
 </mapper>
