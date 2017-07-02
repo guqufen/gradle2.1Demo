@@ -191,6 +191,9 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
         }
 		String password=Md5Util.getInstance().md5(appUserDTO.getPassword());
 		AppUser appUser=MappUserDao.selectAppUserByMobile(appUserDTO.getMobile());
+		if(null == appUser){
+		    return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_ERROR);
+		}
 		if(!password.equals(appUser.getPassword())){
 			return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_ERROR);
 		}
