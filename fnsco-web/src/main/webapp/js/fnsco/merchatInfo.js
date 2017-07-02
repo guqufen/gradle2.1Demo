@@ -186,6 +186,7 @@ $('#btn_add').click(function(){
 		   alert('服务器出错');
 	   }
    })
+   $(".uploadify").show();
    $(".remove-icon").show();
 });
 //上传文件
@@ -206,6 +207,9 @@ function  fileUp(num){
        'fileTypeDesc': 'Image Files',
      //允许上传的文件后缀
        'fileTypeExts': '*.gif; *.jpg; *.png',
+       //限制上传图片张数
+       'simUploadLimit' : 1,
+       'multi': false,
        'auto': true,
        'multi': true,
        //参数
@@ -220,11 +224,11 @@ function  fileUp(num){
 						"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"',"+num+")><span class='glyphicon glyphicon-trash'></span>删除</a>" + "</div>");
        		//预览图片
        		var aId='previewfileImg'+obj.id;
-			var viewer = new Viewer(document.getElementById(aId), {
-				url: 'data-original',
-				navbar: false,
-				toolbar: false
-			});
+    			var viewer = new Viewer(document.getElementById(aId), {
+    				url: 'data-original',
+    				navbar: false,
+    				toolbar: false
+    			});
 
     	   	$('#uploadify_file'+num).hide();
     	   	$('#fileQueue'+num).html('');
@@ -237,11 +241,11 @@ function  fileUp(num){
     	   	{
     	   		$('#fileIds').val(obj.id);
     	   	}	
-       },
+        },
        'onUploadError': function(file,errorCode,errorMsg,errorString) {
-			alert(errorCode+"."+errorMsg+""+errorString);
+    			alert(errorCode+"."+errorMsg+""+errorString);
 
-		}
+    		}
    });
 }
 //删除图片
@@ -310,7 +314,16 @@ $('#save_btn').click(function(){
 //批量删除数据
 $('#btn_delete').click(function(){
 	var select_data = $('#table').bootstrapTable('getSelections');  
-	if(select_data.length == 0){alert('请选择一行删除!')}
+	if(select_data.length == 0){
+    alert('请选择一行删除!');
+    return false;
+  };
+  var dataId=[];
+  for(var i=0;i<select_data.length;i++){
+    dataId=dataId.concat(select_data[i].id);
+  }
+  console.log(dataId);
+  delete_btn_event(dataId);
 	
 });
 //弹框下一步按钮事件
@@ -544,19 +557,19 @@ $("#btn_saveChannel").click(function(){
 
 //添加银行卡信息列表
 var BankCardlList=1;
-function bankCardHtml(BankCardlList){
-  return '<div class="bankCard-list"><div class="remove-icon remove-bankCardList'+BankCardlList+'" onclick="removeBankCard('+BankCardlList+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
-            '<div class="col-sm-4"><label class="control-label" for="accountType'+BankCardlList+'">账户类型：</label><select name="accountType'+BankCardlList+'" class="form-control accountType"><option value="1">对公</option><option value="0">对私</option></select></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="accountName'+BankCardlList+'">账户开户名：</label><input type="text" class="form-control accountName" id="accountName'+BankCardlList+'" name="accountName'+BankCardlList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户账号：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户人身份证号：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">结算周期：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div></div>'+
-            '<div class="row"><div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">支行名称:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行所在省:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行所在市:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+BankCardlList+'">开户行行号:</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+BankCardlList+'" name="channelMerKey'+BankCardlList+'"></div>'+
-            '</div></div>';
+function bankCardHtml(num){
+  return '<div class="bankCard-list"><div class="remove-icon remove-bankCardList'+num+'" onclick="removeBankCard('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
+            '<div class="col-sm-4"><label class="control-label" for="accountType'+num+'">账户类型：</label><select name="accountType'+num+'" class="form-control accountType"><option value="1">对公</option><option value="0">对私</option></select></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="accountName'+num+'">账户开户名：</label><input type="text" class="form-control accountName" id="accountName'+num+'" name="accountName'+num+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="accountNo'+num+'">开户账号：</label><input type="text" class="form-control accountNo" id="accountNo'+num+'" name="accountNo'+num+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="accountCardId'+num+'">开户人身份证号：</label><input type="text" class="form-control accountCardId" id="accountCardId'+num+'" name="accountCardId'+num+'"></div>'+
+            // '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">结算周期：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'"></div></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="subBankName'+num+'">支行名称:</label><input type="text" class="form-control subBankName" id="subBankName'+num+'" name="subBankName'+num+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="openBank'+num+'">开户行:</label><input type="text" class="form-control openBank" id="openBank'+num+'" name="openBank'+num+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="openBankPrince'+num+'">开户行所在省:</label><input type="text" class="form-control openBankPrince" id="openBankPrince'+num+'" name="openBankPrince'+num+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="openBankCity'+num+'">开户行所在市:</label><input type="text" class="form-control openBankCity" id="openBankCity'+num+'" name="openBankCity'+num+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="openBankNum'+num+'">开户行行号:</label><input type="text" class="form-control openBankNum" id="openBankNum'+num+'" name="openBankNum'+num+'"></div>'+
+            '</div>';
 }
 //默认添加一个银行卡信息列表
 $('#bankCard-con').append(bankCardHtml(BankCardlList));
@@ -568,6 +581,50 @@ $("#btn_addBankCard").click(function(){
 function removeBankCard(num){
   $('.remove-bankCardList'+num).parent().remove();
 }
+//保存银行卡数据
+$("#btn_saveBankCard").click(function(){
+  var listLen=$(".bankCard-list").length;
+  var bankCardArr=new Array();
+  for (var i=0;i<listLen;i++){
+    var accountType=$(".bankCard-list").eq(i).find($('.accountType')).val();
+    var accountNo=$(".bankCard-list").eq(i).find($('.accountNo')).val();
+    var accountName=$(".bankCard-list").eq(i).find($('.accountName')).val();
+    var accountCardId=$(".bankCard-list").eq(i).find($('.accountCardId')).val();
+    var subBankName=$(".bankCard-list").eq(i).find($('.subBankName')).val();
+    var openBankPrince=$(".bankCard-list").eq(i).find($('.openBankPrince')).val();
+    var openBank=$(".bankCard-list").eq(i).find($('.openBank')).val();
+    var openBankCity=$(".bankCard-list").eq(i).find($('.openBankCity')).val();
+    var openBankNum=$(".bankCard-list").eq(i).find($('.openBankNum')).val();
+    var innerCode=$("#innerCode").val();
+    concatBankCardArr={accountType,accountNo,accountName,accountCardId,subBankName,openBankPrince,openBank,openBankCity,openBankNum,innerCode}
+    bankCardArr=bankCardArr.concat(concatBankCardArr);
+  }
+  console.log(bankCardArr);
+  var innerCode = $('#innerCode').val();
+  if(!innerCode){
+    alert('操作错误!');return;
+  }
+  //保存
+  $.ajax({
+    url:'/web/merchantinfo/toAddBank',
+    dataType:"json", 
+    type:'POST',
+    contentType:"application/json",
+    data:JSON.stringify(bankCardArr),
+    success:function(data){
+      alert('添加成功'+data.data);//返回innerCode
+      $("#myModal").hide();
+    },
+    error:function(){
+      alert('系统错误');
+    }
+  });
+})
+
+
+
+
+
 
 //表格中编辑事件
 function editData(id)
@@ -580,7 +637,6 @@ function editData(id)
       success:function(data){
           //data.data就是所有数据集
           console.log(data.data);
-            $('#editModal').modal();
             //关闭再次点开回到第一个标签
             // $("#editModal").find('.tab-pane').removeClass("active");
             // $("#home1").addClass("active");
@@ -601,6 +657,30 @@ function editData(id)
             $('input[name="taxRegistCode1"]').val(data.data.taxRegistCode);
             $('input[name="registAddress1"]').val(data.data.registAddress);
             $('input[name="mercFlag1"]').val(data.data.mercFlag);
+            //资料文件
+            clickFileBtn();
+            var filesLen=data.data.files.length;
+            for(var i=0;i<filesLen;i++){
+                var fileName=data.data.files[i].fileName;
+                var fileType=data.data.files[i].fileType;
+                var filePath=data.data.files[i].filePath;
+                var id=data.data.files[i].id;
+                console.log(fileName,fileType,filePath,id)
+                $('#view'+fileType+'_1').append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
+                        "<a class='previewfileImg' id='previewfileImg"+id+"_1' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
+                        "<a title='删除' class='deletefileImg' style='display:none' id='deletefileImg"+id+"' href=javascript:deleteImage('#deletefileImg"+id+"',"+id+",'"+filePath+"',"+fileType+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" + "</div>");
+                $(".uploadify").hide();
+                //预览图片事件
+                var aId='previewfileImg'+id;
+                aId=aId+'_1';
+                var viewer =new Viewer(document.getElementById(aId), {
+                    url: 'data-original',
+                    navbar: false,
+                    toolbar: false,
+                });
+                $('#uploadify_file'+fileType+'_1').addClass('havaFile');
+                $('#uploadify_file'+fileType+'_1').hide();
+            }
             // 联系信息
             var contactsLen=data.data.contacts.length;
             console.log(contactsLen);
@@ -612,6 +692,9 @@ function editData(id)
                 $('input[name="contactTelphone'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactTelphone);
                 $('input[name="contactJobs'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactJobs);
             }
+            $(".btn_addContact1").click(function(){
+                $("#contact-con1").append(contactHtml());
+            })
             //终端
             var terminalsLen=data.data.terminal.length;
             console.log(terminalsLen);
@@ -642,7 +725,6 @@ function editData(id)
             }
             // 渠道信息
             var channelsLen=data.data.channel.length;
-            console.log(channelsLen);
             for(var i=0;i<channelsLen;i++){
               $("#channel-con1").append(channelHtml(data.data.channel[i].id));
                $('input[name="agentId'+data.data.channel[i].id+'"]').val(data.data.channel[i].agentId);
@@ -651,35 +733,21 @@ function editData(id)
                $('input[name="channelType'+data.data.channel[i].id+'"]').find("option[value="+data.data.channel[i].channelType+"]").attr("selected",true);
             }
             
-
-            //资料文件
-            var filesLen=data.data.files.length;
-            for(var i=0;i<filesLen;i++){
-                var fileName=data.data.files[i].fileName;
-                var fileType=data.data.files[i].fileType;
-                var filePath=data.data.files[i].filePath;
-                var id=data.data.files[i].id;
-                $('#view'+fileType).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
-                        "<a class='previewfileImg' id='previewfileImg"+id+"' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
-                        "<a title='删除' class='deletefileImg' id='deletefileImg"+id+"' href=javascript:deleteImage('#deletefileImg"+id+"',"+id+",'"+filePath+"',"+fileType+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" + "</div>");
-                $('#uploadify_file'+fileType).hide();
-                //预览图片事件
-                var aId='previewfileImg'+id;
-                var viewer = new Viewer(document.getElementById(aId), {
-                    url: 'data-original',
-                    navbar: false,
-                    toolbar: false,
-                });
-            }
+            //显示编辑弹框
+            $('#editModal').modal();
             // 全部默认不可编辑
             $("#editModal").find('input').attr('disabled',true);
             $("#editModal").find('select').attr('disabled',true);
             $(".remove-icon").hide();
+            $(".btn-addList").hide();
             $("#btn_addContact1").hide();
+            $(".deletefileImg").hide();
+            $(".uploadify").hide();
+            
             //编辑弹框点击编辑按钮事件
             $(".editBtn_edit").click(function(){
                 $(".remove-icon").show();
-                $("#btn_addContact1").show();
+                $(".btn-addList").show();
                 $("#editModal .nav-tabs li a").attr('href','javascript:;');
                 $("#editModal .nav-tabs li a").removeAttr('data-toggle');
                 $("#editModal .nav-tabs li a").css('cursor','no-drop');
@@ -687,8 +755,11 @@ function editData(id)
                 $(this).hide();
                 $(this).parent().find('input').attr('disabled',false);
                 $(this).parent().find('select').attr('disabled',false);
+                $(".uploadify").show();
+                $(".havaFile").hide();
+                $(".deletefileImg").show();
             })
-
+            //保存按钮
             $(".editBtn_save").click(function(){
                 var editModalALen=$("#editModal .nav-tabs li a").length;
                 for(var i=0;i<editModalALen;i++){
@@ -700,92 +771,16 @@ function editData(id)
                 $(this).prev().css('display','inline-block');
                 $(this).hide();
                 $(".remove-icon").hide();
-                $("#btn_addContact1").hide();
+                $(".btn-addList").hide();
                 $("#editModal .nav-tabs li a").css('cursor','default');
                 $(this).parent().find('input').attr('disabled',true);
                 $(this).parent().find('select').attr('disabled',true);
+                $(".uploadify").hide();
+                $(".deletefileImg").hide();
             })
-            //新增联系信息
-            var editContactNum=0;
-            $("#btn_addContact1").click(function(){
-              var addContactNum='-1'+(editContactNum++);
-              $('#contact-con1').append(contactHtml(addContactNum));
-            })
-          $('#innerCode').val(data.data.innerCode);
-          clickFileBtn();
-          $('#editModal').modal();
-          $("#editModal").find('.tab-pane').removeClass("active");
-          $("#home1").addClass("active");
-          $("#editModal .nav-tabs li").removeClass("active");
-          $("#editModal .nav-tabs li:first-child").addClass("active");
-          //基本信息
-          $('input[name="merName"]').val(data.data.merName);
-          $('input[name="abbreviation"]').val(data.data.abbreviation);
-          $('input[name="enName"]').val(data.data.enName);
-          $('input[name="legalPerson"]').val(data.data.legalPerson);
-          $('input[name="legalPersonMobile"]').val(data.data.legalPersonMobile);
-          $('input[name="legalPersonTel"]').val(data.data.legalPersonTel);
-          $('select[name="legalValidCardType"]').find("option[value="+data.data.legalValidCardType+"]").attr("selected",true);
-          $('input[name="cardNum"]').val(data.data.cardNum);
-          $('input[name="cardValidTime"]').val(data.data.cardValidTime);
-          $('input[name="businessLicenseNum"]').val(data.data.businessLicenseNum);
-          $('input[name="businessLicenseValidTime"]').val(data.data.businessLicenseValidTime);
-          $('input[name="taxRegistCode"]').val(data.data.taxRegistCode);
-          $('input[name="registAddress"]').val(data.data.registAddress);
-          $('input[name="mercFlag"]').val(data.data.mercFlag);
-          // 渠道信息
-          $('input[name="agentId"]').val(data.data.channel.agentId);
-          $('input[name="channelMerId"]').val(data.data.channel.channelMerId);
-          $('input[name="channelMerKey"]').val(data.data.channel.channelMerKey);
-          $('select[name="channelType"]').find("option[value="+data.data.channel.channelType+"]").attr("selected",true);
-          //终端
-          $('input[name="merchantCode"]').val(data.data.terminal.merchantCode);
-          $('input[name="channelId"]').val(data.data.terminal.channelId);
-          $('input[name="channelName"]').val(data.data.terminal.channelName);
-          $('input[name="terminalCode"]').val(data.data.terminal.terminalCode);
-          $('input[name="innerTermCode"]').val(data.data.terminal.innerTermCode);
-          $('input[name="snCode"]').val(data.data.terminal.snCode);
-          $('input[name="terminalBatch"]').val(data.data.terminal.terminalBatch);
-          $('input[name="terminalPara"]').val(data.data.terminal.terminalPara);
-          $('select[name="chargesType"]').find("option[value="+data.data.terminal.chargesType+"]").attr("selected",true);
-          $('input[name="debitCardRate"]').val(data.data.terminal.debitCardRate);
-          $('input[name="creditCardRate"]').val(data.data.terminal.creditCardRate);
-          $('input[name="debitCardFee"]').val(data.data.terminal.debitCardFee);
-          $('input[name="creditCardFee"]').val(data.data.terminal.creditCardFee);
-          $('input[name="debitCardMaxFee"]').val(data.data.terminal.debitCardMaxFee);
-          $('input[name="creditCardMaxFee"]').val(data.data.terminal.creditCardMaxFee);
-          $('input[name="dealSwitch"]').val(data.data.terminal.dealSwitch);
-          $('select[name="recordState"]').find("option[value="+data.data.terminal.recordState+"]").attr("selected",true);
-          $('select[name="termAuditState"]').find("option[value="+data.data.terminal.termAuditState+"]").attr("selected",true);
-          $('input[name="termName"]').val(data.data.terminal.termName);
-          $('input[name="posFactory"]').val(data.data.terminal.posFactory);
-          $('input[name="posType"]').val(data.data.terminal.posType);
-          $('input[name="mercReferName"]').val(data.data.terminal.mercReferName);
-          // 联系信息
-          $('input[name="contactName"]').val(data.data.contacts[0].contactName);
-          $('input[name="contactMobile"]').val(data.data.contacts[0].contactMobile);
-          $('input[name="contactEmail"]').val(data.data.contacts[0].contactEmail);
-          $('input[name="contactTelphone"]').val(data.data.contacts[0].contactTelphone);
-          $('input[name="contactJobs"]').val(data.data.contacts[0].contactJobs);
-          //资料文件
-          var filesLen=data.data.files.length;
-          for(var i=0;i<filesLen;i++){
-              var fileName=data.data.files[i].fileName;
-              var fileType=data.data.files[i].fileType;
-              var filePath=data.data.files[i].filePath;
-              var id=data.data.files[i].id;
-              $('#view'+fileType).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
-                      "<a class='previewfileImg' id='previewfileImg"+id+"' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
-                      "<a title='删除' class='deletefileImg' id='deletefileImg"+id+"' href=javascript:deleteImage('#deletefileImg"+id+"',"+id+",'"+filePath+"',"+fileType+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" + "</div>");
-              $('#uploadify_file'+fileType).hide();
-              //预览图片事件
-              var aId='previewfileImg'+id;
-              var viewer = new Viewer(document.getElementById(aId), {
-                  url: 'data-original',
-                  navbar: false,
-                  toolbar: false,
-              });
-          }
+
+
+          
       }});
 }
 
