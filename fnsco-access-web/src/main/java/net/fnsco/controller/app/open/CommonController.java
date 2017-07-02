@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.VersionDTO;
 import net.fnsco.api.dto.VersionResultDTO;
-import net.fnsco.api.merchant.VersionService;
+import net.fnsco.api.merchant.ConmmService;
 import net.fnsco.controller.app.jo.CommJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -27,7 +27,7 @@ public class CommonController extends BaseController {
     @Autowired
     private Environment    env;
     @Autowired
-    private VersionService versionService;
+    private ConmmService versionService;
 
     /**
      * 获取APP下载地址
