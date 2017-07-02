@@ -97,6 +97,11 @@ public class VersionServiceImpl extends BaseService implements VersionService {
     @Override
     public VersionResultDTO queryVersionInfo(VersionDTO sysVersionDTO) {
         VersionResultDTO result = new VersionResultDTO();
+        result.setDownloadUrl1("http://sdfe");
+        result.setForceUpdate("1");
+        result.setVersion("1.0.0");
+        result.setIsUpdate(true);
+        //sysVersionDTO.getVersion(),
         Version maxVersion = sysVersionDao.selectSysVersion(sysVersionDTO.getAppCode(), sysVersionDTO.getAppType());
         return result;
     }

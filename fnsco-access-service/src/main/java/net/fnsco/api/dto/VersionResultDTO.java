@@ -1,10 +1,33 @@
 package net.fnsco.api.dto;
 
 public class VersionResultDTO {
-    private String forceUpdate;
-    private String version;
-    private String downloadUrl1;
-    private String downloadUrl2;
+    private String  forceUpdate;
+    private String  version;
+    private String  downloadUrl1;
+    private String  downloadUrl2;
+    private Boolean isUpdate;
+
+    /**
+     * isUpdate
+     *
+     * @return  the isUpdate
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Boolean getIsUpdate() {
+        return isUpdate;
+    }
+
+    /**
+     * isUpdate
+     *
+     * @param   isUpdate    the isUpdate to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setIsUpdate(Boolean isUpdate) {
+        this.isUpdate = isUpdate;
+    }
 
     /**
      * forceUpdate

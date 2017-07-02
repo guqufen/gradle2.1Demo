@@ -2,6 +2,7 @@ package net.fnsco.controller.app.open;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +42,7 @@ public class CommonController extends BaseController {
 
     @RequestMapping(value = "/checkUpdate")
     @ApiOperation(value = "检查是否有新版本")
-    public ResultDTO checkUpdate(CommJO commJO) {
+    public ResultDTO checkUpdate(@RequestBody CommJO commJO) {
         String version = commJO.getVersion();
         String type = commJO.getType();
         String[] versionArr = version.split(".");
