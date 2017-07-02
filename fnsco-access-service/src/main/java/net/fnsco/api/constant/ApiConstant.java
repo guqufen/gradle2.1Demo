@@ -45,7 +45,7 @@ public class ApiConstant extends CoreConstants {
     public static String E_ALREADY_LOGIN           = "5101";                            //用户已注册
     public static String E_REGISTER_ERROR          = "5102";                            //注册失败
     public static String E_CODEOVERTIME_ERROR      = "5103";                            //验证码超时
-    public static String E_UPDATEPASSWORD_ERROR    = "5104";                            //更新密码失败
+    public static String E_UPDATEPASSWORD_ERROR    = "5107";                            //更新密码失败
     public static String E_OLDPASSWORD_ERROR       = "5105";                            //  原密码错误
     public static String E_NOREGISTER_LOGIN        = "5106";                            //用户未注册
     //未注册   5106
@@ -68,8 +68,9 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put("5101", "用户已注册");
         ERROR_MESSGE_MAP.put("5102", "注册失败");
         ERROR_MESSGE_MAP.put("5103", "验证码超时");
-        ERROR_MESSGE_MAP.put("5104", "更新密码失败");
+        ERROR_MESSGE_MAP.put("5107", "更新密码失败");
         ERROR_MESSGE_MAP.put("5105", "原密码错误");
+        ERROR_MESSGE_MAP.put("5106", "用户未注册");
 
         ERROR_MESSGE_MAP.put("5023", "商铺码不能为空");
         ERROR_MESSGE_MAP.put("5024", "用户ID不能为空");
