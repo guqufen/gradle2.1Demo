@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.api.appuser.ConmmService;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.ProtocolDTO;
 import net.fnsco.api.dto.VersionDTO;
-import net.fnsco.api.merchant.ConmmService;
 import net.fnsco.controller.app.jo.DiscoveryJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;

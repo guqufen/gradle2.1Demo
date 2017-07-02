@@ -1,4 +1,4 @@
-package net.fnsco.api.merchant;
+package net.fnsco.api.appuser;
 
 import net.fnsco.api.dto.ProtocolDTO;
 import net.fnsco.api.dto.VersionDTO;
