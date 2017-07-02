@@ -10,20 +10,20 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 
 import net.fnsco.api.constant.ApiConstant;
-import net.fnsco.api.dto.SysVersionDTO;
-import net.fnsco.api.merchant.SysVersionService;
+import net.fnsco.api.dto.VersionDTO;
+import net.fnsco.api.merchant.VersionService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.service.dao.master.SysVersionDao;
+import net.fnsco.service.dao.master.VersionDao;
 import net.fnsco.service.domain.Version;
 @Service
-public class VersionServiceImpl extends BaseService implements SysVersionService {
+public class VersionServiceImpl extends BaseService implements VersionService {
 
     @Autowired
-    private SysVersionDao sysVersionDao;
+    private VersionDao sysVersionDao;
 
     @Override
-    public ResultDTO<Object> Selective(SysVersionDTO sysVersionDTO) {
+    public ResultDTO<Object> Selective(VersionDTO sysVersionDTO) {
         String version = sysVersionDTO.getVersion();
         //非空判断
         if (Strings.isNullOrEmpty(version)) {

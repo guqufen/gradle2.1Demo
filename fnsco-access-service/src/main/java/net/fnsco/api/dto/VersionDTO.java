@@ -2,7 +2,7 @@ package net.fnsco.api.dto;
 
 import net.fnsco.core.base.DTO;
 
-public class SysVersionDTO extends DTO{
+public class VersionDTO extends DTO{
     private String version;
     private String appType;
     private String deviceId;
