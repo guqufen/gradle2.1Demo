@@ -11,11 +11,13 @@ import com.google.common.base.Strings;
 
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.SysVersionDTO;
+import net.fnsco.api.dto.VersionDTO;
 import net.fnsco.api.merchant.SysVersionService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.service.dao.master.SysVersionDao;
 import net.fnsco.service.domain.Version;
+
 @Service
 public class VersionServiceImpl extends BaseService implements SysVersionService {
 
@@ -50,7 +52,7 @@ public class VersionServiceImpl extends BaseService implements SysVersionService
         int newV = Integer.valueOf(newVersionArr[0]);
         int oldV = Integer.valueOf(versionArr[0]);
         //判断forceUpdate的值为1  强制更新
-        if(av.getForceUpdate()==1){
+        if (av.getForceUpdate() == 1) {
             map.put("haveNewVersion", 1);
             map.put("forceUpdate", av.getForceUpdate());
             map.put("version", av.getVersion());
@@ -58,7 +60,7 @@ public class VersionServiceImpl extends BaseService implements SysVersionService
             map.put("downloadUrl", av.getDownloadUrl1());
             map.put("downloadUrl2", av.getDownloadUrl2());
             return ResultDTO.success(map);
-         }
+        }
         //第一数字比较判断是否强制更新
         if (Integer.valueOf(newVersionArr[0]) > Integer.valueOf(versionArr[0])) {
             map.put("haveNewVersion", 1);
@@ -92,4 +94,10 @@ public class VersionServiceImpl extends BaseService implements SysVersionService
         return null;
     }
 
+    @Override
+    public VersionDTO queryVersionInfo(SysVersionDTO sysVersionDTO) {
+        VersionDTO result = new VersionDTO();
+        Version maxVersion = sysVersionDao.selectSysVersion(sysVersionDTO.getAppCode(), sysVersionDTO.getAppType());
+        return result;
+    }
 }

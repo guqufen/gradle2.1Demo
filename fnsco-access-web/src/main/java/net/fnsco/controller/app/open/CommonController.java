@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.SysVersionDTO;
+import net.fnsco.api.dto.VersionDTO;
 import net.fnsco.api.merchant.SysVersionService;
 import net.fnsco.controller.app.jo.CommJO;
 import net.fnsco.core.base.BaseController;
@@ -53,7 +54,7 @@ public class CommonController extends BaseController {
         sysVersionDTO.setAppType(type);
         sysVersionDTO.setVersion(version);
         sysVersionDTO.setAppCode(appCode);
-        versionService.queryVersionInfo(sysVersionDTO);
-        return ResultDTO.success();
+        VersionDTO resultDTO =versionService.queryVersionInfo(sysVersionDTO);
+        return ResultDTO.success(resultDTO);
     }
 }
