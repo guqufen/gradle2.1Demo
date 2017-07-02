@@ -8,6 +8,8 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 public class DateUtils {
     private static Logger logger = LoggerFactory.getLogger(DateUtils.class);
 
@@ -25,5 +27,37 @@ public class DateUtils {
             logger.error("DateUtils.getDayEndTime()日志转换出错", e);
         }
         return result;
+    }
+
+    public static String getDateStartTime(String date) {
+        String result = "";
+        if (Strings.isNullOrEmpty(date)) {
+            return result;
+        }
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMdd");
+        try {
+            Date tempDate = sf.parse(date);
+            result = sf1.format(tempDate);
+        } catch (Exception e) {
+            logger.error("DateUtils.getDayEndTime()日志转换出错", e);
+        }
+        return result + "000000";
+    }
+
+    public static String getDateEndTime(String date) {
+        String result = "";
+        if (Strings.isNullOrEmpty(date)) {
+            return result;
+        }
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMdd");
+        try {
+            Date tempDate = sf.parse(date);
+            result = sf1.format(tempDate);
+        } catch (Exception e) {
+            logger.error("DateUtils.getDayEndTime()日志转换出错", e);
+        }
+        return result + "235959";
     }
 }

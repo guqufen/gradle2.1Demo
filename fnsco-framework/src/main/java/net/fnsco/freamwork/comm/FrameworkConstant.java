@@ -16,9 +16,9 @@ public class FrameworkConstant {
     public static String              E_SYSTEM_EXCEPTION = "5000";
     public static Map<String, String> ERROR_MESSGE_MAP   = Maps.newHashMap();
     static {
-        ERROR_MESSGE_MAP.put("4010", "非法请求,没有token");
-        ERROR_MESSGE_MAP.put("4011", "非法请求,token不正确");
-        ERROR_MESSGE_MAP.put("4012", "请登录");
-        ERROR_MESSGE_MAP.put("5000", "系统未处理的异常");
+        ERROR_MESSGE_MAP.put(E_TOKEN_EMPTY, "非法请求,没有token");
+        ERROR_MESSGE_MAP.put(E_TOKEN_ERROR, "非法请求,token不正确");
+        ERROR_MESSGE_MAP.put(E_NOT_LOGIN, "请登录");
+        ERROR_MESSGE_MAP.put(E_SYSTEM_EXCEPTION, "系统未处理的异常");
     }
 }

@@ -14,6 +14,7 @@ import net.fnsco.controller.app.jo.TradeDataJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.service.domain.trade.TradeData;
 
 /**
  * 交易流水处理类
@@ -38,10 +39,8 @@ public class TradeDataController extends BaseController {
     @RequestMapping(value = "/queryList")
     @ApiOperation(value = "查询交易流水")
     public ResultDTO queryList(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
-        tradeDataService.queryAllByCondition(tradeQueryDTO);
-        ResultPageDTO resultPage = new ResultPageDTO();
-        resultPage.setTotal(90);
-        return success(resultPage);
+        ResultPageDTO<TradeData> result = tradeDataService.queryAllByCondition(tradeQueryDTO);
+        return success(result);
     }
 
     /**
@@ -54,9 +53,8 @@ public class TradeDataController extends BaseController {
     @RequestMapping(value = "/information")
     @ApiOperation(value = "查询交易流水")
     public ResultDTO information(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
-        ResultPageDTO resultPage = new ResultPageDTO();
-        resultPage.setTotal(90);
-        return success(resultPage);
+        TradeData result = tradeDataService.queryByTradeId(tradeQueryDTO.getTradeId());
+        return ResultDTO.success(result);
     }
 
 }

@@ -8,7 +8,7 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.trade.TradeData;
 
 public interface TradeDataService {
-    
+
     boolean saveTradeData(TradeDataDTO tradeData);
 
     /**
@@ -16,7 +16,10 @@ public interface TradeDataService {
      * @param merchantCore
      * @return
      */
-    List<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore);
+    ResultPageDTO<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore);
+
+    TradeData queryByTradeId(String tradeId);
+
     /**
      * queryTradeData:(这里用一句话描述这个方法的作用) web分页查询
      * @param merchantCore
@@ -27,6 +30,6 @@ public interface TradeDataService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO,int currentPageNum,int perPageSize);
+    ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize);
 
 }
