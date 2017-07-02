@@ -16,7 +16,7 @@ public interface TradeDataService {
      * @param merchantCore
      * @return
      */
-    List<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore);
+    ResultPageDTO<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore);
     /**
      * queryTradeData:(这里用一句话描述这个方法的作用) web分页查询
      * @param merchantCore

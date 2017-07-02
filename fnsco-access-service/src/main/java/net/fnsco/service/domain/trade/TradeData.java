@@ -1,117 +1,213 @@
 package net.fnsco.service.domain.trade;
 
 import java.util.Date;
+import java.util.List;
 
 public class TradeData {
-    private String id;
+    private String       id;
 
-    private String innerCode;
+    private String       innerCode;
 
-    private String txnType;
+    private String       txnType;
 
-    private String txnSubType;
+    private String       txnSubType;
 
-    private String currency;
+    private String       currency;
 
-    private String payTimeOut;
+    private String       payTimeOut;
 
-    private String subject;
+    private String       subject;
 
-    private String body;
+    private String       body;
 
-    private String customerInfo;
+    private String       customerInfo;
 
-    private String remark;
+    private String       remark;
 
-    private String customerIp;
+    private String       customerIp;
 
-    private String tn;
+    private String       tn;
 
-    private String respCode;
+    private String       respCode;
 
-    private String respMsg;
+    private String       respMsg;
 
-    private String settleAmount;
+    private String       settleAmount;
 
-    private String settleCurrency;
+    private String       settleCurrency;
 
-    private String settleDate;
+    private String       settleDate;
 
-    private String succTime;
+    private String       succTime;
 
-    private String orgMerOrderId;
+    private String       orgMerOrderId;
 
-    private String canRefAmt;
+    private String       canRefAmt;
 
-    private String refCnt;
+    private String       refCnt;
 
-    private String refAmt;
+    private String       refAmt;
 
-    private String bankId;
+    private String       bankId;
 
-    private String ppFlag;
+    private String       ppFlag;
 
-    private String purpose;
+    private String       purpose;
 
-    private String dcType;
+    private String       dcType;
 
-    private String certifyId;
+    private String       certifyId;
 
-    private String msgDestId;
+    private String       msgDestId;
 
-    private String customerNm;
+    private String       customerNm;
 
-    private String phoneNo;
+    private String       phoneNo;
 
-    private String subOpenId;
+    private String       subOpenId;
 
-    private String channelType;
+    private String       channelType;
 
-    private String amt;
+    private String       amt;
 
-    private String orderNo;
+    private String       orderNo;
 
-    private String orderTime;
+    private String       orderTime;
 
-    private String orderInfo;
+    private String       orderInfo;
 
-    private String payType;
+    private String       payType;
 
-    private String timeStamp;
+    private String       timeStamp;
 
-    private String tradeDetail;
+    private String       tradeDetail;
 
-    private String merId;
+    private String       merId;
 
-    private String termId;
+    private String       termId;
 
-    private String batchNo;
+    private String       batchNo;
 
-    private String sysTraceNo;
+    private String       sysTraceNo;
 
-    private String authCode;
+    private String       authCode;
 
-    private String orderIdScan;
+    private String       orderIdScan;
 
-    private String source;
+    private String       source;
 
-    private String md5;
+    private String       md5;
 
-    private String sendTime;
+    private String       sendTime;
 
-    private Date   createTime;
-    private String paySubType;    //交易子类型
+    private Date         createTime;
+    private String       paySubType;    //交易子类型
+
+    private String       startSendTime; //条件查询 发送开始时间
+    private String       endSendTime;   //条件查询 发送结束时间
+
+    private String       startTime;     // 订单交易开始日期 20160510000000
+    private String       endTime;       // 订单交易结束日期 20160510235959
+    //内部商务号列表
+    private List<String> innerCodeList;
+    //终端号列表
+    private List<String> terminalList;
+
+    /**
+     * terminalList
+     *
+     * @return  the terminalList
+     * @since   CodingExample Ver 1.0
+    */
     
-    private String startSendTime;//条件查询 发送开始时间
-    private String endSendTime;//条件查询 发送结束时间
+    public List<String> getTerminalList() {
+        return terminalList;
+    }
+
+    /**
+     * terminalList
+     *
+     * @param   terminalList    the terminalList to set
+     * @since   CodingExample Ver 1.0
+     */
     
+    public void setTerminalList(List<String> terminalList) {
+        this.terminalList = terminalList;
+    }
+
+    /**
+     * innerCodeList
+     *
+     * @return  the innerCodeList
+     * @since   CodingExample Ver 1.0
+    */
+
+    public List<String> getInnerCodeList() {
+        return innerCodeList;
+    }
+
+    /**
+     * innerCodeList
+     *
+     * @param   innerCodeList    the innerCodeList to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setInnerCodeList(List<String> innerCodeList) {
+        this.innerCodeList = innerCodeList;
+    }
+
+    /**
+     * startTime
+     *
+     * @return  the startTime
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * startTime
+     *
+     * @param   startTime    the startTime to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    /**
+     * endTime
+     *
+     * @return  the endTime
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    /**
+     * endTime
+     *
+     * @param   endTime    the endTime to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
     /**
      * startSendTime
      *
      * @return  the startSendTime
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getStartSendTime() {
         return startSendTime;
     }
@@ -122,7 +218,7 @@ public class TradeData {
      * @param   startSendTime    the startSendTime to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setStartSendTime(String startSendTime) {
         this.startSendTime = startSendTime;
     }
@@ -133,7 +229,7 @@ public class TradeData {
      * @return  the endSendTime
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getEndSendTime() {
         return endSendTime;
     }
@@ -144,7 +240,7 @@ public class TradeData {
      * @param   endSendTime    the endSendTime to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setEndSendTime(String endSendTime) {
         this.endSendTime = endSendTime;
     }
