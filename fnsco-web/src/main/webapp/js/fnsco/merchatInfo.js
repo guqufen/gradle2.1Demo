@@ -678,6 +678,7 @@ function editData(id)
                     navbar: false,
                     toolbar: false,
                 });
+                $('#uploadify_file'+fileType+'_1').addClass('havaFile');
                 $('#uploadify_file'+fileType+'_1').hide();
             }
             // 联系信息
@@ -755,6 +756,7 @@ function editData(id)
                 $(this).parent().find('input').attr('disabled',false);
                 $(this).parent().find('select').attr('disabled',false);
                 $(".uploadify").show();
+                $(".havaFile").hide();
                 $(".deletefileImg").show();
             })
             //保存按钮
