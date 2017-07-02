@@ -9,22 +9,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.dto.AppUserDTO;
-import net.fnsco.api.dto.SysVersionDTO;
+import net.fnsco.api.dto.VersionDTO;
 import net.fnsco.api.merchant.AppUserService;
-import net.fnsco.api.merchant.SysVersionService;
+import net.fnsco.api.merchant.VersionService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 @RestController
 @RequestMapping(value = "/app/user", method = RequestMethod.POST)
 
-public class SysVersionController extends BaseController{
+public class VersionController extends BaseController{
     @Autowired
-    private SysVersionService sysVersionService;
+    private VersionService sysVersionService;
 
     @RequestMapping(value = "/update")
     @ApiOperation(value = "版本更新")
     @ResponseBody
-    public ResultDTO<Object> register(@RequestBody SysVersionDTO sysVersionDTO) {
+    public ResultDTO<Object> register(@RequestBody VersionDTO sysVersionDTO) {
 //        ResultDTO result = sysVersionService.insertSelective(sysVersionDTO);
         return null;
     }

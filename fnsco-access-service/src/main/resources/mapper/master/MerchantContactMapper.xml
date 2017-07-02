@@ -72,10 +72,48 @@
       </if>
     </trim>
   </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.MerchantContact" >
+    update m_merchant_contact
+    <set >
+      <if test="innerCode != null" >
+        inner_code = #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactMobile != null" >
+        contact_mobile = #{contactMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contactEmail != null" >
+        contact_email = #{contactEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTelphone != null" >
+        contact_telphone = #{contactTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactJobs != null" >
+        contact_jobs = #{contactJobs,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.MerchantContact" >
+    update m_merchant_contact
+    set inner_code = #{innerCode,jdbcType=VARCHAR},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      contact_mobile = #{contactMobile,jdbcType=VARCHAR},
+      contact_email = #{contactEmail,jdbcType=VARCHAR},
+      contact_telphone = #{contactTelphone,jdbcType=VARCHAR},
+      contact_jobs = #{contactJobs,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
   <select id="queryByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
      select 
      <include refid="Base_Column_List" />
      from m_merchant_contact
     where inner_code = #{innerCode,jdbcType=VARCHAR}
   </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from m_merchant_contact
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
 </mapper>

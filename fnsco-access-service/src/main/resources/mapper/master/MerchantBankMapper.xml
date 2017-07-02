@@ -161,4 +161,11 @@
   <select id="queryByInnerCode" parameterType="java.lang.String" resultMap="MerResultMap">
      select account_no,open_bank,open_bank_num from m_merchant_bank where inner_code = #{innerCode}
   </select>
+  <!-- 根据innerCode查询所有银行卡信息 -->
+  <select id="queryWebByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+     from m_merchant_bank
+     where inner_code = #{innerCode}
+  </select>
 </mapper>

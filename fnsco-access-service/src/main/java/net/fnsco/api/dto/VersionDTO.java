@@ -1,97 +1,50 @@
 package net.fnsco.api.dto;
 
-public class VersionDTO {
-    private String forceUpdate;
-    private String version;
-    private String downloadUrl1;
-    private String downloadUrl2;
+import net.fnsco.core.base.DTO;
 
+public class VersionDTO extends DTO{
+    private String version;
+    private String appType;
+    private String deviceId;
+    private String appCode;
+    
     /**
-     * forceUpdate
+     * appCode
      *
-     * @return  the forceUpdate
+     * @return  the appCode
      * @since   CodingExample Ver 1.0
     */
-
-    public String getForceUpdate() {
-        return forceUpdate;
+    
+    public String getAppCode() {
+        return appCode;
     }
-
     /**
-     * forceUpdate
+     * appCode
      *
-     * @param   forceUpdate    the forceUpdate to set
+     * @param   appCode    the appCode to set
      * @since   CodingExample Ver 1.0
      */
-
-    public void setForceUpdate(String forceUpdate) {
-        this.forceUpdate = forceUpdate;
+    
+    public void setAppCode(String appCode) {
+        this.appCode = appCode;
     }
-
-    /**
-     * version
-     *
-     * @return  the version
-     * @since   CodingExample Ver 1.0
-    */
-
     public String getVersion() {
         return version;
     }
-
-    /**
-     * version
-     *
-     * @param   version    the version to set
-     * @since   CodingExample Ver 1.0
-     */
-
     public void setVersion(String version) {
         this.version = version;
     }
-
-    /**
-     * downloadUrl1
-     *
-     * @return  the downloadUrl1
-     * @since   CodingExample Ver 1.0
-    */
-
-    public String getDownloadUrl1() {
-        return downloadUrl1;
+    public String getAppType() {
+        return appType;
     }
-
-    /**
-     * downloadUrl1
-     *
-     * @param   downloadUrl1    the downloadUrl1 to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setDownloadUrl1(String downloadUrl1) {
-        this.downloadUrl1 = downloadUrl1;
+    public void setAppType(String appType) {
+        this.appType = appType;
     }
-
-    /**
-     * downloadUrl2
-     *
-     * @return  the downloadUrl2
-     * @since   CodingExample Ver 1.0
-    */
-
-    public String getDownloadUrl2() {
-        return downloadUrl2;
+    public String getDeviceId() {
+        return deviceId;
     }
-
-    /**
-     * downloadUrl2
-     *
-     * @param   downloadUrl2    the downloadUrl2 to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setDownloadUrl2(String downloadUrl2) {
-        this.downloadUrl2 = downloadUrl2;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
-
+   
 }

@@ -17,6 +17,11 @@ public interface MerchantContactDao {
 
     int insertSelective(MerchantContact record);
     
+    int updateByPrimaryKeySelective(MerchantContact record);
+
+    int updateByPrimaryKey(MerchantContact record);
+    
+    int deleteByPrimaryKey(Integer id);
     /**
      * 根据innercode查询
      * @param innerCode

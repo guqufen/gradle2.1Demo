@@ -71,4 +71,14 @@ public interface MerchantBankDao {
      * @since  CodingExample　Ver 1.1
      */
     List<MerChantBankDTO> queryByInnerCode(@Param("innerCode") String innerCode);
+    /**
+     * queryWebByInnerCode:(这里用一句话描述这个方法的作用)后台管理系统用到
+     *
+     * @param innerCode
+     * @return    设定文件
+     * @return List<MerchantBank>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<MerchantBank> queryWebByInnerCode(@Param("innerCode") String innerCode);
 }
