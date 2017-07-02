@@ -6,6 +6,28 @@ public class VersionDTO extends DTO{
     private String version;
     private String appType;
     private String deviceId;
+    private String appCode;
+    
+    /**
+     * appCode
+     *
+     * @return  the appCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getAppCode() {
+        return appCode;
+    }
+    /**
+     * appCode
+     *
+     * @param   appCode    the appCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setAppCode(String appCode) {
+        this.appCode = appCode;
+    }
     public String getVersion() {
         return version;
     }
