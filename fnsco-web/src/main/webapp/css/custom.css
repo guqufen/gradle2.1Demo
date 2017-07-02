@@ -143,6 +143,7 @@ table a.remove,table a.redact{
     border-radius: 3px;
     margin: 0 3px;
     position: relative;
+    font-size: 12px;
 }
 .previewfileImg img{
 	position: absolute;
@@ -160,6 +161,10 @@ table a.remove,table a.redact{
     background: #ed5565;
     color: #fff;
     border-radius: 3px;
+    font-size: 12px;
+}
+.previewfileImg span,.deletefileImg span{
+	margin-right: 3px;
 }
 .previewfileImg:hover,.deletefileImg:hover{
 	color: #fff;

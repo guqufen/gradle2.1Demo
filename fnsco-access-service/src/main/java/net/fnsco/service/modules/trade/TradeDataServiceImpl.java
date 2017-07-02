@@ -1,24 +1,33 @@
 package net.fnsco.service.modules.trade;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import net.fnsco.api.dto.TradeDataDTO;
 import net.fnsco.api.dto.TradeDataQueryDTO;
+import net.fnsco.api.merchant.MerchantQueryService;
 import net.fnsco.api.trade.TradeDataService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.DbUtil;
 import net.fnsco.service.dao.master.MerchantChannelDao;
+import net.fnsco.service.dao.master.MerchantUserRelDao;
 import net.fnsco.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.service.domain.MerchantChannel;
+import net.fnsco.service.domain.MerchantTerminal;
+import net.fnsco.service.domain.MerchantUserRel;
 import net.fnsco.service.domain.trade.TradeData;
 
 /**
@@ -29,9 +38,13 @@ import net.fnsco.service.domain.trade.TradeData;
 @Service
 public class TradeDataServiceImpl extends BaseService implements TradeDataService {
     @Autowired
-    private TradeDataDAO       tradeListDAO;
+    private TradeDataDAO         tradeListDAO;
     @Autowired
-    private MerchantChannelDao merchantChannelDao;
+    private MerchantChannelDao   merchantChannelDao;
+    @Autowired
+    private MerchantQueryService merchantQueryService;
+    @Autowired
+    private MerchantUserRelDao   merchantUserRelDao;
 
     /**
      * 保存交易流水
@@ -92,9 +105,47 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      * @see net.fnsco.api.trade.TradeDataService#queryAllByCondition(net.fnsco.api.dto.TradeDataQueryDTO)
      */
     @Override
-    public List<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore) {
-        return null;
+    public ResultPageDTO<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore) {
+        TradeData tradeData = new TradeData();
+        //设置交易时间
+        tradeData.setStartTime(DateUtils.getDateStartTime(merchantCore.getStartDate()));
+        tradeData.setEndTime(DateUtils.getDateEndTime(merchantCore.getEndDate()));
+        //定义要查询的商户号
+        List<String> innerCodeList = null;
+        //根据终端查询商户号列表
+        String terminals = merchantCore.getTerminals();
+        List<String> terminalList = null;
+        if (!Strings.isNullOrEmpty(terminals)) {
+            String[] terminalss = terminals.trim().split(",");
+            if (terminalss.length > 0) {
+                terminalList = Lists.newArrayList();
+                for (int i = 0; i < terminalss.length; i++) {
+                    terminalList.add(terminalss[i]);
+                }
+            }
+        }
+        tradeData.setTerminalList(terminalList);
+        //根据用户查询商户号
+        Integer appUserId = merchantCore.getUserId();
+        if (null == terminalList || terminalList.size() == 0) {
+            List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
+            if (!CollectionUtils.isEmpty(tempList)) {
+                innerCodeList = Lists.newArrayList();
+                for (MerchantUserRel rel : tempList) {
+                    innerCodeList.add(rel.getInnerCode());
+                }
+            }
+        }
+        //设置商户号
+        tradeData.setInnerCodeList(innerCodeList);
+        PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(), merchantCore.getPerPageSize(), tradeData);
+        List<TradeData> datas = tradeListDAO.queryPageList(pages);
+        int total = tradeListDAO.queryTotalByCondition(tradeData);
+        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total, datas);
+        result.setCurrentPage(merchantCore.getCurrentPageNum());
+        return result;
     }
+
     /**
      * 条件分页查询
      * (non-Javadoc)
@@ -104,17 +155,17 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      */
     @Override
     public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
-        
+
         TradeData tradeData = new TradeData();
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
-        PageDTO<TradeData> pages = new PageDTO<TradeData>(currentPageNum,perPageSize,tradeData);
-        
+        PageDTO<TradeData> pages = new PageDTO<TradeData>(currentPageNum, perPageSize, tradeData);
+
         List<TradeData> datas = tradeListDAO.queryPageList(pages);
         int total = tradeListDAO.queryTotalByCondition(tradeData);
-        
-        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total,datas);
+
+        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total, datas);
         result.setCurrentPage(currentPageNum);
         return result;
-        
+
     }
 }
