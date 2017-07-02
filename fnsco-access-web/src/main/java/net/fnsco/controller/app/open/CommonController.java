@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.constant.ApiConstant;
+import net.fnsco.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.api.dto.VersionDTO;
 import net.fnsco.api.dto.VersionResultDTO;
 import net.fnsco.api.merchant.ConmmService;
@@ -25,7 +26,7 @@ import net.fnsco.core.base.ResultDTO;
 @RequestMapping(value = "/open/comm", method = RequestMethod.POST)
 public class CommonController extends BaseController {
     @Autowired
-    private Environment    env;
+    private Environment  env;
     @Autowired
     private ConmmService versionService;
 
@@ -51,7 +52,7 @@ public class CommonController extends BaseController {
             logger.warn("版本号格式错误,version=" + version);
             return ResultDTO.fail();
         }
-        String appCode = "lkl";
+        String appCode = AppTypeEnum.LKL.getCode();
         VersionDTO sysVersionDTO = new VersionDTO();
         sysVersionDTO.setAppType(type);
         sysVersionDTO.setVersion(version);

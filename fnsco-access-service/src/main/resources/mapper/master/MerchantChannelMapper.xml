@@ -69,9 +69,6 @@
       <if test="innerCode != null" >
         #{innerCode,jdbcType=VARCHAR},
       </if>
-      <if test="agentId != null" >
-        #{agentId,jdbcType=INTEGER},
-      </if>
       <if test="channelType != null" >
         #{channelType,jdbcType=VARCHAR},
       </if>

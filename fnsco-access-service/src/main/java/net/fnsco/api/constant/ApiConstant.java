@@ -1,6 +1,5 @@
 package net.fnsco.api.constant;
 
-
 import net.fnsco.core.constants.CoreConstants;
 
 public class ApiConstant extends CoreConstants {
@@ -14,15 +13,11 @@ public class ApiConstant extends CoreConstants {
     public static String E_TOKEN_ERROR             = "4011";
     public static String E_NOT_LOGIN               = "4012";
     public static String E_SYSTEM_EXCEPTION        = "5000";
-    //  原密码错误
-    public static String E_PASSWORDTIME_ERROR      = "5104";                            //密码输入错误超过3次
     public static String E_MERCHANT_CODE_NULL      = "5023";                            //商铺码不能为空
     public static String E_USER_ID_NULL            = "5024";                            //用户ID不能为空
     public static String E_MERCHANT_CODE_NOT_EXIST = "5025";                            //此商铺码不存在，请重新输入
     public static String E_MERCHANT_CODE_OVERDUE   = "5026";
 
-    public static String       E_USERID_NULL = "5110";
-    public static String       E_UPDATE_FAIL = "5111";
     public static String E_APP_PHONE_EMPTY         = "5011";                            //非法请求,没有手机号
     public static String E_APP_PHONE_ERROR         = "5012";                            //非法请求,手机号不正确
 
@@ -44,11 +39,15 @@ public class ApiConstant extends CoreConstants {
     public static String E_ALREADY_LOGIN           = "5101";                            //用户已注册
     public static String E_REGISTER_ERROR          = "5102";                            //注册失败
     public static String E_CODEOVERTIME_ERROR      = "5103";                            //验证码超时
+    //  原密码错误
+    public static String E_PASSWORDTIME_ERROR      = "5104";                            //密码输入错误超过3次
     public static String E_UPDATEPASSWORD_ERROR    = "5107";                            //更新密码失败
     public static String E_OLDPASSWORD_ERROR       = "5105";                            //  原密码错误
     public static String E_NOREGISTER_LOGIN        = "5106";                            //用户未注册
-    
-    
+
+    public static String E_USERID_NULL             = "5110";
+    public static String E_UPDATE_FAIL             = "5111";
+
     static {
         //APP
         ERROR_MESSGE_MAP.put(E_USERID_NULL, "入参ID为null");
