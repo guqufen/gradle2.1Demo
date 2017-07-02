@@ -224,7 +224,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             user.setId(appUser.getId());
             //更新到实体
             if(MappUserDao.updateByPrimaryKeySelective(user)){
-                return ResultDTO.success();
+                map.put("appUserId", appUser.getId());
+                return ResultDTO.success(map);
             }
         }
         return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);

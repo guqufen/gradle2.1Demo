@@ -5,6 +5,8 @@ import net.fnsco.core.constants.CoreConstants;
 
 public class ApiConstant extends CoreConstants {
     public static String THIS_PROGREM_URL          = "app.download.url";
+    public static String THIS_ANDROID_URL          ="app.download.android";
+    public static String THIS_IOS_URL              ="app.download.ios";
     public static String IS_AUTHOR                 = "false";
     public static String OPEN_IS_AUTHOR            = "open.is.author";
     public static String WEB_IS_AUTHOR             = "web.is.author";
@@ -47,9 +49,13 @@ public class ApiConstant extends CoreConstants {
     public static String E_UPDATEPASSWORD_ERROR    = "5107";                            //更新密码失败
     public static String E_OLDPASSWORD_ERROR       = "5105";                            //  原密码错误
     public static String E_NOREGISTER_LOGIN        = "5106";                            //用户未注册
-    
+    public static String E_EDITION_LOGIN           = "5107";                            //版本号格式错误
     
     static {
+        ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NULL, "商铺码不能为空");
+        ERROR_MESSGE_MAP.put(E_USER_ID_NULL, "用户ID不能为空");
+        ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NOT_EXIST, "此商铺码不存在，请重新输入");
+        ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_OVERDUE, "此商铺码已过期，请到pos机查询最新的商铺码");
         //APP
         ERROR_MESSGE_MAP.put(E_USERID_NULL, "入参ID为null");
         ERROR_MESSGE_MAP.put(E_UPDATE_FAIL, "更新失败");
@@ -72,11 +78,8 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_UPDATEPASSWORD_ERROR, "更新密码失败");
         ERROR_MESSGE_MAP.put(E_OLDPASSWORD_ERROR, "原密码错误");
         ERROR_MESSGE_MAP.put(E_NOREGISTER_LOGIN, "用户未注册");
-
-        ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NULL, "商铺码不能为空");
-        ERROR_MESSGE_MAP.put(E_USER_ID_NULL, "用户ID不能为空");
-        ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NOT_EXIST, "此商铺码不存在，请重新输入");
-        ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_OVERDUE, "此商铺码已过期，请到pos机查询最新的商铺码");
+        ERROR_MESSGE_MAP.put(E_EDITION_LOGIN, "版本号格式错误");
+        
     }
 
 }

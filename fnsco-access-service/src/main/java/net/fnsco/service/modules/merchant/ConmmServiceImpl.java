@@ -30,7 +30,7 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
 
     @Override
     public ResultDTO checkUpdate(VersionDTO sysVersionDTO) {
-        //
+        
         String version = sysVersionDTO.getVersion();
         Integer appType = Integer.valueOf(sysVersionDTO.getAppType());
         //非空判断
@@ -44,7 +44,7 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
         String[] versionArr = StringUtils.split(version, ".");
         if (versionArr == null || versionArr.length != 3) {
             logger.warn("版本号格式错误,version=" + version);
-            return ResultDTO.fail();
+            return ResultDTO.fail(ApiConstant.E_EDITION_LOGIN);
         }
 
         String appCode = "sqb";
