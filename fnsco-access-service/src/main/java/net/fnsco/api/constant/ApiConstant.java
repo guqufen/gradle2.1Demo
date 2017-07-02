@@ -65,8 +65,8 @@ public class ApiConstant extends CoreConstants {
 
         ERROR_MESSGE_MAP.put("5101", "用户已注册");
         ERROR_MESSGE_MAP.put("5102", "注册失败");
-        ERROR_MESSGE_MAP.put("5013", "验证码超时");
-        ERROR_MESSGE_MAP.put("5014", "更新密码失败");
+        ERROR_MESSGE_MAP.put("5103", "验证码超时");
+        ERROR_MESSGE_MAP.put("5104", "更新密码失败");
         ERROR_MESSGE_MAP.put("5105", "原密码错误");
 
         ERROR_MESSGE_MAP.put("5023", "商铺码不能为空");
