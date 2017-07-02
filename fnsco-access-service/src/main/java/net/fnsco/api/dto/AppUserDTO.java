@@ -20,7 +20,6 @@ public class AppUserDTO extends DTO{
 	    private Integer gesState;
 
 	    private String gesPassword;
-
 	    private Integer gesTrail;
 	    private String code;
 	    private String oldPassword;

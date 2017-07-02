@@ -47,7 +47,9 @@ public class ApiConstant extends CoreConstants {
     public static String E_CODEOVERTIME_ERROR      = "5103";                            //验证码超时
     public static String E_UPDATEPASSWORD_ERROR    = "5104";                            //更新密码失败
     public static String E_OLDPASSWORD_ERROR       = "5105";                            //  原密码错误
-
+    public static String E_NOREGISTER_LOGIN        = "5106";                            //用户未注册
+    //未注册   5106
+    
     static {
         //APP
         ERROR_MESSGE_MAP.put("5011", "非法请求,没有手机号");
