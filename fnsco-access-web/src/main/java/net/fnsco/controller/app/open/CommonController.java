@@ -44,7 +44,7 @@ public class CommonController extends BaseController {
     @ApiOperation(value = "检查是否有新版本")
     public ResultDTO checkUpdate(@RequestBody CommJO commJO) {
         String version = commJO.getVersion();
-        String type = commJO.getType();
+        Integer type = commJO.getType();
         String[] versionArr = version.split(".");
         if (versionArr == null || versionArr.length != 3) {
             logger.warn("版本号格式错误,version=" + version);
