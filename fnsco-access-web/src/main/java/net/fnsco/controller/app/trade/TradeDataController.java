@@ -53,9 +53,8 @@ public class TradeDataController extends BaseController {
     @RequestMapping(value = "/information")
     @ApiOperation(value = "查询交易流水")
     public ResultDTO information(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
-        ResultPageDTO resultPage = new ResultPageDTO();
-        resultPage.setTotal(90);
-        return success(resultPage);
+        TradeData result = tradeDataService.queryByTradeId(tradeQueryDTO.getTradeId());
+        return ResultDTO.success(result);
     }
 
 }

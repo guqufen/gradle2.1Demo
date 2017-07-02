@@ -1,14 +1,16 @@
 package net.fnsco.api.dto;
 
+import java.util.List;
+
 import net.fnsco.core.base.PageDTO;
 
 public class TradeDataQueryDTO extends PageDTO {
-    private Integer userId;    //登录用户Id
-    private String  innerCode; // 内部商务号
-    private String  startDate; // 开始日期 2016-05-10
-    private String  endDate;   //结束日期 2016-05-10
-    private String  terminals; //终端号数组，所有选择的终端
-    private String  tradeId;   //交易流水ID
+    private Integer      userId;    //登录用户Id
+    private String       innerCode; // 内部商务号
+    private String       startDate; // 开始日期 2016-05-10
+    private String       endDate;   //结束日期 2016-05-10
+    private List<String> terminals; //终端号数组，所有选择的终端
+    private String       tradeId;   //交易流水ID
 
     /**
      * tradeId
@@ -127,7 +129,7 @@ public class TradeDataQueryDTO extends PageDTO {
      * @since   CodingExample Ver 1.0
     */
 
-    public String getTerminals() {
+    public List<String> getTerminals() {
         return terminals;
     }
 
@@ -138,7 +140,7 @@ public class TradeDataQueryDTO extends PageDTO {
      * @since   CodingExample Ver 1.0
      */
 
-    public void setTerminals(String terminals) {
+    public void setTerminals(List<String> terminals) {
         this.terminals = terminals;
     }
 

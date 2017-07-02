@@ -113,24 +113,25 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         //定义要查询的商户号
         List<String> innerCodeList = null;
         //根据终端查询商户号列表
-        String terminals = merchantCore.getTerminals();
-        List<String> terminalList = null;
-        if (!Strings.isNullOrEmpty(terminals)) {
-            String[] terminalss = terminals.trim().split(",");
-            if (terminalss.length > 0) {
-                terminalList = Lists.newArrayList();
-                for (int i = 0; i < terminalss.length; i++) {
-                    terminalList.add(terminalss[i]);
-                }
-            }
-        }
+        //        String terminals = merchantCore.getTerminals();
+        //        List<String> terminalList = null;
+        //        if (!Strings.isNullOrEmpty(terminals)) {
+        //            String[] terminalss = terminals.trim().split(",");
+        //            if (terminalss.length > 0) {
+        //                terminalList = Lists.newArrayList();
+        //                for (int i = 0; i < terminalss.length; i++) {
+        //                    terminalList.add(terminalss[i]);
+        //                }
+        //            }
+        //        }
+        List<String> terminalList = merchantCore.getTerminals();
         tradeData.setTerminalList(terminalList);
         //根据用户查询商户号
         Integer appUserId = merchantCore.getUserId();
         if (null == terminalList || terminalList.size() == 0) {
+            innerCodeList = Lists.newArrayList();
             List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
             if (!CollectionUtils.isEmpty(tempList)) {
-                innerCodeList = Lists.newArrayList();
                 for (MerchantUserRel rel : tempList) {
                     innerCodeList.add(rel.getInnerCode());
                 }
@@ -166,6 +167,12 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total, datas);
         result.setCurrentPage(currentPageNum);
         return result;
+
+    }
+
+    @Override
+    public TradeData queryByTradeId(String tradeId) {
+        return tradeListDAO.selectByPrimaryKey(tradeId);
 
     }
 }

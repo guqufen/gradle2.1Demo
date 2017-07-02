@@ -24,6 +24,8 @@ public class ApiConstant extends CoreConstants {
     public static String E_MERCHANT_CODE_NOT_EXIST = "5025";                            //此商铺码不存在，请重新输入
     public static String E_MERCHANT_CODE_OVERDUE   = "5026";
 
+    public static String       E_USERID_NULL = "5110";
+    public static String       E_UPDATE_FAIL = "5111";
     public static String E_APP_PHONE_EMPTY         = "5011";                            //非法请求,没有手机号
     public static String E_APP_PHONE_ERROR         = "5012";                            //非法请求,手机号不正确
 
@@ -50,6 +52,8 @@ public class ApiConstant extends CoreConstants {
 
     static {
         //APP
+        ERROR_MESSGE_MAP.put(E_USERID_NULL, "入参ID为null");
+        ERROR_MESSGE_MAP.put(E_UPDATE_FAIL, "更新失败");
         ERROR_MESSGE_MAP.put("5011", "非法请求,没有手机号");
         ERROR_MESSGE_MAP.put("5012", "非法请求,手机号不正确");
         ERROR_MESSGE_MAP.put("5013", "非法请求,没有密码");
