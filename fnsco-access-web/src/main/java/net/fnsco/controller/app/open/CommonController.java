@@ -45,7 +45,7 @@ public class CommonController extends BaseController {
     public ResultDTO checkUpdate(@RequestBody CommJO commJO) {
         String version = commJO.getVersion();
         Integer type = commJO.getType();
-        String[] versionArr = version.split(".");
+        String[] versionArr = version.split("\\.");
         if (versionArr == null || versionArr.length != 3) {
             logger.warn("版本号格式错误,version=" + version);
             return ResultDTO.fail();
