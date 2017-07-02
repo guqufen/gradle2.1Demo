@@ -105,6 +105,14 @@ public class AppUserServiceImpl  extends BaseService implements AppUserService{
 
 	//验证码对比
 	private ResultDTO validateCode(String deviceId, String code,String mobile) {
+	   //非空判断
+        if(Strings.isNullOrEmpty(deviceId)){
+            return ResultDTO.fail(ApiConstant.E_APP_DEVICETYPE_EMPTY);
+        }else if(Strings.isNullOrEmpty(code)){
+            return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
+        }if(Strings.isNullOrEmpty(mobile)){
+            return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
+        }
 		//从Map中根据手机号取到存入的验证码
 		SmsCodeDTO codeDto= MsgCodeMap.get(mobile+deviceId);
 		//时间
