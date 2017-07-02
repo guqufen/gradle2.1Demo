@@ -25,9 +25,10 @@ import net.fnsco.core.base.ResultDTO;
 @RequestMapping(value = "/open/comm", method = RequestMethod.POST)
 public class CommonController extends BaseController {
     @Autowired
-    private Environment env;
+    private Environment    env;
     @Autowired
     private VersionService versionService;
+
     /**
      * 获取APP下载地址
      *
@@ -55,8 +56,7 @@ public class CommonController extends BaseController {
         sysVersionDTO.setAppType(type);
         sysVersionDTO.setVersion(version);
         sysVersionDTO.setAppCode(appCode);
-//        VersionResultDTO resultDTO =versionService.queryVersionInfo(sysVersionDTO);
-//        return ResultDTO.success(resultDTO);
-        return null;
+        VersionResultDTO resultDTO = versionService.queryVersionInfo(sysVersionDTO);
+        return ResultDTO.success(resultDTO);
     }
 }

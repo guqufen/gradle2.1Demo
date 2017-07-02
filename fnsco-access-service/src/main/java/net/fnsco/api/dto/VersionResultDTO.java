@@ -8,28 +8,6 @@ public class VersionResultDTO {
     private Boolean isUpdate;
 
     /**
-     * isUpdate
-     *
-     * @return  the isUpdate
-     * @since   CodingExample Ver 1.0
-    */
-
-    public Boolean getIsUpdate() {
-        return isUpdate;
-    }
-
-    /**
-     * isUpdate
-     *
-     * @param   isUpdate    the isUpdate to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setIsUpdate(Boolean isUpdate) {
-        this.isUpdate = isUpdate;
-    }
-
-    /**
      * forceUpdate
      *
      * @return  the forceUpdate
@@ -49,6 +27,28 @@ public class VersionResultDTO {
 
     public void setForceUpdate(String forceUpdate) {
         this.forceUpdate = forceUpdate;
+    }
+
+    /**
+     * isUpdate
+     *
+     * @return  the isUpdate
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Boolean getIsUpdate() {
+        return isUpdate;
+    }
+
+    /**
+     * isUpdate
+     *
+     * @param   isUpdate    the isUpdate to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setIsUpdate(Boolean isUpdate) {
+        this.isUpdate = isUpdate;
     }
 
     /**
