@@ -3,7 +3,9 @@ package net.fnsco.controller.app.jo;
 import net.fnsco.core.base.JO;
 
 public class CommJO extends JO {
+    //版本号
     private String version;
+    //安卓
     private String type;
     
     /**
