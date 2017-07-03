@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
+
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.dto.TradeDataQueryDTO;
 import net.fnsco.api.trade.TradeDataService;
@@ -39,6 +41,7 @@ public class TradeDataController extends BaseController {
     @RequestMapping(value = "/queryList")
     @ApiOperation(value = "查询交易流水")
     public ResultDTO queryList(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
+        logger.warn("/queryList查询交易流水入参:"+JSON.toJSONString(tradeQueryDTO));
         ResultPageDTO<TradeData> result = tradeDataService.queryAllByCondition(tradeQueryDTO);
         return success(result);
     }
