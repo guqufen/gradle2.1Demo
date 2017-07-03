@@ -18,12 +18,12 @@ public interface MerchantInfoService {
 	 * @param loginUserId
 	 * @return
 	 */
-	public ResultDTO<Integer> doAddToDB (MerchantFileTemp fileInfo,int loginUserId);
+	ResultDTO<Integer> doAddToDB (MerchantFileTemp fileInfo,int loginUserId);
 	
 	/**
 	 * 根据ID删除文件数据
 	 * @param id
 	 * @return
 	 */
-	public boolean deleteFromDB(Integer id,String url);
+	boolean deleteFromDB(Integer id,String url);
 }
