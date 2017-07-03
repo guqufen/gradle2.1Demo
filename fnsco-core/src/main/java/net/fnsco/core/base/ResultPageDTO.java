@@ -16,6 +16,29 @@ public class ResultPageDTO<T> extends DTO {
     private List<T>           list;
     private int               total;
     private int               currentPage;
+    private int               merTotal;
+    
+    /**
+     * merTotal
+     *
+     * @return  the merTotal
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public int getMerTotal() {
+        return merTotal;
+    }
+
+    /**
+     * merTotal
+     *
+     * @param   merTotal    the merTotal to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setMerTotal(int merTotal) {
+        this.merTotal = merTotal;
+    }
 
     public List<T> getList() {
         return this.list;
