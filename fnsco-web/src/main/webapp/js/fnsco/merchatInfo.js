@@ -477,53 +477,58 @@ function removeTerminal(num){
 }
 //保存终端
 $("#btn_saveTerminal").click(function(){
-		var listLen=$("#terminal-con .terminal-list").length;
-		var terminalArr=new Array();
-		for (var i=0;i<listLen;i++){
-			var merchantCode=$("#terminal-con .terminal-list").eq(i).find($('.merchantCode')).val();
-			var channelId=$("#terminal-con .terminal-list").eq(i).find($('.channelId')).val();
-			var channelName=$("#terminal-con .terminal-list").eq(i).find($('.channelName')).val();
-			var terminalCode=$("#terminal-con .terminal-list").eq(i).find($('.terminalCode')).val();
-			var snCode=$("#terminal-con .terminal-list").eq(i).find($('.snCode')).val();
-			var terminalBatch=$("#terminal-con .terminal-list").eq(i).find($('.terminalBatch')).val();
-			var terminalPara=$("#terminal-con .terminal-list").eq(i).find($('.terminalPara')).val();
-			var chargesType=$("#terminal-con .terminal-list").eq(i).find($('.chargesType')).val();
-			var debitCardRate=$("#terminal-con .terminal-list").eq(i).find($('.debitCardRate')).val();
-			var creditCardRate=$("#terminal-con .terminal-list").eq(i).find($('.creditCardRate')).val();
-			var debitCardMaxFee=$("#terminal-con .terminal-list").eq(i).find($('.debitCardMaxFee')).val();
-			var creditCardMaxFee=$("#terminal-con .terminal-list").eq(i).find($('.creditCardMaxFee')).val();
-			var dealSwitch=$("#terminal-con .terminal-list").eq(i).find($('.dealSwitch')).val();
-			var recordState=$("#terminal-con .terminal-list").eq(i).find($('.recordState')).val();
-			var termName=$("#terminal-con .terminal-list").eq(i).find($('.termName')).val();
-			var posFactory=$("#terminal-con .terminal-list").eq(i).find($('.posFactory')).val();
-			var posType=$("#terminal-con .terminal-list").eq(i).find($('.posType')).val();
-			var mercReferName=$("#terminal-con .terminal-list").eq(i).find($('.mercReferName')).val();
-      var innerCode=$("#innerCode").val();
-			concatTerminalArr={merchantCode,channelId,channelName,terminalCode,snCode,terminalBatch,terminalPara,chargesType,debitCardRate,creditCardRate,debitCardMaxFee,creditCardMaxFee,dealSwitch,recordState,termName,posFactory,posType,mercReferName,innerCode}
-			terminalArr=terminalArr.concat(concatTerminalArr);
-		}
-		var innerCode = $('#innerCode').val();
-		if(!innerCode){
-			alert('操作错误!');return ;
-		}
-		console.log(terminalArr);
-		//保存
-		$.ajax({
-			url:'/web/merchantinfo/toAddTerminal',
-			dataType:"json", 
-			type:'POST',
-		    contentType:"application/json",
-			data:JSON.stringify(terminalArr),
-			success:function(data){
-				alert('添加成功'+data.data);//返回innerCode
-			},
-			error:function(){
-				alert('系统错误');
-			}
-		});
-		
+	saveTerminalParams();
 })
-
+//获取终端参数结果集保存
+function saveTerminalParams(){
+	var listLen=$("#terminal-con .terminal-list").length;
+	var terminalArr=new Array();
+	var concatTerminalArr;
+	for (var i=0;i<listLen;i++){
+		var merchantCode=$("#terminal-con .terminal-list").eq(i).find($('.merchantCode')).val();
+		var channelId=$("#terminal-con .terminal-list").eq(i).find($('.channelId')).val();
+		var channelName=$("#terminal-con .terminal-list").eq(i).find($('.channelName')).val();
+		var terminalCode=$("#terminal-con .terminal-list").eq(i).find($('.terminalCode')).val();
+		var snCode=$("#terminal-con .terminal-list").eq(i).find($('.snCode')).val();
+		var terminalBatch=$("#terminal-con .terminal-list").eq(i).find($('.terminalBatch')).val();
+		var terminalPara=$("#terminal-con .terminal-list").eq(i).find($('.terminalPara')).val();
+		var chargesType=$("#terminal-con .terminal-list").eq(i).find($('.chargesType')).val();
+		var debitCardRate=$("#terminal-con .terminal-list").eq(i).find($('.debitCardRate')).val();
+		var creditCardRate=$("#terminal-con .terminal-list").eq(i).find($('.creditCardRate')).val();
+		var debitCardMaxFee=$("#terminal-con .terminal-list").eq(i).find($('.debitCardMaxFee')).val();
+		var creditCardMaxFee=$("#terminal-con .terminal-list").eq(i).find($('.creditCardMaxFee')).val();
+		var dealSwitch=$("#terminal-con .terminal-list").eq(i).find($('.dealSwitch')).val();
+		var recordState=$("#terminal-con .terminal-list").eq(i).find($('.recordState')).val();
+		var termName=$("#terminal-con .terminal-list").eq(i).find($('.termName')).val();
+		var posFactory=$("#terminal-con .terminal-list").eq(i).find($('.posFactory')).val();
+		var posType=$("#terminal-con .terminal-list").eq(i).find($('.posType')).val();
+		var mercReferName=$("#terminal-con .terminal-list").eq(i).find($('.mercReferName')).val();
+		var innerCode=$("#innerCode").val();
+		var id=$("#terminal-con1 .terminal-list").eq(i).find($('.remove-icon')).attr('editId');
+		console.log('terId:'+id);
+		concatTerminalArr={merchantCode,channelId,channelName,terminalCode,snCode,terminalBatch,terminalPara,chargesType,debitCardRate,creditCardRate,debitCardMaxFee,creditCardMaxFee,dealSwitch,recordState,termName,posFactory,posType,mercReferName,innerCode}
+		terminalArr=terminalArr.concat(concatTerminalArr);
+	}
+	var innerCode = $('#innerCode').val();
+	if(!innerCode){
+		alert('操作错误!');return ;
+	}
+	console.log(terminalArr);return ;
+	//保存
+	$.ajax({
+		url:'/web/merchantinfo/toAddTerminal',
+		dataType:"json", 
+		type:'POST',
+	    contentType:"application/json",
+		data:JSON.stringify(terminalArr),
+		success:function(data){
+			alert('添加成功'+data.data);//返回innerCode
+		},
+		error:function(){
+			alert('系统错误');
+		}
+	});
+}
 
 //添加渠道信息列表
 var ChannellList=1;
@@ -659,6 +664,7 @@ $("#btn_saveBankCard").click(function(){
 //表格中编辑事件
 function editData(id)
 {
+	 clickFileBtn();
      $.ajax({
       url:'/web/merchantinfo/queryAllById',
       type:'POST',
@@ -704,6 +710,7 @@ function editData(id)
             $("#bankCard-con1").html('');
 
             //基本信息
+            $('input[name=merId]').val(data.data.id);
             $('input[name="merName1"]').val(data.data.merName);
             $('input[name="abbreviation1"]').val(data.data.abbreviation);
             $('input[name="enName1"]').val(data.data.enName);
@@ -720,7 +727,7 @@ function editData(id)
             $('input[name="mercFlag1"]').val(data.data.mercFlag);
             requestAgent(data.data.agentId);
             //资料文件
-            clickFileBtn();
+            
             var filesLen=data.data.files.length;
             for(var i=0;i<filesLen;i++){
                 var fileName=data.data.files[i].fileName;
@@ -855,7 +862,44 @@ function editData(id)
                 $(".deletefileImg").hide();
             })
 
-
+            //基本信息保存按钮操作
+            $('#editBtn_merchant').click(function(){
+            	var mer_id = $('input[name=merId]').val();
+                var merName = $('input[name="merName1"]').val();
+                var abbreviation = $('input[name="abbreviation1"]').val();
+                var enName = $('input[name="enName1"]').val();
+                var legalPerson = $('input[name="legalPerson1"]').val();
+                var legalPersonMobile = $('input[name="legalPersonMobile1"]').val();
+                var legalPersonTel = $('input[name="legalPersonTel1"]').val();
+                var legalValidCardType = $('select[name="legalValidCardType1"]').val();
+                var cardNum = $('input[name="cardNum1"]').val();
+                var cardValidTime = $('input[name="cardValidTime1"]').val();
+                var businessLicenseNum = $('input[name="businessLicenseNum1"]').val();
+                var businessLicenseValidTime = $('input[name="businessLicenseValidTime1"]').val();
+                var taxRegistCode = $('input[name="taxRegistCode1"]').val();
+                var registAddress = $('input[name="registAddress1"]').val();
+                var mercFlag = $('input[name="mercFlag1"]').val();
+                var agentId = $('#agentId1').val();
+                
+                var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,
+                		'legalPersonTel':legalPersonTel,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
+                		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId};
+                $.ajax({
+         		   url:'/web/merchantinfo/toAddCore',
+         		   data: params,
+         		   type:'POST',
+         		   success:function(data){
+         			   if(data.success)
+         			   {
+         				   alert('保存成功');
+         				   return true;
+         			   }	
+         			   else{
+         				   alert('保存失败');
+         			   }
+         		   }
+         	   });
+            });
           
       }});
 }
@@ -869,6 +913,7 @@ $("#btn_addContact1").click(function(){
   $("#editBtn_messages").click(function(){
     var listLen=$('#contact-con1 .contact-list').length;
     var contactArr=new Array();
+    var concatContactArr;
     for (var i=0;i<listLen;i++){
       var contactName=$("#contact-con1 .contact-list").eq(i).find($('.contactName')).val();
       var contactMobile=$("#contact-con1 .contact-list").eq(i).find($('.contactMobile')).val();
@@ -880,12 +925,13 @@ $("#btn_addContact1").click(function(){
       if(!innerCode){
         alert('操作错误!');return ;
       }
-      concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode,id}
-      console.log(concatContactArr);
+      if(id<0){
+    	  concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
+      }else{
+    	  concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode,id}
+      }
       contactlArr=contactArr.push(concatContactArr);
-      console.log(contactlArr);
     }
-    console.log(contactlArr);
     $.ajax({
       url:'/web/merchantinfo/toAddContact',
       dataType:"json", 
@@ -893,7 +939,7 @@ $("#btn_addContact1").click(function(){
       contentType:"application/json",
       data:JSON.stringify(contactArr),
       success:function(data){
-        alert('添加成功');
+        alert('更新成功');
       },
       error:function(){
         alert('系统错误');
@@ -909,6 +955,10 @@ $("#btn_addTerminal1").click(function(){
     editTerminalList=editTerminalList+1;
     $("#terminal-con1").append(terminalHtml(-(editTerminalList)));
 })
+//修改终端保存按钮
+$('#editBtn_terminal_info').click(function(){
+	saveTerminalParams();
+});
 //修改商户——添加渠道信息
 var editChannelList=20;
 $("#btn_addChannel1").click(function(){
