@@ -592,4 +592,14 @@
 				) REL
 			LEFT JOIN m_merchant_core CO ON REL.inner_code = CO.inner_code WHERE CO.status=1
   </select>
+  
+   <select id="selectByInnerCode" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from m_merchant_core
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+    and status=1
+    limit 1
+  </select>
+  
 </mapper>

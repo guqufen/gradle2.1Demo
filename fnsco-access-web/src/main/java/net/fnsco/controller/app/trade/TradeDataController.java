@@ -3,7 +3,6 @@ package net.fnsco.controller.app.trade;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +13,7 @@ import com.google.common.collect.Lists;
 
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.dto.TradeDataQueryDTO;
+import net.fnsco.api.merchant.MerchantCoreService;
 import net.fnsco.api.trade.TradeDataService;
 import net.fnsco.controller.app.jo.TradeDataJO;
 import net.fnsco.core.base.BaseController;
@@ -21,6 +21,8 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.comm.ServiceConstant.PaySubTypeEnum;
 import net.fnsco.service.comm.ServiceConstant.TradeStateEnum;
+import net.fnsco.service.comm.ServiceConstant.TradeTypeEnum;
+import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.trade.TradeData;
 
 /**
@@ -32,9 +34,9 @@ import net.fnsco.service.domain.trade.TradeData;
 @RequestMapping(value = "/app/trade", method = RequestMethod.POST)
 public class TradeDataController extends BaseController {
     @Autowired
-    private Environment      env;
+    private TradeDataService    tradeDataService;
     @Autowired
-    private TradeDataService tradeDataService;
+    private MerchantCoreService merchantCoreService;
 
     /**
      * 查询交易流水信息
@@ -63,7 +65,7 @@ public class TradeDataController extends BaseController {
                 resultList.add(jo);
             }
         }
-        ResultPageDTO<TradeDataJO> result = new ResultPageDTO<TradeDataJO>(temp.getTotal(),resultList);
+        ResultPageDTO<TradeDataJO> result = new ResultPageDTO<TradeDataJO>(temp.getTotal(), resultList);
         result.setCurrentPage(temp.getCurrentPage());
         result.setMerTotal(temp.getMerTotal());
         return success(result);
@@ -79,7 +81,25 @@ public class TradeDataController extends BaseController {
     @RequestMapping(value = "/information")
     @ApiOperation(value = "查询交易流水")
     public ResultDTO information(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
-        TradeData result = tradeDataService.queryByTradeId(tradeQueryDTO.getTradeId());
+        TradeData tradeData = tradeDataService.queryByTradeId(tradeQueryDTO.getTradeId());
+        MerchantCore merchantCore =merchantCoreService.queryByInnerCode(tradeData.getInnerCode());
+        TradeDataJO result = new TradeDataJO();
+        result.setAmount(tradeData.getAmt());
+        result.setPayType(tradeData.getPaySubType());
+        result.setPayTypeName(PaySubTypeEnum.getNameByCode(result.getPayType()));
+        result.setStatus(tradeData.getRespCode());
+        result.setStatusName(TradeStateEnum.getNameByCode(result.getStatus()));
+        result.setId(tradeData.getId());
+        result.setTradeTime(tradeData.getTimeStamp());
+        
+        result.setMerName(merchantCore.getMerName());
+        result.setInnerCode(tradeData.getInnerCode());
+        result.setTradeType(tradeData.getTxnType());
+        result.setPayTypeName(TradeTypeEnum.getNameByCode(result.getTradeType()));
+        
+        result.setBatchNo(tradeData.getBatchNo());
+        result.setTermId(tradeData.getTermId());
+        result.setSysTraceNo(tradeData.getSysTraceNo());
         return ResultDTO.success(result);
     }
 
