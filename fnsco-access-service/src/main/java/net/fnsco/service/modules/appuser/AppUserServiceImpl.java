@@ -1,4 +1,4 @@
-package net.fnsco.service.modules.merchant;
+package net.fnsco.service.modules.appuser;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 
+import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.SmsCodeDTO;
-import net.fnsco.api.merchant.AppUserService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.sms.JavaSmsApi;
@@ -224,7 +224,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             user.setId(appUser.getId());
             //更新到实体
             if(MappUserDao.updateByPrimaryKeySelective(user)){
-                return ResultDTO.success();
+                map.put("appUserId", appUser.getId());
+                return ResultDTO.success(map);
             }
         }
         return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);

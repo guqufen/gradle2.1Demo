@@ -1,4 +1,4 @@
-package net.fnsco.controller.app.merchat;
+package net.fnsco.controller.app.comm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.dto.AppUserDTO;
-import net.fnsco.api.merchant.AppUserService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.service.domain.AppUser;

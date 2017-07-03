@@ -1,4 +1,4 @@
-package net.fnsco.service.modules.merchant;
+package net.fnsco.service.modules.appuser;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.api.appuser.ConmmService;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.ProtocolDTO;
 import net.fnsco.api.dto.VersionDTO;
 import net.fnsco.api.dto.VersionResultDTO;
-import net.fnsco.api.merchant.ConmmService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.FileUtils;
@@ -30,7 +30,7 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
 
     @Override
     public ResultDTO checkUpdate(VersionDTO sysVersionDTO) {
-        //
+        
         String version = sysVersionDTO.getVersion();
         Integer appType = Integer.valueOf(sysVersionDTO.getAppType());
         //非空判断
@@ -44,7 +44,7 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
         String[] versionArr = StringUtils.split(version, ".");
         if (versionArr == null || versionArr.length != 3) {
             logger.warn("版本号格式错误,version=" + version);
-            return ResultDTO.fail();
+            return ResultDTO.fail(ApiConstant.E_EDITION_LOGIN);
         }
 
         String appCode = "sqb";

@@ -1,4 +1,4 @@
-package net.fnsco.controller.app.open;
+package net.fnsco.controller.open;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

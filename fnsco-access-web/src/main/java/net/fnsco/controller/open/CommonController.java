@@ -1,4 +1,4 @@
-package net.fnsco.controller.app.open;
+package net.fnsco.controller.open;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -8,10 +8,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.api.appuser.ConmmService;
 import net.fnsco.api.constant.ApiConstant;
+import net.fnsco.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.api.dto.VersionDTO;
 import net.fnsco.api.dto.VersionResultDTO;
-import net.fnsco.api.merchant.ConmmService;
 import net.fnsco.controller.app.jo.CommJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -25,7 +26,7 @@ import net.fnsco.core.base.ResultDTO;
 @RequestMapping(value = "/open/comm", method = RequestMethod.POST)
 public class CommonController extends BaseController {
     @Autowired
-    private Environment    env;
+    private Environment  env;
     @Autowired
     private ConmmService versionService;
 
@@ -49,9 +50,9 @@ public class CommonController extends BaseController {
         String[] versionArr = version.split("\\.");
         if (versionArr == null || versionArr.length != 3) {
             logger.warn("版本号格式错误,version=" + version);
-            return ResultDTO.fail();
+            return ResultDTO.fail(ApiConstant.E_EDITION_LOGIN);
         }
-        String appCode = "lkl";
+        String appCode = AppTypeEnum.LKL.getCode();
         VersionDTO sysVersionDTO = new VersionDTO();
         sysVersionDTO.setAppType(type);
         sysVersionDTO.setVersion(version);
