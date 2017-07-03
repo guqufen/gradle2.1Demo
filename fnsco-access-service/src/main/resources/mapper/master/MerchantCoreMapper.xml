@@ -570,7 +570,7 @@
 				m_merchant_user_rel
 			WHERE
 				app_user_id = #{userId}
-		) REL ON CO.inner_code = REL.inner_code
+		) REL ON CO.inner_code = REL.inner_code WHERE CO.status=1
   </select>
   <!-- APP根据ID查询详情信息 -->
   <select id="queryDetailById" parameterType="java.lang.Integer"  resultMap="DetailResultMap">
@@ -590,6 +590,6 @@
 					WHERE
 						app_user_id = #{userId}
 				) REL
-			LEFT JOIN m_merchant_core CO ON REL.inner_code = CO.inner_code
+			LEFT JOIN m_merchant_core CO ON REL.inner_code = CO.inner_code WHERE CO.status=1
   </select>
 </mapper>
