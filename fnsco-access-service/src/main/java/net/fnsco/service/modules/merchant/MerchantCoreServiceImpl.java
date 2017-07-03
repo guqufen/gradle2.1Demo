@@ -139,12 +139,12 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     @Override
     public ResultDTO<Integer> deleteByIds(Integer[] ids) {
         // TODO Auto-generated method stub
-        ResultDTO<Integer> result = new ResultDTO<Integer>();
+        ResultDTO<Integer> result = null;
         int re = merchantCoreDao.updateStatusByMutipleKey(ids);
-        if (re == 1) {
-            result.success("删除成功!");
+        if (re != 0) {
+            result = ResultDTO.success("删除成功!");
         } else {
-            result.fail("删除失败");
+            result = ResultDTO.fail("删除失败");
             logger.error("批量删除失败! ids = " + ids);
         }
         return result;
