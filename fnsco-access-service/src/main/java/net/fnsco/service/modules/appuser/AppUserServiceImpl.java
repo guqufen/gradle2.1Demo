@@ -117,6 +117,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (Strings.isNullOrEmpty(mobile)) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
         }
+        if(MsgCodeMap.get(mobile + deviceId)==null){
+            return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);
+        }
         //从Map中根据手机号取到存入的验证码
         SmsCodeDTO codeDto = MsgCodeMap.get(mobile + deviceId);
         if(null == codeDto){
@@ -129,13 +132,14 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             MsgCodeMap.remove(mobile + deviceId);
             return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);
         }
-
-        if (!code.equals(codeDto.getCode())) {
+        //判断验证码
+        if (code.equals(codeDto.getCode())) {
+            MsgCodeMap.remove(mobile + deviceId);
+            return ResultDTO.success();
+        } else {
             return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
         }
         //从map从移除验证码
-        MsgCodeMap.remove(mobile + deviceId);
-        return ResultDTO.success();
     }
 
     //根据手机号找回登录密码
@@ -147,14 +151,14 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_APP_DEVICEIDNULL);
         } else if (Strings.isNullOrEmpty(appUserDTO.getPassword())) {
             return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
-        }else if (Strings.isNullOrEmpty(appUserDTO.getCode())) {
+        } else if (Strings.isNullOrEmpty(appUserDTO.getCode())) {
             return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
-        }else if(Strings.isNullOrEmpty(appUserDTO.getMobile())){
+        } else if (Strings.isNullOrEmpty(appUserDTO.getMobile())) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
         }
-        
+
         //判断手机号是否已经注册
-        if(MappUserDao.selectAppUserByMobile(appUserDTO.getMobile())==null){
+        if (MappUserDao.selectAppUserByMobile(appUserDTO.getMobile()) == null) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
@@ -213,8 +217,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         AppUser appUser = MappUserDao.selectAppUserByMobile(appUserDTO.getMobile());
-           
-        if (appUser != null&&appUser.getState() == 1) {
+        //用户存在并且账户状态可用为1
+        if (appUser != null && appUser.getState() == 1) {
             //密码错误
             if (!password.equals(appUser.getPassword())) {
                 return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_ERROR);
@@ -226,7 +230,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             user.setDeviceToken(appUserDTO.getDeviceToken());
             user.setId(appUser.getId());
             //更新到实体
-            if(MappUserDao.updateByPrimaryKeySelective(user)){
+            if (MappUserDao.updateByPrimaryKeySelective(user)) {
                 map.put("appUserId", appUser.getId());
                 return ResultDTO.success(map);
             }
