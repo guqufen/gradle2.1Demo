@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.dto.TradeDataQueryDTO;
@@ -45,9 +46,10 @@ public class TradeDataController extends BaseController {
     @RequestMapping(value = "/queryList")
     @ApiOperation(value = "查询交易流水")
     public ResultDTO queryList(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
-        logger.warn("/queryList查询交易流水入参:"+JSON.toJSONString(tradeQueryDTO));
-        ResultPageDTO<TradeData> result = tradeDataService.queryAllByCondition(tradeQueryDTO);
-        List<TradeData> list = result.getList();
+        logger.warn("/queryList查询交易流水入参:" + JSON.toJSONString(tradeQueryDTO));
+        ResultPageDTO<TradeData> temp = tradeDataService.queryAllByCondition(tradeQueryDTO);
+        List<TradeData> list = temp.getList();
+        List<TradeDataJO> resultList = Lists.newArrayList();
         if (null != list) {
             for (TradeData tradeData : list) {
                 TradeDataJO jo = new TradeDataJO();
@@ -58,8 +60,12 @@ public class TradeDataController extends BaseController {
                 jo.setStatusName(TradeStateEnum.getNameByCode(jo.getStatus()));
                 jo.setId(tradeData.getId());
                 jo.setTradeTime(tradeData.getTimeStamp());
+                resultList.add(jo);
             }
         }
+        ResultPageDTO<TradeDataJO> result = new ResultPageDTO<TradeDataJO>(temp.getTotal(),resultList);
+        result.setCurrentPage(temp.getCurrentPage());
+        result.setMerTotal(temp.getMerTotal());
         return success(result);
     }
 
