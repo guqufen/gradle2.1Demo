@@ -512,8 +512,7 @@ $("#btn_saveTerminal").click(function(){
 //添加渠道信息列表
 var ChannellList=1;
 function channelHtml(num){
-	return '<div class="channel-list"><div class="remove-icon remove-channelList'+num+'" editId="'+num+'" onclick="removeChannel('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
-            '<div class="col-sm-4"><label class="control-label" for="agentId'+num+'">代理商：</label><input type="number" class="form-control agentId" id="agentId'+num+'" name="agentId'+num+'" required="required"></div>'+
+	return  '<div class="channel-list"><div class="remove-icon remove-channelList'+num+'" editId="'+num+'" onclick="removeChannel('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerId'+num+'">渠道商户号：</label><input type="text" class="form-control channelMerId" id="channelMerId'+num+'" name="channelMerId'+num+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">渠道商户key：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道类型：</label><select name="channelType'+num+'" class="form-control channelType"><option value="00">爱农</option><option value="01">浦发</option><option value="02">拉卡拉</option></select></div></div></div>';
@@ -543,12 +542,11 @@ $("#btn_saveChannel").click(function(){
 	var listLen=$("#channel-con .channel-list").length;
 	var channelArr=new Array();
 	for (var i=0;i<listLen;i++){
-		var agentId=$("#channel-con .channel-list").eq(i).find($('.agentId')).val();
 		var channelMerId=$("#channel-con .channel-list").eq(i).find($('.channelMerId')).val();
 		var channelMerKey=$("#channel-con .channel-list").eq(i).find($('.channelMerKey')).val();
 		var channelType=$("#channel-con .channel-list").eq(i).find($('.channelType')).val();
-    var innerCode=$("#innerCode").val();
-		concatChannelArrArr={agentId,channelMerId,channelMerKey,channelType,innerCode}
+		var innerCode=$("#innerCode").val();
+		concatChannelArrArr={channelMerId,channelMerKey,channelType,innerCode}
 		channelArr=channelArr.concat(concatChannelArrArr);
 	}
 	
@@ -632,16 +630,14 @@ $("#btn_saveBankCard").click(function(){
     success:function(data){
       alert('添加成功'+data.data);//返回innerCode
       $("#myModal").hide();
+      queryEvent();
+      
     },
     error:function(){
       alert('系统错误');
     }
   });
 })
-
-
-
-
 
 
 //表格中编辑事件
@@ -656,6 +652,7 @@ function editData(id)
             //data.data就是所有数据集
             console.log(data.data);
             // 关闭再次点开回到第一个标签
+            $('#innerCode').val(data.data.innerCode);
             $("#editModal").find('.tab-pane').removeClass("active");
             $("#home1").addClass("active");
             $("#editModal .nav-tabs li").removeClass("active");
