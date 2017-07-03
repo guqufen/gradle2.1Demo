@@ -128,7 +128,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         //            }
         //        }
         List<String> terminalList = merchantCore.getTerminals();
-        tradeData.setTerminalList(terminalList);
+        if (null != terminalList && terminalList.size() > 0) {
+            tradeData.setTerminalList(terminalList);
+        }
         //根据用户查询商户号
         Integer appUserId = merchantCore.getUserId();
         List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
