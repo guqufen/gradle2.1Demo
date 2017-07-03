@@ -30,7 +30,6 @@ function delete_btn_event(td_obj){
 		dataType : "json",
 		data:{'ids':td_obj},
 		success:function(data){
-			console.log();
 			if(data.success)
 			{
 				alert('删除成功');
@@ -322,8 +321,26 @@ $('#btn_delete').click(function(){
   for(var i=0;i<select_data.length;i++){
     dataId=dataId.concat(select_data[i].id);
   }
-  console.log(dataId);
-  delete_btn_event(dataId);
+  $.ajax({
+		url:'/web/merchantinfo/delete',
+		type:'POST',
+		dataType : "json",
+		data:{'ids':dataId},
+		success:function(data){
+			if(data.success)
+			{
+				alert('删除成功');
+				queryEvent();
+			}else
+			{
+				alert('删除失败');
+			}	
+		},
+		error:function(e)
+		{
+			alert('系统异常!'+e);
+		}
+	});
 	
 });
 //弹框下一步按钮事件
