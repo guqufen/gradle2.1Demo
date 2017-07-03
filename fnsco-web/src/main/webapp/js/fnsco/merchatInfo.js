@@ -322,45 +322,71 @@ function  fileUp(num){
     		}
    });
 }
-  //上传图片删除图片事件
-  function deleteImage(queueId,id,url,num)
-  {
-     $.ajax({
-  	   url:'/web/fileInfo/delete',
-  	   data:{'id':id,'url':url},
-  	   type:'POST',
-  	   success:function(data){
-  		   if(data)
-  		   {
-  			   $('#file'+num).remove();
-  			   alert('删除成功');
-  			   $(queueId).parent().parent().parent().next().find('.uploadify').show();
-  			   $(queueId).parent().parent().html('');
-  		   }	   
-  	   }
-     });
-  }
+//手动触发文件上传方法
+function clickFileBtn(){
+   fileUp('1100_1');
+   fileUp('1101_1');
+   fileUp('1190_1');
+   fileUp('1_1');
+   fileUp('2_1');
+   fileUp('300_1');
+   fileUp('301_1');
+   fileUp('4_1');
+   fileUp('6_1');
+   fileUp('7_1');
+   fileUp('8_1');
+   fileUp('900_1');
+   fileUp('901_1');
+   fileUp('902_1');
+   fileUp('10_1');
+}
+//上传图片删除图片事件
+function deleteImage(queueId,id,url,num)
+{
+   $.ajax({
+	   url:'/web/fileInfo/delete',
+	   data:{'id':id,'url':url},
+	   type:'POST',
+	   success:function(data){
+		   if(data)
+		   {
+			   $('#file'+num).remove();
+			   alert('删除成功');
+			   $(queueId).parent().parent().parent().next().find('.uploadify').show();
+			   $(queueId).parent().parent().html('');
+		   }	   
+	   }
+   });
+}
 
-// //保存表格数据
-// $('#save_btn').click(function(){
-//    $.ajax({
-// 	   url:'/web/merchantinfo/toAdd',
-// 	   data: $('#merchant_form').serialize(),
-// 	   type:'POST',
-// 	   success:function(data){
-// 		   if(data.success)
-// 		   {
-// 			   alert('保存成功');
-// 			   $('#myModal').hide();
-// 			   queryEvent();
-// 		   }	
-// 		   else{
-// 			   alert('保存失败');
-// 		   }
-// 	   }
-//    });
-// });
+//保存商户基本信息下一步按钮
+function saveMerCore(){
+  $.ajax({
+      url:'/web/merchantinfo/toAddCore',
+      data: $('#mercore_form').serialize(),
+      type:'POST',
+      success:function(data){
+        if(data.success){
+           alert('保存成功');
+           return true;
+        }else{
+           alert('保存失败');
+        }
+      }
+  });
+}
 
+//保存文件信息
+function saveFile(){
+  var file_ids = $('#fileIds').val();
+  $.ajax({
+    url:'/web/fileInfo/savefiles',
+    data:{'fileIds':file_ids},
+    success:function(){
+      
+    }
+  });
+}
 
 //弹框下一步按钮事件
 $(".nextBtn").click(function(){
@@ -932,7 +958,7 @@ function editData(id){
   });
 }
 
-//修改商户——添加联系信息
+//添加联系信息——修改商户
 var editContactList=1;
 $("#btn_addContact1").click(function(){
     editContactList=editContactList+1;
@@ -945,7 +971,7 @@ $("#btn_addContact1").click(function(){
     
 
 
-//修改商户——添加终端信息
+//添加终端信息——修改商户
 var editTerminalList=10;
 $("#btn_addTerminal1").click(function(){
     editTerminalList=editTerminalList+1;
@@ -958,7 +984,7 @@ $("#btn_addTerminal1").click(function(){
 
 
 
-//修改商户——添加渠道信息
+//添加渠道信息——修改商户
 var editChannelList=20;
 $("#btn_addChannel1").click(function(){
     editChannelList=editChannelList+1;
@@ -970,7 +996,7 @@ $("#btn_addChannel1").click(function(){
   });
 
 
-//修改商户——添加银行卡信息
+//添加银行卡信息——修改商户
 var editBankCardList=30;
 $("#btn_addBankCard1").click(function(){
     editBankCardList=editBankCardList+1;
@@ -982,50 +1008,4 @@ $("#btn_addBankCard1").click(function(){
   });
 
 
-//保存商户基本信息下一步按钮
-function saveMerCore(){
-	$.ajax({
-		   url:'/web/merchantinfo/toAddCore',
-		   data: $('#mercore_form').serialize(),
-		   type:'POST',
-		   success:function(data){
-			   if(data.success)
-			   {
-				   alert('保存成功');
-				   return true;
-			   }	
-			   else{
-				   alert('保存失败');
-			   }
-		   }
-	   });
-}
-//保存文件信息
-function saveFile(){
-	var file_ids = $('#fileIds').val();
-	$.ajax({
-		url:'/web/fileInfo/savefiles',
-		data:{'fileIds':file_ids},
-		success:function(){
-			
-		}
-	});
-}
-//手动触发文件上传方法
-function clickFileBtn(){
-	 fileUp('1100_1');
-	 fileUp('1101_1');
-	 fileUp('1190_1');
-	 fileUp('1_1');
-	 fileUp('2_1');
-	 fileUp('300_1');
-	 fileUp('301_1');
-	 fileUp('4_1');
-	 fileUp('6_1');
-	 fileUp('7_1');
-	 fileUp('8_1');
-	 fileUp('900_1');
-	 fileUp('901_1');
-	 fileUp('902_1');
-	 fileUp('10_1');
-}
+
