@@ -171,23 +171,35 @@ function resetEvent(){
 
 getInnerCode();
 $('#btn_add').click(function(){
-   $.ajax({
-	   url:'/web/merchantinfo/queryAgents',
-	   success:function(data){
-		   var agtS = data.data;
-		   var html_opt = '';
-		   $.each(agtS,function(index,value){
-			   html_opt += '<option value="'+value.id+'">'+value.name+'</option>';
-		   })
-		   $('#agentId').append(html_opt);
-	   },
-	   error:function(e){
-		   alert('服务器出错');
-	   }
-   })
+   requestAgent(null);
    $(".uploadify").show();
    $(".remove-icon").show();
 });
+//请求所有代理商数据
+function requestAgent(type){
+	 $.ajax({
+		   url:'/web/merchantinfo/queryAgents',
+		   success:function(data){
+			   var agtS = data.data;
+			   var html_opt = '';
+			   $.each(agtS,function(index,value){
+				   if(type && type == value.id){
+					   html_opt += '<option value="'+value.id+'" selected ="selected">'+value.name+'</option>';
+				   }else{
+					   html_opt += '<option value="'+value.id+'">'+value.name+'</option>';
+				   }
+			   })
+			   if(!type){
+				   $('#agentId').append(html_opt);
+			   }else{
+				   $('#agentId1').append(html_opt);
+			   }
+		   },
+		   error:function(e){
+			   alert('服务器出错');
+		   }
+	   })
+}
 //上传文件
 function  fileUp(num){
    var inno_code = $('#innerCode').val();
@@ -702,6 +714,7 @@ function editData(id)
             $('input[name="taxRegistCode1"]').val(data.data.taxRegistCode);
             $('input[name="registAddress1"]').val(data.data.registAddress);
             $('input[name="mercFlag1"]').val(data.data.mercFlag);
+            requestAgent(data.data.agentId);
             //资料文件
             clickFileBtn();
             var filesLen=data.data.files.length;
