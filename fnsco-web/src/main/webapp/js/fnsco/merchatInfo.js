@@ -295,7 +295,7 @@ function  fileUp(num){
 			   var fileName = file.name.replace(',','');
        		$('#view'+num).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
 						"<a class='previewfileImg' id='previewfileImg"+obj.id+"' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
-						"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"',"+num+")><span class='glyphicon glyphicon-trash'></span>删除</a>" + "</div>");
+						"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"','"+num+"')><span class='glyphicon glyphicon-trash'></span>删除</a>" + "</div>");
        		//预览图片
        		var aId='previewfileImg'+obj.id;
     			var viewer = new Viewer(document.getElementById(aId), {
@@ -303,16 +303,12 @@ function  fileUp(num){
     				navbar: false,
     				toolbar: false
     			});
-
     	   	$('#uploadify_file'+num).hide();
     	   	$('#fileQueue'+num).html('');
     	   	var fileIds = $('#fileIds').val();
-    	   	if(fileIds)
-    	   	{
+    	   	if(fileIds){
     	   		$('#fileIds').val(fileIds+','+obj.id);
-    	   	}
-    	   	else
-    	   	{
+    	   	}else{
     	   		$('#fileIds').val(obj.id);
     	   	}	
         },
@@ -343,6 +339,10 @@ function clickFileBtn(){
 //上传图片删除图片事件
 function deleteImage(queueId,id,url,num)
 {
+    var num_type = num+'';
+    if(num_type.substr(num_type.length-2,num_type.length) == '_1'){
+      num_type = num_type.substr(0,num_type.length-2);
+    }
    $.ajax({
 	   url:'/web/fileInfo/delete',
 	   data:{'id':id,'url':url},
@@ -379,11 +379,12 @@ function saveMerCore(){
 //保存文件信息
 function saveFile(){
   var file_ids = $('#fileIds').val();
+  console.log(file_ids);
   $.ajax({
     url:'/web/fileInfo/savefiles',
     data:{'fileIds':file_ids},
     success:function(){
-      
+      alert("保存成功");
     }
   });
 }
@@ -810,7 +811,7 @@ function editData(id){
             var id=data.data.files[i].id;
             console.log(fileName,fileType,filePath,id);
             //重置
-            $('#view'+fileType+'_1').append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
+            $('#view'+fileType+'_1').append("<div style='float:left;width:99%'><span class='fileImgName' imgFileId="+id+">"+fileName+"</span>" +
                     "<a class='previewfileImg' id='previewfileImg"+id+"_1' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
                     "<a title='删除' class='deletefileImg' style='display:none' id='deletefileImg"+id+"' href=javascript:deleteImage('#deletefileImg"+id+"',"+id+",'"+filePath+"',"+fileType+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" + "</div>");
             $(".uploadify").hide();
