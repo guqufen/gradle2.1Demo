@@ -46,12 +46,12 @@ public class ApiConstant extends CoreConstants {
     public static String E_UPDATEPASSWORD_ERROR    = "5107";                            //更新密码失败
     public static String E_OLDPASSWORD_ERROR       = "5105";                            //  原密码错误
     public static String E_NOREGISTER_LOGIN        = "5106";                            //用户未注册
-
+    
     public static String E_USERID_NULL             = "5110";
     public static String E_UPDATE_FAIL             = "5111";
 
     public static String E_EDITION_LOGIN           = "5107";                            //版本号格式错误
-    
+    public static String E_CODE_INVALID            = "5108";                            //验证码已失效
 
     static {
         ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NULL, "商铺码不能为空");
@@ -81,7 +81,7 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_OLDPASSWORD_ERROR, "原密码错误");
         ERROR_MESSGE_MAP.put(E_NOREGISTER_LOGIN, "用户未注册");
         ERROR_MESSGE_MAP.put(E_EDITION_LOGIN, "版本号格式错误");
-        
+        ERROR_MESSGE_MAP.put(E_CODE_INVALID, "验证码已失效");
     }
 
 }
