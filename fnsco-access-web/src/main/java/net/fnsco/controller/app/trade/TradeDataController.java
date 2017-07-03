@@ -1,5 +1,7 @@
 package net.fnsco.controller.app.trade;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +16,8 @@ import net.fnsco.controller.app.jo.TradeDataJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.service.comm.ServiceConstant.PaySubTypeEnum;
+import net.fnsco.service.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.service.domain.trade.TradeData;
 
 /**
@@ -40,6 +44,19 @@ public class TradeDataController extends BaseController {
     @ApiOperation(value = "查询交易流水")
     public ResultDTO queryList(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
         ResultPageDTO<TradeData> result = tradeDataService.queryAllByCondition(tradeQueryDTO);
+        List<TradeData> list = result.getList();
+        if (null != list) {
+            for (TradeData tradeData : list) {
+                TradeDataJO jo = new TradeDataJO();
+                jo.setAmount(tradeData.getAmt());
+                jo.setPayType(tradeData.getPaySubType());
+                jo.setPayTypeName(PaySubTypeEnum.getNameByCode(jo.getPayType()));
+                jo.setStatus(tradeData.getRespCode());
+                jo.setStatusName(TradeStateEnum.getNameByCode(jo.getStatus()));
+                jo.setId(tradeData.getId());
+                jo.setTradeTime(tradeData.getTimeStamp());
+            }
+        }
         return success(result);
     }
 

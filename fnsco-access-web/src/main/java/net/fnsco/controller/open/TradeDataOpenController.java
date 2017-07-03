@@ -55,8 +55,9 @@ public class TradeDataOpenController extends BaseController {
         String payType = tradeData.getPayType();
         tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
         tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
+        tradeData.setRespCode(ServiceConstant.TradeStateEnum.SUCCESS.getCode());
         tradeDataService.saveTradeData(tradeData);
-       
+
         return success();
     }
 
