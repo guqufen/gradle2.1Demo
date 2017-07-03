@@ -28,7 +28,7 @@ public interface MerchantCoreService {
      * @param loginUserId
      * @return
      */
-    public ResultDTO<Integer> doAdd(HttpServletRequest request);
+    ResultDTO<Integer> doAdd(HttpServletRequest request);
 
     /**
      * doAddMerCore:(这里用一句话描述这个方法的作用)添加商户基本信息
@@ -39,7 +39,7 @@ public interface MerchantCoreService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public ResultDTO<String> doAddMerCore(MerchantCore merchantCore);
+    ResultDTO<String> doAddMerCore(MerchantCore merchantCore);
 
     /**
      * doAddMerContact:(这里用一句话描述这个方法的作用) 保存联系方式
@@ -50,7 +50,7 @@ public interface MerchantCoreService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public ResultDTO<String> doAddMerContact(List<MerchantContact> merchantContact);
+    ResultDTO<String> doAddMerContact(List<MerchantContact> merchantContact);
 
     /**
      * 
@@ -62,7 +62,7 @@ public interface MerchantCoreService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public ResultDTO<String> doAddMerTerminal(List<MerchantTerminal> merchantTerminal);
+    ResultDTO<String> doAddMerTerminal(List<MerchantTerminal> merchantTerminal);
 
     /**
      * doAddChannel:(这里用一句话描述这个方法的作用)保存渠道信息
@@ -73,7 +73,7 @@ public interface MerchantCoreService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public ResultDTO<String> doAddMerChannel(List<MerchantChannel> merchantChannel);
+    ResultDTO<String> doAddMerChannel(List<MerchantChannel> merchantChannel);
 
     /**
      * doAddMerBanks:(这里用一句话描述这个方法的作用)保存银行卡信息
@@ -84,28 +84,28 @@ public interface MerchantCoreService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public ResultDTO<String> doAddMerBanks(List<MerchantBank> merchantBanks);
+    ResultDTO<String> doAddMerBanks(List<MerchantBank> merchantBanks);
 
     /**
      * 条件查询 根据商家基本信息条件分页查询
      * @param merchantCore
      * @return
      */
-    public ResultPageDTO<MerchantCore> queryMerchantCore(MerchantCore merchantCore, int currentPageNum, int perPageSize);
+    ResultPageDTO<MerchantCore> queryMerchantCore(MerchantCore merchantCore, int currentPageNum, int perPageSize);
 
     /**
      * 条件查询所有数据
      * @param merchantCore
      * @return
      */
-    public List<MerchantCore> queryAllByCondition(MerchantCore merchantCore);
+     List<MerchantCore> queryAllByCondition(MerchantCore merchantCore);
 
     /**
      * 根据ID删除数据
      * @param ids
      * @return
      */
-    public ResultDTO<Integer> deleteByIds(Integer[] ids);
+     ResultDTO<Integer> deleteByIds(Integer[] ids);
 
     /**
      * deleteByContact:(这里用一句话描述这个方法的作用)根据ID删除联系方式
@@ -116,7 +116,7 @@ public interface MerchantCoreService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public ResultDTO<Integer> deleteByContact(Integer id);
+     ResultDTO<Integer> deleteByContact(Integer id);
 
     /**
      * deleteByTerminal:(这里用一句话描述这个方法的作用)根据ID删除终端信息
@@ -127,18 +127,18 @@ public interface MerchantCoreService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public ResultDTO<Integer> deleteByTerminal(Integer id);
+    ResultDTO<Integer> deleteByTerminal(Integer id);
 
-    public ResultDTO<Integer> deleteByChanel(Integer id);
+    ResultDTO<Integer> deleteByChanel(Integer id);
 
-    public ResultDTO<Integer> deleteByBank(Integer id);
+    ResultDTO<Integer> deleteByBank(Integer id);
 
     /**
      * 根据ID 查询所有数据
      * @param id
      * @return
      */
-    public ResultDTO<MerchantCore> queryAllById(Integer id);
+    ResultDTO<MerchantCore> queryAllById(Integer id);
 
     /**
      * 
@@ -159,5 +159,5 @@ public interface MerchantCoreService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public ResultDTO<List<Agent>> queryAllAgent();
+    ResultDTO<List<Agent>> queryAllAgent();
 }

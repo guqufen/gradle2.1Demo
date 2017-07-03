@@ -671,6 +671,21 @@ $("#btn_addBankCard").click(function(){
 function removeBankCard(num){
   console.log($('.remove-bankCardList'+num));
   $('.remove-bankCardList'+num).parent().remove();
+  if(num && num >0){
+	  a.ajax({
+		  url:'/web/merchantinfo/deleteBank',
+		  data:{},
+		  type:'POST',
+		  success:function(data){
+			  if(data.success){
+				  alert('删除成功!')
+			  }else{
+				  alert('删除失败!');
+			  }
+		  },
+		  error:function(){alert('系统错误!')}
+	  });
+  }
 }
 //获取银行卡信息参数并保存
 function saveBankCardParams(conId){
