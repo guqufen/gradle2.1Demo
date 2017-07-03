@@ -61,7 +61,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         long timer = System.currentTimeMillis();
         String innerCode = "";
         String merId = tradeData.getMerId();
-        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId, tradeData.getSource());
+        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId,
+            tradeData.getSource());
         if (null == merchantChannel) {
             //logger.error("渠道商户不存在" + merId + ":" + tradeData.getSource() + ",丢弃该交易流水");
             //return true;
@@ -106,6 +107,10 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      */
     @Override
     public ResultPageDTO<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore) {
+        List<TradeData> datas = Lists.newArrayList();
+        int total = 0;
+        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total, datas);
+        result.setCurrentPage(merchantCore.getCurrentPageNum());
         TradeData tradeData = new TradeData();
         //设置交易时间
         tradeData.setStartTime(DateUtils.getDateStartTime(merchantCore.getStartDate()));
@@ -136,13 +141,17 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
                     innerCodeList.add(rel.getInnerCode());
                 }
             }
+            if (null == innerCodeList || innerCodeList.size() == 0) {
+                return result;
+            }
         }
         //设置商户号
         tradeData.setInnerCodeList(innerCodeList);
-        PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(), merchantCore.getPerPageSize(), tradeData);
-        List<TradeData> datas = tradeListDAO.queryPageList(pages);
-        int total = tradeListDAO.queryTotalByCondition(tradeData);
-        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total, datas);
+        PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(),
+            merchantCore.getPerPageSize(), tradeData);
+        datas = tradeListDAO.queryPageList(pages);
+        total = tradeListDAO.queryTotalByCondition(tradeData);
+        result = new ResultPageDTO<TradeData>(total, datas);
         result.setCurrentPage(merchantCore.getCurrentPageNum());
         return result;
     }
@@ -155,7 +164,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      * @date 2017年6月28日 下午5:13:54
      */
     @Override
-    public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
+    public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum,
+                                                   int perPageSize) {
 
         TradeData tradeData = new TradeData();
         BeanUtils.copyProperties(tradeDataDTO, tradeData);

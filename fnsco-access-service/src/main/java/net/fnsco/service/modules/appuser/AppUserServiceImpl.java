@@ -119,6 +119,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         //从Map中根据手机号取到存入的验证码
         SmsCodeDTO codeDto = MsgCodeMap.get(mobile + deviceId);
+        if(null == codeDto){
+            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
+        }
         //时间
         long newTime = System.currentTimeMillis();
         //验证码超过30分钟
