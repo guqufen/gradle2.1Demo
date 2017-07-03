@@ -193,6 +193,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         AppUser appUser = new AppUser();
         //根据id查询用户是否存在获取原密码
         AppUser mAppUser = MappUserDao.selectAppUserById(id);
+        if(null == mAppUser){
+            return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+        }
         //查到的密码和原密码做比较
         if (!oldPassword.equals(mAppUser.getPassword())) {
             return ResultDTO.fail(ApiConstant.E_OLDPASSWORD_ERROR);
