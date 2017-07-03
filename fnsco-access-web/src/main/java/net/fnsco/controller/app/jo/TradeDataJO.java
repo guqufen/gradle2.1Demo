@@ -25,7 +25,7 @@ public class TradeDataJO extends JO {
     private String batchNo;
     //凭证号
     private String traceNo;
-
+    //参数考
     private String referNo;
 
     /**

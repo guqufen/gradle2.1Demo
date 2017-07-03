@@ -95,7 +95,7 @@ public class TradeDataController extends BaseController {
         result.setMerName(merchantCore.getMerName());
         result.setInnerCode(tradeData.getInnerCode());
         result.setTradeType(tradeData.getTxnType());
-        result.setPayTypeName(TradeTypeEnum.getNameByCode(result.getTradeType()));
+        result.setTradeTypeName(TradeTypeEnum.getNameByCode(result.getTradeType()));
         
         result.setBatchNo(tradeData.getBatchNo());
         result.setTermId(tradeData.getTermId());
