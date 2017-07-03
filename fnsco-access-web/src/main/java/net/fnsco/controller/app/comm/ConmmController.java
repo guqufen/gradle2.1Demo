@@ -51,7 +51,7 @@ public class ConmmController extends BaseController{
         }else if(discoveryJO.getDeviceType()==2){
             return success(env.getProperty(ApiConstant.THIS_IOS_URL));
         }
-        return success(env.getProperty(ApiConstant.THIS_PROGREM_URL));
+        return success(env.getProperty(ApiConstant.THIS_ANDROID_URL));
         
     }
     
