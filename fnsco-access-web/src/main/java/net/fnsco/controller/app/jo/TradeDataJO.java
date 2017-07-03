@@ -24,7 +24,53 @@ public class TradeDataJO extends JO {
     //批次号
     private String batchNo;
     //凭证号
-    private String sysTraceNo;
+    private String traceNo;
+
+    private String referNo;
+
+    /**
+     * traceNo
+     *
+     * @return  the traceNo
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getTraceNo() {
+        return traceNo;
+    }
+
+    /**
+     * traceNo
+     *
+     * @param   traceNo    the traceNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setTraceNo(String traceNo) {
+        this.traceNo = traceNo;
+    }
+
+    /**
+     * referNo
+     *
+     * @return  the referNo
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getReferNo() {
+        return referNo;
+    }
+
+    /**
+     * referNo
+     *
+     * @param   referNo    the referNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setReferNo(String referNo) {
+        this.referNo = referNo;
+    }
 
     /**
      * tradeTypeName
@@ -32,7 +78,7 @@ public class TradeDataJO extends JO {
      * @return  the tradeTypeName
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getTradeTypeName() {
         return tradeTypeName;
     }
@@ -43,7 +89,7 @@ public class TradeDataJO extends JO {
      * @param   tradeTypeName    the tradeTypeName to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setTradeTypeName(String tradeTypeName) {
         this.tradeTypeName = tradeTypeName;
     }
@@ -54,7 +100,7 @@ public class TradeDataJO extends JO {
      * @return  the termId
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getTermId() {
         return termId;
     }
@@ -65,7 +111,7 @@ public class TradeDataJO extends JO {
      * @param   termId    the termId to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setTermId(String termId) {
         this.termId = termId;
     }
@@ -76,7 +122,7 @@ public class TradeDataJO extends JO {
      * @return  the batchNo
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getBatchNo() {
         return batchNo;
     }
@@ -87,31 +133,9 @@ public class TradeDataJO extends JO {
      * @param   batchNo    the batchNo to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setBatchNo(String batchNo) {
         this.batchNo = batchNo;
-    }
-
-    /**
-     * sysTraceNo
-     *
-     * @return  the sysTraceNo
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public String getSysTraceNo() {
-        return sysTraceNo;
-    }
-
-    /**
-     * sysTraceNo
-     *
-     * @param   sysTraceNo    the sysTraceNo to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setSysTraceNo(String sysTraceNo) {
-        this.sysTraceNo = sysTraceNo;
     }
 
     /**

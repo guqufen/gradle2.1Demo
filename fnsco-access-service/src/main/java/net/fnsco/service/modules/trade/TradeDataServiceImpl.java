@@ -81,7 +81,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setMerId(merId);
         tradeDataEntity.setTermId(tradeData.getTermId());
         tradeDataEntity.setBatchNo(tradeData.getBatchNo());
-        tradeDataEntity.setSysTraceNo(tradeData.getSysTraceNo());
+        tradeDataEntity.setTraceNo(tradeData.getSysTraceNo());
         tradeDataEntity.setAuthCode(tradeData.getAuthCode());
         tradeDataEntity.setOrderIdScan(tradeData.getOrderIdScan());
         tradeDataEntity.setSource(tradeData.getSource());
@@ -89,7 +89,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setSendTime(tradeData.getSendTime());
         tradeDataEntity.setPayType(tradeData.getPayType());
         tradeDataEntity.setPaySubType(tradeData.getPaySubType());
-
+        tradeDataEntity.setReferNo(tradeData.getReferNo());
         tradeDataEntity.setInnerCode(innerCode);
         tradeDataEntity.setCreateTime(new Date());
         tradeDataEntity.setRespCode(tradeData.getRespCode());

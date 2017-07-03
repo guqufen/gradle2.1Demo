@@ -99,7 +99,8 @@ public class TradeDataController extends BaseController {
         
         result.setBatchNo(tradeData.getBatchNo());
         result.setTermId(tradeData.getTermId());
-        result.setSysTraceNo(tradeData.getSysTraceNo());
+        result.setTraceNo(tradeData.getTraceNo());
+        result.setReferNo(tradeData.getReferNo());
         return ResultDTO.success(result);
     }
 
