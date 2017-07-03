@@ -3,166 +3,166 @@ package net.fnsco.controller.app.jo;
 import net.fnsco.core.base.JO;
 
 public class TradeDataJO extends JO {
-    private String userId;    //登录用户Id
-    private String innerCode; // 内部商务号
-    private String startDate; // 开始日期 2016-5-10
-    private String endDate;   //结束日期 2016-5-10
-    private String pageNum;   //分页的页码
-    private String terminals; //终端号数组，所有选择的终端
-    private String tradeId;   //交易流水ID
+    private String id;         //交易记录ID
+    private String amount;     //交易金额
+    private String tradeTime;  //交易时间
+    private String status;     //交易状态（1成功 2失败）
+    private String statusName;
+    private String payType;
+    private String payTypeName;
 
     /**
-     * tradeId
+     * id
      *
-     * @return  the tradeId
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public String getTradeId() {
-        return tradeId;
-    }
-
-    /**
-     * tradeId
-     *
-     * @param   tradeId    the tradeId to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setTradeId(String tradeId) {
-        this.tradeId = tradeId;
-    }
-
-    /**
-     * userId
-     *
-     * @return  the userId
+     * @return  the id
      * @since   CodingExample Ver 1.0
     */
 
-    public String getUserId() {
-        return userId;
+    public String getId() {
+        return id;
     }
 
     /**
-     * userId
+     * id
      *
-     * @param   userId    the userId to set
+     * @param   id    the id to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
-     * innerCode
+     * tradeTime
      *
-     * @return  the innerCode
+     * @return  the tradeTime
      * @since   CodingExample Ver 1.0
     */
 
-    public String getInnerCode() {
-        return innerCode;
+    public String getTradeTime() {
+        return tradeTime;
     }
 
     /**
-     * innerCode
+     * tradeTime
      *
-     * @param   innerCode    the innerCode to set
+     * @param   tradeTime    the tradeTime to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setInnerCode(String innerCode) {
-        this.innerCode = innerCode;
+    public void setTradeTime(String tradeTime) {
+        this.tradeTime = tradeTime;
     }
 
     /**
-     * startDate
+     * amount
      *
-     * @return  the startDate
+     * @return  the amount
      * @since   CodingExample Ver 1.0
     */
 
-    public String getStartDate() {
-        return startDate;
+    public String getAmount() {
+        return amount;
     }
 
     /**
-     * startDate
+     * amount
      *
-     * @param   startDate    the startDate to set
+     * @param   amount    the amount to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
     /**
-     * endDate
+     * statusName
      *
-     * @return  the endDate
+     * @return  the statusName
      * @since   CodingExample Ver 1.0
     */
 
-    public String getEndDate() {
-        return endDate;
+    public String getStatusName() {
+        return statusName;
     }
 
     /**
-     * endDate
+     * statusName
      *
-     * @param   endDate    the endDate to set
+     * @param   statusName    the statusName to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 
     /**
-     * pageNum
+     * payType
      *
-     * @return  the pageNum
+     * @return  the payType
      * @since   CodingExample Ver 1.0
     */
 
-    public String getPageNum() {
-        return pageNum;
+    public String getPayType() {
+        return payType;
     }
 
     /**
-     * pageNum
+     * payType
      *
-     * @param   pageNum    the pageNum to set
+     * @param   payType    the payType to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setPageNum(String pageNum) {
-        this.pageNum = pageNum;
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
     /**
-     * terminals
+     * status
      *
-     * @return  the terminals
+     * @return  the status
      * @since   CodingExample Ver 1.0
     */
 
-    public String getTerminals() {
-        return terminals;
+    public String getStatus() {
+        return status;
     }
 
     /**
-     * terminals
+     * status
      *
-     * @param   terminals    the terminals to set
+     * @param   status    the status to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setTerminals(String terminals) {
-        this.terminals = terminals;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
+     * payTypeName
+     *
+     * @return  the payTypeName
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getPayTypeName() {
+        return payTypeName;
+    }
+
+    /**
+     * payTypeName
+     *
+     * @param   payTypeName    the payTypeName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPayTypeName(String payTypeName) {
+        this.payTypeName = payTypeName;
     }
 
 }

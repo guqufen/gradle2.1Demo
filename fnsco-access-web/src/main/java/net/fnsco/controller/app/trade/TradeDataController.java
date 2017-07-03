@@ -1,11 +1,16 @@
 package net.fnsco.controller.app.trade;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.dto.TradeDataQueryDTO;
@@ -14,6 +19,8 @@ import net.fnsco.controller.app.jo.TradeDataJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.service.comm.ServiceConstant.PaySubTypeEnum;
+import net.fnsco.service.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.service.domain.trade.TradeData;
 
 /**
@@ -39,7 +46,26 @@ public class TradeDataController extends BaseController {
     @RequestMapping(value = "/queryList")
     @ApiOperation(value = "查询交易流水")
     public ResultDTO queryList(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
-        ResultPageDTO<TradeData> result = tradeDataService.queryAllByCondition(tradeQueryDTO);
+        logger.warn("/queryList查询交易流水入参:" + JSON.toJSONString(tradeQueryDTO));
+        ResultPageDTO<TradeData> temp = tradeDataService.queryAllByCondition(tradeQueryDTO);
+        List<TradeData> list = temp.getList();
+        List<TradeDataJO> resultList = Lists.newArrayList();
+        if (null != list) {
+            for (TradeData tradeData : list) {
+                TradeDataJO jo = new TradeDataJO();
+                jo.setAmount(tradeData.getAmt());
+                jo.setPayType(tradeData.getPaySubType());
+                jo.setPayTypeName(PaySubTypeEnum.getNameByCode(jo.getPayType()));
+                jo.setStatus(tradeData.getRespCode());
+                jo.setStatusName(TradeStateEnum.getNameByCode(jo.getStatus()));
+                jo.setId(tradeData.getId());
+                jo.setTradeTime(tradeData.getTimeStamp());
+                resultList.add(jo);
+            }
+        }
+        ResultPageDTO<TradeDataJO> result = new ResultPageDTO<TradeDataJO>(temp.getTotal(),resultList);
+        result.setCurrentPage(temp.getCurrentPage());
+        result.setMerTotal(temp.getMerTotal());
         return success(result);
     }
 
