@@ -29,6 +29,30 @@ public class TradeDataDTO extends DTO {
     
     private String startSendTime;//条件查询 发送开始时间
     private String endSendTime;//条件查询 发送结束时间
+    
+    private String respCode;
+    /**
+     * respCode
+     *
+     * @return  the respCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getRespCode() {
+        return respCode;
+    }
+
+    /**
+     * respCode
+     *
+     * @param   respCode    the respCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setRespCode(String respCode) {
+        this.respCode = respCode;
+    }
+
     /**
      * @return the paySubType
      */

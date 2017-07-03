@@ -13,6 +13,7 @@ import net.fnsco.api.appuser.ConmmService;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.ProtocolDTO;
 import net.fnsco.api.dto.VersionDTO;
+
 import net.fnsco.controller.app.jo.DiscoveryJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -46,14 +47,11 @@ public class ConmmController extends BaseController{
     @ResponseBody
     public ResultDTO<Object> discovery(@RequestBody DiscoveryJO discoveryJO) {
         // 1.安卓  2.IOS
-        if(discoveryJO.getDeviceType()==1){
-            return success(env.getProperty(ApiConstant.THIS_ANDROID_URL));
-        }else if(discoveryJO.getDeviceType()==2){
+        if(discoveryJO.getDeviceType()==2){
             return success(env.getProperty(ApiConstant.THIS_IOS_URL));
         }
         return success(env.getProperty(ApiConstant.THIS_ANDROID_URL));
-        
-    }
+        }
     
 }
 
