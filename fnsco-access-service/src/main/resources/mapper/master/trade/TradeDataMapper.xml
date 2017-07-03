@@ -40,13 +40,13 @@
     <result column="order_info" property="orderInfo" jdbcType="VARCHAR" />
     <result column="pay_type" property="payType" jdbcType="VARCHAR" />
     <result column="pay_sub_type" property="paySubType" jdbcType="VARCHAR" />
-    
+    <result column="refer_no" property="referNo" jdbcType="VARCHAR" />
     <result column="time_stamp" property="timeStamp" jdbcType="VARCHAR" />
     <result column="trade_detail" property="tradeDetail" jdbcType="VARCHAR" />
     <result column="mer_id" property="merId" jdbcType="VARCHAR" />
     <result column="term_id" property="termId" jdbcType="VARCHAR" />
     <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
-    <result column="sys_trace_no" property="sysTraceNo" jdbcType="VARCHAR" />
+    <result column="trace_no" property="traceNo" jdbcType="VARCHAR" />
     <result column="auth_code" property="authCode" jdbcType="VARCHAR" />
     <result column="order_id_scan" property="orderIdScan" jdbcType="VARCHAR" />
     <result column="source" property="source" jdbcType="VARCHAR" />
@@ -61,8 +61,8 @@
     succ_time, org_mer_order_id, can_ref_amt, ref_cnt, ref_amt, bank_id, pp_flag, purpose, 
     dc_type, certify_id, msg_dest_id, customer_nm, phone_no, sub_open_id, channel_type, 
     amt, order_no, order_time, order_info, pay_type,pay_sub_type, time_stamp, trade_detail, mer_id, 
-    term_id, batch_no, sys_trace_no, auth_code, order_id_scan, source, md5, send_time, 
-    create_time
+    term_id, batch_no, trace_no, auth_code, order_id_scan, source, md5, send_time, 
+    create_time,refer_no
   </sql>
    
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -100,9 +100,9 @@
       order_no, order_time, order_info, 
       pay_type,pay_sub_type, time_stamp, trade_detail, 
       mer_id, term_id, batch_no, 
-      sys_trace_no, auth_code, order_id_scan, 
+      trace_no, auth_code, order_id_scan, 
       source, md5, send_time, 
-      create_time)
+      create_time,refer_no)
     values (#{id,jdbcType=VARCHAR}, #{innerCode,jdbcType=VARCHAR}, #{txnType,jdbcType=VARCHAR}, 
       #{txnSubType,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{payTimeOut,jdbcType=VARCHAR}, 
       #{subject,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{customerInfo,jdbcType=VARCHAR}, 
@@ -117,9 +117,9 @@
       #{orderNo,jdbcType=VARCHAR}, #{orderTime,jdbcType=VARCHAR}, #{orderInfo,jdbcType=VARCHAR}, 
       #{payType,jdbcType=VARCHAR},#{paySubType,jdbcType=VARCHAR}, #{timeStamp,jdbcType=VARCHAR}, #{tradeDetail,jdbcType=VARCHAR}, 
       #{merId,jdbcType=VARCHAR}, #{termId,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, 
-      #{sysTraceNo,jdbcType=VARCHAR}, #{authCode,jdbcType=VARCHAR}, #{orderIdScan,jdbcType=VARCHAR}, 
+      #{traceNo,jdbcType=VARCHAR}, #{authCode,jdbcType=VARCHAR}, #{orderIdScan,jdbcType=VARCHAR}, 
       #{source,jdbcType=VARCHAR}, #{md5,jdbcType=VARCHAR}, #{sendTime,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP})
+      #{createTime,jdbcType=TIMESTAMP}, #{referNo,jdbcType=VARCHAR})
   </insert>
     
   <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.trade.TradeData" >
@@ -248,8 +248,8 @@
       <if test="batchNo != null" >
         batch_no = #{batchNo,jdbcType=VARCHAR},
       </if>
-      <if test="sysTraceNo != null" >
-        sys_trace_no = #{sysTraceNo,jdbcType=VARCHAR},
+      <if test="traceNo != null" >
+        trace_no = #{traceNo,jdbcType=VARCHAR},
       </if>
       <if test="authCode != null" >
         auth_code = #{authCode,jdbcType=VARCHAR},
@@ -266,6 +266,9 @@
       <if test="sendTime != null" >
         send_time = #{sendTime,jdbcType=VARCHAR},
       </if>
+      <if test="referNo != null" >
+        refer_no = #{referNo,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -276,6 +279,7 @@
     update t_trade_data
     set inner_code = #{innerCode,jdbcType=VARCHAR},
       txn_type = #{txnType,jdbcType=VARCHAR},
+      refer_no = #{referNo,jdbcType=VARCHAR},
       txn_sub_type = #{txnSubType,jdbcType=VARCHAR},
       currency = #{currency,jdbcType=VARCHAR},
       pay_time_out = #{payTimeOut,jdbcType=VARCHAR},
@@ -315,7 +319,7 @@
       mer_id = #{merId,jdbcType=VARCHAR},
       term_id = #{termId,jdbcType=VARCHAR},
       batch_no = #{batchNo,jdbcType=VARCHAR},
-      sys_trace_no = #{sysTraceNo,jdbcType=VARCHAR},
+      trace_no = #{traceNo,jdbcType=VARCHAR},
       auth_code = #{authCode,jdbcType=VARCHAR},
       order_id_scan = #{orderIdScan,jdbcType=VARCHAR},
       source = #{source,jdbcType=VARCHAR},
@@ -453,8 +457,8 @@
       <if test="condition.batchNo != null and condition.batchNo !=''" >
         AND batch_no = #{condition.batchNo,jdbcType=VARCHAR}
       </if>
-      <if test="condition.sysTraceNo != null and condition.sysTraceNo !=''" >
-        AND sys_trace_no = #{condition.sysTraceNo,jdbcType=VARCHAR}
+      <if test="condition.traceNo != null and condition.traceNo !=''" >
+        AND trace_no = #{condition.traceNo,jdbcType=VARCHAR}
       </if>
       <if test="condition.authCode != null and condition.authCode !=''" >
         AND auth_code = #{authCode,jdbcType=VARCHAR}
@@ -622,8 +626,8 @@
       <if test="batchNo != null and batchNo != ''" >
         AND batch_no = #{batchNo,jdbcType=VARCHAR}
       </if>
-      <if test="sysTraceNo != null and sysTraceNo != ''" >
-        AND sys_trace_no = #{sysTraceNo,jdbcType=VARCHAR}
+      <if test="traceNo != null and traceNo != ''" >
+        AND trace_no = #{traceNo,jdbcType=VARCHAR}
       </if>
       <if test="authCode != null and authCode != ''" >
         AND auth_code = #{authCode,jdbcType=VARCHAR}
