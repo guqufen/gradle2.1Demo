@@ -106,6 +106,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      */
     @Override
     public ResultPageDTO<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore) {
+        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(0, null);
+        result.setCurrentPage(merchantCore.getCurrentPageNum());
         TradeData tradeData = new TradeData();
         //设置交易时间
         tradeData.setStartTime(DateUtils.getDateStartTime(merchantCore.getStartDate()));
@@ -128,13 +130,18 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeData.setTerminalList(terminalList);
         //根据用户查询商户号
         Integer appUserId = merchantCore.getUserId();
+        List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
+        result.setMerTotal(tempList.size());
         if (null == terminalList || terminalList.size() == 0) {
             innerCodeList = Lists.newArrayList();
-            List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
             if (!CollectionUtils.isEmpty(tempList)) {
                 for (MerchantUserRel rel : tempList) {
                     innerCodeList.add(rel.getInnerCode());
                 }
+            }
+            if (null == innerCodeList || innerCodeList.size() == 0) {
+
+                return result;
             }
         }
         //设置商户号
@@ -142,7 +149,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(), merchantCore.getPerPageSize(), tradeData);
         List<TradeData> datas = tradeListDAO.queryPageList(pages);
         int total = tradeListDAO.queryTotalByCondition(tradeData);
-        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total, datas);
+        result.setTotal(total);
+        result.setList(datas);
         result.setCurrentPage(merchantCore.getCurrentPageNum());
         return result;
     }

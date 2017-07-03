@@ -171,23 +171,35 @@ function resetEvent(){
 
 getInnerCode();
 $('#btn_add').click(function(){
-   $.ajax({
-	   url:'/web/merchantinfo/queryAgents',
-	   success:function(data){
-		   var agtS = data.data;
-		   var html_opt = '';
-		   $.each(agtS,function(index,value){
-			   html_opt += '<option value="'+value.id+'">'+value.name+'</option>';
-		   })
-		   $('#agentId').append(html_opt);
-	   },
-	   error:function(e){
-		   alert('服务器出错');
-	   }
-   })
+   requestAgent(null);
    $(".uploadify").show();
    $(".remove-icon").show();
 });
+//请求所有代理商数据
+function requestAgent(type){
+	 $.ajax({
+		   url:'/web/merchantinfo/queryAgents',
+		   success:function(data){
+			   var agtS = data.data;
+			   var html_opt = '';
+			   $.each(agtS,function(index,value){
+				   if(type && type == value.id){
+					   html_opt += '<option value="'+value.id+'" selected ="selected">'+value.name+'</option>';
+				   }else{
+					   html_opt += '<option value="'+value.id+'">'+value.name+'</option>';
+				   }
+			   })
+			   if(!type){
+				   $('#agentId').append(html_opt);
+			   }else{
+				   $('#agentId1').append(html_opt);
+			   }
+		   },
+		   error:function(e){
+			   alert('服务器出错');
+		   }
+	   })
+}
 //上传文件
 function  fileUp(num){
    var inno_code = $('#innerCode').val();
@@ -351,7 +363,7 @@ $(".nextBtn").click(function(){
 //添加联系信息列表
 var ContactList=1;
 function contactHtml(num){
-	return "<div class='contact-list'><div class='remove-icon remove-contactList"+num+"' onclick='removeContact("+num+")'><span class='glyphicon glyphicon-remove'></span></div><div class='row'>"+
+	return "<div class='contact-list'><div class='remove-icon remove-contactList"+num+"' editId='"+num+"' onclick='removeContact("+num+")'><span class='glyphicon glyphicon-remove'></span></div><div class='row'>"+
 						"<div class='col-sm-4'><label class='control-label' for='contactName"+num+"'>联系人名：</label><input type='text' class='form-control contactName' id='contactName"+num+"' name='contactName"+num+"'></div>"+
 						"<div class='col-sm-4'><label class='control-label' for='contactMobile"+num+"'>联系人手机：</label><input type='text' class='form-control contactMobile' id='contactMobile"+num+"' name='contactMobile"+num+"'></div>"+
 						"<div class='col-sm-4'><label class='control-label' for='contactEmail"+num+"'>联系人邮箱：</label><input type='text' class='form-control contactEmail' id='contactEmail"+num+"' name='contactEmail"+num+"'></div>"+
@@ -419,7 +431,7 @@ $("#btn_saveContact").click(function(){
 //添加终端信息列表
 var TerminalList=1;
 function terminalHtml(num){
-	return '<div class="terminal-list"><div class="remove-icon remove-terminalList'+num+'" onclick="removeTerminal('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
+	return '<div class="terminal-list"><div class="remove-icon remove-terminalList'+num+'" editId="'+num+'" onclick="removeTerminal('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
         '<div class="col-sm-4"><label class="control-label" for="merchantCode'+num+'">通道商户号：</label><input type="text" class="form-control merchantCode" id="merchantCode'+num+'" name="merchantCode'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="channelId'+num+'">通道ID：</label><input type="text" class="form-control channelId" id="channelId'+num+'" name="channelId'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="channelName'+num+'">通道名称：</label><input type="text" class="form-control channelName" id="channelName'+num+'" name="channelName'+num+'" required="required"></div>'+
@@ -512,8 +524,7 @@ $("#btn_saveTerminal").click(function(){
 //添加渠道信息列表
 var ChannellList=1;
 function channelHtml(num){
-	return '<div class="channel-list"><div class="remove-icon remove-channelList'+num+'" onclick="removeChannel('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
-            '<div class="col-sm-4"><label class="control-label" for="agentId'+num+'">代理商：</label><input type="number" class="form-control agentId" id="agentId'+num+'" name="agentId'+num+'" required="required"></div>'+
+	return  '<div class="channel-list"><div class="remove-icon remove-channelList'+num+'" editId="'+num+'" onclick="removeChannel('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerId'+num+'">渠道商户号：</label><input type="text" class="form-control channelMerId" id="channelMerId'+num+'" name="channelMerId'+num+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">渠道商户key：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道类型：</label><select name="channelType'+num+'" class="form-control channelType"><option value="00">爱农</option><option value="01">浦发</option><option value="02">拉卡拉</option></select></div></div></div>';
@@ -543,12 +554,11 @@ $("#btn_saveChannel").click(function(){
 	var listLen=$("#channel-con .channel-list").length;
 	var channelArr=new Array();
 	for (var i=0;i<listLen;i++){
-		var agentId=$("#channel-con .channel-list").eq(i).find($('.agentId')).val();
 		var channelMerId=$("#channel-con .channel-list").eq(i).find($('.channelMerId')).val();
 		var channelMerKey=$("#channel-con .channel-list").eq(i).find($('.channelMerKey')).val();
 		var channelType=$("#channel-con .channel-list").eq(i).find($('.channelType')).val();
-    var innerCode=$("#innerCode").val();
-		concatChannelArrArr={agentId,channelMerId,channelMerKey,channelType,innerCode}
+		var innerCode=$("#innerCode").val();
+		concatChannelArrArr={channelMerId,channelMerKey,channelType,innerCode}
 		channelArr=channelArr.concat(concatChannelArrArr);
 	}
 	
@@ -575,7 +585,7 @@ $("#btn_saveChannel").click(function(){
 //添加银行卡信息列表
 var BankCardlList=1;
 function bankCardHtml(num){
-  return '<div class="bankCard-list"><div class="remove-icon remove-bankCardList'+num+'" onclick="removeBankCard('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
+  return '<div class="bankCard-list"><div class="remove-icon remove-bankCardList'+num+'" editId="'+num+'" onclick="removeBankCard('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
             '<div class="col-sm-4"><label class="control-label" for="accountType'+num+'">账户类型：</label><select name="accountType'+num+'" class="form-control accountType"><option value="1">对公</option><option value="0">对私</option></select></div>'+
             '<div class="col-sm-4"><label class="control-label" for="accountName'+num+'">账户开户名：</label><input type="text" class="form-control accountName" id="accountName'+num+'" name="accountName'+num+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="accountNo'+num+'">开户账号：</label><input type="text" class="form-control accountNo" id="accountNo'+num+'" name="accountNo'+num+'"></div>'+
@@ -632,16 +642,14 @@ $("#btn_saveBankCard").click(function(){
     success:function(data){
       alert('添加成功'+data.data);//返回innerCode
       $("#myModal").hide();
+      queryEvent();
+      
     },
     error:function(){
       alert('系统错误');
     }
   });
 })
-
-
-
-
 
 
 //表格中编辑事件
@@ -656,6 +664,7 @@ function editData(id)
             //data.data就是所有数据集
             console.log(data.data);
             // 关闭再次点开回到第一个标签
+            $('#innerCode').val(data.data.innerCode);
             $("#editModal").find('.tab-pane').removeClass("active");
             $("#home1").addClass("active");
             $("#editModal .nav-tabs li").removeClass("active");
@@ -705,6 +714,7 @@ function editData(id)
             $('input[name="taxRegistCode1"]').val(data.data.taxRegistCode);
             $('input[name="registAddress1"]').val(data.data.registAddress);
             $('input[name="mercFlag1"]').val(data.data.mercFlag);
+            requestAgent(data.data.agentId);
             //资料文件
             clickFileBtn();
             var filesLen=data.data.files.length;
@@ -848,8 +858,8 @@ function editData(id)
 //修改商户——添加联系信息
 var editContactList=1;
 $("#btn_addContact1").click(function(){
-    editContactList='A'+(editContactList++);
-    $("#contact-con1").append(contactHtml(editContactList));
+    editContactList=editContactList+1;
+    $("#contact-con1").append(contactHtml(-(editContactList)));
 })
   //修改保存事件
   $("#editBtn_messages").click(function(){
@@ -862,10 +872,11 @@ $("#btn_addContact1").click(function(){
       var contactTelphone=$("#contact-con1 .contact-list").eq(i).find($('.contactTelphone')).val();
       var contactJobs=$("#contact-con1 .contact-list").eq(i).find($('.contactJobs')).val();
       var innerCode = $('#innerCode').val();
+      var id=$("#contact-con1 .contact-list").eq(i).find($('.remove-icon')).attr('editId');
       if(!innerCode){
         alert('操作错误!');return ;
       }
-      concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
+      concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode,id}
       console.log(concatContactArr);
       contactlArr=contactArr.push(concatContactArr);
       console.log(contactlArr);
@@ -889,22 +900,22 @@ $("#btn_addContact1").click(function(){
 
 
 //修改商户——添加终端信息
-var editTerminalList=1;
+var editTerminalList=10;
 $("#btn_addTerminal1").click(function(){
-    editTerminalList='B'+(editTerminalList++);
-    $("#terminal-con1").append(terminalHtml(editTerminalList));
+    editTerminalList=editTerminalList+1;
+    $("#terminal-con1").append(terminalHtml(-(editTerminalList)));
 })
 //修改商户——添加渠道信息
-var editChannelList=1;
+var editChannelList=20;
 $("#btn_addChannel1").click(function(){
-    editChannelList='C'+(editChannelList++);
-    $("#channel-con1").append(contactHtml(editChannelList));
+    editChannelList=editChannelList+1;
+    $("#channel-con1").append(contactHtml(-(editChannelList)));
 })
 //修改商户——添加银行卡信息
-var editBankCardList=1;
+var editBankCardList=30;
 $("#btn_addBankCard1").click(function(){
-    editBankCardList='D'+(editBankCardList++);
-    $("#bankCard-con1").append(bankCardHtml(editBankCardList));
+    editBankCardList=editBankCardList+1;
+    $("#bankCard-con1").append(bankCardHtml(-(editBankCardList)));
 })
 
 
