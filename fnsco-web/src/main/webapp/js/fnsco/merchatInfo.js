@@ -22,13 +22,13 @@ function operateFormatter(value, row, index) {
 }
 //表格中删除按钮事件
 function delete_btn_event(td_obj){
-	var ids =[];
-	ids[0] = td_obj;
+	// var ids =[];
+	// ids[0] = td_obj;
 	$.ajax({
 		url:'/web/merchantinfo/delete',
 		type:'POST',
 		dataType : "json",
-		data:{'ids':ids},
+		data:{'ids':td_obj},
 		success:function(data){
 			console.log();
 			if(data.success)
@@ -579,6 +579,7 @@ $("#btn_addBankCard").click(function(){
 })
 //删除银行卡
 function removeBankCard(num){
+  console.log($('.remove-bankCardList'+num));
   $('.remove-bankCardList'+num).parent().remove();
 }
 //保存银行卡数据
