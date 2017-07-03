@@ -30,7 +30,32 @@ public class TradeDataDTO extends DTO {
     private String startSendTime;//条件查询 发送开始时间
     private String endSendTime;//条件查询 发送结束时间
     
+    private String txnType;
+    
     private String respCode;
+    
+    /**
+     * txnType
+     *
+     * @return  the txnType
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getTxnType() {
+        return txnType;
+    }
+
+    /**
+     * txnType
+     *
+     * @param   txnType    the txnType to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setTxnType(String txnType) {
+        this.txnType = txnType;
+    }
+
     /**
      * respCode
      *

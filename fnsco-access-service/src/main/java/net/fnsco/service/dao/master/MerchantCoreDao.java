@@ -100,4 +100,14 @@ public interface MerchantCoreDao {
      * @since  CodingExample　Ver 1.1
      */
     List<MerTerminalsDTO> queryMerTerminalsByUserId(@Param("userId") Integer userId);
+    /**
+     * 
+     * selectByInnerCode:(根据商户号查询商户信息)
+     *
+     * @param innerCode
+     * @return   MerchantCore    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    MerchantCore selectByInnerCode(@Param("innerCode") String innerCode);
 }

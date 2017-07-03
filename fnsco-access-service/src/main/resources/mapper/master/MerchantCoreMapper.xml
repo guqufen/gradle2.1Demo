@@ -36,7 +36,9 @@
      <result column="mer_name" property="merName" jdbcType="VARCHAR" />
      <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
      <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
-     <collection property="merBanks" column="inner_code" select="net.fnsco.service.dao.master.MerchantBankDao.queryByInnerCode"/>
+     <result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+     <result column="open_bank" property="openBank" jdbcType="VARCHAR" />
+     <result column="sub_bank_name" property="subBankName" jdbcType="VARCHAR" />
   </resultMap>
   <!-- APP商户列表实体结果集 -->
   <resultMap  id="CoreResultMap" type="net.fnsco.api.dto.MerChantCoreDTO">
@@ -574,7 +576,21 @@
   </select>
   <!-- APP根据ID查询详情信息 -->
   <select id="queryDetailById" parameterType="java.lang.Integer"  resultMap="DetailResultMap">
-     select id,mer_name,legal_person,card_num,inner_code  from m_merchant_core where id=#{merId}
+     SELECT 
+		CO.*,
+		BA.account_no,
+		BA.open_bank,
+		BA.sub_bank_name
+		FROM (SELECT
+			id,
+			mer_name,
+			legal_person,
+			card_num,
+			inner_code
+		FROM
+			m_merchant_core
+		WHERE
+			id = #{merId} ) CO LEFT JOIN m_merchant_bank BA ON CO.inner_code = BA.inner_code LIMIT 1 
   </select>
   <!-- APP根据用户ID查询设备列表 -->
   <select id="queryMerTerminalsByUserId" parameterType="java.lang.Integer" resultMap="TerminalResultMap">
@@ -592,4 +608,14 @@
 				) REL
 			LEFT JOIN m_merchant_core CO ON REL.inner_code = CO.inner_code WHERE CO.status=1
   </select>
+  
+   <select id="selectByInnerCode" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from m_merchant_core
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+    and status=1
+    limit 1
+  </select>
+  
 </mapper>

@@ -133,4 +133,40 @@ public class ServiceConstant {
             return "";
         }
     }
+
+    //交易类型1消费2撤销
+    public static enum TradeTypeEnum {
+                                      CONSUMER("1", "消费"), CANCEL("2", "撤销");
+        private String code;
+        private String name;
+
+        private TradeTypeEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        /**
+        * @return the code
+        */
+        public String getCode() {
+            return code;
+        }
+
+        /**
+        * @return the name
+        */
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(String code) {
+            for (TradeTypeEnum eopen : TradeTypeEnum.values()) {
+                if (eopen.code.equals(code)) {
+                    return eopen.name;
+                }
+            }
+            return "";
+        }
+    }
+
 }
