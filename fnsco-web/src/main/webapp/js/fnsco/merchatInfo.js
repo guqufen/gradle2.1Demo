@@ -204,6 +204,10 @@ function requestAgent(type){
 function  fileUp(num){
    var inno_code = $('#innerCode').val();
    if(!inno_code)return;
+   var num_type = num+'';
+   if(num_type.substr(num_type.length-2,num_type.length) == '_1'){
+	   num_type = num_type.substr(0,num_type.length-2);
+   }
  //文件上传
    $('#uploadify_file'+num).uploadify({
 	   //指定swf文件
@@ -225,7 +229,7 @@ function  fileUp(num){
        'multi': true,
        //参数
        'formData': {
-           'fileTypeKey':num,"innerCode":inno_code
+           'fileTypeKey':num_type,"innerCode":inno_code
        },
        'onUploadSuccess':function ( file, response, data) {
     	   var obj = eval('(' + response + ')');
