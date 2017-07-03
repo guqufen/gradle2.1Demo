@@ -93,6 +93,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setInnerCode(innerCode);
         tradeDataEntity.setCreateTime(new Date());
         tradeDataEntity.setRespCode(tradeData.getRespCode());
+        tradeDataEntity.setTxnType(tradeData.getTxnType());
         logger.error("保存交易流水信息" + JSON.toJSONString(tradeDataEntity));
         tradeListDAO.insert(tradeDataEntity);
         logger.warn("插入流水总耗时" + (System.currentTimeMillis() - timer));
