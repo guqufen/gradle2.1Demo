@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.appuser.ConmmService;
 import net.fnsco.api.constant.ApiConstant;
+import net.fnsco.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.api.dto.ProtocolDTO;
 import net.fnsco.api.dto.VersionDTO;
 
@@ -31,7 +32,9 @@ public class ConmmController extends BaseController {
     @ApiOperation(value = "版本更新")
     @ResponseBody
     public ResultDTO checkUpdate(@RequestBody VersionDTO sysVersionDTO) {
-        ResultDTO result = conmmService.checkUpdate(sysVersionDTO);
+        String appCode = AppTypeEnum.LKL.getCode();
+        sysVersionDTO.setAppCode(appCode);
+        ResultDTO result = conmmService.queryLastVersionInfo(sysVersionDTO);
         return result;
     }
 

@@ -28,85 +28,36 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
     @Autowired
     private VersionDao sysVersionDao;
 
-    @Override
-    public ResultDTO checkUpdate(VersionDTO sysVersionDTO) {
-
+    private ResultDTO validateVersion(VersionDTO sysVersionDTO) {
         String version = sysVersionDTO.getVersion();
         Integer appType = Integer.valueOf(sysVersionDTO.getAppType());
-        String appCode =ConstantEnum.AppTypeEnum.SQB.getCode();
+        String appCode = sysVersionDTO.getAppCode();
         //非空判断
         if (Strings.isNullOrEmpty(version)) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
-        } else if (appType == null) {
-            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
-        } else if (Strings.isNullOrEmpty(appCode)) {
-            return ResultDTO.fail("appcode为空");
         }
-
+        if (appType == null) {
+            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+        }
+        if (Strings.isNullOrEmpty(appCode)) {
+            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+        }
         //客户端版本号并转换为int
         String[] versionArr = StringUtils.split(version, ".");
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < versionArr.length; i++) {
-            sb.append(versionArr[i]); 
-        };
-        int userVersion=Integer.valueOf(sb.toString());
-        //判断版本格式
-        if (versionArr == null || versionArr.length != 3) {
-            logger.warn("版本号格式错误,version=" + version);
+        if (versionArr.length != 3) {
+            logger.error("版本号格式错误,version=" + version);
             return ResultDTO.fail(ApiConstant.E_EDITION_LOGIN);
         }
-        //查询出大于等于用户当前版本的
-        List<Version> list = sysVersionDao.selectByPrimaryKey(appCode, appType, version);
-        //当前版本为最新
-        if(list.size()==1){
-            return ResultDTO.success("无需更新");
-        }
-        String lastNew = "";
-        Version ver = new Version();
-        Map<String, Object> map = new HashMap<>();
-        int forceUpdate = 0;
-        //获取到最新的强制更新版本
-        for (Version temp : list) {
-            if (temp.getForceUpdate() == 1) {
-                lastNew = temp.getVersion();
-            }
-            ver = temp;
-        }
-        //获取到最新的不强制更新版本
-        if(lastNew ==""){
-            forceUpdate = 0;
-            map.put("forceUpdate", forceUpdate);
-            map.put("version", ver.getVersion());
-            map.put("remark", ver.getVersionDesc());
-            map.put("downloadUrl", ver.getDownloadUrl1());
-            map.put("downloadUrl2", ver.getDownloadUrl2());
-            return ResultDTO.success(map);
-        }
-        //数据库最新强制更新的版本并转换为int
-        String[] versionArrLast = StringUtils.split(lastNew, ".");
-        StringBuffer sc = new StringBuffer();
-        for (int i = 0; i < versionArrLast.length; i++) {
-            sc.append(versionArrLast[i]); 
-        };
-        int lastVersion=Integer.valueOf(sc.toString());
-        //获取最后一个强制更新的版本  如果比该版本小  则强制更新   
-       
-        //1强制更新       0不强制更新
-        if(userVersion<lastVersion){
-            forceUpdate=1;
-        }
-        map.put("forceUpdate", forceUpdate);
-        map.put("version", ver.getVersion());
-        map.put("remark", ver.getVersionDesc());
-        map.put("downloadUrl", ver.getDownloadUrl1());
-        map.put("downloadUrl2", ver.getDownloadUrl2());
-        return ResultDTO.success( map);
+        return ResultDTO.success();
     }
 
     @Override
-    public VersionResultDTO queryVersionInfo(VersionDTO sysVersionDTO) {
+    public ResultDTO queryLastVersionInfo(VersionDTO sysVersionDTO) {
+        ResultDTO valResult = validateVersion(sysVersionDTO);
+        if (!valResult.isSuccess()) {
+            return valResult;
+        }
         List<Version> list = sysVersionDao.selectByPrimaryKey(sysVersionDTO.getAppCode(), sysVersionDTO.getAppType(), sysVersionDTO.getVersion());
-        //便利list集合
         int flag = 0;
         Version ver = new Version();
         for (Version temp : list) {
@@ -116,21 +67,23 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
             ver = temp;
         }
 
-        ver.setForceUpdate(flag);
         VersionResultDTO result = new VersionResultDTO();
         result.setDownloadUrl1(ver.getDownloadUrl1());
+        result.setDownloadUrl2(ver.getDownloadUrl2());
         result.setForceUpdate(String.valueOf(flag));
         Boolean isUpdate = false;
-        if (sysVersionDTO.getVersion().equals(ver.getVersion())) {
-            isUpdate = false;
-        } else {
+        int lastVersion = Integer.valueOf(ver.getVersion().replaceAll("\\.", ""));
+        int curressVersion = Integer.valueOf(sysVersionDTO.getVersion().replaceAll("\\.", ""));
+        if (curressVersion < lastVersion) {
             isUpdate = true;
+        } else {
+            isUpdate = false;
         }
         result.setIsUpdate(isUpdate);
         result.setVersion(ver.getVersion());
         result.setRemark(ver.getRemark());
         result.setVersionDesc(ver.getVersionDesc());
-        return result;
+        return ResultDTO.success(result);
     }
 
     //获取用户协议

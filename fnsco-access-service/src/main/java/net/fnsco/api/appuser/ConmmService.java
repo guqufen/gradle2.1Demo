@@ -6,9 +6,8 @@ import net.fnsco.api.dto.VersionResultDTO;
 import net.fnsco.core.base.ResultDTO;
 
 public interface ConmmService {
-    //版本更新  
-    ResultDTO checkUpdate(VersionDTO sysVersionDTO);
-    VersionResultDTO queryVersionInfo(VersionDTO sysVersionDTO);
+    //获取最新版本信息  
+    ResultDTO queryLastVersionInfo(VersionDTO sysVersionDTO);
     //获取用户协议
     ResultDTO getProtocol(ProtocolDTO protocolDTO);
 }

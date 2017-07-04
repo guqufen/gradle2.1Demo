@@ -19,7 +19,7 @@ public class ApiConstant extends CoreConstants {
     public static String E_USER_ID_NULL            = "5024";                            //用户ID不能为空
     public static String E_MERCHANT_CODE_NOT_EXIST = "5025";                            //此商铺码不存在，请重新输入
     public static String E_MERCHANT_CODE_OVERDUE   = "5026";
-    public static String E_MERCHANT_EXIST_REF      = "5027";                            //已关联此商铺，请勿重复关联
+    public static String E_MERCHANT_ALREADY_REF      = "5027";                            //已关联此商铺，请勿重复关联
 
     public static String E_APP_PHONE_EMPTY         = "5011";                            //非法请求,没有手机号
     public static String E_APP_PHONE_ERROR         = "5012";                            //非法请求,手机号不正确
@@ -59,7 +59,7 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_USER_ID_NULL, "用户ID不能为空");
         ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NOT_EXIST, "此商铺码不存在，请重新输入");
         ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_OVERDUE, "此商铺码已过期，请到pos机查询最新的商铺码");
-        ERROR_MESSGE_MAP.put(E_MERCHANT_EXIST_REF, "已关联此商铺，请勿重复关联");
+        ERROR_MESSGE_MAP.put(E_MERCHANT_ALREADY_REF, "已关联此商铺，请勿重复关联");
         //APP
         ERROR_MESSGE_MAP.put(E_USERID_NULL, "入参ID为null");
         ERROR_MESSGE_MAP.put(E_UPDATE_FAIL, "更新失败");
