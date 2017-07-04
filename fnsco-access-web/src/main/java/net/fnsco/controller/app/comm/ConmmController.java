@@ -32,7 +32,7 @@ public class ConmmController extends BaseController {
     @ApiOperation(value = "版本更新")
     @ResponseBody
     public ResultDTO checkUpdate(@RequestBody VersionDTO sysVersionDTO) {
-        String appCode = AppTypeEnum.LKL.getCode();
+        String appCode = AppTypeEnum.SQB.getCode();
         sysVersionDTO.setAppCode(appCode);
         ResultDTO result = conmmService.queryLastVersionInfo(sysVersionDTO);
         return result;
