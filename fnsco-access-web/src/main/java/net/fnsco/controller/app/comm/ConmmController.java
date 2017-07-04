@@ -47,7 +47,7 @@ public class ConmmController extends BaseController {
     @ApiOperation(value = "发现页面")
     @ResponseBody
     public ResultDTO discovery(@RequestBody DiscoveryJO discoveryJO) {
-        // 1.安卓  2.IOS
+        // 1.安卓  2.IOS            version版本号 1.0.0
         if (discoveryJO.getDeviceType() == 2) {
             return success(env.getProperty(ApiConstant.THIS_IOS_URL));
         }
