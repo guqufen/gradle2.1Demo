@@ -134,9 +134,11 @@ table a.remove,table a.redact,table a.details{
 /*增加商户弹框修改*/
 .fileImgName{
 	padding: 5px 15px;
-    background: #f4f4f4;
-    border-radius: 3px;
-    margin-right: 10px;
+	background: #f4f4f4;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	overflow: hidden;
+	display: block;
 }
 .previewfileImg{
 	padding: 5px;
