@@ -143,7 +143,7 @@ public class FileInfoController extends BaseController{
 	@RequestMapping("/getImagePath")
 	@ResponseBody
 	public String getImagePath(String url){
-	    if(Strings.isNullOrEmpty(url)){
+	    if(!Strings.isNullOrEmpty(url)){
 	        String path = url.substring(url.indexOf("^")+1);
 	        return OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
 	    }
