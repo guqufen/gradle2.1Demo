@@ -313,6 +313,9 @@
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="agentId != null" >
+        agent_id = #{agentId,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -337,7 +340,8 @@
       source = #{source,jdbcType=INTEGER},
       modify_user_id = #{modifyUserId,jdbcType=VARCHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=INTEGER}
+      status = #{status,jdbcType=INTEGER},
+      agent_id = #{agentId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!-- 条件分页查询 -->

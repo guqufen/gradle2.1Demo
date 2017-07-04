@@ -57,7 +57,7 @@ public class CommonController extends BaseController {
         sysVersionDTO.setAppType(type);
         sysVersionDTO.setVersion(version);
         sysVersionDTO.setAppCode(appCode);
-        VersionResultDTO resultDTO = versionService.queryVersionInfo(sysVersionDTO);
-        return ResultDTO.success(resultDTO);
+        ResultDTO resultDTO = versionService.queryLastVersionInfo(sysVersionDTO);
+        return resultDTO;
     }
 }
