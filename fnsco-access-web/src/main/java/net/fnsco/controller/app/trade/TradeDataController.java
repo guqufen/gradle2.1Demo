@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import io.swagger.annotations.ApiOperation;
@@ -82,21 +83,32 @@ public class TradeDataController extends BaseController {
     @ApiOperation(value = "查询交易流水")
     public ResultDTO information(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
         TradeData tradeData = tradeDataService.queryByTradeId(tradeQueryDTO.getTradeId());
-        MerchantCore merchantCore =merchantCoreService.queryByInnerCode(tradeData.getInnerCode());
+        MerchantCore merchantCore = merchantCoreService.queryByInnerCode(tradeData.getInnerCode());
         TradeDataJO result = new TradeDataJO();
-        result.setAmount(tradeData.getAmt());
+        String amount = tradeData.getAmt();
+        if (!Strings.isNullOrEmpty(amount)) {
+            if(amount.length()==1){
+                amount="00"+amount;
+            }else if(amount.length()==2){
+                amount="0"+amount;
+            }
+            String temp1 = amount.substring(0, amount.length() - 2);
+            String temp2 = amount.substring(amount.length() - 2, amount.length());
+            result.setAmount(temp1 + "." + temp2);
+        }
+
         result.setPayType(tradeData.getPaySubType());
         result.setPayTypeName(PaySubTypeEnum.getNameByCode(result.getPayType()));
         result.setStatus(tradeData.getRespCode());
         result.setStatusName(TradeStateEnum.getNameByCode(result.getStatus()));
         result.setId(tradeData.getId());
         result.setTradeTime(tradeData.getTimeStamp());
-        
+
         result.setMerName(merchantCore.getMerName());
         result.setInnerCode(tradeData.getInnerCode());
         result.setTradeType(tradeData.getTxnType());
         result.setTradeTypeName(TradeTypeEnum.getNameByCode(result.getTradeType()));
-        
+
         result.setBatchNo(tradeData.getBatchNo());
         result.setTermId(tradeData.getTermId());
         result.setTraceNo(tradeData.getTraceNo());

@@ -418,7 +418,7 @@
 		                    </div>
 		                    <div role="tabpanel" class="tab-pane" id="profile1">
 		                    <a class="editBtn_edit btn btn-default"><span class="glyphicon glyphicon-pencil"></span>编辑</a>
-		                    <a class="editBtn_save btn btn-success" id="editBtn_profile"><span class="glyphicon glyphicon-book"></span>保存</a>
+		                    <a class="editBtn_save btn btn-success" id="editBtn_profile" onclick="saveFile()"><span class="glyphicon glyphicon-book"></span>保存</a>
 		                    <table class="table table-bordered">
 		                      	<thead>
 		                          	<th style="width: 30%">材料名称</th>
@@ -580,10 +580,6 @@
 		            </div>
 		            <input type="hidden" id="innerCode" name="innerCode">
 		            <input type="hidden" id="fileIds" name="fileIds">
-		            <!-- <div class="modal-footer">
-		                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		                <button type="button" class="btn btn-primary">Save changes</button>
-		            </div> -->
 		        </div>
 		    </div>
 		</div>
@@ -592,9 +588,8 @@
     </div> 
     
 </div>
-<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<!-- <script src="js/content.min.js"></script> -->
+<script src="js/bootstrap/jquery.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
@@ -604,7 +599,7 @@
 <script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
 <script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
-<script src="http://www.dowebok.com/demo/192/js/viewer.min.js"></script>
+<script src="js/viewer/viewer.min.js"></script>
 <script type="text/javascript" src="js/fnsco/merchatInfo.js"></script>
 </body>
 </html>

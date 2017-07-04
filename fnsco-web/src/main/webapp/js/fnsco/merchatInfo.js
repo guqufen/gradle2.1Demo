@@ -295,7 +295,7 @@ function  fileUp(num){
 			   var fileName = file.name.replace(',','');
        		$('#view'+num).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
 						"<a class='previewfileImg' id='previewfileImg"+obj.id+"' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
-						"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"',"+num+")><span class='glyphicon glyphicon-trash'></span>删除</a>" + "</div>");
+						"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"','"+num+"')><span class='glyphicon glyphicon-trash'></span>删除</a>" + "</div>");
        		//预览图片
        		var aId='previewfileImg'+obj.id;
     			var viewer = new Viewer(document.getElementById(aId), {
@@ -303,16 +303,12 @@ function  fileUp(num){
     				navbar: false,
     				toolbar: false
     			});
-
     	   	$('#uploadify_file'+num).hide();
     	   	$('#fileQueue'+num).html('');
     	   	var fileIds = $('#fileIds').val();
-    	   	if(fileIds)
-    	   	{
+    	   	if(fileIds){
     	   		$('#fileIds').val(fileIds+','+obj.id);
-    	   	}
-    	   	else
-    	   	{
+    	   	}else{
     	   		$('#fileIds').val(obj.id);
     	   	}	
         },
@@ -322,45 +318,76 @@ function  fileUp(num){
     		}
    });
 }
-  //上传图片删除图片事件
-  function deleteImage(queueId,id,url,num)
-  {
-     $.ajax({
-  	   url:'/web/fileInfo/delete',
-  	   data:{'id':id,'url':url},
-  	   type:'POST',
-  	   success:function(data){
-  		   if(data)
-  		   {
-  			   $('#file'+num).remove();
-  			   alert('删除成功');
-  			   $(queueId).parent().parent().parent().next().find('.uploadify').show();
-  			   $(queueId).parent().parent().html('');
-  		   }	   
-  	   }
-     });
-  }
+//手动触发文件上传方法
+function clickFileBtn(){
+   fileUp('1100_1');
+   fileUp('1101_1');
+   fileUp('1190_1');
+   fileUp('1_1');
+   fileUp('2_1');
+   fileUp('300_1');
+   fileUp('301_1');
+   fileUp('4_1');
+   fileUp('6_1');
+   fileUp('7_1');
+   fileUp('8_1');
+   fileUp('900_1');
+   fileUp('901_1');
+   fileUp('902_1');
+   fileUp('10_1');
+}
+//上传图片删除图片事件
+function deleteImage(queueId,id,url,num)
+{
+    var num_type = num+'';
+    if(num_type.substr(num_type.length-2,num_type.length) == '_1'){
+      num_type = num_type.substr(0,num_type.length-2);
+    }
+   $.ajax({
+	   url:'/web/fileInfo/delete',
+	   data:{'id':id,'url':url},
+	   type:'POST',
+	   success:function(data){
+		   if(data)
+		   {
+			   $('#file'+num).remove();
+			   alert('删除成功');
+			   $(queueId).parent().parent().parent().next().find('.uploadify').show();
+			   $(queueId).parent().parent().html('');
+		   }	   
+	   }
+   });
+}
 
-// //保存表格数据
-// $('#save_btn').click(function(){
-//    $.ajax({
-// 	   url:'/web/merchantinfo/toAdd',
-// 	   data: $('#merchant_form').serialize(),
-// 	   type:'POST',
-// 	   success:function(data){
-// 		   if(data.success)
-// 		   {
-// 			   alert('保存成功');
-// 			   $('#myModal').hide();
-// 			   queryEvent();
-// 		   }	
-// 		   else{
-// 			   alert('保存失败');
-// 		   }
-// 	   }
-//    });
-// });
+//保存商户基本信息下一步按钮
+function saveMerCore(){
+  $.ajax({
+      url:'/web/merchantinfo/toAddCore',
+      data: $('#mercore_form').serialize(),
+      type:'POST',
+      success:function(data){
+        if(data.success){
+           alert('保存成功');
+           return true;
+        }else{
+           alert('保存失败');
+        }
+      }
+  });
+}
 
+//保存文件信息
+function saveFile(){
+  var file_ids = $('#fileIds').val();
+  console.log(file_ids);
+  $.ajax({
+    url:'/web/fileInfo/savefiles',
+    data:{'fileIds':file_ids},
+    success:function(){
+      alert("保存成功");
+    }
+  });
+}
 
 //弹框下一步按钮事件
 $(".nextBtn").click(function(){
@@ -784,7 +811,7 @@ function editData(id){
             var id=data.data.files[i].id;
             console.log(fileName,fileType,filePath,id);
             //重置
-            $('#view'+fileType+'_1').append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
+            $('#view'+fileType+'_1').append("<div style='float:left;width:99%'><span class='fileImgName' imgFileId="+id+">"+fileName+"</span>" +
                     "<a class='previewfileImg' id='previewfileImg"+id+"_1' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
                     "<a title='删除' class='deletefileImg' style='display:none' id='deletefileImg"+id+"' href=javascript:deleteImage('#deletefileImg"+id+"',"+id+",'"+filePath+"',"+fileType+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" + "</div>");
             $(".uploadify").hide();
@@ -947,7 +974,7 @@ function editData(id){
   });
 }
 
-//修改商户——添加联系信息
+//添加联系信息——修改商户
 var editContactList=1;
 $("#btn_addContact1").click(function(){
     editContactList=editContactList+1;
@@ -960,7 +987,7 @@ $("#btn_addContact1").click(function(){
     
 
 
-//修改商户——添加终端信息
+//添加终端信息——修改商户
 var editTerminalList=10;
 $("#btn_addTerminal1").click(function(){
     editTerminalList=editTerminalList+1;
@@ -973,7 +1000,7 @@ $("#btn_addTerminal1").click(function(){
 
 
 
-//修改商户——添加渠道信息
+//添加渠道信息——修改商户
 var editChannelList=20;
 $("#btn_addChannel1").click(function(){
     editChannelList=editChannelList+1;
@@ -985,7 +1012,7 @@ $("#btn_addChannel1").click(function(){
   });
 
 
-//修改商户——添加银行卡信息
+//添加银行卡信息——修改商户
 var editBankCardList=30;
 $("#btn_addBankCard1").click(function(){
     editBankCardList=editBankCardList+1;
@@ -997,50 +1024,4 @@ $("#btn_addBankCard1").click(function(){
   });
 
 
-//保存商户基本信息下一步按钮
-function saveMerCore(){
-	$.ajax({
-		   url:'/web/merchantinfo/toAddCore',
-		   data: $('#mercore_form').serialize(),
-		   type:'POST',
-		   success:function(data){
-			   if(data.success)
-			   {
-				   alert('保存成功');
-				   return true;
-			   }	
-			   else{
-				   alert('保存失败');
-			   }
-		   }
-	   });
-}
-//保存文件信息
-function saveFile(){
-	var file_ids = $('#fileIds').val();
-	$.ajax({
-		url:'/web/fileInfo/savefiles',
-		data:{'fileIds':file_ids},
-		success:function(){
-			
-		}
-	});
-}
-//手动触发文件上传方法
-function clickFileBtn(){
-	 fileUp('1100_1');
-	 fileUp('1101_1');
-	 fileUp('1190_1');
-	 fileUp('1_1');
-	 fileUp('2_1');
-	 fileUp('300_1');
-	 fileUp('301_1');
-	 fileUp('4_1');
-	 fileUp('6_1');
-	 fileUp('7_1');
-	 fileUp('8_1');
-	 fileUp('900_1');
-	 fileUp('901_1');
-	 fileUp('902_1');
-	 fileUp('10_1');
-}
+
