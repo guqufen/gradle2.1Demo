@@ -134,20 +134,24 @@ table a.remove,table a.redact,table a.details{
 /*增加商户弹框修改*/
 .fileImgName{
 	padding: 5px 15px;
-	background: #f4f4f4;
-	border-radius: 3px;
-	margin-bottom: 10px;
-	overflow: hidden;
-	display: block;
+    background: #f4f4f4;
+    border-radius: 3px;
+    float: left;
+    margin-right: 5px;
+    width: 160px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .previewfileImg{
 	padding: 5px;
-    background: #428bca;
-    color: #fff;
-    border-radius: 3px;
-    margin: 0 3px;
-    position: relative;
-    font-size: 12px;
+	background: #428bca;
+	color: #fff;
+	border-radius: 3px;
+	/* margin: 0 3px; */
+	position: relative;
+	font-size: 12px;
+	display: inline-block;
 }
 .previewfileImg img{
 	position: absolute;
@@ -162,10 +166,12 @@ table a.remove,table a.redact,table a.details{
 }
 .deletefileImg{
 	padding: 5px;
-    background: #ed5565;
-    color: #fff;
-    border-radius: 3px;
-    font-size: 12px;
+	background: #ed5565;
+	color: #fff;
+	border-radius: 3px;
+	font-size: 12px;
+	display: inline-block;
+	margin: 0 3px;
 }
 .previewfileImg span,.deletefileImg span{
 	margin-right: 3px;

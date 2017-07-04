@@ -404,16 +404,19 @@ function deleteImage(queueId,id,url,num){
 }
 //查看图片
 function seeImage(fileName,divId){
-  console.log($('.modal-dialog').css('marginLeft'));
-  console.log($('.modal-dialog').css('marginTop'));
-  var viewerLeft=($(".modal-backdrop").width()-$(".modal-dialog").width())/2;
-  var viewerTop=$('.modal-dialog').css('marginTop');
-  console.log(viewerLeft);
-  console.log(viewerTop);
-  $(".viewer-container").width($(".modal-backdrop").width());
-  $(".viewer-container").css('left','-'+viewerLeft+'px');
-  $(".viewer-container").css('top','-'+viewerTop);
-  $(".viewer-container").height($(".modal-backdrop").height());
+  changeViewerSize();
+  function changeViewerSize(){
+    var viewerLeft=($(".modal-backdrop").width()-$(".modal-dialog").width())/2;
+    var viewerTop=$('.modal-dialog').css('marginTop');
+    $(".viewer-container").width($(".modal-backdrop").width());
+    $(".viewer-container").css('left','-'+viewerLeft+'px');
+    $(".viewer-container").css('top','-'+viewerTop);
+    $(".viewer-container").height($(".modal-backdrop").height());
+  }
+  //改变窗口响应事件
+  window.onresize=function(){ 
+    changeViewerSize();  
+  }  
 	$.ajax({
 	      url:'/web/fileInfo/getImagePath',
 	      data: {'url':fileName},
