@@ -34,6 +34,30 @@ public class TradeDataDTO extends DTO {
     
     private String respCode;
     
+    private String cardNo;
+    
+    /**
+     * cardNo
+     *
+     * @return  the cardNo
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    /**
+     * cardNo
+     *
+     * @param   cardNo    the cardNo to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
+    }
+
     /**
      * txnType
      *
