@@ -95,6 +95,10 @@ public class TradeDataController extends BaseController {
     @ApiOperation(value = "查询交易流水")
     public ResultDTO information(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
         TradeData tradeData = tradeDataService.queryByTradeId(tradeQueryDTO.getTradeId());
+        if(null == tradeData){
+            TradeDataJO result = new TradeDataJO();
+            return ResultDTO.success(result);
+        }
         MerchantCore merchantCore = merchantCoreService.queryByInnerCode(tradeData.getInnerCode());
         TradeDataJO result = new TradeDataJO();
         result.setAmount(getAtm(tradeData.getAmt()));
@@ -114,6 +118,7 @@ public class TradeDataController extends BaseController {
         result.setTermId(tradeData.getTermId());
         result.setTraceNo(tradeData.getTraceNo());
         result.setReferNo(tradeData.getReferNo());
+        result.setCertifyId(tradeData.getCertifyId());
         return ResultDTO.success(result);
     }
 

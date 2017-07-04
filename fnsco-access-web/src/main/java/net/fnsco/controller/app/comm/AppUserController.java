@@ -51,7 +51,7 @@ public class AppUserController extends BaseController {
     public ResultDTO<String> modifyPassword(@RequestBody AppUserDTO appUserDTO) {
         ResultDTO<String> result = new ResultDTO<>();
         result = appUserService.modifyPassword(appUserDTO);
-        return result;
+         return result;
     }
 
     //根据手机号码找回密码

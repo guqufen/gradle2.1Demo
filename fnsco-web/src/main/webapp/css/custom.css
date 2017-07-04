@@ -11,8 +11,10 @@ table a.remove{
 table a.redact{
 	color:#428bca;
 }
-
-table a.remove,table a.redact{
+table a.details{
+	color:#428bca;
+}
+table a.remove,table a.redact,table a.details{
 	padding: 5px 10px;
     border-radius: 3px;
 }
