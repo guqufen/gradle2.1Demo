@@ -45,7 +45,8 @@ function initTableData(){
             title: '法人联系电话'
         }, {
             field: 'legalValidCardType',
-            title: '法人有效证件类型'
+            title: '法人有效证件类型',
+            formatter: judgeCardType
         }, {
             field: 'cardNum',
             title: '证件号码'
@@ -85,6 +86,20 @@ function formatSource(value, row, index){
   }else{
     return '其他';
   } 
+}
+//判断法人证件类型
+function judgeCardType(value, row, index){
+  if(value == '0'){
+    return '身份证';
+  }else if(value == '1'){
+    return '护照';
+  }else if(value == '2'){
+    return '士兵证';
+  }else if(value == '3'){
+    return '军官证';
+  }else if(value == '4'){
+    return '港澳台通行证';
+  }
 }
 //组装请求参数
 function queryParams(params)
@@ -484,6 +499,8 @@ function contactHtml(num){
   		var listLen=$("#"+conId+" .contact-list").length;
       var contactArr=new Array();
       var concatContactArr;
+      console.log(contactArr);
+      console.log(concatContactArr);
       for (var i=0;i<listLen;i++){
         var contactName=$("#"+conId+" .contact-list").eq(i).find($('.contactName')).val();
         var contactMobile=$("#"+conId+" .contact-list").eq(i).find($('.contactMobile')).val();
@@ -491,7 +508,7 @@ function contactHtml(num){
         var contactTelphone=$("#"+conId+" .contact-list").eq(i).find($('.contactTelphone')).val();
         var contactJobs=$("#"+conId+" .contact-list").eq(i).find($('.contactJobs')).val();
         var innerCode = $('#innerCode').val();
-        var id=$("#"+conId+" .contact-list").eq(i).find($('.remove-icon')).attr('editid');
+        var id=$("#terminal-con1 .contact-list").eq(i).find($('.remove-icon')).attr('editId');
         if(!innerCode){
           layer.msg('操作错误!');return ;
         }
@@ -502,7 +519,7 @@ function contactHtml(num){
         }
         contactArr=contactArr.concat(concatContactArr);
       }
-      
+      console.log(contactArr);
   		$.ajax({
   			url:'/web/merchantinfo/toAddContact',
   			dataType:"json", 
@@ -995,6 +1012,7 @@ function editData(id){
             var registAddress = $('input[name="registAddress1"]').val();
             var mercFlag = $('input[name="mercFlag1"]').val();
             var agentId = $('#agentId1').val();
+            
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,
             		'legalPersonTel':legalPersonTel,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
             		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId};
