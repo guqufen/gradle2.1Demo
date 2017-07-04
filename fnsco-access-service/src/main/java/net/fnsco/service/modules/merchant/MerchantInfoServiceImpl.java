@@ -7,12 +7,13 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.FileUtils;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.service.dao.master.MerchantFileDao;
 import net.fnsco.service.dao.master.MerchantFileTempDao;
 import net.fnsco.service.domain.MerchantFileTemp;
@@ -30,8 +31,8 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 	@Autowired
 	private MerchantFileDao merChantFileDao;
 	
-	@Autowired
-	private Environment env;
+//	@Autowired
+//	private Environment env;
 	
 	/**
 	 * @todo 录入文件信息入库
@@ -80,15 +81,22 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 	 * @date 2017年6月27日 下午5:12:40
 	 * @see net.fnsco.api.merchant.MerchantInfoService#deleteFromDB(java.lang.Integer)
 	 */
+	@Transactional
 	@Override
 	public boolean deleteFromDB(Integer id,String url) {
 		// TODO Auto-generated method stub
 		if(!StringUtils.isEmpty(url))
 		{
-			String stry = this.env.getProperty("fileUpload.url");
-			url = StringUtils.replace(url, "^", "/");
-			String filePath = stry+"/"+url;
-			FileUtils.delFile(filePath);
+			String fileKey = url.substring(url.lastIndexOf("^")+1);
+			String nativeFile = url.substring(0, url.indexOf("^"));
+			if(FileUtils.ifExist(nativeFile)){
+			    FileUtils.delFile(nativeFile);
+			}
+			/**
+			 * 删除OSS上图片
+			 * 
+			 */
+			OssUtil.deleteFile(OssUtil.getHeadBucketName(), fileKey);
 		}	
 		int res = merChantFileDao.deleteByPrimaryKey(id);
 		int re =  merchantFileInfoDao.deleteByPrimaryKey(id);
