@@ -41,7 +41,14 @@ import com.aliyun.oss.model.GeneratePresignedUrlRequest;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.OSSObjectSummary;
 import com.aliyun.oss.model.ObjectListing;
-
+/**
+ * @desc 文件上传OSS云服务器
+ * @author   tangliang
+ * @version  0.0.1-SNAPSHOT
+ * @since    Ver 1.1
+ * @Date	 2017年7月4日 下午3:31:10
+ *
+ */
 public class OssUtil {
     static Logger            logger          = LoggerFactory.getLogger(OssUtil.class);
 
@@ -197,19 +204,10 @@ public class OssUtil {
      * @since  CodingExample　Ver 1.1
      */
     public static String getFileUrl(String bucketName,String fileKey) {
-//        String endpoint = "<endpoint, 例如http://oss-cn-hangzhou.aliyuncs.com>";
-//        String accessKeyId = "<accessKeyId>";
-//        String accessKeySecret = "<accessKeySecret>";
-//        String bucketName = "<bucketName>";
-//        String key = "example.jpg";
-//        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-        // 图片处理样式
-//        String style = "image/resize,m_fixed,w_100,h_100/rotate,90";
         // 过期时间8小时
         Date expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 8);
         GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, fileKey, HttpMethod.GET);
         req.setExpiration(expiration);
-        //req.setProcess(style);
         URL signedUrl = ossClient.generatePresignedUrl(req);
         logger.info("获取图片地址" + signedUrl.toString());
         return signedUrl.toString();
