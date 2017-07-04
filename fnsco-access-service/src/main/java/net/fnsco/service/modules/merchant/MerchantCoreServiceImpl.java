@@ -425,29 +425,29 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
     @Override
     public ResultDTO<Integer> deleteByContact(Integer id) {
-        
-        if(null == id){
+
+        if (null == id) {
             return ResultDTO.fail();
         }
         merchantContactDao.deleteByPrimaryKey(id);
         return ResultDTO.success(id);
-        
+
     }
 
     @Override
     public ResultDTO<Integer> deleteByTerminal(Integer id) {
-        
-        if(null == id){
+
+        if (null == id) {
             return ResultDTO.fail();
         }
         merchantTerminalDao.deleteByPrimaryKey(id);
         return ResultDTO.success(id);
-        
+
     }
 
     @Override
     public ResultDTO<Integer> deleteByChanel(Integer id) {
-        if(null == id){
+        if (null == id) {
             return ResultDTO.fail();
         }
         merchantChannelDao.deleteByPrimaryKey(id);
@@ -456,12 +456,17 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
     @Override
     public ResultDTO<Integer> deleteByBank(Integer id) {
-        if(null == id){
+        if (null == id) {
             return ResultDTO.fail();
         }
         merchantBankDao.deleteByPrimaryKey(id);
         return ResultDTO.success(id);
-        
+
     }
 
+    @Override
+    public MerchantCore queryByInnerCode(String innerCode) {
+        MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
+        return merchantCore;
+    }
 }

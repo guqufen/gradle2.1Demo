@@ -3,56 +3,139 @@ package net.fnsco.controller.app.jo;
 import net.fnsco.core.base.JO;
 
 public class TradeDataJO extends JO {
-    private String userId;    //登录用户Id
-    private String innerCode; // 内部商务号
-    private String startDate; // 开始日期 2016-5-10
-    private String endDate;   //结束日期 2016-5-10
-    private String pageNum;   //分页的页码
-    private String terminals; //终端号数组，所有选择的终端
-    private String tradeId;   //交易流水ID
+    private String id;           //交易记录ID
+    private String amount;       //交易金额
+    private String tradeTime;    //交易时间
+    private String status;       //交易状态（1成功 2失败）
+    private String statusName;
+    private String payType;
+    private String payTypeName;
+
+    //交易详情
+    private String innerCode;
+    //商户名
+    private String merName;
+    //交易类型1消费2撤销
+    private String tradeType;
+    //交易类型1消费2撤销
+    private String tradeTypeName;
+    //终端号
+    private String termId;
+    //批次号
+    private String batchNo;
+    //凭证号
+    private String traceNo;
+    //参数考
+    private String referNo;
 
     /**
-     * tradeId
+     * traceNo
      *
-     * @return  the tradeId
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public String getTradeId() {
-        return tradeId;
-    }
-
-    /**
-     * tradeId
-     *
-     * @param   tradeId    the tradeId to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setTradeId(String tradeId) {
-        this.tradeId = tradeId;
-    }
-
-    /**
-     * userId
-     *
-     * @return  the userId
+     * @return  the traceNo
      * @since   CodingExample Ver 1.0
     */
 
-    public String getUserId() {
-        return userId;
+    public String getTraceNo() {
+        return traceNo;
     }
 
     /**
-     * userId
+     * traceNo
      *
-     * @param   userId    the userId to set
+     * @param   traceNo    the traceNo to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setTraceNo(String traceNo) {
+        this.traceNo = traceNo;
+    }
+
+    /**
+     * referNo
+     *
+     * @return  the referNo
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getReferNo() {
+        return referNo;
+    }
+
+    /**
+     * referNo
+     *
+     * @param   referNo    the referNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setReferNo(String referNo) {
+        this.referNo = referNo;
+    }
+
+    /**
+     * tradeTypeName
+     *
+     * @return  the tradeTypeName
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getTradeTypeName() {
+        return tradeTypeName;
+    }
+
+    /**
+     * tradeTypeName
+     *
+     * @param   tradeTypeName    the tradeTypeName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setTradeTypeName(String tradeTypeName) {
+        this.tradeTypeName = tradeTypeName;
+    }
+
+    /**
+     * termId
+     *
+     * @return  the termId
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getTermId() {
+        return termId;
+    }
+
+    /**
+     * termId
+     *
+     * @param   termId    the termId to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setTermId(String termId) {
+        this.termId = termId;
+    }
+
+    /**
+     * batchNo
+     *
+     * @return  the batchNo
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    /**
+     * batchNo
+     *
+     * @param   batchNo    the batchNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
     }
 
     /**
@@ -78,91 +161,201 @@ public class TradeDataJO extends JO {
     }
 
     /**
-     * startDate
+     * merName
      *
-     * @return  the startDate
+     * @return  the merName
      * @since   CodingExample Ver 1.0
     */
 
-    public String getStartDate() {
-        return startDate;
+    public String getMerName() {
+        return merName;
     }
 
     /**
-     * startDate
+     * merName
      *
-     * @param   startDate    the startDate to set
+     * @param   merName    the merName to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setMerName(String merName) {
+        this.merName = merName;
     }
 
     /**
-     * endDate
+     * tradeType
      *
-     * @return  the endDate
+     * @return  the tradeType
      * @since   CodingExample Ver 1.0
     */
 
-    public String getEndDate() {
-        return endDate;
+    public String getTradeType() {
+        return tradeType;
     }
 
     /**
-     * endDate
+     * tradeType
      *
-     * @param   endDate    the endDate to set
+     * @param   tradeType    the tradeType to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public void setTradeType(String tradeType) {
+        this.tradeType = tradeType;
     }
 
     /**
-     * pageNum
+     * id
      *
-     * @return  the pageNum
+     * @return  the id
      * @since   CodingExample Ver 1.0
     */
 
-    public String getPageNum() {
-        return pageNum;
+    public String getId() {
+        return id;
     }
 
     /**
-     * pageNum
+     * id
      *
-     * @param   pageNum    the pageNum to set
+     * @param   id    the id to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setPageNum(String pageNum) {
-        this.pageNum = pageNum;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
-     * terminals
+     * tradeTime
      *
-     * @return  the terminals
+     * @return  the tradeTime
      * @since   CodingExample Ver 1.0
     */
 
-    public String getTerminals() {
-        return terminals;
+    public String getTradeTime() {
+        return tradeTime;
     }
 
     /**
-     * terminals
+     * tradeTime
      *
-     * @param   terminals    the terminals to set
+     * @param   tradeTime    the tradeTime to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setTerminals(String terminals) {
-        this.terminals = terminals;
+    public void setTradeTime(String tradeTime) {
+        this.tradeTime = tradeTime;
+    }
+
+    /**
+     * amount
+     *
+     * @return  the amount
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getAmount() {
+        return amount;
+    }
+
+    /**
+     * amount
+     *
+     * @param   amount    the amount to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    /**
+     * statusName
+     *
+     * @return  the statusName
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    /**
+     * statusName
+     *
+     * @param   statusName    the statusName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    /**
+     * payType
+     *
+     * @return  the payType
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getPayType() {
+        return payType;
+    }
+
+    /**
+     * payType
+     *
+     * @param   payType    the payType to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
+    /**
+     * status
+     *
+     * @return  the status
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * status
+     *
+     * @param   status    the status to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    /**
+     * payTypeName
+     *
+     * @return  the payTypeName
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getPayTypeName() {
+        return payTypeName;
+    }
+
+    /**
+     * payTypeName
+     *
+     * @param   payTypeName    the payTypeName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPayTypeName(String payTypeName) {
+        this.payTypeName = payTypeName;
     }
 
 }

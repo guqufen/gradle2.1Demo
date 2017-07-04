@@ -88,7 +88,9 @@ public class TradeData {
 
     private String       batchNo;
 
-    private String       sysTraceNo;
+    private String       traceNo;
+
+    private String       referNo;
 
     private String       authCode;
 
@@ -119,7 +121,7 @@ public class TradeData {
      * @return  the terminalList
      * @since   CodingExample Ver 1.0
     */
-    
+
     public List<String> getTerminalList() {
         return terminalList;
     }
@@ -130,7 +132,7 @@ public class TradeData {
      * @param   terminalList    the terminalList to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setTerminalList(List<String> terminalList) {
         this.terminalList = terminalList;
     }
@@ -595,12 +597,48 @@ public class TradeData {
         this.batchNo = batchNo == null ? null : batchNo.trim();
     }
 
-    public String getSysTraceNo() {
-        return sysTraceNo;
+    /**
+     * traceNo
+     *
+     * @return  the traceNo
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getTraceNo() {
+        return traceNo;
     }
 
-    public void setSysTraceNo(String sysTraceNo) {
-        this.sysTraceNo = sysTraceNo == null ? null : sysTraceNo.trim();
+    /**
+     * traceNo
+     *
+     * @param   traceNo    the traceNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setTraceNo(String traceNo) {
+        this.traceNo = traceNo;
+    }
+
+    /**
+     * referNo
+     *
+     * @return  the referNo
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getReferNo() {
+        return referNo;
+    }
+
+    /**
+     * referNo
+     *
+     * @param   referNo    the referNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setReferNo(String referNo) {
+        this.referNo = referNo;
     }
 
     public String getAuthCode() {

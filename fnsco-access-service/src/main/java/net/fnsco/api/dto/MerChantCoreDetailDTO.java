@@ -1,7 +1,5 @@
 package net.fnsco.api.dto;
 
-import java.util.List;
-
 import net.fnsco.core.base.DTO;
 
 /**
@@ -30,7 +28,77 @@ public class MerChantCoreDetailDTO extends DTO {
     
     private String cardNum;
     
-    private List<MerChantBankDTO>  merBanks;
+    private String accountNo;
+    
+    private String openBank;
+    
+    private String subBankName;;
+    
+    /**
+     * accountNo
+     *
+     * @return  the accountNo
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getAccountNo() {
+        return accountNo;
+    }
+
+    /**
+     * accountNo
+     *
+     * @param   accountNo    the accountNo to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setAccountNo(String accountNo) {
+        this.accountNo = accountNo;
+    }
+
+    /**
+     * openBank
+     *
+     * @return  the openBank
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOpenBank() {
+        return openBank;
+    }
+
+    /**
+     * openBank
+     *
+     * @param   openBank    the openBank to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOpenBank(String openBank) {
+        this.openBank = openBank;
+    }
+
+    /**
+     * subBankName
+     *
+     * @return  the subBankName
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getSubBankName() {
+        return subBankName;
+    }
+
+    /**
+     * subBankName
+     *
+     * @param   subBankName    the subBankName to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setSubBankName(String subBankName) {
+        this.subBankName = subBankName;
+    }
 
     /**
      * id
@@ -120,26 +188,4 @@ public class MerChantCoreDetailDTO extends DTO {
         this.cardNum = cardNum;
     }
 
-    /**
-     * merBanks
-     *
-     * @return  the merBanks
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public List<MerChantBankDTO> getMerBanks() {
-        return merBanks;
-    }
-
-    /**
-     * merBanks
-     *
-     * @param   merBanks    the merBanks to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setMerBanks(List<MerChantBankDTO> merBanks) {
-        this.merBanks = merBanks;
-    }
-    
 }

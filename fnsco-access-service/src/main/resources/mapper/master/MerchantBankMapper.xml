@@ -35,11 +35,11 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="net.fnsco.service.domain.MerchantBank" >
-    insert into m_merchant_bank (id, account_type, account_no, 
+    insert into m_merchant_bank (id, inner_code,account_type, account_no, 
       account_name, account_card_id, sub_bank_name, 
       open_bank_prince, open_bank, open_bank_city, 
       open_bank_num)
-    values (#{id,jdbcType=INTEGER}, #{accountType,jdbcType=VARCHAR}, #{accountNo,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR},#{accountType,jdbcType=VARCHAR}, #{accountNo,jdbcType=VARCHAR}, 
       #{accountName,jdbcType=VARCHAR}, #{accountCardId,jdbcType=VARCHAR}, #{subBankName,jdbcType=VARCHAR}, 
       #{openBankPrince,jdbcType=VARCHAR}, #{openBank,jdbcType=VARCHAR}, #{openBankCity,jdbcType=VARCHAR}, 
       #{openBankNum,jdbcType=VARCHAR})
@@ -49,6 +49,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
+      </if>
+      <if test="innerCode != null" >
+        inner_code,
       </if>
       <if test="accountType != null" >
         account_type,
@@ -82,6 +85,9 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
+      <if test="innerCode != null" >
+        #{innerCode,jdbcType=VARCHAR},
+      </if>
       <if test="accountType != null" >
         #{accountType,jdbcType=VARCHAR},
       </if>
@@ -114,6 +120,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.MerchantBank" >
     update m_merchant_bank
     <set >
+      <if test="innerCode != null" >
+        inner_code = #{innerCode,jdbcType=VARCHAR},
+      </if>
       <if test="accountType != null" >
         account_type = #{accountType,jdbcType=VARCHAR},
       </if>
@@ -147,6 +156,7 @@
   <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.MerchantBank" >
     update m_merchant_bank
     set account_type = #{accountType,jdbcType=VARCHAR},
+      inner_code = #{innerCode,jdbcType=VARCHAR},
       account_no = #{accountNo,jdbcType=VARCHAR},
       account_name = #{accountName,jdbcType=VARCHAR},
       account_card_id = #{accountCardId,jdbcType=VARCHAR},

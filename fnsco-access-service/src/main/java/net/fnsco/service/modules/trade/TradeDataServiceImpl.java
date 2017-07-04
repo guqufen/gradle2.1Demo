@@ -81,7 +81,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setMerId(merId);
         tradeDataEntity.setTermId(tradeData.getTermId());
         tradeDataEntity.setBatchNo(tradeData.getBatchNo());
-        tradeDataEntity.setSysTraceNo(tradeData.getSysTraceNo());
+        tradeDataEntity.setTraceNo(tradeData.getSysTraceNo());
         tradeDataEntity.setAuthCode(tradeData.getAuthCode());
         tradeDataEntity.setOrderIdScan(tradeData.getOrderIdScan());
         tradeDataEntity.setSource(tradeData.getSource());
@@ -89,9 +89,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setSendTime(tradeData.getSendTime());
         tradeDataEntity.setPayType(tradeData.getPayType());
         tradeDataEntity.setPaySubType(tradeData.getPaySubType());
-
+        tradeDataEntity.setReferNo(tradeData.getReferNo());
         tradeDataEntity.setInnerCode(innerCode);
         tradeDataEntity.setCreateTime(new Date());
+        tradeDataEntity.setRespCode(tradeData.getRespCode());
+        tradeDataEntity.setTxnType(tradeData.getTxnType());
         logger.error("保存交易流水信息" + JSON.toJSONString(tradeDataEntity));
         tradeListDAO.insert(tradeDataEntity);
         logger.warn("插入流水总耗时" + (System.currentTimeMillis() - timer));
@@ -127,7 +129,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         //            }
         //        }
         List<String> terminalList = merchantCore.getTerminals();
-        tradeData.setTerminalList(terminalList);
+        if (null != terminalList && terminalList.size() > 0) {
+            tradeData.setTerminalList(terminalList);
+        }
         //根据用户查询商户号
         Integer appUserId = merchantCore.getUserId();
         List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
