@@ -6,6 +6,52 @@ public class VersionResultDTO {
     private String  downloadUrl1;
     private String  downloadUrl2;
     private Boolean isUpdate;
+    private String  remark;
+    private String  versionDesc;
+    
+    /**
+     * versionDesc
+     *
+     * @return  the versionDesc
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getVersionDesc() {
+        return versionDesc;
+    }
+
+    /**
+     * versionDesc
+     *
+     * @param   versionDesc    the versionDesc to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setVersionDesc(String versionDesc) {
+        this.versionDesc = versionDesc;
+    }
+
+    /**
+     * remark
+     *
+     * @return  the remark
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getRemark() {
+        return remark;
+    }
+
+    /**
+     * remark
+     *
+     * @param   remark    the remark to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     /**
      * forceUpdate
