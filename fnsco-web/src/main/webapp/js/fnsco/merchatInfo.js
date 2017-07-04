@@ -412,7 +412,8 @@ function seeImage(fileName,divId){
           console.log(data);
           console.log(divId);
 	        if(data){
-            $("#"+divId+" img").attr('data-original',data);
+	           console.log(data);
+               $("#"+divId+" img").attr('data-original',data);
 	        }else{
 	           layer.msg('获取失败');
 	        }
