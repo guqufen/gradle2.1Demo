@@ -8,11 +8,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import com.google.common.base.Strings;
 
 import net.fnsco.api.appuser.ConmmService;
 import net.fnsco.api.constant.ApiConstant;
+import net.fnsco.api.constant.ConstantEnum;
 import net.fnsco.api.dto.ProtocolDTO;
 import net.fnsco.api.dto.VersionDTO;
 import net.fnsco.api.dto.VersionResultDTO;
@@ -30,36 +30,77 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
 
     @Override
     public ResultDTO checkUpdate(VersionDTO sysVersionDTO) {
-        
+
         String version = sysVersionDTO.getVersion();
         Integer appType = Integer.valueOf(sysVersionDTO.getAppType());
+        String appCode ="SQB";
         //非空判断
         if (Strings.isNullOrEmpty(version)) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
         } else if (appType == null) {
             return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+        } else if (Strings.isNullOrEmpty(appCode)) {
+            return ResultDTO.fail("appcode为空");
         }
 
-        //客户端版本号
+        //客户端版本号并转换为int
         String[] versionArr = StringUtils.split(version, ".");
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < versionArr.length; i++) {
+            sb.append(versionArr[i]); 
+        };
+        int userVersion=Integer.valueOf(sb.toString());
+        //判断版本格式
         if (versionArr == null || versionArr.length != 3) {
             logger.warn("版本号格式错误,version=" + version);
             return ResultDTO.fail(ApiConstant.E_EDITION_LOGIN);
         }
-
-        String appCode = "sqb";
+        //查询出大于用户当前版本的
         List<Version> list = sysVersionDao.selectByPrimaryKey(appCode, appType, version);
-        //便利list集合
-        int flag = 0;
+        //当前版本为最新
+        if(list==null){
+            return ResultDTO.success("无需更新");
+        }
+        String lastNew = "";
         Version ver = new Version();
+        Map<String, Object> map = new HashMap<>();
+        int forceUpdate = 0;
+        //获取到最新的强制更新版本
         for (Version temp : list) {
             if (temp.getForceUpdate() == 1) {
-                flag = 1;
+                lastNew = temp.getVersion();
             }
             ver = temp;
         }
-        ver.setForceUpdate(flag);
-        return ResultDTO.success(ver);
+        //获取到最新的不强制更新版本
+        if(lastNew ==""){
+            forceUpdate = 0;
+            map.put("forceUpdate", forceUpdate);
+            map.put("version", ver.getVersion());
+            map.put("remark", ver.getVersionDesc());
+            map.put("downloadUrl", ver.getDownloadUrl1());
+            map.put("downloadUrl2", ver.getDownloadUrl2());
+            return ResultDTO.success(map);
+        }
+        //数据库最新强制更新的版本并转换为int
+        String[] versionArrLast = StringUtils.split(lastNew, ".");
+        StringBuffer sc = new StringBuffer();
+        for (int i = 0; i < versionArrLast.length; i++) {
+            sc.append(versionArrLast[i]); 
+        };
+        int lastVersion=Integer.valueOf(sc.toString());
+        //获取最后一个强制更新的版本  如果比该版本小  则强制更新   
+       
+        //1强制更新       0不强制更新
+        if(userVersion<lastVersion){
+            forceUpdate=1;
+        }
+        map.put("forceUpdate", forceUpdate);
+        map.put("version", ver.getVersion());
+        map.put("remark", ver.getVersionDesc());
+        map.put("downloadUrl", ver.getDownloadUrl1());
+        map.put("downloadUrl2", ver.getDownloadUrl2());
+        return ResultDTO.success( map);
     }
 
     @Override
@@ -93,19 +134,14 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
     //获取用户协议
     @Override
     public ResultDTO getProtocol(ProtocolDTO protocolDTO) {
-        Map<String,String> map=new HashMap<>();
-        try{
+        Map<String, String> map = new HashMap<>();
+        try {
             if (protocolDTO.getProtocol() == 1) {
-                map.put("title", "认领说明");
-                StringBuilder sb = new StringBuilder();
-                sb.append("        浙付通App是法奈昇科技有限公司自主研发的手机端软件.针对自有POS机商户可输入开户登记手机号码进行认领操作登录。").append(FileUtils.separator);
-                sb.append("        如需开通二维码支付，请拨打400-1818-823联系客服，提交相关认证资料，认证通过后即可认领APP账号，开启二维码支付功能。").append(FileUtils.separator);
-                sb.append("        感谢您的使用，祝您生活愉快，生意兴隆！ ").append(FileUtils.separator);
-                map.put("content", sb.toString());
-            }else if(protocolDTO.getProtocol()==2){
                 map.put("title", "用户服务协议须知");
                 StringBuilder sb = new StringBuilder();
-                sb.append("请务必认真阅读和理解本《用户服务协议》（以下简称《协议》）中规定的所有权利和限制。除非您接受本《协议》条款，否则您无权认领、登录或使用本协议所涉及的相关服务。您一旦认领、登录、使用或以任何方式使用本《协议》所涉及的相关服务的行为将视为对本《协议》的接受，即表示您同意接受本《协议》各项条款的约束。如果您不同意本《协议》中的条款，请不要认领、登录或使用本《协议》相关服务。 本《协议》是用户与法奈昇网络科技有限公司之间的法律协议。").append(FileUtils.separator);
+                sb.append(
+                    "请务必认真阅读和理解本《用户服务协议》（以下简称《协议》）中规定的所有权利和限制。除非您接受本《协议》条款，否则您无权认领、登录或使用本协议所涉及的相关服务。您一旦认领、登录、使用或以任何方式使用本《协议》所涉及的相关服务的行为将视为对本《协议》的接受，即表示您同意接受本《协议》各项条款的约束。如果您不同意本《协议》中的条款，请不要认领、登录或使用本《协议》相关服务。 本《协议》是用户与法奈昇网络科技有限公司之间的法律协议。")
+                    .append(FileUtils.separator);
                 sb.append("").append(FileUtils.separator);
                 sb.append("第一章  服务内容").append(FileUtils.separator);
                 sb.append("").append(FileUtils.separator);
@@ -172,16 +208,18 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
                 sb.append("第八章  其他条款").append(FileUtils.separator);
                 sb.append("").append(FileUtils.separator);
                 sb.append("第二十三条 如果本协议中的任何条款无论因何种原因完全或部分无效或不具有执行力，或违反任何适用的法律，则该条款被视为删除，但本协议的其余条款仍应有效并且有约束力。").append(FileUtils.separator);
-                sb.append("第二十四条 法奈昇网络科技有限公司有权随时根据有关法律、法规的变化以及公司经营状况和经营策略的调整等修改本协议，而无需另行单独通知用户。用户可随时通过网络浏览最新服务协议条款。当发生有关争议时，以最新的协议文本为准。如果不同意法奈昇网络科技有限公司对本协议相关条款所做的修改，用户有权停止使用网络服务。如果用户继续使用网络服务，则视为用户接受法奈昇网络科技有限公司对本协议相关条款所做的修改。").append(FileUtils.separator);
+                sb.append(
+                    "第二十四条 法奈昇网络科技有限公司有权随时根据有关法律、法规的变化以及公司经营状况和经营策略的调整等修改本协议，而无需另行单独通知用户。用户可随时通过网络浏览最新服务协议条款。当发生有关争议时，以最新的协议文本为准。如果不同意法奈昇网络科技有限公司对本协议相关条款所做的修改，用户有权停止使用网络服务。如果用户继续使用网络服务，则视为用户接受法奈昇网络科技有限公司对本协议相关条款所做的修改。")
+                    .append(FileUtils.separator);
                 sb.append("第二十五条 法奈昇网络科技有限公司在法律允许最大范围对本协议拥有解释权与修改权。").append(FileUtils.separator);
                 map.put("content", sb.toString());
             }
             return ResultDTO.success(map);
-        }catch(Exception e){
-            logger.error("获取协议异常",e);
+        } catch (Exception e) {
+            logger.error("获取协议异常", e);
             return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
         }
-      
+
     }
 
 }
