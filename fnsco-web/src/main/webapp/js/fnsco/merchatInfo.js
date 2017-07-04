@@ -16,7 +16,7 @@ function initTableData(){
         pageNumber:1,   //初始化加载第一页，默认第一页
         pageSize: 15,   //每页的记录行数（*）
         pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
-        queryParams:queryParams,
+        queryParams:queryParams,	
         responseHandler:responseHandler,//处理服务器返回数据
         columns: [{
             field: 'state',
@@ -114,7 +114,7 @@ function responseHandler(res) {
 }
 window.operateEvents = {
     'click .redact': function (e, value, row, index) {
-        alert('You click like action, row: ' + JSON.stringify(row));
+        layer.msg('You click like action, row: ' + JSON.stringify(row));
     },
     'click .remove': function (e, value, row, index) {
         $table.bootstrapTable('remove', {
@@ -129,6 +129,9 @@ function operateFormatter(value, row, index) {
         '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
         '<i class="glyphicon glyphicon-pencil"></i>',
         '</a>  ',
+        '<a class="details" href="javascript:detailsData('+value+');" title="查看详情">',
+        '<i class="glyphicon glyphicon-file"></i>',
+        '</a>  ',
         '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
         '<i class="glyphicon glyphicon glyphicon-trash"></i>',
         '</a>'
@@ -138,26 +141,34 @@ function operateFormatter(value, row, index) {
   function delete_btn_event(td_obj){
   	var ids =[];
   	ids[0] = td_obj;
-  	$.ajax({
-  		url:'/web/merchantinfo/delete',
-  		type:'POST',
-  		dataType : "json",
-  		data:{'ids':ids},
-  		success:function(data){
-  			if(data.success)
-  			{
-  				alert('删除成功');
-  				queryEvent();
-  			}else
-  			{
-  				alert('删除失败');
-  			}	
-  		},
-  		error:function(e)
-  		{
-  			alert('系统异常!'+e);
-  		}
-  	});
+    layer.confirm('确定删除吗？', {
+        time: 20000, //20s后自动关闭
+        btn: ['确定', '取消']
+    }, function(){
+      $.ajax({
+        url:'/web/merchantinfo/delete',
+        type:'POST',
+        dataType : "json",
+        data:{'ids':ids},
+        success:function(data){
+          if(data.success)
+          {
+            layer.msg('删除成功');
+            queryEvent();
+          }else
+          {
+            layer.msg('删除失败');
+          } 
+        },
+        error:function(e)
+        {
+          layer.msg('系统异常!'+e);
+        }
+      });
+    }, function(){
+      layer.msg('取消成功');
+    });
+  	
   }
 
 
@@ -172,8 +183,7 @@ function resetEvent(){
 }
 //点击获取innocode
 getInnerCode();//默认获取
-function getInnerCode()
-{
+function getInnerCode(){
    var code = '';
    if(!$('#innerCode').val()){
      $.ajax({
@@ -197,7 +207,7 @@ function getInnerCode()
    }
 }
 //新增按钮事件
-$('#btn_add').click(function(){
+$('#btn_add').click(function(){ 
    requestAgent(null);
    $(".uploadify").show();
    $(".remove-icon").show();
@@ -206,33 +216,41 @@ $('#btn_add').click(function(){
 $('#btn_delete').click(function(){
   var select_data = $('#table').bootstrapTable('getSelections');  
   if(select_data.length == 0){
-    alert('请选择一行删除!');
+    layer.msg('请选择一行删除!');
     return false;
   };
   var dataId=[];
   for(var i=0;i<select_data.length;i++){
     dataId=dataId.concat(select_data[i].id);
   }
-  $.ajax({
-    url:'/web/merchantinfo/delete',
-    type:'POST',
-    dataType : "json",
-    data:{'ids':dataId},
-    success:function(data){
-      if(data.success)
-      {
-        alert('删除成功');
-        queryEvent();
-      }else
-      {
-        alert('删除失败');
-      } 
-    },
-    error:function(e)
-    {
-      alert('系统异常!'+e);
-    }
+  layer.confirm('确定删除选中数据吗？', {
+        time: 20000, //20s后自动关闭
+        btn: ['确定', '取消']
+    }, function(){
+      $.ajax({
+        url:'/web/merchantinfo/delete',
+        type:'POST',
+        dataType : "json",
+        data:{'ids':dataId},
+        success:function(data){
+          if(data.success)
+          {
+            layer.msg('删除成功');
+            queryEvent();
+          }else
+          {
+            layer.msg('删除失败');
+          } 
+        },
+        error:function(e)
+        {
+          layer.msg('系统异常!'+e);
+        }
+      });
+    }, function(){
+      layer.msg('取消成功');
   });
+  
 });
 
 //请求所有代理商数据
@@ -250,13 +268,17 @@ function requestAgent(type){
 				   }
 			   })
 			   if(!type){
+           $('#agentId').html('');
 				   $('#agentId').append(html_opt);
 			   }else{
-				   $('#agentId1').append(html_opt);
+           $('#agentId1').html('');
+           $('#agentId2').html('');
+           $('#agentId1').append(html_opt);
+				   $('#agentId2').append(html_opt);
 			   }
 		   },
 		   error:function(e){
-			   alert('服务器出错');
+			   layer.msg('服务器出错');
 		   }
 	   })
 }
@@ -314,7 +336,7 @@ function  fileUp(num){
     	   	}	
         },
        'onUploadError': function(file,errorCode,errorMsg,errorString) {
-    			alert(errorCode+"."+errorMsg+""+errorString);
+    			layer.msg(errorCode+"."+errorMsg+""+errorString);
 
     		}
    });
@@ -338,26 +360,33 @@ function clickFileBtn(){
    fileUp('10_1');
 }
 //上传图片删除图片事件
-function deleteImage(queueId,id,url,num)
-{
+function deleteImage(queueId,id,url,num){
     var num_type = num+'';
     if(num_type.substr(num_type.length-2,num_type.length) == '_1'){
       num_type = num_type.substr(0,num_type.length-2);
     }
-   $.ajax({
-	   url:'/web/fileInfo/delete',
-	   data:{'id':id,'url':url},
-	   type:'POST',
-	   success:function(data){
-		   if(data)
-		   {
-			   $('#file'+num).remove();
-			   alert('删除成功');
-			   $(queueId).parent().parent().parent().next().find('.uploadify').show();
-			   $(queueId).parent().parent().html('');
-		   }	   
-	   }
-   });
+    layer.confirm('确定删除此文件么？', {
+        time: 20000, //20s后自动关闭
+        btn: ['确定', '取消']
+    }, function(){
+      $.ajax({
+         url:'/web/fileInfo/delete',
+         data:{'id':id,'url':url},
+         type:'POST',
+         success:function(data){
+           if(data)
+           {
+             $('#file'+num).remove();
+             layer.msg('删除成功');
+             $(queueId).parent().parent().parent().next().find('.uploadify').show();
+             $(queueId).parent().parent().html('');
+           }     
+         }
+      });
+    }, function(){
+      layer.msg('取消成功');
+  });
+   
 }
 
 //保存商户基本信息下一步按钮
@@ -368,10 +397,10 @@ function saveMerCore(){
       type:'POST',
       success:function(data){
         if(data.success){
-           alert('保存成功');
+           layer.msg('保存成功');
            return true;
         }else{
-           alert('保存失败');
+           layer.msg('保存失败');
         }
       }
   });
@@ -385,7 +414,7 @@ function saveFile(){
     url:'/web/fileInfo/savefiles',
     data:{'fileIds':file_ids},
     success:function(){
-      alert("保存成功");
+      layer.msg("保存成功");
     }
   });
 }
@@ -414,23 +443,34 @@ function contactHtml(num){
   })
   //删除列表
   function removeContact(num){
-  	if(num){
-  		$.ajax({
-  			url:'/web/merchantinfo/deleteContact',
-  			type:'POST',
-  			data:{'id':num},
-  			success:function(data){
-  				alert('删除成功');
-  			}
-  		});
-  	}
-  	$('.remove-contactList'+num).parent().remove();
+    layer.confirm('确定删除该列表吗？', {
+        time: 20000, //20s后自动关闭
+        btn: ['确定', '取消']
+    }, function(){
+      if(num){
+        $.ajax({
+          url:'/web/merchantinfo/deleteContact',
+          type:'POST',
+          data:{'id':num},
+          success:function(data){
+            layer.msg('删除成功');
+            // layer.msg('删除成功');
+          }
+        });
+      }
+      $('.remove-contactList'+num).parent().remove();
+    }, function(){
+      layer.msg('取消成功');
+    });
+  	
   }
   //获取联系信息参数结果集保存
   function saveContactParams(conId){
   		var listLen=$("#"+conId+" .contact-list").length;
       var contactArr=new Array();
       var concatContactArr;
+      console.log(contactArr);
+      console.log(concatContactArr);
       for (var i=0;i<listLen;i++){
         var contactName=$("#"+conId+" .contact-list").eq(i).find($('.contactName')).val();
         var contactMobile=$("#"+conId+" .contact-list").eq(i).find($('.contactMobile')).val();
@@ -440,15 +480,16 @@ function contactHtml(num){
         var innerCode = $('#innerCode').val();
         var id=$("#terminal-con1 .contact-list").eq(i).find($('.remove-icon')).attr('editId');
         if(!innerCode){
-          alert('操作错误!');return ;
+          layer.msg('操作错误!');return ;
         }
         if(!id || id<0){
           concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
         }else{
           concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode,id}
         }
-        contactlArr=contactArr.push(concatContactArr);
-  		}
+        contactArr=contactArr.concat(concatContactArr);
+      }
+      console.log(contactArr);
   		$.ajax({
   			url:'/web/merchantinfo/toAddContact',
   			dataType:"json", 
@@ -456,10 +497,10 @@ function contactHtml(num){
   		    contentType:"application/json",
   			data:JSON.stringify(contactArr),
   			success:function(data){
-  				alert('添加成功');
+  				layer.msg('添加成功');
   			},
   			error:function(){
-  				alert('系统错误');
+  				layer.msg('系统错误');
   			}
   		});
   }
@@ -507,7 +548,7 @@ function terminalHtml(num){
   			type:'POST',
   			data:{'id':num},
   			success:function(data){
-  				alert('删除成功');
+  				layer.msg('删除成功');
   			}
   		});
   	}
@@ -540,7 +581,7 @@ function terminalHtml(num){
   		var innerCode=$("#innerCode").val();
   		var id=$("#terminal-con1 .terminal-list").eq(i).find($('.remove-icon')).attr('editId');
       if(!innerCode){
-        alert('操作错误!');return ;
+        layer.msg('操作错误!');return ;
       }
       if(!id || id<0){
           concatTerminalArr={merchantCode,channelId,channelName,terminalCode,snCode,terminalBatch,terminalPara,chargesType,debitCardRate,creditCardRate,debitCardMaxFee,creditCardMaxFee,dealSwitch,recordState,termName,posFactory,posType,mercReferName,innerCode}
@@ -554,13 +595,13 @@ function terminalHtml(num){
   		url:'/web/merchantinfo/toAddTerminal',
   		dataType:"json", 
   		type:'POST',
-  	    contentType:"application/json",
+  	  contentType:"application/json",
   		data:JSON.stringify(terminalArr),
   		success:function(data){
-  			alert('添加成功'+data.data);//返回innerCode
+  			layer.msg('添加成功'+data.data);//返回innerCode
   		},
   		error:function(){
-  			alert('系统错误');
+  			layer.msg('系统错误');
   		}
   	});
   }
@@ -593,7 +634,7 @@ function removeChannel(num){
 			type:'POST',
 			data:{'id':num},
 			success:function(data){
-				alert('删除成功');
+				layer.msg('删除成功');
 			}
 		});
 	}
@@ -610,7 +651,7 @@ function saveChannelParams(conId){
     var innerCode=$("#innerCode").val();
     var id=$("#channel-con1 .channel-list").eq(i).find($('.remove-icon')).attr('editId');
     if(!innerCode){
-      alert('操作错误!');return ;
+      layer.msg('操作错误!');return ;
     }
     if(!id || id<0){
       concatChannelArrArr={channelMerId,channelMerKey,channelType,innerCode}      
@@ -627,10 +668,10 @@ function saveChannelParams(conId){
       contentType:"application/json",
     data:JSON.stringify(channelArr),
     success:function(data){
-      alert('添加成功'+data.data);//返回innerCode
+      layer.msg('添加成功'+data.data);//返回innerCode
     },
     error:function(){
-      alert('系统错误');
+      layer.msg('系统错误');
     }
   });
 }
@@ -672,12 +713,12 @@ function removeBankCard(num){
 		  type:'POST',
 		  success:function(data){
 			  if(data.success){
-				  alert('删除成功!')
+				  layer.msg('删除成功!')
 			  }else{
-				  alert('删除失败!');
+				  layer.msg('删除失败!');
 			  }
 		  },
-		  error:function(){alert('系统错误!')}
+		  error:function(){layer.msg('系统错误!')}
 	  });
   }
 }
@@ -698,7 +739,7 @@ function saveBankCardParams(conId){
     var openBankNum=$("#"+conId+" .bankCard-list").eq(i).find($('.openBankNum')).val();
     var innerCode=$("#innerCode").val();
     if(!innerCode){
-      alert('操作错误!');return;
+      layer.msg('操作错误!');return;
     }
     var id=$("#bankCard-con1 .bankCard-list").eq(i).find($('.remove-icon')).attr('editId');
     if(!id || id<0){     
@@ -716,12 +757,12 @@ function saveBankCardParams(conId){
     contentType:"application/json",
     data:JSON.stringify(bankCardArr),
     success:function(data){
-      alert('添加成功'+data.data);
+      layer.msg('添加成功'+data.data);
       $("#myModal").hide();
       queryEvent();
     },
     error:function(){
-      alert('系统错误');
+      layer.msg('系统错误');
     }
   });
 }
@@ -926,7 +967,7 @@ function editData(id){
         })
         //基本信息保存按钮操作
         $('#editBtn_merchant').click(function(){
-        	var mer_id = $('input[name=merId]').val();
+        	  var mer_id = $('input[name=merId]').val();
             var merName = $('input[name="merName1"]').val();
             var abbreviation = $('input[name="abbreviation1"]').val();
             var enName = $('input[name="enName1"]').val();
@@ -953,11 +994,11 @@ function editData(id){
        		    success:function(data){
        			    if(data.success)
        			    {
-       				    alert('保存成功');
+       				    layer.msg('保存成功');
        				    return true;
        			    }	
        			    else{
-       				    alert('保存失败');
+       				    layer.msg('保存失败');
        			    }
    		        }
      	      })
@@ -1015,5 +1056,156 @@ $("#btn_addBankCard1").click(function(){
     saveBankCardParams('bankCard-con1');
   });
 
+//查看详情
+function detailsData(id){
+   $.ajax({
+    url:'/web/merchantinfo/queryAllById',
+    type:'POST',
+    dataType : "json",
+    data:{'id':id},
+    success:function(data){
+        //data.data就是所有数据集
+        console.log(data.data);
+        // 关闭再次点开回到第一个标签
+        $('#innerCode').val(data.data.innerCode);
+        $("input[name='innerCode']").val(data.data.innerCode);
+        clickFileBtn();
+        //重置上传文件内容
+        $('#view1100_2').html('');
+        $('#view1101_2').html('');
+        $('#view1190_2').html('');
+        $('#view1_2').html('');
+        $('#view2_2').html('');
+        $('#view300_2').html('');
+        $('#view301_2').html('');
+        $('#view4_2').html('');
+        $('#view6_2').html('');
+        $('#view7_2').html('');
+        $('#view8_2').html('');
+        $('#view900_2').html('');
+        $('#view901_2').html('');
+        $('#view902_2').html('');
+        $('#view10_2').html('');
+        $("#contact-con2").html('');
+        $("#terminal-con2").html('');
+        $("#channel-con2").html('');
+        $("#bankCard-con2").html('');
 
+        //基本信息
+        $('input[name=merId]').val(data.data.id);
+        $('input[name="merName2"]').val(data.data.merName);
+        $('input[name="abbreviation2"]').val(data.data.abbreviation);
+        $('input[name="enName2"]').val(data.data.enName);
+        $('input[name="legalPerson2"]').val(data.data.legalPerson);
+        $('input[name="legalPersonMobile2"]').val(data.data.legalPersonMobile);
+        $('input[name="legalPersonTel2"]').val(data.data.legalPersonTel);
+        $('select[name="legalValidCardType2"]').find("option[value="+data.data.legalValidCardType+"]").attr("selected",true);
+        $('input[name="cardNum2"]').val(data.data.cardNum);
+        $('input[name="cardValidTime2"]').val(data.data.cardValidTime);
+        $('input[name="businessLicenseNum2"]').val(data.data.businessLicenseNum);
+        $('input[name="businessLicenseValidTime2"]').val(data.data.businessLicenseValidTime);
+        $('input[name="taxRegistCode2"]').val(data.data.taxRegistCode);
+        $('input[name="registAddress2"]').val(data.data.registAddress);
+        $('input[name="mercFlag2"]').val(data.data.mercFlag);
+        requestAgent(data.data.agentId);
+        //资料文件
+        var filesLen=data.data.files.length;
+        for(var i=0;i<filesLen;i++){
+            var fileName=data.data.files[i].fileName;
+            var fileType=data.data.files[i].fileType;
+            var filePath=data.data.files[i].filePath;
+            var id=data.data.files[i].id;
+            //重置
+            $('#view'+fileType+'_2').append("<div style='float:left;width:99%'><span class='fileImgName' imgFileId="+id+">"+fileName+"</span>" +
+                    "<a class='previewfileImg' id='previewfileImg"+id+"_2' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
+                    "<a title='删除' class='deletefileImg' style='display:none' id='deletefileImg"+id+"' href=javascript:deleteImage('#deletefileImg"+id+"',"+id+",'"+filePath+"',"+fileType+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" + "</div>");
+            $(".uploadify").hide();
+            //预览图片事件
+            var aId='previewfileImg'+id;
+            aId=aId+'_2';
+            var viewer =new Viewer(document.getElementById(aId), {
+                url: 'data-original',
+                navbar: false,
+                toolbar: false,
+            });
+            $('#uploadify_file'+fileType+'_2').addClass('havaFile');
+            $('#uploadify_file'+fileType+'_2').hide();
+        }
+        // 联系信息
+        var contactsLen=data.data.contacts.length;
+        for(var i=0;i<contactsLen;i++){
+            $("#contact-con2").append(contactHtml(data.data.contacts[i].id));
+            $('input[name="contactName'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactName);
+            $('input[name="contactMobile'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactMobile);
+            $('input[name="contactEmail'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactEmail);
+            $('input[name="contactTelphone'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactTelphone);
+            $('input[name="contactJobs'+data.data.contacts[i].id+'"]').val(data.data.contacts[i].contactJobs);
+        }
+        //终端
+        var terminalsLen=data.data.terminal.length;
+        for(var i=0;i<terminalsLen;i++){
+            $("#terminal-con2").append(terminalHtml(data.data.terminal[i].id));
+            $('input[name="merchantCode'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].merchantCode);
+            $('input[name="channelId'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].channelId);
+            $('input[name="channelName'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].channelName);
+            $('input[name="terminalCode'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].terminalCode);
+            $('input[name="innerTermCode'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].innerTermCode);
+            $('input[name="snCode'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].snCode);
+            $('input[name="terminalBatch'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].terminalBatch);
+            $('input[name="terminalPara'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].terminalPara);
+            $('select[name="chargesType'+data.data.terminal[i].id+'"]').find("option[value="+data.data.terminal[i].chargesType+"]").attr("selected",true);
+            $('input[name="debitCardRate'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].debitCardRate);
+            $('input[name="creditCardRate'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].creditCardRate);
+            $('input[name="debitCardFee'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].debitCardFee);
+            $('input[name="creditCardFee'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].creditCardFee);
+            $('input[name="debitCardMaxFee'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].debitCardMaxFee);
+            $('input[name="creditCardMaxFee'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].creditCardMaxFee);
+            $('input[name="dealSwitch'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].dealSwitch);
+            $('select[name="recordState'+data.data.terminal[i].id+'"]').find("option[value="+data.data.terminal[i].recordState+"]").attr("selected",true);
+            $('select[name="termAuditState'+data.data.terminal[i].id+'"]').find("option[value="+data.data.terminal[i].termAuditState+"]").attr("selected",true);
+            $('input[name="termName'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].termName);
+            $('input[name="posFactory'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].posFactory);
+            $('input[name="posType'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].posType);
+            $('input[name="mercReferName'+data.data.terminal[i].id+'"]').val(data.data.terminal[i].mercReferName);
+        }
+        // 渠道信息
+        var channelsLen=data.data.channel.length;
+        for(var i=0;i<channelsLen;i++){
+          $("#channel-con2").append(channelHtml(data.data.channel[i].id));
+           $('input[name="agentId'+data.data.channel[i].id+'"]').val(data.data.channel[i].agentId);
+           $('input[name="channelMerId'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerId);
+           $('input[name="channelMerKey'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerKey);
+           $('select[name="channelType'+data.data.channel[i].id+'"]').find("option[value="+data.data.channel[i].channelType+"]").attr("selected",true);
+        }
+        // 银行卡信息
+        var bankCardLen=data.data.banks.length;
+        for(var i=0;i<bankCardLen;i++){
+          $("#bankCard-con2").append(bankCardHtml(data.data.banks[i].id));
+          $('select[name="accountType'+data.data.banks[i].id+'"]').find("option[value="+data.data.banks[i].accountType+"]").attr("selected",true);
+          $('input[name="accountName'+data.data.banks[i].id+'"]').val(data.data.banks[i].accountName);
+          $('input[name="accountCardId'+data.data.banks[i].id+'"]').val(data.data.banks[i].accountCardId);
+          $('input[name="accountNo'+data.data.banks[i].id+'"]').val(data.data.banks[i].accountNo);
+          $('input[name="openBank'+data.data.banks[i].id+'"]').val(data.data.banks[i].openBank);
+          $('input[name="openBankCity'+data.data.banks[i].id+'"]').val(data.data.banks[i].openBankCity);
+          $('input[name="openBankNum'+data.data.banks[i].id+'"]').val(data.data.banks[i].openBankNum);
+          $('input[name="openBankPrince'+data.data.banks[i].id+'"]').val(data.data.banks[i].openBankPrince);
+          $('input[name="subBankName'+data.data.banks[i].id+'"]').val(data.data.banks[i].subBankName);
+        }
 
+        //显示编辑弹框
+        $('#detailsModal').modal();
+        // 全部默认不可编辑
+        $("#detailsModal").find('input').attr('disabled',true);
+        $("#detailsModal").find('select').attr('disabled',true);
+        $(".remove-icon").hide();
+        $(".btn-addList").hide();
+        $(".deletefileImg").hide();
+        $(".uploadify").hide();
+        //默认点开回到基本信息页
+        $("#detailsModal").find('.tab-pane').removeClass("active");
+        $("#home2").addClass("active");
+        $("#detailsModal .nav-tabs li").removeClass("active");
+        $("#detailsModal .nav-tabs li:first-child").addClass("active");
+    }
+  });
+}
