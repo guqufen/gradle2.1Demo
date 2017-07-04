@@ -268,11 +268,8 @@ function requestAgent(type){
 				   }
 			   })
 			   if(!type){
-           $('#agentId').html('');
 				   $('#agentId').append(html_opt);
 			   }else{
-           $('#agentId1').html('');
-           $('#agentId2').html('');
            $('#agentId1').append(html_opt);
 				   $('#agentId2').append(html_opt);
 			   }
@@ -912,7 +909,6 @@ function editData(id){
         var channelsLen=data.data.channel.length;
         for(var i=0;i<channelsLen;i++){
           $("#channel-con1").append(channelHtml(data.data.channel[i].id));
-           $('input[name="agentId'+data.data.channel[i].id+'"]').val(data.data.channel[i].agentId);
            $('input[name="channelMerId'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerId);
            $('input[name="channelMerKey'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerKey);
            $('select[name="channelType'+data.data.channel[i].id+'"]').find("option[value="+data.data.channel[i].channelType+"]").attr("selected",true);
@@ -998,6 +994,8 @@ function editData(id){
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,
             		'legalPersonTel':legalPersonTel,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
             		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId};
+            
+            console.log(params);
             $.ajax({
      		      url:'/web/merchantinfo/toAddCore',
        		    data: params,
@@ -1183,7 +1181,6 @@ function detailsData(id){
         var channelsLen=data.data.channel.length;
         for(var i=0;i<channelsLen;i++){
           $("#channel-con2").append(channelHtml(data.data.channel[i].id));
-           $('input[name="agentId'+data.data.channel[i].id+'"]').val(data.data.channel[i].agentId);
            $('input[name="channelMerId'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerId);
            $('input[name="channelMerKey'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerKey);
            $('select[name="channelType'+data.data.channel[i].id+'"]').find("option[value="+data.data.channel[i].channelType+"]").attr("selected",true);

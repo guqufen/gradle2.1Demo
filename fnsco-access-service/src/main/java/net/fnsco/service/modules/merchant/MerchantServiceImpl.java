@@ -71,13 +71,14 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
             return ResultDTO.fail(ApiConstant.E_MERCHANT_CODE_OVERDUE);//些商铺码已过期，请到pos机查询最新的商铺码
         }
         MerchantUserRel merchantUserRel = merchantUserRelDao.selectByUserIdInnerCode(merchantDTO.getUserId(), alias.getInnerCode());
-        if (null == merchantUserRel) {
-            MerchantUserRel muRel = new MerchantUserRel();
-            muRel.setAppUserId(merchantDTO.getUserId());
-            muRel.setInnerCode(alias.getInnerCode());
-            muRel.setModefyTime(new Date());
-            merchantUserRelDao.insert(muRel);
+        if (null != merchantUserRel) {
+            return ResultDTO.fail(ApiConstant.E_MERCHANT_CODE_NOT_EXIST);//此商铺码不存在，请重新输入
         }
+        MerchantUserRel muRel = new MerchantUserRel();
+        muRel.setAppUserId(merchantDTO.getUserId());
+        muRel.setInnerCode(alias.getInnerCode());
+        muRel.setModefyTime(new Date());
+        merchantUserRelDao.insert(muRel);
         return ResultDTO.success();
     }
 
