@@ -34,19 +34,19 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
         String appCode = sysVersionDTO.getAppCode();
         //非空判断
         if (Strings.isNullOrEmpty(version)) {
-            return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
+            return ResultDTO.fail(ApiConstant.E_VERSION_NULL);
         }
         if (appType == null) {
             return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
         }
         if (Strings.isNullOrEmpty(appCode)) {
-            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+            return ResultDTO.fail(ApiConstant.E_APPCODE_NULL);
         }
         //客户端版本号并转换为int
         String[] versionArr = StringUtils.split(version, ".");
         if (versionArr.length != 3) {
             logger.error("版本号格式错误,version=" + version);
-            return ResultDTO.fail(ApiConstant.E_EDITION_LOGIN);
+            return ResultDTO.fail(ApiConstant.E_EDITION_ERROR);
         }
         return ResultDTO.success();
     }
