@@ -33,7 +33,7 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
 
         String version = sysVersionDTO.getVersion();
         Integer appType = Integer.valueOf(sysVersionDTO.getAppType());
-        String appCode ="SQB";
+        String appCode =ConstantEnum.AppTypeEnum.SQB.getCode();
         //非空判断
         if (Strings.isNullOrEmpty(version)) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
@@ -55,10 +55,10 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
             logger.warn("版本号格式错误,version=" + version);
             return ResultDTO.fail(ApiConstant.E_EDITION_LOGIN);
         }
-        //查询出大于用户当前版本的
+        //查询出大于等于用户当前版本的
         List<Version> list = sysVersionDao.selectByPrimaryKey(appCode, appType, version);
         //当前版本为最新
-        if(list==null){
+        if(list.size()==1){
             return ResultDTO.success("无需更新");
         }
         String lastNew = "";

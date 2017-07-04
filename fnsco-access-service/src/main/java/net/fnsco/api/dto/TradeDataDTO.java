@@ -4,43 +4,90 @@ import net.fnsco.core.base.DTO;
 
 public class TradeDataDTO extends DTO {
 
-    private String amt;         //金额，格式为“100.01”
-    private String orderNo;     // 订单号（不唯一）
-    private String orderTime;   // 订单时间戳
-    private String orderInfo;   // 订单信息 
-    private String batchBillNo; // 撤销时会有  无用**
+    private String amt;          //金额，格式为“100.01”
+    private String orderNo;      // 订单号（不唯一）
+    private String orderTime;    // 订单时间戳
+    private String orderInfo;    // 订单信息 
+    private String batchBillNo;  // 撤销时会有  无用**
 
-    private String payType;     // 支付方式
-    private String referNo;     // 检索参考号 无用**
-    private String timeStamp;   // 交易时间戳
-    private String tradeDetail; // 交易详情（JSON串）
+    private String payType;      // 支付方式
+    private String referNo;      // 检索参考号 无用**
+    private String timeStamp;    // 交易时间戳
+    private String tradeDetail;  // 交易详情（JSON串）
 
-    private String merId;       // 商户号
-    private String termId;      // 终端号
-    private String batchNo;     // 批次号
-    private String sysTraceNo;  // 凭证号
-    private String authCode;    // 授权码
-    private String orderIdScan; // 扫码交易的订单号
-    private String source;      //流水来源00拉卡拉机器
-    private String md5;         //参数md5值
-    private String sendTime;    //发送时间
-    private String validate;    //是否校验1验证0不验证
-    private String paySubType;  //交易子类型
-    
+    private String merId;        // 商户号
+    private String termId;       // 终端号
+    private String batchNo;      // 批次号
+    private String sysTraceNo;   // 凭证号
+    private String authCode;     // 授权码
+    private String orderIdScan;  // 扫码交易的订单号
+    private String source;       //流水来源00拉卡拉机器
+    private String md5;          //参数md5值
+    private String sendTime;     //发送时间
+    private String validate;     //是否校验1验证0不验证
+    private String paySubType;   //交易子类型
+
     private String startSendTime;//条件查询 发送开始时间
-    private String endSendTime;//条件查询 发送结束时间
-    
+    private String endSendTime;  //条件查询 发送结束时间
+
     private String txnType;
-    
+
     private String respCode;
-    
+
+    private String cardNo;       //卡号
+    private String cardOrg;      // :卡组织，00 境内借记卡 ；01 境内贷记卡 ； 60 境外借记卡 ； 61 境外贷记卡
+
+    /**
+     * cardOrg
+     *
+     * @return  the cardOrg
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getCardOrg() {
+        return cardOrg;
+    }
+
+    /**
+     * cardOrg
+     *
+     * @param   cardOrg    the cardOrg to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setCardOrg(String cardOrg) {
+        this.cardOrg = cardOrg;
+    }
+
+    /**
+     * cardNo
+     *
+     * @return  the cardNo
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    /**
+     * cardNo
+     *
+     * @param   cardNo    the cardNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
+    }
+
     /**
      * txnType
      *
      * @return  the txnType
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getTxnType() {
         return txnType;
     }
@@ -51,7 +98,7 @@ public class TradeDataDTO extends DTO {
      * @param   txnType    the txnType to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setTxnType(String txnType) {
         this.txnType = txnType;
     }
@@ -62,7 +109,7 @@ public class TradeDataDTO extends DTO {
      * @return  the respCode
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getRespCode() {
         return respCode;
     }
@@ -73,7 +120,7 @@ public class TradeDataDTO extends DTO {
      * @param   respCode    the respCode to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setRespCode(String respCode) {
         this.respCode = respCode;
     }
@@ -91,14 +138,14 @@ public class TradeDataDTO extends DTO {
     public void setPaySubType(String paySubType) {
         this.paySubType = paySubType;
     }
-    
+
     /**
      * startSendTime
      *
      * @return  the startSendTime
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getStartSendTime() {
         return startSendTime;
     }
@@ -109,7 +156,7 @@ public class TradeDataDTO extends DTO {
      * @param   startSendTime    the startSendTime to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setStartSendTime(String startSendTime) {
         this.startSendTime = startSendTime;
     }
@@ -120,7 +167,7 @@ public class TradeDataDTO extends DTO {
      * @return  the endSendTime
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getEndSendTime() {
         return endSendTime;
     }
@@ -131,7 +178,7 @@ public class TradeDataDTO extends DTO {
      * @param   endSendTime    the endSendTime to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setEndSendTime(String endSendTime) {
         this.endSendTime = endSendTime;
     }

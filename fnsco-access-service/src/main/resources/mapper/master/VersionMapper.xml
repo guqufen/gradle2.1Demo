@@ -23,6 +23,6 @@
     select 
     <include refid="Base_Column_List" />
     from sys_version
-    where app_code = #{appCode,jdbcType=VARCHAR} and app_type = #{appType,jdbcType=INTEGER} and version >#{version,jdbcType=VARCHAR}  ORDER BY version 
+    where app_code = #{appCode,jdbcType=VARCHAR} and app_type = #{appType,jdbcType=INTEGER} and version >= #{version,jdbcType=VARCHAR}  ORDER BY version 
   </select>
 </mapper>

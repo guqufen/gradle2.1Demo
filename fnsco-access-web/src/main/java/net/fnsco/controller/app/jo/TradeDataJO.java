@@ -27,6 +27,30 @@ public class TradeDataJO extends JO {
     private String traceNo;
     //参数考
     private String referNo;
+    //卡号
+    private String certifyId;
+    
+    /**
+     * certifyId
+     *
+     * @return  the certifyId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getCertifyId() {
+        return certifyId;
+    }
+
+    /**
+     * certifyId
+     *
+     * @param   certifyId    the certifyId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setCertifyId(String certifyId) {
+        this.certifyId = certifyId;
+    }
 
     /**
      * traceNo

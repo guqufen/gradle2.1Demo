@@ -30,7 +30,8 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.HttpMethod;
@@ -43,31 +44,80 @@ import com.aliyun.oss.model.OSSObjectSummary;
 import com.aliyun.oss.model.ObjectListing;
 
 public class OssUtil {
-    static Logger         logger          = Logger.getLogger(OssUtil.class);
+    static Logger            logger          = LoggerFactory.getLogger(OssUtil.class);
 
     // endpoint是访问OSS的域名。如果您已经在OSS的控制台上 创建了Bucket，请在控制台上查看域名。
     // 如果您还没有创建Bucket，endpoint选择请参看文档中心的“开发人员指南 > 基本概念 > 访问域名”，
     // 链接地址是：https://help.aliyun.com/document_detail/oss/user_guide/oss_concept/endpoint.html?spm=5176.docoss/user_guide/endpoint_region
     // endpoint的格式形如“http://oss-cn-hangzhou.aliyuncs.com/”，注意http://后不带bucket名称，
     // 比如“http://bucket-name.oss-cn-hangzhou.aliyuncs.com”，是错误的endpoint，请去掉其中的“bucket-name”。
-    private static String endpoint        = "http://oss-cn-hangzhou.aliyuncs.com";
+    private static String    endpoint        = "http://oss-cn-hangzhou.aliyuncs.com";
 
     // accessKeyId和accessKeySecret是OSS的访问密钥，您可以在控制台上创建和查看，
     // 创建和查看访问密钥的链接地址是：https://ak-console.aliyun.com/#/。
     // 注意：accessKeyId和accessKeySecret前后都没有空格，从控制台复制时请检查并去除多余的空格。
-    private static String accessKeyId     = "<YourAccessKeyId>";
-    private static String accessKeySecret = "<YourAccessKeySecret>";
+    private static String    accessKeyId     = "";
+    private static String    accessKeySecret = "";
+    private static String    headBucketName  = "";
+    private static OSSClient ossClient;
 
+    public static void initOssClient() {
+        ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+    }
     // Bucket用来管理所存储Object的存储空间，详细描述请参看“开发人员指南 > 基本概念 > OSS基本概念介绍”。
     // Bucket命名规范如下：只能包括小写字母，数字和短横线（-），必须以小写字母或者数字开头，长度必须在3-63字节之间。
-    private static String bucketName      = "<YourBucketName>";
+    //private static String bucketName      = "<YourBucketName>";
 
     // Object是OSS存储数据的基本单元，称为OSS的对象，也被称为OSS的文件。详细描述请参看“开发人员指南 > 基本概念 > OSS基本概念介绍”。
     // Object命名规范如下：使用UTF-8编码，长度必须在1-1023字节之间，不能以“/”或者“\”字符开头。
-    private static String firstKey        = "my-first-key";
+    //private static String firstKey        = "my-first-key";
 
-    public static void getFile(String[] args) {
-        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+    /**
+     * endpoint
+     *
+     * @param   endpoint    the endpoint to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public static void setEndpoint(String endpoint) {
+        OssUtil.endpoint = endpoint;
+    }
+
+    /**
+     * headBucketName
+     *
+     * @param   headBucketName    the headBucketName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public static void setHeadBucketName(String headBucketName) {
+        OssUtil.headBucketName = headBucketName;
+    }
+
+    /**
+     * accessKeyId
+     *
+     * @param   accessKeyId    the accessKeyId to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public static void setAccessKeyId(String accessKeyId) {
+        OssUtil.accessKeyId = accessKeyId;
+    }
+
+    /**
+     * accessKeySecret
+     *
+     * @param   accessKeySecret    the accessKeySecret to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public static void setAccessKeySecret(String accessKeySecret) {
+        OssUtil.accessKeySecret = accessKeySecret;
+    }
+
+    public static void getFile(String bucketName, String firstKey) {
+
         try {
             // 下载文件。详细请参看“SDK手册 > Java-SDK > 下载文件”。
             // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/download_object.html?spm=5176.docoss/sdk/java-sdk/manage_object
@@ -94,8 +144,7 @@ public class OssUtil {
         }
     }
 
-    public static void deleteFile(String[] args) {
-        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+    public static void deleteFile(String bucketName, String firstKey) {
         String fileKey = "README.md";
         // 删除Object。详细请参看“SDK手册 > Java-SDK > 管理文件”。
         // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/manage_object.html?spm=5176.docoss/sdk/java-sdk/manage_bucket
@@ -105,11 +154,10 @@ public class OssUtil {
         System.out.println("删除Object：" + fileKey + "成功。");
     }
 
-    public static void uploadFile(String[] args) {
+    public static void uploadFile(String bucketName) {
 
         // 生成OSSClient，您可以指定一些参数，详见“SDK手册 > Java-SDK > 初始化”，
         // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/init.html?spm=5176.docoss/sdk/java-sdk/get-start
-        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 
         try {
 
@@ -151,7 +199,7 @@ public class OssUtil {
         logger.info("Completed");
     }
 
-    public static void demo(String[] args) {
+    public static void demo(String bucketName, String firstKey) {
         OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 
         // 把字符串存入OSS，Object的名称为firstKey。详细请参看“SDK手册 > Java-SDK > 上传文件”。
@@ -170,7 +218,7 @@ public class OssUtil {
         }
     }
 
-    public static void getFileUrl(String[] args) {
+    public static String getFileUrl(String[] args) {
         String endpoint = "<endpoint, 例如http://oss-cn-hangzhou.aliyuncs.com>";
         String accessKeyId = "<accessKeyId>";
         String accessKeySecret = "<accessKeySecret>";
@@ -179,12 +227,13 @@ public class OssUtil {
         OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
         // 图片处理样式
         String style = "image/resize,m_fixed,w_100,h_100/rotate,90";
-        // 过期时间10分钟
-        Date expiration = new Date(new Date().getTime() + 1000 * 60 * 10);
+        // 过期时间8小时
+        Date expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 8);
         GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, key, HttpMethod.GET);
         req.setExpiration(expiration);
-        req.setProcess(style);
+        //req.setProcess(style);
         URL signedUrl = ossClient.generatePresignedUrl(req);
-        System.out.println(signedUrl);
+        logger.info("获取图片地址" + signedUrl.toString());
+        return signedUrl.toString();
     }
 }
