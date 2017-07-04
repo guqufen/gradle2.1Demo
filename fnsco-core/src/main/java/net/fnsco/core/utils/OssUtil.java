@@ -37,7 +37,6 @@ import com.aliyun.oss.ClientException;
 import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
-import com.aliyun.oss.model.BucketInfo;
 import com.aliyun.oss.model.GeneratePresignedUrlRequest;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.OSSObjectSummary;
@@ -72,50 +71,6 @@ public class OssUtil {
     // Object命名规范如下：使用UTF-8编码，长度必须在1-1023字节之间，不能以“/”或者“\”字符开头。
     //private static String firstKey        = "my-first-key";
 
-    /**
-     * endpoint
-     *
-     * @param   endpoint    the endpoint to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public static void setEndpoint(String endpoint) {
-        OssUtil.endpoint = endpoint;
-    }
-
-    /**
-     * headBucketName
-     *
-     * @param   headBucketName    the headBucketName to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public static void setHeadBucketName(String headBucketName) {
-        OssUtil.headBucketName = headBucketName;
-    }
-
-    /**
-     * accessKeyId
-     *
-     * @param   accessKeyId    the accessKeyId to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public static void setAccessKeyId(String accessKeyId) {
-        OssUtil.accessKeyId = accessKeyId;
-    }
-
-    /**
-     * accessKeySecret
-     *
-     * @param   accessKeySecret    the accessKeySecret to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public static void setAccessKeySecret(String accessKeySecret) {
-        OssUtil.accessKeySecret = accessKeySecret;
-    }
-
     public static void getFile(String bucketName, String firstKey) {
 
         try {
@@ -143,48 +98,52 @@ public class OssUtil {
             ossClient.shutdown();
         }
     }
-
-    public static void deleteFile(String bucketName, String firstKey) {
-        String fileKey = "README.md";
+    /**
+     * deleteFile:(这里用一句话描述这个方法的作用)删除文件
+     *
+     * @param bucketName
+     * @param fileKey    设定文件
+     * @return void    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static void deleteFile(String bucketName, String fileKey) {
+//        String fileKey = "README.md";
         // 删除Object。详细请参看“SDK手册 > Java-SDK > 管理文件”。
         // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/manage_object.html?spm=5176.docoss/sdk/java-sdk/manage_bucket
-        ossClient.deleteObject(bucketName, firstKey);
-        System.out.println("删除Object：" + firstKey + "成功。");
+//        ossClient.deleteObject(bucketName, firstKey);
+//        System.out.println("删除Object：" + firstKey + "成功。");
         ossClient.deleteObject(bucketName, fileKey);
-        System.out.println("删除Object：" + fileKey + "成功。");
+        logger.info("删除Object：" + fileKey + "成功。");
     }
-
-    public static void uploadFile(String bucketName) {
+    /**
+     * uploadFile:(这里用一句话描述这个方法的作用) 上传文件
+     *
+     * @param filePath    设定文件
+     * @return void    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static void uploadFile(String filePath,String fileKey) {
 
         // 生成OSSClient，您可以指定一些参数，详见“SDK手册 > Java-SDK > 初始化”，
         // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/init.html?spm=5176.docoss/sdk/java-sdk/get-start
-
         try {
-
             // 判断Bucket是否存在。详细请参看“SDK手册 > Java-SDK > 管理Bucket”。
             // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/manage_bucket.html?spm=5176.docoss/sdk/java-sdk/init
-            if (ossClient.doesBucketExist(bucketName)) {
-                System.out.println("您已经创建Bucket：" + bucketName + "。");
+            if (ossClient.doesBucketExist(headBucketName)) {
+                System.out.println("您已经创建Bucket：" + headBucketName + "。");
             } else {
-                System.out.println("您的Bucket不存在，创建Bucket：" + bucketName + "。");
+                System.out.println("您的Bucket不存在，创建Bucket：" + headBucketName + "。");
                 // 创建Bucket。详细请参看“SDK手册 > Java-SDK > 管理Bucket”。
                 // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/manage_bucket.html?spm=5176.docoss/sdk/java-sdk/init
-                ossClient.createBucket(bucketName);
+                ossClient.createBucket(headBucketName);
             }
-
-            // 查看Bucket信息。详细请参看“SDK手册 > Java-SDK > 管理Bucket”。
-            // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/manage_bucket.html?spm=5176.docoss/sdk/java-sdk/init
-            BucketInfo info = ossClient.getBucketInfo(bucketName);
-            System.out.println("Bucket " + bucketName + "的信息如下：");
-            System.out.println("\t数据中心：" + info.getBucket().getLocation());
-            System.out.println("\t创建时间：" + info.getBucket().getCreationDate());
-            System.out.println("\t用户标志：" + info.getBucket().getOwner());
-
             // 文件存储入OSS，Object的名称为fileKey。详细请参看“SDK手册 > Java-SDK > 上传文件”。
             // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/upload_object.html?spm=5176.docoss/user_guide/upload_object
-            String fileKey = "README.md";
-            ossClient.putObject(bucketName, fileKey, new File("README.md"));
-            System.out.println("Object：" + fileKey + "存入OSS成功。");
+//            String fileKey = filePath.substring(filePath.lastIndexOf("/")+1);
+            ossClient.putObject(headBucketName, fileKey, new File(filePath));
+            logger.info("Object：" + fileKey + "存入OSS成功。");
             ossClient.shutdown();
         } catch (OSSException oe) {
             oe.printStackTrace();
@@ -195,10 +154,19 @@ public class OssUtil {
         } finally {
             ossClient.shutdown();
         }
-
         logger.info("Completed");
     }
-
+    
+    public static void main(String[] args) {
+        OssUtil.setEndpoint("http://oss-cn-hangzhou.aliyuncs.com");
+        OssUtil.setAccessKeyId("LTAI8t0z2dOlvLr6");
+        OssUtil.setAccessKeySecret("0jB12XLFoEM4UEauiN8ohp7dXSbE40");
+        OssUtil.setHeadBucketName("bigdata-fns-test");
+        initOssClient();
+//        uploadFile("D:\\temp\\2017\\7\\1499145304175.jpg", "2017/1499145304175.jpg");
+        String url = getFileUrl(getHeadBucketName(),"2017/1499145304175.jpg");
+        System.out.println(url);
+    }
     public static void demo(String bucketName, String firstKey) {
         OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 
@@ -217,23 +185,87 @@ public class OssUtil {
             System.out.println("\t" + object.getKey());
         }
     }
-
-    public static String getFileUrl(String[] args) {
-        String endpoint = "<endpoint, 例如http://oss-cn-hangzhou.aliyuncs.com>";
-        String accessKeyId = "<accessKeyId>";
-        String accessKeySecret = "<accessKeySecret>";
-        String bucketName = "<bucketName>";
-        String key = "example.jpg";
-        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+    /**
+     * getFileUrl:(这里用一句话描述这个方法的作用)获取查看的URL
+     *
+     * @param bucketName
+     * @param fileKey
+     * @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String getFileUrl(String bucketName,String fileKey) {
+//        String endpoint = "<endpoint, 例如http://oss-cn-hangzhou.aliyuncs.com>";
+//        String accessKeyId = "<accessKeyId>";
+//        String accessKeySecret = "<accessKeySecret>";
+//        String bucketName = "<bucketName>";
+//        String key = "example.jpg";
+//        OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
         // 图片处理样式
-        String style = "image/resize,m_fixed,w_100,h_100/rotate,90";
+//        String style = "image/resize,m_fixed,w_100,h_100/rotate,90";
         // 过期时间8小时
         Date expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 8);
-        GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, key, HttpMethod.GET);
+        GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, fileKey, HttpMethod.GET);
         req.setExpiration(expiration);
         //req.setProcess(style);
         URL signedUrl = ossClient.generatePresignedUrl(req);
         logger.info("获取图片地址" + signedUrl.toString());
         return signedUrl.toString();
     }
+    
+    /**
+     * endpoint
+     *
+     * @param   endpoint    the endpoint to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public static void setEndpoint(String endpoint) {
+        OssUtil.endpoint = endpoint;
+    }
+
+    /**
+     * headBucketName
+     *
+     * @param   headBucketName    the headBucketName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public static void setHeadBucketName(String headBucketName) {
+        OssUtil.headBucketName = headBucketName;
+    }
+    /**
+     * headBucketName
+     *
+     * @return  the headBucketName
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public static String getHeadBucketName() {
+        return OssUtil.headBucketName;
+    }
+
+    /**
+     * accessKeyId
+     *
+     * @param   accessKeyId    the accessKeyId to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public static void setAccessKeyId(String accessKeyId) {
+        OssUtil.accessKeyId = accessKeyId;
+    }
+
+    /**
+     * accessKeySecret
+     *
+     * @param   accessKeySecret    the accessKeySecret to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public static void setAccessKeySecret(String accessKeySecret) {
+        OssUtil.accessKeySecret = accessKeySecret;
+    }
+
 }

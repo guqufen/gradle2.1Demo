@@ -128,6 +128,8 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
         }
         result.setIsUpdate(isUpdate);
         result.setVersion(ver.getVersion());
+        result.setRemark(ver.getRemark());
+        result.setVersionDesc(ver.getVersionDesc());
         return result;
     }
 

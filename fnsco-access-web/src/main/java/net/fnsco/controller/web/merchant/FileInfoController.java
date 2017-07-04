@@ -23,11 +23,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONArray;
+import com.google.common.base.Strings;
 
 import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.service.dao.master.MerchantFileDao;
 import net.fnsco.service.dao.master.MerchantFileTempDao;
 import net.fnsco.service.domain.MerchantFile;
@@ -130,6 +132,25 @@ public class FileInfoController extends BaseController{
 	}
 	
 	/**
+	 * getImagePath:(这里用一句话描述这个方法的作用)查看文件外网路径
+	 *
+	 * @param url
+	 * @return    设定文件
+	 * @return String    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	@RequestMapping("/getImagePath")
+	@ResponseBody
+	public String getImagePath(String url){
+	    if(!Strings.isNullOrEmpty(url)){
+	        String path = url.substring(url.indexOf("^")+1);
+	        return OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
+	    }
+	    return "";
+	}
+	
+	/**
 	 * @param req
 	 * @param response
 	 * @param isApp
@@ -173,7 +194,9 @@ public class FileInfoController extends BaseController{
 			}
 
 			String yearMonthPath = year + line + month + line;
-			String filepath = yearMonthPath + System.currentTimeMillis() + "." + prefix;
+			String newFileName = System.currentTimeMillis() + "." + prefix;
+			String fileKey = year+"/"+month+"/"+newFileName;
+			String filepath = yearMonthPath + newFileName;
 
 			String fileURL = this.env.getProperty("fileUpload.url") + line + filepath;
 
@@ -183,20 +206,9 @@ public class FileInfoController extends BaseController{
 					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileURL));
 					stream.write(bytes);
 					stream.close();
-					String newUrl = null;
-
-					if(!isApp){
-						newUrl = StringUtils.replace(filepath, line, "^");
-//						fileInfo.setSaveURL(newUrl);
-					}else{
-
-						newUrl = filepath;
-
-						if(!"/".equals(line)){
-							newUrl = StringUtils.replace(filepath, line, "/");
-						}
-					}
-
+					//上传阿里云OSS文件服务器
+					OssUtil.uploadFile(fileURL, fileKey);
+					String newUrl = OssUtil.getHeadBucketName()+"^"+fileKey;
 					fileInfo.setInnerCode(innerCode);
 					fileInfo.setFilePath(newUrl);
 					fileInfo.setFileType(fileType);
@@ -204,19 +216,14 @@ public class FileInfoController extends BaseController{
 					fileInfo.setCreateTime(new Date());
 					ResultDTO<Integer> result = merchantInfoService.doAddToDB(fileInfo,0);
 					if (result.isSuccess()) {
-						ResultDTO<TreeMap<String, String>> appResult = new ResultDTO<>();
-//						appResult.success("上传成功");
-//						appResult.setCode("200");
+						ResultDTO<TreeMap<String, String>> appResult = null;
 
 						TreeMap<String, String> paras = new TreeMap<>();
-
 						paras.put("id", String.valueOf(result.getData()));
 						paras.put("url", newUrl);
 						paras.put("fileType", fileType);
 
-						appResult.success(paras);
-
-//						String json = isApp?Result.toNewJson(appResult):Result.toNewJson(paras);//待定
+						appResult = ResultDTO.success(paras);
 						String json = isApp?JSONArray.toJSONString(appResult):JSONArray.toJSONString(paras);
 						response.getWriter().write(json);
 					} else {

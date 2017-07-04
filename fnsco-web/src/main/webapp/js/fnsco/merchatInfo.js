@@ -313,7 +313,7 @@ function  fileUp(num){
     	   var obj = eval('(' + response + ')');
 			   var fileName = file.name.replace(',','');
        		$('#view'+num).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
-						"<a class='previewfileImg' id='previewfileImg"+obj.id+"' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
+						"<a class='previewfileImg' id='previewfileImg"+obj.id+"' href=javascript:seeImage('"+obj.url+"') title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
 						"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"','"+num+"')><span class='glyphicon glyphicon-trash'></span>删除</a>" + "</div>");
        		//预览图片
        		var aId='previewfileImg'+obj.id;
@@ -385,7 +385,21 @@ function deleteImage(queueId,id,url,num){
   });
    
 }
-
+//查看图片
+function seeImage(fileName){
+	$.ajax({
+	      url:'/web/fileInfo/getImagePath',
+	      data: {'url':fileName},
+	      type:'POST',
+	      success:function(data){
+	        if(data){
+	           alert(data);
+	        }else{
+	           layer.msg('获取失败');
+	        }
+	      }
+	  });
+}
 //保存商户基本信息下一步按钮
 function saveMerCore(){
   $.ajax({
@@ -842,7 +856,7 @@ function editData(id){
             var id=data.data.files[i].id;
             //重置
             $('#view'+fileType+'_1').append("<div style='float:left;width:99%'><span class='fileImgName' imgFileId="+id+">"+fileName+"</span>" +
-                    "<a class='previewfileImg' id='previewfileImg"+id+"_1' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
+                    "<a class='previewfileImg' href=javascript:seeImage('"+filePath+"') id='previewfileImg"+id+"_1' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
                     "<a title='删除' class='deletefileImg' style='display:none' id='deletefileImg"+id+"' href=javascript:deleteImage('#deletefileImg"+id+"',"+id+",'"+filePath+"',"+fileType+")><span class='glyphicon glyphicon-trash'></span>删除</a><!-- 删除 -->" + "</div>");
             $(".uploadify").hide();
             //预览图片事件
