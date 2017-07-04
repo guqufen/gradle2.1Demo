@@ -144,16 +144,17 @@ public class OssUtil {
 //            String fileKey = filePath.substring(filePath.lastIndexOf("/")+1);
             ossClient.putObject(headBucketName, fileKey, new File(filePath));
             logger.info("Object：" + fileKey + "存入OSS成功。");
-            ossClient.shutdown();
+          //  ossClient.shutdown();
         } catch (OSSException oe) {
             oe.printStackTrace();
         } catch (ClientException ce) {
             ce.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            ossClient.shutdown();
         }
+//        finally {
+//            ossClient.shutdown();
+//        }
         logger.info("Completed");
     }
     

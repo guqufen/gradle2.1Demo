@@ -393,7 +393,7 @@ function seeImage(fileName){
 	      type:'POST',
 	      success:function(data){
 	        if(data){
-	           alert(data);
+	           console.log(data);
 	        }else{
 	           layer.msg('获取失败');
 	        }
