@@ -56,7 +56,7 @@ public class TradeDataController extends BaseController {
         if (null != list) {
             for (TradeData tradeData : list) {
                 TradeDataJO jo = new TradeDataJO();
-                jo.setAmount(tradeData.getAmt());
+                jo.setAmount(getAtm(tradeData.getAmt()));
                 jo.setPayType(tradeData.getPaySubType());
                 jo.setPayTypeName(PaySubTypeEnum.getNameByCode(jo.getPayType()));
                 jo.setStatus(tradeData.getRespCode());
@@ -71,7 +71,19 @@ public class TradeDataController extends BaseController {
         result.setMerTotal(temp.getMerTotal());
         return success(result);
     }
-
+    private String getAtm(String amount){
+        if (Strings.isNullOrEmpty(amount)) {
+            return "";
+        }
+        if(amount.length()==1){
+            amount="00"+amount;
+        }else if(amount.length()==2){
+            amount="0"+amount;
+        }
+        String temp1 = amount.substring(0, amount.length() - 2);
+        String temp2 = amount.substring(amount.length() - 2, amount.length());
+        return (temp1 + "." + temp2);
+    }
     /**
      * 查询交易流水信息
      *
@@ -85,18 +97,7 @@ public class TradeDataController extends BaseController {
         TradeData tradeData = tradeDataService.queryByTradeId(tradeQueryDTO.getTradeId());
         MerchantCore merchantCore = merchantCoreService.queryByInnerCode(tradeData.getInnerCode());
         TradeDataJO result = new TradeDataJO();
-        String amount = tradeData.getAmt();
-        if (!Strings.isNullOrEmpty(amount)) {
-            if(amount.length()==1){
-                amount="00"+amount;
-            }else if(amount.length()==2){
-                amount="0"+amount;
-            }
-            String temp1 = amount.substring(0, amount.length() - 2);
-            String temp2 = amount.substring(amount.length() - 2, amount.length());
-            result.setAmount(temp1 + "." + temp2);
-        }
-
+        result.setAmount(getAtm(tradeData.getAmt()));
         result.setPayType(tradeData.getPaySubType());
         result.setPayTypeName(PaySubTypeEnum.getNameByCode(result.getPayType()));
         result.setStatus(tradeData.getRespCode());

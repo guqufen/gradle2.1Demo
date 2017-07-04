@@ -13,11 +13,12 @@ public class InitConfig {
     private Environment env;
 
     @Bean
-    public void ossConf() {
+    public int ossConf() {
         OssUtil.setEndpoint(env.getProperty("aliyun.oss.endpoint"));
         OssUtil.setAccessKeyId(env.getProperty("aliyun.oss.accessKeyId"));
         OssUtil.setAccessKeySecret(env.getProperty("aliyun.oss.accessKeySecret"));
         OssUtil.setHeadBucketName(env.getProperty("aliyun.oss.headBucketName"));
         OssUtil.initOssClient();
+        return 1;
     }
 }
