@@ -50,7 +50,7 @@ public class CommonController extends BaseController {
         String[] versionArr = version.split("\\.");
         if (versionArr == null || versionArr.length != 3) {
             logger.warn("版本号格式错误,version=" + version);
-            return ResultDTO.fail(ApiConstant.E_EDITION_LOGIN);
+            return ResultDTO.fail(ApiConstant.E_EDITION_ERROR);
         }
         String appCode = AppTypeEnum.LKL.getCode();
         VersionDTO sysVersionDTO = new VersionDTO();
