@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
@@ -37,7 +37,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
     //注册
     @Override
-    @Transactional
     public ResultDTO insertSelective(AppUserDTO appUserDTO) {
         Map<String, Integer> map = new HashMap<>();
         //非空判断
@@ -118,7 +117,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
         }
         if(MsgCodeMap.get(mobile + deviceId)==null){
-            return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);
+            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
         }
         //从Map中根据手机号取到存入的验证码
         SmsCodeDTO codeDto = MsgCodeMap.get(mobile + deviceId);
@@ -136,15 +135,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (code.equals(codeDto.getCode())) {
             MsgCodeMap.remove(mobile + deviceId);
             return ResultDTO.success();
-        } else {
-            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
-        }
-        //从map从移除验证码
+        } 
+        return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
     }
 
     //根据手机号找回登录密码
     @Override
-    @Transactional
     public ResultDTO findPassword(AppUserDTO appUserDTO) {
         //非空判断
         if (Strings.isNullOrEmpty(appUserDTO.getDeviceId())) {
@@ -176,9 +172,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
     //修改密码
     @Override
-    @Transactional
     public ResultDTO<String> modifyPassword(AppUserDTO appUserDTO) {
-        Integer id = appUserDTO.getId();
+        Integer id = appUserDTO.getUserId();
         //非空判断
         if (id == null) {
             return ResultDTO.fail(ApiConstant.E_APP_ID_EMPTY);
@@ -193,6 +188,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         AppUser appUser = new AppUser();
         //根据id查询用户是否存在获取原密码
         AppUser mAppUser = MappUserDao.selectAppUserById(id);
+        if(null == mAppUser){
+            return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+        }
         //查到的密码和原密码做比较
         if (!oldPassword.equals(mAppUser.getPassword())) {
             return ResultDTO.fail(ApiConstant.E_OLDPASSWORD_ERROR);
@@ -231,7 +229,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             user.setId(appUser.getId());
             //更新到实体
             if (MappUserDao.updateByPrimaryKeySelective(user)) {
-                map.put("appUserId", appUser.getId());
+                map.put("appUserId", appUser.getId()); 
                 return ResultDTO.success(map);
             }
         }

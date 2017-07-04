@@ -4,7 +4,7 @@ import net.fnsco.core.base.JO;
 
 public class DiscoveryJO extends JO {
     private Integer  deviceType;
-
+    
     public Integer getDeviceType() {
         return deviceType;
     }

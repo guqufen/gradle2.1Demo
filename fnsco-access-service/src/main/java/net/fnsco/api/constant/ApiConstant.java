@@ -53,6 +53,8 @@ public class ApiConstant extends CoreConstants {
     public static String E_EDITION_LOGIN           = "5107";                            //版本号格式错误
     public static String E_CODE_INVALID            = "5108";                            //验证码已失效
 
+    
+    
     static {
         ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NULL, "商铺码不能为空");
         ERROR_MESSGE_MAP.put(E_USER_ID_NULL, "用户ID不能为空");
