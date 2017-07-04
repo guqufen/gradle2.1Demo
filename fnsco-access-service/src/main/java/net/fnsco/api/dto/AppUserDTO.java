@@ -4,210 +4,219 @@ import java.util.Date;
 
 import net.fnsco.core.base.DTO;
 
-public class AppUserDTO extends DTO{
-	  private Integer id;
+public class AppUserDTO extends DTO {
+    private Integer id;
+    private Integer userId;
+    private String  userName;
 
-	    private String userName;
+    private String  mobile;
 
-	    private String mobile;
+    private String  password;
 
-	    private String password;
+    private String  realName;
 
-	    private String realName;
+    private String  deviceId;
 
-	    private String deviceId;
+    private Integer gesState;
 
-	    private Integer gesState;
+    private String  gesPassword;
+    private Integer gesTrail;
+    private String  code;
+    private String  oldPassword;
 
-	    private String gesPassword;
-	    private Integer gesTrail;
-	    private String code;
-	    private String oldPassword;
-	    public String getOldPassword() {
-			return oldPassword;
-		}
+    public Integer getUserId() {
+        return userId;
+    }
 
-		public void setOldPassword(String oldPassword) {
-			this.oldPassword = oldPassword;
-		}
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
-		public String getCode() {
-			return code;
-		}
+    public String getOldPassword() {
+        return oldPassword;
+    }
 
-		public void setCode(String code) {
-			this.code = code;
-		}
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
 
-		public Integer getId() {
-			return id;
-		}
+    public String getCode() {
+        return code;
+    }
 
-		public void setId(Integer id) {
-			this.id = id;
-		}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-		public String getUserName() {
-			return userName;
-		}
+    public Integer getId() {
+        return id;
+    }
 
-		public void setUserName(String userName) {
-			this.userName = userName;
-		}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-		public String getMobile() {
-			return mobile;
-		}
+    public String getUserName() {
+        return userName;
+    }
 
-		public void setMobile(String mobile) {
-			this.mobile = mobile;
-		}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-		public String getPassword() {
-			return password;
-		}
+    public String getMobile() {
+        return mobile;
+    }
 
-		public void setPassword(String password) {
-			this.password = password;
-		}
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
-		public String getRealName() {
-			return realName;
-		}
+    public String getPassword() {
+        return password;
+    }
 
-		public void setRealName(String realName) {
-			this.realName = realName;
-		}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-		public String getDeviceId() {
-			return deviceId;
-		}
+    public String getRealName() {
+        return realName;
+    }
 
-		public void setDeviceId(String deviceId) {
-			this.deviceId = deviceId;
-		}
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
 
-		public Integer getGesState() {
-			return gesState;
-		}
+    public String getDeviceId() {
+        return deviceId;
+    }
 
-		public void setGesState(Integer gesState) {
-			this.gesState = gesState;
-		}
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
 
-		public String getGesPassword() {
-			return gesPassword;
-		}
+    public Integer getGesState() {
+        return gesState;
+    }
 
-		public void setGesPassword(String gesPassword) {
-			this.gesPassword = gesPassword;
-		}
+    public void setGesState(Integer gesState) {
+        this.gesState = gesState;
+    }
 
-		public Integer getGesTrail() {
-			return gesTrail;
-		}
+    public String getGesPassword() {
+        return gesPassword;
+    }
 
-		public void setGesTrail(Integer gesTrail) {
-			this.gesTrail = gesTrail;
-		}
+    public void setGesPassword(String gesPassword) {
+        this.gesPassword = gesPassword;
+    }
 
-		public String getPayPassword() {
-			return payPassword;
-		}
+    public Integer getGesTrail() {
+        return gesTrail;
+    }
 
-		public void setPayPassword(String payPassword) {
-			this.payPassword = payPassword;
-		}
+    public void setGesTrail(Integer gesTrail) {
+        this.gesTrail = gesTrail;
+    }
 
-		public Integer getDeviceType() {
-			return deviceType;
-		}
+    public String getPayPassword() {
+        return payPassword;
+    }
 
-		public void setDeviceType(Integer deviceType) {
-			this.deviceType = deviceType;
-		}
+    public void setPayPassword(String payPassword) {
+        this.payPassword = payPassword;
+    }
 
-		public String getDeviceToken() {
-			return deviceToken;
-		}
+    public Integer getDeviceType() {
+        return deviceType;
+    }
 
-		public void setDeviceToken(String deviceToken) {
-			this.deviceToken = deviceToken;
-		}
+    public void setDeviceType(Integer deviceType) {
+        this.deviceType = deviceType;
+    }
 
-		public Integer getPasswordErrorNum() {
-			return passwordErrorNum;
-		}
+    public String getDeviceToken() {
+        return deviceToken;
+    }
 
-		public void setPasswordErrorNum(Integer passwordErrorNum) {
-			this.passwordErrorNum = passwordErrorNum;
-		}
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
 
-		public Date getPasswordErrorDate() {
-			return passwordErrorDate;
-		}
+    public Integer getPasswordErrorNum() {
+        return passwordErrorNum;
+    }
 
-		public void setPasswordErrorDate(Date passwordErrorDate) {
-			this.passwordErrorDate = passwordErrorDate;
-		}
+    public void setPasswordErrorNum(Integer passwordErrorNum) {
+        this.passwordErrorNum = passwordErrorNum;
+    }
 
-		public String getRemark() {
-			return remark;
-		}
+    public Date getPasswordErrorDate() {
+        return passwordErrorDate;
+    }
 
-		public void setRemark(String remark) {
-			this.remark = remark;
-		}
+    public void setPasswordErrorDate(Date passwordErrorDate) {
+        this.passwordErrorDate = passwordErrorDate;
+    }
 
-		public Date getRegTime() {
-			return regTime;
-		}
+    public String getRemark() {
+        return remark;
+    }
 
-		public void setRegTime(Date regTime) {
-			this.regTime = regTime;
-		}
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
-		public Date getLastLoginTime() {
-			return lastLoginTime;
-		}
+    public Date getRegTime() {
+        return regTime;
+    }
 
-		public void setLastLoginTime(Date lastLoginTime) {
-			this.lastLoginTime = lastLoginTime;
-		}
+    public void setRegTime(Date regTime) {
+        this.regTime = regTime;
+    }
 
-		public Date getModifyTime() {
-			return modifyTime;
-		}
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
 
-		public void setModifyTime(Date modifyTime) {
-			this.modifyTime = modifyTime;
-		}
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
 
-		public Integer getState() {
-			return state;
-		}
+    public Date getModifyTime() {
+        return modifyTime;
+    }
 
-		public void setState(Integer state) {
-			this.state = state;
-		}
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
 
-		private String payPassword;
+    public Integer getState() {
+        return state;
+    }
 
-	    private Integer deviceType;
+    public void setState(Integer state) {
+        this.state = state;
+    }
 
-	    private String deviceToken;
+    private String  payPassword;
 
-	    private Integer passwordErrorNum;
+    private Integer deviceType;
 
-	    private Date passwordErrorDate;
+    private String  deviceToken;
 
-	    private String remark;
+    private Integer passwordErrorNum;
 
-	    private Date regTime;
+    private Date    passwordErrorDate;
 
-	    private Date lastLoginTime;
+    private String  remark;
 
-	    private Date modifyTime;
+    private Date    regTime;
 
-	    private Integer state;
+    private Date    lastLoginTime;
+
+    private Date    modifyTime;
+
+    private Integer state;
 }

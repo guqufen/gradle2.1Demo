@@ -11,8 +11,6 @@ public interface AppUserService {
 	ResultDTO<String> modifyPassword(AppUserDTO appUserDTO);
 	//生产验证码
 	void getValidateCode(AppUserDTO appUserDTO);
-	//比对验证码
-	//ResultDTO<String> validateCode(String deviceId, String code);
 	//通过手机号找回登录密码
 	ResultDTO<String> findPassword(AppUserDTO appUserDTO);
 	//根据手机号查询用户实体
