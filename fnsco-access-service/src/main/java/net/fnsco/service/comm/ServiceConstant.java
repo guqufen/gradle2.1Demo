@@ -67,7 +67,7 @@ public class ServiceConstant {
     }
 
     public static enum PaySubTypeEnum {
-                                       WX_PAY("01", "微信支付"), ZFB_PAY("02", "支付宝支付"), YL_PAY("02", "银联支付");
+                                       SK_PAY("00", "刷卡支付"), WX_PAY("01", "微信支付"), ZFB_PAY("02", "支付宝支付"), YL_PAY("02", "银联支付");
         private String code;
         private String name;
 
