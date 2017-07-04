@@ -118,6 +118,7 @@ public class TradeDataController extends BaseController {
         result.setTermId(tradeData.getTermId());
         result.setTraceNo(tradeData.getTraceNo());
         result.setReferNo(tradeData.getReferNo());
+        result.setCertifyId(tradeData.getCertifyId());
         return ResultDTO.success(result);
     }
 
