@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import net.fnsco.api.merchant.MerchantInfoService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.FileUtils;
+import net.fnsco.service.dao.master.MerchantFileDao;
 import net.fnsco.service.dao.master.MerchantFileTempDao;
 import net.fnsco.service.domain.MerchantFileTemp;
 
@@ -25,6 +26,9 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 	
 	@Autowired
 	private MerchantFileTempDao merchantFileInfoDao;
+	
+	@Autowired
+	private MerchantFileDao merChantFileDao;
 	
 	@Autowired
 	private Environment env;
@@ -86,10 +90,10 @@ public class MerchantInfoServiceImpl implements MerchantInfoService {
 			String filePath = stry+"/"+url;
 			FileUtils.delFile(filePath);
 		}	
+		int res = merChantFileDao.deleteByPrimaryKey(id);
+		int re =  merchantFileInfoDao.deleteByPrimaryKey(id);
 		
-		int re = merchantFileInfoDao.deleteByPrimaryKey(id);
-		
-		if(re == 1)
+		if(re != 0 || res !=0)
 		{
 			return true;
 		}	

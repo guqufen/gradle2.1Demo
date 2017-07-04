@@ -306,6 +306,7 @@ function  fileUp(num){
     	   	$('#uploadify_file'+num).hide();
     	   	$('#fileQueue'+num).html('');
     	   	var fileIds = $('#fileIds').val();
+    	   	console.log('上传后的结果:'+fileIds+'本次结果:'+obj.id);
     	   	if(fileIds){
     	   		$('#fileIds').val(fileIds+','+obj.id);
     	   	}else{
@@ -379,7 +380,7 @@ function saveMerCore(){
 //保存文件信息
 function saveFile(){
   var file_ids = $('#fileIds').val();
-  console.log(file_ids);
+  console.log('保存文件:'+file_ids);
   $.ajax({
     url:'/web/fileInfo/savefiles',
     data:{'fileIds':file_ids},
@@ -428,7 +429,6 @@ function contactHtml(num){
   //获取联系信息参数结果集保存
   function saveContactParams(conId){
   		var listLen=$("#"+conId+" .contact-list").length;
-      console.log(listLen);
       var contactArr=new Array();
       var concatContactArr;
       for (var i=0;i<listLen;i++){
@@ -439,7 +439,6 @@ function contactHtml(num){
         var contactJobs=$("#"+conId+" .contact-list").eq(i).find($('.contactJobs')).val();
         var innerCode = $('#innerCode').val();
         var id=$("#terminal-con1 .contact-list").eq(i).find($('.remove-icon')).attr('editId');
-        console.log('terId:'+id);
         if(!innerCode){
           alert('操作错误!');return ;
         }
@@ -450,7 +449,6 @@ function contactHtml(num){
         }
         contactlArr=contactArr.push(concatContactArr);
   		}
-      console.log(contactlArr);
   		$.ajax({
   			url:'/web/merchantinfo/toAddContact',
   			dataType:"json", 
@@ -518,7 +516,6 @@ function terminalHtml(num){
   //获取终端参数结果集保存
   function saveTerminalParams(conId){
   	var listLen=$("#"+conId+" .terminal-list").length;
-    console.log(listLen);
   	var terminalArr=new Array();
   	var concatTerminalArr;
   	for (var i=0;i<listLen;i++){
@@ -542,7 +539,6 @@ function terminalHtml(num){
   		var mercReferName=$("#"+conId+" .terminal-list").eq(i).find($('.mercReferName')).val();
   		var innerCode=$("#innerCode").val();
   		var id=$("#terminal-con1 .terminal-list").eq(i).find($('.remove-icon')).attr('editId');
-  		console.log('terId:'+id);
       if(!innerCode){
         alert('操作错误!');return ;
       }
@@ -553,7 +549,6 @@ function terminalHtml(num){
         }
   		terminalArr=terminalArr.concat(concatTerminalArr);
     }
-  	console.log(terminalArr);
   	//保存
   	$.ajax({
   		url:'/web/merchantinfo/toAddTerminal',
@@ -624,7 +619,6 @@ function saveChannelParams(conId){
     }
     channelArr=channelArr.concat(concatChannelArrArr);
   }
-  console.log(concatChannelArrArr);
   //保存
   $.ajax({
     url:'/web/merchantinfo/toAddChannel',
@@ -670,7 +664,6 @@ $("#btn_addBankCard").click(function(){
 })
 //删除银行卡列表
 function removeBankCard(num){
-  console.log($('.remove-bankCardList'+num));
   $('.remove-bankCardList'+num).parent().remove();
   if(num && num >0){
 	  a.ajax({
@@ -715,7 +708,6 @@ function saveBankCardParams(conId){
     }
     bankCardArr=bankCardArr.concat(concatBankCardArr);
   }
-  console.log(bankCardArr);
   //保存
   $.ajax({
     url:'/web/merchantinfo/toAddBank',
@@ -741,7 +733,6 @@ $("#btn_saveBankCard").click(function(){
 
 //生成表格里的编辑事件
 function editData(id){
-	 clickFileBtn();
    $.ajax({
     url:'/web/merchantinfo/queryAllById',
     type:'POST',
@@ -752,6 +743,8 @@ function editData(id){
         console.log(data.data);
         // 关闭再次点开回到第一个标签
         $('#innerCode').val(data.data.innerCode);
+        $("input[name='innerCode']").val(data.data.innerCode);
+        clickFileBtn();
         $("#editModal").find('.tab-pane').removeClass("active");
         $("#home1").addClass("active");
         $("#editModal .nav-tabs li").removeClass("active");
@@ -809,7 +802,6 @@ function editData(id){
             var fileType=data.data.files[i].fileType;
             var filePath=data.data.files[i].filePath;
             var id=data.data.files[i].id;
-            console.log(fileName,fileType,filePath,id);
             //重置
             $('#view'+fileType+'_1').append("<div style='float:left;width:99%'><span class='fileImgName' imgFileId="+id+">"+fileName+"</span>" +
                     "<a class='previewfileImg' id='previewfileImg"+id+"_1' title='预览'><img src data-original='http://img.zcool.cn/community/00a4cc59532534a8012193a349921d.jpg'/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
