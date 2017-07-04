@@ -813,6 +813,7 @@ function saveBankCardParams(conId){
 //保存银行卡数据
 $("#btn_saveBankCard").click(function(){
   saveBankCardParams('bankCard-con');
+  $('body').removeClass('modal-open');
 })
 
 
