@@ -1,3 +1,3 @@
 @echo off
-mvn clean package -Pprop -Dmaven.test.skip=true
+mvn clean package -Pprod -Dmaven.test.skip=true
 pause
