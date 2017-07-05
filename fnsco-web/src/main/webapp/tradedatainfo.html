@@ -35,8 +35,8 @@
                     </div>
                     <div class="col-sm-8 query-time">
                         <label class="control-label" for="txt_search_price">发送日期:</label>
-                        <input type="text" value="2017-07-05" class="form-control" id="datetimepicker1" name="startSendTime"> -
-                        <input type="text" value="2017-07-05" class="form-control" id="datetimepicker2" name="endSendTime">
+                        <input type="text" value="" class="form-control" id="datetimepicker1" name="startSendTime"> -
+                        <input type="text" value="" class="form-control" id="datetimepicker2" name="endSendTime">
                     </div>
                 </div>
                 <div class="col-sm-2" style="text-align: right;">
@@ -205,7 +205,9 @@
  			   pageSize : this.pageSize,
  			   orderNo :$('#txt_search_id').val(),
  			   merId:$('#txt_search_name').val(),
- 			   amt:$('#txt_search_price').val()
+ 			   amt:$('#txt_search_price').val(),
+ 			   startSendTime:$('#datetimepicker1').val(),
+ 			  endSendTime:$('#datetimepicker2').val()
  	   }
  	   return param;
     }
