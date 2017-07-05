@@ -90,8 +90,8 @@ function initTableData(){
             field: 'legalPerson',
             title: '商户法人姓名'
         }, {
-            field: 'legalPersonTel',
-            title: '法人联系电话'
+            field: 'legalPersonMobile',
+            title: '法人手机号码'
         }, {
             field: 'legalValidCardType',
             title: '法人有效证件类型',
@@ -712,7 +712,7 @@ function channelHtml(num){
 	return  '<div class="channel-list"><div class="remove-icon remove-channelList'+num+'" editId="'+num+'" onclick="removeChannel('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerId'+num+'">渠道商户号：</label><input type="text" class="form-control channelMerId" id="channelMerId'+num+'" name="channelMerId'+num+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">渠道商户key：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道类型：</label><select name="channelType'+num+'" class="form-control channelType"><option value="00">爱农</option><option value="01">浦发</option><option value="02">拉卡拉</option></select></div></div></div>';
+            '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道类型：</label><select name="channelType'+num+'" class="form-control channelType"><option value="00">拉卡拉</option><option value="01">浦发</option><option value="02">爱农</option></select></div></div></div>';
 }
 //默认添加一个渠道信息列表
 $('#channel-con').append(channelHtml(ChannellList));
@@ -922,7 +922,6 @@ function editData(id){
         $('input[name="enName1"]').val(data.data.enName);
         $('input[name="legalPerson1"]').val(data.data.legalPerson);
         $('input[name="legalPersonMobile1"]').val(data.data.legalPersonMobile);
-        $('input[name="legalPersonTel1"]').val(data.data.legalPersonTel);
         $('select[name="legalValidCardType1"]').find("option[value="+data.data.legalValidCardType+"]").attr("selected",true);
         $('input[name="cardNum1"]').val(data.data.cardNum);
         $('input[name="cardValidTime1"]').val(data.data.cardValidTime);
@@ -1069,7 +1068,6 @@ function editData(id){
             var enName = $('input[name="enName1"]').val();
             var legalPerson = $('input[name="legalPerson1"]').val();
             var legalPersonMobile = $('input[name="legalPersonMobile1"]').val();
-            var legalPersonTel = $('input[name="legalPersonTel1"]').val();
             var legalValidCardType = $('select[name="legalValidCardType1"]').val();
             var cardNum = $('input[name="cardNum1"]').val();
             var cardValidTime = $('input[name="cardValidTime1"]').val();
@@ -1080,8 +1078,7 @@ function editData(id){
             var mercFlag = $('input[name="mercFlag1"]').val();
             var agentId = $('#agentId1').val();
             
-            var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,
-            		'legalPersonTel':legalPersonTel,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
+            var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
             		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId};
             
             console.log(params);
@@ -1196,7 +1193,6 @@ function detailsData(id){
         $('input[name="enName2"]').val(data.data.enName);
         $('input[name="legalPerson2"]').val(data.data.legalPerson);
         $('input[name="legalPersonMobile2"]').val(data.data.legalPersonMobile);
-        $('input[name="legalPersonTel2"]').val(data.data.legalPersonTel);
         $('select[name="legalValidCardType2"]').find("option[value="+data.data.legalValidCardType+"]").attr("selected",true);
         $('input[name="cardNum2"]').val(data.data.cardNum);
         $('input[name="cardValidTime2"]').val(data.data.cardValidTime);
