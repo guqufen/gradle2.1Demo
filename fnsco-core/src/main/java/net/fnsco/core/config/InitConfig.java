@@ -8,6 +8,7 @@ import org.springframework.core.env.Environment;
 import net.fnsco.core.utils.OssUtil;
 
 @Configuration
+//@EnableRedisHttpSession
 public class InitConfig {
     @Autowired
     private Environment env;
@@ -21,4 +22,9 @@ public class InitConfig {
         OssUtil.initOssClient();
         return 1;
     }
+    
+//    @Bean
+//    public JedisConnectionFactory connectionFactory() {
+//            return new JedisConnectionFactory();
+//    }
 }
