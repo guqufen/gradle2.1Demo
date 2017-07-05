@@ -204,3 +204,75 @@ table a.remove,table a.redact,table a.details{
 .editBtn_edit span,.editBtn_save span{
 	margin-right: 3px;
 }
+
+/*修改账户密码*/
+.modal-lg .input-group{
+	margin: 10px;
+}
+#changePassword .changePassword-mian{
+	position: absolute;
+    height: 100%;
+    width: 100%;
+    display: table;
+}
+#changePassword .changePassword-mian .modal-dialog{
+	display: table-cell;
+    vertical-align: middle;
+}
+#changePassword .changePassword-mian .modal-dialog .modal-content{
+	width: 565px;
+	margin: 0 auto;
+	border-radius: 0;
+}
+#changePassword .changePassword-mian .modal-dialog  .modal-header{
+	border:0;
+}
+
+.login-header{
+	height: 140px;
+	border-bottom: 2px solid #f5f5f5;
+	font-size: 24px;
+	color: #666;
+	padding-top: 10px;
+	text-align: center;
+}
+
+.login-header .logo {
+	height: 60px;
+	margin-bottom: 10px;
+}
+.login-header .logo img{
+	width: 60px;
+}
+.forget-body{
+	width: 386px;
+	margin: 40px auto 40px auto;
+}
+.forget-input-panel input{
+	border: none;
+	float: right;
+	height: 20px;
+	width: 300px;
+	outline:none;
+}
+.username-input,.password-input{
+	height: 50px;
+	padding: 15px;
+	margin: 20px 0;
+	border:1px solid #ccc;
+}
+.forget-input-panel .left{
+	float: left;
+}
+.forget-input-panel .icon{
+	height: 20px;
+	padding-right: 10px;
+	margin-right: 20px;
+	border-right: 1px solid #ccc;
+}
+.forget-btn{
+	height: 50px;line-height: 50px;background: #2f4050;color: #fff;cursor: pointer;border: none;width: 100%;
+}
+.changePage{
+	font-size: 14px;color: #666;padding-top: 20px;cursor: pointer;
+}
