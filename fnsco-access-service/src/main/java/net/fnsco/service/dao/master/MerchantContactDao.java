@@ -28,4 +28,6 @@ public interface MerchantContactDao {
      * @return
      */
    List<MerchantContact> queryByInnerCode(@Param("innerCode") String innerCode);
+   //条件查询
+   List<MerchantContact> queryListByCondition(MerchantContact merchantContact);
 }

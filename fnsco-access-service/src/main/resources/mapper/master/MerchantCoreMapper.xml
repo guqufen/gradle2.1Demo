@@ -621,5 +621,11 @@
     and status=1
     limit 1
   </select>
-  
+  <!--根据手机号查询inner_code-->
+  <select id="innerCodeByMobile" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from m_merchant_core
+    where legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR}
+  </select>
 </mapper>

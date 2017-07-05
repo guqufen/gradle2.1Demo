@@ -116,4 +116,30 @@
     delete from m_merchant_contact
     where id = #{id,jdbcType=INTEGER}
   </delete>
+  <!-- 条件查询 -->
+  <select id="queryListByCondition" parameterType="net.fnsco.service.domain.MerchantContact" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+   	 from m_merchant_contact
+      <where>
+   	   <if test="innerCode != null" >
+        AND inner_code = #{innerCode,jdbcType=VARCHAR}
+      </if>
+     <if test="contactName != null" >
+        AND contact_name = #{contactName,jdbcType=VARCHAR}
+      </if>
+      <if test="contactMobile != null" >
+        AND contact_mobile = #{contactMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="contactEmail != null" >
+        AND contact_email = #{contactEmail,jdbcType=VARCHAR}
+      </if>
+      <if test="contactTelphone != null" >
+        AND contact_telphone = #{contactTelphone,jdbcType=VARCHAR}
+      </if>
+      <if test="contactJobs != null" >
+        AND contact_jobs = #{contactJobs,jdbcType=VARCHAR}
+      </if>
+   </where>
+</select>
 </mapper>
