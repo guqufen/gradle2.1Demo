@@ -122,7 +122,7 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="/web/logout" class="right-sidebar-toggle"><i class="glyphicon glyphicon-log-out"></i> 退出</a>
+                        <a href="/web/logout" class="right-sidebar-toggle" id="logout"><i class="glyphicon glyphicon-log-out"></i> 退出</a>
                     </li>
                 </ul>
             </nav>
@@ -173,20 +173,21 @@
 <script type="text/javascript" src="js/contabs/contabs.min.js"></script>
 <script src="js/pace/pace.min.js"></script>
 <script src="js/hplus/hplus.min.js"></script>
+<script type="text/javascript" src="js/fnsco/common.js"></script>
 <script type="text/javascript">
+$('#logout').attr('href',PROJECT_NAME+"/web/logout");
 $(function(){
 	$.ajax({
-		url:'/web/getCurrentUser',
+		url:PROJECT_NAME+'/web/getCurrentUser',
 		dataType:'json',
 		type:'POST',
 		success:function(data){
 			if(!data.sessionUser)
-			widows.localhost='http://127.0.0.1:8080/login.html';
+			window.location=PROJECT_NAME+'/';
 			$('.indexPageUserName').html(data.sessionUser.name);
 		}
 	});
 });
 </script>
-
-
-</body></html>
+</body>
+</html>
