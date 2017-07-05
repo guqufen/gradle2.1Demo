@@ -1,5 +1,7 @@
 package net.fnsco.freamwork.interceptor;
 
+import java.nio.charset.Charset;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.freamwork.aop.HttpHelper;
 import net.fnsco.freamwork.aop.OutWriterUtil;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.freamwork.comm.Md5Util;
@@ -35,6 +38,8 @@ public class AppInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String isAuthor = env.getProperty(FrameworkConstant.APP_IS_AUTHOR);
         if (FrameworkConstant.IS_AUTHOR.equals(isAuthor)) {
+            //byte[] body = HttpHelper.getBodyString(request).getBytes(Charset.forName("UTF-8"));
+            //logger.error(new String(body,"utf-8"));
             return true;
         }
         String requestUrl = request.getRequestURL().toString();
