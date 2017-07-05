@@ -28,7 +28,31 @@ public class TerminalDetailDTO extends DTO {
     private String posType;
     
     private String snCode;
+    
+    private String terminalCode;
+    
+    
+    /**
+     * terminalCode
+     *
+     * @return  the terminalCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getTerminalCode() {
+        return terminalCode;
+    }
 
+    /**
+     * terminalCode
+     *
+     * @param   terminalCode    the terminalCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setTerminalCode(String terminalCode) {
+        this.terminalCode = terminalCode;
+    }
 
     /**
      * termName
