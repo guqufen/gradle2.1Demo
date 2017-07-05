@@ -246,7 +246,7 @@ $(function(){
 		type:'POST',
 		success:function(data){
 			if(!data.sessionUser)
-			window.location=PROJECT_NAME+'/';
+			window.location='login.html';
 			$('.indexPageUserName').html(data.sessionUser.name);
 		}
 	});
