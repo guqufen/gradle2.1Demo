@@ -146,7 +146,7 @@ body {
 								</div>
 								<input type="password" id="password" name="password" value="" placeholder="请输入密码">
 							</div>
-							<button type="submit" class="login-btn"  id="btn_submit">登录</button>
+							<button type="button" class="login-btn"  id="btn_submit">登录</button>
 						</div>
 					</form>
 				</div>
@@ -156,6 +156,7 @@ body {
 </body>
 <script type="text/javascript" src="js/bootstrap/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/fnsco/common.js"></script>
 <script type="text/javascript">
 //登录
 $(function(){
@@ -211,18 +212,11 @@ $(function(){
         imgAuto();
     });
 })();
-</script>
-<script>
-	var code;
-	function ajax(){
-		$.ajax({
-	        url:url,
-	        type:type,
-	        data:data,
-	        success:function(msg){
-	        	$(".workOrder_num").html(msg);
-	        }
-	    });
-	}
+//登录表单
+$('#btn_submit').click(function(){
+	console.log(PROJECT_NAME);
+	$('#login_info_form').attr('action',PROJECT_NAME+'/web/doLogin');
+	$('#login_info_form').submit();
+});
 </script>
 </html>

@@ -1,10 +1,12 @@
+var pathName=window.document.location.pathname; 
+var PROJECT_NAME =pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 //初始化表格
 initTableData();
 function initTableData(){
   $('#table').bootstrapTable({
         sidePagination:'server',
         search: false, //是否启动搜索栏 
-        url:'/web/merchantinfo/query',
+        url:PROJECT_NAME+'/web/merchantinfo/query',
         showRefresh: true,//是否显示刷新按钮
         showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
         toolbar: '#toolbar',  //工具按钮用哪个容器
@@ -202,7 +204,7 @@ function getInnerCode(){
    var code = '';
    if(!$('#innerCode').val()){
      $.ajax({
-       url:'/web/fileInfo/getInnoCode',
+       url:PROJECT_NAME+'/web/fileInfo/getInnoCode',
        type:'POST',
        success:function(data){
          $('#innerCode').val(data);
@@ -243,7 +245,7 @@ $('#btn_delete').click(function(){
         btn: ['确定', '取消']
     }, function(){
       $.ajax({
-        url:'/web/merchantinfo/delete',
+        url:PROJECT_NAME+'/web/merchantinfo/delete',
         type:'POST',
         dataType : "json",
         data:{'ids':dataId},
@@ -271,7 +273,7 @@ $('#btn_delete').click(function(){
 //请求所有代理商数据
 function requestAgent(type){
 	 $.ajax({
-		   url:'/web/merchantinfo/queryAgents',
+		   url:PROJECT_NAME+'/web/merchantinfo/queryAgents',
 		   success:function(data){
 			   var agtS = data.data;
 			   var html_opt = '';
@@ -283,9 +285,11 @@ function requestAgent(type){
 				   }
 			   })
 			   if(!type){
+				   $('#agentId').html();
 				   $('#agentId').append(html_opt);
 			   }else{
-           $('#agentId1').append(html_opt);
+				   $('#agentId1').html();
+				   $('#agentId1').append(html_opt);
 				   $('#agentId2').append(html_opt);
 			   }
 		   },
@@ -308,7 +312,7 @@ function  fileUp(num){
        //指定显示的id
        'queueID' : 'fileQueue'+num,
        //后台处理的页面
-       'uploader': '/web/fileInfo/Import', 
+       'uploader': PROJECT_NAME+'/web/fileInfo/Import', 
        //按钮显示的文字
        'buttonText': '上传图片',
      //在浏览窗口底部的文件类型下拉菜单中显示的文本
@@ -384,7 +388,7 @@ function deleteImage(queueId,id,url,num){
         btn: ['确定', '取消']
     }, function(){
       $.ajax({
-         url:'/web/fileInfo/delete',
+         url:PROJECT_NAME+'/web/fileInfo/delete',
          data:{'id':id,'url':url},
          type:'POST',
          success:function(data){
@@ -418,7 +422,7 @@ function seeImage(fileName,divId){
     changeViewerSize();  
   }  
 	$.ajax({
-	      url:'/web/fileInfo/getImagePath',
+	      url:PROJECT_NAME+'/web/fileInfo/getImagePath',
 	      data: {'url':fileName},
 	      type:'POST',
 	      success:function(data){
@@ -436,7 +440,7 @@ function seeImage(fileName,divId){
 //保存商户基本信息下一步按钮
 function saveMerCore(){
   $.ajax({
-      url:'/web/merchantinfo/toAddCore',
+      url:PROJECT_NAME+'/web/merchantinfo/toAddCore',
       data: $('#mercore_form').serialize(),
       type:'POST',
       success:function(data){
@@ -455,7 +459,7 @@ function saveFile(){
   var file_ids = $('#fileIds').val();
   console.log('保存文件:'+file_ids);
   $.ajax({
-    url:'/web/fileInfo/savefiles',
+    url:PROJECT_NAME+'/web/fileInfo/savefiles',
     data:{'fileIds':file_ids},
     success:function(){
       layer.msg("保存成功");
@@ -493,7 +497,7 @@ function contactHtml(num){
     }, function(){
       if(num){
         $.ajax({
-          url:'/web/merchantinfo/deleteContact',
+          url:PROJECT_NAME+'/web/merchantinfo/deleteContact',
           type:'POST',
           data:{'id':num},
           success:function(data){
@@ -535,7 +539,7 @@ function contactHtml(num){
       }
       console.log(contactArr);
   		$.ajax({
-  			url:'/web/merchantinfo/toAddContact',
+  			url:PROJECT_NAME+'/web/merchantinfo/toAddContact',
   			dataType:"json", 
   			type:'POST',
   		    contentType:"application/json",
@@ -588,7 +592,7 @@ function terminalHtml(num){
   function removeTerminal(num){
   	if(num){
   		$.ajax({
-  			url:'/web/merchantinfo/deleteTerminal',
+  			url:PROJECT_NAME+'/web/merchantinfo/deleteTerminal',
   			type:'POST',
   			data:{'id':num},
   			success:function(data){
@@ -636,7 +640,7 @@ function terminalHtml(num){
     }
   	//保存
   	$.ajax({
-  		url:'/web/merchantinfo/toAddTerminal',
+  		url:PROJECT_NAME+'/web/merchantinfo/toAddTerminal',
   		dataType:"json", 
   		type:'POST',
   	  contentType:"application/json",
@@ -674,7 +678,7 @@ $("#btn_addChannel").click(function(){
 function removeChannel(num){
 	if(num){
 		$.ajax({
-			url:'/web/merchantinfo/deleteChannel',
+			url:PROJECT_NAME+'/web/merchantinfo/deleteChannel',
 			type:'POST',
 			data:{'id':num},
 			success:function(data){
@@ -706,7 +710,7 @@ function saveChannelParams(conId){
   }
   //保存
   $.ajax({
-    url:'/web/merchantinfo/toAddChannel',
+    url:PROJECT_NAME+'/web/merchantinfo/toAddChannel',
     dataType:"json", 
     type:'POST',
       contentType:"application/json",
@@ -752,7 +756,7 @@ function removeBankCard(num){
   $('.remove-bankCardList'+num).parent().remove();
   if(num && num >0){
 	  $.ajax({
-		  url:'/web/merchantinfo/deleteBank',
+		  url:PROJECT_NAME+'/web/merchantinfo/deleteBank',
 		  type:'POST',
       data:{'id':num},
 		  success:function(data){
@@ -795,7 +799,7 @@ function saveBankCardParams(conId){
   }
   //保存
   $.ajax({
-    url:'/web/merchantinfo/toAddBank',
+    url:PROJECT_NAME+'/web/merchantinfo/toAddBank',
     dataType:"json", 
     type:'POST',
     contentType:"application/json",
@@ -820,7 +824,7 @@ $("#btn_saveBankCard").click(function(){
 //生成表格里的编辑事件
 function editData(id){
    $.ajax({
-    url:'/web/merchantinfo/queryAllById',
+    url:PROJECT_NAME+'/web/merchantinfo/queryAllById',
     type:'POST',
     dataType : "json",
     data:{'id':id},
@@ -1034,7 +1038,7 @@ function editData(id){
             
             console.log(params);
             $.ajax({
-     		      url:'/web/merchantinfo/toAddCore',
+     		      url:PROJECT_NAME+'/web/merchantinfo/toAddCore',
        		    data: params,
        		    type:'POST',
        		    success:function(data){
@@ -1105,7 +1109,7 @@ $("#btn_addBankCard1").click(function(){
 //查看详情
 function detailsData(id){
    $.ajax({
-    url:'/web/merchantinfo/queryAllById',
+    url:PROJECT_NAME+'/web/merchantinfo/queryAllById',
     type:'POST',
     dataType : "json",
     data:{'id':id},

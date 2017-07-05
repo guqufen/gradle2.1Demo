@@ -73,13 +73,14 @@
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="js/fnsco/common.js"></script>
 
 </body>
 <script type="text/javascript">
     $('#table').bootstrapTable({
         search: false, //是否启动搜索栏
         sidePagination:'server',
-        url:'/web/trade/query',
+        url:PROJECT_NAME+'/web/trade/query',
         showRefresh: false,//是否显示刷新按钮
         showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
         toolbar: '#toolbar',  //工具按钮用哪个容器
@@ -111,7 +112,8 @@
             title: '交易时间'
         },{
             field: 'payType',
-            title: '支付方式'
+            title: '支付方式',
+            formatter:formatPayType
         },{
             field: 'merId',
             title: '商户号'
@@ -152,6 +154,19 @@
     		return '其他';
     	}	
     }
+  //支付方式格式化
+  function formatPayType(value, row, index){
+	  if(!value){
+	    	return '-';
+	    }
+	  else if(value == '00'){
+  		return '刷卡';
+  	 }else if(value == '01'){
+  		return '二维码';
+  	}else{
+  		return '其他';
+  	}	
+  }
   //条件查询按钮事件
     function queryEvent(){
  	   $('#table').bootstrapTable('refresh');
