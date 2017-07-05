@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -172,6 +173,12 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
 
         TradeData tradeData = new TradeData();
+        if(!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())){
+            tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
+        }
+        if(!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())){
+            tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
+        }
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
         PageDTO<TradeData> pages = new PageDTO<TradeData>(currentPageNum, perPageSize, tradeData);
 
