@@ -1,5 +1,52 @@
 var pathName=window.document.location.pathname; 
 var PROJECT_NAME =pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+
+//默认给表单加上时间控件
+$("#cardValidTime").datetimepicker({
+  format: 'yyyy-mm-dd',
+  autoclose: true,
+  todayBtn: true,
+  todayHighlight: true,
+  showMeridian: true,
+  pickerPosition: "bottom-left",
+  language: 'zh-CN',//中文，需要引用zh-CN.js包
+  startView: 2,//月视图
+  minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+});
+$("#businessLicenseValidTime").datetimepicker({
+  format: 'yyyy-mm-dd',
+  autoclose: true,
+  todayBtn: true,
+  todayHighlight: true,
+  showMeridian: true,
+  pickerPosition: "bottom-left",
+  language: 'zh-CN',//中文，需要引用zh-CN.js包
+  startView: 2,//月视图
+  minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+});
+//默认给表单加上时间控件
+$("#cardValidTime1").datetimepicker({
+  format: 'yyyy-mm-dd',
+  autoclose: true,
+  todayBtn: true,
+  todayHighlight: true,
+  showMeridian: true,
+  pickerPosition: "bottom-left",
+  language: 'zh-CN',//中文，需要引用zh-CN.js包
+  startView: 2,//月视图
+  minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+});
+$("#businessLicenseValidTime1").datetimepicker({
+  format: 'yyyy-mm-dd',
+  autoclose: true,
+  todayBtn: true,
+  todayHighlight: true,
+  showMeridian: true,
+  pickerPosition: "bottom-left",
+  language: 'zh-CN',//中文，需要引用zh-CN.js包
+  startView: 2,//月视图
+  minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+});
 //初始化表格
 initTableData();
 function initTableData(){
@@ -502,7 +549,6 @@ function contactHtml(num){
           data:{'id':num},
           success:function(data){
             layer.msg('删除成功');
-            // layer.msg('删除成功');
           }
         });
       }
@@ -545,7 +591,7 @@ function contactHtml(num){
   		    contentType:"application/json",
   			data:JSON.stringify(contactArr),
   			success:function(data){
-  				layer.msg('添加成功');
+  				layer.msg(data.message);
   			},
   			error:function(){
   				layer.msg('系统错误');
@@ -646,7 +692,8 @@ function terminalHtml(num){
   	  contentType:"application/json",
   		data:JSON.stringify(terminalArr),
   		success:function(data){
-  			layer.msg('添加成功'+data.data);//返回innerCode
+        // console.log(data);
+  			layer.msg(data.message);//返回innerCode
   		},
   		error:function(){
   			layer.msg('系统错误');
@@ -716,7 +763,7 @@ function saveChannelParams(conId){
       contentType:"application/json",
     data:JSON.stringify(channelArr),
     success:function(data){
-      layer.msg('添加成功'+data.data);//返回innerCode
+      layer.msg(data.message);//返回innerCode
     },
     error:function(){
       layer.msg('系统错误');
@@ -805,7 +852,7 @@ function saveBankCardParams(conId){
     contentType:"application/json",
     data:JSON.stringify(bankCardArr),
     success:function(data){
-      layer.msg('添加成功'+data.data);
+      layer.msg(data.message);
       $("#myModal").hide();
       queryEvent();
     },
@@ -885,6 +932,7 @@ function editData(id){
         $('input[name="registAddress1"]').val(data.data.registAddress);
         $('input[name="mercFlag1"]').val(data.data.mercFlag);
         requestAgent(data.data.agentId);
+
         //资料文件
         var filesLen=data.data.files.length;
         for(var i=0;i<filesLen;i++){
