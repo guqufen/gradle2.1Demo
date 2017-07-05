@@ -20,6 +20,12 @@ public interface SysUserService {
 	 * @param password
 	 * @return
 	 */
-	ResultDTO<SysUser> doLogin(HttpServletResponse res,String username,String password); 
-	
+	ResultDTO<SysUser> doLogin(String username,String password); 
+	/** 修改密码方法
+     * @param id
+     * @param password
+     * @param oldPassword
+     * @return
+     */
+	ResultDTO<String> modifyPassword(String name,String newPassword,String oldPassword );
 }

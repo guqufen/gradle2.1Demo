@@ -47,7 +47,7 @@ public class SysUserLoginAction extends BaseController{
             return "redirect:/login.html";
         }
 		
-		result = adminUserService.doLogin(res, username, password);
+		result = adminUserService.doLogin( username, password);
 		if (result.isSuccess()) {
 			setSessionUser(result.getData());
 			CookieUtils.addCookie(res, CoreConstants.COOKIE_USER_KEY, ((SysUser)result.getData()).getName());
@@ -86,5 +86,26 @@ public class SysUserLoginAction extends BaseController{
 		result.put("sessionUser", adminUser);
 		return result;
 	}
+	
+	   /**
+     * 修改密码
+     * @return
+     */
+	
+	@RequestMapping("/modifyPassword")
+    @ResponseBody
+    public ResultDTO<String> modifyPassword(String name, String newPassword, String oldPassword){
+       return adminUserService.modifyPassword(name,newPassword,oldPassword);
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
