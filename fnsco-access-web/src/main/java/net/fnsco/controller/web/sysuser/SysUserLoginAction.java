@@ -44,7 +44,7 @@ public class SysUserLoginAction extends BaseController{
 		String username = req.getParameter("account");
 		String password = req.getParameter("password");
 		if (StringUtils.isEmpty(password)) {
-            return "forward:/";
+            return "redirect:/login.html";
         }
 		
 		result = adminUserService.doLogin(res, username, password);
@@ -52,7 +52,7 @@ public class SysUserLoginAction extends BaseController{
 			setSessionUser(result.getData());
 			CookieUtils.addCookie(res, CoreConstants.COOKIE_USER_KEY, ((SysUser)result.getData()).getName());
 		}
-		return "forward:/";
+		return "redirect:/index.html";
 	}
 	
 	/**
