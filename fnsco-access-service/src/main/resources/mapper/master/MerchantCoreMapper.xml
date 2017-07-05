@@ -409,7 +409,8 @@
       </if>
         AND status = 1
       </where>
-      limit #{startRow} , #{perPageSize}
+      ORDER BY modify_time DESC
+      limit #{startRow} , #{perPageSize} 
   </select>
   <!-- 条件查询总数 -->
   <select id="queryTotalByCondition" parameterType="net.fnsco.service.domain.MerchantCore" resultType="java.lang.Integer">

@@ -472,8 +472,11 @@
       <if test="condition.md5 != null and condition.md5 !=''" >
        AND  md5 = #{condition.md5,jdbcType=VARCHAR}
       </if>
-      <if test="condition.sendTime != null  and condition.sendTime !='' " >
-       AND  send_time = #{condition.sendTime,jdbcType=VARCHAR}
+      <if test="condition.startSendTime != null  and condition.startSendTime !='' " >
+       AND  send_time  >= #{condition.startSendTime,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.endSendTime != null  and condition.endSendTime !='' " >
+       AND  send_time  &lt;= #{condition.endSendTime,jdbcType=VARCHAR}
       </if>
       <if test="condition.createTime != null and condition.createTime !='' " >
         AND create_time = #{condition.createTime,jdbcType=TIMESTAMP}
@@ -641,8 +644,11 @@
       <if test="md5 != null and md5 != ''" >
        AND  md5 = #{md5,jdbcType=VARCHAR}
       </if>
-      <if test="sendTime != null and sendTime != ''" >
-       AND  send_time = #{sendTime,jdbcType=VARCHAR}
+       <if test="startSendTime != null  and  startSendTime !='' " >
+       AND  send_time  >= #{startSendTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endSendTime != null  and endSendTime !='' " >
+       AND  send_time  	&lt;= #{endSendTime,jdbcType=VARCHAR}
       </if>
       <if test="createTime != null and createTime != ''" >
         AND create_time = #{createTime,jdbcType=TIMESTAMP}

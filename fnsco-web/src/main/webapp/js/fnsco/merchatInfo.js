@@ -1,5 +1,52 @@
 var pathName=window.document.location.pathname; 
 var PROJECT_NAME =pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+
+//默认给表单加上时间控件
+$("#cardValidTime").datetimepicker({
+  format: 'yyyy-mm-dd',
+  autoclose: true,
+  todayBtn: true,
+  todayHighlight: true,
+  showMeridian: true,
+  pickerPosition: "bottom-left",
+  language: 'zh-CN',//中文，需要引用zh-CN.js包
+  startView: 2,//月视图
+  minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+});
+$("#businessLicenseValidTime").datetimepicker({
+  format: 'yyyy-mm-dd',
+  autoclose: true,
+  todayBtn: true,
+  todayHighlight: true,
+  showMeridian: true,
+  pickerPosition: "bottom-left",
+  language: 'zh-CN',//中文，需要引用zh-CN.js包
+  startView: 2,//月视图
+  minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+});
+//默认给表单加上时间控件
+$("#cardValidTime1").datetimepicker({
+  format: 'yyyy-mm-dd',
+  autoclose: true,
+  todayBtn: true,
+  todayHighlight: true,
+  showMeridian: true,
+  pickerPosition: "bottom-left",
+  language: 'zh-CN',//中文，需要引用zh-CN.js包
+  startView: 2,//月视图
+  minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+});
+$("#businessLicenseValidTime1").datetimepicker({
+  format: 'yyyy-mm-dd',
+  autoclose: true,
+  todayBtn: true,
+  todayHighlight: true,
+  showMeridian: true,
+  pickerPosition: "bottom-left",
+  language: 'zh-CN',//中文，需要引用zh-CN.js包
+  startView: 2,//月视图
+  minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+});
 //初始化表格
 initTableData();
 function initTableData(){
@@ -43,8 +90,8 @@ function initTableData(){
             field: 'legalPerson',
             title: '商户法人姓名'
         }, {
-            field: 'legalPersonTel',
-            title: '法人联系电话'
+            field: 'legalPersonMobile',
+            title: '法人手机号码'
         }, {
             field: 'legalValidCardType',
             title: '法人有效证件类型',
@@ -502,7 +549,6 @@ function contactHtml(num){
           data:{'id':num},
           success:function(data){
             layer.msg('删除成功');
-            // layer.msg('删除成功');
           }
         });
       }
@@ -545,7 +591,7 @@ function contactHtml(num){
   		    contentType:"application/json",
   			data:JSON.stringify(contactArr),
   			success:function(data){
-  				layer.msg('添加成功');
+  				layer.msg(data.message);
   			},
   			error:function(){
   				layer.msg('系统错误');
@@ -646,7 +692,8 @@ function terminalHtml(num){
   	  contentType:"application/json",
   		data:JSON.stringify(terminalArr),
   		success:function(data){
-  			layer.msg('添加成功'+data.data);//返回innerCode
+        // console.log(data);
+  			layer.msg(data.message);//返回innerCode
   		},
   		error:function(){
   			layer.msg('系统错误');
@@ -665,7 +712,7 @@ function channelHtml(num){
 	return  '<div class="channel-list"><div class="remove-icon remove-channelList'+num+'" editId="'+num+'" onclick="removeChannel('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerId'+num+'">渠道商户号：</label><input type="text" class="form-control channelMerId" id="channelMerId'+num+'" name="channelMerId'+num+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">渠道商户key：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道类型：</label><select name="channelType'+num+'" class="form-control channelType"><option value="00">爱农</option><option value="01">浦发</option><option value="02">拉卡拉</option></select></div></div></div>';
+            '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道类型：</label><select name="channelType'+num+'" class="form-control channelType"><option value="00">拉卡拉</option><option value="01">浦发</option><option value="02">爱农</option></select></div></div></div>';
 }
 //默认添加一个渠道信息列表
 $('#channel-con').append(channelHtml(ChannellList));
@@ -716,7 +763,7 @@ function saveChannelParams(conId){
       contentType:"application/json",
     data:JSON.stringify(channelArr),
     success:function(data){
-      layer.msg('添加成功'+data.data);//返回innerCode
+      layer.msg(data.message);//返回innerCode
     },
     error:function(){
       layer.msg('系统错误');
@@ -805,7 +852,7 @@ function saveBankCardParams(conId){
     contentType:"application/json",
     data:JSON.stringify(bankCardArr),
     success:function(data){
-      layer.msg('添加成功'+data.data);
+      layer.msg(data.message);
       $("#myModal").hide();
       queryEvent();
     },
@@ -875,7 +922,6 @@ function editData(id){
         $('input[name="enName1"]').val(data.data.enName);
         $('input[name="legalPerson1"]').val(data.data.legalPerson);
         $('input[name="legalPersonMobile1"]').val(data.data.legalPersonMobile);
-        $('input[name="legalPersonTel1"]').val(data.data.legalPersonTel);
         $('select[name="legalValidCardType1"]').find("option[value="+data.data.legalValidCardType+"]").attr("selected",true);
         $('input[name="cardNum1"]').val(data.data.cardNum);
         $('input[name="cardValidTime1"]').val(data.data.cardValidTime);
@@ -885,6 +931,7 @@ function editData(id){
         $('input[name="registAddress1"]').val(data.data.registAddress);
         $('input[name="mercFlag1"]').val(data.data.mercFlag);
         requestAgent(data.data.agentId);
+
         //资料文件
         var filesLen=data.data.files.length;
         for(var i=0;i<filesLen;i++){
@@ -1021,7 +1068,6 @@ function editData(id){
             var enName = $('input[name="enName1"]').val();
             var legalPerson = $('input[name="legalPerson1"]').val();
             var legalPersonMobile = $('input[name="legalPersonMobile1"]').val();
-            var legalPersonTel = $('input[name="legalPersonTel1"]').val();
             var legalValidCardType = $('select[name="legalValidCardType1"]').val();
             var cardNum = $('input[name="cardNum1"]').val();
             var cardValidTime = $('input[name="cardValidTime1"]').val();
@@ -1032,8 +1078,7 @@ function editData(id){
             var mercFlag = $('input[name="mercFlag1"]').val();
             var agentId = $('#agentId1').val();
             
-            var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,
-            		'legalPersonTel':legalPersonTel,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
+            var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
             		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId};
             
             console.log(params);
@@ -1148,7 +1193,6 @@ function detailsData(id){
         $('input[name="enName2"]').val(data.data.enName);
         $('input[name="legalPerson2"]').val(data.data.legalPerson);
         $('input[name="legalPersonMobile2"]').val(data.data.legalPersonMobile);
-        $('input[name="legalPersonTel2"]').val(data.data.legalPersonTel);
         $('select[name="legalValidCardType2"]').find("option[value="+data.data.legalValidCardType+"]").attr("selected",true);
         $('input[name="cardNum2"]').val(data.data.cardNum);
         $('input[name="cardValidTime2"]').val(data.data.cardValidTime);

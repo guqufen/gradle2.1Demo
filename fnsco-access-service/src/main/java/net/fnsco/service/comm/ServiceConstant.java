@@ -23,6 +23,11 @@ public class ServiceConstant {
     static {
         PAY_TYPE_MAP.put("0", "00");
         PAY_TYPE_MAP.put("1", "01");
+        PAY_TYPE_MAP.put("2", "01");
+        PAY_TYPE_MAP.put("3", "01");
+        PAY_TYPE_MAP.put("4", "01");
+        PAY_TYPE_MAP.put("5", "01");
+        PAY_TYPE_MAP.put("6", "01");
         PAY_SUB_TYPE_MAP.put("0", "00");
         PAY_SUB_TYPE_MAP.put("1", "01");
         PAY_SUB_TYPE_MAP.put("2", "02");

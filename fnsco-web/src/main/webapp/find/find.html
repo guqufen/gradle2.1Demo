@@ -34,9 +34,11 @@
 	<script type="text/javascript">
 		$("#hhdCd").on('tap',function(){
 			param("http://www.fnsco.net/find/input2.html");
+			window.webkit.messageHandlers.param.postMessage("http://www.fnsco.net/find/input2.html");
 		})
 		$("#hhdFd").on('tap',function(){
 			param("http://www.fnsco.net/find/input1.html");
+			window.webkit.messageHandlers.param.postMessage("http://www.fnsco.net/find/input1.html");
 		})
 		$("#xld").on('tap',function(){
 			window.location.href='http://www.zheft.cn/template/weixin/xld/xld.html?back';
@@ -47,8 +49,8 @@
 			console.log(url)
 			document.location = "js://webview?url="+url+"";
 		}
-
-		//下拉刷新
+		
+		// 下拉刷新
 		mui.init({
 		  pullRefresh : {
 		    container:"#findPageList",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等

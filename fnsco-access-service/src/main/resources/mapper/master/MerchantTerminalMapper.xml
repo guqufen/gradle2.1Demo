@@ -31,12 +31,14 @@
   <resultMap id="ListResultMap" type="net.fnsco.api.dto.TerminalsDTO">
      <id column="id" property="id" jdbcType="INTEGER" />
      <result column="term_name" property="termName" jdbcType="VARCHAR" />
+     <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="DetailResultMap" type="net.fnsco.api.dto.TerminalDetailDTO" >
      <result column="term_name" property="termName" jdbcType="VARCHAR" />
      <result column="sn_code" property="snCode" jdbcType="VARCHAR" />
      <result column="pos_factory" property="posFactory" jdbcType="VARCHAR" />
      <result column="pos_type" property="posType" jdbcType="VARCHAR" />
+     <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, inner_code, merchant_code, channel_id, channel_name, terminal_code, inner_term_code, 
