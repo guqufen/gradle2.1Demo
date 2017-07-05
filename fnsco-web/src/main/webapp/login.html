@@ -146,7 +146,7 @@ body {
 								</div>
 								<input type="password" id="password" name="password" value="" placeholder="请输入密码">
 							</div>
-							<button type="button" class="login-btn"  id="btn_submit">登录</button>
+							<button type="submit" class="login-btn"  id="btn_submit">登录</button>
 						</div>
 					</form>
 				</div>
@@ -164,7 +164,8 @@ $(function(){
 	if(aduser)
 	{
 		location.href ='/';
-	}	
+	}
+	$('#login_info_form').attr('action',PROJECT_NAME+'/web/doLogin');
 });
 </script>
 <script>
@@ -212,11 +213,6 @@ $(function(){
         imgAuto();
     });
 })();
-//登录表单
-$('#btn_submit').click(function(){
-	console.log(PROJECT_NAME);
-	$('#login_info_form').attr('action',PROJECT_NAME+'/web/doLogin');
-	$('#login_info_form').submit();
-});
+
 </script>
 </html>
