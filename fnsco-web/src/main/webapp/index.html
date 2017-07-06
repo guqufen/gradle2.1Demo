@@ -227,6 +227,7 @@
 <script type="text/javascript" src="js/contabs/contabs.min.js"></script>
 <script src="js/pace/pace.min.js"></script>
 <script src="js/hplus/hplus.min.js"></script>
+<script src="js/layer/layer.js"></script>
 <script type="text/javascript" src="js/fnsco/common.js"></script>
 <script type="text/javascript">
 $('.logout').attr('href',PROJECT_NAME+"/web/logout");
@@ -236,6 +237,7 @@ $(function(){
 		dataType:'json',
 		type:'POST',
 		success:function(data){
+			unloginHandler(data);
 			if(!data.sessionUser)
 			window.location='login.html';
 			$('.indexPageUserName').html(data.sessionUser.name);
@@ -255,6 +257,7 @@ $("#btn_forget").click(function(){
 			type:'POST',
 			data:data,
 			success:function(result){
+				unloginHandler(result);
 				if(result.success){
 					window.location=PROJECT_NAME+"/web/logout";
 				}else{
