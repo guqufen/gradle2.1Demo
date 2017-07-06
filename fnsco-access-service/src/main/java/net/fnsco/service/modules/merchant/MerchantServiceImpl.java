@@ -58,6 +58,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         if (Strings.isNullOrEmpty(randomCode)) {
             return ResultDTO.fail(ApiConstant.E_MERCHANT_CODE_NULL);//商铺码不能为空
         }
+        randomCode = randomCode.toUpperCase();
         if (null == merchantDTO.getUserId() || 0 == merchantDTO.getUserId().intValue()) {
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);//用户ID不能为空
         }

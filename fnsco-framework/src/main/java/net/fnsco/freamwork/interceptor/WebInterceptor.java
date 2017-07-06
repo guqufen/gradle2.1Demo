@@ -62,7 +62,7 @@ public class WebInterceptor implements HandlerInterceptor {
             if (Strings.isNullOrEmpty(requestType)) {
                 response.sendRedirect("/login.html");
             } else {
-                OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_EMPTY);
+                OutWriterUtil.outJson(response, FrameworkConstant.E_NOT_LOGIN);
             }
             return false;
         }
