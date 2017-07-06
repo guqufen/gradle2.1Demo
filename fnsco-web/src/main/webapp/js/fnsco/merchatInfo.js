@@ -1,6 +1,11 @@
 var pathName=window.document.location.pathname; 
 var PROJECT_NAME =pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-
+function unloginHandler(result){
+	if(result.code && result.code == '4012'){
+		layer.msg('登录失效,去登录');
+		window.location=PROJECT_NAME+"/web/logout";
+	}
+}
 //默认给表单加上时间控件
 $("#cardValidTime").datetimepicker({
   format: 'yyyy-mm-dd',
@@ -164,6 +169,7 @@ function queryParams(params)
 }
 //处理后台返回数据
 function responseHandler(res) { 
+	unloginHandler(res);
     if (res) {
         return {
             "rows" : res.list,
@@ -215,6 +221,7 @@ function operateFormatter(value, row, index) {
         dataType : "json",
         data:{'ids':ids},
         success:function(data){
+          unloginHandler(data);
           if(data.success)
           {
             layer.msg('删除成功');
@@ -254,6 +261,7 @@ function getInnerCode(){
        url:PROJECT_NAME+'/web/fileInfo/getInnoCode',
        type:'POST',
        success:function(data){
+    	  unloginHandler(data);
          $('#innerCode').val(data);
          $("input[name='innerCode']").val(data);
          var  objs=document.getElementsByName("init");
@@ -297,6 +305,7 @@ $('#btn_delete').click(function(){
         dataType : "json",
         data:{'ids':dataId},
         success:function(data){
+          unloginHandler(data);	
           if(data.success)
           {
             layer.msg('删除成功');
@@ -322,6 +331,7 @@ function requestAgent(type){
 	 $.ajax({
 		   url:PROJECT_NAME+'/web/merchantinfo/queryAgents',
 		   success:function(data){
+			   unloginHandler(data);
 			   var agtS = data.data;
 			   var html_opt = '';
 			   $.each(agtS,function(index,value){
@@ -376,10 +386,11 @@ function  fileUp(num){
            'fileTypeKey':num_type,"innerCode":inno_code
        },
        'onUploadSuccess':function ( file, response, data) {
+    	   unloginHandler(data);
     	   var obj = eval('(' + response + ')');
 			   var fileName = file.name.replace(',','');
-         var filePath = obj.url;
-         console.log(filePath);
+            var filePath = obj.url;
+            console.log(filePath);
        		$('#view'+num).append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
 						"<a class='previewfileImg' id='previewfileImg"+obj.id+"' href=javascript:seeImage('"+filePath+"','previewfileImg"+obj.id+"') title='预览'><img src data-original=''/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
 						"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"','"+num+"')><span class='glyphicon glyphicon-trash'></span>删除</a>" + "</div>");
@@ -441,6 +452,7 @@ function deleteImage(queueId,id,url,num){
          success:function(data){
            if(data)
            {
+        	   unloginHandler(data);  
              $('#file'+num).remove();
              layer.msg('删除成功');
              $(queueId).parent().parent().parent().next().find('.uploadify').show();
@@ -473,8 +485,7 @@ function seeImage(fileName,divId){
 	      data: {'url':fileName},
 	      type:'POST',
 	      success:function(data){
-          console.log(data);
-          console.log(divId);
+	    	unloginHandler(data);
 	        if(data){
 	           console.log(data);
                $("#"+divId+" img").attr('data-original',data);
@@ -491,6 +502,7 @@ function saveMerCore(){
       data: $('#mercore_form').serialize(),
       type:'POST',
       success:function(data){
+    	  unloginHandler(data);  
         if(data.success){
            layer.msg('保存成功');
            return true;
@@ -509,6 +521,7 @@ function saveFile(){
     url:PROJECT_NAME+'/web/fileInfo/savefiles',
     data:{'fileIds':file_ids},
     success:function(){
+    	unloginHandler(data);
       layer.msg("保存成功");
     }
   });
@@ -548,6 +561,7 @@ function contactHtml(num){
           type:'POST',
           data:{'id':num},
           success:function(data){
+        	  unloginHandler(data);
             layer.msg('删除成功');
           }
         });
@@ -591,6 +605,7 @@ function contactHtml(num){
   		    contentType:"application/json",
   			data:JSON.stringify(contactArr),
   			success:function(data){
+  				unloginHandler(data);
   				layer.msg(data.message);
   			},
   			error:function(){
@@ -642,6 +657,7 @@ function terminalHtml(num){
   			type:'POST',
   			data:{'id':num},
   			success:function(data){
+  				unloginHandler(data);
   				layer.msg('删除成功');
   			}
   		});
@@ -692,7 +708,7 @@ function terminalHtml(num){
   	  contentType:"application/json",
   		data:JSON.stringify(terminalArr),
   		success:function(data){
-        // console.log(data);
+  			unloginHandler(data);
   			layer.msg(data.message);//返回innerCode
   		},
   		error:function(){
@@ -729,6 +745,7 @@ function removeChannel(num){
 			type:'POST',
 			data:{'id':num},
 			success:function(data){
+				unloginHandler(data);
 				layer.msg('删除成功');
 			}
 		});
@@ -763,6 +780,7 @@ function saveChannelParams(conId){
       contentType:"application/json",
     data:JSON.stringify(channelArr),
     success:function(data){
+    	unloginHandler(data);
       layer.msg(data.message);//返回innerCode
     },
     error:function(){
@@ -807,8 +825,9 @@ function removeBankCard(num){
 		  type:'POST',
       data:{'id':num},
 		  success:function(data){
+			  unloginHandler(data);
 			  if(data.success){
-				  layer.msg('删除成功!')
+				  layer.msg('删除成功!');
 			  }else{
 				  layer.msg('删除失败!');
 			  }
@@ -852,6 +871,7 @@ function saveBankCardParams(conId){
     contentType:"application/json",
     data:JSON.stringify(bankCardArr),
     success:function(data){
+    	unloginHandler(data);
       layer.msg(data.message);
       $("#myModal").hide();
       queryEvent();
@@ -876,6 +896,7 @@ function editData(id){
     dataType : "json",
     data:{'id':id},
     success:function(data){
+    	unloginHandler(data);
         //data.data就是所有数据集
         console.log(data.data);
         // 关闭再次点开回到第一个标签
@@ -1087,6 +1108,7 @@ function editData(id){
        		    data: params,
        		    type:'POST',
        		    success:function(data){
+       		    	unloginHandler(data);
        			    if(data.success)
        			    {
        				    layer.msg('保存成功');
@@ -1159,6 +1181,7 @@ function detailsData(id){
     dataType : "json",
     data:{'id':id},
     success:function(data){
+    	unloginHandler(data);
         //data.data就是所有数据集
         console.log(data.data);
         // 关闭再次点开回到第一个标签

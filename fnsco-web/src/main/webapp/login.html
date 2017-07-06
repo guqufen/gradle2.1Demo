@@ -166,7 +166,7 @@ $(function(){
 	var aduser = $.cookie('cookie_user_key'); 
 	if(aduser)
 	{
-		location.href ='/';
+		$.cookie('cookie_user_key',null); 
 	}
 	$('#login_info_form').attr('action',PROJECT_NAME+'/web/doLogin');
 });
