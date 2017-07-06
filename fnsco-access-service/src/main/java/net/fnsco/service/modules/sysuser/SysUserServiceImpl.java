@@ -56,6 +56,9 @@ public class SysUserServiceImpl extends BaseService implements SysUserService {
         String newPwd = Md5Util.getInstance().md5(newPassword);
         //判断原密码是否正确 
         SysUser sysUser = adminUserDao.getUserByName(name);
+        if(null == sysUser){
+            return ResultDTO.fail("用户名不存在");
+        }
         if (!oldPwd.equals(sysUser.getPassword())) {
             return result.fail("原密码不正确");
         }

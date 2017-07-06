@@ -213,6 +213,7 @@
     }
     //处理后台返回数据
     function responseHandler(res) { 
+    	unloginHandler(res);
  	    if (res) {
  	        return {
  	            "rows" : res.list,
