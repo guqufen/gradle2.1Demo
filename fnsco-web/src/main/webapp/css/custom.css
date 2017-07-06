@@ -236,7 +236,12 @@ table a.remove,table a.redact,table a.details{
 	padding-top: 10px;
 	text-align: center;
 }
-
+.indexPageUserName{
+	padding-left: 3px;
+}
+.glyphicon-user{
+	font-size:13px;
+}
 .login-header .logo {
 	height: 60px;
 	margin-bottom: 10px;

@@ -55,6 +55,10 @@ public class ApiConstant extends CoreConstants {
     public static String E_CODE_INVALID            = "5108";                            //验证码已失效
     public static String E_APPCODE_NULL            = "5109";                            //非法请求,手机码为空
     public static String E_VERSION_NULL            = "5112";                            //非法请求,版本号为空
+    public static String E_ACCOUNTLOCKOUT_ERROR    = "5113";                            //非法请求,用户账号被锁定
+    public static String E_LOGIN_ERROR             = "5114";                            //登录失败
+    
+    
     static {
         ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NULL, "商铺码不能为空");
         ERROR_MESSGE_MAP.put(E_USER_ID_NULL, "用户ID不能为空");
@@ -87,6 +91,8 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_CODE_INVALID, "验证码已失效");
         ERROR_MESSGE_MAP.put(E_APPCODE_NULL, "非法请求,手机码为空");
         ERROR_MESSGE_MAP.put(E_VERSION_NULL, "非法请求,版本号为空");
+        ERROR_MESSGE_MAP.put(E_ACCOUNTLOCKOUT_ERROR, "非法请求,用户账号被锁定");
+        ERROR_MESSGE_MAP.put(E_LOGIN_ERROR, "登录失败");
     }
 
 }
