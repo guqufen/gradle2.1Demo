@@ -103,7 +103,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     /**
      * @todo 条件分页查询
      * @author tangliang
-     * @date 2017年6月22日 上午11:50:55
+     * @date 2017年6月22日 上午11:50:55.
      * @see net.fnsco.api.merchant.MerchantCoreService#queryMerchantCore(net.fnsco.service.domain.MerchantCore)
      */
     @Override

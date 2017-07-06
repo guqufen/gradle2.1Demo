@@ -218,7 +218,7 @@ function operateFormatter(value, row, index) {
         btn: ['确定', '取消']
     }, function(){
       $.ajax({
-        url:'/web/merchantinfo/delete',
+        url:PROJECT_NAME+'/web/merchantinfo/delete',
         type:'POST',
         dataType : "json",
         data:{'ids':ids},

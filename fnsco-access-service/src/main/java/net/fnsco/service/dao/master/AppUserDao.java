@@ -15,5 +15,6 @@ public interface AppUserDao {
 	boolean updateByPrimaryKeySelective(AppUser appUser);
 	//根据手机号找回密码
 	boolean updatePasswordByPhone(@Param("mobile")String mobile,@Param("password")String password);
-	
+	//根据用户手机号和状态查询用户实体
+	AppUser selectAppUserByMobileAndState(@Param("mobile")String mobile,@Param("state")Integer state);
 }
