@@ -43,6 +43,13 @@
 		from m_app_user
 		where mobile = #{mobile,jdbcType=VARCHAR}
 	</select>
+    <!-- 根据手机号和用户状态查询用户实体 -->
+	<select id="selectAppUserByMobileAndState" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from m_app_user
+		where mobile = #{mobile,jdbcType=VARCHAR} and state = #{state,jdbcType=INTEGER}
+	</select>
 	<!-- 根据id查询用户实体 -->
 	<select id="selectAppUserById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
 		select

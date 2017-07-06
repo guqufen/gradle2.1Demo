@@ -47,7 +47,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private MerchantUserRelDao             merchantUserRelDao;
     @Autowired
     private MerchantContactDao             merchantContactDao;
-    
+
     //注册
     @Override
     public ResultDTO insertSelective(AppUserDTO appUserDTO) {
@@ -66,9 +66,10 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (!res.isSuccess()) {
             return res;
         }
-        //判断是否已经注册
-        if (MappUserDao.selectAppUserByMobile(appUserDTO.getMobile()) != null) {
-            return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
+        //根据手机号查询用户实体是否存在
+        AppUser user = MappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
+        if (user != null) {   
+            return ResultDTO.fail("用户已注册");
         }
         AppUser appUser = new AppUser();
         appUser.setDeviceId(appUserDTO.getDeviceId());
@@ -131,7 +132,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
     //生产验证码
     @Override
-    public void getValidateCode(AppUserDTO appUserDTO) {
+    public ResultDTO getValidateCode(AppUserDTO appUserDTO) {
+        //判断用户是否已经注册
+        AppUser user = MappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
+        if (user != null) {   
+            return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
+        }
         String deviceId = appUserDTO.getDeviceId();
         final String mobile = appUserDTO.getMobile();
         // 生成6位验证码
@@ -159,6 +165,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 }
             }
         }).start();
+        return ResultDTO.success();
     }
 
     //验证码对比
@@ -187,10 +194,14 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             MsgCodeMap.remove(mobile + deviceId);
             return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);
         }
-        //判断验证码
+        //验证码正确
         if (code.equals(codeDto.getCode())) {
             MsgCodeMap.remove(mobile + deviceId);
             return ResultDTO.success();
+        }
+        if(!code.equals(codeDto.getCode())){
+            MsgCodeMap.remove(mobile + deviceId);
+            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
         }
         return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
     }
@@ -270,40 +281,34 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
-        AppUser appUser = MappUserDao.selectAppUserByMobile(appUserDTO.getMobile());
-        //用户存在并且账户状态可用为1
-        if (appUser == null) {
+        //根据手机号查询用户实体是否存在
+        AppUser appUser = MappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
+        if (appUser == null) {   
             return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
-        }else if(appUser.getState() != 1){
-            return ResultDTO.fail(ApiConstant.E_ACCOUNTLOCKOUT_ERROR);
         }
         //密码错误
         if (!password.equals(appUser.getPassword())) {
             return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_ERROR);
         }
-        AppUser user = new AppUser();
-        user.setDeviceId(appUserDTO.getDeviceId());
-        user.setLastLoginTime(new Date());
-        user.setDeviceType(appUserDTO.getDeviceType());
-        user.setDeviceToken(appUserDTO.getDeviceToken());
-        user.setId(appUser.getId());
+        AppUser adminUser = new AppUser();
+        adminUser.setDeviceId(appUserDTO.getDeviceId());
+        adminUser.setLastLoginTime(new Date());
+        adminUser.setDeviceType(appUserDTO.getDeviceType());
+        adminUser.setDeviceToken(appUserDTO.getDeviceToken());
+        adminUser.setId(appUser.getId());
         //更新到实体
-        if(!MappUserDao.updateByPrimaryKeySelective(user)){
+        if (!MappUserDao.updateByPrimaryKeySelective(adminUser)) {
             return ResultDTO.fail(ApiConstant.E_LOGIN_ERROR);
         }
         map.put("appUserId", appUser.getId());
         //查询用户绑定商户数量 根据用户id查询数量
-        int merchantNums=0;
-        List<MerchantUserRel> rel= merchantUserRelDao.selectByUserId(appUser.getId());
-        if(!CollectionUtils.isEmpty(rel)){
-            merchantNums=rel.size();
+        int merchantNums = 0;
+        List<MerchantUserRel> rel = merchantUserRelDao.selectByUserId(appUser.getId());
+        if (!CollectionUtils.isEmpty(rel)) {
+            merchantNums = rel.size();
         }
-        map.put("merchantNums",merchantNums);
+        map.put("merchantNums", merchantNums);
         return ResultDTO.success(map);
     }
 
 }
-
-
-
-

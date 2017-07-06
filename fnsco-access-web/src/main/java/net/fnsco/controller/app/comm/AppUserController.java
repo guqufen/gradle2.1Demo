@@ -40,8 +40,8 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/getValidateCode")
     @ApiOperation(value = "获取验证码")
     public ResultDTO getValidateCode(@RequestBody AppUserDTO appUserDTO) {
-        appUserService.getValidateCode(appUserDTO);
-        return success();
+        ResultDTO result = appUserService.getValidateCode(appUserDTO);
+        return result;
     }
 
     //修改密码     旧密码和新密码

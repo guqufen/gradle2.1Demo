@@ -10,7 +10,7 @@ public interface AppUserService {
 	//用户修改密码接口
 	ResultDTO<String> modifyPassword(AppUserDTO appUserDTO);
 	//生产验证码
-	void getValidateCode(AppUserDTO appUserDTO);
+	ResultDTO<String> getValidateCode(AppUserDTO appUserDTO);
 	//通过手机号找回登录密码
 	ResultDTO<String> findPassword(AppUserDTO appUserDTO);
 	//根据手机号查询用户实体
