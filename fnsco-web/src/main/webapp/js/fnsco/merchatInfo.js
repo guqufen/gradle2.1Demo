@@ -83,9 +83,11 @@ function initTableData(){
             title: '操作',
             width:'10%',
             align: 'center',
+            width: 150,
             formatter: operateFormatter
             // events: operateEvents
         },{
+            width: 100,
             field: 'merName',
             title: '商户名'
         }, {
@@ -631,7 +633,7 @@ function terminalHtml(num){
         '<div class="col-sm-4"><label class="control-label" for="terminalBatch'+num+'">终端批次号：</label><input type="text" class="form-control terminalBatch" id="terminalBatch'+num+'" name="terminalBatch'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="terminalPara'+num+'">终端参数：</label><input type="text" class="form-control terminalPara" id="terminalPara'+num+'" name="terminalPara'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="chargesType'+num+'">收费类型：</label><select id="chargesType'+num+'" name="chargesType'+num+'" class="chargesType form-control" ><option value="1">按每笔百分比</option><option value="2">按每笔固定金额</option><option value="3">百分比封顶</option></select></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="debitCardRate'+num+'">贷记卡费率：</label><input type="text" class="form-control debitCardRate" id="debitCardRate'+num+'" name="debitCardRate'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="debitCardRate'+num+'">借记卡费率：</label><input type="text" class="form-control debitCardRate" id="debitCardRate'+num+'" name="debitCardRate'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="creditCardRate'+num+'">贷记卡费率：</label><input type="text" class="form-control creditCardRate" id="creditCardRate'+num+'" name="creditCardRate'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="debitCardMaxFee'+num+'">借记卡费率封顶值：</label><input type="text" class="form-control debitCardMaxFee" id="debitCardMaxFee'+num+'" name="debitCardMaxFee'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="creditCardMaxFee'+num+'">贷记卡费率封顶值：</label><input type="text" class="form-control creditCardMaxFee" id="creditCardMaxFee'+num+'" name="creditCardMaxFee'+num+'" required="required"></div>'+

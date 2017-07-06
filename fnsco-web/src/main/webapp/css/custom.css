@@ -18,6 +18,11 @@ table a.remove,table a.redact,table a.details{
 	padding: 5px 10px;
     border-radius: 3px;
 }
+table td{
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
 .form-group{
 	padding: 0 10px;
 }
