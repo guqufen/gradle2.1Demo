@@ -163,6 +163,7 @@ table a.remove,table a.redact,table a.details{
     -moz-opacity:0;   
     -khtml-opacity: 0; 
 	opacity: 0;
+	z-index: 999;
 }
 .deletefileImg{
 	padding: 5px;
@@ -236,7 +237,12 @@ table a.remove,table a.redact,table a.details{
 	padding-top: 10px;
 	text-align: center;
 }
-
+.indexPageUserName{
+	padding-left: 3px;
+}
+.glyphicon-user{
+	font-size:13px;
+}
 .login-header .logo {
 	height: 60px;
 	margin-bottom: 10px;

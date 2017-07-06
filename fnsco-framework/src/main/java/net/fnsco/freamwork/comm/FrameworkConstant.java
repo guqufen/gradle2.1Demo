@@ -18,7 +18,7 @@ public class FrameworkConstant {
     static {
         ERROR_MESSGE_MAP.put(E_TOKEN_EMPTY, "非法请求,没有token");
         ERROR_MESSGE_MAP.put(E_TOKEN_ERROR, "非法请求,token不正确");
-        ERROR_MESSGE_MAP.put(E_NOT_LOGIN, "请登录");
+        ERROR_MESSGE_MAP.put(E_NOT_LOGIN, "session已失效，请重新登录");
         ERROR_MESSGE_MAP.put(E_SYSTEM_EXCEPTION, "系统未处理的异常");
     }
 }
