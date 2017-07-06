@@ -73,7 +73,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         }
         MerchantUserRel merchantUserRel = merchantUserRelDao.selectByUserIdInnerCode(merchantDTO.getUserId(), alias.getInnerCode());
         if (null != merchantUserRel) {
-            return ResultDTO.fail(ApiConstant.E_MERCHANT_CODE_NOT_EXIST);//此商铺码不存在，请重新输入
+            return ResultDTO.fail(ApiConstant.E_MERCHANT_ALREADY_REF);//此商铺码不存在，请重新输入
         }
         MerchantUserRel muRel = new MerchantUserRel();
         muRel.setAppUserId(merchantDTO.getUserId());
