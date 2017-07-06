@@ -29,7 +29,55 @@ public class TradeDataJO extends JO {
     private String referNo;
     //卡号
     private String certifyId;
+    //订单号
+    private String       orderNo;
+    //订单创建时间
+    private String       orderTime;
     
+    /**
+     * orderNo
+     *
+     * @return  the orderNo
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    /**
+     * orderNo
+     *
+     * @param   orderNo    the orderNo to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    /**
+     * orderTime
+     *
+     * @return  the orderTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOrderTime() {
+        return orderTime;
+    }
+
+    /**
+     * orderTime
+     *
+     * @param   orderTime    the orderTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOrderTime(String orderTime) {
+        this.orderTime = orderTime;
+    }
+
     /**
      * certifyId
      *
