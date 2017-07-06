@@ -46,7 +46,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Autowired
     private MerchantUserRelDao             merchantUserRelDao;
     @Autowired
-    private MerchantContactDao             merchantContactDao;  
+    private MerchantContactDao             merchantContactDao;
+    
     //注册
     @Override
     public ResultDTO insertSelective(AppUserDTO appUserDTO) {
@@ -83,17 +84,16 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUser = MappUserDao.selectAppUserByMobile(appUser.getMobile());
         map.put("appUserId", appUser.getId());
         //注册成功后关联商户
-        MerchantCore merchantCore = new MerchantCore();
-        merchantCore.setLegalPersonMobile(appUserDTO.getMobile());
-        int merchantNums1=0;
-        int merchantNums2=0;
-        
+        int merchantNums1 = 0;
+        int merchantNums2 = 0;
+
         //MerchantContact表
-        MerchantContact merchantContact=new MerchantContact();
+        MerchantContact merchantContact = new MerchantContact();
         merchantContact.setContactMobile(appUserDTO.getMobile());
-        List<MerchantContact> li=merchantContactDao.queryListByCondition(merchantContact);
+        //条件查询符合手机号的记录返回list
+        List<MerchantContact> li = merchantContactDao.queryListByCondition(merchantContact);
         if (!CollectionUtils.isEmpty(li)) {
-            merchantNums1=li.size();
+            merchantNums1 = li.size();
             //返回商户数
             for (MerchantContact object : li) {
                 MerchantUserRel rel = merchantUserRelDao.selectByUserIdInnerCode(appUser.getId(), object.getInnerCode());
@@ -106,11 +106,13 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 }
             }
         }
-               
+
         //MerchantCore表
+        MerchantCore merchantCore = new MerchantCore();
+        merchantCore.setLegalPersonMobile(appUserDTO.getMobile());
         List<MerchantCore> list = merchantCoreDao.queryListByCondition(merchantCore);
         if (!CollectionUtils.isEmpty(list)) {
-            merchantNums2=list.size();
+            merchantNums2 = list.size();
             //返回商户数
             for (MerchantCore object : list) {
                 MerchantUserRel rel = merchantUserRelDao.selectByUserIdInnerCode(appUser.getId(), object.getInnerCode());
@@ -123,7 +125,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 }
             }
         }
-        map.put("merchantNums", merchantNums1+merchantNums2);
+        map.put("merchantNums", merchantNums1 + merchantNums2);
         return ResultDTO.success(map);
     }
 
@@ -270,47 +272,38 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         AppUser appUser = MappUserDao.selectAppUserByMobile(appUserDTO.getMobile());
         //用户存在并且账户状态可用为1
-        if (appUser != null && appUser.getState() == 1) {
-            //密码错误
-            if (!password.equals(appUser.getPassword())) {
-                return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_ERROR);
-            }
-            AppUser user = new AppUser();
-            user.setDeviceId(appUserDTO.getDeviceId());
-            user.setLastLoginTime(new Date());
-            user.setDeviceType(appUserDTO.getDeviceType());
-            user.setDeviceToken(appUserDTO.getDeviceToken());
-            user.setId(appUser.getId());
-            //更新到实体
-            if (!MappUserDao.updateByPrimaryKeySelective(user)) {
-                return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);  
-            }
-            //注册成功后关联商户
-            MerchantCore merchantCore = new MerchantCore();
-            merchantCore.setLegalPersonMobile(appUserDTO.getMobile());
-            merchantCore.setLegalPersonTel(appUserDTO.getMobile());
-            //条件查询返回list
-            Integer merchantNums = 0;
-            List<MerchantCore> list = merchantCoreDao.queryListByCondition(merchantCore);
-            if (!CollectionUtils.isEmpty(list)) {
-                //返回商户数
-                merchantNums=list.size();
-                for (MerchantCore object : list) {
-                    MerchantUserRel rel = merchantUserRelDao.selectByUserIdInnerCode(appUser.getId(), object.getInnerCode());
-                    if (rel == null) {
-                        rel = new MerchantUserRel();
-                        rel.setAppUserId(appUser.getId());
-                        rel.setInnerCode(object.getInnerCode());
-                        rel.setModefyTime(new Date());
-                        merchantUserRelDao.insertSelective(rel);
-                    }
-                }
-            }
-            map.put("merchantNums", merchantNums);
-            map.put("appUserId", appUser.getId());
-            return ResultDTO.success(map);
+        if (appUser == null) {
+            return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+        }else if(appUser.getState() != 1){
+            return ResultDTO.fail(ApiConstant.E_ACCOUNTLOCKOUT_ERROR);
         }
-        return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+        //密码错误
+        if (!password.equals(appUser.getPassword())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_ERROR);
+        }
+        AppUser user = new AppUser();
+        user.setDeviceId(appUserDTO.getDeviceId());
+        user.setLastLoginTime(new Date());
+        user.setDeviceType(appUserDTO.getDeviceType());
+        user.setDeviceToken(appUserDTO.getDeviceToken());
+        user.setId(appUser.getId());
+        //更新到实体
+        if(!MappUserDao.updateByPrimaryKeySelective(user)){
+            return ResultDTO.fail(ApiConstant.E_LOGIN_ERROR);
+        }
+        map.put("appUserId", appUser.getId());
+        //查询用户绑定商户数量 根据用户id查询数量
+        int merchantNums=0;
+        List<MerchantUserRel> rel= merchantUserRelDao.selectByUserId(appUser.getId());
+        if(!CollectionUtils.isEmpty(rel)){
+            merchantNums=rel.size();
+        }
+        map.put("merchantNums",merchantNums);
+        return ResultDTO.success(map);
     }
 
 }
+
+
+
+
