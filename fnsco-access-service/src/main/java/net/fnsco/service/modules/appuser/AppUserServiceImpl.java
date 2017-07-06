@@ -123,7 +123,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 }
             }
         }
-        map.put("MerchantNums", merchantNums1+merchantNums2);
+        map.put("merchantNums", merchantNums1+merchantNums2);
         return ResultDTO.success(map);
     }
 
@@ -290,10 +290,11 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             merchantCore.setLegalPersonMobile(appUserDTO.getMobile());
             merchantCore.setLegalPersonTel(appUserDTO.getMobile());
             //条件查询返回list
+            Integer merchantNums = 0;
             List<MerchantCore> list = merchantCoreDao.queryListByCondition(merchantCore);
             if (!CollectionUtils.isEmpty(list)) {
                 //返回商户数
-                map.put("MerchantNums", list.size());
+                merchantNums=list.size();
                 for (MerchantCore object : list) {
                     MerchantUserRel rel = merchantUserRelDao.selectByUserIdInnerCode(appUser.getId(), object.getInnerCode());
                     if (rel == null) {
@@ -305,6 +306,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     }
                 }
             }
+            map.put("merchantNums", merchantNums);
             map.put("appUserId", appUser.getId());
             return ResultDTO.success(map);
         }
