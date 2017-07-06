@@ -163,6 +163,7 @@ table a.remove,table a.redact,table a.details{
     -moz-opacity:0;   
     -khtml-opacity: 0; 
 	opacity: 0;
+	z-index: 999;
 }
 .deletefileImg{
 	padding: 5px;
