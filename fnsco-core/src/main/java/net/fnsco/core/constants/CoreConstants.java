@@ -18,10 +18,14 @@ public class CoreConstants extends FrameworkConstant {
     public static String       OK              = "2000";
     public static String       E_COMM_BUSSICSS = "5100";
     public static String       WEB_SAVE_OK     = "2001";//web保存成功
+    public static String       WEB_LOGIN_NULL = "5900";//用户名或密码为空
+    public static String       WEB_LOGIN_FAIL ="5901";//用户名或密码错误
 
     static {
         ERROR_MESSGE_MAP.put(OK, "处理成功");
         ERROR_MESSGE_MAP.put(E_COMM_BUSSICSS, "一般业务错误");
         ERROR_MESSGE_MAP.put(WEB_SAVE_OK, "保存成功");
+        ERROR_MESSGE_MAP.put(WEB_LOGIN_NULL, "用户名或密码为空");
+        ERROR_MESSGE_MAP.put(WEB_LOGIN_FAIL, "用户名或密码错误");
     }
 }
