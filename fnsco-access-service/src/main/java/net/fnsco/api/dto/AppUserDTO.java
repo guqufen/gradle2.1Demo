@@ -8,15 +8,14 @@ public class AppUserDTO extends DTO {
     private Integer id;
     private Integer userId;
     private String  userName;
-    private Integer  type;//0注册 1忘记密码
+    private Integer  oprationType;//0注册 1忘记密码
 
-
-    public Integer getType() {
-        return type;
+    public Integer getOprationType() {
+        return oprationType;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setOprationType(Integer oprationType) {
+        this.oprationType = oprationType;
     }
 
     private String  mobile;

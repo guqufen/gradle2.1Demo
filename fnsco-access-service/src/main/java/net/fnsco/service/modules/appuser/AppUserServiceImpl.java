@@ -77,6 +77,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUser.setMobile(appUserDTO.getMobile());
         appUser.setDeviceType(appUserDTO.getDeviceType());
         appUser.setState(1);
+        appUser.setRegTime(new Date());
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         appUser.setPassword(password);
         if (!MappUserDao.insertSelective(appUser)) {
@@ -134,7 +135,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Override
     public ResultDTO getValidateCode(AppUserDTO appUserDTO) {
         //注册需要判断
-        if(appUserDTO.getType()==0){
+        if(appUserDTO.getOprationType()==0){
             AppUser user = MappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
             if (user != null) {   
                 return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
