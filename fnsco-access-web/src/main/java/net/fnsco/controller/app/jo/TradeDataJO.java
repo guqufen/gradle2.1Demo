@@ -33,7 +33,31 @@ public class TradeDataJO extends JO {
     private String       orderNo;
     //订单创建时间
     private String       orderTime;
+    //失败原因
+    private String       respMsg;
     
+    /**
+     * respMsg
+     *
+     * @return  the respMsg
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getRespMsg() {
+        return respMsg;
+    }
+
+    /**
+     * respMsg
+     *
+     * @param   respMsg    the respMsg to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setRespMsg(String respMsg) {
+        this.respMsg = respMsg;
+    }
+
     /**
      * orderNo
      *

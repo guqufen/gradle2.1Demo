@@ -216,6 +216,20 @@ $(function(){
         imgAuto();
     });
 })();
-
+//登录
+$('#btn_submit').click(function(){
+	$.ajax({
+		url:PROJECT_NAME+'/web/doLogin',
+		data:$('#login_info_form').serialize(),
+		success:function(data){
+			if(data.success){
+				window.location = 'index.html';
+			}else{
+				alert(data.message);
+			}
+		}
+	});
+	return false;
+});
 </script>
 </html>

@@ -3,8 +3,6 @@
  */
 package net.fnsco.service.modules.sysuser;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
