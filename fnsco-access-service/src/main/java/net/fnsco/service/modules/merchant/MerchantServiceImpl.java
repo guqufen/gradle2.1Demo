@@ -30,6 +30,7 @@ import net.fnsco.service.dao.master.MerchantTerminalDao;
 import net.fnsco.service.dao.master.MerchantUserRelDao;
 import net.fnsco.service.domain.Alias;
 import net.fnsco.service.domain.MerchantChannel;
+import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.MerchantTerminal;
 import net.fnsco.service.domain.MerchantUserRel;
 import net.fnsco.service.modules.helper.MerchantHelper;
@@ -73,7 +74,11 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         }
         MerchantUserRel merchantUserRel = merchantUserRelDao.selectByUserIdInnerCode(merchantDTO.getUserId(), alias.getInnerCode());
         if (null != merchantUserRel) {
-            return ResultDTO.fail(ApiConstant.E_MERCHANT_ALREADY_REF);//此商铺码不存在，请重新输入
+            return ResultDTO.fail(ApiConstant.E_MERCHANT_ALREADY_REF);//已关联此商铺，请勿重复关联
+        }
+        MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(alias.getInnerCode());
+        if(null == merchantUserRel){
+            return ResultDTO.fail(ApiConstant.E_MERCHANT_IS_DEL);//此商户已删除，关联失败
         }
         MerchantUserRel muRel = new MerchantUserRel();
         muRel.setAppUserId(merchantDTO.getUserId());
