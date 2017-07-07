@@ -72,12 +72,14 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
         result.setDownloadUrl2(ver.getDownloadUrl2());
         result.setForceUpdate(String.valueOf(flag));
         Boolean isUpdate = false;
-        int lastVersion = Integer.valueOf(ver.getVersion().replaceAll("\\.", ""));
-        int curressVersion = Integer.valueOf(sysVersionDTO.getVersion().replaceAll("\\.", ""));
-        if (curressVersion < lastVersion) {
-            isUpdate = true;
-        } else {
-            isUpdate = false;
+        if(null != ver.getVersion()){
+            int lastVersion = Integer.valueOf(ver.getVersion().replaceAll("\\.", ""));
+            int curressVersion = Integer.valueOf(sysVersionDTO.getVersion().replaceAll("\\.", ""));
+            if (curressVersion < lastVersion) {
+                isUpdate = true;
+            } else {
+                isUpdate = false;
+            }
         }
         result.setIsUpdate(isUpdate);
         result.setVersion(ver.getVersion());
