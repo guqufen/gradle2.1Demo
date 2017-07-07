@@ -889,7 +889,11 @@ function saveChannelParams(conId){
     data:JSON.stringify(channelArr),
     success:function(data){
     	unloginHandler(data);
-      layer.msg(data.message);//返回innerCode
+    	layer.msg(data.message);//返回innerCode
+    	if(!data.success){
+    		return false;
+    	}
+      
     },
     error:function(){
       layer.msg('系统错误');

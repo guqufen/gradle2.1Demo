@@ -101,14 +101,4 @@ public class SysUserLoginAction extends BaseController{
        return adminUserService.modifyPassword(name,newPassword,oldPassword);
     }
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
