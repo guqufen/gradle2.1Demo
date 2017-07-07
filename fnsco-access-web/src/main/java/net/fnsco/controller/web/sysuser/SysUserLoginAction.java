@@ -38,21 +38,24 @@ public class SysUserLoginAction extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/doLogin")
-	public String doLogin(HttpServletRequest req,HttpServletResponse res)
+	@ResponseBody
+	public ResultDTO<String> doLogin(HttpServletRequest req,HttpServletResponse res)
 	{
 		ResultDTO<SysUser> result = new ResultDTO<>();
 		String username = req.getParameter("account");
 		String password = req.getParameter("password");
-		if (StringUtils.isEmpty(password)) {
-            return "redirect:/login.html";
+		if (StringUtils.isEmpty(password) || StringUtils.isEmpty(username)) {
+		    
+            return ResultDTO.fail(CoreConstants.WEB_LOGIN_NULL);
         }
 		
 		result = adminUserService.doLogin( username, password);
 		if (result.isSuccess()) {
 			setSessionUser(result.getData());
 			CookieUtils.addCookie(res, CoreConstants.COOKIE_USER_KEY, ((SysUser)result.getData()).getName());
+			return ResultDTO.success();
 		}
-		return "redirect:/index.html";
+		return ResultDTO.fail(CoreConstants.WEB_LOGIN_FAIL);
 	}
 	
 	/**

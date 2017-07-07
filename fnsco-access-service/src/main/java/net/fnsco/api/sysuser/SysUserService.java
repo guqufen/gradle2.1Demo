@@ -3,8 +3,6 @@
  */
 package net.fnsco.api.sysuser;
 
-import javax.servlet.http.HttpServletResponse;
-
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.service.domain.SysUser;
 

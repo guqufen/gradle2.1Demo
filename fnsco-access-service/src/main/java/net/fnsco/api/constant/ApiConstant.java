@@ -19,7 +19,8 @@ public class ApiConstant extends CoreConstants {
     public static String E_USER_ID_NULL            = "5024";                            //用户ID不能为空
     public static String E_MERCHANT_CODE_NOT_EXIST = "5025";                            //此商铺码不存在，请重新输入
     public static String E_MERCHANT_CODE_OVERDUE   = "5026";
-    public static String E_MERCHANT_ALREADY_REF      = "5027";                            //已关联此商铺，请勿重复关联
+    public static String E_MERCHANT_ALREADY_REF    = "5027";                            //已关联此商铺，请勿重复关联
+    public static String E_MERCHANT_IS_DEL         = "5028";                            //此商户已删除，关联失败
 
     public static String E_APP_PHONE_EMPTY         = "5011";                            //非法请求,没有手机号
     public static String E_APP_PHONE_ERROR         = "5012";                            //非法请求,手机号不正确
@@ -57,29 +58,30 @@ public class ApiConstant extends CoreConstants {
     public static String E_VERSION_NULL            = "5112";                            //非法请求,版本号为空
     public static String E_ACCOUNTLOCKOUT_ERROR    = "5113";                            //非法请求,用户账号被注销
     public static String E_LOGIN_ERROR             = "5114";                            //登录失败
-    
-    
+    public static String E_LOGINMSG_ERROR          = "5115";                            //用户名或密码不正确
+
     static {
         ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NULL, "商铺码不能为空");
         ERROR_MESSGE_MAP.put(E_USER_ID_NULL, "用户ID不能为空");
         ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NOT_EXIST, "此商铺码不存在，请重新输入");
         ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_OVERDUE, "此商铺码已过期，请到pos机查询最新的商铺码");
         ERROR_MESSGE_MAP.put(E_MERCHANT_ALREADY_REF, "已关联此商铺，请勿重复关联");
+        ERROR_MESSGE_MAP.put(E_MERCHANT_IS_DEL, "此商户已删除，关联失败");
         //APP
         ERROR_MESSGE_MAP.put(E_USERID_NULL, "入参ID为null");
         ERROR_MESSGE_MAP.put(E_UPDATE_FAIL, "更新失败");
-        ERROR_MESSGE_MAP.put(E_APP_PHONE_EMPTY, "非法请求,没有手机号");
-        ERROR_MESSGE_MAP.put(E_APP_PHONE_ERROR, "非法请求,手机号不正确");
-        ERROR_MESSGE_MAP.put(E_APP_PASSWORD_EMPTY, "非法请求,没有密码");
-        ERROR_MESSGE_MAP.put(E_APP_PASSWORD_ERROR, "非法请求,密码不正确");
-        ERROR_MESSGE_MAP.put(E_APP_ID_EMPTY, "非法请求,没有id");
-        ERROR_MESSGE_MAP.put(E_APP_ID_ERROR, "非法请求,id不正确");
-        ERROR_MESSGE_MAP.put(E_APP_DEVICETYPE_EMPTY, "非法请求,没有deviceType");
-        ERROR_MESSGE_MAP.put(E_APP_DEVICETYPE_ERROR, "非法请求,deviceType不正确");
-        ERROR_MESSGE_MAP.put(E_APP_CODE_EMPTY, "非法请求,没有验证码");
-        ERROR_MESSGE_MAP.put(E_APP_CODE_ERROR, "非法请求,验证码不正确");
-        ERROR_MESSGE_MAP.put(E_APP_DEVICEIDNULL, "非法请求,设备号为空");
-        ERROR_MESSGE_MAP.put(E_APP_DEVICETYPENULL, "非法请求,设备号不正确");
+        ERROR_MESSGE_MAP.put(E_APP_PHONE_EMPTY, "没有手机号");
+        ERROR_MESSGE_MAP.put(E_APP_PHONE_ERROR, "手机号不正确");
+        ERROR_MESSGE_MAP.put(E_APP_PASSWORD_EMPTY, "密码为空");
+        ERROR_MESSGE_MAP.put(E_APP_PASSWORD_ERROR, "密码不正确");
+        ERROR_MESSGE_MAP.put(E_APP_ID_EMPTY, "id为空");
+        ERROR_MESSGE_MAP.put(E_APP_ID_ERROR, "id不正确");
+        ERROR_MESSGE_MAP.put(E_APP_DEVICETYPE_EMPTY, "deviceType为空");
+        ERROR_MESSGE_MAP.put(E_APP_DEVICETYPE_ERROR, "deviceType不正确");
+        ERROR_MESSGE_MAP.put(E_APP_CODE_EMPTY, "验证码为空");
+        ERROR_MESSGE_MAP.put(E_APP_CODE_ERROR, "验证码不正确");
+        ERROR_MESSGE_MAP.put(E_APP_DEVICEIDNULL, "设备号为空");
+        ERROR_MESSGE_MAP.put(E_APP_DEVICETYPENULL, "设备号不正确");
 
         ERROR_MESSGE_MAP.put(E_ALREADY_LOGIN, "用户已注册");
         ERROR_MESSGE_MAP.put(E_REGISTER_ERROR, "注册失败");
@@ -89,10 +91,11 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_NOREGISTER_LOGIN, "用户未注册");
         ERROR_MESSGE_MAP.put(E_EDITION_ERROR, "版本号格式错误");
         ERROR_MESSGE_MAP.put(E_CODE_INVALID, "验证码已失效");
-        ERROR_MESSGE_MAP.put(E_APPCODE_NULL, "非法请求,手机码为空");
-        ERROR_MESSGE_MAP.put(E_VERSION_NULL, "非法请求,版本号为空");
-        ERROR_MESSGE_MAP.put(E_ACCOUNTLOCKOUT_ERROR, "非法请求,用户账号被锁定");
+        ERROR_MESSGE_MAP.put(E_APPCODE_NULL, "手机码为空");
+        ERROR_MESSGE_MAP.put(E_VERSION_NULL, "版本号为空");
+        ERROR_MESSGE_MAP.put(E_ACCOUNTLOCKOUT_ERROR, "用户账号被锁定");
         ERROR_MESSGE_MAP.put(E_LOGIN_ERROR, "登录失败");
+        ERROR_MESSGE_MAP.put(E_LOGINMSG_ERROR, "用户名或密码不正确");
     }
 
 }
