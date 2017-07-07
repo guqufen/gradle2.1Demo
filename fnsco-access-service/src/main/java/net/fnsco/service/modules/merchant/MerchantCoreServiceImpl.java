@@ -381,6 +381,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
      * @auth tangliang
      * @date 2017年7月1日 上午9:59:00
      */
+    @Transactional
     @Override
     public ResultDTO<String> doAddMerChannel(List<MerchantChannel> merchantChannels) {
 
@@ -389,9 +390,16 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         String innerCode = "";
         for (MerchantChannel merchantChannel : merchantChannels) {
+            MerchantChannel res = merchantChannelDao.selectByMerCode(merchantChannel.getChannelMerId(), merchantChannel.getChannelType());
             if (null != merchantChannel.getId()) {
+                if(res != null && merchantChannel.getId() != res.getId()){
+                    return ResultDTO.fail(CoreConstants.WEB_MER_CHANNEL_NOTUNIQUE);
+                }
                 merchantChannelDao.updateByPrimaryKeySelective(merchantChannel);
             } else {
+                if(null != res){
+                    return ResultDTO.fail(CoreConstants.WEB_MER_CHANNEL_NOTUNIQUE);
+                }
                 merchantChannelDao.insertSelective(merchantChannel);
                 innerCode = merchantChannel.getInnerCode();
             }
