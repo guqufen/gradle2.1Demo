@@ -137,12 +137,18 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
      * @date 2017年6月27日 上午10:30:05
      * @see net.fnsco.api.merchant.MerchantCoreService#deleteByIds(java.lang.Integer[])
      */
+    @Transactional
     @Override
     public ResultDTO<Integer> deleteByIds(Integer[] ids) {
         // TODO Auto-generated method stub
         ResultDTO<Integer> result = null;
         int re = merchantCoreDao.updateStatusByMutipleKey(ids);
         if (re != 0) {
+            merchantContactDao.deleteByMerCoreIds(ids);
+            merchantFileDao.deleteByMerCoreIds(ids);
+            merchantChannelDao.deleteByMerCoreIds(ids);
+            merchantBankDao.deleteByMerCoreIds(ids);
+            merchantTerminalDao.deleteByMerCoreIds(ids);
             result = ResultDTO.success("删除成功!");
         } else {
             result = ResultDTO.fail("删除失败");
