@@ -255,10 +255,10 @@ function resetEvent(){
    $('#formSearch')[0].reset();
 }
 //点击获取innocode
-getInnerCode();//默认获取
+//getInnerCode();//默认获取
 function getInnerCode(){
    var code = '';
-   if(!$('#innerCode').val()){
+//   if(!$('#innerCode').val()){
      $.ajax({
        url:PROJECT_NAME+'/web/fileInfo/getInnoCode',
        type:'POST',
@@ -275,16 +275,18 @@ function getInnerCode(){
            objs_1[i].click();
          }
          code = data;
+         $(".uploadify").show();
+         $(".remove-icon").show();
          return code;
        }
      });
-   }
+//   }
 }
 //新增按钮事件
 $('#btn_add').click(function(){ 
    requestAgent(null);
-   $(".uploadify").show();
-   $(".remove-icon").show();
+   getInnerCode();
+   
 });
 //批量删除按钮事件
 $('#btn_delete').click(function(){
