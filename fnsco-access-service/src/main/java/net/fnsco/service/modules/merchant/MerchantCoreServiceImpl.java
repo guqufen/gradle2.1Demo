@@ -18,6 +18,7 @@ import net.fnsco.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.service.dao.master.AgentDao;
 import net.fnsco.service.dao.master.MerchantBankDao;
 import net.fnsco.service.dao.master.MerchantChannelDao;
@@ -318,7 +319,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             merchantCore = merchantCoreDao.selectByPrimaryKey(merchantCore.getId());
         }
 
-        return ResultDTO.success(merchantCore.getInnerCode());
+        return new ResultDTO<>(true, merchantCore.getInnerCode(), CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
 
     }
 
@@ -345,7 +346,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             }
 
         }
-        return ResultDTO.success(innerCode);
+        return new ResultDTO<>(true, innerCode, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
 
     }
 
@@ -370,7 +371,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             }
             innerCode = merchantTerminal.getInnerCode();
         }
-        return ResultDTO.success(innerCode);
+        return new ResultDTO<>(true, innerCode, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
 
     }
 
@@ -395,7 +396,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
                 innerCode = merchantChannel.getInnerCode();
             }
         }
-        return ResultDTO.success(innerCode);
+        return new ResultDTO<>(true, innerCode, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
 
     }
 
@@ -420,7 +421,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
                 innerCode = merchantBank.getInnerCode();
             }
         }
-        return ResultDTO.success(innerCode);
+        return new ResultDTO<>(true, innerCode, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
     }
 
     @Override
