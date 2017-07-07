@@ -96,7 +96,7 @@ public class ServiceConstant {
         }
 
         public static String getNameByCode(String code) {
-            for (PayTypeEnum eopen : PayTypeEnum.values()) {
+            for (PaySubTypeEnum eopen : PaySubTypeEnum.values()) {
                 if (eopen.code.equals(code)) {
                     return eopen.name;
                 }
