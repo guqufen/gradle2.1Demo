@@ -52,6 +52,10 @@ $("#businessLicenseValidTime1").datetimepicker({
   startView: 2,//月视图
   minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
 });
+//给静态框的关闭按钮增加事件
+$('.close').click(function(){
+	queryEvent();
+});
 //初始化表格
 initTableData();
 function initTableData(){
@@ -601,7 +605,9 @@ function contactHtml(num){
         }
         contactArr=contactArr.concat(concatContactArr);
       }
-      console.log(contactArr);
+      if(contactArr && contactArr.length == 0){
+    	  layer.msg('保存成功');return ;
+      }
   		$.ajax({
   			url:PROJECT_NAME+'/web/merchantinfo/toAddContact',
   			dataType:"json", 
@@ -705,6 +711,9 @@ function terminalHtml(num){
   		terminalArr=terminalArr.concat(concatTerminalArr);
     }
   	//保存
+  	if(terminalArr && terminalArr.length == 0){
+  	  layer.msg('保存成功');return ;
+    }
   	$.ajax({
   		url:PROJECT_NAME+'/web/merchantinfo/toAddTerminal',
   		dataType:"json", 
@@ -777,6 +786,9 @@ function saveChannelParams(conId){
     channelArr=channelArr.concat(concatChannelArrArr);
   }
   //保存
+  if(channelArr && channelArr.length == 0){
+	  layer.msg('保存成功');return ;
+  }
   $.ajax({
     url:PROJECT_NAME+'/web/merchantinfo/toAddChannel',
     dataType:"json", 
@@ -868,6 +880,9 @@ function saveBankCardParams(conId){
     bankCardArr=bankCardArr.concat(concatBankCardArr);
   }
   //保存
+  if(bankCardArr && bankCardArr.length == 0){
+	  layer.msg('保存成功');return ;
+  }
   $.ajax({
     url:PROJECT_NAME+'/web/merchantinfo/toAddBank',
     dataType:"json", 
