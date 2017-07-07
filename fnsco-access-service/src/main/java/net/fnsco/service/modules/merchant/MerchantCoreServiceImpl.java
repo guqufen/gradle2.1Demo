@@ -145,7 +145,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         int re = merchantCoreDao.updateStatusByMutipleKey(ids);
         if (re != 0) {
             merchantContactDao.deleteByMerCoreIds(ids);
-            merchantFileDao.deleteByMerCoreIds(ids);
+           // merchantFileDao.deleteByMerCoreIds(ids);
             merchantChannelDao.deleteByMerCoreIds(ids);
             merchantBankDao.deleteByMerCoreIds(ids);
             merchantTerminalDao.deleteByMerCoreIds(ids);
