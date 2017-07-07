@@ -36,8 +36,8 @@
                     </div>
                 </div>
                 <div class="col-sm-2" style="text-align: right;">
-                    <button type="button" id="btn_query" class="btn btn-primary" onclick="javascript:queryEvent();"><span class="glyphicon glyphicon-search"></span>查询</button>
-                    <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent();"><span class="glyphicon glyphicon-refresh"></span>重置</button>
+                    <button type="button" id="btn_query" class="btn btn-primary" onclick="javascript:queryEvent('table');"><span class="glyphicon glyphicon-search"></span>查询</button>
+                    <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent('formSearch');"><span class="glyphicon glyphicon-refresh"></span>重置</button>
                 </div>
             </div>
         </form>
@@ -823,7 +823,7 @@
 	                <h4 class="modal-title" id="banksModalLabel">支行信息</h4>
 	            </div>
 	            <div class="modal-body">
-	                <form id="formSearch" class="form-horizontal">
+	                <form id="bankFormSearch" class="form-horizontal">
 			            <div class="form-group" style="margin-top:15px">
 			                <div class="row col-sm-10">
 			                    <div class="col-sm-6">
@@ -844,19 +844,19 @@
 			                    </div>
 			                </div>
 			                <div class="col-sm-2" style="text-align: right;">
-			                    <button type="button" id="btn_query" class="btn btn-primary" onclick="javascript:queryEvent();"><span class="glyphicon glyphicon-search"></span>查询</button>
-			                    <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent();"><span class="glyphicon glyphicon-refresh"></span>重置</button>
+			                    <button type="button" id="btn_query" class="btn btn-primary" onclick="javascript:queryEvent('bankTable');"><span class="glyphicon glyphicon-search"></span>查询</button>
+			                    <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent('bankFormSearch','bankTable');"><span class="glyphicon glyphicon-refresh"></span>重置</button>
 			                </div>
 			            </div>
 			        </form>
 			        <div id="banksToolbar">
-	                    <button id="btn_delete" type="button" class="btn btn-success">
+	                    <button id="btn_select_bank" type="button" class="btn btn-success">
 	                        <span class="glyphicon glyphicon-file" aria-hidden="true"></span>确定选择
 	                    </button>
 	                </div>
 	                <div class="row">
 	                	<div class="col-sm-12">
-							<div id="bankTable"></div>
+							<div id="bankTable" style="width: 100%;"></div>
 						</div>
 					</div>
 	            </div>

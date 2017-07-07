@@ -151,7 +151,7 @@ function initBanksTableData(){
         sortable: true,   //是否启用排序
         sortOrder: "asc",   //排序方式
         pageNumber:1,   //初始化加载第一页，默认第一页
-        pageSize: 15,   //每页的记录行数（*）
+        pageSize: 5,   //每页的记录行数（*）
         pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
         queryParams:queryBanksParams,	
         responseHandler:responseBanksHandler,//处理服务器返回数据
@@ -162,19 +162,21 @@ function initBanksTableData(){
             align: 'center',
             valign: 'middle'
         },{
-            width: 100,
-            field: 'branch_bank_name',
+            field: 'branchBankName',
             title: '支行名称'
         }, {
-            field: 'province_name',
+            field: 'provinceName',
             title: '所在省'
         }, {
-            field: 'city_name',
+            width:120,
+            field: 'cityName',
             title: '所在市'
         }, {
-            field: 'bank_name',
+            width:140,
+            field: 'bankName',
             title: '银行名称'
         }, {
+            width:140,
             field: 'code',
             title: '支行名称'
         }]
@@ -322,12 +324,13 @@ function operateFormatter(value, row, index) {
 
 
 //条件查询按钮事件
-function queryEvent(){
-   $('#table').bootstrapTable('refresh');
+function queryEvent(id){
+   $('#'+id).bootstrapTable('refresh');
 }
 //重置按钮事件
-function resetEvent(){
-   $('#formSearch')[0].reset();
+function resetEvent(form,id){
+   $('#'+form)[0].reset();
+   $('#'+id).bootstrapTable('refresh');
 }
 //点击获取innocode
 //getInnerCode();//默认获取
@@ -402,6 +405,21 @@ $('#btn_delete').click(function(){
       layer.msg('取消成功');
   });
   
+});
+//选择银行支行事件
+$('#btn_select_bank').click(function(){
+  var select_data = $('#bankTable').bootstrapTable('getSelections')[0];
+  $(".subBankName.active").val(select_data.branchBankName);
+  $(".subBankName.active").parents().parents().find('.openBank').val(select_data.bankName);
+  $(".subBankName.active").parents().parents().find('.openBankPrince').val(select_data.provinceName);
+  $(".subBankName.active").parents().parents().find('.openBankCity').val(select_data.cityName);
+  $(".subBankName.active").parents().parents().find('.openBankNum').val(select_data.code);
+  $("#banksModal").hide();
+  $(".subBankName").removeClass('active');
+  var dataId=[];
+  for(var i=0;i<select_data.length;i++){
+    dataId=dataId.concat(select_data[i].id);
+  }
 });
 //弹框下一步按钮事件
 $(".nextBtn").click(function(){
@@ -910,12 +928,15 @@ function bankCardHtml(num){
             '<div class="col-sm-4"><label class="control-label" for="accountNo'+num+'">开户账号：</label><input type="text" class="form-control accountNo" id="accountNo'+num+'" name="accountNo'+num+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="accountCardId'+num+'">开户人身份证号：</label><input type="text" class="form-control accountCardId" id="accountCardId'+num+'" name="accountCardId'+num+'"></div>'+
             // '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">结算周期：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'"></div></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="subBankName'+num+'">支行名称:</label><input type="text" class="form-control subBankName" id="subBankName'+num+'" name="subBankName'+num+'" readonly="readonly" data-toggle="modal" data-target="#banksModal"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="subBankName'+num+'">支行名称:</label><input type="text" class="form-control subBankName" onclick="selectBank('+num+')" id="subBankName'+num+'" name="subBankName'+num+'" readonly="readonly" data-toggle="modal" data-target="#banksModal"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="openBank'+num+'">开户行:</label><input type="text" class="form-control openBank" id="openBank'+num+'" name="openBank'+num+'" disabled="disabled"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="openBankPrince'+num+'">开户行所在省:</label><input type="text" class="form-control openBankPrince" id="openBankPrince'+num+'" name="openBankPrince'+num+'" disabled="disabled"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="openBankCity'+num+'">开户行所在市:</label><input type="text" class="form-control openBankCity" id="openBankCity'+num+'" name="openBankCity'+num+'" disabled="disabled"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="openBankNum'+num+'">开户行行号:</label><input type="text" class="form-control openBankNum" id="openBankNum'+num+'" name="openBankNum'+num+'" disabled="disabled"></div>'+
             '</div>';
+}
+function selectBank(id){
+  $('#subBankName'+id).addClass("active");
 }
 //默认添加一个银行卡信息列表
 $('#bankCard-con').append(bankCardHtml(BankCardlList));
@@ -1198,6 +1219,7 @@ function editData(id){
             $(this).parent().find('select').attr('disabled',true);
             $(".uploadify").hide();
             $(".deletefileImg").hide();
+            $(".subBankName").attr("readonly",false);
         })
         //基本信息保存按钮操作
         $('#editBtn_merchant').click(function(){
@@ -1435,6 +1457,7 @@ function detailsData(id){
         // 全部默认不可编辑
         $("#detailsModal").find('input').attr('disabled',true);
         $("#detailsModal").find('select').attr('disabled',true);
+        $(".subBankName").attr('readonly',false);
         $(".remove-icon").hide();
         $(".btn-addList").hide();
         $(".deletefileImg").hide();

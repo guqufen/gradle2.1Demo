@@ -4,6 +4,9 @@
 .bootstrap-table{
 	padding:10px;
 }
+.bootstrap-table .table#bankTable{
+	padding:0!important;
+}
 table thead{
 	/*color: #fff;
     background: #2f4050;*/
