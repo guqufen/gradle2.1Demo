@@ -108,8 +108,11 @@ public class TradeDataController extends BaseController {
         result.setStatusName(TradeStateEnum.getNameByCode(result.getStatus()));
         result.setId(tradeData.getId());
         result.setTradeTime(tradeData.getTimeStamp());
-
-        result.setMerName(merchantCore.getMerName());
+        if(null != merchantCore){
+            result.setMerName(merchantCore.getMerName());
+        }else{
+            result.setMerName("未知商户");
+        }
         result.setInnerCode(tradeData.getInnerCode());
         result.setTradeType(tradeData.getTxnType());
         result.setTradeTypeName(TradeTypeEnum.getNameByCode(result.getTradeType()));
