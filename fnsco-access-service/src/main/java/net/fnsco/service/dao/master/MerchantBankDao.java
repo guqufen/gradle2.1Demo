@@ -81,4 +81,14 @@ public interface MerchantBankDao {
      * @since  CodingExample　Ver 1.1
      */
     List<MerchantBank> queryWebByInnerCode(@Param("innerCode") String innerCode);
+    /**
+     * deleteByMerCoreIds:(这里用一句话描述这个方法的作用) 根据core实体IDS删除关联数据
+     *
+     * @param ids
+     * @return    设定文件
+     * @return int    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    int deleteByMerCoreIds(Integer[] ids);
 }

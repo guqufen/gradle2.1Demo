@@ -142,4 +142,13 @@
       </if>
    </where>
 </select>
+<!-- 根据商家ID删除关联数据 -->
+<delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
+   DELETE   FROM m_merchant_contact WHERE inner_code in (
+	 SELECT inner_code FROM m_merchant_core WHERE id in 
+	  <foreach item="item" collection="array" open="(" separator="," close=")">
+       #{item}
+     </foreach>
+	)
+</delete>
 </mapper>

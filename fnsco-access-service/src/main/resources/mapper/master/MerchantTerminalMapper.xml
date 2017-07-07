@@ -360,4 +360,13 @@
   <select id="queryDetailById" parameterType="java.lang.Integer" resultMap="DetailResultMap">
      select sn_code,term_name,pos_factory,pos_type from m_merchant_terminal where id=#{terId}
   </select>
+  <!-- 根据商家ID删除关联数据 -->
+	<delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
+	   DELETE   FROM m_merchant_terminal WHERE inner_code in (
+		 SELECT inner_code FROM m_merchant_core WHERE id in 
+		  <foreach item="item" collection="array" open="(" separator="," close=")">
+	       #{item}
+	     </foreach>
+		)
+	</delete>
 </mapper>
