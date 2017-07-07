@@ -133,10 +133,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     //生产验证码
     @Override
     public ResultDTO getValidateCode(AppUserDTO appUserDTO) {
-        //判断用户是否已经注册
-        AppUser user = MappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
-        if (user != null) {   
-            return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
+        //注册需要判断
+        if(appUserDTO.getType()==0){
+            AppUser user = MappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
+            if (user != null) {   
+                return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
+            }
         }
         String deviceId = appUserDTO.getDeviceId();
         final String mobile = appUserDTO.getMobile();
@@ -198,10 +200,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (code.equals(codeDto.getCode())) {
             MsgCodeMap.remove(mobile + deviceId);
             return ResultDTO.success();
-        }
-        if(!code.equals(codeDto.getCode())){
-            MsgCodeMap.remove(mobile + deviceId);
-            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
         }
         return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
     }
