@@ -1,6 +1,9 @@
 #side-menu .glyphicon-chevron-down,#side-menu .glyphicon-chevron-up{
 	float: right;
 }
+.bootstrap-table{
+	padding:10px;
+}
 table thead{
 	/*color: #fff;
     background: #2f4050;*/
