@@ -45,12 +45,12 @@
                         <div class="forget-body" style="display: block;">
                             <form id="forget_info_form" name="forget" method="post" action="/web/doForget">
                                 <div class="forget-input-panel">
-                                    <div class="username-input">
+                             <!--        <div class="username-input">
                                         <div class="icon left">
                                             <img src="login/6-25-19.png">
                                         </div>
                                         <input type="text" id="account" name="account" value="" placeholder="请输入账号">
-                                    </div>
+                                    </div> -->
                                     <div class="password-input">
                                         <div class="icon left">
                                             <img src="login/6-25-14.png">
@@ -156,15 +156,6 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="/web/logout" class="right-sidebar-toggle logout"><i class="glyphicon glyphicon-log-out"></i> 退出</a>
-                    </li>
-<!--                      <li class="dropdown"> -->
-<!--                         <a href="/web/logout" class="right-sidebar-toggle logout"><i class="glyphicon glyphicon-log-out"></i>修改密码</a> -->
-<!--                     </li> -->
-                    <!-- <li class="dropdown">
-                        <a href="/web/logout" class="right-sidebar-toggle .logout"><i class="glyphicon glyphicon-log-out"></i> 退出</a>
-                    </li> -->
-                    <li class="dropdown">
                        	<a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">
                        		<span class="glyphicon glyphicon-user"></span><strong class="font-bold indexPageUserName">董审核</strong>
                         </a> 
@@ -250,7 +241,7 @@ $("#btn_forget").click(function(){
 	if($("#newPassword").val()!=$("#newPassword1").val()){
 		alert("两次密码输入不一致,请重新输入");
 	}
-	var data={"name":$("#account").val(),"oldPassword":$("#oldPassword").val(),"newPassword":$("#newPassword1").val()};
+	var data={"name":$(".indexPageUserName").html(),"oldPassword":$("#oldPassword").val(),"newPassword":$("#newPassword1").val()};
 	$.ajax({
 			url:PROJECT_NAME+'/web/modifyPassword',
 			dataType:'json',
