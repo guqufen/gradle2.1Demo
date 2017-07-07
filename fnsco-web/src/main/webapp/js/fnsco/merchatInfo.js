@@ -6,6 +6,7 @@ function unloginHandler(result){
 		window.location="login.html";
 	}
 }
+
 //默认给表单加上时间控件
 $("#cardValidTime").datetimepicker({
   format: 'yyyy-mm-dd',
@@ -58,6 +59,7 @@ $('.close').click(function(){
 });
 //初始化表格
 initTableData();
+initBanksTableData();
 function initTableData(){
   $('#table').bootstrapTable({
         sidePagination:'server',
@@ -74,7 +76,7 @@ function initTableData(){
         pageNumber:1,   //初始化加载第一页，默认第一页
         pageSize: 15,   //每页的记录行数（*）
         pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
-        queryParams:queryParams,	
+        queryParams:queryParams,  
         responseHandler:responseHandler,//处理服务器返回数据
         columns: [{
             field: 'state',
@@ -135,6 +137,49 @@ function initTableData(){
         }]
     });
 }
+function initBanksTableData(){
+  $('#bankTable').bootstrapTable({
+        sidePagination:'server',
+        search: false, //是否启动搜索栏 
+        url:PROJECT_NAME+'/web/bank/query',
+        showRefresh: true,//是否显示刷新按钮
+        showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
+        toolbar: '#banksToolbar',  //工具按钮用哪个容器
+        striped: true,   //是否显示行间隔色
+        cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pagination: true,   //是否显示分页（*）
+        sortable: true,   //是否启用排序
+        sortOrder: "asc",   //排序方式
+        pageNumber:1,   //初始化加载第一页，默认第一页
+        pageSize: 15,   //每页的记录行数（*）
+        pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
+        queryParams:queryBanksParams,	
+        responseHandler:responseBanksHandler,//处理服务器返回数据
+        columns: [{
+            field: 'state',
+            radio: true,
+            rowspan:1,
+            align: 'center',
+            valign: 'middle'
+        },{
+            width: 100,
+            field: 'branch_bank_name',
+            title: '支行名称'
+        }, {
+            field: 'province_name',
+            title: '所在省'
+        }, {
+            field: 'city_name',
+            title: '所在市'
+        }, {
+            field: 'bank_name',
+            title: '银行名称'
+        }, {
+            field: 'code',
+            title: '支行名称'
+        }]
+    });
+}
 //商户注册来源格式处理
 function formatSource(value, row, index){
   if(value == '1')
@@ -173,9 +218,35 @@ function queryParams(params)
    }
    return param;
 }
+function queryBanksParams(params)
+{
+   var param ={
+       currentPageNum : this.pageNumber,
+       pageSize : this.pageSize,
+       bankName :$('#txt_search_bank').val(),
+       provinceName:$('#txt_search_pro').val(),
+       cityName:$('#txt_search_city').val(),
+       branchBankName:$('#txt_search_branch').val()
+   }
+   return param;
+}
 //处理后台返回数据
 function responseHandler(res) { 
 	unloginHandler(res);
+    if (res) {
+        return {
+            "rows" : res.list,
+            "total" : res.total
+        };
+    } else {
+        return {
+            "rows" : [],
+            "total" : 0
+        };
+    }
+}
+function responseBanksHandler(res) { 
+  unloginHandler(res);
     if (res) {
         return {
             "rows" : res.list,
@@ -290,7 +361,6 @@ function getInnerCode(){
 $('#btn_add').click(function(){ 
    requestAgent(null);
    getInnerCode();
-   
 });
 //批量删除按钮事件
 $('#btn_delete').click(function(){
@@ -333,7 +403,10 @@ $('#btn_delete').click(function(){
   });
   
 });
-
+//弹框下一步按钮事件
+$(".nextBtn").click(function(){
+    $(".nav-tabs li.active").removeClass('active').next().addClass('active');
+})
 //请求所有代理商数据
 function requestAgent(type){
 	 $.ajax({
@@ -535,11 +608,6 @@ function saveFile(){
   });
 }
 
-//弹框下一步按钮事件
-$(".nextBtn").click(function(){
-    $(".nav-tabs li.active").removeClass('active').next().addClass('active');
-})
-
 //添加联系信息列表
 var ContactList=1;
 function contactHtml(num){
@@ -633,10 +701,10 @@ function contactHtml(num){
 var TerminalList=1;
 function terminalHtml(num){
 	return '<div class="terminal-list"><div class="remove-icon remove-terminalList'+num+'" editId="'+num+'" onclick="removeTerminal('+num+')"><span class="glyphicon glyphicon-remove"></span></div><div class="row">'+
-        '<div class="col-sm-4"><label class="control-label" for="merchantCode'+num+'">通道商户号：</label><input type="text" class="form-control merchantCode" id="merchantCode'+num+'" name="merchantCode'+num+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="channelId'+num+'">通道ID：</label><input type="text" class="form-control channelId" id="channelId'+num+'" name="channelId'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="channelName'+num+'">通道名称：</label><input type="text" class="form-control channelName" id="channelName'+num+'" name="channelName'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="terminalCode'+num+'">通道终端号：</label><input type="text" class="form-control terminalCode" id="terminalCode'+num+'" name="terminalCode'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="merchantCode'+num+'">通道商户号：</label><input type="text" class="form-control merchantCode" id="merchantCode'+num+'" name="merchantCode'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="channelId'+num+'">通道ID：</label><input type="number" class="form-control channelId" id="channelId'+num+'" name="channelId'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="snCode'+num+'">POS机SN码：</label><input type="text" class="form-control snCode" id="snCode'+num+'" name="snCode'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="terminalBatch'+num+'">终端批次号：</label><input type="text" class="form-control terminalBatch" id="terminalBatch'+num+'" name="terminalBatch'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="terminalPara'+num+'">终端参数：</label><input type="text" class="form-control terminalPara" id="terminalPara'+num+'" name="terminalPara'+num+'" required="required"></div>'+
@@ -703,6 +771,26 @@ function terminalHtml(num){
       if(!innerCode){
         layer.msg('操作错误!');return ;
       }
+      if(!channelName){
+        if(conId=='terminal-con'){
+            $("#myModal").find('.tab-pane').removeClass("active");
+            $("#terminal_info").addClass("active");
+            $("#myModal .nav-tabs li").removeClass("active");
+            $("#myModal .nav-tabs li:eq(3)").addClass("active");
+            $("#terminal_info").show();
+        }
+        layer.msg('保存失败，通道名称不能为空，请重新编辑');return ;
+      }
+      if(!terminalCode){
+        if(conId=='terminal-con'){
+            $("#myModal").find('.tab-pane').removeClass("active");
+            $("#terminal_info").addClass("active");
+            $("#myModal .nav-tabs li").removeClass("active");
+            $("#myModal .nav-tabs li:eq(3)").addClass("active");
+            $("#terminal_info").show();
+        }
+        layer.msg('保存失败，通道终端号不能为空，请重新编辑');return ;
+      }
       if(!id || id<0){
           concatTerminalArr={merchantCode,channelId,channelName,terminalCode,snCode,terminalBatch,terminalPara,chargesType,debitCardRate,creditCardRate,debitCardMaxFee,creditCardMaxFee,dealSwitch,recordState,termName,posFactory,posType,mercReferName,innerCode}
         }else{
@@ -723,6 +811,10 @@ function terminalHtml(num){
   		success:function(data){
   			unloginHandler(data);
   			layer.msg(data.message);//返回innerCode
+        $("#terminal_info").removeClass('active');
+        $("#terminal_info").hide();
+        $("#channel_info").addClass('active');
+        $("#channel_info").show();
   		},
   		error:function(){
   			layer.msg('系统错误');
@@ -818,11 +910,11 @@ function bankCardHtml(num){
             '<div class="col-sm-4"><label class="control-label" for="accountNo'+num+'">开户账号：</label><input type="text" class="form-control accountNo" id="accountNo'+num+'" name="accountNo'+num+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="accountCardId'+num+'">开户人身份证号：</label><input type="text" class="form-control accountCardId" id="accountCardId'+num+'" name="accountCardId'+num+'"></div>'+
             // '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">结算周期：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'"></div></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="subBankName'+num+'">支行名称:</label><input type="text" class="form-control subBankName" id="subBankName'+num+'" name="subBankName'+num+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="openBank'+num+'">开户行:</label><input type="text" class="form-control openBank" id="openBank'+num+'" name="openBank'+num+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="openBankPrince'+num+'">开户行所在省:</label><input type="text" class="form-control openBankPrince" id="openBankPrince'+num+'" name="openBankPrince'+num+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="openBankCity'+num+'">开户行所在市:</label><input type="text" class="form-control openBankCity" id="openBankCity'+num+'" name="openBankCity'+num+'"></div>'+
-            '<div class="col-sm-4"><label class="control-label" for="openBankNum'+num+'">开户行行号:</label><input type="text" class="form-control openBankNum" id="openBankNum'+num+'" name="openBankNum'+num+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="subBankName'+num+'">支行名称:</label><input type="text" class="form-control subBankName" id="subBankName'+num+'" name="subBankName'+num+'" readonly="readonly" data-toggle="modal" data-target="#banksModal"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="openBank'+num+'">开户行:</label><input type="text" class="form-control openBank" id="openBank'+num+'" name="openBank'+num+'" disabled="disabled"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="openBankPrince'+num+'">开户行所在省:</label><input type="text" class="form-control openBankPrince" id="openBankPrince'+num+'" name="openBankPrince'+num+'" disabled="disabled"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="openBankCity'+num+'">开户行所在市:</label><input type="text" class="form-control openBankCity" id="openBankCity'+num+'" name="openBankCity'+num+'" disabled="disabled"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="openBankNum'+num+'">开户行行号:</label><input type="text" class="form-control openBankNum" id="openBankNum'+num+'" name="openBankNum'+num+'" disabled="disabled"></div>'+
             '</div>';
 }
 //默认添加一个银行卡信息列表
@@ -1059,6 +1151,7 @@ function editData(id){
         // 全部默认不可编辑
         $("#editModal").find('input').attr('disabled',true);
         $("#editModal").find('select').attr('disabled',true);
+        $(".subBankName").attr('readonly',false);
         $(".remove-icon").hide();
         $(".btn-addList").hide();
         $("#btn_addContact1").hide();
@@ -1080,6 +1173,12 @@ function editData(id){
             $(".uploadify").show();
             $(".havaFile").hide();
             $(".deletefileImg").show();
+            //银行支行选择
+            $(".subBankName").attr("readonly",true);
+            $(".openBank").attr("disabled",true);
+            $(".openBankPrince").attr("disabled",true);
+            $(".openBankCity").attr("disabled",true);
+            $(".openBankNum").attr("disabled",true);
         })
         //保存按钮
         $(".editBtn_save").click(function(){
@@ -1160,7 +1259,11 @@ $("#btn_addContact1").click(function(){
 var editTerminalList=10;
 $("#btn_addTerminal1").click(function(){
     editTerminalList=editTerminalList+1;
-    $("#terminal-con1").append(terminalHtml(-(editTerminalList)));
+    if($("#terminal-con1 .terminal-list").length>7){
+      layer.msg('最多添加八个终端');
+    }else{
+      $("#terminal-con1").append(terminalHtml(-(editTerminalList)));
+    }
 })
   //修改终端保存按钮
   $('#editBtn_terminal_info').click(function(){
