@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -50,6 +51,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
     //注册
     @Override
+    @Transactional
     public ResultDTO insertSelective(AppUserDTO appUserDTO) {
         Map<String, Integer> map = new HashMap<>();
         //非空判断
@@ -134,6 +136,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     //生产验证码
     @Override
     public ResultDTO getValidateCode(AppUserDTO appUserDTO) {
+        String deviceId = appUserDTO.getDeviceId();
+        final String mobile = appUserDTO.getMobile();
         //注册需要判断
         if(appUserDTO.getOprationType()==0){
             AppUser user = MappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
@@ -141,8 +145,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
             }
         }
-        String deviceId = appUserDTO.getDeviceId();
-        final String mobile = appUserDTO.getMobile();
+        
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
         SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
