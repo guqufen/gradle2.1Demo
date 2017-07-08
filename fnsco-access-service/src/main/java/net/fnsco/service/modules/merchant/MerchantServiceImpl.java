@@ -77,7 +77,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
             return ResultDTO.fail(ApiConstant.E_MERCHANT_ALREADY_REF);//已关联此商铺，请勿重复关联
         }
         MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(alias.getInnerCode());
-        if(null == merchantUserRel){
+        if(null != merchantUserRel){
             return ResultDTO.fail(ApiConstant.E_MERCHANT_IS_DEL);//此商户已删除，关联失败
         }
         MerchantUserRel muRel = new MerchantUserRel();

@@ -3,7 +3,7 @@ var PROJECT_NAME =pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 function unloginHandler(result){
 	if(result.code && result.code == '4012'){
 		layer.msg('登录失效,去登录');
-		window.location=PROJECT_NAME+"/web/logout";
+		window.location="login.html";
 	}
 }
 
@@ -907,6 +907,7 @@ function saveChannelParams(conId){
     data:JSON.stringify(channelArr),
     success:function(data){
     	unloginHandler(data);
+
       layer.msg(data.message);//返回innerCode
       if(!data.success){
         if(conId=='channel-con'){

@@ -62,7 +62,7 @@ public class JavaSmsApi {
         String tpl_value = URLEncoder.encode("#code#",ENCODING) +"="
             + URLEncoder.encode(code, ENCODING) + "&"
             + URLEncoder.encode("#company#",ENCODING) + "="
-            + URLEncoder.encode("浙付通",ENCODING);
+            + URLEncoder.encode("数钱吧",ENCODING);
 
       String result=JavaSmsApi.tplSendSms(apikey, tpl_id, tpl_value, mobile);
 
