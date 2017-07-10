@@ -41,6 +41,7 @@ public class DateUtils {
             result = sf1.format(tempDate);
         } catch (Exception e) {
             logger.error("DateUtils.getDayEndTime()日志转换出错", e);
+            return "";
         }
         return result + "000000";
     }
@@ -57,6 +58,7 @@ public class DateUtils {
             result = sf1.format(tempDate);
         } catch (Exception e) {
             logger.error("DateUtils.getDayEndTime()日志转换出错", e);
+            return "";
         }
         return result + "235959";
     }
