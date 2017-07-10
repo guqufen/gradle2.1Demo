@@ -286,7 +286,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         //根据手机号查询用户实体是否存在
         AppUser appUser = MappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
         if (appUser == null) {   
-            return ResultDTO.fail(ApiConstant.E_LOGINMSG_ERROR);
+            return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
         }
         //密码错误
         if (!password.equals(appUser.getPassword())) {

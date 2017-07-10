@@ -150,22 +150,22 @@
        AND code = #{condition.code,jdbcType=VARCHAR}
       </if>
       <if test="condition.bankName != null and condition.bankName != '' " >
-       AND bank_name = #{condition.bankName,jdbcType=VARCHAR}
+       AND bank_name LIKE CONCAT('%', #{condition.bankName}, '%') 
       </if>
       <if test="condition.provinceId != null and condition.provinceId != '' " >
        AND  province_id = #{condition.provinceId,jdbcType=INTEGER}
       </if>
       <if test="condition.provinceName != null and condition.provinceName != '' " >
-       AND  province_name = #{condition.provinceName,jdbcType=VARCHAR}
+       AND  province_name LIKE CONCAT('%', #{condition.provinceName}, '%')  
       </if>
       <if test="condition.cityId != null and condition.cityId != '' " >
        AND  city_id = #{condition.cityId,jdbcType=INTEGER}
       </if>
       <if test="condition.cityName != null and condition.cityName != '' " >
-        AND city_name = #{condition.cityName,jdbcType=VARCHAR}
+        AND city_name LIKE CONCAT('%', #{condition.cityName}, '%')   
       </if>
       <if test="condition.branchBankName != null and condition.branchBankName != '' " >
-        AND branch_bank_name = #{condition.branchBankName,jdbcType=VARCHAR}
+        AND branch_bank_name LIKE CONCAT('%', #{condition.branchBankName}, '%')    
       </if>
       <if test="condition.anBankId != null and condition.anBankId != '' " >
        AND  an_bank_id = #{condition.anBankId,jdbcType=VARCHAR}
@@ -182,22 +182,22 @@
        AND code = #{code,jdbcType=VARCHAR}
       </if>
       <if test="bankName != null and bankName != '' " >
-       AND bank_name = #{bankName,jdbcType=VARCHAR}
+       AND bank_name LIKE CONCAT('%', #{bankName}, '%') 
       </if>
       <if test="provinceId != null and provinceId != '' " >
        AND  province_id = #{provinceId,jdbcType=INTEGER}
       </if>
       <if test="provinceName != null and provinceName != '' " >
-       AND  province_name = #{provinceName,jdbcType=VARCHAR}
+       AND  province_name LIKE CONCAT('%', #{provinceName}, '%')  
       </if>
       <if test="cityId != null and cityId != '' " >
        AND  city_id = #{cityId,jdbcType=INTEGER}
       </if>
       <if test="cityName != null and cityName != '' " >
-        AND city_name = #{cityName,jdbcType=VARCHAR}
+        AND city_name LIKE CONCAT('%', #{cityName}, '%')   
       </if>
       <if test="branchBankName != null and branchBankName != '' " >
-        AND branch_bank_name = #{branchBankName,jdbcType=VARCHAR}
+        AND branch_bank_name LIKE CONCAT('%', #{branchBankName}, '%')    
       </if>
       <if test="anBankId != null and anBankId != '' " >
        AND  an_bank_id = #{anBankId,jdbcType=VARCHAR}

@@ -55,7 +55,7 @@ $("#businessLicenseValidTime1").datetimepicker({
 });
 //给静态框的关闭按钮增加事件
 $('.close').click(function(){
-	queryEvent();
+	queryEvent("table");
 });
 //初始化表格
 initTableData();
@@ -178,7 +178,7 @@ function initBanksTableData(){
         }, {
             width:140,
             field: 'code',
-            title: '支行名称'
+            title: '开户行行号'
         }]
     });
 }
@@ -225,10 +225,10 @@ function queryBanksParams(params)
    var param ={
        currentPageNum : this.pageNumber,
        pageSize : this.pageSize,
-       bankName :$('#txt_search_bank').val(),
-       provinceName:$('#txt_search_pro').val(),
-       cityName:$('#txt_search_city').val(),
-       branchBankName:$('#txt_search_branch').val()
+       bankName :$.trim($('#txt_search_bank').val()),
+       provinceName:$.trim($('#txt_search_pro').val()),
+       cityName:$.trim($('#txt_search_city').val()),
+       branchBankName:$.trim($('#txt_search_branch').val())
    }
    return param;
 }
@@ -304,7 +304,7 @@ function operateFormatter(value, row, index) {
           if(data.success)
           {
             layer.msg('删除成功');
-            queryEvent();
+            queryEvent("table");
           }else
           {
             layer.msg('删除失败');
@@ -390,7 +390,7 @@ $('#btn_delete').click(function(){
           if(data.success)
           {
             layer.msg('删除成功');
-            queryEvent();
+            queryEvent("table");
           }else
           {
             layer.msg('删除失败');
@@ -619,7 +619,7 @@ function saveFile(){
   $.ajax({
     url:PROJECT_NAME+'/web/fileInfo/savefiles',
     data:{'fileIds':file_ids},
-    success:function(){
+    success:function(data){
     	unloginHandler(data);
       layer.msg("保存成功");
     }
@@ -907,11 +907,18 @@ function saveChannelParams(conId){
     data:JSON.stringify(channelArr),
     success:function(data){
     	unloginHandler(data);
-    	layer.msg(data.message);//返回innerCode
-    	if(!data.success){
-    		return false;
-    	}
-      
+
+      layer.msg(data.message);//返回innerCode
+      if(!data.success){
+        if(conId=='channel-con'){
+            $("#myModal").find('.tab-pane').removeClass("active");
+            $("#channel_info").addClass("active");
+            $("#myModal .nav-tabs li").removeClass("active");
+            $("#myModal .nav-tabs li:eq(4)").addClass("active");
+            $("#channel_info").show();
+        }
+        return false;
+      }
     },
     error:function(){
       layer.msg('系统错误');
@@ -1010,7 +1017,7 @@ function saveBankCardParams(conId){
     	unloginHandler(data);
       layer.msg(data.message);
       $("#myModal").hide();
-      queryEvent();
+      queryEvent("table");
     },
     error:function(){
       layer.msg('系统错误');
@@ -1021,6 +1028,10 @@ function saveBankCardParams(conId){
 $("#btn_saveBankCard").click(function(){
   saveBankCardParams('bankCard-con');
   $('body').removeClass('modal-open');
+  $("#myModal").find('.tab-pane').removeClass("active");
+  $("#home").addClass("active");
+  $("#myModal .nav-tabs li").removeClass("active");
+  $("#myModal .nav-tabs li:first-child").addClass("active");
 })
 
 
@@ -1461,7 +1472,7 @@ function detailsData(id){
         // 全部默认不可编辑
         $("#detailsModal").find('input').attr('disabled',true);
         $("#detailsModal").find('select').attr('disabled',true);
-        $(".subBankName").attr('readonly',false);
+        $("#detailsModal .subBankName").attr('readonly',false);
         $(".remove-icon").hide();
         $(".btn-addList").hide();
         $(".deletefileImg").hide();
