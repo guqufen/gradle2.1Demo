@@ -4,13 +4,18 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.google.common.collect.Lists;
 
 import net.fnsco.freamwork.interceptor.AppInterceptor;
 import net.fnsco.freamwork.interceptor.OpenInterceptor;
@@ -55,4 +60,28 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //        fastConverter.setFastJsonConfig(fastJsonConfig);
 //        converters.add(fastConverter);
 //    }
+    //    @Bean
+    //    public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
+    //        RequestMappingHandlerAdapter adapter = new RequestMappingHandlerAdapter();
+    //        List converterList = Lists.newArrayList();
+    //        FastJsonHttpMessageConverter fastJsonConverter = new FastJsonHttpMessageConverter();
+    //        //FastJsonConfig fastJsonConfig = new FastJsonConfig();
+    //        //SerializeConfig serializeConfig = new SerializeConfig();
+    //
+    //        //fastJsonConfig.setSerializeConfig(serializeConfig);
+    //        //fastJsonConverter.setFastJsonConfig(fastJsonConfig);
+    //        fastJsonConverter.setFeatures(SerializerFeature.WriteMapNullValue,
+    //            SerializerFeature.WriteNullStringAsEmpty);
+    //
+    //        converterList.add(fastJsonConverter);
+    //        converterList.add(new ByteArrayHttpMessageConverter());
+    //        StringHttpMessageConverter stringConverter = new StringHttpMessageConverter();
+    //        List<MediaType> supportedMediaTypes = Lists.newArrayList();
+    //        MediaType type = MediaType.parseMediaType("text/html;charset=UTF-8");
+    //        supportedMediaTypes.add(type);
+    //        stringConverter.setSupportedMediaTypes(supportedMediaTypes);
+    //        converterList.add(stringConverter);
+    //        adapter.setMessageConverters(converterList);
+    //        return adapter;
+    //    }
 }

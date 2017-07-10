@@ -225,10 +225,10 @@ function queryBanksParams(params)
    var param ={
        currentPageNum : this.pageNumber,
        pageSize : this.pageSize,
-       bankName :$('#txt_search_bank').val(),
-       provinceName:$('#txt_search_pro').val(),
-       cityName:$('#txt_search_city').val(),
-       branchBankName:$('#txt_search_branch').val()
+       bankName :$.trim($('#txt_search_bank').val()),
+       provinceName:$.trim($('#txt_search_pro').val()),
+       cityName:$.trim($('#txt_search_city').val()),
+       branchBankName:$.trim($('#txt_search_branch').val())
    }
    return param;
 }
