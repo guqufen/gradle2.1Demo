@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.sysuser.SysUserService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -46,7 +47,7 @@ public class SysUserLoginAction extends BaseController{
 		String password = req.getParameter("password");
 		if (StringUtils.isEmpty(password) || StringUtils.isEmpty(username)) {
 		    
-            return ResultDTO.fail(CoreConstants.WEB_LOGIN_NULL);
+            return ResultDTO.fail(ApiConstant.WEB_LOGIN_NULL);
         }
 		
 		result = adminUserService.doLogin( username, password);
@@ -55,7 +56,7 @@ public class SysUserLoginAction extends BaseController{
 			CookieUtils.addCookie(res, CoreConstants.COOKIE_USER_KEY, ((SysUser)result.getData()).getName());
 			return ResultDTO.success();
 		}
-		return ResultDTO.fail(CoreConstants.WEB_LOGIN_FAIL);
+		return ResultDTO.fail(ApiConstant.WEB_LOGIN_FAIL);
 	}
 	
 	/**

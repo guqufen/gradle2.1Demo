@@ -40,7 +40,10 @@ public class ResultDTO<T extends Object> extends DTO {
         ResultDTO result = new ResultDTO(true, data, CoreConstants.OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.OK));
         return result;
     }
-
+    public static ResultDTO successForSave(Object data) {
+        ResultDTO result = new ResultDTO(true, data, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
+        return result;
+    }
     public static ResultDTO fail(String code) {
         ResultDTO result = new ResultDTO(false, null, code, CoreConstants.ERROR_MESSGE_MAP.get(code));
         return result;
@@ -49,7 +52,12 @@ public class ResultDTO<T extends Object> extends DTO {
     public static ResultDTO fail() {
         return fail(CoreConstants.E_COMM_BUSSICSS);
     }
-
+    public static ResultDTO failForSave() {
+        return fail(CoreConstants.E_COMM_BUSSICSS);
+    }
+    public static ResultDTO failForUpdate() {
+        return fail(CoreConstants.E_COMM_BUSSICSS);
+    }
     /**
      * success
      *
