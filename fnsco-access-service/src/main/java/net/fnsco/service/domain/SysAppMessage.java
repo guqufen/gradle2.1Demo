@@ -10,6 +10,7 @@ import java.util.Date;
  *
  */
 public class SysAppMessage {
+    
     private Integer id;
 
     private Date sendTime;
@@ -27,6 +28,10 @@ public class SysAppMessage {
     private Integer modifyUserId;
 
     private Date modifyTime;
+
+    private Integer msgType;
+
+    private Integer busType;
 
     public Integer getId() {
         return id;
@@ -98,5 +103,21 @@ public class SysAppMessage {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public Integer getMsgType() {
+        return msgType;
+    }
+
+    public void setMsgType(Integer msgType) {
+        this.msgType = msgType;
+    }
+
+    public Integer getBusType() {
+        return busType;
+    }
+
+    public void setBusType(Integer busType) {
+        this.busType = busType;
     }
 }

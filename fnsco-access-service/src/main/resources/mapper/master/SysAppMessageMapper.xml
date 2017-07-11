@@ -11,33 +11,35 @@
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="msg_type" property="msgType" jdbcType="INTEGER" />
+    <result column="bus_type" property="busType" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, send_time, content, phone_type, send_type, push_type, status, modify_user_id, 
-    modify_time
+    modify_time, msg_type, bus_type
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from sys_app_message
+    from sys_msg_app
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from sys_app_message
+    delete from sys_msg_app
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="net.fnsco.service.domain.SysAppMessage" >
-    insert into sys_app_message (id, send_time, content, 
+    insert into sys_msg_app (id, send_time, content, 
       phone_type, send_type, push_type, 
-      status, modify_user_id, modify_time
-      )
+      status, modify_user_id, modify_time, 
+      msg_type, bus_type)
     values (#{id,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR}, 
       #{phoneType,jdbcType=INTEGER}, #{sendType,jdbcType=INTEGER}, #{pushType,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{modifyUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}
-      )
+      #{status,jdbcType=INTEGER}, #{modifyUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{msgType,jdbcType=INTEGER}, #{busType,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="net.fnsco.service.domain.SysAppMessage" >
-    insert into sys_app_message
+    insert into sys_msg_app
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -65,6 +67,12 @@
       </if>
       <if test="modifyTime != null" >
         modify_time,
+      </if>
+      <if test="msgType != null" >
+        msg_type,
+      </if>
+      <if test="busType != null" >
+        bus_type,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -95,11 +103,17 @@
       <if test="modifyTime != null" >
         #{modifyTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="msgType != null" >
+        #{msgType,jdbcType=INTEGER},
+      </if>
+      <if test="busType != null" >
+        #{busType,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.SysAppMessage" >
-    update sys_app_message
-    <set >
+     update sys_msg_app
+     <set >
       <if test="sendTime != null" >
         send_time = #{sendTime,jdbcType=TIMESTAMP},
       </if>
@@ -124,11 +138,17 @@
       <if test="modifyTime != null" >
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="msgType != null" >
+        msg_type = #{msgType,jdbcType=INTEGER},
+      </if>
+      <if test="busType != null" >
+        bus_type = #{busType,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.SysAppMessage" >
-    update sys_app_message
+    update sys_msg_app
     set send_time = #{sendTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=VARCHAR},
       phone_type = #{phoneType,jdbcType=INTEGER},
@@ -136,7 +156,9 @@
       push_type = #{pushType,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       modify_user_id = #{modifyUserId,jdbcType=INTEGER},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      msg_type = #{msgType,jdbcType=INTEGER},
+      bus_type = #{busType,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
