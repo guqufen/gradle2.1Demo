@@ -213,6 +213,15 @@
       <if test="condition.contentJson != null and condition.contentJson != ''" >
         AND content_json = #{condition.contentJson,jdbcType=VARCHAR}
       </if>
+      <!-- 手工添加 -->
+      <if test="condition.startSendTime != null and condition.startSendTime != ''" >
+        	AND send_time >= #{condition.startSendTime}
+      </if>
+      <if test="condition.endSendTime != null and condition.endSendTime != ''" >
+      	<![CDATA[
+        	AND send_time <= #{condition.endSendTime}
+        ]]>
+      </if>
     </where> 
      ORDER BY modify_time DESC 
      limit #{startRow} , #{perPageSize}
@@ -253,6 +262,15 @@
       </if>
       <if test="contentJson != null and contentJson != ''" >
         AND content_json = #{contentJson,jdbcType=VARCHAR}
+      </if>
+      <!-- 手工添加 -->
+      <if test="startSendTime != null and startSendTime != ''" >
+        	AND send_time >= #{startSendTime}
+      </if>
+      <if test="endSendTime != null and endSendTime != ''" >
+      	<![CDATA[
+        	AND send_time <= #{endSendTime}
+        ]]>
       </if>
     </where> 
   </select>
@@ -302,6 +320,6 @@
   <select id="queryExecuteData" resultMap="BaseResultMap">
     select 
      <include refid="Base_Column_List" />
-      from sys_msg_app where send_time <= NOW() AND status=2
+      from sys_msg_app where send_time &lt;=  NOW() AND status=2
   </select>
 </mapper>

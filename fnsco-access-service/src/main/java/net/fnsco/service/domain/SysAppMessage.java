@@ -34,6 +34,54 @@ public class SysAppMessage {
     private Integer busType;
 
     private String content;
+    
+    private String startSendTime;//开始推送时间 用于条件查询
+    
+    private String endSendTime;//借宿推送时间 用于条件查询
+    
+    /**
+     * startSendTime
+     *
+     * @return  the startSendTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getStartSendTime() {
+        return startSendTime;
+    }
+
+    /**
+     * startSendTime
+     *
+     * @param   startSendTime    the startSendTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStartSendTime(String startSendTime) {
+        this.startSendTime = startSendTime;
+    }
+
+    /**
+     * endSendTime
+     *
+     * @return  the endSendTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getEndSendTime() {
+        return endSendTime;
+    }
+
+    /**
+     * endSendTime
+     *
+     * @param   endSendTime    the endSendTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEndSendTime(String endSendTime) {
+        this.endSendTime = endSendTime;
+    }
 
     public Integer getId() {
         return id;
