@@ -69,7 +69,7 @@
         </div>
         <!-- model新增 start -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
-            <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -84,11 +84,16 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <label class="control-label" for="abbreviation1">图片：</label>
-                                    <input type="file" name="file" id="uploadify" class="form-control">
+                                    <div id="view"></div><div id="fileQueue"></div>
+		                          	<input type="file" name="file" id="uploadify_file" style="display: none">
+		                          	<input type="button"  name='init' class="btn" value="开始上传" id="fileupload_button_first1101" onclick="fileUp();" style="display: none"/>
                                 </div>
                                 <div class="col-sm-12">
                                     <label class="control-label" for="merName1">类型：</label>
-                                    <input type="text" class="form-control" id="merName1" name="merName1" required="required">
+                                    <select id="pushType" name="pushType" class="form-control">
+			                           <option value="1">强推</option>
+			                           <option value="2">内推</option>
+			                        </select>
                                 </div>
                                 <div class="col-sm-12">
                                     <label class="control-label" for="abbreviation1">推送时间：</label>
@@ -101,6 +106,9 @@
                                 <div class="col-sm-12">
                                     <label class="control-label" for="abbreviation1">副标题：</label>
                                     <input type="text" class="form-control" id="abbreviation1" name="abbreviation1">
+                                </div>
+                                <div class="col-sm-12">
+                                    <button class="sunmitBtn btn btn-primary" type="button">确认提交</button>
                                 </div>
                             </div>
                         </div>
@@ -127,7 +135,8 @@
 <script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="js/layer/layer.js"></script>
+<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
 <script type="text/javascript" src="js/fnsco/common.js"></script>
 </body>
 <script type="text/javascript">
@@ -293,7 +302,15 @@
         startView: 2,//月视图
         minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
     });
-    $('#datetimepicker3').datetimepicker({
+    var dateTime=new Date();
+    var year=dateTime.getFullYear();
+    var month=dateTime.getMonth()+1;
+    var date=dateTime.getDate();
+    var hours=dateTime.getHours();
+    var minutes=dateTime.getMinutes();
+    var time=""+year+"-"+month+"-"+date+" "+hours+":"+minutes;
+    $('#datetimepicker3').datetimepicker('setStartDate',time,{
+		
         format: 'yyyy-mm-dd hh:ii',
         autoclose: true,
         todayBtn: true,
@@ -304,5 +321,64 @@
         startView: 2,//月视图
         minView: 0//日期时间选择器所能够提供的最精确的时间选择视图
     });
+	//上传文件
+	fileUp();
+	function fileUp(){
+	   $('#uploadify_file').uploadify({
+		   //指定swf文件
+	       'swf': 'js/uploadify-v3.1/uploadify.swf',
+	       //指定显示的id
+	       'queueID' : 'fileQueue',
+	       //后台处理的页面
+	       'uploader': PROJECT_NAME+'/web/fileInfo/Import', 
+	       //按钮显示的文字
+	       'buttonText': '上传图片',
+	     //在浏览窗口底部的文件类型下拉菜单中显示的文本
+	       'fileTypeDesc': 'Image Files',
+	       //限制大小
+	       'fileSizeLimit':'2MB',
+	     //允许上传的文件后缀
+	       'fileTypeExts': '*.gif; *.jpg; *.png',
+	       //限制上传图片张数
+	       'simUploadLimit' : 1,
+	       'multi': false,
+	       'auto': true,
+	       'multi': true,
+	       //参数
+	       'formData': {
+	           
+	       },
+	       'onUploadSuccess':function ( file, response, data) {
+	    	   unloginHandler(data);
+	    	   var obj = eval('(' + response + ')');
+				   var fileName = file.name.replace(',','');
+	            var filePath = obj.url;
+	            console.log(filePath);
+	       		$('#view').append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
+							"<a class='previewfileImg' id='previewfileImg"+obj.id+"' href=javascript:seeImage('"+filePath+"','previewfileImg"+obj.id+"') title='预览'><img src data-original=''/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
+							"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"','"+num+"')><span class='glyphicon glyphicon-trash'></span>删除</a>" + "</div>");
+	       		//预览图片
+	       		var aId='previewfileImg'+obj.id;
+	    			var viewer = new Viewer(document.getElementById(aId), {
+	    				url: 'data-original',
+	    				navbar: false,
+	    				toolbar: true
+	    			});
+	    	   	$('#uploadify_file'+num).hide();
+	    	   	$('#fileQueue'+num).html('');
+	    	   	var fileIds = $('#fileIds').val();
+	    	   	console.log('上传后的结果:'+fileIds+'本次结果:'+obj.id);
+	    	   	if(fileIds){
+	    	   		$('#fileIds').val(fileIds+','+obj.id);
+	    	   	}else{
+	    	   		$('#fileIds').val(obj.id);
+	    	   	}	
+	        },
+	       'onUploadError': function(file,errorCode,errorMsg,errorString) {
+	    			layer.msg(errorCode+"."+errorMsg+""+errorString);
+
+	    		}
+	   });
+	}
 </script>
 </html>
