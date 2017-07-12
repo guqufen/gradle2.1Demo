@@ -1,5 +1,8 @@
 package net.fnsco.service.dao.master;
 
+import java.util.List;
+
+import net.fnsco.core.base.PageDTO;
 import net.fnsco.service.domain.SysAppMessage;
 /**
  * @desc APP信息推送实体操作DAO 
@@ -22,4 +25,16 @@ public interface SysAppMessageDao {
     int updateByPrimaryKeySelective(SysAppMessage record);
 
     int updateByPrimaryKey(SysAppMessage record);
+    
+    /**
+     * 条件分页查询
+     */
+    List<SysAppMessage> queryPageList(PageDTO<SysAppMessage> pages);
+    
+    /**
+     * 条件查询总数
+     * @param pages
+     * @return
+     */
+    int queryTotalByCondition(SysAppMessage record);
 }

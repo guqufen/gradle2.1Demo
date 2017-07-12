@@ -161,4 +161,81 @@
       bus_type = #{busType,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 分页条件查询 -->
+  <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="BaseResultMap">
+    select 
+     <include refid="Base_Column_List" />
+      from sys_msg_app
+    <where>
+      <if test="condition.sendTime != null and condition.sendTime != ''" >
+        AND send_time = #{condition.sendTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="condition.content != null and condition.content != ''" >
+        AND content = #{condition.content,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.phoneType != null and condition.phoneType != ''" >
+        AND phone_type = #{condition.phoneType,jdbcType=INTEGER}
+      </if>
+      <if test="condition.sendType != null and condition.sendType != ''" >
+        AND send_type = #{condition.sendType,jdbcType=INTEGER}
+      </if>
+      <if test="condition.pushType != null and condition.pushType != ''" >
+        AND push_type = #{condition.pushType,jdbcType=INTEGER}
+      </if>
+      <if test="condition.status != null and condition.status != ''" >
+        AND status = #{condition.status,jdbcType=INTEGER}
+      </if>
+      <if test="condition.modifyUserId != null and condition.modifyUserId != ''" >
+        AND modify_user_id = #{condition.modifyUserId,jdbcType=INTEGER}
+      </if>
+      <if test="condition.modifyTime != null and condition.modifyTime != ''" >
+        AND modify_time = #{condition.modifyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="condition.msgType != null and condition.msgType != ''" >
+        AND msg_type = #{condition.msgType,jdbcType=INTEGER}
+      </if>
+      <if test="condition.busType != null and condition.busType != ''" >
+        AND bus_type = #{busType,jdbcType=INTEGER}
+      </if>
+    </where> 
+     ORDER BY modify_time DESC 
+     limit #{startRow} , #{perPageSize}
+  </select>
+  <!-- 根据条件查询总数 -->
+  <select id="queryTotalByCondition" parameterType="net.fnsco.service.domain.SysAppMessage" resultType="java.lang.Integer">
+    select count(*)  from sys_msg_app
+    <where>
+      <if test="sendTime != null and sendTime != '' " >
+        AND send_time = #{sendTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="content != null and content != '' " >
+        AND content = #{content,jdbcType=VARCHAR}
+      </if>
+      <if test="phoneType != null and phoneType != '' " >
+        AND phone_type = #{phoneType,jdbcType=INTEGER}
+      </if>
+      <if test="sendType != null and sendType != '' " >
+        AND send_type = #{sendType,jdbcType=INTEGER}
+      </if>
+      <if test="pushType != null and pushType != '' " >
+        AND push_type = #{pushType,jdbcType=INTEGER}
+      </if>
+      <if test="status != null and status != '' " >
+        AND status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="modifyUserId != null and modifyUserId != '' " >
+        AND modify_user_id = #{modifyUserId,jdbcType=INTEGER}
+      </if>
+      <if test="modifyTime != null and modifyTime != '' " >
+        AND modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="msgType != null and msgType != '' " >
+        AND msg_type = #{msgType,jdbcType=INTEGER}
+      </if>
+      <if test="busType != null and busType != '' " >
+        AND bus_type = #{busType,jdbcType=INTEGER}
+      </if>
+    </where> 
+  </select>
+  
 </mapper>

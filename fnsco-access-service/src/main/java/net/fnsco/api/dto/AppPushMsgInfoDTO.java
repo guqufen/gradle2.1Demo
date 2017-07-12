@@ -1,8 +1,8 @@
 package net.fnsco.api.dto;
 
 import java.util.Date;
-import com.alibaba.fastjson.JSONObject;
 import net.fnsco.core.base.DTO;
+import net.sf.json.JSONObject;
 
 /**
  * @desc 推送消息详细内容实体
@@ -218,7 +218,7 @@ public class AppPushMsgInfoDTO extends DTO{
      */
     @Override
     public String toString() {
-        return JSONObject.toJSONString(this);
+        return JSONObject.fromObject(this).toString();
     }
     
     @Override

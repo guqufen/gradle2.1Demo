@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.service.dao.master.MsgReadDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.MsgRead" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
+    <result column="read_time" property="readTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, app_user_id, read_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from u_msg_read
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from u_msg_read
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="net.fnsco.service.domain.MsgRead" >
+    insert into u_msg_read (id, app_user_id, read_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{appUserId,jdbcType=INTEGER}, #{readTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.service.domain.MsgRead" >
+    insert into u_msg_read
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="appUserId != null" >
+        app_user_id,
+      </if>
+      <if test="readTime != null" >
+        read_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="appUserId != null" >
+        #{appUserId,jdbcType=INTEGER},
+      </if>
+      <if test="readTime != null" >
+        #{readTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.MsgRead" >
+    update u_msg_read
+    <set >
+      <if test="appUserId != null" >
+        app_user_id = #{appUserId,jdbcType=INTEGER},
+      </if>
+      <if test="readTime != null" >
+        read_time = #{readTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.MsgRead" >
+    update u_msg_read
+    set app_user_id = #{appUserId,jdbcType=INTEGER},
+      read_time = #{readTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
