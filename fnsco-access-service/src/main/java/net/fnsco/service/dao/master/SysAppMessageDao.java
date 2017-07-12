@@ -37,4 +37,15 @@ public interface SysAppMessageDao {
      * @return
      */
     int queryTotalByCondition(SysAppMessage record);
+    
+    /**
+     * queryListByCondition:(这里用一句话描述这个方法的作用)根据条件查询
+     *
+     * @param record
+     * @return    设定文件
+     * @return List<SysAppMessage>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<SysAppMessage> queryListByCondition(SysAppMessage record);
 }
