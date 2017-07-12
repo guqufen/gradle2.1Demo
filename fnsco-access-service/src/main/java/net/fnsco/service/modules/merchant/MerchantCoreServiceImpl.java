@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
@@ -399,12 +400,12 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             MerchantChannel res = merchantChannelDao.selectByMerCode(merchantChannel.getChannelMerId(), merchantChannel.getChannelType());
             if (null != merchantChannel.getId()) {
                 if(res != null && merchantChannel.getId() != res.getId()){
-                    return ResultDTO.fail(CoreConstants.WEB_MER_CHANNEL_NOTUNIQUE);
+                    return ResultDTO.fail(ApiConstant.WEB_MER_CHANNEL_NOTUNIQUE);
                 }
                 merchantChannelDao.updateByPrimaryKeySelective(merchantChannel);
             } else {
                 if(null != res){
-                    return ResultDTO.fail(CoreConstants.WEB_MER_CHANNEL_NOTUNIQUE);
+                    return ResultDTO.fail(ApiConstant.WEB_MER_CHANNEL_NOTUNIQUE);
                 }
                 merchantChannelDao.insertSelective(merchantChannel);
                 innerCode = merchantChannel.getInnerCode();

@@ -60,7 +60,15 @@ public class ApiConstant extends CoreConstants {
     public static String E_LOGIN_ERROR             = "5114";                            //登录失败
     public static String E_LOGINMSG_ERROR          = "5115";                            //用户名或密码不正确
 
+    public static String       WEB_LOGIN_NULL = "5900";//用户名或密码为空
+    public static String       WEB_LOGIN_FAIL ="5901";//用户名或密码错误
+    public static String       WEB_MER_CHANNEL_NOTUNIQUE = "5902";//商户渠道号和渠道组合要唯一
+    
     static {
+        ERROR_MESSGE_MAP.put(WEB_LOGIN_NULL, "用户名或密码为空");
+        ERROR_MESSGE_MAP.put(WEB_LOGIN_FAIL, "用户名或密码错误");
+        ERROR_MESSGE_MAP.put(WEB_MER_CHANNEL_NOTUNIQUE, "渠道商户号和渠道类型组合需要唯一");
+        
         ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NULL, "商铺码不能为空");
         ERROR_MESSGE_MAP.put(E_USER_ID_NULL, "用户ID不能为空");
         ERROR_MESSGE_MAP.put(E_MERCHANT_CODE_NOT_EXIST, "此商铺码不存在，请重新输入");
