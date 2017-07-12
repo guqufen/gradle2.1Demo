@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消息推送-法奈昇大数据平台</title>
+    <meta name="keywords" content="法奈昇大数据平台">
+    <meta name="description" content="法奈昇大数据平台">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="panel-body animated fadeInRight">
+    <div class="panel panel-default">
+        <form id="formSearch" class="form-horizontal">
+            <div class="form-group" style="margin-top:15px">
+                <div class="row col-sm-10">
+                    <div class="col-sm-4">
+                        <label class="control-label" for="pushType">推送类型:</label>
+                        <select id="pushType" name="pushType" class="form-control">
+                           <option value="0" selected="selected">全部</option>
+                           <option value="1">强推</option>
+                           <option value="2">内推</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label" for="pushState">状态:</label>
+                        <select id="pushState" name="pushState" class="form-control">
+                           <option value="0" selected="selected">全部</option>
+                           <option value="1">已发布</option>
+                           <option value="2">待推送</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label" for="submitter">提交人:</label>
+                        <input type="text" class="form-control" id="submitter" name="submitter"/>
+                    </div>
+                    <div class="col-sm-8 query-time">
+                        <label class="control-label" for="releaseTime">发布时间:</label>
+                        <input type="text" value="" class="form-control" id="datetimepicker1" name="startSendTime"> -
+                        <input type="text" value="" class="form-control" id="datetimepicker2" name="endSendTime">
+                    </div>
+                </div>
+                <div class="col-sm-2" style="text-align: right;">
+                    <button type="button" id="btn_query" class="btn btn-primary" onclick="javascript:queryEvent();"><span class="glyphicon glyphicon-search"></span>查询</button>
+                    <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent();"><span class="glyphicon glyphicon-refresh"></span>重置</button>
+                </div>
+            </div>
+        </form>
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div id="toolbar">
+                            <button id="btn_add" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                            </button>
+                        </div>
+                        <table id="table"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- model新增 start -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">新增推送消息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tab-content">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="merName1">主题：</label>
+                                    <input type="text" class="form-control" id="merName1" name="merName1" required="required">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="abbreviation1">图片：</label>
+                                    <input type="file" name="file" id="uploadify" class="form-control">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="merName1">类型：</label>
+                                    <input type="text" class="form-control" id="merName1" name="merName1" required="required">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="abbreviation1">推送时间：</label>
+                                    <input type="text" value="" class="form-control" id="datetimepicker3" name="startSendTime">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="merName1">URL：</label>
+                                    <input type="text" class="form-control" id="merName1" name="merName1" required="required">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="abbreviation1">副标题：</label>
+                                    <input type="text" class="form-control" id="abbreviation1" name="abbreviation1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- model end -->
+    </div>
+</div>
+<!-- end -->
+</div> 
+    
+</div>
+<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!-- <script src="js/content.min.js"></script> -->
+<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="js/fnsco/common.js"></script>
+</body>
+<script type="text/javascript">
+    $('#table').bootstrapTable({
+        search: false, //是否启动搜索栏
+        sidePagination:'server',
+        url:PROJECT_NAME+'/web/trade/query',
+        showRefresh: false,//是否显示刷新按钮
+        showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
+        toolbar: '#toolbar',  //工具按钮用哪个容器
+        striped: true,   //是否显示行间隔色
+        cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pagination: true,   //是否显示分页（*）
+        sortable: true,   //是否启用排序
+        sortOrder: "asc",   //排序方式
+        pageNumber:1,   //初始化加载第一页，默认第一页
+        pageSize: 15,   //每页的记录行数（*）
+        pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
+        queryParams:queryParams,
+        responseHandler:responseHandler,//处理服务器返回数据
+        columns: [{
+            field: 'id',
+            title: '操作',
+            width:'10%',
+            align: 'center',
+            width: 150,
+            formatter: operateFormatter
+        },{
+            field: 'orderNo',
+            title: '推送名称'
+        },{
+            field: 'amt',
+            title: '推送类型',
+            formatter: formatPushState
+        },{
+            field: 'orderTime',
+            title: '推送内容'
+        },{
+            field: 'orderInfo',
+            title: '提交人'
+        },{
+            field: 'timeStamp',
+            title: '发布时间'
+        },{
+            field: 'payType',
+            title: '提交时间',
+        },{
+            field: 'merId',
+            title: '状态',
+            formatter: formatPushState
+        }]
+    });
+    //操作格式化
+    function operateFormatter(value, row, index) {
+        return [
+            '<a class="redact" href="javascript:void(0)" title="编辑">',
+            '<i class="glyphicon glyphicon-file"></i>',
+            '</a>  ',
+            '<a class="remove" href="javascript:void(0)" title="删除">',
+            '<i class="glyphicon glyphicon glyphicon-trash"></i>',
+            '</a>'
+        ].join('');
+    }
+    //推送类型格式化
+    function formatPushType(value, row, index){
+        if(!value){
+            return '-';
+        }
+        else if(value == '1'){
+            return '强推';
+        }else if(value == '2'){
+            return '内推';
+        }else{
+            return '定时推';
+        }   
+    }
+    //状态格式化
+    function formatPushState(value, row, index){
+        if(!value){
+            return '-';
+        }
+        else if(value == '1'){
+            return '已发布';
+        }else if(value == '2'){
+            return '待推送';
+        }else{
+            return '其他';
+        }   
+    }
+  //条件查询按钮事件
+    function queryEvent(){
+ 	   $('#table').bootstrapTable('refresh');
+    }
+    //重置按钮事件
+    function resetEvent(){
+ 	   $('#formSearch')[0].reset();
+    }
+    window.operateEvents = {
+        'click .redact': function (e, value, row, index) {
+            alert('You click like action, row: ' + JSON.stringify(row));
+        },
+        'click .remove': function (e, value, row, index) {
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: [row.id]
+            });
+        }
+    };
+    
+	
+  //组装请求参数
+    function queryParams(params)
+    {
+ 	   var param ={
+ 			   currentPageNum : this.pageNumber,
+ 			   pageSize : this.pageSize,
+ 			   orderNo :$('#txt_search_id').val(),
+ 			   merId:$('#txt_search_name').val(),
+ 			   amt:$('#txt_search_price').val(),
+ 			   startSendTime:$('#datetimepicker1').val(),
+ 			  endSendTime:$('#datetimepicker2').val()
+ 	   }
+ 	   return param;
+    }
+    //处理后台返回数据
+    function responseHandler(res) { 
+    	unloginHandler(res);
+ 	    if (res) {
+ 	        return {
+ 	            "rows" : res.list,
+ 	            "total" : res.total
+ 	        };
+ 	    } else {
+ 	        return {
+ 	            "rows" : [],
+ 	            "total" : 0
+ 	        };
+ 	    }
+ 	}
+    /*弹框下一步按钮事件*/
+    $(".nextBtn").click(function(){
+        $(".nav-tabs li.active").removeClass('active').next().addClass('active');
+    })
+    $('#datetimepicker1').datetimepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayBtn: true,
+        todayHighlight: true,
+        showMeridian: true,
+        pickerPosition: "bottom-left",
+        language: 'zh-CN',//中文，需要引用zh-CN.js包
+        startView: 2,//月视图
+        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+    });
+    $('#datetimepicker2').datetimepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayBtn: true,
+        todayHighlight: true,
+        showMeridian: true,
+        pickerPosition: "bottom-left",
+        language: 'zh-CN',//中文，需要引用zh-CN.js包
+        startView: 2,//月视图
+        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+    });
+    $('#datetimepicker3').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        autoclose: true,
+        todayBtn: true,
+        todayHighlight: true,
+        showMeridian: true,
+        pickerPosition: "bottom-left",
+        language: 'zh-CN',//中文，需要引用zh-CN.js包
+        startView: 2,//月视图
+        minView: 0//日期时间选择器所能够提供的最精确的时间选择视图
+    });
+</script>
+</html>
