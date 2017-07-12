@@ -15,7 +15,7 @@ public class SysAppMessage {
 
     private Date sendTime;
 
-    private String content;
+    private String contentJson;
 
     private Integer phoneType;
 
@@ -33,6 +33,8 @@ public class SysAppMessage {
 
     private Integer busType;
 
+    private String content;
+
     public Integer getId() {
         return id;
     }
@@ -49,12 +51,12 @@ public class SysAppMessage {
         this.sendTime = sendTime;
     }
 
-    public String getContent() {
-        return content;
+    public String getContentJson() {
+        return contentJson;
     }
 
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
+    public void setContentJson(String contentJson) {
+        this.contentJson = contentJson == null ? null : contentJson.trim();
     }
 
     public Integer getPhoneType() {
@@ -119,5 +121,13 @@ public class SysAppMessage {
 
     public void setBusType(Integer busType) {
         this.busType = busType;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 }

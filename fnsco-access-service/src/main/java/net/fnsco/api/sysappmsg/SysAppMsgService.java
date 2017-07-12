@@ -1,5 +1,7 @@
 package net.fnsco.api.sysappmsg;
 
+import java.util.List;
+
 import net.fnsco.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -57,4 +59,15 @@ public interface SysAppMsgService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<String> deleteMsg(Integer id);
+    /**
+     * queryMsgList:(这里用一句话描述这个方法的作用) APP获取推送消息列表
+     *
+     * @param userId
+     * @param hasRead
+     * @return    设定文件
+     * @return ResultDTO<List<AppPushMsgInfoDTO>>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    ResultDTO<List<AppPushMsgInfoDTO>> queryMsgList(Integer userId,boolean hasRead);
 }

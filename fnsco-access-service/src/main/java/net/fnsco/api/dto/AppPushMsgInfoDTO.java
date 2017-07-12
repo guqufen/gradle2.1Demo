@@ -1,6 +1,9 @@
 package net.fnsco.api.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import net.fnsco.core.base.DTO;
 import net.sf.json.JSONObject;
 
@@ -23,11 +26,6 @@ public class AppPushMsgInfoDTO extends DTO{
     private static final long serialVersionUID = 7892526271637632128L;
     
     /**
-     * ID
-     */
-    private int id;
-    
-    /**
      * 消息主题
      */
     private String msgSubject;
@@ -40,7 +38,7 @@ public class AppPushMsgInfoDTO extends DTO{
     /**
      * 推送类型0内推1强推
      */
-    private String msgType;
+    private String msgType = "1";
     
     /**
      * 推送时间
@@ -56,28 +54,6 @@ public class AppPushMsgInfoDTO extends DTO{
      * 副标题
      */
     private String msgSubtitle;
-
-    /**
-     * id
-     *
-     * @return  the id
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * id
-     *
-     * @param   id    the id to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setId(int id) {
-        this.id = id;
-    }
 
     /**
      * msgSubject
@@ -225,5 +201,19 @@ public class AppPushMsgInfoDTO extends DTO{
     public int hashCode() {
         return super.hashCode()<<1;
     }
-   
+//   public static void main(String[] args) throws ParseException {
+//    AppPushMsgInfoDTO app = new AppPushMsgInfoDTO();
+//    app.setDetailURL("/dsds/detail");
+//    app.setImageURL("/dsjd/image");
+//    app.setMsgSubject("测试主题");
+//    app.setMsgSubtitle("重大通知：quandhsjhjhjshdjshjhjh");
+//    app.setMsgType("1");
+//    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//    String dateString = formatter.format(new Date());
+//    app.setSendTime(formatter.parse(dateString));
+//    System.out.println(app.toString());
+//    JSONObject jsonObject = JSONObject.fromObject(app.toString());
+//    AppPushMsgInfoDTO sds = (AppPushMsgInfoDTO) JSONObject.toBean(jsonObject, AppPushMsgInfoDTO.class);
+//    System.out.println(sds);
+//}
 }

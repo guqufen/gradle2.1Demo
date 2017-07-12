@@ -3,9 +3,14 @@ package net.fnsco.service.modules.sysappmsg;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
+
+import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.api.push.AppPushService;
 import net.fnsco.api.sysappmsg.SysAppMsgService;
@@ -14,9 +19,14 @@ import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.JsonPluginsUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
+import net.fnsco.service.dao.master.MsgReadDao;
 import net.fnsco.service.dao.master.SysAppMessageDao;
+import net.fnsco.service.dao.master.SysMsgReceiverDao;
+import net.fnsco.service.domain.MsgRead;
 import net.fnsco.service.domain.SysAppMessage;
+import net.fnsco.service.domain.SysMsgReceiver;
 import net.fnsco.service.domain.SysUser;
 
 /**
@@ -34,6 +44,12 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
     
     @Autowired
     private AppPushService appPushService;
+    
+    @Autowired
+    private MsgReadDao msgReadDao;
+    
+    @Autowired
+    private SysMsgReceiverDao sysMsgReceiverDao;
 
     /**
      * (non-Javadoc)
@@ -161,14 +177,15 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         SysUser sysUser = (SysUser) SpringUtils.getRequest().getSession().getAttribute("SESSION_USER_KEY");
         message.setModifyUserId(sysUser.getId());
         message.setModifyTime(date); //创建时间
-        message.setContent(record.toString());
+        message.setContent(record.getMsgSubtitle());
+        message.setContentJson(record.toString());
         message.setBusType(1);
         message.setMsgType(1);
         String sendTime = sdf.format(date);//定义传递给友盟的时间
         message.setSendTime(date);
         //广播推送
-            // ios
         try {
+            // ios
             int iosStatus = appPushService.sendIOSBroadcast(record.getMsgSubtitle(), sendTime);
             if (iosStatus == 200) {
                 logger.warn("ios信息推送成功");
@@ -179,7 +196,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             }
            message.setPhoneType(1);
            sysAppMessageDao.insertSelective(message);
-
+           //android
             int androidStatus = appPushService.sendAndroidBroadcast(record.getMsgSubtitle(), sendTime);
             if (androidStatus == 200) {
                 logger.warn("安卓信息推送成功");
@@ -215,6 +232,61 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         }
         return ResultDTO.fail();
 
+    }
+    
+    /**
+     * (non-Javadoc) 获取消息列表
+     * @see net.fnsco.api.sysappmsg.SysAppMsgService#queryMsgList(java.lang.Integer, boolean)
+     * @auth tangliang
+     * @date 2017年7月12日 下午1:45:55
+     */
+    @Transactional
+    @Override
+    public ResultDTO<List<AppPushMsgInfoDTO>> queryMsgList(Integer userId, boolean hasRead) {
+        if(null == userId){
+            return ResultDTO.fail(ApiConstant.E_USERID_NULL);
+        }
+        MsgRead reader = msgReadDao.selectByUserId(userId);
+        Date date = null;
+        if(null != reader){
+            date = reader.getReadTime();
+        }
+        /**
+         * 根据记录时间查询出未读数据
+         */
+        SysAppMessage condition = new SysAppMessage();
+        SysMsgReceiver condition1 = new SysMsgReceiver();
+        condition.setSendTime(date);
+        condition1.setSendTime(date);
+        condition1.setAppUserId(userId);
+        List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);
+        List<SysMsgReceiver> datas1 =  sysMsgReceiverDao.queryListByCondition(condition1);
+        List<AppPushMsgInfoDTO> result = Lists.newArrayList();
+        for (SysAppMessage sysAppMessage : datas) {
+            result.add(JsonPluginsUtil.jsonToBean(sysAppMessage.getContentJson(), AppPushMsgInfoDTO.class));
+        }
+        for (SysMsgReceiver sysMsgReceiver : datas1) {
+            result.add(JsonPluginsUtil.jsonToBean(sysMsgReceiver.getMsgContent(), AppPushMsgInfoDTO.class));
+        }
+        
+        /**
+         * 再次记录读取时间
+         */
+        if(hasRead){
+            Date readTime = new Date();
+            if(reader == null){
+                reader = new MsgRead();
+                reader.setAppUserId(userId);
+                reader.setReadTime(readTime);
+                msgReadDao.insertSelective(reader);
+            }else{
+                reader.setReadTime(readTime);
+                msgReadDao.updateByPrimaryKeySelective(reader);
+            }
+        }
+        
+        return ResultDTO.success(result);
+        
     }
 
 }
