@@ -298,4 +298,10 @@
     </where> 
      ORDER BY modify_time DESC 
   </select>
+  <!-- 查询待发送推送的数据 -->
+  <select id="queryExecuteData" resultMap="BaseResultMap">
+    select 
+     <include refid="Base_Column_List" />
+      from sys_msg_app where send_time <= NOW() AND status=2
+  </select>
 </mapper>

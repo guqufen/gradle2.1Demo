@@ -133,7 +133,34 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         return sysAppMessageDao.updateByPrimaryKey(record);
 
     }
-
+    
+    /**
+     * 条件查询
+     * (non-Javadoc)
+     * @see net.fnsco.api.sysappmsg.SysAppMsgService#queryListByCondition(net.fnsco.service.domain.SysAppMessage)
+     * @auth tangliang
+     * @date 2017年7月12日 下午4:27:36
+     */
+    @Override
+    public List<SysAppMessage> queryListByCondition(SysAppMessage record) {
+        
+        // TODO Auto-generated method stub
+        return sysAppMessageDao.queryListByCondition(record);
+        
+    }
+    /**
+     * 查询待执行推送任务的数据
+     * (non-Javadoc)
+     * @see net.fnsco.api.sysappmsg.SysAppMsgService#queryExecuteData()
+     * @auth tangliang
+     * @date 2017年7月12日 下午4:38:35
+     */
+    @Override
+    public List<SysAppMessage> queryExecuteData() {
+        
+        return sysAppMessageDao.queryExecuteData();
+        
+    }
     /**
      * (non-Javadoc) 条件分页查询
      * @see net.fnsco.api.sysappmsg.SysAppMsgService#queryPageList(net.fnsco.service.domain.SysAppMessage, int, int)
@@ -181,35 +208,12 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         message.setContentJson(record.toString());
         message.setBusType(1);
         message.setMsgType(1);
-        String sendTime = sdf.format(date);//定义传递给友盟的时间
         message.setSendTime(date);
-        //广播推送
-        try {
-            // ios
-            int iosStatus = appPushService.sendIOSBroadcast(record.getMsgSubtitle(), sendTime);
-            if (iosStatus == 200) {
-                logger.warn("ios信息推送成功");
-                message.setStatus(1);
-            } else {
-                logger.warn("ios信息推送失败");
-                message.setStatus(0);
-            }
-           message.setPhoneType(1);
-           sysAppMessageDao.insertSelective(message);
-           //android
-            int androidStatus = appPushService.sendAndroidBroadcast(record.getMsgSubtitle(), sendTime);
-            if (androidStatus == 200) {
-                logger.warn("安卓信息推送成功");
-                message.setStatus(1);
-            } else {
-                logger.warn("安卓信息推送失败");
-                message.setStatus(0);
-            }
-            message.setPhoneType(2);
-            sysAppMessageDao.insertSelective(message);
-        } catch (Exception e) {
-            logger.error("广播推送异常", e);
-        }
+        message.setStatus(2); 
+        message.setPhoneType(1);
+        sysAppMessageDao.insertSelective(message);
+        message.setPhoneType(2);
+        sysAppMessageDao.insertSelective(message);
         return ResultDTO.successForSave(null);
 
     }

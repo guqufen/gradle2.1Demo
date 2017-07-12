@@ -48,4 +48,13 @@ public interface SysAppMessageDao {
      * @since  CodingExample　Ver 1.1
      */
     List<SysAppMessage> queryListByCondition(SysAppMessage record);
+    /**
+     * queryExecuteData:(这里用一句话描述这个方法的作用) 查询待执行任务数据
+     *
+     * @return    设定文件
+     * @return List<SysAppMessage>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<SysAppMessage> queryExecuteData();
 }

@@ -29,6 +29,25 @@ public interface SysAppMsgService {
 
     int updateByPrimaryKey(SysAppMessage record);
     /**
+     * queryExecuteData:(这里用一句话描述这个方法的作用) 查询待执行任务数据
+     *
+     * @return    设定文件
+     * @return List<SysAppMessage>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<SysAppMessage> queryExecuteData();
+    /**
+     * queryListByCondition:(这里用一句话描述这个方法的作用)根据条件查询
+     *
+     * @param record
+     * @return    设定文件
+     * @return List<SysAppMessage>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<SysAppMessage> queryListByCondition(SysAppMessage record);
+    /**
      * queryPageList:(这里用一句话描述这个方法的作用) 分页条件查询
      *
      * @param record
