@@ -1,6 +1,6 @@
 package net.fnsco.controller.app.jo;
 
-import net.fnsco.core.base.JO;
+import net.fnsco.core.base.PageDTO;
 
 /**
  * @desc 推送消息查询
@@ -9,7 +9,7 @@ import net.fnsco.core.base.JO;
  * @since    Ver 1.1
  * @Date	 2017年7月12日 下午1:12:35
  */
-public class AppPushMsgJO extends JO {
+public class AppPushMsgJO extends PageDTO<Object> {
 
     /**
      * serialVersionUID:TODO（用一句话描述这个变量表示什么）
@@ -27,6 +27,33 @@ public class AppPushMsgJO extends JO {
      * 标识本次获取是否为已读取 true:是标识 false:否  默认为false
      */
     private boolean hasRead = false;
+    
+    /**
+     * 手机类型
+     */
+    private Integer phoneType;
+    
+    /**
+     * phoneType
+     *
+     * @return  the phoneType
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getPhoneType() {
+        return phoneType;
+    }
+
+    /**
+     * phoneType
+     *
+     * @param   phoneType    the phoneType to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPhoneType(Integer phoneType) {
+        this.phoneType = phoneType;
+    }
 
     /**
      * userId

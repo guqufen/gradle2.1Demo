@@ -2,6 +2,8 @@ package net.fnsco.api.dto;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.fnsco.core.base.DTO;
 import net.sf.json.JSONObject;
 
@@ -13,7 +15,7 @@ import net.sf.json.JSONObject;
  * @Date	 2017年7月11日 下午5:23:23
  */
 
-public class AppPushMsgInfoDTO extends DTO{
+public class AppPushMsgInfoDTO extends DTO implements Comparable<AppPushMsgInfoDTO>{
 
     /**
      * serialVersionUID:TODO（用一句话描述这个变量表示什么）
@@ -225,19 +227,35 @@ public class AppPushMsgInfoDTO extends DTO{
     public int hashCode() {
         return super.hashCode()<<1;
     }
-//   public static void main(String[] args) throws ParseException {
-//    AppPushMsgInfoDTO app = new AppPushMsgInfoDTO();
-//    app.setDetailURL("/dsds/detail");
-//    app.setImageURL("/dsjd/image");
-//    app.setMsgSubject("测试主题");
-//    app.setMsgSubtitle("重大通知：quandhsjhjhjshdjshjhjh");
-//    app.setMsgType("1");
-//    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//    String dateString = formatter.format(new Date());
-//    app.setSendTime(formatter.parse(dateString));
-//    System.out.println(app.toString());
-//    JSONObject jsonObject = JSONObject.fromObject(app.toString());
-//    AppPushMsgInfoDTO sds = (AppPushMsgInfoDTO) JSONObject.toBean(jsonObject, AppPushMsgInfoDTO.class);
-//    System.out.println(sds);
-//}
+    
+    /**
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     * @auth tangliang
+     * @date 2017年7月13日 下午3:16:23
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof AppPushMsgInfoDTO){
+            AppPushMsgInfoDTO apm = (AppPushMsgInfoDTO) obj;
+            if(StringUtils.isNoneEmpty(apm.getSendTimeStr()) && apm.getSendTimeStr().equals(sendTimeStr)){
+                return true;
+            }
+        }
+        return super.equals(obj);
+        
+    }
+    /**
+     * (non-Javadoc)为消息排序，主要根据发送时间字段
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     * @auth tangliang
+     * @date 2017年7月13日 下午3:18:17
+     */
+    @Override
+    public int compareTo(AppPushMsgInfoDTO o) {
+        if(StringUtils.isNoneEmpty(o.getSendTimeStr()) && StringUtils.isNoneEmpty(this.sendTimeStr)){
+            return o.getSendTimeStr().compareTo(this.sendTimeStr);
+        }
+        return 0;
+    }
 }

@@ -332,7 +332,8 @@
         AND content_json = #{contentJson,jdbcType=VARCHAR}
       </if>
     </where> 
-     ORDER BY modify_time DESC 
+     ORDER BY send_time DESC 
+     limit 1000
   </select>
   <!-- 查询待发送推送的数据 -->
   <select id="queryExecuteData" resultMap="BaseResultMap">
