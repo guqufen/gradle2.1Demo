@@ -15,6 +15,22 @@
     <result column="bus_type" property="busType" jdbcType="INTEGER" />
     <result column="content" property="content" jdbcType="VARCHAR" />
   </resultMap>
+  <!-- 分页查询用 -->
+  <resultMap id="PageResultMap" type="net.fnsco.service.domain.SysAppMessage" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="content_json" property="contentJson" jdbcType="VARCHAR" />
+    <result column="phone_type" property="phoneType" jdbcType="INTEGER" />
+    <result column="send_type" property="sendType" jdbcType="INTEGER" />
+    <result column="push_type" property="pushType" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="msg_type" property="msgType" jdbcType="INTEGER" />
+    <result column="bus_type" property="busType" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="modifyUser" property="modifyUser" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, send_time, content_json, phone_type, send_type, push_type, status, modify_user_id, 
     modify_time, msg_type, bus_type, content
@@ -175,7 +191,8 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!-- 分页条件查询 -->
-  <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="BaseResultMap">
+  <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="PageResultMap">
+    SELECT SA.*,SU.name as modifyUser FROM (
     select 
      <include refid="Base_Column_List" />
       from sys_msg_app
@@ -186,28 +203,28 @@
       <if test="condition.content != null and condition.content != ''" >
         AND content = #{condition.content,jdbcType=VARCHAR}
       </if>
-      <if test="condition.phoneType != null and condition.phoneType != ''" >
+      <if test="condition.phoneType != null" >
         AND phone_type = #{condition.phoneType,jdbcType=INTEGER}
       </if>
-      <if test="condition.sendType != null and condition.sendType != ''" >
+      <if test="condition.sendType != null" >
         AND send_type = #{condition.sendType,jdbcType=INTEGER}
       </if>
-      <if test="condition.pushType != null and condition.pushType != ''" >
+      <if test="condition.pushType != null" >
         AND push_type = #{condition.pushType,jdbcType=INTEGER}
       </if>
-      <if test="condition.status != null and condition.status != ''" >
+      <if test="condition.status != null" >
         AND status = #{condition.status,jdbcType=INTEGER}
       </if>
-      <if test="condition.modifyUserId != null and condition.modifyUserId != ''" >
+      <if test="condition.modifyUserId != null" >
         AND modify_user_id = #{condition.modifyUserId,jdbcType=INTEGER}
       </if>
       <if test="condition.modifyTime != null and condition.modifyTime != ''" >
         AND modify_time = #{condition.modifyTime,jdbcType=TIMESTAMP}
       </if>
-      <if test="condition.msgType != null and condition.msgType != ''" >
+      <if test="condition.msgType != null" >
         AND msg_type = #{condition.msgType,jdbcType=INTEGER}
       </if>
-      <if test="condition.busType != null and condition.busType != ''" >
+      <if test="condition.busType != null " >
         AND bus_type = #{condition.busType,jdbcType=INTEGER}
       </if>
       <if test="condition.contentJson != null and condition.contentJson != ''" >
@@ -225,6 +242,7 @@
     </where> 
      ORDER BY modify_time DESC 
      limit #{startRow} , #{perPageSize}
+     ) SA LEFT JOIN sys_user SU ON SA.modify_user_id = SU.ID
   </select>
   <!-- 根据条件查询总数 -->
   <select id="queryTotalByCondition" parameterType="net.fnsco.service.domain.SysAppMessage" resultType="java.lang.Integer">
@@ -236,16 +254,16 @@
       <if test="content != null and content != '' " >
         AND content = #{content,jdbcType=VARCHAR}
       </if>
-      <if test="phoneType != null and phoneType != '' " >
+      <if test="phoneType != null" >
         AND phone_type = #{phoneType,jdbcType=INTEGER}
       </if>
-      <if test="sendType != null and sendType != '' " >
+      <if test="sendType != null" >
         AND send_type = #{sendType,jdbcType=INTEGER}
       </if>
-      <if test="pushType != null and pushType != '' " >
+      <if test="pushType != null" >
         AND push_type = #{pushType,jdbcType=INTEGER}
       </if>
-      <if test="status != null and status != '' " >
+      <if test="status != null" >
         AND status = #{status,jdbcType=INTEGER}
       </if>
       <if test="modifyUserId != null and modifyUserId != '' " >
@@ -254,10 +272,10 @@
       <if test="modifyTime != null and modifyTime != '' " >
         AND modify_time = #{modifyTime,jdbcType=TIMESTAMP}
       </if>
-      <if test="msgType != null and msgType != '' " >
+      <if test="msgType != null " >
         AND msg_type = #{msgType,jdbcType=INTEGER}
       </if>
-      <if test="busType != null and busType != '' " >
+      <if test="busType != null" >
         AND bus_type = #{busType,jdbcType=INTEGER}
       </if>
       <if test="contentJson != null and contentJson != ''" >
@@ -286,28 +304,28 @@
       <if test="content != null and content != ''" >
         AND content = #{content,jdbcType=VARCHAR}
       </if>
-      <if test="phoneType != null and phoneType != ''" >
+      <if test="phoneType != null" >
         AND phone_type = #{phoneType,jdbcType=INTEGER}
       </if>
-      <if test="sendType != null and sendType != ''" >
+      <if test="sendType != null" >
         AND send_type = #{sendType,jdbcType=INTEGER}
       </if>
-      <if test="pushType != null and pushType != ''" >
+      <if test="pushType != null" >
         AND push_type = #{pushType,jdbcType=INTEGER}
       </if>
-      <if test="status != null and status != ''" >
+      <if test="status != null" >
         AND status = #{status,jdbcType=INTEGER}
       </if>
-      <if test="modifyUserId != null and modifyUserId != ''" >
+      <if test="modifyUserId != null" >
         AND modify_user_id = #{modifyUserId,jdbcType=INTEGER}
       </if>
       <if test="modifyTime != null " >
         AND modify_time = #{modifyTime,jdbcType=TIMESTAMP}
       </if>
-      <if test="msgType != null and msgType != ''" >
+      <if test="msgType != null" >
         AND msg_type = #{msgType,jdbcType=INTEGER}
       </if>
-      <if test="busType != null and busType != ''" >
+      <if test="busType != null" >
         AND bus_type = #{condition.busType,jdbcType=INTEGER}
       </if>
       <if test="contentJson != null and contentJson != ''" >

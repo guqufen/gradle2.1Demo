@@ -203,12 +203,17 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         
         SysAppMessage message = new SysAppMessage();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (null == record.getSendTime()) {
+        if (StringUtils.isEmpty(record.getSendTimeStr())) {
             return ResultDTO.fail();
         }
+        record.setSendTimeStr(record.getSendTimeStr()+":00");
+        try {
+            record.setSendTime(sdf.parse(record.getSendTimeStr()));
+        } catch (ParseException e1) {
+            e1.printStackTrace();
+        }
         String currTime = sdf.format(new Date());
-        String getPage = sdf.format(record.getSendTime());
-        int timeStatus = DateUtils.compare_date(getPage, currTime);
+        int timeStatus = DateUtils.compare_date(record.getSendTimeStr(), currTime);
         if (timeStatus == 2 || timeStatus == -1) {
             return ResultDTO.fail();
         }
@@ -222,7 +227,11 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         message.setContentJson(record.toString());
         message.setBusType(1);
         message.setMsgType(1);
-        message.setSendTime(date);
+        try {
+            message.setSendTime(sdf.parse(record.getSendTimeStr()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         message.setStatus(2); 
         message.setPhoneType(1);
         sysAppMessageDao.insertSelective(message);

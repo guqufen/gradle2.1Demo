@@ -1,7 +1,5 @@
 package net.fnsco.api.dto;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import net.fnsco.core.base.DTO;
@@ -46,6 +44,10 @@ public class AppPushMsgInfoDTO extends DTO{
     private Date sendTime;
     
     /**
+     * 推送时间字符串
+     */
+    private String sendTimeStr;
+    /**
      * 消息详情链接
      */
     private String detailURL;
@@ -64,6 +66,28 @@ public class AppPushMsgInfoDTO extends DTO{
     
     public String getMsgSubject() {
         return msgSubject;
+    }
+
+    /**
+     * sendTimeStr
+     *
+     * @return  the sendTimeStr
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getSendTimeStr() {
+        return sendTimeStr;
+    }
+
+    /**
+     * sendTimeStr
+     *
+     * @param   sendTimeStr    the sendTimeStr to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setSendTimeStr(String sendTimeStr) {
+        this.sendTimeStr = sendTimeStr;
     }
 
     /**
