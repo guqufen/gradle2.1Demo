@@ -88,7 +88,7 @@ public interface SysAppMsgService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ResultDTO<List<AppPushMsgInfoDTO>> queryMsgList(Integer userId,boolean hasRead);
+    ResultDTO<ResultPageDTO<AppPushMsgInfoDTO>> queryMsgList(Integer userId,boolean hasRead,Integer phoneType,Integer currentPageNum,Integer perPageSize);
     /**
      * pushMerChantMsg:(这里用一句话描述这个方法的作用) 店员加入商家通知
      *
@@ -99,4 +99,15 @@ public interface SysAppMsgService {
      * @since  CodingExample　Ver 1.1
      */
     void pushMerChantMsg(String innerCode,Integer userId);
+    /**
+     * queryNewsCount:(这里用一句话描述这个方法的作用)查询新消息条数
+     *
+     * @param userId
+     * @param phoneType
+     * @return    设定文件
+     * @return ResultDTO<String>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    ResultDTO<String> queryNewsCount(Integer userId,boolean hasRead,Integer phoneType);
 }

@@ -95,5 +95,7 @@
         AND send_time >= #{sendTime,jdbcType=TIMESTAMP}
       </if>
     </where>
+    ORDER BY send_time desc
+    limit 1000
   </select>
 </mapper>

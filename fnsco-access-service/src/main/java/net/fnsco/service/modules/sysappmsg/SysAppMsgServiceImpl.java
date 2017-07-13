@@ -2,6 +2,7 @@ package net.fnsco.service.modules.sysappmsg;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,7 @@ import com.google.common.collect.Lists;
 
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.AppPushMsgInfoDTO;
+import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.push.AppPushService;
 import net.fnsco.api.sysappmsg.SysAppMsgService;
 import net.fnsco.core.base.BaseService;
@@ -269,22 +271,16 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
      */
     @Transactional
     @Override
-    public ResultDTO<List<AppPushMsgInfoDTO>> queryMsgList(Integer userId, boolean hasRead) {
+    public ResultDTO<ResultPageDTO<AppPushMsgInfoDTO>> queryMsgList(Integer userId, boolean hasRead,Integer phoneType,Integer currentPageNum,Integer perPageSize) {
         if(null == userId){
             return ResultDTO.fail(ApiConstant.E_USERID_NULL);
-        }
-        MsgRead reader = msgReadDao.selectByUserId(userId);
-        Date date = null;
-        if(null != reader){
-            date = reader.getReadTime();
         }
         /**
          * 根据记录时间查询出未读数据
          */
         SysAppMessage condition = new SysAppMessage();
         SysMsgReceiver condition1 = new SysMsgReceiver();
-        condition.setSendTime(date);
-        condition1.setSendTime(date);
+        condition.setPhoneType(phoneType);
         condition1.setAppUserId(userId);
         List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);
         List<SysMsgReceiver> datas1 =  sysMsgReceiverDao.queryListByCondition(condition1);
@@ -295,11 +291,21 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         for (SysMsgReceiver sysMsgReceiver : datas1) {
             result.add(JsonPluginsUtil.jsonToBean(sysMsgReceiver.getMsgContent(), AppPushMsgInfoDTO.class));
         }
+        ResultPageDTO<AppPushMsgInfoDTO> resultPage = new ResultPageDTO<AppPushMsgInfoDTO>(perPageSize, null);
+        //按照时间排序
+        Collections.sort(result);
+        resultPage.setTotal(result.size());
+        resultPage.setCurrentPage(currentPageNum);
+        if(result.size() >= currentPageNum*perPageSize){
+            result = result.subList((currentPageNum-1)*perPageSize, currentPageNum*perPageSize);
+        }
+        resultPage.setList(result);
         
         /**
          * 再次记录读取时间
          */
         if(hasRead){
+            MsgRead reader = msgReadDao.selectByUserId(userId);
             Date readTime = new Date();
             if(reader == null){
                 reader = new MsgRead();
@@ -312,7 +318,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             }
         }
         
-        return ResultDTO.success(result);
+        return ResultDTO.success(resultPage);
         
     }
     /**
@@ -396,6 +402,63 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         } catch (ParseException e) {
             logger.error("列播推送消息日期转换出错："+e);
         }
+        
+    }
+    /**
+     * (non-Javadoc)查询新消息条数
+     * @see net.fnsco.api.sysappmsg.SysAppMsgService#queryNewsCount(java.lang.Integer, java.lang.Integer)
+     * @auth tangliang
+     * @date 2017年7月13日 下午4:49:57
+     */
+    @Override
+    public ResultDTO<String> queryNewsCount(Integer userId, boolean hasRead,Integer phoneType) {
+        
+        if(null == userId){
+            return ResultDTO.fail(ApiConstant.E_USERID_NULL);
+        }
+        if(null == phoneType || (phoneType != 1 && phoneType!=2)){
+            return ResultDTO.fail(ApiConstant.E_PHONETYPE_ERROR);
+        }
+        
+        MsgRead reader = msgReadDao.selectByUserId(userId);
+        SysAppMessage condition = new SysAppMessage();
+        SysMsgReceiver condition1 = new SysMsgReceiver();
+        if(null != reader){
+            condition.setSendTime(reader.getReadTime());
+            condition1.setSendTime(reader.getReadTime());
+        }
+        
+        condition.setPhoneType(phoneType);
+        condition1.setAppUserId(userId);
+        List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);
+        List<SysMsgReceiver> datas1 =  sysMsgReceiverDao.queryListByCondition(condition1);
+        /**
+         * 再次记录读取时间
+         */
+        if(hasRead){
+            Date readTime = new Date();
+            if(reader == null){
+                reader = new MsgRead();
+                reader.setAppUserId(userId);
+                reader.setReadTime(readTime);
+                msgReadDao.insertSelective(reader);
+            }else{
+                reader.setReadTime(readTime);
+                msgReadDao.updateByPrimaryKeySelective(reader);
+            }
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String readTimeStr = null;
+        PushMsgInfoDTO msgInfoDTO = new PushMsgInfoDTO();
+        if(null == reader && hasRead){
+            readTimeStr = sdf.format(new Date());
+        }else if(reader != null){
+            readTimeStr = sdf.format(reader.getReadTime());
+        }
+        msgInfoDTO.setLastReadTimeStr(readTimeStr);
+        msgInfoDTO.setUnReadCount(datas.size()+datas1.size());
+        
+        return ResultDTO.success(msgInfoDTO);
         
     }
 
