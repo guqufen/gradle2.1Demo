@@ -1,7 +1,9 @@
 package net.fnsco.api.appuser;
 
 import net.fnsco.api.dto.AppUserDTO;
+import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.AppUser;
 
 public interface AppUserService {
@@ -15,5 +17,17 @@ public interface AppUserService {
 	ResultDTO<String> findPassword(AppUserDTO appUserDTO);
 	//根据手机号查询用户实体
 	ResultDTO<String> loginByMoblie(AppUserDTO appUserDTO);
+	/**
+	 * queryPageList:(这里用一句话描述这个方法的作用) 条件分页查询
+	 *
+	 * @param record
+	 * @param currentPageNum
+	 * @param perPageSize
+	 * @return    设定文件
+	 * @return ResultPageDTO<AppUserManageDTO>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	ResultPageDTO<AppUserManageDTO> queryPageList(AppUserManageDTO record,int currentPageNum, int perPageSize);
 	
 }

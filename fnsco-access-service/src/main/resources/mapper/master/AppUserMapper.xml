@@ -24,6 +24,13 @@
 		<result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
 		<result column="state" jdbcType="INTEGER" property="state" />
 	</resultMap>
+	<!-- WEB页面用 -->
+	<resultMap id="PageResultMap" type="net.fnsco.api.dto.AppUserManageDTO" >
+	  <result column="user_name" property="userName" jdbcType="VARCHAR" />
+	  <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+	  <result column="reg_time" property="regTime" jdbcType="TIMESTAMP"/>
+	  <result column="mer_names" property="merNames" jdbcType="VARCHAR"/>
+	</resultMap>
 	<sql id="Base_Column_List">
 		id, user_name, mobile, password, real_name, device_id, ges_state,
 		ges_password, ges_trail,
@@ -149,5 +156,88 @@
 					inner_code = #{innerCode}
 			) RE
 		LEFT JOIN m_app_user MU ON RE.app_user_id = MU.id
+	</select>
+	<!-- 条件分页查询 -->
+	<select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="PageResultMap">
+	   SELECT
+		TA.mobile,
+		TA.reg_time,
+		TA.user_name,
+		concat(
+					GROUP_CONCAT(TA.mer_name),
+					"、"
+				) AS 'mer_names'
+		FROM
+			(
+				SELECT
+					MR.mobile,
+					MC.mer_name,
+					MR.reg_time,
+					MR.user_name
+				FROM
+					(
+						SELECT
+							MU.*, RE.inner_code
+						FROM
+							(SELECT * FROM m_app_user
+							  <where>
+							    <if test="condition.mobile != null and condition.mobile !=''">
+									AND mobile = #{condition.mobile,jdbcType=VARCHAR}
+								</if>
+							  </where>
+							) MU
+						LEFT JOIN m_merchant_user_rel RE ON MU.id = RE.app_user_id
+					) MR
+				LEFT JOIN (
+				  SELECT * FROM m_merchant_core 
+				  <where>
+				     <if test="condition.merNames != null and condition.merNames != ''" >
+				        AND mer_name LIKE CONCAT('%', #{condition.merNames}, '%')
+				      </if>
+				  </where>
+				) MC ON MR.inner_code = MC.inner_code
+			) TA
+		GROUP BY
+			TA.mobile,TA.reg_time,TA.user_name
+	limit #{startRow},#{perPageSize}		
+	</select>
+	<!-- 条件查询总数 -->
+	<select id="queryTotalByCondition" parameterType="net.fnsco.api.dto.AppUserManageDTO" resultType="java.lang.Integer">
+	 SELECT COUNT(*) FROM (
+	  SELECT
+		TA.mobile
+		FROM
+			(
+				SELECT
+					MR.mobile,
+					MC.mer_name,
+					MR.reg_time,
+					MR.user_name
+				FROM
+					(
+						SELECT
+							MU.*, RE.inner_code
+						FROM
+							(SELECT * FROM m_app_user
+							  <where>
+							    <if test="mobile != null and mobile !=''">
+									AND mobile = #{mobile,jdbcType=VARCHAR}
+								</if>
+							  </where>
+							) MU
+						LEFT JOIN m_merchant_user_rel RE ON MU.id = RE.app_user_id
+					) MR
+				LEFT JOIN (
+				  SELECT * FROM m_merchant_core 
+				  <where>
+				     <if test="merNames != null and merNames != ''" >
+				        AND mer_name LIKE CONCAT('%', #{merNames}, '%')
+				      </if>
+				  </where>
+				) MC ON MR.inner_code = MC.inner_code
+			) TA
+		GROUP BY
+			TA.mobile,TA.reg_time,TA.user_name
+		) TAB
 	</select>
 </mapper>

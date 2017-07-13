@@ -18,9 +18,12 @@ import com.google.common.base.Strings;
 import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.AppUserDTO;
+import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.api.dto.SmsCodeDTO;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.sms.JavaSmsApi;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.service.dao.master.AppUserDao;
@@ -31,6 +34,7 @@ import net.fnsco.service.domain.AppUser;
 import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.MerchantUserRel;
+import net.fnsco.service.domain.SysAppMessage;
 
 @Service
 public class AppUserServiceImpl extends BaseService implements AppUserService {
@@ -41,7 +45,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     //private static Map<String,Integer> LoginTimeMap=new HashMap<>();//存放登录次数的
 
     @Autowired
-    private AppUserDao                     MappUserDao;
+    private AppUserDao                     mappUserDao;
     @Autowired
     private MerchantCoreDao                merchantCoreDao;
     @Autowired
@@ -69,7 +73,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return res;
         }
         //根据手机号查询用户实体是否存在
-        AppUser user = MappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
+        AppUser user = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
         if (user != null) {   
             return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
         }
@@ -82,10 +86,10 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUser.setRegTime(new Date());
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         appUser.setPassword(password);
-        if (!MappUserDao.insertSelective(appUser)) {
+        if (!mappUserDao.insertSelective(appUser)) {
             return ResultDTO.fail(ApiConstant.E_REGISTER_ERROR);
         }
-        appUser = MappUserDao.selectAppUserByMobile(appUser.getMobile());
+        appUser = mappUserDao.selectAppUserByMobile(appUser.getMobile());
         map.put("appUserId", appUser.getId());
         //注册成功后关联商户
         int merchantNums1 = 0;
@@ -140,7 +144,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         final String mobile = appUserDTO.getMobile();
         //注册需要判断
         if(appUserDTO.getOprationType()==0){
-            AppUser user = MappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
+            AppUser user = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
             if (user != null) {   
                 return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
             }
@@ -223,7 +227,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
 
         //判断手机号是否已经注册
-        if (MappUserDao.selectAppUserByMobile(appUserDTO.getMobile()) == null) {
+        if (mappUserDao.selectAppUserByMobile(appUserDTO.getMobile()) == null) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
@@ -233,7 +237,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return res;
         }
         //密码更新失败
-        if (!MappUserDao.updatePasswordByPhone(appUserDTO.getMobile(), password)) {
+        if (!mappUserDao.updatePasswordByPhone(appUserDTO.getMobile(), password)) {
             return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
         }
         return ResultDTO.success();
@@ -256,7 +260,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         String oldPassword = Md5Util.getInstance().md5(appUserDTO.getOldPassword());
         AppUser appUser = new AppUser();
         //根据id查询用户是否存在获取原密码
-        AppUser mAppUser = MappUserDao.selectAppUserById(id);
+        AppUser mAppUser = mappUserDao.selectAppUserById(id);
         if (null == mAppUser) {
             return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
         }
@@ -266,7 +270,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         appUser.setPassword(password);
         appUser.setId(id);
-        if (!MappUserDao.updateByPrimaryKeySelective(appUser)) {
+        if (!mappUserDao.updateByPrimaryKeySelective(appUser)) {
             return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
         }
         return ResultDTO.success();
@@ -284,7 +288,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         //根据手机号查询用户实体是否存在
-        AppUser appUser = MappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
+        AppUser appUser = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
         if (appUser == null) {   
             return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
         }
@@ -299,7 +303,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         adminUser.setDeviceToken(appUserDTO.getDeviceToken());
         adminUser.setId(appUser.getId());
         //更新到实体
-        if (!MappUserDao.updateByPrimaryKeySelective(adminUser)) {
+        if (!mappUserDao.updateByPrimaryKeySelective(adminUser)) {
             return ResultDTO.fail(ApiConstant.E_LOGIN_ERROR);
         }
         map.put("appUserId", appUser.getId());
@@ -311,6 +315,24 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         map.put("merchantNums", merchantNums);
         return ResultDTO.success(map);
+    }
+    
+    /**
+     * web端分页查询
+     * (non-Javadoc)
+     * @see net.fnsco.api.appuser.AppUserService#queryPageList(net.fnsco.api.dto.AppUserManageDTO, int, int)
+     * @auth tangliang
+     * @date 2017年7月13日 下午1:53:56
+     */
+    @Override
+    public ResultPageDTO<AppUserManageDTO> queryPageList(AppUserManageDTO record, int currentPageNum, int perPageSize) {
+        
+        PageDTO<AppUserManageDTO> params = new PageDTO<AppUserManageDTO>(currentPageNum, perPageSize, record);
+        List<AppUserManageDTO> data = mappUserDao.queryPageList(params);
+        int totalNum = mappUserDao.queryTotalByCondition(record);
+        ResultPageDTO<AppUserManageDTO> result = new ResultPageDTO<AppUserManageDTO>(totalNum, data);
+        return result;
+        
     }
 
 }
