@@ -24,9 +24,8 @@
                     <div class="col-sm-4">
                         <label class="control-label" for="pushType">推送类型:</label>
                         <select id="pushType" name="pushType" class="form-control">
-                           <option value="0" selected="selected">全部</option>
                            <option value="1">强推</option>
-                           <option value="2">内推</option>
+                           <option value="0">内推</option>
                         </select>
                     </div>
                     <div class="col-sm-4">
@@ -36,10 +35,6 @@
                            <option value="1">已发布</option>
                            <option value="2">待推送</option>
                         </select>
-                    </div>
-                    <div class="col-sm-4">
-                        <label class="control-label" for="submitter">提交人:</label>
-                        <input type="text" class="form-control" id="submitter" name="submitter"/>
                     </div>
                     <div class="col-sm-8 query-time">
                         <label class="control-label" for="releaseTime">发布时间:</label>
@@ -143,7 +138,7 @@
     $('#table').bootstrapTable({
         search: false, //是否启动搜索栏
         sidePagination:'server',
-        url:PROJECT_NAME+'/web/trade/query',
+        url:PROJECT_NAME+'/web/msg/query',
         showRefresh: false,//是否显示刷新按钮
         showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
         toolbar: '#toolbar',  //工具按钮用哪个容器
@@ -168,27 +163,38 @@
             field: 'orderNo',
             title: '推送名称'
         },{
-            field: 'amt',
+            field: 'msgType',
             title: '推送类型',
-            formatter: formatPushState
+            formatter: formatPushType
         },{
-            field: 'orderTime',
+            field: 'content',
             title: '推送内容'
         },{
-            field: 'orderInfo',
+            field: 'modifyUserId',
             title: '提交人'
         },{
-            field: 'timeStamp',
-            title: '发布时间'
+            field: 'sendTime',
+            title: '发布时间',
+            formatter:formatTime
         },{
-            field: 'payType',
+            field: 'modifyTime',
             title: '提交时间',
+            formatter:formatTime
         },{
-            field: 'merId',
+            field: 'status',
             title: '状态',
             formatter: formatPushState
         }]
     });
+    //时间格式化
+    function formatTime(value, row, index){
+    	return formatDate(new Date(value));
+    }
+    //时间格式化
+    function formatDate(date){
+    	return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+
+    }
     //操作格式化
     function operateFormatter(value, row, index) {
         return [
@@ -207,21 +213,25 @@
         }
         else if(value == '1'){
             return '强推';
-        }else if(value == '2'){
+        }else if(value == '0'){
             return '内推';
         }else{
-            return '定时推';
+            return '其他';
         }   
     }
     //状态格式化
     function formatPushState(value, row, index){
         if(!value){
             return '-';
+        }else if(value == '0'){
+        	return '失败';
         }
         else if(value == '1'){
-            return '已发布';
+            return '成功';
         }else if(value == '2'){
-            return '待推送';
+            return '等待发送';
+        }else if(value == '3'){
+        	return '取消';
         }else{
             return '其他';
         }   
@@ -253,11 +263,10 @@
  	   var param ={
  			   currentPageNum : this.pageNumber,
  			   pageSize : this.pageSize,
- 			   orderNo :$('#txt_search_id').val(),
- 			   merId:$('#txt_search_name').val(),
- 			   amt:$('#txt_search_price').val(),
+ 			   msgType :$('#pushType').val(),
+ 			   status:$('#txt_search_name').val(),
  			   startSendTime:$('#datetimepicker1').val(),
- 			  endSendTime:$('#datetimepicker2').val()
+ 			   endSendTime:$('#datetimepicker2').val()
  	   }
  	   return param;
     }

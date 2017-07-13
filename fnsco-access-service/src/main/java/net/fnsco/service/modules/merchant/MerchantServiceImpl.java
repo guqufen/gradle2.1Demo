@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Strings;
 
@@ -20,6 +21,7 @@ import net.fnsco.api.dto.MerchantDTO;
 import net.fnsco.api.dto.TerminalDetailDTO;
 import net.fnsco.api.dto.TerminalsDTO;
 import net.fnsco.api.merchant.MerchantService;
+import net.fnsco.api.sysappmsg.SysAppMsgService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
@@ -52,7 +54,9 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     private MerchantTerminalDao merchantTerminalDao;
     @Autowired
     private MerchantUserRelDao  merchantUserRelDao;
-
+    @Autowired
+    private SysAppMsgService sysAppMsgService;
+    
     @Override
     public ResultDTO addMerChant(MerchantDTO merchantDTO) {
         String randomCode = merchantDTO.getRandomCode();
@@ -85,6 +89,8 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         muRel.setInnerCode(alias.getInnerCode());
         muRel.setModefyTime(new Date());
         merchantUserRelDao.insert(muRel);
+        //发送推送
+        sysAppMsgService.pushMerChantMsg(alias.getInnerCode(), merchantDTO.getUserId());
         return ResultDTO.success();
     }
 
