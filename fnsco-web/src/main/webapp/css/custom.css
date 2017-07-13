@@ -17,6 +17,9 @@ table a.remove{
 table a.redact{
 	color:#428bca;
 }
+table a.redact span{
+	padding-left: 2px;
+}
 table a.details{
 	color:#428bca;
 }
@@ -296,4 +299,11 @@ table td{
 }
 .changePage{
 	font-size: 14px;color: #666;padding-top: 20px;cursor: pointer;
+}
+/*用户管理*/
+.shopRoleList{
+	padding: 10px 20px 16px 20px;
+    background: #f4f4f4;
+    margin: 10px 0;
+    position: relative;
 }

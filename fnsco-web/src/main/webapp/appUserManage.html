@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>交易统计-法奈昇大数据平台</title>
+    <title>APP用户管理-法奈昇大数据平台</title>
     <meta name="keywords" content="法奈昇大数据平台">
     <meta name="description" content="法奈昇大数据平台">
     <link rel="shortcut icon" href="favicon.ico">
@@ -22,21 +22,12 @@
             <div class="form-group" style="margin-top:15px">
                 <div class="row col-sm-10">
                     <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_id">订单号:</label>
-                        <input type="text" class="form-control" id="txt_search_id" name="orderNo">
+                        <label class="control-label" for="shopName">商铺名称:</label>
+                        <input type="text" class="form-control" id="shopName" name="shopName"/>
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_name">商户号:</label>
-                        <input type="text" class="form-control" id="txt_search_name" name="merId"/>
-                    </div>
-                    <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_price">交易金额:</label>
-                        <input type="text" class="form-control" id="txt_search_price" name="amt"/>
-                    </div>
-                    <div class="col-sm-8 query-time">
-                        <label class="control-label" for="txt_search_price">发送日期:</label>
-                        <input type="text" value="" class="form-control" id="datetimepicker1" name="startSendTime"> -
-                        <input type="text" value="" class="form-control" id="datetimepicker2" name="endSendTime">
+                        <label class="control-label" for="shopPhoneNum">手机号码:</label>
+                        <input type="text" class="form-control" id="shopPhoneNum" name="shopPhoneNum"/>
                     </div>
                 </div>
                 <div class="col-sm-2" style="text-align: right;">
@@ -49,15 +40,62 @@
             <div class="ibox-content">
                 <div class="row row-lg">
                     <div class="col-sm-12">
-                        <table id="table" ></table>
+                        <table id="table"></table>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- model新增 start -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">角色管理权限设置</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tab-content">
+                            <div class="shopRoleList">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label class="control-label" for="shopName1">店铺名称：</label>
+                                        <input type="text" class="form-control" id="shopName1" name="shopName1" required="required">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="control-label" for="shopRole">角色：</label>
+                                        <select id="shopRole" name="shopRole" class="form-control">
+    			                           <option value="1">店员</option>
+    			                           <option value="2">店主</option>
+    			                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="shopRoleList">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label class="control-label" for="shopName1">店铺名称：</label>
+                                        <input type="text" class="form-control" id="shopName1" name="shopName1" required="required">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="control-label" for="shopRole">角色：</label>
+                                        <select id="shopRole" name="shopRole" class="form-control">
+                                           <option value="1">店员</option>
+                                           <option value="2">店主</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="saveBtn">确定修改</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- model end -->
     </div>
 </div>
-        <!-- end -->
-    </div> 
+<!-- end -->
+</div> 
     
 </div>
 <script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
@@ -72,9 +110,9 @@
 <script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="js/layer/layer.js"></script>
+<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
 <script type="text/javascript" src="js/fnsco/common.js"></script>
-
 </body>
 <script type="text/javascript">
     $('#table').bootstrapTable({
@@ -83,7 +121,7 @@
         url:PROJECT_NAME+'/web/trade/query',
         showRefresh: false,//是否显示刷新按钮
         showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
-        toolbar: '#toolbar',  //工具按钮用哪个容器
+        // toolbar: '#toolbar',  //工具按钮用哪个容器
         striped: true,   //是否显示行间隔色
         cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
         pagination: true,   //是否显示分页（*）
@@ -95,80 +133,61 @@
         queryParams:queryParams,
         responseHandler:responseHandler,//处理服务器返回数据
         columns: [{
+            field: 'id',
+            title: '操作',
+            width:'10%',
+            align: 'center',
+            width: 150,
+            formatter: operateFormatter
+        },{
             field: 'orderNo',
-            title: '订单号'
-        },{
-            field: 'merId',
-            title: '商户号'
-        },{
-            field: 'timeStamp',
-            title: '交易时间'
-        },{
-            field: 'payType',
-            title: '支付方式',
-            formatter:formatPayType
+            title: '用户名称'
         },{
             field: 'amt',
-            title: '交易金额'
-        },{
-            field: 'orderInfo',
-            title: '订单信息'
-        },{
-            field: 'merId',
-            title: '商户号'
-        },{
-            field: 'termId',
-            title: '终端号'
-        },{
-            field: 'batchNo',
-            title: '批次号'
-        },{
-            field: 'sysTraceNo',
-            title: '凭证号'
-        },{
-            field: 'authCode',
-            title: '授权码'
-        },{
-            field: 'orderIdScan',
-            title: '扫码交易的订单号'
-        },{
-            field: 'source',
-            title: '来源',
-            formatter:formatSource
+            title: '手机号码',
+            formatter: formatPushState
         },{
             field: 'orderTime',
-            title: '订单时间'
+            title: '绑定店铺'
         },{
-            field: 'sendTime',
-            title: '交易传送时间'
+            field: 'orderInfo',
+            title: '注册时间'
         }]
     });
-    
-  //商户注册来源格式处理
-    function formatSource(value, row, index){
-	    if(!value){
-	    	return '-';
-	    }
-	    else if(value == '00')
-    	{
-    		return '拉卡拉';
-    	}else{
-    		return '其他';
-    	}	
+    //操作格式化
+    function operateFormatter(value, row, index) {
+        return [
+            '<a class="redact" href="javascript:setRole();" title="设置角色">',
+            '<i class="glyphicon glyphicon-pencil"></i><span>角色修改</span>',
+            '</a>  '
+        ].join('');
     }
-  //支付方式格式化
-  function formatPayType(value, row, index){
-	  if(!value){
-	    	return '-';
-	    }
-	  else if(value == '00'){
-  		return '刷卡';
-  	 }else if(value == '01'){
-  		return '二维码';
-  	}else{
-  		return '其他';
-  	}	
-  }
+    //推送类型格式化
+    function formatPushType(value, row, index){
+        if(!value){
+            return '-';
+        }
+        else if(value == '1'){
+            return '强推';
+        }else if(value == '2'){
+            return '内推';
+        }else{
+            return '定时推';
+        }   
+    }
+    //状态格式化
+    function formatPushState(value, row, index){
+        if(!value){
+            return '-';
+        }
+        else if(value == '1'){
+            return '已发布';
+        }else if(value == '2'){
+            return '待推送';
+        }else{
+            return '其他';
+        }   
+    }
   //条件查询按钮事件
     function queryEvent(){
  	   $('#table').bootstrapTable('refresh');
@@ -188,16 +207,7 @@
             });
         }
     };
-    function operateFormatter(value, row, index) {
-        return [
-            '<a class="redact" href="javascript:void(0)" title="编辑">',
-            '<i class="glyphicon glyphicon-pencil"></i>',
-            '</a>  ',
-            '<a class="remove" href="javascript:void(0)" title="删除">',
-            '<i class="glyphicon glyphicon glyphicon-trash"></i>',
-            '</a>'
-        ].join('');
-    }
+    
 	
   //组装请求参数
     function queryParams(params)
@@ -228,32 +238,9 @@
  	        };
  	    }
  	}
-    
-    /*弹框下一步按钮事件*/
-    $(".nextBtn").click(function(){
-        $(".nav-tabs li.active").removeClass('active').next().addClass('active');
-    })
-    $('#datetimepicker1').datetimepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayBtn: true,
-        todayHighlight: true,
-        showMeridian: true,
-        pickerPosition: "bottom-left",
-        language: 'zh-CN',//中文，需要引用zh-CN.js包
-        startView: 2,//月视图
-        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
-    });
-    $('#datetimepicker2').datetimepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayBtn: true,
-        todayHighlight: true,
-        showMeridian: true,
-        pickerPosition: "bottom-left",
-        language: 'zh-CN',//中文，需要引用zh-CN.js包
-        startView: 2,//月视图
-        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
-    });
+    function setRole(){
+        //显示设置弹框
+        $('#myModal').modal();
+    }
 </script>
 </html>
