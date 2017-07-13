@@ -182,7 +182,7 @@
 							(SELECT * FROM m_app_user
 							  <where>
 							    <if test="condition.mobile != null and condition.mobile !=''">
-									AND mobile = #{condition.mobile,jdbcType=VARCHAR}
+									AND mobile LIKE CONCAT('%',#{condition.mobile},'%')
 								</if>
 							  </where>
 							) MU
@@ -231,7 +231,7 @@
 				  SELECT * FROM m_merchant_core 
 				  <where>
 				     <if test="merNames != null and merNames != ''" >
-				        AND mer_name LIKE CONCAT('%', #{merNames}, '%')
+				        AND mer_name LIKE CONCAT('%', #{merNames}, '%') 
 				      </if>
 				  </where>
 				) MC ON MR.inner_code = MC.inner_code

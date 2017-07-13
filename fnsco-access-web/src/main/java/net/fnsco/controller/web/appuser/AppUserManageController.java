@@ -38,7 +38,6 @@ public class AppUserManageController extends BaseController {
     @RequestMapping("/query")
     @ResponseBody
     public ResultPageDTO<AppUserManageDTO> appUserIndex(AppUserManageDTO sysmsg,Integer currentPageNum,Integer pageSize){
-        logger.info("查询推送消息列表");
         return AppUserService.queryPageList(sysmsg, currentPageNum, pageSize);
     }
     

@@ -355,13 +355,13 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
      */
     @Override
     public ResultPageDTO<AppUserManageDTO> queryPageList(AppUserManageDTO record, int currentPageNum, int perPageSize) {
-        
+        //分页器实例化
         PageDTO<AppUserManageDTO> params = new PageDTO<AppUserManageDTO>(currentPageNum, perPageSize, record);
+        //
         List<AppUserManageDTO> data = mappUserDao.queryPageList(params);
         int totalNum = mappUserDao.queryTotalByCondition(record);
         ResultPageDTO<AppUserManageDTO> result = new ResultPageDTO<AppUserManageDTO>(totalNum, data);
         return result;
-        
     }
 
 }
