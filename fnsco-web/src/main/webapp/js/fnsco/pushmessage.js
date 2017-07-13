@@ -32,6 +32,10 @@ $('#table').bootstrapTable({
         title: '推送类型',
         formatter: formatPushType
     },{
+        field: 'phoneType',
+        title: '手机类型',
+        formatter: formatPhoneType
+    },{
         field: 'content',
         title: '推送内容'
     },{
@@ -51,6 +55,18 @@ $('#table').bootstrapTable({
         formatter: formatPushState
     }]
 });
+//手机类型处理
+function formatPhoneType(value, row, index){
+	if(!value){
+		return '--';
+	}else if(value == '1'){
+		return '安卓';
+	}else if(value=='2'){
+		return 'IOS';
+	}else{
+		return '未知设备';
+	}
+}
 //推送名称处理
 function formatSubject(value, row, index){
 	var jsonObj=JSON.parse(value); 
