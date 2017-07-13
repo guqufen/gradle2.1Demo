@@ -255,7 +255,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         }
         int res = sysAppMessageDao.deleteByPrimaryKey(id);
         if (res != 0) {
-            ResultDTO.success();
+            return ResultDTO.success();
         }
         return ResultDTO.fail();
 

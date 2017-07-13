@@ -71,6 +71,6 @@ public class SysAppMsgController extends BaseController {
     @RequestMapping("/delete")
     @ResponseBody
     public ResultDTO<String> deleteMsg(Integer id){
-        return null;
+        return sysAppMsgService.deleteMsg(id);
     }
 }

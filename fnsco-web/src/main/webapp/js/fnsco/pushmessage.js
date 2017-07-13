@@ -71,7 +71,7 @@ function operateFormatter(value, row, index) {
         '<a class="redact" href="javascript:void(0)" title="编辑">',
         '<i class="glyphicon glyphicon-file"></i>',
         '</a>  ',
-        '<a class="remove" href="javascript:void(0)" title="删除">',
+        '<a class="remove" href="javascript:deleteSingle('+value+')" title="删除">',
         '<i class="glyphicon glyphicon glyphicon-trash"></i>',
         '</a>'
     ].join('');
@@ -155,6 +155,29 @@ function responseHandler(res) {
 	        };
 	    }
 	}
+//删除事件
+function deleteSingle(id){
+	$.ajax({
+		url:PROJECT_NAME+'/web/msg/delete',
+        type:'POST',
+        data:{'id':id},
+        success:function(data){
+          unloginHandler(data);
+          if(data.success)
+          {
+            layer.msg('删除成功');
+            queryEvent("table");
+          }else
+          {
+            layer.msg('删除失败');
+          } 
+        },
+        error:function(e)
+        {
+          layer.msg('系统异常!'+e);
+        }
+	});
+}
 /*弹框下一步按钮事件*/
 $(".nextBtn").click(function(){
     $(".nav-tabs li.active").removeClass('active').next().addClass('active');
@@ -263,7 +286,8 @@ $('.sunmitBtn').click(function(){
 		   unloginHandler(data);
 		   if(data.success){
 	           layer.msg('保存成功');
-	           return true;
+	           $("#myModal").hide();
+	           queryEvent("table");
 	        }else{
 	           layer.msg('保存失败');
 	        }
