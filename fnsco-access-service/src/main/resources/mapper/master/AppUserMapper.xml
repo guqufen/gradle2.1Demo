@@ -135,4 +135,19 @@
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
+	<!-- 根据innerCode查询 -->
+	<select id="selectByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+	  SELECT
+			MU.id,MU.device_token,MU.mobile
+		FROM
+			(
+				SELECT DISTINCT
+					(app_user_id)
+				FROM
+					m_merchant_user_rel
+				WHERE
+					inner_code = #{innerCode}
+			) RE
+		LEFT JOIN m_app_user MU ON RE.app_user_id = MU.id
+	</select>
 </mapper>

@@ -1,9 +1,13 @@
 package net.fnsco.service.modules.sysappmsg;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +25,13 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.JsonPluginsUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
+import net.fnsco.service.dao.master.AppUserDao;
+import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MsgReadDao;
 import net.fnsco.service.dao.master.SysAppMessageDao;
 import net.fnsco.service.dao.master.SysMsgReceiverDao;
+import net.fnsco.service.domain.AppUser;
+import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.MsgRead;
 import net.fnsco.service.domain.SysAppMessage;
 import net.fnsco.service.domain.SysMsgReceiver;
@@ -50,6 +58,12 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
     
     @Autowired
     private SysMsgReceiverDao sysMsgReceiverDao;
+    
+    @Autowired
+    private AppUserDao    appUserDao;
+    
+    @Autowired
+    private MerchantCoreDao merchantCoreDao;
 
     /**
      * (non-Javadoc)
@@ -290,6 +304,89 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         }
         
         return ResultDTO.success(result);
+        
+    }
+    /**
+     * (non-Javadoc) 店员加入商家通知
+     * @see net.fnsco.api.sysappmsg.SysAppMsgService#pushMerChantMsg(java.lang.String, java.lang.Integer)
+     * @auth tangliang
+     * @date 2017年7月13日 上午9:15:18
+     */
+    @Override
+    public void pushMerChantMsg(String innerCode, Integer userId) {
+        
+      //发送推送
+        List<AppUser> users = appUserDao.selectByInnerCode(innerCode);
+        String param_and ="";
+        String param_ios ="";
+        String newPhone = "";
+        Set<String> relatelds_and = new HashSet<String>();
+        Set<String> relatelds_ios = new HashSet<String>();
+        for (AppUser user : users) {
+            int deviceType = user.getDeviceType();
+            if(String.valueOf(deviceType)==null||"0".equals(deviceType)||user.getId() == userId){
+                continue;
+            }else if(deviceType==1){//安卓
+                if(StringUtils.isNotBlank(user.getDeviceToken())){
+                    relatelds_and.add(user.getDeviceToken());
+                }
+            }else if(deviceType==2){//ios
+                if(StringUtils.isNotBlank(user.getDeviceToken())){
+                    relatelds_ios.add(user.getDeviceToken());
+                }
+            }
+            if(user.getId() == userId){
+                newPhone =user.getMobile();
+            }
+            
+        }
+        param_and = relatelds_and.toString().substring(1, param_and.length()-1);
+        param_and = param_and.replaceAll(" ", "");//安卓去重后token
+        
+        param_ios = relatelds_ios.toString().substring(1, param_ios.length()-1);
+        param_ios = param_ios.replaceAll(" ", "");//ios去重后的token
+        MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
+        String msgContent = "【新店员加入】新店员"+newPhone+"加入"+merchantCore.getMerName()+"店";
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String sendTime = sdf.format(new Date());
+        /**
+         * IOS
+         */
+        try {
+            int status = appPushService.sendIOSListcast(param_ios, msgContent,sendTime);
+            if (status == 200) {
+                logger.info("ios信息推送成功");
+            } else {
+                logger.info("ios信息推送失败");
+            }
+            
+        } catch (Exception e) {
+            logger.error("ios列播推送"+e);
+        }
+        /**
+         * android
+         */
+        try {
+            int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime);
+            if (status == 200) {
+                logger.info("安卓信息推送成功");
+            } else {
+                logger.info("安卓信息推送失败");
+            }
+        } catch (Exception e) {
+            logger.error("android列播推送："+e);
+        } 
+       
+        try {
+            SysMsgReceiver sysMsgReceiver = new SysMsgReceiver();
+            sysMsgReceiver.setAppUserId(userId);
+            sysMsgReceiver.setMsgContent(msgContent);
+            sysMsgReceiver.setSendTime(sdf.parse(sendTime));
+            sysMsgReceiverDao.insertSelective(sysMsgReceiver);
+        } catch (ParseException e) {
+            logger.error("列播推送消息日期转换出错："+e);
+        }
         
     }
 

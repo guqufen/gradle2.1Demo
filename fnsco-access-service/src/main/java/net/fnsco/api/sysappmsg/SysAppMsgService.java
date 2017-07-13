@@ -89,4 +89,14 @@ public interface SysAppMsgService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<List<AppPushMsgInfoDTO>> queryMsgList(Integer userId,boolean hasRead);
+    /**
+     * pushMerChantMsg:(这里用一句话描述这个方法的作用) 店员加入商家通知
+     *
+     * @param innerCode
+     * @param userId    设定文件
+     * @return void    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    void pushMerChantMsg(String innerCode,Integer userId);
 }
