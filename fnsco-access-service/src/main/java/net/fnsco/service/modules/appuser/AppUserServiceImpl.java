@@ -236,6 +236,15 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (!MappUserDao.updatePasswordByPhone(appUserDTO.getMobile(), password)) {
             return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
         }
+        //登录成功更新deviceToken
+        Integer id = appUserDTO.getUserId();
+        AppUser adminUser = new AppUser();
+        adminUser.setDeviceToken("");
+        adminUser.setId(id);
+        //更新到实体
+        if (!MappUserDao.updateByPrimaryKeySelective(adminUser)) {
+            return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
+        }
         return ResultDTO.success();
     }
 
@@ -266,6 +275,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         appUser.setPassword(password);
         appUser.setId(id);
+        //修改密码后app跳到未登录页面 需要清空deviceToken
+        appUser.setDeviceToken("");
         if (!MappUserDao.updateByPrimaryKeySelective(appUser)) {
             return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
         }
@@ -311,6 +322,20 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         map.put("merchantNums", merchantNums);
         return ResultDTO.success(map);
+    }
+    
+    //退出登录
+    @Override
+    public ResultDTO<String> loginOut(AppUserDTO appUserDTO) {
+        Integer id = appUserDTO.getUserId();
+        AppUser adminUser = new AppUser();
+        adminUser.setDeviceToken("");
+        adminUser.setId(id);
+        //更新到实体
+        if (!MappUserDao.updateByPrimaryKeySelective(adminUser)) {
+            return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
+        }
+        return ResultDTO.success();
     }
 
 }

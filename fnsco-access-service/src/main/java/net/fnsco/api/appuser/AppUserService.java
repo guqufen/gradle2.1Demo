@@ -15,5 +15,6 @@ public interface AppUserService {
 	ResultDTO<String> findPassword(AppUserDTO appUserDTO);
 	//根据手机号查询用户实体
 	ResultDTO<String> loginByMoblie(AppUserDTO appUserDTO);
-	
+	//退出登录
+	ResultDTO<String> loginOut(AppUserDTO appUserDTO);
 }

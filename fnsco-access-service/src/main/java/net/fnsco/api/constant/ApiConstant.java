@@ -59,7 +59,8 @@ public class ApiConstant extends CoreConstants {
     public static String E_ACCOUNTLOCKOUT_ERROR    = "5113";                            //非法请求,用户账号被注销
     public static String E_LOGIN_ERROR             = "5114";                            //登录失败
     public static String E_LOGINMSG_ERROR          = "5115";                            //用户名或密码不正确
-
+    public static String E_LOGINOUT_ERROR          = "5116";                         //退出登录失败
+    
     public static String       WEB_LOGIN_NULL = "5900";//用户名或密码为空
     public static String       WEB_LOGIN_FAIL ="5901";//用户名或密码错误
     public static String       WEB_MER_CHANNEL_NOTUNIQUE = "5902";//商户渠道号和渠道组合要唯一
@@ -104,6 +105,7 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_ACCOUNTLOCKOUT_ERROR, "用户账号被锁定");
         ERROR_MESSGE_MAP.put(E_LOGIN_ERROR, "登录失败");
         ERROR_MESSGE_MAP.put(E_LOGINMSG_ERROR, "用户名或密码不正确");
+        ERROR_MESSGE_MAP.put(E_LOGINOUT_ERROR, "退出登录失败");
     }
 
 }

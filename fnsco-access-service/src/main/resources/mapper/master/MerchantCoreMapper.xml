@@ -629,4 +629,6 @@
     from m_merchant_core
     where legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR}
   </select>
+  <!-- 根据条件查询所有数据 -->
+  
 </mapper>
