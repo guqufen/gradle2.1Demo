@@ -1,5 +1,6 @@
 package net.fnsco.core.utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -61,5 +62,39 @@ public class DateUtils {
             return "";
         }
         return result + "235959";
+    }
+    /**
+     * compare_date:(这里用一句话描述这个方法的作用) 比较时间
+     *
+     * @param DATE1
+     * @param DATE2
+     * @return    设定文件
+     * @return int    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static int compare_date(String DATE1, String DATE2) {
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date dt1 = df.parse(DATE1);
+            Date dt2 = df.parse(DATE2);
+            if (dt1.getYear() >= dt2.getYear()) {// 判断年
+                if (dt1.getTime() > dt2.getTime()) {
+                    return 1;
+                } else if (dt1.getTime() < dt2.getTime()) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+
+            } else {
+                return 2;// 年份小于当前年份
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return 0;
     }
 }

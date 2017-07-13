@@ -10,11 +10,12 @@ import java.util.Date;
  *
  */
 public class SysAppMessage {
+    
     private Integer id;
 
     private Date sendTime;
 
-    private String content;
+    private String contentJson;
 
     private Integer phoneType;
 
@@ -27,6 +28,84 @@ public class SysAppMessage {
     private Integer modifyUserId;
 
     private Date modifyTime;
+
+    private Integer msgType;
+
+    private Integer busType;
+
+    private String content;
+    
+    private String startSendTime;//开始推送时间 用于条件查询
+    
+    private String endSendTime;//借宿推送时间 用于条件查询
+    
+    private String modifyUser;//修改人
+    
+    /**
+     * modifyUser
+     *
+     * @return  the modifyUser
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getModifyUser() {
+        return modifyUser;
+    }
+
+    /**
+     * modifyUser
+     *
+     * @param   modifyUser    the modifyUser to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setModifyUser(String modifyUser) {
+        this.modifyUser = modifyUser;
+    }
+
+    /**
+     * startSendTime
+     *
+     * @return  the startSendTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getStartSendTime() {
+        return startSendTime;
+    }
+
+    /**
+     * startSendTime
+     *
+     * @param   startSendTime    the startSendTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStartSendTime(String startSendTime) {
+        this.startSendTime = startSendTime;
+    }
+
+    /**
+     * endSendTime
+     *
+     * @return  the endSendTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getEndSendTime() {
+        return endSendTime;
+    }
+
+    /**
+     * endSendTime
+     *
+     * @param   endSendTime    the endSendTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEndSendTime(String endSendTime) {
+        this.endSendTime = endSendTime;
+    }
 
     public Integer getId() {
         return id;
@@ -44,12 +123,12 @@ public class SysAppMessage {
         this.sendTime = sendTime;
     }
 
-    public String getContent() {
-        return content;
+    public String getContentJson() {
+        return contentJson;
     }
 
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
+    public void setContentJson(String contentJson) {
+        this.contentJson = contentJson == null ? null : contentJson.trim();
     }
 
     public Integer getPhoneType() {
@@ -98,5 +177,29 @@ public class SysAppMessage {
 
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
+    }
+
+    public Integer getMsgType() {
+        return msgType;
+    }
+
+    public void setMsgType(Integer msgType) {
+        this.msgType = msgType;
+    }
+
+    public Integer getBusType() {
+        return busType;
+    }
+
+    public void setBusType(Integer busType) {
+        this.busType = busType;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 }
