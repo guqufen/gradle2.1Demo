@@ -7,3 +7,27 @@ function unloginHandler(result){
 		window.location="login.html";
 	}
 }
+//日期格式化
+function formatDateUtil(datestr){
+	if(datestr){
+		var date = new Date(datestr);
+		var month="";
+		var day="";
+		var hour="";
+		var minutes="";
+		if(date.getMonth()<9){
+			month="0";
+		}
+		if(date.getDate()<10){
+			day="0";
+		}
+	    if(date.getHours()<10){
+	    	hour="0";
+	    }	
+	    if(date.getMinutes()<10){
+	    	minutes="0";
+	    }
+		return date.getFullYear()+"-"+month+(date.getMonth()+1)+"-"+day+date.getDate()+' '+hour+date.getHours()+':'+minutes+date.getMinutes()+':'+date.getSeconds();
+	}
+	return "--";
+}

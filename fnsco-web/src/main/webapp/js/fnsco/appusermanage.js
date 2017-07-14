@@ -47,26 +47,7 @@ function formatMerNames(value, row, index){
 }
 //格式化时间
 function formatReDate(value, row, index){
-	var date = new Date(value);
-	console.log(date.getMonth())
-	var month="";
-	var day="";
-	var hour="";
-	var minutes="";
-	if(date.getMonth()<9){
-		month="0";
-	}
-	if(date.getDate()<10){
-		day="0";
-	}
-    if(date.getHours()<10){
-    	hour="0";
-    }	
-    if(date.getMinutes()<10){
-    	minutes="0";
-    }
-
-	return date.getFullYear()+"-"+month+(date.getMonth()+1)+"-"+day+date.getDate()+' '+hour+date.getHours()+':'+minutes+date.getMinutes();
+	return formatDateUtil(value);
 	
 }
 //操作格式化
