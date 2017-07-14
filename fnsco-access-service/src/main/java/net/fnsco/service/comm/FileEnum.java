@@ -1,4 +1,4 @@
-package net.fnsco.core.base;
+package net.fnsco.service.comm;
 
 import java.util.Map;
 import java.util.TreeMap;

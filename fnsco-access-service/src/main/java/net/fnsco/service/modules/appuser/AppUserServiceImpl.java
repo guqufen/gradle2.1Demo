@@ -24,7 +24,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.sms.JavaSmsApi;
+import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.service.dao.master.AppUserDao;
 import net.fnsco.service.dao.master.MerchantContactDao;
@@ -161,7 +161,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             @Override
             public void run() {
                 try {
-                    String callback = JavaSmsApi.Code(mobile, code);
+                    String callback = SmsUtil.Code(mobile, code);
                     JSONObject callbackJson = (JSONObject) JSONObject.parse(callback);
                     String resultCode = callbackJson.getString("code");
                     if ("0".equals(resultCode)) {
