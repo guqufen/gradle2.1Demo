@@ -39,7 +39,7 @@ public class TimerConfig {
      * @author tangliang
      * @since  CodingExample　Ver 1.1
      */
-//    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void pushMagTimer(){
         List<SysAppMessage> datas = sysAppMsgService.queryExecuteData();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
