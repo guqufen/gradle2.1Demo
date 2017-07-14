@@ -3,7 +3,7 @@ package net.fnsco.service.domain;
 import java.util.Date;
 
 import net.fnsco.core.base.DTO;
-import net.fnsco.core.base.FileEnum;
+import net.fnsco.service.comm.FileEnum;
 
 public class MerchantFile extends DTO{
 
