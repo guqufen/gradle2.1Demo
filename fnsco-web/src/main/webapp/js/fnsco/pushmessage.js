@@ -84,7 +84,7 @@ function formatDate(date){
 //操作格式化
 function operateFormatter(value, row, index) {
     return [
-        '<a class="redact" href="javascript:void(0)" title="编辑">',
+        '<a class="redact" href="javascript:querySingle('+value+');" title="详情">',
         '<i class="glyphicon glyphicon-file"></i>',
         '</a>  ',
         '<a class="remove" href="javascript:deleteSingle('+value+')" title="删除">',
@@ -141,8 +141,6 @@ window.operateEvents = {
         });
     }
 };
-
-
 //组装请求参数
 function queryParams(params)
 {
@@ -173,30 +171,102 @@ function responseHandler(res) {
 	}
 //删除事件
 function deleteSingle(id){
-	$.ajax({
-		url:PROJECT_NAME+'/web/msg/delete',
+    layer.confirm('确定要删除么', {
+        btn: ['确认','取消'] 
+    }, function(){
+        $.ajax({
+            url:PROJECT_NAME+'/web/msg/delete',
+            type:'POST',
+            data:{'id':id},
+            success:function(data){
+              unloginHandler(data);
+              if(data.success){
+                layer.msg('删除成功');
+                queryEvent("table");
+              }else{
+                layer.msg('删除失败');
+              } 
+            },
+            error:function(e)
+            {
+              layer.msg('系统异常!'+e);
+            }
+        });
+    }, function(){
+      layer.msg('取消成功');
+      return false;
+    });	
+}
+//详情
+function querySingle(id){
+    $.ajax({
+        url:PROJECT_NAME+'/web/msg/query',
         type:'POST',
         data:{'id':id},
         success:function(data){
-          unloginHandler(data);
-          if(data.success)
-          {
-            layer.msg('删除成功');
-            queryEvent("table");
-          }else
-          {
-            layer.msg('删除失败');
-          } 
+        var data={
+                "busType": 1,
+                "content": "重大通知：地球马上爆炸了",
+                "contentJson": {
+                    "msgType": "1",
+                    "msgSubject": "测试推送主题",
+                    "sendTimeStr": "2017-07-2114: 15: 00",
+                    "imageURL": "bigdata-fns-test^2017/7/1499922978147.jpg",
+                    "msgSubtitle": "重大通知：地球马上爆炸了",
+                    "detailURL": "http: //sdsd.com",
+                    "sendTime": {
+                        "date": 21,
+                        "hours": 14,
+                        "seconds": 0,
+                        "month": 6,
+                        "timezoneOffset": -480,
+                        "year": 117,
+                        "minutes": 15,
+                        "time": 1500617700000,
+                        "day": 5
+                    }
+                },
+                "endSendTime": null,
+                "id": 514,
+                "modifyTime": 1499923007000,
+                "modifyUser": "admin",
+                "modifyUserId": 1,
+                "msgType": 1,
+                "phoneType": 2,
+                "pushType": 2,
+                "sendTime": 1500617700000,
+                "sendType": 2,
+                "startSendTime": null,
+                "status": 2
+            }
+          console.log(data);
+          $("#myModalLabel").html("推送消息详情");
+          $("#uploadify_file").hide();
+          $("#myModal input").attr("disabled",true);
+          $("#myModal select").attr("disabled",true);
+          $("#pushView").append(data.contentJson.imageURL).show();
+          $("#msgSubject").val(data.contentJson.msgSubject);
+          $("#datetimepicker3").val(data.contentJson.sendTimeStr);
+          $("#detailURL").val(data.contentJson.detailURL);
+          $("#msgSubtitle").val(data.contentJson.msgSubtitle);
+          $(".remove-icon").hide();
+          $(".sunmitBtn").hide();
+          $("#myModal").modal();
         },
         error:function(e)
         {
           layer.msg('系统异常!'+e);
         }
-	});
+    });
 }
-/*弹框下一步按钮事件*/
-$(".nextBtn").click(function(){
-    $(".nav-tabs li.active").removeClass('active').next().addClass('active');
+$("#btn_add").click(function(){
+    $("#myModalLabel").html("新增推送消息");
+    $("#myModal input").val('').attr("disabled",false);
+    $("#myModal select").attr("disabled",false);
+    $("#uploadify_file").show();
+    $("#fileQueue").html('').show();
+    $("#pushView").html('<div class="remove-icon" onclick="delPushImg()"><span class="glyphicon glyphicon-remove"></span></div>').hide();
+    $(".sunmitBtn").show();
 })
 $('#datetimepicker1').datetimepicker({
     format: 'yyyy-mm-dd',
@@ -274,9 +344,13 @@ function fileUp(){
             var filePath = obj.url;
             console.log(filePath);
             $('#imageURL').val(filePath);
-//       		$('#view').append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
-//						"<a class='previewfileImg' id='previewfileImg"+obj.id+"' href=javascript:seeImage('"+filePath+"','previewfileImg"+obj.id+"') title='预览'><img src data-original=''/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
-//						"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"','"+num+"')><span class='glyphicon glyphicon-trash'></span>删除</a>" + "</div>");
+            $('#pushView').html('<div class="remove-icon" onclick="delPushImg()"><span class="glyphicon glyphicon-remove"></span></div>');
+      		$('#pushView').append(""+fileName+"");
+
+            $("#fileQueue").hide();
+            $('#pushView').show();
+            $("#uploadify_file").hide();
+
 //       		//预览图片
 //       		var aId='previewfileImg'+obj.id;
 //    			var viewer = new Viewer(document.getElementById(aId), {
@@ -292,6 +366,19 @@ function fileUp(){
     		}
    });
 } 
+function delPushImg(){
+    layer.confirm('确定要删除该图片么？', {
+              btn: ['确认','取消'] //按钮
+            }, function(){
+                $("#pushView").hide();
+                $("#uploadify_file").show();
+                $("#fileQueue").html('').show();
+                //需要添加删除事件
+                layer.msg("删除成功");
+            },function(){
+                layer.msg("取消成功");
+            })
+}
 //提交按钮事件
 $('.sunmitBtn').click(function(){
 	$.ajax({
