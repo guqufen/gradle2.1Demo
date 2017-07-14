@@ -200,58 +200,27 @@ function deleteSingle(id){
 //详情
 function querySingle(id){
     $.ajax({
-        url:PROJECT_NAME+'/web/msg/query',
+        url:PROJECT_NAME+'/web/msg/querySingle',
         type:'POST',
         data:{'id':id},
         success:function(data){
-        var data={
-                "busType": 1,
-                "content": "重大通知：地球马上爆炸了",
-                "contentJson": {
-                    "msgType": "1",
-                    "msgSubject": "测试推送主题",
-                    "sendTimeStr": "2017-07-2114: 15: 00",
-                    "imageURL": "bigdata-fns-test^2017/7/1499922978147.jpg",
-                    "msgSubtitle": "重大通知：地球马上爆炸了",
-                    "detailURL": "http: //sdsd.com",
-                    "sendTime": {
-                        "date": 21,
-                        "hours": 14,
-                        "seconds": 0,
-                        "month": 6,
-                        "timezoneOffset": -480,
-                        "year": 117,
-                        "minutes": 15,
-                        "time": 1500617700000,
-                        "day": 5
-                    }
-                },
-                "endSendTime": null,
-                "id": 514,
-                "modifyTime": 1499923007000,
-                "modifyUser": "admin",
-                "modifyUserId": 1,
-                "msgType": 1,
-                "phoneType": 2,
-                "pushType": 2,
-                "sendTime": 1500617700000,
-                "sendType": 2,
-                "startSendTime": null,
-                "status": 2
-            }
-          console.log(data);
-          $("#myModalLabel").html("推送消息详情");
-          $("#uploadify_file").hide();
-          $("#myModal input").attr("disabled",true);
-          $("#myModal select").attr("disabled",true);
-          $("#pushView").append(data.contentJson.imageURL).show();
-          $("#msgSubject").val(data.contentJson.msgSubject);
-          $("#datetimepicker3").val(data.contentJson.sendTimeStr);
-          $("#detailURL").val(data.contentJson.detailURL);
-          $("#msgSubtitle").val(data.contentJson.msgSubtitle);
-          $(".remove-icon").hide();
-          $(".sunmitBtn").hide();
-          $("#myModal").modal();
+        	if(data.success){
+        		$("#myModalLabel").html("推送消息详情");
+                $("#uploadify_file").hide();
+                $("#myModal input").attr("disabled",true);
+                $("#myModal select").attr("disabled",true);
+                $("#pushView").append(data.data.imageURL).show();
+                $("#msgSubject").val(data.data.msgSubject);
+                $("#datetimepicker3").val(data.data.sendTimeStr);
+                $("#detailURL").val(data.data.detailURL);
+                $("#msgSubtitle").val(data.data.msgSubtitle);
+                $(".remove-icon").hide();
+                $(".sunmitBtn").hide();
+                $("#myModal").modal();
+        	}else{
+        		layer.msg('系统异常!'+e);
+        	}
+          
         },
         error:function(e)
         {
@@ -342,7 +311,6 @@ function fileUp(){
     	   var obj = eval('(' + response + ')');
 		    var fileName = file.name.replace(',','');
             var filePath = obj.url;
-            console.log(filePath);
             $('#imageURL').val(filePath);
             $('#pushView').html('<div class="remove-icon" onclick="delPushImg()"><span class="glyphicon glyphicon-remove"></span></div>');
       		$('#pushView').append(""+fileName+"");
@@ -370,11 +338,23 @@ function delPushImg(){
     layer.confirm('确定要删除该图片么？', {
               btn: ['确认','取消'] //按钮
             }, function(){
-                $("#pushView").hide();
-                $("#uploadify_file").show();
-                $("#fileQueue").html('').show();
-                //需要添加删除事件
-                layer.msg("删除成功");
+            	var imgUrl = $("#imageURL").val();
+            	if(imgUrl){
+            		$.ajax({
+                		url:PROJECT_NAME+'/web/fileInfo/deleteOssFile',
+                		type:'POST',
+                		data:{'url':imgUrl},
+                		success:function(){
+                			unloginHandler(data);
+                			$('#imageURL').val('');
+                			 $("#pushView").hide();
+                             $("#uploadify_file").show();
+                             $("#fileQueue").html('').show();
+                             //需要添加删除事件
+                             layer.msg("删除成功");
+                		}
+                	});
+            	}
             },function(){
                 layer.msg("取消成功");
             })

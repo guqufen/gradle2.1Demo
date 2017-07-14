@@ -26,6 +26,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.JsonPluginsUtil;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
 import net.fnsco.service.dao.master.AppUserDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
@@ -298,8 +299,20 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         resultPage.setCurrentPage(currentPageNum);
         if(result.size() >= currentPageNum*perPageSize){
             result = result.subList((currentPageNum-1)*perPageSize, currentPageNum*perPageSize);
+        }else if(result.size() < currentPageNum*perPageSize && currentPageNum != 1){
+            result.clear();
         }
-        resultPage.setList(result);
+        List<AppPushMsgInfoDTO> resultDate = Lists.newArrayList();
+        //重新获取图片路径
+        for (AppPushMsgInfoDTO appPushMsgInfoDTO : result) {
+            if(StringUtils.isNotEmpty(appPushMsgInfoDTO.getImageURL())){
+                String path = appPushMsgInfoDTO.getImageURL().substring(appPushMsgInfoDTO.getImageURL().indexOf("^")+1);
+                String imageURL =  OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
+                appPushMsgInfoDTO.setImageURL(imageURL);
+            }
+            resultDate.add(appPushMsgInfoDTO);
+        }
+        resultPage.setList(resultDate);
         
         /**
          * 再次记录读取时间
