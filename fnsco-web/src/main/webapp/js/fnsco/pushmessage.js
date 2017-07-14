@@ -209,7 +209,7 @@ function querySingle(id){
                 $("#uploadify_file").hide();
                 $("#myModal input").attr("disabled",true);
                 $("#myModal select").attr("disabled",true);
-                $("#pushView").append(data.data.imageURL).show();
+                $("#pushView").append('<img src='+data.data.imageURL+'>').show();
                 $("#msgSubject").val(data.data.msgSubject);
                 $("#datetimepicker3").val(data.data.sendTimeStr);
                 $("#detailURL").val(data.data.detailURL);
