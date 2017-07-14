@@ -282,6 +282,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         SysAppMessage condition = new SysAppMessage();
         SysMsgReceiver condition1 = new SysMsgReceiver();
         condition.setPhoneType(phoneType);
+        condition.setStatus(1);
         condition1.setAppUserId(userId);
         List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);
         List<SysMsgReceiver> datas1 =  sysMsgReceiverDao.queryListByCondition(condition1);
@@ -442,6 +443,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         }
         
         condition.setPhoneType(phoneType);
+        condition.setStatus(1);
         condition1.setAppUserId(userId);
         List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);
         List<SysMsgReceiver> datas1 =  sysMsgReceiverDao.queryListByCondition(condition1);
