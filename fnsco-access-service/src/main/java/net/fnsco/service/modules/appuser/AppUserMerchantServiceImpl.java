@@ -33,7 +33,7 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
     private MerchantUserRelDao merchantUserRelDao;
     @Override
     public ResultDTO queryBindPeople(BandListDTO bandListDTO) {
-        Integer appUserId = bandListDTO.getAppUserId();
+        Integer appUserId = bandListDTO.getUserId();
         //返回多个店铺的店主
         List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId, "1");
         if (CollectionUtils.isEmpty(merchantList)) {
@@ -41,16 +41,17 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
         }
         List<AppUserMerchantDTO> datas = Lists.newArrayList();
         for(AppUserMerchant object : merchantList){
-            //根据innerCode查询出店铺名称
+            //根据innerCode查询出店铺名称\
             MerchantCore res = merchantCoreDao.selectByInnerCode(object.getInnerCode());
             AppUserMerchantDTO dto=new AppUserMerchantDTO();
-            dto.setMerName(res.getMerName());
+            dto.setInnerCode(object.getInnerCode());
+            //dto.setMerName(res.getMerName());
             //查询出店铺的店员集合
             List<AppUserMerchant> list = appUserMerchantDao.selectByInnerCode(object.getInnerCode(), "2");
             List<BandListDTO> listDto=new ArrayList<BandListDTO>();
             for(AppUserMerchant li:list){
                 BandListDTO bandList=new BandListDTO();
-                bandList.setAppUserId(li.getAppUserId());
+                bandList.setUserId((li.getAppUserId()));
                 //根据appUserId查询到手机号
                 bandList.setMobile(appUserDao.selectAppUserById(li.getAppUserId()).getMobile());
                 listDto.add(bandList);
@@ -64,7 +65,7 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
 
     @Override
     public ResultDTO deletedBindPeople(BandDto bandDto) {
-        Integer appUserId = bandDto.getAppUserId();
+        Integer appUserId = bandDto.getUserId();
         if(merchantUserRelDao.deleteByPrimaryKey(bandDto.getInnerCode(),appUserId)==0){
             return ResultDTO.fail("删除绑定失败");
         };

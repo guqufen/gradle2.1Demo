@@ -2,6 +2,7 @@ package net.fnsco.api.appuser;
 
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
+import net.fnsco.api.dto.BandDto;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.AppUser;
@@ -34,5 +35,6 @@ public interface AppUserService {
 	 */
 	ResultPageDTO<AppUserManageDTO> queryPageList(AppUserManageDTO record,int currentPageNum, int perPageSize);
 	
+	ResultDTO<String> modifyRole(BandDto bandDto);
 
 }

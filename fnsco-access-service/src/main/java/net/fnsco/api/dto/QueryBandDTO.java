@@ -1,23 +1,25 @@
 package net.fnsco.api.dto;
 
+import java.util.List;
+
 import net.fnsco.core.base.DTO;
 
-public class BandDto extends DTO{
-    private String  mobile;
-    private Integer userId;
+public class QueryBandDTO extends DTO{
+    private String roleId;
     private String innerCode;
+    private Integer id;
     private String merName;
-    public Integer getUserId() {
-        return userId;
-    }
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
     public String getMerName() {
         return merName;
     }
     public void setMerName(String merName) {
         this.merName = merName;
+    }
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
     }
     public String getInnerCode() {
         return innerCode;
@@ -25,11 +27,12 @@ public class BandDto extends DTO{
     public void setInnerCode(String innerCode) {
         this.innerCode = innerCode;
     }
-    public String getMobile() {
-        return mobile;
+    public String getRoleId() {
+        return roleId;
     }
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 
+    
 }

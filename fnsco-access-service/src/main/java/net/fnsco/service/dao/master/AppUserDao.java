@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.api.dto.AppUserManageDTO;
+import net.fnsco.api.dto.AppUserMerchantDTO;
+import net.fnsco.api.dto.QueryBandDTO;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.service.domain.AppUser;
 
@@ -49,4 +51,5 @@ public interface AppUserDao {
      * @return
      */
     int queryTotalByCondition(AppUserManageDTO record);
+    List<QueryBandDTO> selectBandPeopleByMobile(@Param("mobile")String mobile);
 }

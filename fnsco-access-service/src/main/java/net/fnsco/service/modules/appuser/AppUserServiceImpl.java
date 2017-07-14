@@ -19,6 +19,9 @@ import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
+import net.fnsco.api.dto.AppUserMerchantDTO;
+import net.fnsco.api.dto.BandDto;
+import net.fnsco.api.dto.QueryBandDTO;
 import net.fnsco.api.dto.SmsCodeDTO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
@@ -27,10 +30,12 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.service.dao.master.AppUserDao;
+import net.fnsco.service.dao.master.AppUserMerchantDao;
 import net.fnsco.service.dao.master.MerchantContactDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MerchantUserRelDao;
 import net.fnsco.service.domain.AppUser;
+import net.fnsco.service.domain.AppUserMerchant;
 import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.MerchantUserRel;
@@ -52,7 +57,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private MerchantUserRelDao             merchantUserRelDao;
     @Autowired
     private MerchantContactDao             merchantContactDao;
-
+    @Autowired
+    private AppUserMerchantDao             appUserMerchantDao;
     //注册
     @Override
     @Transactional
@@ -295,6 +301,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Override
     public ResultDTO loginByMoblie(AppUserDTO appUserDTO) {
         Map<String, Integer> map = new HashMap<>();
+        int Shopkeeper=2;
         //非空判断
         if (Strings.isNullOrEmpty(appUserDTO.getMobile())) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
@@ -329,6 +336,14 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             merchantNums = rel.size();
         }
         map.put("merchantNums", merchantNums);
+        //登录判断是否是店主
+        Integer appUserId = appUserDTO.getUserId();
+        //返回多个店铺的店主
+        List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId, "1");
+        if (!CollectionUtils.isEmpty(merchantList)) {
+            Shopkeeper=1;
+        }
+        map.put("Shopkeeper", Shopkeeper);
         return ResultDTO.success(map);
     }
     
@@ -364,4 +379,24 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         return result;
     }
 
+    @Override
+    public ResultDTO modifyRole(BandDto bandDto) {
+        List<QueryBandDTO> list=mappUserDao.selectBandPeopleByMobile(bandDto.getMobile());
+        for(QueryBandDTO li:list){
+            MerchantCore core=merchantCoreDao.selectByInnerCode(li.getInnerCode());
+            li.setMerName(core.getMerName());
+        }
+         return ResultDTO.success(list);
+    }
+
 }
+
+
+
+
+
+
+
+
+
+

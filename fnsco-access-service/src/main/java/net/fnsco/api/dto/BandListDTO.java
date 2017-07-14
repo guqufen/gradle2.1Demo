@@ -1,18 +1,21 @@
 package net.fnsco.api.dto;
 
-public class BandListDTO {
+import net.fnsco.core.base.DTO;
+
+public class BandListDTO extends DTO{
     private String  mobile;
-    private Integer appUserId;
+    private Integer userId;
+    public Integer getUserId() {
+        return userId;
+    }
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
     public String getMobile() {
         return mobile;
     }
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
-    public Integer getAppUserId() {
-        return appUserId;
-    }
-    public void setAppUserId(Integer appUserId) {
-        this.appUserId = appUserId;
-    }
+
 }

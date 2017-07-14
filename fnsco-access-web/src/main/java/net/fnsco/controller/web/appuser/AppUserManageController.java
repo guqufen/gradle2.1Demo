@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.dto.AppUserManageDTO;
+import net.fnsco.api.dto.BandDto;
 import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 /**
@@ -40,5 +42,13 @@ public class AppUserManageController extends BaseController {
     public ResultPageDTO<AppUserManageDTO> appUserIndex(AppUserManageDTO sysmsg,Integer currentPageNum,Integer pageSize){
         return AppUserService.queryPageList(sysmsg, currentPageNum, pageSize);
     }
+    
+    @RequestMapping("/modifyRoles")
+    @ResponseBody
+    public ResultDTO modifyRole(BandDto bandDto){
+        return AppUserService.modifyRole(bandDto);
+    }
+    
+    
     
 }
