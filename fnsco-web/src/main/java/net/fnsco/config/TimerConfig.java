@@ -47,7 +47,9 @@ public class TimerConfig {
         for (SysAppMessage sysAppMessage : datas) {
             sendTime = sdf.format(sysAppMessage.getSendTime());//定义传递给友盟的时间
             try {
-                if(sysAppMessage.getPhoneType() == 1){
+                if(sysAppMessage.getPhoneType() == 2){
+                    
+                    
                     int iosStatus = appPushService.sendIOSBroadcast(sysAppMessage.getContent(), sendTime);
                     if (iosStatus == 200) {
                         logger.warn("ios信息推送成功");
@@ -56,7 +58,7 @@ public class TimerConfig {
                         logger.warn("ios信息推送失败");
                         sysAppMessage.setStatus(0);
                     }
-                }else if(sysAppMessage.getPhoneType() == 2){
+                }else if(sysAppMessage.getPhoneType() == 1){
                     int androidStatus = appPushService.sendAndroidBroadcast(sysAppMessage.getContent(), sendTime);
                     if (androidStatus == 200) {
                         logger.warn("安卓信息推送成功");
