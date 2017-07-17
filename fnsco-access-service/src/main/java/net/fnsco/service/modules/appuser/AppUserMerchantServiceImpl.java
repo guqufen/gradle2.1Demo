@@ -34,6 +34,7 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
     @Override
     public ResultDTO queryBindPeople(BandListDTO bandListDTO) {
         Integer appUserId = bandListDTO.getUserId();
+        
         //返回多个店铺的店主
         List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId, "1");
         if (CollectionUtils.isEmpty(merchantList)) {

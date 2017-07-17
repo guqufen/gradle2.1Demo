@@ -8,6 +8,13 @@ public class QueryBandDTO extends DTO{
     private String roleId;
     private String innerCode;
     private Integer id;
+    private Integer appUserId;
+    public Integer getAppUserId() {
+        return appUserId;
+    }
+    public void setAppUserId(Integer appUserId) {
+        this.appUserId = appUserId;
+    }
     private String merName;
     public String getMerName() {
         return merName;

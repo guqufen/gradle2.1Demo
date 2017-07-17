@@ -17,6 +17,7 @@ import com.google.common.base.Strings;
 
 import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.constant.ApiConstant;
+import net.fnsco.api.dto.AppPeopleDTO;
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.api.dto.AppUserMerchantDTO;
@@ -59,6 +60,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private MerchantContactDao             merchantContactDao;
     @Autowired
     private AppUserMerchantDao             appUserMerchantDao;
+
     //注册
     @Override
     @Transactional
@@ -79,8 +81,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return res;
         }
         //根据手机号查询用户实体是否存在
-        AppUser user = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
-        if (user != null) {   
+        AppUser user = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+        if (user != null) {
             return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
         }
         AppUser appUser = new AppUser();
@@ -149,13 +151,13 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         String deviceId = appUserDTO.getDeviceId();
         final String mobile = appUserDTO.getMobile();
         //注册需要判断
-        if(appUserDTO.getOprationType()==0){
-            AppUser user = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
-            if (user != null) {   
+        if (appUserDTO.getOprationType() == 0) {
+            AppUser user = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+            if (user != null) {
                 return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
             }
         }
-        
+
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
         SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
@@ -294,14 +296,14 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
         }
         return ResultDTO.success();
-    
+
     }
 
     //根据手机号码和密码登录
     @Override
     public ResultDTO loginByMoblie(AppUserDTO appUserDTO) {
         Map<String, Integer> map = new HashMap<>();
-        int Shopkeeper=2;
+        int Shopkeeper = 2;
         //非空判断
         if (Strings.isNullOrEmpty(appUserDTO.getMobile())) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
@@ -310,8 +312,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         //根据手机号查询用户实体是否存在
-        AppUser appUser = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(),1);
-        if (appUser == null) {   
+        AppUser appUser = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+        if (appUser == null) {
             return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
         }
         //密码错误
@@ -341,12 +343,11 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         //返回多个店铺的店主
         List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId, "1");
         if (!CollectionUtils.isEmpty(merchantList)) {
-            Shopkeeper=1;
+            Shopkeeper = 1;
         }
         map.put("Shopkeeper", Shopkeeper);
         return ResultDTO.success(map);
     }
-    
 
     //退出登录
     @Override
@@ -361,6 +362,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         return ResultDTO.success();
     }
+
     /**
      * web端分页查询
      * (non-Javadoc)
@@ -381,22 +383,38 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
     @Override
     public ResultDTO modifyRole(BandDto bandDto) {
-        List<QueryBandDTO> list=mappUserDao.selectBandPeopleByMobile(bandDto.getMobile());
-        for(QueryBandDTO li:list){
-            MerchantCore core=merchantCoreDao.selectByInnerCode(li.getInnerCode());
-            li.setMerName(core.getMerName());
+        List<QueryBandDTO> list = mappUserDao.selectBandPeopleByMobile(bandDto.getMobile());
+        for (QueryBandDTO li : list) {
+            MerchantCore core = merchantCoreDao.selectByInnerCode(li.getInnerCode());
+            if (core.getMerName() != null) {
+                li.setMerName(core.getMerName());
+            }
+
         }
-         return ResultDTO.success(list);
+        return ResultDTO.success(list);
+    }
+
+    @Override
+    public ResultDTO<String> changeRole(List<AppUserMerchantDTO> params) {
+           for(AppUserMerchantDTO li :params){
+               //成为店主
+               if(li.getRoleId().equals("1")){
+                   //找到这个店铺为1的更新为0
+                   AppUserMerchant appUserMerchant=appUserMerchantDao.selectByCode(li.getInnerCode(),"1");
+                   if(appUserMerchant!=null){
+                       AppUserMerchantDTO dto=new AppUserMerchantDTO();
+                       dto.setId(appUserMerchant.getId());
+                       dto.setModefyTime(new Date());
+                       dto.setRoleId("2");
+                       appUserMerchantDao.updateByPrimaryKeySelective(dto);
+                   }
+               }
+               int num=appUserMerchantDao.updateByPrimaryKeySelective(li);
+               if(num==0){
+                   return ResultDTO.fail("更新失败");
+               }
+           }
+           return ResultDTO.success();
     }
 
 }
-
-
-
-
-
-
-
-
-
-

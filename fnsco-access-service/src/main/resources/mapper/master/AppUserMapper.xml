@@ -36,6 +36,7 @@
      <result column="id" property="id" jdbcType="INTEGER" />
      <result column="role_id" property="roleId" jdbcType="VARCHAR" />
      <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+     <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
   </resultMap>
 	<sql id="Base_Column_List">
 		id, user_name, mobile, password, real_name, device_id, ges_state,
@@ -249,7 +250,7 @@
 	  <!-- 根据手机号查询店铺绑定情况 -->
   <select id="selectBandPeopleByMobile" parameterType="java.lang.String" resultMap="RELResultMap">
   	SELECT
-			REL.role_id,REL.inner_code,User.id
+			REL.role_id,REL.inner_code,REL.app_user_id,REL.id
 		FROM
 			u_app_user_merchant REL
 		RIGHT JOIN (
