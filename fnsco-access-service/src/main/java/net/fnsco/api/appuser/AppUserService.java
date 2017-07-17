@@ -2,8 +2,13 @@ package net.fnsco.api.appuser;
 
 import java.util.List;
 
+<<<<<<< HEAD
+import net.fnsco.api.dto.AppPeopleDTO;
+=======
+>>>>>>> 1fd413e3dd43c7c5f52a150fd7f6b1093ebe212f
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
+import net.fnsco.api.dto.AppUserMerchantDTO;
 import net.fnsco.api.dto.BandDto;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -39,6 +44,8 @@ public interface AppUserService {
 	
 	ResultDTO<String> modifyRole(BandDto bandDto);
 	
+    ResultDTO<String> changeRole(List<AppUserMerchantDTO> params);
+
 	/**
 	 * queryAllPushUser:(这里用一句话描述这个方法的作用)查询所有需要推送消息的用户
 	 *

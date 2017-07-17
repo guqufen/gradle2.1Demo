@@ -1,18 +1,14 @@
 package net.fnsco.api.dto;
 
+import java.util.Date;
+import java.util.List;
+
 import net.fnsco.core.base.DTO;
-//传入的参数
-public class BandDto extends DTO{
-    private String  mobile;
-    private Integer userId;
+
+public class AppUserMerchantOutDTO extends DTO{
     private String innerCode;
     private String merName;
-    public Integer getUserId() {
-        return userId;
-    }
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+    private List<BandListDTO> bandListDTO;
     public String getMerName() {
         return merName;
     }
@@ -25,11 +21,11 @@ public class BandDto extends DTO{
     public void setInnerCode(String innerCode) {
         this.innerCode = innerCode;
     }
-    public String getMobile() {
-        return mobile;
+    public List<BandListDTO> getBandListDTO() {
+        return bandListDTO;
     }
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setBandListDTO(List<BandListDTO> bandListDTO) {
+        this.bandListDTO = bandListDTO;
     }
-
+    
 }
