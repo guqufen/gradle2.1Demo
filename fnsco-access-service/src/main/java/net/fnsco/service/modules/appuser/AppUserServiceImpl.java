@@ -337,7 +337,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         map.put("merchantNums", merchantNums);
         //登录判断是否是店主
-        Integer appUserId = appUserDTO.getUserId();
+        Integer appUserId = appUser.getId();
         //返回多个店铺的店主
         List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId, "1");
         if (!CollectionUtils.isEmpty(merchantList)) {
