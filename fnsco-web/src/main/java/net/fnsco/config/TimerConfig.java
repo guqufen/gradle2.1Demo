@@ -3,6 +3,7 @@ package net.fnsco.config;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import net.fnsco.api.appuser.AppUserService;
+import net.fnsco.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.push.AppPushService;
 import net.fnsco.api.sysappmsg.SysAppMsgService;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.JsonPluginsUtil;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.service.domain.AppUser;
 import net.fnsco.service.domain.SysAppMessage;
 
@@ -72,8 +76,16 @@ public class TimerConfig {
                               }
                             }
                     }
-//                    
+                   //  安卓                  
                 }else if(sysAppMessage.getPhoneType() == 1){
+                    if(StringUtils.isNotEmpty(sysAppMessage.getContentJson())){
+                        AppPushMsgInfoDTO appMsgInfo = JsonPluginsUtil.jsonToBean(sysAppMessage.getContentJson(), AppPushMsgInfoDTO.class);
+                        if(StringUtils.isNotEmpty(appMsgInfo.getImageURL())){
+                            appMsgInfo.setImageURL(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), appMsgInfo.getImageURL()));
+                        }
+                        sysAppMessage.setContentJson(appMsgInfo.toString());
+                    }
+                    
                     int androidStatus = appPushService.sendAndroidBroadcast(sysAppMessage.getContent(), sendTime,sysAppMessage.getContentJson());
                     if (androidStatus == 200) {
                         logger.warn("安卓信息推送成功");
