@@ -80,7 +80,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         IOSListcast listcast = new IOSListcast(appkey,appMasterSecret);
         listcast.setDeviceToken(param_ios);
         listcast.setAlert(content);//内容
-        listcast.setBadge( 0);
+        listcast.setBadge( 1);
         listcast.setSound( "default");
         if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "test")) {
             listcast.setTestMode();// 测试模式
@@ -138,8 +138,9 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         String appMasterSecret = this.env.getProperty("ios.app.master.secret");
         IOSBroadcast broadcast = new IOSBroadcast(appkey,appMasterSecret);
         broadcast.setAlert(content);
-        broadcast.setBadge( 0);
-        broadcast.setSound( "default");
+        broadcast.setBadge( 1);//角标消息数量
+        broadcast.setSound( "");
+        broadcast.setContentAvailable(1);//后台运行
         if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "test")) {
             broadcast.setTestMode();// 测试模式
         } else if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "www")) {
@@ -201,7 +202,8 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         
         unicast.setDeviceToken(iosUnicastToken);
         unicast.setAlert(content);
-        unicast.setSound( "default");
+        unicast.setSound( "");
+        unicast.setContentAvailable(1);
         if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "test")) {
             unicast.setTestMode();// 测试模式
         } else if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "www")) {

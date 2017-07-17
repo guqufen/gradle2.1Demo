@@ -17,7 +17,6 @@ import com.google.common.base.Strings;
 
 import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.constant.ApiConstant;
-import net.fnsco.api.dto.AppPeopleDTO;
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.api.dto.AppUserMerchantDTO;
@@ -40,7 +39,6 @@ import net.fnsco.service.domain.AppUserMerchant;
 import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.MerchantUserRel;
-import net.fnsco.service.domain.SysAppMessage;
 
 @Service
 public class AppUserServiceImpl extends BaseService implements AppUserService {

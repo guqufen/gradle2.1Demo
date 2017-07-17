@@ -7,22 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.alibaba.fastjson.JSONObject;
-
 import net.fnsco.api.appuser.AppUserService;
-import net.fnsco.api.dto.AppPeopleDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.api.dto.AppUserMerchantDTO;
 import net.fnsco.api.dto.BandDto;
-import net.fnsco.api.dto.ListDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.service.domain.MerchantContact;
-import net.fnsco.service.domain.MerchantTerminal;
 
 /**
  * @desc APP用户管理控制器

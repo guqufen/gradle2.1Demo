@@ -11,6 +11,13 @@ public class AppUserMerchantDTO extends DTO{
     private String innerCode;
     private Integer id;
     private Integer appUserId;
+    private String merName;
+    public String getMerName() {
+        return merName;
+    }
+    public void setMerName(String merName) {
+        this.merName = merName;
+    }
     private List<BandListDTO> bandListDTO;
     private Date modefyTime;
     public Date getModefyTime() {

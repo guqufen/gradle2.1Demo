@@ -199,10 +199,9 @@ $(".saveBtn").click(function(){
 		data :toStr,
 		success : function(data) {
 			unloginHandler(data);
-			layer.msg('更改角色成功');
 			 $("#myModal").hide();
+			 layer.msg('更改角色成功');
 			 setTimeout(function(){window.location.reload();},1000);
-			 
 		},
 	    error:function(){
 	        layer.msg('系统错误');

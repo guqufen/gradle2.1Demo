@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.appuser.AppUserMerchantService;
 import net.fnsco.api.dto.BandDto;
-import net.fnsco.api.dto.BandListDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 
@@ -23,8 +22,8 @@ public class AppUserMerchantController extends BaseController {
     @RequestMapping(value = "/queryBindPeople")
     @ApiOperation(value = "获取店铺绑定情况")
     @ResponseBody
-    public ResultDTO queryBindPeople(@RequestBody BandListDTO bandListDTO) {
-        ResultDTO result = appUserMerchantService.queryBindPeople(bandListDTO);
+    public ResultDTO queryBindPeople(@RequestBody BandDto bandDto) {
+        ResultDTO result = appUserMerchantService.queryBindPeople(bandDto);
         return result;
     }
     
