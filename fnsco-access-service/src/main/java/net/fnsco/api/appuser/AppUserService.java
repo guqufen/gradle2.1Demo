@@ -2,7 +2,10 @@ package net.fnsco.api.appuser;
 
 import java.util.List;
 
+<<<<<<< HEAD
 import net.fnsco.api.dto.AppPeopleDTO;
+=======
+>>>>>>> 1fd413e3dd43c7c5f52a150fd7f6b1093ebe212f
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.api.dto.AppUserMerchantDTO;
@@ -43,4 +46,13 @@ public interface AppUserService {
 	
     ResultDTO<String> changeRole(List<AppUserMerchantDTO> params);
 
+	/**
+	 * queryAllPushUser:(这里用一句话描述这个方法的作用)查询所有需要推送消息的用户
+	 *
+	 * @return    设定文件
+	 * @return List<AppUser>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	List<AppUser> queryAllPushUser();
 }

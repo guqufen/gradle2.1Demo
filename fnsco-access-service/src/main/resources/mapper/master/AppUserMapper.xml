@@ -262,4 +262,11 @@
 				mobile = #{mobile,jdbcType=VARCHAR}
 		) User ON REL.app_user_id = User.id
   </select>
+  <!-- 查询推送用户信息 -->
+  <select id="queryAllPushUser" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+		from m_app_user
+		where state = 1 and device_token &lt;&gt; '' and device_token is not null
+  </select>
 </mapper>

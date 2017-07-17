@@ -391,6 +391,19 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         return ResultDTO.success(list);
     }
+    
+    /**
+     * (non-Javadoc)推送消息接收者查询
+     * @see net.fnsco.api.appuser.AppUserService#queryAllPushUser()
+     * @auth tangliang
+     * @date 2017年7月17日 上午9:35:26
+     */
+    @Override
+    public List<AppUser> queryAllPushUser() {
+        
+        return mappUserDao.queryAllPushUser();
+        
+    }
 
     @Override
     public ResultDTO<String> changeRole(List<AppUserMerchantDTO> params) {
