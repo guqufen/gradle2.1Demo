@@ -49,7 +49,7 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public Integer sendAndroidBroadcast(String content,String sendTime) throws Exception;
+    public Integer sendAndroidBroadcast(String content,String sendTime,String contentJson) throws Exception;
     
     /**
      * sendIOSBroadcast:(这里用一句话描述这个方法的作用) ios--广播
@@ -75,7 +75,7 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public void sendAndroidUnicast(String adrUnicastToken,String innerTermCode,String content) throws Exception;
+    public Integer sendAndroidUnicast(String adrUnicastToken,String innerTermCode,String content) throws Exception;
     
     /**
      * sendIOSUnicast:(这里用一句话描述这个方法的作用) ios -- 单播
@@ -88,5 +88,5 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public void sendIOSUnicast(String iosUnicastToken,String innerTermCode,String content) throws Exception ;
+    public Integer sendIOSUnicast(String iosUnicastToken,String innerTermCode,String content,Integer badge) throws Exception ;
 }

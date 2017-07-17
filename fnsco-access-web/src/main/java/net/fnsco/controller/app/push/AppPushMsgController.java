@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.dto.AppPushMsgInfoDTO;
+import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.sysappmsg.SysAppMsgService;
 import net.fnsco.controller.app.jo.AppPushMsgJO;
 import net.fnsco.core.base.BaseController;
@@ -50,7 +51,7 @@ public class AppPushMsgController extends BaseController{
      */
     @RequestMapping("/newsCount")
     @ApiOperation(value = "获取推送未读消息条数")
-    public ResultDTO<String> queryNewsCount(@RequestBody AppPushMsgJO appPushMsgJO){
+    public ResultDTO<PushMsgInfoDTO> queryNewsCount(@RequestBody AppPushMsgJO appPushMsgJO){
         return sysAppMsgService.queryNewsCount(appPushMsgJO.getUserId(), appPushMsgJO.isHasRead(),appPushMsgJO.getPhoneType());
     }
 }

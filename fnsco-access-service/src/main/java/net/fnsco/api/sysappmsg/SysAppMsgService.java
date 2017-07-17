@@ -3,6 +3,7 @@ package net.fnsco.api.sysappmsg;
 import java.util.List;
 
 import net.fnsco.api.dto.AppPushMsgInfoDTO;
+import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.SysAppMessage;
@@ -109,5 +110,5 @@ public interface SysAppMsgService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ResultDTO<String> queryNewsCount(Integer userId,boolean hasRead,Integer phoneType);
+    ResultDTO<PushMsgInfoDTO> queryNewsCount(Integer userId,boolean hasRead,Integer phoneType);
 }

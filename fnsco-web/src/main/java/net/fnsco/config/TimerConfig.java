@@ -9,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import net.fnsco.api.appuser.AppUserService;
+import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.push.AppPushService;
 import net.fnsco.api.sysappmsg.SysAppMsgService;
+import net.fnsco.core.base.ResultDTO;
+import net.fnsco.service.domain.AppUser;
 import net.fnsco.service.domain.SysAppMessage;
 
 @EnableScheduling
@@ -23,6 +27,9 @@ public class TimerConfig {
     
     @Autowired
     private AppPushService appPushService;
+    
+    @Autowired
+    private AppUserService appUserService;
     /**
      * spring boot 定时任务
      */
@@ -44,22 +51,30 @@ public class TimerConfig {
         List<SysAppMessage> datas = sysAppMsgService.queryExecuteData();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String  sendTime = null;
+        List<AppUser>  users = null;
+        if(datas.size()> 0 ){
+            users = appUserService.queryAllPushUser();
+        }
         for (SysAppMessage sysAppMessage : datas) {
             sendTime = sdf.format(sysAppMessage.getSendTime());//定义传递给友盟的时间
             try {
                 if(sysAppMessage.getPhoneType() == 2){
-                    
-                    
-                    int iosStatus = appPushService.sendIOSBroadcast(sysAppMessage.getContent(), sendTime);
-                    if (iosStatus == 200) {
-                        logger.warn("ios信息推送成功");
-                        sysAppMessage.setStatus(1);
-                    } else {
-                        logger.warn("ios信息推送失败");
-                        sysAppMessage.setStatus(0);
+                    for (AppUser appUser : users) {
+                        if(appUser.getDeviceType() == 2){
+                            ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appUser.getId(), false, appUser.getDeviceType());
+                            int iosStatus = appPushService.sendIOSUnicast(appUser.getDeviceToken(), "", sysAppMessage.getContent(), countInfo.getData().getUnReadCount());
+                            if (iosStatus == 200) {
+                                  logger.warn("ios信息推送成功");
+                                  sysAppMessage.setStatus(1);
+                              } else {
+                                  logger.warn("ios信息推送失败");
+                                  sysAppMessage.setStatus(0);
+                              }
+                            }
                     }
+//                    
                 }else if(sysAppMessage.getPhoneType() == 1){
-                    int androidStatus = appPushService.sendAndroidBroadcast(sysAppMessage.getContent(), sendTime);
+                    int androidStatus = appPushService.sendAndroidBroadcast(sysAppMessage.getContent(), sendTime,sysAppMessage.getContentJson());
                     if (androidStatus == 200) {
                         logger.warn("安卓信息推送成功");
                         sysAppMessage.setStatus(1);
@@ -75,7 +90,6 @@ public class TimerConfig {
                 e.printStackTrace();
                 
             }
-            
         }
     }
 }
