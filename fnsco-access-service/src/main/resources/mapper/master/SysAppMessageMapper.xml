@@ -43,7 +43,7 @@
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from sys_msg_app
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER} AND status = 2
   </delete>
   <insert id="insert" parameterType="net.fnsco.service.domain.SysAppMessage" >
     insert into sys_msg_app (id, send_time, content_json, 
