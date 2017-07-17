@@ -42,7 +42,7 @@ import net.fnsco.service.domain.SysUser;
 
 /**
  * @desc app推送消息服务类实现
- * @author   tangliang
+ * @author   tangliang 
  * @version  0.0.1-SNAPSHOT
  * @since    Ver 1.1
  * @Date	 2017年7月12日 上午9:48:03
@@ -467,6 +467,34 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         msgInfoDTO.setUnReadCount(datas.size()+datas1.size());
         
         return ResultDTO.success(msgInfoDTO);
+        
+    }
+    
+    /**
+     * (non-Javadoc) 记录读取时间
+     * @see net.fnsco.api.sysappmsg.SysAppMsgService#readPushMsg(java.lang.Integer)
+     * @auth tangliang
+     * @date 2017年7月17日 下午2:40:00
+     */
+    @Override
+    public ResultDTO<String> readPushMsg(Integer userId) {
+        
+        if(null == userId){
+            return ResultDTO.fail(ApiConstant.E_USERID_NULL);
+        }
+        
+        MsgRead reader = msgReadDao.selectByUserId(userId);
+        Date readTime = new Date();
+        if(reader == null){
+            reader = new MsgRead();
+            reader.setAppUserId(userId);
+            reader.setReadTime(readTime);
+            msgReadDao.insertSelective(reader);
+        }else{
+            reader.setReadTime(readTime);
+            msgReadDao.updateByPrimaryKeySelective(reader);
+        }
+        return ResultDTO.success();
         
     }
 

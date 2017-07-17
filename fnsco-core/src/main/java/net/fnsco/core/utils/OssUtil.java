@@ -30,7 +30,6 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -209,6 +208,25 @@ public class OssUtil {
     public static String getFileUrl(String bucketName,String fileKey) {
         // 过期时间8小时
         Date expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 8);
+        GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, fileKey, HttpMethod.GET);
+        req.setExpiration(expiration);
+        URL signedUrl = ossClient.generatePresignedUrl(req);
+        logger.info("获取图片地址" + signedUrl.toString());
+        return signedUrl.toString().replaceAll("-internal", "");
+    }
+    /**
+     * getForeverFileUrl:(这里用一句话描述这个方法的作用)获取有效期时间为一年的URL地址
+     *
+     * @param bucketName
+     * @param fileKey
+     * @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String getForeverFileUrl(String bucketName,String fileKey){
+     // 过期时间8小时
+        Date expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 8 * 365);
         GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, fileKey, HttpMethod.GET);
         req.setExpiration(expiration);
         URL signedUrl = ossClient.generatePresignedUrl(req);

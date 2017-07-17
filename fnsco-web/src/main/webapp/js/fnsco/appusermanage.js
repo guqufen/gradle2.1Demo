@@ -129,8 +129,9 @@ function responseHandler(res) {
 
 $(function() {
 	$(document).on('click', '.redact', function() {
+		$(".tab-content").html("");
 		var mobile = $(this).parent().next().next().html();
-		console.log(date)
+		
 		var date={"mobile":mobile};
 		$.ajax({
 			url : PROJECT_NAME + '/web/appsuser/modifyRoles',
@@ -138,7 +139,8 @@ $(function() {
 			data : date,
 			success : function(data) {
 				unloginHandler(data);
-				$(".tab-content").prepend("1111");
+				console.log(data);
+				showdates(data.data);
 			}
 		});
 		$('#myModal').modal();
@@ -147,15 +149,76 @@ $(function() {
 
 
 function showdates(data){
+	
 	for(i=0;i<data.length;i++){
-		var html='<div class="shopRoleList"><div class="row"><div class="col-sm-6"><label class="control-label" for="shopName1">店铺名称：</label><input type="text" value="+data[i].merName+" i="+data[i].innerCode+" j="+data[i].id+" class="form-control" id="shopName1" name="shopName1" required="required"></div><div class="col-sm-6"> <label class="control-label" for="shopRole">角色：</label><select id="shopRole" name="shopRole" class="form-control"><option value="1">店员</option><option value="2">店主</option></select> </div></div> </div>';
+		var select="";
+		if(data[i].roleId==1){
+			select='<option value="1" selected="selected">店主</option><option value="2" >店员</option>';
+		}
+		if(data[i].roleId==2){
+			select='<option value="1">店主</option><option value="2" selected="selected">店员</option>';
+		}
+		var html='<div class="shopRoleList"><div class="row"><div class="col-sm-6"><label class="control-label" for="shopName1">店铺名称：</label><input type="text" value="'+data[i].merName+'" i="'+data[i].innerCode+'" j="'+data[i].id+'" o="'+data[i].appUserId+'" class="form-control" id="shopName1" name="shopName1" required="required"></div><div class="col-sm-6"> <label class="control-label" for="shopRole">角色：</label><select id="shopRole" name="shopRole" class="form-control">'+select+'</select> </div></div> </div>';
 		$(".tab-content").prepend(html);
-/*		data[i].id
-		data[i].innerCode
-		data[i].merName
-		data[i].roleId*/
 	}
 };
+
+
+$(".saveBtn").click(function(){
+	var arry=[];
+	var innerCode;
+	var id;
+	var roleId;
+	var appUserId;
+	$(".tab-content").find(".shopRoleList").each(function(){
+		$(this).find(".row").each(function(){
+			innerCode=$(this).find("#shopName1").attr("i");
+			console.log($(this).find("#shopName1").attr("i"));
+			id=$(this).find("#shopName1").attr("j");
+			appUserId=$(this).find("#shopName1").attr("o");
+			console.log($(this).find("#shopName1").attr("j"));
+			$(this).find("#shopRole").each(function(){
+				$(this).find("option").each(function(){
+					if($(this).is(":selected")){
+						roleId=$(this).val();
+						console.log($(this).val())
+					}
+				})
+			})
+		})
+		var date={"innerCode":innerCode,"id":id,"roleId":roleId,"appUserId":appUserId};
+		arry.push(date);
+	})
+	console.log(arry);
+	var toStr = JSON.stringify(arry);
+	$.ajax({
+		url : PROJECT_NAME + '/web/appsuser/changeRole',
+		type : 'POST',
+		dataType: "json",
+		contentType:"application/json",
+		data :toStr,
+		success : function(data) {
+			unloginHandler(data);
+			 $("#myModal").hide();
+			 layer.msg('更改角色成功');
+			 setTimeout(function(){window.location.reload();},1000);
+		},
+	    error:function(){
+	        layer.msg('系统错误');
+	    }
+	});
+	
+})
+
+
+
+
+
+
+
+
+
+
 
 
 
