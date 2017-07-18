@@ -61,6 +61,8 @@ public class ApiConstant extends CoreConstants {
     public static String E_LOGINMSG_ERROR          = "5115";                            //用户名或密码不正确
     public static String E_LOGINOUT_ERROR          = "5116";                         //退出登录失败
     public static String E_PHONETYPE_ERROR         = "5117";                          //手机类型错误
+    public static String E_NOSHOPKEEPER_ERROR      = "5118";                          // 该用户不是店主
+    public static String E_DELETEBAND_ERROR        = "5119";                          // 删除绑定失败
     
     public static String       WEB_LOGIN_NULL = "5900";//用户名或密码为空
     public static String       WEB_LOGIN_FAIL ="5901";//用户名或密码错误
@@ -108,6 +110,8 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_LOGINMSG_ERROR, "用户名或密码不正确");
         ERROR_MESSGE_MAP.put(E_LOGINOUT_ERROR, "退出登录失败");
         ERROR_MESSGE_MAP.put(E_PHONETYPE_ERROR, "手机类型错误");
+        ERROR_MESSGE_MAP.put(E_NOSHOPKEEPER_ERROR, "该用户不是店主");  
+        ERROR_MESSGE_MAP.put(E_DELETEBAND_ERROR, "删除绑定失败");
     }
 
 }

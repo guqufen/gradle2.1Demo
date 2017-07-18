@@ -370,11 +370,13 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
      */
     @Override
     public ResultPageDTO<AppUserManageDTO> queryPageList(AppUserManageDTO record, int currentPageNum, int perPageSize) {
-        //分页器实例化
+        //分页器实例化     实例化当前页和每条显示的记录数 还有传过来的参数  手机号和店铺名等条件称封装到一个实体里面
         PageDTO<AppUserManageDTO> params = new PageDTO<AppUserManageDTO>(currentPageNum, perPageSize, record);
-        //
+        //调用Dao方法时可以使用上面封装的实体         AppUserManageDTO即使用户返回给用户的实体 也用来传递参数
         List<AppUserManageDTO> data = mappUserDao.queryPageList(params);
+        //返回根据条件查询的所有记录条数
         int totalNum = mappUserDao.queryTotalByCondition(record);
+        //返回给页面总条数和每页查询的数据
         ResultPageDTO<AppUserManageDTO> result = new ResultPageDTO<AppUserManageDTO>(totalNum, data);
         return result;
     }
@@ -406,6 +408,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     }
 
     @Override
+    @Transactional
     public ResultDTO<String> changeRole(List<AppUserMerchantDTO> params) {
            for(AppUserMerchantDTO li :params){
                //成为店主
