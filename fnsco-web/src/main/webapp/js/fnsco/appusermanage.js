@@ -12,8 +12,8 @@ $('#table').bootstrapTable({
 	sortable : true, // 是否启用排序
 	sortOrder : "asc", // 排序方式
 	pageNumber : 1, // 初始化加载第一页，默认第一页
-	pageSize : 15, // 每页的记录行数（*）
-	pageList : [ 15, 20, 50, 100 ], // 可供选择的每页的行数（*）
+	pageSize : 5, // 每页的记录行数（*）
+	pageList : [ 5, 10, 15, 20 ], // 可供选择的每页的行数（*）
 	queryParams : queryParams,
 	responseHandler : responseHandler,// 处理服务器返回数据
 	columns : [ {
@@ -140,10 +140,16 @@ $(function() {
 			success : function(data) {
 				unloginHandler(data);
 				console.log(data);
-				showdates(data.data);
+				if(data.data==null){
+					layer.msg('该用户没有绑定任何商户');
+				}else{
+					showdates(data.data);
+					$('#myModal').modal();
+				}
+				
 			}
 		});
-		$('#myModal').modal();
+		
 	})
 })
 

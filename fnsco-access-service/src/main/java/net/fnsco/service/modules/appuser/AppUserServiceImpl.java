@@ -370,11 +370,13 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
      */
     @Override
     public ResultPageDTO<AppUserManageDTO> queryPageList(AppUserManageDTO record, int currentPageNum, int perPageSize) {
-        //分页器实例化
+        //分页器实例化     实例化当前页和每条显示的记录数 还有传过来的参数  手机号和店铺名等条件称封装到一个实体里面
         PageDTO<AppUserManageDTO> params = new PageDTO<AppUserManageDTO>(currentPageNum, perPageSize, record);
-        //
+        //调用Dao方法时可以使用上面封装的实体         AppUserManageDTO即使用户返回给用户的实体 也用来传递参数
         List<AppUserManageDTO> data = mappUserDao.queryPageList(params);
+        //返回根据条件查询的所有记录条数
         int totalNum = mappUserDao.queryTotalByCondition(record);
+        //返回给页面总条数和每页查询的数据
         ResultPageDTO<AppUserManageDTO> result = new ResultPageDTO<AppUserManageDTO>(totalNum, data);
         return result;
     }
@@ -382,16 +384,17 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Override
     public ResultDTO modifyRole(BandDto bandDto) {
         List<QueryBandDTO> list = mappUserDao.selectBandPeopleByMobile(bandDto.getMobile());
+        //一条商铺都没有绑定
         for (QueryBandDTO li : list) {
-            MerchantCore core = merchantCoreDao.selectByInnerCode(li.getInnerCode());
-            if (core.getMerName() != null) {
-                li.setMerName(core.getMerName());
+            if(li==null){
+                return ResultDTO.fail(ApiConstant.E_NOBAND_ERROR);
             }
-
+            MerchantCore core = merchantCoreDao.selectByInnerCode(li.getInnerCode());
+            li.setMerName(core.getMerName());
         }
         return ResultDTO.success(list);
     }
-    
+
     /**
      * (non-Javadoc)推送消息接收者查询
      * @see net.fnsco.api.appuser.AppUserService#queryAllPushUser()
@@ -400,32 +403,33 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
      */
     @Override
     public List<AppUser> queryAllPushUser() {
-        
+
         return mappUserDao.queryAllPushUser();
-        
+
     }
 
     @Override
+    @Transactional
     public ResultDTO<String> changeRole(List<AppUserMerchantDTO> params) {
-           for(AppUserMerchantDTO li :params){
-               //成为店主
-               if(li.getRoleId().equals("1")){
-                   //找到这个店铺为1的更新为0
-                   AppUserMerchant appUserMerchant=appUserMerchantDao.selectByCode(li.getInnerCode(),"1");
-                   if(appUserMerchant!=null){
-                       AppUserMerchantDTO dto=new AppUserMerchantDTO();
-                       dto.setId(appUserMerchant.getId());
-                       dto.setModefyTime(new Date());
-                       dto.setRoleId("2");
-                       appUserMerchantDao.updateByPrimaryKeySelective(dto);
-                   }
-               }
-               int num=appUserMerchantDao.updateByPrimaryKeySelective(li);
-               if(num==0){
-                   return ResultDTO.fail("更新失败");
-               }
-           }
-           return ResultDTO.success();
+        for (AppUserMerchantDTO li : params) {
+            //成为店主
+            if (li.getRoleId().equals("1")) {
+                //找到这个店铺为1的更新为0
+                AppUserMerchant appUserMerchant = appUserMerchantDao.selectByCode(li.getInnerCode(), "1");
+                if (appUserMerchant != null) {
+                    AppUserMerchantDTO dto = new AppUserMerchantDTO();
+                    dto.setId(appUserMerchant.getId());
+                    dto.setModefyTime(new Date());
+                    dto.setRoleId("2");
+                    appUserMerchantDao.updateByPrimaryKeySelective(dto);
+                }
+            }
+            int num = appUserMerchantDao.updateByPrimaryKeySelective(li);
+            if (num == 0) {
+                return ResultDTO.fail("更新失败");
+            }
+        }
+        return ResultDTO.success();
     }
 
 }

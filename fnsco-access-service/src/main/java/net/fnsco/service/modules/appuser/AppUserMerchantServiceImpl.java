@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.Lists;
 
 import net.fnsco.api.appuser.AppUserMerchantService;
+import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.AppUserMerchantOutDTO;
 import net.fnsco.api.dto.BandDto;
 import net.fnsco.api.dto.BandListDTO;
@@ -37,7 +39,7 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
         //返回多个店铺的店主       AppUserMerchantOutDTO
         List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId, "1");
         if (CollectionUtils.isEmpty(merchantList)) {
-            return ResultDTO.fail("该用户不是店主");
+            return ResultDTO.fail(ApiConstant.E_NOSHOPKEEPER_ERROR);
         }
         List<AppUserMerchantOutDTO> datas = Lists.newArrayList();
         for(AppUserMerchant object : merchantList){
@@ -67,15 +69,16 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
     }
 
     @Override
+    @Transactional
     public ResultDTO deletedBindPeople(BandDto bandDto) {
         Integer appUserId = bandDto.getUserId();
         if(merchantUserRelDao.deleteByPrimaryKey(bandDto.getInnerCode(),appUserId)==0){
-            return ResultDTO.fail("删除绑定失败");
+            return ResultDTO.fail(ApiConstant.E_DELETEBAND_ERROR);
         };
         if(appUserMerchantDao.deleteByPrimaryKey(bandDto.getInnerCode(),appUserId)==0){
-            return ResultDTO.fail("删除绑定失败");
+            return ResultDTO.fail(ApiConstant.E_DELETEBAND_ERROR);
         };
-        return ResultDTO.success("删除绑定成功");
+        return ResultDTO.success();
     }
 
 }
