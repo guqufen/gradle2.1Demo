@@ -483,11 +483,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
      * @date 2017年7月17日 下午2:40:00
      */
     @Override
-    public ResultDTO<String> readPushMsg(Integer userId) {
-        
-        if(null == userId){
-            return ResultDTO.fail(ApiConstant.E_USERID_NULL);
-        }
+    public void readPushMsg(Integer userId) {
         
         MsgRead reader = msgReadDao.selectByUserId(userId);
         Date readTime = new Date();
@@ -500,7 +496,6 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             reader.setReadTime(readTime);
             msgReadDao.updateByPrimaryKeySelective(reader);
         }
-        return ResultDTO.success();
         
     }
 
