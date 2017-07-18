@@ -22,7 +22,7 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    Integer sendAndroidListcast(String param_and, String content,String sendTime) throws Exception;
+    Integer sendAndroidListcast(String param_and, String content,String sendTime,String contentJson) throws Exception;
     
     /**
      * sendIOSListcast:(这里用一句话描述这个方法的作用) ios推送--列播
@@ -88,5 +88,5 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public Integer sendIOSUnicast(String iosUnicastToken,String innerTermCode,String content,Integer badge) throws Exception ;
+    public Integer sendIOSUnicast(String iosUnicastToken,String content,Integer badge,String contentJson) throws Exception ;
 }

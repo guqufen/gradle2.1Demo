@@ -38,7 +38,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @date 2017年7月12日 上午10:49:26
      */
     @Override
-    public Integer sendAndroidListcast(String param_and, String content, String sendTime) throws Exception {
+    public Integer sendAndroidListcast(String param_and, String content, String sendTime,String contentJson) throws Exception {
 
         logger.warn("开始安卓列播推送");
         String appkey = this.env.getProperty("ad.appkey");
@@ -59,6 +59,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         listcast.setExtraField("msgType", "1");//系统通知
         listcast.setExtraField("sendTime", sendTime);//推送时间
         listcast.setExtraField("titleType", "系统消息");
+        listcast.setExtraField("contentJson", contentJson);
         listcast.setCustomField("");//标识系统通知还是交易流水通知
         int status = client.send(listcast);
         return status;
@@ -194,7 +195,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @date 2017年7月12日 上午10:49:26
      */
     @Override
-    public Integer sendIOSUnicast(String iosUnicastToken, String innerTermCode, String content,Integer badge) throws Exception {
+    public Integer sendIOSUnicast(String iosUnicastToken, String content,Integer badge,String contentJson) throws Exception {
 
         logger.warn("开始IOS单播推送");
         String appkey = this.env.getProperty("ios.appkey");
@@ -214,7 +215,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         // Set customized fields
         unicast.setCustomizedField("msgType", "1");//交易流水通知
         unicast.setCustomizedField("titleType", "系统通知");
-        unicast.setCustomizedField("innerTermCode", innerTermCode);
+        unicast.setCustomizedField("contentJson", contentJson);
         int status = client.send(unicast);
         return status;
     }
