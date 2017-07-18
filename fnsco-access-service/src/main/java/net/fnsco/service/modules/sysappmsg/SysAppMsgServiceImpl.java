@@ -348,11 +348,19 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         List<AppUser> users = appUserDao.selectByInnerCode(innerCode);
         String param_and ="";
         String newPhone = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date sendDate = new Date();
+        String sendTime = sdf.format(sendDate);
         Set<String> relatelds_and = new HashSet<String>();
         MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
         AppUser appUser = appUserDao.selectAppUserById(userId);
         newPhone = appUser.getMobile();
         String msgContent = "【新店员加入】新店员"+newPhone+"加入"+merchantCore.getMerName()+"店";
+        AppPushMsgInfoDTO appMsgInfo = new AppPushMsgInfoDTO();
+        appMsgInfo.setMsgSubject("新店员加入");
+        appMsgInfo.setMsgSubtitle(msgContent);
+        appMsgInfo.setSendTime(sendDate);
+        appMsgInfo.setSendTimeStr(sendTime);
         for (AppUser user : users) {
             int deviceType = user.getDeviceType();
             if(String.valueOf(deviceType)==null||"0".equals(deviceType)||user.getId() == userId){
@@ -365,7 +373,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
                 if(StringUtils.isNotBlank(user.getDeviceToken())){
                     ResultDTO<PushMsgInfoDTO> countInfo =  queryNewsCount(user.getId(), false, user.getDeviceType());
                     try {
-                        int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), "", msgContent, countInfo.getData().getUnReadCount());
+                        int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), msgContent, countInfo.getData().getUnReadCount(),appMsgInfo.toString());
                         if (iosStatus == 200) {
                             logger.info("ios信息推送成功");
                         } else {
@@ -384,13 +392,11 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         param_and = relatelds_and.toString().substring(1, param_and.length()-1);
         param_and = param_and.replaceAll(" ", "");//安卓去重后token
         
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String sendTime = sdf.format(new Date());
         /**
          * android
          */
         try {
-            int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime);
+            int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime,appMsgInfo.toString());
             if (status == 200) {
                 logger.info("安卓信息推送成功");
             } else {
