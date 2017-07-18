@@ -84,7 +84,7 @@ function formatDate(date){
 //操作格式化
 function operateFormatter(value, row, index) {
     return [
-        '<a class="redact" href="javascript:void(0)" title="编辑">',
+        '<a class="redact" href="javascript:querySingle('+value+');" title="详情">',
         '<i class="glyphicon glyphicon-file"></i>',
         '</a>  ',
         '<a class="remove" href="javascript:deleteSingle('+value+')" title="删除">',
@@ -141,8 +141,6 @@ window.operateEvents = {
         });
     }
 };
-
-
 //组装请求参数
 function queryParams(params)
 {
@@ -173,30 +171,72 @@ function responseHandler(res) {
 	}
 //删除事件
 function deleteSingle(id){
-	$.ajax({
-		url:PROJECT_NAME+'/web/msg/delete',
+    layer.confirm('确定要删除么', {
+        btn: ['确认','取消'] 
+    }, function(){
+        $.ajax({
+            url:PROJECT_NAME+'/web/msg/delete',
+            type:'POST',
+            data:{'id':id},
+            success:function(data){
+              unloginHandler(data);
+              if(data.success){
+                layer.msg('删除成功');
+                queryEvent("table");
+              }else{
+                layer.msg('消息推送已发布，删除失败！');
+              } 
+            },
+            error:function(e)
+            {
+              layer.msg('系统异常!'+e);
+            }
+        });
+    }, function(){
+      layer.msg('取消成功');
+      return false;
+    });	
+}
+//详情
+function querySingle(id){
+    $.ajax({
+        url:PROJECT_NAME+'/web/msg/querySingle',
         type:'POST',
         data:{'id':id},
         success:function(data){
-          unloginHandler(data);
-          if(data.success)
-          {
-            layer.msg('删除成功');
-            queryEvent("table");
-          }else
-          {
-            layer.msg('删除失败');
-          } 
+        	if(data.success){
+                $("#myModal").modal();
+                $("#myModalLabel").html("推送消息详情");
+                $("#uploadify_file").hide();
+                $("#myModal input").attr("disabled",true);
+                $("#myModal select").attr("disabled",true);
+                $("#pushView").html('');
+                $("#pushView").append('<img src='+data.data.imageURL+'>').show();
+                $("#msgSubject").val(data.data.msgSubject);
+                $("#datetimepicker3").val(data.data.sendTimeStr);
+                $("#detailURL").val(data.data.detailURL);
+                $("#msgSubtitle").val(data.data.msgSubtitle);
+                $(".remove-icon").hide();
+                $(".sunmitBtn").hide();
+        	}else{
+        		layer.msg('系统异常!'+e);
+        	}
+          
         },
         error:function(e)
         {
           layer.msg('系统异常!'+e);
         }
-	});
+    });
 }
-/*弹框下一步按钮事件*/
-$(".nextBtn").click(function(){
-    $(".nav-tabs li.active").removeClass('active').next().addClass('active');
+$("#btn_add").click(function(){
+    $("#myModalLabel").html("新增推送消息");
+    $("#myModal input").val('').attr("disabled",false);
+    $("#myModal select").attr("disabled",false);
+    $("#uploadify_file").show();
+    $("#fileQueue").html('').show();
+    $("#pushView").html('<div class="remove-icon" onclick="delPushImg()"><span class="glyphicon glyphicon-remove"></span></div>').hide();
+    $(".sunmitBtn").show();
 })
 $('#datetimepicker1').datetimepicker({
     format: 'yyyy-mm-dd',
@@ -243,6 +283,7 @@ $('#datetimepicker3').datetimepicker('setStartDate',time,{
 //上传文件
 fileUp();
 function fileUp(){
+    var uploadLimit=1;
    $('#uploadify_file').uploadify({
 	   //指定swf文件
        'swf': 'js/uploadify-v3.1/uploadify.swf',
@@ -255,11 +296,11 @@ function fileUp(){
      //在浏览窗口底部的文件类型下拉菜单中显示的文本
        'fileTypeDesc': 'Image Files',
        //限制大小
-       'fileSizeLimit':'2MB',
+       'fileSizeLimit':'1MB',
      //允许上传的文件后缀
        'fileTypeExts': '*.gif; *.jpg; *.png',
        //限制上传图片张数
-       'simUploadLimit' : 1,
+       'simUploadLimit' : uploadLimit,
        'multi': false,
        'auto': true,
        'multi': true,
@@ -270,30 +311,82 @@ function fileUp(){
        'onUploadSuccess':function ( file, response, data) {
     	   unloginHandler(data);
     	   var obj = eval('(' + response + ')');
-		    var fileName = file.name.replace(',','');
+    	    var fileName = file.name.replace(',','');
             var filePath = obj.url;
-            console.log(filePath);
             $('#imageURL').val(filePath);
-//       		$('#view').append("<div style='float:left;width:99%'><span class='fileImgName'>"+fileName+"</span>" +
-//						"<a class='previewfileImg' id='previewfileImg"+obj.id+"' href=javascript:seeImage('"+filePath+"','previewfileImg"+obj.id+"') title='预览'><img src data-original=''/><span class='glyphicon glyphicon-zoom-in'></span>预览</a>" +
-//						"<a title='删除' class='deletefileImg' id='deletefileImg"+obj.id+"' href=javascript:deleteImage('#deletefileImg"+obj.id+"',"+obj.id+",'"+obj.url+"','"+num+"')><span class='glyphicon glyphicon-trash'></span>删除</a>" + "</div>");
-//       		//预览图片
-//       		var aId='previewfileImg'+obj.id;
-//    			var viewer = new Viewer(document.getElementById(aId), {
-//    				url: 'data-original',
-//    				navbar: false,
-//    				toolbar: true
-//    			});
+            $('#pushView').html('<div class="remove-icon" onclick="delPushImg()"><span class="glyphicon glyphicon-remove"></span></div>');
+      		$('#pushView').append(""+fileName+"");
+            $("#fileQueue").hide();
+            $('#pushView').show();
+            $("#uploadify_file").hide();
+            // $('#uploadify_file').uploadify('settings','uploadLimit', ++uploadLimit);
+            $('#uploadify_file').uploadify('cancel', 'SWFUpload_0_0');
     	   	
         },
        'onUploadError': function(file,errorCode,errorMsg,errorString) {
-    			layer.msg(errorCode+"."+errorMsg+""+errorString);
+			layer.msg(errorCode+"."+errorMsg+""+errorString);
 
-    		}
+		}
    });
 } 
+function delPushImg(){
+    layer.confirm('确定要删除该图片么？', {
+              btn: ['确认','取消'] //按钮
+            }, function(){
+            	var imgUrl = $("#imageURL").val();
+            	if(imgUrl){
+            		$.ajax({
+                		url:PROJECT_NAME+'/web/fileInfo/deleteOssFile',
+                		type:'POST',
+                		data:{'url':imgUrl},
+                		success:function(data){
+                			unloginHandler(data);
+                			$('#imageURL').val('');
+                			 $("#pushView").hide();
+                             $("#uploadify_file").show();
+                             $("#fileQueue").html('').show();
+                             //需要添加删除事件
+                             layer.msg("删除成功");
+                		}
+                	});
+            	}
+            },function(){
+                layer.msg("取消成功");
+            })
+}
 //提交按钮事件
 $('.sunmitBtn').click(function(){
+    var reg=/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
+    var url=$("#detailURL").val();
+    var msgSubject=$("#msgSubject").val();
+    var msgSubtitle=$("#msgSubtitle").val();
+    var msgType=$("#msgType").val();
+    if(msgSubject==""){
+        layer.msg('主题不能为空');
+        return false;
+    }
+    if($("#pushView").css('display')=='none'){
+        layer.msg('图片不能为空');
+        return false;
+    }
+    if(msgType!='1'){
+        layer.msg('目前只支持“强推”,请重新选择');
+        return false;
+    }
+    if($("#datetimepicker3").val()==""){
+        layer.msg('推送日期不能为空');
+        return false;
+    }
+    if(!reg.test(url)){
+        layer.msg('请输入正确的url');
+        return false;
+    }
+    if(msgSubtitle==""){
+        layer.msg('副标题不能为空');
+        return false;
+    }
+
+    
 	$.ajax({
 		url:PROJECT_NAME+'/web/msg/doAdd',
 		type:'POST',
@@ -301,11 +394,11 @@ $('.sunmitBtn').click(function(){
 		success:function(data){
 		   unloginHandler(data);
 		   if(data.success){
-	           layer.msg('保存成功');
-	           $("#myModal").hide();
+	           layer.msg(data.message);
+	           $('#myModal').modal('hide');
 	           queryEvent("table");
 	        }else{
-	           layer.msg('保存失败');
+	           layer.msg(data.message);
 	        }
 		},
 		error:function(e){

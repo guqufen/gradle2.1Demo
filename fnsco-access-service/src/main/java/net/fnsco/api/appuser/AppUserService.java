@@ -1,7 +1,10 @@
 package net.fnsco.api.appuser;
 
+import java.util.List;
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
+import net.fnsco.api.dto.AppUserMerchantDTO;
+import net.fnsco.api.dto.BandDto;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.AppUser;
@@ -34,5 +37,16 @@ public interface AppUserService {
 	 */
 	ResultPageDTO<AppUserManageDTO> queryPageList(AppUserManageDTO record,int currentPageNum, int perPageSize);
 	
-
+	ResultDTO<String> modifyRole(BandDto bandDto);
+	
+    ResultDTO<String> changeRole(List<AppUserMerchantDTO> params);
+	/**
+	 * queryAllPushUser:(这里用一句话描述这个方法的作用)查询所有需要推送消息的用户
+	 *
+	 * @return    设定文件
+	 * @return List<AppUser>    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	List<AppUser> queryAllPushUser();
 }

@@ -3,6 +3,7 @@ package net.fnsco.api.sysappmsg;
 import java.util.List;
 
 import net.fnsco.api.dto.AppPushMsgInfoDTO;
+import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.service.domain.SysAppMessage;
@@ -109,5 +110,15 @@ public interface SysAppMsgService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ResultDTO<String> queryNewsCount(Integer userId,boolean hasRead,Integer phoneType);
+    ResultDTO<PushMsgInfoDTO> queryNewsCount(Integer userId,boolean hasRead,Integer phoneType);
+    /**
+     * readPushMsg:(这里用一句话描述这个方法的作用)记录用户读取时间
+     *
+     * @param userId
+     * @return    设定文件
+     * @return ResultDTO<String>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    ResultDTO<String>  readPushMsg(Integer userId);
 }

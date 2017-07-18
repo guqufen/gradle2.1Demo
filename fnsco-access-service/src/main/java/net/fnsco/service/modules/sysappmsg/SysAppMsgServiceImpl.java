@@ -26,6 +26,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.JsonPluginsUtil;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
 import net.fnsco.service.dao.master.AppUserDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
@@ -41,7 +42,7 @@ import net.fnsco.service.domain.SysUser;
 
 /**
  * @desc app推送消息服务类实现
- * @author   tangliang
+ * @author   tangliang 
  * @version  0.0.1-SNAPSHOT
  * @since    Ver 1.1
  * @Date	 2017年7月12日 上午9:48:03
@@ -281,6 +282,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         SysAppMessage condition = new SysAppMessage();
         SysMsgReceiver condition1 = new SysMsgReceiver();
         condition.setPhoneType(phoneType);
+        condition.setStatus(1);
         condition1.setAppUserId(userId);
         List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);
         List<SysMsgReceiver> datas1 =  sysMsgReceiverDao.queryListByCondition(condition1);
@@ -298,8 +300,20 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         resultPage.setCurrentPage(currentPageNum);
         if(result.size() >= currentPageNum*perPageSize){
             result = result.subList((currentPageNum-1)*perPageSize, currentPageNum*perPageSize);
+        }else if(result.size() < currentPageNum*perPageSize && currentPageNum != 1){
+            result.clear();
         }
-        resultPage.setList(result);
+        List<AppPushMsgInfoDTO> resultDate = Lists.newArrayList();
+        //重新获取图片路径
+        for (AppPushMsgInfoDTO appPushMsgInfoDTO : result) {
+            if(StringUtils.isNotEmpty(appPushMsgInfoDTO.getImageURL())){
+                String path = appPushMsgInfoDTO.getImageURL().substring(appPushMsgInfoDTO.getImageURL().indexOf("^")+1);
+                String imageURL =  OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
+                appPushMsgInfoDTO.setImageURL(imageURL);
+            }
+            resultDate.add(appPushMsgInfoDTO);
+        }
+        resultPage.setList(resultDate);
         
         /**
          * 再次记录读取时间
@@ -333,10 +347,20 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
       //发送推送
         List<AppUser> users = appUserDao.selectByInnerCode(innerCode);
         String param_and ="";
-        String param_ios ="";
         String newPhone = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date sendDate = new Date();
+        String sendTime = sdf.format(sendDate);
         Set<String> relatelds_and = new HashSet<String>();
-        Set<String> relatelds_ios = new HashSet<String>();
+        MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
+        AppUser appUser = appUserDao.selectAppUserById(userId);
+        newPhone = appUser.getMobile();
+        String msgContent = "【新店员加入】新店员"+newPhone+"加入"+merchantCore.getMerName()+"店";
+        AppPushMsgInfoDTO appMsgInfo = new AppPushMsgInfoDTO();
+        appMsgInfo.setMsgSubject("新店员加入");
+        appMsgInfo.setMsgSubtitle(msgContent);
+        appMsgInfo.setSendTime(sendDate);
+        appMsgInfo.setSendTimeStr(sendTime);
         for (AppUser user : users) {
             int deviceType = user.getDeviceType();
             if(String.valueOf(deviceType)==null||"0".equals(deviceType)||user.getId() == userId){
@@ -347,43 +371,32 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
                 }
             }else if(deviceType==2){//ios
                 if(StringUtils.isNotBlank(user.getDeviceToken())){
-                    relatelds_ios.add(user.getDeviceToken());
+                    ResultDTO<PushMsgInfoDTO> countInfo =  queryNewsCount(user.getId(), false, user.getDeviceType());
+                    try {
+                        int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), msgContent, countInfo.getData().getUnReadCount(),appMsgInfo.toString());
+                        if (iosStatus == 200) {
+                            logger.info("ios信息推送成功");
+                        } else {
+                            logger.info("ios信息推送失败");
+                        }
+                    } catch (Exception e) {
+                        
+                        logger.error("ios信息推送异常"+e);
+                        e.printStackTrace();
+                        
+                    }
                 }
-            }
-            if(user.getId() == userId){
-                newPhone =user.getMobile();
             }
             
         }
         param_and = relatelds_and.toString().substring(1, param_and.length()-1);
         param_and = param_and.replaceAll(" ", "");//安卓去重后token
         
-        param_ios = relatelds_ios.toString().substring(1, param_ios.length()-1);
-        param_ios = param_ios.replaceAll(" ", "");//ios去重后的token
-        MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
-        String msgContent = "【新店员加入】新店员"+newPhone+"加入"+merchantCore.getMerName()+"店";
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String sendTime = sdf.format(new Date());
-        /**
-         * IOS
-         */
-        try {
-            int status = appPushService.sendIOSListcast(param_ios, msgContent,sendTime);
-            if (status == 200) {
-                logger.info("ios信息推送成功");
-            } else {
-                logger.info("ios信息推送失败");
-            }
-            
-        } catch (Exception e) {
-            logger.error("ios列播推送"+e);
-        }
         /**
          * android
          */
         try {
-            int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime);
+            int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime,appMsgInfo.toString());
             if (status == 200) {
                 logger.info("安卓信息推送成功");
             } else {
@@ -411,7 +424,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
      * @date 2017年7月13日 下午4:49:57
      */
     @Override
-    public ResultDTO<String> queryNewsCount(Integer userId, boolean hasRead,Integer phoneType) {
+    public ResultDTO<PushMsgInfoDTO> queryNewsCount(Integer userId, boolean hasRead,Integer phoneType) {
         
         if(null == userId){
             return ResultDTO.fail(ApiConstant.E_USERID_NULL);
@@ -429,6 +442,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         }
         
         condition.setPhoneType(phoneType);
+        condition.setStatus(1);
         condition1.setAppUserId(userId);
         List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);
         List<SysMsgReceiver> datas1 =  sysMsgReceiverDao.queryListByCondition(condition1);
@@ -459,6 +473,34 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         msgInfoDTO.setUnReadCount(datas.size()+datas1.size());
         
         return ResultDTO.success(msgInfoDTO);
+        
+    }
+    
+    /**
+     * (non-Javadoc) 记录读取时间
+     * @see net.fnsco.api.sysappmsg.SysAppMsgService#readPushMsg(java.lang.Integer)
+     * @auth tangliang
+     * @date 2017年7月17日 下午2:40:00
+     */
+    @Override
+    public ResultDTO<String> readPushMsg(Integer userId) {
+        
+        if(null == userId){
+            return ResultDTO.fail(ApiConstant.E_USERID_NULL);
+        }
+        
+        MsgRead reader = msgReadDao.selectByUserId(userId);
+        Date readTime = new Date();
+        if(reader == null){
+            reader = new MsgRead();
+            reader.setAppUserId(userId);
+            reader.setReadTime(readTime);
+            msgReadDao.insertSelective(reader);
+        }else{
+            reader.setReadTime(readTime);
+            msgReadDao.updateByPrimaryKeySelective(reader);
+        }
+        return ResultDTO.success();
         
     }
 

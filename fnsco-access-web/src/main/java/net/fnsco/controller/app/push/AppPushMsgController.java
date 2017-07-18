@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.dto.AppPushMsgInfoDTO;
+import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.sysappmsg.SysAppMsgService;
 import net.fnsco.controller.app.jo.AppPushMsgJO;
 import net.fnsco.core.base.BaseController;
@@ -50,7 +50,23 @@ public class AppPushMsgController extends BaseController{
      */
     @RequestMapping("/newsCount")
     @ApiOperation(value = "获取推送未读消息条数")
-    public ResultDTO<String> queryNewsCount(@RequestBody AppPushMsgJO appPushMsgJO){
+    public ResultDTO<PushMsgInfoDTO> queryNewsCount(@RequestBody AppPushMsgJO appPushMsgJO){
         return sysAppMsgService.queryNewsCount(appPushMsgJO.getUserId(), appPushMsgJO.isHasRead(),appPushMsgJO.getPhoneType());
     }
+    
+    /**
+     * readPushMsg:(这里用一句话描述这个方法的作用)记录用户已经读取
+     *
+     * @param appPushMsgJO
+     * @return    设定文件
+     * @return ResultDTO<String>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping("/read")
+    @ApiOperation(value = "记录用户读取消息时间")
+    public ResultDTO<String> readPushMsg(@RequestBody AppPushMsgJO appPushMsgJO){
+        return sysAppMsgService.readPushMsg(appPushMsgJO.getUserId());
+    }
+    
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.api.dto.AppUserManageDTO;
+import net.fnsco.api.dto.AppUserMerchantDTO;
+import net.fnsco.api.dto.QueryBandDTO;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.service.domain.AppUser;
 
@@ -49,4 +51,15 @@ public interface AppUserDao {
      * @return
      */
     int queryTotalByCondition(AppUserManageDTO record);
+    List<QueryBandDTO> selectBandPeopleByMobile(@Param("mobile")String mobile);
+    
+    /**
+     * queryAllPushUser:(这里用一句话描述这个方法的作用)查询所有需要推送消息的用户
+     *
+     * @return    设定文件
+     * @return List<AppUser>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<AppUser> queryAllPushUser();
 }

@@ -31,6 +31,13 @@
 	  <result column="reg_time" property="regTime" jdbcType="TIMESTAMP"/>
 	  <result column="mer_names" property="merNames" jdbcType="VARCHAR"/>
 	</resultMap>
+	<!-- 商户角色结果集 -->
+  <resultMap  id="RELResultMap" type="net.fnsco.api.dto.QueryBandDTO">
+     <result column="id" property="id" jdbcType="INTEGER" />
+     <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+     <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
+  </resultMap>
 	<sql id="Base_Column_List">
 		id, user_name, mobile, password, real_name, device_id, ges_state,
 		ges_password, ges_trail,
@@ -240,4 +247,26 @@
 			TA.mobile,TA.reg_time,TA.user_name
 		) TAB
 	</select>
+	  <!-- 根据手机号查询店铺绑定情况 -->
+  <select id="selectBandPeopleByMobile" parameterType="java.lang.String" resultMap="RELResultMap">
+  	SELECT
+			REL.role_id,REL.inner_code,REL.app_user_id,REL.id
+		FROM
+			u_app_user_merchant REL
+		RIGHT JOIN (
+			SELECT
+				*
+			FROM
+				m_app_user
+			WHERE
+				mobile = #{mobile,jdbcType=VARCHAR}
+		) User ON REL.app_user_id = User.id
+  </select>
+  <!-- 查询推送用户信息 -->
+  <select id="queryAllPushUser" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+		from m_app_user
+		where state = 1 and device_token &lt;&gt; '' and device_token is not null
+  </select>
 </mapper>

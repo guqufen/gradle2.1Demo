@@ -214,6 +214,23 @@ public class FileInfoController extends BaseController{
 	}
 	
 	/**
+	 * deleteOssFile:(这里用一句话描述这个方法的作用)删除OSS上文件文件
+	 *
+	 * @param url
+	 * @return    设定文件
+	 * @return String    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	@RequestMapping("/deleteOssFile")
+	@ResponseBody
+	public String deleteOssFile(String url){
+	    String fileKey = url.substring(url.lastIndexOf("^")+1);
+	    OssUtil.deleteFile(OssUtil.getHeadBucketName(), fileKey);
+	    return null;
+	}
+	
+	/**
 	 * getImagePath:(这里用一句话描述这个方法的作用)查看文件外网路径
 	 *
 	 * @param url

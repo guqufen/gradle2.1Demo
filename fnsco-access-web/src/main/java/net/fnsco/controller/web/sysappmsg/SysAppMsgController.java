@@ -1,5 +1,6 @@
 package net.fnsco.controller.web.sysappmsg;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,8 @@ import net.fnsco.api.sysappmsg.SysAppMsgService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.JsonPluginsUtil;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.service.domain.SysAppMessage;
 
 /**
@@ -72,5 +75,33 @@ public class SysAppMsgController extends BaseController {
     @ResponseBody
     public ResultDTO<String> deleteMsg(Integer id){
         return sysAppMsgService.deleteMsg(id);
+    }
+    
+    /**
+     * querySingle:(这里用一句话描述这个方法的作用)查询单条数据详情
+     *
+     * @param id
+     * @return    设定文件
+     * @return ResultDTO<Object>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping("/querySingle")
+    @ResponseBody
+    public ResultDTO<AppPushMsgInfoDTO> querySingle(Integer id){
+        if(null == id){
+            return ResultDTO.fail();
+        }
+        SysAppMessage message = sysAppMsgService.selectByPrimaryKey(id);
+        AppPushMsgInfoDTO infoDto = null;
+        if(StringUtils.isNoneEmpty(message.getContentJson())){
+            infoDto = JsonPluginsUtil.jsonToBean(message.getContentJson(), AppPushMsgInfoDTO.class);
+            if(StringUtils.isNotEmpty(infoDto.getImageURL())){
+                String path = infoDto.getImageURL().substring(infoDto.getImageURL().indexOf("^")+1);
+                String imageURL =  OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
+                infoDto.setImageURL(imageURL);
+            }
+        }
+        return ResultDTO.success(infoDto);
     }
 }
