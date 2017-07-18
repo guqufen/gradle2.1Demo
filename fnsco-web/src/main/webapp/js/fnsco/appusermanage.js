@@ -140,10 +140,16 @@ $(function() {
 			success : function(data) {
 				unloginHandler(data);
 				console.log(data);
-				showdates(data.data);
+				if(data.data==null){
+					layer.msg('该用户没有绑定任何商户');
+				}else{
+					showdates(data.data);
+					$('#myModal').modal();
+				}
+				
 			}
 		});
-		$('#myModal').modal();
+		
 	})
 })
 
