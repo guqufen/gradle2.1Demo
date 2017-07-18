@@ -2,10 +2,6 @@ package net.fnsco.api.appuser;
 
 import java.util.List;
 
-<<<<<<< HEAD
-import net.fnsco.api.dto.AppPeopleDTO;
-=======
->>>>>>> 1fd413e3dd43c7c5f52a150fd7f6b1093ebe212f
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.api.dto.AppUserMerchantDTO;

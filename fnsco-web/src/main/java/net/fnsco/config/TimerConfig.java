@@ -81,7 +81,8 @@ public class TimerConfig {
                     if(StringUtils.isNotEmpty(sysAppMessage.getContentJson())){
                         AppPushMsgInfoDTO appMsgInfo = JsonPluginsUtil.jsonToBean(sysAppMessage.getContentJson(), AppPushMsgInfoDTO.class);
                         if(StringUtils.isNotEmpty(appMsgInfo.getImageURL())){
-                            appMsgInfo.setImageURL(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), appMsgInfo.getImageURL()));
+                            String path = appMsgInfo.getImageURL().substring(appMsgInfo.getImageURL().indexOf("^")+1);
+                            appMsgInfo.setImageURL(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
                         }
                         sysAppMessage.setContentJson(appMsgInfo.toString());
                     }
@@ -95,6 +96,7 @@ public class TimerConfig {
                         sysAppMessage.setStatus(0);
                     }
                 }
+                sysAppMessage.setContentJson(null);
                 sysAppMsgService.updateByPrimaryKeySelective(sysAppMessage);
                
             } catch (Exception e) {
