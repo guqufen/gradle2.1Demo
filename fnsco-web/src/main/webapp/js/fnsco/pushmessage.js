@@ -148,7 +148,7 @@ function queryParams(params)
 			   currentPageNum : this.pageNumber,
 			   pageSize : this.pageSize,
 			   msgType :$('#pushType').val(),
-			   status:$('#txt_search_name').val(),
+			   status:$('#pushState').val(),
 			   startSendTime:$('#datetimepicker1').val(),
 			   endSendTime:$('#datetimepicker2').val()
 	   }
