@@ -11,10 +11,7 @@ public class ApiConstant extends CoreConstants {
     public static String WEB_IS_AUTHOR             = "web.is.author";
     public static String APP_IS_AUTHOR             = "app.is.author";
     public static String TOKEN_ID                  = "b9eccb7036f9719059b0f61076991b75";
-    public static String E_TOKEN_EMPTY             = "4010";
-    public static String E_TOKEN_ERROR             = "4011";
-    public static String E_NOT_LOGIN               = "4012";
-    public static String E_SYSTEM_EXCEPTION        = "5000";
+    
     public static String E_MERCHANT_CODE_NULL      = "5023";                            //商铺码不能为空
     public static String E_USER_ID_NULL            = "5024";                            //用户ID不能为空
     public static String E_MERCHANT_CODE_NOT_EXIST = "5025";                            //此商铺码不存在，请重新输入

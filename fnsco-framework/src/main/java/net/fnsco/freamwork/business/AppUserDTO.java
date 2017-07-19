@@ -1,55 +1,55 @@
-package net.fnsco.service.domain;
+package net.fnsco.freamwork.business;
 
 import java.util.Date;
 
-public class AppUser {
+public class AppUserDTO {
     private Integer id;
 
-    private String userName;
+    private String  userName;
 
-    private String mobile;
+    private String  mobile;
 
-    private String password;
+    private String  password;
+    //是否强制退出标志1强0不强
+    private Integer forcedLoginOut;
 
-    private String realName;
+    private String  realName;
 
-    private String deviceId;
+    private String  deviceId;
 
     private Integer gesState;
 
-    private String gesPassword;
+    private String  gesPassword;
 
     private Integer gesTrail;
 
-    private String payPassword;
+    private String  payPassword;
 
     private Integer deviceType;
 
-    private String deviceToken;
+    private String  deviceToken;
 
     private Integer passwordErrorNum;
 
-    private Date passwordErrorDate;
+    private Date    passwordErrorDate;
 
-    private String remark;
+    private String  remark;
 
-    private Date regTime;
+    private Date    regTime;
 
-    private Date lastLoginTime;
+    private Date    lastLoginTime;
 
-    private Date modifyTime;
+    private Date    modifyTime;
 
     private Integer state;
-    
-    private Integer forcedLoginOut;
-    
+
     /**
      * forcedLoginOut
      *
      * @return  the forcedLoginOut
      * @since   CodingExample Ver 1.0
     */
-    
+
     public Integer getForcedLoginOut() {
         return forcedLoginOut;
     }
@@ -60,7 +60,7 @@ public class AppUser {
      * @param   forcedLoginOut    the forcedLoginOut to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setForcedLoginOut(Integer forcedLoginOut) {
         this.forcedLoginOut = forcedLoginOut;
     }
