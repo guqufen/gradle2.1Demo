@@ -31,10 +31,10 @@ public class AppInterceptor implements HandlerInterceptor {
 
     @Autowired
     private Environment env;
-    
+
     @Autowired
     private UserService userService;
-    
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String isAuthor = env.getProperty(FrameworkConstant.APP_IS_AUTHOR);
@@ -68,17 +68,17 @@ public class AppInterceptor implements HandlerInterceptor {
             OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_ERROR);
             return false;
         }
-                //强制退出
-                String userId = request.getHeader("userId");
-                if (!Strings.isNullOrEmpty(userId)) {
-                    AppUserDTO userDto = userService.getUserInfo(userId);
-                    if (userDto != null) {
-                        if (userDto.getForcedLoginOut() != null && userDto.getForcedLoginOut().compareTo(1) == 0) {
-                            OutWriterUtil.outJson(response, FrameworkConstant.E_FORCED_LOGIN_OUT);
-                            return false;
-                        }
-                    }
+        //强制退出
+        String userId = request.getHeader("userId");
+        if (!Strings.isNullOrEmpty(userId)) {
+            AppUserDTO userDto = userService.getUserInfo(userId);
+            if (userDto != null) {
+                if (userDto.getForcedLoginOut() != null && userDto.getForcedLoginOut().compareTo(1) == 0) {
+                    OutWriterUtil.outJson(response, FrameworkConstant.E_FORCED_LOGIN_OUT);
+                    return false;
                 }
+            }
+        }
         return true;
     }
 
