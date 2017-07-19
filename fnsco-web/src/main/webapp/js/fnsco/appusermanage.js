@@ -204,10 +204,15 @@ $(".saveBtn").click(function(){
 		contentType:"application/json",
 		data :toStr,
 		success : function(data) {
-			unloginHandler(data);
+			 unloginHandler(data);
+			 if(data.success==false){
+				 layer.msg(data.message);
+				 return false;
+			 }
 			 $("#myModal").hide();
 			 layer.msg('更改角色成功');
 			 setTimeout(function(){window.location.reload();},1000);
+			
 		},
 	    error:function(){
 	        layer.msg('系统错误');

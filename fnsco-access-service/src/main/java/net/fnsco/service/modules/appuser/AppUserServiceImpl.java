@@ -403,30 +403,23 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
      */
     @Override
     public List<AppUser> queryAllPushUser() {
-
         return appUserDao.queryAllPushUser();
-
     }
 
+    //角色修改
     @Override
     @Transactional
     public ResultDTO<String> changeRole(List<AppUserMerchantDTO> params) {
         for (AppUserMerchantDTO li : params) {
-            //成为店主
-            if (li.getRoleId().equals("1")) {
-                //找到这个店铺为1的更新为0
-                AppUserMerchant appUserMerchant = appUserMerchantDao.selectByCode(li.getInnerCode(), "1");
-                if (appUserMerchant != null) {
-                    AppUserMerchantDTO dto = new AppUserMerchantDTO();
-                    dto.setId(appUserMerchant.getId());
-                    dto.setModefyTime(new Date());
-                    dto.setRoleId("2");
-                    appUserMerchantDao.updateByPrimaryKeySelective(dto);
+            if(li.getRoleId().equals("1")){
+                List<AppUserMerchant> list=appUserMerchantDao.selectByInnerCode(li.getInnerCode(),"1");
+                if(list.size()>=1){
+                    return ResultDTO.fail(ApiConstant.E_ONLYSHOPKEEPER_ERROR);
                 }
             }
             int num = appUserMerchantDao.updateByPrimaryKeySelective(li);
             if (num == 0) {
-                return ResultDTO.fail("更新失败");
+                return ResultDTO.fail(ApiConstant.E_CHANGEROLE_ERROR);
             }
         }
         return ResultDTO.success();
