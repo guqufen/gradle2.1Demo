@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.api.constant.ApiConstant;
@@ -32,6 +33,7 @@ import net.fnsco.service.dao.master.AppUserDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MsgReadDao;
 import net.fnsco.service.dao.master.SysAppMessageDao;
+import net.fnsco.service.dao.master.SysMsgAppSuccDao;
 import net.fnsco.service.dao.master.SysMsgReceiverDao;
 import net.fnsco.service.domain.AppUser;
 import net.fnsco.service.domain.MerchantCore;
@@ -46,7 +48,7 @@ import net.fnsco.service.domain.SysUser;
  * @version  0.0.1-SNAPSHOT
  * @since    Ver 1.1
  * @Date	 2017年7月12日 上午9:48:03
- */
+ */ 
 @Service
 public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgService {
 
@@ -67,6 +69,9 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
     
     @Autowired
     private MerchantCoreDao merchantCoreDao;
+    
+    @Autowired
+    private SysMsgAppSuccDao sysMsgAppSuccDao;
 
     /**
      * (non-Javadoc)
@@ -495,6 +500,39 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             reader.setReadTime(readTime);
             msgReadDao.updateByPrimaryKeySelective(reader);
         }
+        
+    }
+    
+    /**
+     * (non-Javadoc)根据ID查询列表
+     * @see net.fnsco.api.sysappmsg.SysAppMsgService#queryList(java.util.List)
+     * @auth tangliang
+     * @date 2017年7月19日 下午4:08:17
+     */
+    @Transactional
+    @Override
+    public ResultDTO<List<AppPushMsgInfoDTO>> queryListByIds(List<Integer> ids) {
+        List<SysAppMessage> datas = sysAppMessageDao.queryListByIds(ids);
+        List<AppPushMsgInfoDTO> data = Lists.newArrayList();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for (SysAppMessage sysAppMessage : datas) {
+            AppPushMsgInfoDTO dtoInfo = new AppPushMsgInfoDTO();
+            dtoInfo.setId(sysAppMessage.getId());
+            dtoInfo.setDetailURL(sysAppMessage.getDetailUrl());
+            String pathUrl  = sysAppMessage.getImageUrl();
+            if(!Strings.isNullOrEmpty(pathUrl)){
+                String path = pathUrl.substring(pathUrl.indexOf("^")+1);
+                dtoInfo.setImageURL(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
+            }
+            
+            dtoInfo.setMsgSubtitle(sysAppMessage.getMsgSubTitle());
+            dtoInfo.setMsgSubject(sysAppMessage.getMsgSubject());
+            dtoInfo.setSendTimeStr(sdf.format(sysAppMessage.getSendTime()));
+            data.add(dtoInfo);
+        }
+        //更新成功消息状态
+        sysMsgAppSuccDao.updateByMsgIds(ids);
+        return ResultDTO.success(data);
         
     }
 

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.service.dao.master.SysMsgAppSuccDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.SysMsgAppSucc" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="msg_id" property="msgId" jdbcType="INTEGER" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="phone_type" property="phoneType" jdbcType="INTEGER" />
+    <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
+    <result column="read_status" property="readStatus" jdbcType="INTEGER" />
+    <result column="read_time" property="readTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, msg_id, send_time, phone_type, app_user_id, read_status, read_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_msg_app_succ
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sys_msg_app_succ
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="net.fnsco.service.domain.SysMsgAppSucc" >
+    insert into sys_msg_app_succ (id, msg_id, send_time, 
+      phone_type, app_user_id, read_status, 
+      read_time)
+    values (#{id,jdbcType=INTEGER}, #{msgId,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, 
+      #{phoneType,jdbcType=INTEGER}, #{appUserId,jdbcType=INTEGER}, #{readStatus,jdbcType=INTEGER}, 
+      #{readTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.service.domain.SysMsgAppSucc" >
+    insert into sys_msg_app_succ
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="msgId != null" >
+        msg_id,
+      </if>
+      <if test="sendTime != null" >
+        send_time,
+      </if>
+      <if test="phoneType != null" >
+        phone_type,
+      </if>
+      <if test="appUserId != null" >
+        app_user_id,
+      </if>
+      <if test="readStatus != null" >
+        read_status,
+      </if>
+      <if test="readTime != null" >
+        read_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="msgId != null" >
+        #{msgId,jdbcType=INTEGER},
+      </if>
+      <if test="sendTime != null" >
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phoneType != null" >
+        #{phoneType,jdbcType=INTEGER},
+      </if>
+      <if test="appUserId != null" >
+        #{appUserId,jdbcType=INTEGER},
+      </if>
+      <if test="readStatus != null" >
+        #{readStatus,jdbcType=INTEGER},
+      </if>
+      <if test="readTime != null" >
+        #{readTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.SysMsgAppSucc" >
+    update sys_msg_app_succ
+    <set >
+      <if test="msgId != null" >
+        msg_id = #{msgId,jdbcType=INTEGER},
+      </if>
+      <if test="sendTime != null" >
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phoneType != null" >
+        phone_type = #{phoneType,jdbcType=INTEGER},
+      </if>
+      <if test="appUserId != null" >
+        app_user_id = #{appUserId,jdbcType=INTEGER},
+      </if>
+      <if test="readStatus != null" >
+        read_status = #{readStatus,jdbcType=INTEGER},
+      </if>
+      <if test="readTime != null" >
+        read_time = #{readTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.SysMsgAppSucc" >
+    update sys_msg_app_succ
+    set msg_id = #{msgId,jdbcType=INTEGER},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      phone_type = #{phoneType,jdbcType=INTEGER},
+      app_user_id = #{appUserId,jdbcType=INTEGER},
+      read_status = #{readStatus,jdbcType=INTEGER},
+      read_time = #{readTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 根据IDs更新 -->
+  <update id="updateByMsgIds">
+    update sys_msg_app_succ set read_status=1 , read_time = NOW()
+    where msg_id in
+     <foreach collection="msgIds" item="msgId" index="index"
+            open="(" close=")" separator=",">
+            #{msgId}
+        </foreach>
+  </update>
+</mapper>

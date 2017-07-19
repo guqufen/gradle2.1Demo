@@ -362,4 +362,13 @@
      <include refid="Base_Column_List" />
       from sys_msg_app where send_time &lt;=  NOW() AND status=2
   </select>
+  <select id="queryListByIds"  resultMap="BaseResultMap">
+	  select 
+	     <include refid="Base_Column_List" />
+	      from sys_msg_app where id in 
+	      <foreach collection="ids" item="msgId" index="index"
+            open="(" close=")" separator=",">
+            #{msgId}
+        </foreach>
+  </select>
 </mapper>

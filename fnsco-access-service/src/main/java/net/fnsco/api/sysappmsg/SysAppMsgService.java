@@ -121,4 +121,15 @@ public interface SysAppMsgService {
      * @since  CodingExample　Ver 1.1
      */
     void readPushMsg(Integer userId);
+    
+    /**
+     * queryList:(这里用一句话描述这个方法的作用)
+     *
+     * @param ids
+     * @return    设定文件
+     * @return ResultDTO<AppPushMsgInfoDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    ResultDTO<List<AppPushMsgInfoDTO>> queryListByIds(List<Integer> ids);
 }

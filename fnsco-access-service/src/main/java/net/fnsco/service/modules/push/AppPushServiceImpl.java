@@ -1,6 +1,7 @@
 package net.fnsco.service.modules.push;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,8 @@ import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.push.AppPushService;
 import net.fnsco.api.sysappmsg.SysAppMsgService;
+import net.fnsco.api.sysappmsg.SysMsgAppFailService;
+import net.fnsco.api.sysappmsg.SysMsgAppSuccService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.push.AndroidNotification;
@@ -24,6 +27,8 @@ import net.fnsco.core.push.ios.IOSListcast;
 import net.fnsco.core.push.ios.IOSUnicast;
 import net.fnsco.service.domain.AppUser;
 import net.fnsco.service.domain.SysAppMessage;
+import net.fnsco.service.domain.SysMsgAppFail;
+import net.fnsco.service.domain.SysMsgAppSucc;
 
 /**
  * @desc 友盟推送实现
@@ -45,6 +50,12 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
     
     @Autowired
     private AppUserService appUserService;
+    
+    @Autowired
+    private SysMsgAppSuccService sysMsgAppSuccService;
+    
+    @Autowired
+    private SysMsgAppFailService sysMsgAppFailService;
     
     /**
      * (non-Javadoc) 安卓推送--列播
@@ -254,25 +265,53 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         for (SysAppMessage sysAppMessage : datas) {
             sendTime = sdf.format(sysAppMessage.getSendTime());//定义传递给友盟的时间
             try {
-                //IOS
-                for (AppUser appUser : users) {
-                    if(appUser.getDeviceType() == 2){
-                        ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appUser.getId(), false, appUser.getDeviceType());
-                        int iosStatus = sendIOSUnicast(appUser.getDeviceToken(),  sysAppMessage.getMsgSubTitle(), countInfo.getData().getUnReadCount(),sysAppMessage.getId().toString());
-                        if (iosStatus == 200) {
-                             
-                              logger.warn("ios信息推送成功");
-                          } else {
-                              logger.warn("ios信息推送失败");
-                          }
-                        }
-                }
-               //  安卓                  
+                //  安卓                  
                 int androidStatus = sendAndroidBroadcast(sysAppMessage.getMsgSubTitle(), sendTime,sysAppMessage.getId().toString());
                 if (androidStatus == 200) {
                     logger.warn("安卓信息推送成功");
                 } else {
                     logger.warn("安卓信息推送失败");
+                }
+                
+                //IOS
+                for (AppUser appUser : users) {
+                    //成功
+                    SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
+                    sysMsgAppSucc.setSendTime(new Date());
+                    sysMsgAppSucc.setAppUserId(appUser.getId());
+                    sysMsgAppSucc.setMsgId(sysAppMessage.getId());
+                    sysMsgAppSucc.setReadStatus(0);
+                    //失败情况
+                    SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
+                    sysMsgAppFail.setAppUserId(appUser.getId());
+                    sysMsgAppFail.setMsgId(sysAppMessage.getId());
+                    sysMsgAppFail.setSendCount(1);
+                    sysMsgAppFail.setSendTime(new Date());
+                    sysMsgAppFail.setStatus(0);
+                    if(appUser.getDeviceType() == 2){
+                        ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appUser.getId(), false, appUser.getDeviceType());
+                        int iosStatus = sendIOSUnicast(appUser.getDeviceToken(),  sysAppMessage.getMsgSubTitle(), countInfo.getData().getUnReadCount(),sysAppMessage.getId().toString());
+                        
+                        if (iosStatus == 200) {
+                            sysMsgAppSucc.setPhoneType(2);
+                            sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
+                            logger.warn("ios信息推送成功");
+                          } else {
+                              sysMsgAppFail.setPhoneType(2);
+                              sysMsgAppFailService.insertSelective(sysMsgAppFail);
+                              logger.warn("ios信息推送失败");
+                          }
+                     }else if(appUser.getDeviceType() == 1){
+                            if(androidStatus == 200){
+                                sysMsgAppSucc.setPhoneType(2);
+                                sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
+                            }else{
+                                sysMsgAppSucc.setPhoneType(1);
+                                sysMsgAppFailService.insertSelective(sysMsgAppFail);
+                            }
+                            
+                        }
+                    
                 }
                 
                 sysAppMessage.setStatus(1);//已发送状态
