@@ -360,7 +360,7 @@
   <select id="queryExecuteData" resultMap="BaseResultMap">
     select 
      <include refid="Base_Column_List" />
-      from sys_msg_app where send_time &lt;=  NOW() AND status=2
+      from sys_msg_app where send_time &lt;=  NOW() AND status=0
   </select>
   <select id="queryListByIds"  resultMap="BaseResultMap">
 	  select 
