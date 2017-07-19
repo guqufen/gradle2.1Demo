@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.sysappmsg.SysAppMsgService;
@@ -66,7 +67,11 @@ public class AppPushMsgController extends BaseController{
     @RequestMapping("/read")
     @ApiOperation(value = "记录用户读取消息时间")
     public ResultDTO<String> readPushMsg(@RequestBody AppPushMsgJO appPushMsgJO){
-        return sysAppMsgService.readPushMsg(appPushMsgJO.getUserId());
+        if(null == appPushMsgJO.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_USERID_NULL);
+        }
+        sysAppMsgService.readPushMsg(appPushMsgJO.getUserId());
+        return ResultDTO.success();
     }
     
 }

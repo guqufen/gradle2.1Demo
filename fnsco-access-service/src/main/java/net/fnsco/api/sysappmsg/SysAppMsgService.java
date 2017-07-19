@@ -120,5 +120,5 @@ public interface SysAppMsgService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ResultDTO<String>  readPushMsg(Integer userId);
+    void readPushMsg(Integer userId);
 }

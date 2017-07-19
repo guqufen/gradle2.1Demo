@@ -50,7 +50,7 @@ public class TimerConfig {
      * @author tangliang
      * @since  CodingExample　Ver 1.1
      */
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 * * * * ?")//每一分钟的0秒执行，每分钟执行一次
     public void pushMagTimer(){
         List<SysAppMessage> datas = sysAppMsgService.queryExecuteData();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
