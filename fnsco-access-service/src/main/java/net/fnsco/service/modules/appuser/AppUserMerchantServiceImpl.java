@@ -39,17 +39,17 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
         //返回多个店铺的店主       AppUserMerchantOutDTO
         List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId, "1");
         if (CollectionUtils.isEmpty(merchantList)) {
-            return ResultDTO.fail(ApiConstant.E_NOSHOPKEEPER_ERROR);
+            return null;
         }
         List<AppUserMerchantOutDTO> datas = Lists.newArrayList();
-        for(AppUserMerchant object : merchantList){
+        for(AppUserMerchant it : merchantList){
             //根据innerCode查询出店铺名称
-            MerchantCore res = merchantCoreDao.selectByInnerCode(object.getInnerCode());
+            MerchantCore res = merchantCoreDao.selectByInnerCode(it.getInnerCode());
             AppUserMerchantOutDTO dto=new AppUserMerchantOutDTO();
-            dto.setInnerCode(object.getInnerCode());
+            dto.setInnerCode(it.getInnerCode());
             dto.setMerName(res.getMerName());
             //查询出店铺的店员集合
-            List<AppUserMerchant> list = appUserMerchantDao.selectByInnerCode(object.getInnerCode(), "2");
+            List<AppUserMerchant> list = appUserMerchantDao.selectByInnerCode(it.getInnerCode(), "2");
             List<BandListDTO> listDto=new ArrayList<BandListDTO>();
             //该店铺只有一个店主 没有其他店员
             if(CollectionUtils.isEmpty(list)){

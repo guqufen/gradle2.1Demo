@@ -64,6 +64,9 @@ public class ApiConstant extends CoreConstants {
     public static String E_NOSHOPKEEPER_ERROR      = "5118";                          // 该用户不是店主
     public static String E_DELETEBAND_ERROR        = "5119";                          // 删除绑定失败
     public static String E_NOBAND_ERROR            = "5120";                          // 该用户没有绑定商户
+    public static String E_ONLYSHOPKEEPER_ERROR    = "5121";                          //  一个店铺只能有一个店主
+    public static String E_CHANGEROLE_ERROR        = "5122";                          //  更改角色失败
+    
     
     public static String       WEB_LOGIN_NULL = "5900";//用户名或密码为空
     public static String       WEB_LOGIN_FAIL ="5901";//用户名或密码错误
@@ -113,7 +116,8 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_PHONETYPE_ERROR, "手机类型错误");
         ERROR_MESSGE_MAP.put(E_NOSHOPKEEPER_ERROR, "该用户不是店主");  
         ERROR_MESSGE_MAP.put(E_DELETEBAND_ERROR, "删除绑定失败");
-        ERROR_MESSGE_MAP.put(E_NOBAND_ERROR, "该用户没有绑定商户");
+        ERROR_MESSGE_MAP.put(E_ONLYSHOPKEEPER_ERROR, "修改失败,一个店铺只能有一个店主");
+        ERROR_MESSGE_MAP.put(E_CHANGEROLE_ERROR, "更改角色失败");
     }
 
 }
