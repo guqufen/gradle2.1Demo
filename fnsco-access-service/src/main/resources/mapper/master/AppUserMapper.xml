@@ -147,6 +147,9 @@
 			<if test="state != null">
 				state = #{state,jdbcType=INTEGER},
 			</if>
+			<if test="forcedLoginOut != null">
+				forced_login_out = #{forcedLoginOut,jdbcType=INTEGER},
+			</if>
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
