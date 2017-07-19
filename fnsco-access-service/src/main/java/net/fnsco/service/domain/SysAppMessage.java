@@ -13,56 +13,35 @@ public class SysAppMessage {
     
     private Integer id;
 
-    private Date sendTime;
+    private Integer msgType;
 
-    private String contentJson;
+    private Integer busType;
 
-    private Integer phoneType;
+    private String msgSubject;
+
+    private String imageUrl;
+
+    private String detailUrl;
+
+    private String msgSubTitle;
+
+    private Integer pushType;
 
     private Integer sendType;
 
-    private Integer pushType;
+    private Date sendTime;
 
     private Integer status;
 
     private Integer modifyUserId;
 
     private Date modifyTime;
-
-    private Integer msgType;
-
-    private Integer busType;
-
-    private String content;
     
     private String startSendTime;//开始推送时间 用于条件查询
     
     private String endSendTime;//借宿推送时间 用于条件查询
     
-    private String modifyUser;//修改人
     
-    /**
-     * modifyUser
-     *
-     * @return  the modifyUser
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public String getModifyUser() {
-        return modifyUser;
-    }
-
-    /**
-     * modifyUser
-     *
-     * @param   modifyUser    the modifyUser to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setModifyUser(String modifyUser) {
-        this.modifyUser = modifyUser;
-    }
-
     /**
      * startSendTime
      *
@@ -115,28 +94,60 @@ public class SysAppMessage {
         this.id = id;
     }
 
-    public Date getSendTime() {
-        return sendTime;
+    public Integer getMsgType() {
+        return msgType;
     }
 
-    public void setSendTime(Date sendTime) {
-        this.sendTime = sendTime;
+    public void setMsgType(Integer msgType) {
+        this.msgType = msgType;
     }
 
-    public String getContentJson() {
-        return contentJson;
+    public Integer getBusType() {
+        return busType;
     }
 
-    public void setContentJson(String contentJson) {
-        this.contentJson = contentJson == null ? null : contentJson.trim();
+    public void setBusType(Integer busType) {
+        this.busType = busType;
     }
 
-    public Integer getPhoneType() {
-        return phoneType;
+    public String getMsgSubject() {
+        return msgSubject;
     }
 
-    public void setPhoneType(Integer phoneType) {
-        this.phoneType = phoneType;
+    public void setMsgSubject(String msgSubject) {
+        this.msgSubject = msgSubject == null ? null : msgSubject.trim();
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl == null ? null : imageUrl.trim();
+    }
+
+    public String getDetailUrl() {
+        return detailUrl;
+    }
+
+    public void setDetailUrl(String detailUrl) {
+        this.detailUrl = detailUrl == null ? null : detailUrl.trim();
+    }
+
+    public String getMsgSubTitle() {
+        return msgSubTitle;
+    }
+
+    public void setMsgSubTitle(String msgSubTitle) {
+        this.msgSubTitle = msgSubTitle == null ? null : msgSubTitle.trim();
+    }
+
+    public Integer getPushType() {
+        return pushType;
+    }
+
+    public void setPushType(Integer pushType) {
+        this.pushType = pushType;
     }
 
     public Integer getSendType() {
@@ -147,12 +158,12 @@ public class SysAppMessage {
         this.sendType = sendType;
     }
 
-    public Integer getPushType() {
-        return pushType;
+    public Date getSendTime() {
+        return sendTime;
     }
 
-    public void setPushType(Integer pushType) {
-        this.pushType = pushType;
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
     }
 
     public Integer getStatus() {
@@ -178,28 +189,5 @@ public class SysAppMessage {
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
-
-    public Integer getMsgType() {
-        return msgType;
-    }
-
-    public void setMsgType(Integer msgType) {
-        this.msgType = msgType;
-    }
-
-    public Integer getBusType() {
-        return busType;
-    }
-
-    public void setBusType(Integer busType) {
-        this.busType = busType;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
-    }
+    
 }

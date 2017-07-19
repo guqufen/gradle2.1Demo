@@ -94,14 +94,14 @@ public class SysAppMsgController extends BaseController {
         }
         SysAppMessage message = sysAppMsgService.selectByPrimaryKey(id);
         AppPushMsgInfoDTO infoDto = null;
-        if(StringUtils.isNoneEmpty(message.getContentJson())){
-            infoDto = JsonPluginsUtil.jsonToBean(message.getContentJson(), AppPushMsgInfoDTO.class);
-            if(StringUtils.isNotEmpty(infoDto.getImageURL())){
-                String path = infoDto.getImageURL().substring(infoDto.getImageURL().indexOf("^")+1);
-                String imageURL =  OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
-                infoDto.setImageURL(imageURL);
-            }
-        }
+//        if(StringUtils.isNoneEmpty(message.getContentJson())){
+//            infoDto = JsonPluginsUtil.jsonToBean(message.getContentJson(), AppPushMsgInfoDTO.class);
+//            if(StringUtils.isNotEmpty(infoDto.getImageURL())){
+//                String path = infoDto.getImageURL().substring(infoDto.getImageURL().indexOf("^")+1);
+//                String imageURL =  OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
+//                infoDto.setImageURL(imageURL);
+//            }
+//        }
         return ResultDTO.success(infoDto);
     }
 }

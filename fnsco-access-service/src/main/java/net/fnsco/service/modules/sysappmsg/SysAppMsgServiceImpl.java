@@ -226,8 +226,6 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         SysUser sysUser = (SysUser) SpringUtils.getRequest().getSession().getAttribute("SESSION_USER_KEY");
         message.setModifyUserId(sysUser.getId());
         message.setModifyTime(date); //创建时间
-        message.setContent(record.getMsgSubtitle());
-        message.setContentJson(record.toString());
         message.setBusType(1);
         message.setMsgType(1);
         try {
@@ -235,10 +233,11 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        message.setStatus(2); 
-        message.setPhoneType(1);
-        sysAppMessageDao.insertSelective(message);
-        message.setPhoneType(2);
+        message.setDetailUrl(record.getDetailURL());
+        message.setImageUrl(record.getImageURL());
+        message.setMsgSubject(record.getMsgSubject());
+        message.setMsgSubTitle(record.getMsgSubtitle());
+        message.setStatus(0); //待发送
         sysAppMessageDao.insertSelective(message);
         return ResultDTO.successForSave(null);
 
@@ -281,15 +280,15 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
          */
         SysAppMessage condition = new SysAppMessage();
         SysMsgReceiver condition1 = new SysMsgReceiver();
-        condition.setPhoneType(phoneType);
+//        condition.setPhoneType(phoneType);
         condition.setStatus(1);
         condition1.setAppUserId(userId);
         List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);
         List<SysMsgReceiver> datas1 =  sysMsgReceiverDao.queryListByCondition(condition1);
         List<AppPushMsgInfoDTO> result = Lists.newArrayList();
-        for (SysAppMessage sysAppMessage : datas) {
-            result.add(JsonPluginsUtil.jsonToBean(sysAppMessage.getContentJson(), AppPushMsgInfoDTO.class));
-        }
+//        for (SysAppMessage sysAppMessage : datas) {
+//            result.add(JsonPluginsUtil.jsonToBean(sysAppMessage.getContentJson(), AppPushMsgInfoDTO.class));
+//        }
         for (SysMsgReceiver sysMsgReceiver : datas1) {
             result.add(JsonPluginsUtil.jsonToBean(sysMsgReceiver.getMsgContent(), AppPushMsgInfoDTO.class));
         }
@@ -441,7 +440,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             condition1.setSendTime(reader.getReadTime());
         }
         
-        condition.setPhoneType(phoneType);
+//        condition.setPhoneType(phoneType);
         condition.setStatus(1);
         condition1.setAppUserId(userId);
         List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);

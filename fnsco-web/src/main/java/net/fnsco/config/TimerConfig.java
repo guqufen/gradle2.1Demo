@@ -59,51 +59,51 @@ public class TimerConfig {
         if(datas.size()> 0 ){
             users = appUserService.queryAllPushUser();
         }
-        for (SysAppMessage sysAppMessage : datas) {
-            sendTime = sdf.format(sysAppMessage.getSendTime());//定义传递给友盟的时间
-            try {
-                if(StringUtils.isNotEmpty(sysAppMessage.getContentJson())){
-                    AppPushMsgInfoDTO appMsgInfo = JsonPluginsUtil.jsonToBean(sysAppMessage.getContentJson(), AppPushMsgInfoDTO.class);
-                    if(StringUtils.isNotEmpty(appMsgInfo.getImageURL())){
-                        String path = appMsgInfo.getImageURL().substring(appMsgInfo.getImageURL().indexOf("^")+1);
-                        appMsgInfo.setImageURL(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
-                    }
-                    sysAppMessage.setContentJson(appMsgInfo.toString());
-                }
-                //IOS
-                if(sysAppMessage.getPhoneType() == 2){
-                    for (AppUser appUser : users) {
-                        if(appUser.getDeviceType() == 2){
-                            ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appUser.getId(), false, appUser.getDeviceType());
-                            int iosStatus = appPushService.sendIOSUnicast(appUser.getDeviceToken(),  sysAppMessage.getContent(), countInfo.getData().getUnReadCount(),sysAppMessage.getContentJson());
-                            if (iosStatus == 200) {
-                                  logger.warn("ios信息推送成功");
-                                  sysAppMessage.setStatus(1);
-                              } else {
-                                  logger.warn("ios信息推送失败");
-                                  sysAppMessage.setStatus(0);
-                              }
-                            }
-                    }
-                   //  安卓                  
-                }else if(sysAppMessage.getPhoneType() == 1){
-                    int androidStatus = appPushService.sendAndroidBroadcast(sysAppMessage.getContent(), sendTime,sysAppMessage.getContentJson());
-                    if (androidStatus == 200) {
-                        logger.warn("安卓信息推送成功");
-                        sysAppMessage.setStatus(1);
-                    } else {
-                        logger.warn("安卓信息推送失败");
-                        sysAppMessage.setStatus(0);
-                    }
-                }
-                sysAppMessage.setContentJson(null);
-                sysAppMsgService.updateByPrimaryKeySelective(sysAppMessage);
-               
-            } catch (Exception e) {
-                logger.error("广播推送异常", e);
-                e.printStackTrace();
-                
-            }
-        }
+//        for (SysAppMessage sysAppMessage : datas) {
+//            sendTime = sdf.format(sysAppMessage.getSendTime());//定义传递给友盟的时间
+//            try {
+//                if(StringUtils.isNotEmpty(sysAppMessage.getContentJson())){
+//                    AppPushMsgInfoDTO appMsgInfo = JsonPluginsUtil.jsonToBean(sysAppMessage.getContentJson(), AppPushMsgInfoDTO.class);
+//                    if(StringUtils.isNotEmpty(appMsgInfo.getImageURL())){
+//                        String path = appMsgInfo.getImageURL().substring(appMsgInfo.getImageURL().indexOf("^")+1);
+//                        appMsgInfo.setImageURL(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
+//                    }
+//                    sysAppMessage.setContentJson(appMsgInfo.toString());
+//                }
+//                //IOS
+//                if(sysAppMessage.getPhoneType() == 2){
+//                    for (AppUser appUser : users) {
+//                        if(appUser.getDeviceType() == 2){
+//                            ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appUser.getId(), false, appUser.getDeviceType());
+//                            int iosStatus = appPushService.sendIOSUnicast(appUser.getDeviceToken(),  sysAppMessage.getContent(), countInfo.getData().getUnReadCount(),sysAppMessage.getContentJson());
+//                            if (iosStatus == 200) {
+//                                  logger.warn("ios信息推送成功");
+//                                  sysAppMessage.setStatus(1);
+//                              } else {
+//                                  logger.warn("ios信息推送失败");
+//                                  sysAppMessage.setStatus(0);
+//                              }
+//                            }
+//                    }
+//                   //  安卓                  
+//                }else if(sysAppMessage.getPhoneType() == 1){
+//                    int androidStatus = appPushService.sendAndroidBroadcast(sysAppMessage.getContent(), sendTime,sysAppMessage.getContentJson());
+//                    if (androidStatus == 200) {
+//                        logger.warn("安卓信息推送成功");
+//                        sysAppMessage.setStatus(1);
+//                    } else {
+//                        logger.warn("安卓信息推送失败");
+//                        sysAppMessage.setStatus(0);
+//                    }
+//                }
+//                sysAppMessage.setContentJson(null);
+//                sysAppMsgService.updateByPrimaryKeySelective(sysAppMessage);
+//               
+//            } catch (Exception e) {
+//                logger.error("广播推送异常", e);
+//                e.printStackTrace();
+//                
+//            }
+//        }
     }
 }
