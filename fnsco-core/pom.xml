@@ -44,7 +44,7 @@
 		    <version>20170516</version>
 		</dependency>
 		
-		<!-- session共享 -->
+		<!-- session共享
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-redis</artifactId>
@@ -54,7 +54,7 @@
 			<groupId>org.springframework.session</groupId>
 			<artifactId>spring-session-data-redis</artifactId>
 			<version>1.2.2.RELEASE</version>
-		</dependency>
+		</dependency> -->
 		<!-- Junit -->
 		<dependency>
 			<groupId>junit</groupId>

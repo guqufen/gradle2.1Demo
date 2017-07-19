@@ -41,7 +41,30 @@ public class SysAppMessage {
     
     private String endSendTime;//借宿推送时间 用于条件查询
     
+    private String modifyUser;
     
+    /**
+     * modifyUser
+     *
+     * @return  the modifyUser
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getModifyUser() {
+        return modifyUser;
+    }
+
+    /**
+     * modifyUser
+     *
+     * @param   modifyUser    the modifyUser to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setModifyUser(String modifyUser) {
+        this.modifyUser = modifyUser;
+    }
+
     /**
      * startSendTime
      *

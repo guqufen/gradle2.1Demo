@@ -2,8 +2,6 @@ package net.fnsco.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -12,7 +10,7 @@ import net.fnsco.freamwork.interceptor.OpenInterceptor;
 import net.fnsco.freamwork.interceptor.WebInterceptor;
 
 @Configuration
-@EnableRedisHttpSession
+//@EnableRedisHttpSession
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
@@ -30,10 +28,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return new OpenInterceptor();
     }
 
-    @Bean
-    public JedisConnectionFactory connectionFactory() {
-        return new JedisConnectionFactory();
-    }
+//    @Bean
+//    public JedisConnectionFactory connectionFactory() {
+//        return new JedisConnectionFactory();
+//    }
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localInterceptor()).addPathPatterns("/web/**");
