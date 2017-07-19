@@ -18,6 +18,8 @@
 		<module>fnsco-access-service</module>
 		<!-- 数据接入web项目-->
 		<module>fnsco-access-web</module>
+		<module>fnsco-withhold-service</module>
+		<module>fnsco-withhold-web</module>
 	</modules>
 
 </project>
