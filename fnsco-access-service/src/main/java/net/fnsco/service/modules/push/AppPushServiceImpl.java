@@ -1,12 +1,22 @@
 package net.fnsco.service.modules.push;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import net.fnsco.api.appuser.AppUserService;
+import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.push.AppPushService;
+import net.fnsco.api.sysappmsg.SysAppMsgService;
+import net.fnsco.api.sysappmsg.SysMsgAppFailService;
+import net.fnsco.api.sysappmsg.SysMsgAppSuccService;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.push.AndroidNotification;
 import net.fnsco.core.push.PushClient;
 import net.fnsco.core.push.android.AndroidBroadcast;
@@ -15,6 +25,10 @@ import net.fnsco.core.push.android.AndroidUnicast;
 import net.fnsco.core.push.ios.IOSBroadcast;
 import net.fnsco.core.push.ios.IOSListcast;
 import net.fnsco.core.push.ios.IOSUnicast;
+import net.fnsco.service.domain.AppUser;
+import net.fnsco.service.domain.SysAppMessage;
+import net.fnsco.service.domain.SysMsgAppFail;
+import net.fnsco.service.domain.SysMsgAppSucc;
 
 /**
  * @desc 友盟推送实现
@@ -30,6 +44,18 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
     private Environment env;
     
     private PushClient client = new PushClient();
+    
+    @Autowired
+    private SysAppMsgService sysAppMsgService;
+    
+    @Autowired
+    private AppUserService appUserService;
+    
+    @Autowired
+    private SysMsgAppSuccService sysMsgAppSuccService;
+    
+    @Autowired
+    private SysMsgAppFailService sysMsgAppFailService;
     
     /**
      * (non-Javadoc) 安卓推送--列播
@@ -102,7 +128,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @date 2017年7月12日 上午10:49:26
      */
     @Override
-    public Integer sendAndroidBroadcast(String content, String sendTime,String contentJson) throws Exception {
+    public Integer sendAndroidBroadcast(String content, String sendTime,String ids) throws Exception {
 
         logger.warn("开始安卓广播推送");
         String appkey = this.env.getProperty("ad.appkey");
@@ -121,7 +147,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         broadcast.setExtraField("msgType", "1");//系统通知
         broadcast.setExtraField("sendTime", sendTime);
         broadcast.setExtraField("titleType", "系统消息");
-        broadcast.setExtraField("contentJson", contentJson);
+        broadcast.setExtraField("msgId", ids);
         int status = client.send(broadcast);
         return status;
     }
@@ -195,7 +221,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @date 2017年7月12日 上午10:49:26
      */
     @Override
-    public Integer sendIOSUnicast(String iosUnicastToken, String content,Integer badge,String contentJson) throws Exception {
+    public Integer sendIOSUnicast(String iosUnicastToken, String content,Integer badge,String ids) throws Exception {
 
         logger.warn("开始IOS单播推送");
         String appkey = this.env.getProperty("ios.appkey");
@@ -215,9 +241,89 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         // Set customized fields
         unicast.setCustomizedField("msgType", "1");//通知
         unicast.setCustomizedField("titleType", "系统通知");
-        unicast.setCustomizedField("contentJson", contentJson);
+        unicast.setCustomizedField("ids", ids);
         int status = client.send(unicast);
         return status;
+    }
+    
+    /**
+     * (non-Javadoc)  发送待发送消息
+     * @see net.fnsco.api.push.AppPushService#sendSystemMgs()
+     * @auth tangliang
+     * @date 2017年7月19日 下午3:08:33
+     */
+    @Override
+    public void sendSystemMgs() {
+        
+        List<SysAppMessage> datas = sysAppMsgService.queryExecuteData();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String  sendTime = null;
+        List<AppUser>  users = null;
+        if(datas.size()> 0 ){
+            users = appUserService.queryAllPushUser();
+        }
+        for (SysAppMessage sysAppMessage : datas) {
+            sendTime = sdf.format(sysAppMessage.getSendTime());//定义传递给友盟的时间
+            try {
+                //  安卓                  
+                int androidStatus = sendAndroidBroadcast(sysAppMessage.getMsgSubTitle(), sendTime,sysAppMessage.getId().toString());
+                if (androidStatus == 200) {
+                    logger.warn("安卓信息推送成功");
+                } else {
+                    logger.warn("安卓信息推送失败");
+                }
+                
+                //IOS
+                for (AppUser appUser : users) {
+                    //成功
+                    SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
+                    sysMsgAppSucc.setSendTime(new Date());
+                    sysMsgAppSucc.setAppUserId(appUser.getId());
+                    sysMsgAppSucc.setMsgId(sysAppMessage.getId());
+                    sysMsgAppSucc.setReadStatus(0);
+                    //失败情况
+                    SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
+                    sysMsgAppFail.setAppUserId(appUser.getId());
+                    sysMsgAppFail.setMsgId(sysAppMessage.getId());
+                    sysMsgAppFail.setSendCount(1);
+                    sysMsgAppFail.setSendTime(new Date());
+                    sysMsgAppFail.setStatus(0);
+                    if(appUser.getDeviceType() == 2){
+                        ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appUser.getId(), false, appUser.getDeviceType());
+                        int iosStatus = sendIOSUnicast(appUser.getDeviceToken(),  sysAppMessage.getMsgSubTitle(), countInfo.getData().getUnReadCount(),sysAppMessage.getId().toString());
+                        
+                        if (iosStatus == 200) {
+                            sysMsgAppSucc.setPhoneType(2);
+                            sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
+                            logger.warn("ios信息推送成功");
+                          } else {
+                              sysMsgAppFail.setPhoneType(2);
+                              sysMsgAppFailService.insertSelective(sysMsgAppFail);
+                              logger.warn("ios信息推送失败");
+                          }
+                     }else if(appUser.getDeviceType() == 1){
+                            if(androidStatus == 200){
+                                sysMsgAppSucc.setPhoneType(2);
+                                sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
+                            }else{
+                                sysMsgAppSucc.setPhoneType(1);
+                                sysMsgAppFailService.insertSelective(sysMsgAppFail);
+                            }
+                            
+                        }
+                    
+                }
+                
+                sysAppMessage.setStatus(1);//已发送状态
+                sysAppMsgService.updateByPrimaryKeySelective(sysAppMessage);
+               
+            } catch (Exception e) {
+                logger.error("广播推送异常", e);
+                e.printStackTrace();
+                
+            }
+        }
+        
     }
 
 }

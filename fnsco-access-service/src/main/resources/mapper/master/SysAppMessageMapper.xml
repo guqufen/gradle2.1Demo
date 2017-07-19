@@ -3,37 +3,39 @@
 <mapper namespace="net.fnsco.service.dao.master.SysAppMessageDao" >
   <resultMap id="BaseResultMap" type="net.fnsco.service.domain.SysAppMessage" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
-    <result column="content_json" property="contentJson" jdbcType="VARCHAR" />
-    <result column="phone_type" property="phoneType" jdbcType="INTEGER" />
-    <result column="send_type" property="sendType" jdbcType="INTEGER" />
+    <result column="msg_type" property="msgType" jdbcType="INTEGER" />
+    <result column="bus_type" property="busType" jdbcType="INTEGER" />
+    <result column="msg_subject" property="msgSubject" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="detail_url" property="detailUrl" jdbcType="VARCHAR" />
+    <result column="msg_sub_title" property="msgSubTitle" jdbcType="VARCHAR" />
     <result column="push_type" property="pushType" jdbcType="INTEGER" />
+    <result column="send_type" property="sendType" jdbcType="INTEGER" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-    <result column="msg_type" property="msgType" jdbcType="INTEGER" />
-    <result column="bus_type" property="busType" jdbcType="INTEGER" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
   </resultMap>
   <!-- 分页查询用 -->
   <resultMap id="PageResultMap" type="net.fnsco.service.domain.SysAppMessage" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
-    <result column="content_json" property="contentJson" jdbcType="VARCHAR" />
-    <result column="phone_type" property="phoneType" jdbcType="INTEGER" />
-    <result column="send_type" property="sendType" jdbcType="INTEGER" />
+    <result column="msg_type" property="msgType" jdbcType="INTEGER" />
+    <result column="bus_type" property="busType" jdbcType="INTEGER" />
+    <result column="msg_subject" property="msgSubject" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="detail_url" property="detailUrl" jdbcType="VARCHAR" />
+    <result column="msg_sub_title" property="msgSubTitle" jdbcType="VARCHAR" />
     <result column="push_type" property="pushType" jdbcType="INTEGER" />
+    <result column="send_type" property="sendType" jdbcType="INTEGER" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
-    <result column="msg_type" property="msgType" jdbcType="INTEGER" />
-    <result column="bus_type" property="busType" jdbcType="INTEGER" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="modifyUser" property="modifyUser" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, send_time, content_json, phone_type, send_type, push_type, status, modify_user_id, 
-    modify_time, msg_type, bus_type, content
+    id, msg_type, bus_type, msg_subject, image_url, detail_url, msg_sub_title, push_type, 
+    send_type, send_time, status, modify_user_id, modify_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -46,16 +48,16 @@
     where id = #{id,jdbcType=INTEGER} AND status = 2
   </delete>
   <insert id="insert" parameterType="net.fnsco.service.domain.SysAppMessage" >
-    insert into sys_msg_app (id, send_time, content_json, 
-      phone_type, send_type, push_type, 
-      status, modify_user_id, modify_time, 
-      msg_type, bus_type, content
-      )
-    values (#{id,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, #{contentJson,jdbcType=VARCHAR}, 
-      #{phoneType,jdbcType=INTEGER}, #{sendType,jdbcType=INTEGER}, #{pushType,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{modifyUserId,jdbcType=INTEGER}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{msgType,jdbcType=INTEGER}, #{busType,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}
-      )
+    insert into sys_msg_app (id, msg_type, bus_type, 
+      msg_subject, image_url, detail_url, 
+      msg_sub_title, push_type, send_type, 
+      send_time, status, modify_user_id, 
+      modify_time)
+    values (#{id,jdbcType=INTEGER}, #{msgType,jdbcType=INTEGER}, #{busType,jdbcType=INTEGER}, 
+      #{msgSubject,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR}, #{detailUrl,jdbcType=VARCHAR}, 
+      #{msgSubTitle,jdbcType=VARCHAR}, #{pushType,jdbcType=INTEGER}, #{sendType,jdbcType=INTEGER}, 
+      #{sendTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{modifyUserId,jdbcType=INTEGER}, 
+      #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="net.fnsco.service.domain.SysAppMessage" >
     insert into sys_msg_app
@@ -63,20 +65,32 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="sendTime != null" >
-        send_time,
+      <if test="msgType != null" >
+        msg_type,
       </if>
-      <if test="contentJson != null" >
-        content_json,
+      <if test="busType != null" >
+        bus_type,
       </if>
-      <if test="phoneType != null" >
-        phone_type,
+      <if test="msgSubject != null" >
+        msg_subject,
+      </if>
+      <if test="imageUrl != null" >
+        image_url,
+      </if>
+      <if test="detailUrl != null" >
+        detail_url,
+      </if>
+      <if test="msgSubTitle != null" >
+        msg_sub_title,
+      </if>
+      <if test="pushType != null" >
+        push_type,
       </if>
       <if test="sendType != null" >
         send_type,
       </if>
-      <if test="pushType != null" >
-        push_type,
+      <if test="sendTime != null" >
+        send_time,
       </if>
       <if test="status != null" >
         status,
@@ -87,34 +101,37 @@
       <if test="modifyTime != null" >
         modify_time,
       </if>
-      <if test="msgType != null" >
-        msg_type,
-      </if>
-      <if test="busType != null" >
-        bus_type,
-      </if>
-      <if test="content != null" >
-        content,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="sendTime != null" >
-        #{sendTime,jdbcType=TIMESTAMP},
+      <if test="msgType != null" >
+        #{msgType,jdbcType=INTEGER},
       </if>
-      <if test="contentJson != null" >
-        #{contentJson,jdbcType=VARCHAR},
+      <if test="busType != null" >
+        #{busType,jdbcType=INTEGER},
       </if>
-      <if test="phoneType != null" >
-        #{phoneType,jdbcType=INTEGER},
+      <if test="msgSubject != null" >
+        #{msgSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null" >
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="detailUrl != null" >
+        #{detailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="msgSubTitle != null" >
+        #{msgSubTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushType != null" >
+        #{pushType,jdbcType=INTEGER},
       </if>
       <if test="sendType != null" >
         #{sendType,jdbcType=INTEGER},
       </if>
-      <if test="pushType != null" >
-        #{pushType,jdbcType=INTEGER},
+      <if test="sendTime != null" >
+        #{sendTime,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         #{status,jdbcType=INTEGER},
@@ -125,34 +142,37 @@
       <if test="modifyTime != null" >
         #{modifyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="msgType != null" >
-        #{msgType,jdbcType=INTEGER},
-      </if>
-      <if test="busType != null" >
-        #{busType,jdbcType=INTEGER},
-      </if>
-      <if test="content != null" >
-        #{content,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.SysAppMessage" >
      update sys_msg_app
     <set >
-      <if test="sendTime != null" >
-        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      <if test="msgType != null" >
+        msg_type = #{msgType,jdbcType=INTEGER},
       </if>
-      <if test="contentJson != null" >
-        content_json = #{contentJson,jdbcType=VARCHAR},
+      <if test="busType != null" >
+        bus_type = #{busType,jdbcType=INTEGER},
       </if>
-      <if test="phoneType != null" >
-        phone_type = #{phoneType,jdbcType=INTEGER},
+      <if test="msgSubject != null" >
+        msg_subject = #{msgSubject,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null" >
+        image_url = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="detailUrl != null" >
+        detail_url = #{detailUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="msgSubTitle != null" >
+        msg_sub_title = #{msgSubTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushType != null" >
+        push_type = #{pushType,jdbcType=INTEGER},
       </if>
       <if test="sendType != null" >
         send_type = #{sendType,jdbcType=INTEGER},
       </if>
-      <if test="pushType != null" >
-        push_type = #{pushType,jdbcType=INTEGER},
+      <if test="sendTime != null" >
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=INTEGER},
@@ -163,31 +183,23 @@
       <if test="modifyTime != null" >
         modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="msgType != null" >
-        msg_type = #{msgType,jdbcType=INTEGER},
-      </if>
-      <if test="busType != null" >
-        bus_type = #{busType,jdbcType=INTEGER},
-      </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.SysAppMessage" >
     update sys_msg_app
-    set send_time = #{sendTime,jdbcType=TIMESTAMP},
-      content_json = #{contentJson,jdbcType=VARCHAR},
-      phone_type = #{phoneType,jdbcType=INTEGER},
-      send_type = #{sendType,jdbcType=INTEGER},
+    set msg_type = #{msgType,jdbcType=INTEGER},
+      bus_type = #{busType,jdbcType=INTEGER},
+      msg_subject = #{msgSubject,jdbcType=VARCHAR},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+      detail_url = #{detailUrl,jdbcType=VARCHAR},
+      msg_sub_title = #{msgSubTitle,jdbcType=VARCHAR},
       push_type = #{pushType,jdbcType=INTEGER},
+      send_type = #{sendType,jdbcType=INTEGER},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
       modify_user_id = #{modifyUserId,jdbcType=INTEGER},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      msg_type = #{msgType,jdbcType=INTEGER},
-      bus_type = #{busType,jdbcType=INTEGER},
-      content = #{content,jdbcType=VARCHAR}
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!-- 分页条件查询 -->
@@ -200,11 +212,11 @@
       <if test="condition.sendTime != null and condition.sendTime != ''" >
         AND send_time = #{condition.sendTime,jdbcType=TIMESTAMP}
       </if>
-      <if test="condition.content != null and condition.content != ''" >
-        AND content = #{condition.content,jdbcType=VARCHAR}
+      <if test="condition.msgSubject != null and condition.msgSubject != ''" >
+        AND msg_subject = #{condition.msgSubject,jdbcType=VARCHAR}
       </if>
-      <if test="condition.phoneType != null" >
-        AND phone_type = #{condition.phoneType,jdbcType=INTEGER}
+      <if test="condition.imageUrl != null and condition.imageUrl != ''" >
+        AND image_url = #{condition.imageUrl,jdbcType=VARCHAR}
       </if>
       <if test="condition.sendType != null" >
         AND send_type = #{condition.sendType,jdbcType=INTEGER}
@@ -227,8 +239,11 @@
       <if test="condition.busType != null " >
         AND bus_type = #{condition.busType,jdbcType=INTEGER}
       </if>
-      <if test="condition.contentJson != null and condition.contentJson != ''" >
-        AND content_json = #{condition.contentJson,jdbcType=VARCHAR}
+      <if test="condition.detailUrl != null and condition.detailUrl != ''" >
+        AND detail_url = #{condition.detailUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.msgSubTitle != null and condition.msgSubTitle != ''" >
+        AND msg_sub_title = #{condition.msgSubTitle,jdbcType=VARCHAR}
       </if>
       <!-- 手工添加 -->
       <if test="condition.startSendTime != null and condition.startSendTime != ''" >
@@ -248,14 +263,14 @@
   <select id="queryTotalByCondition" parameterType="net.fnsco.service.domain.SysAppMessage" resultType="java.lang.Integer">
     select count(*)  from sys_msg_app
     <where>
-      <if test="sendTime != null and sendTime != '' " >
+      <if test="sendTime != null and sendTime != ''" >
         AND send_time = #{sendTime,jdbcType=TIMESTAMP}
       </if>
-      <if test="content != null and content != '' " >
-        AND content = #{content,jdbcType=VARCHAR}
+      <if test="msgSubject != null and msgSubject != ''" >
+        AND msg_subject = #{msgSubject,jdbcType=VARCHAR}
       </if>
-      <if test="phoneType != null" >
-        AND phone_type = #{phoneType,jdbcType=INTEGER}
+      <if test="imageUrl != null and imageUrl != ''" >
+        AND image_url = #{imageUrl,jdbcType=VARCHAR}
       </if>
       <if test="sendType != null" >
         AND send_type = #{sendType,jdbcType=INTEGER}
@@ -266,24 +281,27 @@
       <if test="status != null" >
         AND status = #{status,jdbcType=INTEGER}
       </if>
-      <if test="modifyUserId != null and modifyUserId != '' " >
+      <if test="modifyUserId != null" >
         AND modify_user_id = #{modifyUserId,jdbcType=INTEGER}
       </if>
-      <if test="modifyTime != null and modifyTime != '' " >
+      <if test="modifyTime != null" >
         AND modify_time = #{modifyTime,jdbcType=TIMESTAMP}
       </if>
-      <if test="msgType != null " >
+      <if test="msgType != null" >
         AND msg_type = #{msgType,jdbcType=INTEGER}
       </if>
-      <if test="busType != null" >
+      <if test="busType != null " >
         AND bus_type = #{busType,jdbcType=INTEGER}
       </if>
-      <if test="contentJson != null and contentJson != ''" >
-        AND content_json = #{contentJson,jdbcType=VARCHAR}
+      <if test="detailUrl != null and detailUrl != ''" >
+        AND detail_url = #{detailUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="msgSubTitle != null and msgSubTitle != ''" >
+        AND msg_sub_title = #{msgSubTitle,jdbcType=VARCHAR}
       </if>
       <!-- 手工添加 -->
       <if test="startSendTime != null and startSendTime != ''" >
-        	AND send_time >= #{startSendTime}
+        	AND send_time >= #{condition.startSendTime}
       </if>
       <if test="endSendTime != null and endSendTime != ''" >
       	<![CDATA[
@@ -298,14 +316,14 @@
      <include refid="Base_Column_List" />
       from sys_msg_app
     <where>
-      <if test="sendTime != null " >
-        AND send_time >= #{sendTime,jdbcType=TIMESTAMP}
+      <if test="sendTime != null and sendTime != ''" >
+        AND send_time = #{sendTime,jdbcType=TIMESTAMP}
       </if>
-      <if test="content != null and content != ''" >
-        AND content = #{content,jdbcType=VARCHAR}
+      <if test="msgSubject != null and msgSubject != ''" >
+        AND msg_subject = #{msgSubject,jdbcType=VARCHAR}
       </if>
-      <if test="phoneType != null" >
-        AND phone_type = #{phoneType,jdbcType=INTEGER}
+      <if test="imageUrl != null and imageUrl != ''" >
+        AND image_url = #{imageUrl,jdbcType=VARCHAR}
       </if>
       <if test="sendType != null" >
         AND send_type = #{sendType,jdbcType=INTEGER}
@@ -319,17 +337,20 @@
       <if test="modifyUserId != null" >
         AND modify_user_id = #{modifyUserId,jdbcType=INTEGER}
       </if>
-      <if test="modifyTime != null " >
+      <if test="modifyTime != null" >
         AND modify_time = #{modifyTime,jdbcType=TIMESTAMP}
       </if>
       <if test="msgType != null" >
         AND msg_type = #{msgType,jdbcType=INTEGER}
       </if>
-      <if test="busType != null" >
-        AND bus_type = #{condition.busType,jdbcType=INTEGER}
+      <if test="busType != null " >
+        AND bus_type = #{busType,jdbcType=INTEGER}
       </if>
-      <if test="contentJson != null and contentJson != ''" >
-        AND content_json = #{contentJson,jdbcType=VARCHAR}
+      <if test="detailUrl != null and detailUrl != ''" >
+        AND detail_url = #{detailUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="msgSubTitle != null and msgSubTitle != ''" >
+        AND msg_sub_title = #{msgSubTitle,jdbcType=VARCHAR}
       </if>
     </where> 
      ORDER BY send_time DESC 
@@ -340,5 +361,14 @@
     select 
      <include refid="Base_Column_List" />
       from sys_msg_app where send_time &lt;=  NOW() AND status=2
+  </select>
+  <select id="queryListByIds"  resultMap="BaseResultMap">
+	  select 
+	     <include refid="Base_Column_List" />
+	      from sys_msg_app where id in 
+	      <foreach collection="ids" item="msgId" index="index"
+            open="(" close=")" separator=",">
+            #{msgId}
+        </foreach>
   </select>
 </mapper>
