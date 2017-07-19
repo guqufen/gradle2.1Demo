@@ -1,7 +1,5 @@
 package net.fnsco.freamwork.interceptor;
 
-import java.nio.charset.Charset;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,14 +8,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Strings;
 
-import net.fnsco.freamwork.aop.HttpHelper;
 import net.fnsco.freamwork.aop.OutWriterUtil;
+import net.fnsco.freamwork.business.AppUserDTO;
+import net.fnsco.freamwork.business.UserService;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.freamwork.comm.Md5Util;
 
@@ -33,7 +31,10 @@ public class AppInterceptor implements HandlerInterceptor {
 
     @Autowired
     private Environment env;
-
+    
+    @Autowired
+    private UserService userService;
+    
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String isAuthor = env.getProperty(FrameworkConstant.APP_IS_AUTHOR);
@@ -67,6 +68,17 @@ public class AppInterceptor implements HandlerInterceptor {
             OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_ERROR);
             return false;
         }
+                //强制退出
+                String userId = request.getHeader("userId");
+                if (!Strings.isNullOrEmpty(userId)) {
+                    AppUserDTO userDto = userService.getUserInfo(userId);
+                    if (userDto != null) {
+                        if (userDto.getForcedLoginOut() != null && userDto.getForcedLoginOut().compareTo(1) == 0) {
+                            OutWriterUtil.outJson(response, FrameworkConstant.E_FORCED_LOGIN_OUT);
+                            return false;
+                        }
+                    }
+                }
         return true;
     }
 

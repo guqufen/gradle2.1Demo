@@ -60,7 +60,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         listcast.setExtraField("sendTime", sendTime);//推送时间
         listcast.setExtraField("titleType", "系统消息");
         listcast.setExtraField("contentJson", contentJson);
-        listcast.setCustomField("");//标识系统通知还是交易流水通知
+        listcast.setCustomField("");//通知
         int status = client.send(listcast);
         return status;
 
@@ -180,7 +180,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             unicast.setProductionMode();// 正式模式
         }
         // Set customized fields
-        unicast.setExtraField("msgType", "1");//交易流水通知
+        unicast.setExtraField("msgType", "1");//通知
         unicast.setExtraField("titleType", "系统通知");
         unicast.setExtraField("innerTermCode", innerTermCode);
         unicast.setTicker("【数钱吧】您有一条新消息");
@@ -213,7 +213,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             unicast.setProductionMode();// 正式模式
         }
         // Set customized fields
-        unicast.setCustomizedField("msgType", "1");//交易流水通知
+        unicast.setCustomizedField("msgType", "1");//通知
         unicast.setCustomizedField("titleType", "系统通知");
         unicast.setCustomizedField("contentJson", contentJson);
         int status = client.send(unicast);

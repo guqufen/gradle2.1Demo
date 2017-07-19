@@ -49,7 +49,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     //private static Map<String,Integer> LoginTimeMap=new HashMap<>();//存放登录次数的
 
     @Autowired
-    private AppUserDao                     mappUserDao;
+    private AppUserDao                     appUserDao;
     @Autowired
     private MerchantCoreDao                merchantCoreDao;
     @Autowired
@@ -79,7 +79,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return res;
         }
         //根据手机号查询用户实体是否存在
-        AppUser user = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+        AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
         if (user != null) {
             return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
         }
@@ -92,10 +92,10 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUser.setRegTime(new Date());
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         appUser.setPassword(password);
-        if (!mappUserDao.insertSelective(appUser)) {
+        if (!appUserDao.insertSelective(appUser)) {
             return ResultDTO.fail(ApiConstant.E_REGISTER_ERROR);
         }
-        appUser = mappUserDao.selectAppUserByMobile(appUser.getMobile());
+        appUser = appUserDao.selectAppUserByMobile(appUser.getMobile());
         map.put("appUserId", appUser.getId());
         //注册成功后关联商户
         int merchantNums1 = 0;
@@ -150,7 +150,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         final String mobile = appUserDTO.getMobile();
         //注册需要判断
         if (appUserDTO.getOprationType() == 0) {
-            AppUser user = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+            AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
             if (user != null) {
                 return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
             }
@@ -233,7 +233,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
 
         //判断手机号是否已经注册
-        if (mappUserDao.selectAppUserByMobile(appUserDTO.getMobile()) == null) {
+        if (appUserDao.selectAppUserByMobile(appUserDTO.getMobile()) == null) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
@@ -243,7 +243,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return res;
         }
         //密码更新失败
-        if (!mappUserDao.updatePasswordByPhone(appUserDTO.getMobile(), password)) {
+        if (!appUserDao.updatePasswordByPhone(appUserDTO.getMobile(), password)) {
             return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
         }
         //登录成功更新deviceToken
@@ -252,7 +252,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         adminUser.setDeviceToken("");
         adminUser.setId(id);
         //更新到实体
-        if (!mappUserDao.updateByPrimaryKeySelective(adminUser)) {
+        if (!appUserDao.updateByPrimaryKeySelective(adminUser)) {
             return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
         }
         return ResultDTO.success();
@@ -275,7 +275,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         String oldPassword = Md5Util.getInstance().md5(appUserDTO.getOldPassword());
         AppUser appUser = new AppUser();
         //根据id查询用户是否存在获取原密码
-        AppUser mAppUser = mappUserDao.selectAppUserById(id);
+        AppUser mAppUser = appUserDao.selectAppUserById(id);
         if (null == mAppUser) {
             return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
         }
@@ -289,7 +289,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         //修改密码后app跳到未登录页面 需要清空deviceToken
         appUser.setDeviceToken("");
 
-        if (!mappUserDao.updateByPrimaryKeySelective(appUser)) {
+        if (!appUserDao.updateByPrimaryKeySelective(appUser)) {
 
             return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
         }
@@ -310,7 +310,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         //根据手机号查询用户实体是否存在
-        AppUser appUser = mappUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+        AppUser appUser = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
         if (appUser == null) {
             return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
         }
@@ -325,7 +325,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         adminUser.setDeviceToken(appUserDTO.getDeviceToken());
         adminUser.setId(appUser.getId());
         //更新到实体
-        if (!mappUserDao.updateByPrimaryKeySelective(adminUser)) {
+        if (!appUserDao.updateByPrimaryKeySelective(adminUser)) {
             return ResultDTO.fail(ApiConstant.E_LOGIN_ERROR);
         }
         map.put("appUserId", appUser.getId());
@@ -355,7 +355,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         adminUser.setDeviceToken("");
         adminUser.setId(id);
         //更新到实体
-        if (!mappUserDao.updateByPrimaryKeySelective(adminUser)) {
+        if (!appUserDao.updateByPrimaryKeySelective(adminUser)) {
             return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
         }
         return ResultDTO.success();
@@ -373,9 +373,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         //分页器实例化     实例化当前页和每条显示的记录数 还有传过来的参数  手机号和店铺名等条件称封装到一个实体里面
         PageDTO<AppUserManageDTO> params = new PageDTO<AppUserManageDTO>(currentPageNum, perPageSize, record);
         //调用Dao方法时可以使用上面封装的实体         AppUserManageDTO即使用户返回给用户的实体 也用来传递参数
-        List<AppUserManageDTO> data = mappUserDao.queryPageList(params);
+        List<AppUserManageDTO> data = appUserDao.queryPageList(params);
         //返回根据条件查询的所有记录条数
-        int totalNum = mappUserDao.queryTotalByCondition(record);
+        int totalNum = appUserDao.queryTotalByCondition(record);
         //返回给页面总条数和每页查询的数据
         ResultPageDTO<AppUserManageDTO> result = new ResultPageDTO<AppUserManageDTO>(totalNum, data);
         return result;
@@ -383,7 +383,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
     @Override
     public ResultDTO modifyRole(BandDto bandDto) {
-        List<QueryBandDTO> list = mappUserDao.selectBandPeopleByMobile(bandDto.getMobile());
+        List<QueryBandDTO> list = appUserDao.selectBandPeopleByMobile(bandDto.getMobile());
         //一条商铺都没有绑定
         for (QueryBandDTO li : list) {
             if (li == null) {
@@ -403,7 +403,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
      */
     @Override
     public List<AppUser> queryAllPushUser() {
-        return mappUserDao.queryAllPushUser();
+        return appUserDao.queryAllPushUser();
     }
 
     //角色修改
@@ -425,4 +425,20 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         return ResultDTO.success();
     }
 
+    @Override
+    public net.fnsco.freamwork.business.AppUserDTO getUserInfo(String userId) {
+        net.fnsco.freamwork.business.AppUserDTO dto = null;
+        try {
+            AppUser user = appUserDao.selectAppUserById(Integer.parseInt(userId));
+            if (user != null) {
+                dto = new net.fnsco.freamwork.business.AppUserDTO();
+                dto.setForcedLoginOut(user.getForcedLoginOut());
+                dto.setUserName(user.getUserName());
+                dto.setId(user.getId());
+            }
+        } catch (Exception ex) {
+            logger.error("获取用户信息出错" + userId, ex);
+        }
+        return dto;
+    }
 }
