@@ -324,6 +324,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         adminUser.setDeviceType(appUserDTO.getDeviceType());
         adminUser.setDeviceToken(appUserDTO.getDeviceToken());
         adminUser.setId(appUser.getId());
+        adminUser.setForcedLoginOut(0);
         //更新到实体
         if (!appUserDao.updateByPrimaryKeySelective(adminUser)) {
             return ResultDTO.fail(ApiConstant.E_LOGIN_ERROR);
