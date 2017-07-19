@@ -123,4 +123,8 @@
             #{msgId}
         </foreach>
   </update>
+  <!-- 查询用户未读消息条数 -->
+  <select id="selectTotalUnreadCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(*) from sys_msg_app_succ where read_status = 0 and app_user_id = #{userId}
+  </select>
 </mapper>

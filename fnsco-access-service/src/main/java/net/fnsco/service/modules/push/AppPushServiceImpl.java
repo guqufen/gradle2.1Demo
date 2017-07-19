@@ -85,7 +85,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         listcast.setExtraField("msgType", "1");//系统通知
         listcast.setExtraField("sendTime", sendTime);//推送时间
         listcast.setExtraField("titleType", "系统消息");
-        listcast.setExtraField("contentJson", contentJson);
+        listcast.setExtraField("ids", contentJson);
         listcast.setCustomField("");//通知
         int status = client.send(listcast);
         return status;
@@ -259,9 +259,10 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String  sendTime = null;
         List<AppUser>  users = null;
-        if(datas.size()> 0 ){
-            users = appUserService.queryAllPushUser();
+        if(datas.size() == 0 ){
+           return;
         }
+        users = appUserService.queryAllPushUser();
         for (SysAppMessage sysAppMessage : datas) {
             sendTime = sdf.format(sysAppMessage.getSendTime());//定义传递给友盟的时间
             try {

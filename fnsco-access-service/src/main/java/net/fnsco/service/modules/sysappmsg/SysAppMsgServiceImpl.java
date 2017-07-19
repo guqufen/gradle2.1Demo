@@ -21,6 +21,8 @@ import net.fnsco.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.push.AppPushService;
 import net.fnsco.api.sysappmsg.SysAppMsgService;
+import net.fnsco.api.sysappmsg.SysMsgAppFailService;
+import net.fnsco.api.sysappmsg.SysMsgAppSuccService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
@@ -31,15 +33,13 @@ import net.fnsco.core.utils.OssUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
 import net.fnsco.service.dao.master.AppUserDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
-import net.fnsco.service.dao.master.MsgReadDao;
 import net.fnsco.service.dao.master.SysAppMessageDao;
 import net.fnsco.service.dao.master.SysMsgAppSuccDao;
-import net.fnsco.service.dao.master.SysMsgReceiverDao;
 import net.fnsco.service.domain.AppUser;
 import net.fnsco.service.domain.MerchantCore;
-import net.fnsco.service.domain.MsgRead;
 import net.fnsco.service.domain.SysAppMessage;
-import net.fnsco.service.domain.SysMsgReceiver;
+import net.fnsco.service.domain.SysMsgAppFail;
+import net.fnsco.service.domain.SysMsgAppSucc;
 import net.fnsco.service.domain.SysUser;
 
 /**
@@ -59,12 +59,6 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
     private AppPushService appPushService;
     
     @Autowired
-    private MsgReadDao msgReadDao;
-    
-    @Autowired
-    private SysMsgReceiverDao sysMsgReceiverDao;
-    
-    @Autowired
     private AppUserDao    appUserDao;
     
     @Autowired
@@ -72,6 +66,12 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
     
     @Autowired
     private SysMsgAppSuccDao sysMsgAppSuccDao;
+    
+    @Autowired
+    private SysMsgAppSuccService sysMsgAppSuccService;
+    
+    @Autowired
+    private SysMsgAppFailService sysMsgAppFailService;
 
     /**
      * (non-Javadoc)
@@ -249,7 +249,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
     }
 
     /**
-     * (non-Javadoc) 删除单条数据
+     * (non-Javadoc) 更新单条数据
      * @see net.fnsco.api.sysappmsg.SysAppMsgService#deleteMsg(java.lang.Integer)
      * @auth tangliang
      * @date 2017年7月12日 上午10:12:33
@@ -260,7 +260,10 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         if (null == id) {
             return ResultDTO.fail();
         }
-        int res = sysAppMessageDao.deleteByPrimaryKey(id);
+        SysAppMessage record = new SysAppMessage();
+        record.setId(id);
+        record.setStatus(2);
+        int res = sysAppMessageDao.updateByPrimaryKeySelective(record);
         if (res != 0) {
             return ResultDTO.success();
         }
@@ -283,58 +286,58 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         /**
          * 根据记录时间查询出未读数据
          */
-        SysAppMessage condition = new SysAppMessage();
-        SysMsgReceiver condition1 = new SysMsgReceiver();
-//        condition.setPhoneType(phoneType);
-        condition.setStatus(1);
-        condition1.setAppUserId(userId);
-        List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);
-        List<SysMsgReceiver> datas1 =  sysMsgReceiverDao.queryListByCondition(condition1);
-        List<AppPushMsgInfoDTO> result = Lists.newArrayList();
-//        for (SysAppMessage sysAppMessage : datas) {
-//            result.add(JsonPluginsUtil.jsonToBean(sysAppMessage.getContentJson(), AppPushMsgInfoDTO.class));
+//        SysAppMessage condition = new SysAppMessage();
+//        SysMsgReceiver condition1 = new SysMsgReceiver();
+////        condition.setPhoneType(phoneType);
+//        condition.setStatus(1);
+//        condition1.setAppUserId(userId);
+//        List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);
+//        List<SysMsgReceiver> datas1 =  sysMsgReceiverDao.queryListByCondition(condition1);
+//        List<AppPushMsgInfoDTO> result = Lists.newArrayList();
+////        for (SysAppMessage sysAppMessage : datas) {
+////            result.add(JsonPluginsUtil.jsonToBean(sysAppMessage.getContentJson(), AppPushMsgInfoDTO.class));
+////        }
+//        for (SysMsgReceiver sysMsgReceiver : datas1) {
+//            result.add(JsonPluginsUtil.jsonToBean(sysMsgReceiver.getMsgContent(), AppPushMsgInfoDTO.class));
 //        }
-        for (SysMsgReceiver sysMsgReceiver : datas1) {
-            result.add(JsonPluginsUtil.jsonToBean(sysMsgReceiver.getMsgContent(), AppPushMsgInfoDTO.class));
-        }
         ResultPageDTO<AppPushMsgInfoDTO> resultPage = new ResultPageDTO<AppPushMsgInfoDTO>(perPageSize, null);
-        //按照时间排序
-        Collections.sort(result);
-        resultPage.setTotal(result.size());
-        resultPage.setCurrentPage(currentPageNum);
-        if(result.size() >= currentPageNum*perPageSize){
-            result = result.subList((currentPageNum-1)*perPageSize, currentPageNum*perPageSize);
-        }else if(result.size() < currentPageNum*perPageSize && currentPageNum != 1){
-            result.clear();
-        }
-        List<AppPushMsgInfoDTO> resultDate = Lists.newArrayList();
-        //重新获取图片路径
-        for (AppPushMsgInfoDTO appPushMsgInfoDTO : result) {
-            if(StringUtils.isNotEmpty(appPushMsgInfoDTO.getImageURL())){
-                String path = appPushMsgInfoDTO.getImageURL().substring(appPushMsgInfoDTO.getImageURL().indexOf("^")+1);
-                String imageURL =  OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
-                appPushMsgInfoDTO.setImageURL(imageURL);
-            }
-            resultDate.add(appPushMsgInfoDTO);
-        }
-        resultPage.setList(resultDate);
-        
-        /**
-         * 再次记录读取时间
-         */
-        if(hasRead){
-            MsgRead reader = msgReadDao.selectByUserId(userId);
-            Date readTime = new Date();
-            if(reader == null){
-                reader = new MsgRead();
-                reader.setAppUserId(userId);
-                reader.setReadTime(readTime);
-                msgReadDao.insertSelective(reader);
-            }else{
-                reader.setReadTime(readTime);
-                msgReadDao.updateByPrimaryKeySelective(reader);
-            }
-        }
+//        //按照时间排序
+//        Collections.sort(result);
+//        resultPage.setTotal(result.size());
+//        resultPage.setCurrentPage(currentPageNum);
+//        if(result.size() >= currentPageNum*perPageSize){
+//            result = result.subList((currentPageNum-1)*perPageSize, currentPageNum*perPageSize);
+//        }else if(result.size() < currentPageNum*perPageSize && currentPageNum != 1){
+//            result.clear();
+//        }
+//        List<AppPushMsgInfoDTO> resultDate = Lists.newArrayList();
+//        //重新获取图片路径
+//        for (AppPushMsgInfoDTO appPushMsgInfoDTO : result) {
+//            if(StringUtils.isNotEmpty(appPushMsgInfoDTO.getImageURL())){
+//                String path = appPushMsgInfoDTO.getImageURL().substring(appPushMsgInfoDTO.getImageURL().indexOf("^")+1);
+//                String imageURL =  OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
+//                appPushMsgInfoDTO.setImageURL(imageURL);
+//            }
+//            resultDate.add(appPushMsgInfoDTO);
+//        }
+//        resultPage.setList(resultDate);
+//        
+//        /**
+//         * 再次记录读取时间
+//         */
+//        if(hasRead){
+//            MsgRead reader = msgReadDao.selectByUserId(userId);
+//            Date readTime = new Date();
+//            if(reader == null){
+//                reader = new MsgRead();
+//                reader.setAppUserId(userId);
+//                reader.setReadTime(readTime);
+//                msgReadDao.insertSelective(reader);
+//            }else{
+//                reader.setReadTime(readTime);
+//                msgReadDao.updateByPrimaryKeySelective(reader);
+//            }
+//        }
         
         return ResultDTO.success(resultPage);
         
@@ -360,64 +363,108 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         AppUser appUser = appUserDao.selectAppUserById(userId);
         newPhone = appUser.getMobile();
         String msgContent = "【新店员加入】新店员"+newPhone+"加入"+merchantCore.getMerName()+"店";
-        AppPushMsgInfoDTO appMsgInfo = new AppPushMsgInfoDTO();
-        appMsgInfo.setMsgSubject("新店员加入");
-        appMsgInfo.setMsgSubtitle(msgContent);
-        appMsgInfo.setSendTime(sendDate);
-        appMsgInfo.setSendTimeStr(sendTime);
-        for (AppUser user : users) {
-            int deviceType = user.getDeviceType();
-            if(String.valueOf(deviceType)==null||"0".equals(deviceType)||user.getId() == userId){
-                continue;
-            }else if(deviceType==1){//安卓
-                if(StringUtils.isNotBlank(user.getDeviceToken())){
-                    relatelds_and.add(user.getDeviceToken());
-                }
-            }else if(deviceType==2){//ios
-                if(StringUtils.isNotBlank(user.getDeviceToken())){
-                    ResultDTO<PushMsgInfoDTO> countInfo =  queryNewsCount(user.getId(), false, user.getDeviceType());
-                    try {
-                        int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), msgContent, countInfo.getData().getUnReadCount(),appMsgInfo.toString());
-                        if (iosStatus == 200) {
-                            logger.info("ios信息推送成功");
-                        } else {
-                            logger.info("ios信息推送失败");
+        SysAppMessage message = new SysAppMessage();
+        message.setBusType(0);
+        message.setModifyUserId(1);
+        message.setMsgSubject("新店员加入");
+        message.setMsgSubTitle(msgContent);
+        message.setMsgType(1);
+        message.setPushType(1);
+        message.setSendType(1);
+        message.setSendTime(sendDate);
+        message.setModifyTime(new Date());
+        message.setStatus(1);
+        insertSelective(message);
+        List<SysAppMessage >messages = queryListByCondition(message);
+        if(messages.size()>0){
+            message = messages.get(0);
+            
+            for (AppUser user : users) {
+                int deviceType = user.getDeviceType();
+                if(String.valueOf(deviceType)==null||"0".equals(deviceType)||user.getId() == userId){
+                    continue;
+                }else if(deviceType==1){//安卓
+                    if(StringUtils.isNotBlank(user.getDeviceToken())){
+                        relatelds_and.add(user.getDeviceToken());
+                    }
+                }else if(deviceType==2){//ios
+                    if(StringUtils.isNotBlank(user.getDeviceToken())){
+                        ResultDTO<PushMsgInfoDTO> countInfo =  queryNewsCount(user.getId(), false, user.getDeviceType());
+                        try {
+                            int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), msgContent, countInfo.getData().getUnReadCount(),message.getId().toString());
+                            if (iosStatus == 200) {
+                                //成功
+                                SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
+                                sysMsgAppSucc.setSendTime(new Date());
+                                sysMsgAppSucc.setAppUserId(appUser.getId());
+                                sysMsgAppSucc.setMsgId(message.getId());
+                                sysMsgAppSucc.setReadStatus(0);
+                                sysMsgAppSucc.setPhoneType(2);
+                                sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
+                                logger.info("ios信息推送成功");
+                            } else {
+                                SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
+                                sysMsgAppFail.setAppUserId(appUser.getId());
+                                sysMsgAppFail.setMsgId(message.getId());
+                                sysMsgAppFail.setSendCount(1);
+                                sysMsgAppFail.setSendTime(new Date());
+                                sysMsgAppFail.setStatus(0);
+                                sysMsgAppFail.setPhoneType(2);
+                                sysMsgAppFailService.insertSelective(sysMsgAppFail);
+                                logger.info("ios信息推送失败");
+                            }
+                        } catch (Exception e) {
+                            
+                            logger.error("ios信息推送异常"+e);
+                            e.printStackTrace();
+                            
                         }
-                    } catch (Exception e) {
-                        
-                        logger.error("ios信息推送异常"+e);
-                        e.printStackTrace();
-                        
                     }
                 }
+                
             }
+            param_and = relatelds_and.toString().substring(1, param_and.length()-1);
+            param_and = param_and.replaceAll(" ", "");//安卓去重后token
             
-        }
-        param_and = relatelds_and.toString().substring(1, param_and.length()-1);
-        param_and = param_and.replaceAll(" ", "");//安卓去重后token
-        
-        /**
-         * android
-         */
-        try {
-            int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime,appMsgInfo.toString());
-            if (status == 200) {
-                logger.info("安卓信息推送成功");
-            } else {
-                logger.info("安卓信息推送失败");
-            }
-        } catch (Exception e) {
-            logger.error("android列播推送："+e);
-        } 
-       
-        try {
-            SysMsgReceiver sysMsgReceiver = new SysMsgReceiver();
-            sysMsgReceiver.setAppUserId(userId);
-            sysMsgReceiver.setMsgContent(msgContent);
-            sysMsgReceiver.setSendTime(sdf.parse(sendTime));
-            sysMsgReceiverDao.insertSelective(sysMsgReceiver);
-        } catch (ParseException e) {
-            logger.error("列播推送消息日期转换出错："+e);
+            /**
+             * android
+             */
+            try {
+                int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime,message.getId().toString());
+                if (status == 200) {
+                    logger.info("安卓信息推送成功");
+                } else {
+                    logger.info("安卓信息推送失败");
+                }
+                for (AppUser user : users) {
+                    int deviceType = user.getDeviceType();
+                    if(deviceType==1){
+                        if (status == 200) {
+                            //成功
+                            SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
+                            sysMsgAppSucc.setSendTime(new Date());
+                            sysMsgAppSucc.setAppUserId(appUser.getId());
+                            sysMsgAppSucc.setMsgId(message.getId());
+                            sysMsgAppSucc.setReadStatus(0);
+                            sysMsgAppSucc.setPhoneType(1);
+                            sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
+                        } else {
+                            SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
+                            sysMsgAppFail.setAppUserId(appUser.getId());
+                            sysMsgAppFail.setMsgId(message.getId());
+                            sysMsgAppFail.setSendCount(1);
+                            sysMsgAppFail.setSendTime(new Date());
+                            sysMsgAppFail.setStatus(0);
+                            sysMsgAppFail.setPhoneType(1);
+                            sysMsgAppFailService.insertSelective(sysMsgAppFail);
+                        }
+                }
+               }
+            } catch (Exception e) {
+                logger.error("android列播推送："+e);
+            } 
+            
+            
         }
         
     }
@@ -436,70 +483,9 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         if(null == phoneType || (phoneType != 1 && phoneType!=2)){
             return ResultDTO.fail(ApiConstant.E_PHONETYPE_ERROR);
         }
-        
-        MsgRead reader = msgReadDao.selectByUserId(userId);
-        SysAppMessage condition = new SysAppMessage();
-        SysMsgReceiver condition1 = new SysMsgReceiver();
-        if(null != reader){
-            condition.setSendTime(reader.getReadTime());
-            condition1.setSendTime(reader.getReadTime());
-        }
-        
-//        condition.setPhoneType(phoneType);
-        condition.setStatus(1);
-        condition1.setAppUserId(userId);
-        List<SysAppMessage> datas = sysAppMessageDao.queryListByCondition(condition);
-        List<SysMsgReceiver> datas1 =  sysMsgReceiverDao.queryListByCondition(condition1);
-        /**
-         * 再次记录读取时间
-         */
-        if(hasRead){
-            Date readTime = new Date();
-            if(reader == null){
-                reader = new MsgRead();
-                reader.setAppUserId(userId);
-                reader.setReadTime(readTime);
-                msgReadDao.insertSelective(reader);
-            }else{
-                reader.setReadTime(readTime);
-                msgReadDao.updateByPrimaryKeySelective(reader);
-            }
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String readTimeStr = null;
         PushMsgInfoDTO msgInfoDTO = new PushMsgInfoDTO();
-        if(null == reader && hasRead){
-            readTimeStr = sdf.format(new Date());
-        }else if(reader != null){
-            readTimeStr = sdf.format(reader.getReadTime());
-        }
-        msgInfoDTO.setLastReadTimeStr(readTimeStr);
-        msgInfoDTO.setUnReadCount(datas.size()+datas1.size());
-        
+        msgInfoDTO.setUnReadCount(sysMsgAppSuccDao.selectTotalUnreadCount(userId));
         return ResultDTO.success(msgInfoDTO);
-        
-    }
-    
-    /**
-     * (non-Javadoc) 记录读取时间
-     * @see net.fnsco.api.sysappmsg.SysAppMsgService#readPushMsg(java.lang.Integer)
-     * @auth tangliang
-     * @date 2017年7月17日 下午2:40:00
-     */
-    @Override
-    public void readPushMsg(Integer userId) {
-        
-        MsgRead reader = msgReadDao.selectByUserId(userId);
-        Date readTime = new Date();
-        if(reader == null){
-            reader = new MsgRead();
-            reader.setAppUserId(userId);
-            reader.setReadTime(readTime);
-            msgReadDao.insertSelective(reader);
-        }else{
-            reader.setReadTime(readTime);
-            msgReadDao.updateByPrimaryKeySelective(reader);
-        }
         
     }
     
