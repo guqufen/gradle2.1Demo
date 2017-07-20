@@ -566,4 +566,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         return dto;
     }
+
+    @Override
+    public AppUser selectAppUserById(Integer id) {
+        
+        // TODO Auto-generated method stub
+        return appUserDao.selectAppUserById(id);
+        
+    }
 }

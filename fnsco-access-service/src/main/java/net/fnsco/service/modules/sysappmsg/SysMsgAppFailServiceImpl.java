@@ -1,5 +1,7 @@
 package net.fnsco.service.modules.sysappmsg;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -102,6 +104,19 @@ public class SysMsgAppFailServiceImpl extends BaseService implements SysMsgAppFa
         // TODO Auto-generated method stub
         return sysMsgAppFailDao.updateByPrimaryKey(record);
 
+    }
+    /**
+     * (non-Javadoc)条件查询
+     * @see net.fnsco.api.sysappmsg.SysMsgAppFailService#queryFailMsg(net.fnsco.service.domain.SysMsgAppFail)
+     * @auth tangliang
+     * @date 2017年7月20日 下午1:40:28
+     */
+    @Override
+    public List<SysMsgAppFail> queryFailMsg(SysMsgAppFail record) {
+        
+        // TODO Auto-generated method stub
+        return sysMsgAppFailDao.queryFailMsg(record);
+        
     }
 
 }
