@@ -2,6 +2,8 @@ package net.fnsco.api.appuser;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.api.dto.AppUserMerchantDTO;
@@ -51,4 +53,7 @@ public interface AppUserService extends UserService{
 	 * @since  CodingExample　Ver 1.1
 	 */
 	List<AppUser> queryAllPushUser();
+	
+	//根据id查询用户实体
+    AppUser selectAppUserById(Integer id);
 }

@@ -1,5 +1,7 @@
 package net.fnsco.service.dao.master;
 
+import java.util.List;
+
 import net.fnsco.service.domain.SysMsgAppFail;
 
 public interface SysMsgAppFailDao {
@@ -15,4 +17,15 @@ public interface SysMsgAppFailDao {
     int updateByPrimaryKeySelective(SysMsgAppFail record);
 
     int updateByPrimaryKey(SysMsgAppFail record);
+    
+    /**
+     * queryFailMsg:(这里用一句话描述这个方法的作用)条件查询
+     *
+     * @param record
+     * @return    设定文件
+     * @return List<SysMsgAppFail>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<SysMsgAppFail> queryFailMsg(SysMsgAppFail record);
 }
