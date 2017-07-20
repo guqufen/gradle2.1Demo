@@ -1,4 +1,4 @@
-package net.fnsco.withhold.service.comm;
+package net.fnsco.withhold.server.comm;
 
 import java.util.HashMap;
 import java.util.Map;

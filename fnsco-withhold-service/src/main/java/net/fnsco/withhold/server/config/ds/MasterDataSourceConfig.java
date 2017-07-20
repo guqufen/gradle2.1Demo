@@ -1,4 +1,4 @@
-package net.fnsco.withhold.service.config.ds;
+package net.fnsco.withhold.server.config.ds;
 
 import javax.sql.DataSource;
 

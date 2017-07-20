@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.fnsco</groupId>
-	<artifactId>fnsco-withhold-web</artifactId>
+	<artifactId>fnsco-withhold-war</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>fnsco-withhold-web</name>
-	<description>fnsco-withhold-web project for Spring Boot</description>
+	<name>fnsco-withhold-war</name>
+	<description>fnsco-withhold-war project for Spring Boot</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -84,7 +84,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>admin</finalName>
+		<finalName>withhold</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
