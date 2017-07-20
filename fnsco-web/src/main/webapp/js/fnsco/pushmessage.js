@@ -24,19 +24,14 @@ $('#table').bootstrapTable({
         width: 150,
         formatter: operateFormatter
     },{
-        field: 'contentJson',
-        title: '推送名称',
-        formatter:formatSubject
+        field: 'msgSubject',
+        title: '推送名称'
     },{
         field: 'msgType',
         title: '推送类型',
         formatter: formatPushType
     },{
-        field: 'phoneType',
-        title: '手机类型',
-        formatter: formatPhoneType
-    },{
-        field: 'content',
+        field: 'msgSubTitle',
         title: '推送内容'
     },{
         field: 'modifyUser',
@@ -66,11 +61,6 @@ function formatPhoneType(value, row, index){
 	}else{
 		return '未知设备';
 	}
-}
-//推送名称处理
-function formatSubject(value, row, index){
-	var jsonObj=JSON.parse(value); 
-	return jsonObj.msgSubject;
 }
 //时间格式化
 function formatTime(value, row, index){
@@ -107,17 +97,13 @@ function formatPushType(value, row, index){
 }
 //状态格式化
 function formatPushState(value, row, index){
-    if(!value){
-        return '-';
-    }else if(value == '0'){
-    	return '失败';
+     if(value == 0){
+    	return '待发送';
     }
-    else if(value == '1'){
-        return '成功';
-    }else if(value == '2'){
-        return '等待发送';
-    }else if(value == '3'){
-    	return '取消';
+    else if(value == 1){
+        return '已发送';
+    }else if(value == 2){
+        return '已取消';
     }else{
         return '其他';
     }   
@@ -211,11 +197,11 @@ function querySingle(id){
                 $("#myModal input").attr("disabled",true);
                 $("#myModal select").attr("disabled",true);
                 $("#pushView").html('');
-                $("#pushView").append('<img src='+data.data.imageURL+'>').show();
+                $("#pushView").append('<img src='+data.data.imageUrl+'>').show();
                 $("#msgSubject").val(data.data.msgSubject);
                 $("#datetimepicker3").val(data.data.sendTimeStr);
-                $("#detailURL").val(data.data.detailURL);
-                $("#msgSubtitle").val(data.data.msgSubtitle);
+                $("#detailURL").val(data.data.detailUrl);
+                $("#msgSubtitle").val(data.data.msgSubTitle);
                 $(".remove-icon").hide();
                 $(".sunmitBtn").hide();
         	}else{

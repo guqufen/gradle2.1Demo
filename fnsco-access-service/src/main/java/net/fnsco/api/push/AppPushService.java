@@ -89,4 +89,13 @@ public interface AppPushService {
      * @since  CodingExample　Ver 1.1
      */
     public Integer sendIOSUnicast(String iosUnicastToken,String content,Integer badge,String contentJson) throws Exception ;
+    
+    /**
+     * sendSystemMgs:(这里用一句话描述这个方法的作用)
+     *    设定文件
+     * @return void    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public void sendSystemMgs();
 }

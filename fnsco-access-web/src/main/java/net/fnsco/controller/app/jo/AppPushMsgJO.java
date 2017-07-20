@@ -1,5 +1,7 @@
 package net.fnsco.controller.app.jo;
 
+import java.util.List;
+
 import net.fnsco.core.base.PageDTO;
 
 /**
@@ -33,6 +35,33 @@ public class AppPushMsgJO extends PageDTO<Object> {
      */
     private Integer phoneType;
     
+    /**
+     * 信息IDs
+     */
+    private List<Integer> msgIds; //信息ID
+    
+    /**
+     * msgIds
+     *
+     * @return  the msgIds
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public List<Integer> getMsgIds() {
+        return msgIds;
+    }
+
+    /**
+     * msgIds
+     *
+     * @param   msgIds    the msgIds to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setMsgIds(List<Integer> msgIds) {
+        this.msgIds = msgIds;
+    }
+
     /**
      * phoneType
      *

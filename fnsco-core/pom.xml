@@ -44,8 +44,8 @@
 		    <version>20170516</version>
 		</dependency>
 		
-		<!-- session共享 -->
-		<!-- <dependency>
+		<!-- session共享
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-redis</artifactId>
 			<version>${redis.version}</version>

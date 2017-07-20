@@ -156,7 +156,7 @@
 	<!-- 根据innerCode查询 -->
 	<select id="selectByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
 	  SELECT
-			MU.id,MU.device_token,MU.mobile
+			MU.id,MU.device_token,MU.mobile,MU.device_type
 		FROM
 			(
 				SELECT DISTINCT

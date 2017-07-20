@@ -18,6 +18,7 @@
 		<module>fnsco-access-service</module>
 		<!-- 数据接入web项目-->
 		<module>fnsco-access-web</module>
+		<module>fnsco-war-app</module>
 	</modules>
 
 </project>

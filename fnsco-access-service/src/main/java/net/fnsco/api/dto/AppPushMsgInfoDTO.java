@@ -25,6 +25,7 @@ public class AppPushMsgInfoDTO extends DTO implements Comparable<AppPushMsgInfoD
     
     private static final long serialVersionUID = 7892526271637632128L;
     
+    private Integer id;
     /**
      * 消息主题
      */
@@ -58,6 +59,29 @@ public class AppPushMsgInfoDTO extends DTO implements Comparable<AppPushMsgInfoD
      * 副标题
      */
     private String msgSubtitle;
+    
+    
+    /**
+     * id
+     *
+     * @return  the id
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * id
+     *
+     * @param   id    the id to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     /**
      * msgSubject

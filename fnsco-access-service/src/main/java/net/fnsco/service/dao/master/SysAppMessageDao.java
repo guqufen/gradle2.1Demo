@@ -2,6 +2,8 @@ package net.fnsco.service.dao.master;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.service.domain.SysAppMessage;
 /**
@@ -25,6 +27,16 @@ public interface SysAppMessageDao {
     int updateByPrimaryKeySelective(SysAppMessage record);
 
     int updateByPrimaryKey(SysAppMessage record);
+    /**
+     * updateStatusByIdAndStatus:(这里用一句话描述这个方法的作用) 逻辑删除 修改状态
+     *
+     * @param record
+     * @return    设定文件
+     * @return int    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    int updateStatusByIdAndStatus(SysAppMessage record);
     
     /**
      * 条件分页查询
@@ -57,4 +69,14 @@ public interface SysAppMessageDao {
      * @since  CodingExample　Ver 1.1
      */
     List<SysAppMessage> queryExecuteData();
+    /**
+     * queryListByIds:(这里用一句话描述这个方法的作用)根据ID查询出详情
+     *
+     * @param ids
+     * @return    设定文件
+     * @return List<SysAppMessage>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<SysAppMessage> queryListByIds(@Param("ids")List<Integer> ids);
 }

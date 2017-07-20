@@ -1,5 +1,7 @@
 package net.fnsco.controller.web.sysappmsg;
 
+import java.text.SimpleDateFormat;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +13,6 @@ import net.fnsco.api.sysappmsg.SysAppMsgService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.utils.JsonPluginsUtil;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.service.domain.SysAppMessage;
 
@@ -88,20 +89,18 @@ public class SysAppMsgController extends BaseController {
      */
     @RequestMapping("/querySingle")
     @ResponseBody
-    public ResultDTO<AppPushMsgInfoDTO> querySingle(Integer id){
+    public ResultDTO<SysAppMessage> querySingle(Integer id){
         if(null == id){
             return ResultDTO.fail();
         }
         SysAppMessage message = sysAppMsgService.selectByPrimaryKey(id);
-        AppPushMsgInfoDTO infoDto = null;
-        if(StringUtils.isNoneEmpty(message.getContentJson())){
-            infoDto = JsonPluginsUtil.jsonToBean(message.getContentJson(), AppPushMsgInfoDTO.class);
-            if(StringUtils.isNotEmpty(infoDto.getImageURL())){
-                String path = infoDto.getImageURL().substring(infoDto.getImageURL().indexOf("^")+1);
-                String imageURL =  OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
-                infoDto.setImageURL(imageURL);
-            }
+        if(StringUtils.isNotEmpty(message.getImageUrl())){
+            String path = message.getImageUrl().substring(message.getImageUrl().indexOf("^")+1);
+            String imageURL =  OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
+            message.setImageUrl(imageURL);
         }
-        return ResultDTO.success(infoDto);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        message.setSendTimeStr(sdf.format(message.getSendTime()));
+        return ResultDTO.success(message);
     }
 }

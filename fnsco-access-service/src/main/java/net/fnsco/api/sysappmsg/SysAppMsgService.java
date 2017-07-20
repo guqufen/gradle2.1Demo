@@ -111,14 +111,15 @@ public interface SysAppMsgService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<PushMsgInfoDTO> queryNewsCount(Integer userId,boolean hasRead,Integer phoneType);
+    
     /**
-     * readPushMsg:(这里用一句话描述这个方法的作用)记录用户读取时间
+     * queryList:(这里用一句话描述这个方法的作用)
      *
-     * @param userId
+     * @param ids
      * @return    设定文件
-     * @return ResultDTO<String>    DOM对象
+     * @return ResultDTO<AppPushMsgInfoDTO>    DOM对象
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    void readPushMsg(Integer userId);
+    ResultDTO<List<AppPushMsgInfoDTO>> queryListByIds(List<Integer> ids);
 }
