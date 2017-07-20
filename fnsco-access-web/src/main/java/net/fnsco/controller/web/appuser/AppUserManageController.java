@@ -53,6 +53,14 @@ public class AppUserManageController extends BaseController {
         return AppUserService.modifyRole(bandDto);
     }
     
+    //判断成为店主
+    @RequestMapping("/judgeRoles")
+    @ResponseBody
+    public ResultDTO judgeRoles(@RequestBody AppUserMerchantDTO[] terminals){
+        List<AppUserMerchantDTO> params = Arrays.asList(terminals);
+        return AppUserService.judgeRoles(params);
+    }
+    
     @RequestMapping("/changeRole")
     @ResponseBody
     public ResultDTO changeRole(@RequestBody AppUserMerchantDTO[] terminals){

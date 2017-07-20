@@ -273,4 +273,8 @@
 		from m_app_user
 		where state = 1 and device_token &lt;&gt; '' and device_token is not null
   </select>
+  <update id="updateDeviceToken">
+		update m_app_user set device_token = #{deviceToken,jdbcType=VARCHAR}  where mobile =
+		#{mobile,jdbcType=VARCHAR}
+	</update>
 </mapper>

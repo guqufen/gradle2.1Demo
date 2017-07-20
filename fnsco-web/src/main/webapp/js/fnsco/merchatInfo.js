@@ -687,10 +687,10 @@ function contactHtml(num){
           layer.msg('操作错误!');return ;
         }
         if(!id || id<0){
-          concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
-        }else{
-          concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode,id}
-        }
+            concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
+          }else{
+            concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode,id}
+          }
         contactArr=contactArr.concat(concatContactArr);
       }
       if(contactArr && contactArr.length == 0){
