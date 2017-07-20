@@ -59,7 +59,7 @@
       #{sendTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{modifyUserId,jdbcType=INTEGER}, 
       #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.service.domain.SysAppMessage" >
+  <insert id="insertSelective" parameterType="net.fnsco.service.domain.SysAppMessage" useGeneratedKeys="true" keyProperty="id">
     insert into sys_msg_app
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

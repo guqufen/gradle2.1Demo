@@ -375,13 +375,11 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         message.setModifyTime(new Date());
         message.setStatus(1);
         insertSelective(message);
-        List<SysAppMessage >messages = queryListByCondition(message);
-        if(messages.size()>0){
-            message = messages.get(0);
+        if(message.getId() != null){
             
             for (AppUser user : users) {
-                int deviceType = user.getDeviceType();
-                if(String.valueOf(deviceType)==null||"0".equals(deviceType)||user.getId() == userId){
+                Integer deviceType = user.getDeviceType();
+                if(null == deviceType ||deviceType == 0||user.getId() == userId){
                     continue;
                 }else if(deviceType==1){//安卓
                     if(StringUtils.isNotBlank(user.getDeviceToken())){
@@ -423,7 +421,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
                 }
                 
             }
-            param_and = relatelds_and.toString().substring(1, param_and.length()-1);
+            param_and = relatelds_and.toString().substring(1, relatelds_and.toString().length()-1);
             param_and = param_and.replaceAll(" ", "");//安卓去重后token
             
             /**

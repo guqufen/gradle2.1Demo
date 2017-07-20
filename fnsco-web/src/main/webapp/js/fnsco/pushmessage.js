@@ -103,7 +103,7 @@ function formatPushState(value, row, index){
     else if(value == 1){
         return '已发送';
     }else if(value == 2){
-        return '已经取消';
+        return '已取消';
     }else{
         return '其他';
     }   
@@ -197,11 +197,11 @@ function querySingle(id){
                 $("#myModal input").attr("disabled",true);
                 $("#myModal select").attr("disabled",true);
                 $("#pushView").html('');
-                $("#pushView").append('<img src='+data.data.imageURL+'>').show();
+                $("#pushView").append('<img src='+data.data.imageUrl+'>').show();
                 $("#msgSubject").val(data.data.msgSubject);
                 $("#datetimepicker3").val(data.data.sendTimeStr);
-                $("#detailURL").val(data.data.detailURL);
-                $("#msgSubtitle").val(data.data.msgSubtitle);
+                $("#detailURL").val(data.data.detailUrl);
+                $("#msgSubtitle").val(data.data.msgSubTitle);
                 $(".remove-icon").hide();
                 $(".sunmitBtn").hide();
         	}else{
