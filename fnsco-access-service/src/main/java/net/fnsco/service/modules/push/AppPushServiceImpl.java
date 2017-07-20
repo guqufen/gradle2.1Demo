@@ -85,7 +85,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         listcast.setExtraField("msgType", "1");//系统通知
         listcast.setExtraField("sendTime", sendTime);//推送时间
         listcast.setExtraField("titleType", "系统消息");
-        listcast.setExtraField("ids", contentJson);
+        listcast.setExtraField("msgId", contentJson);
         listcast.setCustomField("");//通知
         int status = client.send(listcast);
         return status;
@@ -241,7 +241,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         // Set customized fields
         unicast.setCustomizedField("msgType", "1");//通知
         unicast.setCustomizedField("titleType", "系统通知");
-        unicast.setCustomizedField("ids", ids);
+        unicast.setCustomizedField("msgId", ids);
         int status = client.send(unicast);
         return status;
     }
@@ -304,7 +304,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                           }
                      }else if(appUser.getDeviceType() == 1){
                             if(androidStatus == 200){
-                                sysMsgAppSucc.setPhoneType(2);
+                                sysMsgAppSucc.setPhoneType(1);
                                 sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
                             }else{
                                 sysMsgAppSucc.setPhoneType(1);

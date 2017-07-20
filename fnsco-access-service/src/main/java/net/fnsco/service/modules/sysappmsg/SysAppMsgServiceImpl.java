@@ -263,7 +263,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         SysAppMessage record = new SysAppMessage();
         record.setId(id);
         record.setStatus(2);
-        int res = sysAppMessageDao.updateByPrimaryKeySelective(record);
+        int res = sysAppMessageDao.updateStatusByIdAndStatus(record);
         if (res != 0) {
             return ResultDTO.success();
         }

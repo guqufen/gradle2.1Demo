@@ -27,6 +27,16 @@ public interface SysAppMessageDao {
     int updateByPrimaryKeySelective(SysAppMessage record);
 
     int updateByPrimaryKey(SysAppMessage record);
+    /**
+     * updateStatusByIdAndStatus:(这里用一句话描述这个方法的作用) 逻辑删除 修改状态
+     *
+     * @param record
+     * @return    设定文件
+     * @return int    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    int updateStatusByIdAndStatus(SysAppMessage record);
     
     /**
      * 条件分页查询

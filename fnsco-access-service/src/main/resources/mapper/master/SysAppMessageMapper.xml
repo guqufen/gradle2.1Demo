@@ -371,4 +371,10 @@
             #{msgId}
         </foreach>
   </select>
+  <!-- 逻辑更新状态代表删除 -->
+  <update id="updateStatusByIdAndStatus" parameterType="net.fnsco.service.domain.SysAppMessage">
+    update sys_msg_app
+   	 set status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER} and status = 0
+  </update>
 </mapper>
