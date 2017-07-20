@@ -257,7 +257,7 @@
 			REL.role_id,REL.inner_code,REL.app_user_id,REL.id
 		FROM
 			u_app_user_merchant REL
-		RIGHT JOIN (
+		 JOIN (
 			SELECT
 				*
 			FROM

@@ -397,7 +397,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Override
     public ResultDTO modifyRole(BandDto bandDto) {
         List<QueryBandDTO> list = appUserDao.selectBandPeopleByMobile(bandDto.getMobile());
-        if (list.size() == 1 && list.contains(null)) {
+        if (list.size()==0) {
             return ResultDTO.fail(ApiConstant.E_NOBAND_ERROR);
         }
         //一条商铺都没有绑定
