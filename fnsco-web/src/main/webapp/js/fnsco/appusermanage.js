@@ -12,8 +12,8 @@ $('#table').bootstrapTable({
 	sortable : true, // 是否启用排序
 	sortOrder : "asc", // 排序方式
 	pageNumber : 1, // 初始化加载第一页，默认第一页
-	pageSize : 5, // 每页的记录行数（*）
-	pageList : [ 5, 10, 15, 20 ], // 可供选择的每页的行数（*）
+	pageSize : 15, // 每页的记录行数（*）
+	pageList : [ 15, 20, 25, 30 ], // 可供选择的每页的行数（*）
 	queryParams : queryParams,
 	responseHandler : responseHandler,// 处理服务器返回数据
 	columns : [ {
@@ -169,8 +169,83 @@ function showdates(data){
 	}
 };
 
+//判断修改
+$(".modify").click(function(){
+	confirmlt();
 
-$(".saveBtn").click(function(){
+	
+})
+
+function confirmlt(){
+	var arry=[];
+	var innerCode;
+	var id;
+	var roleId;
+	var appUserId;
+	$(".tab-content").find(".shopRoleList").each(function(){
+		$(this).find(".row").each(function(){
+			innerCode=$(this).find("#shopName1").attr("i");
+			console.log($(this).find("#shopName1").attr("i"));
+			id=$(this).find("#shopName1").attr("j");
+			appUserId=$(this).find("#shopName1").attr("o");
+			console.log($(this).find("#shopName1").attr("j"));
+			$(this).find("#shopRole").each(function(){
+				$(this).find("option").each(function(){
+					if($(this).is(":selected")){
+						roleId=$(this).val();
+						console.log($(this).val())
+					}
+				})
+			})
+		})
+		var date={"innerCode":innerCode,"id":id,"roleId":roleId,"appUserId":appUserId};
+		arry.push(date);
+	})
+	console.log(arry);
+	var toStr = JSON.stringify(arry);
+	$.ajax({
+		url : PROJECT_NAME + '/web/appsuser/judgeRoles',
+		type : 'POST',
+		dataType: "json",
+		contentType:"application/json",
+		data :toStr,
+		success : function(data) {
+			 unloginHandler(data);
+			 console.log(data)
+			 console.log(data.data.list.length)
+//			 var str="";
+			
+//			 $(".layui-layer-content").html(22);
+			// $(".layui-layer-content").prepend(22);
+			 if(data.data.list!=""){
+				 var str="";
+				 for(i=0;i<data.data.list.length;i++){
+						/* data.data.list[i].mobile         确定将<span>某店铺</span><span>小吴</span>更改为店员
+						 data.data.list[i].merName*/  
+						  str+='确定将<span>'+data.data.list[i].merName+'的</span><span>'+data.data.list[i].mobile+'</span>更改为店员'+',';
+						// $(".layui-layer-content").prepend(str);
+				 }
+					layer.confirm(str, {
+				        time: 200000, //20s后自动关闭
+				        btn: ['确定', '取消']
+				    }, function(){
+				    	saveBtn();
+				    }, function(){
+				      layer.msg('取消成功');
+				    });
+			 }
+			 if(data.data.list==""){
+				 saveBtn();
+			 }
+		}
+	});
+}
+
+
+
+
+
+function saveBtn(){
 	var arry=[];
 	var innerCode;
 	var id;
@@ -219,7 +294,14 @@ $(".saveBtn").click(function(){
 	    }
 	});
 	
-})
+}
+
+
+
+
+//$(".saveBtn").click(function(){
+//	
+//})
 
 
 

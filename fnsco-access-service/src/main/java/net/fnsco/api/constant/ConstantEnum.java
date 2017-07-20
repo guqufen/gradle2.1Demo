@@ -68,4 +68,38 @@ public class ConstantEnum {
             return "";
         }
     }
+
+    public static enum AuthorTypeEnum {
+        SHOPOWNER("1", "店长"), CLERK("2", "店员");
+        private String code;
+        private String name;
+
+        private AuthorTypeEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        /**
+        * @return the code
+        */
+        public String getCode() {
+            return code;
+        }
+
+        /**
+        * @return the name
+        */
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(String code) {
+            for (AuthorTypeEnum eopen : AuthorTypeEnum.values()) {
+                if (eopen.code.equals(code)) {
+                    return eopen.name;
+                }
+            }
+            return "";
+        }
+    }
 }

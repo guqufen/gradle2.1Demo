@@ -49,6 +49,7 @@ public interface AppUserService extends UserService{
 	 * @return List<AppUser>    DOM对象
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
-	 */
+	 */ 
 	List<AppUser> queryAllPushUser();
+    ResultDTO<String> judgeRoles(List<AppUserMerchantDTO> params);
 }

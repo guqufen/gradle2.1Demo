@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 
 import net.fnsco.api.appuser.AppUserMerchantService;
 import net.fnsco.api.constant.ApiConstant;
+import net.fnsco.api.constant.ConstantEnum;
 import net.fnsco.api.dto.AppUserMerchantOutDTO;
 import net.fnsco.api.dto.BandDto;
 import net.fnsco.api.dto.BandListDTO;
@@ -37,7 +38,7 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
     public ResultDTO queryBindPeople(BandDto bandDto) {
         Integer appUserId = bandDto.getUserId();
         //返回多个店铺的店主       AppUserMerchantOutDTO
-        List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId, "1");
+        List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId,ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         if (CollectionUtils.isEmpty(merchantList)) {
             return null;
         }
@@ -49,11 +50,11 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
             dto.setInnerCode(it.getInnerCode());
             dto.setMerName(res.getMerName());
             //查询出店铺的店员集合
-            List<AppUserMerchant> list = appUserMerchantDao.selectByInnerCode(it.getInnerCode(), "2");
+            List<AppUserMerchant> list = appUserMerchantDao.selectByInnerCode(it.getInnerCode(),ConstantEnum.AuthorTypeEnum.CLERK.getCode());
             List<BandListDTO> listDto=new ArrayList<BandListDTO>();
             //该店铺只有一个店主 没有其他店员
             if(CollectionUtils.isEmpty(list)){
-                listDto.add(null);
+                listDto=null;
             }
             for(AppUserMerchant li:list){
                 BandListDTO bandList=new BandListDTO();

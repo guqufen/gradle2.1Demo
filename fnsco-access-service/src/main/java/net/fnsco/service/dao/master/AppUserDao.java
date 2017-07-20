@@ -23,6 +23,7 @@ public interface AppUserDao {
 	boolean updatePasswordByPhone(@Param("mobile")String mobile,@Param("password")String password);
 	//根据用户手机号和状态查询用户实体
 	AppUser selectAppUserByMobileAndState(@Param("mobile")String mobile,@Param("state")Integer state);
+	boolean updateDeviceToken(@Param("mobile")String mobile,@Param("deviceToken")String deviceToken);
 	/**
 	 * selectByInnerCode:(这里用一句话描述这个方法的作用)根据innerCode查询
 	 *

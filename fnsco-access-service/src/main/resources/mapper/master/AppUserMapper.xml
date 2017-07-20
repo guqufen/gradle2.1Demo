@@ -23,6 +23,7 @@
 		<result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
 		<result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
 		<result column="state" jdbcType="INTEGER" property="state" />
+		<result column="forced_login_out" jdbcType="INTEGER" property="forcedLoginOut" />
 	</resultMap>
 	<!-- WEB页面用 -->
 	<resultMap id="PageResultMap" type="net.fnsco.api.dto.AppUserManageDTO" >
@@ -42,7 +43,7 @@
 		id, user_name, mobile, password, real_name, device_id, ges_state,
 		ges_password, ges_trail,
 		pay_password, device_type, device_token, password_error_num, password_error_date,
-		remark, reg_time, last_login_time, modify_time, state
+		remark, reg_time, last_login_time, modify_time, state,forced_login_out
 	</sql>
 	<!-- 根据手机号更新用户 密码 -->
 	<update id="updatePasswordByPhone" parameterType="java.lang.String">
@@ -145,6 +146,9 @@
 			</if>
 			<if test="state != null">
 				state = #{state,jdbcType=INTEGER},
+			</if>
+			<if test="forcedLoginOut != null">
+				forced_login_out = #{forcedLoginOut,jdbcType=INTEGER},
 			</if>
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
@@ -269,4 +273,8 @@
 		from m_app_user
 		where state = 1 and device_token &lt;&gt; '' and device_token is not null
   </select>
+  <update id="updateDeviceToken">
+		update m_app_user set device_token = #{deviceToken,jdbcType=VARCHAR}  where mobile =
+		#{mobile,jdbcType=VARCHAR}
+	</update>
 </mapper>

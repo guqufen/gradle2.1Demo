@@ -19,8 +19,22 @@
 		where app_user_id = #{appUserId,jdbcType=INTEGER} and role_id =
 		#{roleId,jdbcType=VARCHAR}
 	</select>
+	<select id="selectByall" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from u_app_user_merchant
+		where app_user_id = #{appUserId,jdbcType=INTEGER} and role_id =
+		#{roleId,jdbcType=VARCHAR} and inner_code = #{innerCode,jdbcType=VARCHAR}
+	</select>
 	<!-- 根据innerCode查询出店铺绑定 -->
 	<select id="selectByInnerCode" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from u_app_user_merchant
+		where inner_code = #{innerCode,jdbcType=VARCHAR} and role_id =
+		#{roleId,jdbcType=VARCHAR}
+	</select>
+	<select id="selectOneByInnerCode" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from u_app_user_merchant
