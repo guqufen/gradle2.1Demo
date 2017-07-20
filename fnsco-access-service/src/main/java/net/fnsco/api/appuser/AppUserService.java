@@ -2,8 +2,6 @@ package net.fnsco.api.appuser;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.api.dto.AppUserMerchantDTO;
