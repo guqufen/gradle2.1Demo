@@ -24,7 +24,7 @@ public class FileUtils {
         if (path.indexOf("\\") < 0) {
             return;
         }
-        String[] arr = path.split("\\");
+        String[] arr = path.split("\\\\");
         String newPath = "";
         for (int i = 0; i < arr.length; i++) {
             if (i == 0) {

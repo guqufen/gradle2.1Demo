@@ -22,7 +22,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 public class MasterDataSourceConfig {
 
     // 精确到 master 目录，以便跟其他数据源隔离
-    static final String PACKAGE = "net.fnsco.service.dao.master";
+    static final String PACKAGE = "net.fnsco.withhold.service";
     //static final String MAPPER_LOCATION = "classpath:mapper/master/*.xml";
     static final String MAPPER_LOCATION_2 = "classpath:mapper/master/**/*.xml";
     @Value("${master.datasource.url}")
@@ -63,11 +63,11 @@ public class MasterDataSourceConfig {
          
         PathMatchingResourcePatternResolver resourceLoader = new PathMatchingResourcePatternResolver();
         //Resource[] resource1 = resourceLoader.getResources(MasterDataSourceConfig.MAPPER_LOCATION);
-        Resource[] resource2 = resourceLoader.getResources(MasterDataSourceConfig.MAPPER_LOCATION_2);
+        //Resource[] resource2 = resourceLoader.getResources(MasterDataSourceConfig.MAPPER_LOCATION_2);
         //Resource[] resource = new Resource[resource1.length+resource2.length];
         //System.arraycopy(resource1, 0, resource, 0, resource1.length); 
         //System.arraycopy(resource2, 0, resource, resource1.length, resource2.length); 
-        sessionFactory.setMapperLocations(resource2);
+        //sessionFactory.setMapperLocations(resource2);
         return sessionFactory.getObject();
     }
 }
