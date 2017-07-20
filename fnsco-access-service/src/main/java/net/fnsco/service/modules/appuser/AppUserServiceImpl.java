@@ -492,7 +492,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 }
                 //原来没有店长的强制更新 
                 if(it==null){
-                    if(!li.getAppUserId().equals(it.getAppUserId())){
+                    //if(!li.getAppUserId().equals(it.getAppUserId())){
                         //自己强制更新
                         AppUser user = new AppUser();
                         user.setId(li.getAppUserId());
@@ -500,7 +500,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                         if (!appUserDao.updateByPrimaryKeySelective(user)) {
                             return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
                         }
-                    }
+                   // }
                 }
                
             }
