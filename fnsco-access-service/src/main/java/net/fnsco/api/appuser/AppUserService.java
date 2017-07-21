@@ -10,6 +10,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.freamwork.business.UserService;
 import net.fnsco.service.domain.AppUser;
+import net.fnsco.service.domain.AppUserMerchant;
 
 public interface AppUserService extends UserService{
 	//用户注册方法接口
@@ -57,4 +58,6 @@ public interface AppUserService extends UserService{
     
     
     ResultDTO<String> judgeRoles(List<AppUserMerchantDTO> params);
+    
+    void addAppUserMerchantRole(AppUserMerchant dto);
 }

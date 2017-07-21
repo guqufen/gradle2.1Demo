@@ -6,12 +6,12 @@ import net.fnsco.core.base.DTO;
 
 public class AppOldPeopleDTO extends DTO{
     private List<AppOldListDTO> list;
-    private List<AppOldListDTO> clerkList;
-    public List<AppOldListDTO> getClerkList() {
-        return clerkList;
+    private List<AppOldListDTO> clerk;
+    public List<AppOldListDTO> getClerk() {
+        return clerk;
     }
-    public void setClerkList(List<AppOldListDTO> clerkList) {
-        this.clerkList = clerkList;
+    public void setClerk(List<AppOldListDTO> clerk) {
+        this.clerk = clerk;
     }
     public List<AppOldListDTO> getList() {
         return list;

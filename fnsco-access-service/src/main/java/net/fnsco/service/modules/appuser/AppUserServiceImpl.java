@@ -124,6 +124,13 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     rel.setInnerCode(object.getInnerCode());
                     rel.setModefyTime(new Date());
                     merchantUserRelDao.insertSelective(rel);
+                    //用户管理表新增记录
+                    AppUserMerchant dto=new AppUserMerchant();
+                    dto.setAppUserId(appUser.getId());
+                    dto.setInnerCode(object.getInnerCode());
+                    dto.setModefyTime(new Date());
+                    dto.setRoleId(ConstantEnum.AuthorTypeEnum.CLERK.getCode());
+                    appUserMerchantDao.insertSelective(dto);
                 }
             }
         }
@@ -143,6 +150,13 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     rel.setInnerCode(object.getInnerCode());
                     rel.setModefyTime(new Date());
                     merchantUserRelDao.insertSelective(rel);
+                  //用户管理表新增记录
+                    AppUserMerchant dto=new AppUserMerchant();
+                    dto.setAppUserId(appUser.getId());
+                    dto.setInnerCode(object.getInnerCode());
+                    dto.setModefyTime(new Date());
+                    dto.setRoleId(ConstantEnum.AuthorTypeEnum.CLERK.getCode());
+                    appUserMerchantDao.insertSelective(dto);
                 }
             }
         }
@@ -422,15 +436,15 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     //判断角色修改
     @Override
     public ResultDTO<String> judgeRoles(List<AppUserMerchantDTO> params) {
-        //想成为店主
         AppOldPeopleDTO datas = new AppOldPeopleDTO();
         List<AppOldListDTO> listDto = new ArrayList<AppOldListDTO>();
+        //想成为店主
+        List<AppOldListDTO> clerk = new ArrayList<AppOldListDTO>();
         for (AppUserMerchantDTO li : params) {
             //如果自己更新自己则不提示
             //AppOldPeopleDTO appOldPeopleDTO=new AppOldPeopleDTO();
             if (li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())) {
                 List<AppUserMerchant> list = appUserMerchantDao.selectByInnerCode(li.getInnerCode(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-
                 for (AppUserMerchant it : list) {
                     AppOldListDTO dto = new AppOldListDTO();
                     //根据userId查询到手机号
@@ -443,10 +457,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                         listDto.add(dto);
                     }
                 }
-                datas.setList(listDto);
             }
             //想成为店员
-            List<AppOldListDTO> clerkList = new ArrayList<AppOldListDTO>();
             if (li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.CLERK.getCode())) {
                 //查询这个店员原来是不是店主
                 AppUserMerchant appUserMerchant = appUserMerchantDao.selectByall(li.getInnerCode(), li.getAppUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
@@ -457,12 +469,13 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(li.getInnerCode());
                     dto.setMerName(merchantCore.getMerName());
                     //如果自己更新自己则不提示
-                    clerkList.add(dto);
+                    clerk.add(dto);
                 }
-                datas.setClerkList(clerkList);
             }
 
         }
+        datas.setList(listDto);
+        datas.setClerk(clerk);
         return ResultDTO.success(datas);
     }
 
@@ -588,5 +601,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         // TODO Auto-generated method stub
         return appUserDao.selectAppUserById(id);
 
+    }
+    @Override
+    public void addAppUserMerchantRole(AppUserMerchant dto){
+        appUserMerchantDao.insertSelective(dto);
     }
 }
