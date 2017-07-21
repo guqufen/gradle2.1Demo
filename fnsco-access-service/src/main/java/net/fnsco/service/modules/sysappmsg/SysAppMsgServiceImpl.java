@@ -16,6 +16,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.api.constant.ApiConstant;
+import net.fnsco.api.constant.ConstantEnum;
 import net.fnsco.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.push.AppPushService;
@@ -30,10 +31,12 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
 import net.fnsco.service.dao.master.AppUserDao;
+import net.fnsco.service.dao.master.AppUserMerchantDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.SysAppMessageDao;
 import net.fnsco.service.dao.master.SysMsgAppSuccDao;
 import net.fnsco.service.domain.AppUser;
+import net.fnsco.service.domain.AppUserMerchant;
 import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.SysAppMessage;
 import net.fnsco.service.domain.SysMsgAppFail;
@@ -70,6 +73,9 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
     
     @Autowired
     private SysMsgAppFailService sysMsgAppFailService;
+    
+    @Autowired
+    private AppUserMerchantDao appUserMerchantDao;
 
     /**
      * (non-Javadoc)
@@ -348,9 +354,14 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
      */
     @Override
     public void pushMerChantMsg(String innerCode, Integer userId) {
-        
-      //发送推送
-        List<AppUser> users = appUserDao.selectByInnerCode(innerCode);
+        //如果没有店长,不发送推送
+        AppUserMerchant merInfo = appUserMerchantDao.selectOneByInnerCode(innerCode, ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        AppUser user = appUserDao.selectAppUserById(merInfo.getAppUserId());
+        if(null == user){
+            logger.warn(innerCode+"该店没有店长!");
+            return;
+        }
+       //发送推送
         String param_and ="";
         String newPhone = "";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -360,7 +371,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
         AppUser appUser = appUserDao.selectAppUserById(userId);
         newPhone = appUser.getMobile();
-        String msgContent = "【新店员加入】新店员"+newPhone+"加入"+merchantCore.getMerName()+"店";
+        String msgContent = "【新店员加入】新店员"+newPhone+"加入了"+merchantCore.getMerName()+"店";
         SysAppMessage message = new SysAppMessage();
         message.setBusType(0);
         message.setModifyUserId(1);
@@ -374,69 +385,18 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         message.setStatus(1);
         insertSelective(message);
         if(message.getId() != null){
-            
-            for (AppUser user : users) {
-                Integer deviceType = user.getDeviceType();
-                if(null == deviceType ||deviceType == 0||user.getId() == userId){
-                    continue;
-                }else if(deviceType==1){//安卓
-                    if(StringUtils.isNotBlank(user.getDeviceToken())){
-                        relatelds_and.add(user.getDeviceToken());
-                    }
-                }else if(deviceType==2){//ios
-                    if(StringUtils.isNotBlank(user.getDeviceToken())){
-                        ResultDTO<PushMsgInfoDTO> countInfo =  queryNewsCount(user.getId(), false, user.getDeviceType());
-                        try {
-                            int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), msgContent, countInfo.getData().getUnReadCount(),message.getId().toString());
-                            if (iosStatus == 200) {
-                                //成功
-                                SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
-                                sysMsgAppSucc.setSendTime(new Date());
-                                sysMsgAppSucc.setAppUserId(appUser.getId());
-                                sysMsgAppSucc.setMsgId(message.getId());
-                                sysMsgAppSucc.setReadStatus(0);
-                                sysMsgAppSucc.setPhoneType(2);
-                                sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
-                                logger.info("ios信息推送成功");
-                            } else {
-                                SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
-                                sysMsgAppFail.setAppUserId(appUser.getId());
-                                sysMsgAppFail.setMsgId(message.getId());
-                                sysMsgAppFail.setSendCount(1);
-                                sysMsgAppFail.setSendTime(new Date());
-                                sysMsgAppFail.setStatus(0);
-                                sysMsgAppFail.setPhoneType(2);
-                                sysMsgAppFailService.insertSelective(sysMsgAppFail);
-                                logger.info("ios信息推送失败");
-                            }
-                        } catch (Exception e) {
-                            
-                            logger.error("ios信息推送异常"+e);
-                            e.printStackTrace();
-                            
-                        }
-                    }
-                }
-                
-            }
-            param_and = relatelds_and.toString().substring(1, relatelds_and.toString().length()-1);
-            param_and = param_and.replaceAll(" ", "");//安卓去重后token
-            
-            /**
-             * android
-             */
-            try {
-                int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime,message.getId().toString());
-                if (status == 200) {
-                    logger.info("安卓信息推送成功");
-                } else {
-                    logger.info("安卓信息推送失败");
-                }
-                for (AppUser user : users) {
-                    int deviceType = user.getDeviceType();
-                    if(deviceType==1){
+            Integer deviceType = user.getDeviceType();
+            if(null == deviceType ||deviceType == 0||user.getId() == userId){
+                return;
+            }else if(deviceType==1){//安卓
+                if(StringUtils.isNotBlank(user.getDeviceToken())){
+                    relatelds_and.add(user.getDeviceToken());
+                    param_and = relatelds_and.toString().substring(1, relatelds_and.toString().length()-1);
+                    param_and = param_and.replaceAll(" ", "");//安卓去重后token
+                    try {
+                        int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime,message.getId().toString());
                         if (status == 200) {
-                            //成功
+                          //成功
                             SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
                             sysMsgAppSucc.setSendTime(new Date());
                             sysMsgAppSucc.setAppUserId(appUser.getId());
@@ -444,6 +404,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
                             sysMsgAppSucc.setReadStatus(0);
                             sysMsgAppSucc.setPhoneType(1);
                             sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
+                            logger.info("安卓信息推送成功");
                         } else {
                             SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
                             sysMsgAppFail.setAppUserId(appUser.getId());
@@ -453,14 +414,46 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
                             sysMsgAppFail.setStatus(0);
                             sysMsgAppFail.setPhoneType(1);
                             sysMsgAppFailService.insertSelective(sysMsgAppFail);
+                            logger.info("安卓信息推送失败");
                         }
+                    } catch (Exception e) {
+                        logger.error("android列播推送："+e);
+                    } 
                 }
-               }
-            } catch (Exception e) {
-                logger.error("android列播推送："+e);
-            } 
-            
-            
+            }else if(deviceType==2){//ios
+                if(StringUtils.isNotBlank(user.getDeviceToken())){
+                    ResultDTO<PushMsgInfoDTO> countInfo =  queryNewsCount(user.getId(), false, user.getDeviceType());
+                    try {
+                        int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), msgContent, countInfo.getData().getUnReadCount()+1,message.getId().toString());
+                        if (iosStatus == 200) {
+                            //成功
+                            SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
+                            sysMsgAppSucc.setSendTime(new Date());
+                            sysMsgAppSucc.setAppUserId(appUser.getId());
+                            sysMsgAppSucc.setMsgId(message.getId());
+                            sysMsgAppSucc.setReadStatus(0);
+                            sysMsgAppSucc.setPhoneType(2);
+                            sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
+                            logger.info("ios信息推送成功");
+                        } else {
+                            SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
+                            sysMsgAppFail.setAppUserId(appUser.getId());
+                            sysMsgAppFail.setMsgId(message.getId());
+                            sysMsgAppFail.setSendCount(1);
+                            sysMsgAppFail.setSendTime(new Date());
+                            sysMsgAppFail.setStatus(0);
+                            sysMsgAppFail.setPhoneType(2);
+                            sysMsgAppFailService.insertSelective(sysMsgAppFail);
+                            logger.info("ios信息推送失败");
+                        }
+                    } catch (Exception e) {
+                        
+                        logger.error("ios信息推送异常"+e);
+                        e.printStackTrace();
+                        
+                    }
+                }
+            }
         }
         
     }
