@@ -15,6 +15,7 @@ function formatDateUtil(datestr){
 		var day="";
 		var hour="";
 		var minutes="";
+		var seconds="";
 		if(date.getMonth()<9){
 			month="0";
 		}
@@ -27,7 +28,10 @@ function formatDateUtil(datestr){
 	    if(date.getMinutes()<10){
 	    	minutes="0";
 	    }
-		return date.getFullYear()+"-"+month+(date.getMonth()+1)+"-"+day+date.getDate()+' '+hour+date.getHours()+':'+minutes+date.getMinutes()+':'+date.getSeconds();
+	    if(date.getSeconds()<10){
+	    	seconds="0";
+	    }
+		return date.getFullYear()+"-"+month+(date.getMonth()+1)+"-"+day+date.getDate()+' '+hour+date.getHours()+':'+minutes+date.getMinutes()+':'+seconds+date.getSeconds();
 	}
 	return "--";
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.api.constant.ApiConstant;
@@ -28,7 +29,7 @@ import net.fnsco.service.domain.SysUser;
  * @date 2017年6月20日 下午3:11:23
  */
 @Controller
-@RequestMapping("/web")
+@RequestMapping(value = "/web" , method = RequestMethod.POST)
 public class SysUserLoginAction extends BaseController{
 	
 	@Autowired

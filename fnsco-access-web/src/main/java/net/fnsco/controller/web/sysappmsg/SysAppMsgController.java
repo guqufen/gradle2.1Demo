@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.api.dto.AppPushMsgInfoDTO;
@@ -24,7 +25,7 @@ import net.fnsco.service.domain.SysAppMessage;
  * @Date	 2017年7月12日 上午9:52:53
  */
 @Controller
-@RequestMapping("/web/msg")
+@RequestMapping(value = "/web/msg")
 public class SysAppMsgController extends BaseController {
     
     @Autowired
@@ -41,7 +42,7 @@ public class SysAppMsgController extends BaseController {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @RequestMapping("/query")
+    @RequestMapping(value = "/query",method = RequestMethod.GET)
     @ResponseBody
     public ResultPageDTO<SysAppMessage> appMsgIndex(SysAppMessage sysmsg,Integer currentPageNum,Integer pageSize){
         logger.info("查询推送消息列表");
@@ -57,7 +58,7 @@ public class SysAppMsgController extends BaseController {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @RequestMapping("/doAdd")
+    @RequestMapping(value = "/doAdd",method = RequestMethod.POST)
     @ResponseBody
     public ResultDTO<String> toAddMsg(AppPushMsgInfoDTO sysmsg){
         return sysAppMsgService.doAddMsg(sysmsg);
@@ -72,7 +73,7 @@ public class SysAppMsgController extends BaseController {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @RequestMapping("/delete")
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
     @ResponseBody
     public ResultDTO<String> deleteMsg(Integer id){
         return sysAppMsgService.deleteMsg(id);
@@ -87,7 +88,7 @@ public class SysAppMsgController extends BaseController {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @RequestMapping("/querySingle")
+    @RequestMapping(value = "/querySingle",method = RequestMethod.POST)
     @ResponseBody
     public ResultDTO<SysAppMessage> querySingle(Integer id){
         if(null == id){

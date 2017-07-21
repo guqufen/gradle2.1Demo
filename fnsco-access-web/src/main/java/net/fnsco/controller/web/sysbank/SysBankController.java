@@ -3,7 +3,9 @@ package net.fnsco.controller.web.sysbank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import net.fnsco.api.sysbank.SysBankService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultPageDTO;
@@ -17,7 +19,7 @@ import net.fnsco.service.domain.SysBank;
  * @Date	 2017年7月7日 上午11:14:09
  */
 @Controller
-@RequestMapping("/web/bank")
+@RequestMapping(value = "/web/bank")
 public class SysBankController extends BaseController{
     
     @Autowired
@@ -34,7 +36,7 @@ public class SysBankController extends BaseController{
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @RequestMapping("/query")
+    @RequestMapping(value = "/query", method = RequestMethod.GET)
     @ResponseBody
     public ResultPageDTO<SysBank> merchatInfoIndex(SysBank sysBank,Integer currentPageNum,Integer pageSize){
         logger.info("查询银行卡列表");
