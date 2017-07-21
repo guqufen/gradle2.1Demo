@@ -16,9 +16,6 @@ $('#table').bootstrapTable({
     pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
     queryParams:queryParams,
     responseHandler:responseHandler,//处理服务器返回数据
-    onAll:function(){
-    	console.log(1);
-    },
     columns: [{
         field: 'id',
         title: '操作',
@@ -89,7 +86,7 @@ function formatTime(value, row, index){
 }
 //时间格式化
 function formatDate(date){
-	return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+	return formatDateUtil(date);
 
 }
 //操作格式化
