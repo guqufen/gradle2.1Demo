@@ -602,4 +602,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         return appUserDao.selectAppUserById(id);
 
     }
+    @Override
+    public void addAppUserMerchantRole(AppUserMerchant dto){
+        appUserMerchantDao.insertSelective(dto);
+    }
 }

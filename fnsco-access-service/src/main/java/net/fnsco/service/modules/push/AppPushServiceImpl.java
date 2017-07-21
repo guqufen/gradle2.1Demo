@@ -292,7 +292,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                     sysMsgAppFail.setStatus(0);
                     if(appUser.getDeviceType() == 2){
                         ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appUser.getId(), false, appUser.getDeviceType());
-                        int iosStatus = sendIOSUnicast(appUser.getDeviceToken(),  sysAppMessage.getMsgSubTitle(), countInfo.getData().getUnReadCount(),sysAppMessage.getId().toString());
+                        int iosStatus = sendIOSUnicast(appUser.getDeviceToken(),  sysAppMessage.getMsgSubTitle(), countInfo.getData().getUnReadCount()+1,sysAppMessage.getId().toString());
                         
                         if (iosStatus == 200) {
                             sysMsgAppSucc.setPhoneType(2);
@@ -401,7 +401,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                 ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appuser.getId(), false, appuser.getDeviceType());
                 int iosStatus;
                 try {
-                    iosStatus = sendIOSUnicast(appuser.getDeviceToken(),  message.getMsgSubTitle(), countInfo.getData().getUnReadCount(),message.getId().toString());
+                    iosStatus = sendIOSUnicast(appuser.getDeviceToken(),  message.getMsgSubTitle(), countInfo.getData().getUnReadCount()+1,message.getId().toString());
                     sysMsgAppFail.setPhoneType(2);
                     if (iosStatus == 200) {
                         msgAppSucc.setPhoneType(2);
