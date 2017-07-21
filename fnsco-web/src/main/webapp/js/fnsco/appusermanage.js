@@ -131,8 +131,10 @@ $(function() {
 	$(document).on('click', '.redact', function() {
 		$(".tab-content").html("");
 		mobile = $(this).parent().next().next().html();
-		
-		var date={"mobile":mobile};
+
+		var date = {
+			"mobile" : mobile
+		};
 		$.ajax({
 			url : PROJECT_NAME + '/web/appsuser/modifyRoles',
 			type : 'POST',
@@ -140,138 +142,157 @@ $(function() {
 			success : function(data) {
 				unloginHandler(data);
 				console.log(data);
-				if(data.data==null){
+				if (data.data == null) {
 					layer.msg('该用户没有绑定任何商户');
-				}else{
+				} else {
 					showdates(data.data);
 					$('#myModal').modal();
 				}
-				
+
 			}
 		});
-		
+
 	})
 })
 
+function showdates(data) {
 
-function showdates(data){
-	
-	for(i=0;i<data.length;i++){
-		var select="";
-		if(data[i].roleId==1){
-			select='<option value="1" selected="selected">店主</option><option value="2" >店员</option>';
+	for (i = 0; i < data.length; i++) {
+		var select = "";
+		if (data[i].roleId == 1) {
+			select = '<option value="1" selected="selected">店主</option><option value="2" >店员</option>';
 		}
-		if(data[i].roleId==2){
-			select='<option value="1">店主</option><option value="2" selected="selected">店员</option>';
+		if (data[i].roleId == 2) {
+			select = '<option value="1">店主</option><option value="2" selected="selected">店员</option>';
 		}
-		var html='<div class="shopRoleList"><div class="row"><div class="col-sm-6"><label class="control-label" for="shopName1">店铺名称：</label><input type="text" value="'+data[i].merName+'" i="'+data[i].innerCode+'" j="'+data[i].id+'" o="'+data[i].appUserId+'" class="form-control" id="shopName1" name="shopName1" required="required"></div><div class="col-sm-6"> <label class="control-label" for="shopRole">角色：</label><select id="shopRole" name="shopRole" class="form-control">'+select+'</select> </div></div> </div>';
+		var html = '<div class="shopRoleList"><div class="row"><div class="col-sm-6"><label class="control-label" for="shopName1">店铺名称：</label><input type="text" value="'
+				+ data[i].merName
+				+ '" i="'
+				+ data[i].innerCode
+				+ '" j="'
+				+ data[i].id
+				+ '" o="'
+				+ data[i].appUserId
+				+ '" class="form-control" id="shopName1" name="shopName1" required="required"></div><div class="col-sm-6"> <label class="control-label" for="shopRole">角色：</label><select id="shopRole" name="shopRole" class="form-control">'
+				+ select + '</select> </div></div> </div>';
 		$(".tab-content").prepend(html);
 	}
 };
 
-//判断修改
-$(".modify").click(function(){
+// 判断修改
+$(".modify").click(function() {
 	confirmlt(mobile);
 
-	
 })
 
-
-
-function confirmlt(mobile){
+function confirmlt(mobile) {
 	var mobile;
-	var arry=[];
+	var arry = [];
 	var innerCode;
 	var id;
 	var roleId;
 	var appUserId;
-	$(".tab-content").find(".shopRoleList").each(function(){
-		$(this).find(".row").each(function(){
-			innerCode=$(this).find("#shopName1").attr("i");
+	$(".tab-content").find(".shopRoleList").each(function() {
+		$(this).find(".row").each(function() {
+			innerCode = $(this).find("#shopName1").attr("i");
 			console.log($(this).find("#shopName1").attr("i"));
-			id=$(this).find("#shopName1").attr("j");
-			appUserId=$(this).find("#shopName1").attr("o");
+			id = $(this).find("#shopName1").attr("j");
+			appUserId = $(this).find("#shopName1").attr("o");
 			console.log($(this).find("#shopName1").attr("j"));
-			$(this).find("#shopRole").each(function(){
-				$(this).find("option").each(function(){
-					if($(this).is(":selected")){
-						roleId=$(this).val();
+			$(this).find("#shopRole").each(function() {
+				$(this).find("option").each(function() {
+					if ($(this).is(":selected")) {
+						roleId = $(this).val();
 						console.log($(this).val())
 					}
 				})
 			})
 		})
-		var date={"innerCode":innerCode,"id":id,"roleId":roleId,"appUserId":appUserId};
+		var date = {
+			"innerCode" : innerCode,
+			"id" : id,
+			"roleId" : roleId,
+			"appUserId" : appUserId
+		};
 		arry.push(date);
 	})
 	console.log(arry);
 	var toStr = JSON.stringify(arry);
-	$.ajax({
-		url : PROJECT_NAME + '/web/appsuser/judgeRoles',
-		type : 'POST',
-		dataType: "json",
-		contentType:"application/json",
-		data :toStr,
-		success : function(data) {
-			 unloginHandler(data);
-			 console.log(data)
-			 console.log(data.data.list.length)
-//			 var str="";
-			
-//			 $(".layui-layer-content").html(22);
-			// $(".layui-layer-content").prepend(22);
-			 if(data.data.list!=""){
-				 var str="";
-				 for(i=0;i<data.data.list.length;i++){
-						/* data.data.list[i].mobile         确定将<span>某店铺</span><span>小吴</span>更改为店员
-						 data.data.list[i].merName*/  
-						  str+='<div style="font-size:16px;margin-bottom:8px;">该店已有'+data.data.list[i].merName+'('+data.data.list[i].mobile+')是否将权限转让给'+mobile+'？</div>';
-						// $(".layui-layer-content").prepend(str);
-				 }
-					layer.confirm(str, {
-						area: ['600px', '200px'],
-				        time: 200000, //20s后自动关闭
-				        btn: ['确定', '取消']
-				    }, function(){
-				    	saveBtn();
-				    }, function(){
-				      layer.msg('取消成功');
-				    });
-			 }
-			 if(data.data.list==""){
-				 saveBtn();
-			 }
-		}
-	});
+	$
+			.ajax({
+				url : PROJECT_NAME + '/web/appsuser/judgeRoles',
+				type : 'POST',
+				dataType : "json",
+				contentType : "application/json",
+				data : toStr,
+				success : function(data) {
+					unloginHandler(data);
+					console.log(data)
+					console.log(data.data.list.length)
+					if (data.data.list != "" || data.data.clerkList != "") {
+						var str = "";
+						var contant="";
+						for (i = 0; i < data.data.list.length; i++) {
+							str += '<div style="font-size:16px;margin-bottom:8px;">该店已有'
+									+ data.data.list[i].merName
+									+ '('
+									+ data.data.list[i].mobile
+									+ ')是否将权限转让给'
+									+ mobile + '？</div>';
+						}
+						for (i = 0; i < data.data.clerkList.length; i++) {
+							contant+='<div style="font-size:16px;margin-bottom:8px;">是否移除'
+								+ data.data.clerkList[i].merName
+								+ '('
+								+ data.data.clerkList[i].mobile
+								+ ')的店主权限？</div>';
+						}
+						console.log(str+contant);
+						layer.confirm(str+contant, {
+							area : [ '600px', '200px' ],
+							time : 2000000, // 20s后自动关闭
+							btn : [ '确定', '取消' ]
+						}, function() {
+							saveBtn();
+						}, function() {
+							layer.msg('取消成功');
+						});
+					}
+					if (data.data.list == "" && data.data.clerkList == "") {
+						saveBtn();
+					}
+				}
+			});
 }
 
-
-
-
-
-function saveBtn(){
-	var arry=[];
+function saveBtn() {
+	var arry = [];
 	var innerCode;
 	var id;
 	var roleId;
 	var appUserId;
-	$(".tab-content").find(".shopRoleList").each(function(){
-		$(this).find(".row").each(function(){
-			innerCode=$(this).find("#shopName1").attr("i");
+	$(".tab-content").find(".shopRoleList").each(function() {
+		$(this).find(".row").each(function() {
+			innerCode = $(this).find("#shopName1").attr("i");
 			console.log($(this).find("#shopName1").attr("i"));
-			id=$(this).find("#shopName1").attr("j");
-			appUserId=$(this).find("#shopName1").attr("o");
+			id = $(this).find("#shopName1").attr("j");
+			appUserId = $(this).find("#shopName1").attr("o");
 			console.log($(this).find("#shopName1").attr("j"));
-			$(this).find("#shopRole").each(function(){
-				$(this).find("option").each(function(){
-					if($(this).is(":selected")){
-						roleId=$(this).val();
+			$(this).find("#shopRole").each(function() {
+				$(this).find("option").each(function() {
+					if ($(this).is(":selected")) {
+						roleId = $(this).val();
 						console.log($(this).val())
 					}
 				})
 			})
 		})
-		var date={"innerCode":innerCode,"id":id,"roleId":roleId,"appUserId":appUserId};
+		var date = {
+			"innerCode" : innerCode,
+			"id" : id,
+			"roleId" : roleId,
+			"appUserId" : appUserId
+		};
 		arry.push(date);
 	})
 	console.log(arry);
@@ -279,51 +300,30 @@ function saveBtn(){
 	$.ajax({
 		url : PROJECT_NAME + '/web/appsuser/changeRole',
 		type : 'POST',
-		dataType: "json",
-		contentType:"application/json",
-		data :toStr,
+		dataType : "json",
+		contentType : "application/json",
+		data : toStr,
 		success : function(data) {
-			 unloginHandler(data);
-			 if(data.success==false){
-				 layer.msg(data.message);
-				 return false;
-			 }
-			 $("#myModal").hide();
-			 layer.msg('更改角色成功');
-			 setTimeout(function(){window.location.reload();},1000);
-			
+			unloginHandler(data);
+			if (data.success == false) {
+				layer.msg(data.message);
+				return false;
+			}
+			$("#myModal").hide();
+			layer.msg('更改角色成功');
+			setTimeout(function() {
+				window.location.reload();
+			}, 1000);
+
 		},
-	    error:function(){
-	        layer.msg('系统错误');
-	    }
+		error : function() {
+			layer.msg('系统错误');
+		}
 	});
-	
+
 }
 
-
-
-
-//$(".saveBtn").click(function(){
+// $(".saveBtn").click(function(){
 //	
-//})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// })
 
