@@ -369,6 +369,12 @@ $('.sunmitBtn').click(function(){
         layer.msg('主题不能为空');
         return false;
     }
+    
+    if(msgSubject.length > 50){
+        layer.msg('主题太长，重新输入');
+        return false;
+    }
+    
     if($("#pushView").css('display')=='none'){
         layer.msg('图片不能为空');
         return false;
@@ -389,7 +395,11 @@ $('.sunmitBtn').click(function(){
         layer.msg('副标题不能为空');
         return false;
     }
-
+    
+    if(msgSubtitle.length>150){
+        layer.msg('副标题太长，请重新输入');
+        return false;
+    }
     
 	$.ajax({
 		url:PROJECT_NAME+'/web/msg/doAdd',
