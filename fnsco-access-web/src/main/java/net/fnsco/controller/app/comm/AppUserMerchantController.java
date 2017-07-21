@@ -1,5 +1,7 @@
 package net.fnsco.controller.app.comm;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.appuser.AppUserMerchantService;
+import net.fnsco.api.constant.ApiConstant;
+import net.fnsco.api.dto.AppUserMerchantOutDTO;
 import net.fnsco.api.dto.BandDto;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -23,8 +27,11 @@ public class AppUserMerchantController extends BaseController {
     @ApiOperation(value = "获取店铺绑定情况")
     @ResponseBody
     public ResultDTO queryBindPeople(@RequestBody BandDto bandDto) {
-        ResultDTO result = appUserMerchantService.queryBindPeople(bandDto);
-        return result;
+        List<AppUserMerchantOutDTO> result = appUserMerchantService.queryBindPeople(bandDto);
+        if(result.size()==0){
+            return ResultDTO.fail(ApiConstant.E_NOSHOPKEEPER_ERROR);
+        }
+        return ResultDTO.success(result);
     }
     
     @RequestMapping(value = "/deletedBindPeople")

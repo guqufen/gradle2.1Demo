@@ -233,9 +233,9 @@ function confirmlt(mobile) {
 						var str = "";
 						var contant = "";
 						for (i = 0; i < data.data.list.length; i++) {
-							str += '<div style="font-size:16px;margin-bottom:8px;">该店已有'
+							str += '<div style="font-size:16px;margin-bottom:8px;">该'
 									+ data.data.list[i].merName
-									+ '('
+									+ '店已有店主('
 									+ data.data.list[i].mobile
 									+ ')是否将权限转让给'
 									+ mobile + '？</div>';

@@ -34,15 +34,19 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
     private AppUserDao         appUserDao;
     @Autowired
     private MerchantUserRelDao merchantUserRelDao;
+    /**
+     * 根据用户u
+     * (non-Javadoc)
+     * @see net.fnsco.api.appuser.AppUserMerchantService#queryBindPeople(net.fnsco.api.dto.BandDto)
+     */
     @Override
-    public ResultDTO queryBindPeople(BandDto bandDto) {
+    public List<AppUserMerchantOutDTO> queryBindPeople(BandDto bandDto) {
+        List<AppUserMerchantOutDTO> datas = Lists.newArrayList();
         Integer appUserId = bandDto.getUserId();
-        //返回多个店铺的店主       AppUserMerchantOutDTO
         List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId,ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         if (CollectionUtils.isEmpty(merchantList)) {
-            return null;
+            return datas;
         }
-        List<AppUserMerchantOutDTO> datas = Lists.newArrayList();
         for(AppUserMerchant it : merchantList){
             //根据innerCode查询出店铺名称
             MerchantCore res = merchantCoreDao.selectByInnerCode(it.getInnerCode());
@@ -66,22 +70,17 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
             dto.setBandListDTO(listDto);
             datas.add(dto);
         }
-        return ResultDTO.success(datas);
+        return datas;
     }
 
     @Override
     @Transactional
     public ResultDTO deletedBindPeople(BandDto bandDto) {
         Integer appUserId = bandDto.getUserId();
-        if(merchantUserRelDao.deleteByPrimaryKey(bandDto.getInnerCode(),appUserId)==0){
-            return ResultDTO.fail(ApiConstant.E_DELETEBAND_ERROR);
-        };
-        if(appUserMerchantDao.deleteByPrimaryKey(bandDto.getInnerCode(),appUserId)==0){
-            return ResultDTO.fail(ApiConstant.E_DELETEBAND_ERROR);
-        };
+        merchantUserRelDao.deleteByPrimaryKey(bandDto.getInnerCode(),appUserId);
+        appUserMerchantDao.deleteByPrimaryKey(bandDto.getInnerCode(),appUserId);
         return ResultDTO.success();
     }
-
 }
 
 
