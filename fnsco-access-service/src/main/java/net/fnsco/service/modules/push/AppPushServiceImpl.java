@@ -349,14 +349,14 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                 record.setSendCount(1);
                 break;
             case 2:
-                record.setSendTime(DateUtils.getTimeByMinuteDate(-2*60));//前两小时数据
+                record.setSendTime(DateUtils.getTimeByMinuteDate(-2*60-5));//前两小时数据
                 record.setSendCount(2);
                 break;
             case 3:
-                record.setSendTime(DateUtils.getTimeByMinuteDate(-5*60));//前五个小时数据
+                record.setSendTime(DateUtils.getTimeByMinuteDate(-5*60-5-2*60));//前五个小时数据
                 record.setSendCount(3);
             default:
-                break;
+                return;
         }
         
         record.setStatus(0);
@@ -382,6 +382,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             if(appuser.getDeviceType() == 1){//android
                 try {
                     Integer androidStatus  = sendAndroidListcast(appuser.getDeviceToken(),message.getMsgSubTitle(),DateUtils.dateFormatToStr(message.getSendTime()),message.getId().toString());
+                    sysMsgAppFail.setPhoneType(1);
                     if(androidStatus == 200){
                         msgAppSucc.setPhoneType(1);
                         sysMsgAppFail.setStatus(1);
@@ -401,13 +402,13 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                 int iosStatus;
                 try {
                     iosStatus = sendIOSUnicast(appuser.getDeviceToken(),  message.getMsgSubTitle(), countInfo.getData().getUnReadCount(),message.getId().toString());
+                    sysMsgAppFail.setPhoneType(2);
                     if (iosStatus == 200) {
                         msgAppSucc.setPhoneType(2);
                         sysMsgAppFail.setStatus(1);
                         sysMsgAppSuccService.insertSelective(msgAppSucc);
                         logger.warn("ios信息推送成功");
                       } else {
-                          sysMsgAppFail.setPhoneType(2);
                           sysMsgAppFail.setSendCount(sysMsgAppFail.getSendCount()+1);
                           logger.warn("ios信息推送失败");
                       }
