@@ -220,6 +220,7 @@ $(function(){
 $('#btn_submit').click(function(){
 	$.ajax({
 		url:PROJECT_NAME+'/web/doLogin',
+		type:'POST',
 		data:$('#login_info_form').serialize(),
 		success:function(data){
 			if(data.success){

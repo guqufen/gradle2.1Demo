@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 import net.fnsco.core.base.BaseController;
 import net.fnsco.service.dao.master.SysUserDao;
 import net.fnsco.service.domain.SysUser;
@@ -22,7 +24,7 @@ public class IndexController extends BaseController {
      * @param res
      * @return
      */
-    @RequestMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(HttpServletRequest rep, HttpServletResponse res) {
 
         Object obj = getSessionUser();
