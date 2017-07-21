@@ -13,8 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Strings;
 
-import net.fnsco.api.appuser.AppUserMerchantService;
+import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.constant.ApiConstant;
+import net.fnsco.api.constant.ConstantEnum;
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.api.dto.MerTerminalsDTO;
@@ -32,6 +33,7 @@ import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MerchantTerminalDao;
 import net.fnsco.service.dao.master.MerchantUserRelDao;
 import net.fnsco.service.domain.Alias;
+import net.fnsco.service.domain.AppUserMerchant;
 import net.fnsco.service.domain.MerchantChannel;
 import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.MerchantTerminal;
@@ -58,7 +60,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     @Autowired
     private SysAppMsgService    sysAppMsgService;
     @Autowired
-    private AppUserMerchantService appUserMerchantService;
+    private AppUserService      appUserService;
     @Override
     @Transactional
     public ResultDTO addMerChant(MerchantDTO merchantDTO) {
@@ -92,7 +94,13 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         muRel.setInnerCode(alias.getInnerCode());
         muRel.setModefyTime(new Date());
         merchantUserRelDao.insert(muRel);
- 
+        //用户管理表新增记录
+        AppUserMerchant dto = new AppUserMerchant();
+        dto.setAppUserId(merchantDTO.getUserId());
+        dto.setInnerCode(alias.getInnerCode());
+        dto.setModefyTime(new Date());
+        dto.setRoleId(ConstantEnum.AuthorTypeEnum.CLERK.getCode());
+        appUserService.addAppUserMerchantRole(dto);
         //发送推送
         try {
             sysAppMsgService.pushMerChantMsg(alias.getInnerCode(), merchantDTO.getUserId());
