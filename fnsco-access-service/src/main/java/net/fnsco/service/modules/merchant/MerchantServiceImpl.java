@@ -9,9 +9,11 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.api.appuser.AppUserMerchantService;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
@@ -54,9 +56,11 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     @Autowired
     private MerchantUserRelDao  merchantUserRelDao;
     @Autowired
-    private SysAppMsgService sysAppMsgService;
-    
+    private SysAppMsgService    sysAppMsgService;
+    @Autowired
+    private AppUserMerchantService appUserMerchantService;
     @Override
+    @Transactional
     public ResultDTO addMerChant(MerchantDTO merchantDTO) {
         String randomCode = merchantDTO.getRandomCode();
         if (Strings.isNullOrEmpty(randomCode)) {
@@ -80,7 +84,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
             return ResultDTO.fail(ApiConstant.E_MERCHANT_ALREADY_REF);//已关联此商铺，请勿重复关联
         }
         MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(alias.getInnerCode());
-        if(null != merchantUserRel){
+        if (null != merchantUserRel) {
             return ResultDTO.fail(ApiConstant.E_MERCHANT_IS_DEL);//此商户已删除，关联失败
         }
         MerchantUserRel muRel = new MerchantUserRel();
@@ -88,8 +92,13 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         muRel.setInnerCode(alias.getInnerCode());
         muRel.setModefyTime(new Date());
         merchantUserRelDao.insert(muRel);
+ 
         //发送推送
-        sysAppMsgService.pushMerChantMsg(alias.getInnerCode(), merchantDTO.getUserId());
+        try {
+            sysAppMsgService.pushMerChantMsg(alias.getInnerCode(), merchantDTO.getUserId());
+        } catch (Exception ex) {
+            logger.error("绑定商户发送消息失败", ex);
+        }
         return ResultDTO.success();
     }
 
