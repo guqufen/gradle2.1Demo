@@ -18,6 +18,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -40,7 +41,7 @@ import net.fnsco.service.domain.MerchantFileTemp;
  * @date 2017年6月21日 上午10:57:41
  */
 @Controller
-@RequestMapping("/web/fileInfo")
+@RequestMapping(value = "/web/fileInfo",method =RequestMethod.POST)
 public class FileInfoController extends BaseController{
 
 	@Autowired

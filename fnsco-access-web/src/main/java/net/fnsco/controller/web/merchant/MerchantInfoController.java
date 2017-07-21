@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -30,7 +31,7 @@ import net.fnsco.service.domain.MerchantTerminal;
  * @date 2017年6月21日 下午7:39:22
  */
 @Controller
-@RequestMapping("/web/merchantinfo")
+@RequestMapping(value = "/web/merchantinfo")
 public class MerchantInfoController extends BaseController{
 	
 	private final static Logger logger = LoggerFactory.getLogger(MerchantInfoController.class);
@@ -42,7 +43,7 @@ public class MerchantInfoController extends BaseController{
 	 * 跳转到商户信息首页
 	 * @return
 	 */
-	@RequestMapping("/query")
+	@RequestMapping(value ="/query",method= RequestMethod.GET)
 	@ResponseBody
 	public ResultPageDTO<MerchantCore> merchatInfoIndex(MerchantCore merchantCore,Integer currentPageNum,Integer pageSize){
 		logger.info("查询商户列表");
@@ -53,7 +54,7 @@ public class MerchantInfoController extends BaseController{
 	 * @param merchantCore
 	 * @return
 	 */
-	@RequestMapping("/queryList")
+	@RequestMapping(value ="/queryList",method= RequestMethod.POST)
 	@ResponseBody
 	public Map<String,List<MerchantCore>> queryList(MerchantCore merchantCore){
 		Map<String,List<MerchantCore>> maps = new HashMap<String, List<MerchantCore>>();
@@ -69,7 +70,7 @@ public class MerchantInfoController extends BaseController{
 	 * @param merchantContact
 	 * @return 
 	 */
-	@RequestMapping("/toAddCore")
+	@RequestMapping(value ="/toAddCore",method= RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO<String> toAddCore(MerchantCore merchantCore){
 		ResultDTO<String> result = merchantCoreService.doAddMerCore(merchantCore);
@@ -84,7 +85,7 @@ public class MerchantInfoController extends BaseController{
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	@RequestMapping("/toAddContact")
+	@RequestMapping(value ="/toAddContact",method= RequestMethod.POST)
     @ResponseBody
     public ResultDTO<String> toAddContact(@RequestBody MerchantContact[] contacts){
 	    List<MerchantContact> params = Arrays.asList(contacts);
@@ -100,7 +101,7 @@ public class MerchantInfoController extends BaseController{
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	@RequestMapping("/toAddTerminal")
+	@RequestMapping(value ="/toAddTerminal",method= RequestMethod.POST)
     @ResponseBody
     public ResultDTO<String> toAddTerminal(@RequestBody MerchantTerminal[] terminals){
         List<MerchantTerminal> params = Arrays.asList(terminals);
@@ -116,7 +117,7 @@ public class MerchantInfoController extends BaseController{
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	@RequestMapping("/toAddChannel")
+	@RequestMapping(value ="/toAddChannel",method= RequestMethod.POST)
     @ResponseBody
     public ResultDTO<String> toAddChannel(@RequestBody MerchantChannel[] channels){
         List<MerchantChannel> params = Arrays.asList(channels);
@@ -132,7 +133,7 @@ public class MerchantInfoController extends BaseController{
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	@RequestMapping("/toAddBank")
+	@RequestMapping(value ="/toAddBank",method= RequestMethod.POST)
     @ResponseBody
     public ResultDTO<String> toAddBank(@RequestBody MerchantBank[] banks){
         List<MerchantBank> params = Arrays.asList(banks);
@@ -145,7 +146,7 @@ public class MerchantInfoController extends BaseController{
 	 * @param ids
 	 * @return
 	 */
-	@RequestMapping("/delete")
+	@RequestMapping(value ="/delete",method= RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO<Integer> delete(@RequestParam(value="ids[]") Integer[] ids){
 		logger.info("删除商户数据ids = "+ids);
@@ -161,7 +162,7 @@ public class MerchantInfoController extends BaseController{
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	@RequestMapping("/deleteContact")
+	@RequestMapping(value ="/deleteContact",method= RequestMethod.POST)
     @ResponseBody
     public ResultDTO<Integer> deleteContact(@RequestParam(value="id") Integer id){
         logger.info("删除商户联系方式数据id = "+id);
@@ -175,7 +176,7 @@ public class MerchantInfoController extends BaseController{
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	@RequestMapping("/deleteChannel")
+	@RequestMapping(value ="/deleteChannel",method= RequestMethod.POST)
     @ResponseBody
     public ResultDTO<Integer> deleteChannel(@RequestParam(value="id") Integer id){
         logger.info("删除商户渠道信息数据id = "+id);
@@ -189,7 +190,7 @@ public class MerchantInfoController extends BaseController{
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	@RequestMapping("/deleteTerminal")
+	@RequestMapping(value ="/deleteTerminal",method= RequestMethod.POST)
     @ResponseBody
     public ResultDTO<Integer> deleteTerminal(@RequestParam(value="id") Integer id){
         logger.info("删除商户终端信息数据id = "+id);
@@ -204,7 +205,7 @@ public class MerchantInfoController extends BaseController{
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	@RequestMapping("/deleteBank")
+	@RequestMapping(value ="/deleteBank",method= RequestMethod.POST)
     @ResponseBody
     public ResultDTO<Integer> deleteBank(@RequestParam(value="id") Integer id){
         logger.info("删除商户银行卡数据id = "+id);
@@ -215,7 +216,7 @@ public class MerchantInfoController extends BaseController{
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping("/queryAllById")
+	@RequestMapping(value ="/queryAllById",method= RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO<MerchantCore> queryAllById(Integer id){
 		logger.info("查询出商户所有关联数据id = "+id);
@@ -229,7 +230,7 @@ public class MerchantInfoController extends BaseController{
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	@RequestMapping("/queryAgents")
+	@RequestMapping(value ="/queryAgents",method= RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO<List<Agent>> queryAllAgent()
 	{

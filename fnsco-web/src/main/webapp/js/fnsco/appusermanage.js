@@ -218,6 +218,7 @@ function confirmlt(mobile) {
 	})
 	console.log(arry);
 	var toStr = JSON.stringify(arry);
+
 	$
 			.ajax({
 				url : PROJECT_NAME + '/web/appsuser/judgeRoles',
@@ -227,11 +228,10 @@ function confirmlt(mobile) {
 				data : toStr,
 				success : function(data) {
 					unloginHandler(data);
-					console.log(data)
-					console.log(data.data.list.length)
-					if (data.data.list != "" || data.data.clerkList != "") {
+					if (data.data.list.length != 0
+							|| data.data.clerk.length != 0) {
 						var str = "";
-						var contant="";
+						var contant = "";
 						for (i = 0; i < data.data.list.length; i++) {
 							str += '<div style="font-size:16px;margin-bottom:8px;">该店已有'
 									+ data.data.list[i].merName
@@ -240,15 +240,15 @@ function confirmlt(mobile) {
 									+ ')是否将权限转让给'
 									+ mobile + '？</div>';
 						}
-						for (i = 0; i < data.data.clerkList.length; i++) {
-							contant+='<div style="font-size:16px;margin-bottom:8px;">是否移除'
-								+ data.data.clerkList[i].merName
-								+ '('
-								+ data.data.clerkList[i].mobile
-								+ ')的店主权限？</div>';
+						for (i = 0; i < data.data.clerk.length; i++) {
+							contant += '<div style="font-size:16px;margin-bottom:8px;">是否移除'
+									+ data.data.clerk[i].merName
+									+ '('
+									+ data.data.clerk[i].mobile
+									+ ')的店主权限？</div>';
 						}
-						console.log(str+contant);
-						layer.confirm(str+contant, {
+						console.log(str + contant);
+						layer.confirm(str + contant, {
 							area : [ '600px', '200px' ],
 							time : 2000000, // 20s后自动关闭
 							btn : [ '确定', '取消' ]
@@ -258,7 +258,8 @@ function confirmlt(mobile) {
 							layer.msg('取消成功');
 						});
 					}
-					if (data.data.list == "" && data.data.clerkList == "") {
+					if (data.data.list.length == 0
+							&& data.data.clerk.length == 0) {
 						saveBtn();
 					}
 				}

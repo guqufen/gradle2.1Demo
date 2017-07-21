@@ -429,6 +429,7 @@ $(".nextBtn").click(function(){
 function requestAgent(type){
 	 $.ajax({
 		   url:PROJECT_NAME+'/web/merchantinfo/queryAgents',
+		   type:'POST',
 		   success:function(data){
 			   unloginHandler(data);
 			   var agtS = data.data;

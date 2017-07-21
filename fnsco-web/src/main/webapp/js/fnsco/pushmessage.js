@@ -25,14 +25,18 @@ $('#table').bootstrapTable({
         formatter: operateFormatter
     },{
         field: 'msgSubject',
-        title: '推送名称'
+        title: '活动主题',
+        width:'10%',
+        formatter: formatMgsSubject
     },{
         field: 'msgType',
         title: '推送类型',
         formatter: formatPushType
     },{
         field: 'msgSubTitle',
-        title: '推送内容'
+        title: '推送内容',
+        width:'10%',
+        formatter:formatMsgSubTitle
     },{
         field: 'modifyUser',
         title: '提交人'
@@ -50,6 +54,20 @@ $('#table').bootstrapTable({
         formatter: formatPushState
     }]
 });
+//活动内容处理
+function formatMsgSubTitle(value, row, index){
+	if(value && value.length>30){
+		return value.substr(0,30)+'...';
+	}
+	return value;
+}
+//活动主题处理
+function formatMgsSubject(value, row, index){
+	if(value && value.length>15){
+		return value.substr(0,15)+'...';
+	}
+	return value;
+}
 //手机类型处理
 function formatPhoneType(value, row, index){
 	if(!value){
@@ -68,7 +86,7 @@ function formatTime(value, row, index){
 }
 //时间格式化
 function formatDate(date){
-	return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds();
+	return formatDateUtil(date);
 
 }
 //操作格式化
@@ -192,7 +210,7 @@ function querySingle(id){
         success:function(data){
         	if(data.success){
                 $("#myModal").modal();
-                $("#myModalLabel").html("推送消息详情");
+                $("#myModalLabel").html("活动推送消息详情");
                 $("#uploadify_file").hide();
                 $("#myModal input").attr("disabled",true);
                 $("#myModal select").attr("disabled",true);
@@ -216,7 +234,7 @@ function querySingle(id){
     });
 }
 $("#btn_add").click(function(){
-    $("#myModalLabel").html("新增推送消息");
+    $("#myModalLabel").html("新增活动推送消息");
     $("#myModal input").val('').attr("disabled",false);
     $("#myModal select").attr("disabled",false);
     $("#uploadify_file").show();

@@ -189,7 +189,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
      */
     @Override
     public ResultPageDTO<SysAppMessage> queryPageList(SysAppMessage record, int currentPageNum, int perPageSize) {
-
+        record.setBusType(1);
         PageDTO<SysAppMessage> params = new PageDTO<SysAppMessage>(currentPageNum, perPageSize, record);
         List<SysAppMessage> data = sysAppMessageDao.queryPageList(params);
         int totalNum = sysAppMessageDao.queryTotalByCondition(record);
