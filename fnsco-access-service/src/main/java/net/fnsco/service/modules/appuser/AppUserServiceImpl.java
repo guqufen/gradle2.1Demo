@@ -397,7 +397,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Override
     public ResultDTO modifyRole(BandDto bandDto) {
         List<QueryBandDTO> list = appUserDao.selectBandPeopleByMobile(bandDto.getMobile());
-        if (list.size() == 1 && list.contains(null)) {
+        if (list.size()==0) {
             return ResultDTO.fail(ApiConstant.E_NOBAND_ERROR);
         }
         //一条商铺都没有绑定
@@ -492,7 +492,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 }
                 //原来没有店长的强制更新 
                 if(it==null){
-                    if(!li.getAppUserId().equals(it.getAppUserId())){
+                    //if(!li.getAppUserId().equals(it.getAppUserId())){
                         //自己强制更新
                         AppUser user = new AppUser();
                         user.setId(li.getAppUserId());
@@ -500,7 +500,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                         if (!appUserDao.updateByPrimaryKeySelective(user)) {
                             return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
                         }
-                    }
+                   // }
                 }
                
             }
@@ -565,5 +565,13 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             logger.error("获取用户信息出错" + userId, ex);
         }
         return dto;
+    }
+
+    @Override
+    public AppUser selectAppUserById(Integer id) {
+        
+        // TODO Auto-generated method stub
+        return appUserDao.selectAppUserById(id);
+        
     }
 }

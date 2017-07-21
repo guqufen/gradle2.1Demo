@@ -25,6 +25,7 @@ import net.fnsco.core.push.android.AndroidUnicast;
 import net.fnsco.core.push.ios.IOSBroadcast;
 import net.fnsco.core.push.ios.IOSListcast;
 import net.fnsco.core.push.ios.IOSUnicast;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.service.domain.AppUser;
 import net.fnsco.service.domain.SysAppMessage;
 import net.fnsco.service.domain.SysMsgAppFail;
@@ -42,7 +43,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
     
     @Autowired
     private Environment env;
-    
+     
     private PushClient client = new PushClient();
     
     @Autowired
@@ -307,7 +308,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                                 sysMsgAppSucc.setPhoneType(1);
                                 sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
                             }else{
-                                sysMsgAppSucc.setPhoneType(1);
+                                sysMsgAppFail.setPhoneType(1);
                                 sysMsgAppFailService.insertSelective(sysMsgAppFail);
                             }
                             
@@ -325,6 +326,102 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             }
         }
         
+    }
+    /**
+     * 
+     * (non-Javadoc)
+     * @see net.fnsco.api.push.AppPushService#sendFirstFailMgs()第一次发送失败消息
+     * @auth tangliang
+     * @date 2017年7月20日 下午1:29:57
+     */
+    @Override
+    public void sendFailMgs(Integer frequencyNum) {
+        
+        if(frequencyNum == null || !(frequencyNum > 0 && 4 > frequencyNum)){
+            logger.error("非法参数!拒绝执行任务");
+            return;
+        }
+        
+        SysMsgAppFail record = new SysMsgAppFail();
+        switch (frequencyNum) {
+            case 1:
+                record.setSendTime(DateUtils.getTimeByMinuteDate(-5));//前两分钟数据
+                record.setSendCount(1);
+                break;
+            case 2:
+                record.setSendTime(DateUtils.getTimeByMinuteDate(-2*60-5));//前两小时数据
+                record.setSendCount(2);
+                break;
+            case 3:
+                record.setSendTime(DateUtils.getTimeByMinuteDate(-5*60-5-2*60));//前五个小时数据
+                record.setSendCount(3);
+            default:
+                return;
+        }
+        
+        record.setStatus(0);
+        List<SysMsgAppFail> datas = sysMsgAppFailService.queryFailMsg(record);
+        for (SysMsgAppFail sysMsgAppFail : datas) {
+            if(null == sysMsgAppFail.getAppUserId()){
+                continue;
+            }
+            AppUser appuser = appUserService.selectAppUserById(sysMsgAppFail.getAppUserId());
+            //不在线不推送
+            if(null == appuser.getDeviceType()){
+                continue;
+            }
+            //在线
+            SysAppMessage message = sysAppMsgService.selectByPrimaryKey(sysMsgAppFail.getMsgId());
+            //成功
+            SysMsgAppSucc msgAppSucc = new SysMsgAppSucc();
+            msgAppSucc.setSendTime(new Date());
+            msgAppSucc.setAppUserId(appuser.getId());
+            msgAppSucc.setMsgId(message.getId());
+            msgAppSucc.setReadStatus(0);
+            
+            if(appuser.getDeviceType() == 1){//android
+                try {
+                    Integer androidStatus  = sendAndroidListcast(appuser.getDeviceToken(),message.getMsgSubTitle(),DateUtils.dateFormatToStr(message.getSendTime()),message.getId().toString());
+                    sysMsgAppFail.setPhoneType(1);
+                    if(androidStatus == 200){
+                        msgAppSucc.setPhoneType(1);
+                        sysMsgAppFail.setStatus(1);
+                        sysMsgAppSuccService.insertSelective(msgAppSucc);
+                        logger.info("安卓信息推送成功");
+                    }else{
+                        sysMsgAppFail.setSendCount(sysMsgAppFail.getSendCount()+1);
+                        logger.info("安卓信息推送失败");
+                    }
+                } catch (Exception e) {
+                    logger.error("第"+frequencyNum+"次重试推送android消息异常"+e);
+                    e.printStackTrace();
+                }
+                
+            }else if(appuser.getDeviceType() == 2){//IOS
+                ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appuser.getId(), false, appuser.getDeviceType());
+                int iosStatus;
+                try {
+                    iosStatus = sendIOSUnicast(appuser.getDeviceToken(),  message.getMsgSubTitle(), countInfo.getData().getUnReadCount(),message.getId().toString());
+                    sysMsgAppFail.setPhoneType(2);
+                    if (iosStatus == 200) {
+                        msgAppSucc.setPhoneType(2);
+                        sysMsgAppFail.setStatus(1);
+                        sysMsgAppSuccService.insertSelective(msgAppSucc);
+                        logger.warn("ios信息推送成功");
+                      } else {
+                          sysMsgAppFail.setSendCount(sysMsgAppFail.getSendCount()+1);
+                          logger.warn("ios信息推送失败");
+                      }
+                    
+                } catch (Exception e) {
+                    
+                    logger.error("第"+frequencyNum+"次重试推送ios消息异常"+e);
+                    e.printStackTrace();
+                    
+                }
+            }
+            sysMsgAppFailService.updateByPrimaryKeySelective(sysMsgAppFail);
+        }
     }
 
 }

@@ -114,4 +114,30 @@
       status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 条件查询 -->
+  <select id="queryFailMsg" parameterType="net.fnsco.service.domain.SysMsgAppFail" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+    from sys_msg_app_fail
+    <where>
+      <if test="msgId != null" >
+        AND msg_id = #{msgId,jdbcType=INTEGER}
+      </if>
+      <if test="sendTime != null" >
+        AND send_time &lt;= #{sendTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="phoneType != null" >
+        AND phone_type = #{phoneType,jdbcType=INTEGER}
+      </if>
+      <if test="appUserId != null" >
+        AND app_user_id = #{appUserId,jdbcType=INTEGER}
+      </if>
+      <if test="sendCount != null" >
+        AND send_count = #{sendCount,jdbcType=INTEGER}
+      </if>
+      <if test="status != null" >
+        AND status = #{status,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
 </mapper>

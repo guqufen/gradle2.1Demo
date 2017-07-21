@@ -97,4 +97,48 @@ public class DateUtils {
         }
         return 0;
     }
+    /**
+     * dateFormatToStr:(这里用一句话描述这个方法的作用)
+     *
+     * @param date
+     * @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String dateFormatToStr(Date date){
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+    }
+    
+    /**
+     * getTimeByMinute:(这里用一句话描述这个方法的作用)获取当前时间前或后N分钟的时间字符串
+     *
+     * @param minute
+     * @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @author tangliang
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String getTimeByMinuteStr(int minute) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, minute);
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(calendar.getTime());
+    }
+    /**
+     * getTimeByMinuteDate:(这里用一句话描述这个方法的作用)获取当前时间前或后N分钟的时间Date格式
+     *
+     * @param minute
+     * @return    设定文件
+     * @return Date    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static Date getTimeByMinuteDate(int minute) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, minute);
+        return calendar.getTime();
+    }
 }
