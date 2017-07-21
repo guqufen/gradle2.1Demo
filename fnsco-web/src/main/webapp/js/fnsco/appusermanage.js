@@ -126,11 +126,11 @@ function responseHandler(res) {
 		};
 	}
 }
-
+var mobile;
 $(function() {
 	$(document).on('click', '.redact', function() {
 		$(".tab-content").html("");
-		var mobile = $(this).parent().next().next().html();
+		mobile = $(this).parent().next().next().html();
 		
 		var date={"mobile":mobile};
 		$.ajax({
@@ -171,12 +171,15 @@ function showdates(data){
 
 //判断修改
 $(".modify").click(function(){
-	confirmlt();
+	confirmlt(mobile);
 
 	
 })
 
-function confirmlt(){
+
+
+function confirmlt(mobile){
+	var mobile;
 	var arry=[];
 	var innerCode;
 	var id;
@@ -222,10 +225,11 @@ function confirmlt(){
 				 for(i=0;i<data.data.list.length;i++){
 						/* data.data.list[i].mobile         确定将<span>某店铺</span><span>小吴</span>更改为店员
 						 data.data.list[i].merName*/  
-						  str+='确定将<span>'+data.data.list[i].merName+'的</span><span>'+data.data.list[i].mobile+'</span>更改为店员'+',';
+						  str+='<div style="font-size:16px;margin-bottom:8px;">该店已有'+data.data.list[i].merName+'('+data.data.list[i].mobile+')是否将权限转让给'+mobile+'？</div>';
 						// $(".layui-layer-content").prepend(str);
 				 }
 					layer.confirm(str, {
+						area: ['600px', '200px'],
 				        time: 200000, //20s后自动关闭
 				        btn: ['确定', '取消']
 				    }, function(){
