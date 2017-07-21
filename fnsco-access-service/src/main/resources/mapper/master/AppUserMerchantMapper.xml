@@ -73,4 +73,41 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+   <insert id="insertSelective" parameterType="net.fnsco.service.domain.AppUserMerchant" >
+    insert into u_app_user_merchant
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="innerCode != null" >
+        inner_code,
+      </if>
+      <if test="appUserId != null" >
+        app_user_id,
+      </if>
+      <if test="modefyTime != null" >
+        modefy_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="innerCode != null" >
+        #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="appUserId != null" >
+        #{appUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modefyTime != null" >
+        #{modefyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
 </mapper>
