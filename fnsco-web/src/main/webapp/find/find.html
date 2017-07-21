@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>发现页面</title>
+		<title>发现</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -16,11 +16,14 @@
 			<div class="mui-scroll">
 				<ul class="mui-table-view mui-table-view-chevron findList">
 					<li>
-						<a id="hhdCd"><img src="img/bigdata.jpg"></a>
+						<a id="news1"><img src="img/1478152948123.jpg"></a>
 					</li>
 					<li>
-						<a id="hhdFd"><img src="img/alibaba.jpg"></a>
+						<a id="news2"><img src="img/1478152975635.jpg"></a>
 					</li>
+					<!-- <li>
+						<a id="news3"><img src="img/bigdata-2.jpg"></a>
+					</li> -->
 				</ul>
 			</div>
 		</div>
@@ -29,11 +32,13 @@
 	<script type="text/javascript" src="js/setWidth.js"></script>
 	<script type="text/javascript" src="js/mui.min.js"></script>
 	<script type="text/javascript">
-		$("#hhdCd").on('tap',function(){
-			param("http://open.fnsco.net/admin/find/news-bigdata.html");
+		$("#news1").on('tap',function(){
+			// param("http://www.fnsco.net/find/input1.html");
+			window.location.href='http://www.fnsco.net/find/input2.html?back';
 		})
-		$("#hhdFd").on('tap',function(){
-			param("http://open.fnsco.net/admin/find/news-alibaba.html");
+		$("#news2").on('tap',function(){
+			// param("http://www.fnsco.net/find/input1.html");
+			window.location.href='http://www.fnsco.net/find/input1.html?back';
 		})
 		//传值方法
 		function param(url){
