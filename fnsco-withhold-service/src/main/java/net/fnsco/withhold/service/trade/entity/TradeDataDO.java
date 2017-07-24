@@ -137,12 +137,12 @@ public class TradeDataDO {
     /**
      * 应答码
      */
-    private String respcode;
+    private String respCode;
 
     /**
      * 应答信息
      */
-    private String respmsg;
+    private String respMsg;
 
 
 
@@ -354,26 +354,26 @@ public class TradeDataDO {
         this.purpose = purpose;
     }
 
-    public String getRespcode() {
-        return respcode;
+    public String getRespCode() {
+        return respCode;
     }
 
-    public void setRespcode(String respcode) {
-        this.respcode = respcode;
+    public void setRespCode(String respCode) {
+        this.respCode = respCode;
     }
 
-    public String getRespmsg() {
-        return respmsg;
+    public String getRespMsg() {
+        return respMsg;
     }
 
-    public void setRespmsg(String respmsg) {
-        this.respmsg = respmsg;
+    public void setRespMsg(String respMsg) {
+        this.respMsg = respMsg;
     }
 
 
 
     @Override
     public String toString() {
-        return "[id="+ id + ", withholdId="+ withholdId + ", txnAmt="+ txnAmt + ", status="+ status + ", failReason="+ failReason + ", userName="+ userName + ", mobile="+ mobile + ", cardNum="+ cardNum + ", bankCard="+ bankCard + ", subBankName="+ subBankName + ", anBankId="+ anBankId + ", accountType="+ accountType + ", txnType="+ txnType + ", txnSubType="+ txnSubType + ", bizType="+ bizType + ", accessType="+ accessType + ", merId="+ merId + ", orderSn="+ orderSn + ", txnTime="+ txnTime + ", currency="+ currency + ", backUrl="+ backUrl + ", payType="+ payType + ", subject="+ subject + ", body="+ body + ", customerInfo="+ customerInfo + ", purpose="+ purpose + ", respcode="+ respcode + ", respmsg="+ respmsg + "]";
+        return "[id="+ id + ", withholdId="+ withholdId + ", txnAmt="+ txnAmt + ", status="+ status + ", failReason="+ failReason + ", userName="+ userName + ", mobile="+ mobile + ", cardNum="+ cardNum + ", bankCard="+ bankCard + ", subBankName="+ subBankName + ", anBankId="+ anBankId + ", accountType="+ accountType + ", txnType="+ txnType + ", txnSubType="+ txnSubType + ", bizType="+ bizType + ", accessType="+ accessType + ", merId="+ merId + ", orderSn="+ orderSn + ", txnTime="+ txnTime + ", currency="+ currency + ", backUrl="+ backUrl + ", payType="+ payType + ", subject="+ subject + ", body="+ body + ", customerInfo="+ customerInfo + ", purpose="+ purpose + ", respCode="+ respCode + ", respMsg="+ respMsg + "]";
     }
 }

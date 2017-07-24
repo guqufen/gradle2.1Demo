@@ -93,11 +93,11 @@ public class TradeDataProvider {
         if (StringUtils.isNotBlank(tradeData.getPurpose())){
             SET("purpose=#{tradeData.purpose}");
         }
-        if (StringUtils.isNotBlank(tradeData.getRespcode())){
-            SET("respCode=#{tradeData.respcode}");
+        if (StringUtils.isNotBlank(tradeData.getRespCode())){
+            SET("resp_code=#{tradeData.respCode}");
         }
-        if (StringUtils.isNotBlank(tradeData.getRespmsg())){
-            SET("respMsg=#{tradeData.respmsg}");
+        if (StringUtils.isNotBlank(tradeData.getRespMsg())){
+            SET("resp_msg=#{tradeData.respMsg}");
         }
         WHERE("id = #{tradeData.id}");
         }}.toString();
@@ -196,11 +196,11 @@ public class TradeDataProvider {
         if (StringUtils.isNotBlank(tradeData.getPurpose())){
             WHERE("purpose=#{tradeData.purpose}");
         }
-        if (StringUtils.isNotBlank(tradeData.getRespcode())){
-            WHERE("respCode=#{tradeData.respcode}");
+        if (StringUtils.isNotBlank(tradeData.getRespCode())){
+            WHERE("resp_code=#{tradeData.respCode}");
         }
-        if (StringUtils.isNotBlank(tradeData.getRespmsg())){
-            WHERE("respMsg=#{tradeData.respmsg}");
+        if (StringUtils.isNotBlank(tradeData.getRespMsg())){
+            WHERE("resp_msg=#{tradeData.respMsg}");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
@@ -289,11 +289,11 @@ public class TradeDataProvider {
         if (StringUtils.isNotBlank(tradeData.getPurpose())){
             WHERE("purpose=#{tradeData.purpose}");
         }
-        if (StringUtils.isNotBlank(tradeData.getRespcode())){
-            WHERE("respCode=#{tradeData.respcode}");
+        if (StringUtils.isNotBlank(tradeData.getRespCode())){
+            WHERE("resp_code=#{tradeData.respCode}");
         }
-        if (StringUtils.isNotBlank(tradeData.getRespmsg())){
-            WHERE("respMsg=#{tradeData.respmsg}");
+        if (StringUtils.isNotBlank(tradeData.getRespMsg())){
+            WHERE("resp_msg=#{tradeData.respMsg}");
         }
         }}.toString();
     }
