@@ -493,6 +493,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     AppUserMerchantDTO dto = new AppUserMerchantDTO();
                     dto.setId(it.getId());
                     dto.setRoleId(ConstantEnum.AuthorTypeEnum.CLERK.getCode());
+                    dto.setModefyTime(new Date());
                     //更新另一个店长
                     if (appUserMerchantDao.updateByPrimaryKeySelective(dto) == 0) {
                         return ResultDTO.fail(ApiConstant.E_CHANGEROLE_ERROR);
@@ -548,18 +549,27 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     if (!appUserDao.updateByPrimaryKeySelective(user)) {
                         return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
                     }
-                    //原店主强制更新
-                    AppUser oldUser = new AppUser();
-                    oldUser.setId(it.getAppUserId());
-                    oldUser.setForcedLoginOut(1);
-                    if (!appUserDao.updateByPrimaryKeySelective(oldUser)) {
-                        return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
-                    }
                     // }
+                    //如果原来的店长不是自己 把原来的店长更新为店员
+                    if(!li.getAppUserId().equals(it.getAppUserId())){
+                        //原店主强制更新
+                        AppUser oldUser = new AppUser();
+                        oldUser.setId(it.getAppUserId());
+                        oldUser.setForcedLoginOut(1);
+                        if (!appUserDao.updateByPrimaryKeySelective(oldUser)) {
+                            return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
+                        }
+                        //原店主更改角色
+                        AppUserMerchantDTO dto = new AppUserMerchantDTO();
+                        dto.setId(it.getId());
+                        dto.setRoleId(ConstantEnum.AuthorTypeEnum.CLERK.getCode());
+                        dto.setModefyTime(new Date());
+                        appUserMerchantDao.updateByPrimaryKeySelective(dto);
+                    }
                 }
 
                 //原来没有店长
-                if (it == null) {
+         /*       if (it == null) {
                     //自己强制更新
                     AppUser user = new AppUser();
                     user.setId(li.getAppUserId());
@@ -567,9 +577,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     if (!appUserDao.updateByPrimaryKeySelective(user)) {
                         return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
                     }
-                }
+                }*/
             }
-
+            li.setModefyTime(new Date());
             int num = appUserMerchantDao.updateByPrimaryKeySelective(li);
             if (num == 0) {
                 return ResultDTO.fail(ApiConstant.E_CHANGEROLE_ERROR);
