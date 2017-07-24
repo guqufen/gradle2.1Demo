@@ -27,6 +27,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
@@ -216,7 +217,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         SysAppMessage message = new SysAppMessage();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (StringUtils.isEmpty(record.getSendTimeStr())) {
-            return ResultDTO.fail();
+            return ResultDTO.fail(CoreConstants.WEB_PUSH_DATE_ERROR);
         }
         record.setSendTimeStr(record.getSendTimeStr()+":00");
         try {
@@ -227,7 +228,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         String currTime = sdf.format(new Date());
         int timeStatus = DateUtils.compare_date(record.getSendTimeStr(), currTime);
         if (timeStatus == 2 || timeStatus == -1) {
-            return ResultDTO.fail();
+            return ResultDTO.fail(CoreConstants.WEB_PUSH_DATE_ERROR);
         }
         message.setSendType(2);
         message.setPushType(2);
