@@ -17,6 +17,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 import net.fnsco.core.constants.CoreConstants;
+import net.fnsco.core.utils.CookieUtils;
 
 public class BaseController {
     protected Logger              logger   = LoggerFactory.getLogger(this.getClass());
@@ -214,5 +215,8 @@ public class BaseController {
                 }
             }
         }
+    }
+    public void addCookie(String key, String value) {
+        CookieUtils.addCookie(response, key, value, 60 * 60 * 24 * 7);
     }
 }

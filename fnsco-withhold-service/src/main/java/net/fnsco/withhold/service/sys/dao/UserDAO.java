@@ -19,6 +19,9 @@ public interface UserDAO {
     @Select("SELECT * FROM sys_user WHERE id = #{id}")
     public UserDO getById(@Param("id") int id);
 
+    @Select("SELECT * FROM sys_user WHERE name = #{name}")
+    public UserDO getByUserName(@Param("name") String name);
+    
     @Results({@Result( column = "real_name",property = "realName"),@Result( column = "alias_name",property = "aliasName"),@Result( column = "agent_id",property = "agentId"),@Result( column = "modify_time",property = "modifyTime"),@Result( column = "modify_user_id",property = "modifyUserId") })
     @Insert("INSERT into sys_user(id,type,name,password,real_name,mobile,sex,alias_name,department,agent_id,remark,modify_time,modify_user_id) VALUES (#{id},#{type},#{name},#{password},#{realName},#{mobile},#{sex},#{aliasName},#{department},#{agentId},#{remark},#{modifyTime},#{modifyUserId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")

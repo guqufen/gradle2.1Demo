@@ -65,6 +65,21 @@ public class WithholdInfoDO {
      */
     private Integer total;
 
+    /**
+     * 开户支行名
+     */
+    private String subBankName;
+
+    /**
+     * 爱农银行编号
+     */
+    private String anBankId;
+
+    /**
+     * 账户类型00：对公 01：对私
+     */
+    private String accountType;
+
 
 
     public Integer getId() {
@@ -163,10 +178,34 @@ public class WithholdInfoDO {
         this.total = total;
     }
 
+    public String getSubBankName() {
+        return subBankName;
+    }
+
+    public void setSubBankName(String subBankName) {
+        this.subBankName = subBankName;
+    }
+
+    public String getAnBankId() {
+        return anBankId;
+    }
+
+    public void setAnBankId(String anBankId) {
+        this.anBankId = anBankId;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
 
 
     @Override
     public String toString() {
-        return "[id="+ id + ", userName="+ userName + ", mobile="+ mobile + ", cardNum="+ cardNum + ", debitDay="+ debitDay + ", amount="+ amount + ", amountTotal="+ amountTotal + ", bankCard="+ bankCard + ", status="+ status + ", modifyUserId="+ modifyUserId + ", modifyTime="+ modifyTime + ", total="+ total + "]";
+        return "[id="+ id + ", userName="+ userName + ", mobile="+ mobile + ", cardNum="+ cardNum + ", debitDay="+ debitDay + ", amount="+ amount + ", amountTotal="+ amountTotal + ", bankCard="+ bankCard + ", status="+ status + ", modifyUserId="+ modifyUserId + ", modifyTime="+ modifyTime + ", total="+ total + ", subBankName="+ subBankName + ", anBankId="+ anBankId + ", accountType="+ accountType + "]";
     }
 }

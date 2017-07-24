@@ -51,6 +51,15 @@ public class WithholdInfoProvider {
         if (withholdInfo.getTotal() != null) {
             SET("total=#{withholdInfo.total}");
         }
+        if (StringUtils.isNotBlank(withholdInfo.getSubBankName())){
+            SET("sub_bank_name=#{withholdInfo.subBankName}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getAnBankId())){
+            SET("an_bank_id=#{withholdInfo.anBankId}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getAccountType())){
+            SET("account_type=#{withholdInfo.accountType}");
+        }
         WHERE("id = #{withholdInfo.id}");
         }}.toString();
     }
@@ -106,6 +115,15 @@ public class WithholdInfoProvider {
         if (withholdInfo.getTotal() != null) {
             WHERE("total=#{withholdInfo.total}");
         }
+        if (StringUtils.isNotBlank(withholdInfo.getSubBankName())){
+            WHERE("sub_bank_name=#{withholdInfo.subBankName}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getAnBankId())){
+            WHERE("an_bank_id=#{withholdInfo.anBankId}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getAccountType())){
+            WHERE("account_type=#{withholdInfo.accountType}");
+        }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -150,6 +168,15 @@ public class WithholdInfoProvider {
         }
         if (withholdInfo.getTotal() != null) {
             WHERE("total=#{withholdInfo.total}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getSubBankName())){
+            WHERE("sub_bank_name=#{withholdInfo.subBankName}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getAnBankId())){
+            WHERE("an_bank_id=#{withholdInfo.anBankId}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getAccountType())){
+            WHERE("account_type=#{withholdInfo.accountType}");
         }
         }}.toString();
     }

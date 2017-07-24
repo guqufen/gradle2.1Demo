@@ -1,23 +1,21 @@
 package net.fnsco.withhold.web.trade;
 
 import java.util.Map;
-
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import net.fnsco.core.base.BaseController;
-import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.base.ResultPageDTO;
+import org.springframework.web.bind.annotation.RequestBody;
 import net.fnsco.withhold.service.trade.WithholdInfoService;
 import net.fnsco.withhold.service.trade.entity.WithholdInfoDO;
+import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.BaseController;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Controller
 @RequestMapping(value ="/withholdInfo", method = RequestMethod.POST)

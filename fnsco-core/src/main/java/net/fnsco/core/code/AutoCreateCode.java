@@ -579,9 +579,9 @@ public class AutoCreateCode {
         sb.append("import " + daoPackage + "." + daoName + ";").append(this.separator);
         sb.append("import " + doPackage + "." + doName + ";").append(this.separator);
 
-        sb.append("import cn.gmph.core.base.BaseService;").append(this.separator);
-        sb.append("import cn.gmph.core.base.ResultDTO;").append(this.separator);
-        sb.append("import cn.gmph.core.base.ResultPageDTO;").append(this.separator);
+        sb.append("import net.fnsco.core.base.BaseService;").append(this.separator);
+        sb.append("import net.fnsco.core.base.ResultDTO;").append(this.separator);
+        sb.append("import net.fnsco.core.base.ResultPageDTO;").append(this.separator);
 
         sb.append(this.separator);
 
@@ -710,9 +710,9 @@ public class AutoCreateCode {
         sb.append("import " + servicePackage + "." + serviceName + ";").append(this.separator);
         sb.append("import " + entityPackage + "." + doName + ";").append(this.separator);
 
-        sb.append("import cn.gmph.core.base.ResultPageDTO;").append(this.separator);
-        sb.append("import cn.gmph.core.base.ResultDTO;").append(this.separator);
-        sb.append("import cn.gmph.core.base.BaseController;").append(this.separator);
+        sb.append("import net.fnsco.core.base.ResultPageDTO;").append(this.separator);
+        sb.append("import net.fnsco.core.base.ResultDTO;").append(this.separator);
+        sb.append("import net.fnsco.core.base.BaseController;").append(this.separator);
         sb.append("import io.swagger.annotations.Api;").append(this.separator);
         sb.append("import io.swagger.annotations.ApiOperation;").append(this.separator);
 
