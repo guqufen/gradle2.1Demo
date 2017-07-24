@@ -1,4 +1,4 @@
-package net.fnsco.withhold.web.withhold;
+package net.fnsco.withhold.web.trade;
 
 import java.util.Map;
 
@@ -16,12 +16,12 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.withhold.service.withhold.WithholdLogService;
-import net.fnsco.withhold.service.withhold.entity.WithholdLogDO;
+import net.fnsco.withhold.service.trade.WithholdLogService;
+import net.fnsco.withhold.service.trade.entity.WithholdLogDO;
 
 @Controller
-@RequestMapping(value ="/web/withholdLog", produces = "application/*;charset=utf-8", method = RequestMethod.POST)
-@Api(value = "/withholdLog", tags = {"代扣日志管理"})
+@RequestMapping(value ="/withholdLog", method = RequestMethod.POST)
+@Api(value = "/withholdLog", tags = {""})
 public class WithholdLogController extends BaseController {
 
  @Autowired
@@ -29,7 +29,7 @@ public class WithholdLogController extends BaseController {
 
 
  // 列表页
- @RequestMapping("/list.htm")
+ @RequestMapping("/list")
  public String list() {
      return "";
  }
@@ -37,7 +37,7 @@ public class WithholdLogController extends BaseController {
  // 分页
  @ApiOperation(value = "分页查询", notes = "分页查询")
  @ResponseBody
- @RequestMapping(value = "query.htm", method = RequestMethod.GET)
+ @RequestMapping(value = "query", method = RequestMethod.GET)
  public ResultDTO page(@RequestBody WithholdLogDO withholdLog) {
      logger.info("开始分页查询WithholdLogController.page, withholdLog=" + withholdLog.toString());
      Map<String, Integer> params = super.copyParamsToInteger(new String[] { "page", "rows" });
@@ -50,7 +50,7 @@ public class WithholdLogController extends BaseController {
  // 添加
  @ApiOperation(value = "新增保存", notes = "新增保存")
  @ResponseBody
- @RequestMapping(value = "doAdd.htm")
+ @RequestMapping(value = "doAdd")
  public ResultDTO doAdd (@RequestBody WithholdLogDO withholdLog) {
     WithholdLogDO   resultDO = this.withholdLogService.doAdd(withholdLog,super.getUserId());
     return success(resultDO);
@@ -59,7 +59,7 @@ public class WithholdLogController extends BaseController {
  // 修改
  @ApiOperation(value = "修改保存", notes = "修改保存")
  @ResponseBody
- @RequestMapping(value = "doUpdate.htm")
+ @RequestMapping(value = "doUpdate")
  public ResultDTO doUpdate (@RequestBody WithholdLogDO withholdLog) {
      Integer result = this.withholdLogService.doUpdate(withholdLog,getUserId());
      return success(result);
@@ -68,7 +68,7 @@ public class WithholdLogController extends BaseController {
  // 删除
  @ApiOperation(value = "删除", notes = "删除")
  @ResponseBody
- @RequestMapping(value = "doDelete.htm")
+ @RequestMapping(value = "doDelete")
  public ResultDTO doDelete(@RequestBody WithholdLogDO withholdLog) {
      Integer result = this.withholdLogService.doDelete(withholdLog,getUserId());
      return success(result);
@@ -76,7 +76,7 @@ public class WithholdLogController extends BaseController {
  // 详情
  @ApiOperation(value = "查询详情", notes = "查询详情")
  @ResponseBody
- @RequestMapping(value = "detail.htm")
+ @RequestMapping(value = "detail")
  public ResultDTO detail(@RequestParam String id) {
      WithholdLogDO result = this.withholdLogService.doQueryById(NumberUtils.toInt(id));
      return success(result);

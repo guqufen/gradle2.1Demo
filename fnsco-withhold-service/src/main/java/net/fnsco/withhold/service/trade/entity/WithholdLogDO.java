@@ -1,4 +1,4 @@
-package net.fnsco.withhold.service.withhold.entity;
+package net.fnsco.withhold.service.trade.entity;
 
 import java.math.BigDecimal;
 

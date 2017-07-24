@@ -5,11 +5,12 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-
-import net.fnsco.withhold.service.sys.dao.helper.UserProvider;
 import net.fnsco.withhold.service.sys.entity.UserDO;
+import net.fnsco.withhold.service.sys.dao.helper.UserProvider;
 
 import java.util.List;;
 
@@ -18,7 +19,8 @@ public interface UserDAO {
     @Select("SELECT * FROM sys_user WHERE id = #{id}")
     public UserDO getById(@Param("id") int id);
 
-    @Insert("INSERT into sys_user(id,type,name,password,real_Name,mobile,sex,alias_Name,department,agent_Id,remark,modify_Time,modify_User_Id) VALUES (#{id},#{type},#{name},#{password},#{realName},#{mobile},#{sex},#{aliasName},#{department},#{agentId},#{remark},#{modifyTime},#{modifyUserId})")
+    @Results({@Result( column = "real_name",property = "realName"),@Result( column = "alias_name",property = "aliasName"),@Result( column = "agent_id",property = "agentId"),@Result( column = "modify_time",property = "modifyTime"),@Result( column = "modify_user_id",property = "modifyUserId") })
+    @Insert("INSERT into sys_user(id,type,name,password,real_name,mobile,sex,alias_name,department,agent_id,remark,modify_time,modify_user_id) VALUES (#{id},#{type},#{name},#{password},#{realName},#{mobile},#{sex},#{aliasName},#{department},#{agentId},#{remark},#{modifyTime},#{modifyUserId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(UserDO user);
 
@@ -28,6 +30,7 @@ public interface UserDAO {
     @UpdateProvider(type = UserProvider.class, method = "update")
     public int update(@Param("user") UserDO  user);
 
+    @Results({@Result( column = "real_name",property = "realName"),@Result( column = "alias_name",property = "aliasName"),@Result( column = "agent_id",property = "agentId"),@Result( column = "modify_time",property = "modifyTime"),@Result( column = "modify_user_id",property = "modifyUserId") })
     @SelectProvider(type = UserProvider.class, method = "pageList")
     public List<UserDO> pageList(@Param("user") UserDO user, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 

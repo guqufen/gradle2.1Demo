@@ -1,21 +1,13 @@
-package net.fnsco.withhold.service.withhold.dao.helper;
+package net.fnsco.withhold.service.trade.dao.helper;
 
-import static org.apache.ibatis.jdbc.SqlBuilder.BEGIN;
-import static org.apache.ibatis.jdbc.SqlBuilder.FROM;
-import static org.apache.ibatis.jdbc.SqlBuilder.ORDER_BY;
-import static org.apache.ibatis.jdbc.SqlBuilder.SELECT;
-import static org.apache.ibatis.jdbc.SqlBuilder.SET;
-import static org.apache.ibatis.jdbc.SqlBuilder.SQL;
-import static org.apache.ibatis.jdbc.SqlBuilder.UPDATE;
-import static org.apache.ibatis.jdbc.SqlBuilder.WHERE;
-
+import org.apache.ibatis.jdbc.SQL;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
-import net.fnsco.withhold.service.withhold.entity.WithholdLogDO;
+import net.fnsco.withhold.service.trade.entity.WithholdLogDO;
 public class WithholdLogProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -24,10 +16,10 @@ public class WithholdLogProvider {
 
     public String update(Map<String, Object> params) {
         WithholdLogDO withholdLog = (WithholdLogDO) params.get("withholdLog");
-        BEGIN();
+        return new SQL() {{
         UPDATE(TABLE_NAME);
         if (withholdLog.getWithholdId() != null) {
-            SET("withholdId=#{withholdLog.withholdId}");
+            SET("withhold_id=#{withholdLog.withholdId}");
         }
         if (withholdLog.getAmount() != null) {
             SET("amount=#{withholdLog.amount}");
@@ -36,67 +28,35 @@ public class WithholdLogProvider {
             SET("status=#{withholdLog.status}");
         }
         if (StringUtils.isNotBlank(withholdLog.getFailReason())){
-            SET("failReason=#{withholdLog.failReason}");
+            SET("fail_reason=#{withholdLog.failReason}");
         }
         if (StringUtils.isNotBlank(withholdLog.getDebitDay())){
-            SET("debitDay=#{withholdLog.debitDay}");
+            SET("debit_day=#{withholdLog.debitDay}");
         }
         WHERE("id = #{withholdLog.id}");
-        String sql = SQL();
-        return sql;
+        }}.toString();
     }
 
     public String pageList(Map<String, Object> params) {
         WithholdLogDO withholdLog = (WithholdLogDO) params.get("withholdLog");
         Integer pageNum = (Integer) params.get("pageNum");
         Integer pageSize = (Integer) params.get("pageSize");
-        BEGIN();
-        SELECT("*");
-        FROM(TABLE_NAME);
-        if (withholdLog.getId() != null) {
-            WHERE("id=#{withholdLog.id}");
-        }
-        if (withholdLog.getWithholdId() != null) {
-            WHERE("withholdId=#{withholdLog.withholdId}");
-        }
-        if (withholdLog.getAmount() != null) {
-            WHERE("amount=#{withholdLog.amount}");
-        }
-        if (withholdLog.getStatus() != null) {
-            WHERE("status=#{withholdLog.status}");
-        }
-        if (StringUtils.isNotBlank(withholdLog.getFailReason())){
-            WHERE("failReason=#{withholdLog.failReason}");
-        }
-        if (StringUtils.isNotBlank(withholdLog.getDebitDay())){
-            WHERE("debitDay=#{withholdLog.debitDay}");
-        }
-        ORDER_BY("id desc");
-        String sql = SQL();
-        int start = 0;
-        int limit = 0;
         if (pageNum == null || pageNum == 0) {
             pageNum = 1;
         }
         if (pageSize == null || pageSize == 0) {
             pageSize = 20;
         }
-        start = (pageNum - 1) * pageSize;
-        limit = pageSize;
-        sql += " limit " + start + ", " + limit;
-        return sql;
-    }
-
-    public String pageListCount(Map<String, Object> params) {
-        WithholdLogDO withholdLog = (WithholdLogDO) params.get("withholdLog");
-        BEGIN();
-        SELECT("count(1)");
+        int start = (pageNum - 1) * pageSize;
+        int limit = pageSize;
+        return new SQL() {{
+        SELECT("*");
         FROM(TABLE_NAME);
         if (withholdLog.getId() != null) {
             WHERE("id=#{withholdLog.id}");
         }
         if (withholdLog.getWithholdId() != null) {
-            WHERE("withholdId=#{withholdLog.withholdId}");
+            WHERE("withhold_id=#{withholdLog.withholdId}");
         }
         if (withholdLog.getAmount() != null) {
             WHERE("amount=#{withholdLog.amount}");
@@ -105,13 +65,39 @@ public class WithholdLogProvider {
             WHERE("status=#{withholdLog.status}");
         }
         if (StringUtils.isNotBlank(withholdLog.getFailReason())){
-            WHERE("failReason=#{withholdLog.failReason}");
+            WHERE("fail_reason=#{withholdLog.failReason}");
         }
         if (StringUtils.isNotBlank(withholdLog.getDebitDay())){
-            WHERE("debitDay=#{withholdLog.debitDay}");
+            WHERE("debit_day=#{withholdLog.debitDay}");
         }
-        String sql = SQL();
-        return sql;
+        ORDER_BY("id desc limit " + start + ", " + limit );
+        }}.toString();
+    }
+
+    public String pageListCount(Map<String, Object> params) {
+        WithholdLogDO withholdLog = (WithholdLogDO) params.get("withholdLog");
+        return new SQL() {{
+        SELECT("count(1)");
+        FROM(TABLE_NAME);
+        if (withholdLog.getId() != null) {
+            WHERE("id=#{withholdLog.id}");
+        }
+        if (withholdLog.getWithholdId() != null) {
+            WHERE("withhold_id=#{withholdLog.withholdId}");
+        }
+        if (withholdLog.getAmount() != null) {
+            WHERE("amount=#{withholdLog.amount}");
+        }
+        if (withholdLog.getStatus() != null) {
+            WHERE("status=#{withholdLog.status}");
+        }
+        if (StringUtils.isNotBlank(withholdLog.getFailReason())){
+            WHERE("fail_reason=#{withholdLog.failReason}");
+        }
+        if (StringUtils.isNotBlank(withholdLog.getDebitDay())){
+            WHERE("debit_day=#{withholdLog.debitDay}");
+        }
+        }}.toString();
     }
 }
 

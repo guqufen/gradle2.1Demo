@@ -9,8 +9,8 @@ public class CodeGen {
         //auto.setCreateAction(true);
         //auto.setCreateService(true);
         auto.setOverride(true);
-        auto.init("net.fnsco.withhold.server", "sys", "sys_user");
-        auto.init("net.fnsco.withhold.server", "withhold", "w_withhold_info");
-        auto.init("net.fnsco.withhold.server", "withhold", "w_withhold_log");
+        auto.init("net.fnsco.withhold", "sys", "sys_user");
+        auto.init("net.fnsco.withhold", "trade", "w_withhold_info");
+        auto.init("net.fnsco.withhold", "trade", "w_withhold_log");
     }
 }

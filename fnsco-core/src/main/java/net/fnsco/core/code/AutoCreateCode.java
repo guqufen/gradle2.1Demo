@@ -291,6 +291,25 @@ public class AutoCreateCode {
         return sb.toString();
     }
 
+    private boolean getUpperColumn(List<Field> list, StringBuffer sb) {
+        sb.reverse();
+        boolean result = false;
+        sb.append("    @Results({");
+        int j=0;
+        for (int i = 0; i < list.size(); i++) {
+            Field f = list.get(i);
+            if (!f.getColumn().equals(f.getName())) {
+                result = true;
+                if(j>0){
+                    sb.append(",");
+                }
+                sb.append("@Result( column = \""+f.column+"\",property = \""+f.name+"\")");
+                j++;
+            }
+        }
+        sb.append(" })");
+        return result;
+    }
     private void createDaoFile(String basePackage, String module, String tableName, List<Field> list, boolean override) {
         String daoPackage = basePackage + ".service";
         String providerPackage = basePackage + ".service";
@@ -343,7 +362,8 @@ public class AutoCreateCode {
         sb.append("import org.apache.ibatis.annotations.Select;").append(this.separator);
         sb.append("import org.apache.ibatis.annotations.Options;").append(this.separator);
         sb.append("import org.apache.ibatis.annotations.Delete;").append(this.separator);
-
+        sb.append("import org.apache.ibatis.annotations.Result;").append(this.separator);
+        sb.append("import org.apache.ibatis.annotations.Results;").append(this.separator);
         sb.append("import org.apache.ibatis.annotations.SelectProvider;").append(this.separator);
         sb.append("import org.apache.ibatis.annotations.UpdateProvider;").append(this.separator);
         sb.append("import " + entityPackage + ".").append(doName).append(";").append(this.separator);
@@ -360,12 +380,18 @@ public class AutoCreateCode {
         sb.append("    @Select(\"SELECT * FROM " + tableName + " WHERE id = #{id}\")").append(this.separator);
         sb.append("    public " + doName + " getById(@Param(\"id\") int id);").append(this.separator);
         sb.append(this.separator);
-
+        
+        StringBuffer sb1 = new StringBuffer();
+        boolean flag = getUpperColumn(list,sb1);
         // insert
+        if(flag){
+            sb.append(sb1.toString());
+            sb.append(this.separator);
+        }
         sb.append("    @Insert(\"INSERT into " + tableName + "(");
         for (int i = 0; i < list.size(); i++) {
             Field f = list.get(i);
-            sb.append(f.getName());
+            sb.append(f.getColumn());
             if (i != list.size() - 1) {
                 sb.append(",");
             }
@@ -396,6 +422,10 @@ public class AutoCreateCode {
             .append(this.separator);
         sb.append(this.separator);
 
+        if(flag){
+            sb.append(sb1.toString());
+            sb.append(this.separator);
+        }
         // PAGE
         sb.append("    @SelectProvider(type = " + providerName + ".class, method = \"pageList\")").append(this.separator);
         sb.append("    public List<" + doName + "> pageList(@Param(\"" + doVariable + "\") " + doName + " " + this.tableNameTransfer(tableName, false)
@@ -416,14 +446,7 @@ public class AutoCreateCode {
         sb2.append("package ").append(providerPackage).append(";").append(this.separator);
         sb2.append(this.separator);
 
-        sb2.append("import static org.apache.ibatis.jdbc.SqlBuilder.BEGIN;").append(this.separator);
-        sb2.append("import static org.apache.ibatis.jdbc.SqlBuilder.SELECT;").append(this.separator);
-        sb2.append("import static org.apache.ibatis.jdbc.SqlBuilder.SET;").append(this.separator);
-        sb2.append("import static org.apache.ibatis.jdbc.SqlBuilder.SQL;").append(this.separator);
-        sb2.append("import static org.apache.ibatis.jdbc.SqlBuilder.UPDATE;").append(this.separator);
-        sb2.append("import static org.apache.ibatis.jdbc.SqlBuilder.WHERE;").append(this.separator);
-        sb2.append("import static org.apache.ibatis.jdbc.SqlBuilder.FROM;").append(this.separator);
-        sb2.append("import static org.apache.ibatis.jdbc.SqlBuilder.ORDER_BY;").append(this.separator);
+        sb2.append("import org.apache.ibatis.jdbc.SQL;").append(this.separator);
 
         sb2.append("import java.util.Map;").append(this.separator);
         sb2.append(this.separator);
@@ -442,7 +465,7 @@ public class AutoCreateCode {
         sb2.append(this.separator);
         sb2.append("    public String update(Map<String, Object> params) {").append(this.separator);
         sb2.append("        " + doName + " " + doVariable + " = (" + doName + ") params.get(\"" + doVariable + "\");").append(this.separator);
-        sb2.append("        BEGIN();").append(this.separator);
+        sb2.append("        return new SQL() {{").append(this.separator);
         sb2.append("        UPDATE(TABLE_NAME);").append(this.separator);
         for (Field f : list) {
             if (StringUtils.equals(f.getName(), "id")) {
@@ -453,12 +476,11 @@ public class AutoCreateCode {
             } else {
                 sb2.append("        if (" + doVariable + "." + this.getMethodName(f) + "() != null) {").append(this.separator);
             }
-            sb2.append("            SET(\"" + f.getName() + "=#{" + doVariable + "." + f.getName() + "}\");").append(this.separator);
+            sb2.append("            SET(\"" + f.getColumn() + "=#{" + doVariable + "." + f.getName() + "}\");").append(this.separator);
             sb2.append("        }").append(this.separator);
         }
         sb2.append("        WHERE(\"id = #{" + doVariable + ".id}\");").append(this.separator);
-        sb2.append("        String sql = SQL();").append(this.separator);
-        sb2.append("        return sql;").append(this.separator);
+        sb2.append("        }}.toString();").append(this.separator);
         sb2.append("    }").append(this.separator);
         sb2.append(this.separator);
 
@@ -466,7 +488,15 @@ public class AutoCreateCode {
         sb2.append("        " + doName + " " + doVariable + " = (" + doName + ") params.get(\"" + doVariable + "\");").append(this.separator);
         sb2.append("        Integer pageNum = (Integer) params.get(\"pageNum\");").append(this.separator);
         sb2.append("        Integer pageSize = (Integer) params.get(\"pageSize\");").append(this.separator);
-        sb2.append("        BEGIN();").append(this.separator);
+        sb2.append("        if (pageNum == null || pageNum == 0) {").append(this.separator);
+        sb2.append("            pageNum = 1;").append(this.separator);
+        sb2.append("        }").append(this.separator);
+        sb2.append("        if (pageSize == null || pageSize == 0) {").append(this.separator);
+        sb2.append("            pageSize = 20;").append(this.separator);
+        sb2.append("        }").append(this.separator);
+        sb2.append("        int start = (pageNum - 1) * pageSize;").append(this.separator);
+        sb2.append("        int limit = pageSize;").append(this.separator);
+        sb2.append("        return new SQL() {{").append(this.separator);
         sb2.append("        SELECT(\"*\");").append(this.separator);
         sb2.append("        FROM(TABLE_NAME);").append(this.separator);
         for (Field f : list) {
@@ -476,28 +506,16 @@ public class AutoCreateCode {
                 sb2.append("        if (" + doVariable + "." + this.getMethodName(f) + "() != null) {").append(this.separator);
             }
             // sb2.append(" if (" + doVariable + "." + this.getMethodName(f) + "() != null) {").append(this.separator);
-            sb2.append("            WHERE(\"" + f.getName() + "=#{" + doVariable + "." + f.getName() + "}\");").append(this.separator);
+            sb2.append("            WHERE(\"" + f.getColumn() + "=#{" + doVariable + "." + f.getName() + "}\");").append(this.separator);
             sb2.append("        }").append(this.separator);
         }
-        sb2.append("        ORDER_BY(\"id desc\");").append(this.separator);
-        sb2.append("        String sql = SQL();").append(this.separator);
-        sb2.append("        int start = 0;").append(this.separator);
-        sb2.append("        int limit = 0;").append(this.separator);
-        sb2.append("        if (pageNum == null || pageNum == 0) {").append(this.separator);
-        sb2.append("            pageNum = 1;").append(this.separator);
-        sb2.append("        }").append(this.separator);
-        sb2.append("        if (pageSize == null || pageSize == 0) {").append(this.separator);
-        sb2.append("            pageSize = 20;").append(this.separator);
-        sb2.append("        }").append(this.separator);
-        sb2.append("        start = (pageNum - 1) * pageSize;").append(this.separator);
-        sb2.append("        limit = pageSize;").append(this.separator);
-        sb2.append("        sql += \" limit \" + start + \", \" + limit;").append(this.separator);
-        sb2.append("        return sql;").append(this.separator);
+        sb2.append("        ORDER_BY(\"id desc limit \" + start + \", \" + limit );").append(this.separator);
+        sb2.append("        }}.toString();").append(this.separator);
         sb2.append("    }").append(this.separator);
         sb2.append(this.separator);
         sb2.append("    public String pageListCount(Map<String, Object> params) {").append(this.separator);
         sb2.append("        " + doName + " " + doVariable + " = (" + doName + ") params.get(\"" + doVariable + "\");").append(this.separator);
-        sb2.append("        BEGIN();").append(this.separator);
+        sb2.append("        return new SQL() {{").append(this.separator);
         sb2.append("        SELECT(\"count(1)\");").append(this.separator);
         sb2.append("        FROM(TABLE_NAME);").append(this.separator);
         for (Field f : list) {
@@ -506,11 +524,10 @@ public class AutoCreateCode {
             } else {
                 sb2.append("        if (" + doVariable + "." + this.getMethodName(f) + "() != null) {").append(this.separator);
             }
-            sb2.append("            WHERE(\"" + f.getName() + "=#{" + doVariable + "." + f.getName() + "}\");").append(this.separator);
+            sb2.append("            WHERE(\"" + f.getColumn() + "=#{" + doVariable + "." + f.getName() + "}\");").append(this.separator);
             sb2.append("        }").append(this.separator);
         }
-        sb2.append("        String sql = SQL();").append(this.separator);
-        sb2.append("        return sql;").append(this.separator);
+        sb2.append("        }}.toString();").append(this.separator);
         sb2.append("    }").append(this.separator);
         sb2.append("}").append(this.separator);
         sb2.append(this.separator);
@@ -702,7 +719,7 @@ public class AutoCreateCode {
         sb.append(this.separator);
 
         sb.append("@Controller").append(this.separator);
-        sb.append("@RequestMapping(value =\"/" + doVariable + "\", produces = \"application/*;charset=utf-8\", method = RequestMethod.POST)").append(this.separator);
+        sb.append("@RequestMapping(value =\"/" + doVariable + "\", method = RequestMethod.POST)").append(this.separator);
         sb.append("@Api(value = \"/" + doVariable + "\", tags = {\"" + tableComment + "\"})").append(this.separator);
         sb.append("public class ").append(actionName).append(" extends BaseController {").append(this.separator);
         sb.append(this.separator);
@@ -711,7 +728,7 @@ public class AutoCreateCode {
         sb.append(this.separator);
         sb.append(this.separator);
         sb.append(" // 列表页").append(this.separator);
-        sb.append(" @RequestMapping(\"/list.htm\")").append(this.separator);
+        sb.append(" @RequestMapping(\"/list\")").append(this.separator);
         sb.append(" public String list() {").append(this.separator);
         sb.append("     return \"\";").append(this.separator);
         sb.append(" }").append(this.separator);
@@ -719,7 +736,7 @@ public class AutoCreateCode {
         sb.append(" // 分页").append(this.separator);
         sb.append(" @ApiOperation(value = \"分页查询\", notes = \"分页查询\")").append(this.separator);
         sb.append(" @ResponseBody").append(this.separator);
-        sb.append(" @RequestMapping(value = \"query.htm\", method = RequestMethod.GET)").append(this.separator);
+        sb.append(" @RequestMapping(value = \"query\", method = RequestMethod.GET)").append(this.separator);
         sb.append(" public ResultDTO page(@RequestBody " + doName + " " + doVariable + ") {").append(this.separator);
         sb.append("     logger.info(\"开始分页查询" + actionName + ".page, " + doVariable + "=\" + " + doVariable + ".toString());").append(this.separator);
         sb.append("     Map<String, Integer> params = super.copyParamsToInteger(new String[] { \"page\", \"rows\" });").append(this.separator);
@@ -732,7 +749,7 @@ public class AutoCreateCode {
         sb.append(" // 添加").append(this.separator);
         sb.append(" @ApiOperation(value = \"新增保存\", notes = \"新增保存\")").append(this.separator);
         sb.append(" @ResponseBody").append(this.separator);
-        sb.append(" @RequestMapping(value = \"doAdd.htm\")").append(this.separator);
+        sb.append(" @RequestMapping(value = \"doAdd\")").append(this.separator);
         sb.append(" public ResultDTO doAdd (@RequestBody " + doName + " " + doVariable + ") {").append(this.separator);
         sb.append("    " + doName + "   resultDO = this." + serviceVariable + ".doAdd(" + doVariable + ",super.getUserId());").append(this.separator);
         sb.append("    return success(resultDO);").append(this.separator);
@@ -741,7 +758,7 @@ public class AutoCreateCode {
         sb.append(" // 修改").append(this.separator);
         sb.append(" @ApiOperation(value = \"修改保存\", notes = \"修改保存\")").append(this.separator);
         sb.append(" @ResponseBody").append(this.separator);
-        sb.append(" @RequestMapping(value = \"doUpdate.htm\")").append(this.separator);
+        sb.append(" @RequestMapping(value = \"doUpdate\")").append(this.separator);
         sb.append(" public ResultDTO doUpdate (@RequestBody " + doName + " " + doVariable + ") {").append(this.separator);
         sb.append("     Integer result = this." + serviceVariable + ".doUpdate(" + doVariable + ",getUserId());").append(this.separator);
         sb.append("     return success(result);").append(this.separator);
@@ -750,7 +767,7 @@ public class AutoCreateCode {
         sb.append(" // 删除").append(this.separator);
         sb.append(" @ApiOperation(value = \"删除\", notes = \"删除\")").append(this.separator);
         sb.append(" @ResponseBody").append(this.separator);
-        sb.append(" @RequestMapping(value = \"doDelete.htm\")").append(this.separator);
+        sb.append(" @RequestMapping(value = \"doDelete\")").append(this.separator);
         sb.append(" public ResultDTO doDelete(@RequestBody " + doName + " " + doVariable + ") {").append(this.separator);
         sb.append("     Integer result = this." + serviceVariable + ".doDelete(" + doVariable + ",getUserId());").append(this.separator);
         sb.append("     return success(result);").append(this.separator);
@@ -759,7 +776,7 @@ public class AutoCreateCode {
         sb.append(" // 详情").append(this.separator);
         sb.append(" @ApiOperation(value = \"查询详情\", notes = \"查询详情\")").append(this.separator);
         sb.append(" @ResponseBody").append(this.separator);
-        sb.append(" @RequestMapping(value = \"detail.htm\")").append(this.separator);
+        sb.append(" @RequestMapping(value = \"detail\")").append(this.separator);
         sb.append(" public ResultDTO detail(@RequestParam String id) {").append(this.separator);
         //sb.append("     String id = request.getParameter(\"id\");").append(this.separator);
         sb.append("     " + doName + " result = this." + serviceVariable + ".doQueryById(NumberUtils.toInt(id));").append(this.separator);
@@ -811,9 +828,10 @@ public class AutoCreateCode {
         private String name;
         private String type;
         private String comment;
-
+        private String column;
         public Field(String name, String type, String comment) {
             super();
+            this.column = name;
             this.name = StrChange(name);
             this.type = type;
             this.comment = comment;
@@ -861,6 +879,61 @@ public class AutoCreateCode {
 
         public String getComment() {
             return comment;
+        }
+
+        /**
+         * column
+         *
+         * @return  the column
+         * @since   CodingExample Ver 1.0
+        */
+        
+        public String getColumn() {
+            return column;
+        }
+
+        /**
+         * column
+         *
+         * @param   column    the column to set
+         * @since   CodingExample Ver 1.0
+         */
+        
+        public void setColumn(String column) {
+            this.column = column;
+        }
+
+        /**
+         * name
+         *
+         * @param   name    the name to set
+         * @since   CodingExample Ver 1.0
+         */
+        
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        /**
+         * type
+         *
+         * @param   type    the type to set
+         * @since   CodingExample Ver 1.0
+         */
+        
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        /**
+         * comment
+         *
+         * @param   comment    the comment to set
+         * @since   CodingExample Ver 1.0
+         */
+        
+        public void setComment(String comment) {
+            this.comment = comment;
         }
 
         @Override

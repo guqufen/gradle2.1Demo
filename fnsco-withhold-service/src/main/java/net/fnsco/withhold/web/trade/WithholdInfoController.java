@@ -1,4 +1,4 @@
-package net.fnsco.withhold.web.withhold;
+package net.fnsco.withhold.web.trade;
 
 import java.util.Map;
 
@@ -16,12 +16,12 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.withhold.service.withhold.WithholdInfoService;
-import net.fnsco.withhold.service.withhold.entity.WithholdInfoDO;
+import net.fnsco.withhold.service.trade.WithholdInfoService;
+import net.fnsco.withhold.service.trade.entity.WithholdInfoDO;
 
 @Controller
-@RequestMapping(value ="/web/withholdInfo", produces = "application/*;charset=utf-8", method = RequestMethod.POST)
-@Api(value = "/withholdInfo", tags = {"代扣管理"})
+@RequestMapping(value ="/withholdInfo", method = RequestMethod.POST)
+@Api(value = "/withholdInfo", tags = {""})
 public class WithholdInfoController extends BaseController {
 
  @Autowired
@@ -29,7 +29,7 @@ public class WithholdInfoController extends BaseController {
 
 
  // 列表页
- @RequestMapping("/list.htm")
+ @RequestMapping("/list")
  public String list() {
      return "";
  }
@@ -37,7 +37,7 @@ public class WithholdInfoController extends BaseController {
  // 分页
  @ApiOperation(value = "分页查询", notes = "分页查询")
  @ResponseBody
- @RequestMapping(value = "query.htm", method = RequestMethod.GET)
+ @RequestMapping(value = "query", method = RequestMethod.GET)
  public ResultDTO page(@RequestBody WithholdInfoDO withholdInfo) {
      logger.info("开始分页查询WithholdInfoController.page, withholdInfo=" + withholdInfo.toString());
      Map<String, Integer> params = super.copyParamsToInteger(new String[] { "page", "rows" });
@@ -50,7 +50,7 @@ public class WithholdInfoController extends BaseController {
  // 添加
  @ApiOperation(value = "新增保存", notes = "新增保存")
  @ResponseBody
- @RequestMapping(value = "doAdd.htm")
+ @RequestMapping(value = "doAdd")
  public ResultDTO doAdd (@RequestBody WithholdInfoDO withholdInfo) {
     WithholdInfoDO   resultDO = this.withholdInfoService.doAdd(withholdInfo,super.getUserId());
     return success(resultDO);
@@ -59,7 +59,7 @@ public class WithholdInfoController extends BaseController {
  // 修改
  @ApiOperation(value = "修改保存", notes = "修改保存")
  @ResponseBody
- @RequestMapping(value = "doUpdate.htm")
+ @RequestMapping(value = "doUpdate")
  public ResultDTO doUpdate (@RequestBody WithholdInfoDO withholdInfo) {
      Integer result = this.withholdInfoService.doUpdate(withholdInfo,getUserId());
      return success(result);
@@ -68,7 +68,7 @@ public class WithholdInfoController extends BaseController {
  // 删除
  @ApiOperation(value = "删除", notes = "删除")
  @ResponseBody
- @RequestMapping(value = "doDelete.htm")
+ @RequestMapping(value = "doDelete")
  public ResultDTO doDelete(@RequestBody WithholdInfoDO withholdInfo) {
      Integer result = this.withholdInfoService.doDelete(withholdInfo,getUserId());
      return success(result);
@@ -76,7 +76,7 @@ public class WithholdInfoController extends BaseController {
  // 详情
  @ApiOperation(value = "查询详情", notes = "查询详情")
  @ResponseBody
- @RequestMapping(value = "detail.htm")
+ @RequestMapping(value = "detail")
  public ResultDTO detail(@RequestParam String id) {
      WithholdInfoDO result = this.withholdInfoService.doQueryById(NumberUtils.toInt(id));
      return success(result);

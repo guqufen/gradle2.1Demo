@@ -1,21 +1,13 @@
-package net.fnsco.withhold.service.withhold.dao.helper;
+package net.fnsco.withhold.service.trade.dao.helper;
 
-import static org.apache.ibatis.jdbc.SqlBuilder.BEGIN;
-import static org.apache.ibatis.jdbc.SqlBuilder.SELECT;
-import static org.apache.ibatis.jdbc.SqlBuilder.SET;
-import static org.apache.ibatis.jdbc.SqlBuilder.SQL;
-import static org.apache.ibatis.jdbc.SqlBuilder.UPDATE;
-import static org.apache.ibatis.jdbc.SqlBuilder.WHERE;
-import static org.apache.ibatis.jdbc.SqlBuilder.FROM;
-import static org.apache.ibatis.jdbc.SqlBuilder.ORDER_BY;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.fnsco.withhold.service.withhold.entity.WithholdInfoDO;
-
-import org.apache.commons.lang3.StringUtils;
+import net.fnsco.withhold.service.trade.entity.WithholdInfoDO;
 public class WithholdInfoProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -24,148 +16,142 @@ public class WithholdInfoProvider {
 
     public String update(Map<String, Object> params) {
         WithholdInfoDO withholdInfo = (WithholdInfoDO) params.get("withholdInfo");
-        BEGIN();
+        return new SQL() {{
         UPDATE(TABLE_NAME);
         if (StringUtils.isNotBlank(withholdInfo.getUserName())){
-            SET("userName=#{withholdInfo.userName}");
+            SET("user_name=#{withholdInfo.userName}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getMobile())){
             SET("mobile=#{withholdInfo.mobile}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getCardNum())){
-            SET("cardNum=#{withholdInfo.cardNum}");
+            SET("card_num=#{withholdInfo.cardNum}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getDebitDay())){
-            SET("debitDay=#{withholdInfo.debitDay}");
+            SET("debit_day=#{withholdInfo.debitDay}");
         }
         if (withholdInfo.getAmount() != null) {
             SET("amount=#{withholdInfo.amount}");
         }
         if (withholdInfo.getAmountTotal() != null) {
-            SET("amountTotal=#{withholdInfo.amountTotal}");
+            SET("amount_total=#{withholdInfo.amountTotal}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getBankCard())){
-            SET("bankCard=#{withholdInfo.bankCard}");
+            SET("bank_card=#{withholdInfo.bankCard}");
         }
         if (withholdInfo.getStatus() != null) {
             SET("status=#{withholdInfo.status}");
         }
         if (withholdInfo.getModifyUserId() != null) {
-            SET("modifyUserId=#{withholdInfo.modifyUserId}");
+            SET("modify_user_id=#{withholdInfo.modifyUserId}");
         }
         if (withholdInfo.getModifyTime() != null) {
-            SET("modifyTime=#{withholdInfo.modifyTime}");
+            SET("modify_time=#{withholdInfo.modifyTime}");
         }
         if (withholdInfo.getTotal() != null) {
             SET("total=#{withholdInfo.total}");
         }
         WHERE("id = #{withholdInfo.id}");
-        String sql = SQL();
-        return sql;
+        }}.toString();
     }
 
     public String pageList(Map<String, Object> params) {
         WithholdInfoDO withholdInfo = (WithholdInfoDO) params.get("withholdInfo");
         Integer pageNum = (Integer) params.get("pageNum");
         Integer pageSize = (Integer) params.get("pageSize");
-        BEGIN();
-        SELECT("*");
-        FROM(TABLE_NAME);
-        if (withholdInfo.getId() != null) {
-            WHERE("id=#{withholdInfo.id}");
-        }
-        if (StringUtils.isNotBlank(withholdInfo.getUserName())){
-            WHERE("userName=#{withholdInfo.userName}");
-        }
-        if (StringUtils.isNotBlank(withholdInfo.getMobile())){
-            WHERE("mobile=#{withholdInfo.mobile}");
-        }
-        if (StringUtils.isNotBlank(withholdInfo.getCardNum())){
-            WHERE("cardNum=#{withholdInfo.cardNum}");
-        }
-        if (StringUtils.isNotBlank(withholdInfo.getDebitDay())){
-            WHERE("debitDay=#{withholdInfo.debitDay}");
-        }
-        if (withholdInfo.getAmount() != null) {
-            WHERE("amount=#{withholdInfo.amount}");
-        }
-        if (withholdInfo.getAmountTotal() != null) {
-            WHERE("amountTotal=#{withholdInfo.amountTotal}");
-        }
-        if (StringUtils.isNotBlank(withholdInfo.getBankCard())){
-            WHERE("bankCard=#{withholdInfo.bankCard}");
-        }
-        if (withholdInfo.getStatus() != null) {
-            WHERE("status=#{withholdInfo.status}");
-        }
-        if (withholdInfo.getModifyUserId() != null) {
-            WHERE("modifyUserId=#{withholdInfo.modifyUserId}");
-        }
-        if (withholdInfo.getModifyTime() != null) {
-            WHERE("modifyTime=#{withholdInfo.modifyTime}");
-        }
-        if (withholdInfo.getTotal() != null) {
-            WHERE("total=#{withholdInfo.total}");
-        }
-        ORDER_BY("id desc");
-        String sql = SQL();
-        int start = 0;
-        int limit = 0;
         if (pageNum == null || pageNum == 0) {
             pageNum = 1;
         }
         if (pageSize == null || pageSize == 0) {
             pageSize = 20;
         }
-        start = (pageNum - 1) * pageSize;
-        limit = pageSize;
-        sql += " limit " + start + ", " + limit;
-        return sql;
+        int start = (pageNum - 1) * pageSize;
+        int limit = pageSize;
+        return new SQL() {{
+        SELECT("*");
+        FROM(TABLE_NAME);
+        if (withholdInfo.getId() != null) {
+            WHERE("id=#{withholdInfo.id}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getUserName())){
+            WHERE("user_name=#{withholdInfo.userName}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getMobile())){
+            WHERE("mobile=#{withholdInfo.mobile}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getCardNum())){
+            WHERE("card_num=#{withholdInfo.cardNum}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getDebitDay())){
+            WHERE("debit_day=#{withholdInfo.debitDay}");
+        }
+        if (withholdInfo.getAmount() != null) {
+            WHERE("amount=#{withholdInfo.amount}");
+        }
+        if (withholdInfo.getAmountTotal() != null) {
+            WHERE("amount_total=#{withholdInfo.amountTotal}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getBankCard())){
+            WHERE("bank_card=#{withholdInfo.bankCard}");
+        }
+        if (withholdInfo.getStatus() != null) {
+            WHERE("status=#{withholdInfo.status}");
+        }
+        if (withholdInfo.getModifyUserId() != null) {
+            WHERE("modify_user_id=#{withholdInfo.modifyUserId}");
+        }
+        if (withholdInfo.getModifyTime() != null) {
+            WHERE("modify_time=#{withholdInfo.modifyTime}");
+        }
+        if (withholdInfo.getTotal() != null) {
+            WHERE("total=#{withholdInfo.total}");
+        }
+        ORDER_BY("id desc limit " + start + ", " + limit );
+        }}.toString();
     }
 
     public String pageListCount(Map<String, Object> params) {
         WithholdInfoDO withholdInfo = (WithholdInfoDO) params.get("withholdInfo");
-        BEGIN();
+        return new SQL() {{
         SELECT("count(1)");
         FROM(TABLE_NAME);
         if (withholdInfo.getId() != null) {
             WHERE("id=#{withholdInfo.id}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getUserName())){
-            WHERE("userName=#{withholdInfo.userName}");
+            WHERE("user_name=#{withholdInfo.userName}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getMobile())){
             WHERE("mobile=#{withholdInfo.mobile}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getCardNum())){
-            WHERE("cardNum=#{withholdInfo.cardNum}");
+            WHERE("card_num=#{withholdInfo.cardNum}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getDebitDay())){
-            WHERE("debitDay=#{withholdInfo.debitDay}");
+            WHERE("debit_day=#{withholdInfo.debitDay}");
         }
         if (withholdInfo.getAmount() != null) {
             WHERE("amount=#{withholdInfo.amount}");
         }
         if (withholdInfo.getAmountTotal() != null) {
-            WHERE("amountTotal=#{withholdInfo.amountTotal}");
+            WHERE("amount_total=#{withholdInfo.amountTotal}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getBankCard())){
-            WHERE("bankCard=#{withholdInfo.bankCard}");
+            WHERE("bank_card=#{withholdInfo.bankCard}");
         }
         if (withholdInfo.getStatus() != null) {
             WHERE("status=#{withholdInfo.status}");
         }
         if (withholdInfo.getModifyUserId() != null) {
-            WHERE("modifyUserId=#{withholdInfo.modifyUserId}");
+            WHERE("modify_user_id=#{withholdInfo.modifyUserId}");
         }
         if (withholdInfo.getModifyTime() != null) {
-            WHERE("modifyTime=#{withholdInfo.modifyTime}");
+            WHERE("modify_time=#{withholdInfo.modifyTime}");
         }
         if (withholdInfo.getTotal() != null) {
             WHERE("total=#{withholdInfo.total}");
         }
-        String sql = SQL();
-        return sql;
+        }}.toString();
     }
 }
 

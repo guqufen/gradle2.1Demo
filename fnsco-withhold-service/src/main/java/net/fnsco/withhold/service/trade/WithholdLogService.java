@@ -1,4 +1,4 @@
-package net.fnsco.withhold.service.withhold;
+package net.fnsco.withhold.service.trade;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.withhold.service.withhold.dao.WithholdLogDAO;
-import net.fnsco.withhold.service.withhold.entity.WithholdLogDO;
+import net.fnsco.withhold.service.trade.dao.WithholdLogDAO;
+import net.fnsco.withhold.service.trade.entity.WithholdLogDO;
 
 @Service
 public class WithholdLogService extends BaseService {
