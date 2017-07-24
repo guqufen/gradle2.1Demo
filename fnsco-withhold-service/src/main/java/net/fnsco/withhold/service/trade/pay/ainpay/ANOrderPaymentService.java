@@ -40,8 +40,8 @@ public class ANOrderPaymentService extends BaseService {
         paras.put("merOrderId", tradeDataDO.getOrderSn());// 商户订单号
         paras.put("accNo", "");//银行卡卡号
         JSONObject jo = new JSONObject();
-        jo.put("certifTp", "01"); //证件类型   身份证 01
-        jo.put("certify_id", tradeDataDO.getCardNum());// 证号
+        jo.put("certifTp", tradeDataDO.getCertifType()); //证件类型   身份证 01
+        jo.put("certify_id", tradeDataDO.getCertifyId());// 证号
         jo.put("phoneNo", tradeDataDO.getMobile());//手机号
         jo.put("customerNm", tradeDataDO.getUserName());//姓名
         if (("01").equals(tradeDataDO.getAccountType())) {//对私
@@ -68,7 +68,7 @@ public class ANOrderPaymentService extends BaseService {
         }
         String resv = result1.get("resv");
         if (Strings.isNullOrEmpty(resv)) {
-            logger.error("被扫爱农返回字段resv二维码url为空" + tradeDataDO.getMobile());
+            logger.error("单笔代付" + tradeDataDO.getMobile());
         }
         tradeDataDO.setRespCode(result1.get("respCode"));
         tradeDataDO.setRespMsg(result1.get("respMsg"));

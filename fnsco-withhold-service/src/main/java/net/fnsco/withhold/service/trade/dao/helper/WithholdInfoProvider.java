@@ -24,8 +24,11 @@ public class WithholdInfoProvider {
         if (StringUtils.isNotBlank(withholdInfo.getMobile())){
             SET("mobile=#{withholdInfo.mobile}");
         }
-        if (StringUtils.isNotBlank(withholdInfo.getCardNum())){
-            SET("card_num=#{withholdInfo.cardNum}");
+        if (StringUtils.isNotBlank(withholdInfo.getCertifType())){
+            SET("certif_type=#{withholdInfo.certifType}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getCertifyId())){
+            SET("certify_id=#{withholdInfo.certifyId}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getDebitDay())){
             SET("debit_day=#{withholdInfo.debitDay}");
@@ -88,8 +91,11 @@ public class WithholdInfoProvider {
         if (StringUtils.isNotBlank(withholdInfo.getMobile())){
             WHERE("mobile=#{withholdInfo.mobile}");
         }
-        if (StringUtils.isNotBlank(withholdInfo.getCardNum())){
-            WHERE("card_num=#{withholdInfo.cardNum}");
+        if (StringUtils.isNotBlank(withholdInfo.getCertifType())){
+            WHERE("certif_type=#{withholdInfo.certifType}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getCertifyId())){
+            WHERE("certify_id=#{withholdInfo.certifyId}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getDebitDay())){
             WHERE("debit_day=#{withholdInfo.debitDay}");
@@ -142,8 +148,11 @@ public class WithholdInfoProvider {
         if (StringUtils.isNotBlank(withholdInfo.getMobile())){
             WHERE("mobile=#{withholdInfo.mobile}");
         }
-        if (StringUtils.isNotBlank(withholdInfo.getCardNum())){
-            WHERE("card_num=#{withholdInfo.cardNum}");
+        if (StringUtils.isNotBlank(withholdInfo.getCertifType())){
+            WHERE("certif_type=#{withholdInfo.certifType}");
+        }
+        if (StringUtils.isNotBlank(withholdInfo.getCertifyId())){
+            WHERE("certify_id=#{withholdInfo.certifyId}");
         }
         if (StringUtils.isNotBlank(withholdInfo.getDebitDay())){
             WHERE("debit_day=#{withholdInfo.debitDay}");

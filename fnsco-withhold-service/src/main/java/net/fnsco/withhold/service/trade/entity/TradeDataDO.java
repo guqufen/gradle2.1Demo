@@ -40,11 +40,6 @@ public class TradeDataDO {
     private String mobile;
 
     /**
-     * 身份证号
-     */
-    private String cardNum;
-
-    /**
      * 银行卡号
      */
     private String bankCard;
@@ -144,6 +139,17 @@ public class TradeDataDO {
      */
     private String respMsg;
 
+    /**
+     * 证件类型01：身份证02：军官证03：护照04：回乡证05：台胞证06：警官证07：士兵证99：其它证件
+
+     */
+    private String certifType;
+
+    /**
+     * 证件号码
+     */
+    private String certifyId;
+
 
 
     public Integer getId() {
@@ -200,14 +206,6 @@ public class TradeDataDO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
-    }
-
-    public String getCardNum() {
-        return cardNum;
-    }
-
-    public void setCardNum(String cardNum) {
-        this.cardNum = cardNum;
     }
 
     public String getBankCard() {
@@ -370,10 +368,26 @@ public class TradeDataDO {
         this.respMsg = respMsg;
     }
 
+    public String getCertifType() {
+        return certifType;
+    }
+
+    public void setCertifType(String certifType) {
+        this.certifType = certifType;
+    }
+
+    public String getCertifyId() {
+        return certifyId;
+    }
+
+    public void setCertifyId(String certifyId) {
+        this.certifyId = certifyId;
+    }
+
 
 
     @Override
     public String toString() {
-        return "[id="+ id + ", withholdId="+ withholdId + ", txnAmt="+ txnAmt + ", status="+ status + ", failReason="+ failReason + ", userName="+ userName + ", mobile="+ mobile + ", cardNum="+ cardNum + ", bankCard="+ bankCard + ", subBankName="+ subBankName + ", anBankId="+ anBankId + ", accountType="+ accountType + ", txnType="+ txnType + ", txnSubType="+ txnSubType + ", bizType="+ bizType + ", accessType="+ accessType + ", merId="+ merId + ", orderSn="+ orderSn + ", txnTime="+ txnTime + ", currency="+ currency + ", backUrl="+ backUrl + ", payType="+ payType + ", subject="+ subject + ", body="+ body + ", customerInfo="+ customerInfo + ", purpose="+ purpose + ", respCode="+ respCode + ", respMsg="+ respMsg + "]";
+        return "[id="+ id + ", withholdId="+ withholdId + ", txnAmt="+ txnAmt + ", status="+ status + ", failReason="+ failReason + ", userName="+ userName + ", mobile="+ mobile + ", bankCard="+ bankCard + ", subBankName="+ subBankName + ", anBankId="+ anBankId + ", accountType="+ accountType + ", txnType="+ txnType + ", txnSubType="+ txnSubType + ", bizType="+ bizType + ", accessType="+ accessType + ", merId="+ merId + ", orderSn="+ orderSn + ", txnTime="+ txnTime + ", currency="+ currency + ", backUrl="+ backUrl + ", payType="+ payType + ", subject="+ subject + ", body="+ body + ", customerInfo="+ customerInfo + ", purpose="+ purpose + ", respCode="+ respCode + ", respMsg="+ respMsg + ", certifType="+ certifType + ", certifyId="+ certifyId + "]";
     }
 }

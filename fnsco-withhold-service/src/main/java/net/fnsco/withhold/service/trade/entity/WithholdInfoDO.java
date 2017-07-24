@@ -21,9 +21,15 @@ public class WithholdInfoDO {
     private String mobile;
 
     /**
-     * 身份证号
+     * 证件类型01：身份证02：军官证03：护照04：回乡证05：台胞证06：警官证07：士兵证99：其它证件
+
      */
-    private String cardNum;
+    private String certifType;
+
+    /**
+     * 证件号码
+     */
+    private String certifyId;
 
     /**
      * 扣款日
@@ -106,12 +112,20 @@ public class WithholdInfoDO {
         this.mobile = mobile;
     }
 
-    public String getCardNum() {
-        return cardNum;
+    public String getCertifType() {
+        return certifType;
     }
 
-    public void setCardNum(String cardNum) {
-        this.cardNum = cardNum;
+    public void setCertifType(String certifType) {
+        this.certifType = certifType;
+    }
+
+    public String getCertifyId() {
+        return certifyId;
+    }
+
+    public void setCertifyId(String certifyId) {
+        this.certifyId = certifyId;
     }
 
     public String getDebitDay() {
@@ -206,6 +220,6 @@ public class WithholdInfoDO {
 
     @Override
     public String toString() {
-        return "[id="+ id + ", userName="+ userName + ", mobile="+ mobile + ", cardNum="+ cardNum + ", debitDay="+ debitDay + ", amount="+ amount + ", amountTotal="+ amountTotal + ", bankCard="+ bankCard + ", status="+ status + ", modifyUserId="+ modifyUserId + ", modifyTime="+ modifyTime + ", total="+ total + ", subBankName="+ subBankName + ", anBankId="+ anBankId + ", accountType="+ accountType + "]";
+        return "[id="+ id + ", userName="+ userName + ", mobile="+ mobile + ", certifType="+ certifType + ", certifyId="+ certifyId + ", debitDay="+ debitDay + ", amount="+ amount + ", amountTotal="+ amountTotal + ", bankCard="+ bankCard + ", status="+ status + ", modifyUserId="+ modifyUserId + ", modifyTime="+ modifyTime + ", total="+ total + ", subBankName="+ subBankName + ", anBankId="+ anBankId + ", accountType="+ accountType + "]";
     }
 }

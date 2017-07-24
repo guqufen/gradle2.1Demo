@@ -1,11 +1,11 @@
 package net.fnsco.withhold.service.trade.dao.helper;
 
+import org.apache.ibatis.jdbc.SQL;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 
 import net.fnsco.withhold.service.trade.entity.TradeDataDO;
 public class TradeDataProvider {
@@ -35,9 +35,6 @@ public class TradeDataProvider {
         }
         if (StringUtils.isNotBlank(tradeData.getMobile())){
             SET("mobile=#{tradeData.mobile}");
-        }
-        if (StringUtils.isNotBlank(tradeData.getCardNum())){
-            SET("card_num=#{tradeData.cardNum}");
         }
         if (StringUtils.isNotBlank(tradeData.getBankCard())){
             SET("bank_card=#{tradeData.bankCard}");
@@ -99,6 +96,12 @@ public class TradeDataProvider {
         if (StringUtils.isNotBlank(tradeData.getRespMsg())){
             SET("resp_msg=#{tradeData.respMsg}");
         }
+        if (StringUtils.isNotBlank(tradeData.getCertifType())){
+            SET("certif_type=#{tradeData.certifType}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getCertifyId())){
+            SET("certify_id=#{tradeData.certifyId}");
+        }
         WHERE("id = #{tradeData.id}");
         }}.toString();
     }
@@ -139,9 +142,6 @@ public class TradeDataProvider {
         if (StringUtils.isNotBlank(tradeData.getMobile())){
             WHERE("mobile=#{tradeData.mobile}");
         }
-        if (StringUtils.isNotBlank(tradeData.getCardNum())){
-            WHERE("card_num=#{tradeData.cardNum}");
-        }
         if (StringUtils.isNotBlank(tradeData.getBankCard())){
             WHERE("bank_card=#{tradeData.bankCard}");
         }
@@ -201,6 +201,12 @@ public class TradeDataProvider {
         }
         if (StringUtils.isNotBlank(tradeData.getRespMsg())){
             WHERE("resp_msg=#{tradeData.respMsg}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getCertifType())){
+            WHERE("certif_type=#{tradeData.certifType}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getCertifyId())){
+            WHERE("certify_id=#{tradeData.certifyId}");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
@@ -232,9 +238,6 @@ public class TradeDataProvider {
         if (StringUtils.isNotBlank(tradeData.getMobile())){
             WHERE("mobile=#{tradeData.mobile}");
         }
-        if (StringUtils.isNotBlank(tradeData.getCardNum())){
-            WHERE("card_num=#{tradeData.cardNum}");
-        }
         if (StringUtils.isNotBlank(tradeData.getBankCard())){
             WHERE("bank_card=#{tradeData.bankCard}");
         }
@@ -294,6 +297,12 @@ public class TradeDataProvider {
         }
         if (StringUtils.isNotBlank(tradeData.getRespMsg())){
             WHERE("resp_msg=#{tradeData.respMsg}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getCertifType())){
+            WHERE("certif_type=#{tradeData.certifType}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getCertifyId())){
+            WHERE("certify_id=#{tradeData.certifyId}");
         }
         }}.toString();
     }
