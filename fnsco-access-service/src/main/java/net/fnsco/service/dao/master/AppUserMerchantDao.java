@@ -17,4 +17,5 @@ public interface AppUserMerchantDao {
     int deleteByPrimaryKey(@Param("innerCode")String innerCode,@Param("appUserId")Integer appUserId);
     int updateByPrimaryKeySelective(AppUserMerchantDTO dto);
     int insertSelective(AppUserMerchant dto);
+    int deleteByMerCoreIds(Integer[] ids);
 }

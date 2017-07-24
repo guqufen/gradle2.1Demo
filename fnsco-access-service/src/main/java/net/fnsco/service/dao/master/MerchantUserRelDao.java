@@ -24,4 +24,6 @@ public interface MerchantUserRelDao {
     List<MerchantUserRel> selectByUserId(@Param("appUserId") Integer appUserId);
     //删除绑定关系
     int deleteByPrimaryKey(@Param("innerCode")String innerCode,@Param("appUserId")Integer appUserId);
+    
+    int deleteByMerCoreIds(Integer[] ids);
 }
