@@ -1,5 +1,7 @@
 package net.fnsco.api.push;
 
+import org.json.JSONObject;
+
 /**
  * @desc APP消息推送调用友盟接口
  * @author   tangliang
@@ -88,7 +90,7 @@ public interface AppPushService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public Integer sendIOSUnicast(String iosUnicastToken,String content,Integer badge,String contentJson) throws Exception ;
+    public Integer sendIOSUnicast(String iosUnicastToken,JSONObject content,Integer badge,String contentJson) throws Exception ;
     
     /**
      * sendSystemMgs:(这里用一句话描述这个方法的作用)发送系统消息

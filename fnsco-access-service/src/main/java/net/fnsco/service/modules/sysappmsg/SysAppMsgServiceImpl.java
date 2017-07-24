@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
@@ -196,6 +198,12 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
     @Override
     public ResultPageDTO<SysAppMessage> queryPageList(SysAppMessage record, int currentPageNum, int perPageSize) {
         record.setBusType(1);
+        if(StringUtils.isNoneEmpty(record.getStartSendTime())){
+            record.setStartSendTime(record.getStartSendTime()+" 00:00:00");
+        }
+        if(StringUtils.isNoneEmpty(record.getEndSendTime())){
+            record.setEndSendTime(record.getEndSendTime()+" 23:59:59");
+        }
         PageDTO<SysAppMessage> params = new PageDTO<SysAppMessage>(currentPageNum, perPageSize, record);
         List<SysAppMessage> data = sysAppMessageDao.queryPageList(params);
         int totalNum = sysAppMessageDao.queryTotalByCondition(record);
@@ -216,7 +224,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         SysAppMessage message = new SysAppMessage();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (StringUtils.isEmpty(record.getSendTimeStr())) {
-            return ResultDTO.fail();
+            return ResultDTO.fail(CoreConstants.WEB_PUSH_DATE_ERROR);
         }
         record.setSendTimeStr(record.getSendTimeStr()+":00");
         try {
@@ -227,7 +235,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         String currTime = sdf.format(new Date());
         int timeStatus = DateUtils.compare_date(record.getSendTimeStr(), currTime);
         if (timeStatus == 2 || timeStatus == -1) {
-            return ResultDTO.fail();
+            return ResultDTO.fail(CoreConstants.WEB_PUSH_DATE_ERROR);
         }
         message.setSendType(2);
         message.setPushType(2);
@@ -424,7 +432,11 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
                 if(StringUtils.isNotBlank(user.getDeviceToken())){
                     ResultDTO<PushMsgInfoDTO> countInfo =  queryNewsCount(user.getId(), false, user.getDeviceType());
                     try {
-                        int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), msgContent, countInfo.getData().getUnReadCount()+1,message.getId().toString());
+                        JSONObject alertContext = new JSONObject();
+                        alertContext.put("title", message.getMsgSubject());
+                        alertContext.put("subtitle", "");
+                        alertContext.put("body", message.getMsgSubTitle());
+                        int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), alertContext, countInfo.getData().getUnReadCount()+1,message.getId().toString());
                         if (iosStatus == 200) {
                             //成功
                             SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();

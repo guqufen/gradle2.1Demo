@@ -301,7 +301,7 @@
       </if>
       <!-- 手工添加 -->
       <if test="startSendTime != null and startSendTime != ''" >
-        	AND send_time >= #{condition.startSendTime}
+        	AND send_time >= #{startSendTime}
       </if>
       <if test="endSendTime != null and endSendTime != ''" >
       	<![CDATA[

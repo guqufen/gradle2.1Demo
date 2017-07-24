@@ -3,11 +3,15 @@ package net.fnsco.service.modules.push;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Maps;
 
 import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.dto.PushMsgInfoDTO;
@@ -222,7 +226,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @date 2017年7月12日 上午10:49:26
      */
     @Override
-    public Integer sendIOSUnicast(String iosUnicastToken, String content,Integer badge,String ids) throws Exception {
+    public Integer sendIOSUnicast(String iosUnicastToken, JSONObject content,Integer badge,String ids) throws Exception {
 
         logger.warn("开始IOS单播推送");
         String appkey = this.env.getProperty("ios.appkey");
@@ -230,7 +234,8 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         IOSUnicast unicast = new IOSUnicast(appkey,appMasterSecret);
         
         unicast.setDeviceToken(iosUnicastToken);
-        unicast.setAlert(content);
+//        unicast.setAlert(content);
+        unicast.setPredefinedKeyValue("alert", content);
         unicast.setSound( "");
         unicast.setContentAvailable(1);
         unicast.setBadge(badge);//未读数量
@@ -274,7 +279,10 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                 } else {
                     logger.warn("安卓信息推送失败");
                 }
-                
+                JSONObject alertContext = new JSONObject();
+                alertContext.put("title", sysAppMessage.getMsgSubject());
+                alertContext.put("subtitle", "");
+                alertContext.put("body", sysAppMessage.getMsgSubTitle());
                 //IOS
                 for (AppUser appUser : users) {
                     //成功
@@ -292,7 +300,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                     sysMsgAppFail.setStatus(0);
                     if(appUser.getDeviceType() == 2){
                         ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appUser.getId(), false, appUser.getDeviceType());
-                        int iosStatus = sendIOSUnicast(appUser.getDeviceToken(),  sysAppMessage.getMsgSubTitle(), countInfo.getData().getUnReadCount()+1,sysAppMessage.getId().toString());
+                        int iosStatus = sendIOSUnicast(appUser.getDeviceToken(),  alertContext, countInfo.getData().getUnReadCount()+1,sysAppMessage.getId().toString());
                         
                         if (iosStatus == 200) {
                             sysMsgAppSucc.setPhoneType(2);
@@ -401,7 +409,11 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                 ResultDTO<PushMsgInfoDTO> countInfo =  sysAppMsgService.queryNewsCount(appuser.getId(), false, appuser.getDeviceType());
                 int iosStatus;
                 try {
-                    iosStatus = sendIOSUnicast(appuser.getDeviceToken(),  message.getMsgSubTitle(), countInfo.getData().getUnReadCount()+1,message.getId().toString());
+                    JSONObject alertContext = new JSONObject();
+                    alertContext.put("title", message.getMsgSubject());
+                    alertContext.put("subtitle", "");
+                    alertContext.put("body", message.getMsgSubTitle());
+                    iosStatus = sendIOSUnicast(appuser.getDeviceToken(),  alertContext, countInfo.getData().getUnReadCount()+1,message.getId().toString());
                     sysMsgAppFail.setPhoneType(2);
                     if (iosStatus == 200) {
                         msgAppSucc.setPhoneType(2);
