@@ -188,7 +188,7 @@ function deleteSingle(id){
                 layer.msg('删除成功');
                 queryEvent("table");
               }else{
-                layer.msg('消息推送已发布，删除失败！');
+                layer.msg('消息推送已发布或取消，删除失败！');
               } 
             },
             error:function(e)
