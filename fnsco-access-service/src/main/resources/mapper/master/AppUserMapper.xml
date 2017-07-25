@@ -235,7 +235,7 @@
 			) TA
 			<where>
 							    <if test="mobile != null and mobile !=''">
-									AND TA.mobile = #{mobile,jdbcType=VARCHAR}
+									AND TA.mobile LIKE CONCAT('%', #{mobile}, '%') 
 								</if>
 								<if test="merNames != null and merNames != ''" >
 				        			AND TA.mer_name LIKE CONCAT('%', #{merNames}, '%') 
