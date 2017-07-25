@@ -112,7 +112,7 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_LOGINMSG_ERROR, "用户名或密码不正确");
         ERROR_MESSGE_MAP.put(E_LOGINOUT_ERROR, "退出登录失败");
         ERROR_MESSGE_MAP.put(E_PHONETYPE_ERROR, "手机类型错误");
-        ERROR_MESSGE_MAP.put(E_NOSHOPKEEPER_ERROR, "该用户不是店主");  
+        ERROR_MESSGE_MAP.put(E_NOSHOPKEEPER_ERROR, "您还不是店主，请先成为店主");  
         ERROR_MESSGE_MAP.put(E_DELETEBAND_ERROR, "删除绑定失败");  
         ERROR_MESSGE_MAP.put(E_NOBAND_ERROR, "该用户没有绑定商户");
         ERROR_MESSGE_MAP.put(E_ONLYSHOPKEEPER_ERROR, "修改失败,一个店铺只能有一个店主");
