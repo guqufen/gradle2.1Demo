@@ -46,4 +46,15 @@ public interface SysMsgAppSuccDao {
      * @since  CodingExample　Ver 1.1
      */
     int selectTotalUnreadCount(@Param("userId") Integer userId);
+    
+    /**
+     * selectTotalUnread:(这里用一句话描述这个方法的作用)根据用户ID查询未读信息IDS
+     *
+     * @param userId
+     * @return    设定文件
+     * @return List<SysMsgAppSucc>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<SysMsgAppSucc> selectTotalUnread(@Param("userId") Integer userId);
 }

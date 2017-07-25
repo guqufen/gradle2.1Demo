@@ -25,9 +25,8 @@ import net.fnsco.api.dto.AppOldPeopleDTO;
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.api.dto.AppUserMerchantDTO;
-import net.fnsco.api.dto.AppUserMerchantOutDTO;
 import net.fnsco.api.dto.BandDto;
-import net.fnsco.api.dto.BandListDTO;
+import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.dto.QueryBandDTO;
 import net.fnsco.api.dto.SmsCodeDTO;
 import net.fnsco.core.base.BaseService;
@@ -41,11 +40,13 @@ import net.fnsco.service.dao.master.AppUserMerchantDao;
 import net.fnsco.service.dao.master.MerchantContactDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MerchantUserRelDao;
+import net.fnsco.service.dao.master.SysMsgAppSuccDao;
 import net.fnsco.service.domain.AppUser;
 import net.fnsco.service.domain.AppUserMerchant;
 import net.fnsco.service.domain.MerchantContact;
 import net.fnsco.service.domain.MerchantCore;
 import net.fnsco.service.domain.MerchantUserRel;
+import net.fnsco.service.domain.SysMsgAppSucc;
 
 @Service
 public class AppUserServiceImpl extends BaseService implements AppUserService {
@@ -65,7 +66,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private MerchantContactDao             merchantContactDao;
     @Autowired
     private AppUserMerchantDao             appUserMerchantDao;
-
+    @Autowired
+    private SysMsgAppSuccDao               sysMsgAppSuccDao;
     //注册
     @Override
     @Transactional
@@ -321,7 +323,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     //根据手机号码和密码登录
     @Override
     public ResultDTO loginByMoblie(AppUserDTO appUserDTO) {
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         int Shopkeeper = 2;
         //非空判断
         if (Strings.isNullOrEmpty(appUserDTO.getMobile())) {
@@ -370,6 +372,13 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (!CollectionUtils.isEmpty(merchantList)) {
             Shopkeeper = 1;
         }
+        //登录获取未读消息信息
+        List<SysMsgAppSucc> unReadInfo =  sysMsgAppSuccDao.selectTotalUnread(appUserId);
+        List<Integer> unReadMsgIds = Lists.newArrayList();
+        for (SysMsgAppSucc sysMsgAppSucc : unReadInfo) {
+            unReadMsgIds.add(sysMsgAppSucc.getMsgId());
+        }
+        map.put("unReadMsgIds", unReadMsgIds);
         map.put("Shopkeeper", Shopkeeper);
         return ResultDTO.success(map);
     }

@@ -487,7 +487,6 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         PushMsgInfoDTO msgInfoDTO = new PushMsgInfoDTO();
         msgInfoDTO.setUnReadCount(sysMsgAppSuccDao.selectTotalUnreadCount(userId));
         return ResultDTO.success(msgInfoDTO);
-        
     }
     
     /**
