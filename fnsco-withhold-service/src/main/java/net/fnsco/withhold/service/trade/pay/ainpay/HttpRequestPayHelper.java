@@ -8,16 +8,16 @@ import java.util.TreeMap;
 import org.apache.log4j.Logger;
 
 public class HttpRequestPayHelper {
-    
-    private static Logger           logger         = Logger.getLogger(HttpRequestPayHelper.class);
 
-    public static Map<String, String> sendPost(String apiHost, Map<String, String> paras, String encoding, int sendType) {
+    private static Logger logger = Logger.getLogger(HttpRequestPayHelper.class);
+
+    public static Map<String, String> sendPost(String apiHost, String payKey, Map<String, String> paras, String encoding, int sendType) {
 
         TreeMap<String, String> treeMap = new TreeMap<>();
         treeMap.putAll(paras);
         try {
             logger.error("调用爱农输入参数" + treeMap.toString());
-            String result = HttpRequest.doPost(apiHost, treeMap, encoding, sendType);
+            String result = HttpRequest.doPost(apiHost, payKey, treeMap, encoding, sendType);
             logger.error("调用爱农返回原报文：" + result);
             return buildResult(result, encoding);
         } catch (Exception e) {

@@ -4,6 +4,7 @@ import net.fnsco.core.constants.CoreConstants;
 
 public class ApiConstant extends CoreConstants {
     public static String AN_PAY_URL               = "anPayURL";
+    public static String AN_PAY_KEY               = "merchant.payKey";
     public static String MER_ID                   = "merchant.code";  //商户号
     public static String WEB_LOGIN_NULL           = "5101";    //用户名或密码为空
     public static String WEB_LOGIN_FAIL           = "5102";    //用户名或密码错误

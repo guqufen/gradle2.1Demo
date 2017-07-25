@@ -7,12 +7,12 @@ public class TradeDataDO {
     /**
      * 
      */
-    private Integer id;
+    private Integer    id;
 
     /**
      * 代扣ID
      */
-    private Integer withholdId;
+    private Integer    withholdId;
 
     /**
      * 扣款金额
@@ -22,135 +22,159 @@ public class TradeDataDO {
     /**
      * 状态0扣款失败1扣款成功2补收
      */
-    private Integer status;
+    private Integer    status;
 
     /**
      * 扣款失败原因
      */
-    private String failReason;
+    private String     failReason;
 
     /**
      * 姓名
      */
-    private String userName;
+    private String     userName;
 
     /**
      * 手机号
      */
-    private String mobile;
+    private String     mobile;
 
     /**
      * 银行卡号
      */
-    private String bankCard;
+    private String     bankCard;
 
     /**
      * 开户支行名
      */
-    private String subBankName;
+    private String     subBankName;
 
     /**
      * 爱农银行编号
      */
-    private String anBankId;
+    private String     anBankId;
 
     /**
      * 账户类型00：对公 01：对私
      */
-    private String accountType;
+    private String     accountType;
 
     /**
      * 交易类型
      */
-    private String txnType;
+    private String     txnType;
 
     /**
      * 交易子类型
      */
-    private String txnSubType;
+    private String     txnSubType;
 
     /**
      * 产品类型
      */
-    private String bizType;
+    private String     bizType;
 
     /**
      * 接入类型
      */
-    private String accessType;
+    private String     accessType;
 
     /**
      * 接收交易金额的商户号
      */
-    private String merId;
+    private String     merId;
 
     /**
      * 订单id
      */
-    private String orderSn;
+    private String     orderSn;
 
     /**
      * 订单发送时间YYYYMMDDhhmmss
      */
-    private String txnTime;
+    private String     txnTime;
 
     /**
      * 交易币种
      */
-    private String currency;
+    private String     currency;
 
     /**
      * 后台通知地址
      */
-    private String backUrl;
+    private String     backUrl;
 
     /**
      * 支付方式0401代付
      */
-    private String payType;
+    private String     payType;
 
     /**
      * 商品标题
      */
-    private String subject;
+    private String     subject;
 
     /**
      * 商品描述
      */
-    private String body;
+    private String     body;
 
     /**
      * 银行卡验证信息及身份信息
      */
-    private String customerInfo;
+    private String     customerInfo;
 
     /**
      * 用途
      */
-    private String purpose;
+    private String     purpose;
 
     /**
      * 应答码
      */
-    private String respCode;
+    private String     respCode;
 
     /**
      * 应答信息
      */
-    private String respMsg;
+    private String     respMsg;
 
     /**
      * 证件类型01：身份证02：军官证03：护照04：回乡证05：台胞证06：警官证07：士兵证99：其它证件
-
+    
      */
-    private String certifType;
+    private String     certifType;
 
     /**
      * 证件号码
      */
-    private String certifyId;
+    private String     certifyId;
+    /**
+     * 账号类型：01：借记卡03：存折04：公司账号
+     */
+    private String     accType;
 
+    /**
+     * accType
+     *
+     * @return  the accType
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getAccType() {
+        return accType;
+    }
 
+    /**
+     * accType
+     *
+     * @param   accType    the accType to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setAccType(String accType) {
+        this.accType = accType;
+    }
 
     public Integer getId() {
         return id;
@@ -384,10 +408,12 @@ public class TradeDataDO {
         this.certifyId = certifyId;
     }
 
-
-
     @Override
     public String toString() {
-        return "[id="+ id + ", withholdId="+ withholdId + ", txnAmt="+ txnAmt + ", status="+ status + ", failReason="+ failReason + ", userName="+ userName + ", mobile="+ mobile + ", bankCard="+ bankCard + ", subBankName="+ subBankName + ", anBankId="+ anBankId + ", accountType="+ accountType + ", txnType="+ txnType + ", txnSubType="+ txnSubType + ", bizType="+ bizType + ", accessType="+ accessType + ", merId="+ merId + ", orderSn="+ orderSn + ", txnTime="+ txnTime + ", currency="+ currency + ", backUrl="+ backUrl + ", payType="+ payType + ", subject="+ subject + ", body="+ body + ", customerInfo="+ customerInfo + ", purpose="+ purpose + ", respCode="+ respCode + ", respMsg="+ respMsg + ", certifType="+ certifType + ", certifyId="+ certifyId + "]";
+        return "[id=" + id + ", withholdId=" + withholdId + ", txnAmt=" + txnAmt + ", status=" + status + ", failReason=" + failReason + ", userName=" + userName + ", mobile=" + mobile + ", bankCard="
+               + bankCard + ", subBankName=" + subBankName + ", anBankId=" + anBankId + ", accountType=" + accountType + ", txnType=" + txnType + ", txnSubType=" + txnSubType + ", bizType=" + bizType
+               + ", accessType=" + accessType + ", merId=" + merId + ", orderSn=" + orderSn + ", txnTime=" + txnTime + ", currency=" + currency + ", backUrl=" + backUrl + ", payType=" + payType
+               + ", subject=" + subject + ", body=" + body + ", customerInfo=" + customerInfo + ", purpose=" + purpose + ", respCode=" + respCode + ", respMsg=" + respMsg + ", certifType="
+               + certifType + ", certifyId=" + certifyId + "]";
     }
 }

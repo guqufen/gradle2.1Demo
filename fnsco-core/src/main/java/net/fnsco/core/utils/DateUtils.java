@@ -62,4 +62,12 @@ public class DateUtils {
         }
         return result + "235959";
     }
+
+    public static String getNowDateStr() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
+        result = sf.format(new Date());
+        return result;
+    }
+
 }

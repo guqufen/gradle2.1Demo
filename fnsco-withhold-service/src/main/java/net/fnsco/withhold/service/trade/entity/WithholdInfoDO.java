@@ -86,7 +86,32 @@ public class WithholdInfoDO {
      */
     private String accountType;
 
+    /**
+     * 账号类型：01：借记卡03：存折04：公司账号
+     */
+    private String     accType;
 
+    /**
+     * accType
+     *
+     * @return  the accType
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getAccType() {
+        return accType;
+    }
+
+    /**
+     * accType
+     *
+     * @param   accType    the accType to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setAccType(String accType) {
+        this.accType = accType;
+    }
 
     public Integer getId() {
         return id;
