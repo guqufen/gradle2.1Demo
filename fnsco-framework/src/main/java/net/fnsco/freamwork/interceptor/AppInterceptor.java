@@ -70,12 +70,17 @@ public class AppInterceptor implements HandlerInterceptor {
         }
         //强制退出
         String userId = request.getHeader("userId");
+        logger.error("进入强制退出前判断" + userId);
         if (!Strings.isNullOrEmpty(userId)) {
+            logger.error("进入强制退出判断" + userId);
             AppUserDTO userDto = userService.getUserInfo(userId);
             if (userDto != null) {
                 if (userDto.getForcedLoginOut() != null && userDto.getForcedLoginOut().compareTo(1) == 0) {
                     OutWriterUtil.outJson(response, FrameworkConstant.E_FORCED_LOGIN_OUT);
+                    logger.error("强制退出" + userId);
                     return false;
+                } else {
+                    logger.error("不用强制退出" + userId);
                 }
             }
         }
