@@ -204,7 +204,7 @@
 				      			</if>
 			</where>
 		GROUP BY
-			TA.mobile,TA.reg_time,TA.user_name
+			TA.reg_time,TA.mobile,TA.user_name
 	limit #{startRow},#{perPageSize}		
 	</select>
 	<!-- 条件查询总数 -->

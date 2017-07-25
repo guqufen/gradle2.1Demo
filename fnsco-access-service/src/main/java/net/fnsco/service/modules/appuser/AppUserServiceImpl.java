@@ -99,6 +99,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUser.setDeviceType(appUserDTO.getDeviceType());
         appUser.setState(1);
         appUser.setRegTime(new Date());
+        appUser.setLastLoginTime(new Date());
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         appUser.setPassword(password);
         if (!appUserDao.insertSelective(appUser)) {
