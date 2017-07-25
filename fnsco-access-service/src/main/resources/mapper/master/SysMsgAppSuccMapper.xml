@@ -127,4 +127,11 @@
   <select id="selectTotalUnreadCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
     select count(*) from sys_msg_app_succ where read_status = 0 and app_user_id = #{userId}
   </select>
+  <!-- 根据用户ID查询未读消息信息 -->
+  <select id="selectTotalUnread"  parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_msg_app_succ
+     where read_status = 0 and app_user_id = #{userId}
+  </select>
 </mapper>
