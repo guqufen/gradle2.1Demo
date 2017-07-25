@@ -3,15 +3,12 @@ package net.fnsco.service.modules.push;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-
-import com.google.common.collect.Maps;
 
 import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.dto.PushMsgInfoDTO;

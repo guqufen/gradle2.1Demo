@@ -364,11 +364,11 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
     public void pushMerChantMsg(String innerCode, Integer userId) {
         //如果没有店长,不发送推送
         AppUserMerchant merInfo = appUserMerchantDao.selectOneByInnerCode(innerCode, ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-        AppUser user = appUserDao.selectAppUserById(merInfo.getAppUserId());
-        if(null == user){
+        if(null == merInfo){
             logger.warn(innerCode+"该店没有店长!");
             return;
         }
+        AppUser user = appUserDao.selectAppUserById(merInfo.getAppUserId());
        //发送推送
         String param_and ="";
         String newPhone = "";
