@@ -18,8 +18,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Controller
-@RequestMapping(value ="/withholdInfo", method = RequestMethod.POST)
-@Api(value = "/withholdInfo", tags = {""})
+@RequestMapping(value ="/web/withholdInfo", method = RequestMethod.POST)
+@Api(value = "/web/withholdInfo", tags = {"代扣管理"})
 public class WithholdInfoController extends BaseController {
 
  @Autowired

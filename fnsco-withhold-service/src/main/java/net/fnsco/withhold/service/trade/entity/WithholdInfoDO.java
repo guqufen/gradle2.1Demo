@@ -8,33 +8,33 @@ public class WithholdInfoDO {
     /**
      * 
      */
-    private Integer id;
+    private Integer    id;
 
     /**
      * 姓名
      */
-    private String userName;
+    private String     userName;
 
     /**
      * 手机号
      */
-    private String mobile;
+    private String     mobile;
 
     /**
      * 证件类型01：身份证02：军官证03：护照04：回乡证05：台胞证06：警官证07：士兵证99：其它证件
-
+    
      */
-    private String certifType;
+    private String     certifType;
 
     /**
      * 证件号码
      */
-    private String certifyId;
+    private String     certifyId;
 
     /**
      * 扣款日
      */
-    private String debitDay;
+    private String     debitDay;
 
     /**
      * 扣款金额/次
@@ -49,47 +49,97 @@ public class WithholdInfoDO {
     /**
      * 银行卡号
      */
-    private String bankCard;
+    private String     bankCard;
 
     /**
      * 状态0终止1进行2已完成
      */
-    private Integer status;
+    private Integer    status;
 
     /**
      * 最后提交人
      */
-    private Integer modifyUserId;
+    private Integer    modifyUserId;
 
     /**
      * 最后提交时间
      */
-    private Date modifyTime;
+    private Date       modifyTime;
 
     /**
      * 扣款次数
      */
-    private Integer total;
+    private Integer    total;
 
     /**
      * 开户支行名
      */
-    private String subBankName;
+    private String     subBankName;
 
     /**
      * 爱农银行编号
      */
-    private String anBankId;
+    private String     anBankId;
 
     /**
      * 账户类型00：对公 01：对私
      */
-    private String accountType;
+    private String     accountType;
 
     /**
      * 账号类型：01：借记卡03：存折04：公司账号
      */
     private String     accType;
+    /**
+     * 开户行行号
+     */
+    private String     opeBnankNum;
+    
+    private Integer    failTotal;
+
+    /**
+     * failTotal
+     *
+     * @return  the failTotal
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Integer getFailTotal() {
+        return failTotal;
+    }
+
+    /**
+     * failTotal
+     *
+     * @param   failTotal    the failTotal to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setFailTotal(Integer failTotal) {
+        this.failTotal = failTotal;
+    }
+
+    /**
+     * opeBnankNum
+     *
+     * @return  the opeBnankNum
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getOpeBnankNum() {
+        return opeBnankNum;
+    }
+
+    /**
+     * opeBnankNum
+     *
+     * @param   opeBnankNum    the opeBnankNum to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setOpeBnankNum(String opeBnankNum) {
+        this.opeBnankNum = opeBnankNum;
+    }
 
     /**
      * accType
@@ -97,7 +147,7 @@ public class WithholdInfoDO {
      * @return  the accType
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getAccType() {
         return accType;
     }
@@ -108,7 +158,7 @@ public class WithholdInfoDO {
      * @param   accType    the accType to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setAccType(String accType) {
         this.accType = accType;
     }
@@ -241,10 +291,10 @@ public class WithholdInfoDO {
         this.accountType = accountType;
     }
 
-
-
     @Override
     public String toString() {
-        return "[id="+ id + ", userName="+ userName + ", mobile="+ mobile + ", certifType="+ certifType + ", certifyId="+ certifyId + ", debitDay="+ debitDay + ", amount="+ amount + ", amountTotal="+ amountTotal + ", bankCard="+ bankCard + ", status="+ status + ", modifyUserId="+ modifyUserId + ", modifyTime="+ modifyTime + ", total="+ total + ", subBankName="+ subBankName + ", anBankId="+ anBankId + ", accountType="+ accountType + "]";
+        return "[id=" + id + ", userName=" + userName + ", mobile=" + mobile + ", certifType=" + certifType + ", certifyId=" + certifyId + ", debitDay=" + debitDay + ", amount=" + amount
+               + ", amountTotal=" + amountTotal + ", bankCard=" + bankCard + ", status=" + status + ", modifyUserId=" + modifyUserId + ", modifyTime=" + modifyTime + ", total=" + total
+               + ", subBankName=" + subBankName + ", anBankId=" + anBankId + ", accountType=" + accountType + "]";
     }
 }

@@ -19,6 +19,8 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
+import net.fnsco.freamwork.comm.Md5Util;
+
 public class HttpRequest {
 
     private static final String   SERVLET_POST   = "POST";
@@ -143,10 +145,10 @@ public class HttpRequest {
         try {
             switch (REQUEST_SEC) {
                 case "MD5":
-                    checkSign = MD5Util.encodebyte(signString.getBytes("utf-8")); //签名结果
+                    checkSign = Md5Util.encodebyte(signString.getBytes("utf-8")); //签名结果
                     break;
                 default:
-                    checkSign = MD5Util.encodebyte(signString.getBytes("utf-8"));
+                    checkSign = Md5Util.encodebyte(signString.getBytes("utf-8"));
                     break;
             }
         } catch (UnsupportedEncodingException e) {
@@ -156,12 +158,16 @@ public class HttpRequest {
         //		System.err.println(signString);
         for (String key : base64Keys) {
             if (treeMap.containsKey(key)) {
-                treeMap.put(key, Base64.getEncoder().encodeToString(treeMap.get(key).getBytes()));
+                if (null != treeMap.get(key)) {
+                    treeMap.put(key, Base64.getEncoder().encodeToString(treeMap.get(key).getBytes()));
+                }
             }
         }
         for (String key : base64JsonKeys) {
             if (treeMap.containsKey(key)) {
-                treeMap.put(key, Base64.getEncoder().encodeToString(treeMap.get(key).getBytes()));
+                if (null != treeMap.get(key)) {
+                    treeMap.put(key, Base64.getEncoder().encodeToString(treeMap.get(key).getBytes()));
+                }
             }
         }
         treeMap.put("signMethod", "MD5");
@@ -209,10 +215,10 @@ public class HttpRequest {
         try {
             switch (signMethod.toUpperCase()) {
                 case "MD5":
-                    checkSign = MD5Util.encodebyte(signString.getBytes("UTF-8"));
+                    checkSign = Md5Util.encodebyte(signString.getBytes("UTF-8"));
                     break;
                 default:
-                    checkSign = MD5Util.encodebyte(signString.getBytes("UTF-8"));
+                    checkSign = Md5Util.encodebyte(signString.getBytes("UTF-8"));
                     break;
             }
             chsign = new String(checkSign, "UTF-8");

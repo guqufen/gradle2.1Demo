@@ -95,8 +95,7 @@ public class ANOrderPaymentService extends BaseService {
      * @return
      */
     public TradeDataDO collectPaymentSendPost(TradeDataDO tradeDataDO) {
-        String merId = env.getProperty(ApiConstant.MER_ID);
-        String anBackURL = env.getProperty("anBackURL");
+       
         Map<String, String> paras = new HashMap<String, String>();
         paras.put("version", "1.0.0");// 消息版本号
         paras.put("txnType", "11");// 交易类型
@@ -105,7 +104,7 @@ public class ANOrderPaymentService extends BaseService {
         paras.put("accessType", "0");// 接入类型
         paras.put("accessMode", "01");// 接入方式
 
-        paras.put("merId", merId);// 商户号       
+        paras.put("merId", tradeDataDO.getMerId());// 商户号       
         paras.put("merOrderId", tradeDataDO.getOrderSn());// 商户订单号
         paras.put("accNo", tradeDataDO.getBankCard());//银行卡卡号
         paras.put("accType", tradeDataDO.getAccType());//账号类型：01：借记卡03：存折04：公司账号
@@ -120,17 +119,16 @@ public class ANOrderPaymentService extends BaseService {
         jo.put("cvv2", "");//CVV2
         jo.put("issInsProvince", "");//开户行省 
         jo.put("issInsCity", "");//开户行市
-
-        if (("01").equals(tradeDataDO.getAccountType())) {//对私
-            jo.put("iss_ins_name", tradeDataDO.getSubBankName());//开户支行名称
-        }
+        //if (("00").equals(tradeDataDO.getAccountType())) {//对公
+        jo.put("iss_ins_name", tradeDataDO.getSubBankName());//开户支行名称
+        //}
         paras.put("customerInfo", jo.toString()); // 银行卡验证信息及身份信息
-
+        tradeDataDO.setCustomerInfo(jo.toString());
         paras.put("txnTime", tradeDataDO.getTxnTime());// 订单发送时间
         paras.put("txnAmt", tradeDataDO.getTxnAmt().toString());// 交易金额（分）
         paras.put("currency", "CNY");// 交易币种
-        paras.put("backUrl", anBackURL);// 后台通地址
-        paras.put("payType", "0401");// 支付方式
+        paras.put("backUrl", tradeDataDO.getBackUrl());// 后台通地址
+        paras.put("payType", "0501");// 支付方式
 
         paras.put("bankId", tradeDataDO.getAnBankId());// 银行编号
         paras.put("subject", tradeDataDO.getSubject());// 商品标题
@@ -149,7 +147,6 @@ public class ANOrderPaymentService extends BaseService {
         }
         tradeDataDO.setRespCode(result1.get("respCode"));
         tradeDataDO.setRespMsg(result1.get("respMsg"));
-
         return tradeDataDO;
     }
 }

@@ -18,8 +18,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Controller
-@RequestMapping(value = "/tradeData", method = RequestMethod.POST)
-@Api(value = "/tradeData", tags = { "" })
+@RequestMapping(value = "/web/tradeData", method = RequestMethod.POST)
+@Api(value = "/web/tradeData", tags = { "代扣交易管理" })
 public class TradeDataController extends BaseController {
 
     @Autowired
@@ -36,7 +36,7 @@ public class TradeDataController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "collectPayment", method = RequestMethod.GET)
     public ResultDTO collectPayment() {
-        tradeDataService.collectPayment(1);
+        tradeDataService.collectPayment(0);
         return ResultDTO.success();
     }
 

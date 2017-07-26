@@ -1,5 +1,6 @@
 package net.fnsco.withhold.service.trade;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,8 @@ import com.google.common.base.Strings;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.withhold.comm.ApiConstant;
+import net.fnsco.withhold.comm.ServiceConstant;
 import net.fnsco.withhold.service.trade.dao.TradeDataDAO;
 import net.fnsco.withhold.service.trade.dao.WithholdInfoDAO;
 import net.fnsco.withhold.service.trade.entity.TradeDataDO;
@@ -33,12 +36,76 @@ public class TradeDataService extends BaseService {
     @Autowired
     private ANOrderPaymentService aNOrderPaymentService;
     @Autowired
-    private Environment env;
-    // 代收
-    public void collectPayment(Integer id) {
-        WithholdInfoDO withholdInfo = withholdInfoDAO.getById(1);
-        TradeDataDO tradeData = new TradeDataDO();
+    private Environment           env;
+/**
+ * 
+ * type 1,2,3 2.扣款时间：早上 9点  下午 1点   下午5点 ，若第一次扣款没有成功，第二次继续请求，第二次没有成功，第三次继续请求。
+ * collectPayment:(这里用一句话描述这个方法的作用)
+ *
+ * @param type   void    返回Result对象
+ * @throws 
+ * @since  CodingExample　Ver 1.1
+ */
+    // 代收扣
+    public void collectPayment(int type) {
+        String dayStr = DateUtils.getNowDateDayStr();
+        logger.debug("开始代扣" + dayStr);
+        List<WithholdInfoDO> withholdInfoList = withholdInfoDAO.getByDebitDay(dayStr,type);
+        for (WithholdInfoDO withholdInfo : withholdInfoList) {
+            TradeDataDO tradeData = new TradeDataDO();
+            init(tradeData, withholdInfo);
+            tradeDataDAO.insert(tradeData);
+            TradeDataDO result = aNOrderPaymentService.collectPaymentSendPost(tradeData);
+            if (null == result) {
+                logger.error("调用爱农出错");
+                return;
+            }
+            String respCode = result.getRespCode();
+            if (ServiceConstant.AnPayResultEnum.AN_PAY_SUCC.getCode().equals(respCode)) {
+                result.setStatus(ServiceConstant.PayStatusEnum.PAY_SUCC.getCode());
+                tradeDataDAO.update(result);
+                BigDecimal amount = withholdInfo.getAmount();
+                BigDecimal amountTotal = withholdInfo.getAmountTotal();
+                //已扣金额加本次扣款额=已扣总金额
+                amountTotal = amountTotal.add(amount);
+                withholdInfo.setAmountTotal(amountTotal);
+                Integer total = withholdInfo.getTotal();
+                //总共应该扣款金额
+                BigDecimal tempAmountTotal = amount.multiply(new BigDecimal(total));
+                //相等则张露露扣款
+                if (tempAmountTotal.compareTo(amountTotal) == 0) {
+                    withholdInfo.setStatus(2);
+                }
+                withholdInfo.setFailTotal(0);
+                withholdInfoDAO.update(withholdInfo);
+            } else {
+                String temp = ServiceConstant.anErrorMap.get(respCode);
+                if (temp != null) {
+                    result.setStatus(ServiceConstant.PayStatusEnum.PAY_FAIL.getCode());
+                    result.setFailReason(temp);
+                    tradeDataDAO.update(result);
+                    withholdInfo.setFailTotal(type+1);
+                    withholdInfoDAO.update(withholdInfo);
+                }
+            }
+        }
+    }
+
+    private void init(TradeDataDO tradeData, WithholdInfoDO withholdInfo) {
+        String merId = env.getProperty(ApiConstant.MER_ID);
+        String anBackURL = env.getProperty("anBackURL");
+        tradeData.setMerId(merId);
+        tradeData.setTxnType("11");// 交易类型
+        tradeData.setTxnSubType("01");// 交易子类型
+        tradeData.setBizType("000501");// 产品类型
+        tradeData.setAccessType("0");// 接入类型
+        tradeData.setCurrency("CNY");// 交易币种
+        tradeData.setBackUrl(anBackURL);// 后台通地址
+        tradeData.setPayType("0501");// 支付方式
+
         String orderSn = createOrderSN(withholdInfo);
+        tradeData.setStatus(ServiceConstant.PayStatusEnum.PAYING.getCode());
+        tradeData.setWithholdId(withholdInfo.getId());
         tradeData.setOrderSn(orderSn);
         //paras.put("merOrderId"// 商户订单号
         tradeData.setBankCard(withholdInfo.getBankCard());
@@ -48,7 +115,7 @@ public class TradeDataService extends BaseService {
         tradeData.getSubBankName();
         //jo.put("iss_ins_name", tradeDataDO.getSubBankName());//开户支行名称
         tradeData.setSubBankName(withholdInfo.getSubBankName());
-       // paras.put("txnTime", tradeDataDO.getTxnTime());// 订单发送时间
+        // paras.put("txnTime", tradeDataDO.getTxnTime());// 订单发送时间
         tradeData.setTxnTime(DateUtils.getNowDateStr());
         //paras.put("txnAmt", tradeDataDO.getTxnAmt().toString());// 交易金额（分）
         tradeData.setTxnAmt(withholdInfo.getAmount());
@@ -64,11 +131,11 @@ public class TradeDataService extends BaseService {
         tradeData.setAnBankId(withholdInfo.getAnBankId());
         //paras.put("ppFlag", tradeDataDO.getAccountType());//  对公对私标志00：对公 01：对私
         tradeData.setAccountType(withholdInfo.getAccountType());
-        tradeDataDAO.insert(tradeData);
-        aNOrderPaymentService.collectPaymentSendPost(tradeData);
-        tradeDataDAO.update(tradeData);
-        return;
+
+        tradeData.setSubject("");
+        tradeData.setBody("");
     }
+
     private String createOrderSN(WithholdInfoDO withholdInfo) {
         String order_sn = "";
         String innerCode = withholdInfo.getMobile();
@@ -82,6 +149,7 @@ public class TradeDataService extends BaseService {
         logger.error("订单前缀为" + pre);
         return pre + order_sn;
     }
+
     private static String getFixLenthString(int strLength) {
 
         Random rm = new Random();
@@ -95,6 +163,7 @@ public class TradeDataService extends BaseService {
         // 返回固定的长度的随机数  
         return fixLenthString.substring(1, strLength + 1);
     }
+
     // 查询
     public TradeDataDO doQueryById(Integer id) {
         TradeDataDO obj = this.tradeDataDAO.getById(id);
