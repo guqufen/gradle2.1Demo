@@ -2,6 +2,7 @@ package net.fnsco.service.modules.appuser;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +11,6 @@ import org.springframework.util.CollectionUtils;
 import com.google.common.collect.Lists;
 
 import net.fnsco.api.appuser.AppUserMerchantService;
-import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.constant.ConstantEnum;
 import net.fnsco.api.dto.AppUserMerchantOutDTO;
 import net.fnsco.api.dto.BandDto;
@@ -21,6 +21,7 @@ import net.fnsco.service.dao.master.AppUserDao;
 import net.fnsco.service.dao.master.AppUserMerchantDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MerchantUserRelDao;
+import net.fnsco.service.domain.AppUser;
 import net.fnsco.service.domain.AppUserMerchant;
 import net.fnsco.service.domain.MerchantCore;
 
@@ -64,8 +65,14 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
                 BandListDTO bandList=new BandListDTO();
                 bandList.setUserId((li.getAppUserId()));
                 //根据appUserId查询到手机号
-                bandList.setMobile(appUserDao.selectAppUserById(li.getAppUserId()).getMobile());
-                listDto.add(bandList);
+                AppUser user = appUserDao.selectAppUserById(li.getAppUserId());
+                if(null != user){
+                    bandList.setMobile(user.getMobile());
+                    listDto.add(bandList);
+                }else{
+                    logger.error(li.getAppUserId()+"该用户ID不存在!");
+                }
+               
             }
             dto.setBandListDTO(listDto);
             datas.add(dto);
