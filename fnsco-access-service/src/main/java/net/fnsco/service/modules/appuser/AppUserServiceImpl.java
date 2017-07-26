@@ -92,6 +92,19 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (user != null) {
             return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
         }
+        //根据deviceToken查找记录 如果存在就清空
+        List<AppUser> items=appUserDao.queryBydeviceToken(appUserDTO.getDeviceToken());
+        if(items.isEmpty()){
+            logger.warn("该设备之前没有注册过账号或该设备之前注册的账号已注销");
+        }
+        for(AppUser item:items){
+            String deviceToken=null;
+            String deviceId=null;
+            Integer deviceType=null;
+            if (!appUserDao.updateDeviceToken(item.getMobile(),deviceToken,deviceId,deviceType)) {
+                return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
+            }
+        }
         AppUser appUser = new AppUser();
         appUser.setDeviceId(appUserDTO.getDeviceId());
         appUser.setDeviceToken(appUserDTO.getDeviceToken());
@@ -270,15 +283,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (!appUserDao.updatePasswordByPhone(appUserDTO.getMobile(), password)) {
             return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
         }
-        //登录成功更新deviceToken
-        Integer id = appUserDTO.getUserId();
-        AppUser adminUser = new AppUser();
-        adminUser.setDeviceToken("");
-        adminUser.setId(id);
-        //更新到实体
-        if (!appUserDao.updateByPrimaryKeySelective(adminUser)) {
-            return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
-        }
         return ResultDTO.success();
     }
 
@@ -309,16 +313,17 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         appUser.setPassword(password);
         appUser.setId(id);
-
-        //修改密码后app跳到未登录页面 需要清空deviceToken
-        appUser.setDeviceToken("");
-
         if (!appUserDao.updateByPrimaryKeySelective(appUser)) {
-
             return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
         }
+        //更新到deviceToken
+        String deviceToken=null;
+        String deviceId=null;
+        Integer deviceType=null;
+        if (!appUserDao.updateDeviceTokenById(id,deviceToken,deviceId,deviceType)){
+            return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
+        }
         return ResultDTO.success();
-
     }
 
     //根据手机号码和密码登录
@@ -343,9 +348,18 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_LOGINMSG_ERROR);
         }
         //把原先的deviceToken清空
-        String deviceToken = "";
-        if (!appUserDao.updateDeviceToken(appUserDTO.getMobile(), deviceToken)) {
-            return ResultDTO.fail(ApiConstant.E_EMPTYDEVICETOKEN_ERROR);
+        //根据deviceToken查找记录 如果存在就清空
+        List<AppUser> items=appUserDao.queryBydeviceToken(appUserDTO.getDeviceToken());
+        if(items.isEmpty()){
+            logger.warn("该设备之前没有注册过账号或该设备之前注册的账号已注销");
+        }
+        for(AppUser item:items){
+            String deviceToken=null;
+            String deviceId=null;
+            Integer deviceType=null;
+            if (!appUserDao.updateDeviceToken(item.getMobile(),deviceToken,deviceId,deviceType)) {
+                return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
+            }
         }
         AppUser adminUser = new AppUser();
         adminUser.setDeviceId(appUserDTO.getDeviceId());
@@ -387,12 +401,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     //退出登录
     @Override
     public ResultDTO<String> loginOut(AppUserDTO appUserDTO) {
-        Integer id = appUserDTO.getUserId();
-        AppUser adminUser = new AppUser();
-        adminUser.setDeviceToken("");
-        adminUser.setId(id);
         //更新到实体
-        if (!appUserDao.updateByPrimaryKeySelective(adminUser)) {
+        Integer id=appUserDTO.getUserId();
+        String deviceToken=null;
+        String deviceId=null;
+        Integer deviceType=null;
+        if (!appUserDao.updateDeviceTokenById(id,deviceToken,deviceId,deviceType)){
             return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
         }
         return ResultDTO.success();
