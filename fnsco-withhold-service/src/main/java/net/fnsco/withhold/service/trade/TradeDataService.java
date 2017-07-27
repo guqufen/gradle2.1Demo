@@ -49,12 +49,25 @@ public class TradeDataService extends BaseService {
     // 代收扣
     public void collectPayment(int type) {
         String dayStr = DateUtils.getNowDateDayStr();
+        String monthStr = DateUtils.getNowDateMonthStr();
         logger.debug("开始代扣" + dayStr);
         List<WithholdInfoDO> withholdInfoList = withholdInfoDAO.getByDebitDay(dayStr,type);
         for (WithholdInfoDO withholdInfo : withholdInfoList) {
             TradeDataDO tradeData = new TradeDataDO();
-            init(tradeData, withholdInfo);
-            tradeDataDAO.insert(tradeData);
+            if(type>0){
+                TradeDataDO temp =tradeDataDAO.getByWithholdId(withholdInfo.getId(),monthStr+"-"+dayStr);
+                if(null != temp){
+                    tradeData= temp;
+                }
+            }else{
+                init(tradeData, withholdInfo);
+            }
+            tradeData.setPayTimes(type+1);
+            if(type>0){
+                tradeDataDAO.update(tradeData);
+            }else{
+                tradeDataDAO.insert(tradeData);
+            }
             TradeDataDO result = aNOrderPaymentService.collectPaymentSendPost(tradeData);
             if (null == result) {
                 logger.error("调用爱农出错");

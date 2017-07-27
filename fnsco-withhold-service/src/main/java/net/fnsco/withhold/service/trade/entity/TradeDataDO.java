@@ -153,6 +153,32 @@ public class TradeDataDO {
      * 账号类型：01：借记卡03：存折04：公司账号
      */
     private String     accType;
+    /**
+     * 扣款次数
+     */
+    private Integer payTimes;
+    
+    /**
+     * payTimes
+     *
+     * @return  the payTimes
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getPayTimes() {
+        return payTimes;
+    }
+
+    /**
+     * payTimes
+     *
+     * @param   payTimes    the payTimes to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPayTimes(Integer payTimes) {
+        this.payTimes = payTimes;
+    }
 
     /**
      * accType
