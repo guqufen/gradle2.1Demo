@@ -168,7 +168,7 @@ $(function(){
 	{
 		$.cookie('cookie_user_key',null); 
 	}
-	$('#login_info_form').attr('action',PROJECT_NAME+'/web/doLogin');
+	$('#login_info_form').attr('action',PROJECT_NAME+'/web/user/doLogin');
 });
 </script>
 <script>
@@ -219,7 +219,7 @@ $(function(){
 //登录
 $('#btn_submit').click(function(){
 	$.ajax({
-		url:PROJECT_NAME+'/web/doLogin',
+		url:PROJECT_NAME+'/web/user/doLogin',
 		type:'POST',
 		data:$('#login_info_form').serialize(),
 		success:function(data){
