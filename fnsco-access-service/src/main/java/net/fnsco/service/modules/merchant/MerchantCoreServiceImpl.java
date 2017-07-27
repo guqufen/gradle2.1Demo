@@ -21,6 +21,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.service.dao.master.AgentDao;
+import net.fnsco.service.dao.master.AppUserMerchantDao;
 import net.fnsco.service.dao.master.MerchantBankDao;
 import net.fnsco.service.dao.master.MerchantChannelDao;
 import net.fnsco.service.dao.master.MerchantContactDao;
@@ -28,6 +29,7 @@ import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MerchantFileDao;
 import net.fnsco.service.dao.master.MerchantFileTempDao;
 import net.fnsco.service.dao.master.MerchantTerminalDao;
+import net.fnsco.service.dao.master.MerchantUserRelDao;
 import net.fnsco.service.domain.Agent;
 import net.fnsco.service.domain.MerchantBank;
 import net.fnsco.service.domain.MerchantChannel;
@@ -70,7 +72,12 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
     @Autowired
     private AgentDao            agentDao;
+    
+    @Autowired
+    private AppUserMerchantDao  appUserMerchantDao;
 
+    @Autowired
+    private MerchantUserRelDao  merchantUserRelDao;
     /**
      * @todo 新增加商家
      * @author tangliang
@@ -150,6 +157,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             merchantChannelDao.deleteByMerCoreIds(ids);
             merchantBankDao.deleteByMerCoreIds(ids);
             merchantTerminalDao.deleteByMerCoreIds(ids);
+            //根据id找到innerCode  删除店铺绑定关系表和用户角色表
+            merchantUserRelDao.deleteByMerCoreIds(ids);
+            appUserMerchantDao.deleteByMerCoreIds(ids);   
             result = ResultDTO.success("删除成功!");
         } else {
             result = ResultDTO.fail("删除失败");

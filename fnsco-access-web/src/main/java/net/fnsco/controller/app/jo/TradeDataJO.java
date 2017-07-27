@@ -35,7 +35,31 @@ public class TradeDataJO extends JO {
     private String       orderTime;
     //失败原因
     private String       respMsg;
+    //扫码订单号
+    private String       orderIdScan;
     
+    /**
+     * orderIdScan
+     *
+     * @return  the orderIdScan
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOrderIdScan() {
+        return orderIdScan;
+    }
+
+    /**
+     * orderIdScan
+     *
+     * @param   orderIdScan    the orderIdScan to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOrderIdScan(String orderIdScan) {
+        this.orderIdScan = orderIdScan;
+    }
+
     /**
      * respMsg
      *

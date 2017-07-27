@@ -20,6 +20,7 @@
 		<module>fnsco-access-web</module>
 		<module>fnsco-withhold-service</module>
 		<module>fnsco-withhold-war</module>
+		<module>fnsco-war-app</module>
 	</modules>
 
 </project>

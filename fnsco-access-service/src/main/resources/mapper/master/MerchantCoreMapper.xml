@@ -629,4 +629,5 @@
     from m_merchant_core
     where legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR}
   </select>
+
 </mapper>

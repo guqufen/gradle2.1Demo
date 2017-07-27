@@ -68,4 +68,23 @@
     from m_merchant_user_rel
     where app_user_id = #{appUserId,jdbcType=INTEGER}
   </select>
+    <!-- 根据innerCode和appUserId删除绑定关系-->
+  <delete id="deleteByPrimaryKey" >
+    delete from m_merchant_user_rel
+    where inner_code = #{innerCode,jdbcType=VARCHAR} and app_user_id = #{appUserId,jdbcType=INTEGER}
+  </delete>
+  <!-- 删除绑定关系 -->
+  <delete id="deleteByInnerCode" >
+    delete from m_merchant_user_rel
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </delete>
+  <!-- 根据商家ID删除关联数据 -->
+  <delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
+   DELETE   FROM m_merchant_user_rel  WHERE inner_code in (
+	 SELECT inner_code FROM m_merchant_core WHERE id in 
+	  <foreach item="item" collection="array" open="(" separator="," close=")">
+       #{item}
+     </foreach>
+	)
+</delete>
 </mapper>

@@ -23,12 +23,27 @@
 		<result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
 		<result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
 		<result column="state" jdbcType="INTEGER" property="state" />
+		<result column="forced_login_out" jdbcType="INTEGER" property="forcedLoginOut" />
 	</resultMap>
+	<!-- WEB页面用 -->
+	<resultMap id="PageResultMap" type="net.fnsco.api.dto.AppUserManageDTO" >
+	  <result column="user_name" property="userName" jdbcType="VARCHAR" />
+	  <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+	  <result column="reg_time" property="regTime" jdbcType="TIMESTAMP"/>
+	  <result column="mer_names" property="merNames" jdbcType="VARCHAR"/>
+	</resultMap>
+	<!-- 商户角色结果集 -->
+  <resultMap  id="RELResultMap" type="net.fnsco.api.dto.QueryBandDTO">
+     <result column="id" property="id" jdbcType="INTEGER" />
+     <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+     <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
+  </resultMap>
 	<sql id="Base_Column_List">
 		id, user_name, mobile, password, real_name, device_id, ges_state,
 		ges_password, ges_trail,
 		pay_password, device_type, device_token, password_error_num, password_error_date,
-		remark, reg_time, last_login_time, modify_time, state
+		remark, reg_time, last_login_time, modify_time, state,forced_login_out
 	</sql>
 	<!-- 根据手机号更新用户 密码 -->
 	<update id="updatePasswordByPhone" parameterType="java.lang.String">
@@ -62,7 +77,7 @@
 		insert into m_app_user(id, user_name, mobile, password, real_name,
 		device_id, ges_state, ges_password, ges_trail,
 		pay_password, device_type, device_token, password_error_num, password_error_date,
-		remark, reg_time, last_login_time, modify_time, state)
+		remark, reg_time, last_login_time, modify_time, state,forced_login_out)
 		values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
 		#{mobile,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
 		#{realName,jdbcType=VARCHAR}, #{deviceId,jdbcType=VARCHAR},
@@ -72,7 +87,7 @@
 		#{passwordErrorNum,jdbcType=INTEGER},
 		#{passwordErrorDate,jdbcType=TIMESTAMP},
 		#{remark,jdbcType=VARCHAR}, #{regTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP},
-		#{modifyTime,jdbcType=TIMESTAMP},#{state,jdbcType=INTEGER})
+		#{modifyTime,jdbcType=TIMESTAMP},#{state,jdbcType=INTEGER},#{forcedLoginOut,jdbcType=INTEGER})
 	</insert>
 	<!-- 修改用户信息 -->
 	<update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.AppUser">
@@ -132,7 +147,152 @@
 			<if test="state != null">
 				state = #{state,jdbcType=INTEGER},
 			</if>
+			<if test="forcedLoginOut != null">
+				forced_login_out = #{forcedLoginOut,jdbcType=INTEGER},
+			</if>
 		</set>
-		where id = #{id,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
 	</update>
+	<!-- 根据innerCode查询 -->
+	<select id="selectByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+	  SELECT
+			MU.id,MU.device_token,MU.mobile,MU.device_type
+		FROM
+			(
+				SELECT DISTINCT
+					(app_user_id)
+				FROM
+					m_merchant_user_rel
+				WHERE
+					inner_code = #{innerCode}
+			) RE
+		LEFT JOIN m_app_user MU ON RE.app_user_id = MU.id
+	</select>
+	<!-- 条件分页查询 -->
+	<select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="PageResultMap">
+	   SELECT
+		TA.mobile,
+		TA.reg_time,
+		TA.user_name,
+		concat(
+					GROUP_CONCAT(TA.mer_name),
+					"、"
+				) AS 'mer_names'
+		FROM
+			(
+				SELECT
+					MR.mobile,
+					MC.mer_name,
+					MR.reg_time,
+					MR.user_name
+				FROM
+					(
+						SELECT
+							MU.*, RE.inner_code
+						FROM
+							 m_app_user MU
+						LEFT JOIN m_merchant_user_rel RE ON MU.id = RE.app_user_id
+					) MR
+				LEFT JOIN  m_merchant_core MC ON MR.inner_code = MC.inner_code
+			) TA
+			<where>
+							    <if test="condition.mobile != null and condition.mobile !=''">
+									AND TA.mobile LIKE CONCAT('%',#{condition.mobile},'%')
+								</if>
+								 <if test="condition.merNames != null and condition.merNames != ''" >
+				                     AND TA.mer_name LIKE CONCAT('%', #{condition.merNames}, '%')
+				      			</if>
+			</where>
+		GROUP BY
+			TA.reg_time,TA.mobile,TA.user_name
+	limit #{startRow},#{perPageSize}		
+	</select>
+	<!-- 条件查询总数 -->
+	<select id="queryTotalByCondition" parameterType="net.fnsco.api.dto.AppUserManageDTO" resultType="java.lang.Integer">
+	 SELECT COUNT(*) FROM (
+	  SELECT
+		TA.mobile
+		FROM
+			(
+				SELECT
+					MR.mobile,
+					MC.mer_name,
+					MR.reg_time,
+					MR.user_name
+				FROM
+					(
+						SELECT
+							MU.*, RE.inner_code
+						FROM
+							 m_app_user
+							  
+							MU
+						LEFT JOIN m_merchant_user_rel RE ON MU.id = RE.app_user_id
+					) MR
+				LEFT JOIN 
+				   m_merchant_core 
+				 MC ON MR.inner_code = MC.inner_code
+			) TA
+			<where>
+							    <if test="mobile != null and mobile !=''">
+									AND TA.mobile LIKE CONCAT('%', #{mobile}, '%') 
+								</if>
+								<if test="merNames != null and merNames != ''" >
+				        			AND TA.mer_name LIKE CONCAT('%', #{merNames}, '%') 
+				      			</if>
+			</where>
+		GROUP BY
+			TA.mobile,TA.reg_time,TA.user_name
+		) TAB
+	</select>
+	  <!-- 根据手机号查询店铺绑定情况 -->
+  <select id="selectBandPeopleByMobile" parameterType="java.lang.String" resultMap="RELResultMap">
+  	SELECT
+			REL.role_id,REL.inner_code,REL.app_user_id,REL.id
+		FROM
+			u_app_user_merchant REL
+		 JOIN (
+			SELECT
+				*
+			FROM
+				m_app_user
+			WHERE
+				mobile = #{mobile,jdbcType=VARCHAR}
+		) User ON REL.app_user_id = User.id
+  </select>
+  <!-- 查询推送用户信息 -->
+  <select id="queryAllPushUser" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+		from m_app_user
+		where state = 1 and device_token &lt;&gt; '' and device_token is not null
+  </select>
+  <update id="updateDeviceToken">
+		update m_app_user set device_token = #{deviceToken,jdbcType=VARCHAR} ,device_type=#{deviceType,jdbcType=INTEGER}, device_id=#{deviceId,jdbcType=VARCHAR} where mobile =
+		#{mobile,jdbcType=VARCHAR}
+  </update>
+   <update id="updateDeviceTokenById">
+		update m_app_user set device_token = #{deviceToken,jdbcType=VARCHAR} ,device_type=#{deviceType,jdbcType=INTEGER}, device_id=#{deviceId,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER}
+  </update>
+	<!-- 根据deviceToken查找到用户-->
+	<select id="queryBydeviceToken" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+		from m_app_user
+		where state = 1 and device_token = #{deviceToken,jdbcType=VARCHAR}
+  </select>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.AppUser">
+  	  	update m_app_user set
+  	  	user_name=#{userName,jdbcType=VARCHAR},
+		mobile=#{mobile,jdbcType=VARCHAR},password=#{password,jdbcType=VARCHAR},
+		real_name=#{realName,jdbcType=VARCHAR}, device_id=#{deviceId,jdbcType=VARCHAR},
+		ges_state=#{gesState,jdbcType=INTEGER},
+		ges_password=#{gesPassword,jdbcType=VARCHAR}, ges_trail=#{gesTrail,jdbcType=INTEGER}, pay_password=#{payPassword,jdbcType=VARCHAR},
+		device_type=#{deviceType,jdbcType=INTEGER}, device_token=#{deviceToken,jdbcType=VARCHAR},
+		password_error_num=#{passwordErrorNum,jdbcType=INTEGER},
+		password_error_date=#{passwordErrorDate,jdbcType=TIMESTAMP},
+		remark=#{remark,jdbcType=VARCHAR}, reg_time=#{regTime,jdbcType=TIMESTAMP}, last_login_time=#{lastLoginTime,jdbcType=TIMESTAMP},
+		modify_time=#{modifyTime,jdbcType=TIMESTAMP},state=#{state,jdbcType=INTEGER},forced_login_out=#{forcedLoginOut,jdbcType=INTEGER}
+  	  	where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

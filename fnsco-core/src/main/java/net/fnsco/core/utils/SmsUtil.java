@@ -1,4 +1,4 @@
-package net.fnsco.core.sms;
+package net.fnsco.core.utils;
 
 
 /**
@@ -30,7 +30,7 @@ package net.fnsco.core.sms;
  * @since 2015-04-03
  */
 
-public class JavaSmsApi {
+public class SmsUtil {
 
     //查账户信息的http地址
     private static String URI_GET_USER_INFO = "https://sms.yunpian.com/v2/user/get.json";
@@ -64,7 +64,7 @@ public class JavaSmsApi {
             + URLEncoder.encode("#company#",ENCODING) + "="
             + URLEncoder.encode("数钱吧",ENCODING);
 
-      String result=JavaSmsApi.tplSendSms(apikey, tpl_id, tpl_value, mobile);
+      String result=SmsUtil.tplSendSms(apikey, tpl_id, tpl_value, mobile);
 
         return result;
     }

@@ -40,6 +40,30 @@ public class AppUser {
     private Date modifyTime;
 
     private Integer state;
+    
+    private Integer forcedLoginOut;
+    
+    /**
+     * forcedLoginOut
+     *
+     * @return  the forcedLoginOut
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getForcedLoginOut() {
+        return forcedLoginOut;
+    }
+
+    /**
+     * forcedLoginOut
+     *
+     * @param   forcedLoginOut    the forcedLoginOut to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setForcedLoginOut(Integer forcedLoginOut) {
+        this.forcedLoginOut = forcedLoginOut;
+    }
 
     public Integer getId() {
         return id;

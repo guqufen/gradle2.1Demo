@@ -1037,7 +1037,7 @@ SWFUpload.Console.writeLine = function (message) {
 
 		console.scrollTop = console.scrollHeight - console.clientHeight;
 	} catch (ex) {
-		alert("Exception: " + ex.name + " Message: " + ex.message);
+		layer.msg("Exception: " + ex.name + " Message: " + ex.message);
 	}
 };
 
@@ -1561,7 +1561,7 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 			// Run the default event handler
 			if ($.inArray('onDialogClose', settings.overrideEvents) < 0) {
 				if (this.queueData.filesErrored > 0) {
-					alert(this.queueData.errorMsg);
+					layer.msg(this.queueData.errorMsg);
 				}
 			}
 
@@ -1785,7 +1785,7 @@ Released under the MIT License <http://www.opensource.org/licenses/mit-license.p
 					errorString = 'Security Error';
 					break;
 				case SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED:
-					alert('The upload limit has been reached (' + errorMsg + ').');
+					layer.msg('The upload limit has been reached (' + errorMsg + ').');
 					errorString = 'Exceeds Upload Limit';
 					break;
 				case SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED:

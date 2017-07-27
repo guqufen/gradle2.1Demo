@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.api.constant.ApiConstant;
@@ -28,7 +29,7 @@ import net.fnsco.service.domain.SysUser;
  * @date 2017年6月20日 下午3:11:23
  */
 @Controller
-@RequestMapping("/web")
+@RequestMapping(value = "/web")
 public class SysUserLoginAction extends BaseController{
 	
 	@Autowired
@@ -38,7 +39,7 @@ public class SysUserLoginAction extends BaseController{
 	 * @param adminUser
 	 * @return
 	 */
-	@RequestMapping("/doLogin")
+	@RequestMapping(value = "/doLogin", method = RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO<String> doLogin(HttpServletRequest req,HttpServletResponse res)
 	{
@@ -63,7 +64,7 @@ public class SysUserLoginAction extends BaseController{
 	 * 退出登录
 	 * @return
 	 */
-	@RequestMapping("/logout")
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logOut(){
 		removeSessionUser();
 		removeCookieUser();
@@ -74,7 +75,7 @@ public class SysUserLoginAction extends BaseController{
 	 * 获取当前用户
 	 * @return
 	 */
-	@RequestMapping("/getCurrentUser")
+	@RequestMapping(value = "/getCurrentUser", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> getCurrentUser(){
 		Map<String,Object> result = new HashMap<>();
@@ -96,7 +97,7 @@ public class SysUserLoginAction extends BaseController{
      * @return
      */
 	
-	@RequestMapping("/modifyPassword")
+	@RequestMapping(value = "/modifyPassword", method = RequestMethod.POST)
     @ResponseBody
     public ResultDTO<String> modifyPassword(String name, String newPassword, String oldPassword){
        return adminUserService.modifyPassword(name,newPassword,oldPassword);

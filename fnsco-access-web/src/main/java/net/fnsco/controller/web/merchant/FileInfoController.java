@@ -18,6 +18,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -40,7 +41,7 @@ import net.fnsco.service.domain.MerchantFileTemp;
  * @date 2017年6月21日 上午10:57:41
  */
 @Controller
-@RequestMapping("/web/fileInfo")
+@RequestMapping(value = "/web/fileInfo",method =RequestMethod.POST)
 public class FileInfoController extends BaseController{
 
 	@Autowired
@@ -115,6 +116,88 @@ public class FileInfoController extends BaseController{
 	public String appImport(HttpServletRequest req, HttpServletResponse response) {
 		return commImport(req, response, true);
 	}
+	
+	/**
+	 * msgFileUpImport:(这里用一句话描述这个方法的作用) 消息推送文件上传
+	 *
+	 * @param req
+	 * @param response
+	 * @return    设定文件
+	 * @return String    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	@RequestMapping(value="/msgfile", produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String msgFileUpImport(HttpServletRequest req, HttpServletResponse response){
+	    MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
+        Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+        for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
+            // 上传文件原名
+            MultipartFile file = entity.getValue();
+
+            String fileName = file.getOriginalFilename();
+            String line = System.getProperty("file.separator");// 文件分割符
+            // 保存文件的路径
+            String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
+            // 数据库存的路径
+            Calendar cal = Calendar.getInstance();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH) + 1;
+            String stry = this.env.getProperty("fileUpload.url") + line + year;// +"\\"+month+"\\";
+            File yearPath = new File(stry);
+            // 如果文件夹不存在则创建
+            if (!yearPath.exists()) {
+                logger.info("年份目录不存在");
+                yearPath.mkdirs();
+            } else {
+                logger.info("年份目录已存在");
+            }
+
+            String strm = this.env.getProperty("fileUpload.url") + line + year + line + month + line;
+            File monthPath = new File(strm);
+            if (!monthPath.exists()) {
+                logger.info("月份目录不存在");
+                monthPath.mkdirs();
+            } else {
+                logger.info("月份目录已存在");
+            }
+
+            String yearMonthPath = year + line + month + line;
+            String newFileName = System.currentTimeMillis() + "." + prefix;
+            String fileKey = year+"/"+month+"/"+newFileName;
+            String filepath = yearMonthPath + newFileName;
+
+            String fileURL = this.env.getProperty("fileUpload.url") + line + filepath;
+
+            if (!file.isEmpty()) {
+                try {
+                    byte[] bytes = file.getBytes();
+                    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileURL));
+                    stream.write(bytes);
+                    stream.close();
+                    //上传阿里云OSS文件服务器
+                    OssUtil.uploadFile(fileURL, fileKey);
+                    String newUrl = OssUtil.getHeadBucketName()+"^"+fileKey;
+                    ResultDTO<TreeMap<String, String>> appResult = null;
+                    TreeMap<String, String> paras = new TreeMap<>();
+                    paras.put("url", newUrl);
+                    String json =JSONArray.toJSONString(paras);
+                    response.getWriter().write(json);
+
+                } catch (Exception e) {
+                    logger.error(fileName + "上传失败！"+e);
+                    throw new RuntimeException();
+                }
+            } else {
+                logger.error(fileName + "上传失败");
+                throw new RuntimeException();
+            }
+
+        }
+        return null;
+
+	}
 	/**
 	 * 删除
 	 * @param id
@@ -129,6 +212,23 @@ public class FileInfoController extends BaseController{
 			return "true";
 		}
 		return "false";
+	}
+	
+	/**
+	 * deleteOssFile:(这里用一句话描述这个方法的作用)删除OSS上文件文件
+	 *
+	 * @param url
+	 * @return    设定文件
+	 * @return String    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	@RequestMapping("/deleteOssFile")
+	@ResponseBody
+	public String deleteOssFile(String url){
+	    String fileKey = url.substring(url.lastIndexOf("^")+1);
+	    OssUtil.deleteFile(OssUtil.getHeadBucketName(), fileKey);
+	    return null;
 	}
 	
 	/**

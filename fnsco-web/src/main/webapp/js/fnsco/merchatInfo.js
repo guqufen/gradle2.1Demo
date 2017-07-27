@@ -429,6 +429,7 @@ $(".nextBtn").click(function(){
 function requestAgent(type){
 	 $.ajax({
 		   url:PROJECT_NAME+'/web/merchantinfo/queryAgents',
+		   type:'POST',
 		   success:function(data){
 			   unloginHandler(data);
 			   var agtS = data.data;
@@ -473,6 +474,8 @@ function  fileUp(num){
        'buttonText': '上传图片',
      //在浏览窗口底部的文件类型下拉菜单中显示的文本
        'fileTypeDesc': 'Image Files',
+       //限制大小
+       'fileSizeLimit':'2MB',
      //允许上传的文件后缀
        'fileTypeExts': '*.gif; *.jpg; *.png',
        //限制上传图片张数
@@ -685,10 +688,10 @@ function contactHtml(num){
           layer.msg('操作错误!');return ;
         }
         if(!id || id<0){
-          concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
-        }else{
-          concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode,id}
-        }
+            concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
+          }else{
+            concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode,id}
+          }
         contactArr=contactArr.concat(concatContactArr);
       }
       if(contactArr && contactArr.length == 0){

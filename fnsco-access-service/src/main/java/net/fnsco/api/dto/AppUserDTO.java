@@ -8,16 +8,26 @@ public class AppUserDTO extends DTO {
     private Integer id;
     private Integer userId;
     private String  userName;
-    private Integer  oprationType;//0注册 1忘记密码
+    private Integer oprationType;     //0注册 1忘记密码
+    private String  payPassword;
 
-    public Integer getOprationType() {
-        return oprationType;
-    }
+    private Integer deviceType;
 
-    public void setOprationType(Integer oprationType) {
-        this.oprationType = oprationType;
-    }
+    private String  deviceToken;
 
+    private Integer passwordErrorNum;
+
+    private Date    passwordErrorDate;
+
+    private String  remark;
+
+    private Date    regTime;
+
+    private Date    lastLoginTime;
+
+    private Date    modifyTime;
+
+    private Integer state;
     private String  mobile;
 
     private String  password;
@@ -31,6 +41,14 @@ public class AppUserDTO extends DTO {
     private Integer gesTrail;
     private String  code;
     private String  oldPassword;
+
+    public Integer getOprationType() {
+        return oprationType;
+    }
+
+    public void setOprationType(Integer oprationType) {
+        this.oprationType = oprationType;
+    }
 
     public Integer getUserId() {
         return userId;
@@ -208,23 +226,4 @@ public class AppUserDTO extends DTO {
         this.state = state;
     }
 
-    private String  payPassword;
-
-    private Integer deviceType;
-
-    private String  deviceToken;
-
-    private Integer passwordErrorNum;
-
-    private Date    passwordErrorDate;
-
-    private String  remark;
-
-    private Date    regTime;
-
-    private Date    lastLoginTime;
-
-    private Date    modifyTime;
-
-    private Integer state;
 }

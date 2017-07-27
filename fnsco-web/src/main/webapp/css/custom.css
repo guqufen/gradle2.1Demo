@@ -17,6 +17,9 @@ table a.remove{
 table a.redact{
 	color:#428bca;
 }
+table a.redact span{
+	padding-left: 2px;
+}
 table a.details{
 	color:#428bca;
 }
@@ -50,11 +53,15 @@ table td{
 }
 .form-group .form-control{
 	width: 72%;
+	width: -moz-calc(100% - 86px);
+  	width: -webkit-calc(100% - 86px);
 	width: calc(100% - 86px);
 	display: inline-block;
 }
 .form-group .query-time .form-control{
 	width: 40%;
+	width: -moz-calc(50% - 50px);
+  	width: -webkit-calc(50% - 50px);
 	width: calc(50% - 50px);
 }
 .form-group div{
@@ -97,7 +104,7 @@ table td{
 .modal-body .tab-content label{
 	margin-bottom: 2px;
 }
-.modal-body .col-sm-4{
+.modal-body .col-sm-4,.modal-body .col-sm-12{
 	margin-bottom:15px;
 }
 .contact-list,.terminal-list,.channel-list,.bankCard-list{
@@ -293,3 +300,51 @@ table td{
 .changePage{
 	font-size: 14px;color: #666;padding-top: 20px;cursor: pointer;
 }
+/*用户管理*/
+.shopRoleList{
+	padding: 10px 20px 16px 20px;
+    background: #f4f4f4;
+    margin: 10px 0;
+    position: relative;
+}
+#pushView{
+	width: 100%;
+    background: #f4f4f4;
+    margin: 10px 0;
+    padding: 15px;
+    position: relative;
+    background: #f4f4f4;
+    color: #666;
+	display: none;
+}
+#pushView img{
+	width: 300px;
+	height: 150px;
+}
+.imgRemind{
+	text-align: center;
+	padding-top: 15px;
+	color: #999;
+	font-size: 12px;
+}
+}
+/*角色管理*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+角色管理

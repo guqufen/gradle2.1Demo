@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>发现页面</title>
+		<title>发现</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -16,13 +16,13 @@
 			<div class="mui-scroll">
 				<ul class="mui-table-view mui-table-view-chevron findList">
 					<li>
-						<a id="hhdCd"><img src="img/1478152948123.jpg"></a>
+						<a id="news1"><img src="img/1478152948123.jpg"></a>
 					</li>
 					<li>
-						<a id="hhdFd"><img src="img/1478152975635.jpg"></a>
+						<a id="news2"><img src="img/1478152975635.jpg"></a>
 					</li>
 					<!-- <li>
-						<a id="xld"><img src="img/1495882758573.jpg"></a>
+						<a id="news3"><img src="img/bigdata-2.jpg"></a>
 					</li> -->
 				</ul>
 			</div>
@@ -32,28 +32,25 @@
 	<script type="text/javascript" src="js/setWidth.js"></script>
 	<script type="text/javascript" src="js/mui.min.js"></script>
 	<script type="text/javascript">
-		//新窗口打开
-		$("#hhdCd").on('tap',function(){
-			param("http://www.fnsco.net/find/input2.html");
-			// window.webkit.messageHandlers.param.postMessage("http://www.fnsco.net/find/input2.html");
+		$("#news1").on('tap',function(){
+			// param("http://www.fnsco.net/find/input1.html");
+			window.location.href='http://www.fnsco.net/find/input2.html?back';
 		})
-		$("#hhdFd").on('tap',function(){
-			param("http://www.fnsco.net/find/input1.html");
-			// window.webkit.messageHandlers.param.postMessage("http://www.fnsco.net/find/input1.html");
+		$("#news2").on('tap',function(){
+			// param("http://www.fnsco.net/find/input1.html");
+			window.location.href='http://www.fnsco.net/find/input1.html?back';
 		})
+		//传值方法
+		function param(url){
+			//alert(url);
+			console.log(url)
+			document.location = "js://webview?url="+url+"";
+			return window.webkit.messageHandlers.param.postMessage(url);
+		}
 		//新开一个webview
 		// $("#xld").on('tap',function(){
 		// 	window.location.href='http://www.zheft.cn/template/weixin/xld/xld.html?back';
 		// })
-		
-		
-		function param(url){
-			console.log(url)
-			//安卓传值方法
-			document.location = "js://webview?url="+url+"";
-			// IOS传值方法
-			return window.webkit.messageHandlers.param.postMessage(url);
-		}
 		
 		// 下拉刷新
 		mui.init({
@@ -72,7 +69,7 @@
 		function refreshPage(){
 			setTimeout(function(){
 				location.reload()
-			},1500)
+			},1000)
 		}
 	</script>
 </html>

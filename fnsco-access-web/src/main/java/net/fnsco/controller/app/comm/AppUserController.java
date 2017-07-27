@@ -71,5 +71,20 @@ public class AppUserController extends BaseController {
         ResultDTO<String> result = appUserService.loginByMoblie(appUserDTO);
         return result;
     }
-
+    //退出登录
+    @ResponseBody
+    @RequestMapping(value = "/loginOut")
+    @ApiOperation(value = "退出登录")
+    public ResultDTO<String> loginOut(@RequestBody AppUserDTO appUserDTO) {
+        ResultDTO<String> result = appUserService.loginOut(appUserDTO);
+        return result;
+    }
 }
+
+
+
+
+
+
+
+

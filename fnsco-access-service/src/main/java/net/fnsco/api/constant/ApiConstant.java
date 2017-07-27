@@ -11,10 +11,7 @@ public class ApiConstant extends CoreConstants {
     public static String WEB_IS_AUTHOR             = "web.is.author";
     public static String APP_IS_AUTHOR             = "app.is.author";
     public static String TOKEN_ID                  = "b9eccb7036f9719059b0f61076991b75";
-    public static String E_TOKEN_EMPTY             = "4010";
-    public static String E_TOKEN_ERROR             = "4011";
-    public static String E_NOT_LOGIN               = "4012";
-    public static String E_SYSTEM_EXCEPTION        = "5000";
+    
     public static String E_MERCHANT_CODE_NULL      = "5023";                            //商铺码不能为空
     public static String E_USER_ID_NULL            = "5024";                            //用户ID不能为空
     public static String E_MERCHANT_CODE_NOT_EXIST = "5025";                            //此商铺码不存在，请重新输入
@@ -59,7 +56,16 @@ public class ApiConstant extends CoreConstants {
     public static String E_ACCOUNTLOCKOUT_ERROR    = "5113";                            //非法请求,用户账号被注销
     public static String E_LOGIN_ERROR             = "5114";                            //登录失败
     public static String E_LOGINMSG_ERROR          = "5115";                            //用户名或密码不正确
-
+    public static String E_LOGINOUT_ERROR          = "5116";                         //退出登录失败
+    public static String E_PHONETYPE_ERROR         = "5117";                          //手机类型错误
+    public static String E_NOSHOPKEEPER_ERROR      = "5118";                          // 该用户不是店主
+    public static String E_DELETEBAND_ERROR        = "5119";                          // 删除绑定失败
+    public static String E_NOBAND_ERROR            = "5120";                          // 该用户没有绑定商户
+    public static String E_ONLYSHOPKEEPER_ERROR    = "5121";                          //  一个店铺只能有一个店主
+    public static String E_CHANGEROLE_ERROR        = "5122";                          //  更改角色失败
+    public static String E_FORCEDLOGINOUT_ERROR    = "5123";                          //  强制退出失败
+    public static String E_EMPTYDEVICETOKEN_ERROR  = "5124";                          // 清空友盟设备号失败
+    
     public static String       WEB_LOGIN_NULL = "5900";//用户名或密码为空
     public static String       WEB_LOGIN_FAIL ="5901";//用户名或密码错误
     public static String       WEB_MER_CHANNEL_NOTUNIQUE = "5902";//商户渠道号和渠道组合要唯一
@@ -104,6 +110,15 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_ACCOUNTLOCKOUT_ERROR, "用户账号被锁定");
         ERROR_MESSGE_MAP.put(E_LOGIN_ERROR, "登录失败");
         ERROR_MESSGE_MAP.put(E_LOGINMSG_ERROR, "用户名或密码不正确");
+        ERROR_MESSGE_MAP.put(E_LOGINOUT_ERROR, "退出登录失败");
+        ERROR_MESSGE_MAP.put(E_PHONETYPE_ERROR, "手机类型错误");
+        ERROR_MESSGE_MAP.put(E_NOSHOPKEEPER_ERROR, "您还不是店主，请先成为店主");  
+        ERROR_MESSGE_MAP.put(E_DELETEBAND_ERROR, "删除绑定失败");  
+        ERROR_MESSGE_MAP.put(E_NOBAND_ERROR, "该用户没有绑定商户");
+        ERROR_MESSGE_MAP.put(E_ONLYSHOPKEEPER_ERROR, "修改失败,一个店铺只能有一个店主");
+        ERROR_MESSGE_MAP.put(E_CHANGEROLE_ERROR, "更改角色失败"); 
+        ERROR_MESSGE_MAP.put(E_FORCEDLOGINOUT_ERROR, "强制退出失败"); 
+        ERROR_MESSGE_MAP.put(E_EMPTYDEVICETOKEN_ERROR, "清空友盟设备号失败");  
     }
 
 }

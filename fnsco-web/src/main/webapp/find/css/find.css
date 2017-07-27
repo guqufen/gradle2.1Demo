@@ -57,7 +57,7 @@ body{
     background-color: #fff;
 }
 .findList{
-    padding: 0.75rem 0.55rem;
+    padding: 0.55rem;
 }
 .findList li{
     width: 100%;
@@ -65,7 +65,7 @@ body{
 .findList li a{
     display: block;
     line-height: 0;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.65rem;
 }
 .findList li a img{
     width: 100%;
