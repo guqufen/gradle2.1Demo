@@ -24,6 +24,8 @@
 		<result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
 		<result column="state" jdbcType="INTEGER" property="state" />
 		<result column="forced_login_out" jdbcType="INTEGER" property="forcedLoginOut" />
+		<result column="sex" jdbcType="INTEGER" property="sex" />
+		<result column="head_image_path" jdbcType="VARCHAR" property="headImagePath" />
 	</resultMap>
 	<!-- WEB页面用 -->
 	<resultMap id="PageResultMap" type="net.fnsco.api.dto.AppUserManageDTO" >
@@ -43,7 +45,7 @@
 		id, user_name, mobile, password, real_name, device_id, ges_state,
 		ges_password, ges_trail,
 		pay_password, device_type, device_token, password_error_num, password_error_date,
-		remark, reg_time, last_login_time, modify_time, state,forced_login_out
+		remark, reg_time, last_login_time, modify_time, state,forced_login_out,sex,head_image_path
 	</sql>
 	<!-- 根据手机号更新用户 密码 -->
 	<update id="updatePasswordByPhone" parameterType="java.lang.String">
@@ -149,6 +151,12 @@
 			</if>
 			<if test="forcedLoginOut != null">
 				forced_login_out = #{forcedLoginOut,jdbcType=INTEGER},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=INTEGER},
+			</if>
+			<if test="headImagePath != null">
+				head_image_path = #{headImagePath,jdbcType=VARCHAR},
 			</if>
 		</set>
 		where id = #{id,jdbcType=INTEGER}

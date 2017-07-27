@@ -43,6 +43,54 @@ public class AppUser {
     
     private Integer forcedLoginOut;
     
+    private Integer sex;
+
+    private String headImagePath;
+    
+    /**
+     * sex
+     *
+     * @return  the sex
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getSex() {
+        return sex;
+    }
+
+    /**
+     * sex
+     *
+     * @param   sex    the sex to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    /**
+     * headImagePath
+     *
+     * @return  the headImagePath
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getHeadImagePath() {
+        return headImagePath;
+    }
+
+    /**
+     * headImagePath
+     *
+     * @param   headImagePath    the headImagePath to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setHeadImagePath(String headImagePath) {
+        this.headImagePath = headImagePath;
+    }
+
     /**
      * forcedLoginOut
      *

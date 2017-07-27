@@ -141,4 +141,19 @@ public class DateUtils {
         calendar.add(Calendar.MINUTE, minute);
         return calendar.getTime();
     }
+    /**
+     * getTimeByDayStr:(这里用一句话描述这个方法的作用)获取当前时间前或后N天的时间字符串
+     *
+     * @param day
+     * @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String getTimeByDayStr(int day) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, day);
+        return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime())+"000000";
+    }
 }

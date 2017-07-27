@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import net.fnsco.api.push.AppPushService;
+import net.fnsco.api.trade.TradeReportService;
 
 @EnableScheduling
 public class TimerConfig {
@@ -15,6 +16,8 @@ public class TimerConfig {
     
     @Autowired
     private AppPushService appPushService;
+    @Autowired
+    private TradeReportService tradeReportService;
     
     /**
      * spring boot 定时任务
@@ -32,7 +35,7 @@ public class TimerConfig {
      * @author tangliang
      * @since  CodingExample　Ver 1.1
      */
-    @Scheduled(cron = "0 * * * * ?")//每一分钟的0秒执行，每分钟执行一次
+//    @Scheduled(cron = "0 * * * * ?")//每一分钟的0秒执行，每分钟执行一次
     public void pushMagTimer(){
         appPushService.sendSystemMgs();
     }
@@ -44,7 +47,7 @@ public class TimerConfig {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @Scheduled(cron = "30 * * * * ?")//每一分钟的30秒执行，每分钟执行一次
+//    @Scheduled(cron = "30 * * * * ?")//每一分钟的30秒执行，每分钟执行一次
     public void pushFirstFailMsg(){
         appPushService.sendFailMgs(1);
     }
@@ -56,7 +59,7 @@ public class TimerConfig {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @Scheduled(cron = "0 1 * * * ?")//每个小时的1秒执行，每60分钟执行一次
+//    @Scheduled(cron = "0 1 * * * ?")//每个小时的1秒执行，每60分钟执行一次
     public void pushSecondFailMsg(){
         appPushService.sendFailMgs(2);
     }
@@ -69,8 +72,20 @@ public class TimerConfig {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @Scheduled(cron = "0 0 0/2 * * ?")//每隔2个小时执行一次
+//    @Scheduled(cron = "0 0 0/2 * * ?")//每隔2个小时执行一次
     public void pushThirdFailMsg(){
         appPushService.sendFailMgs(3);
+    }
+    
+    /**
+     * buildTradeReportData:(这里用一句话描述这个方法的作用) 执行生成交易统计数据
+     *    设定文件
+     * @return void    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @Scheduled(cron = "1 0 0 * * ?")//每天凌晨00:00:01秒执行一次
+    public void buildTradeReportData(){
+        tradeReportService.buildTradeReportDaTa();
     }
 }

@@ -1,7 +1,5 @@
 package net.fnsco.api.trade;
 
-import java.util.List;
-
 import net.fnsco.api.dto.TradeDataDTO;
 import net.fnsco.api.dto.TradeDataQueryDTO;
 import net.fnsco.core.base.ResultPageDTO;
