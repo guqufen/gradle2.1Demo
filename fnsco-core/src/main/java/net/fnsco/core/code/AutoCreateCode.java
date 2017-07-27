@@ -376,11 +376,6 @@ public class AutoCreateCode {
 
         sb.append("public interface ").append(daoName).append(" {").append(this.separator).append(this.separator);
 
-        // getById
-        sb.append("    @Select(\"SELECT * FROM " + tableName + " WHERE id = #{id}\")").append(this.separator);
-        sb.append("    public " + doName + " getById(@Param(\"id\") int id);").append(this.separator);
-        sb.append(this.separator);
-        
         StringBuffer sb1 = new StringBuffer();
         boolean flag = getUpperColumn(list,sb1);
         // insert
@@ -388,6 +383,13 @@ public class AutoCreateCode {
             sb.append(sb1.toString());
             sb.append(this.separator);
         }
+        
+        // getById
+        sb.append("    @Select(\"SELECT * FROM " + tableName + " WHERE id = #{id}\")").append(this.separator);
+        sb.append("    public " + doName + " getById(@Param(\"id\") int id);").append(this.separator);
+        sb.append(this.separator);
+        
+        
         sb.append("    @Insert(\"INSERT into " + tableName + "(");
         for (int i = 0; i < list.size(); i++) {
             Field f = list.get(i);
