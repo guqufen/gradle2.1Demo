@@ -94,8 +94,62 @@ public class WithholdInfoDO {
      * 开户行行号
      */
     private String     opeBnankNum;
-    
+    /**
+     * 本月扣款失败次数
+     */
     private Integer    failTotal;
+    /**
+     * 开始日期
+     */
+    private String     startDate;
+    /**
+     * 结束日期
+     */
+    private String     endDate;
+
+    /**
+     * startDate
+     *
+     * @return  the startDate
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * startDate
+     *
+     * @param   startDate    the startDate to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * endDate
+     *
+     * @return  the endDate
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * endDate
+     *
+     * @param   endDate    the endDate to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 
     /**
      * failTotal

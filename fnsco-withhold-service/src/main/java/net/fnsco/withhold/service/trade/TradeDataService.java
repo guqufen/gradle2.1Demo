@@ -37,71 +37,83 @@ public class TradeDataService extends BaseService {
     private ANOrderPaymentService aNOrderPaymentService;
     @Autowired
     private Environment           env;
-/**
- * 
- * type 1,2,3 2.扣款时间：早上 9点  下午 1点   下午5点 ，若第一次扣款没有成功，第二次继续请求，第二次没有成功，第三次继续请求。
- * collectPayment:(这里用一句话描述这个方法的作用)
- *
- * @param type   void    返回Result对象
- * @throws 
- * @since  CodingExample　Ver 1.1
- */
+
+    /**
+     * 
+     * type 1,2,3 2.扣款时间：早上 9点  下午 1点   下午5点 ，若第一次扣款没有成功，第二次继续请求，第二次没有成功，第三次继续请求。
+     * collectPayment:(这里用一句话描述这个方法的作用)
+     *
+     * @param type   void    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
     // 代收扣
     public void collectPayment(int type) {
         String dayStr = DateUtils.getNowDateDayStr();
         String monthStr = DateUtils.getNowDateMonthStr();
         logger.debug("开始代扣" + dayStr);
-        List<WithholdInfoDO> withholdInfoList = withholdInfoDAO.getByDebitDay(dayStr,type);
+        List<WithholdInfoDO> withholdInfoList = withholdInfoDAO.getByDebitDay(dayStr, type);
         for (WithholdInfoDO withholdInfo : withholdInfoList) {
             TradeDataDO tradeData = new TradeDataDO();
-            if(type>0){
-                TradeDataDO temp =tradeDataDAO.getByWithholdId(withholdInfo.getId(),monthStr+"-"+dayStr);
-                if(null != temp){
-                    tradeData= temp;
+            if (type > 0) {
+                TradeDataDO temp = tradeDataDAO.getByWithholdId(withholdInfo.getId(), monthStr + "-" + dayStr);
+                if (null != temp) {
+                    tradeData = temp;
                 }
-            }else{
+            } else {
                 init(tradeData, withholdInfo);
             }
-            tradeData.setPayTimes(type+1);
-            if(type>0){
+            tradeData.setPayTimes(type + 1);
+            if (type > 0) {
                 tradeDataDAO.update(tradeData);
-            }else{
+            } else {
                 tradeDataDAO.insert(tradeData);
             }
             TradeDataDO result = aNOrderPaymentService.collectPaymentSendPost(tradeData);
             if (null == result) {
+                //发送短信
+                payFail(result, withholdInfo, "调用爱农代收接口失败", type);
                 logger.error("调用爱农出错");
                 return;
             }
             String respCode = result.getRespCode();
             if (ServiceConstant.AnPayResultEnum.AN_PAY_SUCC.getCode().equals(respCode)) {
-                result.setStatus(ServiceConstant.PayStatusEnum.PAY_SUCC.getCode());
-                tradeDataDAO.update(result);
-                BigDecimal amount = withholdInfo.getAmount();
-                BigDecimal amountTotal = withholdInfo.getAmountTotal();
-                //已扣金额加本次扣款额=已扣总金额
-                amountTotal = amountTotal.add(amount);
-                withholdInfo.setAmountTotal(amountTotal);
-                Integer total = withholdInfo.getTotal();
-                //总共应该扣款金额
-                BigDecimal tempAmountTotal = amount.multiply(new BigDecimal(total));
-                //相等则张露露扣款
-                if (tempAmountTotal.compareTo(amountTotal) == 0) {
-                    withholdInfo.setStatus(2);
-                }
-                withholdInfo.setFailTotal(0);
-                withholdInfoDAO.update(withholdInfo);
+                paySuccess(result, withholdInfo, type);
             } else {
-                String temp = ServiceConstant.anErrorMap.get(respCode);
-                if (temp != null) {
-                    result.setStatus(ServiceConstant.PayStatusEnum.PAY_FAIL.getCode());
-                    result.setFailReason(temp);
-                    tradeDataDAO.update(result);
-                    withholdInfo.setFailTotal(type+1);
-                    withholdInfoDAO.update(withholdInfo);
-                }
+                String failReason = ServiceConstant.anErrorMap.get(respCode);
+                payFail(result, withholdInfo, failReason, type);
             }
         }
+    }
+
+    private void paySuccess(TradeDataDO result, WithholdInfoDO withholdInfo, int type) {
+        result.setStatus(ServiceConstant.PayStatusEnum.PAY_SUCC.getCode());
+        tradeDataDAO.update(result);
+        BigDecimal amount = withholdInfo.getAmount();
+        BigDecimal amountTotal = withholdInfo.getAmountTotal();
+        //已扣金额加本次扣款额=已扣总金额
+        amountTotal = amountTotal.add(amount);
+        withholdInfo.setAmountTotal(amountTotal);
+        withholdInfo.getModifyTime();
+        String startDate = withholdInfo.getEndDate();
+        String nowDate  = DateUtils.getNowDateStr2();
+        //相等则完成扣款
+        if (startDate.equals(nowDate)) {
+            withholdInfo.setStatus(2);
+        }
+        withholdInfo.setFailTotal(0);
+        withholdInfoDAO.update(withholdInfo);
+    }
+
+    private void payFail(TradeDataDO result, WithholdInfoDO withholdInfo, String failReason, int type) {
+        result.setStatus(ServiceConstant.PayStatusEnum.PAY_FAIL.getCode());
+        result.setFailReason(failReason);
+        tradeDataDAO.update(result);
+        withholdInfo.setFailTotal(type + 1);
+        if(type==2){//最后一次失败则规0
+            withholdInfo.setFailTotal(0);
+        }
+        withholdInfoDAO.update(withholdInfo);
     }
 
     private void init(TradeDataDO tradeData, WithholdInfoDO withholdInfo) {
