@@ -43,7 +43,7 @@
                             <p>法奈昇大数据平台系统</p>
                         </div>
                         <div class="forget-body" style="display: block;">
-                            <form id="forget_info_form" name="forget" method="post" action="/web/doForget">
+                            <form id="forget_info_form" name="forget" method="post" action="/web/user/doForget">
                                 <div class="forget-input-panel">
                              <!--        <div class="username-input">
                                         <div class="icon left">
@@ -93,27 +93,28 @@
                 </li>
                 <li class="">
                     <a href="#">
-                        <i class="glyphicon glyphicon-home"></i> <span class="nav-label">商户管理</span> <span class="fa arrow"></span>
+                        <i class="glyphicon glyphicon-home"></i> <span class="nav-label">代扣管理</span> <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
                         <li>
-                            <a class="J_menuItem" href="merchatInfo.html" data-index="1">商户信息</a>
+                            <a class="J_menuItem" href="withholdList.html" data-index="1">代扣管理</a>
                         </li>
-                        <li>
+                       <!-- <li>
                             <a class="J_menuItem" href="tradedatainfo.html" data-index="2">商户流水</a>
-                        </li>
+                        </li> --> 
                     </ul>
                 </li>
                 <li>
                     <a href="#">
-                        <i class="glyphicon glyphicon-eur"></i> <span class="nav-label">交易管理</span> <span class="fa arrow"></span>
+                        <i class="glyphicon glyphicon-eur"></i> <span class="nav-label">代扣日志</span> <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
                         <li>
-                            <a class="J_menuItem" href="tradedatainfo.html" data-index="3">交易统计</a>
+                            <a class="J_menuItem" href="tradedatainfo.html" data-index="3">代扣流水</a>
                         </li>
                     </ul>
                 </li>
+                <!-- 
                 <li>
                     <a href="#">
                         <i class="glyphicon glyphicon-phone"></i> <span class="nav-label">APP管理</span> <span class="fa arrow"></span>
@@ -126,7 +127,7 @@
                             <a class="J_menuItem" href="dklog.html" data-index="5">用户管理</a>
                         </li>
                     </ul>
-                </li>
+                </li> -->
             </ul>
          </div>
          </div>
@@ -178,7 +179,7 @@
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="/web/logout" class="logout">退出登录</a>
+                                <a href="/web/user/logout" class="logout">退出登录</a>
                             </li>
                         </ul>
                     </li>
@@ -242,11 +243,11 @@ $(function(){
 		dataType:'json',
 		type:'POST',
 		success:function(data){
-
+			//alert(data.success);
 			unloginHandler(data);
-			if(!data.sessionUser)
+			if(!data.success)
 				window.location='login.html';
-			$('.indexPageUserName').html(data.sessionUser.name);
+			$('.indexPageUserName').html(data.data.name);
 		}
 	});
 });
