@@ -1,26 +1,25 @@
 package net.fnsco.core.utils;
 
-
 /**
  * Created by bingone on 15/12/16.
  */
 
-    import org.apache.http.HttpEntity;
-    import org.apache.http.NameValuePair;
-    import org.apache.http.client.entity.UrlEncodedFormEntity;
-    import org.apache.http.client.methods.CloseableHttpResponse;
-    import org.apache.http.client.methods.HttpPost;
-    import org.apache.http.impl.client.CloseableHttpClient;
-    import org.apache.http.impl.client.HttpClients;
-    import org.apache.http.message.BasicNameValuePair;
-    import org.apache.http.util.EntityUtils;
-    import java.io.IOException;
-    import java.net.URISyntaxException;
-    import java.net.URLEncoder;
-    import java.util.ArrayList;
-    import java.util.HashMap;
-    import java.util.List;
-    import java.util.Map;
+import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 短信http接口的java代码调用示例
@@ -33,24 +32,24 @@ package net.fnsco.core.utils;
 public class SmsUtil {
 
     //查账户信息的http地址
-    private static String URI_GET_USER_INFO = "https://sms.yunpian.com/v2/user/get.json";
+    private static String  URI_GET_USER_INFO = "https://sms.yunpian.com/v2/user/get.json";
 
     //智能匹配模板发送接口的http地址
-    private static String URI_SEND_SMS = "https://sms.yunpian.com/v2/sms/single_send.json";
+    private static String  URI_SEND_SMS      = "https://sms.yunpian.com/v2/sms/single_send.json";
 
     //模板发送接口的http地址
-    private static String URI_TPL_SEND_SMS = "https://sms.yunpian.com/v2/sms/tpl_single_send.json";
+    private static String  URI_TPL_SEND_SMS  = "https://sms.yunpian.com/v2/sms/tpl_single_send.json";
 
     //发送语音验证码接口的http地址
-    private static String URI_SEND_VOICE = "https://voice.yunpian.com/v2/voice/send.json";
+    private static String  URI_SEND_VOICE    = "https://voice.yunpian.com/v2/voice/send.json";
 
     //编码格式。发送编码格式统一用UTF-8
-    private static String ENCODING = "UTF-8";
+    private static String  ENCODING          = "UTF-8";
 
-    private static boolean SWITCH_OFF = true;
+    private static boolean SWITCH_OFF        = true;
+    private static String  hbApikey          = "568a854396f8b62157d0e03daeb33cdc";
 
-    public static String  Code(String mobile,String code) throws IOException, URISyntaxException {
-
+    public static String Code(String mobile, String code) throws IOException, URISyntaxException {
 
         //修改为您的apikey.apikey可在官网（http://www.yuanpian.com)登录后获取
         String apikey = "0425f962446c4b2de94e6e08e72120ad ";
@@ -59,12 +58,91 @@ public class SmsUtil {
         long tpl_id = 1;
         //设置对应的模板变量值
 
-        String tpl_value = URLEncoder.encode("#code#",ENCODING) +"="
-            + URLEncoder.encode(code, ENCODING) + "&"
-            + URLEncoder.encode("#company#",ENCODING) + "="
-            + URLEncoder.encode("数钱吧",ENCODING);
+        String tpl_value = URLEncoder.encode("#code#", ENCODING) + "=" + URLEncoder.encode(code, ENCODING) + "&" + URLEncoder.encode("#company#", ENCODING) + "=" + URLEncoder.encode("数钱吧", ENCODING);
 
-      String result=SmsUtil.tplSendSms(apikey, tpl_id, tpl_value, mobile);
+        String result = tplSendSms(apikey, tpl_id, tpl_value, mobile);
+
+        return result;
+    }
+
+    /**
+     * 
+     * withholdSucc:(代扣提醒短信通知)
+     *  【恒镔资产】温馨提醒：#userName#先生/女生，您本期融资服务费 #amount# 元 ，将于#month#月#day#日自动还款，
+     *  请于扣息日前存入足够资金，以免逾期。如有疑问，请咨询客户电话：“电话”
+     * @param mobile
+     * @param code
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException   String    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String withholdRemind(String mobile, String userName, String amount, String month, String day) throws IOException, URISyntaxException {
+
+        //修改为您的apikey.apikey可在官网（http://www.yuanpian.com)登录后获取
+
+        //设置模板ID，如使用1号模板:【#company#】您的验证码是#code#
+        long tpl_id = 1889030;
+        //设置对应的模板变量值
+
+        String tpl_value = URLEncoder.encode("#userName#", ENCODING) + "=" + URLEncoder.encode(userName, ENCODING) + "&" + URLEncoder.encode("#amount#", ENCODING) + "="
+                           + URLEncoder.encode(amount, ENCODING) + "&" + URLEncoder.encode("#month#", ENCODING) + "=" + URLEncoder.encode(month, ENCODING) + "&" + URLEncoder.encode("#day#", ENCODING)
+                           + "=" + URLEncoder.encode(day, ENCODING);
+
+        String result = tplSendSms(hbApikey, tpl_id, tpl_value, mobile);
+
+        return result;
+    }
+
+    /**
+     * 
+     * withholdSucc:(代扣成功短信通知)
+     * 【恒镔资产】本期#month#月融资服务费#amount#元已扣款成功。
+     * 注8月
+     * @param mobile
+     * @param code
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException   String    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String withholdSucc(String mobile, String month, String amount) throws IOException, URISyntaxException {
+
+        //设置模板ID，如使用1号模板:【#company#】您的验证码是#code#
+        long tpl_id = 1889002;
+        //设置对应的模板变量值
+
+        String tpl_value = URLEncoder.encode("#month#", ENCODING) + "=" + URLEncoder.encode(month, ENCODING) + "&" + URLEncoder.encode("#amount#", ENCODING) + "="
+                           + URLEncoder.encode(amount, ENCODING);
+
+        String result = tplSendSms(hbApikey, tpl_id, tpl_value, mobile);
+
+        return result;
+    }
+
+    /**
+     * 
+     * withholdFail:(代扣失败短信通知)
+     * 【恒镔资产】温馨提醒：#userName#先生/女士，本次扣款失败，今日为还息日,请及时存入足够资金， 以免逾期。如有疑问，请咨询客户电话:'电话'。
+     * @param mobile
+     * @param code
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException   String    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String withholdFail(String mobile, String userName) throws IOException, URISyntaxException {
+
+        //设置模板ID，如使用1号模板:【#company#】您的验证码是#code#
+        long tpl_id = 1889022;
+        //设置对应的模板变量值
+
+        String tpl_value = URLEncoder.encode("#userName#", ENCODING) + "=" + URLEncoder.encode(userName, ENCODING);
+
+        String result = tplSendSms(hbApikey, tpl_id, tpl_value, mobile);
 
         return result;
     }

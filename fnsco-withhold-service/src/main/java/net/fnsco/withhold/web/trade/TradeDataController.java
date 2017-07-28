@@ -1,21 +1,24 @@
 package net.fnsco.withhold.web.trade;
 
 import java.util.Map;
+
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-import net.fnsco.withhold.service.trade.TradeDataService;
-import net.fnsco.withhold.service.trade.entity.TradeDataDO;
-import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.base.BaseController;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.withhold.service.trade.TradeDataService;
+import net.fnsco.withhold.service.trade.WithholdService;
+import net.fnsco.withhold.service.trade.entity.TradeDataDO;
 
 @Controller
 @RequestMapping(value = "/web/tradeData", method = RequestMethod.POST)
@@ -24,7 +27,8 @@ public class TradeDataController extends BaseController {
 
     @Autowired
     private TradeDataService tradeDataService;
-
+    @Autowired
+    private WithholdService withholdService;
     // 列表页
     @RequestMapping("/list")
     public String list() {
@@ -36,7 +40,7 @@ public class TradeDataController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "collectPayment", method = RequestMethod.GET)
     public ResultDTO collectPayment() {
-        tradeDataService.collectPayment(0);
+        withholdService.collectPayment(0);
         return ResultDTO.success();
     }
 
