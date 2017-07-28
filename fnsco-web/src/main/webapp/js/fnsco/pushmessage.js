@@ -272,7 +272,6 @@ var hours=dateTime.getHours();
 var minutes=dateTime.getMinutes();
 var time=""+year+"-"+month+"-"+date+" "+hours+":"+minutes;
 $('#datetimepicker3').datetimepicker('setStartDate',time,{
-	
     format: 'yyyy-mm-dd hh:ii:ss',
     autoclose: true,
     todayBtn: true,
@@ -300,7 +299,7 @@ function fileUp(){
      //在浏览窗口底部的文件类型下拉菜单中显示的文本
        'fileTypeDesc': 'Image Files',
        //限制大小
-       'fileSizeLimit':'1MB',
+       'fileSizeLimit':'500KB',
      //允许上传的文件后缀
        'fileTypeExts': '*.gif; *.jpg; *.png',
        //限制上传图片张数
