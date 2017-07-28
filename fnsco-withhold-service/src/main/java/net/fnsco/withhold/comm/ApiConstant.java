@@ -15,6 +15,7 @@ public class ApiConstant extends CoreConstants {
     public static String OLD_PASSWORD             = "5107";
     public static String WEB_NEW_PASSWORD_NULL    = "5108";
     public static String WEB_OLD_PASSWORD_FAIL    = "5108";
+    public static String WEB_BANK_CARD_NULL       = "5109";
     static {
         ERROR_MESSGE_MAP.put(WEB_LOGIN_NULL, "用户名或密码为空");
         ERROR_MESSGE_MAP.put(WEB_LOGIN_FAIL, "用户名或密码错误");
@@ -24,6 +25,7 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(WEB_OLD_PASSWORD_NULL, "原密码不能为空");
         ERROR_MESSGE_MAP.put(WEB_NEW_PASSWORD_NULL, "新密码不能为空");
         ERROR_MESSGE_MAP.put(WEB_OLD_PASSWORD_FAIL, "原密码不正确");
+        ERROR_MESSGE_MAP.put(WEB_BANK_CARD_NULL, "不支持该银行卡类型");
     }
 
 }

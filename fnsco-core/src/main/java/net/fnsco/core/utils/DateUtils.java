@@ -93,7 +93,6 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
-    
     public static String getNowDateMonthStr() {
         String result = "";
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM");
@@ -183,5 +182,14 @@ public class DateUtils {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, minute);
         return calendar.getTime();
+    }
+    /**
+     * @return
+     */
+    public static String getDateStrByDay(int day){
+    	Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        calendar.add(Calendar.DATE, day);
+        return sf.format(calendar.getTime());
     }
 }
