@@ -225,8 +225,8 @@ public class OssUtil {
      * @since  CodingExample　Ver 1.1
      */
     public static String getForeverFileUrl(String bucketName,String fileKey){
-     // 过期时间8小时
-        Date expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 8 * 365);
+     // 过期时间10年
+        Date expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 365 * 10);
         GeneratePresignedUrlRequest req = new GeneratePresignedUrlRequest(bucketName, fileKey, HttpMethod.GET);
         req.setExpiration(expiration);
         URL signedUrl = ossClient.generatePresignedUrl(req);

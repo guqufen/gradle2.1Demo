@@ -54,7 +54,15 @@
     <result column="send_time" property="sendTime" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
-   
+  
+  <!-- 临时表数据集 --> 
+  <resultMap id="TradeDataTempResultMap" type="net.fnsco.service.domain.trade.TradeDateTemp" >
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="amt" property="amt" jdbcType="VARCHAR" />
+    <result column="pay_sub_type" property="paySubType" jdbcType="VARCHAR" />
+    <result column="time_stamp" property="timeStamp" jdbcType="VARCHAR" />
+  </resultMap>
+  
   <sql id="Base_Column_List" >
     id, inner_code, txn_type, txn_sub_type, currency, pay_time_out, subject, body, customer_info, 
     remark, customer_ip, tn, resp_code, resp_msg, settle_amount, settle_currency, settle_date, 
@@ -674,5 +682,37 @@
 			<foreach collection="terminalList" item="terminal" open="(" separator="," close=")">#{terminal}</foreach>
 	  </if>	
    	 </where>		
+  </select>
+  <!-- 条件查询集合 ,返回临时表数据-->
+  <select id="queryTempByCondition" parameterType="net.fnsco.service.domain.trade.TradeData" resultMap="TradeDataTempResultMap">
+    select inner_code,amt,pay_sub_type,time_stamp  from t_trade_data
+    <where>
+      <if test="startTime != null and startTime !=''" >
+        	AND time_stamp >= #{startTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endTime != null and endTime !=''" >
+      	<![CDATA[
+        	AND time_stamp < #{endTime,jdbcType=VARCHAR}
+        ]]>
+      </if>
+    </where>
+  </select>
+  <!-- 统计今日营业额 -->
+  <select id="queryTodayTurnover" parameterType="net.fnsco.service.domain.trade.TradeByDay"  resultType="net.fnsco.api.dto.TurnoverDTO">
+    SELECT
+	SUM(amt) AS turnover,
+	COUNT(*) AS orderNum
+	FROM
+		t_trade_data
+	WHERE
+		inner_code IN (
+			SELECT
+				inner_code
+			FROM
+				m_merchant_user_rel
+			WHERE
+				app_user_id = #{userId}
+		)
+	AND time_stamp > #{tradeDate}
   </select>
 </mapper>

@@ -24,6 +24,8 @@
 		<result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
 		<result column="state" jdbcType="INTEGER" property="state" />
 		<result column="forced_login_out" jdbcType="INTEGER" property="forcedLoginOut" />
+		<result column="sex" jdbcType="INTEGER" property="sex" />
+		<result column="head_image_path" jdbcType="VARCHAR" property="headImagePath" />
 	</resultMap>
 	<!-- WEB页面用 -->
 	<resultMap id="PageResultMap" type="net.fnsco.api.dto.AppUserManageDTO" >
@@ -43,7 +45,7 @@
 		id, user_name, mobile, password, real_name, device_id, ges_state,
 		ges_password, ges_trail,
 		pay_password, device_type, device_token, password_error_num, password_error_date,
-		remark, reg_time, last_login_time, modify_time, state,forced_login_out
+		remark, reg_time, last_login_time, modify_time, state,forced_login_out,sex,head_image_path
 	</sql>
 	<!-- 根据手机号更新用户 密码 -->
 	<update id="updatePasswordByPhone" parameterType="java.lang.String">
@@ -77,7 +79,7 @@
 		insert into m_app_user(id, user_name, mobile, password, real_name,
 		device_id, ges_state, ges_password, ges_trail,
 		pay_password, device_type, device_token, password_error_num, password_error_date,
-		remark, reg_time, last_login_time, modify_time, state)
+		remark, reg_time, last_login_time, modify_time, state,forced_login_out)
 		values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
 		#{mobile,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
 		#{realName,jdbcType=VARCHAR}, #{deviceId,jdbcType=VARCHAR},
@@ -87,7 +89,7 @@
 		#{passwordErrorNum,jdbcType=INTEGER},
 		#{passwordErrorDate,jdbcType=TIMESTAMP},
 		#{remark,jdbcType=VARCHAR}, #{regTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP},
-		#{modifyTime,jdbcType=TIMESTAMP},#{state,jdbcType=INTEGER})
+		#{modifyTime,jdbcType=TIMESTAMP},#{state,jdbcType=INTEGER},#{forcedLoginOut,jdbcType=INTEGER})
 	</insert>
 	<!-- 修改用户信息 -->
 	<update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.AppUser">
@@ -150,8 +152,14 @@
 			<if test="forcedLoginOut != null">
 				forced_login_out = #{forcedLoginOut,jdbcType=INTEGER},
 			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=INTEGER},
+			</if>
+			<if test="headImagePath != null">
+				head_image_path = #{headImagePath,jdbcType=VARCHAR},
+			</if>
 		</set>
-		where id = #{id,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
 	</update>
 	<!-- 根据innerCode查询 -->
 	<select id="selectByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -268,7 +276,31 @@
 		where state = 1 and device_token &lt;&gt; '' and device_token is not null
   </select>
   <update id="updateDeviceToken">
-		update m_app_user set device_token = #{deviceToken,jdbcType=VARCHAR}  where mobile =
+		update m_app_user set device_token = #{deviceToken,jdbcType=VARCHAR} ,device_type=#{deviceType,jdbcType=INTEGER}, device_id=#{deviceId,jdbcType=VARCHAR} where mobile =
 		#{mobile,jdbcType=VARCHAR}
-	</update>
+  </update>
+   <update id="updateDeviceTokenById">
+		update m_app_user set device_token = #{deviceToken,jdbcType=VARCHAR} ,device_type=#{deviceType,jdbcType=INTEGER}, device_id=#{deviceId,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER}
+  </update>
+	<!-- 根据deviceToken查找到用户-->
+	<select id="queryBydeviceToken" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+		from m_app_user
+		where state = 1 and device_token = #{deviceToken,jdbcType=VARCHAR}
+  </select>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.AppUser">
+  	  	update m_app_user set
+  	  	user_name=#{userName,jdbcType=VARCHAR},
+		mobile=#{mobile,jdbcType=VARCHAR},password=#{password,jdbcType=VARCHAR},
+		real_name=#{realName,jdbcType=VARCHAR}, device_id=#{deviceId,jdbcType=VARCHAR},
+		ges_state=#{gesState,jdbcType=INTEGER},
+		ges_password=#{gesPassword,jdbcType=VARCHAR}, ges_trail=#{gesTrail,jdbcType=INTEGER}, pay_password=#{payPassword,jdbcType=VARCHAR},
+		device_type=#{deviceType,jdbcType=INTEGER}, device_token=#{deviceToken,jdbcType=VARCHAR},
+		password_error_num=#{passwordErrorNum,jdbcType=INTEGER},
+		password_error_date=#{passwordErrorDate,jdbcType=TIMESTAMP},
+		remark=#{remark,jdbcType=VARCHAR}, reg_time=#{regTime,jdbcType=TIMESTAMP}, last_login_time=#{lastLoginTime,jdbcType=TIMESTAMP},
+		modify_time=#{modifyTime,jdbcType=TIMESTAMP},state=#{state,jdbcType=INTEGER},forced_login_out=#{forcedLoginOut,jdbcType=INTEGER}
+  	  	where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>
