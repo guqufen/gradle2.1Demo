@@ -74,9 +74,9 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public ResultDTO getCurrentUser() {
 		UserDO adminUser = (UserDO) getSessionUser();
-		if (null == adminUser) {
-			return ResultDTO.fail(ApiConstant.WEB_NOT_LOGIN);
-		}
+//		if (null == adminUser) {
+//			return ResultDTO.fail(ApiConstant.WEB_NOT_LOGIN);
+//		}
 		return ResultDTO.success(adminUser);
 	}
 

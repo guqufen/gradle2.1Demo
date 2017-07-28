@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import net.fnsco.withhold.comm.ApiConstant;
 import net.fnsco.withhold.service.trade.WithholdInfoService;
 import net.fnsco.withhold.service.trade.entity.WithholdInfoDO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -49,8 +51,11 @@ public class WithholdInfoController extends BaseController {
  @ApiOperation(value = "新增保存", notes = "新增保存")
  @ResponseBody
  @RequestMapping(value = "doAdd")
- public ResultDTO doAdd (@RequestBody WithholdInfoDO withholdInfo) {
+ public ResultDTO doAdd ( WithholdInfoDO withholdInfo) {
     WithholdInfoDO   resultDO = this.withholdInfoService.doAdd(withholdInfo,super.getUserId());
+    if(null == resultDO ){
+    	return ResultDTO.fail(ApiConstant.WEB_BANK_CARD_NULL);
+    }
     return success(resultDO);
  }
 

@@ -1,16 +1,22 @@
 package net.fnsco.withhold.service.trade;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
+import net.fnsco.withhold.service.sys.dao.BankCodeDAO;
+import net.fnsco.withhold.service.sys.entity.BankCodeDO;
 import net.fnsco.withhold.service.trade.dao.WithholdInfoDAO;
 import net.fnsco.withhold.service.trade.entity.WithholdInfoDO;
-import net.fnsco.core.base.BaseService;
-import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.base.ResultPageDTO;
 
 @Service
 public class WithholdInfoService extends BaseService {
@@ -18,6 +24,9 @@ public class WithholdInfoService extends BaseService {
  private Logger logger = LoggerFactory.getLogger(this.getClass());
  @Autowired
  private WithholdInfoDAO withholdInfoDAO;
+ @Autowired
+ private BankCodeDAO     bankCodeDAO;
+ 
 
  // 分页
  public ResultPageDTO<WithholdInfoDO> page(WithholdInfoDO withholdInfo, Integer pageNum, Integer pageSize) {
@@ -31,6 +40,28 @@ public class WithholdInfoService extends BaseService {
  // 添加
  public WithholdInfoDO doAdd (WithholdInfoDO withholdInfo,int loginUserId) {
      logger.info("开始添加WithholdInfoService.add,withholdInfo=" + withholdInfo.toString());
+     Date now = new Date();
+     withholdInfo.setModifyUserId(loginUserId);
+     withholdInfo.setModifyTime(now);
+     withholdInfo.setCertifType("01");//证件类型
+     withholdInfo.setAmountTotal(new BigDecimal(0.00));
+     withholdInfo.setAccountType("01");
+     withholdInfo.setStatus(1);
+     withholdInfo.setFailTotal(0);
+     //计算扣款开始、结束日期
+     if(now.getHours()<=8 && now.getMinutes()<=30){
+    	 withholdInfo.setStartDate(DateUtils.getNowDateStr2());
+    	 withholdInfo.setEndDate(DateUtils.getDateStrByDay(withholdInfo.getTotal()));
+     }else{
+    	 withholdInfo.setStartDate(DateUtils.getDateStrByDay(1));
+    	 withholdInfo.setEndDate(DateUtils.getDateStrByDay(withholdInfo.getTotal()+1));
+     }
+     //设置爱农编号
+     BankCodeDO bankCodeDO = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(),withholdInfo.getBankCard().length());
+     if(null == bankCodeDO || StringUtils.isEmpty(bankCodeDO.getCode())){
+    	return null;
+     }
+     withholdInfo.setAnBankId(bankCodeDO.getCode());
      this.withholdInfoDAO.insert(withholdInfo);
      return withholdInfo;
  }
