@@ -60,7 +60,7 @@ public class WithholdService extends BaseService {
                 day = String.valueOf(temp);
                 SmsUtil.withholdRemind(withholdInfo.getMobile(), withholdInfo.getUserName(), withholdInfo.getAmount().toString(), monthStr, day);
             } catch (Exception ex) {
-                logger.error("扣款成功短信发送失败", ex);
+                logger.error("扣款提醒短信发送失败", ex);
             }
         }
     }
@@ -77,19 +77,25 @@ public class WithholdService extends BaseService {
     // 代收扣
     public void collectPayment(int type) {
         String dayStr = DateUtils.getNowDateDayStr();
-        String monthStr = DateUtils.getNowDateMonthStr();
-        logger.debug("开始代扣" + dayStr);
+        String monthStr = DateUtils.getNowDateMonthStr() + "-" + dayStr;
+        logger.debug(type + "开始代扣" + dayStr);
         List<WithholdInfoDO> withholdInfoList = withholdInfoDAO.getByDebitDayFail(dayStr, type);
         for (WithholdInfoDO withholdInfo : withholdInfoList) {
             TradeDataDO tradeData = new TradeDataDO();
-            if (type > 0) {
-                TradeDataDO temp = tradeDataDAO.getByWithholdId(withholdInfo.getId(), monthStr + "-" + dayStr);
+            TradeDataDO temp = tradeDataDAO.getByWithholdId(withholdInfo.getId(), monthStr);
+            if (type == 0) {
+                if (null != temp) {
+                    logger.error("重复扣款，已忽略本次扣款" + withholdInfo.getUserName());
+                    continue;
+                }
+            } else if (type > 0) {
                 if (null != temp) {
                     tradeData = temp;
                 }
             } else {
                 init(tradeData, withholdInfo);
             }
+            tradeData.setWithholdDate(monthStr);
             tradeData.setPayTimes(type + 1);
             if (type > 0) {
                 tradeDataDAO.update(tradeData);
@@ -116,7 +122,8 @@ public class WithholdService extends BaseService {
     private void paySuccess(TradeDataDO result, WithholdInfoDO withholdInfo, int type) {
         String monthStr = DateUtils.getNowMonthStr();
         try {
-            SmsUtil.withholdSucc(withholdInfo.getMobile(), monthStr, withholdInfo.getAmount().toString());
+            String amount = withholdInfo.getAmount().divide(new BigDecimal("100")).toString();
+            SmsUtil.withholdSucc(withholdInfo.getMobile(), monthStr, amount);
         } catch (Exception ex) {
             logger.error("扣款成功短信发送失败", ex);
         }

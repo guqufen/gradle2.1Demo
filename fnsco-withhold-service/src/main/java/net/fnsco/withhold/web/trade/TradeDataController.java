@@ -2,9 +2,12 @@ package net.fnsco.withhold.web.trade;
 
 import java.util.Map;
 
+import javax.websocket.server.PathParam;
+
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,7 +31,8 @@ public class TradeDataController extends BaseController {
     @Autowired
     private TradeDataService tradeDataService;
     @Autowired
-    private WithholdService withholdService;
+    private WithholdService  withholdService;
+
     // 列表页
     @RequestMapping("/list")
     public String list() {
@@ -39,8 +43,8 @@ public class TradeDataController extends BaseController {
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @ResponseBody
     @RequestMapping(value = "collectPayment", method = RequestMethod.GET)
-    public ResultDTO collectPayment() {
-        withholdService.collectPayment(0);
+    public ResultDTO collectPayment(@RequestParam Integer type) {
+        withholdService.collectPayment(type);
         return ResultDTO.success();
     }
 

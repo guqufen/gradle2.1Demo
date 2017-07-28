@@ -156,15 +156,42 @@ public class TradeDataDO {
     /**
      * 扣款次数
      */
-    private Integer payTimes;
-    
+    private Integer    payTimes;
+
+    /**
+     * 扣款日期
+     */
+    private String     withholdDate;
+
+    /**
+     * withholdDate
+     *
+     * @return  the withholdDate
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getWithholdDate() {
+        return withholdDate;
+    }
+
+    /**
+     * withholdDate
+     *
+     * @param   withholdDate    the withholdDate to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setWithholdDate(String withholdDate) {
+        this.withholdDate = withholdDate;
+    }
+
     /**
      * payTimes
      *
      * @return  the payTimes
      * @since   CodingExample Ver 1.0
     */
-    
+
     public Integer getPayTimes() {
         return payTimes;
     }
@@ -175,7 +202,7 @@ public class TradeDataDO {
      * @param   payTimes    the payTimes to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setPayTimes(Integer payTimes) {
         this.payTimes = payTimes;
     }
@@ -186,7 +213,7 @@ public class TradeDataDO {
      * @return  the accType
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getAccType() {
         return accType;
     }
@@ -197,7 +224,7 @@ public class TradeDataDO {
      * @param   accType    the accType to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setAccType(String accType) {
         this.accType = accType;
     }
