@@ -63,4 +63,44 @@
       </if>
     </trim>
   </insert>
+  <!-- 根据时间查询 -->
+  <select id="selectTradeDayDataByTradeDate" parameterType="net.fnsco.service.domain.trade.TradeByDay" resultType="net.fnsco.api.dto.TurnoverDTO">
+    select SUM(turnover) AS turnover,SUM(order_num) AS orderNum from r_trade_by_day
+    <where>
+      <if test="startTradeDate != null and  startTradeDate != ''">
+        AND trade_date &gt;= #{startTradeDate}
+      </if>
+       <if test="endTradeDate != null and  endTradeDate != ''">
+        AND trade_date &lt;= #{endTradeDate}
+      </if>
+      <if test="tradeDate != null and  tradeDate != ''">
+        AND trade_date= #{tradeDate}
+      </if>
+      <if test="userId != null">
+       AND inner_code in (
+         SELECT inner_code FROM m_merchant_user_rel WHERE app_user_id=#{userId}
+       )
+      </if>
+    </where>
+  </select>
+  <!-- 统计周报数据 -->
+  <select id="selectWeekLyTradeData" parameterType="net.fnsco.service.domain.trade.TradeByDay" resultType="net.fnsco.api.dto.TurnoverDTO">
+    select SUM(turnover) AS turnover,SUM(order_num) AS orderNum from r_trade_by_day
+    <where>
+      <if test="startTradeDate != null and  startTradeDate != ''">
+        AND trade_date &gt;= #{startTradeDate}
+      </if>
+       <if test="endTradeDate != null and  endTradeDate != ''">
+        AND trade_date &lt;= #{endTradeDate}
+      </if>
+      <if test="tradeDate != null and  tradeDate != ''">
+        AND trade_date= #{tradeDate}
+      </if>
+      <if test="userId != null">
+       AND inner_code in (
+         SELECT inner_code FROM u_app_user_merchant WHERE role_id=#{roleId} AND app_user_id=#{userId}
+       )
+      </if>
+    </where>
+  </select>
 </mapper>

@@ -1,5 +1,10 @@
 package net.fnsco.api.trade;
 
+import java.util.List;
+
+import net.fnsco.api.dto.TradeReportDTO;
+import net.fnsco.api.dto.TurnoverDTO;
+
 /**
  * @desc 统计service
  * @author   tangliang
@@ -19,4 +24,14 @@ public interface TradeReportService {
      */
     void buildTradeReportDaTa();
     
+    /**
+     * queryTurnovers:(这里用一句话描述这个方法的作用)根据用户ID查询营业额数据
+     *
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @return List<TurnoverDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<TurnoverDTO> queryTurnovers(TradeReportDTO tradeReportDTO);
 }

@@ -156,4 +156,44 @@ public class DateUtils {
         calendar.add(Calendar.DATE, day);
         return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime())+"000000";
     }
+    /**
+     * getTimeByDayStr:(这里用一句话描述这个方法的作用)获取第N周一日期字符串
+     *
+     * @param day
+     * @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String getMondayStr(int weekNum) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.add(Calendar.WEEK_OF_MONTH,weekNum);
+        calendar.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+        return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
+    }
+    /**
+     * getLastSundayStr:(这里用一句话描述这个方法的作用)获取N周日日期字符串
+     *
+     * @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String getSundayStr(int weekNum) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.add(Calendar.WEEK_OF_MONTH,weekNum);
+        calendar.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+        return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
+    }
+    public static void main(String[] args) {
+        String s1= getMondayStr(0);
+        String s2 = getTimeByDayStr(0);
+        System.out.println(getMondayStr(0));
+        System.out.println(getTimeByDayStr(0));
+        System.out.println(s2.startsWith("20170728"));
+    }
 }
