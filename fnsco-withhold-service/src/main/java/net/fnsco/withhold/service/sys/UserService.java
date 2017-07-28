@@ -98,4 +98,10 @@ public class UserService extends BaseService {
         UserDO obj = this.userDAO.getById(id);
         return obj;
     }
+
+    // 查询
+    public UserDO getUserByName(String userName) {
+        UserDO obj = this.userDAO.getByUserName(userName);
+        return obj;
+    }
 }

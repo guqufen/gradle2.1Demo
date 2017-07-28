@@ -21,7 +21,7 @@ public class IndexController extends BaseController {
     public String index(HttpServletRequest rep, HttpServletResponse res) {
         Object obj = getSessionUser();
         if (null == obj) {
-            return "redirect:/login.html";
+            return "forward:/idx";
         }
         return "redirect:/index.html";
     }
