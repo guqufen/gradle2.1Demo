@@ -46,9 +46,9 @@ public class ServiceConstant {
 
     //状态0扣款中1扣款失败2扣款成功9补收
     public static enum AnPayResultEnum {
-                                      AN_PAY_SUCC("1001", "成功"), AN_PAY_FAIL("1002", "失败"), AN_PAYING("1111", "进行中");
+                                        AN_PAY_SUCC("1001", "成功"), AN_PAY_FAIL("1002", "失败"), AN_PAYING("1111", "进行中");
         private String code;
-        private String  name;
+        private String name;
 
         private AnPayResultEnum(String code, String name) {
             this.code = code;
@@ -78,9 +78,10 @@ public class ServiceConstant {
             return "";
         }
     }
-  //状态0扣款中1扣款失败2扣款成功9补收
+
+    //状态0扣款中1扣款失败2扣款成功9补收
     public static enum PayStatusEnum {
-                                      PAYING(0, "扣款中"), PAY_FAIL(1, "扣款失败"), PAY_SUCC(2, "扣款成功"), PAY_AGAIN(9, "补收");
+                                      PAYING(0, "扣款中"), PAY_RE_FAIL(8, "扣款失败有再扣款"), PAY_SUCC(2, "扣款成功"), PAY_FAIL(1, "扣款失败"), PAY_AGAIN(9, "补收");
         private Integer code;
         private String  name;
 
