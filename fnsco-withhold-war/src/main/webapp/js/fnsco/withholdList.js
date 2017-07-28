@@ -64,7 +64,7 @@ function initTableData(){
   $('#table').bootstrapTable({
         sidePagination:'server',
         search: false, //是否启动搜索栏 
-        url:PROJECT_NAME+'/web/merchantinfo/query',
+        url:PROJECT_NAME+'/web/withholdInfo/query',
         showRefresh: true,//是否显示刷新按钮
         showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
         toolbar: '#toolbar',  //工具按钮用哪个容器
@@ -86,54 +86,52 @@ function initTableData(){
             valign: 'middle'
         },{
             field: 'id',
+            title: '序号'
+        }, {
+            field: 'userName',
+            title: '姓名'
+        }, {
+            field: 'mobile',
+            title: '手机号'
+        }, {
+            field: 'certifyId',
+            title: '身份证号'
+        }, {
+            field: 'debitDay',
+            title: '扣款日',
+            formatter: judgeCardType
+        }, {
+            field: 'amount',
+            title: '扣款金额/次'
+        }, {
+            field: 'amountTotal',
+            title: '扣款总额'
+        }, {
+            //field: 'businessLicenseNum',
+            title: '已扣金额'
+        }, {
+            //field: 'businessLicenseValidTime',
+            title: '待扣金额'
+        }, {
+            field: 'bankCard',
+            title: '银行卡号'
+        },  {
+            field: 'modifyUserId',
+            title: '提交人'
+        }, {
+            field: 'modifyTime',
+            title: '提交时间'
+        },{
+            field: 'status',
+            title: '状态'
+        }, {
+            //field: 'id',
             title: '操作',
             width:'10%',
             align: 'center',
             width: 150,
             formatter: operateFormatter
             // events: operateEvents
-        },{
-            width: 100,
-            field: 'merName',
-            title: '商户名'
-        }, {
-            field: 'innerCode',
-            title: '内部商户号'
-        }, {
-            field: 'legalPerson',
-            title: '商户法人姓名'
-        }, {
-            field: 'legalPersonMobile',
-            title: '法人手机号码'
-        }, {
-            field: 'legalValidCardType',
-            title: '法人有效证件类型',
-            formatter: judgeCardType
-        }, {
-            field: 'cardNum',
-            title: '证件号码'
-        }, {
-            field: 'cardValidTime',
-            title: '证件有效期'
-        }, {
-            field: 'businessLicenseNum',
-            title: '营业执照号码'
-        }, {
-            field: 'businessLicenseValidTime',
-            title: '营业执照有效期'
-        }, {
-            field: 'taxRegistCode',
-            title: '税务登记号'
-        }, {
-            field: 'registAddress',
-            title: '商户注册地址'
-        }, {
-            field: 'mercFlag',
-            title: '商户标签'
-        }, {
-            field: 'source',
-            title: '商户注册来源',
-            formatter:formatSource
         }]
     });
 }
@@ -597,10 +595,10 @@ function seeImage(fileName,divId){
 	      }
 	  });
 }
-//保存商户基本信息下一步按钮
+//保存
 function saveMerCore(){
   $.ajax({
-      url:PROJECT_NAME+'/web/merchantinfo/toAddCore',
+      url:PROJECT_NAME+'/web/withholdInfo/doAdd',
       data: $('#mercore_form').serialize(),
       type:'POST',
       success:function(data){

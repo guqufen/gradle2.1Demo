@@ -43,14 +43,8 @@
                             <p>恒镔资产代扣系统</p>
                         </div>
                         <div class="forget-body" style="display: block;">
-                            <form id="forget_info_form" name="forget" method="post" action="/web/doForget">
+                            <form id="forget_info_form" name="forget" method="post" action="/web/user/doForget">
                                 <div class="forget-input-panel">
-                             <!--        <div class="username-input">
-                                        <div class="icon left">
-                                            <img src="login/6-25-19.png">
-                                        </div>
-                                        <input type="text" id="account" name="account" value="" placeholder="请输入账号">
-                                    </div> -->
                                     <div class="password-input">
                                         <div class="icon left">
                                             <img src="login/6-25-14.png">
@@ -97,13 +91,16 @@
                     </a>
                     <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
                         <li>
-                            <a class="J_menuItem" href="merchatInfo.html" data-index="1">代扣设置</a>
+                            <a class="J_menuItem" href="withholdList.html" data-index="1">代扣设置</a>
                         </li>
                     </ul>
                 </li>
                 <li>
-                    <a class="J_menuItem" href="tradedatainfo.html" data-index="2"><i class="glyphicon glyphicon-list-alt"></i> 代扣日志</a>
+                    <a class="J_menuItem" href="withholdList.html" data-index="2">
+                        <i class="glyphicon glyphicon-list-alt"></i> <span class="nav-label">代扣日志</span>
+                    </a>
                 </li>
+
             </ul>
          </div>
          </div>
@@ -155,7 +152,7 @@
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="/web/logout" class="logout">退出登录</a>
+                                <a href="/web/user/logout" class="logout">退出登录</a>
                             </li>
                         </ul>
                     </li>
@@ -219,11 +216,11 @@ $(function(){
 		dataType:'json',
 		type:'POST',
 		success:function(data){
-
+			//alert(data.success);
 			unloginHandler(data);
-			if(!data.sessionUser)
+			if(!data.success)
 				window.location='login.html';
-			$('.indexPageUserName').html(data.sessionUser.name);
+			$('.indexPageUserName').html(data.data.name);
 		}
 	});
 });
