@@ -58,7 +58,7 @@ public class UserController extends BaseController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value="/logout",method = RequestMethod.GET)
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logOut() {
 		removeSessionUser();
 		removeCookieUser();
@@ -72,19 +72,12 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping("/getCurrentUser")
 	@ResponseBody
-	public Map<String, Object> getCurrentUser() {
-		Map<String, Object> result = new HashMap<>();
+	public ResultDTO getCurrentUser() {
 		UserDO adminUser = (UserDO) getSessionUser();
 		if (null == adminUser) {
-			String cookie = (String) getCookieUser();
-			if (StringUtils.isEmpty(cookie))
-				return result;
-			adminUser = new UserDO();
-			adminUser.setName(cookie.substring(cookie.lastIndexOf("#") + 1, cookie.length()));
-			setSessionUser(adminUser);
+			return ResultDTO.fail(ApiConstant.WEB_NOT_LOGIN);
 		}
-		result.put("sessionUser", adminUser);
-		return result;
+		return ResultDTO.success(adminUser);
 	}
 
 	/**

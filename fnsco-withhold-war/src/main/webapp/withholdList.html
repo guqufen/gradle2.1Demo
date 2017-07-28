@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商户信息-法奈昇大数据平台</title>
+<meta name="keywords" content="法奈昇大数据平台">
+<meta name="description" content="法奈昇大数据平台">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css"
+	rel="stylesheet">
+<link
+	href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
+<link href="js/uploadify-v3.1/uploadify.css">
+<link rel="stylesheet" href="js/viewer/viewer.min.css">
+</head>
+<body class="gray-bg">
+	<div class="panel-body animated fadeInRight">
+		<div class="panel panel-default">
+			<form id="formSearch" class="form-horizontal">
+				<div class="form-group" style="margin-top: 15px">
+					<div class="row col-sm-10">
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_id">身份证：</label> <input
+								type="text" class="form-control" id="txt_search_id">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_name">姓名：</label> <input
+								type="text" class="form-control" id="txt_search_name">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_price">手机号：</label>
+							<input type="text" class="form-control" id="txt_search_price">
+						</div>
+					</div>
+					<div class="col-sm-2" style="text-align: right;">
+						<button type="button" id="btn_query" class="btn btn-primary"
+							onclick="javascript:queryEvent('table');">
+							<span class="glyphicon glyphicon-search"></span>查询
+						</button>
+						<button type="button" id="btn_reset" class="btn btn-default"
+							onclick="javascript:resetEvent('formSearch');">
+							<span class="glyphicon glyphicon-refresh"></span>重置
+						</button>
+					</div>
+				</div>
+			</form>
+			<!-- start -->
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="row row-lg">
+						<div class="col-sm-12">
+							<div id="toolbar">
+								<button id="btn_add" type="button" class="btn btn-success"
+									data-toggle="modal" data-target="#myModal">
+									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+								</button>
+								<button id="btn_edit" type="button" class="btn btn-danger">
+									<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>修改
+								</button>
+							</div>
+							<table id="table" style="min-width: 2400px;"></table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end  -->
+			<!-- model新增 start -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">代扣管理</h4>
+						</div>
+						<div class="modal-body">
+							<ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active"><a>代扣新增</a></li>
+							</ul>
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="home">
+									<form action="" id="mercore_form" method="post">
+										<div class="row">
+											<div class="col-sm-4">
+												<label class="control-label" for="legalPerson">姓名：</label> <input
+													type="text" class="form-control" id="legalPerson"
+													name="legalPerson">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="legalPersonMobile">手机号码：</label>
+												<input type="number" class="form-control"
+													id="legalPersonMobile" name="legalPersonMobile">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label " for="legalValidCardType">证件类型：</label>
+												<select id="legalValidCardType" name="legalValidCardType"
+													class="form-control">
+													<option value="0">身份证</option>
+													<option value="1">护照</option>
+													<option value="2">士兵证</option>
+													<option value="3">军官证</option>
+													<option value="4">港澳台通行证</option>
+												</select>
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="cardNum">证件号码：</label> <input
+													type="text" class="form-control" id="cardNum"
+													name="cardNum">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="cardValidTime">银行卡号：</label>
+												<input type="text" class="form-control" id="bankCard"
+													name="cardValidTime">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="businessLicenseNum">扣款金额：</label>
+												<input type="text" class="form-control"
+													id="businessLicenseNum" name="businessLicenseNum">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="taxRegistCode">扣款次数：</label>
+												<input type="text" class="form-control" id="taxRegistCode"
+													name="taxRegistCode">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="businessLicenseValidTime">扣款日：</label>
+												<input type="text" class="form-control"
+													id="businessLicenseValidTime"
+													name="businessLicenseValidTime">
+											</div>
+
+											<a class="nextBtn" href="#profile" aria-controls="profile"
+												role="tab" data-toggle="tab"
+												onclick="javascript:saveMerCore();">保存</a>
+									</form>
+								</div>
+								<!-- banksModel详情 start -->
+								<div class="modal fade" id="banksModal" tabindex="-1"
+									role="dialog" aria-labelledby="banksModalLabel"
+									data-backdrop="static" data-keyboard="false">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close" data-dismiss="modal"
+													aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+												<h4 class="modal-title" id="banksModalLabel">支行信息</h4>
+											</div>
+											<div class="modal-body">
+												<form id="bankFormSearch" class="form-horizontal">
+													<div class="form-group" style="margin-top: 15px">
+														<div class="row col-sm-10">
+															<div class="col-sm-6">
+																<label class="control-label" for="txt_search_id">银行名称：</label>
+																<input type="text" class="form-control"
+																	id="txt_search_bank">
+															</div>
+															<div class="col-sm-6">
+																<label class="control-label" for="txt_search_name">所在省：</label>
+																<input type="text" class="form-control"
+																	id="txt_search_pro">
+															</div>
+															<div class="col-sm-6">
+																<label class="control-label" for="txt_search_price">所在市：</label>
+																<input type="text" class="form-control"
+																	id="txt_search_city">
+															</div>
+															<div class="col-sm-6">
+																<label class="control-label" for="txt_search_price">支行名称：</label>
+																<input type="text" class="form-control"
+																	id="txt_search_branch">
+															</div>
+														</div>
+														<div class="col-sm-2" style="text-align: right;">
+															<button type="button" id="btn_query"
+																class="btn btn-primary"
+																onclick="javascript:queryEvent('bankTable');">
+																<span class="glyphicon glyphicon-search"></span>查询
+															</button>
+															<button type="button" id="btn_reset"
+																class="btn btn-default"
+																onclick="javascript:resetEvent('bankFormSearch','bankTable');">
+																<span class="glyphicon glyphicon-refresh"></span>重置
+															</button>
+														</div>
+													</div>
+												</form>
+												<div id="banksToolbar">
+													<button id="btn_select_bank" type="button"
+														class="btn btn-success">
+														<span class="glyphicon glyphicon-file" aria-hidden="true"></span>确定选择
+													</button>
+												</div>
+												<div class="row">
+													<div class="col-sm-12">
+														<div id="bankTable" style="width: 100%;"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- model end -->
+							</div>
+
+						</div>
+						<script src="js/bootstrap/jquery.min.js"></script>
+						<script src="js/bootstrap/js/bootstrap.min.js"></script>
+						<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+						<script
+							src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+						<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+						<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+						<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+						<script
+							src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+						<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+						<script
+							src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+						<script src="js/viewer/viewer.min.js"></script>
+						<script src="js/layer/layer.js"></script>
+						<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
+						<script
+							src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+						<script
+							src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+						<script type="js/fnsco/common.js"></script>
+						<script src="js/fnsco/withholdList.js"></script>
+</body>
+</html>
