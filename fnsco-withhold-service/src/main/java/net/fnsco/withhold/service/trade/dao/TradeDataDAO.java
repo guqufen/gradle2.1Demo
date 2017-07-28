@@ -38,7 +38,7 @@ public interface TradeDataDAO {
                @Result(column = "certify_id", property = "certifyId"), @Result(column = "acc_type", property = "accType"), @Result(column = "pay_times", property = "payTimes"),
                @Result(column = "withhold_date", property = "withholdDate")})
 
-    @Select("SELECT * FROM t_trade_data WHERE withhold_id = #{withholdId} and withhold_date = #{withholdDate}")
+    @Select("SELECT * FROM t_trade_data WHERE withhold_id = #{withholdId} and withhold_date = #{withholdDate} order by id desc limit 1")
     public TradeDataDO getByWithholdId(@Param("withholdId") int withholdId,@Param("withholdDate") String withholdDate);
 
     @Insert("INSERT into t_trade_data(id,withhold_id,txn_amt,status,fail_reason,user_name,mobile,bank_card,sub_bank_name,an_bank_id,account_type,txn_type,txn_sub_type,biz_type,access_type,mer_id,order_sn,txn_time,currency,back_url,pay_type,subject,body,customer_info,purpose,resp_code,resp_msg,certif_type,certify_id,acc_type,pay_times,withhold_date) VALUES (#{id},#{withholdId},#{txnAmt},#{status},#{failReason},#{userName},#{mobile},#{bankCard},#{subBankName},#{anBankId},#{accountType},#{txnType},#{txnSubType},#{bizType},#{accessType},#{merId},#{orderSn},#{txnTime},#{currency},#{backUrl},#{payType},#{subject},#{body},#{customerInfo},#{purpose},#{respCode},#{respMsg},#{certifType},#{certifyId},#{accType},#{payTimes},#{withholdDate})")

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseService;
-import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.withhold.comm.ApiConstant;
@@ -48,9 +47,9 @@ public class WithholdService extends BaseService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public void collectPaymentRemind(int type) {
+    public void collectPaymentRemind() {
         String dayStr = DateUtils.getAfterDayStr();
-        String monthStr = DateUtils.getNowDateMonthStr();
+        String monthStr = DateUtils.getNowMonthStr();
         logger.debug("开始提醒" + dayStr);
         List<WithholdInfoDO> withholdInfoList = withholdInfoDAO.getByDebitDay(dayStr);
         for (WithholdInfoDO withholdInfo : withholdInfoList) {
@@ -58,7 +57,8 @@ public class WithholdService extends BaseService {
                 String day = withholdInfo.getDebitDay();
                 int temp = Integer.parseInt(day);
                 day = String.valueOf(temp);
-                SmsUtil.withholdRemind(withholdInfo.getMobile(), withholdInfo.getUserName(), withholdInfo.getAmount().toString(), monthStr, day);
+                String amount = withholdInfo.getAmount().divide(new BigDecimal("100")).toString();
+                SmsUtil.withholdRemind(withholdInfo.getMobile(), withholdInfo.getUserName(), amount, monthStr, day);
             } catch (Exception ex) {
                 logger.error("扣款提醒短信发送失败", ex);
             }
@@ -86,22 +86,17 @@ public class WithholdService extends BaseService {
             if (type == 0) {
                 if (null != temp) {
                     logger.error("重复扣款，已忽略本次扣款" + withholdInfo.getUserName());
-                    continue;
+                    //continue;
                 }
+
             } else if (type > 0) {
-                if (null != temp) {
-                    tradeData = temp;
-                }
-            } else {
-                init(tradeData, withholdInfo);
+                temp.setStatus(ServiceConstant.PayStatusEnum.PAY_RE_FAIL.getCode());
+                tradeDataDAO.update(temp);
             }
+            init(tradeData, withholdInfo);
             tradeData.setWithholdDate(monthStr);
             tradeData.setPayTimes(type + 1);
-            if (type > 0) {
-                tradeDataDAO.update(tradeData);
-            } else {
-                tradeDataDAO.insert(tradeData);
-            }
+            tradeDataDAO.insert(tradeData);
             TradeDataDO result = aNOrderPaymentService.collectPaymentSendPost(tradeData);
             if (null == result) {
                 //发送短信
@@ -134,7 +129,7 @@ public class WithholdService extends BaseService {
         //已扣金额加本次扣款额=已扣总金额
         amountTotal = amountTotal.add(amount);
         withholdInfo.setAmountTotal(amountTotal);
-        withholdInfo.getModifyTime();
+
         String startDate = withholdInfo.getEndDate();
         String nowDate = DateUtils.getNowDateStr2();
         //相等则完成扣款
@@ -147,7 +142,7 @@ public class WithholdService extends BaseService {
 
     private void payFail(TradeDataDO result, WithholdInfoDO withholdInfo, String failReason, int type) {
         try {
-            SmsUtil.withholdFail(withholdInfo.getUserName(), withholdInfo.getMobile());
+            SmsUtil.withholdFail(withholdInfo.getMobile(), withholdInfo.getUserName());
         } catch (Exception ex) {
             logger.error("扣款失败短信发送失败", ex);
         }
@@ -155,7 +150,7 @@ public class WithholdService extends BaseService {
         result.setFailReason(failReason);
         tradeDataDAO.update(result);
         withholdInfo.setFailTotal(type + 1);
-        if (type == 2) {//最后一次失败则规0
+        if (type == 2) {//最后一次失败则为0
             withholdInfo.setFailTotal(0);
         }
         withholdInfoDAO.update(withholdInfo);

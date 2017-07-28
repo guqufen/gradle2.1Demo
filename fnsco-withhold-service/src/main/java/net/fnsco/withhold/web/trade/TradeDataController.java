@@ -30,23 +30,14 @@ public class TradeDataController extends BaseController {
 
     @Autowired
     private TradeDataService tradeDataService;
-    @Autowired
-    private WithholdService  withholdService;
-
+    
     // 列表页
     @RequestMapping("/list")
     public String list() {
         return "";
     }
 
-    // 分页
-    @ApiOperation(value = "分页查询", notes = "分页查询")
-    @ResponseBody
-    @RequestMapping(value = "collectPayment", method = RequestMethod.GET)
-    public ResultDTO collectPayment(@RequestParam Integer type) {
-        withholdService.collectPayment(type);
-        return ResultDTO.success();
-    }
+ 
 
     // 分页
     @ApiOperation(value = "分页查询", notes = "分页查询")
