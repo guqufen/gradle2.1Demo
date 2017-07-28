@@ -92,56 +92,86 @@
 									<form action="" id="mercore_form" method="post">
 										<div class="row">
 											<div class="col-sm-4">
-												<label class="control-label" for="legalPerson">姓名：</label> <input
-													type="text" class="form-control" id="legalPerson"
-													name="legalPerson">
+												<label class="control-label" for="userName">姓名：</label> <input
+													type="text" class="form-control" id="userName"
+													name="userName">
 											</div>
 											<div class="col-sm-4">
-												<label class="control-label" for="legalPersonMobile">手机号码：</label>
+												<label class="control-label" for="mobile">手机号码：</label>
 												<input type="number" class="form-control"
-													id="legalPersonMobile" name="legalPersonMobile">
+													id="mobile" name="mobile">
 											</div>
 											<div class="col-sm-4">
-												<label class="control-label " for="legalValidCardType">证件类型：</label>
-												<select id="legalValidCardType" name="legalValidCardType"
+												<label class="control-label " for="certifType">证件类型：</label>
+												<select id="certifType" name="certifType"
 													class="form-control">
-													<option value="0">身份证</option>
-													<option value="1">护照</option>
-													<option value="2">士兵证</option>
-													<option value="3">军官证</option>
-													<option value="4">港澳台通行证</option>
+													<option value="01">身份证</option>
+													<option value="02">军官证</option>
+													<option value="03">护照</option>
+													<option value="04">回乡证</option>
+													<option value="05">台胞证</option>
+													<option value="06">警官证</option>
+													<option value="07">士兵证</option>
+													<option value="99">其它证件</option>
 												</select>
 											</div>
 											<div class="col-sm-4">
-												<label class="control-label" for="cardNum">证件号码：</label> <input
-													type="text" class="form-control" id="cardNum"
-													name="cardNum">
+												<label class="control-label" for="certifyId">证件号码：</label> <input
+													type="text" class="form-control" id="certifyId"
+													name="certifyId">
 											</div>
 											<div class="col-sm-4">
-												<label class="control-label" for="cardValidTime">银行卡号：</label>
+												<label class="control-label" for="bankCard">银行卡号：</label>
 												<input type="text" class="form-control" id="bankCard"
-													name="cardValidTime">
+													name="bankCard">
 											</div>
 											<div class="col-sm-4">
-												<label class="control-label" for="businessLicenseNum">扣款金额：</label>
+												<label class="control-label" for="amount">扣款金额：</label>
 												<input type="text" class="form-control"
-													id="businessLicenseNum" name="businessLicenseNum">
+													id="amount" name="amount">
 											</div>
 											<div class="col-sm-4">
-												<label class="control-label" for="taxRegistCode">扣款次数：</label>
-												<input type="text" class="form-control" id="taxRegistCode"
-													name="taxRegistCode">
+												<label class="control-label" for="total">扣款次数：</label>
+												<input type="number" class="form-control" id="total"
+													name="total">
 											</div>
 											<div class="col-sm-4">
-												<label class="control-label" for="businessLicenseValidTime">扣款日：</label>
-												<input type="text" class="form-control"
-													id="businessLicenseValidTime"
-													name="businessLicenseValidTime">
+												<label class="control-label" for="debitDay">扣款日：</label>
+												<select id="debitDay" name="debitDay" class="form-control">
+												   <option value="1">1</option>
+												   <option value="2">2</option>
+												   <option value="3">3</option>
+												   <option value="4">4</option>
+												   <option value="5">5</option>
+												   <option value="6">6</option>
+												   <option value="7">7</option>
+												   <option value="8">8</option>
+												   <option value="9">9</option>
+												   <option value="10">10</option>
+												   <option value="11">11</option>
+												   <option value="12">12</option>
+												   <option value="13">13</option>
+												   <option value="14">14</option>
+												   <option value="15">15</option>
+												   <option value="16">16</option>
+												   <option value="17">17</option>
+												   <option value="18">18</option>
+												   <option value="19">19</option>
+												   <option value="20">20</option>
+												   <option value="21">21</option>
+												   <option value="22">22</option>
+												   <option value="23">23</option>
+												   <option value="24">24</option>
+												   <option value="25">25</option>
+												   <option value="26">26</option>
+												   <option value="27">27</option>
+												   <option value="28">28</option>
+												</select>
 											</div>
-
+											</div>
 											<a class="nextBtn" href="#profile" aria-controls="profile"
 												role="tab" data-toggle="tab"
-												onclick="javascript:saveMerCore();">保存</a>
+												onclick="javascript:saveWithholdInfo();">保存</a>
 									</form>
 								</div>
 								<!-- banksModel详情 start -->
@@ -213,29 +243,29 @@
 								</div>
 								<!-- model end -->
 							</div>
-
-						</div>
-						<script src="js/bootstrap/jquery.min.js"></script>
-						<script src="js/bootstrap/js/bootstrap.min.js"></script>
-						<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-						<script
-							src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
-						<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
-						<script src="js/plugins/bootstrap-table/tableExport.js"></script>
-						<script src="js/plugins/bootstrap-table/tableExport.js"></script>
-						<script
-							src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
-						<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
-						<script
-							src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
-						<script src="js/viewer/viewer.min.js"></script>
-						<script src="js/layer/layer.js"></script>
-						<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
-						<script
-							src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-						<script
-							src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
-						<script type="js/fnsco/common.js"></script>
-						<script src="js/fnsco/withholdList.js"></script>
+							</div></div></div></div></div>
+	</div>
+	<script src="js/bootstrap/jquery.min.js"></script>
+	<script src="js/bootstrap/js/bootstrap.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+	<script
+		src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+	<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+	<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+	<script
+		src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+	<script
+		src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+	<script src="js/viewer/viewer.min.js"></script>
+	<script src="js/layer/layer.js"></script>
+	<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
+	<script
+		src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+	<script
+		src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script type="js/fnsco/common.js"></script>
+	<script src="js/fnsco/withholdList.js"></script>
 </body>
 </html>

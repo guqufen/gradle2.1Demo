@@ -51,7 +51,7 @@ public class WithholdInfoController extends BaseController {
  @ApiOperation(value = "新增保存", notes = "新增保存")
  @ResponseBody
  @RequestMapping(value = "doAdd")
- public ResultDTO doAdd (@RequestBody WithholdInfoDO withholdInfo) {
+ public ResultDTO doAdd ( WithholdInfoDO withholdInfo) {
     WithholdInfoDO   resultDO = this.withholdInfoService.doAdd(withholdInfo,super.getUserId());
     if(null == resultDO ){
     	return ResultDTO.fail(ApiConstant.WEB_BANK_CARD_NULL);
