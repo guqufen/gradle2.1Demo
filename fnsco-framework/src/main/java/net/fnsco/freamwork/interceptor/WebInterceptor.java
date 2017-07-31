@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Strings;
 
+import ch.qos.logback.core.CoreConstants;
 import net.fnsco.freamwork.aop.OutWriterUtil;
 import net.fnsco.freamwork.business.AppUserDTO;
 import net.fnsco.freamwork.business.UserService;
@@ -28,7 +29,6 @@ import net.fnsco.freamwork.comm.FrameworkConstant;
 @Component
 public class WebInterceptor implements HandlerInterceptor {
     private Logger             logger   = LoggerFactory.getLogger(WebInterceptor.class);
-    public static final String USER_KEY = "SESSION_USER_KEY";
     @Autowired
     private Environment        env;
     @Autowired
@@ -54,7 +54,7 @@ public class WebInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false);
         boolean flag = true;
         if (null != session) {
-            Object obj = session.getAttribute(USER_KEY);
+            Object obj = session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
             if (obj != null) {
                 flag = false;
             }
