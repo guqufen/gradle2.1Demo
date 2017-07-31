@@ -56,80 +56,75 @@ $('.close').click(function(){
 });
 //初始化表格
 initTableData();
-function initTableData(){
-  $('#table').bootstrapTable({
-        sidePagination:'server',
-        search: false, //是否启动搜索栏 
-        url:PROJECT_NAME+'/web/withholdInfo/query',
-        showRefresh: true,//是否显示刷新按钮
-        showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
-        toolbar: '#toolbar',  //工具按钮用哪个容器
-        striped: true,   //是否显示行间隔色
-        cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-        pagination: true,   //是否显示分页（*）
-        sortable: true,   //是否启用排序
-        sortOrder: "asc",   //排序方式
-        pageNumber:1,   //初始化加载第一页，默认第一页
-        pageSize: 15,   //每页的记录行数（*）
-        pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
-        queryParams:queryParams,  
-        responseHandler:responseHandler,//处理服务器返回数据
-        columns: [{
-            field: 'state',
-            checkbox: true,
-            rowspan:1,
-            align: 'center',
-            valign: 'middle'
-        },{
-            field: 'id',
-            title: '序号'
-        }, {
-            field: 'userName',
-            title: '姓名'
-        }, {
-            field: 'mobile',
-            title: '手机号'
-        }, {
-            field: 'certifyId',
-            title: '身份证号'
-        }, {
-            field: 'debitDay',
-            title: '扣款日',
-            formatter: judgeCardType
-        }, {
-            field: 'amount',
-            title: '扣款金额/次'
-        }, {
-            field: 'amountTotal',
-            title: '扣款总额'
-        }, {
-            //field: 'businessLicenseNum',
-            title: '已扣金额'
-        }, {
-            //field: 'businessLicenseValidTime',
-            title: '待扣金额'
-        }, {
-            field: 'bankCard',
-            title: '银行卡号'
-        },  {
-            field: 'modifyUserId',
-            title: '提交人'
-        }, {
-            field: 'modifyTime',
-            title: '提交时间'
-        },{
-            field: 'status',
-            title: '状态'
-        }, {
-            //field: 'id',
-            title: '操作',
-            width:'10%',
-            align: 'center',
-            width: 150,
-            formatter: operateFormatter
-            // events: operateEvents
-        }]
-    });
+function initTableData() {
+	$('#table').bootstrapTable({
+		sidePagination : 'server',
+		search : false, //是否启动搜索栏 
+		url : PROJECT_NAME + '/web/withholdInfo/query',
+		showRefresh : true,//是否显示刷新按钮
+		showPaginationSwitch : false,//是否显示 数据条数选择框(分页是否显示)
+		toolbar : '#toolbar', //工具按钮用哪个容器
+		striped : true, //是否显示行间隔色
+		cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+		pagination : true, //是否显示分页（*）
+		sortable : true, //是否启用排序
+		sortOrder : "asc", //排序方式
+		pageNumber : 1, //初始化加载第一页，默认第一页
+		pageSize : 15, //每页的记录行数（*）
+		pageList : [ 15, 20, 50, 100 ], //可供选择的每页的行数（*）
+		queryParams : queryParams,
+		responseHandler : responseHandler,//处理服务器返回数据
+		columns : [ {
+			field : 'id',
+			title : '序号'
+		}, {
+			field : 'userName',
+			title : '姓名'
+		}, {
+			field : 'mobile',
+			title : '手机号'
+		}, {
+			field : 'certifyId',
+			title : '身份证号'
+		}, {
+			field : 'debitDay',
+			title : '扣款日'
+		}, {
+			field : 'amount',
+			title : '扣款金额/次'
+		}, {
+			field : 'amountTotal',
+			title : '扣款总额'
+		}, {
+			field : 'total',
+			title : '已扣款次数'
+		}, {
+			title : '已扣金额',
+			formatter : formatPayAmout
+		}, {
+			title : '待扣金额',
+			formatter : formatPayLeft
+		}, {
+			field : 'bankCard',
+			title : '银行卡号',
+			formatter : formatPayCard
+		}, {
+			field : 'modifyUserId',
+			title : '提交人'
+		}, {
+			field : 'modifyTime',
+			title : '提交时间'
+		}, {
+			field : 'status',
+			title : '状态',
+			formatter : formatStatus
+		}, {
+			title : '操作',
+			align : 'center',
+			formatter : operateFormatter
+		// events: operateEvents
+		} ]
+	});
 }
 
 //判断法人证件类型
@@ -158,13 +153,46 @@ function queryParams(params)
    }
    return param;
 }
+//银行卡号格式化前四位和后四位保留，中间*代替
+function formatPayCard(value, row, index) {
+	if (!value) {
+		return '-';
+	} else if (value.length == 0) {
+		return '-';
+	} else {
+		var len = value.length;
+		return value.substring(0, 4) + '******'
+				+ value.substring(len - 4);
+	}
+}
+
+//状态转换，数字转为字符串说明
+function formatStatus(value, row, index) {
+	if (value == 0) {
+		return '终止';
+	} else if (value == 1) {
+		return '进行中';
+	} else if (value == 2) {
+		return '已完成';
+	}
+}
+
+//已扣金额=已扣次数X扣款金额/次
+function formatPayAmout(value, row, index) {
+	return row.total * row.amount;
+}
+
+//待扣金额
+function formatPayLeft(value, row, index) {
+	return row.amountTotal - row.total * row.amount;
+}
 //处理后台返回数据
 function responseHandler(res) { 
 	unloginHandler(res);
     if (res) {
         return {
-            "rows" : res.list,
-            "total" : res.total
+            "rows" : res.data.list,
+            "total" : res.data.total
         };
     } else {
         return {
@@ -172,6 +200,13 @@ function responseHandler(res) {
             "total" : 0
         };
     }
+}
+//判断返回码
+function unloginHandler(result) {
+	if (result.code && result.code == '4012') {
+		layer.msg('登录失效,去登录');
+		window.location = "login.html";
+	}
 }
 window.operateEvents = {
     'click .redact': function (e, value, row, index) {
@@ -186,17 +221,15 @@ window.operateEvents = {
 };
 //表格中操作按钮
 function operateFormatter(value, row, index) {
-    return [
-        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
-        '<i class="glyphicon glyphicon-pencil"></i>',
-        '</a>  ',
-        '<a class="details" href="javascript:detailsData('+value+');" title="查看详情">',
-        '<i class="glyphicon glyphicon-file"></i>',
-        '</a>  ',
-        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
-        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
-        '</a>'
-    ].join('');
+	if(row.status == 1){
+		row.status = 0;
+		 return [
+		         '<a class="redact" href="javascript:stopData(' + row.id+','+row.status+');" title="终止">终止',
+		        // '<i class="glyphicon glyphicon-off">终止</i>',
+		         '</a>  ',
+		     ].join('');
+	}else
+		return '';
 }
   //表格中删除按钮事件
   function delete_btn_event(td_obj){
@@ -230,10 +263,8 @@ function operateFormatter(value, row, index) {
     }, function(){
       layer.msg('取消成功');
     });
-  	
+    $('#table').bootstrapTable('refresh');
   }
-
-
 
 //条件查询按钮事件
 function queryEvent(id){
@@ -289,6 +320,33 @@ $('#btn_delete').click(function(){
   
 });
 
-
-
-
+function stopData(id,status){
+	layer.confirm('确定终止吗？', {
+	    time: 20000, // 20s后自动关闭
+	    btn: ['确定', '取消']
+	}, function(){
+	  $.ajax({
+	    url:PROJECT_NAME+'/web/withholdInfo/doUpdate',
+	    type:'POST',
+	    dataType : "json",
+	    data:{'id':id,'status':status},
+	    success:function(data){
+	      unloginHandler(data);
+	      if(data.success)
+	      {
+	        layer.msg('终止成功');
+	        queryEvent("table");
+	      }else
+	      {
+	        layer.msg('终止失败');
+	      } 
+	    },
+	    error:function(e)
+	    {
+	      layer.msg('系统异常!'+e);
+	    }
+	  });
+	}, function(){
+	  layer.msg('取消成功');
+	});	
+	}
