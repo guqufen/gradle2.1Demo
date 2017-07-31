@@ -162,7 +162,14 @@ public class TradeDataDO {
      * 扣款日期
      */
     private String     withholdDate;
-
+    /**
+     * 扣款开始日期
+     */
+    private String     startDate;
+    /**
+     * 扣款日期
+     */
+    private String     endDate;
     /**
      * withholdDate
      *
@@ -461,6 +468,21 @@ public class TradeDataDO {
         this.certifyId = certifyId;
     }
 
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
     @Override
     public String toString() {
         return "[id=" + id + ", withholdId=" + withholdId + ", txnAmt=" + txnAmt + ", status=" + status + ", failReason=" + failReason + ", userName=" + userName + ", mobile=" + mobile + ", bankCard="

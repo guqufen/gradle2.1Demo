@@ -207,6 +207,12 @@ public class TradeDataProvider {
         }
         if (StringUtils.isNotBlank(tradeData.getCertifyId())){
             WHERE("certify_id=#{tradeData.certifyId}");
+        }//startDate
+        if(StringUtils.isNotBlank(tradeData.getStartDate())){
+            WHERE("txn_time >= #{tradeData.startDate}");
+        }
+        if(StringUtils.isNotBlank(tradeData.getEndDate())){
+            WHERE("txn_time <= #{tradeData.endDate}");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();

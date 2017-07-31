@@ -43,7 +43,7 @@ public class TradeDataController extends BaseController {
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @ResponseBody
     @RequestMapping(value = "query", method = RequestMethod.GET)
-    public ResultDTO page(@RequestBody TradeDataDO tradeData) {
+    public ResultDTO page(TradeDataDO tradeData) {
         logger.info("开始分页查询TradeDataController.page, tradeData=" + tradeData.toString());
         Map<String, Integer> params = super.copyParamsToInteger(new String[] { "page", "rows" });
         Integer page = params.get("page");
@@ -60,4 +60,15 @@ public class TradeDataController extends BaseController {
         TradeDataDO result = this.tradeDataService.doQueryById(NumberUtils.toInt(id));
         return success(result);
     }
+    
+    //修改补收
+    @ApiOperation(value = "修改补收", notes = "修改补收")
+    @ResponseBody
+    @RequestMapping(value = "repair")
+    public ResultDTO repair(TradeDataDO tradeData) {
+        ResultDTO result = this.tradeDataService.repair(tradeData);
+        return success(result);
+    }
+    
+    
 }

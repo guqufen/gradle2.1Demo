@@ -30,8 +30,8 @@
 								<input type="text" class="form-control" id="datetimepicker1">
 								- <input type="text" class="form-control" id="datetimepicker2">
 							</div>
-							<div class="col-sm-4">
-								<label class="control-label" for="shopName">扣款日:</label> <select
+							<div class="col-sm-4" id="withholdDate">
+								<label class="control-label" for="shopName" >扣款日:</label> <select
 									class="form-control">
 									<option value="">全部</option>
 									<option value="1">1</option>
@@ -66,28 +66,28 @@
 							</div>
 							<div class="col-sm-4">
 								<label class="control-label">状态:</label> 
-								<select id="" name="" class="form-control">
+								<select id="stauts" name="stauts" class="form-control">
 									<option value="">全部</option>
-									<option value="">成功</option>
-									<option value="">失败</option>
-									<option value="">补收</option>
+									<option value="2">成功</option>
+									<option value="1">失败</option>
+									<option value="9">补收</option>
 								</select>
 							</div>
 						</div>
 						<div class="row col-sm-14">
 							<div class="col-sm-4">
-								<label class="control-label" for="shopName">手机号:</label> <input
-									type="text" class="form-control" id="shopName" name="shopName" />
+								<label class="control-label" for="mobile">手机号:</label> <input
+									type="text" class="form-control" id="mobile" name="mobile" />
 							</div>
 							<div class="col-sm-4">
-								<label class="control-label" for="shopPhoneNum">姓名:</label> <input
-									type="text" class="form-control" id="shopPhoneNum"
-									name="shopPhoneNum" />
+								<label class="control-label" for="userName">姓名:</label> <input
+									type="text" class="form-control" id="userName"
+									name="userName" />
 							</div>
 							<div class="col-sm-4">
-								<label class="control-label" for="shopPhoneNum">身份证:</label> <input
-									type="text" class="form-control" id="shopPhoneNum"
-									name="shopPhoneNum" />
+								<label class="control-label" for="certifyId">身份证:</label> <input
+									type="text" class="form-control" id="certifyId"
+									name="certifyId" />
 							</div>
 							<div class="col-sm-2" style="text-align: right;">
 								<button type="button" id="btn_query" class="btn btn-primary"

@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.withhold.comm.ApiConstant;
@@ -45,5 +47,13 @@ public class TradeDataService extends BaseService {
         Integer count = this.tradeDataDAO.pageListCount(tradeData);
         ResultPageDTO<TradeDataDO> pager = new ResultPageDTO<TradeDataDO>(count, pageList);
         return pager;
+    }
+    //修改状态
+    public ResultDTO repair(TradeDataDO tradeData){
+        TradeDataDO dto=new TradeDataDO();
+        dto.setId(tradeData.getId());
+        dto.setStatus(tradeData.getStatus());
+        int num=this.tradeDataDAO.update(dto);
+        return ResultDTO.success("修改成功");
     }
 }
