@@ -1,6 +1,5 @@
 package net.fnsco.withhold.service.sys.entity;
 
-
 public class BankCodeDO {
 
     /**
@@ -11,39 +10,37 @@ public class BankCodeDO {
     /**
      * 机构代码
      */
-    private String code;
+    private String  code;
 
     /**
      * 发卡行名称
      */
-    private String bankName;
+    private String  bankName;
 
     /**
      * 卡名
      */
-    private String cardName;
+    private String  cardName;
 
     /**
      * 主账号取值
      */
-    private String cardTrimValue;
+    private String  cardTrimValue;
 
     /**
      * 卡种(DC:借记卡、CC：贷记卡、 SCC：准贷记卡、 PC：预付费卡、unK：其他)
      */
-    private String type;
+    private String  type;
 
     /**
      * 长度
      */
-    private String cardTrimLength;
+    private Integer cardTrimLength;
 
     /**
      * 总卡长度
      */
-    private String cardTotalLength;
-
-
+    private Integer cardTotalLength;
 
     public Integer getId() {
         return id;
@@ -93,26 +90,53 @@ public class BankCodeDO {
         this.type = type;
     }
 
-    public String getCardTrimLength() {
+    /**
+     * cardTrimLength
+     *
+     * @return  the cardTrimLength
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Integer getCardTrimLength() {
         return cardTrimLength;
     }
 
-    public void setCardTrimLength(String cardTrimLength) {
+    /**
+     * cardTrimLength
+     *
+     * @param   cardTrimLength    the cardTrimLength to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setCardTrimLength(Integer cardTrimLength) {
         this.cardTrimLength = cardTrimLength;
     }
 
-    public String getCardTotalLength() {
+    /**
+     * cardTotalLength
+     *
+     * @return  the cardTotalLength
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Integer getCardTotalLength() {
         return cardTotalLength;
     }
 
-    public void setCardTotalLength(String cardTotalLength) {
+    /**
+     * cardTotalLength
+     *
+     * @param   cardTotalLength    the cardTotalLength to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setCardTotalLength(Integer cardTotalLength) {
         this.cardTotalLength = cardTotalLength;
     }
 
-
-
     @Override
     public String toString() {
-        return "[id="+ id + ", code="+ code + ", bankName="+ bankName + ", cardName="+ cardName + ", cardTrimValue="+ cardTrimValue + ", type="+ type + ", cardTrimLength="+ cardTrimLength + ", cardTotalLength="+ cardTotalLength + "]";
+        return "[id=" + id + ", code=" + code + ", bankName=" + bankName + ", cardName=" + cardName + ", cardTrimValue=" + cardTrimValue + ", type=" + type + ", cardTrimLength=" + cardTrimLength
+               + ", cardTotalLength=" + cardTotalLength + "]";
     }
 }
