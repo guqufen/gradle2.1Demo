@@ -93,23 +93,24 @@ function initTableData() {
 			field : 'amount',
 			title : '扣款金额/次'
 		}, {
-			field : 'amountTotal',
+			field : 'allTotalAmt',
 			title : '扣款总额'
+			//formatter : formatPayAmout
 		}, {
 			field : 'total',
-			title : '已扣款次数'
+			title : '总扣款次数'
 		}, {
-			title : '已扣金额',
-			formatter : formatPayAmout
+			field : 'amountTotal',
+			title : '已扣款总额'
 		}, {
-			title : '待扣金额',
-			formatter : formatPayLeft
+			field : 'payLeftAmt',
+			title : '待扣金额'
 		}, {
 			field : 'bankCard',
 			title : '银行卡号',
 			formatter : formatPayCard
 		}, {
-			field : 'modifyUserId',
+			field : 'modifyUserName',
 			title : '提交人'
 		}, {
 			field : 'modifyTime',
@@ -147,9 +148,9 @@ function queryParams(params)
    var param ={
        currentPageNum : this.pageNumber,
        pageSize : this.pageSize,
-       merName :$('#txt_search_id').val(),
-       legalPerson:$('#txt_search_name').val(),
-       legalPersonMobile:$('#txt_search_price').val()
+       certifyId :$('#txt_search_id').val(),
+       userName:$('#txt_search_name').val(),
+       mobile:$('#txt_search_price').val()
    }
    return param;
 }
@@ -177,15 +178,6 @@ function formatStatus(value, row, index) {
 	}
 }
 
-//已扣金额=已扣次数X扣款金额/次
-function formatPayAmout(value, row, index) {
-	return row.total * row.amount;
-}
-
-//待扣金额
-function formatPayLeft(value, row, index) {
-	return row.amountTotal - row.total * row.amount;
-}
 //处理后台返回数据
 function responseHandler(res) { 
 	unloginHandler(res);
@@ -225,7 +217,6 @@ function operateFormatter(value, row, index) {
 		row.status = 0;
 		 return [
 		         '<a class="redact" href="javascript:stopData(' + row.id+','+row.status+');" title="终止">终止',
-		        // '<i class="glyphicon glyphicon-off">终止</i>',
 		         '</a>  ',
 		     ].join('');
 	}else
