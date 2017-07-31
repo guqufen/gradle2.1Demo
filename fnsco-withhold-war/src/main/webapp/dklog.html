@@ -24,7 +24,9 @@
 			<form id="formSearch" class="form-horizontal">
 				<div class="form-group" style="margin-top: 15px">
 					<div class="row col-sm-10">
-						<div class="row col-sm-12">
+						<div class="row col-sm-10">
+						<div class="row">
+						<div class="col-sm-10">
 							<div class="col-sm-4 query-time">
 								<label class="control-label" for="txt_search_price">扣款日期:</label>
 								<input type="text" class="form-control" id="datetimepicker1">
@@ -74,7 +76,7 @@
 								</select>
 							</div>
 						</div>
-						<div class="row col-sm-14">
+						<div class="row col-sm-10">
 							<div class="col-sm-4">
 								<label class="control-label" for="mobile">手机号:</label> <input
 									type="text" class="form-control" id="mobile" name="mobile" />
@@ -89,6 +91,7 @@
 									type="text" class="form-control" id="certifyId"
 									name="certifyId" />
 							</div>
+						 </div>	
 							<div class="col-sm-2" style="text-align: right;">
 								<button type="button" id="btn_query" class="btn btn-primary"
 									onclick="javascript:queryEvent('table');">
@@ -99,6 +102,17 @@
 									<span class="glyphicon glyphicon-refresh"></span>重置
 								</button>
 							</div>
+					</div>
+						</div>
+						<div class="col-sm-2" style="text-align: right;">
+							<button type="button" id="btn_query" class="btn btn-primary"
+								onclick="javascript:queryEvent('table');">
+								<span class="glyphicon glyphicon-search"></span>查询
+							</button>
+							<button type="button" id="btn_reset" class="btn btn-default"
+								onclick="javascript:resetEvent('formSearch');">
+								<span class="glyphicon glyphicon-refresh"></span>重置
+							</button>
 						</div>
 
 					</div>
@@ -107,7 +121,7 @@
 				<div class="ibox-content">
 					<div class="row row-lg">
 						<div class="col-sm-12">
-							<table id="table"></table>
+							<table id="table" ></table>
 						</div>
 					</div>
 				</div>
@@ -137,9 +151,6 @@
 		</div>
 	</div>
 	<!-- end -->
-	</div>
-
-	</div>
 	<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
 	<script
 		src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
