@@ -192,4 +192,12 @@ public class DateUtils {
         calendar.add(Calendar.DATE, day);
         return sf.format(calendar.getTime());
     }
+    
+    public static String getDateStrByMonth(int month,int day){
+    	Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        calendar.add(Calendar.MONTH, month);
+        calendar.add(Calendar.DATE, day);
+        return sf.format(calendar.getTime());
+    }
 }

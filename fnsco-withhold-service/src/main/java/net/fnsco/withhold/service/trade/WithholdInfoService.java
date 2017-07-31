@@ -49,12 +49,12 @@ public class WithholdInfoService extends BaseService {
      withholdInfo.setStatus(1);
      withholdInfo.setFailTotal(0);
      //计算扣款开始、结束日期
-     if(now.getHours()<=8 && now.getMinutes()<=30){
+     if((now.getHours() == 8 && now.getMinutes()<=30)|| now.getHours()<=7){
     	 withholdInfo.setStartDate(DateUtils.getNowDateStr2());
-    	 withholdInfo.setEndDate(DateUtils.getDateStrByDay(withholdInfo.getTotal()));
+    	 withholdInfo.setEndDate(DateUtils.getDateStrByMonth(withholdInfo.getTotal(),0));
      }else{
     	 withholdInfo.setStartDate(DateUtils.getDateStrByDay(1));
-    	 withholdInfo.setEndDate(DateUtils.getDateStrByDay(withholdInfo.getTotal()+1));
+    	 withholdInfo.setEndDate(DateUtils.getDateStrByMonth(withholdInfo.getTotal(),1));
      }
      //设置爱农编号
      if(StringUtils.isEmpty(withholdInfo.getBankCard()) || withholdInfo.getBankCard().length() <6){
