@@ -93,7 +93,7 @@ public class WithholdInfoDO {
     /**
      * 开户行行号
      */
-    private String     opeBnankNum;
+    private String     openBankNum;
     /**
      * 本月扣款失败次数
      */
@@ -173,29 +173,16 @@ public class WithholdInfoDO {
         this.failTotal = failTotal;
     }
 
-    /**
-     * opeBnankNum
-     *
-     * @return  the opeBnankNum
-     * @since   CodingExample Ver 1.0
-    */
+    
+    public String getOpenBankNum() {
+		return openBankNum;
+	}
 
-    public String getOpeBnankNum() {
-        return opeBnankNum;
-    }
+	public void setOpenBankNum(String openBankNum) {
+		this.openBankNum = openBankNum;
+	}
 
-    /**
-     * opeBnankNum
-     *
-     * @param   opeBnankNum    the opeBnankNum to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setOpeBnankNum(String opeBnankNum) {
-        this.opeBnankNum = opeBnankNum;
-    }
-
-    /**
+	/**
      * accType
      *
      * @return  the accType

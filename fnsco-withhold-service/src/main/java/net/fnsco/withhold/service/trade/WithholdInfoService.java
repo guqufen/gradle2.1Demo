@@ -57,7 +57,10 @@ public class WithholdInfoService extends BaseService {
     	 withholdInfo.setEndDate(DateUtils.getDateStrByDay(withholdInfo.getTotal()+1));
      }
      //设置爱农编号
-     BankCodeDO bankCodeDO = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(),withholdInfo.getBankCard().length());
+     if(StringUtils.isEmpty(withholdInfo.getBankCard()) || withholdInfo.getBankCard().length() <6){
+    	 return null;
+     }
+     BankCodeDO bankCodeDO = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(),6);
      if(null == bankCodeDO || StringUtils.isEmpty(bankCodeDO.getCode())){
     	return null;
      }
