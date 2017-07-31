@@ -200,14 +200,25 @@ public class DateUtils {
         calendar.add(Calendar.DATE, day);
         return sf.format(calendar.getTime());
     }
-    
+    /**
+     * 根据传入的年月日数据，返回对应格式的日期字符串
+     * @param year
+     * @param month
+     * @param date
+     * @return
+     */
     public static String getDateStrByInput(int year,int month,int date){
     	Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         calendar.set(year, month, date);
         return sf.format(calendar.getTime());
     }
-    
+    /**
+     * 根据传入的日期和增加的月份数据，返回在传入日期加上增加月份后的日期字符串
+     * @param dateStr
+     * @param month
+     * @return
+     */
     public static String getDateStrByStrAdd(String dateStr,int month){
 		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         Date date;

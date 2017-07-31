@@ -53,6 +53,8 @@ public class WithholdInfoService extends BaseService {
         //计算扣款开始、结束日期
         Calendar calender = Calendar.getInstance();
         int month = now.getMonth();
+       //设置扣款开始时间   当用户选择的日期比当前日期小的时候，就设置开始日期为下个月开始。当用户选择的日期比当前日期大的时候就设置从本月开始。
+        //用户选择日期是当前日期时，在八点半之前包含八点半就从本月开月开始，大于八点半就从下个月开始扣款
         if (now.getDate() < Integer.valueOf(withholdInfo.getDebitDay())
             || (now.getDate() == Integer.valueOf(withholdInfo.getDebitDay()) && (now.getHours() == 8 && now.getMinutes() <= 30 || now.getHours() <= 7))) {
 
