@@ -30,6 +30,7 @@ function saveWithholdInfo() {
 			if (data.success) {
 				layer.msg('保存成功');
 				$("#myModal").hide();
+				$("body").removeClass("modal-open");
 				queryEvent("table");
 			} else if (!data.success) {
 				layer.msg(data.message);
