@@ -47,6 +47,7 @@ public class WithholdInfoService extends BaseService {
      withholdInfo.setAmountTotal(new BigDecimal(0.00));
      withholdInfo.setAccountType("01");
      withholdInfo.setStatus(1);
+     withholdInfo.setCertifType("01");//设置身份证
      withholdInfo.setFailTotal(0);
      //计算扣款开始、结束日期
      if((now.getHours() == 8 && now.getMinutes()<=30)|| now.getHours()<=7){
@@ -60,7 +61,7 @@ public class WithholdInfoService extends BaseService {
      if(StringUtils.isEmpty(withholdInfo.getBankCard()) || withholdInfo.getBankCard().length() <6){
     	 return null;
      }
-     BankCodeDO bankCodeDO = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(),6);
+     BankCodeDO bankCodeDO = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(),withholdInfo.getBankCard().length());
      if(null == bankCodeDO || StringUtils.isEmpty(bankCodeDO.getCode())){
     	return null;
      }
