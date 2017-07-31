@@ -22,74 +22,76 @@ import net.fnsco.withhold.service.trade.entity.WithholdInfoDO;
 @Service
 public class WithholdInfoService extends BaseService {
 
- private Logger logger = LoggerFactory.getLogger(this.getClass());
- @Autowired
- private WithholdInfoDAO withholdInfoDAO;
- @Autowired
- private BankCodeDAO     bankCodeDAO;
- 
+    private Logger          logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private WithholdInfoDAO withholdInfoDAO;
+    @Autowired
+    private BankCodeDAO     bankCodeDAO;
 
- // 分页
- public ResultPageDTO<WithholdInfoDO> page(WithholdInfoDO withholdInfo, Integer pageNum, Integer pageSize) {
-     logger.info("开始分页查询WithholdInfoService.page, withholdInfo=" + withholdInfo.toString());
-     List<WithholdInfoDO> pageList = this.withholdInfoDAO.pageList(withholdInfo, pageNum, pageSize);
-     Integer count = this.withholdInfoDAO.pageListCount(withholdInfo);
-   ResultPageDTO<WithholdInfoDO> pager =  new ResultPageDTO<WithholdInfoDO>(count,pageList);
-     return pager;
- }
+    // 分页
+    public ResultPageDTO<WithholdInfoDO> page(WithholdInfoDO withholdInfo, Integer pageNum, Integer pageSize) {
+        logger.info("开始分页查询WithholdInfoService.page, withholdInfo=" + withholdInfo.toString());
+        List<WithholdInfoDO> pageList = this.withholdInfoDAO.pageList(withholdInfo, pageNum, pageSize);
+        Integer count = this.withholdInfoDAO.pageListCount(withholdInfo);
+        ResultPageDTO<WithholdInfoDO> pager = new ResultPageDTO<WithholdInfoDO>(count, pageList);
+        return pager;
+    }
 
- // 添加
- public WithholdInfoDO doAdd (WithholdInfoDO withholdInfo,int loginUserId) {
-     logger.info("开始添加WithholdInfoService.add,withholdInfo=" + withholdInfo.toString());
-     Date now = new Date();
-     withholdInfo.setModifyUserId(loginUserId);
-     withholdInfo.setModifyTime(now);
-     withholdInfo.setCertifType("01");//证件类型
-     withholdInfo.setAmountTotal(new BigDecimal(0.00));
-     withholdInfo.setAccountType("01");
-     withholdInfo.setStatus(1);
-     withholdInfo.setCertifType("01");//设置身份证
-     withholdInfo.setAccType("01");//帐号类型
-     withholdInfo.setFailTotal(0);
-     //计算扣款开始、结束日期
-     Calendar calender=Calendar.getInstance();
-     if(now.getDate()<Integer.valueOf(withholdInfo.getDebitDay()) || (now.getDate() == Integer.valueOf(withholdInfo.getDebitDay()) && (now.getHours() == 8 && now.getMinutes()<=30|| now.getHours()<=7))){
-        	 withholdInfo.setStartDate(DateUtils.getDateStrByInput(calender.get(Calendar.YEAR),now.getMonth(),Integer.valueOf(withholdInfo.getDebitDay())));
-     }else {
-    	 withholdInfo.setStartDate(DateUtils.getDateStrByInput(calender.get(Calendar.YEAR),now.getMonth()+1,Integer.valueOf(withholdInfo.getDebitDay())));
-     }
-     
-     withholdInfo.setEndDate(DateUtils.getDateStrByStrAdd(withholdInfo.getStartDate(),withholdInfo.getTotal()-1));
-     //设置爱农编号
-     if(StringUtils.isEmpty(withholdInfo.getBankCard()) || withholdInfo.getBankCard().length() <6){
-    	 return null;
-     }
-     BankCodeDO bankCodeDO = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(),withholdInfo.getBankCard().length());
-     if(null == bankCodeDO || StringUtils.isEmpty(bankCodeDO.getCode())){
-    	return null;
-     }
-     withholdInfo.setAnBankId(bankCodeDO.getCode());
-     this.withholdInfoDAO.insert(withholdInfo);
-     return withholdInfo;
- }
+    // 添加
+    public WithholdInfoDO doAdd(WithholdInfoDO withholdInfo, int loginUserId) {
+        logger.info("开始添加WithholdInfoService.add,withholdInfo=" + withholdInfo.toString());
+        Date now = new Date();
+        withholdInfo.setModifyUserId(loginUserId);
+        withholdInfo.setModifyTime(now);
+        withholdInfo.setCertifType("01");//证件类型
+        withholdInfo.setAmountTotal(new BigDecimal(0.00));
+        withholdInfo.setAccountType("01");
+        withholdInfo.setStatus(1);
+        withholdInfo.setCertifType("01");//设置身份证
+        withholdInfo.setAccType("01");//帐号类型
+        withholdInfo.setFailTotal(0);
+        //计算扣款开始、结束日期
+        Calendar calender = Calendar.getInstance();
+        int month = now.getMonth();
+        if (now.getDate() < Integer.valueOf(withholdInfo.getDebitDay())
+            || (now.getDate() == Integer.valueOf(withholdInfo.getDebitDay()) && (now.getHours() == 8 && now.getMinutes() <= 30 || now.getHours() <= 7))) {
 
- // 修改
- public Integer doUpdate (WithholdInfoDO withholdInfo,Integer loginUserId) {
-     logger.info("开始修改WithholdInfoService.update,withholdInfo=" + withholdInfo.toString());
-     int rows=this.withholdInfoDAO.update(withholdInfo);
-     return rows;
- }
+        } else {
+            month = now.getMonth() + 1;
+        }
+        withholdInfo.setStartDate(DateUtils.getDateStrByInput(calender.get(Calendar.YEAR), month, Integer.valueOf(withholdInfo.getDebitDay())));
 
- // 删除
- public Integer doDelete (WithholdInfoDO withholdInfo,Integer loginUserId) {
-     logger.info("开始删除WithholdInfoService.delete,withholdInfo=" + withholdInfo.toString());
-     int rows=this.withholdInfoDAO.deleteById(withholdInfo.getId());
-     return rows;
- }
+        withholdInfo.setEndDate(DateUtils.getDateStrByStrAdd(withholdInfo.getStartDate(), withholdInfo.getTotal() - 1));
+        //设置爱农编号
+        if (StringUtils.isEmpty(withholdInfo.getBankCard())) {
+            return null;
+        }
+        BankCodeDO bankCodeDO = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(), withholdInfo.getBankCard().length());
+        if (null == bankCodeDO || StringUtils.isEmpty(bankCodeDO.getCode())) {
+            return null;
+        }
+        withholdInfo.setAnBankId(bankCodeDO.getCode());
+        this.withholdInfoDAO.insert(withholdInfo);
+        return withholdInfo;
+    }
 
- // 查询
- public WithholdInfoDO doQueryById (Integer id) {
-     WithholdInfoDO obj = this.withholdInfoDAO.getById(id);
-     return obj;
- }
+    // 修改
+    public Integer doUpdate(WithholdInfoDO withholdInfo, Integer loginUserId) {
+        logger.info("开始修改WithholdInfoService.update,withholdInfo=" + withholdInfo.toString());
+        int rows = this.withholdInfoDAO.update(withholdInfo);
+        return rows;
+    }
+
+    // 删除
+    public Integer doDelete(WithholdInfoDO withholdInfo, Integer loginUserId) {
+        logger.info("开始删除WithholdInfoService.delete,withholdInfo=" + withholdInfo.toString());
+        int rows = this.withholdInfoDAO.deleteById(withholdInfo.getId());
+        return rows;
+    }
+
+    // 查询
+    public WithholdInfoDO doQueryById(Integer id) {
+        WithholdInfoDO obj = this.withholdInfoDAO.getById(id);
+        return obj;
+    }
 }
