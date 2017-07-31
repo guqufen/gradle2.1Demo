@@ -43,7 +43,7 @@ public class UserController extends BaseController {
 		ResultDTO result = userService.doLogin(username, password);
 		if (result.isSuccess()) {
 			UserDO user = (UserDO) result.getData();
-			setSessionUser(user);
+			setSessionUser(user,user.getId());
 			addCookie(ApiConstant.COOKIE_USER_KEY, user.getName());
 			return ResultDTO.success();
 		}
@@ -71,13 +71,6 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public ResultDTO getCurrentUser() {
 		UserDO adminUser = (UserDO) getSessionUser();
-		if (null == adminUser) {
-			String cookie = (String) getCookieUser();
-			if(StringUtils.isEmpty(cookie))return ResultDTO.fail(ApiConstant.WEB_NOT_LOGIN);
-			adminUser = new UserDO();
-			adminUser.setName(cookie.substring(cookie.lastIndexOf("#")+1, cookie.length()));
-			setSessionUser(adminUser);
-		}
 		return ResultDTO.success(adminUser);
 	}
 

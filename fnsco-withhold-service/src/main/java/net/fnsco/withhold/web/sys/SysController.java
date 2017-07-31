@@ -36,7 +36,7 @@ public class SysController extends BaseController {
             if (null == sysUser) {
                 return "redirect:/login.html";
             }
-            setSessionUser(sysUser);
+            setSessionUser(sysUser,sysUser.getId());
         }
         return "redirect:/index.html";
     }

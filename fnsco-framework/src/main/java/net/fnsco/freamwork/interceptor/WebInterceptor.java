@@ -60,7 +60,7 @@ public class WebInterceptor implements HandlerInterceptor {
         if (flag) {
             logger.warn("未登录转入登录页面");
             if (Strings.isNullOrEmpty(requestType)) {
-                response.sendRedirect("/login.html");
+                response.sendRedirect("/idx");
             } else {
                 OutWriterUtil.outJson(response, FrameworkConstant.E_NOT_LOGIN);
             }
