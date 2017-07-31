@@ -1,6 +1,7 @@
 package net.fnsco.withhold.service.trade;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,9 +40,11 @@ public class WithholdInfoService extends BaseService {
 	public ResultPageDTO<WithholdInfoDO> page(WithholdInfoDO withholdInfo, Integer pageNum, Integer pageSize) {
 		logger.info("开始分页查询WithholdInfoService.page, withholdInfo=" + withholdInfo.toString());
 		List<WithholdInfoDO> pageList = this.withholdInfoDAO.pageList(withholdInfo, pageNum, pageSize);
-		// 根据最后修改人ID查询姓名
+
 		List<WithholdInfoDO> pageListNew = new ArrayList<>();
 		for (WithholdInfoDO withholdInfoDO : pageList) {
+
+			// 根据最后修改人ID查询姓名
 			if (null == withholdInfoDO.getModifyUserId()) {
 				withholdInfoDO.setModifyUserName("--");
 			} else {
@@ -57,18 +60,42 @@ public class WithholdInfoService extends BaseService {
 			String bankCard = withholdInfoDO.getBankCard();
 			withholdInfoDO.setBankCard(bankCard.substring(0, 4) + "****" + bankCard.substring(bankCard.length() - 4));
 
+			// 提交时间处理
 			Date date = withholdInfoDO.getModifyTime();
 			if (null != date) {
 				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-				
+
 				String ss = sdf.format(date);
-				System.out.println(ss);
 				withholdInfoDO.setModifyTimeStr(ss);
-			}else{
+			} else {
 				withholdInfoDO.setModifyTimeStr("--");
 			}
 
-			// 提交时间处理
+			/**
+			 * 扣款金额/次，已扣款总额，扣款总额、待扣款总额处理(保留两位小数)
+			 */
+			BigDecimal b1 = new BigDecimal(100.00);
+			// 扣款金额/次
+			BigDecimal amount = withholdInfoDO.getAmount();
+			BigDecimal b2 = amount.divide(b1, 2, BigDecimal.ROUND_HALF_UP);
+			withholdInfoDO.setAmount(b2);// 设置扣款金额/次
+
+			// 已扣款金额
+			BigDecimal amountTotal = withholdInfoDO.getAmountTotal();
+			b2 = amountTotal.divide(b1, 2, BigDecimal.ROUND_HALF_UP);
+			withholdInfoDO.setAmountTotal(b2);// 设置已扣款金额
+
+			// 扣款总额
+			Integer total = withholdInfoDO.getTotal();// 扣款次数
+			BigDecimal allTotalAmt = amount.multiply(new BigDecimal(total));// 扣款总额
+			b2 = allTotalAmt.divide(b1, 2, BigDecimal.ROUND_HALF_UP);
+			withholdInfoDO.setAllTotalAmt(b2);// 设置扣款总额
+
+			// 待扣款总额
+			BigDecimal payLeftAmt = allTotalAmt.subtract(amountTotal);// 总金额-已扣款金额
+			b2 = payLeftAmt.divide(b1, 2, BigDecimal.ROUND_HALF_UP);
+			withholdInfoDO.setPayLeftAmt(b2);// 设置待扣款金额
+
 			pageListNew.add(withholdInfoDO);
 		}
 		Integer count = this.withholdInfoDAO.pageListCount(withholdInfo);
@@ -89,7 +116,7 @@ public class WithholdInfoService extends BaseService {
 		withholdInfo.setCertifType("01");// 设置身份证
 		withholdInfo.setAccType("01");// 帐号类型
 		withholdInfo.setFailTotal(0);
-		withholdInfo.setAmount(withholdInfo.getAmount().multiply(new BigDecimal(100)));//单次扣款金额乘以100保存
+		withholdInfo.setAmount(withholdInfo.getAmount().multiply(new BigDecimal(100)));// 单次扣款金额乘以100保存
 		// 计算扣款开始、结束日期
 		Calendar calender = Calendar.getInstance();
 		if (now.getDate() < Integer.valueOf(withholdInfo.getDebitDay())

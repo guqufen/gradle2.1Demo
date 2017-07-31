@@ -84,7 +84,7 @@ function initTableData() {
 		columns : [ {
 			field : 'id',
 			title : '序号',
-			width : '30px',
+			width : '1px',
 			formatter : operateFormatterId
 		}, {
 			field : 'userName',
@@ -104,11 +104,11 @@ function initTableData() {
 			width : '30px'
 		}, {
 			field : 'amount',
-			title : '扣款金额/次',
+			title : '扣款金额(元/次)',
 			width : '30px'
 		}, {
 			field : 'allTotalAmt',
-			title : '扣款总额',
+			title : '扣款总额(元)',
 			width : '80px'
 		}, {
 			field : 'total',
@@ -116,11 +116,11 @@ function initTableData() {
 			width : '80px'
 		}, {
 			field : 'amountTotal',
-			title : '已扣款总额',
+			title : '已扣款总额(元)',
 			width : '80px'
 		}, {
 			field : 'payLeftAmt',
-			title : '待扣金额',
+			title : '待扣金额(元)',
 			width : '80px'
 		}, {
 			field : 'bankCard',
@@ -142,7 +142,7 @@ function initTableData() {
 		}, {
 			title : '操作',
 			align : 'center',
-			width : '30px',
+			width : '10px',
 			formatter : operateFormatter
 		} ]
 	});

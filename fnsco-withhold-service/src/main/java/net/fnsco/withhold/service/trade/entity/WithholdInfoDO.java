@@ -136,7 +136,6 @@ public class WithholdInfoDO {
 	}
 
 	public BigDecimal getAllTotalAmt() {
-		allTotalAmt = amount.multiply(new BigDecimal(total));
 		return allTotalAmt;
 	}
 
@@ -145,7 +144,6 @@ public class WithholdInfoDO {
 	}
 
 	public BigDecimal getPayLeftAmt() {
-		payLeftAmt = allTotalAmt.subtract(amountTotal);
 		return payLeftAmt;
 	}
 
