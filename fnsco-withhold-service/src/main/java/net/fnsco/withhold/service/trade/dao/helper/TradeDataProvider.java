@@ -207,12 +207,15 @@ public class TradeDataProvider {
         }
         if (StringUtils.isNotBlank(tradeData.getCertifyId())){
             WHERE("certify_id=#{tradeData.certifyId}");
-        }//startDate
+        }//Withholdday
         if(StringUtils.isNotBlank(tradeData.getStartDate())){
             WHERE("txn_time >= #{tradeData.startDate}");
         }
         if(StringUtils.isNotBlank(tradeData.getEndDate())){
             WHERE("txn_time <= #{tradeData.endDate}");
+        }
+        if(StringUtils.isNotBlank(tradeData.getWithholdday())){
+            WHERE("substring(txn_time,7,2) = #{tradeData.Withholdday}");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();

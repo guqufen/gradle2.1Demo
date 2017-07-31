@@ -19,9 +19,7 @@ $('#table').bootstrapTable({
 	columns : [ {
 		field : 'id',
 		title : '序号',
-		width : '10%',
-		align : 'center',
-		width : 150,
+	    align : 'center',
 		class : 'id',
 		formatter : operateFormatter
 	}, {
@@ -34,9 +32,14 @@ $('#table').bootstrapTable({
 	}, {
 		field : 'bankCard',
 		title : '银行卡号'
-	}, {
+	},{
 		field : 'txnTime',
 		title : '扣款日',
+		formatter : formatday
+	}
+	,{
+		field : 'txnTime',
+		title : '扣款日期',
 		formatter : formatTxnTime
 	}, {
 		field : 'txnAmt',
@@ -50,7 +53,8 @@ $('#table').bootstrapTable({
 		formatter : formatPushType
 	}, {
 		field : 'failReason',
-		title : '原因'
+		title : '原因',
+		width:200
 	}, {
 		field : 'txnTime',
 		title : '扣款时间',
@@ -73,6 +77,7 @@ function formatReDate(value, row, index) {
 
 }
 function formatTxnTime(value, row, index){
+	value.substr(0,8).split()
 	if (!value) {
 		return '-';
 	} else{
@@ -84,6 +89,13 @@ function formatTxn(value, row, index){
 		return '-';
 	} else{
 		return value.substr(8,16);
+	}
+}
+function formatday(value, row, index){
+	if (!value) {
+		return '-';
+	} else{
+		return value.slice(6,8);
 	}
 }
 // 操作格式化
@@ -108,7 +120,7 @@ function formatChange(value, row, index) {
 	if (!value) {
 		return '-';
 	} else if (value == '1') {
-		return "<div class='repair'>补收</div>";
+		return "<button class='btn btn-success repair'>补收</button>";
 	}
 }
 // 条件查询按钮事件
@@ -152,7 +164,7 @@ function queryParams(params) {
 		mobile : $.trim($('#mobile').val()),
 		userName : $.trim($('#userName').val()),
 		certifyId : $.trim($('#certifyId').val()),
-		withholdDate : $("#withholdDate").find("option:selected").val(),
+		Withholdday : $("#withholdDate").find("option:selected").val(),
 		status : $("#stauts").find("option:selected").val(),
 		startDate : startTime,
 		endDate : endTime

@@ -3,6 +3,7 @@ package net.fnsco.withhold.service.trade.entity;
 import java.math.BigDecimal;
 
 public class TradeDataDO {
+    private String Withholdday;
 
     /**
      * 
@@ -482,6 +483,13 @@ public class TradeDataDO {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+    public String getWithholdday() {
+        return Withholdday;
+    }
+
+    public void setWithholdday(String withholdday) {
+        Withholdday = withholdday;
     }
     @Override
     public String toString() {

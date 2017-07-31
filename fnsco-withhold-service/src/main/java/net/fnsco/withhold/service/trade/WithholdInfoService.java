@@ -51,6 +51,11 @@ public class WithholdInfoService extends BaseService {
 				}
 			}
 
+			//银行卡号处理
+			String bankCard = withholdInfoDO.getBankCard();
+			withholdInfoDO.setBankCard(bankCard.substring(0, 4)+"****"+bankCard.substring(bankCard.length()-4));
+			
+			//提交时间处理
 			pageListNew.add(withholdInfoDO);
 		}
 		Integer count = this.withholdInfoDAO.pageListCount(withholdInfo);
