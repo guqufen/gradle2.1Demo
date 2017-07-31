@@ -89,6 +89,7 @@ public class WithholdInfoService extends BaseService {
 		withholdInfo.setCertifType("01");// 设置身份证
 		withholdInfo.setAccType("01");// 帐号类型
 		withholdInfo.setFailTotal(0);
+		withholdInfo.setAmount(withholdInfo.getAmount().multiply(new BigDecimal(100)));//单次扣款金额乘以100保存
 		// 计算扣款开始、结束日期
 		Calendar calender = Calendar.getInstance();
 		if (now.getDate() < Integer.valueOf(withholdInfo.getDebitDay())
