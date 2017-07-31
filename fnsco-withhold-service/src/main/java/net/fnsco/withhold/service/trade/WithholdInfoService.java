@@ -51,6 +51,11 @@ public class WithholdInfoService extends BaseService {
 				}
 			}
 
+			//银行卡号处理
+			String bankCard = withholdInfoDO.getBankCard();
+			withholdInfoDO.setBankCard(bankCard.substring(0, 4)+"****"+bankCard.substring(bankCard.length()-4));
+			
+			//提交时间处理
 			pageListNew.add(withholdInfoDO);
 		}
 		Integer count = this.withholdInfoDAO.pageListCount(withholdInfo);
@@ -71,6 +76,7 @@ public class WithholdInfoService extends BaseService {
 		withholdInfo.setCertifType("01");// 设置身份证
 		withholdInfo.setAccType("01");// 帐号类型
 		withholdInfo.setFailTotal(0);
+		withholdInfo.setAmount(withholdInfo.getAmount().multiply(new BigDecimal(100)));//单次扣款金额乘以100保存
 		// 计算扣款开始、结束日期
 		Calendar calender = Calendar.getInstance();
 		if (now.getDate() < Integer.valueOf(withholdInfo.getDebitDay())
