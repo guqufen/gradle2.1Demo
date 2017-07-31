@@ -5,7 +5,7 @@ $('#table').bootstrapTable({
 	url : PROJECT_NAME + '/web/appsuser/query',
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
-	// toolbar: '#toolbar', //工具按钮用哪个容器
+	toolbar: '#toolbar', //工具按钮用哪个容器
 	striped : true, // 是否显示行间隔色
 	cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 	pagination : true, // 是否显示分页（*）
@@ -31,15 +31,15 @@ $('#table').bootstrapTable({
 		title : '手机号码',
 		class : 'mobile'
 	}, {
-		field : 'merNames',
+		field : 'bankCard',
 		title : '银行卡号',
 		formatter : formatMerNames
 	}, {
-		field : 'regTime',
-		title : '扣款日',
+		field : 'withholdDate',
+		title : '扣款日期',
 		formatter : formatReDate
 	},{
-		field : 'regTime',
+		field : 'txnAmt',
 		title : '扣款金额',
 		formatter : formatReDate
 	},{
@@ -47,23 +47,18 @@ $('#table').bootstrapTable({
 		title : '状态',
 		formatter : formatReDate
 	},{
-		field : 'reason',
+		field : 'failReason',
 		title : '原因'
 	},{
-		field : 'time',
+		field : 'txnTime',
 		title : '扣款时间'
 	},{
-		field : 'operation',
-		title : '操作',
+		//field : 'operation',
+		title : '操作'
 	}
 	]
 });
-// 绑定店铺
-function formatMerNames(value, row, index) {
-	if (value && '' != value) {
-		return value.substr(0, value.length - 1);
-	}
-}
+
 // 格式化时间
 function formatReDate(value, row, index) {
 	return formatDateUtil(value);
@@ -134,8 +129,8 @@ function responseHandler(res) {
 	unloginHandler(res);
 	if (res) {
 		return {
-			"rows" : res.list,
-			"total" : res.total
+			"rows" : res.data.list,
+			"total" : res.data.total
 		};
 	} else {
 		return {
