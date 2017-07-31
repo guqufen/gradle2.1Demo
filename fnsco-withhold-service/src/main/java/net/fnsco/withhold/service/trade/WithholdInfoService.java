@@ -48,6 +48,7 @@ public class WithholdInfoService extends BaseService {
      withholdInfo.setAccountType("01");
      withholdInfo.setStatus(1);
      withholdInfo.setCertifType("01");//设置身份证
+     withholdInfo.setAccType("01");//帐号类型
      withholdInfo.setFailTotal(0);
      //计算扣款开始、结束日期
      if((now.getHours() == 8 && now.getMinutes()<=30)|| now.getHours()<=7){
