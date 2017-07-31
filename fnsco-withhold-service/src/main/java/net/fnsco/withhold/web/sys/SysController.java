@@ -23,7 +23,7 @@ public class SysController extends BaseController {
      * @return
      */
     @RequestMapping("/idx")
-    public String index(HttpServletRequest rep, HttpServletResponse res) {
+    public String index() {
         Object obj = getSessionUser();
         if (null == obj) {
             Object cookeiUser = getCookieUser();
@@ -36,7 +36,7 @@ public class SysController extends BaseController {
             if (null == sysUser) {
                 return "redirect:/login.html";
             }
-            setSessionUser(sysUser,sysUser.getId());
+            setSessionUser(sysUser, sysUser.getId());
         }
         return "redirect:/index.html";
     }

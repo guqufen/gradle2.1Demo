@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 
 import com.google.common.base.Strings;
 
-import net.fnsco.core.base.BaseController;
+import net.fnsco.core.constants.CoreConstants;
 
 public class CookieUtils {
 
@@ -60,7 +60,7 @@ public class CookieUtils {
     }
 
     public static void removeCookie(HttpServletResponse response) {
-        String key = BaseController.USER_KEY;
+        String key = CoreConstants.SESSION_USER_KEY;
         setCookie(response, key, null, 0, null, null, null);
     }
 

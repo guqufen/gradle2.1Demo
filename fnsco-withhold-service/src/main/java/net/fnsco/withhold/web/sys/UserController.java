@@ -21,74 +21,74 @@ import net.fnsco.withhold.service.sys.entity.UserDO;
 @Api(value = "/web/user", tags = { "" })
 public class UserController extends BaseController {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	/**
-	 * 登录方法
-	 * 
-	 * @param req
-	 * @param adminUser
-	 * @return
-	 */
-	@RequestMapping("/doLogin")
-	@ResponseBody
-	public ResultDTO doLogin() {
-		String username = request.getParameter("account");
-		String password = request.getParameter("password");
-		if (Strings.isNullOrEmpty(password) || Strings.isNullOrEmpty(username)) {
-			return ResultDTO.fail(ApiConstant.WEB_LOGIN_NULL);
-		}
+    /**
+     * 登录方法
+     * 
+     * @param req
+     * @param adminUser
+     * @return
+     */
+    @RequestMapping("/doLogin")
+    @ResponseBody
+    public ResultDTO doLogin() {
+        String username = request.getParameter("account");
+        String password = request.getParameter("password");
+        if (Strings.isNullOrEmpty(password) || Strings.isNullOrEmpty(username)) {
+            return ResultDTO.fail(ApiConstant.WEB_LOGIN_NULL);
+        }
 
-		ResultDTO result = userService.doLogin(username, password);
-		if (result.isSuccess()) {
-			UserDO user = (UserDO) result.getData();
-			setSessionUser(user,user.getId());
-			addCookie(ApiConstant.COOKIE_USER_KEY, user.getName());
-			return ResultDTO.success();
-		}
-		return ResultDTO.fail(ApiConstant.WEB_LOGIN_FAIL);
-	}
+        ResultDTO result = userService.doLogin(username, password);
+        if (result.isSuccess()) {
+            UserDO user = (UserDO) result.getData();
+            setSessionUser(user, user.getId());
+            addCookieUser(user.getName());
+            return ResultDTO.success();
+        }
+        return ResultDTO.fail(ApiConstant.WEB_LOGIN_FAIL);
+    }
 
-	/**
-	 * 退出登录
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logOut() {
-		removeSessionUser();
-		removeCookieUser();
-		return "redirect:/";
-	}
+    /**
+     * 退出登录
+     * 
+     * @return
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logOut() {
+        removeSessionUser();
+        removeCookieUser();
+        return "redirect:/";
+    }
 
-	/**
-	 * 获取当前用户
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/getCurrentUser")
-	@ResponseBody
-	public ResultDTO getCurrentUser() {
-		UserDO adminUser = (UserDO) getSessionUser();
-		return ResultDTO.success(adminUser);
-	}
+    /**
+     * 获取当前用户
+     * 
+     * @return
+     */
+    @RequestMapping("/getCurrentUser")
+    @ResponseBody
+    public ResultDTO getCurrentUser() {
+        UserDO adminUser = (UserDO) getSessionUser();
+        return ResultDTO.success(adminUser);
+    }
 
-	/**
-	 * 修改密码
-	 * 
-	 * @return
-	 */
+    /**
+     * 修改密码
+     * 
+     * @return
+     */
 
-	@RequestMapping("/modifyPassword")
-	@ResponseBody
-	public ResultDTO<String> modifyPassword(String name, String newPassword, String oldPassword) {
-		if (Strings.isNullOrEmpty(newPassword)) {
-			return ResultDTO.fail(ApiConstant.WEB_NEW_PASSWORD_NULL);
-		}
-		if (Strings.isNullOrEmpty(oldPassword)) {
-			return ResultDTO.fail(ApiConstant.WEB_OLD_PASSWORD_NULL);
-		}
-		return userService.modifyPassword(name, newPassword, oldPassword);
-	}
+    @RequestMapping("/modifyPassword")
+    @ResponseBody
+    public ResultDTO<String> modifyPassword(String name, String newPassword, String oldPassword) {
+        if (Strings.isNullOrEmpty(newPassword)) {
+            return ResultDTO.fail(ApiConstant.WEB_NEW_PASSWORD_NULL);
+        }
+        if (Strings.isNullOrEmpty(oldPassword)) {
+            return ResultDTO.fail(ApiConstant.WEB_OLD_PASSWORD_NULL);
+        }
+        return userService.modifyPassword(name, newPassword, oldPassword);
+    }
 }

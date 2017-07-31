@@ -24,8 +24,7 @@ public class BaseController {
     protected HttpServletRequest  request;
     protected HttpServletResponse response;
     protected HttpSession         session;
-    public static final String    USER_KEY = "SESSION_USER_KEY";
-    public static final String    USERID   = "userId";
+
 
     public Map<String, Integer> copyParamsToInteger(String[] params) {
         Map<String, Integer> map = Maps.newHashMap();
@@ -72,7 +71,7 @@ public class BaseController {
     }
 
     public Integer getUserId() {
-        Integer userId = (Integer) this.session.getAttribute(USERID);
+        Integer userId = (Integer) this.session.getAttribute(CoreConstants.SESSION_USERID);
         if (null == userId) {
             userId = 0;
         }
@@ -189,13 +188,13 @@ public class BaseController {
         if (null == session) {
             return null;
         }
-        return session.getAttribute(USER_KEY);
+        return session.getAttribute(CoreConstants.SESSION_USER_KEY);
     }
 
-    public void setSessionUser(Object userDO,Integer userId) {
+    public void setSessionUser(Object userDO, Integer userId) {
         HttpSession session = request.getSession();
-        session.setAttribute(USER_KEY, userDO);
-        session.setAttribute(USERID, userId);
+        session.setAttribute(CoreConstants.SESSION_USER_KEY, userDO);
+        session.setAttribute(CoreConstants.SESSION_USERID, userId);
     }
 
     /**
@@ -206,7 +205,7 @@ public class BaseController {
         if (null == session) {
             return;
         }
-        session.removeAttribute(USER_KEY);
+        session.removeAttribute(CoreConstants.SESSION_USER_KEY);
     }
 
     /**
@@ -228,7 +227,7 @@ public class BaseController {
         }
     }
 
-    public void addCookie(String key, String value) {
-        CookieUtils.addCookie(response, key, value, 60 * 60 * 24 * 7);
+    public void addCookieUser(String value) {
+        CookieUtils.addCookie(response, CoreConstants.COOKIE_USER_KEY, value, 60 * 60 * 24 * 7);
     }
 }
