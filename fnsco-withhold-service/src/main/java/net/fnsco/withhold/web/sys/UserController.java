@@ -1,11 +1,8 @@
 package net.fnsco.withhold.web.sys;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -74,9 +71,13 @@ public class UserController extends BaseController {
 	@ResponseBody
 	public ResultDTO getCurrentUser() {
 		UserDO adminUser = (UserDO) getSessionUser();
-//		if (null == adminUser) {
-//			return ResultDTO.fail(ApiConstant.WEB_NOT_LOGIN);
-//		}
+		if (null == adminUser) {
+			String cookie = (String) getCookieUser();
+			if(StringUtils.isEmpty(cookie))return ResultDTO.fail(ApiConstant.WEB_NOT_LOGIN);
+			adminUser = new UserDO();
+			adminUser.setName(cookie.substring(cookie.lastIndexOf("#")+1, cookie.length()));
+			setSessionUser(adminUser);
+		}
 		return ResultDTO.success(adminUser);
 	}
 

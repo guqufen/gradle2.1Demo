@@ -41,7 +41,14 @@ public class BaseController {
         }
         return map;
     }
-
+    public Map<String, String> getParameterMap(){
+        Map<String, String[]> paramsMap = request.getParameterMap();
+        Map<String, String> subMap = new HashMap<>();
+        for (Map.Entry<String, String[]> item : paramsMap.entrySet()) {
+            subMap.put(item.getKey(), item.getValue()[0]);
+        }
+        return subMap;
+    }
     public Map<String, String> copyParams(String[] params) {
         Map<String, String> map = new HashMap<String, String>();
         for (String key : params) {
