@@ -225,7 +225,7 @@ $(function(){
 			unloginHandler(data);
 			if(!data.success)
 				window.location='login.html';
-			//$('.indexPageUserName').html(data.data.name);
+			   $('.indexPageUserName').html(data.data.realName);
 		}
 	});
 });
