@@ -1,6 +1,7 @@
 package net.fnsco.withhold.service.trade;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -47,16 +48,22 @@ public class WithholdInfoService extends BaseService {
      withholdInfo.setAmountTotal(new BigDecimal(0.00));
      withholdInfo.setAccountType("01");
      withholdInfo.setStatus(1);
+     withholdInfo.setCertifType("01");//设置身份证
+     withholdInfo.setAccType("01");//帐号类型
      withholdInfo.setFailTotal(0);
      //计算扣款开始、结束日期
-     if(now.getHours()<=8 && now.getMinutes()<=30){
-    	 withholdInfo.setStartDate(DateUtils.getNowDateStr2());
-    	 withholdInfo.setEndDate(DateUtils.getDateStrByDay(withholdInfo.getTotal()));
-     }else{
-    	 withholdInfo.setStartDate(DateUtils.getDateStrByDay(1));
-    	 withholdInfo.setEndDate(DateUtils.getDateStrByDay(withholdInfo.getTotal()+1));
+     Calendar calender=Calendar.getInstance();
+     if(now.getDate()<Integer.valueOf(withholdInfo.getDebitDay()) || (now.getDate() == Integer.valueOf(withholdInfo.getDebitDay()) && (now.getHours() == 8 && now.getMinutes()<=30|| now.getHours()<=7))){
+        	 withholdInfo.setStartDate(DateUtils.getDateStrByInput(calender.get(Calendar.YEAR),now.getMonth(),Integer.valueOf(withholdInfo.getDebitDay())));
+     }else {
+    	 withholdInfo.setStartDate(DateUtils.getDateStrByInput(calender.get(Calendar.YEAR),now.getMonth()+1,Integer.valueOf(withholdInfo.getDebitDay())));
      }
+     
+     withholdInfo.setEndDate(DateUtils.getDateStrByStrAdd(withholdInfo.getStartDate(),withholdInfo.getTotal()-1));
      //设置爱农编号
+     if(StringUtils.isEmpty(withholdInfo.getBankCard()) || withholdInfo.getBankCard().length() <6){
+    	 return null;
+     }
      BankCodeDO bankCodeDO = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(),withholdInfo.getBankCard().length());
      if(null == bankCodeDO || StringUtils.isEmpty(bankCodeDO.getCode())){
     	return null;

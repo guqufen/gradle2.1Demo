@@ -60,9 +60,6 @@
 									data-toggle="modal" data-target="#myModal">
 									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 								</button>
-								<button id="btn_edit" type="button" class="btn btn-danger">
-									<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>修改
-								</button>
 							</div>
 							<table id="table" style="min-width: 2400px;"></table>
 						</div>
@@ -81,12 +78,9 @@
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 class="modal-title" id="myModalLabel">代扣管理</h4>
+							<h4 class="modal-title" id="myModalLabel">代扣新增</h4>
 						</div>
 						<div class="modal-body">
-							<ul class="nav nav-tabs" role="tablist">
-								<li role="presentation" class="active"><a>代扣新增</a></li>
-							</ul>
 							<div class="tab-content">
 								<div role="tabpanel" class="tab-pane active" id="home">
 									<form action="" id="mercore_form" method="post">
@@ -94,59 +88,59 @@
 											<div class="col-sm-4">
 												<label class="control-label" for="userName">姓名：</label> <input
 													type="text" class="form-control" id="userName"
-													name="userName">
+													name="userName" placeholder="身份证上的姓名">
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="certifyId">身份证号码：</label> <input
+													type="text" class="form-control" id="certifyId"
+													name="certifyId" placeholder="身份证号码">
+											</div>
+<!-- 											<div class="col-sm-4"> -->
+<!-- 												<label class="control-label " for="certifType">证件类型：</label> -->
+<!-- 												<select id="certifType" name="certifType" -->
+<!-- 													class="form-control"> -->
+<!-- 													<option value="01">身份证</option> -->
+<!-- 													<option value="02">军官证</option> -->
+<!-- 													<option value="03">护照</option> -->
+<!-- 													<option value="04">回乡证</option> -->
+<!-- 													<option value="05">台胞证</option> -->
+<!-- 													<option value="06">警官证</option> -->
+<!-- 													<option value="07">士兵证</option> -->
+<!-- 													<option value="99">其它证件</option> -->
+<!-- 												</select> -->
+<!-- 											</div> -->
+											<div class="col-sm-4">
+												<label class="control-label" for="bankCard">银行卡号：</label>
+												<input type="text" class="form-control" id="bankCard"
+													name="bankCard" placeholder="被扣的银行卡号">
 											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="mobile">手机号码：</label>
 												<input type="number" class="form-control"
-													id="mobile" name="mobile">
-											</div>
-											<div class="col-sm-4">
-												<label class="control-label " for="certifType">证件类型：</label>
-												<select id="certifType" name="certifType"
-													class="form-control">
-													<option value="01">身份证</option>
-													<option value="02">军官证</option>
-													<option value="03">护照</option>
-													<option value="04">回乡证</option>
-													<option value="05">台胞证</option>
-													<option value="06">警官证</option>
-													<option value="07">士兵证</option>
-													<option value="99">其它证件</option>
-												</select>
-											</div>
-											<div class="col-sm-4">
-												<label class="control-label" for="certifyId">证件号码：</label> <input
-													type="text" class="form-control" id="certifyId"
-													name="certifyId">
-											</div>
-											<div class="col-sm-4">
-												<label class="control-label" for="bankCard">银行卡号：</label>
-												<input type="text" class="form-control" id="bankCard"
-													name="bankCard">
+													id="mobile" name="mobile" placeholder="银行卡预留手机号">
 											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="amount">扣款金额：</label>
 												<input type="text" class="form-control"
-													id="amount" name="amount">
+													id="amount" name="amount" placeholder="单次扣款金额">
 											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="total">扣款次数：</label>
 												<input type="number" class="form-control" id="total"
-													name="total">
+													name="total" placeholder="总扣款次数">
 											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="debitDay">扣款日：</label>
 												<select id="debitDay" name="debitDay" class="form-control">
-												   <option value="1">1</option>
-												   <option value="2">2</option>
-												   <option value="3">3</option>
-												   <option value="4">4</option>
-												   <option value="5">5</option>
-												   <option value="6">6</option>
-												   <option value="7">7</option>
-												   <option value="8">8</option>
-												   <option value="9">9</option>
+												   <option value="01">01</option>
+												   <option value="02">02</option>
+												   <option value="03">03</option>
+												   <option value="04">04</option>
+												   <option value="05">05</option>
+												   <option value="06">06</option>
+												   <option value="07">07</option>
+												   <option value="08">08</option>
+												   <option value="09">09</option>
 												   <option value="10">10</option>
 												   <option value="11">11</option>
 												   <option value="12">12</option>

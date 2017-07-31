@@ -9,13 +9,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Strings;
 
+import ch.qos.logback.core.CoreConstants;
 import net.fnsco.freamwork.aop.OutWriterUtil;
+import net.fnsco.freamwork.business.AppUserDTO;
+import net.fnsco.freamwork.business.UserService;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 
 /**
@@ -27,9 +29,10 @@ import net.fnsco.freamwork.comm.FrameworkConstant;
 @Component
 public class WebInterceptor implements HandlerInterceptor {
     private Logger             logger   = LoggerFactory.getLogger(WebInterceptor.class);
-    public static final String USER_KEY = "SESSION_USER_KEY";
     @Autowired
     private Environment        env;
+    @Autowired
+    private UserService        userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -49,22 +52,24 @@ public class WebInterceptor implements HandlerInterceptor {
             }
         }
         HttpSession session = request.getSession(false);
-        String requestType = request.getHeader("X-Requested-With");
         boolean flag = true;
         if (null != session) {
-            Object obj = session.getAttribute(USER_KEY);
+            Object obj = session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
             if (obj != null) {
                 flag = false;
             }
         }
         if (flag) {
             logger.warn("未登录转入登录页面");
+            String requestType = request.getHeader("X-Requested-With");
             if (Strings.isNullOrEmpty(requestType)) {
-                response.sendRedirect("/login.html");
-            } else {
-                OutWriterUtil.outJson(response, FrameworkConstant.E_NOT_LOGIN);
+                response.sendRedirect("/idx");
             }
-            return false;
+            AppUserDTO user = userService.getCookieUser(request);
+            if (null == user) {
+                OutWriterUtil.outJson(response, FrameworkConstant.E_NOT_LOGIN);
+                return false;
+            }
         }
         return true;
     }

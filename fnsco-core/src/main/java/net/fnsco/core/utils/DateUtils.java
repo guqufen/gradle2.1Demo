@@ -192,4 +192,36 @@ public class DateUtils {
         calendar.add(Calendar.DATE, day);
         return sf.format(calendar.getTime());
     }
+    
+    public static String getDateStrByMonth(int month,int day){
+    	Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        calendar.add(Calendar.MONTH, month);
+        calendar.add(Calendar.DATE, day);
+        return sf.format(calendar.getTime());
+    }
+    
+    public static String getDateStrByInput(int year,int month,int date){
+    	Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        calendar.set(year, month, date);
+        return sf.format(calendar.getTime());
+    }
+    
+    public static String getDateStrByStrAdd(String dateStr,int month){
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+		try {
+			date = sf.parse(dateStr);
+			 Calendar calendar = Calendar.getInstance();
+		     calendar.setTime(date);
+		     calendar.add(Calendar.MONTH, month);
+		     return sf.format(calendar.getTime());
+		     
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return null;
+    }
 }

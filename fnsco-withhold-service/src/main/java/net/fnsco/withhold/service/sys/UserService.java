@@ -104,4 +104,5 @@ public class UserService extends BaseService {
         UserDO obj = this.userDAO.getByUserName(userName);
         return obj;
     }
+
 }

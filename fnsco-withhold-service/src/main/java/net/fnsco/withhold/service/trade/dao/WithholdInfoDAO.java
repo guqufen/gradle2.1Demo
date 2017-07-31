@@ -42,7 +42,7 @@ public interface WithholdInfoDAO {
     @Select("SELECT * FROM w_withhold_info WHERE status = '1' and debit_day = #{debitDay}  ")
     public List<WithholdInfoDO> getByDebitDay(@Param("debitDay") String debitDay);
 
-    @Insert("INSERT into w_withhold_info(id,user_name,mobile,certif_type,certify_id,debit_day,amount,amount_total,bank_card,status,modify_user_id,modify_time,total,sub_bank_name,an_bank_id,account_type,acc_type,open_bank_num,fail_total) VALUES (#{id},#{userName},#{mobile},#{certifType},#{certifyId},#{debitDay},#{amount},#{amountTotal},#{bankCard},#{status},#{modifyUserId},#{modifyTime},#{total},#{subBankName},#{anBankId},#{accountType},#{accType},#{openBankNum},#{failTotal})")
+    @Insert("INSERT into w_withhold_info(id,user_name,mobile,certif_type,certify_id,debit_day,amount,amount_total,bank_card,status,modify_user_id,modify_time,total,sub_bank_name,an_bank_id,account_type,acc_type,open_bank_num,fail_total,start_date,end_date) VALUES (#{id},#{userName},#{mobile},#{certifType},#{certifyId},#{debitDay},#{amount},#{amountTotal},#{bankCard},#{status},#{modifyUserId},#{modifyTime},#{total},#{subBankName},#{anBankId},#{accountType},#{accType},#{openBankNum},#{failTotal},#{startDate},#{endDate})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(WithholdInfoDO withholdInfo);
 

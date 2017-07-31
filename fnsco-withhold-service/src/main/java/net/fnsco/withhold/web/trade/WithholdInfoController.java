@@ -38,7 +38,7 @@ public class WithholdInfoController extends BaseController {
  @ApiOperation(value = "分页查询", notes = "分页查询")
  @ResponseBody
  @RequestMapping(value = "query", method = RequestMethod.GET)
- public ResultDTO page(@RequestBody WithholdInfoDO withholdInfo) {
+ public ResultDTO page(WithholdInfoDO withholdInfo) {
      logger.info("开始分页查询WithholdInfoController.page, withholdInfo=" + withholdInfo.toString());
      Map<String, Integer> params = super.copyParamsToInteger(new String[] { "page", "rows" });
      Integer page = params.get("page");
@@ -63,7 +63,7 @@ public class WithholdInfoController extends BaseController {
  @ApiOperation(value = "修改保存", notes = "修改保存")
  @ResponseBody
  @RequestMapping(value = "doUpdate")
- public ResultDTO doUpdate (@RequestBody WithholdInfoDO withholdInfo) {
+ public ResultDTO doUpdate (WithholdInfoDO withholdInfo) {
      Integer result = this.withholdInfoService.doUpdate(withholdInfo,getUserId());
      return success(result);
  }

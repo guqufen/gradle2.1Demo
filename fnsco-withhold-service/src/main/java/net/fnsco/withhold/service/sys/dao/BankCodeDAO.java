@@ -22,7 +22,7 @@ public interface BankCodeDAO {
 
     @Results({ @Result(column = "bank_name", property = "bankName"), @Result(column = "card_name", property = "cardName"), @Result(column = "card_trim_value", property = "cardTrimValue"),
                @Result(column = "card_trim_length", property = "cardTrimLength"), @Result(column = "card_total_length", property = "cardTotalLength") })
-    @Select("select * from sys_bank_code where card_trim_value=left(#{cardNum}, card_trim_length) and card_trim_length = #{cardLenth} order by card_trim_length desc limit 1 ")
+    @Select("select * from sys_bank_code where card_trim_value=left(#{cardNum}, card_trim_length) and card_total_length = #{cardLenth} order by card_trim_length desc limit 1 ")
     public BankCodeDO getByCardNum(@Param("cardNum") String cardNum, @Param("cardLenth") int cardLenth);
 
     @Insert("INSERT into sys_bank_code(id,code,bank_name,card_name,card_trim_value,type,card_trim_length,card_total_length) VALUES (#{id},#{code},#{bankName},#{cardName},#{cardTrimValue},#{type},#{cardTrimLength},#{cardTotalLength})")
