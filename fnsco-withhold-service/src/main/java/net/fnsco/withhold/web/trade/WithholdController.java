@@ -20,15 +20,6 @@ public class WithholdController extends BaseController {
     @Autowired
     private WithholdService withholdService;
 
-    /**
-     * 
-     * collectPayment:(这里用一句话描述这个方法的作用)
-     *
-     * @param type 0首次1第二次2第三次扣款
-     * @return   ResultDTO    返回Result对象
-     * @throws 
-     * @since  CodingExample　Ver 1.1
-     */
     @ApiOperation(value = "代扣定时任务", notes = "代扣定时任务")
     @ResponseBody
     @RequestMapping(value = "collectPayment", method = RequestMethod.GET)
