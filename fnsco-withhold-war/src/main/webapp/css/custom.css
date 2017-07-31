@@ -75,6 +75,7 @@ table td{
 	opacity: 0.5;*/
 	background: rgba(0,0,0,0.5);
 }
+.modal-header{background:#f3f3f4;border-radius: 3px 3px 0 0;}
 .modal-body{padding: 0;}
 .modal-body .nav{
 	background: #2f4050;
@@ -332,19 +333,3 @@ table td{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-角色管理
