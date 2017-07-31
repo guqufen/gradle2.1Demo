@@ -45,9 +45,9 @@ public class TradeDataController extends BaseController {
     @RequestMapping(value = "query", method = RequestMethod.GET)
     public ResultDTO page(TradeDataDO tradeData) {
         logger.info("开始分页查询TradeDataController.page, tradeData=" + tradeData.toString());
-        Map<String, Integer> params = super.copyParamsToInteger(new String[] { "page", "rows" });
-        Integer page = params.get("page");
-        Integer rows = params.get("rows");
+        Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
+        Integer page = params.get("currentPageNum");
+        Integer rows = params.get("pageSize");
         ResultPageDTO<TradeDataDO> pager = this.tradeDataService.page(tradeData, page, rows);
         return success(pager);
     }

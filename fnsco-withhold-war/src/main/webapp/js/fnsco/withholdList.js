@@ -72,73 +72,85 @@ function initTableData() {
 		cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 		pagination : true, // 是否显示分页（*）
 		sortable : true, // 是否启用排序
-		sortName : 'id',//定义排序列
+		sortName : 'id',// 定义排序列
 		sortOrder : 'asc', // 排序方式
 		pageNumber : 1, // 初始化加载第一页，默认第一页
-		pageSize : 15, // 每页的记录行数（*）
-		pageList : [ 15, 20, 50, 100 ], // 可供选择的每页的行数（*）
-		showPaginationSwitch:true,//是否显示 数据条数选择框
+		pageSize : 10, // 每页的记录行数（*）
+		pageList : [ 10, 25, 50, 100 ], // 可供选择的每页的行数（*）
+		showPaginationSwitch : true,// 是否显示 数据条数选择框
 		queryParams : queryParams,
 		responseHandler : responseHandler,// 处理服务器返回数据
 		columns : [ {
 			field : 'id',
 			title : '序号',
+			width : '30px',
 			formatter : operateFormatterId
 		}, {
 			field : 'userName',
-			title : '姓名'
+			title : '姓名',
+			width : '100px'
 		}, {
 			field : 'mobile',
-			title : '手机号'
+			title : '手机号',
+			width : '60px'
 		}, {
 			field : 'certifyId',
-			title : '身份证号'
+			title : '身份证号',
+			width : '80px'
 		}, {
 			field : 'debitDay',
-			title : '扣款日'
+			title : '扣款日',
+			width : '30px'
 		}, {
 			field : 'amount',
-			title : '扣款金额/次'
+			title : '扣款金额/次',
+			width : '30px'
 		}, {
 			field : 'allTotalAmt',
-			title : '扣款总额'
+			title : '扣款总额',
+			width : '80px'
 		}, {
 			field : 'total',
-			title : '总扣款次数'
+			title : '总扣款次数',
+			width : '80px'
 		}, {
 			field : 'amountTotal',
-			title : '已扣款总额'
+			title : '已扣款总额',
+			width : '80px'
 		}, {
 			field : 'payLeftAmt',
-			title : '待扣金额'
+			title : '待扣金额',
+			width : '80px'
 		}, {
 			field : 'bankCard',
-			title : '银行卡号'
+			title : '银行卡号',
+			width : '80px'
 		}, {
 			field : 'modifyUserName',
-			title : '提交人'
+			title : '提交人',
+			width : '100px'
 		}, {
-			field : 'modifyTime',
-			title : '提交时间'
-		// width:
+			field : 'modifyTimeStr',
+			title : '提交时间',
+			width : '80px'
 		}, {
 			field : 'status',
 			title : '状态',
+			width : 5,
 			formatter : formatStatus
 		}, {
 			title : '操作',
 			align : 'center',
+			width : '30px',
 			formatter : operateFormatter
-		// events: operateEvents
 		} ]
 	});
 }
 
-//操作格式化
+// 操作格式化
 function operateFormatterId(value, row, index) {
 	index++;
 	return "<div i='" + value + "'>" + index + "</div>";
-	// return [index+1].join('');
 }
 
 // 判断法人证件类型

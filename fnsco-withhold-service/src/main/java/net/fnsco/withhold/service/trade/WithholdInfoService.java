@@ -1,6 +1,8 @@
 package net.fnsco.withhold.service.trade;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,11 +53,22 @@ public class WithholdInfoService extends BaseService {
 				}
 			}
 
-			//银行卡号处理
+			// 银行卡号处理
 			String bankCard = withholdInfoDO.getBankCard();
-			withholdInfoDO.setBankCard(bankCard.substring(0, 4)+"****"+bankCard.substring(bankCard.length()-4));
-			
-			//提交时间处理
+			withholdInfoDO.setBankCard(bankCard.substring(0, 4) + "****" + bankCard.substring(bankCard.length() - 4));
+
+			Date date = withholdInfoDO.getModifyTime();
+			if (null != date) {
+				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+				
+				String ss = sdf.format(date);
+				System.out.println(ss);
+				withholdInfoDO.setModifyTimeStr(ss);
+			}else{
+				withholdInfoDO.setModifyTimeStr("--");
+			}
+
+			// 提交时间处理
 			pageListNew.add(withholdInfoDO);
 		}
 		Integer count = this.withholdInfoDAO.pageListCount(withholdInfo);

@@ -120,6 +120,20 @@ public class WithholdInfoDO {
 	 * 提交人姓名
 	 */
 	private String modifyUserName;
+	
+	/**
+	 * 提交时间
+	 * @return
+	 */
+	private String modifyTimeStr;
+
+	public String getModifyTimeStr() {
+		return modifyTimeStr;
+	}
+
+	public void setModifyTimeStr(String modifyTimeStr) {
+		this.modifyTimeStr = modifyTimeStr;
+	}
 
 	public BigDecimal getAllTotalAmt() {
 		allTotalAmt = amount.multiply(new BigDecimal(total));

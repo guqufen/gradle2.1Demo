@@ -40,9 +40,9 @@ public class WithholdInfoController extends BaseController {
  @RequestMapping(value = "query", method = RequestMethod.GET)
  public ResultDTO page(WithholdInfoDO withholdInfo) {
      logger.info("开始分页查询WithholdInfoController.page, withholdInfo=" + withholdInfo.toString());
-     Map<String, Integer> params = super.copyParamsToInteger(new String[] { "page", "rows" });
-     Integer page = params.get("page");
-     Integer rows = params.get("rows");
+     Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
+     Integer page = params.get("currentPageNum");
+     Integer rows = params.get("pageSize");
      ResultPageDTO<WithholdInfoDO> pager = this.withholdInfoService.page(withholdInfo, page,rows);
      return success(pager);
  }
