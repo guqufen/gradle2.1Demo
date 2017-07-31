@@ -67,20 +67,23 @@ function initTableData() {
 		url : PROJECT_NAME + '/web/withholdInfo/query',
 		showRefresh : true,// 是否显示刷新按钮
 		showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
-//		toolbar : '#toolbar', // 工具按钮用哪个容器
+		// toolbar : '#toolbar', // 工具按钮用哪个容器
 		striped : true, // 是否显示行间隔色
 		cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 		pagination : true, // 是否显示分页（*）
 		sortable : true, // 是否启用排序
-		sortOrder : "asc", // 排序方式
+		sortName : 'id',//定义排序列
+		sortOrder : 'asc', // 排序方式
 		pageNumber : 1, // 初始化加载第一页，默认第一页
 		pageSize : 15, // 每页的记录行数（*）
 		pageList : [ 15, 20, 50, 100 ], // 可供选择的每页的行数（*）
+		showPaginationSwitch:true,//是否显示 数据条数选择框
 		queryParams : queryParams,
 		responseHandler : responseHandler,// 处理服务器返回数据
 		columns : [ {
 			field : 'id',
-			title : '序号'
+			title : '序号',
+			formatter : operateFormatterId
 		}, {
 			field : 'userName',
 			title : '姓名'
@@ -99,7 +102,6 @@ function initTableData() {
 		}, {
 			field : 'allTotalAmt',
 			title : '扣款总额'
-		// formatter : formatPayAmout
 		}, {
 			field : 'total',
 			title : '总扣款次数'
@@ -111,14 +113,14 @@ function initTableData() {
 			title : '待扣金额'
 		}, {
 			field : 'bankCard',
-			title : '银行卡号',
-			formatter : formatPayCard
+			title : '银行卡号'
 		}, {
 			field : 'modifyUserName',
 			title : '提交人'
 		}, {
 			field : 'modifyTime',
 			title : '提交时间'
+		// width:
 		}, {
 			field : 'status',
 			title : '状态',
@@ -130,6 +132,13 @@ function initTableData() {
 		// events: operateEvents
 		} ]
 	});
+}
+
+//操作格式化
+function operateFormatterId(value, row, index) {
+	index++;
+	return "<div i='" + value + "'>" + index + "</div>";
+	// return [index+1].join('');
 }
 
 // 判断法人证件类型
@@ -158,17 +167,6 @@ function queryParams(params) {
 		mobile : $('#txt_search_price').val()
 	}
 	return param;
-}
-// 银行卡号格式化前四位和后四位保留，中间*代替
-function formatPayCard(value, row, index) {
-	if (!value) {
-		return '-';
-	} else if (value.length == 0) {
-		return '-';
-	} else {
-		var len = value.length;
-		return value.substring(0, 4) + '******' + value.substring(len - 4);
-	}
 }
 
 // 状态转换，数字转为字符串说明
