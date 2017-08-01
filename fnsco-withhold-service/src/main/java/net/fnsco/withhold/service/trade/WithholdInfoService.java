@@ -63,7 +63,7 @@ public class WithholdInfoService extends BaseService {
 			// 提交时间处理
 			Date date = withholdInfoDO.getModifyTime();
 			if (null != date) {
-				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 				String ss = sdf.format(date);
 				withholdInfoDO.setModifyTimeStr(ss);
