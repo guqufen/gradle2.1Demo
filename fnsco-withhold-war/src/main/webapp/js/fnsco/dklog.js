@@ -77,18 +77,27 @@ function formatReDate(value, row, index) {
 
 }
 function formatTxnTime(value, row, index){
-	//value.substr(0,8).split()
 	if (!value) {
 		return '-';
 	} else{
-		return value.substr(0,8);
+		var str=value.substr(0,8);
+		var obj=str.replace(/(.)(?=[^$])/g,"$1,").split(","); 
+		obj.splice(4,0,"-");
+		obj.splice(7,0,"-")
+		return obj.toString().replace(/,/g,"");
 	}
 }
 function formatTxn(value, row, index){
+  
+console.log(obj);
+	console.log(obj);
 	if (!value) {
 		return '-';
 	} else{
-		return value.substr(8,14);
+		var str=value.slice(8,12);
+		var obj=str.replace(/(.)(?=[^$])/g,"$1,").split(","); 
+		var aa=obj.splice(2,0,":");
+		return obj.toString().replace(/,/g,"");
 	}
 }
 function formatday(value, row, index){

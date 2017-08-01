@@ -51,7 +51,7 @@ public class WithholdInfoService extends BaseService {
 				if (null == userDO) {
 					withholdInfoDO.setModifyUserName("--");
 				} else {
-					withholdInfoDO.setModifyUserName(userDO.getAliasName());
+					withholdInfoDO.setModifyUserName(userDO.getRealName());
 				}
 			}
 
