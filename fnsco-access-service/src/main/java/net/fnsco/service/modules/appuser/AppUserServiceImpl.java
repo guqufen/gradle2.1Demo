@@ -613,23 +613,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     }
 
     @Override
-    public net.fnsco.freamwork.business.AppUserDTO getUserInfo(String userId) {
-        net.fnsco.freamwork.business.AppUserDTO dto = null;
-        try {
-            AppUser user = appUserDao.selectAppUserById(Integer.parseInt(userId));
-            if (user != null) {
-                dto = new net.fnsco.freamwork.business.AppUserDTO();
-                dto.setForcedLoginOut(user.getForcedLoginOut());
-                dto.setUserName(user.getUserName());
-                dto.setId(user.getId());
-            }
-        } catch (Exception ex) {
-            logger.error("获取用户信息出错" + userId, ex);
-        }
-        return dto;
-    }
-
-    @Override
     public AppUser selectAppUserById(Integer id) {
 
         // TODO Auto-generated method stub
