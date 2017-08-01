@@ -65,6 +65,6 @@ public class TimerConfig {
     @Scheduled(cron = "0 0 12 * * ?")
     public void collectPaymentRemind12() {
         System.out.println("定时任务执行12");
-        withholdService.collectPayment(1);
+        withholdService.collectPaymentRemind();
     }
 }

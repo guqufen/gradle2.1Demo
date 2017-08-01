@@ -96,10 +96,10 @@ public class WithholdInfoService extends BaseService {
 			b2 = payLeftAmt.divide(b1, 2, BigDecimal.ROUND_HALF_UP);
 			withholdInfoDO.setPayLeftAmt(b2);// 设置待扣款金额
 
-			pageListNew.add(withholdInfoDO);
+//			pageListNew.add(withholdInfoDO);
 		}
 		Integer count = this.withholdInfoDAO.pageListCount(withholdInfo);
-		ResultPageDTO<WithholdInfoDO> pager = new ResultPageDTO<WithholdInfoDO>(count, pageListNew);
+		ResultPageDTO<WithholdInfoDO> pager = new ResultPageDTO<WithholdInfoDO>(count, pageList);
 		return pager;
 	}
 
