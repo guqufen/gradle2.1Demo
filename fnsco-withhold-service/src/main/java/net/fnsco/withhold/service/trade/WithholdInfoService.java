@@ -63,7 +63,7 @@ public class WithholdInfoService extends BaseService {
 			// 提交时间处理
 			Date date = withholdInfoDO.getModifyTime();
 			if (null != date) {
-				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 				String ss = sdf.format(date);
 				withholdInfoDO.setModifyTimeStr(ss);
@@ -96,10 +96,10 @@ public class WithholdInfoService extends BaseService {
 			b2 = payLeftAmt.divide(b1, 2, BigDecimal.ROUND_HALF_UP);
 			withholdInfoDO.setPayLeftAmt(b2);// 设置待扣款金额
 
-			pageListNew.add(withholdInfoDO);
+//			pageListNew.add(withholdInfoDO);
 		}
 		Integer count = this.withholdInfoDAO.pageListCount(withholdInfo);
-		ResultPageDTO<WithholdInfoDO> pager = new ResultPageDTO<WithholdInfoDO>(count, pageListNew);
+		ResultPageDTO<WithholdInfoDO> pager = new ResultPageDTO<WithholdInfoDO>(count, pageList);
 		return pager;
 	}
 
@@ -119,16 +119,18 @@ public class WithholdInfoService extends BaseService {
 		withholdInfo.setAmount(withholdInfo.getAmount().multiply(new BigDecimal(100)));// 单次扣款金额乘以100保存
 		// 计算扣款开始、结束日期
 		Calendar calender = Calendar.getInstance();
+		/**
+		 * 当用户选择的还款日期（day）小于当前日期的天时，从下个月开始算还款日期。当用户选择的日期（day）等于当前日期的天的时候，如果当前时间小于早上8:30的时候，就从本月开始，否则从下个月开始
+		 */
+		int month = now.getMonth();
 		if (now.getDate() < Integer.valueOf(withholdInfo.getDebitDay())
 				|| (now.getDate() == Integer.valueOf(withholdInfo.getDebitDay())
 						&& (now.getHours() == 8 && now.getMinutes() <= 30 || now.getHours() <= 7))) {
-			withholdInfo.setStartDate(DateUtils.getDateStrByInput(calender.get(Calendar.YEAR), now.getMonth(),
-					Integer.valueOf(withholdInfo.getDebitDay())));
 		} else {
-			withholdInfo.setStartDate(DateUtils.getDateStrByInput(calender.get(Calendar.YEAR), now.getMonth() + 1,
-					Integer.valueOf(withholdInfo.getDebitDay())));
+			month++;
 		}
-
+		withholdInfo.setStartDate(DateUtils.getDateStrByInput(calender.get(Calendar.YEAR), month,
+				Integer.valueOf(withholdInfo.getDebitDay())));
 		withholdInfo.setEndDate(DateUtils.getDateStrByStrAdd(withholdInfo.getStartDate(), withholdInfo.getTotal() - 1));
 		// 设置爱农编号
 		if (StringUtils.isEmpty(withholdInfo.getBankCard()) || withholdInfo.getBankCard().length() < 6) {

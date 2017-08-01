@@ -160,17 +160,7 @@ input{
 <script type="text/javascript" src="js/bootstrap/jquery.min.js"></script>
 <script type="text/javascript" src="js/bootstrap/jquery.cookie.js"></script>
 <script type="text/javascript" src="js/fnsco/common.js"></script>
-<script type="text/javascript">
-//登录
-$(function(){
-	var aduser = $.cookie('cookie_user_key'); 
-	if(aduser)
-	{
-		$.cookie('cookie_user_key',null); 
-	}
-	$('#login_info_form').attr('action',PROJECT_NAME+'/web/user/doLogin');
-});
-</script>
+
 <script>
 	(function() {
     var imgs = [ 'login/bg_2.png','login/bg_3.png','login/bg_1.jpg'];

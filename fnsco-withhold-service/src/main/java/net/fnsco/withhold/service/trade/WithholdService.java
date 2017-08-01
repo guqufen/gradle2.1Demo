@@ -86,7 +86,7 @@ public class WithholdService extends BaseService {
             if (type == 0) {
                 if (null != temp) {
                     logger.error("重复扣款，已忽略本次扣款" + withholdInfo.getUserName());
-                    //continue;
+                    continue;
                 }
 
             } else if (type > 0) {
@@ -122,22 +122,30 @@ public class WithholdService extends BaseService {
         } catch (Exception ex) {
             logger.error("扣款成功短信发送失败", ex);
         }
-        result.setStatus(ServiceConstant.PayStatusEnum.PAY_SUCC.getCode());
-        tradeDataDAO.update(result);
-        BigDecimal amount = withholdInfo.getAmount();
-        BigDecimal amountTotal = withholdInfo.getAmountTotal();
-        //已扣金额加本次扣款额=已扣总金额
-        amountTotal = amountTotal.add(amount);
-        withholdInfo.setAmountTotal(amountTotal);
-
-        String startDate = withholdInfo.getEndDate();
-        String nowDate = DateUtils.getNowDateStr2();
-        //相等则完成扣款
-        if (startDate.equals(nowDate)) {
-            withholdInfo.setStatus(2);
+        try {
+            result.setStatus(ServiceConstant.PayStatusEnum.PAY_SUCC.getCode());
+            tradeDataDAO.update(result);
+        } catch (Exception ex) {
+            logger.error(">>>>>>>>扣款成功更新流水状态出错", ex);
         }
-        withholdInfo.setFailTotal(0);
-        withholdInfoDAO.update(withholdInfo);
+        try {
+            BigDecimal amount = withholdInfo.getAmount();
+            BigDecimal amountTotal = withholdInfo.getAmountTotal();
+            //已扣金额加本次扣款额=已扣总金额
+            amountTotal = amountTotal.add(amount);
+            withholdInfo.setAmountTotal(amountTotal);
+
+            String startDate = withholdInfo.getEndDate();
+            String nowDate = DateUtils.getNowDateStr2();
+            //相等则完成扣款
+            if (startDate.equals(nowDate)) {
+                withholdInfo.setStatus(2);
+            }
+            withholdInfo.setFailTotal(0);
+            withholdInfoDAO.update(withholdInfo);
+        } catch (Exception ex) {
+            logger.error(">>>>>>>>扣款成功更新扣款信息中的失败次数、已扣总金额、状态出错", ex);
+        }
     }
 
     private void payFail(TradeDataDO result, WithholdInfoDO withholdInfo, String failReason, int type) {
@@ -146,14 +154,22 @@ public class WithholdService extends BaseService {
         } catch (Exception ex) {
             logger.error("扣款失败短信发送失败", ex);
         }
-        result.setStatus(ServiceConstant.PayStatusEnum.PAY_FAIL.getCode());
-        result.setFailReason(failReason);
-        tradeDataDAO.update(result);
-        withholdInfo.setFailTotal(type + 1);
-        if (type == 2) {//最后一次失败则为0
-            withholdInfo.setFailTotal(0);
+        try {
+            result.setStatus(ServiceConstant.PayStatusEnum.PAY_FAIL.getCode());
+            result.setFailReason(failReason);
+            tradeDataDAO.update(result);
+        } catch (Exception ex) {
+            logger.error(">>>>>>>>扣款失败更新流水状态出错", ex);
         }
-        withholdInfoDAO.update(withholdInfo);
+        try {
+            withholdInfo.setFailTotal(type + 1);
+            if (type == 2) {//最后一次失败则为0
+                withholdInfo.setFailTotal(0);
+            }
+            withholdInfoDAO.update(withholdInfo);
+        } catch (Exception ex) {
+            logger.error(">>>>>>>>扣款失败更新扣款信息中的失败次数出错", ex);
+        }
     }
 
     private void init(TradeDataDO tradeData, WithholdInfoDO withholdInfo) {
@@ -203,10 +219,10 @@ public class WithholdService extends BaseService {
 
     private String createOrderSN(WithholdInfoDO withholdInfo) {
         String order_sn = "";
-        String innerCode = withholdInfo.getMobile();
+        String mobile = withholdInfo.getMobile();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
         String rand = getFixLenthString(3);
-        order_sn = simpleDateFormat.format(new Date()) + innerCode + rand;
+        order_sn = simpleDateFormat.format(new Date()) + mobile + rand;
         String pre = this.env.getProperty("fns.order.sn.pre");
         if (Strings.isNullOrEmpty(pre)) {
             pre = "";

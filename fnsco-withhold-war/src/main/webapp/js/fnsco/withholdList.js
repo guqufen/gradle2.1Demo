@@ -1,11 +1,3 @@
-var pathName = window.document.location.pathname;
-var PROJECT_NAME = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-function unloginHandler(result) {
-	if (result.code && result.code == '4012') {
-		layer.msg('登录失效,去登录');
-		window.location = "login.html";
-	}
-}
 // 保存事件
 function saveWithholdInfo() {
 	// 校验
@@ -77,7 +69,7 @@ function initTableData() {
 		sortOrder : 'asc', // 排序方式
 		pageNumber : 1, // 初始化加载第一页，默认第一页
 		pageSize : 10, // 每页的记录行数（*）
-		pageList : [ 10, 25, 50, 100 ], // 可供选择的每页的行数（*）
+		pageList : [ 10, 20, 50, 100 ], // 可供选择的每页的行数（*）
 		showPaginationSwitch : true,// 是否显示 数据条数选择框
 		queryParams : queryParams,
 		responseHandler : responseHandler,// 处理服务器返回数据
