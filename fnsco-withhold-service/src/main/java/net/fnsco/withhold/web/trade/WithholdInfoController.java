@@ -67,6 +67,18 @@ public class WithholdInfoController extends BaseController {
      Integer result = this.withholdInfoService.doUpdate(withholdInfo,getUserId());
      return success(result);
  }
+ 
+ // 修改
+ @ApiOperation(value = "修改状态保存", notes = "修改状态保存")
+ @ResponseBody
+ @RequestMapping(value = "doUpdateStatus")
+ public ResultDTO doUpdateStatus (WithholdInfoDO withholdInfo) {
+	 WithholdInfoDO withholdInfoDO = new WithholdInfoDO();
+	 withholdInfoDO.setId(withholdInfo.getId());
+	 withholdInfoDO.setStatus(0);
+     Integer result = this.withholdInfoService.doUpdate(withholdInfoDO,getUserId());
+     return success(result);
+ }
 
  // 删除
  @ApiOperation(value = "删除", notes = "删除")

@@ -1,3 +1,5 @@
+var pathName = window.document.location.pathname;
+var PROJECT_NAME = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 // 保存事件
 function saveWithholdInfo() {
 	// 校验
@@ -209,10 +211,8 @@ window.operateEvents = {
 // 表格中操作按钮
 function operateFormatter(value, row, index) {
 	if (row.status == 1) {
-		row.status = 0;
 		return [
-				'<a class="redact" href="javascript:stopData(' + row.id + ','
-						+ row.status + ');" title="终止">终止', '</a>  ', ]
+				'<a class="redact" href="javascript:stopData(' + row.id + ');" title="终止">终止', '</a>  ', ]
 				.join('');
 	} else
 		return '';
@@ -305,18 +305,17 @@ $('#btn_delete').click(function() {
 
 });
 
-function stopData(id, status) {
+function stopData(id) {
 	layer.confirm('确定终止吗？', {
 		time : 20000, // 20s后自动关闭
 		btn : [ '确定', '取消' ]
 	}, function() {
 		$.ajax({
-			url : PROJECT_NAME + '/web/withholdInfo/doUpdate',
+			url : PROJECT_NAME + '/web/withholdInfo/doUpdateStatus',
 			type : 'POST',
 			dataType : "json",
 			data : {
-				'id' : id,
-				'status' : status
+				'id' : id
 			},
 			success : function(data) {
 				unloginHandler(data);
