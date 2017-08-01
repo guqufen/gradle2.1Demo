@@ -84,65 +84,53 @@ function initTableData() {
 		columns : [ {
 			field : 'id',
 			title : '序号',
-			width : '1px',
+			width : '20',
 			formatter : operateFormatterId
 		}, {
 			field : 'userName',
 			title : '姓名',
-			width : '100px'
+			width : '80'
 		}, {
 			field : 'mobile',
-			title : '手机号',
-			width : '60px'
+			title : '手机号'
 		}, {
 			field : 'certifyId',
 			title : '身份证号',
-			width : '80px'
 		}, {
 			field : 'debitDay',
 			title : '扣款日',
-			width : '30px'
 		}, {
 			field : 'amount',
-			title : '扣款金额(元/次)',
-			width : '30px'
+			title : '扣款金额(元/次)'
 		}, {
 			field : 'allTotalAmt',
-			title : '扣款总额(元)',
-			width : '80px'
+			title : '扣款总额(元)'
 		}, {
 			field : 'total',
-			title : '总扣款次数',
-			width : '80px'
+			title : '总扣款次数'
 		}, {
 			field : 'amountTotal',
-			title : '已扣款总额(元)',
-			width : '80px'
+			title : '已扣款总额(元)'
 		}, {
 			field : 'payLeftAmt',
-			title : '待扣金额(元)',
-			width : '80px'
+			title : '待扣金额(元)'
 		}, {
 			field : 'bankCard',
-			title : '银行卡号',
-			width : '80px'
+			title : '银行卡号'
 		}, {
 			field : 'modifyUserName',
 			title : '提交人',
-			width : '100px'
+			width : '80'
 		}, {
 			field : 'modifyTimeStr',
-			title : '提交时间',
-			width : '80px'
+			title : '提交时间'
 		}, {
 			field : 'status',
 			title : '状态',
-			width : 5,
 			formatter : formatStatus
 		}, {
 			title : '操作',
 			align : 'center',
-			width : '10px',
 			formatter : operateFormatter
 		} ]
 	});
