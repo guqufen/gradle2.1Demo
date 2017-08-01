@@ -77,7 +77,7 @@ function formatReDate(value, row, index) {
 
 }
 function formatTxnTime(value, row, index){
-	value.substr(0,8).split()
+	//value.substr(0,8).split()
 	if (!value) {
 		return '-';
 	} else{
@@ -88,7 +88,7 @@ function formatTxn(value, row, index){
 	if (!value) {
 		return '-';
 	} else{
-		return value.substr(8,16);
+		return value.substr(8,14);
 	}
 }
 function formatday(value, row, index){
@@ -100,9 +100,9 @@ function formatday(value, row, index){
 }
 // 操作格式化
 function operateFormatter(value, row, index) {
-//	index++;
-//	return "<div i='" + value + "'>" + index + "</div>";
-    return [index+1].join('');
+	index++;
+	return "<div i='" + value + "'>" + index + "</div>";
+//    return [index+1].join('');
 }
 // 推送类型格式化
 function formatPushType(value, row, index) {
@@ -120,7 +120,7 @@ function formatChange(value, row, index) {
 	if (!value) {
 		return '-';
 	} else if (value == '1') {
-		return "<button class='btn btn-success repair'>补收</button>";
+		return "<div class='btn btn-success repair'>补收</div>";
 	}
 }
 // 条件查询按钮事件

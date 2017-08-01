@@ -22,105 +22,95 @@
 	<div class="panel-body animated fadeInRight">
 		<div class="panel panel-default">
 			<form id="formSearch" class="form-horizontal">
-				<div class="form-group" style="margin-top: 15px;margin-right:0px;margin-left:0px;">
-					<div class="row col-sm-10">
-						<div class="row col-sm-10">
+				<div class="form-group"
+					style="margin-top: 15px; margin-right: 0px; margin-left: 0px;">
+
+					<div class="row col-sm-12">
 						<div class="row">
-						<div class="col-sm-10">
-							<div class="col-sm-4 query-time">
-								<label class="control-label" for="txt_search_price">扣款日期:</label>
-								<input type="text" class="form-control" id="datetimepicker1">
-								- <input type="text" class="form-control" id="datetimepicker2">
-							</div>
-							<div class="col-sm-4" id="withholdDate">
-								<label class="control-label" for="shopName" >扣款日:</label> <select
-									class="form-control">
-									<option value="">全部</option>
-									<option value="1">01</option>
-									<option value="2">02</option>
-									<option value="3">03</option>
-									<option value="4">04</option>
-									<option value="5">05</option>
-									<option value="6">06</option>
-									<option value="7">07</option>
-									<option value="8">08</option>
-									<option value="9">09</option>
-									<option value="10">10</option>
-									<option value="11">11</option>
-									<option value="12">12</option>
-									<option value="13">13</option>
-									<option value="14">14</option>
-									<option value="15">15</option>
-									<option value="16">16</option>
-									<option value="17">17</option>
-									<option value="18">18</option>
-									<option value="19">19</option>
-									<option value="20">20</option>
-									<option value="21">21</option>
-									<option value="22">22</option>
-									<option value="23">23</option>
-									<option value="24">24</option>
-									<option value="25">25</option>
-									<option value="26">26</option>
-									<option value="27">27</option>
-									<option value="28">28</option>
-								</select>
-							</div>
-							<div class="col-sm-4">
-								<label class="control-label">状态:</label> 
-								<select id="stauts" name="stauts" class="form-control">
-									<option value="">全部</option>
-									<option value="2">成功</option>
-									<option value="1">失败</option>
-									<option value="9">补收</option>
-								</select>
-							</div>
-						</div>
+							<div class="col-sm-12">
+								<div class="col-sm-6 query-time">
+									<label class="control-label" for="txt_search_price">扣款日期:</label>
+									<input type="text" class="form-control" id="datetimepicker1">
+									- <input type="text" class="form-control" id="datetimepicker2">
+								</div>
+								<div class="col-sm-3" id="withholdDate">
+									<label class="control-label" for="shopName">扣款日:</label> <select
+										class="form-control">
+										<option value="">全部</option>
+										<option value="1">01</option>
+										<option value="2">02</option>
+										<option value="3">03</option>
+										<option value="4">04</option>
+										<option value="5">05</option>
+										<option value="6">06</option>
+										<option value="7">07</option>
+										<option value="8">08</option>
+										<option value="9">09</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+										<option value="21">21</option>
+										<option value="22">22</option>
+										<option value="23">23</option>
+										<option value="24">24</option>
+										<option value="25">25</option>
+										<option value="26">26</option>
+										<option value="27">27</option>
+										<option value="28">28</option>
+									</select>
+								</div>
+								<div class="col-sm-3">
+									<label class="control-label">状态:</label> <select id="stauts"
+										name="stauts" class="form-control">
+										<option value="">全部</option>
+										<option value="2">成功</option>
+										<option value="1">失败</option>
+										<option value="9">补收</option>
+									</select>
+								</div>
 
-						<div class="row col-sm-12">
 
-						<div class="row col-sm-10">
 
-							<div class="col-sm-4">
-								<label class="control-label" for="mobile">手机号:</label> <input
-									type="text" class="form-control" id="mobile" name="mobile" />
-							</div>
-							<div class="col-sm-4">
-								<label class="control-label" for="userName">姓名:</label> <input
-									type="text" class="form-control" id="userName"
-									name="userName" />
-							</div>
-							<!-- <div class="col-sm-4">
+								<div class="row col-sm-12">
+
+									<div class="col-sm-3">
+										<label class="control-label" for="mobile">手机号:</label> <input
+											type="text" class="form-control" id="mobile" name="mobile" />
+									</div>
+									<div class="col-sm-3">
+										<label class="control-label" for="userName">姓名:</label> <input
+											type="text" class="form-control" id="userName"
+											name="userName" />
+									</div>
+									<!-- <div class="col-sm-4">
 								<label class="control-label" for="certifyId">身份证:</label> <input
 									type="text" class="form-control" id="certifyId"
 									name="certifyId" />
 
 							</div> -->
 
-							</div>
-						 </div>	
+								</div>
 
-							<div class="col-sm-2" style="text-align: right;">
-								<button type="button" id="btn_query" class="btn btn-primary"
-									onclick="javascript:queryEvent('table');">
-									<span class="glyphicon glyphicon-search"></span>查询
-								</button>
-								<button type="button" id="btn_reset" class="btn btn-default"
-									onclick="javascript:resetEvent('formSearch');">
-									<span class="glyphicon glyphicon-refresh"></span>重置
-								</button>
+
+								<div class="col-sm-2" style="text-align: right;">
+									<button type="button" id="btn_query" class="btn btn-primary"
+										onclick="javascript:queryEvent('table');">
+										<span class="glyphicon glyphicon-search"></span>查询
+									</button>
+									<button type="button" id="btn_reset" class="btn btn-default"
+										onclick="javascript:resetEvent('formSearch');">
+										<span class="glyphicon glyphicon-refresh"></span>重置
+									</button>
+								</div>
 							</div>
-					</div>
-						</div>
-						<div class="col-sm-2" style="text-align: right;">
-							<button type="button" id="btn_query" class="btn btn-primary"
-								onclick="javascript:queryEvent('table');">
-								<span class="glyphicon glyphicon-search"></span>查询
-							</button>
-							<button type="button" id="btn_reset" class="btn btn-default"
-								onclick="javascript:resetEvent('formSearch');">
-								<span class="glyphicon glyphicon-refresh"></span>重置
-							</button>
 						</div>
 
 					</div>
@@ -129,7 +119,7 @@
 				<div class="ibox-content">
 					<div class="row row-lg">
 						<div class="col-sm-12">
-							<table id="table" ></table>
+							<table id="table"></table>
 						</div>
 					</div>
 				</div>
