@@ -214,7 +214,11 @@ public class TradeDataProvider {
         if(StringUtils.isNotBlank(tradeData.getWithholdday())){
             WHERE("substring(txn_time,7,2) = #{tradeData.withholdday}");
         }
-        WHERE("status in (0,1,2,9)");
+        if(tradeData.getStatus()!=null){
+            WHERE("withhold_date = CONCAT('%',#{tradeData.withholdday})");
+        }else{
+            WHERE("status in (0,1,2,9)");
+        }
         ORDER_BY("txn_time desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -315,9 +319,13 @@ public class TradeDataProvider {
             WHERE("txn_time <= #{tradeData.endDate}");
         }
         if(StringUtils.isNotBlank(tradeData.getWithholdday())){
-            WHERE("substring(txn_time,7,2) = #{tradeData.withholdday}");
+            WHERE("withhold_date = CONCAT('%',#{tradeData.withholdday})");
         }
-        WHERE("status in (0,1,2,9)");
+        if(tradeData.getStatus()!=null){
+            WHERE(" status = '"+tradeData.getStatus()+"'");
+        }else{
+            WHERE("status in (0,1,2,9)");
+        }
         }}.toString();
     }
 }
