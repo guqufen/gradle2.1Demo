@@ -70,4 +70,21 @@
       </if>
     </trim>
   </insert>
+  <!-- 按照innerCode和时间段查询 -->
+  <select id="selectTradeDataByInnerCode" parameterType="net.fnsco.service.domain.trade.TradeByPayType" resultType="net.fnsco.api.dto.TradeTypeDTO">
+     SELECT SUM(turnover) AS turnover,SUM(order_num) AS orderNum,pay_type AS payType 
+           FROM r_trade_by_pay_type 
+     <where>
+       <if test="innerCode != null and innerCode != '' ">
+          AND inner_code = #{innerCode}
+       </if>
+       <if test="startDate != null">
+         AND  trade_date &gt;= #{startDate}
+       </if>
+       <if test="endDate != null">
+         AND trade_date &lt;= #{endDate}
+       </if>
+     </where>
+  	  GROUP BY pay_type
+  </select>
 </mapper>

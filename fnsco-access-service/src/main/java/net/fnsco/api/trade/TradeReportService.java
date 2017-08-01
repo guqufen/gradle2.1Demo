@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.fnsco.api.dto.TradeReportDTO;
 import net.fnsco.api.dto.TurnoverDTO;
+import net.fnsco.api.dto.WeeklyDTO;
 
 /**
  * @desc 统计service
@@ -34,4 +35,14 @@ public interface TradeReportService {
      * @since  CodingExample　Ver 1.1
      */
     List<TurnoverDTO> queryTurnovers(TradeReportDTO tradeReportDTO);
+    /**
+     * queryWeeklyByInnerCode:(这里用一句话描述这个方法的作用)查询某时间段的周报详情数据
+     *
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @return WeeklyDTO    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    WeeklyDTO queryWeeklyByInnerCode(TradeReportDTO tradeReportDTO);
 }

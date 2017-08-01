@@ -1,5 +1,8 @@
 package net.fnsco.service.dao.master.trade;
 
+import java.util.List;
+
+import net.fnsco.api.dto.TradeTypeDTO;
 import net.fnsco.service.domain.trade.TradeByPayType;
 /**
  * @desc
@@ -13,5 +16,14 @@ public interface TradeByPayTypeDao {
     int insert(TradeByPayType record);
 
     int insertSelective(TradeByPayType record);
-
+    /**
+     * selectTradeDataByInnerCode:(这里用一句话描述这个方法的作用)按照innerCode和时间段查询数据
+     *
+     * @param record
+     * @return    设定文件
+     * @return TradeTypeDTO    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<TradeTypeDTO> selectTradeDataByInnerCode(TradeByPayType record);
 }

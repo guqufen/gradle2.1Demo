@@ -47,6 +47,31 @@ public class TurnoverDTO extends JO {
     private boolean isWeekLy;
     
     /**
+     * 营业额类型: 0:昨天 1:上周 2:本日 3:本周 4:店主周报
+     */
+    private Integer type;
+    
+    /**
+     * type
+     *
+     * @return  the type
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getType() {
+        return type;
+    }
+    /**
+     * type
+     *
+     * @param   type    the type to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setType(Integer type) {
+        this.type = type;
+    }
+    /**
      * weeklyTime
      *
      * @return  the weeklyTime

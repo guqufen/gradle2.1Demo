@@ -41,6 +41,30 @@ public class AppUserDTO extends DTO {
     private Integer gesTrail;
     private String  code;
     private String  oldPassword;
+    
+    private Integer sex;//性别
+    
+    /**
+     * sex
+     *
+     * @return  the sex
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getSex() {
+        return sex;
+    }
+
+    /**
+     * sex
+     *
+     * @param   sex    the sex to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
 
     public Integer getOprationType() {
         return oprationType;

@@ -60,4 +60,15 @@ public interface AppUserService extends UserService{
     ResultDTO<String> judgeRoles(List<AppUserMerchantDTO> params);
     
     void addAppUserMerchantRole(AppUserMerchant dto);
+    
+    /**
+     * modifyInfo:(这里用一句话描述这个方法的作用)修改用户信息接口
+     *
+     * @param appUserDTO
+     * @return    设定文件
+     * @return ResultDTO<String>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    ResultDTO<String> modifyInfo(AppUserDTO appUserDTO);
 }

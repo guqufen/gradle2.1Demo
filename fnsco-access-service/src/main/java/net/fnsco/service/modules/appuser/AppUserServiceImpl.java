@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,6 @@ import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.api.dto.AppUserMerchantDTO;
 import net.fnsco.api.dto.BandDto;
-import net.fnsco.api.dto.PushMsgInfoDTO;
 import net.fnsco.api.dto.QueryBandDTO;
 import net.fnsco.api.dto.SmsCodeDTO;
 import net.fnsco.core.base.BaseService;
@@ -639,5 +639,27 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Override
     public void addAppUserMerchantRole(AppUserMerchant dto){
         appUserMerchantDao.insertSelective(dto);
+    }
+    
+    /**
+     * (non-Javadoc)修改用户个人信息
+     * @see net.fnsco.api.appuser.AppUserService#modifyInfo(net.fnsco.api.dto.AppUserDTO)
+     * @author tangliang
+     * @date 2017年7月31日 下午3:01:35
+     */
+    @Override
+    public ResultDTO<String> modifyInfo(AppUserDTO appUserDto) {
+        if(null == appUserDto.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+        AppUser appUser = new AppUser();
+        BeanUtils.copyProperties(appUserDto, appUser);
+        appUser.setId(appUserDto.getUserId());
+        boolean flag = appUserDao.updateByPrimaryKeySelective(appUser);
+        if(!flag){
+            return ResultDTO.fail(ApiConstant.E_UPDATE_FAIL); 
+        }
+        return ResultDTO.success();
+        
     }
 }

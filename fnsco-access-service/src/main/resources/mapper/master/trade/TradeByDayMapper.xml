@@ -81,6 +81,9 @@
          SELECT inner_code FROM m_merchant_user_rel WHERE app_user_id=#{userId}
        )
       </if>
+      <if test="innerCode !=null and innerCode != ''">
+       AND inner_code = #{innerCode}
+      </if>
     </where>
   </select>
   <!-- 统计周报数据 -->
@@ -102,5 +105,20 @@
        )
       </if>
     </where>
+  </select>
+  <!-- 查询每天的数据 -->
+  <select id="selectByInnerCode" parameterType="net.fnsco.service.domain.trade.TradeByDay" resultType="net.fnsco.api.dto.TradeDayDTO">
+     SELECT trade_date AS tradeDate,order_num AS orderNum, turnover AS turnover FROM r_trade_by_day 
+     <where>
+       <if test="startTradeDate != null and  startTradeDate != ''">
+        AND trade_date &gt;= #{startTradeDate}
+      </if>
+       <if test="endTradeDate != null and  endTradeDate != ''">
+        AND trade_date &lt;= #{endTradeDate}
+      </if>
+      <if test="innerCode != null and innerCode != ''">
+        AND inner_code = #{innerCode}
+      </if>
+     </where>
   </select>
 </mapper>

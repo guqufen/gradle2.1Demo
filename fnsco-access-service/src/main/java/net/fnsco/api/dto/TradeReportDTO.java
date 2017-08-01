@@ -24,9 +24,86 @@ public class TradeReportDTO extends DTO {
      * APP用户ID
      */
     private Integer userId;
+    /**
+     * 商家的innerCode
+     */
+    private String innerCode;
+    /**
+     * 查询开始时间
+     */
+    private String startDate;
+    /**
+     * 查询结束时间
+     */
+    private String endDate;
     
     
+    /**
+     * innerCode
+     *
+     * @return  the innerCode
+     * @since   CodingExample Ver 1.0
+    */
     
+    public String getInnerCode() {
+        return innerCode;
+    }
+
+    /**
+     * innerCode
+     *
+     * @param   innerCode    the innerCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setInnerCode(String innerCode) {
+        this.innerCode = innerCode;
+    }
+
+    /**
+     * startDate
+     *
+     * @return  the startDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * startDate
+     *
+     * @param   startDate    the startDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * endDate
+     *
+     * @return  the endDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * endDate
+     *
+     * @param   endDate    the endDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
     /**
      * userId
      *

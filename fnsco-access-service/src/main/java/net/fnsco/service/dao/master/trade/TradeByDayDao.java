@@ -1,5 +1,8 @@
 package net.fnsco.service.dao.master.trade;
 
+import java.util.List;
+
+import net.fnsco.api.dto.TradeDayDTO;
 import net.fnsco.api.dto.TurnoverDTO;
 import net.fnsco.service.domain.trade.TradeByDay;
 /**
@@ -35,4 +38,15 @@ public interface TradeByDayDao {
      * @since  CodingExample　Ver 1.1
      */
     TurnoverDTO selectWeekLyTradeData(TradeByDay record);
+    /**
+     * 
+     * selectByInnerCode:(这里用一句话描述这个方法的作用)查询每天的数据
+     *
+     * @param record
+     * @return    设定文件
+     * @return List<TradeDayDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<TradeDayDTO> selectByInnerCode(TradeByDay record);
 }

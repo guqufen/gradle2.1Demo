@@ -12,7 +12,6 @@ import net.fnsco.api.appuser.AppUserService;
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.service.domain.AppUser;
 
 /**
  * @author   zhoujincheng
@@ -78,6 +77,21 @@ public class AppUserController extends BaseController {
     public ResultDTO<String> loginOut(@RequestBody AppUserDTO appUserDTO) {
         ResultDTO<String> result = appUserService.loginOut(appUserDTO);
         return result;
+    }
+    
+    /**
+     * modifyInfo:(这里用一句话描述这个方法的作用)修改个人信息
+     *
+     * @param appUserDTO
+     * @return    设定文件
+     * @return ResultDTO<String>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping(value = "/modifyInfo")
+    @ApiOperation(value = "修改个人信息")
+    public ResultDTO<String> modifyInfo(@RequestBody AppUserDTO appUserDTO){
+        return appUserService.modifyInfo(appUserDTO);
     }
 }
 
