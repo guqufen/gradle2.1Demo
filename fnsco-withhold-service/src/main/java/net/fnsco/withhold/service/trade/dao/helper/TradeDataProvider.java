@@ -215,7 +215,7 @@ public class TradeDataProvider {
             WHERE("substring(txn_time,7,2) = #{tradeData.withholdday}");
         }
         if(tradeData.getStatus()!=null){
-            WHERE(" status = '"+tradeData.getStatus()+"'");
+            WHERE("withhold_date = CONCAT('%',#{tradeData.withholdday})");
         }else{
             WHERE("status in (0,1,2,9)");
         }
@@ -319,7 +319,7 @@ public class TradeDataProvider {
             WHERE("txn_time <= #{tradeData.endDate}");
         }
         if(StringUtils.isNotBlank(tradeData.getWithholdday())){
-            WHERE("substring(txn_time,7,2) = #{tradeData.withholdday}");
+            WHERE("withhold_date = CONCAT('%',#{tradeData.withholdday})");
         }
         if(tradeData.getStatus()!=null){
             WHERE(" status = '"+tradeData.getStatus()+"'");
