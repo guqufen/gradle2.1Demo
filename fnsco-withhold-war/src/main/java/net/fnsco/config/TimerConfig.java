@@ -26,7 +26,8 @@ public class TimerConfig {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @Scheduled(cron = "0 0 9 * * ?")
+    //@Scheduled(cron = "0 0 9 * * ?")
+    @Scheduled(cron = "0 */5 * * * ?")
     public void collectPayment9() {
         System.out.println("定时任务执行9");
         withholdService.collectPayment(0);
@@ -38,7 +39,8 @@ public class TimerConfig {
  * @throws 
  * @since  CodingExample　Ver 1.1
  */
-    @Scheduled(cron = "0 0 13 * * ?")
+    //@Scheduled(cron = "0 0 13 * * ?")
+    @Scheduled(cron = "0 */5 * * * ?")
     public void collectPayment13() {
         System.out.println("定时任务执行13");
         withholdService.collectPayment(1);
@@ -50,7 +52,8 @@ public class TimerConfig {
  * @throws 
  * @since  CodingExample　Ver 1.1
  */
-    @Scheduled(cron = "0 0 17 * * ?")
+    //@Scheduled(cron = "0 0 17 * * ?")
+    @Scheduled(cron = "0 */5 * * * ?")
     public void collectPayment17() {
         System.out.println("定时任务执行17");
         withholdService.collectPayment(2);
@@ -62,7 +65,8 @@ public class TimerConfig {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @Scheduled(cron = "0 0 12 * * ?")
+    //@Scheduled(cron = "0 0 12 * * ?")
+    @Scheduled(cron = "0 */5 * * * ?")
     public void collectPaymentRemind12() {
         System.out.println("定时任务执行12");
         withholdService.collectPaymentRemind();
