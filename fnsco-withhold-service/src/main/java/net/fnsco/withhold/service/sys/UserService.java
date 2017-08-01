@@ -45,11 +45,12 @@ public class UserService extends BaseService {
         }
         String oldPwd = Md5Util.getInstance().md5(oldPassword);
         String newPwd = Md5Util.getInstance().md5(newPassword);
-        //判断原密码是否正确 
-        UserDO user = userDAO.getByUserName(name);
+        //通过真实姓名判断原密码是否正确 
+        UserDO user = userDAO.getByRealName(name);
         if (null == user) {
             return ResultDTO.fail(ApiConstant.WEB_LOGIN_USER_NOT_EXIST);
         }
+
         if (!oldPwd.equals(user.getPassword())) {
             return ResultDTO.fail(ApiConstant.WEB_OLD_PASSWORD_FAIL);
         }
