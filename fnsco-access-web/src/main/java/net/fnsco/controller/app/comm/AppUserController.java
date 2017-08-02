@@ -190,8 +190,16 @@ public class AppUserController extends BaseController {
                 throw new RuntimeException();
             }
         }
-        
         return null;
+    }
+    
+    //获取个人信息
+    @ResponseBody
+    @RequestMapping(value = "/getPersonInfo")
+    @ApiOperation(value = "获取个人信息")
+    public ResultDTO<String> getPersonInfo(@RequestBody AppUserDTO appUserDTO) {
+        ResultDTO<String> result = appUserService.getPersonInfo(appUserDTO);
+        return result;
     }
 }
 

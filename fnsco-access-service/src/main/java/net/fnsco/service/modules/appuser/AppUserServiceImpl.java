@@ -23,6 +23,7 @@ import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.constant.ConstantEnum;
 import net.fnsco.api.dto.AppOldListDTO;
 import net.fnsco.api.dto.AppOldPeopleDTO;
+import net.fnsco.api.dto.AppPersonInfoDTO;
 import net.fnsco.api.dto.AppUserDTO;
 import net.fnsco.api.dto.AppUserManageDTO;
 import net.fnsco.api.dto.AppUserMerchantDTO;
@@ -660,6 +661,20 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_UPDATE_FAIL); 
         }
         return ResultDTO.success();
+        
+    }
+
+    //获取个人信息
+    @Override
+    public ResultDTO<String> getPersonInfo(AppUserDTO appUserDTO) {
+        if(appUserDTO.getUserId()==null){
+           return ResultDTO.fail(ApiConstant. E_USER_ID_NULL);
+        }
+        AppUser appUser=appUserDao.selectAppUserById(appUserDTO.getUserId());
+        AppPersonInfoDTO dto=new AppPersonInfoDTO();
+        dto.setSex(appUser.getSex());
+        dto.setUserName(appUser.getUserName());
+        return ResultDTO.success(dto);
         
     }
 }
