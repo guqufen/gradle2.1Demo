@@ -53,7 +53,8 @@ public class SysUserLoginAction extends BaseController{
 		
 		result = adminUserService.doLogin( username, password);
 		if (result.isSuccess()) {
-			setSessionUser(result.getData());
+		    SysUser user = result.getData();
+			setSessionUser(user,user.getId());
 			CookieUtils.addCookie(res, CoreConstants.COOKIE_USER_KEY, ((SysUser)result.getData()).getName());
 			return ResultDTO.success();
 		}
@@ -86,7 +87,7 @@ public class SysUserLoginAction extends BaseController{
 			if(StringUtils.isEmpty(cookie))return result;
 			adminUser = new SysUser();
 			adminUser.setName(cookie.substring(cookie.lastIndexOf("#")+1, cookie.length()));
-			setSessionUser(adminUser);
+			setSessionUser(adminUser,1);
 		}
 		result.put("sessionUser", adminUser);
 		return result;

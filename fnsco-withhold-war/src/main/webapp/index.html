@@ -209,14 +209,13 @@
 <script type="text/javascript" src="js/fnsco/common.js"></script>
 <script type="text/javascript">
 $('.logout').attr('href',PROJECT_NAME+"/web/user/logout");
-//获取当前用户
+//获取当前用户,将真实姓名显示出来
 $(function(){
 	$.ajax({
 		url:PROJECT_NAME+'/web/user/getCurrentUser',
 		dataType:'json',
 		type:'POST',
 		success:function(data){
-			//alert(data.success);
 			unloginHandler(data);
 			if(!data.success)
 				window.location='login.html';
@@ -230,6 +229,7 @@ $("#btn_forget").click(function(){
 	if($("#newPassword").val()!=$("#newPassword1").val()){
 		alert("两次密码输入不一致,请重新输入");
 	}
+	//此处为real_name
 	var data={"name":$(".indexPageUserName").html(),"oldPassword":$("#oldPassword").val(),"newPassword":$("#newPassword1").val()};
 	$.ajax({
 			url:PROJECT_NAME+'/web/user/modifyPassword',

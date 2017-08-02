@@ -1,3 +1,5 @@
+var pathName = window.document.location.pathname;
+var PROJECT_NAME = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 // 保存事件
 function saveWithholdInfo() {
 	// 校验
@@ -65,12 +67,11 @@ function initTableData() {
 		cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 		pagination : true, // 是否显示分页（*）
 		sortable : true, // 是否启用排序
-		sortName : 'id',// 定义排序列
 		sortOrder : 'asc', // 排序方式
 		pageNumber : 1, // 初始化加载第一页，默认第一页
 		pageSize : 10, // 每页的记录行数（*）
 		pageList : [ 10, 20, 50, 100 ], // 可供选择的每页的行数（*）
-		showPaginationSwitch : true,// 是否显示 数据条数选择框
+		showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 		queryParams : queryParams,
 		responseHandler : responseHandler,// 处理服务器返回数据
 		columns : [ {
@@ -209,10 +210,8 @@ window.operateEvents = {
 // 表格中操作按钮
 function operateFormatter(value, row, index) {
 	if (row.status == 1) {
-		row.status = 0;
 		return [
-				'<a class="redact" href="javascript:stopData(' + row.id + ','
-						+ row.status + ');" title="终止">终止', '</a>  ', ]
+				'<a class="redact" href="javascript:stopData(' + row.id + ');" title="终止">终止', '</a>  ', ]
 				.join('');
 	} else
 		return '';
@@ -305,18 +304,17 @@ $('#btn_delete').click(function() {
 
 });
 
-function stopData(id, status) {
+function stopData(id) {
 	layer.confirm('确定终止吗？', {
 		time : 20000, // 20s后自动关闭
 		btn : [ '确定', '取消' ]
 	}, function() {
 		$.ajax({
-			url : PROJECT_NAME + '/web/withholdInfo/doUpdate',
+			url : PROJECT_NAME + '/web/withholdInfo/doUpdateStatus',
 			type : 'POST',
 			dataType : "json",
 			data : {
-				'id' : id,
-				'status' : status
+				'id' : id
 			},
 			success : function(data) {
 				unloginHandler(data);

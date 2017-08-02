@@ -77,6 +77,13 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
+    
+    public static String getNowYMDStr() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        result = sf.format(new Date());
+        return result;
+    }
     public static String getAfterDayStr() {
         String result = "";
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
