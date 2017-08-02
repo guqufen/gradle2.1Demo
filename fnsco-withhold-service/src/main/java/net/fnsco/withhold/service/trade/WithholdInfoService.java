@@ -41,6 +41,7 @@ public class WithholdInfoService extends BaseService {
 		logger.info("开始分页查询WithholdInfoService.page, withholdInfo=" + withholdInfo.toString());
 		List<WithholdInfoDO> pageList = this.withholdInfoDAO.pageList(withholdInfo, pageNum, pageSize);
 
+		List<WithholdInfoDO> pageListNew = new ArrayList<>();
 		for (WithholdInfoDO withholdInfoDO : pageList) {
 
 			// 根据最后修改人ID查询姓名
@@ -51,7 +52,7 @@ public class WithholdInfoService extends BaseService {
 				if (null == userDO) {
 					withholdInfoDO.setModifyUserName("--");
 				} else {
-					withholdInfoDO.setModifyUserName(userDO.getRealName());
+					withholdInfoDO.setModifyUserName(userDO.getName());
 				}
 			}
 
@@ -95,6 +96,7 @@ public class WithholdInfoService extends BaseService {
 			b2 = payLeftAmt.divide(b1, 2, BigDecimal.ROUND_HALF_UP);
 			withholdInfoDO.setPayLeftAmt(b2);// 设置待扣款金额
 
+//			pageListNew.add(withholdInfoDO);
 		}
 		Integer count = this.withholdInfoDAO.pageListCount(withholdInfo);
 		ResultPageDTO<WithholdInfoDO> pager = new ResultPageDTO<WithholdInfoDO>(count, pageList);
@@ -123,7 +125,7 @@ public class WithholdInfoService extends BaseService {
 		int month = now.getMonth();
 		if (now.getDate() < Integer.valueOf(withholdInfo.getDebitDay())
 				|| (now.getDate() == Integer.valueOf(withholdInfo.getDebitDay())
-						&& (now.getHours() == 8 && now.getMinutes() <= 30 || now.getHours() <= 7))) {
+						&& ((now.getHours() == 8 && now.getMinutes() <= 30) || now.getHours() <= 7))) {
 		} else {
 			month++;
 		}

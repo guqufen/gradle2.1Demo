@@ -78,8 +78,9 @@ public class WithholdService extends BaseService {
     public void collectPayment(int type) {
         String dayStr = DateUtils.getNowDateDayStr();
         String monthStr = DateUtils.getNowDateMonthStr() + "-" + dayStr;
+        String startDate = DateUtils.getNowYMDStr();
         logger.debug(type + "开始代扣" + dayStr);
-        List<WithholdInfoDO> withholdInfoList = withholdInfoDAO.getByDebitDayFail(dayStr, type);
+        List<WithholdInfoDO> withholdInfoList = withholdInfoDAO.getByDebitDayFail(dayStr, type,startDate);
         for (WithholdInfoDO withholdInfo : withholdInfoList) {
             TradeDataDO tradeData = new TradeDataDO();
             TradeDataDO temp = tradeDataDAO.getByWithholdId(withholdInfo.getId(), monthStr);
@@ -165,6 +166,12 @@ public class WithholdService extends BaseService {
             withholdInfo.setFailTotal(type + 1);
             if (type == 2) {//最后一次失败则为0
                 withholdInfo.setFailTotal(0);
+            }
+            String startDate = withholdInfo.getEndDate();
+            String nowDate = DateUtils.getNowDateStr2();
+            //相等则完成扣款
+            if (startDate.equals(nowDate)) {
+                withholdInfo.setStatus(2);
             }
             withholdInfoDAO.update(withholdInfo);
         } catch (Exception ex) {

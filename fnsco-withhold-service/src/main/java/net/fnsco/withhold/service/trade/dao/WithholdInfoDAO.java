@@ -30,8 +30,8 @@ public interface WithholdInfoDAO {
                @Result(column = "an_bank_id", property = "anBankId"), @Result(column = "account_type", property = "accountType"), @Result(column = "acc_type", property = "accType"),
                @Result(column = "open_bank_num", property = "openBankNum"), @Result(column = "fail_total", property = "failTotal") })
 
-    @Select("SELECT * FROM w_withhold_info WHERE status = '1' and debit_day = #{debitDay} and fail_total =#{failTotal} ")
-    public List<WithholdInfoDO> getByDebitDayFail(@Param("debitDay") String debitDay, @Param("failTotal") int failTotal);
+    @Select("SELECT * FROM w_withhold_info WHERE status = '1' and debit_day = #{debitDay} and fail_total =#{failTotal} and start_date<= #{startDate}")
+    public List<WithholdInfoDO> getByDebitDayFail(@Param("debitDay") String debitDay, @Param("failTotal") int failTotal,@Param("startDate") String startDate);
 
     @Results({ @Result(column = "user_name", property = "userName"), @Result(column = "certif_type", property = "certifType"), @Result(column = "certify_id", property = "certifyId"),
                @Result(column = "debit_day", property = "debitDay"), @Result(column = "amount_total", property = "amountTotal"), @Result(column = "bank_card", property = "bankCard"),
