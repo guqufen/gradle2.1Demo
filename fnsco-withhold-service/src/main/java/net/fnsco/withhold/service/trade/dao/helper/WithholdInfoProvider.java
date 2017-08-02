@@ -152,16 +152,16 @@ public class WithholdInfoProvider {
                     WHERE("id=#{withholdInfo.id}");
                 }
                 if (StringUtils.isNotBlank(withholdInfo.getUserName())) {
-                    WHERE("user_name=#{withholdInfo.userName}");
+                    WHERE("user_name like CONCAT('%',#{withholdInfo.userName}，'%')");
                 }
                 if (StringUtils.isNotBlank(withholdInfo.getMobile())) {
-                    WHERE("mobile=#{withholdInfo.mobile}");
+                    WHERE("mobile like CONCAT('%',#{withholdInfo.mobile},'%')");
                 }
                 if (StringUtils.isNotBlank(withholdInfo.getCertifType())) {
                     WHERE("certif_type=#{withholdInfo.certifType}");
                 }
                 if (StringUtils.isNotBlank(withholdInfo.getCertifyId())) {
-                    WHERE("certify_id=#{withholdInfo.certifyId}");
+                    WHERE("certify_id like CONCAT('%',#{withholdInfo.certifyId},'%')");
                 }
                 if (StringUtils.isNotBlank(withholdInfo.getDebitDay())) {
                     WHERE("debit_day=#{withholdInfo.debitDay}");
