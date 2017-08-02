@@ -71,5 +71,5 @@ public interface AppUserService extends UserService{
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<String> modifyInfo(AppUserDTO appUserDTO);
-    ResultDTO<String> getPersonInfo(AppUserDTO appUserDTO);
+    ResultDTO<String> getUserInfo(AppUserDTO appUserDTO);
 }
