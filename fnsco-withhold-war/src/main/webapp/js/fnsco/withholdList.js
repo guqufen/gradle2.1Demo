@@ -2,6 +2,29 @@ var pathName = window.document.location.pathname;
 var PROJECT_NAME = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 // 保存事件
 function saveWithholdInfo() {
+	//名称
+	if(!$('#userName').val()){
+		layer.msg('请输入有效姓名!');
+		return;
+	}
+	//校验身份证
+	var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+	if(reg.test($('#certifyId').val()) === false)  
+	   {  
+		  layer.msg("身份证输入不合法");  
+	       return;  
+	   } 
+	//校验银行卡号码
+	var bankCard = $('#bankCard').val();
+	if(bankCard.length<16 || bankCard.length>19){
+		layer.msg('请输入有效银行卡号!');
+		return;
+	}
+	var regMob = /^1[0-9]{10}$/;
+	if(regMob.test($('#mobile').val()) === false){
+		layer.msg('请输入有效手机号码!');
+		return;
+	}
 	// 校验
 	if (!checkNum($('#amount').val()) || !$('#amount').val()) {
 		layer.msg('请输入有效扣款金额!');
@@ -11,10 +34,8 @@ function saveWithholdInfo() {
 		layer.msg('请输入有效扣款次数!');
 		return;
 	}
-	if (!$('#mobile').val() || $('#mobile').val().length != 11) {
-		layer.msg('请输入有效手机号码!');
-		return;
-	}
+	
+	layer.msg("校验成功");  return;
 	$.ajax({
 		url : PROJECT_NAME + '/web/withholdInfo/doAdd',
 		data : $('#mercore_form').serialize(),

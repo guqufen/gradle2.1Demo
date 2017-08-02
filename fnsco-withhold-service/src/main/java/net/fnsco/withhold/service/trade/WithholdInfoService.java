@@ -41,6 +41,7 @@ public class WithholdInfoService extends BaseService {
 		logger.info("开始分页查询WithholdInfoService.page, withholdInfo=" + withholdInfo.toString());
 		List<WithholdInfoDO> pageList = this.withholdInfoDAO.pageList(withholdInfo, pageNum, pageSize);
 
+		List<WithholdInfoDO> pageListNew = new ArrayList<>();
 		for (WithholdInfoDO withholdInfoDO : pageList) {
 
 			// 根据最后修改人ID查询姓名
@@ -51,7 +52,7 @@ public class WithholdInfoService extends BaseService {
 				if (null == userDO) {
 					withholdInfoDO.setModifyUserName("--");
 				} else {
-					withholdInfoDO.setModifyUserName(userDO.getRealName());
+					withholdInfoDO.setModifyUserName(userDO.getName());
 				}
 			}
 
@@ -95,6 +96,7 @@ public class WithholdInfoService extends BaseService {
 			b2 = payLeftAmt.divide(b1, 2, BigDecimal.ROUND_HALF_UP);
 			withholdInfoDO.setPayLeftAmt(b2);// 设置待扣款金额
 
+//			pageListNew.add(withholdInfoDO);
 		}
 		Integer count = this.withholdInfoDAO.pageListCount(withholdInfo);
 		ResultPageDTO<WithholdInfoDO> pager = new ResultPageDTO<WithholdInfoDO>(count, pageList);
@@ -104,14 +106,7 @@ public class WithholdInfoService extends BaseService {
 	// 添加
 	public WithholdInfoDO doAdd(WithholdInfoDO withholdInfo, int loginUserId) {
 		logger.info("开始添加WithholdInfoService.add,withholdInfo=" + withholdInfo.toString());
-		Date now = null;
-		SimpleDateFormat sf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		try {
-			now = sf1.parse("2017-08-02 07:45:23");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Date now = new Date();
 		withholdInfo.setModifyUserId(loginUserId);
 		withholdInfo.setModifyTime(now);
 		withholdInfo.setCertifType("01");// 证件类型
