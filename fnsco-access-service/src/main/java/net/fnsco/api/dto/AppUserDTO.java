@@ -43,7 +43,30 @@ public class AppUserDTO extends DTO {
     private String  oldPassword;
     
     private Integer sex;//性别
+    private String headImagePath;//头像
     
+    /**
+     * headImagePath
+     *
+     * @return  the headImagePath
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getHeadImagePath() {
+        return headImagePath;
+    }
+
+    /**
+     * headImagePath
+     *
+     * @param   headImagePath    the headImagePath to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setHeadImagePath(String headImagePath) {
+        this.headImagePath = headImagePath;
+    }
+
     /**
      * sex
      *

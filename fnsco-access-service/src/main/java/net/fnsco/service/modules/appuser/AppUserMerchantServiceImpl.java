@@ -68,6 +68,7 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
                 AppUser user = appUserDao.selectAppUserById(li.getAppUserId());
                 if(null != user){
                     bandList.setMobile(user.getMobile());
+                    bandList.setUserName(user.getUserName());
                     listDto.add(bandList);
                 }else{
                     logger.error(li.getAppUserId()+"该用户ID不存在!");

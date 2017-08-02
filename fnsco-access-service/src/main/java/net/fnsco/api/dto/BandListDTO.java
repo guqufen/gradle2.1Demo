@@ -6,6 +6,28 @@ import net.fnsco.core.base.DTO;
 public class BandListDTO extends DTO{
     private String  mobile;
     private Integer userId;
+    private String  userName;
+    
+    /**
+     * userName
+     *
+     * @return  the userName
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getUserName() {
+        return userName;
+    }
+    /**
+     * userName
+     *
+     * @param   userName    the userName to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
     public String getMobile() {
         return mobile;
     }

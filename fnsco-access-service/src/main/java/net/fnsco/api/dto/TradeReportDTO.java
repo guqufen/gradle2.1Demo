@@ -37,7 +37,34 @@ public class TradeReportDTO extends DTO {
      */
     private String endDate;
     
+    /**
+     * 查询历史时间页码
+     */
+    private Integer pageNum;
     
+    
+    /**
+     * pageNum
+     *
+     * @return  the pageNum
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    /**
+     * pageNum
+     *
+     * @param   pageNum    the pageNum to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
     /**
      * innerCode
      *

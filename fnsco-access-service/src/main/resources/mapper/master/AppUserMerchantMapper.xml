@@ -119,4 +119,22 @@
      </foreach>
 	)
 </delete>
+<!-- 查询商家信息 -->
+ <select id="selectByUserIdAndRoleId" resultType="net.fnsco.api.dto.TradeMerchantDTO">
+     SELECT
+		inner_code AS innerCode,
+		mer_name AS merName
+		FROM
+			m_merchant_core
+		WHERE
+			inner_code IN (
+				SELECT
+					inner_code
+				FROM
+					u_app_user_merchant
+				WHERE
+					app_user_id = #{appUserId}
+				AND role_id = #{roleId}
+			)
+ </select>
 </mapper>

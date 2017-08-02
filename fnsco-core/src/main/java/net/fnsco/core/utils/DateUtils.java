@@ -189,11 +189,5 @@ public class DateUtils {
         calendar.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
         return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
     }
-    public static void main(String[] args) {
-        String s1= getMondayStr(0);
-        String s2 = getTimeByDayStr(0);
-        System.out.println(getMondayStr(0));
-        System.out.println(getTimeByDayStr(0));
-        System.out.println(s2.startsWith("20170728"));
-    }
+    
 }

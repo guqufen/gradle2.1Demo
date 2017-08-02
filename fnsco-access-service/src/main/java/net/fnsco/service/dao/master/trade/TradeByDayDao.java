@@ -2,6 +2,8 @@ package net.fnsco.service.dao.master.trade;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.api.dto.TradeDayDTO;
 import net.fnsco.api.dto.TurnoverDTO;
 import net.fnsco.service.domain.trade.TradeByDay;
@@ -49,4 +51,16 @@ public interface TradeByDayDao {
      * @since  CodingExample　Ver 1.1
      */
     List<TradeDayDTO> selectByInnerCode(TradeByDay record);
+    
+    /**
+     * selectMinTradeDateByUserId:(这里用一句话描述这个方法的作用)查询最早的交易时间
+     *
+     * @param appUserId
+     * @param roleId
+     * @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    String selectMinTradeDateByUserId(@Param("appUserId")Integer appUserId,@Param("roleId")String roleId);
 }
