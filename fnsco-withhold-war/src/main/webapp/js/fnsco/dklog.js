@@ -202,22 +202,17 @@ function responseHandler(res) {
 
 $(function() {
 	$(document).on('click', '.repair', function() {
-		$.ajax({
-			url : PROJECT_NAME + '/web/tradeData/repair',
-			type : 'POST',
-			data : {"id":$(this).parent().parent().find(".id").children("div").attr("i"),"status":9},
-			success : function(data) {
-				 if(data.success){
-			         layer.msg("补交"+data.message);
-			         setTimeout(function() {
-							window.location.reload();
-						}, 1000);
-			     }
-			}
-		});
+		var id=$(this).parent().parent().find(".id").children("div").attr("i");
+		layer.confirm("是否确定线下收款成功", {
+			time : 2000000, // 20s后自动关闭
+			btn : [ '确定', '取消' ]
+		}, function() {
+			saveBtn(id);
+		}, function() {
+			layer.msg('取消成功');
+		});	
 	})
 })
-
 
 //$("#btn_query").click(function(){
 //	var startTime=parseInt($("#datetimepicker1").val().replace(/-/g, ""));
@@ -228,7 +223,21 @@ $(function() {
 //	}
 //})
 
-
+function saveBtn(id){
+	$.ajax({
+		url : PROJECT_NAME + '/web/tradeData/repair',
+		type : 'POST',
+		data : {"id":id,"status":9},
+		success : function(data) {
+			 if(data.success){
+		         layer.msg("补交"+data.message);
+		         setTimeout(function() {
+						window.location.reload();
+					}, 1000);
+		     }
+		}
+	});
+}
 
 
 
