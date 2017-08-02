@@ -43,7 +43,8 @@ $('#table').bootstrapTable({
 		formatter : formatTxnTime
 	}, {
 		field : 'txnAmt',
-		title : '扣款金额'
+		title : '扣款金额',
+		formatter :formatTxnAmt
 	}, {
 		field : 'payTimes',
 		title : '扣款次数'
@@ -75,6 +76,9 @@ function formatMerNames(value, row, index) {
 function formatReDate(value, row, index) {
 	return formatDateUtil(value);
 
+}
+function formatTxnAmt(value, row, index){
+	return value/100;
 }
 function formatTxnTime(value, row, index){
 	if (!value) {
