@@ -93,6 +93,15 @@ public class AppUserController extends BaseController {
     public ResultDTO<String> modifyInfo(@RequestBody AppUserDTO appUserDTO){
         return appUserService.modifyInfo(appUserDTO);
     }
+    
+    //获取个人信息
+    @ResponseBody
+    @RequestMapping(value = "/getPersonInfo")
+    @ApiOperation(value = "获取个人信息")
+    public ResultDTO<String> getPersonInfo(@RequestBody AppUserDTO appUserDTO) {
+        ResultDTO<String> result = appUserService.getPersonInfo(appUserDTO);
+        return result;
+    }
 }
 
 
