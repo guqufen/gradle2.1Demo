@@ -167,6 +167,12 @@ public class WithholdService extends BaseService {
             if (type == 2) {//最后一次失败则为0
                 withholdInfo.setFailTotal(0);
             }
+            String startDate = withholdInfo.getEndDate();
+            String nowDate = DateUtils.getNowDateStr2();
+            //相等则完成扣款
+            if (startDate.equals(nowDate)) {
+                withholdInfo.setStatus(2);
+            }
             withholdInfoDAO.update(withholdInfo);
         } catch (Exception ex) {
             logger.error(">>>>>>>>扣款失败更新扣款信息中的失败次数出错", ex);
