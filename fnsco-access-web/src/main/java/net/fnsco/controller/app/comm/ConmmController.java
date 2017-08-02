@@ -13,6 +13,7 @@ import net.fnsco.api.appuser.ConmmService;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.api.dto.ProtocolDTO;
+import net.fnsco.api.dto.SuggestDTO;
 import net.fnsco.api.dto.VersionDTO;
 
 import net.fnsco.controller.app.jo.DiscoveryJO;
@@ -55,6 +56,15 @@ public class ConmmController extends BaseController {
             return success(env.getProperty(ApiConstant.THIS_IOS_URL));
         }
         return success(env.getProperty(ApiConstant.THIS_ANDROID_URL));  
+     }
+    
+    //反馈
+    @RequestMapping(value = "/suggest")
+    @ApiOperation(value = "反馈页面")
+    @ResponseBody
+    public ResultDTO suggest(@RequestBody SuggestDTO suggestDTO) {
+        ResultDTO result = conmmService.suggest(suggestDTO);
+         return result;  
      }
 }
 

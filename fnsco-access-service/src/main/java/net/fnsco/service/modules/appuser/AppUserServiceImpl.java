@@ -34,6 +34,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.service.dao.master.AppUserDao;
@@ -674,7 +675,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         AppUserInfoDTO dto=new AppUserInfoDTO();
         dto.setSex(appUser.getSex());
         dto.setUserName(appUser.getUserName());
-        dto.setHeadImagePath(appUser.getHeadImagePath());
+        if(!Strings.isNullOrEmpty(appUser.getHeadImagePath())){
+            dto.setHeadImagePath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), appUser.getHeadImagePath()));
+        }
         dto.setMoblie(appUser.getMobile());
         dto.setRealName(appUser.getRealName());
         return ResultDTO.success(dto);

@@ -1,5 +1,6 @@
 package net.fnsco.service.modules.appuser;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,12 +15,18 @@ import net.fnsco.api.appuser.ConmmService;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.constant.ConstantEnum;
 import net.fnsco.api.dto.ProtocolDTO;
+import net.fnsco.api.dto.SuggestDTO;
 import net.fnsco.api.dto.VersionDTO;
 import net.fnsco.api.dto.VersionResultDTO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.FileUtils;
+import net.fnsco.service.dao.master.AppUserDao;
+import net.fnsco.service.dao.master.SysBankDao;
+import net.fnsco.service.dao.master.SysSuggestDao;
 import net.fnsco.service.dao.master.VersionDao;
+import net.fnsco.service.domain.AppUser;
+import net.fnsco.service.domain.SysSuggest;
 import net.fnsco.service.domain.Version;
 
 @Service
@@ -27,7 +34,11 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
 
     @Autowired
     private VersionDao sysVersionDao;
-
+    @Autowired
+    private SysSuggestDao sysSuggestDao;
+    @Autowired
+    private AppUserDao appUserDao;
+    
     private ResultDTO validateVersion(VersionDTO sysVersionDTO) {
         String version = sysVersionDTO.getVersion();
         Integer appType = Integer.valueOf(sysVersionDTO.getAppType());
@@ -168,6 +179,23 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
             return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
         }
 
+    }
+    //建议
+    @Override
+    public ResultDTO suggest(SuggestDTO suggestDTO) {
+        SysSuggest sysSuggest=new SysSuggest();
+        sysSuggest.setAppUserId(suggestDTO.getUserId());
+        //根据id查找到手机号码
+        AppUser appUser=appUserDao.selectAppUserById(suggestDTO.getUserId());
+        if(appUser==null){
+            return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+        }
+        sysSuggest.setMobile(appUser.getMobile());
+        sysSuggest.setContent(suggestDTO.getContent());
+        sysSuggest.setSubmitTime(new Date());
+        sysSuggest.setState("0");
+        sysSuggestDao.insertSelective(sysSuggest);
+        return ResultDTO.success();
     }
 
 }

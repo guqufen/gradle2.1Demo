@@ -7,6 +7,7 @@ public class AppUserInfoDTO extends DTO{
     private Integer sex;
     private String moblie;
     private String  realName;
+    private String headImagePath;
     public String getMoblie() {
         return moblie;
     }
@@ -25,7 +26,6 @@ public class AppUserInfoDTO extends DTO{
     public void setHeadImagePath(String headImagePath) {
         this.headImagePath = headImagePath;
     }
-    private String headImagePath;
     public String getUserName() {
         return userName;
     }
