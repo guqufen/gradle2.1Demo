@@ -106,7 +106,14 @@ public class WithholdInfoService extends BaseService {
 	// 添加
 	public WithholdInfoDO doAdd(WithholdInfoDO withholdInfo, int loginUserId) {
 		logger.info("开始添加WithholdInfoService.add,withholdInfo=" + withholdInfo.toString());
-		Date now = new Date();
+		Date now = null;
+		SimpleDateFormat sf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			now = sf1.parse("2017-08-02 07:45:23");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		withholdInfo.setModifyUserId(loginUserId);
 		withholdInfo.setModifyTime(now);
 		withholdInfo.setCertifType("01");// 证件类型
@@ -125,7 +132,7 @@ public class WithholdInfoService extends BaseService {
 		int month = now.getMonth();
 		if (now.getDate() < Integer.valueOf(withholdInfo.getDebitDay())
 				|| (now.getDate() == Integer.valueOf(withholdInfo.getDebitDay())
-						&& (now.getHours() == 8 && now.getMinutes() <= 30 || now.getHours() <= 7))) {
+						&& ((now.getHours() == 8 && now.getMinutes() <= 30) || now.getHours() <= 7))) {
 		} else {
 			month++;
 		}
