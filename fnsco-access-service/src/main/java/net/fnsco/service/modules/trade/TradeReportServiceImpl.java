@@ -260,10 +260,29 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         payType.setStartDate(tradeReportDTO.getStartDate());
         payType.setEndDate(tradeReportDTO.getEndDate());
         List<TradeTypeDTO> tradeTypeData = tradeByPayTypeDao.selectTradeDataByInnerCode(payType);
+        //如果数据为空 需要填充数据
+        if(tradeTypeData.size()<3){
+            List<String> tempParam = Lists.newArrayList();
+            tempParam.add(ConstantEnum.PayTypeEnum.PAYBYCARD.getCode());
+            tempParam.add(ConstantEnum.PayTypeEnum.PAYBYWX.getCode());
+            tempParam.add(ConstantEnum.PayTypeEnum.PAYBYALIPAY.getCode());
+            for (TradeTypeDTO tradeTypeDTO : tradeTypeData) {
+                tempParam.remove(tradeTypeDTO.getPayType());
+            }
+            for (String param : tempParam) {
+                TradeTypeDTO tempDTO = new TradeTypeDTO();
+                tempDTO.setPayType(param);
+                tempDTO.setOrderNum(0);
+                tempDTO.setTurnover(new BigDecimal(0.00));
+                tradeTypeData.add(tempDTO);
+            }
+        }
         resultData.setTradeTypeData(tradeTypeData);
         //按照天返回数据
         List<TradeDayDTO> tradeDayData = tradeByDayDao.selectByInnerCode(record);
-        resultData.setTradeDayData(tradeDayData);
+        //按照天为组,如果数据为空，需要填充数据
+        List<TradeDayDTO> data = installTradeDay(tradeReportDTO,tradeDayData);
+        resultData.setTradeDayData(data);
         return resultData;
     }
     /**
@@ -367,7 +386,53 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         }
         return dates;
     }
-    public static void main(String[] args) {
-        System.out.println(countTradeHisDate("20170721"));
+    /**
+     * installTradeDay:(这里用一句话描述这个方法的作用)填充数据
+     *
+     * @param tradeReportDTO
+     * @param tradeDayData
+     * @return    设定文件
+     * @return List<TradeDayDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    private List<TradeDayDTO> installTradeDay(TradeReportDTO tradeReportDTO,List<TradeDayDTO> tradeDayData){
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        List<TradeDayDTO> datas = Lists.newArrayList();
+        Date startDate;
+        try {
+            startDate = format.parse(tradeReportDTO.getStartDate());
+            start.setTime(startDate); 
+            Date endDate  = format.parse(tradeReportDTO.getEndDate());
+            end.setTime(endDate);
+            boolean flag = true;
+            while(end.compareTo(start) >= 0) {
+                flag = true;
+                String dateTime = format.format(end.getTime());
+                for (TradeDayDTO tradeDayDTO : tradeDayData) {
+                    if(dateTime.equals(tradeDayDTO.getTradeDate())){
+                        datas.add(tradeDayDTO);
+                        flag = false;
+                    }
+                }
+                if(flag){
+                    TradeDayDTO tempDto = new TradeDayDTO();
+                    tempDto.setTradeDate(dateTime);
+                    tempDto.setOrderNum(0);
+                    tempDto.setTurnover(new BigDecimal(0.00));
+                    datas.add(tempDto);
+                }
+               
+                //循环，每次天数加1
+                end.set(Calendar.DATE, end.get(Calendar.DATE) - 1);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
+        return datas;
     }
+   
 }
