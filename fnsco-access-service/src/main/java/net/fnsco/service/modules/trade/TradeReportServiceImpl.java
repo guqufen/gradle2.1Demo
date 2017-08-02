@@ -1,8 +1,10 @@
 package net.fnsco.service.modules.trade;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -10,14 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.api.constant.ConstantEnum;
+import net.fnsco.api.dto.DateDTO;
 import net.fnsco.api.dto.TradeDayDTO;
+import net.fnsco.api.dto.TradeMerchantDTO;
 import net.fnsco.api.dto.TradeReportDTO;
+import net.fnsco.api.dto.TradeTurnoverDTO;
 import net.fnsco.api.dto.TradeTypeDTO;
 import net.fnsco.api.dto.TurnoverDTO;
 import net.fnsco.api.dto.WeeklyDTO;
+import net.fnsco.api.dto.WeeklyHisDateDTO;
 import net.fnsco.api.trade.TradeReportService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
@@ -61,6 +68,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     
     @Autowired
     private AppUserMerchantDao appUserMerchantDao;
+    
+    private final static int pageSize = 20;
     /**
      * (non-Javadoc)生成统计数据
      * @see net.fnsco.api.trade.TradeReportService#buildTradeReportDaTa()
@@ -114,9 +123,10 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
      * @date 2017年7月27日 下午3:41:05
      */
     @Override
-    public List<TurnoverDTO> queryTurnovers(TradeReportDTO tradeReportDTO) {
+    public TradeTurnoverDTO queryTurnovers(TradeReportDTO tradeReportDTO) {
         
         //返回集合
+        TradeTurnoverDTO result = new TradeTurnoverDTO();
         List<TurnoverDTO> datas = Lists.newArrayList();
         TradeByDay record = new TradeByDay();
         record.setUserId(tradeReportDTO.getUserId());
@@ -214,8 +224,12 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             weekLyTurnover.setWeekLy(true);
             weekLyTurnover.setWeeklyTime(DateUtils.getMondayStr(-1)+"-"+DateUtils.getSundayStr(-1));
             datas.add(weekLyTurnover);
+            List<TradeMerchantDTO> merData = appUserMerchantDao.selectByUserIdAndRoleId(tradeReportDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+            result.setTradeMerchant(merData);
         }
-        return datas;
+        result.setTurnovers(datas);
+        
+        return result;
         
     }
     
@@ -267,5 +281,93 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         BigDecimal bd1 = new BigDecimal(turnover);
         BigDecimal bd2 = new BigDecimal(orderNum);
         return bd1.divide(bd2, 2, BigDecimal.ROUND_HALF_UP);
+    }
+    
+    /**
+     * (non-Javadoc)查询周报历史时间段
+     * @see net.fnsco.api.trade.TradeReportService#queryWeeklyHisDate(net.fnsco.api.dto.TradeReportDTO)
+     * @author tangliang
+     * @date 2017年8月2日 上午9:22:25
+     */
+    @Override
+    public WeeklyHisDateDTO queryWeeklyHisDate(TradeReportDTO tradeReportDTO) {
+       
+       WeeklyHisDateDTO datas = new WeeklyHisDateDTO();
+       String minDate = tradeByDayDao.selectMinTradeDateByUserId(tradeReportDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+       if(Strings.isNullOrEmpty(minDate)){
+           datas.setCurrentPageNum(tradeReportDTO.getPageNum());
+           datas.setTotalPageNum(0);
+           return datas;
+       }
+       List<DateDTO> data = countTradeHisDate(minDate);
+       datas.setCurrentPageNum(tradeReportDTO.getPageNum());
+       datas.setTotalPageNum(data.size());
+       //分页处理
+       Integer pageNum = tradeReportDTO.getPageNum();
+      //不存在的页码
+       if(data.size() <= (pageNum-1) * pageSize){
+           return null;
+       }
+       //当现有长度大于分页要的数据
+       if(data.size() > pageNum * pageSize){
+           data = data.subList((pageNum-1) * pageSize, pageNum * pageSize);
+       }
+       
+       if(data.size() <= pageNum * pageSize){
+           data = data.subList((pageNum-1) * pageSize, data.size());
+       }
+       
+       datas.setHisDate(data);
+       return datas;
+        
+    }
+    
+    /**
+     * countTradeHisDate:(这里用一句话描述这个方法的作用)计算日期间隔周期，且将周期封装返回
+     *
+     * @param minDateStr
+     * @return    设定文件
+     * @return List<DateDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    private static List<DateDTO> countTradeHisDate(String minDateStr){
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        List<DateDTO> dates = Lists.newArrayList();
+        try {
+            Date startDate=format.parse(minDateStr);
+            start.setTime(startDate); 
+            DateDTO date = null;
+            while(end.compareTo(start) >= 0) {
+                int w = end.get(Calendar.DAY_OF_WEEK);
+                String dateTime = format.format(end.getTime());
+                if(w == Calendar.MONDAY){
+                    if(date != null){
+                        date.setStartDate(dateTime);
+                        dates.add(date);
+                    }
+                }
+                if(w == Calendar.SUNDAY){
+                    date = new DateDTO();
+                    date.setEndDate(dateTime);
+                }
+                if(dateTime.equals(minDateStr)){
+                    date.setStartDate(dateTime);
+                    dates.add(date);
+                }
+                
+                //循环，每次天数加1
+                end.set(Calendar.DATE, end.get(Calendar.DATE) - 1);
+            }
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return dates;
+    }
+    public static void main(String[] args) {
+        System.out.println(countTradeHisDate("20170721"));
     }
 }

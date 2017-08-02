@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.api.dto.AppUserMerchantDTO;
+import net.fnsco.api.dto.TradeMerchantDTO;
 import net.fnsco.service.domain.AppUserMerchant;
 
 public interface AppUserMerchantDao { 
@@ -18,4 +19,14 @@ public interface AppUserMerchantDao {
     int updateByPrimaryKeySelective(AppUserMerchantDTO dto);
     int insertSelective(AppUserMerchant dto);
     int deleteByMerCoreIds(Integer[] ids);
+    
+    /**
+     * selectByUserIdAndRoleId:(这里用一句话描述这个方法的作用)根据userId和roleId查询商家信息
+     *
+     * @return    设定文件
+     * @return List<TradeMerchantDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<TradeMerchantDTO> selectByUserIdAndRoleId(@Param("appUserId")Integer appUserId,@Param("roleId")String roleId);
 }

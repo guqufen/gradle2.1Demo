@@ -13,8 +13,9 @@ import com.google.common.base.Strings;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.TradeReportDTO;
-import net.fnsco.api.dto.TurnoverDTO;
+import net.fnsco.api.dto.TradeTurnoverDTO;
 import net.fnsco.api.dto.WeeklyDTO;
+import net.fnsco.api.dto.WeeklyHisDateDTO;
 import net.fnsco.api.trade.TradeReportService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -43,11 +44,11 @@ public class TradeReportController extends BaseController{
      */
     @RequestMapping("/queryTurnoverAndWeekly")
     @ApiOperation(value = "查询APP首页营业额和周报混总数据")
-    public ResultDTO<List<TurnoverDTO>> queryTurnoverAndWeekly(@RequestBody TradeReportDTO tradeReportDTO){
+    public ResultDTO<TradeTurnoverDTO> queryTurnoverAndWeekly(@RequestBody TradeReportDTO tradeReportDTO){
         if(null == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
-        List<TurnoverDTO> datas = tradeReportService.queryTurnovers(tradeReportDTO);
+        TradeTurnoverDTO datas = tradeReportService.queryTurnovers(tradeReportDTO);
         return ResultDTO.success(datas);
     }
     
@@ -66,6 +67,28 @@ public class TradeReportController extends BaseController{
             return ResultDTO.fail(ApiConstant.E_INNER_CODE_NULL);
         }
         WeeklyDTO datas = tradeReportService.queryWeeklyByInnerCode(tradeReportDTO);
+        return ResultDTO.success(datas);
+    }
+    
+    /**
+     * queryWeeklyHisDate:(这里用一句话描述这个方法的作用)查询周报时间
+     *
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @return ResultDTO<Object>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping("/queryWeeklyHisDate")
+    @ApiOperation(value = "查询周报历史时间段")
+    public ResultDTO<WeeklyHisDateDTO> queryWeeklyHisDate(@RequestBody TradeReportDTO tradeReportDTO){
+        if(null == tradeReportDTO.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+        if(null == tradeReportDTO.getPageNum() || tradeReportDTO.getPageNum()<1){
+            return ResultDTO.fail(ApiConstant.E_PAGE_NUM_NULL);
+        }
+        WeeklyHisDateDTO datas = tradeReportService.queryWeeklyHisDate(tradeReportDTO);
         return ResultDTO.success(datas);
     }
 }
