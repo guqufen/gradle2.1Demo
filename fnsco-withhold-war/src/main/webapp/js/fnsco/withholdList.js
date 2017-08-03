@@ -35,7 +35,6 @@ function saveWithholdInfo() {
 		return;
 	}
 	
-	layer.msg("校验成功");  return;
 	$.ajax({
 		url : PROJECT_NAME + '/web/withholdInfo/doAdd',
 		data : $('#mercore_form').serialize(),
