@@ -1,9 +1,8 @@
 package net.fnsco.api.trade;
 
-import java.util.List;
-
 import net.fnsco.api.dto.TradeReportDTO;
 import net.fnsco.api.dto.TradeTurnoverDTO;
+import net.fnsco.api.dto.ConsumptionDTO;
 import net.fnsco.api.dto.WeeklyDTO;
 import net.fnsco.api.dto.WeeklyHisDateDTO;
 
@@ -56,4 +55,15 @@ public interface TradeReportService {
      * @since  CodingExample　Ver 1.1
      */
     WeeklyHisDateDTO queryWeeklyHisDate(TradeReportDTO tradeReportDTO);
+    /**
+     * 
+     * queryTrandPeak:(这里用一句话描述这个方法的作用)查询峰值
+     *
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @return TrandPeakDTO    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    ConsumptionDTO queryConsumption(TradeReportDTO tradeReportDTO);
 }

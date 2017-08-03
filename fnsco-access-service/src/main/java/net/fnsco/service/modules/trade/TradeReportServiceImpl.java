@@ -18,10 +18,10 @@ import com.google.common.collect.Lists;
 import net.fnsco.api.constant.ConstantEnum;
 import net.fnsco.api.dto.DateDTO;
 import net.fnsco.api.dto.TradeDayDTO;
-import net.fnsco.api.dto.TradeMerchantDTO;
 import net.fnsco.api.dto.TradeReportDTO;
 import net.fnsco.api.dto.TradeTurnoverDTO;
 import net.fnsco.api.dto.TradeTypeDTO;
+import net.fnsco.api.dto.ConsumptionDTO;
 import net.fnsco.api.dto.TurnoverDTO;
 import net.fnsco.api.dto.WeeklyDTO;
 import net.fnsco.api.dto.WeeklyHisDateDTO;
@@ -264,6 +264,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         payType.setInnerCode(tradeReportDTO.getInnerCode());
         payType.setStartDate(tradeReportDTO.getStartDate());
         payType.setEndDate(tradeReportDTO.getEndDate());
+        payType.setUserId(tradeReportDTO.getUserId());
+        payType.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         List<TradeTypeDTO> tradeTypeData = tradeByPayTypeDao.selectTradeDataByInnerCode(payType);
         //如果数据为空 需要填充数据
         if(tradeTypeData.size()<3){
@@ -443,6 +445,59 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         }
         
         return datas;
+    }
+    
+    /**
+     * (non-Javadoc)查询消费模式
+     * @see net.fnsco.api.trade.TradeReportService#queryTrandPeak(net.fnsco.api.dto.TradeReportDTO)
+     * @author tangliang
+     * @date 2017年8月3日 下午2:48:48
+     */
+    @Override
+    public ConsumptionDTO queryConsumption(TradeReportDTO tradeReportDTO) {
+        
+      //如果没有传递时间和商家，则默认上周和全部商户数据
+        if(Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate())){
+            tradeReportDTO.setStartDate(DateUtils.getMondayStr(-1));
+            tradeReportDTO.setEndDate(DateUtils.getSundayStr(-1));
+        }
+        ConsumptionDTO datas = new ConsumptionDTO();
+        TradeByPayType payType = new TradeByPayType();
+        payType.setInnerCode(tradeReportDTO.getInnerCode());
+        payType.setStartDate(tradeReportDTO.getStartDate());
+        payType.setEndDate(tradeReportDTO.getEndDate());
+        payType.setUserId(tradeReportDTO.getUserId());
+        payType.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        List<TradeTypeDTO> tradeTypeData = tradeByPayTypeDao.selectTradeDataByInnerCode(payType);
+        //如果数据为空 需要填充数据
+        if(tradeTypeData.size()<3){
+            List<String> tempParam = Lists.newArrayList();
+            tempParam.add(ConstantEnum.PayTypeEnum.PAYBYCARD.getCode());
+            tempParam.add(ConstantEnum.PayTypeEnum.PAYBYWX.getCode());
+            tempParam.add(ConstantEnum.PayTypeEnum.PAYBYALIPAY.getCode());
+            for (TradeTypeDTO tradeTypeDTO : tradeTypeData) {
+                tempParam.remove(tradeTypeDTO.getPayType());
+            }
+            for (String param : tempParam) {
+                TradeTypeDTO tempDTO = new TradeTypeDTO();
+                tempDTO.setPayType(param);
+                tempDTO.setOrderNum(0);
+                tempDTO.setTurnover(new BigDecimal(0.00));
+                tradeTypeData.add(tempDTO);
+            }
+        }
+        
+        int orderNumTotal = 0;
+        BigDecimal turnoverTotal = new BigDecimal(0.00);
+        for (TradeTypeDTO tradeTypeDTO : tradeTypeData) {
+            orderNumTotal += tradeTypeDTO.getOrderNum();
+            turnoverTotal = turnoverTotal.add(tradeTypeDTO.getTurnover());
+        }
+        datas.setOrderNumTotal(orderNumTotal);
+        datas.setTurnoverTotal(turnoverTotal);
+        datas.setTradeTypeData(tradeTypeData);
+        return datas;
+        
     }
    
 }

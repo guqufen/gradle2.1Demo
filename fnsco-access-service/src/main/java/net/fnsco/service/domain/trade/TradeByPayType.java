@@ -23,7 +23,53 @@ public class TradeByPayType {
     
     private String startDate;//条件查询开始日期
     private String endDate;//条件查询结束日期
+    private Integer userId;//用户ID
+    private String roleId;
     
+    /**
+     * roleId
+     *
+     * @return  the roleId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getRoleId() {
+        return roleId;
+    }
+
+    /**
+     * roleId
+     *
+     * @param   roleId    the roleId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    /**
+     * userId
+     *
+     * @return  the userId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getUserId() {
+        return userId;
+    }
+
+    /**
+     * userId
+     *
+     * @param   userId    the userId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     /**
      * startDate
      *

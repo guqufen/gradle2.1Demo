@@ -104,7 +104,7 @@ public class ConstantEnum {
     }
     //支付方式枚举
     public static enum PayTypeEnum{
-        PAYBYCARD("00","刷卡"),PAYBYWX("01","微信"),PAYBYALIPAY("02","支付宝");
+        PAYBYCARD("00","刷卡"),PAYBYWX("01","微信"),PAYBYALIPAY("02","支付宝"),PAYBYOTHER("06","其他");
         
         private String code;
         private String name;

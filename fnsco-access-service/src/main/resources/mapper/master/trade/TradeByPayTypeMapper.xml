@@ -84,6 +84,15 @@
        <if test="endDate != null">
          AND trade_date &lt;= #{endDate}
        </if>
+       <if test="userId != null">
+         AND inner_code in (
+           SELECT inner_code FROM u_app_user_merchant 
+             WHERE app_user_id =#{userId} 
+           <if test="roleId != null">
+             AND role_id =#{roleId}
+           </if>  
+         )
+       </if>
      </where>
   	  GROUP BY pay_type
   </select>

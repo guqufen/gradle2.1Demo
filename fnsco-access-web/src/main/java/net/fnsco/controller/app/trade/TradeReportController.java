@@ -5,11 +5,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.google.common.base.Strings;
+
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.TradeReportDTO;
 import net.fnsco.api.dto.TradeTurnoverDTO;
+import net.fnsco.api.dto.ConsumptionDTO;
 import net.fnsco.api.dto.WeeklyDTO;
 import net.fnsco.api.dto.WeeklyHisDateDTO;
 import net.fnsco.api.trade.TradeReportService;
@@ -88,5 +91,22 @@ public class TradeReportController extends BaseController{
         return ResultDTO.success(datas);
     }
     
-    
+    /**
+     * queryTrandPeak:(这里用一句话描述这个方法的作用)查询消费模式
+     *
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @return ResultDTO<Object>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping("/queryConsumption")
+    @ApiOperation(value = "H5查询消费模式")
+    public ResultDTO<ConsumptionDTO>  queryConsumption(@RequestBody TradeReportDTO tradeReportDTO){
+        if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_INNER_CODE_NULL);
+        }
+        ConsumptionDTO data = tradeReportService.queryConsumption(tradeReportDTO);
+        return ResultDTO.success(data);
+    }
 }
