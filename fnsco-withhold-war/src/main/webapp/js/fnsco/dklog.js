@@ -5,7 +5,7 @@ $('#table').bootstrapTable({
 	url : PROJECT_NAME + '/web/tradeData/query',
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
-	 toolbar: '#toolbar', //工具按钮用哪个容器
+	 toolbar: '#toolbar', // 工具按钮用哪个容器
 	striped : true, // 是否显示行间隔色
 	cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 	pagination : true, // 是否显示分页（*）
@@ -115,7 +115,7 @@ function formatday(value, row, index){
 function operateFormatter(value, row, index) {
 	index++;
 	return "<div i='" + value + "'>" + index + "</div>";
-//    return [index+1].join('');
+// return [index+1].join('');
 }
 // 推送类型格式化
 function formatPushType(value, row, index) {
@@ -170,7 +170,7 @@ function queryParams(params) {
 	} else {
 		endTime = "";
 	}
-	// console.log($("#stauts").find("option:selected").val());      pageNum
+	// console.log($("#stauts").find("option:selected").val()); pageNum
 	var param = {
 		page : this.pageNumber,
 		rows : this.pageSize,
@@ -200,44 +200,55 @@ function responseHandler(res) {
 	}
 }
 
-$(function() {
+$(function(){
 	$(document).on('click', '.repair', function() {
-		var id=$(this).parent().parent().find(".id").children("div").attr("i");
-		layer.confirm("是否确定线下收款成功", {
-			time : 2000000, // 20s后自动关闭
-			btn : [ '确定', '取消' ]
-		}, function() {
-			saveBtn(id);
-		}, function() {
-			layer.msg('取消成功');
-		});	
+	var id=$(this).parent().parent().find(".id").children("div").attr("i");
+	saveBtn(id);
 	})
 })
-
-//$("#btn_query").click(function(){
-//	var startTime=parseInt($("#datetimepicker1").val().replace(/-/g, ""));
-//	var endTime=parseInt($("#datetimepicker2").val().replace(/-/g, ""));
-//	if(endTime<startTime){
-//		layer.msg("结束日期不能小于开始日期");
-//		return false;
-//	}
-//})
-
-function saveBtn(id){
-	$.ajax({
-		url : PROJECT_NAME + '/web/tradeData/repair',
-		type : 'POST',
-		data : {"id":id,"status":9},
-		success : function(data) {
-			 if(data.success){
-		         layer.msg("补交"+data.message);
-		         setTimeout(function() {
-						window.location.reload();
-					}, 1000);
-		     }
-		}
-	});
+	function saveBtn(id){
+		$.ajax({
+			url : PROJECT_NAME + '/web/tradeData/repair',
+			type : 'POST',
+			data : {"id":id,"status":9},
+			success : function(data) {
+				 if(data.code=5110){
+					 console.log(111);
+					 layer.msg("补收时间不能少于扣款当日");
+				 }
+				 if(data.success){
+					 layer.confirm("是否确定线下收款成功", {
+							time : 2000000, // 20s后自动关闭
+							btn : [ '确定', '取消' ]
+						}, function() {
+							buton(id);
+						}, function() {
+							layer.msg('取消成功');
+						});	
+				 }
+			}
+		});
 }
+
+	function buton(id){
+		$.ajax({
+			url : PROJECT_NAME + '/web/tradeData/repair',
+			type : 'POST',
+			data : {"id":id,"status":9},
+			success : function(data) {
+				 if(data.success){
+			         layer.msg("补交成功");
+			         setTimeout(function() {
+							window.location.reload();
+						}, 1000);
+			     }
+			}
+		});
+	}
+
+
+
+
 
 
 

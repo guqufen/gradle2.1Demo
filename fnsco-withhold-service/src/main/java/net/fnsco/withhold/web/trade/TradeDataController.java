@@ -67,7 +67,7 @@ public class TradeDataController extends BaseController {
     @RequestMapping(value = "repair")
     public ResultDTO repair(TradeDataDO tradeData) {
         ResultDTO result = this.tradeDataService.repair(tradeData);
-        return success(result);
+        return result;
     }
     
     

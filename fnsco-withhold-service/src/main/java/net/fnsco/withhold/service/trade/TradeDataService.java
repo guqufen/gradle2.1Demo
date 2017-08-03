@@ -1,11 +1,17 @@
 package net.fnsco.withhold.service.trade;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -47,12 +53,29 @@ public class TradeDataService extends BaseService {
         ResultPageDTO<TradeDataDO> pager = new ResultPageDTO<TradeDataDO>(count, pageList);
         return pager;
     }
+
     //修改状态
-    public ResultDTO repair(TradeDataDO tradeData){
-        TradeDataDO dto=new TradeDataDO();
+    public ResultDTO repair(TradeDataDO tradeData) {
+        TradeDataDO dto = new TradeDataDO();
         dto.setId(tradeData.getId());
         dto.setStatus(tradeData.getStatus());
-        int num=this.tradeDataDAO.update(dto);
-        return ResultDTO.success("修改成功");
+        TradeDataDO tradeDataDO = tradeDataDAO.getById(tradeData.getId());
+        if(tradeDataDO==null){
+            return ResultDTO.fail();
+        }
+        DateFormat df = new SimpleDateFormat("yyyyMMdd");
+        Date date = new Date();
+        String datestr= df.format(date);
+        if(Strings.isNullOrEmpty(tradeDataDO.getTxnTime())){
+            return ResultDTO.fail();
+        }
+        String time=tradeDataDO.getTxnTime().substring(0, 8);
+        int txTime=Integer.valueOf(time);
+        int daTime=Integer.valueOf(datestr);
+        if(txTime>=daTime){
+            return ResultDTO.fail(ApiConstant.WEB_TIME_ERROR);
+        }
+        int num = this.tradeDataDAO.update(dto);
+        return ResultDTO.success();
     }
 }
