@@ -152,7 +152,7 @@ public class WithholdInfoProvider {
                     WHERE("id=#{withholdInfo.id}");
                 }
                 if (StringUtils.isNotBlank(withholdInfo.getUserName())) {
-                    WHERE("user_name like CONCAT('%',#{withholdInfo.userName}，'%')");
+                    WHERE("user_name like CONCAT('%',#{withholdInfo.userName},'%')");
                 }
                 if (StringUtils.isNotBlank(withholdInfo.getMobile())) {
                     WHERE("mobile like CONCAT('%',#{withholdInfo.mobile},'%')");
