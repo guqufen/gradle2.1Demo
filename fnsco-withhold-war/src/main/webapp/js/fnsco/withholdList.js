@@ -34,7 +34,6 @@ function saveWithholdInfo() {
 		layer.msg('请输入有效扣款次数!');
 		return;
 	}
-	
 	$.ajax({
 		url : PROJECT_NAME + '/web/withholdInfo/doAdd',
 		data : $('#mercore_form').serialize(),
@@ -57,18 +56,26 @@ function saveWithholdInfo() {
 function checkNum(obj) {
 	// 检查是否是非数字值
 	if (!isNaN(obj)) {
+		console.log('isNaN');
 		return true;
 	}
 	if (obj != null) {
 		// 检查小数点后是否对于两位http://blog.csdn.net/shanzhizi
 		if (obj.toString().split(".").length > 1
-				&& obj.toString().split(".")[1].length > 0) {
+				&& 3>obj.toString().split(".")[1].length > 0) {
+			console.log('isNaNs');
 			return true;
 		}
 	}
 	return false;
 }
-
+function num(obj){
+	obj.value = obj.value.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
+	obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+	obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
+	obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+	obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //只能输入两个小数
+	}
 // 给静态框的关闭按钮增加事件
 $('.close').click(function() {
 	queryEvent("table");
