@@ -170,7 +170,7 @@ public class WithholdService extends BaseService {
             String startDate = withholdInfo.getEndDate();
             String nowDate = DateUtils.getNowDateStr2();
             //相等则完成扣款
-            if (startDate.equals(nowDate)) {
+            if (startDate.equals(nowDate)&&type == 2) {
                 withholdInfo.setStatus(2);
             }
             withholdInfoDAO.update(withholdInfo);
