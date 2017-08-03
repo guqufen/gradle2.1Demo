@@ -59,7 +59,7 @@ public class TradeReportController extends BaseController{
     @RequestMapping("/queryWeeklyByInnerCode")
     @ApiOperation(value = "查询商家某时间段的周报数据")
     public ResultDTO<WeeklyDTO> queryWeeklyByInnerCode(@RequestBody TradeReportDTO tradeReportDTO){
-        if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode())){
+        if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_INNER_CODE_NULL);
         }
         WeeklyDTO datas = tradeReportService.queryWeeklyByInnerCode(tradeReportDTO);

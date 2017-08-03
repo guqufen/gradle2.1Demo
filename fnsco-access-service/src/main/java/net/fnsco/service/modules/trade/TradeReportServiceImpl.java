@@ -224,8 +224,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             weekLyTurnover.setWeekLy(true);
             weekLyTurnover.setWeeklyTime(DateUtils.getMondayStr(-1)+"-"+DateUtils.getSundayStr(-1));
             datas.add(weekLyTurnover);
-//            List<TradeMerchantDTO> merData = appUserMerchantDao.selectByUserIdAndRoleId(tradeReportDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-//            result.setTradeMerchant(merData);
         }
         result.setTurnovers(datas);
         
@@ -242,10 +240,17 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public WeeklyDTO queryWeeklyByInnerCode(TradeReportDTO tradeReportDTO) {
         
+        //如果没有传递时间和商家，则默认上周和全部商户数据
+        if(Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate())){
+            tradeReportDTO.setStartDate(DateUtils.getMondayStr(-1));
+            tradeReportDTO.setEndDate(DateUtils.getSundayStr(-1));
+        }
+        
         TradeByDay record = new TradeByDay();
         record.setInnerCode(tradeReportDTO.getInnerCode());
         record.setStartTradeDate(tradeReportDTO.getStartDate());
         record.setEndTradeDate(tradeReportDTO.getEndDate());
+        record.setUserId(tradeReportDTO.getUserId());
         TurnoverDTO turnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
         WeeklyDTO resultData = new WeeklyDTO();
         resultData.setInnerCode(tradeReportDTO.getInnerCode());
@@ -358,6 +363,13 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         try {
             Date startDate=format.parse(minDateStr);
             start.setTime(startDate); 
+            /**
+             * 开始时间为产生数据的一周的周一开始，以自然周开始
+             */
+            while(start.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY){
+                start.set(Calendar.DATE, start.get(Calendar.DATE) - 1);
+            }
+            
             DateDTO date = null;
             while(end.compareTo(start) >= 0) {
                 int w = end.get(Calendar.DAY_OF_WEEK);
@@ -372,11 +384,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                     date = new DateDTO();
                     date.setEndDate(dateTime);
                 }
-                if(dateTime.equals(minDateStr)){
-                    date.setStartDate(dateTime);
-                    dates.add(date);
-                }
-                
                 //循环，每次天数加1
                 end.set(Calendar.DATE, end.get(Calendar.DATE) - 1);
             }
@@ -405,6 +412,9 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         try {
             startDate = format.parse(tradeReportDTO.getStartDate());
             start.setTime(startDate); 
+            /**
+             * 不够一周数据的、填充数据
+             */
             Date endDate  = format.parse(tradeReportDTO.getEndDate());
             end.setTime(endDate);
             boolean flag = true;

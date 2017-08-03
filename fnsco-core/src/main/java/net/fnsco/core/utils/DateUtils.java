@@ -63,6 +63,42 @@ public class DateUtils {
         }
         return result + "235959";
     }
+    
+    /**
+     * formatDateStr:(这里用一句话描述这个方法的作用)转换格式
+     *
+     * @param dateStr
+     * @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String formatDateStrOutput(String dateStr){
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMdd");
+        try {
+            Date temp = sf1.parse(dateStr);
+            return sf.format(temp);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return "";
+    }
+    
+    public static String formatDateStrInput(String dateStr){
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMdd");
+        try {
+            Date temp = sf.parse(dateStr);
+            return sf1.format(temp);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return "";
+    }
+    
     /**
      * compare_date:(这里用一句话描述这个方法的作用) 比较时间
      *
@@ -189,5 +225,5 @@ public class DateUtils {
         calendar.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
         return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
     }
-    
+ 
 }
