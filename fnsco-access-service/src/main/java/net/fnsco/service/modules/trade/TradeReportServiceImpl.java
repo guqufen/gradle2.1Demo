@@ -224,8 +224,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             weekLyTurnover.setWeekLy(true);
             weekLyTurnover.setWeeklyTime(DateUtils.getMondayStr(-1)+"-"+DateUtils.getSundayStr(-1));
             datas.add(weekLyTurnover);
-            List<TradeMerchantDTO> merData = appUserMerchantDao.selectByUserIdAndRoleId(tradeReportDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-            result.setTradeMerchant(merData);
+//            List<TradeMerchantDTO> merData = appUserMerchantDao.selectByUserIdAndRoleId(tradeReportDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+//            result.setTradeMerchant(merData);
         }
         result.setTurnovers(datas);
         

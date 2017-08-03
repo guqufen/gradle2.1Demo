@@ -24,7 +24,7 @@ public class TradeTurnoverDTO extends DTO {
     
     private List<TurnoverDTO> turnovers;
     
-    private List<TradeMerchantDTO> tradeMerchant;
+//    private List<TradeMerchantDTO> tradeMerchant;
 
     /**
      * turnovers
@@ -48,26 +48,26 @@ public class TradeTurnoverDTO extends DTO {
         this.turnovers = turnovers;
     }
 
-    /**
-     * tradeMerchant
-     *
-     * @return  the tradeMerchant
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public List<TradeMerchantDTO> getTradeMerchant() {
-        return tradeMerchant;
-    }
-
-    /**
-     * tradeMerchant
-     *
-     * @param   tradeMerchant    the tradeMerchant to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setTradeMerchant(List<TradeMerchantDTO> tradeMerchant) {
-        this.tradeMerchant = tradeMerchant;
-    }
-    
+//    /**
+//     * tradeMerchant
+//     *
+//     * @return  the tradeMerchant
+//     * @since   CodingExample Ver 1.0
+//    */
+//    
+//    public List<TradeMerchantDTO> getTradeMerchant() {
+//        return tradeMerchant;
+//    }
+//
+//    /**
+//     * tradeMerchant
+//     *
+//     * @param   tradeMerchant    the tradeMerchant to set
+//     * @since   CodingExample Ver 1.0
+//     */
+//    
+//    public void setTradeMerchant(List<TradeMerchantDTO> tradeMerchant) {
+//        this.tradeMerchant = tradeMerchant;
+//    }
+//    
 }

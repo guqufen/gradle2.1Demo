@@ -11,6 +11,7 @@ import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.api.dto.MerchantDTO;
 import net.fnsco.api.dto.TerminalDetailDTO;
 import net.fnsco.api.dto.TerminalsDTO;
+import net.fnsco.api.dto.TradeMerchantDTO;
 import net.fnsco.core.base.ResultDTO;
 
 /**@desc 商户相关服务接口
@@ -70,4 +71,15 @@ public interface MerchantService {
     
     
     ResultDTO<TerminalsDTO> updateTerminal(TerminalsDTO terminalsDTO);
+    
+    /**
+     * getShopOwnerMerChant:(这里用一句话描述这个方法的作用)根据userId查询是店主的商户信息
+     *
+     * @param merchantDTO
+     * @return    设定文件
+     * @return List<TradeMerchantDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<TradeMerchantDTO> getShopOwnerMerChant(MerchantDTO merchantDTO);
 }

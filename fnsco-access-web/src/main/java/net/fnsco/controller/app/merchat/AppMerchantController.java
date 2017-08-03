@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.api.constant.ApiConstant;
 import net.fnsco.api.dto.MerChantCoreDTO;
 import net.fnsco.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.api.dto.MerchantDTO;
 import net.fnsco.api.dto.TerminalDetailDTO;
 import net.fnsco.api.dto.TerminalsDTO;
+import net.fnsco.api.dto.TradeMerchantDTO;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.controller.app.jo.TerminalJO;
 import net.fnsco.controller.app.jo.UserMerchantJO;
@@ -126,5 +128,23 @@ public class AppMerchantController extends BaseController {
         terminalsDTO.setId(terminalJO.getTerId());
         terminalsDTO.setTermName(terminalJO.getTermName());
         return merchantService.updateTerminal(terminalsDTO);
+    }
+    /**
+     * getShopOwnerMerChant:(这里用一句话描述这个方法的作用)根据userId查询是店主的商户信息
+     *
+     * @param merchant
+     * @return    设定文件
+     * @return ResultDTO<List<TradeMerchantDTO>>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping(value = "/getShopOwnerMerChant")
+    @ApiOperation(value = "APP用户查询店主商家列表")
+    public ResultDTO<List<TradeMerchantDTO>> getShopOwnerMerChant(@RequestBody MerchantDTO merchant) {
+       if(null == merchant.getUserId()){
+           return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+       }
+       List<TradeMerchantDTO> datas =  merchantService.getShopOwnerMerChant(merchant);
+       return ResultDTO.success(datas);
     }
 }

@@ -22,12 +22,14 @@ import net.fnsco.api.dto.MerTerminalsDTO;
 import net.fnsco.api.dto.MerchantDTO;
 import net.fnsco.api.dto.TerminalDetailDTO;
 import net.fnsco.api.dto.TerminalsDTO;
+import net.fnsco.api.dto.TradeMerchantDTO;
 import net.fnsco.api.merchant.MerchantService;
 import net.fnsco.api.sysappmsg.SysAppMsgService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.service.dao.master.AliasDAO;
+import net.fnsco.service.dao.master.AppUserMerchantDao;
 import net.fnsco.service.dao.master.MerchantChannelDao;
 import net.fnsco.service.dao.master.MerchantCoreDao;
 import net.fnsco.service.dao.master.MerchantTerminalDao;
@@ -61,6 +63,9 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     private SysAppMsgService    sysAppMsgService;
     @Autowired
     private AppUserService      appUserService;
+    @Autowired
+    private AppUserMerchantDao appUserMerchantDao;
+    
     @Override
     @Transactional
     public ResultDTO addMerChant(MerchantDTO merchantDTO) {
@@ -240,6 +245,18 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         }
         return ResultDTO.success(terminalsDTO);
 
+    }
+    
+    /**
+     * (non-Javadoc)查询是店主的商户信息
+     * @see net.fnsco.api.merchant.MerchantService#getShopOwnerMerChant(net.fnsco.api.dto.MerchantDTO)
+     * @author tangliang
+     * @date 2017年8月3日 下午1:18:47
+     */
+    @Override
+    public List<TradeMerchantDTO> getShopOwnerMerChant(MerchantDTO merchantDTO) {
+        
+        return appUserMerchantDao.selectByUserIdAndRoleId(merchantDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
     }
 
 }
