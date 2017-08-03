@@ -183,6 +183,12 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
     //建议
     @Override
     public ResultDTO suggest(SuggestDTO suggestDTO) {
+        if(suggestDTO.getUserId()==null){
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+         }
+        if(Strings.isNullOrEmpty(suggestDTO.getContent())){
+            return ResultDTO.fail(ApiConstant.E_SUGGESTEMPTY_ERROR);
+        }
         SysSuggest sysSuggest=new SysSuggest();
         sysSuggest.setAppUserId(suggestDTO.getUserId());
         //根据id查找到手机号码
