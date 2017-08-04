@@ -20,6 +20,7 @@ import net.fnsco.controller.app.jo.TradeDataJO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.service.comm.ServiceConstant.PaySubTypeAllEnum;
 import net.fnsco.service.comm.ServiceConstant.PaySubTypeEnum;
 import net.fnsco.service.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.service.comm.ServiceConstant.TradeTypeEnum;
@@ -57,8 +58,14 @@ public class TradeDataController extends BaseController {
             for (TradeData tradeData : list) {
                 TradeDataJO jo = new TradeDataJO();
                 jo.setAmount(getAtm(tradeData.getAmt()));
-                jo.setPayType(tradeData.getPaySubType());
-                jo.setPayTypeName(PaySubTypeEnum.getNameByCode(jo.getPayType()));
+                String payTypeStr = PaySubTypeEnum.getNameByCode(jo.getPayType());
+                if(Strings.isNullOrEmpty(payTypeStr)){
+                    jo.setPayType("99");
+                    jo.setPayTypeName("其它");
+                }else{
+                    jo.setPayType(tradeData.getPaySubType());
+                    jo.setPayTypeName(PaySubTypeEnum.getNameByCode(jo.getPayType()));
+                }
                 jo.setStatus(tradeData.getRespCode());
                 jo.setStatusName(TradeStateEnum.getNameByCode(jo.getStatus()));
                 jo.setId(tradeData.getId());
@@ -103,7 +110,7 @@ public class TradeDataController extends BaseController {
         TradeDataJO result = new TradeDataJO();
         result.setAmount(getAtm(tradeData.getAmt()));
         result.setPayType(tradeData.getPaySubType());
-        result.setPayTypeName(PaySubTypeEnum.getNameByCode(result.getPayType()));
+        result.setPayTypeName(PaySubTypeAllEnum.getNameByCode(result.getPayType()));
         result.setStatus(tradeData.getRespCode());
         result.setStatusName(TradeStateEnum.getNameByCode(result.getStatus()));
         result.setId(tradeData.getId());
