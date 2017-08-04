@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -50,6 +51,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     /**
      * 保存交易流水
      */
+    @Transactional
     public boolean saveTradeData(TradeDataDTO tradeData) {
         /*if (ServiceConstant.STR_1.equals(tradeData.getValidate()) && !Strings.isNullOrEmpty(tradeData.getMd5())) {
             //需要校验
@@ -94,9 +96,12 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setInnerCode(innerCode);
         tradeDataEntity.setCreateTime(new Date());
         tradeDataEntity.setRespCode(tradeData.getRespCode());
-        tradeDataEntity.setTxnType(tradeData.getTxnType());
+        
         tradeDataEntity.setCertifyId(tradeData.getCardNo());
         tradeDataEntity.setDcType(tradeData.getCardOrg());
+        tradeDataEntity.setTxnType(tradeData.getTxnType());
+        String txnType = tradeData.getTxnType();
+        
         logger.error("保存交易流水信息" + JSON.toJSONString(tradeDataEntity));
         tradeListDAO.insert(tradeDataEntity);
         logger.warn("插入流水总耗时" + (System.currentTimeMillis() - timer));
