@@ -81,14 +81,6 @@ public class SysUserLoginAction extends BaseController{
 	public Map<String,Object> getCurrentUser(){
 		Map<String,Object> result = new HashMap<>();
 		SysUser adminUser = (SysUser) getSessionUser();
-		if(null == adminUser)
-		{
-			String cookie = (String) getCookieUser();
-			if(StringUtils.isEmpty(cookie))return result;
-			adminUser = new SysUser();
-			adminUser.setName(cookie.substring(cookie.lastIndexOf("#")+1, cookie.length()));
-			setSessionUser(adminUser,1);
-		}
 		result.put("sessionUser", adminUser);
 		return result;
 	}
