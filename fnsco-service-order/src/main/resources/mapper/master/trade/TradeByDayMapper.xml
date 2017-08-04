@@ -79,6 +79,9 @@
       <if test="userId != null">
        AND inner_code in (
          SELECT inner_code FROM m_merchant_user_rel WHERE app_user_id=#{userId}
+         <if test="roleId != null">
+           AND role_id = #{roleId}
+         </if>
        )
       </if>
       <if test="innerCode !=null and innerCode != ''">
