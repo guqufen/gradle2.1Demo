@@ -110,10 +110,33 @@ public class TradeData {
 
     private String       startTime;     // 订单交易开始日期 20160510000000
     private String       endTime;       // 订单交易结束日期 20160510235959
+    private String       status;        //交易状态0非正常交易（包括撤销交易和撤销原交易）1正常交易
     //内部商务号列表
     private List<String> innerCodeList;
     //终端号列表
     private List<String> terminalList;
+
+    /**
+     * status
+     *
+     * @return  the status
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getStatus() {
+        return status;
+    }
+
+    /**
+     * status
+     *
+     * @param   status    the status to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     /**
      * terminalList
