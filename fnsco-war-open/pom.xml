@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.fnsco</groupId>
-	<artifactId>fnsco-app-war</artifactId>
+	<artifactId>fnsco-war-open</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>fnsco-war-app</name>
-	<description>fnsco-war-app project for Spring Boot</description>
+	<name>fnsco-open-war</name>
+	<description>fnsco-open-war project for Spring Boot</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -71,12 +71,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.fnsco</groupId>
-			<artifactId>fnsco-access-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>net.fnsco</groupId>
-			<artifactId>fnsco-access-web</artifactId>
+			<artifactId>fnsco-service-order</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 

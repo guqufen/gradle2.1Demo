@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.fnsco</groupId>
-	<artifactId>fnsco-web-war</artifactId>
+	<artifactId>fnsco-war-timer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
@@ -71,12 +71,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.fnsco</groupId>
-			<artifactId>fnsco-access-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>net.fnsco</groupId>
-			<artifactId>fnsco-access-web</artifactId>
+			<artifactId>fnsco-service-order</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 

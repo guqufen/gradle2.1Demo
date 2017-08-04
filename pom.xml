@@ -12,15 +12,14 @@
 		<!-- 核心代码 -->
 		<module>fnsco-core</module>
 		<!-- web打包用 -->
-		<module>fnsco-web-war</module>
-		<module>fnsco-web-timer-war</module>
-		<module>fnsco-app-war</module>
-		<module>fnsco-open-war</module>
+		<module>fnsco-war-web</module>
+		<module>fnsco-war-timer</module>
+		<module>fnsco-war-app</module>
+		<module>fnsco-war-open</module>
 		<!-- 数据接入service项目-->
-		<module>fnsco-order-service</module>
-		<!-- 数据接入web项目-->
-
+		<module>fnsco-service-order</module>
 		<module>fnsco-withhold-service</module>
+		<!-- 数据接入web项目-->
 		<module>fnsco-withhold-war</module>
 		
 	</modules>
