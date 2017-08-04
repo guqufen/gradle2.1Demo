@@ -5,6 +5,7 @@ import java.util.Map;
 import com.google.common.collect.Maps;
 
 public class FrameworkConstant {
+    public static final String        SESSION_USER_KEY   = "session_user_key";
     public static String              IS_AUTHOR          = "false";
     public static String              OPEN_IS_AUTHOR     = "open.is.author";
     public static String              WEB_IS_AUTHOR      = "web.is.author";

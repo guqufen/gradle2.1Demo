@@ -1,5 +1,7 @@
 package net.fnsco.freamwork.business;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 
  * @desc 
@@ -20,4 +22,15 @@ public interface UserService {
      * @since  CodingExample　Ver 1.1
      */
     AppUserDTO getUserInfo(String userId);
+    
+    /**
+     * 
+     * getUserInfo:(根据用户id获取app用户信息，用于强制退出)
+     *
+     * @param userId
+     * @return   AppUserDTO    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    AppUserDTO getCookieUser(HttpServletRequest request);
 }

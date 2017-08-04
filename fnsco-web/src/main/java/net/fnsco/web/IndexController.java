@@ -36,7 +36,7 @@ public class IndexController extends BaseController {
 
             String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#") + 1, cookeiUser.toString().length());
             SysUser sysUser = sysUserDao.getUserByName(userName);
-            setSessionUser(sysUser);
+            setSessionUser(sysUser,sysUser.getId());
         }
         return "redirect:/index.html";
     }
