@@ -289,11 +289,11 @@ public class DateUtils {
      */
     public static String getDateStrByDay(int day) {
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
         calendar.add(Calendar.DATE, day);
         return sf.format(calendar.getTime());
     }
-
+    
     public static String getDateStrByMonth(int month, int day) {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");

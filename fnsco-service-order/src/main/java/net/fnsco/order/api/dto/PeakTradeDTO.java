@@ -39,6 +39,60 @@ public class PeakTradeDTO extends DTO {
     private List<TradeHourDTO> tradeHourdata;
     
     /**
+     * 查询开始日期
+     */
+    private String startDate;
+    
+    /**
+     * 查询结束日期
+     */
+    private String endDate;
+    
+    /**
+     * startDate
+     *
+     * @return  the startDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * startDate
+     *
+     * @param   startDate    the startDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * endDate
+     *
+     * @return  the endDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * endDate
+     *
+     * @param   endDate    the endDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    /**
      * tradeHourdata
      *
      * @return  the tradeHourdata

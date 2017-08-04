@@ -710,6 +710,7 @@
         	AND time_stamp < #{endTime,jdbcType=VARCHAR}
         ]]>
       </if>
+            AND status = 1
     </where>
   </select>
   <!-- 统计今日营业额 -->
