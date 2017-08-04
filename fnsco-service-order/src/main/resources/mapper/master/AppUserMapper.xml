@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="net.fnsco.service.dao.master.AppUserDao">
-	<resultMap id="BaseResultMap" type="net.fnsco.service.domain.AppUser">
+<mapper namespace="net.fnsco.order.service.dao.master.AppUserDao">
+	<resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.AppUser">
 		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="user_name" jdbcType="VARCHAR" property="userName" />
 		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
@@ -28,14 +28,14 @@
 		<result column="head_image_path" jdbcType="VARCHAR" property="headImagePath" />
 	</resultMap>
 	<!-- WEB页面用 -->
-	<resultMap id="PageResultMap" type="net.fnsco.api.dto.AppUserManageDTO" >
+	<resultMap id="PageResultMap" type="net.fnsco.order.api.dto.AppUserManageDTO" >
 	  <result column="user_name" property="userName" jdbcType="VARCHAR" />
 	  <result column="mobile" property="mobile" jdbcType="VARCHAR" />
 	  <result column="reg_time" property="regTime" jdbcType="TIMESTAMP"/>
 	  <result column="mer_names" property="merNames" jdbcType="VARCHAR"/>
 	</resultMap>
 	<!-- 商户角色结果集 -->
-  <resultMap  id="RELResultMap" type="net.fnsco.api.dto.QueryBandDTO">
+  <resultMap  id="RELResultMap" type="net.fnsco.order.api.dto.QueryBandDTO">
      <result column="id" property="id" jdbcType="INTEGER" />
      <result column="role_id" property="roleId" jdbcType="VARCHAR" />
      <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
@@ -75,7 +75,7 @@
 		where id = #{id,jdbcType=INTEGER}
 	</select>
 	<!-- 新增注册记录 -->
-	<insert id="insertSelective" parameterType="net.fnsco.service.domain.AppUser">
+	<insert id="insertSelective" parameterType="net.fnsco.order.service.domain.AppUser">
 		insert into m_app_user(id, user_name, mobile, password, real_name,
 		device_id, ges_state, ges_password, ges_trail,
 		pay_password, device_type, device_token, password_error_num, password_error_date,
@@ -92,7 +92,7 @@
 		#{modifyTime,jdbcType=TIMESTAMP},#{state,jdbcType=INTEGER},#{forcedLoginOut,jdbcType=INTEGER})
 	</insert>
 	<!-- 修改用户信息 -->
-	<update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.AppUser">
+	<update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.AppUser">
 		update m_app_user
 		<set>
 			<if test="mobile != null">
@@ -216,7 +216,7 @@
 	limit #{startRow},#{perPageSize}		
 	</select>
 	<!-- 条件查询总数 -->
-	<select id="queryTotalByCondition" parameterType="net.fnsco.api.dto.AppUserManageDTO" resultType="java.lang.Integer">
+	<select id="queryTotalByCondition" parameterType="net.fnsco.order.api.dto.AppUserManageDTO" resultType="java.lang.Integer">
 	 SELECT COUNT(*) FROM (
 	  SELECT
 		TA.mobile
@@ -289,7 +289,7 @@
 		from m_app_user
 		where state = 1 and device_token = #{deviceToken,jdbcType=VARCHAR}
   </select>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.AppUser">
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.AppUser">
   	  	update m_app_user set
   	  	user_name=#{userName,jdbcType=VARCHAR},
 		mobile=#{mobile,jdbcType=VARCHAR},password=#{password,jdbcType=VARCHAR},

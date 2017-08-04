@@ -20,7 +20,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 public class ClusterDataSourceConfig {
 
     // 精确到 cluster 目录，以便跟其他数据源隔离
-    static final String PACKAGE = "net.fnsco.service.dao.cluster";
+    static final String PACKAGE = "net.fnsco.order.service.dao.cluster";
     static final String MAPPER_LOCATION = "classpath:mapper/cluster/*.xml";
 
     @Value("${cluster.datasource.url}")

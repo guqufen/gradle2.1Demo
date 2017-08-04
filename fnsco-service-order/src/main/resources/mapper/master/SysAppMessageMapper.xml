@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.service.dao.master.SysAppMessageDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.SysAppMessage" >
+<mapper namespace="net.fnsco.order.service.dao.master.SysAppMessageDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.SysAppMessage" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="msg_type" property="msgType" jdbcType="INTEGER" />
     <result column="bus_type" property="busType" jdbcType="INTEGER" />
@@ -17,7 +17,7 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <!-- 分页查询用 -->
-  <resultMap id="PageResultMap" type="net.fnsco.service.domain.SysAppMessage" >
+  <resultMap id="PageResultMap" type="net.fnsco.order.service.domain.SysAppMessage" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="msg_type" property="msgType" jdbcType="INTEGER" />
     <result column="bus_type" property="busType" jdbcType="INTEGER" />
@@ -47,7 +47,7 @@
     delete from sys_msg_app
     where id = #{id,jdbcType=INTEGER} AND status = 2
   </delete>
-  <insert id="insert" parameterType="net.fnsco.service.domain.SysAppMessage" >
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.SysAppMessage" >
     insert into sys_msg_app (id, msg_type, bus_type, 
       msg_subject, image_url, detail_url, 
       msg_sub_title, push_type, send_type, 
@@ -59,7 +59,7 @@
       #{sendTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{modifyUserId,jdbcType=INTEGER}, 
       #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.service.domain.SysAppMessage" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.SysAppMessage" useGeneratedKeys="true" keyProperty="id">
     insert into sys_msg_app
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -144,7 +144,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.SysAppMessage" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.SysAppMessage" >
      update sys_msg_app
     <set >
       <if test="msgType != null" >
@@ -186,7 +186,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.SysAppMessage" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.SysAppMessage" >
     update sys_msg_app
     set msg_type = #{msgType,jdbcType=INTEGER},
       bus_type = #{busType,jdbcType=INTEGER},
@@ -260,7 +260,7 @@
      ) SA LEFT JOIN sys_user SU ON SA.modify_user_id = SU.ID
   </select>
   <!-- 根据条件查询总数 -->
-  <select id="queryTotalByCondition" parameterType="net.fnsco.service.domain.SysAppMessage" resultType="java.lang.Integer">
+  <select id="queryTotalByCondition" parameterType="net.fnsco.order.service.domain.SysAppMessage" resultType="java.lang.Integer">
     select count(*)  from sys_msg_app
     <where>
       <if test="sendTime != null and sendTime != ''" >
@@ -311,7 +311,7 @@
     </where> 
   </select>
   <!-- 根据条件查询实体 -->
-  <select id="queryListByCondition" parameterType="net.fnsco.service.domain.SysAppMessage" resultMap="BaseResultMap">
+  <select id="queryListByCondition" parameterType="net.fnsco.order.service.domain.SysAppMessage" resultMap="BaseResultMap">
     select 
      <include refid="Base_Column_List" />
       from sys_msg_app
@@ -372,7 +372,7 @@
         </foreach>
   </select>
   <!-- 逻辑更新状态代表删除 -->
-  <update id="updateStatusByIdAndStatus" parameterType="net.fnsco.service.domain.SysAppMessage">
+  <update id="updateStatusByIdAndStatus" parameterType="net.fnsco.order.service.domain.SysAppMessage">
     update sys_msg_app
    	 set status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER} and status = 0

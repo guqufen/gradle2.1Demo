@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.service.dao.master.trade.TradeByDayDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.trade.TradeByDay" >
+<mapper namespace="net.fnsco.order.service.dao.master.trade.TradeByDayDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.trade.TradeByDay" >
     <result column="id" property="id" jdbcType="INTEGER" />
     <result column="trade_date" property="tradeDate" jdbcType="VARCHAR" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
@@ -12,7 +12,7 @@
   <sql id="Base_Column_List" >
     id, trade_date, inner_code, turnover, order_num, order_price
   </sql>
-  <insert id="insert" parameterType="net.fnsco.service.domain.trade.TradeByDay" >
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.trade.TradeByDay" >
     insert into r_trade_by_day (id, trade_date, inner_code, 
       turnover, order_num, order_price
       )
@@ -20,7 +20,7 @@
       #{turnover,jdbcType=DECIMAL}, #{orderNum,jdbcType=INTEGER}, #{orderPrice,jdbcType=DECIMAL}
       )
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.service.domain.trade.TradeByDay" >
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.trade.TradeByDay" >
     insert into r_trade_by_day
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -64,7 +64,7 @@
     </trim>
   </insert>
   <!-- 根据时间查询 -->
-  <select id="selectTradeDayDataByTradeDate" parameterType="net.fnsco.service.domain.trade.TradeByDay" resultType="net.fnsco.api.dto.TurnoverDTO">
+  <select id="selectTradeDayDataByTradeDate" parameterType="net.fnsco.order.service.domain.trade.TradeByDay" resultType="net.fnsco.order.api.dto.TurnoverDTO">
     select SUM(turnover) AS turnover,SUM(order_num) AS orderNum from r_trade_by_day
     <where>
       <if test="startTradeDate != null and  startTradeDate != ''">
@@ -87,7 +87,7 @@
     </where>
   </select>
   <!-- 统计周报数据 -->
-  <select id="selectWeekLyTradeData" parameterType="net.fnsco.service.domain.trade.TradeByDay" resultType="net.fnsco.api.dto.TurnoverDTO">
+  <select id="selectWeekLyTradeData" parameterType="net.fnsco.order.service.domain.trade.TradeByDay" resultType="net.fnsco.order.api.dto.TurnoverDTO">
     select SUM(turnover) AS turnover,SUM(order_num) AS orderNum from r_trade_by_day
     <where>
       <if test="startTradeDate != null and  startTradeDate != ''">
@@ -107,7 +107,7 @@
     </where>
   </select>
   <!-- 查询每天的数据 -->
-  <select id="selectByInnerCode" parameterType="net.fnsco.service.domain.trade.TradeByDay" resultType="net.fnsco.api.dto.TradeDayDTO">
+  <select id="selectByInnerCode" parameterType="net.fnsco.order.service.domain.trade.TradeByDay" resultType="net.fnsco.order.api.dto.TradeDayDTO">
      SELECT trade_date AS tradeDate,order_num AS orderNum, turnover AS turnover FROM r_trade_by_day 
      <where>
        <if test="startTradeDate != null and  startTradeDate != ''">

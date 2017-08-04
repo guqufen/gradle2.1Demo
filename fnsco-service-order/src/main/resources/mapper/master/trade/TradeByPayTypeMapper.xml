@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.service.dao.master.trade.TradeByPayTypeDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.trade.TradeByPayType" >
+<mapper namespace="net.fnsco.order.service.dao.master.trade.TradeByPayTypeDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.trade.TradeByPayType" >
     <result column="id" property="id" jdbcType="INTEGER" />
     <result column="pay_type" property="payType" jdbcType="VARCHAR" />
     <result column="trade_date" property="tradeDate" jdbcType="VARCHAR" />
@@ -13,7 +13,7 @@
   <sql id="Base_Column_List" >
     id, pay_type, trade_date, inner_code, turnover, order_num, order_price
   </sql>
-  <insert id="insert" parameterType="net.fnsco.service.domain.trade.TradeByPayType" >
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.trade.TradeByPayType" >
     insert into r_trade_by_pay_type (id, pay_type, trade_date, 
       inner_code, turnover, order_num, 
       order_price)
@@ -21,7 +21,7 @@
       #{innerCode,jdbcType=VARCHAR}, #{turnover,jdbcType=DECIMAL}, #{orderNum,jdbcType=INTEGER}, 
       #{orderPrice,jdbcType=DECIMAL})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.service.domain.trade.TradeByPayType" >
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.trade.TradeByPayType" >
     insert into r_trade_by_pay_type
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -71,7 +71,7 @@
     </trim>
   </insert>
   <!-- 按照innerCode和时间段查询 -->
-  <select id="selectTradeDataByInnerCode" parameterType="net.fnsco.service.domain.trade.TradeByPayType" resultType="net.fnsco.api.dto.TradeTypeDTO">
+  <select id="selectTradeDataByInnerCode" parameterType="net.fnsco.order.service.domain.trade.TradeByPayType" resultType="net.fnsco.order.api.dto.TradeTypeDTO">
      SELECT SUM(turnover) AS turnover,SUM(order_num) AS orderNum,pay_type AS payType 
            FROM r_trade_by_pay_type 
      <where>
