@@ -35,7 +35,7 @@ public class TimerConfig {
      * @author tangliang
      * @since  CodingExample　Ver 1.1
      */
-//    @Scheduled(cron = "0 * * * * ?")//每一分钟的0秒执行，每分钟执行一次
+    @Scheduled(cron = "0 * * * * ?")//每一分钟的0秒执行，每分钟执行一次
     public void pushMagTimer(){
         appPushService.sendSystemMgs();
     }
@@ -47,7 +47,7 @@ public class TimerConfig {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-//    @Scheduled(cron = "30 * * * * ?")//每一分钟的30秒执行，每分钟执行一次
+    @Scheduled(cron = "30 * * * * ?")//每一分钟的30秒执行，每分钟执行一次
     public void pushFirstFailMsg(){
         appPushService.sendFailMgs(1);
     }
@@ -59,7 +59,7 @@ public class TimerConfig {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-//    @Scheduled(cron = "0 1 * * * ?")//每个小时的1秒执行，每60分钟执行一次
+    @Scheduled(cron = "0 1 * * * ?")//每个小时的1秒执行，每60分钟执行一次
     public void pushSecondFailMsg(){
         appPushService.sendFailMgs(2);
     }
@@ -72,7 +72,7 @@ public class TimerConfig {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-//    @Scheduled(cron = "0 0 0/2 * * ?")//每隔2个小时执行一次
+    @Scheduled(cron = "0 0 0/2 * * ?")//每隔2个小时执行一次
     public void pushThirdFailMsg(){
         appPushService.sendFailMgs(3);
     }
