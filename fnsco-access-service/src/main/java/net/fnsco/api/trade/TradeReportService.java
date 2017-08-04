@@ -1,8 +1,10 @@
 package net.fnsco.api.trade;
 
+import net.fnsco.api.dto.BusinessTrendDTO;
+import net.fnsco.api.dto.ConsumptionDTO;
+import net.fnsco.api.dto.PeakTradeDTO;
 import net.fnsco.api.dto.TradeReportDTO;
 import net.fnsco.api.dto.TradeTurnoverDTO;
-import net.fnsco.api.dto.ConsumptionDTO;
 import net.fnsco.api.dto.WeeklyDTO;
 import net.fnsco.api.dto.WeeklyHisDateDTO;
 
@@ -66,4 +68,24 @@ public interface TradeReportService {
      * @since  CodingExample　Ver 1.1
      */
     ConsumptionDTO queryConsumption(TradeReportDTO tradeReportDTO);
+    /**
+     * queryBusinessTrends:(这里用一句话描述这个方法的作用)查询经营趋势数据
+     *
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @return BusinessTrendDTO    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    BusinessTrendDTO queryBusinessTrends(TradeReportDTO tradeReportDTO);
+    /**
+     * queryPeakTrade:(这里用一句话描述这个方法的作用)查询交易峰值
+     *
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @return PeakTradeDTO    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    PeakTradeDTO queryPeakTrade(TradeReportDTO tradeReportDTO);
 }

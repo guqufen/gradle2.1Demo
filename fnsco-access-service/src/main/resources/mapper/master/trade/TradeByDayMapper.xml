@@ -116,6 +116,14 @@
        <if test="endTradeDate != null and  endTradeDate != ''">
         AND trade_date &lt;= #{endTradeDate}
       </if>
+      <if test="userId != null">
+        AND inner_code in (
+          SELECT inner_code FROM u_app_user_merchant WHERE app_user_id =#{userId}
+          <if test="roleId != null">
+            AND role_id = #{roleId}
+          </if>
+        )
+      </if>
       <if test="innerCode != null and innerCode != ''">
         AND inner_code = #{innerCode}
       </if>

@@ -132,6 +132,9 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
         SysConfig record = new SysConfig();
         record.setName(appConfigDTO.getType());
         SysConfig config = selectByCondition(record);
+        if(null == config){
+            return null;
+        }
         String value = config.getValue();
         if(Strings.isNullOrEmpty(value)){
             return null;

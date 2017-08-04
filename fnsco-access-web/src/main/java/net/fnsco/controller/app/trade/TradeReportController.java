@@ -10,9 +10,11 @@ import com.google.common.base.Strings;
 
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.constant.ApiConstant;
+import net.fnsco.api.dto.BusinessTrendDTO;
+import net.fnsco.api.dto.ConsumptionDTO;
+import net.fnsco.api.dto.PeakTradeDTO;
 import net.fnsco.api.dto.TradeReportDTO;
 import net.fnsco.api.dto.TradeTurnoverDTO;
-import net.fnsco.api.dto.ConsumptionDTO;
 import net.fnsco.api.dto.WeeklyDTO;
 import net.fnsco.api.dto.WeeklyHisDateDTO;
 import net.fnsco.api.trade.TradeReportService;
@@ -107,6 +109,44 @@ public class TradeReportController extends BaseController{
             return ResultDTO.fail(ApiConstant.E_INNER_CODE_NULL);
         }
         ConsumptionDTO data = tradeReportService.queryConsumption(tradeReportDTO);
+        return ResultDTO.success(data);
+    }
+    
+    /**
+     * queryBusinessTrends:(这里用一句话描述这个方法的作用)查询经营趋势数据
+     *
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @return ResultDTO<Object>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping("/queryBusinessTrends")
+    @ApiOperation(value = "H5查询经营趋势")
+    public ResultDTO<BusinessTrendDTO>  queryBusinessTrends(@RequestBody TradeReportDTO tradeReportDTO){
+        if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_INNER_CODE_NULL);
+        }
+        BusinessTrendDTO data = tradeReportService.queryBusinessTrends(tradeReportDTO);
+        return ResultDTO.success(data);
+    }
+    
+    /**
+     * queryPeakTrade:(这里用一句话描述这个方法的作用)查询峰值交易数据
+     *
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @return ResultDTO<Object>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping("/queryPeakTrade")
+    @ApiOperation(value = "H5查询峰值交易")
+    public ResultDTO<PeakTradeDTO>  queryPeakTrade(@RequestBody TradeReportDTO tradeReportDTO){
+        if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_INNER_CODE_NULL);
+        }
+        PeakTradeDTO data = tradeReportService.queryPeakTrade(tradeReportDTO);
         return ResultDTO.success(data);
     }
 }

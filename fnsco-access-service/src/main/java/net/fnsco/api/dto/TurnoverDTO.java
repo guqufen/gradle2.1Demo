@@ -22,9 +22,13 @@ public class TurnoverDTO extends JO {
     
     private static final long serialVersionUID = 8018206410433137948L;
     /**
-     * 统计的营业额时间段
+     * 统计的营业额开始日期
      */
-    private String weeklyTime;
+    private String startDate;
+    /**
+     * 结束日期
+     */
+    private String endDate;
     
     /**
      * 订单数
@@ -52,6 +56,46 @@ public class TurnoverDTO extends JO {
     private Integer type;
     
     /**
+     * startDate
+     *
+     * @return  the startDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getStartDate() {
+        return startDate;
+    }
+    /**
+     * startDate
+     *
+     * @param   startDate    the startDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+    /**
+     * endDate
+     *
+     * @return  the endDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getEndDate() {
+        return endDate;
+    }
+    /**
+     * endDate
+     *
+     * @param   endDate    the endDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+    /**
      * type
      *
      * @return  the type
@@ -70,26 +114,6 @@ public class TurnoverDTO extends JO {
     
     public void setType(Integer type) {
         this.type = type;
-    }
-    /**
-     * weeklyTime
-     *
-     * @return  the weeklyTime
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public String getWeeklyTime() {
-        return weeklyTime;
-    }
-    /**
-     * weeklyTime
-     *
-     * @param   weeklyTime    the weeklyTime to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setWeeklyTime(String weeklyTime) {
-        this.weeklyTime = weeklyTime;
     }
     /**
      * orderNum

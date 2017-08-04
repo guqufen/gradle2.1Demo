@@ -16,12 +16,15 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.api.constant.ConstantEnum;
+import net.fnsco.api.dto.BusinessTrendDTO;
+import net.fnsco.api.dto.ConsumptionDTO;
 import net.fnsco.api.dto.DateDTO;
+import net.fnsco.api.dto.PeakTradeDTO;
 import net.fnsco.api.dto.TradeDayDTO;
+import net.fnsco.api.dto.TradeHourDTO;
 import net.fnsco.api.dto.TradeReportDTO;
 import net.fnsco.api.dto.TradeTurnoverDTO;
 import net.fnsco.api.dto.TradeTypeDTO;
-import net.fnsco.api.dto.ConsumptionDTO;
 import net.fnsco.api.dto.TurnoverDTO;
 import net.fnsco.api.dto.WeeklyDTO;
 import net.fnsco.api.dto.WeeklyHisDateDTO;
@@ -144,7 +147,9 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         }
         yesterdayTurnover.setType(0);
         yesterdayTurnover.setWeekLy(false);
-        yesterdayTurnover.setWeeklyTime(yesTradeDate.substring(0, yesTradeDate.length()-6));
+        String yesterdayStr = DateUtils.formatDateStrOutput(yesTradeDate.substring(0, yesTradeDate.length()-6));
+        yesterdayTurnover.setStartDate(yesterdayStr);
+        yesterdayTurnover.setEndDate(yesterdayStr);;
         datas.add(yesterdayTurnover);
         //上周的营业额
         record.setStartTradeDate(DateUtils.getMondayStr(-1));
@@ -161,7 +166,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         }
         lastWeekTurnover.setType(1);
         lastWeekTurnover.setWeekLy(false);
-        lastWeekTurnover.setWeeklyTime(DateUtils.getMondayStr(-1)+"-"+DateUtils.getSundayStr(-1));
+        lastWeekTurnover.setStartDate(DateUtils.formatDateStrOutput(DateUtils.getMondayStr(-1)));
+        lastWeekTurnover.setEndDate(DateUtils.formatDateStrOutput(DateUtils.getSundayStr(-1)));
         datas.add(lastWeekTurnover);
         //本日营业额
         record.setTradeDate(DateUtils.getTimeByDayStr(0));
@@ -176,15 +182,17 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         }
         totayTurnover.setType(2);
         totayTurnover.setWeekLy(false);
-        totayTurnover.setWeeklyTime(DateUtils.getTimeByDayStr(0));
+        String totayDate = DateUtils.getTimeByDayStr(0).substring(0,8);
+        totayTurnover.setStartDate(DateUtils.formatDateStrOutput(totayDate));
+        totayTurnover.setEndDate(DateUtils.formatDateStrOutput(totayDate));
         datas.add(totayTurnover);
         //本周
         String thisMonday = DateUtils.getMondayStr(0);
-        String toDay = DateUtils.getTimeByDayStr(0);
+        String toDay = DateUtils.getTimeByDayStr(0).substring(0, 8);
         if(toDay.startsWith(thisMonday)){
             totayTurnover.setType(3);
-            totayTurnover.setWeeklyTime(thisMonday);
-            totayTurnover.setWeeklyTime(DateUtils.getMondayStr(0)+"-"+toDay.substring(0, toDay.length()-6));
+            totayTurnover.setStartDate(DateUtils.formatDateStrOutput(thisMonday));
+            totayTurnover.setEndDate(DateUtils.formatDateStrOutput(toDay));
             datas.add(totayTurnover);
         }else{
             record.setStartTradeDate(thisMonday);
@@ -201,7 +209,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             }
             thisWeekTurnover.setWeekLy(false);
             thisWeekTurnover.setType(3);
-            thisWeekTurnover.setWeeklyTime(DateUtils.getMondayStr(0)+"-"+toDay.substring(0, toDay.length()-6));
+            thisWeekTurnover.setStartDate(DateUtils.formatDateStrOutput(DateUtils.getMondayStr(0)));
+            thisWeekTurnover.setEndDate(DateUtils.formatDateStrOutput(toDay));
             datas.add(thisWeekTurnover);
         }
         //返回首页周报数据
@@ -222,7 +231,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             }
             weekLyTurnover.setType(4);
             weekLyTurnover.setWeekLy(true);
-            weekLyTurnover.setWeeklyTime(DateUtils.getMondayStr(-1)+"-"+DateUtils.getSundayStr(-1));
+            weekLyTurnover.setStartDate(DateUtils.formatDateStrOutput(DateUtils.getMondayStr(-1)));
+            weekLyTurnover.setEndDate(DateUtils.formatDateStrOutput(DateUtils.getSundayStr(-1)));
             datas.add(weekLyTurnover);
         }
         result.setTurnovers(datas);
@@ -499,5 +509,129 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         return datas;
         
     }
-   
+    
+    /**
+     * (non-Javadoc)查询经营趋势的数据
+     * @see net.fnsco.api.trade.TradeReportService#queryBusinessTrends(net.fnsco.api.dto.TradeReportDTO)
+     * @author tangliang
+     * @date 2017年8月3日 下午4:41:46
+     */
+    @Override
+    public BusinessTrendDTO queryBusinessTrends(TradeReportDTO tradeReportDTO) {
+        
+      //如果没有传递时间和商家，则默认上周和全部商户数据
+        if(Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate())){
+            tradeReportDTO.setStartDate(DateUtils.getMondayStr(-1));
+            tradeReportDTO.setEndDate(DateUtils.getSundayStr(-1));
+        }
+        BusinessTrendDTO datas = new BusinessTrendDTO();
+        TradeByDay record = new TradeByDay();
+        record.setInnerCode(tradeReportDTO.getInnerCode());
+        record.setStartTradeDate(tradeReportDTO.getStartDate());
+        record.setEndTradeDate(tradeReportDTO.getEndDate());
+        record.setUserId(tradeReportDTO.getUserId());
+        List<TradeDayDTO> tradeDayData = tradeByDayDao.selectByInnerCode(record);
+        List<TradeDayDTO> data = installTradeDay(tradeReportDTO,tradeDayData);
+        int orderNumTotal = 0;
+        BigDecimal turnoverTotal = new BigDecimal(0.00);
+        for (TradeDayDTO tradeDayDTO : data) {
+            orderNumTotal += tradeDayDTO.getOrderNum();
+            turnoverTotal = turnoverTotal.add(tradeDayDTO.getTurnover());
+        }
+        //设置返回数据
+        datas.setOrderNumTotal(orderNumTotal);
+        datas.setTurnoverTotal(turnoverTotal);
+        datas.setOrderPrice(turnoverTotal.divide(new BigDecimal(orderNumTotal), 2, BigDecimal.ROUND_HALF_UP));
+        datas.setTradeDayData(data);
+        return datas;
+        
+    }
+    
+    /**
+     * (non-Javadoc)查询交易峰值
+     * @see net.fnsco.api.trade.TradeReportService#queryPeakTrade(net.fnsco.api.dto.TradeReportDTO)
+     * @author tangliang
+     * @date 2017年8月3日 下午5:34:19
+     */
+    @Override
+    public PeakTradeDTO queryPeakTrade(TradeReportDTO tradeReportDTO) {
+        
+      //如果没有传递时间和商家，则默认上周和全部商户数据
+        if(Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate())){
+            tradeReportDTO.setStartDate(DateUtils.getMondayStr(-1));
+            tradeReportDTO.setEndDate(DateUtils.getSundayStr(-1));
+        }
+        TradeByHour record = new TradeByHour();
+        record.setStartTradeDate(tradeReportDTO.getStartDate());
+        record.setEndTradeDate(tradeReportDTO.getEndDate());
+        record.setUserId(tradeReportDTO.getUserId());
+        List<TradeHourDTO> tradeHourData = tradeByHourDao.selectByCondition(record);
+        PeakTradeDTO data = new PeakTradeDTO();
+        int orderNumTotal = 0;
+        BigDecimal turnoverTotal = new BigDecimal(0.00);
+        for (TradeHourDTO tradeHourDTO : tradeHourData) {
+            orderNumTotal += tradeHourDTO.getOrderNum();
+            turnoverTotal = turnoverTotal.add(tradeHourDTO.getTurnover());
+        }
+        data.setOrderNumTotal(orderNumTotal);
+        data.setTurnoverTotal(turnoverTotal);
+        //如果没有数据填充数据
+        List<TradeHourDTO> datas = installTradeHour(tradeReportDTO,tradeHourData);
+        data.setTradeHourdata(datas);
+        return data;
+        
+    }
+    
+    /**
+     * installTradeHour:(这里用一句话描述这个方法的作用)填充数据
+     *
+     * @param tradeReportDTO
+     * @param tradeDayData
+     * @return    设定文件
+     * @return List<TradeHourDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    private List<TradeHourDTO> installTradeHour(TradeReportDTO tradeReportDTO,List<TradeHourDTO> tradeDayHour){
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd hh");
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        Date startDate;
+        Date endDate;
+        List<TradeHourDTO> datas = Lists.newArrayList();
+        try {
+            startDate = format.parse(tradeReportDTO.getStartDate()+" 00");
+            start.setTime(startDate);
+            endDate = format.parse(tradeReportDTO.getEndDate()+" 23");
+            end.setTime(endDate);
+            boolean flag = true;
+            while (end.compareTo(start) >= 0) {
+                flag = true;
+                String dateTime = format.format(end.getTime());
+                int hour = end.get(Calendar.HOUR_OF_DAY);
+                for (TradeHourDTO tradeHourDTO : tradeDayHour) {
+                    if(dateTime.startsWith(tradeHourDTO.getTradeDate()) && hour ==Integer.valueOf(tradeHourDTO.getTradeHour())){
+                        datas.add(tradeHourDTO);
+                        flag = false;
+                    }
+                }
+                if(flag){
+                    TradeHourDTO temp = new TradeHourDTO();
+                    temp.setOrderNum(0);
+                    String tradeDate = dateTime.substring(0, 8);
+                    temp.setTradeDate(DateUtils.formatDateStrOutput(tradeDate));
+                    temp.setTradeHour(String.valueOf(hour));
+                    temp.setTurnover(new BigDecimal(0.00));
+                    datas.add(temp);
+                }
+              //循环，每次天数加1
+                end.set(Calendar.HOUR_OF_DAY, end.get(Calendar.HOUR_OF_DAY) - 1);
+            }
+            
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+       
+        return datas;
+    }
 }

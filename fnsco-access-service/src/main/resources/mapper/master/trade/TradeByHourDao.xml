@@ -70,4 +70,33 @@
       </if>
     </trim>
   </insert>
+  <!-- 根据条件查询 -->
+  <select id="selectByCondition" parameterType="net.fnsco.service.domain.trade.TradeByHour" resultType="net.fnsco.api.dto.TradeHourDTO">
+     SELECT
+			trade_hour AS tradeHour,
+			trade_date AS tradeDate,
+			turnover AS turnover,
+			order_num AS orderNum
+		FROM
+			r_trade_by_hour
+		<where>
+		      <if test="startTradeDate != null and  startTradeDate != ''">
+		        AND trade_date &gt;= #{startTradeDate}
+		      </if>
+		       <if test="endTradeDate != null and  endTradeDate != ''">
+		        AND trade_date &lt;= #{endTradeDate}
+		      </if>
+		      <if test="tradeDate != null and  tradeDate != ''">
+		        AND trade_date= #{tradeDate}
+		      </if>
+		      <if test="userId != null">
+		       AND inner_code in (
+		         SELECT inner_code FROM u_app_user_merchant WHERE app_user_id=#{userId}
+		         <if test="roleId != null">
+		           AND role_id = #{roleId}
+		         </if>
+		       )
+		      </if>
+		</where>	
+  </select>
 </mapper>

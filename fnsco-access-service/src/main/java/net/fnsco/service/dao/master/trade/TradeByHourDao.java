@@ -1,5 +1,8 @@
 package net.fnsco.service.dao.master.trade;
 
+import java.util.List;
+
+import net.fnsco.api.dto.TradeHourDTO;
 import net.fnsco.service.domain.trade.TradeByHour;
 /**
  * @desc
@@ -13,5 +16,15 @@ public interface TradeByHourDao {
     int insert(TradeByHour record);
 
     int insertSelective(TradeByHour record);
-
+    
+    /**
+     * selectByCondition:(这里用一句话描述这个方法的作用)根据时间点查询
+     *
+     * @param record
+     * @return    设定文件
+     * @return List<TradeHourDTO>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<TradeHourDTO> selectByCondition(TradeByHour record);
 }
