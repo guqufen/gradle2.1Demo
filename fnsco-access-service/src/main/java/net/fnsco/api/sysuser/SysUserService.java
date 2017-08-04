@@ -26,4 +26,14 @@ public interface SysUserService {
      * @return
      */
 	ResultDTO<String> modifyPassword(String name,String newPassword,String oldPassword );
+	/**
+	 * 
+	 * getUserByName:(根据用户名查询用户)
+	 *
+	 * @param username
+	 * @return   SysUser    返回Result对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	SysUser getUserByName(String username); 
 }

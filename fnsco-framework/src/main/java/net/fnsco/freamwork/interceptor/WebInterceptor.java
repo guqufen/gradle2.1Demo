@@ -64,6 +64,7 @@ public class WebInterceptor implements HandlerInterceptor {
             String requestType = request.getHeader("X-Requested-With");
             if (Strings.isNullOrEmpty(requestType)) {
                 response.sendRedirect("/idx");
+                return false;
             }
             AppUserDTO user = userService.getCookieUser(request);
             if (null == user) {

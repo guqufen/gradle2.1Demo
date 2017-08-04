@@ -47,29 +47,33 @@ public class SysUserServiceImpl extends BaseService implements SysUserService {
     public ResultDTO<String> modifyPassword(String name, String newPassword, String oldPassword) {
         ResultDTO<String> result = new ResultDTO<String>();
         //非空判断
-        if(Strings.isNullOrEmpty(name)||Strings.isNullOrEmpty(newPassword)||Strings.isNullOrEmpty(oldPassword)){
+        if (Strings.isNullOrEmpty(name) || Strings.isNullOrEmpty(newPassword) || Strings.isNullOrEmpty(oldPassword)) {
             return result.fail();
         }
         String oldPwd = Md5Util.getInstance().md5(oldPassword);
         String newPwd = Md5Util.getInstance().md5(newPassword);
         //判断原密码是否正确 
         SysUser sysUser = adminUserDao.getUserByName(name);
-        if(null == sysUser){
+        if (null == sysUser) {
             return ResultDTO.fail("用户名不存在");
         }
         if (!oldPwd.equals(sysUser.getPassword())) {
             return result.fail("原密码不正确");
         }
-        SysUser adminUser= new SysUser();
+        SysUser adminUser = new SysUser();
         adminUser.setPassword(newPwd);
         adminUser.setId(sysUser.getId());
-        int num=adminUserDao.updateByPrimaryKeySelective(adminUser);
-        if (num==0) {
+        int num = adminUserDao.updateByPrimaryKeySelective(adminUser);
+        if (num == 0) {
             return result.fail();
         }
         return result.success();
     }
 
     //修改密码
-
+    @Override
+    public SysUser getUserByName(String username) {
+        SysUser sysUser = adminUserDao.getUserByName(username);
+        return sysUser;
+    }
 }
