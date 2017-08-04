@@ -74,9 +74,8 @@
   <select id="selectByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeByHour" resultType="net.fnsco.order.api.dto.TradeHourDTO">
      SELECT
 			trade_hour AS tradeHour,
-			trade_date AS tradeDate,
-			turnover AS turnover,
-			order_num AS orderNum
+			SUM(turnover) AS turnover,
+			SUM(order_num) AS orderNum
 		FROM
 			r_trade_by_hour
 		<where>
@@ -98,5 +97,6 @@
 		       )
 		      </if>
 		</where>	
+		GROUP BY trade_hour
   </select>
 </mapper>

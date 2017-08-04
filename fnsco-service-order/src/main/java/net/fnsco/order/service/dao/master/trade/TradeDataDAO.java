@@ -7,6 +7,7 @@ import net.fnsco.order.api.dto.TurnoverDTO;
 import net.fnsco.order.service.domain.trade.TradeByDay;
 import net.fnsco.order.service.domain.trade.TradeData;
 import net.fnsco.order.service.domain.trade.TradeDateTemp;
+
 /**
  * 
  * @desc
@@ -31,19 +32,19 @@ public interface TradeDataDAO {
     int updateByPrimaryKeySelective(TradeData record);
 
     int updateByPrimaryKey(TradeData record);
-    
+
     /**
      * 条件分页查询
      */
     List<TradeData> queryPageList(PageDTO<TradeData> pages);
-    
+
     /**
      * 条件查询总数
      * @param pages
      * @return
      */
     int queryTotalByCondition(TradeData record);
-    
+
     /**
      * queryByCondition:(这里用一句话描述这个方法的作用)
      *
@@ -54,7 +55,7 @@ public interface TradeDataDAO {
      * @since  CodingExample　Ver 1.1
      */
     List<TradeDateTemp> queryTempByCondition(TradeData record);
-    
+
     /**
      * queryTodayTurnover:(这里用一句话描述这个方法的作用)统计今日营业额
      *
@@ -65,4 +66,17 @@ public interface TradeDataDAO {
      * @since  CodingExample　Ver 1.1
      */
     TurnoverDTO queryTodayTurnover(TradeByDay record);
+
+    /**
+     * 
+     * selectByIRT:(根据内部商务号终端号参数考)
+     *
+     * @param innerCode
+     * @param referNo
+     * @param termId
+     * @return   TradeData    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    TradeData selectByIRT(TradeData record);
 }

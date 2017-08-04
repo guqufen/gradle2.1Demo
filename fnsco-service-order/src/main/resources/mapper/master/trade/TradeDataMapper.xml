@@ -88,6 +88,17 @@
     limit 1
   </select>
   
+  <select id="selectByIRT" resultMap="BaseResultMap" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_trade_data
+    where refer_no = #{referNo,jdbcType=VARCHAR}
+    and term_id = #{termId,jdbcType=VARCHAR}
+    and inner_code = #{innerCode,jdbcType=VARCHAR}
+    order by create_time
+    limit 1
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from t_trade_data
     where id = #{id,jdbcType=VARCHAR}
@@ -280,6 +291,9 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -333,7 +347,8 @@
       source = #{source,jdbcType=VARCHAR},
       md5 = #{md5,jdbcType=VARCHAR},
       send_time = #{sendTime,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <!-- web端分页条件查询 -->
@@ -695,6 +710,7 @@
         	AND time_stamp < #{endTime,jdbcType=VARCHAR}
         ]]>
       </if>
+            AND status = 1
     </where>
   </select>
   <!-- 统计今日营业额 -->
@@ -712,6 +728,9 @@
 				m_merchant_user_rel
 			WHERE
 				app_user_id = #{userId}
+			<if test="roleId != null">
+			    AND role_id = #{roleId}
+			</if>	
 		)
 	AND time_stamp > #{tradeDate}
   </select>

@@ -22,10 +22,6 @@ public class TradeHourDTO extends DTO{
     
     private static final long serialVersionUID = -3344772367211768539L;
     /**
-     * 交易日期
-     */
-    private String tradeDate;
-    /**
      * 交易时间点
      */
     private String tradeHour;
@@ -37,26 +33,7 @@ public class TradeHourDTO extends DTO{
      * 营业额
      */
     private BigDecimal turnover;
-    /**
-     * tradeDate
-     *
-     * @return  the tradeDate
-     * @since   CodingExample Ver 1.0
-    */
     
-    public String getTradeDate() {
-        return tradeDate;
-    }
-    /**
-     * tradeDate
-     *
-     * @param   tradeDate    the tradeDate to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setTradeDate(String tradeDate) {
-        this.tradeDate = tradeDate;
-    }
     /**
      * tradeHour
      *

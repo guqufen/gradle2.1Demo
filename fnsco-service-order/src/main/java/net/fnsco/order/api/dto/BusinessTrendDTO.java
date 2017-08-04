@@ -36,11 +36,64 @@ public class BusinessTrendDTO extends DTO {
      * 客单价
      */
     private BigDecimal orderPrice;
+    /**
+     * 查询开始日期
+     */
+    private String startDate;
+    
+    /**
+     * 查询结束日期
+     */
+    private String endDate;
     
     /**
      * 按照天统计数据
      */
     private List<TradeDayDTO> tradeDayData;
+    
+    /**
+     * startDate
+     *
+     * @return  the startDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * startDate
+     *
+     * @param   startDate    the startDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * endDate
+     *
+     * @return  the endDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * endDate
+     *
+     * @param   endDate    the endDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 
     /**
      * orderNumTotal
