@@ -12,6 +12,26 @@
     <result column="reply_time" property="replyTime" jdbcType="TIMESTAMP" />
     <result column="state" property="state" jdbcType="VARCHAR" />
   </resultMap>
+  <!-- 所有关联数据结果集 -->
+  <resultMap id="AllResultMap" type="net.fnsco.order.service.domain.MerchantCore">
+  <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP" />
+    <result column="reply_user_id" property="replyUserId" jdbcType="VARCHAR" />
+    <result column="reply_time" property="replyTime" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+  </resultMap>	
+  	<!-- WEB页面用 -->
+	<resultMap id="PageResultMap" type="net.fnsco.order.api.dto.SysSuggestDTO" >
+	<id column="id" property="id" jdbcType="INTEGER" />
+	  <result column="content" property="content" jdbcType="VARCHAR" />
+	  <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
+	  <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+	  <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP"/>
+	</resultMap>
     <sql id="Base_Column_List" >
     id, type, content, app_user_id, mobile, submit_time, reply_user_id, reply_time, state
   </sql>
@@ -66,7 +86,7 @@
       <if test="state != null" >
         state,
       </if>
-    </trim>
+    </trim>  
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
@@ -127,6 +147,31 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+    <!-- 根据ID查询出所有商户关联的数据 -->
+  <select id="queryById" parameterType="java.lang.Integer" resultMap="AllResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from sys_suggest
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 条件分页查询 -->
+	<select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="PageResultMap">
+	   select 
+    id,content,app_user_id,mobile,submit_time
+    from sys_suggest
+    where submit_time = #{condition.submitTime,jdbcType=TIMESTAMP}
+	limit #{startRow},#{perPageSize}		
+	</select>
+	<!-- 条件查询总数 -->
+	<select id="queryTotalByCondition" parameterType="net.fnsco.order.api.dto.SysSuggestDTO" resultType="java.lang.Integer">
+	 SELECT COUNT(*) 
+		FROM
+		sys_suggest
+		where submit_time = #{submitTime,jdbcType=TIMESTAMP}	
+	</select>    
+  
   <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.SysSuggest" >
     update sys_suggest
     set type = #{type,jdbcType=VARCHAR},
