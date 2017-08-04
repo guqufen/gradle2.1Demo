@@ -63,7 +63,7 @@ public class DateUtils {
         }
         return result + "235959";
     }
-    
+
     /**
      * formatDateStr:(这里用一句话描述这个方法的作用)转换格式
      *
@@ -73,7 +73,7 @@ public class DateUtils {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public static String formatDateStrOutput(String dateStr){
+    public static String formatDateStrOutput(String dateStr) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMdd");
         try {
@@ -85,8 +85,8 @@ public class DateUtils {
         }
         return "";
     }
-    
-    public static String formatDateStrInput(String dateStr){
+
+    public static String formatDateStrInput(String dateStr) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMdd");
         try {
@@ -98,7 +98,60 @@ public class DateUtils {
         }
         return "";
     }
-    
+
+    public static String getNowDateStr() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
+        result = sf.format(new Date());
+        return result;
+    }
+
+    public static String getNowDateDayStr() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("dd");
+        result = sf.format(new Date());
+        return result;
+    }
+
+    public static String getNowYMDStr() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        result = sf.format(new Date());
+        return result;
+    }
+
+    public static String getAfterDayStr() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH, 3);
+        SimpleDateFormat sf1 = new SimpleDateFormat("dd");
+        result = sf1.format(calendar.getTime());
+        return result;
+    }
+
+    public static String getNowDateStr2() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        result = sf.format(new Date());
+        return result;
+    }
+
+    public static String getNowDateMonthStr() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM");
+        result = sf.format(new Date());
+        return result;
+    }
+
+    public static String getNowMonthStr() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("M");
+        result = sf.format(new Date());
+        return result;
+    }
+
     /**
      * compare_date:(这里用一句话描述这个方法的作用) 比较时间
      *
@@ -133,6 +186,7 @@ public class DateUtils {
         }
         return 0;
     }
+
     /**
      * dateFormatToStr:(这里用一句话描述这个方法的作用)
      *
@@ -142,10 +196,10 @@ public class DateUtils {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public static String dateFormatToStr(Date date){
+    public static String dateFormatToStr(Date date) {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
-    
+
     /**
      * getTimeByMinute:(这里用一句话描述这个方法的作用)获取当前时间前或后N分钟的时间字符串
      *
@@ -162,6 +216,7 @@ public class DateUtils {
         calendar.add(Calendar.MINUTE, minute);
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(calendar.getTime());
     }
+
     /**
      * getTimeByMinuteDate:(这里用一句话描述这个方法的作用)获取当前时间前或后N分钟的时间Date格式
      *
@@ -177,6 +232,7 @@ public class DateUtils {
         calendar.add(Calendar.MINUTE, minute);
         return calendar.getTime();
     }
+
     /**
      * getTimeByDayStr:(这里用一句话描述这个方法的作用)获取当前时间前或后N天的时间字符串
      *
@@ -190,8 +246,9 @@ public class DateUtils {
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, day);
-        return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime())+"000000";
+        return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime()) + "000000";
     }
+
     /**
      * getTimeByDayStr:(这里用一句话描述这个方法的作用)获取第N周一日期字符串
      *
@@ -205,10 +262,11 @@ public class DateUtils {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
-        calendar.add(Calendar.WEEK_OF_MONTH,weekNum);
-        calendar.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+        calendar.add(Calendar.WEEK_OF_MONTH, weekNum);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
     }
+
     /**
      * getLastSundayStr:(这里用一句话描述这个方法的作用)获取N周日日期字符串
      *
@@ -221,9 +279,64 @@ public class DateUtils {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
-        calendar.add(Calendar.WEEK_OF_MONTH,weekNum);
-        calendar.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+        calendar.add(Calendar.WEEK_OF_MONTH, weekNum);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         return new SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
     }
- 
+
+    /**
+     * @return
+     */
+    public static String getDateStrByDay(int day) {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        calendar.add(Calendar.DATE, day);
+        return sf.format(calendar.getTime());
+    }
+
+    public static String getDateStrByMonth(int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        calendar.add(Calendar.MONTH, month);
+        calendar.add(Calendar.DATE, day);
+        return sf.format(calendar.getTime());
+    }
+
+    /**
+     * 根据传入的年月日数据，返回对应格式的日期字符串
+     * @param year
+     * @param month
+     * @param date
+     * @return
+     */
+    public static String getDateStrByInput(int year, int month, int date) {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        calendar.set(year, month, date);
+        return sf.format(calendar.getTime());
+    }
+
+    /**
+     * 根据传入的日期和增加的月份数据，返回在传入日期加上增加月份后的日期字符串
+     * @param dateStr
+     * @param month
+     * @return
+     */
+    public static String getDateStrByStrAdd(String dateStr, int month) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = sf.parse(dateStr);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.MONTH, month);
+            return sf.format(calendar.getTime());
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

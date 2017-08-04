@@ -12,7 +12,7 @@ import net.fnsco.freamwork.business.UserService;
 import net.fnsco.service.domain.AppUser;
 import net.fnsco.service.domain.AppUserMerchant;
 
-public interface AppUserService extends UserService{
+public interface AppUserService {
 	//用户注册方法接口
 	ResultDTO<AppUser> insertSelective(AppUserDTO appUserDTO);
 	//用户修改密码接口
