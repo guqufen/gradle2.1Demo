@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.service.dao.master.trade.TradeByHourDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.trade.TradeByHour" >
+<mapper namespace="net.fnsco.order.service.dao.master.trade.TradeByHourDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.trade.TradeByHour" >
     <result column="id" property="id" jdbcType="INTEGER" />
     <result column="trade_hour" property="tradeHour" jdbcType="VARCHAR" />
     <result column="trade_date" property="tradeDate" jdbcType="VARCHAR" />
@@ -13,7 +13,7 @@
   <sql id="Base_Column_List" >
     id, trade_hour, trade_date, inner_code, turnover, order_num, order_price
   </sql>
-  <insert id="insert" parameterType="net.fnsco.service.domain.trade.TradeByHour" >
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.trade.TradeByHour" >
     insert into r_trade_by_hour (id, trade_hour, trade_date, 
       inner_code, turnover, order_num, 
       order_price)
@@ -21,7 +21,7 @@
       #{innerCode,jdbcType=VARCHAR}, #{turnover,jdbcType=DECIMAL}, #{orderNum,jdbcType=INTEGER}, 
       #{orderPrice,jdbcType=DECIMAL})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.service.domain.trade.TradeByHour" >
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.trade.TradeByHour" >
     insert into r_trade_by_hour
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -71,7 +71,7 @@
     </trim>
   </insert>
   <!-- 根据条件查询 -->
-  <select id="selectByCondition" parameterType="net.fnsco.service.domain.trade.TradeByHour" resultType="net.fnsco.api.dto.TradeHourDTO">
+  <select id="selectByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeByHour" resultType="net.fnsco.order.api.dto.TradeHourDTO">
      SELECT
 			trade_hour AS tradeHour,
 			trade_date AS tradeDate,

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.service.dao.master.AppUserMerchantDao">
-	<resultMap id="BaseResultMap" type="net.fnsco.service.domain.AppUserMerchant">
+<mapper namespace="net.fnsco.order.service.dao.master.AppUserMerchantDao">
+	<resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.AppUserMerchant">
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="role_id" property="roleId" jdbcType="VARCHAR" />
 		<result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
@@ -55,7 +55,7 @@
 		#{appUserId,jdbcType=INTEGER}
 	</delete>
 	<!-- 更新用户角色 -->
-	<update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.AppUserMerchant" >
+	<update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.AppUserMerchant" >
     update u_app_user_merchant
     <set >
       <if test="roleId != null" >
@@ -73,7 +73,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-   <insert id="insertSelective" parameterType="net.fnsco.service.domain.AppUserMerchant" >
+   <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.AppUserMerchant" >
     insert into u_app_user_merchant
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -120,7 +120,7 @@
 	)
 </delete>
 <!-- 查询商家信息 -->
- <select id="selectByUserIdAndRoleId" resultType="net.fnsco.api.dto.TradeMerchantDTO">
+ <select id="selectByUserIdAndRoleId" resultType="net.fnsco.order.api.dto.TradeMerchantDTO">
      SELECT
 		inner_code AS innerCode,
 		mer_name AS merName

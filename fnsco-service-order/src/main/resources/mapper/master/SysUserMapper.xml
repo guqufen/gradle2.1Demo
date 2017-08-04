@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.service.dao.master.SysUserDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.SysUser" >
+<mapper namespace="net.fnsco.order.service.dao.master.SysUserDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.SysUser" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -33,7 +33,7 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   
-  <insert id="insert" parameterType="net.fnsco.service.domain.SysUser" >
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.SysUser" >
     insert into sys_user (id, type, name, 
       password, real_name, mobile, 
       sex, alias_name, department, 
@@ -45,7 +45,7 @@
       #{agentId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{modifyUserId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.service.domain.SysUser" >
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.SysUser" >
     insert into sys_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -130,7 +130,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.SysUser" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.SysUser" >
     update sys_user
     <set >
       <if test="type != null" >
@@ -172,7 +172,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.SysUser" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.SysUser" >
     update sys_user
     set type = #{type,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
@@ -189,7 +189,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!-- 根据用户名密码查询ID -->
-  <select id="getIdBy" parameterType="net.fnsco.service.domain.SysUser" resultMap="BaseResultMap">
+  <select id="getIdBy" parameterType="net.fnsco.order.service.domain.SysUser" resultMap="BaseResultMap">
      select <include refid="Base_Column_List" /> from sys_user where name=#{name} and password=#{password}
   </select>
   <!-- 根据用户名查询 -->

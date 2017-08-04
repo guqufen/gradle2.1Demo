@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.service.dao.master.MerchantTerminalDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.MerchantTerminal" >
+<mapper namespace="net.fnsco.order.service.dao.master.MerchantTerminalDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.MerchantTerminal" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="merchant_code" property="merchantCode" jdbcType="VARCHAR" />
@@ -28,12 +28,12 @@
     <result column="merc_refer_name" property="mercReferName" jdbcType="VARCHAR" />
   </resultMap>
   <!-- APP端使用 -->
-  <resultMap id="ListResultMap" type="net.fnsco.api.dto.TerminalsDTO">
+  <resultMap id="ListResultMap" type="net.fnsco.order.api.dto.TerminalsDTO">
      <id column="id" property="id" jdbcType="INTEGER" />
      <result column="term_name" property="termName" jdbcType="VARCHAR" />
      <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="DetailResultMap" type="net.fnsco.api.dto.TerminalDetailDTO" >
+  <resultMap id="DetailResultMap" type="net.fnsco.order.api.dto.TerminalDetailDTO" >
      <result column="term_name" property="termName" jdbcType="VARCHAR" />
      <result column="sn_code" property="snCode" jdbcType="VARCHAR" />
      <result column="pos_factory" property="posFactory" jdbcType="VARCHAR" />
@@ -56,7 +56,7 @@
     delete from m_merchant_terminal
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="net.fnsco.service.domain.MerchantTerminal" >
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.MerchantTerminal" >
     insert into m_merchant_terminal (id, inner_code, merchant_code, 
       channel_id, channel_name, terminal_code, 
       inner_term_code, sn_code, terminal_batch, 
@@ -76,7 +76,7 @@
       #{posFactory,jdbcType=VARCHAR}, #{posType,jdbcType=VARCHAR}, #{mercReferName,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.service.domain.MerchantTerminal" >
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantTerminal" >
     insert into m_merchant_terminal
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -228,7 +228,7 @@
     </trim>
   </insert>
   
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.MerchantTerminal" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.MerchantTerminal" >
     update m_merchant_terminal
     <set >
       <if test="innerCode != null" >
@@ -303,7 +303,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.MerchantTerminal" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.MerchantTerminal" >
     update m_merchant_terminal
     set inner_code = #{innerCode,jdbcType=VARCHAR},
       merchant_code = #{merchantCode,jdbcType=VARCHAR},

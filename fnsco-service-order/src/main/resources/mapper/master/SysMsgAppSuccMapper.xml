@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.service.dao.master.SysMsgAppSuccDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.SysMsgAppSucc" >
+<mapper namespace="net.fnsco.order.service.dao.master.SysMsgAppSuccDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.SysMsgAppSucc" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="msg_id" property="msgId" jdbcType="INTEGER" />
     <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
@@ -23,7 +23,7 @@
     delete from sys_msg_app_succ
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="net.fnsco.service.domain.SysMsgAppSucc" >
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.SysMsgAppSucc" >
     insert into sys_msg_app_succ (id, msg_id, send_time, 
       phone_type, app_user_id, read_status, 
       read_time)
@@ -31,7 +31,7 @@
       #{phoneType,jdbcType=INTEGER}, #{appUserId,jdbcType=INTEGER}, #{readStatus,jdbcType=INTEGER}, 
       #{readTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.service.domain.SysMsgAppSucc" >
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.SysMsgAppSucc" >
     insert into sys_msg_app_succ
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -80,7 +80,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.SysMsgAppSucc" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.SysMsgAppSucc" >
     update sys_msg_app_succ
     <set >
       <if test="msgId != null" >
@@ -104,7 +104,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.SysMsgAppSucc" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.SysMsgAppSucc" >
     update sys_msg_app_succ
     set msg_id = #{msgId,jdbcType=INTEGER},
       send_time = #{sendTime,jdbcType=TIMESTAMP},

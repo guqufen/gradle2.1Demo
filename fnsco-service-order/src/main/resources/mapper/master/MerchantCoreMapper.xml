@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.service.dao.master.MerchantCoreDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.MerchantCore" >
+<mapper namespace="net.fnsco.order.service.dao.master.MerchantCoreDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.MerchantCore" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="mer_name" property="merName" jdbcType="VARCHAR" />
@@ -26,12 +26,12 @@
     <result column="agent_id" property="agentId" jdbcType="INTEGER" />
   </resultMap>
   <!-- APP商户终端列表结果集 -->
-  <resultMap  id="TerminalResultMap" type="net.fnsco.api.dto.MerTerminalsDTO">
+  <resultMap  id="TerminalResultMap" type="net.fnsco.order.api.dto.MerTerminalsDTO">
     	<result column="mer_name" property="merName" jdbcType="VARCHAR" />
-    	<collection property="terminals" column="inner_code" select="net.fnsco.service.dao.master.MerchantTerminalDao.queryByInnerCode"/>
+    	<collection property="terminals" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantTerminalDao.queryByInnerCode"/>
   </resultMap>
   <!-- APP商家详情结果集 -->
-  <resultMap id="DetailResultMap" type="net.fnsco.api.dto.MerChantCoreDetailDTO">
+  <resultMap id="DetailResultMap" type="net.fnsco.order.api.dto.MerChantCoreDetailDTO">
   	<id column="id" property="id" jdbcType="INTEGER" />
      <result column="mer_name" property="merName" jdbcType="VARCHAR" />
      <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
@@ -41,14 +41,14 @@
      <result column="sub_bank_name" property="subBankName" jdbcType="VARCHAR" />
   </resultMap>
   <!-- APP商户列表实体结果集 -->
-  <resultMap  id="CoreResultMap" type="net.fnsco.api.dto.MerChantCoreDTO">
+  <resultMap  id="CoreResultMap" type="net.fnsco.order.api.dto.MerChantCoreDTO">
      <id column="id" property="id" jdbcType="INTEGER" />
      <result column="mer_name" property="merName" jdbcType="VARCHAR" />
      <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
      <result column="regist_address" property="registAddress" jdbcType="VARCHAR" />
   </resultMap>
   <!-- 所有关联数据结果集 -->
-  <resultMap id="AllResultMap" type="net.fnsco.service.domain.MerchantCore">
+  <resultMap id="AllResultMap" type="net.fnsco.order.service.domain.MerchantCore">
   <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="mer_name" property="merName" jdbcType="VARCHAR" />
@@ -71,11 +71,11 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="agent_id" property="agentId" jdbcType="INTEGER" />
-  	<collection property="channel" column="inner_code" select="net.fnsco.service.dao.master.MerchantChannelDao.selectByInnerCode" />
-  	<collection property="terminal" column="inner_code" select="net.fnsco.service.dao.master.MerchantTerminalDao.selectByInnerCode"/>
-  	<collection property="files" column="inner_code" select="net.fnsco.service.dao.master.MerchantFileDao.queryByInnerCode"/>
-  	<collection property="contacts" column="inner_code" select="net.fnsco.service.dao.master.MerchantContactDao.queryByInnerCode" />
-  	<collection property="banks" column="inner_code" select="net.fnsco.service.dao.master.MerchantBankDao.queryWebByInnerCode" />
+  	<collection property="channel" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantChannelDao.selectByInnerCode" />
+  	<collection property="terminal" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantTerminalDao.selectByInnerCode"/>
+  	<collection property="files" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantFileDao.queryByInnerCode"/>
+  	<collection property="contacts" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantContactDao.queryByInnerCode" />
+  	<collection property="banks" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantBankDao.queryWebByInnerCode" />
   </resultMap>	
   <sql id="Base_Column_List" >
     id, agent_id,inner_code, mer_name, abbreviation, en_name, sign_date, legal_person, legal_person_mobile, 
@@ -93,7 +93,7 @@
     delete from m_merchant_core
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="net.fnsco.service.domain.MerchantCore" >
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.MerchantCore" >
     insert into m_merchant_core (id, inner_code, mer_name, 
       abbreviation, en_name, sign_date, 
       legal_person, legal_person_mobile, legal_person_tel, 
@@ -111,7 +111,7 @@
       #{source,jdbcType=INTEGER}, #{modifyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{status,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.service.domain.MerchantCore" >
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantCore" >
     insert into m_merchant_core
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -250,7 +250,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.MerchantCore" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.MerchantCore" >
     update m_merchant_core
     <set >
       <if test="innerCode != null" >
@@ -319,7 +319,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.MerchantCore" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.MerchantCore" >
     update m_merchant_core
     set inner_code = #{innerCode,jdbcType=VARCHAR},
       mer_name = #{merName,jdbcType=VARCHAR},
@@ -413,7 +413,7 @@
       limit #{startRow} , #{perPageSize} 
   </select>
   <!-- 条件查询总数 -->
-  <select id="queryTotalByCondition" parameterType="net.fnsco.service.domain.MerchantCore" resultType="java.lang.Integer">
+  <select id="queryTotalByCondition" parameterType="net.fnsco.order.service.domain.MerchantCore" resultType="java.lang.Integer">
      select count(*)  from 
      		m_merchant_core
   	 <where>
@@ -478,7 +478,7 @@
   	 </where>
   </select>
   <!-- 根据条件查询所有数据 -->
-  <select id="queryListByCondition" parameterType="net.fnsco.service.domain.MerchantCore" resultMap="BaseResultMap">
+  <select id="queryListByCondition" parameterType="net.fnsco.order.service.domain.MerchantCore" resultMap="BaseResultMap">
      select 
      <include refid="Base_Column_List" />
    	 from m_merchant_core

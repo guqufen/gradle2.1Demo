@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.service.dao.master.trade.TradeDateTempDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.service.domain.trade.TradeDateTemp" >
+<mapper namespace="net.fnsco.order.service.dao.master.trade.TradeDateTempDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.trade.TradeDateTemp" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="amt" property="amt" jdbcType="VARCHAR" />
@@ -23,14 +23,14 @@
     delete from r_trade_date_temp
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="net.fnsco.service.domain.trade.TradeDateTemp" >
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.trade.TradeDateTemp" >
     insert into r_trade_date_temp (id, inner_code, amt, 
       pay_sub_type, time_stamp)
     values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{amt,jdbcType=VARCHAR}, 
       #{paySubType,jdbcType=VARCHAR}, #{timeStamp,jdbcType=VARCHAR}, #{tradeDate,jdbcType=VARCHAR}, 
       #{tradeHoure,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.service.domain.trade.TradeDateTemp" >
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.trade.TradeDateTemp" >
     insert into r_trade_date_temp
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -79,7 +79,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.service.domain.trade.TradeDateTemp" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.trade.TradeDateTemp" >
     update r_trade_date_temp
     <set >
       <if test="innerCode != null" >
@@ -97,7 +97,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.service.domain.trade.TradeDateTemp" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.trade.TradeDateTemp" >
     update r_trade_date_temp
     set inner_code = #{innerCode,jdbcType=VARCHAR},
       amt = #{amt,jdbcType=VARCHAR},
@@ -110,7 +110,7 @@
     delete from r_trade_date_temp
   </delete>
   <!-- 按照天统计数据 -->
-  <select id="selectTradeDataByDate" resultType="net.fnsco.service.domain.trade.TradeByDay" >
+  <select id="selectTradeDataByDate" resultType="net.fnsco.order.service.domain.trade.TradeByDay" >
     SELECT
 		SUM(amt) AS turnover,
 		inner_code AS innerCode,
@@ -124,7 +124,7 @@
 		inner_code
   </select>
   <!-- 按小时统计交易额 -->
-  <select id="selectTradeDataByHour" resultType="net.fnsco.service.domain.trade.TradeByHour">
+  <select id="selectTradeDataByHour" resultType="net.fnsco.order.service.domain.trade.TradeByHour">
     SELECT
 		SUM(amt) AS turnover,
 		inner_code AS innerCode,
@@ -139,7 +139,7 @@
 		inner_code,trade_houre
   </select>
   <!-- 按照支付渠道统计交易额 -->
-  <select id="selectTradeDataByPayType" resultType="net.fnsco.service.domain.trade.TradeByPayType">
+  <select id="selectTradeDataByPayType" resultType="net.fnsco.order.service.domain.trade.TradeByPayType">
      SELECT
 			SUM(amt) AS turnover,
 			inner_code AS innerCode,
