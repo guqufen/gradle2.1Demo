@@ -140,7 +140,7 @@ public class AppMerchantController extends BaseController {
      */
     @RequestMapping(value = "/getShopOwnerMerChant")
     @ApiOperation(value = "APP用户查询店主商家列表")
-    public ResultDTO<List<TradeMerchantDTO>> getShopOwnerMerChant(@RequestBody MerchantDTO merchant) {
+    public ResultDTO<List<TradeMerchantDTO>> getShopOwnerMerChant(MerchantDTO merchant) {
        if(null == merchant.getUserId()){
            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
        }

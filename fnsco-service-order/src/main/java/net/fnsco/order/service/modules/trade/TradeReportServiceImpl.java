@@ -341,8 +341,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             tradeReportDTO.setEndDate(DateUtils.getSundayStr(-1));
         }
         if(!isWeekly &&(Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate()))){
-            tradeReportDTO.setStartDate(DateUtils.getDateStrByDay(-1));
-            tradeReportDTO.setEndDate(DateUtils.getDateStrByDay(-7));
+            tradeReportDTO.setEndDate(DateUtils.getDateStrByDay(-1));
+            tradeReportDTO.setStartDate(DateUtils.getDateStrByDay(-7));
         }
         return tradeReportDTO;
     }
@@ -572,7 +572,11 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         datas.setTurnoverTotal(turnoverTotal);
         datas.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
         datas.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
-        datas.setOrderPrice(turnoverTotal.divide(new BigDecimal(orderNumTotal), 2, BigDecimal.ROUND_HALF_UP));
+        if(BigDecimal.ZERO.compareTo(new BigDecimal(orderNumTotal))!=0){
+        	datas.setOrderPrice(turnoverTotal.divide(new BigDecimal(orderNumTotal), 2, BigDecimal.ROUND_HALF_UP));
+        }else{
+        	datas.setOrderPrice(BigDecimal.ZERO);
+        }
         datas.setTradeDayData(data);
         return datas;
         

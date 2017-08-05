@@ -1,0 +1,110 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>消费模式</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/mui.picker.min.css">
+		<link rel="stylesheet" href="css/layout.css">
+	</head>
+	<body>
+		<header class="filter">
+			<div class="filter-show">
+				<div class="filter-time">
+					<span class="filter-startTime">2017月07月03日</span>-<span class="filter-endTime">2017月07月09日</span>
+				</div>
+				<div class="filter-name">杭州华联商超贸易连锁有限公司江干干区大家方是哒爱的方式</div>
+			</div>
+			<a class="filter-btn" href="javascript:;"></a>
+		</header>
+		<div class="content">
+			<div class="total-ul">
+				<div class="total-list wx">
+					<span class="total-name">微信</span>
+					<span class="total-list-num"><span>64</span>笔</span>
+					<span class="total-list-rmb">￥<span>384.00</span></span>
+				</div>
+				<div class="total-list alipay">
+					<span class="total-name">支付宝</span>
+					<span class="total-list-num"><span>102</span>笔</span>
+					<span class="total-list-rmb">￥<span>976.00</span></span>
+				</div>
+				<div class="total-list bank">
+					<span class="total-name">银行卡</span>
+					<span class="total-list-num"><span>10</span>笔</span>
+					<span class="total-list-rmb">￥<span>2000.00</span></span>
+				</div>
+				<div id="filter-chart-btn" class=" mui-segmented-control">
+					<a class="mui-control-item mui-active" id="amount-chart-btn">按交易笔数</a>
+					<a class="mui-control-item" id="money-chart-btn">按交易金额</a>
+				</div>
+			</div>
+		</div>
+		<!-- 饼图 -->
+		<div id="chart"></div>
+		<!-- 筛选页面 -->
+		<div id="filter" class="mui-page">
+			<div class="close"><span class="mui-icon mui-icon-closeempty"></span></div>
+			<div class="mui-row time-input">
+				<div class="mui-col-xs-5">
+					<input class="select-time" type="text" id="start-time" placeholder="选择日期" readonly="readonly" data-options='{"type":"date"}' value=''>
+				</div>
+				<div class="mui-col-xs-2">——</div>
+				<div class="mui-col-xs-5">
+					<input class="select-time" type="text" id="end-time" placeholder="选择日期" readonly="readonly" data-options='{"type":"date"}' value=''>
+				</div>
+			</div>
+			<div class="mui-row shortcut-select">
+				<div class="mui-col-xs-4 pleft"><span id="yesterday">昨日</span></div>
+				<div class="mui-col-xs-4"><span id="this-week">本周</span></div>
+				<div class="mui-col-xs-4 pright"><span id="last-week" class="active">上周</span></div>
+				<div class="mui-col-xs-4 pleft"><span id="this-month">本月</span></div>
+				<div class="mui-col-xs-4"><span id="last-month">上月</span></div>
+			</div>
+			<div class="mui-row select-shop">
+				<div class="select-shop-head">
+					<div class="select-shop-title">选择商铺</div>
+					<div class="select-shop-tool"><img src="image/yes.png">全选</div>
+				</div>
+				<ul class="mui-table-view mui-table-view-radio shop-list">
+					<li class="mui-table-view-cell mui-selected">
+						<a class="mui-navigate-right">杭州梵云雅集投资管理咨询有限公司</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">投资管理咨询有限公司</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">杭州华联商超贸易连锁有限公司江干区大家多立方加盟店</a>
+					</li>
+				</ul>
+			</div>
+			<!-- <div class="select-pattern mui-row">
+				<div class="select-pattern-head">
+					<div class="select-pattern-title">消费模式</div>
+				</div>
+				<ul class="mui-table-view mui-table-view-radio pattern-list">
+					<li class="mui-table-view-cell  mui-selected">
+						<a class="mui-navigate-right">支付渠道</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">支付方式</a>
+					</li>
+				</ul>
+			</div> -->
+		</div>
+		<div class="fixed-box">
+			<div class="filter-ok-btn">确定</div>
+		</div>
+	</body>
+	<script src="js/mui.min.js"></script>
+	<script src="js/mui.picker.min.js"></script>
+	<script src="js/setWidth.js"></script>
+	<script src="js/echarts.common.min.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/custom.js"></script>
+	<script type="text/javascript" src="js/sqb/consumptionModel.js"></script>
+</html>
