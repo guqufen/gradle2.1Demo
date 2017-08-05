@@ -14,6 +14,25 @@ import net.fnsco.core.base.DTO;
  *
  */
 public class ConsPatternDTO extends DTO {
+	/**
+     * 交易总笔数
+     */
+    private Integer orderNumTotal;
+    
+    /**
+     * 交易总金额
+     */
+    private BigDecimal turnoverTotal;
+    
+    /**
+     * 查询开始日期
+     */
+    private String startDate;
+    
+    /**
+     * 查询结束日期
+     */
+    private String endDate;
     private Integer    wxOrderNumTot;   //  微信总笔数
     private BigDecimal wxTurnoverTot;   //   微信总金额
     private Integer    aliOrderNumTot;  // 支付宝总笔数
@@ -23,7 +42,39 @@ public class ConsPatternDTO extends DTO {
     private Integer    otherOrderNumTot;//   其他总笔数
     private BigDecimal otherTurnoverTot;//   其他总金额
 
-    /**
+    public Integer getOrderNumTotal() {
+		return orderNumTotal;
+	}
+
+	public void setOrderNumTotal(Integer orderNumTotal) {
+		this.orderNumTotal = orderNumTotal;
+	}
+
+	public BigDecimal getTurnoverTotal() {
+		return turnoverTotal;
+	}
+
+	public void setTurnoverTotal(BigDecimal turnoverTotal) {
+		this.turnoverTotal = turnoverTotal;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
+	/**
      * wxOrderNumTot
      *
      * @return  the wxOrderNumTot

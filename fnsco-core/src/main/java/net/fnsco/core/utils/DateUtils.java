@@ -338,5 +338,18 @@ public class DateUtils {
         }
         return null;
     }
+    public static String strFormatToStr(String date) {
+    	 SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+    	 SimpleDateFormat sf1 = new SimpleDateFormat("yyyy-MM-dd");
+    	 Date dateTemp = new Date();
+		try {
+			dateTemp = sf.parse(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	 return sf1.format(dateTemp);
+       
+    }
 
 }

@@ -510,6 +510,14 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
 
         formatInputDate(tradeReportDTO, false);//格式化入参
         ConsPatternDTO datas = new ConsPatternDTO();
+        datas.setBankOrderNumTot(0);
+        datas.setBankTurnoverTot(new BigDecimal("0"));
+        datas.setWxOrderNumTot(0);
+        datas.setWxTurnoverTot(new BigDecimal("0"));
+        datas.setAliOrderNumTot(0);
+        datas.setAliTurnoverTot(new BigDecimal("0"));
+        datas.setOtherOrderNumTot(0);
+        datas.setOtherTurnoverTot(new BigDecimal("0"));
         TradeByPayType payType = new TradeByPayType();
         payType.setInnerCode(tradeReportDTO.getInnerCode());
         payType.setStartDate(tradeReportDTO.getStartDate());
@@ -552,14 +560,16 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 datas.setOtherTurnoverTot(tradeTypeDTO.getTurnover());
             }
             
-            //orderNumTotal += tradeTypeDTO.getOrderNum();
-            //turnoverTotal = turnoverTotal.add(tradeTypeDTO.getTurnover());
+            orderNumTotal += tradeTypeDTO.getOrderNum();
+            turnoverTotal = turnoverTotal.add(tradeTypeDTO.getTurnover());
         }
-        //        datas.setOrderNumTotal(orderNumTotal);
-        //        datas.setTurnoverTotal(turnoverTotal);
+              datas.setOrderNumTotal(orderNumTotal);
+                datas.setTurnoverTotal(turnoverTotal);
         //        datas.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
         //        datas.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
         //        datas.setTradeTypeData(tradeTypeData);
+        datas.setStartDate(DateUtils.strFormatToStr(payType.getStartDate()));
+        datas.setEndDate(DateUtils.strFormatToStr(payType.getEndDate()));
         return datas;
 
     }

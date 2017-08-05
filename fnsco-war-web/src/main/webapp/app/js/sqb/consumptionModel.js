@@ -2,12 +2,6 @@
 * 初始化echarts图表
 */
 var myChart = echarts.init(document.getElementById('chart')); 
-var data=[{value: 102,name: '支付宝'}, {value: 64,name: '微信'}, {value: 10,name: '银行卡'}];
-var data1=[{value: 976,name: '支付宝'}, {value: 384,name: '微信'}, {value: 2000,name: '银行卡'}];
-var formatter="笔";
-var formatter1="元";
-//默认加载笔数图标
-chart(data,formatter);
 //生成图表
 function chart(data,formatter){
 	var option = {
@@ -32,11 +26,30 @@ function chart(data,formatter){
 	};
 	myChart.setOption(option);
 }
+//金额保留两位小数点
+function changeTwoDecimal(x) {
+    var f_x = parseFloat(x);
+    if (isNaN(f_x)) {
+        alert('function:changeTwoDecimal->parameter error');
+        return false;
+    }
+    var f_x = Math.round(x * 100) / 100;
+    var s_x = f_x.toString();
+    var pos_decimal = s_x.indexOf('.');
+    if (pos_decimal < 0) {
+        pos_decimal = s_x.length;
+        s_x += '.';
+    }
+    while (s_x.length <= pos_decimal + 2) {
+        s_x += '0';
+    }
+    return s_x;
+}
 //ajax请求
-trendData(getUrl("tokenId"),getUrl("userId"),null,null,null);
+modelData(getUrl("tokenId"),getUrl("userId"),null,null,null);
 var titleName="营业额";
 var titleName1="订单数";
-function trendData(tokenId,userId,startDate,endDate,innerCode){
+function modelData(tokenId,userId,startDate,endDate,innerCode){
   $.ajax({
     url:'http://localhost:8080/app/tradeReport/queryConsumption',
     dataType : "json",
@@ -53,35 +66,48 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
     },
     success:function(data){
     	console.log(data);
+    	var formatter="笔";
+		var formatter1="元";
+    	var data1=[{value: data.data.aliOrderNumTot,name: '支付宝'}, {value: data.data.wxOrderNumTot,name: '微信'}, {value: data.data.bankOrderNumTot,name: '银行卡'},{value: data.data.otherOrderNumTot,name: '其他'}];
+		var data2=[{value: data.data.aliTurnoverTot ,name: '支付宝'}, {value: data.data.wxTurnoverTot,name: '微信'}, {value: data.data.bankTurnoverTot,name: '银行卡'},{value: data.data.otherTurnoverTot,name: '其他'}];
+		$(".total-list.wx .total-list-rmb span").html(changeTwoDecimal(data.data.wxTurnoverTot));
+		$(".total-list.alipay .total-list-rmb span").html(changeTwoDecimal(data.data.aliTurnoverTot));
+		$(".total-list.bank .total-list-rmb span").html(changeTwoDecimal(data.data.bankTurnoverTot));
+		$(".total-list.other .total-list-rmb span").html(changeTwoDecimal(data.data.otherTurnoverTot));
+		$(".total-list.wx .total-list-num span").html(data.data.wxOrderNumTot);
+		$(".total-list.alipay .total-list-num span").html(data.data.aliOrderNumTot);
+		$(".total-list.bank .total-list-num span").html(data.data.bankOrderNumTot);
+		$(".total-list.other .total-list-num span").html(data.data.otherOrderNumTot);
+		//默认加载笔数图表格
+		chart(data1,formatter);
       	$("#start-time").val(data.data.startDate);
       	$("#end-time").val(data.data.endDate);
      	$(".filter-startTime").html(changeTime(data.data.startDate));
       	$(".filter-endTime").html(changeTime(data.data.endDate));
-      	/*获取生成图表的参数*/
-      	
-      	var dataOrderNum=new Array();
-      	var dataTurnover=new Array();
-      	var dataTradeDate=new Array();
-      	var returnDatd=data.data.tradeDayData;
-      	for(var i=0;i<returnDatd.length;i++){
-        	dataTradeDate.push(data.data.tradeDayData[i].tradeDate.substring(5,10));
-        	dataOrderNum.push(data.data.tradeDayData[i].orderNum);
-        	dataTurnover.push(data.data.tradeDayData[i].turnover);
-      	}
-      	//生成图表
-      	chart(dataTradeDate,max(dataTurnover),dataTurnover,titleName);
       	/*点击切换图表*/
 	  	var amountBtn=$("#amount-chart-btn")[0];
 		var moneyBtn=$("#money-chart-btn")[0];
 		amountBtn.addEventListener('tap',function() {//按交易笔数
-			chart(data,formatter);
+			chart(data1,formatter);
 		})
 		moneyBtn.addEventListener('tap',function() {//按交易金额
-			chart(data1,formatter1);
+			chart(data2,formatter1);
 		})
     }
   });
 }
+//筛选按钮
+$(".filter-ok-btn").click(function(){
+  var startTime=$("#start-time").val();
+  var endTime=$("#end-time").val();
+  var innerCode;
+  if($(".select-shop-tool").hasClass('active')){
+    innerCode=null;
+  }else{
+    innerCode=$(".mui-table-view-cell.mui-selected").attr("innerCode");
+  }
+  modelData(getUrl("tokenId"),getUrl("userId"),startTime,endTime,innerCode);
+})
 //获取URL携带的参数
 function getUrl(name){
      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -102,6 +128,7 @@ function getShopList(tokenId,userId){
       "userId":userId,
     },
     success:function(data){
+    console.log(data);
       var shopList=$("#shop-list");
       for(var i=0;i<data.data.length;i++){
         shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
@@ -109,3 +136,4 @@ function getShopList(tokenId,userId){
     }
   });
 }
+getShopList(getUrl("tokenId"),getUrl("userId"));
