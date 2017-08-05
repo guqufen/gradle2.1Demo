@@ -13,6 +13,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.BusinessTrendDTO;
+import net.fnsco.order.api.dto.ConsPatternDTO;
 import net.fnsco.order.api.dto.ConsumptionDTO;
 import net.fnsco.order.api.dto.PeakTradeDTO;
 import net.fnsco.order.api.dto.TradeReportDTO;
@@ -108,7 +109,7 @@ public class TradeReportController extends BaseController{
         if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_INNER_CODE_NULL);
         }
-        ConsumptionDTO data = tradeReportService.queryConsumption(tradeReportDTO);
+        ConsPatternDTO data = tradeReportService.queryConsumption(tradeReportDTO);
         return ResultDTO.success(data);
     }
     

@@ -1,7 +1,7 @@
 package net.fnsco.order.api.trade;
 
 import net.fnsco.order.api.dto.BusinessTrendDTO;
-import net.fnsco.order.api.dto.ConsumptionDTO;
+import net.fnsco.order.api.dto.ConsPatternDTO;
 import net.fnsco.order.api.dto.PeakTradeDTO;
 import net.fnsco.order.api.dto.TradeReportDTO;
 import net.fnsco.order.api.dto.TradeTurnoverDTO;
@@ -67,7 +67,7 @@ public interface TradeReportService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ConsumptionDTO queryConsumption(TradeReportDTO tradeReportDTO);
+    ConsPatternDTO queryConsumption(TradeReportDTO tradeReportDTO);
     /**
      * queryBusinessTrends:(这里用一句话描述这个方法的作用)查询经营趋势数据
      *
