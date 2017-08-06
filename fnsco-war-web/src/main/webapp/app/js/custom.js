@@ -40,6 +40,9 @@
 })(mui);
 var now = new Date(); //当前日期 
 var nowDayOfWeek = now.getDay(); //今天本周的第几天 
+if(nowDayOfWeek==0){
+	nowDayOfWeek=7;
+}
 var nowDay = now.getDate(); //当前日 
 var nowMonth = now.getMonth(); //当前月 
 var nowYear = now.getYear(); //当前年 
@@ -81,9 +84,6 @@ function getWeekEndDate(num) {
 	var weekEndDate = new Date(nowYear, nowMonth, nowDay + (num - nowDayOfWeek)); 
 	return formatDate(weekEndDate); 
 } 
-//默认为上周
-$("#start-time")[0].value=getWeekStartDate(-6);
-$("#end-time")[0].value=getWeekEndDate(0);
 //快捷选择日期按钮事件
 var yesterdayBtn=$("#yesterday")[0];
 var thisWeekBtn=$("#this-week")[0];
