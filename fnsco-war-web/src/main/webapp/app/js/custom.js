@@ -90,21 +90,34 @@ var thisWeekBtn=$("#this-week")[0];
 var lastWeekBtn=$("#last-week")[0];
 var thisMonthBtn=$("#this-month")[0];
 var lastMonthBtn=$("#last-month")[0];
+var changeActive=true;
 yesterdayBtn.addEventListener('tap',function() {//获取昨天日期
 	$("#start-time")[0].value=formatDate(new Date(nowYear,nowMonth,nowDay-1));
 	$("#end-time")[0].value=formatDate(new Date(nowYear,nowMonth,nowDay-1));
 })
 thisWeekBtn.addEventListener('tap',function() {//获取本周日期
-	$("#start-time")[0].value=getWeekStartDate(1);
-	$("#end-time")[0].value=formatDate(now);
+	if(nowDayOfWeek=="1"){
+		mui.toast('本周数据尚未产生，请重新选择日期',{ duration:'long', type:'div' });
+		changeActive=false;
+		return;
+	}else{
+		$("#start-time")[0].value=getWeekStartDate(1);
+		$("#end-time")[0].value=formatDate(new Date(nowYear,nowMonth,nowDay-1));
+	}
 })
 lastWeekBtn.addEventListener('tap',function() {//获取上周日期
 	$("#start-time")[0].value=getWeekStartDate(-6);
 	$("#end-time")[0].value=getWeekEndDate(0);
 })
 thisMonthBtn.addEventListener('tap',function() {//获取本月日期
-	$("#start-time")[0].value=formatDate(new Date(nowYear,nowMonth,01));
-	$("#end-time")[0].value=formatDate(now);
+	if(nowDay=="1"){
+		mui.toast('本月数据尚未产生，请重新选择日期',{ duration:'long', type:'div' });
+		changeActive=false;
+		return;
+	}else{
+		$("#start-time")[0].value=formatDate(new Date(nowYear,nowMonth,01));
+		$("#end-time")[0].value=formatDate(new Date(nowYear,nowMonth,nowDay-1));
+	}
 })
 lastMonthBtn.addEventListener('tap',function() {//获取上月日期
 	$("#start-time")[0].value=formatDate(lastMonthDate);
@@ -113,23 +126,17 @@ lastMonthBtn.addEventListener('tap',function() {//获取上月日期
 
 //jquery
 $(".shortcut-select div span").click(function(){
-	$(".shortcut-select div span").removeClass("active");
-	$(this).addClass("active");
+	if(changeActive==false){
+		changeActive=true;
+	}else{
+		$(".shortcut-select div span").removeClass("active");
+		$(this).addClass("active");
+	}
 })
 $(".filter-btn").click(function(){
 	$("#filter").show();
 	$("#filter").animate({left:"0"},500);
 	setTimeout("$('.fixed-box').show()",300);
-})
-$(".select-shop-tool").click(function(){
-	if($(this).hasClass("active")){
-		$(this).removeClass("active");
-		$(".shop-list li").removeClass("mui-selected");
-		$(".shop-list li:first-child").addClass("mui-selected");
-	}else{
-		$(this).addClass("active");
-		$(".shop-list li").addClass("mui-selected");
-	}
 })
 
 //关闭筛选框
@@ -143,8 +150,7 @@ $(".filter-ok-btn").click(function(){
 	var startTime=$("#start-time").val();
 	var endTime=$("#end-time").val();
 	var shopName;
-	var patternName=$(".pattern-list .mui-selected a").html();;
-	if($(".select-shop-tool").hasClass("active")){
+	if($("#all-shop").hasClass("mui-selected")){
 		shopName='全部商铺';
 	}else{
 		shopName=$(".shop-list .mui-selected a").html();

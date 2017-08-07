@@ -151,7 +151,7 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
         }else{
             config.setValue(url+"?");
         }
-        return config.getValue() + "userId=" + appConfigDTO.getUserId()+"&identifier="+ appConfigDTO.getUserId()+"&tokenId="+trueTokenId;
+        return config.getValue() + "userId=" + appConfigDTO.getUserId()+"&tokenId="+trueTokenId;
     }
 
 }

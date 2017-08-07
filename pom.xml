@@ -20,9 +20,10 @@
 		<!-- 数据接入service项目-->
 		<module>fnsco-service-order</module>
 		<module>fnsco-service-withhold</module>
+		<module>fnsco-service-api-doc</module>
 		<!-- 数据接入web项目-->
 		<module>fnsco-war-withhold</module>
-		
+		<module>fnsco-war-api-doc</module>
 	</modules>
 
 </project>
