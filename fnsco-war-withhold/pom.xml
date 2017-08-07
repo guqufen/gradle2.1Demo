@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.fnsco</groupId>
-	<artifactId>fnsco-withhold-war</artifactId>
+	<artifactId>fnsco-war-withhold</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>fnsco-withhold-war</name>
+	<name>fnsco-war-withhold</name>
 	<description>fnsco-withhold-war project for Spring Boot</description>
 
 	<parent>
@@ -71,7 +71,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.fnsco</groupId>
-			<artifactId>fnsco-withhold-service</artifactId>
+			<artifactId>fnsco-service-withhold</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		

@@ -145,7 +145,13 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
         }
         String temp = FrameworkConstant.TOKEN_ID + appConfigDTO.getUserId();
         String trueTokenId = Md5Util.getInstance().md5(temp);
-        return config.getValue() + "?userId=" + appConfigDTO.getUserId()+"&identifier="+ appConfigDTO.getUserId()+"&tokenId="+trueTokenId;
+        String url = config.getValue();
+        if(url.indexOf("?")>0){
+            config.setValue(url+"&");
+        }else{
+            config.setValue(url+"?");
+        }
+        return config.getValue() + "userId=" + appConfigDTO.getUserId()+"&identifier="+ appConfigDTO.getUserId()+"&tokenId="+trueTokenId;
     }
 
 }
