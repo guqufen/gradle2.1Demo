@@ -14,7 +14,16 @@ import net.fnsco.order.service.domain.trade.TradeByPayType;
 public interface TradeByPayTypeDao {
 
     int insert(TradeByPayType record);
-
+    /**
+     * deleteByCondition:(这里用一句话描述这个方法的作用)根据条件删除
+     *
+     * @param record
+     * @return    设定文件
+     * @return int    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    int deleteByCondition(TradeByPayType record);
     int insertSelective(TradeByPayType record);
     /**
      * selectTradeDataByInnerCode:(这里用一句话描述这个方法的作用)按照innerCode和时间段查询数据

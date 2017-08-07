@@ -96,4 +96,19 @@
      </where>
   	  GROUP BY pay_type
   </select>
+  <!-- 根据条件删除 -->
+  <delete id="deleteByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeByPayType">
+     DELETE FROM r_trade_by_pay_type 
+    <where>
+      <if test="startDate != null">
+         AND trade_date &gt;= #{startDate}
+       </if>
+       <if test="endDate != null and  endDate != ''">
+        AND trade_date &lt;  #{endDate}
+      </if>
+      <if test="tradeDate != null and  tradeDate != ''">
+        AND trade_date= #{tradeDate}
+      </if>
+    </where>
+  </delete>
 </mapper>

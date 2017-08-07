@@ -99,4 +99,19 @@
 		</where>	
 		GROUP BY trade_hour
   </select>
+  <!-- 根据条件删除 -->
+  <delete id="deleteByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeByHour">
+    DELETE FROM r_trade_by_hour 
+    <where>
+      <if test="startTradeDate != null">
+         AND trade_date &gt;= #{startTradeDate}
+       </if>
+       <if test="endTradeDate != null and  endTradeDate != ''">
+        AND trade_date &lt;  #{endTradeDate}
+      </if>
+      <if test="tradeDate != null and  tradeDate != ''">
+        AND trade_date= #{tradeDate}
+      </if>
+    </where>
+  </delete>
 </mapper>

@@ -16,7 +16,16 @@ public interface TradeByHourDao {
     int insert(TradeByHour record);
 
     int insertSelective(TradeByHour record);
-    
+    /**
+     * deleteByCondition:(这里用一句话描述这个方法的作用)根据条件查询
+     *
+     * @param record
+     * @return    设定文件
+     * @return int    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    int deleteByCondition(TradeByHour record);
     /**
      * selectByCondition:(这里用一句话描述这个方法的作用)根据时间点查询
      *
