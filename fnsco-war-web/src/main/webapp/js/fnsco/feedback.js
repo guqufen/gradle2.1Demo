@@ -111,12 +111,14 @@ function formatindex(value, row, index) {
 function queryEvent(id) {
 	$('#' + id).bootstrapTable('refresh');
 }
+// 查询本周按钮事件
 function queryweek(id) {
 	$('#datetimepicker2').val("");
 	$('#datetimepicker1').val(timeUtil.getFirstDayOfMonth());
 	$('#' + id).bootstrapTable('refresh');
 	$('#datetimepicker1').val("");
 }
+//查询本月按钮事件
 function querymonth(id) {
 	$('#datetimepicker2').val("");
 	$('#datetimepicker1').val(timeUtil.getFirstDayOfMonth());
@@ -132,6 +134,7 @@ function resetEvent(form, id) {
 function formatTime(value, row, index) {
 	return formatDateUtil(new Date(value));
 }
+//根据id查询详情
 function querySingle(id) {
 	$.ajax({
 		url : PROJECT_NAME + '/web/syssuggest/queryById',
@@ -170,7 +173,7 @@ var timeUtil = {
 	getFirstDayOfWeek : function() {
 		var now = new Date();
 		var day = now.getDate(), // 获取本月几号
-		weekday = now.getDay(), // 获取星期几
+		weekday = now.getDay(0), // 获取星期几
 		month = now.getMonth(), // 获取本月
 		year = now.getFullYear();// 获取本年
 
