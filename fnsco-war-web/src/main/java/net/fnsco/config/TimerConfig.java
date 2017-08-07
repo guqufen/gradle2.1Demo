@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.trade.TradeReportService;
 
@@ -84,8 +85,8 @@ public class TimerConfig {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @Scheduled(cron = "1 0 0 * * ?")//每天凌晨00:00:01秒执行一次
+//    @Scheduled(cron = "1 0 0 * * ?")//每天凌晨00:00:01秒执行一次
     public void buildTradeReportData(){
-        tradeReportService.buildTradeReportDaTa();
+        tradeReportService.buildTradeReportDaTa(DateUtils.getTimeByDayStr(-1),DateUtils.getTimeByDayStr(0));
     }
 }
