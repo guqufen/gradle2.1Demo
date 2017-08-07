@@ -402,14 +402,14 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             return null;
         }
         //当现有长度大于分页要的数据
+        int fromIndex = (pageNum - 1) * pageSize;
+        int endIndex = 0;
         if (data.size() > pageNum * pageSize) {
-            data = data.subList((pageNum - 1) * pageSize, pageNum * pageSize);
+            endIndex = pageNum * pageSize;
+        }else if (data.size() <= pageNum * pageSize) {
+            endIndex =  data.size();
         }
-
-        if (data.size() <= pageNum * pageSize) {
-            data = data.subList((pageNum - 1) * pageSize, data.size());
-        }
-
+        data = data.subList(fromIndex, endIndex);
         datas.setHisDate(data);
         return datas;
 

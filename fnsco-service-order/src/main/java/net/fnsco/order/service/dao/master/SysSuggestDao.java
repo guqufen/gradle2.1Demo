@@ -32,5 +32,5 @@ public interface SysSuggestDao {
      * @param id
      * @return
      */
-	SysSuggest queryById(Integer id);
+    SysSuggestDTO queryById(Integer id);
 }
