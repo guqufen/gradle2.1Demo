@@ -1,4 +1,4 @@
-body{
+﻿body{
 	line-height: 1.2;
 	width: 100%;
 	overflow: hidden;
@@ -323,7 +323,7 @@ input[type=text].select-time{
 	/* 确定按钮*/
 .fixed-box{
 	position: fixed;
-	bottom: 0;
+	bottom:44px;
 	height: 3.456rem;
 	width: 100%;
 	background-color: #fff;

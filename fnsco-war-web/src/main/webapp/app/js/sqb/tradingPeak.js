@@ -99,12 +99,12 @@ function changeTwoDecimal(x) {
     return s_x;
 }
 //ajax请求
-epakData(1,1,null,null,null);
+epakData(getUrl("tokenId"),getUrl("userId"),null,null,null);
 var titleName="交易总额(均)";
 var titleName1="交易笔数(均)";
 function epakData(tokenId,userId,startDate,endDate,innerCode){
   $.ajax({
-    url:'/app/tradeReport/queryPeakTrade',
+    url:'tradeReport/queryPeakTrade',
     dataType : "json",
     type:'POST',
     headers: {
@@ -178,7 +178,7 @@ $(".filter-ok-btn").click(function(){
 //获取商户列表
 function getShopList(tokenId,userId){
   $.ajax({
-    url:'/app/merchant/getShopOwnerMerChant',
+    url:'merchant/getShopOwnerMerChant',
     dataType : "json",
     type:'POST',
     headers: {
@@ -208,4 +208,4 @@ function getShopList(tokenId,userId){
     }
   });
 }
-getShopList(1,1);
+getShopList(getUrl("tokenId"),getUrl("userId"));
