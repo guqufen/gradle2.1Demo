@@ -104,7 +104,7 @@ var titleName="营业额";
 var titleName1="订单数";
 function trendData(tokenId,userId,startDate,endDate,innerCode){
   $.ajax({
-    url:'http://localhost:8080/app/tradeReport/queryBusinessTrends',
+    url:'/app/tradeReport/queryBusinessTrends',
     dataType : "json",
     type:'POST',
     headers: {
@@ -174,7 +174,7 @@ $(".filter-ok-btn").click(function(){
 //获取商户列表
 function getShopList(tokenId,userId){
   $.ajax({
-    url:'http://localhost:8080/app/merchant/getShopOwnerMerChant',
+    url:'/app/merchant/getShopOwnerMerChant',
     dataType : "json",
     type:'POST',
     headers: {
