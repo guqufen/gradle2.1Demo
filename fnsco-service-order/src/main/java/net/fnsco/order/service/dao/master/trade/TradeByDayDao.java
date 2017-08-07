@@ -19,7 +19,16 @@ public interface TradeByDayDao {
     int insert(TradeByDay record);
 
     int insertSelective(TradeByDay record);
-    
+    /**
+     * deleteByDate:(这里用一句话描述这个方法的作用)根据时间删除
+     *
+     * @param record
+     * @return    设定文件
+     * @return int    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    int deleteByDate(TradeByDay record);
     /**
      * selectTradeDayDataByTradeDate:(这里用一句话描述这个方法的作用)
      *

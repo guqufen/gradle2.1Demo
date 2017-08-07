@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseService;
+import net.fnsco.freamwork.comm.FrameworkConstant;
+import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.config.SysConfigService;
 import net.fnsco.order.api.dto.AppConfigDTO;
 import net.fnsco.order.service.dao.master.SysConfigDao;
@@ -20,9 +22,10 @@ import net.fnsco.order.service.domain.SysConfig;
  */
 @Service
 public class SysConfigServiceImpl extends BaseService implements SysConfigService {
-    
+
     @Autowired
     private SysConfigDao sysConfigDao;
+
     /**
      * (non-Javadoc)
      * @see net.fnsco.order.api.config.SysConfigService#deleteByPrimaryKey(java.lang.Integer)
@@ -120,7 +123,7 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
         return sysConfigDao.selectByCondition(record);
 
     }
-    
+
     /**
      * (non-Javadoc)获取地址
      * @see net.fnsco.order.api.config.SysConfigService#getValueUrl(net.fnsco.order.api.dto.AppConfigDTO)
@@ -130,16 +133,25 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
     @Override
     public String getValueUrl(AppConfigDTO appConfigDTO) {
         SysConfig record = new SysConfig();
-        record.setName(appConfigDTO.getType());
+        record.setType(appConfigDTO.getType());
+        record.setName(appConfigDTO.getName());
         SysConfig config = selectByCondition(record);
-        if(null == config){
+        if (null == config) {
             return null;
         }
         String value = config.getValue();
-        if(Strings.isNullOrEmpty(value)){
+        if (Strings.isNullOrEmpty(value)) {
             return null;
         }
-       return config.getValue()+"?userId="+appConfigDTO.getUserId();
+        String temp = FrameworkConstant.TOKEN_ID + appConfigDTO.getUserId();
+        String trueTokenId = Md5Util.getInstance().md5(temp);
+        String url = config.getValue();
+        if(url.indexOf("?")>0){
+            config.setValue(url+"&");
+        }else{
+            config.setValue(url+"?");
+        }
+        return config.getValue() + "userId=" + appConfigDTO.getUserId()+"&tokenId="+trueTokenId;
     }
 
 }

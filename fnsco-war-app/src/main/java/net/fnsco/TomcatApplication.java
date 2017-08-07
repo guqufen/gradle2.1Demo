@@ -10,16 +10,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
-import net.fnsco.config.TimerConfig;
 import net.fnsco.config.WebConfig;
 import net.fnsco.freamwork.log.filter.WebAccessLogFilter;
 
 @SpringBootApplication
 @ComponentScan("net.fnsco")
 @EntityScan("net.fnsco.order.service.dao")
-@Import({ TimerConfig.class, WebConfig.class })
+@Import({ WebConfig.class })
 public class TomcatApplication extends SpringBootServletInitializer {
-	
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(TomcatApplication.class);
@@ -39,25 +38,25 @@ public class TomcatApplication extends SpringBootServletInitializer {
         registration.setOrder(1);
         return registration;
     }
-//    @Bean
-//    AppAuthorizeFilter getAppAuthorizeFilter() {
-//        return new AppAuthorizeFilter();
-//    }
-//    @Bean  
-//    public FilterRegistrationBean  filterRegistrationBean() {  
-//        FilterRegistrationBean registrationBean = new FilterRegistrationBean();  
-//        registrationBean.setFilter(getAppAuthorizeFilter());  
-//        List<String> urlPatterns = new ArrayList<String>();  
-//        urlPatterns.add("/app/*");  
-//        registrationBean.setUrlPatterns(urlPatterns);  
-//        registrationBean.setOrder(2);
-//        return registrationBean;  
-//    }  
-//    @Bean
-//    public ServletListenerRegistrationBean servletListenerRegistrationBean() {
-//        ServletListenerRegistrationBean servletListenerRegistrationBean = new ServletListenerRegistrationBean();
-//        servletListenerRegistrationBean.setListener(new IndexListener());
-//        return servletListenerRegistrationBean;
-//    }
+    //    @Bean
+    //    AppAuthorizeFilter getAppAuthorizeFilter() {
+    //        return new AppAuthorizeFilter();
+    //    }
+    //    @Bean  
+    //    public FilterRegistrationBean  filterRegistrationBean() {  
+    //        FilterRegistrationBean registrationBean = new FilterRegistrationBean();  
+    //        registrationBean.setFilter(getAppAuthorizeFilter());  
+    //        List<String> urlPatterns = new ArrayList<String>();  
+    //        urlPatterns.add("/app/*");  
+    //        registrationBean.setUrlPatterns(urlPatterns);  
+    //        registrationBean.setOrder(2);
+    //        return registrationBean;  
+    //    }  
+    //    @Bean
+    //    public ServletListenerRegistrationBean servletListenerRegistrationBean() {
+    //        ServletListenerRegistrationBean servletListenerRegistrationBean = new ServletListenerRegistrationBean();
+    //        servletListenerRegistrationBean.setListener(new IndexListener());
+    //        return servletListenerRegistrationBean;
+    //    }
 
 }

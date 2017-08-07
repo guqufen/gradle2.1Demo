@@ -149,4 +149,19 @@
 				AND role_id = #{roleId}
 			) 
   </select>
+  <!-- 根据日期范围删除 -->
+  <delete id="deleteByDate" parameterType="net.fnsco.order.service.domain.trade.TradeByDay">
+     DELETE FROM r_trade_by_day 
+     <where>
+       <if test="startTradeDate != null">
+         AND trade_date &gt;= #{startTradeDate}
+       </if>
+       <if test="endTradeDate != null and  endTradeDate != ''">
+        AND trade_date &lt;  #{endTradeDate}
+      </if>
+      <if test="tradeDate != null and  tradeDate != ''">
+        AND trade_date= #{tradeDate}
+      </if>
+     </where>
+  </delete>
 </mapper>

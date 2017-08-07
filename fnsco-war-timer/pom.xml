@@ -74,7 +74,11 @@
 			<artifactId>fnsco-service-order</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
+		<dependency>
+			<groupId>net.fnsco</groupId>
+			<artifactId>fnsco-config</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -84,7 +88,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>admin</finalName>
+		<finalName>timer</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

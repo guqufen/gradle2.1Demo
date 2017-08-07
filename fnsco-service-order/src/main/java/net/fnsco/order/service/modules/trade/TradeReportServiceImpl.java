@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,6 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.BusinessTrendDTO;
 import net.fnsco.order.api.dto.ConsPatternDTO;
-import net.fnsco.order.api.dto.ConsumptionDTO;
 import net.fnsco.order.api.dto.DateDTO;
 import net.fnsco.order.api.dto.PeakTradeDTO;
 import net.fnsco.order.api.dto.TradeDayDTO;
@@ -76,21 +76,22 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     private final static int   pageSize = 20;
 
     /**
-     * (non-Javadoc)生成统计数据
+     * (non-Javadoc)生成统计数据 入参时间格式 yyyyMMddHHmmdd
      * @see net.fnsco.order.api.trade.TradeReportService#buildTradeReportDaTa()
      * @author tangliang
      * @date 2017年7月27日 上午11:07:01  
      */
     @Transactional
     @Override
-    public void buildTradeReportDaTa() {
+    public void buildTradeReportDaTa(String startTime,String endTime) {
 
         //首先清空临时表
         tradeDateTempDao.deleteAll();
         //查询最新交易流水数据插入临时表
         TradeData record = new TradeData();
-        record.setStartTime(DateUtils.getTimeByDayStr(-1));
-        record.setEndTime(DateUtils.getTimeByDayStr(0));
+        record.setStartTime(startTime);
+        record.setEndTime(endTime);
+        String startDate = startTime.substring(0, 8);
         List<TradeDateTemp> tempDatas = tradeDataDAO.queryTempByCondition(record);
         String tradeDateStr = DateUtils.getTimeByDayStr(-1);
         for (TradeDateTemp tradeDateTemp : tempDatas) {
@@ -99,9 +100,18 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             tradeDateTemp.setTradeHoure(timeStamp.substring(8, 10));
             tradeDateTempDao.insertSelective(tradeDateTemp);
         }
-
+        //统计之前先删除，防止重复统计
+        TradeByDay dayCondition = new TradeByDay();
+        dayCondition.setTradeDate(startDate);
+        tradeByDayDao.deleteByDate(dayCondition);
+        TradeByHour hourCondition = new TradeByHour();
+        hourCondition.setTradeDate(startDate);
+        tradeByHourDao.deleteByCondition(hourCondition);
+        TradeByPayType payTypeCondition = new TradeByPayType();
+        payTypeCondition.setStartDate(startDate);
+        tradeByPayTypeDao.deleteByCondition(payTypeCondition);
+        
         //分别按小时、天、支付渠道统计查询且插入对应表中
-
         List<TradeByDay> tradeDayData = tradeDateTempDao.selectTradeDataByDate();
         for (TradeByDay tradeByDay : tradeDayData) {
             tradeByDay.setTradeDate(tradeDateStr.substring(0, tradeDateStr.length() - 6));
@@ -152,7 +162,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         String yesterdayStr = DateUtils.formatDateStrOutput(yesTradeDate.substring(0, yesTradeDate.length() - 6));
         yesterdayTurnover.setStartDate(yesterdayStr);
         yesterdayTurnover.setEndDate(yesterdayStr);
-        ;
         datas.add(yesterdayTurnover);
         //上周的营业额
         record.setStartTradeDate(DateUtils.getMondayStr(-1));
@@ -269,9 +278,16 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         resultData.setInnerCode(tradeReportDTO.getInnerCode());
         resultData.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
         resultData.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
-        resultData.setOrderNum(turnover.getOrderNum());
-        resultData.setTurnover(new BigDecimal(turnover.getTurnover()));
-        resultData.setOrderPrice(divide(turnover.getTurnover(), turnover.getOrderNum()));
+        if(null == turnover){
+            resultData.setOrderNum(0);
+            resultData.setTurnover(new BigDecimal(0.00));
+            resultData.setOrderPrice(new BigDecimal(0.00));
+        }else{
+            resultData.setOrderNum(turnover.getOrderNum());
+            resultData.setTurnover(new BigDecimal(turnover.getTurnover()));
+            resultData.setOrderPrice(divide(turnover.getTurnover(), turnover.getOrderNum()));
+        }
+        
         //返回支付渠道类型数据
         TradeByPayType payType = new TradeByPayType();
         payType.setInnerCode(tradeReportDTO.getInnerCode());
@@ -281,8 +297,11 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         payType.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         List<TradeTypeDTO> tradeTypeData = tradeByPayTypeDao.selectTradeDataByInnerCode(payType);
         //如果数据为空 需要填充数据
-        if (tradeTypeData.size() < 3) {
+        if (null == tradeTypeData ||  tradeTypeData.size() < 3) {
             List<String> tempParam = Lists.newArrayList();
+            if(null == tradeTypeData){
+                tradeTypeData = Lists.newArrayList();
+            }
             tempParam.add(ConstantEnum.PayTypeEnum.PAYBYCARD.getCode());
             tempParam.add(ConstantEnum.PayTypeEnum.PAYBYWX.getCode());
             tempParam.add(ConstantEnum.PayTypeEnum.PAYBYALIPAY.getCode());
@@ -495,7 +514,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
+        //反着排序
+        Collections.reverse(datas);
         return datas;
     }
 
@@ -563,11 +583,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             orderNumTotal += tradeTypeDTO.getOrderNum();
             turnoverTotal = turnoverTotal.add(tradeTypeDTO.getTurnover());
         }
-              datas.setOrderNumTotal(orderNumTotal);
-                datas.setTurnoverTotal(turnoverTotal);
-        //        datas.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
-        //        datas.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
-        //        datas.setTradeTypeData(tradeTypeData);
+        datas.setOrderNumTotal(orderNumTotal);
+        datas.setTurnoverTotal(turnoverTotal);
         datas.setStartDate(DateUtils.strFormatToStr(payType.getStartDate()));
         datas.setEndDate(DateUtils.strFormatToStr(payType.getEndDate()));
         return datas;
