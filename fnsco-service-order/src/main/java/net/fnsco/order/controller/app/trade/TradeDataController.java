@@ -58,13 +58,12 @@ public class TradeDataController extends BaseController {
             for (TradeData tradeData : list) {
                 TradeDataJO jo = new TradeDataJO();
                 jo.setAmount(getAtm(tradeData.getAmt()));
+                jo.setPayType(tradeData.getPaySubType());
+                jo.setPayTypeName(PaySubTypeEnum.getNameByCode(jo.getPayType()));
                 String payTypeStr = PaySubTypeEnum.getNameByCode(jo.getPayType());
                 if(Strings.isNullOrEmpty(payTypeStr)){
                     jo.setPayType("99");
                     jo.setPayTypeName("其它");
-                }else{
-                    jo.setPayType(tradeData.getPaySubType());
-                    jo.setPayTypeName(PaySubTypeEnum.getNameByCode(jo.getPayType()));
                 }
                 jo.setStatus(tradeData.getRespCode());
                 jo.setStatusName(TradeStateEnum.getNameByCode(jo.getStatus()));
