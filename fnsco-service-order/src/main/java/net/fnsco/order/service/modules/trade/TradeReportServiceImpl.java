@@ -200,17 +200,18 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         datas.add(totayTurnover);
         //本周
         String thisMonday = DateUtils.getMondayStr(0);
+        TurnoverDTO thisWeekTurnover = totayTurnover;
         String toDay = DateUtils.getTimeByDayStr(0).substring(0, 8);
         if (toDay.startsWith(thisMonday)) {
-            totayTurnover.setType(3);
-            totayTurnover.setStartDate(DateUtils.formatDateStrOutput(thisMonday));
-            totayTurnover.setEndDate(DateUtils.formatDateStrOutput(toDay));
-            datas.add(totayTurnover);
+            thisWeekTurnover.setType(3);
+            thisWeekTurnover.setStartDate(DateUtils.formatDateStrOutput(thisMonday));
+            thisWeekTurnover.setEndDate(DateUtils.formatDateStrOutput(toDay));
+            datas.add(thisWeekTurnover);
         } else {
             record.setStartTradeDate(thisMonday);
             record.setEndTradeDate(null);
             record.setTradeDate(null);
-            TurnoverDTO thisWeekTurnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
+            thisWeekTurnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
             if (null != thisWeekTurnover) {
                 thisWeekTurnover.setOrderPrice(divide(thisWeekTurnover.getTurnover(), thisWeekTurnover.getOrderNum()));
             } else {
