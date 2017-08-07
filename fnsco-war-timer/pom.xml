@@ -88,7 +88,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>admin</finalName>
+		<finalName>timer</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
