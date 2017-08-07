@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -277,9 +278,16 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         resultData.setInnerCode(tradeReportDTO.getInnerCode());
         resultData.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
         resultData.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
-        resultData.setOrderNum(turnover.getOrderNum());
-        resultData.setTurnover(new BigDecimal(turnover.getTurnover()));
-        resultData.setOrderPrice(divide(turnover.getTurnover(), turnover.getOrderNum()));
+        if(null == turnover){
+            resultData.setOrderNum(0);
+            resultData.setTurnover(new BigDecimal(0.00));
+            resultData.setOrderPrice(new BigDecimal(0.00));
+        }else{
+            resultData.setOrderNum(turnover.getOrderNum());
+            resultData.setTurnover(new BigDecimal(turnover.getTurnover()));
+            resultData.setOrderPrice(divide(turnover.getTurnover(), turnover.getOrderNum()));
+        }
+        
         //返回支付渠道类型数据
         TradeByPayType payType = new TradeByPayType();
         payType.setInnerCode(tradeReportDTO.getInnerCode());
@@ -289,8 +297,11 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         payType.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         List<TradeTypeDTO> tradeTypeData = tradeByPayTypeDao.selectTradeDataByInnerCode(payType);
         //如果数据为空 需要填充数据
-        if (tradeTypeData.size() < 3) {
+        if (null == tradeTypeData ||  tradeTypeData.size() < 3) {
             List<String> tempParam = Lists.newArrayList();
+            if(null == tradeTypeData){
+                tradeTypeData = Lists.newArrayList();
+            }
             tempParam.add(ConstantEnum.PayTypeEnum.PAYBYCARD.getCode());
             tempParam.add(ConstantEnum.PayTypeEnum.PAYBYWX.getCode());
             tempParam.add(ConstantEnum.PayTypeEnum.PAYBYALIPAY.getCode());
@@ -503,7 +514,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
+        //反着排序
+        Collections.reverse(datas);
         return datas;
     }
 
