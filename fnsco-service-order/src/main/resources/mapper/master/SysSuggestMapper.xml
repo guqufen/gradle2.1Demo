@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="net.fnsco.order.service.dao.master.SysSuggestDao" >
+  <!-- 所有关联数据结果集 -->
   <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.SysSuggest" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="VARCHAR" />
@@ -12,29 +13,18 @@
     <result column="reply_time" property="replyTime" jdbcType="TIMESTAMP" />
     <result column="state" property="state" jdbcType="VARCHAR" />
   </resultMap>
-  <!-- 所有关联数据结果集 -->
-  <resultMap id="AllResultMap" type="net.fnsco.order.service.domain.MerchantCore">
-  <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="type" property="type" jdbcType="VARCHAR" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
-    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP" />
-    <result column="reply_user_id" property="replyUserId" jdbcType="VARCHAR" />
-    <result column="reply_time" property="replyTime" jdbcType="TIMESTAMP" />
-    <result column="state" property="state" jdbcType="INTEGER" />
-  </resultMap>	
   	<!-- WEB页面用 -->
 	<resultMap id="PageResultMap" type="net.fnsco.order.api.dto.SysSuggestDTO" >
 	<id column="id" property="id" jdbcType="INTEGER" />
 	  <result column="content" property="content" jdbcType="VARCHAR" />
-	  <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
+	  <result column="user_name" property="userName" jdbcType="VARCHAR" />
 	  <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
 	  <result column="submit_time" property="submitTime" jdbcType="TIMESTAMP"/>
 	</resultMap>
-    <sql id="Base_Column_List" >
-    id, type, content, app_user_id, mobile, submit_time, reply_user_id, reply_time, state
-  </sql>
+    
+  <sql id="Base_Column_List">
+		id, type, content, app_user_id, mobile, submit_time, reply_user_id,reply_time,state
+	</sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -149,19 +139,50 @@
   </update>
   
     <!-- 根据ID查询出所有商户关联的数据 -->
-  <select id="queryById" parameterType="java.lang.Integer" resultMap="AllResultMap">
-  	 select 
-    <include refid="Base_Column_List" />
-    from sys_suggest
-    where id = #{id,jdbcType=INTEGER}
+  <select id="queryById" parameterType="java.lang.Integer" resultMap="PageResultMap">
+  	SELECT
+	id,
+	content,
+	user_name,
+	mobile,
+	submit_time
+	FROM
+	(
+		SELECT
+			sys_suggest.*, m_app_user.user_name
+		FROM
+			sys_suggest
+		LEFT JOIN m_app_user ON sys_suggest.app_user_id = m_app_user.id
+		where sys_suggest.id = #{id,jdbcType=INTEGER}
+	)TA
   </select>
   
   <!-- 条件分页查询 -->
 	<select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="PageResultMap">
-	   select 
-    id,content,app_user_id,mobile,submit_time
-    from sys_suggest
-    where submit_time = #{condition.submitTime,jdbcType=TIMESTAMP}
+	SELECT
+	id,
+	content,
+	user_name,
+	mobile,
+	submit_time
+	FROM
+	(
+		SELECT
+			sys_suggest.*, m_app_user.user_name
+		FROM
+			sys_suggest
+		LEFT JOIN m_app_user ON sys_suggest.app_user_id = m_app_user.id
+		<where>
+			<if test="condition.startTime != null and condition.startTime != ''" >
+        	AND submit_time >= #{condition.startTime,jdbcType=TIMESTAMP}
+     		</if>
+      		<if test="condition.endTime != null and condition.endTime != ''" >
+      		<![CDATA[
+        	AND submit_time <= #{condition.endTime,jdbcType=TIMESTAMP}
+        	]]>
+      		</if>			    
+		</where> 
+		)TA    
 	limit #{startRow},#{perPageSize}		
 	</select>
 	<!-- 条件查询总数 -->
@@ -169,7 +190,16 @@
 	 SELECT COUNT(*) 
 		FROM
 		sys_suggest
-		where submit_time = #{submitTime,jdbcType=TIMESTAMP}	
+		<where>
+			<if test="startTime != null and startTime != ''" >
+        	AND submit_time >= #{startTime,jdbcType=VARCHAR}
+     		</if>
+      		<if test="endTime != null and endTime != ''" >
+      		<![CDATA[
+        	AND submit_time <= #{endTime,jdbcType=VARCHAR}
+        	]]>
+      		</if>			    
+		</where> 
 	</select>    
   
   <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.SysSuggest" >

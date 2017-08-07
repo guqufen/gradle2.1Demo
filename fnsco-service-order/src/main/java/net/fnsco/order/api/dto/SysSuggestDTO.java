@@ -25,13 +25,6 @@ public class SysSuggestDTO extends DTO{
 			this.content = content;
 		}
 
-		public Integer getUserId() {
-			return userId;
-		}
-
-		public void setUserId(Integer userId) {
-			this.userId = userId;
-		}
 
 		public String getMobile() {
 			return mobile;
@@ -41,17 +34,44 @@ public class SysSuggestDTO extends DTO{
 			this.mobile = mobile;
 		}
 
-		public Date getSubmitTime() {
+		private String userName;
+
+	    public String getUserName() {
+			return userName;
+		}
+
+		public void setUserName(String userName) {
+			this.userName = userName;
+		}
+
+		private String mobile;
+
+	    private String submitTime;
+	    private String startTime;
+	    private String endTime;
+
+		public String getSubmitTime() {
 			return submitTime;
 		}
 
-		public void setSubmitTime(Date submitTime) {
+		public void setSubmitTime(String submitTime) {
 			this.submitTime = submitTime;
 		}
 
-		private Integer userId;
+		public String getStartTime() {
+			return startTime;
+		}
 
-	    private String mobile;
+		public void setStartTime(String startTime) {
+			this.startTime = startTime;
+		}
 
-	    private Date submitTime;
+		public String getEndTime() {
+			return endTime;
+		}
+
+		public void setEndTime(String endTime) {
+			this.endTime = endTime;
+		}
 }
+
