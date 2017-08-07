@@ -45,7 +45,7 @@ public class SysSuggestManageController extends BaseController {
      */
 	@RequestMapping(value ="/queryById",method= RequestMethod.POST)
 	@ResponseBody
-	public ResultDTO<SysSuggest> queryById(Integer id){
+	public ResultDTO<SysSuggestDTO> queryById(Integer id){
 		logger.info("查询出商户所有关联数据id = "+id);
 		return sysSuggestService.queryById(id);
 	}
