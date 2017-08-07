@@ -374,6 +374,14 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (!appUserDao.updateByPrimaryKeySelective(adminUser)) {
             return ResultDTO.fail(ApiConstant.E_LOGIN_ERROR);
         }
+        String headImagePath = appUser.getHeadImagePath();
+         if(!Strings.isNullOrEmpty(headImagePath)){
+            String path = headImagePath.substring(headImagePath.indexOf("^")+1);
+            map.put("headImagePath",OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
+         }else{
+            map.put("headImagePath",""); 
+         }
+        appUser.getHeadImagePath();
         map.put("appUserId", appUser.getId());
         //查询用户绑定商户数量 根据用户id查询数量
         int merchantNums = 0;
