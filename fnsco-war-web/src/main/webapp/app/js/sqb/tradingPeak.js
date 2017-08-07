@@ -104,7 +104,7 @@ var titleName="交易总额(均)";
 var titleName1="交易笔数(均)";
 function epakData(tokenId,userId,startDate,endDate,innerCode){
   $.ajax({
-    url:'http://localhost:8080/app/tradeReport/queryPeakTrade',
+    url:'/app/tradeReport/queryPeakTrade',
     dataType : "json",
     type:'POST',
     headers: {
@@ -178,7 +178,7 @@ $(".filter-ok-btn").click(function(){
 //获取商户列表
 function getShopList(tokenId,userId){
   $.ajax({
-    url:'http://localhost:8080/app/merchant/getShopOwnerMerChant',
+    url:'/app/merchant/getShopOwnerMerChant',
     dataType : "json",
     type:'POST',
     headers: {
