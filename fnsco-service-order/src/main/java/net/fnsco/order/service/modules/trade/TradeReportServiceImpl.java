@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -200,9 +201,10 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         datas.add(totayTurnover);
         //本周
         String thisMonday = DateUtils.getMondayStr(0);
-        TurnoverDTO thisWeekTurnover = totayTurnover;
+        TurnoverDTO thisWeekTurnover = new TurnoverDTO();
         String toDay = DateUtils.getTimeByDayStr(0).substring(0, 8);
         if (toDay.startsWith(thisMonday)) {
+            BeanUtils.copyProperties(totayTurnover, thisWeekTurnover);
             thisWeekTurnover.setType(3);
             thisWeekTurnover.setStartDate(DateUtils.formatDateStrOutput(thisMonday));
             thisWeekTurnover.setEndDate(DateUtils.formatDateStrOutput(toDay));
