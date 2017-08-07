@@ -69,7 +69,7 @@ public class SysUserLoginAction extends BaseController{
 	public String logOut(){
 		removeSessionUser();
 		removeCookieUser();
-		return "redirect:/";
+		return "redirect:/login.html";
 	}
 	
 	/**
