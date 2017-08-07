@@ -164,7 +164,7 @@ $(".filter-ok-btn").click(function(){
   var startTime=$("#start-time").val();
   var endTime=$("#end-time").val();
   var innerCode;
-  if($(".select-shop-tool").hasClass('active')){
+  if($(".all-shop").hasClass('mui-selected')){
     innerCode=null;
   }else{
     innerCode=$(".mui-table-view-cell.mui-selected").attr("innerCode");
@@ -186,9 +186,21 @@ function getShopList(tokenId,userId){
     },
     success:function(data){
       var shopList=$("#shop-list");
+      if(data.data.length>1){
+        shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部店铺</a></li>');
+      }
       for(var i=0;i<data.data.length;i++){
         shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
       } 
+
+      //筛选店铺
+      $(".shop-list li").click(function(){
+        $(".shop-list li").removeClass("mui-selected");
+        $(this).addClass("mui-selected");
+        if($(this).hasClass('all-shop')){
+          $(".shop-list li").addClass("mui-selected");
+        }
+      })
     }
   });
 }
