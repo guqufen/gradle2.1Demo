@@ -30,6 +30,6 @@ public class TradeReportInstallController extends BaseController {
             return ResultDTO.fail();
         }
         tradeReportService.buildTradeReportDaTa(startTime, endTime);
-        return ResultDTO.success();
+        return ResultDTO.success("");
     }
 }
