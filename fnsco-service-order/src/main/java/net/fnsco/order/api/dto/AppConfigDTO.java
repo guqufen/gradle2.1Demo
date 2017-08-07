@@ -27,6 +27,32 @@ public class AppConfigDTO extends DTO {
      * 类型
      */
     private String type;
+    
+    /**
+     * 名称
+     */
+    private String name;
+    
+    /**
+     * name
+     *
+     * @return  the name
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getName() {
+        return name;
+    }
+    /**
+     * name
+     *
+     * @param   name    the name to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setName(String name) {
+        this.name = name;
+    }
     /**
      * userId
      *
