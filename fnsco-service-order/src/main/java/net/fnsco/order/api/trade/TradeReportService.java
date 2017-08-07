@@ -18,6 +18,7 @@ import net.fnsco.order.api.dto.WeeklyHisDateDTO;
 
 public interface TradeReportService {
     
+    
     /**
      * buildTradeReportDaTa:(这里用一句话描述这个方法的作用)生成报表数据、主要按照小时、天、渠道统计生成数据
      *    设定文件
@@ -25,7 +26,7 @@ public interface TradeReportService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    void buildTradeReportDaTa();
+    void buildTradeReportDaTa(String startTime,String endTime);
     
     /**
      * queryTurnovers:(这里用一句话描述这个方法的作用)根据用户ID查询营业额数据

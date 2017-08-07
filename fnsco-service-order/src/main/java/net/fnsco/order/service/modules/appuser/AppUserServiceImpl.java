@@ -658,12 +658,13 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         AppUserInfoDTO dto=new AppUserInfoDTO();
         dto.setSex(appUser.getSex());
         dto.setUserName(appUser.getUserName());
-        if(!Strings.isNullOrEmpty(appUser.getHeadImagePath())){
-            dto.setHeadImagePath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), appUser.getHeadImagePath()));
+        String headImagePath = appUser.getHeadImagePath();
+        if(!Strings.isNullOrEmpty(headImagePath)){
+            String path = headImagePath.substring(headImagePath.indexOf("^")+1);
+            dto.setHeadImagePath(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
         }
         dto.setMoblie(appUser.getMobile());
         dto.setRealName(appUser.getRealName());
         return ResultDTO.success(dto);
-        
     }
 }
