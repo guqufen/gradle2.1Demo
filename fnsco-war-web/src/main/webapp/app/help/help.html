@@ -12,42 +12,42 @@
 		<div class="title">常见问题</div>
 		<ul class="mui-table-view mui-table-view-chevron">
 			<li class="mui-table-view-cell">
-				<a class="mui-navigate-right" href="help-content1.html?back=true">
+				<a class="mui-navigate-right" onclick="param('help-content1.html')">
 					<div class="mui-media-body">
 						<p class='mui-ellipsis'>商铺码（智能pos机主页右上角）是什么？</p>
 					</div>
 				</a>
 			</li>
 			<li class="mui-table-view-cell">
-				<a class='mui-navigate-right' href="help-content2.html?back=true">
+				<a class='mui-navigate-right' onclick="param('help-content2.html')">
 					<div class="mui-media-body">
 						<p class='mui-ellipsis'>数钱吧APP怎么关联店铺智能POS商铺码？</p>
 					</div>
 				</a>
 			</li>
 			<li class="mui-table-view-cell">
-				<a class="mui-navigate-right" href="help-content3.html?back=true">
+				<a class="mui-navigate-right" onclick="param('help-content3.html')">
 					<div class="mui-media-body">
 						<p class='mui-ellipsis'>POS机支持哪几种网络使用？</p>
 					</div>
 				</a>
 			</li>
 			<li class="mui-table-view-cell">
-				<a class="mui-navigate-right" href="help-content4.html?back=true">
+				<a class="mui-navigate-right" onclick="param('help-content4.html')">
 					<div class="mui-media-body">
 						<p class='mui-ellipsis'>数钱吧客服联系方式？</p>
 					</div>
 				</a>
 			</li>
 			<li class="mui-table-view-cell">
-				<a class="mui-navigate-right" href="help-content5.html?back=true">
+				<a class="mui-navigate-right" onclick="param('help-content5.html')">
 					<div class="mui-media-body">
 						<p class='mui-ellipsis'>如何变更POS机账户信息及其他资料说明？</p>
 					</div>
 				</a>
 			</li>
 			<li class="mui-table-view-cell">
-				<a class="mui-navigate-right" href="help-content6.html?back=true">
+				<a class="mui-navigate-right" onclick="param('help-content6.html')">
 					<div class="mui-media-body">
 						<p class='mui-ellipsis'>拉卡拉交易限额是怎么样？</p>
 					</div>
@@ -58,4 +58,13 @@
 	<script src="../js/mui.min.js"></script>
 	<script src="../js/setWidth.js"></script>
 	<script src="../js/jquery.min.js"></script>
+	<script type="text/javascript">
+		function param(url){
+			console.log(url);
+			//安卓传值方法
+			document.location = "js://webview?url="+url+"";
+			// IOS传值方法
+			return window.webkit.messageHandlers.param.postMessage(url);
+		}
+	</script>
 </html>

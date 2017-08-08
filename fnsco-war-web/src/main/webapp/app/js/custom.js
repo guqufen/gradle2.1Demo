@@ -170,3 +170,8 @@ function changeTime(time){
 	return timeYear+'年'+timeMonth+'月'+timeDay+'日';
 }
 
+//筛选按钮样式
+var htmlSize=document.getElementsByTagName("html")[0].style.fontSize;
+console.log($(window).height());
+$(".fixed-box").css('top',($(window).height()-(3.456*htmlSize.slice(0, -2))));
+
