@@ -164,4 +164,13 @@
       </if>
      </where>
   </delete>
+  <!--  -->
+  <select id="selectMinTradeDateByInnerCode" resultType="java.lang.String">
+    SELECT
+			MIN(trade_date)
+		FROM
+			r_trade_by_day
+		WHERE
+			inner_code = #{innerCode}
+  </select>
 </mapper>
