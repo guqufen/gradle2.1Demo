@@ -621,6 +621,7 @@ function saveFile(){
   console.log('保存文件:'+file_ids);
   $.ajax({
     url:PROJECT_NAME+'/web/fileInfo/savefiles',
+    type:'POST',
     data:{'fileIds':file_ids},
     success:function(data){
     	unloginHandler(data);
