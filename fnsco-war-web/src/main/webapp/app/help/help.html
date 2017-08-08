@@ -60,11 +60,14 @@
 	<script src="../js/jquery.min.js"></script>
 	<script type="text/javascript">
 		function param(url){
-			console.log(url);
+			console.log(url+'?back=true');
+			//新开一个webviwe
+			window.location.href=url+'?back=true';
+			// 跳转出来浏览器
 			//安卓传值方法
-			document.location = "js://webview?url="+url+"";
+			// document.location = "js://webview?url="+url+"";
 			// IOS传值方法
-			return window.webkit.messageHandlers.param.postMessage(url);
+			// return window.webkit.messageHandlers.param.postMessage(url);
 		}
 	</script>
 </html>
