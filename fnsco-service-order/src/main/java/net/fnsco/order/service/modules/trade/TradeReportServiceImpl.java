@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -199,14 +198,16 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             record.setEndTradeDate(null);
             record.setTradeDate(null);
             thisWeekTurnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
-            if (null != thisWeekTurnover) {
-                thisWeekTurnover.setOrderPrice(divide(thisWeekTurnover.getTurnover(), thisWeekTurnover.getOrderNum()));
-            } else {
+            if (null == thisWeekTurnover) {
                 thisWeekTurnover = new TurnoverDTO();
                 thisWeekTurnover.setOrderPrice(new BigDecimal(0.00));
                 thisWeekTurnover.setOrderNum(0);
                 thisWeekTurnover.setTurnover(0l);
-            }
+            } 
+            //需要加上当日的日期
+            thisWeekTurnover.setOrderNum(thisWeekTurnover.getOrderNum()+totayTurnover.getOrderNum());
+            thisWeekTurnover.setTurnover(thisWeekTurnover.getTurnover()+totayTurnover.getTurnover());
+            thisWeekTurnover.setOrderPrice(divide(thisWeekTurnover.getTurnover(), thisWeekTurnover.getOrderNum()));
             thisWeekTurnover.setWeekLy(false);
             thisWeekTurnover.setType(3);
             thisWeekTurnover.setStartDate(DateUtils.formatDateStrOutput(DateUtils.getMondayStr(0)));

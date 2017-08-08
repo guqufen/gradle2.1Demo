@@ -12,8 +12,8 @@ import net.fnsco.core.base.ResultDTO;
 @Controller
 @RequestMapping(value = "/web/user", method = RequestMethod.POST)
 public class UserController {
-    @Autowired
-    private UserServiceIml userServiceIml;
+//    @Autowired
+//    private UserServiceIml userServiceIml;
     @RequestMapping("/doLogin")
     @ResponseBody
     public ResultDTO doLogin() {
