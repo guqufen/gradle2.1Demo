@@ -17,7 +17,7 @@ import net.fnsco.freamwork.log.filter.WebAccessLogFilter;
 @SpringBootApplication
 @ComponentScan("net.fnsco")
 //@EntityScan("net.fnsco")
-@MapperScan("net.fnsco.withhold")
+@MapperScan("net.fnsco.api.doc")
 @Import({ TimerConfig.class, WebConfig.class })
 public class TomcatApplication extends SpringBootServletInitializer {
 	
