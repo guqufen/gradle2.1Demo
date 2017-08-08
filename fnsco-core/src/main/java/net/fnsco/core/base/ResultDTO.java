@@ -35,13 +35,24 @@ public class ResultDTO<T extends Object> extends DTO {
         map.put("result", data);
         return success(map);
     }
-
+    public static ResultDTO successForSubmit() {
+        return successForSubmit(null);
+    }
+//    public static ResultDTO successForSubmit(String data) {
+//        Map map = Maps.newHashMap();
+//        map.put("result", data);
+//        return success(map);
+//    }
     public static ResultDTO success(Object data) {
         ResultDTO result = new ResultDTO(true, data, CoreConstants.OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.OK));
         return result;
     }
     public static ResultDTO successForSave(Object data) {
         ResultDTO result = new ResultDTO(true, data, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
+        return result;
+    }
+    public static ResultDTO successForSubmit(Object data) {
+        ResultDTO result = new ResultDTO(true, data, CoreConstants.WEB_SUBMIT_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SUBMIT_OK));
         return result;
     }
     public static ResultDTO fail(String code) {

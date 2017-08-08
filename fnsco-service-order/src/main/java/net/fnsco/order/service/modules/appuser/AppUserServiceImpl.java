@@ -381,7 +381,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
          }else{
             map.put("headImagePath",""); 
          }
-        appUser.getHeadImagePath();
+        map.put("userName",appUser.getUserName()); 
+        map.put("mobile", appUser.getMobile());
         map.put("appUserId", appUser.getId());
         //查询用户绑定商户数量 根据用户id查询数量
         int merchantNums = 0;
