@@ -146,6 +146,25 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         List<TurnoverDTO> datas = Lists.newArrayList();
         TradeByDay record = new TradeByDay();
         record.setUserId(tradeReportDTO.getUserId());
+        
+       //本日营业额
+        record.setTradeDate(DateUtils.getTimeByDayStr(0));
+        TurnoverDTO totayTurnover = tradeDataDAO.queryTodayTurnover(record);
+        if (null != totayTurnover && null != totayTurnover.getTurnover()) {
+            totayTurnover.setOrderPrice(divide(totayTurnover.getTurnover(), totayTurnover.getOrderNum()));
+        } else {
+            totayTurnover = new TurnoverDTO();
+            totayTurnover.setOrderPrice(new BigDecimal(0.00));
+            totayTurnover.setOrderNum(0);
+            totayTurnover.setTurnover(0l);
+        }
+        totayTurnover.setType(2);
+        totayTurnover.setWeekLy(false);
+        String totayDate = DateUtils.getTimeByDayStr(0).substring(0, 8);
+        totayTurnover.setStartDate(DateUtils.formatDateStrOutput(totayDate));
+        totayTurnover.setEndDate(DateUtils.formatDateStrOutput(totayDate));
+        datas.add(totayTurnover);
+        
         String yesTradeDate = DateUtils.getTimeByDayStr(-1);
         record.setTradeDate(yesTradeDate.substring(0, yesTradeDate.length() - 6));
         //昨天营业额
@@ -164,42 +183,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         yesterdayTurnover.setStartDate(yesterdayStr);
         yesterdayTurnover.setEndDate(yesterdayStr);
         datas.add(yesterdayTurnover);
-        //上周的营业额
-        record.setStartTradeDate(DateUtils.getMondayStr(-1));
-        record.setEndTradeDate(DateUtils.getSundayStr(-1));
-        record.setTradeDate(null);
-        TurnoverDTO lastWeekTurnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
-        if (null != lastWeekTurnover) {
-            lastWeekTurnover.setOrderPrice(divide(lastWeekTurnover.getTurnover(), lastWeekTurnover.getOrderNum()));
-        } else {
-            lastWeekTurnover = new TurnoverDTO();
-            lastWeekTurnover.setOrderPrice(new BigDecimal(0.00));
-            lastWeekTurnover.setOrderNum(0);
-            lastWeekTurnover.setTurnover(0l);
-        }
-        lastWeekTurnover.setType(1);
-        lastWeekTurnover.setWeekLy(false);
-        lastWeekTurnover.setStartDate(DateUtils.formatDateStrOutput(DateUtils.getMondayStr(-1)));
-        lastWeekTurnover.setEndDate(DateUtils.formatDateStrOutput(DateUtils.getSundayStr(-1)));
-        datas.add(lastWeekTurnover);
-        //本日营业额
-        record.setTradeDate(DateUtils.getTimeByDayStr(0));
-        TurnoverDTO totayTurnover = tradeDataDAO.queryTodayTurnover(record);
-        if (null != totayTurnover && null != totayTurnover.getTurnover()) {
-            totayTurnover.setOrderPrice(divide(totayTurnover.getTurnover(), totayTurnover.getOrderNum()));
-        } else {
-            totayTurnover = new TurnoverDTO();
-            totayTurnover.setOrderPrice(new BigDecimal(0.00));
-            totayTurnover.setOrderNum(0);
-            totayTurnover.setTurnover(0l);
-        }
-        totayTurnover.setType(2);
-        totayTurnover.setWeekLy(false);
-        String totayDate = DateUtils.getTimeByDayStr(0).substring(0, 8);
-        totayTurnover.setStartDate(DateUtils.formatDateStrOutput(totayDate));
-        totayTurnover.setEndDate(DateUtils.formatDateStrOutput(totayDate));
-        datas.add(totayTurnover);
-        //本周
+      //本周
         String thisMonday = DateUtils.getMondayStr(0);
         TurnoverDTO thisWeekTurnover = new TurnoverDTO();
         String toDay = DateUtils.getTimeByDayStr(0).substring(0, 8);
@@ -228,6 +212,25 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             thisWeekTurnover.setEndDate(DateUtils.formatDateStrOutput(toDay));
             datas.add(thisWeekTurnover);
         }
+        //上周的营业额
+        record.setStartTradeDate(DateUtils.getMondayStr(-1));
+        record.setEndTradeDate(DateUtils.getSundayStr(-1));
+        record.setTradeDate(null);
+        TurnoverDTO lastWeekTurnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
+        if (null != lastWeekTurnover) {
+            lastWeekTurnover.setOrderPrice(divide(lastWeekTurnover.getTurnover(), lastWeekTurnover.getOrderNum()));
+        } else {
+            lastWeekTurnover = new TurnoverDTO();
+            lastWeekTurnover.setOrderPrice(new BigDecimal(0.00));
+            lastWeekTurnover.setOrderNum(0);
+            lastWeekTurnover.setTurnover(0l);
+        }
+        lastWeekTurnover.setType(1);
+        lastWeekTurnover.setWeekLy(false);
+        lastWeekTurnover.setStartDate(DateUtils.formatDateStrOutput(DateUtils.getMondayStr(-1)));
+        lastWeekTurnover.setEndDate(DateUtils.formatDateStrOutput(DateUtils.getSundayStr(-1)));
+        datas.add(lastWeekTurnover);
+        
         //返回首页周报数据
         List<AppUserMerchant> merchants = appUserMerchantDao.selectByPrimaryKey(tradeReportDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         if (CollectionUtils.isNotEmpty(merchants)) {
@@ -255,6 +258,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             weekLyTurnover.setEndDate(DateUtils.formatDateStrOutput(DateUtils.getSundayStr(-1)));
             datas.add(weekLyTurnover);
         }
+        //对数据集按照APP显示要求排序 type:2、0、3、1、4
         result.setTurnovers(datas);
 
         return result;

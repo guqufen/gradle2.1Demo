@@ -1,4 +1,4 @@
-body{
+﻿body{
 	line-height: 1.2;
 	width: 100%;
 	overflow: hidden;
@@ -22,6 +22,7 @@ body{
 }
 .filter-name{
 	width: 100%;
+	line-height: 1.2;
 	display:block;
 	white-space:nowrap;
 	overflow:hidden;
@@ -77,7 +78,6 @@ body{
 #filter-chart-btn{
 	width: 10rem;
     font-size: 0.55rem;
-    height: 1rem;
     line-height: 1.5rem;
     margin: 1rem auto 0;
     border-color: #3595FF;
@@ -323,7 +323,7 @@ input[type=text].select-time{
 	/* 确定按钮*/
 .fixed-box{
 	position: fixed;
-	bottom: 0;
+	/*bottom:44px;*/
 	height: 3.456rem;
 	width: 100%;
 	background-color: #fff;
