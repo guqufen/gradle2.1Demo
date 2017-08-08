@@ -1,7 +1,7 @@
 ﻿body{
 	line-height: 1.2;
 	width: 100%;
-	overflow: hidden;
+	overflow-x: hidden;
 	background-color: #fff;
 }
 /*筛选显示部分*/
