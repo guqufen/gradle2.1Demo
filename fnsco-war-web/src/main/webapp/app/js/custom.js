@@ -173,5 +173,10 @@ function changeTime(time){
 //筛选按钮样式
 var htmlSize=document.getElementsByTagName("html")[0].style.fontSize;
 console.log($(window).height());
-$(".fixed-box").css('top',($(window).height()-(3.456*htmlSize.slice(0, -2))));
+if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {  //判断iPhone|iPad|iPod|iOS
+   	$(".fixed-box").css('top',($(window).height()-(3.456*htmlSize.slice(0, -2))-46));
+}else{
+   	$(".fixed-box").css('top',($(window).height()-(3.456*htmlSize.slice(0, -2))));
+}
+
 
