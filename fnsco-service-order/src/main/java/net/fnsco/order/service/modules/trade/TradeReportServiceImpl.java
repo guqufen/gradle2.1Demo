@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -329,6 +330,18 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         //按照天为组,如果数据为空，需要填充数据
         List<TradeDayDTO> data = installTradeDay(tradeReportDTO, tradeDayData);
         resultData.setTradeDayData(data);
+        //将周报最早的日期和最小的日期返回
+        String minDate = null;
+        if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode())){
+             minDate = tradeByDayDao.selectMinTradeDateByUserId(tradeReportDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        }else{
+             minDate = tradeByDayDao.selectMinTradeDateByInnerCode(tradeReportDTO.getInnerCode(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        }
+        if(!Strings.isNullOrEmpty(minDate)){
+            resultData.setMinWeeklyDate(DateUtils.getMondayByTimeStr(minDate));
+            resultData.setMaxWeeklyDate(DateUtils.strFormatToStr(DateUtils.getSundayStr(-1)));
+        }
+        
         return resultData;
     }
 

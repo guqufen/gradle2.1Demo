@@ -72,4 +72,15 @@ public interface TradeByDayDao {
      * @since  CodingExample　Ver 1.1
      */
     String selectMinTradeDateByUserId(@Param("appUserId")Integer appUserId,@Param("roleId")String roleId);
+    /**
+     * selectMinTradeDateByInnerCode:(这里用一句话描述这个方法的作用)查询最早的交易时间
+     *
+     * @param innerCode
+     * @param roleId
+     * @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    String selectMinTradeDateByInnerCode(@Param("innerCode")String innerCode,@Param("roleId")String roleId);
 }

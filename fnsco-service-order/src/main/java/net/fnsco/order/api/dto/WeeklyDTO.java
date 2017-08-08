@@ -47,6 +47,14 @@ public class WeeklyDTO extends DTO {
      */
     private BigDecimal orderPrice;
     /**
+     * 周报最小日期
+     */
+    private String minWeeklyDate;
+    /**
+     * 周报最大日期
+     */
+    private String maxWeeklyDate;
+    /**
      * 支付渠道返回数据
      */
     private List<TradeTypeDTO> tradeTypeData;
@@ -54,6 +62,47 @@ public class WeeklyDTO extends DTO {
      * 按照天统计数据
      */
     private List<TradeDayDTO> tradeDayData;
+    
+    /**
+     * minWeeklyDate
+     *
+     * @return  the minWeeklyDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getMinWeeklyDate() {
+        return minWeeklyDate;
+    }
+    /**
+     * minWeeklyDate
+     *
+     * @param   minWeeklyDate    the minWeeklyDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setMinWeeklyDate(String minWeeklyDate) {
+        this.minWeeklyDate = minWeeklyDate;
+    }
+    /**
+     * maxWeeklyDate
+     *
+     * @return  the maxWeeklyDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getMaxWeeklyDate() {
+        return maxWeeklyDate;
+    }
+    /**
+     * maxWeeklyDate
+     *
+     * @param   maxWeeklyDate    the maxWeeklyDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setMaxWeeklyDate(String maxWeeklyDate) {
+        this.maxWeeklyDate = maxWeeklyDate;
+    }
     /**
      * innerCode
      *
