@@ -293,8 +293,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             resultData.setOrderPrice(new BigDecimal(0.00));
         }else{
             resultData.setOrderNum(turnover.getOrderNum());
-            resultData.setTurnover(new BigDecimal(turnover.getTurnover()));
-            resultData.setOrderPrice(divide(turnover.getTurnover(), turnover.getOrderNum()));
+            resultData.setTurnover(divide(turnover.getTurnover(), 100));//转化为元单位
+            resultData.setOrderPrice(divide(turnover.getTurnover(), turnover.getOrderNum()*100));
         }
         
         //返回支付渠道类型数据
@@ -315,6 +315,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             tempParam.add(ConstantEnum.PayTypeEnum.PAYBYWX.getCode());
             tempParam.add(ConstantEnum.PayTypeEnum.PAYBYALIPAY.getCode());
             for (TradeTypeDTO tradeTypeDTO : tradeTypeData) {
+                tradeTypeDTO.setTurnover(divide(tradeTypeDTO.getTurnover(), 100));
                 tempParam.remove(tradeTypeDTO.getPayType());
             }
             for (String param : tempParam) {
@@ -362,7 +363,12 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         BigDecimal bd2 = new BigDecimal(orderNum);
         return bd1.divide(bd2, 2, BigDecimal.ROUND_HALF_UP);
     }
-
+    
+    private BigDecimal divide(BigDecimal turnover, Integer orderNum) {
+        BigDecimal bd2 = new BigDecimal(orderNum);
+        return turnover.divide(bd2, 2, BigDecimal.ROUND_HALF_UP);
+    }
+    
     /**
      * formatInputDate:(这里用一句话描述这个方法的作用)格式化输入日期参数
      *
@@ -517,6 +523,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 for (TradeDayDTO tradeDayDTO : tradeDayData) {
                     if (dateTime.equals(tradeDayDTO.getTradeDate())) {
                         tradeDayDTO.setTradeDate(format1.format(end.getTime()));
+                        tradeDayDTO.setTurnover(divide(tradeDayDTO.getTurnover(), 100));
                         datas.add(tradeDayDTO);
                         flag = false;
                     }
