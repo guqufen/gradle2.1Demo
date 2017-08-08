@@ -201,7 +201,7 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
         sysSuggest.setSubmitTime(new Date());
         sysSuggest.setState("0");
         sysSuggestDao.insertSelective(sysSuggest);
-        return ResultDTO.success();
+        return ResultDTO.successForSubmit();
     }
 
 }
