@@ -10,6 +10,11 @@
 		<link rel="stylesheet" href="css/mui.min.css">
 		<link rel="stylesheet" href="css/mui.picker.min.css">
 		<link rel="stylesheet" href="css/layout.css">
+		<style type="text/css">
+			.shortcut-select div{
+				display: none;
+			}
+		</style>
 	</head>
 	<body>
 		<header class="filter">
@@ -48,11 +53,11 @@
 			<div class="close"><span class="mui-icon mui-icon-closeempty"></span></div>
 			<div class="mui-row time-input">
 				<div class="mui-col-xs-5">
-					<input class="select-time" type="text" id="start-time" placeholder="选择日期" readonly="readonly" data-options='{"type":"date"}' value=''>
+					<input class="select-time1" type="text" id="start-time" placeholder="选择日期" readonly="readonly" data-options='{"type":"date"}' value=''>
 				</div>
 				<div class="mui-col-xs-2">——</div>
 				<div class="mui-col-xs-5">
-					<input class="select-time" type="text" id="end-time" placeholder="选择日期" readonly="readonly" data-options='{"type":"date"}' value=''>
+					<input class="select-time1" type="text" id="end-time" placeholder="选择日期" readonly="readonly" data-options='{"type":"date"}' value=''>
 				</div>
 			</div>
 			<div class="mui-row shortcut-select">

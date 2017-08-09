@@ -6,7 +6,8 @@ function max(data) {
 		if (data[i] > max) { 
 			max = data[i]; 
 		} 
-	} 
+	}
+  max=Math.ceil(max*1.1);
 	return max;
 }
 /*
