@@ -2,14 +2,16 @@ package net.fnsco.core.base;
 
 import java.util.Map;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 import net.fnsco.core.constants.CoreConstants;
+
 @SuppressWarnings("unchecked")
 public class ResultDTO<T extends Object> extends DTO {
     private static final long serialVersionUID = -7387542509934814087L;
     private boolean           success;
-    
+
     private String            code;
     private String            message;
     private T                 data;
@@ -40,36 +42,44 @@ public class ResultDTO<T extends Object> extends DTO {
         ResultDTO result = new ResultDTO(true, data, CoreConstants.OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.OK));
         return result;
     }
+
     public static ResultDTO successForSave(Object data) {
         ResultDTO result = new ResultDTO(true, data, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
         return result;
     }
+
     public static ResultDTO fail(String code) {
-        ResultDTO result = new ResultDTO(false, null, code, CoreConstants.ERROR_MESSGE_MAP.get(code));
+        String msg = CoreConstants.ERROR_MESSGE_MAP.get(code);
+        if (Strings.isNullOrEmpty(msg)) {
+            msg = code;
+            code = CoreConstants.E_COMM_BUSSICSS;
+        }
+        ResultDTO result = new ResultDTO(false, null, code, msg);
         return result;
     }
 
     public static ResultDTO fail() {
         return fail(CoreConstants.E_COMM_BUSSICSS);
     }
+
     public static ResultDTO failForSave() {
         return fail(CoreConstants.E_COMM_BUSSICSS);
     }
+
     public static ResultDTO failForUpdate() {
         return fail(CoreConstants.E_COMM_BUSSICSS);
     }
+
     /**
      * success
      *
      * @return  the success
      * @since   CodingExample Ver 1.0
     */
-    
+
     public boolean isSuccess() {
         return success;
     }
-
-  
 
     /**
      * data
@@ -77,7 +87,7 @@ public class ResultDTO<T extends Object> extends DTO {
      * @return  the data
      * @since   CodingExample Ver 1.0
     */
-    
+
     public T getData() {
         return data;
     }
@@ -88,14 +98,13 @@ public class ResultDTO<T extends Object> extends DTO {
      * @return  the code
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getCode() {
         return code;
     }
 
-     
-    public void setData(T data){
-        this.data=data;
+    public void setData(T data) {
+        this.data = data;
     }
 
     /**
@@ -104,10 +113,9 @@ public class ResultDTO<T extends Object> extends DTO {
      * @return  the message
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getMessage() {
         return message;
     }
 
-    
 }

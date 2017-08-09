@@ -16,9 +16,22 @@ import java.util.List;;
 
 public interface UserLoginDAO {
 
-    @Results({@Result( column = "create_date",property = "createDate"),@Result( column = "modify_date",property = "modifyDate"),@Result( column = "login_date",property = "loginDate"),@Result( column = "login_failure_count",property = "loginFailureCount"),@Result( column = "login_count",property = "loginCount"),@Result( column = "login_ip",property = "loginIp"),@Result( column = "user_id",property = "userId"),@Result( column = "login_type",property = "loginType"),@Result( column = "login_status",property = "loginStatus"),@Result( column = "auth_code",property = "authCode") })
+    @Results({ @Result(column = "create_date", property = "createDate"), @Result(column = "modify_date", property = "modifyDate"), @Result(column = "login_date", property = "loginDate"),
+               @Result(column = "login_failure_count", property = "loginFailureCount"), @Result(column = "login_count", property = "loginCount"), @Result(column = "login_ip", property = "loginIp"),
+               @Result(column = "user_id", property = "userId"), @Result(column = "login_type", property = "loginType"), @Result(column = "login_status", property = "loginStatus"),
+               @Result(column = "auth_code", property = "authCode") })
     @Select("SELECT * FROM t_user_login WHERE id = #{id}")
     public UserLoginDO getById(@Param("id") int id);
+
+    @Results({ @Result(column = "create_date", property = "createDate"), @Result(column = "modify_date", property = "modifyDate"), @Result(column = "login_date", property = "loginDate"),
+               @Result(column = "login_failure_count", property = "loginFailureCount"), @Result(column = "login_count", property = "loginCount"), @Result(column = "login_ip", property = "loginIp"),
+               @Result(column = "user_id", property = "userId"), @Result(column = "login_type", property = "loginType"), @Result(column = "login_status", property = "loginStatus"),
+               @Result(column = "auth_code", property = "authCode") })
+    @Select("SELECT * FROM t_user_login WHERE user_id = #{userId}")
+    public UserLoginDO getByUserId(@Param("userId") Long userId);
+
+    @Insert("update t_user_login set login_failure_count = 0 where login_failure_count > 0")
+    public void resetLoginFailCount();
 
     @Insert("INSERT into t_user_login(id,create_date,modify_date,login_date,login_failure_count,login_count,login_ip,user_id,login_type,login_status,auth_code) VALUES (#{id},#{createDate},#{modifyDate},#{loginDate},#{loginFailureCount},#{loginCount},#{loginIp},#{userId},#{loginType},#{loginStatus},#{authCode})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
@@ -28,9 +41,12 @@ public interface UserLoginDAO {
     public int deleteById(@Param("id") int id);
 
     @UpdateProvider(type = UserLoginProvider.class, method = "update")
-    public int update(@Param("userLogin") UserLoginDO  userLogin);
+    public int update(@Param("userLogin") UserLoginDO userLogin);
 
-    @Results({@Result( column = "create_date",property = "createDate"),@Result( column = "modify_date",property = "modifyDate"),@Result( column = "login_date",property = "loginDate"),@Result( column = "login_failure_count",property = "loginFailureCount"),@Result( column = "login_count",property = "loginCount"),@Result( column = "login_ip",property = "loginIp"),@Result( column = "user_id",property = "userId"),@Result( column = "login_type",property = "loginType"),@Result( column = "login_status",property = "loginStatus"),@Result( column = "auth_code",property = "authCode") })
+    @Results({ @Result(column = "create_date", property = "createDate"), @Result(column = "modify_date", property = "modifyDate"), @Result(column = "login_date", property = "loginDate"),
+               @Result(column = "login_failure_count", property = "loginFailureCount"), @Result(column = "login_count", property = "loginCount"), @Result(column = "login_ip", property = "loginIp"),
+               @Result(column = "user_id", property = "userId"), @Result(column = "login_type", property = "loginType"), @Result(column = "login_status", property = "loginStatus"),
+               @Result(column = "auth_code", property = "authCode") })
     @SelectProvider(type = UserLoginProvider.class, method = "pageList")
     public List<UserLoginDO> pageList(@Param("userLogin") UserLoginDO userLogin, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
