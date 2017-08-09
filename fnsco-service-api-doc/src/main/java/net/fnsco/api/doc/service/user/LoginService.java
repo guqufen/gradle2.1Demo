@@ -54,7 +54,7 @@ public class LoginService extends BaseService {
     public UserInfo loginByEmail(LoginParamInfo loginParamInfo) {
         if ("邮箱".equals(loginParamInfo.getLoginType())) {
             //, ErrorCode.LOGIN_007);
-
+            return null;
         }
 
         UserBasicDO basic = userBasicService.getByEmail(loginParamInfo.getEmail());
@@ -62,13 +62,15 @@ public class LoginService extends BaseService {
 
         if (null == basic) {
             //, ErrorCode.LOGIN_001);
-
+            return null;
         }
         if (basic.getLocked() != 1) {
             // ErrorCode.LOGIN_006);
+            return null;
         }
         if (basic.getValid() != 1) {
             //, ErrorCode.LOGIN_005);
+            return null;
         }
 
         //用户登陆信息

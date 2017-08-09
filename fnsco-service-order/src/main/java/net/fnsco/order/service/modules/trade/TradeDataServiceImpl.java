@@ -100,7 +100,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setCertifyId(tradeData.getCardNo());
         tradeDataEntity.setDcType(tradeData.getCardOrg());
         tradeDataEntity.setTxnType(tradeData.getTxnType());
+        tradeDataEntity.setStatus("1");
         String txnType = tradeData.getTxnType();
+        if ("2".equals(txnType)) {
+            tradeDataEntity.setStatus("0");
+        }
         logger.error("保存交易流水信息" + JSON.toJSONString(tradeDataEntity));
         tradeListDAO.insert(tradeDataEntity);
         logger.warn("插入流水总耗时" + (System.currentTimeMillis() - timer));
