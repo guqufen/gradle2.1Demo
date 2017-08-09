@@ -9,7 +9,7 @@ import net.fnsco.order.service.domain.SysSuggest;
 
 
 public interface SysSuggestDao {
-    int insertSelective(SysSuggest record);
+    int insert(SysSuggest record);
     /**
 	 * queryPageList:(这里用一句话描述这个方法的作用)条件分页查询
 	 *
