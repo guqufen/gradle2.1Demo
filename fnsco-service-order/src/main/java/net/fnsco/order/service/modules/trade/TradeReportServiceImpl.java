@@ -169,7 +169,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setTradeDate(yesTradeDate.substring(0, yesTradeDate.length() - 6));
         //昨天营业额
         TurnoverDTO yesterdayTurnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
-        if (null != yesterdayTurnover) {
+        if (null != yesterdayTurnover && null != yesterdayTurnover.getOrderNum() && yesterdayTurnover.getOrderNum() != 0) {
             yesterdayTurnover.setOrderPrice(divide(yesterdayTurnover.getTurnover(), yesterdayTurnover.getOrderNum()));
         } else {
             yesterdayTurnover = new TurnoverDTO();
@@ -207,7 +207,9 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             //需要加上当日的日期
             thisWeekTurnover.setOrderNum(thisWeekTurnover.getOrderNum()+totayTurnover.getOrderNum());
             thisWeekTurnover.setTurnover(thisWeekTurnover.getTurnover()+totayTurnover.getTurnover());
-            thisWeekTurnover.setOrderPrice(divide(thisWeekTurnover.getTurnover(), thisWeekTurnover.getOrderNum()));
+            if(null != thisWeekTurnover.getOrderNum() && thisWeekTurnover.getOrderNum() != 0){
+                thisWeekTurnover.setOrderPrice(divide(thisWeekTurnover.getTurnover(), thisWeekTurnover.getOrderNum()));
+            }
             thisWeekTurnover.setWeekLy(false);
             thisWeekTurnover.setType(3);
             thisWeekTurnover.setStartDate(DateUtils.formatDateStrOutput(DateUtils.getMondayStr(0)));
@@ -219,7 +221,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setEndTradeDate(DateUtils.getSundayStr(-1));
         record.setTradeDate(null);
         TurnoverDTO lastWeekTurnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
-        if (null != lastWeekTurnover) {
+        if (null != lastWeekTurnover && null != lastWeekTurnover.getOrderNum() && lastWeekTurnover.getOrderNum() != 0) {
             lastWeekTurnover.setOrderPrice(divide(lastWeekTurnover.getTurnover(), lastWeekTurnover.getOrderNum()));
         } else {
             lastWeekTurnover = new TurnoverDTO();
@@ -243,7 +245,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             TurnoverDTO weekLyTurnover = tradeByDayDao.selectWeekLyTradeData(record);
             String minDate = tradeByDayDao.selectMinTradeDateByUserId(tradeReportDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
 
-            if (null != weekLyTurnover) {
+            if (null != weekLyTurnover && null != weekLyTurnover.getOrderNum() && weekLyTurnover.getOrderNum() != 0) {
                 weekLyTurnover.setOrderPrice(divide(weekLyTurnover.getTurnover(), weekLyTurnover.getOrderNum()));
             } else if (!Strings.isNullOrEmpty(minDate) && minDate.compareTo(record.getEndTradeDate()) <= 0) {
                 weekLyTurnover = new TurnoverDTO();
