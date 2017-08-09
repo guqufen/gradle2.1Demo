@@ -19,7 +19,11 @@ public interface UserDetailDAO {
     @Results({@Result( column = "create_date",property = "createDate"),@Result( column = "modify_date",property = "modifyDate"),@Result( column = "user_id",property = "userId"),@Result( column = "area_id",property = "areaId"),@Result( column = "nick_name",property = "nickName"),@Result( column = "zip_code",property = "zipCode"),@Result( column = "head_url",property = "headUrl") })
     @Select("SELECT * FROM t_user_detail WHERE id = #{id}")
     public UserDetailDO getById(@Param("id") int id);
-
+    
+    @Results({@Result( column = "create_date",property = "createDate"),@Result( column = "modify_date",property = "modifyDate"),@Result( column = "user_id",property = "userId"),@Result( column = "area_id",property = "areaId"),@Result( column = "nick_name",property = "nickName"),@Result( column = "zip_code",property = "zipCode"),@Result( column = "head_url",property = "headUrl") })
+    @Select("SELECT * FROM t_user_detail WHERE user_id = #{iuserIdd}")
+    public UserDetailDO getByUserId(@Param("userId") Long userId);
+    
     @Insert("INSERT into t_user_detail(id,create_date,modify_date,user_id,address,area_id,birth,country,gender,name,nick_name,zip_code,head_url,university) VALUES (#{id},#{createDate},#{modifyDate},#{userId},#{address},#{areaId},#{birth},#{country},#{gender},#{name},#{nickName},#{zipCode},#{headUrl},#{university})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(UserDetailDO userDetail);
