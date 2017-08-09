@@ -736,5 +736,6 @@
 			</if>	
 		)
 	AND time_stamp > #{tradeDate}
+	AND status = 1
   </select>
 </mapper>

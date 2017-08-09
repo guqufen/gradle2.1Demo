@@ -93,41 +93,41 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setStartTime(startTime);
         record.setEndTime(endTime);
         String startDate = startTime.substring(0, 8);
+        String endDate =  endTime.substring(0,8);
         List<TradeDateTemp> tempDatas = tradeDataDAO.queryTempByCondition(record);
-        String tradeDateStr = DateUtils.getTimeByDayStr(-1);
         for (TradeDateTemp tradeDateTemp : tempDatas) {
             String timeStamp = tradeDateTemp.getTimeStamp();
-            tradeDateTemp.setTradeDate(timeStamp.substring(0, tradeDateStr.length() - 6));
+            tradeDateTemp.setTradeDate(timeStamp.substring(0, timeStamp.length() - 6));
             tradeDateTemp.setTradeHoure(timeStamp.substring(8, 10));
             tradeDateTempDao.insertSelective(tradeDateTemp);
         }
         //统计之前先删除，防止重复统计
         TradeByDay dayCondition = new TradeByDay();
-        dayCondition.setTradeDate(startDate);
+        dayCondition.setStartTradeDate(startDate);
+        dayCondition.setEndTradeDate(endDate);
         tradeByDayDao.deleteByDate(dayCondition);
         TradeByHour hourCondition = new TradeByHour();
-        hourCondition.setTradeDate(startDate);
+        hourCondition.setStartTradeDate(startDate);
+        hourCondition.setEndTradeDate(endDate);
         tradeByHourDao.deleteByCondition(hourCondition);
         TradeByPayType payTypeCondition = new TradeByPayType();
         payTypeCondition.setStartDate(startDate);
+        payTypeCondition.setEndDate(endDate);
         tradeByPayTypeDao.deleteByCondition(payTypeCondition);
         
         //分别按小时、天、支付渠道统计查询且插入对应表中
         List<TradeByDay> tradeDayData = tradeDateTempDao.selectTradeDataByDate();
         for (TradeByDay tradeByDay : tradeDayData) {
-            tradeByDay.setTradeDate(tradeDateStr.substring(0, tradeDateStr.length() - 6));
             tradeByDayDao.insertSelective(tradeByDay);
         }
 
         List<TradeByHour> tradeHourData = tradeDateTempDao.selectTradeDataByHour();
         for (TradeByHour tradeByHour : tradeHourData) {
-            tradeByHour.setTradeDate(tradeDateStr.substring(0, tradeDateStr.length() - 6));
             tradeByHourDao.insertSelective(tradeByHour);
         }
 
         List<TradeByPayType> tradePayTypeData = tradeDateTempDao.selectTradeDataByPayType();
         for (TradeByPayType tradeByPayType : tradePayTypeData) {
-            tradeByPayType.setTradeDate(tradeDateStr.substring(0, tradeDateStr.length() - 6));
             tradeByPayTypeDao.insert(tradeByPayType);
         }
     }
