@@ -1,6 +1,7 @@
 package net.fnsco.order.service.modules.trade;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -99,8 +100,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             String timeStamp = tradeDateTemp.getTimeStamp();
             tradeDateTemp.setTradeDate(timeStamp.substring(0, timeStamp.length() - 6));
             tradeDateTemp.setTradeHoure(timeStamp.substring(8, 10));
-            tradeDateTempDao.insertSelective(tradeDateTemp);
         }
+        tradeDateTempDao.insertBatch(tempDatas);
         //统计之前先删除，防止重复统计
         TradeByDay dayCondition = new TradeByDay();
         dayCondition.setStartTradeDate(startDate);
@@ -117,19 +118,13 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         
         //分别按小时、天、支付渠道统计查询且插入对应表中
         List<TradeByDay> tradeDayData = tradeDateTempDao.selectTradeDataByDate();
-        for (TradeByDay tradeByDay : tradeDayData) {
-            tradeByDayDao.insertSelective(tradeByDay);
-        }
-
+        tradeByDayDao.insertBatch(tradeDayData);
+        
         List<TradeByHour> tradeHourData = tradeDateTempDao.selectTradeDataByHour();
-        for (TradeByHour tradeByHour : tradeHourData) {
-            tradeByHourDao.insertSelective(tradeByHour);
-        }
-
+        tradeByHourDao.insertBatch(tradeHourData);
+        
         List<TradeByPayType> tradePayTypeData = tradeDateTempDao.selectTradeDataByPayType();
-        for (TradeByPayType tradeByPayType : tradePayTypeData) {
-            tradeByPayTypeDao.insert(tradeByPayType);
-        }
+        tradeByPayTypeDao.insertBatch(tradePayTypeData);
     }
 
     /**
@@ -365,7 +360,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         BigDecimal bd2 = new BigDecimal(orderNum);
         return bd1.divide(bd2, 2, BigDecimal.ROUND_HALF_UP);
     }
-    
     private BigDecimal divide(BigDecimal turnover, Integer orderNum) {
         BigDecimal bd2 = new BigDecimal(orderNum);
         return turnover.divide(bd2, 2, BigDecimal.ROUND_HALF_UP);

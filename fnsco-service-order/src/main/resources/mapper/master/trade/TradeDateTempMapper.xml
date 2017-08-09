@@ -158,4 +158,18 @@
 		pay_sub_type,
 		trade_date
   </select>
+  <!-- 批量插入数据 -->
+  <insert id="insertBatch" parameterType="java.util.List">
+  	 <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                 SELECT LAST_INSERT_ID()
+     </selectKey>
+     insert into r_trade_date_temp (id, inner_code, amt, 
+      pay_sub_type, time_stamp,trade_date, trade_houre)
+    values
+     <foreach collection ="list" item="reddemCode" index= "index" separator =",">
+      (#{reddemCode.id,jdbcType=INTEGER}, #{reddemCode.innerCode,jdbcType=VARCHAR}, #{reddemCode.amt,jdbcType=VARCHAR}, 
+      #{reddemCode.paySubType,jdbcType=VARCHAR}, #{reddemCode.timeStamp,jdbcType=VARCHAR}, #{reddemCode.tradeDate,jdbcType=VARCHAR}, 
+      #{reddemCode.tradeHoure,jdbcType=VARCHAR})
+     </foreach>
+  </insert>
 </mapper>

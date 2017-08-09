@@ -111,4 +111,19 @@
       </if>
     </where>
   </delete>
+  <!-- 批量插入数据 -->
+  <insert id="insertBatch" parameterType="java.util.List">
+  	 <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                 SELECT LAST_INSERT_ID()
+     </selectKey>
+     insert into r_trade_by_pay_type (id, pay_type, trade_date, 
+      inner_code, turnover, order_num, 
+      order_price)
+    values
+     <foreach collection ="list" item="payTrade" index= "index" separator =",">
+      (#{payTrade.id,jdbcType=INTEGER}, #{payTrade.payType,jdbcType=VARCHAR}, #{payTrade.tradeDate,jdbcType=VARCHAR}, 
+      #{payTrade.innerCode,jdbcType=VARCHAR}, #{payTrade.turnover,jdbcType=DECIMAL}, #{payTrade.orderNum,jdbcType=INTEGER}, 
+      #{payTrade.orderPrice,jdbcType=DECIMAL})
+     </foreach>
+  </insert>
 </mapper>
