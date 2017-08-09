@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.base.Strings;
@@ -41,10 +43,10 @@ public class RegistController extends BaseController {
     		*@Description  
     		*@CreateDate 2015年8月8日下午2:20:03
      */
-    @RequestMapping("/regist.htm")
+    @RequestMapping(value = "/regist", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "用户注册", notes = "用户注册")
-    public ResultDTO regist(String loginName, String passwd, String nickName, String validCode, Model model) {
+    public ResultDTO regist(@RequestParam String loginName, @RequestParam String passwd, @RequestParam String nickName, @RequestParam String validCode) {
         if (Strings.isNullOrEmpty(loginName)) {
             ResultDTO.fail("登录名不能为空");
         }
@@ -78,9 +80,10 @@ public class RegistController extends BaseController {
     		*@Description  
     		*@CreateDate 2015年8月6日下午5:14:18
      */
-    @RequestMapping(value = "/json/sendActiveCode.htm")
+    @RequestMapping(value = "/json/sendActiveCode", method = RequestMethod.GET)
     @ResponseBody
-    public ResultDTO sendActiveCode(HttpServletRequest request, String email) {
+    @ApiOperation(value = "重新发送激活授权码", notes = "重新发送激活授权码")
+    public ResultDTO sendActiveCode(@RequestParam String email) {
         if (RegexUtil.isEmail(email)) {
             ResultDTO.fail("邮箱格式错误");
         }
@@ -94,9 +97,10 @@ public class RegistController extends BaseController {
     		*@Description  
     		*@CreateDate 2015年8月23日下午5:54:19
      */
-    @RequestMapping("/active.htm")
+    @RequestMapping(value = "/active", method = RequestMethod.GET)
     @ResponseBody
-    public ResultDTO active(HttpServletRequest request, String code, Model model) {
+    @ApiOperation(value = "激活账号", notes = "激活账号")
+    public ResultDTO active(@RequestParam String code) {
         if (Strings.isNullOrEmpty(code)) {
             ResultDTO.fail("激活码不能为空");
         }
@@ -110,10 +114,11 @@ public class RegistController extends BaseController {
      *@Description  
      *@CreateDate 2015年8月24日下午6:36:46
      */
-    @RequestMapping("/validEmail.htm")
+    @RequestMapping(value = "/validEmail", method = RequestMethod.GET)
     @ResponseBody
-    public ResultDTO isEmailExist(String email) {
+    @ApiOperation(value = "判断邮箱是否已存在", notes = "判断邮箱是否已存在")
+    public ResultDTO isEmailExist(@RequestParam String email) {
         boolean result = userBasicService.isEmailExist(email, null);
-        return ResultDTO.success(result);
+        return ResultDTO.success();
     }
 }

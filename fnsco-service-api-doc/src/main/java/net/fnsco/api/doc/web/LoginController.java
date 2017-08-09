@@ -4,11 +4,15 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.base.Strings;
@@ -23,6 +27,7 @@ import net.fnsco.api.doc.service.user.entity.UserTokenDO;
 import net.fnsco.api.doc.service.vo.LoginParamInfo;
 import net.fnsco.api.doc.service.vo.UserInfo;
 import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
 
 /**
  * 
@@ -31,7 +36,7 @@ import net.fnsco.core.base.BaseController;
 		* <p>CreateDate: 2015年7月11日下午2:04:09</p>
  */
 @Controller
-@RequestMapping("/web")
+@RequestMapping(value = "/web")
 @Api(value = "/web", tags = { "用户登录" })
 public class LoginController extends BaseController {
     @Autowired
@@ -50,9 +55,11 @@ public class LoginController extends BaseController {
     		*@Description  
     		*@CreateDate 2015年7月11日下午2:05:24
      */
-    @RequestMapping("/login.htm")
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ApiOperation(value = "登陆处理", notes = "登陆处理")
-    public String login(HttpServletRequest request, HttpServletResponse response, String loginName, String passwd, String validCode, boolean autoLogin, Model model) {
+    @ResponseBody
+    public ResultDTO login(@RequestParam String loginName, @RequestParam String passwd, @RequestParam String validCode) {
+        boolean autoLogin = true;
         if (Strings.isNullOrEmpty(loginName)) {
             //"登陆名不能为空"
         }
@@ -71,7 +78,7 @@ public class LoginController extends BaseController {
         UserInfo userInfo = null;
 
         if (validCode.equals(getSessionUser())) {
-            return "forward:/forwardLogin.htm";
+            return ResultDTO.fail();//"forward:/forwardLogin.htm";
         }
         userInfo = loginService.loginByEmail(paramInfo);
 
@@ -98,7 +105,7 @@ public class LoginController extends BaseController {
                 break;
         }
 
-        return redirectUrl;
+        return ResultDTO.success();
     }
 
     /**
@@ -107,11 +114,10 @@ public class LoginController extends BaseController {
     		*@Description  
     		*@CreateDate 2015年7月11日下午2:05:24
      */
-    @RequestMapping("/logout.htm")
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @ApiOperation(value = "退出", notes = "退出")
-    public String logout(HttpServletRequest request, HttpServletResponse response, Model model) {
-        model.addAttribute("isLogin", true);
-
+    @ResponseBody
+    public ResultDTO logout() {
         UserInfo userInfo = (UserInfo) getSessionUser();
         if (userInfo != null) {
             //更新数据库信息
@@ -129,7 +135,7 @@ public class LoginController extends BaseController {
         }
         request.getSession().invalidate();
 
-        return "user/login";
+        return ResultDTO.success();//"user/login";
     }
 
     /**
@@ -138,16 +144,17 @@ public class LoginController extends BaseController {
     		*@Description  
     		*@CreateDate 2015年8月22日下午2:58:59
      */
-    @RequestMapping("/json/sendResetCode.htm")
+    @RequestMapping(value = "/json/sendResetCode", method = RequestMethod.GET)
     @ApiOperation(value = "发送重置密码授权码", notes = "发送重置密码授权码")
-    public @ResponseBody Map sendResetCode(HttpServletRequest request, String email) {
+    @ResponseBody
+    public ResultDTO sendResetCode(@RequestParam String email) {
         if (RegexUtil.isEmail(email)) {
             //邮箱格式不正确
         }
 
         loginService.sendResetCode(email);
 
-        return JsonUtils.createSuccess();
+        return ResultDTO.success();
     }
 
     /**
@@ -156,16 +163,16 @@ public class LoginController extends BaseController {
     		*@Description  
     		*@CreateDate 2015年8月22日下午2:58:59
      */
-    @RequestMapping("/resetPasswd.htm")
+    @RequestMapping(value = "/resetPasswd", method = RequestMethod.GET)
     @ApiOperation(value = "重置密码", notes = "重置密码")
-    public String resetPasswd(HttpServletRequest request, String code, String passwd) {
+    public ResultDTO resetPasswd(@RequestParam String code, @RequestParam String passwd) {
         if (Strings.isNullOrEmpty(code)) {
             //授权码不能为空");
         }
 
         loginService.resetPasswd(code, passwd);
 
-        return "/resetSuccess.htm";
+        return ResultDTO.success();//"/resetSuccess.htm";
     }
 
 }
