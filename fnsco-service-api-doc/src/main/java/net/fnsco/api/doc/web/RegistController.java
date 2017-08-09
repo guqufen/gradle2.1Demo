@@ -26,8 +26,8 @@ import net.fnsco.core.base.ResultDTO;
 		* <p>CreateDate: 2015年7月11日下午2:04:09</p>
  */
 @Controller
-@RequestMapping("/regist")
-@Api(value = "/regist", tags = { "用户注册" })
+@RequestMapping("/web/regist")
+@Api(value = "/web/regist", tags = { "用户注册" })
 public class RegistController extends BaseController {
     @Autowired
     private RegistService    registService;

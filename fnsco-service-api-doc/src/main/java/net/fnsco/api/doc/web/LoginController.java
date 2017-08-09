@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.base.Strings;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.doc.comm.JsonUtils;
 import net.fnsco.api.doc.comm.RegexUtil;
 import net.fnsco.api.doc.service.user.LoginService;
@@ -29,7 +31,8 @@ import net.fnsco.core.base.BaseController;
 		* <p>CreateDate: 2015年7月11日下午2:04:09</p>
  */
 @Controller
-@RequestMapping("")
+@RequestMapping("/web")
+@Api(value = "/web", tags = { "用户登录" })
 public class LoginController extends BaseController {
     @Autowired
     private LoginService     loginService;
@@ -48,6 +51,7 @@ public class LoginController extends BaseController {
     		*@CreateDate 2015年7月11日下午2:05:24
      */
     @RequestMapping("/login.htm")
+    @ApiOperation(value = "登陆处理", notes = "登陆处理")
     public String login(HttpServletRequest request, HttpServletResponse response, String loginName, String passwd, String validCode, boolean autoLogin, Model model) {
         if (Strings.isNullOrEmpty(loginName)) {
             //"登陆名不能为空"
@@ -104,6 +108,7 @@ public class LoginController extends BaseController {
     		*@CreateDate 2015年7月11日下午2:05:24
      */
     @RequestMapping("/logout.htm")
+    @ApiOperation(value = "退出", notes = "退出")
     public String logout(HttpServletRequest request, HttpServletResponse response, Model model) {
         model.addAttribute("isLogin", true);
 
@@ -134,6 +139,7 @@ public class LoginController extends BaseController {
     		*@CreateDate 2015年8月22日下午2:58:59
      */
     @RequestMapping("/json/sendResetCode.htm")
+    @ApiOperation(value = "发送重置密码授权码", notes = "发送重置密码授权码")
     public @ResponseBody Map sendResetCode(HttpServletRequest request, String email) {
         if (RegexUtil.isEmail(email)) {
             //邮箱格式不正确
@@ -151,6 +157,7 @@ public class LoginController extends BaseController {
     		*@CreateDate 2015年8月22日下午2:58:59
      */
     @RequestMapping("/resetPasswd.htm")
+    @ApiOperation(value = "重置密码", notes = "重置密码")
     public String resetPasswd(HttpServletRequest request, String code, String passwd) {
         if (Strings.isNullOrEmpty(code)) {
             //授权码不能为空");
