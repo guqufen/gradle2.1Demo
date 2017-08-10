@@ -106,7 +106,7 @@ public class AppUserController extends BaseController {
      */
     @RequestMapping(value = "/modifyInfo")
     @ApiOperation(value = "修改个人信息")
-    public ResultDTO<String> modifyInfo(@RequestBody AppUserDTO appUserDTO){
+    public ResultDTO modifyInfo(@RequestBody AppUserDTO appUserDTO){
         return appUserService.modifyInfo(appUserDTO);
     }
     

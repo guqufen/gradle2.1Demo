@@ -20,11 +20,12 @@ public class CoreConstants extends FrameworkConstant {
     public static String       E_COMM_BUSSICSS     = "5100";
     public static String       WEB_SAVE_OK         = "2001";            //web保存成功
     public static String       WEB_PUSH_DATE_ERROR = "5110";            //推送时间错误
-
+    public static String       WEB_SUBMIT_OK       ="2002";             //提交成功
     static {
         ERROR_MESSGE_MAP.put(OK, "处理成功");
         ERROR_MESSGE_MAP.put(E_COMM_BUSSICSS, "一般业务错误");
         ERROR_MESSGE_MAP.put(WEB_SAVE_OK, "保存成功");
         ERROR_MESSGE_MAP.put(WEB_PUSH_DATE_ERROR, "定时推送时间，不能早于当前时间");
+        ERROR_MESSGE_MAP.put(WEB_SUBMIT_OK, "提交成功");
     }
 }

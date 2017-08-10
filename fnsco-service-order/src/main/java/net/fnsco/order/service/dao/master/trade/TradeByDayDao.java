@@ -20,6 +20,15 @@ public interface TradeByDayDao {
 
     int insertSelective(TradeByDay record);
     /**
+     * insertBatch:(这里用一句话描述这个方法的作用)批量插入
+     * @param record
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月9日 下午5:44:16
+     * @return int    DOM对象
+     */
+    int insertBatch(List<TradeByDay> record);
+    /**
      * deleteByDate:(这里用一句话描述这个方法的作用)根据时间删除
      *
      * @param record

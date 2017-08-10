@@ -27,6 +27,15 @@ public interface TradeDateTempDao {
 
     int updateByPrimaryKey(TradeDateTemp record);
     /**
+     * insertBatch:(这里用一句话描述这个方法的作用) 批量插入数据
+     * @param record
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月9日 下午4:44:44
+     * @return int    DOM对象
+     */
+    int insertBatch(List<TradeDateTemp> record);
+    /**
      * 
      * deleteAll:(这里用一句话描述这个方法的作用)删除全表数据
      *

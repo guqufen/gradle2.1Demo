@@ -15,6 +15,15 @@ public interface TradeByPayTypeDao {
 
     int insert(TradeByPayType record);
     /**
+     * insertBatch:(这里用一句话描述这个方法的作用)批量插入
+     * @param record
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月9日 下午5:44:16
+     * @return int    DOM对象
+     */
+    int insertBatch(List<TradeByPayType> record);
+    /**
      * deleteByCondition:(这里用一句话描述这个方法的作用)根据条件删除
      *
      * @param record

@@ -173,4 +173,19 @@
 		WHERE
 			inner_code = #{innerCode}
   </select>
+  <!-- 批量插入数据 -->
+  <insert id="insertBatch" parameterType="java.util.List">
+     <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                 SELECT LAST_INSERT_ID()
+     </selectKey>
+      insert into r_trade_by_day (id, trade_date, inner_code, 
+      turnover, order_num, order_price
+      )
+     values 
+      <foreach collection ="list" item="dayTrade" index= "index" separator =",">
+     (#{dayTrade.id,jdbcType=INTEGER}, #{dayTrade.tradeDate,jdbcType=VARCHAR}, #{dayTrade.innerCode,jdbcType=VARCHAR}, 
+      #{dayTrade.turnover,jdbcType=DECIMAL}, #{dayTrade.orderNum,jdbcType=INTEGER}, #{dayTrade.orderPrice,jdbcType=DECIMAL}
+      )
+      </foreach>
+  </insert>
 </mapper>

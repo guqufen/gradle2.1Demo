@@ -117,11 +117,12 @@
 		COUNT(*) AS orderNum,
 		cast(
 			(SUM(amt) / COUNT(*)) AS DECIMAL (16, 2)
-		) AS orderPrice
+		) AS orderPrice,
+		trade_date AS tradeDate
 	FROM
 		r_trade_date_temp
 	GROUP BY
-		inner_code
+		inner_code,trade_date
   </select>
   <!-- 按小时统计交易额 -->
   <select id="selectTradeDataByHour" resultType="net.fnsco.order.service.domain.trade.TradeByHour">
@@ -132,25 +133,43 @@
 	    trade_houre AS tradeHour,
 		cast(
 			(SUM(amt) / COUNT(*)) AS DECIMAL (16, 2)
-		) AS orderPrice
+		) AS orderPrice,
+    trade_date AS tradeDate
 	FROM
 		r_trade_date_temp
 	GROUP BY
-		inner_code,trade_houre
+		inner_code,trade_houre,trade_date
   </select>
   <!-- 按照支付渠道统计交易额 -->
   <select id="selectTradeDataByPayType" resultType="net.fnsco.order.service.domain.trade.TradeByPayType">
      SELECT
-			SUM(amt) AS turnover,
-			inner_code AS innerCode,
-			COUNT(*) AS orderNum,
-		  pay_sub_type AS payType,
-			cast(
-				(SUM(amt) / COUNT(*)) AS DECIMAL (16, 2)
-			) AS orderPrice
-		FROM
-			r_trade_date_temp
-		GROUP BY
-			inner_code,pay_sub_type
+		SUM(amt) AS turnover,
+		inner_code AS innerCode,
+		COUNT(*) AS orderNum,
+		pay_sub_type AS payType,
+		cast(
+			(SUM(amt) / COUNT(*)) AS DECIMAL (16, 2)
+		) AS orderPrice,
+		trade_date AS tradeDate
+	FROM
+		r_trade_date_temp
+	GROUP BY
+		inner_code,
+		pay_sub_type,
+		trade_date
   </select>
+  <!-- 批量插入数据 -->
+  <insert id="insertBatch" parameterType="java.util.List">
+  	 <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                 SELECT LAST_INSERT_ID()
+     </selectKey>
+     insert into r_trade_date_temp (id, inner_code, amt, 
+      pay_sub_type, time_stamp,trade_date, trade_houre)
+    values
+     <foreach collection ="list" item="reddemCode" index= "index" separator =",">
+      (#{reddemCode.id,jdbcType=INTEGER}, #{reddemCode.innerCode,jdbcType=VARCHAR}, #{reddemCode.amt,jdbcType=VARCHAR}, 
+      #{reddemCode.paySubType,jdbcType=VARCHAR}, #{reddemCode.timeStamp,jdbcType=VARCHAR}, #{reddemCode.tradeDate,jdbcType=VARCHAR}, 
+      #{reddemCode.tradeHoure,jdbcType=VARCHAR})
+     </foreach>
+  </insert>
 </mapper>

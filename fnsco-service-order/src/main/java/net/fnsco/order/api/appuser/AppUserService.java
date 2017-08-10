@@ -70,6 +70,6 @@ public interface AppUserService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ResultDTO<String> modifyInfo(AppUserDTO appUserDTO);
+    ResultDTO modifyInfo(AppUserDTO appUserDTO);
     ResultDTO<String> getUserInfo(AppUserDTO appUserDTO);
 }
