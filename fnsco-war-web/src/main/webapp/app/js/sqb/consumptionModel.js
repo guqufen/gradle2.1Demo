@@ -18,7 +18,7 @@ function chart(data,formatter){
 	    series: [{
 	        name: '支付方式',
 	        type: 'pie',
-	        radius: '80%',
+	        radius: '65%',
 	        center: ['50%', '50%'],
 	        data: data,
 	        itemStyle: {}
@@ -65,19 +65,19 @@ function modelData(tokenId,userId,startDate,endDate,innerCode){
       "innerCode":innerCode
     },
     success:function(data){
-    	console.log(data);
-    	var formatter="笔";
-		var formatter1="元";
-    	var data1=[{value: data.data.aliOrderNumTot,name: '支付宝'}, {value: data.data.wxOrderNumTot,name: '微信'}, {value: data.data.bankOrderNumTot,name: '银行卡'},{value: data.data.otherOrderNumTot,name: '其他'}];
-		var data2=[{value: data.data.aliTurnoverTot ,name: '支付宝'}, {value: data.data.wxTurnoverTot,name: '微信'}, {value: data.data.bankTurnoverTot,name: '银行卡'},{value: data.data.otherTurnoverTot,name: '其他'}];
-		$(".total-list.wx .total-list-rmb span").html(changeTwoDecimal(data.data.wxTurnoverTot));
-		$(".total-list.alipay .total-list-rmb span").html(changeTwoDecimal(data.data.aliTurnoverTot));
-		$(".total-list.bank .total-list-rmb span").html(changeTwoDecimal(data.data.bankTurnoverTot));
-		$(".total-list.other .total-list-rmb span").html(changeTwoDecimal(data.data.otherTurnoverTot));
-		$(".total-list.wx .total-list-num span").html(data.data.wxOrderNumTot);
-		$(".total-list.alipay .total-list-num span").html(data.data.aliOrderNumTot);
-		$(".total-list.bank .total-list-num span").html(data.data.bankOrderNumTot);
-		$(".total-list.other .total-list-num span").html(data.data.otherOrderNumTot);
+      console.log(data);
+      var formatter="笔";
+  		var formatter1="元";
+      var data1=[{value: data.data.aliOrderNumTot,name: '支付宝'}, {value: data.data.wxOrderNumTot,name: '微信'}, {value: data.data.bankOrderNumTot,name: '银行卡'},{value: data.data.otherOrderNumTot,name: '其他'}];
+  		var data2=[{value: data.data.aliTurnoverTot ,name: '支付宝'}, {value: data.data.wxTurnoverTot,name: '微信'}, {value: data.data.bankTurnoverTot,name: '银行卡'},{value: data.data.otherTurnoverTot,name: '其他'}];
+  		$(".total-list.wx .total-list-rmb span").html(changeTwoDecimal(data.data.wxTurnoverTot));
+  		$(".total-list.alipay .total-list-rmb span").html(changeTwoDecimal(data.data.aliTurnoverTot));
+  		$(".total-list.bank .total-list-rmb span").html(changeTwoDecimal(data.data.bankTurnoverTot));
+  		$(".total-list.other .total-list-rmb span").html(changeTwoDecimal(data.data.otherTurnoverTot));
+  		$(".total-list.wx .total-list-num span").html(data.data.wxOrderNumTot);
+  		$(".total-list.alipay .total-list-num span").html(data.data.aliOrderNumTot);
+  		$(".total-list.bank .total-list-num span").html(data.data.bankOrderNumTot);
+  		$(".total-list.other .total-list-num span").html(data.data.otherOrderNumTot);
 		//默认加载笔数图表格
 		chart(data1,formatter);
       	$("#start-time").val(data.data.startDate);
@@ -116,22 +116,26 @@ function getUrl(name){
 }
 //获取商户列表
 function getShopList(tokenId,userId){
+  var jsonstr = {
+      'userId': userId
+    };
+  var params = JSON.stringify(jsonstr);
   $.ajax({
     url:'merchant/getShopOwnerMerChant',
+    contentType: "application/json",
     dataType : "json",
     type:'POST',
-    headers: {
+    headers:  {
       'tokenId': tokenId,
       'identifier': userId
     },
-    data:{
-      "userId":userId,
-    },
+    data:params,
     success:function(data){
-    console.log(data);
       var shopList=$("#shop-list");
       if(data.data.length>1){
         shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部店铺</a></li>');
+      }else if(data.data.length==1){
+        $(".filter-name").html(data.data[0].merName);
       }
       for(var i=0;i<data.data.length;i++){
         shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
