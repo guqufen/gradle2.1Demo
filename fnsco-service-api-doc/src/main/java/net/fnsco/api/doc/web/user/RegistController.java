@@ -1,4 +1,4 @@
-package net.fnsco.api.doc.web;
+package net.fnsco.api.doc.web.user;
 
 import javax.servlet.http.HttpServletRequest;
 

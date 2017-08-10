@@ -1,18 +1,19 @@
-package net.fnsco.api.doc.service.other.dao;
+package net.fnsco.api.doc.service.inter.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Options;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import net.fnsco.api.doc.service.other.entity.ModuleDO;
-import net.fnsco.api.doc.service.other.dao.helper.ModuleProvider;
 
-import java.util.List;;
+import net.fnsco.api.doc.service.inter.dao.helper.ModuleProvider;
+import net.fnsco.api.doc.service.inter.entity.ModuleDO;;
 
 public interface ModuleDAO {
 
