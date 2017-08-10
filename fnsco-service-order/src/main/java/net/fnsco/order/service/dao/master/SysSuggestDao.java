@@ -3,6 +3,8 @@ package net.fnsco.order.service.dao.master;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.order.api.dto.SysSuggestDTO;
 import net.fnsco.order.service.domain.SysSuggest;
