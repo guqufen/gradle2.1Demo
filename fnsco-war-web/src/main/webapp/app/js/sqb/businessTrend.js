@@ -130,7 +130,7 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
       if(data.data.orderPrice=="0"){
         $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice));
       }else{
-        $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice/data.data.orderNumTotal));
+        $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice/data.data.orderNumTotal/100));
       }
       var dataOrderNum=new Array();
       var dataTurnover=new Array();
@@ -139,8 +139,9 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
       for(var i=0;i<returnDatd.length;i++){
         dataTradeDate.push(data.data.tradeDayData[i].tradeDate.substring(5,10));
         dataOrderNum.push(data.data.tradeDayData[i].orderNum);
-        dataTurnover.push(data.data.tradeDayData[i].turnover);
+        dataTurnover.push(data.data.tradeDayData[i].turnover/100);
       }
+      console.log(dataTurnover);
       //生成图表
       chart(dataTradeDate,max(dataTurnover),dataTurnover,titleName);
       /*点击切换图表*/
