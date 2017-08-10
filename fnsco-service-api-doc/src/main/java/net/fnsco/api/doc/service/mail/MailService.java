@@ -8,6 +8,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -30,13 +31,15 @@ public class MailService extends BaseService {
     /** 邮件发送器 */
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private Environment    env;
 
     public void sendMail(String toEmail, MailMsg mailMsg) {
-        sendMail(MailCfg.DEFAULT_FROM_EMAIL, MailCfg.DEFAULT_FROM_NAME, toEmail, mailMsg);
+        sendMail(env.getProperty(MailCfg.DEFAULT_FROM_EMAIL), env.getProperty(MailCfg.DEFAULT_FROM_NAME), toEmail, mailMsg);
     }
 
     public void sendMail(List<String> toEmailList, MailMsg mailMsg) {
-        sendMail(MailCfg.DEFAULT_FROM_EMAIL, MailCfg.DEFAULT_FROM_NAME, toEmailList, mailMsg);
+        sendMail(env.getProperty(MailCfg.DEFAULT_FROM_EMAIL), env.getProperty(MailCfg.DEFAULT_FROM_NAME), toEmailList, mailMsg);
     }
 
     public void sendMail(String fromEmail, String fromName, String toEmail, MailMsg mailMsg) {
@@ -68,7 +71,13 @@ public class MailService extends BaseService {
     private void sendTextMail(String fromEmail, String fromName, List<String> toEmailList, MailMsg mailMsg) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(fromEmail);//发送者.
-        message.setTo((String[]) toEmailList.toArray());//接收者.
+        String[] toStrs = new String[0];
+        List<String> toList = toEmailList;
+        if (null != toList) {
+            toStrs = new String[toList.size()];
+            toList.toArray(toStrs);
+        }
+        message.setTo(toStrs);
         message.setSubject(mailMsg.getSubject());//邮件主题.
         message.setText(mailMsg.getContent());//邮件内容.
         mailSender.send(message);//发送邮件
@@ -84,14 +93,19 @@ public class MailService extends BaseService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(msg, true, "UTF-8");
             mimeMessageHelper.setFrom(fromEmail, fromName);
             mimeMessageHelper.setSubject(mailMsg.getSubject());
-             
-            mimeMessageHelper.setTo((String[])toEmailList.toArray());
-            //            String[] ccStrs = new String[0];
-            //            List<String> ccList = mailMsg.getCcList();
-            //            if (null != ccList) {
-            //                ccStrs = new String[ccList.size()];
-            //                toList.toArray(toStrs);
-            //            }
+            String[] toStrs = new String[0];
+            List<String> toList = toEmailList;
+            if (null != toList) {
+                toStrs = new String[toList.size()];
+                toList.toArray(toStrs);
+            }
+            mimeMessageHelper.setTo(toStrs);
+            //                        String[] ccStrs = new String[0];
+            //                        List<String> ccList =toEmailList;
+            //                        if (null != ccList) {
+            //                            ccStrs = new String[ccList.size()];
+            //                            ccList.toArray(ccStrs);
+            //                        }
             //            mimeMessageHelper.setCc(ccStrs);
             mimeMessageHelper.setText(mailContent, true);
 
@@ -134,12 +148,12 @@ public class MailService extends BaseService {
 
     private void validate(MailMsg mailBean) {
 
-//        StringUtil.notNullOrEmpty(mailBean, "邮件对象为空");
-//        StringUtil.notNullOrEmpty(mailBean.getFrom(), "邮件发送人为空");
-//        StringUtil.notNullOrEmpty(mailBean.getFromName(), "邮件发送人姓名为空");
-//        StringUtil.notNullOrEmpty(mailBean.getToList(), "邮件接收人列表为空");
-//        StringUtil.notNullOrEmpty(mailBean.getSubject(), "邮件主题为空");
-//        StringUtil.notNullOrEmpty(mailBean.getMailContent(), "邮件内容不能为空");
+        //        StringUtil.notNullOrEmpty(mailBean, "邮件对象为空");
+        //        StringUtil.notNullOrEmpty(mailBean.getFrom(), "邮件发送人为空");
+        //        StringUtil.notNullOrEmpty(mailBean.getFromName(), "邮件发送人姓名为空");
+        //        StringUtil.notNullOrEmpty(mailBean.getToList(), "邮件接收人列表为空");
+        //        StringUtil.notNullOrEmpty(mailBean.getSubject(), "邮件主题为空");
+        //        StringUtil.notNullOrEmpty(mailBean.getMailContent(), "邮件内容不能为空");
 
     }
 }

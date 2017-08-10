@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import net.fnsco.api.doc.service.user.entity.UserDetailDO;
 import net.fnsco.api.doc.service.user.entity.UserLoginDO;
 import net.fnsco.api.doc.service.vo.RegistParamInfo;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 
 /**
  * 
@@ -50,23 +52,26 @@ public class RegistService extends BaseService {
     private MailUtilService   mailUtil;
     @Autowired
     private UserBasicDAO      userBasicDAO;
+    @Autowired
+    private Environment       env;
 
     @Transactional
-    public void registByEmail(RegistParamInfo registParamInfo) {
-        if ("邮箱" == registParamInfo.getLoginType()) {
-
+    public ResultDTO registByEmail(RegistParamInfo registParamInfo) {
+        if ("邮箱" != registParamInfo.getLoginType()) {
+            return ResultDTO.fail("登录类型错误");
         }
 
         UserBasicDO temp = userBasicService.getByEmail(registParamInfo.getEmail());
         //是否验证
-        if (1 == temp.getValid()) {
-
+        if (temp != null) {
+            return ResultDTO.fail("邮箱已存在");
         }
         //保存用户信息
         Long userId = saveUserInfo(registParamInfo);
 
         //发送邮件
         sendEmail(registParamInfo.getNickName(), registParamInfo.getEmail());
+        return ResultDTO.success(userId);
     }
 
     //处理邮件发送
@@ -75,9 +80,9 @@ public class RegistService extends BaseService {
 
         Map<String, Object> model = Maps.newHashMap();
         model.put("nickName", nickName);
-        model.put("activeUrl", CfgConstants.WEB_BASE_URL + "regist/active.htm?code=" + code);
-
-        mailUtil.send(registEmail, MailConstants.SUB_REGIST, MailConstants.TMPL_REGIST, model);
+        model.put("activeUrl", env.getProperty(CfgConstants.WEB_BASE_URL) + "/web/regist/active.htm?code=" + code);
+        String webName = env.getProperty(CfgConstants.WEB_NAME);
+        mailUtil.send(registEmail, MailConstants.SUB_REGIST + webName, MailConstants.TMPL_REGIST, model);
     }
 
     //处理用户信息保存
@@ -89,6 +94,8 @@ public class RegistService extends BaseService {
         userBasic.setRegisterIp(registParamInfo.getRegistIp());
         userBasic.setValid(0);
         userBasic.setRole("普通用户");
+        userBasic.setCreateDate(new Date());
+        userBasic.setModifyDate(new Date());
         userBasicDAO.insert(userBasic);
 
         Long userId = userBasic.getId();
@@ -101,20 +108,26 @@ public class RegistService extends BaseService {
         UserDetailDO userDetail = new UserDetailDO();
         userDetail.setNickName(registParamInfo.getNickName());
         userDetail.setUserId(userId);
+        userDetail.setCreateDate(new Date());
+        userDetail.setModifyDate(new Date());
         userDetailDAO.insert(userDetail);
 
         //处理用户登陆信息
         UserLoginDO userLogin = new UserLoginDO();
         userLogin.setUserId(userId);
+        userLogin.setCreateDate(new Date());
+        userLogin.setModifyDate(new Date());
+        userLogin.setLoginFailureCount(0);
+        userLogin.setLoginCount(0);
         userLoginDAO.insert(userLogin);
 
         return userId;
     }
 
-    public void activeByEmail(String code) {
+    public ResultDTO activeByEmail(String code) {
         String registEmail = CryptUtil.decryptAES(code, AppConstants.DEFAULT_SECRET_KEY);
-        if (RegexUtil.isEmail(registEmail)) {
-
+        if (!RegexUtil.isEmail(registEmail)) {
+            return ResultDTO.fail("邮箱格式错误");
         }
 
         UserBasicDO userBasic = userBasicService.getByEmail(registEmail);
@@ -122,10 +135,10 @@ public class RegistService extends BaseService {
             userBasic.setValid(1);
             userBasic.setModifyDate(new Date());
             userBasicService.update(userBasic);
-
             //加入到demo项目组中
             //			projectMemberService.accept(userBasic.getId(), 1L, Role.viewer);
         }
+        return ResultDTO.success();
     }
 
     public void sendActiveCode(String email) {
