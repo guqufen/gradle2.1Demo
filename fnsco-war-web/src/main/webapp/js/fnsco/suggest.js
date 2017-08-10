@@ -61,7 +61,9 @@ $('#table').bootstrapTable({
 		width : '10%'
 	}, {
 		field : 'content',
-		title : '反馈内容'
+		title : '反馈内容',
+		formatter : formatContent
+		
 	}, {
 		field : 'userName',
 		title : '提交人'
@@ -106,7 +108,13 @@ function operateFormatter(value, row, index) {
 function formatindex(value, row, index) {
 	return [ index + 1 ].join('');
 }
-
+//
+function formatContent(value, row, index){
+	if(value && value.length > 50){
+		return value.substr(0,50)+'...';
+	}
+	return value;
+}
 // 条件查询按钮事件
 function queryEvent(id) {
 	$('#' + id).bootstrapTable('refresh');
@@ -137,7 +145,7 @@ function formatTime(value, row, index) {
 //根据id查询详情
 function querySingle(id) {
 	$.ajax({
-		url : PROJECT_NAME + '/web/syssuggest/queryById',
+		url : PROJECT_NAME + '/web/syssuggest/querySuggestInfo',
 		type : 'POST',
 		dataType : "json",
 		data : {

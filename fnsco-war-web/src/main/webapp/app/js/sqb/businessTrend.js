@@ -33,7 +33,8 @@ function chart(dataTime,max,data,titleName){
             }
 	    },
 	    grid: {
-        	left:'15%',
+        	left:'20%',
+          right:'20%',
 	    },
 	    yAxis: {
 	        type: 'value',
@@ -174,25 +175,30 @@ $(".filter-ok-btn").click(function(){
 })
 //获取商户列表
 function getShopList(tokenId,userId){
+  var jsonstr = {
+      'userId': userId
+    };
+  var params = JSON.stringify(jsonstr);
   $.ajax({
     url:'merchant/getShopOwnerMerChant',
+    contentType: "application/json",
     dataType : "json",
     type:'POST',
-    headers: {
+    headers:  {
       'tokenId': tokenId,
       'identifier': userId
     },
-    data:{
-      "userId":userId,
-    },
+    data:params,
     success:function(data){
       var shopList=$("#shop-list");
       if(data.data.length>1){
         shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部店铺</a></li>');
+      }else if(data.data.length==1){
+        $(".filter-name").html(data.data[0].merName);
       }
       for(var i=0;i<data.data.length;i++){
         shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
-      } 
+      }
 
       //筛选店铺
       $(".shop-list li").click(function(){

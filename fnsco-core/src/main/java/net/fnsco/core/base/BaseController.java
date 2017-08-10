@@ -191,7 +191,7 @@ public class BaseController {
         return session.getAttribute(CoreConstants.SESSION_USER_KEY);
     }
 
-    public void setSessionUser(Object userDO, Integer userId) {
+    public void setSessionUser(Object userDO, Object userId) {
         HttpSession session = request.getSession();
         session.setAttribute(CoreConstants.SESSION_USER_KEY, userDO);
         session.setAttribute(CoreConstants.SESSION_USERID, userId);

@@ -32,7 +32,8 @@ function chart(dataTime,max,data,titleName){
             }
 	    },
 	    grid: {
-        	left:'15%',
+          right:'20%',
+        	left:'20%',
 	    },
 	    yAxis: {
 	        type: 'value',
@@ -100,8 +101,8 @@ function changeTwoDecimal(x) {
 }
 //ajax请求
 epakData(getUrl("tokenId"),getUrl("userId"),null,null,null);
-var titleName="交易总额(均)";
-var titleName1="交易笔数(均)";
+var titleName="总额(均)";
+var titleName1="笔数(均)";
 function epakData(tokenId,userId,startDate,endDate,innerCode){
   $.ajax({
     url:'tradeReport/queryPeakTrade',
@@ -177,21 +178,26 @@ $(".filter-ok-btn").click(function(){
 })
 //获取商户列表
 function getShopList(tokenId,userId){
+  var jsonstr = {
+      'userId': userId
+    };
+  var params = JSON.stringify(jsonstr);
   $.ajax({
     url:'merchant/getShopOwnerMerChant',
+    contentType: "application/json",
     dataType : "json",
     type:'POST',
-    headers: {
+    headers:  {
       'tokenId': tokenId,
       'identifier': userId
     },
-    data:{
-      "userId":userId,
-    },
+    data:params,
     success:function(data){
       var shopList=$("#shop-list");
       if(data.data.length>1){
         shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部店铺</a></li>');
+      }else if(data.data.length==1){
+        $(".filter-name").html(data.data[0].merName);
       }
       for(var i=0;i<data.data.length;i++){
         shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');

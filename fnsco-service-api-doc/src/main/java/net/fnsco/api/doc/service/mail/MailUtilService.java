@@ -65,10 +65,10 @@ public class MailUtilService {
         if (model == null) {
             model = Maps.newHashMap();
         }
-        model.put("webName", CfgConstants.WEB_NAME);
-        model.put("webSite", CfgConstants.WEB_SITE);
-        model.put("webEmail", CfgConstants.WEB_SERVICE_EMAIL);
-        model.put("webTel", CfgConstants.WEB_SERVICE_TEL);
+        model.put("webName", env.getProperty(CfgConstants.WEB_NAME));
+        model.put("webSite", env.getProperty(CfgConstants.WEB_SITE));
+        model.put("webEmail", env.getProperty(CfgConstants.WEB_SERVICE_EMAIL));
+        model.put("webTel", env.getProperty(CfgConstants.WEB_SERVICE_TEL));
         model.put("sendDate", DateUtils.dateFormatToStr(new Date()));
         String tmpl = loadTmpl(tmplName);//"mail-tmpl/email-update.ftl");
         String content = TemplateUtils.process(tmpl, model);

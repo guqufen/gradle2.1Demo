@@ -9,31 +9,29 @@ import java.util.Properties;
 		* <p>CreateDate: 2015年8月22日上午10:27:04</p>
  */
 public class MailCfg {
-    //邮件配置信息
-    private final static Properties mailCfg             = null;                                      //PropertiesUtils.getProperties("mail-cfg.properties");
 
     /**
      * 邮件服务器
      */
-    public final static String      HOST                = mailCfg.getProperty("host");
+    public final static String HOST                = "host";
 
     /**
      * 邮件编码
      */
-    public final static String      CHARSET             = mailCfg.getProperty("charset");
+    public final static String CHARSET             = "charset";
 
     /**
      * 发送者邮箱
      */
-    public final static String      DEFAULT_FROM_EMAIL  = mailCfg.getProperty("default.from.email");
+    public final static String DEFAULT_FROM_EMAIL  = "default.from.email";
 
     /**
      * 发送者密码
      */
-    public final static String      DEFAULT_FROM_PASSWD = mailCfg.getProperty("default.from.passwd");
+    public final static String DEFAULT_FROM_PASSWD = "default.from.passwd";
 
     /**
      * 发送者名称
      */
-    public final static String      DEFAULT_FROM_NAME   = mailCfg.getProperty("default.from.name");
+    public final static String DEFAULT_FROM_NAME   = "default.from.name";
 }
