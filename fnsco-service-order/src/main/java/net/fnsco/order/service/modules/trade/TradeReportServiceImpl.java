@@ -99,8 +99,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             String timeStamp = tradeDateTemp.getTimeStamp();
             tradeDateTemp.setTradeDate(timeStamp.substring(0, timeStamp.length() - 6));
             tradeDateTemp.setTradeHoure(timeStamp.substring(8, 10));
-            tradeDateTempDao.insertSelective(tradeDateTemp);
         }
+        tradeDateTempDao.insertBatch(tempDatas);
         //统计之前先删除，防止重复统计
         TradeByDay dayCondition = new TradeByDay();
         dayCondition.setStartTradeDate(startDate);
@@ -117,19 +117,13 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         
         //分别按小时、天、支付渠道统计查询且插入对应表中
         List<TradeByDay> tradeDayData = tradeDateTempDao.selectTradeDataByDate();
-        for (TradeByDay tradeByDay : tradeDayData) {
-            tradeByDayDao.insertSelective(tradeByDay);
-        }
-
+        tradeByDayDao.insertBatch(tradeDayData);
+        
         List<TradeByHour> tradeHourData = tradeDateTempDao.selectTradeDataByHour();
-        for (TradeByHour tradeByHour : tradeHourData) {
-            tradeByHourDao.insertSelective(tradeByHour);
-        }
-
+        tradeByHourDao.insertBatch(tradeHourData);
+        
         List<TradeByPayType> tradePayTypeData = tradeDateTempDao.selectTradeDataByPayType();
-        for (TradeByPayType tradeByPayType : tradePayTypeData) {
-            tradeByPayTypeDao.insert(tradeByPayType);
-        }
+        tradeByPayTypeDao.insertBatch(tradePayTypeData);
     }
 
     /**
@@ -278,7 +272,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public WeeklyDTO queryWeeklyByInnerCode(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, true);//格式化入参
         TradeByDay record = new TradeByDay();
         record.setInnerCode(tradeReportDTO.getInnerCode());
         record.setStartTradeDate(tradeReportDTO.getStartDate());
@@ -365,41 +358,11 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         BigDecimal bd2 = new BigDecimal(orderNum);
         return bd1.divide(bd2, 2, BigDecimal.ROUND_HALF_UP);
     }
-    
     private BigDecimal divide(BigDecimal turnover, Integer orderNum) {
         BigDecimal bd2 = new BigDecimal(orderNum);
         return turnover.divide(bd2, 2, BigDecimal.ROUND_HALF_UP);
     }
     
-    /**
-     * formatInputDate:(这里用一句话描述这个方法的作用)格式化输入日期参数
-     *
-     * @param tradeReportDTO
-     * @return    设定文件
-     * @return TradeReportDTO    DOM对象
-     * @throws 
-     * @since  CodingExample　Ver 1.1
-     */
-    private TradeReportDTO formatInputDate(TradeReportDTO tradeReportDTO, boolean isWeekly) {
-
-        if (!Strings.isNullOrEmpty(tradeReportDTO.getStartDate())) {
-            tradeReportDTO.setStartDate(DateUtils.formatDateStrInput(tradeReportDTO.getStartDate()));
-        }
-        if (!Strings.isNullOrEmpty(tradeReportDTO.getEndDate())) {
-            tradeReportDTO.setEndDate(DateUtils.formatDateStrInput(tradeReportDTO.getEndDate()));
-        }
-        //如果没有传递时间和商家，则默认上周和全部商户数据
-        if ((Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate())) && isWeekly) {
-            tradeReportDTO.setStartDate(DateUtils.getMondayStr(-1));
-            tradeReportDTO.setEndDate(DateUtils.getSundayStr(-1));
-        }
-        if (!isWeekly && (Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate()))) {
-            tradeReportDTO.setEndDate(DateUtils.getDateStrByDay(-1));
-            tradeReportDTO.setStartDate(DateUtils.getDateStrByDay(-7));
-        }
-        return tradeReportDTO;
-    }
-
     /**
      * (non-Javadoc)查询周报历史时间段
      * @see net.fnsco.order.api.trade.TradeReportService#queryWeeklyHisDate(net.fnsco.order.api.dto.TradeReportDTO)
@@ -558,7 +521,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public ConsPatternDTO queryConsumption(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, false);//格式化入参
         ConsPatternDTO datas = new ConsPatternDTO();
         datas.setBankOrderNumTot(0);
         datas.setBankTurnoverTot(new BigDecimal("0"));
@@ -630,7 +592,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public BusinessTrendDTO queryBusinessTrends(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, false);//格式化入参
         BusinessTrendDTO datas = new BusinessTrendDTO();
         TradeByDay record = new TradeByDay();
         record.setInnerCode(tradeReportDTO.getInnerCode());
@@ -670,7 +631,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public PeakTradeDTO queryPeakTrade(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, false);//格式化入参
         TradeByHour record = new TradeByHour();
         record.setStartTradeDate(tradeReportDTO.getStartDate());
         record.setEndTradeDate(tradeReportDTO.getEndDate());

@@ -643,7 +643,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
      * @date 2017年7月31日 下午3:01:35
      */
     @Override
-    public ResultDTO<String> modifyInfo(AppUserDTO appUserDto) {
+    public ResultDTO modifyInfo(AppUserDTO appUserDto) {
         if(null == appUserDto.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
