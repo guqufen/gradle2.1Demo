@@ -11,6 +11,7 @@ import com.google.common.base.Strings;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.BusinessTrendDTO;
 import net.fnsco.order.api.dto.ConsPatternDTO;
@@ -90,6 +91,7 @@ public class TradeReportController extends BaseController{
         if(null == tradeReportDTO.getPageNum() || tradeReportDTO.getPageNum()<1){
             return ResultDTO.fail(ApiConstant.E_PAGE_NUM_NULL);
         }
+        formatInputDate(tradeReportDTO, true);//格式化入参
         WeeklyHisDateDTO datas = tradeReportService.queryWeeklyHisDate(tradeReportDTO);
         return ResultDTO.success(datas);
     }
@@ -109,6 +111,7 @@ public class TradeReportController extends BaseController{
         if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
+        formatInputDate(tradeReportDTO, false);//格式化入参
         ConsPatternDTO data = tradeReportService.queryConsumption(tradeReportDTO);
         return ResultDTO.success(data);
     }
@@ -128,6 +131,7 @@ public class TradeReportController extends BaseController{
         if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
+        formatInputDate(tradeReportDTO, false);//格式化入参
         BusinessTrendDTO data = tradeReportService.queryBusinessTrends(tradeReportDTO);
         return ResultDTO.success(data);
     }
@@ -147,7 +151,36 @@ public class TradeReportController extends BaseController{
         if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
+        formatInputDate(tradeReportDTO, false);//格式化入参
         PeakTradeDTO data = tradeReportService.queryPeakTrade(tradeReportDTO);
         return ResultDTO.success(data);
+    }
+    /**
+     * formatInputDate:(这里用一句话描述这个方法的作用)格式化输入日期参数
+     *
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @return TradeReportDTO    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    private TradeReportDTO formatInputDate(TradeReportDTO tradeReportDTO, boolean isWeekly) {
+
+        if (!Strings.isNullOrEmpty(tradeReportDTO.getStartDate())) {
+            tradeReportDTO.setStartDate(DateUtils.formatDateStrInput(tradeReportDTO.getStartDate()));
+        }
+        if (!Strings.isNullOrEmpty(tradeReportDTO.getEndDate())) {
+            tradeReportDTO.setEndDate(DateUtils.formatDateStrInput(tradeReportDTO.getEndDate()));
+        }
+        //如果没有传递时间和商家，则默认上周和全部商户数据
+        if ((Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate())) && isWeekly) {
+            tradeReportDTO.setStartDate(DateUtils.getMondayStr(-1));
+            tradeReportDTO.setEndDate(DateUtils.getSundayStr(-1));
+        }
+        if (!isWeekly && (Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate()))) {
+            tradeReportDTO.setEndDate(DateUtils.getDateStrByDay(-1));
+            tradeReportDTO.setStartDate(DateUtils.getDateStrByDay(-7));
+        }
+        return tradeReportDTO;
     }
 }

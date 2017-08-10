@@ -273,7 +273,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public WeeklyDTO queryWeeklyByInnerCode(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, true);//格式化入参
         TradeByDay record = new TradeByDay();
         record.setInnerCode(tradeReportDTO.getInnerCode());
         record.setStartTradeDate(tradeReportDTO.getStartDate());
@@ -365,35 +364,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         return turnover.divide(bd2, 2, BigDecimal.ROUND_HALF_UP);
     }
     
-    /**
-     * formatInputDate:(这里用一句话描述这个方法的作用)格式化输入日期参数
-     *
-     * @param tradeReportDTO
-     * @return    设定文件
-     * @return TradeReportDTO    DOM对象
-     * @throws 
-     * @since  CodingExample　Ver 1.1
-     */
-    private TradeReportDTO formatInputDate(TradeReportDTO tradeReportDTO, boolean isWeekly) {
-
-        if (!Strings.isNullOrEmpty(tradeReportDTO.getStartDate())) {
-            tradeReportDTO.setStartDate(DateUtils.formatDateStrInput(tradeReportDTO.getStartDate()));
-        }
-        if (!Strings.isNullOrEmpty(tradeReportDTO.getEndDate())) {
-            tradeReportDTO.setEndDate(DateUtils.formatDateStrInput(tradeReportDTO.getEndDate()));
-        }
-        //如果没有传递时间和商家，则默认上周和全部商户数据
-        if ((Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate())) && isWeekly) {
-            tradeReportDTO.setStartDate(DateUtils.getMondayStr(-1));
-            tradeReportDTO.setEndDate(DateUtils.getSundayStr(-1));
-        }
-        if (!isWeekly && (Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate()))) {
-            tradeReportDTO.setEndDate(DateUtils.getDateStrByDay(-1));
-            tradeReportDTO.setStartDate(DateUtils.getDateStrByDay(-7));
-        }
-        return tradeReportDTO;
-    }
-
     /**
      * (non-Javadoc)查询周报历史时间段
      * @see net.fnsco.order.api.trade.TradeReportService#queryWeeklyHisDate(net.fnsco.order.api.dto.TradeReportDTO)
@@ -552,7 +522,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public ConsPatternDTO queryConsumption(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, false);//格式化入参
         ConsPatternDTO datas = new ConsPatternDTO();
         datas.setBankOrderNumTot(0);
         datas.setBankTurnoverTot(new BigDecimal("0"));
@@ -624,7 +593,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public BusinessTrendDTO queryBusinessTrends(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, false);//格式化入参
         BusinessTrendDTO datas = new BusinessTrendDTO();
         TradeByDay record = new TradeByDay();
         record.setInnerCode(tradeReportDTO.getInnerCode());
@@ -664,7 +632,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public PeakTradeDTO queryPeakTrade(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, false);//格式化入参
         TradeByHour record = new TradeByHour();
         record.setStartTradeDate(tradeReportDTO.getStartDate());
         record.setEndTradeDate(tradeReportDTO.getEndDate());
