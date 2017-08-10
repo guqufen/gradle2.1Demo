@@ -1,15 +1,7 @@
 package net.fnsco.api.doc.web;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +11,6 @@ import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.api.doc.comm.JsonUtils;
 import net.fnsco.api.doc.comm.RegexUtil;
 import net.fnsco.api.doc.service.user.LoginService;
 import net.fnsco.api.doc.service.user.UserTokenService;
@@ -75,15 +66,16 @@ public class LoginController extends BaseController {
         paramInfo.setLoginType("邮箱");
         paramInfo.setAutoLogin(autoLogin);
 
-        UserInfo userInfo = null;
-
-        if (validCode.equals(getSessionUser())) {
-            return ResultDTO.fail();//"forward:/forwardLogin.htm";
+        //if (validCode.equals(getSessionUser())) {
+        //   return ResultDTO.fail();//"forward:/forwardLogin.htm";
+        //}
+        ResultDTO result = loginService.loginByEmail(paramInfo);
+        if (!result.isSuccess()) {
+            return result;
         }
-        userInfo = loginService.loginByEmail(paramInfo);
-
+        UserInfo userInfo = (UserInfo) result.getData();
         //保存登陆用户信息
-        setSessionUser(userInfo, Integer.parseInt(String.valueOf(userInfo.getUserId())));
+        setSessionUser(userInfo, userInfo.getUserId());
 
         //处理token，保存到cookie中
         if (autoLogin) {

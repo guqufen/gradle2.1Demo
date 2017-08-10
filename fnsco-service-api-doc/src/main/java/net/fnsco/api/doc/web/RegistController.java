@@ -70,7 +70,10 @@ public class RegistController extends BaseController {
         if (validCode.equals("")) {
             return ResultDTO.fail("验证码错误");
         }
-        registService.registByEmail(paramInfo);
+        ResultDTO result = registService.registByEmail(paramInfo);
+        if (!result.isSuccess()) {
+            return result;
+        }
         return ResultDTO.success(loginName);
     }
 
@@ -98,14 +101,13 @@ public class RegistController extends BaseController {
     		*@CreateDate 2015年8月23日下午5:54:19
      */
     @RequestMapping(value = "/active", method = RequestMethod.GET)
-    @ResponseBody
     @ApiOperation(value = "激活账号", notes = "激活账号")
-    public ResultDTO active(@RequestParam String code) {
+    public String active(@RequestParam String code) {
         if (Strings.isNullOrEmpty(code)) {
             ResultDTO.fail("激活码不能为空");
         }
-        registService.activeByEmail(code);
-        return ResultDTO.success();
+        ResultDTO result = registService.activeByEmail(code);
+        return "redirect:/login.html";
     }
 
     /**
@@ -119,6 +121,6 @@ public class RegistController extends BaseController {
     @ApiOperation(value = "判断邮箱是否已存在", notes = "判断邮箱是否已存在")
     public ResultDTO isEmailExist(@RequestParam String email) {
         boolean result = userBasicService.isEmailExist(email, null);
-        return ResultDTO.success();
+        return ResultDTO.success(result);
     }
 }
