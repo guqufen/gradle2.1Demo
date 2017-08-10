@@ -57,7 +57,7 @@ public class LoginService extends BaseService {
     private Environment       env;
 
     public ResultDTO loginByEmail(LoginParamInfo loginParamInfo) {
-        if (!"邮箱".equals(loginParamInfo.getLoginType())) {
+        if (!AppConstants.EMAIL.equals(loginParamInfo.getLoginType())) {
             return ResultDTO.fail("登录类型选择不正确");
         }
 
@@ -96,7 +96,7 @@ public class LoginService extends BaseService {
         userLogin.setLoginType(loginParamInfo.getLoginType());
         userLogin.setAuthCode(loginParamInfo.getSmsCode());
         userLogin.setLoginDate(DateUtil.getNow());
-        userLogin.setLoginStatus("在线");
+        userLogin.setLoginStatus(AppConstants.ON_LINE);
         userLogin.setLoginCount(userLogin.getLoginCount() + 1);
         userLoginService.update(userLogin);
 
@@ -140,9 +140,12 @@ public class LoginService extends BaseService {
             userToken.setUserId(userId);
             userToken.setToken(token);
             userToken.setExpireDate(getTokenExpireDate());
+            userToken.setCreateDate(new Date());
+            userToken.setModifyDate(new Date());
             userTokenService.add(userToken);
         } else {//更新记录信息
             userToken.setToken(token);
+            userToken.setModifyDate(new Date());
             userToken.setExpireDate(getTokenExpireDate());
             userTokenService.update(userToken);
         }

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>APP用户管理-法奈昇大数据平台</title>
+		<meta name="keywords" content="法奈昇大数据平台">
+		<meta name="description" content="法奈昇大数据平台">
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+		<link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<link href="css/style.min.css" rel="stylesheet">
+		<link href="css/custom.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default" style="border-color:none;">
+					<div class="panel-heading">
+						<div class="text-muted bootstrap-admin-box-title">基本信息</div>
+					</div>
+					<div class="bootstrap-admin-panel-content">
+						<form id="projInfoForm" class="form-horizontal bv-form" novalidate="novalidate"><button type="submit" class="bv-hidden-submit" style="display: none; width: 0px; height: 0px;"></button>
+							<input type="hidden" name="projId" value="4">
+							<div class="form-group">
+								<label class="control-label col-lg-3">项目编码</label>
+
+								<div class="col-lg-6">
+									<input type="text" name="code" value="rr" class="form-control" data-bv-field="code">
+									<small class="help-block" data-bv-validator="notEmpty" data-bv-for="code" data-bv-result="NOT_VALIDATED" style="display: none;">项目编码不能为空</small></div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-lg-3">项目名称</label>
+
+								<div class="col-lg-6">
+									<input type="text" name="name" value="rer" class="form-control" data-bv-field="name">
+									<small class="help-block" data-bv-validator="notEmpty" data-bv-for="name" data-bv-result="NOT_VALIDATED" style="display: none;">项目名称不能为空</small></div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-lg-3">项目描述</label>
+
+								<div class="col-lg-6">
+									<textarea name="description" class="form-control" rows="10" id="description"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-lg-3">状态</label>
+
+								<div class="col-lg-6">
+									<select name="status" class="form-control" data-initvalue="open">
+										<option value="open">开启</option>
+										<option value="close">关闭</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-lg-1 col-lg-offset-3">
+									<button id="saveProjInfoBtn" class="btn btn-success btn-lg" type="button">保存</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+		<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+		<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+		<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+		<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+		<script src="js/layer/layer.js"></script>
+		<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
+		<script type="text/javascript">
+		  $('#saveProjInfoBtn').click(function(){
+			  var params = $('#description').val();
+			  $.ajax({
+				  url:'/web/exportJson',
+				  type:'POST',
+				  data:{'jsonParams':params},
+				  success:function(){
+					  
+				  },
+				  error:function(e){
+					  alert(e);
+				  }
+			  });
+		  });
+		</script>
+	</body>
+</html>
