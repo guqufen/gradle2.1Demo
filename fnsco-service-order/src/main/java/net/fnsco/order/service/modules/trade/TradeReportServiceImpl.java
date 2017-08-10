@@ -640,6 +640,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setEndTradeDate(tradeReportDTO.getEndDate());
         record.setUserId(tradeReportDTO.getUserId());
         record.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        record.setInnerCode(tradeReportDTO.getInnerCode());
         List<TradeHourDTO> tradeHourData = tradeByHourDao.selectByCondition(record);
         PeakTradeDTO data = new PeakTradeDTO();
         int orderNumTotal = 0;

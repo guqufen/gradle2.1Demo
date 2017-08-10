@@ -1,23 +1,20 @@
 package net.fnsco.api.doc.service.project;
-
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
+import net.fnsco.api.doc.service.inter.dao.InterDAO;
+import net.fnsco.api.doc.service.inter.dao.InterParamDAO;
+import net.fnsco.api.doc.service.inter.dao.ModuleDAO;
+import net.fnsco.api.doc.service.inter.entity.InterDO;
+import net.fnsco.api.doc.service.inter.entity.InterParamDO;
+import net.fnsco.api.doc.service.inter.entity.ModuleDO;
 import net.fnsco.api.doc.service.other.dao.ApiDocDAO;
-import net.fnsco.api.doc.service.other.dao.InterDAO;
-import net.fnsco.api.doc.service.other.dao.ModuleDAO;
 import net.fnsco.api.doc.service.other.entity.ApiDocDO;
-import net.fnsco.api.doc.service.other.entity.InterDO;
-import net.fnsco.api.doc.service.other.entity.InterParamDO;
-import net.fnsco.api.doc.service.other.entity.ModuleDO;
 import net.fnsco.api.doc.service.project.dao.ProjDAO;
 import net.fnsco.api.doc.service.project.entity.ProjDO;
 import net.fnsco.core.base.BaseService;
@@ -40,6 +37,8 @@ public class ProjectService extends BaseService{
     private ApiDocDAO apiDocDAO;
     @Autowired
     private InterDAO interDAO;
+    @Autowired
+    private InterParamDAO interParamDAO;
     
     /**
      * exportJson:(这里用一句话描述这个方法的作用) 导入JSON 项目接口信息
@@ -172,7 +171,7 @@ public class ProjectService extends BaseService{
             interDO.setModuleId(module.getId());
             interDO.setCreateDate(new Date());
             interDAO.insert(interDO);
-            installParam(interDO.getId(),interDO.getDocId(),value.getJSONObject("parameters"));
+            installParam(interDO.getId(),interDO.getDocId(),value.getJSONArray("parameters"));
         }
     }
     /**
@@ -184,10 +183,25 @@ public class ProjectService extends BaseService{
      * @date      2017年8月10日 下午2:40:40
      * @return void    DOM对象
      */
-    private void installParam(Long interId ,Long docId,JSONObject parameters){
-//        InterParamDO interParamDO = new InterParamDO();
-//        interParamDO.setDocId(docId);
-//        interParamDO.setInterId(interId);
-//        interParamDO.set
+    private void installParam(Long interId ,Long docId,JSONArray parameters){
+        for(int i =0;i<parameters.size();i++){
+            JSONObject json = parameters.getJSONObject(i);
+            InterParamDO interParamDO = new InterParamDO();
+            interParamDO.setDocId(docId);
+            interParamDO.setInterId(interId);
+            interParamDO.setName(json.getString("name"));
+            interParamDO.setDefValue("");
+            interParamDO.setDescription(json.getString("description"));
+            interParamDO.setType(json.getString("type"));
+            interParamDO.setRequired(json.getBoolean("required")?0:1);
+            interParamDO.setPosition(json.getString("in"));
+            interParamDO.setFormat(json.getString("format"));
+            interParamDO.setRefSchemaId(1l);
+            interParamDAO.insert(interParamDO);
+            
+        }
+    }
+    private void installResponse(Long interId ,Long docId,JSONArray responses){
+        
     }
 }
