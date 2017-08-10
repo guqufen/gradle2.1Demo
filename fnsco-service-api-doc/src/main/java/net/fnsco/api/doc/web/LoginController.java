@@ -11,6 +11,7 @@ import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.api.doc.comm.AppConstants;
 import net.fnsco.api.doc.comm.RegexUtil;
 import net.fnsco.api.doc.service.user.LoginService;
 import net.fnsco.api.doc.service.user.UserTokenService;
@@ -63,7 +64,7 @@ public class LoginController extends BaseController {
         paramInfo.setEmail(loginName);
         paramInfo.setPassword(passwd);
         paramInfo.setLoginIp(getIp());
-        paramInfo.setLoginType("邮箱");
+        paramInfo.setLoginType(AppConstants.EMAIL);
         paramInfo.setAutoLogin(autoLogin);
 
         //if (validCode.equals(getSessionUser())) {

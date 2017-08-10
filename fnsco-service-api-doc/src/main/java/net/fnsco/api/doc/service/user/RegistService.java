@@ -57,7 +57,7 @@ public class RegistService extends BaseService {
 
     @Transactional
     public ResultDTO registByEmail(RegistParamInfo registParamInfo) {
-        if ("邮箱" != registParamInfo.getLoginType()) {
+        if (AppConstants.EMAIL != registParamInfo.getLoginType()) {
             return ResultDTO.fail("登录类型错误");
         }
 
@@ -93,7 +93,7 @@ public class RegistService extends BaseService {
         userBasic.setLocked(0);
         userBasic.setRegisterIp(registParamInfo.getRegistIp());
         userBasic.setValid(0);
-        userBasic.setRole("普通用户");
+        userBasic.setRole(AppConstants.ROLE_NORMAL);
         userBasic.setCreateDate(new Date());
         userBasic.setModifyDate(new Date());
         userBasicDAO.insert(userBasic);
@@ -146,7 +146,7 @@ public class RegistService extends BaseService {
         if (temp == null) {
             return;
         }
-        if (temp.getValid() == 1) {
+        if (temp.getValid() == 0) {
             return;
         }
         UserDetailDO detail = userDetailService.getByUserId(temp.getId());
