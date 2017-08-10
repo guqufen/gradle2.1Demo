@@ -9,9 +9,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import net.fnsco.api.doc.service.inter.dao.InterDAO;
 import net.fnsco.api.doc.service.inter.dao.InterParamDAO;
+import net.fnsco.api.doc.service.inter.dao.InterRespDAO;
 import net.fnsco.api.doc.service.inter.dao.ModuleDAO;
 import net.fnsco.api.doc.service.inter.entity.InterDO;
 import net.fnsco.api.doc.service.inter.entity.InterParamDO;
+import net.fnsco.api.doc.service.inter.entity.InterRespDO;
 import net.fnsco.api.doc.service.inter.entity.ModuleDO;
 import net.fnsco.api.doc.service.other.dao.ApiDocDAO;
 import net.fnsco.api.doc.service.other.entity.ApiDocDO;
@@ -39,6 +41,8 @@ public class ProjectService extends BaseService{
     private InterDAO interDAO;
     @Autowired
     private InterParamDAO interParamDAO;
+    @Autowired
+    private InterRespDAO interRespDAO;
     
     /**
      * exportJson:(这里用一句话描述这个方法的作用) 导入JSON 项目接口信息
@@ -172,6 +176,8 @@ public class ProjectService extends BaseService{
             interDO.setCreateDate(new Date());
             interDAO.insert(interDO);
             installParam(interDO.getId(),interDO.getDocId(),value.getJSONArray("parameters"));
+            //增加返回参数
+            installResponse(interDO.getId(),interDO.getDocId(),value.getJSONObject("responses"));
         }
     }
     /**
@@ -201,7 +207,34 @@ public class ProjectService extends BaseService{
             
         }
     }
-    private void installResponse(Long interId ,Long docId,JSONArray responses){
+    /**
+     * installResponse:(这里用一句话描述这个方法的作用)初始化返回值参数
+     * @param interId
+     * @param docId
+     * @param responses    设定文件
+     * @author    tangliang
+     * @date      2017年8月10日 下午5:30:11
+     * @return void    DOM对象
+     */
+    private void installResponse(Long interId ,Long docId,JSONObject responses){
+        Set<String> methods  =  responses.keySet();
+        Iterator<String> iterator = methods.iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            if("200".equals(key)){
+                JSONObject scheJson = responses.getJSONObject(key);
+                InterRespDO interRespDO = new InterRespDO();
+                interRespDO.setDocId(docId);
+                interRespDO.setInterId(interId);
+                interRespDO.setDescription(scheJson.getString("description"));
+//                interRespDO.setse
+                interRespDAO.insert(interRespDO);
+            }
+            
+        }
+    }
+    
+    private void installRespSchema(Long docId,Long moduleId){
         
     }
 }

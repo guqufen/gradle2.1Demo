@@ -35,3 +35,16 @@ function formatDateUtil(datestr){
 	}
 	return "--";
 }
+//格式化时间yyyy-MM-dd HH:mm:ss
+function formateTimeUtil(timestr){
+	if(timestr){
+		var year = timestr.substr(0,4);
+		var month=timestr.substr(4,2);
+		var day=timestr.substr(6,2);
+		var hour=timestr.substr(8,2);
+		var minutes=timestr.substr(10,2);
+		var seconds=timestr.substr(12,2); 
+		return year+"-"+month+"-"+day+' '+hour+':'+minutes+':'+seconds;
+	}
+	return "--";
+}
