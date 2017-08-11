@@ -134,11 +134,12 @@ function getShopList(tokenId,userId){
       var shopList=$("#shop-list");
       if(data.data.length>1){
         shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部商铺</a></li>');
+        for(var i=0;i<data.data.length;i++){
+          shopList.append('<li class="mui-table-view-cell" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
+        }
       }else if(data.data.length==1){
         $(".filter-name").html(data.data[0].merName);
-      }
-      for(var i=0;i<data.data.length;i++){
-        shopList.append('<li class="mui-table-view-cell" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
+        shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[0].innerCode+'"><a class="mui-navigate-right">'+data.data[0].merName+'</a></li>');
       }
 
       //筛选店铺
