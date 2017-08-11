@@ -226,18 +226,17 @@ public class ProjectService extends BaseService{
             String key = iterator.next();
             if("200".equals(key)){
                 JSONObject scheJson = responses.getJSONObject(key);
+                JSONObject schema = scheJson.getJSONObject("schema");
+                
                 InterRespDO interRespDO = new InterRespDO();
                 interRespDO.setDocId(docId);
                 interRespDO.setInterId(interId);
                 interRespDO.setDescription(scheJson.getString("description"));
+                String 
 //                interRespDO.setse
                 interRespDAO.insert(interRespDO);
             }
             
         }
-    }
-    
-    private void installRespSchema(Long docId,Long moduleId){
-        
     }
 }

@@ -95,6 +95,10 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         String startDate = startTime.substring(0, 8);
         String endDate =  endTime.substring(0,8);
         List<TradeDateTemp> tempDatas = tradeDataDAO.queryTempByCondition(record);
+        //如果没有数据直接返回
+        if(CollectionUtils.isEmpty(tempDatas)){
+            return;
+        }
         for (TradeDateTemp tradeDateTemp : tempDatas) {
             String timeStamp = tradeDateTemp.getTimeStamp();
             tradeDateTemp.setTradeDate(timeStamp.substring(0, timeStamp.length() - 6));
@@ -277,6 +281,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setStartTradeDate(tradeReportDTO.getStartDate());
         record.setEndTradeDate(tradeReportDTO.getEndDate());
         record.setUserId(tradeReportDTO.getUserId());
+        record.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         TurnoverDTO turnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
         WeeklyDTO resultData = new WeeklyDTO();
         resultData.setInnerCode(tradeReportDTO.getInnerCode());
@@ -329,7 +334,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         //按照天返回数据
         List<TradeDayDTO> tradeDayData = tradeByDayDao.selectByInnerCode(record);
         //按照天为组,如果数据为空，需要填充数据
-        List<TradeDayDTO> data = installTradeDay(tradeReportDTO, tradeDayData);
+        List<TradeDayDTO> data = installTradeDay(tradeReportDTO, tradeDayData,true);
         resultData.setTradeDayData(data);
         //将周报最早的日期和最小的日期返回
         String minDate = null;
@@ -470,7 +475,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    private List<TradeDayDTO> installTradeDay(TradeReportDTO tradeReportDTO, List<TradeDayDTO> tradeDayData) {
+    private List<TradeDayDTO> installTradeDay(TradeReportDTO tradeReportDTO, List<TradeDayDTO> tradeDayData,boolean weekLy) {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
         Calendar start = Calendar.getInstance();
@@ -492,7 +497,9 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 for (TradeDayDTO tradeDayDTO : tradeDayData) {
                     if (dateTime.equals(tradeDayDTO.getTradeDate())) {
                         tradeDayDTO.setTradeDate(format1.format(end.getTime()));
-                        tradeDayDTO.setTurnover(divide(tradeDayDTO.getTurnover(), 100));
+                        if(weekLy){
+                            tradeDayDTO.setTurnover(divide(tradeDayDTO.getTurnover(), 100));
+                        }
                         datas.add(tradeDayDTO);
                         flag = false;
                     }
@@ -604,7 +611,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setUserId(tradeReportDTO.getUserId());
         record.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         List<TradeDayDTO> tradeDayData = tradeByDayDao.selectByInnerCode(record);
-        List<TradeDayDTO> data = installTradeDay(tradeReportDTO, tradeDayData);
+        List<TradeDayDTO> data = installTradeDay(tradeReportDTO, tradeDayData,false);
         int orderNumTotal = 0;
         BigDecimal turnoverTotal = new BigDecimal(0.00);
         for (TradeDayDTO tradeDayDTO : data) {
