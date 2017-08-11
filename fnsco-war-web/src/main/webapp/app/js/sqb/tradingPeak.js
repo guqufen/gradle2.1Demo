@@ -195,7 +195,7 @@ function getShopList(tokenId,userId){
     success:function(data){
       var shopList=$("#shop-list");
       if(data.data.length>1){
-        shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部店铺</a></li>');
+        shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部商铺</a></li>');
       }else if(data.data.length==1){
         $(".filter-name").html(data.data[0].merName);
       }
