@@ -2,11 +2,15 @@ package net.fnsco.api.doc.service.project;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Strings;
+
 import net.fnsco.api.doc.service.inter.dao.InterDAO;
 import net.fnsco.api.doc.service.inter.dao.InterParamDAO;
 import net.fnsco.api.doc.service.inter.dao.InterRespDAO;
@@ -53,6 +57,13 @@ public class ProjectService extends BaseService{
      */
     @Transactional
     public void exportJson(String jsonParams){
+        if(Strings.isNullOrEmpty(jsonParams)){
+            return;
+        }
+        /**
+         * 对特殊字符需要处理
+         */
+        jsonParams = jsonParams.replaceAll("\\$", "");
         JSONObject jsonParam = JSONObject.parseObject(jsonParams);
         JSONObject info = jsonParam.getJSONObject("info");
         Long proId = installProJDO(info);
@@ -60,9 +71,8 @@ public class ProjectService extends BaseService{
         JSONArray tags = jsonParam.getJSONArray("tags");
         installModuleDO(tags,docId);
         //组装接口信息
-        installInterDO(jsonParam.getJSONObject("paths"));
+        installInterDO(jsonParam.getJSONObject("paths"),jsonParam.getJSONObject("definitions"));
     }
-    
     /**
      * installProJDO:(这里用一句话描述这个方法的作用)组装项目信息对象
      * @param jsonParams
@@ -134,12 +144,12 @@ public class ProjectService extends BaseService{
      * @date      2017年8月10日 下午1:20:12
      * @return void    DOM对象
      */
-    private void installInterDO(JSONObject paths){
+    private void installInterDO(JSONObject paths,JSONObject definitions){
         Set<String> urls  =  paths.keySet();
         Iterator<String> iterator = urls.iterator();
         while (iterator.hasNext()) {
             String key  = iterator.next();
-            getInterInfo(key,paths.getJSONObject(key));
+            getInterInfo(key,paths.getJSONObject(key),definitions);
         }
     }
     /**
@@ -150,7 +160,7 @@ public class ProjectService extends BaseService{
      * @date      2017年8月10日 下午2:40:27
      * @return void    DOM对象
      */
-    private void getInterInfo(String path ,JSONObject interInfo){
+    private void getInterInfo(String path ,JSONObject interInfo,JSONObject definitions){
         Set<String> methods  =  interInfo.keySet();
         Iterator<String> iterator = methods.iterator();
         while (iterator.hasNext()) {
@@ -168,7 +178,7 @@ public class ProjectService extends BaseService{
             interDO.setProduce(value.getString("produces"));
             interDO.setSortWeight(0);
             //获取模块信息
-            JSONArray tags = interInfo.getJSONArray("tags");
+            JSONArray tags = value.getJSONArray("tags");
             String moduleName = tags.get(0).toString();
             ModuleDO module = moduleDAO.getByName(moduleName);
             interDO.setDocId(module.getDocId());
@@ -177,7 +187,7 @@ public class ProjectService extends BaseService{
             interDAO.insert(interDO);
             installParam(interDO.getId(),interDO.getDocId(),value.getJSONArray("parameters"));
             //增加返回参数
-            installResponse(interDO.getId(),interDO.getDocId(),value.getJSONObject("responses"));
+            installResponse(interDO.getId(),interDO.getDocId(),value.getJSONObject("responses"),definitions);
         }
     }
     /**
@@ -216,21 +226,27 @@ public class ProjectService extends BaseService{
      * @date      2017年8月10日 下午5:30:11
      * @return void    DOM对象
      */
-    private void installResponse(Long interId ,Long docId,JSONObject responses){
+    private void installResponse(Long interId ,Long docId,JSONObject responses,JSONObject definitions){
         Set<String> methods  =  responses.keySet();
         Iterator<String> iterator = methods.iterator();
         while (iterator.hasNext()) {
             String key = iterator.next();
+            //响应码有很多种、需要分开处理数据结构 200表示成功
             if("200".equals(key)){
                 JSONObject scheJson = responses.getJSONObject(key);
                 JSONObject schema = scheJson.getJSONObject("schema");
+                //返回值有多种数据结构，需要分开处理
                 
+                String ref = schema.getString("ref");
+                String schemaName = ref.substring(ref.length()-4);
                 InterRespDO interRespDO = new InterRespDO();
                 interRespDO.setDocId(docId);
                 interRespDO.setInterId(interId);
                 interRespDO.setDescription(scheJson.getString("description"));
-                String 
-//                interRespDO.setse
+                JSONObject custSchema = definitions.getJSONObject(schemaName);
+                interRespDO.setType(custSchema.getString("type"));
+                interRespDO.setCustSchema(custSchema.getString("properties"));
+                interRespDO.setSortWeight(0);
                 interRespDAO.insert(interRespDO);
             }
             
