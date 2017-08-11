@@ -1,4 +1,4 @@
-package net.fnsco.api.doc.service.vo;
+package net.fnsco.api.doc.service.mail;
 
 /**
  * 

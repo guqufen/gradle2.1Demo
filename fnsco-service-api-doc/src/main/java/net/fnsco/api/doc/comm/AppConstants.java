@@ -10,7 +10,7 @@ public class AppConstants {
     public static String ROLE_NORMAL        = "普通用户";
     public static String ROLE_Admin         = "管理员";
     public static String EMAIL              = "邮箱";
-    public static String OFF_LINE           = "online";
+    public static String OFF_LINE           = "offline";
     public static String ON_LINE            = "online";
     /**
      * 默认密钥

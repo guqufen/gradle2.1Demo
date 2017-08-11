@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -17,10 +16,9 @@ import org.springframework.util.CollectionUtils;
 import com.google.common.collect.Maps;
 
 import net.fnsco.api.doc.comm.CfgConstants;
-import net.fnsco.api.doc.service.vo.MailCfg;
-import net.fnsco.api.doc.service.vo.MailMsg;
-import net.fnsco.api.doc.service.vo.MailMsgType;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.StringUtil;
+import net.fnsco.core.utils.TaskUtils;
 
 /**
  * 
@@ -71,7 +69,7 @@ public class MailUtilService {
         model.put("webTel", env.getProperty(CfgConstants.WEB_SERVICE_TEL));
         model.put("sendDate", DateUtils.dateFormatToStr(new Date()));
         String tmpl = loadTmpl(tmplName);//"mail-tmpl/email-update.ftl");
-        String content = TemplateUtils.process(tmpl, model);
+        String content = StringUtil.process(tmpl, model);
         final MailMsg mailMsg = new MailMsg();
         mailMsg.setSubject(subject);
         mailMsg.setType(MailMsgType.html);
