@@ -1,4 +1,4 @@
-package net.fnsco.api.doc.service.other.entity;
+package net.fnsco.api.doc.service.inter.entity;
 
 import java.util.Date;
 

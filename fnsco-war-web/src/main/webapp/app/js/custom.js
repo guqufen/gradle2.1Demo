@@ -56,7 +56,7 @@
 						mui.toast('结束时间不能小于开始时间',{ duration:'long', type:'div' })
 						return;
 					}else if(showDays(startTime,rs.text)<6){
-						mui.toast('选择时间间隔不能少于7天，请重新选择',{ duration:'long', type:'div' })
+						mui.toast('间隔不能少于7天，请重新选择',{ duration:'long', type:'div' })
 						return;
 					}else{
 						$("#"+id)[0].value=rs.text;
@@ -68,7 +68,7 @@
 						mui.toast('开始时间不能大于结束时间',{ duration:'long', type:'div' })
 						return;
 					}else if(showDays(endTime,rs.text)<6){
-						mui.toast('选择时间间隔不能少于7天，请重新选择',{ duration:'long', type:'div' })
+						mui.toast('间隔不能少于7天，请重新选择',{ duration:'long', type:'div' })
 						return;
 					}else{
 						$("#"+id)[0].value=rs.text;

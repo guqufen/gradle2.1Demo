@@ -33,7 +33,8 @@ function chart(dataTime,max,data,titleName){
             }
 	    },
 	    grid: {
-        	left:'15%',
+        	left:'20%',
+          right:'20%',
 	    },
 	    yAxis: {
 	        type: 'value',
@@ -129,7 +130,7 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
       if(data.data.orderPrice=="0"){
         $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice));
       }else{
-        $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice/data.data.orderNumTotal));
+        $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice/data.data.orderNumTotal/100));
       }
       var dataOrderNum=new Array();
       var dataTurnover=new Array();
@@ -138,8 +139,9 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
       for(var i=0;i<returnDatd.length;i++){
         dataTradeDate.push(data.data.tradeDayData[i].tradeDate.substring(5,10));
         dataOrderNum.push(data.data.tradeDayData[i].orderNum);
-        dataTurnover.push(data.data.tradeDayData[i].turnover);
+        dataTurnover.push(data.data.tradeDayData[i].turnover/100);
       }
+      console.log(dataTurnover);
       //生成图表
       chart(dataTradeDate,max(dataTurnover),dataTurnover,titleName);
       /*点击切换图表*/
@@ -174,25 +176,30 @@ $(".filter-ok-btn").click(function(){
 })
 //获取商户列表
 function getShopList(tokenId,userId){
+  var jsonstr = {
+      'userId': userId
+    };
+  var params = JSON.stringify(jsonstr);
   $.ajax({
     url:'merchant/getShopOwnerMerChant',
+    contentType: "application/json",
     dataType : "json",
     type:'POST',
-    headers: {
+    headers:  {
       'tokenId': tokenId,
       'identifier': userId
     },
-    data:{
-      "userId":userId,
-    },
+    data:params,
     success:function(data){
       var shopList=$("#shop-list");
       if(data.data.length>1){
         shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部店铺</a></li>');
+      }else if(data.data.length==1){
+        $(".filter-name").html(data.data[0].merName);
       }
       for(var i=0;i<data.data.length;i++){
         shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
-      } 
+      }
 
       //筛选店铺
       $(".shop-list li").click(function(){

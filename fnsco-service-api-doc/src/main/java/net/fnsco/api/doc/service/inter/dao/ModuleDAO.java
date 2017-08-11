@@ -1,18 +1,19 @@
-package net.fnsco.api.doc.service.other.dao;
+package net.fnsco.api.doc.service.inter.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Options;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import net.fnsco.api.doc.service.other.entity.ModuleDO;
-import net.fnsco.api.doc.service.other.dao.helper.ModuleProvider;
 
-import java.util.List;;
+import net.fnsco.api.doc.service.inter.dao.helper.ModuleProvider;
+import net.fnsco.api.doc.service.inter.entity.ModuleDO;;
 
 public interface ModuleDAO {
 
@@ -36,5 +37,17 @@ public interface ModuleDAO {
 
     @SelectProvider(type = ModuleProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("module") ModuleDO module);
+    
+    /**
+     * getByName:(这里用一句话描述这个方法的作用)根据模块名称查询
+     * @param name
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月10日 下午1:56:16
+     * @return ModuleDO    DOM对象
+     */
+    @Results({@Result( column = "create_date",property = "createDate"),@Result( column = "modify_date",property = "modifyDate"),@Result( column = "doc_id",property = "docId"),@Result( column = "sort_weight",property = "sortWeight") })
+    @Select("SELECT * FROM t_module WHERE name = #{name}")
+    public ModuleDO getByName(@Param("name") String name);
 
 }
