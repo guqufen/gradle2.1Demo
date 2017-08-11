@@ -1,8 +1,10 @@
 package net.fnsco.api.doc.service.project;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import net.fnsco.api.doc.service.inter.dao.InterDAO;
 import net.fnsco.api.doc.service.inter.dao.InterParamDAO;
@@ -74,9 +77,9 @@ public class ProjectService extends BaseService{
             Long proId = installProJDO(info);
             Long docId = installApiDocDO(jsonParam,proId);
             JSONArray tags = jsonParam.getJSONArray("tags");
-            installModuleDO(tags,docId);
+            List<ModuleDO> modules = installModuleDO(tags,docId);
             //组装接口信息
-            installInterDO(jsonParam.getJSONObject("paths"),jsonParam.getJSONObject("definitions"));
+            installInterDO(jsonParam.getJSONObject("paths"),jsonParam.getJSONObject("definitions"),modules);
             return true;
         } catch (Exception e) {
             logger.error("组装数据出错"+e);
@@ -134,7 +137,8 @@ public class ProjectService extends BaseService{
      * @date      2017年8月10日 上午11:33:47
      * @return void    DOM对象
      */
-    private void installModuleDO(JSONArray tags,Long docId){
+    private List<ModuleDO> installModuleDO(JSONArray tags,Long docId){
+        List<ModuleDO> result = Lists.newArrayList();
         for(int i =0;i<tags.size(); i++){
             JSONObject object = tags.getJSONObject(i);
             String name  = object.getString("name");
@@ -146,7 +150,9 @@ public class ProjectService extends BaseService{
             model.setDocId(docId);
             model.setSortWeight(0);
             moduleDAO.insert(model);
+            result.add(model);
         }
+        return result;
     }
     /**
      * installInterDO:(这里用一句话描述这个方法的作用)组装接口模块对象信息
@@ -155,12 +161,12 @@ public class ProjectService extends BaseService{
      * @date      2017年8月10日 下午1:20:12
      * @return void    DOM对象
      */
-    private void installInterDO(JSONObject paths,JSONObject definitions){
+    private void installInterDO(JSONObject paths,JSONObject definitions,List<ModuleDO> modules){
         Set<String> urls  =  paths.keySet();
         Iterator<String> iterator = urls.iterator();
         while (iterator.hasNext()) {
             String key  = iterator.next();
-            getInterInfo(key,paths.getJSONObject(key),definitions);
+            getInterInfo(key,paths.getJSONObject(key),definitions,modules);
         }
     }
     /**
@@ -171,7 +177,8 @@ public class ProjectService extends BaseService{
      * @date      2017年8月10日 下午2:40:27
      * @return void    DOM对象
      */
-    private void getInterInfo(String path ,JSONObject interInfo,JSONObject definitions){
+    @Transactional
+    private void getInterInfo(String path ,JSONObject interInfo,JSONObject definitions,List<ModuleDO> modules){
         Set<String> methods  =  interInfo.keySet();
         Iterator<String> iterator = methods.iterator();
         while (iterator.hasNext()) {
@@ -191,12 +198,18 @@ public class ProjectService extends BaseService{
             //获取模块信息
             JSONArray tags = value.getJSONArray("tags");
             String moduleName = tags.get(0).toString();
-            ModuleDO module = moduleDAO.getByName(moduleName);
+            ModuleDO module = null;
+            for (ModuleDO mdo : modules) {
+                if(mdo.getName().equals(moduleName)){
+                    module = mdo;
+                    break;
+                }
+            }
             interDO.setDocId(module.getDocId());
             interDO.setModuleId(module.getId());
             interDO.setCreateDate(new Date());
             interDAO.insert(interDO);
-            installParam(interDO.getId(),interDO.getDocId(),value.getJSONArray("parameters"));
+            installParam(interDO.getId(),interDO.getDocId(),value.getJSONArray("parameters"),definitions);
             //增加返回参数
             installResponse(interDO.getId(),interDO.getDocId(),value.getJSONObject("responses"),definitions);
         }
@@ -210,18 +223,42 @@ public class ProjectService extends BaseService{
      * @date      2017年8月10日 下午2:40:40
      * @return void    DOM对象
      */
-    private void installParam(Long interId ,Long docId,JSONArray parameters){
+    private void installParam(Long interId ,Long docId,JSONArray parameters,JSONObject definitions){
         for(int i =0;i<parameters.size();i++){
             JSONObject json = parameters.getJSONObject(i);
             InterParamDO interParamDO = new InterParamDO();
             interParamDO.setDocId(docId);
             interParamDO.setInterId(interId);
-            interParamDO.setName(json.getString("name"));
+            interParamDO.setCode(json.getString("name"));
             interParamDO.setDefValue("");
             interParamDO.setDescription(json.getString("description"));
             interParamDO.setType(json.getString("type"));
             interParamDO.setRequired(json.getBoolean("required")?0:1);
-            interParamDO.setPosition(json.getString("in"));
+            interParamDO.setCustSchema(json.getString("items"));
+            String in = json.getString("in");
+            interParamDO.setPosition(in);
+            if(in.equals("body")){
+                JSONObject schema = json.getJSONObject("schema");
+                String ref = schema.getString("ref");
+                if(!Strings.isNullOrEmpty(ref)){
+                    int posttion = ref.lastIndexOf("/");
+                    String schemaName = ref.substring(posttion+1);
+                    JSONObject custSchema = definitions.getJSONObject(schemaName);
+                    interParamDO.setType(custSchema.getString("type"));
+                    
+                }else if(!Strings.isNullOrEmpty(schema.getString("items"))){
+                    interParamDO.setType(schema.getString("type"));
+                    JSONObject items = schema.getJSONObject("items");
+                    ref = items.getString("ref");
+                    int posttion = ref.lastIndexOf("/");
+                    String schemaName = ref.substring(posttion+1);
+                    JSONObject custSchema = definitions.getJSONObject(schemaName);
+                    interParamDO.setType(custSchema.getString("type"));
+                }
+            }else if(in.equals("query")){
+                
+            }
+            interParamDO.setExtSchema(json.getString("items"));
             interParamDO.setFormat(json.getString("format"));
             interParamDO.setRefSchemaId(1l);
             interParamDAO.insert(interParamDO);
@@ -249,13 +286,23 @@ public class ProjectService extends BaseService{
                 //返回值有多种数据结构，需要分开处理
                 InterRespDO interRespDO = new InterRespDO();
                 String ref = schema.getString("ref");
-                if(Strings.isNullOrEmpty(ref)){
-                    String schemaName = ref.substring(ref.length()-4);
+                if(!Strings.isNullOrEmpty(ref)){
+                    int posttion = ref.lastIndexOf("/");
+                    String schemaName = ref.substring(posttion+1);
                     JSONObject custSchema = definitions.getJSONObject(schemaName);
                     interRespDO.setType(custSchema.getString("type"));
                     interRespDO.setCustSchema(custSchema.getString("properties"));
-                }else{
-                    interRespDO.setCustSchema(schema.toJSONString());
+                }else if(!Strings.isNullOrEmpty(schema.getString("items"))){
+                    interRespDO.setType(schema.getString("type"));
+                    JSONObject items = schema.getJSONObject("items");
+                    ref = items.getString("ref");
+                    int posttion = ref.lastIndexOf("/");
+                    String schemaName = ref.substring(posttion+1);
+                    JSONObject custSchema = definitions.getJSONObject(schemaName);
+                    interRespDO.setCustSchema(custSchema.getString("properties"));
+                }else if(!Strings.isNullOrEmpty(schema.getString("additionalProperties"))){
+                    interRespDO.setType(schema.getString("type"));
+                    interRespDO.setCustSchema(schema.getJSONObject("additionalProperties").toJSONString());
                 }
                 interRespDO.setDocId(docId);
                 interRespDO.setInterId(interId);
