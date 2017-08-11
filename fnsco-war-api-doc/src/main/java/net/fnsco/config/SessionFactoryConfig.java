@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 //@MapperScan("com.xxx.xxx.mybatis.mapper")
 public class SessionFactoryConfig implements TransactionManagementConfigurer {
     /** * mybatis 配置路径 */
-    private static String MYBATIS_CONFIG   = "mybatis-config.xml";
+    private static String MYBATIS_CONFIG   = "mybatis.xml";
 
     @Autowired
     private DataSource    dataSource;
