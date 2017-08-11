@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -245,6 +244,7 @@ public class ProjectService extends BaseService{
                     String schemaName = ref.substring(posttion+1);
                     JSONObject custSchema = definitions.getJSONObject(schemaName);
                     interParamDO.setType(custSchema.getString("type"));
+                    interParamDO.setCustSchema(custSchema.getString("properties"));
                     
                 }else if(!Strings.isNullOrEmpty(schema.getString("items"))){
                     interParamDO.setType(schema.getString("type"));
@@ -254,6 +254,7 @@ public class ProjectService extends BaseService{
                     String schemaName = ref.substring(posttion+1);
                     JSONObject custSchema = definitions.getJSONObject(schemaName);
                     interParamDO.setType(custSchema.getString("type"));
+                    interParamDO.setCustSchema(custSchema.getString("properties"));
                 }
             }else if(in.equals("query")){
                 
