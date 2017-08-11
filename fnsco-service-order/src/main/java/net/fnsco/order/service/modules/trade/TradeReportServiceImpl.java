@@ -281,6 +281,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setStartTradeDate(tradeReportDTO.getStartDate());
         record.setEndTradeDate(tradeReportDTO.getEndDate());
         record.setUserId(tradeReportDTO.getUserId());
+        record.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         TurnoverDTO turnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
         WeeklyDTO resultData = new WeeklyDTO();
         resultData.setInnerCode(tradeReportDTO.getInnerCode());

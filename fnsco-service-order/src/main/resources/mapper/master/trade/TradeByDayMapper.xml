@@ -78,7 +78,7 @@
       </if>
       <if test="userId != null">
        AND inner_code in (
-         SELECT inner_code FROM m_merchant_user_rel WHERE app_user_id=#{userId}
+         SELECT inner_code FROM u_app_user_merchant WHERE app_user_id=#{userId}
          <if test="roleId != null">
            AND role_id = #{roleId}
          </if>
@@ -111,7 +111,7 @@
   </select>
   <!-- 查询每天的数据 -->
   <select id="selectByInnerCode" parameterType="net.fnsco.order.service.domain.trade.TradeByDay" resultType="net.fnsco.order.api.dto.TradeDayDTO">
-     SELECT trade_date AS tradeDate,order_num AS orderNum, turnover AS turnover FROM r_trade_by_day 
+     SELECT trade_date AS tradeDate,SUM(order_num) AS orderNum, SUM(turnover) AS turnover FROM r_trade_by_day 
      <where>
        <if test="startTradeDate != null and  startTradeDate != ''">
         AND trade_date &gt;= #{startTradeDate}
@@ -131,6 +131,7 @@
         AND inner_code = #{innerCode}
       </if>
      </where>
+     GROUP BY trade_date
   </select>
   <!-- 查询最早的交易日期 -->
   <select id="selectMinTradeDateByUserId" resultType="java.lang.String">

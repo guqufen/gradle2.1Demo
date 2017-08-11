@@ -233,8 +233,23 @@ public class ProjectService extends BaseService{
             
         }
     }
-    
-    private void installRespSchema(Long docId,Long moduleId){
-        
+    /**
+     * installRespSchema:(这里用一句话描述这个方法的作用)组装数据结构定义
+     * @param docId
+     * @param moduleId
+     * @param definitions    设定文件
+     * @author    tangliang
+     * @date      2017年8月11日 上午10:21:51
+     * @return void    DOM对象
+     */
+    private void installRespSchema(Long docId,JSONObject definitions){
+        Set<String> functions  =  definitions.keySet();
+        Iterator<String> iterator = functions.iterator();
+        while (iterator.hasNext()) {
+            String name = iterator.next();
+            JSONObject nameEntity = definitions.getJSONObject(name);
+            JSONObject properties = nameEntity.getJSONObject("properties");
+            
+        }
     }
 }
