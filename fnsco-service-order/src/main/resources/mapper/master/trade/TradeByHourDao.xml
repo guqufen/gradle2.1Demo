@@ -96,6 +96,9 @@
 		         </if>
 		       )
 		      </if>
+		      <if test="innerCode != null and innerCode != ''">
+		      AND inner_code = #{innerCode}
+		      </if>
 		</where>	
 		GROUP BY trade_hour
   </select>

@@ -5,14 +5,14 @@ import net.fnsco.core.base.DTO;
 public class TradeDataDTO extends DTO {
 
     private String amt;          //金额，格式为“100.01”
-    private String orderNo;      // 订单号（不唯一）
+    private String orderNo;      // 商户订单号（不唯一）
     private String orderTime;    // 订单时间戳
     private String orderInfo;    // 订单信息 
     private String batchBillNo;  // 撤销时会有  无用**
 
     private String payType;      // 支付方式
     private String referNo;      // 检索参考号 无用**
-    private String timeStamp;    // 交易时间戳
+    private String timeStamp;    // 交易时间戳，拉卡拉完成时间
     private String tradeDetail;  // 交易详情（JSON串）
 
     private String merId;        // 商户号
@@ -25,12 +25,12 @@ public class TradeDataDTO extends DTO {
     private String md5;          //参数md5值
     private String sendTime;     //发送时间
     private String validate;     //是否校验1验证0不验证
-    private String paySubType;   //交易子类型
+    private String paySubType;   //---支付子类型
 
     private String startSendTime;//条件查询 发送开始时间
     private String endSendTime;  //条件查询 发送结束时间
 
-    private String txnType;
+    private String txnType;     //交易类型1消费2撤销
 
     private String respCode;
 

@@ -1,8 +1,8 @@
-package net.fnsco.api.doc.service.other.entity;
+package net.fnsco.api.doc.service.inter.entity;
 
 import java.util.Date;
 
-public class InterParamDO {
+public class InterRespDO {
 
     /**
      * 主键
@@ -30,42 +30,42 @@ public class InterParamDO {
     private Long interId;
 
     /**
-     * 
+     * 编码
      */
     private String code;
 
     /**
-     * 名称
+     * 
      */
     private String name;
 
     /**
-     * 描述
+     * 描述信息
      */
     private String description;
 
     /**
-     * 数据类型
+     * 响应类型
      */
     private String type;
 
     /**
-     * 格式化
+     * 响应数据结构id
      */
-    private String format;
+    private Long refSchemaId;
 
     /**
-     * 参数位置
+     * 是否是默认
      */
-    private String position;
+    private Integer def;
 
     /**
-     * 是否必输项
+     * 
      */
     private Integer required;
 
     /**
-     * 
+     * 自定义结构体
      */
     private String custSchema;
 
@@ -77,12 +77,7 @@ public class InterParamDO {
     /**
      * 
      */
-    private Long refSchemaId;
-
-    /**
-     * 默认值
-     */
-    private String defValue;
+    private Integer sortWeight;
 
 
 
@@ -158,20 +153,20 @@ public class InterParamDO {
         this.type = type;
     }
 
-    public String getFormat() {
-        return format;
+    public Long getRefSchemaId() {
+        return refSchemaId;
     }
 
-    public void setFormat(String format) {
-        this.format = format;
+    public void setRefSchemaId(Long refSchemaId) {
+        this.refSchemaId = refSchemaId;
     }
 
-    public String getPosition() {
-        return position;
+    public Integer getDef() {
+        return def;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setDef(Integer def) {
+        this.def = def;
     }
 
     public Integer getRequired() {
@@ -198,26 +193,18 @@ public class InterParamDO {
         this.extSchema = extSchema;
     }
 
-    public Long getRefSchemaId() {
-        return refSchemaId;
+    public Integer getSortWeight() {
+        return sortWeight;
     }
 
-    public void setRefSchemaId(Long refSchemaId) {
-        this.refSchemaId = refSchemaId;
-    }
-
-    public String getDefValue() {
-        return defValue;
-    }
-
-    public void setDefValue(String defValue) {
-        this.defValue = defValue;
+    public void setSortWeight(Integer sortWeight) {
+        this.sortWeight = sortWeight;
     }
 
 
 
     @Override
     public String toString() {
-        return "[id="+ id + ", createDate="+ createDate + ", modifyDate="+ modifyDate + ", docId="+ docId + ", interId="+ interId + ", code="+ code + ", name="+ name + ", description="+ description + ", type="+ type + ", format="+ format + ", position="+ position + ", required="+ required + ", custSchema="+ custSchema + ", extSchema="+ extSchema + ", refSchemaId="+ refSchemaId + ", defValue="+ defValue + "]";
+        return "[id="+ id + ", createDate="+ createDate + ", modifyDate="+ modifyDate + ", docId="+ docId + ", interId="+ interId + ", code="+ code + ", name="+ name + ", description="+ description + ", type="+ type + ", refSchemaId="+ refSchemaId + ", def="+ def + ", required="+ required + ", custSchema="+ custSchema + ", extSchema="+ extSchema + ", sortWeight="+ sortWeight + "]";
     }
 }

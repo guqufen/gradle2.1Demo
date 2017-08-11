@@ -1,7 +1,5 @@
 package net.fnsco.api.doc.service.mail;
 
-import net.fnsco.api.doc.comm.CfgConstants;
-
 /**
  * 
 		* <p>Title: 邮件模板</p>

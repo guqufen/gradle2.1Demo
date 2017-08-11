@@ -1,13 +1,13 @@
-package net.fnsco.api.doc.service.other.dao.helper;
+package net.fnsco.api.doc.service.inter.dao.helper;
 
-import org.apache.ibatis.jdbc.SQL;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang3.StringUtils;
 
-import net.fnsco.api.doc.service.other.entity.InterRespDO;
+import net.fnsco.api.doc.service.inter.entity.InterRespDO;
 public class InterRespProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

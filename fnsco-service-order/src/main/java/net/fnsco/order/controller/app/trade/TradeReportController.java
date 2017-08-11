@@ -127,7 +127,7 @@ public class TradeReportController extends BaseController{
      */
     @RequestMapping("/queryBusinessTrends")
     @ApiOperation(value = "H5查询经营趋势")
-    public ResultDTO<BusinessTrendDTO>  queryBusinessTrends( TradeReportDTO tradeReportDTO){
+    public ResultDTO<BusinessTrendDTO>  queryBusinessTrends(TradeReportDTO tradeReportDTO){
         if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
