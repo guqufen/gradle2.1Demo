@@ -1,4 +1,4 @@
-package net.fnsco.api.doc.service.mail;
+package net.fnsco.core.utils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

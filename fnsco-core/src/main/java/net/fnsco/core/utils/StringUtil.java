@@ -1,4 +1,4 @@
-package net.fnsco.api.doc.service.mail;
+package net.fnsco.core.utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,13 +7,15 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 
+ 
+
 /**
  * 
 		* <p>Title: 模板工具类</p>
 		* <p>Description: 描述（简要描述类的职责、实现方式、使用注意事项等）</p>
 		* <p>CreateDate: 2015年8月21日下午2:48:04</p>
  */
-public class TemplateUtils {
+public class StringUtil {
 	/**
 	 * 
 			*@name 字符串变量替换
