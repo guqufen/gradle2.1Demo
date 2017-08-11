@@ -138,17 +138,17 @@ function getShopList(tokenId,userId){
         $(".filter-name").html(data.data[0].merName);
       }
       for(var i=0;i<data.data.length;i++){
-        shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
+        shopList.append('<li class="mui-table-view-cell" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
       }
 
       //筛选店铺
-      $(".shop-list li").click(function(){
-        $(".shop-list li").removeClass("mui-selected");
-        $(this).addClass("mui-selected");
-        if($(this).hasClass('all-shop')){
-          $(".shop-list li").addClass("mui-selected");
-        }
-      })
+      // $(".shop-list li").click(function(){
+      //   $(".shop-list li").removeClass("mui-selected");
+      //   $(this).addClass("mui-selected");
+      //   if($(this).hasClass('all-shop')){
+      //     $(".shop-list li").addClass("mui-selected");
+      //   }
+      // })
     }
   });
 }
