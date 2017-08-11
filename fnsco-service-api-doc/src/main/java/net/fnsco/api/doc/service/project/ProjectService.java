@@ -3,6 +3,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,8 @@ import net.fnsco.core.base.BaseService;
 @Service
 public class ProjectService extends BaseService{
     
+    private static Logger logger = LoggerFactory.getLogger(ProjectService.class);
+    
     @Autowired
     private ProjDAO projDAO;
     @Autowired
@@ -56,22 +60,29 @@ public class ProjectService extends BaseService{
      * @return void    DOM对象
      */
     @Transactional
-    public void exportJson(String jsonParams){
+    public boolean exportJson(String jsonParams){
         if(Strings.isNullOrEmpty(jsonParams)){
-            return;
+            return false;
         }
         /**
          * 对特殊字符需要处理
          */
-        jsonParams = jsonParams.replaceAll("\\$", "");
-        JSONObject jsonParam = JSONObject.parseObject(jsonParams);
-        JSONObject info = jsonParam.getJSONObject("info");
-        Long proId = installProJDO(info);
-        Long docId = installApiDocDO(jsonParam,proId);
-        JSONArray tags = jsonParam.getJSONArray("tags");
-        installModuleDO(tags,docId);
-        //组装接口信息
-        installInterDO(jsonParam.getJSONObject("paths"),jsonParam.getJSONObject("definitions"));
+        try {
+            jsonParams = jsonParams.replaceAll("\\$", "");
+            JSONObject jsonParam = JSONObject.parseObject(jsonParams);
+            JSONObject info = jsonParam.getJSONObject("info");
+            Long proId = installProJDO(info);
+            Long docId = installApiDocDO(jsonParam,proId);
+            JSONArray tags = jsonParam.getJSONArray("tags");
+            installModuleDO(tags,docId);
+            //组装接口信息
+            installInterDO(jsonParam.getJSONObject("paths"),jsonParam.getJSONObject("definitions"));
+            return true;
+        } catch (Exception e) {
+            logger.error("组装数据出错"+e);
+            e.printStackTrace();
+        }
+        return false;
     }
     /**
      * installProJDO:(这里用一句话描述这个方法的作用)组装项目信息对象
@@ -236,16 +247,19 @@ public class ProjectService extends BaseService{
                 JSONObject scheJson = responses.getJSONObject(key);
                 JSONObject schema = scheJson.getJSONObject("schema");
                 //返回值有多种数据结构，需要分开处理
-                
-                String ref = schema.getString("ref");
-                String schemaName = ref.substring(ref.length()-4);
                 InterRespDO interRespDO = new InterRespDO();
+                String ref = schema.getString("ref");
+                if(Strings.isNullOrEmpty(ref)){
+                    String schemaName = ref.substring(ref.length()-4);
+                    JSONObject custSchema = definitions.getJSONObject(schemaName);
+                    interRespDO.setType(custSchema.getString("type"));
+                    interRespDO.setCustSchema(custSchema.getString("properties"));
+                }else{
+                    interRespDO.setCustSchema(schema.toJSONString());
+                }
                 interRespDO.setDocId(docId);
                 interRespDO.setInterId(interId);
                 interRespDO.setDescription(scheJson.getString("description"));
-                JSONObject custSchema = definitions.getJSONObject(schemaName);
-                interRespDO.setType(custSchema.getString("type"));
-                interRespDO.setCustSchema(custSchema.getString("properties"));
                 interRespDO.setSortWeight(0);
                 interRespDAO.insert(interRespDO);
             }
