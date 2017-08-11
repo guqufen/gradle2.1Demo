@@ -12,9 +12,8 @@ import com.google.common.collect.Maps;
 
 import net.fnsco.api.doc.comm.AppConstants;
 import net.fnsco.api.doc.comm.CfgConstants;
+import net.fnsco.api.doc.comm.MailConstants;
 import net.fnsco.api.doc.comm.RegexUtil;
-import net.fnsco.api.doc.service.mail.CryptUtil;
-import net.fnsco.api.doc.service.mail.MailConstants;
 import net.fnsco.api.doc.service.mail.MailUtilService;
 import net.fnsco.api.doc.service.user.dao.UserBasicDAO;
 import net.fnsco.api.doc.service.user.dao.UserDetailDAO;
@@ -25,6 +24,7 @@ import net.fnsco.api.doc.service.user.entity.UserLoginDO;
 import net.fnsco.api.doc.service.vo.RegistParamInfo;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.CryptUtil;
 
 /**
  * 

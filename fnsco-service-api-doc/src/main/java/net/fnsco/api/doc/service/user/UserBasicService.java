@@ -14,15 +14,15 @@ import net.fnsco.api.doc.comm.AppConstants;
 import net.fnsco.api.doc.comm.CfgConstants;
 import net.fnsco.api.doc.comm.DateUtil;
 import net.fnsco.api.doc.comm.JsonUtils;
+import net.fnsco.api.doc.comm.MailConstants;
 import net.fnsco.api.doc.comm.RegexUtil;
 import net.fnsco.api.doc.comm.Sha1Utils;
-import net.fnsco.api.doc.service.mail.CryptUtil;
-import net.fnsco.api.doc.service.mail.MailConstants;
 import net.fnsco.api.doc.service.mail.MailUtilService;
 import net.fnsco.api.doc.service.user.dao.UserBasicDAO;
 import net.fnsco.api.doc.service.user.entity.UserBasicDO;
 import net.fnsco.api.doc.service.user.entity.UserDetailDO;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.utils.CryptUtil;
 
 /**
  * 
