@@ -120,18 +120,15 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
       "innerCode":innerCode
     },
     success:function(data){
+      console.log(data);
       $("#start-time").val(data.data.startDate);
       $("#end-time").val(data.data.endDate);
       $(".filter-startTime").html(changeTime(data.data.startDate));
       $(".filter-endTime").html(changeTime(data.data.endDate));
       /*获取生成图表的参数*/
-      $(".trend-total-sum-num").html(changeTwoDecimal(data.data.orderPrice));
+      $(".trend-total-sum-num").html(changeTwoDecimal(data.data.turnoverTotal/100));
       $(".trend-total-order-num").html(data.data.orderNumTotal);
-      if(data.data.orderPrice=="0"){
-        $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice));
-      }else{
-        $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice/data.data.orderNumTotal/100));
-      }
+      $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice/100));
       var dataOrderNum=new Array();
       var dataTurnover=new Array();
       var dataTradeDate=new Array();
