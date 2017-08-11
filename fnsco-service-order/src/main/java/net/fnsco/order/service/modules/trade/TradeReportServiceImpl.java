@@ -95,6 +95,10 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         String startDate = startTime.substring(0, 8);
         String endDate =  endTime.substring(0,8);
         List<TradeDateTemp> tempDatas = tradeDataDAO.queryTempByCondition(record);
+        //如果没有数据直接返回
+        if(CollectionUtils.isEmpty(tempDatas)){
+            return;
+        }
         for (TradeDateTemp tradeDateTemp : tempDatas) {
             String timeStamp = tradeDateTemp.getTimeStamp();
             tradeDateTemp.setTradeDate(timeStamp.substring(0, timeStamp.length() - 6));

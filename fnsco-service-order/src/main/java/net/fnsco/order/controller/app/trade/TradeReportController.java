@@ -107,7 +107,7 @@ public class TradeReportController extends BaseController{
      */
     @RequestMapping("/queryConsumption")
     @ApiOperation(value = "H5查询消费模式")
-    public ResultDTO<ConsumptionDTO>  queryConsumption(@RequestBody TradeReportDTO tradeReportDTO){
+    public ResultDTO<ConsumptionDTO>  queryConsumption(TradeReportDTO tradeReportDTO){
         if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
@@ -127,7 +127,7 @@ public class TradeReportController extends BaseController{
      */
     @RequestMapping("/queryBusinessTrends")
     @ApiOperation(value = "H5查询经营趋势")
-    public ResultDTO<BusinessTrendDTO>  queryBusinessTrends(@RequestBody TradeReportDTO tradeReportDTO){
+    public ResultDTO<BusinessTrendDTO>  queryBusinessTrends(TradeReportDTO tradeReportDTO){
         if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
@@ -147,7 +147,7 @@ public class TradeReportController extends BaseController{
      */
     @RequestMapping("/queryPeakTrade")
     @ApiOperation(value = "H5查询峰值交易")
-    public ResultDTO<PeakTradeDTO>  queryPeakTrade(@RequestBody TradeReportDTO tradeReportDTO){
+    public ResultDTO<PeakTradeDTO>  queryPeakTrade(TradeReportDTO tradeReportDTO){
         if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
