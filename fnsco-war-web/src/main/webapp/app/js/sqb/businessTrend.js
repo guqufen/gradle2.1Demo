@@ -120,18 +120,15 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
       "innerCode":innerCode
     },
     success:function(data){
+      console.log(data);
       $("#start-time").val(data.data.startDate);
       $("#end-time").val(data.data.endDate);
       $(".filter-startTime").html(changeTime(data.data.startDate));
       $(".filter-endTime").html(changeTime(data.data.endDate));
       /*获取生成图表的参数*/
-      $(".trend-total-sum-num").html(changeTwoDecimal(data.data.orderPrice));
+      $(".trend-total-sum-num").html(changeTwoDecimal(data.data.turnoverTotal/100));
       $(".trend-total-order-num").html(data.data.orderNumTotal);
-      if(data.data.orderPrice=="0"){
-        $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice));
-      }else{
-        $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice/data.data.orderNumTotal/100));
-      }
+      $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice/100));
       var dataOrderNum=new Array();
       var dataTurnover=new Array();
       var dataTradeDate=new Array();
@@ -193,22 +190,13 @@ function getShopList(tokenId,userId){
     success:function(data){
       var shopList=$("#shop-list");
       if(data.data.length>1){
-        shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部店铺</a></li>');
+        shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部商铺</a></li>');
       }else if(data.data.length==1){
         $(".filter-name").html(data.data[0].merName);
       }
       for(var i=0;i<data.data.length;i++){
-        shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
+        shopList.append('<li class="mui-table-view-cell" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
       }
-
-      //筛选店铺
-      $(".shop-list li").click(function(){
-        $(".shop-list li").removeClass("mui-selected");
-        $(this).addClass("mui-selected");
-        if($(this).hasClass('all-shop')){
-          $(".shop-list li").addClass("mui-selected");
-        }
-      })
     }
   });
 }
