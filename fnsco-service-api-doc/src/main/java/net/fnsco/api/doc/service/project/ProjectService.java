@@ -126,6 +126,7 @@ public class ProjectService extends BaseService{
         data.setProjId(projId);
         data.setVersion(info.getString("version"));
         data.setOpen(1);
+        data.setModifyDate(new Date());
         apiDocDAO.insert(data);
         return data.getId();
     }
@@ -148,6 +149,7 @@ public class ProjectService extends BaseService{
             model.setName(name);
             model.setDocId(docId);
             model.setSortWeight(0);
+            model.setModifyDate(new Date());
             moduleDAO.insert(model);
             result.add(model);
         }
