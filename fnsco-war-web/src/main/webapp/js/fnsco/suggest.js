@@ -159,7 +159,11 @@ function querySingle(id) {
 			// 基本信息
 			$('input[name=mobile]').val(data.data.mobile);
 			$('input[name="userName"]').val(data.data.userName);
-			$('input[name="submitTime"]').val(data.data.submitTime);
+			var subTime = data.data.submitTime;
+			if(subTime){
+				subTime = subTime.substr(0,subTime.length-2);
+			}
+			$('input[name="submitTime"]').val(subTime);
 			$('textarea[name="content"]').val(data.data.content);
 
 			$('#detailsModal').modal();
