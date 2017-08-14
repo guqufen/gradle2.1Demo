@@ -99,10 +99,10 @@ public class ProjectService extends BaseService{
         ProjDO data = new ProjDO();
         data.setName(title);
         data.setCreateDate(new Date());
-        data.setStatus("0");//初始化状态
+        data.setStatus("open");//初始化状态
         data.setUserId(1l);
         data.setModifyDate(new Date());
-        data.setDescription(title);
+        data.setDescription(info.getString("description"));
         projDAO.insert(data);
         return data.getId();
     }
@@ -125,8 +125,9 @@ public class ProjectService extends BaseService{
         data.setCreateDate(new Date());
         data.setProjId(projId);
         data.setVersion(info.getString("version"));
-        data.setOpen(1);
+        data.setOpen(0);
         data.setModifyDate(new Date());
+        data.setScheme(jsonParams.getString("schemes"));
         apiDocDAO.insert(data);
         return data.getId();
     }
@@ -209,6 +210,7 @@ public class ProjectService extends BaseService{
             interDO.setDocId(module.getDocId());
             interDO.setModuleId(module.getId());
             interDO.setCreateDate(new Date());
+            interDO.setDeprecated(0);
             interDAO.insert(interDO);
             installParam(interDO.getId(),interDO.getDocId(),value.getJSONArray("parameters"),definitions);
             //增加返回参数
