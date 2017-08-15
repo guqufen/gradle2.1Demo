@@ -16,6 +16,7 @@ import net.fnsco.api.doc.service.other.dao.InterDAO;
 import net.fnsco.api.doc.service.other.dao.ModuleDAO;
 import net.fnsco.api.doc.service.other.entity.ApiDocDO;
 import net.fnsco.api.doc.service.other.entity.InterDO;
+import net.fnsco.api.doc.service.other.entity.InterParamDO;
 import net.fnsco.api.doc.service.other.entity.ModuleDO;
 import net.fnsco.api.doc.service.project.dao.ProjDAO;
 import net.fnsco.api.doc.service.project.entity.ProjDO;
@@ -138,7 +139,14 @@ public class ProjectService extends BaseService{
             getInterInfo(key,paths.getJSONObject(key));
         }
     }
-    
+    /**
+     * getInterInfo:(这里用一句话描述这个方法的作用)初始化接口信息
+     * @param path
+     * @param interInfo    设定文件
+     * @author    tangliang
+     * @date      2017年8月10日 下午2:40:27
+     * @return void    DOM对象
+     */
     private void getInterInfo(String path ,JSONObject interInfo){
         Set<String> methods  =  interInfo.keySet();
         Iterator<String> iterator = methods.iterator();
@@ -164,6 +172,22 @@ public class ProjectService extends BaseService{
             interDO.setModuleId(module.getId());
             interDO.setCreateDate(new Date());
             interDAO.insert(interDO);
+            installParam(interDO.getId(),interDO.getDocId(),value.getJSONObject("parameters"));
         }
+    }
+    /**
+     * installParam:(这里用一句话描述这个方法的作用)初始化参数信息
+     * @param interId
+     * @param docId
+     * @param parameters    设定文件
+     * @author    tangliang
+     * @date      2017年8月10日 下午2:40:40
+     * @return void    DOM对象
+     */
+    private void installParam(Long interId ,Long docId,JSONObject parameters){
+//        InterParamDO interParamDO = new InterParamDO();
+//        interParamDO.setDocId(docId);
+//        interParamDO.setInterId(interId);
+//        interParamDO.set
     }
 }

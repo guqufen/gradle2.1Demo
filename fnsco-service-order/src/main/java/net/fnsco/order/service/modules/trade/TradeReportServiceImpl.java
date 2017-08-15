@@ -320,6 +320,10 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 tempDTO.setTurnover(new BigDecimal(0.00));
                 tradeTypeData.add(tempDTO);
             }
+        }else{
+            for (TradeTypeDTO tradeTypeDTO : tradeTypeData) {
+                tradeTypeDTO.setTurnover(divide(tradeTypeDTO.getTurnover(), 100));
+            }
         }
         resultData.setTradeTypeData(tradeTypeData);
         //按照天返回数据
