@@ -38,7 +38,10 @@ public class ProjectController extends BaseController{
     @ResponseBody
     @ApiOperation(value = "导入JSON数据", notes = "导入JSON数据")
     public ResultDTO exportJson(@RequestParam String jsonParams){
-        projectService.exportJson(jsonParams);
+        boolean succsss = projectService.exportJson(jsonParams);
+        if(!succsss){
+            return ResultDTO.fail();
+        }
         return ResultDTO.success();
     }
     
