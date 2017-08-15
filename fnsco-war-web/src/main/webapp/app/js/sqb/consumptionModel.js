@@ -18,7 +18,7 @@ function chart(data,formatter){
 	    series: [{
 	        name: '支付方式',
 	        type: 'pie',
-	        radius: '65%',
+	        radius: '60%',
 	        center: ['50%', '50%'],
 	        data: data,
 	        itemStyle: {}
@@ -69,11 +69,11 @@ function modelData(tokenId,userId,startDate,endDate,innerCode){
       var formatter="笔";
   		var formatter1="元";
       var data1=[{value: data.data.aliOrderNumTot,name: '支付宝'}, {value: data.data.wxOrderNumTot,name: '微信'}, {value: data.data.bankOrderNumTot,name: '银行卡'},{value: data.data.otherOrderNumTot,name: '其他'}];
-  		var data2=[{value: data.data.aliTurnoverTot ,name: '支付宝'}, {value: data.data.wxTurnoverTot,name: '微信'}, {value: data.data.bankTurnoverTot,name: '银行卡'},{value: data.data.otherTurnoverTot,name: '其他'}];
-  		$(".total-list.wx .total-list-rmb span").html(changeTwoDecimal(data.data.wxTurnoverTot));
-  		$(".total-list.alipay .total-list-rmb span").html(changeTwoDecimal(data.data.aliTurnoverTot));
-  		$(".total-list.bank .total-list-rmb span").html(changeTwoDecimal(data.data.bankTurnoverTot));
-  		$(".total-list.other .total-list-rmb span").html(changeTwoDecimal(data.data.otherTurnoverTot));
+  		var data2=[{value: data.data.aliTurnoverTot/100 ,name: '支付宝'}, {value: data.data.wxTurnoverTot/100,name: '微信'}, {value: data.data.bankTurnoverTot/100,name: '银行卡'},{value: data.data.otherTurnoverTot/100,name: '其他'}];
+  		$(".total-list.wx .total-list-rmb span").html(changeTwoDecimal(data.data.wxTurnoverTot/100));
+  		$(".total-list.alipay .total-list-rmb span").html(changeTwoDecimal(data.data.aliTurnoverTot/100));
+  		$(".total-list.bank .total-list-rmb span").html(changeTwoDecimal(data.data.bankTurnoverTot/100));
+  		$(".total-list.other .total-list-rmb span").html(changeTwoDecimal(data.data.otherTurnoverTot/100));
   		$(".total-list.wx .total-list-num span").html(data.data.wxOrderNumTot);
   		$(".total-list.alipay .total-list-num span").html(data.data.aliOrderNumTot);
   		$(".total-list.bank .total-list-num span").html(data.data.bankOrderNumTot);

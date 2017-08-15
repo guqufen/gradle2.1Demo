@@ -126,7 +126,7 @@ function epakData(tokenId,userId,startDate,endDate,innerCode){
       $(".filter-endTime").html(changeTime(data.data.endDate));
       /*获取生成图表的参数*/
       $(".total-num span").html(data.data.orderNumTotal);
-      $(".total-rmb span").html(changeTwoDecimal(data.data.turnoverTotal));
+      $(".total-rmb span").html(changeTwoDecimal(data.data.turnoverTotal/100));
       var dataOrderNum=new Array();
       var dataTurnover=new Array();
       var dataTradeHour=new Array();
@@ -134,7 +134,7 @@ function epakData(tokenId,userId,startDate,endDate,innerCode){
       for(var i=0;i<returnDatd.length;i++){
         dataTradeHour.push(formatHours(data.data.tradeHourdata[i].tradeHour));
         dataOrderNum.push(data.data.tradeHourdata[i].orderNum);
-        dataTurnover.push(data.data.tradeHourdata[i].turnover);
+        dataTurnover.push(data.data.tradeHourdata[i].turnover/100);
       }
       //生成图表
       chart(dataTradeHour,max(dataTurnover),dataTurnover,titleName);
