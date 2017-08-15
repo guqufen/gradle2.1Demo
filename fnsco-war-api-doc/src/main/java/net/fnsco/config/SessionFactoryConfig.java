@@ -15,9 +15,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
-@Configuration
-@EnableTransactionManagement
-//@MapperScan("com.xxx.xxx.mybatis.mapper")
+//@Configuration
+//@EnableTransactionManagement
+//@MapperScan("net.fnsco.api.doc")
 public class SessionFactoryConfig implements TransactionManagementConfigurer {
     /** * mybatis 配置路径 */
     private static String MYBATIS_CONFIG   = "mybatis.xml";
@@ -35,25 +35,25 @@ public class SessionFactoryConfig implements TransactionManagementConfigurer {
     * @return 
     * @throws Exception 
     */
-    @Bean(name = "sqlSessionFactory")
+    //@Bean(name = "sqlSessionFactory")
     public SqlSessionFactoryBean createSqlSessionFactoryBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         /** 设置mybatis configuration 扫描路径 */
         sqlSessionFactoryBean.setConfigLocation(new ClassPathResource(MYBATIS_CONFIG));
         /** 设置datasource */
         sqlSessionFactoryBean.setDataSource(dataSource);
-        /** 设置typeAlias 包扫描路径 */
+        /** 设置typeAlias 包xml中sql文件扫描路径 */
         sqlSessionFactoryBean.setTypeAliasesPackage(typeAliasPackage);
         return sqlSessionFactoryBean;
     }
 
-    @Bean
+    //@Bean
     public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
-    @Bean
-    @Override
+    //@Bean
+    //@Override
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return new DataSourceTransactionManager(dataSource);
     }
