@@ -46,7 +46,7 @@ public class RegistController extends BaseController {
     @RequestMapping(value = "/regist", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "用户注册", notes = "用户注册")
-    public ResultDTO regist(@RequestParam String loginName, @RequestParam String passwd, @RequestParam String nickName, @RequestParam String validCode) {
+    public ResultDTO regist(@RequestParam String loginName, @RequestParam String passwd, @RequestParam String nickName) {
         if (Strings.isNullOrEmpty(loginName)) {
             ResultDTO.fail("登录名不能为空");
         }
@@ -54,10 +54,7 @@ public class RegistController extends BaseController {
             ResultDTO.fail("密码不能为空");
         }
         if (Strings.isNullOrEmpty(nickName)) {
-            ResultDTO.fail("昵称不能为空");
-        }
-        if (Strings.isNullOrEmpty(validCode)) {
-            ResultDTO.fail("验证码不能为空");
+           ResultDTO.fail("昵称不能为空");
         }
         //目前默认为邮箱注册
         RegistParamInfo paramInfo = new RegistParamInfo();
@@ -66,12 +63,11 @@ public class RegistController extends BaseController {
         paramInfo.setNickName(nickName);
         paramInfo.setPassword(passwd);
         paramInfo.setRegistIp(getIp());
-
-        if (validCode.equals("")) {
-            return ResultDTO.fail("验证码错误");
-        }
+//        if (validCode.equals("")) {
+//            return ResultDTO.fail("验证码错误");
+//        }
         ResultDTO result = registService.registByEmail(paramInfo);
-        if (!result.isSuccess()) {
+        if (!result.isSuccess()){
             return result;
         }
         return ResultDTO.success(loginName);
@@ -107,6 +103,9 @@ public class RegistController extends BaseController {
             ResultDTO.fail("激活码不能为空");
         }
         ResultDTO result = registService.activeByEmail(code);
+        if(!result.isSuccess()){
+            ResultDTO.fail("激活码不能为空");
+        }
         return "redirect:/login.html";
     }
 

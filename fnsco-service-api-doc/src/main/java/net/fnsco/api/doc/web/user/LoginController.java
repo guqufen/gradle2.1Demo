@@ -50,7 +50,7 @@ public class LoginController extends BaseController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ApiOperation(value = "登陆处理", notes = "登陆处理")
     @ResponseBody
-    public ResultDTO login(@RequestParam String loginName, @RequestParam String passwd, @RequestParam String validCode) {
+    public ResultDTO login(@RequestParam String loginName, @RequestParam String passwd) {
         boolean autoLogin = true;
         if (Strings.isNullOrEmpty(loginName)) {
             //"登陆名不能为空"
@@ -84,19 +84,19 @@ public class LoginController extends BaseController {
         }
 
         //设置登陆跳转页面
-        String redirectUrl = "";
-        switch (userInfo.getRole()) {
-            case "管理员":
-                redirectUrl = "/auth/home/home.htm";
-                break;
-
-            case "普通用户":
-                redirectUrl = "/admin/home.htm";
-                break;
-
-            default:
-                break;
-        }
+//        String redirectUrl = "";
+//        switch (userInfo.getRole()) {
+//            case "管理员":
+//                redirectUrl = "/auth/home/home.htm";
+//                break;
+//
+//            case "普通用户":
+//                redirectUrl = "/admin/home.htm";
+//                break;
+//
+//            default:
+//                break;
+//        }
 
         return ResultDTO.success();
     }
