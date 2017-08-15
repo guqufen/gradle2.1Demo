@@ -92,7 +92,9 @@
 #chart{
 	margin-top: 1.365rem;
 	height: 14rem;
-	margin-bottom: 1rem;
+}
+.navBar{
+	height: 1rem;
 }
 	/*经营趋势页面*/
 .trend-total{
