@@ -34,20 +34,32 @@
 				<div class="col-sm-5">	
 						<!--<h4 class="no-margins">登录：</h4>-->
 						<h3 class="m-t-md">登录接口管理</h3>
-						<input type="text" class="form-control uname" placeholder="用户名" />
-						<input type="password" class="form-control pword m-b" placeholder="密码" />
+						<input type="text" class="form-control uname loginName" placeholder="用户名" />
+						<input type="password" class="form-control pword m-b passwd" placeholder="密码" />
 						<a href="register.html" style="margin-right:5px;">注册</a>
 						<a href="accountActive.html" style="margin-right:5px;">账号激活</a>
 						<a href="findPassword.html">忘记密码了？</a>
-						<button class="btn btn-success btn-block login">登录</button>
+						<div class="btn btn-success btn-block login">登录</div>
 				</div>
 			</div>
 		</div>
 	<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
 	<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+	
 		$(".login").click(function(){
-			window.location.href="index.html";
+				var data={"loginName":$(".loginName").val(),"passwd":$(".passwd").val()};
+				console.log(data);
+				$.ajax({
+					url:"http://localhost:8080/web/login",
+					data:data,
+					type:'GET',
+					success:function(data){
+					if(data.success){
+							window.location ='index.html';
+						} 
+					}
+				});
 		})
 	</script>
 	</body>

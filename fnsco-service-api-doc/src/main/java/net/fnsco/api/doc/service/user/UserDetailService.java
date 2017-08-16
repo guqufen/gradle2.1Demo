@@ -51,4 +51,11 @@ public class UserDetailService extends BaseService {
         return userInfo;
     }
 
+    public void update(UserDetailDO userDetail) {
+        userDetailDAO.update(userDetail);
+    }
+
+    public UserDetailDO getDetailByUserId(Long userId) {
+        return userDetailDAO.getByUserId(userId);
+    }
 }

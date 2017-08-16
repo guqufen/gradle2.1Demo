@@ -32,13 +32,30 @@
 				<h3>账号激活</h3>
 				<form class="m-t" role="form" action="http://www.zi-han.net/theme/hplus/login.html">
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="请输入邮件地址" required="">
+						<input type="text" class="form-control email" placeholder="请输入邮件地址" required="" style="color: black;">
 					</div>
-					<button type="submit" class="btn btn-primary block full-width m-b">发送账号激活邮件</button>
+					<div type="submit" class="btn btn-primary block full-width m-b btn-send">发送账号激活邮件</div>
 				</form>
 			</div>
 		</div>
 		<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
 		<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script>
+		$(".btn-send").click(function(){
+			var data={"email":$(".email").val()};
+			console.log(data);
+			$.ajax({
+				url:"http://localhost:8080/web/regist/active",
+				data:data,
+				type:'GET',
+				success:function(data){
+					if(data.success){
+						alert("账号激活成功");
+						window.location ='login.html';
+					}
+				}
+			});
+		})
+		</script>
 	</body>
 </html>

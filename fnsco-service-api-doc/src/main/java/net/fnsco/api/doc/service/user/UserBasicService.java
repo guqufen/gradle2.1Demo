@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Maps;
@@ -13,15 +14,15 @@ import net.fnsco.api.doc.comm.AppConstants;
 import net.fnsco.api.doc.comm.CfgConstants;
 import net.fnsco.api.doc.comm.DateUtil;
 import net.fnsco.api.doc.comm.JsonUtils;
+import net.fnsco.api.doc.comm.MailConstants;
 import net.fnsco.api.doc.comm.RegexUtil;
 import net.fnsco.api.doc.comm.Sha1Utils;
-import net.fnsco.api.doc.service.mail.CryptUtil;
-import net.fnsco.api.doc.service.mail.MailConstants;
 import net.fnsco.api.doc.service.mail.MailUtilService;
 import net.fnsco.api.doc.service.user.dao.UserBasicDAO;
 import net.fnsco.api.doc.service.user.entity.UserBasicDO;
 import net.fnsco.api.doc.service.user.entity.UserDetailDO;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.utils.CryptUtil;
 
 /**
  * 
@@ -37,7 +38,8 @@ public class UserBasicService extends BaseService {
     private UserBasicDAO      userBasicDAO;
     @Autowired
     private MailUtilService   mailUtil;
-
+    @Autowired
+    private Environment       env;
     public UserBasicDO getByEmail(String email) {
         return userBasicDAO.getByEmail(email);
     }
@@ -85,7 +87,7 @@ public class UserBasicService extends BaseService {
         model.put("nickName", detail.getNickName());
         model.put("oldEmail", basic.getEmail());
         model.put("newEmail", email);
-        model.put("updateEmailUrl", CfgConstants.WEB_BASE_URL + "pass/user/updateEmail.htm?code=" + code);
+        model.put("updateEmailUrl", env.getProperty(CfgConstants.WEB_BASE_URL) + "pass/user/updateEmail.htm?code=" + code);
 
         mailUtil.send(email, MailConstants.SUB_EMAIL_UPDATE, MailConstants.TMPL_EMAIL_UPDATE, model);
     }

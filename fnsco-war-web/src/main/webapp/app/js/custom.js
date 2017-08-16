@@ -56,7 +56,7 @@
 						mui.toast('结束时间不能小于开始时间',{ duration:'long', type:'div' })
 						return;
 					}else if(showDays(startTime,rs.text)<6){
-						mui.toast('选择时间间隔不能少于7天，请重新选择',{ duration:'long', type:'div' })
+						mui.toast('间隔不能少于7天，请重新选择',{ duration:'long', type:'div' })
 						return;
 					}else{
 						$("#"+id)[0].value=rs.text;
@@ -68,7 +68,7 @@
 						mui.toast('开始时间不能大于结束时间',{ duration:'long', type:'div' })
 						return;
 					}else if(showDays(endTime,rs.text)<6){
-						mui.toast('选择时间间隔不能少于7天，请重新选择',{ duration:'long', type:'div' })
+						mui.toast('间隔不能少于7天，请重新选择',{ duration:'long', type:'div' })
 						return;
 					}else{
 						$("#"+id)[0].value=rs.text;
@@ -226,7 +226,6 @@ function changeTime(time){
 
 //筛选按钮样式
 var htmlSize=document.getElementsByTagName("html")[0].style.fontSize;
-console.log($(window).height());
 if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {  //判断iPhone|iPad|iPod|iOS
    	$(".fixed-box").css('top',($(window).height()-(3.456*htmlSize.slice(0, -2))-46));
 }else{

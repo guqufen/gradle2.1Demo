@@ -69,6 +69,7 @@ public class TradeReportController extends BaseController{
         if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
+        formatInputDate(tradeReportDTO, true);//格式化入参
         WeeklyDTO datas = tradeReportService.queryWeeklyByInnerCode(tradeReportDTO);
         return ResultDTO.success(datas);
     }
@@ -91,7 +92,6 @@ public class TradeReportController extends BaseController{
         if(null == tradeReportDTO.getPageNum() || tradeReportDTO.getPageNum()<1){
             return ResultDTO.fail(ApiConstant.E_PAGE_NUM_NULL);
         }
-        formatInputDate(tradeReportDTO, true);//格式化入参
         WeeklyHisDateDTO datas = tradeReportService.queryWeeklyHisDate(tradeReportDTO);
         return ResultDTO.success(datas);
     }
@@ -127,7 +127,7 @@ public class TradeReportController extends BaseController{
      */
     @RequestMapping("/queryBusinessTrends")
     @ApiOperation(value = "H5查询经营趋势")
-    public ResultDTO<BusinessTrendDTO>  queryBusinessTrends( TradeReportDTO tradeReportDTO){
+    public ResultDTO<BusinessTrendDTO>  queryBusinessTrends(TradeReportDTO tradeReportDTO){
         if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }

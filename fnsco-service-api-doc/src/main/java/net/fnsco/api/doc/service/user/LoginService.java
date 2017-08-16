@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Maps;
@@ -12,9 +13,8 @@ import net.fnsco.api.doc.comm.AppConstants;
 import net.fnsco.api.doc.comm.CfgConstants;
 import net.fnsco.api.doc.comm.DateUtil;
 import net.fnsco.api.doc.comm.MD5Utils;
+import net.fnsco.api.doc.comm.MailConstants;
 import net.fnsco.api.doc.comm.RegexUtil;
-import net.fnsco.api.doc.service.mail.CryptUtil;
-import net.fnsco.api.doc.service.mail.MailConstants;
 import net.fnsco.api.doc.service.mail.MailUtilService;
 import net.fnsco.api.doc.service.user.entity.UserBasicDO;
 import net.fnsco.api.doc.service.user.entity.UserDetailDO;
@@ -23,6 +23,8 @@ import net.fnsco.api.doc.service.user.entity.UserTokenDO;
 import net.fnsco.api.doc.service.vo.LoginParamInfo;
 import net.fnsco.api.doc.service.vo.UserInfo;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.CryptUtil;
 
 /**
  * 
@@ -45,32 +47,32 @@ public class LoginService extends BaseService {
     private UserTokenService  userTokenService;
     @Autowired
     private MailUtilService   mailUtil;
+
     //	@Autowired
     //	private UserMsgService userMsgService;
     //	
     //	@Autowired
     //	private AuthService authService;
+    @Autowired
+    private Environment       env;
 
-    public UserInfo loginByEmail(LoginParamInfo loginParamInfo) {
-        if ("邮箱".equals(loginParamInfo.getLoginType())) {
-            //, ErrorCode.LOGIN_007);
-            return null;
+    public ResultDTO loginByEmail(LoginParamInfo loginParamInfo) {
+        if (!AppConstants.EMAIL.equals(loginParamInfo.getLoginType())) {
+            return ResultDTO.fail("登录类型选择不正确");
         }
 
         UserBasicDO basic = userBasicService.getByEmail(loginParamInfo.getEmail());
         //登陆验证
 
         if (null == basic) {
-            //, ErrorCode.LOGIN_001);
-            return null;
+            return ResultDTO.fail("用户不存在");
         }
-        if (basic.getLocked() != 1) {
-            // ErrorCode.LOGIN_006);
-            return null;
+        if (basic.getLocked() != 0) {
+            return ResultDTO.fail("用户被锁定");
         }
         if (basic.getValid() != 1) {
             //, ErrorCode.LOGIN_005);
-            return null;
+            return ResultDTO.fail("用户未激活");
         }
 
         //用户登陆信息
@@ -78,13 +80,14 @@ public class LoginService extends BaseService {
         String passwdEncry = userBasicService.encryPasswd(basic.getId(), loginParamInfo.getPassword());
         if (!basic.getPassword().equals(passwdEncry)) {
             dealLoginFail(basic, loginParamInfo, userLogin);
+            return ResultDTO.fail("用户名或密码错误");
         }
 
         return dealLongSuccess(basic, loginParamInfo, userLogin);
     }
 
     //登陆成功处理
-    private UserInfo dealLongSuccess(UserBasicDO basic, LoginParamInfo loginParamInfo, UserLoginDO userLogin) {
+    private ResultDTO dealLongSuccess(UserBasicDO basic, LoginParamInfo loginParamInfo, UserLoginDO userLogin) {
         Long userId = basic.getId();
 
         //更新用户登陆信息
@@ -93,7 +96,7 @@ public class LoginService extends BaseService {
         userLogin.setLoginType(loginParamInfo.getLoginType());
         userLogin.setAuthCode(loginParamInfo.getSmsCode());
         userLogin.setLoginDate(DateUtil.getNow());
-        userLogin.setLoginStatus("在线");
+        userLogin.setLoginStatus(AppConstants.ON_LINE);
         userLogin.setLoginCount(userLogin.getLoginCount() + 1);
         userLoginService.update(userLogin);
 
@@ -118,7 +121,7 @@ public class LoginService extends BaseService {
         String token = dealAutoLogin(userId, loginParamInfo);
         userInfo.setToken(token);
 
-        return userInfo;
+        return ResultDTO.success(userInfo);
     }
 
     //处理自动登录
@@ -137,9 +140,12 @@ public class LoginService extends BaseService {
             userToken.setUserId(userId);
             userToken.setToken(token);
             userToken.setExpireDate(getTokenExpireDate());
+            userToken.setCreateDate(new Date());
+            userToken.setModifyDate(new Date());
             userTokenService.add(userToken);
         } else {//更新记录信息
             userToken.setToken(token);
+            userToken.setModifyDate(new Date());
             userToken.setExpireDate(getTokenExpireDate());
             userTokenService.update(userToken);
         }
@@ -149,7 +155,8 @@ public class LoginService extends BaseService {
 
     //获取token失效时间
     private Date getTokenExpireDate() {
-        return new Date(DateUtil.getNowTime() + CfgConstants.COOKIE_TOKEN_EXPIRE * 1000);
+        int cookieTokenExpire = Integer.parseInt(env.getProperty(CfgConstants.COOKIE_TOKEN_EXPIRE));
+        return new Date(DateUtil.getNowTime() + cookieTokenExpire * 1000);
     }
 
     //登陆失败处理
@@ -163,9 +170,9 @@ public class LoginService extends BaseService {
         userLogin.setLoginType(loginParamInfo.getLoginType());
         userLogin.setAuthCode(loginParamInfo.getSmsCode());
         userLogin.setLoginDate(nowDate);
-
+        int limitCurrentFailCount = Integer.parseInt(env.getProperty(CfgConstants.LIMIT_LOGIN_FAIL_COUNT));
         //登陆错误次数超过限制，账号锁定
-        if (currentFailCount >= CfgConstants.LIMIT_LOGIN_FAIL_COUNT) {
+        if (currentFailCount >= limitCurrentFailCount) {
             basic.setLocked(1);
             basic.setLockedDate(nowDate);
             userBasicService.update(basic);
@@ -189,7 +196,7 @@ public class LoginService extends BaseService {
         Map<String, Object> model = Maps.newHashMap();
         model.put("nickName", detail.getNickName());
         model.put("email", email);
-        model.put("resetPasswdUrl", CfgConstants.WEB_BASE_URL + "forwardReset.htm?code=" + code);
+        model.put("resetPasswdUrl", env.getProperty(CfgConstants.WEB_BASE_URL) + "forwardReset.htm?code=" + code);
 
         mailUtil.send(email, MailConstants.SUB_PASSWD_RESET, MailConstants.TMPL_PASSWD_RESET, model);
     }
@@ -208,7 +215,7 @@ public class LoginService extends BaseService {
         }
     }
 
-    public UserInfo loginByToken(LoginParamInfo loginParamInfo) {
+    public ResultDTO loginByToken(LoginParamInfo loginParamInfo) {
         UserTokenDO userToken = userTokenService.getByToken(loginParamInfo.getToken());
         if (userToken == null) {
             return null;
