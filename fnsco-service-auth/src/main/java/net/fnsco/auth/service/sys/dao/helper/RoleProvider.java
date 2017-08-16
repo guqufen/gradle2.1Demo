@@ -34,7 +34,7 @@ public class RoleProvider {
         if (role.getCreateTime() != null) {
             SET("create_time=#{role.createTime}");
         }
-        WHERE("id = #{role.id}");
+        WHERE("role_id = #{role.id}");
         }}.toString();
     }
 
