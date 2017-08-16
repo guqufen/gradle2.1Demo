@@ -23,21 +23,26 @@ import net.fnsco.order.api.dto.MerChantCoreDTO;
 import net.fnsco.order.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.order.api.dto.MerTerminalsDTO;
 import net.fnsco.order.api.dto.MerchantDTO;
+import net.fnsco.order.api.dto.PosDetailDTO;
+import net.fnsco.order.api.dto.PosListDTO;
 import net.fnsco.order.api.dto.TerminalDetailDTO;
 import net.fnsco.order.api.dto.TerminalsDTO;
 import net.fnsco.order.api.dto.TradeMerchantDTO;
 import net.fnsco.order.api.merchant.MerchantService;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
+import net.fnsco.order.controller.app.jo.TerminalJO;
 import net.fnsco.order.service.dao.master.AliasDAO;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.dao.master.MerchantChannelDao;
 import net.fnsco.order.service.dao.master.MerchantCoreDao;
+import net.fnsco.order.service.dao.master.MerchantPosDao;
 import net.fnsco.order.service.dao.master.MerchantTerminalDao;
 import net.fnsco.order.service.dao.master.MerchantUserRelDao;
 import net.fnsco.order.service.domain.Alias;
 import net.fnsco.order.service.domain.AppUserMerchant;
 import net.fnsco.order.service.domain.MerchantChannel;
 import net.fnsco.order.service.domain.MerchantCore;
+import net.fnsco.order.service.domain.MerchantPos;
 import net.fnsco.order.service.domain.MerchantTerminal;
 import net.fnsco.order.service.domain.MerchantUserRel;
 import net.fnsco.order.service.modules.helper.MerchantHelper;
@@ -64,7 +69,9 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     @Autowired
     private AppUserService      appUserService;
     @Autowired
-    private AppUserMerchantDao appUserMerchantDao;
+    private AppUserMerchantDao  appUserMerchantDao;
+    @Autowired
+    private MerchantPosDao      merchantPosDao;
     
     @Override
     @Transactional
@@ -257,6 +264,44 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     public List<TradeMerchantDTO> getShopOwnerMerChant(MerchantDTO merchantDTO) {
         
         return appUserMerchantDao.selectByUserIdAndRoleId(merchantDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+    }
+    
+    /**
+     * (non-Javadoc)获取POS机列表
+     * @see net.fnsco.order.api.merchant.MerchantService#getAllPosInfo(net.fnsco.order.api.dto.MerchantDTO)
+     * @author tangliang
+     * @date 2017年8月16日 下午1:15:44
+     */
+    @Override
+    public List<PosListDTO> getAllPosInfo(MerchantDTO merchantDTO) {
+        return merchantPosDao.selectAllPosInfo(merchantDTO.getUserId());
+    }
+    
+    /**
+     * (non-Javadoc)获取单个POS详情
+     * @see net.fnsco.order.api.merchant.MerchantService#getPosDetail(java.lang.Integer)
+     * @author tangliang
+     * @date 2017年8月16日 下午2:15:19
+     */
+    @Override
+    public PosDetailDTO getPosDetail(Integer posId) {
+        return merchantPosDao.selectDetailById(posId);
+    }
+    
+    /**
+     * (non-Javadoc)更新POS机信息
+     * @see net.fnsco.order.api.merchant.MerchantService#updatePosInfo(net.fnsco.order.controller.app.jo.TerminalJO)
+     * @author tangliang
+     * @date 2017年8月16日 下午2:50:42
+     */
+    @Override
+    public boolean updatePosInfo(TerminalJO terminalJO) {
+        
+        MerchantPos mecord = new MerchantPos();
+        mecord.setId(terminalJO.getPosId());
+        mecord.setPosName(terminalJO.getPosName());
+        return merchantPosDao.updateByPrimaryKeySelective(mecord)> 0 ?true:false;
+        
     }
 
 }

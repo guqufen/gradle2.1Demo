@@ -34,6 +34,7 @@ function saveWithholdInfo() {
 		layer.msg('请输入有效扣款次数!');
 		return;
 	}
+	console.log( $('#mercore_form').serialize());
 	$.ajax({
 		url : PROJECT_NAME + '/web/withholdInfo/doAdd',
 		data : $('#mercore_form').serialize(),
@@ -116,7 +117,11 @@ function initTableData() {
 		}, {
 			field : 'certifyId',
 			title : '身份证号',
-		}, {
+		},{
+			field : 'productTypeCode',
+			title : '扣款类型'
+		}
+		,{
 			field : 'debitDay',
 			title : '扣款日',
 		}, {
@@ -161,7 +166,45 @@ function operateFormatterId(value, row, index) {
 	index++;
 	return "<div i='" + value + "'>" + index + "</div>";
 }
-
+//获取代扣名称
+//function operateTypeCode(value, row, index){
+//	if(value){
+//		var date={"code":value};
+//		$.ajax({
+//			url : PROJECT_NAME + '/web/withholdInfo/queryWithholdName',
+//			type : 'POST',
+//			data : date,
+//			success : function(data) {
+//				unloginHandler(data);
+//				if(data.data!=null){
+//				  console.log(data.data.name)
+//				  var str=data.data.name;
+//				 // return data.data.name+"";
+//				}
+//			}
+//		});
+//		return "ww";
+//	}
+//	console.log(value)
+//	if(value!=null){
+//		var date={"code":value};
+//		$.ajax({
+//			url : PROJECT_NAME + '/web/withholdInfo/queryWithholdName',
+//			type : 'POST',
+//			data : date,
+//			success : function(data) {
+//				unloginHandler(data);
+//				if(data.data!=null){
+//				  console.log(data.data.name)
+//				  var str=data.data.name;
+//				 // return data.data.name+"";
+//				}
+//			}
+//		});
+//		console.log(str)
+//	}
+////	console.log(str)
+//}
 // 判断法人证件类型
 function judgeCardType(value, row, index) {
 	if (value == '0') {
@@ -288,6 +331,26 @@ function resetEvent(form, id) {
 }
 // 新增按钮事件
 $('#btn_add').click(function() {
+	$("#productTypeCode").html("");
+	$.ajax({
+		url : PROJECT_NAME + '/web/withholdInfo/queryWithholdType',
+		type : 'POST',
+		data:null,
+		dataType : "json",
+		success : function(data) {
+			unloginHandler(data);
+			console.log(data);
+			if (data.success) {
+				for(var i=0;i<data.data.length;i++){
+					var html="<option value='"+data.data[i].code+"'>"+data.data[i].name+"</option>";
+					$("#productTypeCode").prepend(html);
+				}
+			}
+		},
+		error : function(e) {
+			layer.msg('系统异常!' + e);
+		}
+	});
 });
 // 批量删除按钮事件
 $('#btn_delete').click(function() {

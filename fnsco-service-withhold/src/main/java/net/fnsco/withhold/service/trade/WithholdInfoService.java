@@ -22,7 +22,9 @@ import net.fnsco.withhold.service.sys.UserService;
 import net.fnsco.withhold.service.sys.dao.BankCodeDAO;
 import net.fnsco.withhold.service.sys.entity.BankCodeDO;
 import net.fnsco.withhold.service.sys.entity.UserDO;
+import net.fnsco.withhold.service.trade.dao.ProductTypeDAO;
 import net.fnsco.withhold.service.trade.dao.WithholdInfoDAO;
+import net.fnsco.withhold.service.trade.entity.ProductTypeDO;
 import net.fnsco.withhold.service.trade.entity.WithholdInfoDO;
 
 @Service
@@ -35,7 +37,9 @@ public class WithholdInfoService extends BaseService {
 	private BankCodeDAO bankCodeDAO;
 	@Autowired
 	private UserService userService;
-
+	@Autowired
+	private ProductTypeDAO productTypeDAO;
+	
 	// 分页
 	public ResultPageDTO<WithholdInfoDO> page(WithholdInfoDO withholdInfo, Integer pageNum, Integer pageSize) {
 		logger.info("开始分页查询WithholdInfoService.page, withholdInfo=" + withholdInfo.toString());
@@ -43,7 +47,13 @@ public class WithholdInfoService extends BaseService {
 
 		List<WithholdInfoDO> pageListNew = new ArrayList<>();
 		for (WithholdInfoDO withholdInfoDO : pageList) {
-
+		    
+		    //根据productTypeCode查询出贷款类型
+		    ProductTypeDO dto=productTypeDAO.getByCode(withholdInfoDO.getProductTypeCode());
+		    if(dto!=null){
+		        withholdInfoDO.setProductTypeCode(dto.getName()); 
+		    }
+		    
 			// 根据最后修改人ID查询姓名
 			if (null == withholdInfoDO.getModifyUserId()) {
 				withholdInfoDO.setModifyUserName("--");
@@ -117,6 +127,10 @@ public class WithholdInfoService extends BaseService {
 		withholdInfo.setAccType("01");// 帐号类型
 		withholdInfo.setFailTotal(0);
 		withholdInfo.setAmount(withholdInfo.getAmount().multiply(new BigDecimal(100)));// 单次扣款金额乘以100保存
+		//处理身份证最后一位字母大写
+		String str=withholdInfo.getCertifyId();
+		//String st=str.substring(0,str.length() -1)+str.substring(str.length()-1,str.length()).toUpperCase();
+		withholdInfo.setCertifyId(str.substring(0,str.length() -1)+str.substring(str.length()-1,str.length()).toUpperCase());
 		// 计算扣款开始、结束日期
 		Calendar calender = Calendar.getInstance();
 		/**
@@ -164,5 +178,15 @@ public class WithholdInfoService extends BaseService {
 	public WithholdInfoDO doQueryById(Integer id) {
 		WithholdInfoDO obj = this.withholdInfoDAO.getById(id);
 		return obj;
+	}
+	//代扣类型查询
+	public List<ProductTypeDO> queryWithholdType(){
+	    List<ProductTypeDO> productTypeDO=this.productTypeDAO.query();
+        return productTypeDO;
+	}
+	//代扣名称查询
+	public ProductTypeDO queryWithholdName(String code){
+	    ProductTypeDO productTypeDO=this.productTypeDAO.getByCode(code);
+        return productTypeDO;
 	}
 }
