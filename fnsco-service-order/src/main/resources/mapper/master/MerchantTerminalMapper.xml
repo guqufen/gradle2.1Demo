@@ -346,7 +346,7 @@
 		)
 	</delete>
 	<!-- 根据POSid查询 -->
-	<select id="queryTerByPosId" parameterType="java.lang.Integer" resultType="java.lang.String">
-	  SELECT term_name FROM m_merchant_terminal WHERE pos_id = #{posId}
+	<select id="queryTerByPosId" parameterType="java.lang.Integer" resultType="net.fnsco.order.api.dto.TerminalInfoDTO">
+	  SELECT term_name AS terName,terminal_code AS terminalCode FROM m_merchant_terminal WHERE pos_id = #{posId}
 	</select>
 </mapper>

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.order.api.dto.TerminalDetailDTO;
+import net.fnsco.order.api.dto.TerminalInfoDTO;
 import net.fnsco.order.api.dto.TerminalsDTO;
 import net.fnsco.order.service.domain.MerchantTerminal;
 /**
@@ -80,6 +81,6 @@ public interface MerchantTerminalDao {
      * @date      2017年8月16日 下午2:09:34
      * @return List<String>    DOM对象
      */
-    List<String> queryTerByPosId(@Param("posId")Integer posId);
+    List<TerminalInfoDTO> queryTerByPosId(@Param("posId")Integer posId);
     
 }

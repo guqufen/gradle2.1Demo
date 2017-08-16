@@ -31,7 +31,7 @@ public class PosDetailDTO extends DTO {
     /**
      * 终端名称
      */
-    private List<String> terNames;
+    private List<TerminalInfoDTO> terNames;
     /**
      * posName
      *
@@ -119,7 +119,7 @@ public class PosDetailDTO extends DTO {
      * @since   CodingExample Ver 1.0
     */
     
-    public List<String> getTerNames() {
+    public List<TerminalInfoDTO> getTerNames() {
         return terNames;
     }
     /**
@@ -129,8 +129,7 @@ public class PosDetailDTO extends DTO {
      * @since   CodingExample Ver 1.0
      */
     
-    public void setTerNames(List<String> terNames) {
+    public void setTerNames(List<TerminalInfoDTO> terNames) {
         this.terNames = terNames;
     }
-    
 }
