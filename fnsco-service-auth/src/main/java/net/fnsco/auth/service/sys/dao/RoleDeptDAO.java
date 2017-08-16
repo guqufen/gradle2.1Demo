@@ -24,8 +24,8 @@ public interface RoleDeptDAO {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(RoleDeptDO roleDept);
 
-    @Delete("DELETE FROM sys_role_dept WHERE id = #{id}")
-    public int deleteById(@Param("id") int id);
+    @Delete("DELETE FROM sys_role_dept WHERE role_id = #{id}")
+    public int deleteById(@Param("id") Long id);
 
     @UpdateProvider(type = RoleDeptProvider.class, method = "update")
     public int update(@Param("roleDept") RoleDeptDO  roleDept);

@@ -1,10 +1,16 @@
 package net.fnsco.auth.service.sys.dao.helper;
 
 import org.apache.ibatis.jdbc.SQL;
+
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.alibaba.druid.sql.visitor.functions.Insert;
+
 import org.apache.commons.lang3.StringUtils;
 
 import net.fnsco.auth.service.sys.entity.RoleMenuDO;

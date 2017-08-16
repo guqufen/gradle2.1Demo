@@ -1,118 +1,154 @@
 package net.fnsco.auth.service.sys.entity;
 
+import java.util.List;
 
 public class MenuDO {
 
-    /**
-     * 
-     */
-    private Integer id;
+	/**
+	 * 菜单ID
+	 */
+	private Integer id;
 
-    /**
-     * 父菜单ID，一级菜单为0
-     */
-    private Integer parentId;
+	/**
+	 * 父菜单ID，一级菜单为0
+	 */
+	private Integer parentId;
 
-    /**
-     * 菜单名称
-     */
-    private String name;
+	/**
+	 * 父菜单名称
+	 */
+	private String parentName;
 
-    /**
-     * 菜单URL
-     */
-    private String url;
+	/**
+	 * 菜单名称
+	 */
+	private String name;
 
-    /**
-     * 授权(多个用逗号分隔，如：user:list,user:create)
-     */
-    private String perms;
+	/**
+	 * 菜单URL
+	 */
+	private String url;
 
-    /**
-     * 类型   0：目录   1：菜单   2：按钮
-     */
-    private Integer type;
+	/**
+	 * 授权(多个用逗号分隔，如：user:list,user:create)
+	 */
+	private String perms;
 
-    /**
-     * 菜单图标
-     */
-    private String icon;
+	/**
+	 * 类型 0：目录 1：菜单 2：按钮
+	 */
+	private Integer type;
 
-    /**
-     * 排序
-     */
-    private Integer orderNum;
+	/**
+	 * 菜单图标
+	 */
+	private String icon;
 
+	/**
+	 * 排序
+	 */
+	private Integer orderNum;
 
+	/**
+	 * ztree属性
+	 * 
+	 * @return
+	 */
+	private Boolean open;
 
-    public Integer getId() {
-        return id;
-    }
+	private List<?> list;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public Integer getParentId() {
-        return parentId;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
-    }
+	public Integer getParentId() {
+		return parentId;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public String getPerms() {
-        return perms;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    public void setPerms(String perms) {
-        this.perms = perms;
-    }
+	public String getPerms() {
+		return perms;
+	}
 
-    public Integer getType() {
-        return type;
-    }
+	public void setPerms(String perms) {
+		this.perms = perms;
+	}
 
-    public void setType(Integer type) {
-        this.type = type;
-    }
+	public Integer getType() {
+		return type;
+	}
 
-    public String getIcon() {
-        return icon;
-    }
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
+	public String getIcon() {
+		return icon;
+	}
 
-    public Integer getOrderNum() {
-        return orderNum;
-    }
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
 
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
-    }
+	public Integer getOrderNum() {
+		return orderNum;
+	}
 
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
+	}
 
+	public String getParentName() {
+		return parentName;
+	}
 
-    @Override
-    public String toString() {
-        return "[id="+ id + ", parentId="+ parentId + ", name="+ name + ", url="+ url + ", perms="+ perms + ", type="+ type + ", icon="+ icon + ", orderNum="+ orderNum + "]";
-    }
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+	public Boolean getOpen() {
+		return open;
+	}
+
+	public void setOpen(Boolean open) {
+		this.open = open;
+	}
+
+	public List<?> getList() {
+		return list;
+	}
+
+	public void setList(List<?> list) {
+		this.list = list;
+	}
+
+	@Override
+	public String toString() {
+		return "[id=" + id + ", parentId=" + parentId + ", name=" + name + ", url=" + url + ", perms=" + perms
+				+ ", type=" + type + ", icon=" + icon + ", orderNum=" + orderNum + "]";
+	}
 }
