@@ -63,7 +63,6 @@ public class DeptProvider {
         if (dept.getDelFlag() != null) {
             WHERE("del_flag=#{dept.delFlag}");
         }
-        ORDER_BY("order_num asc limit " + start + ", " + limit );
         WHERE("del_flag=0");
         ORDER_BY("id  limit " + start + ", " + limit );
         }}.toString();
