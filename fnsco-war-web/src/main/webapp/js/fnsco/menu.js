@@ -304,24 +304,24 @@ $('#btn_edit').click(function() {
 
 		//设置单选按钮的值
 		$("input[name=team]").each(function(){
-			if(this.val == selectContent[0].type){
+			if(this.value == selectContent[0].type){
 				$(this).prop("checked", "checked");
 			
-			if($(this).val() == "0"){
+			if(this.value == "0"){
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
 				$('#permsDiv').hide();
 				$('#orderNumDiv').show();
 				$('#iconDiv').show();
-			}else if($(this).val() == "1"){
+			}else if(this.value == "1"){
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').show();
 				$('#permsDiv').show();
 				$('#orderNumDiv').show();
 				$('#iconDiv').show();
-			}else if($(this).val() == "2"){
+			}else if(this.value == "2"){
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
