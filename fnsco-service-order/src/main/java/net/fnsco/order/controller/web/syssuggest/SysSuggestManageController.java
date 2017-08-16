@@ -13,7 +13,6 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.order.api.dto.SysSuggestDTO;
 import net.fnsco.order.api.syssuggest.SysSuggestService;
-import net.fnsco.order.service.domain.SysSuggest;
 
 /**
  * 

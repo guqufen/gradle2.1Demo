@@ -6,11 +6,35 @@ import net.fnsco.core.base.PageDTO;
 
 public class TradeDataQueryDTO extends PageDTO {
     private Integer      userId;    //登录用户Id
-    private String       innerCode; // 内部商务号
+    private List<String>       innerCodes; // 内部商务号
     private String       startDate; // 开始日期 2016-05-10
     private String       endDate;   //结束日期 2016-05-10
     private List<String> terminals; //终端号数组，所有选择的终端
     private String       tradeId;   //交易流水ID
+    private String       payType;//支付类型00", "刷卡支付""01", "02", "支付宝支付","微信支付""06", "拉卡拉钱包"
+    
+    
+    /**
+     * payType
+     *
+     * @return  the payType
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getPayType() {
+        return payType;
+    }
+
+    /**
+     * payType
+     *
+     * @param   payType    the payType to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
 
     /**
      * tradeId
@@ -56,26 +80,28 @@ public class TradeDataQueryDTO extends PageDTO {
         this.userId = userId;
     }
 
+     
+
     /**
-     * innerCode
+     * innerCodes
      *
-     * @return  the innerCode
+     * @return  the innerCodes
      * @since   CodingExample Ver 1.0
     */
-
-    public String getInnerCode() {
-        return innerCode;
+    
+    public List<String> getInnerCodes() {
+        return innerCodes;
     }
 
     /**
-     * innerCode
+     * innerCodes
      *
-     * @param   innerCode    the innerCode to set
+     * @param   innerCodes    the innerCodes to set
      * @since   CodingExample Ver 1.0
      */
-
-    public void setInnerCode(String innerCode) {
-        this.innerCode = innerCode;
+    
+    public void setInnerCodes(List<String> innerCodes) {
+        this.innerCodes = innerCodes;
     }
 
     /**

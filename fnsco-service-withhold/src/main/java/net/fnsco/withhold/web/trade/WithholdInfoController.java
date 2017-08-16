@@ -1,5 +1,6 @@
 package net.fnsco.withhold.web.trade;
 
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import net.fnsco.withhold.comm.ApiConstant;
 import net.fnsco.withhold.service.trade.WithholdInfoService;
+import net.fnsco.withhold.service.trade.entity.ProductTypeDO;
 import net.fnsco.withhold.service.trade.entity.WithholdInfoDO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.base.ResultDTO;
@@ -95,5 +97,21 @@ public class WithholdInfoController extends BaseController {
  public ResultDTO detail(@RequestParam String id) {
      WithholdInfoDO result = this.withholdInfoService.doQueryById(NumberUtils.toInt(id));
      return success(result);
+ }
+ // 查询代扣类型
+ @ApiOperation(value = "查询代扣类型", notes = "查询代扣类型")
+ @ResponseBody
+ @RequestMapping(value = "queryWithholdType")
+ public ResultDTO queryWithholdType () {
+     List<ProductTypeDO> resultDO = this.withholdInfoService.queryWithholdType();
+     return success(resultDO);
+ }
+ //根据code查询
+ @ApiOperation(value = "查询代扣名称", notes = "查询代扣名称")
+ @ResponseBody
+ @RequestMapping(value = "queryWithholdName")
+ public ResultDTO queryWithholdName (@RequestParam String code) {
+     ProductTypeDO resultDO = this.withholdInfoService.queryWithholdName(code);
+     return success(resultDO);
  }
 }

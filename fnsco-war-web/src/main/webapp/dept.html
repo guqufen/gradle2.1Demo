@@ -9,6 +9,7 @@
     <link rel="shortcut icon" href="favicon.ico">
     <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/ztree/metroStyle/metroStyle.css" rel="stylesheet">
     <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
     <link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="css/style.min.css" rel="stylesheet">
@@ -53,27 +54,29 @@
 	            </div>
 	            <div class="modal-body">
 	                <div class="tab-content">
+	                	<form action="" id="mercore_form" method="post">
 	                        <div class="row">
 	                            <div class="col-sm-8">
-	                                <label class="control-label" for="mobile">部门名称：</label>
-	                                <input type="text" class="form-control" id=name placeholder="部门名称" name="name" required="required">
+	                                <label class="control-label" for="name">部门名称：</label>
+	                                <input type="text" class="form-control" id="name" placeholder="部门名称" name="name" required="required">
 	                            </div>
 	                            <div class="col-sm-8">
-	                                <label class="control-label" for="userName">上级部门：</label>
-	                                <input type="text" class="form-control" id="pointer" name="pointer" readonly="readonly" placeholder="一级部门">
+	                                <label class="control-label" for="parentName">上级部门：</label>
+	                                <input type="text" class="form-control" id="parentName" name="parentName" readonly="readonly" placeholder="一级部门">
 	                            </div>
 	                            <div class="col-sm-8">
-	                                <label class="control-label" for="submitTime">排序号：</label>
+	                                <label class="control-label" for="orderNum">排序号：</label>
 	                                <input type="number" class="form-control" id="orderNum" name="orderNum" placeholder="排序号">
 	                            </div>
 	                        </div>  
+	                    </form>
 	                </div>
 	            </div>
 	             <div class="modal-footer">
 	                <div class="tab-content">
 	                	<div class="form-group">
 							<div class="col-sm-2 control-label"></div>
-							<button id="btn_yse" type="button" class="btn btn-primary">
+							<button id="btn_yes" type="button" class="btn btn-primary">
                                 <span  aria-hidden="true"></span>确认添加
                             </button>
 						</div>
@@ -92,27 +95,29 @@
 	            </div>
 	            <div class="modal-body">
 	                <div class="tab-content">
+	                <form action="" id="mercore_form1" method="post">
 	                        <div class="row">
 	                            <div class="col-sm-8">
-	                                <label class="control-label" for="mobile">部门名称：</label>
-	                                <input type="text" class="form-control" id=name1 placeholder="部门名称" name="name1" required="required">
+	                                <label class="control-label" for="name1">部门名称：</label>
+	                                <input type="text" class="form-control" id="name1" placeholder="部门名称" name="name" required="required">
 	                            </div>
 	                            <div class="col-sm-8">
 	                                <label class="control-label" for="userName">上级部门：</label>
-	                                <input type="text" class="form-control" id="pointer1" name="pointer1" readonly="readonly" placeholder="一级部门">
+	                                <input type="text" class="form-control" id="parentName1" name="parentName" readonly="readonly" placeholder="一级部门">
 	                            </div>
 	                            <div class="col-sm-8">
-	                                <label class="control-label" for="submitTime">排序号：</label>
-	                                <input type="number" class="form-control" id="orderNum1" name="orderNum1 " placeholder="排序号">
+	                                <label class="control-label" for="orderNum1">排序号：</label>
+	                                <input type="number" class="form-control" id="orderNum1" name="orderNum" placeholder="排序号">
 	                            </div>
-	                        </div>  
+	                        </div> 
+	                </form>    
 	                </div>
 	            </div>
 	             <div class="modal-footer">
 	                <div class="tab-content">
 	                	<div class="form-group">
 							<div class="col-sm-2 control-label"></div>
-							<button id="btn_yse1" type="button" class="btn btn-primary" role="tab" data-toggle="tab">
+							<button id="btn_yes1" type="button" class="btn btn-primary" role="tab" data-toggle="tab">
                                 <span aria-hidden="true"></span>确认修改
                             </button>
 						</div>
@@ -136,6 +141,7 @@
 <script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="js/plugins/ztree/jquery.ztree.all.min.js"></script>
 <script src="js/layer/layer.js"></script>
 <script type="text/javascript" src="js/fnsco/common.js"></script>
 <script type="text/javascript" src="js/fnsco/dept.js"></script>
