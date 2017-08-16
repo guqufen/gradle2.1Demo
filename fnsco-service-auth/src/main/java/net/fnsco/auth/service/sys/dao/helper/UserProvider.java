@@ -80,7 +80,7 @@ public class UserProvider {
             WHERE("type=#{user.type}");
         }
         if (StringUtils.isNotBlank(user.getName())){
-            WHERE("name=#{user.name}");
+            WHERE("name like CONCAT('%',#{user.name},'%')");
         }
         if (StringUtils.isNotBlank(user.getPassword())){
             WHERE("password=#{user.password}");
@@ -112,7 +112,8 @@ public class UserProvider {
         if (user.getModifyUserId() != null) {
             WHERE("modify_user_id=#{user.modifyUserId}");
         }
-        ORDER_BY("id desc limit " + start + ", " + limit );
+        WHERE("status!=-1");
+        ORDER_BY("id limit " + start + ", " + limit );
         }}.toString();
     }
 
@@ -127,8 +128,8 @@ public class UserProvider {
         if (user.getType() != null) {
             WHERE("type=#{user.type}");
         }
-        if (StringUtils.isNotBlank(user.getName())){
-            WHERE("name=#{user.name}");
+        if (StringUtils.isNotBlank(user.getName())) {
+            WHERE("name like CONCAT('%',#{user.name},'%')");
         }
         if (StringUtils.isNotBlank(user.getPassword())){
             WHERE("password=#{user.password}");

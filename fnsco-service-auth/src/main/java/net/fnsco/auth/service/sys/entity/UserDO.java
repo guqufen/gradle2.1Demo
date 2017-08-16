@@ -13,8 +13,22 @@ public class UserDO {
      * 1 oem管理员/2 代理商用户/ 3 商户/ 4 其它用户
      */
     private Integer type;
-
     /**
+     * 1禁止 0正常-1删除
+     */
+    private Integer status;
+
+    public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+
+
+	/**
      * 用户名
      */
     private String name;
@@ -70,8 +84,16 @@ public class UserDO {
     private Integer modifyUserId;
 
 
+    private String modifyTimeStr;
+    public String getModifyTimeStr() {
+		return modifyTimeStr;
+	}
 
-    public Integer getId() {
+	public void setModifyTimeStr(String modifyTimeStr) {
+		this.modifyTimeStr = modifyTimeStr;
+	}
+
+	public Integer getId() {
         return id;
     }
 
