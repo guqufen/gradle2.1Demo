@@ -68,7 +68,7 @@ public class RoleProvider {
         if (role.getCreateTime() != null) {
             WHERE("create_time=#{role.createTime}");
         }
-        ORDER_BY("id desc limit " + start + ", " + limit );
+        ORDER_BY("role_id desc limit " + start + ", " + limit );
         }}.toString();
     }
 
