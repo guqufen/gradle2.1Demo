@@ -1,6 +1,5 @@
 package net.fnsco.auth.service.sys.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +7,7 @@ public class RoleDO {
 	/**
 	 * 角色ID
 	 */
-	private Integer roleId;
+	private Long roleId;
 
 	/**
 	 * 角色名称
@@ -50,11 +49,11 @@ public class RoleDO {
 	 */
 	private String createTimeSt;
 
-	public Integer getRoleId() {
+	public Long getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(Integer roleId) {
+	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
 	}
 

@@ -27,7 +27,7 @@ public class RoleService extends BaseService {
 
 	public ResultPageDTO<RoleDO> pageList(RoleDO role, Integer page, Integer rows) {
 		logger.info("开始分页查询RoleService.page, role=" + role.toString() + ",page=" + page + ",rows=" + rows);
-		List<RoleDO> pageList = roleDAO.queryList(role, page, rows);
+		List<RoleDO> pageList = roleDAO.pageList(role, page, rows);
 		for (RoleDO roleDO : pageList) {
 			Integer deptId = roleDO.getDeptId();
 			if (null != deptId) {
@@ -85,7 +85,7 @@ public class RoleService extends BaseService {
 			role.setRoleId(roleId);
 
 			// 删除角色表数据(根据ID删除)
-			int result = this.roleDAO.delete(roleDO);
+			int result = this.roleDAO.deleteById(roleDO.getRoleId());
 			if (result <= 0) {
 				roleDO = null;
 				return roleDO;
@@ -111,7 +111,7 @@ public class RoleService extends BaseService {
 	 public List<RoleDO> queryType() {
 			 //返回根据条件查询的所有记录条数
 			 List<RoleDO> data = roleDAO.query();
-		        //ResultDTO<DeptDO> result = new ResultDTO<DeptDO>(data);
+
 		     return data;
 	 }
 

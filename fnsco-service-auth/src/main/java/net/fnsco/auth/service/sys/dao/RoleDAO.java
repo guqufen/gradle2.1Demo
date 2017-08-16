@@ -26,7 +26,7 @@ public interface RoleDAO {
     public void insert(RoleDO role);
 
     @Delete("DELETE FROM sys_role WHERE id = #{id}")
-    public int deleteById(@Param("id") int id);
+    public int deleteById(@Param("id") Long id);
 
     @UpdateProvider(type = RoleProvider.class, method = "update")
     public int update(@Param("role") RoleDO  role);
