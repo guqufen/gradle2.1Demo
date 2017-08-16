@@ -10,7 +10,7 @@ public class TradeDataJO extends JO {
     private String statusName;
     private String payType;
     private String payTypeName;
-
+    private String txnType;//交易类型1消费2撤销
     //交易详情
     private String innerCode;
     //商户名
@@ -38,6 +38,28 @@ public class TradeDataJO extends JO {
     //扫码订单号
     private String       orderIdScan;
     
+    /**
+     * txnType
+     *
+     * @return  the txnType
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getTxnType() {
+        return txnType;
+    }
+
+    /**
+     * txnType
+     *
+     * @param   txnType    the txnType to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setTxnType(String txnType) {
+        this.txnType = txnType;
+    }
+
     /**
      * orderIdScan
      *

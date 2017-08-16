@@ -66,9 +66,21 @@ public class TradeDataController extends BaseController {
                     jo.setPayTypeName("其它");
                 }
                 jo.setStatus(tradeData.getRespCode());
-                jo.setStatusName(TradeStateEnum.getNameByCode(jo.getStatus()));
+                String statusName =TradeStateEnum.getNameByCode(jo.getStatus());
+                String payType =tradeData.getPaySubType();
+                if("1".equals(tradeData.getTxnType())){//交易类型1消费2撤销
+                    if("00".equals(payType)){//交易子类型00刷卡01微信02支付宝
+                        jo.setStatusName("刷卡"+statusName);
+                    }else{
+                        jo.setStatusName("扫码"+statusName);
+                    }
+                }else if("2".equals(tradeData.getTxnType())){//交易类型1消费2撤销
+                    jo.setStatusName("撤单"+statusName);
+                }
+                
                 jo.setId(tradeData.getId());
                 jo.setTradeTime(tradeData.getTimeStamp());
+                jo.setTxnType(tradeData.getTxnType());
                 resultList.add(jo);
             }
         }
@@ -111,7 +123,18 @@ public class TradeDataController extends BaseController {
         result.setPayType(tradeData.getPaySubType());
         result.setPayTypeName(PaySubTypeAllEnum.getNameByCode(result.getPayType()));
         result.setStatus(tradeData.getRespCode());
-        result.setStatusName(TradeStateEnum.getNameByCode(result.getStatus()));
+        String statusName =TradeStateEnum.getNameByCode(result.getStatus());
+        String payType =tradeData.getPaySubType();
+        if("1".equals(tradeData.getTxnType())){//交易类型1消费2撤销
+            if("00".equals(payType)){//交易子类型00刷卡01微信02支付宝
+                result.setStatusName("刷卡"+statusName);
+            }else{
+                result.setStatusName("扫码"+statusName);
+            }
+        }else if("2".equals(tradeData.getTxnType())){//交易类型1消费2撤销
+            result.setStatusName("撤单"+statusName);
+        }
+        //result.setStatusName(TradeStateEnum.getNameByCode(result.getStatus()));
         result.setId(tradeData.getId());
         result.setTradeTime(tradeData.getTimeStamp());
         if(null != merchantCore){

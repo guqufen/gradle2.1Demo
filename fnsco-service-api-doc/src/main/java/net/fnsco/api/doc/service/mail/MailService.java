@@ -15,7 +15,6 @@ import java.util.List;
 
 import javax.mail.internet.MimeMessage;
 
-import org.assertj.core.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
@@ -23,6 +22,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import com.google.common.base.Strings;
 
 import net.fnsco.api.doc.service.vo.MailCfg;
 import net.fnsco.core.base.BaseService;

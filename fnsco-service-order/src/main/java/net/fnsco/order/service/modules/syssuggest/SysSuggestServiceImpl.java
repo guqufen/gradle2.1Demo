@@ -48,7 +48,8 @@ public class SysSuggestServiceImpl extends BaseService implements SysSuggestServ
 	 */
 	@Override
 	public ResultDTO<SysSuggestDTO> queryById(Integer id) {
-        return ResultDTO.success(syssuggestDao.queryById(id));
+		SysSuggestDTO data = syssuggestDao.queryById(id);
+        return ResultDTO.success(data);
 	}
     
 

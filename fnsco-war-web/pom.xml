@@ -66,6 +66,11 @@
 		</dependency>
 		<dependency>
 			<groupId>net.fnsco</groupId>
+			<artifactId>fnsco-service-auth</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>net.fnsco</groupId>
 			<artifactId>fnsco-config</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

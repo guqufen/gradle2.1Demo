@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
 import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.auth.service.sys.dao.helper.UserProvider;
@@ -24,8 +25,8 @@ public interface UserDAO {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(UserDO user);
 
-    @Delete("DELETE FROM sys_user WHERE id = #{id}")
-    public int deleteById(@Param("id") int id);
+    @Update("UPDATE sys_user SET status='-1' WHERE id = #{id}")
+    public int deleteById(@Param("id") Integer id);
 
     @UpdateProvider(type = UserProvider.class, method = "update")
     public int update(@Param("user") UserDO  user);

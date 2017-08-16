@@ -51,7 +51,7 @@ public class MenuProvider {
             pageNum = 1;
         }
         if (pageSize == null || pageSize == 0) {
-            pageSize = 20;
+            pageSize = 50;
         }
         int start = (pageNum - 1) * pageSize;
         int limit = pageSize;
@@ -82,7 +82,7 @@ public class MenuProvider {
         if (menu.getOrderNum() != null) {
             WHERE("order_num=#{menu.orderNum}");
         }
-        ORDER_BY("id desc limit " + start + ", " + limit );
+        ORDER_BY("id asc limit " + start + ", " + limit );
         }}.toString();
     }
 
