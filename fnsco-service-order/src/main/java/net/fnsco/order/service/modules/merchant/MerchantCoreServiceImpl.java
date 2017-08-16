@@ -270,12 +270,12 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     private MerchantTerminal getParamesFormReqTerm(HttpServletRequest request) {
         MerchantTerminal merchantTerminal = new MerchantTerminal();
         merchantTerminal.setInnerCode(request.getParameter("innerCode"));
-        merchantTerminal.setMerchantCode(request.getParameter("merchantCode"));
-        merchantTerminal.setChannelId(Integer.valueOf(request.getParameter("channelId")));
-        merchantTerminal.setChannelName(request.getParameter("channelName"));
+//        merchantTerminal.setMerchantCode(request.getParameter("merchantCode"));
+//        merchantTerminal.setChannelId(Integer.valueOf(request.getParameter("channelId")));
+//        merchantTerminal.setChannelName(request.getParameter("channelName"));
         merchantTerminal.setTerminalCode(request.getParameter("terminalCode"));
         merchantTerminal.setInnerTermCode(request.getParameter("innerTermCode"));
-        merchantTerminal.setSnCode(request.getParameter("snCode"));
+//        merchantTerminal.setSnCode(request.getParameter("snCode"));
         merchantTerminal.setTerminalBatch(request.getParameter("terminalBatch"));
         merchantTerminal.setTerminalPara(request.getParameter("terminalPara"));
         merchantTerminal.setChargesType(Integer.valueOf(request.getParameter("chargesType")));
@@ -289,8 +289,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         merchantTerminal.setRecordState(request.getParameter("recordState"));
         merchantTerminal.setTermAuditState(request.getParameter("termAuditState"));
         merchantTerminal.setTermName(request.getParameter("termName"));
-        merchantTerminal.setPosFactory(request.getParameter("posFactory"));
-        merchantTerminal.setPosType(request.getParameter("posType"));
+//        merchantTerminal.setPosFactory(request.getParameter("posFactory"));
+//        merchantTerminal.setPosType(request.getParameter("posType"));
         merchantTerminal.setMercReferName(request.getParameter("mercReferName"));
         return merchantTerminal;
     }

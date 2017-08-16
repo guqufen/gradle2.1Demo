@@ -20,17 +20,11 @@ public class MerchantTerminal extends DTO{
 
     private String innerCode;
 
-    private String merchantCode;
-
-    private Integer channelId;
-
-    private String channelName;
+    private Integer posId;
 
     private String terminalCode;
 
     private String innerTermCode;
-
-    private String snCode;
 
     private String terminalBatch;
 
@@ -58,11 +52,13 @@ public class MerchantTerminal extends DTO{
 
     private String termName;
 
-    private String posFactory;
-
-    private String posType;
-
     private String mercReferName;
+
+    private Integer wechatFee;
+
+    private Integer alipayFee;
+
+    private String terminalType;
 
     public Integer getId() {
         return id;
@@ -80,28 +76,12 @@ public class MerchantTerminal extends DTO{
         this.innerCode = innerCode == null ? null : innerCode.trim();
     }
 
-    public String getMerchantCode() {
-        return merchantCode;
+    public Integer getPosId() {
+        return posId;
     }
 
-    public void setMerchantCode(String merchantCode) {
-        this.merchantCode = merchantCode == null ? null : merchantCode.trim();
-    }
-
-    public Integer getChannelId() {
-        return channelId;
-    }
-
-    public void setChannelId(Integer channelId) {
-        this.channelId = channelId;
-    }
-
-    public String getChannelName() {
-        return channelName;
-    }
-
-    public void setChannelName(String channelName) {
-        this.channelName = channelName == null ? null : channelName.trim();
+    public void setPosId(Integer posId) {
+        this.posId = posId;
     }
 
     public String getTerminalCode() {
@@ -118,14 +98,6 @@ public class MerchantTerminal extends DTO{
 
     public void setInnerTermCode(String innerTermCode) {
         this.innerTermCode = innerTermCode == null ? null : innerTermCode.trim();
-    }
-
-    public String getSnCode() {
-        return snCode;
-    }
-
-    public void setSnCode(String snCode) {
-        this.snCode = snCode == null ? null : snCode.trim();
     }
 
     public String getTerminalBatch() {
@@ -232,28 +204,36 @@ public class MerchantTerminal extends DTO{
         this.termName = termName == null ? null : termName.trim();
     }
 
-    public String getPosFactory() {
-        return posFactory;
-    }
-
-    public void setPosFactory(String posFactory) {
-        this.posFactory = posFactory == null ? null : posFactory.trim();
-    }
-
-    public String getPosType() {
-        return posType;
-    }
-
-    public void setPosType(String posType) {
-        this.posType = posType == null ? null : posType.trim();
-    }
-
     public String getMercReferName() {
         return mercReferName;
     }
 
     public void setMercReferName(String mercReferName) {
         this.mercReferName = mercReferName == null ? null : mercReferName.trim();
+    }
+
+    public Integer getWechatFee() {
+        return wechatFee;
+    }
+
+    public void setWechatFee(Integer wechatFee) {
+        this.wechatFee = wechatFee;
+    }
+
+    public Integer getAlipayFee() {
+        return alipayFee;
+    }
+
+    public void setAlipayFee(Integer alipayFee) {
+        this.alipayFee = alipayFee;
+    }
+
+    public String getTerminalType() {
+        return terminalType;
+    }
+
+    public void setTerminalType(String terminalType) {
+        this.terminalType = terminalType == null ? null : terminalType.trim();
     }
     
     @Override
