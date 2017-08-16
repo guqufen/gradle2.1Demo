@@ -1,18 +1,19 @@
 package net.fnsco.auth.service.sys.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Options;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import net.fnsco.auth.service.sys.entity.RoleDO;
-import net.fnsco.auth.service.sys.dao.helper.RoleProvider;
 
-import java.util.List;;
+import net.fnsco.auth.service.sys.dao.helper.RoleProvider;
+import net.fnsco.auth.service.sys.entity.RoleDO;;
 
 public interface RoleDAO {
 
