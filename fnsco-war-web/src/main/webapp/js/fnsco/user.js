@@ -229,7 +229,7 @@ function resetEvent(form, id) {
 function showdates(data) {
 	$("#type").html('');
 	for (i = 0; i < data.length; i++) {
-		html='<div class="col-sm-6"><label><input type="checkbox"  id="type" name="type"  for="type">'+data[i].roleName+'</label></div>';
+		html='<div class="col-sm-6"><label><input type="checkbox"  id="type" name="type" value="'+data[i].roleId+'"/>'+data[i].roleName+'</label></div>';
 		$("#type").append(html);
 	}
 };
