@@ -3,13 +3,15 @@ package net.fnsco.order.service.dao.master;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.order.api.dto.SysSuggestDTO;
 import net.fnsco.order.service.domain.SysSuggest;
 
 
 public interface SysSuggestDao {
-    int insertSelective(SysSuggest record);
+    int insert(SysSuggest record);
     /**
 	 * queryPageList:(这里用一句话描述这个方法的作用)条件分页查询
 	 *

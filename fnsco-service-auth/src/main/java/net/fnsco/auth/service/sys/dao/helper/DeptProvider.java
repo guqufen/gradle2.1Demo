@@ -33,7 +33,6 @@ public class DeptProvider {
         WHERE("id = #{dept.id}");
         }}.toString();
     }
-
     public String pageList(Map<String, Object> params) {
         DeptDO dept = (DeptDO) params.get("dept");
         Integer pageNum = (Integer) params.get("pageNum");
@@ -65,6 +64,8 @@ public class DeptProvider {
             WHERE("del_flag=#{dept.delFlag}");
         }
         ORDER_BY("order_num asc limit " + start + ", " + limit );
+        WHERE("del_flag=0");
+        ORDER_BY("id  limit " + start + ", " + limit );
         }}.toString();
     }
 

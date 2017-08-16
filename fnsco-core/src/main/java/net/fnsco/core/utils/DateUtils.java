@@ -301,7 +301,32 @@ public class DateUtils {
         calendar.add(Calendar.DATE, day);
         return sf.format(calendar.getTime());
     }
-
+    /**
+     * 
+     * getMondayByTimeStr:(这里用一句话描述这个方法的作用)返回传入日期的那周周一日期
+     *
+     * @param dateStr
+     * @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String getMondayByTimeStr(String dateStr){
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        try {
+            Date date = sf.parse(dateStr);
+            calendar.setTime(date);
+            while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+                calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
+            }
+            return strFormatToStr(sf.format(calendar.getTime()));
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
     /**
      * 根据传入的年月日数据，返回对应格式的日期字符串
      * @param year

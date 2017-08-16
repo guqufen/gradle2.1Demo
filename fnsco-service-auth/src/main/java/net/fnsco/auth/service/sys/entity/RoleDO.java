@@ -4,14 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class RoleDO implements Serializable {
-
-	private static final Long serialVersionUID = 1L;
-
+public class RoleDO {
 	/**
 	 * 角色ID
 	 */
-	private Long roleId;
+	private Integer roleId;
 
 	/**
 	 * 角色名称
@@ -48,11 +45,16 @@ public class RoleDO implements Serializable {
 	 */
 	private List<Long> deptIdList;
 
-	public Long getRoleId() {
+	/**
+	 * 时间的String类型
+	 */
+	private String createTimeSt;
+
+	public Integer getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(Long roleId) {
+	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
 	}
 
@@ -80,20 +82,20 @@ public class RoleDO implements Serializable {
 		this.deptId = deptId;
 	}
 
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
 	public String getDeptName() {
 		return deptName;
 	}
 
 	public void setDeptName(String deptName) {
 		this.deptName = deptName;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
 	public List<Long> getMenuIdList() {
@@ -112,8 +114,17 @@ public class RoleDO implements Serializable {
 		this.deptIdList = deptIdList;
 	}
 
-	public static Long getSerialversionuid() {
-		return serialVersionUID;
+	public String getCreateTimeSt() {
+		return createTimeSt;
 	}
 
+	public void setCreateTimeSt(String createTimeSt) {
+		this.createTimeSt = createTimeSt;
+	}
+
+	@Override
+	public String toString() {
+		return "[roleId=" + roleId + ", roleName=" + roleName + ", remark=" + remark + ", deptId=" + deptId
+				+ ", createTime=" + createTime + "]";
+	}
 }

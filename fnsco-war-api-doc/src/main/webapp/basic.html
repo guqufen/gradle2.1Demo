@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>APP用户管理-法奈昇大数据平台</title>
+		<meta name="keywords" content="法奈昇大数据平台">
+		<meta name="description" content="法奈昇大数据平台">
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+		<link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<!--<link href="css/style.min.css" rel="stylesheet">-->
+		<!--<link href="css/custom.css" rel="stylesheet">-->
+		<style>
+			.arrow {
+				position: absolute;
+				top: 50%;
+				right: 8px;
+				width: 10px;
+				margin-top: -3px;
+				height: 5px;
+				background: url(img/drop-arrow.png) -10px -25px no-repeat;
+			}
+			
+			#exampleTableFromData td {
+				/*border-left: 1px solid #ddd;
+				border-right: 1px solid #ddd;*/
+			}
+			.content_box{
+				width: 100%;height:40px;background-color:white;border-radius: 2%;border-bottom: 1px solid #ddd;
+				    background-color: rgb(32, 160, 255);
+			}
+			label{
+				color: gray;
+				font-size: 16px;
+			}
+		</style>
+	</head>
+
+	<body style="background-color: rgb(247,246,242);">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-3" style="background-color: white; padding: 10px 20px; margin-top: 15px; border-radius: 5px; box-shadow: rgb(136, 136, 136) 0px 2px 2px;height:600px;">
+					<div class="first" style="width: 100%;height: 50px;background-color:rgb(32, 160, 255);border-radius: 2%;">
+						<div>
+							<span style="font-size: 20px;line-height: 55px;color:white;margin-left: 5%;margin-right: 60%;">分组</span>
+							<span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:white;font-size: 20px;margin-right: 10%;"></span>
+							<span class="glyphicon glyphicon-search" aria-hidden="true" style="color:white;font-size: 20px;"></span>
+						</div>
+						<!--<button type="button" class="btn btn-default btn-lg">-->
+						<!--<span class="glyphicon glyphicon-star" aria-hidden="true"></span>-->
+						<!--</button>-->
+					</div>
+					<div class="content">
+						<div class="second" style="width: 100%;height:40px;background-color:white;border-radius: 2%;border-bottom: 1px solid #ddd;line-height: 40px;">
+							<span class="glyphicon glyphicon-chevron-right" aria-hidden="true" style="font-size: 20px;color: rgb(32, 160, 255);"></span>
+							<span style="font-size: 20px;margin-right: 70%;color: rgb(32, 160, 255);">分组1</span>
+							<!--<span class="glyphicon glyphicon-align-justify" aria-hidden="true" style="font-size: 20px;color: rgb(32, 160, 255);"></span>-->
+							<div class="btn-group">
+								<span class="glyphicon glyphicon-align-justify dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-hidden="true" style="font-size: 20px;color: rgb(32, 160, 255);"></span>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="#">新建接口</a>
+									</li>
+									<li>
+										<a href="#">删除</a>
+									</li>
+									<li>
+										<a href="#">刷新</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="content_box" style="line-height: 40px;">
+							<span style="color: white;margin-left: 10%;margin-right: 60%;">接口名称</span>
+							<div class="btn-group">
+								<span class="glyphicon glyphicon-align-justify dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-hidden="true" style="font-size: 20px;color: white;"></span>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="#">删除</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="ths"></div>
+				</div>
+				<div class="col-md-9 right_box">
+					<div class="one" style="background-color: white; padding: 10px 20px; margin-top: 15px; border-radius: 5px; box-shadow: rgb(136, 136, 136) 0px 2px 2px;">
+						<div class="row" style="margin-bottom: 15px;">
+							<div class="col-sm-6">
+								<div class="form-group form-horizontal">
+									<label for="inputEmail3" class="col-sm-2 control-label">名称</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" placeholder="请输入接口名称">
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group form-horizontal">
+									<!--<div class="col-sm-3">
+										<button type="button" id="btn_query" class="btn btn-primary">保存</button>
+									</div>
+									<div class="col-sm-3">
+										<button type="button" id="btn_query" class="btn btn-primary">运行</button>
+									</div>-->
+									<div class="col-sm-9">
+										<button type="button" id="btn_yl" class="btn btn-primary">预览</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 15px;">
+								<div class="col-sm-6">
+									<div class="form-group form-horizontal">
+										<label for="inputEmail3" class="col-sm-2 control-label">路径</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" placeholder="请输入接口路径(不包含BaseUrl)">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="row form-group form-horizontal">
+										<label class="control-label col-sm-2" for="pushState">方法:</label>
+										<div class="col-sm-10">
+											<select id="pushState" name="pushState" class="form-control ">
+												<option selected="selected" value="">全部</option>
+												<option value="0">Get</option>
+												<option value="1">Post</option>
+											</select>
+										</div>
+									</div>
+								</div>
+						</div>
+						<div class="row" style="margin-bottom: 15px;">
+							<div class="col-sm-6">
+								<div class="form-group form-horizontal">
+									<label for="inputEmail3" class="col-sm-2 control-label">分组</label>
+									<div class="col-sm-10">
+										<select id="pushState" name="pushState" class="form-control ">
+											<option selected="selected" value="">全部</option>
+											<option value="0">分组1</option>
+											<option value="1">分组2</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="row form-group form-horizontal">
+									<label class="control-label col-sm-2" for="pushState">状态:</label>
+									<div class="col-sm-10">
+										<select id="pushState" name="pushState" class="form-control ">
+											<option selected="selected" value="">全部</option>
+											<option value="0">开发中</option>
+											<option value="1">开发完成</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin-bottom: 15px;">
+							<div class="col-sm-12">
+								<div class="form-group form-horizontal">
+									<label for="inputEmail3" class="col-sm-1 control-label">分享</label>
+									<div class="col-sm-11">
+										<input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group form-horizontal">
+									<label for="inputEmail3" class="col-sm-1 control-label">简介</label>
+									<div class="col-sm-11">
+										<textarea class="form-control" rows="3"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--<div class="two" style="background-color: white; padding: 10px 20px; margin-top: 15px; border-radius: 5px; box-shadow: rgb(136, 136, 136) 0px 2px 2px;overflow:hidden;padding:20px 0;">
+						<div class="row">
+							<h4 class="col-sm-2"> 快照</h4>
+							<h4 class="col-sm-2">当前为主干</h4>
+							<div class="col-sm-8">
+								<select id="pushState" name="pushState" style="float:right;" class="btn-sm">
+									<option selected="selected" value="">操作</option>
+									<option value="0">列表</option>
+									<option value="1">创建</option>
+								</select>
+							</div>
+						</div>
+					</div>-->
+					<div class="three" style="background-color: white; padding: 10px 20px; margin-top: 15px; border-radius: 5px; box-shadow: rgb(136, 136, 136) 0px 2px 2px;">
+						<div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+							<ul id="myTabs" class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active">
+									<a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="false">Query (0)</a>
+								</li>
+								<li role="presentation" class="">
+									<a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile" aria-expanded="true">Header (0)</a>
+								</li>
+								<li role="presentation" class="">
+									<a href="#inject" role="tab" id="inject-tab" data-toggle="tab" aria-controls="inject" aria-expanded="true">Inject (0)</a>
+								</li>
+							</ul>
+							<div id="myTabContent" class="tab-content">
+								<div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
+									<button type="button" id="btn_query" class="btn btn-primary btn_add">添加</button>
+									<table>
+										<tr>
+											<td style="width:20%;"><input type="email" class="form-control" id="exampleInputEmail3" placeholder="请填写参数名称"></td>
+											<td style="width:25%;margin-right:5%;">
+												<div class="checkbox" style="margin-left: 10%;">
+													<label><input type="checkbox"> 必选</label>
+												</div>
+											</td>
+											<td style="width:41%;"><input type="text" class="form-control" placeholder="请填写备注"></td>
+											<td style="width:10%;color: #20a0ff;"></td>
+											<td><button type="button" id="btn_query" class="btn btn-primary btn_add">删除</button></td>
+										</tr>
+									</table>
+								</div>
+								<div role="tabpanel" class="tab-pane" id="profile" aria-labelledby="profile-tab">
+									<table style="width: 100%;">
+										<tr>
+											<td style="width:6%;">
+												<div style="margin-right: 25%;"><input type="text" class="form-control" placeholder="请填写header"></div>
+											</td>
+											<td style="width:6%;">
+												<div style="margin-right: 25%;"><input type="text" class="form-control" placeholder="请填写value"></div>
+											</td>
+											<td style="width:6%;">
+												<div style="margin-right: 25%;"><input type="text" class="form-control" placeholder="请填写备注"></div>
+											</td>
+										</tr>
+										<tr>
+											<td><button type="button" id="btn_query" class="btn btn-primary">导入HTTP Header字符串</button></td>
+										</tr>
+									</table>
+								</div>
+								<div role="tabpanel" class="tab-pane" id="inject" aria-labelledby="inject-tab">
+									<div>
+										<label class="radio-inline">
+  											<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Before
+										</label>
+										<label class="radio-inline">
+  											<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> After
+										</label>
+										<label class="checkbox-inline">
+  											<input type="checkbox" id="inlineCheckbox1" value="option1"> 不执行全局注入
+										</label>
+									</div>
+									<textarea class="form-control" rows="3"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="four" style="background-color: white; padding: 10px 20px; margin-top: 15px; border-radius: 5px; box-shadow: rgb(136, 136, 136) 0px 2px 2px;">
+						<div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+							<ul id="myTabs" class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="active">
+									<a href="#json" id="json-tab" role="tab" data-toggle="json" aria-controls="json" aria-expanded="false">Query (0)</a>
+								</li>
+							</ul>
+							<div id="myTabContent" class="tab-content">
+								<div role="tabpanel" class="tab-pane fade active in" id="json" aria-labelledby="json-tab">
+									<div>
+										<label class="radio-inline">
+  											<input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> JSON
+										</label>
+										<!--<label class="radio-inline">
+  											<input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> RAW
+										</label>-->
+									</div>
+									<div>
+										<!--<input type="text" class="form-control" placeholder="Text input">-->
+										<textarea class="form-control" rows="3"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="col-md-9 right_box_tab" style="display: none;background-color: white; padding: 10px 20px; margin-top: 15px; border-radius: 5px; box-shadow: rgb(136, 136, 136) 0px 2px 2px;">
+					<div class="five">
+						<button type="button" id="btn_query" class="btn btn-primary pull-right btn_back">返回</button>
+						<h3>Method：</h3>
+						<h4>get</h4>
+						<h3>Path：</h3>
+						<h4>222</h4>
+						<h3>开发状态：</h3>
+						<h4>开发中</h4>
+						<h3>描述：</h3>
+						<h4>22</h4>
+						<h3>Query:</h3>
+						<table id="exampleTableFromData" data-mobile-responsive="true" class="table table-hover" >
+							<thead>
+								<tr>
+									<th style="" data-field="First" tabindex="0">
+										<div class="th-inner ">名称</div>
+										<div class="fht-cell"></div>
+									</th>
+									<th style="" data-field="sex" tabindex="0">
+										<div class="th-inner ">是否可选</div>
+										<div class="fht-cell"></div>
+									</th>
+									<th style="" data-field="Score" tabindex="0">
+										<div class="th-inner ">备注</div>
+										<div class="fht-cell"></div>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr data-index="1">
+									<td style="">2</td>
+									<td style="">灞波儿奔</td>
+									<td style="">男</td>
+								</tr>
+								<tr data-index="2">
+									<td style="">3</td>
+									<td style="">作家崔成浩</td>
+									<td style="">男</td>
+								</tr>
+								<tr data-index="3">
+									<td style="">4</td>
+									<td style="">韩寒</td>
+									<td style="">男</td>
+								</tr>
+							</tbody>
+						</table>
+						<h3>Result:</h3>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+		<script src=" https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js "></script>
+		<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js "></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-table.min.js "></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js "></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-table-export.js "></script>
+		<script src="js/plugins/bootstrap-table/tableExport.js "></script>
+		<script src="js/plugins/bootstrap-table/tableExport.js "></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js "></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-editable.js "></script>
+		<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js "></script>
+		<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js "></script>
+		<script src="js/layer/layer.js "></script>
+		<script src="js/uploadify-v3.1/jquery.uploadify.js "></script>
+		<script>
+			$("#btn_yl").click(function() {
+				$(".right_box").hide();
+				$(".right_box_tab").show();
+			})
+			$(".btn_back").click(function() {
+				$(".right_box").show();
+				$(".right_box_tab").hide();
+			})
+			$(".second").click(function(){
+				
+			})
+			$(".btn_add").click(function(){
+				
+			})
+		</script>
+	</body>
+
+</html>

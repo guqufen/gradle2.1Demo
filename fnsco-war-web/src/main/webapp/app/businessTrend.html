@@ -10,21 +10,26 @@
 		<link rel="stylesheet" href="css/mui.min.css">
 		<link rel="stylesheet" href="css/mui.picker.min.css">
 		<link rel="stylesheet" href="css/layout.css">
+		<style type="text/css">
+			.shortcut-select div{
+				display: none;
+			}
+		</style>
 	</head>
 	<body>
 		<header class="filter">
 			<div class="filter-show">
 				<div class="filter-time">
-					<span class="filter-startTime">2017月07月03日</span>-<span class="filter-endTime">2017月07月09日</span>
+					<span class="filter-startTime">----月--月--日</span>-<span class="filter-endTime">----月--月--日</span>
 				</div>
-				<div class="filter-name">全部店铺</div>
+				<div class="filter-name">全部商铺</div>
 			</div>
 			<a class="filter-btn" href="javascript:;"></a>
 		</header>
 		<div class="content">
 			<div class="trend-total">
 				<div class="trend-total-sum">
-					<span class="trend-total-num trend-total-sum-num">00.00</span>
+					<span class="trend-total-num trend-total-sum-num">0.00</span>
 					<span class="trend-total-title trend-total-sum-title">营业额(元)</span>
 				</div>
 				<div class="trend-total-order">
@@ -32,7 +37,7 @@
 					<span class="trend-total-title trend-total-order-title">订单数</span>
 				</div>
 				<div class="trend-total-average">
-					<span class="trend-total-num trend-total-average-num">00.00</span>
+					<span class="trend-total-num trend-total-average-num">0.00</span>
 					<span class="trend-total-title trend-total-average-title">客单价(均)</span>
 				</div>
 			</div>
@@ -48,11 +53,11 @@
 			<div class="close"><span class="mui-icon mui-icon-closeempty"></span></div>
 			<div class="mui-row time-input">
 				<div class="mui-col-xs-5">
-					<input class="select-time" type="text" id="start-time" placeholder="选择日期" readonly="readonly" data-options='{"type":"date"}' value=''>
+					<input class="select-time1" type="text" id="start-time" placeholder="选择日期" readonly="readonly" data-options='{"type":"date"}' value=''>
 				</div>
 				<div class="mui-col-xs-2">——</div>
 				<div class="mui-col-xs-5">
-					<input class="select-time" type="text" id="end-time" placeholder="选择日期" readonly="readonly" data-options='{"type":"date"}' value=''>
+					<input class="select-time1" type="text" id="end-time" placeholder="选择日期" readonly="readonly" data-options='{"type":"date"}' value=''>
 				</div>
 			</div>
 			<div class="mui-row shortcut-select">

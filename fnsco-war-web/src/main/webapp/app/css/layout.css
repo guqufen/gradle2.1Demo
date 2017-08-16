@@ -1,7 +1,7 @@
 ﻿body{
 	line-height: 1.2;
 	width: 100%;
-	overflow: hidden;
+	overflow-x: hidden;
 	background-color: #fff;
 }
 /*筛选显示部分*/
@@ -22,7 +22,8 @@
 }
 .filter-name{
 	width: 100%;
-	line-height: 1.2;
+	height: 0.85rem;
+	line-height: 0.85rem;
 	display:block;
 	white-space:nowrap;
 	overflow:hidden;
@@ -90,7 +91,10 @@
 }
 #chart{
 	margin-top: 1.365rem;
-	height: 10.62rem;
+	height: 14rem;
+}
+.navBar{
+	height: 1rem;
 }
 	/*经营趋势页面*/
 .trend-total{
@@ -161,7 +165,7 @@
 	right: 0.25rem;
 }
 .close .mui-icon{
-	font-size: 2rem;
+	font-size: 1.8rem;
 	font-weight: bold;
 	color: #515151;
 }
@@ -179,6 +183,16 @@
 	color: #E2E8EF;
 }
 input[type=text].select-time{
+	height: 1.7rem;
+	line-height: 1.7rem;
+	background: #F2F4F7;
+	border-radius: 0;
+	font-size: 0.64rem;
+	color: #499CFD;
+	text-align: center;
+	border:none;
+}
+input[type=text].select-time1{
 	height: 1.7rem;
 	line-height: 1.7rem;
 	background: #F2F4F7;

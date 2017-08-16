@@ -12,8 +12,22 @@ public class DeptDO {
      * 上级部门ID，一级部门为0
      */
     private Integer parentId;
-
     /**
+     * 上级部门名称
+     */
+    private String parentName;
+
+    public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String string) {
+		this.parentName = string;
+	}
+
+
+
+	/**
      * 部门名称
      */
     private String name;

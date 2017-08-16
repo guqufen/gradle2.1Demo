@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>APP用户管理-法奈昇大数据平台</title>
+		<meta name="keywords" content="法奈昇大数据平台">
+		<meta name="description" content="法奈昇大数据平台">
+		<link rel="shortcut icon" href="favicon.ico">
+		<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+		<link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+		<link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+		<link href="css/style.min.css" rel="stylesheet">
+		<link href="css/animate.min.css" rel="stylesheet">
+		<style type="text/css">
+			body.signin {
+				height: auto;
+				background: url("img/login-background.jpg"/*tpa=http://www.zi-han.net/theme/hplus/img/login-background.jpg*/
+				) no-repeat center fixed;
+				-webkit-background-size: cover;
+				-moz-background-size: cover;
+				-o-background-size: cover;
+				background-size: cover;
+				color: rgba(255, 255, 255, .95)
+			}
+		</style>
+	</head>
+	<body class="gray-bg signin">
+		<div class="middle-box text-center loginscreen   animated fadeInDown">
+			<div>
+				<h3>账号激活</h3>
+				<form class="m-t" role="form" action="http://www.zi-han.net/theme/hplus/login.html">
+					<div class="form-group">
+						<input type="text" class="form-control email" placeholder="请输入邮件地址" required="" style="color: black;">
+					</div>
+					<div type="submit" class="btn btn-primary block full-width m-b btn-send">发送账号激活邮件</div>
+				</form>
+			</div>
+		</div>
+		<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script>
+		$(".btn-send").click(function(){
+			var data={"email":$(".email").val()};
+			console.log(data);
+			$.ajax({
+				url:"http://localhost:8080/web/regist/active",
+				data:data,
+				type:'GET',
+				success:function(data){
+					if(data.success){
+						alert("账号激活成功");
+						window.location ='login.html';
+					}
+				}
+			});
+		})
+		</script>
+	</body>
+</html>

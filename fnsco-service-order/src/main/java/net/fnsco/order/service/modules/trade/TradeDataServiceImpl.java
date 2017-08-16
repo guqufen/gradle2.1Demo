@@ -1,6 +1,5 @@
 package net.fnsco.order.service.modules.trade;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -22,13 +21,13 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.DbUtil;
 import net.fnsco.order.api.dto.TradeDataDTO;
 import net.fnsco.order.api.dto.TradeDataQueryDTO;
-import net.fnsco.order.api.merchant.MerchantQueryService;
 import net.fnsco.order.api.trade.TradeDataService;
 import net.fnsco.order.service.dao.master.MerchantChannelDao;
+import net.fnsco.order.service.dao.master.MerchantCoreDao;
 import net.fnsco.order.service.dao.master.MerchantUserRelDao;
 import net.fnsco.order.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.order.service.domain.MerchantChannel;
-import net.fnsco.order.service.domain.MerchantTerminal;
+import net.fnsco.order.service.domain.MerchantCore;
 import net.fnsco.order.service.domain.MerchantUserRel;
 import net.fnsco.order.service.domain.trade.TradeData;
 
@@ -44,10 +43,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Autowired
     private MerchantChannelDao   merchantChannelDao;
     @Autowired
-    private MerchantQueryService merchantQueryService;
-    @Autowired
     private MerchantUserRelDao   merchantUserRelDao;
-
+    @Autowired
+    private MerchantCoreDao      merchantCoreDao;
     /**
      * 保存交易流水
      */
@@ -100,7 +98,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setCertifyId(tradeData.getCardNo());
         tradeDataEntity.setDcType(tradeData.getCardOrg());
         tradeDataEntity.setTxnType(tradeData.getTxnType());
+        tradeDataEntity.setStatus("1");
         String txnType = tradeData.getTxnType();
+        if ("2".equals(txnType)) {
+            tradeDataEntity.setStatus("0");
+        }
         logger.error("保存交易流水信息" + JSON.toJSONString(tradeDataEntity));
         tradeListDAO.insert(tradeDataEntity);
         logger.warn("插入流水总耗时" + (System.currentTimeMillis() - timer));
@@ -194,6 +196,14 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         PageDTO<TradeData> pages = new PageDTO<TradeData>(currentPageNum, perPageSize, tradeData);
 
         List<TradeData> datas = tradeListDAO.queryPageList(pages);
+        for (TradeData tradeData2 : datas) {
+            if(!Strings.isNullOrEmpty(tradeData2.getInnerCode())){
+                MerchantCore core = merchantCoreDao.selectByInnerCode(tradeData2.getInnerCode());
+                if(null != core){
+                    tradeData2.setMerName(core.getMerName());
+                }
+            }
+        }
         int total = tradeListDAO.queryTotalByCondition(tradeData);
 
         ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(total, datas);

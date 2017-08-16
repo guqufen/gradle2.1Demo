@@ -96,6 +96,9 @@
 		         </if>
 		       )
 		      </if>
+		      <if test="innerCode != null and innerCode != ''">
+		      AND inner_code = #{innerCode}
+		      </if>
 		</where>	
 		GROUP BY trade_hour
   </select>
@@ -114,4 +117,19 @@
       </if>
     </where>
   </delete>
+  <!-- 批量插入数据 -->
+  <insert id="insertBatch" parameterType="java.util.List">
+  	 <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                 SELECT LAST_INSERT_ID()
+     </selectKey >
+     insert into r_trade_by_hour (id, trade_hour, trade_date, 
+      inner_code, turnover, order_num, 
+      order_price)
+    values
+     <foreach collection ="list" item="hourTrade" index= "index" separator =",">
+      (#{hourTrade.id,jdbcType=INTEGER}, #{hourTrade.tradeHour,jdbcType=VARCHAR}, #{hourTrade.tradeDate,jdbcType=VARCHAR}, 
+      #{hourTrade.innerCode,jdbcType=VARCHAR}, #{hourTrade.turnover,jdbcType=DECIMAL}, #{hourTrade.orderNum,jdbcType=INTEGER}, 
+      #{hourTrade.orderPrice,jdbcType=DECIMAL})
+     </foreach>
+  </insert>
 </mapper>

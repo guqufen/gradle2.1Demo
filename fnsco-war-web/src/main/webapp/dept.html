@@ -1,84 +1,149 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>部门管理</title>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<link rel="stylesheet" href="../../css/bootstrap.min.css">
-	<link rel="stylesheet" href="../../css/font-awesome.min.css">
-	<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
-	<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
-	<link rel="stylesheet" href="../../css/bootstrap-table.min.css">
-	<link rel="stylesheet" href="../../css/main.css">
-	<link rel="stylesheet" href="../../plugins/treegrid/jquery.treegrid.css">
-
-	<script src="../../libs/jquery.min.js"></script>
-	<script src="../../plugins/layer/layer.js"></script>
-	<script src="../../libs/bootstrap.min.js"></script>
-	<script src="../../libs/vue.min.js"></script>
-	<script src="../../libs/bootstrap-table.min.js"></script>
-	<script src="../../plugins/treegrid/jquery.treegrid.min.js"></script>
-	<script src="../../plugins/treegrid/jquery.treegrid.bootstrap3.js"></script>
-	<script src="../../plugins/treegrid/jquery.treegrid.extension.js"></script>
-	<script src="../../plugins/treegrid/tree.table.js"></script>
-	<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
-	<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
-	<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
-	<script src="../../js/common.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消息推送-法奈昇大数据平台</title>
+    <meta name="keywords" content="法奈昇大数据平台">
+    <meta name="description" content="法奈昇大数据平台">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/ztree/metroStyle/metroStyle.css" rel="stylesheet">
+    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
 </head>
-<body>
-<div id="rrapp" v-cloak>
-	<div v-show="showList">
-		<div class="grid-btn">
-			<a v-if="hasPermission('sys:dept:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-			<a v-if="hasPermission('sys:dept:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-			<a v-if="hasPermission('sys:dept:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-		</div>
-		<table id="deptTable" data-mobile-responsive="true" data-click-to-select="true">
-			<thead>
-			<tr>
-				<th data-field="selectItem" data-checkbox="true"></th>
-			</tr>
-			</thead>
-		</table>
-	</div>
 
-	<div v-show="!showList" class="panel panel-default">
-		<div class="panel-heading">{{title}}</div>
-		<form class="form-horizontal">
-			<div class="form-group">
-				<div class="col-sm-2 control-label">部门名称</div>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" v-model="dept.name" placeholder="部门名称"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-2 control-label">上级部门</div>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" style="cursor:pointer;" v-model="dept.parentName" @click="deptTree" readonly="readonly" placeholder="一级部门"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-2 control-label">排序号</div>
-				<div class="col-sm-10">
-					<input type="number" class="form-control" v-model="dept.orderNum" placeholder="排序号"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-sm-2 control-label"></div>
-				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
-				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
-			</div>
-		</form>
-	</div>
+<body class="gray-bg">
+<div class="panel-body animated fadeInRight">
+  <div class="panel panel-default">
+     <!-- 搜索条件 -->
+     <form id="formSearch" class="form-horizontal">
+         <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div id="toolbar">
+                            <button id="btn_add" type="button" class="btn btn-success">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                            </button>
+                            <button id="btn_edit" type="button" class="btn btn-warning">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
+                            </button>
+                            <button id="btn_delete" type="button" class="btn btn-danger">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+                            </button>
+                        </div>
+                        <table id="table"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </form>
+   </div>
 </div>
-
+<!-- 新增 -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModelLabel" data-backdrop="static" data-keyboard="false">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	                <h4 class="modal-title" id="addModalLabel">部门新增</h4>
+	            </div>
+	            <div class="modal-body">
+	                <div class="tab-content">
+	                	<form action="" id="mercore_form" method="post">
+	                        <div class="row">
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="name">部门名称：</label>
+	                                <input type="text" class="form-control" id="name" placeholder="部门名称" name="name" required="required">
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="parentName">上级部门：</label>
+	                                <input type="text" class="form-control" id="parentName" name="parentName" readonly="readonly" placeholder="一级部门">
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="orderNum">排序号：</label>
+	                                <input type="number" class="form-control" id="orderNum" name="orderNum" placeholder="排序号">
+	                            </div>
+	                        </div>  
+	                    </form>
+	                </div>
+	            </div>
+	             <div class="modal-footer">
+	                <div class="tab-content">
+	                	<div class="form-group">
+							<div class="col-sm-2 control-label"></div>
+							<button id="btn_yes" type="button" class="btn btn-primary">
+                                <span  aria-hidden="true"></span>确认添加
+                            </button>
+						</div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div> 
+<!-- 修改 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" data-backdrop="static" data-keyboard="false">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	                <h4 class="modal-title" id="editModalLabel">部门修改</h4>
+	            </div>
+	            <div class="modal-body">
+	                <div class="tab-content">
+	                <form action="" id="mercore_form1" method="post">
+	                        <div class="row">
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="name1">部门名称：</label>
+	                                <input type="text" class="form-control" id="name1" placeholder="部门名称" name="name" required="required">
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="userName">上级部门：</label>
+	                                <input type="text" class="form-control" id="parentName1" name="parentName" readonly="readonly" placeholder="一级部门">
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="orderNum1">排序号：</label>
+	                                <input type="number" class="form-control" id="orderNum1" name="orderNum" placeholder="排序号">
+	                            </div>
+	                        </div> 
+	                </form>    
+	                </div>
+	            </div>
+	             <div class="modal-footer">
+	                <div class="tab-content">
+	                	<div class="form-group">
+							<div class="col-sm-2 control-label"></div>
+							<button id="btn_yes1" type="button" class="btn btn-primary" role="tab" data-toggle="tab">
+                                <span aria-hidden="true"></span>确认修改
+                            </button>
+						</div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div> 	   
+	
 <!-- 选择部门 -->
 <div id="deptLayer" style="display: none;padding:10px;">
 	<ul id="deptTree" class="ztree"></ul>
-</div>
+</div>	
 
-<script src="../../js/modules/sys/dept.js"></script>
+<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="js/plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript" src="js/fnsco/common.js"></script>
+<script type="text/javascript" src="js/fnsco/dept.js"></script>
 </body>
-</html>
+

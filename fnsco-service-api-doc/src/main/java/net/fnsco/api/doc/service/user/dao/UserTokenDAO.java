@@ -16,9 +16,20 @@ import java.util.List;;
 
 public interface UserTokenDAO {
 
-    @Results({@Result( column = "create_date",property = "createDate"),@Result( column = "modify_date",property = "modifyDate"),@Result( column = "user_id",property = "userId"),@Result( column = "login_ip",property = "loginIp"),@Result( column = "expire_date",property = "expireDate") })
+    @Results({ @Result(column = "create_date", property = "createDate"), @Result(column = "modify_date", property = "modifyDate"), @Result(column = "user_id", property = "userId"),
+               @Result(column = "login_ip", property = "loginIp"), @Result(column = "expire_date", property = "expireDate") })
     @Select("SELECT * FROM t_user_token WHERE id = #{id}")
     public UserTokenDO getById(@Param("id") int id);
+
+    @Results({ @Result(column = "create_date", property = "createDate"), @Result(column = "modify_date", property = "modifyDate"), @Result(column = "user_id", property = "userId"),
+               @Result(column = "login_ip", property = "loginIp"), @Result(column = "expire_date", property = "expireDate") })
+    @Select("SELECT * FROM t_user_token WHERE token = #{token}")
+    public UserTokenDO getByToken(@Param("token") String token);
+
+    @Results({ @Result(column = "create_date", property = "createDate"), @Result(column = "modify_date", property = "modifyDate"), @Result(column = "user_id", property = "userId"),
+               @Result(column = "login_ip", property = "loginIp"), @Result(column = "expire_date", property = "expireDate") })
+    @Select("SELECT * FROM t_user_token WHERE user_id = #{userId}")
+    public UserTokenDO getByUserId(@Param("userId") Long userId);
 
     @Insert("INSERT into t_user_token(id,create_date,modify_date,user_id,login_ip,token,expire_date) VALUES (#{id},#{createDate},#{modifyDate},#{userId},#{loginIp},#{token},#{expireDate})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
@@ -28,9 +39,10 @@ public interface UserTokenDAO {
     public int deleteById(@Param("id") int id);
 
     @UpdateProvider(type = UserTokenProvider.class, method = "update")
-    public int update(@Param("userToken") UserTokenDO  userToken);
+    public int update(@Param("userToken") UserTokenDO userToken);
 
-    @Results({@Result( column = "create_date",property = "createDate"),@Result( column = "modify_date",property = "modifyDate"),@Result( column = "user_id",property = "userId"),@Result( column = "login_ip",property = "loginIp"),@Result( column = "expire_date",property = "expireDate") })
+    @Results({ @Result(column = "create_date", property = "createDate"), @Result(column = "modify_date", property = "modifyDate"), @Result(column = "user_id", property = "userId"),
+               @Result(column = "login_ip", property = "loginIp"), @Result(column = "expire_date", property = "expireDate") })
     @SelectProvider(type = UserTokenProvider.class, method = "pageList")
     public List<UserTokenDO> pageList(@Param("userToken") UserTokenDO userToken, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 

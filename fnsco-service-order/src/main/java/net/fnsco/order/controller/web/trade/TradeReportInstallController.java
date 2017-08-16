@@ -3,6 +3,7 @@ package net.fnsco.order.controller.web.trade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.base.Strings;
 
@@ -25,6 +26,7 @@ public class TradeReportInstallController extends BaseController {
     private TradeReportService tradeReportService;
     
     @RequestMapping("/install")
+    @ResponseBody
     public ResultDTO<Object> installReport(String startTime,String endTime){
         if(Strings.isNullOrEmpty(startTime)||Strings.isNullOrEmpty(endTime)){
             return ResultDTO.fail();

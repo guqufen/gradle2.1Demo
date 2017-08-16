@@ -93,43 +93,41 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setStartTime(startTime);
         record.setEndTime(endTime);
         String startDate = startTime.substring(0, 8);
+        String endDate =  endTime.substring(0,8);
         List<TradeDateTemp> tempDatas = tradeDataDAO.queryTempByCondition(record);
-        String tradeDateStr = DateUtils.getTimeByDayStr(-1);
+        //如果没有数据直接返回
+        if(CollectionUtils.isEmpty(tempDatas)){
+            return;
+        }
         for (TradeDateTemp tradeDateTemp : tempDatas) {
             String timeStamp = tradeDateTemp.getTimeStamp();
-            tradeDateTemp.setTradeDate(timeStamp.substring(0, tradeDateStr.length() - 6));
+            tradeDateTemp.setTradeDate(timeStamp.substring(0, timeStamp.length() - 6));
             tradeDateTemp.setTradeHoure(timeStamp.substring(8, 10));
-            tradeDateTempDao.insertSelective(tradeDateTemp);
         }
+        tradeDateTempDao.insertBatch(tempDatas);
         //统计之前先删除，防止重复统计
         TradeByDay dayCondition = new TradeByDay();
-        dayCondition.setTradeDate(startDate);
+        dayCondition.setStartTradeDate(startDate);
+        dayCondition.setEndTradeDate(endDate);
         tradeByDayDao.deleteByDate(dayCondition);
         TradeByHour hourCondition = new TradeByHour();
-        hourCondition.setTradeDate(startDate);
+        hourCondition.setStartTradeDate(startDate);
+        hourCondition.setEndTradeDate(endDate);
         tradeByHourDao.deleteByCondition(hourCondition);
         TradeByPayType payTypeCondition = new TradeByPayType();
         payTypeCondition.setStartDate(startDate);
+        payTypeCondition.setEndDate(endDate);
         tradeByPayTypeDao.deleteByCondition(payTypeCondition);
         
         //分别按小时、天、支付渠道统计查询且插入对应表中
         List<TradeByDay> tradeDayData = tradeDateTempDao.selectTradeDataByDate();
-        for (TradeByDay tradeByDay : tradeDayData) {
-            tradeByDay.setTradeDate(tradeDateStr.substring(0, tradeDateStr.length() - 6));
-            tradeByDayDao.insertSelective(tradeByDay);
-        }
-
+        tradeByDayDao.insertBatch(tradeDayData);
+        
         List<TradeByHour> tradeHourData = tradeDateTempDao.selectTradeDataByHour();
-        for (TradeByHour tradeByHour : tradeHourData) {
-            tradeByHour.setTradeDate(tradeDateStr.substring(0, tradeDateStr.length() - 6));
-            tradeByHourDao.insertSelective(tradeByHour);
-        }
-
+        tradeByHourDao.insertBatch(tradeHourData);
+        
         List<TradeByPayType> tradePayTypeData = tradeDateTempDao.selectTradeDataByPayType();
-        for (TradeByPayType tradeByPayType : tradePayTypeData) {
-            tradeByPayType.setTradeDate(tradeDateStr.substring(0, tradeDateStr.length() - 6));
-            tradeByPayTypeDao.insert(tradeByPayType);
-        }
+        tradeByPayTypeDao.insertBatch(tradePayTypeData);
     }
 
     /**
@@ -169,7 +167,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setTradeDate(yesTradeDate.substring(0, yesTradeDate.length() - 6));
         //昨天营业额
         TurnoverDTO yesterdayTurnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
-        if (null != yesterdayTurnover) {
+        if (null != yesterdayTurnover && null != yesterdayTurnover.getOrderNum() && yesterdayTurnover.getOrderNum() != 0) {
             yesterdayTurnover.setOrderPrice(divide(yesterdayTurnover.getTurnover(), yesterdayTurnover.getOrderNum()));
         } else {
             yesterdayTurnover = new TurnoverDTO();
@@ -198,13 +196,17 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             record.setEndTradeDate(null);
             record.setTradeDate(null);
             thisWeekTurnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
-            if (null != thisWeekTurnover) {
-                thisWeekTurnover.setOrderPrice(divide(thisWeekTurnover.getTurnover(), thisWeekTurnover.getOrderNum()));
-            } else {
+            if (null == thisWeekTurnover) {
                 thisWeekTurnover = new TurnoverDTO();
                 thisWeekTurnover.setOrderPrice(new BigDecimal(0.00));
                 thisWeekTurnover.setOrderNum(0);
                 thisWeekTurnover.setTurnover(0l);
+            } 
+            //需要加上当日的日期
+            thisWeekTurnover.setOrderNum(thisWeekTurnover.getOrderNum()+totayTurnover.getOrderNum());
+            thisWeekTurnover.setTurnover(thisWeekTurnover.getTurnover()+totayTurnover.getTurnover());
+            if(null != thisWeekTurnover.getOrderNum() && thisWeekTurnover.getOrderNum() != 0){
+                thisWeekTurnover.setOrderPrice(divide(thisWeekTurnover.getTurnover(), thisWeekTurnover.getOrderNum()));
             }
             thisWeekTurnover.setWeekLy(false);
             thisWeekTurnover.setType(3);
@@ -217,7 +219,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setEndTradeDate(DateUtils.getSundayStr(-1));
         record.setTradeDate(null);
         TurnoverDTO lastWeekTurnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
-        if (null != lastWeekTurnover) {
+        if (null != lastWeekTurnover && null != lastWeekTurnover.getOrderNum() && lastWeekTurnover.getOrderNum() != 0) {
             lastWeekTurnover.setOrderPrice(divide(lastWeekTurnover.getTurnover(), lastWeekTurnover.getOrderNum()));
         } else {
             lastWeekTurnover = new TurnoverDTO();
@@ -241,7 +243,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             TurnoverDTO weekLyTurnover = tradeByDayDao.selectWeekLyTradeData(record);
             String minDate = tradeByDayDao.selectMinTradeDateByUserId(tradeReportDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
 
-            if (null != weekLyTurnover) {
+            if (null != weekLyTurnover && null != weekLyTurnover.getOrderNum() && weekLyTurnover.getOrderNum() != 0) {
                 weekLyTurnover.setOrderPrice(divide(weekLyTurnover.getTurnover(), weekLyTurnover.getOrderNum()));
             } else if (!Strings.isNullOrEmpty(minDate) && minDate.compareTo(record.getEndTradeDate()) <= 0) {
                 weekLyTurnover = new TurnoverDTO();
@@ -274,12 +276,12 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public WeeklyDTO queryWeeklyByInnerCode(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, true);//格式化入参
         TradeByDay record = new TradeByDay();
         record.setInnerCode(tradeReportDTO.getInnerCode());
         record.setStartTradeDate(tradeReportDTO.getStartDate());
         record.setEndTradeDate(tradeReportDTO.getEndDate());
         record.setUserId(tradeReportDTO.getUserId());
+        record.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         TurnoverDTO turnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
         WeeklyDTO resultData = new WeeklyDTO();
         resultData.setInnerCode(tradeReportDTO.getInnerCode());
@@ -291,8 +293,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             resultData.setOrderPrice(new BigDecimal(0.00));
         }else{
             resultData.setOrderNum(turnover.getOrderNum());
-            resultData.setTurnover(new BigDecimal(turnover.getTurnover()));
-            resultData.setOrderPrice(divide(turnover.getTurnover(), turnover.getOrderNum()));
+            resultData.setTurnover(divide(turnover.getTurnover(), 100));//转化为元单位
+            resultData.setOrderPrice(divide(turnover.getTurnover(), turnover.getOrderNum()*100));
         }
         
         //返回支付渠道类型数据
@@ -313,6 +315,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             tempParam.add(ConstantEnum.PayTypeEnum.PAYBYWX.getCode());
             tempParam.add(ConstantEnum.PayTypeEnum.PAYBYALIPAY.getCode());
             for (TradeTypeDTO tradeTypeDTO : tradeTypeData) {
+                tradeTypeDTO.setTurnover(divide(tradeTypeDTO.getTurnover(), 100));
                 tempParam.remove(tradeTypeDTO.getPayType());
             }
             for (String param : tempParam) {
@@ -322,13 +325,29 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 tempDTO.setTurnover(new BigDecimal(0.00));
                 tradeTypeData.add(tempDTO);
             }
+        }else{
+            for (TradeTypeDTO tradeTypeDTO : tradeTypeData) {
+                tradeTypeDTO.setTurnover(divide(tradeTypeDTO.getTurnover(), 100));
+            }
         }
         resultData.setTradeTypeData(tradeTypeData);
         //按照天返回数据
         List<TradeDayDTO> tradeDayData = tradeByDayDao.selectByInnerCode(record);
         //按照天为组,如果数据为空，需要填充数据
-        List<TradeDayDTO> data = installTradeDay(tradeReportDTO, tradeDayData);
+        List<TradeDayDTO> data = installTradeDay(tradeReportDTO, tradeDayData,true);
         resultData.setTradeDayData(data);
+        //将周报最早的日期和最小的日期返回
+        String minDate = null;
+        if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode())){
+             minDate = tradeByDayDao.selectMinTradeDateByUserId(tradeReportDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        }else{
+             minDate = tradeByDayDao.selectMinTradeDateByInnerCode(tradeReportDTO.getInnerCode(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        }
+        if(!Strings.isNullOrEmpty(minDate)){
+            resultData.setMinWeeklyDate(DateUtils.getMondayByTimeStr(minDate));
+            resultData.setMaxWeeklyDate(DateUtils.strFormatToStr(DateUtils.getSundayStr(-1)));
+        }
+        
         return resultData;
     }
 
@@ -348,36 +367,11 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         BigDecimal bd2 = new BigDecimal(orderNum);
         return bd1.divide(bd2, 2, BigDecimal.ROUND_HALF_UP);
     }
-
-    /**
-     * formatInputDate:(这里用一句话描述这个方法的作用)格式化输入日期参数
-     *
-     * @param tradeReportDTO
-     * @return    设定文件
-     * @return TradeReportDTO    DOM对象
-     * @throws 
-     * @since  CodingExample　Ver 1.1
-     */
-    private TradeReportDTO formatInputDate(TradeReportDTO tradeReportDTO, boolean isWeekly) {
-
-        if (!Strings.isNullOrEmpty(tradeReportDTO.getStartDate())) {
-            tradeReportDTO.setStartDate(DateUtils.formatDateStrInput(tradeReportDTO.getStartDate()));
-        }
-        if (!Strings.isNullOrEmpty(tradeReportDTO.getEndDate())) {
-            tradeReportDTO.setEndDate(DateUtils.formatDateStrInput(tradeReportDTO.getEndDate()));
-        }
-        //如果没有传递时间和商家，则默认上周和全部商户数据
-        if ((Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate())) && isWeekly) {
-            tradeReportDTO.setStartDate(DateUtils.getMondayStr(-1));
-            tradeReportDTO.setEndDate(DateUtils.getSundayStr(-1));
-        }
-        if (!isWeekly && (Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate()))) {
-            tradeReportDTO.setEndDate(DateUtils.getDateStrByDay(-1));
-            tradeReportDTO.setStartDate(DateUtils.getDateStrByDay(-7));
-        }
-        return tradeReportDTO;
+    private BigDecimal divide(BigDecimal turnover, Integer orderNum) {
+        BigDecimal bd2 = new BigDecimal(orderNum);
+        return turnover.divide(bd2, 2, BigDecimal.ROUND_HALF_UP);
     }
-
+    
     /**
      * (non-Javadoc)查询周报历史时间段
      * @see net.fnsco.order.api.trade.TradeReportService#queryWeeklyHisDate(net.fnsco.order.api.dto.TradeReportDTO)
@@ -481,7 +475,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    private List<TradeDayDTO> installTradeDay(TradeReportDTO tradeReportDTO, List<TradeDayDTO> tradeDayData) {
+    private List<TradeDayDTO> installTradeDay(TradeReportDTO tradeReportDTO, List<TradeDayDTO> tradeDayData,boolean weekLy) {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
         Calendar start = Calendar.getInstance();
@@ -503,6 +497,9 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 for (TradeDayDTO tradeDayDTO : tradeDayData) {
                     if (dateTime.equals(tradeDayDTO.getTradeDate())) {
                         tradeDayDTO.setTradeDate(format1.format(end.getTime()));
+                        if(weekLy){
+                            tradeDayDTO.setTurnover(divide(tradeDayDTO.getTurnover(), 100));
+                        }
                         datas.add(tradeDayDTO);
                         flag = false;
                     }
@@ -535,7 +532,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public ConsPatternDTO queryConsumption(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, false);//格式化入参
         ConsPatternDTO datas = new ConsPatternDTO();
         datas.setBankOrderNumTot(0);
         datas.setBankTurnoverTot(new BigDecimal("0"));
@@ -607,7 +603,6 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public BusinessTrendDTO queryBusinessTrends(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, false);//格式化入参
         BusinessTrendDTO datas = new BusinessTrendDTO();
         TradeByDay record = new TradeByDay();
         record.setInnerCode(tradeReportDTO.getInnerCode());
@@ -616,7 +611,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setUserId(tradeReportDTO.getUserId());
         record.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         List<TradeDayDTO> tradeDayData = tradeByDayDao.selectByInnerCode(record);
-        List<TradeDayDTO> data = installTradeDay(tradeReportDTO, tradeDayData);
+        List<TradeDayDTO> data = installTradeDay(tradeReportDTO, tradeDayData,false);
         int orderNumTotal = 0;
         BigDecimal turnoverTotal = new BigDecimal(0.00);
         for (TradeDayDTO tradeDayDTO : data) {
@@ -647,12 +642,12 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     @Override
     public PeakTradeDTO queryPeakTrade(TradeReportDTO tradeReportDTO) {
 
-        formatInputDate(tradeReportDTO, false);//格式化入参
         TradeByHour record = new TradeByHour();
         record.setStartTradeDate(tradeReportDTO.getStartDate());
         record.setEndTradeDate(tradeReportDTO.getEndDate());
         record.setUserId(tradeReportDTO.getUserId());
         record.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        record.setInnerCode(tradeReportDTO.getInnerCode());
         List<TradeHourDTO> tradeHourData = tradeByHourDao.selectByCondition(record);
         PeakTradeDTO data = new PeakTradeDTO();
         int orderNumTotal = 0;

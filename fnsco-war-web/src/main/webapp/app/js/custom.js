@@ -10,9 +10,9 @@
 			var options = JSON.parse(optionsJson);
 			var id = this.getAttribute('id');
 			// 设置开始时间
-			options.beginDate=new Date(2017,5,4);
+			// options.beginDate=new Date(2017,6,4);
 			//设置结束时间
-			options.endDate=new Date(now.getFullYear(),now.getMonth(), now.getDay()-1);
+			options.endDate=new Date(now.getFullYear(),now.getMonth(), now.getDate()-1);
 			var picker = new $.DtPicker(options);
 			picker.show(function(rs) {
 				if(id=='end-time'){//判断结束时间不能小于开始时间
@@ -37,7 +37,61 @@
 			});
 		}, false);
 	})
+
+	var selects1 = $('.select-time1');
+	selects1.each(function(i, select) {
+		select.addEventListener('tap', function() {
+			var optionsJson = this.getAttribute('data-options') || '{}';
+			var options = JSON.parse(optionsJson);
+			var id = this.getAttribute('id');
+			// 设置开始时间
+			// options.beginDate=new Date(2017,6,4);
+			//设置结束时间
+			options.endDate=new Date(now.getFullYear(),now.getMonth(), now.getDate()-1);
+			var picker = new $.DtPicker(options);	
+			picker.show(function(rs) {
+				if(id=='end-time'){//判断结束时间不能小于开始时间
+					var startTime=document.getElementById("start-time").value;
+					if(startTime>rs.text){
+						mui.toast('结束时间不能小于开始时间',{ duration:'long', type:'div' })
+						return;
+					}else if(showDays(startTime,rs.text)<6){
+						mui.toast('间隔不能少于7天，请重新选择',{ duration:'long', type:'div' })
+						return;
+					}else{
+						$("#"+id)[0].value=rs.text;
+						picker.dispose();
+					}
+				}else if(id=='start-time'){
+					var endTime=document.getElementById("end-time").value;
+					if(endTime<rs.text){
+						mui.toast('开始时间不能大于结束时间',{ duration:'long', type:'div' })
+						return;
+					}else if(showDays(endTime,rs.text)<6){
+						mui.toast('间隔不能少于7天，请重新选择',{ duration:'long', type:'div' })
+						return;
+					}else{
+						$("#"+id)[0].value=rs.text;
+						picker.dispose();
+					}
+				}
+			});
+		}, false);
+	})
 })(mui);
+//判断相隔日期
+function showDays(strDateStart,strDateEnd){
+   var strSeparator = "-"; //日期分隔符
+   var oDate1;
+   var oDate2;
+   var iDays;
+   oDate1= strDateStart.split(strSeparator);
+   oDate2= strDateEnd.split(strSeparator);
+   var strDateS = new Date(oDate1[0], oDate1[1]-1, oDate1[2]);
+   var strDateE = new Date(oDate2[0], oDate2[1]-1, oDate2[2]);
+   iDays = parseInt(Math.abs(strDateS - strDateE ) / 1000 / 60 / 60 /24)//把相差的毫秒数转换为天数 
+   return iDays ;
+}
 var now = new Date(); //当前日期 
 var nowDayOfWeek = now.getDay(); //今天本周的第几天 
 if(nowDayOfWeek==0){
@@ -172,6 +226,10 @@ function changeTime(time){
 
 //筛选按钮样式
 var htmlSize=document.getElementsByTagName("html")[0].style.fontSize;
-console.log($(window).height());
-$(".fixed-box").css('top',($(window).height()-(3.456*htmlSize.slice(0, -2))));
+if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {  //判断iPhone|iPad|iPod|iOS
+   	$(".fixed-box").css('top',($(window).height()-(3.456*htmlSize.slice(0, -2))-46));
+}else{
+   	$(".fixed-box").css('top',($(window).height()-(3.456*htmlSize.slice(0, -2))));
+}
+
 

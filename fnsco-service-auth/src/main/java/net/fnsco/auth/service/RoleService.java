@@ -106,4 +106,13 @@ public class RoleService extends BaseService {
 
 		return roleDO;
 	}
+
+	
+	 public List<RoleDO> queryType() {
+			 //返回根据条件查询的所有记录条数
+			 List<RoleDO> data = roleDAO.query();
+		        //ResultDTO<DeptDO> result = new ResultDTO<DeptDO>(data);
+		     return data;
+	 }
+
 }

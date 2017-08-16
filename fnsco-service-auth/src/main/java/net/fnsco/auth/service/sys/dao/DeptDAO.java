@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
 import net.fnsco.auth.service.sys.entity.DeptDO;
 import net.fnsco.auth.service.sys.dao.helper.DeptProvider;
@@ -18,14 +19,22 @@ public interface DeptDAO {
 
     @Results({@Result( column = "parent_id",property = "parentId"),@Result( column = "order_num",property = "orderNum"),@Result( column = "del_flag",property = "delFlag") })
     @Select("SELECT * FROM sys_dept WHERE id = #{id}")
-    public DeptDO getById(@Param("id") int id);
+    public DeptDO getById(@Param("id") Integer id);
+    
+    @Results({@Result( column = "id",property = "id")})
+    @Select("SELECT id FROM sys_dept WHERE parent_id= #{id}")
+    public List<Integer> getByparentId(@Param("id") Integer id);
+    
+    //@Results({@Result( column = "parent_id",property = "parentId"),@Result( column = "order_num",property = "orderNum"),@Result( column = "del_flag",property = "delFlag") })
+    @Select("SELECT id FROM sys_dept WHERE name= #{parentName}")
+    public int getByName(@Param("parentName") String parentName);
 
-    @Insert("INSERT into sys_dept(id,parent_id,name,order_num,del_flag) VALUES (#{id},#{parentId},#{name},#{orderNum},#{delFlag})")
+    @Insert("INSERT into sys_dept(parent_id,name,order_num,del_flag) VALUES (#{parentId},#{name},#{orderNum},#{delFlag})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    public void insert(DeptDO dept);
+    public int insert(DeptDO dept);
 
-    @Delete("DELETE FROM sys_dept WHERE id = #{id}")
-    public int deleteById(@Param("id") int id);
+    @Update("UPDATE sys_dept SET del_flag='-1' WHERE id = #{id}")
+    public int deleteById(@Param("id") Integer id);
 
     @UpdateProvider(type = DeptProvider.class, method = "update")
     public int update(@Param("dept") DeptDO  dept);
@@ -33,6 +42,10 @@ public interface DeptDAO {
     @Results({@Result( column = "parent_id",property = "parentId"),@Result( column = "order_num",property = "orderNum"),@Result( column = "del_flag",property = "delFlag") })
     @SelectProvider(type = DeptProvider.class, method = "pageList")
     public List<DeptDO> pageList(@Param("dept") DeptDO dept, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
+    
+    @Results({@Result( column = "parent_id",property = "parentId"),@Result( column = "order_num",property = "orderNum"),@Result( column = "del_flag",property = "delFlag") })
+    @Select("SELECT * FROM sys_dept")
+    public List<DeptDO> pageNameList();
 
     @SelectProvider(type = DeptProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("dept") DeptDO dept);

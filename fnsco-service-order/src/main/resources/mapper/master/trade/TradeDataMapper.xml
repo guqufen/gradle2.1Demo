@@ -53,6 +53,7 @@
     <result column="md5" property="md5" jdbcType="VARCHAR" />
     <result column="send_time" property="sendTime" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR"/>
   </resultMap>
   
   <!-- 临时表数据集 --> 
@@ -70,7 +71,7 @@
     dc_type, certify_id, msg_dest_id, customer_nm, phone_no, sub_open_id, channel_type, 
     amt, order_no, order_time, order_info, pay_type,pay_sub_type, time_stamp, trade_detail, mer_id, 
     term_id, batch_no, trace_no, auth_code, order_id_scan, source, md5, send_time, 
-    create_time,refer_no
+    create_time,refer_no,status
   </sql>
    
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -121,7 +122,7 @@
       mer_id, term_id, batch_no, 
       trace_no, auth_code, order_id_scan, 
       source, md5, send_time, 
-      create_time,refer_no)
+      create_time,refer_no,status)
     values (#{id,jdbcType=VARCHAR}, #{innerCode,jdbcType=VARCHAR}, #{txnType,jdbcType=VARCHAR}, 
       #{txnSubType,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{payTimeOut,jdbcType=VARCHAR}, 
       #{subject,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{customerInfo,jdbcType=VARCHAR}, 
@@ -138,7 +139,7 @@
       #{merId,jdbcType=VARCHAR}, #{termId,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, 
       #{traceNo,jdbcType=VARCHAR}, #{authCode,jdbcType=VARCHAR}, #{orderIdScan,jdbcType=VARCHAR}, 
       #{source,jdbcType=VARCHAR}, #{md5,jdbcType=VARCHAR}, #{sendTime,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{referNo,jdbcType=VARCHAR})
+      #{createTime,jdbcType=TIMESTAMP}, #{referNo,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
   </insert>
     
   <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
@@ -523,7 +524,7 @@
 			<foreach collection="condition.terminalList" item="terminal" open="(" separator="," close=")">#{terminal}</foreach>
 	  </if>	
    	 </where>
-   	 order by time_stamp desc
+   	 order by create_time desc
    	 limit #{startRow} , #{perPageSize}
   </select>
   <!-- 条件查询总数 -->
@@ -728,7 +729,7 @@
 			SELECT
 				inner_code
 			FROM
-				m_merchant_user_rel
+				u_app_user_merchant
 			WHERE
 				app_user_id = #{userId}
 			<if test="roleId != null">
@@ -736,5 +737,6 @@
 			</if>	
 		)
 	AND time_stamp > #{tradeDate}
+	AND status = 1
   </select>
 </mapper>

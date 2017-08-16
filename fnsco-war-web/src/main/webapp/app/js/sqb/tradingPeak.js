@@ -32,7 +32,8 @@ function chart(dataTime,max,data,titleName){
             }
 	    },
 	    grid: {
-        	left:'15%',
+          right:'20%',
+        	left:'20%',
 	    },
 	    yAxis: {
 	        type: 'value',
@@ -100,8 +101,8 @@ function changeTwoDecimal(x) {
 }
 //ajax请求
 epakData(getUrl("tokenId"),getUrl("userId"),null,null,null);
-var titleName="交易总额(均)";
-var titleName1="交易笔数(均)";
+var titleName="总额(均)";
+var titleName1="笔数(均)";
 function epakData(tokenId,userId,startDate,endDate,innerCode){
   $.ajax({
     url:'tradeReport/queryPeakTrade',
@@ -125,7 +126,7 @@ function epakData(tokenId,userId,startDate,endDate,innerCode){
       $(".filter-endTime").html(changeTime(data.data.endDate));
       /*获取生成图表的参数*/
       $(".total-num span").html(data.data.orderNumTotal);
-      $(".total-rmb span").html(changeTwoDecimal(data.data.turnoverTotal));
+      $(".total-rmb span").html(changeTwoDecimal(data.data.turnoverTotal/100));
       var dataOrderNum=new Array();
       var dataTurnover=new Array();
       var dataTradeHour=new Array();
@@ -133,7 +134,7 @@ function epakData(tokenId,userId,startDate,endDate,innerCode){
       for(var i=0;i<returnDatd.length;i++){
         dataTradeHour.push(formatHours(data.data.tradeHourdata[i].tradeHour));
         dataOrderNum.push(data.data.tradeHourdata[i].orderNum);
-        dataTurnover.push(data.data.tradeHourdata[i].turnover);
+        dataTurnover.push(data.data.tradeHourdata[i].turnover/100);
       }
       //生成图表
       chart(dataTradeHour,max(dataTurnover),dataTurnover,titleName);
@@ -177,34 +178,31 @@ $(".filter-ok-btn").click(function(){
 })
 //获取商户列表
 function getShopList(tokenId,userId){
+  var jsonstr = {
+      'userId': userId
+    };
+  var params = JSON.stringify(jsonstr);
   $.ajax({
     url:'merchant/getShopOwnerMerChant',
+    contentType: "application/json",
     dataType : "json",
     type:'POST',
-    headers: {
+    headers:  {
       'tokenId': tokenId,
       'identifier': userId
     },
-    data:{
-      "userId":userId,
-    },
+    data:params,
     success:function(data){
       var shopList=$("#shop-list");
       if(data.data.length>1){
-        shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部店铺</a></li>');
-      }
-      for(var i=0;i<data.data.length;i++){
-        shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
-      }
-
-      //筛选店铺
-      $(".shop-list li").click(function(){
-        $(".shop-list li").removeClass("mui-selected");
-        $(this).addClass("mui-selected");
-        if($(this).hasClass('all-shop')){
-          $(".shop-list li").addClass("mui-selected");
+        shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部商铺</a></li>');
+        for(var i=0;i<data.data.length;i++){
+          shopList.append('<li class="mui-table-view-cell" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
         }
-      })
+      }else if(data.data.length==1){
+        $(".filter-name").html(data.data[0].merName);
+        shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[0].innerCode+'"><a class="mui-navigate-right">'+data.data[0].merName+'</a></li>');
+      }
     }
   });
 }
