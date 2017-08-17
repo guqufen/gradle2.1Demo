@@ -1,5 +1,6 @@
 package net.fnsco.withhold.web.trade;
 
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import net.fnsco.withhold.comm.ApiConstant;
 import net.fnsco.withhold.service.trade.WithholdInfoService;
+import net.fnsco.withhold.service.trade.entity.ProductTypeDO;
 import net.fnsco.withhold.service.trade.entity.WithholdInfoDO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.base.ResultDTO;
@@ -95,5 +97,41 @@ public class WithholdInfoController extends BaseController {
  public ResultDTO detail(@RequestParam String id) {
      WithholdInfoDO result = this.withholdInfoService.doQueryById(NumberUtils.toInt(id));
      return success(result);
+ }
+ // 查询代扣类型
+ @ApiOperation(value = "查询代扣类型", notes = "查询代扣类型")
+ @ResponseBody
+ @RequestMapping(value = "queryWithholdType")
+ public ResultDTO queryWithholdType () {
+     List<ProductTypeDO> resultDO = this.withholdInfoService.queryWithholdType();
+     return success(resultDO);
+ }
+ //查询产品类型分页
+ @ApiOperation(value = "分页查询产品类型", notes = "分页查询产品类型")
+ @ResponseBody
+ @RequestMapping(value = "queryProductType", method = RequestMethod.GET)
+ public ResultDTO page(ProductTypeDO productTypeDO){
+     logger.info("开始分页查询WithholdInfoController.page, withholdInfo=" + productTypeDO.toString());
+     Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
+     Integer page = params.get("currentPageNum");
+     Integer rows = params.get("pageSize");
+     ResultPageDTO<ProductTypeDO> pager = this.withholdInfoService.pageProductType(productTypeDO, page,rows);
+     return success(pager);
+ }
+ //新增产品类型  insert
+ @ApiOperation(value = "新增代扣类型", notes = "新增代扣类型")
+ @ResponseBody
+ @RequestMapping(value = "doAddProductType")
+ public ResultDTO doAddProductType(ProductTypeDO productTypeDO) {
+    int num = this.withholdInfoService.doAddProductType(productTypeDO);
+    return success();
+ }
+ //更新产品状态 update
+ @ApiOperation(value = "更新产品状态", notes = "更新产品状态")
+ @ResponseBody
+ @RequestMapping(value = "updateProductType")
+ public ResultDTO updateProductType(ProductTypeDO productTypeDO) {
+    int num = this.withholdInfoService.updateProductType(productTypeDO);
+    return success();
  }
 }

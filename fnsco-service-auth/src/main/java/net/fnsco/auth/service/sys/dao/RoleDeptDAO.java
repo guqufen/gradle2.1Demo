@@ -26,6 +26,9 @@ public interface RoleDeptDAO {
 
     @Delete("DELETE FROM sys_role_dept WHERE role_id = #{id}")
     public int deleteById(@Param("id") Long id);
+    
+    @Delete("DELETE FROM sys_role_dept WHERE dept_id = #{id}")
+    public int deleteByDeptId(@Param("id") Integer id);
 
     @UpdateProvider(type = RoleDeptProvider.class, method = "update")
     public int update(@Param("roleDept") RoleDeptDO  roleDept);

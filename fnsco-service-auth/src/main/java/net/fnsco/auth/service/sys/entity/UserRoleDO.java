@@ -28,25 +28,24 @@ public class UserRoleDO {
         this.id = id;
     }
 
+
     public Integer getUserId() {
-        return userId;
-    }
+		return userId;
+	}
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 
-    public Integer getRoleId() {
-        return roleId;
-    }
+	public Integer getRoleId() {
+		return roleId;
+	}
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
 
-
-
-    @Override
+	@Override
     public String toString() {
         return "[id="+ id + ", userId="+ userId + ", roleId="+ roleId + "]";
     }
