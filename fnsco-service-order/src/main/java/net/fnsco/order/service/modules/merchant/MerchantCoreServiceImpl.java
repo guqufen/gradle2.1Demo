@@ -73,15 +73,16 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
     @Autowired
     private AgentDao            agentDao;
-    
+
     @Autowired
     private AppUserMerchantDao  appUserMerchantDao;
 
     @Autowired
     private MerchantUserRelDao  merchantUserRelDao;
-    
+
     @Autowired
     private MerchantPosDao      merchantPosDao;
+
     /**
      * @todo 新增加商家
      * @author tangliang
@@ -157,13 +158,13 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         int re = merchantCoreDao.updateStatusByMutipleKey(ids);
         if (re != 0) {
             merchantContactDao.deleteByMerCoreIds(ids);
-           // merchantFileDao.deleteByMerCoreIds(ids);
+            // merchantFileDao.deleteByMerCoreIds(ids);
             merchantChannelDao.deleteByMerCoreIds(ids);
             merchantBankDao.deleteByMerCoreIds(ids);
             merchantTerminalDao.deleteByMerCoreIds(ids);
             //根据id找到innerCode  删除店铺绑定关系表和用户角色表
             merchantUserRelDao.deleteByMerCoreIds(ids);
-            appUserMerchantDao.deleteByMerCoreIds(ids);   
+            appUserMerchantDao.deleteByMerCoreIds(ids);
             result = ResultDTO.success("删除成功!");
         } else {
             result = ResultDTO.fail("删除失败");
@@ -274,12 +275,12 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     private MerchantTerminal getParamesFormReqTerm(HttpServletRequest request) {
         MerchantTerminal merchantTerminal = new MerchantTerminal();
         merchantTerminal.setInnerCode(request.getParameter("innerCode"));
-//        merchantTerminal.setMerchantCode(request.getParameter("merchantCode"));
-//        merchantTerminal.setChannelId(Integer.valueOf(request.getParameter("channelId")));
-//        merchantTerminal.setChannelName(request.getParameter("channelName"));
+        //        merchantTerminal.setMerchantCode(request.getParameter("merchantCode"));
+        //        merchantTerminal.setChannelId(Integer.valueOf(request.getParameter("channelId")));
+        //        merchantTerminal.setChannelName(request.getParameter("channelName"));
         merchantTerminal.setTerminalCode(request.getParameter("terminalCode"));
         merchantTerminal.setInnerTermCode(request.getParameter("innerTermCode"));
-//        merchantTerminal.setSnCode(request.getParameter("snCode"));
+        //        merchantTerminal.setSnCode(request.getParameter("snCode"));
         merchantTerminal.setTerminalBatch(request.getParameter("terminalBatch"));
         merchantTerminal.setTerminalPara(request.getParameter("terminalPara"));
         merchantTerminal.setChargesType(Integer.valueOf(request.getParameter("chargesType")));
@@ -293,8 +294,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         merchantTerminal.setRecordState(request.getParameter("recordState"));
         merchantTerminal.setTermAuditState(request.getParameter("termAuditState"));
         merchantTerminal.setTermName(request.getParameter("termName"));
-//        merchantTerminal.setPosFactory(request.getParameter("posFactory"));
-//        merchantTerminal.setPosType(request.getParameter("posType"));
+        //        merchantTerminal.setPosFactory(request.getParameter("posFactory"));
+        //        merchantTerminal.setPosType(request.getParameter("posType"));
         merchantTerminal.setMercReferName(request.getParameter("mercReferName"));
         return merchantTerminal;
     }
@@ -413,12 +414,12 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         for (MerchantChannel merchantChannel : merchantChannels) {
             MerchantChannel res = merchantChannelDao.selectByMerCode(merchantChannel.getChannelMerId(), merchantChannel.getChannelType());
             if (null != merchantChannel.getId()) {
-                if(res != null && merchantChannel.getId() != res.getId()){
+                if (res != null && merchantChannel.getId() != res.getId()) {
                     return ResultDTO.fail(ApiConstant.WEB_MER_CHANNEL_NOTUNIQUE);
                 }
                 merchantChannelDao.updateByPrimaryKeySelective(merchantChannel);
             } else {
-                if(null != res){
+                if (null != res) {
                     return ResultDTO.fail(ApiConstant.WEB_MER_CHANNEL_NOTUNIQUE);
                 }
                 merchantChannelDao.insertSelective(merchantChannel);
@@ -474,6 +475,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         return ResultDTO.success(id);
 
     }
+
     /**
      * (non-Javadoc)删除渠道的时候，需要删除下面的POS机以及终端信息
      * @see net.fnsco.order.api.merchant.MerchantCoreService#deleteByChanel(java.lang.Integer)
@@ -506,4 +508,5 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
         return merchantCore;
     }
+
 }
