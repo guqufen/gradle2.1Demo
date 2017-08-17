@@ -342,7 +342,7 @@ $('#btn_add').click(function() {
 			console.log(data);
 			if (data.success) {
 				for(var i=0;i<data.data.length;i++){
-					var html="<option value='"+data.data[i].code+"'>"+data.data[i].name+"</option>";
+					var html="<option value='"+data.data[i].name+"'>"+data.data[i].name+"</option>";
 					$("#productTypeCode").prepend(html);
 				}
 			}
