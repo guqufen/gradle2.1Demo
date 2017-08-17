@@ -95,6 +95,11 @@ public class DeptManageController extends BaseController {
 		ResultDTO<String> result = sysDeptService.deleteById(id);
 		return success(result);
 	}
+	/**
+	 * 查询部门的ID
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value ="/queryParentId",method= RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO<String> queryParentId(@RequestParam(value="id[]") Integer[] id){

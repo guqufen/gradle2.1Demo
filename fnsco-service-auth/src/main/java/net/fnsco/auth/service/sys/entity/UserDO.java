@@ -1,6 +1,7 @@
 package net.fnsco.auth.service.sys.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class UserDO {
 
@@ -8,23 +9,29 @@ public class UserDO {
      * 
      */
     private Integer id;
-
     /**
+     * 角色id
+     */
+    private Integer roleId;
+   
+	/**
      * 1 oem管理员/2 代理商用户/ 3 商户/ 4 其它用户
      */
     private Integer type;
     /**
+     * 角色数组多选前后端传值
+     */
+    private List<Integer> roleList;
+    
+
+
+
+	/**
      * 1禁止 0正常-1删除
      */
     private Integer status;
 
-    public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
+   
 
 
 
@@ -85,6 +92,27 @@ public class UserDO {
 
 
     private String modifyTimeStr;
+    public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+    public List<Integer> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<Integer> roleList) {
+		this.roleList = roleList;
+	}
+    public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
     public String getModifyTimeStr() {
 		return modifyTimeStr;
 	}

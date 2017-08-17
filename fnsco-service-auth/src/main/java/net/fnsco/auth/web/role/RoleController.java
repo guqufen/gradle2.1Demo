@@ -81,9 +81,9 @@ public class RoleController extends BaseController{
 		
 		return success(roleDO);
 	}
-	@RequestMapping(value ="/queryType",method= RequestMethod.POST)
+	@RequestMapping(value ="/queryRole",method= RequestMethod.POST)
 	@ResponseBody
-	public ResultDTO<RoleDO> queryType(){
+	public ResultDTO<RoleDO> queryRole(){
 		List<RoleDO> result = roleService.queryType();
 		return success(result);
 	}
