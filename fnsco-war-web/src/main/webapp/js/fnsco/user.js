@@ -141,7 +141,7 @@ function queryByName(name) {
 		url : PROJECT_NAME + 'web/auth/user/queryUserByName',
 		type : 'POST',
 		dataType : "json",
-		async:false,
+		async:false,//同步获取数据
 		data : {
 			'name' : name
 		},
