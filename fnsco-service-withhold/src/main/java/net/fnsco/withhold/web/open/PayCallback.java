@@ -60,11 +60,11 @@ public class PayCallback extends BaseController {
             }else{
                 logger.error("收到失败的爱农代收扣回调：" + parameterMap);
                 tradeData.setRespCode(respCode);
-                tradeData.setStatus(ServiceConstant.PayStatusEnum.PAY_FAIL.getCode());
                 tradeData.setRespMsg(parameterMap.get("respMsg"));
                 String failReason = ServiceConstant.anErrorMap.get(respCode);
                 tradeData.setFailReason(failReason);
                 if(ServiceConstant.PayStatusEnum.PAYING.getCode().equals(tradeData.getStatus())){
+                    tradeData.setStatus(ServiceConstant.PayStatusEnum.PAY_FAIL.getCode());
                     tradeDataService.update(tradeData);
                 }
             }

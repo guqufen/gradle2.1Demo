@@ -214,6 +214,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Override
     public TradeData queryByTradeId(String tradeId) {
         return tradeListDAO.selectByPrimaryKey(tradeId);
-
+    }
+    
+    @Override
+    public TradeData queryByTerminal(TradeData tradeData) {
+        TradeData list = tradeListDAO.selectByIRT(tradeData);
+        return list;
     }
 }
