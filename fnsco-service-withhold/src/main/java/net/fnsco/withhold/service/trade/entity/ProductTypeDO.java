@@ -1,20 +1,30 @@
 package net.fnsco.withhold.service.trade.entity;
 
+import java.util.Date;
+
 public class ProductTypeDO {
     private Integer id;
-    private String code;
     private String name;
+    private String status;
+    private Date modifyTime;
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
     public Integer getId() {
         return id;
     }
     public void setId(Integer id) {
         this.id = id;
-    }
-    public String getCode() {
-        return code;
-    }
-    public void setCode(String code) {
-        this.code = code;
     }
     public String getName() {
         return name;
@@ -24,6 +34,6 @@ public class ProductTypeDO {
     }
     @Override
     public String toString() {
-        return "ProductTypeDO [id=" + id + ", code=" + code + ", name=" + name + "]";
+        return "ProductTypeDO [id=" + id + ", name=" + name + ", status=" + status + ", modifyTime=" + modifyTime + "]";
     }
 }
