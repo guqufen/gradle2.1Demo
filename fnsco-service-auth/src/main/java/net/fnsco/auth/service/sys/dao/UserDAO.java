@@ -28,6 +28,11 @@ public interface UserDAO {
     @Select("SELECT * FROM sys_user WHERE name=#{name} and password = #{password}")
     public UserDO getByUserName(@Param("name") String name, @Param("password") String password);
 
+    @Results({ @Result(column = "real_name", property = "realName"), @Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),
+               @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
+    @Select("SELECT * FROM sys_user WHERE name=#{name}")
+    public UserDO getByName(@Param("name") String name);
+
     @Insert("INSERT into sys_user(id,type,name,password,real_name,mobile,sex,alias_name,department,agent_id,remark,modify_time,modify_user_id) VALUES (#{id},#{type},#{name},#{password},#{realName},#{mobile},#{sex},#{aliasName},#{department},#{agentId},#{remark},#{modifyTime},#{modifyUserId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(UserDO user);

@@ -48,7 +48,7 @@ public interface MenuDAO {
     @Results({ @Result(column = "id", property = "id"), @Result(column = "parent_id", property = "parentId"), @Result(column = "name", property = "name"), @Result(column = "url", property = "url"),
                @Result(column = "perms", property = "perms"), @Result(column = "type", property = "type"), @Result(column = "icon", property = "icon"),
                @Result(column = "order_num", property = "orderNum") })
-    @SelectProvider(type = MenuProvider.class, method = "pageList")
+    @SelectProvider(type = MenuProvider.class, method = "queryList")
     public List<MenuDO> queryList(@Param("menu") MenuDO menu);
 
 }

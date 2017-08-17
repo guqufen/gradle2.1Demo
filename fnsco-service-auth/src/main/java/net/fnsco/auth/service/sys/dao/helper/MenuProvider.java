@@ -130,8 +130,8 @@ public class MenuProvider {
 
         return new SQL() {
             {
-                SELECT("select m.*,(select p.name from sys_menu p where p.menu_id = m.parent_id) as parentName");
-                FROM(TABLE_NAME);
+                SELECT(" m.*,(select p.name from sys_menu p where p.id = m.parent_id) as parentName");
+                FROM(TABLE_NAME +" m ");
                 if (menu.getId() != null) {
                     WHERE("id=#{menu.id}");
                 }

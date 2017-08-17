@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.auth.service.sys.dao.UserDAO;
 import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.core.base.BaseService;
@@ -36,6 +38,37 @@ public class UserService extends BaseService {
         }
         // 写到缓存
         return ResultDTO.success(auser);
+    }
+
+    public UserDO getByName(String name) {
+        UserDO sysUser = userDAO.getByName(name);
+        return sysUser;
+    }
+
+    public ResultDTO<String> modifyPassword(String name, String newPassword, String oldPassword) {
+        ResultDTO<String> result = new ResultDTO<String>();
+        //非空判断
+        if (Strings.isNullOrEmpty(name) || Strings.isNullOrEmpty(newPassword) || Strings.isNullOrEmpty(oldPassword)) {
+            return result.fail();
+        }
+        String oldPwd = Md5Util.getInstance().md5(oldPassword);
+        String newPwd = Md5Util.getInstance().md5(newPassword);
+        //判断原密码是否正确 
+        UserDO sysUser = userDAO.getByName(name);
+        if (null == sysUser) {
+            return ResultDTO.fail("用户名不存在");
+        }
+        if (!oldPwd.equals(sysUser.getPassword())) {
+            return result.fail("原密码不正确");
+        }
+        UserDO adminUser = new UserDO();
+        adminUser.setPassword(newPwd);
+        adminUser.setId(sysUser.getId());
+        int num = userDAO.update(adminUser);
+        if (num == 0) {
+            return result.fail();
+        }
+        return result.success();
     }
 
     // 分页

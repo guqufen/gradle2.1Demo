@@ -3,8 +3,8 @@
  */
 package net.fnsco.auth.web.sys;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,9 +43,9 @@ public class UserLoginAction extends BaseController {
      */
     @RequestMapping(value = "/doLogin", method = RequestMethod.POST)
     @ResponseBody
-    public ResultDTO doLogin(HttpServletRequest req, HttpServletResponse res) {
-        String username = req.getParameter("account");
-        String password = req.getParameter("password");
+    public ResultDTO doLogin() {
+        String username = request.getParameter("account");
+        String password = request.getParameter("password");
         if (StringUtils.isEmpty(password) || StringUtils.isEmpty(username)) {
 
             return ResultDTO.fail(AuthConstant.WEB_LOGIN_NULL);
@@ -59,13 +59,39 @@ public class UserLoginAction extends BaseController {
         WebUserDTO webUser = new WebUserDTO();
         webUser.setId(user.getId());
         webUser.setName(user.getName());
-        
-        CookieUtils.addCookie(res, CoreConstants.COOKIE_USER_KEY, user.getName());
-        String tokenId =userTokenService.createToken(user.getId());
-        
+
+        CookieUtils.addCookie(response, CoreConstants.COOKIE_USER_KEY, user.getName());
+        String tokenId = userTokenService.createToken(user.getId());
+
         webUser.setTokenId(tokenId);
         setSessionUser(webUser, webUser.getId());
         return ResultDTO.success();
+    }
+
+    /** 登录方法
+     * @param req
+     * @param adminUser
+     * @return
+     */
+    @RequestMapping(value = "/goLogin", method = RequestMethod.GET)
+    public String goLogin() {
+        Object cookeiUser = getCookieUser();
+        if (null == cookeiUser) {
+            return "redirect:/login.html";
+        }
+
+        String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#") + 1, cookeiUser.toString().length());
+        UserDO sysUser = userService.getByName(userName);
+        if (null == sysUser) {
+            return "redirect:/login.html";
+        }
+        WebUserDTO user = new WebUserDTO();
+        user.setId(sysUser.getId());
+        user.setName(sysUser.getName());
+        String tokenId = userTokenService.createToken(user.getId());
+        user.setTokenId(tokenId);
+        setSessionUser(user, user.getId());
+        return "redirect:/index.html";
     }
 
     /**
@@ -79,4 +105,27 @@ public class UserLoginAction extends BaseController {
         return "redirect:/login.html";
     }
 
+    /**
+     * 获取当前用户
+     * @return
+     */
+    @RequestMapping(value = "/getCurrentUser", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getCurrentUser() {
+        Map<String, Object> result = new HashMap<>();
+        WebUserDTO adminUser = (WebUserDTO) getSessionUser();
+        result.put("sessionUser", adminUser);
+        return result;
+    }
+
+    /**
+    * 修改密码
+    * @return
+    */
+
+    @RequestMapping(value = "/modifyPassword", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO<String> modifyPassword(String name, String newPassword, String oldPassword) {
+        return userService.modifyPassword(name, newPassword, oldPassword);
+    }
 }

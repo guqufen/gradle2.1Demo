@@ -55,8 +55,9 @@ public class OAuth2Filter extends AuthenticatingFilter {
         if (StringUtils.isBlank(token)) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             String json = JSON.toJSONString(ResultDTO.fail("token不存在"));
+            httpResponse.setContentType("application/json;charset=utf-8");
             httpResponse.getWriter().print(json);
-
+            logger.error("session不存在或页面未传入token值");
             return false;
         }
 

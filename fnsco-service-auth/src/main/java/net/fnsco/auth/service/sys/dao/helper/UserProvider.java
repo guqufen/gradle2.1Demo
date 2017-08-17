@@ -175,7 +175,7 @@ public class UserProvider {
         Integer userId = (Integer) params.get("userId");
         return new SQL() {
             {
-                SELECT("select m.perms from sys_user_role ur LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id LEFT JOIN sys_menu m on rm.menu_id = m.menu_id ");
+                SELECT(" m.perms from sys_user_role ur LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id LEFT JOIN sys_menu m on rm.menu_id = m.id ");
                 WHERE("ur.user_id = #{userId}");
             }
         }.toString();

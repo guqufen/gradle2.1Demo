@@ -77,24 +77,24 @@ public class SysUserLoginAction extends BaseController{
 	 * 获取当前用户
 	 * @return
 	 */
-	@RequestMapping(value = "/getCurrentUser", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String,Object> getCurrentUser(){
-		Map<String,Object> result = new HashMap<>();
-		WebUserDTO adminUser = (WebUserDTO) getSessionUser();
-		result.put("sessionUser", adminUser);
-		return result;
-	}
-	
-	   /**
-     * 修改密码
-     * @return
-     */
-	
-	@RequestMapping(value = "/modifyPassword", method = RequestMethod.POST)
-    @ResponseBody
-    public ResultDTO<String> modifyPassword(String name, String newPassword, String oldPassword){
-       return adminUserService.modifyPassword(name,newPassword,oldPassword);
-    }
+//	@RequestMapping(value = "/getCurrentUser", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Map<String,Object> getCurrentUser(){
+//		Map<String,Object> result = new HashMap<>();
+//		WebUserDTO adminUser = (WebUserDTO) getSessionUser();
+//		result.put("sessionUser", adminUser);
+//		return result;
+//	}
+//	
+//	   /**
+//     * 修改密码
+//     * @return
+//     */
+//	
+//	@RequestMapping(value = "/modifyPassword", method = RequestMethod.POST)
+//    @ResponseBody
+//    public ResultDTO<String> modifyPassword(String name, String newPassword, String oldPassword){
+//       return adminUserService.modifyPassword(name,newPassword,oldPassword);
+//    }
 	
 }
