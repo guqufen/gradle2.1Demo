@@ -32,5 +32,5 @@ public interface UserService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    AppUserDTO getCookieUser(HttpServletRequest request);
+    WebUserDTO getCookieUser(HttpServletRequest request);
 }

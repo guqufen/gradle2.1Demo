@@ -60,9 +60,6 @@ public class DeptProvider {
         if (dept.getOrderNum() != null) {
             WHERE("order_num=#{dept.orderNum}");
         }
-        if (dept.getDelFlag() != null) {
-            WHERE("del_flag=#{dept.delFlag}");
-        }
         WHERE("del_flag=0");
         ORDER_BY("id  limit " + start + ", " + limit );
         }}.toString();
@@ -85,9 +82,7 @@ public class DeptProvider {
         if (dept.getOrderNum() != null) {
             WHERE("order_num=#{dept.orderNum}");
         }
-        if (dept.getDelFlag() != null) {
-            WHERE("del_flag=#{dept.delFlag}");
-        }
+        WHERE("del_flag=0");
         }}.toString();
     }
 }

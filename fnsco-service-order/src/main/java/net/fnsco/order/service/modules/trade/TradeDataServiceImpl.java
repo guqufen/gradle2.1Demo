@@ -24,10 +24,12 @@ import net.fnsco.order.api.dto.TradeDataQueryDTO;
 import net.fnsco.order.api.trade.TradeDataService;
 import net.fnsco.order.service.dao.master.MerchantChannelDao;
 import net.fnsco.order.service.dao.master.MerchantCoreDao;
+import net.fnsco.order.service.dao.master.MerchantTerminalDao;
 import net.fnsco.order.service.dao.master.MerchantUserRelDao;
 import net.fnsco.order.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.order.service.domain.MerchantChannel;
 import net.fnsco.order.service.domain.MerchantCore;
+import net.fnsco.order.service.domain.MerchantTerminal;
 import net.fnsco.order.service.domain.MerchantUserRel;
 import net.fnsco.order.service.domain.trade.TradeData;
 
@@ -39,13 +41,16 @@ import net.fnsco.order.service.domain.trade.TradeData;
 @Service
 public class TradeDataServiceImpl extends BaseService implements TradeDataService {
     @Autowired
-    private TradeDataDAO         tradeListDAO;
+    private TradeDataDAO       tradeListDAO;
     @Autowired
-    private MerchantChannelDao   merchantChannelDao;
+    private MerchantChannelDao merchantChannelDao;
     @Autowired
-    private MerchantUserRelDao   merchantUserRelDao;
+    private MerchantUserRelDao merchantUserRelDao;
     @Autowired
-    private MerchantCoreDao      merchantCoreDao;
+    private MerchantCoreDao    merchantCoreDao;
+    @Autowired
+    private MerchantTerminalDao     merchantTerminalDao;
+
     /**
      * 保存交易流水
      */
@@ -94,7 +99,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setInnerCode(innerCode);
         tradeDataEntity.setCreateTime(new Date());
         tradeDataEntity.setRespCode(tradeData.getRespCode());
-        
+
         tradeDataEntity.setCertifyId(tradeData.getCardNo());
         tradeDataEntity.setDcType(tradeData.getCardOrg());
         tradeDataEntity.setTxnType(tradeData.getTxnType());
@@ -131,30 +136,22 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeData.setStartTime(DateUtils.getDateStartTime(merchantCore.getStartDate()));
         tradeData.setEndTime(DateUtils.getDateEndTime(merchantCore.getEndDate()));
         tradeData.setPaySubType(merchantCore.getPayType());
-        //根据终端查询商户号列表
-        //        String terminals = merchantCore.getTerminals();
-        //        List<String> terminalList = null;
-        //        if (!Strings.isNullOrEmpty(terminals)) {
-        //            String[] terminalss = terminals.trim().split(",");
-        //            if (terminalss.length > 0) {
-        //                terminalList = Lists.newArrayList();
-        //                for (int i = 0; i < terminalss.length; i++) {
-        //                    terminalList.add(terminalss[i]);
-        //                }
-        //            }
-        //        }
-//        List<String> terminalList = merchantCore.getTerminals();
-//        if (null != terminalList && terminalList.size() > 0) {
-//            tradeData.setTerminalList(terminalList);
-//        }
-        //根据用户查询商户号
-      //定义要查询的商户号
-        List<String> innerCodeList = merchantCore.getInnerCodes();
-        if(CollectionUtils.isEmpty(innerCodeList)){
+        //根据pos查询终端列表
+        List<String> posList = merchantCore.getTerminals();
+        if (!CollectionUtils.isEmpty(posList)) {
+            List<String> terminalList = Lists.newArrayList();
+            for (String id : posList) {
+                MerchantTerminal terminal = merchantTerminalDao.selectByPrimaryKey(Integer.parseInt(id));
+                terminalList.add(terminal.getTerminalCode());
+            }
+            tradeData.setTerminalList(terminalList);
+        }
+        List<String> terminalList = tradeData.getTerminalList();
+        if (CollectionUtils.isEmpty(terminalList)) {//无终端则查询按商户查询
             Integer appUserId = merchantCore.getUserId();
             List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
-            result.setMerTotal(tempList.size()); 
-            innerCodeList = Lists.newArrayList();
+            result.setMerTotal(tempList.size());
+            List<String> innerCodeList = Lists.newArrayList();
             if (!CollectionUtils.isEmpty(tempList)) {
                 for (MerchantUserRel rel : tempList) {
                     innerCodeList.add(rel.getInnerCode());
@@ -163,9 +160,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             if (null == innerCodeList || innerCodeList.size() == 0) {
                 return result;
             }
+            //设置商户号
+            tradeData.setInnerCodeList(innerCodeList);
         }
-        //设置商户号
-        tradeData.setInnerCodeList(innerCodeList);
         PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(), merchantCore.getPerPageSize(), tradeData);
         List<TradeData> datas = tradeListDAO.queryPageList(pages);
         int total = tradeListDAO.queryTotalByCondition(tradeData);
@@ -186,10 +183,10 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
 
         TradeData tradeData = new TradeData();
-        if(!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())){
+        if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
             tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
         }
-        if(!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())){
+        if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
         }
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
@@ -197,9 +194,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
 
         List<TradeData> datas = tradeListDAO.queryPageList(pages);
         for (TradeData tradeData2 : datas) {
-            if(!Strings.isNullOrEmpty(tradeData2.getInnerCode())){
+            if (!Strings.isNullOrEmpty(tradeData2.getInnerCode())) {
                 MerchantCore core = merchantCoreDao.selectByInnerCode(tradeData2.getInnerCode());
-                if(null != core){
+                if (null != core) {
                     tradeData2.setMerName(core.getMerName());
                 }
             }

@@ -1,6 +1,7 @@
 package net.fnsco.order.service.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -33,7 +34,31 @@ public class MerchantChannel extends DTO{
 
     private Integer modifyUserId;
     
-	public Integer getId() {
+    private List<MerchantPos> posInfos;//POS机信息列表
+    
+	/**
+     * posInfos
+     *
+     * @return  the posInfos
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public List<MerchantPos> getPosInfos() {
+        return posInfos;
+    }
+
+    /**
+     * posInfos
+     *
+     * @param   posInfos    the posInfos to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPosInfos(List<MerchantPos> posInfos) {
+        this.posInfos = posInfos;
+    }
+
+    public Integer getId() {
         return id;
     }
 

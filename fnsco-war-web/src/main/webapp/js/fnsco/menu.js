@@ -98,8 +98,6 @@ function queryParams(params) {
 	var param = {
 		currentPageNum : this.pageNumber,
 		pageSize : this.pageSize
-//		roleId : $('#txt_search_roleId').val(),
-//		roleName : $('#txt_search_roleName').val()
 	}
 	return param;
 }
@@ -259,14 +257,22 @@ function MenuTreeGet() {
 //点击增加按钮事件
 $('#btn_add').click(function() {
 
-	$('h4').html('新增');
+	$('h4').html('新增菜单');
+	
+	//先清掉相关数据，设置menuType默认选中,并展示相应菜单
 	clearInput();
-	//设置menuType默认选中
 	$('input[id=menuType]').prop('checked', 'checked');//固有属性用prop
+	$('#menuNameDiv').show();
+	$('#parentNameDiv').show();
+	$('#menuUrlDiv').show();
+	$('#permsDiv').show();
+	$('#orderNumDiv').show();
+	$('#iconDiv').show();
 
 	//给当前菜单ID置空,防止与修改功能串线
 	$('#id').val(null);
 
+	//获取菜单树形结构(传空表示新增，不带父节点ID)
 	getMenuTree(null);
 })
 
@@ -283,15 +289,15 @@ $('#btn_edit').click(function() {
 		return false;
 	} else {
 		
-		$('h4').html('修改');
+		$('h4').html('修改菜单');
 
 		// 获取table选中数据的父菜单ID
 		var parentId = selectContent[0].parentId;
 		
-		//将当前选中的父菜单ID，放入获取菜单ID中进行操作
+		//获取树形结构，传入当前选中的父菜单ID，便于在菜单树形结构展示选中点
 		getMenuTree(parentId);
 
-		//给当前菜单ID赋值,以便进行修改
+		//给当前菜单ID赋值,表示当前使用功能是修改
 		$('#id').val(selectContent[0].id);
 
 		$('#menuName').val(selectContent[0].name);
@@ -400,7 +406,6 @@ function saveOrUpdate() {
 		type : 'POST',
 		url : PROJECT_NAME + url,
 		data : param,
-		traditional: true,
 		success : function(data) {
 			unloginHandler(data);
 			if (data.success) {
@@ -432,16 +437,16 @@ $('#btn_delete').click(function() {
 	} else {
 
 		// 获取table选中数据的角色ID
-		var roleId = selectContent[0].roleId;
+		var id = selectContent[0].id;
 
 		var param = {
-			'roleId' : roleId
+			'id' : id
 		}
 
 		// 组包发给后台
 		$.ajax({
 			type : 'POST',
-			url : PROJECT_NAME + "/web/auth/role/delete",
+			url : PROJECT_NAME + "/web/auth/menu/delete",
 			data : param,
 			traditional : true,
 			success : function(data) {

@@ -23,6 +23,54 @@ public class TerminalJO extends JO {
     private Integer terId;
     
     private String termName;
+    
+    private Integer posId;
+    
+    private String posName;
+    
+    /**
+     * posId
+     *
+     * @return  the posId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getPosId() {
+        return posId;
+    }
+
+    /**
+     * posId
+     *
+     * @param   posId    the posId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPosId(Integer posId) {
+        this.posId = posId;
+    }
+
+    /**
+     * posName
+     *
+     * @return  the posName
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getPosName() {
+        return posName;
+    }
+
+    /**
+     * posName
+     *
+     * @param   posName    the posName to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPosName(String posName) {
+        this.posName = posName;
+    }
 
     /**
      * terId

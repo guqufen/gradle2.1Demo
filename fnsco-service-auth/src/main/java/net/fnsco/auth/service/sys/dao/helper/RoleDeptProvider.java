@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang3.StringUtils;
 
 import net.fnsco.auth.service.sys.entity.RoleDeptDO;
 public class RoleDeptProvider {
@@ -60,6 +59,23 @@ public class RoleDeptProvider {
         RoleDeptDO roleDept = (RoleDeptDO) params.get("roleDept");
         return new SQL() {{
         SELECT("count(1)");
+        FROM(TABLE_NAME);
+        if (roleDept.getId() != null) {
+            WHERE("id=#{roleDept.id}");
+        }
+        if (roleDept.getRoleId() != null) {
+            WHERE("role_id=#{roleDept.roleId}");
+        }
+        if (roleDept.getDeptId() != null) {
+            WHERE("dept_id=#{roleDept.deptId}");
+        }
+        }}.toString();
+    }
+    
+    public String query(Map<String, Object> params) {
+    	RoleDeptDO roleDept = (RoleDeptDO) params.get("roleDept");
+        return new SQL() {{
+        SELECT("*");
         FROM(TABLE_NAME);
         if (roleDept.getId() != null) {
             WHERE("id=#{roleDept.id}");
