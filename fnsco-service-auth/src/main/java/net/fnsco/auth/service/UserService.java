@@ -1,6 +1,7 @@
 package net.fnsco.auth.service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Service;
 
 import net.fnsco.auth.service.sys.dao.DeptDAO;
 import net.fnsco.auth.service.sys.dao.UserDAO;
+import net.fnsco.auth.service.sys.dao.UserRoleDAO;
 import net.fnsco.auth.service.sys.entity.DeptDO;
 import net.fnsco.auth.service.sys.entity.UserDO;
+import net.fnsco.auth.service.sys.entity.UserRoleDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -27,6 +30,8 @@ public class UserService extends BaseService{
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	 @Autowired
 	 private UserDAO userDAO;
+	 @Autowired
+	 private UserRoleDAO userRoleDAO;
 	 // 分页
 	 public ResultPageDTO<UserDO> queryList(UserDO user, Integer pageNum, Integer pageSize) {
 		 List<UserDO> data = userDAO.pageList(user,pageNum, pageSize);
@@ -42,13 +47,99 @@ public class UserService extends BaseService{
 	        ResultPageDTO<UserDO> result = new ResultPageDTO<UserDO>(totalNum, data);
 	     return result;
 	 }
+	 /**
+	  * 通过id删除用户（将状态改为0）
+	  * @param id
+	  * @return
+	  */
 	 public ResultDTO<String> deleteById(Integer[] id) {
 		 for(int i=0;i<id.length;i++){			 
-			int res = userDAO.deleteById(id[i]);
+		 int res = userDAO.deleteById(id[i]);
 		 if (res != 1) {
              return ResultDTO.fail();
          }
+		 int es=userRoleDAO.deleteByUserId(id[i]);
+		 if (es != 1) {
+			 return ResultDTO.fail();
+		 }
 	    } 
 		 return new ResultDTO<>(true, id, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
 		 }
+	 /**
+	  * 添加用户信息
+	  * @param dept
+	  * @return
+	  */
+	 public ResultDTO<String> doAddUser(UserDO user) {
+		 Date date=new Date();
+		 user.setModifyTime(date);
+		 int res = userDAO.insert(user);
+		 if (res != 1) {
+			 return ResultDTO.fail();
+		 }
+		 Integer userId=userDAO.getByName(user.getName());
+		 List<Integer> list=user.getRoleList();	
+		 UserRoleDO userRole=new UserRoleDO();
+		 userRole.setUserId(userId);
+		 for (Integer roleId : list) {
+			 userRole.setRoleId(roleId);
+			 int re=userRoleDAO.insert(userRole);
+			 if (re != 1) {
+				 return ResultDTO.fail();
+			 }
+		}
+		 return new ResultDTO<>(true, user.getId(), CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
+	    }
+	 /**
+	  * 修改内的用户信息查询
+	  * @param id
+	  * @return
+	  */
+	 public UserDO queryUserById(Integer id) {
+		 UserDO user = userDAO.getById(id);
+		 List<Integer> list = userRoleDAO.getByUserId(id);
+		 user.setRoleList(list);
+	     return  user;
+	 }
+	/**
+	 *通过用户名查询是否存在该用户
+	 * @param id
+	 * @return
+	 */
+	 public boolean queryUserByName(String name) {
+		 Integer id= userDAO.getByName(name);
+		 if(id!=null) {
+			 return false;
+		 }
+	     return  true;
+	 }
+	 /**
+	  * 修改用户信息
+	  * @param dept
+	  * @return
+	  */
+	 public ResultDTO<String> toEditDept(UserDO user) {
+		 List<Integer> list=user.getRoleList();
+		 UserRoleDO userRole=new UserRoleDO();
+		 Integer userId=user.getId();
+		 int es=userRoleDAO.deleteByUserId(userId);
+		 if (es != 1) {
+			 return ResultDTO.fail();
+		 }
+		 userRole.setUserId(userId);
+		 for (Integer roleId : list) {
+			 userRole.setRoleId(roleId);
+			 int re=userRoleDAO.insert(userRole);
+			 if (re != 1) {
+				 return ResultDTO.fail();
+			 }
+		}
+		 Date date=new Date();
+		 user.setModifyTime(date);
+		 int res = userDAO.update(user);
+		 if (res != 1) {
+             return ResultDTO.fail();
+         }
+		 return new ResultDTO<>(true, user.getId(), CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
+	    }
 }

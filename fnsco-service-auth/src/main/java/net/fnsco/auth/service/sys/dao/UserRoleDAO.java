@@ -19,14 +19,21 @@ public interface UserRoleDAO {
     @Results({@Result( column = "user_id",property = "userId"),@Result( column = "role_id",property = "roleId") })
     @Select("SELECT * FROM sys_user_role WHERE id = #{id}")
     public UserRoleDO getById(@Param("id") int id);
+    
+    @Results({@Result( column = "role_id",property = "roleId") })
+    @Select("SELECT role_id FROM sys_user_role WHERE user_id = #{id}")
+    public List<Integer> getByUserId(@Param("id") int id);
 
-    @Insert("INSERT into sys_user_role(id,user_id,role_id) VALUES (#{id},#{userId},#{roleId})")
+    @Insert("INSERT into sys_user_role(user_id,role_id) VALUES (#{userId},#{roleId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    public void insert(UserRoleDO userRole);
+    public int insert(UserRoleDO userRole);
 
-    @Delete("DELETE FROM sys_user_role WHERE id = #{id}")
+    @Delete("DELETE FROM sys_user_role WHERE user_id = #{id}")
     public int deleteById(@Param("id") int id);
-
+    
+    @Delete("DELETE FROM sys_user_role WHERE user_id = #{userId}")
+    public int deleteByUserId(@Param("userId") int userId);
+    
     @UpdateProvider(type = UserRoleProvider.class, method = "update")
     public int update(@Param("userRole") UserRoleDO  userRole);
 
