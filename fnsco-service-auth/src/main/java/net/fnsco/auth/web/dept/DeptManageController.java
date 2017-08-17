@@ -2,6 +2,7 @@ package net.fnsco.auth.web.dept;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,7 @@ public class DeptManageController extends BaseController {
 	 */
 	@RequestMapping(value = "/query",method= RequestMethod.GET)
 	@ResponseBody
+	@RequiresPermissions("sys:dept:list1")
 	 public ResultDTO<DeptDO> query(DeptDO dept,@RequestParam("currentPageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
 		 ResultPageDTO<DeptDO> result=sysDeptService.queryList(dept, pageNum, pageSize);
 	     return success(result);
@@ -95,6 +97,11 @@ public class DeptManageController extends BaseController {
 		ResultDTO<String> result = sysDeptService.deleteById(id);
 		return success(result);
 	}
+	/**
+	 * 查询部门的ID
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value ="/queryParentId",method= RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO<String> queryParentId(@RequestParam(value="id[]") Integer[] id){

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.auth.service.MenuService;
@@ -24,7 +25,8 @@ public class MenuController extends BaseController {
 	@RequestMapping("list")
 	@ResponseBody
 	public ResultDTO pageList(MenuDO menuDO) {
-		logger.info("开始分页查询RoleController.pageList, role=" + menuDO.toString());
+		logger.info("开始分页查询MenuController.pageList, role=" + menuDO.toString());
+		
 		Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
 		Integer page = params.get("currentPageNum");
 		Integer rows = params.get("pageSize");
@@ -33,7 +35,7 @@ public class MenuController extends BaseController {
 		return success(pager);
 	}
 	
-	//添加菜单信息
+	//选择菜单信息，去掉按钮类型
 	@RequestMapping("select")
 	@ResponseBody
 	public ResultDTO select(){
@@ -44,16 +46,40 @@ public class MenuController extends BaseController {
 		return success(pager);
 	}
 	
-	@RequestMapping("add")
+	@RequestMapping(value="add", method=RequestMethod.POST)
 	@ResponseBody
 	public  ResultDTO doAdd(MenuDO menu){
-		logger.info("开始插数据 RoleController.doAdd, menu=" + menu.toString());
+		logger.info("开始插数据 MenuController.doAdd, menu=" + menu.toString());
 		
 		MenuDO menuDO = this.menuService.doAdd(menu);
 		if(null == menuDO){
-			logger.info("数据存储失败 RoleController.doAdd, role=" + menu.toString());
+			logger.info("数据存储失败 MenuController.doAdd, menu=" + menu.toString());
 			return ResultDTO.fail(CoreConstants.E_COMM_BUSSICSS);
 		}
+		
+		return success(menuDO);
+	}
+	
+	@RequestMapping(value="update", method=RequestMethod.POST)
+	@ResponseBody
+	public ResultDTO doUpdate(MenuDO menu){
+		logger.info("开始更新数据 MenuController.doUpdate, menu=" + menu.toString());
+		
+		MenuDO menuDO = this.menuService.doUpdate(menu);
+		if(null == menuDO){
+			logger.info("数据更新失败 MenuController.doUpdate, menu=" + menu.toString());
+			return ResultDTO.fail(CoreConstants.E_COMM_BUSSICSS);
+		}
+		
+		return success(menuDO);
+	}
+	
+	@RequestMapping(value="delete", method=RequestMethod.POST)
+	@ResponseBody
+	public ResultDTO doDelete(MenuDO menu){
+		logger.info("开始删除数据 MenuController.doDelete, menu=" + menu.toString());
+		
+		this.menuService.doDelete(menu);
 		
 		return success(menu);
 	}

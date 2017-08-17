@@ -10,11 +10,11 @@ public class CodeGen {
         auto.setCreateService(false);
         auto.setOverride(true);
         
-        auto.init("net.fnsco.auth", "sys", "sys_user");
-        auto.init("net.fnsco.auth", "sys", "sys_user_role");
-        auto.init("net.fnsco.auth", "sys", "sys_role_menu");
-        auto.init("net.fnsco.auth", "sys", "sys_role_dept");
-        auto.init("net.fnsco.auth", "sys", "sys_menu");
-        auto.init("net.fnsco.auth", "sys", "sys_dept");
+        //auto.init("net.fnsco.auth", "sys", "sys_user");
+        //auto.init("net.fnsco.auth", "sys", "sys_user_role");
+        //auto.init("net.fnsco.auth", "sys", "sys_role_menu");
+        //auto.init("net.fnsco.auth", "sys", "sys_role_dept");
+        //auto.init("net.fnsco.auth", "sys", "sys_menu");
+        auto.init("net.fnsco.auth", "sys", "sys_user_token");
     }
 }

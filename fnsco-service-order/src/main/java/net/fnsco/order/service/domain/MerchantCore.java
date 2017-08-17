@@ -64,8 +64,6 @@ public class MerchantCore extends DTO{
     
     private List<MerchantContact> contacts;//关联的联系人信息
     
-    private List<MerchantTerminal> terminal;//关联的终端信息
-    
     private List<MerchantChannel> channel;//关联的渠道信息
     
     private List<MerchantBank> banks;//关联的银行卡信息
@@ -86,16 +84,6 @@ public class MerchantCore extends DTO{
 	public void setContacts(List<MerchantContact> contacts) {
 		this.contacts = contacts;
 	}
-	/**
-     * terminal
-     *
-     * @return  the terminal
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public List<MerchantTerminal> getTerminal() {
-        return terminal;
-    }
     /**
      * agentId
      *
@@ -118,16 +106,6 @@ public class MerchantCore extends DTO{
         this.agentId = agentId;
     }
 
-    /**
-     * terminal
-     *
-     * @param   terminal    the terminal to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setTerminal(List<MerchantTerminal> terminal) {
-        this.terminal = terminal;
-    }
 	/**
      * channel
      *

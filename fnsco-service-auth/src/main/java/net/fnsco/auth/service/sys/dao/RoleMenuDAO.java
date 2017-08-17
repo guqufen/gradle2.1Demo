@@ -1,7 +1,6 @@
 package net.fnsco.auth.service.sys.dao;
 
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Options;
@@ -27,6 +26,9 @@ public interface RoleMenuDAO {
 
     @Delete("DELETE FROM sys_role_menu WHERE role_id = #{id}")
     public int deleteById(@Param("id") Long roleId);
+    
+    @Delete("DELETE FROM sys_role_menu WHERE menu_id = #{id}")
+    public int deleteByMenuId(@Param("id") Integer MenuId);
 
     @UpdateProvider(type = RoleMenuProvider.class, method = "update")
     public int update(@Param("roleMenu") RoleMenuDO  roleMenu);
@@ -37,4 +39,8 @@ public interface RoleMenuDAO {
 
     @SelectProvider(type = RoleMenuProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("roleMenu") RoleMenuDO roleMenu);
+    
+    @Results({@Result( column = "role_id",property = "roleId"),@Result( column = "menu_id",property = "menuId") })
+    @SelectProvider(type = RoleMenuProvider.class, method = "query")
+    public List<RoleMenuDO> query(@Param("roleMenu") RoleMenuDO roleMenu);
 }
