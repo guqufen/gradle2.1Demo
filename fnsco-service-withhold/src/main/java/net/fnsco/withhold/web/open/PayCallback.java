@@ -64,7 +64,9 @@ public class PayCallback extends BaseController {
                 tradeData.setRespMsg(parameterMap.get("respMsg"));
                 String failReason = ServiceConstant.anErrorMap.get(respCode);
                 tradeData.setFailReason(failReason);
-                tradeDataService.update(tradeData);
+                if(ServiceConstant.PayStatusEnum.PAYING.getCode().equals(tradeData.getStatus())){
+                    tradeDataService.update(tradeData);
+                }
             }
         }
         return ResultDTO.success();

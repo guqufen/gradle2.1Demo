@@ -19,6 +19,7 @@ import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.DbUtil;
+import net.fnsco.order.api.dto.TerminalInfoDTO;
 import net.fnsco.order.api.dto.TradeDataDTO;
 import net.fnsco.order.api.dto.TradeDataQueryDTO;
 import net.fnsco.order.api.trade.TradeDataService;
@@ -29,7 +30,6 @@ import net.fnsco.order.service.dao.master.MerchantUserRelDao;
 import net.fnsco.order.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.order.service.domain.MerchantChannel;
 import net.fnsco.order.service.domain.MerchantCore;
-import net.fnsco.order.service.domain.MerchantTerminal;
 import net.fnsco.order.service.domain.MerchantUserRel;
 import net.fnsco.order.service.domain.trade.TradeData;
 
@@ -140,9 +140,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         List<String> posList = merchantCore.getTerminals();
         if (!CollectionUtils.isEmpty(posList)) {
             List<String> terminalList = Lists.newArrayList();
-            for (String id : posList) {
-                MerchantTerminal terminal = merchantTerminalDao.selectByPrimaryKey(Integer.parseInt(id));
-                terminalList.add(terminal.getTerminalCode());
+            for(String posId : posList){
+                List<TerminalInfoDTO> tempList = merchantTerminalDao.queryTerByPosId(Integer.parseInt(posId));
+                for (TerminalInfoDTO terminal : tempList) {
+                    terminalList.add(terminal.getTerminalCode());
+                }
             }
             tradeData.setTerminalList(terminalList);
         }
