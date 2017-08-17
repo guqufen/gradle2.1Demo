@@ -477,7 +477,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         //想成为店主
         List<AppOldListDTO> clerk = new ArrayList<AppOldListDTO>();
         for (AppUserMerchantDTO li : params) {
-            //如果自己更新自己则不提示
+            //如果自己更新自己则不提示 成为店主 1
             //AppOldPeopleDTO appOldPeopleDTO=new AppOldPeopleDTO();
             if (li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())) {
                 List<AppUserMerchant> list = appUserMerchantDao.selectByInnerCode(li.getInnerCode(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
@@ -494,7 +494,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     }
                 }
             }
-            //想成为店员
+            //想成为店员 2
             if (li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.CLERK.getCode())) {
                 //查询这个店员原来是不是店主
                 AppUserMerchant appUserMerchant = appUserMerchantDao.selectByall(li.getInnerCode(), li.getAppUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
@@ -574,46 +574,15 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             if (li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.CLERK.getCode())) {
                 //判断这个店铺原来有没有店长
                 AppUserMerchant it = appUserMerchantDao.selectOneByInnerCode(li.getInnerCode(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-                //原来有店长
+                //原来有店长不管是不是自己都强制更新
                 if (it != null) {
-                    //不是自己更新自己
-                    //if(!li.getAppUserId().equals(it.getAppUserId())){
-                    //自己强制更新
-                    AppUser user = new AppUser();
-                    user.setId(li.getAppUserId());
-                    user.setForcedLoginOut(1);
-                    if (!appUserDao.updateByPrimaryKeySelective(user)) {
+                    AppUser oldUser = new AppUser();
+                    oldUser.setId(it.getAppUserId());
+                    oldUser.setForcedLoginOut(1);
+                    if (!appUserDao.updateByPrimaryKeySelective(oldUser)) {
                         return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
-                    }
-                    // }
-                    //如果原来的店长不是自己 把原来的店长更新为店员
-                    if(!li.getAppUserId().equals(it.getAppUserId())){
-                        //原店主强制更新
-                        AppUser oldUser = new AppUser();
-                        oldUser.setId(it.getAppUserId());
-                        oldUser.setForcedLoginOut(1);
-                        if (!appUserDao.updateByPrimaryKeySelective(oldUser)) {
-                            return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
-                        }
-                        //原店主更改角色
-                        AppUserMerchantDTO dto = new AppUserMerchantDTO();
-                        dto.setId(it.getId());
-                        dto.setRoleId(ConstantEnum.AuthorTypeEnum.CLERK.getCode());
-                        dto.setModefyTime(new Date());
-                        appUserMerchantDao.updateByPrimaryKeySelective(dto);
                     }
                 }
-
-                //原来没有店长
-         /*       if (it == null) {
-                    //自己强制更新
-                    AppUser user = new AppUser();
-                    user.setId(li.getAppUserId());
-                    user.setForcedLoginOut(1);
-                    if (!appUserDao.updateByPrimaryKeySelective(user)) {
-                        return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
-                    }
-                }*/
             }
             li.setModefyTime(new Date());
             int num = appUserMerchantDao.updateByPrimaryKeySelective(li);
