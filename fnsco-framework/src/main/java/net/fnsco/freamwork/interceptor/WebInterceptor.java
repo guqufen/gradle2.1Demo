@@ -14,10 +14,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Strings;
 
-import ch.qos.logback.core.CoreConstants;
 import net.fnsco.freamwork.aop.OutWriterUtil;
-import net.fnsco.freamwork.business.AppUserDTO;
 import net.fnsco.freamwork.business.UserService;
+import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 
 /**
@@ -66,7 +65,7 @@ public class WebInterceptor implements HandlerInterceptor {
                 response.sendRedirect("/idx");
                 return false;
             }
-            AppUserDTO user = userService.getCookieUser(request);
+            WebUserDTO user = userService.getCookieUser(request);
             if (null == user) {
                 OutWriterUtil.outJson(response, FrameworkConstant.E_NOT_LOGIN);
                 return false;

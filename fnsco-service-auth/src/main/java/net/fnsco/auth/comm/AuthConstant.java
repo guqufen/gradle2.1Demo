@@ -2,7 +2,8 @@ package net.fnsco.auth.comm;
 
 import net.fnsco.core.constants.CoreConstants;
 
-public class ApiConstant extends CoreConstants {
+public class AuthConstant extends CoreConstants {
+    public static int    SUPER_ADMIN              = 1;
     public static String WEB_LOGIN_NULL           = "5101"; //用户名或密码为空
     public static String WEB_LOGIN_FAIL           = "5102"; //用户名或密码错误
     public static String WEB_LOGIN_USER_NOT_EXIST = "5103"; //用户名不存在
@@ -26,5 +27,4 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(WEB_BANK_CARD_NULL, "不支持该银行卡类型");
         ERROR_MESSGE_MAP.put(WEB_TIME_ERROR, "时间错误");
     }
-
 }

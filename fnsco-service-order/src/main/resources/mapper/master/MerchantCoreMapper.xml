@@ -72,7 +72,6 @@
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="agent_id" property="agentId" jdbcType="INTEGER" />
   	<collection property="channel" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantChannelDao.selectByInnerCode" />
-  	<collection property="terminal" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantTerminalDao.selectByInnerCode"/>
   	<collection property="files" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantFileDao.queryByInnerCode"/>
   	<collection property="contacts" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantContactDao.queryByInnerCode" />
   	<collection property="banks" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantBankDao.queryWebByInnerCode" />

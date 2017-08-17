@@ -38,6 +38,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(appInterceptor()).addPathPatterns("/app/**");
         registry.addInterceptor(openInterceptor()).addPathPatterns("/open/**");
     }
+    
     //    @Override
     //    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
     //        registry.addResourceHandler("/*.js/**").addResourceLocations("/ui/static/");
