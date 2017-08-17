@@ -130,8 +130,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         //设置交易时间
         tradeData.setStartTime(DateUtils.getDateStartTime(merchantCore.getStartDate()));
         tradeData.setEndTime(DateUtils.getDateEndTime(merchantCore.getEndDate()));
-        //定义要查询的商户号
-        List<String> innerCodeList = null;
+        tradeData.setPaySubType(merchantCore.getPayType());
         //根据终端查询商户号列表
         //        String terminals = merchantCore.getTerminals();
         //        List<String> terminalList = null;
@@ -144,15 +143,17 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         //                }
         //            }
         //        }
-        List<String> terminalList = merchantCore.getTerminals();
-        if (null != terminalList && terminalList.size() > 0) {
-            tradeData.setTerminalList(terminalList);
-        }
+//        List<String> terminalList = merchantCore.getTerminals();
+//        if (null != terminalList && terminalList.size() > 0) {
+//            tradeData.setTerminalList(terminalList);
+//        }
         //根据用户查询商户号
-        Integer appUserId = merchantCore.getUserId();
-        List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
-        result.setMerTotal(tempList.size());
-        if (null == terminalList || terminalList.size() == 0) {
+      //定义要查询的商户号
+        List<String> innerCodeList = merchantCore.getInnerCodes();
+        if(CollectionUtils.isEmpty(innerCodeList)){
+            Integer appUserId = merchantCore.getUserId();
+            List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
+            result.setMerTotal(tempList.size()); 
             innerCodeList = Lists.newArrayList();
             if (!CollectionUtils.isEmpty(tempList)) {
                 for (MerchantUserRel rel : tempList) {
@@ -160,7 +161,6 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
                 }
             }
             if (null == innerCodeList || innerCodeList.size() == 0) {
-
                 return result;
             }
         }

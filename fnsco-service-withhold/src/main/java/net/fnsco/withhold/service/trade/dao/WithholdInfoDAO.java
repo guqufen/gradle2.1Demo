@@ -15,7 +15,7 @@ import net.fnsco.withhold.service.trade.dao.helper.WithholdInfoProvider;
 import java.util.List;;
 
 public interface WithholdInfoDAO {
-    @Results({ @Result(column = "user_name", property = "userName"), @Result(column = "certif_type", property = "certifType"), @Result(column = "certify_id", property = "certifyId"),
+    @Results({ @Result(column = "user_name", property = "userName"),@Result(column = "product_type_code", property = "productTypeCode"), @Result(column = "certif_type", property = "certifType"), @Result(column = "certify_id", property = "certifyId"),
                @Result(column = "debit_day", property = "debitDay"), @Result(column = "amount_total", property = "amountTotal"), @Result(column = "bank_card", property = "bankCard"),
                @Result(column = "modify_user_id", property = "modifyUserId"), @Result(column = "modify_time", property = "modifyTime"), @Result(column = "sub_bank_name", property = "subBankName"),
                @Result(column = "an_bank_id", property = "anBankId"), @Result(column = "account_type", property = "accountType"), @Result(column = "acc_type", property = "accType"),
@@ -42,7 +42,7 @@ public interface WithholdInfoDAO {
     @Select("SELECT * FROM w_withhold_info WHERE status = '1' and debit_day = #{debitDay}  ")
     public List<WithholdInfoDO> getByDebitDay(@Param("debitDay") String debitDay);
 
-    @Insert("INSERT into w_withhold_info(id,user_name,mobile,certif_type,certify_id,debit_day,amount,amount_total,bank_card,status,modify_user_id,modify_time,total,sub_bank_name,an_bank_id,account_type,acc_type,open_bank_num,fail_total,start_date,end_date) VALUES (#{id},#{userName},#{mobile},#{certifType},#{certifyId},#{debitDay},#{amount},#{amountTotal},#{bankCard},#{status},#{modifyUserId},#{modifyTime},#{total},#{subBankName},#{anBankId},#{accountType},#{accType},#{openBankNum},#{failTotal},#{startDate},#{endDate})")
+    @Insert("INSERT into w_withhold_info(id,product_type_code,user_name,mobile,certif_type,certify_id,debit_day,amount,amount_total,bank_card,status,modify_user_id,modify_time,total,sub_bank_name,an_bank_id,account_type,acc_type,open_bank_num,fail_total,start_date,end_date) VALUES (#{id},#{productTypeCode},#{userName},#{mobile},#{certifType},#{certifyId},#{debitDay},#{amount},#{amountTotal},#{bankCard},#{status},#{modifyUserId},#{modifyTime},#{total},#{subBankName},#{anBankId},#{accountType},#{accType},#{openBankNum},#{failTotal},#{startDate},#{endDate})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(WithholdInfoDO withholdInfo);
 
@@ -52,7 +52,7 @@ public interface WithholdInfoDAO {
     @UpdateProvider(type = WithholdInfoProvider.class, method = "update")
     public int update(@Param("withholdInfo") WithholdInfoDO withholdInfo);
 
-    @Results({ @Result(column = "user_name", property = "userName"), @Result(column = "certif_type", property = "certifType"), @Result(column = "certify_id", property = "certifyId"),
+    @Results({ @Result(column = "user_name", property = "userName"),@Result(column = "product_type_code", property = "productTypeCode"),@Result(column = "certif_type", property = "certifType"), @Result(column = "certify_id", property = "certifyId"),
                @Result(column = "debit_day", property = "debitDay"), @Result(column = "amount_total", property = "amountTotal"), @Result(column = "bank_card", property = "bankCard"),
                @Result(column = "modify_user_id", property = "modifyUserId"), @Result(column = "modify_time", property = "modifyTime"), @Result(column = "sub_bank_name", property = "subBankName"),
                @Result(column = "an_bank_id", property = "anBankId"), @Result(column = "account_type", property = "accountType"), @Result(column = "open_bank_num", property = "openBankNum") })
