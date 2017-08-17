@@ -155,6 +155,7 @@ public class TradeDataController extends BaseController {
         result.setOrderTime(tradeData.getOrderTime());
         result.setRespMsg(tradeData.getRespMsg());
         result.setOrderIdScan(tradeData.getOrderIdScan());
+        result.setTxnType(tradeData.getTxnType());
         return ResultDTO.success(result);
     }
 

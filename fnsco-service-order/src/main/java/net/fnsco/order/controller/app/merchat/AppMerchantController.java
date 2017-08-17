@@ -16,6 +16,8 @@ import net.fnsco.order.api.dto.MerChantCoreDTO;
 import net.fnsco.order.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.order.api.dto.MerTerminalsDTO;
 import net.fnsco.order.api.dto.MerchantDTO;
+import net.fnsco.order.api.dto.PosDetailDTO;
+import net.fnsco.order.api.dto.PosListDTO;
 import net.fnsco.order.api.dto.TerminalDetailDTO;
 import net.fnsco.order.api.dto.TerminalsDTO;
 import net.fnsco.order.api.dto.TradeMerchantDTO;
@@ -147,4 +149,62 @@ public class AppMerchantController extends BaseController {
        List<TradeMerchantDTO> datas =  merchantService.getShopOwnerMerChant(merchant);
        return ResultDTO.success(datas);
     }
+    
+    /**
+     * getAllPosInfo:(这里用一句话描述这个方法的作用)获取所有POS机列表信息
+     * @param merchant
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月16日 上午10:52:27
+     * @return ResultDTO<Object>    DOM对象
+     */
+    @RequestMapping(value = "/getAllPosInfo")
+    @ApiOperation(value = "APP用户查询POS机信息列表")
+    public ResultDTO<List<PosListDTO>> getAllPosInfo(@RequestBody MerchantDTO merchant){
+        if(null == merchant.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+        List<PosListDTO> dates = merchantService.getAllPosInfo(merchant);
+        return ResultDTO.success(dates);
+    }
+    
+    /**
+     * getPosDetail:(这里用一句话描述这个方法的作用)获取单个POS机详情
+     * @param merchant
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月16日 上午10:53:17
+     * @return ResultDTO<Object>    DOM对象
+     */
+    @RequestMapping(value = "/getPosDetail")
+    @ApiOperation(value = "APP用户查询POS机详情")
+    public ResultDTO<PosDetailDTO> getPosDetail(@RequestBody TerminalJO terminalJO){
+        if(null == terminalJO.getPosId()){
+            return ResultDTO.fail(ApiConstant.E_USERID_NULL);
+        }
+        PosDetailDTO datas = merchantService.getPosDetail(terminalJO.getPosId());
+        return ResultDTO.success(datas);
+    }
+    
+    /**
+     * updatetPosInfo:(这里用一句话描述这个方法的作用)编辑单个POS机信息
+     * @param merchant
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月16日 上午10:54:06
+     * @return ResultDTO<Object>    DOM对象
+     */
+    @RequestMapping(value = "/updatetPosInfo")
+    @ApiOperation(value = "编辑修改POS机信息")
+    public ResultDTO updatetPosInfo(@RequestBody TerminalJO terminalJO){
+        if(null == terminalJO.getPosId()){
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+        boolean result = merchantService.updatePosInfo(terminalJO);
+        if(!result){
+            return ResultDTO.fail();
+        }
+        return ResultDTO.success();
+    }
+    
 }
