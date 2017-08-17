@@ -34,7 +34,7 @@ public class RoleProvider {
         if (role.getCreateTime() != null) {
             SET("create_time=#{role.createTime}");
         }
-        WHERE("role_id = #{role.id}");
+        WHERE("role_id = #{role.roleId}");
         }}.toString();
     }
 
@@ -57,7 +57,7 @@ public class RoleProvider {
             WHERE("role_id=#{role.roleId}");
         }
         if (StringUtils.isNotBlank(role.getRoleName())){
-            WHERE("role_name=#{role.roleName}");
+            WHERE("role_name like CONCAT('%',#{role.roleName},'%')");
         }
         if (StringUtils.isNotBlank(role.getRemark())){
             WHERE("remark=#{role.remark}");

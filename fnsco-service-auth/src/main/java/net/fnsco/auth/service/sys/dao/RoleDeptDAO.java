@@ -36,5 +36,9 @@ public interface RoleDeptDAO {
 
     @SelectProvider(type = RoleDeptProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("roleDept") RoleDeptDO roleDept);
+    
+    @Results({@Result( column = "id",property = "id"),@Result( column = "role_id",property = "roleId"),@Result( column = "dept_id",property = "deptId") })
+    @SelectProvider(type = RoleDeptProvider.class, method = "query")
+    public List<RoleDeptDO> query(@Param("roleDept") RoleDeptDO roleDept);
 
 }
