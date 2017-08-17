@@ -20,6 +20,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.CookieUtils;
+import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.sysuser.SysUserService;
 import net.fnsco.order.service.domain.SysUser;
@@ -39,38 +40,38 @@ public class SysUserLoginAction extends BaseController{
 	 * @param adminUser
 	 * @return
 	 */
-	@RequestMapping(value = "/doLogin", method = RequestMethod.POST)
-	@ResponseBody
-	public ResultDTO<String> doLogin(HttpServletRequest req,HttpServletResponse res)
-	{
-		ResultDTO<SysUser> result = new ResultDTO<>();
-		String username = req.getParameter("account");
-		String password = req.getParameter("password");
-		if (StringUtils.isEmpty(password) || StringUtils.isEmpty(username)) {
-		    
-            return ResultDTO.fail(ApiConstant.WEB_LOGIN_NULL);
-        }
-		
-		result = adminUserService.doLogin( username, password);
-		if (result.isSuccess()) {
-		    SysUser user = result.getData();
-			setSessionUser(user,user.getId());
-			CookieUtils.addCookie(res, CoreConstants.COOKIE_USER_KEY, ((SysUser)result.getData()).getName());
-			return ResultDTO.success();
-		}
-		return ResultDTO.fail(ApiConstant.WEB_LOGIN_FAIL);
-	}
+//	@RequestMapping(value = "/doLogin", method = RequestMethod.POST)
+//	@ResponseBody
+//	public ResultDTO<String> doLogin(HttpServletRequest req,HttpServletResponse res)
+//	{
+//		ResultDTO<SysUser> result = new ResultDTO<>();
+//		String username = req.getParameter("account");
+//		String password = req.getParameter("password");
+//		if (StringUtils.isEmpty(password) || StringUtils.isEmpty(username)) {
+//		    
+//            return ResultDTO.fail(ApiConstant.WEB_LOGIN_NULL);
+//        }
+//		
+//		result = adminUserService.doLogin( username, password);
+//		if (result.isSuccess()) {
+//		    SysUser user = result.getData();
+//			setSessionUser(user,user.getId());
+//			CookieUtils.addCookie(res, CoreConstants.COOKIE_USER_KEY, ((SysUser)result.getData()).getName());
+//			return ResultDTO.success();
+//		}
+//		return ResultDTO.fail(ApiConstant.WEB_LOGIN_FAIL);
+//	}
 	
 	/**
 	 * 退出登录
 	 * @return
 	 */
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logOut(){
-		removeSessionUser();
-		removeCookieUser();
-		return "redirect:/login.html";
-	}
+//	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+//	public String logOut(){
+//		removeSessionUser();
+//		removeCookieUser();
+//		return "redirect:/login.html";
+//	}
 	
 	/**
 	 * 获取当前用户
@@ -80,7 +81,7 @@ public class SysUserLoginAction extends BaseController{
 	@ResponseBody
 	public Map<String,Object> getCurrentUser(){
 		Map<String,Object> result = new HashMap<>();
-		SysUser adminUser = (SysUser) getSessionUser();
+		WebUserDTO adminUser = (WebUserDTO) getSessionUser();
 		result.put("sessionUser", adminUser);
 		return result;
 	}

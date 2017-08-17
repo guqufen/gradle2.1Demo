@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.auth.service.UserTokenService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.constants.CoreConstants;
-import net.fnsco.freamwork.business.AppUserDTO;
 import net.fnsco.freamwork.business.UserService;
+import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.order.api.sysuser.SysUserService;
 import net.fnsco.order.service.dao.master.AppUserDao;
 import net.fnsco.order.service.domain.AppUser;
@@ -24,8 +25,9 @@ public class UserServiceImpl extends BaseService implements UserService {
     private AppUserDao appUserDao;
     @Autowired
     private SysUserService sysUserService;
-
-    @Override
+    @Autowired
+    private UserTokenService userTokenService;
+    @Override 
     public net.fnsco.freamwork.business.AppUserDTO getUserInfo(String userId) {
         net.fnsco.freamwork.business.AppUserDTO dto = null;
         try {
@@ -43,8 +45,8 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
-    public AppUserDTO getCookieUser(HttpServletRequest request) {
-        AppUserDTO user = null;
+    public WebUserDTO getCookieUser(HttpServletRequest request) {
+        WebUserDTO user = null;
         Object cookeiUser = getUser(request);
         if (null == cookeiUser) {
             return user;
@@ -52,8 +54,12 @@ public class UserServiceImpl extends BaseService implements UserService {
         String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#") + 1, cookeiUser.toString().length());
         SysUser temp = sysUserService.getUserByName(userName);
         if (temp != null) {
-            user = new AppUserDTO();
-            setSessionUser(request, temp, temp.getId());
+            user = new WebUserDTO();
+            user.setId(temp.getId());
+            user.setName(temp.getName());
+            String tokenId = userTokenService.createToken(user.getId());
+            user.setTokenId(tokenId);
+            setSessionUser(request, user, user.getId());
         }
         return user;
     }

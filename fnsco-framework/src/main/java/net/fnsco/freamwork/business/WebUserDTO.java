@@ -1,99 +1,62 @@
-package net.fnsco.auth.service.sys.entity;
+package net.fnsco.freamwork.business;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserDO {
+import com.alibaba.fastjson.JSONObject;
 
-    /**
-     * 
-     */
+public class WebUserDTO implements Serializable {
     private Integer id;
 
-    /**
-     * 1 oem管理员/2 代理商用户/ 3 商户/ 4 其它用户
-     */
     private Integer type;
-    /**
-     * 用户状态0删除1正常2禁止
-     */
-    private Integer status;
 
-    public Integer getStatus() {
-		return status;
-	}
+    private String  name;
 
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
+    private String  password;
 
+    private String  realName;
 
+    private String  mobile;
 
-	/**
-     * 用户名
-     */
-    private String name;
-
-    /**
-     * 密码
-     */
-    private String password;
-
-    /**
-     * 真实姓名
-     */
-    private String realName;
-
-    /**
-     * 手机
-     */
-    private String mobile;
-
-    /**
-     * 1男 2女
-     */
     private Integer sex;
 
-    /**
-     * 花名
-     */
-    private String aliasName;
+    private String  aliasName;
 
-    /**
-     * 部门
-     */
-    private String department;
+    private String  department;
 
-    /**
-     * 代理商编号
-     */
     private Integer agentId;
 
-    /**
-     * 备注
-     */
-    private String remark;
+    private String  remark;
 
-    /**
-     * 
-     */
-    private Date modifyTime;
+    private Date    modifyTime;
 
-    /**
-     * 
-     */
     private Integer modifyUserId;
 
+    private String  tokenId;
 
-    private String modifyTimeStr;
-    public String getModifyTimeStr() {
-		return modifyTimeStr;
-	}
+    /**
+     * tokenId
+     *
+     * @return  the tokenId
+     * @since   CodingExample Ver 1.0
+    */
 
-	public void setModifyTimeStr(String modifyTimeStr) {
-		this.modifyTimeStr = modifyTimeStr;
-	}
+    public String getTokenId() {
+        return tokenId;
+    }
 
-	public Integer getId() {
+    /**
+     * tokenId
+     *
+     * @param   tokenId    the tokenId to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setTokenId(String tokenId) {
+        this.tokenId = tokenId;
+    }
+
+    public Integer getId() {
         return id;
     }
 
@@ -114,7 +77,7 @@ public class UserDO {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? null : name.trim();
     }
 
     public String getPassword() {
@@ -122,7 +85,7 @@ public class UserDO {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password == null ? null : password.trim();
     }
 
     public String getRealName() {
@@ -130,7 +93,7 @@ public class UserDO {
     }
 
     public void setRealName(String realName) {
-        this.realName = realName;
+        this.realName = realName == null ? null : realName.trim();
     }
 
     public String getMobile() {
@@ -138,7 +101,7 @@ public class UserDO {
     }
 
     public void setMobile(String mobile) {
-        this.mobile = mobile;
+        this.mobile = mobile == null ? null : mobile.trim();
     }
 
     public Integer getSex() {
@@ -154,7 +117,7 @@ public class UserDO {
     }
 
     public void setAliasName(String aliasName) {
-        this.aliasName = aliasName;
+        this.aliasName = aliasName == null ? null : aliasName.trim();
     }
 
     public String getDepartment() {
@@ -162,7 +125,7 @@ public class UserDO {
     }
 
     public void setDepartment(String department) {
-        this.department = department;
+        this.department = department == null ? null : department.trim();
     }
 
     public Integer getAgentId() {
@@ -178,7 +141,7 @@ public class UserDO {
     }
 
     public void setRemark(String remark) {
-        this.remark = remark;
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public Date getModifyTime() {
@@ -197,10 +160,17 @@ public class UserDO {
         this.modifyUserId = modifyUserId;
     }
 
-
-
     @Override
     public String toString() {
-        return "[id="+ id + ", type="+ type + ", name="+ name + ", password="+ password + ", realName="+ realName + ", mobile="+ mobile + ", sex="+ sex + ", aliasName="+ aliasName + ", department="+ department + ", agentId="+ agentId + ", remark="+ remark + ", modifyTime="+ modifyTime + ", modifyUserId="+ modifyUserId + "]";
+        // TODO Auto-generated method stub
+        return JSONObject.toJSONString(this);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = result * 31 + name.hashCode();
+        result = result * 31 + id;
+        return result;
     }
 }
