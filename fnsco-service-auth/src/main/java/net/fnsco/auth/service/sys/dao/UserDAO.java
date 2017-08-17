@@ -22,7 +22,7 @@ public interface UserDAO {
                @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
     @Select("SELECT * FROM sys_user WHERE id = #{id}")
     public UserDO getById(@Param("id") int id);
-
+    
     @Results({ @Result(column = "real_name", property = "realName"), @Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),
                @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
     @Select("SELECT * FROM sys_user WHERE name=#{name} and password = #{password}")
@@ -35,9 +35,9 @@ public interface UserDAO {
 
     @Insert("INSERT into sys_user(id,type,name,password,real_name,mobile,sex,alias_name,department,agent_id,remark,modify_time,modify_user_id) VALUES (#{id},#{type},#{name},#{password},#{realName},#{mobile},#{sex},#{aliasName},#{department},#{agentId},#{remark},#{modifyTime},#{modifyUserId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    public void insert(UserDO user);
+    public int insert(UserDO user);
 
-    @Update("UPDATE sys_user SET status='-1' WHERE id = #{id}")
+    @Update("UPDATE sys_user SET status='0' WHERE id = #{id}")
     public int deleteById(@Param("id") Integer id);
 
     @UpdateProvider(type = UserProvider.class, method = "update")

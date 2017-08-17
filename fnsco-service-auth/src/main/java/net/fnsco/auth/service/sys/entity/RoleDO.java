@@ -47,7 +47,7 @@ public class RoleDO {
 	/**
 	 * 时间的String类型
 	 */
-	private String createTimeSt;
+	private String createTimeStr;
 
 	public Long getRoleId() {
 		return roleId;
@@ -113,12 +113,12 @@ public class RoleDO {
 		this.deptIdList = deptIdList;
 	}
 
-	public String getCreateTimeSt() {
-		return createTimeSt;
+	public String getCreateTimeStr() {
+		return createTimeStr;
 	}
 
-	public void setCreateTimeSt(String createTimeSt) {
-		this.createTimeSt = createTimeSt;
+	public void setCreateTimeStr(String createTimeStr) {
+		this.createTimeStr = createTimeStr;
 	}
 
 	@Override

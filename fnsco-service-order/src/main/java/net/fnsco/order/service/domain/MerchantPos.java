@@ -1,4 +1,7 @@
 package net.fnsco.order.service.domain;
+
+import java.util.List;
+
 /**
  * @desc POS机信息实体
  * @author   tangliang
@@ -22,6 +25,31 @@ public class MerchantPos {
     private String posType;
 
     private String status;
+    
+    private List<MerchantTerminal> terminal;//POS机下终端信息
+    
+
+    /**
+     * terminal
+     *
+     * @return  the terminal
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public List<MerchantTerminal> getTerminal() {
+        return terminal;
+    }
+
+    /**
+     * terminal
+     *
+     * @param   terminal    the terminal to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setTerminal(List<MerchantTerminal> terminal) {
+        this.terminal = terminal;
+    }
 
     public Integer getId() {
         return id;

@@ -18,6 +18,15 @@ import net.fnsco.order.service.domain.MerchantPos;
 public interface MerchantPosDao {
 
     int deleteByPrimaryKey(Integer id);
+    /**
+     * deleteByChannelId:(这里用一句话描述这个方法的作用)根据channelId删除
+     * @param channelId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月17日 下午1:41:59
+     * @return int    DOM对象
+     */
+    int deleteByChannelId(@Param("channelId")Integer channelId);
 
     int insert(MerchantPos record);
 
@@ -28,6 +37,16 @@ public interface MerchantPosDao {
     int updateByPrimaryKeySelective(MerchantPos record);
 
     int updateByPrimaryKey(MerchantPos record);
+    
+    /**
+     * selectByChannelId:(这里用一句话描述这个方法的作用)根据channelId查询
+     * @param channelId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月17日 下午2:44:43
+     * @return List<MerchantPos>    DOM对象
+     */
+    List<MerchantPos> selectByChannelId(@Param("channelId")Integer channelId);
     
     /**
      * selectPosNamesByInnerCode:(这里用一句话描述这个方法的作用)根据innercode查询出 POS姓名

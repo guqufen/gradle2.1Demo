@@ -19,7 +19,6 @@ function initTableData() {
 		url : PROJECT_NAME + '/web/auth/role/list',
 		showRefresh : true,// 是否显示刷新按钮
 		showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
-//		toolbar : '#toolbar', // 搜索框绑定
 		striped : true, // 是否显示行间隔色
 		cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 		pagination : true, // 是否显示分页（*）
@@ -57,7 +56,7 @@ function initTableData() {
 			field : 'remark',
 			title : '备注'
 		}, {
-			field : 'createTime',
+			field : 'createTimeStr',
 			title : '创建时间',
 			width : 30
 		} ]
@@ -79,6 +78,7 @@ function responseHandler(res) {
 		};
 	}
 }
+
 // 组装请求参数
 function queryParams(params) {
 	var param = {
@@ -95,21 +95,24 @@ function queryEvent(id) {
 	console.log("id:" + id);
 	$('#' + id).bootstrapTable('refresh');
 }
+
 // 重置按钮事件
 function resetEvent(form, id) {
 	$('#' + form)[0].reset();
 	$('#' + id).bootstrapTable('refresh');
 }
 
-function onCheck(e, treeId, treeNode) {
-	if (treeNode.isParent) // 如果不是叶子结点，结束
-		return;
-	alert(treeNode.name); // 获取当前结点上的相关属性数据，执行相关逻辑
-};
+//清除所有表单数据
+function clearDate(){
+	$('#roleId').val(null);//角色ID，新增无此值，修改此值必须有值
+	$('#roleName').val(null);
+	$('#deptId').val(null);
+	$('#deptName').val(null);
+	$('#remark').val(null);
+}
 
 /***************************** 新增add ********************************************/
 //菜单树， 获取菜单树数据
-var menu_ztree;
 var menu_setting = {
 		data : {
 			simpleData : {
@@ -128,24 +131,47 @@ var menu_setting = {
 			nocheckInherit : true
 		}
 	};
-function getMenuTreeAdd(roleId) {
+function getMenuTreeAdd(id) {
 
-	// 加载菜单树
-	$.get(PROJECT_NAME + "/web/auth/menu/list",
-			function(r) {
-				menu_ztree = $.fn.zTree.init($("#menuTree"), menu_setting,
-						r.data.list);
+	// 加载权限树，组包发给后台
+	$.ajax({
+		type : 'get',
+		url : PROJECT_NAME + "/web/auth/menu/list",
+		async : false,//同步获取数据
+		success : function(data) {
+			if (data.success) {
+				var menu_ztree = $.fn.zTree.init($("#menuTree"), menu_setting, data.data.list);
 
-				// 全部取消勾选
+				//全部取消勾选
 				menu_ztree.checkAllNodes(false);
+				
+				//id不为空，表示修改；否则表示新增
+				if(id != null){
 
-				// 是否展开所有节点(true--展开；false--不展开)
-				menu_ztree.expandAll(false);
-			});
+					//修改，则需将当前所选的菜单展示出来
+					for(var i=0; i<id.length; i++){
+
+						//指定节点id选中
+						var node = menu_ztree.getNodeByParam("id", id[i], null);
+						if( node != null){
+							menu_ztree.checkNode(node, true);// 勾选指定ID的节点
+							menu_ztree.expandNode(node, true, false);// 指定ID节点展开
+						}
+					}
+					//展开所有节点
+					menu_ztree.expandAll(true);
+				}else{
+					//展开所有节点
+					menu_ztree.expandAll(false);
+				}
+			} else if (!data.success) {
+				layer.msg(data.message);
+			}
+		}
+	});
 }
 
 //数据权限树
-var data_ztree;
 var data_setting = {
 		data : {
 			simpleData : {
@@ -167,21 +193,37 @@ var data_setting = {
 			}
 		}
 	};
-function getDataTreeAdd(roleId) {
+function getDataTreeAdd(id) {
 
 	// 加载权限树，组包发给后台
 	$.ajax({
 		type : 'get',
-		url : PROJECT_NAME + "/web/auth/dept/query",
+		url : PROJECT_NAME + "/web/auth/dept/querytree",
+		async : false,//同步获取数据
 		success : function(data) {
 			if (data.success) {
-				data_ztree = $.fn.zTree.init($("#dataTree"), data_setting, data.data.list);
+				var data_ztree = $.fn.zTree.init($("#dataTree"), data_setting, data.data);
 
 				//全部取消勾选
 				data_ztree.checkAllNodes(false);
 				
-				//展开所有节点
-				data_ztree.expandAll(false);
+				//ID不为空，表示修改；否则表示新增
+				if(id != null){
+					//修改，则需将当前所选的数据权限展示出来
+					for(var i=0; i<id.length; i++){
+						//指定节点id选中
+						var node = data_ztree.getNodeByParam("id", id[i], null);
+						if( node != null){
+							data_ztree.checkNode(node, true);// 勾选指定ID的节点
+							data_ztree.expandNode(node, true, false);// 指定ID节点展开
+						}
+					}
+					//展开所有节点
+					data_ztree.expandAll(true);
+				}else{
+					//不展开所有节点
+					data_ztree.expandAll(false);
+				}
 			} else if (!data.success) {
 				layer.msg(data.message);
 			}
@@ -189,8 +231,6 @@ function getDataTreeAdd(roleId) {
 	});
 }
 //所属部门树
-//var d_ztree;//所属部门弹框的ztree对象
-var d_id;//所属部门弹框点击确定之后，获取改id
 var d_setting = {
 		data : {
 			simpleData : {
@@ -205,20 +245,31 @@ var d_setting = {
 		}
 	};
 
-function getDeptAdd(){
+function getDeptTree(id){
 	// 组包发给后台
 	$.ajax({
 		type : 'get',
-		url : PROJECT_NAME + "/web/auth/dept/query",
+		url : PROJECT_NAME + "/web/auth/dept/querytree",
+		async : false,//同步获取数据
 		success : function(data) {
 			if (data.success) {
-				var dd_ztree = $.fn.zTree.init($("#deptTree"), d_setting, data.data.list);
+				var dd_ztree = $.fn.zTree.init($("#deptTree"), d_setting, data.data);
 
 				//全部取消勾选
 				dd_ztree.checkAllNodes(false);
 
+				//ID不为空，表示修改；否则表示新增
+				if(id != null){
+					//修改，则需将当前所选指定节点id选中
+					var node = dd_ztree.getNodeByParam("id", id, null);
+					if( node != null){
+						dd_ztree.selectNode(node, true);// 指定选中ID的节点
+						dd_ztree.expandNode(node, true, false);// 指定选中ID节点展开
+					}
+				}
+
 				//展开所有节点
-				dd_ztree.expandAll(false);
+				dd_ztree.expandAll(true);
 			} else if (!data.success) {
 				layer.msg(data.message);
 			}
@@ -230,7 +281,7 @@ function getDeptAdd(){
 }
 
 //点击所属部门弹窗,弹出ztreeId的窗体
-function deptTreeGetAdd() {
+function deptTreeGet() {
 
 	// 获取所属部门树
 	var add_deptTree = $.fn.zTree.getZTreeObj('deptTree');
@@ -249,8 +300,8 @@ function deptTreeGetAdd() {
 
 			var node = add_deptTree.getSelectedNodes();
 			if (node.length != 0) {
-				$('#deptId').val(node[0].name);
-				d_id = node[0].id;
+				$('#deptName').val(node[0].name);
+				$('#deptId').val(node[0].id);
 				layer.close(index);
 			} else {
 				layer.msg('请选择所属部门!');
@@ -261,118 +312,20 @@ function deptTreeGetAdd() {
 //点击增加按钮事件
 $('#btn_add').click(function() {
 
+	//加载完成之后，将所有数据清掉
+	clearDate();
+
+	$('h4').html('角色新增');
+
 	getMenuTreeAdd(null);
 
 	getDataTreeAdd(null);
 	
-	getDeptAdd();
+	getDeptTree(null);
 })
 
-/*************************************** 修改edit*****************************/
-function getMenuTreeEdit(roleId) {
-
-	// 加载菜单树
-	$.get(PROJECT_NAME + "/web/auth/menu/list", function(r) {
-		var m_ztree = $.fn.zTree.init($("#menuTree2"), menu_setting,
-				r.data.list);
-
-		//清除当前ztree已选中的ID，避免缓存数据(先查找看是否有选中)
-		m_ztree.checkAllNodes(false);
-
-		// 是否展开所有节点(true--展开；false--不展开)
-		m_ztree.expandAll(true);
-	});
-}
-
-// 数据权限树
-function getDataTreeEdit(roleId) {
-
-	// 加载权限树，同步加载
-	$.ajax({
-		type : 'get',
-		url : PROJECT_NAME + "/web/auth/dept/query",
-		async: false,
-		success : function(data) {
-			if (data.success) {
-				var da_ztree = $.fn.zTree.init($("#dataTree2"), data_setting,
-						data.data.list);
-
-				//清除当前ztree已选中的ID，避免缓存数据(先查找看是否有选中)
-				da_ztree.checkAllNodes(false);
-
-				// 展开所有节点
-				da_ztree.expandAll(true);
-			} else if (!data.success) {
-				layer.msg(data.message);
-			}
-		}
-	});
-}
-
-//所属部门树
-//var d_ztree;//所属部门弹框的ztree对象
-var e_id;//所属部门弹框点击确定之后，获取改id
-var edit_deptTree;//所属部门弹框的ztree对象
-function getDeptEdit() {
-
-	// 组包发给后台
-	$.ajax({
-		type : 'get',
-		url : PROJECT_NAME + "/web/auth/dept/query",
-		async: false,//ajax是异步请求，所以可能出现数据没有传回来就往下运行了，导致操作这些加载的数据出错(此时这些数据为null)
-		success : function(data) {
-			if (data.success) {
-				var e_deptTree = $.fn.zTree.init($("#deptTree2"), d_setting,
-						data.data.list);
-
-				//清除当前ztree已选中的ID，避免缓存数据(先查找看是否有选中)
-				e_deptTree.checkAllNodes(false);
-
-				// 展开所有节点
-				e_deptTree.expandAll(true);
-
-			} else if (!data.success) {
-				layer.msg(data.message);
-			}
-		},
-		error : function(data) {
-			layer.msg("操作失败");
-		}
-	});
-}
-
-// 点击所属部门弹窗,弹出id=ztreeId的窗体
-//deptLayer为新增的窗体；deptLayer2为修改的窗体
-//ztree:外框体;dTree:内框体;type:0-add;1-edit
-function deptTreeGetEdit() {
-
-	edit_deptTree = $.fn.zTree.getZTreeObj("deptTree2");
-
-	layer.open({
-		type : 1,
-		offset : '50px',
-		skin : 'layui-layer-molv',
-		title : "选择部门",
-		area : [ '300px', '450px' ],
-		shade : 0,
-		shadeClose : false,
-		content : jQuery('#deptLayer2'),
-		btn : [ '确定', '取消' ],
-		btn1 : function(index) {
-
-			var node = edit_deptTree.getSelectedNodes();
-			if (node.length != 0) {
-				$('#deptId2').val(node[0].name);
-				e_id = node[0].id;
-				layer.close(index);
-			} else {
-				layer.msg('请选择所属部门!');
-			}
-		}
-	});
-}
+/********* 修改edit*******/
 //点击修改按钮
-var edit_roleId = null;
 $('#btn_edit').click(function() {
 
 	// 找到当前table选择的行
@@ -384,77 +337,67 @@ $('#btn_edit').click(function() {
 		return false;
 	} else {
 
-		// 获取table选中数据的部门ID
-		var deptId = selectContent[0].deptId;
-		edit_roleId = selectContent[0].roleId;
+		$('h4').html('角色修改');
 
-		getMenuTreeEdit(null);
-		getDataTreeEdit(null);
-		getDeptEdit();
-		
+		// 获取table选中数据的部门ID
+		$('#roleId').val(selectContent[0].roleId);
+		$('#roleName').val(selectContent[0].roleName);
+		$('#remark').val(selectContent[0].remark);
+		$('#deptName').val(selectContent[0].deptName);
+		$('#deptId').val(selectContent[0].deptId);
+
+		var deptId = selectContent[0].deptId;
+		var menuList = [];
+		var dataList = [];
+		menuList = selectContent[0].menuIdList;//菜单树
+		dataList = selectContent[0].deptIdList;//数据权限树
+
+		getMenuTreeAdd(menuList);
+
+		getDataTreeAdd(dataList);
+
+		getDeptTree(deptId);
+
 		// 获取所属部门树数据对象
-		edit_deptTree = $.fn.zTree.getZTreeObj("deptTree2");
+		edit_deptTree = $.fn.zTree.getZTreeObj("deptTree");
 
 		console.info(selectContent);
-		$('#roleName2').val(selectContent[0].roleName);
-		$('#remark2').val(selectContent[0].remark);
-		$('#deptId2').val(selectContent[0].deptName);
 
-		//指定节点id选中
-		var node = edit_deptTree.getNodeByParam("id", deptId, null);
-		if( node != null){
-			edit_deptTree.selectNode(node, true);// 指定选中ID的节点
-			edit_deptTree.expandNode(node, true, false);// 指定选中ID节点展开
-		}
 	}
 })
 
-/******************** 点击保存按钮 *************************************/
+/****** 点击保存按钮 *****/
 // 点击保存按钮,获取选择的数据以及输入框的数据，组包发给后台
 $('#btn_save').click(function() {
-	saveOrUpdate(1);
+	saveOrUpdate();
 })
 // 点击保存按钮,获取选择的数据以及输入框的数据，组包发给后台
 $('#btn_update').click(function() {
-	saveOrUpdate(2);
+	saveOrUpdate();
 })
 
 //typeId:1-新增;2-修改
-function saveOrUpdate(typeId) {
+function saveOrUpdate() {
 
-	var roleName;//角色名称
-	var menuTree;//菜单权限tree
-	var dataTree;//数据权限tree
-	var remark;//备注
-	var url;//访问的url
-	var myModal;//弹出框ID
-	var deptId;
-	
-	if(typeId == 1){
-		roleName = 'roleName';
-		menuTree = "menuTree";
-		dataTree = "dataTree";
-		remark = "remark";
+	var roleId = $('#roleId').val();
+	var url;
+
+	//为空表示新增；否则表示修改
+	if(roleId == ""){
 		url = "/web/auth/role/add";
-		myModal = 'myModal';
-		deptId = d_id;
-	}else if(typeId == 2){
-		roleName = 'roleName2';
-		menuTree = "menuTree2";
-		dataTree = "dataTree2";
-		remark = 'remark2';
+		roleId = null;
+	}else{
 		url = "/web/auth/role/update";
-		myModal = 'editModal';
-		deptId = e_id;
 	}
+
 	//角色名称  校验，不能为空
-	if (!$('#'+roleName).val()) {
+	if (!$('#roleName').val()) {
 		layer.msg('请输入有效角色名称!');
 		return;
 	}
 
 	// 获取选择的菜单树数据
-	var m_ztree = $.fn.zTree.getZTreeObj(menuTree);// 获取菜单树对象
+	var m_ztree = $.fn.zTree.getZTreeObj('menuTree');// 获取菜单树对象
 	var nodes = m_ztree.getCheckedNodes(true);
 	var menuIdList = [];
 	if (nodes.length > 0) {
@@ -467,7 +410,7 @@ function saveOrUpdate(typeId) {
 	}
 
 	// 获取数据权限树的数据
-	var da_tree = $.fn.zTree.getZTreeObj(dataTree);// 获取数据权限树对象
+	var da_tree = $.fn.zTree.getZTreeObj('dataTree');// 获取数据权限树对象
 	var nodes = da_tree.getCheckedNodes(true);
 	var deptIdList = [];
 	if (nodes.length > 0) {
@@ -479,31 +422,32 @@ function saveOrUpdate(typeId) {
 		return false;
 	}
 	
-	
 	//获取部门ID数据
 	var de_tree = $.fn.zTree.getZTreeObj(dataTree);//获取部门树对象
 	
-	var param = {
+		var param = {
 		'menuIdList' : menuIdList,
 		'deptIdList' : deptIdList,
-		'roleId':edit_roleId,//新增角色的roleId自动生成,没有此项
-		'deptId' : deptId,
-		'roleName' : $('#'+roleName).val(),
-		'remark' : $('#'+remark).val()
+		'roleId' : $('#roleId').val(),// 新增角色的roleId自动生成,没有此项
+		'deptId' : $('#deptId').val(),
+		'roleName' : $('#roleName').val(),
+		'remark' : $('#remark').val()
 	}
 
 	// 组包发给后台
 	$.ajax({
-		type : 'POST',
+		type : 'get',
 		url : PROJECT_NAME + url,
 		data : param,
-		traditional: true,
+		traditional: true,//提交带数组类型必须设置true
 		success : function(data) {
 			unloginHandler(data);
 			if (data.success) {
 				layer.msg("操作成功");
-				$('#'+myModal).modal("hide");
+				
+				$('#myModal').modal("hide");
 				$("body").removeClass("modal-open");
+				
 				queryEvent("table");
 			} else if (!data.success) {
 				layer.msg(data.message);

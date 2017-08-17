@@ -23,16 +23,18 @@ $('#table').bootstrapTable({
 		checkbox : true
 	}, {
 		title : '部门ID',
-		field : 'id'
+		field : 'id',
+		width : 40
+	}, {
+		title : '排序号',
+		field : 'orderNum',
+		width : 40
 	}, {
 		title : '部门名称',
 		field : 'name'
 	}, {
 		title : '上级部门',
 		field : 'parentName'
-	}, {
-		title : '排序号',
-		field : 'orderNum'
 	} ]
 });
 

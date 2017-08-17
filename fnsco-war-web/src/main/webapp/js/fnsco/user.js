@@ -35,8 +35,9 @@ $('#table').bootstrapTable({
 		title: '用户名',
 		field: 'name'
 	},{
-		title: '角色',
-		field: 'type'
+		title: '账户类型',
+		field: 'type',
+		formatter : formatname
 	},{
 		title: '所属部门',
 		field: 'department'
@@ -44,18 +45,26 @@ $('#table').bootstrapTable({
 		title: '手机号',
 		field: 'mobile'
 	},{
+		title: '修改时间',
+		field: 'modifyTimeStr'
+	},{
 		title: '状态',
 		field: 'status',
 		formatter:formatstatus
-	},{
-		title: '创建时间',
-		field: 'modifyTimeStr'
 	}]
 });
+//正常禁用图形化显示
 function formatstatus(value, row, index) {
-	return value === 1 ? 
+	return value === 2 ? 
 			'<span class="label label-danger">禁用</span>' : 
 			'<span class="label label-primary">正常</span>';
+}
+//显示name
+function formatname(value, row, index) {
+	if(value==1){return value="oem管理员"}
+	if(value==2){return value="代理商用户"}
+	if(value==3){return value="商户"}
+	if(value==4){return value="其他用户"}
 }
 //表单序号
 function formatindex(value, row, index) {
@@ -86,10 +95,11 @@ function responseHandler(res) {
 	}
 }
 //添加确认事件方法
-function add() {
+function add(date) {
 	$.ajax({
+		traditional:true,
 		url : PROJECT_NAME + 'web/auth/user/toAdd',
-		data : $('#mercore_form').serialize(),
+		data : date,
 		type : 'POST',
 		success : function(data) {
 			unloginHandler(data);
@@ -107,6 +117,7 @@ function add() {
 //修改确认事件方法
 function edit(date) {
 	$.ajax({
+		traditional:true,
 		url : PROJECT_NAME + 'web/auth/user/toEdit',
 		data : date,
 		type : 'POST',
@@ -123,10 +134,27 @@ function edit(date) {
 		}
 	});
 }
+//查询用户名是否重复
+var isdata;
+function queryByName(name) {
+	$.ajax({
+		url : PROJECT_NAME + 'web/auth/user/queryUserByName',
+		type : 'POST',
+		dataType : "json",
+		async:false,
+		data : {
+			'name' : name
+		},
+		success : function(data) {
+			unloginHandler(data);
+			isdata=data;
+		}
+	});
+}
 //修改信息查询
 function queryById(id) {
 	$.ajax({
-		url : PROJECT_NAME + 'web/auth/user/queryDeptById',
+		url : PROJECT_NAME + 'web/auth/user/queryUserById',
 		type : 'POST',
 		dataType : "json",
 		data : {
@@ -137,9 +165,22 @@ function queryById(id) {
 			// data.data就是所有数据集
 			//console.log(data.data);
 			// 基本信息
-			$("#name1").val(data.data.name);
-			$("#parentName1").val(data.data.parentName);
-			$("#orderNum1").val(data.data.orderNum);
+			$("#username1").val(data.data.name);
+			$("#password1").val(data.data.password);
+			$("#type1").val(data.data.type);
+			$("#realname1").val(data.data.realName);
+			$("#mobile1").val(data.data.mobile);
+			$("#sex1").val(data.data.sex);
+			$("#aliasname1").val(data.data.aliasName);
+			$("#department1").val(data.data.department);
+			$("#agentid1").val(data.data.agentId);
+			$("#status1").val(data.data.status);
+			$("#remark1").val(data.data.remark);
+			var list =data.data.roleList;
+			for(var i=0;i<list.length;i++){
+			    var l = list[i];
+			    $("input[type='checkbox'][value="+l+"]").prop('checked','true');
+			}
 			$('#editModal').modal();
 		}
 	});
@@ -147,7 +188,7 @@ function queryById(id) {
 /*
  * 判断是否选择记录方法
  */
-function getDeptId() {
+function getUserId() {
 	var select_data = $('#table').bootstrapTable('getSelections');
 	if (select_data.length == 0) {
 		layer.msg('请选择一条记录!');
@@ -225,18 +266,46 @@ function resetEvent(form, id) {
 	$('#' + form)[0].reset();
 	$('#' + id).bootstrapTable('refresh');
 }
-//角色查询拼接
+//角色查询添加拼接
 function showdates(data) {
-	$("#type").html('');
+	$("#role").html('');
 	for (i = 0; i < data.length; i++) {
-		html='<div class="col-sm-6"><label><input type="checkbox"  id="type" name="type" value="'+data[i].roleId+'"/>'+data[i].roleName+'</label></div>';
-		$("#type").append(html);
+		html='<div class="col-sm-6"><label><input type="checkbox" id="role" name="role" value="'+data[i].roleId+'"/>'+data[i].roleName+'</label></div>';
+		$("#role").append(html);
 	}
 };
+//角色查询修改拼接
+function showdates1(data) {
+	$("#role1").html('');
+	for (i = 0; i < data.length; i++) {
+		html='<div class="col-sm-6"><label><input type="checkbox" name="role1" value="'+data[i].roleId+'"/>'+data[i].roleName+'</label></div>';
+		$("#role1").append(html);
+	}
+};
+//获取添加的角色id
+function getRoleId() {
+	var obj = document.getElementsByName("role");
+    check_val = [];
+    for(k in obj){
+        if(obj[k].checked)
+            check_val.push(obj[k].value);
+    }
+    return check_val;
+};
+//获取修改的角色id
+function getRoleId1() {
+	var obj = document.getElementsByName("role1");
+    check_val = [];
+    for(k in obj){
+        if(obj[k].checked)
+            check_val.push(obj[k].value);
+    }
+    return check_val;
+};
 //角色查询
-function querytype() {
+function queryRole() {
 	$.ajax({
-		url : PROJECT_NAME + '/web/auth/role/queryType',
+		url : PROJECT_NAME + '/web/auth/role/queryRole',
 		type : 'POST',
 		success : function(data) {
 			unloginHandler(data);
@@ -245,91 +314,131 @@ function querytype() {
 				layer.msg('没有任何角色');
 			} else {
 				showdates(data.data);
+				showdates1(data.data);
 			}
 		}
 	});
 };
 //新增按钮事件
 $('#btn_add').click(function() {
-	querytype();
+	queryRole();
 	$('#addModal').modal();
 });
 //新增确认按钮事件
-$('#btn_yes').click(
-		function() {
-			username = $('#username').val(), 
-			department = $('#department').val(),
-			password = $('#password').val(),
-			email = $('#email').val(),
-			mobile = $('#mobile').val()
+$('#btn_yes').click(function() {
+			var roleid=getRoleId();
+			 //获得当前选中的值
+			var type =$('#type').val();
+			var sex = $('#sex').val();
+			var status = $('#status').val();
+			var username = $('#username').val();
+			var password = $('#password').val();
+			var mobile = $('#mobile').val();
+			var department = $('#department').val();
+			var date = {
+					"name" : username,
+					"password" : password,
+					"roleList" : roleid,
+					"mobile" : mobile,
+					"department" : department,
+					"type" : type,
+					"sex" : sex,
+					"status" : status,
+					"realName" : $('#realname').val(),
+					"aliasName" : $('#aliasname').val(),
+					"agentId" : $('#agentid').val(),
+					"remark" : $('#remark').val()
+				};
 			if (username == null || username.length == 0) {
 				layer.msg('用户名不能为空!');
 				return false;
 			}
-			if (department == null || department.length == 0) {
-				layer.msg('所属部门不能为空!');
+			queryByName(username);
+			if (isdata == false) {
+				layer.msg('用户名已存在!');
 				return false;
 			}
 			if (password == null || password.length == 0) {
 				layer.msg('密码不能为空!');
 				return false;
 			}
-			if (email == null || email.length == 0) {
-				layer.msg('邮箱不能为空!');
-				return false;
-			}
 			if (mobile == null || mobile.length == 0) {
 				layer.msg('手机号不能为空!');
 				return false;
 			}
-			add();
+			if (department == null || department.length == 0) {
+				layer.msg('所属部门不能为空!');
+				return false;
+			}
+			if (roleid == null || roleid.length == 0) {
+				layer.msg('角色不能为空!');
+				return false;
+			}
+			add(date);
 		});
 //修改按钮事件
 $('#btn_edit').click(function() {
-	var deptId = getDeptId();
-	if (deptId == null) {
+	var userId = getUserId();
+	if (userId == null) {
 		return;
 	}
-	queryById(deptId);
+	queryRole();
+	queryById(userId);
 });
 //修改确认按钮事件
 $('#btn_yes1').click(
 		function() {
-			var id= getDeptId();
+			var id= getUserId();
 			if (id== null) {
 				return;
 			}
+			var roleid=getRoleId1();
+			 //获得当前选中的值
+			var type =$('#type1').val();
+			var sex = $('#sex1').val();
+			var status = $('#status1').val();
+			var username = $('#username1').val();
+			var password = $('#password1').val();
+			var mobile = $('#mobile1').val();
+			var department = $('#department1').val();
 			var date = {
 					"id" : id,
-					"username" : $('#username1').val(),
-					"department" : $('#department1').val(),
-					"password" : $('#password1').val(),
-					"email" : $('#email1').val(),
-					"mobile" : $('#mobile1').val()
+					"name" : username,
+					"password" : password,
+					"roleList" : roleid,
+					"mobile" : mobile,
+					"department" : department,
+					"tyep" : type,
+					"sex" : sex,
+					"status" : status,
+					"realName" : $('#realname1').val(),
+					"aliasName" : $('#aliasname1').val(),
+					"agentId" : $('#agentid1').val(),
+					"remark" : $('#remark1').val()
 				};
-			username = $('#username').val(), 
-			department = $('#department').val(),
-			password = $('#password').val(),
-			email = $('#email').val(),
-			mobile = $('#mobile').val()
 			if (username == null || username.length == 0) {
 				layer.msg('用户名不能为空!');
 				return false;
 			}
-			if (department == null || department.length == 0) {
-				layer.msg('所属部门不能为空!');
+			queryByName(username);
+			if (isdata == false) {
+				layer.msg('用户名已存在!');
 				return false;
 			}
 			if (password == null || password.length == 0) {
 				layer.msg('密码不能为空!');
 				return false;
 			}
-			if (email == null || email.length == 0) {
-				layer.msg('邮箱不能为空!');
-				return false;
-			}
 			if (mobile == null || mobile.length == 0) {
 				layer.msg('手机号不能为空!');
+				return false;
+			}
+			if (department == null || department.length == 0) {
+				layer.msg('所属部门不能为空!');
+				return false;
+			}
+			if (roleid == null || roleid.length == 0) {
+				layer.msg('角色不能为空!');
 				return false;
 			}
 			layer.confirm('确定修改选中数据吗？', {
