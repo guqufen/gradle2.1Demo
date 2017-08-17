@@ -28,6 +28,7 @@ import net.fnsco.order.service.dao.master.MerchantContactDao;
 import net.fnsco.order.service.dao.master.MerchantCoreDao;
 import net.fnsco.order.service.dao.master.MerchantFileDao;
 import net.fnsco.order.service.dao.master.MerchantFileTempDao;
+import net.fnsco.order.service.dao.master.MerchantPosDao;
 import net.fnsco.order.service.dao.master.MerchantTerminalDao;
 import net.fnsco.order.service.dao.master.MerchantUserRelDao;
 import net.fnsco.order.service.domain.Agent;
@@ -78,6 +79,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
     @Autowired
     private MerchantUserRelDao  merchantUserRelDao;
+    
+    @Autowired
+    private MerchantPosDao      merchantPosDao;
     /**
      * @todo 新增加商家
      * @author tangliang
@@ -470,12 +474,19 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         return ResultDTO.success(id);
 
     }
-
+    /**
+     * (non-Javadoc)删除渠道的时候，需要删除下面的POS机以及终端信息
+     * @see net.fnsco.order.api.merchant.MerchantCoreService#deleteByChanel(java.lang.Integer)
+     * @author tangliang
+     * @date 2017年8月17日 下午1:39:35
+     */
     @Override
     public ResultDTO<Integer> deleteByChanel(Integer id) {
         if (null == id) {
             return ResultDTO.fail();
         }
+        merchantTerminalDao.deleteByChannelId(id);
+        merchantPosDao.deleteByChannelId(id);
         merchantChannelDao.deleteByPrimaryKey(id);
         return ResultDTO.success(id);
     }

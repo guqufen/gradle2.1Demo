@@ -11,6 +11,18 @@
     <result column="pos_type" property="posType" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
   </resultMap>
+  <!-- 查询POS所有数据，包括终端信息 -->
+  <resultMap id="AllResultMap" type="net.fnsco.order.service.domain.MerchantPos" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="channel_id" property="channelId" jdbcType="INTEGER" />
+    <result column="pos_name" property="posName" jdbcType="VARCHAR" />
+    <result column="sn_code" property="snCode" jdbcType="VARCHAR" />
+    <result column="pos_factory" property="posFactory" jdbcType="VARCHAR" />
+    <result column="pos_type" property="posType" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <collection property="terminal" column="id" select="net.fnsco.order.service.dao.master.MerchantTerminalDao.queryAllTerByPosId"/>
+  </resultMap>
   <!-- APP商户终端列表结果集 -->
   <resultMap  id="PosResultMap" type="net.fnsco.order.api.dto.PosListDTO">
    	<result column="mer_name" property="merName" jdbcType="VARCHAR" />
@@ -46,7 +58,7 @@
       #{posName,jdbcType=VARCHAR}, #{snCode,jdbcType=VARCHAR}, #{posFactory,jdbcType=VARCHAR}, 
       #{posType,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantPos" >
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantPos" useGeneratedKeys="true" keyProperty="id">
     insert into m_merchant_pos
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -151,5 +163,17 @@
   <!-- 根据ID查询详情 -->
   <select id="selectDetailById" parameterType="java.lang.Integer" resultMap="PosInfoResultMap">
      SELECT id,pos_name,pos_factory,pos_type,sn_code  FROM m_merchant_pos WHERE id = #{id} AND status = 1
+  </select>
+  <!-- 根据channelId删除数据 -->
+  <delete id="deleteByChannelId" parameterType="java.lang.Integer">
+    delete from m_merchant_pos
+      where channel_id = #{channelId,jdbcType=INTEGER}
+  </delete>
+  <!-- 根据channelId查询所有数据包括终端数据 -->
+  <select id="selectByChannelId" parameterType="java.lang.Integer" resultMap="AllResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_pos
+    where channel_id = #{channelId,jdbcType=INTEGER}
   </select>
 </mapper>
