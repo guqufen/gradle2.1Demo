@@ -38,7 +38,6 @@ public class DeptManageController extends BaseController {
 	 */
 	@RequestMapping(value = "/query",method= RequestMethod.GET)
 	@ResponseBody
-	@RequiresPermissions("sys:dept:list1")
 	 public ResultDTO<DeptDO> query(DeptDO dept,@RequestParam("currentPageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
 		 ResultPageDTO<DeptDO> result=sysDeptService.queryList(dept, pageNum, pageSize);
 	     return success(result);
