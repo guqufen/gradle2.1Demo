@@ -98,18 +98,89 @@
 				<div class="ibox-content">
 					<div class="row row-lg">
 						<div class="col-sm-12">
-							<div id="toolbar">
-								<button id="btn_add" type="button" class="btn btn-success"
-									data-toggle="modal" data-target="#myModal">
-									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-								</button>
-							</div>
+							<!-- 	<div id="toolbar"> -->
+							<button id="btn_add" type="button" class="btn btn-success"
+								data-toggle="modal" data-target="#myModal">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+							</button>
+							<!-- </div> -->
 							<table id="table" style="min-width: 1000px;"></table>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- end  -->
+			<div class="modal fade" id="myModaldetails" tabindex="-1" i="602"
+				role="dialog" aria-labelledby="myModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">代扣详情</h4>
+						</div>
+						<div class="modal-body">
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="home">
+									<div class="row">
+										<div class="col-sm-4">
+											<label class="control-label ">姓名：</label> <input
+												type="text" class="form-control detail_name" disabled="disabled">
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label ">产品类型：</label>
+											<input type="text" class="form-control detail_product_type_code" disabled="disabled" >
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label ">扣款次数：</label> <input
+												type="text" class="form-control detail_total" disabled="disabled" >
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label ">手机号：</label> <input
+												type="text" class="form-control detail_mobile" disabled="disabled" >
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label ">银行卡号：</label>
+											<input type="text" class="form-control detail_bank_card" disabled="disabled" >
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label ">扣款金额：</label> <input
+												type="text" class="form-control detail_amount" disabled="disabled" >
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label ">扣款日：</label> <input
+												type="text" class="form-control detail_debit_day" disabled="disabled" >
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label ">已扣金额：</label>
+											<input type="text" class="form-control detail_amount_total" disabled="disabled" >
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label ">扣款总额：</label> <input
+												type="text" class="form-control detail_sum" disabled="disabled" >
+										</div>
+									</div>
+
+									<div class="ibox float-e-margins">
+										<div class="ibox-content">
+											<div class="row row-lg">
+												<div class="col-sm-12">
+													<div id="toolbar"></div>
+													<table id="tableDetails" style="min-width: 650px;"></table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<!-- model新增 start -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 				aria-labelledby="myModalLabel" data-backdrop="static"
@@ -159,8 +230,8 @@
 											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="mobile">手机号码：</label> <input
-													type="text" class="form-control" id="mobile"
-													name="mobile" placeholder="银行卡预留手机号" maxlength="11">
+													type="text" class="form-control" id="mobile" name="mobile"
+													placeholder="银行卡预留手机号" maxlength="11">
 											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="amount">扣款金额：</label> <input
@@ -174,8 +245,9 @@
 											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="productTypeCode">扣款类型：</label>
-												<select id="productTypeCode" name="productTypeCode" class="form-control">
-													
+												<select id="productTypeCode" name="productTypeCode"
+													class="form-control">
+
 												</select>
 											</div>
 											<div class="col-sm-4">
