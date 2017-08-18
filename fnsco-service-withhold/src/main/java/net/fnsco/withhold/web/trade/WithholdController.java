@@ -11,7 +11,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.withhold.service.trade.WithholdInfoService;
 import net.fnsco.withhold.service.trade.WithholdService;
+import net.fnsco.withhold.service.trade.entity.WithholdInfoDO;
 
 @Controller
 @RequestMapping(value = "/web/withholdInfo", method = RequestMethod.POST)
@@ -19,7 +21,10 @@ import net.fnsco.withhold.service.trade.WithholdService;
 public class WithholdController extends BaseController {
     @Autowired
     private WithholdService withholdService;
-
+    @Autowired
+    private WithholdInfoService withholdInfoService;
+    
+    
     @ApiOperation(value = "代扣定时任务", notes = "代扣定时任务")
     @ResponseBody
     @RequestMapping(value = "collectPayment", method = RequestMethod.GET)
@@ -34,5 +39,13 @@ public class WithholdController extends BaseController {
     public ResultDTO collectPaymentRemind() {
         withholdService.collectPaymentRemind();
         return ResultDTO.success();
+    }
+    //根据用户id查询代扣信息详情
+    @ApiOperation(value = "查询代扣详情", notes = "查询代扣详情")
+    @ResponseBody
+    @RequestMapping(value = "queryById", method = RequestMethod.GET)
+    public ResultDTO queryById(@RequestParam Integer id) {
+        WithholdInfoDO dto=withholdInfoService.doQueryById(id);
+        return ResultDTO.success(dto);
     }
 }
