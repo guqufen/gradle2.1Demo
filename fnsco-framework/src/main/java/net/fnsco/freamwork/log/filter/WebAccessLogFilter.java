@@ -101,6 +101,7 @@ public class WebAccessLogFilter extends RequestContextFilter {
             if (LoggerConstant.WEB_DETAIL_LOGGER.isInfoEnabled()) {
                 //LoggerConstant.WEB_DETAIL_LOGGER.info("Receive http request");
             }
+            logger.error("当前url"+requestURI);
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             hasError = true;
