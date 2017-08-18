@@ -28,6 +28,9 @@ public interface MenuDAO {
 
 	@Delete("DELETE FROM sys_menu WHERE id = #{id}")
 	public int deleteById(@Param("id") int id);
+	
+	@Delete("DELETE FROM sys_menu WHERE parent_id = #{id}")
+	public int deleteByParentId(@Param("id") int id);
 
 	@UpdateProvider(type = MenuProvider.class, method = "update")
 	public int update(@Param("menu") MenuDO menu);

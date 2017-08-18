@@ -165,14 +165,13 @@ $(':radio').click(function(){
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
-				$('#permsDiv').hide();
+				$('#permsDiv').show();
 				$('#orderNumDiv').hide();
 				$('#iconDiv').show();
 			}
 		}
 	});
 
-/***** 新增add *******/
 //菜单数树
 function getMenuTree(id){
 	
@@ -254,6 +253,7 @@ function MenuTreeGet() {
 		}
 	});
 }
+/***** 新增add *******/
 //点击增加按钮事件
 $('#btn_add').click(function() {
 
@@ -331,33 +331,19 @@ $('#btn_edit').click(function() {
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
-				$('#permsDiv').hide();
+				$('#permsDiv').show();
 				$('#orderNumDiv').hide();
 				$('#iconDiv').show();
 			}
 			}
 		});
-		
-		/**
-		//清除当前ztree已选中的ID，避免缓存数据(先查找看是否有选中)
-		edit_deptTree.checkAllNodes(false);
 
-		//指定节点id选中
-		var node = edit_deptTree.getNodeByParam("id", deptId);
-		if( node != null){
-			edit_deptTree.selectNode(node, true);// 指定选中ID的节点
-			edit_deptTree.expandNode(node, true, false);// 指定选中ID节点展开
-		}**/
 	}
 })
 
 /******************** 点击保存按钮 *************************************/
 // 点击保存按钮,获取选择的数据以及输入框的数据，组包发给后台
 $('#btn_save').click(function() {
-	saveOrUpdate();
-})
-// 点击保存按钮,获取选择的数据以及输入框的数据，组包发给后台
-$('#btn_update').click(function() {
 	saveOrUpdate();
 })
 
@@ -436,11 +422,13 @@ $('#btn_delete').click(function() {
 		return false;
 	} else {
 
-		// 获取table选中数据的角色ID
+		// 获取table选中数据的菜单ID和菜单类型
 		var id = selectContent[0].id;
+		var type = selectContent[0].type;
 
 		var param = {
-			'id' : id
+			'id' : id,
+			'type':type
 		}
 
 		// 组包发给后台
