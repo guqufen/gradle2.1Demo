@@ -22,10 +22,10 @@ public interface RoleDAO {
     public RoleDO getById(@Param("id") int id);
 
     @Insert("INSERT into sys_role(role_id,role_name,remark,dept_id,create_time) VALUES (#{roleId},#{roleName},#{remark},#{deptId},#{createTime})")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Options(useGeneratedKeys = true, keyProperty = "roleId")
     public void insert(RoleDO role);
 
-    @Delete("DELETE FROM sys_role WHERE id = #{id}")
+    @Delete("DELETE FROM sys_role WHERE role_id = #{id}")
     public int deleteById(@Param("id") Long id);
 
     @UpdateProvider(type = RoleProvider.class, method = "update")

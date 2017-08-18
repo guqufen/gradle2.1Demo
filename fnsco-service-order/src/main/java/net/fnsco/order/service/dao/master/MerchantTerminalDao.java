@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.order.api.dto.TerminalDetailDTO;
+import net.fnsco.order.api.dto.TerminalInfoDTO;
 import net.fnsco.order.api.dto.TerminalsDTO;
 import net.fnsco.order.service.domain.MerchantTerminal;
 /**
@@ -15,9 +16,36 @@ import net.fnsco.order.service.domain.MerchantTerminal;
 public interface MerchantTerminalDao {
 
     int deleteByPrimaryKey(Integer id);
-
+    /**
+     * deleteByChannelId:(这里用一句话描述这个方法的作用)根据channelId删除数据
+     * @param channelId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月17日 下午1:46:29
+     * @return int    DOM对象
+     */
+    int deleteByChannelId(@Param("channelId")Integer channelId);
+    /**
+     * deleteByPosId:(这里用一句话描述这个方法的作用)根据POSid删除
+     * @param posId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月17日 下午2:16:08
+     * @return int    DOM对象
+     */
+    int deleteByPosId(@Param("posId")Integer posId);
+    
     int insert(MerchantTerminal record);
-
+    /**
+     * insertBatch:(这里用一句话描述这个方法的作用)批量插入数据
+     * @param record
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月17日 下午1:26:08
+     * @return int    DOM对象
+     */
+    int insertBatch(List<MerchantTerminal> record);
+    
     int insertSelective(MerchantTerminal record);
 
     MerchantTerminal selectByPrimaryKey(Integer id);
@@ -80,6 +108,16 @@ public interface MerchantTerminalDao {
      * @date      2017年8月16日 下午2:09:34
      * @return List<String>    DOM对象
      */
-    List<String> queryTerByPosId(@Param("posId")Integer posId);
+    List<TerminalInfoDTO> queryTerByPosId(@Param("posId")Integer posId);
+    
+    /**
+     * queryAllTerByPosId:(这里用一句话描述这个方法的作用)查询所有数据
+     * @param posId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月17日 下午2:49:34
+     * @return List<MerchantTerminal>    DOM对象
+     */
+    List<MerchantTerminal> queryAllTerByPosId(@Param("posId")Integer posId);
     
 }

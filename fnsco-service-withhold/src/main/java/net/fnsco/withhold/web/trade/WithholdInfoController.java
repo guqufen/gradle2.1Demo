@@ -106,12 +106,32 @@ public class WithholdInfoController extends BaseController {
      List<ProductTypeDO> resultDO = this.withholdInfoService.queryWithholdType();
      return success(resultDO);
  }
- //根据code查询
- @ApiOperation(value = "查询代扣名称", notes = "查询代扣名称")
+ //查询产品类型分页
+ @ApiOperation(value = "分页查询产品类型", notes = "分页查询产品类型")
  @ResponseBody
- @RequestMapping(value = "queryWithholdName")
- public ResultDTO queryWithholdName (@RequestParam String code) {
-     ProductTypeDO resultDO = this.withholdInfoService.queryWithholdName(code);
-     return success(resultDO);
+ @RequestMapping(value = "queryProductType", method = RequestMethod.GET)
+ public ResultDTO page(ProductTypeDO productTypeDO){
+     logger.info("开始分页查询WithholdInfoController.page, withholdInfo=" + productTypeDO.toString());
+     Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
+     Integer page = params.get("currentPageNum");
+     Integer rows = params.get("pageSize");
+     ResultPageDTO<ProductTypeDO> pager = this.withholdInfoService.pageProductType(productTypeDO, page,rows);
+     return success(pager);
+ }
+ //新增产品类型  insert
+ @ApiOperation(value = "新增代扣类型", notes = "新增代扣类型")
+ @ResponseBody
+ @RequestMapping(value = "doAddProductType")
+ public ResultDTO doAddProductType(ProductTypeDO productTypeDO) {
+    int num = this.withholdInfoService.doAddProductType(productTypeDO);
+    return success();
+ }
+ //更新产品状态 update
+ @ApiOperation(value = "更新产品状态", notes = "更新产品状态")
+ @ResponseBody
+ @RequestMapping(value = "updateProductType")
+ public ResultDTO updateProductType(ProductTypeDO productTypeDO) {
+    int num = this.withholdInfoService.updateProductType(productTypeDO);
+    return success();
  }
 }

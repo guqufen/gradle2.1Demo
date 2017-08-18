@@ -6,6 +6,7 @@ package net.fnsco.order.service.modules.merchant;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import com.google.common.base.Strings;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.NumberUtil;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
@@ -26,6 +28,7 @@ import net.fnsco.order.api.dto.MerchantDTO;
 import net.fnsco.order.api.dto.PosDetailDTO;
 import net.fnsco.order.api.dto.PosListDTO;
 import net.fnsco.order.api.dto.TerminalDetailDTO;
+import net.fnsco.order.api.dto.TerminalInfoDTO;
 import net.fnsco.order.api.dto.TerminalsDTO;
 import net.fnsco.order.api.dto.TradeMerchantDTO;
 import net.fnsco.order.api.merchant.MerchantService;
@@ -285,7 +288,17 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public PosDetailDTO getPosDetail(Integer posId) {
-        return merchantPosDao.selectDetailById(posId);
+        PosDetailDTO data = merchantPosDao.selectDetailById(posId);
+        List<TerminalInfoDTO> terNames = data.getTerNames();
+        if(!CollectionUtils.isEmpty(terNames)){
+            int i = 1;
+            for (TerminalInfoDTO terminalInfoDTO : terNames) {
+                String title = NumberUtil.TER_TITLE_NAME+NumberUtil.numToUpper(i);
+                terminalInfoDTO.setTerTitle(title);
+                i++;
+            }
+        }
+        return data;
     }
     
     /**

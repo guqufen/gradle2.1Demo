@@ -1,5 +1,6 @@
 package net.fnsco.auth.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,37 @@ public class RoleMenuService extends BaseService {
 
 		return 0;
 	}
-	
+
 	@Transactional
 	public int delete(Long roleId) {
 
-		// 删除角色与菜单的关系
+		// 通过角色ID删除角色与菜单的关系
 		int result = roleMenuDAO.deleteById(roleId);
 		return result;
+	}
+
+	@Transactional
+	public int deleteByMenuId(Integer integer) {
+
+		// 通过菜单ID删除角色与菜单的关系
+		int result = roleMenuDAO.deleteByMenuId(integer);
+
+		return result;
+	}
+	
+	public List<Long> queryByRoleId(Long roleId) {
+		
+		//通过角色ID查找对应菜单ID
+		RoleMenuDO roleMenuDO = new RoleMenuDO();
+		roleMenuDO.setRoleId(roleId);
+		List<RoleMenuDO> list = roleMenuDAO.query(roleMenuDO);
+		
+		//将菜单ID放入集合
+		List<Long> roleMenuList = new ArrayList<Long>();
+		for (RoleMenuDO roleMenu : list) {
+			roleMenuList.add(roleMenu.getMenuId());
+		}
+		
+		return roleMenuList;
 	}
 }

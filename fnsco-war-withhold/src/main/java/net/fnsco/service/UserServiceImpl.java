@@ -12,6 +12,7 @@ import com.google.common.base.Strings;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.freamwork.business.AppUserDTO;
 import net.fnsco.freamwork.business.UserService;
+import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.withhold.service.sys.entity.UserDO;
 
 /**
@@ -40,8 +41,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AppUserDTO getCookieUser(HttpServletRequest request) {
-        AppUserDTO user = null;
+    public WebUserDTO getCookieUser(HttpServletRequest request) {
+        WebUserDTO user = null;
         Object cookeiUser = getUser(request);
         if (null == cookeiUser) {
             return user;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
         String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#") + 1, cookeiUser.toString().length());
         UserDO temp = userService.getUserByName(userName);
         if (temp != null) {
-            user = new AppUserDTO();
+            user = new WebUserDTO();
             setSessionUser(request,temp,temp.getId());
         }
         return user;

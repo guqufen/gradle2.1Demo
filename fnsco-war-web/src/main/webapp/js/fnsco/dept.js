@@ -23,16 +23,18 @@ $('#table').bootstrapTable({
 		checkbox : true
 	}, {
 		title : '部门ID',
-		field : 'id'
+		field : 'id',
+		width : 40
+	}, {
+		title : '排序号',
+		field : 'orderNum',
+		width : 40
 	}, {
 		title : '部门名称',
 		field : 'name'
 	}, {
 		title : '上级部门',
 		field : 'parentName'
-	}, {
-		title : '排序号',
-		field : 'orderNum'
 	} ]
 });
 
@@ -69,6 +71,7 @@ function add() {
 			unloginHandler(data);
 			if (data.success) {
 				layer.msg('保存成功');
+				$('#addModal').modal("hide");
 				queryEvent("table");
 				layer.close();
 				return true;
@@ -88,6 +91,7 @@ function edit(date) {
 			unloginHandler(data);
 			if (data.success) {
 				layer.msg('修改成功');
+				$('#editModal').modal("hide");
 				queryEvent("table");
 				layer.close();
 				return true;

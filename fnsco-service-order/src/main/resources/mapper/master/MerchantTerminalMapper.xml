@@ -346,7 +346,50 @@
 		)
 	</delete>
 	<!-- 根据POSid查询 -->
-	<select id="queryTerByPosId" parameterType="java.lang.Integer" resultType="java.lang.String">
-	  SELECT term_name FROM m_merchant_terminal WHERE pos_id = #{posId}
+	<select id="queryTerByPosId" parameterType="java.lang.Integer" resultType="net.fnsco.order.api.dto.TerminalInfoDTO">
+	  SELECT term_name AS terName,terminal_code AS terminalCode FROM m_merchant_terminal WHERE pos_id = #{posId}
+	</select>
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch"  parameterType="java.util.List">
+	  <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                 SELECT LAST_INSERT_ID()
+      </selectKey>
+      insert into m_merchant_terminal (id, inner_code, pos_id, 
+      terminal_code, inner_term_code, terminal_batch, 
+      terminal_para, charges_type, debit_card_rate, 
+      credit_card_rate, debit_card_fee, credit_card_fee, 
+      debit_card_max_fee, credit_card_max_fee, deal_switch, 
+      record_state, term_audit_state, term_name, 
+      merc_refer_name, wechat_fee, alipay_fee, 
+      terminal_type)
+    values 
+   	   <foreach collection ="list" item="terMinal" index= "index" separator =",">
+   	   (#{terMinal.id,jdbcType=INTEGER}, #{terMinal.innerCode,jdbcType=VARCHAR}, #{terMinal.posId,jdbcType=INTEGER}, 
+      #{terMinal.terminalCode,jdbcType=VARCHAR}, #{terMinal.innerTermCode,jdbcType=VARCHAR}, #{terMinal.terminalBatch,jdbcType=VARCHAR}, 
+      #{terMinal.terminalPara,jdbcType=VARCHAR}, #{terMinal.chargesType,jdbcType=INTEGER}, #{terMinal.debitCardRate,jdbcType=VARCHAR}, 
+      #{terMinal.creditCardRate,jdbcType=VARCHAR}, #{terMinal.debitCardFee,jdbcType=INTEGER}, #{terMinal.creditCardFee,jdbcType=INTEGER}, 
+      #{terMinal.debitCardMaxFee,jdbcType=INTEGER}, #{terMinal.creditCardMaxFee,jdbcType=INTEGER}, #{terMinal.dealSwitch,jdbcType=VARCHAR}, 
+      #{terMinal.recordState,jdbcType=VARCHAR}, #{terMinal.termAuditState,jdbcType=VARCHAR}, #{terMinal.termName,jdbcType=VARCHAR}, 
+      #{terMinal.mercReferName,jdbcType=VARCHAR}, #{terMinal.wechatFee,jdbcType=INTEGER}, #{terMinal.alipayFee,jdbcType=INTEGER}, 
+      #{terMinal.terminalType,jdbcType=VARCHAR})
+      </foreach>
+	</insert>
+	<!-- 根据channelID删除数据 -->
+	<delete id="deleteByChannelId" parameterType="java.lang.Integer">
+	   delete from m_merchant_terminal
+       where pos_id in (
+         select id from m_merchant_pos where channel_id = #{channelId}
+       )
+	</delete>
+	<!-- 根据POSID删除 -->
+	<delete id="deleteByPosId" parameterType="java.lang.Integer">
+	  delete from m_merchant_terminal
+       where pos_id = #{posId}
+	</delete>
+	<!-- 查询所有数据 -->
+	<select id="queryAllTerByPosId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	   select 
+    <include refid="Base_Column_List" />
+    from m_merchant_terminal where pos_id = #{posId}
 	</select>
 </mapper>

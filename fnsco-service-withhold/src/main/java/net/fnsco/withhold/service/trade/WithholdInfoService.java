@@ -49,10 +49,10 @@ public class WithholdInfoService extends BaseService {
 		for (WithholdInfoDO withholdInfoDO : pageList) {
 		    
 		    //根据productTypeCode查询出贷款类型
-		    ProductTypeDO dto=productTypeDAO.getByCode(withholdInfoDO.getProductTypeCode());
-		    if(dto!=null){
-		        withholdInfoDO.setProductTypeCode(dto.getName()); 
-		    }
+//		    ProductTypeDO dto=productTypeDAO.getByCode(withholdInfoDO.getProductTypeCode());
+//		    if(dto!=null){
+//		        withholdInfoDO.setProductTypeCode(dto.getName()); 
+//		    }
 		    
 			// 根据最后修改人ID查询姓名
 			if (null == withholdInfoDO.getModifyUserId()) {
@@ -185,8 +185,29 @@ public class WithholdInfoService extends BaseService {
         return productTypeDO;
 	}
 	//代扣名称查询
-	public ProductTypeDO queryWithholdName(String code){
-	    ProductTypeDO productTypeDO=this.productTypeDAO.getByCode(code);
-        return productTypeDO;
+//	public ProductTypeDO queryWithholdName(String code){
+//	    ProductTypeDO productTypeDO=this.productTypeDAO.getByCode(code);
+//        return productTypeDO;
+//	}
+	//分页查询
+	public ResultPageDTO<ProductTypeDO> pageProductType(ProductTypeDO productTypeDO, Integer pageNum, Integer pageSize) {
+	    logger.info("开始分页查询WithholdInfoService.page, withholdInfo=" + productTypeDO.toString());
+        List<ProductTypeDO> pageList = this.productTypeDAO.pageList(productTypeDO, pageNum, pageSize);
+        Integer count = this.productTypeDAO.pageListCount(productTypeDO);
+        ResultPageDTO<ProductTypeDO> pager = new ResultPageDTO<ProductTypeDO>(count, pageList);
+        return pager;
 	}
+	//新增代扣类型
+    public int doAddProductType(ProductTypeDO productTypeDO){
+        productTypeDO.setStatus("1");
+        productTypeDO.setModifyTime(new Date());
+        int count =this.productTypeDAO.insert(productTypeDO);
+        return count; 
+    }
+    //更新代扣状态
+
+    public int updateProductType(ProductTypeDO productTypeDO) {
+        int count =this.productTypeDAO.update(productTypeDO);
+        return count;
+    }
 }

@@ -117,6 +117,10 @@ public class TradeDataController extends BaseController {
             TradeDataJO result = new TradeDataJO();
             return ResultDTO.success(result);
         }
+        TradeData temp = tradeDataService.queryByTerminal(tradeData);
+        if(temp != null){
+            tradeData.setTxnType("2");
+        }
         MerchantCore merchantCore = merchantCoreService.queryByInnerCode(tradeData.getInnerCode());
         TradeDataJO result = new TradeDataJO();
         result.setAmount(getAtm(tradeData.getAmt()));
@@ -155,7 +159,7 @@ public class TradeDataController extends BaseController {
         result.setOrderTime(tradeData.getOrderTime());
         result.setRespMsg(tradeData.getRespMsg());
         result.setOrderIdScan(tradeData.getOrderIdScan());
-        result.setTxnType(tradeData.getTxnType());
+        //result.setTxnType(tradeData.getTxnType());
         return ResultDTO.success(result);
     }
 

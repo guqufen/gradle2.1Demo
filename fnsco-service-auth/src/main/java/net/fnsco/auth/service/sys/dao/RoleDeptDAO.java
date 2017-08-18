@@ -26,6 +26,9 @@ public interface RoleDeptDAO {
 
     @Delete("DELETE FROM sys_role_dept WHERE role_id = #{id}")
     public int deleteById(@Param("id") Long id);
+    
+    @Delete("DELETE FROM sys_role_dept WHERE dept_id = #{id}")
+    public int deleteByDeptId(@Param("id") Integer id);
 
     @UpdateProvider(type = RoleDeptProvider.class, method = "update")
     public int update(@Param("roleDept") RoleDeptDO  roleDept);
@@ -36,5 +39,9 @@ public interface RoleDeptDAO {
 
     @SelectProvider(type = RoleDeptProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("roleDept") RoleDeptDO roleDept);
+    
+    @Results({@Result( column = "id",property = "id"),@Result( column = "role_id",property = "roleId"),@Result( column = "dept_id",property = "deptId") })
+    @SelectProvider(type = RoleDeptProvider.class, method = "query")
+    public List<RoleDeptDO> query(@Param("roleDept") RoleDeptDO roleDept);
 
 }
