@@ -105,6 +105,7 @@ function add(date) {
 			unloginHandler(data);
 			if (data.success) {
 				layer.msg('保存成功');
+				$('#addModal').modal("hide");
 				queryEvent("table");
 				layer.close();
 				return true;
@@ -125,6 +126,7 @@ function edit(date) {
 			unloginHandler(data);
 			if (data.success) {
 				layer.msg('修改成功');
+				$('#editModal').modal("hide");
 				queryEvent("table");
 				layer.close();
 				return true;
@@ -418,11 +420,6 @@ $('#btn_yes1').click(
 				};
 			if (username == null || username.length == 0) {
 				layer.msg('用户名不能为空!');
-				return false;
-			}
-			queryByName(username);
-			if (isdata == false) {
-				layer.msg('用户名已存在!');
 				return false;
 			}
 			if (password == null || password.length == 0) {

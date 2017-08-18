@@ -2,7 +2,6 @@ package net.fnsco.auth.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,14 +13,11 @@ import com.google.common.base.Strings;
 
 import net.fnsco.auth.service.sys.dao.UserDAO;
 import net.fnsco.auth.service.sys.dao.UserRoleDAO;
-import net.fnsco.auth.service.sys.entity.DeptDO;
-
 import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.auth.service.sys.entity.UserRoleDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.freamwork.comm.Md5Util;
 
 /**
@@ -97,11 +93,11 @@ public class UserService extends BaseService {
     public ResultDTO<String> deleteById(Integer[] id) {
         for (int i = 0; i < id.length; i++) {
             int res = userDAO.deleteById(id[i]);
-            if (res != 1) {
+            if (res <1) {
                 return ResultDTO.fail();
             }
         }
-        return new ResultDTO<>(true, id, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
+        return ResultDTO.success();
     }
 
     /**
@@ -113,7 +109,7 @@ public class UserService extends BaseService {
         Date date = new Date();
         user.setModifyTime(date);
         int res = userDAO.insert(user);
-        if (res != 1) {
+        if (res <1) {
             return ResultDTO.fail();
         }
         List<Integer> list = user.getRoleList();
@@ -122,11 +118,11 @@ public class UserService extends BaseService {
         for (Integer roleId : list) {
             userRole.setRoleId(roleId);
             int re = userRoleDAO.insert(userRole);
-            if (re != 1) {
+            if (re <1) {
                 return ResultDTO.fail();
             }
         }
-        return new ResultDTO<>(true, user.getId(), CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
+        return ResultDTO.success();
     }
 
     /**
@@ -164,21 +160,21 @@ public class UserService extends BaseService {
         UserRoleDO userRole = new UserRoleDO();
         Integer userId = user.getId();
         int es = userRoleDAO.deleteByUserId(userId);
-        if (es != 1) {
+        if (es <1) {
             return ResultDTO.fail();
         }
         userRole.setUserId(userId);
         for (Integer roleId : list) {
             userRole.setRoleId(roleId);
             int re = userRoleDAO.insert(userRole);
-            if (re != 1) {
+            if (re <=0) {
                 return ResultDTO.fail();
             }
         }
         Date date = new Date();
         user.setModifyTime(date);
         int res = userDAO.update(user);
-        if (res != 1) {
+        if (res <1) {
             return ResultDTO.fail();
         }
         return ResultDTO.success();

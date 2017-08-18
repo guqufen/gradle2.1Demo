@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.auth.service.UserService;
-import net.fnsco.auth.service.sys.entity.DeptDO;
 import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.freamwork.business.WebUserDTO;
 
 
 /**
@@ -92,6 +92,10 @@ public class UserManageController extends BaseController {
 	@RequestMapping(value ="/toEdit",method= RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO<String> toEdit(UserDO user){
+		//获取当前登录的用户
+	    WebUserDTO adminUser = (WebUserDTO) getSessionUser();
+	    Integer userId=adminUser.getId();
+	    user.setModifyUserId(userId);
 		ResultDTO<String> result = userService.toEditDept(user);
 		return result;
 	}

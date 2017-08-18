@@ -33,7 +33,7 @@ public interface UserDAO {
     @Select("SELECT * FROM sys_user WHERE name=#{name}")
     public UserDO getByName(@Param("name") String name);
 
-    @Insert("INSERT into sys_user(id,type,name,password,real_name,mobile,sex,alias_name,department,agent_id,remark,modify_time,modify_user_id) VALUES (#{id},#{type},#{name},#{password},#{realName},#{mobile},#{sex},#{aliasName},#{department},#{agentId},#{remark},#{modifyTime},#{modifyUserId})")
+    @Insert("INSERT into sys_user(id,type,name,password,real_name,mobile,sex,alias_name,department,agent_id,remark,modify_time,modify_user_id,status) VALUES (#{id},#{type},#{name},#{password},#{realName},#{mobile},#{sex},#{aliasName},#{department},#{agentId},#{remark},#{modifyTime},#{modifyUserId},#{status})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public int insert(UserDO user);
 
