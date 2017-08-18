@@ -15,6 +15,9 @@ import net.fnsco.auth.service.sys.dao.helper.MenuProvider;
 import java.util.List;;
 
 public interface MenuDAO {
+	
+	@Delete("DELETE FROM sys_menu WHERE parent_id = #{id}")
+	public int deleteByParentId(@Param("id") int id);
 
     @Results({ @Result(column = "parent_id", property = "parentId"), @Result(column = "name", property = "name"), @Result(column = "order_num", property = "orderNum") })
     @Select("SELECT * FROM sys_menu WHERE id = #{id}")

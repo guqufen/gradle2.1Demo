@@ -10,6 +10,7 @@
     <result column="pos_factory" property="posFactory" jdbcType="VARCHAR" />
     <result column="pos_type" property="posType" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="bank_id" property="bankId" jdbcType="INTEGER" />
   </resultMap>
   <!-- 查询POS所有数据，包括终端信息 -->
   <resultMap id="AllResultMap" type="net.fnsco.order.service.domain.MerchantPos" >
@@ -21,6 +22,7 @@
     <result column="pos_factory" property="posFactory" jdbcType="VARCHAR" />
     <result column="pos_type" property="posType" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="bank_id" property="bankId" jdbcType="INTEGER" />
     <collection property="terminal" column="id" select="net.fnsco.order.service.dao.master.MerchantTerminalDao.queryAllTerByPosId"/>
   </resultMap>
   <!-- APP商户终端列表结果集 -->
@@ -37,7 +39,7 @@
     <collection property="terNames" column="id" select="net.fnsco.order.service.dao.master.MerchantTerminalDao.queryTerByPosId"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, inner_code, channel_id, pos_name, sn_code, pos_factory, pos_type, status
+    id, inner_code, channel_id, pos_name, sn_code, pos_factory, pos_type, status, bank_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -53,10 +55,12 @@
   <insert id="insert" parameterType="net.fnsco.order.service.domain.MerchantPos" >
     insert into m_merchant_pos (id, inner_code, channel_id, 
       pos_name, sn_code, pos_factory, 
-      pos_type, status)
+      pos_type, status, bank_id
+      )
     values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{channelId,jdbcType=INTEGER}, 
       #{posName,jdbcType=VARCHAR}, #{snCode,jdbcType=VARCHAR}, #{posFactory,jdbcType=VARCHAR}, 
-      #{posType,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+      #{posType,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{bankId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantPos" useGeneratedKeys="true" keyProperty="id">
     insert into m_merchant_pos
@@ -85,6 +89,9 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="bankId != null" >
+        bank_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -110,6 +117,9 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="bankId != null" >
+        #{bankId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -138,6 +148,9 @@
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
       </if>
+      <if test="bankId != null" >
+        bank_id = #{bankId,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -149,7 +162,8 @@
       sn_code = #{snCode,jdbcType=VARCHAR},
       pos_factory = #{posFactory,jdbcType=VARCHAR},
       pos_type = #{posType,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR}
+      status = #{status,jdbcType=VARCHAR},
+      bank_id = #{bankId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!-- 根据innercode查询POS名称集合 -->
