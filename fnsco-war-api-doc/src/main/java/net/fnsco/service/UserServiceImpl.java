@@ -11,6 +11,7 @@ import com.google.common.base.Strings;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.freamwork.business.AppUserDTO;
 import net.fnsco.freamwork.business.UserService;
+import net.fnsco.freamwork.business.WebUserDTO;
 
 /**
  * 判断是否强制登录获取用户信息
@@ -36,8 +37,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AppUserDTO getCookieUser(HttpServletRequest request) {
-        AppUserDTO user = null;
+    public WebUserDTO getCookieUser(HttpServletRequest request) {
+        WebUserDTO user = null;
         Object cookeiUser = getUser(request);
         if (null == cookeiUser) {
             return user;

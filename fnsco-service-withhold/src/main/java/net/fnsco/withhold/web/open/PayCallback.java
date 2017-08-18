@@ -16,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.withhold.comm.ServiceConstant;
 import net.fnsco.withhold.service.trade.TradeDataService;
 import net.fnsco.withhold.service.trade.entity.TradeDataDO;
 
@@ -51,8 +52,21 @@ public class PayCallback extends BaseController {
             logger.info("respCode" + respCode);
             if (respCode.trim().equals("1001")) {
                 tradeData.setRespCode("1001");
+                tradeData.setStatus(ServiceConstant.PayStatusEnum.PAY_SUCC.getCode());
                 tradeData.setRespMsg(parameterMap.get("respMsg"));
+                String failReason = ServiceConstant.anErrorMap.get(respCode);
+                tradeData.setFailReason(failReason);
                 tradeDataService.update(tradeData);
+            }else{
+                logger.error("收到失败的爱农代收扣回调：" + parameterMap);
+                tradeData.setRespCode(respCode);
+                tradeData.setRespMsg(parameterMap.get("respMsg"));
+                String failReason = ServiceConstant.anErrorMap.get(respCode);
+                tradeData.setFailReason(failReason);
+                if(ServiceConstant.PayStatusEnum.PAYING.getCode().equals(tradeData.getStatus())){
+                    tradeData.setStatus(ServiceConstant.PayStatusEnum.PAY_FAIL.getCode());
+                    tradeDataService.update(tradeData);
+                }
             }
         }
         return ResultDTO.success();

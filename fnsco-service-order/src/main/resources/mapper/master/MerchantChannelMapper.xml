@@ -11,6 +11,18 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
   </resultMap>
+  <!-- 查询渠道下所有信息 -->
+  <resultMap id="AllResultMap" type="net.fnsco.order.service.domain.MerchantChannel" >
+  	<id column="id" property="id" jdbcType="INTEGER" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="channel_type" property="channelType" jdbcType="VARCHAR" />
+    <result column="channel_mer_id" property="channelMerId" jdbcType="VARCHAR" />
+    <result column="channel_mer_key" property="channelMerKey" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
+    <collection property="posInfos" column="id" select="net.fnsco.order.service.dao.master.MerchantPosDao.selectByChannelId"/>
+  </resultMap>
   <sql id="Base_Column_List" >
     id, inner_code, channel_type, channel_mer_id, channel_mer_key, create_time, modify_time, 
     modify_user_id
@@ -33,7 +45,7 @@
       #{channelMerId,jdbcType=VARCHAR}, #{channelMerKey,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantChannel" >
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantChannel" useGeneratedKeys="true" keyProperty="id">
     insert into m_merchant_channel
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -139,7 +151,7 @@
     limit 1
   </select>
     <!-- 根据innercode查询 -->
-  <select id="selectByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByInnerCode" parameterType="java.lang.String" resultMap="AllResultMap">
     select 
     <include refid="Base_Column_List" />
     from m_merchant_channel

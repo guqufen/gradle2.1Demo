@@ -1,5 +1,7 @@
 package net.fnsco.order.api.trade;
 
+import java.util.List;
+
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.order.api.dto.TradeDataDTO;
 import net.fnsco.order.api.dto.TradeDataQueryDTO;
@@ -29,5 +31,14 @@ public interface TradeDataService {
      * @since  CodingExample　Ver 1.1
      */
     ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize);
-
+    /**
+     * 
+     * queryByTerminal:(查询流水信息)
+     *
+     * @param merchantCore
+     * @return   MerchantCore    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    TradeData queryByTerminal(TradeData tradeData);
 }

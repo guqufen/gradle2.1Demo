@@ -32,7 +32,7 @@ public interface UserRoleDAO {
     public int deleteById(@Param("id") int id);
     
     @Delete("DELETE FROM sys_user_role WHERE user_id = #{userId}")
-    public int deleteByUserId(@Param("userId") int userId);
+    public int deleteByUserId(@Param("userId") Integer userId);
     
     @UpdateProvider(type = UserRoleProvider.class, method = "update")
     public int update(@Param("userRole") UserRoleDO  userRole);

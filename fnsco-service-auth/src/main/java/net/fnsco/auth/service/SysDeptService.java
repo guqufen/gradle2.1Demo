@@ -71,10 +71,10 @@ public class SysDeptService extends BaseService{
 		 int parentid=deptDAO.getByName(dept.getParentName());
 		 dept.setParentId(parentid);
 		 int res = deptDAO.insert(dept);
-		 if (res != 1) {
+		 if (res <1) {
              return ResultDTO.fail();
          }
-		 return new ResultDTO<>(true, dept.getId(), CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
+		 return ResultDTO.success();
 	    }
 	 /**
 	  * 修改部门
@@ -86,10 +86,10 @@ public class SysDeptService extends BaseService{
 		 int parentid=deptDAO.getByName(dept.getParentName());
 		 dept.setParentId(parentid);
 		 int res = deptDAO.update(dept);
-		 if (res != 1) {
+		 if (res <1) {
              return ResultDTO.fail();
          }
-		 return new ResultDTO<>(true, dept.getId(), CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
+		 return ResultDTO.success();
 	    }
 	 /**
 	  * 修改内的部门信息查询
@@ -116,15 +116,15 @@ public class SysDeptService extends BaseService{
 	 public ResultDTO<String> deleteById(Integer[] id) {
 		 for(int i=0;i<id.length;i++){	
 			int res = deptDAO.deleteById(id[i]);
-		 if (res != 1) {
+		 if (res <1) {
              return ResultDTO.fail();
          }
 		int re= roleDeptDAO.deleteByDeptId(id[i]);
-		if (re != 1) {
+		if (re <1) {
             return ResultDTO.fail();
         }
 	    } 
-		 return new ResultDTO<>(true, id, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
+		 return ResultDTO.success();
 		 }
 	 /**
 	  * 遍历获取部门ID
@@ -138,7 +138,7 @@ public class SysDeptService extends BaseService{
 				return ResultDTO.fail();
 			}
 	    } 
-		 return new ResultDTO<>(true, id, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
+		 return ResultDTO.success();
 		 }
 		 
 }
