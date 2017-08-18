@@ -26,8 +26,31 @@ public class MerchantPos {
 
     private String status;
     
+    private Integer bankId;
+    
     private List<MerchantTerminal> terminal;//POS机下终端信息
     
+    /**
+     * bankId
+     *
+     * @return  the bankId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getBankId() {
+        return bankId;
+    }
+
+    /**
+     * bankId
+     *
+     * @param   bankId    the bankId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setBankId(Integer bankId) {
+        this.bankId = bankId;
+    }
 
     /**
      * terminal
