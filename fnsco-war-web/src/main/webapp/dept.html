@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>消息推送-法奈昇大数据平台</title>
+    <title>部门管理-法奈昇大数据平台</title>
     <meta name="keywords" content="法奈昇大数据平台">
     <meta name="description" content="法奈昇大数据平台">
     <link rel="shortcut icon" href="favicon.ico">
@@ -61,7 +61,7 @@
 	                                <input type="text" class="form-control" id="name" placeholder="部门名称" name="name" required="required">
 	                            </div>
 	                            <div class="col-sm-8">
-	                                <label class="control-label" for="parentName">上级部门：</label>
+	                                <label class="control-label" id="deptId" for="parentName">上级部门：</label>
 	                                <input type="text" class="form-control" id="parentName" name="parentName" readonly="readonly" placeholder="一级部门">
 	                            </div>
 	                            <div class="col-sm-8">
@@ -102,7 +102,7 @@
 	                                <input type="text" class="form-control" id="name1" placeholder="部门名称" name="name" required="required">
 	                            </div>
 	                            <div class="col-sm-8">
-	                                <label class="control-label" for="userName">上级部门：</label>
+	                                <label class="control-label" id="deptId1" for="userName">上级部门：</label>
 	                                <input type="text" class="form-control" id="parentName1" name="parentName" readonly="readonly" placeholder="一级部门">
 	                            </div>
 	                            <div class="col-sm-8">
@@ -144,6 +144,7 @@
 <script src="js/plugins/ztree/jquery.ztree.all.min.js"></script>
 <script src="js/layer/layer.js"></script>
 <script type="text/javascript" src="js/fnsco/common.js"></script>
+<script src="js/fnsco/url.js"></script>
 <script type="text/javascript" src="js/fnsco/dept.js"></script>
 </body>
 

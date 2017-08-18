@@ -38,7 +38,7 @@ public interface UserDAO {
     public int insert(UserDO user);
 
     @Update("UPDATE sys_user SET status='0' WHERE id = #{id}")
-    public int deleteById(@Param("id") Integer id);
+    public int updateById(@Param("id") Integer id);
 
     @UpdateProvider(type = UserProvider.class, method = "update")
     public int update(@Param("user") UserDO user);
