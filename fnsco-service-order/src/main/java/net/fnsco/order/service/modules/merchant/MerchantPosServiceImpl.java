@@ -11,9 +11,11 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.dto.WebMerchantPosDTO;
 import net.fnsco.order.api.dto.WebMerchantTerminalDTO;
 import net.fnsco.order.api.merchant.MerchantPosService;
+import net.fnsco.order.service.dao.master.MerchantBankDao;
 import net.fnsco.order.service.dao.master.MerchantChannelDao;
 import net.fnsco.order.service.dao.master.MerchantPosDao;
 import net.fnsco.order.service.dao.master.MerchantTerminalDao;
+import net.fnsco.order.service.domain.MerchantBank;
 import net.fnsco.order.service.domain.MerchantChannel;
 import net.fnsco.order.service.domain.MerchantPos;
 import net.fnsco.order.service.domain.MerchantTerminal;
@@ -34,6 +36,8 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
     private MerchantChannelDao merchantChannelDao;
     @Autowired
     private MerchantTerminalDao merchantTerminalDao;
+    @Autowired
+    private MerchantBankDao merchantBankDao;
     
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -118,6 +122,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
      * @date      2017年8月17日 下午2:25:34
      * @return void    DOM对象
      */
+    @Transactional
     private void updatePosInfoToDB(List<WebMerchantTerminalDTO> posInfos){
         for (WebMerchantTerminalDTO webMerchantTerminalDTO : posInfos) {
             MerchantPos merchantPos = webMerchantTerminalDTO.getMerchantPos();
@@ -147,6 +152,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
      * @date      2017年8月17日 下午1:31:21
      * @return void    DOM对象
      */
+    @Transactional
     private void addPosInfoToDB(List<WebMerchantTerminalDTO> posInfos,Integer channelId){
         for (WebMerchantTerminalDTO webMerchantTerminalDTO : posInfos) {
             MerchantPos merchantPos = webMerchantTerminalDTO.getMerchantPos();
@@ -179,5 +185,16 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
             return false;
         }
         return true;
+    }
+    
+    /**
+     * (non-Javadoc)获取所有银行卡信息
+     * @see net.fnsco.order.api.merchant.MerchantPosService#queryWebByInnerCode(java.lang.String)
+     * @author tangliang
+     * @date 2017年8月18日 下午5:45:51
+     */
+    @Override
+    public List<MerchantBank> queryWebByInnerCode(String innerCode) {
+        return merchantBankDao.queryWebByInnerCode(innerCode);
     }
 }
