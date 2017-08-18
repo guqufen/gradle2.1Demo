@@ -11,6 +11,7 @@ public class TradeDataJO extends JO {
     private String payType;
     private String payTypeName;
     private String txnType;//交易类型1消费2撤销
+    private String cancel;//订单是否取消
     //交易详情
     private String innerCode;
     //商户名
@@ -38,6 +39,28 @@ public class TradeDataJO extends JO {
     //扫码订单号
     private String       orderIdScan;
     
+    /**
+     * cancel
+     *
+     * @return  the cancel
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getCancel() {
+        return cancel;
+    }
+
+    /**
+     * cancel
+     *
+     * @param   cancel    the cancel to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setCancel(String cancel) {
+        this.cancel = cancel;
+    }
+
     /**
      * txnType
      *

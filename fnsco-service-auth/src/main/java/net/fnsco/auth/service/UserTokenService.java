@@ -15,7 +15,7 @@ public class UserTokenService extends BaseService {
     @Autowired
     private UserTokenDAO     sysUserTokenDao;
     //12小时后过期
-    private final static int EXPIRE = 3600 * 12;
+    private final static int EXPIRE = 3600 * 12 * 7;
 
     public UserTokenDO queryByUserId(Integer userId) {
         return sysUserTokenDao.queryByUserId(userId);
