@@ -99,8 +99,8 @@ public class MenuService extends BaseService {
 			// 如果是菜单，则需要将菜单和其相关按钮都删掉
 		} else if (menu.getType() == 1) {
 
-			// 通过将父菜单ID为当前目录ID来删除菜单相关按钮
-			this.menuDAO.deleteByParentId(menu.getParentId());
+			// 通过父菜单ID(为当前目录ID)来删除菜单按钮
+			this.menuDAO.deleteByParentId(menu.getId());
 		}
 
 		// 删除菜单

@@ -147,6 +147,7 @@ function clearInput(){
 //绑定按钮点击事件(目录/菜单/按钮所展示的页面不同)
 $(':radio').click(function(){
 		if(this.checked){
+			//如果目录选中
 			if(this.value == "0"){
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
@@ -154,20 +155,22 @@ $(':radio').click(function(){
 				$('#permsDiv').hide();
 				$('#orderNumDiv').show();
 				$('#iconDiv').show();
+				//如果菜单选中
 			}else if(this.value == "1"){
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').show();
 				$('#permsDiv').show();
 				$('#orderNumDiv').show();
-				$('#iconDiv').show();
+				$('#iconDiv').hide();
+				//如果按钮选中
 			}else if(this.value == "2"){
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
 				$('#permsDiv').show();
 				$('#orderNumDiv').hide();
-				$('#iconDiv').show();
+				$('#iconDiv').hide();
 			}
 		}
 	});
@@ -267,7 +270,7 @@ $('#btn_add').click(function() {
 	$('#menuUrlDiv').show();
 	$('#permsDiv').show();
 	$('#orderNumDiv').show();
-	$('#iconDiv').show();
+	$('#iconDiv').hide();
 
 	//给当前菜单ID置空,防止与修改功能串线
 	$('#id').val(null);
@@ -326,14 +329,14 @@ $('#btn_edit').click(function() {
 				$('#menuUrlDiv').show();
 				$('#permsDiv').show();
 				$('#orderNumDiv').show();
-				$('#iconDiv').show();
+				$('#iconDiv').hide();
 			}else if(this.value == "2"){
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
 				$('#permsDiv').show();
 				$('#orderNumDiv').hide();
-				$('#iconDiv').show();
+				$('#iconDiv').hide();
 			}
 			}
 		});
