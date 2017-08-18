@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import net.fnsco.auth.comm.AuthConstant;
 import net.fnsco.auth.service.sys.dao.DeptDAO;
 import net.fnsco.auth.service.sys.dao.RoleDeptDAO;
 import net.fnsco.auth.service.sys.entity.DeptDO;
@@ -66,15 +68,9 @@ public class SysDeptService extends BaseService{
 	  * @param dept
 	  * @return
 	  */
-	 public ResultDTO<String> doAddDept(DeptDO dept) {
+	 public void doAddDept(DeptDO dept) {
 		 dept.setDelFlag(0);
-		 int parentid=deptDAO.getByName(dept.getParentName());
-		 dept.setParentId(parentid);
-		 int res = deptDAO.insert(dept);
-		 if (res <1) {
-             return ResultDTO.fail();
-         }
-		 return ResultDTO.success();
+		 deptDAO.insert(dept);
 	    }
 	 /**
 	  * 修改部门
@@ -83,8 +79,6 @@ public class SysDeptService extends BaseService{
 	  */
 	 public ResultDTO<String> toEditDept(DeptDO dept) {
 		 dept.setDelFlag(0);
-		 int parentid=deptDAO.getByName(dept.getParentName());
-		 dept.setParentId(parentid);
 		 int res = deptDAO.update(dept);
 		 if (res <1) {
              return ResultDTO.fail();
@@ -99,12 +93,8 @@ public class SysDeptService extends BaseService{
 	 public DeptDO queryDeptById(Integer id) {
 		 DeptDO data = deptDAO.getById(id);
 		 if(data.getParentId()!=0) {
-			 String tdo = deptDAO.getById(data.getParentId()).getName();
-			 if(tdo==null) {
-				 data. setParentName(null);
-			 }else {
-				 data.setParentName(tdo);
-			 }
+			 DeptDO user = deptDAO.getById(data.getParentId());
+			 data. setParentName(user.getName());
 		 }
 	     return  data;
 	 }
@@ -113,7 +103,14 @@ public class SysDeptService extends BaseService{
 	  * @param id
 	  * @return
 	  */
+	 @Transactional
 	 public ResultDTO<String> deleteById(Integer[] id) {
+		 for(int i=0;i<id.length;i++){	
+			 List<Integer> dept=deptDAO.getByparentId(id[i]);
+			if(dept.size()!=0) {
+				return ResultDTO.fail(AuthConstant.E_PEPT_EXIST);
+			}
+	    } 
 		 for(int i=0;i<id.length;i++){	
 			int res = deptDAO.deleteById(id[i]);
 		 if (res <1) {
@@ -126,19 +123,4 @@ public class SysDeptService extends BaseService{
 	    } 
 		 return ResultDTO.success();
 		 }
-	 /**
-	  * 遍历获取部门ID
-	  * @param id
-	  * @return
-	  */
-	 public ResultDTO<String> queryParentId(Integer[] id) {
-		 for(int i=0;i<id.length;i++){	
-			 List<Integer> dept=deptDAO.getByparentId(id[i]);
-			if(dept.size()!=0) {
-				return ResultDTO.fail();
-			}
-	    } 
-		 return ResultDTO.success();
-		 }
-		 
 }

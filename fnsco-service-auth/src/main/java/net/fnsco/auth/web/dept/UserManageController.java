@@ -59,8 +59,8 @@ public class UserManageController extends BaseController {
 	@RequestMapping(value ="/toAdd",method= RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO<String> toAdd(UserDO user){
-		ResultDTO<String> result = userService.doAddUser(user);
-		return result;
+		userService.doAddUser(user);
+		return ResultDTO.successForSave(null);
 	}
 	/**
 	 * 通过id查询修改对象的数据

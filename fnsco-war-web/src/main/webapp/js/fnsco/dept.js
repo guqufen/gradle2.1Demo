@@ -4,7 +4,7 @@
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url : PROJECT_NAME + 'web/auth/dept/query',
+	url :auth_dept_query,
 	showRefresh : false,// 是否显示刷新按钮	
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	toolbar : '#toolbar', // 工具按钮用哪个容器
@@ -62,10 +62,10 @@ function responseHandler(res) {
 	}
 }
 //添加确认事件方法
-function add() {
+function add(date) {
 	$.ajax({
-		url : PROJECT_NAME + 'web/auth/dept/toAdd',
-		data : $('#mercore_form').serialize(),
+		url :auth_dept_toAdd,
+		data : date,
 		type : 'POST',
 		success : function(data) {
 			unloginHandler(data);
@@ -84,7 +84,7 @@ function add() {
 //修改确认事件方法
 function edit(date) {
 	$.ajax({
-		url : PROJECT_NAME + 'web/auth/dept/toEdit',
+		url :auth_dept_toEdit,
 		data : date,
 		type : 'POST',
 		success : function(data) {
@@ -105,7 +105,7 @@ function edit(date) {
 //修改信息查询
 function queryById(id) {
 	$.ajax({
-		url : PROJECT_NAME + 'web/auth/dept/queryDeptById',
+		url :auth_dept_queryDeptById,
 		type : 'POST',
 		dataType : "json",
 		data : {
@@ -157,7 +157,7 @@ var dept_setting = {
 //初始化树方法
 function getDept() {
 	$.ajax({
-		url : PROJECT_NAME + 'web/auth/dept/querytree',
+		url : auth_dept_querytree,
 		//type : 'POST',	
 		success : function(data) {
 			dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting,data.data);
@@ -176,7 +176,7 @@ function queryEvent(id) {
 	$('#' + id).bootstrapTable('refresh');
 }
 //部门选择框确认方法
-function dotext() {
+function dotext(a) {
 	getDept();
 	layer.open({
 		type : 1,
@@ -191,9 +191,13 @@ function dotext() {
 		btn1 : function(index) {
 			var node = dept_ztree.getSelectedNodes();
 			//选择上级部门
-			name = node[0].name;
-			$("#parentName").val(name);
-			$("#parentName1").val(name);
+			if(a==1){
+				$("#parentName").val(node[0].name);
+				$('#deptId').val(node[0].id);
+			}else if(a==2){
+				$('#deptId1').val(node[0].id);
+				$("#parentName1").val(node[0].name);
+			}
 			layer.close(index);
 		}
 	});
@@ -206,6 +210,12 @@ $('#btn_add').click(function() {
 //新增确认按钮事件
 $('#btn_yes').click(
 		function() {
+			var date = {
+					"parentId" :$('#deptId').val(),
+					"name" : $('#name').val(),
+				//	"parentName" : $('#parentName1').val(),
+					"orderNum" : $('#orderNum').val()
+				};
 			name = $('#name').val(), 
 			orderNum = $('#orderNum').val()
 			if (name == null || name.length == 0) {
@@ -216,7 +226,7 @@ $('#btn_yes').click(
 				layer.msg('排序号不能为空!');
 				return false;
 			}
-			add();
+			add(date);
 		});
 //修改按钮事件
 $('#btn_edit').click(function() {
@@ -235,8 +245,9 @@ $('#btn_yes1').click(
 			}
 			var date = {
 					"id" : id,
+					"parentId" :$('#deptId1').val(),
 					"name" : $('#name1').val(),
-					"parentName" : $('#parentName1').val(),
+				//	"parentName" : $('#parentName1').val(),
 					"orderNum" : $('#orderNum1').val()
 				};
 			name = $('#name1').val(),
@@ -260,11 +271,13 @@ $('#btn_yes1').click(
 		});
 //部门点击事件
 $('#parentName').click(function() {
-	dotext();
+	var a=1;
+	dotext(a);
 });
 //部门点击1事件
 $('#parentName1').click(function() {
-	dotext();
+	var a=2;
+	dotext(a);
 });
 //批量删除按钮事件
 $('#btn_delete').click(function() {
@@ -277,49 +290,32 @@ $('#btn_delete').click(function() {
 	for (var i = 0; i < select_data.length; i++) {
 		dataId = dataId.concat(select_data[i].id);
 	}
-	$.ajax({
-		url : PROJECT_NAME + 'web/auth/dept/queryParentId',
-		type : 'POST',
-		dataType : "json",
-		data : {
-			'id' : dataId
-		},
-		success : function(data) {
-			unloginHandler(data);
-			if (data.data.success) {
-				layer.confirm('确定删除选中数据吗？', {
-					time : 20000, //20s后自动关闭
-					btn : [ '确定', '取消' ]
-				}, function() {
-					$.ajax({
-						url : PROJECT_NAME + 'web/auth/dept/deleteDeptById',
-						type : 'POST',
-						dataType : "json",
-						data : {
-							'id' : dataId
-						},
-						success : function(data) {
-							unloginHandler(data);
-							if (data.success) {
-								layer.msg('删除成功');
-								queryEvent("table");
-							}else {
-								layer.msg('删除失败');
-							}
-						},
-						error : function(e) {
-							layer.msg('系统异常!' + e);
-						}
-					});
-				}, function() {
-					layer.msg('取消成功');
-				});
-			}else {
-				layer.msg('存在子部门,无法删除！');
+	layer.confirm('确定删除选中数据吗？', {
+		time : 20000, //20s后自动关闭
+		btn : [ '确定', '取消' ]
+	}, function() {
+		$.ajax({
+			url :auth_dept_deleteDeptById,
+			type : 'POST',
+			dataType : "json",
+			data : {
+				'id' : dataId
+			},
+			success : function(data) {
+				unloginHandler(data);
+				console.log(data);
+				if (data.success) {
+					layer.msg('删除成功');
+					queryEvent("table");
+				}else {
+					layer.msg(data.message);
+				}
+			},
+			error : function(e) {
+				layer.msg('系统异常!' + e);
 			}
-		},
-		error : function(e) {
-			layer.msg('系统异常!' + e);
-		}
+		});
+	}, function() {
+		layer.msg('取消成功');
 	});	
 });
