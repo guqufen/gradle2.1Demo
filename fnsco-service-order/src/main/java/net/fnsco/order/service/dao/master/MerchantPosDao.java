@@ -39,6 +39,15 @@ public interface MerchantPosDao {
     int updateByPrimaryKey(MerchantPos record);
     
     /**
+     * selectAllByUserId:(这里用一句话描述这个方法的作用)根据userID查询列表
+     * @param userId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月18日 下午4:58:22
+     * @return List<PosInfoDTO>    DOM对象
+     */
+    List<PosInfoDTO> selectAllByUserId(@Param("userId")Integer userId);
+    /**
      * selectByChannelId:(这里用一句话描述这个方法的作用)根据channelId查询
      * @param channelId
      * @return    设定文件

@@ -11,6 +11,7 @@ import net.fnsco.order.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.order.api.dto.MerTerminalsDTO;
 import net.fnsco.order.api.dto.MerchantDTO;
 import net.fnsco.order.api.dto.PosDetailDTO;
+import net.fnsco.order.api.dto.PosInfoDTO;
 import net.fnsco.order.api.dto.PosListDTO;
 import net.fnsco.order.api.dto.TerminalDetailDTO;
 import net.fnsco.order.api.dto.TerminalsDTO;
@@ -95,6 +96,16 @@ public interface MerchantService {
      * @return List<PosListDTO>    DOM对象
      */
     List<PosListDTO> getAllPosInfo(MerchantDTO merchantDTO);
+    
+    /**
+     * getAllReportPos:(这里用一句话描述这个方法的作用)查询用户下面所有的POS列表信息
+     * @param merchantDTO
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月18日 下午4:53:46
+     * @return List<PosInfoDTO>    DOM对象
+     */
+    List<PosInfoDTO> getAllReportPos(MerchantDTO merchantDTO);
     /**
      * getPosDetail:(这里用一句话描述这个方法的作用)根据POSid查询详情
      * @param posId

@@ -296,7 +296,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         merchantTerminal.setTermName(request.getParameter("termName"));
         //        merchantTerminal.setPosFactory(request.getParameter("posFactory"));
         //        merchantTerminal.setPosType(request.getParameter("posType"));
-        merchantTerminal.setMercReferName(request.getParameter("mercReferName"));
+//        merchantTerminal.setMercReferName(request.getParameter("mercReferName"));
         return merchantTerminal;
     }
 
