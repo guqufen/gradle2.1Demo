@@ -106,6 +106,7 @@ function initTableData() {
 			field : 'id',
 			title : '序号',
 			width : '20',
+			class:'j',
 			formatter : operateFormatterId
 		}, {
 			field : 'userName',
@@ -266,7 +267,7 @@ function unloginHandler(result) {
 		window.location = "login.html";
 	}
 }
-window.operateEvents = {
+/*window.operateEvents = {
 	'click .redact' : function(e, value, row, index) {
 		layer.msg('You click like action, row: ' + JSON.stringify(row));
 	},
@@ -276,15 +277,15 @@ window.operateEvents = {
 			values : [ row.id ]
 		});
 	}
-};
+};*/
 // 表格中操作按钮
 function operateFormatter(value, row, index) {
 	if (row.status == 1) {
 		return [
-				'<a class="redact" href="javascript:stopData(' + row.id + ');" title="终止">终止', '</a>  ', ]
+				'<a class="redact" href="javascript:stopData(' + row.id + ');" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
 				.join('');
 	} else
-		return '';
+		 return "<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>";
 }
 // 表格中删除按钮事件
 function delete_btn_event(td_obj) {
@@ -422,4 +423,160 @@ function stopData(id) {
 	}, function() {
 		layer.msg('取消成功');
 	});
+}
+
+
+var withholdId;
+function details(id) {
+	//加载详情
+	query(id);
+	withholdId=id;
+	$('#tableDetails').bootstrapTable('refresh');
+}
+
+
+function query(id){
+	$.ajax({
+		url : PROJECT_NAME + '/web/withholdInfo/queryById',
+		type : 'POST',
+		dataType : "json",
+		data : {
+			'id' : id
+		},
+		success : function(data) {
+			console.log(data);
+			console.log(data.data.userName)
+			$(".detail_name").val(data.data.userName);
+			$(".detail_product_type_code").val(data.data.productTypeCode);
+			$(".detail_total").val(data.data.total);
+			$(".detail_mobile").val(data.data.mobile);
+			$(".detail_bank_card").val(data.data.bankCard);
+			$(".detail_amount").val(data.data.amount);
+			$(".detail_debit_day").val(data.data.debitDay);
+			$(".detail_amount_total").val(data.data.amountTotal);
+			$(".detail_sum").val(data.data.total*data.data.amount);
+		}
+	});
+}
+
+initTableData1();
+function initTableData1() {
+	$('#tableDetails').bootstrapTable({
+		sidePagination : 'server',
+		search : false, // 是否启动搜索栏
+		url : PROJECT_NAME + '/web/tradeData/query',
+		showRefresh : false,// 是否显示刷新按钮
+		showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
+		// toolbar : '#toolbar', // 工具按钮用哪个容器
+		striped : true, // 是否显示行间隔色
+		cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+		pagination : true, // 是否显示分页（*）
+		sortable : true, // 是否启用排序
+		sortOrder : 'asc', // 排序方式
+		pageNumber : 1, // 初始化加载第一页，默认第一页
+		pageSize : 10, // 每页的记录行数（*）
+		pageList : [ 10, 20, 50, 100 ], // 可供选择的每页的行数（*）
+		showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
+		queryParams :queryParams1,
+		responseHandler : responseHandler1,// 处理服务器返回数据
+		columns : [ {
+			field : 'id',
+			title : '序号',
+			width : '20',
+			formatter : operateFormatterId
+		}, {
+			field : 'txnTime',
+			title : '扣款日期',
+			width : '10',
+			formatter :formatTxnTime
+		}, {
+			field : 'txnAmt',
+			title : '扣款金额',
+			width : '10'
+		}, {
+			field : 'payTimes',
+			title : '扣款次数',
+			width : '10'
+		},{
+			field : 'failReason',
+			title : '原因',
+			width : '10'
+		}
+		,{
+			field : 'txnTime',
+			title : '扣款时间',
+			width : '10',
+			formatter : formatTxn
+		}, {
+			field : 'status',
+			title : '状态',
+			width : '10',
+			formatter : formatPushType
+		}]
+	});
+}
+
+
+function queryParams1(params) {
+	console.log(withholdId)
+	var param = {
+		currentPageNum : this.pageNumber,
+		pageSize : this.pageSize,
+		withholdId :withholdId
+	}
+	return param;
+}
+
+// 处理后台返回数据
+function responseHandler1(res) {
+	unloginHandler(res);
+	if (res) {
+		return {
+			"rows" : res.data.list,
+			"total" : res.data.total
+		};
+	} else {
+		return {
+			"rows" : [],
+			"total" : 0
+		};
+	}
+}
+
+function formatTxnTime(value, row, index){
+	if (!value) {
+		return '-';
+	} else{
+		var str=value.substr(0,8);
+		var obj=str.replace(/(.)(?=[^$])/g,"$1,").split(","); 
+		obj.splice(4,0,"-");
+		obj.splice(7,0,"-")
+		return obj.toString().replace(/,/g,"");
+	}
+}
+
+
+function formatTxn(value, row, index){
+	  
+	console.log(obj);
+		console.log(obj);
+		if (!value) {
+			return '-';
+		} else{
+			var str=value.slice(8,12);
+			var obj=str.replace(/(.)(?=[^$])/g,"$1,").split(","); 
+			var aa=obj.splice(2,0,":");
+			return obj.toString().replace(/,/g,"");
+		}
+	}
+function formatPushType(value, row, index) {
+	if (!value) {
+		return '-';
+	} else if (value == '1') {
+		return '扣款失败';
+	} else if (value == '2') {
+		return '扣款成功';
+	} else {
+		return '补收';
+	}
 }

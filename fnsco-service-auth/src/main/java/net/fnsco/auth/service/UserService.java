@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Strings;
 
@@ -27,7 +28,7 @@ import net.fnsco.freamwork.comm.Md5Util;
  */
 @Service
 public class UserService extends BaseService {
-    private Logger      logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private UserDAO     userDAO;
     @Autowired
@@ -89,13 +90,14 @@ public class UserService extends BaseService {
         ResultPageDTO<UserDO> result = new ResultPageDTO<UserDO>(totalNum, data);
         return result;
     }
-
+    /**
+     * 通过id删除用户（改变状态0）
+     * @param id
+     * @return
+     */
     public ResultDTO<String> deleteById(Integer[] id) {
         for (int i = 0; i < id.length; i++) {
-            int res = userDAO.deleteById(id[i]);
-            if (res <1) {
-                return ResultDTO.fail();
-            }
+            int res = userDAO.updateById(id[i]);
         }
         return ResultDTO.success();
     }
@@ -105,24 +107,21 @@ public class UserService extends BaseService {
      * @param dept
      * @return
      */
-    public ResultDTO<String> doAddUser(UserDO user) {
-        Date date = new Date();
-        user.setModifyTime(date);
-        int res = userDAO.insert(user);
-        if (res <1) {
-            return ResultDTO.fail();
-        }
+    @Transactional
+    public void doAddUser(UserDO user) {
+    	String psw=Md5Util.getInstance().md5(user.getPassword());
+    	user.setPassword(psw);
+        user.setModifyTime(new Date());
+        userDAO.insert(user);
         List<Integer> list = user.getRoleList();
         UserRoleDO userRole = new UserRoleDO();
         userRole.setUserId(user.getId());
-        for (Integer roleId : list) {
-            userRole.setRoleId(roleId);
-            int re = userRoleDAO.insert(userRole);
-            if (re <1) {
-                return ResultDTO.fail();
-            }
+        if(list!=null) {
+        	for (Integer roleId : list) {
+        		userRole.setRoleId(roleId);
+        		userRoleDAO.insert(userRole);
+        	}
         }
-        return ResultDTO.success();
     }
 
     /**
@@ -155,24 +154,20 @@ public class UserService extends BaseService {
      * @param dept
      * @return
      */
+    @Transactional
     public ResultDTO<String> toEditDept(UserDO user) {
         List<Integer> list = user.getRoleList();
         UserRoleDO userRole = new UserRoleDO();
         Integer userId = user.getId();
-        int es = userRoleDAO.deleteByUserId(userId);
-        if (es <1) {
-            return ResultDTO.fail();
-        }
+        userRoleDAO.deleteByUserId(userId);
         userRole.setUserId(userId);
+        if(list!=null) {
         for (Integer roleId : list) {
             userRole.setRoleId(roleId);
-            int re = userRoleDAO.insert(userRole);
-            if (re <=0) {
-                return ResultDTO.fail();
-            }
+            userRoleDAO.insert(userRole);
         }
-        Date date = new Date();
-        user.setModifyTime(date);
+        }
+        user.setModifyTime(new Date());
         int res = userDAO.update(user);
         if (res <1) {
             return ResultDTO.fail();

@@ -1,0 +1,14 @@
+var auth_user_query = PROJECT_NAME + '/web/auth/user/query';
+var auth_user_toAdd = PROJECT_NAME + 'web/auth/user/toAdd';
+var auth_user_toEdit = PROJECT_NAME + 'web/auth/user/toEdit';
+var auth_user_queryUserByName = PROJECT_NAME + 'web/auth/user/queryUserByName';
+var auth_user_queryUserById = PROJECT_NAME + 'web/auth/user/queryUserById';
+var auth_user_querytree = PROJECT_NAME + 'web/auth/dept/querytree';
+var auth_user_queryRole = PROJECT_NAME + '/web/auth/role/queryRole';
+var auth_user_deleteUserById = PROJECT_NAME+'/web/auth/user/deleteUserById';
+var auth_dept_query = PROJECT_NAME + 'web/auth/dept/query';
+var auth_dept_toAdd = PROJECT_NAME + 'web/auth/dept/toAdd';
+var auth_dept_toEdit = PROJECT_NAME + 'web/auth/dept/toEdit';
+var auth_dept_queryDeptById = PROJECT_NAME + 'web/auth/dept/queryDeptById';
+var auth_dept_querytree = PROJECT_NAME + 'web/auth/dept/querytree';
+var auth_dept_deleteDeptById = PROJECT_NAME + 'web/auth/dept/deleteDeptById';
