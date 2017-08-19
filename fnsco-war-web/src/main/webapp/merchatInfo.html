@@ -15,6 +15,40 @@
     <link href="css/custom.css" rel="stylesheet">
     <link href="js/uploadify-v3.1/uploadify.css">
     <link rel="stylesheet" href="js/viewer/viewer.min.css">
+    <style type="text/css">
+    	.btn-div{
+    		float: left;
+    		width: 100%;
+    	}
+    	.addPos{
+    		float: left;
+    		padding: 20px 5px;
+    		margin: 15px;
+			background-color: #fff;
+			position: relative;
+    	}
+    	.addPos h2{
+    		width: 100%;
+			float: left;
+    	    font-size: 18px;
+			font-weight: bold;
+			text-indent: 15px;
+			margin-top: 0;
+    	}
+    	.zd{
+		    float: left;
+		    padding: 20px 5px;
+		    margin: 15px;
+		    background-color: #f4f4f4;
+		    position: relative;
+    	}
+    	.addChannel{
+    		padding-bottom: 20px;
+    	}
+    	.addChannel .btn{
+    		margin-left: 15px;
+    	}
+    </style>
 </head>
 <body class="gray-bg">
 <div class="panel-body animated fadeInRight">
@@ -78,9 +112,9 @@
 	                    <li role="presentation"><a href="#bankCard_info" aria-controls="bankCard_info" role="tab" data-toggle="tab">银行卡信息</a></li> -->
 	                    <li role="presentation"><a>银行卡信息</a></li>
 	                    <li role="presentation"><a>资质文件</a></li>
-	                    <li role="presentation"><a>联系信息</a></li>
 	                    <li role="presentation"><a>终端信息</a></li>
-	                    <li role="presentation"><a>渠道信息</a></li>
+	                    <li role="presentation"><a>联系信息</a></li>
+	                    <!-- <li role="presentation"><a>渠道信息</a></li> -->
 	                </ul>
 	                <div class="tab-content">
 	                    <div role="tabpanel" class="tab-pane active" id="home">
@@ -159,7 +193,7 @@
 	                    		<!-- 银行卡列表默认js增加 -->
 		                    </div>
 	                        <button id="btn_addBankCard" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增银行卡信息</button>
-	                        <a class="nextBtn" href="#profile" aria-controls="profile" role="tab" data-toggle="tab" id="btn_saveBankCard">保存</a>
+	                        <a class="nextBtn" href="#profile" aria-controls="profile" role="tab" data-toggle="tab" id="btn_saveBankCard">保存并下一步</a>
 	                    </div>
 	                    <div role="tabpanel" class="tab-pane" id="profile">
 	                    <form action="" id="file_form" method="post">
@@ -292,8 +326,16 @@
 	                      </tr>
 	                    </table>
 	                        <input  type="hidden" name="innerCode" />
-	                        <a class="nextBtn"  href="#messages" aria-controls="messages" role="tab" data-toggle="tab" onclick="javascript:saveFile();">保存并下一步</a>
+	                        <a class="nextBtn"  href="#terminal_info" aria-controls="terminal_info" role="tab" data-toggle="tab" onclick="javascript:saveFile();">保存并下一步</a>
 	                    </form>    
+	                    </div>
+	                    <!-- 终端信息 -->
+	                    <div role="tabpanel" class="tab-pane" id="terminal_info">
+	                    	<div id="terminal-con">
+			                    <!-- 终端列表默认js增加 -->
+		                    </div>
+		                    <button id="btn_addTerminal" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增渠道</button>
+	                        <a class="nextBtn" href="#messages" aria-controls="messages" role="tab" data-toggle="tab"  id="btn_saveTerminal">保存并下一步</a>
 	                    </div>
 	                    <!-- 联系信息 -->
 	                    <div role="tabpanel" class="tab-pane" id="messages">
@@ -301,24 +343,17 @@
 			                    <!-- 联系列表默认js增加 -->
 		                    </div>
 		                    <button id="btn_addContact" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增联系人</button>
-	                        <a class="nextBtn" href="#terminal_info" aria-controls="terminal_info" role="tab" data-toggle="tab" id="btn_saveContact">保存并下一步</a>
+	                        <a class="nextBtn" id="btn_saveContact">保存并下一步</a>
 	                    </div>
-	                    <!-- 终端信息 -->
-	                    <div role="tabpanel" class="tab-pane" id="terminal_info">
-	                    	<div id="terminal-con">
-			                    <!-- 终端列表默认js增加 -->
-		                    </div>
-		                    <button id="btn_addTerminal" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增终端</button>
-	                        <a class="nextBtn" id="btn_saveTerminal">保存并下一步</a>
-	                    </div>
+	                    
 	                    <!-- 渠道信息 -->
-	                    <div role="tabpanel" class="tab-pane" id="channel_info">
-	                    	<div id="channel-con">
+	                   <!--  <div role="tabpanel" class="tab-pane" id="channel_info">
+	                    	<div id="channel-con"> -->
 	                    		<!-- 渠道列表默认js增加 -->
-		                    </div>
+		                    <!-- </div>
 	                        <button id="btn_addChannel" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增渠道</button>
 	                        <a class="nextBtn" id="btn_saveChannel" href="#bankCard_info" aria-controls="bankCard_info" role="tab" data-toggle="tab">保存并下一步</a>
-	                    </div>
+	                    </div> -->
 	                </div>
 	            </div>
 	            <input type="hidden" id="innerCode" name="innerCode">
@@ -899,6 +934,6 @@
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="js/fnsco/common.js"></script>
-<script src="js/fnsco/merchatInfo.js"></script>
+<script src="js/fnsco/merchatInfo1.js"></script>
 </body>
 </html>
