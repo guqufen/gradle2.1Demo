@@ -52,8 +52,6 @@ public class MerchantTerminal extends DTO{
 
     private String termName;
 
-    private String mercReferName;
-
     private Integer wechatFee;
 
     private Integer alipayFee;
@@ -202,14 +200,6 @@ public class MerchantTerminal extends DTO{
 
     public void setTermName(String termName) {
         this.termName = termName == null ? null : termName.trim();
-    }
-
-    public String getMercReferName() {
-        return mercReferName;
-    }
-
-    public void setMercReferName(String mercReferName) {
-        this.mercReferName = mercReferName == null ? null : mercReferName.trim();
     }
 
     public Integer getWechatFee() {

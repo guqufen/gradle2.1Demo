@@ -26,6 +26,7 @@ import net.fnsco.order.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.order.api.dto.MerTerminalsDTO;
 import net.fnsco.order.api.dto.MerchantDTO;
 import net.fnsco.order.api.dto.PosDetailDTO;
+import net.fnsco.order.api.dto.PosInfoDTO;
 import net.fnsco.order.api.dto.PosListDTO;
 import net.fnsco.order.api.dto.TerminalDetailDTO;
 import net.fnsco.order.api.dto.TerminalInfoDTO;
@@ -315,6 +316,16 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         mecord.setPosName(terminalJO.getPosName());
         return merchantPosDao.updateByPrimaryKeySelective(mecord)> 0 ?true:false;
         
+    }
+    /**
+     * (non-Javadoc)查询用户下所有的POS列表 不带商户信息的
+     * @see net.fnsco.order.api.merchant.MerchantService#getAllReportPos(net.fnsco.order.api.dto.MerchantDTO)
+     * @author tangliang
+     * @date 2017年8月18日 下午5:01:20
+     */
+    @Override
+    public List<PosInfoDTO> getAllReportPos(MerchantDTO merchantDTO) {
+        return merchantPosDao.selectAllByUserId(merchantDTO.getUserId());
     }
 
 }

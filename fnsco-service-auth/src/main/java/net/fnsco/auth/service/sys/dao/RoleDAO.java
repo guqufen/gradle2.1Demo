@@ -40,6 +40,6 @@ public interface RoleDAO {
     
     @Results({@Result( column = "role_id",property = "roleId"),@Result( column = "role_name",property = "roleName"),@Result( column = "dept_id",property = "deptId"),@Result( column = "create_time",property = "createTime") })
     @Select("SELECT * FROM sys_role")
-    public List<RoleDO> query();
+    public List<RoleDO> queryAll();
 
 }

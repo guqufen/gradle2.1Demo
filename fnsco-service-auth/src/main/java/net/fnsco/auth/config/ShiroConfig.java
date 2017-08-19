@@ -23,8 +23,8 @@ import net.fnsco.auth.service.oauth.OAuth2Realm;
 /**
  * Shiro配置
  *
- * @author chenshun
- * @email sunlightcs@gmail.com
+ * @author sxfei
+ * @email songxianfei@gmail.com
  * @date 2017-04-20 18:33
  */
 @Configuration

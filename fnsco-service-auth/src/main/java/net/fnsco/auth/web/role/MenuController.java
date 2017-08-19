@@ -1,5 +1,6 @@
 package net.fnsco.auth.web.role;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,11 +77,23 @@ public class MenuController extends BaseController {
 	
 	@RequestMapping(value="delete", method=RequestMethod.POST)
 	@ResponseBody
-	public ResultDTO doDelete(MenuDO menu){
+//	public ResultDTO doDelete(MenuDO menu){
+	public Map<String, Object> doDelete(MenuDO menu){
 		logger.info("开始删除数据 MenuController.doDelete, menu=" + menu.toString());
 		
-		this.menuService.doDelete(menu);
+		MenuDO menuDO = this.menuService.doDelete(menu);
+		Map<String, Object> map = new HashMap<>();
+		//返回的是空的，表示有子菜单
+		if(menuDO == null){
+			map.put("success", false);
+			map.put("message", "请先删除子菜单");
+			return map;
+		}
 		
-		return success(menu);
+		map.put("success", true);
+		map.put("message", "删除成功");
+		
+//		return success(menu);
+		return map;
 	}
 }
