@@ -32,7 +32,7 @@ public class MerchantPosJO extends JO {
     //POS机子信息
     public MerchantPos toMerchantPos() {
         MerchantPos merchantPos = new MerchantPos();
-        merchantPos.setId(id);
+        merchantPos.setId(posId);
         merchantPos.setPosName(posName);
         merchantPos.setSnCode(snCode);
         merchantPos.setBankId(bankId);
@@ -88,26 +88,27 @@ public class MerchantPosJO extends JO {
 
     private Integer alipayFee;
 
+
     /**
-     * id
+     * posId
      *
-     * @return  the id
+     * @return  the posId
      * @since   CodingExample Ver 1.0
     */
-
-    public Integer getId() {
-        return id;
+    
+    public Integer getPosId() {
+        return posId;
     }
 
     /**
-     * id
+     * posId
      *
-     * @param   id    the id to set
+     * @param   posId    the posId to set
      * @since   CodingExample Ver 1.0
      */
-
-    public void setId(Integer id) {
-        this.id = id;
+    
+    public void setPosId(Integer posId) {
+        this.posId = posId;
     }
 
     /**
