@@ -285,7 +285,8 @@ function operateFormatter(value, row, index) {
 				'<a class="redact" href="javascript:stopData(' + row.id + ');" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
 				.join('');
 	} else
-		 return "<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>";
+		 return ['<a class="redact" style="visibility:hidden;" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>"]
+	.join('');
 }
 // 表格中删除按钮事件
 function delete_btn_event(td_obj) {

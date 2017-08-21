@@ -14,22 +14,26 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.freamwork.business.UserService;
 import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
+import net.fnsco.freamwork.spring.SpringUtils;
 
 /**
  * oauth2过滤器
  *
- * @author chenshun
- * @email sunlightcs@gmail.com
+ * @author sxfei
+ * @email songxianfei@gmail.com
  * @date 2017-05-20 13:00
  */
 public class OAuth2Filter extends AuthenticatingFilter {
-    public Logger logger = LoggerFactory.getLogger(this.getClass());
+    public Logger       logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
@@ -90,12 +94,21 @@ public class OAuth2Filter extends AuthenticatingFilter {
         if (StringUtils.isBlank(token)) {
             token = httpRequest.getParameter("token");
         }
-        if(StringUtils.isBlank(token)){
+        if (StringUtils.isBlank(token)) {
             HttpSession session = httpRequest.getSession(false);
+            boolean flag = true;
             if (null != session) {
-                WebUserDTO obj = (WebUserDTO)session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
+                WebUserDTO obj = (WebUserDTO) session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
                 if (obj != null) {
                     token = obj.getTokenId();
+                    flag = false;
+                }
+            }
+            if (flag) {
+                UserService userService = (UserService) SpringUtils.getBean("userServiceImpl");
+                WebUserDTO user = userService.getCookieUser(httpRequest);
+                if (null != user) {
+                    token = user.getTokenId();
                 }
             }
         }

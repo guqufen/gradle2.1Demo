@@ -1,6 +1,6 @@
 package net.fnsco.order.controller.web.merchant;
-import java.util.Arrays;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +15,8 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.dto.WebMerchantPosDTO;
 import net.fnsco.order.api.merchant.MerchantPosService;
+import net.fnsco.order.controller.web.merchant.jo.MerchantChannelJO;
+import net.fnsco.order.controller.web.merchant.jo.PosJO;
 import net.fnsco.order.service.domain.MerchantBank;
 
 /**
@@ -41,8 +43,10 @@ public class MerchantPosController extends BaseController {
      */
     @RequestMapping(value ="/toAddPosInfos",method= RequestMethod.POST)
     @ResponseBody
-    public ResultDTO<String> toAddPosInfos(@RequestBody WebMerchantPosDTO[] posInfos){
-        List<WebMerchantPosDTO> params = Arrays.asList(posInfos);
+    public ResultDTO<String> toAddPosInfos(@RequestBody PosJO pos){
+       // List<MerchantChannelJO> temp = Arrays.asList(posInfos);
+    	List<MerchantChannelJO> posInfos =pos.getPoses();
+        List<WebMerchantPosDTO> params = MerchantHelper.toPosDTO(posInfos,pos.getInnerCode());
         ResultDTO<String> result = merchantPosService.savePosInfo(params);
         return result;
     }
@@ -76,7 +80,7 @@ public class MerchantPosController extends BaseController {
      * @date      2017年8月18日 下午5:42:15
      * @return ResultDTO    DOM对象
      */
-    @RequestMapping(value = "/getBankInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/getBankInfo",method = RequestMethod.GET)
     @ResponseBody
     public ResultDTO<List<MerchantBank>> getBankInfo(@RequestParam(value="innerCode") String innerCode){
         if (Strings.isNullOrEmpty(innerCode)) {
