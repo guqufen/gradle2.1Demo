@@ -13,6 +13,8 @@ import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.freamwork.business.WebUserDTO;
+import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.order.api.dto.WebMerchantPosDTO;
 import net.fnsco.order.api.merchant.MerchantPosService;
 import net.fnsco.order.controller.web.merchant.jo.MerchantChannelJO;
@@ -46,7 +48,8 @@ public class MerchantPosController extends BaseController {
     public ResultDTO<String> toAddPosInfos(@RequestBody PosJO pos){
        // List<MerchantChannelJO> temp = Arrays.asList(posInfos);
     	List<MerchantChannelJO> posInfos =pos.getPoses();
-        List<WebMerchantPosDTO> params = MerchantHelper.toPosDTO(posInfos,pos.getInnerCode());
+    	WebUserDTO obj = (WebUserDTO) session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
+        List<WebMerchantPosDTO> params = MerchantHelper.toPosDTO(posInfos,pos.getInnerCode(),obj.getId());
         ResultDTO<String> result = merchantPosService.savePosInfo(params);
         return result;
     }

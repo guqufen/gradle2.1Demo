@@ -41,6 +41,7 @@ public class MerchantPosJO extends JO {
         merchantPos.setChannelId(channelId);
         merchantPos.setPosType(posType);
         merchantPos.setPosFactory(posFactory);
+        merchantPos.setStatus("1");//默认状态正常
         return merchantPos;
     }
 
