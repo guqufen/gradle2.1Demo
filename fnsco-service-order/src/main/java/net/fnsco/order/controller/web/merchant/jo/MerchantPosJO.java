@@ -9,7 +9,7 @@ import net.fnsco.order.service.domain.MerchantPos;
 import net.fnsco.order.service.domain.MerchantTerminal;
 
 public class MerchantPosJO extends JO {
-    private Integer id;
+    private Integer posId;
 
     private String  innerCode;
 
