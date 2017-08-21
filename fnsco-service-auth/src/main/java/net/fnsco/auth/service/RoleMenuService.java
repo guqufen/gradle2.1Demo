@@ -1,6 +1,7 @@
 package net.fnsco.auth.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,20 +57,46 @@ public class RoleMenuService extends BaseService {
 
 		return result;
 	}
-	
+
 	public List<Long> queryByRoleId(Long roleId) {
-		
-		//通过角色ID查找对应菜单ID
+
+		// 通过角色ID查找对应菜单ID
 		RoleMenuDO roleMenuDO = new RoleMenuDO();
 		roleMenuDO.setRoleId(roleId);
 		List<RoleMenuDO> list = roleMenuDAO.query(roleMenuDO);
-		
-		//将菜单ID放入集合
+
+		// 将菜单ID放入集合
 		List<Long> roleMenuList = new ArrayList<Long>();
 		for (RoleMenuDO roleMenu : list) {
 			roleMenuList.add(roleMenu.getMenuId());
 		}
-		
+
+		return roleMenuList;
+	}
+
+	// 通过角色ID列表，查询对应菜单列表(去重)
+	public List<Long> queryByRoleIdList(List<Integer> roleIdList) {
+
+		// 将菜单ID放入集合
+		List<Long> roleMenuList = new ArrayList<Long>();
+
+		for (Integer roleId : roleIdList) {
+			// 通过角色ID查找对应菜单ID
+			RoleMenuDO roleMenuDO = new RoleMenuDO();
+			roleMenuDO.setRoleId(roleId.longValue());
+			List<RoleMenuDO> list = roleMenuDAO.query(roleMenuDO);
+
+			// 将查询出来的menuList放入List，然后返回
+			for (RoleMenuDO roleMenu : list) {
+				roleMenuList.add(roleMenu.getMenuId());
+			}
+		}
+
+		// 菜单ID去重
+		HashSet hash = new HashSet(roleMenuList);
+		roleMenuList.clear();
+		roleMenuList.addAll(hash);
+
 		return roleMenuList;
 	}
 }

@@ -1,6 +1,5 @@
 package net.fnsco.auth.web.role;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 

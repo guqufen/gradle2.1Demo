@@ -1,14 +1,16 @@
 package net.fnsco.auth.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.auth.service.sys.dao.MenuDAO;
+import net.fnsco.auth.service.sys.dao.UserRoleDAO;
 import net.fnsco.auth.service.sys.entity.MenuDO;
-
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
 
@@ -20,6 +22,9 @@ public class MenuService extends BaseService {
 
 	@Autowired
 	private RoleMenuService roleMenuService;
+
+	@Autowired
+	private UserRoleDAO userRoleDAO;
 
 	public ResultPageDTO<MenuDO> pageList(MenuDO menu, Integer page, Integer rows) {
 		logger.info("开始分页查询MenuService.page, role=" + menu.toString());
@@ -110,5 +115,44 @@ public class MenuService extends BaseService {
 		this.roleMenuService.deleteByMenuId(menu.getId());
 
 		return menu;
+	}
+
+	// 通过用户ID查询用户角色，听过用户角色对应菜单ID，查询对应菜单并返回
+	/**
+	 * 1、用户ID找到角色ID(一对多)，
+	 * 2、角色ID找到菜单ID(多对多)，
+	 * 3、菜单ID找到菜单Obj(多对多)
+	 * 
+	 * @param userId：用户ID
+	 * @return
+	 */
+	public ResultPageDTO<MenuDO> userMenuist(Integer userId) {
+
+		//1、 通过用户ID查询用户角色ID列表,用户角色表，一对多;如果没找到角色列表，返回空
+		List<Integer> list = this.userRoleDAO.getByUserId(userId);
+		if(list.size() == 0){
+			return null;
+		}
+
+		//2、  通过角色ID列表查询角色对应菜单ID列表,角色菜单表，多对多;没找到对应菜单列表，返回空
+		List<Long> menuList = this.roleMenuService.queryByRoleIdList(list);
+		if(menuList.size() == 0){
+			return null;
+		}
+
+		//3、 通过菜单ID查询菜单Obj，遍历;如果没找到菜单，返回空
+		List<MenuDO> pageList = new ArrayList<>();
+		for (Long menuId : menuList) {
+			MenuDO menuDO = menuDAO.getById(menuId.intValue());
+			//去掉空和按钮
+			if(null != menuDO && menuDO.getType() != 2){
+				pageList.add(menuDO);
+			}
+		}
+		if( pageList.size() == 0){
+			return null;
+		}
+		ResultPageDTO<MenuDO> pager = new ResultPageDTO<MenuDO>(list.size(), pageList);
+		return pager;
 	}
 }

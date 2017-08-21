@@ -30,6 +30,7 @@ public class RoleService extends BaseService {
 	public ResultPageDTO<RoleDO> pageList(RoleDO role, Integer page, Integer rows) {
 		logger.info("开始分页查询RoleService.page, role=" + role.toString() + ",page=" + page + ",rows=" + rows);
 		List<RoleDO> pageList = roleDAO.pageList(role, page, rows);
+		
 		for (RoleDO roleDO : pageList) {
 			
 			//给部门名称赋值
