@@ -25,7 +25,7 @@ public class TomcatApplication extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(TomcatApplication.class);
     }
-    
+
     public static void main(String[] args) {
         SpringApplication.run(TomcatApplication.class, args);
     }
@@ -40,6 +40,7 @@ public class TomcatApplication extends SpringBootServletInitializer {
         registration.setOrder(1);
         return registration;
     }
+
     //    @Bean
     //    AppAuthorizeFilter getAppAuthorizeFilter() {
     //        return new AppAuthorizeFilter();
@@ -60,5 +61,20 @@ public class TomcatApplication extends SpringBootServletInitializer {
     //        servletListenerRegistrationBean.setListener(new IndexListener());
     //        return servletListenerRegistrationBean;
     //    }
-
+    
+    //    @Bean
+    //    public EmbeddedServletContainerCustomizer containerCustomizer() {
+    //
+    //        return new EmbeddedServletContainerCustomizer() {
+    //            @Override
+    //            public void customize(ConfigurableEmbeddedServletContainer container) {
+    //
+    //                ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/401.html");
+    //                ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/404.html");
+    //                ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500.html");
+    //
+    //                container.addErrorPages(error401Page, error404Page, error500Page);
+    //            }
+    //        };
+    //    }
 }

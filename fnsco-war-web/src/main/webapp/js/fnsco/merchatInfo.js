@@ -530,6 +530,7 @@ function clickFileBtn(){
    fileUp('301_1');
    fileUp('4_1');
    fileUp('6_1');
+   fileUp('601_1');
    fileUp('7_1');
    fileUp('8_1');
    fileUp('900_1');
@@ -1020,7 +1021,7 @@ function saveBankCardParams(conId){
     success:function(data){
     	unloginHandler(data);
       layer.msg(data.message);
-      $("#myModal").hide();
+      // $("#myModal").hide();
       queryEvent("table");
     },
     error:function(){
@@ -1031,11 +1032,11 @@ function saveBankCardParams(conId){
 //保存银行卡数据
 $("#btn_saveBankCard").click(function(){
   saveBankCardParams('bankCard-con');
-  $('body').removeClass('modal-open');
-  $("#myModal").find('.tab-pane').removeClass("active");
-  $("#home").addClass("active");
-  $("#myModal .nav-tabs li").removeClass("active");
-  $("#myModal .nav-tabs li:first-child").addClass("active");
+  // $('body').removeClass('modal-open');
+  // $("#myModal").find('.tab-pane').removeClass("active");
+  // $("#home").addClass("active");
+  // $("#myModal .nav-tabs li").removeClass("active");
+  // $("#myModal .nav-tabs li:first-child").addClass("active");
 })
 
 
@@ -1076,6 +1077,7 @@ function editData(id){
         $('#view301_1').html('');
         $('#view4_1').html('');
         $('#view6_1').html('');
+        $('#view601_1').html('');
         $('#view7_1').html('');
         $('#view8_1').html('');
         $('#view900_1').html('');
@@ -1361,6 +1363,7 @@ function detailsData(id){
         $('#view301_2').html('');
         $('#view4_2').html('');
         $('#view6_2').html('');
+        $('#view601_2').html('');
         $('#view7_2').html('');
         $('#view8_2').html('');
         $('#view900_2').html('');

@@ -128,9 +128,9 @@ public class RoleService extends BaseService {
 		return roleDO;
 	}
 
-	 public List<RoleDO> queryType() {
+	 public List<RoleDO> queryRole() {
 			 //返回根据条件查询的所有记录条数
-			 List<RoleDO> data = roleDAO.query();
+			 List<RoleDO> data = roleDAO.queryAll();
 
 		     return data;
 	 }
