@@ -23,20 +23,24 @@
                 <div class="row col-sm-10">
                     <div class="col-sm-4">
                         <label class="control-label" for="txt_search_id">订单号:</label>
-                        <input type="text" class="form-control" id="txt_search_id" name="orderNo">
+                        <input type="text" class="form-control" id="txt_search_id" name="orderNo" placeholder="请输入需要搜索的订单号">
                     </div>
                     <div class="col-sm-4">
                         <label class="control-label" for="txt_search_name">商户号:</label>
-                        <input type="text" class="form-control" id="txt_search_name" name="merId"/>
+                        <input type="text" class="form-control" id="txt_search_name" name="merId" placeholder="请输入需要搜索的结算商户号"/>
                     </div>
                     <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_price">交易金额:</label>
-                        <input type="text" class="form-control" id="txt_search_price" name="amt"/>
+                        <label class="control-label" for="txt_search_price">商户名称:</label>
+                        <input type="text" class="form-control" id="merName" name="merName" placeholder="请输入需要搜索的商户名称"/>
                     </div>
                     <div class="col-sm-8 query-time">
                         <label class="control-label" for="txt_search_price">发送日期:</label>
                         <input type="text" value="" class="form-control" id="datetimepicker1" name="startSendTime"> -
                         <input type="text" value="" class="form-control" id="datetimepicker2" name="endSendTime">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label" for="txt_search_price">交易金额:</label>
+                        <input type="text" class="form-control" id="txt_search_price" name="amt" placeholder="请输入需要搜索的金额"/>
                     </div>
                 </div>
                 <div class="col-sm-2" style="text-align: right;">
@@ -105,7 +109,7 @@
             title: '商户名'
         },{
             field: 'merId',
-            title: '商户号'
+            title: '结算商户号'
         },{
             field: 'timeStamp',
             title: '交易时间',
@@ -239,6 +243,7 @@
  			   pageSize : this.pageSize,
  			   orderNo :$('#txt_search_id').val(),
  			   merId:$('#txt_search_name').val(),
+ 			   merName:$('#merName').val(),
  			   amt:$('#txt_search_price').val(),
  			   startSendTime:$('#datetimepicker1').val(),
  			  endSendTime:$('#datetimepicker2').val()

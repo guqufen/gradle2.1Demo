@@ -36,6 +36,29 @@ public class TradeDataDTO extends DTO {
 
     private String cardNo;       //卡号
     private String cardOrg;      // :卡组织，00 境内借记卡 ；01 境内贷记卡 ； 60 境外借记卡 ； 61 境外贷记卡
+    private String merName;       //商户名称
+    
+    /**
+     * merName
+     *
+     * @return  the merName
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getMerName() {
+        return merName;
+    }
+
+    /**
+     * merName
+     *
+     * @param   merName    the merName to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setMerName(String merName) {
+        this.merName = merName;
+    }
 
     /**
      * cardOrg
