@@ -37,6 +37,7 @@ public class DeptManageController extends BaseController {
 	 */
 	@RequestMapping(value = "/query", method = RequestMethod.GET)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:dept:info"})
 	public ResultDTO<DeptDO> query(DeptDO dept, @RequestParam("currentPageNum") Integer pageNum,
 			@RequestParam("pageSize") Integer pageSize) {
 		ResultPageDTO<DeptDO> result = sysDeptService.queryList(dept, pageNum, pageSize);
@@ -63,6 +64,7 @@ public class DeptManageController extends BaseController {
 	 */
 	@RequestMapping(value = "/toAdd", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:dept:save"})
 	public ResultDTO<String> toAdd(DeptDO dept) {
 		sysDeptService.doAddDept(dept);
 		return ResultDTO.successForSave(null);
@@ -76,6 +78,7 @@ public class DeptManageController extends BaseController {
 	 */
 	@RequestMapping(value = "/toEdit", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:dept:update"})
 	public ResultDTO<String> toEdit(DeptDO dept) {
 		ResultDTO<String> result = sysDeptService.toEditDept(dept);
 		return result;
@@ -102,6 +105,7 @@ public class DeptManageController extends BaseController {
 	 */
 	@RequestMapping(value = "/deleteDeptById", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:dept:delete"})
 	public ResultDTO<String> deleteDeptById(@RequestParam(value = "id[]") Integer[] id) {
 		ResultDTO<String> result = sysDeptService.deleteById(id);
 		return result;
