@@ -15,6 +15,6 @@ public class CodeGen {
         //auto.init("net.fnsco.auth", "sys", "sys_role_menu");
         //auto.init("net.fnsco.auth", "sys", "sys_role_dept");
         //auto.init("net.fnsco.auth", "sys", "sys_menu");
-        auto.init("net.fnsco.auth", "sys", "sys_user_token");
+        auto.init("net.fnsco.auth", "sys", "sys_role");
     }
 }

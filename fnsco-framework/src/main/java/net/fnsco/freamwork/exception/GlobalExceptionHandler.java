@@ -2,6 +2,7 @@ package net.fnsco.freamwork.exception;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -24,7 +25,18 @@ public class GlobalExceptionHandler {
         logger.error("业务处理异常", exception);
         Result result = new Result();
         result.setCode(FrameworkConstant.E_SYSTEM_EXCEPTION);
-        result.setMessage(FrameworkConstant.ERROR_MESSGE_MAP.get(FrameworkConstant.E_SYSTEM_EXCEPTION)+exception.getMessage());
+        result.setMessage(FrameworkConstant.ERROR_MESSGE_MAP.get(FrameworkConstant.E_SYSTEM_EXCEPTION) + exception.getMessage());
+        result.setSuccess(false);
+        return result;
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public Object handleAuthorizationException(AuthorizationException e) {
+        logger.error("没有权限，请联系管理员授权", e);
+        //"没有权限，请联系管理员授权");
+        Result result = new Result();
+        result.setCode(FrameworkConstant.E_NOT_AUTHORIZED);
+        result.setMessage(FrameworkConstant.ERROR_MESSGE_MAP.get(FrameworkConstant.E_NOT_AUTHORIZED));
         result.setSuccess(false);
         return result;
     }

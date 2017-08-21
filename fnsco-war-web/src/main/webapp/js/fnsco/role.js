@@ -66,7 +66,7 @@ function initTableData() {
 // 处理后台返回数据
 function responseHandler(res) {
 	unloginHandler(res);
-	if (res) {
+	if (res.data) {
 		return {
 			"rows" : res.data.list,
 			"total" : res.data.total
@@ -393,6 +393,12 @@ function saveOrUpdate() {
 	//角色名称  校验，不能为空
 	if (!$('#roleName').val()) {
 		layer.msg('请输入有效角色名称!');
+		return;
+	}
+	
+	//部门选择不能为空
+	if(!$('#deptId').val()){
+		layer.msg('请选择部门!');
 		return;
 	}
 
