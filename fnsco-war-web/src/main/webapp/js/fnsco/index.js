@@ -1,7 +1,5 @@
 $(document).ready(function() {
 var menu = $('#side-menu');
-	console.log(menu.html());
-
 	// 组包发给后台
 	$.ajax({
 		type : 'POST',

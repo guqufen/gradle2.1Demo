@@ -102,7 +102,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
             if(null != merChannel){
                 if(null != merChannel.getId()){
                     merchantChannelDao.updateByPrimaryKeySelective(merChannel);
-                    updatePosInfoToDB(webMerchantPosDTO.getPosInfos());
+                    updatePosInfoToDB(webMerchantPosDTO.getPosInfos(),merChannel.getId());
                 }else{
                     merchantChannelDao.insertSelective(merChannel);
                     if(null != merChannel.getId()){
@@ -123,10 +123,11 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
      * @return void    DOM对象
      */
     @Transactional
-    private void updatePosInfoToDB(List<WebMerchantTerminalDTO> posInfos){
+    private void updatePosInfoToDB(List<WebMerchantTerminalDTO> posInfos,Integer channelId){
         for (WebMerchantTerminalDTO webMerchantTerminalDTO : posInfos) {
             MerchantPos merchantPos = webMerchantTerminalDTO.getMerchantPos();
             if(null != merchantPos){
+                merchantPos.setChannelId(channelId);
                 if(null != merchantPos.getId()){
                     this.updateByPrimaryKeySelective(merchantPos);
                 }else{
