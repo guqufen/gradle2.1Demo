@@ -116,7 +116,7 @@
             formatter:formatPayType
         },{
             field: 'amt',
-            title: '交易金额',
+            title: '交易金额(元)',
             formatter:formatAmt
         },{
             field: 'orderTime',
@@ -188,6 +188,10 @@
   } 
   //金额格式化
   function formatAmt(value, row, index){
+	  if(value){
+		  var num = Number(value);
+		  return num/100;
+	  }
 	  return value;
   }
   //时间格式化
