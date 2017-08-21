@@ -20,7 +20,6 @@
     <result column="record_state" property="recordState" jdbcType="VARCHAR" />
     <result column="term_audit_state" property="termAuditState" jdbcType="VARCHAR" />
     <result column="term_name" property="termName" jdbcType="VARCHAR" />
-    <result column="merc_refer_name" property="mercReferName" jdbcType="VARCHAR" />
     <result column="wechat_fee" property="wechatFee" jdbcType="INTEGER" />
     <result column="alipay_fee" property="alipayFee" jdbcType="INTEGER" />
     <result column="terminal_type" property="terminalType" jdbcType="VARCHAR" />
@@ -42,7 +41,7 @@
     id, inner_code, pos_id, terminal_code, inner_term_code, terminal_batch, terminal_para, 
     charges_type, debit_card_rate, credit_card_rate, debit_card_fee, credit_card_fee, 
     debit_card_max_fee, credit_card_max_fee, deal_switch, record_state, term_audit_state, 
-    term_name, merc_refer_name, wechat_fee, alipay_fee, terminal_type
+    term_name, wechat_fee, alipay_fee, terminal_type
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -61,16 +60,14 @@
       credit_card_rate, debit_card_fee, credit_card_fee, 
       debit_card_max_fee, credit_card_max_fee, deal_switch, 
       record_state, term_audit_state, term_name, 
-      merc_refer_name, wechat_fee, alipay_fee, 
-      terminal_type)
+      wechat_fee, alipay_fee, terminal_type)
     values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{posId,jdbcType=INTEGER}, 
       #{terminalCode,jdbcType=VARCHAR}, #{innerTermCode,jdbcType=VARCHAR}, #{terminalBatch,jdbcType=VARCHAR}, 
       #{terminalPara,jdbcType=VARCHAR}, #{chargesType,jdbcType=INTEGER}, #{debitCardRate,jdbcType=VARCHAR}, 
       #{creditCardRate,jdbcType=VARCHAR}, #{debitCardFee,jdbcType=INTEGER}, #{creditCardFee,jdbcType=INTEGER}, 
       #{debitCardMaxFee,jdbcType=INTEGER}, #{creditCardMaxFee,jdbcType=INTEGER}, #{dealSwitch,jdbcType=VARCHAR}, 
       #{recordState,jdbcType=VARCHAR}, #{termAuditState,jdbcType=VARCHAR}, #{termName,jdbcType=VARCHAR}, 
-      #{mercReferName,jdbcType=VARCHAR}, #{wechatFee,jdbcType=INTEGER}, #{alipayFee,jdbcType=INTEGER}, 
-      #{terminalType,jdbcType=VARCHAR})
+      #{wechatFee,jdbcType=INTEGER}, #{alipayFee,jdbcType=INTEGER}, #{terminalType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantTerminal" >
     insert into m_merchant_terminal
@@ -128,9 +125,6 @@
       </if>
       <if test="termName != null" >
         term_name,
-      </if>
-      <if test="mercReferName != null" >
-        merc_refer_name,
       </if>
       <if test="wechatFee != null" >
         wechat_fee,
@@ -196,9 +190,6 @@
       </if>
       <if test="termName != null" >
         #{termName,jdbcType=VARCHAR},
-      </if>
-      <if test="mercReferName != null" >
-        #{mercReferName,jdbcType=VARCHAR},
       </if>
       <if test="wechatFee != null" >
         #{wechatFee,jdbcType=INTEGER},
@@ -266,9 +257,6 @@
       <if test="termName != null" >
         term_name = #{termName,jdbcType=VARCHAR},
       </if>
-      <if test="mercReferName != null" >
-        merc_refer_name = #{mercReferName,jdbcType=VARCHAR},
-      </if>
       <if test="wechatFee != null" >
         wechat_fee = #{wechatFee,jdbcType=INTEGER},
       </if>
@@ -300,7 +288,6 @@
       record_state = #{recordState,jdbcType=VARCHAR},
       term_audit_state = #{termAuditState,jdbcType=VARCHAR},
       term_name = #{termName,jdbcType=VARCHAR},
-      merc_refer_name = #{mercReferName,jdbcType=VARCHAR},
       wechat_fee = #{wechatFee,jdbcType=INTEGER},
       alipay_fee = #{alipayFee,jdbcType=INTEGER},
       terminal_type = #{terminalType,jdbcType=VARCHAR}
@@ -360,8 +347,7 @@
       credit_card_rate, debit_card_fee, credit_card_fee, 
       debit_card_max_fee, credit_card_max_fee, deal_switch, 
       record_state, term_audit_state, term_name, 
-      merc_refer_name, wechat_fee, alipay_fee, 
-      terminal_type)
+      wechat_fee, alipay_fee, terminal_type)
     values 
    	   <foreach collection ="list" item="terMinal" index= "index" separator =",">
    	   (#{terMinal.id,jdbcType=INTEGER}, #{terMinal.innerCode,jdbcType=VARCHAR}, #{terMinal.posId,jdbcType=INTEGER}, 
@@ -370,8 +356,7 @@
       #{terMinal.creditCardRate,jdbcType=VARCHAR}, #{terMinal.debitCardFee,jdbcType=INTEGER}, #{terMinal.creditCardFee,jdbcType=INTEGER}, 
       #{terMinal.debitCardMaxFee,jdbcType=INTEGER}, #{terMinal.creditCardMaxFee,jdbcType=INTEGER}, #{terMinal.dealSwitch,jdbcType=VARCHAR}, 
       #{terMinal.recordState,jdbcType=VARCHAR}, #{terMinal.termAuditState,jdbcType=VARCHAR}, #{terMinal.termName,jdbcType=VARCHAR}, 
-      #{terMinal.mercReferName,jdbcType=VARCHAR}, #{terMinal.wechatFee,jdbcType=INTEGER}, #{terMinal.alipayFee,jdbcType=INTEGER}, 
-      #{terMinal.terminalType,jdbcType=VARCHAR})
+      #{terMinal.wechatFee,jdbcType=INTEGER}, #{terMinal.alipayFee,jdbcType=INTEGER}, #{terMinal.terminalType,jdbcType=VARCHAR})
       </foreach>
 	</insert>
 	<!-- 根据channelID删除数据 -->

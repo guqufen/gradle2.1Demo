@@ -17,6 +17,7 @@ import net.fnsco.order.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.order.api.dto.MerTerminalsDTO;
 import net.fnsco.order.api.dto.MerchantDTO;
 import net.fnsco.order.api.dto.PosDetailDTO;
+import net.fnsco.order.api.dto.PosInfoDTO;
 import net.fnsco.order.api.dto.PosListDTO;
 import net.fnsco.order.api.dto.TerminalDetailDTO;
 import net.fnsco.order.api.dto.TerminalsDTO;
@@ -207,4 +208,21 @@ public class AppMerchantController extends BaseController {
         return ResultDTO.success();
     }
     
+    /**
+     * getAllReportPos:(这里用一句话描述这个方法的作用)筛选页面获取所有POS列表
+     * @param merchant
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月18日 下午5:02:32
+     * @return ResultDTO<List<PosInfoDTO>>    DOM对象
+     */
+    @RequestMapping(value = "/getAllReportPos")
+    @ApiOperation(value = "APP用户查询筛选页面POS机信息列表")
+    public ResultDTO<List<PosInfoDTO>> getAllReportPos(@RequestBody MerchantDTO merchant){
+        if(null == merchant.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+        List<PosInfoDTO> dates = merchantService.getAllReportPos(merchant);
+        return ResultDTO.success(dates);
+    }
 }

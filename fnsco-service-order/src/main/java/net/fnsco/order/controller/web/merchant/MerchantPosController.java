@@ -1,6 +1,7 @@
 package net.fnsco.order.controller.web.merchant;
 import java.util.Arrays;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,10 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.common.base.Strings;
+
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.dto.WebMerchantPosDTO;
 import net.fnsco.order.api.merchant.MerchantPosService;
+import net.fnsco.order.controller.web.merchant.jo.MerchantChannelJO;
+import net.fnsco.order.service.domain.MerchantBank;
 
 /**
  * @desc Pos相关业务控制器
@@ -37,8 +43,9 @@ public class MerchantPosController extends BaseController {
      */
     @RequestMapping(value ="/toAddPosInfos",method= RequestMethod.POST)
     @ResponseBody
-    public ResultDTO<String> toAddPosInfos(@RequestBody WebMerchantPosDTO[] posInfos){
-        List<WebMerchantPosDTO> params = Arrays.asList(posInfos);
+    public ResultDTO<String> toAddPosInfos(@RequestBody MerchantChannelJO[] posInfos){
+        List<MerchantChannelJO> temp = Arrays.asList(posInfos);
+        List<WebMerchantPosDTO> params = MerchantHelper.toPosDTO(temp);
         ResultDTO<String> result = merchantPosService.savePosInfo(params);
         return result;
     }
@@ -62,5 +69,23 @@ public class MerchantPosController extends BaseController {
             return ResultDTO.fail();
         }
         return ResultDTO.success();
+    }
+    
+    /**
+     * getPosInfo:(这里用一句话描述这个方法的作用)获取所有银行卡信息
+     * @param innerCode
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月18日 下午5:42:15
+     * @return ResultDTO    DOM对象
+     */
+    @RequestMapping(value = "/getBankInfo",method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO<List<MerchantBank>> getBankInfo(@RequestParam(value="innerCode") String innerCode){
+        if (Strings.isNullOrEmpty(innerCode)) {
+            return ResultDTO.fail();
+        }
+        List<MerchantBank> datas = merchantPosService.queryWebByInnerCode(innerCode);
+        return ResultDTO.success(datas);
     }
 }

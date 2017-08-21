@@ -109,6 +109,8 @@ public class UserService extends BaseService {
      */
     @Transactional
     public void doAddUser(UserDO user) {
+    	String psw=Md5Util.getInstance().md5(user.getPassword());
+    	user.setPassword(psw);
         user.setModifyTime(new Date());
         userDAO.insert(user);
         List<Integer> list = user.getRoleList();

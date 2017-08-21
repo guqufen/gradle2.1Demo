@@ -28,8 +28,32 @@ public class MerchantPos {
     
     private Integer bankId;
     
+    private String mercReferName;
+    
     private List<MerchantTerminal> terminal;//POS机下终端信息
     
+    /**
+     * mercReferName
+     *
+     * @return  the mercReferName
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getMercReferName() {
+        return mercReferName;
+    }
+
+    /**
+     * mercReferName
+     *
+     * @param   mercReferName    the mercReferName to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setMercReferName(String mercReferName) {
+        this.mercReferName = mercReferName;
+    }
+
     /**
      * bankId
      *
