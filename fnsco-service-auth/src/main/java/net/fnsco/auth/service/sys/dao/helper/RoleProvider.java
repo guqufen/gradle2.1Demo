@@ -19,9 +19,6 @@ public class RoleProvider {
         RoleDO role = (RoleDO) params.get("role");
         return new SQL() {{
         UPDATE(TABLE_NAME);
-        if (role.getRoleId() != null) {
-            SET("role_id=#{role.roleId}");
-        }
         if (StringUtils.isNotBlank(role.getRoleName())){
             SET("role_name=#{role.roleName}");
         }

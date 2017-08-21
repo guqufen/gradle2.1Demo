@@ -358,6 +358,11 @@
      <include refid="Base_Column_List" />
    	 from t_trade_data
    	 <where>
+	  <if test="condition.merName != null and condition.merName !=''" >
+        AND inner_code in (
+           SELECT inner_code FROM m_merchant_core WHERE mer_name LIKE CONCAT('%',#{condition.merName},'%')
+        )
+      </if>
    	    <if test="condition.innerCode != null and condition.innerCode !=''" >
         AND inner_code = #{condition.innerCode,jdbcType=VARCHAR}
       </if>
@@ -532,6 +537,11 @@
      select count(*)  from 
      		t_trade_data
      <where>
+      <if test="merName != null and merName !=''" >
+        AND inner_code in (
+           SELECT inner_code FROM m_merchant_core WHERE mer_name LIKE CONCAT('%',#{merName},'%')
+        )
+      </if>
    	    <if test="innerCode != null and innerCode != ''" >
         AND inner_code = #{innerCode,jdbcType=VARCHAR}
       </if>

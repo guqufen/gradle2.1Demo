@@ -25,7 +25,7 @@ public interface UserDAO {
     
     @Results({ @Result(column = "real_name", property = "realName"), @Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),
                @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
-    @Select("SELECT * FROM sys_user WHERE name=#{name} and password = #{password}")
+    @Select("SELECT * FROM sys_user WHERE name=#{name} and password = #{password} and status ='1' ")
     public UserDO getByUserName(@Param("name") String name, @Param("password") String password);
 
     @Results({ @Result(column = "real_name", property = "realName"), @Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),

@@ -6,6 +6,7 @@ function unloginHandler(result){
 	if(result.code && result.code == '4012'){
 		layer.msg('登录失效,去登录');
 		window.location="login.html";
+		window.top.location="login.html";
 	}
 }
 //日期格式化

@@ -37,43 +37,45 @@ function initTableData() {
 			radio: 'true',//单选框
 			rowspan : 1,
 			align : 'center',
+			width : 20,
 			valign : 'middle'
 		}, {
 			field : 'id',
 			title : '菜单ID',
 			width : '10%',
 			align : 'center',
-			width : 20
+			width : 40
 		}, {
 			width : 100,
 			field : 'name',
 			title : '菜单名称',
-			width : 60
+			width : 80
 		}, {
 			field : 'parentName',
 			title : '上级菜单',
-			width : 60
+			width : 80
 		}, {
 			field : 'icon',
 			title : '图标',
+			width : 40,
 			formatter:formatIcon
 		}, {
 			field : 'type',
 			title : '类型',
+			width : 40,
 			formatter:formatType
 		}, {
 			field : 'orderNum',
 			title : '排序号',
-			width : 30
+			width : 40
 		} 
 		, {
 			field : 'url',
 			title : '菜单URL',
-			width : 30
+			width : 60
 		}, {
 			field : 'perms',
-			title : '授权标识',
-			width : 30
+			title : '授权标识'
 		}]
 	});
 }
@@ -81,7 +83,7 @@ function initTableData() {
 // 处理后台返回数据
 function responseHandler(res) {
 	unloginHandler(res);
-	if (res) {
+	if (res.data) {
 		return {
 			"rows" : res.data.list,
 			"total" : res.data.total
@@ -191,7 +193,7 @@ function getMenuTree(id){
 				}
 			}
 		};
-	
+
 	// 组包发给后台
 	$.ajax({
 		type : 'POST',
@@ -355,12 +357,13 @@ function saveOrUpdate() {
 
 	var id = $('#id').val();
 	var url;
-	//如果ID为空，则表示新增数据,否则为修改
+	//如果当前菜单ID为空，则表示新增数据,否则为修改
 	if(id == ""){
 		url = "/web/auth/menu/add";
 	}else{
 		url="/web/auth/menu/update";
 	}
+	
 	//角色名称  校验，不能为空
 	if (!$('#menuName').val()) {
 		layer.msg('请输入有效菜单名称!');

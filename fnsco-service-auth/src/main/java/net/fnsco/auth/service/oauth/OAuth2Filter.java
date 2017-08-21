@@ -58,7 +58,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
         String token = getRequestToken((HttpServletRequest) request);
         if (StringUtils.isBlank(token)) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
-            String json = JSON.toJSONString(ResultDTO.fail("token不存在"));
+            String json = JSON.toJSONString(ResultDTO.fail(FrameworkConstant.E_NOT_LOGIN));//"token不存在"
             httpResponse.setContentType("application/json;charset=utf-8");
             httpResponse.getWriter().print(json);
             logger.error("session不存在或页面未传入token值");
@@ -74,7 +74,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
         httpResponse.setContentType("application/json;charset=utf-8");
         try {
             //处理登录失败的异常
-            String json = JSON.toJSONString(ResultDTO.fail("登录异常"));
+            String json = JSON.toJSONString(ResultDTO.fail(FrameworkConstant.E_NOT_LOGIN));//"登录异常"));
             httpResponse.getWriter().print(json);
         } catch (IOException e1) {
             logger.error("登录处理异常", e1);

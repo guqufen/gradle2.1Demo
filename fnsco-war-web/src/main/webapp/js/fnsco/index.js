@@ -5,7 +5,7 @@ var menu = $('#side-menu');
 	// 组包发给后台
 	$.ajax({
 		type : 'POST',
-		url : PROJECT_NAME + "/web/auth/menu/select",
+		url : PROJECT_NAME + "/web/auth/menu/userMenuist",
 		async: false,//同步加载
 		success : function(data) {
 			if (data.success) {
