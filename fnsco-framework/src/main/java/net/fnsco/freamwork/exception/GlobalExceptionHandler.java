@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthorizationException.class)
     public Object handleAuthorizationException(AuthorizationException e) {
-        logger.error(e.getMessage(), e);
+        logger.error("没有权限，请联系管理员授权", e);
         //"没有权限，请联系管理员授权");
         Result result = new Result();
         result.setCode(FrameworkConstant.E_NOT_AUTHORIZED);
