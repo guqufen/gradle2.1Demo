@@ -15,6 +15,7 @@ public class FrameworkConstant {
     public static String              E_TOKEN_ERROR      = "4011";
     public static String              E_NOT_LOGIN        = "4012";
     public static String              E_FORCED_LOGIN_OUT = "4014";
+    public static String              E_NOT_AUTHORIZED   = "4015";
     public static String              E_SYSTEM_EXCEPTION = "5000";
     public static Map<String, String> ERROR_MESSGE_MAP   = Maps.newHashMap();
     static {
@@ -23,5 +24,6 @@ public class FrameworkConstant {
         ERROR_MESSGE_MAP.put(E_NOT_LOGIN, "session已失效，请重新登录");
         ERROR_MESSGE_MAP.put(E_SYSTEM_EXCEPTION, "系统未处理的异常");
         ERROR_MESSGE_MAP.put(E_FORCED_LOGIN_OUT, "当前用户需要强制退出");
+        ERROR_MESSGE_MAP.put(E_NOT_AUTHORIZED, "没有权限，请联系管理员授权");
     }
 }
