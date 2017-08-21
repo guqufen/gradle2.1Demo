@@ -39,6 +39,8 @@ public class MerchantPosJO extends JO {
         merchantPos.setMercReferName(mercReferName);
         merchantPos.setInnerCode(innerCode);
         merchantPos.setChannelId(channelId);
+        merchantPos.setPosType(posType);
+        merchantPos.setPosFactory(posFactory);
         return merchantPos;
     }
 
@@ -50,12 +52,17 @@ public class MerchantPosJO extends JO {
         terminal1.setWechatFee(wechatFee);
         terminal1.setTerminalCode(terminalCode1);
         terminal1.setId(terminalId1);
+        terminal1.setInnerCode(innerCode);
+        terminal1.setTerminalType("01");
         MerchantTerminal terminal2 = new MerchantTerminal();
         terminal2.setDebitCardMaxFee(debitCardMaxFee);
         terminal2.setCreditCardRate(creditCardRate);
         terminal2.setDebitCardRate(debitCardRate);
         terminal2.setTerminalCode(terminalCode2);
+        terminal2.setTerminalType("00");
         terminal2.setId(terminalId2);
+        terminal2.setInnerCode(innerCode);
+        
         terminals.add(terminal1);
         terminals.add(terminal2);
 

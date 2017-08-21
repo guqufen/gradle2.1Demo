@@ -105,16 +105,10 @@
 	            <div class="modal-body">
 	                <ul class="nav nav-tabs" role="tablist">
 	                    <li role="presentation" class="active"><a>基本信息</a></li>
-	                    <!-- <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">资质文件</a></li>
-	                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">联系信息</a></li>
-	                    <li role="presentation"><a href="#terminal_info" aria-controls="terminal_info" role="tab" data-toggle="tab">终端信息</a></li>
-	                    <li role="presentation"><a href="#channel_info" aria-controls="channel_info" role="tab" data-toggle="tab">渠道信息</a></li>
-	                    <li role="presentation"><a href="#bankCard_info" aria-controls="bankCard_info" role="tab" data-toggle="tab">银行卡信息</a></li> -->
 	                    <li role="presentation"><a>银行卡信息</a></li>
 	                    <li role="presentation"><a>资质文件</a></li>
 	                    <li role="presentation"><a>终端信息</a></li>
 	                    <li role="presentation"><a>联系信息</a></li>
-	                    <!-- <li role="presentation"><a>渠道信息</a></li> -->
 	                </ul>
 	                <div class="tab-content">
 	                    <div role="tabpanel" class="tab-pane active" id="home">
@@ -128,10 +122,6 @@
 		                                <label class="control-label" for="abbreviation">简称：</label>
 		                                <input type="text" class="form-control" id="abbreviation" name="abbreviation">
 		                            </div>
-		                            <!-- <div class="col-sm-4">
-		                                <label class="control-label" for="enName">商户名英文名：</label>
-		                                <input type="text" class="form-control" id="enName" name="enName">
-		                            </div> -->
 		                            <div class="col-sm-4">
 		                                <label class="control-label" for="legalPerson">商户法人姓名：</label>
 		                                <input type="text" class="form-control" id="legalPerson" name="legalPerson">
@@ -166,10 +156,6 @@
 		                                <label class="control-label" for="businessLicenseValidTime">营业执照有效期：</label>
 		                                <input type="text" class="form-control" id="businessLicenseValidTime" name="businessLicenseValidTime">
 		                            </div>
-		                            <!-- <div class="col-sm-4">
-		                                <label class="control-label" for="taxRegistCode">税务登记号：</label>
-		                                <input type="text" class="form-control" id="taxRegistCode" name="taxRegistCode">
-		                            </div> -->
 		                            <div class="col-sm-4">
 		                                <label class="control-label" for="registAddress">商户注册地址：</label>
 		                                <input type="text" class="form-control" id="registAddress" name="registAddress">
@@ -343,17 +329,8 @@
 			                    <!-- 联系列表默认js增加 -->
 		                    </div>
 		                    <button id="btn_addContact" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增联系人</button>
-	                        <a class="nextBtn" id="btn_saveContact">保存并下一步</a>
+	                        <a class="saveBtn" id="btn_saveContact">保存</a>
 	                    </div>
-	                    
-	                    <!-- 渠道信息 -->
-	                   <!--  <div role="tabpanel" class="tab-pane" id="channel_info">
-	                    	<div id="channel-con"> -->
-	                    		<!-- 渠道列表默认js增加 -->
-		                    <!-- </div>
-	                        <button id="btn_addChannel" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增渠道</button>
-	                        <a class="nextBtn" id="btn_saveChannel" href="#bankCard_info" aria-controls="bankCard_info" role="tab" data-toggle="tab">保存并下一步</a>
-	                    </div> -->
 	                </div>
 	            </div>
 	            <input type="hidden" id="innerCode" name="innerCode">
@@ -371,12 +348,11 @@
 	            </div>
 	            <div class="modal-body">
 	                <ul class="nav nav-tabs" role="tablist">
-	                    <li role="presentation" class="active"><a href="#home1" aria-controls="home1" role="tab" data-toggle="tab">基本信息</a></li>
-	                    <li role="presentation"><a href="#profile1" aria-controls="profile1" role="tab" data-toggle="tab">资质文件</a></li>
-	                    <li role="presentation"><a href="#messages1" aria-controls="messages1" role="tab" data-toggle="tab">联系信息</a></li>
-	                    <li role="presentation"><a href="#terminal_info1" aria-controls="terminal_info1" role="tab" data-toggle="tab">终端信息</a></li>
-	                    <li role="presentation"><a href="#channel_info1" aria-controls="channel_info1" role="tab" data-toggle="tab">渠道信息</a></li>
+	                	<li role="presentation" class="active"><a href="#home1" aria-controls="home1" role="tab" data-toggle="tab">基本信息</a></li>
 	                    <li role="presentation"><a href="#bankCard_info1" aria-controls="bankCard_info1" role="tab" data-toggle="tab">银行卡信息</a></li>
+	                    <li role="presentation"><a href="#profile1" aria-controls="profile1" role="tab" data-toggle="tab">资质文件</a></li>
+	                    <li role="presentation"><a href="#terminal_info1" aria-controls="terminal_info1" role="tab" data-toggle="tab">终端信息</a></li>
+	                    <li role="presentation"><a href="#messages1" aria-controls="messages1" role="tab" data-toggle="tab">联系信息</a></li>
 	                </ul>
 	                <div class="tab-content">
 	                    <div role="tabpanel" class="tab-pane active" id="home1">
@@ -390,10 +366,6 @@
 	                            <div class="col-sm-4">
 	                                <label class="control-label" for="abbreviation1">简称：</label>
 	                                <input type="text" class="form-control" id="abbreviation1" name="abbreviation1">
-	                            </div>
-	                            <div class="col-sm-4">
-	                                <label class="control-label" for="enName1">商户名英文名：</label>
-	                                <input type="text" class="form-control" id="enName1" name="enName1">
 	                            </div>
 	                            <div class="col-sm-4">
 	                                <label class="control-label" for="legalPerson1">商户法人姓名：</label>
@@ -428,10 +400,6 @@
 	                            <div class="col-sm-4">
 	                                <label class="control-label" for="businessLicenseValidTime1">营业执照有效期：</label>
 	                                <input type="text" class="form-control" id="businessLicenseValidTime1" name="businessLicenseValidTime1">
-	                            </div>
-	                            <div class="col-sm-4">
-	                                <label class="control-label" for="taxRegistCode1">税务登记号：</label>
-	                                <input type="text" class="form-control" id="taxRegistCode1" name="taxRegistCode1">
 	                            </div>
 	                            <div class="col-sm-4">
 	                                <label class="control-label" for="registAddress1">商户注册地址：</label>
@@ -636,11 +604,10 @@
 	            <div class="modal-body">
 	                <ul class="nav nav-tabs" role="tablist">
 	                    <li role="presentation" class="active"><a href="#home2" aria-controls="home2" role="tab" data-toggle="tab">基本信息</a></li>
-	                    <li role="presentation"><a href="#profile2" aria-controls="profile2" role="tab" data-toggle="tab">资质文件</a></li>
-	                    <li role="presentation"><a href="#messages2" aria-controls="messages2" role="tab" data-toggle="tab">联系信息</a></li>
-	                    <li role="presentation"><a href="#terminal_info2" aria-controls="terminal_info2" role="tab" data-toggle="tab">终端信息</a></li>
-	                    <li role="presentation"><a href="#channel_info2" aria-controls="channel_info2" role="tab" data-toggle="tab">渠道信息</a></li>
 	                    <li role="presentation"><a href="#bankCard_info2" aria-controls="bankCard_info2" role="tab" data-toggle="tab">银行卡信息</a></li>
+	                    <li role="presentation"><a href="#profile2" aria-controls="profile2" role="tab" data-toggle="tab">资质文件</a></li>
+	                    <li role="presentation"><a href="#terminal_info2" aria-controls="terminal_info2" role="tab" data-toggle="tab">终端信息</a></li>
+	                    <li role="presentation"><a href="#messages2" aria-controls="messages2" role="tab" data-toggle="tab">联系信息</a></li>
 	                </ul>
 	                <div class="tab-content">
 	                	<!-- 基本信息 -->
@@ -653,10 +620,6 @@
 	                            <div class="col-sm-4">
 	                                <label class="control-label" for="abbreviation2">简称：</label>
 	                                <input type="text" class="form-control" id="abbreviation2" name="abbreviation2">
-	                            </div>
-	                            <div class="col-sm-4">
-	                                <label class="control-label" for="enName2">商户名英文名：</label>
-	                                <input type="text" class="form-control" id="enName2" name="enName2">
 	                            </div>
 	                            <div class="col-sm-4">
 	                                <label class="control-label" for="legalPerson2">商户法人姓名：</label>
@@ -693,10 +656,6 @@
 	                                <input type="date" class="form-control" id="businessLicenseValidTime2" name="businessLicenseValidTime2">
 	                            </div>
 	                            <div class="col-sm-4">
-	                                <label class="control-label" for="taxRegistCode2">税务登记号：</label>
-	                                <input type="text" class="form-control" id="taxRegistCode2" name="taxRegistCode2">
-	                            </div>
-	                            <div class="col-sm-4">
 	                                <label class="control-label" for="registAddress2">商户注册地址：</label>
 	                                <input type="text" class="form-control" id="registAddress2" name="registAddress2">
 	                            </div>
@@ -711,6 +670,12 @@
 	                            </div>
 	                            <input type="hidden" name="merId"/>
 	                        </div>  
+	                    </div>
+	                    <!-- 银行卡信息 -->
+	                    <div role="tabpanel" class="tab-pane" id="bankCard_info2">
+	                        <div id="bankCard-con2">
+		                    	<!-- js获取终端数据 -->
+		                    </div>
 	                    </div>
 	                    <!-- 文件信息 -->
 	                    <div role="tabpanel" class="tab-pane" id="profile2">
@@ -784,11 +749,19 @@
 		                          </td>
 		                      </tr>
 		                      <tr>
-		                          <td>法人身份证照片</td>
+		                          <td>法人身份证照片正面</td>
 		                          <td><div id="view6_2"></div><div id="fileQueue6_2"></div></td>
 		                          <td>
 		                          <input type="file" name="file" id="uploadify_file6_2" style="display: none" >
 										<input type="button"  name='init1' class="btn" value="开始上传" id="fileupload_button_first6_2" style="display: none"/>
+		                          </td>
+		                      </tr>
+		                      <tr>
+		                          <td>法人身份证照片反面</td>
+		                          <td><div id="view601_2"></div><div id="fileQueue601_2"></div></td>
+		                          <td>
+		                          <input type="file" name="file" id="uploadify_file601_2" style="display: none" >
+										<input type="button"  name='init1' class="btn" value="开始上传" id="fileupload_button_first601_2" style="display: none"/>
 		                          </td>
 		                      </tr>
 		                      <tr>
@@ -835,28 +808,16 @@
 		                      </tr>
 		                    </table>
 	                    </div>
-						<!-- 联系人信息 --> 
-	                    <div role="tabpanel" class="tab-pane" id="messages2">
-                    		<div id="contact-con2">
-		                    	<!-- js获取联系人数据 -->
-		                    </div>
-	                    </div>
 	                    <!-- 终端信息 -->
 	                    <div role="tabpanel" class="tab-pane" id="terminal_info2">
 	                    	<div id="terminal-con2">
 		                    	<!-- js获取终端数据 -->
 		                    </div>
 	                    </div>
-	                    <!-- 渠道信息 -->
-	                    <div role="tabpanel" class="tab-pane" id="channel_info2">
-	                        <div id="channel-con2">
-		                    	<!-- js获取终端数据 -->
-		                    </div>
-	                    </div>
-	                    <!-- 银行卡信息 -->
-	                    <div role="tabpanel" class="tab-pane" id="bankCard_info2">
-	                        <div id="bankCard-con2">
-		                    	<!-- js获取终端数据 -->
+	                    <!-- 联系人信息 --> 
+	                    <div role="tabpanel" class="tab-pane" id="messages2">
+                    		<div id="contact-con2">
+		                    	<!-- js获取联系人数据 -->
 		                    </div>
 	                    </div>
 	                </div>
