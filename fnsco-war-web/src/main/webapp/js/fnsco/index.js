@@ -10,7 +10,7 @@ var menu = $('#side-menu');
 		success : function(data) {
 			if (data.success) {
 
-				var menuList = data.data.list;
+				var menuList = data.data;
 				
 				for(var i =0; i< menuList.length; i++){
 					if(menuList[i].type == 0){

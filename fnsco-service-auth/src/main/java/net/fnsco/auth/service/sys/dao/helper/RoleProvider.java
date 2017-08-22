@@ -31,7 +31,7 @@ public class RoleProvider {
         if (role.getCreateTime() != null) {
             SET("create_time=#{role.createTime}");
         }
-        WHERE("role_id = #{role.roleId}");
+        WHERE("id = #{role.roleId}");
         }}.toString();
     }
 
@@ -51,7 +51,7 @@ public class RoleProvider {
         SELECT("*");
         FROM(TABLE_NAME);
         if (role.getRoleId() != null) {
-            WHERE("role_id=#{role.roleId}");
+            WHERE("id=#{role.roleId}");
         }
         if (StringUtils.isNotBlank(role.getRoleName())){
             WHERE("role_name like CONCAT('%',#{role.roleName},'%')");
@@ -65,7 +65,7 @@ public class RoleProvider {
         if (role.getCreateTime() != null) {
             WHERE("create_time=#{role.createTime}");
         }
-        ORDER_BY("role_id desc limit " + start + ", " + limit );
+        ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
 
@@ -75,10 +75,10 @@ public class RoleProvider {
         SELECT("count(1)");
         FROM(TABLE_NAME);
         if (role.getRoleId() != null) {
-            WHERE("role_id=#{role.roleId}");
+            WHERE("id=#{role.roleId}");
         }
         if (StringUtils.isNotBlank(role.getRoleName())){
-            WHERE("role_name=#{role.roleName}");
+            WHERE("role_name like CONCAT('%',#{role.roleName},'%')");
         }
         if (StringUtils.isNotBlank(role.getRemark())){
             WHERE("remark=#{role.remark}");

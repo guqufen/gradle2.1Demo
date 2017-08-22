@@ -25,7 +25,7 @@ public interface RoleMenuDAO {
     public void insert(RoleMenuDO roleMenu);
 
     @Delete("DELETE FROM sys_role_menu WHERE role_id = #{id}")
-    public int deleteById(@Param("id") Long roleId);
+    public int deleteById(@Param("id") Integer roleId);
     
     @Delete("DELETE FROM sys_role_menu WHERE menu_id = #{id}")
     public int deleteByMenuId(@Param("id") Integer MenuId);

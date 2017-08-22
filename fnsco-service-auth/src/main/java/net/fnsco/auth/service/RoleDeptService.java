@@ -18,7 +18,7 @@ public class RoleDeptService extends BaseService {
 	private RoleDeptDAO roleDeptDAO;
 
 	@Transactional
-	public int saveOrUpdate(Long roleId, List<Long> deptIdList) {
+	public int saveOrUpdate(Integer roleId, List<Integer> deptIdList) {
 
 		// 判断如果部门集合为空，直接返回(表示没有修改或者该角色不属于任何现有部门)
 		if (deptIdList.size() == 0) {
@@ -29,7 +29,7 @@ public class RoleDeptService extends BaseService {
 		roleDeptDAO.deleteById(roleId);
 
 		// 批量插表
-		for (Long deptId : deptIdList) {
+		for (Integer deptId : deptIdList) {
 			RoleDeptDO roleDeptDO = new RoleDeptDO();
 			roleDeptDO.setRoleId(roleId);
 			roleDeptDO.setDeptId(deptId);
@@ -41,13 +41,13 @@ public class RoleDeptService extends BaseService {
 
 	// 通过角色ID将对应的数据权限ID全部删掉
 	@Transactional
-	public int delete(Long roleId) {
+	public int delete(Integer roleId) {
 		int result = roleDeptDAO.deleteById(roleId);
 		return result;
 	}
 
 	// 通过角色ID查找部门ID(一对多，此处部门ID属于数据权限ID),并将查出来的数据的deptId存于list集合
-	public List<Long> queryByRoleId(Long roleId) {
+	public List<Integer> queryByRoleId(Integer roleId) {
 
 		RoleDeptDO roleDept = new RoleDeptDO();
 		roleDept.setRoleId(roleId);
@@ -55,7 +55,7 @@ public class RoleDeptService extends BaseService {
 		List<RoleDeptDO> list = roleDeptDAO.query(roleDept);
 
 		// 遍历，将角色ID对应的数据权限ID查出来并放入集合list
-		List<Long> deptIdList = new ArrayList<>();
+		List<Integer> deptIdList = new ArrayList<>();
 		for (RoleDeptDO roleDeptDO : list) {
 			deptIdList.add(roleDeptDO.getDeptId());
 		}

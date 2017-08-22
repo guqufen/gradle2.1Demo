@@ -7,7 +7,7 @@ public class RoleDO {
 	/**
 	 * 角色ID
 	 */
-	private Long roleId;
+	private Integer roleId;
 
 	/**
 	 * 角色名称
@@ -37,23 +37,23 @@ public class RoleDO {
 	/**
 	 * 角色和菜单ID对应列表
 	 */
-	private List<Long> menuIdList;
+	private List<Integer> menuIdList;
 
 	/**
 	 * 角色和部门id对应列表
 	 */
-	private List<Long> deptIdList;
+	private List<Integer> deptIdList;
 
 	/**
 	 * 时间的String类型
 	 */
 	private String createTimeStr;
 
-	public Long getRoleId() {
+	public Integer getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(Long roleId) {
+	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
 	}
 
@@ -97,19 +97,19 @@ public class RoleDO {
 		this.createTime = createTime;
 	}
 
-	public List<Long> getMenuIdList() {
+	public List<Integer> getMenuIdList() {
 		return menuIdList;
 	}
 
-	public void setMenuIdList(List<Long> menuIdList) {
+	public void setMenuIdList(List<Integer> menuIdList) {
 		this.menuIdList = menuIdList;
 	}
 
-	public List<Long> getDeptIdList() {
+	public List<Integer> getDeptIdList() {
 		return deptIdList;
 	}
 
-	public void setDeptIdList(List<Long> deptIdList) {
+	public void setDeptIdList(List<Integer> deptIdList) {
 		this.deptIdList = deptIdList;
 	}
 

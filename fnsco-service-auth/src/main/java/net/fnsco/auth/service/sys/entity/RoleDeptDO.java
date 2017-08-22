@@ -6,41 +6,41 @@ public class RoleDeptDO {
     /**
      * 
      */
-    private Long id;
+    private Integer id;
 
     /**
      * 角色ID
      */
-    private Long roleId;
+    private Integer roleId;
 
     /**
      * 部门ID
      */
-    private Long deptId;
+    private Integer deptId;
 
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Long roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 
-    public Long getDeptId() {
+    public Integer getDeptId() {
         return deptId;
     }
 
-    public void setDeptId(Long deptId) {
+    public void setDeptId(Integer deptId) {
         this.deptId = deptId;
     }
 
