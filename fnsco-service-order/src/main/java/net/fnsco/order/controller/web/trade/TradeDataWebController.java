@@ -1,5 +1,6 @@
 package net.fnsco.order.controller.web.trade;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class TradeDataWebController extends BaseController {
 	 */
 	@RequestMapping(value = "/query",method = RequestMethod.GET)
 	@ResponseBody
+	@RequiresPermissions(value = { "m:trade:list" })
 	public ResultPageDTO<TradeData> query(TradeDataDTO tradeDataDTO,Integer currentPageNum,Integer pageSize){
 	    
 		return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize);
