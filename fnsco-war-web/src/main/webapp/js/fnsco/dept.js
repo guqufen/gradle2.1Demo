@@ -4,7 +4,7 @@
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url :auth_dept_query,
+	url :json.auth_dept_query,
 	showRefresh : false,// 是否显示刷新按钮	
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	toolbar : '#toolbar', // 工具按钮用哪个容器
@@ -64,7 +64,7 @@ function responseHandler(res) {
 //添加确认事件方法
 function add(date) {
 	$.ajax({
-		url :auth_dept_toAdd,
+		url :json.auth_dept_toAdd,
 		data : date,
 		type : 'POST',
 		success : function(data) {
@@ -84,7 +84,7 @@ function add(date) {
 //修改确认事件方法
 function edit(date) {
 	$.ajax({
-		url :auth_dept_toEdit,
+		url :json.auth_dept_toEdit,
 		data : date,
 		type : 'POST',
 		success : function(data) {
@@ -105,7 +105,7 @@ function edit(date) {
 //修改信息查询
 function queryById(id) {
 	$.ajax({
-		url :auth_dept_queryDeptById,
+		url :json.auth_dept_queryDeptById,
 		type : 'POST',
 		dataType : "json",
 		data : {
@@ -157,7 +157,7 @@ var dept_setting = {
 //初始化树方法
 function getDept() {
 	$.ajax({
-		url : auth_dept_querytree,
+		url : json.auth_dept_querytree,
 		//type : 'POST',	
 		success : function(data) {
 			dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting,data.data);
@@ -295,7 +295,7 @@ $('#btn_delete').click(function() {
 		btn : [ '确定', '取消' ]
 	}, function() {
 		$.ajax({
-			url :auth_dept_deleteDeptById,
+			url :json.auth_dept_deleteDeptById,
 			type : 'POST',
 			dataType : "json",
 			data : {

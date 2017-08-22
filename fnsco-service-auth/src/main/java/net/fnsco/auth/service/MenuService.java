@@ -3,15 +3,16 @@ package net.fnsco.auth.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.fnsco.auth.comm.AuthConstant;
 import net.fnsco.auth.service.sys.dao.MenuDAO;
 import net.fnsco.auth.service.sys.dao.UserRoleDAO;
 import net.fnsco.auth.service.sys.entity.MenuDO;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 @Service
@@ -43,20 +44,20 @@ public class MenuService extends BaseService {
 		return pager;
 	}
 
-	public ResultPageDTO<MenuDO> queryNotButtonList() {
+	public ResultDTO<MenuDO> queryNotButtonList() {
 
 		List<MenuDO> menuList = menuDAO.queryNotButtonList();
 
 		// 添加顶级菜单
 		MenuDO root = new MenuDO();
 		root.setId(0);
-		root.setName("一级菜单");
+		root.setName("总菜单");
 		root.setParentId(-1);
 		root.setOpen(true);
 		menuList.add(root);
 
-		ResultPageDTO<MenuDO> pager = new ResultPageDTO<MenuDO>(0, menuList);
-		return pager;
+		//将查询到的menuList数据返回
+		return ResultDTO.success(menuList);
 	}
 
 	@Transactional
@@ -71,16 +72,19 @@ public class MenuService extends BaseService {
 
 		// 通过传入菜单ID查找该菜单信息
 		MenuDO menuDO = this.menuDAO.getById(menu.getId());
-		if (menuDO == null) {
-			return null;
-		}
+
 		this.menuDAO.update(menu);
 
 		return menu;
 	}
 
+	/**
+	 * 
+	 * @param menu
+	 * @return
+	 */
 	@Transactional
-	public MenuDO doDelete(MenuDO menu) {
+	public ResultDTO doDelete(MenuDO menu) {
 
 		// 删除目录，需要查询是否含有菜单，有则删除失败；删除菜单，需要同时删除其按钮；删除按钮，直接删除
 		// 如果类型为目录类型，查询是否有菜单，如果有菜单，则删除失败(返回失败，提示信息:请先删除其子菜单)
@@ -97,10 +101,13 @@ public class MenuService extends BaseService {
 			// 如果有子菜单
 			if (count > 0) {
 				logger.info("删除MenuService.doDelete, 当前有子菜单，不能删除");
+
 				// 表示当前菜单不能删除，需返回失败(返回失败，提示信息:请先删除其子菜单)
-				return null;
+				return ResultDTO.fail(AuthConstant.E_MENU_EXIST);
 			}
-			// 否则，没有子菜单，则可以直接删除
+			// 否则，查询是否含有子目录
+			
+			//否则，没有子菜单，则可以直接删除
 			// 如果是菜单，则需要将菜单和其相关按钮都删掉
 		} else if (menu.getType() == 1) {
 
@@ -114,7 +121,7 @@ public class MenuService extends BaseService {
 		// 删除角色菜单表里面角色对应的菜单，不删除的话，容易造成角色对应空菜单
 		this.roleMenuService.deleteByMenuId(menu.getId());
 
-		return menu;
+		return ResultDTO.success();
 	}
 
 	// 通过用户ID查询用户角色，听过用户角色对应菜单ID，查询对应菜单并返回
@@ -126,23 +133,33 @@ public class MenuService extends BaseService {
 	 * @param userId：用户ID
 	 * @return
 	 */
-	public ResultPageDTO<MenuDO> userMenuist(Integer userId) {
+	public ResultDTO userMenuist(Integer userId) {
+		
+		//admin 用户，返回所有页面
+		if(userId == AuthConstant.SUPER_ADMIN){
+			//查询所有的非按钮List
+			List<MenuDO> menuList = menuDAO.queryNotButtonList();
+			//返回成功
+			return ResultDTO.success(menuList);
+		}
 
 		//1、 通过用户ID查询用户角色ID列表,用户角色表，一对多;如果没找到角色列表，返回空
 		List<Integer> list = this.userRoleDAO.getByUserId(userId);
 		if(list.size() == 0){
-			return null;
+			logger.info("通过用户ID查询到的用户角色ID列表为空" );
+			return ResultDTO.fail();
 		}
 
 		//2、  通过角色ID列表查询角色对应菜单ID列表,角色菜单表，多对多;没找到对应菜单列表，返回空
-		List<Long> menuList = this.roleMenuService.queryByRoleIdList(list);
+		List<Integer> menuList = this.roleMenuService.queryByRoleIdList(list);
 		if(menuList.size() == 0){
-			return null;
+			logger.info("通过角色ID查询到的菜单ID列表为空" );
+			return ResultDTO.fail();
 		}
 
 		//3、 通过菜单ID查询菜单Obj，遍历;如果没找到菜单，返回空
 		List<MenuDO> pageList = new ArrayList<>();
-		for (Long menuId : menuList) {
+		for (Integer menuId : menuList) {
 			MenuDO menuDO = menuDAO.getById(menuId.intValue());
 			//去掉空和按钮
 			if(null != menuDO && menuDO.getType() != 2){
@@ -150,9 +167,10 @@ public class MenuService extends BaseService {
 			}
 		}
 		if( pageList.size() == 0){
-			return null;
+			logger.info("通过菜单ID查询菜单Obj为空" );
+			return ResultDTO.fail();
 		}
-		ResultPageDTO<MenuDO> pager = new ResultPageDTO<MenuDO>(list.size(), pageList);
-		return pager;
+
+		return ResultDTO.success(pageList);
 	}
 }

@@ -51,8 +51,7 @@ public interface UserDAO {
     @SelectProvider(type = UserProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("user") UserDO user);
 
-    @Results({ @Result(column = "real_name", property = "realName"), @Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),
-               @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
+    @Results({ @Result(column = "perms", property = "perms")})
     @SelectProvider(type = UserProvider.class, method = "queryAllPerms")
     public List<String> queryAllPerms(@Param("userId") Integer userId);
 }

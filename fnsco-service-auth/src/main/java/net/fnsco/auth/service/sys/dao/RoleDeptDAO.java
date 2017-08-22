@@ -25,7 +25,7 @@ public interface RoleDeptDAO {
     public void insert(RoleDeptDO roleDept);
 
     @Delete("DELETE FROM sys_role_dept WHERE role_id = #{id}")
-    public int deleteById(@Param("id") Long id);
+    public int deleteById(@Param("id") Integer id);
     
     @Delete("DELETE FROM sys_role_dept WHERE dept_id = #{id}")
     public int deleteByDeptId(@Param("id") Integer id);

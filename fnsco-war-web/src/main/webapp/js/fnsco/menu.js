@@ -201,7 +201,7 @@ function getMenuTree(id){
 		async: false,//同步加载
 		success : function(data) {
 			if (data.success) {
-				var dd_ztree = $.fn.zTree.init($("#upMenuTree"), m_setting, data.data.list);
+				var dd_ztree = $.fn.zTree.init($("#upMenuTree"), m_setting, data.data);
 
 				//清空所有节点勾选
 				dd_ztree.checkAllNodes(false);
@@ -290,7 +290,7 @@ $('#btn_edit').click(function() {
 
 	// 判断当前选择的数据行，若为0代表没有选择，提示请选择一列数据
 	if (selectContent.length == 0) {
-		layer.msg('请选择一列数据!');
+		layer.msg('请选择一条数据!');
 		return false;
 	} else {
 		
@@ -363,8 +363,8 @@ function saveOrUpdate() {
 	}else{
 		url="/web/auth/menu/update";
 	}
-	
-	//角色名称  校验，不能为空
+
+		// 菜单名称 校验，不能为空
 	if (!$('#menuName').val()) {
 		layer.msg('请输入有效菜单名称!');
 		return;
@@ -372,13 +372,13 @@ function saveOrUpdate() {
 
 	// 获取菜单树数据的父菜单ID
 	if (!$('#parentId').val()) {
-		layer.msg('请选择上一级菜单!');
+		layer.msg('请选择上级菜单!');
 		return;
 	}
 
 	// 获取菜单树数据的父菜单名称
 	if (!$('#parentName').val()) {
-		layer.msg('请选择上一级菜单!');
+		layer.msg('请选择上级菜单!');
 		return;
 	}
 	
@@ -424,7 +424,7 @@ $('#btn_delete').click(function() {
 	// 找到当前table选择的行
 	var selectContent = ttable.bootstrapTable('getSelections');// 返回的是数组类型,Array
 	if (selectContent.length == 0) {
-		layer.msg('请选择一行数据!');
+		layer.msg('请选择一条数据!');
 		return false;
 	} else {
 

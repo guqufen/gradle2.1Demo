@@ -1,6 +1,5 @@
 package net.fnsco.auth.service;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +11,9 @@ import net.fnsco.auth.service.sys.dao.RoleDAO;
 import net.fnsco.auth.service.sys.entity.DeptDO;
 import net.fnsco.auth.service.sys.entity.RoleDO;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
 
 @Service
 public class RoleService extends BaseService {
@@ -45,16 +46,15 @@ public class RoleService extends BaseService {
 			}
 			
 			//时间格式化yyyy-MM-dd HH:mm:ss
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String createTimeStr = sdf.format(roleDO.getCreateTime());
+			String createTimeStr = DateUtils.dateFormatToStr(roleDO.getCreateTime());
 			roleDO.setCreateTimeStr(createTimeStr);
 			
 			//将数据权限放入对象
-			List<Long> deptIdList = roleDeptService.queryByRoleId(roleDO.getRoleId());
+			List<Integer> deptIdList = roleDeptService.queryByRoleId(roleDO.getRoleId());
 			roleDO.setDeptIdList(deptIdList);
 			
 			//将菜单列表放入对象
-			List<Long> menuList = roleMenuService.queryByRoleId(roleDO.getRoleId());
+			List<Integer> menuList = roleMenuService.queryByRoleId(roleDO.getRoleId());
 			roleDO.setMenuIdList(menuList);
 		}
 
@@ -64,7 +64,7 @@ public class RoleService extends BaseService {
 	}
 
 	@Transactional
-	public RoleDO doAdd(RoleDO role) {
+	public ResultDTO doAdd(RoleDO role) {
 
 		// 保存数据到角色表
 		role.setCreateTime(new Date());
@@ -76,56 +76,46 @@ public class RoleService extends BaseService {
 		// 保存(角色-数据权限部门)数据到角色数据表
 		this.roleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
 
-		return role;
+		return ResultDTO.success();
 	}
 
 	@Transactional
-	public RoleDO doUpdate(RoleDO role) {
+	public ResultDTO doUpdate(RoleDO role) {
 
 		if( role.getRoleId() == null){
-			return null;
+			return ResultDTO.fail();
 		}
-		int result = this.roleDAO.update(role);
+		this.roleDAO.update(role);
 
 		// 保存(角色-菜单)数据到角色菜单表
-		result = this.roleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
+		this.roleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
 
 		// 保存(角色-数据权限部门)数据到角色数据表
 		this.roleDeptService.saveOrUpdate(role.getRoleId(), role.getDeptIdList());
-		return role;
+		return ResultDTO.success();
 	}
 
 	@Transactional
-	public RoleDO doDelete(RoleDO roleDO) {
+	public ResultDTO doDelete(RoleDO roleDO) {
 
 		RoleDO role = new RoleDO();
-		Long roleId = roleDO.getRoleId();
+		Integer roleId = roleDO.getRoleId();
 		if (null != roleId) {
 			role.setRoleId(roleId);
 
 			// 删除角色表数据(根据ID删除)
-			int result = this.roleDAO.deleteById(roleDO.getRoleId());
-			if (result <= 0) {
-				roleDO = null;
-				return roleDO;
-			}
+			this.roleDAO.deleteById(roleDO.getRoleId());
 
 			//删除角色菜单表对应角色数据
-			result = this.roleMenuService.delete(roleId);
-			if (result <= 0) {
-				roleDO = null;
-				return roleDO;
-			}
+			this.roleMenuService.delete(roleId);
 
 			//删除角色数据表对应数据
-			result = this.roleDeptService.delete(roleId);
-			if (result <= 0) {
-				roleDO = null;
-				return roleDO;
-			}
-		}
+			this.roleDeptService.delete(roleId);
 
-		return roleDO;
+			return ResultDTO.success();
+		}
+		//否则返回失败
+		return ResultDTO.fail();
 	}
 
 	 public List<RoleDO> queryRole() {

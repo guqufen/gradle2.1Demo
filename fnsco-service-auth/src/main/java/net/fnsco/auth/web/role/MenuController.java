@@ -1,8 +1,8 @@
 package net.fnsco.auth.web.role;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +26,7 @@ public class MenuController extends BaseController {
 	//查询菜单列表
 	@RequestMapping("list")
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:menu:list" })
 	public ResultDTO pageList(MenuDO menuDO) {
 		logger.info("开始分页查询MenuController.pageList, role=" + menuDO.toString());
 
@@ -40,17 +41,16 @@ public class MenuController extends BaseController {
 	// 选择菜单信息，去掉按钮类型
 	@RequestMapping("select")
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:menu:list" })
 	public ResultDTO select() {
 
-		// 查询列表数据
-		ResultPageDTO<MenuDO> pager = menuService.queryNotButtonList();
-
-		return success(pager);
+		return menuService.queryNotButtonList();
 	}
 
 	//新增
 	@RequestMapping(value = "add", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:menu:add" })
 	public ResultDTO doAdd(MenuDO menu) {
 		logger.info("开始插数据 MenuController.doAdd, menu=" + menu.toString());
 
@@ -66,6 +66,7 @@ public class MenuController extends BaseController {
 	//修改
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:menu:update" })
 	public ResultDTO doUpdate(MenuDO menu) {
 		logger.info("开始更新数据 MenuController.doUpdate, menu=" + menu.toString());
 
@@ -78,34 +79,23 @@ public class MenuController extends BaseController {
 		return success(menuDO);
 	}
 
-	//删除
+	// 删除
 	@RequestMapping(value = "delete", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> doDelete(MenuDO menu) {
+	@RequiresPermissions(value = { "sys:menu:delete" })
+	public ResultDTO doDelete(MenuDO menu) {
 		logger.info("开始删除数据 MenuController.doDelete, menu=" + menu.toString());
 
-		MenuDO menuDO = this.menuService.doDelete(menu);
-		Map<String, Object> map = new HashMap<>();
-		// 返回的是空的，表示有子菜单
-		if (menuDO == null) {
-			map.put("success", false);
-			map.put("message", "请先删除子菜单");
-			return map;
-		}
-
-		map.put("success", true);
-		map.put("message", "删除成功");
-
-		return map;
+		return menuService.doDelete(menu);
 	}
 	
-	//用户登录，根据用户，查询角色信息，再根据角色信息查询菜单
+	// 用户登录，根据用户，查询角色信息，再根据角色信息查询菜单
 	@RequestMapping("userMenuist")
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:menu:list" })
 	public ResultDTO userMenuist() {
-		
-		//在session，获取当前用户ID,并带入service处理
-		ResultPageDTO<MenuDO> pager = this.menuService.userMenuist(getUserId());
-		return success(pager);
+
+		// 将在session，获取的当前用户ID,带入service处理
+		return this.menuService.userMenuist(getUserId());
 	}
 }
