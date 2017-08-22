@@ -707,9 +707,9 @@
 			<foreach collection="innerCodeList" item="innerCode" open="(" separator="," close=")">#{innerCode}</foreach>
 	 		)
 	 </if>
-	 <if test="condition.paySubTypes != null" >
+	 <if test="paySubTypes != null" >
         AND txn_sub_type in 
-		<foreach collection="condition.paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
+		<foreach collection="paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
       </if>
 	  <if test="terminalList != null">
 			AND term_id IN 
