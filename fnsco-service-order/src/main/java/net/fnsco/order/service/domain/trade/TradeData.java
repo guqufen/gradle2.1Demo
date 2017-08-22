@@ -104,7 +104,7 @@ public class TradeData {
 
     private Date         createTime;
     private String       paySubType;    //交易子类型
-
+    private List<String>       paySubTypes;    //交易子类型
     private String       startSendTime; //条件查询 发送开始时间
     private String       endSendTime;   //条件查询 发送结束时间
 
@@ -117,6 +117,14 @@ public class TradeData {
     //终端号列表
     private List<String> terminalList;
     
+    public List<String> getPaySubTypes() {
+        return paySubTypes;
+    }
+
+    public void setPaySubTypes(List<String> paySubTypes) {
+        this.paySubTypes = paySubTypes;
+    }
+
     /**
      * merName
      *
