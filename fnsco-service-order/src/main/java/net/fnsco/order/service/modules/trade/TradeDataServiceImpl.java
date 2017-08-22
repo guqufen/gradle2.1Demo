@@ -135,7 +135,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         //设置交易时间
         tradeData.setStartTime(DateUtils.getDateStartTime(merchantCore.getStartDate()));
         tradeData.setEndTime(DateUtils.getDateEndTime(merchantCore.getEndDate()));
-        tradeData.setPaySubType(merchantCore.getPayType());
+        tradeData.setPaySubTypes(merchantCore.getPayType());
         //根据pos查询终端列表
         List<String> posList = merchantCore.getTerminals();
         if (!CollectionUtils.isEmpty(posList)) {
