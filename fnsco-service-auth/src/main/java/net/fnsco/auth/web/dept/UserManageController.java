@@ -1,5 +1,6 @@
 package net.fnsco.auth.web.dept;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,7 @@ public class UserManageController extends BaseController {
 	 */
 	@RequestMapping(value = "/query",method= RequestMethod.GET)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:user:list"})
 	 public ResultDTO<UserDO> query(UserDO user,@RequestParam("currentPageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
 		 ResultPageDTO<UserDO> result=userService.queryList(user, pageNum, pageSize);
 	     return success(result);
@@ -47,6 +49,7 @@ public class UserManageController extends BaseController {
 	 */
 	@RequestMapping(value ="/deleteUserById",method= RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:user:delete"})
 	public ResultDTO<String> deleteUserById(@RequestParam(value="id[]") Integer[] id){
 		ResultDTO<String> result = userService.deleteById(id);
 		return success(result);
@@ -58,6 +61,7 @@ public class UserManageController extends BaseController {
 	 */
 	@RequestMapping(value ="/toAdd",method= RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:user:save"})
 	public ResultDTO<String> toAdd(UserDO user){
 		userService.doAddUser(user);
 		return ResultDTO.successForSave(null);
@@ -91,6 +95,7 @@ public class UserManageController extends BaseController {
 	 */
 	@RequestMapping(value ="/toEdit",method= RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:user:update"})
 	public ResultDTO<String> toEdit(UserDO user){
 		//获取当前登录的用户
 	    WebUserDTO adminUser = (WebUserDTO) getSessionUser();

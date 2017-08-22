@@ -5,7 +5,7 @@
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url : auth_user_query,
+	url : json.auth_user_query,
 	showRefresh : false,// 是否显示刷新按钮	
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	toolbar : '#toolbar', // 工具按钮用哪个容器
@@ -87,7 +87,7 @@ function responseHandler(res) {
 function add(date) {
 	$.ajax({
 		traditional:true,
-		url : auth_user_toAdd,
+		url : json.auth_user_toAdd,
 		data : date,
 		type : 'POST',
 		success : function(data) {
@@ -108,7 +108,7 @@ function add(date) {
 function edit(date) {
 	$.ajax({
 		traditional:true,
-		url : auth_user_toEdit,
+		url : json.auth_user_toEdit,
 		data : date,
 		type : 'POST',
 		success : function(data) {
@@ -129,7 +129,7 @@ function edit(date) {
 var isdata;
 function queryByName(name) {
 	$.ajax({
-		url : auth_user_queryUserByName,
+		url : json.auth_user_queryUserByName,
 		type : 'POST',
 		dataType : "json",
 		async:false,//同步获取数据
@@ -145,7 +145,7 @@ function queryByName(name) {
 //修改信息查询
 function queryById(id) {
 	$.ajax({
-		url :auth_user_queryUserById,
+		url :json.auth_user_queryUserById,
 		type : 'POST',
 		dataType : "json",
 		data : {
@@ -208,7 +208,7 @@ var dept_setting = {
 //初始化树方法
 function getDept() {
 	$.ajax({
-		url :auth_user_querytree,
+		url :json.auth_user_querytree,
 		//type : 'POST',	
 		success : function(data) {
 			dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting,data.data);
@@ -279,8 +279,9 @@ function getRoleId(name) {
 //角色查询
 function queryRole(id) {
 	$.ajax({
-		url :auth_user_queryRole,
+		url :json.auth_user_queryRole,
 		type : 'POST',
+		async:false,//同步获取数据
 		success : function(data) {
 			unloginHandler(data);
 			console.log(data);
@@ -427,7 +428,7 @@ $('#btn_delete').click(function(){
         btn: ['确定', '取消']
     }, function(){
       $.ajax({
-        url : auth_user_deleteUserById,
+        url : json.auth_user_deleteUserById,
         type:'POST',
         dataType : "json",
         data:{'id':dataId},

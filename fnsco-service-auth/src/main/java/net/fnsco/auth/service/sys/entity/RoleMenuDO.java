@@ -10,12 +10,12 @@ public class RoleMenuDO {
 	/**
 	 * 角色ID
 	 */
-	private Long roleId;
+	private Integer roleId;
 
 	/**
 	 * 菜单ID
 	 */
-	private Long menuId;
+	private Integer menuId;
 
 	public Integer getId() {
 		return id;
@@ -25,19 +25,19 @@ public class RoleMenuDO {
 		this.id = id;
 	}
 
-	public Long getRoleId() {
+	public Integer getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(Long roleId2) {
+	public void setRoleId(Integer roleId2) {
 		this.roleId = roleId2;
 	}
 
-	public Long getMenuId() {
+	public Integer getMenuId() {
 		return menuId;
 	}
 
-	public void setMenuId(Long menuId2) {
+	public void setMenuId(Integer menuId2) {
 		this.menuId = menuId2;
 	}
 

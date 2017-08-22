@@ -1,7 +1,5 @@
 package net.fnsco.auth.service.oauth;
 
-import java.io.IOException;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -14,12 +12,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import com.alibaba.fastjson.JSON;
-
-import net.fnsco.core.base.ResultDTO;
 import net.fnsco.freamwork.business.UserService;
 import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
@@ -33,7 +26,7 @@ import net.fnsco.freamwork.spring.SpringUtils;
  * @date 2017-05-20 13:00
  */
 public class OAuth2Filter extends AuthenticatingFilter {
-    public Logger       logger = LoggerFactory.getLogger(this.getClass());
+    public Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
@@ -57,11 +50,8 @@ public class OAuth2Filter extends AuthenticatingFilter {
         //获取请求token，如果token不存在，直接返回401
         String token = getRequestToken((HttpServletRequest) request);
         if (StringUtils.isBlank(token)) {
-            HttpServletResponse httpResponse = (HttpServletResponse) response;
-            String json = JSON.toJSONString(ResultDTO.fail(FrameworkConstant.E_NOT_LOGIN));//"token不存在"
-            httpResponse.setContentType("application/json;charset=utf-8");
-            httpResponse.getWriter().print(json);
             logger.error("session不存在或页面未传入token值");
+            OAuth2Helper.reLogin(response);
             return false;
         }
 
@@ -72,13 +62,10 @@ public class OAuth2Filter extends AuthenticatingFilter {
     protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         httpResponse.setContentType("application/json;charset=utf-8");
-        try {
-            //处理登录失败的异常
-            String json = JSON.toJSONString(ResultDTO.fail(FrameworkConstant.E_NOT_LOGIN));//"登录异常"));
-            httpResponse.getWriter().print(json);
-        } catch (IOException e1) {
-            logger.error("登录处理异常", e1);
-        }
+
+        logger.error("登录失败");
+        //处理登录失败的异常
+        OAuth2Helper.reLogin(response);
 
         return false;
     }

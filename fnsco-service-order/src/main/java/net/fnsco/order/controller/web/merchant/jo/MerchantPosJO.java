@@ -9,7 +9,7 @@ import net.fnsco.order.service.domain.MerchantPos;
 import net.fnsco.order.service.domain.MerchantTerminal;
 
 public class MerchantPosJO extends JO {
-    private Integer id;
+    private Integer posId;
 
     private String  innerCode;
 
@@ -32,7 +32,7 @@ public class MerchantPosJO extends JO {
     //POS机子信息
     public MerchantPos toMerchantPos() {
         MerchantPos merchantPos = new MerchantPos();
-        merchantPos.setId(id);
+        merchantPos.setId(posId);
         merchantPos.setPosName(posName);
         merchantPos.setSnCode(snCode);
         merchantPos.setBankId(bankId);
@@ -41,6 +41,7 @@ public class MerchantPosJO extends JO {
         merchantPos.setChannelId(channelId);
         merchantPos.setPosType(posType);
         merchantPos.setPosFactory(posFactory);
+        merchantPos.setStatus("1");//默认状态正常
         return merchantPos;
     }
 
@@ -88,26 +89,27 @@ public class MerchantPosJO extends JO {
 
     private Integer alipayFee;
 
+
     /**
-     * id
+     * posId
      *
-     * @return  the id
+     * @return  the posId
      * @since   CodingExample Ver 1.0
     */
-
-    public Integer getId() {
-        return id;
+    
+    public Integer getPosId() {
+        return posId;
     }
 
     /**
-     * id
+     * posId
      *
-     * @param   id    the id to set
+     * @param   posId    the posId to set
      * @since   CodingExample Ver 1.0
      */
-
-    public void setId(Integer id) {
-        this.id = id;
+    
+    public void setPosId(Integer posId) {
+        this.posId = posId;
     }
 
     /**

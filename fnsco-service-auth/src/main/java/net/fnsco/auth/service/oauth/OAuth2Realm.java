@@ -12,6 +12,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +31,7 @@ import net.fnsco.auth.service.sys.entity.UserTokenDO;
 public class OAuth2Realm extends AuthorizingRealm {
     @Autowired
     private ShiroService shiroService;
+    private Logger       logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -57,19 +60,21 @@ public class OAuth2Realm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String accessToken = (String) token.getPrincipal();
-
+        logger.error("认证登录时调用返回的token为"+accessToken);
         //根据accessToken，查询用户信息
         UserTokenDO tokenEntity = shiroService.queryByToken(accessToken);
         //token失效
         if (tokenEntity == null || tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()) {
-            throw new IncorrectCredentialsException("token失效，请重新登录");
+            logger.error("认证时返回的token错误或超时");
+            throw new AuthenticationException("token失效");
         }
 
         //查询用户信息
         UserDO user = shiroService.queryUser(tokenEntity.getUserId());
         //账号锁定
         if (user.getStatus() == 0) {
-            throw new LockedAccountException("账号已被锁定,请联系管理员");
+            logger.error("认证时,账号已被锁定,请联系管理员");
+            throw new AuthenticationException("账号已被锁定,请联系管理员");
         }
 
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, accessToken, getName());

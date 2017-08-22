@@ -1,6 +1,7 @@
 package net.fnsco.order.controller.web.merchant;
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,8 @@ import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.freamwork.business.WebUserDTO;
+import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.order.api.dto.WebMerchantPosDTO;
 import net.fnsco.order.api.merchant.MerchantPosService;
 import net.fnsco.order.controller.web.merchant.jo.MerchantChannelJO;
@@ -43,10 +46,12 @@ public class MerchantPosController extends BaseController {
      */
     @RequestMapping(value ="/toAddPosInfos",method= RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions(value = { "m:merchant:add"})
     public ResultDTO<String> toAddPosInfos(@RequestBody PosJO pos){
        // List<MerchantChannelJO> temp = Arrays.asList(posInfos);
     	List<MerchantChannelJO> posInfos =pos.getPoses();
-        List<WebMerchantPosDTO> params = MerchantHelper.toPosDTO(posInfos,pos.getInnerCode());
+    	WebUserDTO obj = (WebUserDTO) session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
+        List<WebMerchantPosDTO> params = MerchantHelper.toPosDTO(posInfos,pos.getInnerCode(),obj.getId());
         ResultDTO<String> result = merchantPosService.savePosInfo(params);
         return result;
     }
@@ -61,6 +66,7 @@ public class MerchantPosController extends BaseController {
      */
     @RequestMapping(value = "/deletePosInfo",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions(value = { "m:merchant:delete" })
     public ResultDTO deletePosInfo(@RequestParam(value="id") Integer id){
         if (null == id) {
             return ResultDTO.fail();
@@ -82,6 +88,7 @@ public class MerchantPosController extends BaseController {
      */
     @RequestMapping(value = "/getBankInfo",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions(value = { "m:merchant:list" })
     public ResultDTO<List<MerchantBank>> getBankInfo(@RequestParam(value="innerCode") String innerCode){
         if (Strings.isNullOrEmpty(innerCode)) {
             return ResultDTO.fail();

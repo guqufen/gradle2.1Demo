@@ -2,6 +2,7 @@ package net.fnsco.auth.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class RoleMenuService extends BaseService {
 
 	// 修改或者更新都走这个方法
 	@Transactional
-	public int saveOrUpdate(Long roleId, List<Long> menuIdList) {
+	public int saveOrUpdate(Integer roleId, List<Integer> menuIdList) {
 
 		// 如果菜单集合为空，直接返回
 		if (menuIdList.size() == 0) {
@@ -30,7 +31,7 @@ public class RoleMenuService extends BaseService {
 		roleMenuDAO.deleteById(roleId);
 
 		// 保存角色与菜单的关系
-		for (Long menuId : menuIdList) {
+		for (Integer menuId : menuIdList) {
 			RoleMenuDO roleMenuDO = new RoleMenuDO();
 			roleMenuDO.setRoleId(roleId);
 			roleMenuDO.setMenuId(menuId);
@@ -40,36 +41,57 @@ public class RoleMenuService extends BaseService {
 		return 0;
 	}
 
-	@Transactional
-	public int delete(Long roleId) {
+	public void delete(Integer roleId) {
 
 		// 通过角色ID删除角色与菜单的关系
-		int result = roleMenuDAO.deleteById(roleId);
-		return result;
+		roleMenuDAO.deleteById(roleId);
 	}
 
-	@Transactional
-	public int deleteByMenuId(Integer integer) {
+	public void deleteByMenuId(Integer integer) {
 
 		// 通过菜单ID删除角色与菜单的关系
-		int result = roleMenuDAO.deleteByMenuId(integer);
-
-		return result;
+		roleMenuDAO.deleteByMenuId(integer);
 	}
-	
-	public List<Long> queryByRoleId(Long roleId) {
-		
-		//通过角色ID查找对应菜单ID
+
+	public List<Integer> queryByRoleId(Integer roleId) {
+
+		// 通过角色ID查找对应菜单ID
 		RoleMenuDO roleMenuDO = new RoleMenuDO();
 		roleMenuDO.setRoleId(roleId);
 		List<RoleMenuDO> list = roleMenuDAO.query(roleMenuDO);
-		
-		//将菜单ID放入集合
-		List<Long> roleMenuList = new ArrayList<Long>();
+
+		// 将菜单ID放入集合
+		List<Integer> roleMenuList = new ArrayList<Integer>();
 		for (RoleMenuDO roleMenu : list) {
 			roleMenuList.add(roleMenu.getMenuId());
 		}
-		
+
+		return roleMenuList;
+	}
+
+	// 通过角色ID列表，查询对应菜单列表(去重)
+	public List<Integer> queryByRoleIdList(List<Integer> roleIdList) {
+
+		// 菜单ID集合
+		List<Integer> roleMenuList = new ArrayList<Integer>();
+
+		for (Integer roleId : roleIdList) {
+			// 通过角色ID查找对应菜单ID
+			RoleMenuDO roleMenuDO = new RoleMenuDO();
+			roleMenuDO.setRoleId(roleId);
+			List<RoleMenuDO> list = roleMenuDAO.query(roleMenuDO);
+
+			// 将查询出来的menuList放入List，然后返回
+			for (RoleMenuDO roleMenu : list) {
+				roleMenuList.add(roleMenu.getMenuId());
+			}
+		}
+
+		// 菜单ID去重
+		TreeSet<Integer> hash = new TreeSet<Integer>(roleMenuList);
+		roleMenuList.clear();
+		roleMenuList.addAll(hash);
+
 		return roleMenuList;
 	}
 }

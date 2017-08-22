@@ -66,7 +66,7 @@ function initTableData() {
 // 处理后台返回数据
 function responseHandler(res) {
 	unloginHandler(res);
-	if (res) {
+	if (res.data) {
 		return {
 			"rows" : res.data.list,
 			"total" : res.data.total
@@ -155,7 +155,7 @@ function getMenuTreeAdd(id) {
 						var node = menu_ztree.getNodeByParam("id", id[i], null);
 						if( node != null){
 							menu_ztree.checkNode(node, true);// 勾选指定ID的节点
-							menu_ztree.expandNode(node, true, false);// 指定ID节点展开
+//							menu_ztree.expandNode(node, true, false);// 指定ID节点展开
 						}
 					}
 					//展开所有节点
@@ -215,7 +215,7 @@ function getDataTreeAdd(id) {
 						var node = data_ztree.getNodeByParam("id", id[i], null);
 						if( node != null){
 							data_ztree.checkNode(node, true);// 勾选指定ID的节点
-							data_ztree.expandNode(node, true, false);// 指定ID节点展开
+//							data_ztree.expandNode(node, true, false);// 指定ID节点展开
 						}
 					}
 					//展开所有节点
@@ -264,7 +264,7 @@ function getDeptTree(id){
 					var node = dd_ztree.getNodeByParam("id", id, null);
 					if( node != null){
 						dd_ztree.selectNode(node, true);// 指定选中ID的节点
-						dd_ztree.expandNode(node, true, false);// 指定选中ID节点展开
+//						dd_ztree.expandNode(node, true, false);// 指定选中ID节点展开
 					}
 				}
 
@@ -333,7 +333,7 @@ $('#btn_edit').click(function() {
 
 	// 判断当前选择的数据行，若为0代表没有选择，提示请选择一列数据
 	if (selectContent.length == 0) {
-		layer.msg('请选择一列数据!');
+		layer.msg('请选择一条数据!');
 		return false;
 	} else {
 
@@ -371,12 +371,7 @@ $('#btn_edit').click(function() {
 $('#btn_save').click(function() {
 	saveOrUpdate();
 })
-// 点击保存按钮,获取选择的数据以及输入框的数据，组包发给后台
-$('#btn_update').click(function() {
-	saveOrUpdate();
-})
 
-//typeId:1-新增;2-修改
 function saveOrUpdate() {
 
 	var roleId = $('#roleId').val();
@@ -393,6 +388,12 @@ function saveOrUpdate() {
 	//角色名称  校验，不能为空
 	if (!$('#roleName').val()) {
 		layer.msg('请输入有效角色名称!');
+		return;
+	}
+	
+	//部门选择不能为空
+	if(!$('#deptId').val()){
+		layer.msg('请选择部门!');
 		return;
 	}
 
@@ -468,7 +469,7 @@ $('#btn_delete').click(function() {
 	// 找到当前table选择的行
 	var selectContent = ttable.bootstrapTable('getSelections');// 返回的是数组类型,Array
 	if (selectContent.length == 0) {
-		layer.msg('请选择一行数据!');
+		layer.msg('请选择一条数据!');
 		return false;
 	} else {
 
