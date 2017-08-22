@@ -33,7 +33,7 @@ import net.fnsco.freamwork.spring.SpringUtils;
  * @date 2017-05-20 13:00
  */
 public class OAuth2Filter extends AuthenticatingFilter {
-    public Logger       logger = LoggerFactory.getLogger(this.getClass());
+    public Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
@@ -57,6 +57,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
         //获取请求token，如果token不存在，直接返回401
         String token = getRequestToken((HttpServletRequest) request);
         if (StringUtils.isBlank(token)) {
+            logger.error("session不存在或页面未传入token值");
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             String json = JSON.toJSONString(ResultDTO.fail(FrameworkConstant.E_NOT_LOGIN));//"token不存在"
             httpResponse.setContentType("application/json;charset=utf-8");
@@ -73,9 +74,11 @@ public class OAuth2Filter extends AuthenticatingFilter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         httpResponse.setContentType("application/json;charset=utf-8");
         try {
+            logger.error("登录失败");
             //处理登录失败的异常
             String json = JSON.toJSONString(ResultDTO.fail(FrameworkConstant.E_NOT_LOGIN));//"登录异常"));
             httpResponse.getWriter().print(json);
+
         } catch (IOException e1) {
             logger.error("登录处理异常", e1);
         }

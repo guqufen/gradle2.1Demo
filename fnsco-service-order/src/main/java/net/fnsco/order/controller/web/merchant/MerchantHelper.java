@@ -1,5 +1,6 @@
 package net.fnsco.order.controller.web.merchant;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -13,12 +14,14 @@ import net.fnsco.order.service.domain.MerchantPos;
 import net.fnsco.order.service.domain.MerchantTerminal;
 
 public class MerchantHelper {
-    public static List<WebMerchantPosDTO> toPosDTO(List<MerchantChannelJO> channelJO,String innerCode) {
+    public static List<WebMerchantPosDTO> toPosDTO(List<MerchantChannelJO> channelJO,String innerCode,Integer userId) {
         List<WebMerchantPosDTO> result = Lists.newArrayList();
         for (MerchantChannelJO jo : channelJO) {
             WebMerchantPosDTO posDto = new WebMerchantPosDTO();
             MerchantChannel channel =jo.getMerChannel();
             channel.setInnerCode(innerCode);
+            channel.setModifyTime(new Date());
+            channel.setModifyUserId(userId);
             posDto.setMerChannel(channel);
             List<WebMerchantTerminalDTO> posInfos = Lists.newArrayList();
             posDto.setPosInfos(posInfos);
