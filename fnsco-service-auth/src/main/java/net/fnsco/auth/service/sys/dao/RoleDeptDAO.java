@@ -16,10 +16,6 @@ import java.util.List;;
 
 public interface RoleDeptDAO {
 
-    @Results({@Result( column = "role_id",property = "roleId"),@Result( column = "dept_id",property = "deptId") })
-    @Select("SELECT * FROM sys_role_dept WHERE id = #{id}")
-    public RoleDeptDO getById(@Param("id") int id);
-
     @Insert("INSERT into sys_role_dept(id,role_id,dept_id) VALUES (#{id},#{roleId},#{deptId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(RoleDeptDO roleDept);
@@ -39,9 +35,12 @@ public interface RoleDeptDAO {
 
     @SelectProvider(type = RoleDeptProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("roleDept") RoleDeptDO roleDept);
-    
-    @Results({@Result( column = "id",property = "id"),@Result( column = "role_id",property = "roleId"),@Result( column = "dept_id",property = "deptId") })
-    @SelectProvider(type = RoleDeptProvider.class, method = "query")
-    public List<RoleDeptDO> query(@Param("roleDept") RoleDeptDO roleDept);
 
+    /**
+     * 通过角色ID查询对应的数据权限ID(一对多，列表)
+     * @param roleId
+     * @return
+     */
+    @Select("select dept_id from sys_role_dept WHERE role_id=#{roleId}")
+    public List<Integer> queryByRoleId(@Param("roleId") Integer roleId);
 }

@@ -1,6 +1,5 @@
 package net.fnsco.auth.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,16 +48,7 @@ public class RoleDeptService extends BaseService {
 	// 通过角色ID查找部门ID(一对多，此处部门ID属于数据权限ID),并将查出来的数据的deptId存于list集合
 	public List<Integer> queryByRoleId(Integer roleId) {
 
-		RoleDeptDO roleDept = new RoleDeptDO();
-		roleDept.setRoleId(roleId);
-
-		List<RoleDeptDO> list = roleDeptDAO.query(roleDept);
-
-		// 遍历，将角色ID对应的数据权限ID查出来并放入集合list
-		List<Integer> deptIdList = new ArrayList<>();
-		for (RoleDeptDO roleDeptDO : list) {
-			deptIdList.add(roleDeptDO.getDeptId());
-		}
+		List<Integer> deptIdList = roleDeptDAO.queryByRoleId(roleId);
 		return deptIdList;
 	}
 }

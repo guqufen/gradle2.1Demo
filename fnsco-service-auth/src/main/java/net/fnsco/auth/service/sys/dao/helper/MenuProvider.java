@@ -1,6 +1,7 @@
 package net.fnsco.auth.service.sys.dao.helper;
 
 import org.apache.ibatis.jdbc.SQL;
+
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -161,5 +162,4 @@ public class MenuProvider {
             }
         }.toString();
     }
-
 }

@@ -60,4 +60,26 @@ public interface MenuDAO {
 			@Result(column = "icon", property = "icon"), @Result(column = "order_num", property = "orderNum") })
 	@SelectProvider(type = MenuProvider.class, method = "queryList")
 	public List<MenuDO> queryList(@Param("menu") MenuDO menu);
+	
+	/**
+	 * 获取用户登录的菜单界面的所有菜单ID列表
+	 * @param id
+	 * @return
+	 */
+	@Select("select distinct rm.menu_id from sys_user_role ur LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id where ur.user_id=#{id}")
+	public List<Integer> queryAllMenuId(@Param("id") int id);
+	
+	/**
+	 * 通过菜单ID列表查询菜单Obj
+	 * @param id
+	 * @return
+	 */
+	@Results({ @Result(column = "id", property = "id"), @Result(column = "parent_id", property = "parentId"),
+		@Result(column = "name", property = "name"), @Result(column = "url", property = "url"),
+		@Result(column = "perms", property = "perms"), @Result(column = "type", property = "type"),
+		@Result(column = "icon", property = "icon"), @Result(column = "order_num", property = "orderNum") })
+	@Select("<script>SELECT * FROM sys_menu WHERE id IN "
+			+ "<foreach item='item' index='index' collection='MenuIdList' open='(' separator=',' close=')'> #{item}"
+        + "</foreach> ORDER BY type, id, order_num</script>")
+	public List<MenuDO> queryAllMenuById(@Param("MenuIdList") List<Integer> MenuId);
 }
