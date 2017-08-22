@@ -524,6 +524,10 @@
 			<foreach collection="condition.innerCodeList" item="innerCode" open="(" separator="," close=")">#{innerCode}</foreach>
 	 		)
 	  </if>
+	  <if test="condition.paySubTypes != null" >
+        AND txn_sub_type in 
+		<foreach collection="condition.paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
+      </if>
 	  <if test="condition.terminalList != null">
 			AND term_id IN 
 			<foreach collection="condition.terminalList" item="terminal" open="(" separator="," close=")">#{terminal}</foreach>
@@ -703,6 +707,10 @@
 			<foreach collection="innerCodeList" item="innerCode" open="(" separator="," close=")">#{innerCode}</foreach>
 	 		)
 	 </if>
+	 <if test="condition.paySubTypes != null" >
+        AND txn_sub_type in 
+		<foreach collection="condition.paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
+      </if>
 	  <if test="terminalList != null">
 			AND term_id IN 
 			<foreach collection="terminalList" item="terminal" open="(" separator="," close=")">#{terminal}</foreach>
