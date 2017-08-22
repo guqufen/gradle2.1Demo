@@ -3,6 +3,7 @@ package net.fnsco.order.controller.web.sysappmsg;
 import java.text.SimpleDateFormat;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +45,7 @@ public class SysAppMsgController extends BaseController {
      */
     @RequestMapping(value = "/query",method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions(value = { "sys:msg:list" })
     public ResultPageDTO<SysAppMessage> appMsgIndex(SysAppMessage sysmsg,Integer currentPageNum,Integer pageSize){
         logger.info("查询推送消息列表");
         return sysAppMsgService.queryPageList(sysmsg, currentPageNum, pageSize);
@@ -60,6 +62,7 @@ public class SysAppMsgController extends BaseController {
      */
     @RequestMapping(value = "/doAdd",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions(value = { "sys:msg:save" })
     public ResultDTO<String> toAddMsg(AppPushMsgInfoDTO sysmsg){
         return sysAppMsgService.doAddMsg(sysmsg);
     }
@@ -75,6 +78,7 @@ public class SysAppMsgController extends BaseController {
      */
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions(value = { "sys:msg:delete" })
     public ResultDTO<String> deleteMsg(Integer id){
         return sysAppMsgService.deleteMsg(id);
     }
@@ -90,6 +94,7 @@ public class SysAppMsgController extends BaseController {
      */
     @RequestMapping(value = "/querySingle",method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions(value = { "sys:msg:list" })
     public ResultDTO<SysAppMessage> querySingle(Integer id){
         if(null == id){
             return ResultDTO.fail();

@@ -1,5 +1,6 @@
 package net.fnsco.order.controller.web.sysbank;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ public class SysBankController extends BaseController{
      */
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions(value = { "m:merchant:list" })
     public ResultPageDTO<SysBank> merchatInfoIndex(SysBank sysBank,Integer currentPageNum,Integer pageSize){
         logger.info("查询银行卡列表");
         return sysBankService.queryPageList(sysBank, currentPageNum, pageSize);

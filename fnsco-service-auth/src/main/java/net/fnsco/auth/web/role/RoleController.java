@@ -3,6 +3,7 @@ package net.fnsco.auth.web.role;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +24,6 @@ import net.fnsco.core.base.ResultPageDTO;
  */
 @Controller
 @RequestMapping("/web/auth/role")
-@Api()
 public class RoleController extends BaseController{
 	
 	@Autowired
@@ -31,6 +31,7 @@ public class RoleController extends BaseController{
 
 	@RequestMapping("list")
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:role:list" })
 	public ResultDTO pageList(RoleDO role) {
 		logger.info("开始分页查询RoleController.pageList, role=" + role.toString());
 		Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
@@ -43,6 +44,7 @@ public class RoleController extends BaseController{
 
 	@RequestMapping("add")
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:role:add" })
 	public  ResultDTO doAdd(RoleDO role){
 		logger.info("开始新增RoleController.doAdd, role=" + role.toString());
 
@@ -51,6 +53,7 @@ public class RoleController extends BaseController{
 	
 	@RequestMapping("update")
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:role:update" })
 	public ResultDTO doUpdate(RoleDO role){
 		logger.info("开始修改RoleController.doUpdate, roleId=" + role.getRoleId());
 
@@ -63,6 +66,7 @@ public class RoleController extends BaseController{
 	
 	@RequestMapping("delete")
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:role:delete" })
 	public ResultDTO doDelete(RoleDO role) {
 		logger.info("开始新增RoleController.doDelete, roleId=" + role.getRoleId());
 
@@ -71,6 +75,7 @@ public class RoleController extends BaseController{
 
 	@RequestMapping(value = "/queryRole", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:role:list" })
 	public ResultDTO<RoleDO> queryRole() {
 
 		List<RoleDO> result = roleService.queryRole();
