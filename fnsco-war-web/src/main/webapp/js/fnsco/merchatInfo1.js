@@ -400,6 +400,9 @@ $('#btn_delete').click(function(){
 //选择银行支行事件
 $('#btn_select_bank').click(function(){
   var select_data = $('#bankTable').bootstrapTable('getSelections')[0];
+  if(!select_data){
+    layer.msg('请选择银行!');return
+  }
   $(".subBankName.active").val(select_data.branchBankName);
   $(".subBankName.active").parents().next().find('.openBank').val(select_data.bankName);
   $(".subBankName.active").parents().next().next().find('.openBankPrince').val(select_data.provinceName);
@@ -412,7 +415,19 @@ $('#btn_select_bank').click(function(){
     dataId=dataId.concat(select_data[i].id);
   }
 });
-
+//兼容选择银行取消弹框Bug
+$('.subBankName').click(function(){
+  $("body").addClass('modal-open-custom');
+})
+$("#myModal .close").click(function(){
+  $("body").removeClass('modal-open-custom');
+})
+$("#editModal .close").click(function(){
+  $("body").removeClass('modal-open-custom');
+})
+$("#detailsModal .close").click(function(){
+  $("body").removeClass('modal-open-custom');
+})
 //请求所有代理商数据
 function requestAgent(type){
 	 $.ajax({
@@ -639,6 +654,7 @@ function bankCardHtml(num){
             '</div>';
 }
 function selectBank(id){
+  $("body").addClass('modal-open-custom');
   $('#subBankName'+id).addClass("active");
 }
 
@@ -720,6 +736,7 @@ function saveBankCardParams(conId){
         data:{"innerCode":innerCode},
         success:function(data){
           console.log(data);
+          bankOption='';
           for(var i=0;i<data.data.length;i++){
             bankOption+='<option value="'+data.data[i].id+'">'+data.data[i].subBankName+'</option>';
           }
@@ -727,6 +744,8 @@ function saveBankCardParams(conId){
           //默认添加一个终端列表
           $('#terminal-con').html('');
           $('#terminal-con').append(terminalHtml(TerminalList));
+          //
+          
         }
       })
     },
@@ -1005,6 +1024,7 @@ function contactHtml(num){
   				layer.msg(data.message);
           $("#myModal").modal('hide');
           $("#editModal").modal('hide');
+          $('body').removeClass('modal-open-custom');
   			},
   			error:function(){
   				layer.msg('系统错误');
@@ -1238,8 +1258,10 @@ function editData(id){
         $(".uploadify").hide();
         $('.editBtn_edit').show();
         $('.editBtn_save').hide();
+        $('.btn-div').hide();
         //编辑弹框点击编辑按钮事件
         $(".editBtn_edit").click(function(){
+            $('.btn-div').show();
             $(".remove-icon").show();
             $(".btn-addList").show();
             $("#editModal .nav-tabs li a").attr('href','javascript:;');
@@ -1270,6 +1292,7 @@ function editData(id){
             }
             $(this).prev().css('display','inline-block');
             $(this).hide();
+            $('.btn-div').hide();
             $(".remove-icon").hide();
             $(".btn-addList").hide();
             $("#editModal .nav-tabs li a").css('cursor','default');

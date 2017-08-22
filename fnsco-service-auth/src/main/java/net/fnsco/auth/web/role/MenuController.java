@@ -26,6 +26,7 @@ public class MenuController extends BaseController {
 	//查询菜单列表
 	@RequestMapping("list")
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:menu:list" })
 	public ResultDTO pageList(MenuDO menuDO) {
 		logger.info("开始分页查询MenuController.pageList, role=" + menuDO.toString());
 
@@ -40,6 +41,7 @@ public class MenuController extends BaseController {
 	// 选择菜单信息，去掉按钮类型
 	@RequestMapping("select")
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:menu:list" })
 	public ResultDTO select() {
 
 		return menuService.queryNotButtonList();
