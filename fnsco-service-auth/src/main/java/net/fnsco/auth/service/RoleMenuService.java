@@ -1,8 +1,8 @@
 package net.fnsco.auth.service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,7 +88,7 @@ public class RoleMenuService extends BaseService {
 		}
 
 		// 菜单ID去重
-		HashSet<Integer> hash = new HashSet<Integer>(roleMenuList);
+		TreeSet<Integer> hash = new TreeSet<Integer>(roleMenuList);
 		roleMenuList.clear();
 		roleMenuList.addAll(hash);
 
