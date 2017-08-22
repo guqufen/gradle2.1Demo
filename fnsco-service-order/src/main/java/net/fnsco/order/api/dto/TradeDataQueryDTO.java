@@ -11,28 +11,13 @@ public class TradeDataQueryDTO extends PageDTO {
     private String       endDate;   //结束日期 2016-05-10
     private List<String> terminals; //终端号数组，所有选择的终端
     private String       tradeId;   //交易流水ID
-    private String       payType;//支付类型00", "刷卡支付""01", "微信支付""02", "支付宝支付","06", "拉卡拉钱包"
+    private List<String>       payType;//支付类型00", "刷卡支付""01", "微信支付""02", "支付宝支付","06", "拉卡拉钱包"
     
-    
-    /**
-     * payType
-     *
-     * @return  the payType
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public String getPayType() {
+    public List<String> getPayType() {
         return payType;
     }
 
-    /**
-     * payType
-     *
-     * @param   payType    the payType to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setPayType(String payType) {
+    public void setPayType(List<String> payType) {
         this.payType = payType;
     }
 
