@@ -3,6 +3,7 @@ package net.fnsco.order.controller.web.appuser;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,12 +46,14 @@ public class AppUserManageController extends BaseController {
      */
     @RequestMapping(value = "/query",method= RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions(value = { "sys:app:user:list" })
     public ResultPageDTO<AppUserManageDTO> appUserIndex(AppUserManageDTO sysmsg,Integer currentPageNum,Integer pageSize){
         return AppUserService.queryPageList(sysmsg, currentPageNum, pageSize);
     }
     
     @RequestMapping(value = "/modifyRoles",method= RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions(value = { "sys:app:user:update" })
     public ResultDTO modifyRole(BandDto bandDto){
         return AppUserService.modifyRole(bandDto);
     }
@@ -58,6 +61,7 @@ public class AppUserManageController extends BaseController {
     //判断成为店主
     @RequestMapping(value = "/judgeRoles",method= RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions(value = { "sys:app:user:list" })
     public ResultDTO judgeRoles(@RequestBody AppUserMerchantDTO[] terminals){
         List<AppUserMerchantDTO> params = Arrays.asList(terminals);
         return AppUserService.judgeRoles(params);
@@ -65,6 +69,7 @@ public class AppUserManageController extends BaseController {
     
     @RequestMapping(value = "/changeRole",method= RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions(value = { "sys:app:user:update" })
     public ResultDTO changeRole(@RequestBody AppUserMerchantDTO[] terminals){
         List<AppUserMerchantDTO> params = Arrays.asList(terminals);
         return AppUserService.changeRole(params);
