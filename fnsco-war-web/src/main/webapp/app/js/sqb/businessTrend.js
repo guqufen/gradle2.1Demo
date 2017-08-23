@@ -106,7 +106,7 @@ var titleName="营业额";
 var titleName1="订单数";
 function trendData(tokenId,userId,startDate,endDate,innerCode){
   $.ajax({
-    url:'tradeReport/queryBusinessTrends',
+    url:'tradeReport/queryBusinessTrends?timer='+new Date().getTime(),
     dataType : "json",
     type:'POST',
     headers: {
