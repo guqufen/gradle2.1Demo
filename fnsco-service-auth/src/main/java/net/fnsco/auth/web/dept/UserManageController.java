@@ -85,6 +85,7 @@ public class UserManageController extends BaseController {
 	 * @param id
 	 * @return
 	 */
+	@RequiresPermissions(value = {"sys:user:list"})
 	@RequestMapping(value ="/queryUserById",method= RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO<UserDO> queryUserById(Integer id){
@@ -98,6 +99,7 @@ public class UserManageController extends BaseController {
 	 */
 	@RequestMapping(value ="/queryUserByName",method= RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:user:list"})
 	public boolean queryUserByName(String name){
 		boolean result = userService.queryUserByName(name);
 		return result;

@@ -202,9 +202,15 @@ function dotext(a) {
 		}
 	});
 }
-
+//清除所有表单数据
+function clearDate(){
+	$("#name").val(null);
+	$("#parentName").val(null);
+	$("#orderNum").val(null);
+}
 //新增按钮事件
 $('#btn_add').click(function() {
+	clearDate();
 	$('#addModal').modal();
 });
 //新增确认按钮事件
@@ -217,9 +223,14 @@ $('#btn_yes').click(
 					"orderNum" : $('#orderNum').val()
 				};
 			name = $('#name').val(), 
+			parent = $('#parentName').val(), 
 			orderNum = $('#orderNum').val()
 			if (name == null || name.length == 0) {
 				layer.msg('部门名称不能为空!');
+				return false;
+			}
+			if (parent == null || parent.length == 0) {
+				layer.msg('上级部门不能为空!');
 				return false;
 			}
 			if (orderNum == null || orderNum.length == 0) {
@@ -251,9 +262,14 @@ $('#btn_yes1').click(
 					"orderNum" : $('#orderNum1').val()
 				};
 			name = $('#name1').val(),
+			parent = $('#parentName1').val(),
 			orderNum = $('#orderNum1').val()
 			if (name == null || name.length == 0) {
 				layer.msg('部门名称不能为空!');
+				return false;
+			}
+			if (parent == null || parent.length == 0) {
+				layer.msg('上级部门不能为空!');
 				return false;
 			}
 			if (orderNum == null || orderNum.length == 0) {
