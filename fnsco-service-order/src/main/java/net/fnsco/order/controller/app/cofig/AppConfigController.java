@@ -31,6 +31,7 @@ public class AppConfigController extends BaseController {
     
     @Autowired
     private SysConfigService sysConfigService;
+    
     /**
      * getValueByName:(这里用一句话描述这个方法的作用)获取配置地址信息
      *

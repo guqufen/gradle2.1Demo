@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -24,6 +25,7 @@ import net.fnsco.order.controller.app.jo.CommJO;
  */
 @RestController
 @RequestMapping(value = "/open/comm", method = RequestMethod.POST)
+@Api(value = "/open/comm", tags = { "开放接口公共接口" })
 public class CommonController extends BaseController {
     @Autowired
     private Environment  env;

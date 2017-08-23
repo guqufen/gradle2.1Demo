@@ -470,7 +470,7 @@ function  fileUp(num){
      //在浏览窗口底部的文件类型下拉菜单中显示的文本
        'fileTypeDesc': 'Image Files',
        //限制大小
-       'fileSizeLimit':'2MB',
+       'fileSizeLimit':'20MB',
      //允许上传的文件后缀
        'fileTypeExts': '*.gif; *.jpg; *.png',
        //限制上传图片张数

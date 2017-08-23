@@ -41,15 +41,15 @@ import net.fnsco.order.service.domain.trade.TradeData;
 @Service
 public class TradeDataServiceImpl extends BaseService implements TradeDataService {
     @Autowired
-    private TradeDataDAO       tradeListDAO;
+    private TradeDataDAO        tradeListDAO;
     @Autowired
-    private MerchantChannelDao merchantChannelDao;
+    private MerchantChannelDao  merchantChannelDao;
     @Autowired
-    private MerchantUserRelDao merchantUserRelDao;
+    private MerchantUserRelDao  merchantUserRelDao;
     @Autowired
-    private MerchantCoreDao    merchantCoreDao;
+    private MerchantCoreDao     merchantCoreDao;
     @Autowired
-    private MerchantTerminalDao     merchantTerminalDao;
+    private MerchantTerminalDao merchantTerminalDao;
 
     /**
      * 保存交易流水
@@ -135,12 +135,14 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         //设置交易时间
         tradeData.setStartTime(DateUtils.getDateStartTime(merchantCore.getStartDate()));
         tradeData.setEndTime(DateUtils.getDateEndTime(merchantCore.getEndDate()));
-        tradeData.setPaySubTypes(merchantCore.getPayType());
+        if (!CollectionUtils.isEmpty(merchantCore.getPayType())) {
+            tradeData.setPaySubTypes(merchantCore.getPayType());
+        }
         //根据pos查询终端列表
         List<String> posList = merchantCore.getTerminals();
         if (!CollectionUtils.isEmpty(posList)) {
             List<String> terminalList = Lists.newArrayList();
-            for(String posId : posList){
+            for (String posId : posList) {
                 List<TerminalInfoDTO> tempList = merchantTerminalDao.queryTerByPosId(Integer.parseInt(posId));
                 for (TerminalInfoDTO terminal : tempList) {
                     terminalList.add(terminal.getTerminalCode());
@@ -215,10 +217,10 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     public TradeData queryByTradeId(String tradeId) {
         return tradeListDAO.selectByPrimaryKey(tradeId);
     }
-    
+
     @Override
-    public TradeData queryByTerminal(TradeData tradeData) {
-        TradeData list = tradeListDAO.selectByIRT(tradeData);
-        return list;
+    public int selectCountByIRT(TradeData tradeData) {
+        int result = tradeListDAO.selectCountByIRT(tradeData);
+        return result;
     }
 }
