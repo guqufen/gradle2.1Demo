@@ -1,10 +1,16 @@
 package net.fnsco.order.api.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.DTO;
 
+@ApiModel(value ="MerchantDTO")
 public class MerchantDTO extends DTO {
+    @ApiModelProperty(value = "商户码", required = true)
     private String  randomCode;
+    @ApiModelProperty(value = "渠道类型", required = true)
     private String  channelType;
+    @ApiModelProperty(value = "用户登录账号", required = true)
     private Integer userId;     //登录用户Id
 
     /**

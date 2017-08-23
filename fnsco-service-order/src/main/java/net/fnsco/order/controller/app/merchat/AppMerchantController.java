@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -37,6 +38,7 @@ import net.fnsco.order.controller.app.jo.UserMerchantJO;
  */
 @RestController
 @RequestMapping(value = "/app/merchant", method = RequestMethod.POST)
+@Api(value = "/app/merchant", tags = { "商户管理" })
 public class AppMerchantController extends BaseController {
     @Autowired
     private MerchantService merchantService;
