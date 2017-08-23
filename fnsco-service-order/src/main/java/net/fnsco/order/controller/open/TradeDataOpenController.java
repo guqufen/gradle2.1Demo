@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -25,6 +26,7 @@ import net.fnsco.order.service.comm.ServiceConstant;
  */
 @RestController
 @RequestMapping(value = "/open/trade", method = RequestMethod.POST)
+@Api(value = "/open/merchant", tags = { "交易流水处理接口" })
 public class TradeDataOpenController extends BaseController {
     @Autowired
     private TradeDataService tradeDataService;

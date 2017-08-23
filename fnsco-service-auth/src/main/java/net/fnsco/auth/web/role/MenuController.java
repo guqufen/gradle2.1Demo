@@ -92,7 +92,6 @@ public class MenuController extends BaseController {
 	// 用户登录，根据用户，查询角色信息，再根据角色信息查询菜单
 	@RequestMapping("userMenuist")
 	@ResponseBody
-	@RequiresPermissions(value = { "sys:menu:list" })
 	public ResultDTO userMenuist() {
 
 		// 将在session，获取的当前用户ID,带入service处理

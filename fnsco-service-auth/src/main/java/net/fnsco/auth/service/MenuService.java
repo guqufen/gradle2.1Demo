@@ -143,34 +143,34 @@ public class MenuService extends BaseService {
 			return ResultDTO.success(menuList);
 		}
 
-		//1、 通过用户ID查询用户角色ID列表,用户角色表，一对多;如果没找到角色列表，返回空
-		List<Integer> list = this.userRoleDAO.getByUserId(userId);
-		if(list.size() == 0){
-			logger.info("通过用户ID查询到的用户角色ID列表为空" );
+		//获取用户ID下所有菜单ID(优化DAO里面的语句，改为left join左连接)
+		List<Integer> menuIdList = menuDAO.queryAllMenuId(userId);
+		if(menuIdList.size() == 0){
 			return ResultDTO.fail();
 		}
-
-		//2、  通过角色ID列表查询角色对应菜单ID列表,角色菜单表，多对多;没找到对应菜单列表，返回空
-		List<Integer> menuList = this.roleMenuService.queryByRoleIdList(list);
-		if(menuList.size() == 0){
-			logger.info("通过角色ID查询到的菜单ID列表为空" );
-			return ResultDTO.fail();
-		}
-
-		//3、 通过菜单ID查询菜单Obj，遍历;如果没找到菜单，返回空
-		List<MenuDO> pageList = new ArrayList<>();
-		for (Integer menuId : menuList) {
-			MenuDO menuDO = menuDAO.getById(menuId.intValue());
-			//去掉空和按钮
-			if(null != menuDO && menuDO.getType() != 2){
-				pageList.add(menuDO);
-			}
-		}
-		if( pageList.size() == 0){
+		
+		//通过菜单ID的list查询菜单Obj列表(in查询)
+		List<MenuDO> menuList = menuDAO.queryAllMenuById(menuIdList);
+		System.out.println("menuList.size():"+menuList.size());
+		if( menuList.size() == 0){
 			logger.info("通过菜单ID查询菜单Obj为空" );
-			return ResultDTO.fail();
+			return ResultDTO.success();
 		}
 
-		return ResultDTO.success(pageList);
+//		//3、 通过菜单ID查询菜单Obj，遍历;如果没找到菜单，返回空
+//		List<MenuDO> pageList = new ArrayList<>();
+//		for (Integer menuId : menuIdList) {
+//			MenuDO menuDO = menuDAO.getById(menuId.intValue());
+//			//去掉空和按钮
+//			if(null != menuDO && menuDO.getType() != 2){
+//				pageList.add(menuDO);
+//			}
+//		}
+//		if( pageList.size() == 0){
+//			logger.info("通过菜单ID查询菜单Obj为空" );
+//			return ResultDTO.fail();
+//		}
+
+		return ResultDTO.success(menuList);
 	}
 }
