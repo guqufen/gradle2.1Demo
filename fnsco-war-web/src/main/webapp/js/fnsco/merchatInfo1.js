@@ -1,12 +1,3 @@
-var pathName=window.document.location.pathname; 
-var PROJECT_NAME =pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-function unloginHandler(result){
-  if(result.code && result.code == '4012'){
-    layer.msg('登录失效,去登录');
-		window.location="login.html";
-	}
-}
-
 //默认给表单加上时间控件
 $("#cardValidTime").datetimepicker({
   format: 'yyyy-mm-dd',

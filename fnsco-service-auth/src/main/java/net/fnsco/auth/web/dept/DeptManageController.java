@@ -51,6 +51,7 @@ public class DeptManageController extends BaseController {
 	 */
 	@RequestMapping(value = "/querytree", method = RequestMethod.GET)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:dept:info"})
 	public ResultDTO<DeptDO> querytree() {
 		List<DeptDO> result = sysDeptService.queryName();
 		return success(result);
@@ -92,6 +93,7 @@ public class DeptManageController extends BaseController {
 	 */
 	@RequestMapping(value = "/queryDeptById", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:dept:info"})
 	public ResultDTO<DeptDO> queryDeptById(Integer id) {
 		DeptDO result = sysDeptService.queryDeptById(id);
 		return success(result);

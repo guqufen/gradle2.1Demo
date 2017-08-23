@@ -1,14 +1,3 @@
-var pathName = window.document.location.pathname;
-var PROJECT_NAME = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-
-// 校验登录时间失效后访问处理方法
-function unloginHandler(result) {
-	if (result.code && result.code == '4012') {
-		layer.msg('登录失效,去登录');
-		window.location = "login.html";
-	}
-}
-
 var ttable;
 initTableData();
 function initTableData() {
@@ -54,7 +43,8 @@ function initTableData() {
 			width : 60
 		}, {
 			field : 'remark',
-			title : '备注'
+			title : '备注',
+			formatter :formatRemark
 		}, {
 			field : 'createTimeStr',
 			title : '创建时间',
@@ -77,6 +67,14 @@ function responseHandler(res) {
 			"total" : 0
 		};
 	}
+}
+
+//
+function formatRemark(value, row, index){
+	if(value && value.length > 30){
+		return value.substr(0,30)+'...';
+	}
+	return value;
 }
 
 // 组装请求参数
@@ -391,9 +389,21 @@ function saveOrUpdate() {
 		return;
 	}
 	
+	//角色名称  校验，不能超过100
+	if($('#roleName').val().length > 100){
+		layer.msg('角色名称超长，请不要超过100!');
+		return;
+	}
+	
 	//部门选择不能为空
 	if(!$('#deptId').val()){
 		layer.msg('请选择部门!');
+		return;
+	}
+	
+	//备注长度判断
+	if($('#remark').val().length > 100){
+		layer.msg('备注超长，请不要超过100!');
 		return;
 	}
 
@@ -473,34 +483,41 @@ $('#btn_delete').click(function() {
 		return false;
 	} else {
 
-		// 获取table选中数据的角色ID
-		var roleId = selectContent[0].roleId;
+		layer.confirm('确定删除选中数据吗？', {
+			time : 2000,
+			btn : [ '确定', '取消' ]
+		}, function() {
+			// 获取table选中数据的角色ID
+			var roleId = selectContent[0].roleId;
 
-		var param = {
-			'roleId' : roleId
-		}
-
-		// 组包发给后台
-		$.ajax({
-			type : 'POST',
-			url : PROJECT_NAME + "/web/auth/role/delete",
-			data : param,
-			traditional : true,
-			success : function(data) {
-				unloginHandler(data);
-				if (data.success) {
-					layer.msg("删除成功");
-					queryEvent("table");
-				} else if (!data.success) {
-					layer.msg(data.message);
-				}
-			},
-			error : function(data) {
-				layer.msg("删除失败");
-			},
-			exception : function() {
-				layer.mag("异常报错");
+			var param = {
+				'roleId' : roleId
 			}
+
+			// 组包发给后台
+			$.ajax({
+				type : 'POST',
+				url : PROJECT_NAME + "/web/auth/role/delete",
+				data : param,
+				traditional : true,
+				success : function(data) {
+					unloginHandler(data);
+					if (data.success) {
+						layer.msg("删除成功");
+						queryEvent("table");
+					} else if (!data.success) {
+						layer.msg(data.message);
+					}
+				},
+				error : function(data) {
+					layer.msg("删除失败");
+				},
+				exception : function() {
+					layer.mag("异常报错");
+				}
+			});
+		}, function() {
+			layer.mas('取消成功');
 		});
 	}
 })
