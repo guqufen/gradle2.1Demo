@@ -85,9 +85,9 @@ public class MerchantPosJO extends JO {
 
     private String  creditCardRate;
 
-    private Integer wechatFee;
+    private String wechatFee;
 
-    private Integer alipayFee;
+    private String alipayFee;
 
 
     /**
@@ -470,8 +470,8 @@ public class MerchantPosJO extends JO {
      * @return  the wechatFee
      * @since   CodingExample Ver 1.0
     */
-
-    public Integer getWechatFee() {
+    
+    public String getWechatFee() {
         return wechatFee;
     }
 
@@ -481,8 +481,8 @@ public class MerchantPosJO extends JO {
      * @param   wechatFee    the wechatFee to set
      * @since   CodingExample Ver 1.0
      */
-
-    public void setWechatFee(Integer wechatFee) {
+    
+    public void setWechatFee(String wechatFee) {
         this.wechatFee = wechatFee;
     }
 
@@ -492,8 +492,8 @@ public class MerchantPosJO extends JO {
      * @return  the alipayFee
      * @since   CodingExample Ver 1.0
     */
-
-    public Integer getAlipayFee() {
+    
+    public String getAlipayFee() {
         return alipayFee;
     }
 
@@ -503,9 +503,9 @@ public class MerchantPosJO extends JO {
      * @param   alipayFee    the alipayFee to set
      * @since   CodingExample Ver 1.0
      */
-
-    public void setAlipayFee(Integer alipayFee) {
+    
+    public void setAlipayFee(String alipayFee) {
         this.alipayFee = alipayFee;
     }
-
+    
 }
