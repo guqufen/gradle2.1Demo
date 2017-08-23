@@ -55,6 +55,7 @@ public class MerchantPosJO extends JO {
         terminal1.setId(terminalId1);
         terminal1.setInnerCode(innerCode);
         terminal1.setTerminalType("01");
+        terminal1.setTermName("扫码");
         MerchantTerminal terminal2 = new MerchantTerminal();
         terminal2.setDebitCardMaxFee(debitCardMaxFee);
         terminal2.setCreditCardRate(creditCardRate);
@@ -63,6 +64,7 @@ public class MerchantPosJO extends JO {
         terminal2.setTerminalType("00");
         terminal2.setId(terminalId2);
         terminal2.setInnerCode(innerCode);
+        terminal2.setTermName("刷卡");
         
         terminals.add(terminal1);
         terminals.add(terminal2);
