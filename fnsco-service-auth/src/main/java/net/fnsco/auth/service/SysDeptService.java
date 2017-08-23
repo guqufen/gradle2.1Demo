@@ -124,13 +124,7 @@ public class SysDeptService extends BaseService {
 		}
 		for (int i = 0; i < id.length; i++) {
 			int res = deptDAO.deleteById(id[i]);
-			if (res < 1) {
-				return ResultDTO.fail();
-			}
 			int re = roleDeptDAO.deleteByDeptId(id[i]);
-			if (re < 1) {
-				return ResultDTO.fail();
-			}
 		}
 		return ResultDTO.success();
 	}

@@ -120,7 +120,7 @@ function edit(date) {
 				layer.close();
 				return true;
 			} else {
-				layer.msg('修改失败');
+				layer.msg(data.message);
 			}
 		}
 	});
@@ -467,7 +467,7 @@ $('#btn_delete').click(function(){
             queryEvent("table");
           }else
           {
-            layer.msg('删除失败');
+            layer.msg(data.message);
           } 
         },
         error:function(e)
