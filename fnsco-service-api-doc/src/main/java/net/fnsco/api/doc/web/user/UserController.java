@@ -1,5 +1,7 @@
 package net.fnsco.api.doc.web.user;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +13,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.base.Strings;
 
+import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.doc.comm.RegexUtil;
 import net.fnsco.api.doc.service.user.UserBasicService;
 import net.fnsco.api.doc.service.user.UserDetailService;
+import net.fnsco.api.doc.service.user.entity.UserBasicDO;
 import net.fnsco.api.doc.service.user.entity.UserDetailDO;
 import net.fnsco.api.doc.service.vo.UserInfo;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
 
 /**
  * 
@@ -135,5 +140,24 @@ public class UserController extends BaseController {
 
         return ResultDTO.success();
     }
-
+   
+    //项目成员
+    @ApiOperation(value = "分页查询产品类型", notes = "分页查询产品类型")
+    @RequestMapping(value = "/pass/user/queryMembers", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultDTO page(UserBasicDO dto) {
+        Map<String, Integer> params = super.copyParamsToInteger(new String[] { "page", "rows" });
+        Integer page = params.get("page");
+        Integer rows = params.get("rows");
+        ResultPageDTO<UserBasicDO> pager = this.userBasicService.page(dto, page, rows);
+        return success(pager);
+    }
+    //新增项目成员
+    @ApiOperation(value = "新增项目成员", notes = "新增项目成员")
+    @RequestMapping(value = "/pass/user/addMembers", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultDTO addMembers(UserBasicDO dto){
+        ResultDTO res=userBasicService.addMembers(dto);
+        return res;
+    }
 }
