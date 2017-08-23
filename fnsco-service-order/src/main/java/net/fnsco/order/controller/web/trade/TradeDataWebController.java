@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import io.swagger.annotations.Api;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.order.api.dto.TradeDataDTO;
@@ -19,6 +20,7 @@ import net.fnsco.order.service.domain.trade.TradeData;
  */
 @Controller
 @RequestMapping(value = "/web/trade")
+@Api(value = "/web", tags = { "交易统计控制器" })
 public class TradeDataWebController extends BaseController {
 	
     @Autowired
