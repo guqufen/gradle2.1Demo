@@ -87,7 +87,7 @@ public class MenuProvider {
                 if (menu.getOrderNum() != null) {
                     WHERE("order_num=#{menu.orderNum}");
                 }
-                ORDER_BY("id asc limit " + start + ", " + limit);
+                ORDER_BY("type,id,order_num asc limit " + start + ", " + limit);
             }
         }.toString();
     }
