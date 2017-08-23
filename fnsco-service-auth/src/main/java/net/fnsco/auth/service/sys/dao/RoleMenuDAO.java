@@ -16,10 +16,6 @@ import java.util.List;;
 
 public interface RoleMenuDAO {
 
-    @Results({@Result( column = "role_id",property = "roleId"),@Result( column = "menu_id",property = "menuId") })
-    @Select("SELECT * FROM sys_role_menu WHERE id = #{id}")
-    public RoleMenuDO getById(@Param("id") int id);
-
     @Insert("INSERT into sys_role_menu(id,role_id,menu_id) VALUES (#{id},#{roleId},#{menuId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(RoleMenuDO roleMenu);
@@ -40,7 +36,11 @@ public interface RoleMenuDAO {
     @SelectProvider(type = RoleMenuProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("roleMenu") RoleMenuDO roleMenu);
     
-    @Results({@Result( column = "role_id",property = "roleId"),@Result( column = "menu_id",property = "menuId") })
-    @SelectProvider(type = RoleMenuProvider.class, method = "query")
-    public List<RoleMenuDO> query(@Param("roleMenu") RoleMenuDO roleMenu);
+    /**
+     * 通过角色ID查找对应的菜单ID(一对多，列表)
+     * @param roleId
+     * @return
+     */
+    @Select("select menu_id from sys_role_menu WHERE role_id = #{roleId}")
+    public List<Integer> queryByRoleId(@Param("roleId") Integer roleId);
 }

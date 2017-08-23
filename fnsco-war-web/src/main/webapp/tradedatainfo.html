@@ -67,10 +67,10 @@
 <script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <!-- <script src="js/content.min.js"></script> -->
+<script src="js/plugins/bootstrap-table/xlsx.core.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
-<script src="js/plugins/bootstrap-table/tableExport.js"></script>
 <script src="js/plugins/bootstrap-table/tableExport.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
@@ -93,6 +93,18 @@
         pagination: true,   //是否显示分页（*）
         sortable: true,   //是否启用排序
         sortOrder: "asc",   //排序方式
+        showExport: true, //显示导出按钮
+        exportDataType: "all",//导出合适条件的所有数据
+        exportTypes:['excel'],//只导出excel
+        Icons:'glyphicon-export icon-share',
+        exportOptions:{  
+//             ignoreColumn: [0,1],  //忽略某一列的索引  
+            fileName: '商户流水信息',  //文件名称设置  
+            worksheetName: '流水列表',  //表格工作区名称  
+            tableName: '商户流水信息',  
+            excelstyles: ['background-color', 'color', 'font-size', 'font-weight']
+//             onMsoNumberFormat: DoOnMsoNumberFormat  
+        },
         pageNumber:1,   //初始化加载第一页，默认第一页
         pageSize: 15,   //每页的记录行数（*）
         pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）

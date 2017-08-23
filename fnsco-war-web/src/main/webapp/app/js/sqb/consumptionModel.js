@@ -51,7 +51,7 @@ var titleName="营业额";
 var titleName1="订单数";
 function modelData(tokenId,userId,startDate,endDate,innerCode){
   $.ajax({
-    url:'tradeReport/queryConsumption',
+    url:'tradeReport/queryConsumption?timer='+new Date().getTime(),
     dataType : "json",
     type:'POST',
     headers: {
@@ -121,7 +121,7 @@ function getShopList(tokenId,userId){
     };
   var params = JSON.stringify(jsonstr);
   $.ajax({
-    url:'merchant/getShopOwnerMerChant',
+    url:'merchant/getShopOwnerMerChant?timer='+new Date().getTime(),
     contentType: "application/json",
     dataType : "json",
     type:'POST',
