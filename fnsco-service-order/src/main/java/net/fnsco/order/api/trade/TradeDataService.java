@@ -40,5 +40,5 @@ public interface TradeDataService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    TradeData queryByTerminal(TradeData tradeData);
+    int selectCountByIRT(TradeData tradeData);
 }

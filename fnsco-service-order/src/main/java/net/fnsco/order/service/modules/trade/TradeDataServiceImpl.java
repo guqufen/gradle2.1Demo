@@ -219,8 +219,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     }
 
     @Override
-    public TradeData queryByTerminal(TradeData tradeData) {
-        TradeData list = tradeListDAO.selectByIRT(tradeData);
-        return list;
+    public int selectCountByIRT(TradeData tradeData) {
+        int result = tradeListDAO.selectCountByIRT(tradeData);
+        return result;
     }
 }

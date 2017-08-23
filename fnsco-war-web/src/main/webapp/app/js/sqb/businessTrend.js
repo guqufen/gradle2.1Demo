@@ -178,7 +178,7 @@ function getShopList(tokenId,userId){
     };
   var params = JSON.stringify(jsonstr);
   $.ajax({
-    url:'merchant/getShopOwnerMerChant',
+    url:'merchant/getShopOwnerMerChant?timer='+new Date().getTime(),
     contentType: "application/json",
     dataType : "json",
     type:'POST',
