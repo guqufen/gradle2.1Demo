@@ -1,12 +1,3 @@
-var pathName=window.document.location.pathname; 
-var PROJECT_NAME =pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-function unloginHandler(result){
-  if(result.code && result.code == '4012'){
-    layer.msg('登录失效,去登录');
-		window.location="login.html";
-	}
-}
-
 //默认给表单加上时间控件
 $("#cardValidTime").datetimepicker({
   format: 'yyyy-mm-dd',
@@ -479,7 +470,7 @@ function  fileUp(num){
      //在浏览窗口底部的文件类型下拉菜单中显示的文本
        'fileTypeDesc': 'Image Files',
        //限制大小
-       'fileSizeLimit':'2MB',
+       'fileSizeLimit':'20MB',
      //允许上传的文件后缀
        'fileTypeExts': '*.gif; *.jpg; *.png',
        //限制上传图片张数

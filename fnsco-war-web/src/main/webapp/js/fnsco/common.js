@@ -8,6 +8,9 @@ function unloginHandler(result){
 		window.location="index.html";
 		window.top.location="index.html";
 	}
+	if(result.code && result.code == '4015'){
+		layer.msg(result.message);
+	}
 }
 //日期格式化
 function formatDateUtil(datestr){

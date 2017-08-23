@@ -79,4 +79,6 @@ public interface TradeDataDAO {
      * @since  CodingExample　Ver 1.1
      */
     TradeData selectByIRT(TradeData record);
+    
+    int selectCountByIRT(TradeData record);
 }

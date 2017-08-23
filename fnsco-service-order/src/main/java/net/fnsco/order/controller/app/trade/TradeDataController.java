@@ -117,8 +117,8 @@ public class TradeDataController extends BaseController {
         if(null == tradeData){
             return ResultDTO.success(result);
         }
-        TradeData temp = tradeDataService.queryByTerminal(tradeData);
-        if(temp != null){
+        int count = tradeDataService.selectCountByIRT(tradeData);
+        if(count>1){
             result.setCancel("1");
         }else{
             result.setCancel("0");

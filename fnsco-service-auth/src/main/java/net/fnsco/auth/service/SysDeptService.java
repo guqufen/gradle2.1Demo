@@ -12,6 +12,7 @@ import net.fnsco.auth.comm.AuthConstant;
 import net.fnsco.auth.service.sys.dao.DeptDAO;
 import net.fnsco.auth.service.sys.dao.RoleDeptDAO;
 import net.fnsco.auth.service.sys.entity.DeptDO;
+import net.fnsco.auth.service.sys.entity.MenuDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -43,7 +44,7 @@ public class SysDeptService extends BaseService {
 		for (DeptDO temp : data) {
 			DeptDO tdo = deptDAO.getById(temp.getParentId());
 			if (tdo == null) {
-				temp.setParentName(null);
+				temp.setParentName("杭州法奈昇有限公司");
 			} else {
 				temp.setParentName(tdo.getName());
 			}
@@ -64,6 +65,12 @@ public class SysDeptService extends BaseService {
 		// 返回根据条件查询的所有记录条数
 		List<DeptDO> data = deptDAO.pageNameList();
 		// ResultDTO<DeptDO> result = new ResultDTO<DeptDO>(data);
+		// 添加顶级菜单
+				DeptDO root = new DeptDO();
+				root.setId(0);
+				root.setName("杭州法奈昇有限公司");
+				root.setParentId(-1);
+				data.add(root);
 		return data;
 	}
 
@@ -104,6 +111,8 @@ public class SysDeptService extends BaseService {
 		if (data.getParentId() != 0) {
 			DeptDO user = deptDAO.getById(data.getParentId());
 			data.setParentName(user.getName());
+		}else {
+			data.setParentName("杭州法奈昇有限公司");
 		}
 		return data;
 	}
@@ -124,13 +133,7 @@ public class SysDeptService extends BaseService {
 		}
 		for (int i = 0; i < id.length; i++) {
 			int res = deptDAO.deleteById(id[i]);
-			if (res < 1) {
-				return ResultDTO.fail();
-			}
 			int re = roleDeptDAO.deleteByDeptId(id[i]);
-			if (re < 1) {
-				return ResultDTO.fail();
-			}
 		}
 		return ResultDTO.success();
 	}

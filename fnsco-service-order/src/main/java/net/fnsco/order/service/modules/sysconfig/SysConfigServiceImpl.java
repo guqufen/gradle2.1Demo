@@ -1,6 +1,7 @@
 package net.fnsco.order.service.modules.sysconfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
@@ -25,6 +26,10 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
 
     @Autowired
     private SysConfigDao sysConfigDao;
+    @Autowired
+    private Environment env; 
+    
+    private static final String baseUrl ="base.url";
 
     /**
      * (non-Javadoc)
@@ -143,13 +148,15 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
         if (Strings.isNullOrEmpty(value)) {
             return null;
         }
+        
+        value = env.getProperty(baseUrl)+value;
+        
         String temp = FrameworkConstant.TOKEN_ID + appConfigDTO.getUserId();
         String trueTokenId = Md5Util.getInstance().md5(temp);
-        String url = config.getValue();
-        if(url.indexOf("?")>0){
-            config.setValue(url+"&");
+        if(value.indexOf("?")>0){
+            config.setValue(value+"&");
         }else{
-            config.setValue(url+"?");
+            config.setValue(value+"?");
         }
         return config.getValue() + "userId=" + appConfigDTO.getUserId()+"&tokenId="+trueTokenId;
     }

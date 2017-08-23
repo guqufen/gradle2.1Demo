@@ -1,5 +1,7 @@
 package net.fnsco.auth.web.dept;
 
+import java.util.List;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import net.fnsco.auth.comm.AuthConstant;
 import net.fnsco.auth.service.UserService;
 import net.fnsco.auth.service.sys.entity.UserDO;
 import net.fnsco.core.base.BaseController;
@@ -51,6 +54,17 @@ public class UserManageController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions(value = {"sys:user:delete"})
 	public ResultDTO<String> deleteUserById(@RequestParam(value="id[]") Integer[] id){
+		//获取当前登录的用户
+	    WebUserDTO adminUser = (WebUserDTO) getSessionUser();
+	    Integer userId=adminUser.getId();
+	    for (int i = 0; i < id.length; i++) {
+	    	if(id[i]==AuthConstant.SUPER_ADMIN) {
+	    		return ResultDTO.fail(AuthConstant.E_NOT_DELEET_ADMIN);
+	    	}
+	    	if(userId==id[i]) {
+	    		return ResultDTO.fail(AuthConstant.E_NOT_DELEET_ONESELF);
+	    	}
+		}
 		ResultDTO<String> result = userService.deleteById(id);
 		return success(result);
 	}
@@ -71,6 +85,7 @@ public class UserManageController extends BaseController {
 	 * @param id
 	 * @return
 	 */
+	@RequiresPermissions(value = {"sys:user:list"})
 	@RequestMapping(value ="/queryUserById",method= RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO<UserDO> queryUserById(Integer id){
@@ -84,6 +99,7 @@ public class UserManageController extends BaseController {
 	 */
 	@RequestMapping(value ="/queryUserByName",method= RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:user:list"})
 	public boolean queryUserByName(String name){
 		boolean result = userService.queryUserByName(name);
 		return result;
@@ -101,6 +117,16 @@ public class UserManageController extends BaseController {
 	    WebUserDTO adminUser = (WebUserDTO) getSessionUser();
 	    Integer userId=adminUser.getId();
 	    user.setModifyUserId(userId);
+	    Integer id=user.getId();
+	    Integer status=user.getStatus();
+	    if(status==2) {
+	    	if(id==AuthConstant.SUPER_ADMIN) {
+	    		return ResultDTO.fail(AuthConstant.E_NOT_DELEET_ADMIN);
+	    	}
+	    	if(userId==id) {
+	    		return ResultDTO.fail(AuthConstant.E_NOT_DELEET_ONESELF);
+	    	}
+	    }
 		ResultDTO<String> result = userService.toEditDept(user);
 		return result;
 	}

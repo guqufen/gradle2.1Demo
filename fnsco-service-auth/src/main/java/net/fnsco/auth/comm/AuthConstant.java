@@ -17,6 +17,8 @@ public class AuthConstant extends CoreConstants {
     public static String WEB_TIME_ERROR           = "5110";
     public static String E_PEPT_EXIST       	  = "5011";            //存在子部门
     public static String E_MENU_EXIST       	  = "5021";            //存在子目录或菜单
+    public static String E_NOT_DELEET_ONESELF     = "5022";            //无法删除自己和禁用自己
+    public static String E_NOT_DELEET_ADMIN     = "5023";            //无法删除和禁用admin系统管理员
     static {
         ERROR_MESSGE_MAP.put(WEB_LOGIN_NULL, "用户名或密码为空");
         ERROR_MESSGE_MAP.put(WEB_LOGIN_FAIL, "用户名或密码错误");
@@ -30,5 +32,7 @@ public class AuthConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(WEB_TIME_ERROR, "时间错误");
         ERROR_MESSGE_MAP.put(E_PEPT_EXIST, "存在子部门，无法删除");
         ERROR_MESSGE_MAP.put(E_MENU_EXIST, "存在子目录或菜单，无法删除");
+        ERROR_MESSGE_MAP.put(E_NOT_DELEET_ONESELF, "无法删除和禁用自己");
+        ERROR_MESSGE_MAP.put(E_NOT_DELEET_ADMIN, "无法删除和禁用admin系统管理员");
     }
 }

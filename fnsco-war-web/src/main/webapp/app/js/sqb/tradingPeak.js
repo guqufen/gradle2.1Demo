@@ -105,7 +105,7 @@ var titleName="总额(均)";
 var titleName1="笔数(均)";
 function epakData(tokenId,userId,startDate,endDate,innerCode){
   $.ajax({
-    url:'tradeReport/queryPeakTrade',
+    url:'tradeReport/queryPeakTrade?timer='+new Date().getTime(),
     dataType : "json",
     type:'POST',
     headers: {
@@ -183,7 +183,7 @@ function getShopList(tokenId,userId){
     };
   var params = JSON.stringify(jsonstr);
   $.ajax({
-    url:'merchant/getShopOwnerMerChant',
+    url:'merchant/getShopOwnerMerChant?timer='+new Date().getTime(),
     contentType: "application/json",
     dataType : "json",
     type:'POST',

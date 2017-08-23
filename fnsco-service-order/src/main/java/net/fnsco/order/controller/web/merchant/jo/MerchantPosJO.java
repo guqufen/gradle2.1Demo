@@ -55,6 +55,7 @@ public class MerchantPosJO extends JO {
         terminal1.setId(terminalId1);
         terminal1.setInnerCode(innerCode);
         terminal1.setTerminalType("01");
+        terminal1.setTermName("扫码");
         MerchantTerminal terminal2 = new MerchantTerminal();
         terminal2.setDebitCardMaxFee(debitCardMaxFee);
         terminal2.setCreditCardRate(creditCardRate);
@@ -63,6 +64,7 @@ public class MerchantPosJO extends JO {
         terminal2.setTerminalType("00");
         terminal2.setId(terminalId2);
         terminal2.setInnerCode(innerCode);
+        terminal2.setTermName("刷卡");
         
         terminals.add(terminal1);
         terminals.add(terminal2);
@@ -85,9 +87,9 @@ public class MerchantPosJO extends JO {
 
     private String  creditCardRate;
 
-    private Integer wechatFee;
+    private String wechatFee;
 
-    private Integer alipayFee;
+    private String alipayFee;
 
 
     /**
@@ -470,8 +472,8 @@ public class MerchantPosJO extends JO {
      * @return  the wechatFee
      * @since   CodingExample Ver 1.0
     */
-
-    public Integer getWechatFee() {
+    
+    public String getWechatFee() {
         return wechatFee;
     }
 
@@ -481,8 +483,8 @@ public class MerchantPosJO extends JO {
      * @param   wechatFee    the wechatFee to set
      * @since   CodingExample Ver 1.0
      */
-
-    public void setWechatFee(Integer wechatFee) {
+    
+    public void setWechatFee(String wechatFee) {
         this.wechatFee = wechatFee;
     }
 
@@ -492,8 +494,8 @@ public class MerchantPosJO extends JO {
      * @return  the alipayFee
      * @since   CodingExample Ver 1.0
     */
-
-    public Integer getAlipayFee() {
+    
+    public String getAlipayFee() {
         return alipayFee;
     }
 
@@ -503,9 +505,9 @@ public class MerchantPosJO extends JO {
      * @param   alipayFee    the alipayFee to set
      * @since   CodingExample Ver 1.0
      */
-
-    public void setAlipayFee(Integer alipayFee) {
+    
+    public void setAlipayFee(String alipayFee) {
         this.alipayFee = alipayFee;
     }
-
+    
 }
