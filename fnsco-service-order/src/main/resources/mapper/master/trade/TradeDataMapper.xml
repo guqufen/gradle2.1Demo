@@ -525,7 +525,7 @@
 	 		)
 	  </if>
 	  <if test="condition.paySubTypes != null" >
-        AND txn_sub_type in 
+        AND pay_sub_type in 
 		<foreach collection="condition.paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
       </if>
 	  <if test="condition.terminalList != null">
@@ -708,7 +708,7 @@
 	 		)
 	 </if>
 	 <if test="paySubTypes != null" >
-        AND txn_sub_type in 
+        AND pay_sub_type in 
 		<foreach collection="paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
       </if>
 	  <if test="terminalList != null">
@@ -756,5 +756,14 @@
 		)
 	AND time_stamp > #{tradeDate}
 	AND status = 1
+  </select>
+  
+    <select id="selectCountByIRT" resultType="java.lang.Integer" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+    select 
+      count(id)
+    from t_trade_data
+    where refer_no = #{referNo,jdbcType=VARCHAR}
+    and term_id = #{termId,jdbcType=VARCHAR}
+    and inner_code = #{innerCode,jdbcType=VARCHAR}
   </select>
 </mapper>

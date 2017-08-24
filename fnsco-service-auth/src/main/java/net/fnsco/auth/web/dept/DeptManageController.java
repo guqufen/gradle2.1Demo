@@ -51,8 +51,22 @@ public class DeptManageController extends BaseController {
 	 */
 	@RequestMapping(value = "/querytree", method = RequestMethod.GET)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:dept:info"})
 	public ResultDTO<DeptDO> querytree() {
-		List<DeptDO> result = sysDeptService.queryName();
+		List<DeptDO> result = sysDeptService.queryName(true);
+		return success(result);
+	}
+	
+	/**
+	 * 部门树查询,不带root根节点
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/queryNoRoottree", method = RequestMethod.GET)
+	@ResponseBody
+	@RequiresPermissions(value = {"sys:dept:info"})
+	public ResultDTO<DeptDO> queryNoRoottree() {
+		List<DeptDO> result = sysDeptService.queryName(false);
 		return success(result);
 	}
 
@@ -92,6 +106,7 @@ public class DeptManageController extends BaseController {
 	 */
 	@RequestMapping(value = "/queryDeptById", method = RequestMethod.POST)
 	@ResponseBody
+	@RequiresPermissions(value = {"sys:dept:info"})
 	public ResultDTO<DeptDO> queryDeptById(Integer id) {
 		DeptDO result = sysDeptService.queryDeptById(id);
 		return success(result);

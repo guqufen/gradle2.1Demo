@@ -23,7 +23,7 @@ public class MenuController extends BaseController {
 	@Autowired
 	private MenuService menuService;
 
-	//查询菜单列表
+	// 查询菜单列表
 	@RequestMapping("list")
 	@ResponseBody
 	@RequiresPermissions(value = { "sys:menu:list" })
@@ -47,7 +47,7 @@ public class MenuController extends BaseController {
 		return menuService.queryNotButtonList();
 	}
 
-	//新增
+	// 新增
 	@RequestMapping(value = "add", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions(value = { "sys:menu:add" })
@@ -63,7 +63,7 @@ public class MenuController extends BaseController {
 		return success(menuDO);
 	}
 
-	//修改
+	// 修改
 	@RequestMapping(value = "update", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions(value = { "sys:menu:update" })
@@ -88,7 +88,7 @@ public class MenuController extends BaseController {
 
 		return menuService.doDelete(menu);
 	}
-	
+
 	// 用户登录，根据用户，查询角色信息，再根据角色信息查询菜单
 	@RequestMapping("userMenuist")
 	@ResponseBody

@@ -1,0 +1,54 @@
+body.help{
+	background-color: #f8f8f8;
+}
+.title{
+	/*font-size: 0.555rem;*/
+	font-size: 13px;
+	color: #aeaeae;
+	/*padding:0.6rem;*/
+	padding:14px;
+	line-height: 1;
+}
+/*重置mui样式*/
+p.mui-ellipsis{
+	color: #333;
+	/*font-size: 0.64rem;*/
+	font-size: 15px;
+}
+.mui-table-view-cell{
+	/*padding:0.68rem;*/
+	padding:16px;
+	line-height: 1.2;
+}
+.mui-table-view-cell>a:not(.mui-btn){
+	/*margin: -0.68rem -15px;*/
+	margin: -16px -15px;
+}
+.mui-table-view-cell:after{
+	background-color: #e8e8e8;
+}
+.mui-table-view:before {
+	background-color: #e8e8e8;
+}
+.mui-table-view:after{
+	background-color: #e8e8e8;
+}
+
+/*帮助详情*/
+.help-body{
+	background-color: #fff;
+}
+.content-title{
+	/*font-size: 0.64rem;
+	padding: 0.68rem;*/
+	font-size: 15px;
+	padding: 16px;
+	border-bottom: 1px solid #e8e8e8;
+	color: #333333;
+}
+.help-content{
+	/*padding: 0.68rem;
+	font-size: 0.64rem;*/
+	padding: 16px;
+	font-size: 15px;
+}

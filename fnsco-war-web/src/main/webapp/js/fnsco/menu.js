@@ -1,13 +1,3 @@
-var pathName = window.document.location.pathname;
-var PROJECT_NAME = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-// 校验登录时间失效后访问处理方法
-function unloginHandler(result) {
-	if (result.code && result.code == '4012') {
-		layer.msg('登录失效,去登录');
-		window.location = "login.html";
-	}
-}
-
 /**页面加载时初始化表格**/
 var ttable;
 initTableData();
@@ -151,6 +141,7 @@ $(':radio').click(function(){
 		if(this.checked){
 			//如果目录选中
 			if(this.value == "0"){
+				$('#id').html('目录名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
@@ -159,6 +150,7 @@ $(':radio').click(function(){
 				$('#iconDiv').show();
 				//如果菜单选中
 			}else if(this.value == "1"){
+				$('#id').html('菜单名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').show();
@@ -167,6 +159,7 @@ $(':radio').click(function(){
 				$('#iconDiv').hide();
 				//如果按钮选中
 			}else if(this.value == "2"){
+				$('#id').html('按钮名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
@@ -212,7 +205,7 @@ function getMenuTree(id){
 					var node = dd_ztree.getNodeByParam("id", id);
 					if( node != null){
 						dd_ztree.selectNode(node, true);// 指定选中ID的节点
-						dd_ztree.expandNode(node, true, false);// 指定选中ID节点展开
+//						dd_ztree.expandNode(node, true, false);// 指定选中ID节点展开
 					}
 				}
 
@@ -267,6 +260,7 @@ $('#btn_add').click(function() {
 	//先清掉相关数据，设置menuType默认选中,并展示相应菜单
 	clearInput();
 	$('input[id=menuType]').prop('checked', 'checked');//固有属性用prop
+	$('#id').html('菜单名称');
 	$('#menuNameDiv').show();
 	$('#parentNameDiv').show();
 	$('#menuUrlDiv').show();
@@ -316,9 +310,10 @@ $('#btn_edit').click(function() {
 		//设置单选按钮的值
 		$("input[name=team]").each(function(){
 			if(this.value == selectContent[0].type){
-				$(this).prop("checked", "checked");
-			
+
+				this.checked=true;//修改默认选中
 			if(this.value == "0"){
+				$('#id').html('目录名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
@@ -326,6 +321,7 @@ $('#btn_edit').click(function() {
 				$('#orderNumDiv').show();
 				$('#iconDiv').show();
 			}else if(this.value == "1"){
+				$('#id').html('菜单名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').show();
@@ -333,6 +329,7 @@ $('#btn_edit').click(function() {
 				$('#orderNumDiv').show();
 				$('#iconDiv').hide();
 			}else if(this.value == "2"){
+				$('#id').html('按钮名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
@@ -366,7 +363,7 @@ function saveOrUpdate() {
 
 		// 菜单名称 校验，不能为空
 	if (!$('#menuName').val()) {
-		layer.msg('请输入有效菜单名称!');
+		layer.msg('请输入有效名称!');
 		return;
 	}
 
@@ -428,36 +425,44 @@ $('#btn_delete').click(function() {
 		return false;
 	} else {
 
-		// 获取table选中数据的菜单ID和菜单类型
-		var id = selectContent[0].id;
-		var type = selectContent[0].type;
+		layer.confirm('确定删除选中数据吗？', {
+			time : 20000, // 20s后自动关闭
+			btn : [ '确定', '取消' ]
+		}, function() {
+			// 获取table选中数据的菜单ID和菜单类型
+			var id = selectContent[0].id;
+			var type = selectContent[0].type;
 
-		var param = {
-			'id' : id,
-			'type':type
-		}
-
-		// 组包发给后台
-		$.ajax({
-			type : 'POST',
-			url : PROJECT_NAME + "/web/auth/menu/delete",
-			data : param,
-			traditional : true,
-			success : function(data) {
-				unloginHandler(data);
-				if (data.success) {
-					layer.msg("删除成功");
-					queryEvent("table");
-				} else if (!data.success) {
-					layer.msg(data.message);
-				}
-			},
-			error : function(data) {
-				layer.msg("删除失败");
-			},
-			exception : function() {
-				layer.mag("异常报错");
+			var param = {
+				'id' : id,
+				'type' : type
 			}
+
+			// 组包发给后台
+			$.ajax({
+				type : 'POST',
+				url : PROJECT_NAME + "/web/auth/menu/delete",
+				data : param,
+				traditional : true,
+				success : function(data) {
+					unloginHandler(data);
+					if (data.success) {
+						layer.msg("删除成功");
+						queryEvent("table");
+					} else if (!data.success) {
+						layer.msg(data.message);
+					}
+				},
+				error : function(data) {
+					layer.msg("删除失败");
+				},
+				exception : function() {
+					layer.mag("异常报错");
+				}
+			});
+
+		}, function() {
+			layer.msg('取消成功');
 		});
 	}
 })

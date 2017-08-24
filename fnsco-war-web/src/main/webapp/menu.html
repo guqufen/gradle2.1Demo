@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>菜单管理-法奈昇大数据平台</title>
-    <meta name="keywords" content="法奈昇大数据平台">
-    <meta name="description" content="法奈昇大数据平台">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
-    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
-    <link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
-    <link href="css/style.min.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
-    <link href="js/uploadify-v3.1/uploadify.css">
-    <link rel="stylesheet" href="js/viewer/viewer.min.css">
-    <link href="js/ztree/metroStyle/metroStyle.css" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>菜单管理-法奈昇大数据平台</title>
+<meta name="keywords" content="法奈昇大数据平台">
+<meta name="description" content="法奈昇大数据平台">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css"
+	rel="stylesheet">
+<link
+	href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
+<link href="js/uploadify-v3.1/uploadify.css">
+<link rel="stylesheet" href="js/viewer/viewer.min.css">
+<link href="js/ztree/metroStyle/metroStyle.css" rel="stylesheet">
+<style>
+textarea {
+	resize: none;
+}
+</style>
 </head>
 <body class="gray-bg">
 	<div class="panel-body animated fadeInRight">
@@ -31,7 +39,7 @@
 									data-toggle="modal" data-target="#myModal">
 									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 								</button>
-								<button id="btn_edit" type="button" class="btn btn-success"
+								<button id="btn_edit" type="button" class="btn btn-warning"
 									data-toggle="modal" data-target="#myModal">
 									<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>修改
 								</button>
@@ -76,7 +84,7 @@
 
 										<div class="form-group" id="menuNameDiv">
 											<!-- 加一个ID区分新增和修改 ，修改时ID给值-->
-											<div class="col-sm-2 control-label" id="id">菜单名称</div>
+											<div class="col-sm-2 control-label" id="id"></div>
 											<div class="col-sm-10">
 												<input type="text" class="form-control" name="menuName" id="menuName"
 													placeholder="菜单名称或按钮名称" />
@@ -88,7 +96,7 @@
 											<div class="col-sm-10">
 												<input type="text" class="form-control"
 													style="cursor: pointer;" name="parentName" id="parentName"
-													onclick="javascript:MenuTreeGet()" readonly="readonly" placeholder="一级菜单" />
+													onclick="javascript:MenuTreeGet()" readonly="readonly" placeholder="上级菜单" />
 											</div>
 										</div>
 										
@@ -121,7 +129,7 @@
 											<div class="col-sm-10">
 												<input type="text" class="form-control" name="icon" id="icon"
 													placeholder="菜单图标" />
-													<code style="margin-top:4px;display: block;">获取图标：http://fontawesome.io/icons/或者https://getbootstrap.com/docs/3.3/components/</code>
+													<code style="margin-top:4px;display: block;">获取图标：https://getbootstrap.com/docs/3.3/components/</code>
 											</div>
 										</div>
 										<a class="saveBtn" id="btn_save">确定</a>
@@ -155,7 +163,7 @@
 <script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
-<script type="js/fnsco/common.js"></script>
-<script src="js/fnsco/menu.js"></script>
+<script type="text/javascript" src="js/fnsco/common.js"></script>
+<script type="text/javascript" src="js/fnsco/menu.js"></script>
 </body>
 </html>
