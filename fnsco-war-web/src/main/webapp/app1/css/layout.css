@@ -11,14 +11,14 @@
 	padding: 8px 16px;
 }
 .filter-show{
-	/*width: 280px;*/
+	width:80%;
 	height: 43px;
 	display: inline-block;
 	color: #151515;
 }
 .filter-time{
 	line-height: 15px;
-	font-size: 12px;
+	font-size: 13px;
 	padding-bottom: 8px;
 	color: #333;
 }
@@ -79,7 +79,7 @@
 	float: right;
 }
 #filter-chart-btn{
-	width: 234px;
+	width: 60%;
     font-size: 13px;
     line-height: 35px;
     margin: 23.4375px auto 0;
@@ -149,16 +149,13 @@
 }
 /*筛选页面*/
 #filter{
-	display: none;
-	position: absolute;
+	position: relative;
 	width: 100%;
 	overflow-x:hidden;
 	min-height: 100%;
-	top: 0;
-	left:100%;
 	background: #fff;
 	padding-bottom: 93.75px;
-	padding-top: 23.4375px;
+	/*padding-top: 23.4375px;*/
 	z-index: 9999999;
 }
 .close{
@@ -178,7 +175,7 @@
 	height: 61px;
 	line-height: 61px;
 	font-size: 15px;
-	padding-top: 20px;
+	/*padding-top: 20px;*/
 }
 #filter .time-input div{
 	text-align: center;
