@@ -107,6 +107,12 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/modifyInfo")
     @ApiOperation(value = "修改个人信息")
     public ResultDTO modifyInfo(@RequestBody AppUserDTO appUserDTO){
+        if(null == appUserDTO.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+        if(!Strings.isNullOrEmpty(appUserDTO.getUserName()) && appUserDTO.getUserName().length() >19){
+            return ResultDTO.fail(ApiConstant.E_STRING_TOO_LENGTH);
+        }
         return appUserService.modifyInfo(appUserDTO);
     }
     
