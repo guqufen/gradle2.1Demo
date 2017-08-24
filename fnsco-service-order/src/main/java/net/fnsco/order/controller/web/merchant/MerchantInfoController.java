@@ -265,7 +265,7 @@ public class MerchantInfoController extends BaseController {
 	 */
 	@RequestMapping(value = "/queryAgents", method = RequestMethod.POST)
 	@ResponseBody
-	@RequiresPermissions(value = { "m:merchant:list" })
+	@RequiresPermissions(value = { "m:merchant:list"})
 	public ResultDTO<List<Agent>> queryAllAgent() {
 		return merchantCoreService.queryAllAgent();
 	}

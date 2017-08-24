@@ -7,6 +7,9 @@ function unloginHandler(result) {
 		layer.msg('登录失效,去登录');
 		window.location = "login.html";
 	}
+	if(result.code && result.code == '4015'){
+		layer.msg('没有权限，请联系管理员授权');
+	}
 }
 
 var ttable;

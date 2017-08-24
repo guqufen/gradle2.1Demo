@@ -151,10 +151,12 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             tradeData.setTerminalList(terminalList);
         }
         List<String> terminalList = tradeData.getTerminalList();
+        
+        Integer appUserId = merchantCore.getUserId();
+        List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
+        result.setMerTotal(tempList.size());
+        
         if (CollectionUtils.isEmpty(terminalList)) {//无终端则查询按商户查询
-            Integer appUserId = merchantCore.getUserId();
-            List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
-            result.setMerTotal(tempList.size());
             List<String> innerCodeList = Lists.newArrayList();
             if (!CollectionUtils.isEmpty(tempList)) {
                 for (MerchantUserRel rel : tempList) {
@@ -219,8 +221,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     }
 
     @Override
-    public TradeData queryByTerminal(TradeData tradeData) {
-        TradeData list = tradeListDAO.selectByIRT(tradeData);
-        return list;
+    public int selectCountByIRT(TradeData tradeData) {
+        int result = tradeListDAO.selectCountByIRT(tradeData);
+        return result;
     }
 }

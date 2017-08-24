@@ -120,7 +120,7 @@ function edit(date) {
 				layer.close();
 				return true;
 			} else {
-				layer.msg('修改失败');
+				layer.msg(data.message);
 			}
 		}
 	});
@@ -319,8 +319,22 @@ function queryRole(id) {
 		}
 	});
 };
+//清除所有表单数据
+function clearDate(){
+	$("#username").val(null);
+	$("#password").val(null);
+	$("#realname").val(null);
+	$("#mobile").val(null);
+	$("#sex").val(1);
+	$("#aliasname").val(null);
+	$("#department").val(null);
+	$("#agentId").val(null);
+	$("#status").val(1);
+	$("#remark").val(null);
+}
 //新增按钮事件
 $('#btn_add').click(function() {
+	clearDate();
 	requestAgent(null);
 	queryRole("role");
 	$('#addModal').modal();
@@ -335,6 +349,7 @@ $('#btn_yes').click(function() {
 			var password = $('#password').val();
 			var mobile = $('#mobile').val();
 			var department = $('#department').val();
+			var remark =$('#remark').val();
 			var date = {
 					"name" : username,
 					"password" : password,
@@ -346,7 +361,7 @@ $('#btn_yes').click(function() {
 					"realName" : $('#realname').val(),
 					"aliasName" : $('#aliasname').val(),
 					"agentId" : $('#agentId').val(),
-					"remark" : $('#remark').val()
+					"remark" : remark
 				};
 			if (username == null || username.length == 0) {
 				layer.msg('用户名不能为空!');
@@ -367,6 +382,10 @@ $('#btn_yes').click(function() {
 			}
 			if (department == null || department.length == 0) {
 				layer.msg('所属部门不能为空!');
+				return false;
+			}
+			if (remark.length>50) {
+				layer.msg('备注最多50个字!');
 				return false;
 			}
 			add(date);
@@ -395,6 +414,7 @@ $('#btn_yes1').click(
 			var username = $('#username1').val();
 			var mobile = $('#mobile1').val();
 			var department = $('#department1').val();
+			var remark =$('#remark1').val();
 			var date = {
 					"id" : id,
 					"name" : username,
@@ -406,7 +426,7 @@ $('#btn_yes1').click(
 					"realName" : $('#realname1').val(),
 					"aliasName" : $('#aliasname1').val(),
 					"agentId" : $('#agentId1').val(),
-					"remark" : $('#remark1').val()
+					"remark" : remark
 				};
 			if (username == null || username.length == 0) {
 				layer.msg('用户名不能为空!');
@@ -418,6 +438,10 @@ $('#btn_yes1').click(
 			}
 			if (department == null || department.length == 0) {
 				layer.msg('所属部门不能为空!');
+				return false;
+			}
+			if (remark.length>50) {
+				layer.msg('备注最多50个字!');
 				return false;
 			}
 			layer.confirm('确定修改选中数据吗？', {
@@ -467,7 +491,7 @@ $('#btn_delete').click(function(){
             queryEvent("table");
           }else
           {
-            layer.msg('删除失败');
+            layer.msg(data.message);
           } 
         },
         error:function(e)

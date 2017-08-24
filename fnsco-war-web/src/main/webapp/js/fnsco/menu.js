@@ -1,13 +1,3 @@
-var pathName = window.document.location.pathname;
-var PROJECT_NAME = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-// 校验登录时间失效后访问处理方法
-function unloginHandler(result) {
-	if (result.code && result.code == '4012') {
-		layer.msg('登录失效,去登录');
-		window.location = "login.html";
-	}
-}
-
 /**页面加载时初始化表格**/
 var ttable;
 initTableData();
@@ -316,8 +306,7 @@ $('#btn_edit').click(function() {
 		//设置单选按钮的值
 		$("input[name=team]").each(function(){
 			if(this.value == selectContent[0].type){
-				$(this).prop("checked", "checked");
-			
+
 			if(this.value == "0"){
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
@@ -428,36 +417,44 @@ $('#btn_delete').click(function() {
 		return false;
 	} else {
 
-		// 获取table选中数据的菜单ID和菜单类型
-		var id = selectContent[0].id;
-		var type = selectContent[0].type;
+		layer.confirm('确定删除选中数据吗？', {
+			time : 20000, // 20s后自动关闭
+			btn : [ '确定', '取消' ]
+		}, function() {
+			// 获取table选中数据的菜单ID和菜单类型
+			var id = selectContent[0].id;
+			var type = selectContent[0].type;
 
-		var param = {
-			'id' : id,
-			'type':type
-		}
-
-		// 组包发给后台
-		$.ajax({
-			type : 'POST',
-			url : PROJECT_NAME + "/web/auth/menu/delete",
-			data : param,
-			traditional : true,
-			success : function(data) {
-				unloginHandler(data);
-				if (data.success) {
-					layer.msg("删除成功");
-					queryEvent("table");
-				} else if (!data.success) {
-					layer.msg(data.message);
-				}
-			},
-			error : function(data) {
-				layer.msg("删除失败");
-			},
-			exception : function() {
-				layer.mag("异常报错");
+			var param = {
+				'id' : id,
+				'type' : type
 			}
+
+			// 组包发给后台
+			$.ajax({
+				type : 'POST',
+				url : PROJECT_NAME + "/web/auth/menu/delete",
+				data : param,
+				traditional : true,
+				success : function(data) {
+					unloginHandler(data);
+					if (data.success) {
+						layer.msg("删除成功");
+						queryEvent("table");
+					} else if (!data.success) {
+						layer.msg(data.message);
+					}
+				},
+				error : function(data) {
+					layer.msg("删除失败");
+				},
+				exception : function() {
+					layer.mag("异常报错");
+				}
+			});
+
+		}, function() {
+			layer.msg('取消成功');
 		});
 	}
 })

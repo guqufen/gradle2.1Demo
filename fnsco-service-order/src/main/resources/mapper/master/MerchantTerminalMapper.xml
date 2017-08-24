@@ -20,8 +20,8 @@
     <result column="record_state" property="recordState" jdbcType="VARCHAR" />
     <result column="term_audit_state" property="termAuditState" jdbcType="VARCHAR" />
     <result column="term_name" property="termName" jdbcType="VARCHAR" />
-    <result column="wechat_fee" property="wechatFee" jdbcType="INTEGER" />
-    <result column="alipay_fee" property="alipayFee" jdbcType="INTEGER" />
+    <result column="wechat_fee" property="wechatFee" jdbcType="VARCHAR" />
+    <result column="alipay_fee" property="alipayFee" jdbcType="VARCHAR" />
     <result column="terminal_type" property="terminalType" jdbcType="VARCHAR" />
   </resultMap>
   <!-- APP端使用 -->
@@ -67,7 +67,7 @@
       #{creditCardRate,jdbcType=VARCHAR}, #{debitCardFee,jdbcType=INTEGER}, #{creditCardFee,jdbcType=INTEGER}, 
       #{debitCardMaxFee,jdbcType=INTEGER}, #{creditCardMaxFee,jdbcType=INTEGER}, #{dealSwitch,jdbcType=VARCHAR}, 
       #{recordState,jdbcType=VARCHAR}, #{termAuditState,jdbcType=VARCHAR}, #{termName,jdbcType=VARCHAR}, 
-      #{wechatFee,jdbcType=INTEGER}, #{alipayFee,jdbcType=INTEGER}, #{terminalType,jdbcType=VARCHAR})
+      #{wechatFee,jdbcType=VARCHAR}, #{alipayFee,jdbcType=VARCHAR}, #{terminalType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantTerminal" >
     insert into m_merchant_terminal
@@ -192,10 +192,10 @@
         #{termName,jdbcType=VARCHAR},
       </if>
       <if test="wechatFee != null" >
-        #{wechatFee,jdbcType=INTEGER},
+        #{wechatFee,jdbcType=VARCHAR},
       </if>
       <if test="alipayFee != null" >
-        #{alipayFee,jdbcType=INTEGER},
+        #{alipayFee,jdbcType=VARCHAR},
       </if>
       <if test="terminalType != null" >
         #{terminalType,jdbcType=VARCHAR},
@@ -258,10 +258,10 @@
         term_name = #{termName,jdbcType=VARCHAR},
       </if>
       <if test="wechatFee != null" >
-        wechat_fee = #{wechatFee,jdbcType=INTEGER},
+        wechat_fee = #{wechatFee,jdbcType=VARCHAR},
       </if>
       <if test="alipayFee != null" >
-        alipay_fee = #{alipayFee,jdbcType=INTEGER},
+        alipay_fee = #{alipayFee,jdbcType=VARCHAR},
       </if>
       <if test="terminalType != null" >
         terminal_type = #{terminalType,jdbcType=VARCHAR},
@@ -288,8 +288,8 @@
       record_state = #{recordState,jdbcType=VARCHAR},
       term_audit_state = #{termAuditState,jdbcType=VARCHAR},
       term_name = #{termName,jdbcType=VARCHAR},
-      wechat_fee = #{wechatFee,jdbcType=INTEGER},
-      alipay_fee = #{alipayFee,jdbcType=INTEGER},
+      wechat_fee = #{wechatFee,jdbcType=VARCHAR},
+      alipay_fee = #{alipayFee,jdbcType=VARCHAR},
       terminal_type = #{terminalType,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -356,7 +356,7 @@
       #{terMinal.creditCardRate,jdbcType=VARCHAR}, #{terMinal.debitCardFee,jdbcType=INTEGER}, #{terMinal.creditCardFee,jdbcType=INTEGER}, 
       #{terMinal.debitCardMaxFee,jdbcType=INTEGER}, #{terMinal.creditCardMaxFee,jdbcType=INTEGER}, #{terMinal.dealSwitch,jdbcType=VARCHAR}, 
       #{terMinal.recordState,jdbcType=VARCHAR}, #{terMinal.termAuditState,jdbcType=VARCHAR}, #{terMinal.termName,jdbcType=VARCHAR}, 
-      #{terMinal.wechatFee,jdbcType=INTEGER}, #{terMinal.alipayFee,jdbcType=INTEGER}, #{terMinal.terminalType,jdbcType=VARCHAR})
+      #{terMinal.wechatFee,jdbcType=VARCHAR}, #{terMinal.alipayFee,jdbcType=VARCHAR}, #{terMinal.terminalType,jdbcType=VARCHAR})
       </foreach>
 	</insert>
 	<!-- 根据channelID删除数据 -->
