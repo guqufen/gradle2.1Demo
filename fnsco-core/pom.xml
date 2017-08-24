@@ -57,7 +57,11 @@
 		    <artifactId>json</artifactId>
 		    <version>20170516</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.14</version>
+		</dependency>
 		<!-- session共享
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

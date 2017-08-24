@@ -20,12 +20,6 @@ $('#table').bootstrapTable({
 	queryParams : queryParams,
 	responseHandler : responseHandler,// 处理服务器返回数据
 	columns : [{
-		field : 'index',
-		title : '序号',
-		align : 'center',
-		width : 10,
-		formatter : formatindex
-	},{
 		field: 'selectItem',
 		checkbox: true
 	},{
@@ -54,10 +48,6 @@ function formatstatus(value, row, index) {
 	return value === 2 ? 
 			'<span class="label label-danger">禁用</span>' : 
 			'<span class="label label-primary">正常</span>';
-}
-//表单序号
-function formatindex(value, row, index) {
-	return [ index + 1 ].join('');
 }
 //组装请求参数
 function queryParams(params) {

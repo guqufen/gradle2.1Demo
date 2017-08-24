@@ -46,6 +46,7 @@
                 <div class="col-sm-2" style="text-align: right;">
                     <button type="button" id="btn_query" class="btn btn-primary" onclick="javascript:queryEvent();"><span class="glyphicon glyphicon-search"></span>查询</button>
                     <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent();"><span class="glyphicon glyphicon-refresh"></span>重置</button>
+                	<button type="button" id="btn_export" class="btn btn-info" onclick="javascript:exportEvent();"><span class="glyphicon glyphicon-export"></span>导出</button>
                 </div>
             </div>
         </form>
@@ -94,6 +95,7 @@
         sortable: true,   //是否启用排序
         sortOrder: "asc",   //排序方式
         showExport: true, //显示导出按钮
+        buttonsAlign:"right",  //按钮位置
         exportDataType: "all",//导出合适条件的所有数据
         exportTypes:['excel'],//只导出excel
         Icons:'glyphicon-export icon-share',
@@ -102,6 +104,7 @@
             fileName: '商户流水信息',  //文件名称设置  
             worksheetName: '流水列表',  //表格工作区名称  
             tableName: '商户流水信息',  
+            excelFileFormat:'xmlss',
             excelstyles: ['background-color', 'color', 'font-size', 'font-weight']
 //             onMsoNumberFormat: DoOnMsoNumberFormat  
         },
@@ -224,6 +227,20 @@
     //重置按钮事件
     function resetEvent(){
  	   $('#formSearch')[0].reset();
+    }
+  //导出按钮事件
+    function exportEvent(){
+    	//拼接参数
+    			   var orderNo =$('#txt_search_id').val();
+     			   var merId=$('#txt_search_name').val();
+     			   var merName=$('#merName').val();
+     			   var amt=$('#txt_search_price').val();
+     			   var startSendTime=$('#datetimepicker1').val();
+     			   var endSendTime=$('#datetimepicker2').val();
+     			   var url=PROJECT_NAME+'/web/trade/export'+'?orderNo='+orderNo+'&merId='+merId
+					+'&merName='+merName+'&amt='+amt
+					+'&startSendTime='+startSendTime+'&endSendTime='+endSendTime;
+		window.open(url, 'Excel导出');
     }
     window.operateEvents = {
         'click .redact': function (e, value, row, index) {

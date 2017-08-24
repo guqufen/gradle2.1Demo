@@ -103,6 +103,7 @@ public class TradeData {
     private String       sendTime;
 
     private Date         createTime;
+    
     private String       paySubType;    //交易子类型
     private List<String>       paySubTypes;    //交易子类型
     private String       startSendTime; //条件查询 发送开始时间
@@ -116,8 +117,18 @@ public class TradeData {
     private List<String> innerCodeList;
     //终端号列表
     private List<String> terminalList;
+    //创建时间string类型显示
+    private String 		 createTimeStr;
     
-    public List<String> getPaySubTypes() {
+    public String getCreateTimeStr() {
+		return createTimeStr;
+	}
+
+	public void setCreateTimeStr(String createTimeStr) {
+		this.createTimeStr = createTimeStr;
+	}
+
+	public List<String> getPaySubTypes() {
         return paySubTypes;
     }
 

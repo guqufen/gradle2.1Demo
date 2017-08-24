@@ -223,4 +223,20 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         TradeData list = tradeListDAO.selectByIRT(tradeData);
         return list;
     }
+
+	@Override
+	public List<TradeData> queryDataList(TradeDataDTO tradeDataDTO) {
+		TradeData tradeData = new TradeData();
+        if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
+            tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
+        }
+        if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
+            tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
+        }
+        BeanUtils.copyProperties(tradeDataDTO, tradeData);
+        PageDTO<TradeData> pages = new PageDTO<TradeData>(1, 10000, tradeData);
+
+        List<TradeData> datas = tradeListDAO.queryPageList(pages);
+		return datas;
+	}
 }
