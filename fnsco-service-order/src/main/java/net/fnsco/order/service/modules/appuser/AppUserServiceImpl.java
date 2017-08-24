@@ -613,9 +613,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
      */
     @Override
     public ResultDTO modifyInfo(AppUserDTO appUserDto) {
-        if(null == appUserDto.getUserId()){
-            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
-        }
         AppUser appUser = new AppUser();
         BeanUtils.copyProperties(appUserDto, appUser);
         appUser.setId(appUserDto.getUserId());

@@ -475,6 +475,7 @@ function  fileUp(num){
        'fileTypeExts': '*.gif; *.jpg; *.png; *.bmp',
        //限制上传图片张数
        'simUploadLimit' : 1,
+       'successTimeout':300,
        'multi': false,
        'auto': true,
        'multi': true,

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
@@ -202,6 +204,9 @@ public class AppMerchantController extends BaseController {
     public ResultDTO updatetPosInfo(@RequestBody TerminalJO terminalJO){
         if(null == terminalJO.getPosId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+        if(!Strings.isNullOrEmpty(terminalJO.getPosName()) && terminalJO.getPosName().length() >19){
+            return ResultDTO.fail(ApiConstant.E_STRING_TOO_LENGTH);
         }
         boolean result = merchantService.updatePosInfo(terminalJO);
         if(!result){
