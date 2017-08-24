@@ -91,6 +91,75 @@
                     <div class="logo-element">FNS
                     </div>
                 </li>
+                <!-- 
+                <li class="">
+                    <a href="#">
+                        <i class="glyphicon glyphicon-home"></i>
+                        <span class="nav-label">商户管理</span> <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
+                        <li>
+                            <a class="J_menuItem" href="merchatInfo.html" data-index="1">商户信息</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="tradedatainfo.html" data-index="2">商户流水</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="glyphicon glyphicon-eur"></i> <span class="nav-label">交易管理</span> <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
+                        <li>
+                            <a class="J_menuItem" href="tradedatainfo.html" data-index="3">交易统计</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="glyphicon glyphicon-phone"></i> <span class="nav-label">APP管理</span> <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
+                        <li>
+                            <a class="J_menuItem" href="pushmessage.html" data-index="4">活动推送</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="appusermanage.html" data-index="5">用户管理</a>
+                        </li>
+                    </ul>
+                </li>
+               
+                <li>
+                    <a href="#">
+                        <i class="glyphicon glyphicon-fire"></i> <span class="nav-label">帮助与反馈</span> <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
+                        <li>
+                            <a class="J_menuItem" href="suggest.html" data-index="6">反馈管理</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="">
+                    <a href="#">
+                        <i class="glyphicon glyphicon-cog"></i> <span class="nav-label">系统管理</span> <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
+                    <li>
+                            <a class="J_menuItem" href="user.html" data-index="7">系统用户管理</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="dept.html" data-index="8">部门管理</a>
+                        </li>
+                         <li>
+                            <a class="J_menuItem" href="role.html" data-index="9">角色管理</a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="menu.html" data-index="10">菜单管理</a>
+                        </li>
+                    </ul>
+                </li> -->
             </ul>
          </div>
          </div>
@@ -200,14 +269,14 @@
 <script type="text/javascript" src="js/fnsco/common.js"></script>
 <script type="text/javascript">
 $('.logout').attr('href',PROJECT_NAME+"/web/logout");
+
 $(function(){
 	$.ajax({
 		url:PROJECT_NAME+'/web/getCurrentUser',
 		dataType:'json',
 		type:'POST',
 		success:function(data){
-			//返回的是MAP结构，不带code，故此判断没用
-			//unloginHandler(data);
+			unloginHandler(data);
 			if(!data.sessionUser)
 			window.location='login.html';
 			$('.indexPageUserName').html(data.sessionUser.name);
