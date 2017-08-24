@@ -142,7 +142,7 @@ function getMenuTreeAdd(id) {
 
 				//全部取消勾选
 				menu_ztree.checkAllNodes(false);
-				
+
 				//id不为空，表示修改；否则表示新增
 				if(id != null){
 
@@ -196,7 +196,7 @@ function getDataTreeAdd(id) {
 	// 加载权限树，组包发给后台
 	$.ajax({
 		type : 'get',
-		url : PROJECT_NAME + "/web/auth/dept/querytree",
+		url : PROJECT_NAME + "/web/auth/dept/queryNoRoottree",
 		async : false,//同步获取数据
 		success : function(data) {
 			if (data.success) {
@@ -204,7 +204,7 @@ function getDataTreeAdd(id) {
 
 				//全部取消勾选
 				data_ztree.checkAllNodes(false);
-				
+
 				//ID不为空，表示修改；否则表示新增
 				if(id != null){
 					//修改，则需将当前所选的数据权限展示出来
@@ -247,7 +247,7 @@ function getDeptTree(id){
 	// 组包发给后台
 	$.ajax({
 		type : 'get',
-		url : PROJECT_NAME + "/web/auth/dept/querytree",
+		url : PROJECT_NAME + "/web/auth/dept/queryNoRoottree",
 		async : false,//同步获取数据
 		success : function(data) {
 			if (data.success) {
