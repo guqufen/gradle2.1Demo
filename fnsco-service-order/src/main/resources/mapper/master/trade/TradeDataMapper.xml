@@ -525,7 +525,7 @@
 	 		)
 	  </if>
 	  <if test="condition.paySubTypes != null" >
-        AND txn_sub_type in 
+        AND pay_sub_type in 
 		<foreach collection="condition.paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
       </if>
 	  <if test="condition.terminalList != null">
@@ -708,7 +708,7 @@
 	 		)
 	 </if>
 	 <if test="paySubTypes != null" >
-        AND txn_sub_type in 
+        AND pay_sub_type in 
 		<foreach collection="paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
       </if>
 	  <if test="terminalList != null">

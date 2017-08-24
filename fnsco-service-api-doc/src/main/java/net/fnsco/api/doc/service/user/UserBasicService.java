@@ -2,6 +2,7 @@ package net.fnsco.api.doc.service.user;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import net.fnsco.api.doc.service.user.dao.UserBasicDAO;
 import net.fnsco.api.doc.service.user.entity.UserBasicDO;
 import net.fnsco.api.doc.service.user.entity.UserDetailDO;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.CryptUtil;
 
 /**
@@ -121,4 +124,22 @@ public class UserBasicService extends BaseService {
     public UserBasicDO getById(Long userId) {
         return userBasicDAO.getById(userId);
     }
+    public ResultPageDTO<UserBasicDO> page(UserBasicDO tradeData, Integer pageNum, Integer pageSize) {
+        logger.info("开始分页查询TradeDataService.page, tradeData=" + tradeData.toString());
+        List<UserBasicDO> pageList = this.userBasicDAO.pageList(tradeData, pageNum, pageSize);
+        Integer count = this.userBasicDAO.pageListCount(tradeData);
+        ResultPageDTO<UserBasicDO> pager = new ResultPageDTO<UserBasicDO>(count, pageList);
+        return pager;
+    }
+
+    public ResultDTO addMembers(UserBasicDO dto) {
+        dto.setCreateDate(new Date());
+        dto.setModifyDate(new Date());
+        dto.setPassword("123456");
+        dto.setValid(1);
+        dto.setLocked(0);
+        this.userBasicDAO.insert(dto);
+        return ResultDTO.success();
+    }
+    
 }
