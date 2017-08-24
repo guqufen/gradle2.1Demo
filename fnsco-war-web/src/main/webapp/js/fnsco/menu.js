@@ -202,7 +202,7 @@ function getMenuTree(id){
 					var node = dd_ztree.getNodeByParam("id", id);
 					if( node != null){
 						dd_ztree.selectNode(node, true);// 指定选中ID的节点
-						dd_ztree.expandNode(node, true, false);// 指定选中ID节点展开
+//						dd_ztree.expandNode(node, true, false);// 指定选中ID节点展开
 					}
 				}
 
@@ -307,6 +307,7 @@ $('#btn_edit').click(function() {
 		$("input[name=team]").each(function(){
 			if(this.value == selectContent[0].type){
 
+				this.checked=true;//修改默认选中
 			if(this.value == "0"){
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();

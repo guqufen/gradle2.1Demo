@@ -6,26 +6,24 @@
 }
 /*筛选显示部分*/
 .filter{
-	font-size: 13px;
+	font-size: 0.55rem;
 	background:rgba(125,187,255,0.10);
-	padding: 8px 16px;
+	padding: 0.34rem 0.68rem;
 }
 .filter-show{
-	/*width: 280px;*/
-	height: 43px;
+	width: 11.97rem;
+	height: 1.835rem;
 	display: inline-block;
 	color: #151515;
 }
 .filter-time{
-	line-height: 15px;
-	font-size: 12px;
-	padding-bottom: 8px;
-	color: #333;
+	line-height: 0.64rem;
+	padding-bottom: 0.42rem;
 }
 .filter-name{
 	width: 100%;
-	height: 20px;
-	line-height: 20px;
+	height: 0.85rem;
+	line-height: 0.85rem;
 	display:block;
 	white-space:nowrap;
 	overflow:hidden;
@@ -34,10 +32,10 @@
 	color: #333;
 }
 .filter-btn{
-	width: 13px;
-	height: 13px;
+	width: 0.55rem;
+	height: 0.55rem;
 	float: right;
-	margin: 14px 0 14px 44.5px;
+	margin: 0.61rem 0 0.61rem 1.9rem;;
 	background-image:url(../image/filtrate.png);
 	background-size: contain;
 }
@@ -45,16 +43,16 @@
 /*主体部分样式*/
 .content{
 	background-color: #fff;
-	padding: 0 16px;
+	padding: 0 0.68rem;
 	width: 100%;
 	overflow-x: hidden;
 }
 	/*消费模式page*/
 .total-ul{
-	font-size: 16px;
+	font-size: 0.68rem;
 }
 .total-list{
-	padding: 13px 0;
+	padding: 0.555rem 0;
 	position: relative;
 }
 .total-list:before{
@@ -72,39 +70,39 @@
     transform: scaleY(.5);
 }
 .total-name{
-	width: 129px;
+	width: 5.5rem;
 	display: inline-block;
 }
 .total-list-rmb{
 	float: right;
 }
 #filter-chart-btn{
-	width: 234px;
-    font-size: 13px;
-    line-height: 35px;
-    margin: 23.4375px auto 0;
+	width: 10rem;
+    font-size: 0.55rem;
+    line-height: 1.5rem;
+    margin: 1rem auto 0;
     border-color: #3595FF;
 }
 .mui-segmented-control .mui-control-item{
-	line-height: 35px;
+	line-height: 1.5rem;
 }
 .mui-segmented-control .mui-control-item.mui-active{
 	background-color: #3595FF;
 }
 #chart{
-	margin-top: 32px;
-	height: 328px;
+	margin-top: 1.365rem;
+	height: 14rem;
 }
 .navBar{
-	height: 23.4375px;
+	height: 1rem;
 }
 	/*经营趋势页面*/
 .trend-total{
 	width: 100%;
-	margin-top: 19px;
-	margin-bottom: 11.5px;
-	height: 74px;
-	padding:16px 14px;
+	margin-top: 0.82rem;
+	margin-bottom: 0.5rem;
+	height: 3.157rem;
+	padding:0.68rem 0.6rem;
 }
 .trend-total div{
 	width: 33.33%;
@@ -115,31 +113,31 @@
 	text-align: center;
 }
 .trend-total div span.trend-total-num{
-	font-size: 20px;
+	font-size: 0.85rem;
 	font-weight: bold;
 }
 .trend-total div span.trend-total-title{
-	font-size: 13px;
+	font-size: 0.55rem;
 	color: #aeaeae;
-	padding-top: 2px;
+	padding-top: 0.1rem;
 }
 #filter-chart-btn.trend-chart-btn{
 	margin-top:0;
 }
 #trend-chart{
-	height: 375px;
+	height: 16rem;
 }
 
 /*峰值样式*/
 .total{
-	height: 47px;
-    line-height: 47px;
-    font-size: 13px;
-    margin: 12px 12px 23.4375px;
+	height: 2rem;
+    line-height: 2rem;
+    font-size: 0.55rem;
+    margin: 0.5rem 0.5rem 1rem;
 }
 .total div span{
-	font-size: 20px;
-	margin-left: 8px;
+	font-size: 0.85rem;
+	margin-left: 0.35rem;
 }
 .total .total-num{
 	float: left;
@@ -157,57 +155,57 @@
 	top: 0;
 	left:100%;
 	background: #fff;
-	padding-bottom: 93.75px;
-	padding-top: 23.4375px;
+	padding-bottom: 4rem;
+	padding-top: 1rem;
 	z-index: 9999999;
 }
 .close{
 	position: absolute;
-	top: 6px;
-	right: 6px;
+	top: 0.25rem;
+	right: 0.25rem;
 }
 .close .mui-icon{
-	font-size: 42px;
+	font-size: 1.8rem;
 	font-weight: bold;
 	color: #515151;
 }
 #filter .mui-row{
-	padding:0 18px;
+	padding:0 0.768rem;
 }
 #filter .mui-row.time-input{
-	height: 61px;
-	line-height: 61px;
-	font-size: 15px;
-	padding-top: 20px;
+	height: 2.6rem;
+	line-height: 2.6rem;
+	font-size: 0.64rem;
+	padding-top: 0.85rem;
 }
 #filter .time-input div{
 	text-align: center;
 	color: #E2E8EF;
 }
 input[type=text].select-time{
-	height: 40px;
-	line-height: 40px;
+	height: 1.7rem;
+	line-height: 1.7rem;
 	background: #F2F4F7;
 	border-radius: 0;
-	font-size: 15px;
+	font-size: 0.64rem;
 	color: #499CFD;
 	text-align: center;
 	border:none;
 }
 input[type=text].select-time1{
-	height: 40px;
-	line-height: 40px;
+	height: 1.7rem;
+	line-height: 1.7rem;
 	background: #F2F4F7;
 	border-radius: 0;
-	font-size: 15px;
+	font-size: 0.64rem;
 	color: #499CFD;
 	text-align: center;
 	border:none;
 }
 #filter .mui-row.shortcut-select{
 	text-align: center;
-	margin-top: 13px;
-	padding-bottom: 16px;
+	margin-top: 0.55rem;
+	padding-bottom: 0.68rem;
 	position: relative;
 }
 .shortcut-select:before{
@@ -225,21 +223,21 @@ input[type=text].select-time1{
     transform: scaleY(.5);
 }
 .shortcut-select div{
-	margin-top: 10.5px;
-	padding:0 12px;
+	margin-top: 0.45rem;
+	padding:0 0.5rem;
 }
 .shortcut-select div.pleft{
 	padding: 0;
-	padding-right: 23.4375px;
+	padding-right: 1rem;
 }
 .shortcut-select div.pright{
 	padding: 0;
-	padding-left: 23.4375px;
+	padding-left: 1rem;
 }
 .shortcut-select div span{
-	font-size: 15px;
-	height: 36px;
-	line-height: 36px;
+	font-size: 0.64rem;
+	height: 1.55rem;
+	line-height: 1.55rem;
 	border:1px solid #D4E2F9;
 	display: block;
 	color: #3064B6;
@@ -251,7 +249,7 @@ input[type=text].select-time1{
 }
 	/*重置时间下框样式*/
 .mui-pciker-list li{
-	font-size:18px;
+	font-size:0.75rem;
 }
 	/*商铺选择*/
 #filter .mui-row.select-shop{
@@ -261,30 +259,30 @@ input[type=text].select-time1{
 	padding: 0;
 }
 .select-shop-head,.select-pattern-head{
-	height: 47px;
-	padding: 0 18px;
+	height: 2rem;
+	padding: 0 0.768rem;
 }
 .select-shop-title,.select-pattern-title{
-	font-size: 15px;
-	margin-top: 10px;
+	font-size: 0.65rem;
+	margin-top: 0.42rem;
 	float: left;
 	font-weight: bold;
 }
 .select-shop-tool{
 	float: right;
 	text-align:center;
-	margin-top: 6px;
-	font-size: 15px;
-	height: 1.347px;
-	width: 3.23.4375px;
-	line-height: 1.347px;
+	margin-top: 0.25rem;
+	font-size: 0.64rem;
+	height: 1.32rem;
+	width: 3.1rem;
+	line-height: 1.32rem;
 	border: 1px solid #D4E2F9;
 	color: #3064B6;
 	position: relative;
 }
 .select-shop-tool img{
-	width: 15px;
-	margin-top: 9.5px;
+	width: 0.65rem;
+	margin-top: 0.4rem;
 	display: none;
 }
 .select-shop-tool.active{
@@ -295,23 +293,23 @@ input[type=text].select-time1{
 }
 .select-shop-tool.active img{
 	display: inline-block;
-    margin-right: 3.5px;
+    margin-right: 0.15rem;
 }
 .select-pattern-head{
-	height: 35px;
+	height: 1.5rem;
 	position: relative;
 }
 .mui-table-view-cell>a:not(.mui-btn){
-	padding: 18.75px 42px 18.75px 0;
+	padding: 0.8rem 1.8rem 0.8rem 0;
 	white-space:inherit;
-	font-size: 15px;
+	font-size: 0.65rem;
 	color: #7F7F7F;
 }
 .select-pattern .mui-table-view-cell>a:not(.mui-btn){
-	padding:12px 42px 12px 0;
+	padding:0.5rem 1.8rem 0.5rem 0;
 }
 .mui-table-view-radio .mui-table-view-cell>a:not(.mui-btn){
-	padding-left: 18px;;
+	padding-left: 0.768rem;;
 }
 .select-shop .mui-table-view:before,.select-shop .mui-table-view:after,.select-pattern .mui-table-view:before,.select-pattern .mui-table-view:after{
 	height: 0;
@@ -320,7 +318,7 @@ input[type=text].select-time1{
 	height: 0;
 }
 .mui-table-view-radio .mui-table-view-cell .mui-navigate-right:after{
-	font-size: 36px;
+	font-size: 1.55rem;
 }
 .select-pattern-head:before{
 	content: '';
@@ -340,19 +338,19 @@ input[type=text].select-time1{
 .fixed-box{
 	position: fixed;
 	/*bottom:44px;*/
-	height: 81px;
+	height: 3.456rem;
 	width: 100%;
 	background-color: #fff;
 	display: none;
 	z-index: 99999999;
 }
 .filter-ok-btn{
-	margin:14px 18px 0;
-	height: 41px;
-	line-height: 41px;
+	margin:0.6rem 0.768rem 0;
+	height: 1.75rem;
+	line-height: 1.75rem;
 	background: #3595FF;
 	text-align: center;
-	font-size:18px;
+	font-size:0.75rem;
 	color: #fff;
 }
 /*筛选页面 end*/

@@ -472,7 +472,7 @@ function  fileUp(num){
        //限制大小
        'fileSizeLimit':'20MB',
      //允许上传的文件后缀
-       'fileTypeExts': '*.gif; *.jpg; *.png',
+       'fileTypeExts': '*.gif; *.jpg; *.png; *.bmp',
        //限制上传图片张数
        'simUploadLimit' : 1,
        'successTimeout':300,
@@ -775,6 +775,7 @@ function posHtml(num){
         '<div class="col-sm-4"><label class="control-label" for="bankId'+num+'">入账银行卡：</label><select id="bankId'+num+'" name="bankId'+num+'" class="bankId form-control" >'+bankOption+'</select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="posType'+num+'">机具型号：</label><input type="text" class="form-control posType" id="posType'+num+'" name="posType'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="mercReferName'+num+'">签购单名称：</label><input type="text" class="form-control mercReferName" id="mercReferName'+num+'" name="mercReferName'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="posFactory'+num+'">机具厂家：</label><input type="text" class="form-control posFactory" id="posFactory'+num+'" name="posFactory'+num+'" required="required"></div>'+
         '<h2>扫码：</h2>'+
         '<input type="hidden" class="form-control terminalId1" id="terminalId1'+num+'" name="terminalId1'+num+'">'+
         '<div class="col-sm-4"><label class="control-label" for="terminalCode1'+num+'">终端编号：</label><input type="text" class="form-control terminalCode1" id="terminalCode1'+num+'" name="terminalCode1'+num+'" required="required"></div>'+
@@ -858,6 +859,7 @@ function removePos(num){
           var snCode=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.snCode')).val();
           var posType=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posType')).val();
           var mercReferName=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.mercReferName')).val();
+          var posFactory=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posFactory')).val();
           var terminalCode1=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.terminalCode1')).val();
           var alipayFee=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.alipayFee')).val();
           var wechatFee=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.wechatFee')).val();
@@ -870,9 +872,9 @@ function removePos(num){
           var terminalId2=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.terminalId2')).val();
           var posId=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.remove-icon')).attr('editid');
           if(!posId || posId<0){
-            posInfos=posInfos.concat({posName,snCode,posType,mercReferName,terminalCode1,alipayFee,wechatFee,terminalCode2,debitCardMaxFee,debitCardMaxFee,debitCardRate,creditCardRate,bankId,terminalId1,terminalId2});
+            posInfos=posInfos.concat({posName,snCode,posType,mercReferName,posFactory,terminalCode1,alipayFee,wechatFee,terminalCode2,debitCardMaxFee,debitCardMaxFee,debitCardRate,creditCardRate,bankId,terminalId1,terminalId2});
           }else{
-            posInfos=posInfos.concat({posName,snCode,posType,mercReferName,terminalCode1,alipayFee,wechatFee,terminalCode2,debitCardMaxFee,debitCardMaxFee,debitCardRate,creditCardRate,bankId,terminalId1,terminalId2,posId});  
+            posInfos=posInfos.concat({posName,snCode,posType,mercReferName,posFactory,terminalCode1,alipayFee,wechatFee,terminalCode2,debitCardMaxFee,debitCardMaxFee,debitCardRate,creditCardRate,bankId,terminalId1,terminalId2,posId});  
           }
           console.log("PosID："+id);
 
@@ -1207,6 +1209,7 @@ function editData(id){
               $('select[name="bankId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value="+data.data.channel[i].posInfos[j].bankId+"]").attr("selected",true);
               $('input[name="posType'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posType);
               $('input[name="mercReferName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].mercReferName);
+              $('input[name="posFactory'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posFactory);
               var terminalLen=data.data.channel[i].posInfos[j].terminal.length;
               for(var o=0;o<terminalLen;o++){
                 if(data.data.channel[i].posInfos[j].terminal[o].terminalType=='00'){
@@ -1510,6 +1513,7 @@ function detailsData(id){
               $('#terminal-con2 select[name="bankId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value="+data.data.channel[i].posInfos[j].bankId+"]").attr("selected",true);
               $('#terminal-con2 input[name="posType'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posType);
               $('#terminal-con2 input[name="mercReferName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].mercReferName);
+              $('#terminal-con2 input[name="posFactory'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posFactory);
               var terminalLen=data.data.channel[i].posInfos[j].terminal.length;
               for(var o=0;o<terminalLen;o++){
                 if(data.data.channel[i].posInfos[j].terminal[o].terminalType=='00'){

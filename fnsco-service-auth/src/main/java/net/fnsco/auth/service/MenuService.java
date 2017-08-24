@@ -29,7 +29,12 @@ public class MenuService extends BaseService {
 			// 设置父菜单名称
 			MenuDO m = menuDAO.getById(menuDO.getParentId());
 			if (m == null) {
-				menuDO.setParentName("--");
+				//外层目录没有子菜单,修改此处便于与点击上级菜单弹出的菜单界面相同
+				if(menuDO.getParentId() == 0){
+					menuDO.setParentName("总菜单");
+				}else{
+					menuDO.setParentName("--");
+				}
 			} else {
 				menuDO.setParentName(m.getName());
 			}
