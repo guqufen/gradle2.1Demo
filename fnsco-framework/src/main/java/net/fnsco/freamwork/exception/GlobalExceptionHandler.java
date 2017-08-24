@@ -22,10 +22,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public Object MethodArgumentNotValidHandler(HttpServletRequest request, Exception exception) throws Exception {
         //按需重新封装需要返回的错误信息  
-        logger.error("业务处理异常", exception);
+        logger.error("未处理的业务处理异常", exception);
         Result result = new Result();
         result.setCode(FrameworkConstant.E_SYSTEM_EXCEPTION);
-        result.setMessage(FrameworkConstant.ERROR_MESSGE_MAP.get(FrameworkConstant.E_SYSTEM_EXCEPTION) + exception.getMessage());
+        result.setMessage(FrameworkConstant.ERROR_MESSGE_MAP.get(FrameworkConstant.E_SYSTEM_EXCEPTION));
         result.setSuccess(false);
         return result;
     }
