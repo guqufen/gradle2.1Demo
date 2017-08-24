@@ -141,6 +141,7 @@ $(':radio').click(function(){
 		if(this.checked){
 			//如果目录选中
 			if(this.value == "0"){
+				$('#id').html('目录名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
@@ -149,6 +150,7 @@ $(':radio').click(function(){
 				$('#iconDiv').show();
 				//如果菜单选中
 			}else if(this.value == "1"){
+				$('#id').html('菜单名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').show();
@@ -157,6 +159,7 @@ $(':radio').click(function(){
 				$('#iconDiv').hide();
 				//如果按钮选中
 			}else if(this.value == "2"){
+				$('#id').html('按钮名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
@@ -257,6 +260,7 @@ $('#btn_add').click(function() {
 	//先清掉相关数据，设置menuType默认选中,并展示相应菜单
 	clearInput();
 	$('input[id=menuType]').prop('checked', 'checked');//固有属性用prop
+	$('#id').html('菜单名称');
 	$('#menuNameDiv').show();
 	$('#parentNameDiv').show();
 	$('#menuUrlDiv').show();
@@ -309,6 +313,7 @@ $('#btn_edit').click(function() {
 
 				this.checked=true;//修改默认选中
 			if(this.value == "0"){
+				$('#id').html('目录名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
@@ -316,6 +321,7 @@ $('#btn_edit').click(function() {
 				$('#orderNumDiv').show();
 				$('#iconDiv').show();
 			}else if(this.value == "1"){
+				$('#id').html('菜单名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').show();
@@ -323,6 +329,7 @@ $('#btn_edit').click(function() {
 				$('#orderNumDiv').show();
 				$('#iconDiv').hide();
 			}else if(this.value == "2"){
+				$('#id').html('按钮名称');
 				$('#menuNameDiv').show();
 				$('#parentNameDiv').show();
 				$('#menuUrlDiv').hide();
@@ -356,7 +363,7 @@ function saveOrUpdate() {
 
 		// 菜单名称 校验，不能为空
 	if (!$('#menuName').val()) {
-		layer.msg('请输入有效菜单名称!');
+		layer.msg('请输入有效名称!');
 		return;
 	}
 
