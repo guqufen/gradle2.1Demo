@@ -390,8 +390,8 @@ function saveOrUpdate() {
 	}
 	
 	//角色名称  校验，不能超过100
-	if($('#roleName').val().length > 100){
-		layer.msg('角色名称超长，请不要超过100!');
+	if($('#roleName').val().length > 20){
+		layer.msg('角色名称超长，请不要超过20!');
 		return;
 	}
 	
