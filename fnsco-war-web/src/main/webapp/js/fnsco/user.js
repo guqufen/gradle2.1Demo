@@ -32,9 +32,6 @@ $('#table').bootstrapTable({
 		title: '所属部门',
 		field: 'department'
 	},{
-		title: '手机号',
-		field: 'mobile'
-	},{
 		title: '修改时间',
 		field: 'modifyTimeStr'
 	},{
