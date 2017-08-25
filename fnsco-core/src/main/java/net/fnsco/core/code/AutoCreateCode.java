@@ -62,6 +62,10 @@ public class AutoCreateCode {
         typeMap.put("datetime", "Date");
         typeMap.put("decimal", "BigDecimal");
         typeMap.put("timestamp", "Date");
+        typeMap.put("longtext", "String");
+        typeMap.put("bigint unsigned", "Long");
+        typeMap.put("tinytext", "String");
+        typeMap.put("mediumtext", "String");
     }
 
     /**
@@ -229,7 +233,7 @@ public class AutoCreateCode {
     // 设置get/set方法
     private String method(Field f) {
         StringBuilder sb = new StringBuilder();
-        sb.append("    public ").append(this.typeTransfer(f.getType())).append(" get");
+        sb.append("    public ").append(this.typeTransfer(f.getType().toLowerCase())).append(" get");
         char[] arr = f.getName().toCharArray();
         for (int i = 0; i < arr.length; i++) {
             if (i == 0) {
