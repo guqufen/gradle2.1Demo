@@ -108,7 +108,13 @@ function changeTwoDecimal(x) {
     return s_x;
 }
 //ajax请求
-trendData(getUrl("tokenId"),getUrl("userId"),null,null,null);
+console.log(decodeURI("%E6%9D%AD%E5%B7%9E"));
+trendData(getUrl("tokenId"),getUrl("userId"),getUrl("startTime"),getUrl("endTime"),getUrl("innerCode"));
+if(!getUrl("innerCode") || getUrl("innerCode")==''){
+  $(".filter-name").html("全部商铺");
+}else{
+  $(".filter-name").html(decodeURI(getUrl("innerCodeName")));
+}
 var titleName="营业额";
 var titleName1="订单数";
 var startDate;
@@ -190,34 +196,3 @@ $(".filter-ok-btn").click(function(){
   }
   trendData(getUrl("tokenId"),getUrl("userId"),startTime,endTime,innerCode);
 })
-//获取商户列表
-function getShopList(tokenId,userId){
-  var jsonstr = {
-      'userId': userId
-    };
-  var params = JSON.stringify(jsonstr);
-  $.ajax({
-    url:'/app/merchant/getShopOwnerMerChant',
-    contentType: "application/json",
-    dataType : "json",
-    type:'POST',
-    headers:  {
-      'tokenId': tokenId,
-      'identifier': userId
-    },
-    data:params,
-    success:function(data){
-      var shopList=$("#shop-list");
-      if(data.data.length>1){
-        shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部商铺</a></li>');
-        for(var i=0;i<data.data.length;i++){
-          shopList.append('<li class="mui-table-view-cell" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
-        }
-      }else if(data.data.length==1){
-        $(".filter-name").html(data.data[0].merName);
-        shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[0].innerCode+'"><a class="mui-navigate-right">'+data.data[0].merName+'</a></li>');
-      }
-    }
-  });
-}
-getShopList(getUrl("tokenId"),getUrl("userId"));

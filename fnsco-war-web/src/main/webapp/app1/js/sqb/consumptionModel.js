@@ -53,7 +53,13 @@ function changeTwoDecimal(x) {
     return s_x;
 }
 //ajax请求
-modelData(getUrl("tokenId"),getUrl("userId"),null,null,null);
+console.log(decodeURI("%E6%9D%AD%E5%B7%9E"));
+modelData(getUrl("tokenId"),getUrl("userId"),getUrl("startTime"),getUrl("endTime"),getUrl("innerCode"));
+if(!getUrl("innerCode") || getUrl("innerCode")==''){
+  $(".filter-name").html("全部商铺");
+}else{
+  $(".filter-name").html(decodeURI(getUrl("innerCodeName")));
+}
 var titleName="营业额";
 var titleName1="订单数";
 function modelData(tokenId,userId,startDate,endDate,innerCode){
@@ -85,79 +91,31 @@ function modelData(tokenId,userId,startDate,endDate,innerCode){
   		$(".total-list.alipay .total-list-num span").html(data.data.aliOrderNumTot);
   		$(".total-list.bank .total-list-num span").html(data.data.bankOrderNumTot);
   		$(".total-list.other .total-list-num span").html(data.data.otherOrderNumTot);
-		//默认加载笔数图表格
-		chart(data1,formatter);
-      	$("#start-time").val(data.data.startDate);
-      	$("#end-time").val(data.data.endDate);
-     	$(".filter-startTime").html(changeTime(data.data.startDate));
-      	$(".filter-endTime").html(changeTime(data.data.endDate));
-      	/*点击切换图表*/
+  		//默认加载笔数图表格
+  		chart(data1,formatter);
+    	$("#start-time").val(data.data.startDate);
+    	$("#end-time").val(data.data.endDate);
+   	  $(".filter-startTime").html(changeTime(data.data.startDate));
+    	$(".filter-endTime").html(changeTime(data.data.endDate));
+    	/*点击切换图表*/
 	  	var amountBtn=$("#amount-chart-btn")[0];
-		var moneyBtn=$("#money-chart-btn")[0];
-		amountBtn.addEventListener('tap',function() {//按交易笔数
-			chart(data1,formatter);
-		})
-		moneyBtn.addEventListener('tap',function() {//按交易金额
-			chart(data2,formatter1);
-		})
+  		var moneyBtn=$("#money-chart-btn")[0];
+  		amountBtn.addEventListener('tap',function() {//按交易笔数
+  			chart(data1,formatter);
+  		})
+  		moneyBtn.addEventListener('tap',function() {//按交易金额
+  			chart(data2,formatter1);
+  		})
+      //筛选页面
+      $(".filter-btn").click(function(){
+        window.location.href='filtrate.html?back=true&userId='+getUrl("userId")+'&tokenId='+getUrl("tokenId")+'&startDate='+startDate+'&endDate='+endDate+'&type=2';
+      })
     }
   });
 }
-//筛选按钮
-$(".filter-ok-btn").click(function(){
-  var startTime=$("#start-time").val();
-  var endTime=$("#end-time").val();
-  var innerCode;
-  if($(".all-shop").hasClass('mui-selected')){
-    innerCode=null;
-  }else{
-    innerCode=$(".mui-table-view-cell.mui-selected").attr("innerCode");
-  }
-  modelData(getUrl("tokenId"),getUrl("userId"),startTime,endTime,innerCode);
-})
 //获取URL携带的参数
 function getUrl(name){
      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
      var r = window.location.search.substr(1).match(reg);
      if(r!=null)return  unescape(r[2]); return null;
 }
-//获取商户列表
-function getShopList(tokenId,userId){
-  var jsonstr = {
-      'userId': userId
-    };
-  var params = JSON.stringify(jsonstr);
-  $.ajax({
-    url:'/app/merchant/getShopOwnerMerChant',
-    contentType: "application/json",
-    dataType : "json",
-    type:'POST',
-    headers:  {
-      'tokenId': tokenId,
-      'identifier': userId
-    },
-    data:params,
-    success:function(data){
-      var shopList=$("#shop-list");
-      if(data.data.length>1){
-        shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部商铺</a></li>');
-        for(var i=0;i<data.data.length;i++){
-          shopList.append('<li class="mui-table-view-cell" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
-        }
-      }else if(data.data.length==1){
-        $(".filter-name").html(data.data[0].merName);
-        shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[0].innerCode+'"><a class="mui-navigate-right">'+data.data[0].merName+'</a></li>');
-      }
-
-      //筛选店铺
-      // $(".shop-list li").click(function(){
-      //   $(".shop-list li").removeClass("mui-selected");
-      //   $(this).addClass("mui-selected");
-      //   if($(this).hasClass('all-shop')){
-      //     $(".shop-list li").addClass("mui-selected");
-      //   }
-      // })
-    }
-  });
-}
-getShopList(getUrl("tokenId"),getUrl("userId"));
