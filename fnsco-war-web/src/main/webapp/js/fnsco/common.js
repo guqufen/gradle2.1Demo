@@ -9,6 +9,7 @@ function unloginHandler(result){
 		window.top.location="index.html";
 	}
 	if(result.code && result.code == '4015'){
+		window.location="noAuth.html";
 		layer.msg(result.message);
 	}
 }
