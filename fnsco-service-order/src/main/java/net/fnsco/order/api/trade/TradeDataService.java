@@ -32,6 +32,12 @@ public interface TradeDataService {
      */
     ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize);
     /**
+    * 查询符合条件的数据用于excel导出
+    * @param tradeDataDTO
+    * @return
+    */
+    List<TradeData> queryDataList(TradeDataDTO tradeDataDTO);
+    /**
      * 
      * queryByTerminal:(查询流水信息)
      *

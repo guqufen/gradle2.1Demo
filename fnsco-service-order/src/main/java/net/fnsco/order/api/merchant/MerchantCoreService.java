@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.order.api.dto.TradeDataDTO;
 import net.fnsco.order.service.domain.Agent;
 import net.fnsco.order.service.domain.MerchantBank;
 import net.fnsco.order.service.domain.MerchantChannel;
@@ -92,7 +93,12 @@ public interface MerchantCoreService {
      * @return
      */
     ResultPageDTO<MerchantCore> queryMerchantCore(MerchantCore merchantCore, int currentPageNum, int perPageSize);
-
+    /**
+     * 多条件查询 根据基本信息查询分页查，后导出
+     * @param tradeDataDTO
+     * @return
+     */
+    List<MerchantCore> queryMerchantList(MerchantCore merchantCore);
     /**
      * 条件查询所有数据
      * @param merchantCore

@@ -131,6 +131,13 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
         return result;
     }
+    @Override
+    public List<MerchantCore> queryMerchantList(MerchantCore merchantCore) {
+
+        PageDTO<MerchantCore> pages = new PageDTO<>(1, 10000, merchantCore);
+        List<MerchantCore> datas = merchantCoreDao.queryPageList(pages);
+        return datas;
+    }
 
     /**
      * @todo 条件查询

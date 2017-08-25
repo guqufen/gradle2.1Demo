@@ -75,7 +75,7 @@ public class TradeDataController extends BaseController {
                         jo.setStatusName("扫码"+statusName);
                     }
                 }else if("2".equals(tradeData.getTxnType())){//交易类型1消费2撤销
-                    jo.setStatusName("撤单"+statusName);
+                    jo.setStatusName("撤销"+statusName);
                 }
                 
                 jo.setId(tradeData.getId());
