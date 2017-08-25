@@ -22,7 +22,7 @@ var menu = $('#side-menu');
 				        for(var j = 0; j < menuList.length; j ++){
 				        	if(menuList[j].parentId == menuP.id){
 				        		editStr = editStr + "<li>"+
-				                "<a class='J_menuItem' href="+menuList[j].url+" data-index="+j+">"+menuList[j].name+
+				                "<a class='J_menuItem' href="+menuList[j].url+" data-index="+j+" id=menu_"+menuList[j].id+">"+menuList[j].name+
 				                "</a></li>";
 				        	}
 				        }
@@ -38,4 +38,7 @@ var menu = $('#side-menu');
 			layer.msg("操作失败");
 		}
 	});
+	
+	//隐藏掉菜单管理页面
+//	$('#menu_69').hide();
 });

@@ -80,6 +80,6 @@ public interface MenuDAO {
 		@Result(column = "icon", property = "icon"), @Result(column = "order_num", property = "orderNum") })
 	@Select("<script>SELECT * FROM sys_menu WHERE id IN "
 			+ "<foreach item='item' index='index' collection='MenuIdList' open='(' separator=',' close=')'> #{item}"
-        + "</foreach> ORDER BY type, id, order_num</script>")
+        + "</foreach> ORDER BY type, order_num</script>")
 	public List<MenuDO> queryAllMenuById(@Param("MenuIdList") List<Integer> MenuId);
 }

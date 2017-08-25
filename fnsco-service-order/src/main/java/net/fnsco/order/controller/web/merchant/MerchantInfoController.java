@@ -79,7 +79,7 @@ public class MerchantInfoController extends BaseController {
 	 */
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	@ResponseBody
-	@RequiresPermissions(value = { "m:merchant:list" })
+	@RequiresPermissions(value = { "m:merchant:export" })
 	public void export(MerchantCore merchantCore ,HttpServletRequest req, HttpServletResponse response) throws IOException {
 		List<MerchantCore> dataList= merchantCoreService.queryMerchantList(merchantCore);
 		

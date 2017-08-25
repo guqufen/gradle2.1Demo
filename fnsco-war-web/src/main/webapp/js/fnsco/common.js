@@ -10,7 +10,7 @@ function unloginHandler(result){
 	}
 	if(result.code && result.code == '4015'){
 		window.location="noAuth.html";
-		layer.msg(result.message);
+//		layer.msg(result.message);
 	}
 }
 //日期格式化

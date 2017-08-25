@@ -68,7 +68,7 @@ public class TradeDataWebController extends BaseController {
 	 */
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	@ResponseBody
-	@RequiresPermissions(value = { "m:trade:list" })
+	@RequiresPermissions(value = { "m:trade:export" })
 	public void export(TradeDataDTO tradeDataDTO ,HttpServletRequest req, HttpServletResponse response) throws IOException {
 		List<TradeData> dataList= tradeDataService.queryDataList(tradeDataDTO);
 		// 转换日期显示
