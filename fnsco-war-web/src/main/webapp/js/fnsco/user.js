@@ -186,6 +186,11 @@ function queryById(id) {
 			    $("input[type='checkbox'][value="+l+"]").prop('checked','true');
 			}
 			$('#editModal').modal();
+			$('#sex1hide').hide();
+			$('#agentId1hide').hide();
+			$('#aliasname1hide').hide();
+			$('#mobile1hide').hide();
+			$('#remark1hide').hide();
 		}
 	});
 }
@@ -328,30 +333,35 @@ $('#btn_add').click(function() {
 	requestAgent(null);
 	queryRole("role");
 	$('#addModal').modal();
+	$('#sexhide').hide();
+	$('#agentIdhide').hide();
+	$('#aliasnamehide').hide();
+	$('#mobilehide').hide();
+	$('#remarkhide').hide();
 });
 //新增确认按钮事件
 $('#btn_yes').click(function() {
 			var roleid=getRoleId("role");
 			 //获得当前选中的值
-			var sex = $('#sex').val();
+			//var sex = $('#sex').val();
 			var status = $('#status').val();
 			var username = $('#username').val();
 			var password = $('#password').val();
-			var mobile = $('#mobile').val();
+			//var mobile = $('#mobile').val();
 			var department = $('#department').val();
-			var remark =$('#remark').val();
+			//var remark =$('#remark').val();
 			var date = {
 					"name" : username,
 					"password" : password,
 					"roleList" : roleid,
-					"mobile" : mobile,
+					//"mobile" : mobile,
 					"department" : department,
-					"sex" : sex,
+					//"sex" : sex,
 					"status" : status,
 					"realName" : $('#realname').val(),
-					"aliasName" : $('#aliasname').val(),
-					"agentId" : $('#agentId').val(),
-					"remark" : remark
+					//"aliasName" : $('#aliasname').val(),
+					//"agentId" : $('#agentId').val(),
+					//"remark" : remark
 				};
 			if (username == null || username.length == 0) {
 				layer.msg('用户名不能为空!');
@@ -366,18 +376,18 @@ $('#btn_yes').click(function() {
 				layer.msg('密码不能为空!');
 				return false;
 			}
-			if (mobile == null || mobile.length == 0) {
+			/*if (mobile == null || mobile.length == 0) {
 				layer.msg('手机号不能为空!');
 				return false;
-			}
+			}*/
 			if (department == null || department.length == 0) {
 				layer.msg('所属部门不能为空!');
 				return false;
 			}
-			if (remark.length>50) {
+			/*if (remark.length>50) {
 				layer.msg('备注最多50个字!');
 				return false;
-			}
+			}*/
 			add(date);
 		});
 //修改按钮事件
@@ -399,41 +409,41 @@ $('#btn_yes1').click(
 			}
 			var roleid=getRoleId("role1");
 			 //获得当前选中的值
-			var sex = $('#sex1').val();
+			//var sex = $('#sex1').val();
 			var status = $('#status1').val();
 			var username = $('#username1').val();
-			var mobile = $('#mobile1').val();
+			//var mobile = $('#mobile1').val();
 			var department = $('#department1').val();
-			var remark =$('#remark1').val();
+			//var remark =$('#remark1').val();
 			var date = {
 					"id" : id,
 					"name" : username,
 					"roleList" : roleid,
-					"mobile" : mobile,
+					//"mobile" : mobile,
 					"department" : department,
-					"sex" : sex,
+					//"sex" : sex,
 					"status" : status,
 					"realName" : $('#realname1').val(),
-					"aliasName" : $('#aliasname1').val(),
-					"agentId" : $('#agentId1').val(),
-					"remark" : remark
+					//"aliasName" : $('#aliasname1').val(),
+					//"agentId" : $('#agentId1').val(),
+					//"remark" : remark
 				};
-			if (username == null || username.length == 0) {
+			/*if (username == null || username.length == 0) {
 				layer.msg('用户名不能为空!');
 				return false;
-			}
-			if (mobile == null || mobile.length == 0) {
+			}*/
+			/*if (mobile == null || mobile.length == 0) {
 				layer.msg('手机号不能为空!');
 				return false;
-			}
+			}*/
 			if (department == null || department.length == 0) {
 				layer.msg('所属部门不能为空!');
 				return false;
 			}
-			if (remark.length>50) {
+			/*if (remark.length>50) {
 				layer.msg('备注最多50个字!');
 				return false;
-			}
+			}*/
 			layer.confirm('确定修改选中数据吗？', {
 				time : 20000, //20s后自动关闭
 				btn : [ '确定', '取消' ]
