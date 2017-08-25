@@ -29,6 +29,7 @@ import com.google.common.base.Strings;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.merchant.MerchantInfoService;
 import net.fnsco.order.service.dao.master.MerchantFileDao;
@@ -177,9 +178,8 @@ public class FileInfoController extends BaseController{
                     stream.write(bytes);
                     stream.close();
                     //上传阿里云OSS文件服务器
-                    OssUtil.uploadFile(fileURL, fileKey);
+                    OssLoaclUtil.uploadFile(fileURL, fileKey);
                     String newUrl = OssUtil.getHeadBucketName()+"^"+fileKey;
-                    ResultDTO<TreeMap<String, String>> appResult = null;
                     TreeMap<String, String> paras = new TreeMap<>();
                     paras.put("url", newUrl);
                     String json =JSONArray.toJSONString(paras);
@@ -307,7 +307,7 @@ public class FileInfoController extends BaseController{
 					stream.write(bytes);
 					stream.close();
 					//上传阿里云OSS文件服务器
-					OssUtil.uploadFile(fileURL, fileKey);
+					OssLoaclUtil.uploadFile(fileURL, fileKey);
 					String newUrl = OssUtil.getHeadBucketName()+"^"+fileKey;
 					fileInfo.setInnerCode(innerCode);
 					fileInfo.setFilePath(newUrl);

@@ -22,6 +22,7 @@ import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
@@ -107,6 +108,12 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/modifyInfo")
     @ApiOperation(value = "修改个人信息")
     public ResultDTO modifyInfo(@RequestBody AppUserDTO appUserDTO){
+        if(null == appUserDTO.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+        if(!Strings.isNullOrEmpty(appUserDTO.getUserName()) && appUserDTO.getUserName().length() >19){
+            return ResultDTO.fail(ApiConstant.E_STRING_TOO_LENGTH);
+        }
         return appUserService.modifyInfo(appUserDTO);
     }
     
@@ -171,7 +178,7 @@ public class AppUserController extends BaseController {
                     stream.write(bytes);
                     stream.close();
                     //上传阿里云OSS文件服务器
-                    OssUtil.uploadFile(fileURL, fileKey);
+                    OssLoaclUtil.uploadFile(fileURL, fileKey);
                     String newUrl = OssUtil.getHeadBucketName()+"^"+fileKey;
                     AppUserDTO appUserDto = new AppUserDTO();
                     appUserDto.setUserId(Integer.valueOf(userId));

@@ -1,10 +1,18 @@
 package net.fnsco.order.controller.web.merchant;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.ExcelUtils;
+import net.fnsco.order.api.dto.TradeDataDTO;
 import net.fnsco.order.api.merchant.MerchantCoreService;
 import net.fnsco.order.service.domain.Agent;
 import net.fnsco.order.service.domain.MerchantBank;
@@ -26,6 +37,8 @@ import net.fnsco.order.service.domain.MerchantChannel;
 import net.fnsco.order.service.domain.MerchantContact;
 import net.fnsco.order.service.domain.MerchantCore;
 import net.fnsco.order.service.domain.MerchantTerminal;
+import net.fnsco.order.service.domain.trade.TradeData;
+import net.sf.json.JSONObject;
 
 /**
  * @desc 商户信息控制器
@@ -54,7 +67,43 @@ public class MerchantInfoController extends BaseController {
 		logger.info("查询商户列表");
 		return merchantCoreService.queryMerchantCore(merchantCore, currentPageNum, pageSize);
 	}
+	/**
+	 * 交易流水excel导出
+	 * @param tradeDataDTO
+	 * @param currentPageNum
+	 * @param pageSize
+	 * @param req
+	 * @param response
+	 * @return
+	 * @throws IOException 
+	 */
+	@RequestMapping(value = "/export", method = RequestMethod.GET)
+	@ResponseBody
+	@RequiresPermissions(value = { "m:merchant:list" })
+	public void export(MerchantCore merchantCore ,HttpServletRequest req, HttpServletResponse response) throws IOException {
+		List<MerchantCore> dataList= merchantCoreService.queryMerchantList(merchantCore);
+		
+		JSONObject jObject = new JSONObject();
+        jObject.put("data", dataList);
+        List<MerchantCore> list = (List<MerchantCore>) jObject.get("data");
+        String itemMark = "merName,innerCode,legalPerson,legalPersonMobile,legalValidCardType,cardNum,cardValidTime,businessLicenseNum,businessLicenseValidTime,taxRegistCode,registAddress,mercFlag,source";
+        String itemParap = "商户名, 内部商户号, 商户法人姓名, 法人手机号码, 法人有效证件类型, 证件号码, 证件有效期, 营业执照号码, 营业执照有效期, 税务登记号, 商户注册地址, 商户标签, 商户注册来源";
+        String[] itemMarks = itemMark.split(",");// 键
+        String[] itemParaps = itemParap.split(",");// 列头
 
+        HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "商户信息");
+
+        response.setContentType("application/vnd.ms-excel;");
+        String nowStr = DateUtils.getNowDateStr2();
+        String fileName = "商户信息"+nowStr+".xls";
+        response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
+
+        OutputStream ouputStream = response.getOutputStream();
+        workbook.write(ouputStream);
+
+        ouputStream.flush();
+        ouputStream.close();
+	}
 	/**
 	 * 获取表格数据
 	 * 

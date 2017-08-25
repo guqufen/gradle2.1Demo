@@ -21,6 +21,7 @@ public class ApiConstant extends CoreConstants {
     public static String E_INNER_CODE_NULL         = "5029";                            //商户内部商户号不能为空
     public static String E_PAGE_NUM_NULL           = "5030";                            //页码为空或不合规范
     public static String E_CONFIG_NAME_NULL        = "5031";                            //type为空
+    public static String E_STRING_TOO_LENGTH       = "5032";                            //入参太常
     
     public static String E_APP_PHONE_EMPTY         = "5011";                            //非法请求,没有手机号
     public static String E_APP_PHONE_ERROR         = "5012";                            //非法请求,手机号不正确
@@ -88,6 +89,7 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_INNER_CODE_NULL, "商户内部商户号不能为空");
         ERROR_MESSGE_MAP.put(E_PAGE_NUM_NULL, "页码为空或不合规范");
         ERROR_MESSGE_MAP.put(E_CONFIG_NAME_NULL, "资源类型不能为空");
+        ERROR_MESSGE_MAP.put(E_STRING_TOO_LENGTH, "输入参数太长");
         //APP
         ERROR_MESSGE_MAP.put(E_USERID_NULL, "入参ID为null");
         ERROR_MESSGE_MAP.put(E_UPDATE_FAIL, "更新失败");

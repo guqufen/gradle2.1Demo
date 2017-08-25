@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 
 @Configuration
@@ -19,6 +20,12 @@ public class InitConfig {
         OssUtil.setAccessKeySecret(env.getProperty("aliyun.oss.accessKeySecret"));
         OssUtil.setHeadBucketName(env.getProperty("aliyun.oss.headBucketName"));
         OssUtil.initOssClient();
+        
+        OssLoaclUtil.setEndpoint(env.getProperty("aliyun.oss.local.endpoint"));
+        OssLoaclUtil.setAccessKeyId(env.getProperty("aliyun.oss.local.accessKeyId"));
+        OssLoaclUtil.setAccessKeySecret(env.getProperty("aliyun.oss.local.accessKeySecret"));
+        OssLoaclUtil.setHeadBucketName(env.getProperty("aliyun.oss.local.headBucketName"));
+        OssLoaclUtil.initOssClient();
         return 1;
     }
 }
