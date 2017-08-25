@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import io.swagger.annotations.Api;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.ExcelUtils;
 import net.fnsco.order.api.dto.TradeDataDTO;
 import net.fnsco.order.api.trade.TradeDataService;
@@ -116,7 +117,9 @@ public class TradeDataWebController extends BaseController {
         HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "交易流水");
 
         response.setContentType("application/vnd.ms-excel;");
-        response.setHeader("Content-disposition", "attachment;filename=" + new String("交易流水.xls".getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
+        String nowStr = DateUtils.getNowDateStr2();
+        String fileName = "交易流水"+nowStr+".xls";
+        response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
 
         OutputStream ouputStream = response.getOutputStream();
         workbook.write(ouputStream);
