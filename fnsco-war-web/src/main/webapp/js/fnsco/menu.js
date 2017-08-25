@@ -95,7 +95,11 @@ function queryParams(params) {
 }
 
 function formatIcon(value, row, index) {
-	return value == null ? '' : '<i class="' + value + ' fa-lg"></i>';
+	if(row.type != 0){
+		return '';
+	}else{
+		return value == null ? '' : '<i class="' + value + ' fa-lg"></i>';
+	}
 }
 
 function formatType(value, row, index) {
