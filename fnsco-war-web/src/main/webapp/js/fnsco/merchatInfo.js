@@ -323,6 +323,7 @@ function resetEvent(form,id){
    $('#'+form)[0].reset();
    $('#'+id).bootstrapTable('refresh');
 }
+
 //点击获取innocode
 //getInnerCode();//默认获取
 function getInnerCode(){
