@@ -373,6 +373,10 @@ $('#btn_yes').click(function() {
 				layer.msg('密码不能为空!');
 				return false;
 			}
+			if (password.length<6) {
+				layer.msg('密码最少6位');
+				return false;
+			}
 			/*if (mobile == null || mobile.length == 0) {
 				layer.msg('手机号不能为空!');
 				return false;
