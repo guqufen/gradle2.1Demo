@@ -1,4 +1,4 @@
-﻿body{
+body{
 	line-height: 1.2;
 	width: 100%;
 	overflow-x: hidden;
@@ -149,12 +149,13 @@
 }
 /*筛选页面*/
 #filter{
-	position: relative;
+	position: absolute;
 	width: 100%;
 	overflow-x:hidden;
 	min-height: 100%;
 	background: #fff;
-	padding-bottom: 93.75px;
+	/*padding-bottom: 93.75px;*/
+	padding-bottom: 81px;
 	/*padding-top: 23.4375px;*/
 	z-index: 9999999;
 }
@@ -186,7 +187,7 @@ input[type=text].select-time{
 	line-height: 40px;
 	background: #F2F4F7;
 	border-radius: 0;
-	font-size: 15px;
+	font-size: 14px;
 	color: #499CFD;
 	text-align: center;
 	border:none;
@@ -203,7 +204,7 @@ input[type=text].select-time1{
 }
 #filter .mui-row.shortcut-select{
 	text-align: center;
-	margin-top: 13px;
+	/*margin-top: 13px;*/
 	padding-bottom: 16px;
 	position: relative;
 }
@@ -223,28 +224,31 @@ input[type=text].select-time1{
 }
 .shortcut-select div{
 	margin-top: 10.5px;
-	padding:0 12px;
+	padding: 0 2.5%;
 }
 .shortcut-select div.pleft{
 	padding: 0;
-	padding-right: 23.4375px;
+	padding-right: 5%;
 }
 .shortcut-select div.pright{
 	padding: 0;
-	padding-left: 23.4375px;
+	padding-left: 5%;
 }
-.shortcut-select div span{
-	font-size: 15px;
+.shortcut-select div button{
+	font-size: 13px;
 	height: 36px;
 	line-height: 36px;
 	border:1px solid #D4E2F9;
 	display: block;
 	color: #3064B6;
+	padding: 0;
+	width: 100%;
+	border-radius: 0;
 }
-.shortcut-select div span.active{
+.shortcut-select div button.active{
 	background: #7DBBFF;
 	color: #fff;
-	border:none;
+	border:1px solid #D4E2F9;
 }
 	/*重置时间下框样式*/
 .mui-pciker-list li{
@@ -258,11 +262,11 @@ input[type=text].select-time1{
 	padding: 0;
 }
 .select-shop-head,.select-pattern-head{
-	height: 47px;
+	height: 40px;
 	padding: 0 18px;
 }
 .select-shop-title,.select-pattern-title{
-	font-size: 15px;
+	font-size: 14px;
 	margin-top: 10px;
 	float: left;
 	font-weight: bold;
@@ -336,11 +340,10 @@ input[type=text].select-time1{
 	/* 确定按钮*/
 .fixed-box{
 	position: fixed;
-	/*bottom:44px;*/
 	height: 81px;
 	width: 100%;
+	bottom: 0;
 	background-color: #fff;
-	display: none;
 	z-index: 99999999;
 }
 .filter-ok-btn{
@@ -349,13 +352,10 @@ input[type=text].select-time1{
 	line-height: 41px;
 	background: #3595FF;
 	text-align: center;
-	font-size:18px;
+	font-size:17px;
 	color: #fff;
 }
 /*筛选页面 end*/
-
-
-
 .mui-dtpicker{
 	z-index:9999999999;
 }

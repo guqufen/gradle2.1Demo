@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.ExcelUtils;
 import net.fnsco.order.api.dto.TradeDataDTO;
 import net.fnsco.order.api.merchant.MerchantCoreService;
@@ -78,7 +79,7 @@ public class MerchantInfoController extends BaseController {
 	 */
 	@RequestMapping(value = "/export", method = RequestMethod.GET)
 	@ResponseBody
-	@RequiresPermissions(value = { "m:merchant:list" })
+	@RequiresPermissions(value = { "m:merchant:export" })
 	public void export(MerchantCore merchantCore ,HttpServletRequest req, HttpServletResponse response) throws IOException {
 		List<MerchantCore> dataList= merchantCoreService.queryMerchantList(merchantCore);
 		
@@ -93,7 +94,9 @@ public class MerchantInfoController extends BaseController {
         HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "商户信息");
 
         response.setContentType("application/vnd.ms-excel;");
-        response.setHeader("Content-disposition", "attachment;filename=" + new String("商户信息.xls".getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
+        String nowStr = DateUtils.getNowDateStr2();
+        String fileName = "商户信息"+nowStr+".xls";
+        response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
 
         OutputStream ouputStream = response.getOutputStream();
         workbook.write(ouputStream);
