@@ -39,7 +39,7 @@ public interface DeptDAO {
     @UpdateProvider(type = DeptProvider.class, method = "update")
     public int update(@Param("dept") DeptDO  dept);
 
-    @Results({@Result( column = "parent_id",property = "parentId"),@Result( column = "order_num",property = "orderNum"),@Result( column = "del_flag",property = "delFlag") })
+    @Results({@Result( column = "parent_id",property = "parentId"),@Result( column = "order_num",property = "orderNum"),@Result( column = "del_flag",property = "delFlag"),@Result( column = "parentName",property = "parentName")})
     @SelectProvider(type = DeptProvider.class, method = "pageList")
     public List<DeptDO> pageList(@Param("dept") DeptDO dept, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
     
