@@ -75,24 +75,24 @@
 	                            </div>
 	                            <div class="col-sm-4">
 	                                <label class="control-label" for="password">密码：</label>
-	                                <input type="text" class="form-control" id="password" name="password" placeholder="密码">
+	                                <input type="text" class="form-control" id="password" name="password" placeholder="密码最少6位">
 	                            </div>
 	                            <div class="col-sm-4">
 	                                <label class="control-label" for="realname">真实姓名：</label>
 	                                <input type="text" class="form-control" id="realname" name="realname" placeholder="真实姓名">
 	                            </div>
-	                            <div class="col-sm-4">
+	                            <div id="mobilehide" class="col-sm-4">
 	                                <label class="control-label" for="mobile">手机号：</label>
 	                                <input type="text" class="form-control" id="mobile" name="mobile" required="required" placeholder="手机号">
 	                            </div>
-	                             <div class="col-sm-4">
+	                             <div id="sexhide" class="col-sm-4">
 		                                <label class="control-label " for="sex">性别：</label>
 		                                <select id="sex" name="sex" class="form-control">
 		                                   <option value="1">男</option>
 		                                   <option value="2">女</option>
 		                                </select>
 		                         </div>
-		                          <div class="col-sm-4">
+		                          <div id="aliasnamehide" class="col-sm-4">
 	                                <label class="control-label" for="aliasname">花名：</label>
 	                                <input type="text" class="form-control" id="aliasname" name="aliasname" required="required" placeholder="花名">
 	                            </div>
@@ -100,7 +100,7 @@
 	                                <label class="control-label" for="department">所属部门：</label>
 	                                <input type="text" class="form-control" id="department" name="department" readonly="readonly" placeholder="所属部门">
 	                            </div>
-	                            <div class="col-sm-4">
+	                            <div id="agentIdhide" class="col-sm-4">
 	                                <label class="control-label" for="agentId">代理商：</label>
 	                                	<select id="agentId" name="agentId" class="form-control">
 	                                    </select>
@@ -112,7 +112,7 @@
 		                                   <option value="2">禁用</option>
 		                                </select>
 		                            </div>
-		                             <div class="col-sm-8">
+		                         	<div id="remarkhide" class="col-sm-8">
 	                                <label class="control-label" for="remark">备注：</label>
 	                                <textarea id="remark" name="remark" class="form-control" placeholder="最多50个字" rows="2"></textarea>	                                
 	                            </div>
@@ -158,18 +158,18 @@
 	                                <label class="control-label" for="realname1">真实姓名：</label>
 	                                <input type="text" class="form-control" id="realname1" name="realname" placeholder="真实姓名">
 	                            </div>
-	                            <div class="col-sm-4">
+	                            <div id="mobile1hide" class="col-sm-4">
 	                                <label class="control-label" for="mobile1">手机号：</label>
 	                                <input type="text" class="form-control" id="mobile1" name="mobile" required="required" placeholder="手机号">
 	                            </div>
-	                             <div class="col-sm-4">
+	                             <div id="sex1hide" class="col-sm-4">
 		                                <label class="control-label " for="sex1">性别：</label>
 		                                <select id="sex1" name="sex" class="form-control">
 		                                   <option value="1">男</option>
 		                                   <option value="2">女</option>
 		                                </select>
 		                         </div>
-		                          <div class="col-sm-4">
+		                          <div id="aliasname1hide" class="col-sm-4">
 	                                <label class="control-label" for="aliasname1">花名：</label>
 	                                <input type="text" class="form-control" id="aliasname1" name="aliasname" required="required" placeholder="花名">
 	                            </div>
@@ -177,7 +177,7 @@
 	                                <label class="control-label" for="department1">所属部门：</label>
 	                                <input type="text" class="form-control" id="department1" name="department" readonly="readonly" placeholder="所属部门">
 	                            </div>
-	                            <div class="col-sm-4">
+	                            <div id="agentId1hide" class="col-sm-4">
 	                                <label class="control-label" for="agentId1">代理商：</label>
 	                                	<select id="agentId1" name="agentId1" class="form-control">
 	                                    </select>
@@ -189,7 +189,7 @@
 		                                   <option value="2">禁用</option>
 		                                </select>
 		                            </div>
-		                            <div class="col-sm-8">
+		                            <div id="remark1hide" class="col-sm-8">
 	                                <label class="control-label" for="remark1">备注：</label>
 	                                <textarea id="remark1" name="remark1" class="form-control" placeholder="最多50个字" rows="2"></textarea>	                                
 	                            </div>

@@ -46,8 +46,8 @@ public class DeptProvider {
         int start = (pageNum - 1) * pageSize;
         int limit = pageSize;
         return new SQL() {{
-        SELECT("*");
-        FROM(TABLE_NAME);
+        SELECT(" m.*,IFNULL((select name from sys_dept d where d.id = m.parent_id),'杭州法奈昇有限公司')AS parentName");
+        FROM(TABLE_NAME+" m ");
         if (dept.getId() != null) {
             WHERE("id=#{dept.id}");
         }
