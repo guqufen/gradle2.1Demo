@@ -29,7 +29,10 @@ public class AppUserManageDTO extends DTO{
     private String mobile;
     
     private Date regTime;
-    /**
+    
+    private String regTimeStr;
+   
+	/**
      * 店铺名称集合字符串拼接
      */
     private String merNames;
@@ -43,6 +46,13 @@ public class AppUserManageDTO extends DTO{
     public String getUserName() {
         return userName;
     }
+    
+    public String getRegTimeStr() {
+		return regTimeStr;
+	}
+	public void setRegTimeStr(String regTimeStr) {
+		this.regTimeStr = regTimeStr;
+	}
     /**
      * userName
      *

@@ -40,6 +40,8 @@ public interface AppUserService {
 	 */
 	ResultPageDTO<AppUserManageDTO> queryPageList(AppUserManageDTO record,int currentPageNum, int perPageSize);
 	
+	List<AppUserManageDTO> queryAppPageList(AppUserManageDTO record);
+	
 	ResultDTO<String> modifyRole(BandDto bandDto);
 	
     ResultDTO<String> changeRole(List<AppUserMerchantDTO> params);
