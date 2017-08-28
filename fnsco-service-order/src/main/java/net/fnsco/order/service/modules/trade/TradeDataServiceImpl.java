@@ -239,6 +239,14 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         PageDTO<TradeData> pages = new PageDTO<TradeData>(1, 10000, tradeData);
 
         List<TradeData> datas = tradeListDAO.queryPageList(pages);
+        for (TradeData tradeData2 : datas) {
+            if (!Strings.isNullOrEmpty(tradeData2.getInnerCode())) {
+                MerchantCore core = merchantCoreDao.selectByInnerCode(tradeData2.getInnerCode());
+                if (null != core) {
+                    tradeData2.setMerName(core.getMerName());
+                }
+            }
+        }
 		return datas;
 	}
 }
