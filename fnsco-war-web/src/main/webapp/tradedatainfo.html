@@ -229,10 +229,10 @@
   //导出按钮事件
     function exportEvent(){
     	//拼接参数
-    			   var orderNo =$('#txt_search_id').val();
-     			   var merId=$('#txt_search_name').val();
-     			   var merName=$('#merName').val();
-     			   var amt=$('#txt_search_price').val();
+    			   var orderNo =$.trim($('#txt_search_id').val());
+     			   var merId=$.trim($('#txt_search_name').val());
+     			   var merName=$.trim($('#merName').val());
+     			   var amt=$.trim($('#txt_search_price').val());
      			   var startSendTime=$('#datetimepicker1').val();
      			   var endSendTime=$('#datetimepicker2').val();
      			   var url=PROJECT_NAME+'/web/trade/export'+'?orderNo='+orderNo+'&merId='+merId
@@ -268,10 +268,10 @@
  	   var param ={
  			   currentPageNum : this.pageNumber,
  			   pageSize : this.pageSize,
- 			   orderNo :$('#txt_search_id').val(),
- 			   merId:$('#txt_search_name').val(),
- 			   merName:$('#merName').val(),
- 			   amt:$('#txt_search_price').val(),
+ 			   orderNo :$.trim($('#txt_search_id').val()),
+ 			   merId:$.trim($('#txt_search_name').val()),
+ 			   merName:$.trim($('#merName').val()),
+ 			   amt:$.trim($('#txt_search_price').val()),
  			   startSendTime:$('#datetimepicker1').val(),
  			  endSendTime:$('#datetimepicker2').val()
  	   }

@@ -205,9 +205,9 @@ function queryParams(params)
    var param ={
        currentPageNum : this.pageNumber,
        pageSize : this.pageSize,
-       merName :$('#txt_search_id').val(),
-       legalPerson:$('#txt_search_name').val(),
-       legalPersonMobile:$('#txt_search_price').val()
+       merName :$.trim($('#txt_search_id').val()),
+       legalPerson:$.trim($('#txt_search_name').val()),
+       legalPersonMobile:$.trim($('#txt_search_price').val())
    }
    return param;
 }
