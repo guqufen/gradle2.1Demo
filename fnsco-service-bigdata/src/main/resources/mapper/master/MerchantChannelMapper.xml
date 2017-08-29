@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.order.service.dao.master.MerchantChannelDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.MerchantChannel" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantChannelDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantChannel" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="channel_type" property="channelType" jdbcType="VARCHAR" />
@@ -12,7 +12,7 @@
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
   </resultMap>
   <!-- 查询渠道下所有信息 -->
-  <resultMap id="AllResultMap" type="net.fnsco.order.service.domain.MerchantChannel" >
+  <resultMap id="AllResultMap" type="net.fnsco.bigdata.service.domain.MerchantChannel" >
   	<id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="channel_type" property="channelType" jdbcType="VARCHAR" />
@@ -21,7 +21,7 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
-    <collection property="posInfos" column="id" select="net.fnsco.order.service.dao.master.MerchantPosDao.selectByChannelId"/>
+    <collection property="posInfos" column="id" select="net.fnsco.bigdata.service.dao.master.MerchantPosDao.selectByChannelId"/>
   </resultMap>
   <sql id="Base_Column_List" >
     id, inner_code, channel_type, channel_mer_id, channel_mer_key, create_time, modify_time, 
@@ -37,7 +37,7 @@
     delete from m_merchant_channel
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="net.fnsco.order.service.domain.MerchantChannel" >
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantChannel" >
     insert into m_merchant_channel (id, inner_code, channel_type, 
       channel_mer_id, channel_mer_key, create_time, 
       modify_time, modify_user_id)
@@ -45,7 +45,7 @@
       #{channelMerId,jdbcType=VARCHAR}, #{channelMerKey,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{modifyUserId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantChannel" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantChannel" useGeneratedKeys="true" keyProperty="id">
     insert into m_merchant_channel
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -102,7 +102,7 @@
     </trim>
   </insert>
   
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.MerchantChannel" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantChannel" >
     update m_merchant_channel
     <set >
       <if test="innerCode != null" >
@@ -130,7 +130,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.MerchantChannel" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantChannel" >
     update m_merchant_channel
     set inner_code = #{innerCode,jdbcType=VARCHAR},
      

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.order.service.dao.master.AgentDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.Agent" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.AgentDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.Agent" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="INTEGER" />
@@ -26,7 +26,7 @@
     delete from m_agent
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="net.fnsco.order.service.domain.Agent" >
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.Agent" >
     insert into m_agent (id, name, type, 
       provinceId, provinceName, cityId, 
       cityName, areaId, areaName, 
@@ -36,7 +36,7 @@
       #{cityname,jdbcType=VARCHAR}, #{areaid,jdbcType=INTEGER}, #{areaname,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.Agent" >
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.Agent" >
     insert into m_agent
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -103,7 +103,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.Agent" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.Agent" >
     update m_agent
     <set >
       <if test="name != null" >
@@ -136,7 +136,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.Agent" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.Agent" >
     update m_agent
     set name = #{name,jdbcType=VARCHAR},
       type = #{type,jdbcType=INTEGER},

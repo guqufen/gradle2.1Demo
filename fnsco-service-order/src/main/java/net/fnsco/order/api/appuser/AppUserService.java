@@ -2,15 +2,14 @@ package net.fnsco.order.api.appuser;
 
 import java.util.List;
 
-import net.fnsco.bigdata.service.domain.AppUserMerchant;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.freamwork.business.UserService;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserManageDTO;
 import net.fnsco.order.api.dto.AppUserMerchantDTO;
 import net.fnsco.order.api.dto.BandDto;
 import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.order.service.domain.AppUserMerchant;
 
 public interface AppUserService {
 	//用户注册方法接口

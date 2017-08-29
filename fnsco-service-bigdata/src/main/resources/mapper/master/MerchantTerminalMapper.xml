@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.order.service.dao.master.MerchantTerminalDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.MerchantTerminal" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantTerminalDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantTerminal" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="pos_id" property="posId" jdbcType="INTEGER" />
@@ -25,12 +25,12 @@
     <result column="terminal_type" property="terminalType" jdbcType="VARCHAR" />
   </resultMap>
   <!-- APP端使用 -->
-  <resultMap id="ListResultMap" type="net.fnsco.order.api.dto.TerminalsDTO">
+  <resultMap id="ListResultMap" type="net.fnsco.bigdata.api.dto.TerminalsDTO">
      <id column="id" property="id" jdbcType="INTEGER" />
      <result column="term_name" property="termName" jdbcType="VARCHAR" />
      <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
   </resultMap>
-  <resultMap id="DetailResultMap" type="net.fnsco.order.api.dto.TerminalDetailDTO" >
+  <resultMap id="DetailResultMap" type="net.fnsco.bigdata.api.dto.TerminalDetailDTO" >
      <result column="term_name" property="termName" jdbcType="VARCHAR" />
      <result column="sn_code" property="snCode" jdbcType="VARCHAR" />
      <result column="pos_factory" property="posFactory" jdbcType="VARCHAR" />
@@ -53,7 +53,7 @@
     delete from m_merchant_terminal
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="net.fnsco.order.service.domain.MerchantTerminal" >
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantTerminal" >
     insert into m_merchant_terminal (id, inner_code, pos_id, 
       terminal_code, inner_term_code, terminal_batch, 
       terminal_para, charges_type, debit_card_rate, 
@@ -69,7 +69,7 @@
       #{recordState,jdbcType=VARCHAR}, #{termAuditState,jdbcType=VARCHAR}, #{termName,jdbcType=VARCHAR}, 
       #{wechatFee,jdbcType=VARCHAR}, #{alipayFee,jdbcType=VARCHAR}, #{terminalType,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantTerminal" >
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantTerminal" >
     insert into m_merchant_terminal
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -203,7 +203,7 @@
     </trim>
   </insert>
   
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.MerchantTerminal" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantTerminal" >
     update m_merchant_terminal
     <set >
       <if test="innerCode != null" >
@@ -269,7 +269,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.MerchantTerminal" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantTerminal" >
     update m_merchant_terminal
     set inner_code = #{innerCode,jdbcType=VARCHAR},
       pos_id = #{posId,jdbcType=INTEGER},
@@ -333,7 +333,7 @@
 		)
 	</delete>
 	<!-- 根据POSid查询 -->
-	<select id="queryTerByPosId" parameterType="java.lang.Integer" resultType="net.fnsco.order.api.dto.TerminalInfoDTO">
+	<select id="queryTerByPosId" parameterType="java.lang.Integer" resultType="net.fnsco.bigdata.api.dto.TerminalInfoDTO">
 	  SELECT term_name AS terName,terminal_code AS terminalCode FROM m_merchant_terminal WHERE pos_id = #{posId}
 	</select>
 	<!-- 批量插入数据 -->

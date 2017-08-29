@@ -1,4 +1,4 @@
-package net.fnsco.order.service.comm;
+package net.fnsco.bigdata.comm;
 
 import java.util.Map;
 import java.util.TreeMap;

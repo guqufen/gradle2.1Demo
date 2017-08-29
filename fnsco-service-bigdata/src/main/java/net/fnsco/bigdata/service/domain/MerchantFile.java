@@ -2,7 +2,7 @@ package net.fnsco.bigdata.service.domain;
 
 import java.util.Date;
 
-import net.fnsco.bigdata.service.comm.FileEnum;
+import net.fnsco.bigdata.comm.FileEnum;
 import net.fnsco.core.base.DTO;
 
 public class MerchantFile extends DTO{

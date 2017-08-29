@@ -18,11 +18,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.bigdata.service.dao.master.MerchantContactDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
-import net.fnsco.bigdata.service.domain.AppUserMerchant;
 import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
@@ -46,8 +44,10 @@ import net.fnsco.order.api.dto.BandDto;
 import net.fnsco.order.api.dto.QueryBandDTO;
 import net.fnsco.order.api.dto.SmsCodeDTO;
 import net.fnsco.order.service.dao.master.AppUserDao;
+import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.dao.master.SysMsgAppSuccDao;
 import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.order.service.domain.AppUserMerchant;
 import net.fnsco.order.service.domain.SysMsgAppSucc;
 
 @Service

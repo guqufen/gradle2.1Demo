@@ -17,7 +17,6 @@ import net.fnsco.bigdata.service.dao.master.AliasDAO;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.domain.Alias;
-import net.fnsco.bigdata.service.domain.AppUserMerchant;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseService;
@@ -29,6 +28,7 @@ import net.fnsco.order.api.dto.TradeMerchantDTO;
 import net.fnsco.order.api.merchant.MerchantOrderService;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
+import net.fnsco.order.service.domain.AppUserMerchant;
 
 /**@desc 商户相关操作
  * @author sxfei

@@ -18,7 +18,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
-import net.fnsco.bigdata.service.domain.AppUserMerchant;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
@@ -41,6 +40,7 @@ import net.fnsco.order.service.dao.master.trade.TradeByDayDao;
 import net.fnsco.order.service.dao.master.trade.TradeByHourDao;
 import net.fnsco.order.service.dao.master.trade.TradeByPayTypeDao;
 import net.fnsco.order.service.dao.master.trade.TradeDateTempDao;
+import net.fnsco.order.service.domain.AppUserMerchant;
 import net.fnsco.order.service.domain.trade.TradeByDay;
 import net.fnsco.order.service.domain.trade.TradeByHour;
 import net.fnsco.order.service.domain.trade.TradeByPayType;

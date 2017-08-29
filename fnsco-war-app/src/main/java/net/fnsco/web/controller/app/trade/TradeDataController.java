@@ -16,15 +16,15 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.dto.TradeDataQueryDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.trade.TradeDataService;
-import net.fnsco.bigdata.service.comm.ServiceConstant.PaySubTypeAllEnum;
-import net.fnsco.bigdata.service.comm.ServiceConstant.PaySubTypeEnum;
-import net.fnsco.bigdata.service.comm.ServiceConstant.TradeStateEnum;
-import net.fnsco.bigdata.service.comm.ServiceConstant.TradeTypeEnum;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.order.comm.ServiceConstant.PaySubTypeAllEnum;
+import net.fnsco.order.comm.ServiceConstant.PaySubTypeEnum;
+import net.fnsco.order.comm.ServiceConstant.TradeStateEnum;
+import net.fnsco.order.comm.ServiceConstant.TradeTypeEnum;
 import net.fnsco.web.controller.app.jo.TradeDataJO;
 
 /**

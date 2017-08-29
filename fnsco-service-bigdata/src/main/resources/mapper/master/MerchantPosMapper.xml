@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.order.service.dao.master.MerchantPosDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.MerchantPos" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantPosDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantPos" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="channel_id" property="channelId" jdbcType="INTEGER" />
@@ -14,7 +14,7 @@
     <result column="merc_refer_name" property="mercReferName" jdbcType="VARCHAR" />
   </resultMap>
   <!-- 查询POS所有数据，包括终端信息 -->
-  <resultMap id="AllResultMap" type="net.fnsco.order.service.domain.MerchantPos" >
+  <resultMap id="AllResultMap" type="net.fnsco.bigdata.service.domain.MerchantPos" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="channel_id" property="channelId" jdbcType="INTEGER" />
@@ -25,20 +25,20 @@
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="bank_id" property="bankId" jdbcType="INTEGER" />
     <result column="merc_refer_name" property="mercReferName" jdbcType="VARCHAR" />
-    <collection property="terminal" column="id" select="net.fnsco.order.service.dao.master.MerchantTerminalDao.queryAllTerByPosId"/>
+    <collection property="terminal" column="id" select="net.fnsco.bigdata.service.dao.master.MerchantTerminalDao.queryAllTerByPosId"/>
   </resultMap>
   <!-- APP商户终端列表结果集 -->
-  <resultMap  id="PosResultMap" type="net.fnsco.order.api.dto.PosListDTO">
+  <resultMap  id="PosResultMap" type="net.fnsco.bigdata.api.dto.PosListDTO">
    	<result column="mer_name" property="merName" jdbcType="VARCHAR" />
-   	<collection property="posInfo" column="inner_code" select="net.fnsco.order.service.dao.master.MerchantPosDao.selectPosNamesByInnerCode"/>
+   	<collection property="posInfo" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantPosDao.selectPosNamesByInnerCode"/>
   </resultMap>
   <!-- APPPOS详情结果集 -->
-  <resultMap id="PosInfoResultMap" type="net.fnsco.order.api.dto.PosDetailDTO" >
+  <resultMap id="PosInfoResultMap" type="net.fnsco.bigdata.api.dto.PosDetailDTO" >
     <result column="pos_name" property="posName" jdbcType="VARCHAR" />
     <result column="sn_code" property="snCode" jdbcType="VARCHAR" />
     <result column="pos_factory" property="posFactory" jdbcType="VARCHAR" />
     <result column="pos_type" property="posType" jdbcType="VARCHAR" />
-    <collection property="terNames" column="id" select="net.fnsco.order.service.dao.master.MerchantTerminalDao.queryTerByPosId"/>
+    <collection property="terNames" column="id" select="net.fnsco.bigdata.service.dao.master.MerchantTerminalDao.queryTerByPosId"/>
   </resultMap>
   <sql id="Base_Column_List" >
     id, inner_code, channel_id, pos_name, sn_code, pos_factory, pos_type, status, bank_id, merc_refer_name
@@ -54,7 +54,7 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   
-  <insert id="insert" parameterType="net.fnsco.order.service.domain.MerchantPos" >
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantPos" >
     insert into m_merchant_pos (id, inner_code, channel_id, 
       pos_name, sn_code, pos_factory, 
       pos_type, status, bank_id, 
@@ -64,7 +64,7 @@
       #{posType,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{bankId,jdbcType=INTEGER}, 
       #{mercReferName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantPos" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantPos" useGeneratedKeys="true" keyProperty="id">
     insert into m_merchant_pos
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -132,7 +132,7 @@
     </trim>
   </insert>
 
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.MerchantPos" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantPos" >
     update m_merchant_pos
     <set >
       <if test="innerCode != null and innerCode != ''" >
@@ -165,7 +165,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.MerchantPos" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantPos" >
     update m_merchant_pos
     set inner_code = #{innerCode,jdbcType=VARCHAR},
       channel_id = #{channelId,jdbcType=INTEGER},
@@ -179,7 +179,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!-- 根据innercode查询POS名称集合 -->
-  <select id="selectPosNamesByInnerCode" parameterType="java.lang.String" resultType="net.fnsco.order.api.dto.PosInfoDTO">
+  <select id="selectPosNamesByInnerCode" parameterType="java.lang.String" resultType="net.fnsco.bigdata.api.dto.PosInfoDTO">
   	SELECT id AS posId,pos_name AS posName FROM m_merchant_pos WHERE inner_code = #{innerCode} AND status = 1
   </select>
   <!-- 根据用户ID 查询所有POS设备信息 -->
@@ -203,7 +203,7 @@
     where channel_id = #{channelId,jdbcType=INTEGER}
   </select>
   <!-- 根据userID查询POS列表 -->
-  <select id="selectAllByUserId" parameterType="java.lang.Integer" resultType="net.fnsco.order.api.dto.PosInfoDTO">
+  <select id="selectAllByUserId" parameterType="java.lang.Integer" resultType="net.fnsco.bigdata.api.dto.PosInfoDTO">
     SELECT id AS posId,pos_name AS posName FROM m_merchant_pos WHERE inner_code IN( SELECT inner_code FROM m_merchant_user_rel WHERE app_user_id = #{userId}) AND status = 1
   </select>
 </mapper>

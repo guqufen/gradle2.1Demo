@@ -10,10 +10,8 @@ import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.Lists;
 
-import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
-import net.fnsco.bigdata.service.domain.AppUserMerchant;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -23,7 +21,9 @@ import net.fnsco.order.api.dto.AppUserMerchantOutDTO;
 import net.fnsco.order.api.dto.BandDto;
 import net.fnsco.order.api.dto.BandListDTO;
 import net.fnsco.order.service.dao.master.AppUserDao;
+import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.order.service.domain.AppUserMerchant;
 
 @Service
 public class AppUserMerchantServiceImpl extends BaseService implements AppUserMerchantService {

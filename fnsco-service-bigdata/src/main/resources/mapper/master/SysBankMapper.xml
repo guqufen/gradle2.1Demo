@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.order.service.dao.master.SysBankDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.SysBank" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.SysBankDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.SysBank" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
@@ -27,7 +27,7 @@
     delete from sys_bank
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="net.fnsco.order.service.domain.SysBank" >
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.SysBank" >
     insert into sys_bank (id, code, bank_name, 
       province_id, province_name, city_id, 
       city_name, branch_bank_name, an_bank_id
@@ -37,7 +37,7 @@
       #{cityName,jdbcType=VARCHAR}, #{branchBankName,jdbcType=VARCHAR}, #{anBankId,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.SysBank" >
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.SysBank" >
     insert into sys_bank
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -98,7 +98,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.SysBank" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.SysBank" >
     update sys_bank
     <set >
       <if test="code != null" >
@@ -128,7 +128,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.SysBank" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.SysBank" >
     update sys_bank
     set code = #{code,jdbcType=VARCHAR},
       bank_name = #{bankName,jdbcType=VARCHAR},
@@ -174,7 +174,7 @@
   	limit #{startRow} , #{perPageSize}
   </select>
   <!-- 条件查询总数 -->
-  <select id="queryTotalByCondition" parameterType="net.fnsco.order.service.domain.SysBank" resultType="java.lang.Integer">
+  <select id="queryTotalByCondition" parameterType="net.fnsco.bigdata.service.domain.SysBank" resultType="java.lang.Integer">
   	select count(*) 
   		from sys_bank
   	<where>
