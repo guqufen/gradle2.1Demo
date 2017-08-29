@@ -2,9 +2,11 @@ package net.fnsco.order.service.dao.master.trade;
 
 import java.util.List;
 
+import net.fnsco.order.api.dto.TurnoverDTO;
 import net.fnsco.order.service.domain.trade.TradeByDay;
 import net.fnsco.order.service.domain.trade.TradeByHour;
 import net.fnsco.order.service.domain.trade.TradeByPayType;
+import net.fnsco.order.service.domain.trade.TradeData;
 import net.fnsco.order.service.domain.trade.TradeDateTemp;
 /**
  * @desc 流水统计临时表
@@ -72,4 +74,15 @@ public interface TradeDateTempDao {
      * @since  CodingExample　Ver 1.1
      */
     List<TradeByPayType> selectTradeDataByPayType();
+    
+    /**
+     * queryTodayTurnover:(这里用一句话描述这个方法的作用)统计今日营业额
+     *
+     * @param record
+     * @return    设定文件
+     * @return TurnoverDTO    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    TurnoverDTO queryTodayTurnover(TradeByDay record);
 }

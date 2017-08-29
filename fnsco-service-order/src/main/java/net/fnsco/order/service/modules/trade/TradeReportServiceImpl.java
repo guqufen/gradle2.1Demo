@@ -94,17 +94,23 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setEndTime(endTime);
         String startDate = startTime.substring(0, 8);
         String endDate =  endTime.substring(0,8);
-        List<TradeDateTemp> tempDatas = tradeDataDAO.queryTempByCondition(record);
+        List<TradeData> tempDatas = tradeDataDAO.queryTempByCondition(record);
         //如果没有数据直接返回
         if(CollectionUtils.isEmpty(tempDatas)){
             return;
         }
-        for (TradeDateTemp tradeDateTemp : tempDatas) {
-            String timeStamp = tradeDateTemp.getTimeStamp();
+        List<TradeDateTemp> tempData = Lists.newArrayList();
+        for (TradeData tradeData : tempDatas) {
+            TradeDateTemp tradeDateTemp = new TradeDateTemp();
+            String timeStamp = tradeData.getTimeStamp();
             tradeDateTemp.setTradeDate(timeStamp.substring(0, timeStamp.length() - 6));
             tradeDateTemp.setTradeHoure(timeStamp.substring(8, 10));
+            tradeDateTemp.setAmt(tradeData.getAmt());
+            tradeDateTemp.setInnerCode(tradeData.getInnerCode());
+            tradeDateTemp.setPaySubType(tradeData.getPaySubType());
+            tempData.add(tradeDateTemp);
         }
-        tradeDateTempDao.insertBatch(tempDatas);
+        tradeDateTempDao.insertBatch(tempData);
         //统计之前先删除，防止重复统计
         TradeByDay dayCondition = new TradeByDay();
         dayCondition.setStartTradeDate(startDate);
@@ -147,7 +153,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         
        //本日营业额
         record.setTradeDate(DateUtils.getTimeByDayStr(0));
-        TurnoverDTO totayTurnover = tradeDataDAO.queryTodayTurnover(record);
+        TurnoverDTO totayTurnover = tradeDateTempDao.queryTodayTurnover(record);
         if (null != totayTurnover && null != totayTurnover.getTurnover()) {
             totayTurnover.setOrderPrice(divide(totayTurnover.getTurnover(), totayTurnover.getOrderNum()));
         } else {
