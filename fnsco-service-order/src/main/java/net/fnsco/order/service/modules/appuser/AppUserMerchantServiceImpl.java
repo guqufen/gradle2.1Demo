@@ -10,7 +10,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.google.common.collect.Lists;
 
-import net.fnsco.bigdata.service.dao.master.AppUserMerchantDao;
+import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.domain.AppUserMerchant;

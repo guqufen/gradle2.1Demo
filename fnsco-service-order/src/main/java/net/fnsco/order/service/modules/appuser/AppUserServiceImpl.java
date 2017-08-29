@@ -18,7 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import net.fnsco.bigdata.service.dao.master.AppUserMerchantDao;
+import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.bigdata.service.dao.master.MerchantContactDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;

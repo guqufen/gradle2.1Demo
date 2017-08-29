@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import net.fnsco.bigdata.service.dao.master.AppUserMerchantDao;
 import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.bigdata.service.domain.AppUserMerchant;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
@@ -37,6 +36,7 @@ import net.fnsco.order.api.dto.TurnoverDTO;
 import net.fnsco.order.api.dto.WeeklyDTO;
 import net.fnsco.order.api.dto.WeeklyHisDateDTO;
 import net.fnsco.order.api.trade.TradeReportService;
+import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.dao.master.trade.TradeByDayDao;
 import net.fnsco.order.service.dao.master.trade.TradeByHourDao;
 import net.fnsco.order.service.dao.master.trade.TradeByPayTypeDao;

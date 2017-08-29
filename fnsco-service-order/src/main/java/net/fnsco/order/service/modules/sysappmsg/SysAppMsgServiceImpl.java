@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import net.fnsco.bigdata.service.dao.master.AppUserMerchantDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.domain.AppUserMerchant;
 import net.fnsco.bigdata.service.domain.MerchantCore;
@@ -38,6 +37,7 @@ import net.fnsco.order.api.sysappmsg.SysAppMsgService;
 import net.fnsco.order.api.sysappmsg.SysMsgAppFailService;
 import net.fnsco.order.api.sysappmsg.SysMsgAppSuccService;
 import net.fnsco.order.service.dao.master.AppUserDao;
+import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.dao.master.SysAppMessageDao;
 import net.fnsco.order.service.dao.master.SysMsgAppSuccDao;
 import net.fnsco.order.service.domain.AppUser;

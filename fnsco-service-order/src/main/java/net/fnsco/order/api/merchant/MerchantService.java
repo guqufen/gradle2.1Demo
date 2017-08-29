@@ -5,8 +5,8 @@ package net.fnsco.order.api.merchant;
 
 import java.util.List;
 
+import net.fnsco.bigdata.api.dto.MerchantDTO;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.order.api.dto.MerchantDTO;
 import net.fnsco.order.api.dto.TradeMerchantDTO;
 
 /**@desc 商户相关服务接口
