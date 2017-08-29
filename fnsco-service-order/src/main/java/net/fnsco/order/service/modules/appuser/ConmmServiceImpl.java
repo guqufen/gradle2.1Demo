@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.service.dao.master.SysBankDao;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.FileUtils;
@@ -22,7 +23,6 @@ import net.fnsco.order.api.dto.SuggestDTO;
 import net.fnsco.order.api.dto.VersionDTO;
 import net.fnsco.order.api.dto.VersionResultDTO;
 import net.fnsco.order.service.dao.master.AppUserDao;
-import net.fnsco.order.service.dao.master.SysBankDao;
 import net.fnsco.order.service.dao.master.SysSuggestDao;
 import net.fnsco.order.service.dao.master.VersionDao;
 import net.fnsco.order.service.domain.AppUser;

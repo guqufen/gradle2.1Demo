@@ -2,8 +2,8 @@ package net.fnsco.web.controller.merchant.jo;
 
 import java.util.List;
 
+import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.core.base.JO;
-import net.fnsco.order.service.domain.MerchantChannel;
 
 public class MerchantChannelJO extends JO {
     /**

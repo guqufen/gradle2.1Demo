@@ -26,16 +26,16 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.api.merchant.MerchantInfoService;
+import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
+import net.fnsco.bigdata.service.dao.master.MerchantFileTempDao;
+import net.fnsco.bigdata.service.domain.MerchantFile;
+import net.fnsco.bigdata.service.domain.MerchantFileTemp;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
-import net.fnsco.order.api.merchant.MerchantInfoService;
-import net.fnsco.order.service.dao.master.MerchantFileDao;
-import net.fnsco.order.service.dao.master.MerchantFileTempDao;
-import net.fnsco.order.service.domain.MerchantFile;
-import net.fnsco.order.service.domain.MerchantFileTemp;
 /**
  * @desc 文件上传控制器
  * @author tangliang

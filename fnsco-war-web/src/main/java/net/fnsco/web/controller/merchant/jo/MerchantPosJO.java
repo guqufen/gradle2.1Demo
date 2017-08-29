@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import net.fnsco.bigdata.service.domain.MerchantPos;
+import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.JO;
-import net.fnsco.order.service.domain.MerchantPos;
-import net.fnsco.order.service.domain.MerchantTerminal;
 
 public class MerchantPosJO extends JO {
     private Integer posId;

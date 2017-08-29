@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import net.fnsco.bigdata.api.sysbank.SysBankService;
+import net.fnsco.bigdata.service.domain.SysBank;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.order.api.sysbank.SysBankService;
-import net.fnsco.order.service.domain.SysBank;
 
 /**
  * @desc 银行卡信息控制器

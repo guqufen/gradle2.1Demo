@@ -12,6 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.api.merchant.MerchantService;
+import net.fnsco.bigdata.service.dao.master.AliasDAO;
+import net.fnsco.bigdata.service.dao.master.AppUserMerchantDao;
+import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
+import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
+import net.fnsco.bigdata.service.domain.Alias;
+import net.fnsco.bigdata.service.domain.AppUserMerchant;
+import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
@@ -19,16 +28,7 @@ import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.MerchantDTO;
 import net.fnsco.order.api.dto.TradeMerchantDTO;
-import net.fnsco.order.api.merchant.MerchantService;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
-import net.fnsco.order.service.dao.master.AliasDAO;
-import net.fnsco.order.service.dao.master.AppUserMerchantDao;
-import net.fnsco.order.service.dao.master.MerchantCoreDao;
-import net.fnsco.order.service.dao.master.MerchantUserRelDao;
-import net.fnsco.order.service.domain.Alias;
-import net.fnsco.order.service.domain.AppUserMerchant;
-import net.fnsco.order.service.domain.MerchantCore;
-import net.fnsco.order.service.domain.MerchantUserRel;
 
 /**@desc 商户相关操作
  * @author sxfei
@@ -101,7 +101,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     
     /**
      * (non-Javadoc)查询是店主的商户信息
-     * @see net.fnsco.order.api.merchant.MerchantService#getShopOwnerMerChant(net.fnsco.order.api.dto.MerchantDTO)
+     * @see net.fnsco.bigdata.api.merchant.MerchantService#getShopOwnerMerChant(net.fnsco.order.api.dto.MerchantDTO)
      * @author tangliang
      * @date 2017年8月3日 下午1:18:47
      */

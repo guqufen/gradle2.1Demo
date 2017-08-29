@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import net.fnsco.bigdata.service.domain.AppUserMerchant;
 import net.fnsco.order.api.dto.AppUserMerchantDTO;
 import net.fnsco.order.api.dto.TradeMerchantDTO;
-import net.fnsco.order.service.domain.AppUserMerchant;
 
 public interface AppUserMerchantDao { 
     //根据appUserId和roleId查询用户实体集合

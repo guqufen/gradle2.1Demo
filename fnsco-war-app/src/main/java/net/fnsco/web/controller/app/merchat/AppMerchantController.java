@@ -12,6 +12,7 @@ import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.constant.ApiConstant;
@@ -25,7 +26,6 @@ import net.fnsco.order.api.dto.PosListDTO;
 import net.fnsco.order.api.dto.TerminalDetailDTO;
 import net.fnsco.order.api.dto.TerminalsDTO;
 import net.fnsco.order.api.dto.TradeMerchantDTO;
-import net.fnsco.order.api.merchant.MerchantService;
 import net.fnsco.web.controller.app.jo.TerminalJO;
 import net.fnsco.web.controller.app.jo.UserMerchantJO;
 

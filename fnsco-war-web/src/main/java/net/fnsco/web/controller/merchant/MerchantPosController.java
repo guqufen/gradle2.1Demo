@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.api.merchant.MerchantPosService;
+import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.order.api.dto.WebMerchantPosDTO;
-import net.fnsco.order.api.merchant.MerchantPosService;
-import net.fnsco.order.service.domain.MerchantBank;
 import net.fnsco.web.controller.merchant.jo.MerchantChannelJO;
 import net.fnsco.web.controller.merchant.jo.PosJO;
 

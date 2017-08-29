@@ -2,8 +2,8 @@ package net.fnsco.order.api.dto;
 
 import java.util.List;
 
-import net.fnsco.order.service.domain.MerchantPos;
-import net.fnsco.order.service.domain.MerchantTerminal;
+import net.fnsco.bigdata.service.domain.MerchantPos;
+import net.fnsco.bigdata.service.domain.MerchantTerminal;
 
 /**
  * 

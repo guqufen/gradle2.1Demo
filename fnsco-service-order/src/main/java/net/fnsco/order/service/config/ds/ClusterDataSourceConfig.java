@@ -14,6 +14,8 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import com.alibaba.druid.pool.DruidDataSource;
 
+import net.fnsco.bigdata.service.config.ds.ClusterDataSourceConfig;
+
 //@Configuration
 // 扫描 Mapper 接口并容器管理
 //@MapperScan(basePackages = ClusterDataSourceConfig.PACKAGE, sqlSessionFactoryRef = "clusterSqlSessionFactory")

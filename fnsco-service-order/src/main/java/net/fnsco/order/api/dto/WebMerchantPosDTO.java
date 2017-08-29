@@ -2,8 +2,8 @@ package net.fnsco.order.api.dto;
 
 import java.util.List;
 
+import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.core.base.DTO;
-import net.fnsco.order.service.domain.MerchantChannel;
 
 /**
  * @desc WEB页面修改或增加POS终端信息接收实体
