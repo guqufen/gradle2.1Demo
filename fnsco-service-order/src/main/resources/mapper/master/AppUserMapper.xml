@@ -213,7 +213,8 @@
 			</where>
 		GROUP BY
 			TA.reg_time,TA.mobile,TA.user_name
-	limit #{startRow},#{perPageSize}		
+		ORDER BY reg_time DESC	
+	    limit #{startRow},#{perPageSize}		
 	</select>
 	<!-- 条件查询总数 -->
 	<select id="queryTotalByCondition" parameterType="net.fnsco.order.api.dto.AppUserManageDTO" resultType="java.lang.Integer">
