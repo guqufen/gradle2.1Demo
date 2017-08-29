@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -362,13 +363,12 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
      */
     @Override
     public void pushMerChantMsg(String innerCode, Integer userId) {
-        //如果没有店长,不发送推送
-        AppUserMerchant merInfo = appUserMerchantDao.selectOneByInnerCode(innerCode, ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-        if(null == merInfo){
-            logger.warn(innerCode+"该店没有店长!");
+        //推送给该商户的其他所有成员
+        List<AppUserMerchant> merInfos = appUserMerchantDao.selectByInnerCode(innerCode,null);
+        if(CollectionUtils.isEmpty(merInfos)){
+            logger.warn(innerCode+"该店没有成员!");
             return;
         }
-        AppUser user = appUserDao.selectAppUserById(merInfo.getAppUserId());
        //发送推送
         String param_and ="";
         String newPhone = "";
@@ -393,79 +393,85 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         message.setStatus(1);
         insertSelective(message);
         if(message.getId() != null){
-            Integer deviceType = user.getDeviceType();
-            if(null == deviceType ||deviceType == 0||user.getId() == userId){
-                return;
-            }else if(deviceType==1){//安卓
-                if(StringUtils.isNotBlank(user.getDeviceToken())){
-                    relatelds_and.add(user.getDeviceToken());
-                    param_and = relatelds_and.toString().substring(1, relatelds_and.toString().length()-1);
-                    param_and = param_and.replaceAll(" ", "");//安卓去重后token
-                    try {
-                        int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime,message.getId().toString());
-                        if (status == 200) {
-                          //成功
-                            SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
-                            sysMsgAppSucc.setSendTime(new Date());
-                            sysMsgAppSucc.setAppUserId(appUser.getId());
-                            sysMsgAppSucc.setMsgId(message.getId());
-                            sysMsgAppSucc.setReadStatus(0);
-                            sysMsgAppSucc.setPhoneType(1);
-                            sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
-                            logger.info("安卓信息推送成功");
-                        } else {
-                            SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
-                            sysMsgAppFail.setAppUserId(appUser.getId());
-                            sysMsgAppFail.setMsgId(message.getId());
-                            sysMsgAppFail.setSendCount(1);
-                            sysMsgAppFail.setSendTime(new Date());
-                            sysMsgAppFail.setStatus(0);
-                            sysMsgAppFail.setPhoneType(1);
-                            sysMsgAppFailService.insertSelective(sysMsgAppFail);
-                            logger.info("安卓信息推送失败");
-                        }
-                    } catch (Exception e) {
-                        logger.error("android列播推送："+e);
-                    } 
+            //组装推送信息
+            for (AppUserMerchant merInfo : merInfos) {
+                AppUser user = appUserDao.selectAppUserById(merInfo.getAppUserId());
+                if(user.getId() == userId){
+                    continue;
                 }
-            }else if(deviceType==2){//ios
-                if(StringUtils.isNotBlank(user.getDeviceToken())){
-                    ResultDTO<PushMsgInfoDTO> countInfo =  queryNewsCount(user.getId(), false, user.getDeviceType());
-                    try {
-                        JSONObject alertContext = new JSONObject();
-                        alertContext.put("title", message.getMsgSubject());
-                        alertContext.put("subtitle", "");
-                        alertContext.put("body", message.getMsgSubTitle());
-                        int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), alertContext, countInfo.getData().getUnReadCount()+1,message.getId().toString());
-                        if (iosStatus == 200) {
-                            //成功
-                            SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
-                            sysMsgAppSucc.setSendTime(new Date());
-                            sysMsgAppSucc.setAppUserId(appUser.getId());
-                            sysMsgAppSucc.setMsgId(message.getId());
-                            sysMsgAppSucc.setReadStatus(0);
-                            sysMsgAppSucc.setPhoneType(2);
-                            sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
-                            logger.info("ios信息推送成功");
-                        } else {
-                            SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
-                            sysMsgAppFail.setAppUserId(appUser.getId());
-                            sysMsgAppFail.setMsgId(message.getId());
-                            sysMsgAppFail.setSendCount(1);
-                            sysMsgAppFail.setSendTime(new Date());
-                            sysMsgAppFail.setStatus(0);
-                            sysMsgAppFail.setPhoneType(2);
-                            sysMsgAppFailService.insertSelective(sysMsgAppFail);
-                            logger.info("ios信息推送失败");
+                Integer deviceType = user.getDeviceType();
+                if(null == deviceType ||deviceType == 0||user.getId() == userId){
+                    return;
+                }else if(deviceType==1){//安卓
+                    if(StringUtils.isNotBlank(user.getDeviceToken())){
+                        relatelds_and.add(user.getDeviceToken());
+                    }
+                }else if(deviceType==2){//ios
+                    if(StringUtils.isNotBlank(user.getDeviceToken())){
+                        ResultDTO<PushMsgInfoDTO> countInfo =  queryNewsCount(user.getId(), false, user.getDeviceType());
+                        try {
+                            JSONObject alertContext = new JSONObject();
+                            alertContext.put("title", message.getMsgSubject());
+                            alertContext.put("subtitle", "");
+                            alertContext.put("body", message.getMsgSubTitle());
+                            int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), alertContext, countInfo.getData().getUnReadCount()+1,message.getId().toString());
+                            if (iosStatus == 200) {
+                                //成功
+                                SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
+                                sysMsgAppSucc.setSendTime(new Date());
+                                sysMsgAppSucc.setAppUserId(appUser.getId());
+                                sysMsgAppSucc.setMsgId(message.getId());
+                                sysMsgAppSucc.setReadStatus(0);
+                                sysMsgAppSucc.setPhoneType(2);
+                                sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
+                                logger.info("ios信息推送成功");
+                            } else {
+                                SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
+                                sysMsgAppFail.setAppUserId(appUser.getId());
+                                sysMsgAppFail.setMsgId(message.getId());
+                                sysMsgAppFail.setSendCount(1);
+                                sysMsgAppFail.setSendTime(new Date());
+                                sysMsgAppFail.setStatus(0);
+                                sysMsgAppFail.setPhoneType(2);
+                                sysMsgAppFailService.insertSelective(sysMsgAppFail);
+                                logger.info("ios信息推送失败");
+                            }
+                        } catch (Exception e) {
+                            logger.error("ios信息推送异常"+e);
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        
-                        logger.error("ios信息推送异常"+e);
-                        e.printStackTrace();
-                        
                     }
                 }
             }
+            param_and = relatelds_and.toString().substring(1, relatelds_and.toString().length()-1);
+            param_and = param_and.replaceAll(" ", "");//安卓去重后token
+            //发送推送信息
+            try {
+                int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime,message.getId().toString());//安卓
+                if (status == 200) {
+                  //成功
+                    SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
+                    sysMsgAppSucc.setSendTime(new Date());
+                    sysMsgAppSucc.setAppUserId(appUser.getId());
+                    sysMsgAppSucc.setMsgId(message.getId());
+                    sysMsgAppSucc.setReadStatus(0);
+                    sysMsgAppSucc.setPhoneType(1);
+                    sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
+                    logger.info("安卓信息推送成功");
+                } else {
+                    SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
+                    sysMsgAppFail.setAppUserId(appUser.getId());
+                    sysMsgAppFail.setMsgId(message.getId());
+                    sysMsgAppFail.setSendCount(1);
+                    sysMsgAppFail.setSendTime(new Date());
+                    sysMsgAppFail.setStatus(0);
+                    sysMsgAppFail.setPhoneType(1);
+                    sysMsgAppFailService.insertSelective(sysMsgAppFail);
+                    logger.info("安卓信息推送失败");
+                }
+            } catch (Exception e) {
+                logger.error("android列播推送："+e);
+            } 
         }
         
     }

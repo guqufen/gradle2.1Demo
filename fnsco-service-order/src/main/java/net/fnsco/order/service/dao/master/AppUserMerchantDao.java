@@ -13,8 +13,6 @@ public interface AppUserMerchantDao {
     List<AppUserMerchant> selectByPrimaryKey(@Param("appUserId")Integer appUserId,@Param("roleId")String roleId);
     List<AppUserMerchant> selectByInnerCode(@Param("innerCode")String innerCode,@Param("roleId")String roleId);
     AppUserMerchant selectByall(@Param("innerCode")String innerCode,@Param("appUserId")Integer appUserId,@Param("roleId")String roleId);
-    AppUserMerchant selectOneByInnerCode(@Param("innerCode")String innerCode,@Param("roleId")String roleId);
-    AppUserMerchant selectByCode(@Param("innerCode")String innerCode,@Param("roleId")String roleId);
     int deleteByPrimaryKey(@Param("innerCode")String innerCode,@Param("appUserId")Integer appUserId);
     int updateByPrimaryKeySelective(AppUserMerchantDTO dto);
     int insertSelective(AppUserMerchant dto);
