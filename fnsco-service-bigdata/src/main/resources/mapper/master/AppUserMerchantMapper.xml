@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.bigdata.service.dao.master.AppUserMerchantDao">
+<mapper namespace="net.fnsco.bigdata.service.dao.master.AppUserMerchant1Dao">
 	
  <!-- 根据商家ID删除关联数据 -->
  <delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">

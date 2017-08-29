@@ -21,7 +21,7 @@ public interface UserService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    AppUserDTO getUserInfo(String userId);
+    AppUser1DTO getUserInfo(String userId);
     
     /**
      * 

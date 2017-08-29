@@ -1,5 +1,5 @@
 package net.fnsco.bigdata.service.dao.master;
 
-public interface AppUserMerchantDao {
+public interface AppUserMerchant1Dao {
     int deleteByMerCoreIds(Integer[] ids);
 }

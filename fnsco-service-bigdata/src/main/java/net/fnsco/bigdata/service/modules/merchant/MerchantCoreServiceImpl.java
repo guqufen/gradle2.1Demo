@@ -17,7 +17,7 @@ import org.springframework.util.CollectionUtils;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.service.dao.master.AgentDao;
-import net.fnsco.bigdata.service.dao.master.AppUserMerchantDao;
+import net.fnsco.bigdata.service.dao.master.AppUserMerchant1Dao;
 import net.fnsco.bigdata.service.dao.master.MerchantBankDao;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantContactDao;
@@ -75,7 +75,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     private AgentDao            agentDao;
 
     @Autowired
-    private AppUserMerchantDao  appUserMerchantDao;
+    private AppUserMerchant1Dao  appUserMerchantDao;
 
     @Autowired
     private MerchantUserRelDao  merchantUserRelDao;

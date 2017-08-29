@@ -15,9 +15,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
-//@Configuration
-//@EnableTransactionManagement
-//@MapperScan("net.fnsco.api.doc")
+@Configuration
+@EnableTransactionManagement
+@MapperScan({"net.fnsco.auth.service","net.fnsco.order.service","net.fnsco.bigdata.service"})
 public class SessionFactoryConfig implements TransactionManagementConfigurer {
     /** * mybatis 配置路径 */
     private static String MYBATIS_CONFIG   = "mybatis.xml";
@@ -35,7 +35,7 @@ public class SessionFactoryConfig implements TransactionManagementConfigurer {
     * @return 
     * @throws Exception 
     */
-    //@Bean(name = "sqlSessionFactory")
+    @Bean(name = "sqlSessionFactory")
     public SqlSessionFactoryBean createSqlSessionFactoryBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         /** 设置mybatis configuration 扫描路径 */
@@ -47,13 +47,13 @@ public class SessionFactoryConfig implements TransactionManagementConfigurer {
         return sqlSessionFactoryBean;
     }
 
-    //@Bean
+    @Bean
     public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
-    //@Bean
-    //@Override
+    @Bean
+    @Override
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return new DataSourceTransactionManager(dataSource);
     }
