@@ -141,7 +141,6 @@ $(function() {
 			data : date,
 			success : function(data) {
 				unloginHandler(data);
-				console.log(data);
 				if (data.data == null) {
 					layer.msg('该用户没有绑定任何商户');
 				} else {
@@ -195,15 +194,12 @@ function confirmlt(mobile) {
 	$(".tab-content").find(".shopRoleList").each(function() {
 		$(this).find(".row").each(function() {
 			innerCode = $(this).find("#shopName1").attr("i");
-			console.log($(this).find("#shopName1").attr("i"));
 			id = $(this).find("#shopName1").attr("j");
 			appUserId = $(this).find("#shopName1").attr("o");
-			console.log($(this).find("#shopName1").attr("j"));
 			$(this).find("#shopRole").each(function() {
 				$(this).find("option").each(function() {
 					if ($(this).is(":selected")) {
 						roleId = $(this).val();
-						console.log($(this).val())
 					}
 				})
 			})
@@ -247,7 +243,6 @@ function confirmlt(mobile) {
 									+ data.data.clerk[i].mobile
 									+ ')的店主权限？</div>';
 						}
-						console.log(str + contant);
 						layer.confirm(str + contant, {
 							area : [ '600px', '200px' ],
 							time : 2000000, // 20s后自动关闭
@@ -275,15 +270,12 @@ function saveBtn() {
 	$(".tab-content").find(".shopRoleList").each(function() {
 		$(this).find(".row").each(function() {
 			innerCode = $(this).find("#shopName1").attr("i");
-			console.log($(this).find("#shopName1").attr("i"));
 			id = $(this).find("#shopName1").attr("j");
 			appUserId = $(this).find("#shopName1").attr("o");
-			console.log($(this).find("#shopName1").attr("j"));
 			$(this).find("#shopRole").each(function() {
 				$(this).find("option").each(function() {
 					if ($(this).is(":selected")) {
 						roleId = $(this).val();
-						console.log($(this).val())
 					}
 				})
 			})
@@ -296,7 +288,6 @@ function saveBtn() {
 		};
 		arry.push(date);
 	})
-	console.log(arry);
 	var toStr = JSON.stringify(arry);
 	$.ajax({
 		url : PROJECT_NAME + '/web/appsuser/changeRole',
@@ -315,7 +306,6 @@ function saveBtn() {
 			setTimeout(function() {
 				window.location.reload();
 			}, 1000);
-
 		},
 		error : function() {
 			layer.msg('系统错误');
@@ -323,8 +313,11 @@ function saveBtn() {
 	});
 
 }
-
-// $(".saveBtn").click(function(){
-//	
-// })
-
+//导出按钮事件
+function exportEvent(){
+	//拼接参数
+			   var mobile = $('#shopPhoneNum').val();
+			   var merNames = $('#shopName').val();
+ 			   var url=PROJECT_NAME+'/web/appsuser/export'+'?mobile='+mobile+'&merNames='+merNames;
+	window.open(url, 'Excel导出');
+}

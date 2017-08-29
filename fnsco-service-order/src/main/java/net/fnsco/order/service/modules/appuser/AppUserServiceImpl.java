@@ -445,6 +445,15 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     }
 
     @Override
+    public List<AppUserManageDTO> queryAppPageList(AppUserManageDTO record) {
+        //分页器实例化     实例化当前页和每条显示的记录数 还有传过来的参数  手机号和店铺名等条件称封装到一个实体里面
+        PageDTO<AppUserManageDTO> params = new PageDTO<AppUserManageDTO>(1, 10000, record);
+        //调用Dao方法时可以使用上面封装的实体         AppUserManageDTO即使用户返回给用户的实体 也用来传递参数
+        List<AppUserManageDTO> data = appUserDao.queryPageList(params);
+        return data;
+    }
+    
+    @Override
     public ResultDTO modifyRole(BandDto bandDto) {
         List<QueryBandDTO> list = appUserDao.selectBandPeopleByMobile(bandDto.getMobile());
         if (list.size() == 0) {
@@ -576,12 +585,14 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 AppUserMerchant it = appUserMerchantDao.selectOneByInnerCode(li.getInnerCode(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
                 //原来有店长不管是不是自己都强制更新
                 if (it != null) {
+                	if(li.getAppUserId().equals(it.getAppUserId())) {
                     AppUser oldUser = new AppUser();
                     oldUser.setId(it.getAppUserId());
                     oldUser.setForcedLoginOut(1);
                     if (!appUserDao.updateByPrimaryKeySelective(oldUser)) {
                         return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
                     }
+                   }
                 }
             }
             li.setModefyTime(new Date());
