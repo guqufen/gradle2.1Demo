@@ -31,22 +31,10 @@
 		select
 		<include refid="Base_Column_List" />
 		from u_app_user_merchant
-		where inner_code = #{innerCode,jdbcType=VARCHAR} and role_id =
-		#{roleId,jdbcType=VARCHAR}
-	</select>
-	<select id="selectOneByInnerCode" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from u_app_user_merchant
-		where inner_code = #{innerCode,jdbcType=VARCHAR} and role_id =
-		#{roleId,jdbcType=VARCHAR}
-	</select>
-	<select id="selectByCode" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from u_app_user_merchant
-		where inner_code = #{innerCode,jdbcType=VARCHAR} and role_id =
-		#{roleId,jdbcType=VARCHAR}
+		where inner_code = #{innerCode,jdbcType=VARCHAR} 
+		<if test="roleId != null and roleId != '' ">
+		  and role_id = #{roleId,jdbcType=VARCHAR}
+		</if>
 	</select>
 	<!-- 根据innerCode和appUserId删除绑定关系 -->
 	<delete id="deleteByPrimaryKey">
