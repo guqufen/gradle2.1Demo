@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.order.service.dao.master.SysBankDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.SysBank" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="branch_bank_name" property="branchBankName" jdbcType="VARCHAR" />
+    <result column="an_bank_id" property="anBankId" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    id, code, bank_name, province_id, province_name, city_id, city_name, branch_bank_name, 
+    an_bank_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_bank
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sys_bank
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.SysBank" >
+    insert into sys_bank (id, code, bank_name, 
+      province_id, province_name, city_id, 
+      city_name, branch_bank_name, an_bank_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{code,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, 
+      #{provinceId,jdbcType=INTEGER}, #{provinceName,jdbcType=VARCHAR}, #{cityId,jdbcType=INTEGER}, 
+      #{cityName,jdbcType=VARCHAR}, #{branchBankName,jdbcType=VARCHAR}, #{anBankId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.SysBank" >
+    insert into sys_bank
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+      <if test="provinceId != null" >
+        province_id,
+      </if>
+      <if test="provinceName != null" >
+        province_name,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="cityName != null" >
+        city_name,
+      </if>
+      <if test="branchBankName != null" >
+        branch_bank_name,
+      </if>
+      <if test="anBankId != null" >
+        an_bank_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceName != null" >
+        #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="cityName != null" >
+        #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBankName != null" >
+        #{branchBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="anBankId != null" >
+        #{anBankId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.SysBank" >
+    update sys_bank
+    <set >
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceId != null" >
+        province_id = #{provinceId,jdbcType=INTEGER},
+      </if>
+      <if test="provinceName != null" >
+        province_name = #{provinceName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=INTEGER},
+      </if>
+      <if test="cityName != null" >
+        city_name = #{cityName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBankName != null" >
+        branch_bank_name = #{branchBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="anBankId != null" >
+        an_bank_id = #{anBankId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.SysBank" >
+    update sys_bank
+    set code = #{code,jdbcType=VARCHAR},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      province_id = #{provinceId,jdbcType=INTEGER},
+      province_name = #{provinceName,jdbcType=VARCHAR},
+      city_id = #{cityId,jdbcType=INTEGER},
+      city_name = #{cityName,jdbcType=VARCHAR},
+      branch_bank_name = #{branchBankName,jdbcType=VARCHAR},
+      an_bank_id = #{anBankId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 条件分页查询 -->
+  <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_bank
+  	<where>
+  	  <if test="condition.code != null and condition.code != '' " >
+       AND code = #{condition.code,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.bankName != null and condition.bankName != '' " >
+       AND bank_name LIKE CONCAT('%', #{condition.bankName}, '%') 
+      </if>
+      <if test="condition.provinceId != null and condition.provinceId != '' " >
+       AND  province_id = #{condition.provinceId,jdbcType=INTEGER}
+      </if>
+      <if test="condition.provinceName != null and condition.provinceName != '' " >
+       AND  province_name LIKE CONCAT('%', #{condition.provinceName}, '%')  
+      </if>
+      <if test="condition.cityId != null and condition.cityId != '' " >
+       AND  city_id = #{condition.cityId,jdbcType=INTEGER}
+      </if>
+      <if test="condition.cityName != null and condition.cityName != '' " >
+        AND city_name LIKE CONCAT('%', #{condition.cityName}, '%')   
+      </if>
+      <if test="condition.branchBankName != null and condition.branchBankName != '' " >
+        AND branch_bank_name LIKE CONCAT('%', #{condition.branchBankName}, '%')    
+      </if>
+      <if test="condition.anBankId != null and condition.anBankId != '' " >
+       AND  an_bank_id = #{condition.anBankId,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  	limit #{startRow} , #{perPageSize}
+  </select>
+  <!-- 条件查询总数 -->
+  <select id="queryTotalByCondition" parameterType="net.fnsco.order.service.domain.SysBank" resultType="java.lang.Integer">
+  	select count(*) 
+  		from sys_bank
+  	<where>
+  	  <if test="code != null and code != '' " >
+       AND code = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="bankName != null and bankName != '' " >
+       AND bank_name LIKE CONCAT('%', #{bankName}, '%') 
+      </if>
+      <if test="provinceId != null and provinceId != '' " >
+       AND  province_id = #{provinceId,jdbcType=INTEGER}
+      </if>
+      <if test="provinceName != null and provinceName != '' " >
+       AND  province_name LIKE CONCAT('%', #{provinceName}, '%')  
+      </if>
+      <if test="cityId != null and cityId != '' " >
+       AND  city_id = #{cityId,jdbcType=INTEGER}
+      </if>
+      <if test="cityName != null and cityName != '' " >
+        AND city_name LIKE CONCAT('%', #{cityName}, '%')   
+      </if>
+      <if test="branchBankName != null and branchBankName != '' " >
+        AND branch_bank_name LIKE CONCAT('%', #{branchBankName}, '%')    
+      </if>
+      <if test="anBankId != null and anBankId != '' " >
+       AND  an_bank_id = #{anBankId,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  </select>
+</mapper>

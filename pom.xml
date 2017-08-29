@@ -19,6 +19,7 @@
 		<module>fnsco-war-open</module>
 		<!-- 数据接入service项目-->
 		<module>fnsco-service-order</module>
+		<module>fnsco-service-bigdata</module>
 		<module>fnsco-service-withhold</module>
 		<module>fnsco-service-api-doc</module>
 		<module>fnsco-service-auth</module>

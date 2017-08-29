@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.order.service.dao.master.MerchantFileDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.MerchantFile" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="file_type" property="fileType" jdbcType="VARCHAR" />
+    <result column="file_path" property="filePath" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    id, inner_code, file_name, file_type, file_path, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_file
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from m_merchant_file
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.MerchantFile" >
+    insert into m_merchant_file (id, inner_code, file_name, 
+      file_type, file_path, create_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+      #{fileType,jdbcType=VARCHAR}, #{filePath,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.MerchantFile" >
+    insert into m_merchant_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="innerCode != null" >
+        inner_code,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="fileType != null" >
+        file_type,
+      </if>
+      <if test="filePath != null" >
+        file_path,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="innerCode != null" >
+        #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null" >
+        #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null" >
+        #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.MerchantFile" >
+     update m_merchant_file
+    <set >
+      <if test="innerCode != null" >
+        inner_code = #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileType != null" >
+        file_type = #{fileType,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null" >
+        file_path = #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.MerchantFile" >
+    update m_merchant_file
+    set inner_code = #{innerCode,jdbcType=VARCHAR},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_type = #{fileType,jdbcType=VARCHAR},
+      file_path = #{filePath,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 根据条件查询 -->
+  <select id="queryByCondition" parameterType="net.fnsco.order.service.domain.MerchantFile" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+     from m_merchant_file
+     <where>
+       <if test="innerCode != null" >
+        AND inner_code = #{innerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="fileName != null" >
+        AND file_name = #{fileName,jdbcType=VARCHAR}
+      </if>
+      <if test="fileType != null" >
+        AND file_type = #{fileType,jdbcType=VARCHAR}
+      </if>
+      <if test="filePath != null" >
+        AND file_path = #{filePath,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null" >
+        AND create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+     </where> 
+  </select>
+  <!-- 根据innercode查询 -->
+  <select id="queryByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_file
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
+  <!-- 根据商家ID删除关联数据 -->
+	<delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
+	   DELETE   FROM m_merchant_file WHERE inner_code in (
+		 SELECT inner_code FROM m_merchant_core WHERE id in 
+		  <foreach item="item" collection="array" open="(" separator="," close=")">
+	       #{item}
+	     </foreach>
+		)
+	</delete>
+</mapper>

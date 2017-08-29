@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.order.service.dao.master.trade.TradeDataDAO" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.trade.TradeData" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="txn_type" property="txnType" jdbcType="VARCHAR" />
+    <result column="txn_sub_type" property="txnSubType" jdbcType="VARCHAR" />
+    <result column="currency" property="currency" jdbcType="VARCHAR" />
+    <result column="pay_time_out" property="payTimeOut" jdbcType="VARCHAR" />
+    <result column="subject" property="subject" jdbcType="VARCHAR" />
+    <result column="body" property="body" jdbcType="VARCHAR" />
+    <result column="customer_info" property="customerInfo" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="customer_ip" property="customerIp" jdbcType="VARCHAR" />
+    <result column="tn" property="tn" jdbcType="VARCHAR" />
+    <result column="resp_code" property="respCode" jdbcType="VARCHAR" />
+    <result column="resp_msg" property="respMsg" jdbcType="VARCHAR" />
+    <result column="settle_amount" property="settleAmount" jdbcType="VARCHAR" />
+    <result column="settle_currency" property="settleCurrency" jdbcType="VARCHAR" />
+    <result column="settle_date" property="settleDate" jdbcType="VARCHAR" />
+    <result column="succ_time" property="succTime" jdbcType="VARCHAR" />
+    <result column="org_mer_order_id" property="orgMerOrderId" jdbcType="VARCHAR" />
+    <result column="can_ref_amt" property="canRefAmt" jdbcType="VARCHAR" />
+    <result column="ref_cnt" property="refCnt" jdbcType="VARCHAR" />
+    <result column="ref_amt" property="refAmt" jdbcType="VARCHAR" />
+    <result column="bank_id" property="bankId" jdbcType="VARCHAR" />
+    <result column="pp_flag" property="ppFlag" jdbcType="VARCHAR" />
+    <result column="purpose" property="purpose" jdbcType="VARCHAR" />
+    <result column="dc_type" property="dcType" jdbcType="VARCHAR" />
+    <result column="certify_id" property="certifyId" jdbcType="VARCHAR" />
+    <result column="msg_dest_id" property="msgDestId" jdbcType="VARCHAR" />
+    <result column="customer_nm" property="customerNm" jdbcType="VARCHAR" />
+    <result column="phone_no" property="phoneNo" jdbcType="VARCHAR" />
+    <result column="sub_open_id" property="subOpenId" jdbcType="VARCHAR" />
+    <result column="channel_type" property="channelType" jdbcType="VARCHAR" />
+    <result column="amt" property="amt" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_time" property="orderTime" jdbcType="VARCHAR" />
+    <result column="order_info" property="orderInfo" jdbcType="VARCHAR" />
+    <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+    <result column="pay_sub_type" property="paySubType" jdbcType="VARCHAR" />
+    <result column="refer_no" property="referNo" jdbcType="VARCHAR" />
+    <result column="time_stamp" property="timeStamp" jdbcType="VARCHAR" />
+    <result column="trade_detail" property="tradeDetail" jdbcType="VARCHAR" />
+    <result column="mer_id" property="merId" jdbcType="VARCHAR" />
+    <result column="term_id" property="termId" jdbcType="VARCHAR" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="trace_no" property="traceNo" jdbcType="VARCHAR" />
+    <result column="auth_code" property="authCode" jdbcType="VARCHAR" />
+    <result column="order_id_scan" property="orderIdScan" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="md5" property="md5" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <!-- 临时表数据集 --> 
+  <resultMap id="TradeDataTempResultMap" type="net.fnsco.order.service.domain.trade.TradeDateTemp" >
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="amt" property="amt" jdbcType="VARCHAR" />
+    <result column="pay_sub_type" property="paySubType" jdbcType="VARCHAR" />
+    <result column="time_stamp" property="timeStamp" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, inner_code, txn_type, txn_sub_type, currency, pay_time_out, subject, body, customer_info, 
+    remark, customer_ip, tn, resp_code, resp_msg, settle_amount, settle_currency, settle_date, 
+    succ_time, org_mer_order_id, can_ref_amt, ref_cnt, ref_amt, bank_id, pp_flag, purpose, 
+    dc_type, certify_id, msg_dest_id, customer_nm, phone_no, sub_open_id, channel_type, 
+    amt, order_no, order_time, order_info, pay_type,pay_sub_type, time_stamp, trade_detail, mer_id, 
+    term_id, batch_no, trace_no, auth_code, order_id_scan, source, md5, send_time, 
+    create_time,refer_no,status
+  </sql>
+   
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_trade_data
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByMd5" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_trade_data
+    where md5 = #{md5,jdbcType=VARCHAR}
+    limit 1
+  </select>
+  
+  <select id="selectByIRT" resultMap="BaseResultMap" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_trade_data
+    where refer_no = #{referNo,jdbcType=VARCHAR}
+    and term_id = #{termId,jdbcType=VARCHAR}
+    and inner_code = #{innerCode,jdbcType=VARCHAR}
+    order by create_time
+    limit 1
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_trade_data
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+   
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+    insert into t_trade_data (id, inner_code, txn_type, 
+      txn_sub_type, currency, pay_time_out, 
+      subject, body, customer_info, 
+      remark, customer_ip, tn, 
+      resp_code, resp_msg, settle_amount, 
+      settle_currency, settle_date, succ_time, 
+      org_mer_order_id, can_ref_amt, ref_cnt, 
+      ref_amt, bank_id, pp_flag, 
+      purpose, dc_type, certify_id, 
+      msg_dest_id, customer_nm, phone_no, 
+      sub_open_id, channel_type, amt, 
+      order_no, order_time, order_info, 
+      pay_type,pay_sub_type, time_stamp, trade_detail, 
+      mer_id, term_id, batch_no, 
+      trace_no, auth_code, order_id_scan, 
+      source, md5, send_time, 
+      create_time,refer_no,status)
+    values (#{id,jdbcType=VARCHAR}, #{innerCode,jdbcType=VARCHAR}, #{txnType,jdbcType=VARCHAR}, 
+      #{txnSubType,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{payTimeOut,jdbcType=VARCHAR}, 
+      #{subject,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{customerInfo,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{customerIp,jdbcType=VARCHAR}, #{tn,jdbcType=VARCHAR}, 
+      #{respCode,jdbcType=VARCHAR}, #{respMsg,jdbcType=VARCHAR}, #{settleAmount,jdbcType=VARCHAR}, 
+      #{settleCurrency,jdbcType=VARCHAR}, #{settleDate,jdbcType=VARCHAR}, #{succTime,jdbcType=VARCHAR}, 
+      #{orgMerOrderId,jdbcType=VARCHAR}, #{canRefAmt,jdbcType=VARCHAR}, #{refCnt,jdbcType=VARCHAR}, 
+      #{refAmt,jdbcType=VARCHAR}, #{bankId,jdbcType=VARCHAR}, #{ppFlag,jdbcType=VARCHAR}, 
+      #{purpose,jdbcType=VARCHAR}, #{dcType,jdbcType=VARCHAR}, #{certifyId,jdbcType=VARCHAR}, 
+      #{msgDestId,jdbcType=VARCHAR}, #{customerNm,jdbcType=VARCHAR}, #{phoneNo,jdbcType=VARCHAR}, 
+      #{subOpenId,jdbcType=VARCHAR}, #{channelType,jdbcType=VARCHAR}, #{amt,jdbcType=VARCHAR}, 
+      #{orderNo,jdbcType=VARCHAR}, #{orderTime,jdbcType=VARCHAR}, #{orderInfo,jdbcType=VARCHAR}, 
+      #{payType,jdbcType=VARCHAR},#{paySubType,jdbcType=VARCHAR}, #{timeStamp,jdbcType=VARCHAR}, #{tradeDetail,jdbcType=VARCHAR}, 
+      #{merId,jdbcType=VARCHAR}, #{termId,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, 
+      #{traceNo,jdbcType=VARCHAR}, #{authCode,jdbcType=VARCHAR}, #{orderIdScan,jdbcType=VARCHAR}, 
+      #{source,jdbcType=VARCHAR}, #{md5,jdbcType=VARCHAR}, #{sendTime,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{referNo,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+  </insert>
+    
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+    update t_trade_data
+    <set >
+      <if test="innerCode != null" >
+        inner_code = #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="txnType != null" >
+        txn_type = #{txnType,jdbcType=VARCHAR},
+      </if>
+      <if test="txnSubType != null" >
+        txn_sub_type = #{txnSubType,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null" >
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="payTimeOut != null" >
+        pay_time_out = #{payTimeOut,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null" >
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="body != null" >
+        body = #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="customerInfo != null" >
+        customer_info = #{customerInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="customerIp != null" >
+        customer_ip = #{customerIp,jdbcType=VARCHAR},
+      </if>
+      <if test="tn != null" >
+        tn = #{tn,jdbcType=VARCHAR},
+      </if>
+      <if test="respCode != null" >
+        resp_code = #{respCode,jdbcType=VARCHAR},
+      </if>
+      <if test="respMsg != null" >
+        resp_msg = #{respMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="settleAmount != null" >
+        settle_amount = #{settleAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="settleCurrency != null" >
+        settle_currency = #{settleCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="settleDate != null" >
+        settle_date = #{settleDate,jdbcType=VARCHAR},
+      </if>
+      <if test="succTime != null" >
+        succ_time = #{succTime,jdbcType=VARCHAR},
+      </if>
+      <if test="orgMerOrderId != null" >
+        org_mer_order_id = #{orgMerOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="canRefAmt != null" >
+        can_ref_amt = #{canRefAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="refCnt != null" >
+        ref_cnt = #{refCnt,jdbcType=VARCHAR},
+      </if>
+      <if test="refAmt != null" >
+        ref_amt = #{refAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="bankId != null" >
+        bank_id = #{bankId,jdbcType=VARCHAR},
+      </if>
+      <if test="ppFlag != null" >
+        pp_flag = #{ppFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="purpose != null" >
+        purpose = #{purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="dcType != null" >
+        dc_type = #{dcType,jdbcType=VARCHAR},
+      </if>
+      <if test="certifyId != null" >
+        certify_id = #{certifyId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgDestId != null" >
+        msg_dest_id = #{msgDestId,jdbcType=VARCHAR},
+      </if>
+      <if test="customerNm != null" >
+        customer_nm = #{customerNm,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNo != null" >
+        phone_no = #{phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="subOpenId != null" >
+        sub_open_id = #{subOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelType != null" >
+        channel_type = #{channelType,jdbcType=VARCHAR},
+      </if>
+      <if test="amt != null" >
+        amt = #{amt,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null" >
+        order_time = #{orderTime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderInfo != null" >
+        order_info = #{orderInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="timeStamp != null" >
+        time_stamp = #{timeStamp,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeDetail != null" >
+        trade_detail = #{tradeDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="merId != null" >
+        mer_id = #{merId,jdbcType=VARCHAR},
+      </if>
+      <if test="termId != null" >
+        term_id = #{termId,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNo != null" >
+        batch_no = #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="traceNo != null" >
+        trace_no = #{traceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="authCode != null" >
+        auth_code = #{authCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderIdScan != null" >
+        order_id_scan = #{orderIdScan,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="md5 != null" >
+        md5 = #{md5,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        send_time = #{sendTime,jdbcType=VARCHAR},
+      </if>
+      <if test="referNo != null" >
+        refer_no = #{referNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+    update t_trade_data
+    set inner_code = #{innerCode,jdbcType=VARCHAR},
+      txn_type = #{txnType,jdbcType=VARCHAR},
+      refer_no = #{referNo,jdbcType=VARCHAR},
+      txn_sub_type = #{txnSubType,jdbcType=VARCHAR},
+      currency = #{currency,jdbcType=VARCHAR},
+      pay_time_out = #{payTimeOut,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      body = #{body,jdbcType=VARCHAR},
+      customer_info = #{customerInfo,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      customer_ip = #{customerIp,jdbcType=VARCHAR},
+      tn = #{tn,jdbcType=VARCHAR},
+      resp_code = #{respCode,jdbcType=VARCHAR},
+      resp_msg = #{respMsg,jdbcType=VARCHAR},
+      settle_amount = #{settleAmount,jdbcType=VARCHAR},
+      settle_currency = #{settleCurrency,jdbcType=VARCHAR},
+      settle_date = #{settleDate,jdbcType=VARCHAR},
+      succ_time = #{succTime,jdbcType=VARCHAR},
+      org_mer_order_id = #{orgMerOrderId,jdbcType=VARCHAR},
+      can_ref_amt = #{canRefAmt,jdbcType=VARCHAR},
+      ref_cnt = #{refCnt,jdbcType=VARCHAR},
+      ref_amt = #{refAmt,jdbcType=VARCHAR},
+      bank_id = #{bankId,jdbcType=VARCHAR},
+      pp_flag = #{ppFlag,jdbcType=VARCHAR},
+      purpose = #{purpose,jdbcType=VARCHAR},
+      dc_type = #{dcType,jdbcType=VARCHAR},
+      certify_id = #{certifyId,jdbcType=VARCHAR},
+      msg_dest_id = #{msgDestId,jdbcType=VARCHAR},
+      customer_nm = #{customerNm,jdbcType=VARCHAR},
+      phone_no = #{phoneNo,jdbcType=VARCHAR},
+      sub_open_id = #{subOpenId,jdbcType=VARCHAR},
+      channel_type = #{channelType,jdbcType=VARCHAR},
+      amt = #{amt,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      order_time = #{orderTime,jdbcType=VARCHAR},
+      order_info = #{orderInfo,jdbcType=VARCHAR},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      time_stamp = #{timeStamp,jdbcType=VARCHAR},
+      trade_detail = #{tradeDetail,jdbcType=VARCHAR},
+      mer_id = #{merId,jdbcType=VARCHAR},
+      term_id = #{termId,jdbcType=VARCHAR},
+      batch_no = #{batchNo,jdbcType=VARCHAR},
+      trace_no = #{traceNo,jdbcType=VARCHAR},
+      auth_code = #{authCode,jdbcType=VARCHAR},
+      order_id_scan = #{orderIdScan,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      md5 = #{md5,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <!-- web端分页条件查询 -->
+  <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+   	 from t_trade_data
+   	 <where>
+	  <if test="condition.merName != null and condition.merName !=''" >
+        AND inner_code in (
+           SELECT inner_code FROM m_merchant_core WHERE mer_name LIKE CONCAT('%',#{condition.merName},'%')
+        )
+      </if>
+   	    <if test="condition.innerCode != null and condition.innerCode !=''" >
+        AND inner_code = #{condition.innerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.txnType != null and condition.txnType !=''" >
+        AND txn_type = #{condition.txnType,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.txnSubType != null and condition.txnSubType !=''" >
+        AND txn_sub_type = #{condition.txnSubType,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.currency != null and condition.currency !=''" >
+        AND currency = #{condition.currency,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.payTimeOut != null and condition.payTimeOut !=''" >
+        AND pay_time_out = #{condition.payTimeOut,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.subject != null and condition.subject !=''" >
+        AND subject = #{condition.subject,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.body != null and condition.body !=''" >
+        AND body = #{condition.body,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.customerInfo != null and condition.customerInfo !=''" >
+        AND customer_info = #{condition.customerInfo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.remark != null and condition.remark !=''" >
+        AND remark = #{condition.remark,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.customerIp != null and condition.customerIp !=''" >
+        AND customer_ip = #{condition.customerIp,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.tn != null and condition.tn !=''" >
+        AND tn = #{condition.tn,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.respCode != null and condition.respCode !=''" >
+        AND resp_code = #{condition.respCode,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.respMsg != null and condition.respMsg !=''" >
+        AND resp_msg = #{condition.respMsg,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.settleAmount != null and condition.settleAmount !=''" >
+        AND settle_amount = #{condition.settleAmount,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.settleCurrency != null and condition.settleCurrency !=''" >
+        AND settle_currency = #{condition.settleCurrency,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.settleDate != null and condition.settleDate !=''" >
+        AND settle_date = #{condition.settleDate,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.succTime != null and condition.succTime !=''" >
+        AND succ_time = #{condition.succTime,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.orgMerOrderId != null and condition.orgMerOrderId !=''" >
+        AND org_mer_order_id = #{condition.orgMerOrderId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.canRefAmt != null and condition.canRefAmt !=''" >
+        AND can_ref_amt = #{condition.canRefAmt,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.refCnt != null and condition.refCnt !=''" >
+        AND ref_cnt = #{condition.refCnt,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.refAmt != null and condition.refAmt !=''" >
+        AND ref_amt = #{condition.refAmt,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.bankId != null and condition.bankId !=''" >
+        AND bank_id = #{condition.bankId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.ppFlag != null and condition.ppFlag !=''" >
+        AND pp_flag = #{condition.ppFlag,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.purpose != null and condition.purpose !=''" >
+        AND purpose = #{condition.purpose,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.dcType != null and condition.dcType !=''" >
+       AND  dc_type = #{condition.dcType,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.certifyId != null and condition.certifyId !=''" >
+        AND certify_id = #{condition.certifyId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.msgDestId != null and condition.msgDestId !=''" >
+        AND msg_dest_id = #{condition.msgDestId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.customerNm != null and condition.customerNm !=''" >
+        AND customer_nm = #{condition.customerNm,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.phoneNo != null and condition.phoneNo !=''" >
+        AND phone_no = #{condition.phoneNo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.subOpenId != null and condition.subOpenId !=''" >
+        AND sub_open_id = #{condition.subOpenId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.channelType != null and condition.channelType !=''" >
+        AND channel_type = #{condition.channelType,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.amt != null and condition.amt !=''" >
+       AND  amt = #{condition.amt,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.orderNo != null and condition.orderNo !=''" >
+       AND  order_no = #{condition.orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.orderTime != null and condition.orderTime !=''" >
+        AND order_time = #{condition.orderTime,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.orderInfo != null and condition.orderInfo !=''" >
+       AND  order_info = #{condition.orderInfo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.payType != null and condition.payType !=''" >
+        AND pay_type = #{condition.payType,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.timeStamp != null and condition.timeStamp !=''" >
+        AND time_stamp = #{condition.timeStamp,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.tradeDetail != null and condition.tradeDetail !=''" >
+        AND trade_detail = #{condition.tradeDetail,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.merId != null and condition.merId !=''" >
+       AND  mer_id = #{condition.merId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.termId != null and condition.termId !=''" >
+       AND  term_id = #{condition.termId,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.batchNo != null and condition.batchNo !=''" >
+        AND batch_no = #{condition.batchNo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.traceNo != null and condition.traceNo !=''" >
+        AND trace_no = #{condition.traceNo,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.authCode != null and condition.authCode !=''" >
+        AND auth_code = #{authCode,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.orderIdScan != null and condition.orderIdScan !=''" >
+        AND order_id_scan = #{orderIdScan,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.source != null and condition.source !=''" >
+        AND source = #{source,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.md5 != null and condition.md5 !=''" >
+       AND  md5 = #{condition.md5,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.startSendTime != null  and condition.startSendTime !='' " >
+       AND  send_time  >= #{condition.startSendTime,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.endSendTime != null  and condition.endSendTime !='' " >
+       AND  send_time  &lt;= #{condition.endSendTime,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.createTime != null and condition.createTime !='' " >
+        AND create_time = #{condition.createTime,jdbcType=TIMESTAMP}
+      </if>
+      <!-- 手工添加 -->
+      <if test="condition.startTime != null and condition.startTime !=''" >
+        	AND time_stamp >= #{condition.startTime,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.endTime != null and condition.endTime !=''" >
+      	<![CDATA[
+        	AND time_stamp <= #{condition.endTime,jdbcType=VARCHAR}
+        ]]>
+      </if>
+      <if test="condition.innerCodeList != null">
+			AND term_id in ( select terminal_code from m_merchant_terminal where inner_code IN 
+			<foreach collection="condition.innerCodeList" item="innerCode" open="(" separator="," close=")">#{innerCode}</foreach>
+	 		)
+	  </if>
+	  <if test="condition.paySubTypes != null" >
+        AND pay_sub_type in 
+		<foreach collection="condition.paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
+      </if>
+	  <if test="condition.terminalList != null">
+			AND term_id IN 
+			<foreach collection="condition.terminalList" item="terminal" open="(" separator="," close=")">#{terminal}</foreach>
+	  </if>	
+   	 </where>
+   	 order by create_time desc
+   	 limit #{startRow} , #{perPageSize}
+  </select>
+  <!-- 条件查询总数 -->
+  <select id="queryTotalByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeData" resultType="java.lang.Integer">
+     select count(*)  from 
+     		t_trade_data
+     <where>
+      <if test="merName != null and merName !=''" >
+        AND inner_code in (
+           SELECT inner_code FROM m_merchant_core WHERE mer_name LIKE CONCAT('%',#{merName},'%')
+        )
+      </if>
+   	    <if test="innerCode != null and innerCode != ''" >
+        AND inner_code = #{innerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="txnType != null and txnType != ''" >
+        AND txn_type = #{txnType,jdbcType=VARCHAR}
+      </if>
+      <if test="txnSubType != null and txnSubType != ''" >
+        AND txn_sub_type = #{txnSubType,jdbcType=VARCHAR}
+      </if>
+      <if test="currency != null and currency != ''" >
+        AND currency = #{currency,jdbcType=VARCHAR}
+      </if>
+      <if test="payTimeOut != null and payTimeOut != ''" >
+        AND pay_time_out = #{payTimeOut,jdbcType=VARCHAR}
+      </if>
+      <if test="subject != null and subject != ''" >
+        AND subject = #{subject,jdbcType=VARCHAR}
+      </if>
+      <if test="body != null and body != ''" >
+        AND body = #{body,jdbcType=VARCHAR}
+      </if>
+      <if test="customerInfo != null and customerInfo != ''" >
+        AND customer_info = #{customerInfo,jdbcType=VARCHAR}
+      </if>
+      <if test="remark != null and remark != ''" >
+        AND remark = #{remark,jdbcType=VARCHAR}
+      </if>
+      <if test="customerIp != null and customerIp != ''" >
+        AND customer_ip = #{customerIp,jdbcType=VARCHAR}
+      </if>
+      <if test="tn != null and tn != ''" >
+        AND tn = #{tn,jdbcType=VARCHAR}
+      </if>
+      <if test="respCode != null and respCode != ''" >
+        AND resp_code = #{respCode,jdbcType=VARCHAR}
+      </if>
+      <if test="respMsg != null and respMsg != ''" >
+        AND resp_msg = #{respMsg,jdbcType=VARCHAR}
+      </if>
+      <if test="settleAmount != null and settleAmount != ''" >
+        AND settle_amount = #{settleAmount,jdbcType=VARCHAR}
+      </if>
+      <if test="settleCurrency != null and settleCurrency != ''" >
+        AND settle_currency = #{settleCurrency,jdbcType=VARCHAR}
+      </if>
+      <if test="settleDate != null and settleDate != ''" >
+        AND settle_date = #{settleDate,jdbcType=VARCHAR}
+      </if>
+      <if test="succTime != null and succTime != ''" >
+        AND succ_time = #{succTime,jdbcType=VARCHAR}
+      </if>
+      <if test="orgMerOrderId != null and orgMerOrderId != ''" >
+        AND org_mer_order_id = #{orgMerOrderId,jdbcType=VARCHAR}
+      </if>
+      <if test="canRefAmt != null and canRefAmt != ''" >
+        AND can_ref_amt = #{canRefAmt,jdbcType=VARCHAR}
+      </if>
+      <if test="refCnt != null and refCnt != ''" >
+        AND ref_cnt = #{refCnt,jdbcType=VARCHAR}
+      </if>
+      <if test="refAmt != null and refAmt != ''" >
+        AND ref_amt = #{refAmt,jdbcType=VARCHAR}
+      </if>
+      <if test="bankId != null and bankId != ''" >
+        AND bank_id = #{bankId,jdbcType=VARCHAR}
+      </if>
+      <if test="ppFlag != null and ppFlag != ''" >
+        AND pp_flag = #{ppFlag,jdbcType=VARCHAR}
+      </if>
+      <if test="purpose != null and purpose != ''" >
+        AND purpose = #{purpose,jdbcType=VARCHAR}
+      </if>
+      <if test="dcType != null and dcType != ''" >
+       AND  dc_type = #{dcType,jdbcType=VARCHAR}
+      </if>
+      <if test="certifyId != null and certifyId != ''" >
+        AND certify_id = #{certifyId,jdbcType=VARCHAR}
+      </if>
+      <if test="msgDestId != null and msgDestId != ''" >
+        AND msg_dest_id = #{msgDestId,jdbcType=VARCHAR}
+      </if>
+      <if test="customerNm != null and customerNm != ''" >
+        AND customer_nm = #{customerNm,jdbcType=VARCHAR}
+      </if>
+      <if test="phoneNo != null and phoneNo != ''" >
+        AND phone_no = #{phoneNo,jdbcType=VARCHAR}
+      </if>
+      <if test="subOpenId != null and subOpenId != ''" >
+        AND sub_open_id = #{subOpenId,jdbcType=VARCHAR}
+      </if>
+      <if test="channelType != null and channelType != ''" >
+        AND channel_type = #{channelType,jdbcType=VARCHAR}
+      </if>
+      <if test="amt != null and amt != ''" >
+       AND  amt = #{amt,jdbcType=VARCHAR}
+      </if>
+      <if test="orderNo != null and orderNo != ''" >
+       AND  order_no = #{orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="orderTime != null and orderTime != ''" >
+        AND order_time = #{orderTime,jdbcType=VARCHAR}
+      </if>
+      <if test="orderInfo != null and orderInfo != ''" >
+       AND  order_info = #{orderInfo,jdbcType=VARCHAR}
+      </if>
+      <if test="payType != null and payType != ''" >
+        AND pay_type = #{payType,jdbcType=VARCHAR}
+      </if>
+      <if test="timeStamp != null and timeStamp != ''" >
+        AND time_stamp = #{timeStamp,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeDetail != null and tradeDetail != ''" >
+        AND trade_detail = #{tradeDetail,jdbcType=VARCHAR}
+      </if>
+      <if test="merId != null and merId != ''" >
+       AND  mer_id = #{merId,jdbcType=VARCHAR}
+      </if>
+      <if test="termId != null and termId != ''" >
+       AND  term_id = #{termId,jdbcType=VARCHAR}
+      </if>
+      <if test="batchNo != null and batchNo != ''" >
+        AND batch_no = #{batchNo,jdbcType=VARCHAR}
+      </if>
+      <if test="traceNo != null and traceNo != ''" >
+        AND trace_no = #{traceNo,jdbcType=VARCHAR}
+      </if>
+      <if test="authCode != null and authCode != ''" >
+        AND auth_code = #{authCode,jdbcType=VARCHAR}
+      </if>
+      <if test="orderIdScan != null and orderIdScan != ''" >
+        AND order_id_scan = #{orderIdScan,jdbcType=VARCHAR}
+      </if>
+      <if test="source != null and source != ''" >
+        AND source = #{source,jdbcType=VARCHAR}
+      </if>
+      <if test="md5 != null and md5 != ''" >
+       AND  md5 = #{md5,jdbcType=VARCHAR}
+      </if>
+       <if test="startSendTime != null  and  startSendTime !='' " >
+       AND  send_time  >= #{startSendTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endSendTime != null  and endSendTime !='' " >
+       AND  send_time  	&lt;= #{endSendTime,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null and createTime != ''" >
+        AND create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <!-- 手工添加 -->
+      <if test="startTime != null and startTime !=''" >
+        	AND time_stamp >= #{startTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endTime != null and endTime !=''" >
+      	<![CDATA[
+        	AND time_stamp <= #{endTime,jdbcType=VARCHAR}
+        ]]>
+      </if>
+      <if test="innerCodeList != null">
+			AND term_id in ( select terminal_code from m_merchant_terminal where inner_code IN 
+			<foreach collection="innerCodeList" item="innerCode" open="(" separator="," close=")">#{innerCode}</foreach>
+	 		)
+	 </if>
+	 <if test="paySubTypes != null" >
+        AND pay_sub_type in 
+		<foreach collection="paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
+      </if>
+	  <if test="terminalList != null">
+			AND term_id IN 
+			<foreach collection="terminalList" item="terminal" open="(" separator="," close=")">#{terminal}</foreach>
+	  </if>	
+   	 </where>		
+  </select>
+  <!-- 条件查询集合 ,返回临时表数据-->
+  <select id="queryTempByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeData" resultMap="TradeDataTempResultMap">
+    select inner_code,amt,pay_sub_type,time_stamp  from t_trade_data
+    <where>
+      <if test="startTime != null and startTime !=''" >
+        	AND time_stamp >= #{startTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endTime != null and endTime !=''" >
+      	<![CDATA[
+        	AND time_stamp < #{endTime,jdbcType=VARCHAR}
+        ]]>
+      </if>
+            AND status = 1
+            AND inner_code IN (
+			 SELECT inner_code FROM m_merchant_core WHERE `status` = 1
+			)
+    </where>
+  </select>
+  <!-- 统计今日营业额 -->
+  <select id="queryTodayTurnover" parameterType="net.fnsco.order.service.domain.trade.TradeData"  resultType="net.fnsco.order.api.dto.TurnoverDTO">
+    SELECT
+	SUM(amt) AS turnover,
+	COUNT(*) AS orderNum
+	FROM
+		t_trade_data
+	WHERE
+		inner_code IN (
+			SELECT
+				inner_code
+			FROM
+				u_app_user_merchant
+			WHERE
+				app_user_id = #{userId}
+			<if test="roleId != null">
+			    AND role_id = #{roleId}
+			</if>	
+		)
+	AND time_stamp > #{tradeDate}
+	AND status = 1
+  </select>
+  
+    <select id="selectCountByIRT" resultType="java.lang.Integer" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+    select 
+      count(id)
+    from t_trade_data
+    where refer_no = #{referNo,jdbcType=VARCHAR}
+    and term_id = #{termId,jdbcType=VARCHAR}
+    and inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

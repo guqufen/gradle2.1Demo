@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.order.service.dao.master.VersionDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.Version" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="app_name" property="appName" jdbcType="VARCHAR" />
+    <result column="app_code" property="appCode" jdbcType="VARCHAR" />
+    <result column="app_type" property="appType" jdbcType="INTEGER" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="force_update" property="forceUpdate" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="version_desc" property="versionDesc" jdbcType="VARCHAR" />
+    <result column="download_url1" property="downloadUrl1" jdbcType="VARCHAR" />
+    <result column="download_url2" property="downloadUrl2" jdbcType="VARCHAR" />
+    <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP" />
+    <result column="last_modify_user_id" property="lastModifyUserId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, app_name, app_code, app_type, version, force_update, remark, version_desc, download_url1, 
+    download_url2, last_modify_time, last_modify_user_id
+  </sql>
+   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_version
+    where app_code = #{appCode,jdbcType=VARCHAR} and app_type = #{appType,jdbcType=INTEGER} and version >= #{version,jdbcType=VARCHAR}  ORDER BY version 
+  </select>
+</mapper>

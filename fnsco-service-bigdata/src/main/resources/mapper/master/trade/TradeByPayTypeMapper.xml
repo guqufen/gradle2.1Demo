@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.order.service.dao.master.trade.TradeByPayTypeDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.trade.TradeByPayType" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+    <result column="trade_date" property="tradeDate" jdbcType="VARCHAR" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="turnover" property="turnover" jdbcType="DECIMAL" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="order_price" property="orderPrice" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, pay_type, trade_date, inner_code, turnover, order_num, order_price
+  </sql>
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.trade.TradeByPayType" >
+    insert into r_trade_by_pay_type (id, pay_type, trade_date, 
+      inner_code, turnover, order_num, 
+      order_price)
+    values (#{id,jdbcType=INTEGER}, #{payType,jdbcType=VARCHAR}, #{tradeDate,jdbcType=VARCHAR}, 
+      #{innerCode,jdbcType=VARCHAR}, #{turnover,jdbcType=DECIMAL}, #{orderNum,jdbcType=INTEGER}, 
+      #{orderPrice,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.trade.TradeByPayType" >
+    insert into r_trade_by_pay_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="tradeDate != null" >
+        trade_date,
+      </if>
+      <if test="innerCode != null" >
+        inner_code,
+      </if>
+      <if test="turnover != null" >
+        turnover,
+      </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="orderPrice != null" >
+        order_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeDate != null" >
+        #{tradeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="innerCode != null" >
+        #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="turnover != null" >
+        #{turnover,jdbcType=DECIMAL},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrice != null" >
+        #{orderPrice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <!-- 按照innerCode和时间段查询 -->
+  <select id="selectTradeDataByInnerCode" parameterType="net.fnsco.order.service.domain.trade.TradeByPayType" resultType="net.fnsco.order.api.dto.TradeTypeDTO">
+     SELECT SUM(turnover) AS turnover,SUM(order_num) AS orderNum,pay_type AS payType 
+           FROM r_trade_by_pay_type 
+     <where>
+       <if test="innerCode != null and innerCode != '' ">
+          AND inner_code = #{innerCode}
+       </if>
+       <if test="startDate != null">
+         AND  trade_date &gt;= #{startDate}
+       </if>
+       <if test="endDate != null">
+         AND trade_date &lt;= #{endDate}
+       </if>
+       <if test="userId != null">
+         AND inner_code in (
+           SELECT inner_code FROM u_app_user_merchant 
+             WHERE app_user_id =#{userId} 
+           <if test="roleId != null">
+             AND role_id =#{roleId}
+           </if>  
+         )
+       </if>
+     </where>
+  	  GROUP BY pay_type
+  </select>
+  <!-- 根据条件删除 -->
+  <delete id="deleteByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeByPayType">
+     DELETE FROM r_trade_by_pay_type 
+    <where>
+      <if test="startDate != null">
+         AND trade_date &gt;= #{startDate}
+       </if>
+       <if test="endDate != null and  endDate != ''">
+        AND trade_date &lt;  #{endDate}
+      </if>
+      <if test="tradeDate != null and  tradeDate != ''">
+        AND trade_date= #{tradeDate}
+      </if>
+    </where>
+  </delete>
+  <!-- 批量插入数据 -->
+  <insert id="insertBatch" parameterType="java.util.List">
+  	 <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                 SELECT LAST_INSERT_ID()
+     </selectKey>
+     insert into r_trade_by_pay_type (id, pay_type, trade_date, 
+      inner_code, turnover, order_num, 
+      order_price)
+    values
+     <foreach collection ="list" item="payTrade" index= "index" separator =",">
+      (#{payTrade.id,jdbcType=INTEGER}, #{payTrade.payType,jdbcType=VARCHAR}, #{payTrade.tradeDate,jdbcType=VARCHAR}, 
+      #{payTrade.innerCode,jdbcType=VARCHAR}, #{payTrade.turnover,jdbcType=DECIMAL}, #{payTrade.orderNum,jdbcType=INTEGER}, 
+      #{payTrade.orderPrice,jdbcType=DECIMAL})
+     </foreach>
+  </insert>
+</mapper>
