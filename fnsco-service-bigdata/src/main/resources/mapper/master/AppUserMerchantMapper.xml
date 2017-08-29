@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.order.service.dao.master.AppUserMerchantDao">
+	
+ <!-- 根据商家ID删除关联数据 -->
+ <delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
+   DELETE   FROM u_app_user_merchant  WHERE inner_code in (
+	 SELECT inner_code FROM m_merchant_core WHERE id in 
+	  <foreach item="item" collection="array" open="(" separator="," close=")">
+       #{item}
+     </foreach>
+	)
+</delete>
+</mapper>

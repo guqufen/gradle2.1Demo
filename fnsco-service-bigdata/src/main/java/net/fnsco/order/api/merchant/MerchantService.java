@@ -24,8 +24,6 @@ import net.fnsco.order.api.dto.TradeMerchantDTO;
 public interface MerchantService {
     String getMerCode(String merNum, String channelType);
 
-    ResultDTO addMerChant(MerchantDTO merchantDTO);
-
     /**
      * getMerchantsCoreByUserId:(这里用一句话描述这个方法的作用) 根据用户ID 查询商户列表
      *
@@ -74,17 +72,6 @@ public interface MerchantService {
     
     
     ResultDTO<TerminalsDTO> updateTerminal(TerminalsDTO terminalsDTO);
-    
-    /**
-     * getShopOwnerMerChant:(这里用一句话描述这个方法的作用)根据userId查询是店主的商户信息
-     *
-     * @param merchantDTO
-     * @return    设定文件
-     * @return List<TradeMerchantDTO>    DOM对象
-     * @throws 
-     * @since  CodingExample　Ver 1.1
-     */
-    List<TradeMerchantDTO> getShopOwnerMerChant(MerchantDTO merchantDTO);
     
     /**
      * getAllPosInfo:(这里用一句话描述这个方法的作用)获取POS机列表
