@@ -3,10 +3,7 @@ package net.fnsco.order.service.dao.master.trade;
 import java.util.List;
 
 import net.fnsco.core.base.PageDTO;
-import net.fnsco.order.api.dto.TurnoverDTO;
-import net.fnsco.order.service.domain.trade.TradeByDay;
 import net.fnsco.order.service.domain.trade.TradeData;
-import net.fnsco.order.service.domain.trade.TradeDateTemp;
 
 /**
  * 
@@ -54,18 +51,7 @@ public interface TradeDataDAO {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    List<TradeDateTemp> queryTempByCondition(TradeData record);
-
-    /**
-     * queryTodayTurnover:(这里用一句话描述这个方法的作用)统计今日营业额
-     *
-     * @param record
-     * @return    设定文件
-     * @return TurnoverDTO    DOM对象
-     * @throws 
-     * @since  CodingExample　Ver 1.1
-     */
-    TurnoverDTO queryTodayTurnover(TradeByDay record);
+    List<TradeData> queryTempByCondition(TradeData record);
 
     /**
      * 

@@ -15,8 +15,6 @@ import net.fnsco.order.api.appuser.ConmmService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.order.api.dto.VersionDTO;
-import net.fnsco.order.api.dto.VersionResultDTO;
-import net.fnsco.order.controller.app.jo.CommJO;
 
 /**
  * 开放接口公共处理类

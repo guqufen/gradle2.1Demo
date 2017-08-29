@@ -56,14 +56,6 @@
     <result column="status" property="status" jdbcType="VARCHAR"/>
   </resultMap>
   
-  <!-- 临时表数据集 --> 
-  <resultMap id="TradeDataTempResultMap" type="net.fnsco.order.service.domain.trade.TradeDateTemp" >
-    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
-    <result column="amt" property="amt" jdbcType="VARCHAR" />
-    <result column="pay_sub_type" property="paySubType" jdbcType="VARCHAR" />
-    <result column="time_stamp" property="timeStamp" jdbcType="VARCHAR" />
-  </resultMap>
-  
   <sql id="Base_Column_List" >
     id, inner_code, txn_type, txn_sub_type, currency, pay_time_out, subject, body, customer_info, 
     remark, customer_ip, tn, resp_code, resp_msg, settle_amount, settle_currency, settle_date, 
@@ -718,7 +710,7 @@
    	 </where>		
   </select>
   <!-- 条件查询集合 ,返回临时表数据-->
-  <select id="queryTempByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeData" resultMap="TradeDataTempResultMap">
+  <select id="queryTempByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeData" resultMap="BaseResultMap">
     select inner_code,amt,pay_sub_type,time_stamp  from t_trade_data
     <where>
       <if test="startTime != null and startTime !=''" >
@@ -734,28 +726,6 @@
 			 SELECT inner_code FROM m_merchant_core WHERE `status` = 1
 			)
     </where>
-  </select>
-  <!-- 统计今日营业额 -->
-  <select id="queryTodayTurnover" parameterType="net.fnsco.order.service.domain.trade.TradeData"  resultType="net.fnsco.order.api.dto.TurnoverDTO">
-    SELECT
-	SUM(amt) AS turnover,
-	COUNT(*) AS orderNum
-	FROM
-		t_trade_data
-	WHERE
-		inner_code IN (
-			SELECT
-				inner_code
-			FROM
-				u_app_user_merchant
-			WHERE
-				app_user_id = #{userId}
-			<if test="roleId != null">
-			    AND role_id = #{roleId}
-			</if>	
-		)
-	AND time_stamp > #{tradeDate}
-	AND status = 1
   </select>
   
     <select id="selectCountByIRT" resultType="java.lang.Integer" parameterType="net.fnsco.order.service.domain.trade.TradeData" >

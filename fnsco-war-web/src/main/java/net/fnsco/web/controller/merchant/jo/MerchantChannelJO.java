@@ -3,11 +3,7 @@ package net.fnsco.web.controller.merchant.jo;
 import java.util.List;
 
 import net.fnsco.core.base.JO;
-import net.fnsco.order.api.dto.WebMerchantTerminalDTO;
-import net.fnsco.order.controller.web.merchant.jo.MerchantPosJO;
 import net.fnsco.order.service.domain.MerchantChannel;
-import net.fnsco.order.service.domain.MerchantPos;
-import net.fnsco.order.service.domain.MerchantTerminal;
 
 public class MerchantChannelJO extends JO {
     /**

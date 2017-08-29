@@ -309,11 +309,11 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      * @date 2017年8月16日 下午2:50:42
      */
     @Override
-    public boolean updatePosInfo(TerminalJO terminalJO) {
+    public boolean updatePosInfo(TerminalsDTO dto) {
         
         MerchantPos mecord = new MerchantPos();
-        mecord.setId(terminalJO.getPosId());
-        mecord.setPosName(terminalJO.getPosName());
+        mecord.setId(dto.getPosId());
+        mecord.setPosName(dto.getPosName());
         return merchantPosDao.updateByPrimaryKeySelective(mecord)> 0 ?true:false;
         
     }

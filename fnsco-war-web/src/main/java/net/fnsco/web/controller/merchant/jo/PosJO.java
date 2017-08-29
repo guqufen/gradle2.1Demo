@@ -3,7 +3,6 @@ package net.fnsco.web.controller.merchant.jo;
 import java.util.List;
 
 import net.fnsco.core.base.JO;
-import net.fnsco.order.controller.web.merchant.jo.MerchantChannelJO;
 
 public class PosJO extends JO {
 	private List<MerchantChannelJO> poses;

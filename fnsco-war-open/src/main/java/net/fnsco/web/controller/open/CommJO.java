@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.app.jo;
+package net.fnsco.web.controller.open;
 
 import net.fnsco.core.base.JO;
 

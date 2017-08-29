@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.merchant.MerchantService;
-import net.fnsco.order.controller.app.jo.MerchantJO;
 
 @RestController
 @RequestMapping(value = "/open/merchant", method = RequestMethod.POST)

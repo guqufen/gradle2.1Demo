@@ -208,7 +208,12 @@ public class AppMerchantController extends BaseController {
         if(!Strings.isNullOrEmpty(terminalJO.getPosName()) && terminalJO.getPosName().length() >19){
             return ResultDTO.fail(ApiConstant.E_STRING_TOO_LENGTH);
         }
-        boolean result = merchantService.updatePosInfo(terminalJO);
+        TerminalsDTO dto = new TerminalsDTO();
+        dto.setTermName(terminalJO.getTermName());
+        dto.setTerId(terminalJO.getTerId());
+        dto.setPosId(terminalJO.getPosId());
+        dto.setPosName(terminalJO.getPosName());
+        boolean result = merchantService.updatePosInfo(dto);
         if(!result){
             return ResultDTO.fail();
         }

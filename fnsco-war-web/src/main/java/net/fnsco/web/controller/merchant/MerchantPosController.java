@@ -18,7 +18,6 @@ import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.order.api.dto.WebMerchantPosDTO;
 import net.fnsco.order.api.merchant.MerchantPosService;
-import net.fnsco.order.controller.web.merchant.MerchantHelper;
 import net.fnsco.order.service.domain.MerchantBank;
 import net.fnsco.web.controller.merchant.jo.MerchantChannelJO;
 import net.fnsco.web.controller.merchant.jo.PosJO;

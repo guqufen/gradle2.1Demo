@@ -16,7 +16,6 @@ import net.fnsco.order.api.dto.PosListDTO;
 import net.fnsco.order.api.dto.TerminalDetailDTO;
 import net.fnsco.order.api.dto.TerminalsDTO;
 import net.fnsco.order.api.dto.TradeMerchantDTO;
-import net.fnsco.order.controller.app.jo.TerminalJO;
 
 /**@desc 商户相关服务接口
  * @author sxfei
@@ -124,5 +123,5 @@ public interface MerchantService {
      * @date      2017年8月16日 下午2:50:03
      * @return boolean    DOM对象
      */
-    boolean updatePosInfo(TerminalJO terminalJO);
+    boolean updatePosInfo(TerminalsDTO dto);
 }
