@@ -148,14 +148,16 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
                     terminalList.add(terminal.getTerminalCode());
                 }
             }
-            tradeData.setTerminalList(terminalList);
+            if (!CollectionUtils.isEmpty(terminalList)) {
+                tradeData.setTerminalList(terminalList);
+            }
         }
         List<String> terminalList = tradeData.getTerminalList();
-        
+
         Integer appUserId = merchantCore.getUserId();
         List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
         result.setMerTotal(tempList.size());
-        
+
         if (CollectionUtils.isEmpty(terminalList)) {//无终端则查询按商户查询
             List<String> innerCodeList = Lists.newArrayList();
             if (!CollectionUtils.isEmpty(tempList)) {
@@ -226,9 +228,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         return result;
     }
 
-	@Override
-	public List<TradeData> queryDataList(TradeDataDTO tradeDataDTO) {
-		TradeData tradeData = new TradeData();
+    @Override
+    public List<TradeData> queryDataList(TradeDataDTO tradeDataDTO) {
+        TradeData tradeData = new TradeData();
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
             tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
         }
@@ -247,6 +249,6 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
                 }
             }
         }
-		return datas;
-	}
+        return datas;
+    }
 }
