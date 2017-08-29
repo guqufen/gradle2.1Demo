@@ -5,11 +5,11 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import net.fnsco.bigdata.api.dto.WebMerchantPosDTO;
+import net.fnsco.bigdata.api.dto.WebMerchantTerminalDTO;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
-import net.fnsco.order.api.dto.WebMerchantPosDTO;
-import net.fnsco.order.api.dto.WebMerchantTerminalDTO;
 import net.fnsco.web.controller.merchant.jo.MerchantChannelJO;
 import net.fnsco.web.controller.merchant.jo.MerchantPosJO;
 

@@ -11,11 +11,11 @@ import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.service.comm.ServiceConstant;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.order.api.dto.TradeDataDTO;
 
 /**
  * 交易流水处理

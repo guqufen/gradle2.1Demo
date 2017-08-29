@@ -12,20 +12,21 @@ import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
+import net.fnsco.bigdata.api.dto.MerChantCoreDetailDTO;
+import net.fnsco.bigdata.api.dto.MerTerminalsDTO;
+import net.fnsco.bigdata.api.dto.MerchantDTO;
+import net.fnsco.bigdata.api.dto.PosDetailDTO;
+import net.fnsco.bigdata.api.dto.PosInfoDTO;
+import net.fnsco.bigdata.api.dto.PosListDTO;
+import net.fnsco.bigdata.api.dto.TerminalDetailDTO;
+import net.fnsco.bigdata.api.dto.TerminalsDTO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.constant.ApiConstant;
-import net.fnsco.order.api.dto.MerChantCoreDTO;
-import net.fnsco.order.api.dto.MerChantCoreDetailDTO;
-import net.fnsco.order.api.dto.MerTerminalsDTO;
-import net.fnsco.order.api.dto.MerchantDTO;
-import net.fnsco.order.api.dto.PosDetailDTO;
-import net.fnsco.order.api.dto.PosInfoDTO;
-import net.fnsco.order.api.dto.PosListDTO;
-import net.fnsco.order.api.dto.TerminalDetailDTO;
-import net.fnsco.order.api.dto.TerminalsDTO;
 import net.fnsco.order.api.dto.TradeMerchantDTO;
+import net.fnsco.order.api.merchant.MerchantOrderService;
 import net.fnsco.web.controller.app.jo.TerminalJO;
 import net.fnsco.web.controller.app.jo.UserMerchantJO;
 
@@ -44,6 +45,8 @@ import net.fnsco.web.controller.app.jo.UserMerchantJO;
 public class AppMerchantController extends BaseController {
     @Autowired
     private MerchantService merchantService;
+    @Autowired
+    private MerchantOrderService  merchantOrderService;
 
     /**
      * 关联商铺
@@ -54,7 +57,7 @@ public class AppMerchantController extends BaseController {
     @RequestMapping(value = "/addMerChant")
     @ApiOperation(value = "关联商铺")
     public ResultDTO addMerChant(@RequestBody MerchantDTO merchant) {
-        ResultDTO result = merchantService.addMerChant(merchant);
+        ResultDTO result = merchantOrderService.addMerChant(merchant);
         return result;
     }
 
@@ -151,7 +154,7 @@ public class AppMerchantController extends BaseController {
        if(null == merchant.getUserId()){
            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
        }
-       List<TradeMerchantDTO> datas =  merchantService.getShopOwnerMerChant(merchant);
+       List<TradeMerchantDTO> datas =  merchantOrderService.getShopOwnerMerChant(merchant);
        return ResultDTO.success(datas);
     }
     

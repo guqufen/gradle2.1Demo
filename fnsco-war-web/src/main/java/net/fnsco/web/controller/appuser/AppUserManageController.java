@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -29,7 +28,6 @@ import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.dto.AppUserManageDTO;
 import net.fnsco.order.api.dto.AppUserMerchantDTO;
 import net.fnsco.order.api.dto.BandDto;
-import net.fnsco.order.api.dto.TradeDataDTO;
 import net.sf.json.JSONObject;
 
 /**

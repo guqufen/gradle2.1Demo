@@ -13,7 +13,7 @@ import net.fnsco.order.api.dto.TradeMerchantDTO;
  * @author sxfei
  * @date 2017年6月21日 上午10:12:23
  */
-public interface MerchantService {
+public interface MerchantOrderService {
 
     ResultDTO addMerChant(MerchantDTO merchantDTO);
     

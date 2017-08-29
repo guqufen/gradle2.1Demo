@@ -26,7 +26,7 @@ import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.TradeMerchantDTO;
-import net.fnsco.order.api.merchant.MerchantService;
+import net.fnsco.order.api.merchant.MerchantOrderService;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 
@@ -35,7 +35,7 @@ import net.fnsco.order.service.dao.master.AppUserMerchantDao;
  * @date 2017年6月21日 上午10:15:40
  */
 @Service
-public class MerchantServiceImpl extends BaseService implements MerchantService {
+public class MerchantOrderServiceImpl extends BaseService implements MerchantOrderService {
 
     @Autowired
     private AliasDAO            aliasDAO;
