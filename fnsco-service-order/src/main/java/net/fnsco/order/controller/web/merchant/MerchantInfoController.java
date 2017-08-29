@@ -2,9 +2,7 @@ package net.fnsco.order.controller.web.merchant;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +27,6 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.ExcelUtils;
-import net.fnsco.order.api.dto.TradeDataDTO;
 import net.fnsco.order.api.merchant.MerchantCoreService;
 import net.fnsco.order.service.domain.Agent;
 import net.fnsco.order.service.domain.MerchantBank;
@@ -37,7 +34,6 @@ import net.fnsco.order.service.domain.MerchantChannel;
 import net.fnsco.order.service.domain.MerchantContact;
 import net.fnsco.order.service.domain.MerchantCore;
 import net.fnsco.order.service.domain.MerchantTerminal;
-import net.fnsco.order.service.domain.trade.TradeData;
 import net.sf.json.JSONObject;
 
 /**
