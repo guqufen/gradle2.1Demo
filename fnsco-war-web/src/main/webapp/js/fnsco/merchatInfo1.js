@@ -799,7 +799,7 @@ function posHtml(num){
         '</div>';
 }
 function addPos(num){
-  TerminalList=TerminalList+1
+  TerminalList=TerminalList+1;
   $("#posList"+num).append(posHtml(TerminalList));
 }
 function removePos(num){

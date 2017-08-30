@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantTerminalDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantTerminal" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="pos_id" property="posId" jdbcType="INTEGER" />
+    <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
+    <result column="inner_term_code" property="innerTermCode" jdbcType="VARCHAR" />
+    <result column="terminal_batch" property="terminalBatch" jdbcType="VARCHAR" />
+    <result column="terminal_para" property="terminalPara" jdbcType="VARCHAR" />
+    <result column="charges_type" property="chargesType" jdbcType="INTEGER" />
+    <result column="debit_card_rate" property="debitCardRate" jdbcType="VARCHAR" />
+    <result column="credit_card_rate" property="creditCardRate" jdbcType="VARCHAR" />
+    <result column="debit_card_fee" property="debitCardFee" jdbcType="INTEGER" />
+    <result column="credit_card_fee" property="creditCardFee" jdbcType="INTEGER" />
+    <result column="debit_card_max_fee" property="debitCardMaxFee" jdbcType="INTEGER" />
+    <result column="credit_card_max_fee" property="creditCardMaxFee" jdbcType="INTEGER" />
+    <result column="deal_switch" property="dealSwitch" jdbcType="VARCHAR" />
+    <result column="record_state" property="recordState" jdbcType="VARCHAR" />
+    <result column="term_audit_state" property="termAuditState" jdbcType="VARCHAR" />
+    <result column="term_name" property="termName" jdbcType="VARCHAR" />
+    <result column="wechat_fee" property="wechatFee" jdbcType="VARCHAR" />
+    <result column="alipay_fee" property="alipayFee" jdbcType="VARCHAR" />
+    <result column="terminal_type" property="terminalType" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- APP端使用 -->
+  <resultMap id="ListResultMap" type="net.fnsco.bigdata.api.dto.TerminalsDTO">
+     <id column="id" property="id" jdbcType="INTEGER" />
+     <result column="term_name" property="termName" jdbcType="VARCHAR" />
+     <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="DetailResultMap" type="net.fnsco.bigdata.api.dto.TerminalDetailDTO" >
+     <result column="term_name" property="termName" jdbcType="VARCHAR" />
+     <result column="sn_code" property="snCode" jdbcType="VARCHAR" />
+     <result column="pos_factory" property="posFactory" jdbcType="VARCHAR" />
+     <result column="pos_type" property="posType" jdbcType="VARCHAR" />
+     <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, inner_code, pos_id, terminal_code, inner_term_code, terminal_batch, terminal_para, 
+    charges_type, debit_card_rate, credit_card_rate, debit_card_fee, credit_card_fee, 
+    debit_card_max_fee, credit_card_max_fee, deal_switch, record_state, term_audit_state, 
+    term_name, wechat_fee, alipay_fee, terminal_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_terminal
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from m_merchant_terminal
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantTerminal" >
+    insert into m_merchant_terminal (id, inner_code, pos_id, 
+      terminal_code, inner_term_code, terminal_batch, 
+      terminal_para, charges_type, debit_card_rate, 
+      credit_card_rate, debit_card_fee, credit_card_fee, 
+      debit_card_max_fee, credit_card_max_fee, deal_switch, 
+      record_state, term_audit_state, term_name, 
+      wechat_fee, alipay_fee, terminal_type)
+    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{posId,jdbcType=INTEGER}, 
+      #{terminalCode,jdbcType=VARCHAR}, #{innerTermCode,jdbcType=VARCHAR}, #{terminalBatch,jdbcType=VARCHAR}, 
+      #{terminalPara,jdbcType=VARCHAR}, #{chargesType,jdbcType=INTEGER}, #{debitCardRate,jdbcType=VARCHAR}, 
+      #{creditCardRate,jdbcType=VARCHAR}, #{debitCardFee,jdbcType=INTEGER}, #{creditCardFee,jdbcType=INTEGER}, 
+      #{debitCardMaxFee,jdbcType=INTEGER}, #{creditCardMaxFee,jdbcType=INTEGER}, #{dealSwitch,jdbcType=VARCHAR}, 
+      #{recordState,jdbcType=VARCHAR}, #{termAuditState,jdbcType=VARCHAR}, #{termName,jdbcType=VARCHAR}, 
+      #{wechatFee,jdbcType=VARCHAR}, #{alipayFee,jdbcType=VARCHAR}, #{terminalType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantTerminal" >
+    insert into m_merchant_terminal
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="innerCode != null" >
+        inner_code,
+      </if>
+      <if test="posId != null" >
+        pos_id,
+      </if>
+      <if test="terminalCode != null" >
+        terminal_code,
+      </if>
+      <if test="innerTermCode != null" >
+        inner_term_code,
+      </if>
+      <if test="terminalBatch != null" >
+        terminal_batch,
+      </if>
+      <if test="terminalPara != null" >
+        terminal_para,
+      </if>
+      <if test="chargesType != null" >
+        charges_type,
+      </if>
+      <if test="debitCardRate != null" >
+        debit_card_rate,
+      </if>
+      <if test="creditCardRate != null" >
+        credit_card_rate,
+      </if>
+      <if test="debitCardFee != null" >
+        debit_card_fee,
+      </if>
+      <if test="creditCardFee != null" >
+        credit_card_fee,
+      </if>
+      <if test="debitCardMaxFee != null" >
+        debit_card_max_fee,
+      </if>
+      <if test="creditCardMaxFee != null" >
+        credit_card_max_fee,
+      </if>
+      <if test="dealSwitch != null" >
+        deal_switch,
+      </if>
+      <if test="recordState != null" >
+        record_state,
+      </if>
+      <if test="termAuditState != null" >
+        term_audit_state,
+      </if>
+      <if test="termName != null" >
+        term_name,
+      </if>
+      <if test="wechatFee != null" >
+        wechat_fee,
+      </if>
+      <if test="alipayFee != null" >
+        alipay_fee,
+      </if>
+      <if test="terminalType != null" >
+        terminal_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="innerCode != null" >
+        #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="posId != null" >
+        #{posId,jdbcType=INTEGER},
+      </if>
+      <if test="terminalCode != null" >
+        #{terminalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="innerTermCode != null" >
+        #{innerTermCode,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalBatch != null" >
+        #{terminalBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalPara != null" >
+        #{terminalPara,jdbcType=VARCHAR},
+      </if>
+      <if test="chargesType != null" >
+        #{chargesType,jdbcType=INTEGER},
+      </if>
+      <if test="debitCardRate != null" >
+        #{debitCardRate,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCardRate != null" >
+        #{creditCardRate,jdbcType=VARCHAR},
+      </if>
+      <if test="debitCardFee != null" >
+        #{debitCardFee,jdbcType=INTEGER},
+      </if>
+      <if test="creditCardFee != null" >
+        #{creditCardFee,jdbcType=INTEGER},
+      </if>
+      <if test="debitCardMaxFee != null" >
+        #{debitCardMaxFee,jdbcType=INTEGER},
+      </if>
+      <if test="creditCardMaxFee != null" >
+        #{creditCardMaxFee,jdbcType=INTEGER},
+      </if>
+      <if test="dealSwitch != null" >
+        #{dealSwitch,jdbcType=VARCHAR},
+      </if>
+      <if test="recordState != null" >
+        #{recordState,jdbcType=VARCHAR},
+      </if>
+      <if test="termAuditState != null" >
+        #{termAuditState,jdbcType=VARCHAR},
+      </if>
+      <if test="termName != null" >
+        #{termName,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatFee != null" >
+        #{wechatFee,jdbcType=VARCHAR},
+      </if>
+      <if test="alipayFee != null" >
+        #{alipayFee,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalType != null" >
+        #{terminalType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantTerminal" >
+    update m_merchant_terminal
+    <set >
+      <if test="innerCode != null" >
+        inner_code = #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="posId != null" >
+        pos_id = #{posId,jdbcType=INTEGER},
+      </if>
+      <if test="terminalCode != null" >
+        terminal_code = #{terminalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="innerTermCode != null" >
+        inner_term_code = #{innerTermCode,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalBatch != null" >
+        terminal_batch = #{terminalBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalPara != null" >
+        terminal_para = #{terminalPara,jdbcType=VARCHAR},
+      </if>
+      <if test="chargesType != null" >
+        charges_type = #{chargesType,jdbcType=INTEGER},
+      </if>
+      <if test="debitCardRate != null" >
+        debit_card_rate = #{debitCardRate,jdbcType=VARCHAR},
+      </if>
+      <if test="creditCardRate != null" >
+        credit_card_rate = #{creditCardRate,jdbcType=VARCHAR},
+      </if>
+      <if test="debitCardFee != null" >
+        debit_card_fee = #{debitCardFee,jdbcType=INTEGER},
+      </if>
+      <if test="creditCardFee != null" >
+        credit_card_fee = #{creditCardFee,jdbcType=INTEGER},
+      </if>
+      <if test="debitCardMaxFee != null" >
+        debit_card_max_fee = #{debitCardMaxFee,jdbcType=INTEGER},
+      </if>
+      <if test="creditCardMaxFee != null" >
+        credit_card_max_fee = #{creditCardMaxFee,jdbcType=INTEGER},
+      </if>
+      <if test="dealSwitch != null" >
+        deal_switch = #{dealSwitch,jdbcType=VARCHAR},
+      </if>
+      <if test="recordState != null" >
+        record_state = #{recordState,jdbcType=VARCHAR},
+      </if>
+      <if test="termAuditState != null" >
+        term_audit_state = #{termAuditState,jdbcType=VARCHAR},
+      </if>
+      <if test="termName != null" >
+        term_name = #{termName,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatFee != null" >
+        wechat_fee = #{wechatFee,jdbcType=VARCHAR},
+      </if>
+      <if test="alipayFee != null" >
+        alipay_fee = #{alipayFee,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalType != null" >
+        terminal_type = #{terminalType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantTerminal" >
+    update m_merchant_terminal
+    set inner_code = #{innerCode,jdbcType=VARCHAR},
+      pos_id = #{posId,jdbcType=INTEGER},
+      terminal_code = #{terminalCode,jdbcType=VARCHAR},
+      inner_term_code = #{innerTermCode,jdbcType=VARCHAR},
+      terminal_batch = #{terminalBatch,jdbcType=VARCHAR},
+      terminal_para = #{terminalPara,jdbcType=VARCHAR},
+      charges_type = #{chargesType,jdbcType=INTEGER},
+      debit_card_rate = #{debitCardRate,jdbcType=VARCHAR},
+      credit_card_rate = #{creditCardRate,jdbcType=VARCHAR},
+      debit_card_fee = #{debitCardFee,jdbcType=INTEGER},
+      credit_card_fee = #{creditCardFee,jdbcType=INTEGER},
+      debit_card_max_fee = #{debitCardMaxFee,jdbcType=INTEGER},
+      credit_card_max_fee = #{creditCardMaxFee,jdbcType=INTEGER},
+      deal_switch = #{dealSwitch,jdbcType=VARCHAR},
+      record_state = #{recordState,jdbcType=VARCHAR},
+      term_audit_state = #{termAuditState,jdbcType=VARCHAR},
+      term_name = #{termName,jdbcType=VARCHAR},
+      wechat_fee = #{wechatFee,jdbcType=VARCHAR},
+      alipay_fee = #{alipayFee,jdbcType=VARCHAR},
+      terminal_type = #{terminalType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 根据innercode查询出 -->
+  <select id="selectByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from m_merchant_terminal
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
+  <!-- 根据userId连表查询出终端信息 -->
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+		CO.*
+		FROM
+			m_merchant_terminal CO
+		RIGHT JOIN (
+			SELECT
+				*
+			FROM
+				m_merchant_user_rel
+			WHERE
+				app_user_id = #{userId}
+		) REL ON CO.inner_code = REL.inner_code
+  </select>
+  <!-- APP端查询列表 -->
+  <select id="queryByInnerCode" parameterType="java.lang.String" resultMap="ListResultMap">
+      select * from m_merchant_terminal  where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
+  <!-- APP查询详情 -->
+  <select id="queryDetailById" parameterType="java.lang.Integer" resultMap="DetailResultMap">
+     select sn_code,term_name,pos_factory,pos_type from m_merchant_terminal where id=#{terId}
+  </select>
+  <!-- 根据商家ID删除关联数据 -->
+	<delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
+	   DELETE   FROM m_merchant_terminal WHERE inner_code in (
+		 SELECT inner_code FROM m_merchant_core WHERE id in 
+		  <foreach item="item" collection="array" open="(" separator="," close=")">
+	       #{item}
+	     </foreach>
+		)
+	</delete>
+	<!-- 根据POSid查询 -->
+	<select id="queryTerByPosId" parameterType="java.lang.Integer" resultType="net.fnsco.bigdata.api.dto.TerminalInfoDTO">
+	  SELECT term_name AS terName,terminal_code AS terminalCode FROM m_merchant_terminal WHERE pos_id = #{posId}
+	</select>
+	<!-- 批量插入数据 -->
+	<insert id="insertBatch"  parameterType="java.util.List">
+	  <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                 SELECT LAST_INSERT_ID()
+      </selectKey>
+      insert into m_merchant_terminal (id, inner_code, pos_id, 
+      terminal_code, inner_term_code, terminal_batch, 
+      terminal_para, charges_type, debit_card_rate, 
+      credit_card_rate, debit_card_fee, credit_card_fee, 
+      debit_card_max_fee, credit_card_max_fee, deal_switch, 
+      record_state, term_audit_state, term_name, 
+      wechat_fee, alipay_fee, terminal_type)
+    values 
+   	   <foreach collection ="list" item="terMinal" index= "index" separator =",">
+   	   (#{terMinal.id,jdbcType=INTEGER}, #{terMinal.innerCode,jdbcType=VARCHAR}, #{terMinal.posId,jdbcType=INTEGER}, 
+      #{terMinal.terminalCode,jdbcType=VARCHAR}, #{terMinal.innerTermCode,jdbcType=VARCHAR}, #{terMinal.terminalBatch,jdbcType=VARCHAR}, 
+      #{terMinal.terminalPara,jdbcType=VARCHAR}, #{terMinal.chargesType,jdbcType=INTEGER}, #{terMinal.debitCardRate,jdbcType=VARCHAR}, 
+      #{terMinal.creditCardRate,jdbcType=VARCHAR}, #{terMinal.debitCardFee,jdbcType=INTEGER}, #{terMinal.creditCardFee,jdbcType=INTEGER}, 
+      #{terMinal.debitCardMaxFee,jdbcType=INTEGER}, #{terMinal.creditCardMaxFee,jdbcType=INTEGER}, #{terMinal.dealSwitch,jdbcType=VARCHAR}, 
+      #{terMinal.recordState,jdbcType=VARCHAR}, #{terMinal.termAuditState,jdbcType=VARCHAR}, #{terMinal.termName,jdbcType=VARCHAR}, 
+      #{terMinal.wechatFee,jdbcType=VARCHAR}, #{terMinal.alipayFee,jdbcType=VARCHAR}, #{terMinal.terminalType,jdbcType=VARCHAR})
+      </foreach>
+	</insert>
+	<!-- 根据channelID删除数据 -->
+	<delete id="deleteByChannelId" parameterType="java.lang.Integer">
+	   delete from m_merchant_terminal
+       where pos_id in (
+         select id from m_merchant_pos where channel_id = #{channelId}
+       )
+	</delete>
+	<!-- 根据POSID删除 -->
+	<delete id="deleteByPosId" parameterType="java.lang.Integer">
+	  delete from m_merchant_terminal
+       where pos_id = #{posId}
+	</delete>
+	<!-- 查询所有数据 -->
+	<select id="queryAllTerByPosId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	   select 
+    <include refid="Base_Column_List" />
+    from m_merchant_terminal where pos_id = #{posId}
+	</select>
+</mapper>

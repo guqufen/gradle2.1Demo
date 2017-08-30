@@ -18,6 +18,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import net.fnsco.bigdata.service.dao.master.MerchantContactDao;
+import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
+import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
+import net.fnsco.bigdata.service.domain.MerchantContact;
+import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
@@ -39,15 +45,9 @@ import net.fnsco.order.api.dto.QueryBandDTO;
 import net.fnsco.order.api.dto.SmsCodeDTO;
 import net.fnsco.order.service.dao.master.AppUserDao;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
-import net.fnsco.order.service.dao.master.MerchantContactDao;
-import net.fnsco.order.service.dao.master.MerchantCoreDao;
-import net.fnsco.order.service.dao.master.MerchantUserRelDao;
 import net.fnsco.order.service.dao.master.SysMsgAppSuccDao;
 import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.order.service.domain.AppUserMerchant;
-import net.fnsco.order.service.domain.MerchantContact;
-import net.fnsco.order.service.domain.MerchantCore;
-import net.fnsco.order.service.domain.MerchantUserRel;
 import net.fnsco.order.service.domain.SysMsgAppSucc;
 
 @Service
@@ -532,8 +532,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             //如果修改成店主
             if (li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())) {
                 //找到另一个店长
-                AppUserMerchant it = appUserMerchantDao.selectOneByInnerCode(li.getInnerCode(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+                List<AppUserMerchant> its = appUserMerchantDao.selectByInnerCode(li.getInnerCode(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
                 //原来有店长
+                AppUserMerchant it = its.get(0);
                 if (it != null) {
                     AppUserMerchantDTO dto = new AppUserMerchantDTO();
                     dto.setId(it.getId());
@@ -582,7 +583,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             //如果成为店员   一种原来有店长  原来没有店长          
             if (li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.CLERK.getCode())) {
                 //判断这个店铺原来有没有店长
-                AppUserMerchant it = appUserMerchantDao.selectOneByInnerCode(li.getInnerCode(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+                List<AppUserMerchant> its = appUserMerchantDao.selectByInnerCode(li.getInnerCode(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+                AppUserMerchant it = its.get(0);
                 //原来有店长不管是不是自己都强制更新
                 if (it != null) {
                 	if(li.getAppUserId().equals(it.getAppUserId())) {

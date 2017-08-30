@@ -28,12 +28,12 @@ public class UserServiceImpl extends BaseService implements UserService {
     @Autowired
     private UserTokenService userTokenService;
     @Override 
-    public net.fnsco.freamwork.business.AppUserDTO getUserInfo(String userId) {
-        net.fnsco.freamwork.business.AppUserDTO dto = null;
+    public net.fnsco.freamwork.business.AppUser1DTO getUserInfo(String userId) {
+        net.fnsco.freamwork.business.AppUser1DTO dto = null;
         try {
             AppUser user = appUserDao.selectAppUserById(Integer.parseInt(userId));
             if (user != null) {
-                dto = new net.fnsco.freamwork.business.AppUserDTO();
+                dto = new net.fnsco.freamwork.business.AppUser1DTO();
                 dto.setForcedLoginOut(user.getForcedLoginOut());
                 dto.setUserName(user.getUserName());
                 dto.setId(user.getId());
