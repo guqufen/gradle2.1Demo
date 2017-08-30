@@ -3,6 +3,7 @@ package net.fnsco.withhold.service.sys.entity;
 import java.util.Date;
 
 public class UserDO {
+    private Integer roleType;
 
     /**
      * 
@@ -175,10 +176,18 @@ public class UserDO {
         this.modifyUserId = modifyUserId;
     }
 
+    public Integer getRoleType() {
+        return roleType;
+    }
 
+    public void setRoleType(Integer roleType) {
+        this.roleType = roleType;
+    }
 
     @Override
     public String toString() {
-        return "[id="+ id + ", type="+ type + ", name="+ name + ", password="+ password + ", realName="+ realName + ", mobile="+ mobile + ", sex="+ sex + ", aliasName="+ aliasName + ", department="+ department + ", agentId="+ agentId + ", remark="+ remark + ", modifyTime="+ modifyTime + ", modifyUserId="+ modifyUserId + "]";
+        return "UserDO [roleType=" + roleType + ", id=" + id + ", type=" + type + ", name=" + name + ", password=" + password + ", realName=" + realName + ", mobile=" + mobile + ", sex=" + sex
+               + ", aliasName=" + aliasName + ", department=" + department + ", agentId=" + agentId + ", remark=" + remark + ", modifyTime=" + modifyTime + ", modifyUserId=" + modifyUserId + "]";
     }
+
 }

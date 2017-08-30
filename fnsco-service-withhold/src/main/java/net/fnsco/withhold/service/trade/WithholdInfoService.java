@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.withhold.service.sys.UserService;
@@ -122,7 +123,7 @@ public class WithholdInfoService extends BaseService {
 		withholdInfo.setCertifType("01");// 证件类型
 		withholdInfo.setAmountTotal(new BigDecimal(0.00));
 		withholdInfo.setAccountType("01");
-		withholdInfo.setStatus(1);
+		withholdInfo.setStatus(3);
 		withholdInfo.setCertifType("01");// 设置身份证
 		withholdInfo.setAccType("01");// 帐号类型
 		withholdInfo.setFailTotal(0);
@@ -210,4 +211,10 @@ public class WithholdInfoService extends BaseService {
         int count =this.productTypeDAO.update(productTypeDO);
         return count;
     }
+    //根据id查询代扣名称
+    public ResultDTO queryProductTypeById(Integer id) {
+        ProductTypeDO dto=this.productTypeDAO.getById(id);
+        return ResultDTO.success(dto);
+    }
+    
 }

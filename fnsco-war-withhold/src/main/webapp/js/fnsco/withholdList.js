@@ -1,5 +1,25 @@
 var pathName = window.document.location.pathname;
 var PROJECT_NAME = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+//获取当前用户
+function load_val2(){
+    var result;
+    $.ajax({
+        dataType:'json',
+        type : 'POST',
+        url :PROJECT_NAME + '/web/user/getCurrentUser',
+        async:false,//这里选择异步为false，那么这个程序执行到这里的时候会暂停，等待
+                    //数据加载完成后才继续执行
+        success : function(data){
+        	console.log(data)
+            result = data.data.roleType;
+        }
+    });
+    return result;
+}
+var roleType = load_val2();
+console.log(roleType);
+
+
 // 保存事件
 function saveWithholdInfo() {
 	//名称
@@ -35,25 +55,34 @@ function saveWithholdInfo() {
 		return;
 	}
 	console.log( $('#mercore_form').serialize());
-	$.ajax({
-		url : PROJECT_NAME + '/web/withholdInfo/doAdd',
-		data : $('#mercore_form').serialize(),
-		type : 'POST',
-		success : function(data) {
-			unloginHandler(data);
-			if (data.success) {
-				layer.msg('保存成功');
-				$("#myModal").hide();
-				$("body").removeClass("modal-open");
-				queryEvent("table");
-			} else if (!data.success) {
-				layer.msg(data.message);
-			} else {
-				layer.msg('保存失败');
+	layer.confirm('确定新增代扣信息无误吗？', {
+		time : 20000, // 20s后自动关闭
+		btn : [ '确定', '取消' ]
+	}, function() {
+		$.ajax({
+			url : PROJECT_NAME + '/web/withholdInfo/doAdd',
+			data : $('#mercore_form').serialize(),
+			type : 'POST',
+			success : function(data) {
+				unloginHandler(data);
+				if (data.success) {
+					layer.msg('保存成功');
+					$("#myModal").hide();
+					$("body").removeClass("modal-open");
+					queryEvent("table");
+				} else if (!data.success) {
+					layer.msg(data.message);
+				} else {
+					layer.msg('保存失败');
+				}
 			}
-		}
+		});
+	}, function() {
+		layer.msg('取消成功');
 	});
+	
 }
+
 function checkNum(obj) {
 	// 检查是否是非数字值
 	if (!isNaN(obj)) {
@@ -105,13 +134,11 @@ function initTableData() {
 		columns : [ {
 			field : 'id',
 			title : '序号',
-			width : '20',
 			class:'j',
 			formatter : operateFormatterId
 		}, {
 			field : 'userName',
-			title : '姓名',
-			width : '80'
+			title : '姓名'
 		}, {
 			field : 'mobile',
 			title : '手机号'
@@ -120,7 +147,8 @@ function initTableData() {
 			title : '身份证号',
 		},{
 			field : 'productTypeCode',
-			title : '扣款类型'
+			title : '扣款类型',
+			formatter : formatStyle
 		}
 		,{
 			field : 'debitDay',
@@ -143,7 +171,12 @@ function initTableData() {
 		}, {
 			field : 'bankCard',
 			title : '银行卡号'
-		}, {
+		}
+//		,{
+//			field : 'contractNum',
+//			title : '合同编号'
+//		}
+		, {
 			field : 'modifyUserName',
 			title : '提交人',
 			width : '80'
@@ -206,6 +239,32 @@ function operateFormatterId(value, row, index) {
 //	}
 ////	console.log(str)
 //}
+
+function formatStyle(value, row, index){
+	//console.log(value)
+	var result;
+	$.ajax({
+		url : PROJECT_NAME + '/web/withholdInfo/queryProductTypeById',
+		type : 'POST',
+		async:false,
+		dataType : "json",
+		data : {
+			'id' :value
+		},
+		success : function(data) {
+			if(data.data==null){
+				result=null;
+			}else{
+			    result=data.data.name;
+			}
+		}
+	});
+	if(result==null){
+		return '-';
+	}else{
+		return result;
+	}
+}
 // 判断法人证件类型
 function judgeCardType(value, row, index) {
 	if (value == '0') {
@@ -225,11 +284,12 @@ function queryParams(params) {
 	var param = {
 		currentPageNum : this.pageNumber,
 		pageSize : this.pageSize,
-		debitDay : $('#debitDay option:selected').val(),
+		debitDay : $('#debitDay_bg option:selected').val(),
 		status : $('#status option:selected').val(),
 		certifyId : $('#txt_search_id').val(),
 		userName : $('#txt_search_name').val(),
-		mobile : $('#txt_search_price').val()
+		mobile : $('#txt_search_price').val(), 
+		contractNum : $('#txt_search_contractNum').val()
 	}
 	return param;
 }
@@ -242,6 +302,10 @@ function formatStatus(value, row, index) {
 		return '进行中';
 	} else if (value == 2) {
 		return '已完成';
+	}else if(value==3){
+		return '待审核';
+	}else if(value==4){
+		return '审核失败';
 	}
 }
 
@@ -280,13 +344,40 @@ function unloginHandler(result) {
 };*/
 // 表格中操作按钮
 function operateFormatter(value, row, index) {
+	console.log(roleType)
+	if(roleType==1){
+		//待审核 
+		if(row.status==3){
+			return [
+					'<a class="redact btn btn-warning" style="padding: 3px 6px;color:white;" onclick="javascript:check(' + row.id + ');" data-toggle="modal" data-target="#myCheckdetails" title="审核">审核', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
+					.join('');
+		}
+	}else{
+		if(row.status==3){
+			return [
+					'<a class="redact" style="padding: 3px 6px;visibility:hidden;" data-toggle="modal" data-target="#myCheckdetails" title="审核">审核', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
+					.join('');
+		}
+	}
+	
+	//审核成功
 	if (row.status == 1) {
 		return [
-				'<a class="redact" href="javascript:stopData(' + row.id + ');" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
+				'<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" onclick="javascript:stopData(' + row.id + ');" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
 				.join('');
-	} else
-		 return ['<a class="redact" style="visibility:hidden;" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>"]
-	.join('');
+	}
+	//审核失败 点击编辑
+	if (row.status == 4) {
+		return [
+				'<a class="redact btn btn-danger" style="padding: 3px 6px;color:white;" onclick="javascript:edit(' + row.id + ');"  data-toggle="modal" data-target="#myModal" title="编辑">编辑', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
+				.join('');
+	}
+	//终止状态 
+	if(row.status == 0){
+		 return ['<a class="redact" style="padding: 3px 6px;visibility:hidden;" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>"]
+			.join('');
+	}
+	
 }
 // 表格中删除按钮事件
 function delete_btn_event(td_obj) {
@@ -332,10 +423,15 @@ function resetEvent(form, id) {
 	$('#' + id).bootstrapTable('refresh');
 }
 // 新增按钮事件
-$('#btn_add').click(function() {
+$('.btn_add').click(function() {
+	 productTypeCode();
+});
+
+function productTypeCode(){
 	$("#productTypeCode").html("");
 	$.ajax({
 		url : PROJECT_NAME + '/web/withholdInfo/queryWithholdType',
+		async: false,
 		type : 'POST',
 		data:null,
 		dataType : "json",
@@ -344,7 +440,7 @@ $('#btn_add').click(function() {
 			console.log(data);
 			if (data.success) {
 				for(var i=0;i<data.data.length;i++){
-					var html="<option value='"+data.data[i].name+"'>"+data.data[i].name+"</option>";
+					var html="<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>";
 					$("#productTypeCode").prepend(html);
 				}
 			}
@@ -353,7 +449,7 @@ $('#btn_add').click(function() {
 			layer.msg('系统异常!' + e);
 		}
 	});
-});
+}
 // 批量删除按钮事件
 $('#btn_delete').click(function() {
 	var select_data = $('#table').bootstrapTable('getSelections');
@@ -402,11 +498,12 @@ function stopData(id) {
 		btn : [ '确定', '取消' ]
 	}, function() {
 		$.ajax({
-			url : PROJECT_NAME + '/web/withholdInfo/doUpdateStatus',
+			url : PROJECT_NAME + '/web/withholdInfo/doUpdate',
 			type : 'POST',
 			dataType : "json",
 			data : {
-				'id' : id
+				'id' :id,
+				'status':0
 			},
 			success : function(data) {
 				unloginHandler(data);
@@ -426,6 +523,178 @@ function stopData(id) {
 	});
 }
 
+function edit(id){
+	console.log(id);
+	$(".add_two").html("代扣编辑详情");
+	productTypeCode();
+	$(".nextBtn").hide();
+	$(".save_btn").show();
+	$.ajax({
+		url : PROJECT_NAME + '/web/withholdInfo/queryById',
+		type : 'POST',
+		dataType : "json",
+		data : {
+			'id' : id
+		},
+		success : function(data) {
+			console.log(data);
+			console.log(data.data.userName)
+			console.log(data.data.certifyId)
+			$("#userName").val(data.data.userName);
+			$(".certifyId_add").val(data.data.certifyId);
+			$("#bankCard").val(data.data.bankCard);
+			$("#mobile").val(data.data.mobile);
+			$("#amount").val(data.data.amount);
+			$("#total").val(data.data.total);
+			$("#contractNum").val(data.data.contractNum);
+			//$(" option[value="+data.data.productTypeCode+"]").prop('selected','selected');
+			$("#productTypeCode").val(data.data.productTypeCode);
+			$("#debitDay").val(data.data.debitDay);
+			$(".hiddenId").val(data.data.id)
+		}
+	});
+}
+
+$(".save_btn").click(function(){
+	//名称
+	if(!$('#userName').val()){
+		layer.msg('请输入有效姓名!');
+		return;
+	}
+	//校验身份证
+	var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+	if(reg.test($('#certifyId').val()) === false)  
+	   {  
+		  layer.msg("身份证输入不合法");  
+	       return;  
+	   } 
+	//校验银行卡号码
+	var bankCard = $('#bankCard').val();
+	if(bankCard.length<16 || bankCard.length>19){
+		layer.msg('请输入有效银行卡号!');
+		return;
+	}
+	var regMob = /^1[0-9]{10}$/;
+	if(regMob.test($('#mobile').val()) === false){
+		layer.msg('请输入有效手机号码!');
+		return;
+	}
+	// 校验
+	if (!checkNum($('#amount').val()) || !$('#amount').val()) {
+		layer.msg('请输入有效扣款金额!');
+		return;
+	}
+	if (!$('#total').val() || $('#total').val() <= 0) {
+		layer.msg('请输入有效扣款次数!');
+		return;
+	}
+	console.log($('#mercore_form').serialize()+"&id="+$(".hiddenId").val());
+	$.ajax({
+		url : PROJECT_NAME + '/web/withholdInfo/doUpdate',
+		data :$('#mercore_form').serialize()+"&status=3&id="+$(".hiddenId").val(),
+		type : 'POST',
+		success : function(data) {
+			unloginHandler(data);
+			if (data.success) {
+				layer.msg('保存成功');
+				$("#myModal").hide();
+				$("body").removeClass("modal-open");
+				queryEvent("table");
+			} else if (!data.success) {
+				layer.msg(data.message);
+			} else {
+				layer.msg('保存失败');
+			}
+		}
+	});
+})
+
+function check(id){
+	$.ajax({
+		url : PROJECT_NAME + '/web/withholdInfo/queryById',
+		type : 'POST',
+		dataType : "json",
+		data : {
+			'id' : id
+		},
+		success : function(data) {
+			console.log(data);
+			console.log(data.data.userName)
+			$("#myCheckdetails .userName").val(data.data.userName);
+			$("#myCheckdetails .certifyId").val(data.data.certifyId);
+			$("#myCheckdetails .bankCard").val(data.data.bankCard);
+			$("#myCheckdetails .mobile").val(data.data.mobile);
+			$("#myCheckdetails .amount").val(data.data.amount);
+			$("#myCheckdetails .total").val(data.data.total);
+			$("#myCheckdetails .contractNum").val(data.data.contractNum);
+			$("#myCheckdetails .productTypeCode").val(data.data.productTypeCode);
+			$("#myCheckdetails .debitDay").val(data.data.debitDay);
+			$("#myCheckdetails .id").val(data.data.id);
+		}
+	});
+}
+
+function checkPass(){
+	layer.confirm('确定审核通过吗？', {
+		time : 20000, // 20s后自动关闭
+		btn : [ '确定', '取消' ]
+	}, function() {
+		$.ajax({
+			url : PROJECT_NAME + '/web/withholdInfo/doUpdate',
+			type : 'POST',
+			dataType : "json",
+			data : {
+				'id' : $("#myCheckdetails .id").val(),
+				'status':1
+			},
+			success : function(data) {
+				unloginHandler(data);
+				if (data.success) {
+					layer.msg('审核通过成功');
+					queryEvent("table");
+					$("#myCheckdetails").hide();
+				} else {
+					layer.msg('审核通过失败');
+				}
+			},
+			error : function(e) {
+				layer.msg('系统异常!' + e);
+			}
+		});
+	}, function() {
+		layer.msg('取消成功');
+	});
+}
+
+function checkFail(){
+	layer.confirm('确定审核失败吗？', {
+		time : 20000, // 20s后自动关闭
+		btn : [ '确定', '取消' ]
+	}, function() {
+		$.ajax({
+			url : PROJECT_NAME + '/web/withholdInfo/doUpdate',
+			type : 'POST',
+			dataType : "json",
+			data : {
+				'id' : $("#myCheckdetails .id").val(),
+				'status':4
+			},
+			success : function(data) {
+				unloginHandler(data);
+				if (data.success) {
+					layer.msg('审核没有通过');
+					queryEvent("table");
+					$("#myCheckdetails").hide();
+				}
+			},
+			error : function(e) {
+				layer.msg('系统异常!' + e);
+			}
+		});
+	}, function() {
+		layer.msg('取消成功');
+	});
+}
 
 var withholdId;
 function details(id) {
@@ -456,6 +725,7 @@ function query(id){
 			$(".detail_debit_day").val(data.data.debitDay);
 			$(".detail_amount_total").val(data.data.amountTotal);
 			$(".detail_sum").val(data.data.total*data.data.amount);
+			$(".detail_contractNum").val(data.data.contractNum);
 		}
 	});
 }

@@ -47,6 +47,7 @@ public class SessionFactoryConfig implements TransactionManagementConfigurer {
         /** 设置datasource */
         sqlSessionFactoryBean.setDataSource(dataSource);
         /** 设置typeAlias 包xml中sql文件扫描路径 */
+        //domain起别名。
         sqlSessionFactoryBean.setTypeAliasesPackage(typeAliasPackage);
         return sqlSessionFactoryBean;
     }
