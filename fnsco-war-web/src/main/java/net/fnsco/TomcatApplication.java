@@ -1,8 +1,8 @@
 package net.fnsco;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
@@ -15,7 +15,7 @@ import net.fnsco.freamwork.log.filter.WebAccessLogFilter;
 
 @SpringBootApplication
 @ComponentScan("net.fnsco")
-@EntityScan({"net.fnsco.bigdata.service.dao","net.fnsco.order.service.dao","net.fnsco.auth.service.dao"})
+@MapperScan({"net.fnsco.auth.service","net.fnsco.order.service","net.fnsco.bigdata.service"})
 @Import({ WebConfig.class })
 public class TomcatApplication extends SpringBootServletInitializer {
 
