@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.order.service.dao.master.trade.TradeDataDAO" >
-  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.trade.TradeData" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.trade.TradeData" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="txn_type" property="txnType" jdbcType="VARCHAR" />
@@ -81,7 +81,7 @@
     limit 1
   </select>
   
-  <select id="selectByIRT" resultMap="BaseResultMap" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+  <select id="selectByIRT" resultMap="BaseResultMap" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" >
     select 
     <include refid="Base_Column_List" />
     from t_trade_data
@@ -97,7 +97,7 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
    
-  <insert id="insert" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" >
     insert into t_trade_data (id, inner_code, txn_type, 
       txn_sub_type, currency, pay_time_out, 
       subject, body, customer_info, 
@@ -134,7 +134,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{referNo,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
   </insert>
     
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" >
     update t_trade_data
     <set >
       <if test="innerCode != null" >
@@ -290,7 +290,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" >
     update t_trade_data
     set inner_code = #{innerCode,jdbcType=VARCHAR},
       txn_type = #{txnType,jdbcType=VARCHAR},
@@ -529,7 +529,7 @@
    	 limit #{startRow} , #{perPageSize}
   </select>
   <!-- 条件查询总数 -->
-  <select id="queryTotalByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeData" resultType="java.lang.Integer">
+  <select id="queryTotalByCondition" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" resultType="java.lang.Integer">
      select count(*)  from 
      		t_trade_data
      <where>
@@ -710,7 +710,7 @@
    	 </where>		
   </select>
   <!-- 条件查询集合 ,返回临时表数据-->
-  <select id="queryTempByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeData" resultMap="BaseResultMap">
+  <select id="queryTempByCondition" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" resultMap="BaseResultMap">
     select inner_code,amt,pay_sub_type,time_stamp  from t_trade_data
     <where>
       <if test="startTime != null and startTime !=''" >
@@ -728,7 +728,7 @@
     </where>
   </select>
   
-    <select id="selectCountByIRT" resultType="java.lang.Integer" parameterType="net.fnsco.order.service.domain.trade.TradeData" >
+    <select id="selectCountByIRT" resultType="java.lang.Integer" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" >
     select 
       count(id)
     from t_trade_data
