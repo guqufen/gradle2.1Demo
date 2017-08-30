@@ -173,7 +173,7 @@
      </foreach>
   </insert>
   <!-- 统计今日营业额 -->
-  <select id="queryTodayTurnover" parameterType="net.fnsco.order.service.domain.trade.TradeData"  resultType="net.fnsco.order.api.dto.TurnoverDTO">
+  <select id="queryTodayTurnover" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData"  resultType="net.fnsco.order.api.dto.TurnoverDTO">
     SELECT
 	SUM(amt) AS turnover,
 	COUNT(*) AS orderNum
