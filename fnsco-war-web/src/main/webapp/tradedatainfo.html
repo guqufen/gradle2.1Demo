@@ -208,9 +208,10 @@
   function formatAmt(value, row, index){
 	  if(value){
 		  var num = Number(value);
-		  return num/100;
+		  var res = returnFloat(num/100);
+		  return res;
 	  }
-	  return returnFloat(value);
+	  return '--';
   }
   function returnFloat(value){
 	  var value=Math.round(parseFloat(value)*100)/100;

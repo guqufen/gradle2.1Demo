@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
 import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
+import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.NumberUtil;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.BusinessTrendDTO;
 import net.fnsco.order.api.dto.ConsPatternDTO;
@@ -34,6 +38,7 @@ import net.fnsco.order.api.dto.TradeTypeDTO;
 import net.fnsco.order.api.dto.TurnoverDTO;
 import net.fnsco.order.api.dto.WeeklyDTO;
 import net.fnsco.order.api.dto.WeeklyHisDateDTO;
+import net.fnsco.order.api.report.dto.FinanceReportDTO;
 import net.fnsco.order.api.trade.TradeReportService;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.dao.master.trade.TradeByDayDao;
@@ -73,6 +78,9 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
 
     @Autowired
     private AppUserMerchantDao appUserMerchantDao;
+    
+    @Autowired
+    private MerchantTerminalDao merchantTerminalDao;
 
     private final static int   pageSize = 20;
 
@@ -108,6 +116,12 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             tradeDateTemp.setAmt(tradeData.getAmt());
             tradeDateTemp.setInnerCode(tradeData.getInnerCode());
             tradeDateTemp.setPaySubType(tradeData.getPaySubType());
+            //计算手续费
+            String terId = tradeData.getTermId();
+            if(StringUtils.isNoneEmpty(terId)){
+                BigDecimal rate = countFeeRate(terId,tradeData);
+                tradeDateTemp.setProcedureFee(rate);
+            }
             tempData.add(tradeDateTemp);
         }
         tradeDateTempDao.insertBatch(tempData);
@@ -135,7 +149,68 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         List<TradeByPayType> tradePayTypeData = tradeDateTempDao.selectTradeDataByPayType();
         tradeByPayTypeDao.insertBatch(tradePayTypeData);
     }
-
+    
+    /**
+     * countFeeRate:(计算费率)返回结果是以元为单位
+     * @param terminalCode
+     * @param tradeData
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月30日 下午2:25:41
+     * @return BigDecimal    DOM对象
+     */
+    private BigDecimal countFeeRate(String terminalCode,TradeData tradeData){
+        BigDecimal result = new BigDecimal(0);
+        if(Strings.isNullOrEmpty(terminalCode)){
+            return result;
+        }
+        MerchantTerminal merTer = merchantTerminalDao.selectByTerminalCode(terminalCode);
+        /**
+         * 根据交易渠道类型来计算费率。
+         */
+        String paySubType = tradeData.getPaySubType();
+        if(Strings.isNullOrEmpty(paySubType)){
+            return result;
+        }
+        //刷卡需要区分借记卡和贷记卡
+        if(ConstantEnum.PayTypeEnum.PAYBYCARD.getCode().equals(paySubType)){
+            String dcType = tradeData.getDcType();
+            if(Strings.isNullOrEmpty(dcType)){
+                return result;
+            }
+          //贷记卡
+            if(ConstantEnum.DcTypeEnum.INLANDCREDITCARD.getCode().equals(dcType) || ConstantEnum.DcTypeEnum.OVERSEASCREDITCARD.getCode().equals(dcType)){
+                
+                result = NumberUtil.multiplication(tradeData.getAmt(), merTer.getCreditCardRate()).divide(new BigDecimal(100)).divide(new BigDecimal(100));
+                
+            }else if(ConstantEnum.DcTypeEnum.DOMESTICDEBITCARD.getCode().equals(dcType) || ConstantEnum.DcTypeEnum.OVERSEASDEBITCARD.getCode().equals(dcType)){
+                //借记卡
+                BigDecimal rate = NumberUtil.multiplication(tradeData.getAmt(), merTer.getDebitCardRate());
+                //跟设置的峰值比较，如果大于峰值则峰值，否则借记卡费率
+                BigDecimal bd1 = rate.divide(new BigDecimal(100));
+                BigDecimal db2 = new BigDecimal(merTer.getCreditCardMaxFee());
+                if(bd1.compareTo(db2) > 1){
+                    result = db2;
+                }else{
+                    result = bd1;
+                }
+            }
+        } //微信
+         else if(ConstantEnum.PayTypeEnum.PAYBYWX.getCode().equals(paySubType)){
+             BigDecimal rate = new BigDecimal(tradeData.getAmt());
+             BigDecimal bd1 = rate.divide(new BigDecimal(100));
+             BigDecimal db2 = new BigDecimal(merTer.getWechatFee());
+             result = bd1.multiply(db2);
+        }//支付宝
+         else if(ConstantEnum.PayTypeEnum.PAYBYALIPAY.getCode().equals(paySubType)){
+             BigDecimal rate = new BigDecimal(tradeData.getAmt());
+             BigDecimal bd1 = rate.divide(new BigDecimal(100));
+             BigDecimal db2 = new BigDecimal(merTer.getAlipayFee());
+             result = bd1.multiply(db2);
+         }
+        return result;
+        
+    }
     /**
      * (non-Javadoc)根据用户ID查询营业额数据
      * @see net.fnsco.order.api.trade.TradeReportService#queryTurnovers(net.fnsco.order.api.dto.TradeReportDTO)
@@ -703,5 +778,41 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             }
         }
         return datas;
+    }
+    
+    /**
+     * (non-Javadoc)查询财务实现方法
+     * @see net.fnsco.order.api.trade.TradeReportService#queryFinanceTrade(net.fnsco.order.api.dto.TradeReportDTO)
+     * @author tangliang
+     * @date 2017年8月30日 上午11:49:53
+     */
+    @Override
+    public FinanceReportDTO queryFinanceTrade(TradeReportDTO tradeReportDTO) {
+        /**
+         * 返回结果赋值
+         */
+        FinanceReportDTO resultDto = new FinanceReportDTO();
+        resultDto.setInnerCode(tradeReportDTO.getInnerCode());
+        resultDto.setStartDate(tradeReportDTO.getStartDate());
+        resultDto.setEndDate(tradeReportDTO.getEndDate());
+        
+        TradeByDay record = new TradeByDay();
+        record.setInnerCode(tradeReportDTO.getInnerCode());
+        record.setStartTradeDate(tradeReportDTO.getStartDate());
+        record.setEndTradeDate(tradeReportDTO.getEndDate());
+        record.setUserId(tradeReportDTO.getUserId());
+        record.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        TurnoverDTO turnoverData = tradeByDayDao.selectTradeDayDataByTradeDate(record);
+        
+        resultDto.setTotalTurnover(divide(turnoverData.getTurnover(), 100).doubleValue()+"");
+        resultDto.setOrderNum(turnoverData.getOrderNum());
+        
+        /**
+         * 计算手术费
+         */
+        List<TradeDayDTO> tradeDayData = tradeByDayDao.selectByInnerCode(record);
+        List<TradeDayDTO> data = installTradeDay(tradeReportDTO, tradeDayData,false);
+        return null;
+        
     }
 }

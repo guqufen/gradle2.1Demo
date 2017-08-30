@@ -7,6 +7,7 @@ import net.fnsco.order.api.dto.TradeReportDTO;
 import net.fnsco.order.api.dto.TradeTurnoverDTO;
 import net.fnsco.order.api.dto.WeeklyDTO;
 import net.fnsco.order.api.dto.WeeklyHisDateDTO;
+import net.fnsco.order.api.report.dto.FinanceReportDTO;
 
 /**
  * @desc 统计service
@@ -89,4 +90,14 @@ public interface TradeReportService {
      * @since  CodingExample　Ver 1.1
      */
     PeakTradeDTO queryPeakTrade(TradeReportDTO tradeReportDTO);
+    
+    /**
+     * queryFinanceTrade:(查询财务信息)
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月30日 上午11:49:16
+     * @return FinanceReportDTO    DOM对象
+     */
+    FinanceReportDTO queryFinanceTrade(TradeReportDTO tradeReportDTO);
 }
