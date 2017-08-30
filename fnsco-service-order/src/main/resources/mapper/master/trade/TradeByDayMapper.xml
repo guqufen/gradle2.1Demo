@@ -8,9 +8,10 @@
     <result column="turnover" property="turnover" jdbcType="DECIMAL" />
     <result column="order_num" property="orderNum" jdbcType="INTEGER" />
     <result column="order_price" property="orderPrice" jdbcType="DECIMAL" />
+    <result column="procedure_fee" property="procedureFee" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, trade_date, inner_code, turnover, order_num, order_price
+    id, trade_date, inner_code, turnover, order_num, order_price, procedure_fee
   </sql>
   <insert id="insert" parameterType="net.fnsco.order.service.domain.trade.TradeByDay" >
     insert into r_trade_by_day (id, trade_date, inner_code, 
@@ -180,12 +181,12 @@
                  SELECT LAST_INSERT_ID()
      </selectKey>
       insert into r_trade_by_day (id, trade_date, inner_code, 
-      turnover, order_num, order_price
+      turnover, order_num, order_price, procedure_fee
       )
      values 
       <foreach collection ="list" item="dayTrade" index= "index" separator =",">
      (#{dayTrade.id,jdbcType=INTEGER}, #{dayTrade.tradeDate,jdbcType=VARCHAR}, #{dayTrade.innerCode,jdbcType=VARCHAR}, 
-      #{dayTrade.turnover,jdbcType=DECIMAL}, #{dayTrade.orderNum,jdbcType=INTEGER}, #{dayTrade.orderPrice,jdbcType=DECIMAL}
+      #{dayTrade.turnover,jdbcType=DECIMAL}, #{dayTrade.orderNum,jdbcType=INTEGER}, #{dayTrade.orderPrice,jdbcType=DECIMAL,#{dayTrade.procedureFee,jdbcType=DECIMAL}
       )
       </foreach>
   </insert>

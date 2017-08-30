@@ -21,6 +21,7 @@ import net.fnsco.order.api.dto.TradeReportDTO;
 import net.fnsco.order.api.dto.TradeTurnoverDTO;
 import net.fnsco.order.api.dto.WeeklyDTO;
 import net.fnsco.order.api.dto.WeeklyHisDateDTO;
+import net.fnsco.order.api.report.dto.FinanceReportDTO;
 import net.fnsco.order.api.trade.TradeReportService;
 
 /**
@@ -182,5 +183,24 @@ public class TradeReportController extends BaseController{
             tradeReportDTO.setStartDate(DateUtils.getDateStrByDay(-7));
         }
         return tradeReportDTO;
+    }
+    
+    /**
+     * queryFinanceTrade:(APP接口根据条件获取财务信息接口)
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月30日 上午10:17:45
+     * @return ResultDTO<PeakTradeDTO>    DOM对象
+     */
+    @RequestMapping("/queryFinanceTrade")
+    @ApiOperation(value = "APP获取财务信息接口")
+    public ResultDTO<FinanceReportDTO>  queryFinanceTrade(TradeReportDTO tradeReportDTO){
+        if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+        formatInputDate(tradeReportDTO, false);//格式化入参
+        PeakTradeDTO data = tradeReportService.queryPeakTrade(tradeReportDTO);
+        return ResultDTO.success(data);
     }
 }

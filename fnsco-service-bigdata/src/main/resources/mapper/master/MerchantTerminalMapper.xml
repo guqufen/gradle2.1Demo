@@ -377,4 +377,10 @@
     <include refid="Base_Column_List" />
     from m_merchant_terminal where pos_id = #{posId}
 	</select>
+	<!-- 根据终端号查询数据 -->
+	<select id="selectByTerminalCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+	      select 
+    <include refid="Base_Column_List" />
+    from m_merchant_terminal where terminal_code = #{terCode}  limit 1
+	</select>
 </mapper>
