@@ -32,11 +32,11 @@ import net.fnsco.bigdata.service.domain.Alias;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
-import net.fnsco.bigdata.service.modules.helper.MerchantHelper;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.NumberUtil;
+import net.fnsco.core.utils.StringUtil;
 
 /**@desc 商户相关操作
  * @author sxfei
@@ -81,13 +81,13 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
                 return randomCode;
             }
         }
-        randomCode = MerchantHelper.getMerCode();
+        randomCode = StringUtil.getMerCode();
         while (true) {
             Alias alias = aliasDAO.selectByRandomCode(randomCode);
             if (null == alias) {
                 break;
             }
-            randomCode = MerchantHelper.getMerCode();
+            randomCode = StringUtil.getMerCode();
         }
         Alias alias = new Alias();
         alias.setInnerCode(innerCode);
