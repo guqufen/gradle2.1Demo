@@ -16,6 +16,7 @@ import net.fnsco.withhold.service.trade.dao.helper.ProductTypeProvider;
 import net.fnsco.withhold.service.trade.dao.helper.TradeDataProvider;
 import net.fnsco.withhold.service.trade.entity.ProductTypeDO;
 import net.fnsco.withhold.service.trade.entity.TradeDataDO;
+import net.fnsco.withhold.service.trade.entity.WithholdInfoDO;
 
 public interface ProductTypeDAO {
     @Results({
@@ -24,7 +25,14 @@ public interface ProductTypeDAO {
     })
     @Select("SELECT * FROM w_product_type WHERE status=1")
     public List<ProductTypeDO> query();
-         
+    
+    @Results({
+        @Result(column = "id", property = "id"),@Result(column = "status", property = "status"),
+        @Result(column = "name", property = "name"),@Result(column = "modify_time", property = "modifyTime")
+    })
+    @Select("SELECT * FROM w_product_type WHERE id = #{id}")
+    public ProductTypeDO getById(@Param("id") int id);
+    
     @Insert("INSERT into w_product_type(id,name,status,modify_time) VALUES (#{id},#{name},#{status},#{modifyTime})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public int insert(ProductTypeDO productTypeDO);
