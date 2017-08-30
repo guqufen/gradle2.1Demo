@@ -55,24 +55,32 @@ function saveWithholdInfo() {
 		return;
 	}
 	console.log( $('#mercore_form').serialize());
-	$.ajax({
-		url : PROJECT_NAME + '/web/withholdInfo/doAdd',
-		data : $('#mercore_form').serialize(),
-		type : 'POST',
-		success : function(data) {
-			unloginHandler(data);
-			if (data.success) {
-				layer.msg('保存成功');
-				$("#myModal").hide();
-				$("body").removeClass("modal-open");
-				queryEvent("table");
-			} else if (!data.success) {
-				layer.msg(data.message);
-			} else {
-				layer.msg('保存失败');
+	layer.confirm('确定新增代扣信息无误吗？', {
+		time : 20000, // 20s后自动关闭
+		btn : [ '确定', '取消' ]
+	}, function() {
+		$.ajax({
+			url : PROJECT_NAME + '/web/withholdInfo/doAdd',
+			data : $('#mercore_form').serialize(),
+			type : 'POST',
+			success : function(data) {
+				unloginHandler(data);
+				if (data.success) {
+					layer.msg('保存成功');
+					$("#myModal").hide();
+					$("body").removeClass("modal-open");
+					queryEvent("table");
+				} else if (!data.success) {
+					layer.msg(data.message);
+				} else {
+					layer.msg('保存失败');
+				}
 			}
-		}
+		});
+	}, function() {
+		layer.msg('取消成功');
 	});
+	
 }
 
 function checkNum(obj) {
@@ -361,7 +369,7 @@ function operateFormatter(value, row, index) {
 	//审核失败 点击编辑
 	if (row.status == 4) {
 		return [
-				'<a class="redact" onclick="javascript:edit(' + row.id + ');"  data-toggle="modal" data-target="#myModal" title="编辑">编辑', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
+				'<a class="redact btn btn-danger" style="padding: 3px 6px;color:white;" onclick="javascript:edit(' + row.id + ');"  data-toggle="modal" data-target="#myModal" title="编辑">编辑', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
 				.join('');
 	}
 	//终止状态 
