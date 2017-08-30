@@ -355,7 +355,7 @@ function operateFormatter(value, row, index) {
 	}else{
 		if(row.status==3){
 			return [
-					'<a class="redact" style="padding: 3px 6px;" style="visibility:hidden;" onclick="javascript:check(' + row.id + ');" data-toggle="modal" data-target="#myCheckdetails" title="审核">审核', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
+					'<a class="redact" style="padding: 3px 6px;visibility:hidden;" data-toggle="modal" data-target="#myCheckdetails" title="审核">审核', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
 					.join('');
 		}
 	}
