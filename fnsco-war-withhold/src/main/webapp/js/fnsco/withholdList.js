@@ -374,7 +374,7 @@ function operateFormatter(value, row, index) {
 	}
 	//终止状态 
 	if(row.status == 0){
-		 return ['<a class="redact" style="visibility:hidden;" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>"]
+		 return ['<a class="redact" style="padding: 3px 6px;visibility:hidden;" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>"]
 			.join('');
 	}
 	
