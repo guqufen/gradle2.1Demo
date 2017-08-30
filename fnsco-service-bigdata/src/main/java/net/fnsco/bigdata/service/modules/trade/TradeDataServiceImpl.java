@@ -2,6 +2,7 @@ package net.fnsco.bigdata.service.modules.trade;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -177,6 +178,12 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         result.setTotal(total);
         result.setList(datas);
         result.setCurrentPage(merchantCore.getCurrentPageNum());
+        //查询总金额
+        Map map = tradeListDAO.querySumByCondition(tradeData);
+        if (map != null) {
+            Double count = (Double) map.get("count");
+            Double amtSum = (Double) map.get("amt");
+        }
         return result;
     }
 

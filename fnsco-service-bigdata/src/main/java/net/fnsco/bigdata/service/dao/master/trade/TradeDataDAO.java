@@ -1,6 +1,7 @@
 package net.fnsco.bigdata.service.dao.master.trade;
 
 import java.util.List;
+import java.util.Map;
 
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.PageDTO;
@@ -67,4 +68,6 @@ public interface TradeDataDAO {
     TradeData selectByIRT(TradeData record);
     
     int selectCountByIRT(TradeData record);
+    
+    Map querySumByCondition(TradeData record);
 }
