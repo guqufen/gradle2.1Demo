@@ -1,4 +1,7 @@
 package net.fnsco.order.service.domain.trade;
+
+import java.math.BigDecimal;
+
 /**
  * @desc 统计天的营业额实体
  * @author   tangliang
@@ -19,11 +22,35 @@ public class TradeByDay {
 
     private Long orderPrice;
     
+    private BigDecimal procedureFee;
+    
     private String startTradeDate;//开始查询条件
     private String endTradeDate;//结束查询条件
     private Integer userId;//用户ID
     private String roleId;//角色ID
     
+    /**
+     * procedureFee
+     *
+     * @return  the procedureFee
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public BigDecimal getProcedureFee() {
+        return procedureFee;
+    }
+
+    /**
+     * procedureFee
+     *
+     * @param   procedureFee    the procedureFee to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setProcedureFee(BigDecimal procedureFee) {
+        this.procedureFee = procedureFee;
+    }
+
     /**
      * roleId
      *

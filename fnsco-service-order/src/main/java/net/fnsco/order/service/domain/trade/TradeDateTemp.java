@@ -1,4 +1,7 @@
 package net.fnsco.order.service.domain.trade;
+
+import java.math.BigDecimal;
+
 /**
  * @desc 交易流水统计临时表
  * @author   tangliang
@@ -21,6 +24,30 @@ public class TradeDateTemp {
 
     private String tradeHoure;
     
+    private BigDecimal procedureFee;
+    
+
+    /**
+     * procedureFee
+     *
+     * @return  the procedureFee
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public BigDecimal getProcedureFee() {
+        return procedureFee;
+    }
+
+    /**
+     * procedureFee
+     *
+     * @param   procedureFee    the procedureFee to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setProcedureFee(BigDecimal procedureFee) {
+        this.procedureFee = procedureFee;
+    }
 
     /**
      * tradeDate

@@ -127,7 +127,40 @@ public class ConstantEnum {
          }
 
          public static String getNameByCode(String code) {
-             for (AuthorTypeEnum eopen : AuthorTypeEnum.values()) {
+             for (PayTypeEnum eopen : PayTypeEnum.values()) {
+                 if (eopen.code.equals(code)) {
+                     return eopen.name;
+                 }
+             }
+             return "";
+         }
+    }
+    //贷记卡和借记卡
+    public static enum DcTypeEnum{
+        DOMESTICDEBITCARD("00","境内借记卡"),INLANDCREDITCARD("01","境内贷记卡"),OVERSEASDEBITCARD("60","境外借记卡"),OVERSEASCREDITCARD("61","境外贷记卡");
+        
+        private String code;
+        private String name;
+        private DcTypeEnum(String code, String name){
+            this.code = code;
+            this.name = name;
+        }
+        /**
+         * @return the code
+         */
+         public String getCode() {
+             return code;
+         }
+
+         /**
+         * @return the name
+         */
+         public String getName() {
+             return name;
+         }
+
+         public static String getNameByCode(String code) {
+             for (DcTypeEnum eopen : DcTypeEnum.values()) {
                  if (eopen.code.equals(code)) {
                      return eopen.name;
                  }

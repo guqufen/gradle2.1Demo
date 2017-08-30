@@ -34,6 +34,17 @@ public class AppUserMerchantController extends BaseController {
         return ResultDTO.success(result);
     }
     
+    @RequestMapping(value = "/queryBindPeople")
+    @ApiOperation(value = "获取店铺全员绑定情况")
+    @ResponseBody
+    public ResultDTO queryBindRelation(@RequestBody BandDto bandDto) {
+        List<AppUserMerchantOutDTO> result = appUserMerchantService.queryBindRelation(bandDto);
+        if(result.size()==0){
+            return ResultDTO.fail(ApiConstant.E_NOSHOPKEEPER_ERROR);
+        }
+        return ResultDTO.success(result);
+    }
+    
     @RequestMapping(value = "/deletedBindPeople")
     @ApiOperation(value = "删除用户绑定")
     @ResponseBody

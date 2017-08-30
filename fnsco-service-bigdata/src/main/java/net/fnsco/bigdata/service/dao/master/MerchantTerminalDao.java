@@ -53,6 +53,17 @@ public interface MerchantTerminalDao {
     int updateByPrimaryKeySelective(MerchantTerminal record);
 
     int updateByPrimaryKey(MerchantTerminal record);
+    
+    /**
+     * selectByTerminalCode:(这里用一句话描述这个方法的作用)根据终端号查询费率
+     * @param terCode
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月30日 下午1:38:33
+     * @return MerchantTerminal    DOM对象
+     */
+    MerchantTerminal selectByTerminalCode(@Param("terCode")String terCode);
+    
     /**
      * 根据innercode查询出实体
      * @param innerCode

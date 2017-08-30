@@ -1,5 +1,7 @@
 package net.fnsco.core.utils;
 
+import java.math.BigDecimal;
+
 /**
  * @desc 数字工具类
  * @author   tangliang
@@ -21,6 +23,22 @@ public class NumberUtil {
             rstr = rstr + u[Integer.parseInt(str[i] + "")];    
         }    
         return rstr;    
-    }    
+    }   
+    
+    /**
+     * multiplication:(这里用一句话描述这个方法的作用)乘法运算
+     * @param bds
+     * @param bds1
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月30日 下午3:09:54
+     * @return BigDecimal    DOM对象
+     */
+    public static BigDecimal multiplication(String bds,String bds1){
+        BigDecimal bd1 = new BigDecimal(bds);
+        BigDecimal bd2 = new BigDecimal(bds1);
+        
+        return bd1.multiply(bd2);
+    }
     
 }
