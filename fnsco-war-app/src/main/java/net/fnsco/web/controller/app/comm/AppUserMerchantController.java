@@ -34,7 +34,7 @@ public class AppUserMerchantController extends BaseController {
         return ResultDTO.success(result);
     }
     
-    @RequestMapping(value = "/queryBindPeople")
+    @RequestMapping(value = "/queryBindRelation")
     @ApiOperation(value = "获取店铺全员绑定情况")
     @ResponseBody
     public ResultDTO queryBindRelation(@RequestBody BandDto bandDto) {
