@@ -81,6 +81,50 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
         return datas;
     }
 
+    //查询店铺全员绑定情况
+    @Override
+    public List<AppUserMerchantOutDTO> queryBindRelation(BandDto bandDto) {
+        List<AppUserMerchantOutDTO> datas = Lists.newArrayList();
+        Integer appUserId = bandDto.getUserId();
+        List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId,ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        if (CollectionUtils.isEmpty(merchantList)) {
+            return datas;
+        }
+        for(AppUserMerchant it : merchantList){
+          //根据innerCode查询出店铺名称
+            MerchantCore res = merchantCoreDao.selectByInnerCode(it.getInnerCode());
+            AppUserMerchantOutDTO dto=new AppUserMerchantOutDTO();
+            dto.setInnerCode(it.getInnerCode());
+            dto.setMerName(res.getMerName());
+            //查询店铺下店主和店员绑定情况
+            List<AppUserMerchant> list = appUserMerchantDao.selectByInnerCode(it.getInnerCode(),null);
+            List<BandListDTO> listDto=new ArrayList<BandListDTO>();
+            //该店铺只有一个店主 没有其他店员
+            if(CollectionUtils.isEmpty(list)){
+                listDto=null;
+            }
+            //遍历每一条店员和店铺的绑定关系
+            for(AppUserMerchant li:list){
+                BandListDTO bandList=new BandListDTO();
+                bandList.setUserId((li.getAppUserId()));
+                bandList.setIsShopkeeper(li.getRoleId());
+                //根据appUserId查询到手机号
+                AppUser user = appUserDao.selectAppUserById(li.getAppUserId());
+                //用户必须存在
+                if(null != user){
+                    bandList.setMobile(user.getMobile());
+                    bandList.setUserName(user.getUserName());
+                    listDto.add(bandList);
+                }else{
+                    logger.error(li.getAppUserId()+"该用户ID不存在!");
+                }
+            }
+            dto.setBandListDTO(listDto);
+            datas.add(dto);
+        }
+        return datas;
+    }
+    
     @Override
     @Transactional
     public ResultDTO deletedBindPeople(BandDto bandDto) {
