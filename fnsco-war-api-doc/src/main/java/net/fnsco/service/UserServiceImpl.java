@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 
 import net.fnsco.core.constants.CoreConstants;
-import net.fnsco.freamwork.business.AppUserDTO;
+import net.fnsco.freamwork.business.AppUser1DTO;
 import net.fnsco.freamwork.business.UserService;
 import net.fnsco.freamwork.business.WebUserDTO;
 
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
      * @see net.fnsco.freamwork.business.UserService#getUserInfo(java.lang.String)
      */
     @Override
-    public AppUserDTO getUserInfo(String userId) {
+    public AppUser1DTO getUserInfo(String userId) {
         return null;
 
     }
