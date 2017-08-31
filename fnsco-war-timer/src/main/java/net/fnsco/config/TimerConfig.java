@@ -89,4 +89,15 @@ public class TimerConfig {
     public void buildTradeReportData() {
         tradeReportService.buildTradeReportDaTa(DateUtils.getTimeByDayStr(-1), DateUtils.getTimeByDayStr(0));
     }
+    
+    /**
+     * pushWeeklyData:(定时推送周报)    设定文件
+     * @author    tangliang
+     * @date      2017年8月31日 上午11:37:51
+     * @return void    DOM对象
+     */
+    @Scheduled(cron = "0 0 8 ? * MON") //每周一上午八点推送周报
+    public void pushWeeklyData() {
+        appPushService.sendWeeklyDataMgs();
+    }
 }

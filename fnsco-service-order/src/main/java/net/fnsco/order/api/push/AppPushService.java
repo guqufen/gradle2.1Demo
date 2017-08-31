@@ -110,4 +110,12 @@ public interface AppPushService {
      */
     public void sendFailMgs(Integer frequencyNum);
     
+    /**
+     * sendWeeklyDataMgs:(推送周报数据)    设定文件
+     * @author    tangliang
+     * @date      2017年8月31日 上午11:43:10
+     * @return void    DOM对象
+     */
+    public void sendWeeklyDataMgs();
+    
 }
