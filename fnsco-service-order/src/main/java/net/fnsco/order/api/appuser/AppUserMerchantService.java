@@ -12,4 +12,5 @@ public interface AppUserMerchantService {
     //判断是否是店主并返回
     ResultDTO deletedBindPeople(BandDto bandDto);
     List<AppUserMerchantOutDTO> queryBindPeople(BandDto bandDto);
+    List<AppUserMerchantOutDTO> queryBindRelation(BandDto bandDto);
 }
