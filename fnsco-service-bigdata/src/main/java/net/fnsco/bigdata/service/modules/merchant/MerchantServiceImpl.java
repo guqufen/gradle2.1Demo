@@ -32,6 +32,8 @@ import net.fnsco.bigdata.service.domain.Alias;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
+import net.fnsco.bigdata.service.merchant.dao.MerchantPosSimpleDao;
+import net.fnsco.bigdata.service.merchant.entity.MerchantPosDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
@@ -55,8 +57,8 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     private MerchantTerminalDao merchantTerminalDao;
     @Autowired
     private MerchantPosDao      merchantPosDao;
-    
-
+    @Autowired
+    private MerchantPosSimpleDao      merchantPosSimpleDao;
     /**
       * 
       * @param merNum 商户号
@@ -188,7 +190,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         return ResultDTO.success(terminalsDTO);
 
     }
-    
+
     /**
      * (non-Javadoc)获取POS机列表
      * @see net.fnsco.bigdata.api.merchant.MerchantService#getAllPosInfo(net.fnsco.order.api.dto.MerchantDTO)
@@ -199,7 +201,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     public List<PosListDTO> getAllPosInfo(MerchantDTO merchantDTO) {
         return merchantPosDao.selectAllPosInfo(merchantDTO.getUserId());
     }
-    
+
     /**
      * (non-Javadoc)获取单个POS详情
      * @see net.fnsco.bigdata.api.merchant.MerchantService#getPosDetail(java.lang.Integer)
@@ -210,17 +212,17 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     public PosDetailDTO getPosDetail(Integer posId) {
         PosDetailDTO data = merchantPosDao.selectDetailById(posId);
         List<TerminalInfoDTO> terNames = data.getTerNames();
-        if(!CollectionUtils.isEmpty(terNames)){
+        if (!CollectionUtils.isEmpty(terNames)) {
             int i = 1;
             for (TerminalInfoDTO terminalInfoDTO : terNames) {
-                String title = NumberUtil.TER_TITLE_NAME+NumberUtil.numToUpper(i);
+                String title = NumberUtil.TER_TITLE_NAME + NumberUtil.numToUpper(i);
                 terminalInfoDTO.setTerTitle(title);
                 i++;
             }
         }
         return data;
     }
-    
+
     /**
      * (non-Javadoc)更新POS机信息
      * @see net.fnsco.bigdata.api.merchant.MerchantService#updatePosInfo(net.fnsco.order.controller.app.jo.TerminalJO)
@@ -229,13 +231,14 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public boolean updatePosInfo(TerminalsDTO dto) {
-        
+
         MerchantPos mecord = new MerchantPos();
         mecord.setId(dto.getPosId());
         mecord.setPosName(dto.getPosName());
-        return merchantPosDao.updateByPrimaryKeySelective(mecord)> 0 ?true:false;
-        
+        return merchantPosDao.updateByPrimaryKeySelective(mecord) > 0 ? true : false;
+
     }
+
     /**
      * (non-Javadoc)查询用户下所有的POS列表 不带商户信息的
      * @see net.fnsco.bigdata.api.merchant.MerchantService#getAllReportPos(net.fnsco.order.api.dto.MerchantDTO)
@@ -246,6 +249,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     public List<PosInfoDTO> getAllReportPos(MerchantDTO merchantDTO) {
         return merchantPosDao.selectAllByUserId(merchantDTO.getUserId());
     }
+
     /**
      * 
      * (non-Javadoc)
@@ -254,8 +258,32 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      * @date 2017年8月31日 下午5:01:20
      */
     @Override
-    public MerchantTerminal getTerminalDetailByCode(String terminalCode){
+    public MerchantTerminal getTerminalDetailByCode(String terminalCode) {
         MerchantTerminal merchantTerminal = merchantTerminalDao.selectByTerminalCode(terminalCode);
         return merchantTerminal;
+    }
+
+    /**
+     * 
+     * (non-Javadoc)
+     * @see net.fnsco.bigdata.api.merchant.MerchantService#updatePosName(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void updatePosName(String snCode, String posName) {
+        merchantPosSimpleDao.updateBySnCode(snCode,posName);
+    }
+
+    /**
+     * 
+     * (non-Javadoc)
+     * @see net.fnsco.bigdata.api.merchant.MerchantService#getPosName(java.lang.String)
+     */
+    @Override
+    public String getPosName(String snCode) {
+        MerchantPosDO merchantPos = merchantPosSimpleDao.selectBySnCode(snCode);
+        if (null != merchantPos) {
+            return merchantPos.getPosName();
+        }
+        return "";
     }
 }

@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.web.controller.open.jo.MerchantJO;
 
 @RestController
 @RequestMapping(value = "/open/merchant", method = RequestMethod.POST)
@@ -30,5 +31,31 @@ public class MerchantController extends BaseController {
     public ResultDTO getMerCode(@RequestBody MerchantJO merchant) {
         String randomCode = merchantService.getMerCode(merchant.getMerCode(), merchant.getChannelType());
         return success(randomCode);
+    }
+
+    /**
+     * 更新商户pos机名称
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/updatePosName")
+    @ApiOperation(value = "更新商户pos机名称")
+    public ResultDTO updatePosName(@RequestBody MerchantJO merchant) {
+        merchantService.updatePosName(merchant.getSnCode(), merchant.getPosName());
+        return success();
+    }
+
+    /**
+     * 获取商户pos机名称
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/getPosName")
+    @ApiOperation(value = "获取商户pos机名称")
+    public ResultDTO getPosName(@RequestBody MerchantJO merchant) {
+        String posName = merchantService.getPosName(merchant.getSnCode());
+        return success(posName);
     }
 }
