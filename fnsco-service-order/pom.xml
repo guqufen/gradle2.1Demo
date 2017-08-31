@@ -58,16 +58,7 @@
 			<artifactId>fnsco-service-bigdata</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi</artifactId>
-			<version>3.16</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml-schemas</artifactId>
-			<version>3.16</version>
-		</dependency>
+		
 		<!-- Junit -->
 		<dependency>
 			<groupId>junit</groupId>

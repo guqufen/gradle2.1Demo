@@ -1,9 +1,6 @@
 package net.fnsco.core.utils;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import com.google.common.base.Strings;
 
@@ -58,6 +55,7 @@ public class NumberUtil {
         }
         BigDecimal bd1 = new BigDecimal(turnover);
         BigDecimal bd2 = new BigDecimal(orderNum);
-        return bd1.subtract(bd2);
+        return bd1.subtract(bd2).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
+    
 }
