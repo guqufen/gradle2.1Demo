@@ -13,9 +13,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
+import net.fnsco.bigdata.comm.ServiceConstant;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.order.comm.ServiceConstant;
 
 /**
  * 交易流水处理

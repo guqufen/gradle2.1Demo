@@ -1,4 +1,4 @@
-package net.fnsco.service;
+package net.fnsco.web;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -9,37 +9,22 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.auth.service.UserTokenService;
+import net.fnsco.core.base.BaseService;
 import net.fnsco.core.constants.CoreConstants;
-import net.fnsco.freamwork.business.AppService;
-import net.fnsco.freamwork.business.AppUser1DTO;
 import net.fnsco.freamwork.business.WebService;
 import net.fnsco.freamwork.business.WebUserDTO;
-import net.fnsco.withhold.service.sys.entity.UserDO;
+import net.fnsco.order.api.sysuser.SysUserService;
+import net.fnsco.order.service.domain.SysUser;
 
-/**
- * 判断是否强制登录获取用户信息
- * @desc 
- * @author   sxf
- * @version  
- * @since    Ver 1.1
- * @Date	 2017年7月27日 上午10:54:30
- *
- */
 @Service
-public class UserServiceImpl implements WebService, AppService {
+public class WebUserServiceImpl extends BaseService implements WebService {
+    
     @Autowired
-    private net.fnsco.withhold.service.sys.UserService userService;
-
-    /**
-     * 判断是否强制登录获取用户信息
-     * (non-Javadoc)
-     * @see net.fnsco.freamwork.business.UserService#getUserInfo(java.lang.String)
-     */
-    @Override
-    public AppUser1DTO getUserInfo(String userId) {
-        return null;
-
-    }
+    private SysUserService sysUserService;
+    @Autowired
+    private UserTokenService userTokenService;
+    
 
     @Override
     public WebUserDTO getCookieUser(HttpServletRequest request) {
@@ -49,15 +34,19 @@ public class UserServiceImpl implements WebService, AppService {
             return user;
         }
         String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#") + 1, cookeiUser.toString().length());
-        UserDO temp = userService.getUserByName(userName);
+        SysUser temp = sysUserService.getUserByName(userName);
         if (temp != null) {
             user = new WebUserDTO();
-            setSessionUser(request, temp, temp.getId());
+            user.setId(temp.getId());
+            user.setName(temp.getName());
+            String tokenId = userTokenService.createToken(user.getId());
+            user.setTokenId(tokenId);
+            setSessionUser(request, user, user.getId());
         }
         return user;
     }
 
-    public void setSessionUser(HttpServletRequest request, Object userDO, Integer userId) {
+    private void setSessionUser(HttpServletRequest request, Object userDO, Integer userId) {
         HttpSession session = request.getSession();
         session.setAttribute(CoreConstants.SESSION_USER_KEY, userDO);
         session.setAttribute(CoreConstants.SESSION_USERID, userId);

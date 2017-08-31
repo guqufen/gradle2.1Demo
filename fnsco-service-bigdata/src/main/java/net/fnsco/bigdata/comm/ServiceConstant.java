@@ -1,4 +1,4 @@
-package net.fnsco.order.comm;
+package net.fnsco.bigdata.comm;
 
 import java.util.HashMap;
 import java.util.Map;
