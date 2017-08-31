@@ -42,7 +42,7 @@ public class FinanceReportDTO extends DTO{
     /**
      * 订单数
      */
-    private Integer orderNum;
+    private Integer totalOrderNum;
     
     /**
      * 结算额
@@ -143,25 +143,25 @@ public class FinanceReportDTO extends DTO{
     }
 
     /**
-     * orderNum
+     * totalOrderNum
      *
-     * @return  the orderNum
+     * @return  the totalOrderNum
      * @since   CodingExample Ver 1.0
     */
     
-    public Integer getOrderNum() {
-        return orderNum;
+    public Integer getTotalOrderNum() {
+        return totalOrderNum;
     }
 
     /**
-     * orderNum
+     * totalOrderNum
      *
-     * @param   orderNum    the orderNum to set
+     * @param   totalOrderNum    the totalOrderNum to set
      * @since   CodingExample Ver 1.0
      */
     
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
+    public void setTotalOrderNum(Integer totalOrderNum) {
+        this.totalOrderNum = totalOrderNum;
     }
 
     /**

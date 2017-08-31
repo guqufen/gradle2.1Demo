@@ -167,14 +167,19 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         if(Strings.isNullOrEmpty(terminalCode)){
             return result;
         }
-        MerchantTerminal merTer = merchantTerminalDao.selectByTerminalCode(terminalCode);
-        /**
-         * 根据交易渠道类型来计算费率。
-         */
         String paySubType = tradeData.getPaySubType();
         if(Strings.isNullOrEmpty(paySubType)){
             return result;
         }
+        
+        /**
+         * 根据交易渠道类型来计算费率。
+         */
+        MerchantTerminal merTer = merchantTerminalDao.selectByTerminalCode(terminalCode);
+        if(null == merTer){
+            return result;
+        }
+        
         //刷卡需要区分借记卡和贷记卡
         if(ConstantEnum.PayTypeEnum.PAYBYCARD.getCode().equals(paySubType)){
             String dcType = tradeData.getDcType();
@@ -808,7 +813,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         
         if(null != turnoverData){
             resultDto.setTotalTurnover(NumberUtil.divide(turnoverData.getTurnover(), 100).doubleValue()+"");
-            resultDto.setOrderNum(turnoverData.getOrderNum());
+            resultDto.setTotalOrderNum(turnoverData.getOrderNum());
             /**
              * 总应结金额=总额-手术费
              */
@@ -817,7 +822,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         }else{
             turnoverData = new FinanceTurnoverDTO();
             resultDto.setTotalTurnover("0.00");
-            resultDto.setOrderNum(0);
+            resultDto.setTotalOrderNum(0);
             resultDto.setTotalSettlementAmount("0.00");
         }
        

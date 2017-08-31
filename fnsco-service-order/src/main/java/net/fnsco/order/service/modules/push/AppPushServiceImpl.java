@@ -9,6 +9,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -22,11 +25,14 @@ import net.fnsco.core.push.ios.IOSListcast;
 import net.fnsco.core.push.ios.IOSUnicast;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.PushMsgInfoDTO;
 import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
 import net.fnsco.order.api.sysappmsg.SysMsgAppFailService;
 import net.fnsco.order.api.sysappmsg.SysMsgAppSuccService;
+import net.fnsco.order.service.dao.master.AppUserDao;
+import net.fnsco.order.service.dao.master.trade.TradeByDayDao;
 import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.order.service.domain.SysAppMessage;
 import net.fnsco.order.service.domain.SysMsgAppFail;
@@ -58,6 +64,15 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
     
     @Autowired
     private SysMsgAppFailService sysMsgAppFailService;
+    
+    @Autowired
+    private AppUserDao appuUserDao;
+    
+    @Autowired
+    private TradeByDayDao  tradeByDayDao;
+    
+    @Autowired
+    private AppPushHelper appPushHelper;
     
     /**
      * (non-Javadoc) 安卓推送--列播
@@ -423,14 +438,49 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                       }
                     
                 } catch (Exception e) {
-                    
                     logger.error("第"+frequencyNum+"次重试推送ios消息异常"+e);
                     e.printStackTrace();
-                    
                 }
             }
             sysMsgAppFailService.updateByPrimaryKeySelective(sysMsgAppFail);
         }
     }
-
+    
+    /**
+     * (non-Javadoc)推送周报数据、推送给所有店主角色在线且本周之前有过交易数据的用户
+     * @see net.fnsco.order.api.push.AppPushService#sendWeeklyDataMgs()
+     * @author tangliang
+     * @date 2017年8月31日 上午11:43:37
+     */
+    @Transactional
+    @Override
+    public void sendWeeklyDataMgs() {
+        //查询所有是店主角色且在线的APP用户
+        List<AppUser> appUsers = appuUserDao.selectAllInlineByRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        String lastSunday = DateUtils.getSundayStr(-1);
+        
+        String msgContent = "【周报】上周的周报已经生成,轻轻一点即可查看详情";
+        SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "周报");
+        if(message.getId() == null){
+            logger.error("入库信息实体异常");
+            return;
+        }
+        
+        for (AppUser appUser : appUsers) {
+            String minDate = tradeByDayDao.selectMinTradeDateByUserId(appUser.getId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+            //如果上周日之前没有产生过交易数据，不推送
+            if(Strings.isNullOrEmpty(minDate) && minDate.compareTo(lastSunday) >= 0){
+                continue;
+            } 
+            
+            Integer deviceType = appUser.getDeviceType();
+            //不在线用户不推送
+            if(null == deviceType ||deviceType == 0){
+                continue;
+            }
+            //分别推送安卓和IOS消息且保存发送结果
+            appPushHelper.pushNewMessage(appUser, message);
+        }
+    }
+    
 }
