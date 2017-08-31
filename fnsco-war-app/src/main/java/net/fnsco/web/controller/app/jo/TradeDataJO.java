@@ -10,8 +10,8 @@ public class TradeDataJO extends JO {
     private String statusName;
     private String payType;
     private String payTypeName;
-    private String txnType;//交易类型1消费2撤销
-    private String cancel;//订单是否取消
+    private String txnType;      //交易类型1消费2撤销
+    private String cancel;       //订单是否取消
     //交易详情
     private String innerCode;
     //商户名
@@ -31,21 +31,46 @@ public class TradeDataJO extends JO {
     //卡号
     private String certifyId;
     //订单号
-    private String       orderNo;
+    private String orderNo;
     //订单创建时间
-    private String       orderTime;
+    private String orderTime;
     //失败原因
-    private String       respMsg;
+    private String respMsg;
     //扫码订单号
-    private String       orderIdScan;
+    private String orderIdScan;
+    //pos机sn号
+    private String snCode;
     
+
+    /**
+     * snCode
+     *
+     * @return  the snCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getSnCode() {
+        return snCode;
+    }
+
+    /**
+     * snCode
+     *
+     * @param   snCode    the snCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setSnCode(String snCode) {
+        this.snCode = snCode;
+    }
+
     /**
      * cancel
      *
      * @return  the cancel
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getCancel() {
         return cancel;
     }
@@ -56,7 +81,7 @@ public class TradeDataJO extends JO {
      * @param   cancel    the cancel to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setCancel(String cancel) {
         this.cancel = cancel;
     }
@@ -67,7 +92,7 @@ public class TradeDataJO extends JO {
      * @return  the txnType
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getTxnType() {
         return txnType;
     }
@@ -78,7 +103,7 @@ public class TradeDataJO extends JO {
      * @param   txnType    the txnType to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setTxnType(String txnType) {
         this.txnType = txnType;
     }
@@ -89,7 +114,7 @@ public class TradeDataJO extends JO {
      * @return  the orderIdScan
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getOrderIdScan() {
         return orderIdScan;
     }
@@ -100,7 +125,7 @@ public class TradeDataJO extends JO {
      * @param   orderIdScan    the orderIdScan to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setOrderIdScan(String orderIdScan) {
         this.orderIdScan = orderIdScan;
     }
@@ -111,7 +136,7 @@ public class TradeDataJO extends JO {
      * @return  the respMsg
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getRespMsg() {
         return respMsg;
     }
@@ -122,7 +147,7 @@ public class TradeDataJO extends JO {
      * @param   respMsg    the respMsg to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setRespMsg(String respMsg) {
         this.respMsg = respMsg;
     }
@@ -133,7 +158,7 @@ public class TradeDataJO extends JO {
      * @return  the orderNo
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getOrderNo() {
         return orderNo;
     }
@@ -144,7 +169,7 @@ public class TradeDataJO extends JO {
      * @param   orderNo    the orderNo to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
     }
@@ -155,7 +180,7 @@ public class TradeDataJO extends JO {
      * @return  the orderTime
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getOrderTime() {
         return orderTime;
     }
@@ -166,7 +191,7 @@ public class TradeDataJO extends JO {
      * @param   orderTime    the orderTime to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setOrderTime(String orderTime) {
         this.orderTime = orderTime;
     }
@@ -177,7 +202,7 @@ public class TradeDataJO extends JO {
      * @return  the certifyId
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getCertifyId() {
         return certifyId;
     }
@@ -188,7 +213,7 @@ public class TradeDataJO extends JO {
      * @param   certifyId    the certifyId to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setCertifyId(String certifyId) {
         this.certifyId = certifyId;
     }

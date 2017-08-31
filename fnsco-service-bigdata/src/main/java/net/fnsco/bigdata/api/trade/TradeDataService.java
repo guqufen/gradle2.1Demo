@@ -3,6 +3,7 @@ package net.fnsco.bigdata.api.trade;
 import java.util.List;
 
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
+import net.fnsco.bigdata.api.dto.TradeDataPageDTO;
 import net.fnsco.bigdata.api.dto.TradeDataQueryDTO;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.ResultPageDTO;
@@ -16,7 +17,7 @@ public interface TradeDataService {
      * @param merchantCore
      * @return
      */
-    ResultPageDTO<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore);
+    TradeDataPageDTO<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore);
 
     TradeData queryByTradeId(String tradeId);
 

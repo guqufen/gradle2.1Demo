@@ -14,6 +14,7 @@ import net.fnsco.bigdata.api.dto.PosInfoDTO;
 import net.fnsco.bigdata.api.dto.PosListDTO;
 import net.fnsco.bigdata.api.dto.TerminalDetailDTO;
 import net.fnsco.bigdata.api.dto.TerminalsDTO;
+import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.ResultDTO;
 
 /**@desc 商户相关服务接口
@@ -110,4 +111,15 @@ public interface MerchantService {
      * @return boolean    DOM对象
      */
     boolean updatePosInfo(TerminalsDTO dto);
+    /**
+     * 
+     * getTerminalDetailByCode:(根据终端号查询终端信息)
+     *
+     * @param terminalCode
+     * @return   TerminalsDTO    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    MerchantTerminal getTerminalDetailByCode(String terminalCode);
+    
 }
