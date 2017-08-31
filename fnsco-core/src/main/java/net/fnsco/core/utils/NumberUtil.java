@@ -1,6 +1,11 @@
 package net.fnsco.core.utils;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import com.google.common.base.Strings;
 
 /**
  * @desc 数字工具类
@@ -41,4 +46,18 @@ public class NumberUtil {
         return bd1.multiply(bd2);
     }
     
+    public static BigDecimal divide(String turnover, Integer orderNum) {
+        BigDecimal bd1 = new BigDecimal(turnover);
+        BigDecimal bd2 = new BigDecimal(orderNum);
+        return bd1.divide(bd2, 2, BigDecimal.ROUND_HALF_UP);
+    }
+    
+    public static BigDecimal subtract(String turnover, String orderNum) {
+        if(Strings.isNullOrEmpty(turnover)||Strings.isNullOrEmpty(orderNum)){
+            return new BigDecimal(0);
+        }
+        BigDecimal bd1 = new BigDecimal(turnover);
+        BigDecimal bd2 = new BigDecimal(orderNum);
+        return bd1.subtract(bd2);
+    }
 }
