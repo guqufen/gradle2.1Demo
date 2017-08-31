@@ -246,5 +246,16 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     public List<PosInfoDTO> getAllReportPos(MerchantDTO merchantDTO) {
         return merchantPosDao.selectAllByUserId(merchantDTO.getUserId());
     }
-
+    /**
+     * 
+     * (non-Javadoc)
+     * @see net.fnsco.bigdata.api.merchant.MerchantService#getTerminalDetailByCode(java.lang.String)
+     * @author songxf
+     * @date 2017年8月31日 下午5:01:20
+     */
+    @Override
+    public MerchantTerminal getTerminalDetailByCode(String terminalCode){
+        MerchantTerminal merchantTerminal = merchantTerminalDao.selectByTerminalCode(terminalCode);
+        return merchantTerminal;
+    }
 }
