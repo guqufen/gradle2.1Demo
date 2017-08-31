@@ -28,7 +28,6 @@ public class TradeReportInstallController extends BaseController {
     
     @RequestMapping("/install")
     @ResponseBody
-    @RequiresPermissions(value = { "m:trade:list" })
     public ResultDTO<Object> installReport(String startTime,String endTime){
         if(Strings.isNullOrEmpty(startTime)||Strings.isNullOrEmpty(endTime)){
             return ResultDTO.fail();

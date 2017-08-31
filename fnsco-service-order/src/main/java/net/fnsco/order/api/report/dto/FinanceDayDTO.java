@@ -40,6 +40,33 @@ public class FinanceDayDTO extends DTO {
     private String settlementAmount;
     
     /**
+     * 订单数量
+     */
+    private Integer orderNum;
+    
+    /**
+     * orderNum
+     *
+     * @return  the orderNum
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    /**
+     * orderNum
+     *
+     * @param   orderNum    the orderNum to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    /**
      * tradeDate
      *
      * @return  the tradeDate

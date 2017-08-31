@@ -711,7 +711,7 @@
   </select>
   <!-- 条件查询集合 ,返回临时表数据-->
   <select id="queryTempByCondition" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" resultMap="BaseResultMap">
-    select inner_code,amt,pay_sub_type,time_stamp  from t_trade_data
+    select <include refid="Base_Column_List" />  from t_trade_data
     <where>
       <if test="startTime != null and startTime !=''" >
         	AND time_stamp >= #{startTime,jdbcType=VARCHAR}
