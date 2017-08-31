@@ -181,8 +181,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         //查询总金额
         Map map = tradeListDAO.querySumByCondition(tradeData);
         if (map != null) {
-            Double count = (Double) map.get("count");
-            Double amtSum = (Double) map.get("amt");
+            Long count = (Long) map.get("count");
+            Long amtSum = (Long) map.get("amt");
         }
         return result;
     }

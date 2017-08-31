@@ -14,8 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.common.base.Strings;
 
 import net.fnsco.freamwork.aop.OutWriterUtil;
+import net.fnsco.freamwork.business.AppService;
 import net.fnsco.freamwork.business.AppUser1DTO;
-import net.fnsco.freamwork.business.UserService;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.freamwork.comm.Md5Util;
 
@@ -33,7 +33,7 @@ public class AppInterceptor implements HandlerInterceptor {
     private Environment env;
 
     @Autowired
-    private UserService userService;
+    private AppService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
