@@ -50,13 +50,13 @@ public class AppPushHelper extends BaseService {
      * @date      2017年8月31日 下午2:35:48
      * @return SysAppMessage    DOM对象
      */
-    public SysAppMessage insertIntoDBSysAppMessage(String msgContent, String msgSubject) {
+    public SysAppMessage insertIntoDBSysAppMessage(String msgContent, String msgSubject,Integer msgType) {
         SysAppMessage message = new SysAppMessage();
         message.setBusType(0);
         message.setModifyUserId(1);
         message.setMsgSubject("周报");
         message.setMsgSubTitle(msgContent);
-        message.setMsgType(1);
+        message.setMsgType(msgType);
         message.setPushType(1);
         message.setSendType(1);
         message.setSendTime(new Date());
