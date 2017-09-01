@@ -34,13 +34,18 @@
                         <input type="text" class="form-control" id="merName" name="merName" placeholder="请输入需要搜索的商户名称"/>
                     </div>
                     <div class="col-sm-8 query-time">
-                        <label class="control-label" for="txt_search_price">发送日期:</label>
-                        <input type="text" value="" class="form-control" id="datetimepicker1" name="startSendTime"> -
-                        <input type="text" value="" class="form-control" id="datetimepicker2" name="endSendTime">
+                        <label class="control-label" for="txt_search_price">支付日期:</label>
+                        <input type="text" value="" class="form-control" id="datetimepicker3" name="startTime"> -
+                        <input type="text" value="" class="form-control" id="datetimepicker4" name="endTime">
                     </div>
                     <div class="col-sm-4">
                         <label class="control-label" for="txt_search_price">交易金额:</label>
                         <input type="text" class="form-control" id="txt_search_price" name="amt" placeholder="请输入需要搜索的金额"/>
+                    </div>
+                    <div class="col-sm-8 query-time">
+                        <label class="control-label" for="txt_search_price">发送日期:</label>
+                        <input type="text" value="" class="form-control" id="datetimepicker1" name="startSendTime"> -
+                        <input type="text" value="" class="form-control" id="datetimepicker2" name="endSendTime">
                     </div>
                 </div>
                 <div class="col-sm-3" style="text-align: right;">
@@ -125,7 +130,7 @@
             title: '结算商户号'
         },{
             field: 'timeStamp',
-            title: '交易时间',
+            title: '支付时间',
             formatter:formatTime
         },{
             field: 'payType',
@@ -139,6 +144,10 @@
         },{
             field: 'orderTime',
             title: '订单时间',
+            formatter:formatTime
+        },{
+            field: 'sendTime',
+            title: '发送时间',
             formatter:formatTime
         },{
             field: 'termId',
@@ -289,7 +298,9 @@
  			   merName:$.trim($('#merName').val()),
  			   amt:$.trim($('#txt_search_price').val()),
  			   startSendTime:$('#datetimepicker1').val(),
- 			  endSendTime:$('#datetimepicker2').val()
+ 			   endSendTime:$('#datetimepicker2').val(),
+ 			   startTime:$('#datetimepicker3').val(),
+ 			   endTime:$('#datetimepicker4').val()
  	   }
  	   return param;
     }
@@ -325,6 +336,28 @@
         minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
     });
     $('#datetimepicker2').datetimepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayBtn: true,
+        todayHighlight: true,
+        showMeridian: true,
+        pickerPosition: "bottom-left",
+        language: 'zh-CN',//中文，需要引用zh-CN.js包
+        startView: 2,//月视图
+        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+    });
+    $('#datetimepicker3').datetimepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayBtn: true,
+        todayHighlight: true,
+        showMeridian: true,
+        pickerPosition: "bottom-left",
+        language: 'zh-CN',//中文，需要引用zh-CN.js包
+        startView: 2,//月视图
+        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+    });
+    $('#datetimepicker4').datetimepicker({
         format: 'yyyy-mm-dd',
         autoclose: true,
         todayBtn: true,
