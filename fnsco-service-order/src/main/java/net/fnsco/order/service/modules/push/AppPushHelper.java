@@ -124,12 +124,15 @@ public class AppPushHelper extends BaseService {
     public void pushNewMessage(AppUser appUser, SysAppMessage message,boolean weekLy) {
 
         Integer deviceType = appUser.getDeviceType();
-        Map<String,String> extraField = Maps.newHashMap();
+        Map<String,String> extraField = null;
         if(weekLy){
+            extraField = Maps.newHashMap();
             extraField.put("sendTime", DateUtils.dateFormatToStr(message.getSendTime()));
             extraField.put("msgId", message.getId().toString());
             extraField.put("weeklyStartDate", DateUtils.strFormatToStr(DateUtils.getMondayStr(-1)));
             extraField.put("weeklyEndDate", DateUtils.strFormatToStr(DateUtils.getSundayStr(-1)));
+            extraField.put("msgType", "0");
+            extraField.put("titleType", "系统消息");
         }
         
         //分别推送安卓和IOS消息且保存发送结果

@@ -148,6 +148,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     @Override
     public List<MerchantCore> queryAllByCondition(MerchantCore merchantCore) {
         // TODO Auto-generated method stub
+        merchantCore.setStatus(1);
         return merchantCoreDao.queryListByCondition(merchantCore);
     }
 
