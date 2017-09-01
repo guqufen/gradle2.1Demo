@@ -1,9 +1,13 @@
 package net.fnsco.core.utils;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -44,7 +48,45 @@ public class ReadExcel {
 	public String getErrorInfo() {
 		return errorMsg;
 	}
-
+	
+	/**
+     * 下载模板
+     *
+     * @param filePath
+     * @param response
+     * @throws IOException
+     */
+    public static void downTemplate(String filePath, String fileName, HttpServletResponse response) throws IOException {
+        // 设置response的编码方式
+        response.setContentType("application/x-msdownload");
+        // 写明要下载的文件的大小
+        response.setHeader("Content-Disposition", "attachment;filename=" + new String(fileName.getBytes(), "iso8859-1"));
+        FileInputStream in = null;
+        OutputStream out = null;
+        
+        try {
+        	in = new FileInputStream(filePath);
+        	out = response.getOutputStream();
+            // 创建缓冲区
+            byte buffer[] = new byte[1024];
+            int len = 0;
+            // 循环将输入流中的内容读取到缓冲区当中
+            while ((len = in.read(buffer)) > 0) {
+                // 输出缓冲区的内容到浏览器，实现文件下载
+                out.write(buffer, 0, len);
+            }
+        } finally {
+        	if (in!=null) {
+        		// 关闭文件输入流
+        		in.close();
+        	}
+        	if (out!=null) {
+        		// 关闭输出流
+        		out.close();
+        	}
+        }
+    }
+	
 	/**
 	 * 验证EXCEL文件
 	 * 
