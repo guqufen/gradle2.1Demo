@@ -85,6 +85,7 @@ public class WebAccessLogFilter extends RequestContextFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestURI = getRequestURI(request, false);
+        //logger.error("2当前url"+requestURI);
         if (!filterApplied || requestURI.indexOf(".") > 0) {
             filterChain.doFilter(request, response);
             return;

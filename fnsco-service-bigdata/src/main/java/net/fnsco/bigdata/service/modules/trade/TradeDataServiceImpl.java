@@ -1,5 +1,6 @@
 package net.fnsco.bigdata.service.modules.trade;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import com.google.common.collect.Lists;
 
 import net.fnsco.bigdata.api.dto.TerminalInfoDTO;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
+import net.fnsco.bigdata.api.dto.TradeDataPageDTO;
 import net.fnsco.bigdata.api.dto.TradeDataQueryDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
@@ -129,8 +131,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      * @see net.fnsco.bigdata.api.trade.TradeDataService#queryAllByCondition(net.fnsco.order.api.dto.TradeDataQueryDTO)
      */
     @Override
-    public ResultPageDTO<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore) {
-        ResultPageDTO<TradeData> result = new ResultPageDTO<TradeData>(0, null);
+    public TradeDataPageDTO<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore) {
+        TradeDataPageDTO<TradeData> result = new TradeDataPageDTO<TradeData>(0, null);
         result.setCurrentPage(merchantCore.getCurrentPageNum());
         TradeData tradeData = new TradeData();
         //设置交易时间
@@ -158,7 +160,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         Integer appUserId = merchantCore.getUserId();
         List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
         result.setMerTotal(tempList.size());
-
+        result.setCount("0");
+        result.setAmtTot("0.00");
         if (CollectionUtils.isEmpty(terminalList)) {//无终端则查询按商户查询
             List<String> innerCodeList = Lists.newArrayList();
             if (!CollectionUtils.isEmpty(tempList)) {
@@ -180,10 +183,22 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         result.setCurrentPage(merchantCore.getCurrentPageNum());
         //查询总金额
         Map map = tradeListDAO.querySumByCondition(tradeData);
+        Long count = null;
+        Double amtSum = null;
+        String amtSumStr = "0.00";
         if (map != null) {
-            Double count = (Double) map.get("count");
-            Double amtSum = (Double) map.get("amt");
+            count = (Long) map.get("count");
+            amtSum = (Double) map.get("amt");
         }
+        if (count != null) {
+            result.setCount(String.valueOf(count));
+        }
+        if (amtSum != null) {
+            DecimalFormat df = new DecimalFormat("#0.00");
+            amtSum = amtSum / 100;
+            amtSumStr = df.format(amtSum);
+        }
+        result.setAmtTot(amtSumStr);
         return result;
     }
 

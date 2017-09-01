@@ -13,7 +13,7 @@ import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.fnsco.freamwork.business.UserService;
+import net.fnsco.freamwork.business.WebService;
 import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.freamwork.spring.SpringUtils;
@@ -92,7 +92,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
                 }
             }
             if (flag) {
-                UserService userService = (UserService) SpringUtils.getBean("userServiceImpl");
+                WebService userService = (WebService) SpringUtils.getBean("webUserServiceImpl");
                 WebUserDTO user = userService.getCookieUser(httpRequest);
                 if (null != user) {
                     token = user.getTokenId();

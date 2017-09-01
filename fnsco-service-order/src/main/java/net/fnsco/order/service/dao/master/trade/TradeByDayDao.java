@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.order.api.dto.TradeDayDTO;
 import net.fnsco.order.api.dto.TurnoverDTO;
+import net.fnsco.order.api.report.dto.FinanceDayDTO;
+import net.fnsco.order.api.report.dto.FinanceTurnoverDTO;
 import net.fnsco.order.service.domain.trade.TradeByDay;
 /**
  * @desc
@@ -47,6 +49,15 @@ public interface TradeByDayDao {
      * @since  CodingExample　Ver 1.1
      */
     TurnoverDTO selectTradeDayDataByTradeDate(TradeByDay record);
+    /**
+     * selectFinanceByRecord:(这里用一句话描述这个方法的作用)
+     * @param record
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月30日 下午4:14:33
+     * @return FinanceDayDTO    DOM对象
+     */
+    FinanceTurnoverDTO selectFinanceByRecord(TradeByDay record);
     
     /**
      * selectWeekLyTradeData:(这里用一句话描述这个方法的作用)查找周报数据（只有店长有周报数据）
@@ -92,4 +103,13 @@ public interface TradeByDayDao {
      * @since  CodingExample　Ver 1.1
      */
     String selectMinTradeDateByInnerCode(@Param("innerCode")String innerCode,@Param("roleId")String roleId);
+    /**
+     * selectFinaceByRecord:(按照日期位组查询统计)
+     * @param record
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月30日 下午4:30:40
+     * @return List<FinanceDayDTO>    DOM对象
+     */
+    List<FinanceDayDTO> selectFinaceByRecord(TradeByDay record);
 }

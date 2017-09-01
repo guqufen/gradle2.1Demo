@@ -195,12 +195,12 @@ public class TradeReportController extends BaseController{
      */
     @RequestMapping("/queryFinanceTrade")
     @ApiOperation(value = "APP获取财务信息接口")
-    public ResultDTO<FinanceReportDTO>  queryFinanceTrade(TradeReportDTO tradeReportDTO){
+    public ResultDTO<FinanceReportDTO>  queryFinanceTrade(@RequestBody TradeReportDTO tradeReportDTO){
         if(Strings.isNullOrEmpty(tradeReportDTO.getInnerCode()) && null  == tradeReportDTO.getUserId()){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
         formatInputDate(tradeReportDTO, false);//格式化入参
-        PeakTradeDTO data = tradeReportService.queryPeakTrade(tradeReportDTO);
+        FinanceReportDTO data = tradeReportService.queryFinanceTrade(tradeReportDTO);
         return ResultDTO.success(data);
     }
 }

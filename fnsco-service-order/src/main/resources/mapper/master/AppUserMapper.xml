@@ -304,4 +304,11 @@
 		modify_time=#{modifyTime,jdbcType=TIMESTAMP},state=#{state,jdbcType=INTEGER},forced_login_out=#{forcedLoginOut,jdbcType=INTEGER}
   	  	where id = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 查询某种角色的所有用户信息 -->
+  <select id="selectAllInlineByRoleId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+		from m_app_user
+		WHERE state = 1 and device_token &lt;&gt; '' and device_token is not null and id IN ( SELECT app_user_id FROM u_app_user_merchant WHERE role_id = #{roleId})
+  </select>
 </mapper>
