@@ -25,6 +25,28 @@ public interface MerchantService {
     String getMerCode(String merNum, String channelType);
 
     /**
+     * 
+     * updatePosName:(更新pos机名称，拉卡拉机器使用)
+     *
+     * @param snCode
+     * @param posName   void    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    void updatePosName(String snCode, String posName);
+
+    /**
+     * 
+     * getPosName:(查询pos机名称)
+     *
+     * @param snCode
+     * @return   String    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    String getPosName(String snCode);
+
+    /**
      * getMerchantsCoreByUserId:(这里用一句话描述这个方法的作用) 根据用户ID 查询商户列表
      *
      * @param userId
@@ -46,7 +68,7 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<List<MerTerminalsDTO>> getMerchantTerminalByUserId(Integer userId);
-    
+
     /**
      * 
      * getMerChantDetailById:(这里用一句话描述这个方法的作用) 根据商家ID获取商家详细信息
@@ -58,7 +80,7 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<MerChantCoreDetailDTO> getMerChantDetailById(Integer merId);
-    
+
     /**
      * getTerminalDetailByTerId:(这里用一句话描述这个方法的作用)根据设备ID查询详情
      *
@@ -69,10 +91,9 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<TerminalDetailDTO> getTerminalDetailByTerId(Integer terId);
-    
-    
+
     ResultDTO<TerminalsDTO> updateTerminal(TerminalsDTO terminalsDTO);
-    
+
     /**
      * getAllPosInfo:(这里用一句话描述这个方法的作用)获取POS机列表
      * @param merchantDTO
@@ -82,7 +103,7 @@ public interface MerchantService {
      * @return List<PosListDTO>    DOM对象
      */
     List<PosListDTO> getAllPosInfo(MerchantDTO merchantDTO);
-    
+
     /**
      * getAllReportPos:(这里用一句话描述这个方法的作用)查询用户下面所有的POS列表信息
      * @param merchantDTO
@@ -92,6 +113,7 @@ public interface MerchantService {
      * @return List<PosInfoDTO>    DOM对象
      */
     List<PosInfoDTO> getAllReportPos(MerchantDTO merchantDTO);
+
     /**
      * getPosDetail:(这里用一句话描述这个方法的作用)根据POSid查询详情
      * @param posId
@@ -101,7 +123,7 @@ public interface MerchantService {
      * @return PosDetailDTO    DOM对象
      */
     PosDetailDTO getPosDetail(Integer posId);
-    
+
     /**
      * updatePosInfo:(这里用一句话描述这个方法的作用)更新POS设备信息
      * @param terminalJO
@@ -111,6 +133,7 @@ public interface MerchantService {
      * @return boolean    DOM对象
      */
     boolean updatePosInfo(TerminalsDTO dto);
+
     /**
      * 
      * getTerminalDetailByCode:(根据终端号查询终端信息)
@@ -121,5 +144,5 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     MerchantTerminal getTerminalDetailByCode(String terminalCode);
-    
+
 }
