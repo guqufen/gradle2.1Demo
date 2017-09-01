@@ -8,6 +8,13 @@ public class BandListDTO extends DTO{
     private Integer userId;
     private String  userName;
     private String isShopkeeper;
+    public String getIsDelete() {
+        return isDelete;
+    }
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
+    }
+    private String isDelete;
     /**
      * userName
      *
