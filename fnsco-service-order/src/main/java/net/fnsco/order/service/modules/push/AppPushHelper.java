@@ -128,8 +128,8 @@ public class AppPushHelper extends BaseService {
         if(weekLy){
             extraField.put("sendTime", DateUtils.dateFormatToStr(message.getSendTime()));
             extraField.put("msgId", message.getId().toString());
-            extraField.put("weeklyStartDate", DateUtils.getMondayStr(-1));
-            extraField.put("weeklyEndDate", DateUtils.getSundayStr(-1));
+            extraField.put("weeklyStartDate", DateUtils.strFormatToStr(DateUtils.getMondayStr(-1)));
+            extraField.put("weeklyEndDate", DateUtils.strFormatToStr(DateUtils.getSundayStr(-1)));
         }
         
         //分别推送安卓和IOS消息且保存发送结果
