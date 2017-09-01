@@ -364,7 +364,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         AppUser appUser = appUserDao.selectAppUserById(userId);
         newPhone = appUser.getMobile();
         String msgContent = "【新店员加入】新店员"+newPhone+"加入了"+merchantCore.getMerName()+"店";
-        SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "新店员加入");
+        SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "新店员加入",1);
         
         if(message.getId() != null){
             //组装推送信息
@@ -375,7 +375,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
                     continue;
                 }
                 //推送IOS和android消息
-                appPushHelper.pushNewMessage(user, message);
+                appPushHelper.pushNewMessage(user, message,false);
             }
         }
         
