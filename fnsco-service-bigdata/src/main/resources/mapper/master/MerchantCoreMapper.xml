@@ -539,7 +539,9 @@
       <if test="modifyTime != null" >
         AND modify_time = #{modifyTime,jdbcType=TIMESTAMP}
       </if>
-        AND status = 1
+      <if test="status != null" >
+        AND status = #{status,jdbcType=INTEGER}
+      </if>
    	 </where>
   </select>
   <!-- 根据ID批量删除 -->

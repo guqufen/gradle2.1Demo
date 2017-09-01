@@ -156,6 +156,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         //MerchantCore表
         MerchantCore merchantCore = new MerchantCore();
         merchantCore.setLegalPersonMobile(appUserDTO.getMobile());
+        merchantCore.setStatus(1);
         List<MerchantCore> list = merchantCoreDao.queryListByCondition(merchantCore);
         if (!CollectionUtils.isEmpty(list)) {
             merchantNums2 = list.size();

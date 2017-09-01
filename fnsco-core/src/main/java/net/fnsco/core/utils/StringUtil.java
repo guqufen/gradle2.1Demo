@@ -61,6 +61,16 @@ public class StringUtil {
         return result.toString();
     }
 
+ // @描述：是否是2003的excel，返回true是2003 
+    public static boolean isExcel2003(String filePath)  {  
+         return filePath.matches("^.+\\.(?i)(xls)$");  
+     }  
+   
+    //@描述：是否是2007的excel，返回true是2007 
+    public static boolean isExcel2007(String filePath)  {  
+         return filePath.matches("^.+\\.(?i)(xlsx)$");  
+     }  
+    
     public static void main(String[] args) {
         //被替换关键字的的数据源 
         Map<String, Object> tokens = new HashMap<String, Object>();

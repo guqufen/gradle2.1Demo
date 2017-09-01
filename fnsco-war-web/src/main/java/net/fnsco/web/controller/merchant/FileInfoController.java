@@ -5,12 +5,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +29,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.merchant.MerchantInfoService;
+import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileTempDao;
+import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantFileTemp;
 import net.fnsco.core.base.BaseController;
@@ -56,21 +60,35 @@ public class FileInfoController extends BaseController{
 	
 	@Autowired
     private MerchantFileDao merchantFileDao;
-
-	// 列表页
-	@RequestMapping("/list")
-	public String list() {
-		return "ups/control/fileUploadView";
-	}
 	
+	@Autowired
+	private MerchantCoreDao merchantCoreDao;
+
 	/**
-	 * 获取innocode
-	 * @return
+	 * 
+	 * getInnoCode:(获取innocode，为了防止重复，需要在获取最新的innercode后去对比，如果没有才能作为最新的innerCode,否则重新获取校验，一直到唯一)
+	 * @return    设定文件
+	 * @author    tangliang
+	 * @date      2017年9月1日 下午1:31:07
+	 * @return String    DOM对象
 	 */
 	@ResponseBody
 	@RequestMapping("/getInnoCode")
 	public String getInnoCode(){
-		return CodeUtil.generateMerchantCode("F");
+	    
+	    String innerCode = CodeUtil.generateMerchantCode("F");
+	    MerchantCore record = new MerchantCore();
+	    record.setInnerCode(innerCode);
+	    boolean stop = true;
+	    
+	    while(stop){
+	        List<MerchantCore> datas  = merchantCoreDao.queryListByCondition(record);
+	        if(CollectionUtils.isEmpty(datas)){
+	            stop = false;
+	        }
+	    }
+	    
+		return innerCode;
 	}
 	
 	/**

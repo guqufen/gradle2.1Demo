@@ -130,5 +130,10 @@ public interface MerchantTerminalDao {
      * @return List<MerchantTerminal>    DOM对象
      */
     List<MerchantTerminal> queryAllTerByPosId(@Param("posId")Integer posId);
-    
+    /**
+     * 通过终端号查询sncode
+     * @param id
+      * @return
+     */
+     String querySnCode(@Param("id") String id,@Param("code") String code);
 }
