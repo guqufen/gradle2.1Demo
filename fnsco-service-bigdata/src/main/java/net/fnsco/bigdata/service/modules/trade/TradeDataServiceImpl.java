@@ -51,7 +51,6 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     private MerchantCoreDao     merchantCoreDao;
     @Autowired
     private MerchantTerminalDao merchantTerminalDao;
-
     /**
      * 保存交易流水
      */
@@ -245,9 +244,13 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
         }
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
-        PageDTO<TradeData> pages = new PageDTO<TradeData>(1, 10000, tradeData);
-
-        List<TradeData> datas = tradeListDAO.queryPageList(pages);
+        List<TradeData> datas = tradeListDAO.queryByAllCondition(tradeData);
+        for (TradeData merchantdo : datas) {
+			String id = merchantdo.getTermId();
+			String code = merchantdo.getInnerCode();
+			String sn = merchantTerminalDao.querySnCode(id,code);
+			merchantdo.setSnCode(sn);
+		}
         for (TradeData tradeData2 : datas) {
             if (!Strings.isNullOrEmpty(tradeData2.getInnerCode())) {
                 MerchantCore core = merchantCoreDao.selectByInnerCode(tradeData2.getInnerCode());

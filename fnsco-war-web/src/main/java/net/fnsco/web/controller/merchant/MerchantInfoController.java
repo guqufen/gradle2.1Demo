@@ -2,7 +2,9 @@ package net.fnsco.web.controller.merchant;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,12 +80,21 @@ public class MerchantInfoController extends BaseController {
 	@RequiresPermissions(value = { "m:merchant:export" })
 	public void export(MerchantCore merchantCore ,HttpServletRequest req, HttpServletResponse response) throws IOException {
 		List<MerchantCore> dataList= merchantCoreService.queryMerchantList(merchantCore);
-		
+		if (dataList != null) {
+						for (MerchantCore merchantdo : dataList) {
+							Date li = merchantdo.getModifyTime();
+						if (li != null) {
+								SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+								String dateString = formatter.format(li);
+								merchantdo.setModifyTimeStr(dateString);;
+							}
+						}
+					}
 		JSONObject jObject = new JSONObject();
         jObject.put("data", dataList);
         List<MerchantCore> list = (List<MerchantCore>) jObject.get("data");
-        String itemMark = "merName,innerCode,legalPerson,legalPersonMobile,legalValidCardType,cardNum,cardValidTime,businessLicenseNum,businessLicenseValidTime,taxRegistCode,registAddress,mercFlag,source";
-        String itemParap = "商户名, 内部商户号, 商户法人姓名, 法人手机号码, 法人有效证件类型, 证件号码, 证件有效期, 营业执照号码, 营业执照有效期, 税务登记号, 商户注册地址, 商户标签, 商户注册来源";
+        String itemMark = "merName,innerCode,legalPerson,legalPersonMobile,legalValidCardType,cardNum,cardValidTime,businessLicenseNum,businessLicenseValidTime,taxRegistCode,registAddress,mercFlag,source,modifyTimeStr";
+        String itemParap = "商户名, 内部商户号, 商户法人姓名, 法人手机号码, 法人有效证件类型, 证件号码, 证件有效期, 营业执照号码, 营业执照有效期, 税务登记号, 商户注册地址, 商户标签, 商户注册来源,创建日期";
         String[] itemMarks = itemMark.split(",");// 键
         String[] itemParaps = itemParap.split(",");// 列头
 
