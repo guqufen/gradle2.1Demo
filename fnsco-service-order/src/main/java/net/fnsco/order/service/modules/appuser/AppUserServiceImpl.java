@@ -156,6 +156,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         //MerchantCore表
         MerchantCore merchantCore = new MerchantCore();
         merchantCore.setLegalPersonMobile(appUserDTO.getMobile());
+        merchantCore.setStatus(1);
         List<MerchantCore> list = merchantCoreDao.queryListByCondition(merchantCore);
         if (!CollectionUtils.isEmpty(list)) {
             merchantNums2 = list.size();
@@ -513,7 +514,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     dto.setMobile(appUser.getMobile());
                     MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(li.getInnerCode());
                     dto.setMerName(merchantCore.getMerName());
-                    //如果自己更新自己则不提示
                     clerk.add(dto);
                 }
             }

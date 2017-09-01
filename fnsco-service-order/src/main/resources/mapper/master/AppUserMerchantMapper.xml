@@ -16,8 +16,11 @@
 		select
 		<include refid="Base_Column_List" />
 		from u_app_user_merchant
-		where app_user_id = #{appUserId,jdbcType=INTEGER} and role_id =
-		#{roleId,jdbcType=VARCHAR}
+		where app_user_id = #{appUserId,jdbcType=INTEGER} 
+		<if test="roleId != null and roleId != '' ">
+		  and role_id = #{roleId,jdbcType=VARCHAR}
+		</if>
+		ORDER BY role_id
 	</select>
 	<select id="selectByall" resultMap="BaseResultMap">
 		select

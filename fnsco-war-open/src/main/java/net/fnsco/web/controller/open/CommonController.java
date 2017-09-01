@@ -15,6 +15,8 @@ import net.fnsco.order.api.appuser.ConmmService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.order.api.dto.VersionDTO;
+import net.fnsco.web.controller.open.jo.CommJO;
+import net.fnsco.web.controller.open.jo.LogJO;
 
 /**
  * 开放接口公共处理类
@@ -40,6 +42,14 @@ public class CommonController extends BaseController {
     @ApiOperation(value = "获取APP下载地址")
     public ResultDTO getMerCode() {
         return success(env.getProperty(ApiConstant.THIS_PROGREM_URL));
+    }
+
+    @RequestMapping(value = "/saveLog")
+    @ApiOperation(value = "保存log")
+    public ResultDTO saveLog(@RequestBody LogJO log) {
+        //终端号
+        logger.error(String.format("pos机sn码%s，终端号%s,log日志%s", log.getSnCode(), log.getTermCode(), log.getLogInfo()));
+        return ResultDTO.success();
     }
 
     @RequestMapping(value = "/checkUpdate")

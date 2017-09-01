@@ -60,8 +60,5 @@ public class CodeUtil {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		return prefix+sdf.format(new Date());
 	}
-
-	public static void main(String[] args) {
-		System.out.println(generateMerchantCode("F"));
-	}
+	
 }

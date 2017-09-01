@@ -29,6 +29,9 @@ public class TradeDataDTO extends DTO {
 
     private String startSendTime;//条件查询 发送开始时间
     private String endSendTime;  //条件查询 发送结束时间
+    
+    private String startTime;    //条件查询 交易开始时间
+    private String endTime;      //条件查询 交易结束时间
 
     private String txnType;     //交易类型1消费2撤销
 
@@ -38,6 +41,50 @@ public class TradeDataDTO extends DTO {
     private String cardOrg;      // :卡组织，00 境内借记卡 ；01 境内贷记卡 ； 60 境外借记卡 ； 61 境外贷记卡
     private String merName;       //商户名称
     
+    /**
+     * startTime
+     *
+     * @return  the startTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * startTime
+     *
+     * @param   startTime    the startTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    /**
+     * endTime
+     *
+     * @return  the endTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getEndTime() {
+        return endTime;
+    }
+
+    /**
+     * endTime
+     *
+     * @param   endTime    the endTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
     /**
      * merName
      *
