@@ -117,9 +117,9 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
                         bandList.setMobile(user.getMobile());
                         bandList.setUserName(user.getUserName());
                         if(li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())){
-                            bandList.setIsDelete("不能删");
+                            bandList.setIsDelete("2");
                         }else{
-                            bandList.setIsDelete("能删");
+                            bandList.setIsDelete("1");
                         }
                         if(it.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())&&it.getAppUserId().equals(li.getAppUserId())){
                             listDto.add(0,bandList);
@@ -144,7 +144,7 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
                     if(null != user){
                         bandList.setMobile(user.getMobile());
                         bandList.setUserName(user.getUserName());
-                        bandList.setIsDelete("不能删");
+                        bandList.setIsDelete("2");
                         if(it.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())&&it.getAppUserId().equals(li.getAppUserId())){
                             listDto.add(0,bandList);
                         }else{

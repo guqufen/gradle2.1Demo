@@ -802,7 +802,8 @@ function initTableData1() {
 		}, {
 			field : 'txnAmt',
 			title : '扣款金额',
-			width : '10'
+			width : '10',
+			formatter:formatSxnTime
 		}, {
 			field : 'payTimes',
 			title : '扣款次数',
@@ -826,7 +827,9 @@ function initTableData1() {
 	});
 }
 
-
+function formatSxnTime(value, row, index){
+	return value/100;
+}
 function queryParams1(params) {
 	console.log(withholdId)
 	var param = {

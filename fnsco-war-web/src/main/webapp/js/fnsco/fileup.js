@@ -8,6 +8,11 @@ function exportEvent(){
 		+'&legalPersonMobile='+legalPersonMobile;
 	   window.open(url, 'Excel导出');
 }
+//模板下载按钮事件
+function downEvent(){
+	var url=PROJECT_NAME+'/web/merchantinfo/down';
+   window.open(url, 'Excel导出');
+}
 //导入按钮事件
 function importEvent(){
 	$('#importModal').modal();
