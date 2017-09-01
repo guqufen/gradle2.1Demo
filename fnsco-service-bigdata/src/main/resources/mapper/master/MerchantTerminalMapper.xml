@@ -383,4 +383,11 @@
     <include refid="Base_Column_List" />
     from m_merchant_terminal where terminal_code = #{terCode}  limit 1
 	</select>
+	<!-- 根据终端号snCode -->
+	<select id="querySnCode" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT sn_code FROM m_merchant_pos WHERE id in (select 
+    pos_id
+    from m_merchant_terminal
+    where terminal_code=#{id,jdbcType=VARCHAR} AND inner_code=#{code,jdbcType=VARCHAR}) limit 1
+  </select>
 </mapper>

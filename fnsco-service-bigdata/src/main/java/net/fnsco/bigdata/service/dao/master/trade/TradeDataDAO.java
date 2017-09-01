@@ -35,7 +35,9 @@ public interface TradeDataDAO {
      * 条件分页查询
      */
     List<TradeData> queryPageList(PageDTO<TradeData> pages);
-
+    
+    List<TradeData> queryByAllCondition(TradeData record);
+    
     /**
      * 条件查询总数
      * @param pages

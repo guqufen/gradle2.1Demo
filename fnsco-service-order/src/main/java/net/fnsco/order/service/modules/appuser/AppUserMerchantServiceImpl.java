@@ -104,23 +104,55 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
                 listDto=null;
             }
             //遍历每一条店员和店铺的绑定关系
-            for(AppUserMerchant li:list){
-                BandListDTO bandList=new BandListDTO();
-                bandList.setUserId((li.getAppUserId()));
-                bandList.setIsShopkeeper(li.getRoleId());
-                //根据appUserId查询到手机号
-                AppUser user = appUserDao.selectAppUserById(li.getAppUserId());
-                //用户必须存在
-                if(null != user){
-                    bandList.setMobile(user.getMobile());
-                    bandList.setUserName(user.getUserName());
-                    if(it.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())&&it.getAppUserId().equals(li.getAppUserId())){
-                        listDto.add(0,bandList);
+            //如果该店铺下是店主
+            if(it.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())){
+                for(AppUserMerchant li:list){
+                    BandListDTO bandList=new BandListDTO();
+                    bandList.setUserId((li.getAppUserId()));
+                    bandList.setIsShopkeeper(li.getRoleId());
+                    //根据appUserId查询到手机号
+                    AppUser user = appUserDao.selectAppUserById(li.getAppUserId());
+                    //用户必须存在
+                    if(null != user){
+                        bandList.setMobile(user.getMobile());
+                        bandList.setUserName(user.getUserName());
+                        if(li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())){
+                            bandList.setIsDelete("不能删");
+                        }else{
+                            bandList.setIsDelete("能删");
+                        }
+                        if(it.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())&&it.getAppUserId().equals(li.getAppUserId())){
+                            listDto.add(0,bandList);
+                        }else{
+                            listDto.add(bandList);
+                        }
+                        
                     }else{
-                        listDto.add(bandList);
+                        logger.error(li.getAppUserId()+"该用户ID不存在!");
                     }
-                }else{
-                    logger.error(li.getAppUserId()+"该用户ID不存在!");
+                }
+            }
+          //如果该店铺下是店员
+            if(it.getRoleId().equals(ConstantEnum.AuthorTypeEnum.CLERK.getCode())){
+                for(AppUserMerchant li:list){
+                    BandListDTO bandList=new BandListDTO();
+                    bandList.setUserId((li.getAppUserId()));
+                    bandList.setIsShopkeeper(li.getRoleId());
+                    //根据appUserId查询到手机号
+                    AppUser user = appUserDao.selectAppUserById(li.getAppUserId());
+                    //用户必须存在
+                    if(null != user){
+                        bandList.setMobile(user.getMobile());
+                        bandList.setUserName(user.getUserName());
+                        bandList.setIsDelete("不能删");
+                        if(it.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())&&it.getAppUserId().equals(li.getAppUserId())){
+                            listDto.add(0,bandList);
+                        }else{
+                            listDto.add(bandList);
+                        }
+                    }else{
+                        logger.error(li.getAppUserId()+"该用户ID不存在!");
+                    }
                 }
             }
             dto.setBandListDTO(listDto);

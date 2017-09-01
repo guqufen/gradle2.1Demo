@@ -136,6 +136,15 @@ public class TradeData {
         this.paySubTypes = paySubTypes;
     }
 
+  //POS机SN码/设备号
+        private String       snCode;
+        public String getSnCode() {
+    		return snCode;
+    	}
+    
+    	public void setSnCode(String snCode) {
+    		this.snCode = snCode;
+    	}
     /**
      * merName
      *
