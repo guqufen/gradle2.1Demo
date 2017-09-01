@@ -375,7 +375,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
                     continue;
                 }
                 //推送IOS和android消息
-                appPushHelper.pushNewMessage(user, message);
+                appPushHelper.pushNewMessage(user, message,false);
             }
         }
         

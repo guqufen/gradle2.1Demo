@@ -1,10 +1,13 @@
 package net.fnsco.order.service.modules.push;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Maps;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -118,15 +121,22 @@ public class AppPushHelper extends BaseService {
      * @date      2017年8月31日 下午2:58:16
      * @return void    DOM对象
      */
-    public void pushNewMessage(AppUser appUser, SysAppMessage message) {
+    public void pushNewMessage(AppUser appUser, SysAppMessage message,boolean weekLy) {
 
         Integer deviceType = appUser.getDeviceType();
 
         //分别推送安卓和IOS消息且保存发送结果
         if (deviceType == 1) {//安卓
             try {
-                Integer androidStatus = appPushService.sendAndroidListcast(appUser.getDeviceToken(), message.getMsgSubTitle(), DateUtils.dateFormatToStr(message.getSendTime()),
-                    message.getId().toString());
+                Integer androidStatus = null;
+                if(weekLy){
+                    //周报发送内容有区别
+                    Map<String,String> extraField = Maps.newHashMap();
+                }else{
+                    androidStatus = appPushService.sendAndroidListcast(appUser.getDeviceToken(), message.getMsgSubTitle(), DateUtils.dateFormatToStr(message.getSendTime()), message.getId().toString());
+                }
+                
+                   
                 if (androidStatus == 200) {
                     //成功
                     this.insertIntoDBSuccMsg(appUser.getId(), message.getId(), 1);

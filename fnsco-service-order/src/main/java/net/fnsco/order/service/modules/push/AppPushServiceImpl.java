@@ -3,6 +3,9 @@ package net.fnsco.order.service.modules.push;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -479,8 +482,85 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                 continue;
             }
             //分别推送安卓和IOS消息且保存发送结果
-            appPushHelper.pushNewMessage(appUser, message);
+            appPushHelper.pushNewMessage(appUser, message,true);
         }
+    }
+    
+    /**
+     * (non-Javadoc)自定义扩张参数的安卓列播
+     * @see net.fnsco.order.api.push.AppPushService#sendAndroidListcast(java.lang.String, java.lang.String, java.util.Map)
+     * @author tangliang
+     * @date 2017年9月1日 上午9:47:33
+     */
+    @Override
+    public Integer sendAndroidListcast(String param_and, String content, Map<String, String> extraField) throws Exception {
+        
+        logger.warn("开始安卓列播推送");
+        String appkey = this.env.getProperty("ad.appkey");
+        String appMasterSecret = this.env.getProperty("ad.app.master.secret");
+        AndroidListcast listcast = new AndroidListcast(appkey,appMasterSecret);
+        listcast.setDeviceToken(param_and);
+        listcast.setTicker("【数钱吧】您有一条新消息");
+        listcast.setTitle("数钱吧");
+        listcast.setText(content);
+        listcast.goAppAfterOpen();
+        listcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);//通知
+        if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "test")) {
+            listcast.setTestMode();// 测试模式
+        } else if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "www")) {
+            listcast.setProductionMode();// 正式模式
+        }
+        listcast.setDescription("列播通知-Android");
+        listcast.setExtraField("msgType", "1");//系统通知
+        listcast.setExtraField("titleType", "系统消息");
+        /**
+         * 遍历扩张参数、放入listcast中
+         */
+        for (Entry<String, String> entry : extraField.entrySet()) {
+            listcast.setExtraField(entry.getKey(), entry.getValue());
+        }
+        listcast.setCustomField("");//通知
+        int status = client.send(listcast);
+        return status;
+        
+    }
+    /**
+     * (non-Javadoc)自定义扩张参数的ios单播
+     * @see net.fnsco.order.api.push.AppPushService#sendIOSUnicast(java.lang.String, org.json.JSONObject, java.lang.Integer, java.util.Map)
+     * @author tangliang
+     * @date 2017年9月1日 上午9:47:48
+     */
+    @Override
+    public Integer sendIOSUnicast(String iosUnicastToken, JSONObject content, Integer badge, Map<String, String> extraField) throws Exception {
+        
+        logger.warn("开始IOS单播推送");
+        String appkey = this.env.getProperty("ios.appkey");
+        String appMasterSecret = this.env.getProperty("ios.app.master.secret");
+        IOSUnicast unicast = new IOSUnicast(appkey,appMasterSecret);
+        
+        unicast.setDeviceToken(iosUnicastToken);
+//        unicast.setAlert(content);
+        unicast.setPredefinedKeyValue("alert", content);
+        unicast.setSound( "");
+        unicast.setContentAvailable(1);
+        unicast.setBadge(badge);//未读数量
+        if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "test")) {
+            unicast.setTestMode();// 测试模式
+        } else if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "www")) {
+            unicast.setProductionMode();// 正式模式
+        }
+        // Set customized fields
+        unicast.setCustomizedField("msgType", "1");//通知
+        unicast.setCustomizedField("titleType", "系统通知");
+        /**
+         * 遍历扩张参数、放入unicast中
+         */
+        for (Entry<String, String> entry : extraField.entrySet()) {
+            unicast.setCustomizedField(entry.getKey(), entry.getValue());
+        }
+        int status = client.send(unicast);
+        return status;
+        
     }
     
 }
