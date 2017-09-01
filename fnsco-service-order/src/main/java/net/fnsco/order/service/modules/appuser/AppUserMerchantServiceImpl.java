@@ -86,7 +86,7 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
     public List<AppUserMerchantOutDTO> queryBindRelation(BandDto bandDto) {
         List<AppUserMerchantOutDTO> datas = Lists.newArrayList();
         Integer appUserId = bandDto.getUserId();
-        List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId,ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        List<AppUserMerchant> merchantList = appUserMerchantDao.selectByPrimaryKey(appUserId,null);
         if (CollectionUtils.isEmpty(merchantList)) {
             return datas;
         }
@@ -114,7 +114,11 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
                 if(null != user){
                     bandList.setMobile(user.getMobile());
                     bandList.setUserName(user.getUserName());
-                    listDto.add(bandList);
+                    if(it.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())&&it.getAppUserId().equals(li.getAppUserId())){
+                        listDto.add(0,bandList);
+                    }else{
+                        listDto.add(bandList);
+                    }
                 }else{
                     logger.error(li.getAppUserId()+"该用户ID不存在!");
                 }

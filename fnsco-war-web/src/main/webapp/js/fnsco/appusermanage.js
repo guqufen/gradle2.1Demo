@@ -229,12 +229,11 @@ function confirmlt(mobile) {
 						var str = "";
 						var contant = "";
 						for (i = 0; i < data.data.list.length; i++) {
-							str += '<div style="font-size:16px;margin-bottom:8px;">该'
+							str += '<div style="font-size:16px;margin-bottom:8px;">是否将该'
 									+ data.data.list[i].merName
-									+ '店已有店主('
-									+ data.data.list[i].mobile
-									+ ')是否将权限转让给'
-									+ mobile + '？</div>';
+									+ '店下的('
+									+ mobile
+									+ ')升级为店长？</div>';
 						}
 						for (i = 0; i < data.data.clerk.length; i++) {
 							contant += '<div style="font-size:16px;margin-bottom:8px;">是否移除'

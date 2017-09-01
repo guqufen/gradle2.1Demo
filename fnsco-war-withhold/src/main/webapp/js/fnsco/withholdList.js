@@ -156,9 +156,13 @@ function initTableData() {
 		}, {
 			field : 'amount',
 			title : '扣款金额(元/次)'
+//				,
+//			formatter : formatNnm
 		}, {
 			field : 'allTotalAmt',
 			title : '扣款总额(元)'
+//				,
+//			formatter : formatNnm
 		}, {
 			field : 'total',
 			title : '总扣款次数'
@@ -239,7 +243,9 @@ function operateFormatterId(value, row, index) {
 //	}
 ////	console.log(str)
 //}
-
+function formatNnm(value, row, index){
+	return value/100;
+}
 function formatStyle(value, row, index){
 	//console.log(value)
 	var result;
@@ -359,7 +365,6 @@ function operateFormatter(value, row, index) {
 					.join('');
 		}
 	}
-	
 	//审核成功
 	if (row.status == 1) {
 		return [
@@ -373,11 +378,20 @@ function operateFormatter(value, row, index) {
 				.join('');
 	}
 	//终止状态 
-	if(row.status == 0){
+	if(row.status == 0||row.status == 2){
 		 return ['<a class="redact" style="padding: 3px 6px;visibility:hidden;" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>"]
 			.join('');
 	}
 	
+}
+function new1(){
+	$(".nextBtn").show();
+	$(".save_btn").hide();
+	$(".add_two").html("代扣新增");
+//	$("#myModalLabel").hide();
+	$("#myModal input").val("");
+	$("#productTypeCode").val("1"); 
+	$("#debitDay").val("01");
 }
 // 表格中删除按钮事件
 function delete_btn_event(td_obj) {
@@ -550,7 +564,7 @@ function edit(id){
 			//$(" option[value="+data.data.productTypeCode+"]").prop('selected','selected');
 			$("#productTypeCode").val(data.data.productTypeCode);
 			$("#debitDay").val(data.data.debitDay);
-			$(".hiddenId").val(data.data.id)
+			$(".hiddenId").val(data.data.id);
 		}
 	});
 }
@@ -645,7 +659,9 @@ function checkPass(){
 			dataType : "json",
 			data : {
 				'id' : $("#myCheckdetails .id").val(),
-				'status':1
+				'status':1,
+				'debitDay':$("#myCheckdetails .debitDay").val(),
+				'total':$("#myCheckdetails .total").val()
 			},
 			success : function(data) {
 				unloginHandler(data);
@@ -695,10 +711,33 @@ function checkFail(){
 		layer.msg('取消成功');
 	});
 }
-
+function productTypeCodeelse(){
+	$("#detail_product_type_code").html("");
+	$.ajax({
+		url : PROJECT_NAME + '/web/withholdInfo/queryWithholdType',
+		async: false,
+		type : 'POST',
+		data:null,
+		dataType : "json",
+		success : function(data) {
+			unloginHandler(data);
+			console.log(data);
+			if (data.success) {
+				for(var i=0;i<data.data.length;i++){
+					var html="<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>";
+					$("#detail_product_type_code").prepend(html);
+				}
+			}
+		},
+		error : function(e) {
+			layer.msg('系统异常!' + e);
+		}
+	});
+}
 var withholdId;
 function details(id) {
 	//加载详情
+	productTypeCodeelse();
 	query(id);
 	withholdId=id;
 	$('#tableDetails').bootstrapTable('refresh');
@@ -717,7 +756,7 @@ function query(id){
 			console.log(data);
 			console.log(data.data.userName)
 			$(".detail_name").val(data.data.userName);
-			$(".detail_product_type_code").val(data.data.productTypeCode);
+			$("#detail_product_type_code").val(data.data.productTypeCode);
 			$(".detail_total").val(data.data.total);
 			$(".detail_mobile").val(data.data.mobile);
 			$(".detail_bank_card").val(data.data.bankCard);

@@ -107,7 +107,7 @@
 						<div class="col-sm-12">
 							<!-- 	<div id="toolbar"> -->
 							<button type="button" class="btn btn-success btn_add"
-								data-toggle="modal" data-target="#myModal">
+								data-toggle="modal" data-target="#myModal" onclick="javascript:new1();">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 							</button>
 							<!-- </div> -->
@@ -138,9 +138,10 @@
 												class="form-control detail_name" disabled="disabled">
 										</div>
 										<div class="col-sm-4">
-											<label class="control-label ">产品类型：</label> <input
-												type="text" class="form-control detail_product_type_code"
-												disabled="disabled">
+											<label class="control-label ">产品类型：</label>
+												<select id="detail_product_type_code" name="productTypeCode"
+													class="form-control" disabled="disabled">
+												</select>
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label ">扣款次数：</label> <input
@@ -252,7 +253,7 @@
 												name="contractNum" disabled="disabled">
 										</div>
 										<div class="col-sm-4">
-											<label class="control-label" for="productTypeCode">扣款类型：</label>
+											<label class="control-label" for="productTypeCode">产品名称：</label>
 											<input type="text" class="form-control productTypeCode"
 												name="productTypeCode" disabled="disabled">
 										</div>
@@ -345,7 +346,7 @@
 													name="contractNum" placeholder="合同编号">
 											</div>
 											<div class="col-sm-4">
-												<label class="control-label" for="productTypeCode">扣款类型：</label>
+												<label class="control-label" for="productTypeCode">产品名称：</label>
 												<select id="productTypeCode" name="productTypeCode"
 													class="form-control">
 

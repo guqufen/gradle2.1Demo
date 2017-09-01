@@ -513,7 +513,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     dto.setMobile(appUser.getMobile());
                     MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(li.getInnerCode());
                     dto.setMerName(merchantCore.getMerName());
-                    //如果自己更新自己则不提示
                     clerk.add(dto);
                 }
             }

@@ -132,21 +132,6 @@ public class WithholdInfoService extends BaseService {
 		String str=withholdInfo.getCertifyId();
 		//String st=str.substring(0,str.length() -1)+str.substring(str.length()-1,str.length()).toUpperCase();
 		withholdInfo.setCertifyId(str.substring(0,str.length() -1)+str.substring(str.length()-1,str.length()).toUpperCase());
-		// 计算扣款开始、结束日期
-		Calendar calender = Calendar.getInstance();
-		/**
-		 * 当用户选择的还款日期（day）小于当前日期的天时，从下个月开始算还款日期。当用户选择的日期（day）等于当前日期的天的时候，如果当前时间小于早上8:30的时候，就从本月开始，否则从下个月开始
-		 */
-		int month = now.getMonth();
-		if (now.getDate() < Integer.valueOf(withholdInfo.getDebitDay())
-				|| (now.getDate() == Integer.valueOf(withholdInfo.getDebitDay())
-						&& ((now.getHours() == 8 && now.getMinutes() <= 30) || now.getHours() <= 7))) {
-		} else {
-			month++;
-		}
-		withholdInfo.setStartDate(DateUtils.getDateStrByInput(calender.get(Calendar.YEAR), month,
-				Integer.valueOf(withholdInfo.getDebitDay())));
-		withholdInfo.setEndDate(DateUtils.getDateStrByStrAdd(withholdInfo.getStartDate(), withholdInfo.getTotal() - 1));
 		// 设置爱农编号
 		if (StringUtils.isEmpty(withholdInfo.getBankCard()) || withholdInfo.getBankCard().length() < 6) {
 			return null;
@@ -164,6 +149,36 @@ public class WithholdInfoService extends BaseService {
 	// 修改
 	public Integer doUpdate(WithholdInfoDO withholdInfo, Integer loginUserId) {
 		logger.info("开始修改WithholdInfoService.update,withholdInfo=" + withholdInfo.toString());
+		Date now = new Date();
+		//withholdInfo.setModifyUserId(loginUserId);
+		withholdInfo.setModifyTime(now);
+		//处理身份证最后一位字母大写
+	     //更改状态为审核
+	     if(withholdInfo.getStatus()==1){
+	         /**
+	          * 当用户选择的还款日期（day）小于当前日期的天时，从下个月开始算还款日期。当用户选择的日期（day）等于当前日期的天的时候，如果当前时间小于早上8:30的时候，就从本月开始，否则从下个月开始
+	          */
+	         // 计算扣款开始、结束日期
+	         Calendar calender = Calendar.getInstance();
+	         int month = now.getMonth();
+	         if (now.getDate() < Integer.valueOf(withholdInfo.getDebitDay())
+	                 || (now.getDate() == Integer.valueOf(withholdInfo.getDebitDay())
+	                         && ((now.getHours() == 8 && now.getMinutes() <= 30) || now.getHours() <= 7))) {
+	         } else {
+	             month++;
+	         }
+	         withholdInfo.setStartDate(DateUtils.getDateStrByInput(calender.get(Calendar.YEAR), month,
+	                 Integer.valueOf(withholdInfo.getDebitDay())));
+	         withholdInfo.setEndDate(DateUtils.getDateStrByStrAdd(withholdInfo.getStartDate(), withholdInfo.getTotal() - 1));
+	     }
+	     //更改状态为编辑时 需要特殊处理的字段
+	     if(withholdInfo.getStatus()==3){
+	         withholdInfo.setAmount(withholdInfo.getAmount().multiply(new BigDecimal(100)));
+	         withholdInfo.setAmountTotal(new BigDecimal(0.00));
+	         withholdInfo.setFailTotal(0);
+	         String str=withholdInfo.getCertifyId();     
+	         withholdInfo.setCertifyId(str.substring(0,str.length() -1)+str.substring(str.length()-1,str.length()).toUpperCase());
+	     }
 		int rows = this.withholdInfoDAO.update(withholdInfo);
 		return rows;
 	}
@@ -178,6 +193,11 @@ public class WithholdInfoService extends BaseService {
 	// 查询
 	public WithholdInfoDO doQueryById(Integer id) {
 		WithholdInfoDO obj = this.withholdInfoDAO.getById(id);
+		BigDecimal b1 = new BigDecimal(100.00);
+          // 扣款金额/次
+        BigDecimal amount = obj.getAmount();
+        BigDecimal b2 = amount.divide(b1, 2, BigDecimal.ROUND_HALF_UP);
+        obj.setAmount(b2);// 设置扣款金额/次
 		return obj;
 	}
 	//代扣类型查询

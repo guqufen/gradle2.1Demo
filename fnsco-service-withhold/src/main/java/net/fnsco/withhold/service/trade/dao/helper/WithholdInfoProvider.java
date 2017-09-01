@@ -23,6 +23,12 @@ public class WithholdInfoProvider {
                 if (StringUtils.isNotBlank(withholdInfo.getProductTypeCode())) {
                     SET("product_type_code=#{withholdInfo.productTypeCode}");
                 }
+                if (StringUtils.isNotBlank(withholdInfo.getStartDate())) {
+                    SET("start_date=#{withholdInfo.startDate}");
+                }
+                if (StringUtils.isNotBlank(withholdInfo.getEndDate())) {
+                    SET("end_date=#{withholdInfo.endDate}");
+                }
                 if (StringUtils.isNotBlank(withholdInfo.getUserName())) {
                     SET("user_name=#{withholdInfo.userName}");
                 }
