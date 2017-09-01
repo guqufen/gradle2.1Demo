@@ -194,10 +194,13 @@ public class WithholdInfoService extends BaseService {
 	public WithholdInfoDO doQueryById(Integer id) {
 		WithholdInfoDO obj = this.withholdInfoDAO.getById(id);
 		BigDecimal b1 = new BigDecimal(100.00);
-          // 扣款金额/次
         BigDecimal amount = obj.getAmount();
         BigDecimal b2 = amount.divide(b1, 2, BigDecimal.ROUND_HALF_UP);
-        obj.setAmount(b2);// 设置扣款金额/次
+        obj.setAmount(b2);// 设置扣款金额/次  amount_total
+        
+        BigDecimal amountTotal = obj.getAmountTotal();
+        BigDecimal b3 =amountTotal.divide(b1, 2, BigDecimal.ROUND_HALF_UP);
+        obj.setAmountTotal(b3);
 		return obj;
 	}
 	//代扣类型查询
