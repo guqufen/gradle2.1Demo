@@ -124,19 +124,25 @@ public class AppPushHelper extends BaseService {
     public void pushNewMessage(AppUser appUser, SysAppMessage message,boolean weekLy) {
 
         Integer deviceType = appUser.getDeviceType();
-
+        Map<String,String> extraField = Maps.newHashMap();
+        if(weekLy){
+            extraField.put("sendTime", DateUtils.dateFormatToStr(message.getSendTime()));
+            extraField.put("msgId", message.getId().toString());
+            extraField.put("weeklyStartDate", DateUtils.getMondayStr(-1));
+            extraField.put("weeklyEndDate", DateUtils.getSundayStr(-1));
+        }
+        
         //分别推送安卓和IOS消息且保存发送结果
         if (deviceType == 1) {//安卓
             try {
                 Integer androidStatus = null;
                 if(weekLy){
                     //周报发送内容有区别
-                    Map<String,String> extraField = Maps.newHashMap();
+                    androidStatus = appPushService.sendAndroidListcast(appUser.getDeviceToken(), message.getMsgSubTitle(),extraField);
                 }else{
                     androidStatus = appPushService.sendAndroidListcast(appUser.getDeviceToken(), message.getMsgSubTitle(), DateUtils.dateFormatToStr(message.getSendTime()), message.getId().toString());
                 }
                 
-                   
                 if (androidStatus == 200) {
                     //成功
                     this.insertIntoDBSuccMsg(appUser.getId(), message.getId(), 1);
@@ -152,13 +158,19 @@ public class AppPushHelper extends BaseService {
             }
         } else if (deviceType == 2) {//ios
             ResultDTO<PushMsgInfoDTO> countInfo = sysAppMsgService.queryNewsCount(appUser.getId(), false, appUser.getDeviceType());
-            int iosStatus;
+            Integer iosStatus = null;
             try {
                 JSONObject alertContext = new JSONObject();
                 alertContext.put("title", message.getMsgSubject());
                 alertContext.put("subtitle", "");
                 alertContext.put("body", message.getMsgSubTitle());
-                iosStatus = appPushService.sendIOSUnicast(appUser.getDeviceToken(), alertContext, countInfo.getData().getUnReadCount() + 1, message.getId().toString());
+                if(weekLy){
+                  //周报发送内容有区别
+                    iosStatus = appPushService.sendIOSUnicast(appUser.getDeviceToken(), alertContext, countInfo.getData().getUnReadCount() + 1, extraField);
+                }else{
+                    iosStatus = appPushService.sendIOSUnicast(appUser.getDeviceToken(), alertContext, countInfo.getData().getUnReadCount() + 1, message.getId().toString());
+                }
+                
                 if (iosStatus == 200) {
                     //成功
                     this.insertIntoDBSuccMsg(appUser.getId(), message.getId(), 2);
