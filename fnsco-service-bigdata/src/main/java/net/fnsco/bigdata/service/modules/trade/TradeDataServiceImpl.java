@@ -1,5 +1,6 @@
 package net.fnsco.bigdata.service.modules.trade;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -184,16 +185,20 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         Map map = tradeListDAO.querySumByCondition(tradeData);
         Long count = null;
         Double amtSum = null;
+        String amtSumStr = "0.00";
         if (map != null) {
             count = (Long) map.get("count");
             amtSum = (Double) map.get("amt");
         }
-        if(count!=null){
+        if (count != null) {
             result.setCount(String.valueOf(count));
         }
-        if(amtSum!=null){
-            result.setAmtSum(String.valueOf(amtSum));
+        if (amtSum != null) {
+            DecimalFormat df = new DecimalFormat("#0.00");
+            amtSum = amtSum / 100;
+            amtSumStr = df.format(amtSum);
         }
+        result.setAmtSum(amtSumStr);
         return result;
     }
 
