@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -511,8 +510,6 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             listcast.setProductionMode();// 正式模式
         }
         listcast.setDescription("列播通知-Android");
-        listcast.setExtraField("msgType", "1");//系统通知
-        listcast.setExtraField("titleType", "系统消息");
         /**
          * 遍历扩张参数、放入listcast中
          */
@@ -539,7 +536,6 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         IOSUnicast unicast = new IOSUnicast(appkey,appMasterSecret);
         
         unicast.setDeviceToken(iosUnicastToken);
-//        unicast.setAlert(content);
         unicast.setPredefinedKeyValue("alert", content);
         unicast.setSound( "");
         unicast.setContentAvailable(1);
@@ -549,9 +545,6 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         } else if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "www")) {
             unicast.setProductionMode();// 正式模式
         }
-        // Set customized fields
-        unicast.setCustomizedField("msgType", "1");//通知
-        unicast.setCustomizedField("titleType", "系统通知");
         /**
          * 遍历扩张参数、放入unicast中
          */
