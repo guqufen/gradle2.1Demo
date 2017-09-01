@@ -160,8 +160,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         Integer appUserId = merchantCore.getUserId();
         List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);
         result.setMerTotal(tempList.size());
-        result.setAmtSum("0");
-        result.setAmtSum("0.00");
+        result.setCount("0");
+        result.setAmtTot("0.00");
         if (CollectionUtils.isEmpty(terminalList)) {//无终端则查询按商户查询
             List<String> innerCodeList = Lists.newArrayList();
             if (!CollectionUtils.isEmpty(tempList)) {
@@ -198,7 +198,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             amtSum = amtSum / 100;
             amtSumStr = df.format(amtSum);
         }
-        result.setAmtSum(amtSumStr);
+        result.setAmtTot(amtSumStr);
         return result;
     }
 
