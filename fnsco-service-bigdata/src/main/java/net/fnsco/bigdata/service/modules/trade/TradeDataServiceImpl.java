@@ -219,6 +219,14 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
         }
+        
+        if (!StringUtils.isEmpty(tradeDataDTO.getStartTime())) {
+            tradeDataDTO.setStartTime(DateUtils.getDateStartTime(tradeDataDTO.getStartTime()));
+        }
+        if (!StringUtils.isEmpty(tradeDataDTO.getEndTime())) {
+            tradeDataDTO.setEndTime(DateUtils.getDateEndTime(tradeDataDTO.getEndTime()));
+        }
+        
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
         PageDTO<TradeData> pages = new PageDTO<TradeData>(currentPageNum, perPageSize, tradeData);
 

@@ -525,7 +525,7 @@
 			<foreach collection="condition.terminalList" item="terminal" open="(" separator="," close=")">#{terminal}</foreach>
 	  </if>	
    	 </where>
-   	 order by create_time desc
+   	 order by time_stamp desc
    	 limit #{startRow} , #{perPageSize}
   </select>
   <!-- 条件查询总数 -->
