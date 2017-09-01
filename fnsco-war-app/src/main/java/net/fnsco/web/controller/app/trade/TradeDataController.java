@@ -95,7 +95,7 @@ public class TradeDataController extends BaseController {
         TradeDataPageDTO<TradeDataJO> result = new TradeDataPageDTO<TradeDataJO>(temp.getTotal(), resultList);
         result.setCurrentPage(temp.getCurrentPage());
         result.setMerTotal(temp.getMerTotal());
-        result.setAmtSum(temp.getAmtSum());
+        result.setAmtTot(temp.getAmtTot());
         result.setCount(temp.getCount());
         return success(result);
     }
