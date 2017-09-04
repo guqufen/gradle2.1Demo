@@ -36,6 +36,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.ExcelUtils;
+import net.fnsco.core.utils.ReadExcel;
 import net.sf.json.JSONObject;
 
 /**
@@ -110,6 +111,15 @@ public class MerchantInfoController extends BaseController {
 
         ouputStream.flush();
         ouputStream.close();
+	}
+	@RequestMapping(value = "/down", method = RequestMethod.GET)
+	@ResponseBody
+	@RequiresPermissions(value = { "m:merchant:export" })
+	public void down(MerchantCore merchantCore ,HttpServletRequest req, HttpServletResponse response) throws IOException {
+		String filePath="D:\\test\\第八批商户入件信息表.xlsx";
+		String fileName="第八批商户入件信息表.xlsx";
+		//解析excel，获取客户信息集合。
+        ReadExcel.downTemplate(filePath, fileName, response);
 	}
 	/**
 	 * 获取表格数据

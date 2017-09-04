@@ -416,6 +416,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             AppPushMsgInfoDTO dtoInfo = new AppPushMsgInfoDTO();
             dtoInfo.setId(sysAppMessage.getId());
             dtoInfo.setDetailURL(sysAppMessage.getDetailUrl());
+            dtoInfo.setMsgType(sysAppMessage.getMsgType().toString());
             String pathUrl  = sysAppMessage.getImageUrl();
             if(!Strings.isNullOrEmpty(pathUrl)){
                 String path = pathUrl.substring(pathUrl.indexOf("^")+1);
