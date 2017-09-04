@@ -115,7 +115,7 @@ public class MerchantInfoController extends BaseController {
 	@RequestMapping(value = "/down", method = RequestMethod.GET)
 	@ResponseBody
 	@RequiresPermissions(value = { "m:merchant:export" })
-	public void down(MerchantCore merchantCore ,HttpServletRequest req, HttpServletResponse response) throws IOException {
+	public void down(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String filePath="D:\\test\\第八批商户入件信息表.xlsx";
 		String fileName="第八批商户入件信息表.xlsx";
 		//解析excel，获取客户信息集合。

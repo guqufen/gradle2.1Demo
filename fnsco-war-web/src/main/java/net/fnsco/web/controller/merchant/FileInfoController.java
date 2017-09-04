@@ -263,7 +263,7 @@ public class FileInfoController extends BaseController{
 	public String getImagePath(String url){
 	    if(!Strings.isNullOrEmpty(url)){
 	        String path = url.substring(url.indexOf("^")+1);
-	        return OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
+	        return OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), path);
 	    }
 	    return "";
 	}
