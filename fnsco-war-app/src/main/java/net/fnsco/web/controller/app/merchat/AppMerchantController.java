@@ -240,4 +240,28 @@ public class AppMerchantController extends BaseController {
         List<PosInfoDTO> dates = merchantService.getAllReportPos(merchant);
         return ResultDTO.success(dates);
     }
+    
+    /**
+     * unBundMerchant:(解绑商户)
+     * @param userMerchant
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月4日 上午11:09:11
+     * @return ResultDTO<List<PosInfoDTO>>    DOM对象
+     */
+    @RequestMapping(value = "/unBundMerchant")
+    @ApiOperation(value = "APP用户解绑商户")
+    public ResultDTO<String> unBundMerchant(@RequestBody UserMerchantJO userMerchant){
+        if(null == userMerchant.getUserId()){
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+        if(null == userMerchant.getMerId()){
+            return ResultDTO.fail(ApiConstant.E_APP_ID_EMPTY);
+        }
+        boolean dates = merchantOrderService.deleteMerchantRelation(userMerchant.getMerId(), userMerchant.getUserId());
+        if(!dates){
+            return ResultDTO.fail();
+        }
+        return ResultDTO.success(dates);
+    }
 }

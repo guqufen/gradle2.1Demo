@@ -110,6 +110,24 @@ public class MerchantOrderServiceImpl extends BaseService implements MerchantOrd
         
         return appUserMerchantDao.selectByUserIdAndRoleId(merchantDTO.getUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
     }
-    
 
+    /**
+     * (non-Javadoc)解绑商户
+     * @see net.fnsco.bigdata.api.merchant.MerchantService#deleteMerchantRelation(java.lang.Integer, java.lang.Integer)
+     * @author tangliang
+     * @date 2017年9月4日 上午11:15:09
+     */
+    @Transactional
+    @Override
+    public boolean deleteMerchantRelation(Integer merId, Integer userId) {
+        
+        int ar = appUserMerchantDao.deleteByMerIdAndUserId(userId, merId);
+        int au = merchantUserRelDao.deleteByMerIdAndUserId(userId, merId);
+        if(ar+au>0){
+            return true;
+        }
+        return false;
+        
+    }
+    
 }

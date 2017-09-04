@@ -144,5 +144,5 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     MerchantTerminal getTerminalDetailByCode(String terminalCode);
-
+    
 }
