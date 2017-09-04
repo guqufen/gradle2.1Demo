@@ -1,6 +1,7 @@
 package net.fnsco.core.utils;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import com.google.common.base.Strings;
 
@@ -58,4 +59,9 @@ public class NumberUtil {
         return bd1.subtract(bd2).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
     
+    public static String format(BigDecimal bd,int scale) {
+        DecimalFormat df1 = new DecimalFormat("0.00"); 
+        return df1.format(bd.doubleValue());
+        
+    }
 }

@@ -812,13 +812,13 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         FinanceTurnoverDTO turnoverData = tradeByDayDao.selectFinanceByRecord(record);
         
         if(null != turnoverData){
-            resultDto.setTotalTurnover(NumberUtil.divide(turnoverData.getTurnover(), 100).doubleValue()+"");
+            resultDto.setTotalTurnover(NumberUtil.format(NumberUtil.divide(turnoverData.getTurnover(), 100),2));
             resultDto.setTotalOrderNum(turnoverData.getOrderNum());
             /**
              * 总应结金额=总额-手术费
              */
             BigDecimal totalSettlementAmount = new BigDecimal(turnoverData.getTurnover()).subtract(new BigDecimal(turnoverData.getProcedureFee())).divide(new BigDecimal(100));
-            resultDto.setTotalSettlementAmount(String.valueOf(totalSettlementAmount.doubleValue()));
+            resultDto.setTotalSettlementAmount(NumberUtil.format(totalSettlementAmount, 2));
         }else{
             turnoverData = new FinanceTurnoverDTO();
             resultDto.setTotalTurnover("0.00");
@@ -882,8 +882,10 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 for (FinanceDayDTO tradeDayDTO : tradeFinanceData) {
                     if (dateTime.equals(tradeDayDTO.getTradeDate())) {
                         tradeDayDTO.setTradeDate(format1.format(end.getTime()));
+                        tradeDayDTO.setTurnover(NumberUtil.format(new BigDecimal(tradeDayDTO.getTurnover()),2));
+                        tradeDayDTO.setProcedureFee(NumberUtil.format(new BigDecimal(tradeDayDTO.getProcedureFee()),2));
                         BigDecimal settAmount = NumberUtil.subtract(tradeDayDTO.getTurnover(), tradeDayDTO.getProcedureFee());
-                        tradeDayDTO.setSettlementAmount(String.valueOf(settAmount.doubleValue()));
+                        tradeDayDTO.setSettlementAmount(NumberUtil.format(settAmount,2));
                         dayDatas.add(tradeDayDTO);
                         flag = false;
                     }
