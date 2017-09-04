@@ -165,4 +165,9 @@ public interface MerchantCoreService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<List<Agent>> queryAllAgent();
+    /**
+     * 生成innoCode
+     * @return
+     */
+    String getInnerCode();
 }
