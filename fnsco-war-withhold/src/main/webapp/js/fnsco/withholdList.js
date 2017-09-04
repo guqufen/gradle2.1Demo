@@ -118,7 +118,7 @@ function initTableData() {
 		search : false, // 是否启动搜索栏
 		url : PROJECT_NAME + '/web/withholdInfo/query',
 		showRefresh : true,// 是否显示刷新按钮
-		showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
+		//showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 		// toolbar : '#toolbar', // 工具按钮用哪个容器
 		striped : true, // 是否显示行间隔色
 		cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
@@ -740,7 +740,9 @@ function details(id) {
 	productTypeCodeelse();
 	query(id);
 	withholdId=id;
+	$('#table').bootstrapTable('refresh');
 	$('#tableDetails').bootstrapTable('refresh');
+	initTableData1();
 }
 
 
@@ -768,15 +770,13 @@ function query(id){
 		}
 	});
 }
-
-initTableData1();
 function initTableData1() {
 	$('#tableDetails').bootstrapTable({
 		sidePagination : 'server',
 		search : false, // 是否启动搜索栏
 		url : PROJECT_NAME + '/web/tradeData/query',
 		showRefresh : false,// 是否显示刷新按钮
-		showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
+		//showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 		// toolbar : '#toolbar', // 工具按钮用哪个容器
 		striped : true, // 是否显示行间隔色
 		cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
@@ -830,7 +830,7 @@ function initTableData1() {
 function formatSxnTime(value, row, index){
 	return value/100;
 }
-function queryParams1(params) {
+function queryParams1(params1) {
 	console.log(withholdId)
 	var param = {
 		currentPageNum : this.pageNumber,
