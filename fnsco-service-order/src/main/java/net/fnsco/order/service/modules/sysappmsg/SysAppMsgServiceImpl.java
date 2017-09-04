@@ -22,6 +22,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
 import net.fnsco.order.api.constant.ApiConstant;
@@ -416,10 +417,11 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             AppPushMsgInfoDTO dtoInfo = new AppPushMsgInfoDTO();
             dtoInfo.setId(sysAppMessage.getId());
             dtoInfo.setDetailURL(sysAppMessage.getDetailUrl());
+            dtoInfo.setMsgType(sysAppMessage.getMsgType().toString());
             String pathUrl  = sysAppMessage.getImageUrl();
             if(!Strings.isNullOrEmpty(pathUrl)){
                 String path = pathUrl.substring(pathUrl.indexOf("^")+1);
-                dtoInfo.setImageURL(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
+                dtoInfo.setImageURL(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
             }
             
             dtoInfo.setMsgSubtitle(sysAppMessage.getMsgSubTitle());

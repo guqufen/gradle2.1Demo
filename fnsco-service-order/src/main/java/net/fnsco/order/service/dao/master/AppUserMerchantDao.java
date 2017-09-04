@@ -19,6 +19,17 @@ public interface AppUserMerchantDao {
     int deleteByMerCoreIds(Integer[] ids);
     
     /**
+     * deleteByMerIdAndUserId:(根据商户ID和用户ID 删除关系)
+     * @param userId
+     * @param merId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月4日 上午11:17:35
+     * @return int    DOM对象
+     */
+    int deleteByMerIdAndUserId(@Param("userId")Integer userId,@Param("merId")Integer merId);
+    
+    /**
      * selectByUserIdAndRoleId:(这里用一句话描述这个方法的作用)根据userId和roleId查询商家信息
      *
      * @return    设定文件
