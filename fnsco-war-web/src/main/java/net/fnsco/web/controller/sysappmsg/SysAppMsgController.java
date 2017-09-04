@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
@@ -102,7 +103,7 @@ public class SysAppMsgController extends BaseController {
         SysAppMessage message = sysAppMsgService.selectByPrimaryKey(id);
         if(StringUtils.isNotEmpty(message.getImageUrl())){
             String path = message.getImageUrl().substring(message.getImageUrl().indexOf("^")+1);
-            String imageURL =  OssUtil.getFileUrl(OssUtil.getHeadBucketName(), path);
+            String imageURL =  OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), path);
             message.setImageUrl(imageURL);
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
