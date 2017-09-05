@@ -3,27 +3,12 @@
  */
 package net.fnsco.web.controller.sysuser;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.core.base.BaseController;
-import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.constants.CoreConstants;
-import net.fnsco.core.utils.CookieUtils;
-import net.fnsco.freamwork.business.WebUserDTO;
-import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.sysuser.SysUserService;
-import net.fnsco.order.service.domain.SysUser;
 
 /**@desc 后台管理系统登录控制器
  * @author tangliang
