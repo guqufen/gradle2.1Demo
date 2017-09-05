@@ -152,7 +152,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     dto.setAppUserId(appUser.getId());
                     dto.setInnerCode(object.getInnerCode());
                     dto.setModefyTime(new Date());
-                    dto.setRoleId(ConstantEnum.AuthorTypeEnum.CLERK.getCode());
+                    dto.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
                     appUserMerchantDao.insertSelective(dto);
                 }
             }
@@ -179,7 +179,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                     dto.setAppUserId(appUser.getId());
                     dto.setInnerCode(object.getInnerCode());
                     dto.setModefyTime(new Date());
-                    dto.setRoleId(ConstantEnum.AuthorTypeEnum.CLERK.getCode());
+                    dto.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
                     appUserMerchantDao.insertSelective(dto);
                 }
             }
