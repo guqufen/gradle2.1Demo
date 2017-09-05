@@ -32,7 +32,7 @@ public class AppInterceptor implements HandlerInterceptor {
     @Autowired
     private Environment env;
 
-    @Autowired
+    @Autowired(required = false)
     private AppService userService;
 
     @Override

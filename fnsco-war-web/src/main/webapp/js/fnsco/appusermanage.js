@@ -35,6 +35,10 @@ $('#table').bootstrapTable({
 		title : '绑定店铺',
 		formatter : formatMerNames
 	}, {
+		field : 'lastLoginTime',
+		title : '最后登录时间',
+		formatter : formatReDate
+	}, {
 		field : 'regTime',
 		title : '注册时间',
 		formatter : formatReDate
