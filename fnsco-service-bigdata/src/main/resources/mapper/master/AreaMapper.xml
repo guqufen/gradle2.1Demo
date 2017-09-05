@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.AreaDAO">
+	<resultMap type="net.fnsco.bigdata.service.domain.Area" id="BaseResultMap">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="supper_id" property="supper_id" jdbcType="INTEGER" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, name, supper_id, level
+	</sql>
+
+	<select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sys_area
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<insert id="insert" parameterType="net.fnsco.bigdata.service.domain.Area"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into sys_area(id, name,
+		supper_id, level)
+		values(#{id,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		#{supper_id,jdbcType=INTEGER}，
+		#{level,jdbcType=INTEGER})
+	</insert>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		DELETE FROM t_area WHERE
+		id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<update id="update" parameterType="net.fnsco.bigdata.service.domain.Area">
+		update sys_area
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="supper_id != null">
+				supper_id = #{supper_id, jdbcType=INTEGER}
+			</if>
+			<if test="level != null">
+				level = #{level, jdbcType=INTEGER}
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="getProvinceList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_area
+		where level=1 order by id asc
+	</select>
+
+	<select id="getListBySupperId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_area
+		where supper_id = #{supper_id, jdbcType=INTEGER} order by
+		id asc
+	</select>
+
+	<select id="getList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_area order by id asc
+	</select>
+
+	<select id="getNameById" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		select name from sys_area where id = #{id,
+		jdbcType=INTEGER}
+	</select>
+</mapper>
