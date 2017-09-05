@@ -775,18 +775,18 @@ function posHtml(num){
         '<div class="col-sm-4"><label class="control-label" for="posType'+num+'">机具型号：</label><input type="text" class="form-control posType" id="posType'+num+'" name="posType'+num+'" required="required" value="APOS A8"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="mercReferName'+num+'">签购单名称：</label><input type="text" class="form-control mercReferName" id="mercReferName'+num+'" name="mercReferName'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="posFactory'+num+'">机具厂家：</label><input type="text" class="form-control posFactory" id="posFactory'+num+'" name="posFactory'+num+'" required="required" value="福建联迪商用设备有限公司"></div>'+
-        '<div class="col-sm-8"><label class="control-label" for="installAddr'+num+'">POS装机地址：</label>'+
-        '<select class="posProvince" id="provinceId' + num + '" name="provinceId' + num + '" style="width: 80px; type=province" onchange=processSelect('+ num + ',' + true + ')>' + 
+        '<div class="col-sm-4"><label class="control-label" for="installAddr'+num+'">POS装机地址：</label>'+
+        '<select  class="form-control posProvince" id="provinceId' + num + '" name="provinceId' + num + '" style="type=province" onchange=processSelect('+ num + ',' + true + ')>' + 
 			'<option value="">--选择省--</option>' +
-		'</select>' +
-        '<select class="posCity" id="cityId' + num + '" name="cityId' + num + '" style="width: 100px;" onchange=processSelect(' + num + ','+ false + ')>' + 
+		'</select></div>' +
+        '<div class="col-sm-4"><label class="control-label"></label><select  class="form-control posCity" id="cityId' + num + '" name="cityId' + num + '" onchange=processSelect(' + num + ','+ false + ')>' + 
         	'<option value="">--选择市--</option>' + 
-		'</select>' +
-		'<select class="posArea" id="areaId' + num + '" name="areaId' + num + '" style="width: 100px;">' + 
+		'</select></div>' +
+		'<div class="col-sm-4"><label class="control-label"></label><select class="form-control posArea" id="areaId' + num + '" name="areaId' + num + '" >' + 
 			'<option value="">--选择区--</option>' +
-		'</select>' +
-		'</div>'+
-		'<div class="col-sm-4"><label class="control-label" for="installAddr'+num+'">POS装机详细地址：</label>'+
+		'</select></div>' +
+		
+		'<div class="col-sm-12"><label class="control-label" for="installAddr'+num+'">POS装机详细地址：</label>'+
 		'<input type="text" class="form-control installAddr" id="installAddr'+num+'" name="installAddr'+num+'" required="required">'
         '</div>'+
         '<h2>扫码：</h2>'+
