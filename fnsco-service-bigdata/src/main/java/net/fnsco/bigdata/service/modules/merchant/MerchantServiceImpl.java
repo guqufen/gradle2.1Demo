@@ -284,7 +284,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         if (null != merchantPos) {
             return merchantPos.getPosName();
         }
-        return "";
+        return null;
     }
     
 }

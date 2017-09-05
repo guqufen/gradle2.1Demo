@@ -20,7 +20,6 @@
 		<if test="roleId != null and roleId != '' ">
 		  and role_id = #{roleId,jdbcType=VARCHAR}
 		</if>
-		ORDER BY role_id
 	</select>
 	<select id="selectByall" resultMap="BaseResultMap">
 		select
@@ -38,6 +37,7 @@
 		<if test="roleId != null and roleId != '' ">
 		  and role_id = #{roleId,jdbcType=VARCHAR}
 		</if>
+		ORDER BY CONVERT(role_id,SIGNED)
 	</select>
 	<!-- 根据innerCode和appUserId删除绑定关系 -->
 	<delete id="deleteByPrimaryKey">

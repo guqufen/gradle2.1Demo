@@ -5,11 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 public class HttpRequestPayHelper {
 
-    private static Logger logger = Logger.getLogger(HttpRequestPayHelper.class);
+    private static Logger logger = LoggerFactory.getLogger(HttpRequestPayHelper.class);
 
     public static Map<String, String> sendPost(String apiHost, String payKey, Map<String, String> paras, String encoding, int sendType) {
 
