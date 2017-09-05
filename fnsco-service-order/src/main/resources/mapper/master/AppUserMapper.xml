@@ -33,6 +33,7 @@
 	  <result column="mobile" property="mobile" jdbcType="VARCHAR" />
 	  <result column="reg_time" property="regTime" jdbcType="TIMESTAMP"/>
 	  <result column="mer_names" property="merNames" jdbcType="VARCHAR"/>
+	  <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP"/>
 	</resultMap>
 	<!-- 商户角色结果集 -->
   <resultMap  id="RELResultMap" type="net.fnsco.order.api.dto.QueryBandDTO">
@@ -182,6 +183,7 @@
 		TA.mobile,
 		TA.reg_time,
 		TA.user_name,
+		TA.last_login_time,
 		concat(
 					GROUP_CONCAT(TA.mer_name),
 					"、"
@@ -192,7 +194,8 @@
 					MR.mobile,
 					MC.mer_name,
 					MR.reg_time,
-					MR.user_name
+					MR.user_name,
+					MR.last_login_time
 				FROM
 					(
 						SELECT
@@ -212,7 +215,7 @@
 				      			</if>
 			</where>
 		GROUP BY
-			TA.reg_time,TA.mobile,TA.user_name
+			TA.last_login_time,TA.reg_time,TA.mobile,TA.user_name
 		ORDER BY reg_time DESC	
 	    limit #{startRow},#{perPageSize}		
 	</select>
@@ -227,7 +230,8 @@
 					MR.mobile,
 					MC.mer_name,
 					MR.reg_time,
-					MR.user_name
+					MR.user_name,
+					MR.last_login_time
 				FROM
 					(
 						SELECT
@@ -251,7 +255,7 @@
 				      			</if>
 			</where>
 		GROUP BY
-			TA.mobile,TA.reg_time,TA.user_name
+			TA.last_login_time,TA.mobile,TA.reg_time,TA.user_name
 		) TAB
 	</select>
 	  <!-- 根据手机号查询店铺绑定情况 -->

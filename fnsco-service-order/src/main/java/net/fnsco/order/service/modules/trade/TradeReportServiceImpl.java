@@ -906,8 +906,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        //反着排序
-        Collections.reverse(datas);
+        
         return datas;
     }
 }
