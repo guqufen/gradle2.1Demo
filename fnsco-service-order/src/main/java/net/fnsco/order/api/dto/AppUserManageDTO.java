@@ -31,8 +31,9 @@ public class AppUserManageDTO extends DTO{
     private Date regTime;
     
     private String regTimeStr;
-   
-	/**
+    private Date lastLoginTime;
+
+    /**
      * 店铺名称集合字符串拼接
      */
     private String merNames;
@@ -124,4 +125,11 @@ public class AppUserManageDTO extends DTO{
         this.merNames = merNames;
     }
     
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
 }

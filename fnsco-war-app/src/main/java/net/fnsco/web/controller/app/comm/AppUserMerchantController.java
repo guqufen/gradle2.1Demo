@@ -40,7 +40,7 @@ public class AppUserMerchantController extends BaseController {
     public ResultDTO queryBindRelation(@RequestBody BandDto bandDto) {
         List<AppUserMerchantOutDTO> result = appUserMerchantService.queryBindRelation(bandDto);
         if(result.size()==0){
-            return ResultDTO.fail(ApiConstant.E_NOSHOPKEEPER_ERROR);
+            return ResultDTO.fail(ApiConstant.E_SUGGESTEMPTYNULL_ERROR);
         }
         return ResultDTO.success(result);
     }
