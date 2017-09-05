@@ -48,7 +48,7 @@ public class CommonController extends BaseController {
     @ApiOperation(value = "保存log")
     public ResultDTO saveLog(@RequestBody LogJO log) {
         //终端号
-        logger.error(String.format("pos机sn码%s，终端号%s,log日志%s", log.getSnCode(), log.getTermCode(), log.getLogInfo()));
+        logger.error(String.format("=====>拉卡拉日志：pos机sn码%s，终端号%s,log日志%s", log.getSnCode(), log.getTermCode(), log.getLogInfo()));
         return ResultDTO.success();
     }
 
