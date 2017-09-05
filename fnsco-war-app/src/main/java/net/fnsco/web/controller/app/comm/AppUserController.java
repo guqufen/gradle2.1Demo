@@ -184,7 +184,7 @@ public class AppUserController extends BaseController {
                     appUserDto.setUserId(Integer.valueOf(userId));
                     appUserDto.setHeadImagePath(newUrl);
                     appUserService.modifyInfo(appUserDto);
-                    String imageUrl = OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), fileKey);
+                    String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), fileKey);
                     Map<String,String> datas = Maps.newHashMap();
                     datas.put("headImageUrl", imageUrl);
                     return ResultDTO.success(datas);

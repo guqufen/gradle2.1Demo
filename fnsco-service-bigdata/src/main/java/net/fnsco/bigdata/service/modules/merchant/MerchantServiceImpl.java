@@ -286,4 +286,5 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         }
         return null;
     }
+    
 }

@@ -147,8 +147,8 @@ public class TradeDataWebController extends BaseController {
 		JSONObject jObject = new JSONObject();
         jObject.put("data", dataList);
         List<TradeData> list = (List<TradeData>) jObject.get("data");
-        String itemMark = "orderNo,orderIdScan,merName,merId,timeStamp,payType,amt,orderTime,termId,batchNo,sysTraceNo,authCode,source,createTimeStr,status";
-        String itemParap = "订单号,扫码交易的订单号,商户名,结算商户号,支付时间,支付方式,交易金额(元),订单时间,终端号,批次号,凭证号,授权码,来源,创建时间,状态";
+        String itemMark = "orderNo,orderIdScan,merName,innerCode,snCode,referNo,txnType,merId,timeStamp,payType,amt,orderTime,termId,batchNo,sysTraceNo,authCode,source,createTimeStr,status";
+        String itemParap = "订单号,扫码交易的订单号,商户名,内部商户号,终端SN码,参考号,交易类型,结算商户号,支付时间,支付方式,交易金额(元),订单时间,终端号,批次号,凭证号,授权码,来源,创建时间,状态";
 
 		String[] itemMarks = itemMark.split(",");// 键
 		String[] itemParaps = itemParap.split(",");// 列头

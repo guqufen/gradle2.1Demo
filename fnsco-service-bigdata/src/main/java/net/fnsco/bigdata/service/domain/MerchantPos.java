@@ -13,7 +13,7 @@ public class MerchantPos {
     private Integer id;
 
     private String innerCode;
-
+    
     private Integer channelId;
 
     private String posName;
@@ -30,7 +30,15 @@ public class MerchantPos {
     
     private String mercReferName;
     
-    private List<MerchantTerminal> terminal;//POS机下终端信息
+    private String posAddr;
+    
+    private Integer posProvince;
+    
+    private Integer posCity;
+    
+    private Integer posArea;
+    
+	private List<MerchantTerminal> terminal;//POS机下终端信息
     
     /**
      * mercReferName
@@ -161,4 +169,36 @@ public class MerchantPos {
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
     }
+    public String getPosAddr() {
+		return posAddr;
+	}
+
+	public void setPosAddr(String posAddr) {
+		this.posAddr = posAddr;
+	}
+
+	public Integer getPosProvince() {
+		return posProvince;
+	}
+
+	public void setPosProvince(Integer posProvince) {
+		this.posProvince = posProvince;
+	}
+
+	public Integer getPosCity() {
+		return posCity;
+	}
+
+	public void setPosCity(Integer posCity) {
+		this.posCity = posCity;
+	}
+
+	public Integer getPosArea() {
+		return posArea;
+	}
+
+	public void setPosArea(Integer posArea) {
+		this.posArea = posArea;
+	}
+
 }

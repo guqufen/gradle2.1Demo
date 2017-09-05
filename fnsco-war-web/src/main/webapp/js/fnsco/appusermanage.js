@@ -181,7 +181,6 @@ function showdates(data) {
 // 判断修改
 $(".modify").click(function() {
 	confirmlt(mobile);
-
 })
 
 function confirmlt(mobile) {
@@ -214,9 +213,7 @@ function confirmlt(mobile) {
 	})
 	console.log(arry);
 	var toStr = JSON.stringify(arry);
-
-	$
-			.ajax({
+			$.ajax({
 				url : PROJECT_NAME + '/web/appsuser/judgeRoles',
 				type : 'POST',
 				dataType : "json",
