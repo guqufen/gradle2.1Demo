@@ -90,28 +90,38 @@ public class MerchantInfoImportService{
         	   //借记卡字符串分割
         	   String jjk0=String.valueOf(objs[20]);
         	   //借记卡转小数
-        	   String jjk1=jjk0.substring(0, jjk0.indexOf("%"));
-        	   BigDecimal bigDecimal0= new BigDecimal(jjk1);
-       		   BigDecimal jjk=  bigDecimal0.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
-        	   merchantTerminal.setDebitCardRate(String.valueOf(jjk.doubleValue()));
-        	   //借记卡费率封顶值
-        	   String max1=jjk0.substring(jjk0.indexOf("+"));
-        	   Integer max=Integer.valueOf(max1);
-        	   merchantTerminal.setDebitCardMaxFee(max);
+        	   if("null".equals(jjk0)) {
+        		   merchantTerminal.setDebitCardRate(null);
+        		   merchantTerminal.setDebitCardMaxFee(null);
+        	   }else {
+        		   String jjk1=jjk0.substring(0, jjk0.indexOf("%"));
+        		   BigDecimal bigDecimal0= new BigDecimal(jjk1);
+        		   BigDecimal jjk=  bigDecimal0.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+        		   merchantTerminal.setDebitCardRate(String.valueOf(jjk.doubleValue()));
+        		   //借记卡费率封顶值
+        		   String max1=jjk0.substring(jjk0.indexOf("+"));
+        		   Integer max=Integer.valueOf(max1);
+        		   merchantTerminal.setDebitCardMaxFee(max);
+        	   }
         	   String hjk=String.valueOf(objs[21]);
         	   merchantTerminal.setCreditCardRate(hjk);
         	   //支付宝微信费率分割
         	   String xx=String.valueOf(objs[23]);
-        	   //支付宝费率转换
-        	   String zfb1=xx.substring(xx.indexOf("支付宝")+3, xx.indexOf("%"));
-        	   BigDecimal bigDecimal1= new BigDecimal(zfb1);
-       		   BigDecimal zfb=  bigDecimal1.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
-        	   merchantTerminal.setAlipayFee(String.valueOf(zfb.doubleValue()));
-        	   //微信费率转换
-        	   String wx1=xx.substring(xx.indexOf("微信")+2, xx.lastIndexOf("%"));
-        	   BigDecimal bigDecimal2= new BigDecimal(wx1);
-       		   BigDecimal wx=  bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
-        	   merchantTerminal.setWechatFee(String.valueOf(wx.doubleValue()));
+        	   if("null".equals(xx)) {
+        		   merchantTerminal.setAlipayFee(null);
+        		   merchantTerminal.setWechatFee(null);
+        	   }else {
+        		   //支付宝费率转换
+        		   String zfb1=xx.substring(xx.indexOf("支付宝")+3, xx.indexOf("%"));
+        		   BigDecimal bigDecimal1= new BigDecimal(zfb1);
+        		   BigDecimal zfb=  bigDecimal1.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+        		   merchantTerminal.setAlipayFee(String.valueOf(zfb.doubleValue()));
+        		   //微信费率转换
+        		   String wx1=xx.substring(xx.indexOf("微信")+2, xx.lastIndexOf("%"));
+        		   BigDecimal bigDecimal2= new BigDecimal(wx1);
+        		   BigDecimal wx=  bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+        		   merchantTerminal.setWechatFee(String.valueOf(wx.doubleValue()));
+        	   }
         	   List<MerchantTerminal> terminalList=new ArrayList<MerchantTerminal>();
         	   terminalList.add(merchantTerminal);
         	   //终端信息保存
