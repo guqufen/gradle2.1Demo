@@ -39,6 +39,7 @@ import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.constants.CoreConstants;
+import net.fnsco.core.utils.CodeUtil;
 
 /**
  * @desc 商家基本信息 实现类
@@ -516,5 +517,22 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
         return merchantCore;
     }
+
+	@Override
+	public String getInnerCode() {
+		String innerCode = CodeUtil.generateMerchantCode("F");
+	    MerchantCore record = new MerchantCore();
+	    record.setInnerCode(innerCode);
+	    boolean stop = true;
+	    
+	    while(stop){
+	        List<MerchantCore> datas  = merchantCoreDao.queryListByCondition(record);
+	        if(CollectionUtils.isEmpty(datas)){
+	            stop = false;
+	        }
+	    }
+	    
+		return innerCode;
+	}
 
 }
