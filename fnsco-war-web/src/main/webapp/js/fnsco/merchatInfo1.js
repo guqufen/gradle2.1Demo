@@ -736,7 +736,7 @@ function saveBankCardParams(conId){
           $('#terminal-con').html('');
           $('#terminal-con').append(terminalHtml(TerminalList));
           //
-          
+          posProvince(TerminalList);
         }
       })
     },
@@ -1394,6 +1394,7 @@ $("#btn_addTerminal1").click(function(){
       layer.msg('最多添加八个终端');
     }else{
       $("#terminal-con1").append(terminalHtml(-(editTerminalList)));
+      posProvince(-(editTerminalList));
     }
 })
   //修改终端保存按钮
@@ -1408,6 +1409,7 @@ var editChannelList=20;
 $("#btn_addChannel1").click(function(){
     editChannelList=editChannelList+1;
     $("#channel-con1").append(channelHtml(-(editChannelList)));
+    posProvince(-(editChannelList));
 })
   //修改渠道保存按钮
   $('#editBtn_channel_info').click(function(){

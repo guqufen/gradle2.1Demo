@@ -30,7 +30,7 @@ public class WebInterceptor implements HandlerInterceptor {
     private Logger             logger   = LoggerFactory.getLogger(WebInterceptor.class);
     @Autowired
     private Environment        env;
-    @Autowired
+    @Autowired(required = false)
     private WebService        userService;
 
     @Override
