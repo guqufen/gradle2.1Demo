@@ -299,4 +299,10 @@ public class HttpRequest {
         // String ss = ChangeUnicode.getEncoding(result);
         return result;
     }
+    public static void main(String[] args) throws UnsupportedEncodingException{
+        //String signString = "accNo=6226227703549430&accType=01&accessMode=01&accessType=0&backUrl=http://dk.hengbingroup.cn:8081/withhold/open/pfWithholdCallback&bankId=03050000&bizType=000501&currency=CNY&customerInfo={\"certify_id\":\"33032419850524575X\",\"cvv2\":\"\",\"expired\":\"\",\"issInsCity\":\"\",\"smsCode\":\"\",\"issInsProvince\":\"\",\"certifTp\":\"01\",\"customerNm\":\"谷曲锋\",\"phoneNo\":\"13777828380\"}&merId=929000095012526&merOrderId=2017090509000013777828380292&payType=0501&ppFlag=01&txnAmt=1&txnSubType=01&txnTime=20170905090000&txnType=11&version=1.0.025c5BksZW5g23yGFz6hmEKkmCMUewhrU";
+        String signString = "accNo=6226227703549430&accType=01&accessMode=01&accessType=0&backUrl=http://114.55.54.76:8080/withhold/open/pfWithholdCallback&bankId=03050000&bizType=000501&currency=CNY&customerInfo={\"certify_id\":\"33032419850524575X\",\"cvv2\":\"\",\"expired\":\"\",\"issInsCity\":\"\",\"smsCode\":\"\",\"issInsProvince\":\"\",\"certifTp\":\"01\",\"customerNm\":\"guqufeng\",\"phoneNo\":\"13777828380\"}&merId=929000095012526&merOrderId=cs2017090509000013777828380164&payType=0501&ppFlag=01&txnAmt=1&txnSubType=01&txnTime=20170905090000&txnType=11&version=1.0.025c5BksZW5g23yGFz6hmEKkmCMUewhrU";
+        byte[] checkSign = Md5Util.encodebyte(signString.getBytes("UTF-8"));
+        System.out.println(Base64.getEncoder().encodeToString(checkSign));
+    }
 }

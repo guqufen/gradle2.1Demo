@@ -56,6 +56,9 @@ public class MerchantController extends BaseController {
     @ApiOperation(value = "获取商户pos机名称")
     public ResultDTO getPosName(@RequestBody MerchantJO merchant) {
         String posName = merchantService.getPosName(merchant.getSnCode());
+        if(null == posName){
+            return fail();
+        }
         return success(posName);
     }
 }

@@ -4,11 +4,11 @@ import net.fnsco.core.base.JO;
 
 public class LogJO extends JO {
     //终端号
-    private String  termCode;
+    private String termCode;
     //pos号
-    private String  snCode;
+    private String snCode;
     //log日志
-    private Integer logInfo;
+    private String logInfo;
 
     /**
      * termCode
@@ -54,25 +54,11 @@ public class LogJO extends JO {
         this.snCode = snCode;
     }
 
-    /**
-     * logInfo
-     *
-     * @return  the logInfo
-     * @since   CodingExample Ver 1.0
-    */
-
-    public Integer getLogInfo() {
+    public String getLogInfo() {
         return logInfo;
     }
 
-    /**
-     * logInfo
-     *
-     * @param   logInfo    the logInfo to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setLogInfo(Integer logInfo) {
+    public void setLogInfo(String logInfo) {
         this.logInfo = logInfo;
     }
 
