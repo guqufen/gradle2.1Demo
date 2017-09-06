@@ -196,8 +196,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 BigDecimal rate = NumberUtil.multiplication(tradeData.getAmt(), merTer.getDebitCardRate());
                 //跟设置的峰值比较，如果大于峰值则峰值，否则借记卡费率
                 BigDecimal bd1 = rate.divide(new BigDecimal(100));
-                BigDecimal db2 = new BigDecimal(merTer.getCreditCardMaxFee());
-                if(bd1.compareTo(db2) > 1){
+                BigDecimal db2 = new BigDecimal(merTer.getDebitCardMaxFee());
+                if(bd1.compareTo(db2) > 0){
                     result = db2;
                 }else{
                     result = bd1;
@@ -373,6 +373,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         TurnoverDTO turnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
         WeeklyDTO resultData = new WeeklyDTO();
         resultData.setInnerCode(tradeReportDTO.getInnerCode());
+        resultData.setMerNames(tradeReportDTO.getMerNames());
         resultData.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
         resultData.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
         if(null == turnover){

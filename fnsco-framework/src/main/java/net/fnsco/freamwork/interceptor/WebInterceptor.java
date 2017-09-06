@@ -40,6 +40,7 @@ public class WebInterceptor implements HandlerInterceptor {
             return true;
         }
         String requestUrl = request.getRequestURL().toString();
+        String contextPath = request.getContextPath();
         // 从配置文件中获取浙付通接口模块,不需要被拦截
         String appModules = env.getProperty("web.ignore.url");
         if (!Strings.isNullOrEmpty(appModules)) {
@@ -62,7 +63,7 @@ public class WebInterceptor implements HandlerInterceptor {
             logger.warn("未登录转入登录页面");
             String requestType = request.getHeader("X-Requested-With");
             if (Strings.isNullOrEmpty(requestType)) {
-                response.sendRedirect("/idx");
+                response.sendRedirect(contextPath+"/idx");
                 return false;
             }
             WebUserDTO user = userService.getCookieUser(request);
