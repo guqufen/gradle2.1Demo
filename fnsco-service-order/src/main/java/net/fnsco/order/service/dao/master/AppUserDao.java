@@ -76,4 +76,5 @@ public interface AppUserDao {
      * @return List<AppUser>    DOM对象
      */
     List<AppUser> selectAllInlineByRoleId(@Param("roleId")String roleId);
+    List<QueryBandDTO> selectInnercode(@Param("mobile")String mobile);
 }

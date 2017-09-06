@@ -42,6 +42,10 @@
      <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
      <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
   </resultMap>
+  <!-- innerCode结果集 -->
+  <resultMap  id="RELInnerCodeResultMap" type="net.fnsco.order.api.dto.QueryBandDTO">
+     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+  </resultMap>
 	<sql id="Base_Column_List">
 		id, user_name, mobile, password, real_name, device_id, ges_state,
 		ges_password, ges_trail,
@@ -314,5 +318,9 @@
 		<include refid="Base_Column_List" />
 		from m_app_user
 		WHERE state = 1 and device_token &lt;&gt; '' and device_token is not null and id IN ( SELECT app_user_id FROM u_app_user_merchant WHERE role_id = #{roleId})
+  </select>
+  <!-- 查询手机号的关联信息 -->
+ <select id="selectInnercode" parameterType="java.lang.String" resultMap="RELInnerCodeResultMap">
+  	SELECT inner_code FROM m_merchant_core WHERE legal_person_mobile=#{mobile,jdbcType=VARCHAR}  UNION SELECT inner_code FROM m_merchant_contact  WHERE contact_mobile=#{mobile,jdbcType=VARCHAR}
   </select>
 </mapper>
