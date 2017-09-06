@@ -124,7 +124,7 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
     mui.alert('获取用户信息失败');
   }else{
     $.ajax({
-      url:'/app/tradeReport/queryBusinessTrends',
+      url:'/app/tradeReport/queryBusinessTrends'+new Date().getTime(),
       dataType : "json",
       type:'POST',
       headers: {
