@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 
 import net.fnsco.core.constants.CoreConstants;
-import net.fnsco.freamwork.business.AppUserDTO;
-import net.fnsco.freamwork.business.UserService;
+import net.fnsco.freamwork.business.AppService;
+import net.fnsco.freamwork.business.AppUser1DTO;
+import net.fnsco.freamwork.business.WebService;
 import net.fnsco.freamwork.business.WebUserDTO;
 
 /**
@@ -23,15 +24,15 @@ import net.fnsco.freamwork.business.WebUserDTO;
  *
  */
 @Service
-public class UserServiceImpl implements UserService {
-     
+public class UserServiceImpl implements AppService, WebService {
+
     /**
      * 判断是否强制登录获取用户信息
      * (non-Javadoc)
      * @see net.fnsco.freamwork.business.UserService#getUserInfo(java.lang.String)
      */
     @Override
-    public AppUserDTO getUserInfo(String userId) {
+    public AppUser1DTO getUserInfo(String userId) {
         return null;
 
     }
@@ -44,11 +45,11 @@ public class UserServiceImpl implements UserService {
             return user;
         }
         String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#") + 1, cookeiUser.toString().length());
-//        UserDO temp = userService.getUserByName(userName);
-//        if (temp != null) {
-//            user = new AppUserDTO();
-//            setSessionUser(request,temp,temp.getId());
-//        }
+        //        UserDO temp = userService.getUserByName(userName);
+        //        if (temp != null) {
+        //            user = new AppUserDTO();
+        //            setSessionUser(request,temp,temp.getId());
+        //        }
         return user;
     }
 

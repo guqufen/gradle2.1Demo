@@ -8,9 +8,10 @@
     <result column="turnover" property="turnover" jdbcType="DECIMAL" />
     <result column="order_num" property="orderNum" jdbcType="INTEGER" />
     <result column="order_price" property="orderPrice" jdbcType="DECIMAL" />
+    <result column="procedure_fee" property="procedureFee" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, trade_date, inner_code, turnover, order_num, order_price
+    id, trade_date, inner_code, turnover, order_num, order_price, procedure_fee
   </sql>
   <insert id="insert" parameterType="net.fnsco.order.service.domain.trade.TradeByDay" >
     insert into r_trade_by_day (id, trade_date, inner_code, 
@@ -180,13 +181,64 @@
                  SELECT LAST_INSERT_ID()
      </selectKey>
       insert into r_trade_by_day (id, trade_date, inner_code, 
-      turnover, order_num, order_price
+      turnover, order_num, order_price, procedure_fee
       )
      values 
       <foreach collection ="list" item="dayTrade" index= "index" separator =",">
      (#{dayTrade.id,jdbcType=INTEGER}, #{dayTrade.tradeDate,jdbcType=VARCHAR}, #{dayTrade.innerCode,jdbcType=VARCHAR}, 
-      #{dayTrade.turnover,jdbcType=DECIMAL}, #{dayTrade.orderNum,jdbcType=INTEGER}, #{dayTrade.orderPrice,jdbcType=DECIMAL}
+      #{dayTrade.turnover,jdbcType=DECIMAL}, #{dayTrade.orderNum,jdbcType=INTEGER}, #{dayTrade.orderPrice,jdbcType=DECIMAL},#{dayTrade.procedureFee,jdbcType=DECIMAL}
       )
       </foreach>
   </insert>
+  <!-- 统计手续费的每天记录 -->
+  <select id="selectFinanceByRecord" parameterType="net.fnsco.order.service.domain.trade.TradeByDay" resultType="net.fnsco.order.api.report.dto.FinanceTurnoverDTO">
+  	select SUM(turnover) AS turnover,SUM(order_num) AS orderNum,SUM(procedure_fee) AS procedureFee from r_trade_by_day
+    <where>
+      <if test="startTradeDate != null and  startTradeDate != ''">
+        AND trade_date &gt;= #{startTradeDate}
+      </if>
+       <if test="endTradeDate != null and  endTradeDate != ''">
+        AND trade_date &lt;= #{endTradeDate}
+      </if>
+      <if test="tradeDate != null and  tradeDate != ''">
+        AND trade_date= #{tradeDate}
+      </if>
+      <if test="userId != null">
+       AND inner_code in (
+         SELECT inner_code FROM u_app_user_merchant WHERE app_user_id=#{userId}
+         <if test="roleId != null">
+           AND role_id = #{roleId}
+         </if>
+       )
+      </if>
+      <if test="innerCode !=null and innerCode != ''">
+       AND inner_code = #{innerCode}
+      </if>
+    </where>
+  </select>
+  <!-- 按照日期统计、 -->
+  <select id="selectFinaceByRecord" parameterType="net.fnsco.order.service.domain.trade.TradeByDay" resultType="net.fnsco.order.api.report.dto.FinanceDayDTO">
+	  SELECT trade_date AS tradeDate,SUM(order_num) AS orderNum, SUM(turnover) AS turnover,SUM(procedure_fee) AS procedureFee FROM r_trade_by_day 
+     <where>
+       <if test="startTradeDate != null and  startTradeDate != ''">
+        AND trade_date &gt;= #{startTradeDate}
+      </if>
+       <if test="endTradeDate != null and  endTradeDate != ''">
+        AND trade_date &lt;= #{endTradeDate}
+      </if>
+      <if test="userId != null">
+        AND inner_code in (
+          SELECT inner_code FROM u_app_user_merchant WHERE app_user_id =#{userId}
+          <if test="roleId != null">
+            AND role_id = #{roleId}
+          </if>
+        )
+      </if>
+      <if test="innerCode != null and innerCode != ''">
+        AND inner_code = #{innerCode}
+      </if>
+     </where>
+     GROUP BY trade_date
+     ORDER BY trade_date DESC
+  </select>
 </mapper>

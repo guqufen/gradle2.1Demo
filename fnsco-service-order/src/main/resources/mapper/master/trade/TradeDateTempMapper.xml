@@ -9,9 +9,10 @@
     <result column="time_stamp" property="timeStamp" jdbcType="VARCHAR" />
     <result column="trade_date" property="tradeDate" jdbcType="VARCHAR" />
     <result column="trade_houre" property="tradeHoure" jdbcType="VARCHAR" />
+    <result column="procedure_fee" property="procedureFee" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, inner_code, amt, pay_sub_type, time_stamp, trade_date, trade_houre
+    id, inner_code, amt, pay_sub_type, time_stamp, trade_date, trade_houre, procedure_fee
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -113,6 +114,7 @@
   <select id="selectTradeDataByDate" resultType="net.fnsco.order.service.domain.trade.TradeByDay" >
     SELECT
 		SUM(amt) AS turnover,
+		SUM(procedure_fee) AS procedureFee,
 		inner_code AS innerCode,
 		COUNT(*) AS orderNum,
 		cast(
@@ -164,12 +166,34 @@
                  SELECT LAST_INSERT_ID()
      </selectKey>
      insert into r_trade_date_temp (id, inner_code, amt, 
-      pay_sub_type, time_stamp,trade_date, trade_houre)
+      pay_sub_type, time_stamp,trade_date, trade_houre,procedure_fee)
     values
      <foreach collection ="list" item="reddemCode" index= "index" separator =",">
       (#{reddemCode.id,jdbcType=INTEGER}, #{reddemCode.innerCode,jdbcType=VARCHAR}, #{reddemCode.amt,jdbcType=VARCHAR}, 
       #{reddemCode.paySubType,jdbcType=VARCHAR}, #{reddemCode.timeStamp,jdbcType=VARCHAR}, #{reddemCode.tradeDate,jdbcType=VARCHAR}, 
-      #{reddemCode.tradeHoure,jdbcType=VARCHAR})
+      #{reddemCode.tradeHoure,jdbcType=VARCHAR},#{reddemCode.procedureFee,jdbcType=DECIMAL})
      </foreach>
   </insert>
+  <!-- 统计今日营业额 -->
+  <select id="queryTodayTurnover" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData"  resultType="net.fnsco.order.api.dto.TurnoverDTO">
+    SELECT
+	SUM(amt) AS turnover,
+	COUNT(*) AS orderNum
+	FROM
+		t_trade_data
+	WHERE
+		inner_code IN (
+			SELECT
+				inner_code
+			FROM
+				u_app_user_merchant
+			WHERE
+				app_user_id = #{userId}
+			<if test="roleId != null">
+			    AND role_id = #{roleId}
+			</if>	
+		)
+	AND time_stamp > #{tradeDate}
+	AND status = 1
+  </select>
 </mapper>

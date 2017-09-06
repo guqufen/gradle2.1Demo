@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
+import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
+import net.fnsco.bigdata.service.domain.MerchantTerminal;
+import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.NumberUtil;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.BusinessTrendDTO;
 import net.fnsco.order.api.dto.ConsPatternDTO;
@@ -32,18 +38,20 @@ import net.fnsco.order.api.dto.TradeTypeDTO;
 import net.fnsco.order.api.dto.TurnoverDTO;
 import net.fnsco.order.api.dto.WeeklyDTO;
 import net.fnsco.order.api.dto.WeeklyHisDateDTO;
+import net.fnsco.order.api.report.dto.FinanceDayDTO;
+import net.fnsco.order.api.report.dto.FinanceMouthDTO;
+import net.fnsco.order.api.report.dto.FinanceReportDTO;
+import net.fnsco.order.api.report.dto.FinanceTurnoverDTO;
 import net.fnsco.order.api.trade.TradeReportService;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.dao.master.trade.TradeByDayDao;
 import net.fnsco.order.service.dao.master.trade.TradeByHourDao;
 import net.fnsco.order.service.dao.master.trade.TradeByPayTypeDao;
-import net.fnsco.order.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.order.service.dao.master.trade.TradeDateTempDao;
 import net.fnsco.order.service.domain.AppUserMerchant;
 import net.fnsco.order.service.domain.trade.TradeByDay;
 import net.fnsco.order.service.domain.trade.TradeByHour;
 import net.fnsco.order.service.domain.trade.TradeByPayType;
-import net.fnsco.order.service.domain.trade.TradeData;
 import net.fnsco.order.service.domain.trade.TradeDateTemp;
 
 /**
@@ -73,6 +81,9 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
 
     @Autowired
     private AppUserMerchantDao appUserMerchantDao;
+    
+    @Autowired
+    private MerchantTerminalDao merchantTerminalDao;
 
     private final static int   pageSize = 20;
 
@@ -94,17 +105,29 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         record.setEndTime(endTime);
         String startDate = startTime.substring(0, 8);
         String endDate =  endTime.substring(0,8);
-        List<TradeDateTemp> tempDatas = tradeDataDAO.queryTempByCondition(record);
+        List<TradeData> tempDatas = tradeDataDAO.queryTempByCondition(record);
         //如果没有数据直接返回
         if(CollectionUtils.isEmpty(tempDatas)){
             return;
         }
-        for (TradeDateTemp tradeDateTemp : tempDatas) {
-            String timeStamp = tradeDateTemp.getTimeStamp();
+        List<TradeDateTemp> tempData = Lists.newArrayList();
+        for (TradeData tradeData : tempDatas) {
+            TradeDateTemp tradeDateTemp = new TradeDateTemp();
+            String timeStamp = tradeData.getTimeStamp();
             tradeDateTemp.setTradeDate(timeStamp.substring(0, timeStamp.length() - 6));
             tradeDateTemp.setTradeHoure(timeStamp.substring(8, 10));
+            tradeDateTemp.setAmt(tradeData.getAmt());
+            tradeDateTemp.setInnerCode(tradeData.getInnerCode());
+            tradeDateTemp.setPaySubType(tradeData.getPaySubType());
+            //计算手续费
+            String terId = tradeData.getTermId();
+            if(StringUtils.isNoneEmpty(terId)){
+                BigDecimal rate = countFeeRate(terId,tradeData);
+                tradeDateTemp.setProcedureFee(rate);
+            }
+            tempData.add(tradeDateTemp);
         }
-        tradeDateTempDao.insertBatch(tempDatas);
+        tradeDateTempDao.insertBatch(tempData);
         //统计之前先删除，防止重复统计
         TradeByDay dayCondition = new TradeByDay();
         dayCondition.setStartTradeDate(startDate);
@@ -129,7 +152,72 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         List<TradeByPayType> tradePayTypeData = tradeDateTempDao.selectTradeDataByPayType();
         tradeByPayTypeDao.insertBatch(tradePayTypeData);
     }
-
+    
+    /**
+     * countFeeRate:(计算费率)返回结果是以分为单位
+     * @param terminalCode
+     * @param tradeData
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月30日 下午2:25:41
+     * @return BigDecimal    DOM对象
+     */
+    private BigDecimal countFeeRate(String terminalCode,TradeData tradeData){
+        BigDecimal result = new BigDecimal(0);
+        if(Strings.isNullOrEmpty(terminalCode)){
+            return result;
+        }
+        String paySubType = tradeData.getPaySubType();
+        if(Strings.isNullOrEmpty(paySubType)){
+            return result;
+        }
+        
+        /**
+         * 根据交易渠道类型来计算费率。
+         */
+        MerchantTerminal merTer = merchantTerminalDao.selectByTerminalCode(terminalCode);
+        if(null == merTer){
+            return result;
+        }
+        
+        //刷卡需要区分借记卡和贷记卡
+        if(ConstantEnum.PayTypeEnum.PAYBYCARD.getCode().equals(paySubType)){
+            String dcType = tradeData.getDcType();
+            if(Strings.isNullOrEmpty(dcType)){
+                return result;
+            }
+          //贷记卡
+            if(dcType.startsWith(ConstantEnum.DcTypeEnum.INLANDCREDITCARD.getCode()) || dcType.startsWith(ConstantEnum.DcTypeEnum.OVERSEASCREDITCARD.getCode())){
+                
+                result = NumberUtil.multiplication(tradeData.getAmt(), merTer.getCreditCardRate());
+                
+            }else if(dcType.startsWith(ConstantEnum.DcTypeEnum.DOMESTICDEBITCARD.getCode()) || dcType.startsWith(ConstantEnum.DcTypeEnum.OVERSEASDEBITCARD.getCode())){
+                //借记卡
+                BigDecimal rate = NumberUtil.multiplication(tradeData.getAmt(), merTer.getDebitCardRate());
+                //跟设置的峰值比较，如果大于峰值则峰值，否则借记卡费率
+                BigDecimal bd1 = rate.divide(new BigDecimal(100));
+                BigDecimal db2 = new BigDecimal(merTer.getDebitCardMaxFee());
+                if(bd1.compareTo(db2) > 0){
+                    result = db2;
+                }else{
+                    result = bd1;
+                }
+                result = result.multiply(new BigDecimal(100));
+            }
+        } //微信
+         else if(ConstantEnum.PayTypeEnum.PAYBYWX.getCode().equals(paySubType)){
+             BigDecimal rate = new BigDecimal(tradeData.getAmt());
+             BigDecimal db2 = new BigDecimal(merTer.getWechatFee());
+             result = rate.multiply(db2);
+        }//支付宝
+         else if(ConstantEnum.PayTypeEnum.PAYBYALIPAY.getCode().equals(paySubType)){
+             BigDecimal rate = new BigDecimal(tradeData.getAmt());
+             BigDecimal db2 = new BigDecimal(merTer.getAlipayFee());
+             result = rate.multiply(db2);
+         }
+        return result;
+        
+    }
     /**
      * (non-Javadoc)根据用户ID查询营业额数据
      * @see net.fnsco.order.api.trade.TradeReportService#queryTurnovers(net.fnsco.order.api.dto.TradeReportDTO)
@@ -147,7 +235,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         
        //本日营业额
         record.setTradeDate(DateUtils.getTimeByDayStr(0));
-        TurnoverDTO totayTurnover = tradeDataDAO.queryTodayTurnover(record);
+        TurnoverDTO totayTurnover = tradeDateTempDao.queryTodayTurnover(record);
         if (null != totayTurnover && null != totayTurnover.getTurnover()) {
             totayTurnover.setOrderPrice(divide(totayTurnover.getTurnover(), totayTurnover.getOrderNum()));
         } else {
@@ -285,6 +373,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         TurnoverDTO turnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
         WeeklyDTO resultData = new WeeklyDTO();
         resultData.setInnerCode(tradeReportDTO.getInnerCode());
+        resultData.setMerNames(tradeReportDTO.getMerNames());
         resultData.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
         resultData.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
         if(null == turnover){
@@ -696,6 +785,130 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 datas.add(temp);
             }
         }
+        return datas;
+    }
+    
+    /**
+     * (non-Javadoc)查询财务实现方法
+     * @see net.fnsco.order.api.trade.TradeReportService#queryFinanceTrade(net.fnsco.order.api.dto.TradeReportDTO)
+     * @author tangliang
+     * @date 2017年8月30日 上午11:49:53
+     */
+    @Override
+    public FinanceReportDTO queryFinanceTrade(TradeReportDTO tradeReportDTO) {
+        /**
+         * 返回结果赋值
+         */
+        FinanceReportDTO resultDto = new FinanceReportDTO();
+        resultDto.setInnerCode(tradeReportDTO.getInnerCode());
+        resultDto.setMerNames(tradeReportDTO.getMerNames());
+        resultDto.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
+        resultDto.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
+        
+        TradeByDay record = new TradeByDay();
+        record.setInnerCode(tradeReportDTO.getInnerCode());
+        record.setStartTradeDate(tradeReportDTO.getStartDate());
+        record.setEndTradeDate(tradeReportDTO.getEndDate());
+        record.setUserId(tradeReportDTO.getUserId());
+        record.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        FinanceTurnoverDTO turnoverData = tradeByDayDao.selectFinanceByRecord(record);
+        
+        if(null != turnoverData){
+            resultDto.setTotalTurnover(NumberUtil.format(NumberUtil.divide(turnoverData.getTurnover(), 100),2));
+            resultDto.setTotalOrderNum(turnoverData.getOrderNum());
+            /**
+             * 总应结金额=总额-手术费
+             */
+            BigDecimal totalSettlementAmount = new BigDecimal(turnoverData.getTurnover()).subtract(new BigDecimal(turnoverData.getProcedureFee())).divide(new BigDecimal(100));
+            resultDto.setTotalSettlementAmount(NumberUtil.format(totalSettlementAmount, 2));
+        }else{
+            turnoverData = new FinanceTurnoverDTO();
+            resultDto.setTotalTurnover("0.00");
+            resultDto.setTotalOrderNum(0);
+            resultDto.setTotalSettlementAmount("0.00");
+        }
+       
+        /**
+         * 查询分析每一天的结算信息
+         */
+        List<FinanceDayDTO> tradeFinanceData = tradeByDayDao.selectFinaceByRecord(record);
+        //需要对每条数据判断填充和计算处理
+        List<FinanceMouthDTO> tradeMouthDatas = installFinanceData(tradeFinanceData,tradeReportDTO);
+        resultDto.setTradeMouthDatas(tradeMouthDatas);
+        return resultDto;
+        
+    }
+    
+    /**
+     * installFinanceData:(处理结算数据)
+     * @param tradeFinanceData
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月30日 下午4:44:12
+     * @return List<FinanceMouthDTO>    DOM对象
+     */
+    private List<FinanceMouthDTO> installFinanceData(List<FinanceDayDTO> tradeFinanceData,TradeReportDTO tradeReportDTO){
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        List<FinanceMouthDTO> datas = Lists.newArrayList();
+        
+        Date startDate;
+        try {
+            startDate = format.parse(tradeReportDTO.getStartDate());
+            start.setTime(startDate);
+            Date endDate = format.parse(tradeReportDTO.getEndDate());
+            end.setTime(endDate);
+            //业务变量
+            boolean flag = true;
+            Integer mouth = null;
+            List<FinanceDayDTO> dayDatas = null;
+            while (end.compareTo(start) >= 0) {
+                flag = true;
+                Integer newMouth = end.get(Calendar.MONTH);
+                String dateTime = format.format(end.getTime());
+                
+                //获取月份、根据月份来组装数据
+                if(mouth == null || !mouth.equals(newMouth)){
+                    mouth = end.get(Calendar.MONTH);
+                    FinanceMouthDTO mouthDto = new FinanceMouthDTO();
+                    mouthDto.setTradeMonth(NumberUtil.numToUpper(newMouth+1));
+                    dayDatas = Lists.newArrayList();
+                    mouthDto.setTradeDayDatas(dayDatas);
+                    datas.add(mouthDto);
+                    
+                }
+                
+                for (FinanceDayDTO tradeDayDTO : tradeFinanceData) {
+                    if (dateTime.equals(tradeDayDTO.getTradeDate())) {
+                        tradeDayDTO.setTradeDate(format1.format(end.getTime()));
+                        tradeDayDTO.setTurnover(NumberUtil.format(new BigDecimal(tradeDayDTO.getTurnover()).divide(new BigDecimal(100)),2));
+                        tradeDayDTO.setProcedureFee(NumberUtil.format(new BigDecimal(tradeDayDTO.getProcedureFee()).divide(new BigDecimal(100)),2));
+                        BigDecimal settAmount = NumberUtil.subtract(tradeDayDTO.getTurnover(), tradeDayDTO.getProcedureFee());
+                        tradeDayDTO.setSettlementAmount(NumberUtil.format(settAmount,2));
+                        dayDatas.add(tradeDayDTO);
+                        flag = false;
+                    }
+                }
+                if (flag) {
+                    FinanceDayDTO tempDto = new FinanceDayDTO();
+                    tempDto.setTradeDate(format1.format(end.getTime()));
+                    tempDto.setOrderNum(0);
+                    tempDto.setProcedureFee("0.00");
+                    tempDto.setSettlementAmount("0.00");
+                    tempDto.setTurnover("0.00");
+                    dayDatas.add(tempDto);
+                }
+                //循环，每次天数加1
+                end.set(Calendar.DATE, end.get(Calendar.DATE) - 1);
+                
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
         return datas;
     }
 }

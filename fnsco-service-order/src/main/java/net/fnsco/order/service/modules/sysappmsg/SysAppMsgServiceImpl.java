@@ -3,12 +3,10 @@ package net.fnsco.order.service.modules.sysappmsg;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,16 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
+import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
 import net.fnsco.order.api.constant.ApiConstant;
-import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.order.api.dto.PushMsgInfoDTO;
 import net.fnsco.order.api.push.AppPushService;
@@ -34,16 +34,13 @@ import net.fnsco.order.api.sysappmsg.SysMsgAppFailService;
 import net.fnsco.order.api.sysappmsg.SysMsgAppSuccService;
 import net.fnsco.order.service.dao.master.AppUserDao;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
-import net.fnsco.order.service.dao.master.MerchantCoreDao;
 import net.fnsco.order.service.dao.master.SysAppMessageDao;
 import net.fnsco.order.service.dao.master.SysMsgAppSuccDao;
 import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.order.service.domain.AppUserMerchant;
-import net.fnsco.order.service.domain.MerchantCore;
 import net.fnsco.order.service.domain.SysAppMessage;
-import net.fnsco.order.service.domain.SysMsgAppFail;
-import net.fnsco.order.service.domain.SysMsgAppSucc;
 import net.fnsco.order.service.domain.SysUser;
+import net.fnsco.order.service.modules.push.AppPushHelper;
 
 /**
  * @desc app推送消息服务类实现
@@ -59,9 +56,6 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
     private SysAppMessageDao sysAppMessageDao;
     
     @Autowired
-    private AppPushService appPushService;
-    
-    @Autowired
     private AppUserDao    appUserDao;
     
     @Autowired
@@ -71,13 +65,10 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
     private SysMsgAppSuccDao sysMsgAppSuccDao;
     
     @Autowired
-    private SysMsgAppSuccService sysMsgAppSuccService;
-    
-    @Autowired
-    private SysMsgAppFailService sysMsgAppFailService;
-    
-    @Autowired
     private AppUserMerchantDao appUserMerchantDao;
+    
+    @Autowired
+    private AppPushHelper appPushHelper;
 
     /**
      * (non-Javadoc)
@@ -362,109 +353,30 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
      */
     @Override
     public void pushMerChantMsg(String innerCode, Integer userId) {
-        //如果没有店长,不发送推送
-        AppUserMerchant merInfo = appUserMerchantDao.selectOneByInnerCode(innerCode, ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-        if(null == merInfo){
-            logger.warn(innerCode+"该店没有店长!");
+        //推送给该商户的其他所有成员
+        List<AppUserMerchant> merInfos = appUserMerchantDao.selectByInnerCode(innerCode,null);
+        if(CollectionUtils.isEmpty(merInfos)){
+            logger.warn(innerCode+"该店没有成员!");
             return;
         }
-        AppUser user = appUserDao.selectAppUserById(merInfo.getAppUserId());
        //发送推送
-        String param_and ="";
         String newPhone = "";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date sendDate = new Date();
-        String sendTime = sdf.format(sendDate);
-        Set<String> relatelds_and = new HashSet<String>();
         MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
         AppUser appUser = appUserDao.selectAppUserById(userId);
         newPhone = appUser.getMobile();
         String msgContent = "【新店员加入】新店员"+newPhone+"加入了"+merchantCore.getMerName()+"店";
-        SysAppMessage message = new SysAppMessage();
-        message.setBusType(0);
-        message.setModifyUserId(1);
-        message.setMsgSubject("新店员加入");
-        message.setMsgSubTitle(msgContent);
-        message.setMsgType(1);
-        message.setPushType(1);
-        message.setSendType(1);
-        message.setSendTime(sendDate);
-        message.setModifyTime(new Date());
-        message.setStatus(1);
-        insertSelective(message);
+        SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "新店员加入",1);
+        
         if(message.getId() != null){
-            Integer deviceType = user.getDeviceType();
-            if(null == deviceType ||deviceType == 0||user.getId() == userId){
-                return;
-            }else if(deviceType==1){//安卓
-                if(StringUtils.isNotBlank(user.getDeviceToken())){
-                    relatelds_and.add(user.getDeviceToken());
-                    param_and = relatelds_and.toString().substring(1, relatelds_and.toString().length()-1);
-                    param_and = param_and.replaceAll(" ", "");//安卓去重后token
-                    try {
-                        int status = appPushService.sendAndroidListcast(param_and, msgContent,sendTime,message.getId().toString());
-                        if (status == 200) {
-                          //成功
-                            SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
-                            sysMsgAppSucc.setSendTime(new Date());
-                            sysMsgAppSucc.setAppUserId(appUser.getId());
-                            sysMsgAppSucc.setMsgId(message.getId());
-                            sysMsgAppSucc.setReadStatus(0);
-                            sysMsgAppSucc.setPhoneType(1);
-                            sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
-                            logger.info("安卓信息推送成功");
-                        } else {
-                            SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
-                            sysMsgAppFail.setAppUserId(appUser.getId());
-                            sysMsgAppFail.setMsgId(message.getId());
-                            sysMsgAppFail.setSendCount(1);
-                            sysMsgAppFail.setSendTime(new Date());
-                            sysMsgAppFail.setStatus(0);
-                            sysMsgAppFail.setPhoneType(1);
-                            sysMsgAppFailService.insertSelective(sysMsgAppFail);
-                            logger.info("安卓信息推送失败");
-                        }
-                    } catch (Exception e) {
-                        logger.error("android列播推送："+e);
-                    } 
+            //组装推送信息
+            for (AppUserMerchant merInfo : merInfos) {
+                AppUser user = appUserDao.selectAppUserById(merInfo.getAppUserId());
+                Integer deviceType = user.getDeviceType();
+                if(null == deviceType ||deviceType == 0||user.getId() == userId){
+                    continue;
                 }
-            }else if(deviceType==2){//ios
-                if(StringUtils.isNotBlank(user.getDeviceToken())){
-                    ResultDTO<PushMsgInfoDTO> countInfo =  queryNewsCount(user.getId(), false, user.getDeviceType());
-                    try {
-                        JSONObject alertContext = new JSONObject();
-                        alertContext.put("title", message.getMsgSubject());
-                        alertContext.put("subtitle", "");
-                        alertContext.put("body", message.getMsgSubTitle());
-                        int iosStatus = appPushService.sendIOSUnicast(user.getDeviceToken(), alertContext, countInfo.getData().getUnReadCount()+1,message.getId().toString());
-                        if (iosStatus == 200) {
-                            //成功
-                            SysMsgAppSucc sysMsgAppSucc = new SysMsgAppSucc();
-                            sysMsgAppSucc.setSendTime(new Date());
-                            sysMsgAppSucc.setAppUserId(appUser.getId());
-                            sysMsgAppSucc.setMsgId(message.getId());
-                            sysMsgAppSucc.setReadStatus(0);
-                            sysMsgAppSucc.setPhoneType(2);
-                            sysMsgAppSuccService.insertSelective(sysMsgAppSucc);
-                            logger.info("ios信息推送成功");
-                        } else {
-                            SysMsgAppFail sysMsgAppFail = new SysMsgAppFail();
-                            sysMsgAppFail.setAppUserId(appUser.getId());
-                            sysMsgAppFail.setMsgId(message.getId());
-                            sysMsgAppFail.setSendCount(1);
-                            sysMsgAppFail.setSendTime(new Date());
-                            sysMsgAppFail.setStatus(0);
-                            sysMsgAppFail.setPhoneType(2);
-                            sysMsgAppFailService.insertSelective(sysMsgAppFail);
-                            logger.info("ios信息推送失败");
-                        }
-                    } catch (Exception e) {
-                        
-                        logger.error("ios信息推送异常"+e);
-                        e.printStackTrace();
-                        
-                    }
-                }
+                //推送IOS和android消息
+                appPushHelper.pushNewMessage(user, message,false);
             }
         }
         
@@ -505,10 +417,11 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             AppPushMsgInfoDTO dtoInfo = new AppPushMsgInfoDTO();
             dtoInfo.setId(sysAppMessage.getId());
             dtoInfo.setDetailURL(sysAppMessage.getDetailUrl());
+            dtoInfo.setMsgType(sysAppMessage.getMsgType().toString());
             String pathUrl  = sysAppMessage.getImageUrl();
             if(!Strings.isNullOrEmpty(pathUrl)){
                 String path = pathUrl.substring(pathUrl.indexOf("^")+1);
-                dtoInfo.setImageURL(OssUtil.getForeverFileUrl(OssUtil.getHeadBucketName(), path));
+                dtoInfo.setImageURL(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
             }
             
             dtoInfo.setMsgSubtitle(sysAppMessage.getMsgSubTitle());

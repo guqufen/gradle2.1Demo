@@ -35,6 +35,10 @@ $('#table').bootstrapTable({
 		title : '绑定店铺',
 		formatter : formatMerNames
 	}, {
+		field : 'lastLoginTime',
+		title : '最后登录时间',
+		formatter : formatReDate
+	}, {
 		field : 'regTime',
 		title : '注册时间',
 		formatter : formatReDate
@@ -141,7 +145,6 @@ $(function() {
 			data : date,
 			success : function(data) {
 				unloginHandler(data);
-				console.log(data);
 				if (data.data == null) {
 					layer.msg('该用户没有绑定任何商户');
 				} else {
@@ -182,7 +185,6 @@ function showdates(data) {
 // 判断修改
 $(".modify").click(function() {
 	confirmlt(mobile);
-
 })
 
 function confirmlt(mobile) {
@@ -195,15 +197,12 @@ function confirmlt(mobile) {
 	$(".tab-content").find(".shopRoleList").each(function() {
 		$(this).find(".row").each(function() {
 			innerCode = $(this).find("#shopName1").attr("i");
-			console.log($(this).find("#shopName1").attr("i"));
 			id = $(this).find("#shopName1").attr("j");
 			appUserId = $(this).find("#shopName1").attr("o");
-			console.log($(this).find("#shopName1").attr("j"));
 			$(this).find("#shopRole").each(function() {
 				$(this).find("option").each(function() {
 					if ($(this).is(":selected")) {
 						roleId = $(this).val();
-						console.log($(this).val())
 					}
 				})
 			})
@@ -218,9 +217,7 @@ function confirmlt(mobile) {
 	})
 	console.log(arry);
 	var toStr = JSON.stringify(arry);
-
-	$
-			.ajax({
+			$.ajax({
 				url : PROJECT_NAME + '/web/appsuser/judgeRoles',
 				type : 'POST',
 				dataType : "json",
@@ -233,12 +230,11 @@ function confirmlt(mobile) {
 						var str = "";
 						var contant = "";
 						for (i = 0; i < data.data.list.length; i++) {
-							str += '<div style="font-size:16px;margin-bottom:8px;">该'
+							str += '<div style="font-size:16px;margin-bottom:8px;">是否将该'
 									+ data.data.list[i].merName
-									+ '店已有店主('
-									+ data.data.list[i].mobile
-									+ ')是否将权限转让给'
-									+ mobile + '？</div>';
+									+ '店下的('
+									+ mobile
+									+ ')升级为店长？</div>';
 						}
 						for (i = 0; i < data.data.clerk.length; i++) {
 							contant += '<div style="font-size:16px;margin-bottom:8px;">是否移除'
@@ -247,7 +243,6 @@ function confirmlt(mobile) {
 									+ data.data.clerk[i].mobile
 									+ ')的店主权限？</div>';
 						}
-						console.log(str + contant);
 						layer.confirm(str + contant, {
 							area : [ '600px', '200px' ],
 							time : 2000000, // 20s后自动关闭
@@ -275,15 +270,12 @@ function saveBtn() {
 	$(".tab-content").find(".shopRoleList").each(function() {
 		$(this).find(".row").each(function() {
 			innerCode = $(this).find("#shopName1").attr("i");
-			console.log($(this).find("#shopName1").attr("i"));
 			id = $(this).find("#shopName1").attr("j");
 			appUserId = $(this).find("#shopName1").attr("o");
-			console.log($(this).find("#shopName1").attr("j"));
 			$(this).find("#shopRole").each(function() {
 				$(this).find("option").each(function() {
 					if ($(this).is(":selected")) {
 						roleId = $(this).val();
-						console.log($(this).val())
 					}
 				})
 			})
@@ -296,7 +288,6 @@ function saveBtn() {
 		};
 		arry.push(date);
 	})
-	console.log(arry);
 	var toStr = JSON.stringify(arry);
 	$.ajax({
 		url : PROJECT_NAME + '/web/appsuser/changeRole',
@@ -315,7 +306,6 @@ function saveBtn() {
 			setTimeout(function() {
 				window.location.reload();
 			}, 1000);
-
 		},
 		error : function() {
 			layer.msg('系统错误');
@@ -323,8 +313,11 @@ function saveBtn() {
 	});
 
 }
-
-// $(".saveBtn").click(function(){
-//	
-// })
-
+//导出按钮事件
+function exportEvent(){
+	//拼接参数
+			   var mobile = $('#shopPhoneNum').val();
+			   var merNames = $('#shopName').val();
+ 			   var url=PROJECT_NAME+'/web/appsuser/export'+'?mobile='+mobile+'&merNames='+merNames;
+	window.open(url, 'Excel导出');
+}

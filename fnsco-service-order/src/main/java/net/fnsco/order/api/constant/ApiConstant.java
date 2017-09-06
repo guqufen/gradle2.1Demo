@@ -70,6 +70,7 @@ public class ApiConstant extends CoreConstants {
     public static String E_FORCEDLOGINOUT_ERROR    = "5123";                          //  强制退出失败
     public static String E_EMPTYDEVICETOKEN_ERROR  = "5124";                          // 清空友盟设备号失败
     public static String E_SUGGESTEMPTY_ERROR      = "5125";                          // 反馈内容不能为空
+    public static String E_SUGGESTEMPTYNULL_ERROR  = "5126";                          // 未绑定任何店铺
     
     public static String       WEB_LOGIN_NULL = "5900";//用户名或密码为空
     public static String       WEB_LOGIN_FAIL ="5901";//用户名或密码错误
@@ -129,6 +130,7 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_FORCEDLOGINOUT_ERROR, "强制退出失败"); 
         ERROR_MESSGE_MAP.put(E_EMPTYDEVICETOKEN_ERROR, "清空友盟设备号失败");  
         ERROR_MESSGE_MAP.put(E_SUGGESTEMPTY_ERROR, "反馈内容不能为空");  
+        ERROR_MESSGE_MAP.put(E_SUGGESTEMPTYNULL_ERROR, "您未绑定店铺,请关联店铺");
     }
 
 }

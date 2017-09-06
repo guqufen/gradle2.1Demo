@@ -7,7 +7,14 @@ public class BandListDTO extends DTO{
     private String  mobile;
     private Integer userId;
     private String  userName;
-    
+    private String isShopkeeper;
+    public String getIsDelete() {
+        return isDelete;
+    }
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
+    }
+    private String isDelete;
     /**
      * userName
      *
@@ -40,4 +47,11 @@ public class BandListDTO extends DTO{
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+    public String getIsShopkeeper() {
+        return isShopkeeper;
+    }
+    public void setIsShopkeeper(String isShopkeeper) {
+        this.isShopkeeper = isShopkeeper;
+    }
+
 }

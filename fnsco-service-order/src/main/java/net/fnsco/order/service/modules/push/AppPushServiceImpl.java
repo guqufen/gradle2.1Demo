@@ -3,12 +3,17 @@ package net.fnsco.order.service.modules.push;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -22,11 +27,14 @@ import net.fnsco.core.push.ios.IOSListcast;
 import net.fnsco.core.push.ios.IOSUnicast;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.PushMsgInfoDTO;
 import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
 import net.fnsco.order.api.sysappmsg.SysMsgAppFailService;
 import net.fnsco.order.api.sysappmsg.SysMsgAppSuccService;
+import net.fnsco.order.service.dao.master.AppUserDao;
+import net.fnsco.order.service.dao.master.trade.TradeByDayDao;
 import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.order.service.domain.SysAppMessage;
 import net.fnsco.order.service.domain.SysMsgAppFail;
@@ -58,6 +66,15 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
     
     @Autowired
     private SysMsgAppFailService sysMsgAppFailService;
+    
+    @Autowired
+    private AppUserDao appuUserDao;
+    
+    @Autowired
+    private TradeByDayDao  tradeByDayDao;
+    
+    @Autowired
+    private AppPushHelper appPushHelper;
     
     /**
      * (non-Javadoc) 安卓推送--列播
@@ -423,14 +440,120 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                       }
                     
                 } catch (Exception e) {
-                    
                     logger.error("第"+frequencyNum+"次重试推送ios消息异常"+e);
                     e.printStackTrace();
-                    
                 }
             }
             sysMsgAppFailService.updateByPrimaryKeySelective(sysMsgAppFail);
         }
     }
-
+    
+    /**
+     * (non-Javadoc)推送周报数据、推送给所有店主角色在线且本周之前有过交易数据的用户
+     * @see net.fnsco.order.api.push.AppPushService#sendWeeklyDataMgs()
+     * @author tangliang
+     * @date 2017年8月31日 上午11:43:37
+     */
+    @Transactional
+    @Override
+    public void sendWeeklyDataMgs() {
+        //查询所有是店主角色且在线的APP用户
+        List<AppUser> appUsers = appuUserDao.selectAllInlineByRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+        String lastSunday = DateUtils.getSundayStr(-1);
+        
+        String msgContent = "【周报】上周的周报已经生成,轻轻一点即可查看详情";
+        SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "周报",0);
+        if(message.getId() == null){
+            logger.error("入库信息实体异常");
+            return;
+        }
+        
+        for (AppUser appUser : appUsers) {
+            String minDate = tradeByDayDao.selectMinTradeDateByUserId(appUser.getId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+            //如果上周日之前没有产生过交易数据，不推送
+            if(Strings.isNullOrEmpty(minDate) && minDate.compareTo(lastSunday) >= 0){
+                continue;
+            } 
+            
+            Integer deviceType = appUser.getDeviceType();
+            //不在线用户不推送
+            if(null == deviceType ||deviceType == 0){
+                continue;
+            }
+            //分别推送安卓和IOS消息且保存发送结果
+            appPushHelper.pushNewMessage(appUser, message,true);
+        }
+    }
+    
+    /**
+     * (non-Javadoc)自定义扩张参数的安卓列播
+     * @see net.fnsco.order.api.push.AppPushService#sendAndroidListcast(java.lang.String, java.lang.String, java.util.Map)
+     * @author tangliang
+     * @date 2017年9月1日 上午9:47:33
+     */
+    @Override
+    public Integer sendAndroidListcast(String param_and, String content, Map<String, String> extraField) throws Exception {
+        
+        logger.warn("开始安卓列播推送");
+        String appkey = this.env.getProperty("ad.appkey");
+        String appMasterSecret = this.env.getProperty("ad.app.master.secret");
+        AndroidListcast listcast = new AndroidListcast(appkey,appMasterSecret);
+        listcast.setDeviceToken(param_and);
+        listcast.setTicker("【数钱吧】您有一条新消息");
+        listcast.setTitle("数钱吧");
+        listcast.setText(content);
+        listcast.goAppAfterOpen();
+        listcast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);//通知
+        if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "test")) {
+            listcast.setTestMode();// 测试模式
+        } else if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "www")) {
+            listcast.setProductionMode();// 正式模式
+        }
+        listcast.setDescription("列播通知-Android");
+        /**
+         * 遍历扩张参数、放入listcast中
+         */
+        for (Entry<String, String> entry : extraField.entrySet()) {
+            listcast.setExtraField(entry.getKey(), entry.getValue());
+        }
+        listcast.setCustomField("");//通知
+        int status = client.send(listcast);
+        return status;
+        
+    }
+    /**
+     * (non-Javadoc)自定义扩张参数的ios单播
+     * @see net.fnsco.order.api.push.AppPushService#sendIOSUnicast(java.lang.String, org.json.JSONObject, java.lang.Integer, java.util.Map)
+     * @author tangliang
+     * @date 2017年9月1日 上午9:47:48
+     */
+    @Override
+    public Integer sendIOSUnicast(String iosUnicastToken, JSONObject content, Integer badge, Map<String, String> extraField) throws Exception {
+        
+        logger.warn("开始IOS单播推送");
+        String appkey = this.env.getProperty("ios.appkey");
+        String appMasterSecret = this.env.getProperty("ios.app.master.secret");
+        IOSUnicast unicast = new IOSUnicast(appkey,appMasterSecret);
+        
+        unicast.setDeviceToken(iosUnicastToken);
+        unicast.setPredefinedKeyValue("alert", content);
+        unicast.setSound( "");
+        unicast.setContentAvailable(1);
+        unicast.setBadge(badge);//未读数量
+        if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "test")) {
+            unicast.setTestMode();// 测试模式
+        } else if (StringUtils.equals(this.env.getProperty("youmeng.msg.mode"), "www")) {
+            unicast.setProductionMode();// 正式模式
+        }
+        /**
+         * 遍历扩张参数、放入unicast中
+         */
+        for (Entry<String, String> entry : extraField.entrySet()) {
+            unicast.setCustomizedField(entry.getKey(), entry.getValue());
+        }
+        int status = client.send(unicast);
+        return status;
+        
+    }
+    
 }

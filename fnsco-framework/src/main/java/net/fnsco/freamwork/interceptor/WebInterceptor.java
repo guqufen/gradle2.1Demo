@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.common.base.Strings;
 
 import net.fnsco.freamwork.aop.OutWriterUtil;
-import net.fnsco.freamwork.business.UserService;
+import net.fnsco.freamwork.business.WebService;
 import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 
@@ -30,8 +30,8 @@ public class WebInterceptor implements HandlerInterceptor {
     private Logger             logger   = LoggerFactory.getLogger(WebInterceptor.class);
     @Autowired
     private Environment        env;
-    @Autowired
-    private UserService        userService;
+    @Autowired(required = false)
+    private WebService        userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -40,6 +40,7 @@ public class WebInterceptor implements HandlerInterceptor {
             return true;
         }
         String requestUrl = request.getRequestURL().toString();
+        String contextPath = request.getContextPath();
         // 从配置文件中获取浙付通接口模块,不需要被拦截
         String appModules = env.getProperty("web.ignore.url");
         if (!Strings.isNullOrEmpty(appModules)) {
@@ -62,7 +63,7 @@ public class WebInterceptor implements HandlerInterceptor {
             logger.warn("未登录转入登录页面");
             String requestType = request.getHeader("X-Requested-With");
             if (Strings.isNullOrEmpty(requestType)) {
-                response.sendRedirect("/idx");
+                response.sendRedirect(contextPath+"/idx");
                 return false;
             }
             WebUserDTO user = userService.getCookieUser(request);

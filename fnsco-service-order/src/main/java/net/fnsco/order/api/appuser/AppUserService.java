@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.freamwork.business.UserService;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserManageDTO;
 import net.fnsco.order.api.dto.AppUserMerchantDTO;
@@ -39,6 +38,8 @@ public interface AppUserService {
 	 * @since  CodingExample　Ver 1.1
 	 */
 	ResultPageDTO<AppUserManageDTO> queryPageList(AppUserManageDTO record,int currentPageNum, int perPageSize);
+	
+	List<AppUserManageDTO> queryAppPageList(AppUserManageDTO record);
 	
 	ResultDTO<String> modifyRole(BandDto bandDto);
 	

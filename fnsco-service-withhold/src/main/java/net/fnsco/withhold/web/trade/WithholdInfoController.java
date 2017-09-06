@@ -77,7 +77,7 @@ public class WithholdInfoController extends BaseController {
  public ResultDTO doUpdateStatus (WithholdInfoDO withholdInfo) {
 	 WithholdInfoDO withholdInfoDO = new WithholdInfoDO();
 	 withholdInfoDO.setId(withholdInfo.getId());
-	 withholdInfoDO.setStatus(0);
+	 withholdInfoDO.setStatus(withholdInfo.getStatus());
      Integer result = this.withholdInfoService.doUpdate(withholdInfoDO,getUserId());
      return success(result);
  }
@@ -133,5 +133,12 @@ public class WithholdInfoController extends BaseController {
  public ResultDTO updateProductType(ProductTypeDO productTypeDO) {
     int num = this.withholdInfoService.updateProductType(productTypeDO);
     return success();
+ }
+ //根据id查询代扣名称
+ @ApiOperation(value = "根据id查询代扣名称", notes = "根据id查询代扣名称")
+ @ResponseBody
+ @RequestMapping(value = "queryProductTypeById")
+ public ResultDTO queryProductTypeById(@RequestParam String id) {
+    return this.withholdInfoService.queryProductTypeById(NumberUtils.toInt(id));
  }
 }

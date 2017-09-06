@@ -5,6 +5,11 @@ import java.util.Date;
 
 public class WithholdInfoDO {
     /**
+     * 合同编号
+     */
+    private String contractNum;
+   
+    /**
      * 产品类型
      */
 
@@ -399,14 +404,22 @@ public class WithholdInfoDO {
     public void setProductTypeCode(String productTypeCode) {
         this.productTypeCode = productTypeCode;
     }
+    public String getContractNum() {
+        return contractNum;
+    }
+
+    public void setContractNum(String contractNum) {
+        this.contractNum = contractNum;
+    }
 
     @Override
     public String toString() {
-        return "WithholdInfoDO [productTypeCode=" + productTypeCode + ", id=" + id + ", userName=" + userName + ", mobile=" + mobile + ", certifType=" + certifType + ", certifyId=" + certifyId
-               + ", debitDay=" + debitDay + ", amount=" + amount + ", amountTotal=" + amountTotal + ", bankCard=" + bankCard + ", status=" + status + ", modifyUserId=" + modifyUserId + ", modifyTime="
-               + modifyTime + ", total=" + total + ", subBankName=" + subBankName + ", anBankId=" + anBankId + ", accountType=" + accountType + ", accType=" + accType + ", openBankNum=" + openBankNum
-               + ", failTotal=" + failTotal + ", startDate=" + startDate + ", endDate=" + endDate + ", allTotalAmt=" + allTotalAmt + ", payLeftAmt=" + payLeftAmt + ", modifyUserName=" + modifyUserName
-               + ", modifyTimeStr=" + modifyTimeStr + "]";
+        return "WithholdInfoDO [contractNum=" + contractNum + ", productTypeCode=" + productTypeCode + ", id=" + id + ", userName=" + userName + ", mobile=" + mobile + ", certifType=" + certifType
+               + ", certifyId=" + certifyId + ", debitDay=" + debitDay + ", amount=" + amount + ", amountTotal=" + amountTotal + ", bankCard=" + bankCard + ", status=" + status + ", modifyUserId="
+               + modifyUserId + ", modifyTime=" + modifyTime + ", total=" + total + ", subBankName=" + subBankName + ", anBankId=" + anBankId + ", accountType=" + accountType + ", accType=" + accType
+               + ", openBankNum=" + openBankNum + ", failTotal=" + failTotal + ", startDate=" + startDate + ", endDate=" + endDate + ", allTotalAmt=" + allTotalAmt + ", payLeftAmt=" + payLeftAmt
+               + ", modifyUserName=" + modifyUserName + ", modifyTimeStr=" + modifyTimeStr + "]";
     }
+
   
 }

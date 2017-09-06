@@ -29,6 +29,10 @@ public class AppUserManageDTO extends DTO{
     private String mobile;
     
     private Date regTime;
+    
+    private String regTimeStr;
+    private Date lastLoginTime;
+
     /**
      * 店铺名称集合字符串拼接
      */
@@ -43,6 +47,13 @@ public class AppUserManageDTO extends DTO{
     public String getUserName() {
         return userName;
     }
+    
+    public String getRegTimeStr() {
+		return regTimeStr;
+	}
+	public void setRegTimeStr(String regTimeStr) {
+		this.regTimeStr = regTimeStr;
+	}
     /**
      * userName
      *
@@ -114,4 +125,11 @@ public class AppUserManageDTO extends DTO{
         this.merNames = merNames;
     }
     
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
 }

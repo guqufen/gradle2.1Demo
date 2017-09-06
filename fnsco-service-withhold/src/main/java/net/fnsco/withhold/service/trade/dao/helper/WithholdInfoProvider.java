@@ -20,9 +20,21 @@ public class WithholdInfoProvider {
         return new SQL() {
             {
                 UPDATE(TABLE_NAME);
+                if (StringUtils.isNotBlank(withholdInfo.getProductTypeCode())) {
+                    SET("product_type_code=#{withholdInfo.productTypeCode}");
+                }
+                if (StringUtils.isNotBlank(withholdInfo.getStartDate())) {
+                    SET("start_date=#{withholdInfo.startDate}");
+                }
+                if (StringUtils.isNotBlank(withholdInfo.getEndDate())) {
+                    SET("end_date=#{withholdInfo.endDate}");
+                }
                 if (StringUtils.isNotBlank(withholdInfo.getUserName())) {
                     SET("user_name=#{withholdInfo.userName}");
                 }
+                if(StringUtils.isNotBlank(withholdInfo.getContractNum())){
+                    SET("contract_num=#{withholdInfo.contractNum}");
+                }   
                 if (StringUtils.isNotBlank(withholdInfo.getMobile())) {
                     SET("mobile=#{withholdInfo.mobile}");
                 }
@@ -92,6 +104,12 @@ public class WithholdInfoProvider {
                 if (withholdInfo.getId() != null) {
                     WHERE("id=#{withholdInfo.id}");
                 }
+                if (StringUtils.isNotBlank(withholdInfo.getProductTypeCode())) {
+                    WHERE("product_type_code=#{withholdInfo.productTypeCode}");
+                }
+                if(StringUtils.isNotBlank(withholdInfo.getContractNum())){
+                    WHERE("contract_num like CONCAT('%',#{withholdInfo.contractNum},'%')");
+                }
                 if (StringUtils.isNotBlank(withholdInfo.getUserName())) {
                     WHERE("user_name like CONCAT('%',#{withholdInfo.userName},'%')");
                 }
@@ -150,6 +168,12 @@ public class WithholdInfoProvider {
                 FROM(TABLE_NAME);
                 if (withholdInfo.getId() != null) {
                     WHERE("id=#{withholdInfo.id}");
+                }
+                if (StringUtils.isNotBlank(withholdInfo.getProductTypeCode())) {
+                    WHERE("product_type_code=#{withholdInfo.productTypeCode}");
+                }
+                if(StringUtils.isNotBlank(withholdInfo.getContractNum())){
+                    WHERE("contract_num like CONCAT('%',#{withholdInfo.contractNum},'%')");
                 }
                 if (StringUtils.isNotBlank(withholdInfo.getUserName())) {
                     WHERE("user_name like CONCAT('%',#{withholdInfo.userName},'%')");

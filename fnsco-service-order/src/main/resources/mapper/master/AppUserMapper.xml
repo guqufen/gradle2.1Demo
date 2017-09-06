@@ -33,6 +33,7 @@
 	  <result column="mobile" property="mobile" jdbcType="VARCHAR" />
 	  <result column="reg_time" property="regTime" jdbcType="TIMESTAMP"/>
 	  <result column="mer_names" property="merNames" jdbcType="VARCHAR"/>
+	  <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP"/>
 	</resultMap>
 	<!-- 商户角色结果集 -->
   <resultMap  id="RELResultMap" type="net.fnsco.order.api.dto.QueryBandDTO">
@@ -40,6 +41,10 @@
      <result column="role_id" property="roleId" jdbcType="VARCHAR" />
      <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
      <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
+  </resultMap>
+  <!-- innerCode结果集 -->
+  <resultMap  id="RELInnerCodeResultMap" type="net.fnsco.order.api.dto.QueryBandDTO">
+     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
   </resultMap>
 	<sql id="Base_Column_List">
 		id, user_name, mobile, password, real_name, device_id, ges_state,
@@ -182,6 +187,7 @@
 		TA.mobile,
 		TA.reg_time,
 		TA.user_name,
+		TA.last_login_time,
 		concat(
 					GROUP_CONCAT(TA.mer_name),
 					"、"
@@ -192,7 +198,8 @@
 					MR.mobile,
 					MC.mer_name,
 					MR.reg_time,
-					MR.user_name
+					MR.user_name,
+					MR.last_login_time
 				FROM
 					(
 						SELECT
@@ -212,8 +219,9 @@
 				      			</if>
 			</where>
 		GROUP BY
-			TA.reg_time,TA.mobile,TA.user_name
-	limit #{startRow},#{perPageSize}		
+			TA.last_login_time,TA.reg_time,TA.mobile,TA.user_name
+		ORDER BY reg_time DESC	
+	    limit #{startRow},#{perPageSize}		
 	</select>
 	<!-- 条件查询总数 -->
 	<select id="queryTotalByCondition" parameterType="net.fnsco.order.api.dto.AppUserManageDTO" resultType="java.lang.Integer">
@@ -226,7 +234,8 @@
 					MR.mobile,
 					MC.mer_name,
 					MR.reg_time,
-					MR.user_name
+					MR.user_name,
+					MR.last_login_time
 				FROM
 					(
 						SELECT
@@ -250,7 +259,7 @@
 				      			</if>
 			</where>
 		GROUP BY
-			TA.mobile,TA.reg_time,TA.user_name
+			TA.last_login_time,TA.mobile,TA.reg_time,TA.user_name
 		) TAB
 	</select>
 	  <!-- 根据手机号查询店铺绑定情况 -->
@@ -303,4 +312,15 @@
 		modify_time=#{modifyTime,jdbcType=TIMESTAMP},state=#{state,jdbcType=INTEGER},forced_login_out=#{forcedLoginOut,jdbcType=INTEGER}
   	  	where id = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 查询某种角色的所有用户信息 -->
+  <select id="selectAllInlineByRoleId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+		from m_app_user
+		WHERE state = 1 and device_token &lt;&gt; '' and device_token is not null and id IN ( SELECT app_user_id FROM u_app_user_merchant WHERE role_id = #{roleId})
+  </select>
+  <!-- 查询手机号的关联信息 -->
+ <select id="selectInnercode" parameterType="java.lang.String" resultMap="RELInnerCodeResultMap">
+  	SELECT inner_code FROM m_merchant_core WHERE legal_person_mobile=#{mobile,jdbcType=VARCHAR}  UNION SELECT inner_code FROM m_merchant_contact  WHERE contact_mobile=#{mobile,jdbcType=VARCHAR}
+  </select>
 </mapper>

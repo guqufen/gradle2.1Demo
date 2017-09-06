@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantUserRelDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantUserRel" >
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="app_user_id" property="appUserId" jdbcType="INTEGER" />
+    <result column="modefy_time" property="modefyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, inner_code, app_user_id, modefy_time
+  </sql>
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantUserRel" >
+    insert into m_merchant_user_rel (id, inner_code, app_user_id, 
+      modefy_time)
+    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{appUserId,jdbcType=INTEGER}, 
+      #{modefyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantUserRel" >
+    insert into m_merchant_user_rel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="innerCode != null" >
+        inner_code,
+      </if>
+      <if test="appUserId != null" >
+        app_user_id,
+      </if>
+      <if test="modefyTime != null" >
+        modefy_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="innerCode != null" >
+        #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="appUserId != null" >
+        #{appUserId,jdbcType=INTEGER},
+      </if>
+      <if test="modefyTime != null" >
+        #{modefyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_user_rel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserIdInnerCode" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_user_rel
+    where app_user_id = #{appUserId,jdbcType=INTEGER}
+    and inner_code = #{innerCode,jdbcType=VARCHAR}
+    limit 1
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_user_rel
+    where app_user_id = #{appUserId,jdbcType=INTEGER}
+  </select>
+    <!-- 根据innerCode和appUserId删除绑定关系-->
+  <delete id="deleteByPrimaryKey" >
+    delete from m_merchant_user_rel
+    where inner_code = #{innerCode,jdbcType=VARCHAR} and app_user_id = #{appUserId,jdbcType=INTEGER}
+  </delete>
+  <!-- 删除绑定关系 -->
+  <delete id="deleteByInnerCode" >
+    delete from m_merchant_user_rel
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </delete>
+  <!-- 根据商家ID删除关联数据 -->
+  <delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
+   DELETE   FROM m_merchant_user_rel  WHERE inner_code in (
+	 SELECT inner_code FROM m_merchant_core WHERE id in 
+	  <foreach item="item" collection="array" open="(" separator="," close=")">
+       #{item}
+     </foreach>
+	)
+</delete>
+  <delete id="deleteByMerIdAndUserId" parameterType="java.lang.Integer">
+    DELETE
+		FROM
+			m_merchant_user_rel
+		WHERE
+			app_user_id = #{userId}
+		AND inner_code IN (
+			SELECT
+				inner_code
+			FROM
+				m_merchant_core
+			WHERE
+				id = #{merId}
+		)
+  </delete>
+</mapper>

@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 
 import net.fnsco.core.constants.CoreConstants;
-import net.fnsco.freamwork.business.AppUserDTO;
-import net.fnsco.freamwork.business.UserService;
+import net.fnsco.freamwork.business.AppService;
+import net.fnsco.freamwork.business.AppUser1DTO;
+import net.fnsco.freamwork.business.WebService;
 import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.withhold.service.sys.entity.UserDO;
 
@@ -25,7 +26,7 @@ import net.fnsco.withhold.service.sys.entity.UserDO;
  *
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements WebService, AppService {
     @Autowired
     private net.fnsco.withhold.service.sys.UserService userService;
 
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
      * @see net.fnsco.freamwork.business.UserService#getUserInfo(java.lang.String)
      */
     @Override
-    public AppUserDTO getUserInfo(String userId) {
+    public AppUser1DTO getUserInfo(String userId) {
         return null;
 
     }
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
         UserDO temp = userService.getUserByName(userName);
         if (temp != null) {
             user = new WebUserDTO();
-            setSessionUser(request,temp,temp.getId());
+            setSessionUser(request, temp, temp.getId());
         }
         return user;
     }

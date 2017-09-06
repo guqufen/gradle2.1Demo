@@ -19,13 +19,17 @@ public class InitConfig {
         OssUtil.setAccessKeyId(env.getProperty("aliyun.oss.accessKeyId"));
         OssUtil.setAccessKeySecret(env.getProperty("aliyun.oss.accessKeySecret"));
         OssUtil.setHeadBucketName(env.getProperty("aliyun.oss.headBucketName"));
-        OssUtil.initOssClient();
-        
+        if (null != env.getProperty("aliyun.oss.endpoint")) {
+            OssUtil.initOssClient();
+        }
+
         OssLoaclUtil.setEndpoint(env.getProperty("aliyun.oss.local.endpoint"));
         OssLoaclUtil.setAccessKeyId(env.getProperty("aliyun.oss.local.accessKeyId"));
         OssLoaclUtil.setAccessKeySecret(env.getProperty("aliyun.oss.local.accessKeySecret"));
         OssLoaclUtil.setHeadBucketName(env.getProperty("aliyun.oss.local.headBucketName"));
-        OssLoaclUtil.initOssClient();
+        if (null != env.getProperty("aliyun.oss.local.endpoint")) {
+            OssLoaclUtil.initOssClient();
+        }
         return 1;
     }
 }

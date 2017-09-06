@@ -151,7 +151,8 @@ function queryParams(params)
 	   var param ={
 			   currentPageNum : this.pageNumber,
 			   pageSize : this.pageSize,
-			   msgType :$('#pushType').val(),
+//			   msgType :$('#pushType').val(),
+			   msgType :1,
 			   status:$('#pushState').val(),
 			   startSendTime:$('#datetimepicker1').val(),
 			   endSendTime:$('#datetimepicker2').val()

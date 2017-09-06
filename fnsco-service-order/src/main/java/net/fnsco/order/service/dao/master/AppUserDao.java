@@ -66,4 +66,15 @@ public interface AppUserDao {
      */
     List<AppUser> queryAllPushUser();
     List<AppUser> queryBydeviceToken(@Param("deviceToken")String deviceToken);
+    
+    /**
+     * selectAllInlineByRoleId:(查询某种角色的所有在线用户)
+     * @param roleId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年8月31日 下午1:53:34
+     * @return List<AppUser>    DOM对象
+     */
+    List<AppUser> selectAllInlineByRoleId(@Param("roleId")String roleId);
+    List<QueryBandDTO> selectInnercode(@Param("mobile")String mobile);
 }

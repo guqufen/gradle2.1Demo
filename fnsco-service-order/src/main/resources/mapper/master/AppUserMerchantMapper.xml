@@ -16,8 +16,10 @@
 		select
 		<include refid="Base_Column_List" />
 		from u_app_user_merchant
-		where app_user_id = #{appUserId,jdbcType=INTEGER} and role_id =
-		#{roleId,jdbcType=VARCHAR}
+		where app_user_id = #{appUserId,jdbcType=INTEGER} 
+		<if test="roleId != null and roleId != '' ">
+		  and role_id = #{roleId,jdbcType=VARCHAR}
+		</if>
 	</select>
 	<select id="selectByall" resultMap="BaseResultMap">
 		select
@@ -31,22 +33,11 @@
 		select
 		<include refid="Base_Column_List" />
 		from u_app_user_merchant
-		where inner_code = #{innerCode,jdbcType=VARCHAR} and role_id =
-		#{roleId,jdbcType=VARCHAR}
-	</select>
-	<select id="selectOneByInnerCode" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from u_app_user_merchant
-		where inner_code = #{innerCode,jdbcType=VARCHAR} and role_id =
-		#{roleId,jdbcType=VARCHAR}
-	</select>
-	<select id="selectByCode" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from u_app_user_merchant
-		where inner_code = #{innerCode,jdbcType=VARCHAR} and role_id =
-		#{roleId,jdbcType=VARCHAR}
+		where inner_code = #{innerCode,jdbcType=VARCHAR} 
+		<if test="roleId != null and roleId != '' ">
+		  and role_id = #{roleId,jdbcType=VARCHAR}
+		</if>
+		ORDER BY CONVERT(role_id,SIGNED)
 	</select>
 	<!-- 根据innerCode和appUserId删除绑定关系 -->
 	<delete id="deleteByPrimaryKey">
@@ -138,4 +129,20 @@
 			)
 			 AND status = 1
  </select>
+ <!-- 删除关系 -->
+ <delete id="deleteByMerIdAndUserId" parameterType="java.lang.Integer">
+    DELETE
+		FROM
+			u_app_user_merchant
+		WHERE
+			app_user_id = #{userId}
+		AND inner_code IN (
+			SELECT
+				inner_code
+			FROM
+				m_merchant_core
+			WHERE
+				id = #{merId}
+		)
+ </delete>
 </mapper>

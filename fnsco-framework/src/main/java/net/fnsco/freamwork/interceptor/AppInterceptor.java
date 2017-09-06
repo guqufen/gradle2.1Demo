@@ -14,8 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.common.base.Strings;
 
 import net.fnsco.freamwork.aop.OutWriterUtil;
-import net.fnsco.freamwork.business.AppUserDTO;
-import net.fnsco.freamwork.business.UserService;
+import net.fnsco.freamwork.business.AppService;
+import net.fnsco.freamwork.business.AppUser1DTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.freamwork.comm.Md5Util;
 
@@ -32,8 +32,8 @@ public class AppInterceptor implements HandlerInterceptor {
     @Autowired
     private Environment env;
 
-    @Autowired
-    private UserService userService;
+    @Autowired(required = false)
+    private AppService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -73,7 +73,7 @@ public class AppInterceptor implements HandlerInterceptor {
         logger.error("进入强制退出前判断" + userId);
         if (!Strings.isNullOrEmpty(userId)) {
             logger.error("进入强制退出判断" + userId);
-            AppUserDTO userDto = userService.getUserInfo(userId);
+            AppUser1DTO userDto = userService.getUserInfo(userId);
             if (userDto != null) {
                 if (userDto.getForcedLoginOut() != null && userDto.getForcedLoginOut().compareTo(1) == 0) {
                     OutWriterUtil.outJson(response, FrameworkConstant.E_FORCED_LOGIN_OUT);

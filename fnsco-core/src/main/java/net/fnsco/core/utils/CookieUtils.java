@@ -1,5 +1,8 @@
 package net.fnsco.core.utils;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,48 +17,46 @@ public class CookieUtils {
 
     private final static String COOKIE_SEPARATOR = "#SAP#";
     private final static String ENCRYPT_KEY      = "asdfwerxcv";
-    private final static Logger logger           = org.slf4j.LoggerFactory
-        .getLogger(CookieUtils.class);
+    private final static Logger logger           = org.slf4j.LoggerFactory.getLogger(CookieUtils.class);
 
     public static void addCookie(HttpServletResponse response, String key, String value) {
         addCookie(response, key, value, 60 * 60 * 24 * 7);
     }
 
-    public static void addCookie(HttpServletResponse response, String key, String value,
-                                 int maxAgeInSeconds) {
+    public static void addCookie(HttpServletResponse response, String key, String value, int maxAgeInSeconds) {
         String encrypt_key = ENCRYPT_KEY;
         String saveTime = System.currentTimeMillis() + "";
         //签名
         String encrypt_value = encrypt(encrypt_key, saveTime, maxAgeInSeconds + "", value);
         //组合保存
-        String cookieValue = encrypt_value + COOKIE_SEPARATOR + saveTime + COOKIE_SEPARATOR
-                             + maxAgeInSeconds + COOKIE_SEPARATOR + value;
+        String cookieValue = encrypt_value + COOKIE_SEPARATOR + saveTime + COOKIE_SEPARATOR + maxAgeInSeconds + COOKIE_SEPARATOR + value;
         setCookie(response, key, cookieValue, maxAgeInSeconds, null, null, null);
     }
 
-    private static void setCookie(HttpServletResponse response, String name, String value,
-                                  int maxAgeInSeconds, String path, String domain,
-                                  Boolean isHttpOnly) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setMaxAge(maxAgeInSeconds);
+    private static void setCookie(HttpServletResponse response, String name, String value, int maxAgeInSeconds, String path, String domain, Boolean isHttpOnly) {
+        try {
+            value = URLEncoder.encode(value, "UTF-8");
+            Cookie cookie = new Cookie(name, value);
+            cookie.setMaxAge(maxAgeInSeconds);
 
-        if (path == null) {
-            path = "/";
-        }
-        cookie.setPath(path);
+            if (path == null) {
+                path = "/";
+            }
+            cookie.setPath(path);
 
-        if (domain != null) {
-            cookie.setDomain(domain);
+            if (domain != null) {
+                cookie.setDomain(domain);
+            }
+            if (isHttpOnly != null) {
+                cookie.setHttpOnly(isHttpOnly.booleanValue());
+            }
+            response.addCookie(cookie);
+        } catch (Exception e) {
+            logger.error("保存cookie出错", e);
         }
-        if (isHttpOnly != null) {
-            cookie.setHttpOnly(isHttpOnly.booleanValue());
-        }
-        response.addCookie(cookie);
-
     }
 
-    private static String encrypt(String encrypt_key, String saveTime, String maxAgeInSeconds,
-                                  String value) {
+    private static String encrypt(String encrypt_key, String saveTime, String maxAgeInSeconds, String value) {
         return HashUtils.md5(encrypt_key + saveTime + maxAgeInSeconds + value);
     }
 
@@ -67,10 +68,15 @@ public class CookieUtils {
     public static String getCookStr(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(name)) {
-                    return cookie.getValue();
+            try {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals(name)) {
+                        String cookieValue = URLDecoder.decode(cookie.getValue(), "UTF-8");
+                        return cookieValue;
+                    }
                 }
+            } catch (Exception ex) {
+                logger.error("获取cookie值出错", ex);
             }
         }
         return null;

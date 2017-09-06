@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantContactDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantContact" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="contact_name" property="contactName" jdbcType="VARCHAR" />
+    <result column="contact_mobile" property="contactMobile" jdbcType="VARCHAR" />
+    <result column="contact_email" property="contactEmail" jdbcType="VARCHAR" />
+    <result column="contact_telphone" property="contactTelphone" jdbcType="VARCHAR" />
+    <result column="contact_jobs" property="contactJobs" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, inner_code, contact_name, contact_mobile, contact_email, contact_telphone, contact_jobs
+  </sql>
+  
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantContact" >
+    insert into m_merchant_contact (id, inner_code, contact_name, 
+      contact_mobile, contact_email, contact_telphone, 
+      contact_jobs)
+    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
+      #{contactMobile,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, #{contactTelphone,jdbcType=VARCHAR}, 
+      #{contactJobs,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantContact" >
+    insert into m_merchant_contact
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="innerCode != null" >
+        inner_code,
+      </if>
+      <if test="contactName != null" >
+        contact_name,
+      </if>
+      <if test="contactMobile != null" >
+        contact_mobile,
+      </if>
+      <if test="contactEmail != null" >
+        contact_email,
+      </if>
+      <if test="contactTelphone != null" >
+        contact_telphone,
+      </if>
+      <if test="contactJobs != null" >
+        contact_jobs,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="innerCode != null" >
+        #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactMobile != null" >
+        #{contactMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contactEmail != null" >
+        #{contactEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTelphone != null" >
+        #{contactTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactJobs != null" >
+        #{contactJobs,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantContact" >
+    update m_merchant_contact
+    <set >
+      <if test="innerCode != null" >
+        inner_code = #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null" >
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactMobile != null" >
+        contact_mobile = #{contactMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="contactEmail != null" >
+        contact_email = #{contactEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="contactTelphone != null" >
+        contact_telphone = #{contactTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactJobs != null" >
+        contact_jobs = #{contactJobs,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantContact" >
+    update m_merchant_contact
+    set inner_code = #{innerCode,jdbcType=VARCHAR},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      contact_mobile = #{contactMobile,jdbcType=VARCHAR},
+      contact_email = #{contactEmail,jdbcType=VARCHAR},
+      contact_telphone = #{contactTelphone,jdbcType=VARCHAR},
+      contact_jobs = #{contactJobs,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="queryByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+     from m_merchant_contact
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from m_merchant_contact
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <!-- 条件查询 -->
+  <select id="queryListByCondition" parameterType="net.fnsco.bigdata.service.domain.MerchantContact" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+   	 from m_merchant_contact
+      <where>
+   	   <if test="innerCode != null" >
+        AND inner_code = #{innerCode,jdbcType=VARCHAR}
+      </if>
+     <if test="contactName != null" >
+        AND contact_name = #{contactName,jdbcType=VARCHAR}
+      </if>
+      <if test="contactMobile != null" >
+        AND contact_mobile = #{contactMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="contactEmail != null" >
+        AND contact_email = #{contactEmail,jdbcType=VARCHAR}
+      </if>
+      <if test="contactTelphone != null" >
+        AND contact_telphone = #{contactTelphone,jdbcType=VARCHAR}
+      </if>
+      <if test="contactJobs != null" >
+        AND contact_jobs = #{contactJobs,jdbcType=VARCHAR}
+      </if>
+   </where>
+</select>
+<!-- 根据商家ID删除关联数据 -->
+<delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
+   DELETE   FROM m_merchant_contact WHERE inner_code in (
+	 SELECT inner_code FROM m_merchant_core WHERE id in 
+	  <foreach item="item" collection="array" open="(" separator="," close=")">
+       #{item}
+     </foreach>
+	)
+</delete>
+</mapper>
