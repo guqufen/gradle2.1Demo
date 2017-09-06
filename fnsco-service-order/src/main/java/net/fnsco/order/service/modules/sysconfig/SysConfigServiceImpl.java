@@ -31,7 +31,7 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
     @Autowired
     private Environment         env;
 
-    private static final String baseUrl = "base.url";
+    private static final String baseUrl = "h5.base.url";
 
     /**
      * (non-Javadoc)
