@@ -874,7 +874,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 if(mouth == null || !mouth.equals(newMouth)){
                     mouth = end.get(Calendar.MONTH);
                     FinanceMouthDTO mouthDto = new FinanceMouthDTO();
-                    mouthDto.setTradeMonth(NumberUtil.numToUpper(newMouth+1));
+                    mouthDto.setTradeMonth(NumberUtil.numToUpper(newMouth+1)+"月");
                     dayDatas = Lists.newArrayList();
                     mouthDto.setTradeDayDatas(dayDatas);
                     datas.add(mouthDto);

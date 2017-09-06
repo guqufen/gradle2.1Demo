@@ -74,7 +74,12 @@ public interface MerchantCoreService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<String> doAddMerChannel(List<MerchantChannel> merchantChannel);
-
+    /**
+     * 批量导入渠道信息保存
+     * @param merchantBank
+     * @return
+     */
+    Integer doAddChannel(MerchantChannel merchantChannel);
     /**
      * doAddMerBanks:(这里用一句话描述这个方法的作用)保存银行卡信息
      *
@@ -85,6 +90,12 @@ public interface MerchantCoreService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<String> doAddMerBanks(List<MerchantBank> merchantBanks);
+    /**
+     * 批量导入银行卡保存
+     * @param merchantBank
+     * @return
+     */
+    Integer doAddBanks(MerchantBank merchantBank);
 
     /**
      * 条件查询 根据商家基本信息条件分页查询

@@ -44,7 +44,7 @@
       #{openBankPrince,jdbcType=VARCHAR}, #{openBank,jdbcType=VARCHAR}, #{openBankCity,jdbcType=VARCHAR}, 
       #{openBankNum,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantBank" >
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantBank" keyProperty="id" useGeneratedKeys="true">
     insert into m_merchant_bank
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

@@ -44,6 +44,7 @@ import net.fnsco.order.api.dto.AppUserMerchantDTO;
 import net.fnsco.order.api.dto.BandDto;
 import net.fnsco.order.api.dto.QueryBandDTO;
 import net.fnsco.order.api.dto.SmsCodeDTO;
+import net.fnsco.order.api.sysappmsg.SysAppMsgService;
 import net.fnsco.order.service.dao.master.AppUserDao;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.dao.master.SysMsgAppSuccDao;
@@ -66,11 +67,11 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Autowired
     private MerchantUserRelDao             merchantUserRelDao;
     @Autowired
-    private MerchantContactDao             merchantContactDao;
-    @Autowired
     private AppUserMerchantDao             appUserMerchantDao;
     @Autowired
     private SysMsgAppSuccDao               sysMsgAppSuccDao;
+    @Autowired
+    private SysAppMsgService               sysAppMsgService;
     //注册
     @Override
     @Transactional
@@ -126,8 +127,10 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUser = appUserDao.selectAppUserByMobile(appUser.getMobile());
         map.put("appUserId", appUser.getId());
         int merchantNums=0;
+        int Shopkeeper = 2;
         List<QueryBandDTO> list=appUserDao.selectInnercode(appUserDTO.getMobile());
         if (!CollectionUtils.isEmpty(list)){
+            Shopkeeper=1;
             merchantNums= list.size();
             for(QueryBandDTO li:list){
                 MerchantUserRel rel=new MerchantUserRel();
@@ -141,8 +144,15 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 dto.setModefyTime(new Date());
                 dto.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
                 appUserMerchantDao.insertSelective(dto);
+                //推送消息
+                try {
+                    sysAppMsgService.pushMerChantMsg(li.getInnerCode(), appUser.getId());
+                } catch (Exception ex) {
+                    logger.error("绑定商户发送消息失败", ex);
+                }
             }
         }
+        map.put("Shopkeeper", Shopkeeper);
         map.put("merchantNums",merchantNums);
         return ResultDTO.success(map);
     }

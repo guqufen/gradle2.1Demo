@@ -1,16 +1,20 @@
 package net.fnsco.web.controller.report;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.Api;
+import net.fnsco.bigdata.api.dto.TradeDataListResultDTO;
+import net.fnsco.bigdata.api.dto.TradeDataResultDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.order.api.trade.TradeReportService;
-import net.fnsco.order.service.domain.SysAppMessage;
+import net.fnsco.order.service.modules.trade.TradeWebReportService;
 
 /**
  * @desc 大屏幕报表接口
@@ -25,10 +29,10 @@ import net.fnsco.order.service.domain.SysAppMessage;
 public class TradeReportController extends BaseController {
 
     @Autowired
-    private TradeReportService tradeReportService;
+    private TradeWebReportService tradeWebReportService;
 
     /**
-     * appMsgIndex:(大屏幕报表查询)
+     * appMsgIndex:(大屏幕报表统计查询)
      *
      * @param sysmsg
      * @param currentPageNum
@@ -38,11 +42,30 @@ public class TradeReportController extends BaseController {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @RequestMapping(value = "/query", method = RequestMethod.GET)
+    @RequestMapping(value = "/getTradeDataTotle", method = RequestMethod.GET)
     @ResponseBody
     //@RequiresPermissions(value = { "trade:report:list" })
-    public ResultDTO appMsgIndex(SysAppMessage sysmsg, Integer currentPageNum, Integer pageSize) {
-        //tradeReportService.queryBusinessTrends(tradeReportDTO);
-        return success();
+    public ResultDTO getTradeDataTotle() {
+        TradeDataResultDTO result = tradeWebReportService.getAllTradeDataTotle();
+        return success(result);
+    }
+
+    /**
+     * appMsgIndex:(大屏幕交易详情查询)
+     *
+     * @param sysmsg
+     * @param currentPageNum
+     * @param pageSize
+     * @return    设定文件
+     * @return ResultPageDTO<SysAppMessage>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping(value = "/getTradeDataList", method = RequestMethod.GET)
+    @ResponseBody
+    //@RequiresPermissions(value = { "trade:report:list" })
+    public ResultDTO getTradeDataList(@RequestParam("startDate") String startDate, @RequestParam("pageSize") Integer pageSize) {
+        List<TradeDataListResultDTO> result = tradeWebReportService.getTradeDataList(startDate, pageSize);
+        return success(result);
     }
 }
