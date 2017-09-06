@@ -16,6 +16,7 @@ import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.comm.ServiceConstant;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.order.api.constant.ConstantEnum;
 
 /**
  * 交易流水处理
@@ -55,6 +56,7 @@ public class TradeDataOpenController extends BaseController {
         5-京东钱包
         6-拉卡拉钱包*/
         String payType = tradeData.getPayType();
+        //tradeData.setCardOrg(ConstantEnum.DcTypeEnum.getNameByCode(code));
         tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
         tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
         tradeData.setRespCode(ServiceConstant.TradeStateEnum.SUCCESS.getCode());
