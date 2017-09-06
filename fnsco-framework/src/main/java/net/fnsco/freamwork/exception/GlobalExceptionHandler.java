@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,6 +27,17 @@ public class GlobalExceptionHandler {
         Result result = new Result();
         result.setCode(FrameworkConstant.E_SYSTEM_EXCEPTION);
         result.setMessage(FrameworkConstant.ERROR_MESSGE_MAP.get(FrameworkConstant.E_SYSTEM_EXCEPTION));
+        result.setSuccess(false);
+        return result;
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public Object MissingServletRequestParameterException(HttpServletRequest request, Exception exception) throws Exception {
+        //按需重新封装需要返回的错误信息  
+        logger.error("未处理的业务处理异常", exception);
+        Result result = new Result();
+        result.setCode(FrameworkConstant.E_PARAMETER_NOT_NULL);
+        result.setMessage(FrameworkConstant.ERROR_MESSGE_MAP.get(FrameworkConstant.E_PARAMETER_NOT_NULL) + exception.getMessage());
         result.setSuccess(false);
         return result;
     }
