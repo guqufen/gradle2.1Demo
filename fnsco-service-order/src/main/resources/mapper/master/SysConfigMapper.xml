@@ -141,4 +141,31 @@
     </where>
     LIMIT 1
   </select>
+  
+  <!-- 条件查询返回多个实体 -->
+  <select id="selectAllByCondition" parameterType="net.fnsco.order.service.domain.SysConfig"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_config
+    <where>
+       <if test="type != null" >
+        AND type = #{type,jdbcType=VARCHAR}
+      </if>
+      <if test="group != null" >
+        AND group_name = #{group,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null" >
+        AND name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="value != null" >
+        AND value = #{value,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null" >
+        AND status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="remark != null" >
+        AND remark = #{remark,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
 </mapper>

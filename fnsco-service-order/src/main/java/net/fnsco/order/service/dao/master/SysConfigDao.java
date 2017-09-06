@@ -1,5 +1,7 @@
 package net.fnsco.order.service.dao.master;
 
+import java.util.List;
+
 import net.fnsco.order.service.domain.SysConfig;
 /**
  * @desc 配置DAO
@@ -31,4 +33,6 @@ public interface SysConfigDao {
      * @since  CodingExample　Ver 1.1
      */
     SysConfig selectByCondition(SysConfig record);
+    
+    List<SysConfig> selectAllByCondition(SysConfig record);
 }

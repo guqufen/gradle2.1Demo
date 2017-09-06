@@ -736,7 +736,7 @@ function saveBankCardParams(conId){
           $('#terminal-con').html('');
           $('#terminal-con').append(terminalHtml(TerminalList));
           //
-          
+          posProvince(TerminalList);
         }
       })
     },
@@ -775,6 +775,20 @@ function posHtml(num){
         '<div class="col-sm-4"><label class="control-label" for="posType'+num+'">机具型号：</label><input type="text" class="form-control posType" id="posType'+num+'" name="posType'+num+'" required="required" value="APOS A8"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="mercReferName'+num+'">签购单名称：</label><input type="text" class="form-control mercReferName" id="mercReferName'+num+'" name="mercReferName'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="posFactory'+num+'">机具厂家：</label><input type="text" class="form-control posFactory" id="posFactory'+num+'" name="posFactory'+num+'" required="required" value="福建联迪商用设备有限公司"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="installAddr'+num+'">POS装机地址：</label>'+
+        '<select  class="form-control posProvince" id="provinceId' + num + '" name="provinceId' + num + '" style="type=province" onchange=processSelect('+ num + ',' + true + ')>' + 
+			'<option value="">--选择省--</option>' +
+		'</select></div>' +
+        '<div class="col-sm-4"><label class="control-label"></label><select  class="form-control posCity" id="cityId' + num + '" name="cityId' + num + '" onchange=processSelect(' + num + ','+ false + ')>' + 
+        	'<option value="">--选择市--</option>' + 
+		'</select></div>' +
+		'<div class="col-sm-4"><label class="control-label"></label><select class="form-control posArea" id="areaId' + num + '" name="areaId' + num + '" >' + 
+			'<option value="">--选择区--</option>' +
+		'</select></div>' +
+		
+		'<div class="col-sm-12"><label class="control-label" for="installAddr'+num+'">POS装机详细地址：</label>'+
+		'<input type="text" class="form-control installAddr" id="installAddr'+num+'" name="installAddr'+num+'" required="required">'+
+        '</div>'+
         '<h2>扫码：</h2>'+
         '<input type="hidden" class="form-control terminalId1" id="terminalId1'+num+'" name="terminalId1'+num+'">'+
         '<div class="col-sm-4"><label class="control-label" for="terminalCode1'+num+'">终端编号：</label><input type="text" class="form-control terminalCode1" id="terminalCode1'+num+'" name="terminalCode1'+num+'" required="required"></div>'+
@@ -788,9 +802,15 @@ function posHtml(num){
         '<div class="col-sm-4"><label class="control-label" for="debitCardMaxFee'+num+'">借记卡封顶值：</label><input type="number" class="form-control debitCardMaxFee" id="debitCardMaxFee'+num+'" name="debitCardMaxFee'+num+'" required="required"></div>'+
         '</div>';
 }
+
+/**
+ * 终端信息界面的 新增设备按钮  触发的事件
+ * @param num
+ */
 function addPos(num){
   TerminalList=TerminalList+1;
   $("#posList"+num).append(posHtml(TerminalList));
+  posProvince(TerminalList);
 }
 function removePos(num){
   if(num){
@@ -816,6 +836,8 @@ function removePos(num){
   $("#btn_addTerminal").click(function(){
     TerminalList=TerminalList+1;
     $('#terminal-con').append(terminalHtml(TerminalList));
+  // 添加省份显示
+    posProvince(TerminalList);
   })
   //删除终端列表
   function removeTerminal(num){
@@ -857,6 +879,10 @@ function removePos(num){
           var posName=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posName')).val();
           var snCode=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.snCode')).val();
           var posType=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posType')).val();
+          var posAddr=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.installAddr')).val();//POS装机地址
+          var posProvince=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posProvince')).val();//POS装机省份
+          var posCity=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posCity')).val();//POS装机市
+          var posArea=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posArea')).val();//POS装机区
           var mercReferName=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.mercReferName')).val();
           var posFactory=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posFactory')).val();
           var terminalCode1=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.terminalCode1')).val();
@@ -871,13 +897,11 @@ function removePos(num){
           var terminalId2=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.terminalId2')).val();
           var posId=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.remove-icon')).attr('editid');
           if(!posId || posId<0){
-            posInfos=posInfos.concat({posName,snCode,posType,mercReferName,posFactory,terminalCode1,alipayFee,wechatFee,terminalCode2,debitCardMaxFee,debitCardMaxFee,debitCardRate,creditCardRate,bankId,terminalId1,terminalId2});
+            posInfos=posInfos.concat({posName,snCode,posType,posAddr,posProvince,posCity,posArea,mercReferName,posFactory,terminalCode1,alipayFee,wechatFee,terminalCode2,debitCardMaxFee,debitCardMaxFee,debitCardRate,creditCardRate,bankId,terminalId1,terminalId2});
           }else{
-            posInfos=posInfos.concat({posName,snCode,posType,mercReferName,posFactory,terminalCode1,alipayFee,wechatFee,terminalCode2,debitCardMaxFee,debitCardMaxFee,debitCardRate,creditCardRate,bankId,terminalId1,terminalId2,posId});  
+            posInfos=posInfos.concat({posName,snCode,posType,posAddr,posProvince,posCity,posArea,mercReferName,posFactory,terminalCode1,alipayFee,wechatFee,terminalCode2,debitCardMaxFee,debitCardMaxFee,debitCardRate,creditCardRate,bankId,terminalId1,terminalId2,posId});  
           }
-          console.log("PosID："+id);
-
-          
+          console.log("PosID："+id);  
       }
       if(!id || id<0){
         poses=poses.concat({merChannel:{channelMerId,channelType,channelMerKey},posInfos});
@@ -1068,7 +1092,7 @@ $('#btn_add').click(function(){
     //默认添加一个银行卡信息列表
     $('#bankCard-con').append(bankCardHtml(BankCardlList));
     //默认添加一个终端列表
-    $('#terminal-con').append(terminalHtml(TerminalList));
+//    $('#terminal-con').append(terminalHtml(TerminalList));
     //默认添加一个信息列表页
     $('#contact-con').append(contactHtml(ContactList));
 });
@@ -1205,6 +1229,16 @@ function editData(id){
               $("#posList"+data.data.channel[i].id).append(posHtml(data.data.channel[i].posInfos[j].id));
               $('input[name="posName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posName);
               $('input[name="snCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].snCode);
+              $('input[name="installAddr'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posAddr);//装机地址数据放入
+
+              //选中省份/市/区
+              posProvince(data.data.channel[i].posInfos[j].id);
+              $('select[name="provinceId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posProvince+"']").attr("selected",true);
+              processSelect(data.data.channel[i].posInfos[j].id, true);//通过选中的省份，获取市的数据
+              $('select[name="cityId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posCity+"']").attr("selected",true);
+              processSelect(data.data.channel[i].posInfos[j].id, false);//通过选中的市，获取区的数据
+              $('select[name="areaId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posArea+"']").attr("selected",true);
+              
               $('select[name="bankId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value="+data.data.channel[i].posInfos[j].bankId+"]").attr("selected",true);
               $('input[name="posType'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posType);
               $('input[name="mercReferName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].mercReferName);
@@ -1360,6 +1394,7 @@ $("#btn_addTerminal1").click(function(){
       layer.msg('最多添加八个终端');
     }else{
       $("#terminal-con1").append(terminalHtml(-(editTerminalList)));
+      posProvince(-(editTerminalList));
     }
 })
   //修改终端保存按钮
@@ -1374,6 +1409,7 @@ var editChannelList=20;
 $("#btn_addChannel1").click(function(){
     editChannelList=editChannelList+1;
     $("#channel-con1").append(channelHtml(-(editChannelList)));
+    posProvince(-(editChannelList));
 })
   //修改渠道保存按钮
   $('#editBtn_channel_info').click(function(){
@@ -1506,11 +1542,26 @@ function detailsData(id){
             $('#terminal-con2 select[name="channelType'+data.data.channel[i].id+'"]').find("option[value="+data.data.channel[i].channelType+"]").attr("selected",true);
             var posLen=data.data.channel[i].posInfos.length;
             for(var j=0;j<posLen;j++){
-              $("#terminal-con2 #posList"+data.data.channel[i].id).append(posHtml(data.data.channel[i].posInfos[j].id));
+            	//先移除省份/市/区的数据<修改和查看详情该部分ID会重复导致出现多个select的ID相同的数据>
+                $('select[name="provinceId'+data.data.channel[i].posInfos[j].id+'"]').remove();
+                $('select[name="cityId'+data.data.channel[i].posInfos[j].id+'"]').remove();
+                $('select[name="areaId'+data.data.channel[i].posInfos[j].id+'"]').remove();
+                $("#terminal-con2 #posList"+data.data.channel[i].id).append(posHtml(data.data.channel[i].posInfos[j].id));
+                
               $('#terminal-con2 input[name="posName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posName);
               $('#terminal-con2 input[name="snCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].snCode);
               $('#terminal-con2 select[name="bankId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value="+data.data.channel[i].posInfos[j].bankId+"]").attr("selected",true);
               $('#terminal-con2 input[name="posType'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posType);
+              $('#terminal-con2 input[name="installAddr'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posAddr);//POS装机地址
+
+              //选中省份/市/区
+              posProvince(data.data.channel[i].posInfos[j].id);
+              $('select[name="provinceId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posProvince+"']").attr("selected",true);
+              processSelect(data.data.channel[i].posInfos[j].id, true);//通过选中的省份，获取市的数据
+              $('select[name="cityId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posCity+"']").attr("selected",true);
+              processSelect(data.data.channel[i].posInfos[j].id, false);//通过选中的市，获取区的数据
+              $('select[name="areaId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posArea+"']").attr("selected",true);
+              
               $('#terminal-con2 input[name="mercReferName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].mercReferName);
               $('#terminal-con2 input[name="posFactory'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posFactory);
               var terminalLen=data.data.channel[i].posInfos[j].terminal.length;

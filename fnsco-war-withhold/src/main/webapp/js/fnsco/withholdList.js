@@ -122,6 +122,7 @@ function initTableData() {
 		// toolbar : '#toolbar', // 工具按钮用哪个容器
 		striped : true, // 是否显示行间隔色
 		cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+		uniqueId: "ids",   
 		pagination : true, // 是否显示分页（*）
 		sortable : true, // 是否启用排序
 		sortOrder : 'asc', // 排序方式
@@ -132,10 +133,9 @@ function initTableData() {
 		queryParams : queryParams,
 		responseHandler : responseHandler,// 处理服务器返回数据
 		columns : [ {
-			field : 'id',
+			field : 'ids',
 			title : '序号',
-			class:'j',
-			formatter : operateFormatterId
+			class:'j'
 		}, {
 			field : 'userName',
 			title : '姓名'
@@ -624,6 +624,27 @@ $(".save_btn").click(function(){
 })
 
 function check(id){
+	$("#detail_product_type_code_else").html("");
+	$.ajax({
+		url : PROJECT_NAME + '/web/withholdInfo/queryWithholdType',
+		async: true,
+		type : 'POST',
+		data:null,
+		dataType : "json",
+		success : function(data) {
+			unloginHandler(data);
+			console.log(data);
+			if (data.success) {
+				for(var i=0;i<data.data.length;i++){
+					var html="<option value='"+data.data[i].id+"'>"+data.data[i].name+"</option>";
+					$("#detail_product_type_code_else").prepend(html);
+				}
+			}
+		},
+		error : function(e) {
+			layer.msg('系统异常!' + e);
+		}
+	});
 	$.ajax({
 		url : PROJECT_NAME + '/web/withholdInfo/queryById',
 		type : 'POST',
@@ -641,7 +662,7 @@ function check(id){
 			$("#myCheckdetails .amount").val(data.data.amount);
 			$("#myCheckdetails .total").val(data.data.total);
 			$("#myCheckdetails .contractNum").val(data.data.contractNum);
-			$("#myCheckdetails .productTypeCode").val(data.data.productTypeCode);
+			$("#detail_product_type_code_else").val(data.data.productTypeCode);
 			$("#myCheckdetails .debitDay").val(data.data.debitDay);
 			$("#myCheckdetails .id").val(data.data.id);
 		}

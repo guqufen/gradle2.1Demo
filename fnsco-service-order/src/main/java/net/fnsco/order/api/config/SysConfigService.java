@@ -1,5 +1,7 @@
 package net.fnsco.order.api.config;
 
+import java.util.List;
+
 import net.fnsco.order.api.dto.AppConfigDTO;
 import net.fnsco.order.service.domain.SysConfig;
 
@@ -35,4 +37,6 @@ public interface SysConfigService {
      * @since  CodingExample　Ver 1.1
      */
     String getValueUrl(AppConfigDTO appConfigDTO);
+    
+    List<SysConfig> selectAllByCondition(SysConfig record);
 }

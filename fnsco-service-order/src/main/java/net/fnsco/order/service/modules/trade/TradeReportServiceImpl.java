@@ -187,17 +187,17 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 return result;
             }
           //贷记卡
-            if(ConstantEnum.DcTypeEnum.INLANDCREDITCARD.getCode().equals(dcType) || ConstantEnum.DcTypeEnum.OVERSEASCREDITCARD.getCode().equals(dcType)){
+            if(dcType.startsWith(ConstantEnum.DcTypeEnum.INLANDCREDITCARD.getCode()) || dcType.startsWith(ConstantEnum.DcTypeEnum.OVERSEASCREDITCARD.getCode())){
                 
                 result = NumberUtil.multiplication(tradeData.getAmt(), merTer.getCreditCardRate());
                 
-            }else if(ConstantEnum.DcTypeEnum.DOMESTICDEBITCARD.getCode().equals(dcType) || ConstantEnum.DcTypeEnum.OVERSEASDEBITCARD.getCode().equals(dcType)){
+            }else if(dcType.startsWith(ConstantEnum.DcTypeEnum.DOMESTICDEBITCARD.getCode()) || dcType.startsWith(ConstantEnum.DcTypeEnum.OVERSEASDEBITCARD.getCode())){
                 //借记卡
                 BigDecimal rate = NumberUtil.multiplication(tradeData.getAmt(), merTer.getDebitCardRate());
                 //跟设置的峰值比较，如果大于峰值则峰值，否则借记卡费率
                 BigDecimal bd1 = rate.divide(new BigDecimal(100));
-                BigDecimal db2 = new BigDecimal(merTer.getCreditCardMaxFee());
-                if(bd1.compareTo(db2) > 1){
+                BigDecimal db2 = new BigDecimal(merTer.getDebitCardMaxFee());
+                if(bd1.compareTo(db2) > 0){
                     result = db2;
                 }else{
                     result = bd1;
@@ -373,6 +373,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         TurnoverDTO turnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
         WeeklyDTO resultData = new WeeklyDTO();
         resultData.setInnerCode(tradeReportDTO.getInnerCode());
+        resultData.setMerNames(tradeReportDTO.getMerNames());
         resultData.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
         resultData.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
         if(null == turnover){
@@ -800,6 +801,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
          */
         FinanceReportDTO resultDto = new FinanceReportDTO();
         resultDto.setInnerCode(tradeReportDTO.getInnerCode());
+        resultDto.setMerNames(tradeReportDTO.getMerNames());
         resultDto.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
         resultDto.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
         
@@ -872,7 +874,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 if(mouth == null || !mouth.equals(newMouth)){
                     mouth = end.get(Calendar.MONTH);
                     FinanceMouthDTO mouthDto = new FinanceMouthDTO();
-                    mouthDto.setTradeMonth(NumberUtil.numToUpper(newMouth+1));
+                    mouthDto.setTradeMonth(NumberUtil.numToUpper(newMouth+1)+"月");
                     dayDatas = Lists.newArrayList();
                     mouthDto.setTradeDayDatas(dayDatas);
                     datas.add(mouthDto);
@@ -882,8 +884,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 for (FinanceDayDTO tradeDayDTO : tradeFinanceData) {
                     if (dateTime.equals(tradeDayDTO.getTradeDate())) {
                         tradeDayDTO.setTradeDate(format1.format(end.getTime()));
-                        tradeDayDTO.setTurnover(NumberUtil.format(new BigDecimal(tradeDayDTO.getTurnover()),2));
-                        tradeDayDTO.setProcedureFee(NumberUtil.format(new BigDecimal(tradeDayDTO.getProcedureFee()),2));
+                        tradeDayDTO.setTurnover(NumberUtil.format(new BigDecimal(tradeDayDTO.getTurnover()).divide(new BigDecimal(100)),2));
+                        tradeDayDTO.setProcedureFee(NumberUtil.format(new BigDecimal(tradeDayDTO.getProcedureFee()).divide(new BigDecimal(100)),2));
                         BigDecimal settAmount = NumberUtil.subtract(tradeDayDTO.getTurnover(), tradeDayDTO.getProcedureFee());
                         tradeDayDTO.setSettlementAmount(NumberUtil.format(settAmount,2));
                         dayDatas.add(tradeDayDTO);
@@ -906,8 +908,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        //反着排序
-        Collections.reverse(datas);
+        
         return datas;
     }
 }
