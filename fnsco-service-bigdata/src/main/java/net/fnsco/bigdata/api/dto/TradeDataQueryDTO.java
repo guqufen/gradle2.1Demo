@@ -5,14 +5,14 @@ import java.util.List;
 import net.fnsco.core.base.PageDTO;
 
 public class TradeDataQueryDTO extends PageDTO {
-    private Integer      userId;    //登录用户Id
-    private List<String>       innerCodes; // 内部商务号
-    private String       startDate; // 开始日期 2016-05-10
-    private String       endDate;   //结束日期 2016-05-10
-    private List<String> terminals; //终端号数组，所有选择的终端
-    private String       tradeId;   //交易流水ID
-    private List<String>       payType;//支付类型00", "刷卡支付""01", "微信支付""02", "支付宝支付","06", "拉卡拉钱包"
-    
+    private Integer      userId;     //登录用户Id
+    private List<String> innerCodes; // 内部商务号
+    private String       startDate;  // 开始日期 2016-05-10
+    private String       endDate;    //结束日期 2016-05-10
+    private List<String> terminals;  //终端号数组，所有选择的终端
+    private String       tradeId;    //交易流水ID
+    private List<String> payType;    //支付类型00", "刷卡支付""01", "微信支付""02", "支付宝支付","06", "拉卡拉钱包"
+
     public List<String> getPayType() {
         return payType;
     }
@@ -65,15 +65,13 @@ public class TradeDataQueryDTO extends PageDTO {
         this.userId = userId;
     }
 
-     
-
     /**
      * innerCodes
      *
      * @return  the innerCodes
      * @since   CodingExample Ver 1.0
     */
-    
+
     public List<String> getInnerCodes() {
         return innerCodes;
     }
@@ -84,7 +82,7 @@ public class TradeDataQueryDTO extends PageDTO {
      * @param   innerCodes    the innerCodes to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setInnerCodes(List<String> innerCodes) {
         this.innerCodes = innerCodes;
     }

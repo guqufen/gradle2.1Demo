@@ -53,6 +53,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     private MerchantCoreDao     merchantCoreDao;
     @Autowired
     private MerchantTerminalDao merchantTerminalDao;
+
     /**
      * 保存交易流水
      */
@@ -163,17 +164,23 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         result.setAmtTot("0.00");
         if (CollectionUtils.isEmpty(terminalList)) {//无终端则查询按商户查询
             List<String> innerCodeList = Lists.newArrayList();
-            if (!CollectionUtils.isEmpty(tempList)) {
-                for (MerchantUserRel rel : tempList) {
-                    innerCodeList.add(rel.getInnerCode());
+            //查询条件没有转入内部商户号时查询用户的所有商户信息
+            if (CollectionUtils.isEmpty(merchantCore.getInnerCodes())) {
+                if (!CollectionUtils.isEmpty(tempList)) {
+                    for (MerchantUserRel rel : tempList) {
+                        innerCodeList.add(rel.getInnerCode());
+                    }
                 }
-            }
-            if (null == innerCodeList || innerCodeList.size() == 0) {
-                return result;
+                if (null == innerCodeList || innerCodeList.size() == 0) {
+                    return result;
+                }
+            } else {
+                innerCodeList = merchantCore.getInnerCodes();
             }
             //设置商户号
             tradeData.setInnerCodeList(innerCodeList);
         }
+
         PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(), merchantCore.getPerPageSize(), tradeData);
         List<TradeData> datas = tradeListDAO.queryPageList(pages);
         int total = tradeListDAO.queryTotalByCondition(tradeData);
@@ -218,14 +225,14 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
         }
-        
+
         if (!StringUtils.isEmpty(tradeDataDTO.getStartTime())) {
             tradeDataDTO.setStartTime(DateUtils.getDateStartTime(tradeDataDTO.getStartTime()));
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getEndTime())) {
             tradeDataDTO.setEndTime(DateUtils.getDateEndTime(tradeDataDTO.getEndTime()));
         }
-        
+
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
         PageDTO<TradeData> pages = new PageDTO<TradeData>(currentPageNum, perPageSize, tradeData);
 
@@ -269,11 +276,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
         List<TradeData> datas = tradeListDAO.queryByAllCondition(tradeData);
         for (TradeData merchantdo : datas) {
-			String id = merchantdo.getTermId();
-			String code = merchantdo.getInnerCode();
-			String sn = merchantTerminalDao.querySnCode(id,code);
-			merchantdo.setSnCode(sn);
-		}
+            String id = merchantdo.getTermId();
+            String code = merchantdo.getInnerCode();
+            String sn = merchantTerminalDao.querySnCode(id, code);
+            merchantdo.setSnCode(sn);
+        }
         for (TradeData tradeData2 : datas) {
             if (!Strings.isNullOrEmpty(tradeData2.getInnerCode())) {
                 MerchantCore core = merchantCoreDao.selectByInnerCode(tradeData2.getInnerCode());
