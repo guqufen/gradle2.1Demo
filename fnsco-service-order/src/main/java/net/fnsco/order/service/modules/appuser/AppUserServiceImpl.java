@@ -126,8 +126,10 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUser = appUserDao.selectAppUserByMobile(appUser.getMobile());
         map.put("appUserId", appUser.getId());
         int merchantNums=0;
+        int Shopkeeper = 2;
         List<QueryBandDTO> list=appUserDao.selectInnercode(appUserDTO.getMobile());
         if (!CollectionUtils.isEmpty(list)){
+            Shopkeeper=1;
             merchantNums= list.size();
             for(QueryBandDTO li:list){
                 MerchantUserRel rel=new MerchantUserRel();
@@ -143,6 +145,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 appUserMerchantDao.insertSelective(dto);
             }
         }
+        map.put("Shopkeeper", Shopkeeper);
         map.put("merchantNums",merchantNums);
         return ResultDTO.success(map);
     }
