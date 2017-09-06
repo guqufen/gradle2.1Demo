@@ -15,6 +15,6 @@ public class CodeGen {
         //auto.init("net.fnsco.auth", "sys", "sys_role_menu");
         //auto.init("net.fnsco.auth", "sys", "sys_role_dept");
         //auto.init("net.fnsco.auth", "sys", "sys_menu");
-        auto.init("net.fnsco.bigdata", "merchant", "m_merchant_pos");
+        auto.init("net.fnsco.bigdata", "trade", "t_trade_data");
     }
 }
