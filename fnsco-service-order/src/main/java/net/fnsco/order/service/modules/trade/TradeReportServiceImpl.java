@@ -373,6 +373,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         TurnoverDTO turnover = tradeByDayDao.selectTradeDayDataByTradeDate(record);
         WeeklyDTO resultData = new WeeklyDTO();
         resultData.setInnerCode(tradeReportDTO.getInnerCode());
+        resultData.setMerNames(tradeReportDTO.getMerNames());
         resultData.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
         resultData.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
         if(null == turnover){

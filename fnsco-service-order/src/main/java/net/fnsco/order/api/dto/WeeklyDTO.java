@@ -27,6 +27,10 @@ public class WeeklyDTO extends DTO {
      */
     private String innerCode;
     /**
+     * 商户名称字符串
+     */
+    private String merNames;
+    /**
      * 查询开始时间
      */
     private String startDate;
@@ -63,6 +67,26 @@ public class WeeklyDTO extends DTO {
      */
     private List<TradeDayDTO> tradeDayData;
     
+    /**
+     * merNames
+     *
+     * @return  the merNames
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getMerNames() {
+        return merNames;
+    }
+    /**
+     * merNames
+     *
+     * @param   merNames    the merNames to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setMerNames(String merNames) {
+        this.merNames = merNames;
+    }
     /**
      * minWeeklyDate
      *
