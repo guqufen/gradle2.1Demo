@@ -42,7 +42,33 @@ public class TradeReportDTO extends DTO {
      */
     private Integer pageNum;
     
+    /**
+     * 商户名称字符串
+     */
+    private String merNames;
     
+    /**
+     * merNames
+     *
+     * @return  the merNames
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getMerNames() {
+        return merNames;
+    }
+
+    /**
+     * merNames
+     *
+     * @param   merNames    the merNames to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setMerNames(String merNames) {
+        this.merNames = merNames;
+    }
+
     /**
      * pageNum
      *

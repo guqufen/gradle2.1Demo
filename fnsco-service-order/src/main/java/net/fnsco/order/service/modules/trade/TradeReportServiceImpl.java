@@ -800,6 +800,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
          */
         FinanceReportDTO resultDto = new FinanceReportDTO();
         resultDto.setInnerCode(tradeReportDTO.getInnerCode());
+        resultDto.setMerNames(tradeReportDTO.getMerNames());
         resultDto.setStartDate(DateUtils.formatDateStrOutput(tradeReportDTO.getStartDate()));
         resultDto.setEndDate(DateUtils.formatDateStrOutput(tradeReportDTO.getEndDate()));
         
