@@ -187,11 +187,11 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 return result;
             }
           //贷记卡
-            if(ConstantEnum.DcTypeEnum.INLANDCREDITCARD.getCode().equals(dcType) || ConstantEnum.DcTypeEnum.OVERSEASCREDITCARD.getCode().equals(dcType)){
+            if(dcType.startsWith(ConstantEnum.DcTypeEnum.INLANDCREDITCARD.getCode()) || dcType.startsWith(ConstantEnum.DcTypeEnum.OVERSEASCREDITCARD.getCode())){
                 
                 result = NumberUtil.multiplication(tradeData.getAmt(), merTer.getCreditCardRate());
                 
-            }else if(ConstantEnum.DcTypeEnum.DOMESTICDEBITCARD.getCode().equals(dcType) || ConstantEnum.DcTypeEnum.OVERSEASDEBITCARD.getCode().equals(dcType)){
+            }else if(dcType.startsWith(ConstantEnum.DcTypeEnum.DOMESTICDEBITCARD.getCode()) || dcType.startsWith(ConstantEnum.DcTypeEnum.OVERSEASDEBITCARD.getCode())){
                 //借记卡
                 BigDecimal rate = NumberUtil.multiplication(tradeData.getAmt(), merTer.getDebitCardRate());
                 //跟设置的峰值比较，如果大于峰值则峰值，否则借记卡费率
@@ -883,8 +883,8 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 for (FinanceDayDTO tradeDayDTO : tradeFinanceData) {
                     if (dateTime.equals(tradeDayDTO.getTradeDate())) {
                         tradeDayDTO.setTradeDate(format1.format(end.getTime()));
-                        tradeDayDTO.setTurnover(NumberUtil.format(new BigDecimal(tradeDayDTO.getTurnover()),2));
-                        tradeDayDTO.setProcedureFee(NumberUtil.format(new BigDecimal(tradeDayDTO.getProcedureFee()),2));
+                        tradeDayDTO.setTurnover(NumberUtil.format(new BigDecimal(tradeDayDTO.getTurnover()).divide(new BigDecimal(100)),2));
+                        tradeDayDTO.setProcedureFee(NumberUtil.format(new BigDecimal(tradeDayDTO.getProcedureFee()).divide(new BigDecimal(100)),2));
                         BigDecimal settAmount = NumberUtil.subtract(tradeDayDTO.getTurnover(), tradeDayDTO.getProcedureFee());
                         tradeDayDTO.setSettlementAmount(NumberUtil.format(settAmount,2));
                         dayDatas.add(tradeDayDTO);
