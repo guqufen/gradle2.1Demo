@@ -197,7 +197,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                 //跟设置的峰值比较，如果大于峰值则峰值，否则借记卡费率
                 BigDecimal bd1 = rate.divide(new BigDecimal(100));
                 BigDecimal db2 = new BigDecimal(merTer.getDebitCardMaxFee());
-                if(bd1.compareTo(db2) > 1){
+                if(bd1.compareTo(db2) > 0){
                     result = db2;
                 }else{
                     result = bd1;
