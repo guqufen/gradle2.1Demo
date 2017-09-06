@@ -438,7 +438,23 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         return new ResultDTO<>(true, innerCode, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
 
     }
+    /**
+     * (non-Javadoc)批量保存渠道信息
+     * @see net.fnsco.bigdata.api.merchant.MerchantCoreService#doAddChannel(java.util.List)
+     * @auth tangliang
+     * @date 2017年7月1日 上午9:59:00
+     */
+    @Transactional
+    @Override
+    public Integer doAddChannel(MerchantChannel merchantChannel) {
 
+        if (null==merchantChannel) {
+            return 0;
+        }
+                merchantChannelDao.insertSelective(merchantChannel);
+        return merchantChannel.getId();
+
+    }
     /**
      * (non-Javadoc) 保存银行卡信息
      * @see net.fnsco.bigdata.api.merchant.MerchantCoreService#doAddMerBanks(java.util.List)
@@ -462,7 +478,23 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         return new ResultDTO<>(true, innerCode, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
     }
+    
+    /**
+     * (non-Javadoc) 批量导入excel保存银行卡信息
+     * @see net.fnsco.bigdata.api.merchant.MerchantCoreService#doAddMerBanks(java.util.List)
+     * @auth tangliang
+     * @date 2017年7月1日 下午2:03:47
+     */
+    @Override
+    public Integer doAddBanks(MerchantBank merchantBank) {
 
+        if (null == merchantBank) {
+            return 0;
+        }
+        merchantBankDao.insertSelective(merchantBank);
+        return merchantBank.getId();
+    }
+    
     @Override
     public ResultDTO<Integer> deleteByContact(Integer id) {
 
