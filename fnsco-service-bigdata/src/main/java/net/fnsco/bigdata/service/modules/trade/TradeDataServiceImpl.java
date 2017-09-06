@@ -166,19 +166,24 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             List<String> innerCodeList = Lists.newArrayList();
             //查询条件没有转入内部商户号时查询用户的所有商户信息
             if (CollectionUtils.isEmpty(merchantCore.getInnerCodes())) {
+                logger.info("查询流水，内部商务号为空");
                 if (!CollectionUtils.isEmpty(tempList)) {
                     for (MerchantUserRel rel : tempList) {
                         innerCodeList.add(rel.getInnerCode());
                     }
                 }
                 if (null == innerCodeList || innerCodeList.size() == 0) {
+                    logger.info("查询流水，内部商务号没有");
                     return result;
                 }
             } else {
+                logger.info("查询流水，内部商务号不为空");
                 innerCodeList = merchantCore.getInnerCodes();
             }
             //设置商户号
-            tradeData.setInnerCodeList(innerCodeList);
+            if (CollectionUtils.isEmpty(innerCodeList)) {
+                return result;
+            }
         }
 
         PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(), merchantCore.getPerPageSize(), tradeData);
