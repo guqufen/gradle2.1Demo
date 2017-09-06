@@ -23,15 +23,11 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.OssLoaclUtil;
-import net.fnsco.core.utils.OssUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.order.api.dto.PushMsgInfoDTO;
-import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
-import net.fnsco.order.api.sysappmsg.SysMsgAppFailService;
-import net.fnsco.order.api.sysappmsg.SysMsgAppSuccService;
 import net.fnsco.order.service.dao.master.AppUserDao;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.dao.master.SysAppMessageDao;
@@ -427,6 +423,9 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             dtoInfo.setMsgSubtitle(sysAppMessage.getMsgSubTitle());
             dtoInfo.setMsgSubject(sysAppMessage.getMsgSubject());
             dtoInfo.setSendTimeStr(sdf.format(sysAppMessage.getSendTime()));
+          //推算周报时间
+            dtoInfo.setWeeklyStartDate(DateUtils.getMonDateStr(dtoInfo.getSendTimeStr()));
+            dtoInfo.setWeeklyEndDate(DateUtils.getSunDateStr(dtoInfo.getSendTimeStr()));
             data.add(dtoInfo);
         }
         //更新成功消息状态

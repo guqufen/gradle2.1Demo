@@ -388,4 +388,37 @@ public class DateUtils {
         return sf.format(calendar.getTime());
 
     }
+    
+    public static String getMonDateStr(String dateStr) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(sf.parse(dateStr));
+            while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY ) {
+                calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
+            }
+            
+            calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 7);
+            
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return sf.format(calendar.getTime());
+    }
+    
+    public static String getSunDateStr(String dateStr) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(sf.parse(dateStr));
+            while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY ) {
+                calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
+            }
+            
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return sf.format(calendar.getTime());
+    }
+    
 }
