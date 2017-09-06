@@ -471,7 +471,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         for (AppUser appUser : appUsers) {
             String minDate = tradeByDayDao.selectMinTradeDateByUserId(appUser.getId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
             //如果上周日之前没有产生过交易数据，不推送
-            if(Strings.isNullOrEmpty(minDate) && minDate.compareTo(lastSunday) >= 0){
+            if(Strings.isNullOrEmpty(minDate) || minDate.compareTo(lastSunday) >= 0){
                 continue;
             } 
             
