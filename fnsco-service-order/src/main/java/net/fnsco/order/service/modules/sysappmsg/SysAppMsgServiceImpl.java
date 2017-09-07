@@ -368,7 +368,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             for (AppUserMerchant merInfo : merInfos) {
                 AppUser user = appUserDao.selectAppUserById(merInfo.getAppUserId());
                 Integer deviceType = user.getDeviceType();
-                if(null == deviceType ||deviceType == 0||user.getId() == userId){
+                if(null == deviceType ||deviceType == 0||user.getId().equals(userId)){
                     continue;
                 }
                 //推送IOS和android消息
