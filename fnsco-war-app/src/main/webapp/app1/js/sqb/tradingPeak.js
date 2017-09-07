@@ -117,7 +117,7 @@ var titleName="总额(均)";
 var titleName1="笔数(均)";
 function epakData(tokenId,userId,startDate,endDate,innerCode){
   $.ajax({
-    url:'tradeReport/queryPeakTrade?timer='+new Date().getTime(),
+    url:'../app/tradeReport/queryPeakTrade?timer='+new Date().getTime(),
     dataType : "json",
     type:'POST',
     headers: {
