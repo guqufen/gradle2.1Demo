@@ -420,5 +420,10 @@ public class DateUtils {
         }
         return sf.format(calendar.getTime());
     }
-    
+    public static String getDateStrYYYYMMDD(Date date) {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        result = sf.format(date);
+        return result;
+    }
 }
