@@ -29,6 +29,7 @@ import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.web.controller.app.jo.TradeDataJO;
 
 /**
@@ -59,6 +60,10 @@ public class TradeDataController extends BaseController {
     @ApiOperation(value = "查询交易流水")
     public ResultDTO queryList(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
         logger.warn("/queryList查询交易流水入参:" + JSON.toJSONString(tradeQueryDTO));
+        if(Strings.isNullOrEmpty(tradeQueryDTO.getEndDate())&&Strings.isNullOrEmpty(tradeQueryDTO.getStartDate())){
+            tradeQueryDTO.setStartDate(DateUtils.getNextMonthDayStr());
+            tradeQueryDTO.setEndDate(DateUtils.getNowYMDStr());
+        }
         TradeDataPageDTO<TradeData> temp = tradeDataService.queryAllByCondition(tradeQueryDTO);
         List<TradeData> list = temp.getList();
         List<TradeDataJO> resultList = Lists.newArrayList();

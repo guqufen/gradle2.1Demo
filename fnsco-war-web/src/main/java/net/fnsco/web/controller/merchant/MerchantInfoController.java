@@ -102,7 +102,7 @@ public class MerchantInfoController extends BaseController {
         HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "商户信息");
 
         response.setContentType("application/vnd.ms-excel;");
-        String nowStr = DateUtils.getNowDateStr2();
+        String nowStr = DateUtils.getNowYMDStr();
         String fileName = "商户信息"+nowStr+".xls";
         response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
 
