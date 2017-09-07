@@ -183,6 +183,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             //设置商户号
             if (CollectionUtils.isEmpty(innerCodeList)) {
                 return result;
+            }else{
+                tradeData.setInnerCodeList(innerCodeList);
             }
         }
 
