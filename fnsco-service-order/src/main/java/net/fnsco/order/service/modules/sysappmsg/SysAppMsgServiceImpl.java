@@ -424,8 +424,9 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             dtoInfo.setMsgSubject(sysAppMessage.getMsgSubject());
             dtoInfo.setSendTimeStr(sdf.format(sysAppMessage.getSendTime()));
           //推算周报时间
-            dtoInfo.setWeeklyStartDate(DateUtils.getMonDateStr(dtoInfo.getSendTimeStr()));
-            dtoInfo.setWeeklyEndDate(DateUtils.getSunDateStr(dtoInfo.getSendTimeStr()));
+            String weekDateStr = dtoInfo.getSendTimeStr().substring(0, 10);
+            dtoInfo.setWeeklyStartDate(DateUtils.getMonDateStr(weekDateStr));
+            dtoInfo.setWeeklyEndDate(DateUtils.getSunDateStr(weekDateStr));
             data.add(dtoInfo);
         }
         //更新成功消息状态
@@ -433,5 +434,4 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         return ResultDTO.success(data);
         
     }
-
 }
