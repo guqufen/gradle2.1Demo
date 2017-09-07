@@ -57,7 +57,7 @@ public class AppPushHelper extends BaseService {
         SysAppMessage message = new SysAppMessage();
         message.setBusType(0);
         message.setModifyUserId(1);
-        message.setMsgSubject("周报");
+        message.setMsgSubject(msgSubject);
         message.setMsgSubTitle(msgContent);
         message.setMsgType(msgType);
         message.setPushType(1);
