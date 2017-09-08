@@ -555,21 +555,26 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
         return merchantCore;
     }
-
+    
+    /**
+     * (non-Javadoc)产生新的innerCode，必须保持全库唯一
+     * @see net.fnsco.bigdata.api.merchant.MerchantCoreService#getInnerCode()
+     * @author tangliang
+     * @date 2017年9月8日 下午4:14:19
+     */
 	@Override
 	public String getInnerCode() {
-		String innerCode = CodeUtil.generateMerchantCode("F");
-	    MerchantCore record = new MerchantCore();
-	    record.setInnerCode(innerCode);
-	    boolean stop = true;
-	    
-	    while(stop){
-	        List<MerchantCore> datas  = merchantCoreDao.queryListByCondition(record);
-	        if(CollectionUtils.isEmpty(datas)){
-	            stop = false;
-	        }
-	    }
-	    
+	    String innerCode = null;
+        MerchantCore record = new MerchantCore();
+        
+        while(true){
+            innerCode = CodeUtil.generateMerchantCode("F");
+            record.setInnerCode(innerCode);
+            List<MerchantCore> datas  = merchantCoreDao.queryListByCondition(record);
+            if(CollectionUtils.isEmpty(datas)){
+                break;
+            }
+        }
 		return innerCode;
 	}
 

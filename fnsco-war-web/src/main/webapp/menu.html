@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="pragma" content="no -cache">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="expires" content="0">
 <title>菜单管理-法奈昇大数据平台</title>
 <meta name="keywords" content="法奈昇大数据平台">
 <meta name="description" content="法奈昇大数据平台">
@@ -164,6 +167,10 @@ textarea {
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript" src="js/fnsco/common.js"></script>
-<script type="text/javascript" src="js/fnsco/menu.js"></script>
+<!-- <script type="text/javascript" src="js/fnsco/menu.js"></script> -->
+<script type="text/javascript">
+//在页面加载完成之后动态加载，避免因为缓存问题导致数据展示不对(在不人工清理缓存情况下)
+loadJSRandom(document, "js/fnsco/menu.js");
+</script>
 </body>
 </html>

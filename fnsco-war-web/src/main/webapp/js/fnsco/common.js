@@ -54,3 +54,12 @@ function formateTimeUtil(timestr){
 	}
 	return "--";
 }
+
+
+// 动态加载某个JS(末尾带上随机数),入参：文档对象，JS地址
+function loadJSRandom(document,jsUrl) {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src = jsUrl + "?" + Math.random();
+	document.body.appendChild(script);
+}
