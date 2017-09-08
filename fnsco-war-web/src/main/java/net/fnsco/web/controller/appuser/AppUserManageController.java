@@ -91,7 +91,7 @@ public class AppUserManageController extends BaseController {
 		HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "APP用户管理");
 
 		response.setContentType("application/vnd.ms-excel;");
-		String nowStr = DateUtils.getNowDateStr2();
+		String nowStr = DateUtils.getNowYMDStr();
 		String fileName = "APP用户管理" + nowStr + ".xls";
 		response.setHeader("Content-disposition",
 				"attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
