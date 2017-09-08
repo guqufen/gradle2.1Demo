@@ -84,6 +84,7 @@ body{
     line-height: 35px;
     margin: 23.4375px auto 0;
     border-color: #3595FF;
+    background-color: #3595FF;
 }
 .mui-segmented-control .mui-control-item{
 	line-height: 35px;
