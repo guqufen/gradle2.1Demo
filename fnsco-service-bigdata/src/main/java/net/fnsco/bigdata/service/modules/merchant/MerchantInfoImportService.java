@@ -8,14 +8,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import net.fnsco.bigdata.api.dto.SnCodeDTO;
-import net.fnsco.bigdata.api.dto.WebMerchantTerminalDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
 import net.fnsco.bigdata.service.domain.MerchantBank;
@@ -25,8 +22,6 @@ import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.CodeUtil;
-import net.fnsco.core.utils.ReadExcel;
 
 /**
  * @desc excel上传实现类
@@ -42,7 +37,7 @@ public class MerchantInfoImportService {
 
 	// 批量导入客户
 	@Transactional
-	public boolean batchImport(String name, MultipartFile file, List<Object[]> customerList) throws ParseException {
+	public ResultDTO<String> batchImportToDB( List<Object[]> customerList) throws ParseException {
 		boolean b = false;
 		// 循环便利customList数组，将其中excel每一行的数据分批导入数据库
 		if (customerList.size() != 0) {
@@ -142,11 +137,11 @@ public class MerchantInfoImportService {
 				// excel中导出的时间是“EEE MMM dd HH:mm:ss z yyyy”类型的String类，将他转换成"yyyy/MM/dd"
 				SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
 				Date date1 = sdf1.parse(cardvalidtimeStr);
-				sdf1 = new SimpleDateFormat("yyyy/MM/dd");
+				sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 				String cardvalidtime = sdf1.format(date1);
 				SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
 				Date date2 = sdf2.parse(businesslicensevalidtimeStr);
-				sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+				sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 				String businesslicensevalidtime = sdf2.format(date2);
 				merchantCore.setCardValidTime(cardvalidtime);
 				merchantCore.setBusinessLicenseValidTime(businesslicensevalidtime);
@@ -169,13 +164,14 @@ public class MerchantInfoImportService {
 				// 商户联系人信息保存
 				merchantCoreService.doAddMerContact(contcactList);
 				/**
-				 * 渠道信息
+				 * 渠道信息--设置默认值
 				 */
 				//创建一个渠道信息实体类对象接收渠道信息
 				MerchantChannel merchantChannel = new MerchantChannel();
 				merchantChannel.setInnerCode(innerCode);
 				merchantChannel.setChannelMerId(channelmerid);
 				merchantChannel.setChannelType("00");
+				
 				// List<MerchantChannel> channelList=new ArrayList<MerchantChannel>();
 				// channelList.add(merchantChannel);
 				// 渠道信息保存
@@ -234,11 +230,11 @@ public class MerchantInfoImportService {
 					merchantPos.setPosName(sn.getNum()+"号POS机");
 					// 获取银行卡ID
 					if (bankId == 0) {
-						return b;
+//						return b;
 					}
 					merchantPos.setBankId(bankId);
 					if (channelId == 0) {
-						return b;
+//						return b;
 					}
 					merchantPos.setChannelId(channelId);
 					// pos机信息保存
@@ -308,6 +304,7 @@ public class MerchantInfoImportService {
 			}
 			b = true;
 		}
-		return b;
+//		return b;
+		return null;
 	}
 }

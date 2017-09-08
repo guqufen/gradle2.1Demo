@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,13 +19,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
+import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.ReadExcel;
 
 @Controller
 @RequestMapping(value = "/web/merchantinfoImport")
-public class MerchantInfoImportController extends HttpServlet {
+public class MerchantInfoImportController extends BaseController {
 
-	private static final long serialVersionUID = 1L;
 	@Autowired
 	private MerchantInfoImportService merchantInfoImportService;
 
@@ -55,15 +55,15 @@ public class MerchantInfoImportController extends HttpServlet {
 		// 解析excel，获取客户信息集合。
 		List<Object[]> customerList = readExcel.getExcelInfo(name, file);
 		// 批量导入。参数：文件名，文件。
-		boolean b = merchantInfoImportService.batchImport(name, file, customerList);
-		if (b) {
+		ResultDTO<String> result = merchantInfoImportService.batchImportToDB(customerList);
+		if (result.isSuccess()) {
 			String Msg = "批量导入EXCEL成功！";
 			request.getSession().setAttribute("msg", Msg);
 		} else {
 			String Msg = "批量导入EXCEL失败！";
 			request.getSession().setAttribute("msg", Msg);
 			Map<String, String> map = new HashMap<>();
-			map.put("data", "批量导入EXCEL失败！");
+			map.put("data", result.getMessage());
 			return map;
 		}
 		Map<String, String> map = new HashMap<>();
