@@ -74,7 +74,8 @@ public class ApiConstant extends CoreConstants {
     
     public static String       WEB_LOGIN_NULL = "5900";//用户名或密码为空
     public static String       WEB_LOGIN_FAIL ="5901";//用户名或密码错误
-    public static String       WEB_MER_CHANNEL_NOTUNIQUE = "5902";//商户渠道号和渠道组合要唯一
+    public static String       WEB_MER_CHANNEL_NOTUNIQUE = "5902";//商户渠道号和渠道组合要唯一  
+    public static String       APP_DELETE_SUCCESS="2003";  //解绑成功
     
     static {
         ERROR_MESSGE_MAP.put(WEB_LOGIN_NULL, "用户名或密码为空");
@@ -131,6 +132,7 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_EMPTYDEVICETOKEN_ERROR, "清空友盟设备号失败");  
         ERROR_MESSGE_MAP.put(E_SUGGESTEMPTY_ERROR, "反馈内容不能为空");  
         ERROR_MESSGE_MAP.put(E_SUGGESTEMPTYNULL_ERROR, "您未绑定店铺,请关联店铺");
+        ERROR_MESSGE_MAP.put(APP_DELETE_SUCCESS, "解绑成功");
     }
 
 }

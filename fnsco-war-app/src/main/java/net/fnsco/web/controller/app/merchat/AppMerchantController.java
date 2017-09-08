@@ -262,6 +262,6 @@ public class AppMerchantController extends BaseController {
         if(!dates){
             return ResultDTO.fail();
         }
-        return ResultDTO.success(dates);
+        return ResultDTO.success(ApiConstant.APP_DELETE_SUCCESS);
     }
 }
