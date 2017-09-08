@@ -54,7 +54,7 @@ var FileInput = function () {
         console.log(data);
         var data = data.response.data;
         if (data != "success") {
-        	layer.msg(data);
+        	alert(data);
         	//$('#importModal').modal("hide");
             return;
         }

@@ -37,12 +37,13 @@ public class MerchantInfoImportService {
 
 	// 批量导入客户
 	@Transactional
-	public ResultDTO<String> batchImportToDB( List<Object[]> customerList) throws ParseException {
-		boolean b = false;
+	public ResultDTO<String> batchImportToDB(List<Object[]> customerList, Integer userId) throws ParseException {
 		// 循环便利customList数组，将其中excel每一行的数据分批导入数据库
 		if (customerList.size() != 0) {
-			//excel导出的空数据是“null”，赋值一个空字符串
+			// excel导出的空数据是“null”，赋值一个空字符串
+			int timeNum = 2;
 			for (Object[] objs : customerList) {
+				timeNum = timeNum + 1;
 				for (int i = 0; i < objs.length; i++) {
 					if (objs[i] == null) {
 						objs[i] = "";
@@ -124,7 +125,7 @@ public class MerchantInfoImportService {
 				/**
 				 * 商户基本信息
 				 */
-				//创建一个商户基础信息实体类对象接收商户及信息
+				// 创建一个商户基础信息实体类对象接收商户及信息
 				MerchantCore merchantCore = new MerchantCore();
 				merchantCore.setInnerCode(innerCode);
 				merchantCore.setMerName(mername);
@@ -148,12 +149,17 @@ public class MerchantInfoImportService {
 				merchantCore.setRegistAddress(registaddress);
 				merchantCore.setMercFlag(mercflag);
 				merchantCore.setAgentId(agentid);
-				// 商户基本信息保存
-				merchantCoreService.doAddMerCore(merchantCore);
+				try {
+					// 商户基本信息保存
+					merchantCoreService.doAddMerCore(merchantCore);
+				} catch (Exception e) {
+					return ResultDTO.fail("第" + timeNum + "行数据的基本数据信息有误，导入失败");
+				}
+
 				/**
 				 * 商户联系人信息
 				 */
-				//创建一个商户联系人信息实体类对象接收商户联系人信息
+				// 创建一个商户联系人信息实体类对象接收商户联系人信息
 				MerchantContact merchantContact = new MerchantContact();
 				merchantContact.setInnerCode(innerCode);
 				merchantContact.setContactName(contactname);
@@ -161,25 +167,35 @@ public class MerchantInfoImportService {
 				merchantContact.setContactEmail(contactemail);
 				List<MerchantContact> contcactList = new ArrayList<MerchantContact>();
 				contcactList.add(merchantContact);
-				// 商户联系人信息保存
-				merchantCoreService.doAddMerContact(contcactList);
+				try {
+					// 商户联系人信息保存
+					merchantCoreService.doAddMerContact(contcactList);
+				} catch (Exception e) {
+					return ResultDTO.fail("第" + timeNum + "行数据的商户联系人信息有误，导入失败");
+				}
 				/**
 				 * 渠道信息--设置默认值
 				 */
-				//创建一个渠道信息实体类对象接收渠道信息
+				// 创建一个渠道信息实体类对象接收渠道信息
 				MerchantChannel merchantChannel = new MerchantChannel();
 				merchantChannel.setInnerCode(innerCode);
 				merchantChannel.setChannelMerId(channelmerid);
 				merchantChannel.setChannelType("00");
-				
-				// List<MerchantChannel> channelList=new ArrayList<MerchantChannel>();
-				// channelList.add(merchantChannel);
-				// 渠道信息保存
-				Integer channelId = merchantCoreService.doAddChannel(merchantChannel);
+				merchantChannel.setCreateTime(new Date());
+				merchantChannel.setModifyTime(new Date());
+				merchantChannel.setModifyUserId(userId);
+				Integer channelId=null;
+				try {
+					// 渠道信息保存
+					channelId = merchantCoreService.doAddChannel(merchantChannel);
+				} catch (Exception e) {
+					return ResultDTO.fail("第" + timeNum + "行数据的渠道信息有误，导入失败");
+				}
+
 				/**
 				 * 商户银行卡信息
 				 */
-				//创建一个商户银行卡信息实体类对象接收商户银行卡信息
+				// 创建一个商户银行卡信息实体类对象接收商户银行卡信息
 				MerchantBank merchantBank = new MerchantBank();
 				merchantBank.setInnerCode(innerCode);
 				merchantBank.setAccountName(accountname);
@@ -187,10 +203,16 @@ public class MerchantInfoImportService {
 				merchantBank.setAccountType(accounttype);
 				merchantBank.setAccountCardId(accountcardid);
 				merchantBank.setSubBankName(subbankname);
+				Integer bankId=null;
+				try {
+					bankId = merchantCoreService.doAddBanks(merchantBank);
+				} catch (Exception e) {
+					return ResultDTO.fail("第" + timeNum + "行数据的银行卡信息有误，导入失败");
+				}
 				// 银行卡信息保存
-				Integer bankId = merchantCoreService.doAddBanks(merchantBank);
 				
-				//判断有多少个pos机
+
+				// 判断有多少个pos机
 				List<SnCodeDTO> posList = new ArrayList<>();
 				SnCodeDTO snCode1 = new SnCodeDTO();
 				snCode1.setNum(1);
@@ -218,7 +240,7 @@ public class MerchantInfoImportService {
 					/**
 					 * 商戶pos机信息
 					 */
-					//创建一个商户pos信息实体类对象接收商户pos信息
+					// 创建一个商户pos信息实体类对象接收商户pos信息
 					MerchantPos merchantPos = new MerchantPos();
 					merchantPos.setInnerCode(innerCode);
 					merchantPos.setMercReferName(mercrefername);
@@ -227,18 +249,18 @@ public class MerchantInfoImportService {
 					merchantPos.setSnCode(sn.getSncode());
 					merchantPos.setPosAddr(posaddr);
 					merchantPos.setStatus("1");
-					merchantPos.setPosName(sn.getNum()+"号POS机");
+					merchantPos.setPosName(sn.getNum() + "号POS机");
 					// 获取银行卡ID
-					if (bankId == 0) {
-//						return b;
-					}
 					merchantPos.setBankId(bankId);
-					if (channelId == 0) {
-//						return b;
-					}
+					// 获取渠道ID
 					merchantPos.setChannelId(channelId);
-					// pos机信息保存
-					Integer posId = merchantPosService.insertPos(merchantPos);
+					Integer posId = null;
+					try {
+						// pos机信息保存
+						 posId = merchantPosService.insertPos(merchantPos);
+					} catch (Exception e) {
+						return ResultDTO.fail("第" + timeNum + "行数据的Pos机信息有误，导入失败");
+					}
 
 					/**
 					 * 商户终端信息
@@ -246,7 +268,6 @@ public class MerchantInfoImportService {
 					// 创建一个merchantTerminal1来接受刷卡的终端信息
 					MerchantTerminal merchantTerminal1 = new MerchantTerminal();
 					merchantTerminal1.setInnerCode(innerCode);
-					// 借记卡字符串分割
 					// 借记卡转小数
 					if ("".equals(jjk0)) {
 						merchantTerminal1.setDebitCardRate(null);
@@ -273,38 +294,49 @@ public class MerchantInfoImportService {
 					merchantTerminal2.setInnerCode(innerCode);
 					// 支付宝微信费率分割
 					// String xx = String.valueOf(objs[23]);
+
 					if ("".equals(xx)) {
 						merchantTerminal2.setAlipayFee(null);
 						merchantTerminal2.setWechatFee(null);
 					} else {
-						// 支付宝费率转换
-						String zfb1 = xx.substring(xx.indexOf("支付宝") + 3, xx.indexOf("%"));
-						BigDecimal bigDecimal1 = new BigDecimal(zfb1);
-						BigDecimal zfb = bigDecimal1.divide(new BigDecimal("100")).setScale(6,
-								BigDecimal.ROUND_HALF_UP);
-						merchantTerminal2.setAlipayFee(String.valueOf(zfb.doubleValue()));
-						// 微信费率转换
-						String wx1 = xx.substring(xx.indexOf("微信") + 2, xx.lastIndexOf("%"));
-						BigDecimal bigDecimal2 = new BigDecimal(wx1);
-						BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
-						merchantTerminal2.setWechatFee(String.valueOf(wx.doubleValue()));
-						merchantTerminal2.setPosId(posId);
+						try {
+							// 支付宝费率转换
+							String zfb1 = xx.substring(xx.indexOf("支付宝") + 3, xx.indexOf("%"));
+							BigDecimal bigDecimal1 = new BigDecimal(zfb1);
+							BigDecimal zfb = bigDecimal1.divide(new BigDecimal("100")).setScale(6,
+									BigDecimal.ROUND_HALF_UP);
+							merchantTerminal2.setAlipayFee(String.valueOf(zfb.doubleValue()));
+							// 微信费率转换
+							String wx1 = xx.substring(xx.indexOf("微信") + 2, xx.lastIndexOf("%"));
+							BigDecimal bigDecimal2 = new BigDecimal(wx1);
+							BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6,
+									BigDecimal.ROUND_HALF_UP);
+							merchantTerminal2.setWechatFee(String.valueOf(wx.doubleValue()));
+							merchantTerminal2.setPosId(posId);
 
-						merchantTerminal2.setTermName("扫码");
-						merchantTerminal2.setTerminalType("01");
+							merchantTerminal2.setTermName("扫码");
+							merchantTerminal2.setTerminalType("01");
+						} catch (Exception e) {
+							return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
+						}
+
 					}
 					merchantTerminal2.setTerminalCode(sn.getTerminalcode2());
 					// 把2个终端信息打包成List
 					List<MerchantTerminal> terminalList = new ArrayList<MerchantTerminal>();
 					terminalList.add(merchantTerminal1);
 					terminalList.add(merchantTerminal2);
-					// 终端信息保存
-					merchantCoreService.doAddMerTerminal(terminalList);
+					try {
+						// 终端信息保存
+						merchantCoreService.doAddMerTerminal(terminalList);
+					} catch (Exception e) {
+						return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
+					}
 				}
 			}
-			b = true;
+			return ResultDTO.success();
 		}
-//		return b;
-		return null;
+		// return b;
+		return ResultDTO.fail("没有导入数据，Excel为空");
 	}
 }

@@ -22,6 +22,7 @@ import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.ReadExcel;
+import net.fnsco.freamwork.business.WebUserDTO;
 
 @Controller
 @RequestMapping(value = "/web/merchantinfoImport")
@@ -30,7 +31,7 @@ public class MerchantInfoImportController extends BaseController {
 	@Autowired
 	private MerchantInfoImportService merchantInfoImportService;
 
-	// 重写doPost方法，处理事件识别请求
+	// 重写doImport方法，处理事件识别请求
 	@RequestMapping(value = "/doImport", method = RequestMethod.POST)
 	@ResponseBody
 	protected Map<String, String> doImport(HttpServletRequest request, HttpServletResponse response)
@@ -54,18 +55,20 @@ public class MerchantInfoImportController extends BaseController {
 		ReadExcel readExcel = new ReadExcel();
 		// 解析excel，获取客户信息集合。
 		List<Object[]> customerList = readExcel.getExcelInfo(name, file);
+		//获取当前登录的用户
+	    WebUserDTO adminUser = (WebUserDTO) getSessionUser();
+	    Integer userId=adminUser.getId();
 		// 批量导入。参数：文件名，文件。
-		ResultDTO<String> result = merchantInfoImportService.batchImportToDB(customerList);
-		if (result.isSuccess()) {
-			String Msg = "批量导入EXCEL成功！";
-			request.getSession().setAttribute("msg", Msg);
-		} else {
-			String Msg = "批量导入EXCEL失败！";
-			request.getSession().setAttribute("msg", Msg);
+		ResultDTO<String> result = merchantInfoImportService.batchImportToDB(customerList,userId);
+		if (!result.isSuccess()) {
 			Map<String, String> map = new HashMap<>();
+			if(("").equals(result.getMessage())) {
+				map.put("data","批量导入EXCEL失败！" );
+				return map;
+			}
 			map.put("data", result.getMessage());
 			return map;
-		}
+		} 
 		Map<String, String> map = new HashMap<>();
 		map.put("data", "success");
 		return map;

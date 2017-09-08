@@ -58,7 +58,10 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
     public Integer insertPos(MerchantPos record) {
         
         // TODO Auto-generated method stub
-        merchantPosDao.insert(record);
+        int i=merchantPosDao.insert(record);
+        if(i!=1) {
+        	return 0;
+        }
         return record.getId();
         
     }

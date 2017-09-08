@@ -451,7 +451,10 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         if (null==merchantChannel) {
             return 0;
         }
-        merchantChannelDao.insertSelective(merchantChannel);
+        int i=merchantChannelDao.insertSelective(merchantChannel);
+        if(i!=1) {
+        	return 0;
+        }
         return merchantChannel.getId();
 
     }
@@ -491,7 +494,10 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         if (null == merchantBank) {
             return 0;
         }
-        merchantBankDao.insertSelective(merchantBank);
+       int i= merchantBankDao.insertSelective(merchantBank);
+       if(i!=1) {
+       	return 0;
+       }
         return merchantBank.getId();
     }
     
