@@ -16,6 +16,7 @@
     <result column="pos_city" property="posCity" jdbcType="INTEGER"/>
     <result column="pos_area" property="posArea" jdbcType="INTEGER"/>
     <result column="merc_refer_name" property="mercReferName" jdbcType="VARCHAR" />
+    <result column="pos_addr" property="posAddr" jdbcType="VARCHAR" />
   </resultMap>
   <!-- 查询POS所有数据，包括终端信息 -->
   <resultMap id="AllResultMap" type="net.fnsco.bigdata.service.domain.MerchantPos" >
@@ -62,7 +63,7 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   
-  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantPos" >
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantPos" keyProperty="id" useGeneratedKeys="true">
     insert into m_merchant_pos (id, inner_code, channel_id, 
       pos_name, sn_code, pos_factory, 
       pos_type, status, bank_id, pos_addr, pos_province, pos_city, pos_area,

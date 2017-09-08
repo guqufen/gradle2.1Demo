@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import junit.framework.Test;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.service.domain.Agent;
 import net.fnsco.bigdata.service.domain.MerchantBank;
@@ -102,7 +103,7 @@ public class MerchantInfoController extends BaseController {
         HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "商户信息");
 
         response.setContentType("application/vnd.ms-excel;");
-        String nowStr = DateUtils.getNowDateStr2();
+        String nowStr = DateUtils.getNowYMDStr();
         String fileName = "商户信息"+nowStr+".xls";
         response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
 
@@ -116,7 +117,8 @@ public class MerchantInfoController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions(value = { "m:merchant:export" })
 	public void down(HttpServletRequest req, HttpServletResponse response) throws IOException {
-		String filePath="D:\\test\\第八批商户入件信息表.xlsx";
+		String g=req.getRealPath("/") ;
+		String filePath=g+"test\\第八批商户入件信息表.xlsx";
 		String fileName="第八批商户入件信息表.xlsx";
 		//解析excel，获取客户信息集合。
         ReadExcel.downTemplate(filePath, fileName, response);

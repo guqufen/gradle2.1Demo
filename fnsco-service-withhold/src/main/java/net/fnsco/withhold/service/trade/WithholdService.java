@@ -137,7 +137,7 @@ public class WithholdService extends BaseService {
             withholdInfo.setAmountTotal(amountTotal);
 
             String startDate = withholdInfo.getEndDate();
-            String nowDate = DateUtils.getNowDateStr2();
+            String nowDate = DateUtils.getNowYMDStr();
             //相等则完成扣款
             if (startDate.equals(nowDate)) {
                 withholdInfo.setStatus(2);
@@ -168,7 +168,7 @@ public class WithholdService extends BaseService {
                 withholdInfo.setFailTotal(0);
             }
             String startDate = withholdInfo.getEndDate();
-            String nowDate = DateUtils.getNowDateStr2();
+            String nowDate = DateUtils.getNowYMDStr();
             //相等则完成扣款
             if (startDate.equals(nowDate)&&type == 2) {
                 withholdInfo.setStatus(2);

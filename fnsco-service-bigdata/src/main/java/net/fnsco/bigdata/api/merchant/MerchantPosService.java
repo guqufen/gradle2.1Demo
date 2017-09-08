@@ -56,4 +56,6 @@ public interface MerchantPosService {
      * @return List<MerchantBank>    DOM对象
      */
     List<MerchantBank> queryWebByInnerCode(String innerCode);
+
+	Integer insertPos(MerchantPos record);
 }

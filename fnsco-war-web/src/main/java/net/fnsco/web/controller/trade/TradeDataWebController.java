@@ -156,7 +156,7 @@ public class TradeDataWebController extends BaseController {
 		HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "交易流水");
 
 		response.setContentType("application/vnd.ms-excel;");
-		String nowStr = DateUtils.getNowDateStr2();
+		String nowStr = DateUtils.getNowYMDStr();
 		String fileName = "交易流水" + nowStr + ".xls";
 		response.setHeader("Content-disposition",
 				"attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头

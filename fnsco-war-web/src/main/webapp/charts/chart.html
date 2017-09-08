@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>杭州法奈昇大数据平台</title>
+	<link rel="stylesheet" type="text/css" href="css/chart.css">
+</head>
+<body>
+	<div class="container">
+		<div class="container-title">
+			杭州法奈昇大数据平台
+		</div>
+		<div class="box">
+			<div class="left-box">
+				<div class="china-chart">
+					<div id="chart"></div>
+					<div class="addres"><img src="img/fnsLogo.png"></div>
+				</div>
+			</div>
+			<div class="right-box">
+				<div class="total">
+					<div class="total-num">
+						<span class="counter" id="total-number"></span>元
+					</div>
+					<div class="total-count">
+						<span class="counter" id="total-count-num"></span>笔
+					</div>
+				</div>
+				<div class="time" id="scrollDiv">
+					<div class="scroll" class="scrollText">
+						<ul id="scroll-ul">
+							<li>
+								<div class="card-num">4392****8743</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">125.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">5201****0355</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">100.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">6229****6108</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">160.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">6258****1039</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">56.50</span></div>
+							</li>
+							<li>
+								<div class="card-num">6230****2333</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">7000.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">5316****0065</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">6500.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">6227****7829</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">216.50</span></div>
+							</li>
+							<li>
+								<div class="card-num">6230****6079</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">24.50</span></div>
+							</li>
+							<li>
+								<div class="card-num">6228****8479</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">9.80</span></div>
+							</li>
+							<li>
+								<div class="card-num">6226****4605</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">2400.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">6236****1200</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">5550.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">6259****2172</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">9.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">6259****7462</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">165000.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">6217****0218</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">12.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">6226****3093</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">25.50</span></div>
+							</li>
+							<li>
+								<div class="card-num">6228****1219</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">716.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">4041****4534</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">196.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">4033****4225</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">120.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">5309****0681</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">680.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">4041****5123</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">15500.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">4637****3404</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">865.00</span></div>
+							</li>
+							<li>
+								<div class="card-num">6210****0090</div>
+								<div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">11900.00</span></div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+</body>
+<script type="text/javascript" src="js/echarts.min.js"></script>
+<script type="text/javascript" src="js/bmap.js"></script>
+<script type="text/javascript" src="js/china.js"></script>
+<script type="text/javascript" src="js/chart.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/scroll.js"></script>
+<script type="text/javascript" src="js/countup.js"></script>
+<script type="text/javascript">
+var totalCountNum;
+var totalNum;
+function changeValue(target, startVal, endVal, decimals, duration, options){
+     var options = {
+      useEasing : true, //使用缓和效果
+      useGrouping : true, //使用分组效果
+      separator : ',', //分离器，数据够三位，例如100,000
+      decimal : '.', //小数点分割，例如：10.00
+      prefix : '', //第一位默认数字
+      suffix : '' //最后一位默认数字
+    };
+    var demo = new CountUp(target, startVal, endVal, decimals, duration, options);
+    demo.start();
+    // target = 目标元素的 ID；
+    // startVal = 开始值；
+    // endVal = 结束值；
+    // decimals = 小数位数，默认值是0；
+    // duration = 动画延迟秒数，默认值是2；
+}
+function getValue(type){
+	$.ajax({
+		url:'../web/report/getTradeDataTotle',
+		type:'get',
+		success:function(data){
+			amtTot=Number(Math.round(data.data.amtTot));
+			count=Number(Math.round(data.data.count));
+			if(!type){
+				changeValue('total-number',0,amtTot,0,10);
+				changeValue('total-count-num',0,count,0,5);
+				totalNum=Number(Math.round(data.data.amtTot));
+				totalCountNum=Number(data.data.count);
+				console.log("默认请求:"+totalNum,totalCountNum);
+			}else{
+				changeValue('total-number',totalNum,amtTot,0,10);
+				changeValue('total-count-num',totalCountNum,count,0,5);
+				totalNum=amtTot;
+				totalCountNum=count; 	
+				console.log("保存的值:"+totalNum,totalCountNum+"<br />获取的值:"+amtTot,count);
+			}
+		}
+	})
+}
+setInterval(function(){
+	getValue(1)
+},20000)	
+
+
+
+// setInterval(function(){
+// 	var totalNum=Number($("#total-number").html().replace(/,/g,''));
+// 	var countNum=Number($("#total-count-num").html().replace(/,/g,'')); 
+// 	var m=new Date().getTime().toString().substring(9,15);
+// 	var ms=Number(new Date().getTime().toString().substring(10,15));
+// 	var mss=Number(new Date().getTime().toString().substring(12,15));
+// 	changeValue('total-number',totalNum,Number(totalNum+ms),0,2);
+// 	changeValue('total-count-num',countNum,Number(countNum+mss+1),0,1);
+// 	totalNum=Number(totalNum+ms);
+// 	countNum=Number(countNum+mss+1);
+// 	console.log(mss);
+// },8123)
+//设置
+$(document).ready(function(){
+	getValue();
+    $("#scrollDiv").textSlider({line:1,speed:500,timer:3000});
+});
+</script>
+</html>
