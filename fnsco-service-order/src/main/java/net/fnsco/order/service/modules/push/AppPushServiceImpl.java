@@ -461,7 +461,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         List<AppUser> appUsers = appuUserDao.selectAllInlineByRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
         String lastSunday = DateUtils.getSundayStr(-1);
         
-        String msgContent = "【周报】上周的周报已经生成,轻轻一点即可查看详情";
+        String msgContent = "上周的周报已经生成,轻轻一点即可查看详情";
         SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "周报",0);
         if(message.getId() == null){
             logger.error("入库信息实体异常");
