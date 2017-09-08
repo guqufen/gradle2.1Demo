@@ -5,14 +5,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +26,14 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.alibaba.fastjson.JSONArray;
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantInfoService;
-import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileTempDao;
-import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantFileTemp;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 /**
@@ -62,7 +58,7 @@ public class FileInfoController extends BaseController{
     private MerchantFileDao merchantFileDao;
 	
 	@Autowired
-	private MerchantCoreDao merchantCoreDao;
+    private MerchantCoreService merchantCoreService;
 
 	/**
 	 * 
@@ -76,17 +72,7 @@ public class FileInfoController extends BaseController{
 	@RequestMapping("/getInnoCode")
 	public String getInnoCode(){
 	    
-	    String innerCode = CodeUtil.generateMerchantCode("F");
-	    MerchantCore record = new MerchantCore();
-	    record.setInnerCode(innerCode);
-	    boolean stop = true;
-	    
-	    while(stop){
-	        List<MerchantCore> datas  = merchantCoreDao.queryListByCondition(record);
-	        if(CollectionUtils.isEmpty(datas)){
-	            stop = false;
-	        }
-	    }
+	    String innerCode = merchantCoreService.getInnerCode();
 	    
 		return innerCode;
 	}
