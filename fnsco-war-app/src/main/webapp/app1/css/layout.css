@@ -187,7 +187,7 @@ input[type=text].select-time{
 	line-height: 40px;
 	background: #F2F4F7;
 	border-radius: 0;
-	font-size: 14px;
+	font-size: 15px;
 	color: #499CFD;
 	text-align: center;
 	border:none;
@@ -372,7 +372,7 @@ input[type=text].select-time1{
 }
 
 /*加载层*/
-.mui-backdrop {
+.mui-backdrop1{
     position: fixed;
     top: 0;
     right: 0;

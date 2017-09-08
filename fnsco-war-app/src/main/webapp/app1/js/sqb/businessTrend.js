@@ -206,7 +206,7 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
       } 
     });
     //隐藏遮罩
-    $(".mui-backdrop").hide();
+    $(".mui-backdrop1").hide();
   }
 }
 //获取URL携带的参数
