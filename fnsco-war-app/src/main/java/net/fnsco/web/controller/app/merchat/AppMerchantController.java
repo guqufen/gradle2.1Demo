@@ -24,6 +24,7 @@ import net.fnsco.bigdata.api.dto.TerminalsDTO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.TradeMerchantDTO;
 import net.fnsco.order.api.merchant.MerchantOrderService;
@@ -258,10 +259,10 @@ public class AppMerchantController extends BaseController {
         if(null == userMerchant.getMerId()){
             return ResultDTO.fail(ApiConstant.E_APP_ID_EMPTY);
         }
-        boolean dates = merchantOrderService.deleteMerchantRelation(userMerchant.getMerId(), userMerchant.getUserId());
-        if(!dates){
+        boolean datas = merchantOrderService.deleteMerchantRelation(userMerchant.getMerId(), userMerchant.getUserId());
+        if(!datas){
             return ResultDTO.fail();
         }
-        return ResultDTO.success(dates);
+        return new ResultDTO(true, datas, ApiConstant.APP_DELETE_SUCCESS, ApiConstant.ERROR_MESSGE_MAP.get(ApiConstant.APP_DELETE_SUCCESS));
     }
 }

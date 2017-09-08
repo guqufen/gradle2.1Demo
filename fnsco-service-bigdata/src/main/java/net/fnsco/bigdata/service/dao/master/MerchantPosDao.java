@@ -29,6 +29,8 @@ public interface MerchantPosDao {
     int deleteByChannelId(@Param("channelId")Integer channelId);
 
     int insert(MerchantPos record);
+    
+    Integer insertPos(MerchantPos record);
 
     int insertSelective(MerchantPos record);
 

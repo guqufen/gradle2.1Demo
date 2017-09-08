@@ -44,6 +44,7 @@ import net.fnsco.order.api.dto.AppUserMerchantDTO;
 import net.fnsco.order.api.dto.BandDto;
 import net.fnsco.order.api.dto.QueryBandDTO;
 import net.fnsco.order.api.dto.SmsCodeDTO;
+import net.fnsco.order.api.sysappmsg.SysAppMsgService;
 import net.fnsco.order.service.dao.master.AppUserDao;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.dao.master.SysMsgAppSuccDao;
@@ -66,11 +67,11 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Autowired
     private MerchantUserRelDao             merchantUserRelDao;
     @Autowired
-    private MerchantContactDao             merchantContactDao;
-    @Autowired
     private AppUserMerchantDao             appUserMerchantDao;
     @Autowired
     private SysMsgAppSuccDao               sysMsgAppSuccDao;
+    @Autowired
+    private SysAppMsgService               sysAppMsgService;
     //注册
     @Override
     @Transactional
@@ -110,9 +111,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         AppUser appUser = new AppUser();
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        if(Strings.isNullOrEmpty(appUserDTO.getUserName())){
-            appUser.setUserName("sqb"+code);
-        }
+        appUser.setUserName("sqb"+code);
         appUser.setDeviceId(appUserDTO.getDeviceId());
         appUser.setDeviceToken(appUserDTO.getDeviceToken());
         appUser.setMobile(appUserDTO.getMobile());
@@ -127,64 +126,34 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         appUser = appUserDao.selectAppUserByMobile(appUser.getMobile());
         map.put("appUserId", appUser.getId());
-        //注册成功后关联商户
-        int merchantNums1 = 0;
-        int merchantNums2 = 0;
-
-        //MerchantContact表
-        MerchantContact merchantContact = new MerchantContact();
-        merchantContact.setContactMobile(appUserDTO.getMobile());
-        //条件查询符合手机号的记录返回list
-        List<MerchantContact> li = merchantContactDao.queryListByCondition(merchantContact);
-        if (!CollectionUtils.isEmpty(li)) {
-            merchantNums1 = li.size();
-            //返回商户数
-            for (MerchantContact object : li) {
-                MerchantUserRel rel = merchantUserRelDao.selectByUserIdInnerCode(appUser.getId(), object.getInnerCode());
-                if (rel == null) {
-                    rel = new MerchantUserRel();
-                    rel.setAppUserId(appUser.getId());
-                    rel.setInnerCode(object.getInnerCode());
-                    rel.setModefyTime(new Date());
-                    merchantUserRelDao.insertSelective(rel);
-                    //用户管理表新增记录
-                    AppUserMerchant dto=new AppUserMerchant();
-                    dto.setAppUserId(appUser.getId());
-                    dto.setInnerCode(object.getInnerCode());
-                    dto.setModefyTime(new Date());
-                    dto.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-                    appUserMerchantDao.insertSelective(dto);
+        int merchantNums=0;
+        int Shopkeeper = 2;
+        List<QueryBandDTO> list=appUserDao.selectInnercode(appUserDTO.getMobile());
+        if (!CollectionUtils.isEmpty(list)){
+            Shopkeeper=1;
+            merchantNums= list.size();
+            for(QueryBandDTO li:list){
+                MerchantUserRel rel=new MerchantUserRel();
+                rel.setAppUserId(appUser.getId());
+                rel.setInnerCode(li.getInnerCode());
+                rel.setModefyTime(new Date());
+                merchantUserRelDao.insertSelective(rel);
+                AppUserMerchant dto=new AppUserMerchant();
+                dto.setAppUserId(appUser.getId());
+                dto.setInnerCode(li.getInnerCode());
+                dto.setModefyTime(new Date());
+                dto.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+                appUserMerchantDao.insertSelective(dto);
+                //推送消息
+                try {
+                    sysAppMsgService.pushMerChantMsg(li.getInnerCode(), appUser.getId());
+                } catch (Exception ex) {
+                    logger.error("绑定商户发送消息失败", ex);
                 }
             }
         }
-
-        //MerchantCore表
-        MerchantCore merchantCore = new MerchantCore();
-        merchantCore.setLegalPersonMobile(appUserDTO.getMobile());
-        merchantCore.setStatus(1);
-        List<MerchantCore> list = merchantCoreDao.queryListByCondition(merchantCore);
-        if (!CollectionUtils.isEmpty(list)) {
-            merchantNums2 = list.size();
-            //返回商户数
-            for (MerchantCore object : list) {
-                MerchantUserRel rel = merchantUserRelDao.selectByUserIdInnerCode(appUser.getId(), object.getInnerCode());
-                if (rel == null) {
-                    rel = new MerchantUserRel();
-                    rel.setAppUserId(appUser.getId());
-                    rel.setInnerCode(object.getInnerCode());
-                    rel.setModefyTime(new Date());
-                    merchantUserRelDao.insertSelective(rel);
-                  //用户管理表新增记录
-                    AppUserMerchant dto=new AppUserMerchant();
-                    dto.setAppUserId(appUser.getId());
-                    dto.setInnerCode(object.getInnerCode());
-                    dto.setModefyTime(new Date());
-                    dto.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-                    appUserMerchantDao.insertSelective(dto);
-                }
-            }
-        }
-        map.put("merchantNums", merchantNums1 + merchantNums2);
+        map.put("Shopkeeper", Shopkeeper);
+        map.put("merchantNums",merchantNums);
         return ResultDTO.success(map);
     }
 

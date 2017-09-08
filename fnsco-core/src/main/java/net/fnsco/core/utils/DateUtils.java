@@ -120,22 +120,23 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
-
-    public static String getAfterDayStr() {
+    public static String getNextMonthDayStr() {
         String result = "";
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, -1);
+        calendar.add(Calendar.DAY_OF_WEEK, 1);
+        result = sf.format(calendar.getTime());
+        return result;
+    }
+    public static String getAfterDayStr() {
+        String result = "";
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_MONTH, 3);
         SimpleDateFormat sf1 = new SimpleDateFormat("dd");
         result = sf1.format(calendar.getTime());
-        return result;
-    }
-
-    public static String getNowDateStr2() {
-        String result = "";
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-        result = sf.format(new Date());
         return result;
     }
 
@@ -294,7 +295,7 @@ public class DateUtils {
         calendar.add(Calendar.DATE, day);
         return sf.format(calendar.getTime());
     }
-    
+
     public static String getDateStrByMonth(int month, int day) {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -302,6 +303,7 @@ public class DateUtils {
         calendar.add(Calendar.DATE, day);
         return sf.format(calendar.getTime());
     }
+
     /**
      * 
      * getMondayByTimeStr:(这里用一句话描述这个方法的作用)返回传入日期的那周周一日期
@@ -312,7 +314,7 @@ public class DateUtils {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public static String getMondayByTimeStr(String dateStr){
+    public static String getMondayByTimeStr(String dateStr) {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
         try {
@@ -328,6 +330,7 @@ public class DateUtils {
         }
         return null;
     }
+
     /**
      * 根据传入的年月日数据，返回对应格式的日期字符串
      * @param year
@@ -364,18 +367,64 @@ public class DateUtils {
         }
         return null;
     }
+
     public static String strFormatToStr(String date) {
-    	 SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
-    	 SimpleDateFormat sf1 = new SimpleDateFormat("yyyy-MM-dd");
-    	 Date dateTemp = new Date();
-		try {
-			dateTemp = sf.parse(date);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	 return sf1.format(dateTemp);
-       
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateTemp = new Date();
+        try {
+            dateTemp = sf.parse(date);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return sf1.format(dateTemp);
+
     }
- 
+
+    public static String getYesterdayDateStr() {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_WEEK, -1);
+        return sf.format(calendar.getTime());
+
+    }
+    
+    public static String getMonDateStr(String dateStr) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(sf.parse(dateStr));
+            while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY ) {
+                calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
+            }
+            
+            calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 7);
+            
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return sf.format(calendar.getTime());
+    }
+    
+    public static String getSunDateStr(String dateStr) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(sf.parse(dateStr));
+            while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY ) {
+                calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
+            }
+            
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return sf.format(calendar.getTime());
+    }
+    public static String getDateStrYYYYMMDD(Date date) {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        result = sf.format(date);
+        return result;
+    }
 }

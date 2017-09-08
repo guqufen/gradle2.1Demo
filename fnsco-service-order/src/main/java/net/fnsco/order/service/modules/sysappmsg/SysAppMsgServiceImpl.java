@@ -23,15 +23,11 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.OssLoaclUtil;
-import net.fnsco.core.utils.OssUtil;
 import net.fnsco.freamwork.spring.SpringUtils;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.order.api.dto.PushMsgInfoDTO;
-import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
-import net.fnsco.order.api.sysappmsg.SysMsgAppFailService;
-import net.fnsco.order.api.sysappmsg.SysMsgAppSuccService;
 import net.fnsco.order.service.dao.master.AppUserDao;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.dao.master.SysAppMessageDao;
@@ -364,7 +360,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
         AppUser appUser = appUserDao.selectAppUserById(userId);
         newPhone = appUser.getMobile();
-        String msgContent = "【新店员加入】新店员"+newPhone+"加入了"+merchantCore.getMerName()+"店";
+        String msgContent = "新店员"+newPhone+"加入了"+merchantCore.getMerName()+"店";
         SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "新店员加入",1);
         
         if(message.getId() != null){
@@ -372,7 +368,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             for (AppUserMerchant merInfo : merInfos) {
                 AppUser user = appUserDao.selectAppUserById(merInfo.getAppUserId());
                 Integer deviceType = user.getDeviceType();
-                if(null == deviceType ||deviceType == 0||user.getId() == userId){
+                if(null == deviceType ||deviceType == 0||user.getId().equals(userId)){
                     continue;
                 }
                 //推送IOS和android消息
@@ -427,6 +423,10 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
             dtoInfo.setMsgSubtitle(sysAppMessage.getMsgSubTitle());
             dtoInfo.setMsgSubject(sysAppMessage.getMsgSubject());
             dtoInfo.setSendTimeStr(sdf.format(sysAppMessage.getSendTime()));
+          //推算周报时间
+            String weekDateStr = dtoInfo.getSendTimeStr().substring(0, 10);
+            dtoInfo.setWeeklyStartDate(DateUtils.getMonDateStr(weekDateStr));
+            dtoInfo.setWeeklyEndDate(DateUtils.getSunDateStr(weekDateStr));
             data.add(dtoInfo);
         }
         //更新成功消息状态
@@ -434,5 +434,4 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         return ResultDTO.success(data);
         
     }
-
 }

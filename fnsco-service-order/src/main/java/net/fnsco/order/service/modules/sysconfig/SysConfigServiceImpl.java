@@ -1,5 +1,7 @@
 package net.fnsco.order.service.modules.sysconfig;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -25,11 +27,11 @@ import net.fnsco.order.service.domain.SysConfig;
 public class SysConfigServiceImpl extends BaseService implements SysConfigService {
 
     @Autowired
-    private SysConfigDao sysConfigDao;
+    private SysConfigDao        sysConfigDao;
     @Autowired
-    private Environment env; 
-    
-    private static final String baseUrl ="base.url";
+    private Environment         env;
+
+    private static final String baseUrl = "h5.base.url";
 
     /**
      * (non-Javadoc)
@@ -148,17 +150,28 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
         if (Strings.isNullOrEmpty(value)) {
             return null;
         }
-        
-        value = env.getProperty(baseUrl)+value;
-        
+
+        value = env.getProperty(baseUrl) + value;
+
         String temp = FrameworkConstant.TOKEN_ID + appConfigDTO.getUserId();
         String trueTokenId = Md5Util.getInstance().md5(temp);
-        if(value.indexOf("?")>0){
-            config.setValue(value+"&");
-        }else{
-            config.setValue(value+"?");
+        if (value.indexOf("?") > 0) {
+            config.setValue(value + "&");
+        } else {
+            config.setValue(value + "?");
         }
-        return config.getValue() + "userId=" + appConfigDTO.getUserId()+"&tokenId="+trueTokenId;
+        return config.getValue() + "userId=" + appConfigDTO.getUserId() + "&tokenId=" + trueTokenId;
+    }
+
+    /**
+     * 
+     * (non-Javadoc)
+     * @see net.fnsco.order.api.config.SysConfigService#selectAllByCondition(net.fnsco.order.service.domain.SysConfig)
+     */
+    @Override
+    public List<SysConfig> selectAllByCondition(SysConfig record) {
+        return sysConfigDao.selectAllByCondition(record);
+
     }
 
 }

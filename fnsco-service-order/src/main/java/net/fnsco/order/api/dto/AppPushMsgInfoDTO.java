@@ -60,7 +60,60 @@ public class AppPushMsgInfoDTO extends DTO implements Comparable<AppPushMsgInfoD
      */
     private String msgSubtitle;
     
+    /**
+     * 周报开始日期
+     */
     
+    private String weeklyStartDate;
+    /**
+     * 周报结束日期
+     */
+    private String weeklyEndDate;
+    
+    /**
+     * weeklyStartDate
+     *
+     * @return  the weeklyStartDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getWeeklyStartDate() {
+        return weeklyStartDate;
+    }
+
+    /**
+     * weeklyStartDate
+     *
+     * @param   weeklyStartDate    the weeklyStartDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setWeeklyStartDate(String weeklyStartDate) {
+        this.weeklyStartDate = weeklyStartDate;
+    }
+
+    /**
+     * weeklyEndDate
+     *
+     * @return  the weeklyEndDate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getWeeklyEndDate() {
+        return weeklyEndDate;
+    }
+
+    /**
+     * weeklyEndDate
+     *
+     * @param   weeklyEndDate    the weeklyEndDate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setWeeklyEndDate(String weeklyEndDate) {
+        this.weeklyEndDate = weeklyEndDate;
+    }
+
     /**
      * id
      *

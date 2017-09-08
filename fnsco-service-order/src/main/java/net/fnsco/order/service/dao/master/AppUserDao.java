@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.order.api.dto.AppUserManageDTO;
-import net.fnsco.order.api.dto.AppUserMerchantDTO;
 import net.fnsco.order.api.dto.QueryBandDTO;
 import net.fnsco.order.service.domain.AppUser;
 
@@ -76,4 +75,5 @@ public interface AppUserDao {
      * @return List<AppUser>    DOM对象
      */
     List<AppUser> selectAllInlineByRoleId(@Param("roleId")String roleId);
+    List<QueryBandDTO> selectInnercode(@Param("mobile")String mobile);
 }
