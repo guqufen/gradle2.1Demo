@@ -120,22 +120,23 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
-
-    public static String getAfterDayStr() {
+    public static String getNextMonthDayStr() {
         String result = "";
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, -1);
+        calendar.add(Calendar.DAY_OF_WEEK, 1);
+        result = sf.format(calendar.getTime());
+        return result;
+    }
+    public static String getAfterDayStr() {
+        String result = "";
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_MONTH, 3);
         SimpleDateFormat sf1 = new SimpleDateFormat("dd");
         result = sf1.format(calendar.getTime());
-        return result;
-    }
-
-    public static String getNowDateStr2() {
-        String result = "";
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-        result = sf.format(new Date());
         return result;
     }
 
@@ -420,5 +421,10 @@ public class DateUtils {
         }
         return sf.format(calendar.getTime());
     }
-    
+    public static String getDateStrYYYYMMDD(Date date) {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        result = sf.format(date);
+        return result;
+    }
 }
