@@ -391,3 +391,10 @@ input[type=text].select-time1{
     height: 50px;
     color: #fff;
 }
+/*筛选时间快捷按钮*/
+.shortcutBtn1{
+	display: none;
+}
+.shortcutBtn2{
+	display: none;
+}
