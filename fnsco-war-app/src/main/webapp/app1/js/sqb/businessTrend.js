@@ -120,9 +120,35 @@ var titleName1="订单数";
 var startDate;
 var endDate;
 function trendData(tokenId,userId,startDate,endDate,innerCode){
+  //显示遮罩
+  $('#loader').shCircleLoader({color: "#fff"});
   if(!tokenId || !userId){
     mui.alert('获取用户信息失败');
   }else{
+
+    var jsonstr = {
+      'userId': userId
+    };
+    var params = JSON.stringify(jsonstr);
+    $.ajax({
+      url:'../app/merchant/getShopOwnerMerChant?timer='+new Date().getTime(),
+      contentType: "application/json",
+      dataType : "json",
+      type:'POST',
+      headers:  {
+        'tokenId': tokenId,
+        'identifier': userId
+      },
+      data:params,
+      success:function(data){
+        console.log(data);
+        if(data.data.length==1){
+          $(".filter-name").html(data.data[0].merName);
+        }else{
+          $(".filter-name").html("全部商铺");
+        }
+      }
+    });
     $.ajax({
       url:'../app/tradeReport/queryBusinessTrends?timer='+new Date().getTime(),
       dataType : "json",
@@ -174,8 +200,13 @@ function trendData(tokenId,userId,startDate,endDate,innerCode){
         $(".filter-btn").click(function(){
           window.location.href='filtrate.html?back=true&userId='+getUrl("userId")+'&tokenId='+getUrl("tokenId")+'&startDate='+startDate+'&endDate='+endDate+'&type=1';
         })
-      }
+      },
+      error: function(e) {
+        mui.toast(e.status,{ duration:'long', type:'div' })
+      } 
     });
+    //隐藏遮罩
+    $(".mui-backdrop1").hide();
   }
 }
 //获取URL携带的参数

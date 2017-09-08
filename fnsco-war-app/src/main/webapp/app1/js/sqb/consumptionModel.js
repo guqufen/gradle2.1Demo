@@ -63,57 +63,91 @@ if(!getUrl("innerCode") || getUrl("innerCode")==''){
 var titleName="营业额";
 var titleName1="订单数";
 function modelData(tokenId,userId,startDate,endDate,innerCode){
-  $.ajax({
-    url:'../app/tradeReport/queryConsumption?timer='+new Date().getTime(),
-    dataType : "json",
-    type:'POST',
-    headers: {
-      'tokenId': tokenId,
-      'identifier': userId
-    },
-    data:{
-      "userId":userId,
-      "startDate":startDate,
-      "endDate":endDate,
-      "innerCode":innerCode
-    },
-    success:function(data){
-      console.log(data);
-      var formatter="笔";
-  		var formatter1="元";
-      startDate=data.data.startDate;
-      endDate=data.data.endDate;  
-      var data1=[{value: data.data.aliOrderNumTot,name: '支付宝'}, {value: data.data.wxOrderNumTot,name: '微信'}, {value: data.data.bankOrderNumTot,name: '银行卡'},{value: data.data.otherOrderNumTot,name: '其他'}];
-  		var data2=[{value: data.data.aliTurnoverTot/100 ,name: '支付宝'}, {value: data.data.wxTurnoverTot/100,name: '微信'}, {value: data.data.bankTurnoverTot/100,name: '银行卡'},{value: data.data.otherTurnoverTot/100,name: '其他'}];
-  		$(".total-list.wx .total-list-rmb span").html(changeTwoDecimal(data.data.wxTurnoverTot/100));
-  		$(".total-list.alipay .total-list-rmb span").html(changeTwoDecimal(data.data.aliTurnoverTot/100));
-  		$(".total-list.bank .total-list-rmb span").html(changeTwoDecimal(data.data.bankTurnoverTot/100));
-  		$(".total-list.other .total-list-rmb span").html(changeTwoDecimal(data.data.otherTurnoverTot/100));
-  		$(".total-list.wx .total-list-num span").html(data.data.wxOrderNumTot);
-  		$(".total-list.alipay .total-list-num span").html(data.data.aliOrderNumTot);
-  		$(".total-list.bank .total-list-num span").html(data.data.bankOrderNumTot);
-  		$(".total-list.other .total-list-num span").html(data.data.otherOrderNumTot);
-  		//默认加载笔数图表格
-  		chart(data1,formatter);
-    	$("#start-time").val(data.data.startDate);
-    	$("#end-time").val(data.data.endDate);
-   	  $(".filter-startTime").html(changeTime(data.data.startDate));
-    	$(".filter-endTime").html(changeTime(data.data.endDate));
-    	/*点击切换图表*/
-	  	var amountBtn=$("#amount-chart-btn")[0];
-  		var moneyBtn=$("#money-chart-btn")[0];
-  		amountBtn.addEventListener('tap',function() {//按交易笔数
-  			chart(data1,formatter);
-  		})
-  		moneyBtn.addEventListener('tap',function() {//按交易金额
-  			chart(data2,formatter1);
-  		})
-      //筛选页面
-      $(".filter-btn").click(function(){
-        window.location.href='filtrate.html?back=true&userId='+getUrl("userId")+'&tokenId='+getUrl("tokenId")+'&startDate='+startDate+'&endDate='+endDate+'&type=2';
-      })
-    }
-  });
+  //显示遮罩
+  $('#loader').shCircleLoader({color: "#fff"});
+  if(!tokenId || !userId){
+    mui.alert('获取用户信息失败');
+  }else{
+    var jsonstr = {
+        'userId': userId
+      };
+    var params = JSON.stringify(jsonstr);
+    $.ajax({
+      url:'../app/merchant/getShopOwnerMerChant?timer='+new Date().getTime(),
+      contentType: "application/json",
+      dataType : "json",
+      type:'POST',
+      headers:  {
+        'tokenId': tokenId,
+        'identifier': userId
+      },
+      data:params,
+      success:function(data){
+        console.log(data);
+        if(data.data.length==1){
+          $(".filter-name").html(data.data[0].merName);
+        }else{
+          $(".filter-name").html("全部商铺");
+        }
+      }
+    });
+    $.ajax({
+      url:'../app/tradeReport/queryConsumption?timer='+new Date().getTime(),
+      dataType : "json",
+      type:'POST',
+      headers: {
+        'tokenId': tokenId,
+        'identifier': userId
+      },
+      data:{
+        "userId":userId,
+        "startDate":startDate,
+        "endDate":endDate,
+        "innerCode":innerCode
+      },
+      success:function(data){
+        console.log(data);
+        var formatter="笔";
+    		var formatter1="元";
+        startDate=data.data.startDate;
+        endDate=data.data.endDate;  
+        var data1=[{value: data.data.aliOrderNumTot,name: '支付宝'}, {value: data.data.wxOrderNumTot,name: '微信'}, {value: data.data.bankOrderNumTot,name: '银行卡'},{value: data.data.otherOrderNumTot,name: '其他'}];
+    		var data2=[{value: data.data.aliTurnoverTot/100 ,name: '支付宝'}, {value: data.data.wxTurnoverTot/100,name: '微信'}, {value: data.data.bankTurnoverTot/100,name: '银行卡'},{value: data.data.otherTurnoverTot/100,name: '其他'}];
+    		$(".total-list.wx .total-list-rmb span").html(changeTwoDecimal(data.data.wxTurnoverTot/100));
+    		$(".total-list.alipay .total-list-rmb span").html(changeTwoDecimal(data.data.aliTurnoverTot/100));
+    		$(".total-list.bank .total-list-rmb span").html(changeTwoDecimal(data.data.bankTurnoverTot/100));
+    		$(".total-list.other .total-list-rmb span").html(changeTwoDecimal(data.data.otherTurnoverTot/100));
+    		$(".total-list.wx .total-list-num span").html(data.data.wxOrderNumTot);
+    		$(".total-list.alipay .total-list-num span").html(data.data.aliOrderNumTot);
+    		$(".total-list.bank .total-list-num span").html(data.data.bankOrderNumTot);
+    		$(".total-list.other .total-list-num span").html(data.data.otherOrderNumTot);
+    		//默认加载笔数图表格
+    		chart(data1,formatter);
+      	$("#start-time").val(data.data.startDate);
+      	$("#end-time").val(data.data.endDate);
+     	  $(".filter-startTime").html(changeTime(data.data.startDate));
+      	$(".filter-endTime").html(changeTime(data.data.endDate));
+      	/*点击切换图表*/
+  	  	var amountBtn=$("#amount-chart-btn")[0];
+    		var moneyBtn=$("#money-chart-btn")[0];
+    		amountBtn.addEventListener('tap',function() {//按交易笔数
+    			chart(data1,formatter);
+    		})
+    		moneyBtn.addEventListener('tap',function() {//按交易金额
+    			chart(data2,formatter1);
+    		})
+        //筛选页面
+        $(".filter-btn").click(function(){
+          window.location.href='filtrate.html?back=true&userId='+getUrl("userId")+'&tokenId='+getUrl("tokenId")+'&startDate='+startDate+'&endDate='+endDate+'&type=2';
+        })
+      },
+      error: function(e) {
+        mui.toast(e.status,{ duration:'long', type:'div' })
+      } 
+    });
+    //隐藏遮罩
+    $(".mui-backdrop1").hide();
+  }
 }
 //获取URL携带的参数
 function getUrl(name){
@@ -121,3 +155,12 @@ function getUrl(name){
      var r = window.location.search.substr(1).match(reg);
      if(r!=null)return  unescape(r[2]); return null;
 }
+
+/*加载*/
+// $('#loader').shCircleLoader({
+//     keyframes:
+//        "0%   {background:white}\
+//         40%  {background:transparent}\
+//         60%  {background:transparent}\
+//         100% {background:white}"
+// });

@@ -27,11 +27,14 @@
 				</div>
 			</div>
 			<div class="mui-row shortcut-select">
-				<div class="mui-col-xs-4 pleft"><button id="yesterday">昨日</button></div>
-				<div class="mui-col-xs-4"><button id="this-week">本周</button></div>
-				<div class="mui-col-xs-4 pright"><button id="last-week">上周</button></div>
-				<div class="mui-col-xs-4 pleft"><button id="this-month">本月</button></div>
-				<div class="mui-col-xs-4"><button id="last-month">上月</button></div>
+				<div class="mui-col-xs-4 pleft shortcutBtn1"><button id="yesterday">昨日</button></div>
+				<div class="mui-col-xs-4 shortcutBtn1"><button id="this-week">本周</button></div>
+				<div class="mui-col-xs-4 pright shortcutBtn1"><button id="last-week">上周</button></div>
+				<div class="mui-col-xs-4 pleft shortcutBtn1"><button id="this-month">本月</button></div>
+				<div class="mui-col-xs-4 shortcutBtn1"><button id="last-month">上月</button></div>
+				<div class="mui-col-xs-4 pleft shortcutBtn2"><button id="oneMonth">近一月</button></div>
+				<div class="mui-col-xs-4 shortcutBtn2"><button id="threeMonth">近三月</button></div>
+				<div class="mui-col-xs-4 pright shortcutBtn2"><button id="sixMonth">近半年</button></div>
 			</div>
 			<div class="mui-row select-shop">
 				<div class="select-shop-head">
@@ -45,11 +48,15 @@
 		<div class="fixed-box">
 			<div class="filter-ok-btn">确定</div>
 		</div>
+		<div class="mui-backdrop1">
+			<div id="loader"></div>
+		</div>
 	</body>
 	<script src="js/mui.min.js"></script>
 	<script src="js/mui.picker.min.js"></script>
 	<script src="js/setWidth.js"></script>
 	<script src="js/echarts.common.min.js"></script>
 	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.shCircleLoader-min.js"></script>
 	<script type="text/javascript" src="js/custom.js"></script>
 </html>

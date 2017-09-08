@@ -451,7 +451,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         if (null==merchantChannel) {
             return 0;
         }
-                merchantChannelDao.insertSelective(merchantChannel);
+        merchantChannelDao.insertSelective(merchantChannel);
         return merchantChannel.getId();
 
     }
