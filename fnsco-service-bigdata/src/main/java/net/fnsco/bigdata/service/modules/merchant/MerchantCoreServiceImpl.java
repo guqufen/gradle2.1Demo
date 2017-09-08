@@ -558,16 +558,16 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
      */
 	@Override
 	public String getInnerCode() {
-	    String innerCode = CodeUtil.generateMerchantCode("F");
+	    String innerCode = null;
         MerchantCore record = new MerchantCore();
         
         while(true){
+            innerCode = CodeUtil.generateMerchantCode("F");
             record.setInnerCode(innerCode);
             List<MerchantCore> datas  = merchantCoreDao.queryListByCondition(record);
             if(CollectionUtils.isEmpty(datas)){
                 break;
             }
-            innerCode = CodeUtil.generateMerchantCode("F");
         }
 		return innerCode;
 	}
