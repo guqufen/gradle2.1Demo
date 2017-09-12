@@ -14,19 +14,19 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.risk.comm.RiskConstant;
-import net.fnsco.risk.service.sys.dao.UserDAO;
-import net.fnsco.risk.service.sys.entity.UserDO;
+import net.fnsco.risk.service.sys.dao.WebUserDAO;
+import net.fnsco.risk.service.sys.entity.WebUserDO;
 
 @Service
-public class UserService extends BaseService {
+public class WebUserService extends BaseService {
 
     private Logger  logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    private UserDAO userDAO;
+    private WebUserDAO userDAO;
 
     public ResultDTO doLogin(String username, String password) {
         String pwd = Md5Util.getInstance().md5(password);
-        UserDO user = userDAO.getByUserName(username);
+        WebUserDO user = userDAO.getByUserName(username);
         if (user == null) {
             return ResultDTO.fail(RiskConstant.WEB_LOGIN_USER_NOT_EXIST);
         }
@@ -46,7 +46,7 @@ public class UserService extends BaseService {
         String oldPwd = Md5Util.getInstance().md5(oldPassword);
         String newPwd = Md5Util.getInstance().md5(newPassword);
         //通过真实姓名判断原密码是否正确 
-        UserDO user = userDAO.getByRealName(name);
+        WebUserDO user = userDAO.getByRealName(name);
         if (null == user) {
             return ResultDTO.fail(RiskConstant.WEB_LOGIN_USER_NOT_EXIST);
         }
@@ -54,7 +54,7 @@ public class UserService extends BaseService {
         if (!oldPwd.equals(user.getPassword())) {
             return ResultDTO.fail(RiskConstant.WEB_OLD_PASSWORD_FAIL);
         }
-        UserDO uUser = new UserDO();
+        WebUserDO uUser = new WebUserDO();
         uUser.setPassword(newPwd);
         uUser.setId(user.getId());
         int num = userDAO.update(uUser);
@@ -65,44 +65,44 @@ public class UserService extends BaseService {
     }
 
     // 分页
-    public ResultPageDTO<UserDO> page(UserDO user, Integer pageNum, Integer pageSize) {
+    public ResultPageDTO<WebUserDO> page(WebUserDO user, Integer pageNum, Integer pageSize) {
         logger.info("开始分页查询UserService.page, user=" + user.toString());
-        List<UserDO> pageList = this.userDAO.pageList(user, pageNum, pageSize);
+        List<WebUserDO> pageList = this.userDAO.pageList(user, pageNum, pageSize);
         Integer count = this.userDAO.pageListCount(user);
-        ResultPageDTO<UserDO> pager = new ResultPageDTO<UserDO>(count, pageList);
+        ResultPageDTO<WebUserDO> pager = new ResultPageDTO<WebUserDO>(count, pageList);
         return pager;
     }
 
     // 添加
-    public UserDO doAdd(UserDO user, int loginUserId) {
+    public WebUserDO doAdd(WebUserDO user, int loginUserId) {
         logger.info("开始添加UserService.add,user=" + user.toString());
         this.userDAO.insert(user);
         return user;
     }
 
     // 修改
-    public Integer doUpdate(UserDO user, Integer loginUserId) {
+    public Integer doUpdate(WebUserDO user, Integer loginUserId) {
         logger.info("开始修改UserService.update,user=" + user.toString());
         int rows = this.userDAO.update(user);
         return rows;
     }
 
     // 删除
-    public Integer doDelete(UserDO user, Integer loginUserId) {
+    public Integer doDelete(WebUserDO user, Integer loginUserId) {
         logger.info("开始删除UserService.delete,user=" + user.toString());
         int rows = this.userDAO.deleteById(user.getId());
         return rows;
     }
 
     // 查询
-    public UserDO doQueryById(Integer id) {
-        UserDO obj = this.userDAO.getById(id);
+    public WebUserDO doQueryById(Integer id) {
+        WebUserDO obj = this.userDAO.getById(id);
         return obj;
     }
 
     // 查询
-    public UserDO getUserByName(String userName) {
-        UserDO obj = this.userDAO.getByUserName(userName);
+    public WebUserDO getUserByName(String userName) {
+        WebUserDO obj = this.userDAO.getByUserName(userName);
         return obj;
     }
 

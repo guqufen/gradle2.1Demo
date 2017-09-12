@@ -12,8 +12,8 @@ import io.swagger.annotations.Api;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.risk.comm.RiskConstant;
-import net.fnsco.risk.service.sys.UserService;
-import net.fnsco.risk.service.sys.entity.UserDO;
+import net.fnsco.risk.service.sys.WebUserService;
+import net.fnsco.risk.service.sys.entity.WebUserDO;
 
 @Controller
 @RequestMapping(value = "/web/user", method = RequestMethod.POST)
@@ -21,7 +21,7 @@ import net.fnsco.risk.service.sys.entity.UserDO;
 public class UserController extends BaseController {
 
     @Autowired
-    private UserService userService;
+    private WebUserService userService;
 
     /**
      * 登录方法
@@ -41,7 +41,7 @@ public class UserController extends BaseController {
 
         ResultDTO result = userService.doLogin(username, password);
         if (result.isSuccess()) {
-            UserDO user = (UserDO) result.getData();
+            WebUserDO user = (WebUserDO) result.getData();
             setSessionUser(user, user.getId());
             addCookieUser(user.getName());
             return ResultDTO.success();
@@ -69,7 +69,7 @@ public class UserController extends BaseController {
     @RequestMapping("/getCurrentUser")
     @ResponseBody
     public ResultDTO getCurrentUser() {
-        UserDO adminUser = (UserDO) getSessionUser();
+        WebUserDO adminUser = (WebUserDO) getSessionUser();
         return ResultDTO.success(adminUser);
     }
 
