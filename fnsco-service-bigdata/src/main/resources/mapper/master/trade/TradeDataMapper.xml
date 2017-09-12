@@ -92,6 +92,20 @@
     limit 1
   </select>
   
+  <select id="queryByCertifyId" parameterType="java.lang.String"  resultType="java.lang.String"> 
+    SELECT
+	type
+	FROM
+	sys_bank_card_type
+	WHERE
+	LEFT (
+		#{certifyId,jdbcType=VARCHAR},
+		card_trim_length
+	) = card_trim_value
+		AND card_total_length = #{cardTotalLength,jdbcType=VARCHAR}
+	ORDER BY
+	card_trim_length DESC;
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from t_trade_data
     where id = #{id,jdbcType=VARCHAR}

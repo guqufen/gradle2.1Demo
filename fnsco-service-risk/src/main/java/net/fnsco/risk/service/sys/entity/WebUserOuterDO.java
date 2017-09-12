@@ -2,8 +2,7 @@ package net.fnsco.risk.service.sys.entity;
 
 import java.util.Date;
 
-public class UserDO {
-    private Integer roleType;
+public class WebUserOuterDO {
 
     /**
      * 
@@ -11,7 +10,7 @@ public class UserDO {
     private Integer id;
 
     /**
-     * 1 oem管理员/2 代理商用户/ 3 商户/ 4 其它用户
+     * 用户类型1管理员2合作者3消费者
      */
     private Integer type;
 
@@ -34,6 +33,11 @@ public class UserDO {
      * 手机
      */
     private String mobile;
+
+    /**
+     * email地址
+     */
+    private String email;
 
     /**
      * 1男 2女
@@ -69,6 +73,11 @@ public class UserDO {
      * 
      */
     private Integer modifyUserId;
+
+    /**
+     * 创建时间
+     */
+    private Date createrTime;
 
 
 
@@ -118,6 +127,14 @@ public class UserDO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Integer getSex() {
@@ -176,18 +193,18 @@ public class UserDO {
         this.modifyUserId = modifyUserId;
     }
 
-    public Integer getRoleType() {
-        return roleType;
+    public Date getCreaterTime() {
+        return createrTime;
     }
 
-    public void setRoleType(Integer roleType) {
-        this.roleType = roleType;
+    public void setCreaterTime(Date createrTime) {
+        this.createrTime = createrTime;
     }
+
+
 
     @Override
     public String toString() {
-        return "UserDO [roleType=" + roleType + ", id=" + id + ", type=" + type + ", name=" + name + ", password=" + password + ", realName=" + realName + ", mobile=" + mobile + ", sex=" + sex
-               + ", aliasName=" + aliasName + ", department=" + department + ", agentId=" + agentId + ", remark=" + remark + ", modifyTime=" + modifyTime + ", modifyUserId=" + modifyUserId + "]";
+        return "[id="+ id + ", type="+ type + ", name="+ name + ", password="+ password + ", realName="+ realName + ", mobile="+ mobile + ", email="+ email + ", sex="+ sex + ", aliasName="+ aliasName + ", department="+ department + ", agentId="+ agentId + ", remark="+ remark + ", modifyTime="+ modifyTime + ", modifyUserId="+ modifyUserId + ", createrTime="+ createrTime + "]";
     }
-
 }

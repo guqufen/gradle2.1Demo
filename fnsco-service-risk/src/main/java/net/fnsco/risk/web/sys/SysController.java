@@ -1,20 +1,17 @@
 package net.fnsco.risk.web.sys;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.fnsco.core.base.BaseController;
-import net.fnsco.risk.service.sys.UserService;
-import net.fnsco.risk.service.sys.entity.UserDO;
+import net.fnsco.risk.service.sys.WebUserService;
+import net.fnsco.risk.service.sys.entity.WebUserDO;
 
 @Controller
 public class SysController extends BaseController {
     @Autowired
-    private UserService userService;
+    private WebUserService userService;
 
     /**
      * 进入首页
@@ -32,7 +29,7 @@ public class SysController extends BaseController {
             }
 
             String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#") + 1, cookeiUser.toString().length());
-            UserDO sysUser = userService.getUserByName(userName);
+            WebUserDO sysUser = userService.getUserByName(userName);
             if (null == sysUser) {
                 return "redirect:/login.html";
             }
