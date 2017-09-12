@@ -15,6 +15,9 @@ public class CodeGen {
         //auto.init("net.fnsco.auth", "sys", "sys_role_menu");
         //auto.init("net.fnsco.auth", "sys", "sys_role_dept");
         //auto.init("net.fnsco.auth", "sys", "sys_menu");
-        auto.init("net.fnsco.bigdata", "trade", "t_trade_data");
+        auto.init("net.fnsco.risk", "report", "risk_report_info");
+        auto.init("net.fnsco.risk", "report", "risk_report_repayment_history");
+        auto.init("net.fnsco.risk", "sys", "risk_web_user");
+        auto.init("net.fnsco.risk", "sys", "risk_web_user_outer");
     }
 }
