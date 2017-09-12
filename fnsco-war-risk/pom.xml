@@ -71,7 +71,7 @@
 		</dependency>
 		<dependency>
 			<groupId>net.fnsco</groupId>
-			<artifactId>fnsco-service-withhold</artifactId>
+			<artifactId>fnsco-service-risk</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		

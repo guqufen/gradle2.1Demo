@@ -14,7 +14,8 @@ import net.fnsco.freamwork.business.AppService;
 import net.fnsco.freamwork.business.AppUser1DTO;
 import net.fnsco.freamwork.business.WebService;
 import net.fnsco.freamwork.business.WebUserDTO;
-import net.fnsco.withhold.service.sys.entity.UserDO;
+import net.fnsco.risk.service.sys.UserService;
+import net.fnsco.risk.service.sys.entity.UserDO;
 
 /**
  * 判断是否强制登录获取用户信息
@@ -28,7 +29,7 @@ import net.fnsco.withhold.service.sys.entity.UserDO;
 @Service
 public class UserServiceImpl implements WebService, AppService {
     @Autowired
-    private net.fnsco.withhold.service.sys.UserService userService;
+    private UserService userService;
 
     /**
      * 判断是否强制登录获取用户信息
