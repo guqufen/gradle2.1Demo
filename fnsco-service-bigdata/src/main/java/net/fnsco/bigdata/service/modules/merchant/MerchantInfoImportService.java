@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import net.fnsco.bigdata.api.dto.SnCodeDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
+import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
@@ -34,10 +35,9 @@ public class MerchantInfoImportService {
 	private MerchantCoreService merchantCoreService;
 	@Autowired
 	private MerchantPosService merchantPosService;
-
 	// 批量导入客户
 	@Transactional
-	public ResultDTO<String> batchImportToDB(List<Object[]> customerList, Integer userId) throws ParseException {
+	public ResultDTO<String> merchantBatchImportToDB(List<Object[]> customerList, Integer userId) throws ParseException {
 		// 循环便利customList数组，将其中excel每一行的数据分批导入数据库
 		if (customerList.size() != 0) {
 			// excel导出的空数据是“null”，赋值一个空字符串
