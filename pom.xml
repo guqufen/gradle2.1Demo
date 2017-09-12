@@ -18,6 +18,7 @@
 		<module>fnsco-war-app</module>
 		<module>fnsco-war-open</module>
 		<module>fnsco-war-risk</module>
+		<module>fnsco-war-risk-admin</module>
 		<!-- 数据接入service项目-->
 		<module>fnsco-service-order</module>
 		<module>fnsco-service-bigdata</module>
