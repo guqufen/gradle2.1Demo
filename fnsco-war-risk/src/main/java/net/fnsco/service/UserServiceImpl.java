@@ -14,8 +14,8 @@ import net.fnsco.freamwork.business.AppService;
 import net.fnsco.freamwork.business.AppUser1DTO;
 import net.fnsco.freamwork.business.WebService;
 import net.fnsco.freamwork.business.WebUserDTO;
-import net.fnsco.risk.service.sys.UserService;
-import net.fnsco.risk.service.sys.entity.UserDO;
+import net.fnsco.risk.service.sys.WebUserService;
+import net.fnsco.risk.service.sys.entity.WebUserDO;
 
 /**
  * 判断是否强制登录获取用户信息
@@ -29,7 +29,7 @@ import net.fnsco.risk.service.sys.entity.UserDO;
 @Service
 public class UserServiceImpl implements WebService, AppService {
     @Autowired
-    private UserService userService;
+    private WebUserService userService;
 
     /**
      * 判断是否强制登录获取用户信息
@@ -50,7 +50,7 @@ public class UserServiceImpl implements WebService, AppService {
             return user;
         }
         String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#") + 1, cookeiUser.toString().length());
-        UserDO temp = userService.getUserByName(userName);
+        WebUserDO temp = userService.getUserByName(userName);
         if (temp != null) {
             user = new WebUserDTO();
             setSessionUser(request, temp, temp.getId());
