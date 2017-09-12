@@ -8,6 +8,28 @@ public class BandListDTO extends DTO{
     private Integer userId;
     private String  userName;
     private String isShopkeeper;
+    private String headImagePath;//新增加头像
+    
+    /**
+     * headImagePath
+     *
+     * @return  the headImagePath
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getHeadImagePath() {
+        return headImagePath;
+    }
+    /**
+     * headImagePath
+     *
+     * @param   headImagePath    the headImagePath to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setHeadImagePath(String headImagePath) {
+        this.headImagePath = headImagePath;
+    }
     public String getIsDelete() {
         return isDelete;
     }
