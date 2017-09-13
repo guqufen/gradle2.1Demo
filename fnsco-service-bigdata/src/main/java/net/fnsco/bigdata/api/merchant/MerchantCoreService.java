@@ -181,4 +181,7 @@ public interface MerchantCoreService {
      * @return
      */
     String getInnerCode();
+    
+    List<MerchantChannel> findChannelByInnerCode(String innerCode);
+    MerchantChannel findChannelByMerId(String merId,String channelType);
 }

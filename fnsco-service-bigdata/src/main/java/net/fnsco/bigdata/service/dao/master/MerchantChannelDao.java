@@ -34,6 +34,12 @@ public interface MerchantChannelDao {
      */
     List<MerchantChannel> selectByInnerCode(@Param("innerCode") String innerCode);
     /**
+     * 根据innercode查询
+     * @param innerCode
+     * @return
+     */
+    List<MerchantChannel> selectByInnerCodes(@Param("innerCodes") List<String> innerCodes);
+    /**
      * deleteByMerCoreIds:(这里用一句话描述这个方法的作用) 根据core实体IDS删除关联数据
      *
      * @param ids

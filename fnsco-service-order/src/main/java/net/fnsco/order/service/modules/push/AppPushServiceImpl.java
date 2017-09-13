@@ -556,4 +556,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         
     }
     
+    public void sendFixQRMgs(String innerCode,String msgContent){
+        
+    }
 }
