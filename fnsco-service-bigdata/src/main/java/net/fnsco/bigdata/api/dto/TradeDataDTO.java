@@ -1,5 +1,7 @@
 package net.fnsco.bigdata.api.dto;
 
+import java.util.Date;
+
 import net.fnsco.core.base.DTO;
 
 public class TradeDataDTO extends DTO {
@@ -39,6 +41,153 @@ public class TradeDataDTO extends DTO {
 
     private String cardNo;       //卡号
     private String cardOrg;      // :卡组织，00 境内借记卡 ；01 境内贷记卡 ； 60 境外借记卡 ； 61 境外贷记卡
+    
+    private String 	innerCode;
+    private String 	txnSubType;
+    private String 	currency;
+    private String 	settleDate;
+    private String	dcType;
+    private String	certifyId;
+    private String	msgDestId;
+    private String	payTimeOut;
+    private String	subject;
+    private String	body;
+    private String	customerInfo;
+    private String	customerIp;
+    private String	tn;
+    private String	respMsg;
+    private String	succTime;
+    private Date 	createTime;
+    
+    public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getInnerCode() {
+		return innerCode;
+	}
+
+	public void setInnerCode(String innerCode) {
+		this.innerCode = innerCode;
+	}
+
+	public String getTxnSubType() {
+		return txnSubType;
+	}
+
+	public void setTxnSubType(String txnSubType) {
+		this.txnSubType = txnSubType;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+
+	public String getSettleDate() {
+		return settleDate;
+	}
+
+	public void setSettleDate(String settleDate) {
+		this.settleDate = settleDate;
+	}
+
+	public String getDcType() {
+		return dcType;
+	}
+
+	public void setDcType(String dcType) {
+		this.dcType = dcType;
+	}
+
+	public String getCertifyId() {
+		return certifyId;
+	}
+
+	public void setCertifyId(String certifyId) {
+		this.certifyId = certifyId;
+	}
+
+	public String getMsgDestId() {
+		return msgDestId;
+	}
+
+	public void setMsgDestId(String msgDestId) {
+		this.msgDestId = msgDestId;
+	}
+
+	public String getPayTimeOut() {
+		return payTimeOut;
+	}
+
+	public void setPayTimeOut(String payTimeOut) {
+		this.payTimeOut = payTimeOut;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public String getCustomerInfo() {
+		return customerInfo;
+	}
+
+	public void setCustomerInfo(String customerInfo) {
+		this.customerInfo = customerInfo;
+	}
+
+	public String getCustomerIp() {
+		return customerIp;
+	}
+
+	public void setCustomerIp(String customerIp) {
+		this.customerIp = customerIp;
+	}
+
+	public String getTn() {
+		return tn;
+	}
+
+	public void setTn(String tn) {
+		this.tn = tn;
+	}
+
+	public String getRespMsg() {
+		return respMsg;
+	}
+
+	public void setRespMsg(String respMsg) {
+		this.respMsg = respMsg;
+	}
+
+	public String getSuccTime() {
+		return succTime;
+	}
+
+	public void setSuccTime(String succTime) {
+		this.succTime = succTime;
+	}
+
+	
     private String merName;      //商户名称
 
     private String payMedium;    //支付媒介00pos机01app02台码
@@ -89,6 +238,7 @@ public class TradeDataDTO extends DTO {
     }
 
     /**
+>>>>>>> 66c23d160a3a16ae1deefd5afc452cde023a9778
      * startTime
      *
      * @return  the startTime

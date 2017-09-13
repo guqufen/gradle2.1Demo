@@ -68,8 +68,20 @@ public class WebUserOuterDO {
      * 
      */
     private Date modifyTime;
+    
+    private String modifyTimeStr;
 
-    /**
+    public String getModifyTimeStr() {
+		return modifyTimeStr;
+	}
+
+	public void setModifyTimeStr(String modifyTimeStr) {
+		this.modifyTimeStr = modifyTimeStr;
+	}
+
+
+
+	/**
      * 
      */
     private Integer modifyUserId;

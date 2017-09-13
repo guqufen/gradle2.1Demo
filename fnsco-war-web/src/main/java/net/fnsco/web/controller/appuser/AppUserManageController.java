@@ -77,6 +77,11 @@ public class AppUserManageController extends BaseController {
 					String dateString = formatter.format(li);
 					merchantdo.setRegTimeStr(dateString);
 				}
+				if (merchantdo.getMerNames() !=null) {
+					String mer=merchantdo.getMerNames();
+					String merNames=mer.substring(0, mer.length()-1);
+					merchantdo.setMerNames(merNames);
+				}
 			}
 		}
 		JSONObject jObject = new JSONObject();
