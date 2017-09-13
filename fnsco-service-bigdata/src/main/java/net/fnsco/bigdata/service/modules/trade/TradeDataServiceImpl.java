@@ -102,6 +102,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setReferNo(tradeData.getReferNo());
         tradeDataEntity.setInnerCode(innerCode);
         tradeDataEntity.setCreateTime(new Date());
+        if(tradeData.getCreateTime()!=null) {
+        	tradeDataEntity.setCreateTime(tradeData.getCreateTime());
+        }
         tradeDataEntity.setRespCode(tradeData.getRespCode());
 
         tradeDataEntity.setCertifyId(tradeData.getCardNo());
@@ -172,6 +175,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeData.setEndTime(DateUtils.getDateEndTime(merchantCore.getEndDate()));
         if (!CollectionUtils.isEmpty(merchantCore.getPayType())) {
             tradeData.setPaySubTypes(merchantCore.getPayType());
+        }
+        if(!Strings.isNullOrEmpty(merchantCore.getPayMedium())){
+            tradeData.setPayMedium(merchantCore.getPayMedium());
         }
         //根据pos查询终端列表
         List<String> posList = merchantCore.getTerminals();
@@ -311,6 +317,13 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
+        }
+
+        if (!StringUtils.isEmpty(tradeDataDTO.getStartTime())) {
+            tradeDataDTO.setStartTime(DateUtils.getDateStartTime(tradeDataDTO.getStartTime()));
+        }
+        if (!StringUtils.isEmpty(tradeDataDTO.getEndTime())) {
+            tradeDataDTO.setEndTime(DateUtils.getDateEndTime(tradeDataDTO.getEndTime()));
         }
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
         List<TradeData> datas = tradeListDAO.queryByAllCondition(tradeData);

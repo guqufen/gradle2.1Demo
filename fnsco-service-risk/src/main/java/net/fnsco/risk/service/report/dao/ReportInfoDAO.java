@@ -16,13 +16,16 @@ import java.util.List;;
 
 public interface ReportInfoDAO {
 
-    @Results({@Result( column = "mer_name",property = "merName"),@Result( column = "business_license_num",property = "businessLicenseNum"),@Result( column = "business_address",property = "businessAddress"),@Result( column = "business_due_time",property = "businessDueTime"),@Result( column = "trading_area",property = "tradingArea"),@Result( column = "report_cycle",property = "reportCycle"),@Result( column = "report_timer",property = "reportTimer"),@Result( column = "risk_warning",property = "riskWarning"),@Result( column = "fee_rate",property = "feeRate"),@Result( column = "loan_cycle",property = "loanCycle") })
+    @Results({@Result( column = "mer_name",property = "merName"),@Result( column = "business_license_num",property = "businessLicenseNum"),@Result( column = "business_address",property = "businessAddress"),@Result( column = "business_due_time",property = "businessDueTime"),@Result( column = "trading_area",property = "tradingArea"),@Result( column = "report_cycle",property = "reportCycle"),@Result( column = "report_timer",property = "reportTimer"),@Result( column = "risk_warning",property = "riskWarning"),
+        @Result( column = "fee_rate",property = "feeRate"),@Result( column = "loan_cycle",property = "loanCycle"),
+        @Result( column = "mer_num",property = "merNum"),@Result( column = "status",property = "status"),
+        @Result( column = "create_time",property = "createTime"),@Result( column = "last_modify_time",property = "lastModifyTime") })
     @Select("SELECT * FROM risk_report_info WHERE id = #{id}")
-    public ReportInfoDO getById(@Param("id") int id);
+    public ReportInfoDO getById(@Param("id") Integer id);
 
-    @Insert("INSERT into risk_report_info(id,mer_name,business_license_num,business_address,business_due_time,industry,trading_area,turnover,size,report_cycle,report_timer,risk_warning,quota,fee_rate,loan_cycle) VALUES (#{id},#{merName},#{businessLicenseNum},#{businessAddress},#{businessDueTime},#{industry},#{tradingArea},#{turnover},#{size},#{reportCycle},#{reportTimer},#{riskWarning},#{quota},#{feeRate},#{loanCycle})")
+    @Insert("INSERT into risk_report_info(id,mer_name,business_license_num,business_address,business_due_time,industry,trading_area,turnover,size,report_cycle,report_timer,risk_warning,quota,fee_rate,loan_cycle,mer_num,status,create_time,last_modify_time) VALUES (#{id},#{merName},#{businessLicenseNum},#{businessAddress},#{businessDueTime},#{industry},#{tradingArea},#{turnover},#{size},#{reportCycle},#{reportTimer},#{riskWarning},#{quota},#{feeRate},#{loanCycle},#{merNum},#{status},#{createTime},#{lastModifyTime})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    public void insert(ReportInfoDO reportInfo);
+    public int insert(ReportInfoDO reportInfo);
 
     @Delete("DELETE FROM risk_report_info WHERE id = #{id}")
     public int deleteById(@Param("id") int id);
@@ -30,7 +33,12 @@ public interface ReportInfoDAO {
     @UpdateProvider(type = ReportInfoProvider.class, method = "update")
     public int update(@Param("reportInfo") ReportInfoDO  reportInfo);
 
-    @Results({@Result( column = "mer_name",property = "merName"),@Result( column = "business_license_num",property = "businessLicenseNum"),@Result( column = "business_address",property = "businessAddress"),@Result( column = "business_due_time",property = "businessDueTime"),@Result( column = "trading_area",property = "tradingArea"),@Result( column = "report_cycle",property = "reportCycle"),@Result( column = "report_timer",property = "reportTimer"),@Result( column = "risk_warning",property = "riskWarning"),@Result( column = "fee_rate",property = "feeRate"),@Result( column = "loan_cycle",property = "loanCycle") })
+    @Results({@Result( column = "mer_name",property = "merName"),@Result( column = "business_license_num",property = "businessLicenseNum"),@Result( column = "business_address",property = "businessAddress"),@Result( column = "business_due_time",property = "businessDueTime"),
+        @Result( column = "trading_area",property = "tradingArea"),@Result( column = "report_cycle",property = "reportCycle"),@Result( column = "report_timer",property = "reportTimer"),@Result( column = "risk_warning",property = "riskWarning"),
+        @Result( column = "fee_rate",property = "feeRate"),@Result( column = "loan_cycle",property = "loanCycle"),
+        @Result( column = "mer_num",property = "merNum"),@Result( column = "status",property = "status"),
+        @Result( column = "create_time",property = "createTime"),@Result( column = "last_modify_time",property = "lastModifyTime")
+    })
     @SelectProvider(type = ReportInfoProvider.class, method = "pageList")
     public List<ReportInfoDO> pageList(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 

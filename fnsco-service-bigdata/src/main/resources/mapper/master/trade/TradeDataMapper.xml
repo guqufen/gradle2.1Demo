@@ -516,6 +516,9 @@
       <if test="condition.createTime != null and condition.createTime !='' " >
         AND create_time = #{condition.createTime,jdbcType=TIMESTAMP}
       </if>
+      <if test="condition.payMedium != null and condition.payMedium !='' " >
+        AND pay_medium = #{condition.payMedium,jdbcType=VARCHAR}
+      </if>
       <!-- 手工添加 -->
       <if test="condition.startTime != null and condition.startTime !=''" >
         	AND time_stamp >= #{condition.startTime,jdbcType=VARCHAR}
@@ -698,6 +701,9 @@
       </if>
       <if test="createTime != null and createTime != ''" >
         AND create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="payMedium != null and payMedium !='' " >
+        AND pay_medium = #{payMedium,jdbcType=VARCHAR}
       </if>
       <!-- 手工添加 -->
       <if test="startTime != null and startTime !=''" >

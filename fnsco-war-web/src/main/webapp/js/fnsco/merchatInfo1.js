@@ -265,17 +265,34 @@ window.operateEvents = {
 };
 //表格中操作按钮
 function operateFormatter(value, row, index) {
-    return [
-        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
-        '<i class="glyphicon glyphicon-pencil"></i>',
-        '</a>  ',
-        '<a class="details" href="javascript:detailsData('+value+');" title="查看详情">',
-        '<i class="glyphicon glyphicon-file"></i>',
-        '</a>  ',
-        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
-        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
-        '</a>'
-    ].join('');
+	if(row.openFixQr=="1"){
+	    return [
+	    	'<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码">',
+	        '<i class="glyphicon glyphicon-qrcode"></i>',
+	        '</a>  ',
+	        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
+	        '<i class="glyphicon glyphicon-pencil"></i>',
+	        '</a>  ',
+	        '<a class="details" href="javascript:detailsData('+value+');" title="查看详情">',
+	        '<i class="glyphicon glyphicon-file"></i>',
+	        '</a>  ',
+	        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
+	        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
+	        '</a>'
+	    ].join('');
+    }else{
+    	return [
+	        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
+	        '<i class="glyphicon glyphicon-pencil"></i>',
+	        '</a>  ',
+	        '<a class="details" href="javascript:detailsData('+value+');" title="查看详情">',
+	        '<i class="glyphicon glyphicon-file"></i>',
+	        '</a>  ',
+	        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
+	        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
+	        '</a>'
+	    ].join('');
+    }
 }
 //表格中删除按钮事件
 function delete_btn_event(td_obj){
@@ -1610,4 +1627,18 @@ function detailsData(id){
         $("#detailsModal .nav-tabs li:first-child").addClass("active");
     }
   });
+}
+
+function showQrcode(id){
+	$.ajax({
+	    url:PROJECT_NAME+'/web/pay/getQrImage',
+	    type:'get',
+	    dataType : "json",
+	    data:{'id':id},
+	    success:function(data){
+	    	console.log(data.data.result);
+	    	$(".qrcode").attr('src',data.data.result)
+	    }
+	})
+	$('#showQrcode').modal();
 }

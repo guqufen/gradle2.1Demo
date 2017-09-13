@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.ResultDTO;
@@ -100,7 +101,7 @@ public class TradeDataImportService {
 			//	String innerCode = merchantCoreService.getInnerCode();
 				
 				try {
-					TradeData tradeData=new TradeData();
+					TradeDataDTO tradeData=new TradeDataDTO();
 					tradeData.setInnerCode(innercode);
 					tradeData.setTxnType(txntype);
 					tradeData.setTxnSubType(txnsubtype);
@@ -126,7 +127,7 @@ public class TradeDataImportService {
 					tradeData.setMerId(merid);
 					tradeData.setTermId(termid);
 					tradeData.setBatchNo(batchno);
-					tradeData.setTraceNo(traceno);
+					tradeData.setSysTraceNo(traceno);
 					tradeData.setReferNo(referno);
 					tradeData.setAuthCode(authcode);
 					tradeData.setSource(source);
@@ -140,15 +141,18 @@ public class TradeDataImportService {
 					tradeData.setRespMsg(respmsg);
 					tradeData.setSuccTime(succtime);
 					//日期格式转换
-					String reg = "(\\d{4})(\\d{2})(\\d{2})(\\d{2})(\\d{2})(\\d{2})";
-					createtime = createtime.replaceAll(reg, "$1-$2-$3 $4:$5:$6");
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					Date createTime = sdf.parse(createtime);
+					Date createTime=null;
+					if("".equals(createtime)) {
+						String reg = "(\\d{4})(\\d{2})(\\d{2})(\\d{2})(\\d{2})(\\d{2})";
+						createtime = createtime.replaceAll(reg, "$1-$2-$3 $4:$5:$6");
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						createTime = sdf.parse(createtime);
+					}
 					tradeData.setCreateTime(createTime);
 					//交易流水打包导入
-					ResultDTO<String> result = tradeDataService.batchSaveTradeData(tradeData);
-					if(!result.isSuccess()) {
-						return ResultDTO.fail(result.getMessage());
+					boolean i = tradeDataService.saveTradeData(tradeData);
+					if(i!=true) {
+						return ResultDTO.fail("第" + timeNum + "行交易流水信息有误，导入失败");
 					}
 				} catch (Exception e) {
 					return ResultDTO.fail("第" + timeNum + "行交易流水信息有误，导入失败");
