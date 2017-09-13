@@ -63,7 +63,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     @Autowired
     private Environment               env;
     
-    private static final String TAICODE_BASE_URL = "";
+    private static final String TAICODE_BASE_URL = "web.base.url";
     /**
       * 
       * @param merNum 商户号
@@ -166,8 +166,11 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
             return ResultDTO.fail(BigdataConstant.E_USERID_NULL);
         }
         MerChantCoreDetailDTO datas = merchantCoreDao.queryDetailById(merId);
-        //设置台码url
-        datas.setTaiCodeUrl(env.getProperty(TAICODE_BASE_URL)+"?innerCode="+datas.getTaiCodeUrl());
+        //设置台码url,只为能生成台码的设置url
+        int count = merchantChannelDao.countCanCreateTaiCode(merId);
+        if(count > 0){
+            datas.setTaiCodeUrl(env.getProperty(TAICODE_BASE_URL)+"?innerCode="+datas.getTaiCodeUrl());
+        }
         ResultDTO<MerChantCoreDetailDTO> result = ResultDTO.success(datas);
         return result;
 
