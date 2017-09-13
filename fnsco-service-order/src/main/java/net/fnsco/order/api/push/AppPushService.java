@@ -146,5 +146,5 @@ public interface AppPushService {
      * @return void    DOM对象
      */
     public void sendWeeklyDataMgs();
-    
+    void sendFixQRMgs(String innerCode,String msgContent);
 }

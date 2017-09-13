@@ -28,6 +28,34 @@ public class MerChantCoreDTO extends DTO{
     private String legalPerson;
     
     private String registAddress;
+    
+    /**
+     * 能否生成台码
+     */
+    private boolean canCreateTaiCode;
+    
+    
+    /**
+     * canCreateTaiCode
+     *
+     * @return  the canCreateTaiCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public boolean isCanCreateTaiCode() {
+        return canCreateTaiCode;
+    }
+
+    /**
+     * canCreateTaiCode
+     *
+     * @param   canCreateTaiCode    the canCreateTaiCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setCanCreateTaiCode(boolean canCreateTaiCode) {
+        this.canCreateTaiCode = canCreateTaiCode;
+    }
 
     /**
      * id

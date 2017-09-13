@@ -120,6 +120,7 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
+
     public static String getNextMonthDayStr() {
         String result = "";
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -130,6 +131,7 @@ public class DateUtils {
         result = sf.format(calendar.getTime());
         return result;
     }
+
     public static String getAfterDayStr() {
         String result = "";
         Calendar calendar = Calendar.getInstance();
@@ -389,42 +391,50 @@ public class DateUtils {
         return sf.format(calendar.getTime());
 
     }
-    
+
     public static String getMonDateStr(String dateStr) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
         try {
             calendar.setTime(sf.parse(dateStr));
-            while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY ) {
+            while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
                 calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
             }
-            
+
             calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 7);
-            
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return sf.format(calendar.getTime());
     }
-    
+
     public static String getSunDateStr(String dateStr) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();
         try {
             calendar.setTime(sf.parse(dateStr));
-            while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY ) {
+            while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
                 calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
             }
-            
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return sf.format(calendar.getTime());
     }
+
     public static String getDateStrYYYYMMDD(Date date) {
         String result = "";
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
         result = sf.format(date);
+        return result;
+    }
+
+    public static String getNowTimeStr() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
+        result = sf.format(new Date());
         return result;
     }
 }

@@ -157,6 +157,17 @@
     from m_merchant_channel
     where inner_code = #{innerCode,jdbcType=VARCHAR}
   </select>
+  
+  <select id="selectByInnerCodes" resultMap="BaseResultMap" >
+  	 select 
+    <include refid="Base_Column_List" />
+    from m_merchant_channel
+    where inner_code in
+    <foreach item="item" collection="innerCodes" open="(" separator="," close=")">
+       #{item,jdbcType=VARCHAR} 
+    </foreach>
+  </select>
+  
   <!-- 根据商家ID删除关联数据 -->
 <delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
    DELETE   FROM m_merchant_channel WHERE inner_code in (
@@ -166,4 +177,8 @@
      </foreach>
 	)
 </delete>
+<!-- 根据商家ID查询是否可以生成台码 -->
+<select id="countCanCreateTaiCode" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+ SELECT COUNT(*) FROM m_merchant_channel WHERE inner_code = (SELECT inner_code FROM m_merchant_core WHERE id = #{merId}) AND channel_type='01' AND channel_mer_id IS NOT NULL
+</select>
 </mapper>

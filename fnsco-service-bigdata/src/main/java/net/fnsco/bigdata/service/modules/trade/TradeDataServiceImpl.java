@@ -32,6 +32,7 @@ import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.DbUtil;
@@ -70,7 +71,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         long timer = System.currentTimeMillis();
         String innerCode = "";
         String merId = tradeData.getMerId();
-        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId, tradeData.getSource());
+        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId, tradeData.getChannelType());
         if (null == merchantChannel) {
             //logger.error("渠道商户不存在" + merId + ":" + tradeData.getSource() + ",丢弃该交易流水");
             //return true;
@@ -123,7 +124,38 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         return true;
     }
-
+    /**
+     * 保存交易流水
+     */
+    @Transactional
+    public ResultDTO<String> batchSaveTradeData(TradeData tradeData) {
+        long timer = System.currentTimeMillis();
+        String innerCode = "";
+        String merId = tradeData.getMerId();
+        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId, tradeData.getSource());
+        if (null == merchantChannel) {
+            logger.error("渠道商户不存在" + merId + ":" + tradeData.getSource() + ",丢弃该交易流水");
+            return ResultDTO.fail("渠道商户不存在" + merId + ":" + tradeData.getSource() + ",丢弃该交易流水");
+        } else {
+            innerCode = merchantChannel.getInnerCode();
+        }
+        logger.warn("插入流水，获取商户耗时" + (System.currentTimeMillis() - timer));
+        String txnType = tradeData.getTxnType();
+        if ("2".equals(txnType)) {
+        	tradeData.setStatus("0");
+        }
+        logger.error("保存交易流水信息" + JSON.toJSONString(tradeData));
+        tradeListDAO.insert(tradeData);
+        logger.warn("插入流水总耗时" + (System.currentTimeMillis() - timer));
+        if ("2".equals(txnType)) {
+            TradeData temp = tradeListDAO.selectByIRT(tradeData);
+            TradeData data = new TradeData();
+            data.setStatus("0");
+            data.setId(temp.getId());
+            tradeListDAO.updateByPrimaryKeySelective(data);
+        }
+        return ResultDTO.success();
+    }
     /**
      * 
      * @author sxf
@@ -298,4 +330,10 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         return datas;
     }
+	@Override
+	public String queryByCertifyId(String certifyid) {
+		String cardTotalLength=String.valueOf(certifyid.trim().length());
+		String type=tradeListDAO.queryByCertifyId(cardTotalLength);
+		return type;
+	}
 }

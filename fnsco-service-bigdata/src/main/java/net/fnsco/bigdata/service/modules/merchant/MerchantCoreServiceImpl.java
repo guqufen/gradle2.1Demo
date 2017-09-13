@@ -2,6 +2,7 @@ package net.fnsco.bigdata.service.modules.merchant;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import com.beust.jcommander.internal.Lists;
+import com.beust.jcommander.internal.Maps;
 
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
@@ -126,6 +130,25 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
         PageDTO<MerchantCore> pages = new PageDTO<>(currentPageNum, perPageSize, merchantCore);
         List<MerchantCore> datas = merchantCoreDao.queryPageList(pages);
+        List<String> innerCodeList= Lists.newArrayList();
+        for(MerchantCore core : datas){
+            innerCodeList.add(core.getInnerCode());
+        }
+        Map<String,String> innerMap = Maps.newHashMap();
+        if(!CollectionUtils.isEmpty(innerCodeList)){
+            List<MerchantChannel> chanelList = merchantChannelDao.selectByInnerCodes(innerCodeList);
+            for(MerchantChannel channel :chanelList){
+                if(BigdataConstant.ChannelTypeEnum.PF.getCode().equals(channel.getChannelType())){
+                    innerMap.put(channel.getInnerCode(), "1");
+                }
+            }
+        }
+        for(MerchantCore core : datas){
+            String temp = innerMap.get(core.getInnerCode());
+            if(temp !=null){
+                core.setOpenFixQr(temp);
+            }
+        }
         int totalNum = merchantCoreDao.queryTotalByCondition(merchantCore);
         ResultPageDTO<MerchantCore> result = new ResultPageDTO<MerchantCore>(totalNum, datas);
         result.setCurrentPage(currentPageNum);
@@ -577,5 +600,12 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
 		return innerCode;
 	}
-
+	@Override
+    public List<MerchantChannel> findChannelByInnerCode(String innerCode){
+	    return merchantChannelDao.selectByInnerCode(innerCode);
+	}
+	@Override
+    public MerchantChannel findChannelByMerId(String merId,String channelType){
+	    return merchantChannelDao.selectByMerCode(merId,channelType);
+	}
 }

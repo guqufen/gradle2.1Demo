@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.bigdata.api.constant.BigdataConstant;
@@ -48,17 +49,21 @@ import net.fnsco.core.utils.StringUtil;
 public class MerchantServiceImpl extends BaseService implements MerchantService {
 
     @Autowired
-    private AliasDAO            aliasDAO;
+    private AliasDAO                  aliasDAO;
     @Autowired
-    private MerchantChannelDao  merchantChannelDao;
+    private MerchantChannelDao        merchantChannelDao;
     @Autowired
-    private MerchantCoreDao     merchantCoreDao;
+    private MerchantCoreDao           merchantCoreDao;
     @Autowired
-    private MerchantTerminalDao merchantTerminalDao;
+    private MerchantTerminalDao       merchantTerminalDao;
     @Autowired
-    private MerchantPosDao      merchantPosDao;
+    private MerchantPosDao            merchantPosDao;
     @Autowired
     private MerchantPosSimpleDao      merchantPosSimpleDao;
+    @Autowired
+    private Environment               env;
+    
+    private static final String TAICODE_BASE_URL = "web.base.url";
     /**
       * 
       * @param merNum 商户号
@@ -114,6 +119,19 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
             return ResultDTO.fail(BigdataConstant.E_USERID_NULL);
         }
         List<MerChantCoreDTO> datas = merchantCoreDao.queryAllByUseraId(userId);
+        //增加字段能够生成台码
+        for (MerChantCoreDTO merChantCoreDTO : datas) {
+            if(null == merChantCoreDTO.getId()){
+                merChantCoreDTO.setCanCreateTaiCode(false);
+                continue;
+            }
+            int count = merchantChannelDao.countCanCreateTaiCode(merChantCoreDTO.getId());
+            if(count>0 ){
+                merChantCoreDTO.setCanCreateTaiCode(true);
+            }else{
+                merChantCoreDTO.setCanCreateTaiCode(false);
+            }
+        }
         ResultDTO<List<MerChantCoreDTO>> result = ResultDTO.success(datas);
         return result;
 
@@ -148,6 +166,11 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
             return ResultDTO.fail(BigdataConstant.E_USERID_NULL);
         }
         MerChantCoreDetailDTO datas = merchantCoreDao.queryDetailById(merId);
+        //设置台码url,只为能生成台码的设置url
+        int count = merchantChannelDao.countCanCreateTaiCode(merId);
+        if(count > 0){
+            datas.setTaiCodeUrl(env.getProperty(TAICODE_BASE_URL)+"?innerCode="+datas.getTaiCodeUrl());
+        }
         ResultDTO<MerChantCoreDetailDTO> result = ResultDTO.success(datas);
         return result;
 
