@@ -17,6 +17,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,7 +54,9 @@ public class MerchantInfoController extends BaseController {
 
 	@Autowired
 	private MerchantCoreService merchantCoreService;
-
+	
+	@Autowired
+	private Environment env;
 	/**
 	 * 跳转到商户信息首页
 	 * 
@@ -139,7 +142,8 @@ public class MerchantInfoController extends BaseController {
 	@RequiresPermissions(value = { "m:merchant:export" })
 	public void down(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String g=req.getRealPath("/") ;
-		String filePath=g+"test\\merchantSheet.xlsx";
+		String url=env.getProperty("excle.url");
+		String filePath=g+url;
 		String fileName="merchantSheet.xlsx";
 		//解析excel，获取客户信息集合。
         ReadExcel.downTemplate(filePath, fileName, response);

@@ -89,10 +89,10 @@ public class WebUserOuterService extends BaseService {
     }
 
     // 删除
-    public Integer doDelete(WebUserOuterDO user, Integer loginUserId) {
+    public ResultDTO<String> doDelete(WebUserOuterDO user, Integer loginUserId) {
         logger.info("开始删除UserService.delete,user=" + user.toString());
-        int rows = this.userOuterDAO.deleteById(user.getId());
-        return rows;
+        int rows = this.userOuterDAO.updateById(user.getId());
+        return ResultDTO.success();
     }
 
     // 查询

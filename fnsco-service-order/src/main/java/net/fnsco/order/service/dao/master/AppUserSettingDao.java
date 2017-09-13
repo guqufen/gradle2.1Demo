@@ -45,4 +45,15 @@ public interface AppUserSettingDao {
      * @return List<AppUserSettingDTO>    DOM对象
      */
     List<AppUserSettingDTO> selectAllByUserId(@Param("userId")Integer userId);
+    
+    /**
+     * selectByUserIdAndType:(根据用户id和消息类型查询状态)
+     * @param userId
+     * @param noticeType
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月13日 上午11:48:13
+     * @return AppUserSetting    DOM对象
+     */
+    AppUserSetting selectByUserIdAndType(@Param("userId")Integer userId,@Param("noticeType")String noticeType);
 }

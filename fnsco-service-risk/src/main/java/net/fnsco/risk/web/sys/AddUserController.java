@@ -39,25 +39,17 @@ public class AddUserController extends BaseController {
 		 * 通过id查询删除对象（状态改0）
 		 * @param id
 		 * @return
-		 *//*
+		 */
 		@RequestMapping(value ="/deleteUserById",method= RequestMethod.POST)
 		@ResponseBody
-		public ResultDTO<String> deleteUserById(@RequestParam(value="id[]") Integer[] id){
+		public ResultDTO<String> deleteUserById(@RequestParam(value="id") Integer id){
 			//获取当前登录的用户
-		    WebUserDTO adminUser = (WebUserDTO) getSessionUser();
-		    Integer userId=adminUser.getId();
-		    for (int i = 0; i < id.length; i++) {
-		    	if(id[i]==AuthConstant.SUPER_ADMIN) {
-		    		return ResultDTO.fail(AuthConstant.E_NOT_DELEET_ADMIN);
-		    	}
-		    	if(userId==id[i]) {
-		    		return ResultDTO.fail(AuthConstant.E_NOT_DELEET_ONESELF);
-		    	}
-			}
-			ResultDTO<String> result = userService.deleteById(id);
-			return success(result);
+			WebUserOuterDO adminUser = (WebUserOuterDO) getSessionUser();
+		   // Integer userId=adminUser.getId();
+		    ResultDTO<String> result=userOuterService.doDelete(adminUser, id);
+			return result;
 		}
-		*//**
+		/**
 		 * 添加用户
 		 * @param dept
 		 * @return
