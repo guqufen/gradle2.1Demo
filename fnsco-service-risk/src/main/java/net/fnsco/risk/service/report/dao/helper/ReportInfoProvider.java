@@ -18,6 +18,18 @@ public class ReportInfoProvider {
         ReportInfoDO reportInfo = (ReportInfoDO) params.get("reportInfo");
         return new SQL() {{
         UPDATE(TABLE_NAME);
+        if (StringUtils.isNotBlank(reportInfo.getMerNum())){
+            SET("mer_num=#{reportInfo.merNum}");
+        }
+        if (reportInfo.getStatus()!= null) {
+            SET("status=#{reportInfo.status}");
+        }
+        if (reportInfo.getCreateTime()!= null) {
+            SET("create_time=#{reportInfo.createTime}");
+        }
+        if (reportInfo.getLastModifyTime()!= null) {
+            SET("last_modify_time=#{reportInfo.lastModifyTime}");
+        }
         if (StringUtils.isNotBlank(reportInfo.getMerName())){
             SET("mer_name=#{reportInfo.merName}");
         }
@@ -79,6 +91,18 @@ public class ReportInfoProvider {
         return new SQL() {{
         SELECT("*");
         FROM(TABLE_NAME);
+        if (StringUtils.isNotBlank(reportInfo.getMerNum())){
+            WHERE("mer_num=#{reportInfo.merNum}");
+        }
+        if (reportInfo.getStatus()!= null) {
+            WHERE("status=#{reportInfo.status}");
+        }
+        if (reportInfo.getCreateTime()!= null) {
+            WHERE("create_time=#{reportInfo.createTime}");
+        }
+        if (reportInfo.getLastModifyTime()!= null) {
+            WHERE("last_modify_time=#{reportInfo.lastModifyTime}");
+        }
         if (reportInfo.getId() != null) {
             WHERE("id=#{reportInfo.id}");
         }
@@ -133,6 +157,18 @@ public class ReportInfoProvider {
         return new SQL() {{
         SELECT("count(1)");
         FROM(TABLE_NAME);
+        if (StringUtils.isNotBlank(reportInfo.getMerNum())){
+            WHERE("mer_num=#{reportInfo.merNum}");
+        }
+        if (reportInfo.getStatus()!= null) {
+            WHERE("status=#{reportInfo.status}");
+        }
+        if (reportInfo.getCreateTime()!= null) {
+            WHERE("create_time=#{reportInfo.createTime}");
+        }
+        if (reportInfo.getLastModifyTime()!= null) {
+            WHERE("last_modify_time=#{reportInfo.lastModifyTime}");
+        }
         if (reportInfo.getId() != null) {
             WHERE("id=#{reportInfo.id}");
         }
