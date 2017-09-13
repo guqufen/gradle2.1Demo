@@ -80,7 +80,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     private AgentDao            agentDao;
 
     @Autowired
-    private AppUserMerchant1Dao  appUserMerchantDao;
+    private AppUserMerchant1Dao appUserMerchantDao;
 
     @Autowired
     private MerchantUserRelDao  merchantUserRelDao;
@@ -130,22 +130,22 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
         PageDTO<MerchantCore> pages = new PageDTO<>(currentPageNum, perPageSize, merchantCore);
         List<MerchantCore> datas = merchantCoreDao.queryPageList(pages);
-        List<String> innerCodeList= Lists.newArrayList();
-        for(MerchantCore core : datas){
+        List<String> innerCodeList = Lists.newArrayList();
+        for (MerchantCore core : datas) {
             innerCodeList.add(core.getInnerCode());
         }
-        Map<String,String> innerMap = Maps.newHashMap();
-        if(!CollectionUtils.isEmpty(innerCodeList)){
+        Map<String, String> innerMap = Maps.newHashMap();
+        if (!CollectionUtils.isEmpty(innerCodeList)) {
             List<MerchantChannel> chanelList = merchantChannelDao.selectByInnerCodes(innerCodeList);
-            for(MerchantChannel channel :chanelList){
-                if(BigdataConstant.ChannelTypeEnum.PF.getCode().equals(channel.getChannelType())){
+            for (MerchantChannel channel : chanelList) {
+                if (BigdataConstant.ChannelTypeEnum.PF.getCode().equals(channel.getChannelType())) {
                     innerMap.put(channel.getInnerCode(), "1");
                 }
             }
         }
-        for(MerchantCore core : datas){
+        for (MerchantCore core : datas) {
             String temp = innerMap.get(core.getInnerCode());
-            if(temp !=null){
+            if (temp != null) {
                 core.setOpenFixQr(temp);
             }
         }
@@ -155,6 +155,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
         return result;
     }
+
     @Override
     public List<MerchantCore> queryMerchantList(MerchantCore merchantCore) {
 
@@ -216,8 +217,11 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     public ResultDTO<MerchantCore> queryAllById(Integer id) {
         // TODO Auto-generated method stub
         ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
-        result.setData(merchantCoreDao.queryAllById(id));
-        return result;
+        MerchantCore core = merchantCoreDao.queryAllById(id);
+        if (core == null) {
+            return result.fail();
+        }
+        return result.success(core);
     }
 
     /**
@@ -328,7 +332,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         merchantTerminal.setTermName(request.getParameter("termName"));
         //        merchantTerminal.setPosFactory(request.getParameter("posFactory"));
         //        merchantTerminal.setPosType(request.getParameter("posType"));
-//        merchantTerminal.setMercReferName(request.getParameter("mercReferName"));
+        //        merchantTerminal.setMercReferName(request.getParameter("mercReferName"));
         return merchantTerminal;
     }
 
@@ -461,6 +465,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         return new ResultDTO<>(true, innerCode, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
 
     }
+
     /**
      * (non-Javadoc)批量保存渠道信息
      * @see net.fnsco.bigdata.api.merchant.MerchantCoreService#doAddChannel(java.util.List)
@@ -471,16 +476,17 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     @Override
     public Integer doAddChannel(MerchantChannel merchantChannel) {
 
-        if (null==merchantChannel) {
+        if (null == merchantChannel) {
             return 0;
         }
-        int i=merchantChannelDao.insertSelective(merchantChannel);
-        if(i!=1) {
-        	return 0;
+        int i = merchantChannelDao.insertSelective(merchantChannel);
+        if (i != 1) {
+            return 0;
         }
         return merchantChannel.getId();
 
     }
+
     /**
      * (non-Javadoc) 保存银行卡信息
      * @see net.fnsco.bigdata.api.merchant.MerchantCoreService#doAddMerBanks(java.util.List)
@@ -504,7 +510,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         return new ResultDTO<>(true, innerCode, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
     }
-    
+
     /**
      * (non-Javadoc) 批量导入excel保存银行卡信息
      * @see net.fnsco.bigdata.api.merchant.MerchantCoreService#doAddMerBanks(java.util.List)
@@ -517,13 +523,13 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         if (null == merchantBank) {
             return 0;
         }
-       int i= merchantBankDao.insertSelective(merchantBank);
-       if(i!=1) {
-       	return 0;
-       }
+        int i = merchantBankDao.insertSelective(merchantBank);
+        if (i != 1) {
+            return 0;
+        }
         return merchantBank.getId();
     }
-    
+
     @Override
     public ResultDTO<Integer> deleteByContact(Integer id) {
 
@@ -578,34 +584,36 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(innerCode);
         return merchantCore;
     }
-    
+
     /**
      * (non-Javadoc)产生新的innerCode，必须保持全库唯一
      * @see net.fnsco.bigdata.api.merchant.MerchantCoreService#getInnerCode()
      * @author tangliang
      * @date 2017年9月8日 下午4:14:19
      */
-	@Override
-	public String getInnerCode() {
-	    String innerCode = null;
+    @Override
+    public String getInnerCode() {
+        String innerCode = null;
         MerchantCore record = new MerchantCore();
-        
-        while(true){
+
+        while (true) {
             innerCode = CodeUtil.generateMerchantCode("F");
             record.setInnerCode(innerCode);
-            List<MerchantCore> datas  = merchantCoreDao.queryListByCondition(record);
-            if(CollectionUtils.isEmpty(datas)){
+            List<MerchantCore> datas = merchantCoreDao.queryListByCondition(record);
+            if (CollectionUtils.isEmpty(datas)) {
                 break;
             }
         }
-		return innerCode;
-	}
-	@Override
-    public List<MerchantChannel> findChannelByInnerCode(String innerCode){
-	    return merchantChannelDao.selectByInnerCode(innerCode);
-	}
-	@Override
-    public MerchantChannel findChannelByMerId(String merId,String channelType){
-	    return merchantChannelDao.selectByMerCode(merId,channelType);
-	}
+        return innerCode;
+    }
+
+    @Override
+    public List<MerchantChannel> findChannelByInnerCode(String innerCode) {
+        return merchantChannelDao.selectByInnerCode(innerCode);
+    }
+
+    @Override
+    public MerchantChannel findChannelByMerId(String merId, String channelType) {
+        return merchantChannelDao.selectByMerCode(merId, channelType);
+    }
 }
