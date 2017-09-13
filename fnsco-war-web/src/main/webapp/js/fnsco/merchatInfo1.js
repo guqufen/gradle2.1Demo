@@ -1637,7 +1637,7 @@ function showQrcode(id){
 	    data:{'id':id},
 	    success:function(data){
 	    	console.log(data.data.result);
-	    	$(".qrcode").attr('src',data.data.result);
+	    	$(".qrcode").attr('src',data.data.result)
 	    }
 	})
 	$('#showQrcode').modal();
