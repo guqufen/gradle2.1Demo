@@ -13,6 +13,7 @@ import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.comm.ServiceConstant;
@@ -66,6 +67,11 @@ public class TradeDataOpenController extends BaseController {
         tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
         tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
         tradeData.setRespCode(ServiceConstant.TradeStateEnum.SUCCESS.getCode());
+        tradeData.setPayMedium(BigdataConstant.PayMediumEnum.FIX_QR.getCode());
+        if("00".equals(tradeData.getSource())){
+            tradeData.setChannelType(BigdataConstant.ChannelTypeEnum.LKL.getCode());
+        }
+ 
         tradeDataService.saveTradeData(tradeData);
         String timeStamp = tradeData.getTimeStamp();
         if (!Strings.isNullOrEmpty(timeStamp)) {
@@ -74,7 +80,7 @@ public class TradeDataOpenController extends BaseController {
             }
             String nowDateStr = DateUtils.getDateStrYYYYMMDD(new Date());
             if (!nowDateStr.equals(timeStamp)) {
-                logger.error("重新生成日报"+timeStamp);
+                logger.error("不是当天的数据则重新生成日报"+timeStamp);
                 tradeReportService.buildTradeReportDaTa(timeStamp + "000000", timeStamp + "235959");
             }
         }
