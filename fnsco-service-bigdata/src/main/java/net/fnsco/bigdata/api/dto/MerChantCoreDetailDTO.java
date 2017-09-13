@@ -32,8 +32,34 @@ public class MerChantCoreDetailDTO extends DTO {
     
     private String openBank;
     
-    private String subBankName;;
+    private String subBankName;
+    /**
+     * 台码url
+     */
+    private String taiCodeUrl;
     
+    /**
+     * taiCodeUrl
+     *
+     * @return  the taiCodeUrl
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getTaiCodeUrl() {
+        return taiCodeUrl;
+    }
+
+    /**
+     * taiCodeUrl
+     *
+     * @param   taiCodeUrl    the taiCodeUrl to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setTaiCodeUrl(String taiCodeUrl) {
+        this.taiCodeUrl = taiCodeUrl;
+    }
+
     /**
      * accountNo
      *
