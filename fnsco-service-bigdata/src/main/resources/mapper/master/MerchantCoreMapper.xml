@@ -39,6 +39,7 @@
      <result column="account_no" property="accountNo" jdbcType="VARCHAR" />
      <result column="open_bank" property="openBank" jdbcType="VARCHAR" />
      <result column="sub_bank_name" property="subBankName" jdbcType="VARCHAR" />
+     <result column="inner_code" property="taiCodeUrl" jdbcType="VARCHAR"/>
   </resultMap>
   <!-- APP商户列表实体结果集 -->
   <resultMap  id="CoreResultMap" type="net.fnsco.bigdata.api.dto.MerChantCoreDTO">
