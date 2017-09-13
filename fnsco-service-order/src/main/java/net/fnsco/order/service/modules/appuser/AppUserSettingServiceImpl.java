@@ -124,7 +124,7 @@ public class AppUserSettingServiceImpl extends BaseService implements AppUserSet
         }
         
         List<AppUserSettingDTO> datas = appUserSettingDao.selectAllByUserId(userId);
-        if(CollectionUtils.isNotEmpty(datas) && datas.size() == 2){
+        if(CollectionUtils.isNotEmpty(datas) && datas.size() == 3){
             return datas;
         }
         //当不全时 初始化默认数据
@@ -142,7 +142,13 @@ public class AppUserSettingServiceImpl extends BaseService implements AppUserSet
         record1.setUserId(userId);
         record1.setUpdateTime(record1.getCreateTime());
         appUserSettingDao.insertSelective(record1);
-        
+        AppUserSetting record3 = new AppUserSetting();
+        record3.setCreateTime(new Date());
+        record3.setNoticeType("2");
+        record3.setOpenStatus("1");
+        record3.setUserId(userId);
+        record3.setUpdateTime(record3.getCreateTime());
+        appUserSettingDao.insertSelective(record3);
         List<AppUserSettingDTO> result = appUserSettingDao.selectAllByUserId(userId);
         return result;
         

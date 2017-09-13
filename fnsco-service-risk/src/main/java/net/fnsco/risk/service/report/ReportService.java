@@ -19,12 +19,16 @@ import net.fnsco.risk.service.report.dao.ReportRepaymentHistoryDAO;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 import net.fnsco.risk.service.report.entity.YearReportDO;
+import net.fnsco.risk.web.report.JavaMailSender;
 
 @Service
 public class ReportService extends BaseService{
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private ReportInfoDAO reportInfoDAO;
+//    @Autowired
+//    private JavaMailSender mailSender;
+
     @Autowired
     private ReportRepaymentHistoryDAO reportRepaymentHistoryDAO;
     //分页查询风控报告列表
