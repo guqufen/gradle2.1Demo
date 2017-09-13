@@ -123,7 +123,7 @@ public class WebUserOuterProvider {
         }
         if (webUserOuter.getCreaterTime() != null) {
             WHERE("creater_time=#{webUserOuter.createrTime}");
-        }
+        }WHERE("status!=0}");
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -177,7 +177,7 @@ public class WebUserOuterProvider {
         }
         if (webUserOuter.getCreaterTime() != null) {
             WHERE("creater_time=#{webUserOuter.createrTime}");
-        }
+        }WHERE("status!=0}");
         }}.toString();
     }
 }

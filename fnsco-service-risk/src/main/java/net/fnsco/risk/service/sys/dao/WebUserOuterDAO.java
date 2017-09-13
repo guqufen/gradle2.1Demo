@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 import net.fnsco.risk.service.sys.dao.helper.WebUserOuterProvider;
@@ -23,9 +24,9 @@ public interface WebUserOuterDAO {
     @Insert("INSERT into risk_web_user_outer(id,type,name,password,real_name,mobile,email,sex,alias_name,department,agent_id,remark,modify_time,modify_user_id,creater_time) VALUES (#{id},#{type},#{name},#{password},#{realName},#{mobile},#{email},#{sex},#{aliasName},#{department},#{agentId},#{remark},#{modifyTime},#{modifyUserId},#{createrTime})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(WebUserOuterDO webUserOuter);
-
-    @Delete("DELETE FROM risk_web_user_outer WHERE id = #{id}")
-    public int deleteById(@Param("id") int id);
+    
+    @Update("UPDATE risk_web_user_outer SET status='0' WHERE id = #{id}")
+    public int updateById(@Param("id") Integer id);
 
     @UpdateProvider(type = WebUserOuterProvider.class, method = "update")
     public int update(@Param("webUserOuter") WebUserOuterDO  webUserOuter);
