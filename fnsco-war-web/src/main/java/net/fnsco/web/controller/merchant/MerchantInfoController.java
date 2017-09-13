@@ -90,12 +90,33 @@ public class MerchantInfoController extends BaseController {
 								String dateString = formatter.format(li);
 								merchantdo.setModifyTimeStr(dateString);;
 							}
+						if (null != merchantdo.getLegalValidCardType()) {
+							if (merchantdo.getSource()==0) {
+								merchantdo.setSourceStr("WEB");
+							}else if(merchantdo.getSource()==1) {
+								merchantdo.setSourceStr("APP");
+							}
+							}
+						// 法人有效证件类型
+						if (null != merchantdo.getLegalValidCardType()) {
+							if ("0".equals(merchantdo.getLegalValidCardType())) {
+								merchantdo.setLegalValidCardType("身份证");
+							} else if ("1".equals(merchantdo.getLegalValidCardType())) {
+								merchantdo.setLegalValidCardType("护照");
+							}else if ("2".equals(merchantdo.getLegalValidCardType())) {
+								merchantdo.setLegalValidCardType("士兵证");
+							}else if ("3".equals(merchantdo.getLegalValidCardType())) {
+								merchantdo.setLegalValidCardType("军官证");
+							}else if ("4".equals(merchantdo.getLegalValidCardType())) {
+								merchantdo.setLegalValidCardType("护照");
+							}
+						}
 						}
 					}
 		JSONObject jObject = new JSONObject();
         jObject.put("data", dataList);
         List<MerchantCore> list = (List<MerchantCore>) jObject.get("data");
-        String itemMark = "merName,innerCode,legalPerson,legalPersonMobile,legalValidCardType,cardNum,cardValidTime,businessLicenseNum,businessLicenseValidTime,taxRegistCode,registAddress,mercFlag,source,modifyTimeStr";
+        String itemMark = "merName,innerCode,legalPerson,legalPersonMobile,legalValidCardType,cardNum,cardValidTime,businessLicenseNum,businessLicenseValidTime,taxRegistCode,registAddress,mercFlag,sourceStr,modifyTimeStr";
         String itemParap = "商户名, 内部商户号, 商户法人姓名, 法人手机号码, 法人有效证件类型, 证件号码, 证件有效期, 营业执照号码, 营业执照有效期, 税务登记号, 商户注册地址, 商户标签, 商户注册来源,创建日期";
         String[] itemMarks = itemMark.split(",");// 键
         String[] itemParaps = itemParap.split(",");// 列头
@@ -118,8 +139,8 @@ public class MerchantInfoController extends BaseController {
 	@RequiresPermissions(value = { "m:merchant:export" })
 	public void down(HttpServletRequest req, HttpServletResponse response) throws IOException {
 		String g=req.getRealPath("/") ;
-		String filePath=g+"test\\第八批商户入件信息表.xlsx";
-		String fileName="第八批商户入件信息表.xlsx";
+		String filePath=g+"test\\merchantSheet.xlsx";
+		String fileName="merchantSheet.xlsx";
 		//解析excel，获取客户信息集合。
         ReadExcel.downTemplate(filePath, fileName, response);
 	}

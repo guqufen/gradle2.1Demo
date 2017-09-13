@@ -122,7 +122,7 @@
         pagination: true,   //是否显示分页（*）
         sortable: true,   //是否启用排序
         sortOrder: "asc",   //排序方式
-        showExport: true, //显示导出按钮
+        showExport: false, //显示导出按钮
         buttonsAlign:"right",  //按钮位置
         exportDataType: "all",//导出合适条件的所有数据
         exportTypes:['excel'],//只导出excel
@@ -347,9 +347,12 @@
      			   var amt=$.trim($('#txt_search_price').val());
      			   var startSendTime=$('#datetimepicker1').val();
      			   var endSendTime=$('#datetimepicker2').val();
+     			   var startTime=$('#datetimepicker3').val();
+    			   var endTime=$('#datetimepicker4').val();
      			   var url=PROJECT_NAME+'/web/trade/export'+'?orderNo='+orderNo+'&merId='+merId
 					+'&merName='+merName+'&amt='+amt
-					+'&startSendTime='+startSendTime+'&endSendTime='+endSendTime;
+					+'&startSendTime='+startSendTime+'&endSendTime='+endSendTime
+					+'&startTime='+startTime+'&endTime='+endTime;
 		window.open(url, 'Excel导出');
     }
     window.operateEvents = {

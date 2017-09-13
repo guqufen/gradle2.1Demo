@@ -52,6 +52,11 @@ public class MerchantCore extends DTO {
 	private String mercFlag;
 
 	private Integer source;
+	private String sourceStr;
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	private String modifyUserId;
 
@@ -330,5 +335,12 @@ public class MerchantCore extends DTO {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	public String getSourceStr() {
+		return sourceStr;
+	}
+
+	public void setSourceStr(String sourceStr) {
+		this.sourceStr = sourceStr;
 	}
 }

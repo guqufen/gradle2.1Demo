@@ -102,6 +102,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setReferNo(tradeData.getReferNo());
         tradeDataEntity.setInnerCode(innerCode);
         tradeDataEntity.setCreateTime(new Date());
+        if(tradeData.getCreateTime()!=null) {
+        	tradeDataEntity.setCreateTime(tradeData.getCreateTime());
+        }
         tradeDataEntity.setRespCode(tradeData.getRespCode());
 
         tradeDataEntity.setCertifyId(tradeData.getCardNo());
@@ -311,6 +314,13 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
+        }
+
+        if (!StringUtils.isEmpty(tradeDataDTO.getStartTime())) {
+            tradeDataDTO.setStartTime(DateUtils.getDateStartTime(tradeDataDTO.getStartTime()));
+        }
+        if (!StringUtils.isEmpty(tradeDataDTO.getEndTime())) {
+            tradeDataDTO.setEndTime(DateUtils.getDateEndTime(tradeDataDTO.getEndTime()));
         }
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
         List<TradeData> datas = tradeListDAO.queryByAllCondition(tradeData);
