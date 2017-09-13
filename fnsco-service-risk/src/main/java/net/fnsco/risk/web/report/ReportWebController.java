@@ -22,7 +22,6 @@ import net.fnsco.risk.service.report.entity.ReportInfoDO;
 public class ReportWebController extends BaseController{
     @Autowired
     private ReportService reportService;
-    
     // 分页查询商户列表
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @ResponseBody
