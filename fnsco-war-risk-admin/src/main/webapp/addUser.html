@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="pragma" content="no -cache">
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+    <meta http-equiv="expires" content="0">
+    <title>反馈管理-法奈昇大数据平台</title>
+    <meta name="keywords" content="法奈昇大数据平台">
+    <meta name="description" content="法奈昇大数据平台">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="panel-body animated fadeInRight">
+  <div class="panel panel-default">
+     <!-- 搜索条件 -->
+     <form id="formSearch" class="form-horizontal">
+         <div class="form-group" style="margin-top:15px">
+             <div class="row col-sm-10">
+             	<div class="col-sm-5 query-time">
+                        <label class="control-label" for="status">状态:</label>
+                        <button type="button" id="btn_start" class="btn btn-default" onclick="javascript:queryAllStart(id);">启用</button>
+                 		<button type="button" id="btn_disuse" class="btn btn-default" onclick="javascript:queryAllDisuse('id');">停用</button>
+             	 </div>
+                 </div>
+             </div>
+     </form>
+         </div>
+     <!-- 表格组件 -->
+     <div class="ibox float-e-margins">
+         <div class="ibox-content">
+             <div class="row row-lg">
+                 <div class="col-sm-12">
+                 <div id="toolbar">
+					 <div id="toolbar">
+                         <button id="btn_add" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">
+                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                         </button>
+                     </div> 
+                     <table id="table"></table>
+                 </div>
+             </div>
+         </div>
+     </div>
+  </div>
+  <!-- detailsModel编辑start -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModelLabel" data-backdrop="static" data-keyboard="false">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	                <h4 class="modal-title" id="editModalLabel">编辑</h4>
+	            </div>
+	            <div class="modal-body">
+	                <div class="tab-content">
+	                        <div class="row">
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="mobile">手机号：</label>
+	                                <input type="text" class="form-control" id=mobile name="mobile" required="required">
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="userName">名称：</label>
+	                                <input type="text" class="form-control" id="userName" name="userName">
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="submitTime">密码：</label>
+	                                <input type="text" class="form-control" id="submitTime" name="submitTime">
+	                            </div>
+	                            <div class="col-sm-12">
+	                                <label class="control-label" for="content">类型：</label>
+	                                <select id="sex" name="sex" class="form-control">
+		                                   <option value="1">管理员</option>
+		                                   <option value="2">合作者</option>
+		                                   <option value="2">消费者</option>
+		                            </select>                                
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="submitTime">邮件：</label>
+	                                <input type="text" class="form-control" id="submitTime" name="submitTime">
+	                            </div>
+	                            <div class="col-sm-12">
+	                                <label class="control-label" for="content">备注：</label>
+	                                <textarea id="content" name="content" class="form-control" rows="5"></textarea>	                                
+	                            </div>
+	                        </div>  
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>    
+<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript" src="js/fnsco/common.js"></script>
+<script src="js/fnsco/addUser.js"></script>
+<script type="text/javascript">
+</script>
+</body>
+</html>
