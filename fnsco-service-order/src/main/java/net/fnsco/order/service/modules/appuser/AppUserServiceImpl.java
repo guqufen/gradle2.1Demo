@@ -18,10 +18,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import net.fnsco.bigdata.service.dao.master.MerchantContactDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
-import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseService;
@@ -29,10 +27,10 @@ import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
-import net.fnsco.core.utils.OssUtil;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.AppOldListDTO;
@@ -41,6 +39,7 @@ import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserInfoDTO;
 import net.fnsco.order.api.dto.AppUserManageDTO;
 import net.fnsco.order.api.dto.AppUserMerchantDTO;
+import net.fnsco.order.api.dto.AppUserSettingDTO;
 import net.fnsco.order.api.dto.BandDto;
 import net.fnsco.order.api.dto.QueryBandDTO;
 import net.fnsco.order.api.dto.SmsCodeDTO;
@@ -72,6 +71,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private SysMsgAppSuccDao               sysMsgAppSuccDao;
     @Autowired
     private SysAppMsgService               sysAppMsgService;
+    @Autowired
+    private AppUserSettingService          appUserSettingService;
     //注册
     @Override
     @Transactional
@@ -382,6 +383,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         map.put("unReadMsgIds", unReadMsgIds);
         map.put("Shopkeeper", Shopkeeper);
+        //返回值增加设置状态
+        List<AppUserSettingDTO> settingstatus =  appUserSettingService.installSettingStatus(appUserId);
+        map.put("appSettings", settingstatus);
         return ResultDTO.success(map);
     }
 

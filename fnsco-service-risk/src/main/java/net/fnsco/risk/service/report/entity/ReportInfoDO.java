@@ -1,5 +1,6 @@
 package net.fnsco.risk.service.report.entity;
 
+import java.util.Date;
 
 public class ReportInfoDO {
 
@@ -77,8 +78,53 @@ public class ReportInfoDO {
      * 贷款周期
      */
     private String loanCycle;
+    /**
+     * 商户编码
+     */
+    private String merNum;
+    /**
+     * 状态
+     */
+    private Integer status;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 最后修改时间
+     */
+    private Date lastModifyTime;
+    public String getMerNum() {
+        return merNum;
+    }
 
+    public void setMerNum(String merNum) {
+        this.merNum = merNum;
+    }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getLastModifyTime() {
+        return lastModifyTime;
+    }
+
+    public void setLastModifyTime(Date lastModifyTime) {
+        this.lastModifyTime = lastModifyTime;
+    }
 
     public Integer getId() {
         return id;
@@ -200,10 +246,11 @@ public class ReportInfoDO {
         this.loanCycle = loanCycle;
     }
 
-
-
     @Override
     public String toString() {
-        return "[id="+ id + ", merName="+ merName + ", businessLicenseNum="+ businessLicenseNum + ", businessAddress="+ businessAddress + ", businessDueTime="+ businessDueTime + ", industry="+ industry + ", tradingArea="+ tradingArea + ", turnover="+ turnover + ", size="+ size + ", reportCycle="+ reportCycle + ", reportTimer="+ reportTimer + ", riskWarning="+ riskWarning + ", quota="+ quota + ", feeRate="+ feeRate + ", loanCycle="+ loanCycle + "]";
+        return "ReportInfoDO [id=" + id + ", merName=" + merName + ", businessLicenseNum=" + businessLicenseNum + ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime
+               + ", industry=" + industry + ", tradingArea=" + tradingArea + ", turnover=" + turnover + ", size=" + size + ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer
+               + ", riskWarning=" + riskWarning + ", quota=" + quota + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status=" + status + ", createTime=" + createTime
+               + ", lastModifyTime=" + lastModifyTime + "]";
     }
 }

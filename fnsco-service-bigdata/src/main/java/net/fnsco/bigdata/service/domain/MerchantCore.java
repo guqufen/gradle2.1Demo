@@ -73,8 +73,31 @@ public class MerchantCore extends DTO {
 	private List<MerchantChannel> channel;// 关联的渠道信息
 
 	private List<MerchantBank> banks;// 关联的银行卡信息
+	private String openFixQr;
+	
+	/**
+     * openFixQr
+     *
+     * @return  the openFixQr
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOpenFixQr() {
+        return openFixQr;
+    }
 
-	public List<MerchantFile> getFiles() {
+    /**
+     * openFixQr
+     *
+     * @param   openFixQr    the openFixQr to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOpenFixQr(String openFixQr) {
+        this.openFixQr = openFixQr;
+    }
+
+    public List<MerchantFile> getFiles() {
 		return files;
 	}
 

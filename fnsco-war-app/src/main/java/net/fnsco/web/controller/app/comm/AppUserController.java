@@ -25,7 +25,9 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
+import net.fnsco.order.api.dto.AppSettingDTO;
 import net.fnsco.order.api.dto.AppUserDTO;
 
 /**
@@ -40,6 +42,8 @@ import net.fnsco.order.api.dto.AppUserDTO;
 public class AppUserController extends BaseController {
     @Autowired
     private AppUserService appUserService;
+    @Autowired
+    private AppUserSettingService appUserSettingService;
     @Autowired
     private Environment env;
 
@@ -207,6 +211,30 @@ public class AppUserController extends BaseController {
     public ResultDTO<String> getPersonInfo(@RequestBody AppUserDTO appUserDTO) {
         ResultDTO<String> result = appUserService.getUserInfo(appUserDTO);
         return result;
+    }
+    
+    /**
+     * updateSettingStatus:(更新app用户消息通知状态)
+     * @param appSettingDTO
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月12日 下午4:41:21
+     * @return ResultDTO<String>    DOM对象
+     */
+    @RequestMapping(value = "/updateSettingStatus")
+    @ApiOperation(value = "更新消息通知设置状态")
+    public ResultDTO<String> updateSettingStatus(@RequestBody AppSettingDTO appSettingDTO) {
+        if(null == appSettingDTO.getUserId()){
+            return ResultDTO.fail(ApiConstant. E_USER_ID_NULL);
+        }
+        if(Strings.isNullOrEmpty(appSettingDTO.getNoticeType()) || Strings.isNullOrEmpty(appSettingDTO.getOpenStatus())){
+            return ResultDTO.fail(ApiConstant. E_SETTING_STATUS_NULL);
+        }
+        int result = appUserSettingService.updateByPrimaryKeySelective(appSettingDTO);
+        if(result>0){
+            return ResultDTO.success();
+        }
+        return ResultDTO.fail();
     }
 }
 

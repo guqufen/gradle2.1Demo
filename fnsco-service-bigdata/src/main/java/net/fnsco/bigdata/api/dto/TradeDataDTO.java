@@ -31,17 +31,16 @@ public class TradeDataDTO extends DTO {
 
     private String startSendTime;//条件查询 发送开始时间
     private String endSendTime;  //条件查询 发送结束时间
-    
+
     private String startTime;    //条件查询 交易开始时间
     private String endTime;      //条件查询 交易结束时间
 
-    private String txnType;     //交易类型1消费2撤销
+    private String txnType;      //交易类型1消费2撤销
 
-    private String respCode;
+    private String respCode;    //应答码
 
     private String cardNo;       //卡号
     private String cardOrg;      // :卡组织，00 境内借记卡 ；01 境内贷记卡 ； 60 境外借记卡 ； 61 境外贷记卡
-    private String merName;       //商户名称
     
     private String 	innerCode;
     private String 	txnSubType;
@@ -50,7 +49,6 @@ public class TradeDataDTO extends DTO {
     private String	dcType;
     private String	certifyId;
     private String	msgDestId;
-    private String	channelType;
     private String	payTimeOut;
     private String	subject;
     private String	body;
@@ -125,15 +123,6 @@ public class TradeDataDTO extends DTO {
 		this.msgDestId = msgDestId;
 	}
 
-	public String getChannelType() {
-		return channelType;
-	}
-
-	public void setChannelType(String channelType) {
-		this.channelType = channelType;
-	}
-
-
 	public String getPayTimeOut() {
 		return payTimeOut;
 	}
@@ -198,13 +187,64 @@ public class TradeDataDTO extends DTO {
 		this.succTime = succTime;
 	}
 
-	/**
+	
+    private String merName;      //商户名称
+
+    private String payMedium;    //支付媒介00pos机01app02台码
+    private String channelType;  //渠道
+
+    /**
+     * payMedium
+     *
+     * @return  the payMedium
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getPayMedium() {
+        return payMedium;
+    }
+
+    /**
+     * payMedium
+     *
+     * @param   payMedium    the payMedium to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPayMedium(String payMedium) {
+        this.payMedium = payMedium;
+    }
+
+    /**
+     * channelType
+     *
+     * @return  the channelType
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getChannelType() {
+        return channelType;
+    }
+
+    /**
+     * channelType
+     *
+     * @param   channelType    the channelType to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
+    }
+
+    /**
+>>>>>>> 66c23d160a3a16ae1deefd5afc452cde023a9778
      * startTime
      *
      * @return  the startTime
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getStartTime() {
         return startTime;
     }
@@ -215,7 +255,7 @@ public class TradeDataDTO extends DTO {
      * @param   startTime    the startTime to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
@@ -226,7 +266,7 @@ public class TradeDataDTO extends DTO {
      * @return  the endTime
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getEndTime() {
         return endTime;
     }
@@ -237,7 +277,7 @@ public class TradeDataDTO extends DTO {
      * @param   endTime    the endTime to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
@@ -248,7 +288,7 @@ public class TradeDataDTO extends DTO {
      * @return  the merName
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getMerName() {
         return merName;
     }
@@ -259,7 +299,7 @@ public class TradeDataDTO extends DTO {
      * @param   merName    the merName to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setMerName(String merName) {
         this.merName = merName;
     }

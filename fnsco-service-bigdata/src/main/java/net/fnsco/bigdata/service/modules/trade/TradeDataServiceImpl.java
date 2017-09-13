@@ -71,7 +71,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         long timer = System.currentTimeMillis();
         String innerCode = "";
         String merId = tradeData.getMerId();
-        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId, tradeData.getSource());
+        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId, tradeData.getChannelType());
         if (null == merchantChannel) {
             //logger.error("渠道商户不存在" + merId + ":" + tradeData.getSource() + ",丢弃该交易流水");
             //return true;

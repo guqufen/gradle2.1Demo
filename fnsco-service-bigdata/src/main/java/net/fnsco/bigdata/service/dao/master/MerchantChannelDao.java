@@ -34,6 +34,12 @@ public interface MerchantChannelDao {
      */
     List<MerchantChannel> selectByInnerCode(@Param("innerCode") String innerCode);
     /**
+     * 根据innercode查询
+     * @param innerCode
+     * @return
+     */
+    List<MerchantChannel> selectByInnerCodes(@Param("innerCodes") List<String> innerCodes);
+    /**
      * deleteByMerCoreIds:(这里用一句话描述这个方法的作用) 根据core实体IDS删除关联数据
      *
      * @param ids
@@ -43,4 +49,14 @@ public interface MerchantChannelDao {
      * @since  CodingExample　Ver 1.1
      */
     int deleteByMerCoreIds(Integer[] ids);
+    /**
+     * 
+     * countCanCreateTaiCode:(根据商家ID查询该商家是否可以生成台码)
+     * @param merId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月13日 上午9:38:19
+     * @return int    DOM对象
+     */
+    int countCanCreateTaiCode(@Param("merId") Integer merId);
 }

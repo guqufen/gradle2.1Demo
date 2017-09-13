@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
@@ -15,6 +16,7 @@ import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.order.api.appuser.AppUserMerchantService;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.AppUserMerchantOutDTO;
@@ -145,6 +147,12 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
                         bandList.setMobile(user.getMobile());
                         bandList.setUserName(user.getUserName());
                         bandList.setIsDelete("2");
+                        //新增加头像属性
+                        String headImagePath = user.getHeadImagePath();
+                        if(!Strings.isNullOrEmpty(headImagePath)){
+                            String path = headImagePath.substring(headImagePath.indexOf("^")+1);
+                            bandList.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+                        }
                         listDto.add(bandList);
                     }else{
                         logger.error(li.getAppUserId()+"该用户ID不存在!");
