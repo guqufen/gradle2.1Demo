@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +28,9 @@ import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.comm.ServiceConstant;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
+import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.QrUtil;
 import net.fnsco.core.utils.dto.QrDTO;
@@ -42,8 +43,8 @@ import net.fnsco.web.controller.pay.dto.PfNotifyDTO;
  * Created by sxf on 2017/7/12.
  */
 @Controller
-@RequestMapping("/Web/pay")
-@Api(value = "/Web/pay", tags = { "固定二维码，台码功能" })
+@RequestMapping("/web/pay")
+@Api(value = "/web/pay", tags = { "固定二维码，台码功能" })
 public class FixedQrPayForPfAction extends BaseController {
 
     @Autowired
@@ -158,10 +159,14 @@ public class FixedQrPayForPfAction extends BaseController {
     //商户导出
     @RequestMapping("/getQrImage")
     @ResponseBody
-    public String getQrImage(@RequestParam("innerCode") String innerCode) {
+    public ResultDTO getQrImage(@RequestParam("id") Integer id) {
+        ResultDTO<MerchantCore> result = merchantCoreService.queryAllById(id);
+        if (!result.isSuccess()) {
+            return ResultDTO.fail("商户不存在" + id);
+        }
+        MerchantCore core = result.getData();
+        String innerCode = core.getInnerCode();
         String host = env.getProperty("web.base.url");
-        String resultPage = "ups/control/merchantQrImage";
-        String errorImage = host + "/img/qr_error.png";
         boolean flag = false;
         List<MerchantChannel> channelList = merchantCoreService.findChannelByInnerCode(innerCode);
         for (MerchantChannel channel : channelList) {
@@ -171,7 +176,7 @@ public class FixedQrPayForPfAction extends BaseController {
         }
         if (!flag) {
             logger.error("二维码生成出错，该商户未开通浦发扫码支付" + innerCode);
-            return resultPage;
+            return ResultDTO.fail("二维码生成出错，该商户未开通浦发扫码支付");
         }
         String content = env.getProperty("qr.redrect.url");
         String format = env.getProperty("qr.format");
@@ -183,7 +188,7 @@ public class FixedQrPayForPfAction extends BaseController {
         String fileUrl = env.getProperty("qr.fileUrl");
         File f = new File(filePath + fileName);
         if (f.exists()) {
-            return fileUrl + fileName;
+            ResultDTO.success(fileUrl + fileName);
         }
         QrDTO qrDTO = new QrDTO();
         qrDTO.setFileName(fileName);
@@ -194,12 +199,11 @@ public class FixedQrPayForPfAction extends BaseController {
         qrDTO.setWidth(Integer.parseInt(env.getProperty("qr.width")));
         try {
             QrUtil.createImage(qrDTO);
-            String qrImagePath = fileUrl + fileName;
         } catch (Exception ex) {
-            logger.error("通过成二维码系统异常", ex);
-            return errorImage;
+            logger.error("生成二维码出错", ex);
+            return ResultDTO.fail("生成二维码出错");
         }
-        return resultPage;
+        return ResultDTO.success(fileUrl + fileName);
     }
 
     /**
