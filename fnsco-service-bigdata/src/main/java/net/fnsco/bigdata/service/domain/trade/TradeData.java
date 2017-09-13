@@ -104,8 +104,12 @@ public class TradeData {
 
     private Date         createTime;
     
+    private String       payMedium;
+    
+    
     private String       paySubType;    //交易子类型
     private List<String>       paySubTypes;    //交易子类型
+    
     private String       startSendTime; //条件查询 发送开始时间
     private String       endSendTime;   //条件查询 发送结束时间
 
@@ -120,6 +124,28 @@ public class TradeData {
     //创建时间string类型显示
     private String 		 createTimeStr;
     
+    /**
+     * payMedium
+     *
+     * @return  the payMedium
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getPayMedium() {
+        return payMedium;
+    }
+
+    /**
+     * payMedium
+     *
+     * @param   payMedium    the payMedium to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPayMedium(String payMedium) {
+        this.payMedium = payMedium;
+    }
+
     public String getCreateTimeStr() {
 		return createTimeStr;
 	}

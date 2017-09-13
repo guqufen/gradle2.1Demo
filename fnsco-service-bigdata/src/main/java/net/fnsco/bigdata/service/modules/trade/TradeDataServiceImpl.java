@@ -176,6 +176,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         if (!CollectionUtils.isEmpty(merchantCore.getPayType())) {
             tradeData.setPaySubTypes(merchantCore.getPayType());
         }
+        if(!Strings.isNullOrEmpty(merchantCore.getPayMedium())){
+            tradeData.setPayMedium(merchantCore.getPayMedium());
+        }
         //根据pos查询终端列表
         List<String> posList = merchantCore.getTerminals();
         if (!CollectionUtils.isEmpty(posList)) {

@@ -77,7 +77,9 @@ public class ShiroConfig {
         filterMap.put("/captcha.jpg", "anon");
         //大屏幕报表不拦截
         filterMap.put("/web/report/getTradeDataTotle", "anon");
-        filterMap.put("/web/report/getTradeDataList", "anon");
+        filterMap.put("/web/fileInfo/Import", "anon");
+        filterMap.put("/web/pay/fixedQr", "anon");
+        filterMap.put("/web/pay/fixedQr/callbackPF", "anon");
         filterMap.put("/", "anon");
         //filterMap.put("/**/*", "anon");
         //filterMap.put("/*", "anon");
