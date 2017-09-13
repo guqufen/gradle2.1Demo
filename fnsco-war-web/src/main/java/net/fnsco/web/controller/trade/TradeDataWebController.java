@@ -27,6 +27,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.ExcelUtils;
+import net.fnsco.core.utils.ReadExcel;
 import net.sf.json.JSONObject;
 
 /**
@@ -166,5 +167,15 @@ public class TradeDataWebController extends BaseController {
 
 		ouputStream.flush();
 		ouputStream.close();
+	}
+	@RequestMapping(value = "/down", method = RequestMethod.GET)
+	@ResponseBody
+	@RequiresPermissions(value = { "m:trade:export" })
+	public void down(HttpServletRequest req, HttpServletResponse response) throws IOException {
+		String g=req.getRealPath("/") ;
+		String filePath=g+"test\\第八批商户入件信息表.xlsx";
+		String fileName="第八批商户入件信息表.xlsx";
+		//解析excel，获取客户信息集合。
+        ReadExcel.downTemplate(filePath, fileName, response);
 	}
 }

@@ -6,12 +6,14 @@ import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.dto.TradeDataPageDTO;
 import net.fnsco.bigdata.api.dto.TradeDataQueryDTO;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 public interface TradeDataService {
 
     boolean saveTradeData(TradeDataDTO tradeData);
-
+    
+    ResultDTO<String> batchSaveTradeData(TradeData tradeData);
     /**
      * 条件查询所有数据
      * @param merchantCore
@@ -20,6 +22,8 @@ public interface TradeDataService {
     TradeDataPageDTO<TradeData> queryAllByCondition(TradeDataQueryDTO merchantCore);
 
     TradeData queryByTradeId(String tradeId);
+    
+    String queryByCertifyId(String certifyid);
 
     /**
      * queryTradeData:(这里用一句话描述这个方法的作用) web分页查询

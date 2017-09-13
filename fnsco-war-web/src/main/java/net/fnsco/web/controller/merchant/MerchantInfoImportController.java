@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
+import net.fnsco.bigdata.service.modules.trade.TradeDataImportService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.ReadExcel;
@@ -30,6 +32,8 @@ public class MerchantInfoImportController extends BaseController {
 
 	@Autowired
 	private MerchantInfoImportService merchantInfoImportService;
+	@Autowired
+	private TradeDataImportService tradeDataImportService;
 
 	// 重写doImport方法，处理事件识别请求
 	@RequestMapping(value = "/doImport", method = RequestMethod.POST)
@@ -38,8 +42,20 @@ public class MerchantInfoImportController extends BaseController {
 			throws ServletException, IOException, ParseException {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-
-		MultipartFile file = fileMap.get("excel_file");
+		Set<String> set = fileMap.keySet(); // 取出所有的key值
+		String key = null;
+		for (String str : set) {
+			key = str;
+		}
+		MultipartFile file = null;
+		int num = 0;
+		if ("excel_file_merchant".equals(key)) {
+			file = fileMap.get("excel_file_merchant");
+			num = 1;
+		} else if ("excel_file_trade".equals(key)) {
+			file = fileMap.get("excel_file_trade");
+			num = 2;
+		}
 		// 判断文件是否为空
 		if (file == null) {
 			return null;
@@ -55,20 +71,25 @@ public class MerchantInfoImportController extends BaseController {
 		ReadExcel readExcel = new ReadExcel();
 		// 解析excel，获取客户信息集合。
 		List<Object[]> customerList = readExcel.getExcelInfo(name, file);
-		//获取当前登录的用户
-	    WebUserDTO adminUser = (WebUserDTO) getSessionUser();
-	    Integer userId=adminUser.getId();
+		// 获取当前登录的用户
+		WebUserDTO adminUser = (WebUserDTO) getSessionUser();
+		Integer userId = adminUser.getId();
 		// 批量导入。参数：文件名，文件。
-		ResultDTO<String> result = merchantInfoImportService.batchImportToDB(customerList,userId);
+		ResultDTO<String> result = null;
+		if (num == 1) {
+			result = merchantInfoImportService.merchantBatchImportToDB(customerList, userId);
+		} else if (num == 2) {
+			result = tradeDataImportService.tradeBatchImportToDB(customerList);
+		}
 		if (!result.isSuccess()) {
 			Map<String, String> map = new HashMap<>();
-			if(("").equals(result.getMessage())) {
-				map.put("data","批量导入EXCEL失败！" );
+			if (("").equals(result.getMessage())) {
+				map.put("data", "批量导入EXCEL失败！");
 				return map;
 			}
 			map.put("data", result.getMessage());
 			return map;
-		} 
+		}
 		Map<String, String> map = new HashMap<>();
 		map.put("data", "success");
 		return map;

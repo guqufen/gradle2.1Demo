@@ -72,4 +72,6 @@ public interface TradeDataDAO {
     int selectCountByIRT(TradeData record);
     
     Map querySumByCondition(TradeData record);
+
+	String queryByCertifyId(String cardTotalLength);
 }

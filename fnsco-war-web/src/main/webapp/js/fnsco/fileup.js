@@ -11,7 +11,7 @@ function exportEvent(){
 //模板下载按钮事件
 function downEvent(){
 	var url=PROJECT_NAME+'/web/merchantinfo/down';
-   window.open(url, 'Excel导出');
+   window.open(url, 'Excel导入');
 }
 //导入按钮事件
 function importEvent(){
@@ -20,7 +20,7 @@ function importEvent(){
 $(function () {
     //0.初始化fileinput
     var oFileInput = new FileInput();
-    oFileInput.Init("excel_file", PROJECT_NAME+'/web/merchantinfoImport/doImport');
+    oFileInput.Init("excel_file_merchant", PROJECT_NAME+'/web/merchantinfoImport/doImport');
 });
 //初始化fileinput
 var FileInput = function () {
