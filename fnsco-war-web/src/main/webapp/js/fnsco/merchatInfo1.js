@@ -1636,7 +1636,8 @@ function showQrcode(id){
 	    dataType : "json",
 	    data:{'id':id},
 	    success:function(data){
-	    	console.log(data);
+	    	console.log(data.data.result);
+	    	$(".qrcode").attr('src',data.data.result);
 	    }
 	})
 	$('#showQrcode').modal();
