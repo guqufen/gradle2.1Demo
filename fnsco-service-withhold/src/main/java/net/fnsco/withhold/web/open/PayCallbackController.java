@@ -23,7 +23,7 @@ import net.fnsco.withhold.service.trade.entity.TradeDataDO;
 @Controller
 @RequestMapping(value = "/open", method = RequestMethod.POST)
 @Api(value = "/open", tags = { "支付回调接口" })
-public class PayCallback extends BaseController {
+public class PayCallbackController extends BaseController {
     private static final String[] base64Keys     = new String[] { "subject", "body", "remark", "respMsg", "resv" };
     private static final String[] base64JsonKeys = new String[] { "paras" };
     @Autowired

@@ -157,6 +157,17 @@
     from m_merchant_channel
     where inner_code = #{innerCode,jdbcType=VARCHAR}
   </select>
+  
+  <select id="selectByInnerCodes" resultMap="BaseResultMap" >
+  	 select 
+    <include refid="Base_Column_List" />
+    from m_merchant_channel
+    where inner_code in
+    <foreach item="item" collection="innerCodes" open="(" separator="," close=")">
+       #{item,jdbcType=VARCHAR} 
+    </foreach>
+  </select>
+  
   <!-- 根据商家ID删除关联数据 -->
 <delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
    DELETE   FROM m_merchant_channel WHERE inner_code in (
