@@ -265,20 +265,34 @@ window.operateEvents = {
 };
 //表格中操作按钮
 function operateFormatter(value, row, index) {
-    return [
-    	'<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码">',
-        '<i class="glyphicon glyphicon-qrcode"></i>',
-        '</a>  ',
-        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
-        '<i class="glyphicon glyphicon-pencil"></i>',
-        '</a>  ',
-        '<a class="details" href="javascript:detailsData('+value+');" title="查看详情">',
-        '<i class="glyphicon glyphicon-file"></i>',
-        '</a>  ',
-        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
-        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
-        '</a>'
-    ].join('');
+	if(row.openFixQr=="1"){
+	    return [
+	    	'<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码">',
+	        '<i class="glyphicon glyphicon-qrcode"></i>',
+	        '</a>  ',
+	        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
+	        '<i class="glyphicon glyphicon-pencil"></i>',
+	        '</a>  ',
+	        '<a class="details" href="javascript:detailsData('+value+');" title="查看详情">',
+	        '<i class="glyphicon glyphicon-file"></i>',
+	        '</a>  ',
+	        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
+	        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
+	        '</a>'
+	    ].join('');
+    }else{
+    	return [
+	        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
+	        '<i class="glyphicon glyphicon-pencil"></i>',
+	        '</a>  ',
+	        '<a class="details" href="javascript:detailsData('+value+');" title="查看详情">',
+	        '<i class="glyphicon glyphicon-file"></i>',
+	        '</a>  ',
+	        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
+	        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
+	        '</a>'
+	    ].join('');
+    }
 }
 //表格中删除按钮事件
 function delete_btn_event(td_obj){
@@ -1617,13 +1631,12 @@ function detailsData(id){
 
 function showQrcode(id){
 	$.ajax({
-	    url:PROJECT_NAME+'/web/merchantinfo/queryAllById',
-	    type:'POST',
+	    url:PROJECT_NAME+'/web/pay/getQrImage',
+	    type:'get',
 	    dataType : "json",
 	    data:{'id':id},
 	    success:function(data){
 	    	console.log(data);
-	    	$(".qrcode").attr('src',"data:image/jpeg;base64,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")
 	    }
 	})
 	$('#showQrcode').modal();
