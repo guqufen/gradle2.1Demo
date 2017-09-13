@@ -16,7 +16,7 @@ import java.util.List;;
 
 public interface WebUserOuterDAO {
 
-    @Results({@Result( column = "real_name",property = "realName"),@Result( column = "alias_name",property = "aliasName"),@Result( column = "agent_id",property = "agentId"),@Result( column = "modify_time",property = "modifyTime"),@Result( column = "modify_user_id",property = "modifyUserId"),@Result( column = "creater_time",property = "createrTime") })
+    @Results({@Result( column = "email",property = "email"),@Result( column = "real_name",property = "realName"),@Result( column = "alias_name",property = "aliasName"),@Result( column = "agent_id",property = "agentId"),@Result( column = "modify_time",property = "modifyTime"),@Result( column = "modify_user_id",property = "modifyUserId"),@Result( column = "creater_time",property = "createrTime") })
     @Select("SELECT * FROM risk_web_user_outer WHERE id = #{id}")
     public WebUserOuterDO getById(@Param("id") int id);
 
