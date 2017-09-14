@@ -28,6 +28,17 @@ public interface MerchantChannelDao {
     MerchantChannel selectByMerCode(@Param("merCode") String merCode, @Param("channelType") String channelType);
     
     /**
+     * selectByInnerCodeAndChannelCode:(根据内部商务号和channelMerId回去渠道信息)
+     * @param innerCode
+     * @param channelType
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月14日 下午2:37:44
+     * @return MerchantChannel    DOM对象
+     */
+    MerchantChannel selectByInnerCodeAndChannelCode(@Param("innerCode") String innerCode, @Param("channelMerId") String channelMerId);
+    
+    /**
      * 根据innercode查询
      * @param innerCode
      * @return
