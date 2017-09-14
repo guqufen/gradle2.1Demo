@@ -588,4 +588,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         dto.setRealName(appUser.getRealName());
         return ResultDTO.success(dto);
     }
+    @Override
+    public  List<MerchantUserRel> getAppUserMerchantByInnerCode(String innerCode){
+        return merchantUserRelDao.selectByInnerCode(innerCode); 
+    }
 }
