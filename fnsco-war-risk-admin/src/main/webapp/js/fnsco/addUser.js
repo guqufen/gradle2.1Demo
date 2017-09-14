@@ -20,34 +20,41 @@ $('#table').bootstrapTable({
 		field: 'selectItem',
 		checkbox: true
 	},{
-		field : 'id',
-		title : '操作',
-		formatter : operateFormatter
-	}, {
 		field : 'index',
 		title : '序号',
 		align : 'center',
-		width : 150,
+		width : 20,
 		formatter : formatindex
-	}, {
+	},{
+		field : 'id',
+		title : '操作',
+		align : 'center',
+		width : '15%',
+		formatter : operateFormatter
+	},  {
 		field : 'name',
 		title : '账号',
+		align : 'center',
 		width : '10%'
 	}, {
 		field : 'department',
 		title : '企业名称',
+		align : 'center',
 		formatter : formatContent
 	}, {
 		field : 'type',
-		title : '账号类型'
-		//formatter : formatType
+		title : '账号类型',
+		align : 'center',
+		formatter : formatType
 	}, {
 		field : 'status',
 		title : '状态',
+		align : 'center',
 		formatter : formatstatus
 	}, {
-		field : 'modifyTimeStr',
+		field : 'createrTime',
 		title : '新增时间',
+		align : 'center',
 		formatter : formatTime
 	}]
 });
@@ -58,6 +65,10 @@ function queryParams(params) {
 			pageSize : this.pageSize,
 	}
 	return param;
+}
+//表格刷新
+function queryEvent(id) {
+	$('#' + id).bootstrapTable('refresh');
 }
 // 处理后台返回数据
 function responseHandler(res) {
@@ -81,7 +92,16 @@ function formatstatus(value, row, index) {
 			'<span class="label label-primary">启用</span>';
 }
 //账号类型判断
-function formatstatus(value, row, index) {
+function formatType(value, row, index) {
+	if(value===1){
+		return '管理员'
+	}
+	if(value===2){
+		return '合作者'
+	}
+	else if(value===3){
+		return '消费者'
+	}
 }
 
 // 操作格式化
@@ -89,13 +109,13 @@ function operateFormatter(value, row, index) {
 	return [
 			'<a class="redact" href="javascript:queryEdit(' + value
 					+ ');" title="编辑">',
-			'<i class="glyphicon glyphicon-file"></i>', '</a>  ',
+			'<i class="glyphicon glyphicon-pencil">编辑</i>', '</a>  ',
 			'<a class="redact" href="javascript:queryDisuse(' + value
 			+ ');" title="停用">',
-			'<i class="glyphicon glyphicon-file"></i>', '</a>  ',
+			'<i class="glyphicon glyphicon-pause">停用</i>', '</a>  ',
 			'<a class="redact" href="javascript:queryDelete(' + value
 			+ ');" title="删除">',
-			'<i class="glyphicon glyphicon-file"></i>', '</a>  '].join('');
+			'<i class="glyphicon glyphicon-trash">删除</i>', '</a>  '].join('');
 }
 function formatindex(value, row, index) {
 	return [ index + 1 ].join('');
@@ -111,41 +131,129 @@ function formatContent(value, row, index){
  * 判断是否选择记录方法
  */
 function getUserId() {
-	var select_data = $('#table').bootstrapTable('getSelections');
-	if (select_data.length == 0) {
-		layer.msg('请选择一条记录!');
-		return null;
-	}
-	else {
-		return select_data[0].id;
-	}
+	var select_data = $('#table').bootstrapTable('getSelections');  
+	  if(select_data.length == 0){
+	    layer.msg('请选择一行记录!');
+	    return null;
+	  };
+	  var dataId=[];
+	  for(var i=0;i<select_data.length;i++){
+	    dataId=dataId.concat(select_data[i].id);
+	  }
+	  return dataId;
 }
 // 全部启用
-function queryAllStart(id) {
+function queryAllStart() {
 	var userId = getUserId();
 	if (userId == null) {
 		return;
 	}
+	$.ajax({
+        url : PROJECT_NAME + '/web/addUser/toStart',
+        type:'POST',
+        dataType : "json",
+        data:{'id':userId},
+        traditional: true,
+        success:function(data){
+          unloginHandler(data);	
+          if(data.success)
+          {
+            layer.msg('全部启用成功');
+            queryEvent("table");
+          }else
+          {
+            layer.msg(data.message);
+          } 
+        },
+        error:function(e)
+        {
+          layer.msg('系统异常!'+e);
+        }
+      });
 }
 //全部停用
-function queryAllDisuse(id) {
+function queryAllDisuse() {
 	var userId = getUserId();
 	if (userId == null) {
 		return;
 	}
+	$.ajax({
+        url : PROJECT_NAME + '/web/addUser/toDisuse',
+        type:'POST',
+        dataType : "json",
+        data:{'id':userId},
+        traditional: true,
+        success:function(data){
+          unloginHandler(data);	
+          if(data.success)
+          {
+            layer.msg('全部停用成功');
+            queryEvent("table");
+          }else
+          {
+            layer.msg(data.message);
+          } 
+        },
+        error:function(e)
+        {
+          layer.msg('系统异常!'+e);
+        }
+      });
 }
 // 时间格式化
 function formatTime(value, row, index) {
 	return formatDateUtil(new Date(value));
 }
+//清除所有表单数据
+function clearDate(){
+	$("#name").val(null);
+	$("#password").val(null);
+	$("#department").val(null);
+	$("#email").val(null);
+	$("#type").val(1);
+	$("#remark").val(null);
+}
 //新增点击事件
 $('#btn_add').click(function(){ 
-	
+	$('#addModal').modal();
+	clearDate();
+});
+//新增确认点击事件
+$('#btn_yes').click(function(){ 
+	data={
+			"name" :$('#name').val(),
+			"department" : $('#department').val(),
+			"password" : $('#password').val(),
+			"type" : $('#type').val(),
+			"email" :$('#email').val(),
+			"remark" : $('#remark').val()
+	}
+	$.ajax({
+		url : PROJECT_NAME + '/web/addUser/toAdd',
+		type : 'POST',
+		dataType : "json",
+		data : data,
+		success : function(data) {
+			unloginHandler(data);
+			if(data.success)
+	          {
+	            layer.msg('添加成功');
+	            queryEvent("table");
+	          }else
+	          {
+	            layer.msg(data.message);
+	          } 
+	        },
+	        error:function(e)
+	        {
+	          layer.msg('系统异常!'+e);
+	        }
+	});
 });
 //根据id编辑
 function queryEdit(id) {
 	$.ajax({
-		url : PROJECT_NAME + '/web/addUser/querySuggestInfo',
+		url : PROJECT_NAME + '/web/addUser/queryUserById',
 		type : 'POST',
 		dataType : "json",
 		data : {
@@ -155,23 +263,75 @@ function queryEdit(id) {
 			unloginHandler(data);
 			// data.data就是所有数据集
 			console.log(data.data);
-
 			// 基本信息
-			$('input[name=mobile]').val(data.data.mobile);
-			$('input[name="userName"]').val(data.data.userName);
-			var subTime = data.data.submitTime;
-			if(subTime){
-				subTime = subTime.substr(0,subTime.length-2);
-			}
-			$('input[name="submitTime"]').val(subTime);
-			$('textarea[name="content"]').val(data.data.content);
-
+			$('input[name="id"]').val(id);
+			$('input[name="name1"]').val(data.data.name);
+			$('input[name="department1"]').val(data.data.department);
+			$('select[name="type1"]').val(data.data.type);
+			$('input[name="email1"]').val(data.data.email);
+			$('textarea[name="remark1"]').val(data.data.remark);
 			$('#editModal').modal();
 		}
 	});
 }
-//根据id启用
+//编辑确认点击事件
+$('#btn_yes1').click(function(){ 
+	data={
+			"id" : $('#id').val(),
+			"name" :$('#name1').val(),
+			"department" : $('#department1').val(),
+			"type" : $('#type1').val(),
+			"email" :$('#email1').val(),
+			"remark" : $('#remark1').val()
+	}
+	$.ajax({
+		url : PROJECT_NAME + '/web/addUser/toEdit',
+		type : 'POST',
+		dataType : "json",
+		data : data,
+		success : function(data) {
+			unloginHandler(data);
+			if(data.success)
+	          {
+	            layer.msg('修改成功');
+	            queryEvent("table");
+	          }else
+	          {
+	            layer.msg(data.message);
+	          } 
+	        },
+	        error:function(e)
+	        {
+	          layer.msg('系统异常!'+e);
+	        }
+	});
+});
+//根据id停用
 function queryDisuse(id) {
+	var dataId=[id];
+	   // dataId=dataId.concat(id);
+	$.ajax({
+        url : PROJECT_NAME + '/web/addUser/toDisuse',
+        type:'POST',
+        dataType : "json",
+        data:{'id':dataId},
+        traditional: true,
+        success:function(data){
+          unloginHandler(data);	
+          if(data.success)
+          {
+            layer.msg('停用成功');
+            queryEvent("table");
+          }else
+          {
+            layer.msg(data.message);
+          } 
+        },
+        error:function(e)
+        {
+          layer.msg('系统异常!'+e);
+        }
+      });
 }
 //根据id删除
 function queryDelete(id) {

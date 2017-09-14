@@ -30,9 +30,9 @@
 						<div class="col-sm-5 query-time">
 							<label class="control-label" for="status">状态:</label>
 							<button type="button" id="btn_start" class="btn btn-default"
-								onclick="javascript:queryAllStart(id);">启用</button>
+								onclick="javascript:queryAllStart();">启用</button>
 							<button type="button" id="btn_disuse" class="btn btn-default"
-								onclick="javascript:queryAllDisuse('id');">停用</button>
+								onclick="javascript:queryAllDisuse();">停用</button>
 						</div>
 					</div>
 				</div>
@@ -44,17 +44,17 @@
 		<div class="ibox-content">
 			<div class="row row-lg">
 				<div class="col-sm-12">
-						<div id="toolbar">
-							<button id="btn_add" type="button" class="btn btn-success"
-								data-toggle="modal" data-target="#myModal">
-								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-							</button>
-						</div>
-						<table id="table"></table>
+					<div id="toolbar">
+						<button id="btn_add" type="button" class="btn btn-success"
+							data-toggle="modal" data-target="#myModal">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+						</button>
 					</div>
+					<table id="table"></table>
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 	<!-- detailsModel新增start -->
 	<div class="modal fade" id="addModal" tabindex="-1" role="dialog"
@@ -73,40 +73,49 @@
 					<div class="tab-content">
 						<div class="row">
 							<div class="col-sm-8">
-								<label class="control-label" for="mobile">手机号：</label> <input
-									type="text" class="form-control" id=mobile name="mobile"
+								<label class="control-label" for="name">手机号：</label> <input
+									type="text" class="form-control" id=name name="name"
 									required="required">
 							</div>
 							<div class="col-sm-8">
-								<label class="control-label" for="userName">名称：</label> <input
-									type="text" class="form-control" id="userName" name="userName">
+								<label class="control-label" for="department">名称：</label> <input
+									type="text" class="form-control" id="department"
+									name="department">
 							</div>
 							<div class="col-sm-8">
-								<label class="control-label" for="submitTime">密码：</label> <input
-									type="text" class="form-control" id="submitTime"
-									name="submitTime">
+								<label class="control-label" for="password">密码：</label> <input
+									type="text" class="form-control" id="password" name="password">
 							</div>
 							<div class="col-sm-8">
-								<label class="control-label" for="content">类型：</label> <select
-									id="sex" name="sex" class="form-control">
+								<label class="control-label" for="type">类型：</label> <select
+									id="type" name="type" class="form-control">
 									<option value="1">管理员</option>
 									<option value="2">合作者</option>
 									<option value="2">消费者</option>
 								</select>
 							</div>
 							<div class="col-sm-8">
-								<label class="control-label" for="submitTime">邮件：</label> <input
-									type="text" class="form-control" id="submitTime"
-									name="submitTime">
+								<label class="control-label" for="email">邮件：</label> <input
+									type="text" class="form-control" id="email" name="email">
 							</div>
 							<div class="col-sm-12">
-								<label class="control-label" for="content">备注：</label>
-								<textarea id="content" name="content" class="form-control"
+								<label class="control-label" for="remark">备注：</label>
+								<textarea id="remark" name="remark" class="form-control"
 									rows="5"></textarea>
 							</div>
 						</div>
 					</div>
 				</div>
+				<div class="modal-footer">
+	                <div class="tab-content">
+	                	<div class="form-group">
+							<div class="col-sm-2 control-label"></div>
+							<button id="btn_yes" type="button" class="btn btn-primary">
+                                <span  aria-hidden="true"></span>确认添加
+                            </button>
+						</div>
+	                </div>
+	            </div>
 			</div>
 		</div>
 	</div>
@@ -126,46 +135,57 @@
 				<div class="modal-body">
 					<div class="tab-content">
 						<div class="row">
-							<div class="col-sm-8">
-								<label class="control-label" for="mobile">手机号：</label> <input
-									type="text" class="form-control" id=mobile name="mobile"
+						<div class="col-sm-8" style="display:none;">
+								<label class="control-label" for="id"></label> <input
+									type="text" class="form-control" id=id name="id"
 									required="required">
 							</div>
 							<div class="col-sm-8">
-								<label class="control-label" for="userName">名称：</label> <input
-									type="text" class="form-control" id="userName" name="userName">
+								<label class="control-label" for="name1">手机号：</label> <input
+									type="text" class="form-control" id=name1 name="name1"
+									required="required">
 							</div>
 							<div class="col-sm-8">
-								<label class="control-label" for="submitTime">密码：</label> <input
-									type="text" class="form-control" id="submitTime"
-									name="submitTime">
+								<label class="control-label" for="department1">名称：</label> <input
+									type="text" class="form-control" id="department1" name="department1">
 							</div>
 							<div class="col-sm-8">
-								<label class="control-label" for="content">类型：</label> <select
-									id="sex" name="sex" class="form-control">
+								<label class="control-label" for="type1">类型：</label> <select
+									id="type1" name="type1" class="form-control">
 									<option value="1">管理员</option>
 									<option value="2">合作者</option>
 									<option value="2">消费者</option>
 								</select>
 							</div>
 							<div class="col-sm-8">
-								<label class="control-label" for="submitTime">邮件：</label> <input
-									type="text" class="form-control" id="submitTime"
-									name="submitTime">
+								<label class="control-label" for="email1">邮件：</label> <input
+									type="text" class="form-control" id="email1"
+									name="email1">
 							</div>
 							<div class="col-sm-12">
-								<label class="control-label" for="content">备注：</label>
-								<textarea id="content" name="content" class="form-control"
+								<label class="control-label" for="remark1">备注：</label>
+								<textarea id="remark1" name="remark1" class="form-control"
 									rows="5"></textarea>
 							</div>
 						</div>
 					</div>
 				</div>
+				<div class="modal-footer">
+	                <div class="tab-content">
+	                	<div class="form-group">
+							<div class="col-sm-2 control-label"></div>
+							<button id="btn_yes1" type="button" class="btn btn-primary">
+                                <span  aria-hidden="true"></span>确认添加
+                            </button>
+						</div>
+	                </div>
+	            </div>
 			</div>
 		</div>
 	</div>
 	<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
-	<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script
+		src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
 	<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
 	<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
