@@ -148,6 +148,9 @@ public class ReportInfoProvider {
         if (StringUtils.isNotBlank(reportInfo.getLoanCycle())){
             WHERE("loan_cycle=#{reportInfo.loanCycle}");
         }
+        if(reportInfo.getWebUserOuterId()!=null){
+            WHERE("inner_code in (SELECT inner_code FROM risk_user_merc_rel WHERE web_user_outer_id=#{reportInfo.webUserOuterId})");
+        }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -213,6 +216,9 @@ public class ReportInfoProvider {
         }
         if (StringUtils.isNotBlank(reportInfo.getLoanCycle())){
             WHERE("loan_cycle=#{reportInfo.loanCycle}");
+        }
+        if(reportInfo.getWebUserOuterId()!=null){
+            WHERE("inner_code in (SELECT inner_code FROM risk_user_merc_rel WHERE web_user_outer_id=#{reportInfo.webUserOuterId})");
         }
         }}.toString();
     }

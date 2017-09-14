@@ -3,6 +3,14 @@ package net.fnsco.risk.service.report.entity;
 import java.util.Date;
 
 public class ReportInfoDO {
+    private Integer webUserOuterId;
+    public Integer getWebUserOuterId() {
+        return webUserOuterId;
+    }
+
+    public void setWebUserOuterId(Integer webUserOuterId) {
+        this.webUserOuterId = webUserOuterId;
+    }
 
     /**
      * 
@@ -248,9 +256,11 @@ public class ReportInfoDO {
 
     @Override
     public String toString() {
-        return "ReportInfoDO [id=" + id + ", merName=" + merName + ", businessLicenseNum=" + businessLicenseNum + ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime
-               + ", industry=" + industry + ", tradingArea=" + tradingArea + ", turnover=" + turnover + ", size=" + size + ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer
-               + ", riskWarning=" + riskWarning + ", quota=" + quota + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status=" + status + ", createTime=" + createTime
-               + ", lastModifyTime=" + lastModifyTime + "]";
+        return "ReportInfoDO [webUserOuterId=" + webUserOuterId + ", id=" + id + ", merName=" + merName + ", businessLicenseNum=" + businessLicenseNum + ", businessAddress=" + businessAddress
+               + ", businessDueTime=" + businessDueTime + ", industry=" + industry + ", tradingArea=" + tradingArea + ", turnover=" + turnover + ", size=" + size + ", reportCycle=" + reportCycle
+               + ", reportTimer=" + reportTimer + ", riskWarning=" + riskWarning + ", quota=" + quota + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status="
+               + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
     }
+
+
 }

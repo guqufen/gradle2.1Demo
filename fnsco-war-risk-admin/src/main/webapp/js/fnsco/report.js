@@ -1,4 +1,12 @@
 //获取用户信息
+$.ajax({
+	url : PROJECT_NAME + '/web/userOuter/getCurrentUser',
+	type : 'POST',
+	data : null,
+	success : function(data){
+		console.log(data)
+	}
+});
 
 //初始化表格
 $('#table').bootstrapTable({
@@ -44,7 +52,12 @@ $('#table').bootstrapTable({
 	} ]
 });
 function formatterOperation(value, row, index){
-	
+	//审核成功
+	if (row.status == 1) {
+		return [
+				'<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" onclick="javascript:stopData(' + row.id + ');" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
+				.join('');
+	}
 }
 // 0待审核1审核通过2审核失败3待编辑
 function formatterStatus(value, row, index) {
@@ -129,7 +142,8 @@ function queryParams(params) {
 		merName : $.trim($('#merName').val()),
 		tradingArea : $.trim($('#tradingArea').val()),
 		businessLicenseNum : $.trim($('#businessLicenseNum').val()),
-		status: $.trim($('#status').val())
+		status: $.trim($('#status').val()),
+		webUserOuterId:2
 	}
 	return param;
 }
@@ -148,33 +162,33 @@ function responseHandler(res) {
 	}
 }
 
-$.ajax({
-	url : PROJECT_NAME + '/web/report/queryYearReport',
-	type : 'POST',
-	dataType : "json",
-	data : {"id":1},
-	success : function(data){
-		console.log(data)
-	}
-});
+//$.ajax({
+//	url : PROJECT_NAME + '/web/report/queryYearReport',
+//	type : 'POST',
+//	dataType : "json",
+//	data : {"id":1},
+//	success : function(data){
+//		console.log(data)
+//	}
+//});
+//
+//$.ajax({
+//	url : PROJECT_NAME + '/web/report/queryReportDetails',
+//	type : 'POST',
+//	dataType : "json",
+//	data : {"id":1},
+//	success : function(data){
+//		console.log(data)
+//	}
+//});
 
-$.ajax({
-	url : PROJECT_NAME + '/web/report/queryReportDetails',
-	type : 'POST',
-	dataType : "json",
-	data : {"id":1},
-	success : function(data){
-		console.log(data)
-	}
-});
-
-$.ajax({
-	url : PROJECT_NAME + '/web/report/backPersonnelMes',
-	type : 'POST',
-	dataType : "json",
-	data : {"userId":1,"merchantId":2},
-	success : function(data){
-		console.log(data)
-	}
-});
+//$.ajax({
+//	url : PROJECT_NAME + '/web/report/backPersonnelMes',
+//	type : 'POST',
+//	dataType : "json",
+//	data : {"userId":1,"merchantId":2},
+//	success : function(data){
+//		console.log(data)
+//	}
+//});
 

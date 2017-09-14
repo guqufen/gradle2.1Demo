@@ -49,15 +49,15 @@ public class ReportService extends BaseService{
         return pager;
     }
     //查询12个月风控历史
-    public ResultDTO queryYearReport(Integer id){
+    public ResultDTO queryYearReport(Integer merchantId){
         List<YearReportDO> list=new ArrayList<YearReportDO>();
-        ReportInfoDO reportInfoDO=reportInfoDAO.getById(id);
+        ReportInfoDO reportInfoDO=reportInfoDAO.getById(merchantId);
         //判断风控报告的状态
         if(reportInfoDO.getStatus()!=1){
             return ResultDTO.fail("风控报告状态不正常");
         }
         //当前时间 
-        ReportRepaymentHistoryDO dto=reportRepaymentHistoryDAO.getByReportId(id);
+        ReportRepaymentHistoryDO dto=reportRepaymentHistoryDAO.getByReportId(merchantId);
         Date date=reportInfoDO.getLastModifyTime();
         for (int j=0 ; j<12; j++) {  
             YearReportDO yearReportDO=new YearReportDO();
@@ -133,24 +133,46 @@ public class ReportService extends BaseService{
         return dateStr;
     }
     //查询风控报告明细
-    public ResultDTO queryReportDetails(Integer id) {
-        ReportInfoDO reportInfoDO=reportInfoDAO.getById(id);
+    public ResultDTO queryReportDetails(Integer merchantId) {
+        ReportInfoDO reportInfoDO=reportInfoDAO.getById(merchantId);
         return ResultDTO.success(reportInfoDO);
-    }  
+    }
+    //通知后台人员
     public ResultDTO backPersonnelMes(Integer userId,Integer merchantId) {
         //查询用户的商户名称
-        ReportInfoDO reportInfoDO=reportInfoDAO.getById(userId);
-        WebUserOuterDO dto=webUserOuterDAO.getById(merchantId);
+        ReportInfoDO reportInfoDO=reportInfoDAO.getById(merchantId);
+        WebUserOuterDO dto=webUserOuterDAO.getById(userId);
         MimeMessage message = null;
         try {
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             System.out.println(ev.getProperty("username"));
             helper.setFrom("goggb@qq.com");
-            helper.setTo("judith.zhu@zheft.cn");
+            helper.setTo("782430551@qq.com");
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append(dto.getName()+"申请生成关于"+reportInfoDO.getMerName()+"的风控报告,请尽快处理");
+            sb.append(dto.getName()+"申请生成关于"+reportInfoDO.getMerName()+"的风控报告,请尽快处理"+"<a href='www.baidu.com'>百度</a>"+"<a style='font-size:50px;' href='http://www.w3school.com.cn'>W3School</a>");
+            helper.setText(sb.toString(), true);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        mailSender.send(message);
+        return ResultDTO.success();
+    }
+    //通知用户
+    public ResultDTO headPersonnelMes(Integer userId,Integer merchantId) {
+        ReportInfoDO reportInfoDO=reportInfoDAO.getById(merchantId);
+        WebUserOuterDO dto=webUserOuterDAO.getById(userId);
+        MimeMessage message = null;
+        try {
+            message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            System.out.println(ev.getProperty("username"));
+            helper.setFrom("goggb@qq.com");
+            helper.setTo("782430551@qq.com");
+            helper.setSubject("风控报告");
+            StringBuffer sb = new StringBuffer();
+            sb.append("<h1>"+dto.getName()+"</h1><br>").append("关于商户"+"");
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
             e.printStackTrace();

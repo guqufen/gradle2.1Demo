@@ -2,10 +2,12 @@ package net.fnsco.risk.web.report;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.ApiOperation;
@@ -29,5 +31,11 @@ public class ReportAdminController extends BaseController{
         Integer rows = params.get("pageSize");
         ResultPageDTO<ReportInfoDO> pager = this.reportService.page(reportInfoDO, page,rows);
         return success(pager);
+    }
+    //通知商户风控报告
+    @ResponseBody
+    @RequestMapping(value = "headPersonnelMes", method = RequestMethod.GET)
+    public ResultDTO headPersonnelMes(@RequestParam String userId,@RequestParam String merchantId) {
+        return reportService.headPersonnelMes(NumberUtils.toInt(userId),NumberUtils.toInt(merchantId));
     }
 }
