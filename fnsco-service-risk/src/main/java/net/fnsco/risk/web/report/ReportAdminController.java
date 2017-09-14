@@ -29,7 +29,7 @@ public class ReportAdminController extends BaseController{
         Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
-        ResultPageDTO<ReportInfoDO> pager = this.reportService.page(reportInfoDO, page,rows);
+        ResultPageDTO<ReportInfoDO> pager = this.reportService.pageBack(reportInfoDO, page,rows);
         return success(pager);
     }
     //通知商户风控报告
