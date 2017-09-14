@@ -29,6 +29,13 @@ public interface MerchantPosSimpleDao {
                @Result(column = "sn_code", property = "snCode"), @Result(column = "pos_factory", property = "posFactory"), @Result(column = "pos_type", property = "posType"),
                @Result(column = "bank_id", property = "bankId"), @Result(column = "merc_refer_name", property = "mercReferName"), @Result(column = "pos_addr", property = "posAddr"),
                @Result(column = "pos_province", property = "posProvince"), @Result(column = "pos_city", property = "posCity"), @Result(column = "pos_area", property = "posArea") })
+    @Select("SELECT * FROM m_merchant_pos pos WHERE sn_code = #{snCode} and exists (select 1 from m_merchant_channel channel where channel.channel_type='00' and channel.id=pos.channel_id)")
+    public List<MerchantPosDO> selectBySnCodeChannelType(@Param("snCode") String snCode);
+
+    @Results({ @Result(column = "inner_code", property = "innerCode"), @Result(column = "channel_id", property = "channelId"), @Result(column = "pos_name", property = "posName"),
+               @Result(column = "sn_code", property = "snCode"), @Result(column = "pos_factory", property = "posFactory"), @Result(column = "pos_type", property = "posType"),
+               @Result(column = "bank_id", property = "bankId"), @Result(column = "merc_refer_name", property = "mercReferName"), @Result(column = "pos_addr", property = "posAddr"),
+               @Result(column = "pos_province", property = "posProvince"), @Result(column = "pos_city", property = "posCity"), @Result(column = "pos_area", property = "posArea") })
     @Select("SELECT * FROM m_merchant_pos WHERE id = #{id}")
     public MerchantPosDO getById(@Param("id") int id);
 

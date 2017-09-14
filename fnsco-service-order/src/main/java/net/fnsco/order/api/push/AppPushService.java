@@ -146,5 +146,14 @@ public interface AppPushService {
      * @return void    DOM对象
      */
     public void sendWeeklyDataMgs();
-    void sendFixQRMgs(String innerCode,String msgContent);
+    /**
+     * 
+     * sendFixQRMsg:(台码支付成功后发送消息，进行语音提示)
+     *
+     * @param innerCode
+     * @param msgContent   void    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    void sendFixQRMsg(String innerCode,String msgContent);
 }

@@ -138,9 +138,12 @@ public class TradeDataWebController extends BaseController {
 					merchantdo.setOrderTime(dateString1);
 				}
 				if (li2 != null) {
-					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					String dateString2 = formatter.format(li2);
-					merchantdo.setCreateTimeStr(dateString2);
+					SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
+					SimpleDateFormat formatter2 = new SimpleDateFormat("HH:mm:ss");
+					String dateString2 = formatter1.format(li2);
+					String dateString3 = formatter2.format(li2);
+					merchantdo.setCreateTimeDay(dateString2);
+					merchantdo.setCreateDayTime(dateString3);
 				}
 			}
 		}
@@ -148,8 +151,8 @@ public class TradeDataWebController extends BaseController {
 		JSONObject jObject = new JSONObject();
         jObject.put("data", dataList);
         List<TradeData> list = (List<TradeData>) jObject.get("data");
-        String itemMark = "orderNo,orderIdScan,merName,innerCode,snCode,referNo,txnType,merId,timeStamp,payType,amt,certifyId,orderTime,termId,batchNo,sysTraceNo,authCode,source,createTimeStr,status";
-        String itemParap = "订单号,扫码交易的订单号,商户名,内部商户号,终端SN码,参考号,交易类型,结算商户号,支付时间,支付方式,交易金额(元),持卡人卡号,订单时间,终端号,批次号,凭证号,授权码,来源,创建时间,状态";
+        String itemMark = "orderNo,orderIdScan,merName,innerCode,snCode,referNo,txnType,merId,timeStamp,payType,amt,dcType,certifyId,createTimeDay,createDayTime,termId,batchNo,sysTraceNo,authCode,source,createTimeStr,status";
+        String itemParap = "订单号,扫码交易的订单号,商户名,内部商户号,终端SN码,参考号,交易类型,结算商户号,支付时间,支付方式,交易金额(元),消费卡类型,持卡人卡号,订单日期,订单时间,终端号,批次号,凭证号,授权码,来源,创建时间,状态";
 
 		String[] itemMarks = itemMark.split(",");// 键
 		String[] itemParaps = itemParap.split(",");// 列头

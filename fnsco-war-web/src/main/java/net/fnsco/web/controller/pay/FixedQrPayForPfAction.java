@@ -151,9 +151,14 @@ public class FixedQrPayForPfAction extends BaseController {
         sendMsg(tradeDataDTO.getAmt(), merchantChannel.getInnerCode());
         return JSON.toJSONString(result);
     }
-
+    @RequestMapping("/sendTestQrMsg")
+    @ResponseBody
+    public ResultDTO sendTestQrMsg(@RequestParam("innerCode") String innerCode,@RequestParam("amt") String amt) {
+        sendMsg(amt,innerCode);
+        return ResultDTO.success();
+    }
     private void sendMsg(String tempAmt, String innerCode) {
-        appPushService.sendFixQRMgs(innerCode, "浙付通到账" + tempAmt + "元");
+        appPushService.sendFixQRMsg(innerCode, "浙付通到账" + tempAmt + "元");
     }
 
     //商户导出
