@@ -59,6 +59,30 @@ public class TradeDataDTO extends DTO {
     private String	succTime;
     private Date 	createTime;
     
+    private String  channelTermCode;
+    
+    /**
+     * channelTermCode
+     *
+     * @return  the channelTermCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getChannelTermCode() {
+        return channelTermCode;
+    }
+
+    /**
+     * channelTermCode
+     *
+     * @param   channelTermCode    the channelTermCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setChannelTermCode(String channelTermCode) {
+        this.channelTermCode = channelTermCode;
+    }
+
     public Date getCreateTime() {
 		return createTime;
 	}

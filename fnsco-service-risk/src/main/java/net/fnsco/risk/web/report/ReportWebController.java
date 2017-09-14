@@ -22,10 +22,8 @@ import net.fnsco.risk.service.report.entity.ReportInfoDO;
 public class ReportWebController extends BaseController{
     @Autowired
     private ReportService reportService;
-   // @Autowired
-    //private JavaMailSender mailSender;
 
-    // 分页查询商户列表
+    //根据用户id分页查询绑定下的商户列表
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @ResponseBody
     @RequestMapping(value = "queryMerchants", method = RequestMethod.GET)
@@ -40,14 +38,14 @@ public class ReportWebController extends BaseController{
     //查询全年风控曲线图
     @RequestMapping("queryYearReport")  
     @ResponseBody
-    public ResultDTO queryYearReport(@RequestParam String id){
-        return reportService.queryYearReport(NumberUtils.toInt(id));
+    public ResultDTO queryYearReport(@RequestParam String merchantId){
+        return reportService.queryYearReport(NumberUtils.toInt(merchantId));
     }
     //查询风控报告明细
     @RequestMapping("queryReportDetails")  
     @ResponseBody
-    public ResultDTO queryReportDetails(@RequestParam String id){
-        return reportService.queryReportDetails(NumberUtils.toInt(id));
+    public ResultDTO queryReportDetails(@RequestParam String merchantId){
+        return reportService.queryReportDetails(NumberUtils.toInt(merchantId));
     }
     //给后台人员发送生成报告消息
     @RequestMapping("backPersonnelMes")  

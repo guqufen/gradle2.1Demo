@@ -161,7 +161,7 @@ public class FixedQrPayForPfAction extends BaseController {
         appPushService.sendFixQRMsg(innerCode, "浙付通到账" + tempAmt + "元");
     }
 
-    //商户导出
+    //商户台码生成
     @RequestMapping("/getQrImage")
     @ResponseBody
     public ResultDTO getQrImage(@RequestParam("id") Integer id) {

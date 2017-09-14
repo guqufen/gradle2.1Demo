@@ -30,7 +30,16 @@ public class TradeReportInstallController extends BaseController {
     
     @Autowired
     private AppPushService     appPushService;
-    
+    /**
+     * 
+     * installReport:(批量统计报表数据)
+     *
+     * @param startTime
+     * @param endTime
+     * @return   ResultDTO<Object>    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
     @RequestMapping("/install")
     @ResponseBody
     public ResultDTO<Object> installReport(String startTime,String endTime){
