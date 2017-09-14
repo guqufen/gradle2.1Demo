@@ -168,5 +168,13 @@ $.ajax({
 	}
 });
 
-
+$.ajax({
+	url : PROJECT_NAME + '/web/report/backPersonnelMes',
+	type : 'POST',
+	dataType : "json",
+	data : {"userId":1,"merchantId":2},
+	success : function(data){
+		console.log(data)
+	}
+});
 
