@@ -4,10 +4,12 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +22,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
+import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
@@ -41,11 +45,13 @@ import net.fnsco.order.api.dto.AppUserDTO;
 @RequestMapping(value = "/app/user", method = RequestMethod.POST)
 public class AppUserController extends BaseController {
     @Autowired
-    private AppUserService appUserService;
+    private AppUserService        appUserService;
     @Autowired
     private AppUserSettingService appUserSettingService;
     @Autowired
-    private Environment env;
+    private Environment           env;
+    @Autowired
+    private MerchantService       merchantService;
 
     @RequestMapping(value = "/register")
     @ApiOperation(value = "用户注册")
@@ -71,7 +77,7 @@ public class AppUserController extends BaseController {
     public ResultDTO<String> modifyPassword(@RequestBody AppUserDTO appUserDTO) {
         ResultDTO<String> result = new ResultDTO<>();
         result = appUserService.modifyPassword(appUserDTO);
-         return result;
+        return result;
     }
 
     //根据手机号码找回密码
@@ -91,6 +97,7 @@ public class AppUserController extends BaseController {
         ResultDTO<String> result = appUserService.loginByMoblie(appUserDTO);
         return result;
     }
+
     //退出登录
     @ResponseBody
     @RequestMapping(value = "/loginOut")
@@ -99,7 +106,7 @@ public class AppUserController extends BaseController {
         ResultDTO<String> result = appUserService.loginOut(appUserDTO);
         return result;
     }
-    
+
     /**
      * modifyInfo:(这里用一句话描述这个方法的作用)修改个人信息
      *
@@ -111,16 +118,16 @@ public class AppUserController extends BaseController {
      */
     @RequestMapping(value = "/modifyInfo")
     @ApiOperation(value = "修改个人信息")
-    public ResultDTO modifyInfo(@RequestBody AppUserDTO appUserDTO){
-        if(null == appUserDTO.getUserId()){
+    public ResultDTO modifyInfo(@RequestBody AppUserDTO appUserDTO) {
+        if (null == appUserDTO.getUserId()) {
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
-        if(!Strings.isNullOrEmpty(appUserDTO.getUserName()) && appUserDTO.getUserName().length() >19){
+        if (!Strings.isNullOrEmpty(appUserDTO.getUserName()) && appUserDTO.getUserName().length() > 19) {
             return ResultDTO.fail(ApiConstant.E_STRING_TOO_LENGTH);
         }
         return appUserService.modifyInfo(appUserDTO);
     }
-    
+
     /**
      * uploadImage:(这里用一句话描述这个方法的作用)文件上传
      *
@@ -129,17 +136,17 @@ public class AppUserController extends BaseController {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @RequestMapping(value="/uploadImage")
+    @RequestMapping(value = "/uploadImage")
     @ApiOperation(value = "上传头像文件")
-    public ResultDTO<String> uploadImage(){
+    public ResultDTO<String> uploadImage() {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
             String userId = request.getParameter("userId");
-            if(Strings.isNullOrEmpty(userId)){
+            if (Strings.isNullOrEmpty(userId)) {
                 return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
             }
-           // 上传文件原名
+            // 上传文件原名
             MultipartFile file = entity.getValue();
             String fileName = file.getOriginalFilename();
             String line = System.getProperty("file.separator");// 文件分割符
@@ -170,7 +177,7 @@ public class AppUserController extends BaseController {
 
             String yearMonthPath = year + line + month + line;
             String newFileName = System.currentTimeMillis() + "." + prefix;
-            String fileKey = year+"/"+month+"/"+newFileName;
+            String fileKey = year + "/" + month + "/" + newFileName;
             String filepath = yearMonthPath + newFileName;
 
             String fileURL = this.env.getProperty("fileUpload.url") + line + filepath;
@@ -183,17 +190,17 @@ public class AppUserController extends BaseController {
                     stream.close();
                     //上传阿里云OSS文件服务器
                     OssLoaclUtil.uploadFile(fileURL, fileKey);
-                    String newUrl = OssUtil.getHeadBucketName()+"^"+fileKey;
+                    String newUrl = OssUtil.getHeadBucketName() + "^" + fileKey;
                     AppUserDTO appUserDto = new AppUserDTO();
                     appUserDto.setUserId(Integer.valueOf(userId));
                     appUserDto.setHeadImagePath(newUrl);
                     appUserService.modifyInfo(appUserDto);
                     String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), fileKey);
-                    Map<String,String> datas = Maps.newHashMap();
+                    Map<String, String> datas = Maps.newHashMap();
                     datas.put("headImageUrl", imageUrl);
                     return ResultDTO.success(datas);
                 } catch (Exception e) {
-                    logger.error(fileName + "上传失败！"+e);
+                    logger.error(fileName + "上传失败！" + e);
                     throw new RuntimeException();
                 }
             } else {
@@ -203,7 +210,7 @@ public class AppUserController extends BaseController {
         }
         return null;
     }
-    
+
     //获取个人信息
     @ResponseBody
     @RequestMapping(value = "/getUserInfo")
@@ -212,7 +219,7 @@ public class AppUserController extends BaseController {
         ResultDTO<String> result = appUserService.getUserInfo(appUserDTO);
         return result;
     }
-    
+
     /**
      * updateSettingStatus:(更新app用户消息通知状态)
      * @param appSettingDTO
@@ -224,24 +231,28 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/updateSettingStatus")
     @ApiOperation(value = "更新消息通知设置状态")
     public ResultDTO<String> updateSettingStatus(@RequestBody AppSettingDTO appSettingDTO) {
-        if(null == appSettingDTO.getUserId()){
-            return ResultDTO.fail(ApiConstant. E_USER_ID_NULL);
+        if (null == appSettingDTO.getUserId()) {
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
-        if(Strings.isNullOrEmpty(appSettingDTO.getNoticeType()) || Strings.isNullOrEmpty(appSettingDTO.getOpenStatus())){
-            return ResultDTO.fail(ApiConstant. E_SETTING_STATUS_NULL);
+        if (Strings.isNullOrEmpty(appSettingDTO.getNoticeType()) || Strings.isNullOrEmpty(appSettingDTO.getOpenStatus())) {
+            return ResultDTO.fail(ApiConstant.E_SETTING_STATUS_NULL);
         }
         int result = appUserSettingService.updateByPrimaryKeySelective(appSettingDTO);
-        if(result>0){
+        if (result > 0) {
             return ResultDTO.success();
         }
         return ResultDTO.fail();
     }
+
+    @RequestMapping(value = "/isOpenFixedQr")
+    @ApiOperation(value = "该用户绑定的所有商户是否开通台码功能")
+    public ResultDTO isOpenFixedQr(@RequestBody AppUserDTO appUserDTO) {
+        ResultDTO<List<MerChantCoreDTO>> result = merchantService.getMerchantsCoreByUserId(appUserDTO.getUserId());
+        List<MerChantCoreDTO> resultList = result.getData();
+        if (!CollectionUtils.isEmpty(resultList)) {
+            return ResultDTO.success(true);
+        }
+        return ResultDTO.success(false);
+    }
+
 }
-
-
-
-
-
-
-
-

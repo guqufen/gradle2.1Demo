@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -528,6 +529,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         for (Entry<String, String> entry : extraField.entrySet()) {
             listcast.setExtraField(entry.getKey(), entry.getValue());
         }
+        listcast.setExpireTime(DateUtils.getTimeByMinuteStr(30));//设置过期时间
         listcast.setCustomField("");//通知
         int status = client.send(listcast);
         return status;
@@ -563,6 +565,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
         for (Entry<String, String> entry : extraField.entrySet()) {
             unicast.setCustomizedField(entry.getKey(), entry.getValue());
         }
+        unicast.setExpireTime(DateUtils.getTimeByMinuteStr(30));//设置过期时间
         int status = client.send(unicast);
         return status;
         
@@ -574,9 +577,9 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @author tangliang
      * @date 2017年9月13日 上午11:41:54
      */
-    public void sendFixQRMgs(String innerCode,String msgContent){
+    public void sendFixQRMsg(String innerCode,String msgContent){
         
-        SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "台码",1);
+        SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "台码",2);
         if(message.getId() == null){
             logger.error("入库信息实体异常");
             return;
@@ -593,12 +596,64 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             Integer deviceType = appUser.getDeviceType();
             //不在线用户不推送
             if(null == deviceType ||deviceType == 0){
+                logger.info("用户不在线，不发送台码推送消息"+appUser.getUserName());
                 continue;
             }
             
             //发送推送
           //分别推送安卓和IOS消息且保存发送结果
-            appPushHelper.pushNewMessage(appUser, message,false);
+            Map<String,String> extraField = null;
+            extraField = Maps.newHashMap();
+            extraField.put("sendTime", DateUtils.dateFormatToStr(message.getSendTime()));
+            extraField.put("msgId", message.getId().toString());
+            extraField.put("msgType", "2");
+            extraField.put("titleType", "系统消息");
+            
+            //分别推送安卓和IOS消息且保存发送结果
+            if (deviceType == 1) {//安卓
+                try {
+                    Integer androidStatus = null;
+                        //周报发送内容有区别
+                    androidStatus = sendAndroidListcast(appUser.getDeviceToken(), message.getMsgSubTitle(),extraField);
+                    
+                    if (androidStatus == 200) {
+                        //成功
+                        appPushHelper.insertIntoDBSuccMsg(appUser.getId(), message.getId(), 1);
+                        logger.info("台码安卓信息推送成功");
+                    } else {
+                        //失败
+                        appPushHelper.insertIntoDBFailMsg(appUser.getId(), message.getId(), 1, 1);
+                        logger.info("台码安卓信息推送失败");
+                    }
+                } catch (Exception e) {
+                    logger.error("台码推送android消息异常" + e);
+                    e.printStackTrace();
+                }
+            } else if (deviceType == 2) {//ios
+                ResultDTO<PushMsgInfoDTO> countInfo = sysAppMsgService.queryNewsCount(appUser.getId(), false, appUser.getDeviceType());
+                Integer iosStatus = null;
+                try {
+                    JSONObject alertContext = new JSONObject();
+                    alertContext.put("title", message.getMsgSubject());
+                    alertContext.put("subtitle", "");
+                    alertContext.put("body", message.getMsgSubTitle());
+                    iosStatus = sendIOSUnicast(appUser.getDeviceToken(), alertContext, countInfo.getData().getUnReadCount() + 1, extraField);
+                    
+                    if (iosStatus == 200) {
+                        //成功
+                        appPushHelper.insertIntoDBSuccMsg(appUser.getId(), message.getId(), 2);
+                        logger.info("台码ios信息推送成功");
+                    } else {
+                        //失败
+                        appPushHelper.insertIntoDBFailMsg(appUser.getId(), message.getId(), 2, 1);
+                        logger.info("台码ios信息推送失败");
+                    }
+
+                } catch (Exception e) {
+                    logger.error("台码推送ios消息异常" + e);
+                    e.printStackTrace();
+                }
+            }
         }
         
     }

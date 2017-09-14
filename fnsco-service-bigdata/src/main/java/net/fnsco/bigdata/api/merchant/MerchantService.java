@@ -45,7 +45,16 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     String getPosName(String snCode);
-
+    /**
+     * 
+     * getPosName:(查询pos机对应的app用户)
+     *
+     * @param snCode
+     * @return   String    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<String> getMerchantAppUser(String snCode);
     /**
      * getMerchantsCoreByUserId:(这里用一句话描述这个方法的作用) 根据用户ID 查询商户列表
      *

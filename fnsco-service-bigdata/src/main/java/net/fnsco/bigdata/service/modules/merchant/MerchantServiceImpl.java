@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
+
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.dto.MerChantCoreDetailDTO;
@@ -310,4 +312,13 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         return null;
     }
     
+    @Override
+    public List<String> getMerchantAppUser(String snCode) {
+        List<String> innerCodes = Lists.newArrayList();
+        List<MerchantPosDO> posList = merchantPosSimpleDao.selectBySnCodeChannelType(snCode);
+        for (MerchantPosDO merchantPos: posList) {
+            innerCodes.add(merchantPos.getInnerCode());
+        }
+        return innerCodes;
+    }
 }
