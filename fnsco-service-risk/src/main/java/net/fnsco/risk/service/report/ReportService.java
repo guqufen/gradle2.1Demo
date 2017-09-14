@@ -6,9 +6,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.core.base.BaseService;
@@ -19,16 +25,20 @@ import net.fnsco.risk.service.report.dao.ReportRepaymentHistoryDAO;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 import net.fnsco.risk.service.report.entity.YearReportDO;
-import net.fnsco.risk.web.report.JavaMailSender;
+import net.fnsco.risk.service.sys.dao.WebUserOuterDAO;
+import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 
 @Service
 public class ReportService extends BaseService{
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private ReportInfoDAO reportInfoDAO;
-//    @Autowired
-//    private JavaMailSender mailSender;
-
+    @Autowired
+    private WebUserOuterDAO webUserOuterDAO;
+    @Autowired
+    private JavaMailSender mailSender;
+    @Autowired
+    private Environment ev;
     @Autowired
     private ReportRepaymentHistoryDAO reportRepaymentHistoryDAO;
     //分页查询风控报告列表
@@ -126,6 +136,27 @@ public class ReportService extends BaseService{
     public ResultDTO queryReportDetails(Integer id) {
         ReportInfoDO reportInfoDO=reportInfoDAO.getById(id);
         return ResultDTO.success(reportInfoDO);
+    }  
+    public ResultDTO backPersonnelMes(Integer userId,Integer merchantId) {
+        //查询用户的商户名称
+        ReportInfoDO reportInfoDO=reportInfoDAO.getById(userId);
+        WebUserOuterDO dto=webUserOuterDAO.getById(merchantId);
+        MimeMessage message = null;
+        try {
+            message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            System.out.println(ev.getProperty("username"));
+            helper.setFrom("goggb@qq.com");
+            helper.setTo("judith.zhu@zheft.cn");
+            helper.setSubject("风控报告");
+            StringBuffer sb = new StringBuffer();
+            sb.append(dto.getName()+"申请生成关于"+reportInfoDO.getMerName()+"的风控报告,请尽快处理");
+            helper.setText(sb.toString(), true);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        mailSender.send(message);
+        return ResultDTO.success();
     }
     
 }

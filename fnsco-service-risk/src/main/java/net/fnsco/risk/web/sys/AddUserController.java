@@ -3,6 +3,7 @@ package net.fnsco.risk.web.sys;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +13,9 @@ import io.swagger.annotations.Api;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.risk.service.sys.WebUserOuterService;
+import net.fnsco.risk.service.sys.entity.WebUserDO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 
 @Controller
@@ -39,47 +42,39 @@ public class AddUserController extends BaseController {
 		 * 通过id查询删除对象（状态改0）
 		 * @param id
 		 * @return
-		 *//*
+		 */
 		@RequestMapping(value ="/deleteUserById",method= RequestMethod.POST)
 		@ResponseBody
-		public ResultDTO<String> deleteUserById(@RequestParam(value="id[]") Integer[] id){
+		public ResultDTO<String> deleteUserById(@RequestParam(value="id") Integer id){
 			//获取当前登录的用户
-		    WebUserDTO adminUser = (WebUserDTO) getSessionUser();
-		    Integer userId=adminUser.getId();
-		    for (int i = 0; i < id.length; i++) {
-		    	if(id[i]==AuthConstant.SUPER_ADMIN) {
-		    		return ResultDTO.fail(AuthConstant.E_NOT_DELEET_ADMIN);
-		    	}
-		    	if(userId==id[i]) {
-		    		return ResultDTO.fail(AuthConstant.E_NOT_DELEET_ONESELF);
-		    	}
-			}
-			ResultDTO<String> result = userService.deleteById(id);
-			return success(result);
+		    WebUserDO adminUser = (WebUserDO) getSessionUser();
+		   // Integer userId=adminUser.getId();
+		    ResultDTO<String> result=userOuterService.doDelete(adminUser, id);
+			return result;
 		}
-		*//**
+		/**
 		 * 添加用户
 		 * @param dept
 		 * @return
-		 *//*
+		 */
 		@RequestMapping(value ="/toAdd",method= RequestMethod.POST)
 		@ResponseBody
-		public ResultDTO<String> toAdd(UserDO user){
-			userService.doAddUser(user);
+		public ResultDTO<String> toAdd(WebUserOuterDO user){
+			userOuterService.doAdd(user);
 			return ResultDTO.successForSave(null);
 		}
-		*//**
+		/**
 		 * 通过id查询修改对象的数据
 		 * @param id
 		 * @return
-		 *//*
+		 */
 		@RequestMapping(value ="/queryUserById",method= RequestMethod.POST)
 		@ResponseBody
-		public ResultDTO<UserDO> queryUserById(Integer id){
-			UserDO result = userService.queryUserById(id);
+		public ResultDTO<WebUserOuterDO> queryUserById(Integer id){
+			WebUserOuterDO result = userOuterService.doQueryById(id);
 			return success(result);
 		}
-		*//**
+		/**
 		 * 通过用户名查询是否重复
 		 * @param name
 		 * @return
@@ -94,25 +89,43 @@ public class AddUserController extends BaseController {
 		 * 用户信息修改
 		 * @param dept
 		 * @return
-		 *//*
+		 */
 		@RequestMapping(value ="/toEdit",method= RequestMethod.POST)
 		@ResponseBody
-		public ResultDTO<String> toEdit(UserDO user){
+		public ResultDTO<String> toEdit(WebUserOuterDO user){
 			//获取当前登录的用户
-		    WebUserDTO adminUser = (WebUserDTO) getSessionUser();
+		    WebUserDO adminUser = (WebUserDO) getSessionUser();
 		    Integer userId=adminUser.getId();
 		    user.setModifyUserId(userId);
-		    Integer id=user.getId();
-		    Integer status=user.getStatus();
-		    if(status==2) {
-		    	if(id==AuthConstant.SUPER_ADMIN) {
-		    		return ResultDTO.fail(AuthConstant.E_NOT_DELEET_ADMIN);
-		    	}
-		    	if(userId==id) {
-		    		return ResultDTO.fail(AuthConstant.E_NOT_DELEET_ONESELF);
-		    	}
-		    }
-			ResultDTO<String> result = userService.toEditDept(user);
-			return result;
-		}*/
+			Integer rows = userOuterService.doUpdate(user);
+			return ResultDTO.success();
+		}
+		/**
+		 * 通过id停用
+		 * @param dept  
+		 * @return
+		 */
+		@RequestMapping(value ="/toDisuse",method= RequestMethod.POST)
+		@ResponseBody
+		@Transactional
+		public ResultDTO<String> toDisuse(Integer[] id){
+			for(int i=0;i<id.length;i++) {
+				Integer rows = userOuterService.doDisuse(id[i]);
+			}
+			return ResultDTO.success();
+		}
+		/**
+		 * 通过id启用
+		 * @param dept
+		 * @return
+		 */
+		@RequestMapping(value ="/toStart",method= RequestMethod.POST)
+		@ResponseBody
+		@Transactional
+		public ResultDTO<String> toStart(Integer[] id){
+			for(int i=0;i<id.length;i++) {
+				Integer rows = userOuterService.doStart(id[i]);
+			}
+			return ResultDTO.success();
+		}
 }

@@ -70,8 +70,18 @@ public class WebUserOuterDO {
     private Date modifyTime;
     
     private String modifyTimeStr;
+    
+    private Integer status;
 
-    public String getModifyTimeStr() {
+    public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getModifyTimeStr() {
 		return modifyTimeStr;
 	}
 

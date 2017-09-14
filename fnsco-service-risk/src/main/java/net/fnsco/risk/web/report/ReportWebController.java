@@ -22,6 +22,9 @@ import net.fnsco.risk.service.report.entity.ReportInfoDO;
 public class ReportWebController extends BaseController{
     @Autowired
     private ReportService reportService;
+   // @Autowired
+    //private JavaMailSender mailSender;
+
     // 分页查询商户列表
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @ResponseBody
@@ -46,6 +49,10 @@ public class ReportWebController extends BaseController{
     public ResultDTO queryReportDetails(@RequestParam String id){
         return reportService.queryReportDetails(NumberUtils.toInt(id));
     }
-    
-   
+    //给后台人员发送生成报告消息
+    @RequestMapping("backPersonnelMes")  
+    @ResponseBody
+    public ResultDTO backPersonnelMes(@RequestParam String userId,@RequestParam String merchantId){
+        return reportService.backPersonnelMes(NumberUtils.toInt(userId),NumberUtils.toInt(merchantId));
+    }
 }
