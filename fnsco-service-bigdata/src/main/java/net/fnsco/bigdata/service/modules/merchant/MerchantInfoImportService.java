@@ -27,6 +27,7 @@ import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
+import scala.annotation.meta.setter;
 
 /**
  * @desc excel上传实现类
@@ -77,7 +78,6 @@ public class MerchantInfoImportService extends BaseService {
                 // channelMerchant// 商户入网注册名称
                 String channelMerchant = String.valueOf(String.valueOf(objs[9]));
 
-                //				String abbreviation = String.valueOf(objs[10]);
                 // 签购单名称
                 String mercrefername = String.valueOf(objs[10]);
                 // 商户联系人
@@ -146,7 +146,7 @@ public class MerchantInfoImportService extends BaseService {
                 //innerTermCode
                 String innerTermCode = String.valueOf(objs[45]);
                 //mercReferName
-                String mercReferName = String.valueOf(objs[46]);
+//                String mercReferName = String.valueOf(objs[46]);
 
                 /**
                  * 导入之前要先验证business_license_num 营业执照号码保持唯一,如果存在，则不新加商户，只加该商户其余属性。
@@ -161,68 +161,24 @@ public class MerchantInfoImportService extends BaseService {
                 /**
                  * 商户基本信息
                  */
-                if (merchantCode == null) {
+                if (merchantcore == null) {
                     innerCode = merchantCoreService.getInnerCode();
-                    // 创建一个商户基础信息实体类对象接收商户及信息
-                    MerchantCore merchantCore = new MerchantCore();
-                    merchantCore.setInnerCode(innerCode);
-                    merchantCore.setMerName(mername);
-                    merchantCore.setBusinessLicenseNum(businesslicensenum);
-                    merchantCore.setLegalValidCardType("0");
-                    merchantCore.setCardNum(cardnum);
-                    merchantCore.setLegalPerson(legalperson);
-                    merchantCore.setAbbreviation(channelMerchant);
-                    merchantCore.setLegalPersonMobile(legalpersonmobile);
-                    // excel中导出的时间是“EEE MMM dd HH:mm:ss z yyyy”类型的String类，将他转换成"yyyy/MM/dd"
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-                    Date date1 = sdf1.parse(cardvalidtimeStr);
-                    sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-                    String cardvalidtime = sdf1.format(date1);
-                    SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-                    Date date2 = sdf2.parse(businesslicensevalidtimeStr);
-                    sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                    String businesslicensevalidtime = sdf2.format(date2);
-                    merchantCore.setCardValidTime(cardvalidtime);
-                    merchantCore.setBusinessLicenseValidTime(businesslicensevalidtime);
-                    merchantCore.setRegistAddress(registaddress);
-                    merchantCore.setMercFlag(mercflag);
-                    merchantCore.setAgentId(1);//默认
-                    merchantCore.setTaxRegistCode(taxRegistCode);
-                    merchantCore.setModifyTime(DateUtils.formateToDate(createTime));
-                    merchantCore.setStatus(1);
-
+                    MerchantCore merchantCore = MerchantImportHelper.createMerchantCore(innerCode, mername, businesslicensenum, cardnum, legalperson, channelMerchant, legalpersonmobile, 
+                        cardvalidtimeStr, businesslicensevalidtimeStr, registaddress, mercflag, taxRegistCode, createTime);
+                   
                     try {
-                        // 商户基本信息保存
                         merchantCoreService.doAddMerCore(merchantCore);
                     } catch (Exception e) {
+                        logger.error("第" + timeNum + "行数据的基本数据信息有误，导入失败"+e);
                         return ResultDTO.fail("第" + timeNum + "行数据的基本数据信息有误，导入失败");
                     }
 
                     /**
                      * 商户联系人信息
                      */
-                    // 创建一个商户联系人信息实体类对象接收商户联系人信息
-                    MerchantContact merchantContact = new MerchantContact();
-                    merchantContact.setInnerCode(innerCode);
-                    merchantContact.setContactName(contactname);
-                    merchantContact.setContactMobile(contactmobile);
-                    merchantContact.setContactEmail(contactemail);
-                    MerchantContact merchantContact1 = new MerchantContact();
-                    merchantContact1.setInnerCode(innerCode);
-                    merchantContact1.setContactName(financeLinkMan);
-                    merchantContact1.setContactMobile(financeLinkManTel);
-                    merchantContact1.setContactEmail(financeLinkManEmail);
-                    MerchantContact merchantContact2 = new MerchantContact();
-                    merchantContact2.setInnerCode(innerCode);
-                    merchantContact2.setContactName(merPrincipal);
-                    merchantContact2.setContactMobile(merPrincipalTel);
-                    merchantContact2.setContactEmail(merPrincipalEmail);
-                    List<MerchantContact> contcactList = new ArrayList<MerchantContact>();
-                    contcactList.add(merchantContact);
-                    contcactList.add(merchantContact1);
-                    contcactList.add(merchantContact2);
+                    List<MerchantContact> contcactList = MerchantImportHelper.createMerchantContact(innerCode, contactname, contactmobile, contactemail, financeLinkMan, financeLinkManTel,
+                        financeLinkManEmail, merPrincipal, merPrincipalTel, merPrincipalEmail);
                     try {
-                        // 商户联系人信息保存
                         merchantCoreService.doAddMerContact(contcactList);
                     } catch (Exception e) {
                         return ResultDTO.fail("第" + timeNum + "行数据的商户联系人信息有误，导入失败");
@@ -230,22 +186,15 @@ public class MerchantInfoImportService extends BaseService {
                     /**
                      * 商户银行卡信息
                      */
-                    // 创建一个商户银行卡信息实体类对象接收商户银行卡信息
-                    MerchantBank merchantBank = new MerchantBank();
-                    merchantBank.setInnerCode(innerCode);
-                    merchantBank.setAccountName(accountname);
-                    merchantBank.setAccountNo(accountno);
-                    merchantBank.setAccountType(accounttype);
-                    merchantBank.setAccountCardId(accountcardid);
-                    merchantBank.setSubBankName(subbankname);
-                    merchantBank.setOpenBankNum(openBankNum);
+                    MerchantBank merchantBank = MerchantImportHelper.createMerchantBank(innerCode, accountname, accountno, accounttype, accountcardid, subbankname, openBankNum);
                     try {
                         bankId = merchantCoreService.doAddBanks(merchantBank);
                     } catch (Exception e) {
                         return ResultDTO.fail("第" + timeNum + "行数据的银行卡信息有误，导入失败");
                     }
-                    // 银行卡信息保存
                     //文件处理
+                    
+                    
                 } else {
                     innerCode = merchantcore.getInnerCode();
                 }
@@ -261,14 +210,7 @@ public class MerchantInfoImportService extends BaseService {
                 Integer channelId = null;
                 if (null == channel) {
                     // 创建一个渠道信息实体类对象接收渠道信息
-                    MerchantChannel merchantChannel = new MerchantChannel();
-                    merchantChannel.setInnerCode(innerCode);
-                    merchantChannel.setChannelMerId(merchantCode);
-                    merchantChannel.setChannelType(channelType);
-                    merchantChannel.setCreateTime(new Date());
-                    merchantChannel.setModifyTime(new Date());
-                    merchantChannel.setModifyUserId(userId);
-                    merchantChannel.setChannelMerKey(privateKye);
+                    MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, merchantCode, channelType, userId, privateKye);
                     try {
                         // 渠道信息保存
                         channelId = merchantCoreService.doAddChannel(merchantChannel);
@@ -282,20 +224,7 @@ public class MerchantInfoImportService extends BaseService {
                 /**
                  * 商戶pos机信息
                  */
-                // 创建一个商户pos信息实体类对象接收商户pos信息
-                MerchantPos merchantPos = new MerchantPos();
-                merchantPos.setInnerCode(innerCode);
-                merchantPos.setMercReferName(mercrefername);
-                merchantPos.setPosType(posType);
-                merchantPos.setPosFactory(posFactory);
-                merchantPos.setSnCode(sncode);
-                merchantPos.setPosAddr(posaddr);
-                merchantPos.setStatus("1");
-                merchantPos.setPosName(sncode + "号POS机");
-                // 获取银行卡ID
-                merchantPos.setBankId(bankId);
-                // 获取渠道ID
-                merchantPos.setChannelId(channelId);
+                MerchantPos merchantPos = MerchantImportHelper.createMerchantPos(innerCode, mercrefername, posType, posFactory, sncode, posaddr, bankId, channelId);
                 Integer posId = null;
                 try {
                     // pos机信息保存
@@ -307,50 +236,25 @@ public class MerchantInfoImportService extends BaseService {
                 /**
                  * 商户终端信息
                  */
-                // 创建一个merchantTerminal1来接受刷卡的终端信息
-                MerchantTerminal merchantTerminal1 = new MerchantTerminal();
-                merchantTerminal1.setInnerCode(innerCode);
-                
-                merchantTerminal1.setDebitCardRate(debitCardRate);
-                if(!Strings.isNullOrEmpty(debitCardMaxFee)){
-                    merchantTerminal1.setDebitCardMaxFee(Integer.valueOf(debitCardMaxFee));
-                }
-                if(!Strings.isNullOrEmpty(debitCardFee)){
-                    merchantTerminal1.setDebitCardFee(Integer.valueOf(debitCardFee));
-                }
-               
-                merchantTerminal1.setCreditCardRate(creditCardRate);
-                if(!Strings.isNullOrEmpty(creditCardFee)){
-                    merchantTerminal1.setCreditCardFee(Integer.valueOf(creditCardFee));
-                }
-                if(!Strings.isNullOrEmpty(creditCardMaxFee)){
-                    merchantTerminal1.setCreditCardMaxFee(Integer.valueOf(creditCardMaxFee));
-                }
-                
-                merchantTerminal1.setPosId(posId);
-                merchantTerminal1.setTermName("刷卡");
-                merchantTerminal1.setTerminalType("00");
-                merchantTerminal1.setTerminalCode(innerTermCode);
-                
+                String alipayFee = null;
+                String wechatFee = null;
                 try {
                     // 支付宝费率转换
                     String zfb1 = xx.substring(xx.indexOf("支付宝") + 3, xx.indexOf("%"));
                     BigDecimal bigDecimal1 = new BigDecimal(zfb1);
                     BigDecimal zfb = bigDecimal1.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
-                    merchantTerminal1.setAlipayFee(String.valueOf(zfb.doubleValue()));
+                    alipayFee = String.valueOf(zfb.doubleValue());
                     // 微信费率转换
                     String wx1 = xx.substring(xx.indexOf("微信") + 2, xx.lastIndexOf("%"));
                     BigDecimal bigDecimal2 = new BigDecimal(wx1);
                     BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
-                    merchantTerminal1.setWechatFee(String.valueOf(wx.doubleValue()));
-                    merchantTerminal1.setPosId(posId);
-
-                    merchantTerminal1.setTermName("扫码");
-                    merchantTerminal1.setTerminalType("01");
+                    wechatFee = String.valueOf(wx.doubleValue());
                 } catch (Exception e) {
                     return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
                 }
                 
+                MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(innerCode, debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee, 
+                    creditCardMaxFee, posId, innerTermCode, terminalCode, alipayFee, wechatFee);
                 // 把1个终端信息打包成List
                 List<MerchantTerminal> terminalList = new ArrayList<MerchantTerminal>();
                 terminalList.add(merchantTerminal1);
