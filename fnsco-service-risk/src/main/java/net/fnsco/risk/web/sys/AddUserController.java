@@ -78,14 +78,14 @@ public class AddUserController extends BaseController {
 		 * 通过用户名查询是否重复
 		 * @param name
 		 * @return
-		 *//*
+		 */
 		@RequestMapping(value ="/queryUserByName",method= RequestMethod.POST)
 		@ResponseBody
 		public boolean queryUserByName(String name){
-			boolean result = userService.queryUserByName(name);
+			boolean result = userOuterService.getUserByName(name);
 			return result;
 		}
-		*//**
+		/**
 		 * 用户信息修改
 		 * @param dept
 		 * @return

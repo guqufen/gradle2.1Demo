@@ -28,6 +28,7 @@ import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
@@ -71,12 +72,15 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         long timer = System.currentTimeMillis();
         String innerCode = "";
         String merId = tradeData.getMerId();
-        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId, tradeData.getChannelType());
-        if (null == merchantChannel) {
+        MerchantTerminal merchantTerminal = null;
+        if (!Strings.isNullOrEmpty(tradeData.getTermId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
+            merchantTerminal = merchantTerminalDao.selectOneByTermId(tradeData.getTermId(), tradeData.getChannelType());
+        }
+        if (null == merchantTerminal) {
             //logger.error("渠道商户不存在" + merId + ":" + tradeData.getSource() + ",丢弃该交易流水");
             //return true;
         } else {
-            innerCode = merchantChannel.getInnerCode();
+            innerCode = merchantTerminal.getInnerCode();
         }
         logger.warn("插入流水，获取商户耗时" + (System.currentTimeMillis() - timer));
         TradeData tradeDataEntity = new TradeData();

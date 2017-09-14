@@ -48,11 +48,6 @@ public class MerchantInfoImportController extends BaseController {
     public Map<String, String> doImport() {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-        Set<String> set = fileMap.keySet(); // 取出所有的key值
-        String key = null;
-        for (String str : set) {
-            key = str;
-        }
         MultipartFile file = fileMap.get("excel_file_merchant");
         // 判断文件是否为空
         if (file == null) {
@@ -74,7 +69,14 @@ public class MerchantInfoImportController extends BaseController {
         Integer userId = adminUser.getId();
         // 批量导入。参数：文件名，文件。
         ResultDTO<String> result = null;
-        result = merchantInfoImportService.merchantBatchImportToDB(customerList, userId);
+        try {
+            result = merchantInfoImportService.merchantBatchImportToDB(customerList, userId);
+        } catch (ParseException e) {
+            
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            
+        }
         if (!result.isSuccess()) {
             Map<String, String> map = new HashMap<>();
             if (("").equals(result.getMessage())) {

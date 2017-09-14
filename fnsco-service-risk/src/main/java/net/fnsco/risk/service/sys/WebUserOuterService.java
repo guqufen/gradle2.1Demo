@@ -121,9 +121,12 @@ public class WebUserOuterService extends BaseService {
     }
 
     // 查询
-   /* public WebUserOuterDO getUserByName(String userName) {
+    public boolean getUserByName(String userName) {
     	WebUserOuterDO obj = this.userOuterDAO.getByUserName(userName);
-        return obj;
-    }*/
+    	if(obj==null) {
+			return true;
+		}
+        return false;
+    }
 
 }

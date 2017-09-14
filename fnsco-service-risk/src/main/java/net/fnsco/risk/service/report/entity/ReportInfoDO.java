@@ -3,6 +3,24 @@ package net.fnsco.risk.service.report.entity;
 import java.util.Date;
 
 public class ReportInfoDO {
+    private String innerCode;
+    public String getInnerCode() {
+        return innerCode;
+    }
+
+    public void setInnerCode(String innerCode) {
+        this.innerCode = innerCode;
+    }
+
+    private Integer customerType;
+    public Integer getCustomerType() {
+        return customerType;
+    }
+
+    public void setCustomerType(Integer customerType) {
+        this.customerType = customerType;
+    }
+
     private Integer webUserOuterId;
     public Integer getWebUserOuterId() {
         return webUserOuterId;
@@ -253,14 +271,12 @@ public class ReportInfoDO {
     public void setLoanCycle(String loanCycle) {
         this.loanCycle = loanCycle;
     }
-
     @Override
     public String toString() {
-        return "ReportInfoDO [webUserOuterId=" + webUserOuterId + ", id=" + id + ", merName=" + merName + ", businessLicenseNum=" + businessLicenseNum + ", businessAddress=" + businessAddress
-               + ", businessDueTime=" + businessDueTime + ", industry=" + industry + ", tradingArea=" + tradingArea + ", turnover=" + turnover + ", size=" + size + ", reportCycle=" + reportCycle
-               + ", reportTimer=" + reportTimer + ", riskWarning=" + riskWarning + ", quota=" + quota + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status="
-               + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
+        return "ReportInfoDO [innerCode=" + innerCode + ", customerType=" + customerType + ", webUserOuterId=" + webUserOuterId + ", id=" + id + ", merName=" + merName + ", businessLicenseNum="
+               + businessLicenseNum + ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime + ", industry=" + industry + ", tradingArea=" + tradingArea + ", turnover="
+               + turnover + ", size=" + size + ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer + ", riskWarning=" + riskWarning + ", quota=" + quota + ", feeRate=" + feeRate
+               + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status=" + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
     }
-
 
 }
