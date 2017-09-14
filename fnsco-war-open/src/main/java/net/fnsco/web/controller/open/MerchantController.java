@@ -1,6 +1,9 @@
 package net.fnsco.web.controller.open;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.merchant.MerchantService;
+import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.web.controller.open.jo.MerchantJO;
 
 @RestController
@@ -19,7 +24,8 @@ import net.fnsco.web.controller.open.jo.MerchantJO;
 public class MerchantController extends BaseController {
     @Autowired
     private MerchantService merchantService;
-
+    @Autowired
+    private AppUserService appUserService;
     /**
      * 获取商户编号
      *
@@ -60,5 +66,22 @@ public class MerchantController extends BaseController {
             return fail();
         }
         return success(posName);
+    }
+    
+    @RequestMapping(value = "/isHaveAppUser")
+    @ApiOperation(value = "获取商户pos机名称")
+    public ResultDTO isHaveAppUser(@RequestBody MerchantJO merchant) {
+        List<String> innerCodeList = merchantService.getMerchantAppUser(merchant.getSnCode());
+        if(CollectionUtils.isEmpty(innerCodeList)){
+            return success(false);
+        }
+        for(String innerCode: innerCodeList){
+            List<MerchantUserRel> tempList =appUserService.getAppUserMerchantByInnerCode(innerCode);
+            if(!CollectionUtils.isEmpty(tempList)){
+                return success(true);
+            }
+        }
+        
+        return success(false);
     }
 }

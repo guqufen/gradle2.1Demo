@@ -20,7 +20,9 @@ public interface MerchantUserRelDao {
     MerchantUserRel selectByPrimaryKey(Integer id);
 
     MerchantUserRel selectByUserIdInnerCode(@Param("appUserId") Integer appUserId, @Param("innerCode") String innerCode);
-
+    
+    List<MerchantUserRel> selectByInnerCode(@Param("innerCode") String innerCode);
+    
     List<MerchantUserRel> selectByUserId(@Param("appUserId") Integer appUserId);
     //删除绑定关系
     int deleteByPrimaryKey(@Param("innerCode")String innerCode,@Param("appUserId")Integer appUserId);

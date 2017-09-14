@@ -577,7 +577,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      * @author tangliang
      * @date 2017年9月13日 上午11:41:54
      */
-    public void sendFixQRMgs(String innerCode,String msgContent){
+    public void sendFixQRMsg(String innerCode,String msgContent){
         
         SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "台码",2);
         if(message.getId() == null){
@@ -596,6 +596,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             Integer deviceType = appUser.getDeviceType();
             //不在线用户不推送
             if(null == deviceType ||deviceType == 0){
+                logger.info("用户不在线，不发送台码推送消息"+appUser.getUserName());
                 continue;
             }
             
@@ -618,14 +619,14 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                     if (androidStatus == 200) {
                         //成功
                         appPushHelper.insertIntoDBSuccMsg(appUser.getId(), message.getId(), 1);
-                        logger.info("安卓信息推送成功");
+                        logger.info("台码安卓信息推送成功");
                     } else {
                         //失败
                         appPushHelper.insertIntoDBFailMsg(appUser.getId(), message.getId(), 1, 1);
-                        logger.info("安卓信息推送失败");
+                        logger.info("台码安卓信息推送失败");
                     }
                 } catch (Exception e) {
-                    logger.error("推送android消息异常" + e);
+                    logger.error("台码推送android消息异常" + e);
                     e.printStackTrace();
                 }
             } else if (deviceType == 2) {//ios
@@ -641,15 +642,15 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
                     if (iosStatus == 200) {
                         //成功
                         appPushHelper.insertIntoDBSuccMsg(appUser.getId(), message.getId(), 2);
-                        logger.info("ios信息推送成功");
+                        logger.info("台码ios信息推送成功");
                     } else {
                         //失败
                         appPushHelper.insertIntoDBFailMsg(appUser.getId(), message.getId(), 2, 1);
-                        logger.info("ios信息推送失败");
+                        logger.info("台码ios信息推送失败");
                     }
 
                 } catch (Exception e) {
-                    logger.error("推送ios消息异常" + e);
+                    logger.error("台码推送ios消息异常" + e);
                     e.printStackTrace();
                 }
             }

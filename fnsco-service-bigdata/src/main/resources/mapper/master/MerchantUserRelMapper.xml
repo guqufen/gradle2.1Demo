@@ -62,6 +62,12 @@
     and inner_code = #{innerCode,jdbcType=VARCHAR}
     limit 1
   </select>
+  <select id="selectByInnerCode" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_user_rel
+    where  inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
   <select id="selectByUserId" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
