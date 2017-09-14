@@ -49,7 +49,7 @@ import net.fnsco.core.utils.CodeUtil;
  * @desc 商家基本信息 实现类
  * @author tangliang
  * @date 2017年6月21日 下午2:22:26
- */
+ */ 
 @Service
 public class MerchantCoreServiceImpl implements MerchantCoreService {
 
@@ -615,5 +615,16 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     @Override
     public MerchantChannel findChannelByMerId(String merId, String channelType) {
         return merchantChannelDao.selectByMerCode(merId, channelType);
+    }
+    
+    /**
+     * (non-Javadoc)
+     * @see net.fnsco.bigdata.api.merchant.MerchantCoreService#selectBybusinessLicenseNum(java.lang.String)
+     * @author tangliang
+     * @date 2017年9月14日 下午1:43:33
+     */
+    @Override
+    public MerchantCore selectBybusinessLicenseNum(String businessLicenseNum) {
+        return merchantCoreDao.selectBybusinessLicenseNum(businessLicenseNum);
     }
 }

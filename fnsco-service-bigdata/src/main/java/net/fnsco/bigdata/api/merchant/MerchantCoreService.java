@@ -184,4 +184,14 @@ public interface MerchantCoreService {
     
     List<MerchantChannel> findChannelByInnerCode(String innerCode);
     MerchantChannel findChannelByMerId(String merId,String channelType);
+    
+    /**
+     * selectBybusinessLicenseNum:(根据营业执照号码查询)
+     * @param businessLicenseNum
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月14日 下午1:39:29
+     * @return MerchantCore    DOM对象
+     */
+    MerchantCore selectBybusinessLicenseNum(String businessLicenseNum);
 }

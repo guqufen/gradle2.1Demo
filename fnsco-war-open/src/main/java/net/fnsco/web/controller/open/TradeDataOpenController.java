@@ -71,7 +71,7 @@ public class TradeDataOpenController extends BaseController {
         if("00".equals(tradeData.getSource())){
             tradeData.setChannelType(BigdataConstant.ChannelTypeEnum.LKL.getCode());
         }
- 
+        tradeData.setChannelTermCode(tradeData.getTermId());
         tradeDataService.saveTradeData(tradeData);
         String timeStamp = tradeData.getTimeStamp();
         if (!Strings.isNullOrEmpty(timeStamp)) {

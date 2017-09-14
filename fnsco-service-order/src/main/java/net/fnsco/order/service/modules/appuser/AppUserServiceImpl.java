@@ -77,7 +77,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Override
     @Transactional
     public ResultDTO insertSelective(AppUserDTO appUserDTO) {
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         //非空判断
         if (Strings.isNullOrEmpty(appUserDTO.getMobile())) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
@@ -155,6 +155,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         map.put("Shopkeeper", Shopkeeper);
         map.put("merchantNums",merchantNums);
+      //返回值增加设置状态
+        List<AppUserSettingDTO> settingstatus =  appUserSettingService.installSettingStatus(appUser.getId());
+        map.put("appSettings", settingstatus);
         return ResultDTO.success(map);
     }
 
