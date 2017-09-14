@@ -141,11 +141,16 @@ public class MerchantInfoController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions(value = { "m:merchant:export" })
 	public void down(HttpServletRequest req, HttpServletResponse response) throws IOException {
-		String g=req.getRealPath("/") ;
+		/*String g=request.getSession().getServletContext().getRealPath("");
 		String url=env.getProperty("excle.url");
 		String filePath=g+url;
 		String fileName="merchantSheet.xlsx";
 		//解析excel，获取客户信息集合。
+        ReadExcel.downTemplate(filePath, fileName, response);*/
+        String filePath = request.getSession().getServletContext().getRealPath("");
+        filePath = filePath + "template/商户信息导入模板.xlsx";
+        String fileName = "商户信息导入模板.xlsx";
+        //解析excel，获取客户信息集合。
         ReadExcel.downTemplate(filePath, fileName, response);
 	}
 	/**

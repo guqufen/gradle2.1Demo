@@ -182,9 +182,9 @@ public class TradeDataWebController extends BaseController {
     @RequiresPermissions(value = { "m:trade:export" })
     public void down() throws IOException {
         String filePath = request.getSession().getServletContext().getRealPath("");
-        filePath = filePath + "template\\商户信息导入模板.xlsx";
-        String fileName = "商户信息导入模板.xlsx";
-        //解析excel，获取客户信息集合。
+        filePath = filePath + "template/交易流水导入模板.xlsx";
+        String fileName = "交易流水导入模板.xlsx";
+        //解析excel，获取交易流水信息集合。
         ReadExcel.downTemplate(filePath, fileName, response);
     }
 
@@ -201,11 +201,6 @@ public class TradeDataWebController extends BaseController {
     public Map<String, String> doImport() {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-        Set<String> set = fileMap.keySet(); // 取出所有的key值
-        String key = null;
-        for (String str : set) {
-            key = str;
-        }
         MultipartFile file = fileMap.get("excel_file_trade");
         // 判断文件是否为空
         if (file == null) {

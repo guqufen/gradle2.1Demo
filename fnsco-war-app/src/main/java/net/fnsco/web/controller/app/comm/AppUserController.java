@@ -250,9 +250,9 @@ public class AppUserController extends BaseController {
         ResultDTO<List<MerChantCoreDTO>> result = merchantService.getMerchantsCoreByUserId(appUserDTO.getUserId());
         List<MerChantCoreDTO> resultList = result.getData();
         if (!CollectionUtils.isEmpty(resultList)) {
-            return ResultDTO.success(true);
+            return ResultDTO.success("true");
         }
-        return ResultDTO.success(false);
+        return ResultDTO.success("false");
     }
 
 }
