@@ -437,4 +437,15 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
+    
+    public static Date formateToDate(String timeStr){
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            return sf.parse(timeStr);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

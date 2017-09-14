@@ -181,4 +181,11 @@
 <select id="countCanCreateTaiCode" parameterType="java.lang.Integer" resultType="java.lang.Integer">
  SELECT COUNT(*) FROM m_merchant_channel WHERE inner_code = (SELECT inner_code FROM m_merchant_core WHERE id = #{merId}) AND channel_type='01' AND channel_mer_id IS NOT NULL
 </select>
+<!-- 根据组合查询 -->
+<select id="selectByInnerCodeAndChannelCode" parameterType="java.lang.String" parameterMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_channel
+    where inner_code = #{innerCode} and channel_mer_id = #{channelMerId,jdbcType=VARCHAR} limit 1
+</select>
 </mapper>
