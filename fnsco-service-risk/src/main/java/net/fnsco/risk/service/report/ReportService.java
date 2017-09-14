@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.order.api.dto.QueryBandDTO;
 import net.fnsco.risk.service.report.dao.ReportInfoDAO;
 import net.fnsco.risk.service.report.dao.ReportRepaymentHistoryDAO;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
@@ -51,13 +50,13 @@ public class ReportService extends BaseService{
     }
     //后台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> pageBack(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
-        List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
-        for( ReportInfoDO li:pageList){
-            //根据innerCode查询用户信息
-            
-            //li.getInnerCode()
-        }
-        Integer count = this.reportInfoDAO.pageListCount(reportInfoDO);
+        List<ReportInfoDO> pageList = this.reportInfoDAO.pageListBack(reportInfoDO, pageNum, pageSize);
+//        for( ReportInfoDO li:pageList){
+//            //根据innerCode查询用户信息
+//            
+//            //li.getInnerCode()
+//        }
+        Integer count = this.reportInfoDAO.pageListCountBack(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }

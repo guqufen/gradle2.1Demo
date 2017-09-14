@@ -38,4 +38,10 @@ public class ReportAdminController extends BaseController{
     public ResultDTO headPersonnelMes(@RequestParam String userId,@RequestParam String merchantId) {
         return reportService.headPersonnelMes(NumberUtils.toInt(userId),NumberUtils.toInt(merchantId));
     }
+    //更新风控报告状态
+//    @ResponseBody
+//    @RequestMapping(value = "updateReportStatus", method = RequestMethod.GET)
+//    public ResultDTO updateReportStatus(ReportInfoDO reportInfoDO) {
+//        return reportService.updateReportStatus(reportInfoDO);
+//    }
 }

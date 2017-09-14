@@ -52,9 +52,9 @@ public interface ReportInfoDAO {
         @Result( column = "mer_num",property = "merNum"),@Result( column = "status",property = "status"),
         @Result( column = "create_time",property = "createTime"),@Result( column = "last_modify_time",property = "lastModifyTime")
     })
-    @SelectProvider(type = ReportInfoProvider.class, method = "pageList")
+    @SelectProvider(type = ReportInfoProvider.class, method = "pageListBack")
     public List<ReportInfoDO> pageListBack(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
-    @SelectProvider(type = ReportInfoProvider.class, method = "pageListCount")
+    @SelectProvider(type = ReportInfoProvider.class, method = "pageListCountBack")
     public Integer pageListCountBack(@Param("reportInfo") ReportInfoDO reportInfo);
 }
