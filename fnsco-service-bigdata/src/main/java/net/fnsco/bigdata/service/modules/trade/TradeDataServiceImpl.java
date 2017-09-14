@@ -102,6 +102,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setReferNo(tradeData.getReferNo());
         tradeDataEntity.setInnerCode(innerCode);
         tradeDataEntity.setCreateTime(new Date());
+        tradeDataEntity.setChannelTermCode(tradeData.getChannelTermCode());
         if(tradeData.getCreateTime()!=null) {
         	tradeDataEntity.setCreateTime(tradeData.getCreateTime());
         }

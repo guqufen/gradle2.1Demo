@@ -37,7 +37,7 @@ public class MerchantInfoImportService {
 	private MerchantPosService merchantPosService;
 	// 批量导入客户
 	@Transactional
-	public ResultDTO<String> merchantBatchImportToDB(List<Object[]> customerList, Integer userId) throws ParseException {
+	public ResultDTO<String> merchantBatchImportToDB(List<Object[]> customerList, Integer userId) {
 		// 循环便利customList数组，将其中excel每一行的数据分批导入数据库
 		if (customerList.size() != 0) {
 			// excel导出的空数据是“null”，赋值一个空字符串
@@ -137,11 +137,21 @@ public class MerchantInfoImportService {
 				merchantCore.setLegalPersonMobile(legalpersonmobile);
 				// excel中导出的时间是“EEE MMM dd HH:mm:ss z yyyy”类型的String类，将他转换成"yyyy/MM/dd"
 				SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-				Date date1 = sdf1.parse(cardvalidtimeStr);
+				Date date1 = new Date();
+                try {
+                    date1 = sdf1.parse(cardvalidtimeStr);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
 				sdf1 = new SimpleDateFormat("yyyy-MM-dd");
 				String cardvalidtime = sdf1.format(date1);
 				SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-				Date date2 = sdf2.parse(businesslicensevalidtimeStr);
+				Date date2 = new Date();
+                try {
+                    date2 = sdf2.parse(businesslicensevalidtimeStr);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
 				sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 				String businesslicensevalidtime = sdf2.format(date2);
 				merchantCore.setCardValidTime(cardvalidtime);

@@ -103,34 +103,56 @@ public class TradeData {
     private String       sendTime;
 
     private Date         createTime;
-    
-    private String       payMedium;
-    
-    
-    private String       paySubType;    //交易子类型
-    private List<String>       paySubTypes;    //交易子类型
-    
-    private String       startSendTime; //条件查询 发送开始时间
-    private String       endSendTime;   //条件查询 发送结束时间
 
-    private String       startTime;     // 订单交易开始日期 20160510000000
-    private String       endTime;       // 订单交易结束日期 20160510235959
-    private String       status;        //交易状态0非正常交易（包括撤销交易和撤销原交易）1正常交易
-    private String       merName;       //商户名称
+    private String       payMedium;
+    private String       channelTermCode;
+
+    private String       paySubType;     //交易子类型
+    private List<String> paySubTypes;    //交易子类型
+
+    private String       startSendTime;  //条件查询 发送开始时间
+    private String       endSendTime;    //条件查询 发送结束时间
+
+    private String       startTime;      // 订单交易开始日期 20160510000000
+    private String       endTime;        // 订单交易结束日期 20160510235959
+    private String       status;         //交易状态0非正常交易（包括撤销交易和撤销原交易）1正常交易
+    private String       merName;        //商户名称
     //内部商务号列表
     private List<String> innerCodeList;
     //终端号列表
     private List<String> terminalList;
     //创建时间string类型显示
-    private String 		 createTimeStr;
+    private String       createTimeStr;
+
+    /**
+     * channelTermCode
+     *
+     * @return  the channelTermCode
+     * @since   CodingExample Ver 1.0
+    */
     
+    public String getChannelTermCode() {
+        return channelTermCode;
+    }
+
+    /**
+     * channelTermCode
+     *
+     * @param   channelTermCode    the channelTermCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setChannelTermCode(String channelTermCode) {
+        this.channelTermCode = channelTermCode;
+    }
+
     /**
      * payMedium
      *
      * @return  the payMedium
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getPayMedium() {
         return payMedium;
     }
@@ -141,20 +163,20 @@ public class TradeData {
      * @param   payMedium    the payMedium to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setPayMedium(String payMedium) {
         this.payMedium = payMedium;
     }
 
     public String getCreateTimeStr() {
-		return createTimeStr;
-	}
+        return createTimeStr;
+    }
 
-	public void setCreateTimeStr(String createTimeStr) {
-		this.createTimeStr = createTimeStr;
-	}
+    public void setCreateTimeStr(String createTimeStr) {
+        this.createTimeStr = createTimeStr;
+    }
 
-	public List<String> getPaySubTypes() {
+    public List<String> getPaySubTypes() {
         return paySubTypes;
     }
 
@@ -162,22 +184,24 @@ public class TradeData {
         this.paySubTypes = paySubTypes;
     }
 
-  //POS机SN码/设备号
-        private String       snCode;
-        public String getSnCode() {
-    		return snCode;
-    	}
-    
-    	public void setSnCode(String snCode) {
-    		this.snCode = snCode;
-    	}
+    //POS机SN码/设备号
+    private String snCode;
+
+    public String getSnCode() {
+        return snCode;
+    }
+
+    public void setSnCode(String snCode) {
+        this.snCode = snCode;
+    }
+
     /**
      * merName
      *
      * @return  the merName
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getMerName() {
         return merName;
     }
@@ -188,7 +212,7 @@ public class TradeData {
      * @param   merName    the merName to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setMerName(String merName) {
         this.merName = merName;
     }
@@ -199,7 +223,7 @@ public class TradeData {
      * @return  the status
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getStatus() {
         return status;
     }
@@ -210,7 +234,7 @@ public class TradeData {
      * @param   status    the status to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setStatus(String status) {
         this.status = status;
     }
