@@ -579,7 +579,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
      */
     public void sendFixQRMsg(String innerCode,String msgContent){
         
-        SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "台码",1);
+        SysAppMessage message = appPushHelper.insertIntoDBSysAppMessage(msgContent, "台码",2);
         if(message.getId() == null){
             logger.error("入库信息实体异常");
             return;
@@ -606,8 +606,6 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             extraField = Maps.newHashMap();
             extraField.put("sendTime", DateUtils.dateFormatToStr(message.getSendTime()));
             extraField.put("msgId", message.getId().toString());
-            extraField.put("weeklyStartDate", DateUtils.strFormatToStr(DateUtils.getMondayStr(-1)));
-            extraField.put("weeklyEndDate", DateUtils.strFormatToStr(DateUtils.getSundayStr(-1)));
             extraField.put("msgType", "2");
             extraField.put("titleType", "系统消息");
             

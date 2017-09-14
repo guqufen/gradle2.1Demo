@@ -49,10 +49,9 @@ import net.sf.json.JSONObject;
 public class TradeDataWebController extends BaseController {
 
     @Autowired
-    private TradeDataService       tradeDataService;
+    private TradeDataService tradeDataService;
     @Autowired
     private TradeDataImportService tradeDataImportService;
-
     /**
      * 交易统计分页查询
      * 
@@ -83,7 +82,8 @@ public class TradeDataWebController extends BaseController {
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions(value = { "m:trade:export" })
-    public void export(TradeDataDTO tradeDataDTO, HttpServletRequest req, HttpServletResponse response) throws IOException {
+    public void export(TradeDataDTO tradeDataDTO, HttpServletRequest req, HttpServletResponse response)
+            throws IOException {
         List<TradeData> dataList = tradeDataService.queryDataList(tradeDataDTO);
         // 转换日期显示
         if (dataList != null) {
@@ -168,7 +168,8 @@ public class TradeDataWebController extends BaseController {
         response.setContentType("application/vnd.ms-excel;");
         String nowStr = DateUtils.getNowYMDStr();
         String fileName = "交易流水" + nowStr + ".xls";
-        response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
+        response.setHeader("Content-disposition",
+                "attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
 
         OutputStream ouputStream = response.getOutputStream();
         workbook.write(ouputStream);
@@ -176,15 +177,6 @@ public class TradeDataWebController extends BaseController {
         ouputStream.flush();
         ouputStream.close();
     }
-
-    /**
-     * 
-     * down:(商户导入模板下载)
-     *
-     * @throws IOException   void    返回Result对象
-     * @throws 
-     * @since  CodingExample　Ver 1.1
-     */
     @RequestMapping(value = "/down", method = RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions(value = { "m:trade:export" })

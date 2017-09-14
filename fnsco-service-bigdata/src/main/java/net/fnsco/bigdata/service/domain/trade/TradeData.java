@@ -105,10 +105,15 @@ public class TradeData {
     private Date         createTime;
 
     private String       payMedium;
+
     private String       channelTermCode;
 
     private String       paySubType;     //交易子类型
     private List<String> paySubTypes;    //交易子类型
+
+    private String       createTimeDay;
+
+    private String       createDayTime;
 
     private String       startSendTime;  //条件查询 发送开始时间
     private String       endSendTime;    //条件查询 发送结束时间
@@ -130,7 +135,7 @@ public class TradeData {
      * @return  the channelTermCode
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getChannelTermCode() {
         return channelTermCode;
     }
@@ -141,9 +146,25 @@ public class TradeData {
      * @param   channelTermCode    the channelTermCode to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setChannelTermCode(String channelTermCode) {
         this.channelTermCode = channelTermCode;
+    }
+
+    public String getCreateTimeDay() {
+        return createTimeDay;
+    }
+
+    public void setCreateTimeDay(String createTimeDay) {
+        this.createTimeDay = createTimeDay;
+    }
+
+    public String getCreateDayTime() {
+        return createDayTime;
+    }
+
+    public void setCreateDayTime(String createDayTime) {
+        this.createDayTime = createDayTime;
     }
 
     /**
