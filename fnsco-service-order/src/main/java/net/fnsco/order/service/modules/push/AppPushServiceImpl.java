@@ -596,7 +596,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             Integer deviceType = appUser.getDeviceType();
             //不在线用户不推送
             if(null == deviceType ||deviceType == 0){
-                logger.info("用户不在线，不发送台码推送消息");
+                logger.info("用户不在线，不发送台码推送消息"+appUser.getUserName());
                 continue;
             }
             
