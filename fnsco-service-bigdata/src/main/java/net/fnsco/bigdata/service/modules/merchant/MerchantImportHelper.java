@@ -13,6 +13,7 @@ import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.utils.DateUtils;
@@ -194,10 +195,27 @@ public class MerchantImportHelper {
         merchantTerminal1.setTerminalType("00");
         merchantTerminal1.setTerminalCode(innerTermCode);
         merchantTerminal1.setInnerTermCode(terminalCode);
-        
         merchantTerminal1.setAlipayFee(alipayFee);
         merchantTerminal1.setWechatFee(wechatFee);
         
         return merchantTerminal1;
+    }
+    
+    /**
+     * createMerchantFile:(创建一个MerchantFile实例)
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月14日 下午5:48:07
+     * @return MerchantFile    DOM对象
+     */
+    public static MerchantFile createMerchantFile(String innerCode,String fileName,String fileType,String filePath){
+        MerchantFile file = new MerchantFile();
+        file.setInnerCode(innerCode);
+        file.setFileName(fileName);
+        file.setFileType(fileType);
+        file.setFilePath(filePath);
+        file.setCreateTime(new Date());
+        
+        return file;
     }
 }

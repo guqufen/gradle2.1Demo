@@ -2,11 +2,8 @@ package net.fnsco.bigdata.service.modules.merchant;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,20 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.base.Strings;
 
-import net.fnsco.bigdata.api.dto.SnCodeDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
+import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.DateUtils;
-import scala.annotation.meta.setter;
 
 /**
  * @desc excel上传实现类
@@ -42,6 +38,8 @@ public class MerchantInfoImportService extends BaseService {
     private MerchantPosService  merchantPosService;
     @Autowired
     private MerchantChannelDao  merchantChannelDao;
+    @Autowired
+    private MerchantFileDao     merchantFileDao;
 
     // 批量导入客户
     @Transactional
@@ -146,7 +144,7 @@ public class MerchantInfoImportService extends BaseService {
                 //innerTermCode
                 String innerTermCode = String.valueOf(objs[45]);
                 //mercReferName
-//                String mercReferName = String.valueOf(objs[46]);
+                //                String mercReferName = String.valueOf(objs[46]);
 
                 /**
                  * 导入之前要先验证business_license_num 营业执照号码保持唯一,如果存在，则不新加商户，只加该商户其余属性。
@@ -163,13 +161,13 @@ public class MerchantInfoImportService extends BaseService {
                  */
                 if (merchantcore == null) {
                     innerCode = merchantCoreService.getInnerCode();
-                    MerchantCore merchantCore = MerchantImportHelper.createMerchantCore(innerCode, mername, businesslicensenum, cardnum, legalperson, channelMerchant, legalpersonmobile, 
+                    MerchantCore merchantCore = MerchantImportHelper.createMerchantCore(innerCode, mername, businesslicensenum, cardnum, legalperson, channelMerchant, legalpersonmobile,
                         cardvalidtimeStr, businesslicensevalidtimeStr, registaddress, mercflag, taxRegistCode, createTime);
-                   
+
                     try {
                         merchantCoreService.doAddMerCore(merchantCore);
                     } catch (Exception e) {
-                        logger.error("第" + timeNum + "行数据的基本数据信息有误，导入失败"+e);
+                        logger.error("第" + timeNum + "行数据的基本数据信息有误，导入失败" + e);
                         return ResultDTO.fail("第" + timeNum + "行数据的基本数据信息有误，导入失败");
                     }
 
@@ -192,9 +190,10 @@ public class MerchantInfoImportService extends BaseService {
                     } catch (Exception e) {
                         return ResultDTO.fail("第" + timeNum + "行数据的银行卡信息有误，导入失败");
                     }
+
                     //文件处理
-                    
-                    
+                    saveFileToDB(fileInfos, innerCode);
+
                 } else {
                     innerCode = merchantcore.getInnerCode();
                 }
@@ -252,8 +251,8 @@ public class MerchantInfoImportService extends BaseService {
                 } catch (Exception e) {
                     return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
                 }
-                
-                MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(innerCode, debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee, 
+
+                MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(innerCode, debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee,
                     creditCardMaxFee, posId, innerTermCode, terminalCode, alipayFee, wechatFee);
                 // 把1个终端信息打包成List
                 List<MerchantTerminal> terminalList = new ArrayList<MerchantTerminal>();
@@ -269,5 +268,37 @@ public class MerchantInfoImportService extends BaseService {
         }
         // return b;
         return ResultDTO.fail("没有导入数据，Excel为空");
+    }
+
+    /**
+     * saveFileToDB:(处理文件信息)
+     * @param fileInfos    设定文件
+     * @author    tangliang
+     * @date      2017年9月14日 下午5:39:32
+     * @return void    DOM对象
+     */
+    private void saveFileToDB(String fileInfos, String innerCode) {
+        if (Strings.isNullOrEmpty(fileInfos)) {
+            logger.error("文件信息为空");
+            return;
+        }
+
+        String[] fileMap = fileInfos.split(",");
+
+        for (String files : fileMap) {
+            if (Strings.isNullOrEmpty(files)) {
+                continue;
+            }
+
+            String singleFile[] = files.split("=");
+
+            String fileType = singleFile[0];
+            String filePath = singleFile[1];
+            /**
+             * 此处需要下载，上传OSS，再获取图片路径和名称
+             */
+            MerchantFile merchantFile = MerchantImportHelper.createMerchantFile(innerCode, "", fileType, filePath);
+            merchantFileDao.insertSelective(merchantFile);
+        }
     }
 }
