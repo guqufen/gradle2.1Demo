@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import net.fnsco.bigdata.api.dto.TerminalDetailDTO;
 import net.fnsco.bigdata.api.dto.TerminalInfoDTO;
 import net.fnsco.bigdata.api.dto.TerminalsDTO;
+import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 /**
  * @desc 商家终端信息DAO
@@ -136,4 +137,7 @@ public interface MerchantTerminalDao {
       * @return
      */
      String querySnCode(@Param("id") String id,@Param("code") String code);
+     
+     MerchantTerminal selectOneByTermId(@Param("termId") String termId, @Param("channelType") String channelType);
+     
 }

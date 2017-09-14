@@ -6,7 +6,7 @@
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="pos_id" property="posId" jdbcType="INTEGER" />
     <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
-    <result column="inner_term_code" property="innerTermCode" jdbcType="VARCHAR" />
+    <result column="channel_terminal_code" property="innerTermCode" jdbcType="VARCHAR" />
     <result column="terminal_batch" property="terminalBatch" jdbcType="VARCHAR" />
     <result column="terminal_para" property="terminalPara" jdbcType="VARCHAR" />
     <result column="charges_type" property="chargesType" jdbcType="INTEGER" />
@@ -38,7 +38,13 @@
      <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, inner_code, pos_id, terminal_code, inner_term_code, terminal_batch, terminal_para, 
+    id, inner_code, pos_id, terminal_code, channel_terminal_code, terminal_batch, terminal_para, 
+    charges_type, debit_card_rate, credit_card_rate, debit_card_fee, credit_card_fee, 
+    debit_card_max_fee, credit_card_max_fee, deal_switch, record_state, term_audit_state, 
+    term_name, wechat_fee, alipay_fee, terminal_type
+  </sql>
+  <sql id="T_Base_Column_List" >
+    t.id, t.inner_code, pos_id, terminal_code, channel_terminal_code, terminal_batch, terminal_para, 
     charges_type, debit_card_rate, credit_card_rate, debit_card_fee, credit_card_fee, 
     debit_card_max_fee, credit_card_max_fee, deal_switch, record_state, term_audit_state, 
     term_name, wechat_fee, alipay_fee, terminal_type
@@ -55,7 +61,7 @@
   </delete>
   <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantTerminal" >
     insert into m_merchant_terminal (id, inner_code, pos_id, 
-      terminal_code, inner_term_code, terminal_batch, 
+      terminal_code, channel_terminal_code, terminal_batch, 
       terminal_para, charges_type, debit_card_rate, 
       credit_card_rate, debit_card_fee, credit_card_fee, 
       debit_card_max_fee, credit_card_max_fee, deal_switch, 
@@ -85,7 +91,7 @@
         terminal_code,
       </if>
       <if test="innerTermCode != null" >
-        inner_term_code,
+        channel_terminal_code,
       </if>
       <if test="terminalBatch != null" >
         terminal_batch,
@@ -216,7 +222,7 @@
         terminal_code = #{terminalCode,jdbcType=VARCHAR},
       </if>
       <if test="innerTermCode != null" >
-        inner_term_code = #{innerTermCode,jdbcType=VARCHAR},
+        channel_terminal_code = #{innerTermCode,jdbcType=VARCHAR},
       </if>
       <if test="terminalBatch != null" >
         terminal_batch = #{terminalBatch,jdbcType=VARCHAR},
@@ -274,7 +280,7 @@
     set inner_code = #{innerCode,jdbcType=VARCHAR},
       pos_id = #{posId,jdbcType=INTEGER},
       terminal_code = #{terminalCode,jdbcType=VARCHAR},
-      inner_term_code = #{innerTermCode,jdbcType=VARCHAR},
+      channel_terminal_code = #{innerTermCode,jdbcType=VARCHAR},
       terminal_batch = #{terminalBatch,jdbcType=VARCHAR},
       terminal_para = #{terminalPara,jdbcType=VARCHAR},
       charges_type = #{chargesType,jdbcType=INTEGER},
@@ -342,7 +348,7 @@
                  SELECT LAST_INSERT_ID()
       </selectKey>
       insert into m_merchant_terminal (id, inner_code, pos_id, 
-      terminal_code, inner_term_code, terminal_batch, 
+      terminal_code, channel_terminal_code, terminal_batch, 
       terminal_para, charges_type, debit_card_rate, 
       credit_card_rate, debit_card_fee, credit_card_fee, 
       debit_card_max_fee, credit_card_max_fee, deal_switch, 
@@ -389,5 +395,16 @@
     pos_id
     from m_merchant_terminal
     where terminal_code=#{id,jdbcType=VARCHAR} AND inner_code=#{code,jdbcType=VARCHAR}) limit 1
+  </select>
+  
+  <select id="selectOneByTermId" resultMap="BaseResultMap">
+    select 
+     <include refid="T_Base_Column_List" />
+    from m_merchant_terminal t ,m_merchant_pos p,m_merchant_channel c 
+    where 
+    t.pos_id=p.id and p.channel_id=c.id 
+    and t.terminal_code=#{termId,jdbcType=VARCHAR}
+     and c.channel_type=#{channelType,jdbcType=VARCHAR}
+     limit 1
   </select>
 </mapper>
