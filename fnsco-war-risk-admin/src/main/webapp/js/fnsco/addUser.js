@@ -87,28 +87,31 @@ function responseHandler(res) {
 }
 //正常禁用图形化显示
 function formatstatus(value, row, index) {
+	status=value;
 	return value === 2 ? 
 			'<span class="label label-danger">停用</span>' : 
 			'<span class="label label-primary">启用</span>';
 }
 //账号类型判断
 function formatType(value, row, index) {
-	if(value===1){
+	if(value === 1){
 		return '管理员'
 	}
-	if(value===2){
+	if(value === 2){
 		return '合作者'
 	}
-	else if(value===3){
+	else if(value === 3){
 		return '消费者'
 	}
 }
 
 // 操作格式化
 function operateFormatter(value, row, index) {
-	return [
+	status=row.status;
+	if(status=="1"){
+		return [
 			'<a class="redact" href="javascript:queryEdit(' + value
-					+ ');" title="编辑">',
+			+ ');" title="编辑">',
 			'<i class="glyphicon glyphicon-pencil">编辑</i>', '</a>  ',
 			'<a class="redact" href="javascript:queryDisuse(' + value
 			+ ');" title="停用">',
@@ -116,6 +119,18 @@ function operateFormatter(value, row, index) {
 			'<a class="redact" href="javascript:queryDelete(' + value
 			+ ');" title="删除">',
 			'<i class="glyphicon glyphicon-trash">删除</i>', '</a>  '].join('');
+	}else if(status=="2"){
+		return [
+			'<a class="redact" href="javascript:queryEdit(' + value
+			+ ');" title="编辑">',
+			'<i class="glyphicon glyphicon-pencil">编辑</i>', '</a>  ',
+			'<a class="redact" href="javascript:queryStart(' + value
+			+ ');" title="启用">',
+			'<i class="glyphicon glyphicon-play">启用</i>', '</a>  ',
+			'<a class="redact" href="javascript:queryDelete(' + value
+			+ ');" title="删除">',
+			'<i class="glyphicon glyphicon-trash">删除</i>', '</a>  '].join('');
+	}
 }
 function formatindex(value, row, index) {
 	return [ index + 1 ].join('');
@@ -213,6 +228,23 @@ function clearDate(){
 	$("#type").val(1);
 	$("#remark").val(null);
 }
+//查询用户名是否重复
+var isdata;
+function queryByName(name) {
+	$.ajax({
+		url : PROJECT_NAME + '/web/addUser/queryUserByName',
+		type : 'POST',
+		dataType : "json",
+		async:false,//同步获取数据
+		data : {
+			'name' : name
+		},
+		success : function(data) {
+			unloginHandler(data);
+			isdata=data;
+		}
+	});
+}
 //新增点击事件
 $('#btn_add').click(function(){ 
 	$('#addModal').modal();
@@ -220,6 +252,40 @@ $('#btn_add').click(function(){
 });
 //新增确认点击事件
 $('#btn_yes').click(function(){ 
+	var name=$('#name').val();
+	var department=$('#department').val();
+	var password=$('#password').val();
+	var email=$('#email').val();
+	var remark=$('#remark').val();
+	if (name == null || name.length == 0) {
+		layer.msg('手机号不能为空!');
+		return false;
+	}
+	queryByName(username);
+	if (isdata == false) {
+		layer.msg('用户名已存在!');
+		return false;
+	}
+	if (department == null || department.length == 0) {
+		layer.msg('名称不能为空!');
+		return false;
+	}
+	if (password == null || password.length == 0) {
+		layer.msg('密码不能为空!');
+		return false;
+	}
+	if (password.length<6) {
+		layer.msg('密码最少6位');
+		return false;
+	}
+	if (email == null || email.length == 0) {
+		layer.msg('邮箱不能为空!');
+		return false;
+	}
+	if (remark.length>200) {
+		layer.msg('备注最多200个字!');
+		return false;
+	}
 	data={
 			"name" :$('#name').val(),
 			"department" : $('#department').val(),
@@ -276,6 +342,31 @@ function queryEdit(id) {
 }
 //编辑确认点击事件
 $('#btn_yes1').click(function(){ 
+	var name=$('#name1').val();
+	var department=$('#department1').val();
+	var email=$('#email1').val();
+	var remark=$('#remark1').val();
+	if (name == null || name.length == 0) {
+		layer.msg('手机号不能为空!');
+		return false;
+	}
+	/*queryByName(username);
+	if (isdata == false) {
+		layer.msg('用户名已存在!');
+		return false;
+	}*/
+	if (department == null || department.length == 0) {
+		layer.msg('名称不能为空!');
+		return false;
+	}
+	if (email == null || email.length == 0) {
+		layer.msg('邮箱不能为空!');
+		return false;
+	}
+	if (remark.length>200) {
+		layer.msg('备注最多200个字!');
+		return false;
+	}
 	data={
 			"id" : $('#id').val(),
 			"name" :$('#name1').val(),
@@ -295,6 +386,7 @@ $('#btn_yes1').click(function(){
 	          {
 	            layer.msg('修改成功');
 	            queryEvent("table");
+	            layer.close();
 	          }else
 	          {
 	            layer.msg(data.message);
@@ -306,6 +398,33 @@ $('#btn_yes1').click(function(){
 	        }
 	});
 });
+//根据id启用
+function queryStart(id) {
+	var dataId=[id];
+	   // dataId=dataId.concat(id);
+	$.ajax({
+        url : PROJECT_NAME + '/web/addUser/toStart',
+        type:'POST',
+        dataType : "json",
+        data:{'id':dataId},
+        traditional: true,
+        success:function(data){
+          unloginHandler(data);	
+          if(data.success)
+          {
+            layer.msg('启用成功');
+            queryEvent("table");
+          }else
+          {
+            layer.msg(data.message);
+          } 
+        },
+        error:function(e)
+        {
+          layer.msg('系统异常!'+e);
+        }
+      });
+}
 //根据id停用
 function queryDisuse(id) {
 	var dataId=[id];
