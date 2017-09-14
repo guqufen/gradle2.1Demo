@@ -34,8 +34,14 @@
                         <input type="text" class="form-control" id="businessLicenseNum" name="businessLicenseNum"/>
                     </div>
                        <div class="col-sm-3">
-                        <label class="control-label" for="status">状态:</label>
-                        <input type="text" class="form-control" id="status" name="status"/>
+                        <label class="control-label">状态:</label> 
+                        <select id="status" name="status" class="form-control">
+								<option value="">全部</option>
+								<option value="0" class="admin">待审核</option>
+								<!-- <option value="1" class="admin">审核通过</option> -->
+								<option value="2" class="auditor">审核失败</option>
+								<option value="3" class="auditor">待编辑</option>
+						</select>
                     </div>
                 </div>
                 <div class="col-sm-2" style="text-align: right;">

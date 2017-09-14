@@ -1,13 +1,26 @@
 //获取用户信息
-$.ajax({
-	url : PROJECT_NAME + '/web/userOuter/getCurrentUser',
-	type : 'POST',
-	data : null,
-	success : function(data){
-		console.log(data)
-	}
-});
 
+function load_val2(){
+    var result;
+    $.ajax({
+        dataType:'json',
+        type : 'POST',
+        url :PROJECT_NAME + '/web/user/getCurrentUser',
+        async:false,//这里选择异步为false，那么这个程序执行到这里的时候会暂停，等待
+                    //数据加载完成后才继续执行
+        success : function(data){
+        	console.log(data)
+            result = data.data.type;
+        }
+    });
+    return result;
+}
+var customerType = load_val2();
+if(customerType==1){
+	$(".auditor").css("display","none");
+}else{
+	$(".admin").css("display","none");
+}
 //初始化表格
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
@@ -26,11 +39,7 @@ $('#table').bootstrapTable({
 	pageList : [ 15, 20, 25, 30 ], // 可供选择的每页的行数（*）
 	queryParams : queryParams,
 	responseHandler : responseHandler,// 处理服务器返回数据
-	columns : [ {
-		field : 'id',
-		title : '操作',
-		formatter:formatterOperation
-	}, {
+	columns : [  {
 		field : 'merName',
 		title : '商户名称'
 	}, {
@@ -49,13 +58,22 @@ $('#table').bootstrapTable({
 		field : 'status',
 		title : '状态',
 		formatter : formatterStatus
-	} ]
+	},{
+		field : 'id',
+		title : '操作',
+		formatter:formatterOperation
+	}]
 });
 function formatterOperation(value, row, index){
 	//审核成功
-	if (row.status == 1) {
+	if (row.status == 2||row.status ==3) {
 		return [
-				'<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" onclick="javascript:stopData(' + row.id + ');" title="终止">终止', '</a> ',"<a class='btn btn-primary' onclick='javascript:details("+row.id+")' style='padding: 3px 6px;' data-toggle='modal' data-target='#myModaldetails'>详情</a>" ]
+				'<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" onclick="javascript:edit(' + row.id + ');">编辑</a>']
+				.join('');
+	}
+	if(row.status == 0){
+		return [
+				'<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" onclick="javascript:check(' + row.id + ');">审核报告</a>']
 				.join('');
 	}
 }
@@ -142,8 +160,8 @@ function queryParams(params) {
 		merName : $.trim($('#merName').val()),
 		tradingArea : $.trim($('#tradingArea').val()),
 		businessLicenseNum : $.trim($('#businessLicenseNum').val()),
-		status: $.trim($('#status').val()),
-		webUserOuterId:2
+		status: $('#status option:selected').val(),
+		customerType:customerType
 	}
 	return param;
 }
@@ -161,6 +179,38 @@ function responseHandler(res) {
 		};
 	}
 }
+
+
+function check(id){
+	layer.confirm('确定以邮件的方式通知用户吗?', {
+		time : 20000, // 20s后自动关闭
+		btn : [ '确定', '取消' ]
+	}, function() {
+		$.ajax({
+			url : PROJECT_NAME + '/web/report/headPersonnelMes',
+			type : 'POST',
+			dataType : "json",
+			data :{
+				 "userId":1,
+				 "merchantId":id
+			},
+			success : function(data) {
+				if (data.success) {
+					layer.msg('审核成功');
+					queryEvent("table");
+				} else {
+					layer.msg('终止失败');
+				}
+			},
+			error : function(e) {
+				layer.msg('系统异常!' + e);
+			}
+		});
+	}, function() {
+		layer.msg('取消成功');
+	});
+}
+
 
 //$.ajax({
 //	url : PROJECT_NAME + '/web/report/queryYearReport',
@@ -183,7 +233,7 @@ function responseHandler(res) {
 //});
 
 //$.ajax({
-//	url : PROJECT_NAME + '/web/report/backPersonnelMes',
+//	url : PROJECT_NAME + '/web/report/headPersonnelMes',
 //	type : 'POST',
 //	dataType : "json",
 //	data : {"userId":1,"merchantId":2},
