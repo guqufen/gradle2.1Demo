@@ -14,7 +14,7 @@ public class RiskConstant extends CoreConstants {
     public static String WEB_OLD_PASSWORD_NULL    = "5106";    //用户名或密码为空
     public static String OLD_PASSWORD             = "5107";
     public static String WEB_NEW_PASSWORD_NULL    = "5108";
-    public static String WEB_OLD_PASSWORD_FAIL    = "5108";
+    public static String WEB_OLD_PASSWORD_FAIL    = "5111";
     public static String WEB_BANK_CARD_NULL       = "5109";
     public static String WEB_TIME_ERROR           = "5110";
     static {

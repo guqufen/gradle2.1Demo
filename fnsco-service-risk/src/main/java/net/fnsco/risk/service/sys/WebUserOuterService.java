@@ -8,9 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.freamwork.comm.Md5Util;
+import net.fnsco.risk.comm.RiskConstant;
 import net.fnsco.risk.service.sys.dao.WebUserOuterDAO;
 import net.fnsco.risk.service.sys.entity.WebUserDO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
@@ -22,7 +26,7 @@ public class WebUserOuterService extends BaseService {
     @Autowired
     private WebUserOuterDAO userOuterDAO;
 
- /*   public ResultDTO doLogin(String username, String password) {
+    public ResultDTO doLogin(String username, String password) {
         String pwd = Md5Util.getInstance().md5(password);
         WebUserOuterDO user = userOuterDAO.getByUserName(username);
         if (user == null) {
@@ -36,15 +40,15 @@ public class WebUserOuterService extends BaseService {
     }
 
     //修改密码
-    public ResultDTO modifyPassword(String name, String newPassword, String oldPassword) {
+    public ResultDTO modifyPassword(String username, String newPassword, String oldPassword) {
         //非空判断
-        if (Strings.isNullOrEmpty(name) || Strings.isNullOrEmpty(newPassword) || Strings.isNullOrEmpty(oldPassword)) {
+        if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(newPassword) || Strings.isNullOrEmpty(oldPassword)) {
             return ResultDTO.fail();
         }
         String oldPwd = Md5Util.getInstance().md5(oldPassword);
         String newPwd = Md5Util.getInstance().md5(newPassword);
-        //通过真实姓名判断原密码是否正确 
-        WebUserOuterDO user = userOuterDAO.getByRealName(name);
+        //通过用户名判断原密码是否正确 
+        WebUserOuterDO user = userOuterDAO.getByUserName(username);
         if (null == user) {
             return ResultDTO.fail(RiskConstant.WEB_LOGIN_USER_NOT_EXIST);
         }
@@ -60,7 +64,7 @@ public class WebUserOuterService extends BaseService {
             return ResultDTO.fail();
         }
         return ResultDTO.success();
-    }*/
+    }
 
     // 分页
     public ResultPageDTO<WebUserOuterDO> page(WebUserOuterDO user, Integer pageNum, Integer pageSize) {

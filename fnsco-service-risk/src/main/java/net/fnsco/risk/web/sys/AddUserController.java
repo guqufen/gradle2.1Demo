@@ -24,7 +24,7 @@ import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 public class AddUserController extends BaseController {
 
 	 @Autowired
-	    private WebUserOuterService userOuterService;
+	 private WebUserOuterService userOuterService;
 	 /**
 		 * 页面信息查询
 		 * @param dept
