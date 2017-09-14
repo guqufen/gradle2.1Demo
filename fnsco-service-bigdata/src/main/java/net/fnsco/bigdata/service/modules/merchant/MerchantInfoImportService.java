@@ -12,16 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.bigdata.api.dto.SnCodeDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
-import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
+import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 
 /**
@@ -30,7 +32,7 @@ import net.fnsco.core.base.ResultDTO;
  * @date 2017年6月21日 上午10:15:40
  */
 @Service
-public class MerchantInfoImportService {
+public class MerchantInfoImportService extends BaseService{
 	@Autowired
 	private MerchantCoreService merchantCoreService;
 	@Autowired
@@ -67,95 +69,126 @@ public class MerchantInfoImportService {
 				String registaddress = String.valueOf(objs[7]);
 				// 商户标签
 				String mercflag = String.valueOf(objs[8]);
-				// 代理商
-				Integer agentid = Integer.parseInt(String.valueOf(objs[9]));
-				// 商户入网注册名称
-				String abbreviation = String.valueOf(objs[10]);
+				// channelMerchant// 商户入网注册名称
+				String channelMerchant = String.valueOf(String.valueOf(objs[9]));
+				
+//				String abbreviation = String.valueOf(objs[10]);
 				// 签购单名称
-				String mercrefername = String.valueOf(objs[11]);
+				String mercrefername = String.valueOf(objs[10]);
 				// 商户联系人
-				String contactname = String.valueOf(objs[12]);
+				String contactname = String.valueOf(objs[11]);
 				// 联系电话
-				String contactmobile = String.valueOf(objs[13]);
+				String contactmobile = String.valueOf(objs[12]);
+				//邮箱
+				String contactemail = String.valueOf(objs[13]);
+				//财务联系人信息
+				String financeLinkMan = String.valueOf(objs[14]);
+				String financeLinkManTel = String.valueOf(objs[15]);
+				String financeLinkManEmail = String.valueOf(objs[16]);
+				//商户负责人信息
+				String merPrincipal = String.valueOf(objs[17]);
+				String merPrincipalTel = String.valueOf(objs[18]);
+				String merPrincipalEmail = String.valueOf(objs[19]);
 				// 装机地址
-				String posaddr = String.valueOf(objs[14]);
+				String posaddr = String.valueOf(objs[20]);
 				// 开户类型
-				String accounttype = String.valueOf(objs[15]);
+				String accounttype = String.valueOf(objs[21]);
 				// 开户人身份证
-				String accountcardid = String.valueOf(objs[16]);
+				String accountcardid = String.valueOf(objs[22]);
 				// 入账人
-				String accountname = String.valueOf(objs[17]);
+				String accountname = String.valueOf(objs[23]);
 				// 入账账号
-				String accountno = String.valueOf(objs[18]);
+				String accountno = String.valueOf(objs[24]);
 				// 开户行
-				String subbankname = String.valueOf(objs[19]);
-				// 邮箱
-				String contactemail = String.valueOf(objs[20]);
-				// 刷卡扣率-借记卡
-				String jjk0 = String.valueOf(objs[21]);
-				// 刷卡扣率-贷记卡
-				String creditcardrate = String.valueOf(objs[22]);
+				String subbankname = String.valueOf(objs[25]);
+				String openBankNum = String.valueOf(objs[26]);;
+				// channelType
+				String channelType = String.valueOf(objs[27]);
+				//createTime
+				String createTime = String.valueOf(objs[28]);
+				// 浦发
+				String 浦发 = String.valueOf(objs[29]);
+				String taxRegistCode = String.valueOf(objs[30]);
 				// 扫码扣率
-				String xx = String.valueOf(objs[23]);
-				// 渠道商户号
-				String channelmerid = String.valueOf(objs[24]);
+				String xx = String.valueOf(objs[31]);
+				//文件信息
+				String fileInfos = String.valueOf(objs[32]);
 				// 一号pos机
 				// 备注/1号机具SN
-				String sncode1 = String.valueOf(objs[25]);
-				// 终端编号刷卡
-				String terminalcode11 = String.valueOf(objs[26]);
-				// 终端编号扫码
-				String terminalcode12 = String.valueOf(objs[27]);
-				// 二号pos机
-				// 备注/2号机具SN
-				String sncode2 = String.valueOf(objs[28]);
-				// 终端编号刷卡
-				String terminalcode21 = String.valueOf(objs[29]);
-				// 终端编号扫码
-				String terminalcode22 = String.valueOf(objs[30]);
-				// 三号pos机
-				// 备注/3号机具SN
-				String sncode3 = String.valueOf(objs[31]);
-				// 终端编号刷卡
-				String terminalcode31 = String.valueOf(objs[32]);
-				// 终端编号扫码
-				String terminalcode32 = String.valueOf(objs[33]);
-
-				String innerCode = merchantCoreService.getInnerCode();
-				/**
-				 * 商户基本信息
-				 */
-				// 创建一个商户基础信息实体类对象接收商户及信息
-				MerchantCore merchantCore = new MerchantCore();
-				merchantCore.setInnerCode(innerCode);
-				merchantCore.setMerName(mername);
-				merchantCore.setBusinessLicenseNum(businesslicensenum);
-				merchantCore.setLegalValidCardType("0");
-				merchantCore.setCardNum(cardnum);
-				merchantCore.setLegalPerson(legalperson);
-				merchantCore.setAbbreviation(abbreviation);
-				merchantCore.setLegalPersonMobile(legalpersonmobile);
-				// excel中导出的时间是“EEE MMM dd HH:mm:ss z yyyy”类型的String类，将他转换成"yyyy/MM/dd"
-				SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-				Date date1 = sdf1.parse(cardvalidtimeStr);
-				sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-				String cardvalidtime = sdf1.format(date1);
-				SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-				Date date2 = sdf2.parse(businesslicensevalidtimeStr);
-				sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-				String businesslicensevalidtime = sdf2.format(date2);
-				merchantCore.setCardValidTime(cardvalidtime);
-				merchantCore.setBusinessLicenseValidTime(businesslicensevalidtime);
-				merchantCore.setRegistAddress(registaddress);
-				merchantCore.setMercFlag(mercflag);
-				merchantCore.setAgentId(agentid);
-				try {
-					// 商户基本信息保存
-					merchantCoreService.doAddMerCore(merchantCore);
-				} catch (Exception e) {
-					return ResultDTO.fail("第" + timeNum + "行数据的基本数据信息有误，导入失败");
-				}
-
+				String sncode1 = String.valueOf(objs[33]);
+				//debitCardRate
+				String debitCardRate = String.valueOf(objs[34]);
+				//creditCardRate
+				String creditCardRate = String.valueOf(objs[35]);
+				//debitCardFee
+                String debitCardFee = String.valueOf(objs[36]);
+                //creditCardFee
+                String creditCardFee = String.valueOf(objs[37]);
+                //debitCardMaxFee
+                String debitCardMaxFee = String.valueOf(objs[38]);
+                //creditCardMaxFee
+                String creditCardMaxFee = String.valueOf(objs[39]);
+                //posType
+                String posType = String.valueOf(objs[40]);
+                //posFactory
+                String posFactory = String.valueOf(objs[41]);
+                //merchantCode
+                String merchantCode = String.valueOf(objs[42]);
+                //terminalCode
+                String terminalCode = String.valueOf(objs[43]);
+                //innerTermCode
+                String innerTermCode = String.valueOf(objs[44]);
+              //mercReferName
+                String mercReferName = String.valueOf(objs[45]);
+                
+                /**
+                 * 导入之前要先验证business_license_num 营业执照号码保持唯一,如果存在，则不新加商户，只加该商户其余属性。
+                 */
+                if(Strings.isNullOrEmpty(businesslicensenum)){
+                    logger.error("第" + timeNum + "营业执照为空 不能入库!");
+                }
+                String innerCode = null;
+                MerchantCore merchantcore =merchantCoreService.selectBybusinessLicenseNum(businesslicensenum);
+                /**
+                 * 商户基本信息
+                 */
+                if(merchantCode == null){
+                    innerCode = merchantCoreService.getInnerCode();
+                  // 创建一个商户基础信息实体类对象接收商户及信息
+                    MerchantCore merchantCore = new MerchantCore();
+                    merchantCore.setInnerCode(innerCode);
+                    merchantCore.setMerName(mername);
+                    merchantCore.setBusinessLicenseNum(businesslicensenum);
+                    merchantCore.setLegalValidCardType("0");
+                    merchantCore.setCardNum(cardnum);
+                    merchantCore.setLegalPerson(legalperson);
+                    merchantCore.setAbbreviation(channelMerchant);
+                    merchantCore.setLegalPersonMobile(legalpersonmobile);
+                    // excel中导出的时间是“EEE MMM dd HH:mm:ss z yyyy”类型的String类，将他转换成"yyyy/MM/dd"
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+                    Date date1 = sdf1.parse(cardvalidtimeStr);
+                    sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+                    String cardvalidtime = sdf1.format(date1);
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+                    Date date2 = sdf2.parse(businesslicensevalidtimeStr);
+                    sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+                    String businesslicensevalidtime = sdf2.format(date2);
+                    merchantCore.setCardValidTime(cardvalidtime);
+                    merchantCore.setBusinessLicenseValidTime(businesslicensevalidtime);
+                    merchantCore.setRegistAddress(registaddress);
+                    merchantCore.setMercFlag(mercflag);
+                    merchantCore.setAgentId(1);//默认
+                    
+                    try {
+                        // 商户基本信息保存
+                        merchantCoreService.doAddMerCore(merchantCore);
+                    } catch (Exception e) {
+                        return ResultDTO.fail("第" + timeNum + "行数据的基本数据信息有误，导入失败");
+                    }
+                }else{
+                    innerCode = merchantcore.getInnerCode();
+                }
+                
 				/**
 				 * 商户联系人信息
 				 */
@@ -165,8 +198,20 @@ public class MerchantInfoImportService {
 				merchantContact.setContactName(contactname);
 				merchantContact.setContactMobile(contactmobile);
 				merchantContact.setContactEmail(contactemail);
+				MerchantContact merchantContact1 = new MerchantContact();
+				merchantContact1.setInnerCode(innerCode);
+				merchantContact1.setContactName(financeLinkMan);
+				merchantContact1.setContactMobile(financeLinkManTel);
+				merchantContact1.setContactEmail(financeLinkManEmail);
+                MerchantContact merchantContact2 = new MerchantContact();
+                merchantContact2.setInnerCode(innerCode);
+                merchantContact2.setContactName(merPrincipal);
+                merchantContact2.setContactMobile(merPrincipalTel);
+                merchantContact2.setContactEmail(merPrincipalEmail);
 				List<MerchantContact> contcactList = new ArrayList<MerchantContact>();
 				contcactList.add(merchantContact);
+				contcactList.add(merchantContact1);
+				contcactList.add(merchantContact2);
 				try {
 					// 商户联系人信息保存
 					merchantCoreService.doAddMerContact(contcactList);
