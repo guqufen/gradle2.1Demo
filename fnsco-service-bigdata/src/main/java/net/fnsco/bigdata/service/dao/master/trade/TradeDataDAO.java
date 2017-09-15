@@ -3,6 +3,8 @@ package net.fnsco.bigdata.service.dao.master.trade;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.PageDTO;
 
@@ -73,5 +75,5 @@ public interface TradeDataDAO {
     
     Map querySumByCondition(TradeData record);
 
-	String queryByCertifyId(String cardTotalLength);
+	String queryByCertifyId(@Param("certifyId") String certifyId,@Param("cardTotalLength") String cardTotalLength);
 }
