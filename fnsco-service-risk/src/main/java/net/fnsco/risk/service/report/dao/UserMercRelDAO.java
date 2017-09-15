@@ -20,6 +20,12 @@ public interface UserMercRelDAO {
     @Select("SELECT * FROM risk_user_merc_rel WHERE id = #{id}")
     public UserMercRelDO getById(@Param("id") int id);
 
+    //根据innerCode查询风控信息
+    @Results({@Result( column = "web_user_outer_id",property = "webUserOuterId"),@Result( column = "inner_code",property = "innerCode") })
+    @Select("SELECT * FROM risk_user_merc_rel WHERE inner_code = #{innerCode}")
+    public UserMercRelDO getByInnerCode(@Param("innerCode") String innerCode);
+
+    
     @Insert("INSERT into risk_user_merc_rel(id,web_user_outer_id,inner_code) VALUES (#{id},#{webUserOuterId},#{innerCode})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(UserMercRelDO userMercRel);
