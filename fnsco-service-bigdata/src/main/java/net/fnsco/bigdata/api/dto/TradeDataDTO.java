@@ -46,8 +46,8 @@ public class TradeDataDTO extends DTO {
     private String 	txnSubType;
     private String 	currency;
     private String 	settleDate;
-    private String	dcType;
-    private String	certifyId;
+    //private String	dcType;
+    //private String	certifyId;
     private String	msgDestId;
     private String	payTimeOut;
     private String	subject;
@@ -121,22 +121,6 @@ public class TradeDataDTO extends DTO {
 
 	public void setSettleDate(String settleDate) {
 		this.settleDate = settleDate;
-	}
-
-	public String getDcType() {
-		return dcType;
-	}
-
-	public void setDcType(String dcType) {
-		this.dcType = dcType;
-	}
-
-	public String getCertifyId() {
-		return certifyId;
-	}
-
-	public void setCertifyId(String certifyId) {
-		this.certifyId = certifyId;
 	}
 
 	public String getMsgDestId() {

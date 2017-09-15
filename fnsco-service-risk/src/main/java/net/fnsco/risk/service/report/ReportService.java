@@ -22,8 +22,10 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.risk.service.report.dao.ReportInfoDAO;
 import net.fnsco.risk.service.report.dao.ReportRepaymentHistoryDAO;
+import net.fnsco.risk.service.report.dao.UserMercRelDAO;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
+import net.fnsco.risk.service.report.entity.UserMercRelDO;
 import net.fnsco.risk.service.report.entity.YearReportDO;
 import net.fnsco.risk.service.sys.dao.WebUserOuterDAO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
@@ -41,6 +43,9 @@ public class ReportService extends BaseService{
     private Environment ev;
     @Autowired
     private ReportRepaymentHistoryDAO reportRepaymentHistoryDAO;
+    @Autowired
+    private UserMercRelDAO userMercRelDAO;
+    
     //前台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> page(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
@@ -51,11 +56,11 @@ public class ReportService extends BaseService{
     //后台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> pageBack(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageListBack(reportInfoDO, pageNum, pageSize);
-//        for( ReportInfoDO li:pageList){
-//            //根据innerCode查询用户信息
-//            
-//            //li.getInnerCode()
-//        }
+        for( ReportInfoDO li:pageList){
+            //根据innerCode查询用户信息
+            UserMercRelDO dto=userMercRelDAO.getByInnerCode(li.getInnerCode());
+            li.setWebUserOuterId(dto.getWebUserOuterId());
+        }
         Integer count = this.reportInfoDAO.pageListCountBack(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
@@ -184,12 +189,17 @@ public class ReportService extends BaseService{
             helper.setTo("782430551@qq.com");
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append(dto.getName()+"<br>").append("关于"+reportInfoDO.getMerName()+"的'风控+'报告已经生成!点击查看"+"<a style='font-size:50px;' href='http://www.w3school.com.cn'>W3School</a>");
+            sb.append("<h1>"+dto.getName()+"</h1><br>").append("关于"+reportInfoDO.getMerName()+"的'风控+'报告已经生成!点击查看"+"<a style='font-size:50px;' href='http://www.w3school.com.cn'>W3School</a>");
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
         mailSender.send(message);
+        return ResultDTO.success();
+    }
+    //更新风控报告状态
+    public ResultDTO updateReportStatus(ReportInfoDO reportInfoDO) {
+        int num=reportInfoDAO.update(reportInfoDO);
         return ResultDTO.success();
     }
     
