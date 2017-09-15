@@ -86,7 +86,7 @@ public class WebUserOuterProvider {
             WHERE("type=#{webUserOuter.type}");
         }
         if (StringUtils.isNotBlank(webUserOuter.getName())){
-            WHERE("name=#{webUserOuter.name}");
+            WHERE("name like CONCAT('%',#{webUserOuter.name},'%')");
         }
         if (StringUtils.isNotBlank(webUserOuter.getPassword())){
             WHERE("password=#{webUserOuter.password}");
@@ -123,6 +123,9 @@ public class WebUserOuterProvider {
         }
         if (webUserOuter.getCreaterTime() != null) {
             WHERE("creater_time=#{webUserOuter.createrTime}");
+        }
+        if (webUserOuter.getStatus() != null) {
+            WHERE("status=#{webUserOuter.status}");
         }
         WHERE("status != 0");
         ORDER_BY("id desc limit " + start + ", " + limit );
@@ -141,7 +144,7 @@ public class WebUserOuterProvider {
             WHERE("type=#{webUserOuter.type}");
         }
         if (StringUtils.isNotBlank(webUserOuter.getName())){
-            WHERE("name=#{webUserOuter.name}");
+            WHERE("name like CONCAT('%',#{webUserOuter.name},'%')");
         }
         if (StringUtils.isNotBlank(webUserOuter.getPassword())){
             WHERE("password=#{webUserOuter.password}");
@@ -178,7 +181,11 @@ public class WebUserOuterProvider {
         }
         if (webUserOuter.getCreaterTime() != null) {
             WHERE("creater_time=#{webUserOuter.createrTime}");
-        }WHERE("status!=0");
+        }
+        if (webUserOuter.getStatus() != null) {
+            WHERE("status=#{webUserOuter.status}");
+        }
+        WHERE("status!=0");
         }}.toString();
     }
 }

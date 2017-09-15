@@ -26,31 +26,49 @@
 			<!-- 搜索条件 -->
 			<form id="formSearch" class="form-horizontal">
 				<div class="form-group" style="margin-top: 15px">
-					<div class="row col-sm-10">
-						<div class="col-sm-5 query-time">
-							<label class="control-label" for="status">状态:</label>
-							<button type="button" id="btn_start" class="btn btn-default"
-								onclick="javascript:queryAllStart();">启用</button>
-							<button type="button" id="btn_disuse" class="btn btn-default"
-								onclick="javascript:queryAllDisuse();">停用</button>
-						</div>
+					<div class="col-sm-1 query-time">
+						<h3 class="control-label" for="status">状态:</h3>
+					</div>
+					<div class="col-sm-10 query-time">
+						<button type="button" id="btn_all" class="btn btn-warning"
+							onclick="javascript:queryAll();">
+							</span>全选
+						</button>
+						<button type="button" id="btn_start" class="btn btn-success"
+							onclick="javascript:queryAllStart();">
+							</span>启用
+						</button>
+						<button type="button" id="btn_disuse" class="btn btn-danger"
+							onclick="javascript:queryAllDisuse();">
+							</span>停用
+						</button>
+						<input type="hidden" id=status name="status">
+						<label class="control-label" for="queryname">账户：</label> <input
+							type="text" class="form-control" id="queryname">
+					</div>		
+					<div class="col-sm-1 query-time">
+						<button type="button" id="btn_query" class="btn btn-primary"
+							onclick="javascript:queryEvent('table');">
+							<span class="glyphicon glyphicon-search"></span>查询
+						</button>
 					</div>
 				</div>
 			</form>
-		</div>
-	</div>
-	<!-- 表格组件 -->
-	<div class="ibox float-e-margins">
-		<div class="ibox-content">
-			<div class="row row-lg">
-				<div class="col-sm-12">
-					<div id="toolbar">
-						<button id="btn_add" type="button" class="btn btn-success"
-							data-toggle="modal" data-target="#myModal">
-							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
-						</button>
+
+			<!-- 表格组件 -->
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="row row-lg">
+						<div class="col-sm-12">
+							<div id="toolbar">
+								<button id="btn_add" type="button" class="btn btn-success"
+									data-toggle="modal" data-target="#myModal">
+									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+								</button>
+							</div>
+							<table id="table"></table>
+						</div>
 					</div>
-					<table id="table"></table>
 				</div>
 			</div>
 		</div>
@@ -74,17 +92,18 @@
 						<div class="row">
 							<div class="col-sm-8">
 								<label class="control-label" for="name">手机号：</label> <input
-									type="text" class="form-control" id=name name="name" placeholder="手机号"
-									required="required">
+									type="text" class="form-control" id=name name="name"
+									placeholder="手机号" required="required">
 							</div>
 							<div class="col-sm-8">
 								<label class="control-label" for="department">名称：</label> <input
-									type="text" class="form-control" id="department" placeholder="名称"
-									name="department">
+									type="text" class="form-control" id="department"
+									placeholder="名称" name="department">
 							</div>
 							<div class="col-sm-8">
 								<label class="control-label" for="password">密码：</label> <input
-									type="text" class="form-control" id="password" name="password" placeholder="密码">
+									type="text" class="form-control" id="password" name="password"
+									placeholder="密码">
 							</div>
 							<div class="col-sm-8">
 								<label class="control-label" for="type">类型：</label> <select
@@ -96,26 +115,27 @@
 							</div>
 							<div class="col-sm-8">
 								<label class="control-label" for="email">邮件：</label> <input
-									type="text" class="form-control" id="email" name="email" placeholder="邮件">
+									type="text" class="form-control" id="email" name="email"
+									placeholder="邮件">
 							</div>
 							<div class="col-sm-12">
 								<label class="control-label" for="remark">备注：</label>
-								<textarea id="remark" name="remark" class="form-control" placeholder="备注最多200个字"
-									rows="5"></textarea>
+								<textarea id="remark" name="remark" class="form-control"
+									placeholder="备注最多200个字" rows="5"></textarea>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
-	                <div class="tab-content">
-	                	<div class="form-group">
+					<div class="tab-content">
+						<div class="form-group">
 							<div class="col-sm-2 control-label"></div>
 							<button id="btn_yes" type="button" class="btn btn-primary">
-                                <span  aria-hidden="true"></span>确认添加
-                            </button>
+								<span aria-hidden="true"></span>确认添加
+							</button>
 						</div>
-	                </div>
-	            </div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -135,19 +155,22 @@
 				<div class="modal-body">
 					<div class="tab-content">
 						<div class="row">
-						<div class="col-sm-8" style="display:none;">
+							<div class="col-sm-8" style="display: none;">
 								<label class="control-label" for="id"></label> <input
 									type="text" class="form-control" id=id name="id"
+									required="required"> <input type="text"
+									class="form-control" id=oldname name="oldname"
 									required="required">
 							</div>
 							<div class="col-sm-8">
 								<label class="control-label" for="name1">手机号：</label> <input
-									type="text" class="form-control" id=name1 name="name1" placeholder="手机号"
-									required="required">
+									type="text" class="form-control" id=name1 name="name1"
+									placeholder="手机号" required="required">
 							</div>
 							<div class="col-sm-8">
 								<label class="control-label" for="department1">名称：</label> <input
-									type="text" class="form-control" id="department1" name="department1" placeholder="名称">
+									type="text" class="form-control" id="department1"
+									name="department1" placeholder="名称">
 							</div>
 							<div class="col-sm-8">
 								<label class="control-label" for="type1">类型：</label> <select
@@ -164,22 +187,22 @@
 							</div>
 							<div class="col-sm-12">
 								<label class="control-label" for="remark1">备注：</label>
-								<textarea id="remark1" name="remark1" class="form-control" placeholder="备注最多200个字"
-									rows="5"></textarea>
+								<textarea id="remark1" name="remark1" class="form-control"
+									placeholder="备注最多200个字" rows="5"></textarea>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
-	                <div class="tab-content">
-	                	<div class="form-group">
+					<div class="tab-content">
+						<div class="form-group">
 							<div class="col-sm-2 control-label"></div>
 							<button id="btn_yes1" type="button" class="btn btn-primary">
-                                <span  aria-hidden="true"></span>确认添加
-                            </button>
+								<span aria-hidden="true"></span>确认添加
+							</button>
 						</div>
-	                </div>
-	            </div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
