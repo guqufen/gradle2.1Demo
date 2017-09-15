@@ -155,6 +155,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         map.put("Shopkeeper", Shopkeeper);
         map.put("merchantNums",merchantNums);
+        map.put("userName", appUser.getUserName());
+        map.put("mobile", appUser.getMobile());
       //返回值增加设置状态
         List<AppUserSettingDTO> settingstatus =  appUserSettingService.installSettingStatus(appUser.getId());
         map.put("appSettings", settingstatus);

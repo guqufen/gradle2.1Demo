@@ -105,7 +105,6 @@ public class MerchantInfoImportService extends BaseService {
                 // 开户行
                 String subbankname = String.valueOf(objs[25]);
                 String openBankNum = String.valueOf(objs[26]);
-                
                 // channelType
                 String channelType = String.valueOf(objs[27]);
                 //createTime
@@ -221,17 +220,26 @@ public class MerchantInfoImportService extends BaseService {
                         return ResultDTO.fail("第" + timeNum + "行数据的渠道信息有误，导入失败");
                     }
                     
-                    /**
-                     * 除了爱农和法奈昇的渠道，如果存在浦发的渠道，需要新增加浦发的渠道
-                     */
-                    if(!Strings.isNullOrEmpty(busiCode)){
-                        MerchantChannel pufaChannel = MerchantImportHelper.createMerchantChannel(innerCode, merchantCode, "01", userId, privateKye);
-                    }
-                    
                 } else {
                     channelId = channel.getId();
                 }
-
+                /**
+                 * 爱农
+                 */
+                MerchantChannel ainongChannel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, merchantCode,"02");
+                if(null == ainongChannel){
+                    createChanelAndPosAndTer(innerCode, merchantCode, userId, privateKye, mercrefername, posType, posFactory, sncode, posaddr, bankId, xx, debitCardRate,
+                        debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee, creditCardMaxFee, innerTermCode, terminalCode, timeNum, "02", "01");
+                }
+                
+                /**
+                 * 浦发
+                 */
+                if(!Strings.isNullOrEmpty(busiCode)){
+                    createChanelAndPosAndTer(innerCode, merchantCode, userId, privateKye, mercrefername, posType, posFactory, sncode, posaddr, bankId, xx,
+                        debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee, creditCardMaxFee, innerTermCode, terminalCode, timeNum, "01", "00");
+                }
+                
                 /**
                  * 商戶pos机信息
                  */
@@ -265,7 +273,7 @@ public class MerchantInfoImportService extends BaseService {
                 }
 
                 MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(innerCode, debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee,
-                    creditCardMaxFee, posId, innerTermCode, terminalCode, alipayFee, wechatFee);
+                    creditCardMaxFee, posId, innerTermCode, terminalCode, alipayFee, wechatFee,"00","刷卡");
                 // 把1个终端信息打包成List
                 List<MerchantTerminal> terminalList = new ArrayList<MerchantTerminal>();
                 terminalList.add(merchantTerminal1);
@@ -312,5 +320,77 @@ public class MerchantInfoImportService extends BaseService {
             MerchantFile merchantFile = MerchantImportHelper.createMerchantFile(innerCode, "", fileType, filePath);
             merchantFileDao.insertSelective(merchantFile);
         }
+    }
+    
+    /**
+     * createChanelAndPosAndTer:(新入库渠道POS以及渠道一起)    设定文件
+     * @author    tangliang
+     * @date      2017年9月15日 上午11:08:22
+     * @return void    DOM对象
+     */
+    private ResultDTO<Object> createChanelAndPosAndTer(String innerCode,String merchantCode,Integer userId,String privateKye,String mercrefername,String posType,String posFactory,String sncode,String posaddr,Integer bankId,
+                                          String xx,String debitCardRate,String debitCardMaxFee,String debitCardFee,String creditCardRate,String creditCardFee,
+                                          String creditCardMaxFee,String innerTermCode,String terminalCode,Integer timeNum,String channelType,String terminalType){
+        MerchantChannel pufaChannel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, merchantCode,channelType);
+        if(null == pufaChannel){
+            MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, merchantCode, channelType, userId, privateKye);
+            Integer pufaChannelId = null;
+            try {
+                // 渠道信息保存
+                pufaChannelId = merchantCoreService.doAddChannel(merchantChannel);
+            } catch (Exception e) {
+                return ResultDTO.fail("第" + timeNum + "行数据的渠道信息有误，导入失败");
+            }
+            /**
+             * 商戶pos机信息
+             */
+            MerchantPos merchantPos = MerchantImportHelper.createMerchantPos(innerCode, mercrefername, posType, posFactory, sncode, posaddr, bankId, pufaChannelId);
+            Integer posId = null;
+            try {
+                // pos机信息保存
+                posId = merchantPosService.insertPos(merchantPos);
+            } catch (Exception e) {
+                return ResultDTO.fail("第" + timeNum + "行数据的Pos机信息有误，导入失败");
+            }
+
+            /**
+             * 商户终端信息
+             */
+            String alipayFee = null;
+            String wechatFee = null;
+            try {
+                // 支付宝费率转换
+                String zfb1 = xx.substring(xx.indexOf("支付宝") + 3, xx.indexOf("%"));
+                BigDecimal bigDecimal1 = new BigDecimal(zfb1);
+                BigDecimal zfb = bigDecimal1.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                alipayFee = String.valueOf(zfb.doubleValue());
+                // 微信费率转换
+                String wx1 = xx.substring(xx.indexOf("微信") + 2, xx.lastIndexOf("%"));
+                BigDecimal bigDecimal2 = new BigDecimal(wx1);
+                BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                wechatFee = String.valueOf(wx.doubleValue());
+            } catch (Exception e) {
+                return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
+            }
+            
+            String termName = "扫码";
+            if("00".equals(terminalType)){
+                termName = "刷卡";
+            }
+            
+            MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(innerCode, debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee,
+                creditCardMaxFee, posId, innerTermCode, terminalCode, alipayFee, wechatFee,terminalType,termName);
+            // 把1个终端信息打包成List
+            List<MerchantTerminal> terminalList = new ArrayList<MerchantTerminal>();
+            terminalList.add(merchantTerminal1);
+            try {
+                // 终端信息保存
+                merchantCoreService.doAddMerTerminal(terminalList);
+            } catch (Exception e) {
+                return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
+            }
+        }
+        
+        return ResultDTO.success();
     }
 }
