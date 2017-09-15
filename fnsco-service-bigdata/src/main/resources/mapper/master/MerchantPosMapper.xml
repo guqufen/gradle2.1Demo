@@ -39,6 +39,7 @@
   <!-- APP商户终端列表结果集 -->
   <resultMap  id="PosResultMap" type="net.fnsco.bigdata.api.dto.PosListDTO">
    	<result column="mer_name" property="merName" jdbcType="VARCHAR" />
+   	<result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
    	<collection property="posInfo" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantPosDao.selectPosNamesByInnerCode"/>
   </resultMap>
   <!-- APPPOS详情结果集 -->
@@ -228,7 +229,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!-- 根据innercode查询POS名称集合 -->
-  <select id="selectPosNamesByInnerCode" parameterType="java.lang.String" resultType="net.fnsco.bigdata.api.dto.PosInfoDTO">
+  <select id="selectPosNamesByInnerCode" parameterType="java.lang.String" resultType="net.fnsco.bigdata.api.dto.PosInfosDTO">
   	SELECT id AS posId,pos_name AS posName FROM m_merchant_pos WHERE inner_code = #{innerCode} AND status = 1
   </select>
   <!-- 根据用户ID 查询所有POS设备信息 -->

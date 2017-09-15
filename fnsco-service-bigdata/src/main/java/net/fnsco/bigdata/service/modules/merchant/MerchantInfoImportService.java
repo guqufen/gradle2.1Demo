@@ -105,7 +105,7 @@ public class MerchantInfoImportService extends BaseService {
                 // 开户行
                 String subbankname = String.valueOf(objs[25]);
                 String openBankNum = String.valueOf(objs[26]);
-                ;
+                
                 // channelType
                 String channelType = String.valueOf(objs[27]);
                 //createTime
@@ -199,23 +199,35 @@ public class MerchantInfoImportService extends BaseService {
                 }
 
                 /**
-                 * 渠道信息--根据innerCode+merchantCode判断唯一性，如果存在，则获取ID ，否则新增加
+                 * 渠道信息--根据innerCode+merchantCode+channelType判断唯一性，如果存在，则获取ID ，否则新增加
                  */
                 if (Strings.isNullOrEmpty(merchantCode)) {
                     logger.error("第" + timeNum + "渠道商户号为空 不能入库!");
                     continue;
                 }
-                MerchantChannel channel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, merchantCode);
+                
+                /**
+                 * 判断法奈昇渠道有没有
+                 */
+                MerchantChannel channel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, merchantCode,"03");
                 Integer channelId = null;
                 if (null == channel) {
-                    // 创建一个渠道信息实体类对象接收渠道信息
-                    MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, merchantCode, channelType, userId, privateKye);
+                    // 新增加一个法奈昇的渠道 
+                    MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, merchantCode, "03", userId, privateKye);
                     try {
                         // 渠道信息保存
                         channelId = merchantCoreService.doAddChannel(merchantChannel);
                     } catch (Exception e) {
                         return ResultDTO.fail("第" + timeNum + "行数据的渠道信息有误，导入失败");
                     }
+                    
+                    /**
+                     * 除了爱农和法奈昇的渠道，如果存在浦发的渠道，需要新增加浦发的渠道
+                     */
+                    if(!Strings.isNullOrEmpty(busiCode)){
+                        MerchantChannel pufaChannel = MerchantImportHelper.createMerchantChannel(innerCode, merchantCode, "01", userId, privateKye);
+                    }
+                    
                 } else {
                     channelId = channel.getId();
                 }
@@ -266,7 +278,7 @@ public class MerchantInfoImportService extends BaseService {
             }
             return ResultDTO.success();
         }
-        // return b;
+        
         return ResultDTO.fail("没有导入数据，Excel为空");
     }
 
@@ -295,7 +307,7 @@ public class MerchantInfoImportService extends BaseService {
             String fileType = singleFile[0];
             String filePath = singleFile[1];
             /**
-             * 此处需要下载，上传OSS，再获取图片路径和名称
+             * 此处需要先下载，再上传OSS，再获取图片路径和名称
              */
             MerchantFile merchantFile = MerchantImportHelper.createMerchantFile(innerCode, "", fileType, filePath);
             merchantFileDao.insertSelective(merchantFile);
