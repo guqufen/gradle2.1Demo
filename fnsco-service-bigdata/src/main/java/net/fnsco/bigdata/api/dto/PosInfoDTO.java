@@ -29,7 +29,7 @@ public class PosInfoDTO extends DTO {
      * POS名称
      */
     private String posName;
-
+    
     /**
      * posId
      *

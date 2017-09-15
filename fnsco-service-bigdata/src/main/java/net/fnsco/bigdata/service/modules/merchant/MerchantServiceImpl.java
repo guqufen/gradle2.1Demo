@@ -21,6 +21,7 @@ import net.fnsco.bigdata.api.dto.MerTerminalsDTO;
 import net.fnsco.bigdata.api.dto.MerchantDTO;
 import net.fnsco.bigdata.api.dto.PosDetailDTO;
 import net.fnsco.bigdata.api.dto.PosInfoDTO;
+import net.fnsco.bigdata.api.dto.PosInfosDTO;
 import net.fnsco.bigdata.api.dto.PosListDTO;
 import net.fnsco.bigdata.api.dto.TerminalDetailDTO;
 import net.fnsco.bigdata.api.dto.TerminalInfoDTO;
@@ -224,7 +225,21 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public List<PosListDTO> getAllPosInfo(MerchantDTO merchantDTO) {
-        return merchantPosDao.selectAllPosInfo(merchantDTO.getUserId());
+        
+        List<PosListDTO> datas = merchantPosDao.selectAllPosInfo(merchantDTO.getUserId());
+        //增加台码连接
+      //设置台码url,只为能生成台码的设置url
+        for (PosListDTO posListDTO : datas) {
+            List<MerchantChannel> count = merchantChannelDao.selectByInnerCode(posListDTO.getInnerCode());
+            if(CollectionUtils.isNotEmpty(count)){
+                List<PosInfosDTO> posInfo = posListDTO.getPosInfo();
+                for (PosInfosDTO posInfoDTO : posInfo) {
+                    posInfoDTO.setTaiCodeUrl(env.getProperty(TAICODE_BASE_URL)+"?innerCode="+posListDTO.getInnerCode());
+                }
+            }
+        }
+        
+        return datas;
     }
 
     /**

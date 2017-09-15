@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.bigdata.api.dto.PosDetailDTO;
 import net.fnsco.bigdata.api.dto.PosInfoDTO;
+import net.fnsco.bigdata.api.dto.PosInfosDTO;
 import net.fnsco.bigdata.api.dto.PosListDTO;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 /**
@@ -67,7 +68,7 @@ public interface MerchantPosDao {
      * @date      2017年8月16日 下午1:27:24
      * @return List<String>    DOM对象
      */
-    List<PosInfoDTO> selectPosNamesByInnerCode(@Param("innerCode")String innerCode);
+    List<PosInfosDTO> selectPosNamesByInnerCode(@Param("innerCode")String innerCode);
     
     /**
      * selectAllPosInfo:(这里用一句话描述这个方法的作用) 根据用户ID查询所有POS机设备

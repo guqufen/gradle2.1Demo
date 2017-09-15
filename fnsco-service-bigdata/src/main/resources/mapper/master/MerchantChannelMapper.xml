@@ -186,6 +186,6 @@
     select 
     <include refid="Base_Column_List" />
     from m_merchant_channel
-    where inner_code = #{innerCode} and channel_mer_id = #{channelMerId,jdbcType=VARCHAR} limit 1
+    where inner_code = #{innerCode} and channel_mer_id = #{channelMerId,jdbcType=VARCHAR} and  channel_type = #{channelType,jdbcType=VARCHAR} limit 1
 </select>
 </mapper>
