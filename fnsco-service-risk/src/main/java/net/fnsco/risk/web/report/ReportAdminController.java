@@ -17,7 +17,7 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.risk.service.report.ReportService;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 @Controller
-@RequestMapping(value = "/report", method = RequestMethod.POST)
+@RequestMapping(value = "admin/report", method = RequestMethod.POST)
 public class ReportAdminController extends BaseController{
     @Autowired
     private ReportService reportService;
@@ -34,14 +34,14 @@ public class ReportAdminController extends BaseController{
     }
     //通知商户风控报告
     @ResponseBody
-    @RequestMapping(value = "headPersonnelMes", method = RequestMethod.GET)
+    @RequestMapping("headPersonnelMes")
     public ResultDTO headPersonnelMes(@RequestParam String userId,@RequestParam String merchantId) {
         return reportService.headPersonnelMes(NumberUtils.toInt(userId),NumberUtils.toInt(merchantId));
     }
     //更新风控报告状态
-//    @ResponseBody
-//    @RequestMapping(value = "updateReportStatus", method = RequestMethod.GET)
-//    public ResultDTO updateReportStatus(ReportInfoDO reportInfoDO) {
-//        return reportService.updateReportStatus(reportInfoDO);
-//    }
+    @ResponseBody
+    @RequestMapping("updateReportStatus")
+    public ResultDTO updateReportStatus(ReportInfoDO reportInfoDO) {
+        return reportService.updateReportStatus(reportInfoDO);
+    }
 }

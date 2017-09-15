@@ -25,10 +25,33 @@ public class PosListDTO extends DTO {
     
     private String merName;
     
+    private String innerCode;
     /**
      * POS机名称列表
      */
-    private List<PosInfoDTO> posInfo;
+    private List<PosInfosDTO> posInfo;
+    
+    /**
+     * innerCode
+     *
+     * @return  the innerCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getInnerCode() {
+        return innerCode;
+    }
+
+    /**
+     * innerCode
+     *
+     * @param   innerCode    the innerCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setInnerCode(String innerCode) {
+        this.innerCode = innerCode;
+    }
 
     /**
      * merName
@@ -59,7 +82,7 @@ public class PosListDTO extends DTO {
      * @since   CodingExample Ver 1.0
     */
     
-    public List<PosInfoDTO> getPosInfo() {
+    public List<PosInfosDTO> getPosInfo() {
         return posInfo;
     }
 
@@ -70,7 +93,7 @@ public class PosListDTO extends DTO {
      * @since   CodingExample Ver 1.0
      */
     
-    public void setPosInfo(List<PosInfoDTO> posInfo) {
+    public void setPosInfo(List<PosInfosDTO> posInfo) {
         this.posInfo = posInfo;
     }
 

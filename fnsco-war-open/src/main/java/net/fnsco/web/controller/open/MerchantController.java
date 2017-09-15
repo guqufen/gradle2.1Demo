@@ -73,12 +73,12 @@ public class MerchantController extends BaseController {
     public ResultDTO isHaveAppUser(@RequestBody MerchantJO merchant) {
         List<String> innerCodeList = merchantService.getMerchantAppUser(merchant.getSnCode());
         if(CollectionUtils.isEmpty(innerCodeList)){
-            return success(false);
+            return success("0");
         }
         for(String innerCode: innerCodeList){
             List<MerchantUserRel> tempList =appUserService.getAppUserMerchantByInnerCode(innerCode);
             if(!CollectionUtils.isEmpty(tempList)){
-                return success(true);
+                return success("1");
             }
         }
         

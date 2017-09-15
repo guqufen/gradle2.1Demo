@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
+import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 
 /**
@@ -19,7 +22,7 @@ import net.fnsco.core.base.ResultDTO;
  * @date 2017年6月21日 上午10:15:40
  */
 @Service
-public class TradeDataImportService {
+public class TradeDataImportService extends BaseService{
     @Autowired
     private TradeDataService tradeDataService;
 
@@ -99,9 +102,8 @@ public class TradeDataImportService {
                 String succtime = String.valueOf(objs[29]);
                 //内部终端号
                 String termid = String.valueOf(objs[30]);
-                //支付媒介
-                String paymedium = String.valueOf(objs[31]);
-
+                //支付媒介00pos机01app02台码
+                String payMedium = String.valueOf(objs[31]);
                 //	String innerCode = merchantCoreService.getInnerCode();
 
                 try {
@@ -119,8 +121,8 @@ public class TradeDataImportService {
                     } else if ("CC".equals(type)) {
                         dcType = "01 境内货记卡";
                     }
-                    tradeData.setDcType(dcType);
-                    tradeData.setCertifyId(certifyid);
+                    tradeData.setCardOrg(dcType);
+                    tradeData.setCardNo(certifyid);
                     tradeData.setMsgDestId(msgdestid);
                     tradeData.setChannelType(channeltype);
                     tradeData.setAmt(amt);
@@ -144,22 +146,27 @@ public class TradeDataImportService {
                     tradeData.setRespMsg(respmsg);
                     tradeData.setSuccTime(succtime);
                     tradeData.setTermId(termid);
-                    tradeData.setPayMedium(paymedium);
+                    tradeData.setPayMedium(payMedium);
                     //日期格式转换
                     Date createTime = null;
-                    if ("".equals(createtime)) {
-                        String reg = "(\\d{4})(\\d{2})(\\d{2})(\\d{2})(\\d{2})(\\d{2})";
-                        createtime = createtime.replaceAll(reg, "$1-$2-$3 $4:$5:$6");
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        createTime = sdf.parse(createtime);
+                    SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
+                    if (!"".equals(createtime)) {
+                        //String reg = "(\\d{4})(\\d{2})(\\d{2})(\\d{2})(\\d{2})(\\d{2})";
+                        //createtime = createtime.replaceAll(reg, "$1-$2-$3 $4:$5:$6");
+                        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        createTime = sf.parse(createtime);
                     }
-                    tradeData.setCreateTime(createTime);
+                    tradeData.setCreateTime(new Date());
+                    if(null != createTime){
+                        tradeData.setOrderTime(sf.format(createTime));
+                    }
                     //交易流水打包导入
                     boolean i = tradeDataService.saveTradeData(tradeData);
                     if (i != true) {
                         return ResultDTO.fail("第" + timeNum + "行交易流水信息有误，导入失败");
                     }
                 } catch (Exception e) {
+                    logger.error("导入交易流水出错",e);
                     return ResultDTO.fail("第" + timeNum + "行交易流水信息有误，导入失败");
                 }
             }
