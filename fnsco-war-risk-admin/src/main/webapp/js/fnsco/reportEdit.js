@@ -14,17 +14,17 @@ $(function(){
 //	$('#industry').append('<option value=3>金融类</option>');
 	
 	//给规模赋值(size)
-	$('#size').append('<option value=1>单店</option>');
-	$('#size').append('<option value=2>多店</option>');
+	$('#size').append('<option value=55>单店</option>');
+	$('#size').append('<option value=56>多店</option>');
 	
 	//报告周期赋值(reportCycle)
-	$('#reportCycle').append('<option value=1>一年(半年历史，半年预测)</option>');
-	$('#reportCycle').append('<option value=2>一年(三个月历史，九个月预测)</option>');
-	$('#reportCycle').append('<option value=3>一年(九个月历史，三个月预测)</option>');
+	$('#reportCycle').append('<option value=66>一年(半年历史，半年预测)</option>');
+	$('#reportCycle').append('<option value=67>一年(三个月历史，九个月预测)</option>');
+	$('#reportCycle').append('<option value=68>一年(九个月历史，三个月预测)</option>');
 	
 	//ajax请求修改的数据<id=2>
 	$.ajax({
-		url : PROJECT_NAME + '/admin/report/getById',
+		url : PROJECT_NAME + '/report/getById',
 		type : 'get',
 		data : {
 			'id' : 3
@@ -43,15 +43,15 @@ $(function(){
 
 				$('#businessDueTime').val(dd.businessDueTime);// 营业期限
 
-				$('#industry[value=' + dd.industry + ']').attr("selected", true);// 行业
+				$('select[id="industry"]').find("option[value=" + dd.industry + "]").attr("selected", true);// 行业
 
 				$('#tradingArea').val(dd.tradingArea);// 商圈
 
 				$('#turnover').val(dd.turnover);// 营业额
 
-				$('#size[value=' + dd.size + ']').attr("selected", true);// 规模
+				$('select[id="size"]').find("option[value=" + dd.size + "]").attr("selected", true);// 规模
 
-				$('#reportCycle[value=' + dd.reportCycle + ']').attr("selected", true);// 报告周期
+				$('select[id="reportCycle"]').find("option[value=" + dd.reportCycle + "]").attr("selected", true);// 报告周期
 
 				$('#riskWarning').val(dd.riskWarning);// 风险
 
@@ -76,14 +76,15 @@ function getIndest(){
 	$.ajax({
 		url:PROJECT_NAME + '/industry/queryAll',
 		type:'get',
+		async : false,//同步获取数据
 		success:function(data){
 			console.log(data);
 			if(data.success){
 				for(var i=0; i < data.data.length; i++){
 					if(data.data[i].fourth != ""){
-						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].fourth+'</option>');
+						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'--'+data.data[i].third+'--'+data.data[i].fourth+'</option>');
 					}else if(data.data[i].third != ""){
-						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].third+'</option>');
+						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'--'+data.data[i].third+'</option>');
 					}else if(data.data[i].first != ""){
 						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'</option>');
 					}
@@ -161,7 +162,7 @@ $('#btn_save').click(function(){
 	
 	//用AJAX传给后台，返回修改成功/失败
 	$.ajax({
-		url:PROJECT_NAME + '/admin/report/updateReport',
+		url:PROJECT_NAME + '/report/updateReport',
 		data:params,
 		type:'get',
 		success:function(data){
@@ -185,7 +186,7 @@ $('#table').bootstrapTable({
 	sidePagination : 'server',
 	method : 'post',//提交方式
 	search : false, // 是否启动搜索栏
-	url : PROJECT_NAME + '/admin/report/queryRepay',
+	url : PROJECT_NAME + '/report/queryRepay',
 	showRefresh : true,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	striped : true, // 是否显示行间隔色
@@ -289,7 +290,7 @@ function queryParams(params) {
 /** 导入功能 **/
 //模板下载按钮事件
 function downEvent(){
-	var url=PROJECT_NAME + '/admin/report/down';
+	var url=PROJECT_NAME + '/report/down';
    window.open(url, 'Excel导入');
 }
 //导入按钮事件
