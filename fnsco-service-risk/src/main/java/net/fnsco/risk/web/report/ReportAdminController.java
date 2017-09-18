@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -104,7 +105,8 @@ public class ReportAdminController extends BaseController{
      */
     @ResponseBody
     @RequestMapping(value="doImport", method = RequestMethod.POST)
-    public ResultDTO doImport(){
+    public ResultDTO doImport(@Param("id") Integer id){
+
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		MultipartFile file = fileMap.get("excel_file_risk_inf");
@@ -125,7 +127,7 @@ public class ReportAdminController extends BaseController{
         ReadExcel readExcel = new ReadExcel();
         // 解析excel，获取客户信息集合。
         List<Object[]> objs = readExcel.getExcelInfo(name, file);
-        ResultDTO result = reportService.BatchImportToDB(objs);
+        ResultDTO result = reportService.BatchImportToDB(objs, id);
 
         //导入不成功，返回失败
 		if(!result.isSuccess()){
@@ -142,12 +144,12 @@ public class ReportAdminController extends BaseController{
      */
     @ResponseBody
     @RequestMapping(value="queryRepay", method = RequestMethod.GET)
-    public ResultPageDTO pageRepay(Integer id ){
-    	
-    	Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
+    public ResultPageDTO pageRepay(Integer reportId){
+
+    	Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize"});
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
         
-    	return reportService.pageRepayList(id, page, rows);
+    	return reportService.getByReportId(reportId, page, rows);
     }
 }

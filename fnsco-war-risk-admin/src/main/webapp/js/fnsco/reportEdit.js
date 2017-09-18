@@ -17,6 +17,7 @@ var Request = new Object();
 Request = GetRequest();
 var merchantId=Request["merchantId"];
 console.log(merchantId);
+
 $(function() {
 
 	//给报告时间赋值(当前日期)
@@ -32,13 +33,13 @@ $(function() {
 	//	$('#industry').append('<option value=3>金融类</option>');
 
 	//给规模赋值(size)
-	$('#size').append('<option value=55>单店</option>');
-	$('#size').append('<option value=56>多店</option>');
+	$('#size').append('<option value=1>单店</option>');
+	$('#size').append('<option value=2>多店</option>');
 	
 	//报告周期赋值(reportCycle)
-	$('#reportCycle').append('<option value=66>一年(半年历史，半年预测)</option>');
-	$('#reportCycle').append('<option value=67>一年(三个月历史，九个月预测)</option>');
-	$('#reportCycle').append('<option value=68>一年(九个月历史，三个月预测)</option>');
+	$('#reportCycle').append('<option value=1>一年(半年历史，半年预测)</option>');
+	$('#reportCycle').append('<option value=2>一年(三个月历史，九个月预测)</option>');
+	$('#reportCycle').append('<option value=3>一年(九个月历史，三个月预测)</option>');
 
 	//ajax请求修改的数据<id=2>
 	$.ajax({
@@ -202,7 +203,7 @@ $('#btn_save').click(function() {
 //还款能力历史与预测table
 $('#table').bootstrapTable({
 	sidePagination : 'server',
-	method : 'post',//提交方式
+	method : 'get',//提交方式
 	search : false, // 是否启动搜索栏
 	url : PROJECT_NAME + '/report/queryRepay',
 	showRefresh : true,// 是否显示刷新按钮
@@ -211,13 +212,13 @@ $('#table').bootstrapTable({
 	cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 	pagination : true, // 是否显示分页（*）
 	sortable : true, // 是否启用排序
-	uniqueId : 'Id', //将index列设为唯一索引
+	uniqueId : 'id', //将index列设为唯一索引
 	sortOrder : "asc", // 排序方式
 	pageNumber : 1, // 初始化加载第一页，默认第一页
 	pageSize : 50, // 每页的记录行数（*）
 	singleSelect : true,// 单选
 	pageList : [ 15, 20, 50, 100 ], // 可供选择的每页的行数（*）
-	queryParams : queryParams,
+	queryParams : queryParamss,
 	responseHandler : responseHandler,// 处理服务器返回数据
 	columns : [ {
 		field : 'id',
@@ -277,6 +278,10 @@ $('#table').bootstrapTable({
 		field : 'monthTwelve',
 		title : '十二月',
 		width : 30
+	} , {
+		field : 'lastModifyTimeStr',
+		title : '最后修改时间',
+		width : 30
 	} ]
 });
 //处理后台返回数据
@@ -295,11 +300,11 @@ function responseHandler(res) {
 	}
 }
 //组装请求参数
-function queryParams(params) {
+function queryParamss(params) {
 	var param = {
-		currentPageNum : this.pageNumber,
-		pageSize : this.pageSize,
-		id : merchantId
+		'currentPageNum' : this.pageNumber,
+		'pageSize' : 1,//只查询时间最近的一条
+		'reportId' : merchantId
 	}
 	return param;
 }
@@ -317,7 +322,7 @@ function importEvent() {
 $(function() {
 	//0.初始化fileinput
 	var oFileInput = new FileInput();
-	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + 'report/doImport');
+	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + 'report/doImport?id='+merchantId);
 });
 //初始化fileinput
 var FileInput = function() {
