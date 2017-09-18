@@ -48,11 +48,11 @@ public class ReportAdminController extends BaseController{
         return reportService.headPersonnelMes(NumberUtils.toInt(userId),NumberUtils.toInt(merchantId));
     }
     //更新风控报告状态
-//    @ResponseBody
-//    @RequestMapping(value = "updateReportStatus", method = RequestMethod.GET)
-//    public ResultDTO updateReportStatus(ReportInfoDO reportInfoDO) {
-//        return reportService.updateReportStatus(reportInfoDO);
-//    }
+    @ResponseBody
+    @RequestMapping(value = "updateReportStatus", method = RequestMethod.GET)
+    public ResultDTO updateReportStatus(ReportInfoDO reportInfoDO) {
+        return reportService.updateReportStatus(reportInfoDO);
+    }
     
     /**
      * 通过id查找当前数据对象

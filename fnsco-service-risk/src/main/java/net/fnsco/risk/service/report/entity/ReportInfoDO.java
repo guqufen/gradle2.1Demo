@@ -3,6 +3,16 @@ package net.fnsco.risk.service.report.entity;
 import java.util.Date;
 
 public class ReportInfoDO {
+    //是否可以查看报告
+    private Integer isCheck;
+    public Integer getIsCheck() {
+        return isCheck;
+    }
+
+    public void setIsCheck(Integer isCheck) {
+        this.isCheck = isCheck;
+    }
+
     private String innerCode;
     public String getInnerCode() {
         return innerCode;

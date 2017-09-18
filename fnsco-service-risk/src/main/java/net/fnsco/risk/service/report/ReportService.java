@@ -24,138 +24,165 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.risk.service.report.dao.ReportInfoDAO;
 import net.fnsco.risk.service.report.dao.ReportRepaymentHistoryDAO;
+import net.fnsco.risk.service.report.dao.UserMercRelDAO;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
+import net.fnsco.risk.service.report.entity.UserMercRelDO;
 import net.fnsco.risk.service.report.entity.YearReportDO;
 import net.fnsco.risk.service.sys.dao.WebUserOuterDAO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 
 @Service
-public class ReportService extends BaseService{
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+public class ReportService extends BaseService {
+    private Logger                    logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    private ReportInfoDAO reportInfoDAO;
+    private ReportInfoDAO             reportInfoDAO;
     @Autowired
-    private WebUserOuterDAO webUserOuterDAO;
+    private WebUserOuterDAO           webUserOuterDAO;
     @Autowired
-    private JavaMailSender mailSender;
+    private JavaMailSender            mailSender;
     @Autowired
-    private Environment ev;
+    private Environment               ev;
     @Autowired
     private ReportRepaymentHistoryDAO reportRepaymentHistoryDAO;
+    @Autowired
+    private UserMercRelDAO userMercRelDAO;
     //前台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> page(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
+        for(ReportInfoDO li:pageList){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(li.getLastModifyTime()); 
+            calendar.add(Calendar.DATE,30);
+            //30之内不能重复生成报告
+            if(calendar.getTime().getTime()>new Date().getTime()){
+                li.setIsCheck(2);
+            }else{
+                li.setIsCheck(1);
+            }          
+        }
         Integer count = this.reportInfoDAO.pageListCount(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }
+    public static void main(String args[]) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date()); 
+        calendar.add(Calendar.DATE,30);
+        System.out.println(calendar.getTime().getTime());
+        System.out.println(new Date().getTime());
+       
+    }
     //后台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> pageBack(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageListBack(reportInfoDO, pageNum, pageSize);
-//        for( ReportInfoDO li:pageList){
-//            //根据innerCode查询用户信息
-//            
-//            //li.getInnerCode()
-//        }
+        for (ReportInfoDO li : pageList) {
+            //根据innerCode查询用户信息
+            UserMercRelDO dto=userMercRelDAO.getByInnerCode(li.getInnerCode());
+            li.setWebUserOuterId(dto.getWebUserOuterId());
+        }
         Integer count = this.reportInfoDAO.pageListCountBack(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }
+
     //查询12个月风控历史
-    public ResultDTO queryYearReport(Integer userId,Integer merchantId){
-        List<YearReportDO> list=new ArrayList<YearReportDO>();
-        ReportInfoDO reportInfoDO=reportInfoDAO.getById(userId);
+    public ResultDTO queryYearReport(Integer userId, Integer merchantId) {
+        List<YearReportDO> list = new ArrayList<YearReportDO>();
+        ReportInfoDO reportInfoDO = reportInfoDAO.getById(userId);
         //判断风控报告的状态
-        if(reportInfoDO.getStatus()!=1){
+        if (reportInfoDO.getStatus() != 1) {
             return ResultDTO.fail("风控报告状态不正常");
         }
         //当前时间 
-        ReportRepaymentHistoryDO dto=reportRepaymentHistoryDAO.getByReportId(merchantId);
-        Date date=reportInfoDO.getLastModifyTime();
-        for (int j=0 ; j<12; j++) {  
-            YearReportDO yearReportDO=new YearReportDO();
-            if(j==0){
+        ReportRepaymentHistoryDO dto = reportRepaymentHistoryDAO.getByReportId(merchantId);
+        Date date = reportInfoDO.getLastModifyTime();
+        for (int j = 0; j < 12; j++) {
+            YearReportDO yearReportDO = new YearReportDO();
+            if (j == 0) {
                 yearReportDO.setTurnover(dto.getMonthOne());
-                yearReportDO.setDate(handleDate(date,-6));
+                yearReportDO.setDate(handleDate(date, -6));
                 list.add(yearReportDO);
             }
-            if(j==1){
+            if (j == 1) {
                 yearReportDO.setTurnover(dto.getMonthTwo());
-                yearReportDO.setDate(handleDate(date,-5));
+                yearReportDO.setDate(handleDate(date, -5));
                 list.add(yearReportDO);
             }
-            if(j==2){
+            if (j == 2) {
                 yearReportDO.setTurnover(dto.getMonthThree());
-                yearReportDO.setDate(handleDate(date,-4));
+                yearReportDO.setDate(handleDate(date, -4));
                 list.add(yearReportDO);
             }
-            if(j==3){
+            if (j == 3) {
                 yearReportDO.setTurnover(dto.getMonthFore());
-                yearReportDO.setDate(handleDate(date,-3));
+                yearReportDO.setDate(handleDate(date, -3));
                 list.add(yearReportDO);
             }
-            if(j==4){
+            if (j == 4) {
                 yearReportDO.setTurnover(dto.getMonthFive());
-                yearReportDO.setDate(handleDate(date,-2));
+                yearReportDO.setDate(handleDate(date, -2));
                 list.add(yearReportDO);
             }
-            if(j==5){
+            if (j == 5) {
                 yearReportDO.setTurnover(dto.getMonthSix());
-                yearReportDO.setDate(handleDate(date,-1));
+                yearReportDO.setDate(handleDate(date, -1));
                 list.add(yearReportDO);
             }
-            if(j==6){
+            if (j == 6) {
                 yearReportDO.setTurnover(dto.getMonthSeven());
-                yearReportDO.setDate(handleDate(date,0));
+                yearReportDO.setDate(handleDate(date, 0));
                 list.add(yearReportDO);
             }
-            if(j==7){
+            if (j == 7) {
                 yearReportDO.setTurnover(dto.getMonthEight());
-                yearReportDO.setDate(handleDate(date,1));
+                yearReportDO.setDate(handleDate(date, 1));
                 list.add(yearReportDO);
             }
-            if(j==8){
+            if (j == 8) {
                 yearReportDO.setTurnover(dto.getMonthNine());
-                yearReportDO.setDate(handleDate(date,2));
+                yearReportDO.setDate(handleDate(date, 2));
                 list.add(yearReportDO);
             }
-            if(j==9){
+            if (j == 9) {
                 yearReportDO.setTurnover(dto.getMonthTen());
-                yearReportDO.setDate(handleDate(date,3));
+                yearReportDO.setDate(handleDate(date, 3));
                 list.add(yearReportDO);
             }
-            if(j==10){
+            if (j == 10) {
                 yearReportDO.setTurnover(dto.getMonthEleven());
-                yearReportDO.setDate(handleDate(date,4));
+                yearReportDO.setDate(handleDate(date, 4));
                 list.add(yearReportDO);
             }
-            if(j==11){
+            if (j == 11) {
                 yearReportDO.setTurnover(dto.getMonthTwelve());
-                yearReportDO.setDate(handleDate(date,5));
+                yearReportDO.setDate(handleDate(date, 5));
                 list.add(yearReportDO);
             }
-        }  
+        }
         return ResultDTO.success(list);
     }
-    private String handleDate(Date date,Integer num){
-        Calendar calendar = Calendar.getInstance();    
-        calendar.setTime(date);    
+
+    private String handleDate(Date date, Integer num) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
         calendar.add(Calendar.MONTH, num);
-        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM");
-        String dateStr=sdf.format(calendar.getTime());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String dateStr = sdf.format(calendar.getTime());
         return dateStr;
     }
+
     //查询风控报告明细
     public ResultDTO queryReportDetails(Integer merchantId) {
-        ReportInfoDO reportInfoDO=reportInfoDAO.getById(merchantId);
+        ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
         return ResultDTO.success(reportInfoDO);
     }
+
     //通知后台人员
-    public ResultDTO backPersonnelMes(Integer userId,Integer merchantId) {
+    public ResultDTO backPersonnelMes(Integer userId, Integer merchantId) {
         //查询用户的商户名称
-        ReportInfoDO reportInfoDO=reportInfoDAO.getById(merchantId);
-        WebUserOuterDO dto=webUserOuterDAO.getById(userId);
+        ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
+        WebUserOuterDO dto = webUserOuterDAO.getById(userId);
         MimeMessage message = null;
         try {
             message = mailSender.createMimeMessage();
@@ -165,7 +192,7 @@ public class ReportService extends BaseService{
             helper.setTo("782430551@qq.com");
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append(dto.getName()+"申请生成关于"+reportInfoDO.getMerName()+"的风控报告,请尽快处理"+"<a style='font-size:50px;' href='http://www.w3school.com.cn'>W3School</a>");
+            sb.append("<h3 style='font-size:20px;'>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理" + "<a href='http://www.w3school.com.cn'>W3School</a></h3>");
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -173,10 +200,11 @@ public class ReportService extends BaseService{
         mailSender.send(message);
         return ResultDTO.success();
     }
+
     //通知用户
-    public ResultDTO headPersonnelMes(Integer userId,Integer merchantId) {
-        ReportInfoDO reportInfoDO=reportInfoDAO.getById(merchantId);
-        WebUserOuterDO dto=webUserOuterDAO.getById(userId);
+    public ResultDTO headPersonnelMes(Integer userId, Integer merchantId) {
+        ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
+        WebUserOuterDO dto = webUserOuterDAO.getById(userId);
         MimeMessage message = null;
         try {
             message = mailSender.createMimeMessage();
@@ -187,7 +215,7 @@ public class ReportService extends BaseService{
             helper.setTo("782430551@qq.com");
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append(dto.getName()+"<br>").append("关于"+reportInfoDO.getMerName()+"的'风控+'报告已经生成!点击查看"+"<a style='font-size:50px;' href='http://www.w3school.com.cn'>W3School</a>");
+            sb.append("<h3 style='font-size:20px;'>"+dto.getName()+"</h3>").append("<h3 style='font-size:20px;'>关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!</h3>").append("<h3 style='font-size:20px;'>点击"+"<a  href='http://www.w3school.com.cn'>W3School</a>查看</h3>");
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -195,71 +223,77 @@ public class ReportService extends BaseService{
         mailSender.send(message);
         return ResultDTO.success();
     }
-    
+
     /**
      * 根据id查找当前数据,便于修改用
      * @param reportInfoDO
      * @return
      */
-    public ResultDTO getById(ReportInfoDO reportInfoDO){
-    	ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());
-    	return ResultDTO.success(reportInfo);
+    public ResultDTO getById(ReportInfoDO reportInfoDO) {
+        ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());
+        return ResultDTO.success(reportInfo);
     }
-    
+
     /**
      * 更新风控报告, yx
      * @param reportInfoDO
      * @return
      */
     @Transactional
-    public ResultDTO updateReport(ReportInfoDO reportInfoDO){
-    	
-    	//将状态改为待审核
-    	reportInfoDO.setStatus(0);
-    	
-    	int result = reportInfoDAO.update(reportInfoDO);
-    	
-    	return ResultDTO.success();
+    public ResultDTO updateReport(ReportInfoDO reportInfoDO) {
+
+        //将状态改为待审核
+        reportInfoDO.setStatus(0);
+
+        int result = reportInfoDAO.update(reportInfoDO);
+
+        return ResultDTO.success();
     }
-    
+
     /**
      * 导入数据，批量新增
      * @param objs
      * @return
      */
-    public ResultDTO BatchImportToDB( List<Object[]> objs){
-    	if(objs.size() > 0){
-    		for(Object[] obj: objs){
-    			ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
-    			reportRepaymentHistory.setReportId(Integer.valueOf(obj[0].toString()));
-    			reportRepaymentHistory.setMonthOne(BigDecimal.valueOf(Double.valueOf(obj[1].toString())));
-    			reportRepaymentHistory.setMonthTwo(BigDecimal.valueOf(Double.valueOf(obj[2].toString())) );
-    			reportRepaymentHistory.setMonthThree(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
-    			reportRepaymentHistory.setMonthFore(BigDecimal.valueOf(Double.valueOf(obj[4].toString())));
-    			reportRepaymentHistory.setMonthFive(BigDecimal.valueOf(Double.valueOf(obj[5].toString())));
-    			reportRepaymentHistory.setMonthSix(BigDecimal.valueOf(Double.valueOf(obj[6].toString())));
-    			reportRepaymentHistory.setMonthSeven(BigDecimal.valueOf(Double.valueOf(obj[7].toString())));
-    			reportRepaymentHistory.setMonthEight(BigDecimal.valueOf(Double.valueOf(obj[8].toString())));
-    			reportRepaymentHistory.setMonthNine(BigDecimal.valueOf(Double.valueOf(obj[9].toString())));
-    			reportRepaymentHistory.setMonthTen(BigDecimal.valueOf(Double.valueOf(obj[10].toString())));
-    			reportRepaymentHistory.setMonthEleven(BigDecimal.valueOf(Double.valueOf(obj[11].toString())));
-    			reportRepaymentHistory.setMonthTwelve(BigDecimal.valueOf(Double.valueOf(obj[12].toString())));
-    			//插表
-        		reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
-    		}
-    		
-    	}
-    	
-    	return ResultDTO.success();
+    public ResultDTO BatchImportToDB(List<Object[]> objs) {
+        if (objs.size() > 0) {
+            for (Object[] obj : objs) {
+                ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
+                reportRepaymentHistory.setReportId(Integer.valueOf(obj[0].toString()));
+                reportRepaymentHistory.setMonthOne(BigDecimal.valueOf(Double.valueOf(obj[1].toString())));
+                reportRepaymentHistory.setMonthTwo(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+                reportRepaymentHistory.setMonthThree(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
+                reportRepaymentHistory.setMonthFore(BigDecimal.valueOf(Double.valueOf(obj[4].toString())));
+                reportRepaymentHistory.setMonthFive(BigDecimal.valueOf(Double.valueOf(obj[5].toString())));
+                reportRepaymentHistory.setMonthSix(BigDecimal.valueOf(Double.valueOf(obj[6].toString())));
+                reportRepaymentHistory.setMonthSeven(BigDecimal.valueOf(Double.valueOf(obj[7].toString())));
+                reportRepaymentHistory.setMonthEight(BigDecimal.valueOf(Double.valueOf(obj[8].toString())));
+                reportRepaymentHistory.setMonthNine(BigDecimal.valueOf(Double.valueOf(obj[9].toString())));
+                reportRepaymentHistory.setMonthTen(BigDecimal.valueOf(Double.valueOf(obj[10].toString())));
+                reportRepaymentHistory.setMonthEleven(BigDecimal.valueOf(Double.valueOf(obj[11].toString())));
+                reportRepaymentHistory.setMonthTwelve(BigDecimal.valueOf(Double.valueOf(obj[12].toString())));
+                //插表
+                reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
+            }
+
+        }
+
+        return ResultDTO.success();
     }
-    
+
     //查看导入数据
-    public ResultPageDTO pageRepayList(Integer id, Integer pageNum, Integer pageSize ){
-    	ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
-    	reportRepaymentHistory.setReportId(id);
-    	List<ReportRepaymentHistoryDO> pageList = this.reportRepaymentHistoryDAO.pageList(reportRepaymentHistory, pageNum, pageSize);
-    	Integer count = this.reportRepaymentHistoryDAO.pageListCount(reportRepaymentHistory);
+    public ResultPageDTO pageRepayList(Integer id, Integer pageNum, Integer pageSize) {
+        ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
+        reportRepaymentHistory.setReportId(id);
+        List<ReportRepaymentHistoryDO> pageList = this.reportRepaymentHistoryDAO.pageList(reportRepaymentHistory, pageNum, pageSize);
+        Integer count = this.reportRepaymentHistoryDAO.pageListCount(reportRepaymentHistory);
         ResultPageDTO<ReportRepaymentHistoryDO> pager = new ResultPageDTO<ReportRepaymentHistoryDO>(count, pageList);
         return pager;
+    }
+
+    //更新风控报告
+    public ResultDTO updateReportStatus(ReportInfoDO reportInfoDO) {
+        int result = reportInfoDAO.update(reportInfoDO);
+        return ResultDTO.success();
     }
 }

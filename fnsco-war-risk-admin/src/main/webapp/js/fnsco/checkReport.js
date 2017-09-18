@@ -1,6 +1,7 @@
 /**
  * 页面加载完之后执行
  */
+$("input,select,textarea").attr("disabled","disabled");
 function GetRequest() {
 	var url = location.search; //获取url中"?"符后的字串   
 	var theRequest = new Object();
@@ -16,9 +17,8 @@ function GetRequest() {
 var Request = new Object();
 Request = GetRequest();
 var merchantId=Request["merchantId"];
-console.log(merchantId);
+var webUserOuterId = Request["webUserOuterId"];
 $(function() {
-
 	//给报告时间赋值(当前日期)
 	var date = new Date();
 	$('#reportTimer').val(
@@ -69,10 +69,10 @@ $(function() {
 				$('#turnover').val(dd.turnover);// 营业额
 
 				$('#size option[value=' + dd.size + ']').attr("selected", true);// 规模
-
 				$('#reportCycle option[value=' + dd.reportCycle + ']').attr(
 						"selected", true);// 报告周期
 
+				
 				$('#riskWarning').val(dd.riskWarning);// 风险
 
 				$('#quota').val(dd.quota);// 额度
@@ -121,90 +121,6 @@ function getIndest() {
 		}
 	});
 }
-
-//点击保存按钮
-$('#btn_save').click(function() {
-
-	//商户名称
-	var merName = $('#merName').val();
-
-	//营业执照
-	var businessLicenseNum = $('#businessLicenseNum').val();
-
-	//经营地址
-	var businessAddress = $('#businessAddress').val();
-
-	//营业期限
-	var businessDueTime = $('#businessDueTime').val();
-
-	//行业
-	var industry = $('#industry option:selected').val();
-
-	//商圈
-	var tradingArea = $('#tradingArea').val();
-
-	//营业额
-	var turnover = $('#turnover').val();
-
-	//规模
-	var size = $('#size option:selected').val();
-
-	//报告周期
-	var reportCycle = $('#reportCycle option:selected').val();
-
-	//报告时间
-	var reportTimer = $('#reportTimer').val();
-
-	//风险
-	var riskWarning = $('#riskWarning').val();
-
-	//额度
-	var quota = $('#quota').val();
-
-	//费率
-	var feeRate = $('#feeRate').val();
-
-	//周期
-	var loanCycle = $('#loanCycle').val();
-
-	var params = {
-		'merName' : merName,
-		'businessLicenseNum' : businessLicenseNum,
-		'businessAddress' : businessAddress,
-		'businessDueTime' : businessDueTime,
-		'industry' : industry,
-		'tradingArea' : tradingArea,
-		'turnover' : turnover,
-		'size' : size,
-		'reportCycle' : reportCycle,
-		'reportTimer' : reportTimer,
-		'riskWarning' : riskWarning,
-		'quota' : quota,
-		'feeRate' : feeRate,
-		'loanCycle' : loanCycle,
-		'id':merchantId
-	};
-
-	//用AJAX传给后台，返回修改成功/失败
-	$.ajax({
-		url : PROJECT_NAME + 'report/updateReport',
-		data : params,
-		type : 'get',
-		success : function(data) {
-
-			//编辑成功，跳回风控报告显示页面，同时刷新显示页面
-			if (data.success) {
-				layer.msg(data.message);
-				window.location.href = 'report.html';
-			} else {
-				layer.msg(data.message);
-			}
-		},
-		error : function(data) {
-			layer.msg('修改失败');
-		}
-	});
-});
 
 //还款能力历史与预测table
 $('#table').bootstrapTable({
@@ -311,66 +227,58 @@ function queryParams(params) {
 	return param;
 }
 
-/** 导入功能 **/
-//模板下载按钮事件
-function downEvent() {
-	var url = PROJECT_NAME + 'report/down';
-	window.open(url, 'Excel导入');
-}
-//导入按钮事件
-function importEvent() {
-	$('#importModal').modal();
-}
-$(function() {
-	//0.初始化fileinput
-	var oFileInput = new FileInput();
-	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + 'report/doImport');
+//点击审核
+$('#btn_save').click(function() {
+	check(webUserOuterId, merchantId);
 });
-//初始化fileinput
-var FileInput = function() {
-	var oFile = new Object();
 
-	//初始化fileinput控件（第一次初始化）
-	oFile.Init = function(ctrlName, uploadUrl) {
-		var control = $('#' + ctrlName);
-
-		//初始化上传控件的样式
-		control.fileinput({
-			language : 'zh', //设置语言
-			uploadUrl : uploadUrl, //上传的地址
-			allowedFileExtensions : [ 'xls', 'xlsx' ],//接收的文件后缀
-			showUpload : true, //是否显示上传按钮
-			showCaption : false,//是否显示标题
-			browseClass : "btn btn-primary", //按钮样式     
-			//dropZoneEnabled: false,//是否显示拖拽区域
-			//minImageWidth: 50, //图片的最小宽度
-			//minImageHeight: 50,//图片的最小高度
-			//maxImageWidth: 1000,//图片的最大宽度
-			//maxImageHeight: 1000,//图片的最大高度
-			maxFileSize : 0,//单位为kb，如果为0表示不限制文件大小
-			//minFileCount: 0,
-			maxFileCount : 1, //表示允许同时上传的最大文件个数
-			enctype : 'multipart/form-data',
-			validateInitialCount : true,
-			previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
-			msgFilesTooMany : "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
-		}).on("fileuploaded", function(event, data) {
-			var resp = data.response;
-
-			//成功
-			if (resp.success) {
-				$('#importModal').modal('hide');
-				layer.msg('导入成功');
-				$('#table').bootstrapTable('refresh');
-
-				return;
+function check(webUserOuterId,merchantId) {
+	layer.confirm('确定审核成功后以邮件的方式通知用户吗?', {
+		time : 20000, // 20s后自动关闭
+		btn : [ '审核通过', '审核失败', '取消' ]
+	}, function() {
+		$.ajax({
+			url : PROJECT_NAME + 'report/headPersonnelMes',
+			type : 'POST',
+			dataType : "json",
+			data : {
+				"userId" : webUserOuterId,
+				"merchantId" : merchantId
+			},
+			success : function(data) {
+				if (data.success) {
+					reportStatus(merchantId, 1);
+					layer.msg('审核成功');
+					 window.location.href="report.html";
+				} else {
+					layer.msg('终止失败');
+				}
+			},
+			error : function(e) {
+				layer.msg('系统异常!' + e);
 			}
-
 		});
-		;
+	}, function() {
+		reportStatus(merchantId, 2);
+		layer.msg('审核失败成功');
+		 window.location.href="report.html";
+	}, function() {
+		layer.msg('取消成功');
+	});
+}
 
-		//导入文件上传完成之后的事件
-
-	}
-	return oFile;
-};
+//改变风控状态
+function reportStatus(merchantId,status) {
+	$.ajax({
+		url : PROJECT_NAME + 'report/updateReportStatus',
+		type : 'POST',
+		dataType : "json",
+		data : {
+			"id" : merchantId,
+			"status":status
+		},
+		success : function(data) {
+			console.log(data)
+		}
+	});
+}
