@@ -1,5 +1,6 @@
 package net.fnsco.risk.service.report;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,16 +17,15 @@ import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.risk.service.report.dao.ReportInfoDAO;
 import net.fnsco.risk.service.report.dao.ReportRepaymentHistoryDAO;
-import net.fnsco.risk.service.report.dao.UserMercRelDAO;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
-import net.fnsco.risk.service.report.entity.UserMercRelDO;
 import net.fnsco.risk.service.report.entity.YearReportDO;
 import net.fnsco.risk.service.sys.dao.WebUserOuterDAO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
@@ -43,9 +43,6 @@ public class ReportService extends BaseService{
     private Environment ev;
     @Autowired
     private ReportRepaymentHistoryDAO reportRepaymentHistoryDAO;
-    @Autowired
-    private UserMercRelDAO userMercRelDAO;
-    
     //前台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> page(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
@@ -56,11 +53,11 @@ public class ReportService extends BaseService{
     //后台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> pageBack(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageListBack(reportInfoDO, pageNum, pageSize);
-        for( ReportInfoDO li:pageList){
-            //根据innerCode查询用户信息
-            UserMercRelDO dto=userMercRelDAO.getByInnerCode(li.getInnerCode());
-            li.setWebUserOuterId(dto.getWebUserOuterId());
-        }
+//        for( ReportInfoDO li:pageList){
+//            //根据innerCode查询用户信息
+//            
+//            //li.getInnerCode()
+//        }
         Integer count = this.reportInfoDAO.pageListCountBack(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
@@ -189,7 +186,7 @@ public class ReportService extends BaseService{
             helper.setTo("782430551@qq.com");
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append("<h1>"+dto.getName()+"</h1><br>").append("关于"+reportInfoDO.getMerName()+"的'风控+'报告已经生成!点击查看"+"<a style='font-size:50px;' href='http://www.w3school.com.cn'>W3School</a>");
+            sb.append(dto.getName()+"<br>").append("关于"+reportInfoDO.getMerName()+"的'风控+'报告已经生成!点击查看"+"<a style='font-size:50px;' href='http://www.w3school.com.cn'>W3School</a>");
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -197,10 +194,71 @@ public class ReportService extends BaseService{
         mailSender.send(message);
         return ResultDTO.success();
     }
-    //更新风控报告状态
-    public ResultDTO updateReportStatus(ReportInfoDO reportInfoDO) {
-        int num=reportInfoDAO.update(reportInfoDO);
-        return ResultDTO.success();
+    
+    /**
+     * 根据id查找当前数据,便于修改用
+     * @param reportInfoDO
+     * @return
+     */
+    public ResultDTO getById(ReportInfoDO reportInfoDO){
+    	ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());
+    	return ResultDTO.success(reportInfo);
     }
     
+    /**
+     * 更新风控报告, yx
+     * @param reportInfoDO
+     * @return
+     */
+    @Transactional
+    public ResultDTO updateReport(ReportInfoDO reportInfoDO){
+    	
+    	//将状态改为待审核
+    	reportInfoDO.setStatus(0);
+    	
+    	int result = reportInfoDAO.update(reportInfoDO);
+    	
+    	return ResultDTO.success();
+    }
+    
+    /**
+     * 导入数据，批量新增
+     * @param objs
+     * @return
+     */
+    public ResultDTO BatchImportToDB( List<Object[]> objs){
+    	if(objs.size() > 0){
+    		for(Object[] obj: objs){
+    			ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
+    			reportRepaymentHistory.setReportId(Integer.valueOf(obj[0].toString()));
+    			reportRepaymentHistory.setMonthOne(BigDecimal.valueOf(Double.valueOf(obj[1].toString())));
+    			reportRepaymentHistory.setMonthTwo(BigDecimal.valueOf(Double.valueOf(obj[2].toString())) );
+    			reportRepaymentHistory.setMonthThree(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
+    			reportRepaymentHistory.setMonthFore(BigDecimal.valueOf(Double.valueOf(obj[4].toString())));
+    			reportRepaymentHistory.setMonthFive(BigDecimal.valueOf(Double.valueOf(obj[5].toString())));
+    			reportRepaymentHistory.setMonthSix(BigDecimal.valueOf(Double.valueOf(obj[6].toString())));
+    			reportRepaymentHistory.setMonthSeven(BigDecimal.valueOf(Double.valueOf(obj[7].toString())));
+    			reportRepaymentHistory.setMonthEight(BigDecimal.valueOf(Double.valueOf(obj[8].toString())));
+    			reportRepaymentHistory.setMonthNine(BigDecimal.valueOf(Double.valueOf(obj[9].toString())));
+    			reportRepaymentHistory.setMonthTen(BigDecimal.valueOf(Double.valueOf(obj[10].toString())));
+    			reportRepaymentHistory.setMonthEleven(BigDecimal.valueOf(Double.valueOf(obj[11].toString())));
+    			reportRepaymentHistory.setMonthTwelve(BigDecimal.valueOf(Double.valueOf(obj[12].toString())));
+    			//插表
+        		reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
+    		}
+    		
+    	}
+    	
+    	return ResultDTO.success();
+    }
+    
+    //查看导入数据
+    public ResultPageDTO pageRepayList(Integer id, Integer pageNum, Integer pageSize ){
+    	ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
+    	reportRepaymentHistory.setReportId(id);
+    	List<ReportRepaymentHistoryDO> pageList = this.reportRepaymentHistoryDAO.pageList(reportRepaymentHistory, pageNum, pageSize);
+    	Integer count = this.reportRepaymentHistoryDAO.pageListCount(reportRepaymentHistory);
+        ResultPageDTO<ReportRepaymentHistoryDO> pager = new ResultPageDTO<ReportRepaymentHistoryDO>(count, pageList);
+        return pager;
+    }
 }
