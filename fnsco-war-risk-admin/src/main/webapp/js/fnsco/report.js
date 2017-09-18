@@ -52,8 +52,8 @@ $('#table').bootstrapTable({
 		field : 'tradingArea',
 		title : '商圈'
 	}, {
-		field : 'turnover',
-		title : '营业额'
+		field : 'businessLicenseNum',
+		title : '营业执照'
 	}, {
 		field : 'status',
 		title : '状态',
@@ -67,12 +67,10 @@ $('#table').bootstrapTable({
 function formatterOperation(value, row, index) {
 	//审核成功
 	if (row.status == 2 || row.status == 3) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" onclick="javascript:edit('
-				+ row.id + ');">编辑</a>' ].join('');
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="productType.html?merchantId='+ row.id +' ">编辑</a>' ].join('');
 	}
 	if (row.status == 0) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" onclick="javascript:check('
-				+ row.id + ',' + row.webUserOuterId + ');">审核报告</a>' ].join('');
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="productType.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' "  >审核报告</a>' ].join('');
 	}
 }
 // 0待审核1审核通过2审核失败3待编辑
@@ -178,66 +176,21 @@ function responseHandler(res) {
 	}
 }
 
-function check(id, webUserOuterId) {
-	$(".layui-layer-btn1").css("borderColor","#4898d5");
-	$(".layui-layer-btn1").css("backgroundColor","#2e8ded");
-	layer.confirm('确定审核成功后以邮件的方式通知用户吗?', {
-		time : 20000, // 20s后自动关闭
-		btn : [ '审核通过', '审核失败','取消' ]
-	}, function() {
-		$.ajax({
-			url : PROJECT_NAME + 'admin/report/headPersonnelMes',
-			type : 'POST',
-			dataType : "json",
-			data : {
-				"userId" : webUserOuterId,
-				"merchantId" : id
-			},
-			success : function(data) {
-				if (data.success) {
-					reportStatus(id,1);
-					layer.msg('审核成功');
-					queryEvent("table");
-				} else {
-					layer.msg('终止失败');
-				}
-			},
-			error : function(e) {
-				layer.msg('系统异常!' + e);
-			}
-		});
-	}, function() {
-		reportStatus(id,2);
-	},function() {
-		layer.msg('取消成功');
-	});
+function edit(row){
+	//var selectContent = ttable.bootstrapTable('getSelections');// 返回的是数组类型,Array
+	console.log(row);
 }
 
-//风控状态
-function reportStatus(id,status) {
-	$.ajax({
-		url : PROJECT_NAME + 'admin/report/updateReportStatus',
-		type : 'POST',
-		dataType : "json",
-		data : {
-			"id" : id,
-			"status":status
-		},
-		success : function(data) {
-			console.log(data)
-		}
-	});
-}
 
-//$.ajax({
-//	url : PROJECT_NAME + '/web/report/queryYearReport',
-//	type : 'POST',
-//	dataType : "json",
-//	data : {"id":1},
-//	success : function(data){
-//		console.log(data)
-//	}
-//});
+$.ajax({
+	url : PROJECT_NAME + '/web/report/queryYearReport',
+	type : 'POST',
+	dataType : "json",
+	data : {"userId":2,"merchantId":2},
+	success : function(data){
+		console.log(data)
+	}
+});
 //
 //$.ajax({
 //	url : PROJECT_NAME + '/web/report/queryReportDetails',
@@ -250,7 +203,7 @@ function reportStatus(id,status) {
 //});
 
 //$.ajax({
-//	url : PROJECT_NAME + '/web/report/headPersonnelMes',
+//	url : PROJECT_NAME + '/admin/report/headPersonnelMes',
 //	type : 'POST',
 //	dataType : "json",
 //	data : {"userId":1,"merchantId":2},

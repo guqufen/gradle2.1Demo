@@ -22,7 +22,7 @@ public interface ReportRepaymentHistoryDAO {
 
     //根据reportId查询
     @Results({@Result( column = "id",property = "id"),@Result( column = "month_one",property = "monthOne"),@Result( column = "month_two",property = "monthTwo"),@Result( column = "month_three",property = "monthThree"),@Result( column = "month_fore",property = "monthFore"),@Result( column = "month_five",property = "monthFive"),@Result( column = "month_six",property = "monthSix"),@Result( column = "month_seven",property = "monthSeven"),@Result( column = "month_eight",property = "monthEight"),@Result( column = "month_nine",property = "monthNine"),@Result( column = "month_ten",property = "monthTen"),@Result( column = "month_eleven",property = "monthEleven"),@Result( column = "month_twelve",property = "monthTwelve") })
-    @Select("SELECT * FROM risk_report_repayment_history WHERE report_id = #{reportId}")
+    @Select("SELECT * from risk_report_repayment_history where last_modify_time=(select max(last_modify_time) from risk_report_repayment_history);")
     public ReportRepaymentHistoryDO getByReportId(@Param("reportId") int reportId);
     
     @Insert("INSERT into risk_report_repayment_history(id,report_id,month_one,month_two,month_three,month_fore,month_five,month_six,month_seven,month_eight,month_nine,month_ten,month_eleven,month_twelve) VALUES (#{id},#{reportId},#{monthOne},#{monthTwo},#{monthThree},#{monthFore},#{monthFive},#{monthSix},#{monthSeven},#{monthEight},#{monthNine},#{monthTen},#{monthEleven},#{monthTwelve})")
