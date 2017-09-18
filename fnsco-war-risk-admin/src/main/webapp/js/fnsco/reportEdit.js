@@ -205,12 +205,12 @@ $('#table').bootstrapTable({
 	sidePagination : 'server',
 	method : 'get',//提交方式
 	search : false, // 是否启动搜索栏
-	url : PROJECT_NAME + '/report/queryRepay',
-	showRefresh : true,// 是否显示刷新按钮
+	url : PROJECT_NAME + 'report/queryRepay',
+	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	striped : true, // 是否显示行间隔色
 	cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-	pagination : true, // 是否显示分页（*）
+	pagination : false, // 是否显示分页（*）
 	sortable : true, // 是否启用排序
 	uniqueId : 'id', //将index列设为唯一索引
 	sortOrder : "asc", // 排序方式
