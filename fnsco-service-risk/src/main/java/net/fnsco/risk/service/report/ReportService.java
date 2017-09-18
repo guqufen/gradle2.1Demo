@@ -63,9 +63,9 @@ public class ReportService extends BaseService{
         return pager;
     }
     //查询12个月风控历史
-    public ResultDTO queryYearReport(Integer merchantId){
+    public ResultDTO queryYearReport(Integer userId,Integer merchantId){
         List<YearReportDO> list=new ArrayList<YearReportDO>();
-        ReportInfoDO reportInfoDO=reportInfoDAO.getById(merchantId);
+        ReportInfoDO reportInfoDO=reportInfoDAO.getById(userId);
         //判断风控报告的状态
         if(reportInfoDO.getStatus()!=1){
             return ResultDTO.fail("风控报告状态不正常");
@@ -161,7 +161,7 @@ public class ReportService extends BaseService{
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             System.out.println(ev.getProperty("username"));
-            helper.setFrom("goggb@qq.com");
+            helper.setFrom("fanaisheng@zheft.cn");
             helper.setTo("782430551@qq.com");
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
@@ -181,8 +181,9 @@ public class ReportService extends BaseService{
         try {
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            logger.warn(ev.getProperty("username"));
             System.out.println(ev.getProperty("username"));
-            helper.setFrom("goggb@qq.com");
+            helper.setFrom("fanaisheng@zheft.cn");
             helper.setTo("782430551@qq.com");
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();

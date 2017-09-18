@@ -111,6 +111,84 @@
 	<script src="js/layer/layer.js"></script>
 	<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
 	<script type="text/javascript" src="js/fnsco/common.js"></script>
-	<script type="text/javascript" src="js/fnsco/productType.js"></script>
+	<script>
+		function GetRequest() {
+			var url = location.search; //获取url中"?"符后的字串   
+			var theRequest = new Object();
+			if (url.indexOf("?") != -1) {
+				var str = url.substr(1);
+				strs = str.split("&");
+				for (var i = 0; i < strs.length; i++) {
+					theRequest[strs[i].split("=")[0]] = unescape(strs[i]
+							.split("=")[1]);
+				}
+			}
+			return theRequest;
+		}
+		var Request = new Object();
+		Request = GetRequest();
+		var merchantId;
+		merchantId = Request["merchantId"];
+		var userId;
+		
+		userId = Request["userId"];
+		console.log(merchantId + "-----" + userId)
+		//通过userId判断页面来源
+		if (userId == "" || userId == null) {
+			//编辑页面过来
+		}
+		if (userId != "" || userId != null) {
+			//从审核页面而来  只能查看
+		}
+		
+		function check(id, webUserOuterId) {
+			layer.confirm('确定审核成功后以邮件的方式通知用户吗?', {
+				time : 20000, // 20s后自动关闭
+				btn : [ '审核通过', '审核失败', '取消' ]
+			}, function() {
+				$.ajax({
+					url : PROJECT_NAME + 'admin/report/headPersonnelMes',
+					type : 'POST',
+					dataType : "json",
+					data : {
+						"userId" : webUserOuterId,
+						"merchantId" : id
+					},
+					success : function(data) {
+						if (data.success) {
+							reportStatus(id, 1);
+							layer.msg('审核成功');
+							 window.location.href="report.html";
+						} else {
+							layer.msg('终止失败');
+						}
+					},
+					error : function(e) {
+						layer.msg('系统异常!' + e);
+					}
+				});
+			}, function() {
+				reportStatus(id, 2);
+			}, function() {
+				layer.msg('取消成功');
+			});
+		}
+		
+		//改变风控状态
+		function reportStatus(id,status) {
+			$.ajax({
+				url : PROJECT_NAME + 'admin/report/updateReportStatus',
+				type : 'POST',
+				dataType : "json",
+				data : {
+					"id" : id,
+					"status":status
+				},
+				success : function(data) {
+					console.log(data)
+				}
+			});
+		}
+	</script>
 </body>
 </html>

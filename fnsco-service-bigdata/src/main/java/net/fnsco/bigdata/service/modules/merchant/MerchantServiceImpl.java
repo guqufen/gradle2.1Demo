@@ -233,9 +233,11 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
             List<MerchantChannel> count = merchantChannelDao.selectByInnerCode(posListDTO.getInnerCode());
             if(CollectionUtils.isNotEmpty(count)){
                 List<PosInfosDTO> posInfo = posListDTO.getPosInfo();
-                for (PosInfosDTO posInfoDTO : posInfo) {
-                    posInfoDTO.setTaiCodeUrl(env.getProperty(TAICODE_BASE_URL)+"?innerCode="+posListDTO.getInnerCode());
-                }
+                PosInfosDTO posInfoDTO = new PosInfosDTO();
+                posInfoDTO.setPosName("台码");
+                posInfoDTO.setTaiCodeUrl(env.getProperty(TAICODE_BASE_URL)+"?innerCode="+posListDTO.getInnerCode());
+                posInfoDTO.setPosId(0);
+                posInfo.add(posInfoDTO);
             }
         }
         

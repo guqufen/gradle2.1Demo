@@ -69,7 +69,7 @@ public class TradeDataImportService extends BaseService{
                 //通道商户号
                 String merid = String.valueOf(objs[13]);
                 //通道终端号
-                String channelTermCode = String.valueOf(objs[14]);
+                String channeltermcode = String.valueOf(objs[14]);
                 //批次号
                 String batchno = String.valueOf(objs[15]);
                 //终端流水号
@@ -130,7 +130,7 @@ public class TradeDataImportService extends BaseService{
                     tradeData.setPaySubType(paysubtype);
                     tradeData.setTimeStamp(timestamp);
                     tradeData.setMerId(merid);
-                    tradeData.setTermId(termid);
+                    tradeData.setChannelTermCode(channeltermcode);
                     tradeData.setBatchNo(batchno);
                     tradeData.setSysTraceNo(traceno);
                     tradeData.setReferNo(referno);
@@ -145,7 +145,7 @@ public class TradeDataImportService extends BaseService{
                     tradeData.setTn(tn);
                     tradeData.setRespMsg(respmsg);
                     tradeData.setSuccTime(succtime);
-                    tradeData.setChannelTermCode(channelTermCode);
+                    tradeData.setTermId(termid);
                     tradeData.setPayMedium(payMedium);
                     //日期格式转换
                     Date createTime = null;
