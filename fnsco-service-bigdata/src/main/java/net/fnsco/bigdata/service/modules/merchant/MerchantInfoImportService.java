@@ -236,7 +236,7 @@ public class MerchantInfoImportService extends BaseService {
                  * 浦发
                  */
                 if(!Strings.isNullOrEmpty(busiCode)){
-                    createChanelAndPosAndTer(innerCode, merchantCode, userId, privateKye, mercrefername, posType, posFactory, sncode, posaddr, bankId, xx,
+                    createChanelAndPosAndTer(innerCode, busiCode, userId, privateKye, mercrefername, posType, posFactory, sncode, posaddr, bankId, xx,
                         debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee, creditCardMaxFee, innerTermCode, terminalCode, timeNum, "01", "00");
                 }
                 
