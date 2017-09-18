@@ -38,4 +38,6 @@ public interface AppUserMerchantDao {
      * @since  CodingExample　Ver 1.1
      */
     List<TradeMerchantDTO> selectByUserIdAndRoleId(@Param("appUserId")Integer appUserId,@Param("roleId")String roleId);
+    
+    int updateByUserIdAndInnerCode(AppUserMerchant record);
 }

@@ -35,7 +35,14 @@ public interface AppUserDao {
 	 * @since  CodingExample　Ver 1.1
 	 */
 	List<AppUser> selectByInnerCode(@Param("innerCode")String innerCode);
-	
+	/**
+	 * selectAllValid:(查询所有有效帐号)
+	 * @return    设定文件
+	 * @author    tangliang
+	 * @date      2017年9月18日 上午10:28:41
+	 * @return List<AppUser>    DOM对象
+	 */
+	List<AppUser> selectAllValid();
 	/**
 	 * queryPageList:(这里用一句话描述这个方法的作用)条件分页查询
 	 *
