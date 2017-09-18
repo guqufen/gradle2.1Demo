@@ -17,6 +17,7 @@ var Request = new Object();
 Request = GetRequest();
 var merchantId=Request["merchantId"];
 console.log(merchantId);
+
 $(function() {
 
 	//给报告时间赋值(当前日期)
@@ -34,7 +35,7 @@ $(function() {
 	//给规模赋值(size)
 	$('#size').append('<option value=1>单店</option>');
 	$('#size').append('<option value=2>多店</option>');
-
+	
 	//报告周期赋值(reportCycle)
 	$('#reportCycle').append('<option value=1>一年(半年历史，半年预测)</option>');
 	$('#reportCycle').append('<option value=2>一年(三个月历史，九个月预测)</option>');
@@ -61,17 +62,16 @@ $(function() {
 
 				$('#businessDueTime').val(dd.businessDueTime);// 营业期限
 
-				$('#industry[value=' + dd.industry + ']')
-						.attr("selected", true);// 行业
+				$('select[id="industry"]').find("option[value=" + dd.industry + "]").attr("selected", true);// 行业
 
 				$('#tradingArea').val(dd.tradingArea);// 商圈
 
 				$('#turnover').val(dd.turnover);// 营业额
 
-				$('#size option[value=' + dd.size + ']').attr("selected", true);// 规模
+				$('select[id="size"]').find("option[value=" + dd.size + "]").attr("selected", true);// 规模
 
-				$('#reportCycle option[value=' + dd.reportCycle + ']').attr(
-						"selected", true);// 报告周期
+				$('select[id="reportCycle"]').find("option[value=" + dd.reportCycle + "]").attr("selected", true);// 报告周期
+
 
 				$('#riskWarning').val(dd.riskWarning);// 风险
 
@@ -94,24 +94,19 @@ $(function() {
  */
 function getIndest() {
 	$.ajax({
-		url : PROJECT_NAME + '/industry/queryAll',
-		type : 'get',
-		success : function(data) {
+		url:PROJECT_NAME + '/industry/queryAll',
+		type:'get',
+		async : false,//同步获取数据
+		success:function(data){
 			console.log(data);
-			if (data.success) {
-				for (var i = 0; i < data.data.length; i++) {
-					if (data.data[i].fourth != "") {
-						$('#industry').append(
-								'<option value=' + data.data[i].id + '>'
-										+ data.data[i].fourth + '</option>');
-					} else if (data.data[i].third != "") {
-						$('#industry').append(
-								'<option value=' + data.data[i].id + '>'
-										+ data.data[i].third + '</option>');
-					} else if (data.data[i].first != "") {
-						$('#industry').append(
-								'<option value=' + data.data[i].id + '>'
-										+ data.data[i].first + '</option>');
+			if(data.success){
+				for(var i=0; i < data.data.length; i++){
+					if(data.data[i].fourth != ""){
+						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'--'+data.data[i].third+'--'+data.data[i].fourth+'</option>');
+					}else if(data.data[i].third != ""){
+						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'--'+data.data[i].third+'</option>');
+					}else if(data.data[i].first != ""){
+						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'</option>');
 					}
 				}
 			}
@@ -187,11 +182,10 @@ $('#btn_save').click(function() {
 
 	//用AJAX传给后台，返回修改成功/失败
 	$.ajax({
-		url : PROJECT_NAME + 'report/updateReport',
-		data : params,
-		type : 'get',
-		success : function(data) {
-
+		url:PROJECT_NAME + '/report/updateReport',
+		data:params,
+		type:'get',
+		success:function(data){
 			//编辑成功，跳回风控报告显示页面，同时刷新显示页面
 			if (data.success) {
 				layer.msg(data.message);
@@ -209,7 +203,7 @@ $('#btn_save').click(function() {
 //还款能力历史与预测table
 $('#table').bootstrapTable({
 	sidePagination : 'server',
-	method : 'post',//提交方式
+	method : 'get',//提交方式
 	search : false, // 是否启动搜索栏
 	url : PROJECT_NAME + 'report/queryRepay',
 	showRefresh : false,// 是否显示刷新按钮
@@ -218,13 +212,13 @@ $('#table').bootstrapTable({
 	cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 	pagination : false, // 是否显示分页（*）
 	sortable : true, // 是否启用排序
-	uniqueId : 'Id', //将index列设为唯一索引
+	uniqueId : 'id', //将index列设为唯一索引
 	sortOrder : "asc", // 排序方式
 	pageNumber : 1, // 初始化加载第一页，默认第一页
 	pageSize : 50, // 每页的记录行数（*）
 	singleSelect : true,// 单选
 	pageList : [ 15, 20, 50, 100 ], // 可供选择的每页的行数（*）
-	queryParams : queryParams,
+	queryParams : queryParamss,
 	responseHandler : responseHandler,// 处理服务器返回数据
 	columns : [ {
 		field : 'id',
@@ -284,6 +278,10 @@ $('#table').bootstrapTable({
 		field : 'monthTwelve',
 		title : '十二月',
 		width : 30
+	} , {
+		field : 'lastModifyTimeStr',
+		title : '最后修改时间',
+		width : 30
 	} ]
 });
 //处理后台返回数据
@@ -302,20 +300,20 @@ function responseHandler(res) {
 	}
 }
 //组装请求参数
-function queryParams(params) {
+function queryParamss(params) {
 	var param = {
-		currentPageNum : this.pageNumber,
-		pageSize : this.pageSize,
-		id : merchantId
+		'currentPageNum' : this.pageNumber,
+		'pageSize' : 1,//只查询时间最近的一条
+		'reportId' : merchantId
 	}
 	return param;
 }
 
 /** 导入功能 **/
 //模板下载按钮事件
-function downEvent() {
-	var url = PROJECT_NAME + 'report/down';
-	window.open(url, 'Excel导入');
+function downEvent(){
+	var url=PROJECT_NAME + '/report/down';
+   window.open(url, 'Excel导入');
 }
 //导入按钮事件
 function importEvent() {
@@ -324,7 +322,7 @@ function importEvent() {
 $(function() {
 	//0.初始化fileinput
 	var oFileInput = new FileInput();
-	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + 'report/doImport');
+	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + 'report/doImport?id='+merchantId);
 });
 //初始化fileinput
 var FileInput = function() {

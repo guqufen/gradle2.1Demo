@@ -57,6 +57,9 @@ public class ReportRepaymentHistoryProvider {
         if (reportRepaymentHistory.getMonthTwelve() != null) {
             SET("month_twelve=#{reportRepaymentHistory.monthTwelve}");
         }
+        if (reportRepaymentHistory.getLastModifyTime() != null) {
+            SET("last_modify_time=#{reportRepaymentHistory.lastModifyTime}");
+        }
         WHERE("id = #{reportRepaymentHistory.id}");
         }}.toString();
     }
@@ -118,7 +121,10 @@ public class ReportRepaymentHistoryProvider {
         if (reportRepaymentHistory.getMonthTwelve() != null) {
             WHERE("month_twelve=#{reportRepaymentHistory.monthTwelve}");
         }
-        ORDER_BY("id desc limit " + start + ", " + limit );
+        if (reportRepaymentHistory.getLastModifyTime() != null) {
+            WHERE("last_modify_time=#{reportRepaymentHistory.lastModifyTime}");
+        }
+        ORDER_BY("last_modify_time desc limit " + start + ", " + limit );
         }}.toString();
     }
 
@@ -168,6 +174,9 @@ public class ReportRepaymentHistoryProvider {
         }
         if (reportRepaymentHistory.getMonthTwelve() != null) {
             WHERE("month_twelve=#{reportRepaymentHistory.monthTwelve}");
+        }
+        if (reportRepaymentHistory.getLastModifyTime() != null) {
+            WHERE("last_modify_time=#{reportRepaymentHistory.lastModifyTime}");
         }
         }}.toString();
     }

@@ -241,12 +241,9 @@ public class ReportService extends BaseService {
      */
     @Transactional
     public ResultDTO updateReport(ReportInfoDO reportInfoDO) {
-
         //将状态改为待审核
         reportInfoDO.setStatus(0);
-
         int result = reportInfoDAO.update(reportInfoDO);
-
         return ResultDTO.success();
     }
 
@@ -255,30 +252,30 @@ public class ReportService extends BaseService {
      * @param objs
      * @return
      */
-    public ResultDTO BatchImportToDB(List<Object[]> objs) {
-        if (objs.size() > 0) {
-            for (Object[] obj : objs) {
-                ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
-                reportRepaymentHistory.setReportId(Integer.valueOf(obj[0].toString()));
-                reportRepaymentHistory.setMonthOne(BigDecimal.valueOf(Double.valueOf(obj[1].toString())));
-                reportRepaymentHistory.setMonthTwo(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
-                reportRepaymentHistory.setMonthThree(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
-                reportRepaymentHistory.setMonthFore(BigDecimal.valueOf(Double.valueOf(obj[4].toString())));
-                reportRepaymentHistory.setMonthFive(BigDecimal.valueOf(Double.valueOf(obj[5].toString())));
-                reportRepaymentHistory.setMonthSix(BigDecimal.valueOf(Double.valueOf(obj[6].toString())));
-                reportRepaymentHistory.setMonthSeven(BigDecimal.valueOf(Double.valueOf(obj[7].toString())));
-                reportRepaymentHistory.setMonthEight(BigDecimal.valueOf(Double.valueOf(obj[8].toString())));
-                reportRepaymentHistory.setMonthNine(BigDecimal.valueOf(Double.valueOf(obj[9].toString())));
-                reportRepaymentHistory.setMonthTen(BigDecimal.valueOf(Double.valueOf(obj[10].toString())));
-                reportRepaymentHistory.setMonthEleven(BigDecimal.valueOf(Double.valueOf(obj[11].toString())));
-                reportRepaymentHistory.setMonthTwelve(BigDecimal.valueOf(Double.valueOf(obj[12].toString())));
-                //插表
-                reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
-            }
-
-        }
-
-        return ResultDTO.success();
+    public ResultDTO BatchImportToDB( List<Object[]> objs, Integer id){
+    	if(objs.size() > 0){
+    		for(Object[] obj: objs){
+    			ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
+    			reportRepaymentHistory.setReportId(id);
+    			reportRepaymentHistory.setMonthOne(BigDecimal.valueOf(Double.valueOf(obj[0].toString())));
+    			reportRepaymentHistory.setMonthTwo(BigDecimal.valueOf(Double.valueOf(obj[1].toString())) );
+    			reportRepaymentHistory.setMonthThree(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+    			reportRepaymentHistory.setMonthFore(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
+    			reportRepaymentHistory.setMonthFive(BigDecimal.valueOf(Double.valueOf(obj[4].toString())));
+    			reportRepaymentHistory.setMonthSix(BigDecimal.valueOf(Double.valueOf(obj[5].toString())));
+    			reportRepaymentHistory.setMonthSeven(BigDecimal.valueOf(Double.valueOf(obj[6].toString())));
+    			reportRepaymentHistory.setMonthEight(BigDecimal.valueOf(Double.valueOf(obj[7].toString())));
+    			reportRepaymentHistory.setMonthNine(BigDecimal.valueOf(Double.valueOf(obj[8].toString())));
+    			reportRepaymentHistory.setMonthTen(BigDecimal.valueOf(Double.valueOf(obj[9].toString())));
+    			reportRepaymentHistory.setMonthEleven(BigDecimal.valueOf(Double.valueOf(obj[10].toString())));
+    			reportRepaymentHistory.setMonthTwelve(BigDecimal.valueOf(Double.valueOf(obj[11].toString())));
+    			reportRepaymentHistory.setLastModifyTime(new Date());
+    			//插表
+        		reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
+    		}
+    		
+    	}
+    	return ResultDTO.success();
     }
 
     //查看导入数据
@@ -288,6 +285,7 @@ public class ReportService extends BaseService {
         List<ReportRepaymentHistoryDO> pageList = this.reportRepaymentHistoryDAO.pageList(reportRepaymentHistory, pageNum, pageSize);
         Integer count = this.reportRepaymentHistoryDAO.pageListCount(reportRepaymentHistory);
         ResultPageDTO<ReportRepaymentHistoryDO> pager = new ResultPageDTO<ReportRepaymentHistoryDO>(count, pageList);
+      
         return pager;
     }
 
