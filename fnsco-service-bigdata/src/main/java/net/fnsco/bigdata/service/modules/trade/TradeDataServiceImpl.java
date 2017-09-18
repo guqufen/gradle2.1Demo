@@ -107,15 +107,18 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setInnerCode(innerCode);
         tradeDataEntity.setCreateTime(new Date());
         tradeDataEntity.setChannelTermCode(tradeData.getChannelTermCode());
-        if(tradeData.getCreateTime()!=null) {
-        	tradeDataEntity.setCreateTime(tradeData.getCreateTime());
-        }
+//        if(tradeData.getCreateTime()!=null) {
+//        	tradeDataEntity.setCreateTime(tradeData.getCreateTime());
+//        }
         tradeDataEntity.setRespCode(tradeData.getRespCode());
 
         tradeDataEntity.setCertifyId(tradeData.getCardNo());
         tradeDataEntity.setDcType(tradeData.getCardOrg());
         tradeDataEntity.setTxnType(tradeData.getTxnType());
         tradeDataEntity.setStatus("1");
+        
+        tradeDataEntity.setPayMedium(tradeData.getPayMedium());
+        tradeDataEntity.setChannelType(tradeData.getChannelType());
         String txnType = tradeData.getTxnType();
         if ("2".equals(txnType)) {
             tradeDataEntity.setStatus("0");
@@ -351,7 +354,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
 	@Override
 	public String queryByCertifyId(String certifyid) {
 		String cardTotalLength=String.valueOf(certifyid.trim().length());
-		String type=tradeListDAO.queryByCertifyId(cardTotalLength);
+		String type=tradeListDAO.queryByCertifyId(certifyid,cardTotalLength);
 		return type;
 	}
 }

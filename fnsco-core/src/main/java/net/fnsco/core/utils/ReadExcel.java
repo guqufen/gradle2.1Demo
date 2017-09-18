@@ -18,11 +18,14 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 
 public class ReadExcel {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 	// 总行数
 	private int totalRows = 0;
 	// 总条数
@@ -259,9 +262,10 @@ public class ReadExcel {
                     default:
                         break;
                 }
+                
                 i++;
             }
-
+            logger.info("正在处理数据"+rowIx);
             list.add(ojbs);
         }
         return list;

@@ -78,6 +78,8 @@ public class WebUserOuterService extends BaseService {
     // 添加
     public WebUserOuterDO doAdd(WebUserOuterDO user) {
         logger.info("开始添加UserService.add,user=" + user.toString());
+        String password=Md5Util.getInstance().md5(user.getPassword());
+        user.setPassword(password);
         user.setCreaterTime(new Date());
         this.userOuterDAO.insert(user);
         return user;

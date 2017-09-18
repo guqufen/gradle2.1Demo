@@ -170,7 +170,7 @@ public class MerchantImportHelper {
      * @return MerchantTerminal    DOM对象
      */
     public static MerchantTerminal createMerchantTerminal(String innerCode,String debitCardRate,String debitCardMaxFee,String debitCardFee,String creditCardRate,String creditCardFee,String creditCardMaxFee,
-                                                          Integer posId,String innerTermCode,String terminalCode,String alipayFee,String wechatFee){
+                                                          Integer posId,String innerTermCode,String terminalCode,String alipayFee,String wechatFee,String terminalType,String termName){
         MerchantTerminal merchantTerminal1 = new MerchantTerminal();
         merchantTerminal1.setInnerCode(innerCode);
         
@@ -191,8 +191,8 @@ public class MerchantImportHelper {
         }
         
         merchantTerminal1.setPosId(posId);
-        merchantTerminal1.setTermName("刷卡");
-        merchantTerminal1.setTerminalType("00");
+        merchantTerminal1.setTermName(termName);
+        merchantTerminal1.setTerminalType(terminalType);
         merchantTerminal1.setTerminalCode(innerTermCode);
         merchantTerminal1.setInnerTermCode(terminalCode);
         merchantTerminal1.setAlipayFee(alipayFee);
