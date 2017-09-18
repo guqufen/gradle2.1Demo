@@ -25,7 +25,7 @@ if (customerType == 1) {
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url : PROJECT_NAME + 'admin/report/query',
+	url : PROJECT_NAME + 'report/query',
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	// toolbar: '#toolbar', //工具按钮用哪个容器
@@ -67,10 +67,10 @@ $('#table').bootstrapTable({
 function formatterOperation(value, row, index) {
 	//审核成功
 	if (row.status == 2 || row.status == 3) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="productType.html?merchantId='+ row.id +' ">编辑</a>' ].join('');
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' ">编辑</a>' ].join('');
 	}
 	if (row.status == 0) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="productType.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' "  >审核报告</a>' ].join('');
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' "  >审核报告</a>' ].join('');
 	}
 }
 // 0待审核1审核通过2审核失败3待编辑
