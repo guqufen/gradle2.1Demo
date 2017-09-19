@@ -105,45 +105,41 @@ public class MerchantInfoImportService extends BaseService {
                 // 开户行
                 String subbankname = String.valueOf(objs[25]);
                 String openBankNum = String.valueOf(objs[26]);
-                // channelType
-                String channelType = String.valueOf(objs[27]);
                 //createTime
-                String createTime = String.valueOf(objs[28]);
+                String createTime = String.valueOf(objs[27]);
                 // busiCode
-                String busiCode = String.valueOf(objs[29]);
-                String privateKye = String.valueOf(objs[30]);
-                String taxRegistCode = String.valueOf(objs[31]);
+                String busiCode = String.valueOf(objs[28]);
+                String privateKye = String.valueOf(objs[29]);
+                String taxRegistCode = String.valueOf(objs[30]);
                 // 扫码扣率
-                String xx = String.valueOf(objs[32]);
+                String xx = String.valueOf(objs[31]);
                 //文件信息
-                String fileInfos = String.valueOf(objs[33]);
+                String fileInfos = String.valueOf(objs[32]);
                 // 一号pos机
                 // 备注/1号机具SN
-                String sncode = String.valueOf(objs[34]);
+                String sncode = String.valueOf(objs[33]);
                 //debitCardRate
-                String debitCardRate = String.valueOf(objs[35]);
+                String debitCardRate = String.valueOf(objs[34]);
                 //creditCardRate
-                String creditCardRate = String.valueOf(objs[36]);
+                String creditCardRate = String.valueOf(objs[35]);
                 //debitCardFee
-                String debitCardFee = String.valueOf(objs[37]);
+                String debitCardFee = String.valueOf(objs[36]);
                 //creditCardFee
-                String creditCardFee = String.valueOf(objs[38]);
+                String creditCardFee = String.valueOf(objs[37]);
                 //debitCardMaxFee
-                String debitCardMaxFee = String.valueOf(objs[39]);
+                String debitCardMaxFee = String.valueOf(objs[38]);
                 //creditCardMaxFee
-                String creditCardMaxFee = String.valueOf(objs[40]);
+                String creditCardMaxFee = String.valueOf(objs[39]);
                 //posType
-                String posType = String.valueOf(objs[41]);
+                String posType = String.valueOf(objs[40]);
                 //posFactory
-                String posFactory = String.valueOf(objs[42]);
+                String posFactory = String.valueOf(objs[41]);
                 //merchantCode
-                String merchantCode = String.valueOf(objs[43]);
+                String merchantCode = String.valueOf(objs[42]);
                 //terminalCode
-                String terminalCode = String.valueOf(objs[44]);
+                String terminalCode = String.valueOf(objs[43]);
                 //innerTermCode
-                String innerTermCode = String.valueOf(objs[45]);
-                //mercReferName
-                //                String mercReferName = String.valueOf(objs[46]);
+                String innerTermCode = String.valueOf(objs[44]);
 
                 /**
                  * 导入之前要先验证business_license_num 营业执照号码保持唯一,如果存在，则不新加商户，只加该商户其余属性。

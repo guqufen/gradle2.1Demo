@@ -187,4 +187,8 @@
 	     </foreach>
 		)
 	</delete>
+	<!-- 根据innerCode和accountNo获取张数 -->
+	<select id="countBanksByInnerCodeAndAccountNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+	  select count(*) from m_merchant_bank where inner_code = #{innerCode} and account_no = #{accountNo,jdbcType=VARCHAR}
+	</select>
 </mapper>
