@@ -23,7 +23,6 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
-import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
@@ -179,7 +178,7 @@ public class AppUserController extends BaseController {
                     stream.close();
                     //上传阿里云OSS文件服务器
                     OssLoaclUtil.uploadFile(fileURL, fileKey);
-                    String newUrl = OssUtil.getHeadBucketName()+"^"+fileKey;
+                    String newUrl = OssLoaclUtil.getHeadBucketName()+"^"+fileKey;
                     AppUserDTO appUserDto = new AppUserDTO();
                     appUserDto.setUserId(Integer.valueOf(userId));
                     appUserDto.setHeadImagePath(newUrl);
