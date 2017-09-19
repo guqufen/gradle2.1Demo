@@ -37,4 +37,7 @@ public interface ConfigDAO {
     @SelectProvider(type = ConfigProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("config") ConfigDO config);
 
+    @Results({@Result( column = "value",property = "value") ,@Result( column = "remark",property = "remark")})
+    @Select("SELECT * FROM sys_config WHERE type = #{type} order by id")
+    public List<ConfigDO> getByType(@Param("type") String type);
 }

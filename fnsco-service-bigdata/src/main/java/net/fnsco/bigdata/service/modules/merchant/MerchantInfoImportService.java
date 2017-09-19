@@ -1,6 +1,5 @@
 package net.fnsco.bigdata.service.modules.merchant;
 
-import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -25,8 +24,6 @@ import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.FileUtils;
-import net.fnsco.core.utils.OssLoaclUtil;
 
 /**
  * @desc excel上传实现类
@@ -108,41 +105,45 @@ public class MerchantInfoImportService extends BaseService {
                 // 开户行
                 String subbankname = String.valueOf(objs[25]);
                 String openBankNum = String.valueOf(objs[26]);
+                // channelType
+                String channelType = String.valueOf(objs[27]);
                 //createTime
-                String createTime = String.valueOf(objs[27]);
+                String createTime = String.valueOf(objs[28]);
                 // busiCode
-                String busiCode = String.valueOf(objs[28]);
-                String privateKye = String.valueOf(objs[29]);
-                String taxRegistCode = String.valueOf(objs[30]);
+                String busiCode = String.valueOf(objs[29]);
+                String privateKye = String.valueOf(objs[30]);
+                String taxRegistCode = String.valueOf(objs[31]);
                 // 扫码扣率
-                String xx = String.valueOf(objs[31]);
+                String xx = String.valueOf(objs[32]);
                 //文件信息
-                String fileInfos = String.valueOf(objs[32]);
+                String fileInfos = String.valueOf(objs[33]);
                 // 一号pos机
                 // 备注/1号机具SN
-                String sncode = String.valueOf(objs[33]);
+                String sncode = String.valueOf(objs[34]);
                 //debitCardRate
-                String debitCardRate = String.valueOf(objs[34]);
+                String debitCardRate = String.valueOf(objs[35]);
                 //creditCardRate
-                String creditCardRate = String.valueOf(objs[35]);
+                String creditCardRate = String.valueOf(objs[36]);
                 //debitCardFee
-                String debitCardFee = String.valueOf(objs[36]);
+                String debitCardFee = String.valueOf(objs[37]);
                 //creditCardFee
-                String creditCardFee = String.valueOf(objs[37]);
+                String creditCardFee = String.valueOf(objs[38]);
                 //debitCardMaxFee
-                String debitCardMaxFee = String.valueOf(objs[38]);
+                String debitCardMaxFee = String.valueOf(objs[39]);
                 //creditCardMaxFee
-                String creditCardMaxFee = String.valueOf(objs[39]);
+                String creditCardMaxFee = String.valueOf(objs[40]);
                 //posType
-                String posType = String.valueOf(objs[40]);
+                String posType = String.valueOf(objs[41]);
                 //posFactory
-                String posFactory = String.valueOf(objs[41]);
+                String posFactory = String.valueOf(objs[42]);
                 //merchantCode
-                String merchantCode = String.valueOf(objs[42]);
+                String merchantCode = String.valueOf(objs[43]);
                 //terminalCode
-                String terminalCode = String.valueOf(objs[43]);
+                String terminalCode = String.valueOf(objs[44]);
                 //innerTermCode
-                String innerTermCode = String.valueOf(objs[44]);
+                String innerTermCode = String.valueOf(objs[45]);
+                //mercReferName
+                //                String mercReferName = String.valueOf(objs[46]);
 
                 /**
                  * 导入之前要先验证business_license_num 营业执照号码保持唯一,如果存在，则不新加商户，只加该商户其余属性。
@@ -316,30 +317,9 @@ public class MerchantInfoImportService extends BaseService {
             /**
              * 此处需要先下载，再上传OSS，再获取图片路径和名称
              */
-            
             MerchantFile merchantFile = MerchantImportHelper.createMerchantFile(innerCode, "", fileType, filePath);
             merchantFileDao.insertSelective(merchantFile);
         }
-    }
-    
-    /**
-     * uploadFile:(上传文件)
-     * @param fileUrl
-     * @param fileKey
-     * @return    设定文件
-     * @author    tangliang
-     * @date      2017年9月18日 下午2:14:39
-     * @return String    DOM对象
-     */
-    private String uploadFile(String fileUrl,String fileKey){
-        FileInputStream fis = FileUtils.getFileInputStream(fileUrl);
-        if(null == fis){
-            return null;
-        }
-        OssLoaclUtil.uploadFile(fis, fileKey);
-        String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
-        
-        return newUrl;
     }
     
     /**
