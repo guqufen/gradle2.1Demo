@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.open;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
+import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
@@ -26,6 +28,8 @@ public class MerchantController extends BaseController {
     private MerchantService merchantService;
     @Autowired
     private AppUserService appUserService;
+    @Autowired
+    private MerchantInfoImportService merchantInfoImportService;
     /**
      * 获取商户编号
      *
@@ -82,6 +86,25 @@ public class MerchantController extends BaseController {
             }
         }
         
+        return success(false);
+    }
+    
+    /**
+     * importMerchant:(导入商户信息接口)
+     * @param merchant
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月19日 上午9:32:10
+     * @return ResultDTO    DOM对象
+     */
+    @RequestMapping(value = "/importMerchant")
+    @ApiOperation(value = "导入商户信息")
+    public ResultDTO importMerchant(@RequestBody List<Object[]> customerList) {
+        try {
+             return merchantInfoImportService.merchantBatchImportToDB(customerList, 1);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return success(false);
     }
 }

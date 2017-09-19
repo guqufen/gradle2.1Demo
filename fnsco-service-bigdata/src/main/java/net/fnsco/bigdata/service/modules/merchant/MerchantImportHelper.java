@@ -111,6 +111,13 @@ public class MerchantImportHelper {
         merchantBank.setInnerCode(innerCode);
         merchantBank.setAccountName(accountname);
         merchantBank.setAccountNo(accountno);
+        if(!Strings.isNullOrEmpty(accounttype)){
+            if(accounttype.contains("private")){
+                accounttype = "1";
+            }else if(accounttype.contains("public")){
+                accounttype = "0";
+            }
+        }
         merchantBank.setAccountType(accounttype);
         merchantBank.setAccountCardId(accountcardid);
         merchantBank.setSubBankName(subbankname);
