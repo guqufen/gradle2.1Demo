@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑报告-法奈昇大数据平台</title>
+    <meta name="keywords" content="法奈昇风控+平台">
+    <meta name="description" content="法奈昇风控+平台">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+    <link href="css/plugins/bootstrap/fileinput.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="panel-body animated fadeInRight">
+    <div class="panel panel-default">
+        <form id="formSearch" class="form-horizontal">
+				<div class="form-group" style="margin-top: 15px">
+					 <h2>基本信息</h2>
+					<div class="row col-sm-12">
+						<div class="col-sm-6" style="text-align: right;">
+							<label class="control-label" for="merName">商户名称:</label>
+							<input type="text" class="form-control" id="merName" name="merName" />
+						</div>
+						<div class="col-sm-6">
+							<label class="control-label" for="businessLicenseNum">营业执照:</label>
+							<input type="text" class="form-control" id="businessLicenseNum" name="businessLicenseNum" />
+						</div>
+					</div>
+					<div class="row col-sm-12">
+						<div class="col-sm-6">
+							<label class="control-label" for="businessAddress">经营地址:</label>
+							<input type="text" class="form-control" id="businessAddress" name="businessAddress" />
+						</div>
+						<div class="col-sm-6">
+							<label class="control-label" for="businessDueTime">营业期限:</label> 
+							<input type="text" class="form-control" id="businessDueTime" name="businessDueTime" />
+						</div>
+					</div>
+					<div class="row col-sm-12">
+						<div class="col-sm-6">
+							<label class="control-label" for="industry">行业:</label>
+							<select class="form-control" id="industry" name="industry">
+							</select>
+							<!-- <input type="text" class="form-control" id="industry" name="industry" /> -->
+						</div>
+						<div class="col-sm-6">
+							<label class="control-label" for="tradingArea">商圈:</label> 
+							<input type="text" class="form-control" id="tradingArea" name="tradingArea" />
+						</div>
+					</div>
+					<div class="row col-sm-12">
+						<div class="col-sm-6">
+							<label class="control-label" for="turnover">营业额:</label>
+							<input type="text" class="form-control" id="turnover" name="turnover" />
+						</div>
+						<div class="col-sm-6">
+							<label class="control-label" for="size">规模:</label>
+							<select class="form-control" id="size" name="size"></select>
+						</div>
+					</div>
+					<div class="row col-sm-12">
+						<div class="col-sm-6">
+							<label class="control-label" for="reportCycle">报告周期:</label>
+							<select class="form-control" id="reportCycle" name="reportCycle"></select>
+						</div>
+						<div class="col-sm-6">
+							<label class="control-label" for="reportTimer" >报告时间:</label> 
+							<input type="text" class="form-control" id="reportTimer" name="reportTimer" disabled="disabled"/>
+						</div>
+					</div>
+				</div>
+        </form>
+        </div>
+		<div class="panel panel-default">
+			<div class="form-group" style="margin-top: 15px">
+				<h2>还款能力历史与预测</h2>
+				<button type="button" id="btn_import" class="btn btn-info"
+					onclick="javascript:importEvent();">
+					<span class="glyphicon glyphicon-import"></span>导入数据
+				</button>
+				<table id="table" style="min-width: 420px;"></table>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="form-group" style="margin-top: 15px">
+				<h2>风险</h2>
+				<textarea cols="4" class="form-control" id="riskWarning"
+					name="riskWarning"></textarea>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<form id="formSearch" class="form-horizontal">
+				<div class="form-group" style="margin-top: 15px">
+					<h2>建议</h2>
+					<div class="col-sm-6">
+						<label class="control-label" for="quota">额度:</label> 
+						<input type="text" class="form-control" id="quota" name="quota" />
+					</div>
+					<div class="col-sm-6">
+						<label class="control-label" for="feeRate">费率:</label> 
+						<input type="text" class="form-control" id="feeRate" name="feeRate" />
+					</div>
+					<div class="col-sm-6">
+						<label class="control-label" for="loanCycle">周期:</label> 
+						<input type="text" class="form-control" id="loanCycle" name="loanCycle" />
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-sm-12" style="text-align: center;margin-bottom:20px;">
+			<button type="button" id="btn_save" class="btn btn-primary">
+				<span class="glyphicon glyphicon-save"></span>保存
+			</button>
+		</div>
+
+		<!-- 导入 -->
+		<div class="modal fade" id="importModal" tabindex="-1" role="dialog"
+			aria-labelledby="importModalLabel" data-backdrop="static"
+			data-keyboard="false">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="importModalLabel">请选择Excel文件</h4>
+					</div>
+					<div class="modal-body">
+						<div class="tab-content">
+							<div class="modal-header">
+								<button type="button" id="btn_down" class="btn btn-info"
+									onclick="javascript:downEvent();">
+									<span class="glyphicon glyphicon-download-alt"></span>下载模板
+								</button>
+							</div>
+							<input type="file" name="excel_file_risk_inf"
+								id="excel_file_risk_inf" multiple class="file-loading" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="js/layer/layer.js"></script>
+<script src="js/plugins/bootstrap/fileinput.js"></script>
+<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
+<script type="text/javascript" src="js/fnsco/common.js"></script>
+<script type="text/javascript" src="js/fnsco/reportEdit.js"></script>
+</body>
+</html>

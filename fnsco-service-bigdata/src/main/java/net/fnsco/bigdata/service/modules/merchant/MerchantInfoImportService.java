@@ -1,5 +1,6 @@
 package net.fnsco.bigdata.service.modules.merchant;
 
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.FileUtils;
+import net.fnsco.core.utils.OssLoaclUtil;
 
 /**
  * @desc excel上传实现类
@@ -236,7 +239,7 @@ public class MerchantInfoImportService extends BaseService {
                  * 浦发
                  */
                 if(!Strings.isNullOrEmpty(busiCode)){
-                    createChanelAndPosAndTer(innerCode, merchantCode, userId, privateKye, mercrefername, posType, posFactory, sncode, posaddr, bankId, xx,
+                    createChanelAndPosAndTer(innerCode, busiCode, userId, privateKye, mercrefername, posType, posFactory, sncode, posaddr, bankId, xx,
                         debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee, creditCardMaxFee, innerTermCode, terminalCode, timeNum, "01", "00");
                 }
                 
@@ -317,9 +320,30 @@ public class MerchantInfoImportService extends BaseService {
             /**
              * 此处需要先下载，再上传OSS，再获取图片路径和名称
              */
+            
             MerchantFile merchantFile = MerchantImportHelper.createMerchantFile(innerCode, "", fileType, filePath);
             merchantFileDao.insertSelective(merchantFile);
         }
+    }
+    
+    /**
+     * uploadFile:(上传文件)
+     * @param fileUrl
+     * @param fileKey
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月18日 下午2:14:39
+     * @return String    DOM对象
+     */
+    private String uploadFile(String fileUrl,String fileKey){
+        FileInputStream fis = FileUtils.getFileInputStream(fileUrl);
+        if(null == fis){
+            return null;
+        }
+        OssLoaclUtil.uploadFile(fis, fileKey);
+        String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+        
+        return newUrl;
     }
     
     /**

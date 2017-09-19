@@ -145,4 +145,16 @@
 				id = #{merId}
 		)
  </delete>
+ <update id="updateByUserIdAndInnerCode" parameterType="net.fnsco.order.service.domain.AppUserMerchant">
+   update u_app_user_merchant
+    <set >
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="modefyTime != null" >
+        modefy_time = #{modefyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where inner_code = #{innerCode,jdbcType=VARCHAR} and  app_user_id = #{appUserId,jdbcType=INTEGER}
+ </update>
 </mapper>

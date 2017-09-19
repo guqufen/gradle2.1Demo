@@ -323,4 +323,11 @@
  <select id="selectInnercode" parameterType="java.lang.String" resultMap="RELInnerCodeResultMap">
   	SELECT inner_code FROM m_merchant_core WHERE legal_person_mobile=#{mobile,jdbcType=VARCHAR}  UNION SELECT inner_code FROM m_merchant_contact  WHERE contact_mobile=#{mobile,jdbcType=VARCHAR}
   </select>
+  <!-- 查询所有有效帐号 -->
+  <select id="selectAllValid" resultMap="BaseResultMap">
+      select
+		<include refid="Base_Column_List" />
+		from m_app_user
+		WHERE state = 1 
+  </select>
 </mapper>

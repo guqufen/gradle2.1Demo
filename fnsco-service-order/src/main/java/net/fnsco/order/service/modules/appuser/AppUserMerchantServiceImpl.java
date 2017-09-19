@@ -118,6 +118,12 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
                     if(null != user){
                         bandList.setMobile(user.getMobile());
                         bandList.setUserName(user.getUserName());
+                        //新增加头像属性
+                        String headImagePath = user.getHeadImagePath();
+                        if(!Strings.isNullOrEmpty(headImagePath)){
+                            String path = headImagePath.substring(headImagePath.indexOf("^")+1);
+                            bandList.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+                        }
                         if(li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())){
                             bandList.setIsDelete("2");
                         }else{
