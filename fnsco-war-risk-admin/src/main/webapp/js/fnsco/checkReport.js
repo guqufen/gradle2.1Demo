@@ -125,7 +125,7 @@ function getIndest() {
 //还款能力历史与预测table
 $('#table').bootstrapTable({
 	sidePagination : 'server',
-	method : 'post',//提交方式
+	method : 'get',//提交方式
 	search : false, // 是否启动搜索栏
 	url : PROJECT_NAME + 'report/queryRepay',
 	showRefresh : false,// 是否显示刷新按钮
@@ -200,7 +200,11 @@ $('#table').bootstrapTable({
 		field : 'monthTwelve',
 		title : '十二月',
 		width : 30
-	} ]
+	}, {
+		field : 'lastModifyTimeStr',
+		title : '最后修改时间',
+		width : 30
+	}  ]
 });
 //处理后台返回数据
 function responseHandler(res) {
@@ -220,9 +224,9 @@ function responseHandler(res) {
 //组装请求参数
 function queryParams(params) {
 	var param = {
-		currentPageNum : this.pageNumber,
-		pageSize : this.pageSize,
-		id : merchantId
+		'currentPageNum' : this.pageNumber,
+		'pageSize' : 1,//只查询时间最近的一条
+		'reportId' : merchantId
 	}
 	return param;
 }

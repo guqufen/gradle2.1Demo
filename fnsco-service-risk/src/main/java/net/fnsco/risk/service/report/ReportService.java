@@ -189,7 +189,7 @@ public class ReportService extends BaseService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             System.out.println(ev.getProperty("username"));
             helper.setFrom("fanaisheng@zheft.cn");
-            helper.setTo("782430551@qq.com");
+            helper.setTo(dto.getEmail());
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
             sb.append("<h3 style='font-size:20px;'>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理" + "<a href='http://www.w3school.com.cn'>W3School</a></h3>");
@@ -212,7 +212,7 @@ public class ReportService extends BaseService {
             logger.warn(ev.getProperty("username"));
             System.out.println(ev.getProperty("username"));
             helper.setFrom("fanaisheng@zheft.cn");
-            helper.setTo("782430551@qq.com");
+            helper.setTo(dto.getEmail());
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
             sb.append("<h3 style='font-size:20px;'>"+dto.getName()+"</h3>").append("<h3 style='font-size:20px;'>关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!</h3>").append("<h3 style='font-size:20px;'>点击"+"<a  href='http://www.w3school.com.cn'>W3School</a>查看</h3>");
@@ -273,7 +273,6 @@ public class ReportService extends BaseService {
     			//插表
         		reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
     		}
-    		
     	}
     	return ResultDTO.success();
     }
@@ -283,9 +282,13 @@ public class ReportService extends BaseService {
         ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
         reportRepaymentHistory.setReportId(id);
         List<ReportRepaymentHistoryDO> pageList = this.reportRepaymentHistoryDAO.pageList(reportRepaymentHistory, pageNum, pageSize);
+        for(ReportRepaymentHistoryDO li:pageList){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateStr = sdf.format(li.getLastModifyTime());
+            li.setLastModifyTimeStr(dateStr);
+        }
         Integer count = this.reportRepaymentHistoryDAO.pageListCount(reportRepaymentHistory);
         ResultPageDTO<ReportRepaymentHistoryDO> pager = new ResultPageDTO<ReportRepaymentHistoryDO>(count, pageList);
-      
         return pager;
     }
 
