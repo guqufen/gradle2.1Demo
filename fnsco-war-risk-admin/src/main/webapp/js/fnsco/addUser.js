@@ -64,7 +64,7 @@ function queryParams(params) {
 		pageSize : this.pageSize,
 		status : $('#status').val(),
 		name : $('#queryname').val(),
-		//name : $('#name').val()
+	//name : $('#name').val()
 	}
 	return param;
 }
@@ -97,7 +97,8 @@ function formatstatus(value, row, index) {
 function formatType(value, row, index) {
 	if (value === 1) {
 		return '管理员'
-	}if (value === 2) {
+	}
+	if (value === 2) {
 		return '合作者'
 	} else if (value === 3) {
 		return '消费者'
@@ -203,20 +204,202 @@ function queryByName(name) {
 		}
 	});
 }
-function isphone(obj){  
-    var reg=/^1\d{10}$/;  
-    if(!reg.test(obj)){  
-    	return false;
-    }  
-    return true;
-  } 
-function ismail(obj){  
-    var reg=/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;  
-    if(!reg.test(obj)){  
-    	return false;
-    }  
-    return true;
-  } 
+var a=0;
+//新增手机号判断焦点事件
+$("#name").blur(function() {
+	var name = $('#name').val();
+	if (name == null || name.length == 0) {
+		layer.msg('手机号不能为空!');
+		$("#name").focus();
+		a=1;
+		return false;
+	}
+	queryByName(name);
+	if (isdata == false) {
+		layer.msg('手机号已存在!');
+		$("#name").focus();
+		a=1;
+		return false;
+	}
+	var phone = isphone(name);
+	if (phone == false) {
+		layer.msg("请正确填写手机号！");
+		$("#name").focus();
+		a=1;
+		return false;
+	}
+	a=0;
+});
+//修改手机号判断焦点事件
+$("#name1").blur(function() {
+	var oldname = $('#oldname').val();
+	var name = $('#name1').val();
+	if (name == null || name.length == 0) {
+		layer.msg('手机号不能为空!');
+		$("#name1").focus();
+		a=1;
+		return false;
+	}
+	if (oldname != name) {
+		queryByName(name);
+		if (isdata == false) {
+			layer.msg('手机号已存在!');
+			$("#name1").focus();
+			a=1;
+			return false;
+		}
+	}
+	var phone = isphone(name);
+	if (phone == false) {
+		layer.msg("请正确填写手机号！");
+		$("#name1").focus();
+		a=1;
+		return false;
+	}
+	a=0;
+});
+//新增名称判断焦点事件
+$("#department").blur(function() {
+	var department = $('#department').val();
+	if (department == null || department.length == 0) {
+		layer.msg('名称不能为空!');
+		$("#department").focus();
+		a=1;
+		return false;
+	}
+	a=0;
+});
+//修改名称判断焦点事件
+$("#department1").blur(function() {
+	var department = $('#department1').val();
+	if (department == null || department.length == 0) {
+		layer.msg('名称不能为空!');
+		$("#department1").focus();
+		a=1;
+		return false;
+	}
+	a=0;
+});
+//新增密码判断焦点事件
+$("#password").blur(function() {
+	var password = $('#password').val();
+	if (password == null || password.length == 0) {
+		layer.msg('密码不能为空!');
+		$("#password").focus();
+		a=1;
+		return false;
+	}
+	if (password.length < 6) {
+		layer.msg('密码最少6位');
+		$("#password").focus();
+		a=1;
+		return false;
+	}
+	if (password.length > 12) {
+		layer.msg('密码最多12位');
+		$("#password").focus();
+		a=1;
+		return false;
+	}
+	a=0;
+});
+//修改密码判断焦点事件
+$("#password1").blur(function() {
+	var password = $('#password1').val();
+	if (password == null || password.length == 0) {
+		layer.msg('密码不能为空!');
+		$("#password1").focus();
+		a=1;
+		return false;
+	}
+	if (password.length < 6) {
+		layer.msg('密码最少6位');
+		$("#password1").focus();
+		a=1;
+		return false;
+	}
+	if (password.length > 12) {
+		layer.msg('密码最多12位');
+		$("#password1").focus();
+		a=1;
+		return false;
+	}
+	a=0;
+});
+//新增邮箱判断焦点事件
+$("#email").blur(function() {
+	var email = $('#email').val();
+	if (email == null || email.length == 0) {
+		layer.msg('邮箱不能为空!');
+		$("#email").focus();
+		a=1;
+		return false;
+	}
+	var mail = ismail(email);
+	if (mail == false) {
+		layer.msg('请输出正确的邮箱!');
+		$("#email").focus();
+		a=1;
+		return false;
+	}
+	a=0;
+});
+//修改邮箱判断焦点事件
+$("#email1").blur(function() {
+	var email = $('#email1').val();
+	if (email == null || email.length == 0) {
+		layer.msg('邮箱不能为空!');
+		$("#email1").focus();
+		a=1;
+		return false;
+	}
+	var mail = ismail(email);
+	if (mail == false) {
+		layer.msg('请输出正确的邮箱!');
+		$("#email1").focus();
+		a=1;
+		return false;
+	}
+	a=0;
+});
+//新增备注判断焦点事件
+$("#remark").blur(function() {
+	var remark = $('#remark').val();
+	if (remark.length > 200) {
+		layer.msg('备注最多200个字!');
+		$("#remark").focus();
+		a=1;
+		return false;
+	}
+	a=0;
+});
+//修改备注判断焦点事件
+$("#remark1").blur(function() {
+	var remark = $('#remark1').val();
+	if (remark.length > 200) {
+		layer.msg('备注最多200个字!');
+		$("#remark1").focus();
+		a=1;
+		return false;
+	}
+	a=0;
+});
+//手机号格式判断
+function isphone(obj) {
+	var reg = /^1\d{10}$/;
+	if (!reg.test(obj)) {
+		return false;
+	}
+	return true;
+}
+//邮箱格式判断
+function ismail(obj) {
+	var reg = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+	if (!reg.test(obj)) {
+		return false;
+	}
+	return true;
+}
 //新增点击事件
 $('#btn_add').click(function() {
 	$('#addModal').modal();
@@ -224,48 +407,11 @@ $('#btn_add').click(function() {
 });
 //新增确认点击事件
 $('#btn_yes').click(function() {
-	var name = $('#name').val();
-	var department = $('#department').val();
-	var password = $('#password').val();
-	var email = $('#email').val();
-	var remark = $('#remark').val();
-	if (name == null || name.length == 0) {
-		layer.msg('手机号不能为空!');
+	if(a==1){
 		return false;
 	}
-	queryByName(name);
-	if (isdata == false) {
-		layer.msg('手机号已存在!');
-		return false;
-	}
-	var phone=isphone(name);
-	if (phone == false) {
-		layer.msg("请正确填写手机号！"); 
-		return false;
-	}
-	if (department == null || department.length == 0) {
-		layer.msg('名称不能为空!');
-		return false;
-	}
-	if (password == null || password.length == 0) {
-		layer.msg('密码不能为空!');
-		return false;
-	}
-	if (password.length < 6) {
-		layer.msg('密码最少6位');
-		return false;
-	}
-	if (email == null || email.length == 0) {
-		layer.msg('邮箱不能为空!');
-		return false;
-	}
-	var mail=ismail(email);
-	if (mail== false) {
-		layer.msg('请输出正确的邮箱!');
-		return false;
-	}
-	if (remark.length > 200) {
-		layer.msg('备注最多200个字!');
+	if($('#name').val()==""||$('#department').val()==""||$('#password').val()==""||$('#email').val()==""){
+		layer.msg('请输入完整信息!');
 		return false;
 	}
 	data = {
@@ -323,32 +469,7 @@ function queryEdit(id) {
 }
 //编辑确认点击事件
 $('#btn_yes1').click(function() {
-	var oldname = $('#oldname').val();
-	var name = $('#name1').val();
-	var department = $('#department1').val();
-	var email = $('#email1').val();
-	var remark = $('#remark1').val();
-	if (name == null || name.length == 0) {
-		layer.msg('手机号不能为空!');
-		return false;
-	}
-	if (oldname != name) {
-		queryByName(name);
-		if (isdata == false) {
-			layer.msg('手机号已存在!');
-			return false;
-		}
-	}
-	if (department == null || department.length == 0) {
-		layer.msg('名称不能为空!');
-		return false;
-	}
-	if (email == null || email.length == 0) {
-		layer.msg('邮箱不能为空!');
-		return false;
-	}
-	if (remark.length > 200) {
-		layer.msg('备注最多200个字!');
+	if(a==1){
 		return false;
 	}
 	data = {
