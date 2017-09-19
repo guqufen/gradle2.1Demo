@@ -1,6 +1,6 @@
 //获取用户信息
 
-function load_val2() {
+var customerType = function load_val2() {
 	var result;
 	$.ajax({
 		dataType : 'json',
@@ -15,7 +15,7 @@ function load_val2() {
 	});
 	return result;
 }
-var customerType = load_val2();
+//var customerType = load_val2();
 if (customerType == 1) {
 	$(".auditor").css("display", "none");
 } else {

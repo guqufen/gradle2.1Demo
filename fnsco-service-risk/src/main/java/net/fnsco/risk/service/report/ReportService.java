@@ -74,6 +74,10 @@ public class ReportService extends BaseService{
         }
         //当前时间 
         ReportRepaymentHistoryDO dto=reportRepaymentHistoryDAO.getByReportId(merchantId);
+        //如果查出来的月度营业额为空，则直接返回到页面；否则会报空指针异常
+        if(dto == null){
+        	return ResultDTO.success(list);
+        }
         Date date=reportInfoDO.getLastModifyTime();
         for (int j=0 ; j<12; j++) {  
             YearReportDO yearReportDO=new YearReportDO();

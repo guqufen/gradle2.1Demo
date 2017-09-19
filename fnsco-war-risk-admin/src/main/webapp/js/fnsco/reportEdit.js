@@ -28,18 +28,17 @@ $(function() {
 
 	//获取行业数据(option)，放入行业(select)
 	getIndest();
-	//	$('#industry').append('<option value=1>餐饮类</option>');
-	//	$('#industry').append('<option value=2>服装类</option>');
-	//	$('#industry').append('<option value=3>金融类</option>');
 
 	//给规模赋值(size)
-	$('#size').append('<option value=1>单店</option>');
-	$('#size').append('<option value=2>多店</option>');
+	getSize();
+//	$('#size').append('<option value=1>单店</option>');
+//	$('#size').append('<option value=2>多店</option>');
 	
 	//报告周期赋值(reportCycle)
-	$('#reportCycle').append('<option value=1>一年(半年历史，半年预测)</option>');
-	$('#reportCycle').append('<option value=2>一年(三个月历史，九个月预测)</option>');
-	$('#reportCycle').append('<option value=3>一年(九个月历史，三个月预测)</option>');
+	getReportCycle();
+//	$('#reportCycle').append('<option value=1>一年(半年历史，半年预测)</option>');
+//	$('#reportCycle').append('<option value=2>一年(三个月历史，九个月预测)</option>');
+//	$('#reportCycle').append('<option value=3>一年(九个月历史，三个月预测)</option>');
 
 	//ajax请求修改的数据<id=2>
 	$.ajax({
@@ -113,6 +112,44 @@ function getIndest() {
 		},
 		error : function(data) {
 
+		}
+	});
+}
+
+/**
+ * 获取规模请求列表数据
+ */
+function getSize(){
+	$.ajax({
+		url:PROJECT_NAME + '/sysConfig/getByType',
+		type:'get',
+		data:{"type":"04"},
+		async:false,
+		success:function(data){
+			if(data.success){
+				for(var i=0; i < data.data.length; i++){
+					$('#size').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
+				}
+			}
+			console.log(data);
+		}
+	});
+}
+/**
+ * 获取报告周期列表数据
+ */
+function getReportCycle(){
+	$.ajax({
+		url:PROJECT_NAME + '/sysConfig/getByType',
+		type:'get',
+		data:{'type':'05'},
+		async:false,
+		success:function(data){
+			if(data.success){
+				for(var i = 0; i < data.data.length; i++){
+					$('#reportCycle').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
+				}
+			}
 		}
 	});
 }
@@ -365,8 +402,6 @@ var FileInput = function() {
 			}
 
 		});
-		;
-
 		//导入文件上传完成之后的事件
 
 	}
