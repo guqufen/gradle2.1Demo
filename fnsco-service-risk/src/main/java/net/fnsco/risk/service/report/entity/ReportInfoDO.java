@@ -281,12 +281,14 @@ public class ReportInfoDO {
     public void setLoanCycle(String loanCycle) {
         this.loanCycle = loanCycle;
     }
+
     @Override
     public String toString() {
-        return "ReportInfoDO [innerCode=" + innerCode + ", customerType=" + customerType + ", webUserOuterId=" + webUserOuterId + ", id=" + id + ", merName=" + merName + ", businessLicenseNum="
-               + businessLicenseNum + ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime + ", industry=" + industry + ", tradingArea=" + tradingArea + ", turnover="
-               + turnover + ", size=" + size + ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer + ", riskWarning=" + riskWarning + ", quota=" + quota + ", feeRate=" + feeRate
-               + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status=" + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
+        return "ReportInfoDO [isCheck=" + isCheck + ", innerCode=" + innerCode + ", customerType=" + customerType + ", webUserOuterId=" + webUserOuterId + ", id=" + id + ", merName=" + merName
+               + ", businessLicenseNum=" + businessLicenseNum + ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime + ", industry=" + industry + ", tradingArea="
+               + tradingArea + ", turnover=" + turnover + ", size=" + size + ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer + ", riskWarning=" + riskWarning + ", quota=" + quota
+               + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status=" + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
     }
+
 
 }

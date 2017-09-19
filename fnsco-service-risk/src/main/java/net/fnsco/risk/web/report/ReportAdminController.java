@@ -150,6 +150,6 @@ public class ReportAdminController extends BaseController{
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
         
-    	return reportService.getByReportId(reportId, page, rows);
+    	return reportService.pageRepayList(reportId, page, rows);
     }
 }
