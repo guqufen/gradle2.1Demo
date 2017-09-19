@@ -203,6 +203,20 @@ function queryByName(name) {
 		}
 	});
 }
+function isphone(obj){  
+    var reg=/^1\d{10}$/;  
+    if(!reg.test(obj)){  
+    	return false;
+    }  
+    return true;
+  } 
+function ismail(obj){  
+    var reg=/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;  
+    if(!reg.test(obj)){  
+    	return false;
+    }  
+    return true;
+  } 
 //新增点击事件
 $('#btn_add').click(function() {
 	$('#addModal').modal();
@@ -224,6 +238,11 @@ $('#btn_yes').click(function() {
 		layer.msg('手机号已存在!');
 		return false;
 	}
+	var phone=isphone(name);
+	if (phone == false) {
+		layer.msg("请正确填写手机号！"); 
+		return false;
+	}
 	if (department == null || department.length == 0) {
 		layer.msg('名称不能为空!');
 		return false;
@@ -238,6 +257,11 @@ $('#btn_yes').click(function() {
 	}
 	if (email == null || email.length == 0) {
 		layer.msg('邮箱不能为空!');
+		return false;
+	}
+	var mail=ismail(email);
+	if (mail== false) {
+		layer.msg('请输出正确的邮箱!');
 		return false;
 	}
 	if (remark.length > 200) {
