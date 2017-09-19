@@ -89,7 +89,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>risk-admin</finalName>
+		<finalName>risk-mgmt</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
