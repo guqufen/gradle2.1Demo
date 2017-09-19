@@ -1,5 +1,7 @@
 package net.fnsco.web.controller.open;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,10 +80,17 @@ public class TradeDataOpenController extends BaseController {
             if (timeStamp.length() >= 8) {
                 timeStamp = timeStamp.substring(0, 8);
             }
+            SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+            String timeStampEnd = "";
+            try {
+                timeStampEnd = DateUtils.getDateStrYYYYMMDD(sf.parse(timeStamp),1);
+            } catch (ParseException e) {
+                logger.error("插入交易流水同步报表数据出错",e);
+            }
             String nowDateStr = DateUtils.getDateStrYYYYMMDD(new Date());
             if (!nowDateStr.equals(timeStamp)) {
                 logger.error("不是当天的数据则重新生成日报"+timeStamp);
-                tradeReportService.buildTradeReportDaTa(timeStamp + "000000", timeStamp + "235959");
+                tradeReportService.buildTradeReportDaTa(timeStamp + "000000", timeStampEnd + "000000");
             }
         }
         return success();
