@@ -17,7 +17,16 @@ import net.fnsco.order.service.domain.AppUserSetting;
 public interface AppUserSettingDao {
 
     int deleteByPrimaryKey(Integer id);
-
+    /**
+     * deleteByUserId:(根据用户ID删除数据)
+     * @param userId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月19日 下午2:24:45
+     * @return int    DOM对象
+     */
+    int deleteByUserId(@Param("userId")Integer userId);
+    
     int insert(AppUserSetting record);
 
     int insertSelective(AppUserSetting record);

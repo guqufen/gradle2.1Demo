@@ -27,6 +27,7 @@ import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
@@ -189,7 +190,7 @@ public class AppUserController extends BaseController {
                     stream.close();
                     //上传阿里云OSS文件服务器
                     OssLoaclUtil.uploadFile(fileURL, fileKey);
-                    String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+                    String newUrl = OssUtil.getHeadBucketName() + "^" + fileKey;
                     AppUserDTO appUserDto = new AppUserDTO();
                     appUserDto.setUserId(Integer.valueOf(userId));
                     appUserDto.setHeadImagePath(newUrl);

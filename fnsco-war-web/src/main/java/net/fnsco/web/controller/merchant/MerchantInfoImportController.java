@@ -1,9 +1,15 @@
 package net.fnsco.web.controller.merchant;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +32,8 @@ public class MerchantInfoImportController extends BaseController {
 
     @Autowired
     private MerchantInfoImportService merchantInfoImportService;
+    @Autowired
+    private TradeDataImportService    tradeDataImportService;
 
     /**
     * 

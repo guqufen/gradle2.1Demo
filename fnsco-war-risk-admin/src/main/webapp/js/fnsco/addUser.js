@@ -204,42 +204,6 @@ function queryByName(name) {
 		}
 	});
 }
-//新增手机号判断焦点事件
-$("#name").blur(function() {
-	
-});
-//修改手机号判断焦点事件
-$("#name1").blur(function() {
-	
-});
-//新增名称判断焦点事件
-$("#department").blur(function() {
-	
-});
-//修改名称判断焦点事件
-$("#department1").blur(function() {
-	
-});
-//新增密码判断焦点事件
-$("#password").blur(function() {
-	
-});
-//修改密码判断焦点事件
-$("#password1").blur(function() {
-});
-//新增邮箱判断焦点事件
-$("#email").blur(function() {
-	
-});
-//修改邮箱判断焦点事件
-$("#email1").blur(function() {
-});
-//新增备注判断焦点事件
-$("#remark").blur(function() {
-});
-//修改备注判断焦点事件
-$("#remark1").blur(function() {
-});
 //手机号格式判断
 function isphone(obj) {
 	var reg = /^1\d{10}$/;
@@ -386,6 +350,12 @@ $('#btn_yes1').click(function() {
 		$("#name1").focus();
 		return false;
 	}
+	var phone = isphone(name);
+	if (phone == false) {
+		layer.msg("请正确填写手机号！");
+		$("#name1").focus();
+		return false;
+	}
 	if (oldname != name) {
 		queryByName(name);
 		if (isdata == false) {
@@ -393,12 +363,6 @@ $('#btn_yes1').click(function() {
 			$("#name1").focus();
 			return false;
 		}
-	}
-	var phone = isphone(name);
-	if (phone == false) {
-		layer.msg("请正确填写手机号！");
-		$("#name1").focus();
-		return false;
 	}
 	if (department == null || department.length == 0) {
 		layer.msg('名称不能为空!');

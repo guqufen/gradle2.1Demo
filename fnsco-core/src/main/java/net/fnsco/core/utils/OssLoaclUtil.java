@@ -24,7 +24,6 @@ package net.fnsco.core.utils;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -166,43 +165,17 @@ public class OssLoaclUtil {
         logger.info("Completed");
     }
     
-    /**
-     * uploadFile:(根据文件流上传文件)
-     * @param fileInputStream
-     * @param fileKey    设定文件
-     * @author    tangliang
-     * @date      2017年9月18日 下午2:05:50
-     * @return void    DOM对象
-     */
-    public static void uploadFile(FileInputStream fileInputStream,String fileKey) {
-
-        // 生成OSSClient，您可以指定一些参数，详见“SDK手册 > Java-SDK > 初始化”，
-        // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/init.html?spm=5176.docoss/sdk/java-sdk/get-start
-        try {
-            // 判断Bucket是否存在。详细请参看“SDK手册 > Java-SDK > 管理Bucket”。
-            // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/manage_bucket.html?spm=5176.docoss/sdk/java-sdk/init
-            if (ossClient.doesBucketExist(headBucketName)) {
-                System.out.println("您已经创建Bucket：" + headBucketName + "。");
-            } else {
-                System.out.println("您的Bucket不存在，创建Bucket：" + headBucketName + "。");
-                // 创建Bucket。详细请参看“SDK手册 > Java-SDK > 管理Bucket”。
-                // 链接地址是：https://help.aliyun.com/document_detail/oss/sdk/java-sdk/manage_bucket.html?spm=5176.docoss/sdk/java-sdk/init
-                ossClient.createBucket(headBucketName);
-            }
-            ossClient.putObject(headBucketName, fileKey, fileInputStream);
-            logger.info("Object：" + fileKey + "存入OSS成功。");
-          //  ossClient.shutdown();
-        } catch (OSSException oe) {
-            oe.printStackTrace();
-        } catch (ClientException ce) {
-            ce.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        finally {
-//            ossClient.shutdown();
-//        }
-        logger.info("Completed");
+    public static void main(String[] args) {
+//        OssUtil.setEndpoint("http://oss-cn-hangzhou.aliyuncs.com");
+//        OssUtil.setAccessKeyId("LTAI8t0z2dOlvLr6");
+//        OssUtil.setAccessKeySecret("0jB12XLFoEM4UEauiN8ohp7dXSbE40");
+//        OssUtil.setHeadBucketName("bigdata-fns-test");
+//        initOssClient();
+////        uploadFile("D:\\temp\\2017\\7\\1499145304175.jpg", "2017/1499145304175.jpg");
+//        String url = getFileUrl(getHeadBucketName(),"2017/1499145304175.jpg");
+//        String url = "http://bigdata-fns.oss-cn-hangzhou-internal.aliyuncs.com/2017/7/14993093838…SAccessKeyId=LTAI8t0z2dOlvLr6&Signature=3BJpI5ffB%2BZ1nrL%2BwS2oCLLZPDA%3D";
+//        StringUtils.substringBetween(url, "ads");
+//        System.out.println(url.replaceAll("-internal", ""));
     }
     public static void demo(String bucketName, String firstKey) {
         OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);

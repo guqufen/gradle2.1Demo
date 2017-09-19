@@ -1,5 +1,6 @@
 package net.fnsco.bigdata.service.modules.trade;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -7,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
+import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 
