@@ -16,15 +16,15 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from m_app__user_setting
+    from m_app_user_setting
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from m_app__user_setting
+    delete from m_app_user_setting
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="net.fnsco.order.service.domain.AppUserSetting" >
-    insert into m_app__user_setting (id, user_id, notice_type, 
+    insert into m_app_user_setting (id, user_id, notice_type, 
       open_status, create_time, update_time
       )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{noticeType,jdbcType=VARCHAR}, 
@@ -32,7 +32,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.AppUserSetting" >
-    insert into m_app__user_setting
+    insert into m_app_user_setting
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -75,7 +75,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.AppUserSetting" >
-    update m_app__user_setting
+    update m_app_user_setting
     <set >
       <if test="userId != null" >
         user_id = #{userId,jdbcType=INTEGER},
@@ -96,7 +96,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.AppUserSetting" >
-    update m_app__user_setting
+    update m_app_user_setting
     set user_id = #{userId,jdbcType=INTEGER},
       notice_type = #{noticeType,jdbcType=VARCHAR},
       open_status = #{openStatus,jdbcType=VARCHAR},
@@ -106,11 +106,11 @@
   </update>
   <!-- 根据用户ID 查询所有状态 -->
   <select id="selectAllByUserId" parameterType="java.lang.Integer" resultType="net.fnsco.order.api.dto.AppUserSettingDTO">
-     select notice_type AS noticeType,open_status AS openStatus from m_app__user_setting where user_id = #{userId}
+     select notice_type AS noticeType,open_status AS openStatus from m_app_user_setting where user_id = #{userId}
   </select>
   <!-- 根据参数条件更新数据 -->
   <update id="updateByCondition" parameterType="net.fnsco.order.service.domain.AppUserSetting">
-    update m_app__user_setting
+    update m_app_user_setting
     <set >
 <!--       <if test="userId != null" > -->
 <!--         user_id = #{userId,jdbcType=INTEGER}, -->
@@ -139,12 +139,12 @@
   </update>
   <select id="selectByUserIdAndType" resultType="net.fnsco.order.service.domain.AppUserSetting">
     select <include refid="Base_Column_List" />
-    from m_app__user_setting
+    from m_app_user_setting
     where user_id = #{userId,jdbcType=INTEGER} and notice_type = #{noticeType} limit 1
   </select>
   <!-- 根据userId删除多余数据 -->
   <delete id="deleteByUserId" parameterType="java.lang.Integer">
-    delete from m_app__user_setting
+    delete from m_app_user_setting
     where user_id = #{userId,jdbcType=INTEGER}
   </delete>
 </mapper>
