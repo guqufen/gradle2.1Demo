@@ -6,7 +6,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -159,5 +162,29 @@ public class FileUtils {
             inStream.close();
             fs.close();
         }
+    }
+    /**
+     * getFileInputStreamByUrl:(根据网络URL获取文件流)
+     * @param sourceUrl
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月19日 下午6:01:12
+     * @return FileInputStream    DOM对象
+     * @throws Exception 
+     */
+    public static void getFileInputStreamByUrl(String sourceUrl,String savePath) throws Exception{
+        
+        URL url = new URL(sourceUrl);
+        URLConnection con = url.openConnection(); 
+        con.setConnectTimeout(5*1000);  
+        InputStream is = con.getInputStream();  
+        byte[] bs = new byte[1024];  
+        int len;  
+        OutputStream os = new FileOutputStream(savePath); 
+        while ((len = is.read(bs)) != -1) {  
+            os.write(bs, 0, len);  
+         }  
+        os.close();  
+        is.close(); 
     }
 }

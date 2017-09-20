@@ -1,11 +1,14 @@
 package net.fnsco.bigdata.service.modules.merchant;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,8 @@ import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.FileUtils;
+import net.fnsco.core.utils.OssLoaclUtil;
 
 /**
  * @desc excel上传实现类
@@ -40,7 +45,11 @@ public class MerchantInfoImportService extends BaseService {
     private MerchantChannelDao  merchantChannelDao;
     @Autowired
     private MerchantFileDao     merchantFileDao;
-
+    @Autowired
+    private Environment         env;
+    
+    private static final String IMAGE_PATH = "http://www.zheft.cn/static_img/";
+    
     // 批量导入客户
     @Transactional
     public ResultDTO<String> merchantBatchImportToDB(List<Object[]> customerList, Integer userId) throws ParseException {
@@ -313,8 +322,74 @@ public class MerchantInfoImportService extends BaseService {
             /**
              * 此处需要先下载，再上传OSS，再获取图片路径和名称
              */
-            MerchantFile merchantFile = MerchantImportHelper.createMerchantFile(innerCode, "", fileType, filePath);
+            String urlPath = uploadFile(filePath);
+            if(Strings.isNullOrEmpty(urlPath)){
+                continue;
+            }
+            MerchantFile merchantFile = MerchantImportHelper.createMerchantFile(innerCode, filePath, fileType, urlPath);
             merchantFileDao.insertSelective(merchantFile);
+        }
+    }
+    
+    /**
+     * uploadFile:(获取OSS的URL)
+     * @param filePath
+     * @param fileKey
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月20日 上午9:35:31
+     * @return String    DOM对象
+     */
+    private String uploadFile(String filePath){
+        
+        if(Strings.isNullOrEmpty(filePath)){
+            return null;
+        }
+        String line = System.getProperty("file.separator");// 文件分割符
+        // 保存文件的路径
+        String prefix = filePath.substring(filePath.lastIndexOf(".") + 1);
+        // 数据库存的路径
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        String stry = this.env.getProperty("fileUpload.url") + line + year;// +"\\"+month+"\\";
+        File yearPath = new File(stry);
+        // 如果文件夹不存在则创建
+        if (!yearPath.exists()) {
+            logger.info("年份目录不存在");
+            yearPath.mkdirs();
+        } else {
+            logger.info("年份目录已存在");
+        }
+
+        String strm = this.env.getProperty("fileUpload.url") + line + year + line + month + line;
+        File monthPath = new File(strm);
+        if (!monthPath.exists()) {
+            logger.info("月份目录不存在");
+            monthPath.mkdirs();
+        } else {
+            logger.info("月份目录已存在");
+        }
+
+        String yearMonthPath = year + line + month + line;
+        String newFileName = System.currentTimeMillis() + "." + prefix;
+        String fileKey = year + "/" + month + "/" + newFileName;
+        String filepath = yearMonthPath + newFileName;
+
+        String fileURL = this.env.getProperty("fileUpload.url") + line + filepath;
+       
+        
+        filePath = IMAGE_PATH+filePath;
+        
+        try {
+            //上传阿里云OSS文件服务器
+            FileUtils.getFileInputStreamByUrl(filePath,fileURL);
+            OssLoaclUtil.uploadFile(fileURL, fileKey);
+            String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+            return newUrl;
+        } catch (Exception e) {
+            logger.error("上传失败！" + e);
+            throw new RuntimeException();
         }
     }
     

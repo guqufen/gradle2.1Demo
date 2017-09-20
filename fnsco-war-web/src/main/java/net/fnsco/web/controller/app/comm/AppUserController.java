@@ -179,7 +179,7 @@ public class AppUserController extends BaseController {
                     stream.close();
                     //上传阿里云OSS文件服务器
                     OssLoaclUtil.uploadFile(fileURL, fileKey);
-                    String newUrl = OssUtil.getHeadBucketName()+"^"+fileKey;
+                    String newUrl = OssLoaclUtil.getHeadBucketName()+"^"+fileKey;
                     AppUserDTO appUserDto = new AppUserDTO();
                     appUserDto.setUserId(Integer.valueOf(userId));
                     appUserDto.setHeadImagePath(newUrl);
