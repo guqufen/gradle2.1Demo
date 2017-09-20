@@ -209,4 +209,8 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
     public List<MerchantBank> queryWebByInnerCode(String innerCode) {
         return merchantBankDao.queryWebByInnerCode(innerCode);
     }
+    @Override
+    public List<MerchantPos> selectBySnCode(String snCode){
+        return merchantPosDao.selectBySnCode(snCode);
+    }
 }
