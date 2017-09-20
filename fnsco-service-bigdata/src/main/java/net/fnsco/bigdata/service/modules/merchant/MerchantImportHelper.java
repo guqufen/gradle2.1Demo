@@ -59,6 +59,7 @@ public class MerchantImportHelper {
         merchantCore.setBusinessLicenseValidTime(businesslicensevalidtime);
         merchantCore.setRegistAddress(registaddress);
         merchantCore.setMercFlag(mercflag);
+        merchantCore.setSource(2);//浙付通导入
         merchantCore.setAgentId(1);//默认
         merchantCore.setTaxRegistCode(taxRegistCode);
         merchantCore.setModifyTime(DateUtils.formateToDate(createTime));
