@@ -17,10 +17,13 @@ import org.springframework.util.CollectionUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
+import net.fnsco.bigdata.api.merchant.MerchantPosService;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
@@ -73,6 +76,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private SysAppMsgService               sysAppMsgService;
     @Autowired
     private AppUserSettingService          appUserSettingService;
+    @Autowired
+    private MerchantPosService             merchantPosService;
+
     //注册
     @Override
     @Transactional
@@ -98,28 +104,28 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
         }
         //根据deviceToken查找记录 如果存在就清空
-        List<AppUser> items=appUserDao.queryBydeviceToken(appUserDTO.getDeviceToken());
-        if(items.isEmpty()){
+        List<AppUser> items = appUserDao.queryBydeviceToken(appUserDTO.getDeviceToken());
+        if (items.isEmpty()) {
             logger.warn("该设备之前没有注册过账号或该设备之前注册的账号已注销");
         }
-        for(AppUser item:items){
-            String deviceToken=null;
-            String deviceId=null;
-            Integer deviceType=null;
-            if (!appUserDao.updateDeviceToken(item.getMobile(),deviceToken,deviceId,deviceType)) {
+        for (AppUser item : items) {
+            String deviceToken = null;
+            String deviceId = null;
+            Integer deviceType = null;
+            if (!appUserDao.updateDeviceToken(item.getMobile(), deviceToken, deviceId, deviceType)) {
                 return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
             }
         }
         AppUser appUser = new AppUser();
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        appUser.setUserName("sqb"+code);
+        appUser.setUserName("sqb" + code);
         appUser.setDeviceId(appUserDTO.getDeviceId());
         appUser.setDeviceToken(appUserDTO.getDeviceToken());
         appUser.setMobile(appUserDTO.getMobile());
         appUser.setDeviceType(appUserDTO.getDeviceType());
         appUser.setState(1);
         appUser.setRegTime(new Date());
-        appUser.setLastLoginTime(new Date());
+        //appUser.setLastLoginTime(new Date());
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         appUser.setPassword(password);
         if (!appUserDao.insertSelective(appUser)) {
@@ -127,40 +133,55 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         appUser = appUserDao.selectAppUserByMobile(appUser.getMobile());
         map.put("appUserId", appUser.getId());
-        int merchantNums=0;
+        int merchantNums = 0;
         int Shopkeeper = 2;
-        List<QueryBandDTO> list=appUserDao.selectInnercode(appUserDTO.getMobile());
-        if (!CollectionUtils.isEmpty(list)){
-            Shopkeeper=1;
-            merchantNums= list.size();
-            for(QueryBandDTO li:list){
-                MerchantUserRel rel=new MerchantUserRel();
-                rel.setAppUserId(appUser.getId());
-                rel.setInnerCode(li.getInnerCode());
-                rel.setModefyTime(new Date());
-                merchantUserRelDao.insertSelective(rel);
-                AppUserMerchant dto=new AppUserMerchant();
-                dto.setAppUserId(appUser.getId());
-                dto.setInnerCode(li.getInnerCode());
-                dto.setModefyTime(new Date());
-                dto.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-                appUserMerchantDao.insertSelective(dto);
-                //推送消息
-                try {
-                    sysAppMsgService.pushMerChantMsg(li.getInnerCode(), appUser.getId());
-                } catch (Exception ex) {
-                    logger.error("绑定商户发送消息失败", ex);
-                }
+        List<QueryBandDTO> list = appUserDao.selectInnercode(appUserDTO.getMobile());
+        if (!CollectionUtils.isEmpty(list)) {
+            Shopkeeper = 1;
+            merchantNums = list.size();
+            for (QueryBandDTO li : list) {
+                insertRel(li.getInnerCode(), appUser, ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+            }
+            //拉卡拉机器注册用到以下功能
+        } else if (Strings.isNullOrEmpty(appUserDTO.getSnCode())) {
+            String snCode = appUserDTO.getSnCode();
+            List<MerchantPos> posList = merchantPosService.selectBySnCode(snCode);
+            Map<String, String> innerCodeMap = Maps.newHashMap();
+            for (MerchantPos pos : posList) {
+                innerCodeMap.put(pos.getInnerCode(), pos.getInnerCode());
+            }
+            for (Map.Entry<String, String> entry : innerCodeMap.entrySet()) {
+                insertRel(entry.getKey(), appUser, ConstantEnum.AuthorTypeEnum.CLERK.getCode());
             }
         }
         map.put("Shopkeeper", Shopkeeper);
-        map.put("merchantNums",merchantNums);
+        map.put("merchantNums", merchantNums);
         map.put("userName", appUser.getUserName());
         map.put("mobile", appUser.getMobile());
-      //返回值增加设置状态
-        List<AppUserSettingDTO> settingstatus =  appUserSettingService.installSettingStatus(appUser.getId());
+        //返回值增加设置状态
+        List<AppUserSettingDTO> settingstatus = appUserSettingService.installSettingStatus(appUser.getId());
         map.put("appSettings", settingstatus);
         return ResultDTO.success(map);
+    }
+
+    private void insertRel(String InnerCode, AppUser appUser, String roleId) {
+        MerchantUserRel rel = new MerchantUserRel();
+        rel.setAppUserId(appUser.getId());
+        rel.setInnerCode(InnerCode);
+        rel.setModefyTime(new Date());
+        merchantUserRelDao.insertSelective(rel);
+        AppUserMerchant dto = new AppUserMerchant();
+        dto.setAppUserId(appUser.getId());
+        dto.setInnerCode(InnerCode);
+        dto.setModefyTime(new Date());
+        dto.setRoleId(roleId);
+        appUserMerchantDao.insertSelective(dto);
+        //推送消息
+        try {
+            sysAppMsgService.pushMerChantMsg(InnerCode, appUser.getId());
+        } catch (Exception ex) {
+            logger.error("绑定商户发送消息失败", ex);
+        }
     }
 
     //生产验证码 
@@ -169,7 +190,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         String deviceId = appUserDTO.getDeviceId();
         final String mobile = appUserDTO.getMobile();
         //注册需要判断    0表示通过注册流程来获取验证码  1表示通过忘记密码流程来获取验证码
-        if (appUserDTO.getOprationType() !=null && appUserDTO.getOprationType() == 0) {
+        if (appUserDTO.getOprationType() != null && appUserDTO.getOprationType() == 0) {
             AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
             if (user != null) {
                 return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
@@ -300,10 +321,10 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
         }
         //更新到deviceToken
-        String deviceToken=null;
-        String deviceId=null;
-        Integer deviceType=null;
-        if (!appUserDao.updateDeviceTokenById(id,deviceToken,deviceId,deviceType)){
+        String deviceToken = null;
+        String deviceId = null;
+        Integer deviceType = null;
+        if (!appUserDao.updateDeviceTokenById(id, deviceToken, deviceId, deviceType)) {
             return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
         }
         return ResultDTO.success();
@@ -332,15 +353,15 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         //把原先的deviceToken清空
         //根据deviceToken查找记录 如果存在就清空
-        List<AppUser> items=appUserDao.queryBydeviceToken(appUserDTO.getDeviceToken());
-        if(items.isEmpty()){
+        List<AppUser> items = appUserDao.queryBydeviceToken(appUserDTO.getDeviceToken());
+        if (items.isEmpty()) {
             logger.warn("该设备之前没有注册过账号或该设备之前注册的账号已注销");
         }
-        for(AppUser item:items){
-            String deviceToken=null;
-            String deviceId=null;
-            Integer deviceType=null;
-            if (!appUserDao.updateDeviceToken(item.getMobile(),deviceToken,deviceId,deviceType)) {
+        for (AppUser item : items) {
+            String deviceToken = null;
+            String deviceId = null;
+            Integer deviceType = null;
+            if (!appUserDao.updateDeviceToken(item.getMobile(), deviceToken, deviceId, deviceType)) {
                 return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
             }
         }
@@ -356,15 +377,15 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_LOGIN_ERROR);
         }
         String headImagePath = appUser.getHeadImagePath();
-         if(!Strings.isNullOrEmpty(headImagePath)){
-            String path = headImagePath.substring(headImagePath.indexOf("^")+1);
-            map.put("headImagePath",OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
-         }else{
-            map.put("headImagePath",""); 
-         }
-        map.put("userName",appUser.getUserName()); 
+        if (!Strings.isNullOrEmpty(headImagePath)) {
+            String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
+            map.put("headImagePath", OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+        } else {
+            map.put("headImagePath", "");
+        }
+        map.put("userName", appUser.getUserName());
         map.put("mobile", appUser.getMobile());
-        map.put("sex",appUser.getSex());
+        map.put("sex", appUser.getSex());
         map.put("appUserId", appUser.getId());
         //查询用户绑定商户数量 根据用户id查询数量
         int merchantNums = 0;
@@ -381,7 +402,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             Shopkeeper = 1;
         }
         //登录获取未读消息信息
-        List<SysMsgAppSucc> unReadInfo =  sysMsgAppSuccDao.selectTotalUnread(appUserId);
+        List<SysMsgAppSucc> unReadInfo = sysMsgAppSuccDao.selectTotalUnread(appUserId);
         List<Integer> unReadMsgIds = Lists.newArrayList();
         for (SysMsgAppSucc sysMsgAppSucc : unReadInfo) {
             unReadMsgIds.add(sysMsgAppSucc.getMsgId());
@@ -389,7 +410,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         map.put("unReadMsgIds", unReadMsgIds);
         map.put("Shopkeeper", Shopkeeper);
         //返回值增加设置状态
-        List<AppUserSettingDTO> settingstatus =  appUserSettingService.installSettingStatus(appUserId);
+        List<AppUserSettingDTO> settingstatus = appUserSettingService.installSettingStatus(appUserId);
         map.put("appSettings", settingstatus);
         return ResultDTO.success(map);
     }
@@ -398,11 +419,11 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Override
     public ResultDTO<String> loginOut(AppUserDTO appUserDTO) {
         //更新到实体
-        Integer id=appUserDTO.getUserId();
-        String deviceToken=null;
-        String deviceId=null;
-        Integer deviceType=null;
-        if (!appUserDao.updateDeviceTokenById(id,deviceToken,deviceId,deviceType)){
+        Integer id = appUserDTO.getUserId();
+        String deviceToken = null;
+        String deviceId = null;
+        Integer deviceType = null;
+        if (!appUserDao.updateDeviceTokenById(id, deviceToken, deviceId, deviceType)) {
             return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
         }
         return ResultDTO.success();
@@ -436,7 +457,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         List<AppUserManageDTO> data = appUserDao.queryPageList(params);
         return data;
     }
-    
+
     @Override
     public ResultDTO modifyRole(BandDto bandDto) {
         List<QueryBandDTO> list = appUserDao.selectBandPeopleByMobile(bandDto.getMobile());
@@ -473,15 +494,15 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             //如果自己更新自己则不提示 成为店主 1
             //AppOldPeopleDTO appOldPeopleDTO=new AppOldPeopleDTO();
             if (li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())) {
-               //判断用户是否原先是这个店的店主
-               AppUserMerchant appUserMerchant = appUserMerchantDao.selectByall(li.getInnerCode(), li.getAppUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode()); 
-               if(appUserMerchant == null){
-                   //如果不是店主
-                   AppOldListDTO dto = new AppOldListDTO();
-                   MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(li.getInnerCode());
-                   dto.setMerName(merchantCore.getMerName());
-                   listDto.add(dto);
-               }
+                //判断用户是否原先是这个店的店主
+                AppUserMerchant appUserMerchant = appUserMerchantDao.selectByall(li.getInnerCode(), li.getAppUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+                if (appUserMerchant == null) {
+                    //如果不是店主
+                    AppOldListDTO dto = new AppOldListDTO();
+                    MerchantCore merchantCore = merchantCoreDao.selectByInnerCode(li.getInnerCode());
+                    dto.setMerName(merchantCore.getMerName());
+                    listDto.add(dto);
+                }
             }
             //想成为店员 2
             if (li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.CLERK.getCode())) {
@@ -512,7 +533,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             if (li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode())) {
                 //判断自己是不是这个店原来的店长
                 AppUserMerchant appUserMerchant = appUserMerchantDao.selectByall(li.getInnerCode(), li.getAppUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-                if(appUserMerchant==null){
+                if (appUserMerchant == null) {
                     AppUser user = new AppUser();
                     user.setId(li.getAppUserId());
                     user.setForcedLoginOut(1);
@@ -523,16 +544,16 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             }
             //如果成为店员 
             if (li.getRoleId().equals(ConstantEnum.AuthorTypeEnum.CLERK.getCode())) {
-              //判断自己原来是不是店长
-              AppUserMerchant appUserMerchant = appUserMerchantDao.selectByall(li.getInnerCode(), li.getAppUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
-              if(appUserMerchant!=null){
-                  AppUser user = new AppUser();
-                  user.setId(li.getAppUserId());
-                  user.setForcedLoginOut(1);
-                  if (!appUserDao.updateByPrimaryKeySelective(user)) {
-                      return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
-                  }
-              }
+                //判断自己原来是不是店长
+                AppUserMerchant appUserMerchant = appUserMerchantDao.selectByall(li.getInnerCode(), li.getAppUserId(), ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+                if (appUserMerchant != null) {
+                    AppUser user = new AppUser();
+                    user.setId(li.getAppUserId());
+                    user.setForcedLoginOut(1);
+                    if (!appUserDao.updateByPrimaryKeySelective(user)) {
+                        return ResultDTO.fail(ApiConstant.E_FORCEDLOGINOUT_ERROR);
+                    }
+                }
             }
             li.setModefyTime(new Date());
             int num = appUserMerchantDao.updateByPrimaryKeySelective(li);
@@ -550,11 +571,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         return appUserDao.selectAppUserById(id);
 
     }
+
     @Override
-    public void addAppUserMerchantRole(AppUserMerchant dto){
+    public void addAppUserMerchantRole(AppUserMerchant dto) {
         appUserMerchantDao.insertSelective(dto);
     }
-    
+
     /**
      * (non-Javadoc)修改用户个人信息
      * @see net.fnsco.order.api.appuser.AppUserService#modifyInfo(net.fnsco.order.api.dto.AppUserDTO)
@@ -567,34 +589,35 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         BeanUtils.copyProperties(appUserDto, appUser);
         appUser.setId(appUserDto.getUserId());
         boolean flag = appUserDao.updateByPrimaryKeySelective(appUser);
-        if(!flag){
-            return ResultDTO.fail(ApiConstant.E_UPDATE_FAIL); 
+        if (!flag) {
+            return ResultDTO.fail(ApiConstant.E_UPDATE_FAIL);
         }
         return ResultDTO.success();
-        
+
     }
 
     //获取个人信息
     @Override
     public ResultDTO<String> getUserInfo(AppUserDTO appUserDTO) {
-        if(appUserDTO.getUserId()==null){
-           return ResultDTO.fail(ApiConstant. E_USER_ID_NULL);
+        if (appUserDTO.getUserId() == null) {
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
-        AppUser appUser=appUserDao.selectAppUserById(appUserDTO.getUserId());
-        AppUserInfoDTO dto=new AppUserInfoDTO();
+        AppUser appUser = appUserDao.selectAppUserById(appUserDTO.getUserId());
+        AppUserInfoDTO dto = new AppUserInfoDTO();
         dto.setSex(appUser.getSex());
         dto.setUserName(appUser.getUserName());
         String headImagePath = appUser.getHeadImagePath();
-        if(!Strings.isNullOrEmpty(headImagePath)){
-            String path = headImagePath.substring(headImagePath.indexOf("^")+1);
+        if (!Strings.isNullOrEmpty(headImagePath)) {
+            String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
             dto.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
         }
         dto.setMoblie(appUser.getMobile());
         dto.setRealName(appUser.getRealName());
         return ResultDTO.success(dto);
     }
+
     @Override
-    public  List<MerchantUserRel> getAppUserMerchantByInnerCode(String innerCode){
-        return merchantUserRelDao.selectByInnerCode(innerCode); 
+    public List<MerchantUserRel> getAppUserMerchantByInnerCode(String innerCode) {
+        return merchantUserRelDao.selectByInnerCode(innerCode);
     }
 }
