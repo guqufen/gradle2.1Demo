@@ -1,31 +1,31 @@
 //获取用户信息
 
-function load_val2(){
-    var result;
-    $.ajax({
-        dataType:'json',
-        type : 'POST',
-        url :PROJECT_NAME + '/web/user/getCurrentUser',
-        async:false,//这里选择异步为false，那么这个程序执行到这里的时候会暂停，等待
-                    //数据加载完成后才继续执行
-        success : function(data){
-        	console.log(data)
-            result = data.data.type;
-        }
-    });
-    return result;
+var customerType = function load_val2() {
+	var result;
+	$.ajax({
+		dataType : 'json',
+		type : 'POST',
+		url : PROJECT_NAME + '/web/user/getCurrentUser',
+		async : false,//这里选择异步为false，那么这个程序执行到这里的时候会暂停，等待
+		//数据加载完成后才继续执行
+		success : function(data) {
+			console.log(data)
+			result = data.data.type;
+		}
+	});
+	return result;
 }
-var customerType = load_val2();
-if(customerType==1){
-	$(".auditor").css("display","none");
-}else{
-	$(".admin").css("display","none");
+//var customerType = load_val2();
+if (customerType == 1) {
+	$(".auditor").css("display", "none");
+} else {
+	$(".admin").css("display", "none");
 }
 //初始化表格
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url : PROJECT_NAME + '/report/query',
+	url : PROJECT_NAME + 'report/query',
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	// toolbar: '#toolbar', //工具按钮用哪个容器
@@ -39,7 +39,7 @@ $('#table').bootstrapTable({
 	pageList : [ 15, 20, 25, 30 ], // 可供选择的每页的行数（*）
 	queryParams : queryParams,
 	responseHandler : responseHandler,// 处理服务器返回数据
-	columns : [  {
+	columns : [ {
 		field : 'merName',
 		title : '商户名称'
 	}, {
@@ -52,29 +52,25 @@ $('#table').bootstrapTable({
 		field : 'tradingArea',
 		title : '商圈'
 	}, {
-		field : 'turnover',
-		title : '营业额'
+		field : 'businessLicenseNum',
+		title : '营业执照'
 	}, {
 		field : 'status',
 		title : '状态',
 		formatter : formatterStatus
-	},{
+	}, {
 		field : 'id',
 		title : '操作',
-		formatter:formatterOperation
-	}]
+		formatter : formatterOperation
+	} ]
 });
-function formatterOperation(value, row, index){
+function formatterOperation(value, row, index) {
 	//审核成功
-	if (row.status == 2||row.status ==3) {
-		return [
-				'<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" onclick="javascript:edit(' + row.id + ');">编辑</a>']
-				.join('');
+	if (row.status == 2 || row.status == 3) {
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' ">编辑</a>' ].join('');
 	}
-	if(row.status == 0){
-		return [
-				'<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" onclick="javascript:check(' + row.id + ');">审核报告</a>']
-				.join('');
+	if (row.status == 0) {
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' "  >审核报告</a>' ].join('');
 	}
 }
 // 0待审核1审核通过2审核失败3待编辑
@@ -87,7 +83,7 @@ function formatterStatus(value, row, index) {
 		return '审核失败';
 	} else if (value == '3') {
 		return '待编辑';
-	}else{
+	} else {
 		return '-';
 	}
 }
@@ -160,8 +156,8 @@ function queryParams(params) {
 		merName : $.trim($('#merName').val()),
 		tradingArea : $.trim($('#tradingArea').val()),
 		businessLicenseNum : $.trim($('#businessLicenseNum').val()),
-		status: $('#status option:selected').val(),
-		customerType:customerType
+		status : $('#status option:selected').val(),
+		customerType : customerType
 	}
 	return param;
 }
@@ -180,47 +176,21 @@ function responseHandler(res) {
 	}
 }
 
-
-function check(id){
-	layer.confirm('确定以邮件的方式通知用户吗?', {
-		time : 20000, // 20s后自动关闭
-		btn : [ '确定', '取消' ]
-	}, function() {
-		$.ajax({
-			url : PROJECT_NAME + '/web/report/headPersonnelMes',
-			type : 'POST',
-			dataType : "json",
-			data :{
-				 "userId":1,
-				 "merchantId":id
-			},
-			success : function(data) {
-				if (data.success) {
-					layer.msg('审核成功');
-					queryEvent("table");
-				} else {
-					layer.msg('终止失败');
-				}
-			},
-			error : function(e) {
-				layer.msg('系统异常!' + e);
-			}
-		});
-	}, function() {
-		layer.msg('取消成功');
-	});
+function edit(row){
+	//var selectContent = ttable.bootstrapTable('getSelections');// 返回的是数组类型,Array
+	console.log(row);
 }
 
 
-//$.ajax({
-//	url : PROJECT_NAME + '/web/report/queryYearReport',
-//	type : 'POST',
-//	dataType : "json",
-//	data : {"id":1},
-//	success : function(data){
-//		console.log(data)
-//	}
-//});
+$.ajax({
+	url : PROJECT_NAME + '/web/report/queryYearReport',
+	type : 'POST',
+	dataType : "json",
+	data : {"userId":2,"merchantId":2},
+	success : function(data){
+		console.log(data)
+	}
+});
 //
 //$.ajax({
 //	url : PROJECT_NAME + '/web/report/queryReportDetails',
@@ -233,7 +203,7 @@ function check(id){
 //});
 
 //$.ajax({
-//	url : PROJECT_NAME + '/web/report/headPersonnelMes',
+//	url : PROJECT_NAME + '/admin/report/headPersonnelMes',
 //	type : 'POST',
 //	dataType : "json",
 //	data : {"userId":1,"merchantId":2},

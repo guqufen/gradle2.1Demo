@@ -16,16 +16,18 @@ import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.web.controller.open.jo.MerchantJO;
 
 @RestController
 @RequestMapping(value = "/open/merchant", method = RequestMethod.POST)
-@Api(value = "/open/merchant", tags = { "开放接口商户相关接口" })
+@Api(value = "/open/merchant", tags = { "商户相关接口" })
 public class MerchantController extends BaseController {
     @Autowired
     private MerchantService merchantService;
     @Autowired
-    private AppUserService appUserService;
+    private AppUserService  appUserService;
+
     /**
      * 获取商户编号
      *
@@ -62,26 +64,45 @@ public class MerchantController extends BaseController {
     @ApiOperation(value = "获取商户pos机名称")
     public ResultDTO getPosName(@RequestBody MerchantJO merchant) {
         String posName = merchantService.getPosName(merchant.getSnCode());
-        if(null == posName){
+        if (null == posName) {
             return fail();
         }
         return success(posName);
     }
-    
+
+    /**
+     * 
+     * isHaveAppUser:(判断是否有appUser用户，0没有，1有但没登录过，2有且登录过)
+     *
+     * @param merchant
+     * @return   ResultDTO    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
     @RequestMapping(value = "/isHaveAppUser")
     @ApiOperation(value = "获取商户pos机名称")
     public ResultDTO isHaveAppUser(@RequestBody MerchantJO merchant) {
         List<String> innerCodeList = merchantService.getMerchantAppUser(merchant.getSnCode());
-        if(CollectionUtils.isEmpty(innerCodeList)){
-            return success(false);
+        if (CollectionUtils.isEmpty(innerCodeList)) {
+            return success("0");
         }
-        for(String innerCode: innerCodeList){
-            List<MerchantUserRel> tempList =appUserService.getAppUserMerchantByInnerCode(innerCode);
-            if(!CollectionUtils.isEmpty(tempList)){
-                return success(true);
+        String flag = "0";
+        for (String innerCode : innerCodeList) {
+            List<MerchantUserRel> tempList = appUserService.getAppUserMerchantByInnerCode(innerCode);
+            if (!CollectionUtils.isEmpty(tempList) && "0".equals(flag)) {
+                flag = "1";
+            }
+            for (MerchantUserRel userRel : tempList) {
+                AppUser user = appUserService.selectAppUserById(userRel.getAppUserId());
+                if (user.getLastLoginTime() != null) {
+                    flag = "2";
+                    break;
+                }
+            }
+            if ("2".equals(flag)) {
+                break;
             }
         }
-        
-        return success(false);
+        return success(flag);
     }
 }

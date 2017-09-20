@@ -1,82 +1,107 @@
 package net.fnsco.risk.service.report.entity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class ReportRepaymentHistoryDO {
 
     /**
-     * 
+     * 主键id
      */
     private Integer id;
 
     /**
-     * 
+     * 报告id
      */
     private Integer reportId;
 
     /**
-     * 
+     * 1月
      */
     private BigDecimal monthOne;
 
     /**
-     * 
+     * 2月
      */
     private BigDecimal monthTwo;
 
     /**
-     * 
+     * 3月
      */
     private BigDecimal monthThree;
 
     /**
-     * 
+     * 4月
      */
     private BigDecimal monthFore;
 
     /**
-     * 
+     * 5月
      */
     private BigDecimal monthFive;
 
     /**
-     * 
+     * 6月
      */
     private BigDecimal monthSix;
 
     /**
-     * 
+     * 7月
      */
     private BigDecimal monthSeven;
 
     /**
-     * 
+     * 8月
      */
     private BigDecimal monthEight;
 
     /**
-     * 
+     * 9月
      */
     private BigDecimal monthNine;
 
     /**
-     * 
+     * 10月
      */
     private BigDecimal monthTen;
 
     /**
-     * 
+     * 11月
      */
     private BigDecimal monthEleven;
 
     /**
-     * 
+     * 12月
      */
     private BigDecimal monthTwelve;
+    
+    /**
+     * 最后修改时间
+     */
+    private Date lastModifyTime;
 
+    /**
+     * 最后修改时间，字符串形式yyyy-mm-dd hh:mm:ss
+     */
+    private String lastModifyTimeStr;
+    
+	public String getLastModifyTimeStr() {
+		return lastModifyTimeStr;
+	}
 
+	public void setLastModifyTimeStr(String lastModifyTimeStr) {
+		this.lastModifyTimeStr = lastModifyTimeStr;
+	}
 
-    public Integer getId() {
+	public Date getLastModifyTime() {
+		return lastModifyTime;
+	}
+
+	public void setLastModifyTime(Date lastModifyTime) {
+		this.lastModifyTime = lastModifyTime;
+	}
+
+	public Integer getId() {
         return id;
     }
 

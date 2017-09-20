@@ -625,7 +625,7 @@ function saveMerCore(){
            layer.msg('保存成功');
            return true;
         }else{
-           layer.msg('保存失败');
+           layer.msg('保存失败!系统已经存在该营业执照了');
         }
       }
   });

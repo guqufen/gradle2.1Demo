@@ -127,6 +127,7 @@ public class AppUserSettingServiceImpl extends BaseService implements AppUserSet
         if(CollectionUtils.isNotEmpty(datas) && datas.size() == 3){
             return datas;
         }
+        appUserSettingDao.deleteByUserId(userId);
         //当不全时 初始化默认数据
         AppUserSetting record = new AppUserSetting();
         record.setCreateTime(new Date());

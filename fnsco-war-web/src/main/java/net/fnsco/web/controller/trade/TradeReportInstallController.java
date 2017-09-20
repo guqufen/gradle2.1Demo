@@ -1,18 +1,27 @@
 package net.fnsco.web.controller.trade;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.order.api.constant.ConstantEnum;
+import net.fnsco.order.api.dto.QueryBandDTO;
 import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.trade.TradeReportService;
+import net.fnsco.order.service.dao.master.AppUserDao;
+import net.fnsco.order.service.dao.master.AppUserMerchantDao;
+import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.order.service.domain.AppUserMerchant;
 
 /**
  * @desc  报表初始化接口
@@ -30,6 +39,12 @@ public class TradeReportInstallController extends BaseController {
     
     @Autowired
     private AppPushService     appPushService;
+    
+    @Autowired
+    private AppUserDao                     appUserDao;
+    
+    @Autowired
+    private AppUserMerchantDao             appUserMerchantDao;
     /**
      * 
      * installReport:(批量统计报表数据)
@@ -66,8 +81,23 @@ public class TradeReportInstallController extends BaseController {
         return ResultDTO.success("");
     }
     
-    public static void main(String[] args) {
-        Date date = new Date(1504285484913l);
-        System.out.println(date);
+    @RequestMapping("/updateMerRole")
+    @ResponseBody
+    public ResultDTO<Object> updateMerRole(){
+        List<AppUser> allUsers = appUserDao.selectAllValid();
+        for (AppUser appUserDTO : allUsers) {
+            List<QueryBandDTO> list=appUserDao.selectInnercode(appUserDTO.getMobile());
+            if (!CollectionUtils.isEmpty(list)){
+                for(QueryBandDTO li:list){
+                    AppUserMerchant dto=new AppUserMerchant();
+                    dto.setAppUserId(appUserDTO.getId());
+                    dto.setInnerCode(li.getInnerCode());
+                    dto.setModefyTime(new Date());
+                    dto.setRoleId(ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
+                    appUserMerchantDao.updateByUserIdAndInnerCode(dto);
+            }
+        }
+        }
+        return null;
     }
 }

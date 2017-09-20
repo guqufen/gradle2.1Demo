@@ -37,4 +37,12 @@ public interface IndustryDAO {
     @SelectProvider(type = IndustryProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("industry") IndustryDO industry);
 
+    /**
+     * 查找所有的行业数据
+     * @return
+     */
+    @Results({@Result( column = "id",property = "id") ,@Result( column = "code",property = "code") ,@Result( column = "business_form",property = "businessForm"), @Result( column = "first",property = "first"),
+    	@Result( column = "third",property = "third"), @Result( column = "fourth",property = "fourth"), @Result( column = "status",property = "status"), @Result( column = "remark",property = "remark")})
+    @Select("select * FROM sys_industry")
+    public List<IndustryDO> queryAll();
 }

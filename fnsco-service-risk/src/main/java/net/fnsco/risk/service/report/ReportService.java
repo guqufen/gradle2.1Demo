@@ -1,9 +1,11 @@
 package net.fnsco.risk.service.report;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -16,10 +18,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.risk.service.report.dao.ReportInfoDAO;
 import net.fnsco.risk.service.report.dao.ReportRepaymentHistoryDAO;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
@@ -61,15 +65,19 @@ public class ReportService extends BaseService{
         return pager;
     }
     //查询12个月风控历史
-    public ResultDTO queryYearReport(Integer merchantId){
+    public ResultDTO queryYearReport(Integer userId,Integer merchantId){
         List<YearReportDO> list=new ArrayList<YearReportDO>();
-        ReportInfoDO reportInfoDO=reportInfoDAO.getById(merchantId);
+        ReportInfoDO reportInfoDO=reportInfoDAO.getById(userId);
         //判断风控报告的状态
         if(reportInfoDO.getStatus()!=1){
             return ResultDTO.fail("风控报告状态不正常");
         }
         //当前时间 
         ReportRepaymentHistoryDO dto=reportRepaymentHistoryDAO.getByReportId(merchantId);
+        //如果查出来的月度营业额为空，则直接返回到页面；否则会报空指针异常
+        if(dto == null){
+        	return ResultDTO.success(list);
+        }
         Date date=reportInfoDO.getLastModifyTime();
         for (int j=0 ; j<12; j++) {  
             YearReportDO yearReportDO=new YearReportDO();
@@ -159,7 +167,7 @@ public class ReportService extends BaseService{
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             System.out.println(ev.getProperty("username"));
-            helper.setFrom("goggb@qq.com");
+            helper.setFrom("fanaisheng@zheft.cn");
             helper.setTo("782430551@qq.com");
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
@@ -179,8 +187,9 @@ public class ReportService extends BaseService{
         try {
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            logger.warn(ev.getProperty("username"));
             System.out.println(ev.getProperty("username"));
-            helper.setFrom("goggb@qq.com");
+            helper.setFrom("fanaisheng@zheft.cn");
             helper.setTo("782430551@qq.com");
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
@@ -193,4 +202,74 @@ public class ReportService extends BaseService{
         return ResultDTO.success();
     }
     
+    /**
+     * 根据id查找当前数据,便于修改用
+     * @param reportInfoDO
+     * @return
+     */
+    public ResultDTO getById(ReportInfoDO reportInfoDO){
+    	ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());
+    	return ResultDTO.success(reportInfo);
+    }
+    
+    /**
+     * 更新风控报告, yx
+     * @param reportInfoDO
+     * @return
+     */
+    @Transactional
+    public ResultDTO updateReport(ReportInfoDO reportInfoDO){
+    	
+    	//将状态改为待审核
+    	reportInfoDO.setStatus(0);
+    	
+    	int result = reportInfoDAO.update(reportInfoDO);
+    	
+    	return ResultDTO.success();
+    }
+    
+    /**
+     * 导入数据，批量新增
+     * @param objs
+     * @return
+     */
+    public ResultDTO BatchImportToDB( List<Object[]> objs, Integer id){
+    	if(objs.size() > 0){
+    		for(Object[] obj: objs){
+    			ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
+    			reportRepaymentHistory.setReportId(id);
+    			reportRepaymentHistory.setMonthOne(BigDecimal.valueOf(Double.valueOf(obj[0].toString())));
+    			reportRepaymentHistory.setMonthTwo(BigDecimal.valueOf(Double.valueOf(obj[1].toString())) );
+    			reportRepaymentHistory.setMonthThree(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+    			reportRepaymentHistory.setMonthFore(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
+    			reportRepaymentHistory.setMonthFive(BigDecimal.valueOf(Double.valueOf(obj[4].toString())));
+    			reportRepaymentHistory.setMonthSix(BigDecimal.valueOf(Double.valueOf(obj[5].toString())));
+    			reportRepaymentHistory.setMonthSeven(BigDecimal.valueOf(Double.valueOf(obj[6].toString())));
+    			reportRepaymentHistory.setMonthEight(BigDecimal.valueOf(Double.valueOf(obj[7].toString())));
+    			reportRepaymentHistory.setMonthNine(BigDecimal.valueOf(Double.valueOf(obj[8].toString())));
+    			reportRepaymentHistory.setMonthTen(BigDecimal.valueOf(Double.valueOf(obj[9].toString())));
+    			reportRepaymentHistory.setMonthEleven(BigDecimal.valueOf(Double.valueOf(obj[10].toString())));
+    			reportRepaymentHistory.setMonthTwelve(BigDecimal.valueOf(Double.valueOf(obj[11].toString())));
+    			reportRepaymentHistory.setLastModifyTime(new Date());
+    			//插表
+        		reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
+    		}
+    		
+    	}
+    	
+    	return ResultDTO.success();
+    }
+    
+    //查看导入数据
+    public ResultPageDTO getByReportId(Integer id, Integer pageNum, Integer pageSize ){
+    	ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
+    	reportRepaymentHistory.setReportId(id);
+    	List<ReportRepaymentHistoryDO> pageList = this.reportRepaymentHistoryDAO.pageList(reportRepaymentHistory, pageNum, pageSize);
+    	for (ReportRepaymentHistoryDO reportRepaymentHistoryDO : pageList) {
+    		reportRepaymentHistoryDO.setLastModifyTimeStr(DateUtils.dateFormatToStr(reportRepaymentHistoryDO.getLastModifyTime()));
+		}
+
+        ResultPageDTO<ReportRepaymentHistoryDO> pager = new ResultPageDTO<ReportRepaymentHistoryDO>(1, pageList);
+        return pager;
+    }
 }

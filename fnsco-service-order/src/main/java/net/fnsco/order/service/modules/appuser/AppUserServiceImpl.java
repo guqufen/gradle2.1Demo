@@ -155,6 +155,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         map.put("Shopkeeper", Shopkeeper);
         map.put("merchantNums",merchantNums);
+        map.put("userName", appUser.getUserName());
+        map.put("mobile", appUser.getMobile());
       //返回值增加设置状态
         List<AppUserSettingDTO> settingstatus =  appUserSettingService.installSettingStatus(appUser.getId());
         map.put("appSettings", settingstatus);
@@ -167,7 +169,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         String deviceId = appUserDTO.getDeviceId();
         final String mobile = appUserDTO.getMobile();
         //注册需要判断
-        if (appUserDTO.getOprationType() == 0) {
+        if (appUserDTO.getOprationType() !=null && appUserDTO.getOprationType() == 0) {
             AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
             if (user != null) {
                 return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);

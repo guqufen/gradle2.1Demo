@@ -128,7 +128,7 @@
       mer_id, term_id, batch_no, 
       trace_no, auth_code, order_id_scan, 
       source, md5, send_time, 
-      create_time,refer_no,status)
+      create_time,refer_no,status,pay_medium,channel_term_code)
     values (#{id,jdbcType=VARCHAR}, #{innerCode,jdbcType=VARCHAR}, #{txnType,jdbcType=VARCHAR}, 
       #{txnSubType,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{payTimeOut,jdbcType=VARCHAR}, 
       #{subject,jdbcType=VARCHAR}, #{body,jdbcType=VARCHAR}, #{customerInfo,jdbcType=VARCHAR}, 
@@ -145,7 +145,8 @@
       #{merId,jdbcType=VARCHAR}, #{termId,jdbcType=VARCHAR}, #{batchNo,jdbcType=VARCHAR}, 
       #{traceNo,jdbcType=VARCHAR}, #{authCode,jdbcType=VARCHAR}, #{orderIdScan,jdbcType=VARCHAR}, 
       #{source,jdbcType=VARCHAR}, #{md5,jdbcType=VARCHAR}, #{sendTime,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{referNo,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+      #{createTime,jdbcType=TIMESTAMP}, #{referNo,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+      #{payMedium,jdbcType=VARCHAR},#{channelTermCode,jdbcType=VARCHAR})
   </insert>
     
   <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" >
@@ -703,7 +704,9 @@
         AND create_time = #{createTime,jdbcType=TIMESTAMP}
       </if>
       <if test="payMedium != null and payMedium !='' " >
-        AND pay_medium = #{payMedium,jdbcType=VARCHAR}
+      	<if test="terminalList == null">
+        	AND pay_medium = #{payMedium,jdbcType=VARCHAR}
+        </if>
       </if>
       <!-- 手工添加 -->
       <if test="startTime != null and startTime !=''" >
@@ -724,8 +727,13 @@
 		<foreach collection="paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
       </if>
 	  <if test="terminalList != null">
-			AND term_id IN 
+			AND (term_id IN 
 			<foreach collection="terminalList" item="terminal" open="(" separator="," close=")">#{terminal}</foreach>
+			<if test="payMedium != null and payMedium !='' " >
+	  			or pay_medium = #{payMedium,jdbcType=VARCHAR}
+	  		</if>
+	  		)
+
 	  </if>	
    	 </where>		
   </select>
