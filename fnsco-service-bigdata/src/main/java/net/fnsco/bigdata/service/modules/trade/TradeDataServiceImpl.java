@@ -21,6 +21,7 @@ import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.dto.TradeDataPageDTO;
 import net.fnsco.bigdata.api.dto.TradeDataQueryDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
+import net.fnsco.bigdata.comm.ServiceConstant;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
@@ -61,14 +62,14 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      */
     @Transactional
     public boolean saveTradeData(TradeDataDTO tradeData) {
-        /*if (ServiceConstant.STR_1.equals(tradeData.getValidate()) && !Strings.isNullOrEmpty(tradeData.getMd5())) {
+        if (ServiceConstant.STR_1.equals(tradeData.getValidate()) && !Strings.isNullOrEmpty(tradeData.getMd5())) {
             //需要校验
             TradeData temp = tradeListDAO.selectByPrimaryKey(tradeData.getMd5());
             if (null != temp) {
                 logger.error("交易流水已存在" + tradeData.getOrderNo() + ",丢弃该交易流水");
                 return true;
             }
-        }*/
+        }
         long timer = System.currentTimeMillis();
         String innerCode = "";
         String merId = tradeData.getMerId();
