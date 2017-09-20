@@ -1,6 +1,6 @@
 //获取用户信息
 
-function load_val2() {
+var customerType = function load_val2() {
 	var result;
 	$.ajax({
 		dataType : 'json',
@@ -15,7 +15,7 @@ function load_val2() {
 	});
 	return result;
 }
-var customerType = load_val2();
+//var customerType = load_val2();
 if (customerType == 1) {
 	$(".auditor").css("display", "none");
 } else {
@@ -70,7 +70,7 @@ function formatterOperation(value, row, index) {
 		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' ">编辑</a>' ].join('');
 	}
 	if (row.status == 0) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="checkReport.html?merchantId='+ row.id + '&webUserOuterId=' + row.webUserOuterId+' "  >审核报告</a>' ].join('');
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' "  >审核报告</a>' ].join('');
 	}
 }
 // 0待审核1审核通过2审核失败3待编辑
@@ -182,15 +182,15 @@ function edit(row){
 }
 
 
-//$.ajax({
-//	url : PROJECT_NAME + '/web/report/queryYearReport',
-//	type : 'POST',
-//	dataType : "json",
-//	data : {"userId":2,"merchantId":2},
-//	success : function(data){
-//		console.log(data)
-//	}
-//});
+$.ajax({
+	url : PROJECT_NAME + '/web/report/queryYearReport',
+	type : 'POST',
+	dataType : "json",
+	data : {"userId":2,"merchantId":2},
+	success : function(data){
+		console.log(data)
+	}
+});
 //
 //$.ajax({
 //	url : PROJECT_NAME + '/web/report/queryReportDetails',

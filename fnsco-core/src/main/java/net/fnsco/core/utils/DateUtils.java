@@ -449,4 +449,13 @@ public class DateUtils {
         }
         return null;
     }
+    public static String getDateStrYYYYMMDD(Date date,int days) {
+        String result = "";
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_WEEK, days);
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        result = sf.format(calendar.getTime());
+        return result;
+    }
 }

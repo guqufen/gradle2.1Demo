@@ -518,9 +518,7 @@
         AND create_time = #{condition.createTime,jdbcType=TIMESTAMP}
       </if>
       <if test="condition.payMedium != null and condition.payMedium !='' " >
-      	<if test="condition.terminalList == null">
-        	AND pay_medium = #{condition.payMedium,jdbcType=VARCHAR}
-        </if>
+        AND pay_medium = #{condition.payMedium,jdbcType=VARCHAR}
       </if>
       <!-- 手工添加 -->
       <if test="condition.startTime != null and condition.startTime !=''" >
@@ -541,12 +539,8 @@
 		<foreach collection="condition.paySubTypes" item="txnSubType" open="(" separator="," close=")">#{txnSubType}</foreach>
       </if>
 	  <if test="condition.terminalList != null">
-			AND (term_id IN 
+			AND term_id IN 
 			<foreach collection="condition.terminalList" item="terminal" open="(" separator="," close=")">#{terminal}</foreach>
-	  		<if test="condition.payMedium != null and condition.payMedium !='' " >
-	  			or pay_medium = #{condition.payMedium,jdbcType=VARCHAR}
-	  		</if>
-	  		)
 	  </if>	
    	 </where>
    	 order by time_stamp desc
@@ -739,6 +733,7 @@
 	  			or pay_medium = #{payMedium,jdbcType=VARCHAR}
 	  		</if>
 	  		)
+
 	  </if>	
    	 </where>		
   </select>

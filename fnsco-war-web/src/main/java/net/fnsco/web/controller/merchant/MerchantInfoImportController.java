@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
-import net.fnsco.bigdata.service.modules.trade.TradeDataImportService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.ReadExcel;

@@ -7,13 +7,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Strings;
+ 
 
 public class FileUtils {
 
@@ -161,33 +159,5 @@ public class FileUtils {
             inStream.close();
             fs.close();
         }
-    }
-
-    /**
-     * getFileInputStream:(根据URL获取文件流)
-     * @param url
-     * @return    设定文件
-     * @author    tangliang
-     * @date      2017年9月18日 下午2:00:38
-     * @return InputStream    DOM对象
-     */
-    public static FileInputStream getFileInputStream(String sourceUrl) {
-        if (Strings.isNullOrEmpty(sourceUrl)) {
-            return null;
-        }
-        FileInputStream fis = null;
-        try {
-            URL url = new URL(sourceUrl);
-            URLConnection con = url.openConnection();
-            con.setConnectTimeout(50 * 1000);
-            InputStream is = con.getInputStream();
-            if(is instanceof FileInputStream){
-                fis = (FileInputStream)is;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return fis;
     }
 }
