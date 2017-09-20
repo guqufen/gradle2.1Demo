@@ -710,7 +710,7 @@
         AND create_time = #{createTime,jdbcType=TIMESTAMP}
       </if>
       <if test="payMedium != null and payMedium !='' " >
-      	<if test="condition.terminalList == null">
+      	<if test="terminalList == null">
         	AND pay_medium = #{payMedium,jdbcType=VARCHAR}
         </if>
       </if>
@@ -735,8 +735,8 @@
 	  <if test="terminalList != null">
 			AND (term_id IN 
 			<foreach collection="terminalList" item="terminal" open="(" separator="," close=")">#{terminal}</foreach>
-			<if test="condition.payMedium != null and condition.payMedium !='' " >
-	  			or pay_medium = #{condition.payMedium,jdbcType=VARCHAR}
+			<if test="payMedium != null and payMedium !='' " >
+	  			or pay_medium = #{payMedium,jdbcType=VARCHAR}
 	  		</if>
 	  		)
 	  </if>	
