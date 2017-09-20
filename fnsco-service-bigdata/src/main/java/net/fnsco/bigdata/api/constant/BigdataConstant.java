@@ -55,7 +55,7 @@ public class BigdataConstant extends CoreConstants {
             return map;
         }
 
-        public String getDescByCode(String code) {
+        public static String getNameByCode(String code) {
             for (ChannelTypeEnum eType : ChannelTypeEnum.values()) {
                 if (eType.code.equals(code)) {
                     return eType.name;
@@ -104,10 +104,11 @@ public class BigdataConstant extends CoreConstants {
         }
 
     }
-  //支付媒介00pos机01app02台码
+
+    //支付媒介00pos机01app02台码
     public enum PayMediumEnum {
-                            //支付媒介00pos机01app02台码
-                            POS("00", "pos机"), APP("01", "app"), FIX_QR("02", "台码");
+                               //支付媒介00pos机01app02台码
+                               POS("00", "pos机"), APP("01", "app"), FIX_QR("02", "台码");
         private String code;
         private String name;
 
@@ -132,7 +133,7 @@ public class BigdataConstant extends CoreConstants {
             return map;
         }
 
-        public String getNameByCode(String code) {
+        public static String getNameByCode(String code) {
             for (PayMediumEnum eType : PayMediumEnum.values()) {
                 if (eType.code.equals(code)) {
                     return eType.name;
@@ -142,6 +143,46 @@ public class BigdataConstant extends CoreConstants {
         }
 
     }
+
+    //数据来源00拉卡拉01导入02同步
+    public enum DataSourceEnum {
+
+                                LKL("00", "拉卡拉"), IMPORT("01", "导入"), SYNC("02", "同步");
+        private String code;
+        private String name;
+
+        DataSourceEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Map<String, String> getMap() {
+            Map<String, String> map = new TreeMap<>();
+            for (DataSourceEnum mType : DataSourceEnum.values()) {
+                map.put(mType.code, mType.name);
+            }
+            return map;
+        }
+
+        public static String getNameByCode(String code) {
+            for (DataSourceEnum eType : DataSourceEnum.values()) {
+                if (eType.code.equals(code)) {
+                    return eType.name;
+                }
+            }
+            return "";
+        }
+
+    }
+
     public static Map<Integer, String> payStateNameMap = Maps.newHashMap();
     static {
         payStateNameMap.put(0, "待付款");

@@ -58,4 +58,14 @@ public interface MerchantPosService {
     List<MerchantBank> queryWebByInnerCode(String innerCode);
 
 	Integer insertPos(MerchantPos record);
+	/**
+	 * 
+	 * selectBySnCode:(根据sncode查询pos信息列表)
+	 *
+	 * @param snCode
+	 * @return   List<MerchantPos>    返回Result对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	List<MerchantPos> selectBySnCode(String snCode);
 }
