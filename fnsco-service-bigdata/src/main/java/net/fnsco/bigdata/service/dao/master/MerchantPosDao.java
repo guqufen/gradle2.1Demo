@@ -89,4 +89,14 @@ public interface MerchantPosDao {
      * @return PosDetailDTO    DOM对象
      */
     PosDetailDTO selectDetailById(Integer id);
+    /**
+     * 
+     * selectBySnCode:(根据snCode查询pos列表)
+     *
+     * @param snCode
+     * @return   List<MerchantPos>    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<MerchantPos> selectBySnCode(@Param("snCode") String snCode);
 }

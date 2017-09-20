@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -319,6 +320,17 @@ public class MerchantInfoImportService extends BaseService {
 
             String fileType = singleFile[0];
             String filePath = singleFile[1];
+            
+            /**
+             * 校验、如果存在，则舍去多余图片
+             */
+            MerchantFile record = new MerchantFile();
+            record.setFileType(fileType);
+            record.setInnerCode(innerCode);
+            List<MerchantFile> datas = merchantFileDao.queryByCondition(record);
+            if(CollectionUtils.isNotEmpty(datas)){
+                continue;
+            }
             /**
              * 此处需要先下载，再上传OSS，再获取图片路径和名称
              */

@@ -181,7 +181,10 @@ function formatSource(value, row, index){
   }else if(value == '0')
   {
     return 'WEB';
-  }else{
+  }else if(value == '2'){
+	return '浙付通导入';  
+  }
+  else{
     return '其他';
   } 
 }

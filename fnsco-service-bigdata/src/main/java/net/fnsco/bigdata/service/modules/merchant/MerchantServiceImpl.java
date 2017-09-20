@@ -66,7 +66,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     @Autowired
     private Environment               env;
     
-    private static final String TAICODE_BASE_URL = "web.base.url";
+    private static final String TAICODE_BASE_URL = "qr.redrect.url";
     /**
       * 
       * @param merNum 商户号
@@ -230,8 +230,8 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         //增加台码连接
       //设置台码url,只为能生成台码的设置url
         for (PosListDTO posListDTO : datas) {
-            List<MerchantChannel> count = merchantChannelDao.selectByInnerCode(posListDTO.getInnerCode());
-            if(CollectionUtils.isNotEmpty(count)){
+            int count = merchantChannelDao.countCanCreateTai(posListDTO.getInnerCode());
+            if(count >0){
                 List<PosInfosDTO> posInfo = posListDTO.getPosInfo();
                 PosInfosDTO posInfoDTO = new PosInfosDTO();
                 posInfoDTO.setPosName("台码");
