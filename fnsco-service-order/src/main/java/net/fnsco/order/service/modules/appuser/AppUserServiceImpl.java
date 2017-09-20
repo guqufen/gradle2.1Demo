@@ -163,12 +163,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         return ResultDTO.success(map);
     }
 
-    //生产验证码
+    //生产验证码 
     @Override
     public ResultDTO getValidateCode(AppUserDTO appUserDTO) {
         String deviceId = appUserDTO.getDeviceId();
         final String mobile = appUserDTO.getMobile();
-        //注册需要判断
+        //注册需要判断    0表示通过注册流程来获取验证码  1表示通过忘记密码流程来获取验证码
         if (appUserDTO.getOprationType() == 0) {
             AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
             if (user != null) {
