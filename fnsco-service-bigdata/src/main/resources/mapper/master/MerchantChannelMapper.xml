@@ -188,4 +188,7 @@
     from m_merchant_channel
     where inner_code = #{innerCode} and channel_mer_id = #{channelMerId,jdbcType=VARCHAR} and  channel_type = #{channelType,jdbcType=VARCHAR} limit 1
 </select>
+<select id="countCanCreateTai" parameterType="java.lang.String" resultType="java.lang.Integer">
+   SELECT COUNT(*) FROM m_merchant_channel WHERE inner_code = #{innerCode}  AND channel_type='01' AND channel_mer_id IS NOT NULL
+</select>
 </mapper>

@@ -71,7 +71,6 @@ $(function() {
 
 				$('select[id="reportCycle"]').find("option[value=" + dd.reportCycle + "]").attr("selected", true);// 报告周期
 
-
 				$('#riskWarning').val(dd.riskWarning);// 风险
 
 				$('#quota').val(dd.quota);// 额度
