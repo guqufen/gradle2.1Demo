@@ -17,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
+import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
@@ -368,6 +369,18 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             merchantCore.setModifyUserId("admin");//待定
             merchantCore.setModifyTime(new Date());
             merchantCore.setStatus(1);
+            
+            if (Strings.isNullOrEmpty(merchantCore.getBusinessLicenseNum())) {
+                logger.error("营业执照为空 不能入库!");
+                return ResultDTO.fail();
+            }
+            
+            MerchantCore mc = selectBybusinessLicenseNum(merchantCore.getBusinessLicenseNum());
+            if(null != mc){
+                logger.error("营业执照已经存在,不能入库!");
+                return ResultDTO.fail();
+            }
+            
             int res = merchantCoreDao.insertSelective(merchantCore);
             if (res != 1) {
                 return ResultDTO.fail();
@@ -504,6 +517,11 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             if (null != merchantBank.getId()) {
                 merchantBankDao.updateByPrimaryKeySelective(merchantBank);
             } else {
+                //校验银行卡信息
+                int count  = merchantBankDao.countBanksByInnerCodeAndAccountNo(innerCode, merchantBank.getAccountNo());
+                if(count > 0){
+                    return new ResultDTO<>(true, innerCode, BigdataConstant.WEB_MER_BANKNO_UNIQUE, CoreConstants.ERROR_MESSGE_MAP.get(BigdataConstant.WEB_MER_BANKNO_UNIQUE));
+                }
                 merchantBankDao.insertSelective(merchantBank);
                 innerCode = merchantBank.getInnerCode();
             }

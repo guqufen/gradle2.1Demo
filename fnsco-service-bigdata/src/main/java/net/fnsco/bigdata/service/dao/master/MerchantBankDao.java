@@ -90,4 +90,15 @@ public interface MerchantBankDao {
      * @since  CodingExample　Ver 1.1
      */
     int deleteByMerCoreIds(Integer[] ids);
+    
+    /**
+     * countBanksByInnerCodeAndAccountNo:(根据innerCode和accountNo获取数量)
+     * @param innerCode
+     * @param accountNo
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月19日 下午4:29:06
+     * @return int    DOM对象
+     */
+    int countBanksByInnerCodeAndAccountNo(@Param("innerCode") String innerCode,@Param("accountNo") String accountNo);
 }

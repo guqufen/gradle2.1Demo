@@ -1,12 +1,14 @@
 package net.fnsco.bigdata.service.modules.merchant;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +45,11 @@ public class MerchantInfoImportService extends BaseService {
     private MerchantChannelDao  merchantChannelDao;
     @Autowired
     private MerchantFileDao     merchantFileDao;
-
+    @Autowired
+    private Environment         env;
+    
+    private static final String IMAGE_PATH = "http://www.zheft.cn/static_img/";
+    
     // 批量导入客户
     @Transactional
     public ResultDTO<String> merchantBatchImportToDB(List<Object[]> customerList, Integer userId) throws ParseException {
@@ -108,45 +114,41 @@ public class MerchantInfoImportService extends BaseService {
                 // 开户行
                 String subbankname = String.valueOf(objs[25]);
                 String openBankNum = String.valueOf(objs[26]);
-                // channelType
-                String channelType = String.valueOf(objs[27]);
                 //createTime
-                String createTime = String.valueOf(objs[28]);
+                String createTime = String.valueOf(objs[27]);
                 // busiCode
-                String busiCode = String.valueOf(objs[29]);
-                String privateKye = String.valueOf(objs[30]);
-                String taxRegistCode = String.valueOf(objs[31]);
+                String busiCode = String.valueOf(objs[28]);
+                String privateKye = String.valueOf(objs[29]);
+                String taxRegistCode = String.valueOf(objs[30]);
                 // 扫码扣率
-                String xx = String.valueOf(objs[32]);
+                String xx = String.valueOf(objs[31]);
                 //文件信息
-                String fileInfos = String.valueOf(objs[33]);
+                String fileInfos = String.valueOf(objs[32]);
                 // 一号pos机
                 // 备注/1号机具SN
-                String sncode = String.valueOf(objs[34]);
+                String sncode = String.valueOf(objs[33]);
                 //debitCardRate
-                String debitCardRate = String.valueOf(objs[35]);
+                String debitCardRate = String.valueOf(objs[34]);
                 //creditCardRate
-                String creditCardRate = String.valueOf(objs[36]);
+                String creditCardRate = String.valueOf(objs[35]);
                 //debitCardFee
-                String debitCardFee = String.valueOf(objs[37]);
+                String debitCardFee = String.valueOf(objs[36]);
                 //creditCardFee
-                String creditCardFee = String.valueOf(objs[38]);
+                String creditCardFee = String.valueOf(objs[37]);
                 //debitCardMaxFee
-                String debitCardMaxFee = String.valueOf(objs[39]);
+                String debitCardMaxFee = String.valueOf(objs[38]);
                 //creditCardMaxFee
-                String creditCardMaxFee = String.valueOf(objs[40]);
+                String creditCardMaxFee = String.valueOf(objs[39]);
                 //posType
-                String posType = String.valueOf(objs[41]);
+                String posType = String.valueOf(objs[40]);
                 //posFactory
-                String posFactory = String.valueOf(objs[42]);
+                String posFactory = String.valueOf(objs[41]);
                 //merchantCode
-                String merchantCode = String.valueOf(objs[43]);
+                String merchantCode = String.valueOf(objs[42]);
                 //terminalCode
-                String terminalCode = String.valueOf(objs[44]);
+                String terminalCode = String.valueOf(objs[43]);
                 //innerTermCode
-                String innerTermCode = String.valueOf(objs[45]);
-                //mercReferName
-                //                String mercReferName = String.valueOf(objs[46]);
+                String innerTermCode = String.valueOf(objs[44]);
 
                 /**
                  * 导入之前要先验证business_license_num 营业执照号码保持唯一,如果存在，则不新加商户，只加该商户其余属性。
@@ -320,30 +322,75 @@ public class MerchantInfoImportService extends BaseService {
             /**
              * 此处需要先下载，再上传OSS，再获取图片路径和名称
              */
-            
-            MerchantFile merchantFile = MerchantImportHelper.createMerchantFile(innerCode, "", fileType, filePath);
+            String urlPath = uploadFile(filePath);
+            if(Strings.isNullOrEmpty(urlPath)){
+                continue;
+            }
+            MerchantFile merchantFile = MerchantImportHelper.createMerchantFile(innerCode, filePath, fileType, urlPath);
             merchantFileDao.insertSelective(merchantFile);
         }
     }
     
     /**
-     * uploadFile:(上传文件)
-     * @param fileUrl
+     * uploadFile:(获取OSS的URL)
+     * @param filePath
      * @param fileKey
      * @return    设定文件
      * @author    tangliang
-     * @date      2017年9月18日 下午2:14:39
+     * @date      2017年9月20日 上午9:35:31
      * @return String    DOM对象
      */
-    private String uploadFile(String fileUrl,String fileKey){
-        FileInputStream fis = FileUtils.getFileInputStream(fileUrl);
-        if(null == fis){
+    private String uploadFile(String filePath){
+        
+        if(Strings.isNullOrEmpty(filePath)){
             return null;
         }
-        OssLoaclUtil.uploadFile(fis, fileKey);
-        String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+        String line = System.getProperty("file.separator");// 文件分割符
+        // 保存文件的路径
+        String prefix = filePath.substring(filePath.lastIndexOf(".") + 1);
+        // 数据库存的路径
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        String stry = this.env.getProperty("fileUpload.url") + line + year;// +"\\"+month+"\\";
+        File yearPath = new File(stry);
+        // 如果文件夹不存在则创建
+        if (!yearPath.exists()) {
+            logger.info("年份目录不存在");
+            yearPath.mkdirs();
+        } else {
+            logger.info("年份目录已存在");
+        }
+
+        String strm = this.env.getProperty("fileUpload.url") + line + year + line + month + line;
+        File monthPath = new File(strm);
+        if (!monthPath.exists()) {
+            logger.info("月份目录不存在");
+            monthPath.mkdirs();
+        } else {
+            logger.info("月份目录已存在");
+        }
+
+        String yearMonthPath = year + line + month + line;
+        String newFileName = System.currentTimeMillis() + "." + prefix;
+        String fileKey = year + "/" + month + "/" + newFileName;
+        String filepath = yearMonthPath + newFileName;
+
+        String fileURL = this.env.getProperty("fileUpload.url") + line + filepath;
+       
         
-        return newUrl;
+        filePath = IMAGE_PATH+filePath;
+        
+        try {
+            //上传阿里云OSS文件服务器
+            FileUtils.getFileInputStreamByUrl(filePath,fileURL);
+            OssLoaclUtil.uploadFile(fileURL, fileKey);
+            String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+            return newUrl;
+        } catch (Exception e) {
+            logger.error("上传失败！" + e);
+            throw new RuntimeException();
+        }
     }
     
     /**

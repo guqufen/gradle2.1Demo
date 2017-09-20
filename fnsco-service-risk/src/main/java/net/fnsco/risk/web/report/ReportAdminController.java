@@ -49,11 +49,11 @@ public class ReportAdminController extends BaseController{
         return reportService.headPersonnelMes(NumberUtils.toInt(userId),NumberUtils.toInt(merchantId));
     }
     //更新风控报告状态
-    @ResponseBody
-    @RequestMapping(value = "updateReportStatus", method = RequestMethod.GET)
-    public ResultDTO updateReportStatus(ReportInfoDO reportInfoDO) {
-        return reportService.updateReportStatus(reportInfoDO);
-    }
+//    @ResponseBody
+//    @RequestMapping(value = "updateReportStatus", method = RequestMethod.GET)
+//    public ResultDTO updateReportStatus(ReportInfoDO reportInfoDO) {
+//        return reportService.updateReportStatus(reportInfoDO);
+//    }
     
     /**
      * 通过id查找当前数据对象
@@ -92,9 +92,10 @@ public class ReportAdminController extends BaseController{
     @RequestMapping(value="down", method = RequestMethod.GET)
     public void down() throws IOException{
 
-    	String filePath = env.getProperty("risk_file_path");
-    	 filePath = filePath + "risk_inf_format.xls";
-         String fileName = "risk_inf_format.xls";
+    	String filePath = request.getSession().getServletContext().getRealPath("");
+        filePath = filePath + "template/risk_inf_format.xls";
+        String fileName = "risk_inf_format.xls";
+
          //解析excel，获取客户信息集合。
          ReadExcel.downTemplate(filePath, fileName, response);
     }
@@ -150,6 +151,6 @@ public class ReportAdminController extends BaseController{
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
         
-    	return reportService.pageRepayList(reportId, page, rows);
+    	return reportService.getByReportId(reportId, page, rows);
     }
 }

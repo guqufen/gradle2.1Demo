@@ -169,7 +169,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         String deviceId = appUserDTO.getDeviceId();
         final String mobile = appUserDTO.getMobile();
         //注册需要判断    0表示通过注册流程来获取验证码  1表示通过忘记密码流程来获取验证码
-        if (appUserDTO.getOprationType() == 0) {
+        if (appUserDTO.getOprationType() !=null && appUserDTO.getOprationType() == 0) {
             AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
             if (user != null) {
                 return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);

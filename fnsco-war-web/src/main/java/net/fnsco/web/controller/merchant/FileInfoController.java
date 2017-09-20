@@ -231,7 +231,7 @@ public class FileInfoController extends BaseController{
 	@ResponseBody
 	public String deleteOssFile(String url){
 	    String fileKey = url.substring(url.lastIndexOf("^")+1);
-	    OssUtil.deleteFile(OssUtil.getHeadBucketName(), fileKey);
+	    OssUtil.deleteFile(OssLoaclUtil.getHeadBucketName(), fileKey);
 	    return null;
 	}
 	

@@ -25,7 +25,7 @@ import net.fnsco.web.controller.open.jo.LogJO;
  */
 @RestController
 @RequestMapping(value = "/open/comm", method = RequestMethod.POST)
-@Api(value = "/open/comm", tags = { "开放接口公共接口" })
+@Api(value = "/open/comm", tags = { "公共接口" })
 public class CommonController extends BaseController {
     @Autowired
     private Environment  env;

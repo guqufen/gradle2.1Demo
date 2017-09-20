@@ -64,7 +64,7 @@ function queryParams(params) {
 		pageSize : this.pageSize,
 		status : $('#status').val(),
 		name : $('#queryname').val(),
-		//name : $('#name').val()
+	//name : $('#name').val()
 	}
 	return param;
 }
@@ -97,7 +97,8 @@ function formatstatus(value, row, index) {
 function formatType(value, row, index) {
 	if (value === 1) {
 		return '管理员'
-	}if (value === 2) {
+	}
+	if (value === 2) {
 		return '合作者'
 	} else if (value === 3) {
 		return '消费者'
@@ -203,6 +204,22 @@ function queryByName(name) {
 		}
 	});
 }
+//手机号格式判断
+function isphone(obj) {
+	var reg = /^1\d{10}$/;
+	if (!reg.test(obj)) {
+		return false;
+	}
+	return true;
+}
+//邮箱格式判断
+function ismail(obj) {
+	var reg = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+	if (!reg.test(obj)) {
+		return false;
+	}
+	return true;
+}
 //新增点击事件
 $('#btn_add').click(function() {
 	$('#addModal').modal();
@@ -217,31 +234,55 @@ $('#btn_yes').click(function() {
 	var remark = $('#remark').val();
 	if (name == null || name.length == 0) {
 		layer.msg('手机号不能为空!');
+		$("#name").focus();
 		return false;
 	}
 	queryByName(name);
 	if (isdata == false) {
 		layer.msg('手机号已存在!');
+		$("#name").focus();
+		return false;
+	}
+	var phone = isphone(name);
+	if (phone == false) {
+		layer.msg("请正确填写手机号！");
+		$("#name").focus();
 		return false;
 	}
 	if (department == null || department.length == 0) {
 		layer.msg('名称不能为空!');
+		$("#department").focus();
 		return false;
 	}
 	if (password == null || password.length == 0) {
 		layer.msg('密码不能为空!');
+		$("#password").focus();
 		return false;
 	}
 	if (password.length < 6) {
 		layer.msg('密码最少6位');
+		$("#password").focus();
+		return false;
+	}
+	if (password.length > 12) {
+		layer.msg('密码最多12位');
+		$("#password").focus();
 		return false;
 	}
 	if (email == null || email.length == 0) {
 		layer.msg('邮箱不能为空!');
+		$("#email").focus();
+		return false;
+	}
+	var mail = ismail(email);
+	if (mail == false) {
+		layer.msg('请输出正确的邮箱!');
+		$("#email").focus();
 		return false;
 	}
 	if (remark.length > 200) {
 		layer.msg('备注最多200个字!');
+		$("#remark").focus();
 		return false;
 	}
 	data = {
@@ -306,25 +347,42 @@ $('#btn_yes1').click(function() {
 	var remark = $('#remark1').val();
 	if (name == null || name.length == 0) {
 		layer.msg('手机号不能为空!');
+		$("#name1").focus();
+		return false;
+	}
+	var phone = isphone(name);
+	if (phone == false) {
+		layer.msg("请正确填写手机号！");
+		$("#name1").focus();
 		return false;
 	}
 	if (oldname != name) {
 		queryByName(name);
 		if (isdata == false) {
 			layer.msg('手机号已存在!');
+			$("#name1").focus();
 			return false;
 		}
 	}
 	if (department == null || department.length == 0) {
 		layer.msg('名称不能为空!');
+		$("#department1").focus();
 		return false;
 	}
 	if (email == null || email.length == 0) {
 		layer.msg('邮箱不能为空!');
+		$("#email1").focus();
+		return false;
+	}
+	var mail = ismail(email);
+	if (mail == false) {
+		layer.msg('请输出正确的邮箱!');
+		$("#email1").focus();
 		return false;
 	}
 	if (remark.length > 200) {
 		layer.msg('备注最多200个字!');
+		$("#remark1").focus();
 		return false;
 	}
 	data = {

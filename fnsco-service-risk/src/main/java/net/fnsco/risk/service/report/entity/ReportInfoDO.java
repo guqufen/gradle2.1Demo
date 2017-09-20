@@ -3,16 +3,6 @@ package net.fnsco.risk.service.report.entity;
 import java.util.Date;
 
 public class ReportInfoDO {
-    //是否可以查看报告
-    private Integer isCheck;
-    public Integer getIsCheck() {
-        return isCheck;
-    }
-
-    public void setIsCheck(Integer isCheck) {
-        this.isCheck = isCheck;
-    }
-
     private String innerCode;
     public String getInnerCode() {
         return innerCode;
@@ -281,14 +271,12 @@ public class ReportInfoDO {
     public void setLoanCycle(String loanCycle) {
         this.loanCycle = loanCycle;
     }
-
     @Override
     public String toString() {
-        return "ReportInfoDO [isCheck=" + isCheck + ", innerCode=" + innerCode + ", customerType=" + customerType + ", webUserOuterId=" + webUserOuterId + ", id=" + id + ", merName=" + merName
-               + ", businessLicenseNum=" + businessLicenseNum + ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime + ", industry=" + industry + ", tradingArea="
-               + tradingArea + ", turnover=" + turnover + ", size=" + size + ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer + ", riskWarning=" + riskWarning + ", quota=" + quota
-               + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status=" + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
+        return "ReportInfoDO [innerCode=" + innerCode + ", customerType=" + customerType + ", webUserOuterId=" + webUserOuterId + ", id=" + id + ", merName=" + merName + ", businessLicenseNum="
+               + businessLicenseNum + ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime + ", industry=" + industry + ", tradingArea=" + tradingArea + ", turnover="
+               + turnover + ", size=" + size + ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer + ", riskWarning=" + riskWarning + ", quota=" + quota + ", feeRate=" + feeRate
+               + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status=" + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
     }
-
 
 }
