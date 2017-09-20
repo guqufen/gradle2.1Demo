@@ -69,31 +69,72 @@ public class TradeDataOpenController extends BaseController {
         tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
         tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
         tradeData.setRespCode(ServiceConstant.TradeStateEnum.SUCCESS.getCode());
+        tradeData.setPayMedium(BigdataConstant.PayMediumEnum.POS.getCode());
+        if ("00".equals(tradeData.getSource())) {
+            tradeData.setChannelType(BigdataConstant.ChannelTypeEnum.LKL.getCode());
+        }
+        tradeData.setChannelTermCode(tradeData.getTermId());
+        tradeData.setValidate(ServiceConstant.STR_1);
+        tradeDataService.saveTradeData(tradeData);
+        String timeStamp = tradeData.getTimeStamp();
+        syncReport(timeStamp);
+        return success();
+    }
+
+    /**
+     * 对外交易数据保存到库
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/saveComm")
+    @ApiOperation(value = "保存交易流水")
+    public ResultDTO saveTradeComm(@RequestBody TradeDataDTO tradeData) {
+        logger.error("对外交易流水数据" + JSON.toJSONString(tradeData));
+        String amt = tradeData.getAmt();
+        if (!Strings.isNullOrEmpty(amt)) {
+            amt = amt.replaceAll("\\.", "");
+            tradeData.setAmt(amt);
+        }
+        String payType = tradeData.getPayType();
+        //tradeData.setCardOrg(ConstantEnum.DcTypeEnum.getNameByCode(code));
+        tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
+        tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
+        tradeData.setRespCode(ServiceConstant.TradeStateEnum.SUCCESS.getCode());
         tradeData.setPayMedium(BigdataConstant.PayMediumEnum.FIX_QR.getCode());
-        if("00".equals(tradeData.getSource())){
+        if ("00".equals(tradeData.getSource())) {
             tradeData.setChannelType(BigdataConstant.ChannelTypeEnum.LKL.getCode());
         }
         tradeData.setChannelTermCode(tradeData.getTermId());
         tradeDataService.saveTradeData(tradeData);
         String timeStamp = tradeData.getTimeStamp();
-        if (!Strings.isNullOrEmpty(timeStamp)) {
+        syncReport(timeStamp);
+        return success();
+    }
+
+    private void syncReport(String timeStamp) {
+        try {
+            if (Strings.isNullOrEmpty(timeStamp)) {
+                return;
+            }
             if (timeStamp.length() >= 8) {
                 timeStamp = timeStamp.substring(0, 8);
             }
             SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
             String timeStampEnd = "";
             try {
-                timeStampEnd = DateUtils.getDateStrYYYYMMDD(sf.parse(timeStamp),1);
+                timeStampEnd = DateUtils.getDateStrYYYYMMDD(sf.parse(timeStamp), 1);
             } catch (ParseException e) {
-                logger.error("插入交易流水同步报表数据出错",e);
+                logger.error("插入交易流水同步报表数据出错", e);
             }
             String nowDateStr = DateUtils.getDateStrYYYYMMDD(new Date());
             if (!nowDateStr.equals(timeStamp)) {
-                logger.error("不是当天的数据则重新生成日报"+timeStamp);
+                logger.error("不是当天的数据则重新生成日报" + timeStamp);
                 tradeReportService.buildTradeReportDaTa(timeStamp + "000000", timeStampEnd + "000000");
             }
+        } catch (Exception e) {
+            logger.error("插入交易流水同步报表数据出错", e);
         }
-        return success();
     }
 
 }
