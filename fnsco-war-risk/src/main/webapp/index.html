@@ -7,14 +7,21 @@
 <meta name="description" content="登录页面">
 <meta name="author" content="">
 <link rel="shortcut icon" href="favicon.ico">
-<link href="css/common.css" rel="stylesheet">
-<link href="css/index.css" rel="stylesheet">
 <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
 <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
 <link href="css/style.min.css" rel="stylesheet">
-<link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
-<link href="css/style.min.css" rel="stylesheet">		
+<link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">	
+<link href="css/common.css" rel="stylesheet">
+<link href="css/index.css" rel="stylesheet">
+<style>
+	#table tr th div{
+		text-align:center;
+	}
+	#table tbody tr td{
+		text-align:center;
+	}
+</style>
 </head>
 <body>
 	<div class="content">
@@ -43,18 +50,18 @@
 			<!-- 搜索栏 -->
 			<div class="searchBox" id="searchBox">
 				<div class="inputDiv">
-					<label>商户名</label> <input type="text" name="merchants"
+					<label>商户名</label> <input id="merName" type="text" name="merchants"
 						placeholder="商户名">
 				</div>
 				<div class="inputDiv">
-					<label>商圈</label> <input type="text" name="merchants"
+					<label>商圈</label> <input id="tradingArea" type="text" name="merchants"
 						placeholder="商圈">
 				</div>
 				<div class="inputDiv">
-					<label>营业执照</label> <input type="text" name="merchants"
+					<label>营业执照</label> <input id="businessLicenseNum" type="text" name="merchants"
 						placeholder="营业执照">
 				</div>
-				<button class="searchBtn">搜索</button>
+				<button class="searchBtn" onclick="javascript:queryEvent();">搜索</button>
 			</div>
 			<!-- 表格块 -->
 			<div class="rightContent" id="rightContent">
