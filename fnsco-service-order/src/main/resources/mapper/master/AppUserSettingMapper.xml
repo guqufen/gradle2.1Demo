@@ -137,7 +137,7 @@
       </if>
     </where>
   </update>
-  <select id="selectByUserIdAndType" resultType="net.fnsco.order.service.domain.AppUserSetting">
+  <select id="selectByUserIdAndType" resultMap="BaseResultMap">
     select <include refid="Base_Column_List" />
     from m_app_user_setting
     where user_id = #{userId,jdbcType=INTEGER} and notice_type = #{noticeType} limit 1
