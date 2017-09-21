@@ -12,6 +12,7 @@
 </head>
 <body>
 	<div class="content">
+		<!-- 左侧导航栏 -->
 		<div class="leftNavBar" id="leftContent">
 			<div class="headerIcon">
 				<img class="headerImg" src="img/login/bg1.jpg" alt="">
@@ -19,8 +20,8 @@
 					拉卡拉风控+<div class="triangle-down"></div>
 					<ul class="headNav-list" id="headNav-list">
 						<div class="triangle-up"></div>
-						<a href=""><li>修改密码</li></a>
-						<a href=""><li>退出登录</li></a>
+						<a href="javascript:;" id="openChangePassword"><li>修改密码</li></a>
+						<a href="javascript:;"><li>退出登录</li></a>
 					</ul>
 				</div>
 			</div>
@@ -34,7 +35,9 @@
 				</li>
 			</ul>
 		</div>
+		<!-- 右侧内容区域 -->
 		<div class="rightBox" id="rightBox">
+			<!-- 搜索栏 -->
 			<div class="searchBox" id="searchBox">
 				<div class="inputDiv">
 					<label>商户名</label>
@@ -50,10 +53,37 @@
 				</div>
 				<button class="searchBtn">搜索</button>
 			</div>
+			<!-- 表格块 -->
 			<div class="rightContent" id="rightContent">
 				<div class="contentTable">
 					
 				</div>
+			</div>
+		</div>
+		<!-- 修改密码 -->
+		<div id="tk">
+			<div class="zz"></div>
+			<div class="changePassword">
+				<div class="close" id="changeClose"><img src="img/x.png"></div>
+				<div class="input">
+					<div class="icon">
+						<img src="img/login/Shape.png" alt="旧密码">
+					</div>
+					<input type="text" placeholder="旧密码" class="loginInput" name="account" id="account">
+				</div>
+				<div class="input">
+					<div class="icon">
+						<img src="img/login/Shape.png" alt="新密码">
+					</div>
+					<input type="password" placeholder="新密码" class="loginInput" name="password" id="password">
+				</div>
+				<div class="input">
+					<div class="icon">
+						<img src="img/login/Shape.png" alt="新密码">
+					</div>
+					<input type="password" placeholder="新密码" class="loginInput" name="password" id="password">
+				</div>
+				<input id="btn_submit" type="button" name="" class="changeBtn" value="修改">
 			</div>
 		</div>
 	</div>
