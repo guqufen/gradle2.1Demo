@@ -42,10 +42,14 @@ $('#table').bootstrapTable({
 		align : 'center',
 	}, {
 		field : 'type',
-		title : '账号类型',
+		title : '类型',
 		align : 'center',
 		formatter : formatType
 	}, {
+		field : 'email',
+		title : '邮箱',
+		align : 'center',
+	},{
 		field : 'status',
 		title : '状态',
 		align : 'center',
@@ -96,12 +100,9 @@ function formatstatus(value, row, index) {
 //账号类型判断
 function formatType(value, row, index) {
 	if (value === 1) {
-		return '管理员'
-	}
-	if (value === 2) {
-		return '合作者'
-	} else if (value === 3) {
-		return '消费者'
+		return '法奈昇'
+	}else if (value === 2) {
+		return '纵横钱包'
 	}
 }
 

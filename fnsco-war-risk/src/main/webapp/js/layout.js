@@ -34,3 +34,13 @@ headNav.onclick=function(){
 		headNavList.style.display='none';
 	}
 }
+	//修改弹出框事件
+	var openChangePassword=document.getElementById("openChangePassword");
+	var tk=document.getElementById("tk");
+	var changeClose=document.getElementById("changeClose");
+	openChangePassword.onclick=function(){
+		tk.style.display='block';
+	}
+	changeClose.onclick=function(){
+		tk.style.display='none';
+	}
