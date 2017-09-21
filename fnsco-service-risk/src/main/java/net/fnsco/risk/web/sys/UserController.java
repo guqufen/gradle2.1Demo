@@ -14,6 +14,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.risk.comm.RiskConstant;
 import net.fnsco.risk.service.sys.WebUserService;
 import net.fnsco.risk.service.sys.entity.WebUserDO;
+import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 
 @Controller
 @RequestMapping(value = "/web/user", method = RequestMethod.POST)
@@ -69,7 +70,7 @@ public class UserController extends BaseController {
     @RequestMapping("/getCurrentUser")
     @ResponseBody
     public ResultDTO getCurrentUser() {
-        WebUserDO adminUser = (WebUserDO) getSessionUser();
+        WebUserOuterDO adminUser = (WebUserOuterDO) getSessionUser();
         return ResultDTO.success(adminUser);
     }
 

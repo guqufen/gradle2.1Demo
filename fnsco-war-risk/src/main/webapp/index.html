@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>首页</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="登录页面">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="css/common.css" rel="stylesheet">
-    <link href="css/index.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>首页</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="登录页面">
+<meta name="author" content="">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="css/common.css" rel="stylesheet">
+<link href="css/index.css" rel="stylesheet">
+  <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
 </head>
 <body>
 	<div class="content">
@@ -16,7 +22,8 @@
 			<div class="headerIcon">
 				<img class="headerImg" src="img/login/bg1.jpg" alt="">
 				<div class="headNav" id="headNav">
-					拉卡拉风控+<div class="triangle-down"></div>
+					拉卡拉风控+
+					<div class="triangle-down"></div>
 					<ul class="headNav-list" id="headNav-list">
 						<div class="triangle-up"></div>
 						<a href=""><li>修改密码</li></a>
@@ -26,40 +33,53 @@
 			</div>
 			<!-- 导航列表 -->
 			<ul class="nav">
-				<li class="navList">
-					<a href="">
-						<i class="icon fk"></i>
-						<span>风控+</span>
-					</a>
-				</li>
+				<li class="navList"><a href=""> <i class="icon fk"></i> <span>风控+</span>
+				</a></li>
 			</ul>
 		</div>
-		<div class="rightBox" id="rightBox">
-			<div class="searchBox" id="searchBox">
-				<div class="inputDiv">
-					<label>商户名</label>
-					<input type="text" name="merchants" placeholder="商户名">
+		<form id="formSearch">
+			<div class="rightBox" id="rightBox">
+				<div class="searchBox" id="searchBox">
+					<div class="inputDiv">
+						<label>商户名</label> <input id="merName" type="text"
+							name="merchants" placeholder="商户名">
+					</div>
+					<div class="inputDiv">
+						<label>商圈</label> <input id="tradingArea" type="text"
+							name="merchants" placeholder="商圈">
+					</div>
+					<div class="inputDiv">
+						<label>营业执照</label> <input id="businessLicenseNum" type="text"
+							name="merchants" placeholder="营业执照">
+					</div>
+					<!-- <button class="searchBtn">搜索</button> -->
+					<button type="button" id="btn_query" class="btn btn-primary"
+						onclick="javascript:queryEvent();">
+						<span class="glyphicon glyphicon-search"></span>查询
+					</button>
 				</div>
-				<div class="inputDiv">
-					<label>商圈</label>
-					<input type="text" name="merchants" placeholder="商圈">
+				<div class="rightContent" id="rightContent">
+					<div class="contentTable">
+						<div class="ibox float-e-margins">
+							<div class="ibox-content">
+								<div class="row row-lg">
+									<div class="col-sm-12">
+										<table id="table"></table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="inputDiv">
-					<label>营业执照</label>
-					<input type="text" name="merchants" placeholder="营业执照">
-				</div>
-				<button class="searchBtn">搜索</button>
+
 			</div>
-			<div class="rightContent" id="rightContent">
-				<div class="contentTable">
-					
-				</div>
-			</div>
-		</div>
+		</form>
+
 	</div>
 </body>
 <script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script
+	src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
@@ -67,8 +87,9 @@
 <script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
-<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-<!-- <script src="js/layer/layer.js"></script> -->
+<script
+	src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="js/layer/layer.js"></script>
 <!-- <script src="js/uploadify-v3.1/jquery.uploadify.js"></script> -->
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/report.js"></script>
