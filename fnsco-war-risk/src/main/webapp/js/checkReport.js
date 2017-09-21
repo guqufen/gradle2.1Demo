@@ -55,6 +55,7 @@ $(function(){
 			$(".size span").html(result.size);
 			$(".merName span").html(result.merName);
 			$(".riskWarning ").html(result.riskWarning);
+			$(".report-title").html(result.merName+"+报告");
 		}
 	});
 	//查询全年风控曲线图
