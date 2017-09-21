@@ -65,7 +65,7 @@ function formatterOperation(value, row, index) {
 		return "报告正在生成中";
 	}
 	if (value == 1) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportDetails.html?merchantId='
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="report.html?merchantId='
 				+ row.id + ' ">查看报告</a>' ].join('');
 	} 
 	if(value == 3){
