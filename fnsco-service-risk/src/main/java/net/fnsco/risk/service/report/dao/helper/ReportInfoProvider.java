@@ -104,10 +104,10 @@ public class ReportInfoProvider {
             WHERE("id=#{reportInfo.id}");
         }
         if (StringUtils.isNotBlank(reportInfo.getMerName())){
-            WHERE("mer_name=#{reportInfo.merName}");
+            WHERE("mer_name like CONCAT('%',#{reportInfo.merName},'%')");
         }
-        if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())){
-            WHERE("business_license_num=#{reportInfo.businessLicenseNum}");
+        if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())){   
+            WHERE("business_license_num=like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getBusinessAddress())){
             WHERE("business_address=#{reportInfo.businessAddress}");
@@ -119,7 +119,7 @@ public class ReportInfoProvider {
             WHERE("industry=#{reportInfo.industry}");
         }
         if (StringUtils.isNotBlank(reportInfo.getTradingArea())){
-            WHERE("trading_area=#{reportInfo.tradingArea}");
+            WHERE("trading_area like CONCAT('%', #{reportInfo.tradingArea}, '%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getTurnover())){
             WHERE("turnover=#{reportInfo.turnover}");
@@ -173,10 +173,10 @@ public class ReportInfoProvider {
             WHERE("id=#{reportInfo.id}");
         }
         if (StringUtils.isNotBlank(reportInfo.getMerName())){
-            WHERE("mer_name=#{reportInfo.merName}");
+            WHERE("mer_name like CONCAT('%',#{reportInfo.merName},'%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())){
-            WHERE("business_license_num=#{reportInfo.businessLicenseNum}");
+            WHERE("business_license_num=like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getBusinessAddress())){
             WHERE("business_address=#{reportInfo.businessAddress}");
@@ -188,7 +188,7 @@ public class ReportInfoProvider {
             WHERE("industry=#{reportInfo.industry}");
         }
         if (StringUtils.isNotBlank(reportInfo.getTradingArea())){
-            WHERE("trading_area=#{reportInfo.tradingArea}");
+            WHERE("trading_area like CONCAT('%', #{reportInfo.tradingArea}, '%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getTurnover())){
             WHERE("turnover=#{reportInfo.turnover}");
@@ -248,10 +248,10 @@ public class ReportInfoProvider {
             WHERE("id=#{reportInfo.id}");
         }
         if (StringUtils.isNotBlank(reportInfo.getMerName())){
-            WHERE("mer_name=#{reportInfo.merName}");
+            WHERE("mer_name like CONCAT('%',#{reportInfo.merName},'%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())){
-            WHERE("business_license_num=#{reportInfo.businessLicenseNum}");
+            WHERE("business_license_num=like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getBusinessAddress())){
             WHERE("business_address=#{reportInfo.businessAddress}");
@@ -263,7 +263,7 @@ public class ReportInfoProvider {
             WHERE("industry=#{reportInfo.industry}");
         }
         if (StringUtils.isNotBlank(reportInfo.getTradingArea())){
-            WHERE("trading_area=#{reportInfo.tradingArea}");
+            WHERE("trading_area like CONCAT('%', #{reportInfo.tradingArea}, '%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getTurnover())){
             WHERE("turnover=#{reportInfo.turnover}");

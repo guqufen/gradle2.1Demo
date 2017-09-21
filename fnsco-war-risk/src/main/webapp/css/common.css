@@ -39,11 +39,11 @@ body{
     height: 8px;
 }
 .leftNavBar::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
-    background: rgba(0,0,0,0.2);
+    /*-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.2);*/
 }
 .leftNavBar::-webkit-scrollbar-track {/*滚动条里面轨道*/
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    /*-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);*/
     border-radius: 0;
     background: #fff;
 }
@@ -191,15 +191,28 @@ body{
     height: 8px;
 }
 .contentTable::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
-    background: rgba(0,0,0,0.2);
+    /*-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.2);*/
 }
 .contentTable::-webkit-scrollbar-track {/*滚动条里面轨道*/
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    /*-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);*/
     border-radius: 0;
     background: #fff;
 }
 
+.fixed-table-body::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 8px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 8px;
+}
+.fixed-table-body::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    /*-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);*/
+    /*background: rgba(0,0,0,0.2);*/
+}
+.fixed-table-body::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    /*-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);*/
+    border-radius: 0;
+    background: #fff;
+}
 
 /*修改密码弹框*/
 #tk{
