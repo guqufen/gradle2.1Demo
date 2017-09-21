@@ -119,7 +119,7 @@ public class MerchantController extends BaseController {
      */
     @RequestMapping(value = "/importData")
     @ApiOperation(value = "导入商户所有数据")
-    public ResultDTO importData(@RequestBody List<Object[]> datas) {
+    public ResultDTO importData(List<Object[]> datas) {
         
         try {
             ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(datas, 1);
