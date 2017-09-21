@@ -21,7 +21,7 @@
 					<ul class="headNav-list" id="headNav-list">
 						<div class="triangle-up"></div>
 						<a href="javascript:;" id="openChangePassword"><li>修改密码</li></a>
-						<a href="javascript:;"><li>退出登录</li></a>
+						<a href="/web/userOuter/logout" class="logout"><li>退出登录</li></a>
 					</ul>
 				</div>
 			</div>
@@ -81,7 +81,7 @@
 					<div class="icon">
 						<img src="img/login/Shape.png" alt="新密码">
 					</div>
-					<input type="password" placeholder="新密码" class="loginInput" name="password" id="password">
+					<input type="password" placeholder="新密码" class="loginInput" name="password1" id="password1">
 				</div>
 				<input id="btn_submit" type="button" name="" class="changeBtn" value="修改">
 			</div>
@@ -104,4 +104,48 @@
 <script type="text/javascript" src="js/report.js"></script>
 <script src="js/layout.js"></script>
 <!-- <script src="js/jquery.min.js"></script> -->
+<script type="text/javascript">
+$('.logout').attr('href',PROJECT_NAME+"/web/userOuter/logout");
+//获取当前用户,将真实姓名显示出来
+$(function(){
+	var result;
+	$.ajax({
+		url:PROJECT_NAME+'/web/userOuter/getCurrentUser',
+		dataType:'json',
+		type:'POST',
+		success:function(data){
+			unloginHandler(data);
+			if(!data.success)
+				window.location='login.html';
+			   $('.indexPageUserName').html(data.data.name);
+		}
+	});
+	return result;
+});
+
+//修改密码
+$("#btn_submit").click(function(){
+	if($("#password").val()!=$("#password1").val()){
+		alert("两次密码输入不一致,请重新输入");
+		return false;
+	}
+	//此处为real_name
+	var data={"name":$(".indexPageUserName").html(),"oldPassword":$("#account").val(),"newPassword":$("#password").val()};
+	$.ajax({
+			url:PROJECT_NAME+'/web/userOuter/modifyPassword',
+			dataType:'json',
+			type:'POST',
+			data:data,
+			success:function(result){
+				unloginHandler(result);
+				if(result.success){
+					window.location=PROJECT_NAME+"/web/userOuter/logout";
+				}else{
+					alert("原密码错误,请重新输入")
+				}
+			}
+		});
+	
+})
+</script>
 </html>
