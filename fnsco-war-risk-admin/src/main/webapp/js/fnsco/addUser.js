@@ -33,7 +33,7 @@ $('#table').bootstrapTable({
 		formatter : operateFormatter
 	}, {
 		field : 'name',
-		title : '账号',
+		title : '手机号',
 		align : 'center',
 		width : '10%'
 	}, {
@@ -100,9 +100,9 @@ function formatstatus(value, row, index) {
 //账号类型判断
 function formatType(value, row, index) {
 	if (value === 1) {
-		return '法奈昇'
+		return '法奈昇';
 	}else if (value === 2) {
-		return '纵横钱包'
+		return '纵横钱包';
 	}
 }
 
