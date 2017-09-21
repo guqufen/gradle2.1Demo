@@ -221,8 +221,11 @@ public class ReportService extends BaseService{
     public ResultDTO updateReport(ReportInfoDO reportInfoDO){
     	
     	//将状态改为待审核
-    	reportInfoDO.setStatus(0);
-    	
+    	if(reportInfoDO.getStatus() == null){
+    		//默认将状态改为待审核
+    		reportInfoDO.setStatus(0);
+    	}
+
     	int result = reportInfoDAO.update(reportInfoDO);
     	
     	return ResultDTO.success();
