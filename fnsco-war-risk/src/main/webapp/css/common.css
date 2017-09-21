@@ -17,6 +17,7 @@ body{
 	height: 100%;
 	left: 0;
 	top: 0;
+	background-color: #ededed;
 }
 
 /*leftBox*/
@@ -158,10 +159,21 @@ body{
 }
 /*搜索部分*/
 .searchBox{
-	width: 100%;
-	height: 120px;
+	/*width: 100%;*/
+	padding: 30px 0;
+	/*height: 120px;*/
 	background: #fff;
 }
+.searchBtn{
+	background-color: #4d5f84;
+	color: #fff;
+	border:none;
+	font-size: 16px;
+	padding: 11px 50px;
+	margin: 0 20px;
+	font: 14px 微软雅黑, Tahoma, "Microsoft Yahei", Simsun;
+}
+/**/
 .rightContent{
 	position: relative;
 	margin: 30px;

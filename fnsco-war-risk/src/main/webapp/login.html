@@ -49,7 +49,7 @@ $('#btn_submit').click(function(){
 		data:$('#login_info_form').serialize(),
 		success:function(data){
 			if(data.success){
-				alert("正确");
+				//alert("正确");
 				window.location = 'index.html';
 			}else{
 				alert(data.message);
