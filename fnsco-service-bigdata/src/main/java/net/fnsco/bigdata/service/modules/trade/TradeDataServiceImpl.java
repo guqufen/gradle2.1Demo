@@ -73,16 +73,20 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         long timer = System.currentTimeMillis();
         String innerCode = "";
         String merId = tradeData.getMerId();
-        MerchantTerminal merchantTerminal = null;
         if (!Strings.isNullOrEmpty(tradeData.getTermId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
-            merchantTerminal = merchantTerminalDao.selectOneByTermId(tradeData.getTermId(), tradeData.getChannelType());
+            MerchantTerminal merchantTerminal = merchantTerminalDao.selectOneByTermId(tradeData.getTermId(), tradeData.getChannelType());
+            if(null != merchantTerminal){
+                innerCode = merchantTerminal.getInnerCode();
+            }
+        }else{
+            if(!Strings.isNullOrEmpty(tradeData.getMerId())&& !Strings.isNullOrEmpty(tradeData.getChannelType())){
+                MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
+                if(channel != null){
+                    innerCode = channel.getInnerCode();
+                }
+            }
         }
-        if (null == merchantTerminal) {
-            //logger.error("渠道商户不存在" + merId + ":" + tradeData.getSource() + ",丢弃该交易流水");
-            //return true;
-        } else {
-            innerCode = merchantTerminal.getInnerCode();
-        }
+         
         logger.warn("插入流水，获取商户耗时" + (System.currentTimeMillis() - timer));
         TradeData tradeDataEntity = new TradeData();
         tradeDataEntity.setId(DbUtil.getUuid());
