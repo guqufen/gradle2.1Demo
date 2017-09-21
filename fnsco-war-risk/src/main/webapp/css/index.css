@@ -1,0 +1,25 @@
+/*搜索框*/
+.inputDiv{
+	display: inline-block;
+	margin:10px 30px;
+	border:1px solid #c6d3dd;
+}
+.inputDiv label{
+	background-color: #e9edf0;
+	width: 100px;
+	display: inline-block;
+	color: #4d5f84;
+	height: 41px;
+	text-align: center;
+	line-height: 40px;
+}
+.inputDiv input{
+	border: none;
+	width: 200px;
+	padding-left: 10px;
+	height: 40px;
+	line-height: 40px;
+}
+.inputDiv input:focus{
+	outline: none;
+}

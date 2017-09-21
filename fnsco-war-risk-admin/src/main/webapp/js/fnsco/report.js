@@ -11,21 +11,38 @@ var customerType = function load_val2() {
 		success : function(data) {
 			console.log(data)
 			result = data.data.type;
+
+			$('#status').empty();
+			if (result == 1) {
+//				$(".auditor").css("display", "none");
+				$('#status').append('<option value="0" class="admin" selected="selected">待审核</option>');
+				$('#status').attr('disabled','disabled');
+			} else {
+//				$(".admin").css("display", "none");
+				$('#status').append('<option value="">全部</option>');
+				$('#status').append('<option value="2" class="auditor">审核失败</option>');
+				$('#status').append('<option value="3" class="auditor">待编辑</option>');
+			}
 		}
 	});
 	return result;
 }
+/**
 //var customerType = load_val2();
+//审核人员
 if (customerType == 1) {
-	$(".auditor").css("display", "none");
+//	$(".auditor").css("display", "none");
+	$('#status').append('<option value="0" class="admin">待审核</option>');
 } else {
-	$(".admin").css("display", "none");
-}
+//	$(".admin").css("display", "none");
+	$('#status').append('<option value="2" class="auditor">审核失败</option>');
+	$('#status').append('<option value="3" class="auditor">待编辑</option>');
+}**/
 //初始化表格
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url : PROJECT_NAME + 'report/query',
+	url : PROJECT_NAME + '/report/query',
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	// toolbar: '#toolbar', //工具按钮用哪个容器
@@ -85,47 +102,6 @@ function formatterStatus(value, row, index) {
 		return '待编辑';
 	} else {
 		return '-';
-	}
-}
-// 绑定店铺
-function formatMerNames(value, row, index) {
-	if (value && '' != value) {
-		return value.substr(0, value.length - 1);
-	}
-}
-// 格式化时间
-function formatReDate(value, row, index) {
-	return formatDateUtil(value);
-
-}
-// 操作格式化
-function operateFormatter(value, row, index) {
-	return [ '<div class="redact" title="设置角色">',
-			'<i class="glyphicon glyphicon-pencil"></i><span>角色修改</span>',
-			'</div>  ' ].join('');
-}
-// 推送类型格式化
-function formatPushType(value, row, index) {
-	if (!value) {
-		return '-';
-	} else if (value == '1') {
-		return '强推';
-	} else if (value == '2') {
-		return '内推';
-	} else {
-		return '定时推';
-	}
-}
-// 状态格式化
-function formatPushState(value, row, index) {
-	if (!value) {
-		return '-';
-	} else if (value == '1') {
-		return '已发布';
-	} else if (value == '2') {
-		return '待推送';
-	} else {
-		return '其他';
 	}
 }
 // 条件查询按钮事件

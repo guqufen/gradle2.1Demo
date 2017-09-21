@@ -4,13 +4,14 @@ var rightContent=document.getElementById('rightContent');
 var searchBox=document.getElementById('searchBox');
 window.onload=function(){
 	var wWidth=document.body.clientWidth;
-	var wHeight=document.body.offsetHeight;	
-	console.log(wWidth,wHeight);
+	var wHeight=document.body.offsetHeight;
 	rightBox.style.width=wWidth-220+'px';
 	rightBox.style.height=wHeight+'px';
 	searchBox.style.width=wWidth-220+'px';
 	rightContent.style.width=wWidth-280+'px';
-	rightContent.style.height=wHeight-180+'px';
+	var searchBoxH=searchBox.offsetHeight;
+	rightContent.style.height=wHeight-searchBoxH-60+'px';
+	console.log(wHeight,searchBoxH,wHeight-searchBoxH);
 }
 window.onresize = function () {
 	var wWidth=document.body.clientWidth;
@@ -19,7 +20,9 @@ window.onresize = function () {
 	rightBox.style.height=wHeight+'px';
 	searchBox.style.width=wWidth-220+'px';
 	rightContent.style.width=wWidth-280+'px';
-	rightContent.style.height=wHeight-180+'px';
+	var searchBoxH=searchBox.offsetHeight;
+	rightContent.style.height=wHeight-searchBoxH-60+'px';
+	console.log(wHeight,searchBoxH,wHeight-searchBoxH);
 }
 //修改密码
 var headNav=document.getElementById('headNav');
@@ -31,3 +34,13 @@ headNav.onclick=function(){
 		headNavList.style.display='none';
 	}
 }
+	//修改弹出框事件
+	var openChangePassword=document.getElementById("openChangePassword");
+	var tk=document.getElementById("tk");
+	var changeClose=document.getElementById("changeClose");
+	openChangePassword.onclick=function(){
+		tk.style.display='block';
+	}
+	changeClose.onclick=function(){
+		tk.style.display='none';
+	}

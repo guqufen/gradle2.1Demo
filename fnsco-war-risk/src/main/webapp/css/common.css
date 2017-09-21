@@ -17,6 +17,7 @@ body{
 	height: 100%;
 	left: 0;
 	top: 0;
+	background-color: #ededed;
 }
 
 /*leftBox*/
@@ -158,10 +159,19 @@ body{
 }
 /*搜索部分*/
 .searchBox{
-	width: 100%;
-	height: 120px;
+	padding: 30px 0;
 	background: #fff;
 }
+.searchBtn{
+	background-color: #4d5f84;
+	color: #fff;
+	border:none;
+	font-size: 16px;
+	padding: 11px 50px;
+	margin: 0 30px;
+	font: 14px 微软雅黑, Tahoma, "Microsoft Yahei", Simsun;
+}
+/**/
 .rightContent{
 	position: relative;
 	margin: 30px;
@@ -187,4 +197,87 @@ body{
     -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
     border-radius: 0;
     background: #fff;
+}
+
+
+/*修改密码弹框*/
+#tk{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background:rgba(0,0,0,0.4);
+	z-index: 9;
+	display: none;
+}
+.changePassword{
+	position: absolute;
+	background-color: #fff;
+	width: 400px;
+	/*height: 300px;*/
+	left: 50%;
+	top: 50%;
+	margin-left: -200px;
+	margin-top: -150px;
+	padding:30px 0;
+	border-radius: 5px;
+}
+.close{
+	position: absolute;
+	width: 26px;
+	height: 26px;
+	right: -13px;
+	top: -13px;
+	background-color: #fd1647;
+	border-radius: 50%;
+	text-align: center;
+	color: #fff;
+	cursor: pointer;
+}
+.close img{
+	margin-top: 2px;
+}
+.input{
+	width: 320px;
+	height: 40px;
+	margin: 20px auto;
+	position:relative;
+}
+.input input{
+	position: absolute;
+	width: 255px;
+	height: 100%;
+	padding: 0;
+	padding-left: 65px;
+	line-height: 40px;
+	vertical-align: middle;
+	color: #666;
+	margin: 0;
+	border:1px solid #e4e4e5; 
+	z-index: 1;
+}
+.input .icon{
+	z-index: 2;
+	position: absolute;
+	height: 100%;
+	width: 50px;
+	left: 1px;
+	top: 1px;
+	border-right: 1px solid #e4e4e5;
+	border-radius: 5px 0 0 5px;
+	background-color: #fff;
+}
+.input .icon img{
+	height: 20px;
+	margin: 10px 0 10px 15px ;
+}
+.changeBtn{
+    width: 100px;
+    height: 42px;
+    background-color: #024b7f;
+    border: none;
+    color: #fff;
+    float: right;
+    font-size: 14px;
+    margin-top: 15px;
+    margin-right: 40px;
 }

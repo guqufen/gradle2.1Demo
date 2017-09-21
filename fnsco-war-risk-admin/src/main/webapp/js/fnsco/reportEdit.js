@@ -42,7 +42,7 @@ $(function() {
 
 	//ajax请求修改的数据<id=2>
 	$.ajax({
-		url : PROJECT_NAME + 'report/getById',
+		url : PROJECT_NAME + '/report/getById',
 		type : 'get',
 		data : {
 			'id' : merchantId
@@ -78,6 +78,17 @@ $(function() {
 				$('#feeRate').val(dd.feeRate);// 费率
 
 				$('#loanCycle').val(dd.loanCycle);// 周期
+				
+				//待审核状态
+				if(dd.status == 0){
+					$('#btn_auditing').show();//显示审核成功按钮
+					$('#btn_auditingFail').show();//显示审核失败按钮
+				//待编辑状态
+				}else{
+					$('#btn_save').show();//显示保存修改按钮
+					$('#btn_import').show();//显示导入数据按钮
+				}
+				
 			}
 		},
 		error : function(data) {
@@ -153,8 +164,19 @@ function getReportCycle(){
 	});
 }
 
-//点击保存按钮
-$('#btn_save').click(function() {
+//编辑界面点击保存按钮
+$('#btn_save').click(function(){
+	saveOrUpdate(0);
+});
+//审核页面点击审核成功按钮
+$('#btn_auditing').click(function(){
+	saveOrUpdate(1);
+});
+//审核页面点击审核失败按钮
+$('#btn_auditingFail').click(function(){
+	saveOrUpdate(2);
+});
+function saveOrUpdate(status){
 
 	//商户名称
 	var merName = $('#merName').val();
@@ -213,6 +235,7 @@ $('#btn_save').click(function() {
 		'quota' : quota,
 		'feeRate' : feeRate,
 		'loanCycle' : loanCycle,
+		'status' : status,
 		'id':merchantId
 	};
 
@@ -231,10 +254,10 @@ $('#btn_save').click(function() {
 			}
 		},
 		error : function(data) {
-			layer.msg('修改失败');
+			layer.msg('操作失败');
 		}
 	});
-});
+}
 
 //还款能力历史与预测table
 $('#table').bootstrapTable({
@@ -358,7 +381,7 @@ function importEvent() {
 $(function() {
 	//0.初始化fileinput
 	var oFileInput = new FileInput();
-	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + 'report/doImport?id='+merchantId);
+	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + '/report/doImport?id='+merchantId);
 });
 //初始化fileinput
 var FileInput = function() {
