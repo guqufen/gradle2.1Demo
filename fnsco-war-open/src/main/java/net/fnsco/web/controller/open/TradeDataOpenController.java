@@ -16,13 +16,18 @@ import com.google.common.base.Strings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
+import net.fnsco.bigdata.api.constant.BigdataConstant.ChannelTypeEnum;
+import net.fnsco.bigdata.api.constant.BigdataConstant.DataSourceEnum;
+import net.fnsco.bigdata.api.constant.BigdataConstant.PayMediumEnum;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.comm.ServiceConstant;
+import net.fnsco.bigdata.comm.ServiceConstant.PaySubTypeAllEnum;
+import net.fnsco.bigdata.comm.ServiceConstant.PayTypeEnum;
+import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
-import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.order.api.trade.TradeReportService;
 
 /**
@@ -69,31 +74,88 @@ public class TradeDataOpenController extends BaseController {
         tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
         tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
         tradeData.setRespCode(ServiceConstant.TradeStateEnum.SUCCESS.getCode());
-        tradeData.setPayMedium(BigdataConstant.PayMediumEnum.FIX_QR.getCode());
-        if("00".equals(tradeData.getSource())){
+        tradeData.setPayMedium(BigdataConstant.PayMediumEnum.POS.getCode());
+        if ("00".equals(tradeData.getSource())) {
             tradeData.setChannelType(BigdataConstant.ChannelTypeEnum.LKL.getCode());
         }
         tradeData.setChannelTermCode(tradeData.getTermId());
+        tradeData.setValidate(ServiceConstant.STR_1);
         tradeDataService.saveTradeData(tradeData);
         String timeStamp = tradeData.getTimeStamp();
-        if (!Strings.isNullOrEmpty(timeStamp)) {
+        syncReport(timeStamp);
+        return success();
+    }
+
+    /**
+     * 对外交易数据保存到库
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/saveComm")
+    @ApiOperation(value = "保存交易流水")
+    public ResultDTO saveTradeComm(@RequestBody TradeDataDTO tradeData) {
+        logger.error("对外交易流水数据" + JSON.toJSONString(tradeData));
+        String amt = tradeData.getAmt();
+        if (!Strings.isNullOrEmpty(amt)) {
+            amt = amt.replaceAll("\\.", "");
+            tradeData.setAmt(amt);
+        }
+        String payType = tradeData.getPayType();
+        //tradeData.setCardOrg(ConstantEnum.DcTypeEnum.getNameByCode(code));
+        if(Strings.isNullOrEmpty(PayTypeEnum.getNameByCode(payType))){
+            return fail("支付类型必须为00刷卡01二维码");
+        }
+        if("其它".equals(PaySubTypeAllEnum.getNameByCode(tradeData.getPaySubType()))){
+            return fail("支付子类型必须为00刷卡01微信支付02支付宝支付等等");
+        }
+        //tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
+        //tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
+        if(Strings.isNullOrEmpty(TradeStateEnum.getNameByCode(tradeData.getRespCode()))){
+            return fail("回应状态必须为1001成功1002失败1000进行中");
+        }
+        //tradeData.setRespCode(ServiceConstant.TradeStateEnum.SUCCESS.getCode());
+        //tradeData.setPayMedium(BigdataConstant.PayMediumEnum.FIX_QR.getCode());
+        if(Strings.isNullOrEmpty(PayMediumEnum.getNameByCode(tradeData.getPayMedium()))){
+            return fail("支付媒介00pos机01app02台码");
+        }
+        if (Strings.isNullOrEmpty(DataSourceEnum.getNameByCode(tradeData.getSource()))){
+            return fail("数据来源必须为00拉卡拉01导入02同步");
+        }
+        if (Strings.isNullOrEmpty(ChannelTypeEnum.getNameByCode(tradeData.getChannelType()))){
+            return fail("渠道类型必须为00拉卡拉01浦发02爱农03法奈昇");
+        }
+        //tradeData.setChannelType(BigdataConstant.ChannelTypeEnum.LKL.getCode());
+        tradeData.setChannelTermCode(tradeData.getTermId());
+        tradeDataService.saveTradeData(tradeData);
+        String timeStamp = tradeData.getTimeStamp();
+        syncReport(timeStamp);
+        return success();
+    }
+
+    private void syncReport(String timeStamp) {
+        try {
+            if (Strings.isNullOrEmpty(timeStamp)) {
+                return;
+            }
             if (timeStamp.length() >= 8) {
                 timeStamp = timeStamp.substring(0, 8);
             }
             SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
             String timeStampEnd = "";
             try {
-                timeStampEnd = DateUtils.getDateStrYYYYMMDD(sf.parse(timeStamp),1);
+                timeStampEnd = DateUtils.getDateStrYYYYMMDD(sf.parse(timeStamp), 1);
             } catch (ParseException e) {
-                logger.error("插入交易流水同步报表数据出错",e);
+                logger.error("插入交易流水同步报表数据出错", e);
             }
             String nowDateStr = DateUtils.getDateStrYYYYMMDD(new Date());
             if (!nowDateStr.equals(timeStamp)) {
-                logger.error("不是当天的数据则重新生成日报"+timeStamp);
+                logger.error("不是当天的数据则重新生成日报" + timeStamp);
                 tradeReportService.buildTradeReportDaTa(timeStamp + "000000", timeStampEnd + "000000");
             }
+        } catch (Exception e) {
+            logger.error("插入交易流水同步报表数据出错", e);
         }
-        return success();
     }
 
 }

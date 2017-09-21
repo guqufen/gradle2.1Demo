@@ -42,7 +42,7 @@ $(function() {
 
 	//ajax请求修改的数据<id=2>
 	$.ajax({
-		url : PROJECT_NAME + 'report/getById',
+		url : PROJECT_NAME + '/report/getById',
 		type : 'get',
 		data : {
 			'id' : merchantId
@@ -70,7 +70,6 @@ $(function() {
 				$('select[id="size"]').find("option[value=" + dd.size + "]").attr("selected", true);// 规模
 
 				$('select[id="reportCycle"]').find("option[value=" + dd.reportCycle + "]").attr("selected", true);// 报告周期
-
 
 				$('#riskWarning').val(dd.riskWarning);// 风险
 
@@ -359,7 +358,7 @@ function importEvent() {
 $(function() {
 	//0.初始化fileinput
 	var oFileInput = new FileInput();
-	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + 'report/doImport?id='+merchantId);
+	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + '/report/doImport?id='+merchantId);
 });
 //初始化fileinput
 var FileInput = function() {

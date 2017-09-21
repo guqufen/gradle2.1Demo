@@ -165,18 +165,6 @@ public class OssLoaclUtil {
         logger.info("Completed");
     }
     
-    public static void main(String[] args) {
-//        OssUtil.setEndpoint("http://oss-cn-hangzhou.aliyuncs.com");
-//        OssUtil.setAccessKeyId("LTAI8t0z2dOlvLr6");
-//        OssUtil.setAccessKeySecret("0jB12XLFoEM4UEauiN8ohp7dXSbE40");
-//        OssUtil.setHeadBucketName("bigdata-fns-test");
-//        initOssClient();
-////        uploadFile("D:\\temp\\2017\\7\\1499145304175.jpg", "2017/1499145304175.jpg");
-//        String url = getFileUrl(getHeadBucketName(),"2017/1499145304175.jpg");
-//        String url = "http://bigdata-fns.oss-cn-hangzhou-internal.aliyuncs.com/2017/7/14993093838…SAccessKeyId=LTAI8t0z2dOlvLr6&Signature=3BJpI5ffB%2BZ1nrL%2BwS2oCLLZPDA%3D";
-//        StringUtils.substringBetween(url, "ads");
-//        System.out.println(url.replaceAll("-internal", ""));
-    }
     public static void demo(String bucketName, String firstKey) {
         OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
 

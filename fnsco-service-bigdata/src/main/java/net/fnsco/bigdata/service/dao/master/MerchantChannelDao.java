@@ -70,4 +70,6 @@ public interface MerchantChannelDao {
      * @return int    DOM对象
      */
     int countCanCreateTaiCode(@Param("merId") Integer merId);
+    
+    int countCanCreateTai(@Param("innerCode") String  innerCode);
 }

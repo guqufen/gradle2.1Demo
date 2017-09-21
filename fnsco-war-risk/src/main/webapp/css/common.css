@@ -1,0 +1,202 @@
+* {margin: 0;padding: 0}em,i {font-style: normal}
+li {list-style: none}
+img {border: 0;vertical-align: middle}
+button {cursor: pointer}
+a{color: #666;text-decoration: none}
+a:hover {color: #fff}
+/**/
+body{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	font: 14px/1.5 微软雅黑, Tahoma, "Microsoft Yahei", Simsun;
+}
+.content {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background-color: #ededed;
+}
+
+/*leftBox*/
+.leftNavBar{
+	position: fixed;
+	overflow-x: hidden; 
+	overflow-y: auto;
+	left: 0;
+	top: 0;
+	width: 220px;
+	height: 100%;
+	background-color: #2f4050;
+	z-index: 1;
+	font-size: 14px;
+}
+/*滚动条样式*/
+.leftNavBar::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 8px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 8px;
+}
+.leftNavBar::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.2);
+}
+.leftNavBar::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    border-radius: 0;
+    background: #fff;
+}
+.headerIcon{
+	width: 100%;
+	height: 190px;
+	background-color: #1a2d40;
+	text-align: center;
+}
+.headerImg{
+	width: 90px;
+	height: 90px;
+	margin-top: 30px;
+	border-radius: 50%;
+}
+.headNav{
+	position: relative;
+	color: #fff;
+	font-size:16px;
+	margin-top: 15px;
+	cursor: pointer;
+}
+.triangle-down{
+	width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 8px solid #FFF;
+    display: inline-block;
+    margin-left: 10px;
+}
+.triangle-up{
+	position: absolute;
+	width: 0;
+    height: 0;
+    left: 50%;
+    margin-left: -5px;
+    right: 0;
+    top: -10px;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 10px solid #fff;
+}
+.headNav-list{
+	position: absolute;
+	width: 100px;
+	left: 50%;
+	margin-left: -60px;
+	top: 55px;
+	background: #fff;
+	color: #1a2d40;
+	padding: 10px;
+	display: none;
+}
+.headNav-list a{
+	display: block;
+	height: 40px;
+	line-height: 40px;
+	margin-bottom: 5px;
+	/*padding: 10px 0;*/
+}
+.headNav-list a li{
+	text-align: center;
+}
+.headNav-list a:hover{
+	color: #fff;
+	background-color: #1a2d40;
+}
+.nav{
+
+}
+
+.nav li{
+
+}
+.nav li>a {
+    display: block;
+}
+.nav>li>a {
+    color: #a7b1c2;
+    font-weight: 600;
+    padding: 18px 20px 18px 25px;
+}
+.nav>li>a:hover{
+	color: #fff;
+	background-color: #2a3b4c;
+}
+.nav>li>a>span{
+	height: 24px;
+	line-height: 24px;
+	font-size: 16px;
+	display: inline-block;
+}
+.nav>li>a>i{
+	float: left;
+	width: 24px;
+	height: 24px;
+	margin-right: 10px;
+	display: inline-block;
+}
+.nav>li>a>i.fk{
+	background: url(../img/fk-icon.png) no-repeat center;
+}
+
+/*rightBox*/
+.rightBox{
+	position: absolute;
+	height: 100%;
+	top: 0;
+	left: 220px;
+	background-color: #ededed;
+	z-index: 0;
+}
+/*搜索部分*/
+.searchBox{
+	/*width: 100%;*/
+	padding: 30px 0;
+	/*height: 120px;*/
+	background: #fff;
+}
+.searchBtn{
+	background-color: #4d5f84;
+	color: #fff;
+	border:none;
+	font-size: 16px;
+	padding: 11px 50px;
+	margin: 0 20px;
+	font: 14px 微软雅黑, Tahoma, "Microsoft Yahei", Simsun;
+}
+/**/
+.rightContent{
+	position: relative;
+	margin: 30px;
+	background: #fff;
+	overflow: hidden;
+}
+.contentTable{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	overflow:auto; 
+}
+/*滚动条样式*/
+.contentTable::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 8px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 8px;
+}
+.contentTable::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.2);
+}
+.contentTable::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    border-radius: 0;
+    background: #fff;
+}

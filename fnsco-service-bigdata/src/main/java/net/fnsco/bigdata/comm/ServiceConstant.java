@@ -150,7 +150,7 @@ public class ServiceConstant {
     }
 
     public static enum TradeStateEnum {
-                                       SUCCESS("1001", "成功"), FAIL("1002", "失败");
+                                       SUCCESS("1001", "成功"), FAIL("1002", "失败"), ING("1000", "进行中");
         private String code;
         private String name;
 

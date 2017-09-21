@@ -45,6 +45,30 @@ public class AppUserDTO extends DTO {
     private Integer sex;//性别
     private String headImagePath;//头像
     
+    private String snCode;//sn码
+    
+    /**
+     * snCode
+     *
+     * @return  the snCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getSnCode() {
+        return snCode;
+    }
+
+    /**
+     * snCode
+     *
+     * @param   snCode    the snCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setSnCode(String snCode) {
+        this.snCode = snCode;
+    }
+
     /**
      * headImagePath
      *

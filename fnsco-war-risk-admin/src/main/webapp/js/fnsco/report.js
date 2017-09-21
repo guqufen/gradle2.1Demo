@@ -11,21 +11,37 @@ var customerType = function load_val2() {
 		success : function(data) {
 			console.log(data)
 			result = data.data.type;
+
+			$('#status').empty();
+			$('#status').append('<option value="">全部</option>');
+			if (result == 1) {
+//				$(".auditor").css("display", "none");
+				$('#status').append('<option value="0" class="admin">待审核</option>');
+			} else {
+//				$(".admin").css("display", "none");
+				$('#status').append('<option value="2" class="auditor">审核失败</option>');
+				$('#status').append('<option value="3" class="auditor">待编辑</option>');
+			}
 		}
 	});
 	return result;
 }
+/**
 //var customerType = load_val2();
+//审核人员
 if (customerType == 1) {
-	$(".auditor").css("display", "none");
+//	$(".auditor").css("display", "none");
+	$('#status').append('<option value="0" class="admin">待审核</option>');
 } else {
-	$(".admin").css("display", "none");
-}
+//	$(".admin").css("display", "none");
+	$('#status').append('<option value="2" class="auditor">审核失败</option>');
+	$('#status').append('<option value="3" class="auditor">待编辑</option>');
+}**/
 //初始化表格
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url : PROJECT_NAME + 'report/query',
+	url : PROJECT_NAME + '/report/query',
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	// toolbar: '#toolbar', //工具按钮用哪个容器
