@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>风控+报告</title>
+	<link rel="stylesheet" type="text/css" href="css/common.css">
+	<style type="text/css">
+		body{
+			background-color: #fbfbfb;
+		}
+		.report-title{
+			padding-bottom:50px; 
+			text-align: center;
+		}
+		.report{
+			margin: 30px auto;
+			width: 900px;
+		    background-color: #fff;
+		    padding: 50px;
+			border:1px solid #ccc;
+			border-radius: 20px;
+		}
+		.report h3{
+		}
+		.report-infos{
+			margin: 20px 0;
+			color: #666;
+		}
+		.report-info{
+			display: inline-block;
+		    width: 447px;
+			margin: 5px 0;
+			font-weight: bold;
+			text-indent: 20px;
+		}
+		.report-info span{
+			font-weight: normal;
+		}
+		.report-infos p{
+			text-indent: 20px;
+			margin: 5px 0;
+		} 
+		#trend-chart{
+			width: 900px;
+			height: 600px;
+		}
+		.
+	</style>
+</head>
+<body>
+	<div class="report">
+		<h1 class="report-title">杭州伊氏眼镜有限公司风控+报告</h1>
+		<h3><基础信息></h3>
+		<div class="report-infos">
+			<div class="report-info">
+				商户名：
+				<span>杭州伊氏眼镜有限公司</span>
+			</div>
+			<div class="report-info">
+				营业执照编号：
+				<span>91330104MA27WJ1Q24</span>
+			</div>
+			<div class="report-info">
+				经营地址：
+				<span>杭州市江干区新风路619号汇和城1楼1023号</span>
+			</div>
+			<div class="report-info">
+				经营期限：
+				<span>1年</span>
+			</div>
+		</div>
+		<h3><经营分析></h3>
+		<div class="report-infos">
+			<div class="report-info">
+				行业类别：
+				<span>眼镜零售（生活精品类）</span>
+			</div>
+			<div class="report-info">
+				商圈评级：
+				<span>B级（钱江新城商圈）</span>
+			</div>
+			<div class="report-info">
+				经营规模：
+				<span>小（单店）</span>
+			</div>
+			<div class="report-info">
+				装修等级：
+				<span>普通</span>
+			</div>
+		</div>
+		<h3><还款能力评估趋势图></h3>
+		<!-- 折线图 -->
+		<div id="trend-chart"></div>
+		<h3>风险提醒：</h3>
+		<div class="report-infos">
+			<p>1、商家营业额低于同期行业水平。</p>
+			<p>2、商家盈利能力弱于同类门店。</p>
+			<p>3、经营规模在行业内属初级规模。</p>
+			<p>4、未来半年盈利增长趋势预测为不稳定的小幅下滑。</p>
+		</div>
+		<h3>风控建议：</h3>
+		<div class="report-infos">
+			<p>1、额度：月还款额不超过2500元。</p>
+			<p>2、利率：+（可适当提高利率）。</p>
+			<p>3、周期：不超过6个月。</p>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="js/jquery.min.js"> </script>
+<script type="text/javascript" src="js/echarts.common.min.js"> </script>
+<script type="text/javascript" src="js/businessTrend.js"> </script>
+</html>
