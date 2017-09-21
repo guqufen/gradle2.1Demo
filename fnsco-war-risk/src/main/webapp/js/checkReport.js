@@ -67,13 +67,11 @@ $(function(){
 			console.log(data);
 			/*获取生成图表的参数*/
 			var json=data.data;
-			console.log(json.length)
 			for(var i=0;i<json.length;i++){
 				dateList.push(json[i].date);
 				dataList.push(json[i].turnover);
 			}
 			chart(dateList,dataList)
-			console.log(dateList,dataList);
 		}
 	});
 })
