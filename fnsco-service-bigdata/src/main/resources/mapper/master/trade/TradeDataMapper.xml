@@ -532,9 +532,8 @@
         ]]>
       </if>
       <if test="condition.innerCodeList != null">
-			AND term_id in ( select terminal_code from m_merchant_terminal where inner_code IN 
+			AND inner_code in 
 			<foreach collection="condition.innerCodeList" item="innerCode" open="(" separator="," close=")">#{innerCode}</foreach>
-	 		)
 	 		
 	  </if>
 	  <if test="condition.paySubTypes != null" >
@@ -725,9 +724,8 @@
         ]]>
       </if>
       <if test="innerCodeList != null">
-			AND term_id in ( select terminal_code from m_merchant_terminal where inner_code IN 
+			AND inner_code in 
 			<foreach collection="innerCodeList" item="innerCode" open="(" separator="," close=")">#{innerCode}</foreach>
-	 		)
 	 </if>
 	 <if test="paySubTypes != null" >
         AND pay_sub_type in 

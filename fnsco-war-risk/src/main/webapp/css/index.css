@@ -12,6 +12,7 @@
 	height: 41px;
 	text-align: center;
 	line-height: 40px;
+	margin: 0;
 }
 .inputDiv input{
 	border: none;

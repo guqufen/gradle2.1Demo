@@ -2,6 +2,7 @@ package net.fnsco.web.controller.pay;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -131,7 +132,7 @@ public class FixedQrPayForPfAction extends BaseController {
         }
         tradeDataDTO.setSource(BigdataConstant.SourceEnum.PF.getCode());
         tradeDataDTO.setOrderNo(dto.getCHARGE_CODE());
-        tradeDataDTO.setTermId(dto.getDEV_ID());
+        //tradeDataDTO.setTermId(dto.getDEV_ID());
         String txnTime = dto.getBEGIN_TIME();
         txnTime = txnTime.replaceAll(" ", "");
         txnTime = txnTime.replaceAll("-", "");
@@ -157,8 +158,21 @@ public class FixedQrPayForPfAction extends BaseController {
         sendMsg(amt,innerCode);
         return ResultDTO.success();
     }
-    private void sendMsg(String tempAmt, String innerCode) {
-        appPushService.sendFixQRMsg(innerCode, "浙付通到账" + tempAmt + "元");
+    private void sendMsg(String strAmt, String innerCode) {
+        String tempAmt = "";
+        if(strAmt.length()==1){
+            tempAmt = "0.0"+strAmt;
+        }else if (strAmt.length()==2){
+            tempAmt = "0."+strAmt;
+        }else if (strAmt.length()>2){
+            String temp = strAmt.substring(strAmt.length()-2, strAmt.length());
+            if(temp.equals("00")){
+                tempAmt = strAmt.substring(0, strAmt.length()-2);
+            }else{
+                tempAmt = strAmt.substring(0, strAmt.length()-2)+"."+temp;
+            }
+        }
+        appPushService.sendFixQRMsg(innerCode, "数钱吧到账" + tempAmt + "元");
     }
 
     //商户台码生成
