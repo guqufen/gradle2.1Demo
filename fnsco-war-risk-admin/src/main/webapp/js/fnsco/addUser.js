@@ -76,6 +76,11 @@ function queryParams(params) {
 function queryEvent(id) {
 	$('#' + id).bootstrapTable('refresh');
 }
+//重置按钮事件
+function resetEvent(form, id) {
+	$('#' + form)[0].reset();
+	$('#' + id).bootstrapTable('refresh');
+}
 // 处理后台返回数据
 function responseHandler(res) {
 	unloginHandler(res);
@@ -326,7 +331,6 @@ function queryEdit(id) {
 		success : function(data) {
 			unloginHandler(data);
 			// data.data就是所有数据集
-			console.log(data.data);
 			// 基本信息
 			$('input[name="id"]').val(id);
 			$('input[name="oldname"]').val(data.data.name);
