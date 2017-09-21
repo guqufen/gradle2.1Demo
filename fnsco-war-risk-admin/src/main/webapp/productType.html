@@ -177,7 +177,7 @@
 		//改变风控状态
 		function reportStatus(id,status) {
 			$.ajax({
-				url : PROJECT_NAME + 'admin/report/updateReportStatus',
+				url : PROJECT_NAME + '/report/updateReport',
 				type : 'POST',
 				dataType : "json",
 				data : {
