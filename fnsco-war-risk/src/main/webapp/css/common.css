@@ -97,6 +97,7 @@ body{
 	color: #1a2d40;
 	padding: 10px;
 	display: none;
+	z-index: 10;
 }
 .headNav-list a{
 	display: block;
@@ -207,6 +208,7 @@ body{
 	height: 100%;
 	background:rgba(0,0,0,0.4);
 	z-index: 9;
+	top: 0;
 	display: none;
 }
 .changePassword{
@@ -238,13 +240,13 @@ body{
 }
 .input{
 	width: 320px;
-	height: 40px;
+	height: 50px;
 	margin: 20px auto;
 	position:relative;
 }
 .input input{
 	position: absolute;
-	width: 255px;
+	width: 100%;
 	height: 100%;
 	padding: 0;
 	padding-left: 65px;
@@ -258,7 +260,7 @@ body{
 .input .icon{
 	z-index: 2;
 	position: absolute;
-	height: 100%;
+	height: 48px;
 	width: 50px;
 	left: 1px;
 	top: 1px;
@@ -268,7 +270,7 @@ body{
 }
 .input .icon img{
 	height: 20px;
-	margin: 10px 0 10px 15px ;
+	margin: 15px 0 10px 15px ;
 }
 .changeBtn{
     width: 100px;
