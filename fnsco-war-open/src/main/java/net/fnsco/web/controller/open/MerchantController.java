@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.bigdata.api.dto.MerchantSynchronizationDO;
+import net.fnsco.bigdata.api.dto.MerchantSynchronizationDTO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
@@ -130,14 +130,14 @@ public class MerchantController extends BaseController {
         logger.info("收到商户数据:"+datas);
         
         JSONArray jsonArray = JSONArray.fromObject(datas);
-        List<MerchantSynchronizationDO> params = Lists.newArrayList();
+        List<MerchantSynchronizationDTO> params = Lists.newArrayList();
         for (Object obj : jsonArray) {
             JSONObject jsonObject = JSONObject.fromObject(obj);
-            MerchantSynchronizationDO merdo =  (MerchantSynchronizationDO) JSONObject.toBean(jsonObject, MerchantSynchronizationDO.class);
+            MerchantSynchronizationDTO merdo =  (MerchantSynchronizationDTO) JSONObject.toBean(jsonObject, MerchantSynchronizationDTO.class);
             params.add(merdo);
         }
         
-        List<Object[]> customerList = MerchantSynchronizationDO.installListDatas(params);
+        List<Object[]> customerList = MerchantSynchronizationDTO.installListDatas(params);
         
         try {
             ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(customerList, 1);
