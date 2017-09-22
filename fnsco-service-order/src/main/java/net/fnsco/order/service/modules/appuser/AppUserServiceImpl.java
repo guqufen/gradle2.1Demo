@@ -136,6 +136,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         int merchantNums = 0;
         int Shopkeeper = 2;
         List<QueryBandDTO> list = appUserDao.selectInnercode(appUserDTO.getMobile());
+        logger.error("注册sncode："+appUserDTO.getSnCode());
         if (!CollectionUtils.isEmpty(list)) {
             Shopkeeper = 1;
             merchantNums = list.size();
@@ -144,6 +145,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             }
             //拉卡拉机器注册用到以下功能
         } else if (!Strings.isNullOrEmpty(appUserDTO.getSnCode())) {
+            logger.error("sncode注册");
             String snCode = appUserDTO.getSnCode();
             List<MerchantPos> posList = merchantPosService.selectBySnCode(snCode);
             Map<String, String> innerCodeMap = Maps.newHashMap();
