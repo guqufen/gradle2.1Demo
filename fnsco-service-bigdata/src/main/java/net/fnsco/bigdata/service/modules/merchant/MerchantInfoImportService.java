@@ -17,8 +17,11 @@ import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
+import net.fnsco.bigdata.service.dao.master.MerchantBankDao;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
+import net.fnsco.bigdata.service.dao.master.MerchantContactDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
+import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
@@ -46,6 +49,12 @@ public class MerchantInfoImportService extends BaseService {
     private MerchantChannelDao  merchantChannelDao;
     @Autowired
     private MerchantFileDao     merchantFileDao;
+    @Autowired
+    private MerchantContactDao  merchantContactDao;
+    @Autowired
+    private MerchantBankDao     merchantBankDao;
+    @Autowired
+    private MerchantTerminalDao merchantTerminalDao;
     @Autowired
     private Environment         env;
     
@@ -164,58 +173,49 @@ public class MerchantInfoImportService extends BaseService {
                 /**
                  * 商户基本信息
                  */
-                if (merchantcore == null) {
-                    innerCode = merchantCoreService.getInnerCode();
-                    MerchantCore merchantCore = MerchantImportHelper.createMerchantCore(null,innerCode, mername, businesslicensenum, cardnum, legalperson, channelMerchant, legalpersonmobile,
-                        cardvalidtimeStr, businesslicensevalidtimeStr, registaddress, mercflag, taxRegistCode, createTime);
-
-                    try {
-                        merchantCoreService.doAddMerCore(merchantCore);
-                    } catch (Exception e) {
-                        logger.error("第" + timeNum + "行数据的基本数据信息有误，导入失败" + e);
-                        return ResultDTO.fail("第" + timeNum + "行数据的基本数据信息有误，导入失败");
-                    }
-
-                    /**
-                     * 商户联系人信息
-                     */
-                    List<MerchantContact> contcactList = MerchantImportHelper.createMerchantContact(innerCode, contactname, contactmobile, contactemail, financeLinkMan, financeLinkManTel,
-                        financeLinkManEmail, merPrincipal, merPrincipalTel, merPrincipalEmail);
-                    try {
-                        merchantCoreService.doAddMerContact(contcactList);
-                    } catch (Exception e) {
-                        return ResultDTO.fail("第" + timeNum + "行数据的商户联系人信息有误，导入失败");
-                    }
-                    /**
-                     * 商户银行卡信息
-                     */
-                    MerchantBank merchantBank = MerchantImportHelper.createMerchantBank(innerCode, accountname, accountno, accounttype, accountcardid, subbankname, openBankNum);
-                    try {
-                        bankId = merchantCoreService.doAddBanks(merchantBank);
-                    } catch (Exception e) {
-                        return ResultDTO.fail("第" + timeNum + "行数据的银行卡信息有误，导入失败");
-                    }
-
-                    //文件处理
-                    saveFileToDB(fileInfos, innerCode);
-
-                } else {
-                    
-                    //更新操作
+                Integer merId = null;
+                if(null != merchantcore){
+                    merId = merchantcore.getId();
                     innerCode = merchantcore.getInnerCode();
-                    MerchantCore merchantCore = MerchantImportHelper.createMerchantCore(merchantcore.getId(),innerCode, mername, businesslicensenum, cardnum, legalperson, channelMerchant, legalpersonmobile,
-                        cardvalidtimeStr, businesslicensevalidtimeStr, registaddress, mercflag, taxRegistCode, createTime);
+                    merchantContactDao.deleteByInnerCode(innerCode);
+                    merchantBankDao.deleteByInnerCode(innerCode);
+                }else{
+                    innerCode = merchantCoreService.getInnerCode();
+                }
+                
+                MerchantCore merchantCore = MerchantImportHelper.createMerchantCore(merId,innerCode, mername, businesslicensenum, cardnum, legalperson, channelMerchant, legalpersonmobile,
+                    cardvalidtimeStr, businesslicensevalidtimeStr, registaddress, mercflag, taxRegistCode, createTime);
 
-                    try {
-                        merchantCoreService.doAddMerCore(merchantCore);
-                    } catch (Exception e) {
-                        logger.error("第" + timeNum + "行数据的基本数据信息有误，导入失败" + e);
-                        return ResultDTO.fail("第" + timeNum + "行数据的基本数据信息有误，导入失败");
-                    }
-                    
-                    
+                try {
+                    merchantCoreService.doAddMerCore(merchantCore);
+                } catch (Exception e) {
+                    logger.error("第" + timeNum + "行数据的基本数据信息有误，导入失败" + e);
+                    return ResultDTO.fail("第" + timeNum + "行数据的基本数据信息有误，导入失败");
                 }
 
+                /**
+                 * 商户联系人信息
+                 */
+                List<MerchantContact> contcactList = MerchantImportHelper.createMerchantContact(innerCode, contactname, contactmobile, contactemail, financeLinkMan, financeLinkManTel,
+                    financeLinkManEmail, merPrincipal, merPrincipalTel, merPrincipalEmail);
+                try {
+                    merchantCoreService.doAddMerContact(contcactList);
+                } catch (Exception e) {
+                    return ResultDTO.fail("第" + timeNum + "行数据的商户联系人信息有误，导入失败");
+                }
+                /**
+                 * 商户银行卡信息
+                 */
+                MerchantBank merchantBank = MerchantImportHelper.createMerchantBank(innerCode, accountname, accountno, accounttype, accountcardid, subbankname, openBankNum);
+                try {
+                    bankId = merchantCoreService.doAddBanks(merchantBank);
+                } catch (Exception e) {
+                    return ResultDTO.fail("第" + timeNum + "行数据的银行卡信息有误，导入失败");
+                }
+
+                //文件处理
+                saveFileToDB(fileInfos, innerCode);
+             
                 /**
                  * 渠道信息--根据innerCode+merchantCode+channelType判断唯一性，如果存在，则获取ID ，否则新增加
                  */
@@ -262,13 +262,23 @@ public class MerchantInfoImportService extends BaseService {
                 /**
                  * 商戶pos机信息
                  */
-                MerchantPos merchantPos = MerchantImportHelper.createMerchantPos(innerCode, mercrefername, posType, posFactory, sncode, posaddr, bankId, channelId);
+                
+                MerchantPos posInfo = merchantPosService.selectBySnCodeAndInnerCode(sncode, innerCode);
                 Integer posId = null;
-                try {
-                    // pos机信息保存
-                    posId = merchantPosService.insertPos(merchantPos);
-                } catch (Exception e) {
-                    return ResultDTO.fail("第" + timeNum + "行数据的Pos机信息有误，导入失败");
+                if(null != posInfo){
+                    posId = posInfo.getId();
+                }
+                MerchantPos merchantPos = MerchantImportHelper.createMerchantPos(posId,innerCode, mercrefername, posType, posFactory, sncode, posaddr, bankId, channelId);
+                
+                if(null == posInfo){
+                    try {
+                        // pos机信息保存
+                        posId = merchantPosService.insertPos(merchantPos);
+                    } catch (Exception e) {
+                        return ResultDTO.fail("第" + timeNum + "行数据的Pos机信息有误，导入失败");
+                    }
+                }else{
+                    merchantPosService.updateByPrimaryKeySelective(merchantPos);
                 }
 
                 /**
@@ -290,8 +300,13 @@ public class MerchantInfoImportService extends BaseService {
                 } catch (Exception e) {
                     return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
                 }
-
-                MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(innerCode, debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee,
+                
+                MerchantTerminal merchantTerminal = merchantTerminalDao.selectByTerminalType(posId, innerCode, "00");
+                Integer terId = null;
+                if(null != merchantTerminal){
+                    terId = merchantTerminal.getId();
+                }
+                MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(terId,innerCode, debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee,
                     creditCardMaxFee, posId, innerTermCode, terminalCode, alipayFee, wechatFee,"00","刷卡");
                 // 把1个终端信息打包成List
                 List<MerchantTerminal> terminalList = new ArrayList<MerchantTerminal>();
@@ -341,9 +356,6 @@ public class MerchantInfoImportService extends BaseService {
             record.setFileType(fileType);
             record.setInnerCode(innerCode);
             List<MerchantFile> datas = merchantFileDao.queryByCondition(record);
-            if(CollectionUtils.isNotEmpty(datas)){
-                continue;
-            }
             /**
              * 此处需要先下载，再上传OSS，再获取图片路径和名称
              */
@@ -352,6 +364,9 @@ public class MerchantInfoImportService extends BaseService {
                 continue;
             }
             MerchantFile merchantFile = MerchantImportHelper.createMerchantFile(innerCode, filePath, fileType, urlPath);
+            if(CollectionUtils.isNotEmpty(datas)){
+                merchantFileDao.deleteByInnerCodeAndFileType(innerCode, fileType);
+            }
             merchantFileDao.insertSelective(merchantFile);
         }
     }
@@ -440,7 +455,7 @@ public class MerchantInfoImportService extends BaseService {
             /**
              * 商戶pos机信息
              */
-            MerchantPos merchantPos = MerchantImportHelper.createMerchantPos(innerCode, mercrefername, posType, posFactory, sncode, posaddr, bankId, pufaChannelId);
+            MerchantPos merchantPos = MerchantImportHelper.createMerchantPos(null,innerCode, mercrefername, posType, posFactory, sncode, posaddr, bankId, pufaChannelId);
             Integer posId = null;
             try {
                 // pos机信息保存

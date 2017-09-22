@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.common.collect.Lists;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.bigdata.api.dto.MerchantSynchronizationDO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
@@ -19,6 +23,8 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.web.controller.open.jo.MerchantJO;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @RestController
 @RequestMapping(value = "/open/merchant", method = RequestMethod.POST)
@@ -119,10 +125,22 @@ public class MerchantController extends BaseController {
      */
     @RequestMapping(value = "/importData")
     @ApiOperation(value = "导入商户所有数据")
-    public ResultDTO importData(List<Object[]> datas) {
+    public ResultDTO importData(String datas) {
+        
+        logger.info("收到商户数据:"+datas);
+        
+        JSONArray jsonArray = JSONArray.fromObject(datas);
+        List<MerchantSynchronizationDO> params = Lists.newArrayList();
+        for (Object obj : jsonArray) {
+            JSONObject jsonObject = JSONObject.fromObject(obj);
+            MerchantSynchronizationDO merdo =  (MerchantSynchronizationDO) JSONObject.toBean(jsonObject, MerchantSynchronizationDO.class);
+            params.add(merdo);
+        }
+        
+        List<Object[]> customerList = MerchantSynchronizationDO.installListDatas(params);
         
         try {
-            ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(datas, 1);
+            ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(customerList, 1);
             logger.info("同步商户数据结果"+result);
             return result;
         } catch (ParseException e) {
