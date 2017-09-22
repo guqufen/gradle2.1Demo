@@ -143,7 +143,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 insertRel(li.getInnerCode(), appUser, ConstantEnum.AuthorTypeEnum.SHOPOWNER.getCode());
             }
             //拉卡拉机器注册用到以下功能
-        } else if (Strings.isNullOrEmpty(appUserDTO.getSnCode())) {
+        } else if (!Strings.isNullOrEmpty(appUserDTO.getSnCode())) {
             String snCode = appUserDTO.getSnCode();
             List<MerchantPos> posList = merchantPosService.selectBySnCode(snCode);
             Map<String, String> innerCodeMap = Maps.newHashMap();

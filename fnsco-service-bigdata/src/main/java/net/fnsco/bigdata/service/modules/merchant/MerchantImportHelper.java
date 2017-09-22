@@ -35,9 +35,10 @@ public class MerchantImportHelper {
      * @date      2017年9月14日 下午4:37:06
      * @return MerchantCore    DOM对象
      */
-    public static MerchantCore createMerchantCore(String innerCode,String mername,String businesslicensenum,String cardnum,String legalperson,String channelMerchant,String legalpersonmobile,
+    public static MerchantCore createMerchantCore(Integer id,String innerCode,String mername,String businesslicensenum,String cardnum,String legalperson,String channelMerchant,String legalpersonmobile,
                                                   String cardvalidtimeStr,String businesslicensevalidtimeStr,String registaddress,String mercflag,String taxRegistCode,String createTime) throws ParseException{
         MerchantCore merchantCore = new MerchantCore();
+        merchantCore.setId(id);
         merchantCore.setInnerCode(innerCode);
         merchantCore.setMerName(mername);
         merchantCore.setBusinessLicenseNum(businesslicensenum);
