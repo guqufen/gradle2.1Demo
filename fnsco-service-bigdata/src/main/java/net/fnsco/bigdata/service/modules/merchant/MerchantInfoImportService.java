@@ -262,7 +262,6 @@ public class MerchantInfoImportService extends BaseService {
                 /**
                  * 商戶pos机信息
                  */
-                
                 MerchantPos posInfo = merchantPosService.selectBySnCodeAndInnerCode(sncode, innerCode);
                 Integer posId = null;
                 if(null != posInfo){
@@ -489,7 +488,7 @@ public class MerchantInfoImportService extends BaseService {
                 termName = "刷卡";
             }
             
-            MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(innerCode, debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee,
+            MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(null,innerCode, debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee,
                 creditCardMaxFee, posId, innerTermCode, terminalCode, alipayFee, wechatFee,terminalType,termName);
             // 把1个终端信息打包成List
             List<MerchantTerminal> terminalList = new ArrayList<MerchantTerminal>();
