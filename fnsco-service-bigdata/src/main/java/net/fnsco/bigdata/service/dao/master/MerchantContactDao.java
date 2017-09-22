@@ -22,6 +22,16 @@ public interface MerchantContactDao {
     int updateByPrimaryKey(MerchantContact record);
     
     int deleteByPrimaryKey(Integer id);
+    
+    /**
+     * deleteByInnerCode:(根据innerCode删除数据)
+     * @param innerCode
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月22日 上午10:51:08
+     * @return int    DOM对象
+     */
+    int deleteByInnerCode(@Param("innerCode") String innerCode);
     /**
      * deleteByMerCoreIds:(这里用一句话描述这个方法的作用) 根据core实体IDS删除关联数据
      *

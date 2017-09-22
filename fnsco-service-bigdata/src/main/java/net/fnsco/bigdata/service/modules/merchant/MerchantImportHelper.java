@@ -146,9 +146,10 @@ public class MerchantImportHelper {
      * @date      2017年9月14日 下午4:50:21
      * @return MerchantPos    DOM对象
      */
-    public static MerchantPos createMerchantPos(String innerCode,String mercrefername,String posType,String posFactory,String sncode,String posaddr,Integer bankId,Integer channelId){
+    public static MerchantPos createMerchantPos(Integer id,String innerCode,String mercrefername,String posType,String posFactory,String sncode,String posaddr,Integer bankId,Integer channelId){
      // 创建一个商户pos信息实体类对象接收商户pos信息
         MerchantPos merchantPos = new MerchantPos();
+        merchantPos.setId(id);
         merchantPos.setInnerCode(innerCode);
         merchantPos.setMercReferName(mercrefername);
         merchantPos.setPosType(posType);
@@ -171,10 +172,11 @@ public class MerchantImportHelper {
      * @date      2017年9月14日 下午4:53:37
      * @return MerchantTerminal    DOM对象
      */
-    public static MerchantTerminal createMerchantTerminal(String innerCode,String debitCardRate,String debitCardMaxFee,String debitCardFee,String creditCardRate,String creditCardFee,String creditCardMaxFee,
+    public static MerchantTerminal createMerchantTerminal(Integer id,String innerCode,String debitCardRate,String debitCardMaxFee,String debitCardFee,String creditCardRate,String creditCardFee,String creditCardMaxFee,
                                                           Integer posId,String innerTermCode,String terminalCode,String alipayFee,String wechatFee,String terminalType,String termName){
         MerchantTerminal merchantTerminal1 = new MerchantTerminal();
         merchantTerminal1.setInnerCode(innerCode);
+        merchantTerminal1.setId(id);
         
         merchantTerminal1.setDebitCardRate(debitCardRate);
         if(!Strings.isNullOrEmpty(debitCardMaxFee)){
