@@ -144,4 +144,8 @@
 	     </foreach>
 		)
 	</delete>
+	<!-- 根据innerCode和fileType删除数据 -->
+	<delete id="deleteByInnerCodeAndFileType" parameterType="java.lang.String">
+	  DELETE FROM m_merchant_file WHERE inner_code = #{innerCode} and file_type = #{fileType,jdbcType=VARCHAR}
+	</delete>
 </mapper>
