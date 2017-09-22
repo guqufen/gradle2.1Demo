@@ -1,5 +1,7 @@
 package net.fnsco.risk.web.sys;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.risk.service.sys.WebUserOuterService;
+import net.fnsco.risk.service.sys.entity.AgentDO;
 import net.fnsco.risk.service.sys.entity.WebUserDO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 
@@ -125,5 +128,16 @@ public class AddUserController extends BaseController {
 				Integer rows = userOuterService.doStart(id[i]);
 			}
 			return ResultDTO.success();
+		}
+		/**
+		 * 查询所有类型
+		 * @return
+		 */
+		@RequestMapping(value="/queryType",method=RequestMethod.POST)
+		@ResponseBody
+		@Transactional
+		public ResultDTO<List<AgentDO>> queryType(){
+			ResultDTO<List<AgentDO>> list = userOuterService.queryType();
+			return list;
 		}
 }
