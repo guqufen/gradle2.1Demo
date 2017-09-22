@@ -17,7 +17,7 @@ public class CodeGen {
         //auto.init("net.fnsco.auth", "sys", "sys_menu");
         //auto.init("net.fnsco.risk", "report", "risk_report_info");
         //auto.init("net.fnsco.risk", "report", "risk_report_repayment_history");
-        auto.init("net.fnsco.risk", "sys", "sys_config");
-        auto.init("net.fnsco.risk", "report", "risk_user_merc_rel");
+        //auto.init("net.fnsco.risk", "sys", "sys_config");
+        auto.init("net.fnsco.risk", "trade", "t_trade_data");
     }
 }
