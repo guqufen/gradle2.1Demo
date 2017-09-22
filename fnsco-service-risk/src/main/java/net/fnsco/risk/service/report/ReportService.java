@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -265,43 +264,128 @@ public class ReportService extends BaseService {
      * @param objs
      * @return
      */
-    public ResultDTO BatchImportToDB(List<Object[]> objs, Integer id) {
-        if (objs.size() > 0) {
-            for (Object[] obj : objs) {
-                ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
-                reportRepaymentHistory.setReportId(id);
-                reportRepaymentHistory.setMonthOne(BigDecimal.valueOf(Double.valueOf(obj[0].toString())));
-                reportRepaymentHistory.setMonthTwo(BigDecimal.valueOf(Double.valueOf(obj[1].toString())));
-                reportRepaymentHistory.setMonthThree(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
-                reportRepaymentHistory.setMonthFore(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
-                reportRepaymentHistory.setMonthFive(BigDecimal.valueOf(Double.valueOf(obj[4].toString())));
-                reportRepaymentHistory.setMonthSix(BigDecimal.valueOf(Double.valueOf(obj[5].toString())));
-                reportRepaymentHistory.setMonthSeven(BigDecimal.valueOf(Double.valueOf(obj[6].toString())));
-                reportRepaymentHistory.setMonthEight(BigDecimal.valueOf(Double.valueOf(obj[7].toString())));
-                reportRepaymentHistory.setMonthNine(BigDecimal.valueOf(Double.valueOf(obj[8].toString())));
-                reportRepaymentHistory.setMonthTen(BigDecimal.valueOf(Double.valueOf(obj[9].toString())));
-                reportRepaymentHistory.setMonthEleven(BigDecimal.valueOf(Double.valueOf(obj[10].toString())));
-                reportRepaymentHistory.setMonthTwelve(BigDecimal.valueOf(Double.valueOf(obj[11].toString())));
-                reportRepaymentHistory.setLastModifyTime(new Date());
-                //插表
-                reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
-            }
-
-        }
-
-        return ResultDTO.success();
+    public ResultDTO BatchImportToDB( List<Object[]> objs, Integer id){
+    	if(objs.size() > 0){
+    		for(Object[] obj: objs){
+    			
+    			if(obj.length != 12){
+    				return ResultDTO.fail("导入数据有误，请按照模版导入12个月数据");
+    			}
+    			for (int i = 0; i < obj.length; i++) {
+					if(obj[i] == null){
+						return ResultDTO.fail("导入数据有空数据，请按照模版导入12个月数据");
+					}
+				}
+    			ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
+    			reportRepaymentHistory.setReportId(id);
+    			reportRepaymentHistory.setMonthOne(BigDecimal.valueOf(Double.valueOf(obj[0].toString())));
+    			reportRepaymentHistory.setMonthTwo(BigDecimal.valueOf(Double.valueOf(obj[1].toString())) );
+    			reportRepaymentHistory.setMonthThree(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+    			reportRepaymentHistory.setMonthFore(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
+    			reportRepaymentHistory.setMonthFive(BigDecimal.valueOf(Double.valueOf(obj[4].toString())));
+    			reportRepaymentHistory.setMonthSix(BigDecimal.valueOf(Double.valueOf(obj[5].toString())));
+    			reportRepaymentHistory.setMonthSeven(BigDecimal.valueOf(Double.valueOf(obj[6].toString())));
+    			reportRepaymentHistory.setMonthEight(BigDecimal.valueOf(Double.valueOf(obj[7].toString())));
+    			reportRepaymentHistory.setMonthNine(BigDecimal.valueOf(Double.valueOf(obj[8].toString())));
+    			reportRepaymentHistory.setMonthTen(BigDecimal.valueOf(Double.valueOf(obj[9].toString())));
+    			reportRepaymentHistory.setMonthEleven(BigDecimal.valueOf(Double.valueOf(obj[10].toString())));
+    			reportRepaymentHistory.setMonthTwelve(BigDecimal.valueOf(Double.valueOf(obj[11].toString())));
+    			reportRepaymentHistory.setLastModifyTime(new Date());
+    			//插表
+        		reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
+    		}
+    		
+    	}else{
+    		return ResultDTO.fail("导入数据为空，请核对后重新导入");
+    	}
+    	
+    	return ResultDTO.success();
     }
 
     //查看导入数据
-    public ResultPageDTO getByReportId(Integer id, Integer pageNum, Integer pageSize) {
-        ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
-        reportRepaymentHistory.setReportId(id);
-        List<ReportRepaymentHistoryDO> pageList = this.reportRepaymentHistoryDAO.pageList(reportRepaymentHistory, pageNum, pageSize);
-        for (ReportRepaymentHistoryDO reportRepaymentHistoryDO : pageList) {
-            reportRepaymentHistoryDO.setLastModifyTimeStr(DateUtils.dateFormatToStr(reportRepaymentHistoryDO.getLastModifyTime()));
-        }
+    public ResultPageDTO pageRepay(Integer id, Integer pageNum, Integer pageSize ){
+    	ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
+    	reportRepaymentHistory.setReportId(id);
+    	List<ReportRepaymentHistoryDO> pageList = this.reportRepaymentHistoryDAO.pageList(reportRepaymentHistory, pageNum, pageSize);
+    	for (ReportRepaymentHistoryDO reportRepaymentHistoryDO : pageList) {
+    		reportRepaymentHistoryDO.setLastModifyTimeStr(DateUtils.dateFormatToStr(reportRepaymentHistoryDO.getLastModifyTime()));
+		}
 
         ResultPageDTO<ReportRepaymentHistoryDO> pager = new ResultPageDTO<ReportRepaymentHistoryDO>(1, pageList);
         return pager;
+    }
+    
+    
+  //查看导入数据
+    public ResultDTO getByReportId(Integer id ){
+
+    	ReportRepaymentHistoryDO dto = new ReportRepaymentHistoryDO();
+
+    	dto = reportRepaymentHistoryDAO.getByReportId(id);
+    	List<YearReportDO> list=new ArrayList<YearReportDO>();
+    	for (int j=0 ; j<12; j++) {  
+            YearReportDO yearReportDO=new YearReportDO();
+            if(j==0){
+                yearReportDO.setTurnover(dto.getMonthOne());
+                yearReportDO.setDate("1月");
+                list.add(yearReportDO);
+            }
+            if(j==1){
+                yearReportDO.setTurnover(dto.getMonthTwo());
+                yearReportDO.setDate("2月");
+                list.add(yearReportDO);
+            }
+            if(j==2){
+                yearReportDO.setTurnover(dto.getMonthThree());
+                yearReportDO.setDate("3月");
+                list.add(yearReportDO);
+            }
+            if(j==3){
+                yearReportDO.setTurnover(dto.getMonthFore());
+                yearReportDO.setDate("4月");
+                list.add(yearReportDO);
+            }
+            if(j==4){
+                yearReportDO.setTurnover(dto.getMonthFive());
+                yearReportDO.setDate("5月");
+                list.add(yearReportDO);
+            }
+            if(j==5){
+                yearReportDO.setTurnover(dto.getMonthSix());
+                yearReportDO.setDate("6月");
+                list.add(yearReportDO);
+            }
+            if(j==6){
+                yearReportDO.setTurnover(dto.getMonthSeven());
+                yearReportDO.setDate("7月");
+                list.add(yearReportDO);
+            }
+            if(j==7){
+                yearReportDO.setTurnover(dto.getMonthEight());
+                yearReportDO.setDate("8月");
+                list.add(yearReportDO);
+            }
+            if(j==8){
+                yearReportDO.setTurnover(dto.getMonthNine());
+                yearReportDO.setDate("9月");
+                list.add(yearReportDO);
+            }
+            if(j==9){
+                yearReportDO.setTurnover(dto.getMonthTen());
+                yearReportDO.setDate("10月");
+                list.add(yearReportDO);
+            }
+            if(j==10){
+                yearReportDO.setTurnover(dto.getMonthEleven());
+                yearReportDO.setDate("11月");
+                list.add(yearReportDO);
+            }
+            if(j==11){
+                yearReportDO.setTurnover(dto.getMonthTwelve());
+                yearReportDO.setDate("12月");
+                list.add(yearReportDO);
+            }
+    	}
+        return ResultDTO.success(list);
     }
 }

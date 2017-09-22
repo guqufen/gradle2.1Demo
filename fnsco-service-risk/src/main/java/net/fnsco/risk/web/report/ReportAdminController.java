@@ -150,7 +150,19 @@ public class ReportAdminController extends BaseController{
     	Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize"});
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
-        
-    	return reportService.getByReportId(reportId, page, rows);
+
+    	return reportService.pageRepay(reportId, page, rows);
+    }
+    
+  /**
+   * 查询全年风控曲线图(编辑页面)
+   * @param reportId
+   * @return
+   */
+    @RequestMapping(value="queryReportPre", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultDTO queryReportPre(@RequestParam Integer reportId){
+
+        	return reportService.getByReportId(reportId);
     }
 }
