@@ -55,9 +55,13 @@
 						</div>
 					</div>
 					<div class="row col-sm-12">
-						<div class="col-sm-6">
+						<!-- <div class="col-sm-6">
 							<label class="control-label" for="turnover">营业额:</label>
 							<input type="text" class="form-control" id="turnover" name="turnover" />
+						</div> -->
+						<div class="col-sm-6">
+							<label class="control-label" for="decorationLevel">装修等级:</label>
+							<select class="form-control" id="decorationLevel" name="decorationLevel"></select>
 						</div>
 						<div class="col-sm-6">
 							<label class="control-label" for="size">规模:</label>
@@ -84,7 +88,8 @@
 					onclick="javascript:importEvent();" style="display:none;">
 					<span class="glyphicon glyphicon-import"></span>导入数据
 				</button>
-				<table id="table" style="min-width: 420px;"></table>
+				<div id="trend-chart" style="height:600px"></div>
+				<!-- <table id="table" style="min-width: 420px;"></table> -->
 			</div>
 		</div>
 		<div class="panel panel-default">
@@ -156,20 +161,22 @@
 			</div>
 		</div>
 	</div>
-<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="js/bootstrap/jquery.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<!-- <script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
 <script src="js/plugins/bootstrap-table/tableExport.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
-<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script> -->
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="js/layer/layer.js"></script>
 <script src="js/plugins/bootstrap/fileinput.js"></script>
+<script src="js/plugins/bootstrap/zh.js"></script>
 <script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
 <script type="text/javascript" src="js/fnsco/common.js"></script>
+<script type="text/javascript" src="js/fnsco/echarts.common.min.js"></script>
 <script type="text/javascript" src="js/fnsco/reportEdit.js"></script>
 </body>
 </html>

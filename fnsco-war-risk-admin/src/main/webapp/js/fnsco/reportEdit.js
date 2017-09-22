@@ -18,27 +18,50 @@ Request = GetRequest();
 var merchantId=Request["merchantId"];
 console.log(merchantId);
 
+//获取风控报告明细
+var getReportChart = function getReportChart(){
+	console.log(merchantId);
+	//查询全年风控曲线图
+	$.ajax({
+		url : PROJECT_NAME + '/report/queryReportPre',
+		type : 'POST',
+		dataType : "json",
+		data : {'reportId' : merchantId},
+		success : function(data){
+			if(data.success){
+				console.log(data);
+				/*获取生成图表的参数*/
+				var json=data.data;
+				for(var i=0;i<json.length;i++){
+					dateList.push(json[i].date);
+					dataList.push(json[i].turnover);
+				}
+				console.log(dateList,dataList);
+				
+				chart(dateList,dataList)
+			}
+
+		}
+	});
+}
+
 $(function() {
 
 	//给报告时间赋值(当前日期)
 	var date = new Date();
-	$('#reportTimer').val(
-			date.getFullYear() + '-' + (date.getMonth() + 1) + '-'
-					+ date.getDate());
+	$('#reportTimer').val(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
 
 	//获取行业数据(option)，放入行业(select)
 	getIndest();
 
 	//给规模赋值(size)
 	getSize();
-//	$('#size').append('<option value=1>单店</option>');
-//	$('#size').append('<option value=2>多店</option>');
-	
+
 	//报告周期赋值(reportCycle)
 	getReportCycle();
-//	$('#reportCycle').append('<option value=1>一年(半年历史，半年预测)</option>');
-//	$('#reportCycle').append('<option value=2>一年(三个月历史，九个月预测)</option>');
-//	$('#reportCycle').append('<option value=3>一年(九个月历史，三个月预测)</option>');
+	
+	//获取装修等级数据
+	getDecorationLevel();
 
 	//ajax请求修改的数据<id=2>
 	$.ajax({
@@ -54,18 +77,24 @@ $(function() {
 				var dd = data.data;
 
 				$('#merName').val(dd.merName);// 商户名称
+				$('#merName').attr('disabled','disabled');
 
 				$('#businessLicenseNum').val(dd.businessLicenseNum)// 营业执照
+				$('#businessLicenseNum').attr('disabled','disabled');
 
 				$('#businessAddress').val(dd.businessAddress);// 经营地址
+				$('#businessAddress').attr('disabled','disabled');
 
 				$('#businessDueTime').val(dd.businessDueTime);// 营业期限
+				$('#businessDueTime').attr('disabled','disabled');
 
 				$('select[id="industry"]').find("option[value=" + dd.industry + "]").attr("selected", true);// 行业
 
 				$('#tradingArea').val(dd.tradingArea);// 商圈
 
-				$('#turnover').val(dd.turnover);// 营业额
+//				$('#turnover').val(dd.turnover);// 营业额
+				$('select[id="decorationLevel"]').find("option[value=" + dd.decorationLevel + "]").attr("selected", true);// 行业
+//				$('#decorationLevel').val(dd.turnover);// 营业额
 
 				$('select[id="size"]').find("option[value=" + dd.size + "]").attr("selected", true);// 规模
 
@@ -83,12 +112,17 @@ $(function() {
 				if(dd.status == 0){
 					$('#btn_auditing').show();//显示审核成功按钮
 					$('#btn_auditingFail').show();//显示审核失败按钮
+					$('input').attr('disabled','disabled');//所有输入不可编辑
+					$('select').attr('disabled','disabled');//所有select不可选择
+					$('textarea').attr('disabled','disabled');//所有文本框不可编辑
 				//待编辑状态
 				}else{
 					$('#btn_save').show();//显示保存修改按钮
 					$('#btn_import').show();//显示导入数据按钮
 				}
 				
+				//获取折线图
+				getReportChart();
 			}
 		},
 		error : function(data) {
@@ -146,6 +180,26 @@ function getSize(){
 	});
 }
 /**
+ * 获取装修等级数据
+ */
+function getDecorationLevel(){
+	$.ajax({
+		url:PROJECT_NAME + '/sysConfig/getByType',
+		type:'get',
+		data:{"type":"06"},
+		async:false,
+		success:function(data){
+			if(data.success){
+				for(var i=0; i < data.data.length; i++){
+					$('#decorationLevel').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
+				}
+			}
+			console.log(data);
+		}
+	});
+}
+
+/**
  * 获取报告周期列表数据
  */
 function getReportCycle(){
@@ -170,55 +224,138 @@ $('#btn_save').click(function(){
 });
 //审核页面点击审核成功按钮
 $('#btn_auditing').click(function(){
-	saveOrUpdate(1);
+	updateStatue(1);
 });
 //审核页面点击审核失败按钮
 $('#btn_auditingFail').click(function(){
-	saveOrUpdate(2);
+	updateStatue(2);
 });
 function saveOrUpdate(status){
 
 	//商户名称
 	var merName = $('#merName').val();
+	if(merName == ""){
+		layer.msg('商户名称为空，请核对后联系相关人员录入');
+		return false;
+	}
 
 	//营业执照
 	var businessLicenseNum = $('#businessLicenseNum').val();
+	if(businessLicenseNum == ""){
+		layer.msg('营业执照为空，请核对后联系相关人员录入');
+		return false;
+	}
 
 	//经营地址
 	var businessAddress = $('#businessAddress').val();
+	if(businessAddress == ""){
+		layer.msg('经营地址为空，请核对后联系相关人员录入');
+		return false;
+	}
 
 	//营业期限
 	var businessDueTime = $('#businessDueTime').val();
+	if(businessDueTime == ""){
+		layer.msg('营业期限为空，请核对后联系相关人员录入');
+		return false;
+	}
 
 	//行业
 	var industry = $('#industry option:selected').val();
+	if(industry == ""){
+		layer.msg('请选择行业');
+		return false;
+	}
 
 	//商圈
 	var tradingArea = $('#tradingArea').val();
+	if(tradingArea == ""){
+		layer.msg('请选择商圈');
+		return false;
+	}
 
-	//营业额
-	var turnover = $('#turnover').val();
+//	//营业额
+//	var turnover = $('#turnover').val();
+//	if(turnover == ""){
+//		layer.msg('请输入营业额');
+//		return false;
+//	}
+//	//
+//	var reg = new RegExp("^[0-9]*$");
+//	if(!reg.test($('#turnover').val())){
+//		layer.msg('请输入正确的营业额');
+//		return false;
+//	}
+	
+	//装修等级
+	var decorationLevel = $('#decorationLevel').val();
+	if(decorationLevel == ""){
+		layer.msg('请选择装修等级');
+		return false;
+	}
 
 	//规模
 	var size = $('#size option:selected').val();
+	if(size == ""){
+		layer.msg('请选择规模');
+		return false;
+	}
 
 	//报告周期
 	var reportCycle = $('#reportCycle option:selected').val();
+	if(reportCycle == ""){
+		layer.msg('请选择报告周期');
+		return false;
+	}
 
 	//报告时间
 	var reportTimer = $('#reportTimer').val();
 
 	//风险
 	var riskWarning = $('#riskWarning').val();
+	if(riskWarning == ""){
+		layer.msg('请输入风险信息');
+		return false;
+	}
 
 	//额度
 	var quota = $('#quota').val();
+	if(quota == ""){
+		layer.msg('请输入额度信息');
+		return false;
+	}
+	//额度数字校验
+	var reg = new RegExp("^[0-9]*$");
+	if(!reg.test($('#quota').val())){
+		layer.msg('请输入正确的营业额');
+		return false;
+	}
 
 	//费率
 	var feeRate = $('#feeRate').val();
+	if(feeRate == ""){
+		layer.msg('请输入费率信息');
+		return false;
+	}
+	//费率数字百分比校验,限制以%结尾的数字,允许带两位小数点
+	var reg =  /^\d+(\.\d+)?%$/;
+	if(!reg.test($('#feeRate').val())){
+		layer.msg('请输入正确的费率信息,限制以%结尾的数字');
+		return false;
+	}
 
 	//周期
 	var loanCycle = $('#loanCycle').val();
+	if(loanCycle == ""){
+		layer.msg('请输入周期信息');
+		return false;
+	}
+	//周期数字校验
+	var reg = new RegExp("^[0-9]*$");
+	if(!reg.test($('#loanCycle').val())){
+		layer.msg('请输入正确的周期');
+		return false;
+	}
 
 	var params = {
 		'merName' : merName,
@@ -227,7 +364,8 @@ function saveOrUpdate(status){
 		'businessDueTime' : businessDueTime,
 		'industry' : industry,
 		'tradingArea' : tradingArea,
-		'turnover' : turnover,
+//		'turnover' : turnover,
+		'decorationLevel':decorationLevel,
 		'size' : size,
 		'reportCycle' : reportCycle,
 		'reportTimer' : reportTimer,
@@ -248,7 +386,7 @@ function saveOrUpdate(status){
 			//编辑成功，跳回风控报告显示页面，同时刷新显示页面
 			if (data.success) {
 				layer.msg(data.message);
-				window.location.href = 'report.html';
+				window.setTimeout("window.location.href = 'report.html'", 1000);
 			} else {
 				layer.msg(data.message);
 			}
@@ -257,6 +395,34 @@ function saveOrUpdate(status){
 			layer.msg('操作失败');
 		}
 	});
+}
+
+//根据ID更新状态，用于审核
+function updateStatue(status){
+
+	var params = {
+			'status' : status,
+			'id':merchantId
+		};
+
+		//用AJAX传给后台，返回修改成功/失败
+		$.ajax({
+			url:PROJECT_NAME + '/report/updateReport',
+			data:params,
+			type:'get',
+			success:function(data){
+				//编辑成功，跳回风控报告显示页面，同时刷新显示页面
+				if (data.success) {
+					layer.msg(data.message);
+					window.setTimeout("window.location.href = 'report.html'", 1000);
+				} else {
+					layer.msg(data.message);
+				}
+			},
+			error : function(data) {
+				layer.msg('操作失败');
+			}
+		});
 }
 
 //还款能力历史与预测table
@@ -418,7 +584,9 @@ var FileInput = function() {
 			if (resp.success) {
 				$('#importModal').modal('hide');
 				layer.msg('导入成功');
-				$('#table').bootstrapTable('refresh');
+//				$('#table').bootstrapTable('refresh');
+				//重新获取折线图
+				getReportChart();
 
 				return;
 			}
@@ -429,3 +597,92 @@ var FileInput = function() {
 	}
 	return oFile;
 };
+
+
+//生成数组参数
+var dataList=new Array();
+var dateList=new Array();
+
+var myChart = echarts.init(document.getElementById('trend-chart')); 
+//生成图表
+function chart(dataTime,data){
+	var option = {
+	    tooltip: {
+	        trigger: 'axis',
+	        axisPointer: { type: 'none' },
+	        // position: function (pt) {
+	        //     return [pt[0], '10%'];
+	        // }
+	    },
+	    xAxis: {
+	        type: 'category',
+	        boundaryGap: false,
+	        data: dataTime,
+	        lineStyle:{
+                color:'#333',
+                width:8,//这里是为了突出显示加上的
+            },
+            splitLine:{
+        　　　　show:true,
+                lineStyle: {
+                    color: '#eee',
+                    width: 1,
+                    type: 'solid'
+                }
+        　　}
+
+	    },
+	    grid: {
+        	// right:'0%',
+	    },
+	    yAxis: {
+	        type: 'value',
+	        boundaryGap: [0, '100%'],
+	        splitLine:{  
+        　　　　show:false  
+        　　 },
+          lineStyle:{
+                color:'#333',
+                width:8,//这里是为了突出显示加上的
+          } 
+	    },
+	    dataZoom: [{
+	        type: 'inside',
+	        start: 0,
+	        end: 5000
+	    },],
+	    series: [
+	        {
+	            name:'销售额',
+	            type:'line',
+	            smooth:true,
+	            //symbol: 'none',
+	            sampling: 'average',
+	            itemStyle: {
+	                normal: {
+                      //折线图颜色
+	                    color: '#333',
+	                    width:1,
+	                }
+	            },
+	            areaStyle: {
+                  // 渐变区域
+	                normal: {
+	                    color: new echarts.graphic.LinearGradient(1,0,0,1,[
+	                    {
+	                        offset: 0,
+	                        color: '#fff'
+	                    },{
+	                        offset: 1,
+	                        color: '#ccc'
+	                    }])
+	                }
+	            },
+	            data: data
+	        }
+	    ]
+	};
+	myChart.setOption(option);
+}
+
+
