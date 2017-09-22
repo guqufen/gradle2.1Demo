@@ -191,4 +191,8 @@
 	<select id="countBanksByInnerCodeAndAccountNo" parameterType="java.lang.String" resultType="java.lang.Integer">
 	  select count(*) from m_merchant_bank where inner_code = #{innerCode} and account_no = #{accountNo,jdbcType=VARCHAR}
 	</select>
+	<!-- 根据innercode删除数据 -->
+	<delete id="deleteByInnerCode" parameterType="java.lang.String">
+	  DELETE FROM m_merchant_bank WHERE inner_code = #{innerCode}
+	</delete>
 </mapper>

@@ -27,7 +27,14 @@ public interface MerchantPosService {
     int updateByPrimaryKeySelective(MerchantPos record);
 
     int updateByPrimaryKey(MerchantPos record);
-    
+    /**
+     * selectBySnCodeAndInnerCode:(通过sncode和innercode查询)
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月22日 上午11:41:05
+     * @return MerchantPos    DOM对象
+     */
+    MerchantPos selectBySnCodeAndInnerCode(String snCode,String innerCode);
     /**
      * savePosInfo:(这里用一句话描述这个方法的作用)保存POS机信息
      * @param record

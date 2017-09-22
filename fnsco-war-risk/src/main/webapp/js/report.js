@@ -31,8 +31,8 @@ $('#table').bootstrapTable({
 	sortable : true, // 是否启用排序
 	sortOrder : "asc", // 排序方式
 	pageNumber : 1, // 初始化加载第一页，默认第一页
-	pageSize : 10, // 每页的记录行数（*）
-	pageList : [ 15, 20, 25, 30 ], // 可供选择的每页的行数（*）
+	pageSize : 15, // 每页的记录行数（*）
+	pageList : [ 15,30, 50,100 ], // 可供选择的每页的行数（*）
 	queryParams : queryParams,
 	responseHandler : responseHandler,// 处理服务器返回数据
 	columns : [ {
@@ -55,17 +55,15 @@ $('#table').bootstrapTable({
 		field : 'businessLicenseNum',
 		title : '营业执照'
 	}, {
-		field : 'status',
-		title : '状态',
-		formatter : formatterStatus
+		field : 'size',
+		title : '商户规模',
+		formatter : formatterSize
 	} ]
 });
 function formatterOperation(value, row, index) {
 	console.log(value)
 	if(value==0||value==2||value==4){
-		return [ '<a class="redact" style="color:#4d5f84;" target="_Blank" href="report.html?merchantId='
-			+ row.id + ' ">报告生成</a>' ].join('');
-		//return "报告正在生成中";
+		return [ '<a class="redact" onclick="javascript:tip()" style="color:#4d5f84;" target="_Blank">生成报告</a>' ].join('');
 	}
 	if (value == 1) {
 		return [ '<a  class="check" style="color:#4d5f84;" target="_Blank" href="report.html?merchantId='
@@ -75,15 +73,18 @@ function formatterOperation(value, row, index) {
 			return [ '<a class="generate" style="color:#4d5f84;" onclick="javascript:sendEmail('+row.id+')">生成报告</a> ' ].join('');
 	}
 }
-function formatterStatus(value, row, index){
-	if(value==0||value==2||value==4){
-		return "生成中";
+function formatterSize(value, row, index){
+	if(value==0){
+		return "单店";
 	}
 	if (value == 1) {
-		return "已生成";
+		return "小型连锁";
 	} 
+	if(value == 2){
+		return "中型连锁";
+	}
 	if(value == 3){
-		return "未生成";
+		return "大型连锁";
 	}
 }
 // 组装请求参数  
@@ -116,6 +117,9 @@ function responseHandler(res) {
 function queryEvent() {
 	$('#table').bootstrapTable('refresh');
 }
+function tip(){
+	layer.msg('报告正在生成中,请耐心等待');
+}
 function sendEmail(merchantId) {
 	layer.confirm('确定生成报告吗？', {
 		time : 20000, // 20s后自动关闭
@@ -132,7 +136,7 @@ function sendEmail(merchantId) {
 			success : function(data) {
 				if (data.success) {
 					layer.msg('发送邮件通知成功');
-					reportStatus(merchantId, 3);
+					reportStatus(merchantId, 4);
 					queryEvent();
 				}
 			}

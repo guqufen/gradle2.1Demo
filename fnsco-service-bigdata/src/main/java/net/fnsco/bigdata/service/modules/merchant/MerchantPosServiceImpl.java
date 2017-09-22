@@ -213,4 +213,9 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
     public List<MerchantPos> selectBySnCode(String snCode){
         return merchantPosDao.selectBySnCode(snCode);
     }
+
+    @Override
+    public MerchantPos selectBySnCodeAndInnerCode(String snCode, String innerCode) {
+        return merchantPosDao.selectBySnCodeAndInnerCode(snCode, innerCode);
+    }
 }
