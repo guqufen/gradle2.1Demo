@@ -3,6 +3,16 @@ package net.fnsco.risk.service.report.entity;
 import java.util.Date;
 
 public class ReportInfoDO {
+    //判断三个月是否生成
+    private Integer isTrue;
+    public Integer getIsTrue() {
+        return isTrue;
+    }
+
+    public void setIsTrue(Integer isTrue) {
+        this.isTrue = isTrue;
+    }
+
     private Integer decorationLevel;
     public Integer getDecorationLevel() {
         return decorationLevel;

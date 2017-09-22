@@ -1,6 +1,7 @@
 package net.fnsco.risk.service.report;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,16 +50,37 @@ public class ReportService extends BaseService {
     //前台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> page(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
-//        for (ReportInfoDO li : pageList) {
-//            //根据innerCode查询用户信息
-//            
-//            //li.getInnerCode()
-//        }
+        for (ReportInfoDO li : pageList) {
+            //根据innerCode查询用户信息
+            //li.getInnerCode()
+            
+        }
         Integer count = this.reportInfoDAO.pageListCount(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }
-
+    
+    public static void main(String args[]) { 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");  
+        String time="20170712152705";
+        try {
+            Date old = sdf.parse(time);
+            Date now=new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(now);
+            calendar.add(Calendar.MONTH, -3);
+            //小于三个月
+            if(calendar.getTime().getTime()>old.getTime()){
+                //li.setIsTrue(2);
+            }else{
+            //大于三个月
+                //li.setIsTrue(1);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }  
+    } 
+    
     //后台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> pageBack(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageListBack(reportInfoDO, pageNum, pageSize);
