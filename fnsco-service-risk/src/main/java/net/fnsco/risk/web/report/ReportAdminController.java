@@ -93,8 +93,8 @@ public class ReportAdminController extends BaseController{
     public void down() throws IOException{
 
     	String filePath = request.getSession().getServletContext().getRealPath("");
-        filePath = filePath + "template/risk_inf_format.xls";
-        String fileName = "risk_inf_format.xls";
+        filePath = filePath + "template/风控数据模版.xls";
+        String fileName = "风控数据模版.xls";
 
          //解析excel，获取客户信息集合。
          ReadExcel.downTemplate(filePath, fileName, response);
