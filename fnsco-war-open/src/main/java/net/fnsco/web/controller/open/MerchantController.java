@@ -103,7 +103,7 @@ public class MerchantController extends BaseController {
             }
             for (MerchantUserRel userRel : tempList) {
                 AppUser user = appUserService.selectAppUserById(userRel.getAppUserId());
-                if (user.getLastLoginTime() != null) {
+                if (user != null && user.getLastLoginTime() != null) {
                     flag = "2";
                     break;
                 }

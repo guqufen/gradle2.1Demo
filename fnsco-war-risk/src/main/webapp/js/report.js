@@ -63,9 +63,7 @@ $('#table').bootstrapTable({
 function formatterOperation(value, row, index) {
 	console.log(value)
 	if(value==0||value==2||value==4){
-		return [ '<a class="redact" style="color:#4d5f84;" target="_Blank" href="report.html?merchantId='
-			+ row.id + ' ">报告生成</a>' ].join('');
-		//return "报告正在生成中";
+		return [ '<a class="redact" onclick="javascript:tip()" style="color:#4d5f84;" target="_Blank">生成报告</a>' ].join('');
 	}
 	if (value == 1) {
 		return [ '<a  class="check" style="color:#4d5f84;" target="_Blank" href="report.html?merchantId='
@@ -116,6 +114,9 @@ function responseHandler(res) {
 function queryEvent() {
 	$('#table').bootstrapTable('refresh');
 }
+function tip(){
+	layer.msg('报告正在生成中,请耐心等待');
+}
 function sendEmail(merchantId) {
 	layer.confirm('确定生成报告吗？', {
 		time : 20000, // 20s后自动关闭
@@ -132,7 +133,7 @@ function sendEmail(merchantId) {
 			success : function(data) {
 				if (data.success) {
 					layer.msg('发送邮件通知成功');
-					reportStatus(merchantId, 3);
+					reportStatus(merchantId, 4);
 					queryEvent();
 				}
 			}
