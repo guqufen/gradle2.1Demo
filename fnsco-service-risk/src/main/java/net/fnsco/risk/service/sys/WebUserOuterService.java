@@ -16,6 +16,7 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.risk.comm.RiskConstant;
 import net.fnsco.risk.service.sys.dao.WebUserOuterDAO;
+import net.fnsco.risk.service.sys.entity.AgentDO;
 import net.fnsco.risk.service.sys.entity.WebUserDO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 
@@ -70,6 +71,10 @@ public class WebUserOuterService extends BaseService {
     public ResultPageDTO<WebUserOuterDO> page(WebUserOuterDO user, Integer pageNum, Integer pageSize) {
         logger.info("开始分页查询UserService.page, user=");
         List<WebUserOuterDO> pageList = this.userOuterDAO.pageList(user, pageNum, pageSize);
+        for(WebUserOuterDO list : pageList) {
+        	String typeName=this.userOuterDAO.queryTypeName(list.getType());
+        	list.setTypeName(typeName);
+        }
         Integer count = this.userOuterDAO.pageListCount(user);
         ResultPageDTO<WebUserOuterDO> pager = new ResultPageDTO<WebUserOuterDO>(count, pageList);
         return pager;
@@ -129,6 +134,10 @@ public class WebUserOuterService extends BaseService {
 			return true;
 		}
         return false;
+    }
+    // 查询所有类型
+    public ResultDTO<List<AgentDO>> queryType() {
+    	return ResultDTO.success(this.userOuterDAO.queryType());
     }
 
 }

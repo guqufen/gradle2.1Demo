@@ -270,9 +270,6 @@ window.operateEvents = {
 function operateFormatter(value, row, index) {
 	if(row.openFixQr=="1"){
 	    return [
-	    	'<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码">',
-	        '<i class="glyphicon glyphicon-qrcode"></i>',
-	        '</a>  ',
 	        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
 	        '<i class="glyphicon glyphicon-pencil"></i>',
 	        '</a>  ',
@@ -281,7 +278,10 @@ function operateFormatter(value, row, index) {
 	        '</a>  ',
 	        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
 	        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
-	        '</a>'
+	        '</a>',
+	        '<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码">',
+	        '<i class="glyphicon glyphicon-qrcode"></i>',
+	        '</a>  '
 	    ].join('');
     }else{
     	return [
@@ -293,7 +293,10 @@ function operateFormatter(value, row, index) {
 	        '</a>  ',
 	        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
 	        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
-	        '</a>'
+	        '</a>',
+	        '<a class="details" href="javascript:;">',
+	        '<i class="glyphicon"></i>',
+	        '</a>  '
 	    ].join('');
     }
 }

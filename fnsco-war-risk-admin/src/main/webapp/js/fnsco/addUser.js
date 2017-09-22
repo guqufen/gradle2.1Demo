@@ -1,3 +1,26 @@
+//获取用户登录信息
+var result;
+function getUserName() {
+	$.ajax({
+		dataType : 'json',
+		type : 'POST',
+		url : PROJECT_NAME + '/web/user/getCurrentUser',
+		async : false,// 这里选择异步为false，那么这个程序执行到这里的时候会暂停，等待
+		// 数据加载完成后才继续执行
+		success : function(data) {
+			result = data.data;
+		}
+	});
+	return result;
+}
+$(function(){
+	getUserName();
+	$("#toolbar").html('');
+	if(result.name=="admin"){
+			html='<button id="btn_add" type="button" class="btn btn-success" onclick="javascript:add();"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增</button>';
+			$("#toolbar").append(html);
+	}
+});
 //初始化表格
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
@@ -41,10 +64,9 @@ $('#table').bootstrapTable({
 		title : '企业名称',
 		align : 'center',
 	}, {
-		field : 'type',
+		field : 'typeName',
 		title : '类型',
-		align : 'center',
-		formatter : formatType
+		align : 'center'
 	}, {
 		field : 'email',
 		title : '邮箱',
@@ -102,14 +124,6 @@ function formatstatus(value, row, index) {
 	return value === 2 ? '<span class="label label-danger">停用</span>'
 			: '<span class="label label-primary">启用</span>';
 }
-//账号类型判断
-function formatType(value, row, index) {
-	if (value === 1) {
-		return '法奈昇';
-	}else if (value === 2) {
-		return '纵横钱包';
-	}
-}
 
 // 操作格式化
 function operateFormatter(value, row, index) {
@@ -123,10 +137,10 @@ function operateFormatter(value, row, index) {
 				'<a class="redact" href="javascript:queryDisuse(' + value
 						+ ');" title="停用">',
 				'<i class="glyphicon glyphicon-pause">停用</i>',
-				'</a>  ',
-				'<a class="redact" href="javascript:queryDelete(' + value
+				'</a>  '
+				/*'<a class="redact" href="javascript:queryDelete(' + value
 						+ ');" title="删除">',
-				'<i class="glyphicon glyphicon-trash">删除</i>', '</a>  ' ]
+				'<i class="glyphicon glyphicon-trash">删除</i>', '</a>  '*/ ]
 				.join('');
 	} else if (status == "2") {
 		return [
@@ -137,10 +151,10 @@ function operateFormatter(value, row, index) {
 				'<a class="redact" href="javascript:queryStart(' + value
 						+ ');" title="启用">',
 				'<i class="glyphicon glyphicon-play">启用</i>',
-				'</a>  ',
-				'<a class="redact" href="javascript:queryDelete(' + value
+				'</a>  '
+				/*'<a class="redact" href="javascript:queryDelete(' + value
 						+ ');" title="删除">',
-				'<i class="glyphicon glyphicon-trash">删除</i>', '</a>  ' ]
+				'<i class="glyphicon glyphicon-trash">删除</i>', '</a>  '*/ ]
 				.join('');
 	}
 }
@@ -190,7 +204,6 @@ function clearDate() {
 	$("#password").val(null);
 	$("#department").val(null);
 	$("#email").val(null);
-	$("#type").val(1);
 	$("#remark").val(null);
 }
 //查询用户名是否重复
@@ -226,11 +239,38 @@ function ismail(obj) {
 	}
 	return true;
 }
+//类型查询获取
+function queryType(id,value){
+	 $.ajax({
+		   url : PROJECT_NAME + '/web/addUser/queryType',
+		   type:'POST',
+		   success:function(data){
+			   showdates(data.data,id,value);
+		   },
+		   error:function(e){
+			   layer.msg('服务器出错');
+		   }
+	   })
+}
+//角色查询添加拼接
+function showdates(data,id,value) {
+	$("#"+id).html('');
+	for (i = 0; i < data.length; i++) {
+		var html = '';
+		if(value == data[i].id){
+			html='<option value="'+data[i].id+'" selected="selected">'+data[i].name+'</option>';
+		}else{
+			html='<option value="'+data[i].id+'">'+data[i].name+'</option>';
+		}
+		$("#"+id).append(html);
+	}
+};
 //新增点击事件
-$('#btn_add').click(function() {
+function add() {
 	$('#addModal').modal();
+	queryType("type",null);
 	clearDate();
-});
+};
 //新增确认点击事件
 $('#btn_yes').click(function() {
 	var name = $('#name').val();
@@ -332,11 +372,12 @@ function queryEdit(id) {
 			unloginHandler(data);
 			// data.data就是所有数据集
 			// 基本信息
+			queryType("type1",data.data.type);
 			$('input[name="id"]').val(id);
 			$('input[name="oldname"]').val(data.data.name);
 			$('input[name="name1"]').val(data.data.name);
 			$('input[name="department1"]').val(data.data.department);
-			$('select[name="type1"]').val(data.data.type);
+//			$('select[name="type1"]').val(data.data.type);
 			$('input[name="email1"]').val(data.data.email);
 			$('textarea[name="remark1"]').val(data.data.remark);
 			$('#editModal').modal();

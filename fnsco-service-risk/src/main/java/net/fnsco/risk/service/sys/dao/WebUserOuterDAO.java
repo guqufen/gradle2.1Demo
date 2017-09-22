@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
 
+import net.fnsco.risk.service.sys.entity.AgentDO;
 import net.fnsco.risk.service.sys.entity.WebUserDO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 import net.fnsco.risk.service.sys.dao.helper.WebUserOuterProvider;
@@ -56,4 +57,11 @@ public interface WebUserOuterDAO {
 	@Select("SELECT * FROM risk_web_user_outer WHERE name = #{name}")
 	public WebUserOuterDO getByUserName(@Param("name") String name);
 
+	@Results({ @Result(column = "id", property = "id"), @Result(column = "name", property = "name") })
+	@Select("SELECT * FROM m_agent")
+	public List<AgentDO> queryType();
+
+	@Results({ @Result(column = "name", property = "name") })
+	@Select("SELECT name FROM m_agent WHERE id= #{id}")
+	public String queryTypeName(Integer id);
 }

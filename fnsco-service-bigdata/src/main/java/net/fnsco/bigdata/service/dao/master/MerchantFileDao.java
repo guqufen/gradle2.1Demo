@@ -26,6 +26,16 @@ public interface MerchantFileDao {
     int updateByPrimaryKey(MerchantFile record);
     
     /**
+     * deleteByInnerCode:(删除)
+     * @param innerCode
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月22日 上午10:58:11
+     * @return int    DOM对象
+     */
+    int deleteByInnerCodeAndFileType(@Param("innerCode") String innerCode,@Param("fileType")String fileType);
+    
+    /**
      * 根据条件查询
      * @param record
      * @return

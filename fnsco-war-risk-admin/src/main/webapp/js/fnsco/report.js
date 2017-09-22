@@ -84,7 +84,7 @@ $('#table').bootstrapTable({
 function formatterOperation(value, row, index) {
 	//审核成功
 	if (row.status == 2 || row.status == 3) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' ">编辑</a>' ].join('');
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' ">编辑报告</a>' ].join('');
 	}
 	if (row.status == 0) {
 		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' "  >审核报告</a>' ].join('');

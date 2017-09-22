@@ -151,4 +151,8 @@
      </foreach>
 	)
 </delete>
+<!-- 根据innerCode删除数据 -->
+<delete id="deleteByInnerCode" parameterType="java.lang.String">
+  DELETE   FROM m_merchant_contact WHERE inner_code = #{innerCode}
+</delete>
 </mapper>
