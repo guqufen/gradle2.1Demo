@@ -13,6 +13,8 @@ public class WebUserOuterDO {
      * 用户类型1管理员2合作者3消费者
      */
     private Integer type;
+    
+    private String typeName;
 
     /**
      * 用户名
@@ -119,7 +121,15 @@ public class WebUserOuterDO {
         this.type = type;
     }
 
-    public String getName() {
+    public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	public String getName() {
         return name;
     }
 
