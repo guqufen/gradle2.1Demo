@@ -24,6 +24,9 @@ public class ReportInfoProvider {
         if (reportInfo.getStatus()!= null) {
             SET("status=#{reportInfo.status}");
         }
+        if(reportInfo.getDecorationLevel()!=null){
+            SET("decoration_level=#{reportInfo.decorationLevel}");
+        }
         if (reportInfo.getCreateTime()!= null) {
             SET("create_time=#{reportInfo.createTime}");
         }
@@ -107,7 +110,7 @@ public class ReportInfoProvider {
             WHERE("mer_name like CONCAT('%',#{reportInfo.merName},'%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())){   
-            WHERE("business_license_num=like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
+            WHERE("business_license_num like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getBusinessAddress())){
             WHERE("business_address=#{reportInfo.businessAddress}");
@@ -176,7 +179,7 @@ public class ReportInfoProvider {
             WHERE("mer_name like CONCAT('%',#{reportInfo.merName},'%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())){
-            WHERE("business_license_num=like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
+            WHERE("business_license_num like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getBusinessAddress())){
             WHERE("business_address=#{reportInfo.businessAddress}");
@@ -251,7 +254,7 @@ public class ReportInfoProvider {
             WHERE("mer_name like CONCAT('%',#{reportInfo.merName},'%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())){
-            WHERE("business_license_num=like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
+            WHERE("business_license_num like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
         }
         if (StringUtils.isNotBlank(reportInfo.getBusinessAddress())){
             WHERE("business_address=#{reportInfo.businessAddress}");
@@ -300,7 +303,7 @@ public class ReportInfoProvider {
             if (reportInfo.getStatus()!= null) {
                 WHERE("status=#{reportInfo.status}");
             }else{
-                WHERE("status in (2,3)");
+                WHERE("status in (2,3,4)");
             }
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
@@ -380,7 +383,7 @@ public class ReportInfoProvider {
             if (reportInfo.getStatus()!= null) {
                 WHERE("status=#{reportInfo.status}");
             }else{
-                WHERE("status in (2,3)");
+                WHERE("status in (2,3,4)");
             }
         }
         }}.toString();
