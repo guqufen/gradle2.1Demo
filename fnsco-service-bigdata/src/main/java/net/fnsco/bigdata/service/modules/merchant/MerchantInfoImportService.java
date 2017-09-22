@@ -166,7 +166,7 @@ public class MerchantInfoImportService extends BaseService {
                  */
                 if (merchantcore == null) {
                     innerCode = merchantCoreService.getInnerCode();
-                    MerchantCore merchantCore = MerchantImportHelper.createMerchantCore(innerCode, mername, businesslicensenum, cardnum, legalperson, channelMerchant, legalpersonmobile,
+                    MerchantCore merchantCore = MerchantImportHelper.createMerchantCore(null,innerCode, mername, businesslicensenum, cardnum, legalperson, channelMerchant, legalpersonmobile,
                         cardvalidtimeStr, businesslicensevalidtimeStr, registaddress, mercflag, taxRegistCode, createTime);
 
                     try {
@@ -200,7 +200,20 @@ public class MerchantInfoImportService extends BaseService {
                     saveFileToDB(fileInfos, innerCode);
 
                 } else {
+                    
+                    //更新操作
                     innerCode = merchantcore.getInnerCode();
+                    MerchantCore merchantCore = MerchantImportHelper.createMerchantCore(merchantcore.getId(),innerCode, mername, businesslicensenum, cardnum, legalperson, channelMerchant, legalpersonmobile,
+                        cardvalidtimeStr, businesslicensevalidtimeStr, registaddress, mercflag, taxRegistCode, createTime);
+
+                    try {
+                        merchantCoreService.doAddMerCore(merchantCore);
+                    } catch (Exception e) {
+                        logger.error("第" + timeNum + "行数据的基本数据信息有误，导入失败" + e);
+                        return ResultDTO.fail("第" + timeNum + "行数据的基本数据信息有误，导入失败");
+                    }
+                    
+                    
                 }
 
                 /**

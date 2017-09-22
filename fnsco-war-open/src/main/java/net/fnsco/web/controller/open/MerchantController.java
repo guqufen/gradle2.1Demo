@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.open;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
+import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
@@ -27,7 +28,9 @@ public class MerchantController extends BaseController {
     private MerchantService merchantService;
     @Autowired
     private AppUserService  appUserService;
-
+    @Autowired
+    private MerchantInfoImportService merchantInfoImportService;
+    
     /**
      * 获取商户编号
      *
@@ -104,5 +107,29 @@ public class MerchantController extends BaseController {
             }
         }
         return success(flag);
+    }
+    
+    /**
+     * importData:(导入数据)
+     * @param merchant
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月21日 下午2:40:58
+     * @return ResultDTO    DOM对象
+     */
+    @RequestMapping(value = "/importData")
+    @ApiOperation(value = "导入商户所有数据")
+    public ResultDTO importData(List<Object[]> datas) {
+        
+        try {
+            ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(datas, 1);
+            logger.info("同步商户数据结果"+result);
+            return result;
+        } catch (ParseException e) {
+            
+            e.printStackTrace();
+            
+        }
+        return ResultDTO.fail();
     }
 }
