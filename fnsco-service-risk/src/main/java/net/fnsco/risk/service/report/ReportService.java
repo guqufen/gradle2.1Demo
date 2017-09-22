@@ -31,6 +31,8 @@ import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 import net.fnsco.risk.service.report.entity.YearReportDO;
 import net.fnsco.risk.service.sys.dao.WebUserOuterDAO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
+import net.fnsco.risk.service.trade.dao.TradeDataDAO;
+import net.fnsco.risk.service.trade.entity.TradeDataDO;
 
 @Service
 public class ReportService extends BaseService {
@@ -45,14 +47,30 @@ public class ReportService extends BaseService {
     private Environment               ev;
     @Autowired
     private ReportRepaymentHistoryDAO reportRepaymentHistoryDAO;
-
+    @Autowired
+    private TradeDataDAO tradeDataDAO;
     //前台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> page(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
         for (ReportInfoDO li : pageList) {
-            //根据innerCode查询用户信息
-            //li.getInnerCode()
-            
+            String time=tradeDataDAO.getByInnerCode(li.getInnerCode());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            try {
+                Date old = sdf.parse(time);
+                Date now=new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(now);
+                calendar.add(Calendar.MONTH, -3);
+                //小于三个月
+                if(calendar.getTime().getTime()>old.getTime()){
+                    li.setIsTrue(1);
+                }else{
+                //大于三个月
+                    li.setIsTrue(2);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }  
         }
         Integer count = this.reportInfoDAO.pageListCount(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);

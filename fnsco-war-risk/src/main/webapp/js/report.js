@@ -63,7 +63,7 @@ $('#table').bootstrapTable({
 function formatterOperation(value, row, index) {
 	console.log(value)
 	if (row.isTrue == 2) {
-		return [ '<a class="redact" onclick="javascript:tipMessage()" style="color:#4d5f84;" target="_Blank">生成报告</a>' ]
+		return [ '<a class="redact" onclick="javascript:tipMessage()" style="color:#4d5f84;" >生成报告</a>' ]
 				.join('');
 	} else {
 		if (value == 0 || value == 2 || value == 4) {
