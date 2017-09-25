@@ -6,6 +6,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -65,6 +67,9 @@ public class MerchantInfoImportService extends BaseService {
     @Transactional
     public ResultDTO<String> merchantBatchImportToDB(List<Object[]> customerList, Integer userId) throws ParseException {
         // 循环便利customList数组，将其中excel每一行的数据分批导入数据库
+        
+        ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+        
         if (customerList.size() != 0) {
             // excel导出的空数据是“null”，赋值一个空字符串
             int timeNum = 2;
@@ -168,7 +173,7 @@ public class MerchantInfoImportService extends BaseService {
                     logger.error("第" + timeNum + "营业执照为空 不能入库!");
                     continue;
                 }
-                String innerCode = null;
+                String  innerCode = null;
                 Integer bankId = null;
                 MerchantCore merchantcore = merchantCoreService.selectBybusinessLicenseNum(businesslicensenum);
                 /**
@@ -218,9 +223,19 @@ public class MerchantInfoImportService extends BaseService {
                     logger.error("第" + timeNum + "行数据的银行卡信息有误，导入失败" + e);
                     return ResultDTO.fail("第" + timeNum + "行数据的银行卡信息有误，导入失败");
                 }
-
-                //文件处理
-                saveFileToDB(fileInfos, innerCode);
+                
+                /**
+                 * 文件处理很慢，直接开启一个线程池执行
+                 */
+                String taskInnerCode = innerCode;
+                cachedThreadPool.execute(new Runnable() {  
+                    @Override  
+                    public void run() {  
+                      //文件处理
+                        saveFileToDB(fileInfos, taskInnerCode);
+                    }  
+                });  
+                
              
                 /**
                  * 渠道信息--根据innerCode+merchantCode+channelType判断唯一性，如果存在，则获取ID ，否则新增加
