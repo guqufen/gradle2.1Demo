@@ -222,7 +222,7 @@ public class TradeDataWebController extends BaseController {
         Integer userId = adminUser.getId();
         // 批量导入。参数：文件名，文件。
         ResultDTO<String> result = null;
-        result = tradeDataImportService.tradeBatchImportToDB(customerList);
+        result = tradeDataImportService.tradeBatchImportToDB(customerList,name);
         if (!result.isSuccess()) {
             Map<String, String> map = new HashMap<>();
             if (("").equals(result.getMessage())) {
