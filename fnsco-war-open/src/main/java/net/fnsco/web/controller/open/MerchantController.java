@@ -140,7 +140,7 @@ public class MerchantController extends BaseController {
         List<Object[]> customerList = MerchantSynchronizationDTO.installListDatas(params);
         
         try {
-            ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(customerList, 1);
+            ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(customerList, 1,"接口导入");
             logger.info("同步商户数据结果"+result);
             return result;
         } catch (ParseException e) {
