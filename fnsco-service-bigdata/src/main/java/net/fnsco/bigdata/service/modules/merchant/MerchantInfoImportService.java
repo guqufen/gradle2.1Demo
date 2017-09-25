@@ -340,11 +340,16 @@ public class MerchantInfoImportService extends BaseService {
 
         for (String files : fileMap) {
             if (Strings.isNullOrEmpty(files)) {
+                logger.error("文件内容为空!");
                 continue;
             }
 
             String singleFile[] = files.split("=");
-
+            
+            if(singleFile.length < 2){
+                logger.error("文件格式不正确!"+singleFile);
+                continue;
+            }
             String fileType = singleFile[0];
             String filePath = singleFile[1];
             
@@ -428,8 +433,9 @@ public class MerchantInfoImportService extends BaseService {
             return newUrl;
         } catch (Exception e) {
             logger.error("上传失败！" + e);
-            throw new RuntimeException();
+//            throw new RuntimeException();
         }
+        return null;
     }
     
     /**
