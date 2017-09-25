@@ -1,4 +1,4 @@
-package net.fnsco.bigdata.service.modules.merchant;
+package net.fnsco.web.controller.merchant;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,6 +17,7 @@ import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.order.service.sys.entity.ImportErrorDO;
 
 /**
  * @desc
@@ -230,5 +231,28 @@ public class MerchantImportHelper {
         file.setCreateTime(new Date());
         
         return file;
+    }
+    
+    /**
+     * createImportErrorDO:(创建一个ImportErrorDO实例)
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月25日 下午4:28:14
+     * @return ImportErrorDO    DOM对象
+     */
+    public static ImportErrorDO createImportErrorDO(Date createTime,Date startCreateTime,Date endCreateTime,Integer createUserId,Integer rowNumber,Integer importType,
+                                                    String importFileName,String errorMsg,String data){
+        ImportErrorDO importErrorDO = new ImportErrorDO();
+        importErrorDO.setCreateTime(createTime);
+        importErrorDO.setCreateUserId(createUserId);
+        importErrorDO.setEndCreateTime(endCreateTime);
+        importErrorDO.setStartCreateTime(startCreateTime);
+        importErrorDO.setImportFileName(importFileName);
+        importErrorDO.setRowNumber(rowNumber);
+        importErrorDO.setImportType(importType);
+        importErrorDO.setErrorMsg(errorMsg);
+        importErrorDO.setData(data);
+        
+        return importErrorDO;
     }
 }
