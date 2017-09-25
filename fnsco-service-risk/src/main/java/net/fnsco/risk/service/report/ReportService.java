@@ -53,22 +53,28 @@ public class ReportService extends BaseService {
     public ResultPageDTO<ReportInfoDO> page(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
         for (ReportInfoDO li : pageList) {
-            String time=tradeDataDAO.getByInnerCode(li.getInnerCode());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             try {
-                Date old = sdf.parse(time);
-                Date now=new Date();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(now);
-                calendar.add(Calendar.MONTH, -3);
-                //小于三个月 符合规则
-                if(calendar.getTime().getTime()<old.getTime()){
-                    li.setIsTrue(1);
+                String time=tradeDataDAO.getByInnerCode(li.getInnerCode()); 
+                if(time!=null){
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                    Date old = sdf.parse(time);
+                    Date now=new Date();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(now);
+                    calendar.add(Calendar.MONTH, -3);
+                    //小于三个月 符合规则
+                    if(calendar.getTime().getTime()<old.getTime()){
+                        li.setIsTrue(1);
+                    }else{
+                    //大于三个月 不符合规则
+                        li.setIsTrue(2);
+                    }
                 }else{
-                //大于三个月 不符合规则
-                    li.setIsTrue(2);
+                    //用户绑定的商铺流水产生的时间不正确或没有流水交易
+                    li.setIsTrue(3); 
                 }
             } catch (ParseException e) {
+                //该商铺没有流水
                 e.printStackTrace();
             }  
         }

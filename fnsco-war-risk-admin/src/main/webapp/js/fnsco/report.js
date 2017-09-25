@@ -91,7 +91,7 @@ function formatterIndex(value, row, index){
 
 function formatterOperation(value, row, index) {
 	//2、3、4待编辑
-	if (row.status == 2 || row.status == 3 || row.status == 3) {
+	if (row.status == 2 ||  row.status == 4) {
 		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' ">编辑报告</a>' ].join('');
 	}
 	//0：待审核
