@@ -157,18 +157,18 @@ function chart(dataTime,data){
 	                    }])
 	                }
 	            },
-	            data: [data[0],data[1],data[2],data[3],data[4],data[5],data[6]]
+	            data: [data[0],data[1],data[2],data[3],data[4],data[5]]
 	        },
 	        {
 	            name:'预测销售额',
 	            type:'line',
 	            smooth:true,
 	            //symbol: 'none',
-	            sampling: 'average',
+	            // sampling: 'average',
 	            lineStyle: {
                     normal: {
-                        width: 2,
                         color: '#666',
+	                    width:1,
                         type: 'dashed'
                     }
                 },
@@ -185,7 +185,7 @@ function chart(dataTime,data){
 	                    }])
 	                }
 	            },
-	            data: ['-','-','-','-','-','-',data[6],data[7],data[8],data[9],data[10],data[11],data[12]]
+	            data: ['-','-','-','-','-',data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12]]
 	        },
 	       
 	    ]
