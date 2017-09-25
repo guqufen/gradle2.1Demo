@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,11 +35,11 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.ExcelUtils;
 import net.fnsco.core.utils.ReadExcel;
+import net.fnsco.core.utils.StringUtil;
 import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.order.service.sys.TradeDataImportService;
 import net.fnsco.order.service.sys.entity.ImportErrorDO;
 import net.sf.json.JSONObject;
-import springfox.documentation.spring.web.json.Json;
 
 /**
  * @desc 交易统计控制器
@@ -251,11 +250,6 @@ public class TradeDataWebController extends BaseController {
         int timeNum = 2;
         for (Object[] objs : customerList) {
             timeNum = timeNum + 1;
-            for (int i = 0; i < objs.length; i++) {
-                if (objs[i] == null) {
-                    objs[i] = "";
-                }
-            }
             importTradeData(objs, timeNum, fileName);
         }
         return ResultDTO.success();
@@ -263,69 +257,69 @@ public class TradeDataWebController extends BaseController {
 
     public void importTradeData(Object[] objs, int timeNum, String fileName) {
         // 内部商户号
-        String innercode = String.valueOf(objs[0]);
+        String innercode = StringUtil.valueOf(objs[0]);
         // 交易类型
-        String txntype = String.valueOf(objs[1]);
+        String txntype = StringUtil.valueOf(objs[1]);
         // 交易子类型
-        String txnsubtype = String.valueOf(objs[2]);
+        String txnsubtype = StringUtil.valueOf(objs[2]);
         // 交易币种
-        String currency = String.valueOf(objs[3]);
+        String currency = StringUtil.valueOf(objs[3]);
         // 应答码
-        String respcode = String.valueOf(objs[4]);
+        String respcode = StringUtil.valueOf(objs[4]);
         // 清算日期
-        String settledate = String.valueOf(objs[5]);
+        String settledate = StringUtil.valueOf(objs[5]);
         // 卡号
-        String certifyid = String.valueOf(objs[6]);
+        String certifyid = StringUtil.valueOf(objs[6]);
         // 通道号
-        String msgdestid = String.valueOf(objs[7]);
+        String msgdestid = StringUtil.valueOf(objs[7]);
         // 渠道类型
-        String channeltype = String.valueOf(objs[8]);
+        String channeltype = StringUtil.valueOf(objs[8]);
         // 交易金额
-        String amt = String.valueOf(objs[9]);
+        String amt = StringUtil.valueOf(objs[9]);
         //支付方式
-        String paytype = String.valueOf(objs[10]);
+        String paytype = StringUtil.valueOf(objs[10]);
         //交易子类型
-        String paysubtype = String.valueOf(objs[11]);
+        String paysubtype = StringUtil.valueOf(objs[11]);
         //交易时间
-        String timestamp = String.valueOf(objs[12]);
+        String timestamp = StringUtil.valueOf(objs[12]);
         //通道商户号
-        String merid = String.valueOf(objs[13]);
+        String merid = StringUtil.valueOf(objs[13]);
         //通道终端号
-        String channeltermcode = String.valueOf(objs[14]);
+        String channeltermcode = StringUtil.valueOf(objs[14]);
         //批次号
-        String batchno = String.valueOf(objs[15]);
+        String batchno = StringUtil.valueOf(objs[15]);
         //终端流水号
-        String traceno = String.valueOf(objs[16]);
+        String traceno = StringUtil.valueOf(objs[16]);
         //参考号
-        String referno = String.valueOf(objs[17]);
+        String referno = StringUtil.valueOf(objs[17]);
         //授权码
-        String authcode = String.valueOf(objs[18]);
+        String authcode = StringUtil.valueOf(objs[18]);
         //来源
-        String source = String.valueOf(objs[19]);
+        String source = StringUtil.valueOf(objs[19]);
         //交易传送时间
-        String sendtime = String.valueOf(objs[20]);
+        String sendtime = StringUtil.valueOf(objs[20]);
         //记录创建时间
-        String createtime = String.valueOf(objs[21]);
+        String createtime = StringUtil.valueOf(objs[21]);
         //支付超时时间
-        String paytimeout = String.valueOf(objs[22]);
+        String paytimeout = StringUtil.valueOf(objs[22]);
         //商品标题
-        String subject = String.valueOf(objs[23]);
+        String subject = StringUtil.valueOf(objs[23]);
         //商品描述
-        String body = String.valueOf(objs[24]);
+        String body = StringUtil.valueOf(objs[24]);
         //银行卡验证信息及身份信息
-        String customerinfo = String.valueOf(objs[25]);
+        String customerinfo = StringUtil.valueOf(objs[25]);
         //持卡人IP
-        String customerip = String.valueOf(objs[26]);
+        String customerip = StringUtil.valueOf(objs[26]);
         //受理订单号
-        String tn = String.valueOf(objs[27]);
+        String tn = StringUtil.valueOf(objs[27]);
         //应答信息
-        String respmsg = String.valueOf(objs[28]);
+        String respmsg = StringUtil.valueOf(objs[28]);
         //交易成功时间
-        String succtime = String.valueOf(objs[29]);
+        String succtime = StringUtil.valueOf(objs[29]);
         //内部终端号
-        String termid = String.valueOf(objs[30]);
+        String termid = StringUtil.valueOf(objs[30]);
         //支付媒介00pos机01app02台码
-        String payMedium = String.valueOf(objs[31]);
+        String payMedium = StringUtil.valueOf(objs[31]);
         //  String innerCode = merchantCoreService.getInnerCode();
         TradeDataDTO tradeData = new TradeDataDTO();
         try {
