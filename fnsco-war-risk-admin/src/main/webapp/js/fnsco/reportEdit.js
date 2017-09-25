@@ -39,6 +39,8 @@ var getReportChart = function getReportChart(){
 				console.log(dateList,dataList);
 				
 				chart(dateList,dataList)
+			}else{
+				layer.msg(data.message);
 			}
 
 		}
@@ -589,6 +591,8 @@ var FileInput = function() {
 				getReportChart();
 
 				return;
+			}else{
+				layer.msg(resp.message);
 			}
 
 		});
