@@ -61,11 +61,11 @@ public class ReportService extends BaseService {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(now);
                 calendar.add(Calendar.MONTH, -3);
-                //小于三个月
-                if(calendar.getTime().getTime()>old.getTime()){
+                //小于三个月 符合规则
+                if(calendar.getTime().getTime()<old.getTime()){
                     li.setIsTrue(1);
                 }else{
-                //大于三个月
+                //大于三个月 不符合规则
                     li.setIsTrue(2);
                 }
             } catch (ParseException e) {
@@ -86,12 +86,14 @@ public class ReportService extends BaseService {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(now);
             calendar.add(Calendar.MONTH, -3);
-            //小于三个月
-            if(calendar.getTime().getTime()>old.getTime()){
-                //li.setIsTrue(2);
-            }else{
-            //大于三个月
+            //小于三个月 符合规则
+            if(calendar.getTime().getTime()<old.getTime()){
                 //li.setIsTrue(1);
+                System.out.println("小于三个月");
+            }else{
+            //大于三个月 不符合规则
+                System.out.println("大于三个月");
+                //li.setIsTrue(2);
             }
         } catch (ParseException e) {
             e.printStackTrace();
