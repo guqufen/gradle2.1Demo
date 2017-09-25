@@ -43,6 +43,21 @@
 		#trend-chart{
 			width: 900px;
 			height: 600px;
+			position: relative;
+		}
+		.bar{
+			width: 0;
+			height: 490px;
+			left: 50%;
+			bottom: 55px;
+			position: absolute;
+			margin-left: -3.7%;
+			z-index: 9;
+			border-left:1px dashed #666;
+		}
+		#trend-chart #chart{
+			position: absolute;
+			height: 100%;width: 100%;left: 0;top: 0;
 		}
 	</style>
 </head>
@@ -89,7 +104,10 @@
 		</div>
 		<h3><还款能力评估趋势图></h3>
 		<!-- 折线图 -->
-		<div id="trend-chart"></div>
+		<div id="trend-chart">
+			<div class="bar"></div>
+			<div id="chart"></div>
+		</div>
 		<h3>风险提醒：</h3>
 		<div class="report-infos riskWarning">
 <!-- 			<p>1、商家营业额低于同期行业水平。</p>

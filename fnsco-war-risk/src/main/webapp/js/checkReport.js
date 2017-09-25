@@ -38,6 +38,8 @@ var webUserOuterId = message.id;
 //生成宝贝参数
 var dataList=new Array();
 var dateList=new Array();
+var dataList1=new Array();
+var dateList1=new Array();
 //获取风控报告明细
 $(function(){
 	$.ajax({
@@ -78,7 +80,7 @@ $(function(){
 })
 
 
-var myChart = echarts.init(document.getElementById('trend-chart')); 
+var myChart = echarts.init(document.getElementById('chart')); 
 //生成图表
 function chart(dataTime,data){
 	var option = {
@@ -122,10 +124,12 @@ function chart(dataTime,data){
           } 
 	    },
 	    dataZoom: [{
-	        type: 'inside',
-	        start: 0,
-	        end: 5000
+	        // type: 'inside',
+	        // start: 0,
+	        // end: 5000
+	        show:false
 	    },],
+	    roam: false,
 	    series: [
 	        {
 	            name:'销售额',
@@ -143,6 +147,27 @@ function chart(dataTime,data){
 	            areaStyle: {
                   // 渐变区域
 	                normal: {
+                    	color: '#ccc'
+	                }
+	            },
+	            data: [data[0],data[1],data[2],data[3],data[4],data[5]]
+	        },
+	        {
+	            name:'预测销售额',
+	            type:'line',
+	            smooth:true,
+	            //symbol: 'none',
+	            // sampling: 'average',
+	            lineStyle: {
+                    normal: {
+                        color: '#666',
+	                    width:1,
+                        type: 'dashed'
+                    }
+                },
+	            areaStyle: {
+                  // 渐变区域
+	                normal: {
 	                    color: new echarts.graphic.LinearGradient(1,0,0,1,[
 	                    {
 	                        offset: 0,
@@ -153,8 +178,9 @@ function chart(dataTime,data){
 	                    }])
 	                }
 	            },
-	            data: data
-	        }
+	            data: ['-','-','-','-','-',data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12]]
+	        },
+	       
 	    ]
 	};
 	myChart.setOption(option);
