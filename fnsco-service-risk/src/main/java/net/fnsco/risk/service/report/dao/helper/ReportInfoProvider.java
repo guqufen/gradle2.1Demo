@@ -303,7 +303,7 @@ public class ReportInfoProvider {
             if (reportInfo.getStatus()!= null) {
                 WHERE("status=#{reportInfo.status}");
             }else{
-                WHERE("status in (2,3,4)");
+                WHERE("status in (2, 4)");
             }
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
@@ -383,7 +383,7 @@ public class ReportInfoProvider {
             if (reportInfo.getStatus()!= null) {
                 WHERE("status=#{reportInfo.status}");
             }else{
-                WHERE("status in (2,3,4)");
+                WHERE("status in (2, 4)");
             }
         }
         }}.toString();
