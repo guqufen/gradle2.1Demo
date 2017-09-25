@@ -888,7 +888,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
                     if (dateTime.equals(tradeDayDTO.getTradeDate())) {
                         tradeDayDTO.setTradeDate(format1.format(end.getTime()));
                         tradeDayDTO.setTurnover(NumberUtil.format(new BigDecimal(tradeDayDTO.getTurnover()).divide(new BigDecimal(100)),2));
-                        tradeDayDTO.setProcedureFee(NumberUtil.format(new BigDecimal(tradeDayDTO.getProcedureFee()).divide(new BigDecimal(100)),2));
+                        tradeDayDTO.setProcedureFee(NumberUtil.format(new BigDecimal(tradeDayDTO.getProcedureFee()==null?"0":tradeDayDTO.getProcedureFee()).divide(new BigDecimal(100)),2));
                         BigDecimal settAmount = NumberUtil.subtract(tradeDayDTO.getTurnover(), tradeDayDTO.getProcedureFee());
                         tradeDayDTO.setSettlementAmount(NumberUtil.format(settAmount,2));
                         dayDatas.add(tradeDayDTO);

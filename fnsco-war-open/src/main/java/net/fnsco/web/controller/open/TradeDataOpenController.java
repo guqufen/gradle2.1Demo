@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
@@ -94,8 +95,9 @@ public class TradeDataOpenController extends BaseController {
      */
     @RequestMapping(value = "/saveComm")
     @ApiOperation(value = "保存交易流水")
-    public ResultDTO saveTradeComm(@RequestBody TradeDataDTO tradeData) {
-        logger.error("对外交易流水数据" + JSON.toJSONString(tradeData));
+    public ResultDTO saveTradeComm(String tradeDataStr) {
+        logger.error("对外交易流水数据" + tradeDataStr);
+        TradeDataDTO tradeData = JSONObject.parseObject(tradeDataStr,TradeDataDTO.class);
         String amt = tradeData.getAmt();
         if (!Strings.isNullOrEmpty(amt)) {
             amt = amt.replaceAll("\\.", "");

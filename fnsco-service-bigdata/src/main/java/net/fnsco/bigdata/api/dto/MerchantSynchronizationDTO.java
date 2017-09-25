@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
  * @author tangliang
  * @date 2017年9月21日 上午10:54:00
  */
-public class MerchantSynchronizationDO {
+public class MerchantSynchronizationDTO {
 	
 	private String merchant;
 	private String businessLicenseNum;
@@ -342,10 +342,10 @@ public class MerchantSynchronizationDO {
      * @param lists
      * @return
      */
-    public static List<Object[]> installListDatas(List<MerchantSynchronizationDO> lists) {
+    public static List<Object[]> installListDatas(List<MerchantSynchronizationDTO> lists) {
         List<Object[]>  result = Lists.newArrayList();
         
-        for (MerchantSynchronizationDO merDo : lists) {
+        for (MerchantSynchronizationDTO merDo : lists) {
             Object[]  data = new Object[45]; 
             data[0] = (merDo.getMerchant());
             data[1] =(merDo.getBusinessLicenseNum());
