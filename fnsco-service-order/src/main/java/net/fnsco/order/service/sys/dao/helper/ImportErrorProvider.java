@@ -39,7 +39,53 @@ public class ImportErrorProvider {
         WHERE("id = #{importError.id}");
         }}.toString();
     }
-
+    
+    /**
+     * selectByCondition:(条件查询)
+     * @param params
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月25日 下午4:14:46
+     * @return String    DOM对象
+     */
+    public String selectByCondition(Map<String, Object> params) {
+        ImportErrorDO importError = (ImportErrorDO) params.get("importError");
+        return new SQL() {{
+            SELECT("*");
+            FROM(TABLE_NAME);
+            if (importError.getId() != null) {
+                WHERE("id=#{importError.id}");
+            }
+            if (StringUtils.isNotBlank(importError.getImportFileName())){
+                WHERE("import_file_name=#{importError.importFileName}");
+            }
+            if (StringUtils.isNotBlank(importError.getData())){
+                WHERE("data=#{importError.data}");
+            }
+            if (StringUtils.isNotBlank(importError.getErrorMsg())){
+                WHERE("error_msg=#{importError.errorMsg}");
+            }
+            if (importError.getCreateTime() != null) {
+                WHERE("create_time=#{importError.createTime}");
+            }
+            if (importError.getCreateUserId() != null) {
+                WHERE("create_user_Id=#{importError.createUserId}");
+            }
+            if (importError.getRowNumber() != null) {
+                WHERE("row_number=#{importError.rowNumber}");
+            }
+            
+            if (importError.getStartCreateTime() != null) {
+                WHERE("create_time >=#{importError.startCreateTime}");
+            }
+            if (importError.getEndCreateTime() != null) {
+                WHERE("create_time <=#{importError.endCreateTime}");
+            }
+            
+            ORDER_BY("id desc");
+            }}.toString();
+    }
+    
     public String pageList(Map<String, Object> params) {
         ImportErrorDO importError = (ImportErrorDO) params.get("importError");
         Integer pageNum = (Integer) params.get("pageNum");
