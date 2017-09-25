@@ -219,9 +219,8 @@ public class ReportService extends BaseService {
         try {
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            System.out.println(ev.getProperty("username"));
-            helper.setFrom("fanaisheng@zheft.cn");
-            helper.setTo("1606646959@qq.com");
+            helper.setFrom(ev.getProperty("spring.mail.username"));
+            helper.setTo(ev.getProperty("manger.mail.address"));
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
             sb.append("<div style='font-size:26px;margin-top:50px;'>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理" + "<a href='http://www.w3school.com.cn'>W3School</a></div>");
@@ -241,9 +240,7 @@ public class ReportService extends BaseService {
         try {
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            logger.warn(ev.getProperty("username"));
-            System.out.println(ev.getProperty("username"));
-            helper.setFrom("fanaisheng@zheft.cn");
+            helper.setFrom(ev.getProperty("spring.mail.username"));
             helper.setTo(dto.getEmail());
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
