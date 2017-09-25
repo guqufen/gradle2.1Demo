@@ -131,9 +131,10 @@ function tip() {
 }
 function sendEmail(merchantId) {
 	layer.confirm('确定生成报告吗？', {
-		time : 20000, // 20s后自动关闭
+		time : 2000, // 20s后自动关闭
 		btn : [ '确定', '取消' ]
 	}, function() {
+		layer.msg('发送邮件通知成功');
 		$.ajax({
 			url : PROJECT_NAME + '/web/report/backPersonnelMes',
 			type : 'POST',
@@ -142,9 +143,8 @@ function sendEmail(merchantId) {
 				"userId" : webUserOuterId,
 				"merchantId" : merchantId
 			},
-			success : function(data) {
+			success : function(data){
 				if (data.success) {
-					layer.msg('发送邮件通知成功');
 					reportStatus(merchantId, 4);
 					queryEvent();
 				}

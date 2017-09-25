@@ -221,10 +221,10 @@ public class ReportService extends BaseService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             System.out.println(ev.getProperty("username"));
             helper.setFrom("fanaisheng@zheft.cn");
-            helper.setTo("782430551@qq.com");
+            helper.setTo("1606646959@qq.com");
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append(dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理" + "<a style='font-size:50px;' href='http://www.w3school.com.cn'>W3School</a>");
+            sb.append("<div style='font-size:26px;margin-top:50px;'>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理" + "<a href='http://www.w3school.com.cn'>W3School</a></div>");
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -244,10 +244,10 @@ public class ReportService extends BaseService {
             logger.warn(ev.getProperty("username"));
             System.out.println(ev.getProperty("username"));
             helper.setFrom("fanaisheng@zheft.cn");
-            helper.setTo("782430551@qq.com");
+            helper.setTo(dto.getEmail());
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append(dto.getName() + "<br>").append("关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!点击查看" + "<a style='font-size:50px;' href='http://www.w3school.com.cn'>W3School</a>");
+            sb.append("<div style='font-size:26px;margin-top:50px;'>"+dto.getName()+"关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!点击查看" + "<a href='http://www.w3school.com.cn'>W3School</a></div>");
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
             e.printStackTrace();
