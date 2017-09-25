@@ -61,11 +61,11 @@ public class ReportService extends BaseService {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(now);
                 calendar.add(Calendar.MONTH, -3);
-                //小于三个月
-                if(calendar.getTime().getTime()>old.getTime()){
+                //小于三个月 符合规则
+                if(calendar.getTime().getTime()<old.getTime()){
                     li.setIsTrue(1);
                 }else{
-                //大于三个月
+                //大于三个月 不符合规则
                     li.setIsTrue(2);
                 }
             } catch (ParseException e) {
@@ -86,12 +86,14 @@ public class ReportService extends BaseService {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(now);
             calendar.add(Calendar.MONTH, -3);
-            //小于三个月
-            if(calendar.getTime().getTime()>old.getTime()){
-                //li.setIsTrue(2);
-            }else{
-            //大于三个月
+            //小于三个月 符合规则
+            if(calendar.getTime().getTime()<old.getTime()){
                 //li.setIsTrue(1);
+                System.out.println("小于三个月");
+            }else{
+            //大于三个月 不符合规则
+                System.out.println("大于三个月");
+                //li.setIsTrue(2);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -286,10 +288,10 @@ public class ReportService extends BaseService {
     	if(objs.size() > 0){
     		for(Object[] obj: objs){
     			
-    			if(obj.length != 12){
-    				return ResultDTO.fail("导入数据有误，请按照模版导入12个月数据");
-    			}
-    			for (int i = 0; i < obj.length; i++) {
+//    			if(obj.length != 12){
+//    				return ResultDTO.fail("导入数据有误，请按照模版导入12个月数据");
+//    			}
+    			for (int i = 0; i < 12; i++) {
 					if(obj[i] == null){
 						return ResultDTO.fail("导入数据有空数据，请按照模版导入12个月数据");
 					}
@@ -340,6 +342,9 @@ public class ReportService extends BaseService {
     	ReportRepaymentHistoryDO dto = new ReportRepaymentHistoryDO();
 
     	dto = reportRepaymentHistoryDAO.getByReportId(id);
+    	if(dto == null){
+    		return ResultDTO.fail("没有找到流水数据");
+    	}
     	List<YearReportDO> list=new ArrayList<YearReportDO>();
     	for (int j=0 ; j<12; j++) {  
             YearReportDO yearReportDO=new YearReportDO();

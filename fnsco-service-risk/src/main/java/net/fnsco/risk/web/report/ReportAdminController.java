@@ -132,7 +132,7 @@ public class ReportAdminController extends BaseController{
 
         //导入不成功，返回失败
 		if(!result.isSuccess()){
-			return ResultDTO.fail();
+			return result;
 		}
 
         return ResultDTO.success();
