@@ -55,7 +55,7 @@
                                         <div class="icon left">
                                             <img src="login/6-25-14.png">
                                         </div>
-                                        <input type="password" id="newPassword" name="password" value="" placeholder="输入新密码">
+                                        <input type="password" id="newPassword" name="password" value="" placeholder="输入新密码最少6位最多12位">
                                     </div>
                                     <div class="password-input">
                                         <div class="icon left">
@@ -231,6 +231,17 @@ $(function(){
 
 //修改密码
 $("#btn_forget").click(function(){
+	var newPassword = $("#newPassword").val();
+	if (newPassword.length < 6) {
+		layer.msg('密码最少6位');
+		$("#newPassword").focus();
+		return false;
+	}
+	if (newPassword.length > 12) {
+		layer.msg('密码最多12位');
+		$("#newPassword").focus();
+		return false;
+	}
 	if($("#newPassword").val()!=$("#newPassword1").val()){
 		alert("两次密码输入不一致,请重新输入");
 	}
