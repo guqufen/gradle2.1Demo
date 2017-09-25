@@ -408,7 +408,7 @@
      limit 1
   </select>
   <!-- 查询 -->
-  <select id="selectByTerminalType" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByTerminalType"  resultMap="BaseResultMap">
      select 
     <include refid="Base_Column_List" />
     from m_merchant_terminal where  inner_code = #{innerCode,jdbcType=VARCHAR} and pos_id = #{posId} and terminal_type = #{terminalType,jdbcType=VARCHAR}
