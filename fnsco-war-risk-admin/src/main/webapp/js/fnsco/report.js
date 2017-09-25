@@ -53,10 +53,13 @@ $('#table').bootstrapTable({
 	sortOrder : "asc", // 排序方式
 	pageNumber : 1, // 初始化加载第一页，默认第一页
 	pageSize : 15, // 每页的记录行数（*）
-	pageList : [ 15, 20, 25, 30 ], // 可供选择的每页的行数（*）
+	pageList : [ 15, 30, 50, 100 ], // 可供选择的每页的行数（*）
 	queryParams : queryParams,
 	responseHandler : responseHandler,// 处理服务器返回数据
 	columns : [ {
+		title : '序号',
+		formatter:formatterIndex
+	},{
 		field : 'merName',
 		title : '商户名称'
 	}, {
@@ -81,11 +84,17 @@ $('#table').bootstrapTable({
 		formatter : formatterOperation
 	} ]
 });
+
+function formatterIndex(value, row, index){
+	return index+1;
+}
+
 function formatterOperation(value, row, index) {
-	//审核成功
-	if (row.status == 2 || row.status == 3) {
+	//2、3、4待编辑
+	if (row.status == 2 ||  row.status == 4) {
 		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' ">编辑报告</a>' ].join('');
 	}
+	//0：待审核
 	if (row.status == 0) {
 		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' "  >审核报告</a>' ].join('');
 	}
@@ -100,6 +109,8 @@ function formatterStatus(value, row, index) {
 		return '审核失败';
 	} else if (value == '3') {
 		return '待编辑';
+	} else if(value == '4'){
+		return '已提交的待编辑';
 	} else {
 		return '-';
 	}

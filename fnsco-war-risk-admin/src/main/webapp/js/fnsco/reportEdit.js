@@ -19,6 +19,9 @@ var merchantId=Request["merchantId"];
 console.log(merchantId);
 
 //获取风控报告明细
+//生成数组参数
+var dataList=new Array();
+var dateList=new Array();
 var getReportChart = function getReportChart(){
 	console.log(merchantId);
 	//查询全年风控曲线图
@@ -32,6 +35,11 @@ var getReportChart = function getReportChart(){
 				console.log(data);
 				/*获取生成图表的参数*/
 				var json=data.data;
+
+				//置空，不然容易出现数据叠加
+				dateList = [];
+				dataList = [];
+
 				for(var i=0;i<json.length;i++){
 					dateList.push(json[i].date);
 					dataList.push(json[i].turnover);
@@ -39,6 +47,8 @@ var getReportChart = function getReportChart(){
 				console.log(dateList,dataList);
 				
 				chart(dateList,dataList)
+			}else{
+				layer.msg(data.message);
 			}
 
 		}
@@ -589,6 +599,8 @@ var FileInput = function() {
 				getReportChart();
 
 				return;
+			}else{
+				layer.msg(resp.message);
 			}
 
 		});
@@ -597,11 +609,6 @@ var FileInput = function() {
 	}
 	return oFile;
 };
-
-
-//生成数组参数
-var dataList=new Array();
-var dateList=new Array();
 
 var myChart = echarts.init(document.getElementById('trend-chart')); 
 //生成图表

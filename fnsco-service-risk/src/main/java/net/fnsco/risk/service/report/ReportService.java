@@ -294,10 +294,10 @@ public class ReportService extends BaseService {
     	if(objs.size() > 0){
     		for(Object[] obj: objs){
     			
-    			if(obj.length != 12){
-    				return ResultDTO.fail("导入数据有误，请按照模版导入12个月数据");
-    			}
-    			for (int i = 0; i < obj.length; i++) {
+//    			if(obj.length != 12){
+//    				return ResultDTO.fail("导入数据有误，请按照模版导入12个月数据");
+//    			}
+    			for (int i = 0; i < 12; i++) {
 					if(obj[i] == null){
 						return ResultDTO.fail("导入数据有空数据，请按照模版导入12个月数据");
 					}
@@ -348,6 +348,9 @@ public class ReportService extends BaseService {
     	ReportRepaymentHistoryDO dto = new ReportRepaymentHistoryDO();
 
     	dto = reportRepaymentHistoryDAO.getByReportId(id);
+    	if(dto == null){
+    		return ResultDTO.fail("没有找到流水数据");
+    	}
     	List<YearReportDO> list=new ArrayList<YearReportDO>();
     	for (int j=0 ; j<12; j++) {  
             YearReportDO yearReportDO=new YearReportDO();
