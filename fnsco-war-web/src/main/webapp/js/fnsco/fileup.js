@@ -58,6 +58,7 @@ var FileInput = function () {
         	//$('#importModal').modal("hide");
             return;
         }
+        
         //1.初始化表格
         /*var oTable = new TableInit();
         oTable.Init(data);
