@@ -274,6 +274,7 @@ public class ReportService extends BaseService {
             reportInfoDO.setStatus(0);
         }
 
+        reportInfoDO.setLastModifyTime(new Date());
         int result = reportInfoDAO.update(reportInfoDO);
 
         return ResultDTO.success();
@@ -346,66 +347,67 @@ public class ReportService extends BaseService {
     		return ResultDTO.fail("没有找到流水数据");
     	}
     	List<YearReportDO> list=new ArrayList<YearReportDO>();
+    	Date dd = dto.getLastModifyTime();
     	for (int j=0 ; j<12; j++) {  
             YearReportDO yearReportDO=new YearReportDO();
             if(j==0){
                 yearReportDO.setTurnover(dto.getMonthOne());
-                yearReportDO.setDate("1月");
+                yearReportDO.setDate(handleDate(dd, -6));
                 list.add(yearReportDO);
             }
             if(j==1){
                 yearReportDO.setTurnover(dto.getMonthTwo());
-                yearReportDO.setDate("2月");
+                yearReportDO.setDate(handleDate(dd, -5));
                 list.add(yearReportDO);
             }
             if(j==2){
                 yearReportDO.setTurnover(dto.getMonthThree());
-                yearReportDO.setDate("3月");
+                yearReportDO.setDate(handleDate(dd, -4));
                 list.add(yearReportDO);
             }
             if(j==3){
                 yearReportDO.setTurnover(dto.getMonthFore());
-                yearReportDO.setDate("4月");
+                yearReportDO.setDate(handleDate(dd, -3));
                 list.add(yearReportDO);
             }
             if(j==4){
                 yearReportDO.setTurnover(dto.getMonthFive());
-                yearReportDO.setDate("5月");
+                yearReportDO.setDate(handleDate(dd, -2));
                 list.add(yearReportDO);
             }
             if(j==5){
                 yearReportDO.setTurnover(dto.getMonthSix());
-                yearReportDO.setDate("6月");
+                yearReportDO.setDate(handleDate(dd, -1));
                 list.add(yearReportDO);
             }
             if(j==6){
                 yearReportDO.setTurnover(dto.getMonthSeven());
-                yearReportDO.setDate("7月");
+                yearReportDO.setDate(handleDate(dd, 0));
                 list.add(yearReportDO);
             }
             if(j==7){
                 yearReportDO.setTurnover(dto.getMonthEight());
-                yearReportDO.setDate("8月");
+                yearReportDO.setDate(handleDate(dd, 1));
                 list.add(yearReportDO);
             }
             if(j==8){
                 yearReportDO.setTurnover(dto.getMonthNine());
-                yearReportDO.setDate("9月");
+                yearReportDO.setDate(handleDate(dd, 2));
                 list.add(yearReportDO);
             }
             if(j==9){
                 yearReportDO.setTurnover(dto.getMonthTen());
-                yearReportDO.setDate("10月");
+                yearReportDO.setDate(handleDate(dd, 3));
                 list.add(yearReportDO);
             }
             if(j==10){
                 yearReportDO.setTurnover(dto.getMonthEleven());
-                yearReportDO.setDate("11月");
+                yearReportDO.setDate(handleDate(dd, 4));
                 list.add(yearReportDO);
             }
             if(j==11){
                 yearReportDO.setTurnover(dto.getMonthTwelve());
-                yearReportDO.setDate("12月");
+                yearReportDO.setDate(handleDate(dd, 5));
                 list.add(yearReportDO);
             }
     	}

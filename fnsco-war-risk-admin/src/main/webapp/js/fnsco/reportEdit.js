@@ -98,17 +98,23 @@ $(function() {
 				$('#businessDueTime').val(dd.businessDueTime);// 营业期限
 				$('#businessDueTime').attr('disabled','disabled');
 
-				$('select[id="industry"]').find("option[value=" + dd.industry + "]").attr("selected", true);// 行业
+				if(dd.industry != ""){
+					$('select[id="industry"]').find("option[value=" + dd.industry + "]").attr("selected", true);// 行业
+				}else{
+					$('select[id="industry"]').append('<option selected="selected" value="">----</option>');
+				}
 
 				$('#tradingArea').val(dd.tradingArea);// 商圈
 
 //				$('#turnover').val(dd.turnover);// 营业额
-				$('select[id="decorationLevel"]').find("option[value=" + dd.decorationLevel + "]").attr("selected", true);// 行业
+				$('select[id="decorationLevel"]').find("option[value=" + dd.decorationLevel + "]").attr("selected", true);// 装修等级
 //				$('#decorationLevel').val(dd.turnover);// 营业额
 
 				$('select[id="size"]').find("option[value=" + dd.size + "]").attr("selected", true);// 规模
 
-				$('select[id="reportCycle"]').find("option[value=" + dd.reportCycle + "]").attr("selected", true);// 报告周期
+//				$('select[id="reportCycle"]').find("option[value=" + dd.reportCycle + "]").attr("selected", true);// 报告周期,默认6个月数据预测六个月，不可改
+				$('select[id="reportCycle"]').find('option[value="1"]').attr("selected", true);// 报告周期,默认6个月数据预测六个月，不可改
+				$('select[id="reportCycle"]').attr('disabled','disabled');
 
 				$('#riskWarning').val(dd.riskWarning);// 风险
 
@@ -395,7 +401,7 @@ function saveOrUpdate(status){
 		success:function(data){
 			//编辑成功，跳回风控报告显示页面，同时刷新显示页面
 			if (data.success) {
-				layer.msg(data.message);
+				layer.msg('保存成功');
 				window.setTimeout("window.location.href = 'report.html'", 1000);
 			} else {
 				layer.msg(data.message);
@@ -423,7 +429,12 @@ function updateStatue(status){
 			success:function(data){
 				//编辑成功，跳回风控报告显示页面，同时刷新显示页面
 				if (data.success) {
-					layer.msg(data.message);
+					if(status == 1){
+						layer.msg('审核成功');//审核成功
+					}else{
+						layer.msg('审核完成');//审核失败
+					}
+
 					window.setTimeout("window.location.href = 'report.html'", 1000);
 				} else {
 					layer.msg(data.message);
@@ -610,7 +621,7 @@ var FileInput = function() {
 	return oFile;
 };
 
-var myChart = echarts.init(document.getElementById('trend-chart')); 
+var myChart = echarts.init(document.getElementById('chart')); 
 //生成图表
 function chart(dataTime,data){
 	var option = {
@@ -646,7 +657,7 @@ function chart(dataTime,data){
 	        type: 'value',
 	        boundaryGap: [0, '100%'],
 	        splitLine:{  
-        　　　　show:false  
+        　　　　show:false 
         　　 },
           lineStyle:{
                 color:'#333',
@@ -654,39 +665,61 @@ function chart(dataTime,data){
           } 
 	    },
 	    dataZoom: [{
-	        type: 'inside',
-	        start: 0,
-	        end: 5000
+	        // type: 'inside',
+	        // start: 0,
+	        // end: 5000
+	        show:false
 	    },],
 	    series: [
-	        {
-	            name:'销售额',
-	            type:'line',
-	            smooth:true,
-	            //symbol: 'none',
-	            sampling: 'average',
-	            itemStyle: {
-	                normal: {
-                      //折线图颜色
-	                    color: '#333',
-	                    width:1,
-	                }
-	            },
-	            areaStyle: {
-                  // 渐变区域
-	                normal: {
-	                    color: new echarts.graphic.LinearGradient(1,0,0,1,[
-	                    {
-	                        offset: 0,
-	                        color: '#fff'
-	                    },{
-	                        offset: 1,
-	                        color: '#ccc'
-	                    }])
-	                }
-	            },
-	            data: data
-	        }
+			{
+			    name:'销售额',
+			    type:'line',
+			    smooth:true,
+			    //symbol: 'none',
+			    sampling: 'average',
+			    itemStyle: {
+			        normal: {
+			          //折线图颜色
+			            color: '#333',
+			            width:1,
+			        }
+			    },
+			    areaStyle: {
+			      // 渐变区域
+			        normal: {
+			            color:'#ccc'
+			        }
+			    },
+			    data: [data[0],data[1],data[2],data[3],data[4],data[5]]
+			},
+			{
+			    name:'预测销售额',
+			    type:'line',
+			    smooth:true,
+			    //symbol: 'none',
+			    // sampling: 'average',
+			    lineStyle: {
+			        normal: {
+			            color: '#666',
+			            width:1,
+			            type: 'dashed'
+			        }
+			    },
+			    areaStyle: {
+			      // 渐变区域
+			        normal: {
+			            color: new echarts.graphic.LinearGradient(1,0,0,1,[
+			            {
+			                offset: 0,
+			                color: '#fff'
+			            },{
+			                offset: 1,
+			                color: '#ccc'
+			            }])
+			        }
+			    },
+			    data: ['-','-','-','-','-',data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12]]
+			},
 	    ]
 	};
 	myChart.setOption(option);
