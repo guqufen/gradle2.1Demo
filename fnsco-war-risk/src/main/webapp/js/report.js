@@ -146,10 +146,11 @@ function sendEmail(merchantId) {
 			success : function(data){
 				if (data.success) {
 					reportStatus(merchantId, 4);
-					queryEvent();
+					window.location.reload();
 				}
 			}
 		});
+		
 	}, function() {
 		layer.msg('取消成功');
 	});
