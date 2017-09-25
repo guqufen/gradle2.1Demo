@@ -119,9 +119,6 @@ public class ReportService extends BaseService {
         List<YearReportDO> list = new ArrayList<YearReportDO>();
         ReportInfoDO reportInfoDO = reportInfoDAO.getById(userId);
         //判断风控报告的状态
-        if (reportInfoDO.getStatus() != 1) {
-            return ResultDTO.fail("风控报告状态不正常");
-        }
         //当前时间 
         ReportRepaymentHistoryDO dto = reportRepaymentHistoryDAO.getByReportId(merchantId);
         //如果查出来的月度营业额为空，则直接返回到页面；否则会报空指针异常
@@ -248,7 +245,7 @@ public class ReportService extends BaseService {
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
             e.printStackTrace();
-        }
+        }   
         mailSender.send(message);
         return ResultDTO.success();
     }
