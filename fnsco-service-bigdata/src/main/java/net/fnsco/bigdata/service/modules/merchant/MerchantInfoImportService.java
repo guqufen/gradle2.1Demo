@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -189,6 +190,7 @@ public class MerchantInfoImportService extends BaseService {
                 try {
                     merchantCoreService.doAddMerCore(merchantCore);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     logger.error("第" + timeNum + "行数据的基本数据信息有误，导入失败" + e);
                     return ResultDTO.fail("第" + timeNum + "行数据的基本数据信息有误，导入失败");
                 }
@@ -201,6 +203,8 @@ public class MerchantInfoImportService extends BaseService {
                 try {
                     merchantCoreService.doAddMerContact(contcactList);
                 } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.error("第" + timeNum + "行数据的商户联系人信息有误，导入失败" + e);
                     return ResultDTO.fail("第" + timeNum + "行数据的商户联系人信息有误，导入失败");
                 }
                 /**
@@ -210,6 +214,8 @@ public class MerchantInfoImportService extends BaseService {
                 try {
                     bankId = merchantCoreService.doAddBanks(merchantBank);
                 } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.error("第" + timeNum + "行数据的银行卡信息有误，导入失败" + e);
                     return ResultDTO.fail("第" + timeNum + "行数据的银行卡信息有误，导入失败");
                 }
 
@@ -236,6 +242,8 @@ public class MerchantInfoImportService extends BaseService {
                         // 渠道信息保存
                         channelId = merchantCoreService.doAddChannel(merchantChannel);
                     } catch (Exception e) {
+                        e.printStackTrace();
+                        logger.error("第" + timeNum + "行数据的渠道信息有误，导入失败" + e);
                         return ResultDTO.fail("第" + timeNum + "行数据的渠道信息有误，导入失败");
                     }
                     
@@ -274,6 +282,8 @@ public class MerchantInfoImportService extends BaseService {
                         // pos机信息保存
                         posId = merchantPosService.insertPos(merchantPos);
                     } catch (Exception e) {
+                        e.printStackTrace();
+                        logger.error("第" + timeNum + "行数据的Pos机信息有误，导入失败" + e);
                         return ResultDTO.fail("第" + timeNum + "行数据的Pos机信息有误，导入失败");
                     }
                 }else{
@@ -283,20 +293,26 @@ public class MerchantInfoImportService extends BaseService {
                 /**
                  * 商户终端信息
                  */
-                String alipayFee = null;
-                String wechatFee = null;
+                String alipayFee = "0.00";
+                String wechatFee = "0.00";
                 try {
                     // 支付宝费率转换
                     String zfb1 = xx.substring(xx.indexOf("支付宝") + 3, xx.indexOf("%"));
-                    BigDecimal bigDecimal1 = new BigDecimal(zfb1);
-                    BigDecimal zfb = bigDecimal1.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
-                    alipayFee = String.valueOf(zfb.doubleValue());
+                    if(NumberUtils.isNumber(zfb1)){
+                        BigDecimal bigDecimal1 = new BigDecimal(zfb1);
+                        BigDecimal zfb = bigDecimal1.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        alipayFee = String.valueOf(zfb.doubleValue());
+                    }
                     // 微信费率转换
                     String wx1 = xx.substring(xx.indexOf("微信") + 2, xx.lastIndexOf("%"));
-                    BigDecimal bigDecimal2 = new BigDecimal(wx1);
-                    BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
-                    wechatFee = String.valueOf(wx.doubleValue());
+                    if(NumberUtils.isNumber(wx1)){
+                        BigDecimal bigDecimal2 = new BigDecimal(wx1);
+                        BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        wechatFee = String.valueOf(wx.doubleValue());
+                    }
                 } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.error("第" + timeNum + "行数据的商户终端信息有误，导入失败") ;
                     return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
                 }
                 
@@ -314,6 +330,8 @@ public class MerchantInfoImportService extends BaseService {
                     // 终端信息保存
                     merchantCoreService.doAddMerTerminal(terminalList);
                 } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.error("第" + timeNum + "行数据的商户终端信息有误，导入失败" + e);
                     return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
                 }
             }
@@ -322,7 +340,7 @@ public class MerchantInfoImportService extends BaseService {
         
         return ResultDTO.fail("没有导入数据，Excel为空");
     }
-
+    
     /**
      * saveFileToDB:(处理文件信息)
      * @param fileInfos    设定文件
@@ -432,6 +450,7 @@ public class MerchantInfoImportService extends BaseService {
             String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
             return newUrl;
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("上传失败！" + e);
 //            throw new RuntimeException();
         }
@@ -455,6 +474,7 @@ public class MerchantInfoImportService extends BaseService {
                 // 渠道信息保存
                 pufaChannelId = merchantCoreService.doAddChannel(merchantChannel);
             } catch (Exception e) {
+                e.printStackTrace();
                 return ResultDTO.fail("第" + timeNum + "行数据的渠道信息有误，导入失败");
             }
             /**
@@ -466,26 +486,34 @@ public class MerchantInfoImportService extends BaseService {
                 // pos机信息保存
                 posId = merchantPosService.insertPos(merchantPos);
             } catch (Exception e) {
+                e.printStackTrace();
                 return ResultDTO.fail("第" + timeNum + "行数据的Pos机信息有误，导入失败");
             }
 
             /**
              * 商户终端信息
              */
-            String alipayFee = null;
-            String wechatFee = null;
+            String alipayFee = "0.00";
+            String wechatFee = "0.00";
             try {
                 // 支付宝费率转换
                 String zfb1 = xx.substring(xx.indexOf("支付宝") + 3, xx.indexOf("%"));
-                BigDecimal bigDecimal1 = new BigDecimal(zfb1);
-                BigDecimal zfb = bigDecimal1.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
-                alipayFee = String.valueOf(zfb.doubleValue());
+                if(NumberUtils.isNumber(zfb1)){
+                    BigDecimal bigDecimal1 = new BigDecimal(zfb1);
+                    BigDecimal zfb = bigDecimal1.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    alipayFee = String.valueOf(zfb.doubleValue());
+                }
+               
                 // 微信费率转换
                 String wx1 = xx.substring(xx.indexOf("微信") + 2, xx.lastIndexOf("%"));
-                BigDecimal bigDecimal2 = new BigDecimal(wx1);
-                BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
-                wechatFee = String.valueOf(wx.doubleValue());
+                if(NumberUtils.isNumber(wx1)){
+                    BigDecimal bigDecimal2 = new BigDecimal(wx1);
+                    BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    wechatFee = String.valueOf(wx.doubleValue());
+                }
+              
             } catch (Exception e) {
+                e.printStackTrace();
                 return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
             }
             
@@ -503,6 +531,7 @@ public class MerchantInfoImportService extends BaseService {
                 // 终端信息保存
                 merchantCoreService.doAddMerTerminal(terminalList);
             } catch (Exception e) {
+                e.printStackTrace();
                 return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
             }
         }
