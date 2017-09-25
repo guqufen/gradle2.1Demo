@@ -147,14 +147,7 @@ function chart(dataTime,data){
 	            areaStyle: {
                   // 渐变区域
 	                normal: {
-	                    color: new echarts.graphic.LinearGradient(1,0,0,1,[
-	                    {
-	                        offset: 0,
-	                        color: '#fff'
-	                    },{
-	                        offset: 1,
-	                        color: '#ccc'
-	                    }])
+                    	color: '#ccc'
 	                }
 	            },
 	            data: [data[0],data[1],data[2],data[3],data[4],data[5]]
