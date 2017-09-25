@@ -20,7 +20,7 @@ public interface ImportErrorDAO {
     @Select("SELECT * FROM sys_import_error WHERE id = #{id}")
     public ImportErrorDO getById(@Param("id") int id);
 
-    @Insert("INSERT into sys_import_error(id,import_file_name,data,error_msg,create_time,create_user_Id,row_number) VALUES (#{id},#{importFileName},#{data},#{errorMsg},#{createTime},#{createUserId},#{rowNumber})")
+    @Insert("INSERT into sys_import_error(id,import_file_name,data,error_msg,create_time,create_user_Id,row_number,import_type) VALUES (#{id},#{importFileName},#{data},#{errorMsg},#{createTime},#{createUserId},#{rowNumber},#{importType})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(ImportErrorDO importError);
 
@@ -36,5 +36,16 @@ public interface ImportErrorDAO {
 
     @SelectProvider(type = ImportErrorProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("importError") ImportErrorDO importError);
-
+    
+    /**
+     * selectByCondition:(条件查询)
+     * @param importError
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月25日 下午4:13:00
+     * @return List<ImportErrorDO>    DOM对象
+     */
+    @Results({@Result( column = "import_file_name",property = "importFileName"),@Result( column = "error_msg",property = "errorMsg"),@Result( column = "create_time",property = "createTime"),@Result( column = "create_user_Id",property = "createUserId"),@Result( column = "row_number",property = "rowNumber"),@Result( column = "import_type",property = "importType")  })
+    @SelectProvider(type = ImportErrorProvider.class, method = "selectByCondition")
+    public List<ImportErrorDO> selectByCondition(@Param("importError") ImportErrorDO importError);
 }

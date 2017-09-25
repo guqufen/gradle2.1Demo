@@ -38,8 +38,81 @@ public class ImportErrorDO {
      * 错误行
      */
     private Integer rowNumber;
+    /**
+     * 导入文件类型
+     */
+    private Integer importType;
+    /**
+     * 
+     */
+    private Date startCreateTime;
+    private Date endCreateTime;
+    
+    /**
+     * startCreateTime
+     *
+     * @return  the startCreateTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Date getStartCreateTime() {
+        return startCreateTime;
+    }
 
+    /**
+     * startCreateTime
+     *
+     * @param   startCreateTime    the startCreateTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStartCreateTime(Date startCreateTime) {
+        this.startCreateTime = startCreateTime;
+    }
 
+    /**
+     * endCreateTime
+     *
+     * @return  the endCreateTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Date getEndCreateTime() {
+        return endCreateTime;
+    }
+
+    /**
+     * endCreateTime
+     *
+     * @param   endCreateTime    the endCreateTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEndCreateTime(Date endCreateTime) {
+        this.endCreateTime = endCreateTime;
+    }
+
+    /**
+     * importType
+     *
+     * @return  the importType
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getImportType() {
+        return importType;
+    }
+
+    /**
+     * importType
+     *
+     * @param   importType    the importType to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setImportType(Integer importType) {
+        this.importType = importType;
+    }
 
     public Integer getId() {
         return id;
