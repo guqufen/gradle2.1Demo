@@ -435,6 +435,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         String innerCode = "";
         for (MerchantTerminal merchantTerminal : merchantTerminals) {
+            merchantTerminal.setInnerTermCode(merchantTerminal.getTerminalCode());
             if (null != merchantTerminal.getId()) {
                 merchantTerminalDao.updateByPrimaryKeySelective(merchantTerminal);
             } else {
