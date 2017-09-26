@@ -64,19 +64,19 @@ $('#table').bootstrapTable({
 
 function formatterOperation(value, row, index) {
 	if (row.isTrue == 2||row.isTrue == 3) {
-		return [ '<a class="redact" onclick="javascript:tipMessage()" style="color:#4d5f84;" >生成报告</a>' ]
+		return [ '<a class="redact" onclick="javascript:tipMessage()" style="color:#9ba6bc;" >生成报告</a>' ]
 				.join('');
 	}
 	if (row.isTrue == 1&&value == 0 || value == 2 || value == 4) {
-		return [ '<a class="redact" onclick="javascript:tip()" style="color:#4d5f84;" target="_Blank">生成报告</a>' ]
+		return [ '<a class="redact" onclick="javascript:tip()" style="color:#9ba6bc;" target="_Blank">生成报告</a>' ]
 				.join('');
 	}
 	if (row.isTrue == 1&&value == 1) {
-		return [ '<a  class="check" style="color:#4d5f84;" target="_Blank" href="report.html?merchantId='
+		return [ '<a  class="check" style="color:#2964df;" target="_Blank" href="report.html?merchantId='
 				+ row.id + ' ">查看报告</a>' ].join('');
 	}
 	if (row.isTrue == 1&&value == 3) {
-		return [ '<a class="generate" style="color:#4d5f84;" onclick="javascript:sendEmail('
+		return [ '<a class="generate" style="color:#2964df;" onclick="javascript:sendEmail('
 				+ row.id + ')">生成报告</a> ' ].join('');
 	}
 }
