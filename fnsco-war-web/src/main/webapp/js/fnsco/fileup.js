@@ -52,12 +52,22 @@ var FileInput = function () {
         msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
     }).on("fileuploaded", function (event, data) {
         console.log(data);
-        var data = data.response.data;
-        if (data != "success") {
+        var data = data.response;
+        if (!data.success) {
         	alert(data);
         	//$('#importModal').modal("hide");
             return;
         }
+        var errorMsgStr = null;
+        var errorMsg = data.data;
+        for(var i in errorMsg){
+        	errorMsgStr += '第'+i.rowNumber+'行数据有误!原因:'+i.errorMsg+';';
+        }
+        if(!errorMsgStr){
+        	errorMsgStr = data.message;
+        }
+        
+        layer.msg(errorMsgStr);
         
         //1.初始化表格
         /*var oTable = new TableInit();
