@@ -123,7 +123,7 @@ $(function() {
 				$('select[id="reportCycle"]').find('option[value="1"]').attr("selected", true);// 报告周期,默认6个月数据预测六个月，不可改
 				$('select[id="reportCycle"]').attr('disabled','disabled');
 
-				$('#riskWarning').val(dd.riskWarning);// 风险
+				
 
 				$('#quota').val(dd.quota);// 额度
 
@@ -133,17 +133,21 @@ $(function() {
 				
 				//待审核状态
 				if(dd.status == 0){
+					$('h1').html( dd.merName+'的"风控+"报告审核页面');
+					$('#riskWarning1').html(dd.riskWarning);// 风险
+					$('#riskWarning1').show();//显示p标签
 					$('#btn_auditing').show();//显示审核成功按钮
 					$('#btn_auditingFail').show();//显示审核失败按钮
 					$('input').attr('disabled','disabled');//所有输入不可编辑
 					$('select').attr('disabled','disabled');//所有select不可选择
 					$('textarea').attr('disabled','disabled');//所有文本框不可编辑
-					$('h1').html( dd.merName+'的"风控+"报告审核页面');
 				//待编辑状态
 				}else{
+					$('h1').html( dd.merName+'的"风控+"报告编辑页面');
+					$('#riskWarning').html(dd.riskWarning);// 风险
+					$('#riskWarning').show();//显示textarea标签
 					$('#btn_save').show();//显示保存修改按钮
 					$('#btn_import').show();//显示导入数据按钮
-					$('h1').html( dd.merName+'的"风控+"报告编辑页面');
 				}
 				
 				//获取折线图
