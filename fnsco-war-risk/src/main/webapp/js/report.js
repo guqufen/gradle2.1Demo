@@ -135,22 +135,22 @@ function sendEmail(merchantId) {
 		btn : [ '确定', '取消' ]
 	}, function() {
 		layer.msg('发送邮件通知成功');
+		reportStatus(merchantId, 4);
 		$.ajax({
 			url : PROJECT_NAME + '/web/report/backPersonnelMes',
 			type : 'POST',
 			dataType : "json",
+			async: true,
 			data : {
 				"userId" : webUserOuterId,
 				"merchantId" : merchantId
 			},
 			success : function(data){
 				if (data.success) {
-					reportStatus(merchantId, 4);
 					window.location.reload();
 				}
 			}
 		});
-		
 	}, function() {
 		layer.msg('取消成功');
 	});

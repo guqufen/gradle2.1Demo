@@ -57,7 +57,17 @@ $(function(){
 			$(".size span").html(result.size);
 			$(".merName span").html(result.merName);
 			$(".riskWarning ").html(result.riskWarning);
-			$(".report-title").html(result.merName+"+报告");
+			$(".report-title").html(result.merName+"风控+报告");
+			$(".tradingArea span").html(result.tradingArea);
+			var level=result.decorationLevel;
+			if(level==0){
+				$(".decorationLevel span").html("普通");
+			}else if(level==1){
+				$(".decorationLevel span").html("中级");
+			}else if(level==2){
+				$(".decorationLevel span").html("高级");
+			}
+			
 		}
 	});
 	//查询全年风控曲线图
