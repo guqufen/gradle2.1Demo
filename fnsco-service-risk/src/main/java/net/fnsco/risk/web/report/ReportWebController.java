@@ -53,4 +53,10 @@ public class ReportWebController extends BaseController{
     public ResultDTO backPersonnelMes(@RequestParam String userId,@RequestParam String merchantId){
         return reportService.backPersonnelMes(NumberUtils.toInt(userId),NumberUtils.toInt(merchantId));
     }
+    //查询行业类别
+    @RequestMapping("queryIndustry")  
+    @ResponseBody
+    public ResultDTO queryIndustry(@RequestParam String id){
+        return reportService.queryIndustry(NumberUtils.toInt(id));
+    }
 }

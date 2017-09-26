@@ -29,10 +29,11 @@ import net.fnsco.risk.service.report.dao.ReportRepaymentHistoryDAO;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 import net.fnsco.risk.service.report.entity.YearReportDO;
+import net.fnsco.risk.service.sys.dao.IndustryDAO;
 import net.fnsco.risk.service.sys.dao.WebUserOuterDAO;
+import net.fnsco.risk.service.sys.entity.IndustryDO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 import net.fnsco.risk.service.trade.dao.TradeDataDAO;
-import net.fnsco.risk.service.trade.entity.TradeDataDO;
 
 @Service
 public class ReportService extends BaseService {
@@ -49,6 +50,8 @@ public class ReportService extends BaseService {
     private ReportRepaymentHistoryDAO reportRepaymentHistoryDAO;
     @Autowired
     private TradeDataDAO tradeDataDAO;
+    @Autowired
+    private IndustryDAO industryDAO;
     //前台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> page(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
@@ -412,5 +415,10 @@ public class ReportService extends BaseService {
             }
     	}
         return ResultDTO.success(list);
+    }
+
+    public ResultDTO queryIndustry(int id) {
+        IndustryDO dto=industryDAO.getById(id);
+        return ResultDTO.success(dto);
     }
 }

@@ -53,10 +53,9 @@ $(function(){
 			$(".businessLicenseNum span").html(result.businessLicenseNum);
 			$(".businessAddress span").html(result.businessAddress);
 			$(".businessDueTime span").html(result.businessDueTime);
-			$(".industry span").html(result.industry);
-			$(".size span").html(result.size);
+			//$(".size span").html(result.size);
 			$(".merName span").html(result.merName);
-			$(".riskWarning ").html(result.riskWarning);
+			$(".tips p").html(result.riskWarning);
 			$(".report-title").html(result.merName+"风控+报告");
 			$(".tradingArea span").html(result.tradingArea);
 			var level=result.decorationLevel;
@@ -67,7 +66,21 @@ $(function(){
 			}else if(level==2){
 				$(".decorationLevel span").html("高级");
 			}
-			
+			var size=result.size;
+			if(size==0){
+				$(".size span").html("单店");
+			}else if(size==1){
+				$(".size span").html("小型连锁");
+			}else if(size==2){
+				$(".size span").html("中型连锁");
+			}else if(size==3){
+				$(".size span").html("大型连锁");
+			}
+			var industry=result.industry;
+			queryIndustry(industry);
+			$(".p1").html("1.额度:"+result.quota);
+			$(".p2").html("2.利率:"+result.feeRate);
+			$(".p3").html("3.周期:"+result.loancycle);
 		}
 	});
 	//查询全年风控曲线图
@@ -89,6 +102,19 @@ $(function(){
 	});
 })
 
+//查询行业类别
+   function queryIndustry(industry){
+	$.ajax({
+		url : PROJECT_NAME + '/web/report/queryIndustry',
+		type : 'POST',
+		dataType : "json",
+		data : {"id":industry},
+		success : function(data){
+			console.log(data)
+			$(".industry span").html(data.data.first);
+		}
+	});
+}
 
 var myChart = echarts.init(document.getElementById('chart')); 
 //生成图表

@@ -130,12 +130,13 @@ function tip() {
 	layer.msg('报告正在生成中,请耐心等待');
 }
 function sendEmail(merchantId) {
+	reportStatus(merchantId, 4);
 	layer.confirm('确定生成报告吗？', {
 		time : 2000, // 20s后自动关闭
 		btn : [ '确定', '取消' ]
 	}, function() {
 		layer.msg('发送邮件通知成功');
-		reportStatus(merchantId, 4);
+		window.location.reload();
 		$.ajax({
 			url : PROJECT_NAME + '/web/report/backPersonnelMes',
 			type : 'POST',
@@ -146,9 +147,9 @@ function sendEmail(merchantId) {
 				"merchantId" : merchantId
 			},
 			success : function(data){
-				if (data.success) {
-					window.location.reload();
-				}
+//				if (data.success) {
+//					
+//				}
 			}
 		});
 	}, function() {
@@ -167,7 +168,7 @@ function reportStatus(merchantId, status) {
 			"status" : status
 		},
 		success : function(data) {
-			console.log(data)
+			
 		}
 	});
 }
