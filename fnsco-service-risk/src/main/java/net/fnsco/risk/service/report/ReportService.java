@@ -227,7 +227,7 @@ public class ReportService extends BaseService {
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
             helper.setFrom(new InternetAddress(nick+" <"+ev.getProperty("spring.mail.username")+">"));
-            helper.setTo("782430551@qq.com"); 
+            helper.setTo(ev.getProperty("manger.mail.address"));  
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
             sb.append("<div style='font-size:26px;margin-top:50px;'>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理" + "<a href='http://www.w3school.com.cn'>W3School</a></div>");
@@ -254,7 +254,7 @@ public class ReportService extends BaseService {
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
             helper.setFrom(new InternetAddress(nick+" <"+ev.getProperty("spring.mail.username")+">"));
-            helper.setTo(dto.getEmail());
+            helper.setTo(dto.getEmail()); 
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
             sb.append("<div style='font-size:26px;margin-top:50px;'>"+dto.getName()+"关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!点击查看" + "<a href='http://www.w3school.com.cn'>W3School</a></div>");
