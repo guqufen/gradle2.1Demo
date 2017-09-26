@@ -40,6 +40,7 @@ import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
+import net.fnsco.bigdata.service.modules.merchant.MerchantImportHelper;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.FileUtils;
@@ -84,7 +85,7 @@ public class MerchantInfoImportController extends BaseController {
     */
     @RequestMapping(value = "/doImport", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, String> doImport() {
+    public ResultDTO<String> doImport() {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         MultipartFile file = fileMap.get("excel_file_merchant");
@@ -113,18 +114,7 @@ public class MerchantInfoImportController extends BaseController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (!result.isSuccess()) {
-            Map<String, String> map = new HashMap<>();
-            if (("").equals(result.getMessage())) {
-                map.put("data", "批量导入EXCEL失败！");
-                return map;
-            }
-            map.put("data", result.getMessage());
-            return map;
-        }
-        Map<String, String> map = new HashMap<>();
-        map.put("data", "success");
-        return map;
+        return result;
     }
     
  // 批量导入客户
@@ -418,7 +408,7 @@ public class MerchantInfoImportController extends BaseController {
             }
             
             Date endImportTime = new Date();
-            List<ImportErrorDO> errorDOs = importErrorDAO.selectByCondition(MerchantImportHelper.createImportErrorDO(null, startImportTime, endImportTime, userId, null, 0, null, null, null));
+            List<ImportErrorDO> errorDOs = importErrorDAO.selectByCondition(ImportErrorMsgHelper.createImportErrorDO(null, startImportTime, endImportTime, userId, null, 0, null, null, null));
             return ResultDTO.success(errorDOs);
         }
         
@@ -630,7 +620,7 @@ public class MerchantInfoImportController extends BaseController {
     private void saveErrorMsgToDB(Date createTime,Date startCreateTime,Date endCreateTime,Integer createUserId,Integer rowNumber,
                                   String importFileName,String errorMsg,String data,Exception e){
         
-        ImportErrorDO errorDo =  MerchantImportHelper.createImportErrorDO(createTime, startCreateTime, endCreateTime, createUserId, rowNumber, 0, importFileName, errorMsg, data);
+        ImportErrorDO errorDo =  ImportErrorMsgHelper.createImportErrorDO(createTime, startCreateTime, endCreateTime, createUserId, rowNumber, 0, importFileName, errorMsg, data);
         importErrorDAO.insert(errorDo);
         logger.error("第" + rowNumber + errorMsg,e);
     }
