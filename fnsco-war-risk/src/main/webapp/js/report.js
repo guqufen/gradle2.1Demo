@@ -47,7 +47,8 @@ $('#table').bootstrapTable({
 		title : '商户编码'
 	}, {
 		field : 'industry',
-		title : '行业'
+		title : '行业',
+		formatter : formatterIndustry
 	}, {
 		field : 'tradingArea',
 		title : '商圈'
@@ -60,8 +61,8 @@ $('#table').bootstrapTable({
 		formatter : formatterSize
 	} ]
 });
+
 function formatterOperation(value, row, index) {
-	console.log(value)
 	if (row.isTrue == 2||row.isTrue == 3) {
 		return [ '<a class="redact" onclick="javascript:tipMessage()" style="color:#4d5f84;" >生成报告</a>' ]
 				.join('');
@@ -92,6 +93,27 @@ function formatterSize(value, row, index) {
 	if (value == 3) {
 		return "大型连锁";
 	}
+}
+function formatterIndustry(value, row, index){
+	var val=queryIndustry(value);
+	console.log(val)
+	return val;
+}
+
+function queryIndustry(value){
+	var result;
+	$.ajax({
+		url : PROJECT_NAME + '/web/report/queryIndustry',
+		type : 'POST',
+		async: false,
+		dataType : "json",
+		data : {"id":value},
+		success : function(data){
+			result = data.data.first;
+			console.log(result)
+		}
+	});
+	return result;
 }
 // 组装请求参数
 function queryParams(params) {
@@ -140,7 +162,6 @@ function sendEmail(merchantId) {
 			url : PROJECT_NAME + '/web/report/backPersonnelMes',
 			type : 'POST',
 			dataType : "json",
-			async: true,
 			data : {
 				"userId" : webUserOuterId,
 				"merchantId" : merchantId
@@ -167,7 +188,7 @@ function reportStatus(merchantId, status) {
 			"status" : status
 		},
 		success : function(data) {
-			console.log(data)
+			
 		}
 	});
 }
