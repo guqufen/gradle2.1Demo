@@ -36,6 +36,9 @@ var getReportChart = function getReportChart(){
 				/*获取生成图表的参数*/
 				var json=data.data;
 
+				$('#trend-chart').val(true);
+
+				console.log($('#trend-chart').val());
 				//置空，不然容易出现数据叠加
 				dateList = [];
 				dataList = [];
@@ -46,8 +49,9 @@ var getReportChart = function getReportChart(){
 				}
 				console.log(dateList,dataList);
 				
-				chart(dateList,dataList)
+				chart(dateList,dataList);
 			}else{
+				$('#trend-chart').val(false);
 				layer.msg(data.message);
 			}
 
@@ -83,11 +87,14 @@ $(function() {
 		success : function(data) {
 			if (data.success) {
 
+				
+
 				// 数据获取成功，则将获取到的数据赋值给当前页面
 				var dd = data.data;
 
 				$('#merName').val(dd.merName);// 商户名称
 				$('#merName').attr('disabled','disabled');
+				
 
 				$('#businessLicenseNum').val(dd.businessLicenseNum)// 营业执照
 				$('#businessLicenseNum').attr('disabled','disabled');
@@ -116,7 +123,7 @@ $(function() {
 				$('select[id="reportCycle"]').find('option[value="1"]').attr("selected", true);// 报告周期,默认6个月数据预测六个月，不可改
 				$('select[id="reportCycle"]').attr('disabled','disabled');
 
-				$('#riskWarning').val(dd.riskWarning);// 风险
+				
 
 				$('#quota').val(dd.quota);// 额度
 
@@ -126,6 +133,9 @@ $(function() {
 				
 				//待审核状态
 				if(dd.status == 0){
+					$('h1').html( dd.merName+'的"风控+"报告审核页面');
+					$('#riskWarning1').html(dd.riskWarning);// 风险
+					$('#riskWarning1').show();//显示p标签
 					$('#btn_auditing').show();//显示审核成功按钮
 					$('#btn_auditingFail').show();//显示审核失败按钮
 					$('input').attr('disabled','disabled');//所有输入不可编辑
@@ -133,6 +143,9 @@ $(function() {
 					$('textarea').attr('disabled','disabled');//所有文本框不可编辑
 				//待编辑状态
 				}else{
+					$('h1').html( dd.merName+'的"风控+"报告编辑页面');
+					$('#riskWarning').html(dd.riskWarning);// 风险
+					$('#riskWarning').show();//显示textarea标签
 					$('#btn_save').show();//显示保存修改按钮
 					$('#btn_import').show();//显示导入数据按钮
 				}
@@ -290,6 +303,10 @@ function saveOrUpdate(status){
 		return false;
 	}
 
+	if( !$('#trend-chart').val() ){
+		layer.msg('请先导入数据,再提交此次编辑');
+		return false;
+	}
 //	//营业额
 //	var turnover = $('#turnover').val();
 //	if(turnover == ""){
@@ -444,115 +461,6 @@ function updateStatue(status){
 				layer.msg('操作失败');
 			}
 		});
-}
-
-//还款能力历史与预测table
-$('#table').bootstrapTable({
-	sidePagination : 'server',
-	method : 'get',//提交方式
-	search : false, // 是否启动搜索栏
-	url : PROJECT_NAME + '/report/queryRepay',
-	showRefresh : true,// 是否显示刷新按钮
-	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
-	striped : true, // 是否显示行间隔色
-	cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-	pagination : true, // 是否显示分页（*）
-	sortable : true, // 是否启用排序
-	uniqueId : 'id', //将index列设为唯一索引
-	sortOrder : "asc", // 排序方式
-	pageNumber : 1, // 初始化加载第一页，默认第一页
-	pageSize : 50, // 每页的记录行数（*）
-	singleSelect : true,// 单选
-	pageList : [ 15, 20, 50, 100 ], // 可供选择的每页的行数（*）
-	queryParams : queryParamss,
-	responseHandler : responseHandler,// 处理服务器返回数据
-	columns : [ {
-		field : 'id',
-		title : 'ID',
-		width : '10%',
-		align : 'center',
-		width : 30
-	}, {
-		field : 'reportId',
-		title : '报告ID',
-		width : 30
-	}, {
-		field : 'monthOne',
-		title : '一月',
-		width : 30
-	}, {
-		field : 'monthTwo',
-		title : '二月',
-		width : 30
-	}, {
-		field : 'monthThree',
-		title : '三月',
-		width : 30
-	}, {
-		field : 'monthFore',
-		title : '四月',
-		width : 30
-	}, {
-		field : 'monthFive',
-		title : '五月',
-		width : 30
-	}, {
-		field : 'monthSix',
-		title : '六月',
-		width : 30
-	}, {
-		field : 'monthSeven',
-		title : '七月',
-		width : 30
-	}, {
-		field : 'monthEight',
-		title : '八月',
-		width : 30
-	}, {
-		field : 'monthNine',
-		title : '九月',
-		width : 30
-	}, {
-		field : 'monthTen',
-		title : '十月',
-		width : 30
-	}, {
-		field : 'monthEleven',
-		title : '十一月',
-		width : 30
-	}, {
-		field : 'monthTwelve',
-		title : '十二月',
-		width : 30
-	} , {
-		field : 'lastModifyTimeStr',
-		title : '最后修改时间',
-		width : 30
-	} ]
-});
-//处理后台返回数据
-function responseHandler(res) {
-	unloginHandler(res);
-	if (res.list) {
-		return {
-			"rows" : res.list,
-			"total" : res.total
-		};
-	} else {
-		return {
-			"rows" : [],
-			"total" : 0
-		};
-	}
-}
-//组装请求参数
-function queryParamss(params) {
-	var param = {
-		'currentPageNum' : this.pageNumber,
-		'pageSize' : 1,//只查询时间最近的一条
-		'reportId' : merchantId
-	}
-	return param;
 }
 
 /** 导入功能 **/
