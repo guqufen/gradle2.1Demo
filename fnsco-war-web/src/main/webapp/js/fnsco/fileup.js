@@ -61,7 +61,7 @@ var FileInput = function () {
         var errorMsgStr = null;
         var errorMsg = data.data;
         for(var i in errorMsg){
-        	errorMsgStr += i.errorMsg+';';
+        	errorMsgStr += '第'+i.rowNumber+'行数据有误!原因:'+i.errorMsg+';';
         }
         if(!errorMsgStr){
         	errorMsgStr = data.message;
