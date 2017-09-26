@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -522,6 +521,7 @@ public class MerchantInfoImportController extends BaseController {
             FileUtils.getFileInputStreamByUrl(filePath,fileURL);
             OssLoaclUtil.uploadFile(fileURL, fileKey);
             String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+            FileUtils.delFile(fileURL);
             return newUrl;
         } catch (Exception e) {
             logger.error("上传失败！" ,e);
