@@ -196,7 +196,7 @@ public class ReadExcel {
         // 解析公式结果
         FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
         List<Object[]> list = Lists.newArrayList();
-        int minRowIx = sheet.getFirstRowNum() + 2;
+        int minRowIx = sheet.getFirstRowNum() + 1;
         int maxRowIx = sheet.getLastRowNum();
         Row row1 = sheet.getRow(minRowIx);
         Row row2 = sheet.getRow(sheet.getFirstRowNum());

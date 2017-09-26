@@ -365,7 +365,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     public ResultDTO<String> doAddMerCore(MerchantCore merchantCore) {
 
         if (null == merchantCore.getId()) {
-            merchantCore.setSource(0);
+            if(null == merchantCore.getSource()){
+                merchantCore.setSource(0);
+            }
             merchantCore.setModifyUserId("admin");//待定
             merchantCore.setModifyTime(new Date());
             merchantCore.setStatus(1);
