@@ -217,12 +217,17 @@ public class ReportService extends BaseService {
         ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
         WebUserOuterDO dto = webUserOuterDAO.getById(userId);
         MimeMessage message = null;
+        String nick="";    
+        try {    
+            nick=javax.mail.internet.MimeUtility.encodeText("杭州法奈昇科技有限公司");    
+        } catch (Exception e) {    
+            e.printStackTrace();    
+        }     
         try {
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
-            String nick = javax.mail.internet.MimeUtility.encodeText("哔哩哔哩-旅游");
-            helper.setFrom(ev.getProperty("spring.mail.username"));
-            helper.setTo("782430551@qq.com");
+            helper.setFrom(new InternetAddress(nick+" <"+ev.getProperty("spring.mail.username")+">"));
+            helper.setTo(ev.getProperty("manger.mail.address"));  
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
             sb.append("<div style='font-size:26px;margin-top:50px;'>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理" + "<a href='http://www.w3school.com.cn'>W3School</a></div>");
@@ -239,11 +244,17 @@ public class ReportService extends BaseService {
         ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
         WebUserOuterDO dto = webUserOuterDAO.getById(userId);
         MimeMessage message = null;
+        String nick="";    
+        try {    
+            nick=javax.mail.internet.MimeUtility.encodeText("杭州法奈昇科技有限公司");    
+        } catch (Exception e) {    
+            e.printStackTrace();    
+        }     
         try {
             message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom(ev.getProperty("spring.mail.username"));
-            helper.setTo(dto.getEmail());
+            MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
+            helper.setFrom(new InternetAddress(nick+" <"+ev.getProperty("spring.mail.username")+">"));
+            helper.setTo(dto.getEmail()); 
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
             sb.append("<div style='font-size:26px;margin-top:50px;'>"+dto.getName()+"关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!点击查看" + "<a href='http://www.w3school.com.cn'>W3School</a></div>");

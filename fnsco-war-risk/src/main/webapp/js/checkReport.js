@@ -80,7 +80,7 @@ $(function(){
 			queryIndustry(industry);
 			$(".p1").html("1.额度:"+result.quota);
 			$(".p2").html("2.利率:"+result.feeRate);
-			$(".p3").html("3.周期:"+result.loancycle);
+			$(".p3").html("3.周期:"+result.loanCycle);
 		}
 	});
 	//查询全年风控曲线图
