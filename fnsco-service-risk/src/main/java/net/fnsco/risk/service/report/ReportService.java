@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
@@ -218,14 +219,15 @@ public class ReportService extends BaseService {
         MimeMessage message = null;
         try {
             message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
+            String nick = javax.mail.internet.MimeUtility.encodeText("哔哩哔哩-旅游");
             helper.setFrom(ev.getProperty("spring.mail.username"));
             helper.setTo("782430551@qq.com");
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
             sb.append("<div style='font-size:26px;margin-top:50px;'>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理" + "<a href='http://www.w3school.com.cn'>W3School</a></div>");
             helper.setText(sb.toString(), true);
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         mailSender.send(message);
