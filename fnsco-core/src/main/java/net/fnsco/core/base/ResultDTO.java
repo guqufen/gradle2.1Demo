@@ -2,6 +2,8 @@ package net.fnsco.core.base;
 
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
@@ -40,11 +42,6 @@ public class ResultDTO<T extends Object> extends DTO {
     public static ResultDTO successForSubmit() {
         return successForSubmit(null);
     }
-//    public static ResultDTO successForSubmit(String data) {
-//        Map map = Maps.newHashMap();
-//        map.put("result", data);
-//        return success(map);
-//    }
     public static ResultDTO success(Object data) {
         ResultDTO result = new ResultDTO(true, data, CoreConstants.OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.OK));
         return result;
