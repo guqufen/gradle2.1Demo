@@ -70,6 +70,7 @@ public class MerchantInfoImportService extends BaseService {
         // 循环便利customList数组，将其中excel每一行的数据分批导入数据库
         
         ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+//        Date startImportTime = new Date();
         
         if (customerList.size() != 0) {
             // excel导出的空数据是“null”，赋值一个空字符串
@@ -171,7 +172,7 @@ public class MerchantInfoImportService extends BaseService {
                  * 导入之前要先验证business_license_num 营业执照号码保持唯一,如果存在，则不新加商户，只加该商户其余属性。
                  */
                 if (Strings.isNullOrEmpty(businesslicensenum)) {
-                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "营业执照为空!不能入库", objs.toString(),null);
+//                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "营业执照为空!不能入库", objs.toString(),null);
                     continue;
                 }
                 String  innerCode = null;
@@ -196,7 +197,7 @@ public class MerchantInfoImportService extends BaseService {
                 try {
                     merchantCoreService.doAddMerCore(merchantCore);
                 } catch (Exception e) {
-                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的基本数据信息有误，导入失败", objs.toString(),e);
+//                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的基本数据信息有误，导入失败", objs.toString(),e);
                     continue;
                 }
 
@@ -208,7 +209,7 @@ public class MerchantInfoImportService extends BaseService {
                 try {
                     merchantCoreService.doAddMerContact(contcactList);
                 } catch (Exception e) {
-                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的商户联系人信息有误，导入失败", objs.toString(),e);
+//                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的商户联系人信息有误，导入失败", objs.toString(),e);
                     continue;
                 }
                 /**
@@ -218,7 +219,7 @@ public class MerchantInfoImportService extends BaseService {
                 try {
                     bankId = merchantCoreService.doAddBanks(merchantBank);
                 } catch (Exception e) {
-                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的银行卡信息有误，导入失败", objs.toString(),e);
+//                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的银行卡信息有误，导入失败", objs.toString(),e);
                     continue;
                 }
                 
@@ -239,7 +240,7 @@ public class MerchantInfoImportService extends BaseService {
                  * 渠道信息--根据innerCode+merchantCode+channelType判断唯一性，如果存在，则获取ID ，否则新增加
                  */
                 if (Strings.isNullOrEmpty(merchantCode)) {
-                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "渠道商户号为空 不能入库", objs.toString(),null);
+//                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "渠道商户号为空 不能入库", objs.toString(),null);
                     continue;
                 }
                 
@@ -255,24 +256,12 @@ public class MerchantInfoImportService extends BaseService {
                         // 渠道信息保存
                         channelId = merchantCoreService.doAddChannel(merchantChannel);
                     } catch (Exception e) {
-                        saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的渠道信息有误，导入失败", objs.toString(),e);
+//                        saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的渠道信息有误，导入失败", objs.toString(),e);
                         continue;
                     }
                     
                 } else {
                     channelId = channel.getId();
-                }
-                /**
-                 * 爱农
-                 */
-                MerchantChannel ainongChannel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, merchantCode,"02");
-                if(null == ainongChannel){
-                    ResultDTO<Object> resultDTO = createChanelAndPosAndTer(innerCode, merchantCode, userId, privateKye, mercrefername, posType, posFactory, sncode, posaddr, bankId, xx, debitCardRate,
-                        debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee, creditCardMaxFee, innerTermCode, terminalCode, timeNum, "02", "01");
-                    if(!resultDTO.isSuccess()){
-                        saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的爱农渠道数据导入错误", objs.toString(),null);
-                        continue;
-                    }
                 }
                 
                 /**
@@ -282,8 +271,21 @@ public class MerchantInfoImportService extends BaseService {
                     ResultDTO<Object> resultDTO = createChanelAndPosAndTer(innerCode, busiCode, userId, privateKye, mercrefername, posType, posFactory, sncode, posaddr, bankId, xx,
                         debitCardRate, debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee, creditCardMaxFee, innerTermCode, terminalCode, timeNum, "01", "00");
                     if(!resultDTO.isSuccess()){
-                        saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的浦发渠道数据导入错误", objs.toString(),null);
+//                        saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的浦发渠道数据导入错误", objs.toString(),null);
                         continue;
+                    }
+                }else{
+                    /**
+                     * 爱农
+                     */
+                    MerchantChannel ainongChannel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, merchantCode,"02");
+                    if(null == ainongChannel){
+                        ResultDTO<Object> resultDTO = createChanelAndPosAndTer(innerCode, merchantCode, userId, privateKye, mercrefername, posType, posFactory, sncode, posaddr, bankId, xx, debitCardRate,
+                            debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee, creditCardMaxFee, innerTermCode, terminalCode, timeNum, "02", "01");
+                        if(!resultDTO.isSuccess()){
+//                            saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的爱农渠道数据导入错误", objs.toString(),null);
+                            continue;
+                        }
                     }
                 }
                 
@@ -302,7 +304,7 @@ public class MerchantInfoImportService extends BaseService {
                         // pos机信息保存
                         posId = merchantPosService.insertPos(merchantPos);
                     } catch (Exception e) {
-                        saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的Pos机信息有误，导入失败", objs.toString(),e);
+//                        saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的Pos机信息有误，导入失败", objs.toString(),e);
                         continue;
                     }
                 }else{
@@ -329,8 +331,40 @@ public class MerchantInfoImportService extends BaseService {
                         BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
                         wechatFee = String.valueOf(wx.doubleValue());
                     }
+                    //转换单位
+                    if(NumberUtils.isNumber(debitCardRate)){
+                        BigDecimal bigDecimal2 = new BigDecimal(debitCardRate);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        debitCardRate = String.valueOf(temp.doubleValue());
+                    }
+                    if(NumberUtils.isNumber(creditCardRate)){
+                        BigDecimal bigDecimal2 = new BigDecimal(creditCardRate);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        creditCardRate = String.valueOf(temp.doubleValue());
+                    }
+                    if(NumberUtils.isNumber(debitCardMaxFee)){
+                        BigDecimal bigDecimal2 = new BigDecimal(debitCardMaxFee);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        debitCardMaxFee = String.valueOf(temp.intValue());
+                    }
+                    if(NumberUtils.isNumber(creditCardMaxFee)){
+                        BigDecimal bigDecimal2 = new BigDecimal(creditCardMaxFee);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        creditCardMaxFee = String.valueOf(temp.intValue());
+                    }
+                    if(NumberUtils.isNumber(debitCardFee)){
+                        BigDecimal bigDecimal2 = new BigDecimal(debitCardFee);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        debitCardFee = String.valueOf(temp.intValue());
+                    }
+                    if(NumberUtils.isNumber(creditCardFee)){
+                        BigDecimal bigDecimal2 = new BigDecimal(creditCardFee);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        creditCardFee = String.valueOf(temp.intValue());
+                    }
+                    
                 } catch (Exception e) {
-                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的商户终端信息有误，导入失败", objs.toString(),e);
+//                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的商户终端信息有误，导入失败", objs.toString(),e);
                     continue;
                 }
                 
@@ -348,17 +382,18 @@ public class MerchantInfoImportService extends BaseService {
                     // 终端信息保存
                     merchantCoreService.doAddMerTerminal(terminalList);
                 } catch (Exception e) {
-                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的商户终端信息有误，导入失败", objs.toString(),e);
+//                    saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的商户终端信息有误，导入失败", objs.toString(),e);
                     continue;
                 }
             }
             
+            Date endImportTime = new Date();
+//            List<ImportErrorDO> errorDOs = importErrorDAO.selectByCondition(ImportErrorMsgHelper.createImportErrorDO(null, startImportTime, endImportTime, userId, null, 0, null, null, null));
             return ResultDTO.success();
         }
         
         return ResultDTO.fail("没有导入数据，Excel为空");
     }
-    
     /**
      * saveFileToDB:(处理文件信息)
      * @param fileInfos    设定文件
@@ -388,6 +423,9 @@ public class MerchantInfoImportService extends BaseService {
             }
             String fileType = singleFile[0];
             String filePath = singleFile[1];
+            if(!Strings.isNullOrEmpty(filePath) && filePath.contains("|")){
+                filePath = filePath.split("\\|")[0];
+            }
             
             /**
              * 校验、如果存在，则舍去多余图片
@@ -466,6 +504,7 @@ public class MerchantInfoImportService extends BaseService {
             FileUtils.getFileInputStreamByUrl(filePath,fileURL);
             OssLoaclUtil.uploadFile(fileURL, fileKey);
             String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+            FileUtils.delFile(fileURL);
             return newUrl;
         } catch (Exception e) {
             logger.error("上传失败！" ,e);
@@ -527,7 +566,37 @@ public class MerchantInfoImportService extends BaseService {
                     BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
                     wechatFee = String.valueOf(wx.doubleValue());
                 }
-              
+              //转换单位
+                if(NumberUtils.isNumber(debitCardRate)){
+                    BigDecimal bigDecimal2 = new BigDecimal(debitCardRate);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    debitCardRate = String.valueOf(temp.doubleValue());
+                }
+                if(NumberUtils.isNumber(creditCardRate)){
+                    BigDecimal bigDecimal2 = new BigDecimal(creditCardRate);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    creditCardRate = String.valueOf(temp.doubleValue());
+                }
+                if(NumberUtils.isNumber(debitCardMaxFee)){
+                    BigDecimal bigDecimal2 = new BigDecimal(debitCardMaxFee);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    debitCardMaxFee = String.valueOf(temp.intValue());
+                }
+                if(NumberUtils.isNumber(creditCardMaxFee)){
+                    BigDecimal bigDecimal2 = new BigDecimal(creditCardMaxFee);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    creditCardMaxFee = String.valueOf(temp.intValue());
+                }
+                if(NumberUtils.isNumber(debitCardFee)){
+                    BigDecimal bigDecimal2 = new BigDecimal(debitCardFee);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    debitCardFee = String.valueOf(temp.intValue());
+                }
+                if(NumberUtils.isNumber(creditCardFee)){
+                    BigDecimal bigDecimal2 = new BigDecimal(creditCardFee);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    creditCardFee = String.valueOf(temp.intValue());
+                }
             } catch (Exception e) {
                 logger.error("第" + timeNum + "行数据的商户终端信息有误，导入失败",e);
                 return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
@@ -553,20 +622,6 @@ public class MerchantInfoImportService extends BaseService {
         }
         
         return ResultDTO.success();
-    }
-    
-    /**
-     * saveErrorMsgToDB:(入库错误消息信息）    设定文件
-     * @author    tangliang
-     * @date      2017年9月25日 下午4:35:05
-     * @return void    DOM对象
-     */
-    private void saveErrorMsgToDB(Date createTime,Date startCreateTime,Date endCreateTime,Integer createUserId,Integer rowNumber,
-                                  String importFileName,String errorMsg,String data,Exception e){
-        
-//        ImportErrorDO errorDo =  MerchantImportHelper.createImportErrorDO(createTime, startCreateTime, endCreateTime, createUserId, rowNumber, 0, importFileName, errorMsg, data);
-//        importErrorDAO.insert(errorDo);
-//        logger.error("第" + rowNumber + errorMsg,e);
     }
     
 }
