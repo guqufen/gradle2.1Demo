@@ -315,18 +315,6 @@ public class MerchantInfoImportController extends BaseController {
                 } else {
                     channelId = channel.getId();
                 }
-                /**
-                 * 爱农
-                 */
-                MerchantChannel ainongChannel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, merchantCode,"02");
-                if(null == ainongChannel){
-                    ResultDTO<Object> resultDTO = createChanelAndPosAndTer(innerCode, merchantCode, userId, privateKye, mercrefername, posType, posFactory, sncode, posaddr, bankId, xx, debitCardRate,
-                        debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee, creditCardMaxFee, innerTermCode, terminalCode, timeNum, "02", "01");
-                    if(!resultDTO.isSuccess()){
-                        saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的爱农渠道数据导入错误", objs.toString(),null);
-                        continue;
-                    }
-                }
                 
                 /**
                  * 浦发
@@ -337,6 +325,19 @@ public class MerchantInfoImportController extends BaseController {
                     if(!resultDTO.isSuccess()){
                         saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的浦发渠道数据导入错误", objs.toString(),null);
                         continue;
+                    }
+                }else{
+                    /**
+                     * 爱农
+                     */
+                    MerchantChannel ainongChannel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, merchantCode,"02");
+                    if(null == ainongChannel){
+                        ResultDTO<Object> resultDTO = createChanelAndPosAndTer(innerCode, merchantCode, userId, privateKye, mercrefername, posType, posFactory, sncode, posaddr, bankId, xx, debitCardRate,
+                            debitCardMaxFee, debitCardFee, creditCardRate, creditCardFee, creditCardMaxFee, innerTermCode, terminalCode, timeNum, "02", "01");
+                        if(!resultDTO.isSuccess()){
+                            saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的爱农渠道数据导入错误", objs.toString(),null);
+                            continue;
+                        }
                     }
                 }
                 
@@ -382,6 +383,38 @@ public class MerchantInfoImportController extends BaseController {
                         BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
                         wechatFee = String.valueOf(wx.doubleValue());
                     }
+                    //转换单位
+                    if(NumberUtils.isNumber(debitCardRate)){
+                        BigDecimal bigDecimal2 = new BigDecimal(debitCardRate);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        debitCardRate = String.valueOf(temp.doubleValue());
+                    }
+                    if(NumberUtils.isNumber(creditCardRate)){
+                        BigDecimal bigDecimal2 = new BigDecimal(creditCardRate);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        creditCardRate = String.valueOf(temp.doubleValue());
+                    }
+                    if(NumberUtils.isNumber(debitCardMaxFee)){
+                        BigDecimal bigDecimal2 = new BigDecimal(debitCardMaxFee);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        debitCardMaxFee = String.valueOf(temp.intValue());
+                    }
+                    if(NumberUtils.isNumber(creditCardMaxFee)){
+                        BigDecimal bigDecimal2 = new BigDecimal(creditCardMaxFee);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        creditCardMaxFee = String.valueOf(temp.intValue());
+                    }
+                    if(NumberUtils.isNumber(debitCardFee)){
+                        BigDecimal bigDecimal2 = new BigDecimal(debitCardFee);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        debitCardFee = String.valueOf(temp.intValue());
+                    }
+                    if(NumberUtils.isNumber(creditCardFee)){
+                        BigDecimal bigDecimal2 = new BigDecimal(creditCardFee);
+                        BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                        creditCardFee = String.valueOf(temp.intValue());
+                    }
+                    
                 } catch (Exception e) {
                     saveErrorMsgToDB(new Date(), null, null, userId, timeNum, importFileName, "行数据的商户终端信息有误，导入失败", objs.toString(),e);
                     continue;
@@ -413,7 +446,6 @@ public class MerchantInfoImportController extends BaseController {
         
         return ResultDTO.fail("没有导入数据，Excel为空");
     }
-    
     /**
      * saveFileToDB:(处理文件信息)
      * @param fileInfos    设定文件
@@ -443,6 +475,9 @@ public class MerchantInfoImportController extends BaseController {
             }
             String fileType = singleFile[0];
             String filePath = singleFile[1];
+            if(!Strings.isNullOrEmpty(filePath) && filePath.contains("|")){
+                filePath = filePath.split("\\|")[0];
+            }
             
             /**
              * 校验、如果存在，则舍去多余图片
@@ -583,7 +618,37 @@ public class MerchantInfoImportController extends BaseController {
                     BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
                     wechatFee = String.valueOf(wx.doubleValue());
                 }
-              
+              //转换单位
+                if(NumberUtils.isNumber(debitCardRate)){
+                    BigDecimal bigDecimal2 = new BigDecimal(debitCardRate);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    debitCardRate = String.valueOf(temp.doubleValue());
+                }
+                if(NumberUtils.isNumber(creditCardRate)){
+                    BigDecimal bigDecimal2 = new BigDecimal(creditCardRate);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    creditCardRate = String.valueOf(temp.doubleValue());
+                }
+                if(NumberUtils.isNumber(debitCardMaxFee)){
+                    BigDecimal bigDecimal2 = new BigDecimal(debitCardMaxFee);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    debitCardMaxFee = String.valueOf(temp.intValue());
+                }
+                if(NumberUtils.isNumber(creditCardMaxFee)){
+                    BigDecimal bigDecimal2 = new BigDecimal(creditCardMaxFee);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    creditCardMaxFee = String.valueOf(temp.intValue());
+                }
+                if(NumberUtils.isNumber(debitCardFee)){
+                    BigDecimal bigDecimal2 = new BigDecimal(debitCardFee);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    debitCardFee = String.valueOf(temp.intValue());
+                }
+                if(NumberUtils.isNumber(creditCardFee)){
+                    BigDecimal bigDecimal2 = new BigDecimal(creditCardFee);
+                    BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                    creditCardFee = String.valueOf(temp.intValue());
+                }
             } catch (Exception e) {
                 logger.error("第" + timeNum + "行数据的商户终端信息有误，导入失败",e);
                 return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
@@ -610,7 +675,6 @@ public class MerchantInfoImportController extends BaseController {
         
         return ResultDTO.success();
     }
-    
     /**
      * saveErrorMsgToDB:(入库错误消息信息）    设定文件
      * @author    tangliang
