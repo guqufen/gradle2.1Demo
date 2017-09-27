@@ -290,9 +290,19 @@ public class ReportService extends BaseService {
             reportInfoDO.setStatus(0);
         }
 
+        //更新风控状态
         reportInfoDO.setLastModifyTime(new Date());
-        int result = reportInfoDAO.update(reportInfoDO);
+        reportInfoDAO.update(reportInfoDO);
 
+        //重新查询状态
+        ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());//根据ID查找数据
+        //审核成功，则发邮件通知用户
+        if(1 == reportInfo.getStatus()){
+        	Integer userId = webUserOuterDAO.getByInnercode(reportInfo.getInnerCode().trim());
+        	//邮件通知用户
+        	headPersonnelMes(userId, reportInfoDO.getId());
+        }
+        
         return ResultDTO.success();
     }
 

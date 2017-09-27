@@ -15,30 +15,42 @@
     <link href="css/custom.css" rel="stylesheet">
     <link href="css/plugins/bootstrap/fileinput.css" rel="stylesheet">
     <style>
-    	#trend-chart{
-			width:100%;
-			height: 600px;
-			position: relative;
-		}
-		.form-group div.bar{
-			width: 0;
-			height: 490px;
-			left: 50%;
-			bottom: 55px;
-			position: absolute;
-			z-index: 9;
-			margin:0;
-			margin-left:-3.7%;
-			border-left:1px dashed #666;
-		}
-		#trend-chart #chart{
-			position: absolute;
-			height: 100%;width: 100%;left: 0;top: 0;
-		}
-    </style>
+#trend-chart {
+	width: 100%;
+	height: 600px;
+	position: relative;
+}
+
+.form-group div.bar {
+	width: 0;
+	height: 490px;
+	left: 50%;
+	bottom: 55px;
+	position: absolute;
+	z-index: 9;
+	margin: 0;
+	margin-left: -3.7%;
+	border-left: 1px dashed #666;
+}
+
+#trend-chart #chart {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+
+.report-title {
+	padding-bottom: 10px;
+	text-align: center;
+}
+
+</style>
 </head>
 
 <body class="gray-bg">
+<h1 class="report-title"></h1>
 <div class="panel-body animated fadeInRight">
     <div class="panel panel-default">
         <form id="formSearch" class="form-horizontal">
@@ -120,8 +132,9 @@
 		<div class="panel panel-default">
 			<div class="form-group" style="margin-top: 15px">
 				<h2>风险</h2>
-				<textarea cols="2" class="form-control" id="riskWarning"
-					name="riskWarning"></textarea>
+				<textarea class="form-control" id="riskWarning"
+					name="riskWarning" placeholder="最多500个字" style="display:none;"></textarea>
+					<pre id="riskWarning1" style="display:none;"></pre>
 			</div>
 		</div>
 		<div class="panel panel-default">

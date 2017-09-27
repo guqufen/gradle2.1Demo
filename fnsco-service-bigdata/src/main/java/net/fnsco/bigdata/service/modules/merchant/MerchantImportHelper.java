@@ -53,7 +53,8 @@ public class MerchantImportHelper {
             SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
             Date date1 = sdf1.parse(cardvalidtimeStr);
             sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-            sdf1.format(date1);
+            cardvalidtime = sdf1.format(date1);
+            
         }
         String businesslicensevalidtime = null;
         if(!Strings.isNullOrEmpty(businesslicensevalidtimeStr)){
@@ -118,6 +119,14 @@ public class MerchantImportHelper {
      * @return MerchantBank    DOM对象
      */
     public static MerchantBank createMerchantBank(String innerCode,String accountname,String accountno,String accounttype,String accountcardid,String subbankname,String openBankNum){
+        
+        if(!Strings.isNullOrEmpty(accounttype)){
+            if(accounttype.contains("private")){
+                accounttype = "1";
+            }else{
+                accounttype = "0";
+            }
+        }
         MerchantBank merchantBank = new MerchantBank();
         merchantBank.setInnerCode(innerCode);
         merchantBank.setAccountName(accountname);
@@ -129,7 +138,6 @@ public class MerchantImportHelper {
         
         return merchantBank;
     }
-    
     /**
      * createMerchantChannel:(创建一个MerchantChannel实例)    设定文件
      * @author    tangliang
