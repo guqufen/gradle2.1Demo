@@ -159,7 +159,7 @@ public class ReportService extends BaseService {
             }
             if (j == 5) {
                 yearReportDO.setTurnover(dto.getMonthSix());
-                yearReportDO.setDate(handleDate(date, -1));
+                yearReportDO.setDate(handleDateYear(date, -1));
                 list.add(yearReportDO);
             }
             if (j == 6) {
@@ -196,15 +196,23 @@ public class ReportService extends BaseService {
         return ResultDTO.success(list);
     }
 
-    private String handleDate(Date date, Integer num) {
+    private String handleDateYear(Date date, Integer num) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MONTH, num);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        SimpleDateFormat sdf = new SimpleDateFormat("YY-MM");
         String dateStr = sdf.format(calendar.getTime());
         return dateStr;
     }
 
+    private String handleDate(Date date, Integer num) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, num);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        String dateStr = sdf.format(calendar.getTime());
+        return dateStr;
+    }
     //查询风控报告明细
     public ResultDTO queryReportDetails(Integer merchantId) {
         ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
