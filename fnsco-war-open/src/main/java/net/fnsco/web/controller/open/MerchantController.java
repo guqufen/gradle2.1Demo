@@ -1,6 +1,7 @@
 package net.fnsco.web.controller.open;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import io.swagger.annotations.Api;
@@ -22,6 +24,9 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.order.service.sys.dao.ImportErrorDAO;
+import net.fnsco.order.service.sys.dao.helper.ImportErrorMsgHelper;
+import net.fnsco.order.service.sys.entity.ImportErrorDO;
 import net.fnsco.web.controller.open.jo.MerchantJO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -31,12 +36,14 @@ import net.sf.json.JSONObject;
 @Api(value = "/open/merchant", tags = { "商户相关接口" })
 public class MerchantController extends BaseController {
     @Autowired
-    private MerchantService merchantService;
+    private MerchantService           merchantService;
     @Autowired
-    private AppUserService  appUserService;
+    private AppUserService            appUserService;
     @Autowired
     private MerchantInfoImportService merchantInfoImportService;
-    
+    @Autowired
+    private ImportErrorDAO      importErrorDAO;
+
     /**
      * 获取商户编号
      *
@@ -114,7 +121,7 @@ public class MerchantController extends BaseController {
         }
         return success(flag);
     }
-    
+
     /**
      * importData:(导入数据)
      * @param merchant
@@ -125,29 +132,61 @@ public class MerchantController extends BaseController {
      */
     @RequestMapping(value = "/importData")
     @ApiOperation(value = "导入商户所有数据")
-    public ResultDTO importData(String datas) {
-        
-        logger.info("收到商户数据:"+datas);
-        
+    public ResultDTO<List<ImportErrorDO>> importData(String datas) {
+
+        logger.info("收到商户数据:" + datas);
+
         JSONArray jsonArray = JSONArray.fromObject(datas);
         List<MerchantSynchronizationDTO> params = Lists.newArrayList();
         for (Object obj : jsonArray) {
             JSONObject jsonObject = JSONObject.fromObject(obj);
-            MerchantSynchronizationDTO merdo =  (MerchantSynchronizationDTO) JSONObject.toBean(jsonObject, MerchantSynchronizationDTO.class);
+            MerchantSynchronizationDTO merdo = (MerchantSynchronizationDTO) JSONObject.toBean(jsonObject, MerchantSynchronizationDTO.class);
             params.add(merdo);
         }
-        
+
         List<Object[]> customerList = MerchantSynchronizationDTO.installListDatas(params);
-        
-        try {
-            ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(customerList, 1,"接口导入");
-            logger.info("同步商户数据结果"+result);
-            return result;
-        } catch (ParseException e) {
-            
-            e.printStackTrace();
-            
+        Date startImportTime = new Date();
+        if (customerList.size() != 0) {
+            // excel导出的空数据是“null”，赋值一个空字符串
+            int timeNum = 1;
+            for (Object[] objs : customerList) {
+                timeNum = timeNum + 1;
+                for (int i = 0; i < objs.length; i++) {
+                    if (objs[i] == null) {
+                        objs[i] = "";
+                    }
+                }
+
+                try {
+                    //处理单个
+                    ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(objs, 1, timeNum);
+                    JSONObject jsonObject = JSONObject.fromObject(result.getData());
+                    String errorMsg  = jsonObject.getString("result");
+                    if (!Strings.isNullOrEmpty(errorMsg) && !"null".equalsIgnoreCase(errorMsg)) {
+                        saveErrorMsgToDB(new Date(),null,null,1,timeNum,"浙付通接口同步导入",errorMsg,objs.toString(),null);
+                    }
+                } catch (ParseException e) {
+                    logger.error("接口导入数据程序异常",e);
+                    return ResultDTO.fail();
+                }
+            }
         }
-        return ResultDTO.fail();
+        Date endImportTime = new Date();
+        List<ImportErrorDO> errorDOs = importErrorDAO.selectByCondition(ImportErrorMsgHelper.createImportErrorDO(null, startImportTime, endImportTime, 1, null, 0, null, null, null));
+        return ResultDTO.success(errorDOs);
+    }
+    
+    /**
+     * saveErrorMsgToDB:(入库错误消息信息）    设定文件
+     * @author    tangliang
+     * @date      2017年9月25日 下午4:35:05
+     * @return void    DOM对象
+     */
+    private void saveErrorMsgToDB(Date createTime,Date startCreateTime,Date endCreateTime,Integer createUserId,Integer rowNumber,
+                                  String importFileName,String errorMsg,String data,Exception e){
+        
+        ImportErrorDO errorDo =  ImportErrorMsgHelper.createImportErrorDO(createTime, startCreateTime, endCreateTime, createUserId, rowNumber, 0, importFileName, errorMsg, data);
+        importErrorDAO.insert(errorDo);
+        logger.error("第" + rowNumber + errorMsg,e);
     }
 }

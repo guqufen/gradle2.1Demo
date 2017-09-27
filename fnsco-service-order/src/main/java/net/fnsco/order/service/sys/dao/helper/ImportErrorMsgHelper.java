@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.merchant;
+package net.fnsco.order.service.sys.dao.helper;
 
 import java.util.Date;
 

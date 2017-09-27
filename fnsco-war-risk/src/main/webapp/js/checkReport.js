@@ -55,7 +55,7 @@ $(function(){
 			$(".businessDueTime span").html(result.businessDueTime);
 			//$(".size span").html(result.size);
 			$(".merName span").html(result.merName);
-			$(".tips p").html(result.riskWarning);
+			
 			$(".report-title").html(result.merName+"风控+报告");
 			$(".tradingArea span").html(result.tradingArea);
 			var level=result.decorationLevel;
@@ -81,6 +81,13 @@ $(function(){
 			$(".p1").html("1.额度:"+result.quota);
 			$(".p2").html("2.利率:"+result.feeRate);
 			$(".p3").html("3.周期:"+result.loanCycle);
+			//$(".tips p").html(result.riskWarning);
+			var res=result.riskWarning;
+			var dto =res.replace(/\n/g,"^");
+			var array=dto.split("^");
+			for (i=0;i<array.length ;i++){
+				$(".tips").append("<p>"+array[i]+"</p>");
+			} 
 		}
 	});
 	//查询全年风控曲线图
@@ -97,6 +104,9 @@ $(function(){
 				dateList.push(json[i].date);
 				dataList.push(json[i].turnover);
 			}
+			// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
+			// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
+			// chart(datatime,data);
 			chart(dateList,dataList)
 		}
 	});
@@ -146,11 +156,12 @@ function chart(dataTime,data){
 
 	    },
 	    grid: {
-        	// right:'0%',
+        	// left:'0',
+        	// right:'7%'
 	    },
 	    yAxis: {
 	        type: 'value',
-	        boundaryGap: [0, '100%'],
+	        boundaryGap: [0, '15%'],
 	        splitLine:{  
         　　　　show:false  
         　　 },
@@ -176,7 +187,7 @@ function chart(dataTime,data){
 	            itemStyle: {
 	                normal: {
                       //折线图颜色
-	                    color: '#333',
+	                    color: '#666',
 	                    width:1,
 	                }
 	            },
