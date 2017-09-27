@@ -230,7 +230,7 @@ public class ReportService extends BaseService {
             helper.setTo(ev.getProperty("manger.mail.address"));  
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append("<div style='font-size:26px;margin-top:50px;'>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理" + "<a href='http://www.w3school.com.cn'>W3School</a></div>");
+            sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理!</p>" + "<p><a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a><p></div>");
             helper.setText(sb.toString(), true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -257,7 +257,7 @@ public class ReportService extends BaseService {
             helper.setTo("782430551@qq.com"); 
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append("<div style='font-size:20px;margin-top:50px;'><p>dear:</p><p>"+dto.getName()+"</p><p>关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!</p><p>点击查看" + "<a href='http://www.w3school.com.cn'>W3School</a></p></div>");
+            sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName()+"</p><p>关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!</p><p>点击查看" + "<a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a></p></div>");
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
             e.printStackTrace();
