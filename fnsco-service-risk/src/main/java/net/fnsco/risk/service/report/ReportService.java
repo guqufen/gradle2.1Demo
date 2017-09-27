@@ -254,10 +254,10 @@ public class ReportService extends BaseService {
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
             helper.setFrom(new InternetAddress(nick+" <"+ev.getProperty("spring.mail.username")+">"));
-            helper.setTo(dto.getEmail()); 
+            helper.setTo("782430551@qq.com"); 
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append("<div style='font-size:26px;margin-top:50px;'>"+dto.getName()+"关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!点击查看" + "<a href='http://www.w3school.com.cn'>W3School</a></div>");
+            sb.append("<div style='font-size:20px;margin-top:50px;'><p>dear:</p><p>"+dto.getName()+"</p><p>关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!</p><p>点击查看" + "<a href='http://www.w3school.com.cn'>W3School</a></p></div>");
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
             e.printStackTrace();
