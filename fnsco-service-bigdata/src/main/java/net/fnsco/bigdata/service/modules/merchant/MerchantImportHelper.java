@@ -144,6 +144,9 @@ public class MerchantImportHelper{
         merchantBank.setAccountCardId(dto.getAccountHolderID());
         merchantBank.setSubBankName(dto.getSubBankName());
         merchantBank.setOpenBankNum(dto.getOpenBankNum());
+        merchantBank.setOpenBank(dto.getOpenBank());
+        merchantBank.setOpenBankPrince(dto.getOpenBankPrince());
+        merchantBank.setOpenBankCity(dto.getOpenBankCity());
         
         return merchantBank;
     }
