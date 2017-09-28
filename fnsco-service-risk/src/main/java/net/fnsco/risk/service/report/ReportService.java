@@ -97,11 +97,10 @@ public class ReportService extends BaseService {
     }
 
     //查询12个月风控历史
-    public ResultDTO queryYearReport(Integer userId, Integer merchantId) {
+    public ResultDTO queryYearReport(String innerCode, Integer merchantId) {
         List<YearReportDO> list = new ArrayList<YearReportDO>();
-        ReportInfoDO reportInfoDO = reportInfoDAO.getById(userId);
-        //判断风控报告的状态
-        //当前时间 
+        
+        ReportInfoDO reportInfoDO = reportInfoDAO.getByInnerCode(innerCode);
         ReportRepaymentHistoryDO dto = reportRepaymentHistoryDAO.getByReportId(merchantId);
         //如果查出来的月度营业额为空，则直接返回到页面；否则会报空指针异常
         if (dto == null) {
@@ -221,7 +220,7 @@ public class ReportService extends BaseService {
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
             helper.setFrom(new InternetAddress(nick+" <"+ev.getProperty("spring.mail.username")+">"));
-            helper.setTo(ev.getProperty("manger.mail.address"));  
+            helper.setTo("782430551@qq.com");  
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
             sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理!</p>" + "<p><a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a><p></div>");
@@ -248,7 +247,7 @@ public class ReportService extends BaseService {
             message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
             helper.setFrom(new InternetAddress(nick+" <"+ev.getProperty("spring.mail.username")+">"));
-            helper.setTo("782430551@qq.com"); 
+            helper.setTo(ev.getProperty("manger.mail.address")); 
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
             sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName()+"</p><p>关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!</p><p>点击查看" + "<a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a></p></div>");
