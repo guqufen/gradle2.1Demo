@@ -26,10 +26,17 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
+import net.fnsco.bigdata.api.constant.BigdataConstant.ChannelTypeEnum;
+import net.fnsco.bigdata.api.constant.BigdataConstant.DataSourceEnum;
+import net.fnsco.bigdata.api.constant.BigdataConstant.PayMediumEnum;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
+import net.fnsco.bigdata.comm.ServiceConstant.PaySubTypeAllEnum;
+import net.fnsco.bigdata.comm.ServiceConstant.PayTypeEnum;
+import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -58,7 +65,8 @@ public class TradeDataWebController extends BaseController {
     private TradeDataService       tradeDataService;
     @Autowired
     private TradeDataImportService tradeDataImportService;
-    private ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+    private ExecutorService        cachedThreadPool = Executors.newCachedThreadPool();
+
     /**
      * 交易统计分页查询
      * 
@@ -250,6 +258,11 @@ public class TradeDataWebController extends BaseController {
         int timeNum = 2;
         for (Object[] objs : customerList) {
             timeNum = timeNum + 1;
+            if (objs.length < 32) {
+                Object[] tempObj = new Object[32];
+                System.arraycopy(objs, 0, tempObj, 0, objs.length);
+                objs = tempObj;
+            }
             importTradeData(objs, timeNum, fileName);
         }
         return ResultDTO.success();
@@ -357,11 +370,12 @@ public class TradeDataWebController extends BaseController {
             tradeData.setBody(body);
             tradeData.setCustomerInfo(customerinfo);
             tradeData.setCustomerIp(customerip);
-            tradeData.setTn(tn);
+            //tradeData.setTn(tn);
             tradeData.setRespMsg(respmsg);
             tradeData.setSuccTime(succtime);
             tradeData.setTermId(termid);
             tradeData.setPayMedium(payMedium);
+            tradeData.setOrderNo(tn);
             //日期格式转换
             Date createTime = null;
             SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -377,26 +391,73 @@ public class TradeDataWebController extends BaseController {
             }
             //交易流水打包导入
             tradeData.setMd5(Md5Util.encrypt(JSON.toJSONString(tradeData)));
-            tradeDataService.saveTradeData(tradeData);
+            ResultDTO result = validate(tradeData);
+            if (result.isSuccess()) {
+                tradeDataService.saveTradeData(tradeData);
+            } else {
+                ImportErrorDO importError = new ImportErrorDO();
+                importError.setCreateTime(new Date());
+                importError.setCreateUserId(getUserId());
+                String errorMsg = result.getMessage();
+                importError.setErrorMsg(errorMsg);
+                String data = JSON.toJSONString(tradeData);
+                importError.setData(data);
+                importError.setImportFileName(fileName);
+                importError.setRowNumber(timeNum);
+                saveImportErrorLog(importError);
+            }
         } catch (Exception e) {
-            logger.error("导入交易流水出错", e);
-            ResultDTO.fail("第" + timeNum + "行交易流水信息有误，导入失败");
+            logger.error("第" + timeNum + "行交易流水信息有误，导入失败", e);
             ImportErrorDO importError = new ImportErrorDO();
             importError.setCreateTime(new Date());
             importError.setCreateUserId(getUserId());
             String errorMsg = e.getMessage();
-            if (errorMsg.length() > 2000) {
-                errorMsg.substring(0, 2000);
-            }
             importError.setErrorMsg(errorMsg);
             String data = JSON.toJSONString(tradeData);
-            if (data.length() > 4000) {
-                data.substring(0, 4000);
-            }
             importError.setData(data);
             importError.setImportFileName(fileName);
             importError.setRowNumber(timeNum);
-            tradeDataImportService.saveImportError(importError);
+            saveImportErrorLog(importError);
         }
+    }
+    private void saveImportErrorLog(ImportErrorDO importError){
+        String errorMsg = importError.getErrorMsg();
+        if (errorMsg.length() > 2000) {
+            errorMsg.substring(0, 2000);
+        }
+        importError.setErrorMsg(errorMsg);
+        String data = importError.getData();
+        if (data.length() > 4000) {
+            data.substring(0, 4000);
+        }
+        importError.setData(data);
+        tradeDataImportService.saveImportError(importError);
+    }
+    private ResultDTO validate(TradeDataDTO tradeData) {
+        String payType = tradeData.getPayType();
+        //tradeData.setCardOrg(ConstantEnum.DcTypeEnum.getNameByCode(code));
+        if (Strings.isNullOrEmpty(PayTypeEnum.getNameByCode(payType))) {
+            return fail("支付类型必须为00刷卡01二维码");
+        }
+        if ("其它".equals(PaySubTypeAllEnum.getNameByCode(tradeData.getPaySubType()))) {
+            return fail("支付子类型必须为00刷卡01微信支付02支付宝支付等等");
+        }
+        //tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
+        //tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
+        if (Strings.isNullOrEmpty(TradeStateEnum.getNameByCode(tradeData.getRespCode()))) {
+            return fail("回应状态必须为1001成功1002失败1000进行中");
+        }
+        //tradeData.setRespCode(ServiceConstant.TradeStateEnum.SUCCESS.getCode());
+        //tradeData.setPayMedium(BigdataConstant.PayMediumEnum.FIX_QR.getCode());
+        if (Strings.isNullOrEmpty(PayMediumEnum.getNameByCode(tradeData.getPayMedium()))) {
+            return fail("支付媒介00pos机01app02台码");
+        }
+        if (Strings.isNullOrEmpty(DataSourceEnum.getNameByCode(tradeData.getSource()))) {
+            return fail("数据来源必须为00拉卡拉01导入02同步");
+        }
+        if (Strings.isNullOrEmpty(ChannelTypeEnum.getNameByCode(tradeData.getChannelType()))) {
+            return fail("渠道类型必须为00拉卡拉01浦发02爱农03法奈昇");
+        }
+        return success();
     }
 }
