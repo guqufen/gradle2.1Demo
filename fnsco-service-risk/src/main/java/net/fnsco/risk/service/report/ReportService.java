@@ -87,27 +87,17 @@ public class ReportService extends BaseService {
         return pager;
     }
     
-    public static void main(String args[]) { 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");  
-        String time="20170712152705";
-        try {
-            Date old = sdf.parse(time);
-            Date now=new Date();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(now);
-            calendar.add(Calendar.MONTH, -3);
-            //小于三个月 符合规则
-            if(calendar.getTime().getTime()<old.getTime()){
-                //li.setIsTrue(1);
-                System.out.println("小于三个月");
-            }else{
-            //大于三个月 不符合规则
-                System.out.println("大于三个月");
-                //li.setIsTrue(2);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }  
+        public static void main(String args[]) { 
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");  
+        String time="2017-09";
+        String res=time.substring(5);
+        System.out.println(time);
+        System.out.println(res);
+//        if(res.indexOf("01")>-1){
+//            return dateStr;
+//        }else{
+//            return res;
+//        }
     } 
     
     //后台分页查询风控报告列表
@@ -159,7 +149,7 @@ public class ReportService extends BaseService {
             }
             if (j == 5) {
                 yearReportDO.setTurnover(dto.getMonthSix());
-                yearReportDO.setDate(handleDateYear(date, -1));
+                yearReportDO.setDate(handleDate(date, -1));
                 list.add(yearReportDO);
             }
             if (j == 6) {
@@ -196,7 +186,7 @@ public class ReportService extends BaseService {
         return ResultDTO.success(list);
     }
 
-    private String handleDateYear(Date date, Integer num) {
+/*    private String handleDateYear(Date date, Integer num) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MONTH, num);
@@ -204,14 +194,22 @@ public class ReportService extends BaseService {
         String dateStr = sdf.format(calendar.getTime());
         return dateStr;
     }
-
+*/
     private String handleDate(Date date, Integer num) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MONTH, num);
-        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String newStr=sdf.format(calendar.getTime());
         String dateStr = sdf.format(calendar.getTime());
-        return dateStr;
+        //包含01  2017-09
+        String res=dateStr.substring(5);
+        if(res.indexOf("01")>-1){
+            return newStr;
+        }else{
+        //不包含
+            return res;
+        }
     }
     //查询风控报告明细
     public ResultDTO queryReportDetails(Integer merchantId) {
