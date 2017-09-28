@@ -304,9 +304,11 @@ public class ReportService extends BaseService {
         ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());//根据ID查找数据
         //审核成功，则发邮件通知用户
         if(1 == reportInfo.getStatus()){
-        	Integer userId = webUserOuterDAO.getByInnercode(reportInfo.getInnerCode().trim());
+        	List<Integer> userIdList = webUserOuterDAO.getByInnercode(reportInfo.getInnerCode().trim());
         	//邮件通知用户
-        	headPersonnelMes(userId, reportInfoDO.getId());
+        	for (Integer userId : userIdList) {
+				headPersonnelMes(userId, reportInfoDO.getId());
+			}
         }
         
         return ResultDTO.success();
@@ -317,40 +319,11 @@ public class ReportService extends BaseService {
      * @param objs
      * @return
      */
-    public ResultDTO BatchImportToDB( List<Object[]> objs, Integer id){
-    	if(objs.size() > 0){
-    		for(Object[] obj: objs){
-    			
-//    			if(obj.length != 12){
-//    				return ResultDTO.fail("导入数据有误，请按照模版导入12个月数据");
-//    			}
-    			for (int i = 0; i < 12; i++) {
-					if(obj[i] == null){
-						return ResultDTO.fail("导入数据有空数据，请按照模版导入12个月数据");
-					}
-				}
-    			ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
-    			reportRepaymentHistory.setReportId(id);
-    			reportRepaymentHistory.setMonthOne(BigDecimal.valueOf(Double.valueOf(obj[0].toString())));
-    			reportRepaymentHistory.setMonthTwo(BigDecimal.valueOf(Double.valueOf(obj[1].toString())) );
-    			reportRepaymentHistory.setMonthThree(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
-    			reportRepaymentHistory.setMonthFore(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
-    			reportRepaymentHistory.setMonthFive(BigDecimal.valueOf(Double.valueOf(obj[4].toString())));
-    			reportRepaymentHistory.setMonthSix(BigDecimal.valueOf(Double.valueOf(obj[5].toString())));
-    			reportRepaymentHistory.setMonthSeven(BigDecimal.valueOf(Double.valueOf(obj[6].toString())));
-    			reportRepaymentHistory.setMonthEight(BigDecimal.valueOf(Double.valueOf(obj[7].toString())));
-    			reportRepaymentHistory.setMonthNine(BigDecimal.valueOf(Double.valueOf(obj[8].toString())));
-    			reportRepaymentHistory.setMonthTen(BigDecimal.valueOf(Double.valueOf(obj[9].toString())));
-    			reportRepaymentHistory.setMonthEleven(BigDecimal.valueOf(Double.valueOf(obj[10].toString())));
-    			reportRepaymentHistory.setMonthTwelve(BigDecimal.valueOf(Double.valueOf(obj[11].toString())));
-    			reportRepaymentHistory.setLastModifyTime(new Date());
+    public ResultDTO BatchImportToDB( ReportRepaymentHistoryDO reportRepaymentHistory){
+ 
     			//插表
-        		reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
-    		}
-    		
-    	}else{
-    		return ResultDTO.fail("导入数据为空，请核对后重新导入");
-    	}
+        reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
+   
     	
     	return ResultDTO.success();
     }
