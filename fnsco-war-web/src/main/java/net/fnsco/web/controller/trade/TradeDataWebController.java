@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,7 +58,7 @@ public class TradeDataWebController extends BaseController {
     private TradeDataService       tradeDataService;
     @Autowired
     private TradeDataImportService tradeDataImportService;
-
+    private ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
     /**
      * 交易统计分页查询
      * 
@@ -226,23 +228,20 @@ public class TradeDataWebController extends BaseController {
         Integer userId = adminUser.getId();
         // 批量导入。参数：文件名，文件。
         ResultDTO<String> result = null;
-        result = tradeBatchImportToDB(customerList, name);
-        if (!result.isSuccess()) {
-            Map<String, String> map = new HashMap<>();
-            if (("").equals(result.getMessage())) {
-                map.put("data", "批量导入EXCEL失败！");
-                return map;
+        cachedThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                //文件处理
+                tradeBatchImportToDB(customerList, name);
             }
-            map.put("data", result.getMessage());
-            return map;
-        }
+        });
         Map<String, String> map = new HashMap<>();
         map.put("data", "success");
         return map;
     }
 
     // 批量导入交易流水
-    public ResultDTO<String> tradeBatchImportToDB(List<Object[]> customerList, String fileName) {
+    private ResultDTO<String> tradeBatchImportToDB(List<Object[]> customerList, String fileName) {
         // 循环便利customList数组，将其中excel每一行的数据分批导入数据库
         if (customerList.size() == 0) {
             return ResultDTO.fail("没有导入数据，Excel为空");
@@ -256,7 +255,7 @@ public class TradeDataWebController extends BaseController {
         return ResultDTO.success();
     }
 
-    public void importTradeData(Object[] objs, int timeNum, String fileName) {
+    private void importTradeData(Object[] objs, int timeNum, String fileName) {
         // 内部商户号
         String innercode = StringUtil.valueOf(objs[0]);
         // 交易类型
