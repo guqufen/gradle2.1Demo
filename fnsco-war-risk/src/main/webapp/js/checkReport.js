@@ -55,7 +55,7 @@ $(function(){
 			$(".businessDueTime span").html(result.businessDueTime);
 			//$(".size span").html(result.size);
 			$(".merName span").html(result.merName);
-			$(".tips p").html(result.riskWarning);
+			
 			$(".report-title").html(result.merName+"风控+报告");
 			$(".tradingArea span").html(result.tradingArea);
 			var level=result.decorationLevel;
@@ -81,6 +81,13 @@ $(function(){
 			$(".p1").html("1.额度:"+result.quota);
 			$(".p2").html("2.利率:"+result.feeRate);
 			$(".p3").html("3.周期:"+result.loanCycle);
+			//$(".tips p").html(result.riskWarning);
+			var res=result.riskWarning;
+			var dto =res.replace(/\n/g,"^");
+			var array=dto.split("^");
+			for (i=0;i<array.length ;i++){
+				$(".tips").append("<p>"+array[i]+"</p>");
+			} 
 		}
 	});
 	//查询全年风控曲线图
