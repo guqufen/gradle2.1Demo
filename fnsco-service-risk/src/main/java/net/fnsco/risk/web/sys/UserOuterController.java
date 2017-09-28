@@ -32,14 +32,12 @@ public class UserOuterController extends BaseController {
      */
     @RequestMapping("/doLogin")
     @ResponseBody
-    public ResultDTO doLogin() {
-        String username = request.getParameter("account");
-        String password = request.getParameter("password");
-        if (Strings.isNullOrEmpty(password) || Strings.isNullOrEmpty(username)) {
+    public ResultDTO doLogin(String account,String password) {
+        if (Strings.isNullOrEmpty(password) || Strings.isNullOrEmpty(account)) {
             return ResultDTO.fail(RiskConstant.WEB_LOGIN_NULL);
         }
 
-        ResultDTO result = userOuterService.doLogin(username, password);
+        ResultDTO result = userOuterService.doLogin(account, password);
         if (result.isSuccess()) {
         	WebUserOuterDO user = (WebUserOuterDO) result.getData();
             setSessionUser(user, user.getId());

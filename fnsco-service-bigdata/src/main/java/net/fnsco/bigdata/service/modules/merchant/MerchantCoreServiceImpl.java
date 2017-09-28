@@ -377,7 +377,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
                 return ResultDTO.fail();
             }
             
-            MerchantCore mc = selectBybusinessLicenseNum(merchantCore.getBusinessLicenseNum());
+            MerchantCore mc = selectBybusinessLicenseNum(merchantCore.getBusinessLicenseNum(),null);
             if(null != mc){
                 logger.error("营业执照已经存在,不能入库!");
                 return ResultDTO.fail();
@@ -645,7 +645,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
      * @date 2017年9月14日 下午1:43:33
      */
     @Override
-    public MerchantCore selectBybusinessLicenseNum(String businessLicenseNum) {
-        return merchantCoreDao.selectBybusinessLicenseNum(businessLicenseNum);
+    public MerchantCore selectBybusinessLicenseNum(String businessLicenseNum,String accountNo) {
+        return merchantCoreDao.selectBybusinessLicenseNum(businessLicenseNum,accountNo);
     }
 }

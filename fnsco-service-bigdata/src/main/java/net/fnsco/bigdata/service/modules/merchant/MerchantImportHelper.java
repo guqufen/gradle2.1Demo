@@ -1,5 +1,6 @@
 package net.fnsco.bigdata.service.modules.merchant;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,8 +8,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.management.RuntimeErrorException;
+
+import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.api.dto.MerchantSynchronizationDTO;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
@@ -16,6 +24,8 @@ import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
+import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 
 /**
@@ -26,8 +36,9 @@ import net.fnsco.core.utils.DateUtils;
  * @Date	 2017年9月14日 下午4:33:10
  */
 
-public class MerchantImportHelper {
+public class MerchantImportHelper{
     
+    private static Logger logger = LoggerFactory.getLogger(MerchantImportHelper.class);
     /**
      * createMerchantCore:(创建MerchantCore实例)
      * @throws ParseException    设定文件
@@ -35,44 +46,43 @@ public class MerchantImportHelper {
      * @date      2017年9月14日 下午4:37:06
      * @return MerchantCore    DOM对象
      */
-    public static MerchantCore createMerchantCore(Integer id,String innerCode,String mername,String businesslicensenum,String cardnum,String legalperson,String channelMerchant,String legalpersonmobile,
-                                                  String cardvalidtimeStr,String businesslicensevalidtimeStr,String registaddress,String mercflag,String taxRegistCode,String createTime) throws ParseException{
+    public static MerchantCore createMerchantCore(Integer id,String innerCode,MerchantSynchronizationDTO dto) throws ParseException{
         MerchantCore merchantCore = new MerchantCore();
         merchantCore.setId(id);
         merchantCore.setInnerCode(innerCode);
-        merchantCore.setMerName(mername);
-        merchantCore.setBusinessLicenseNum(businesslicensenum);
+        merchantCore.setMerName(dto.getMerchant());
+        merchantCore.setBusinessLicenseNum(dto.getBusinessLicenseNum());
         merchantCore.setLegalValidCardType("0");
-        merchantCore.setCardNum(cardnum);
-        merchantCore.setLegalPerson(legalperson);
-        merchantCore.setAbbreviation(channelMerchant);
-        merchantCore.setLegalPersonMobile(legalpersonmobile);
+        merchantCore.setCardNum(dto.getPaperNum());
+        merchantCore.setLegalPerson(dto.getMerLegalPerson());
+        merchantCore.setAbbreviation(dto.getChannelMerchant());
+        merchantCore.setLegalPersonMobile(dto.getLegalPersonTel());
         // excel中导出的时间是“EEE MMM dd HH:mm:ss z yyyy”类型的String类，将他转换成"yyyy/MM/dd"
         String cardvalidtime = null;
-        if(!Strings.isNullOrEmpty(cardvalidtimeStr)){
+        if(!Strings.isNullOrEmpty(dto.getPaperValidTime())){
             SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-            Date date1 = sdf1.parse(cardvalidtimeStr);
+            Date date1 = sdf1.parse(dto.getPaperValidTime());
             sdf1 = new SimpleDateFormat("yyyy-MM-dd");
             cardvalidtime = sdf1.format(date1);
             
         }
         String businesslicensevalidtime = null;
-        if(!Strings.isNullOrEmpty(businesslicensevalidtimeStr)){
+        if(!Strings.isNullOrEmpty(dto.getBusinessLicenseValidTime())){
             SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-            Date date2 = sdf2.parse(businesslicensevalidtimeStr);
+            Date date2 = sdf2.parse(dto.getBusinessLicenseValidTime());
             sdf2 = new SimpleDateFormat("yyyy-MM-dd");
             businesslicensevalidtime = sdf2.format(date2);
         }
         
         merchantCore.setCardValidTime(cardvalidtime);
         merchantCore.setBusinessLicenseValidTime(businesslicensevalidtime);
-        merchantCore.setRegistAddress(registaddress);
-        merchantCore.setMercFlag(mercflag);
+        merchantCore.setRegistAddress(dto.getMerRegistAddress());
+        merchantCore.setMercFlag(dto.getMercFlag());
         merchantCore.setSource(2);//浙付通导入
         merchantCore.setAgentId(1);//默认
-        merchantCore.setTaxRegistCode(taxRegistCode);
-        if(!Strings.isNullOrEmpty(createTime)){
-            merchantCore.setModifyTime(DateUtils.formateToDate(createTime));
+        merchantCore.setTaxRegistCode(dto.getTaxRegistCode());
+        if(!Strings.isNullOrEmpty(dto.getCreateTime())){
+            merchantCore.setModifyTime(DateUtils.formateToDate(dto.getCreateTime()));
         }
         merchantCore.setStatus(1);
         
@@ -86,24 +96,23 @@ public class MerchantImportHelper {
      * @date      2017年9月14日 下午4:39:44
      * @return List<MerchantContact>    DOM对象
      */
-    public static List<MerchantContact> createMerchantContact(String innerCode,String contactname,String contactmobile,String contactemail,String financeLinkMan,String financeLinkManTel,String financeLinkManEmail,
-                                                              String merPrincipal,String merPrincipalTel,String merPrincipalEmail){
+    public static List<MerchantContact> createMerchantContact(String innerCode,MerchantSynchronizationDTO dto){
      // 创建一个商户联系人信息实体类对象接收商户联系人信息
         MerchantContact merchantContact = new MerchantContact();
         merchantContact.setInnerCode(innerCode);
-        merchantContact.setContactName(contactname);
-        merchantContact.setContactMobile(contactmobile);
-        merchantContact.setContactEmail(contactemail);
+        merchantContact.setContactName(dto.getLinkMan());
+        merchantContact.setContactMobile(dto.getLinkManTel());
+        merchantContact.setContactEmail(dto.getLinkManEmail());
         MerchantContact merchantContact1 = new MerchantContact();
         merchantContact1.setInnerCode(innerCode);
-        merchantContact1.setContactName(financeLinkMan);
-        merchantContact1.setContactMobile(financeLinkManTel);
-        merchantContact1.setContactEmail(financeLinkManEmail);
+        merchantContact1.setContactName(dto.getFinanceLinkMan());
+        merchantContact1.setContactMobile(dto.getFinanceLinkManTel());
+        merchantContact1.setContactEmail(dto.getFinanceLinkManEmail());
         MerchantContact merchantContact2 = new MerchantContact();
         merchantContact2.setInnerCode(innerCode);
-        merchantContact2.setContactName(merPrincipal);
-        merchantContact2.setContactMobile(merPrincipalTel);
-        merchantContact2.setContactEmail(merPrincipalEmail);
+        merchantContact2.setContactName(dto.getMerPrincipal());
+        merchantContact2.setContactMobile(dto.getMerPrincipalTel());
+        merchantContact2.setContactEmail(dto.getMerPrincipalEmail());
         List<MerchantContact> contcactList = new ArrayList<MerchantContact>();
         contcactList.add(merchantContact);
         contcactList.add(merchantContact1);
@@ -118,8 +127,8 @@ public class MerchantImportHelper {
      * @date      2017年9月14日 下午4:43:28
      * @return MerchantBank    DOM对象
      */
-    public static MerchantBank createMerchantBank(String innerCode,String accountname,String accountno,String accounttype,String accountcardid,String subbankname,String openBankNum){
-        
+    public static MerchantBank createMerchantBank(String innerCode,MerchantSynchronizationDTO dto){
+        String accounttype = dto.getAccountType();
         if(!Strings.isNullOrEmpty(accounttype)){
             if(accounttype.contains("private")){
                 accounttype = "1";
@@ -129,12 +138,12 @@ public class MerchantImportHelper {
         }
         MerchantBank merchantBank = new MerchantBank();
         merchantBank.setInnerCode(innerCode);
-        merchantBank.setAccountName(accountname);
-        merchantBank.setAccountNo(accountno);
+        merchantBank.setAccountName(dto.getAccountName());
+        merchantBank.setAccountNo(dto.getAccountNo());
         merchantBank.setAccountType(accounttype);
-        merchantBank.setAccountCardId(accountcardid);
-        merchantBank.setSubBankName(subbankname);
-        merchantBank.setOpenBankNum(openBankNum);
+        merchantBank.setAccountCardId(dto.getAccountHolderID());
+        merchantBank.setSubBankName(dto.getSubBankName());
+        merchantBank.setOpenBankNum(dto.getOpenBankNum());
         
         return merchantBank;
     }
@@ -163,18 +172,18 @@ public class MerchantImportHelper {
      * @date      2017年9月14日 下午4:50:21
      * @return MerchantPos    DOM对象
      */
-    public static MerchantPos createMerchantPos(Integer id,String innerCode,String mercrefername,String posType,String posFactory,String sncode,String posaddr,Integer bankId,Integer channelId){
+    public static MerchantPos createMerchantPos(Integer id,String innerCode,Integer bankId,Integer channelId,MerchantSynchronizationDTO dto){
      // 创建一个商户pos信息实体类对象接收商户pos信息
         MerchantPos merchantPos = new MerchantPos();
         merchantPos.setId(id);
         merchantPos.setInnerCode(innerCode);
-        merchantPos.setMercReferName(mercrefername);
-        merchantPos.setPosType(posType);
-        merchantPos.setPosFactory(posFactory);
-        merchantPos.setSnCode(sncode);
-        merchantPos.setPosAddr(posaddr);
+        merchantPos.setMercReferName(dto.getSalesSlip());
+        merchantPos.setPosType(dto.getPosType());
+        merchantPos.setPosFactory(dto.getPosFactory());
+        merchantPos.setSnCode(dto.getSnCode());
+        merchantPos.setPosAddr(dto.getMerInstallArea());
         merchantPos.setStatus("1");
-        merchantPos.setPosName(sncode + "号POS机");
+        merchantPos.setPosName(dto.getSnCode() + "号POS机");
         // 获取银行卡ID
         merchantPos.setBankId(bankId);
         // 获取渠道ID
@@ -189,8 +198,70 @@ public class MerchantImportHelper {
      * @date      2017年9月14日 下午4:53:37
      * @return MerchantTerminal    DOM对象
      */
-    public static MerchantTerminal createMerchantTerminal(Integer id,String innerCode,String debitCardRate,String debitCardMaxFee,String debitCardFee,String creditCardRate,String creditCardFee,String creditCardMaxFee,
-                                                          Integer posId,String innerTermCode,String terminalCode,String alipayFee,String wechatFee,String terminalType,String termName){
+    public static MerchantTerminal createMerchantTerminal(Integer id,String innerCode,Integer posId,String terminalType,MerchantSynchronizationDTO dto){
+        
+        String xx = dto.getXx();
+        String alipayFee = "0.00";
+        String wechatFee = "0.00";
+        String debitCardRate = dto.getDebitCardRate();
+        String creditCardRate = dto.getCreditCardRate();
+        String debitCardMaxFee = dto.getDebitCardMaxFee();
+        String creditCardMaxFee = dto.getCreditCardMaxFee();
+        String debitCardFee = dto.getDebitCardFee();
+        String creditCardFee = dto.getCreditCardFee();
+        try {
+            // 支付宝费率转换
+            String zfb1 = xx.substring(xx.indexOf("支付宝") + 3, xx.indexOf("%"));
+            if (NumberUtils.isNumber(zfb1)) {
+                BigDecimal bigDecimal1 = new BigDecimal(zfb1);
+                BigDecimal zfb = bigDecimal1.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                alipayFee = String.valueOf(zfb.doubleValue());
+            }
+
+            // 微信费率转换
+            String wx1 = xx.substring(xx.indexOf("微信") + 2, xx.lastIndexOf("%"));
+            if (NumberUtils.isNumber(wx1)) {
+                BigDecimal bigDecimal2 = new BigDecimal(wx1);
+                BigDecimal wx = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                wechatFee = String.valueOf(wx.doubleValue());
+            }
+            //转换单位
+            if (NumberUtils.isNumber(debitCardRate)) {
+                BigDecimal bigDecimal2 = new BigDecimal(debitCardRate);
+                BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                debitCardRate = String.valueOf(temp.doubleValue());
+            }
+            if (NumberUtils.isNumber(creditCardRate)) {
+                BigDecimal bigDecimal2 = new BigDecimal(creditCardRate);
+                BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                creditCardRate = String.valueOf(temp.doubleValue());
+            }
+            if (NumberUtils.isNumber(debitCardMaxFee)) {
+                BigDecimal bigDecimal2 = new BigDecimal(debitCardMaxFee);
+                BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                debitCardMaxFee = String.valueOf(temp.intValue());
+            }
+            if (NumberUtils.isNumber(creditCardMaxFee)) {
+                BigDecimal bigDecimal2 = new BigDecimal(creditCardMaxFee);
+                BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                creditCardMaxFee = String.valueOf(temp.intValue());
+            }
+            if (NumberUtils.isNumber(debitCardFee)) {
+                BigDecimal bigDecimal2 = new BigDecimal(debitCardFee);
+                BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                debitCardFee = String.valueOf(temp.intValue());
+            }
+            if (NumberUtils.isNumber(creditCardFee)) {
+                BigDecimal bigDecimal2 = new BigDecimal(creditCardFee);
+                BigDecimal temp = bigDecimal2.divide(new BigDecimal("100")).setScale(6, BigDecimal.ROUND_HALF_UP);
+                creditCardFee = String.valueOf(temp.intValue());
+            }
+        } catch (Exception e) {
+            logger.error("转换终端参数出错", e);
+            throw new RuntimeException(e);
+        }
+        
+        
         MerchantTerminal merchantTerminal1 = new MerchantTerminal();
         merchantTerminal1.setInnerCode(innerCode);
         merchantTerminal1.setId(id);
@@ -212,10 +283,14 @@ public class MerchantImportHelper {
         }
         
         merchantTerminal1.setPosId(posId);
+        String termName = "扫码";
+        if ("00".equals(terminalType)) {
+            termName = "刷卡";
+        }
         merchantTerminal1.setTermName(termName);
         merchantTerminal1.setTerminalType(terminalType);
-        merchantTerminal1.setTerminalCode(innerTermCode);
-        merchantTerminal1.setInnerTermCode(terminalCode);
+        merchantTerminal1.setTerminalCode(dto.getInnerTermCode());
+        merchantTerminal1.setInnerTermCode(dto.getTerminalCode());
         merchantTerminal1.setAlipayFee(alipayFee);
         merchantTerminal1.setWechatFee(wechatFee);
         

@@ -48,6 +48,18 @@ public interface MerchantContactDao {
      * @return
      */
    List<MerchantContact> queryByInnerCode(@Param("innerCode") String innerCode);
+   
+   /**
+    * countContactByContactTelphone:(查询电话联系人个数)
+    * @param innerCode
+    * @param contactMobile
+    * @return    设定文件
+    * @author    tangliang
+    * @date      2017年9月28日 上午10:57:42
+    * @return int    DOM对象
+    */
+   int countContactByContactMobile(@Param("innerCode") String innerCode,@Param("contactMobile")String contactMobile);
+   
    //条件查询
    List<MerchantContact> queryListByCondition(MerchantContact merchantContact);
 }
