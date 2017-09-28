@@ -8,6 +8,8 @@ import java.util.List;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 
+import net.fnsco.core.utils.StringUtil;
+
 /**@desc 
  * @author tangliang
  * @date 2017年9月21日 上午10:54:00
@@ -49,6 +51,7 @@ public class MerchantSynchronizationDTO {
 	private String taxRegistCode;
 	private String xx;
 	private String fileInfos;
+	
 	private String snCode;
 	private String debitCardRate;
 	private String creditCardRate;
@@ -400,5 +403,105 @@ public class MerchantSynchronizationDTO {
         }
         
         return result;
+    }
+    /**
+     * installMerchantSynDto:(组装对象)
+     * @param objs
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年9月28日 上午10:36:23
+     * @return MerchantSynchronizationDTO    DOM对象
+     */
+    public static  MerchantSynchronizationDTO installMerchantSynDto(Object[] objs){
+        MerchantSynchronizationDTO dto = new MerchantSynchronizationDTO();
+     // 工商注册名称（协议签约一致）
+        dto.setMerchant(StringUtil.valueOf(objs[0]));
+        // 营业执照注册号
+        dto.setBusinessLicenseNum(StringUtil.valueOf(objs[1]));
+        // 法人身份证号码
+        dto.setPaperNum(StringUtil.valueOf(objs[2]));
+        // 法人姓名
+        dto.setMerLegalPerson(StringUtil.valueOf(objs[3]));
+        // 法人手机号
+        dto.setLegalPersonTel(StringUtil.valueOf(objs[4]));
+        // 证件有效期
+        dto.setPaperValidTime(StringUtil.valueOf(objs[5]));
+        // 营业执照有效期
+        dto.setBusinessLicenseValidTime(StringUtil.valueOf(objs[6]));
+        // 商户注册地址
+        dto.setMerRegistAddress(StringUtil.valueOf(objs[7]));
+        // 商户标签
+        dto.setMercFlag(StringUtil.valueOf(objs[8]));
+        // channelMerchant// 商户入网注册名称
+        dto.setChannelMerchant(StringUtil.valueOf(objs[9]));
+
+        // 签购单名称
+        dto.setSalesSlip(StringUtil.valueOf(objs[10]));
+        // 商户联系人
+        dto.setLinkMan(StringUtil.valueOf(objs[11]));
+        // 联系电话
+        dto.setLinkManTel(StringUtil.valueOf(objs[12]));
+        //邮箱
+        dto.setLinkManEmail(StringUtil.valueOf(objs[13]));
+        //财务联系人信息
+        dto.setFinanceLinkMan(StringUtil.valueOf(objs[14]));
+        dto.setFinanceLinkManTel(StringUtil.valueOf(objs[15]));
+        dto.setFinanceLinkManEmail(StringUtil.valueOf(objs[16]));
+        //商户负责人信息
+        dto.setMerPrincipal(StringUtil.valueOf(objs[17]));
+        dto.setMerPrincipalTel(StringUtil.valueOf(objs[18]));
+        dto.setMerPrincipalEmail(StringUtil.valueOf(objs[19]));
+        
+        // 装机地址
+        dto.setMerInstallArea(StringUtil.valueOf(objs[20]));
+        // 开户类型
+        dto.setAccountType(StringUtil.valueOf(objs[21]));
+        // 开户人身份证
+        dto.setAccountHolderID(StringUtil.valueOf(objs[22]));
+        // 入账人
+        dto.setAccountName(StringUtil.valueOf(objs[23]));
+        // 入账账号
+        dto.setAccountNo(StringUtil.valueOf(objs[24]));
+        // 开户行
+        dto.setSubBankName(StringUtil.valueOf(objs[25]));
+        dto.setOpenBankNum(StringUtil.valueOf(objs[26]));
+        //createTime
+        dto.setCreateTime(StringUtil.valueOf(objs[27]));
+        // busiCode
+        dto.setBusiCode(StringUtil.valueOf(objs[28]));
+        dto.setPrivateKye(StringUtil.valueOf(objs[29]));
+        dto.setTaxRegistCode(StringUtil.valueOf(objs[30]));
+        // 扫码扣率
+        dto.setXx(StringUtil.valueOf(objs[31]));
+        //文件信息
+        dto.setFileInfos(StringUtil.valueOf(objs[32]));
+        
+        // 一号pos机
+        // 备注/1号机具SN
+        dto.setSnCode(StringUtil.valueOf(objs[33]));
+        //debitCardRate
+        dto.setDebitCardRate(StringUtil.valueOf(objs[34]));
+        //creditCardRate
+        dto.setCreditCardRate(StringUtil.valueOf(objs[35]));
+        //debitCardFee
+        dto.setDebitCardFee(StringUtil.valueOf(objs[36]));
+        //creditCardFee
+        dto.setCreditCardFee(StringUtil.valueOf(objs[37]));
+        //debitCardMaxFee
+        dto.setDebitCardMaxFee(StringUtil.valueOf(objs[38]));
+        //creditCardMaxFee
+        dto.setCreditCardMaxFee(StringUtil.valueOf(objs[39]));
+        //posType
+        dto.setPosType(StringUtil.valueOf(objs[40]));
+        //posFactory
+        dto.setPosFactory(StringUtil.valueOf(objs[41]));
+        //merchantCode
+        dto.setMerchantCode(StringUtil.valueOf(objs[42]));
+        //terminalCode
+        dto.setTerminalCode(StringUtil.valueOf(objs[43]));
+        //innerTermCode
+        dto.setInnerTermCode(StringUtil.valueOf(objs[44]));
+
+        return dto;
     }
 }

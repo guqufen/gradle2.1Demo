@@ -29,7 +29,7 @@ import net.fnsco.risk.service.report.ReportService;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 @Controller
-@RequestMapping(value = "/report", method = RequestMethod.POST)
+@RequestMapping(value = "web/admin/report", method = RequestMethod.POST)
 public class ReportAdminController extends BaseController{
     @Autowired
     private ReportService reportService;

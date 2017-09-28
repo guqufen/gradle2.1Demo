@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.api.dto.MerchantSynchronizationDTO;
 import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -80,7 +81,8 @@ public class MerchantInfoImportController extends BaseController {
                 }
                 try {
                     //处理单个
-                    ResultDTO<String> result1 = merchantInfoImportService.merchantBatchImportToDB(objs, userId, timeNum);
+                    MerchantSynchronizationDTO dto = MerchantSynchronizationDTO.installMerchantSynDto(objs);
+                    ResultDTO<String> result1 = merchantInfoImportService.merchantBatchImportToDB(dto, userId, timeNum);
                     JSONObject jsonObject = JSONObject.fromObject(result1.getData());
                     String errorMsg = jsonObject.getString("result");
                     if (!Strings.isNullOrEmpty(errorMsg) && !"null".equalsIgnoreCase(errorMsg)) {

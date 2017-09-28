@@ -193,5 +193,5 @@ public interface MerchantCoreService {
      * @date      2017年9月14日 下午1:39:29
      * @return MerchantCore    DOM对象
      */
-    MerchantCore selectBybusinessLicenseNum(String businessLicenseNum);
+    MerchantCore selectBybusinessLicenseNum(String businessLicenseNum,String accountNo);
 }
