@@ -67,10 +67,8 @@ public class MerchantInfoImportService extends BaseService {
     // 批量导入客户
     @Transactional
     public ResultDTO<String> merchantBatchImportToDB(MerchantSynchronizationDTO dto, Integer userId, Integer timeNum) throws ParseException {
-        // 循环便利customList数组，将其中excel每一行的数据分批导入数据库
 
         ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
-
         /**
          * 导入之前要先验证business_license_num 营业执照号码保持唯一,如果存在，则不新加商户，只加该商户其余属性。
          */
