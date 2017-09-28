@@ -37,6 +37,7 @@ import net.fnsco.core.utils.ExcelUtils;
 import net.fnsco.core.utils.ReadExcel;
 import net.fnsco.core.utils.StringUtil;
 import net.fnsco.freamwork.business.WebUserDTO;
+import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.service.sys.TradeDataImportService;
 import net.fnsco.order.service.sys.entity.ImportErrorDO;
 import net.sf.json.JSONObject;
@@ -376,6 +377,7 @@ public class TradeDataWebController extends BaseController {
                 tradeData.setOrderTime(sf.format(createTime));
             }
             //交易流水打包导入
+            tradeData.setMd5(Md5Util.encrypt(JSON.toJSONString(tradeData)));
             tradeDataService.saveTradeData(tradeData);
         } catch (Exception e) {
             logger.error("导入交易流水出错", e);
