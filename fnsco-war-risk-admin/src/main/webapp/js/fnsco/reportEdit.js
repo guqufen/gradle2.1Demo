@@ -26,7 +26,7 @@ var getReportChart = function getReportChart(){
 //	console.log(merchantId);
 	//查询全年风控曲线图
 	$.ajax({
-		url : PROJECT_NAME + '/report/queryReportPre',
+		url : PROJECT_NAME + '/web/admin/report/queryReportPre',
 		type : 'POST',
 		dataType : "json",
 		data : {'reportId' : merchantId},
@@ -63,7 +63,7 @@ $(function() {
 
 	//ajax请求修改的数据<id=2>
 	$.ajax({
-		url : PROJECT_NAME + '/report/getById',
+		url : PROJECT_NAME + '/web/admin/report/getById',
 		type : 'post',
 		data : {
 			'id' : merchantId
@@ -388,7 +388,7 @@ function saveOrUpdate(status){
 
 	//用AJAX传给后台，返回修改成功/失败
 	$.ajax({
-		url:PROJECT_NAME + '/report/updateReport',
+		url:PROJECT_NAME + '/web/admin/report/updateReport',
 		data:params,
 		type:'get',
 		success:function(data){
@@ -416,7 +416,7 @@ function updateStatue(status){
 
 		//用AJAX传给后台，返回修改成功/失败
 		$.ajax({
-			url:PROJECT_NAME + '/report/updateReport',
+			url:PROJECT_NAME + '/web/admin/report/updateReport',
 			data:params,
 			type:'get',
 			success:function(data){
@@ -442,7 +442,7 @@ function updateStatue(status){
 /** 导入功能 **/
 //模板下载按钮事件
 function downEvent(){
-	var url=PROJECT_NAME + '/report/down';
+	var url=PROJECT_NAME + '/web/admin/report/down';
    window.open(url, 'Excel导入');
 }
 //导入按钮事件
@@ -452,7 +452,7 @@ function importEvent() {
 $(function() {
 	//0.初始化fileinput
 	var oFileInput = new FileInput();
-	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + '/report/doImport?id='+merchantId);
+	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + '/web/admin/report/doImport?id='+merchantId);
 });
 //初始化fileinput
 var FileInput = function() {
