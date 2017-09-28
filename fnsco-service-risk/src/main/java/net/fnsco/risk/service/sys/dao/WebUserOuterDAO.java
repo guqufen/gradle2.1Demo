@@ -66,5 +66,5 @@ public interface WebUserOuterDAO {
 	public String queryTypeName(Integer id);
 
 	@Select("SELECT web_user_outer_id FROM risk_user_merc_rel WHERE inner_code = #{innerCode}")
-	public Integer getByInnercode(String innerCode);
+	public List<Integer> getByInnercode(String innerCode);
 }

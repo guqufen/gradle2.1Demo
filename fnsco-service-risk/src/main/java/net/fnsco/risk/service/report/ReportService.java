@@ -87,29 +87,7 @@ public class ReportService extends BaseService {
         return pager;
     }
     
-    public static void main(String args[]) { 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");  
-        String time="20170712152705";
-        try {
-            Date old = sdf.parse(time);
-            Date now=new Date();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(now);
-            calendar.add(Calendar.MONTH, -3);
-            //小于三个月 符合规则
-            if(calendar.getTime().getTime()<old.getTime()){
-                //li.setIsTrue(1);
-                System.out.println("小于三个月");
-            }else{
-            //大于三个月 不符合规则
-                System.out.println("大于三个月");
-                //li.setIsTrue(2);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }  
-    } 
-    
+  
     //后台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> pageBack(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageListBack(reportInfoDO, pageNum, pageSize);
@@ -196,15 +174,31 @@ public class ReportService extends BaseService {
         return ResultDTO.success(list);
     }
 
+/*    private String handleDateYear(Date date, Integer num) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, num);
+        SimpleDateFormat sdf = new SimpleDateFormat("YY-MM");
+        String dateStr = sdf.format(calendar.getTime());
+        return dateStr;
+    }
+*/
     private String handleDate(Date date, Integer num) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.MONTH, num);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String newStr=sdf.format(calendar.getTime());
         String dateStr = sdf.format(calendar.getTime());
-        return dateStr;
+        //包含01  2017-09
+        String res=dateStr.substring(5);
+        if(res.indexOf("01")>-1){
+            return newStr;
+        }else{
+        //不包含
+            return res;
+        }
     }
-
     //查询风控报告明细
     public ResultDTO queryReportDetails(Integer merchantId) {
         ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
@@ -221,7 +215,7 @@ public class ReportService extends BaseService {
         try {    
             nick=javax.mail.internet.MimeUtility.encodeText("杭州法奈昇科技有限公司");    
         } catch (Exception e) {    
-            e.printStackTrace();    
+            e.printStackTrace();
         }     
         try {
             message = mailSender.createMimeMessage();
@@ -230,10 +224,10 @@ public class ReportService extends BaseService {
             helper.setTo(ev.getProperty("manger.mail.address"));  
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append("<div style='font-size:26px;margin-top:50px;'>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理" + "<a href='http://www.w3school.com.cn'>W3School</a></div>");
+            sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理!</p>" + "<p><a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a><p></div>");
             helper.setText(sb.toString(), true);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("邮件发送失败");
         }
         mailSender.send(message);
         return ResultDTO.success();
@@ -257,10 +251,10 @@ public class ReportService extends BaseService {
             helper.setTo("782430551@qq.com"); 
             helper.setSubject("风控报告");
             StringBuffer sb = new StringBuffer();
-            sb.append("<div style='font-size:20px;margin-top:50px;'><p>dear:</p><p>"+dto.getName()+"</p><p>关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!</p><p>点击查看" + "<a href='http://www.w3school.com.cn'>W3School</a></p></div>");
+            sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName()+"</p><p>关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!</p><p>点击查看" + "<a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a></p></div>");
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            logger.error("邮件发送失败");
         }   
         mailSender.send(message);
         return ResultDTO.success();
@@ -284,12 +278,6 @@ public class ReportService extends BaseService {
     @Transactional
     public ResultDTO updateReport(ReportInfoDO reportInfoDO) {
 
-        //将状态改为待审核
-        if (reportInfoDO.getStatus() == null) {
-            //默认将状态改为待审核
-            reportInfoDO.setStatus(0);
-        }
-
         //更新风控状态
         reportInfoDO.setLastModifyTime(new Date());
         reportInfoDAO.update(reportInfoDO);
@@ -298,9 +286,11 @@ public class ReportService extends BaseService {
         ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());//根据ID查找数据
         //审核成功，则发邮件通知用户
         if(1 == reportInfo.getStatus()){
-        	Integer userId = webUserOuterDAO.getByInnercode(reportInfo.getInnerCode().trim());
+        	List<Integer> userIdList = webUserOuterDAO.getByInnercode(reportInfo.getInnerCode().trim());
         	//邮件通知用户
-        	headPersonnelMes(userId, reportInfoDO.getId());
+        	for (Integer userId : userIdList) {
+				headPersonnelMes(userId, reportInfoDO.getId());
+			}
         }
         
         return ResultDTO.success();
@@ -311,40 +301,11 @@ public class ReportService extends BaseService {
      * @param objs
      * @return
      */
-    public ResultDTO BatchImportToDB( List<Object[]> objs, Integer id){
-    	if(objs.size() > 0){
-    		for(Object[] obj: objs){
-    			
-//    			if(obj.length != 12){
-//    				return ResultDTO.fail("导入数据有误，请按照模版导入12个月数据");
-//    			}
-    			for (int i = 0; i < 12; i++) {
-					if(obj[i] == null){
-						return ResultDTO.fail("导入数据有空数据，请按照模版导入12个月数据");
-					}
-				}
-    			ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
-    			reportRepaymentHistory.setReportId(id);
-    			reportRepaymentHistory.setMonthOne(BigDecimal.valueOf(Double.valueOf(obj[0].toString())));
-    			reportRepaymentHistory.setMonthTwo(BigDecimal.valueOf(Double.valueOf(obj[1].toString())) );
-    			reportRepaymentHistory.setMonthThree(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
-    			reportRepaymentHistory.setMonthFore(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
-    			reportRepaymentHistory.setMonthFive(BigDecimal.valueOf(Double.valueOf(obj[4].toString())));
-    			reportRepaymentHistory.setMonthSix(BigDecimal.valueOf(Double.valueOf(obj[5].toString())));
-    			reportRepaymentHistory.setMonthSeven(BigDecimal.valueOf(Double.valueOf(obj[6].toString())));
-    			reportRepaymentHistory.setMonthEight(BigDecimal.valueOf(Double.valueOf(obj[7].toString())));
-    			reportRepaymentHistory.setMonthNine(BigDecimal.valueOf(Double.valueOf(obj[8].toString())));
-    			reportRepaymentHistory.setMonthTen(BigDecimal.valueOf(Double.valueOf(obj[9].toString())));
-    			reportRepaymentHistory.setMonthEleven(BigDecimal.valueOf(Double.valueOf(obj[10].toString())));
-    			reportRepaymentHistory.setMonthTwelve(BigDecimal.valueOf(Double.valueOf(obj[11].toString())));
-    			reportRepaymentHistory.setLastModifyTime(new Date());
+    public ResultDTO BatchImportToDB( ReportRepaymentHistoryDO reportRepaymentHistory){
+ 
     			//插表
-        		reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
-    		}
-    		
-    	}else{
-    		return ResultDTO.fail("导入数据为空，请核对后重新导入");
-    	}
+        reportRepaymentHistoryDAO.insert(reportRepaymentHistory);
+   
     	
     	return ResultDTO.success();
     }
