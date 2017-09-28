@@ -88,9 +88,30 @@
 			<!-- end -->
 		</div>
 	</div>
+	<!-- detailsModel详情 start -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModelLabel" data-backdrop="static" data-keyboard="false">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	                <h4 class="modal-title" id="editModalLabel">反馈详情</h4>
+	            </div>
+	            <div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="row row-lg">
+						<div class="col-sm-12">
+							<table id="detailsTable"></table>
+						</div>
+					</div>
+				</div>
+			</div>
+	        </div>
+	    </div>
+	</div>    
 
 	<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
-	<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script
+		src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<!-- <script src="js/content.min.js"></script> -->
 	<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
 	<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
@@ -99,198 +120,256 @@
 	<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
 	<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
 	<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
-	<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-	<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script
+		src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+	<script
+		src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script src="js/plugins/bootstrap/fileinput.js"></script>
 	<script src="js/plugins/bootstrap/zh.js"></script>
 	<script type="text/javascript" src="js/fnsco/common.js"></script>
 
 </body>
 <script type="text/javascript">
-    $('#table').bootstrapTable({
-        search: false, //是否启动搜索栏
-        sidePagination:'server',
-        url:PROJECT_NAME+'/web/tradeStatistics/query',
-        showRefresh: false,//是否显示刷新按钮
-        showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
-        toolbar: '#toolbar',  //工具按钮用哪个容器
-        striped: true,   //是否显示行间隔色
-        cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-        pagination: true,   //是否显示分页（*）
-        sortable: true,   //是否启用排序
-        sortOrder: "asc",   //排序方式
-        pageNumber:1,   //初始化加载第一页，默认第一页
-        pageSize: 15,   //每页的记录行数（*）
-        pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
-        queryParams:queryParams,
-        responseHandler:responseHandler,//处理服务器返回数据
-        columns: [{
-    		field : 'id',
-    		title : '操作',
-    		align : 'center',
-    		width : 100,
-    		align : 'center',
-    		formatter : operateFormatter
-    	},{
-            field: 'innerCode',
-            title: '内部商户号',
-            align : 'center'
-        },{
-            field: 'merId',
-            title: '结算商户号',
-            align : 'center'
-        },{
-            field: 'merName',
-            title: '商户名',
-            align : 'center'
-        },{
-            field: 'terminalCode',
-            title: '终端号',
-            align : 'center'
-        },{
-            field: 'tradeDate',
-            title: '支付时间',
-            align : 'center'
-           //formatter:formatDate
-        },{
-            field: 'orderNum',
-            title: '交易笔数',
-            align : 'center'
-        },{
-            field: 'turnover',
-            title: '交易金额(元)',
-            formatter:formatAmt,
-            align:'right'
-        }]
-    });
- 	// 操作格式化
-    function operateFormatter(value, row, index) {
-    	return [
-    		'<a class="redact" href="javascript:querySingle(' + value
-					+ ');" title="详情">',
-			'<i class="glyphicon glyphicon-file"></i>', '</a>  '].join('');
-    }
-  //金额格式化
-  function formatAmt(value, row, index){
-	  if(value){
-		  var num = Number(value);
-		  var res = returnFloat(num/100);
-		  return res;
-	  }
-	  return '--';
-  }
-  function returnFloat(value){
-	  var value=Math.round(parseFloat(value)*100)/100;
-	  var xsd=value.toString().split(".");
-	  if(xsd.length==1){
-	  value=value.toString()+".00";
-	  return value;
-	  }
-	  if(xsd.length>1){
-	  if(xsd[1].length<2){
-	   value=value.toString()+"0";
-	  }
-	  return value;
-	  }
-  }
-  //时间格式化
-  function formatDate(value, row, index){
-	  return formatDateUtil(value);
-  }
-  function formatTime(value, row, index){
-	  return formateTimeUtil(value);
-  }
-  //条件查询按钮事件
-    function queryEvent(){
- 	   $('#table').bootstrapTable('refresh');
-    }
-    //重置按钮事件
-    function resetEvent(){
- 	   $('#formSearch')[0].reset();
-    }
-  //导出按钮事件
-    function exportEvent(){
-    	//拼接参数
-    			   var orderNo =$.trim($('#txt_search_id').val());
-     			   var merId=$.trim($('#txt_search_name').val());
-     			   var merName=$.trim($('#merName').val());
-     			   var amt=$.trim($('#txt_search_price').val());
-     			  /*  var startSendTime=$('#datetimepicker1').val();
-     			   var endSendTime=$('#datetimepicker2').val(); */
-     			   var startTime=$('#datetimepicker1').val();
-    			   var endTime=$('#datetimepicker2').val();
-     			   var url=PROJECT_NAME+'/web/tradeStatistics/export'+'?orderNo='+orderNo+'&merId='+merId
-					+'&merName='+merName+'&amt='+amt
-					+'&startSendTime='+startSendTime+'&endSendTime='+endSendTime
-					+'&startTime='+startTime+'&endTime='+endTime;
+	$('#table').bootstrapTable({
+		search : false, //是否启动搜索栏
+		sidePagination : 'server',
+		url : PROJECT_NAME + '/web/tradeStatistics/query',
+		showRefresh : false,//是否显示刷新按钮
+		showPaginationSwitch : false,//是否显示 数据条数选择框(分页是否显示)
+		toolbar : '#toolbar', //工具按钮用哪个容器
+		striped : true, //是否显示行间隔色
+		cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+		pagination : true, //是否显示分页（*）
+		sortable : true, //是否启用排序
+		sortOrder : "asc", //排序方式
+		pageNumber : 1, //初始化加载第一页，默认第一页
+		pageSize : 15, //每页的记录行数（*）
+		pageList : [ 15, 20, 50, 100 ], //可供选择的每页的行数（*）
+		queryParams : queryParams,
+		responseHandler : responseHandler,//处理服务器返回数据
+		columns : [ {
+			field : 'id',
+			title : '操作',
+			align : 'center',
+			width : 100,
+			align : 'center',
+			formatter : operateFormatter
+		}, {
+			field : 'innerCode',
+			title : '内部商户号',
+			align : 'center'
+		}, {
+			field : 'merId',
+			title : '结算商户号',
+			align : 'center'
+		}, {
+			field : 'merName',
+			title : '商户名',
+			align : 'center'
+		}, {
+			field : 'terminalCode',
+			title : '终端号',
+			align : 'center'
+		}, {
+			field : 'tradeDate',
+			title : '支付时间',
+			align : 'center'
+		//formatter:formatDate
+		}, {
+			field : 'orderNum',
+			title : '交易笔数',
+			align : 'center'
+		}, {
+			field : 'turnover',
+			title : '交易金额(元)',
+			formatter : formatAmt,
+			align : 'right'
+		} ]
+	});
+	$('#detailsTable').bootstrapTable({
+		search : false, //是否启动搜索栏
+		sidePagination : 'server',
+		url : PROJECT_NAME + '/web/tradeStatistics/query',
+		showRefresh : false,//是否显示刷新按钮
+		showPaginationSwitch : false,//是否显示 数据条数选择框(分页是否显示)
+		toolbar : '#toolbar', //工具按钮用哪个容器
+		striped : true, //是否显示行间隔色
+		cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+		pagination : true, //是否显示分页（*）
+		sortable : true, //是否启用排序
+		sortOrder : "asc", //排序方式
+		pageNumber : 1, //初始化加载第一页，默认第一页
+		pageSize : 15, //每页的记录行数（*）
+		pageList : [ 15, 20, 50, 100 ], //可供选择的每页的行数（*）
+		queryParams : queryDetailsParams,
+		responseHandler : responseHandler,//处理服务器返回数据
+		columns : [  {
+			field : 'start',
+			title : '状态',
+			align : 'center'
+		}, {
+			field : 'terminalCode',
+			title : '终端号',
+			align : 'center'
+		}, {
+			field : 'tradeDate',
+			title : '支付时间',
+			align : 'center'
+		//formatter:formatDate
+		}, {
+			field : 'turnover',
+			title : '交易金额(元)',
+			formatter : formatAmt,
+			align : 'right'
+		} ]
+	});
+	// 操作格式化
+	function operateFormatter(value, row, index) {
+		return [
+				'<a class="redact" href="javascript:querySingle(' + value
+						+ ');" title="详情">',
+				'<i class="glyphicon glyphicon-file"></i>', '</a>  ' ].join('');
+	}
+	//金额格式化
+	function formatAmt(value, row, index) {
+		if (value) {
+			var num = Number(value);
+			var res = returnFloat(num / 100);
+			return res;
+		}
+		return '--';
+	}
+	function returnFloat(value) {
+		var value = Math.round(parseFloat(value) * 100) / 100;
+		var xsd = value.toString().split(".");
+		if (xsd.length == 1) {
+			value = value.toString() + ".00";
+			return value;
+		}
+		if (xsd.length > 1) {
+			if (xsd[1].length < 2) {
+				value = value.toString() + "0";
+			}
+			return value;
+		}
+	}
+	//时间格式化
+	function formatDate(value, row, index) {
+		return formatDateUtil(value);
+	}
+	function formatTime(value, row, index) {
+		return formateTimeUtil(value);
+	}
+	//详情按钮事件
+	function querySingle() {
+		$('#detailsModal').modal();
+	}
+	//条件查询按钮事件
+	function queryEvent() {
+		$('#table').bootstrapTable('refresh');
+	}
+	//条件查询按钮事件
+	function querydetailsModal() {
+		$('#detailsTable').bootstrapTable('refresh');
+	}
+	//重置按钮事件
+	function resetEvent() {
+		$('#formSearch')[0].reset();
+	}
+	//导出按钮事件
+	function exportEvent() {
+		//拼接参数
+		var orderNo = $.trim($('#txt_search_id').val());
+		var merId = $.trim($('#txt_search_name').val());
+		var merName = $.trim($('#merName').val());
+		var amt = $.trim($('#txt_search_price').val());
+		/*  var startSendTime=$('#datetimepicker1').val();
+		 var endSendTime=$('#datetimepicker2').val(); */
+		var startTime = $('#datetimepicker1').val();
+		var endTime = $('#datetimepicker2').val();
+		var url = PROJECT_NAME + '/web/tradeStatistics/export' + '?orderNo='
+				+ orderNo + '&merId=' + merId + '&merName=' + merName + '&amt='
+				+ amt + '&startSendTime=' + startSendTime + '&endSendTime='
+				+ endSendTime + '&startTime=' + startTime + '&endTime='
+				+ endTime;
 		window.open(url, 'Excel导出');
-    }
-    window.operateEvents = {
-        'click .redact': function (e, value, row, index) {
-            alert('You click like action, row: ' + JSON.stringify(row));
-        },
-        'click .remove': function (e, value, row, index) {
-            $table.bootstrapTable('remove', {
-                field: 'id',
-                values: [row.id]
-            });
-        }
-    };
-	
-  //组装请求参数
-    function queryParams(params)
-    {
- 	   var param ={
- 			   currentPageNum : this.pageNumber,
- 			   pageSize : this.pageSize,
- 			   //orderNo :$.trim($('#txt_search_id').val()),
- 			   merId:$.trim($('#txt_search_name').val()),
- 			   merName:$.trim($('#merName').val()),
- 			  // amt:$.trim($('#txt_search_price').val()),
- 			   //startSendTime:$('#datetimepicker1').val(),
- 			   //endSendTime:$('#datetimepicker2').val(),
- 			   startTime:$('#datetimepicker1').val(),
- 			   endTime:$('#datetimepicker2').val()
- 	   }
- 	   return param;
-    }
-    //处理后台返回数据
-    function responseHandler(res) { 
-    	unloginHandler(res);
- 	    if (res) {
- 	        return {
- 	            "rows" : res.list,
- 	            "total" : res.total
- 	        };
- 	    } else {
- 	        return {
- 	            "rows" : [],
- 	            "total" : 0
- 	        };
- 	    }
- 	}
-    
-    $('#datetimepicker1').datetimepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayBtn: true,
-        todayHighlight: true,
-        showMeridian: true,
-        pickerPosition: "bottom-left",
-        language: 'zh-CN',//中文，需要引用zh-CN.js包
-        startView: 2,//月视图
-        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
-    });
-    $('#datetimepicker2').datetimepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayBtn: true,
-        todayHighlight: true,
-        showMeridian: true,
-        pickerPosition: "bottom-left",
-        language: 'zh-CN',//中文，需要引用zh-CN.js包
-        startView: 2,//月视图
-        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
-    });
+	}
+	window.operateEvents = {
+		'click .redact' : function(e, value, row, index) {
+			alert('You click like action, row: ' + JSON.stringify(row));
+		},
+		'click .remove' : function(e, value, row, index) {
+			$table.bootstrapTable('remove', {
+				field : 'id',
+				values : [ row.id ]
+			});
+		}
+	};
+
+	//组装请求参数
+	function queryDetailsParams(params) {
+		var param = {
+			currentPageNum : this.pageNumber,
+			pageSize : this.pageSize,
+			merId : $.trim($('#txt_search_name').val()),
+		}
+		return param;
+	}
+	//详情组装请求参数
+	function queryParams(params) {
+		var param = {
+			currentPageNum : this.pageNumber,
+			pageSize : this.pageSize,
+			//orderNo :$.trim($('#txt_search_id').val()),
+			merId : $.trim($('#txt_search_name').val()),
+			merName : $.trim($('#merName').val()),
+			// amt:$.trim($('#txt_search_price').val()),
+			//startSendTime:$('#datetimepicker1').val(),
+			//endSendTime:$('#datetimepicker2').val(),
+			startTime : $('#datetimepicker1').val(),
+			endTime : $('#datetimepicker2').val()
+		}
+		return param;
+	}
+	//处理后台返回数据
+	function responseHandler(res) {
+		unloginHandler(res);
+		if (res) {
+			return {
+				"rows" : res.list,
+				"total" : res.total
+			};
+		} else {
+			return {
+				"rows" : [],
+				"total" : 0
+			};
+		}
+	}
+
+	$('#datetimepicker1').datetimepicker({
+		format : 'yyyy-mm-dd',
+		autoclose : true,
+		todayBtn : true,
+		todayHighlight : true,
+		showMeridian : true,
+		pickerPosition : "bottom-left",
+		language : 'zh-CN',//中文，需要引用zh-CN.js包
+		startView : 2,//月视图
+		minView : 2
+	//日期时间选择器所能够提供的最精确的时间选择视图
+	});
+	$('#datetimepicker2').datetimepicker({
+		format : 'yyyy-mm-dd',
+		autoclose : true,
+		todayBtn : true,
+		todayHighlight : true,
+		showMeridian : true,
+		pickerPosition : "bottom-left",
+		language : 'zh-CN',//中文，需要引用zh-CN.js包
+		startView : 2,//月视图
+		minView : 2
+	//日期时间选择器所能够提供的最精确的时间选择视图
+	});
 </script>
 </html>

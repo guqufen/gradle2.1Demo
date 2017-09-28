@@ -23,7 +23,7 @@
       </if>
       <if test="condition.merId != null and condition.merId !=''" >
         AND inner_code in (
-           SELECT inner_code FROM m_merchant_core WHERE mer_id = #{condition.merId ,jdbcType=VARCHAR})
+         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{condition.merId ,jdbcType=VARCHAR} LIMIT 1)as t  
         )
       </if>
 	  <if test="condition.merName != null and condition.merName !=''" >
@@ -53,7 +53,7 @@
       </if>
       <if test="merId != null and merId !=''" >
         AND inner_code in (
-           SELECT inner_code FROM t_trade_data WHERE mer_id = #{merId ,jdbcType=VARCHAR})
+         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{merId ,jdbcType=VARCHAR} LIMIT 1)as t 
         )
       </if>
 	  <if test="merName != null and merName !=''" >
