@@ -180,7 +180,7 @@ function sendEmail(merchantId) {
 // 改变风控状态
 function reportStatus(merchantId, status) {
 	$.ajax({
-		url : PROJECT_NAME + '/web/admin/updateReport',
+		url : PROJECT_NAME + '/web/admin/report/updateReport',
 		type : 'POST',
 		dataType : "json",
 		data : {
