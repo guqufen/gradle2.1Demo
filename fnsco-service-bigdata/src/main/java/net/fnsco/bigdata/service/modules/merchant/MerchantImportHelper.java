@@ -131,9 +131,9 @@ public class MerchantImportHelper{
         String accounttype = dto.getAccountType();
         if(!Strings.isNullOrEmpty(accounttype)){
             if(accounttype.contains("private")){
-                accounttype = "1";
-            }else{
                 accounttype = "0";
+            }else{
+                accounttype = "1";
             }
         }
         MerchantBank merchantBank = new MerchantBank();
