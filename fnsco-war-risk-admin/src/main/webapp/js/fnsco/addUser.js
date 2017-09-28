@@ -1,6 +1,5 @@
 //获取用户登录信息
-var result;
-function getUserName() {
+$(function(){
 	$.ajax({
 		dataType : 'json',
 		type : 'POST',
@@ -8,18 +7,13 @@ function getUserName() {
 		async : false,// 这里选择异步为false，那么这个程序执行到这里的时候会暂停，等待
 		// 数据加载完成后才继续执行
 		success : function(data) {
-			result = data.data;
+			$("#toolbar").html('');
+			if(data.data.name=="admin"){
+					html='<button id="btn_add" type="button" class="btn btn-success" onclick="javascript:add();"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增</button>';
+					$("#toolbar").append(html);
+			}
 		}
 	});
-	return result;
-}
-$(function(){
-	getUserName();
-	$("#toolbar").html('');
-	if(result.name=="admin"){
-			html='<button id="btn_add" type="button" class="btn btn-success" onclick="javascript:add();"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增</button>';
-			$("#toolbar").append(html);
-	}
 });
 //初始化表格
 $('#table').bootstrapTable({

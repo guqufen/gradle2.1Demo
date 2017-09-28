@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.trade.TradeStatisticsDAO" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.trade.TradeStatistics" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="trade_date" property="tradeDate" jdbcType="VARCHAR" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="turnover" property="turnover" jdbcType="NUMERIC" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="mer_id" property="merId" jdbcType="VARCHAR" />
+    <result column="mer_name" property="merName" jdbcType="VARCHAR" />
+    <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- web端分页条件查询 -->
+  <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="BaseResultMap">
+    SELECT * FROM r_trade_by_day 
+     <where>
+       <if test="condition.startTime != null and  condition.startTime != ''">
+        AND trade_date &gt;= #{condition.startTime ,jdbcType=VARCHAR}
+      </if>
+       <if test="condition.endTime != null and  condition.endTime != ''">
+        AND trade_date &lt;= #{condition.endTime ,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.merId != null and condition.merId !=''" >
+        AND inner_code in (
+           SELECT inner_code FROM m_merchant_core WHERE mer_id = #{condition.merId ,jdbcType=VARCHAR})
+        )
+      </if>
+	  <if test="condition.merName != null and condition.merName !=''" >
+        AND inner_code in (
+           SELECT inner_code FROM m_merchant_core WHERE mer_name LIKE CONCAT('%',#{condition.merName},'%')
+        )
+      </if>
+   	    <if test="condition.innerCode != null and condition.innerCode !=''" >
+        AND inner_code = #{condition.innerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.terminalCode != null and condition.terminalCode !=''" >
+        AND txn_type = #{condition.terminalCode,jdbcType=VARCHAR}
+      </if>
+   	 </where>
+   	 order by trade_date desc
+   	 limit #{startRow} , #{perPageSize}
+  </select>
+  <!-- 条件查询总数 -->
+  <select id="queryTotalByCondition" parameterType="net.fnsco.bigdata.service.domain.trade.TradeStatistics" resultType="java.lang.Integer">
+     SELECT count(*) FROM r_trade_by_day 
+     <where>
+       <if test="startTime != null and  startTime != ''">
+        AND trade_date &gt;= #{startTime ,jdbcType=VARCHAR}
+      </if>
+       <if test="endTime != null and  endTime != ''">
+        AND trade_date &lt;= #{endTime ,jdbcType=VARCHAR}
+      </if>
+      <if test="merId != null and merId !=''" >
+        AND inner_code in (
+           SELECT inner_code FROM t_trade_data WHERE mer_id = #{merId ,jdbcType=VARCHAR})
+        )
+      </if>
+	  <if test="merName != null and merName !=''" >
+        AND inner_code in (
+           SELECT inner_code FROM m_merchant_core WHERE mer_name LIKE CONCAT('%',#{merName},'%')
+        )
+      </if>
+   	    <if test="innerCode != null and innerCode !=''" >
+        AND inner_code = #{innerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="terminalCode != null and terminalCode !=''" >
+        AND txn_type = #{terminalCode,jdbcType=VARCHAR}
+      </if>
+   	 </where>		
+  </select>
+  <select id="queryMerIdByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT t_trade_data.mer_id,m_merchant_core.mer_name 
+    FROM t_trade_data ,m_merchant_core
+     <where>
+       <if test="innerCode != null and  innerCode != ''">
+        AND t_trade_data.inner_code = #{innerCode,jdbcType=VARCHAR}
+      </if>
+       <if test="innerCode != null and  innerCode != ''">
+        AND m_merchant_core.inner_code = #{innerCode,jdbcType=VARCHAR}
+      </if>
+   		limit 1
+      </where>
+  </select>
+</mapper>
