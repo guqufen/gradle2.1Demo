@@ -144,19 +144,12 @@ public class MerchantController extends BaseController {
             params.add(merdo);
         }
 
-        List<Object[]> customerList = MerchantSynchronizationDTO.installListDatas(params);
         Date startImportTime = new Date();
-        if (customerList.size() != 0) {
+        if (params.size() != 0) {
             // excel导出的空数据是“null”，赋值一个空字符串
             int timeNum = 1;
-            for (Object[] objs : customerList) {
+            for (MerchantSynchronizationDTO objs : params) {
                 timeNum = timeNum + 1;
-                for (int i = 0; i < objs.length; i++) {
-                    if (objs[i] == null) {
-                        objs[i] = "";
-                    }
-                }
-
                 try {
                     //处理单个
                     ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(objs, 1, timeNum);
