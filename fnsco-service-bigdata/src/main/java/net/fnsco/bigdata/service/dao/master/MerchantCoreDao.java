@@ -37,7 +37,7 @@ public interface MerchantCoreDao {
      * @date      2017年9月14日 下午1:39:29
      * @return MerchantCore    DOM对象
      */
-    MerchantCore selectBybusinessLicenseNum(@Param("businessLicenseNum") String businessLicenseNum);
+    MerchantCore selectBybusinessLicenseNum(@Param("businessLicenseNum") String businessLicenseNum,@Param("accountNo")String accountNo);
     
     /**
      * 条件分页查询

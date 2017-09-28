@@ -155,4 +155,8 @@
 <delete id="deleteByInnerCode" parameterType="java.lang.String">
   DELETE   FROM m_merchant_contact WHERE inner_code = #{innerCode}
 </delete>
+<!-- 查询电话联系人个数 -->
+<select id="countContactByContactMobile" parameterType="java.lang.String" resultType="java.lang.Integer">
+ SELECT COUNT(*) FROM m_merchant_contact WHERE inner_code= #{innerCode} AND contact_mobile = #{contactMobile}
+</select>
 </mapper>
