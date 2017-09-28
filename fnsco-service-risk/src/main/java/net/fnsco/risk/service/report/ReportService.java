@@ -292,12 +292,6 @@ public class ReportService extends BaseService {
     @Transactional
     public ResultDTO updateReport(ReportInfoDO reportInfoDO) {
 
-        //将状态改为待审核
-        if (reportInfoDO.getStatus() == null) {
-            //默认将状态改为待审核
-            reportInfoDO.setStatus(0);
-        }
-
         //更新风控状态
         reportInfoDO.setLastModifyTime(new Date());
         reportInfoDAO.update(reportInfoDO);

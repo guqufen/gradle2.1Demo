@@ -23,7 +23,7 @@ console.log(merchantId);
 var dataList=new Array();
 var dateList=new Array();
 var getReportChart = function getReportChart(){
-	console.log(merchantId);
+//	console.log(merchantId);
 	//查询全年风控曲线图
 	$.ajax({
 		url : PROJECT_NAME + '/report/queryReportPre',
@@ -61,33 +61,15 @@ var getReportChart = function getReportChart(){
 
 $(function() {
 
-	//给报告时间赋值(当前日期)
-	var date = new Date();
-	$('#reportTimer').val(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
-
-	//获取行业数据(option)，放入行业(select)
-	getIndest();
-
-	//给规模赋值(size)
-	getSize();
-
-	//报告周期赋值(reportCycle)
-	getReportCycle();
-	
-	//获取装修等级数据
-	getDecorationLevel();
-
 	//ajax请求修改的数据<id=2>
 	$.ajax({
 		url : PROJECT_NAME + '/report/getById',
-		type : 'get',
+		type : 'post',
 		data : {
 			'id' : merchantId
 		},
 		success : function(data) {
 			if (data.success) {
-
-				
 
 				// 数据获取成功，则将获取到的数据赋值给当前页面
 				var dd = data.data;
@@ -105,31 +87,29 @@ $(function() {
 				$('#businessDueTime').val(dd.businessDueTime);// 营业期限
 				$('#businessDueTime').attr('disabled','disabled');
 
-				if(dd.industry != ""){
-					$('select[id="industry"]').find("option[value=" + dd.industry + "]").attr("selected", true);// 行业
-				}else{
-					$('select[id="industry"]').append('<option selected="selected" value="">----</option>');
-				}
+				//获取行业数据(option)，放入行业(select)
+				getIndest(dd.industry);
 
 				$('#tradingArea').val(dd.tradingArea);// 商圈
-
-//				$('#turnover').val(dd.turnover);// 营业额
-				$('select[id="decorationLevel"]').find("option[value=" + dd.decorationLevel + "]").attr("selected", true);// 装修等级
-//				$('#decorationLevel').val(dd.turnover);// 营业额
-
-				$('select[id="size"]').find("option[value=" + dd.size + "]").attr("selected", true);// 规模
-
-//				$('select[id="reportCycle"]').find("option[value=" + dd.reportCycle + "]").attr("selected", true);// 报告周期,默认6个月数据预测六个月，不可改
-				$('select[id="reportCycle"]').find('option[value="1"]').attr("selected", true);// 报告周期,默认6个月数据预测六个月，不可改
-				$('select[id="reportCycle"]').attr('disabled','disabled');
-
 				
+				//获取装修等级数据
+				getDecorationLevel(dd.decorationLevel);
+
+				//给规模赋值(size)
+				getSize(dd.size);
+
+				//报告周期赋值(reportCycle)
+				getReportCycle(1);
 
 				$('#quota').val(dd.quota);// 额度
 
 				$('#feeRate').val(dd.feeRate);// 费率
 
 				$('#loanCycle').val(dd.loanCycle);// 周期
+
+				//给报告时间赋值(当前日期)
+				var date = new Date();
+				$('#reportTimer').val(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
 				
 				//待审核状态
 				if(dd.status == 0){
@@ -164,14 +144,17 @@ $(function() {
 /**
  * 请求行业数据
  */
-function getIndest() {
+function getIndest(value) {
 	$.ajax({
 		url:PROJECT_NAME + '/industry/queryAll',
-		type:'get',
-		async : false,//同步获取数据
+		type:'post',
 		success:function(data){
 			console.log(data);
 			if(data.success){
+				if(value == ""){
+					$('select[id="industry"]').append('<option selected="selected" value="">----</option>');
+					return;
+				}
 				for(var i=0; i < data.data.length; i++){
 					if(data.data[i].fourth != ""){
 						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'--'+data.data[i].third+'--'+data.data[i].fourth+'</option>');
@@ -181,6 +164,7 @@ function getIndest() {
 						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'</option>');
 					}
 				}
+				$('select[id="industry"]').find("option[value=" + value + "]").attr("selected", true);// 行业
 			}
 		},
 		error : function(data) {
@@ -192,17 +176,18 @@ function getIndest() {
 /**
  * 获取规模请求列表数据
  */
-function getSize(){
+function getSize(value){
 	$.ajax({
 		url:PROJECT_NAME + '/sysConfig/getByType',
-		type:'get',
+		type:'post',
 		data:{"type":"04"},
-		async:false,
+//		async:false,
 		success:function(data){
 			if(data.success){
 				for(var i=0; i < data.data.length; i++){
 					$('#size').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
 				}
+				$('select[id="size"]').find("option[value=" + value + "]").attr("selected", true);// 规模
 			}
 			console.log(data);
 		}
@@ -211,17 +196,18 @@ function getSize(){
 /**
  * 获取装修等级数据
  */
-function getDecorationLevel(){
+function getDecorationLevel(value){
 	$.ajax({
 		url:PROJECT_NAME + '/sysConfig/getByType',
-		type:'get',
+		type:'post',
 		data:{"type":"06"},
-		async:false,
+//		async:false,
 		success:function(data){
 			if(data.success){
 				for(var i=0; i < data.data.length; i++){
 					$('#decorationLevel').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
 				}
+				$('select[id="decorationLevel"]').find("option[value=" + value + "]").attr("selected", true);// 装修等级
 			}
 			console.log(data);
 		}
@@ -231,17 +217,19 @@ function getDecorationLevel(){
 /**
  * 获取报告周期列表数据
  */
-function getReportCycle(){
+function getReportCycle(value){
 	$.ajax({
 		url:PROJECT_NAME + '/sysConfig/getByType',
-		type:'get',
+		type:'post',
 		data:{'type':'05'},
-		async:false,
+//		async:false,
 		success:function(data){
 			if(data.success){
 				for(var i = 0; i < data.data.length; i++){
 					$('#reportCycle').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
 				}
+				$('select[id="reportCycle"]').find('option[value="'+value+'"]').attr("selected", true);// 报告周期,默认6个月数据预测六个月，不可改
+				$('select[id="reportCycle"]').attr('disabled','disabled');
 			}
 		}
 	});
@@ -307,18 +295,6 @@ function saveOrUpdate(status){
 		layer.msg('请先导入数据,再提交此次编辑');
 		return false;
 	}
-//	//营业额
-//	var turnover = $('#turnover').val();
-//	if(turnover == ""){
-//		layer.msg('请输入营业额');
-//		return false;
-//	}
-//	//
-//	var reg = new RegExp("^[0-9]*$");
-//	if(!reg.test($('#turnover').val())){
-//		layer.msg('请输入正确的营业额');
-//		return false;
-//	}
 	
 	//装修等级
 	var decorationLevel = $('#decorationLevel').val();
@@ -563,7 +539,7 @@ function chart(dataTime,data){
 	    },
 	    yAxis: {
 	        type: 'value',
-	        boundaryGap: [0, '100%'],
+	        boundaryGap: [0, '15%'],
 	        splitLine:{  
         　　　　show:false 
         　　 },
