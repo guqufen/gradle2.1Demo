@@ -87,19 +87,7 @@ public class ReportService extends BaseService {
         return pager;
     }
     
-        public static void main(String args[]) { 
-        //SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");  
-        String time="2017-09";
-        String res=time.substring(5);
-        System.out.println(time);
-        System.out.println(res);
-//        if(res.indexOf("01")>-1){
-//            return dateStr;
-//        }else{
-//            return res;
-//        }
-    } 
-    
+  
     //后台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> pageBack(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageListBack(reportInfoDO, pageNum, pageSize);
@@ -227,7 +215,7 @@ public class ReportService extends BaseService {
         try {    
             nick=javax.mail.internet.MimeUtility.encodeText("杭州法奈昇科技有限公司");    
         } catch (Exception e) {    
-            e.printStackTrace();    
+            e.printStackTrace();
         }     
         try {
             message = mailSender.createMimeMessage();
@@ -239,7 +227,7 @@ public class ReportService extends BaseService {
             sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理!</p>" + "<p><a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a><p></div>");
             helper.setText(sb.toString(), true);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("邮件发送失败");
         }
         mailSender.send(message);
         return ResultDTO.success();
@@ -266,7 +254,7 @@ public class ReportService extends BaseService {
             sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName()+"</p><p>关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!</p><p>点击查看" + "<a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a></p></div>");
             helper.setText(sb.toString(), true);
         } catch (MessagingException e) {
-            e.printStackTrace();
+            logger.error("邮件发送失败");
         }   
         mailSender.send(message);
         return ResultDTO.success();
@@ -289,12 +277,6 @@ public class ReportService extends BaseService {
      */
     @Transactional
     public ResultDTO updateReport(ReportInfoDO reportInfoDO) {
-
-        //将状态改为待审核
-        if (reportInfoDO.getStatus() == null) {
-            //默认将状态改为待审核
-            reportInfoDO.setStatus(0);
-        }
 
         //更新风控状态
         reportInfoDO.setLastModifyTime(new Date());

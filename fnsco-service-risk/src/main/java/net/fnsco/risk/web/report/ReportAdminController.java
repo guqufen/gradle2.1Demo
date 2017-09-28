@@ -29,7 +29,7 @@ import net.fnsco.risk.service.report.ReportService;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 @Controller
-@RequestMapping(value = "/report", method = RequestMethod.POST)
+@RequestMapping(value = "web/admin/report", method = RequestMethod.POST)
 public class ReportAdminController extends BaseController{
     @Autowired
     private ReportService reportService;
@@ -81,10 +81,15 @@ public class ReportAdminController extends BaseController{
     @RequestMapping(value="updateReport", method = RequestMethod.GET)
     public ResultDTO updateReport(ReportInfoDO reportInfoDO){
     	
-    	//如果传过来的ID为空，返回成功
+    	//如果传过来的ID为空，返回失败
     	if(reportInfoDO.getId() == null){
-    		return ResultDTO.success();
+    		return ResultDTO.fail();
     	}
+    	
+    	//如果传过来的状态为空，则返回失败
+        if (reportInfoDO.getStatus() == null) {
+            return ResultDTO.fail();
+        }
     	
 		return reportService.updateReport(reportInfoDO);
     }
@@ -138,11 +143,6 @@ public class ReportAdminController extends BaseController{
 		if (objs.size() != 1) {
 			return ResultDTO.fail("导入数据为空或者条数大于1，请核对后再重新导入");
 		}
-		
-		//导入数据列数必须等于12
-//		if(objs.get(0).length != 12){
-//			return ResultDTO.fail("导入数据列数必须等于12，请核对后再重新导入");
-//		}
         
 		//判断12个月的数据是否带空值，是否为数字
 		Object[] obj = objs.get(0);

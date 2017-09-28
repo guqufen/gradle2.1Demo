@@ -22,6 +22,7 @@ var customerType = function load_val2() {
 				$('#status').append('<option value="">全部</option>');
 				$('#status').append('<option value="2" class="auditor">审核失败</option>');
 				$('#status').append('<option value="3" class="auditor">待编辑</option>');
+				$('#status').append('<option value="4" class="auditor">待编辑</option>');
 			}
 		}
 	});
@@ -42,7 +43,7 @@ if (customerType == 1) {
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url : PROJECT_NAME + '/report/query',
+	url : PROJECT_NAME + '/web/admin/report/query',
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	// toolbar: '#toolbar', //工具按钮用哪个容器
@@ -110,7 +111,7 @@ function formatterStatus(value, row, index) {
 	} else if (value == '3') {
 		return '待编辑';
 	} else if(value == '4'){
-		return '已提交的待编辑';
+		return '待编辑';
 	} else {
 		return '-';
 	}
