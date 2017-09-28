@@ -151,10 +151,7 @@ function getIndest(value) {
 		success:function(data){
 			console.log(data);
 			if(data.success){
-				if(value == ""){
-					$('select[id="industry"]').append('<option selected="selected" value="">----</option>');
-					return;
-				}
+				
 				for(var i=0; i < data.data.length; i++){
 					if(data.data[i].fourth != ""){
 						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'--'+data.data[i].third+'--'+data.data[i].fourth+'</option>');
@@ -164,7 +161,12 @@ function getIndest(value) {
 						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'</option>');
 					}
 				}
-				$('select[id="industry"]').find("option[value=" + value + "]").attr("selected", true);// 行业
+				if(value == ""){
+					$('select[id="industry"]').append('<option selected="selected" value="">----</option>');
+					return;
+				}else{
+					$('select[id="industry"]').find("option[value=" + value + "]").attr("selected", true);// 行业
+				}
 			}
 		},
 		error : function(data) {
@@ -187,7 +189,12 @@ function getSize(value){
 				for(var i=0; i < data.data.length; i++){
 					$('#size').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
 				}
-				$('select[id="size"]').find("option[value=" + value + "]").attr("selected", true);// 规模
+				if((value == "")||(value == null)){
+					$('select[id="size"]').append('<option selected="selected" value="">----</option>');
+					return;
+				}else{
+					$('select[id="size"]').find("option[value=" + value + "]").attr("selected", true);// 规模
+				}
 			}
 			console.log(data);
 		}
@@ -207,7 +214,13 @@ function getDecorationLevel(value){
 				for(var i=0; i < data.data.length; i++){
 					$('#decorationLevel').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
 				}
-				$('select[id="decorationLevel"]').find("option[value=" + value + "]").attr("selected", true);// 装修等级
+				if(value == ""){
+					$('select[id="decorationLevel"]').append('<option selected="selected" value="">----</option>');
+					return;
+				}else{
+					$('select[id="decorationLevel"]').find("option[value=" + value + "]").attr("selected", true);// 装修等级
+				}
+				
 			}
 			console.log(data);
 		}
