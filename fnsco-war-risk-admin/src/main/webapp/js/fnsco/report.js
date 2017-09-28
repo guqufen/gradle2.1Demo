@@ -22,6 +22,7 @@ var customerType = function load_val2() {
 				$('#status').append('<option value="">全部</option>');
 				$('#status').append('<option value="2" class="auditor">审核失败</option>');
 				$('#status').append('<option value="3" class="auditor">待编辑</option>');
+				$('#status').append('<option value="4" class="auditor">待编辑</option>');
 			}
 		}
 	});
@@ -110,7 +111,7 @@ function formatterStatus(value, row, index) {
 	} else if (value == '3') {
 		return '待编辑';
 	} else if(value == '4'){
-		return '已提交的待编辑';
+		return '待编辑';
 	} else {
 		return '-';
 	}
