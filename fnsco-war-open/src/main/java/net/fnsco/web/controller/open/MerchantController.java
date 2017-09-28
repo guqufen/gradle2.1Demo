@@ -147,7 +147,7 @@ public class MerchantController extends BaseController {
         Date startImportTime = new Date();
         if (params.size() != 0) {
             // excel导出的空数据是“null”，赋值一个空字符串
-            int timeNum = 1;
+            int timeNum = 0;
             for (MerchantSynchronizationDTO objs : params) {
                 timeNum = timeNum + 1;
                 try {

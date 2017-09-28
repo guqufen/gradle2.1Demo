@@ -51,17 +51,17 @@ var FileInput = function () {
         previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
         msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
     }).on("fileuploaded", function (event, data) {
-        console.log(data);
-        var data = data.response;
+        console.log(data1);
+        var data = data1.response;
         if (!data.success) {
-        	alert(data);
+        	alert(data.message);
         	//$('#importModal').modal("hide");
             return;
         }
         var errorMsgStr = null;
         var errorMsg = data.data;
         for(var i in errorMsg){
-        	errorMsgStr += '第'+i.rowNumber+'行数据有误!原因:'+i.errorMsg+';';
+        	errorMsgStr += '第'+errorMsg[i].rowNumber+'行数据有误!原因:'+errorMsg[i].errorMsg+';';
         }
         if(!errorMsgStr){
         	errorMsgStr = data.message;
