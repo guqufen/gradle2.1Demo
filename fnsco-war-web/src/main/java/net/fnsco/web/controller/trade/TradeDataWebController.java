@@ -257,13 +257,13 @@ public class TradeDataWebController extends BaseController {
         // excel导出的空数据是“null”，赋值一个空字符串
         int timeNum = 2;
         for (Object[] objs : customerList) {
-            timeNum = timeNum + 1;
             if (objs.length < 32) {
                 Object[] tempObj = new Object[32];
                 System.arraycopy(objs, 0, tempObj, 0, objs.length);
                 objs = tempObj;
             }
             importTradeData(objs, timeNum, fileName);
+            timeNum = timeNum + 1;
         }
         return ResultDTO.success();
     }
