@@ -21,7 +21,7 @@ var customerType = function load_val2() {
 //				$(".admin").css("display", "none");
 				$('#status').append('<option value="">全部</option>');
 				$('#status').append('<option value="2" class="auditor">审核失败</option>');
-				$('#status').append('<option value="3" class="auditor">待编辑</option>');
+//				$('#status').append('<option value="3" class="auditor">待编辑</option>');
 				$('#status').append('<option value="4" class="auditor">待编辑</option>');
 			}
 		}

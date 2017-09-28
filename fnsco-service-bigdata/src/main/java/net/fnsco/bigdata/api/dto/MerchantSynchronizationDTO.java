@@ -45,6 +45,10 @@ public class MerchantSynchronizationDTO {
 	private String accountNo;
 	private String subBankName;
 	private String openBankNum;
+	private String openBank;
+	private String openBankPrince;
+	private String openBankCity;
+	
 	private String createTime;
 	private String busiCode;
 	private String privateKye;
@@ -91,7 +95,67 @@ public class MerchantSynchronizationDTO {
 	public String getLegalPersonTel() {
 		return legalPersonTel;
 	}
-	public void setLegalPersonTel(String legalPersonTel) {
+	/**
+     * openBank
+     *
+     * @return  the openBank
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOpenBank() {
+        return openBank;
+    }
+    /**
+     * openBank
+     *
+     * @param   openBank    the openBank to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOpenBank(String openBank) {
+        this.openBank = openBank;
+    }
+    /**
+     * openBankPrince
+     *
+     * @return  the openBankPrince
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOpenBankPrince() {
+        return openBankPrince;
+    }
+    /**
+     * openBankPrince
+     *
+     * @param   openBankPrince    the openBankPrince to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOpenBankPrince(String openBankPrince) {
+        this.openBankPrince = openBankPrince;
+    }
+    /**
+     * openBankCity
+     *
+     * @return  the openBankCity
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOpenBankCity() {
+        return openBankCity;
+    }
+    /**
+     * openBankCity
+     *
+     * @param   openBankCity    the openBankCity to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOpenBankCity(String openBankCity) {
+        this.openBankCity = openBankCity;
+    }
+    public void setLegalPersonTel(String legalPersonTel) {
 		this.legalPersonTel = legalPersonTel;
 	}
 	public String getPaperValidTime() {
@@ -465,43 +529,48 @@ public class MerchantSynchronizationDTO {
         // 开户行
         dto.setSubBankName(StringUtil.valueOf(objs[25]));
         dto.setOpenBankNum(StringUtil.valueOf(objs[26]));
+        dto.setOpenBank(StringUtil.valueOf(objs[27]));
+        dto.setOpenBankPrince(StringUtil.valueOf(objs[28]));
+        dto.setOpenBankCity(StringUtil.valueOf(objs[29]));
         //createTime
-        dto.setCreateTime(StringUtil.valueOf(objs[27]));
+        dto.setCreateTime(StringUtil.valueOf(objs[30]));
         // busiCode
-        dto.setBusiCode(StringUtil.valueOf(objs[28]));
-        dto.setPrivateKye(StringUtil.valueOf(objs[29]));
-        dto.setTaxRegistCode(StringUtil.valueOf(objs[30]));
+        dto.setBusiCode(StringUtil.valueOf(objs[31]));
+        dto.setPrivateKye(StringUtil.valueOf(objs[32]));
+        dto.setTaxRegistCode(StringUtil.valueOf(objs[33]));
         // 扫码扣率
-        dto.setXx(StringUtil.valueOf(objs[31]));
+        dto.setXx(StringUtil.valueOf(objs[34]));
         //文件信息
-        dto.setFileInfos(StringUtil.valueOf(objs[32]));
+        dto.setFileInfos(StringUtil.valueOf(objs[35]));
         
         // 一号pos机
         // 备注/1号机具SN
-        dto.setSnCode(StringUtil.valueOf(objs[33]));
+        dto.setSnCode(StringUtil.valueOf(objs[36]));
         //debitCardRate
-        dto.setDebitCardRate(StringUtil.valueOf(objs[34]));
+        dto.setDebitCardRate(StringUtil.valueOf(objs[37]));
         //creditCardRate
-        dto.setCreditCardRate(StringUtil.valueOf(objs[35]));
+        dto.setCreditCardRate(StringUtil.valueOf(objs[38]));
         //debitCardFee
-        dto.setDebitCardFee(StringUtil.valueOf(objs[36]));
+        dto.setDebitCardFee(StringUtil.valueOf(objs[39]));
         //creditCardFee
-        dto.setCreditCardFee(StringUtil.valueOf(objs[37]));
+        dto.setCreditCardFee(StringUtil.valueOf(objs[40]));
         //debitCardMaxFee
-        dto.setDebitCardMaxFee(StringUtil.valueOf(objs[38]));
+        dto.setDebitCardMaxFee(StringUtil.valueOf(objs[41]));
         //creditCardMaxFee
-        dto.setCreditCardMaxFee(StringUtil.valueOf(objs[39]));
+        dto.setCreditCardMaxFee(StringUtil.valueOf(objs[42]));
         //posType
-        dto.setPosType(StringUtil.valueOf(objs[40]));
+        dto.setPosType(StringUtil.valueOf(objs[43]));
         //posFactory
-        dto.setPosFactory(StringUtil.valueOf(objs[41]));
+        dto.setPosFactory(StringUtil.valueOf(objs[44]));
         //merchantCode
-        dto.setMerchantCode(StringUtil.valueOf(objs[42]));
+        dto.setMerchantCode(StringUtil.valueOf(objs[45]));
         //terminalCode
-        dto.setTerminalCode(StringUtil.valueOf(objs[43]));
+        dto.setTerminalCode(StringUtil.valueOf(objs[46]));
         //innerTermCode
-        dto.setInnerTermCode(StringUtil.valueOf(objs[44]));
+        dto.setInnerTermCode(StringUtil.valueOf(objs[47]));
 
         return dto;
     }
+    
+    
 }

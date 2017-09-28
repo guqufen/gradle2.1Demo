@@ -38,8 +38,8 @@ public class ReportWebController extends BaseController{
     //查询全年风控曲线图
     @RequestMapping("queryYearReport")  
     @ResponseBody
-    public ResultDTO queryYearReport(@RequestParam String userId,@RequestParam String merchantId){
-        return reportService.queryYearReport(NumberUtils.toInt(userId),NumberUtils.toInt(merchantId));
+    public ResultDTO queryYearReport(@RequestParam String innerCode,@RequestParam String merchantId){
+        return reportService.queryYearReport(innerCode,NumberUtils.toInt(merchantId));
     }
     //查询风控报告明细
     @RequestMapping("queryReportDetails")  
