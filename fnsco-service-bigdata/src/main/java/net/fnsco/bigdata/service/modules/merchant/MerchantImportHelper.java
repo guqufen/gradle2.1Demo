@@ -48,14 +48,22 @@ public class MerchantImportHelper {
         merchantCore.setAbbreviation(channelMerchant);
         merchantCore.setLegalPersonMobile(legalpersonmobile);
         // excel中导出的时间是“EEE MMM dd HH:mm:ss z yyyy”类型的String类，将他转换成"yyyy/MM/dd"
-        SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-        Date date1 = sdf1.parse(cardvalidtimeStr);
-        sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-        String cardvalidtime = sdf1.format(date1);
-        SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-        Date date2 = sdf2.parse(businesslicensevalidtimeStr);
-        sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-        String businesslicensevalidtime = sdf2.format(date2);
+        String cardvalidtime = null;
+        if(!Strings.isNullOrEmpty(cardvalidtimeStr)){
+            SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+            Date date1 = sdf1.parse(cardvalidtimeStr);
+            sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            cardvalidtime = sdf1.format(date1);
+            
+        }
+        String businesslicensevalidtime = null;
+        if(!Strings.isNullOrEmpty(businesslicensevalidtimeStr)){
+            SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+            Date date2 = sdf2.parse(businesslicensevalidtimeStr);
+            sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+            businesslicensevalidtime = sdf2.format(date2);
+        }
+        
         merchantCore.setCardValidTime(cardvalidtime);
         merchantCore.setBusinessLicenseValidTime(businesslicensevalidtime);
         merchantCore.setRegistAddress(registaddress);
@@ -63,7 +71,9 @@ public class MerchantImportHelper {
         merchantCore.setSource(2);//浙付通导入
         merchantCore.setAgentId(1);//默认
         merchantCore.setTaxRegistCode(taxRegistCode);
-        merchantCore.setModifyTime(DateUtils.formateToDate(createTime));
+        if(!Strings.isNullOrEmpty(createTime)){
+            merchantCore.setModifyTime(DateUtils.formateToDate(createTime));
+        }
         merchantCore.setStatus(1);
         
         return merchantCore;
@@ -109,6 +119,14 @@ public class MerchantImportHelper {
      * @return MerchantBank    DOM对象
      */
     public static MerchantBank createMerchantBank(String innerCode,String accountname,String accountno,String accounttype,String accountcardid,String subbankname,String openBankNum){
+        
+        if(!Strings.isNullOrEmpty(accounttype)){
+            if(accounttype.contains("private")){
+                accounttype = "1";
+            }else{
+                accounttype = "0";
+            }
+        }
         MerchantBank merchantBank = new MerchantBank();
         merchantBank.setInnerCode(innerCode);
         merchantBank.setAccountName(accountname);
@@ -120,7 +138,6 @@ public class MerchantImportHelper {
         
         return merchantBank;
     }
-    
     /**
      * createMerchantChannel:(创建一个MerchantChannel实例)    设定文件
      * @author    tangliang
@@ -222,4 +239,5 @@ public class MerchantImportHelper {
         
         return file;
     }
+    
 }

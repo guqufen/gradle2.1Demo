@@ -47,7 +47,8 @@ $('#table').bootstrapTable({
 		title : '商户编码'
 	}, {
 		field : 'industry',
-		title : '行业'
+		title : '行业',
+		formatter : formatterIndustry
 	}, {
 		field : 'tradingArea',
 		title : '商圈'
@@ -60,22 +61,22 @@ $('#table').bootstrapTable({
 		formatter : formatterSize
 	} ]
 });
+
 function formatterOperation(value, row, index) {
-	console.log(value)
-	if (row.isTrue == 2) {
-		return [ '<a class="redact" onclick="javascript:tipMessage()" style="color:#4d5f84;" >生成报告</a>' ]
+	if (row.isTrue == 2||row.isTrue == 3) {
+		return [ '<a class="redact" onclick="javascript:tipMessage()" style="color:#9ba6bc;" >生成报告</a>' ]
 				.join('');
 	}
 	if (row.isTrue == 1&&value == 0 || value == 2 || value == 4) {
-		return [ '<a class="redact" onclick="javascript:tip()" style="color:#4d5f84;" target="_Blank">生成报告</a>' ]
+		return [ '<a class="redact" onclick="javascript:tip()" style="color:#9ba6bc;" target="_Blank">生成报告</a>' ]
 				.join('');
 	}
 	if (row.isTrue == 1&&value == 1) {
-		return [ '<a  class="check" style="color:#4d5f84;" target="_Blank" href="report.html?merchantId='
+		return [ '<a  class="check" style="color:#2964df;" target="_Blank" href="report.html?merchantId='
 				+ row.id + ' ">查看报告</a>' ].join('');
 	}
 	if (row.isTrue == 1&&value == 3) {
-		return [ '<a class="generate" style="color:#4d5f84;" onclick="javascript:sendEmail('
+		return [ '<a class="generate" style="color:#2964df;" onclick="javascript:sendEmail('
 				+ row.id + ')">生成报告</a> ' ].join('');
 	}
 }
@@ -92,6 +93,27 @@ function formatterSize(value, row, index) {
 	if (value == 3) {
 		return "大型连锁";
 	}
+}
+function formatterIndustry(value, row, index){
+	var val=queryIndustry(value);
+	console.log(val)
+	return val;
+}
+
+function queryIndustry(value){
+	var result;
+	$.ajax({
+		url : PROJECT_NAME + '/web/report/queryIndustry',
+		type : 'POST',
+		async: false,
+		dataType : "json",
+		data : {"id":value},
+		success : function(data){
+			result = data.data.first;
+			console.log(result)
+		}
+	});
+	return result;
 }
 // 组装请求参数
 function queryParams(params) {
@@ -131,9 +153,11 @@ function tip() {
 }
 function sendEmail(merchantId) {
 	layer.confirm('确定生成报告吗？', {
-		time : 20000, // 20s后自动关闭
+		time : 2000, // 20s后自动关闭
 		btn : [ '确定', '取消' ]
 	}, function() {
+		layer.msg('发送邮件通知成功');
+		reportStatus(merchantId, 4);
 		$.ajax({
 			url : PROJECT_NAME + '/web/report/backPersonnelMes',
 			type : 'POST',
@@ -142,11 +166,9 @@ function sendEmail(merchantId) {
 				"userId" : webUserOuterId,
 				"merchantId" : merchantId
 			},
-			success : function(data) {
+			success : function(data){
 				if (data.success) {
-					layer.msg('发送邮件通知成功');
-					reportStatus(merchantId, 4);
-					queryEvent();
+					window.location.reload();
 				}
 			}
 		});
@@ -166,7 +188,7 @@ function reportStatus(merchantId, status) {
 			"status" : status
 		},
 		success : function(data) {
-			console.log(data)
+			
 		}
 	});
 }

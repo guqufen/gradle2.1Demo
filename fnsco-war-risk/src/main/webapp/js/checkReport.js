@@ -38,6 +38,8 @@ var webUserOuterId = message.id;
 //生成宝贝参数
 var dataList=new Array();
 var dateList=new Array();
+var dataList1=new Array();
+var dateList1=new Array();
 //获取风控报告明细
 $(function(){
 	$.ajax({
@@ -51,11 +53,41 @@ $(function(){
 			$(".businessLicenseNum span").html(result.businessLicenseNum);
 			$(".businessAddress span").html(result.businessAddress);
 			$(".businessDueTime span").html(result.businessDueTime);
-			$(".industry span").html(result.industry);
-			$(".size span").html(result.size);
+			//$(".size span").html(result.size);
 			$(".merName span").html(result.merName);
-			$(".riskWarning ").html(result.riskWarning);
-			$(".report-title").html(result.merName+"+报告");
+			
+			$(".report-title").html(result.merName+"风控+报告");
+			$(".tradingArea span").html(result.tradingArea);
+			var level=result.decorationLevel;
+			if(level==0){
+				$(".decorationLevel span").html("普通");
+			}else if(level==1){
+				$(".decorationLevel span").html("中级");
+			}else if(level==2){
+				$(".decorationLevel span").html("高级");
+			}
+			var size=result.size;
+			if(size==0){
+				$(".size span").html("单店");
+			}else if(size==1){
+				$(".size span").html("小型连锁");
+			}else if(size==2){
+				$(".size span").html("中型连锁");
+			}else if(size==3){
+				$(".size span").html("大型连锁");
+			}
+			var industry=result.industry;
+			queryIndustry(industry);
+			$(".p1").html("1.额度:"+result.quota);
+			$(".p2").html("2.利率:"+result.feeRate);
+			$(".p3").html("3.周期:"+result.loanCycle);
+			//$(".tips p").html(result.riskWarning);
+			var res=result.riskWarning;
+			var dto =res.replace(/\n/g,"^");
+			var array=dto.split("^");
+			for (i=0;i<array.length ;i++){
+				$(".tips").append("<p>"+array[i]+"</p>");
+			} 
 		}
 	});
 	//查询全年风控曲线图
@@ -72,13 +104,29 @@ $(function(){
 				dateList.push(json[i].date);
 				dataList.push(json[i].turnover);
 			}
+			// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
+			// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
+			// chart(datatime,data);
 			chart(dateList,dataList)
 		}
 	});
 })
 
+//查询行业类别
+   function queryIndustry(industry){
+	$.ajax({
+		url : PROJECT_NAME + '/web/report/queryIndustry',
+		type : 'POST',
+		dataType : "json",
+		data : {"id":industry},
+		success : function(data){
+			console.log(data)
+			$(".industry span").html(data.data.first);
+		}
+	});
+}
 
-var myChart = echarts.init(document.getElementById('trend-chart')); 
+var myChart = echarts.init(document.getElementById('chart')); 
 //生成图表
 function chart(dataTime,data){
 	var option = {
@@ -108,11 +156,12 @@ function chart(dataTime,data){
 
 	    },
 	    grid: {
-        	// right:'0%',
+        	// left:'0',
+        	// right:'7%'
 	    },
 	    yAxis: {
 	        type: 'value',
-	        boundaryGap: [0, '100%'],
+	        boundaryGap: [0, '15%'],
 	        splitLine:{  
         　　　　show:false  
         　　 },
@@ -122,10 +171,12 @@ function chart(dataTime,data){
           } 
 	    },
 	    dataZoom: [{
-	        type: 'inside',
-	        start: 0,
-	        end: 5000
+	        // type: 'inside',
+	        // start: 0,
+	        // end: 5000
+	        show:false
 	    },],
+	    roam: false,
 	    series: [
 	        {
 	            name:'销售额',
@@ -136,10 +187,31 @@ function chart(dataTime,data){
 	            itemStyle: {
 	                normal: {
                       //折线图颜色
-	                    color: '#333',
+	                    color: '#666',
 	                    width:1,
 	                }
 	            },
+	            areaStyle: {
+                  // 渐变区域
+	                normal: {
+                    	color: '#ccc'
+	                }
+	            },
+	            data: [data[0],data[1],data[2],data[3],data[4],data[5]]
+	        },
+	        {
+	            name:'预测销售额',
+	            type:'line',
+	            smooth:true,
+	            //symbol: 'none',
+	            // sampling: 'average',
+	            lineStyle: {
+                    normal: {
+                        color: '#666',
+	                    width:1,
+                        type: 'dashed'
+                    }
+                },
 	            areaStyle: {
                   // 渐变区域
 	                normal: {
@@ -153,8 +225,9 @@ function chart(dataTime,data){
 	                    }])
 	                }
 	            },
-	            data: data
-	        }
+	            data: ['-','-','-','-','-',data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12]]
+	        },
+	       
 	    ]
 	};
 	myChart.setOption(option);

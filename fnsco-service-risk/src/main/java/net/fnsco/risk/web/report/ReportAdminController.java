@@ -1,8 +1,12 @@
 package net.fnsco.risk.web.report;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.ibatis.annotations.Param;
@@ -23,6 +27,7 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.ReadExcel;
 import net.fnsco.risk.service.report.ReportService;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
+import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 @Controller
 @RequestMapping(value = "/report", method = RequestMethod.POST)
 public class ReportAdminController extends BaseController{
@@ -76,10 +81,15 @@ public class ReportAdminController extends BaseController{
     @RequestMapping(value="updateReport", method = RequestMethod.GET)
     public ResultDTO updateReport(ReportInfoDO reportInfoDO){
     	
-    	//如果传过来的ID为空，返回成功
+    	//如果传过来的ID为空，返回失败
     	if(reportInfoDO.getId() == null){
-    		return ResultDTO.success();
+    		return ResultDTO.fail();
     	}
+    	
+    	//如果传过来的状态为空，则返回失败
+        if (reportInfoDO.getStatus() == null) {
+            return ResultDTO.fail();
+        }
     	
 		return reportService.updateReport(reportInfoDO);
     }
@@ -128,7 +138,41 @@ public class ReportAdminController extends BaseController{
         ReadExcel readExcel = new ReadExcel();
         // 解析excel，获取客户信息集合。
         List<Object[]> objs = readExcel.getExcelInfo(name, file);
-        ResultDTO result = reportService.BatchImportToDB(objs, id);
+        
+		// 导入的数据行数必须等于1
+		if (objs.size() != 1) {
+			return ResultDTO.fail("导入数据为空或者条数大于1，请核对后再重新导入");
+		}
+        
+		//判断12个月的数据是否带空值，是否为数字
+		Object[] obj = objs.get(0);
+		for (int i = 0; i < 12; i++) {
+			if( obj[i] == null){
+				return ResultDTO.fail("导入数据第"+(i+1)+"列有空数据，请核查导入的12个月数据不能有空值");
+			}
+			//判断是否为数字
+			if( !isNumeric(obj[i].toString())){
+				return ResultDTO.fail("导入数据第"+(i+1)+"列数据有非数字字符，请核查");
+			}
+		}
+		
+		ReportRepaymentHistoryDO reportRepaymentHistory = new ReportRepaymentHistoryDO();
+		reportRepaymentHistory.setReportId(id);
+		reportRepaymentHistory.setMonthOne(BigDecimal.valueOf(Double.valueOf(obj[0].toString())));
+		reportRepaymentHistory.setMonthTwo(BigDecimal.valueOf(Double.valueOf(obj[1].toString())) );
+		reportRepaymentHistory.setMonthThree(BigDecimal.valueOf(Double.valueOf(obj[2].toString())));
+		reportRepaymentHistory.setMonthFore(BigDecimal.valueOf(Double.valueOf(obj[3].toString())));
+		reportRepaymentHistory.setMonthFive(BigDecimal.valueOf(Double.valueOf(obj[4].toString())));
+		reportRepaymentHistory.setMonthSix(BigDecimal.valueOf(Double.valueOf(obj[5].toString())));
+		reportRepaymentHistory.setMonthSeven(BigDecimal.valueOf(Double.valueOf(obj[6].toString())));
+		reportRepaymentHistory.setMonthEight(BigDecimal.valueOf(Double.valueOf(obj[7].toString())));
+		reportRepaymentHistory.setMonthNine(BigDecimal.valueOf(Double.valueOf(obj[8].toString())));
+		reportRepaymentHistory.setMonthTen(BigDecimal.valueOf(Double.valueOf(obj[9].toString())));
+		reportRepaymentHistory.setMonthEleven(BigDecimal.valueOf(Double.valueOf(obj[10].toString())));
+		reportRepaymentHistory.setMonthTwelve(BigDecimal.valueOf(Double.valueOf(obj[11].toString())));
+		reportRepaymentHistory.setLastModifyTime(new Date());
+        
+        ResultDTO result = reportService.BatchImportToDB(reportRepaymentHistory);
 
         //导入不成功，返回失败
 		if(!result.isSuccess()){
@@ -137,6 +181,20 @@ public class ReportAdminController extends BaseController{
 
         return ResultDTO.success();
     }
+    
+    /**
+     * 判断字符串是否为数字
+     * @param str
+     * @return
+     */
+    public boolean isNumeric(String str){ 
+    	   Pattern pattern = Pattern.compile("[0-9]*"); 
+    	   Matcher isNum = pattern.matcher(str);
+    	   if( !isNum.matches() ){
+    	       return false; 
+    	   } 
+    	   return true; 
+    	}
     
     /**
      * 查询月份数据

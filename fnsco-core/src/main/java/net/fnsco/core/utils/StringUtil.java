@@ -82,4 +82,10 @@ public class StringUtil {
 
         System.out.println(process(template, tokens));
     }
+    public static String valueOf(Object obj){
+        if(null ==obj){
+            return "";
+        }
+        return String.valueOf(obj);
+    }
 }

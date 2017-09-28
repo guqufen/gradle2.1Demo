@@ -19,8 +19,11 @@ var merchantId=Request["merchantId"];
 console.log(merchantId);
 
 //获取风控报告明细
+//生成数组参数
+var dataList=new Array();
+var dateList=new Array();
 var getReportChart = function getReportChart(){
-	console.log(merchantId);
+//	console.log(merchantId);
 	//查询全年风控曲线图
 	$.ajax({
 		url : PROJECT_NAME + '/report/queryReportPre',
@@ -32,14 +35,23 @@ var getReportChart = function getReportChart(){
 				console.log(data);
 				/*获取生成图表的参数*/
 				var json=data.data;
+
+				$('#trend-chart').val(true);
+
+				console.log($('#trend-chart').val());
+				//置空，不然容易出现数据叠加
+				dateList = [];
+				dataList = [];
+
 				for(var i=0;i<json.length;i++){
 					dateList.push(json[i].date);
 					dataList.push(json[i].turnover);
 				}
 				console.log(dateList,dataList);
 				
-				chart(dateList,dataList)
+				chart(dateList,dataList);
 			}else{
+				$('#trend-chart').val(false);
 				layer.msg(data.message);
 			}
 
@@ -49,26 +61,10 @@ var getReportChart = function getReportChart(){
 
 $(function() {
 
-	//给报告时间赋值(当前日期)
-	var date = new Date();
-	$('#reportTimer').val(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
-
-	//获取行业数据(option)，放入行业(select)
-	getIndest();
-
-	//给规模赋值(size)
-	getSize();
-
-	//报告周期赋值(reportCycle)
-	getReportCycle();
-	
-	//获取装修等级数据
-	getDecorationLevel();
-
 	//ajax请求修改的数据<id=2>
 	$.ajax({
 		url : PROJECT_NAME + '/report/getById',
-		type : 'get',
+		type : 'post',
 		data : {
 			'id' : merchantId
 		},
@@ -80,6 +76,7 @@ $(function() {
 
 				$('#merName').val(dd.merName);// 商户名称
 				$('#merName').attr('disabled','disabled');
+				
 
 				$('#businessLicenseNum').val(dd.businessLicenseNum)// 营业执照
 				$('#businessLicenseNum').attr('disabled','disabled');
@@ -90,28 +87,35 @@ $(function() {
 				$('#businessDueTime').val(dd.businessDueTime);// 营业期限
 				$('#businessDueTime').attr('disabled','disabled');
 
-				$('select[id="industry"]').find("option[value=" + dd.industry + "]").attr("selected", true);// 行业
+				//获取行业数据(option)，放入行业(select)
+				getIndest(dd.industry);
 
 				$('#tradingArea').val(dd.tradingArea);// 商圈
+				
+				//获取装修等级数据
+				getDecorationLevel(dd.decorationLevel);
 
-//				$('#turnover').val(dd.turnover);// 营业额
-				$('select[id="decorationLevel"]').find("option[value=" + dd.decorationLevel + "]").attr("selected", true);// 行业
-//				$('#decorationLevel').val(dd.turnover);// 营业额
+				//给规模赋值(size)
+				getSize(dd.size);
 
-				$('select[id="size"]').find("option[value=" + dd.size + "]").attr("selected", true);// 规模
-
-				$('select[id="reportCycle"]').find("option[value=" + dd.reportCycle + "]").attr("selected", true);// 报告周期
-
-				$('#riskWarning').val(dd.riskWarning);// 风险
+				//报告周期赋值(reportCycle)
+				getReportCycle(1);
 
 				$('#quota').val(dd.quota);// 额度
 
 				$('#feeRate').val(dd.feeRate);// 费率
 
 				$('#loanCycle').val(dd.loanCycle);// 周期
+
+				//给报告时间赋值(当前日期)
+				var date = new Date();
+				$('#reportTimer').val(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate());
 				
 				//待审核状态
 				if(dd.status == 0){
+					$('h1').html( dd.merName+'的"风控+"报告审核页面');
+					$('#riskWarning1').html(dd.riskWarning);// 风险
+					$('#riskWarning1').show();//显示p标签
 					$('#btn_auditing').show();//显示审核成功按钮
 					$('#btn_auditingFail').show();//显示审核失败按钮
 					$('input').attr('disabled','disabled');//所有输入不可编辑
@@ -119,6 +123,9 @@ $(function() {
 					$('textarea').attr('disabled','disabled');//所有文本框不可编辑
 				//待编辑状态
 				}else{
+					$('h1').html( dd.merName+'的"风控+"报告编辑页面');
+					$('#riskWarning').html(dd.riskWarning);// 风险
+					$('#riskWarning').show();//显示textarea标签
 					$('#btn_save').show();//显示保存修改按钮
 					$('#btn_import').show();//显示导入数据按钮
 				}
@@ -137,14 +144,17 @@ $(function() {
 /**
  * 请求行业数据
  */
-function getIndest() {
+function getIndest(value) {
 	$.ajax({
 		url:PROJECT_NAME + '/industry/queryAll',
-		type:'get',
-		async : false,//同步获取数据
+		type:'post',
 		success:function(data){
 			console.log(data);
 			if(data.success){
+				if(value == ""){
+					$('select[id="industry"]').append('<option selected="selected" value="">----</option>');
+					return;
+				}
 				for(var i=0; i < data.data.length; i++){
 					if(data.data[i].fourth != ""){
 						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'--'+data.data[i].third+'--'+data.data[i].fourth+'</option>');
@@ -154,6 +164,7 @@ function getIndest() {
 						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'</option>');
 					}
 				}
+				$('select[id="industry"]').find("option[value=" + value + "]").attr("selected", true);// 行业
 			}
 		},
 		error : function(data) {
@@ -165,17 +176,18 @@ function getIndest() {
 /**
  * 获取规模请求列表数据
  */
-function getSize(){
+function getSize(value){
 	$.ajax({
 		url:PROJECT_NAME + '/sysConfig/getByType',
-		type:'get',
+		type:'post',
 		data:{"type":"04"},
-		async:false,
+//		async:false,
 		success:function(data){
 			if(data.success){
 				for(var i=0; i < data.data.length; i++){
 					$('#size').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
 				}
+				$('select[id="size"]').find("option[value=" + value + "]").attr("selected", true);// 规模
 			}
 			console.log(data);
 		}
@@ -184,17 +196,18 @@ function getSize(){
 /**
  * 获取装修等级数据
  */
-function getDecorationLevel(){
+function getDecorationLevel(value){
 	$.ajax({
 		url:PROJECT_NAME + '/sysConfig/getByType',
-		type:'get',
+		type:'post',
 		data:{"type":"06"},
-		async:false,
+//		async:false,
 		success:function(data){
 			if(data.success){
 				for(var i=0; i < data.data.length; i++){
 					$('#decorationLevel').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
 				}
+				$('select[id="decorationLevel"]').find("option[value=" + value + "]").attr("selected", true);// 装修等级
 			}
 			console.log(data);
 		}
@@ -204,17 +217,19 @@ function getDecorationLevel(){
 /**
  * 获取报告周期列表数据
  */
-function getReportCycle(){
+function getReportCycle(value){
 	$.ajax({
 		url:PROJECT_NAME + '/sysConfig/getByType',
-		type:'get',
+		type:'post',
 		data:{'type':'05'},
-		async:false,
+//		async:false,
 		success:function(data){
 			if(data.success){
 				for(var i = 0; i < data.data.length; i++){
 					$('#reportCycle').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
 				}
+				$('select[id="reportCycle"]').find('option[value="'+value+'"]').attr("selected", true);// 报告周期,默认6个月数据预测六个月，不可改
+				$('select[id="reportCycle"]').attr('disabled','disabled');
 			}
 		}
 	});
@@ -276,18 +291,10 @@ function saveOrUpdate(status){
 		return false;
 	}
 
-//	//营业额
-//	var turnover = $('#turnover').val();
-//	if(turnover == ""){
-//		layer.msg('请输入营业额');
-//		return false;
-//	}
-//	//
-//	var reg = new RegExp("^[0-9]*$");
-//	if(!reg.test($('#turnover').val())){
-//		layer.msg('请输入正确的营业额');
-//		return false;
-//	}
+	if( !$('#trend-chart').val() ){
+		layer.msg('请先导入数据,再提交此次编辑');
+		return false;
+	}
 	
 	//装修等级
 	var decorationLevel = $('#decorationLevel').val();
@@ -387,7 +394,7 @@ function saveOrUpdate(status){
 		success:function(data){
 			//编辑成功，跳回风控报告显示页面，同时刷新显示页面
 			if (data.success) {
-				layer.msg(data.message);
+				layer.msg('保存成功');
 				window.setTimeout("window.location.href = 'report.html'", 1000);
 			} else {
 				layer.msg(data.message);
@@ -415,7 +422,12 @@ function updateStatue(status){
 			success:function(data){
 				//编辑成功，跳回风控报告显示页面，同时刷新显示页面
 				if (data.success) {
-					layer.msg(data.message);
+					if(status == 1){
+						layer.msg('审核成功');//审核成功
+					}else{
+						layer.msg('审核完成');//审核失败
+					}
+
 					window.setTimeout("window.location.href = 'report.html'", 1000);
 				} else {
 					layer.msg(data.message);
@@ -425,115 +437,6 @@ function updateStatue(status){
 				layer.msg('操作失败');
 			}
 		});
-}
-
-//还款能力历史与预测table
-$('#table').bootstrapTable({
-	sidePagination : 'server',
-	method : 'get',//提交方式
-	search : false, // 是否启动搜索栏
-	url : PROJECT_NAME + '/report/queryRepay',
-	showRefresh : true,// 是否显示刷新按钮
-	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
-	striped : true, // 是否显示行间隔色
-	cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-	pagination : true, // 是否显示分页（*）
-	sortable : true, // 是否启用排序
-	uniqueId : 'id', //将index列设为唯一索引
-	sortOrder : "asc", // 排序方式
-	pageNumber : 1, // 初始化加载第一页，默认第一页
-	pageSize : 50, // 每页的记录行数（*）
-	singleSelect : true,// 单选
-	pageList : [ 15, 20, 50, 100 ], // 可供选择的每页的行数（*）
-	queryParams : queryParamss,
-	responseHandler : responseHandler,// 处理服务器返回数据
-	columns : [ {
-		field : 'id',
-		title : 'ID',
-		width : '10%',
-		align : 'center',
-		width : 30
-	}, {
-		field : 'reportId',
-		title : '报告ID',
-		width : 30
-	}, {
-		field : 'monthOne',
-		title : '一月',
-		width : 30
-	}, {
-		field : 'monthTwo',
-		title : '二月',
-		width : 30
-	}, {
-		field : 'monthThree',
-		title : '三月',
-		width : 30
-	}, {
-		field : 'monthFore',
-		title : '四月',
-		width : 30
-	}, {
-		field : 'monthFive',
-		title : '五月',
-		width : 30
-	}, {
-		field : 'monthSix',
-		title : '六月',
-		width : 30
-	}, {
-		field : 'monthSeven',
-		title : '七月',
-		width : 30
-	}, {
-		field : 'monthEight',
-		title : '八月',
-		width : 30
-	}, {
-		field : 'monthNine',
-		title : '九月',
-		width : 30
-	}, {
-		field : 'monthTen',
-		title : '十月',
-		width : 30
-	}, {
-		field : 'monthEleven',
-		title : '十一月',
-		width : 30
-	}, {
-		field : 'monthTwelve',
-		title : '十二月',
-		width : 30
-	} , {
-		field : 'lastModifyTimeStr',
-		title : '最后修改时间',
-		width : 30
-	} ]
-});
-//处理后台返回数据
-function responseHandler(res) {
-	unloginHandler(res);
-	if (res.list) {
-		return {
-			"rows" : res.list,
-			"total" : res.total
-		};
-	} else {
-		return {
-			"rows" : [],
-			"total" : 0
-		};
-	}
-}
-//组装请求参数
-function queryParamss(params) {
-	var param = {
-		'currentPageNum' : this.pageNumber,
-		'pageSize' : 1,//只查询时间最近的一条
-		'reportId' : merchantId
-	}
-	return param;
 }
 
 /** 导入功能 **/
@@ -602,12 +505,7 @@ var FileInput = function() {
 	return oFile;
 };
 
-
-//生成数组参数
-var dataList=new Array();
-var dateList=new Array();
-
-var myChart = echarts.init(document.getElementById('trend-chart')); 
+var myChart = echarts.init(document.getElementById('chart')); 
 //生成图表
 function chart(dataTime,data){
 	var option = {
@@ -641,9 +539,9 @@ function chart(dataTime,data){
 	    },
 	    yAxis: {
 	        type: 'value',
-	        boundaryGap: [0, '100%'],
+	        boundaryGap: [0, '15%'],
 	        splitLine:{  
-        　　　　show:false  
+        　　　　show:false 
         　　 },
           lineStyle:{
                 color:'#333',
@@ -651,39 +549,61 @@ function chart(dataTime,data){
           } 
 	    },
 	    dataZoom: [{
-	        type: 'inside',
-	        start: 0,
-	        end: 5000
+	        // type: 'inside',
+	        // start: 0,
+	        // end: 5000
+	        show:false
 	    },],
 	    series: [
-	        {
-	            name:'销售额',
-	            type:'line',
-	            smooth:true,
-	            //symbol: 'none',
-	            sampling: 'average',
-	            itemStyle: {
-	                normal: {
-                      //折线图颜色
-	                    color: '#333',
-	                    width:1,
-	                }
-	            },
-	            areaStyle: {
-                  // 渐变区域
-	                normal: {
-	                    color: new echarts.graphic.LinearGradient(1,0,0,1,[
-	                    {
-	                        offset: 0,
-	                        color: '#fff'
-	                    },{
-	                        offset: 1,
-	                        color: '#ccc'
-	                    }])
-	                }
-	            },
-	            data: data
-	        }
+			{
+			    name:'销售额',
+			    type:'line',
+			    smooth:true,
+			    //symbol: 'none',
+			    sampling: 'average',
+			    itemStyle: {
+			        normal: {
+			          //折线图颜色
+			            color: '#333',
+			            width:1,
+			        }
+			    },
+			    areaStyle: {
+			      // 渐变区域
+			        normal: {
+			            color:'#ccc'
+			        }
+			    },
+			    data: [data[0],data[1],data[2],data[3],data[4],data[5]]
+			},
+			{
+			    name:'预测销售额',
+			    type:'line',
+			    smooth:true,
+			    //symbol: 'none',
+			    // sampling: 'average',
+			    lineStyle: {
+			        normal: {
+			            color: '#666',
+			            width:1,
+			            type: 'dashed'
+			        }
+			    },
+			    areaStyle: {
+			      // 渐变区域
+			        normal: {
+			            color: new echarts.graphic.LinearGradient(1,0,0,1,[
+			            {
+			                offset: 0,
+			                color: '#fff'
+			            },{
+			                offset: 1,
+			                color: '#ccc'
+			            }])
+			        }
+			    },
+			    data: ['-','-','-','-','-',data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12]]
+			},
 	    ]
 	};
 	myChart.setOption(option);

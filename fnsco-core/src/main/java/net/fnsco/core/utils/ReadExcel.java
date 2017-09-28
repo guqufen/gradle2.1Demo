@@ -196,13 +196,14 @@ public class ReadExcel {
         // 解析公式结果
         FormulaEvaluator evaluator = wb.getCreationHelper().createFormulaEvaluator();
         List<Object[]> list = Lists.newArrayList();
-        int minRowIx = sheet.getFirstRowNum() + 2;
+        int minRowIx = sheet.getFirstRowNum() + 1;
         int maxRowIx = sheet.getLastRowNum();
         Row row1 = sheet.getRow(minRowIx);
+        Row row2 = sheet.getRow(sheet.getFirstRowNum());
         short minColIx = row1.getFirstCellNum();
         short maxColIx = (short)0;
         if (maxColIx == 0) {
-            maxColIx = row1.getLastCellNum();
+            maxColIx = row2.getLastCellNum();
         } else {
             maxColIx = (short) (maxColIx + minColIx);
         }

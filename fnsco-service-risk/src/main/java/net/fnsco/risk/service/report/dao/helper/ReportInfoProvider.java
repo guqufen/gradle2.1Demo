@@ -236,8 +236,26 @@ public class ReportInfoProvider {
         int start = (pageNum - 1) * pageSize;
         int limit = pageSize;
         return new SQL() {{
-        SELECT("*");
-        FROM(TABLE_NAME);
+        SELECT("r.mer_num, "
+        		+ "r.create_time, "
+        		+ "r.last_modify_time, "
+        		+ "r.id, "
+        		+ "r.mer_name, "
+        		+ "r.business_license_num, "
+        		+ "r.business_address, "
+        		+ "r.business_due_time,"
+        		+ "r.trading_area, "
+        		+ "r.turnover, "
+        		+ "r.size, "
+        		+ "r.report_cycle, "
+        		+ "r.report_timer, "
+        		+ "r.risk_warning, "
+        		+ "r.quota, "
+        		+ "r.fee_rate, "
+        		+ "r.loan_cycle, "
+        		+ "r.status,"
+        		+ "(select `first` from sys_industry i where id = r.industry) as industry");
+        FROM(TABLE_NAME+" r");
         if (StringUtils.isNotBlank(reportInfo.getMerNum())){
             WHERE("mer_num=#{reportInfo.merNum}");
         }
@@ -303,7 +321,7 @@ public class ReportInfoProvider {
             if (reportInfo.getStatus()!= null) {
                 WHERE("status=#{reportInfo.status}");
             }else{
-                WHERE("status in (2,3,4)");
+                WHERE("status in (2, 4)");
             }
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
@@ -383,7 +401,7 @@ public class ReportInfoProvider {
             if (reportInfo.getStatus()!= null) {
                 WHERE("status=#{reportInfo.status}");
             }else{
-                WHERE("status in (2,3,4)");
+                WHERE("status in (2, 4)");
             }
         }
         }}.toString();

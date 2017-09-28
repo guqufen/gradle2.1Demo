@@ -23,7 +23,7 @@
 		.report h3{
 		}
 		.report-infos{
-			margin: 20px 0;
+			 /* margin: 10px 0;  */
 			color: #666;
 		}
 		.report-info{
@@ -40,23 +40,48 @@
 			text-indent: 20px;
 			margin: 5px 0;
 		} 
+		.chart-box{
+			padding: 30px 0;
+			margin: 20px 0;
+			border-bottom: 1px solid #ccc;
+			border-top: 1px solid #ccc;
+		}
 		#trend-chart{
-			width: 900px;
-			height: 600px;
+			width: 980px;
+			height: 400px;
+			margin-left: -35px;
+			position: relative;
+		}
+		.bar{
+			width: 0;
+			height: 300px;
+			left: 50%;
+			bottom: 55px;
+			position: absolute;
+			margin-left: -3.7%;
+			z-index: 9;
+			border-left:1px dashed #131313;
+		}
+		#trend-chart #chart{
+			position: absolute;
+			height: 100%;width: 100%;left: 0;top: 0;
+		}
+		h3{
+			margin-bottom:20px;
 		}
 	</style>
 </head>
 <body>
 	<div class="report">
 		<h1 class="report-title"></h1>
-		<h3><基础信息></h3>
+		<h3>基础信息</h3>
 		<div class="report-infos">
 			<div class="report-info merName">
-				商户名：
+				商户名称：
 				<span></span>
 			</div>
 			<div class="report-info businessLicenseNum">
-				营业执照编号：
+				营业执照：
 				<span></span>
 			</div>
 			<div class="report-info businessAddress">
@@ -68,40 +93,42 @@
 				<span></span>年
 			</div>
 		</div>
-		<h3><经营分析></h3>
+		<!-- <h3>经营分析</h3> -->
 		<div class="report-infos">
 			<div class="report-info industry">
-				行业类别：
+				类别：
 				<span></span>
 			</div>
-			<div class="report-info">
-				商圈评级：
+			<div class="report-info tradingArea">
+				商圈：
 				<span></span>
 			</div>
 			<div class="report-info size">
-				经营规模：
+				规模：
 				<span></span>
 			</div>
-			<div class="report-info">
+			<div class="report-info decorationLevel">
 				装修等级：
 				<span></span>
 			</div>
 		</div>
-		<h3><还款能力评估趋势图></h3>
 		<!-- 折线图 -->
-		<div id="trend-chart"></div>
-		<h3>风险提醒：</h3>
-		<div class="report-infos riskWarning">
-<!-- 			<p>1、商家营业额低于同期行业水平。</p>
-			<p>2、商家盈利能力弱于同类门店。</p>
-			<p>3、经营规模在行业内属初级规模。</p>
-			<p>4、未来半年盈利增长趋势预测为不稳定的小幅下滑。</p> -->
+		<div class="chart-box">
+		<h3>还款能力评估趋势图</h3>
+			<div id="trend-chart">
+				<div class="bar"></div>
+				<div id="chart"></div>
+			</div>
 		</div>
-		<h3>风控建议：</h3>
-		<div class="report-infos">
-<!-- 			<p>1、额度：月还款额不超过2500元。</p>
-			<p>2、利率：+（可适当提高利率）。</p>
-			<p>3、周期：不超过6个月。</p> -->
+		<h3>风险提醒：</h3>
+		<div class="report-infos riskWarning tips">
+			<!-- <p>1、商家营业额低于同期行业水平。</p> -->
+		</div>
+		<h3 style="margin-top:20px;">风控建议：</h3>
+		<div class="report-infos riskWarning suggest">
+			<p class="p1"></p>
+			<p class="p2"></p>
+			<p class="p3"></p>
 		</div>
 	</div>
 </body>
