@@ -50,7 +50,7 @@ var FileInput = function () {
         validateInitialCount:true,
         previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
         msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
-    }).on("fileuploaded", function (event, data) {
+    }).on("fileuploaded", function (event, data1) {
         console.log(data1);
         var data = data1.response;
         if (!data.success) {
