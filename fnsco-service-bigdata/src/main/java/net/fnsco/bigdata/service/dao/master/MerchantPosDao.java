@@ -106,5 +106,5 @@ public interface MerchantPosDao {
      * @date      2017年9月22日 上午11:41:05
      * @return MerchantPos    DOM对象
      */
-    MerchantPos selectBySnCodeAndInnerCode(@Param("snCode")String snCode,@Param("innerCode")String innerCode);
+    MerchantPos selectBySnCodeAndInnerCode(@Param("snCode")String snCode,@Param("innerCode")String innerCode,@Param("channelId")Integer channelId);
 }
