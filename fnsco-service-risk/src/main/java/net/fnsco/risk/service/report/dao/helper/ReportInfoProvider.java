@@ -75,6 +75,9 @@ public class ReportInfoProvider {
         if (StringUtils.isNotBlank(reportInfo.getLoanCycle())){
             SET("loan_cycle=#{reportInfo.loanCycle}");
         }
+        if (reportInfo.getDecorationLevel() != null){
+            SET("decoration_level=#{reportInfo.decorationLevel}");
+        }
         WHERE("id = #{reportInfo.id}");
         }}.toString();
     }
