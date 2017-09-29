@@ -437,16 +437,15 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
-    
     public static Date formateToDate(String timeStr){
-        SimpleDateFormat sf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+        SimpleDateFormat sf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         try {
             return sf.parse(timeStr);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return null;
+        return new Date();
     }
     public static String getDateStrYYYYMMDD(Date date,int days) {
         String result = "";
