@@ -170,7 +170,7 @@ function edit(row){
 }
 
 
-$.ajax({
+/*$.ajax({
 	url : PROJECT_NAME + '/web/report/queryYearReport',
 	type : 'POST',
 	dataType : "json",
@@ -178,7 +178,7 @@ $.ajax({
 	success : function(data){
 		console.log(data)
 	}
-});
+});*/
 //
 //$.ajax({
 //	url : PROJECT_NAME + '/web/report/queryReportDetails',

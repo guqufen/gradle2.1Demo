@@ -58,7 +58,7 @@ $(function(){
 			//$(".size span").html(result.size);
 			$(".merName span").html(result.merName);
 			
-			$(".report-title").html(result.merName+"风控'+'报告");
+			$(".report-title").html(result.merName+"&quot;风控+&quot;报告");
 			$(".tradingArea span").html(result.tradingArea);
 			var level=result.decorationLevel;
 			if(level==0){
