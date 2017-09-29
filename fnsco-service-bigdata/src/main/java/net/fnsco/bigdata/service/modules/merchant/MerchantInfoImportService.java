@@ -145,7 +145,7 @@ public class MerchantInfoImportService extends BaseService {
         Integer channelId = null;
         if (null == channel) {
             // 新增加一个法奈昇的渠道 
-            MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, dto.getMerchantCode(), "03", userId, dto.getPrivateKye());
+            MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, dto.getMerchantCode(), "03", userId, null);
             try {
                 // 渠道信息保存
                 channelId = merchantCoreService.doAddChannel(merchantChannel);
@@ -161,7 +161,7 @@ public class MerchantInfoImportService extends BaseService {
         /**
          * 爱农
          */
-        ResultDTO<Object> AiResultDTO = createChanelAndPosAndTer(innerCode, "929010048160219", userId, bankId, timeNum, "02", "01",dto);
+        ResultDTO<Object> AiResultDTO = createChanelAndPosAndTer(innerCode, "929010048160219", userId, bankId, timeNum, "02", "01",dto,null);
         if (!AiResultDTO.isSuccess()) {
             return ResultDTO.success("行数据的爱农渠道数据导入错误");
         }
@@ -169,7 +169,7 @@ public class MerchantInfoImportService extends BaseService {
          * 浦发
          */
         if (!Strings.isNullOrEmpty(dto.getBusiCode())) {
-            ResultDTO<Object> resultDTO = createChanelAndPosAndTer(innerCode, dto.getBusiCode(), userId,bankId, timeNum, "01", "00",dto);
+            ResultDTO<Object> resultDTO = createChanelAndPosAndTer(innerCode, dto.getBusiCode(), userId,bankId, timeNum, "01", "00",dto,dto.getPrivateKye());
             if (!resultDTO.isSuccess()) {
                 logger.error("导入商户数据异常");
                 return ResultDTO.success("行数据的浦发渠道数据导入错误");
@@ -179,7 +179,7 @@ public class MerchantInfoImportService extends BaseService {
         /**
          * 商戶pos机信息
          */
-        MerchantPos posInfo = merchantPosService.selectBySnCodeAndInnerCode(dto.getSnCode(), innerCode);
+        MerchantPos posInfo = merchantPosService.selectBySnCodeAndInnerCode(dto.getSnCode(), innerCode,channelId);
         Integer posId = null;
         if (null != posInfo) {
             posId = posInfo.getId();
@@ -344,10 +344,10 @@ public class MerchantInfoImportService extends BaseService {
      * @return void    DOM对象
      */
     private ResultDTO<Object> createChanelAndPosAndTer(String innerCode, String merchantCode, Integer userId, Integer bankId,Integer timeNum, String channelType,
-                                                       String terminalType,MerchantSynchronizationDTO dto) {
+                                                       String terminalType,MerchantSynchronizationDTO dto,String privateKey) {
         MerchantChannel pufaChannel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, merchantCode, channelType);
         if (null == pufaChannel) {
-            MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, merchantCode, channelType, userId, dto.getPrivateKye());
+            MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, merchantCode, channelType, userId, privateKey);
             Integer pufaChannelId = null;
             try {
                 // 渠道信息保存
