@@ -131,9 +131,9 @@ public class MerchantImportHelper{
         String accounttype = dto.getAccountType();
         if(!Strings.isNullOrEmpty(accounttype)){
             if(accounttype.contains("private")){
-                accounttype = "1";
-            }else{
                 accounttype = "0";
+            }else{
+                accounttype = "1";
             }
         }
         MerchantBank merchantBank = new MerchantBank();
@@ -144,6 +144,9 @@ public class MerchantImportHelper{
         merchantBank.setAccountCardId(dto.getAccountHolderID());
         merchantBank.setSubBankName(dto.getSubBankName());
         merchantBank.setOpenBankNum(dto.getOpenBankNum());
+        merchantBank.setOpenBank(dto.getOpenBank());
+        merchantBank.setOpenBankPrince(dto.getOpenBankPrince());
+        merchantBank.setOpenBankCity(dto.getOpenBankCity());
         
         return merchantBank;
     }

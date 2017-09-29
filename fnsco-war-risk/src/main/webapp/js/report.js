@@ -73,7 +73,7 @@ function formatterOperation(value, row, index) {
 	}
 	if (row.isTrue == 1&&value == 1) {
 		return [ '<a  class="check" style="color:#2964df;" target="_Blank" href="report.html?merchantId='
-				+ row.id + ' ">查看报告</a>' ].join('');
+				+ row.id+'&innerCode='+row.innerCode + ' ">查看报告</a>' ].join('');
 	}
 	if (row.isTrue == 1&&value == 3) {
 		return [ '<a class="generate" style="color:#2964df;" onclick="javascript:sendEmail('
@@ -180,7 +180,7 @@ function sendEmail(merchantId) {
 // 改变风控状态
 function reportStatus(merchantId, status) {
 	$.ajax({
-		url : PROJECT_NAME + '/web/admin/updateReport',
+		url : PROJECT_NAME + '/web/admin/report/updateReport',
 		type : 'POST',
 		dataType : "json",
 		data : {

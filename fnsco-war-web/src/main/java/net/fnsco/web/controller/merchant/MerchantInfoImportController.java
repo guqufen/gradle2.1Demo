@@ -74,10 +74,9 @@ public class MerchantInfoImportController extends BaseController {
             int timeNum = 1;
             for (Object[] objs : customerList) {
                 timeNum = timeNum + 1;
-                for (int i = 0; i < objs.length; i++) {
-                    if (objs[i] == null) {
-                        objs[i] = "";
-                    }
+                if(objs.length < 48){
+                    logger.error("文件数据格式不正确!"+name);
+                    return ResultDTO.fail("文件数据格式不正确!");
                 }
                 try {
                     //处理单个
@@ -86,7 +85,7 @@ public class MerchantInfoImportController extends BaseController {
                     JSONObject jsonObject = JSONObject.fromObject(result1.getData());
                     String errorMsg = jsonObject.getString("result");
                     if (!Strings.isNullOrEmpty(errorMsg) && !"null".equalsIgnoreCase(errorMsg)) {
-                        saveErrorMsgToDB(new Date(), null, null, userId, timeNum, name, errorMsg, objs.toString(), null);
+                        saveErrorMsgToDB(new Date(), null, null, userId, timeNum, name, errorMsg, dto.toString(), null);
                     }
                 } catch (ParseException e) {
                     logger.error("接口导入数据程序异常", e);
