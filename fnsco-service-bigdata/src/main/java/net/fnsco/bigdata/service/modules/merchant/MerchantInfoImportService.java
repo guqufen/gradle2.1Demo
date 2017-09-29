@@ -132,6 +132,24 @@ public class MerchantInfoImportService extends BaseService {
         });
 
         /**
+         * 爱农
+         */
+        ResultDTO<Object> AiResultDTO = createChanelAndPosAndTer(innerCode, "929010048160219", userId, bankId, timeNum, "02", "01",dto,null);
+        if (!AiResultDTO.isSuccess()) {
+            return ResultDTO.success("行数据的爱农渠道数据导入错误");
+        }
+        /**
+         * 浦发
+         */
+        if (!Strings.isNullOrEmpty(dto.getBusiCode())) {
+            ResultDTO<Object> resultDTO = createChanelAndPosAndTer(innerCode, dto.getBusiCode(), userId,bankId, timeNum, "01", "00",dto,dto.getPrivateKye());
+            if (!resultDTO.isSuccess()) {
+                logger.error("导入商户数据异常");
+                return ResultDTO.success("行数据的浦发渠道数据导入错误");
+            }
+        }
+        
+        /**
          * 渠道信息--根据innerCode+merchantCode+channelType判断唯一性，如果存在，则获取ID ，否则新增加
          */
         if (Strings.isNullOrEmpty(dto.getMerchantCode())) {
@@ -158,24 +176,6 @@ public class MerchantInfoImportService extends BaseService {
             channelId = channel.getId();
         }
         
-        /**
-         * 爱农
-         */
-        ResultDTO<Object> AiResultDTO = createChanelAndPosAndTer(innerCode, "929010048160219", userId, bankId, timeNum, "02", "01",dto,null);
-        if (!AiResultDTO.isSuccess()) {
-            return ResultDTO.success("行数据的爱农渠道数据导入错误");
-        }
-        /**
-         * 浦发
-         */
-        if (!Strings.isNullOrEmpty(dto.getBusiCode())) {
-            ResultDTO<Object> resultDTO = createChanelAndPosAndTer(innerCode, dto.getBusiCode(), userId,bankId, timeNum, "01", "00",dto,dto.getPrivateKye());
-            if (!resultDTO.isSuccess()) {
-                logger.error("导入商户数据异常");
-                return ResultDTO.success("行数据的浦发渠道数据导入错误");
-            }
-        }
-
         /**
          * 商戶pos机信息
          */
