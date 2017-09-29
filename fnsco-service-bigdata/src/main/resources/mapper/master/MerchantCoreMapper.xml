@@ -636,6 +636,6 @@
      select 
     <include refid="Base_Column_List" />
     from m_merchant_core
-    where business_license_num = #{businessLicenseNum,jdbcType=VARCHAR} AND inner_code  IN (SELECT inner_code FROM m_merchant_bank WHERE account_no = #{accountNo}) limit 1
+    where business_license_num = #{businessLicenseNum,jdbcType=VARCHAR} AND inner_code  = (SELECT inner_code FROM m_merchant_bank WHERE account_no = #{accountNo} limit 1) limit 1
   </select>
 </mapper>
