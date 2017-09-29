@@ -13,12 +13,12 @@ public class ReportInfoDO {
         this.isTrue = isTrue;
     }
 
-    private Integer decorationLevel;
-    public Integer getDecorationLevel() {
+    private String decorationLevel;
+    public String getDecorationLevel() {
         return decorationLevel;
     }
 
-    public void setDecorationLevel(Integer decorationLevel) {
+    public void setDecorationLevel(String decorationLevel) {
         this.decorationLevel = decorationLevel;
     }
 

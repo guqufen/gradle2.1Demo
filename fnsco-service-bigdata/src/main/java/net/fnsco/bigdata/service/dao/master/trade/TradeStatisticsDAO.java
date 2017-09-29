@@ -24,6 +24,10 @@ public interface TradeStatisticsDAO {
      * 条件分页查询
      */
     List<TradeStatistics> queryPageList(PageDTO<TradeStatistics> pages);
+    /**
+     * 导出查询
+     */
+    List<TradeStatistics> queryByAllCondition(TradeStatistics tradeStatistics);
     
     /**
      * 条件查询总数
