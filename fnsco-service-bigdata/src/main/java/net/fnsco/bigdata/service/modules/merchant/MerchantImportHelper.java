@@ -57,22 +57,25 @@ public class MerchantImportHelper{
         merchantCore.setLegalPerson(dto.getMerLegalPerson());
         merchantCore.setAbbreviation(dto.getChannelMerchant());
         merchantCore.setLegalPersonMobile(dto.getLegalPersonTel());
+        
+        String cardvalidtime = dto.getPaperValidTime();
+        String businesslicensevalidtime = dto.getBusinessLicenseValidTime();
         // excel中导出的时间是“EEE MMM dd HH:mm:ss z yyyy”类型的String类，将他转换成"yyyy/MM/dd"
-        String cardvalidtime = null;
-        if(!Strings.isNullOrEmpty(dto.getPaperValidTime())){
-            SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-            Date date1 = sdf1.parse(dto.getPaperValidTime());
-            sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-            cardvalidtime = sdf1.format(date1);
-            
-        }
-        String businesslicensevalidtime = null;
-        if(!Strings.isNullOrEmpty(dto.getBusinessLicenseValidTime())){
-            SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-            Date date2 = sdf2.parse(dto.getBusinessLicenseValidTime());
-            sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-            businesslicensevalidtime = sdf2.format(date2);
-        }
+//        String cardvalidtime = null;
+//        if(!Strings.isNullOrEmpty(dto.getPaperValidTime())){
+//            SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+//            Date date1 = sdf1.parse(dto.getPaperValidTime());
+//            sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+//            cardvalidtime = sdf1.format(date1);
+//            
+//        }
+//        String businesslicensevalidtime = null;
+//        if(!Strings.isNullOrEmpty(dto.getBusinessLicenseValidTime())){
+//            SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+//            Date date2 = sdf2.parse(dto.getBusinessLicenseValidTime());
+//            sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+//            businesslicensevalidtime = sdf2.format(date2);
+//        }
         
         merchantCore.setCardValidTime(cardvalidtime);
         merchantCore.setBusinessLicenseValidTime(businesslicensevalidtime);
