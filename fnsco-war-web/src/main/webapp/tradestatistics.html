@@ -59,6 +59,12 @@
                         <input type="text" value="" class="form-control" id="datetimepicker2" name="endSendTime">
                     </div> -->
 					</div>
+					<div style="display: none;">
+									 <input type="text" class="form-control" id=code name="code"
+									required="required">
+									 <input type="text" class="form-control" id=date name="date"
+									required="required">
+							</div>
 					<div class="col-sm-3" style="text-align: right;">
 						<button type="button" id="btn_query" class="btn btn-primary"
 							onclick="javascript:queryEvent();">
@@ -94,7 +100,7 @@
 	        <div class="modal-content">
 	            <div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	                <h4 class="modal-title" id="editModalLabel">反馈详情</h4>
+	                <h4 class="modal-title" id="editModalLabel">详情</h4>
 	            </div>
 	            <div class="ibox float-e-margins">
 				<div class="ibox-content">
@@ -173,8 +179,8 @@
 		}, {
 			field : 'tradeDate',
 			title : '支付时间',
-			align : 'center'
-		//formatter:formatDate
+			align : 'center',
+			formatter:formatDate
 		}, {
 			field : 'orderNum',
 			title : '交易笔数',
@@ -186,47 +192,10 @@
 			align : 'right'
 		} ]
 	});
-	$('#detailsTable').bootstrapTable({
-		search : false, //是否启动搜索栏
-		sidePagination : 'server',
-		url : PROJECT_NAME + '/web/tradeStatistics/query',
-		showRefresh : false,//是否显示刷新按钮
-		showPaginationSwitch : false,//是否显示 数据条数选择框(分页是否显示)
-		toolbar : '#toolbar', //工具按钮用哪个容器
-		striped : true, //是否显示行间隔色
-		cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-		pagination : true, //是否显示分页（*）
-		sortable : true, //是否启用排序
-		sortOrder : "asc", //排序方式
-		pageNumber : 1, //初始化加载第一页，默认第一页
-		pageSize : 15, //每页的记录行数（*）
-		pageList : [ 15, 20, 50, 100 ], //可供选择的每页的行数（*）
-		queryParams : queryDetailsParams,
-		responseHandler : responseHandler,//处理服务器返回数据
-		columns : [  {
-			field : 'start',
-			title : '状态',
-			align : 'center'
-		}, {
-			field : 'terminalCode',
-			title : '终端号',
-			align : 'center'
-		}, {
-			field : 'tradeDate',
-			title : '支付时间',
-			align : 'center'
-		//formatter:formatDate
-		}, {
-			field : 'turnover',
-			title : '交易金额(元)',
-			formatter : formatAmt,
-			align : 'right'
-		} ]
-	});
 	// 操作格式化
 	function operateFormatter(value, row, index) {
 		return [
-				'<a class="redact" href="javascript:querySingle(' + value
+				'<a class="redact" href="javascript:querySingle(' + value +','+row.tradeDate +','+row.terminalCode
 						+ ');" title="详情">',
 				'<i class="glyphicon glyphicon-file"></i>', '</a>  ' ].join('');
 	}
@@ -255,14 +224,69 @@
 	}
 	//时间格式化
 	function formatDate(value, row, index) {
-		return formatDateUtil(value);
+		var r=value.replace(/^(\d{4})(\d{2})(\d{2})$/, "$1-$2-$3");
+		return r;
 	}
 	function formatTime(value, row, index) {
 		return formateTimeUtil(value);
 	}
 	//详情按钮事件
-	function querySingle() {
+	function querySingle(id,date,code) {
+		$('#code').val(code);
+		$('#date').val(date);
 		$('#detailsModal').modal();
+		querydetailsModal();
+		$('#detailsTable').bootstrapTable({
+			search : false, //是否启动搜索栏
+			sidePagination : 'server',
+			url : PROJECT_NAME + '/web/tradeStatistics/queryTrade',
+			showRefresh : false,//是否显示刷新按钮
+			showPaginationSwitch : false,//是否显示 数据条数选择框(分页是否显示)
+			toolbar : '#toolbar', //工具按钮用哪个容器
+			striped : true, //是否显示行间隔色
+			cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+			pagination : true, //是否显示分页（*）
+			sortable : true, //是否启用排序
+			sortOrder : "asc", //排序方式
+			pageNumber : 1, //初始化加载第一页，默认第一页
+			pageSize : 100, //每页的记录行数（*）
+			pageList : [ 15, 20, 50, 100 ], //可供选择的每页的行数（*）
+			queryParams : queryDetailsParams,
+			responseHandler : responseHandler,//处理服务器返回数据
+			columns : [ {
+				field: 'orderNo',
+	            title: '订单号',
+				align : 'center'
+			}, {
+				field: 'timeStamp',
+	            title: '支付时间',
+				align : 'center',
+	            formatter:formatTime
+			}, {
+				field: 'certifyId',
+	            title: '卡号',
+				align : 'center'
+			},{
+				field: 'amt',
+	            title: '交易金额(元)',
+	            formatter:formatAmt,
+				align : 'right'
+			}, {
+				field: 'status',
+	            title: '状态',
+	            formatter:formatStatus
+			} ]
+		});
+	}
+	//组装请求参数
+	function queryDetailsParams(params) {
+		var param = {
+			"currentPageNum" : this.pageNumber,
+			"pageSize" : this.pageSize,
+			"terminalCode" : $.trim($('#code').val()),
+			"tradeDate" : $.trim($('#date').val()),
+		}
+		return param;
 	}
 	//条件查询按钮事件
 	function queryEvent() {
@@ -279,19 +303,14 @@
 	//导出按钮事件
 	function exportEvent() {
 		//拼接参数
-		var orderNo = $.trim($('#txt_search_id').val());
 		var merId = $.trim($('#txt_search_name').val());
 		var merName = $.trim($('#merName').val());
-		var amt = $.trim($('#txt_search_price').val());
-		/*  var startSendTime=$('#datetimepicker1').val();
-		 var endSendTime=$('#datetimepicker2').val(); */
 		var startTime = $('#datetimepicker1').val();
 		var endTime = $('#datetimepicker2').val();
-		var url = PROJECT_NAME + '/web/tradeStatistics/export' + '?orderNo='
-				+ orderNo + '&merId=' + merId + '&merName=' + merName + '&amt='
-				+ amt + '&startSendTime=' + startSendTime + '&endSendTime='
-				+ endSendTime + '&startTime=' + startTime + '&endTime='
-				+ endTime;
+		var url = PROJECT_NAME + '/web/tradeStatistics/export' +  '?merId=' + merId 
+				+ '&merName=' + merName  
+				+ '&startTime=' + startTime 
+				+ '&endTime=' + endTime;
 		window.open(url, 'Excel导出');
 	}
 	window.operateEvents = {
@@ -307,25 +326,12 @@
 	};
 
 	//组装请求参数
-	function queryDetailsParams(params) {
-		var param = {
-			currentPageNum : this.pageNumber,
-			pageSize : this.pageSize,
-			merId : $.trim($('#txt_search_name').val()),
-		}
-		return param;
-	}
-	//详情组装请求参数
 	function queryParams(params) {
 		var param = {
 			currentPageNum : this.pageNumber,
 			pageSize : this.pageSize,
-			//orderNo :$.trim($('#txt_search_id').val()),
 			merId : $.trim($('#txt_search_name').val()),
 			merName : $.trim($('#merName').val()),
-			// amt:$.trim($('#txt_search_price').val()),
-			//startSendTime:$('#datetimepicker1').val(),
-			//endSendTime:$('#datetimepicker2').val(),
 			startTime : $('#datetimepicker1').val(),
 			endTime : $('#datetimepicker2').val()
 		}
@@ -346,7 +352,18 @@
 			};
 		}
 	}
-
+	//状态格式化
+	  function formatStatus(value, row, index){
+		  if(!value){
+		    	return '-';
+		    }
+		  else if(value == 0){
+			  return '非正常交易';
+		  }
+		  else if(value == 1){
+			  return '正常交易';
+		  }
+	  } 
 	$('#datetimepicker1').datetimepicker({
 		format : 'yyyy-mm-dd',
 		autoclose : true,

@@ -69,6 +69,35 @@
       </if>
    	 </where>		
   </select>
+  <!-- 条件查询 -->
+  <select id="queryByAllCondition" parameterType="net.fnsco.bigdata.service.domain.trade.TradeStatistics" resultMap="BaseResultMap">
+    SELECT * FROM r_trade_by_day 
+     <where>
+       <if test="startTime != null and  startTime != ''">
+        AND trade_date &gt;= #{startTime ,jdbcType=VARCHAR}
+      </if>
+       <if test="endTime != null and  endTime != ''">
+        AND trade_date &lt;= #{endTime ,jdbcType=VARCHAR}
+      </if>
+      <if test="merId != null and merId !=''" >
+        AND inner_code in (
+         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{merId ,jdbcType=VARCHAR} LIMIT 1)as t  
+        )
+      </if>
+	  <if test="merName != null and merName !=''" >
+        AND inner_code in (
+           SELECT inner_code FROM m_merchant_core WHERE mer_name LIKE CONCAT('%',#{merName},'%')
+        )
+      </if>
+   	    <if test="innerCode != null and innerCode !=''" >
+        AND inner_code = #{innerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="terminalCode != null and terminalCode !=''" >
+        AND txn_type = #{terminalCode,jdbcType=VARCHAR}
+      </if>
+   	 </where>
+   	 order by trade_date desc
+  </select>
   <select id="queryMerIdByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
     SELECT t_trade_data.mer_id,m_merchant_core.mer_name 
     FROM t_trade_data ,m_merchant_core

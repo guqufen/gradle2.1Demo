@@ -6,6 +6,7 @@ import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.dto.TradeDataPageDTO;
 import net.fnsco.bigdata.api.dto.TradeDataQueryDTO;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
+import net.fnsco.bigdata.service.domain.trade.TradeStatistics;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
