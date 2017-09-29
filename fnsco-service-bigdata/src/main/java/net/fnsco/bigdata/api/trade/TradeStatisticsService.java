@@ -28,5 +28,5 @@ public interface TradeStatisticsService {
     * @param tradeDataDTO
     * @return
     */
-    List<TradeData> queryDataList(TradeDataDTO tradeDataDTO);
+    List<TradeStatistics> queryDataList(TradeStatistics tradeStatistics);
 }

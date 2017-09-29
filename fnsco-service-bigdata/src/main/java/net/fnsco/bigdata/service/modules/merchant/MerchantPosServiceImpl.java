@@ -215,7 +215,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
     }
 
     @Override
-    public MerchantPos selectBySnCodeAndInnerCode(String snCode, String innerCode) {
-        return merchantPosDao.selectBySnCodeAndInnerCode(snCode, innerCode);
+    public MerchantPos selectBySnCodeAndInnerCode(String snCode, String innerCode,Integer channelId) {
+        return merchantPosDao.selectBySnCodeAndInnerCode(snCode, innerCode,channelId);
     }
 }

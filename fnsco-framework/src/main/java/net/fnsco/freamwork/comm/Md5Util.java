@@ -65,6 +65,7 @@ public class Md5Util {
     public static void main(String[] args) {
         String a = "jsapi_ticket=kgt8ON7yVITDhtdwci0qeRMfbY5dbP3E81RMkmUUSEIkEggc7hV7kD6BFdOnFPYJqyciGzMLQVStz65D_joBZw&noncestr=JBZom2b8Bx4D4i31PO0f&timestamp=1445231783&url=http://wxsc.zuixiandao.cn/llz/cmnt/weixin/orderWeixinPay.htm";
         System.out.println(Md5Util.getInstance().sha1(a));
+        System.out.println(encrypt(a));
     }
 
     /***
@@ -149,4 +150,51 @@ public class Md5Util {
         md.update(source);
         return md.digest();
     }
+    
+    public static String encrypt(String str) {
+        MessageDigest messageDigest = null;
+
+        try {
+            messageDigest = MessageDigest.getInstance("MD5");
+
+            messageDigest.reset();
+
+            messageDigest.update(str.getBytes("UTF-8"));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        byte[] byteArray = messageDigest.digest();
+
+        StringBuffer md5StrBuff = new StringBuffer();
+
+        for (int i = 0; i < byteArray.length; i++) {
+            if (Integer.toHexString(0xFF & byteArray[i]).length() == 1)
+                md5StrBuff.append("0").append(Integer.toHexString(0xFF & byteArray[i]));
+            else
+                md5StrBuff.append(Integer.toHexString(0xFF & byteArray[i]));
+        }
+
+        return md5StrBuff.toString();
+    }
+    public static String encryptAndroid(String string) {
+        byte[] hash;
+        try {
+            hash = MessageDigest.getInstance("MD5").digest(string.getBytes("UTF-8"));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("MD5 should be supported", e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("UTF-8 should be supported", e);
+        }
+
+        StringBuilder hex = new StringBuilder(hash.length * 2);
+        for (byte b : hash) {
+            if ((b & 0xFF) < 0x10) hex.append("0");
+            hex.append(Integer.toHexString(b & 0xFF));
+        }
+        return hex.toString();
+    }
+
 }

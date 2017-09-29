@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
+import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.api.trade.TradeStatisticsService;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.bigdata.service.domain.trade.TradeStatistics;
@@ -42,6 +43,8 @@ public class TradeStatisticsWebController extends BaseController {
 
     @Autowired
     private TradeStatisticsService tradeStatisticsService;
+    @Autowired
+    private TradeDataService       tradeDataService;
     /**
      * 交易统计分页查询
      * 
@@ -57,7 +60,25 @@ public class TradeStatisticsWebController extends BaseController {
 
         return tradeStatisticsService.queryTradeData(tradeStatistics, currentPageNum, pageSize);
     }
-
+    /**
+     * 交易统计详情分页查询
+     * 
+     * @param tradeDataDTO
+     * @param currentPageNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = "/queryTrade", method = RequestMethod.GET)
+    @ResponseBody
+    @RequiresPermissions(value = { "m:trade:list" })
+    public ResultPageDTO<TradeData> queryTrade(TradeStatistics tradeStatistics, Integer currentPageNum, Integer pageSize) {
+    	TradeDataDTO tradeDataDTO = new TradeDataDTO();
+    	String day = DateUtils.strFormatToStr(tradeStatistics.getTradeDate());
+    	tradeDataDTO.setTermId(tradeStatistics.getTerminalCode());
+    	tradeDataDTO.setStartTime(day);
+    	tradeDataDTO.setEndTime(day);
+        return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize);
+    }
     /**
      * 交易流水excel导出
      * 
@@ -72,13 +93,13 @@ public class TradeStatisticsWebController extends BaseController {
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions(value = { "m:trade:export" })
-    public void export(TradeDataDTO tradeDataDTO, HttpServletRequest req, HttpServletResponse response)
+    public void export(TradeStatistics tradeStatistics, HttpServletRequest req, HttpServletResponse response)
             throws IOException {
-        List<TradeData> dataList = tradeStatisticsService.queryDataList(tradeDataDTO);
+        List<TradeStatistics> dataList = tradeStatisticsService.queryDataList(tradeStatistics);
         // 转换日期显示
         if (dataList != null) {
-            for (TradeData merchantdo : dataList) {
-                // 支付方式
+            for (TradeStatistics merchantdo : dataList) {
+                /*// 支付方式
                 if ("00".equals(merchantdo.getPayType())) {
                     merchantdo.setPayType("刷卡");
                 } else if ("01".equals(merchantdo.getPayType())) {
@@ -140,24 +161,24 @@ public class TradeStatisticsWebController extends BaseController {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     String dateString2 = formatter.format(li2);
                     merchantdo.setCreateTimeStr(dateString2);
-                }
+                }*/
             }
         }
 
         JSONObject jObject = new JSONObject();
         jObject.put("data", dataList);
-        List<TradeData> list = (List<TradeData>) jObject.get("data");
-        String itemMark = "orderNo,orderIdScan,merName,innerCode,snCode,referNo,txnType,merId,timeStamp,payType,amt,certifyId,orderTime,termId,batchNo,sysTraceNo,authCode,source,createTimeStr,status";
-        String itemParap = "订单号,扫码交易的订单号,商户名,内部商户号,终端SN码,参考号,交易类型,结算商户号,支付时间,支付方式,交易金额(元),持卡人卡号,订单时间,终端号,批次号,凭证号,授权码,来源,创建时间,状态";
+        List<TradeStatistics> list = (List<TradeStatistics>) jObject.get("data");
+        String itemMark = "innerCode,merId,merName,terminalCode,tradeDate,orderNum,turnover";
+        String itemParap = "内部商户号,结算商户号,商户名,终端号,支付日期,交易笔数,交易金额";
 
         String[] itemMarks = itemMark.split(",");// 键
         String[] itemParaps = itemParap.split(",");// 列头
 
-        HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "交易流水");
+        HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "交易统计");
 
         response.setContentType("application/vnd.ms-excel;");
         String nowStr = DateUtils.getNowYMDStr();
-        String fileName = "交易流水" + nowStr + ".xls";
+        String fileName = "交易统计" + nowStr + ".xls";
         response.setHeader("Content-disposition",
                 "attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
 

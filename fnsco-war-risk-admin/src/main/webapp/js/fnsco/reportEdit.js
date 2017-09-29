@@ -151,10 +151,7 @@ function getIndest(value) {
 		success:function(data){
 			console.log(data);
 			if(data.success){
-				if(value == ""){
-					$('select[id="industry"]').append('<option selected="selected" value="">----</option>');
-					return;
-				}
+
 				for(var i=0; i < data.data.length; i++){
 					if(data.data[i].fourth != ""){
 						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'--'+data.data[i].third+'--'+data.data[i].fourth+'</option>');
@@ -163,6 +160,9 @@ function getIndest(value) {
 					}else if(data.data[i].first != ""){
 						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'</option>');
 					}
+				}
+				if(value == null || value == ""){
+					value = "kk";
 				}
 				$('select[id="industry"]').find("option[value=" + value + "]").attr("selected", true);// 行业
 			}
@@ -187,6 +187,9 @@ function getSize(value){
 				for(var i=0; i < data.data.length; i++){
 					$('#size').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
 				}
+				if(value == null || value == ""){
+					value = "kk";
+				}
 				$('select[id="size"]').find("option[value=" + value + "]").attr("selected", true);// 规模
 			}
 			console.log(data);
@@ -201,11 +204,14 @@ function getDecorationLevel(value){
 		url:PROJECT_NAME + '/sysConfig/getByType',
 		type:'post',
 		data:{"type":"06"},
-//		async:false,
+		async:false,
 		success:function(data){
 			if(data.success){
 				for(var i=0; i < data.data.length; i++){
 					$('#decorationLevel').append('<option value="'+data.data[i].value+'">'+data.data[i].remark+'</option>');
+				}
+				if(value == null || value == ""){
+					value = "kk";
 				}
 				$('select[id="decorationLevel"]').find("option[value=" + value + "]").attr("selected", true);// 装修等级
 			}
@@ -279,7 +285,7 @@ function saveOrUpdate(status){
 
 	//行业
 	var industry = $('#industry option:selected').val();
-	if(industry == ""){
+	if(industry == "" || industry=="kk"){
 		layer.msg('请选择行业');
 		return false;
 	}
@@ -297,15 +303,15 @@ function saveOrUpdate(status){
 	}
 	
 	//装修等级
-	var decorationLevel = $('#decorationLevel').val();
-	if(decorationLevel == ""){
+	var decorationLevel = $('#decorationLevel option:selected').val();
+	if(decorationLevel == "" || decorationLevel == "kk"){
 		layer.msg('请选择装修等级');
 		return false;
 	}
 
 	//规模
 	var size = $('#size option:selected').val();
-	if(size == ""){
+	if(size == "" || size== "kk"){
 		layer.msg('请选择规模');
 		return false;
 	}
@@ -333,12 +339,6 @@ function saveOrUpdate(status){
 		layer.msg('请输入额度信息');
 		return false;
 	}
-	//额度数字校验
-	var reg = new RegExp("^[0-9]*$");
-	if(!reg.test($('#quota').val())){
-		layer.msg('请输入正确的营业额');
-		return false;
-	}
 
 	//费率
 	var feeRate = $('#feeRate').val();
@@ -346,23 +346,11 @@ function saveOrUpdate(status){
 		layer.msg('请输入费率信息');
 		return false;
 	}
-	//费率数字百分比校验,限制以%结尾的数字,允许带两位小数点
-	var reg =  /^\d+(\.\d+)?%$/;
-	if(!reg.test($('#feeRate').val())){
-		layer.msg('请输入正确的费率信息,限制以%结尾的数字');
-		return false;
-	}
 
 	//周期
 	var loanCycle = $('#loanCycle').val();
 	if(loanCycle == ""){
 		layer.msg('请输入周期信息');
-		return false;
-	}
-	//周期数字校验
-	var reg = new RegExp("^[0-9]*$");
-	if(!reg.test($('#loanCycle').val())){
-		layer.msg('请输入正确的周期');
 		return false;
 	}
 

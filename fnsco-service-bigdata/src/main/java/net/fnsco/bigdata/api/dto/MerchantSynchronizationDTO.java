@@ -479,95 +479,95 @@ public class MerchantSynchronizationDTO {
     public static  MerchantSynchronizationDTO installMerchantSynDto(Object[] objs){
         MerchantSynchronizationDTO dto = new MerchantSynchronizationDTO();
      // 工商注册名称（协议签约一致）
-        dto.setMerchant(StringUtil.valueOf(objs[0]));
+        dto.setMerchant(StringUtil.valueOf(objs[0]).trim());
         // 营业执照注册号
-        dto.setBusinessLicenseNum(StringUtil.valueOf(objs[1]));
+        dto.setBusinessLicenseNum(StringUtil.valueOf(objs[1]).trim());
         // 法人身份证号码
-        dto.setPaperNum(StringUtil.valueOf(objs[2]));
+        dto.setPaperNum(StringUtil.valueOf(objs[2]).trim());
         // 法人姓名
-        dto.setMerLegalPerson(StringUtil.valueOf(objs[3]));
+        dto.setMerLegalPerson(StringUtil.valueOf(objs[3]).trim());
         // 法人手机号
-        dto.setLegalPersonTel(StringUtil.valueOf(objs[4]));
+        dto.setLegalPersonTel(StringUtil.valueOf(objs[4]).trim());
         // 证件有效期
-        dto.setPaperValidTime(StringUtil.valueOf(objs[5]));
+        dto.setPaperValidTime(StringUtil.valueOf(objs[5]).trim());
         // 营业执照有效期
-        dto.setBusinessLicenseValidTime(StringUtil.valueOf(objs[6]));
+        dto.setBusinessLicenseValidTime(StringUtil.valueOf(objs[6]).trim());
         // 商户注册地址
-        dto.setMerRegistAddress(StringUtil.valueOf(objs[7]));
+        dto.setMerRegistAddress(StringUtil.valueOf(objs[7]).trim());
         // 商户标签
-        dto.setMercFlag(StringUtil.valueOf(objs[8]));
+        dto.setMercFlag(StringUtil.valueOf(objs[8]).trim());
         // channelMerchant// 商户入网注册名称
-        dto.setChannelMerchant(StringUtil.valueOf(objs[9]));
+        dto.setChannelMerchant(StringUtil.valueOf(objs[9]).trim());
 
         // 签购单名称
-        dto.setSalesSlip(StringUtil.valueOf(objs[10]));
+        dto.setSalesSlip(StringUtil.valueOf(objs[10]).trim());
         // 商户联系人
-        dto.setLinkMan(StringUtil.valueOf(objs[11]));
+        dto.setLinkMan(StringUtil.valueOf(objs[11]).trim());
         // 联系电话
-        dto.setLinkManTel(StringUtil.valueOf(objs[12]));
+        dto.setLinkManTel(StringUtil.valueOf(objs[12]).trim());
         //邮箱
-        dto.setLinkManEmail(StringUtil.valueOf(objs[13]));
+        dto.setLinkManEmail(StringUtil.valueOf(objs[13]).trim());
         //财务联系人信息
-        dto.setFinanceLinkMan(StringUtil.valueOf(objs[14]));
-        dto.setFinanceLinkManTel(StringUtil.valueOf(objs[15]));
-        dto.setFinanceLinkManEmail(StringUtil.valueOf(objs[16]));
+        dto.setFinanceLinkMan(StringUtil.valueOf(objs[14]).trim());
+        dto.setFinanceLinkManTel(StringUtil.valueOf(objs[15]).trim());
+        dto.setFinanceLinkManEmail(StringUtil.valueOf(objs[16]).trim());
         //商户负责人信息
-        dto.setMerPrincipal(StringUtil.valueOf(objs[17]));
-        dto.setMerPrincipalTel(StringUtil.valueOf(objs[18]));
-        dto.setMerPrincipalEmail(StringUtil.valueOf(objs[19]));
+        dto.setMerPrincipal(StringUtil.valueOf(objs[17]).trim());
+        dto.setMerPrincipalTel(StringUtil.valueOf(objs[18]).trim());
+        dto.setMerPrincipalEmail(StringUtil.valueOf(objs[19]).trim());
         
         // 装机地址
-        dto.setMerInstallArea(StringUtil.valueOf(objs[20]));
+        dto.setMerInstallArea(StringUtil.valueOf(objs[20]).trim());
         // 开户类型
-        dto.setAccountType(StringUtil.valueOf(objs[21]));
+        dto.setAccountType(StringUtil.valueOf(objs[21]).trim());
         // 开户人身份证
-        dto.setAccountHolderID(StringUtil.valueOf(objs[22]));
+        dto.setAccountHolderID(StringUtil.valueOf(objs[22]).trim());
         // 入账人
-        dto.setAccountName(StringUtil.valueOf(objs[23]));
+        dto.setAccountName(StringUtil.valueOf(objs[23]).trim());
         // 入账账号
-        dto.setAccountNo(StringUtil.valueOf(objs[24]));
+        dto.setAccountNo(StringUtil.valueOf(objs[24]).trim());
         // 开户行
-        dto.setSubBankName(StringUtil.valueOf(objs[25]));
-        dto.setOpenBankNum(StringUtil.valueOf(objs[26]));
-        dto.setOpenBank(StringUtil.valueOf(objs[27]));
-        dto.setOpenBankPrince(StringUtil.valueOf(objs[28]));
-        dto.setOpenBankCity(StringUtil.valueOf(objs[29]));
+        dto.setSubBankName(StringUtil.valueOf(objs[25]).trim());
+        dto.setOpenBankNum(StringUtil.valueOf(objs[26]).trim());
+        dto.setOpenBank(StringUtil.valueOf(objs[27]).trim());
+        dto.setOpenBankPrince(StringUtil.valueOf(objs[28]).trim());
+        dto.setOpenBankCity(StringUtil.valueOf(objs[29]).trim());
         //createTime
-        dto.setCreateTime(StringUtil.valueOf(objs[30]));
+        dto.setCreateTime(StringUtil.valueOf(objs[30]).trim());
         // busiCode
-        dto.setBusiCode(StringUtil.valueOf(objs[31]));
-        dto.setPrivateKye(StringUtil.valueOf(objs[32]));
-        dto.setTaxRegistCode(StringUtil.valueOf(objs[33]));
+        dto.setBusiCode(StringUtil.valueOf(objs[31]).trim());
+        dto.setPrivateKye(StringUtil.valueOf(objs[32]).trim());
+        dto.setTaxRegistCode(StringUtil.valueOf(objs[33]).trim());
         // 扫码扣率
-        dto.setXx(StringUtil.valueOf(objs[34]));
+        dto.setXx(StringUtil.valueOf(objs[34]).trim());
         //文件信息
-        dto.setFileInfos(StringUtil.valueOf(objs[35]));
+        dto.setFileInfos(StringUtil.valueOf(objs[35]).trim());
         
         // 一号pos机
         // 备注/1号机具SN
-        dto.setSnCode(StringUtil.valueOf(objs[36]));
+        dto.setSnCode(StringUtil.valueOf(objs[36]).trim());
         //debitCardRate
-        dto.setDebitCardRate(StringUtil.valueOf(objs[37]));
+        dto.setDebitCardRate(StringUtil.valueOf(objs[37]).trim());
         //creditCardRate
-        dto.setCreditCardRate(StringUtil.valueOf(objs[38]));
+        dto.setCreditCardRate(StringUtil.valueOf(objs[38]).trim());
         //debitCardFee
-        dto.setDebitCardFee(StringUtil.valueOf(objs[39]));
+        dto.setDebitCardFee(StringUtil.valueOf(objs[39]).trim());
         //creditCardFee
-        dto.setCreditCardFee(StringUtil.valueOf(objs[40]));
+        dto.setCreditCardFee(StringUtil.valueOf(objs[40]).trim());
         //debitCardMaxFee
-        dto.setDebitCardMaxFee(StringUtil.valueOf(objs[41]));
+        dto.setDebitCardMaxFee(StringUtil.valueOf(objs[41]).trim());
         //creditCardMaxFee
-        dto.setCreditCardMaxFee(StringUtil.valueOf(objs[42]));
+        dto.setCreditCardMaxFee(StringUtil.valueOf(objs[42]).trim());
         //posType
-        dto.setPosType(StringUtil.valueOf(objs[43]));
+        dto.setPosType(StringUtil.valueOf(objs[43]).trim());
         //posFactory
-        dto.setPosFactory(StringUtil.valueOf(objs[44]));
+        dto.setPosFactory(StringUtil.valueOf(objs[44]).trim());
         //merchantCode
-        dto.setMerchantCode(StringUtil.valueOf(objs[45]));
+        dto.setMerchantCode(StringUtil.valueOf(objs[45]).trim());
         //terminalCode
-        dto.setTerminalCode(StringUtil.valueOf(objs[46]));
+        dto.setTerminalCode(StringUtil.valueOf(objs[46]).trim());
         //innerTermCode
-        dto.setInnerTermCode(StringUtil.valueOf(objs[47]));
+        dto.setInnerTermCode(StringUtil.valueOf(objs[47]).trim());
 
         return dto;
     }

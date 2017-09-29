@@ -27,7 +27,7 @@ import net.fnsco.core.utils.DateUtils;
 
 /**
  * 交易流水服务类
- * @author sxf
+ * @author 
  *
  */
 @Service
@@ -66,44 +66,22 @@ public class TradeStatisticsServiceImpl extends BaseService implements TradeStat
 
     }
 
-	@Override
-	public List<TradeData> queryDataList(TradeDataDTO tradeDataDTO) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-   /* @Override
-    public List<TradeData> queryDataList(TradeDataDTO tradeDataDTO) {
-        TradeData tradeData = new TradeData();
-        if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
-            tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
+    @Override
+    public List<TradeStatistics> queryDataList(TradeStatistics tradeStatistics) {
+    	if (!StringUtils.isEmpty(tradeStatistics.getStartTime())) {
+        	tradeStatistics.setStartTime(DateUtils.formatDateStrInput(tradeStatistics.getStartTime()));
         }
-        if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
-            tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
+        if (!StringUtils.isEmpty(tradeStatistics.getEndTime())) {
+        	tradeStatistics.setEndTime(DateUtils.formatDateStrInput(tradeStatistics.getEndTime()));
         }
-
-        if (!StringUtils.isEmpty(tradeDataDTO.getStartTime())) {
-            tradeDataDTO.setStartTime(DateUtils.getDateStartTime(tradeDataDTO.getStartTime()));
-        }
-        if (!StringUtils.isEmpty(tradeDataDTO.getEndTime())) {
-            tradeDataDTO.setEndTime(DateUtils.getDateEndTime(tradeDataDTO.getEndTime()));
-        }
-        BeanUtils.copyProperties(tradeDataDTO, tradeData);
-        List<TradeData> datas = tradeListDAO.queryTotalByCondition(tradeData);
-        for (TradeData merchantdo : datas) {
-            String id = merchantdo.getTermId();
-            String code = merchantdo.getInnerCode();
-            String sn = merchantTerminalDao.querySnCode(id, code);
-            merchantdo.setSnCode(sn);
-        }
-        for (TradeData tradeData2 : datas) {
-            if (!Strings.isNullOrEmpty(tradeData2.getInnerCode())) {
-                MerchantCore core = merchantCoreDao.selectByInnerCode(tradeData2.getInnerCode());
-                if (null != core) {
-                    tradeData2.setMerName(core.getMerName());
-                }
-            }
+        List<TradeStatistics> datas = tradeListDAO.queryByAllCondition(tradeStatistics);
+        for(TradeStatistics trade : datas) {
+        	TradeStatistics statistics = tradeListDAO.queryMerIdByInnerCode(trade.getInnerCode());
+        	if(statistics!=null) {
+        		trade.setMerId(statistics.getMerId());
+        		trade.setMerName(statistics.getMerName());
+        	}
         }
         return datas;
-    }*/
+    }
 }
