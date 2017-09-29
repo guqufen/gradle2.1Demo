@@ -262,6 +262,7 @@ public class TradeDataWebController extends BaseController {
                 System.arraycopy(objs, 0, tempObj, 0, objs.length);
                 objs = tempObj;
             }
+            logger.error("正在导入第"+timeNum+"条数据");
             importTradeData(objs, timeNum, fileName);
             timeNum = timeNum + 1;
         }
@@ -395,6 +396,7 @@ public class TradeDataWebController extends BaseController {
             if (result.isSuccess()) {
                 tradeDataService.saveTradeData(tradeData);
             } else {
+                logger.error("第" + timeNum + "行交易流水信息校验有误");
                 ImportErrorDO importError = new ImportErrorDO();
                 importError.setCreateTime(new Date());
                 importError.setCreateUserId(getUserId());
@@ -445,12 +447,12 @@ public class TradeDataWebController extends BaseController {
         //tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
         //tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
         if (Strings.isNullOrEmpty(TradeStateEnum.getNameByCode(tradeData.getRespCode()))) {
-            return fail("回应状态必须为1001成功1002失败1000进行中");
+            return fail("回应状态必须为1001成功1002失败1111进行中");
         }
         //tradeData.setRespCode(ServiceConstant.TradeStateEnum.SUCCESS.getCode());
         //tradeData.setPayMedium(BigdataConstant.PayMediumEnum.FIX_QR.getCode());
         if (Strings.isNullOrEmpty(PayMediumEnum.getNameByCode(tradeData.getPayMedium()))) {
-            return fail("支付媒介00pos机01app02台码");
+            return fail("支付媒介必须为00pos机01app02台码");
         }
         if (Strings.isNullOrEmpty(DataSourceEnum.getNameByCode(tradeData.getSource()))) {
             return fail("数据来源必须为00拉卡拉01导入02同步");

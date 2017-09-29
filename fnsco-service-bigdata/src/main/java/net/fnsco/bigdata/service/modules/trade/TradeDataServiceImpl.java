@@ -62,7 +62,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      */
     @Transactional
     public boolean saveTradeData(TradeDataDTO tradeData) {
-        if (ServiceConstant.STR_1.equals(tradeData.getValidate()) && !Strings.isNullOrEmpty(tradeData.getMd5())) {
+        //ServiceConstant.STR_1.equals(tradeData.getValidate()) && 
+        if (!Strings.isNullOrEmpty(tradeData.getMd5())) {
             //需要校验
             TradeData temp = tradeListDAO.selectByPrimaryKey(tradeData.getMd5());
             if (null != temp) {
