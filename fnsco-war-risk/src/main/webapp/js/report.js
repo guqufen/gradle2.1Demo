@@ -156,8 +156,6 @@ function sendEmail(merchantId) {
 		time : 2000, // 20s后自动关闭
 		btn : [ '确定', '取消' ]
 	}, function() {
-		layer.msg('发送邮件通知成功');
-		reportStatus(merchantId, 4);
 		$.ajax({
 			url : PROJECT_NAME + '/web/report/backPersonnelMes',
 			type : 'POST',
@@ -168,7 +166,9 @@ function sendEmail(merchantId) {
 			},
 			success : function(data){
 				if (data.success) {
-					window.location.reload();
+					layer.msg('发送邮件通知成功');
+					reportStatus(merchantId, 4);
+					setTimeout(function(){window.location.reload();},1000);
 				}
 			}
 		});
