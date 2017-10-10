@@ -172,7 +172,7 @@ public class MerchantImportHelper{
      * @date      2017年9月14日 下午4:50:21
      * @return MerchantPos    DOM对象
      */
-    public static MerchantPos createMerchantPos(Integer id,String innerCode,Integer bankId,Integer channelId,MerchantSynchronizationDTO dto){
+    public static MerchantPos createMerchantPos(Integer id,String innerCode,Integer bankId,Integer channelId,MerchantSynchronizationDTO dto,String posName){
      // 创建一个商户pos信息实体类对象接收商户pos信息
         MerchantPos merchantPos = new MerchantPos();
         merchantPos.setId(id);
@@ -183,7 +183,10 @@ public class MerchantImportHelper{
         merchantPos.setSnCode(dto.getSnCode());
         merchantPos.setPosAddr(dto.getMerInstallArea());
         merchantPos.setStatus("1");
-        merchantPos.setPosName(dto.getSnCode() + "号POS机");
+        if(Strings.isNullOrEmpty(posName)){
+            posName = dto.getSnCode() + "号POS机";
+        }
+        merchantPos.setPosName(posName);
         // 获取银行卡ID
         merchantPos.setBankId(bankId);
         // 获取渠道ID

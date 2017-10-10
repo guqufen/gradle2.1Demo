@@ -17,7 +17,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
-import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
@@ -372,16 +371,16 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             merchantCore.setModifyTime(new Date());
             merchantCore.setStatus(1);
             
-            if (Strings.isNullOrEmpty(merchantCore.getBusinessLicenseNum())) {
-                logger.error("营业执照为空 不能入库!");
-                return ResultDTO.fail();
-            }
-            
-            MerchantCore mc = selectBybusinessLicenseNum(merchantCore.getBusinessLicenseNum(),null);
-            if(null != mc){
-                logger.error("营业执照已经存在,不能入库!");
-                return ResultDTO.fail();
-            }
+//            if (Strings.isNullOrEmpty(merchantCore.getBusinessLicenseNum())) {
+//                logger.error("营业执照为空 不能入库!");
+//                return ResultDTO.fail();
+//            }
+//            
+//            MerchantCore mc = selectBybusinessLicenseNum(merchantCore.getBusinessLicenseNum(),null);
+//            if(null != mc){
+//                logger.error("营业执照已经存在,不能入库!");
+//                return ResultDTO.fail();
+//            }
             
             int res = merchantCoreDao.insertSelective(merchantCore);
             if (res != 1) {
@@ -647,5 +646,16 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     @Override
     public MerchantCore selectBybusinessLicenseNum(String businessLicenseNum,String accountNo) {
         return merchantCoreDao.selectBybusinessLicenseNum(businessLicenseNum,accountNo);
+    }
+    /**
+     * 
+     * (non-Javadoc)
+     * @see net.fnsco.bigdata.api.merchant.MerchantCoreService#selectUniqueMer(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     * @author tangliang
+     * @date 2017年10月10日 下午1:23:26
+     */
+    @Override
+    public MerchantCore selectUniqueMer(String cardNum, String accountNo, String channelType, String channelMerId) {
+        return merchantCoreDao.selectUniqueMer(cardNum, accountNo, channelType, channelMerId);
     }
 }

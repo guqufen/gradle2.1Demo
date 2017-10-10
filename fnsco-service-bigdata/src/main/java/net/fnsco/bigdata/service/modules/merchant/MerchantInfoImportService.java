@@ -20,7 +20,6 @@ import com.google.common.collect.Lists;
 import net.fnsco.bigdata.api.dto.MerchantSynchronizationDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
-import net.fnsco.bigdata.service.dao.master.MerchantBankDao;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantContactDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
@@ -56,164 +55,46 @@ public class MerchantInfoImportService extends BaseService {
     @Autowired
     private MerchantContactDao  merchantContactDao;
     @Autowired
-    private MerchantBankDao     merchantBankDao;
-    @Autowired
     private MerchantTerminalDao merchantTerminalDao;
     @Autowired
     private Environment         env;
 
     private static final String IMAGE_PATH = "http://www.zheft.cn/static_img/";
+    
+    ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
 
     // 批量导入客户
     @Transactional
     public ResultDTO<String> merchantBatchImportToDB(MerchantSynchronizationDTO dto, Integer userId, Integer timeNum) throws ParseException {
-
-        ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
-        /**
-         * 导入之前要先验证business_license_num 营业执照号码保持唯一,如果存在，则不新加商户，只加该商户其余属性。
-         */
-        if (Strings.isNullOrEmpty(dto.getBusinessLicenseNum())) {
-            return ResultDTO.success("营业执照为空!不能入库");
-        }
-        String innerCode = null;
-        Integer bankId = null;
-        MerchantCore merchantcore = merchantCoreService.selectBybusinessLicenseNum(dto.getBusinessLicenseNum(),dto.getAccountNo());
-        /**
-         * 商户基本信息
-         */
-        Integer merId = null;
-        if (null != merchantcore) {
-            merId = merchantcore.getId();
-            innerCode = merchantcore.getInnerCode();
-            merchantContactDao.deleteByInnerCode(innerCode);
-            merchantBankDao.deleteByInnerCode(innerCode);
-        } else {
-            innerCode = merchantCoreService.getInnerCode();
-            /**
-             * 商户银行卡信息
-             */
-            MerchantBank merchantBank = MerchantImportHelper.createMerchantBank(innerCode, dto);
-            try {
-                bankId = merchantCoreService.doAddBanks(merchantBank);
-            } catch (Exception e) {
-                logger.error("导入商户数据异常", e);
-                return ResultDTO.success("行数据的银行卡信息有误，导入失败");
-            }
-        }
-        
-        MerchantCore merchantCore = MerchantImportHelper.createMerchantCore(merId, innerCode, dto);
-        try {
-            merchantCoreService.doAddMerCore(merchantCore);
-        } catch (Exception e) {
-            logger.error("导入商户数据异常", e);
-            return ResultDTO.success("行数据的基本数据信息有误，导入失败");
-        }
-        /**
-         * 联系人处理
-         */
-        List<MerchantContact> contcactList = handlerContact(innerCode,dto);
-        try {
-            merchantCoreService.doAddMerContact(contcactList);
-        } catch (Exception e) {
-            logger.error("导入商户数据异常", e);
-            return ResultDTO.success("行数据的商户联系人信息有误，导入失败");
-        }
         
         /**
-         * 文件处理很慢，直接开启一个线程池执行
+         * 法奈昇渠道商户
          */
-        String taskInnerCode = innerCode;
-        cachedThreadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                //文件处理
-                saveFileToDB(dto.getFileInfos(), taskInnerCode);
-            }
-        });
-
+        ResultDTO<String> fnsResult  = handlerMerchantCore(dto,"03",dto.getMerchantCode(),userId,"00");
+        if(!fnsResult.isSuccess()){
+            return ResultDTO.success(fnsResult.getData());
+        }
+        
         /**
          * 爱农
          */
-        ResultDTO<Object> AiResultDTO = createChanelAndPosAndTer(innerCode, "929010048160219", userId, bankId, timeNum, "02", "01",dto,null);
-        if (!AiResultDTO.isSuccess()) {
-            return ResultDTO.success("行数据的爱农渠道数据导入错误");
+//        dto.setpos
+        ResultDTO<String> aiResult  = handlerMerchantCore(dto,"02","929010048160219",userId,"01");
+        if (!aiResult.isSuccess()) {
+            return ResultDTO.success(aiResult.getData());
         }
+        
         /**
          * 浦发
          */
         if (!Strings.isNullOrEmpty(dto.getBusiCode())) {
-            ResultDTO<Object> resultDTO = createChanelAndPosAndTer(innerCode, dto.getBusiCode(), userId,bankId, timeNum, "01", "00",dto,dto.getPrivateKye());
-            if (!resultDTO.isSuccess()) {
+            ResultDTO<String> pufaResult  = handlerMerchantCore(dto,"01",dto.getBusiCode(),userId,"01");
+            if (!pufaResult.isSuccess()) {
                 logger.error("导入商户数据异常");
-                return ResultDTO.success("行数据的浦发渠道数据导入错误");
+                return ResultDTO.success(pufaResult.getData());
             }
         }
-        
-        /**
-         * 渠道信息--根据innerCode+merchantCode+channelType判断唯一性，如果存在，则获取ID ，否则新增加
-         */
-        if (Strings.isNullOrEmpty(dto.getMerchantCode())) {
-            return ResultDTO.success("渠道商户号为空 不能入库，导入失败");
-        }
-
-        /**
-         * 判断法奈昇渠道有没有
-         */
-        MerchantChannel channel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, dto.getMerchantCode(), "03");
-        Integer channelId = null;
-        if (null == channel) {
-            // 新增加一个法奈昇的渠道 
-            MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, dto.getMerchantCode(), "03", userId, null);
-            try {
-                // 渠道信息保存
-                channelId = merchantCoreService.doAddChannel(merchantChannel);
-            } catch (Exception e) {
-                logger.error("导入商户数据异常", e);
-                return ResultDTO.success("行数据的渠道信息有误，导入失败");
-            }
-
-        } else {
-            channelId = channel.getId();
-        }
-        
-        /**
-         * 商戶pos机信息
-         */
-        MerchantPos posInfo = merchantPosService.selectBySnCodeAndInnerCode(dto.getSnCode(), innerCode,channelId);
-        Integer posId = null;
-        if (null != posInfo) {
-            posId = posInfo.getId();
-        }
-        MerchantPos merchantPos = MerchantImportHelper.createMerchantPos(posId, innerCode, bankId, channelId,dto);
-
-        if (null == posInfo) {
-            try {
-                // pos机信息保存
-                posId = merchantPosService.insertPos(merchantPos);
-            } catch (Exception e) {
-                logger.error("导入商户数据异常", e);
-                return ResultDTO.success("行数据的Pos机信息有误，导入失败");
-            }
-        } else {
-            merchantPosService.updateByPrimaryKeySelective(merchantPos);
-        }
-        
-        MerchantTerminal merchantTerminal = merchantTerminalDao.selectByTerminalType(posId, innerCode, "00");
-        Integer terId = null;
-        if (null != merchantTerminal) {
-            terId = merchantTerminal.getId();
-        }
-        MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(terId, innerCode, posId, "00",dto);
-        // 把1个终端信息打包成List
-        List<MerchantTerminal> terminalList = new ArrayList<MerchantTerminal>();
-        terminalList.add(merchantTerminal1);
-        try {
-            // 终端信息保存
-            merchantCoreService.doAddMerTerminal(terminalList);
-        } catch (Exception e) {
-            logger.error("导入商户数据异常", e);
-            return ResultDTO.success("行数据的商户终端信息有误，导入失败");
-        }
+       
         return ResultDTO.success();
 
     }
@@ -337,55 +218,6 @@ public class MerchantInfoImportService extends BaseService {
         return null;
     }
 
-    /**
-     * createChanelAndPosAndTer:(新入库渠道POS以及渠道一起)    设定文件
-     * @author    tangliang
-     * @date      2017年9月15日 上午11:08:22
-     * @return void    DOM对象
-     */
-    private ResultDTO<Object> createChanelAndPosAndTer(String innerCode, String merchantCode, Integer userId, Integer bankId,Integer timeNum, String channelType,
-                                                       String terminalType,MerchantSynchronizationDTO dto,String privateKey) {
-        MerchantChannel pufaChannel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, merchantCode, channelType);
-        if (null == pufaChannel) {
-            MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, merchantCode, channelType, userId, privateKey);
-            Integer pufaChannelId = null;
-            try {
-                // 渠道信息保存
-                pufaChannelId = merchantCoreService.doAddChannel(merchantChannel);
-            } catch (Exception e) {
-                logger.error("第" + timeNum + "行数据的渠道信息有误，导入失败", e);
-                return ResultDTO.fail("第" + timeNum + "行数据的渠道信息有误，导入失败");
-            }
-            /**
-             * 商戶pos机信息
-             */
-            MerchantPos merchantPos = MerchantImportHelper.createMerchantPos(null, innerCode, bankId, pufaChannelId,dto);
-            Integer posId = null;
-            try {
-                // pos机信息保存
-                posId = merchantPosService.insertPos(merchantPos);
-            } catch (Exception e) {
-                logger.error("第" + timeNum + "行数据的Pos机信息有误，导入失败", e);
-                return ResultDTO.fail("第" + timeNum + "行数据的Pos机信息有误，导入失败");
-            }
-
-            /**
-             * 商户终端信息
-             */
-            MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(null, innerCode, posId,terminalType,dto);
-            // 把1个终端信息打包成List
-            List<MerchantTerminal> terminalList = new ArrayList<MerchantTerminal>();
-            terminalList.add(merchantTerminal1);
-            try {
-                // 终端信息保存
-                merchantCoreService.doAddMerTerminal(terminalList);
-            } catch (Exception e) {
-                logger.error("第" + timeNum + "行数据的商户终端信息有误，导入失败", e);
-                return ResultDTO.fail("第" + timeNum + "行数据的商户终端信息有误，导入失败");
-            }
-        }
-        return ResultDTO.success();
-    }
     
     /**
      * handlerContact:(处理联系人过滤)
@@ -408,6 +240,144 @@ public class MerchantInfoImportService extends BaseService {
                 result.add(merchantContact);
             }
         }
-        return contcactList;
+        return result;
+    }
+    
+    /**
+     * handlerMerchantCore:(处理不同渠道商户信息)
+     * @param dto
+     * @param channelType
+     * @return
+     * @throws ParseException    设定文件
+     * @author    tangliang
+     * @date      2017年10月10日 下午1:44:50
+     * @return ResultDTO<String>    DOM对象
+     */
+    private ResultDTO<String> handlerMerchantCore(MerchantSynchronizationDTO dto,String channelType,String channelMerId,Integer userId,String terminalType) throws ParseException{
+        
+        String innerCode = null;
+        Integer bankId = null;
+        /**
+         * 判断渠道存在不
+         */
+        MerchantCore fnsMerchantcore = merchantCoreService.selectUniqueMer(dto.getPaperNum(), dto.getAccountNo(), channelType, channelMerId);
+        /**
+         * 商户基本信息
+         */
+        Integer merId = null;
+        if (null != fnsMerchantcore) {
+            merId = fnsMerchantcore.getId();
+            innerCode = fnsMerchantcore.getInnerCode();
+        } else {
+            innerCode = merchantCoreService.getInnerCode();
+            /**
+             * 商户银行卡信息
+             */
+            MerchantBank merchantBank = MerchantImportHelper.createMerchantBank(innerCode, dto);
+            try {
+                bankId = merchantCoreService.doAddBanks(merchantBank);
+            } catch (Exception e) {
+                logger.error("导入商户数据异常", e);
+                return ResultDTO.failForMessage("行数据的银行卡信息有误，导入失败");
+            }
+        }
+        
+        MerchantCore fnsMerCore = MerchantImportHelper.createMerchantCore(merId, innerCode, dto);
+        try {
+            merchantCoreService.doAddMerCore(fnsMerCore);
+        } catch (Exception e) {
+            logger.error("导入商户数据异常", e);
+            return ResultDTO.failForMessage("行数据的基本数据信息有误，导入失败");
+        }
+        /**
+         * 联系人处理
+         */
+        List<MerchantContact> contcactList = handlerContact(innerCode,dto);
+        try {
+            merchantCoreService.doAddMerContact(contcactList);
+        } catch (Exception e) {
+            logger.error("导入商户数据异常", e);
+            return ResultDTO.failForMessage("行数据的商户联系人信息有误，导入失败");
+        }
+        
+        /**
+         * 文件处理很慢，直接开启一个线程池执行
+         */
+        String taskInnerCode = innerCode;
+        cachedThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                //文件处理
+                saveFileToDB(dto.getFileInfos(), taskInnerCode);
+            }
+        });
+        
+        /**
+         * 判断渠道有没有
+         */
+        MerchantChannel channel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, channelMerId, channelType);
+        Integer channelId = null;
+        if (null == channel) {
+            // 新增加一个法奈昇的渠道 
+            MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, channelMerId, channelType, userId, null);
+            try {
+                // 渠道信息保存
+                channelId = merchantCoreService.doAddChannel(merchantChannel);
+            } catch (Exception e) {
+                logger.error("导入商户数据异常", e);
+                return ResultDTO.failForMessage("行数据的渠道信息有误，导入失败");
+            }
+
+        } else {
+            channelId = channel.getId();
+        }
+        
+        /**
+         * 商戶pos机信息
+         */
+        MerchantPos posInfo = merchantPosService.selectBySnCodeAndInnerCode(dto.getSnCode(), innerCode,channelId);
+        Integer posId = null;
+        String posName = null;
+        if (null != posInfo) {
+            posId = posInfo.getId();
+        }
+        if("01".equals(channelType)){
+            posName = "台码";
+        }else if("02".equals(channelType)){
+            posName = "二维码";
+        }
+        
+        MerchantPos merchantPos = MerchantImportHelper.createMerchantPos(posId, innerCode, bankId, channelId,dto,posName);
+
+        if (null == posInfo) {
+            try {
+                // pos机信息保存
+                posId = merchantPosService.insertPos(merchantPos);
+            } catch (Exception e) {
+                logger.error("导入商户数据异常", e);
+                return ResultDTO.failForMessage("行数据的Pos机信息有误，导入失败");
+            }
+        } else {
+            merchantPosService.updateByPrimaryKeySelective(merchantPos);
+        }
+        
+        MerchantTerminal merchantTerminal = merchantTerminalDao.selectByTerminalType(posId, innerCode, terminalType);
+        Integer terId = null;
+        if (null != merchantTerminal) {
+            terId = merchantTerminal.getId();
+        }
+        MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(terId, innerCode, posId, terminalType,dto);
+        // 把1个终端信息打包成List
+        List<MerchantTerminal> terminalList = new ArrayList<MerchantTerminal>();
+        terminalList.add(merchantTerminal1);
+        try {
+            // 终端信息保存
+            merchantCoreService.doAddMerTerminal(terminalList);
+        } catch (Exception e) {
+            logger.error("导入商户数据异常", e);
+            return ResultDTO.failForMessage("行数据的商户终端信息有误，导入失败");
+        }
+        
+        return ResultDTO.success();
     }
 }
