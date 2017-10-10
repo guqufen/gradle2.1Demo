@@ -19,7 +19,6 @@
 			</div>
 		</div>
 		<div class="loginContent">
-			<form id="login_info_form" name="login">
 				<div class="input">
 					<div class="icon">
 						<img src="img/login/userIcon.png" alt="用户名" >
@@ -33,7 +32,6 @@
 					<input type="password" placeholder="密码" class="loginInput" name="password" id="password">
 				</div>
 				<input id="btn_submit" type="button" name="" class="subBtn" value="登录">
-			</form>
 		</div>
 	</div>
 </body>
@@ -51,7 +49,10 @@ $('#btn_submit').click(function(){
 	$.ajax({
 		url:PROJECT_NAME+'/web/userOuter/doLogin',
 		type:'POST',
-		data:$('#login_info_form').serialize(),
+		data:{
+			'account' : $("#account").val(),
+			'password' : $("#password").val(),
+		},
 		success:function(data){
 			if(data.success){
 				//alert("正确");
