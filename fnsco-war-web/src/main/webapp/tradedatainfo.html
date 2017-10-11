@@ -1,462 +1,557 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="pragma" content="no -cache">
-    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
-    <meta http-equiv="expires" content="0">
-    <title>交易统计-法奈昇大数据平台</title>
-    <meta name="keywords" content="法奈昇大数据平台">
-    <meta name="description" content="法奈昇大数据平台">
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
-    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
-    <link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
-     <link href="css/plugins/bootstrap/fileinput.css" rel="stylesheet">
-    <link href="css/style.min.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="pragma" content="no -cache">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="expires" content="0">
+<title>交易统计-法奈昇大数据平台</title>
+<meta name="keywords" content="法奈昇大数据平台">
+<meta name="description" content="法奈昇大数据平台">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css"
+	rel="stylesheet">
+<link
+	href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
+<link href="css/plugins/bootstrap/fileinput.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
 </head>
 
 <body class="gray-bg">
-<div class="panel-body animated fadeInRight">
-    <div class="panel panel-default">
-        <form id="formSearch" class="form-horizontal">
-            <div class="form-group" style="margin-top:15px">
-                <div class="row col-sm-10">
-                    <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_id">订单号:</label>
-                        <input type="text" class="form-control" id="txt_search_id" name="orderNo" placeholder="请输入需要搜索的订单号">
-                    </div>
-                    <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_name">商户号:</label>
-                        <input type="text" class="form-control" id="txt_search_name" name="merId" placeholder="请输入需要搜索的结算商户号"/>
-                    </div>
-                    <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_price">商户名:</label>
-                        <input type="text" class="form-control" id="merName" name="merName" placeholder="请输入需要搜索的商户名"/>
-                    </div>
-                    <div class="col-sm-8 query-time">
-                        <label class="control-label" for="txt_search_price">支付日期:</label>
-                        <input type="text" value="" class="form-control" id="datetimepicker3" name="startTime"> -
-                        <input type="text" value="" class="form-control" id="datetimepicker4" name="endTime">
-                    </div>
-                    <div class="col-sm-4">
-                        <label class="control-label" for="txt_search_price">交易金额:</label>
-                        <input type="text" class="form-control" id="txt_search_price" name="amt" placeholder="请输入需要搜索的金额"/>
-                    </div>
-                    <div class="col-sm-8 query-time">
-                        <label class="control-label" for="txt_search_price">发送日期:</label>
-                        <input type="text" value="" class="form-control" id="datetimepicker1" name="startSendTime"> -
-                        <input type="text" value="" class="form-control" id="datetimepicker2" name="endSendTime">
-                    </div>
-                </div>
-                <div class="col-sm-2" style="text-align: right;">
-                    <button type="button" id="btn_query" class="btn btn-primary" onclick="javascript:queryEvent();"><span class="glyphicon glyphicon-search"></span>查询</button>
-                    <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent();"><span class="glyphicon glyphicon-refresh"></span>重置</button>
-                	<button type="button" id="btn_export" class="btn btn-info" onclick="javascript:exportEvent();"><span class="glyphicon glyphicon-export"></span>导出</button>
-                	<button type="button" id="btn_import" class="btn btn-info" onclick="javascript:importEvent();"><span class="glyphicon glyphicon-import"></span>导入</button>
-                </div>
-            </div>
-        </form>
-        <div class="ibox float-e-margins">
-            <div class="ibox-content">
-                <div class="row row-lg">
-                    <div class="col-sm-12">
-                        <table id="table" ></table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end -->
-        <!-- 导入 -->
-	<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" data-backdrop="static" data-keyboard="false">
-	    <div class="modal-dialog" role="document">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	                <h4 class="modal-title" id="importModalLabel">请选择Excel文件</h4>
-	            </div>
-	            <div class="modal-body">
-	                <div class="tab-content">
-	                <div class="modal-header">
-	                <button type="button" id="btn_down" class="btn btn-info" onclick="javascript:downEvent();"><span class="glyphicon glyphicon-download-alt"></span>下载模板</button>
-                    </div>
-                    <input type="file" name="excel_file_trade" id="excel_file_trade" multiple  class="file-loading" />
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div> 	   
-    </div>
-</div>
+	<div class="panel-body animated fadeInRight">
+		<div class="panel panel-default">
+			<form id="formSearch" class="form-horizontal">
+				<div class="form-group" style="margin-top: 15px">
+					<div class="row col-sm-10">
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_id">订单号:</label> <input
+								type="text" class="form-control" id="txt_search_id"
+								name="orderNo" placeholder="请输入需要搜索的订单号">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_name">商户号:</label> <input
+								type="text" class="form-control" id="txt_search_name"
+								name="merId" placeholder="请输入需要搜索的结算商户号" />
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_price">商户名:</label>
+							<input type="text" class="form-control" id="merName"
+								name="merName" placeholder="请输入需要搜索的商户名" />
+						</div>
+						<div class="col-sm-8 query-time">
+							<label class="control-label" for="txt_search_price">支付日期:</label>
+							<input type="text" value="" class="form-control"
+								id="datetimepicker3" name="startTime"> - <input
+								type="text" value="" class="form-control" id="datetimepicker4"
+								name="endTime">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_price">交易金额:</label>
+							<input type="text" class="form-control" id="txt_search_price"
+								name="amt" placeholder="请输入需要搜索的金额" />
+						</div>
+						<div class="col-sm-8 query-time">
+							<label class="control-label" for="txt_search_price">发送日期:</label>
+							<input type="text" value="" class="form-control"
+								id="datetimepicker1" name="startSendTime"> - <input
+								type="text" value="" class="form-control" id="datetimepicker2"
+								name="endSendTime">
+						</div>
+						<div class="col-sm-5">
+							<label class="control-label" for="txt_search_price">法人姓名:</label>
+							<input type="text" class="form-control" id="legal_person"
+								name="legal_person" placeholder="请输入需要搜索的法人姓名" />
+						</div>
+						<div class="col-sm-3">
+							<label class="control-label" for="paytype">支付方式:</label> <select
+								id="paytype" name="paytype" class="form-control">
+								<option value="02" selected>全部</option>
+								<option value="00">刷卡</option>
+								<option value="01">扫码</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-2" style="text-align: right;">
+						<button type="button" id="btn_query" class="btn btn-primary"
+							onclick="javascript:queryEvent();">
+							<span class="glyphicon glyphicon-search"></span>查询
+						</button>
+						<button type="button" id="btn_reset" class="btn btn-default"
+							onclick="javascript:resetEvent();">
+							<span class="glyphicon glyphicon-refresh"></span>重置
+						</button>
+						<button type="button" id="btn_export" class="btn btn-info"
+							onclick="javascript:exportEvent();">
+							<span class="glyphicon glyphicon-export"></span>导出
+						</button>
+						<button type="button" id="btn_import" class="btn btn-info"
+							onclick="javascript:importEvent();">
+							<span class="glyphicon glyphicon-import"></span>导入
+						</button>
+					</div>
+				</div>
+			</form>
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="row row-lg">
+						<div class="col-sm-12">
+							<table id="table"></table>
+							<div class="col-sm-2 pull-right">
+								<label class="form-inline">总金额:</label>
+								<input type="text" class="form-control text-right" disabled="true"　readOnly="true" id="total_amount"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end -->
+			<!-- 导入 -->
+			<div class="modal fade" id="importModal" tabindex="-1" role="dialog"
+				aria-labelledby="importModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="importModalLabel">请选择Excel文件</h4>
+						</div>
+						<div class="modal-body">
+							<div class="tab-content">
+								<div class="modal-header">
+									<button type="button" id="btn_down" class="btn btn-info"
+										onclick="javascript:downEvent();">
+										<span class="glyphicon glyphicon-download-alt"></span>下载模板
+									</button>
+								</div>
+								<input type="file" name="excel_file_trade" id="excel_file_trade"
+									multiple class="file-loading" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<!-- <script src="js/content.min.js"></script> -->
-<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
-<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
-<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
-<script src="js/plugins/bootstrap-table/tableExport.js"></script>
-<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
-<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
-<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
-<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
-<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="js/plugins/bootstrap/fileinput.js"></script>
-<script src="js/plugins/bootstrap/zh.js"></script>
-<script type="text/javascript" src="js/fnsco/common.js"></script>
+	<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+	<script
+		src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<!-- <script src="js/content.min.js"></script> -->
+	<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+	<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+	<script
+		src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+	<script
+		src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="js/plugins/bootstrap/fileinput.js"></script>
+	<script src="js/plugins/bootstrap/zh.js"></script>
+	<script type="text/javascript" src="js/fnsco/common.js"></script>
 
 </body>
 <script type="text/javascript">
-    $('#table').bootstrapTable({
-        search: false, //是否启动搜索栏
-        sidePagination:'server',
-        url:PROJECT_NAME+'/web/trade/query',
-        showRefresh: false,//是否显示刷新按钮
-        showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
-        toolbar: '#toolbar',  //工具按钮用哪个容器
-        striped: true,   //是否显示行间隔色
-        cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-        pagination: true,   //是否显示分页（*）
-        sortable: true,   //是否启用排序
-        sortOrder: "asc",   //排序方式
-        showExport: false, //显示导出按钮
-        buttonsAlign:"right",  //按钮位置
-        exportDataType: "all",//导出合适条件的所有数据
-        exportTypes:['excel'],//只导出excel
-        Icons:'glyphicon-export icon-share',
-        exportOptions:{  
-//             ignoreColumn: [0,1],  //忽略某一列的索引  
-            fileName: '商户流水信息',  //文件名称设置  
-            worksheetName: '流水列表',  //表格工作区名称  
-            tableName: '商户流水信息',  
-            excelFileFormat:'xmlss',
-            excelstyles: ['background-color', 'color', 'font-size', 'font-weight']
-//             onMsoNumberFormat: DoOnMsoNumberFormat  
-        },
-        pageNumber:1,   //初始化加载第一页，默认第一页
-        pageSize: 15,   //每页的记录行数（*）
-        pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
-        queryParams:queryParams,
-        responseHandler:responseHandler,//处理服务器返回数据
-        columns: [{
-            field: 'orderNo',
-            title: '订单号'
-        },{
-            field: 'orderIdScan',
-            title: '扫码交易的订单号'
-        },{
-            field: 'merName',
-            title: '商户名'
-        },{
-            field: 'merId',
-            title: '结算商户号'
-        },{
-            field: 'timeStamp',
-            title: '支付时间',
-            formatter:formatTime
-        },{
-            field: 'payType',
-            title: '支付方式',
-            formatter:formatPayType
-        },{
-            field: 'amt',
-            title: '交易金额(元)',
-            formatter:formatAmt,
-            align:'right'
-        },{
-            field: 'orderTime',
-            title: '订单时间',
-            formatter:formatTime
-        },{
-            field: 'sendTime',
-            title: '发送时间',
-            formatter:formatTime
-        },{
-            field: 'termId',
-            title: '终端号'
-        },{
-            field: 'batchNo',
-            title: '批次号'
-        },{
-            field: 'traceNo',
-            title: '凭证号'
-        },{
-            field: 'authCode',
-            title: '授权码'
-        },{
-            field: 'source',
-            title: '来源',
-            formatter:formatSource
-        },{
-            field: 'createTime',
-            title: '创建时间',
-            formatter:formatDate
-        },{
-            field: 'status',
-            title: '状态',
-            formatter:formatStatus
-        }]
-    });
-    
-  //商户注册来源格式处理
-    function formatSource(value, row, index){
-	    if(!value){
-	    	return '-';
-	    }
-	    else if(value == '00')
-    	{
-    		return '拉卡拉';
-    	}else{
-    		return '其他';
-    	}	
-    }
-  //支付方式格式化
-  function formatPayType(value, row, index){
-	  if(!value){
-	    	return '-';
-	    }
-	  else if(value == '00'){
-  		return '刷卡';
-  	 }else if(value == '01'){
-  		return '二维码';
-  	}else{
-  		return '其他';
-  	}	
-  }
-  //状态格式化
-  function formatStatus(value, row, index){
-	  if(!value){
-	    	return '-';
-	    }
-	  else if(value == 0){
-		  return '非正常交易';
-	  }
-	  else if(value == 1){
-		  return '正常交易';
-	  }
-  } 
-  //金额格式化
-  function formatAmt(value, row, index){
-	  if(value){
-		  var num = Number(value);
-		  var res = returnFloat(num/100);
-		  return res;
-	  }
-	  return '--';
-  }
-  function returnFloat(value){
-	  var value=Math.round(parseFloat(value)*100)/100;
-	  var xsd=value.toString().split(".");
-	  if(xsd.length==1){
-	  value=value.toString()+".00";
-	  return value;
-	  }
-	  if(xsd.length>1){
-	  if(xsd[1].length<2){
-	   value=value.toString()+"0";
-	  }
-	  return value;
-	  }
-  }
-  //时间格式化
-  function formatDate(value, row, index){
-	  return formatDateUtil(value);
-  }
-  function formatTime(value, row, index){
-	  return formateTimeUtil(value);
-  }
-  //条件查询按钮事件
-    function queryEvent(){
- 	   $('#table').bootstrapTable('refresh');
-    }
-    //重置按钮事件
-    function resetEvent(){
- 	   $('#formSearch')[0].reset();
-    }
-  //模板下载按钮事件
-    function downEvent(){
-    	var url=PROJECT_NAME+'/web/trade/down';
-       window.open(url, 'Excel导入');
-    }
-    //导入按钮事件
-    function importEvent(){
-    	$('#importModal').modal();
-    }
-    $(function () {
-        //0.初始化fileinput
-        var oFileInput = new FileInput();
-        oFileInput.Init("excel_file_trade", PROJECT_NAME+'/web/trade/doImport');
-    });
-    //初始化fileinput
-    var FileInput = function () {
-        var oFile = new Object();
+	//进入页面获取金额
+	$(function() {
+		queryTotalAmount();
+	});
+	$('#table').bootstrapTable(
+			{
+				search : false, //是否启动搜索栏
+				sidePagination : 'server',
+				url : PROJECT_NAME + '/web/trade/query',
+				showRefresh : false,//是否显示刷新按钮
+				showPaginationSwitch : false,//是否显示 数据条数选择框(分页是否显示)
+				toolbar : '#toolbar', //工具按钮用哪个容器
+				striped : true, //是否显示行间隔色
+				cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination : true, //是否显示分页（*）
+				sortable : true, //是否启用排序
+				sortOrder : "asc", //排序方式
+				showExport : false, //显示导出按钮
+				buttonsAlign : "right", //按钮位置
+				exportDataType : "all",//导出合适条件的所有数据
+				exportTypes : [ 'excel' ],//只导出excel
+				Icons : 'glyphicon-export icon-share',
+				exportOptions : {
+					//             ignoreColumn: [0,1],  //忽略某一列的索引  
+					fileName : '商户流水信息', //文件名称设置  
+					worksheetName : '流水列表', //表格工作区名称  
+					tableName : '商户流水信息',
+					excelFileFormat : 'xmlss',
+					excelstyles : [ 'background-color', 'color', 'font-size',
+							'font-weight' ]
+				//             onMsoNumberFormat: DoOnMsoNumberFormat  
+				},
+				pageNumber : 1, //初始化加载第一页，默认第一页
+				pageSize : 15, //每页的记录行数（*）
+				pageList : [ 15, 20, 50, 100 ], //可供选择的每页的行数（*）
+				queryParams : queryParams,
+				responseHandler : responseHandler,//处理服务器返回数据
+				columns : [ {
+					field : 'orderNo',
+					title : '订单号'
+				}, {
+					field : 'orderIdScan',
+					title : '扫码交易的订单号'
+				}, {
+					field : 'merName',
+					title : '商户名'
+				}, {
+					field : 'merId',
+					title : '结算商户号'
+				}, {
+					field : 'timeStamp',
+					title : '支付时间',
+					formatter : formatTime
+				}, {
+					field : 'payType',
+					title : '支付方式',
+					formatter : formatPayType
+				}, {
+					field : 'amt',
+					title : '交易金额(元)',
+					formatter : formatAmt,
+					align : 'right'
+				}, {
+					field : 'orderTime',
+					title : '订单时间',
+					formatter : formatTime
+				}, {
+					field : 'sendTime',
+					title : '发送时间',
+					formatter : formatTime
+				}, {
+					field : 'termId',
+					title : '终端号'
+				}, {
+					field : 'batchNo',
+					title : '批次号'
+				}, {
+					field : 'traceNo',
+					title : '凭证号'
+				}, {
+					field : 'authCode',
+					title : '授权码'
+				}, {
+					field : 'source',
+					title : '来源',
+					formatter : formatSource
+				}, {
+					field : 'createTime',
+					title : '创建时间',
+					formatter : formatDate
+				}, {
+					field : 'status',
+					title : '状态',
+					formatter : formatStatus
+				} ]
+			});
 
-        //初始化fileinput控件（第一次初始化）
-        oFile.Init = function(ctrlName, uploadUrl) {
-        var control = $('#' + ctrlName);
+	//商户注册来源格式处理
+	function formatSource(value, row, index) {
+		if (!value) {
+			return '-';
+		} else if (value == '00') {
+			return '拉卡拉';
+		} else {
+			return '其他';
+		}
+	}
+	//支付方式格式化
+	function formatPayType(value, row, index) {
+		if (!value) {
+			return '-';
+		} else if (value == '00') {
+			return '刷卡';
+		} else if (value == '01') {
+			return '二维码';
+		} else {
+			return '其他';
+		}
+	}
+	//状态格式化
+	function formatStatus(value, row, index) {
+		if (!value) {
+			return '-';
+		} else if (value == 0) {
+			return '非正常交易';
+		} else if (value == 1) {
+			return '正常交易';
+		}
+	}
+	//金额格式化
+	function formatAmt(value, row, index) {
+		if (value) {
+			var num = Number(value);
+			var res = returnFloat(num / 100);
+			return res;
+		}
+		return '--';
+	}
+	function returnFloat(value) {
+		var value = Math.round(parseFloat(value) * 100) / 100;
+		var xsd = value.toString().split(".");
+		if (xsd.length == 1) {
+			value = value.toString() + ".00";
+			return value;
+		}
+		if (xsd.length > 1) {
+			if (xsd[1].length < 2) {
+				value = value.toString() + "0";
+			}
+			return value;
+		}
+	}
+	//时间格式化
+	function formatDate(value, row, index) {
+		return formatDateUtil(value);
+	}
+	function formatTime(value, row, index) {
+		return formateTimeUtil(value);
+	}
+	//条件查询按钮事件
+	function queryEvent() {
+		$('#table').bootstrapTable('refresh');
+		queryTotalAmount();
+	}
+	//条件查询总金额
+	function queryTotalAmount() {
+		$.ajax({
+			traditional : true,
+			url : PROJECT_NAME + '/web/trade/queryTotalAmount',
+			data : {
+				orderNo : $.trim($('#txt_search_id').val()),
+				merId : $.trim($('#txt_search_name').val()),
+				merName : $.trim($('#merName').val()),
+				amt : $.trim($('#txt_search_price').val()),
+				startSendTime : $('#datetimepicker1').val(),
+				endSendTime : $('#datetimepicker2').val(),
+				startTime : $('#datetimepicker3').val(),
+				endTime : $('#datetimepicker4').val(),
+				legalPerson : $('#legal_person').val(),
+				payType : $('#paytype').val(),
+			},
+			type : 'POST',
+			success : function(data) {
+				unloginHandler(data);
+				if (data.success) {
+					var num = Number(data.data.result);
+					var res = returnFloat(num / 100);
+					$("#total_amount").val(res);
+				} else {
+					alert('获取失败');
+				}
+			}
+		});
+	}
+	//重置按钮事件
+	function resetEvent() {
+		$('#formSearch')[0].reset();
+		queryEvent();
+	}
+	//模板下载按钮事件
+	function downEvent() {
+		var url = PROJECT_NAME + '/web/trade/down';
+		window.open(url, 'Excel导入');
+	}
+	//导入按钮事件
+	function importEvent() {
+		$('#importModal').modal();
+	}
+	$(function() {
+		//0.初始化fileinput
+		var oFileInput = new FileInput();
+		oFileInput.Init("excel_file_trade", PROJECT_NAME
+				+ '/web/trade/doImport');
+	});
+	//初始化fileinput
+	var FileInput = function() {
+		var oFile = new Object();
 
-        //初始化上传控件的样式
-        control.fileinput({
-            language: 'zh', //设置语言
-            uploadUrl: uploadUrl, //上传的地址
-            allowedFileExtensions: ['xls', 'xlsx'],//接收的文件后缀
-            showUpload: true, //是否显示上传按钮
-            showCaption: false,//是否显示标题
-            browseClass: "btn btn-primary", //按钮样式     
-            //dropZoneEnabled: false,//是否显示拖拽区域
-            //minImageWidth: 50, //图片的最小宽度
-            //minImageHeight: 50,//图片的最小高度
-            //maxImageWidth: 1000,//图片的最大宽度
-            //maxImageHeight: 1000,//图片的最大高度
-            maxFileSize: 0,//单位为kb，如果为0表示不限制文件大小
-            //minFileCount: 0,
-            maxFileCount: 1, //表示允许同时上传的最大文件个数
-            enctype: 'multipart/form-data',
-            validateInitialCount:true,
-            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
-            msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
-        }).on("fileuploaded", function (event, data) {
-            console.log(data);
-            var data = data.response.data;
-            if (data != "success") {
-            	alert(data);
-            	//$('#importModal').modal("hide");
-                return;
-            }
-            //1.初始化表格
-            /*var oTable = new TableInit();
-            oTable.Init(data);
-            $("#div_startimport").show();*/ 
-            queryEvent("table");
-        });;
+		//初始化fileinput控件（第一次初始化）
+		oFile.Init = function(ctrlName, uploadUrl) {
+			var control = $('#' + ctrlName);
 
-        //导入文件上传完成之后的事件
-       
-    }
-        return oFile;
-    };
-  //导出按钮事件
-    function exportEvent(){
-    	//拼接参数
-    			   var orderNo =$.trim($('#txt_search_id').val());
-     			   var merId=$.trim($('#txt_search_name').val());
-     			   var merName=$.trim($('#merName').val());
-     			   var amt=$.trim($('#txt_search_price').val());
-     			   var startSendTime=$('#datetimepicker1').val();
-     			   var endSendTime=$('#datetimepicker2').val();
-     			   var startTime=$('#datetimepicker3').val();
-    			   var endTime=$('#datetimepicker4').val();
-     			   var url=PROJECT_NAME+'/web/trade/export'+'?orderNo='+orderNo+'&merId='+merId
-					+'&merName='+merName+'&amt='+amt
-					+'&startSendTime='+startSendTime+'&endSendTime='+endSendTime
-					+'&startTime='+startTime+'&endTime='+endTime;
+			//初始化上传控件的样式
+			control.fileinput({
+				language : 'zh', //设置语言
+				uploadUrl : uploadUrl, //上传的地址
+				allowedFileExtensions : [ 'xls', 'xlsx' ],//接收的文件后缀
+				showUpload : true, //是否显示上传按钮
+				showCaption : false,//是否显示标题
+				browseClass : "btn btn-primary", //按钮样式     
+				//dropZoneEnabled: false,//是否显示拖拽区域
+				//minImageWidth: 50, //图片的最小宽度
+				//minImageHeight: 50,//图片的最小高度
+				//maxImageWidth: 1000,//图片的最大宽度
+				//maxImageHeight: 1000,//图片的最大高度
+				maxFileSize : 0,//单位为kb，如果为0表示不限制文件大小
+				//minFileCount: 0,
+				maxFileCount : 1, //表示允许同时上传的最大文件个数
+				enctype : 'multipart/form-data',
+				validateInitialCount : true,
+				previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
+				msgFilesTooMany : "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+			}).on("fileuploaded", function(event, data) {
+				console.log(data);
+				var data = data.response.data;
+				if (data != "success") {
+					alert(data);
+					//$('#importModal').modal("hide");
+					return;
+				}
+				//1.初始化表格
+				/*var oTable = new TableInit();
+				oTable.Init(data);
+				$("#div_startimport").show();*/
+				queryEvent("table");
+			});
+			;
+
+			//导入文件上传完成之后的事件
+
+		}
+		return oFile;
+	};
+	//导出按钮事件
+	function exportEvent() {
+		//拼接参数
+		var orderNo = $.trim($('#txt_search_id').val());
+		var merId = $.trim($('#txt_search_name').val());
+		var merName = $.trim($('#merName').val());
+		var amt = $.trim($('#txt_search_price').val());
+		var startSendTime = $('#datetimepicker1').val();
+		var endSendTime = $('#datetimepicker2').val();
+		var startTime = $('#datetimepicker3').val();
+		var endTime = $('#datetimepicker4').val();
+		var legalPerson = $('#legal_person').val();
+		var payType = $('#paytype').val();
+		var url = PROJECT_NAME + '/web/trade/export' + '?orderNo=' + orderNo
+				+ '&merId=' + merId + '&merName=' + merName + '&amt=' + amt
+				+ '&startSendTime=' + startSendTime + '&endSendTime='
+				+ endSendTime + '&startTime=' + startTime + '&endTime='
+				+ endTime + '&legalPerson=' + legalPerson + '&payType='
+				+ payType;
 		window.open(url, 'Excel导出');
-    }
-    window.operateEvents = {
-        'click .redact': function (e, value, row, index) {
-            alert('You click like action, row: ' + JSON.stringify(row));
-        },
-        'click .remove': function (e, value, row, index) {
-            $table.bootstrapTable('remove', {
-                field: 'id',
-                values: [row.id]
-            });
-        }
-    };
-    function operateFormatter(value, row, index) {
-        return [
-            '<a class="redact" href="javascript:void(0)" title="编辑">',
-            '<i class="glyphicon glyphicon-pencil"></i>',
-            '</a>  ',
-            '<a class="remove" href="javascript:void(0)" title="删除">',
-            '<i class="glyphicon glyphicon glyphicon-trash"></i>',
-            '</a>'
-        ].join('');
-    }
-	
-  //组装请求参数
-    function queryParams(params)
-    {
- 	   var param ={
- 			   currentPageNum : this.pageNumber,
- 			   pageSize : this.pageSize,
- 			   orderNo :$.trim($('#txt_search_id').val()),
- 			   merId:$.trim($('#txt_search_name').val()),
- 			   merName:$.trim($('#merName').val()),
- 			   amt:$.trim($('#txt_search_price').val()),
- 			   startSendTime:$('#datetimepicker1').val(),
- 			   endSendTime:$('#datetimepicker2').val(),
- 			   startTime:$('#datetimepicker3').val(),
- 			   endTime:$('#datetimepicker4').val()
- 	   }
- 	   return param;
-    }
-    //处理后台返回数据
-    function responseHandler(res) { 
-    	unloginHandler(res);
- 	    if (res) {
- 	        return {
- 	            "rows" : res.list,
- 	            "total" : res.total
- 	        };
- 	    } else {
- 	        return {
- 	            "rows" : [],
- 	            "total" : 0
- 	        };
- 	    }
- 	}
-    
-    /*弹框下一步按钮事件*/
-    $(".nextBtn").click(function(){
-        $(".nav-tabs li.active").removeClass('active').next().addClass('active');
-    })
-    $('#datetimepicker1').datetimepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayBtn: true,
-        todayHighlight: true,
-        showMeridian: true,
-        pickerPosition: "bottom-left",
-        language: 'zh-CN',//中文，需要引用zh-CN.js包
-        startView: 2,//月视图
-        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
-    });
-    $('#datetimepicker2').datetimepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayBtn: true,
-        todayHighlight: true,
-        showMeridian: true,
-        pickerPosition: "bottom-left",
-        language: 'zh-CN',//中文，需要引用zh-CN.js包
-        startView: 2,//月视图
-        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
-    });
-    $('#datetimepicker3').datetimepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayBtn: true,
-        todayHighlight: true,
-        showMeridian: true,
-        pickerPosition: "bottom-left",
-        language: 'zh-CN',//中文，需要引用zh-CN.js包
-        startView: 2,//月视图
-        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
-    });
-    $('#datetimepicker4').datetimepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayBtn: true,
-        todayHighlight: true,
-        showMeridian: true,
-        pickerPosition: "bottom-left",
-        language: 'zh-CN',//中文，需要引用zh-CN.js包
-        startView: 2,//月视图
-        minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
-    });
+	}
+	window.operateEvents = {
+		'click .redact' : function(e, value, row, index) {
+			alert('You click like action, row: ' + JSON.stringify(row));
+		},
+		'click .remove' : function(e, value, row, index) {
+			$table.bootstrapTable('remove', {
+				field : 'id',
+				values : [ row.id ]
+			});
+		}
+	};
+	function operateFormatter(value, row, index) {
+		return [ '<a class="redact" href="javascript:void(0)" title="编辑">',
+				'<i class="glyphicon glyphicon-pencil"></i>', '</a>  ',
+				'<a class="remove" href="javascript:void(0)" title="删除">',
+				'<i class="glyphicon glyphicon glyphicon-trash"></i>', '</a>' ]
+				.join('');
+	}
+
+	//组装请求参数
+	function queryParams(params) {
+		var param = {
+			currentPageNum : this.pageNumber,
+			pageSize : this.pageSize,
+			orderNo : $.trim($('#txt_search_id').val()),
+			merId : $.trim($('#txt_search_name').val()),
+			merName : $.trim($('#merName').val()),
+			amt : $.trim($('#txt_search_price').val()),
+			startSendTime : $('#datetimepicker1').val(),
+			endSendTime : $('#datetimepicker2').val(),
+			startTime : $('#datetimepicker3').val(),
+			endTime : $('#datetimepicker4').val(),
+			legalPerson : $('#legal_person').val(),
+			payType : $('#paytype').val(),
+		}
+		return param;
+	}
+	//处理后台返回数据
+	function responseHandler(res) {
+		unloginHandler(res);
+		if (res) {
+			return {
+				"rows" : res.list,
+				"total" : res.total
+			};
+		} else {
+			return {
+				"rows" : [],
+				"total" : 0
+			};
+		}
+	}
+
+	/*弹框下一步按钮事件*/
+	$(".nextBtn").click(
+			function() {
+				$(".nav-tabs li.active").removeClass('active').next().addClass(
+						'active');
+			})
+	$('#datetimepicker1').datetimepicker({
+		format : 'yyyy-mm-dd',
+		autoclose : true,
+		todayBtn : true,
+		todayHighlight : true,
+		showMeridian : true,
+		pickerPosition : "bottom-left",
+		language : 'zh-CN',//中文，需要引用zh-CN.js包
+		startView : 2,//月视图
+		minView : 2
+	//日期时间选择器所能够提供的最精确的时间选择视图
+	});
+	$('#datetimepicker2').datetimepicker({
+		format : 'yyyy-mm-dd',
+		autoclose : true,
+		todayBtn : true,
+		todayHighlight : true,
+		showMeridian : true,
+		pickerPosition : "bottom-left",
+		language : 'zh-CN',//中文，需要引用zh-CN.js包
+		startView : 2,//月视图
+		minView : 2
+	//日期时间选择器所能够提供的最精确的时间选择视图
+	});
+	$('#datetimepicker3').datetimepicker({
+		format : 'yyyy-mm-dd',
+		autoclose : true,
+		todayBtn : true,
+		todayHighlight : true,
+		showMeridian : true,
+		pickerPosition : "bottom-left",
+		language : 'zh-CN',//中文，需要引用zh-CN.js包
+		startView : 2,//月视图
+		minView : 2
+	//日期时间选择器所能够提供的最精确的时间选择视图
+	});
+	$('#datetimepicker4').datetimepicker({
+		format : 'yyyy-mm-dd',
+		autoclose : true,
+		todayBtn : true,
+		todayHighlight : true,
+		showMeridian : true,
+		pickerPosition : "bottom-left",
+		language : 'zh-CN',//中文，需要引用zh-CN.js包
+		startView : 2,//月视图
+		minView : 2
+	//日期时间选择器所能够提供的最精确的时间选择视图
+	});
 </script>
 </html>
