@@ -78,7 +78,6 @@ public class MerchantInfoImportService extends BaseService {
         /**
          * 爱农
          */
-//        dto.setpos
         ResultDTO<String> aiResult  = handlerMerchantCore(dto,"02","929010048160219",userId,"01");
         if (!aiResult.isSuccess()) {
             return ResultDTO.success(aiResult.getData());
@@ -341,6 +340,16 @@ public class MerchantInfoImportService extends BaseService {
         if (null != posInfo) {
             posId = posInfo.getId();
         }
+        
+        if("01".equals(channelType) || "02".equals(channelType)){
+            dto.setSnCode(null);
+            dto.setPosFactory(null);
+            dto.setPosType(null);
+            dto.setSalesSlip(null);
+            dto.setInnerTermCode(null);
+            dto.setTerminalCode(null);
+        }
+        
         if("01".equals(channelType)){
             posName = "台码";
         }else if("02".equals(channelType)){

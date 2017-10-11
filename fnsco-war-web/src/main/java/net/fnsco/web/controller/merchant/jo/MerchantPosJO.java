@@ -64,7 +64,7 @@ public class MerchantPosJO extends JO {
 		terminal1.setAlipayFee(alipayFee);
 		terminal1.setWechatFee(wechatFee);
 		terminal1.setTerminalCode(terminalCode1);
-		terminal1.setInnerTermCode(terminalCode1);
+		terminal1.setChannelTerminalCode(terminalCode1);
 		//判断下，如果是更新只需要更新InnerTermCode字段，不更新TerminalCode
 		if(null != terminalId1 && terminalId1.intValue() != 0){
 		    terminal1.setTerminalCode(null);
@@ -78,7 +78,7 @@ public class MerchantPosJO extends JO {
 		terminal2.setCreditCardRate(creditCardRate);
 		terminal2.setDebitCardRate(debitCardRate);
 		terminal2.setTerminalCode(terminalCode2);
-		terminal2.setInnerTermCode(terminalCode2);
+		terminal2.setChannelTerminalCode(terminalCode2);
 		//判断下，如果是更新只需要更新InnerTermCode字段，不更新TerminalCode
         if(null != terminalId2 && terminalId2.intValue() != 0){
             terminal2.setTerminalCode(null);

@@ -315,7 +315,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         //        merchantTerminal.setChannelId(Integer.valueOf(request.getParameter("channelId")));
         //        merchantTerminal.setChannelName(request.getParameter("channelName"));
         merchantTerminal.setTerminalCode(request.getParameter("terminalCode"));
-        merchantTerminal.setInnerTermCode(request.getParameter("innerTermCode"));
+//        merchantTerminal.setInnerTermCode(request.getParameter("innerTermCode"));
         //        merchantTerminal.setSnCode(request.getParameter("snCode"));
         merchantTerminal.setTerminalBatch(request.getParameter("terminalBatch"));
         merchantTerminal.setTerminalPara(request.getParameter("terminalPara"));
@@ -436,7 +436,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         String innerCode = "";
         for (MerchantTerminal merchantTerminal : merchantTerminals) {
-            merchantTerminal.setInnerTermCode(merchantTerminal.getTerminalCode());
             if (null != merchantTerminal.getId()) {
                 merchantTerminalDao.updateByPrimaryKeySelective(merchantTerminal);
             } else {

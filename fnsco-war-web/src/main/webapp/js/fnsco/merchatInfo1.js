@@ -780,7 +780,7 @@ $("#btn_saveBankCard").click(function(){
 //添加终端信息列表
 var TerminalList=-100;
 function terminalHtml(num){
-  return '<div class="terminal-list"><div class="row addChannel">'+
+	return '<div class="terminal-list"><div class="remove-terminalList remove-terminalList'+num+'" editId="'+num+'" ></div><div class="row addChannel">'+
         '<div class="col-sm-4"><label class="control-label" for="channelMerId'+num+'">渠道商户号：</label><input type="text" class="form-control channelMerId" id="channelMerId'+num+'" name="channelMerId'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道名称：</label><select id="channelType'+num+'" name="channelType'+num+'" class="channelType form-control" ><option value="00">拉卡拉</option><option value="01">浦发</option><option value="02">爱农</option><option value="03">法奈昇</option></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">渠道Key：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'" required="required"></div>'+
@@ -1270,13 +1270,13 @@ function editData(id){
               var terminalLen=data.data.channel[i].posInfos[j].terminal.length;
               for(var o=0;o<terminalLen;o++){
                 if(data.data.channel[i].posInfos[j].terminal[o].terminalType=='00'){
-                  $('input[name="terminalCode2'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].terminalCode);
+                  $('input[name="terminalCode2'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].channelTerminalCode);
                   $('input[name="debitCardMaxFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].debitCardMaxFee);
                   $('input[name="debitCardRate'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].debitCardRate);
                   $('input[name="creditCardRate'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].creditCardRate);
                   $('input[name="terminalId2'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].id);
                 }else if(data.data.channel[i].posInfos[j].terminal[o].terminalType=='01'){
-                  $('input[name="terminalCode1'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].terminalCode);
+                  $('input[name="terminalCode1'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].channelTerminalCode);
                   $('input[name="alipayFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].alipayFee);
                   $('input[name="wechatFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].wechatFee);
                   $('input[name="terminalId1'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].id);
