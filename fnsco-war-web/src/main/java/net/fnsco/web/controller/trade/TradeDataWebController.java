@@ -82,7 +82,19 @@ public class TradeDataWebController extends BaseController {
 
         return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize);
     }
-
+    /**
+     * 查询总金额
+     * @param tradeDataDTO
+     * @return
+     */
+    @RequestMapping(value="queryTotalAmount",method=RequestMethod.POST)
+    @ResponseBody
+    @RequiresPermissions(value = { "m:trade:list" })
+    public ResultDTO<String>  queryTotalAmount(TradeDataDTO tradeDataDTO){
+    	String total= tradeDataService.queryTotalAmount(tradeDataDTO);
+    	return ResultDTO.success(total);
+    }
+    
     /**
      * 交易流水excel导出
      * 
