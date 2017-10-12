@@ -27,6 +27,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 
 /**
  * https 请求 微信为https的请求
@@ -39,6 +40,17 @@ public class HttpUtils {
     private static final String _GET            = "GET";   // GET
     private static final String _POST           = "POST";  // POST
 
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        String url = "https://ddk-api.vcredit.com/o2o/platform/api/security/register/introduction";
+        Map<String, String> params = Maps.newHashMap();
+        params.put("invitationCode", "kvrf64");
+        params.put("mobile", "18268008227");
+        params.put("password", "670b14728ad9902aecba32e22fa4f6bd");
+        params.put("smsCode", "414103");
+        String result = post(url, params);
+        System.out.println(result);
+    }
+
     /**
      * 初始化http请求参数
      * 
@@ -48,8 +60,7 @@ public class HttpUtils {
      * @return
      * @throws IOException
      */
-    private static HttpURLConnection initHttp(String url, String method,
-                                              Map<String, String> headers) throws IOException {
+    private static HttpURLConnection initHttp(String url, String method, Map<String, String> headers) throws IOException {
         URL _url = new URL(url);
         HttpURLConnection http = (HttpURLConnection) _url.openConnection();
         // 连接超时
@@ -58,8 +69,7 @@ public class HttpUtils {
         http.setReadTimeout(25000);
         http.setRequestMethod(method);
         http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        http.setRequestProperty("User-Agent",
-            "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.146 Safari/537.36");
+        http.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.146 Safari/537.36");
         if (null != headers && !headers.isEmpty()) {
             for (Entry<String, String> entry : headers.entrySet()) {
                 http.setRequestProperty(entry.getKey(), entry.getValue());
@@ -82,11 +92,7 @@ public class HttpUtils {
      * @throws NoSuchProviderException
      * @throws KeyManagementException
      */
-    private static HttpsURLConnection initHttps(String url, String method,
-                                                Map<String, String> headers) throws IOException,
-                                                                             NoSuchAlgorithmException,
-                                                                             NoSuchProviderException,
-                                                                             KeyManagementException {
+    private static HttpsURLConnection initHttps(String url, String method, Map<String, String> headers) throws IOException, NoSuchAlgorithmException, NoSuchProviderException, KeyManagementException {
         TrustManager[] tm = { new MyX509TrustManager() };
         SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
         sslContext.init(null, tm, new java.security.SecureRandom());
@@ -101,9 +107,10 @@ public class HttpUtils {
         // 读取超时 --服务器响应比较慢，增大时间
         http.setReadTimeout(25000);
         http.setRequestMethod(method);
-        http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        http.setRequestProperty("User-Agent",
-            "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.146 Safari/537.36");
+        //http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        http.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+        //http.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.146 Safari/537.36");
+        http.setRequestProperty("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1");
         if (null != headers && !headers.isEmpty()) {
             for (Entry<String, String> entry : headers.entrySet()) {
                 http.setRequestProperty(entry.getKey(), entry.getValue());
@@ -214,8 +221,7 @@ public class HttpUtils {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public static String post(String url,
-                              Map<String, String> params) throws UnsupportedEncodingException {
+    public static String post(String url, Map<String, String> params) throws UnsupportedEncodingException {
         return post(url, map2Url(params), null);
     }
 
@@ -227,8 +233,7 @@ public class HttpUtils {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public static String post(String url, Map<String, String> params,
-                              Map<String, String> headers) throws UnsupportedEncodingException {
+    public static String post(String url, Map<String, String> params, Map<String, String> headers) throws UnsupportedEncodingException {
         return post(url, map2Url(params), headers);
     }
 
@@ -238,8 +243,7 @@ public class HttpUtils {
      * @return 返回类型:
      * @throws UnsupportedEncodingException
      */
-    public static String initParams(String url,
-                                    Map<String, String> params) throws UnsupportedEncodingException {
+    public static String initParams(String url, Map<String, String> params) throws UnsupportedEncodingException {
         if (null == params || params.isEmpty()) {
             return url;
         }
@@ -309,12 +313,10 @@ class MyX509TrustManager implements X509TrustManager {
         return null;
     }
 
-    public void checkClientTrusted(X509Certificate[] chain,
-                                   String authType) throws CertificateException {
+    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
     }
 
-    public void checkServerTrusted(X509Certificate[] chain,
-                                   String authType) throws CertificateException {
+    public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
     }
 
 }

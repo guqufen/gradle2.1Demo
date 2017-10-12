@@ -114,7 +114,7 @@ public class TradeDataOpenController extends BaseController {
         //tradeData.setPayType(ServiceConstant.PAY_TYPE_MAP.get(payType));
         //tradeData.setPaySubType(ServiceConstant.PAY_SUB_TYPE_MAP.get(payType));
         if(Strings.isNullOrEmpty(TradeStateEnum.getNameByCode(tradeData.getRespCode()))){
-            return fail("回应状态必须为1001成功1002失败1000进行中");
+            return fail("回应状态必须为1001成功1002失败1111进行中");
         }
         //tradeData.setRespCode(ServiceConstant.TradeStateEnum.SUCCESS.getCode());
         //tradeData.setPayMedium(BigdataConstant.PayMediumEnum.FIX_QR.getCode());

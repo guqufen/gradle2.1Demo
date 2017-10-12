@@ -38,6 +38,12 @@ public interface TradeDataService {
      */
     ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize);
     /**
+     * 总金额查询
+     * @param tradeDataDTO
+     * @return
+     */
+    String queryTotalAmount(TradeDataDTO tradeDataDTO);
+    /**
     * 查询符合条件的数据用于excel导出
     * @param tradeDataDTO
     * @return
