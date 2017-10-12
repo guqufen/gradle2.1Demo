@@ -128,6 +128,16 @@ public class TradeData {
     private List<String> terminalList;
     //创建时间string类型显示
     private String       createTimeStr;
+    
+    private String  legalPerson;
+    
+    public String getLegalPerson() {
+		return legalPerson;
+	}
+
+	public void setLegalPerson(String legalPerson) {
+		this.legalPerson = legalPerson;
+	}
 
     /**
      * channelTermCode

@@ -60,8 +60,17 @@ public class TradeDataDTO extends DTO {
     private Date 	createTime;
     
     private String  channelTermCode;
+    private String  legalPerson;
     
-    /**
+    public String getLegalPerson() {
+		return legalPerson;
+	}
+
+	public void setLegalPerson(String legalPerson) {
+		this.legalPerson = legalPerson;
+	}
+
+	/**
      * channelTermCode
      *
      * @return  the channelTermCode

@@ -393,7 +393,7 @@ $('#btn_yes1').click(function() {
 	/*var phone = isphone(name);
 	if (phone == false) {
 		layer.msg("请正确填写手机号！");
-		$("#name1").focus();
+		$("#name1").focus();	
 		return false;
 	}*/
 	if (oldname != name) {
