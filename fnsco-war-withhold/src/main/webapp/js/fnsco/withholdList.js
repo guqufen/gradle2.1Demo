@@ -431,6 +431,7 @@ function operateFormatter(value, row, index) {
 }
 function failDetails(auditFailReason){
 	//根据用户id查询失败原因
+	$(".auditfailreason").val("");
 	console.log(auditFailReason)
 	layer.alert(auditFailReason,{
 	    skin: 'layui-layer-lan'
