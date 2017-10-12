@@ -316,9 +316,13 @@ public class MerchantInfoImportService extends BaseService {
          */
         MerchantChannel channel = merchantChannelDao.selectByInnerCodeAndChannelCode(innerCode, channelMerId, channelType);
         Integer channelId = null;
+        String privateKye = null;
+        if("01".equals(channelType)){
+            privateKye = dto.getPrivateKye();
+        }
         if (null == channel) {
             // 新增加一个法奈昇的渠道 
-            MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, channelMerId, channelType, userId, null);
+            MerchantChannel merchantChannel = MerchantImportHelper.createMerchantChannel(innerCode, channelMerId, channelType, userId, privateKye);
             try {
                 // 渠道信息保存
                 channelId = merchantCoreService.doAddChannel(merchantChannel);
