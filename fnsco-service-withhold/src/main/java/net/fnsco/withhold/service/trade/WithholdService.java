@@ -166,6 +166,9 @@ public class WithholdService extends BaseService {
             withholdInfo.setFailTotal(type + 1);
             if (type == 2) {//最后一次失败则为0
                 withholdInfo.setFailTotal(0);
+                //最后一次失败发送短信给管理员
+                String mobile = env.getProperty("withhold.admin.mobile");
+                SmsUtil.withholdAllFailWarn(mobile, withholdInfo.getUserName(),failReason);
             }
             String startDate = withholdInfo.getEndDate();
             String nowDate = DateUtils.getNowYMDStr();

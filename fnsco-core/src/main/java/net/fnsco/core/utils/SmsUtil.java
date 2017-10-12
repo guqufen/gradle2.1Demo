@@ -163,7 +163,31 @@ public class SmsUtil {
 
         return result;
     }
+    /**
+     * 
+     * withholdFail:(三次代扣失败短信通知管理员)
+     * 【恒镔资产】您好，关于#userName#的代扣业务扣款不成功，失败原因：#failReason#，请及时进行跟进！
+     * @param mobile
+     * @param code
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException   String    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public static String withholdAllFailWarn(String mobile, String userName,String failReason) throws IOException, URISyntaxException {
 
+        //设置模板ID，【恒镔资产】您好，关于#userName#的代扣业务扣款不成功，失败原因：#failReason#，请及时进行跟进！
+        long tpl_id = 1984924;
+        //设置对应的模板变量值
+
+        String tpl_value = URLEncoder.encode("#userName#", ENCODING) + "=" + URLEncoder.encode(userName, ENCODING)+ "&" + URLEncoder.encode("#failReason#", ENCODING) + "="
+                + URLEncoder.encode(failReason, ENCODING);
+
+        String result = tplSendSms(hbApikey, tpl_id, tpl_value, mobile);
+
+        return result;
+    }
     /**
      * 取账户信息
      *
