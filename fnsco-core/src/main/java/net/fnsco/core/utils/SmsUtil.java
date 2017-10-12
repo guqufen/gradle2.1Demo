@@ -14,6 +14,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -48,6 +49,8 @@ public class SmsUtil {
 
     private static boolean SWITCH_OFF        = true;
     private static String  hbApikey          = "568a854396f8b62157d0e03daeb33cdc";
+    //数钱吧APPkey
+    private static String  sqbApikey         = "0425f962446c4b2de94e6e08e72120ad";
 
     public static String Code(String mobile, String code) throws IOException, URISyntaxException {
 
@@ -61,6 +64,20 @@ public class SmsUtil {
         String tpl_value = URLEncoder.encode("#code#", ENCODING) + "=" + URLEncoder.encode(code, ENCODING) + "&" + URLEncoder.encode("#company#", ENCODING) + "=" + URLEncoder.encode("数钱吧", ENCODING);
 
         String result = tplSendSms(apikey, tpl_id, tpl_value, mobile);
+
+        return result;
+    }
+
+    public static String applyUser(String mobile, String userName, String contactNum, String mercName) throws IOException {
+        //修改为您的apikey.apikey可在官网（http://www.yuanpian.com)登录后获取
+        //设置模板ID，#userName#（#mobile#）通过邀新活动，希望使用我们的APP。赶快打电话，咨询清楚吧!
+        long tpl_id = 1983718;
+        //设置对应的模板变量值
+
+        String tpl_value = URLEncoder.encode("#userName#", ENCODING) + "=" + URLEncoder.encode(userName, ENCODING) + "&" + URLEncoder.encode("#mobile#", ENCODING) + "="
+                           + URLEncoder.encode(contactNum, ENCODING);
+
+        String result = tplSendSms(sqbApikey, tpl_id, tpl_value, mobile);
 
         return result;
     }
