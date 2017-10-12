@@ -338,26 +338,26 @@ public class MerchantInfoImportService extends BaseService {
         /**
          * 商戶pos机信息
          */
-        MerchantPos posInfo = merchantPosService.selectBySnCodeAndInnerCode(dto.getSnCode(), innerCode,channelId);
-        Integer posId = null;
         String posName = null;
-        if (null != posInfo) {
-            posId = posInfo.getId();
-        }
-        
         if("01".equals(channelType) || "02".equals(channelType)){
-            dto.setSnCode(null);
-            dto.setPosFactory(null);
-            dto.setPosType(null);
-            dto.setSalesSlip(null);
-            dto.setInnerTermCode(null);
-            dto.setTerminalCode(null);
+            dto.setSnCode("");
+            dto.setPosFactory("");
+            dto.setPosType("");
+            dto.setSalesSlip("");
+            dto.setInnerTermCode("");
+            dto.setTerminalCode("");
+            dto.setMerInstallArea("");
         }
         
         if("01".equals(channelType)){
             posName = "台码";
         }else if("02".equals(channelType)){
             posName = "二维码";
+        }
+        MerchantPos posInfo = merchantPosService.selectBySnCodeAndInnerCode(dto.getSnCode(), innerCode,channelId);
+        Integer posId = null;
+        if (null != posInfo) {
+            posId = posInfo.getId();
         }
         
         MerchantPos merchantPos = MerchantImportHelper.createMerchantPos(posId, innerCode, bankId, channelId,dto,posName);
