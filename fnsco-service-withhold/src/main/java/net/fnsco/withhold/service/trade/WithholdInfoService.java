@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -42,10 +44,36 @@ public class WithholdInfoService extends BaseService {
 	private ProductTypeDAO productTypeDAO;
 	
 	// 分页
-	public ResultPageDTO<WithholdInfoDO> page(WithholdInfoDO withholdInfo, Integer pageNum, Integer pageSize) {
+	public ResultPageDTO<WithholdInfoDO> page(WithholdInfoDO withholdInfo, Integer pageNum, Integer pageSize,String modifyTimeStartStr,String modifyTimeStartEnd) {
 		logger.info("开始分页查询WithholdInfoService.page, withholdInfo=" + withholdInfo.toString());
+		if(!Strings.isNullOrEmpty(modifyTimeStartStr)){
+		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+		    try {
+                withholdInfo.setModifyTimeStart(sdf.parse(modifyTimeStartStr+" 00:00:00"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+		}
+		
+		if(!Strings.isNullOrEmpty(modifyTimeStartEnd)){
+		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+		    try {
+                withholdInfo.setModifyTimeEnd(sdf.parse(modifyTimeStartEnd+" 23:59:59"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+		}
+		
+//		if(withholdInfo.getModifyTime()!=null){
+//		   
+//		    try {
+//                withholdInfo.setModifyTimeStart(sdf.parse(withholdInfo.getModifyTimeStr()+" 00:00:00"));
+//                withholdInfo.setModifyTimeEnd(sdf.parse(withholdInfo.getModifyTimeStr()+" 23:59:59"));
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//		}
 		List<WithholdInfoDO> pageList = this.withholdInfoDAO.pageList(withholdInfo, pageNum, pageSize);
-
 		List<WithholdInfoDO> pageListNew = new ArrayList<>();
 		for (WithholdInfoDO withholdInfoDO : pageList) {
 		    
@@ -117,6 +145,13 @@ public class WithholdInfoService extends BaseService {
 	// 添加
 	public WithholdInfoDO doAdd(WithholdInfoDO withholdInfo, int loginUserId) {
 		logger.info("开始添加WithholdInfoService.add,withholdInfo=" + withholdInfo.toString());
+		//判断是否支持该银行并且每次扣款额度是否正确  getByCardNum  int len = a.length();
+		int cardLenth=withholdInfo.getBankCard().length();
+		bankCodeDAO.getByCardNum(withholdInfo.getBankCard(), cardLenth);
+		
+		withholdInfo.getBankCard();
+		withholdInfo.getAmount();
+		
 		Date now = new Date();
 		withholdInfo.setModifyUserId(loginUserId);
 		withholdInfo.setModifyTime(now);
@@ -130,7 +165,6 @@ public class WithholdInfoService extends BaseService {
 		withholdInfo.setAmount(withholdInfo.getAmount().multiply(new BigDecimal(100)));// 单次扣款金额乘以100保存
 		//处理身份证最后一位字母大写
 		String str=withholdInfo.getCertifyId();
-		//String st=str.substring(0,str.length() -1)+str.substring(str.length()-1,str.length()).toUpperCase();
 		withholdInfo.setCertifyId(str.substring(0,str.length() -1)+str.substring(str.length()-1,str.length()).toUpperCase());
 		// 设置爱农编号
 		if (StringUtils.isEmpty(withholdInfo.getBankCard()) || withholdInfo.getBankCard().length() < 6) {
@@ -238,6 +272,11 @@ public class WithholdInfoService extends BaseService {
     public ResultDTO queryProductTypeById(Integer id) {
         ProductTypeDO dto=this.productTypeDAO.getById(id);
         return ResultDTO.success(dto);
+    }
+
+    public ResultDTO addAuditFailReasonById(WithholdInfoDO withholdInfo) {
+        int count =withholdInfoDAO.update(withholdInfo);
+        return ResultDTO.success();
     }
     
 }

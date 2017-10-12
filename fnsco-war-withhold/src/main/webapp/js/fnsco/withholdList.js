@@ -1,3 +1,27 @@
+$("#datetimepicker1").datetimepicker({
+			format : 'yyyy-mm-dd',
+			autoclose : true,
+			todayBtn : true,
+			todayHighlight : true,
+			showMeridian : true,
+			pickerPosition : "bottom-left",
+			language : 'zh-CN',//中文，需要引用zh-CN.js包
+			startView : 2,//月视图
+			minView : 2
+		//日期时间选择器所能够提供的最精确的时间选择视图
+		});
+$("#datetimepicker2").datetimepicker({
+	format : 'yyyy-mm-dd',
+	autoclose : true,
+	todayBtn : true,
+	todayHighlight : true,
+	showMeridian : true,
+	pickerPosition : "bottom-left",
+	language : 'zh-CN',//中文，需要引用zh-CN.js包
+	startView : 2,//月视图
+	minView : 2
+//日期时间选择器所能够提供的最精确的时间选择视图
+});
 var pathName = window.document.location.pathname;
 var PROJECT_NAME = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 //获取当前用户
@@ -132,11 +156,13 @@ function initTableData() {
 		showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 		queryParams : queryParams,
 		responseHandler : responseHandler,// 处理服务器返回数据
-		columns : [ {
-			field : 'ids',
-			title : '序号',
-			class:'j'
-		}, {
+		columns : [
+//{
+//	field : 'ids',
+//	title : '序号',
+//	class:'j'
+//},
+		{
 			field : 'userName',
 			title : '姓名'
 		}, {
@@ -176,10 +202,10 @@ function initTableData() {
 			field : 'bankCard',
 			title : '银行卡号'
 		}
-//		,{
-//			field : 'contractNum',
-//			title : '合同编号'
-//		}
+		,{
+			field : 'contractNum',
+			title : '合同编号'
+		}
 		, {
 			field : 'modifyUserName',
 			title : '提交人',
@@ -192,6 +218,11 @@ function initTableData() {
 			title : '状态',
 			formatter : formatStatus
 		}, {
+			field : 'auditFailReason', 
+			title : '失败原因',
+			formatter :reasonFormatter
+		}
+		, {
 			title : '操作',
 			align : 'center',
 			formatter : operateFormatter
@@ -285,7 +316,7 @@ function judgeCardType(value, row, index) {
 		return '港澳台通行证';
 	}
 }
-// 组装请求参数
+// 组装请求参数     $("#datetimepicker1").val()
 function queryParams(params) {
 	var param = {
 		currentPageNum : this.pageNumber,
@@ -295,7 +326,9 @@ function queryParams(params) {
 		certifyId : $('#txt_search_id').val(),
 		userName : $('#txt_search_name').val(),
 		mobile : $('#txt_search_price').val(), 
-		contractNum : $('#txt_search_contractNum').val()
+		contractNum : $('#txt_search_contractNum').val(),
+		modifyTimeStartStr: $("#datetimepicker1").val(),
+		modifyTimeStartEnd:$("#datetimepicker2").val()
 	}
 	return param;
 }
@@ -348,9 +381,21 @@ function unloginHandler(result) {
 		});
 	}
 };*/
+
+function reasonFormatter(value, row, index){
+	console.log(row.auditFailReason)
+	if(row.status==4&&value!=""){
+		return ["<a class='btn btn-primary' onclick=\"javascript:failDetails('"+value+"')\" style='padding: 3px 6px;'>详情</a>"]
+		.join('');
+	}else{
+		return "-";
+	}
+	
+}
+
+
 // 表格中操作按钮
 function operateFormatter(value, row, index) {
-	console.log(roleType)
 	if(roleType==1){
 		//待审核 
 		if(row.status==3){
@@ -383,6 +428,16 @@ function operateFormatter(value, row, index) {
 			.join('');
 	}
 	
+}
+function failDetails(auditFailReason){
+	//根据用户id查询失败原因
+	console.log(auditFailReason)
+	layer.alert(auditFailReason,{
+	    skin: 'layui-layer-lan'
+	    ,closeBtn: 0
+	    ,anim:5, //动画类型
+	    title:"审核失败原因"
+	  });
 }
 function new1(){
 	$(".nextBtn").show();
@@ -602,6 +657,8 @@ $(".save_btn").click(function(){
 		layer.msg('请输入有效扣款次数!');
 		return;
 	}
+	//判断是否支持该银行并且每次扣款额度正确
+	
 	console.log($('#mercore_form').serialize()+"&id="+$(".hiddenId").val());
 	$.ajax({
 		url : PROJECT_NAME + '/web/withholdInfo/doUpdate',
@@ -704,6 +761,10 @@ function checkPass(){
 }
 
 function checkFail(){
+	if(!$(".auditfailreason").val()){
+		layer.msg('请填写审核失败原因');
+		return false;
+	}
 	layer.confirm('确定审核失败吗？', {
 		time : 20000, // 20s后自动关闭
 		btn : [ '确定', '取消' ]
@@ -723,6 +784,20 @@ function checkFail(){
 					queryEvent("table");
 					$("#myCheckdetails").hide();
 				}
+			},
+			error : function(e) {
+				layer.msg('系统异常!' + e);
+			}
+		});
+		$.ajax({
+			url : PROJECT_NAME + '/web/withholdInfo/addAuditFailReasonById',
+			type : 'POST',
+			dataType : "json",
+			data : {
+				'id' : $("#myCheckdetails .id").val(),
+				'auditFailReason':$(".auditfailreason").val()
+			},
+			success : function(data) {
 			},
 			error : function(e) {
 				layer.msg('系统异常!' + e);

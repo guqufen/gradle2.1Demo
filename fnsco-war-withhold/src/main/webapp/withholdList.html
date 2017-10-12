@@ -87,6 +87,12 @@
 							<input type="text" class="form-control"
 								id="txt_search_contractNum">
 						</div>
+						<div class="col-sm-4 query-time">
+							<label class="control-label" for="txt_modify_time">提交时间:</label>
+							<input type="text" class="form-control txt_modify_time_start"
+								id="datetimepicker1">- <input type="text"
+								class="form-control txt_modify_time_end" id="datetimepicker2">
+						</div>
 					</div>
 					<div class="col-sm-2" style="text-align: right;">
 						<button type="button" id="btn_query" class="btn btn-primary"
@@ -107,7 +113,8 @@
 						<div class="col-sm-12">
 							<!-- 	<div id="toolbar"> -->
 							<button type="button" class="btn btn-success btn_add"
-								data-toggle="modal" data-target="#myModal" onclick="javascript:new1();">
+								data-toggle="modal" data-target="#myModal"
+								onclick="javascript:new1();">
 								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
 							</button>
 							<!-- </div> -->
@@ -138,10 +145,10 @@
 												class="form-control detail_name" disabled="disabled">
 										</div>
 										<div class="col-sm-4">
-											<label class="control-label ">产品类型：</label>
-												<select id="detail_product_type_code" name="productTypeCode"
-													class="form-control" disabled="disabled">
-												</select>
+											<label class="control-label ">产品类型：</label> <select
+												id="detail_product_type_code" name="productTypeCode"
+												class="form-control" disabled="disabled">
+											</select>
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label ">扣款次数：</label> <input
@@ -224,8 +231,8 @@
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="certifyId">身份证号码：</label> <input
-												type="text" class="form-control certifyId"
-												name="certifyId" disabled="disabled">
+												type="text" class="form-control certifyId" name="certifyId"
+												disabled="disabled">
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="bankCard">银行卡号：</label> <input
@@ -254,21 +261,27 @@
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="productTypeCode">产品名称：</label>
-												<select id="detail_product_type_code_else" name="productTypeCode"
-													class="form-control" disabled="disabled">
-												</select>
+											<select id="detail_product_type_code_else"
+												name="productTypeCode" class="form-control"
+												disabled="disabled">
+											</select>
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="debitDay">扣款日：</label> <input
 												type="text" class="form-control debitDay" name="debitDay"
 												disabled="disabled">
 										</div>
+										<div class="col-sm-12">
+											<label class="control-label" for="productTypeCode">审核失败原因：</label>
+											<textarea class="form-control auditfailreason"></textarea>
+										</div>
 									</div>
 									<div class="row" style="text-align: center;">
-										<button id="btn_add" type="button" class="btn btn-success" onclick="javascript:checkPass();" style="margin-right:20px;">
-											审核通过
-										</button>
-										<button id="btn_edit" type="button" class="btn btn-danger" onclick="javascript:checkFail();">
+										<button id="btn_add" type="button" class="btn btn-success"
+											onclick="javascript:checkPass();" style="margin-right: 20px;">
+											审核通过</button>
+										<button id="btn_edit" type="button" class="btn btn-danger"
+											onclick="javascript:checkFail();">
 											</span>审核失败
 										</button>
 									</div>
@@ -296,7 +309,7 @@
 								<div role="tabpanel" class="tab-pane active" id="home">
 									<form action="" id="mercore_form" method="post">
 										<div class="row">
-										    <input type="hidden" class="hiddenId">
+											<input type="hidden" class="hiddenId">
 											<div class="col-sm-4">
 												<label class="control-label" for="userName">姓名：</label> <input
 													type="text" class="form-control" id="userName"
@@ -304,8 +317,8 @@
 											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="certifyId">身份证号码：</label>
-												<input type="text" class="form-control certifyId_add" id="certifyId" 
-													name="certifyId" placeholder="身份证号码">
+												<input type="text" class="form-control certifyId_add"
+													id="certifyId" name="certifyId" placeholder="身份证号码">
 											</div>
 											<!-- 											<div class="col-sm-4"> -->
 											<!-- 												<label class="control-label " for="certifType">证件类型：</label> -->
@@ -387,10 +400,11 @@
 												</select>
 											</div>
 										</div>
-										<a class="nextBtn" href="#profile" aria-controls="profile" onclick="javascript:saveWithholdInfo();"
-											role="tab" data-toggle="tab" 
-											>保存</a>
-										<a class="btn btn-primary save_btn" style="margin-left: 45%; margin-bottom: 10px;display:none;">确定</a>
+										<a class="nextBtn" href="#profile" aria-controls="profile"
+											onclick="javascript:saveWithholdInfo();" role="tab"
+											data-toggle="tab">保存</a> <a
+											class="btn btn-primary save_btn"
+											style="margin-left: 45%; margin-bottom: 10px; display: none;">确定</a>
 									</form>
 								</div>
 								<!-- banksModel详情 start -->

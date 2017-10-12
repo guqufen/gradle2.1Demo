@@ -45,7 +45,9 @@ public class WithholdInfoController extends BaseController {
      Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
      Integer page = params.get("currentPageNum");
      Integer rows = params.get("pageSize");
-     ResultPageDTO<WithholdInfoDO> pager = this.withholdInfoService.page(withholdInfo, page,rows);
+     String modifyTimeStartStr=request.getParameter("modifyTimeStartStr");
+     String modifyTimeStartEnd=request.getParameter("modifyTimeStartEnd");
+     ResultPageDTO<WithholdInfoDO> pager = this.withholdInfoService.page(withholdInfo, page,rows,modifyTimeStartStr,modifyTimeStartEnd);
      return success(pager);
  }
 
@@ -140,5 +142,12 @@ public class WithholdInfoController extends BaseController {
  @RequestMapping(value = "queryProductTypeById")
  public ResultDTO queryProductTypeById(@RequestParam String id) {
     return this.withholdInfoService.queryProductTypeById(NumberUtils.toInt(id));
+ }
+ //增加审核失败原因
+ @ApiOperation(value = "根据id新增审核失败原因", notes = "根据id新增审核失败原因")
+ @ResponseBody
+ @RequestMapping(value = "addAuditFailReasonById")
+ public ResultDTO addAuditFailReasonById(WithholdInfoDO withholdInfo) {
+    return this.withholdInfoService.addAuditFailReasonById(withholdInfo);
  }
 }
