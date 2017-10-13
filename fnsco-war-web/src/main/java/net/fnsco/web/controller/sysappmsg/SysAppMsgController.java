@@ -14,7 +14,6 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
-import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.dto.AppPushMsgInfoDTO;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
 import net.fnsco.order.service.domain.SysAppMessage;

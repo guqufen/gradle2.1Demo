@@ -253,6 +253,13 @@
       	<![CDATA[
         	AND send_time <= #{condition.endSendTime}
         ]]>
+         <!-- 消息类型集合 -->
+      <if test="condition.msgTypes != null">
+         AND msgType IN <foreach collection="condition.msgTypes" item="msgId" index="index"
+            open="(" close=")" separator=",">
+            #{msgId}
+        </foreach>
+      </if>
       </if>
     </where> 
      ORDER BY modify_time DESC 
@@ -308,6 +315,13 @@
         	AND send_time <= #{endSendTime}
         ]]>
       </if>
+      <!-- 消息类型集合 -->
+      <if test="msgTypes != null">
+         AND msg_type IN <foreach collection="msgTypes" item="msgId" index="index"
+            open="(" close=")" separator=",">
+            #{msgId}
+        </foreach>
+      </if>
     </where> 
   </select>
   <!-- 根据条件查询实体 -->
@@ -360,7 +374,7 @@
   <select id="queryExecuteData" resultMap="BaseResultMap">
     select 
      <include refid="Base_Column_List" />
-      from sys_msg_app where send_time &lt;=  NOW() AND status=0
+      from sys_msg_app where send_time &lt;=  NOW() AND status=0 AND msg_type=1
   </select>
   <select id="queryListByIds"  resultMap="BaseResultMap">
 	  select 

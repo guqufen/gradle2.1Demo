@@ -23,6 +23,7 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.spring.SpringUtils;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppPushMsgInfoDTO;
@@ -35,7 +36,6 @@ import net.fnsco.order.service.dao.master.SysMsgAppSuccDao;
 import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.order.service.domain.AppUserMerchant;
 import net.fnsco.order.service.domain.SysAppMessage;
-import net.fnsco.order.service.domain.SysUser;
 import net.fnsco.order.service.modules.push.AppPushHelper;
 
 /**
@@ -191,6 +191,11 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         if(StringUtils.isNoneEmpty(record.getEndSendTime())){
             record.setEndSendTime(record.getEndSendTime()+" 23:59:59");
         }
+        record.setMsgType(null);
+        List<Integer> msgTypes = Lists.newArrayList();
+        msgTypes.add(1);msgTypes.add(3);
+        record.setMsgTypes(msgTypes);
+        
         PageDTO<SysAppMessage> params = new PageDTO<SysAppMessage>(currentPageNum, perPageSize, record);
         List<SysAppMessage> data = sysAppMessageDao.queryPageList(params);
         int totalNum = sysAppMessageDao.queryTotalByCondition(record);
@@ -227,11 +232,11 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         message.setSendType(2);
         message.setPushType(2);
         Date date = new Date();
-        SysUser sysUser = (SysUser) SpringUtils.getRequest().getSession().getAttribute("SESSION_USER_KEY");
+        WebUserDTO sysUser = (WebUserDTO) SpringUtils.getRequest().getSession().getAttribute(CoreConstants.SESSION_USER_KEY);
         message.setModifyUserId(sysUser.getId());
         message.setModifyTime(date); //创建时间
         message.setBusType(1);
-        message.setMsgType(1);
+        message.setMsgType(Integer.valueOf(record.getMsgType()));
         try {
             message.setSendTime(sdf.parse(record.getSendTimeStr()));
         } catch (ParseException e) {
