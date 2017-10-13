@@ -8,6 +8,7 @@ import net.fnsco.order.service.domain.trade.TradeByDay;
 import net.fnsco.order.service.domain.trade.TradeByHour;
 import net.fnsco.order.service.domain.trade.TradeByPayType;
 import net.fnsco.order.service.domain.trade.TradeDateTemp;
+import net.fnsco.order.service.domain.trade.TradeTerminalByDay;
 /**
  * @desc 流水统计临时表
  * @author   tangliang
@@ -85,4 +86,13 @@ public interface TradeDateTempDao {
      * @since  CodingExample　Ver 1.1
      */
     TurnoverDTO queryTodayTurnover(TradeByDay record);
+    
+    /**
+     * selectTradeTerminalByDate:(按照终端号统计每天的营业额)
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年10月13日 下午3:42:28
+     * @return List<TradeTerminalByDay>    DOM对象
+     */
+    List<TradeTerminalByDay> selectTradeTerminalByDate();
 }
