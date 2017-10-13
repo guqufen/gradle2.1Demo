@@ -45,7 +45,9 @@ public class WithholdInfoController extends BaseController {
      Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
      Integer page = params.get("currentPageNum");
      Integer rows = params.get("pageSize");
-     ResultPageDTO<WithholdInfoDO> pager = this.withholdInfoService.page(withholdInfo, page,rows);
+     String modifyTimeStartStr=request.getParameter("modifyTimeStartStr");
+     String modifyTimeStartEnd=request.getParameter("modifyTimeStartEnd");
+     ResultPageDTO<WithholdInfoDO> pager = this.withholdInfoService.page(withholdInfo, page,rows,modifyTimeStartStr,modifyTimeStartEnd);
      return success(pager);
  }
 
@@ -54,11 +56,8 @@ public class WithholdInfoController extends BaseController {
  @ResponseBody
  @RequestMapping(value = "doAdd")
  public ResultDTO doAdd ( WithholdInfoDO withholdInfo) {
-    WithholdInfoDO   resultDO = this.withholdInfoService.doAdd(withholdInfo,super.getUserId());
-    if(null == resultDO ){
-    	return ResultDTO.fail(ApiConstant.WEB_BANK_CARD_NULL);
-    }
-    return success(resultDO);
+     ResultDTO  resultDO = this.withholdInfoService.doAdd(withholdInfo,super.getUserId());
+     return resultDO;
  }
 
  // 修改
@@ -66,8 +65,8 @@ public class WithholdInfoController extends BaseController {
  @ResponseBody
  @RequestMapping(value = "doUpdate")
  public ResultDTO doUpdate (WithholdInfoDO withholdInfo) {
-     Integer result = this.withholdInfoService.doUpdate(withholdInfo,getUserId());
-     return success(result);
+     ResultDTO resultDO = this.withholdInfoService.doUpdate(withholdInfo,getUserId());
+     return resultDO;
  }
  
  // 修改
@@ -78,8 +77,8 @@ public class WithholdInfoController extends BaseController {
 	 WithholdInfoDO withholdInfoDO = new WithholdInfoDO();
 	 withholdInfoDO.setId(withholdInfo.getId());
 	 withholdInfoDO.setStatus(withholdInfo.getStatus());
-     Integer result = this.withholdInfoService.doUpdate(withholdInfoDO,getUserId());
-     return success(result);
+	 ResultDTO resultDO = this.withholdInfoService.doUpdate(withholdInfoDO,getUserId());
+     return success();
  }
 
  // 删除
@@ -140,5 +139,12 @@ public class WithholdInfoController extends BaseController {
  @RequestMapping(value = "queryProductTypeById")
  public ResultDTO queryProductTypeById(@RequestParam String id) {
     return this.withholdInfoService.queryProductTypeById(NumberUtils.toInt(id));
+ }
+ //增加审核失败原因
+ @ApiOperation(value = "根据id新增审核失败原因", notes = "根据id新增审核失败原因")
+ @ResponseBody
+ @RequestMapping(value = "addAuditFailReasonById")
+ public ResultDTO addAuditFailReasonById(WithholdInfoDO withholdInfo) {
+    return this.withholdInfoService.addAuditFailReasonById(withholdInfo);
  }
 }

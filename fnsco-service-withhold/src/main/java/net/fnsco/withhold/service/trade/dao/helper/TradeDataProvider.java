@@ -329,5 +329,111 @@ public class TradeDataProvider {
         }
         }}.toString();
     }
+    
+    public String pageListCountTxnamt(Map<String, Object> params) {
+        TradeDataDO tradeData = (TradeDataDO) params.get("tradeData");
+        return new SQL() {{
+        SELECT("SUM(txn_amt)");
+        FROM(TABLE_NAME);
+        if (tradeData.getId() != null) {
+            WHERE("id=#{tradeData.id}");
+        }
+        if (tradeData.getWithholdId() != null) {
+            WHERE("withhold_id=#{tradeData.withholdId}");
+        }
+        if (tradeData.getTxnAmt() != null) {
+            WHERE("txn_amt=#{tradeData.txnAmt}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getFailReason())){
+            WHERE("fail_reason=#{tradeData.failReason}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getUserName())){
+            WHERE("user_name like CONCAT('%',#{tradeData.userName},'%')");
+        }
+        if (StringUtils.isNotBlank(tradeData.getMobile())){
+            WHERE("mobile=#{tradeData.mobile}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getBankCard())){
+            WHERE("bank_card=#{tradeData.bankCard}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getSubBankName())){
+            WHERE("sub_bank_name=#{tradeData.subBankName}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getAnBankId())){
+            WHERE("an_bank_id=#{tradeData.anBankId}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getAccountType())){
+            WHERE("account_type=#{tradeData.accountType}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getTxnType())){
+            WHERE("txn_type=#{tradeData.txnType}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getTxnSubType())){
+            WHERE("txn_sub_type=#{tradeData.txnSubType}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getBizType())){
+            WHERE("biz_type=#{tradeData.bizType}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getAccessType())){
+            WHERE("access_type=#{tradeData.accessType}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getMerId())){
+            WHERE("mer_id=#{tradeData.merId}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getOrderSn())){
+            WHERE("order_sn=#{tradeData.orderSn}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getTxnTime())){
+            WHERE("txn_time=#{tradeData.txnTime}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getCurrency())){
+            WHERE("currency=#{tradeData.currency}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getBackUrl())){
+            WHERE("back_url=#{tradeData.backUrl}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getPayType())){
+            WHERE("pay_type=#{tradeData.payType}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getSubject())){
+            WHERE("subject=#{tradeData.subject}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getBody())){
+            WHERE("body=#{tradeData.body}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getCustomerInfo())){
+            WHERE("customer_info=#{tradeData.customerInfo}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getPurpose())){
+            WHERE("purpose=#{tradeData.purpose}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getRespCode())){
+            WHERE("resp_code=#{tradeData.respCode}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getRespMsg())){
+            WHERE("resp_msg=#{tradeData.respMsg}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getCertifType())){
+            WHERE("certif_type=#{tradeData.certifType}");
+        }
+        if (StringUtils.isNotBlank(tradeData.getCertifyId())){
+            WHERE("certify_id like CONCAT('%',#{tradeData.certifyId},'%')");
+        }//Withholdday
+        if(StringUtils.isNotBlank(tradeData.getStartDate())){
+            WHERE("txn_time >= #{tradeData.startDate}");
+        }
+        if(StringUtils.isNotBlank(tradeData.getEndDate())){
+            WHERE("txn_time <= #{tradeData.endDate}");
+        }
+        if(StringUtils.isNotBlank(tradeData.getWithholdday())){
+            WHERE("withhold_date like CONCAT('%',#{tradeData.withholdday})");
+        }
+        if(tradeData.getStatus()!=null){
+            WHERE(" status = '"+tradeData.getStatus()+"'");
+        }else{
+            WHERE("status in (0,1,2,9)");
+        }
+        }}.toString();
+    }
 }
 

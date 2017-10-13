@@ -19,6 +19,10 @@ public interface BankTradeLimitDAO {
     @Results({@Result( column = "bank_code",property = "bankCode"),@Result( column = "bank_name",property = "bankName"),@Result( column = "trade_times_limit",property = "tradeTimesLimit"),@Result( column = "trade_day_limit",property = "tradeDayLimit") })
     @Select("SELECT * FROM sys_bank_trade_limit WHERE id = #{id}")
     public BankTradeLimitDO getById(@Param("id") int id);
+    
+    @Results({@Result( column = "bank_code",property = "bankCode"),@Result( column = "bank_name",property = "bankName"),@Result( column = "trade_times_limit",property = "tradeTimesLimit"),@Result( column = "trade_day_limit",property = "tradeDayLimit") })
+    @Select("SELECT * FROM sys_bank_trade_limit WHERE bank_code = #{bankCode}")
+    public BankTradeLimitDO getByBankCode(@Param("bankCode") String bankCode);
 
     @Insert("INSERT into sys_bank_trade_limit(id,bank_code,bank_name,trade_times_limit,trade_day_limit) VALUES (#{id},#{bankCode},#{bankName},#{tradeTimesLimit},#{tradeDayLimit})")
     @Options(useGeneratedKeys = true, keyProperty = "id")

@@ -20,6 +20,9 @@ public class WithholdInfoProvider {
         return new SQL() {
             {
                 UPDATE(TABLE_NAME);
+                if(StringUtils.isNotBlank(withholdInfo.getAuditFailReason())){
+                    SET("audit_fail_reason=#{withholdInfo.auditFailReason}");
+                }
                 if (StringUtils.isNotBlank(withholdInfo.getProductTypeCode())) {
                     SET("product_type_code=#{withholdInfo.productTypeCode}");
                 }
@@ -64,7 +67,7 @@ public class WithholdInfoProvider {
                 }
                 if (withholdInfo.getModifyTime() != null) {
                     SET("modify_time=#{withholdInfo.modifyTime}");
-                }
+                } 
                 if (withholdInfo.getTotal() != null) {
                     SET("total=#{withholdInfo.total}");
                 }
@@ -140,8 +143,11 @@ public class WithholdInfoProvider {
                 if (withholdInfo.getModifyUserId() != null) {
                     WHERE("modify_user_id=#{withholdInfo.modifyUserId}");
                 }
-                if (withholdInfo.getModifyTime() != null) {
-                    WHERE("modify_time=#{withholdInfo.modifyTime}");
+                if(withholdInfo.getModifyTimeStart()!=null){
+                    WHERE("modify_time>=#{withholdInfo.modifyTimeStart}");
+                }
+                if(withholdInfo.getModifyTimeEnd()!=null){
+                    WHERE("modify_time<=#{withholdInfo.modifyTimeEnd}");
                 }
                 if (withholdInfo.getTotal() != null) {
                     WHERE("total=#{withholdInfo.total}");
@@ -205,8 +211,11 @@ public class WithholdInfoProvider {
                 if (withholdInfo.getModifyUserId() != null) {
                     WHERE("modify_user_id=#{withholdInfo.modifyUserId}");
                 }
-                if (withholdInfo.getModifyTime() != null) {
-                    WHERE("modify_time=#{withholdInfo.modifyTime}");
+                if(withholdInfo.getModifyTimeStart()!=null){
+                    WHERE("modify_time>=#{withholdInfo.modifyTimeStart}");
+                }
+                if(withholdInfo.getModifyTimeEnd()!=null){
+                    WHERE("modify_time<=#{withholdInfo.modifyTimeEnd}");
                 }
                 if (withholdInfo.getTotal() != null) {
                     WHERE("total=#{withholdInfo.total}");
