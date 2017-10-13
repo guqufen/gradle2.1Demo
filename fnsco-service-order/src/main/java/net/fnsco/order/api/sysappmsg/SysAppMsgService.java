@@ -122,4 +122,12 @@ public interface SysAppMsgService {
      * @since  CodingExample　Ver 1.1
      */
     ResultDTO<List<AppPushMsgInfoDTO>> queryListByIds(List<Integer> ids);
+    /**
+     * 查询待未过期的活动列表
+     * (non-Javadoc)
+     * @see net.fnsco.order.api.sysappmsg.SysAppMsgService#queryExecuteData()
+     * @auth tangliang
+     * @date 2017年7月12日 下午4:38:35
+     */
+    public List<SysAppMessage> queryActivityIng(String msgType);
 }

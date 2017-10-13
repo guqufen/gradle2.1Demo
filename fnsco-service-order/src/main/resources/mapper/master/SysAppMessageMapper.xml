@@ -377,4 +377,9 @@
    	 set status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER} and status = 0
   </update>
+  <select id="queryActivityIng" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+     <include refid="Base_Column_List" />
+      from sys_msg_app where send_time &lt;=  NOW() AND status=0 and msg_type='3'
+  </select>
 </mapper>

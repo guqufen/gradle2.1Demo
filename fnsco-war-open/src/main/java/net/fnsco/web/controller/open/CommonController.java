@@ -1,5 +1,7 @@
 package net.fnsco.web.controller.open;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,8 @@ import net.fnsco.order.api.appuser.ConmmService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.order.api.dto.VersionDTO;
+import net.fnsco.order.api.sysappmsg.SysAppMsgService;
+import net.fnsco.order.service.domain.SysAppMessage;
 import net.fnsco.web.controller.open.jo.CommJO;
 import net.fnsco.web.controller.open.jo.LogJO;
 
@@ -28,9 +32,11 @@ import net.fnsco.web.controller.open.jo.LogJO;
 @Api(value = "/open/comm", tags = { "公共接口" })
 public class CommonController extends BaseController {
     @Autowired
-    private Environment  env;
+    private Environment      env;
     @Autowired
-    private ConmmService versionService;
+    private ConmmService     versionService;
+    @Autowired
+    private SysAppMsgService sysAppMsgService;
 
     /**
      * 获取APP下载地址
@@ -69,5 +75,12 @@ public class CommonController extends BaseController {
         sysVersionDTO.setAppCode(appCode);
         ResultDTO resultDTO = versionService.queryLastVersionInfo(sysVersionDTO);
         return resultDTO;
+    }
+
+    @RequestMapping(value = "/getActivityList")
+    @ApiOperation(value = "检查是否有新版本")
+    public ResultDTO getActivityList() {
+        List<SysAppMessage> messageList = sysAppMsgService.queryActivityIng("3");
+        return ResultDTO.success(messageList);
     }
 }
