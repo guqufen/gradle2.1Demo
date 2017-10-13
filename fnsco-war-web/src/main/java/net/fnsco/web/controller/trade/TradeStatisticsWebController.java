@@ -73,8 +73,9 @@ public class TradeStatisticsWebController extends BaseController {
     @RequiresPermissions(value = { "m:trade:list" })
     public ResultPageDTO<TradeData> queryTrade(TradeStatistics tradeStatistics, Integer currentPageNum, Integer pageSize) {
     	TradeDataDTO tradeDataDTO = new TradeDataDTO();
-    	String day = DateUtils.strFormatToStr(tradeStatistics.getTradeDate());
+    	tradeDataDTO.setInnerCode(tradeStatistics.getInnerCode());
     	tradeDataDTO.setTermId(tradeStatistics.getTerminalCode());
+    	String day = DateUtils.strFormatToStr(tradeStatistics.getTradeDate());
     	tradeDataDTO.setStartTime(day);
     	tradeDataDTO.setEndTime(day);
         return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize);
@@ -99,69 +100,6 @@ public class TradeStatisticsWebController extends BaseController {
         // 转换日期显示
         if (dataList != null) {
             for (TradeStatistics merchantdo : dataList) {
-                /*// 支付方式
-                if ("00".equals(merchantdo.getPayType())) {
-                    merchantdo.setPayType("刷卡");
-                } else if ("01".equals(merchantdo.getPayType())) {
-                    merchantdo.setPayType("扫码");
-                }
-                // 处理金额
-                if (null != merchantdo.getAmt()) {
-                    BigDecimal str = new BigDecimal(merchantdo.getAmt());
-                    double resu = str.divide(new BigDecimal(100)).doubleValue();
-                    DecimalFormat df = new DecimalFormat("#0.00");
-                    merchantdo.setAmt(df.format(resu));
-                }
-                // 处理来源
-                if (null != merchantdo.getSource()) {
-                    if ("00".equals(merchantdo.getSource())) {
-                        merchantdo.setSource("拉卡拉");
-                    } else {
-                        merchantdo.setSource("其他");
-                    }
-                }
-                // 处理交易类型
-                if (null != merchantdo.getTxnType()) {
-                    if ("1".equals(merchantdo.getTxnType())) {
-                        merchantdo.setTxnType("消费");
-                    } else if ("2".equals(merchantdo.getTxnType())) {
-                        merchantdo.setTxnType("撤销");
-                    }
-                }
-                // 处理状态
-                if ("0".equals(merchantdo.getStatus())) {
-                    merchantdo.setStatus("非正常交易");
-                } else if ("1".equals(merchantdo.getStatus())) {
-                    merchantdo.setStatus("正常交易");
-                }
-                String li0 = merchantdo.getTimeStamp();
-                String li1 = merchantdo.getOrderTime();
-                Date li2 = merchantdo.getCreateTime();
-                if (li0 != null) {
-                    String year = li0.substring(0, 4);
-                    String month = li0.substring(4, 6);
-                    String day = li0.substring(6, 8);
-                    String hour = li0.substring(8, 10);
-                    String minutes = li0.substring(10, 12);
-                    String seconds = li0.substring(12, 14);
-                    String dateString0 = year + "-" + month + "-" + day + ' ' + hour + ':' + minutes + ':' + seconds;
-                    merchantdo.setTimeStamp(dateString0);
-                }
-                if (li1 != null) {
-                    String year = li1.substring(0, 4);
-                    String month = li1.substring(4, 6);
-                    String day = li1.substring(6, 8);
-                    String hour = li1.substring(8, 10);
-                    String minutes = li1.substring(10, 12);
-                    String seconds = li1.substring(12, 14);
-                    String dateString1 = year + "-" + month + "-" + day + ' ' + hour + ':' + minutes + ':' + seconds;
-                    merchantdo.setOrderTime(dateString1);
-                }
-                if (li2 != null) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String dateString2 = formatter.format(li2);
-                    merchantdo.setCreateTimeStr(dateString2);
-                }*/
             }
         }
 
