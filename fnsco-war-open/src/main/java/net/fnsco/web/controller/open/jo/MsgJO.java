@@ -15,7 +15,7 @@ public class MsgJO extends JO {
 
     private String  msgSubTitle;
 
-    private Date    modifyTime;
+    private String  modifyTime;
 
     /**
      * id
@@ -134,7 +134,7 @@ public class MsgJO extends JO {
      * @since   CodingExample Ver 1.0
     */
 
-    public Date getModifyTime() {
+    public String getModifyTime() {
         return modifyTime;
     }
 
@@ -145,7 +145,7 @@ public class MsgJO extends JO {
      * @since   CodingExample Ver 1.0
      */
 
-    public void setModifyTime(Date modifyTime) {
+    public void setModifyTime(String modifyTime) {
         this.modifyTime = modifyTime;
     }
 

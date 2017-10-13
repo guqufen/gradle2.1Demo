@@ -15,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.appuser.ConmmService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
@@ -90,7 +91,7 @@ public class CommonController extends BaseController {
             jo.setId(msg.getId());
             jo.setDetailUrl(msg.getDetailUrl());
             jo.setImageUrl(msg.getImageUrl());
-            jo.setModifyTime(msg.getModifyTime());
+            jo.setModifyTime(DateUtils.dateFormatToStr(msg.getModifyTime()));
             jo.setMsgSubject(msg.getMsgSubject());
             jo.setMsgSubTitle(msg.getMsgSubTitle());
             resultList.add(jo);
