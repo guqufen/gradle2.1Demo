@@ -91,11 +91,11 @@ public class CommonController extends BaseController {
             jo.setId(msg.getId());
             jo.setDetailUrl(msg.getDetailUrl());
             jo.setImageUrl(msg.getImageUrl());
-            jo.setModifyTime(DateUtils.dateFormatToStr(msg.getModifyTime()));
+            jo.setModifyTime(DateUtils.dateFormat1ToStr(msg.getModifyTime()));
             jo.setMsgSubject(msg.getMsgSubject());
             jo.setMsgSubTitle(msg.getMsgSubTitle());
             resultList.add(jo);
         }
-        return ResultDTO.success(messageList);
+        return ResultDTO.success(resultList);
     }
 }
