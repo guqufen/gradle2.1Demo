@@ -101,9 +101,8 @@
 					<div class="row row-lg">
 						<div class="col-sm-12">
 							<table id="table"></table>
-							<div class="col-sm-2 pull-right">
-								<label class="form-inline">总金额:</label>
-								<input type="text" class="form-control text-right" disabled="true"　readOnly="true" id="total_amount"/>
+							<div class="col-sm-3 pull-right">
+								<label class="form-inline">总金额:<span style="font-size:20px;padding-left:15px;" id="total_amount"></span></label>
 							</div>
 						</div>
 					</div>
@@ -349,7 +348,7 @@
 				if (data.success) {
 					var num = Number(data.data.result);
 					var res = returnFloat(num / 100);
-					$("#total_amount").val(res);
+					$("#total_amount").html(res+'元');
 				} else {
 					alert('获取失败');
 				}
