@@ -136,6 +136,41 @@ public class WithholdInfoDO {
      * @return
      */
     private String     modifyTimeStr;
+    /**
+     * 提交开始时间
+     */
+    private Date modifyTimeStart;
+    /**
+     * 提交结束时间
+     */
+    private Date modifyTimeEnd;
+    /**
+     * 审核失败原因
+     */
+    private String auditFailReason;
+    public String getAuditFailReason() {
+        return auditFailReason;
+    }
+
+    public void setAuditFailReason(String auditFailReason) {
+        this.auditFailReason = auditFailReason;
+    }
+
+    public Date getModifyTimeStart() {
+        return modifyTimeStart;
+    }
+
+    public void setModifyTimeStart(Date modifyTimeStart) {
+        this.modifyTimeStart = modifyTimeStart;
+    }
+
+    public Date getModifyTimeEnd() {
+        return modifyTimeEnd;
+    }
+
+    public void setModifyTimeEnd(Date modifyTimeEnd) {
+        this.modifyTimeEnd = modifyTimeEnd;
+    }
 
     public String getModifyTimeStr() {
         return modifyTimeStr;
@@ -418,8 +453,10 @@ public class WithholdInfoDO {
                + ", certifyId=" + certifyId + ", debitDay=" + debitDay + ", amount=" + amount + ", amountTotal=" + amountTotal + ", bankCard=" + bankCard + ", status=" + status + ", modifyUserId="
                + modifyUserId + ", modifyTime=" + modifyTime + ", total=" + total + ", subBankName=" + subBankName + ", anBankId=" + anBankId + ", accountType=" + accountType + ", accType=" + accType
                + ", openBankNum=" + openBankNum + ", failTotal=" + failTotal + ", startDate=" + startDate + ", endDate=" + endDate + ", allTotalAmt=" + allTotalAmt + ", payLeftAmt=" + payLeftAmt
-               + ", modifyUserName=" + modifyUserName + ", modifyTimeStr=" + modifyTimeStr + "]";
+               + ", modifyUserName=" + modifyUserName + ", modifyTimeStr=" + modifyTimeStr + ", modifyTimeStart=" + modifyTimeStart + ", modifyTimeEnd=" + modifyTimeEnd + ", auditFailReason="
+               + auditFailReason + "]";
     }
 
-  
+
+
 }

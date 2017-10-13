@@ -19,7 +19,7 @@ public interface WithholdInfoDAO {
                @Result(column = "debit_day", property = "debitDay"), @Result(column = "amount_total", property = "amountTotal"), @Result(column = "bank_card", property = "bankCard"),
                @Result(column = "modify_user_id", property = "modifyUserId"), @Result(column = "modify_time", property = "modifyTime"), @Result(column = "sub_bank_name", property = "subBankName"),
                @Result(column = "an_bank_id", property = "anBankId"), @Result(column = "account_type", property = "accountType"), @Result(column = "acc_type", property = "accType"),
-               @Result(column = "open_bank_num", property = "openBankNum"), @Result(column = "fail_total", property = "failTotal"), @Result(column = "contract_num", property = "contractNum")})
+               @Result(column = "open_bank_num", property = "openBankNum"), @Result(column = "fail_total", property = "failTotal"), @Result(column = "contract_num", property = "contractNum"), @Result(column = "audit_fail_reason", property = "auditFailReason")})
 
     @Select("SELECT * FROM w_withhold_info WHERE id = #{id}")
     public WithholdInfoDO getById(@Param("id") int id);
@@ -28,7 +28,7 @@ public interface WithholdInfoDAO {
                @Result(column = "debit_day", property = "debitDay"), @Result(column = "amount_total", property = "amountTotal"), @Result(column = "bank_card", property = "bankCard"),
                @Result(column = "modify_user_id", property = "modifyUserId"), @Result(column = "modify_time", property = "modifyTime"), @Result(column = "sub_bank_name", property = "subBankName"),
                @Result(column = "an_bank_id", property = "anBankId"), @Result(column = "account_type", property = "accountType"), @Result(column = "acc_type", property = "accType"),
-               @Result(column = "open_bank_num", property = "openBankNum"), @Result(column = "fail_total", property = "failTotal") , @Result(column = "contract_num", property = "contractNum")})
+               @Result(column = "open_bank_num", property = "openBankNum"), @Result(column = "fail_total", property = "failTotal") , @Result(column = "contract_num", property = "contractNum"), @Result(column = "audit_fail_reason", property = "auditFailReason")})
 
     @Select("SELECT * FROM w_withhold_info WHERE status = '1' and debit_day = #{debitDay} and fail_total =#{failTotal} and start_date<= #{startDate}")
     public List<WithholdInfoDO> getByDebitDayFail(@Param("debitDay") String debitDay, @Param("failTotal") int failTotal,@Param("startDate") String startDate);
@@ -37,7 +37,7 @@ public interface WithholdInfoDAO {
                @Result(column = "debit_day", property = "debitDay"), @Result(column = "amount_total", property = "amountTotal"), @Result(column = "bank_card", property = "bankCard"),
                @Result(column = "modify_user_id", property = "modifyUserId"), @Result(column = "modify_time", property = "modifyTime"), @Result(column = "sub_bank_name", property = "subBankName"),
                @Result(column = "an_bank_id", property = "anBankId"), @Result(column = "account_type", property = "accountType"), @Result(column = "acc_type", property = "accType"),
-               @Result(column = "open_bank_num", property = "openBankNum"), @Result(column = "fail_total", property = "failTotal"), @Result(column = "contract_num", property = "contractNum") })
+               @Result(column = "open_bank_num", property = "openBankNum"), @Result(column = "fail_total", property = "failTotal"), @Result(column = "contract_num", property = "contractNum"), @Result(column = "audit_fail_reason", property = "auditFailReason") })
 
     @Select("SELECT * FROM w_withhold_info WHERE status = '1' and debit_day = #{debitDay}  ")
     public List<WithholdInfoDO> getByDebitDay(@Param("debitDay") String debitDay);
@@ -55,7 +55,7 @@ public interface WithholdInfoDAO {
     @Results({ @Result(column = "user_name", property = "userName"),@Result(column = "product_type_code", property = "productTypeCode"),@Result(column = "certif_type", property = "certifType"), @Result(column = "certify_id", property = "certifyId"),
                @Result(column = "debit_day", property = "debitDay"), @Result(column = "amount_total", property = "amountTotal"), @Result(column = "bank_card", property = "bankCard"),
                @Result(column = "modify_user_id", property = "modifyUserId"), @Result(column = "modify_time", property = "modifyTime"), @Result(column = "sub_bank_name", property = "subBankName"),
-               @Result(column = "an_bank_id", property = "anBankId"), @Result(column = "account_type", property = "accountType"), @Result(column = "open_bank_num", property = "openBankNum"), @Result(column = "contract_num", property = "contractNum")})
+               @Result(column = "an_bank_id", property = "anBankId"), @Result(column = "account_type", property = "accountType"), @Result(column = "open_bank_num", property = "openBankNum"), @Result(column = "contract_num", property = "contractNum"), @Result(column = "audit_fail_reason", property = "auditFailReason")})
     @SelectProvider(type = WithholdInfoProvider.class, method = "pageList")
     public List<WithholdInfoDO> pageList(@Param("withholdInfo") WithholdInfoDO withholdInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
