@@ -177,6 +177,19 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         
     }
     /**
+     * 查询待未过期的活动列表
+     * (non-Javadoc)
+     * @see net.fnsco.order.api.sysappmsg.SysAppMsgService#queryExecuteData()
+     * @auth tangliang
+     * @date 2017年7月12日 下午4:38:35
+     */
+    @Override
+    public List<SysAppMessage> queryActivityIng(String msgType) {
+        
+        return sysAppMessageDao.queryActivityIng(msgType);
+        
+    }
+    /**
      * (non-Javadoc) 条件分页查询
      * @see net.fnsco.order.api.sysappmsg.SysAppMsgService#queryPageList(net.fnsco.order.service.domain.SysAppMessage, int, int)
      * @auth tangliang

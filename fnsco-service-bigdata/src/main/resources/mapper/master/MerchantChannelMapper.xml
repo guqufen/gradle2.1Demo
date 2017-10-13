@@ -145,9 +145,10 @@
   <select id="selectByMerCode" resultMap="BaseResultMap"  >
     select 
     <include refid="Base_Column_List" />
-    from m_merchant_channel
+    from m_merchant_channel channel
     where channel_type = #{channelType,jdbcType=VARCHAR} 
     and channel_mer_id = #{merCode,jdbcType=VARCHAR} 
+    and exists (select 1 from m_merchant_core core where core.inner_code=channel.inner_code and core.status='1')
     limit 1
   </select>
     <!-- 根据innercode查询 -->
