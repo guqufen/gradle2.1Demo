@@ -83,14 +83,14 @@ public class MerAllocationController extends BaseController{
 		return success(pager);
 	}
 	
-	@RequestMapping(value="/addMerAllo", method=RequestMethod.GET)
+	@RequestMapping(value="/addMerAllo", method=RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO addMerAllo(String agentId, String [] innerCodeList){
 		
 		return merAllocationService.addMerAllo(Integer.parseInt(agentId), innerCodeList);
 	}
 	
-	@RequestMapping(value="/deleteByagentInnerId", method=RequestMethod.GET)
+	@RequestMapping(value="/deleteByagentInnerId", method=RequestMethod.POST)
 	@ResponseBody
 	public ResultDTO deleteByagentInnerId(String agentId, String [] innerCodeList){
 		return merAllocationService.delMerAllo(Integer.parseInt(agentId), innerCodeList);

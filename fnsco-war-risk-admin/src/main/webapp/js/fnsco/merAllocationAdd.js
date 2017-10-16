@@ -17,6 +17,7 @@ $(function(){
 		success : function(data) {
 			if(data.success){
 				department = data.data.department;
+				agentId = data.data.agentId;
 			}else{
 				layer.msg(data.message);
 			}
@@ -161,7 +162,7 @@ function add(){
 
 		$.ajax({
 			url : '/web/MerAllocation/addMerAllo',
-			type : 'get',
+			type : 'post',
 			traditional: true,
 			data : {
 				'innerCodeList' : dataId,
