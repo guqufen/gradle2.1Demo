@@ -15,7 +15,7 @@ import io.swagger.annotations.Api;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.risk.service.report.MerAllocationService;
+import net.fnsco.risk.service.report.MercAllocationService;
 import net.fnsco.risk.service.sys.WebUserOuterService;
 import net.fnsco.risk.service.sys.entity.AgentDO;
 import net.fnsco.risk.service.sys.entity.MerAllocationDO;
@@ -31,7 +31,7 @@ public class AddUserController extends BaseController {
 	 private WebUserOuterService userOuterService;
 
 	 @Autowired
-	 private MerAllocationService merAllocationService;
+	 private MercAllocationService merAllocationService;
 	 /**
 		 * 页面信息查询
 		 * @param dept
@@ -160,9 +160,9 @@ public class AddUserController extends BaseController {
 		 * 3、通过agent_id去外部用户信息表查找用户信息<list集合>
 		 * 
 		 */
-		@RequestMapping(value = "/queryMerAllo",method= RequestMethod.GET)
+		@RequestMapping(value = "/queryOuterUser",method= RequestMethod.GET)
 		@ResponseBody
-		 public ResultDTO<WebUserOuterDO> queryMerAllo(WebUserOuterDO webUserDO,String merName, @RequestParam("currentPageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
+		 public ResultDTO<WebUserOuterDO> queryAllUser(WebUserOuterDO webUserDO,String merName, @RequestParam("currentPageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
 			
 			List<Integer> agentList = null;
 			//如果商户名称不为空，则先查找找商户inner_code，再查找绑定的agent_id
@@ -171,17 +171,17 @@ public class AddUserController extends BaseController {
 				//通过商户名称模糊查询内部商户号，未找到则返回失败
 				List<String> merList = merAllocationService.getByMerName(merName);
 				if(merList.size() == 0){
-					return ResultDTO.fail("该商户不存在！");
+					return ResultDTO.success("该商户不存在！");
 				}
 				
 				//通过商户号查找agent_id,未找到则返回失败
 				agentList = merAllocationService.getByInnerCodeList(merList);
 				if(agentList.size() == 0){
-					return ResultDTO.fail("商户对应的代理商未找到！");
+					return ResultDTO.success("商户对应的代理商未找到！");
 				}
 			}
 			
-			ResultPageDTO<WebUserOuterDO> result=userOuterService.pageMerAllo(webUserDO, agentList, pageNum, pageSize);
+			ResultPageDTO<WebUserOuterDO> result=userOuterService.pageMercAllo(webUserDO, agentList, pageNum, pageSize);
 			
 			
 		     return success(result);
