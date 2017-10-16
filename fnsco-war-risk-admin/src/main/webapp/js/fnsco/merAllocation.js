@@ -2,7 +2,7 @@
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url : PROJECT_NAME + '/web/addUser/queryMerAllo',
+	url : PROJECT_NAME + '/web/addUser/queryOuterUser',
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	toolbar : '#toolbar', // 工具按钮用哪个容器
@@ -96,12 +96,13 @@ function operateFormatter(value, row, index) {
 	
 	return [
 			'<a class="redact" href="'+ addUrl+'" title="添加">',
+//			'<a class="redact" href="'+ addUrl+'" title="添加">',
 			'<i class="glyphicon glyphicon-plus">添加</i>',
 			'</a>  ',
-			'<a class="redact" href="'+removeUrl +'" title="移除">',
+			'<a class="redact" href="'+removeUrl +'" title="移除" target="_blank">',
 			'<i class="glyphicon glyphicon-trash">移除</i>',
 			'</a>  ',
-			'<a class="redact" href="'+ detailUrl +'" title="详情">',
+			'<a class="redact" href="'+ detailUrl +'" title="详情" target="_blank">',
 			'<i class="glyphicon glyphicon-list-alt">详情</i>',
 			'</a>  '
 			]

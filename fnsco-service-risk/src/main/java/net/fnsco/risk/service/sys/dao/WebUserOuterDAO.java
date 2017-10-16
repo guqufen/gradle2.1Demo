@@ -73,9 +73,9 @@ public interface WebUserOuterDAO {
 			@Result(column = "modify_user_id", property = "modifyUserId"),
 			@Result(column = "creater_time", property = "createrTime") })
 	@SelectProvider(type = WebUserOuterProvider.class, method = "pageMerAlloList")
-	public List<WebUserOuterDO> pageMerAlloList(@Param("webUserOuter") WebUserOuterDO webUserOuter,@Param("agentList") List<Integer> agentList,
+	public List<WebUserOuterDO> pageMercAlloList(@Param("webUserOuter") WebUserOuterDO webUserOuter,@Param("agentList") List<Integer> agentList,
 			@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
 	@SelectProvider(type = WebUserOuterProvider.class, method = "pageMerAlloListCount")
-	public Integer pageMerAlloListCount(@Param("department") String department,@Param("agentList") List<Integer> agentList);
+	public Integer pageMercAlloListCount(@Param("department") String department,@Param("agentList") List<Integer> agentList);
 }

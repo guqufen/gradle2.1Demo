@@ -8,10 +8,10 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 
-import net.fnsco.risk.service.report.dao.helper.MerAllocationProvider;
+import net.fnsco.risk.service.report.dao.helper.MercAllocationProvider;
 import net.fnsco.risk.service.sys.entity.MerAllocationDO;
 
-public interface MerAllocationDAO {
+public interface MercAllocationDAO {
 
 	@Results({@Result(column="id",property="id"),@Result(column="inner_code",property="innerCode"),@Result(column="mer_name",property="merName"),
 		@Result(column="abbreviation",property="abbreviation"),@Result(column="en_name",property="enName"),@Result(column="sign_date",property="signDate"),
@@ -21,10 +21,10 @@ public interface MerAllocationDAO {
 		@Result(column="regist_address",property="registAddress"),@Result(column="merc_flag",property="mercFlag"),@Result(column="source",property="source"),@Result(column="sourceStr",property="sourceStr"),@Result(column="modify_user_id",property="modifyUserId"),
 		@Result(column="modify_time",property="modifyTime"),@Result(column="status",property="status"),@Result(column="agent_id",property="agentId"),
 		@Result(column="agentStr",property="agentStr")})
-	@SelectProvider(type=MerAllocationProvider.class, method="pageAddMerDataList")
+	@SelectProvider(type=MercAllocationProvider.class, method="pageAddMerDataList")
 	public List<MerAllocationDO> pageAddMerDataList(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId, @Param("pageNum")Integer pageNum, @Param("pageSize")Integer pageSize);//type:0-详情查询；1-添加查询
 
-	@SelectProvider(type=MerAllocationProvider.class, method="pageAddMerDataCount")
+	@SelectProvider(type=MercAllocationProvider.class, method="pageAddMerDataCount")
 	public Integer pageAddMerDataCount(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId);
 
 	@Results({@Result(column="id",property="id"),@Result(column="inner_code",property="innerCode"),@Result(column="mer_name",property="merName"),
@@ -35,11 +35,11 @@ public interface MerAllocationDAO {
 		@Result(column="regist_address",property="registAddress"),@Result(column="merc_flag",property="mercFlag"),@Result(column="source",property="source"),@Result(column="sourceStr",property="sourceStr"),@Result(column="modify_user_id",property="modifyUserId"),
 		@Result(column="modify_time",property="modifyTime"),@Result(column="status",property="status"),@Result(column="agent_id",property="agentId"),
 		@Result(column="agentStr",property="agentStr")})
-	@SelectProvider(type=MerAllocationProvider.class, method="pageMerDataList")
+	@SelectProvider(type=MercAllocationProvider.class, method="pageMerDataList")
 //	public List<MerAllocationDO> pageMerDataList(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId,@Param("type")Integer type, @Param("pageNum")Integer pageNum, @Param("pageSize")Integer pageSize);//type:0-详情查询；1-添加查询
 	public List<MerAllocationDO> pageMerDataList(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId, @Param("pageNum")Integer pageNum, @Param("pageSize")Integer pageSize);
 
-	@SelectProvider(type=MerAllocationProvider.class, method="pageMerDataCount")
+	@SelectProvider(type=MercAllocationProvider.class, method="pageMerDataCount")
 //	public Integer pageMerDataCount(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId,@Param("type")Integer type);//type:0-详情查询；1-添加查询
 	public Integer pageMerDataCount(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId);
 
