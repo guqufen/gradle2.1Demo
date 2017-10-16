@@ -87,7 +87,7 @@ function resetEvent(form, id) {
 // 处理后台返回数据
 function responseHandler(res) {
 	unloginHandler(res);
-	if (res) {
+	if (res.success) {
 		return {
 			"rows" : res.data.list,
 			"total" : res.data.total
