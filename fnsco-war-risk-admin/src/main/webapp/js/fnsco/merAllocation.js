@@ -95,16 +95,12 @@ function operateFormatter(value, row, index) {
 	var detailUrl = 'merAllocationDetail.html?agentId='+ row.agentId;
 	
 	return [
-//			'<a class="redact" href="merAllocationAdd.html?agentId='+ row.agentId +'&department='+row.department+'" title="添加">',
 			'<a class="redact" href="'+ addUrl+'" title="添加">',
-//			'<a class="redact" href="javascript:jumpUrl('+addUrl+');" id="addBtn" title="添加">',
 			'<i class="glyphicon glyphicon-plus">添加</i>',
 			'</a>  ',
-//			'<a class="redact" href="merAllocationRemove.html?agentId='+ row.agentId +'" title="移除">',
 			'<a class="redact" href="'+removeUrl +'" title="移除">',
 			'<i class="glyphicon glyphicon-trash">移除</i>',
 			'</a>  ',
-//			'<a class="redact" href="merAllocationDetail.html?agentId='+ row.agentId +'" title="详情">',
 			'<a class="redact" href="'+ detailUrl +'" title="详情">',
 			'<i class="glyphicon glyphicon-list-alt">详情</i>',
 			'</a>  '
