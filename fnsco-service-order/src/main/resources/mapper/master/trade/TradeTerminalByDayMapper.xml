@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.order.service.dao.master.trade.TradeTerminalByDayDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.order.service.domain.trade.TradeTerminalByDay" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="trade_date" property="tradeDate" jdbcType="VARCHAR" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
+    <result column="turnover" property="turnover" jdbcType="DECIMAL" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="order_price" property="orderPrice" jdbcType="DECIMAL" />
+    <result column="procedure_fee" property="procedureFee" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, trade_date, inner_code, terminal_code, turnover, order_num, order_price, procedure_fee
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from r_trade_terminal_by_day
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from r_trade_terminal_by_day
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="net.fnsco.order.service.domain.trade.TradeTerminalByDay" >
+    insert into r_trade_terminal_by_day (id, trade_date, inner_code, 
+      terminal_code, turnover, order_num, 
+      order_price, procedure_fee)
+    values (#{id,jdbcType=INTEGER}, #{tradeDate,jdbcType=VARCHAR}, #{innerCode,jdbcType=VARCHAR}, 
+      #{terminalCode,jdbcType=VARCHAR}, #{turnover,jdbcType=DECIMAL}, #{orderNum,jdbcType=INTEGER}, 
+      #{orderPrice,jdbcType=DECIMAL}, #{procedureFee,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.trade.TradeTerminalByDay" >
+    insert into r_trade_terminal_by_day
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tradeDate != null" >
+        trade_date,
+      </if>
+      <if test="innerCode != null" >
+        inner_code,
+      </if>
+      <if test="terminalCode != null" >
+        terminal_code,
+      </if>
+      <if test="turnover != null" >
+        turnover,
+      </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="orderPrice != null" >
+        order_price,
+      </if>
+      <if test="procedureFee != null" >
+        procedure_fee,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tradeDate != null" >
+        #{tradeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="innerCode != null" >
+        #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalCode != null" >
+        #{terminalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="turnover != null" >
+        #{turnover,jdbcType=DECIMAL},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrice != null" >
+        #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="procedureFee != null" >
+        #{procedureFee,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.trade.TradeTerminalByDay" >
+    update r_trade_terminal_by_day
+    <set >
+      <if test="tradeDate != null" >
+        trade_date = #{tradeDate,jdbcType=VARCHAR},
+      </if>
+      <if test="innerCode != null" >
+        inner_code = #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalCode != null" >
+        terminal_code = #{terminalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="turnover != null" >
+        turnover = #{turnover,jdbcType=DECIMAL},
+      </if>
+      <if test="orderNum != null" >
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrice != null" >
+        order_price = #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="procedureFee != null" >
+        procedure_fee = #{procedureFee,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.trade.TradeTerminalByDay" >
+    update r_trade_terminal_by_day
+    set trade_date = #{tradeDate,jdbcType=VARCHAR},
+      inner_code = #{innerCode,jdbcType=VARCHAR},
+      terminal_code = #{terminalCode,jdbcType=VARCHAR},
+      turnover = #{turnover,jdbcType=DECIMAL},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      order_price = #{orderPrice,jdbcType=DECIMAL},
+      procedure_fee = #{procedureFee,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 根据条件删除 -->
+  <delete id="deleteByCondition" parameterType="net.fnsco.order.service.domain.trade.TradeTerminalByDay">
+     DELETE FROM r_trade_terminal_by_day 
+    <where>
+      <if test="startDate != null">
+         AND trade_date &gt;= #{startDate}
+       </if>
+       <if test="endDate != null and  endDate != ''">
+        AND trade_date &lt;  #{endDate}
+      </if>
+      <if test="tradeDate != null and  tradeDate != ''">
+        AND trade_date= #{tradeDate}
+      </if>
+    </where>
+  </delete>
+  <!-- 批量插入数据 -->
+  <insert id="insertBatch" parameterType="java.util.List">
+  	 <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
+                 SELECT LAST_INSERT_ID()
+     </selectKey>
+     insert into r_trade_terminal_by_day (id, trade_date, inner_code, 
+      terminal_code, turnover, order_num, 
+      order_price, procedure_fee)
+    values
+     <foreach collection ="list" item="payTrade" index= "index" separator =",">
+      (#{payTrade.id,jdbcType=INTEGER}, #{payTrade.tradeDate,jdbcType=VARCHAR}, 
+      #{payTrade.innerCode,jdbcType=VARCHAR},#{payTrade.terminalCode,jdbcType=VARCHAR}, #{payTrade.turnover,jdbcType=DECIMAL}, #{payTrade.orderNum,jdbcType=INTEGER}, 
+      #{payTrade.orderPrice,jdbcType=DECIMAL},#{payTrade.procedureFee,jdbcType=DECIMAL})
+     </foreach>
+  </insert>
+</mapper>

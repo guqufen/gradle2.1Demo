@@ -15,8 +15,10 @@ function load_val2() {
 	return result;
 }
 var message = load_val2();
-console.log(message.id)
+//console.log(message.id)
 var webUserOuterId = message.id;
+var agentId = message.agentId;
+console.log(message.agentId)
 // 分页查询用户绑定下的商户列表
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏

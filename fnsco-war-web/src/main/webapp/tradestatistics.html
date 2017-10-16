@@ -60,6 +60,8 @@
                     </div> -->
 					</div>
 					<div style="display: none;">
+									 <input type="text" class="form-control" id=innerCode name="innerCode"
+									required="required">
 									 <input type="text" class="form-control" id=code name="code"
 									required="required">
 									 <input type="text" class="form-control" id=date name="date"
@@ -195,9 +197,8 @@
 	// 操作格式化
 	function operateFormatter(value, row, index) {
 		return [
-				'<a class="redact" href="javascript:querySingle(' + value +','+row.tradeDate +','+row.terminalCode
-						+ ');" title="详情">',
-				'<i class="glyphicon glyphicon-file"></i>', '</a>  ' ].join('');
+				"<a class='redact' href='javascript:querySingle(" + value +","+1+row.innerCode+","+row.tradeDate +","+row.terminalCode+ ");' title='详情'>",
+				"<i class='glyphicon glyphicon-file'></i>", "</a>  " ].join("");
 	}
 	//金额格式化
 	function formatAmt(value, row, index) {
@@ -231,7 +232,9 @@
 		return formateTimeUtil(value);
 	}
 	//详情按钮事件
-	function querySingle(id,date,code) {
+	function querySingle(id,innerCode1,date,code) {
+		var innerCode = innerCode1.toString().substr(1);
+		$('#innerCode').val(innerCode);
 		$('#code').val(code);
 		$('#date').val(date);
 		$('#detailsModal').modal();
@@ -283,6 +286,7 @@
 		var param = {
 			"currentPageNum" : this.pageNumber,
 			"pageSize" : this.pageSize,
+			"innerCode" : $.trim($('#innerCode').val()),
 			"terminalCode" : $.trim($('#code').val()),
 			"tradeDate" : $.trim($('#date').val()),
 		}
