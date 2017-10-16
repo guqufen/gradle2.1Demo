@@ -330,6 +330,7 @@ $('#btn_yes').click(function() {
 		"department" : $('#department').val(),
 		"password" : $('#password').val(),
 		"type" : $('#type').val(),
+		"agentId":$('#type').val(),
 		"email" : $('#email').val(),
 		"remark" : $('#remark').val()
 	}
@@ -430,6 +431,7 @@ $('#btn_yes1').click(function() {
 		"name" : $('#name1').val(),
 		"department" : $('#department1').val(),
 		"type" : $('#type1').val(),
+		"agentId":$('#type1').val(),
 		"email" : $('#email1').val(),
 		"remark" : $('#remark1').val()
 	}

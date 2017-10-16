@@ -17,6 +17,7 @@ $(function(){
 		success : function(data) {
 			if(data.success){
 				department = data.data.department;
+				agentId = data.data.agentId;
 			}else{
 				layer.msg(data.message);
 			}
@@ -155,7 +156,7 @@ function remove() {
 
 		$.ajax({
 			url : '/web/MerAllocation/deleteByagentInnerId',
-			type : 'get',
+			type : 'post',
 			traditional: true,
 			data : {
 				'innerCodeList' : dataId,
