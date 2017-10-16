@@ -36,10 +36,12 @@ public interface MerAllocationDAO {
 		@Result(column="modify_time",property="modifyTime"),@Result(column="status",property="status"),@Result(column="agent_id",property="agentId"),
 		@Result(column="agentStr",property="agentStr")})
 	@SelectProvider(type=MerAllocationProvider.class, method="pageMerDataList")
-	public List<MerAllocationDO> pageMerDataList(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId,@Param("type")Integer type, @Param("pageNum")Integer pageNum, @Param("pageSize")Integer pageSize);//type:0-详情查询；1-添加查询
+//	public List<MerAllocationDO> pageMerDataList(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId,@Param("type")Integer type, @Param("pageNum")Integer pageNum, @Param("pageSize")Integer pageSize);//type:0-详情查询；1-添加查询
+	public List<MerAllocationDO> pageMerDataList(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId, @Param("pageNum")Integer pageNum, @Param("pageSize")Integer pageSize);
 
 	@SelectProvider(type=MerAllocationProvider.class, method="pageMerDataCount")
-	public Integer pageMerDataCount(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId,@Param("type")Integer type);//type:0-详情查询；1-添加查询
+//	public Integer pageMerDataCount(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId,@Param("type")Integer type);//type:0-详情查询；1-添加查询
+	public Integer pageMerDataCount(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId);
 
 	
 	@Select("select inner_code from m_merchant_core where mer_name like CONCAT('%', #{merName}, '%')")

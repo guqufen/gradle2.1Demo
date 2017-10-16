@@ -70,8 +70,8 @@ function queryParams(params) {
 		userAgentId : agentId,
 		merName : $('#merName').val(),//商户名称
 		legalPerson:$('#legalPerson').val(),//法人姓名
-		reportStatus:$('#reportStatus').val(),//报告状态
-		type : '0'
+		reportStatus:$('#reportStatus').val()//报告状态
+//		type : '0'
 	}
 	return param;
 }

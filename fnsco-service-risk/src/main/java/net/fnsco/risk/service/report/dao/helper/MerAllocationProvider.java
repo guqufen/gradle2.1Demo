@@ -18,7 +18,7 @@ public class MerAllocationProvider {
 		Integer agentId = (Integer) params.get("agentId");// 当前外部用户所属代理商ID
 		Integer pageNum = (Integer) params.get("pageNum");
 		Integer pageSize = (Integer) params.get("pageSize");
-		Integer type = (Integer) params.get("type");
+//		Integer type = (Integer) params.get("type");
 
 		if (pageNum == null || pageNum == 0) {
 			pageNum = 1;
@@ -57,13 +57,14 @@ public class MerAllocationProvider {
 		}
 
 		// type:0-属于；1-不属于
-		if (type == 0) {
-			sql = sql + " AND c.inner_code in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
-					+ ")";
-		} else if (type == 1) {
-			sql = sql + " AND c.inner_code not in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
-					+ ")";
-		}
+//		if (type == 0) {
+//			sql = sql + " AND c.inner_code in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
+//					+ ")";
+//		} else if (type == 1) {
+//			sql = sql + " AND c.inner_code not in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
+//					+ ")";
+//		}
+		sql = sql + " AND c.inner_code in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId+ ")";
 
 		// 风控报告状态
 		if (merAllocationDO.getReportStatus() != null) {
@@ -89,7 +90,7 @@ public class MerAllocationProvider {
 
 		MerAllocationDO merAllocationDO = (MerAllocationDO) params.get("merAllocationDO");
 		Integer agentId = (Integer) params.get("agentId");// 当前外部用户所属代理商ID
-		Integer type = (Integer) params.get("type");
+//		Integer type = (Integer) params.get("type");
 
 		String sql = "SELECT COUNT(1) from m_merchant_core c where 1=1";
 
@@ -110,13 +111,14 @@ public class MerAllocationProvider {
 			sql = sql + " AND c.legal_person like '%" + merAllocationDO.getLegalPerson() + "%'";
 		}
 		// type:0-属于；1-不属于，同时agent_id等于当前用户agent_id
-		if (type == 0) {
-			sql = sql + " AND c.inner_code in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
-					+ ")";
-		} else if (type == 1) {
-			sql = sql + " AND c.inner_code not in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
-					+ ")";
-		}
+//		if (type == 0) {
+//			sql = sql + " AND c.inner_code in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
+//					+ ")";
+//		} else if (type == 1) {
+//			sql = sql + " AND c.inner_code not in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
+//					+ ")";
+//		}
+		sql = sql + " AND c.inner_code in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId+ ")";
 
 		// 风控报告状态
 		if (merAllocationDO.getReportStatus() != null) {

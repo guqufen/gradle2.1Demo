@@ -30,9 +30,8 @@ public class MerAllocationController extends BaseController{
 	private MerAllocationService merAllocationService;
 	
 	/**
-	 * 获取所有商户数据(详情/设置)
+	 * 获取所有商户数据(添加，不属于)
 	 * @param agentId：代理商ID
-	 * @param type:0-详情/移除页面查询，绑定过；1-添加页面查询，同一代理商ID非绑定
 	 * @param pageNum：页码
 	 * @param pageSize:每页条数
 	 * @return 商户信息List集合
@@ -43,14 +42,10 @@ public class MerAllocationController extends BaseController{
 	public ResultDTO getMerDataAdd(MerAllocationDO merAllocationDO, @RequestParam("currentPageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize){
 
 		String agentId = request.getParameter("userAgentId");
-//		String type = request.getParameter("type");
 
 		if(StringUtils.isBlank(agentId)){
 			return fail("代理商ID为空！！");
 		}
-//		if(StringUtils.isBlank(type)){
-//			return fail("操作类型为空！！");
-//		}
 
 		ResultPageDTO<MerAllocationDO> pager = merAllocationService.getAddMerData(merAllocationDO, Integer.parseInt(agentId), pageNum, pageSize);
 		if(pager == null){
@@ -60,9 +55,8 @@ public class MerAllocationController extends BaseController{
 	}
 	
 	/**
-	 * 获取所有商户数据(详情/设置)
+	 * 获取所有商户数据(详情/移除，属于该代理商)
 	 * @param agentId：代理商ID
-	 * @param type:0-详情/移除页面查询，绑定过；1-添加页面查询，同一代理商ID非绑定
 	 * @param pageNum：页码
 	 * @param pageSize:每页条数
 	 * @return 商户信息List集合
@@ -78,11 +72,11 @@ public class MerAllocationController extends BaseController{
 		if(StringUtils.isBlank(agentId)){
 			return fail("代理商ID为空！！");
 		}
-		if(StringUtils.isBlank(type)){
-			return fail("操作类型为空！！");
-		}
+//		if(StringUtils.isBlank(type)){
+//			return fail("操作类型为空！！");
+//		}
 
-		ResultPageDTO<MerAllocationDO> pager = merAllocationService.getMerData(merAllocationDO, Integer.parseInt(agentId), Integer.parseInt(type), pageNum, pageSize);
+		ResultPageDTO<MerAllocationDO> pager = merAllocationService.getMerData(merAllocationDO, Integer.parseInt(agentId),  pageNum, pageSize);
 		if(pager == null){
 			return fail();
 		}

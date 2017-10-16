@@ -42,11 +42,11 @@ public class MerAllocationService extends BaseService{
 	 * @param pageSize：每页数据条数
 	 * @return
 	 */
-	public ResultPageDTO getMerData(MerAllocationDO merAllocationDO, Integer agentId, Integer type, Integer pageNum, Integer pageSize){
+	public ResultPageDTO getMerData(MerAllocationDO merAllocationDO, Integer agentId, Integer pageNum, Integer pageSize){
 
-		List<MerAllocationDO> pageList = merAllocationDAO.pageMerDataList(merAllocationDO, agentId, type, pageNum, pageSize);
+		List<MerAllocationDO> pageList = merAllocationDAO.pageMerDataList(merAllocationDO, agentId,  pageNum, pageSize);
 		
-		Integer count = merAllocationDAO.pageMerDataCount(merAllocationDO, agentId, type);
+		Integer count = merAllocationDAO.pageMerDataCount(merAllocationDO, agentId);
 		
         ResultPageDTO<MerAllocationDO> pager = new ResultPageDTO<MerAllocationDO>(count, pageList);
 		return pager;

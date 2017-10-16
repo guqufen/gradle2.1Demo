@@ -94,8 +94,8 @@ function queryParams(params) {
 		merName : $('#merName').val(),//商户名称
 		legalPerson:$('#legalPerson').val(),//法人姓名
 		reportStatus:$('#reportStatus').val(),//报告状态
-		userAgentId : agentId,
-		type : '0'
+		userAgentId : agentId
+//		type : '0'
 	}
 	return param;
 }
