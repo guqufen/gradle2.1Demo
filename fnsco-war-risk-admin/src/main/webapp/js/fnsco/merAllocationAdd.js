@@ -8,7 +8,7 @@ console.log("outerId:"+outerId);
 
 $(function(){
 	$.ajax({
-		url : '/web/addUser/queryUserById',
+		url : PROJECT_NAME + '/web/addUser/queryUserById',
 		type : 'post',
 		traditional: true,
 		data : {
@@ -178,7 +178,7 @@ function add(){
 		}
 
 		$.ajax({
-			url : '/web/MerAllocation/addMerAllo',
+			url : PROJECT_NAME + '/web/MerAllocation/addMerAllo',
 			type : 'post',
 			traditional: true,
 			data : {

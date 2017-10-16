@@ -96,12 +96,13 @@ function operateFormatter(value, row, index) {
 	
 	return [
 			'<a class="redact" href="'+ addUrl+'" title="添加">',
+//			'<a class="redact" href="'+ addUrl+'" title="添加">',
 			'<i class="glyphicon glyphicon-plus">添加</i>',
 			'</a>  ',
-			'<a class="redact" href="'+removeUrl +'" title="移除">',
+			'<a class="redact" href="'+removeUrl +'" title="移除" target="_blank">',
 			'<i class="glyphicon glyphicon-trash">移除</i>',
 			'</a>  ',
-			'<a class="redact" href="'+ detailUrl +'" title="详情">',
+			'<a class="redact" href="'+ detailUrl +'" title="详情" target="_blank">',
 			'<i class="glyphicon glyphicon-list-alt">详情</i>',
 			'</a>  '
 			]
