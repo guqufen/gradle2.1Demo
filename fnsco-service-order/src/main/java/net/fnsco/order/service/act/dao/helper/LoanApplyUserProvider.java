@@ -68,13 +68,16 @@ public class LoanApplyUserProvider {
             WHERE("card_type=#{loanApplyUser.cardType}");
         }
         if (StringUtils.isNotBlank(loanApplyUser.getCardNum())){
-            WHERE("card_num=#{loanApplyUser.cardNum}");
+            WHERE("card_num like  CONCAT('%',#{loanApplyUser.cardNum},'%')");
         }
         if (StringUtils.isNotBlank(loanApplyUser.getLoanType())){
             WHERE("loan_type=#{loanApplyUser.loanType}");
         }
         if (StringUtils.isNotBlank(loanApplyUser.getInnnerCode())){
             WHERE("innner_code=#{loanApplyUser.innnerCode}");
+        }
+        if(StringUtils.isNotBlank(loanApplyUser.getMerName())){
+            WHERE("innner_code in (select inner_code from m_merchant_core where mer_name like CONCAT('%',#{loanApplyUser.merName},'%'))");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
@@ -98,13 +101,16 @@ public class LoanApplyUserProvider {
             WHERE("card_type=#{loanApplyUser.cardType}");
         }
         if (StringUtils.isNotBlank(loanApplyUser.getCardNum())){
-            WHERE("card_num=#{loanApplyUser.cardNum}");
+            WHERE("card_num like CONCAT('%',#{loanApplyUser.cardNum},'%')");
         }
         if (StringUtils.isNotBlank(loanApplyUser.getLoanType())){
             WHERE("loan_type=#{loanApplyUser.loanType}");
         }
         if (StringUtils.isNotBlank(loanApplyUser.getInnnerCode())){
             WHERE("innner_code=#{loanApplyUser.innnerCode}");
+        }
+        if(StringUtils.isNotBlank(loanApplyUser.getMerName())){
+            WHERE("innner_code in (select inner_code from m_merchant_core where mer_name like CONCAT('%',#{loanApplyUser.merName},'%'))");
         }
         }}.toString();
     }
