@@ -18,8 +18,8 @@ public class UserMercRelProvider {
         UserMercRelDO userMercRel = (UserMercRelDO) params.get("userMercRel");
         return new SQL() {{
         UPDATE(TABLE_NAME);
-        if (userMercRel.getWebUserOuterId() != null) {
-            SET("web_user_outer_id=#{userMercRel.webUserOuterId}");
+        if (userMercRel.getAgentId() != null) {
+            SET("agent_id=#{userMercRel.agentId}");
         }
         if (StringUtils.isNotBlank(userMercRel.getInnerCode())){
             SET("inner_code=#{userMercRel.innerCode}");
@@ -46,8 +46,8 @@ public class UserMercRelProvider {
         if (userMercRel.getId() != null) {
             WHERE("id=#{userMercRel.id}");
         }
-        if (userMercRel.getWebUserOuterId() != null) {
-            WHERE("web_user_outer_id=#{userMercRel.webUserOuterId}");
+        if (userMercRel.getAgentId() != null) {
+            WHERE("agent_id=#{userMercRel.agentId}");
         }
         if (StringUtils.isNotBlank(userMercRel.getInnerCode())){
             WHERE("inner_code=#{userMercRel.innerCode}");
@@ -64,8 +64,8 @@ public class UserMercRelProvider {
         if (userMercRel.getId() != null) {
             WHERE("id=#{userMercRel.id}");
         }
-        if (userMercRel.getWebUserOuterId() != null) {
-            WHERE("web_user_outer_id=#{userMercRel.webUserOuterId}");
+        if (userMercRel.getAgentId() != null) {
+            WHERE("agent_id=#{userMercRel.agentId}");
         }
         if (StringUtils.isNotBlank(userMercRel.getInnerCode())){
             WHERE("inner_code=#{userMercRel.innerCode}");

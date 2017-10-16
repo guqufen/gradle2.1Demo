@@ -11,7 +11,7 @@ public class UserMercRelDO {
     /**
      * 
      */
-    private Integer webUserOuterId;
+    private Integer agentId;
 
     /**
      * 
@@ -28,15 +28,15 @@ public class UserMercRelDO {
         this.id = id;
     }
 
-    public Integer getWebUserOuterId() {
-        return webUserOuterId;
-    }
+    public Integer getAgentId() {
+		return agentId;
+	}
 
-    public void setWebUserOuterId(Integer webUserOuterId) {
-        this.webUserOuterId = webUserOuterId;
-    }
+	public void setAgentId(Integer agentId) {
+		this.agentId = agentId;
+	}
 
-    public String getInnerCode() {
+	public String getInnerCode() {
         return innerCode;
     }
 
@@ -48,6 +48,6 @@ public class UserMercRelDO {
 
     @Override
     public String toString() {
-        return "[id="+ id + ", webUserOuterId="+ webUserOuterId + ", innerCode="+ innerCode + "]";
+        return "[id="+ id + ", agentId="+ agentId + ", innerCode="+ innerCode + "]";
     }
 }

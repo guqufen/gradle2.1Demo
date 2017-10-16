@@ -140,4 +140,24 @@ public class WebUserOuterService extends BaseService {
     	return ResultDTO.success(this.userOuterDAO.queryType());
     }
 
+    /**
+     *  商户分配分页信息查询
+     * @param user
+     * @param agentList:代理商ID列表
+     * @param pageNum
+     * @param pageSize
+     * @return
+     * @author jiangw
+     */
+    public ResultPageDTO<WebUserOuterDO> pageMerAllo(WebUserOuterDO user, List<Integer> agentList,Integer pageNum, Integer pageSize) {
+        logger.info("开始分页查询UserService.pageMerAllo");
+        List<WebUserOuterDO> pageList = this.userOuterDAO.pageMerAlloList(user, agentList, pageNum, pageSize);
+        for(WebUserOuterDO list : pageList) {
+        	String typeName=this.userOuterDAO.queryTypeName(list.getType());
+        	list.setTypeName(typeName);
+        }
+        Integer count = this.userOuterDAO.pageMerAlloListCount(user.getDepartment(), agentList);
+        ResultPageDTO<WebUserOuterDO> pager = new ResultPageDTO<WebUserOuterDO>(count, pageList);
+        return pager;
+    }
 }
