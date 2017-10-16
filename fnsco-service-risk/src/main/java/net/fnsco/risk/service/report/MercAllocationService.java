@@ -8,16 +8,16 @@ import org.springframework.stereotype.Service;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.risk.service.report.dao.MerAllocationDAO;
+import net.fnsco.risk.service.report.dao.MercAllocationDAO;
 import net.fnsco.risk.service.report.dao.UserMercRelDAO;
 import net.fnsco.risk.service.report.entity.UserMercRelDO;
 import net.fnsco.risk.service.sys.entity.MerAllocationDO;
 
 @Service
-public class MerAllocationService extends BaseService{
+public class MercAllocationService extends BaseService{
 
 	@Autowired
-	private MerAllocationDAO merAllocationDAO;
+	private MercAllocationDAO merAllocationDAO;
 	
 	@Autowired
 	private UserMercRelDAO userMercRelDAO;
