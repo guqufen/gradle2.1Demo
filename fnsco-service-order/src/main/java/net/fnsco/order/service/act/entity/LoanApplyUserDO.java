@@ -38,7 +38,30 @@ public class LoanApplyUserDO {
      */
     private String innnerCode;
 
+    private String merName;//商户名称
+    
 
+    /**
+     * merName
+     *
+     * @return  the merName
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getMerName() {
+        return merName;
+    }
+
+    /**
+     * merName
+     *
+     * @param   merName    the merName to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setMerName(String merName) {
+        this.merName = merName;
+    }
 
     public Integer getId() {
         return id;
