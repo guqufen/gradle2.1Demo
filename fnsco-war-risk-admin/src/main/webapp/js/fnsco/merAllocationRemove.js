@@ -8,7 +8,7 @@ console.log("outerId:"+outerId);
 
 $(function(){
 	$.ajax({
-		url : '/web/addUser/queryUserById',
+		url : PROJECT_NAME + '/web/addUser/queryUserById',
 		type : 'post',
 		traditional: true,
 		data : {
@@ -70,6 +70,7 @@ $('#table').bootstrapTable({
 		field : 'legalValidCardType',
 		title : '证件类型',
 		align : 'center',
+		formatter : cardTypeFormatter
 	}, {
 		field : 'cardNum',
 		title : '证件号码',
@@ -133,6 +134,22 @@ function formatindex(value, row, index) {
 function formatTime(value, row, index) {
 	return formatDateUtil(new Date(value));
 }
+
+//证件类型格式化
+function cardTypeFormatter(value, row, index){
+	if(value == '0'){
+		return '身份证';
+	}else if(value == '1'){
+		return '护照';
+	}else if(value == '2'){
+		return '士兵证';
+	}else if(value == '3'){
+		return '军官证';
+	}else if(value == '4'){
+		return '港澳通行证';
+	}
+}
+
 /**
  * 点击移除按钮，批量移除的方法
  */
@@ -155,7 +172,7 @@ function remove() {
 		}
 
 		$.ajax({
-			url : '/web/MerAllocation/deleteByagentInnerId',
+			url : PROJECT_NAME + '/web/MerAllocation/deleteByagentInnerId',
 			type : 'post',
 			traditional: true,
 			data : {

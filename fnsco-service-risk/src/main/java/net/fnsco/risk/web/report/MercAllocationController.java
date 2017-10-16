@@ -12,7 +12,7 @@ import io.swagger.annotations.Api;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.risk.service.report.MerAllocationService;
+import net.fnsco.risk.service.report.MercAllocationService;
 import net.fnsco.risk.service.sys.entity.MerAllocationDO;
 
 /**
@@ -24,10 +24,10 @@ import net.fnsco.risk.service.sys.entity.MerAllocationDO;
 @Controller
 @RequestMapping(value="/web/MerAllocation", method=RequestMethod.POST)
 @Api(value="/web/MerAllocation",tags={""})
-public class MerAllocationController extends BaseController{
+public class MercAllocationController extends BaseController{
 
 	@Autowired
-	private MerAllocationService merAllocationService;
+	private MercAllocationService merAllocationService;
 	
 	/**
 	 * 获取所有商户数据(添加，不属于)
@@ -72,9 +72,6 @@ public class MerAllocationController extends BaseController{
 		if(StringUtils.isBlank(agentId)){
 			return fail("代理商ID为空！！");
 		}
-//		if(StringUtils.isBlank(type)){
-//			return fail("操作类型为空！！");
-//		}
 
 		ResultPageDTO<MerAllocationDO> pager = merAllocationService.getMerData(merAllocationDO, Integer.parseInt(agentId),  pageNum, pageSize);
 		if(pager == null){
