@@ -45,12 +45,28 @@
 			<pattern>%date [%-5level] [%thread] %logger{80} - %msg%X{traceId}%n</pattern>
 		</encoder>
 	</appender>
+	<appender name="file—error"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/warn.log</file>
+		<filter class="net.fnsco.freamwork.log.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>  
+	        <onMismatch>DENY</onMismatch>  
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${LOG_PATH}/warn.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<MaxHistory>300</MaxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%date [%-5level] [%thread] %logger{80} - %msg%n</pattern>
+		</encoder>
+	</appender>
 	<!-- 时间滚动输出 level为 ERROR 日志 -->
 	<appender name="file—error"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOG_PATH}/error.log</file>
 		<filter class="net.fnsco.freamwork.log.LevelFilter">
-			<level>WARN</level>
+			<level>ERROR</level>
 			<onMatch>ACCEPT</onMatch>  
 	        <onMismatch>DENY</onMismatch>  
 		</filter>
