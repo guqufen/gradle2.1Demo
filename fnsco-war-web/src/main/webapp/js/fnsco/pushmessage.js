@@ -106,9 +106,9 @@ function formatPushType(value, row, index){
         return '-';
     }
     else if(value == '1'){
-        return '强推';
-    }else if(value == '0'){
-        return '内推';
+        return '数钱吧';
+    }else if(value == '3'){
+        return '收银台';
     }else{
         return '其他';
     }   
@@ -152,7 +152,7 @@ function queryParams(params)
 			   currentPageNum : this.pageNumber,
 			   pageSize : this.pageSize,
 //			   msgType :$('#pushType').val(),
-			   msgType :1,
+//			   msgType :1,
 			   status:$('#pushState').val(),
 			   startSendTime:$('#datetimepicker1').val(),
 			   endSendTime:$('#datetimepicker2').val()
@@ -379,10 +379,10 @@ $('.sunmitBtn').click(function(){
         layer.msg('图片不能为空');
         return false;
     }
-    if(msgType!='1'){
-        layer.msg('目前只支持“强推”,请重新选择');
-        return false;
-    }
+//    if(msgType!='1'){
+//        layer.msg('目前只支持“强推”,请重新选择');
+//        return false;
+//    }
     if($("#datetimepicker3").val()==""){
         layer.msg('推送日期不能为空');
         return false;

@@ -48,11 +48,13 @@ import net.fnsco.order.service.dao.master.trade.TradeByDayDao;
 import net.fnsco.order.service.dao.master.trade.TradeByHourDao;
 import net.fnsco.order.service.dao.master.trade.TradeByPayTypeDao;
 import net.fnsco.order.service.dao.master.trade.TradeDateTempDao;
+import net.fnsco.order.service.dao.master.trade.TradeTerminalByDayDao;
 import net.fnsco.order.service.domain.AppUserMerchant;
 import net.fnsco.order.service.domain.trade.TradeByDay;
 import net.fnsco.order.service.domain.trade.TradeByHour;
 import net.fnsco.order.service.domain.trade.TradeByPayType;
 import net.fnsco.order.service.domain.trade.TradeDateTemp;
+import net.fnsco.order.service.domain.trade.TradeTerminalByDay;
 
 /**
  * @desc 交易统计service
@@ -84,6 +86,9 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
     
     @Autowired
     private MerchantTerminalDao merchantTerminalDao;
+    
+    @Autowired
+    private TradeTerminalByDayDao tradeTerminalByDayDao;
 
     private final static int   pageSize = 20;
 
@@ -119,6 +124,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
             tradeDateTemp.setAmt(tradeData.getAmt());
             tradeDateTemp.setInnerCode(tradeData.getInnerCode());
             tradeDateTemp.setPaySubType(tradeData.getPaySubType());
+            tradeDateTemp.setTerminalCode(tradeData.getTermId());//内部终端号
             //计算手续费
             String terId = tradeData.getTermId();
             if(StringUtils.isNoneEmpty(terId)){
@@ -141,8 +147,13 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         payTypeCondition.setStartDate(startDate);
         payTypeCondition.setEndDate(endDate);
         tradeByPayTypeDao.deleteByCondition(payTypeCondition);
+        TradeTerminalByDay terminalByDay = new TradeTerminalByDay();
+        terminalByDay.setStartDate(startDate);
+        terminalByDay.setEndDate(endDate);
+        tradeTerminalByDayDao.deleteByCondition(terminalByDay);
         
-        //分别按小时、天、支付渠道统计查询且插入对应表中
+        
+        //分别按小时、天、支付渠道、内部终端,统计查询且插入对应表中
         List<TradeByDay> tradeDayData = tradeDateTempDao.selectTradeDataByDate();
         tradeByDayDao.insertBatch(tradeDayData);
         
@@ -151,6 +162,9 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         
         List<TradeByPayType> tradePayTypeData = tradeDateTempDao.selectTradeDataByPayType();
         tradeByPayTypeDao.insertBatch(tradePayTypeData);
+        
+        List<TradeTerminalByDay> tradeTerminalByDay = tradeDateTempDao.selectTradeTerminalByDate();
+        tradeTerminalByDayDao.insertBatch(tradeTerminalByDay);
     }
     
     /**

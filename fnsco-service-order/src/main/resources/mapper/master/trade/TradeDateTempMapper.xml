@@ -10,9 +10,10 @@
     <result column="trade_date" property="tradeDate" jdbcType="VARCHAR" />
     <result column="trade_houre" property="tradeHoure" jdbcType="VARCHAR" />
     <result column="procedure_fee" property="procedureFee" jdbcType="DECIMAL" />
+    <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, inner_code, amt, pay_sub_type, time_stamp, trade_date, trade_houre, procedure_fee
+    id, inner_code, amt, pay_sub_type, time_stamp, trade_date, trade_houre, procedure_fee,terminal_code
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -26,10 +27,10 @@
   </delete>
   <insert id="insert" parameterType="net.fnsco.order.service.domain.trade.TradeDateTemp" >
     insert into r_trade_date_temp (id, inner_code, amt, 
-      pay_sub_type, time_stamp)
+      pay_sub_type, time_stamp,terminal_code)
     values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{amt,jdbcType=VARCHAR}, 
       #{paySubType,jdbcType=VARCHAR}, #{timeStamp,jdbcType=VARCHAR}, #{tradeDate,jdbcType=VARCHAR}, 
-      #{tradeHoure,jdbcType=VARCHAR})
+      #{tradeHoure,jdbcType=VARCHAR},#{terminalCode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="net.fnsco.order.service.domain.trade.TradeDateTemp" >
     insert into r_trade_date_temp
@@ -55,6 +56,9 @@
       <if test="tradeHoure != null" >
         trade_houre,
       </if>
+      <if test="terminalCode != null" >
+        terminal_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -77,6 +81,9 @@
       </if>
       <if test="tradeHoure != null" >
         #{tradeHoure,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalCode != null" >
+        #{terminalCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -166,12 +173,12 @@
                  SELECT LAST_INSERT_ID()
      </selectKey>
      insert into r_trade_date_temp (id, inner_code, amt, 
-      pay_sub_type, time_stamp,trade_date, trade_houre,procedure_fee)
+      pay_sub_type, time_stamp,trade_date, trade_houre,procedure_fee,terminalCode)
     values
      <foreach collection ="list" item="reddemCode" index= "index" separator =",">
       (#{reddemCode.id,jdbcType=INTEGER}, #{reddemCode.innerCode,jdbcType=VARCHAR}, #{reddemCode.amt,jdbcType=VARCHAR}, 
       #{reddemCode.paySubType,jdbcType=VARCHAR}, #{reddemCode.timeStamp,jdbcType=VARCHAR}, #{reddemCode.tradeDate,jdbcType=VARCHAR}, 
-      #{reddemCode.tradeHoure,jdbcType=VARCHAR},#{reddemCode.procedureFee,jdbcType=DECIMAL})
+      #{reddemCode.tradeHoure,jdbcType=VARCHAR},#{reddemCode.procedureFee,jdbcType=DECIMAL},#{reddemCode.terminalCode,jdbcType=VARCHAR})
      </foreach>
   </insert>
   <!-- 统计今日营业额 -->
@@ -195,5 +202,23 @@
 		)
 	AND time_stamp > #{tradeDate}
 	AND status = 1
+  </select>
+  
+  <!-- 统计终端表 -->
+  <select id="selectTradeTerminalByDate" resultType="net.fnsco.order.service.domain.trade.TradeTerminalByDay">
+     SELECT
+			SUM(amt) AS turnover,
+			SUM(procedure_fee) AS procedureFee,
+			inner_code AS innerCode,
+	    terminal_code AS terminalCode,
+			COUNT(*) AS orderNum,
+			cast(
+				(SUM(amt) / COUNT(*)) AS DECIMAL (16, 2)
+			) AS orderPrice,
+			trade_date AS tradeDate
+		FROM
+			r_trade_date_temp
+		GROUP BY
+			inner_code,trade_date,terminal_code
   </select>
 </mapper>

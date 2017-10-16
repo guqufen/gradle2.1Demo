@@ -25,6 +25,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.TaskUtils;
 import net.fnsco.risk.service.report.dao.ReportInfoDAO;
 import net.fnsco.risk.service.report.dao.ReportRepaymentHistoryDAO;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
@@ -209,26 +210,31 @@ public class ReportService extends BaseService {
         //查询用户的商户名称
         ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
         WebUserOuterDO dto = webUserOuterDAO.getById(userId);
-        MimeMessage message = null;
-        String nick="";    
-        try {    
-            nick=javax.mail.internet.MimeUtility.encodeText("杭州法奈昇科技有限公司");    
-        } catch (Exception e) {    
-            e.printStackTrace();
-        }     
-        try {
-            message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
-            helper.setFrom(new InternetAddress(nick+" <"+ev.getProperty("spring.mail.username")+">"));
-            helper.setTo("782430551@qq.com");  
-            helper.setSubject("风控报告");
-            StringBuffer sb = new StringBuffer();
-            sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理!</p>" + "<p><a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a><p></div>");
-            helper.setText(sb.toString(), true);
-        } catch (Exception e) {
-            logger.error("邮件发送失败");
-        }
-        mailSender.send(message);
+        TaskUtils.execAsyn(new Runnable() {
+            @Override
+            public void run() {
+                MimeMessage message = null;
+                String nick="";    
+                try {    
+                    nick=javax.mail.internet.MimeUtility.encodeText("杭州法奈昇科技有限公司");    
+                } catch (Exception e) {    
+                    e.printStackTrace();
+                }     
+                try {
+                    message = mailSender.createMimeMessage();
+                    MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
+                    helper.setFrom(new InternetAddress(nick+" <"+ev.getProperty("spring.mail.username")+">"));
+                    helper.setTo(ev.getProperty("manger.mail.address"));  
+                    helper.setSubject("风控报告");
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName() + "申请生成关于" + reportInfoDO.getMerName() + "的风控报告,请尽快处理!</p>" + "<p><a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a><p></div>");
+                    helper.setText(sb.toString(), true);
+                } catch (Exception e) {
+                    logger.error("邮件发送失败");
+                }
+                mailSender.send(message);
+            }
+        });
         return ResultDTO.success();
     }
 
@@ -236,29 +242,33 @@ public class ReportService extends BaseService {
     public ResultDTO headPersonnelMes(Integer userId, Integer merchantId) {
         ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
         WebUserOuterDO dto = webUserOuterDAO.getById(userId);
-        MimeMessage message = null;
-        String nick="";    
-        try {    
-            nick=javax.mail.internet.MimeUtility.encodeText("杭州法奈昇科技有限公司");    
-        } catch (Exception e) {    
-            e.printStackTrace();    
-        }     
-        try {
-            message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
-            helper.setFrom(new InternetAddress(nick+" <"+ev.getProperty("spring.mail.username")+">"));
-            helper.setTo(ev.getProperty("manger.mail.address")); 
-            helper.setSubject("风控报告");
-            StringBuffer sb = new StringBuffer();
-            sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName()+"</p><p>关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!</p><p>点击查看" + "<a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a></p></div>");
-            helper.setText(sb.toString(), true);
-        } catch (MessagingException e) {
-            logger.error("邮件发送失败");
-        }   
-        mailSender.send(message);
+        TaskUtils.execAsyn(new Runnable() {
+            @Override
+            public void run() {
+                MimeMessage message = null;
+                String nick="";    
+                try {    
+                    nick=javax.mail.internet.MimeUtility.encodeText("杭州法奈昇科技有限公司");    
+                } catch (Exception e) {    
+                    e.printStackTrace();    
+                }     
+                try {
+                    message = mailSender.createMimeMessage();
+                    MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
+                    helper.setFrom(new InternetAddress(nick+" <"+ev.getProperty("spring.mail.username")+">"));
+                    helper.setTo(ev.getProperty("manger.mail.address")); 
+                    helper.setSubject("风控报告");
+                    StringBuffer sb = new StringBuffer();
+                    sb.append("<div style='font-size:14px;margin-top:50px;line-height:12px;'><p>dear:</p><p>"+dto.getName()+"</p><p>关于" + reportInfoDO.getMerName() + "的'风控+'报告已经生成!</p><p>点击查看" + "<a style='color:#1229e3;' href='http://www.w3school.com.cn'>W3School</a></p></div>");
+                    helper.setText(sb.toString(), true);
+                } catch (MessagingException e) {
+                    logger.error("邮件发送失败");
+                }   
+                mailSender.send(message);
+            }
+        });
         return ResultDTO.success();
     }
-
     /**
      * 根据id查找当前数据,便于修改用
      * @param reportInfoDO

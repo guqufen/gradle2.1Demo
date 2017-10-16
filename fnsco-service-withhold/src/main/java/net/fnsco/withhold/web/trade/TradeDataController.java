@@ -70,5 +70,12 @@ public class TradeDataController extends BaseController {
         return result;
     }
     
-    
+    //条件查询代扣总额
+    @ApiOperation(value = "条件查询代扣总额", notes = "条件查询代扣总额")
+    @ResponseBody
+    @RequestMapping(value = "checkCountTxnamt")
+    public ResultDTO checkCountTxnamt(TradeDataDO tradeData) {
+        ResultDTO result = this.tradeDataService.checkCountTxnamt(tradeData);
+        return result;
+    }
 }

@@ -62,7 +62,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      */
     @Transactional
     public boolean saveTradeData(TradeDataDTO tradeData) {
-        if (ServiceConstant.STR_1.equals(tradeData.getValidate()) && !Strings.isNullOrEmpty(tradeData.getMd5())) {
+        //ServiceConstant.STR_1.equals(tradeData.getValidate()) && 
+        if (!Strings.isNullOrEmpty(tradeData.getMd5())) {
             //需要校验
             TradeData temp = tradeListDAO.selectByPrimaryKey(tradeData.getMd5());
             if (null != temp) {
@@ -278,8 +279,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      */
     @Override
     public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
-
         TradeData tradeData = new TradeData();
+        
+        if(tradeDataDTO.getPayType()!=null&&tradeDataDTO.getPayType().equals("02")) {
+        	tradeDataDTO.setPayType(null);
+        }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
             tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
         }
@@ -296,7 +300,6 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
 
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
         PageDTO<TradeData> pages = new PageDTO<TradeData>(currentPageNum, perPageSize, tradeData);
-
         List<TradeData> datas = tradeListDAO.queryPageList(pages);
         for (TradeData tradeData2 : datas) {
             if (!Strings.isNullOrEmpty(tradeData2.getInnerCode())) {
@@ -324,10 +327,36 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         int result = tradeListDAO.selectCountByIRT(tradeData);
         return result;
     }
+    @Override
+    public String queryTotalAmount(TradeDataDTO tradeDataDTO) {
+        TradeData tradeData = new TradeData();
+        if(tradeDataDTO.getPayType().equals("02")) {
+        	tradeDataDTO.setPayType(null);
+        }
+        if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
+            tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
+        }
+        if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
+            tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
+        }
 
+        if (!StringUtils.isEmpty(tradeDataDTO.getStartTime())) {
+            tradeDataDTO.setStartTime(DateUtils.getDateStartTime(tradeDataDTO.getStartTime()));
+        }
+        if (!StringUtils.isEmpty(tradeDataDTO.getEndTime())) {
+            tradeDataDTO.setEndTime(DateUtils.getDateEndTime(tradeDataDTO.getEndTime()));
+        }
+        BeanUtils.copyProperties(tradeDataDTO, tradeData);
+        
+        String totalAmountList=tradeListDAO.queryTotalAmount(tradeData);
+        return totalAmountList;
+    }
     @Override
     public List<TradeData> queryDataList(TradeDataDTO tradeDataDTO) {
         TradeData tradeData = new TradeData();
+        if(tradeDataDTO.getPayType().equals("02")) {
+        	tradeDataDTO.setPayType(null);
+        }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
             tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
         }

@@ -202,7 +202,12 @@ public class DateUtils {
     public static String dateFormatToStr(Date date) {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
-
+    public static String dateFormat1ToStr(Date date) {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
+        result = sf.format(date);
+        return result;
+    }
     /**
      * getTimeByMinute:(这里用一句话描述这个方法的作用)获取当前时间前或后N分钟的时间字符串
      *

@@ -50,7 +50,7 @@ $('#table').bootstrapTable({
 		formatter : operateFormatter
 	}, {
 		field : 'name',
-		title : '手机号',
+		title : '账号',
 		align : 'center',
 		width : '10%'
 	}, {
@@ -218,13 +218,13 @@ function queryByName(name) {
 	});
 }
 //手机号格式判断
-function isphone(obj) {
+/*function isphone(obj) {
 	var reg = /^1\d{10}$/;
 	if (!reg.test(obj)) {
 		return false;
 	}
 	return true;
-}
+}*/
 //邮箱格式判断
 function ismail(obj) {
 	var reg = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
@@ -273,22 +273,22 @@ $('#btn_yes').click(function() {
 	var email = $('#email').val();
 	var remark = $('#remark').val();
 	if (name == null || name.length == 0) {
-		layer.msg('手机号不能为空!');
+		layer.msg('账号不能为空!');
 		$("#name").focus();
 		return false;
 	}
 	queryByName(name);
 	if (isdata == false) {
-		layer.msg('手机号已存在!');
+		layer.msg('账号已存在!');
 		$("#name").focus();
 		return false;
 	}
-	var phone = isphone(name);
+	/*var phone = isphone(name);
 	if (phone == false) {
 		layer.msg("请正确填写手机号！");
 		$("#name").focus();
 		return false;
-	}
+	}*/
 	if (department == null || department.length == 0) {
 		layer.msg('名称不能为空!');
 		$("#department").focus();
@@ -386,20 +386,20 @@ $('#btn_yes1').click(function() {
 	var email = $('#email1').val();
 	var remark = $('#remark1').val();
 	if (name == null || name.length == 0) {
-		layer.msg('手机号不能为空!');
+		layer.msg('账号不能为空!');
 		$("#name1").focus();
 		return false;
 	}
-	var phone = isphone(name);
+	/*var phone = isphone(name);
 	if (phone == false) {
 		layer.msg("请正确填写手机号！");
-		$("#name1").focus();
+		$("#name1").focus();	
 		return false;
-	}
+	}*/
 	if (oldname != name) {
 		queryByName(name);
 		if (isdata == false) {
-			layer.msg('手机号已存在!');
+			layer.msg('账号已存在!');
 			$("#name1").focus();
 			return false;
 		}

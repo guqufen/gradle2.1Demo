@@ -47,6 +47,13 @@ public interface TradeDataDAO {
      */
     int queryTotalByCondition(TradeData record);
 
+    
+    /**
+     * 条件查询金额
+     * @param pages
+     * @return
+     */
+    String queryTotalAmount(TradeData record);
     /**
      * queryByCondition:(这里用一句话描述这个方法的作用)
      *

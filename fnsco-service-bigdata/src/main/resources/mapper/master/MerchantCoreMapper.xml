@@ -24,6 +24,7 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="mer_id" property="merId" jdbcType="VARCHAR" />
   </resultMap>
   <!-- APP商户终端列表结果集 -->
   <resultMap  id="TerminalResultMap" type="net.fnsco.bigdata.api.dto.MerTerminalsDTO">
@@ -350,6 +351,11 @@
      <include refid="Base_Column_List" />
    	 from m_merchant_core
   	<where>
+  	<if test="condition.merId != null and condition.merId != ''" >
+         AND inner_code in (
+         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{condition.merId ,jdbcType=VARCHAR} LIMIT 1)as t  
+        )
+      </if>
   	 <if test="condition.innerCode != null and condition.innerCode != ''" >
         AND inner_code = #{condition.innerCode,jdbcType=VARCHAR}
       </if>
@@ -417,6 +423,11 @@
      select count(*)  from 
      		m_merchant_core
   	 <where>
+  	 <if test="merId != null and merId != ''" >
+         AND inner_code in (
+         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{merId ,jdbcType=VARCHAR} LIMIT 1)as t  
+        )
+      </if>
   	 	<if test="innerCode != null and innerCode != ''" >
         AND inner_code = #{innerCode,jdbcType=VARCHAR}
       </if>
@@ -483,6 +494,11 @@
      <include refid="Base_Column_List" />
    	 from m_merchant_core
    	 <where>
+   	  <if test="merId != null and merId != ''" >
+         AND inner_code in (
+         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{merId ,jdbcType=VARCHAR} LIMIT 1)as t  
+        )
+      </if>
    	   <if test="innerCode != null" >
         AND inner_code = #{innerCode,jdbcType=VARCHAR}
       </if>

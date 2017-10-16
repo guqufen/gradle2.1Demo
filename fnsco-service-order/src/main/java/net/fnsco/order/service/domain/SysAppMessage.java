@@ -1,6 +1,7 @@
 package net.fnsco.order.service.domain;
 
 import java.util.Date;
+import java.util.List;
 /**
  * @desc APP消息推送信息实体
  * @author   tangliang
@@ -45,6 +46,30 @@ public class SysAppMessage {
     
     private String modifyUser;
     
+    private List<Integer> msgTypes;//类型集合
+    
+    /**
+     * msgTypes
+     *
+     * @return  the msgTypes
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public List<Integer> getMsgTypes() {
+        return msgTypes;
+    }
+
+    /**
+     * msgTypes
+     *
+     * @param   msgTypes    the msgTypes to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setMsgTypes(List<Integer> msgTypes) {
+        this.msgTypes = msgTypes;
+    }
+
     /**
      * sendTimeStr
      *

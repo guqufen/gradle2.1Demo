@@ -70,6 +70,16 @@ public interface SysAppMessageDao {
      */
     List<SysAppMessage> queryExecuteData();
     /**
+     * 
+     * queryActivityIng:(查询未过期的活动列表)
+     *
+     * @param msgType
+     * @return   List<SysAppMessage>    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<SysAppMessage> queryActivityIng(@Param("msgType") String msgType);
+    /**
      * queryListByIds:(这里用一句话描述这个方法的作用)根据ID查询出详情
      *
      * @param ids

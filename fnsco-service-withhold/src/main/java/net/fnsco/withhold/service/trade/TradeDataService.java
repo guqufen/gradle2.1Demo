@@ -78,4 +78,9 @@ public class TradeDataService extends BaseService {
         int num = this.tradeDataDAO.update(dto);
         return ResultDTO.success();
     }
+
+    public ResultDTO checkCountTxnamt(TradeDataDO tradeData) {
+        Integer count = this.tradeDataDAO.pageListCountTxnamt(tradeData);
+        return ResultDTO.success(count);
+    }
 }

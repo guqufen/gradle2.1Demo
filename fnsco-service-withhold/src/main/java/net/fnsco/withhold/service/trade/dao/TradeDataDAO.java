@@ -79,4 +79,6 @@ public interface TradeDataDAO {
     @SelectProvider(type = TradeDataProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("tradeData") TradeDataDO tradeData);
 
+    @SelectProvider(type = TradeDataProvider.class, method = "pageListCountTxnamt")
+    public Integer pageListCountTxnamt(@Param("tradeData") TradeDataDO tradeData);
 }

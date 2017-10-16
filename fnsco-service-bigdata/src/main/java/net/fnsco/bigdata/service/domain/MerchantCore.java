@@ -22,6 +22,8 @@ public class MerchantCore extends DTO {
 	private String innerCode;
 
 	private String merName;
+	
+	private String merId;
 
 	private String abbreviation;
 
@@ -214,6 +216,14 @@ public class MerchantCore extends DTO {
 
 	public void setMerName(String merName) {
 		this.merName = merName;
+	}
+	
+	public String getMerId() {
+		return merId;
+	}
+
+	public void setMerId(String merId) {
+		this.merId = merId;
 	}
 
 	public String getAbbreviation() {

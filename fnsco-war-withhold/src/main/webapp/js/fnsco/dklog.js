@@ -5,7 +5,7 @@ $('#table').bootstrapTable({
 	url : PROJECT_NAME + '/web/tradeData/query',
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
-	 toolbar: '#toolbar', // 工具按钮用哪个容器
+	toolbar : '#toolbar', // 工具按钮用哪个容器
 	striped : true, // 是否显示行间隔色
 	cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 	pagination : true, // 是否显示分页（*）
@@ -13,13 +13,13 @@ $('#table').bootstrapTable({
 	sortOrder : "asc", // 排序方式
 	pageNumber : 1, // 初始化加载第一页，默认第一页
 	pageSize : 10, // 每页的记录行数（*）
-	pageList : [10,50,100], // 可供选择的每页的行数（*）
+	pageList : [ 10, 20, 50, 100 ], // 可供选择的每页的行数（*）
 	queryParams : queryParams,
 	responseHandler : responseHandler,// 处理服务器返回数据
 	columns : [ {
 		field : 'id',
 		title : '序号',
-	    align : 'center',
+		align : 'center',
 		class : 'id',
 		formatter : operateFormatter
 	}, {
@@ -28,23 +28,22 @@ $('#table').bootstrapTable({
 	}, {
 		field : 'mobile',
 		title : '手机号码',
-		
+
 	}, {
 		field : 'bankCard',
 		title : '银行卡号'
-	},{
+	}, {
 		field : 'txnTime',
 		title : '扣款日',
 		formatter : formatday
-	}
-	,{
+	}, {
 		field : 'txnTime',
 		title : '扣款日期',
 		formatter : formatTxnTime
 	}, {
 		field : 'txnAmt',
 		title : '扣款金额',
-		formatter :formatTxnAmt
+		formatter : formatTxnAmt
 	}, {
 		field : 'payTimes',
 		title : '扣款次数'
@@ -55,7 +54,7 @@ $('#table').bootstrapTable({
 	}, {
 		field : 'failReason',
 		title : '原因',
-		width:200
+		width : 200
 	}, {
 		field : 'txnTime',
 		title : '扣款时间',
@@ -77,45 +76,45 @@ function formatReDate(value, row, index) {
 	return formatDateUtil(value);
 
 }
-function formatTxnAmt(value, row, index){
-	return value/100;
+function formatTxnAmt(value, row, index) {
+	return value / 100;
 }
-function formatTxnTime(value, row, index){
+function formatTxnTime(value, row, index) {
 	if (!value) {
 		return '-';
-	} else{
-		var str=value.substr(0,8);
-		var obj=str.replace(/(.)(?=[^$])/g,"$1,").split(","); 
-		obj.splice(4,0,"-");
-		obj.splice(7,0,"-")
-		return obj.toString().replace(/,/g,"");
+	} else {
+		var str = value.substr(0, 8);
+		var obj = str.replace(/(.)(?=[^$])/g, "$1,").split(",");
+		obj.splice(4, 0, "-");
+		obj.splice(7, 0, "-")
+		return obj.toString().replace(/,/g, "");
 	}
 }
-function formatTxn(value, row, index){
-  
-console.log(obj);
+function formatTxn(value, row, index) {
+
+	console.log(obj);
 	console.log(obj);
 	if (!value) {
 		return '-';
-	} else{
-		var str=value.slice(8,12);
-		var obj=str.replace(/(.)(?=[^$])/g,"$1,").split(","); 
-		var aa=obj.splice(2,0,":");
-		return obj.toString().replace(/,/g,"");
+	} else {
+		var str = value.slice(8, 12);
+		var obj = str.replace(/(.)(?=[^$])/g, "$1,").split(",");
+		var aa = obj.splice(2, 0, ":");
+		return obj.toString().replace(/,/g, "");
 	}
 }
-function formatday(value, row, index){
+function formatday(value, row, index) {
 	if (!value) {
 		return '-';
-	} else{
-		return value.slice(6,8);
+	} else {
+		return value.slice(6, 8);
 	}
 }
 // 操作格式化
 function operateFormatter(value, row, index) {
 	index++;
 	return "<div i='" + value + "'>" + index + "</div>";
-// return [index+1].join('');
+	// return [index+1].join('');
 }
 // 推送类型格式化
 function formatPushType(value, row, index) {
@@ -139,6 +138,7 @@ function formatChange(value, row, index) {
 // 条件查询按钮事件
 function queryEvent() {
 	$('#table').bootstrapTable('refresh');
+	dk();
 }
 // 重置按钮事件
 function resetEvent() {
@@ -172,8 +172,8 @@ function queryParams(params) {
 	}
 	// console.log($("#stauts").find("option:selected").val()); pageNum
 	var param = {
-		page : this.pageNumber,
-		rows : this.pageSize,
+		currentPageNum : this.pageNumber,
+		pageSize : this.pageSize,
 		mobile : $.trim($('#mobile').val()),
 		userName : $.trim($('#userName').val()),
 		certifyId : $.trim($('#certifyId').val()),
@@ -200,61 +200,93 @@ function responseHandler(res) {
 	}
 }
 
-$(function(){
-	$(document).on('click', '.repair', function() {
-	var id=$(this).parent().parent().find(".id").children("div").attr("i");
-	saveBtn(id);
-	})
+$(function() {
+	$(document).on(
+			'click',
+			'.repair',
+			function() {
+				layer.prompt(function(val, index) {
+					layer.msg('得到了' + val);
+					layer.close(index);
+				});
+				var id = $(this).parent().parent().find(".id").children("div")
+						.attr("i");
+				saveBtn(id);
+			})
 })
-	function saveBtn(id){
-		$.ajax({
-			url : PROJECT_NAME + '/web/tradeData/repair',
-			type : 'POST',
-			data : {"id":id,"status":9},
-			success : function(data) {
-				 if(data.code=5110){
-					 console.log(111);
-					 layer.msg("补收时间不能少于扣款当日");
-				 }
-				 if(data.success){
-					 layer.confirm("是否确定线下收款成功", {
-							time : 2000000, // 20s后自动关闭
-							btn : [ '确定', '取消' ]
-						}, function() {
-							buton(id);
-						}, function() {
-							layer.msg('取消成功');
-						});	
-				 }
+function saveBtn(id) {
+	$.ajax({
+		url : PROJECT_NAME + '/web/tradeData/repair',
+		type : 'POST',
+		data : {
+			"id" : id,
+			"status" : 9
+		},
+		success : function(data) {
+			if (data.code = 5110) {
+				console.log(111);
+				layer.msg("补收时间不能少于扣款当日");
 			}
-		});
+			if (data.success) {
+				// layer.confirm("是否确定线下收款成功", {
+				// time : 2000000, // 20s后自动关闭
+				// btn : [ '确定', '取消' ]
+				// }, function() {
+				// buton(id);
+				// }, function() {
+				// layer.msg('取消成功');
+				// });
+			}
+		}
+	});
 }
 
-	function buton(id){
-		$.ajax({
-			url : PROJECT_NAME + '/web/tradeData/repair',
-			type : 'POST',
-			data : {"id":id,"status":9},
-			success : function(data) {
-				 if(data.success){
-			         layer.msg("补交成功");
-			         setTimeout(function() {
-							window.location.reload();
-						}, 1000);
-			     }
+function buton(id) {
+	$.ajax({
+		url : PROJECT_NAME + '/web/tradeData/repair',
+		type : 'POST',
+		data : {
+			"id" : id,
+			"status" : 9
+		},
+		success : function(data) {
+			if (data.success) {
+				layer.msg("补交成功");
+				setTimeout(function() {
+					window.location.reload();
+				}, 1000);
 			}
-		});
+		}
+	});
+}
+function dk() {
+	var startTime;
+	if ($("#datetimepicker1").val()) {
+		startTime = $("#datetimepicker1").val().replace(/-/g, "") + "000000";
+	} else {
+		startTime = "";
 	}
+	var endTime;
+	if ($("#datetimepicker2").val()) {
+		endTime = $("#datetimepicker2").val().replace(/-/g, "") + "235959";
+	} else {
+		endTime = "";
+	}
+	$.ajax({
+		url : PROJECT_NAME + '/web/tradeData/checkCountTxnamt',
+		type : 'POST',
+		data : {
+			mobile : $.trim($('#mobile').val()),
+			userName : $.trim($('#userName').val()),
+			certifyId : $.trim($('#certifyId').val()),
+			withholdday : $("#withholdDate").find("option:selected").val(),
+			status : $("#stauts").find("option:selected").val(),
+			startDate : startTime,
+			endDate : endTime
+		},
+		success : function(data) {
 
+		}
+	});
 
-
-
-
-
-
-
-
-
-
-
-
+}
