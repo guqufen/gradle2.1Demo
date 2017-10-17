@@ -95,7 +95,11 @@ function saveWithholdInfo() {
 					$("body").removeClass("modal-open");
 					queryEvent("table");
 				} else if (!data.success) {
-					layer.msg(data.message);
+					if(data.data=="0"){
+						layer.msg("该银行卡号暂不支持");
+					}else{
+						layer.msg("扣款金额超过银行限额"+data.data/10000+"万");
+					}
 				} else {
 					layer.msg('保存失败');
 				}
@@ -689,7 +693,6 @@ $(".save_btn").click(function(){
 				}else{
 					layer.msg("扣款金额超过银行限额"+data.data/10000+"万");
 				}
-				
 			} else {
 				layer.msg('保存失败');
 			}
@@ -787,7 +790,7 @@ function checkFail(){
 		return false;
 	}
 	var str=$(".auditfailreason").val();
-	var content = str.replace(/\s/g,"^");
+	var content = str.replace(/\n/g,"^");
 	console.log(content)
 	
 	console.log($(".auditfailreason").val().length>200);
