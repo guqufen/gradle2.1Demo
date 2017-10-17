@@ -91,7 +91,7 @@ $(".submit").click(function(){
 	      innerCode : innerCode
 	    },
 	    function(data,status){
-	    	if(status.success){
+	    	if(data.success==true){
 	    		layer.open({
 				    content: '提交成功！正在跳转'
 				    ,skin: 'msg'
