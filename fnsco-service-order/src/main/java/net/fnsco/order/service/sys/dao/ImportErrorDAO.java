@@ -22,7 +22,7 @@ public interface ImportErrorDAO {
 
     @Insert("INSERT into sys_import_error(id,import_file_name,data,error_msg,create_time,create_user_Id,row_number,import_type) VALUES (#{id},#{importFileName},#{data},#{errorMsg},#{createTime},#{createUserId},#{rowNumber},#{importType})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    public void insert(ImportErrorDO importError);
+    public Integer insert(ImportErrorDO importError);
 
     @Delete("DELETE FROM sys_import_error WHERE id = #{id}")
     public int deleteById(@Param("id") int id);
