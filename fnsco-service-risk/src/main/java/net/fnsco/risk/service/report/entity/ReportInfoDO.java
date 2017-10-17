@@ -3,8 +3,19 @@ package net.fnsco.risk.service.report.entity;
 import java.util.Date;
 
 public class ReportInfoDO {
+    //agent_id
+    private Integer agentId;
+    
     //判断三个月是否生成
     private Integer isTrue;
+    public Integer getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(Integer agentId) {
+        this.agentId = agentId;
+    }
+
     public Integer getIsTrue() {
         return isTrue;
     }
@@ -293,10 +304,13 @@ public class ReportInfoDO {
 
     @Override
     public String toString() {
-        return "ReportInfoDO [decorationLevel=" + decorationLevel + ", innerCode=" + innerCode + ", customerType=" + customerType + ", webUserOuterId=" + webUserOuterId + ", id=" + id + ", merName="
-               + merName + ", businessLicenseNum=" + businessLicenseNum + ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime + ", industry=" + industry + ", tradingArea="
-               + tradingArea + ", turnover=" + turnover + ", size=" + size + ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer + ", riskWarning=" + riskWarning + ", quota=" + quota
-               + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status=" + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
+        return "ReportInfoDO [agentId=" + agentId + ", isTrue=" + isTrue + ", decorationLevel=" + decorationLevel + ", innerCode=" + innerCode + ", customerType=" + customerType + ", webUserOuterId="
+               + webUserOuterId + ", id=" + id + ", merName=" + merName + ", businessLicenseNum=" + businessLicenseNum + ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime
+               + ", industry=" + industry + ", tradingArea=" + tradingArea + ", turnover=" + turnover + ", size=" + size + ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer
+               + ", riskWarning=" + riskWarning + ", quota=" + quota + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status=" + status + ", createTime=" + createTime
+               + ", lastModifyTime=" + lastModifyTime + "]";
     }
+
+  
 
 }

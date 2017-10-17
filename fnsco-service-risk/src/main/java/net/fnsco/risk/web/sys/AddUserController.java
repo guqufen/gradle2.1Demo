@@ -2,6 +2,7 @@ package net.fnsco.risk.web.sys;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import io.swagger.annotations.Api;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.risk.service.report.MercAllocationService;
 import net.fnsco.risk.service.sys.WebUserOuterService;
 import net.fnsco.risk.service.sys.entity.AgentDO;
 import net.fnsco.risk.service.sys.entity.WebUserDO;
@@ -26,6 +28,9 @@ public class AddUserController extends BaseController {
 
 	 @Autowired
 	 private WebUserOuterService userOuterService;
+
+	 @Autowired
+	 private MercAllocationService merAllocationService;
 	 /**
 		 * 页面信息查询
 		 * @param dept
@@ -140,4 +145,44 @@ public class AddUserController extends BaseController {
 			ResultDTO<List<AgentDO>> list = userOuterService.queryType();
 			return list;
 		}
+		
+		/**
+		 * 商户分配页面信息查询
+		 * @param webUserDO:外部用户信息对象
+		 * @param merName:商户名称。
+		 * @param pageNum
+		 * @param pageSize
+		 * @return
+		 * 通过商户名称模糊查询步骤：
+		 * 1、商户名称模糊查询出商户信息mcht_core，取出内部商户号inner_code<list集合>
+		 * 2、根据inner_code去外部绑定表查找该内部商户绑定的agent_id<list集合>
+		 * 3、通过agent_id去外部用户信息表查找用户信息<list集合>
+		 * 
+		 */
+		@RequestMapping(value = "/queryOuterUser",method= RequestMethod.GET)
+		@ResponseBody
+		 public ResultDTO<WebUserOuterDO> queryAllUser(WebUserOuterDO webUserDO,String merName, @RequestParam("currentPageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
+			
+			List<Integer> agentList = null;
+			//如果商户名称不为空，则先查找找商户inner_code，再查找绑定的agent_id
+			if(StringUtils.isNotBlank(merName)){
+				
+				//通过商户名称模糊查询内部商户号，未找到则返回失败
+				List<String> merList = merAllocationService.getByMerName(merName);
+				if(merList.size() == 0){
+					return ResultDTO.fail("该商户不存在！");
+				}
+				
+				//通过商户号查找agent_id,未找到则返回失败
+				agentList = merAllocationService.getByInnerCodeList(merList);
+				if(agentList.size() == 0){
+					return ResultDTO.fail("商户对应的代理商未找到！");
+				}
+			}
+			
+			ResultPageDTO<WebUserOuterDO> result=userOuterService.pageMercAllo(webUserDO, agentList, pageNum, pageSize);
+			
+			
+		     return success(result);
+		 }
 }

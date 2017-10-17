@@ -52,7 +52,7 @@ $('#table').bootstrapTable({
 		title : '状态',
 		formatter : formatPushType
 	}, {
-		field : 'failReason',
+		field : 'respMsg',
 		title : '原因',
 		width : 200
 	}, {

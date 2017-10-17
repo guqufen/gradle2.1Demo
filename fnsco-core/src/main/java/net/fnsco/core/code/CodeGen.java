@@ -4,8 +4,8 @@ public class CodeGen {
 
     public static void main(String[] args) throws Exception {
 
-        //AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "fnsco_big_data", "root", "123456");
-        AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "hb-withhold-platform", "root", "123456");
+        AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "fnsco_big_data", "root", "123456");
+        //AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "hb-withhold-platform", "root", "123456");
         auto.setCreateBiz(false);
         auto.setCreateAction(false);
         auto.setCreateService(true);
@@ -18,8 +18,8 @@ public class CodeGen {
         //auto.init("net.fnsco.auth", "sys", "sys_menu");
         //auto.init("net.fnsco.risk", "report", "risk_report_info");
         //auto.init("net.fnsco.risk", "report", "risk_report_repayment_history");
-        //auto.init("net.fnsco.order", "act", "act_apply_user");
+        auto.init("net.fnsco.order", "act", "act_loan_apply_user");
         //auto.init("net.fnsco.risk", "trade", "t_trade_data");
-        auto.init("net.fnsco.withhold", "sys", "sys_bank_trade_limit");
+        //auto.init("net.fnsco.withhold", "sys", "sys_bank_trade_limit");
     }
 }

@@ -253,7 +253,7 @@ public class SysAppMsgServiceImpl extends BaseService implements SysAppMsgServic
         try {
             message.setSendTime(sdf.parse(record.getSendTimeStr()));
         } catch (ParseException e) {
-            e.printStackTrace();
+           logger.error("解析发送日期出错!",e);
         }
         message.setDetailUrl(record.getDetailURL());
         message.setImageUrl(record.getImageURL());

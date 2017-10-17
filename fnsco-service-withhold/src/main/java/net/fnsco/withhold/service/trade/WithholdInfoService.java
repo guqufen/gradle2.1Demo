@@ -1,7 +1,6 @@
 package net.fnsco.withhold.service.trade;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -155,16 +154,19 @@ public class WithholdInfoService extends BaseService {
             int cardLenth = withholdInfo.getBankCard().length();
             BankCodeDO dto = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(), cardLenth);
             if (dto == null) {
-                return ResultDTO.fail("该银行卡号暂不支持");
+                return ResultDTO.failForMessage("0");
             }
             BankTradeLimitDO bankDo = bankTradeLimitDAO.getByBankCode(dto.getCode());
+            if(bankDo==null){
+                return ResultDTO.failForMessage("0");
+            }
             //默认银行限额
             if (!bankDo.getTradeTimesLimit().equals("无限额")) {
-                int defaultLimt = Integer.valueOf(bankDo.getTradeTimesLimit());
-                BigDecimal big = withholdInfo.getAmount();
-                int afferentLimt = big.intValue();
-                if (defaultLimt * 10000 < afferentLimt) {
-                    return ResultDTO.fail("超过银行限额");
+                BigDecimal bigLimt=new BigDecimal(bankDo.getTradeTimesLimit());
+                BigDecimal bigDto = withholdInfo.getAmount();
+                //比较大小   bigDto大于bigLimt
+                if(bigDto.compareTo(bigLimt)==1){
+                    return ResultDTO.failForMessage(bankDo.getTradeTimesLimit());
                 }
             }
         }
@@ -194,7 +196,6 @@ public class WithholdInfoService extends BaseService {
         this.withholdInfoDAO.insert(withholdInfo);
         return ResultDTO.success();
     }
-
     // 修改
     public ResultDTO doUpdate(WithholdInfoDO withholdInfo, Integer loginUserId) {
         logger.info("开始修改WithholdInfoService.update,withholdInfo=" + withholdInfo.toString());
@@ -203,16 +204,21 @@ public class WithholdInfoService extends BaseService {
             int cardLenth = withholdInfo.getBankCard().length();
             BankCodeDO dto = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(), cardLenth);
             if (dto == null) {
-                return ResultDTO.fail("该银行卡号暂不支持");
+                //该银行卡号暂不支持 0 
+                return ResultDTO.failForMessage("0");
             }
             BankTradeLimitDO bankDo = bankTradeLimitDAO.getByBankCode(dto.getCode());
             //默认银行限额
+            if(bankDo==null){
+                // 该银行卡号暂不支持 0 
+                return ResultDTO.failForMessage("0");
+            }
             if (!bankDo.getTradeTimesLimit().equals("无限额")) {
-                int defaultLimt = Integer.valueOf(bankDo.getTradeTimesLimit());
-                BigDecimal big = withholdInfo.getAmount();
-                int afferentLimt = big.intValue();
-                if (defaultLimt * 10000 < afferentLimt) {
-                    return ResultDTO.fail("超过银行限额");
+                BigDecimal bigLimt=new BigDecimal(bankDo.getTradeTimesLimit());
+                BigDecimal bigDto = withholdInfo.getAmount();
+                //比较大小   bigDto大于bigLimt
+                if(bigDto.compareTo(bigLimt)==1){
+                    return ResultDTO.failForMessage(bankDo.getTradeTimesLimit());
                 }
             }
         }

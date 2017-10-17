@@ -2,7 +2,6 @@ package net.fnsco.order.service.dao.master.trade;
 
 import java.util.List;
 
-import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.order.api.dto.TurnoverDTO;
 import net.fnsco.order.service.domain.trade.TradeByDay;
 import net.fnsco.order.service.domain.trade.TradeByHour;

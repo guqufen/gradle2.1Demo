@@ -1,10 +1,15 @@
 package net.fnsco.risk.service.sys.dao.helper;
 
 import org.apache.ibatis.jdbc.SQL;
+
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Joiner;
+
 import org.apache.commons.lang3.StringUtils;
 
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
@@ -188,5 +193,55 @@ public class WebUserOuterProvider {
         WHERE("status!=0");
         }}.toString();
     }
+
+	@SuppressWarnings("unchecked")
+	public String pageMerAlloList(Map<String, Object> params) {
+
+		WebUserOuterDO webUserOuter = (WebUserOuterDO) params.get("webUserOuter");
+		Integer pageNum = (Integer) params.get("pageNum");
+		Integer pageSize = (Integer) params.get("pageSize");
+		List<Integer> agentList = (List<Integer>) params.get("agentList");
+
+		if (pageNum == null || pageNum == 0) {
+			pageNum = 1;
+		}
+		if (pageSize == null || pageSize == 0) {
+			pageSize = 20;
+		}
+		int start = (pageNum - 1) * pageSize;
+		int limit = pageSize;
+
+		String sql = "select * from risk_web_user_outer where 1=1 ";
+
+		if (StringUtils.isNotBlank(webUserOuter.getDepartment().trim())) {
+			sql = sql + "AND department like '%" + webUserOuter.getDepartment().trim() + "%'";
+		}
+		if (agentList != null) {
+			String str = Joiner.on(",").join(agentList);
+			sql = sql + "AND agent_id in (" + str + ")";
+		}
+		sql = sql + " order by id desc limit " + start + ", " + limit;
+		logger.info("pageMerAlloList:" + sql);
+		return sql;
+	}
+
+	@SuppressWarnings("unchecked")
+	public String pageMerAlloListCount(Map<String, Object> params) {
+
+		String department = (String) params.get("department");
+		List<Integer> agentList = (List<Integer>) params.get("agentList");
+
+		String sql = "select count(1) from risk_web_user_outer where 1=1 ";
+
+		if (StringUtils.isNotBlank(department.trim())) {
+			sql = sql + "AND department like '%" + department.trim() + "%'";
+		}
+		if (agentList != null) {
+			String str = Joiner.on(",").join(agentList);
+			sql = sql + "AND agent_id in (" + str + ")";
+		}
+		logger.info("pageMerAlloListCount:" + sql);
+		return sql;
+	}
 }
 

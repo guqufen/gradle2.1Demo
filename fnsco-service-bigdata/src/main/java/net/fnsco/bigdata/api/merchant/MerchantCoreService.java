@@ -194,4 +194,17 @@ public interface MerchantCoreService {
      * @return MerchantCore    DOM对象
      */
     MerchantCore selectBybusinessLicenseNum(String businessLicenseNum,String accountNo);
+    
+    /**
+     * selectUniqueMer:(身份证+银行卡+通道类型+通道商户号)
+     * @param cardNum
+     * @param accountNo
+     * @param channelType
+     * @param channelMerId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年10月10日 下午1:15:41
+     * @return MerchantCore    DOM对象
+     */
+    MerchantCore selectUniqueMer(String cardNum, String accountNo,String channelType,String channelMerId);
 }
