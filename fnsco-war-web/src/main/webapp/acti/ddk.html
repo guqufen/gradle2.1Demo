@@ -91,7 +91,7 @@ $(".submit").click(function(){
 	      innerCode : innerCode
 	    },
 	    function(data,status){
-	    	if(status==success){
+	    	if(status.success){
 	    		layer.open({
 				    content: '提交成功！正在跳转'
 				    ,skin: 'msg'
@@ -101,7 +101,7 @@ $(".submit").click(function(){
 					window.location.href="finamarket/ddk_page.html";
 			  	},2000)
 	    	}
-	      alert("数据：" + data + "\n状态：" + status);
+	      // alert("数据：" + data + "\n状态：" + status);
 	    });
 	}
 })
