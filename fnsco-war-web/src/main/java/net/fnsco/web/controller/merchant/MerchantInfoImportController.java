@@ -112,9 +112,8 @@ public class MerchantInfoImportController extends BaseController {
                                   Exception e) {
 
         ImportErrorDO errorDo = ImportErrorMsgHelper.createImportErrorDO(createTime, startCreateTime, endCreateTime, createUserId, rowNumber, 0, importFileName, errorMsg, data);
-        Integer id = importErrorDAO.insert(errorDo);
+        importErrorDAO.insert(errorDo);
         logger.error("第" + rowNumber + errorMsg, e);
-        errorDo.setId(id);
         return errorDo;
     }
 }
