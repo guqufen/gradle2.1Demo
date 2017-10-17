@@ -119,4 +119,17 @@ public interface MerchantCoreDao {
      * @since  CodingExample　Ver 1.1
      */
     MerchantCore selectByInnerCode(@Param("innerCode") String innerCode);
+    
+    /**
+     * selectUniqueMer:(身份证+银行卡+通道类型+通道商户号)
+     * @param cardNum
+     * @param accountNo
+     * @param channelType
+     * @param channelMerId
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年10月10日 下午1:15:41
+     * @return MerchantCore    DOM对象
+     */
+    MerchantCore selectUniqueMer(@Param("cardNum") String cardNum,@Param("accountNo") String accountNo,@Param("channelType") String channelType,@Param("channelMerId") String channelMerId);
 }

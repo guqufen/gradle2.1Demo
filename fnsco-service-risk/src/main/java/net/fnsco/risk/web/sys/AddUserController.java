@@ -18,7 +18,6 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.risk.service.report.MercAllocationService;
 import net.fnsco.risk.service.sys.WebUserOuterService;
 import net.fnsco.risk.service.sys.entity.AgentDO;
-import net.fnsco.risk.service.sys.entity.MerAllocationDO;
 import net.fnsco.risk.service.sys.entity.WebUserDO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 

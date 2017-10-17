@@ -6,6 +6,7 @@ public class ApiConstant extends CoreConstants {
     public static String THIS_PROGREM_URL          = "app.download.url";
     public static String THIS_ANDROID_URL          = "app.download.android";
     public static String THIS_IOS_URL              = "app.download.ios";
+    public static String FINA_MARKET_URL           = "fina.market.url";
     public static String IS_AUTHOR                 = "false";
     public static String OPEN_IS_AUTHOR            = "open.is.author";
     public static String WEB_IS_AUTHOR             = "web.is.author";

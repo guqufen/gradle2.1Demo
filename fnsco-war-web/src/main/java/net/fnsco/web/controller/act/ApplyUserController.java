@@ -34,7 +34,7 @@ public class ApplyUserController extends BaseController {
     private ApplyUserService applyUserService;
 
     @RequestMapping("/addApplyUser")
-    @ApiOperation(value = "保存活动报名用户信息保存")
+    @ApiOperation(value = "微信推荐成为数钱吧的用户活动，保存活动报名用户信息保存")
     public ResultDTO<String> addApplyUser(ApplyUserDO applyUser) {
         applyUserService.doAdd(applyUser);
         return ResultDTO.success();

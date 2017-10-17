@@ -6,7 +6,7 @@
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
     <result column="pos_id" property="posId" jdbcType="INTEGER" />
     <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
-    <result column="channel_terminal_code" property="innerTermCode" jdbcType="VARCHAR" />
+    <result column="channel_terminal_code" property="channelTerminalCode" jdbcType="VARCHAR" />
     <result column="terminal_batch" property="terminalBatch" jdbcType="VARCHAR" />
     <result column="terminal_para" property="terminalPara" jdbcType="VARCHAR" />
     <result column="charges_type" property="chargesType" jdbcType="INTEGER" />
@@ -68,7 +68,7 @@
       record_state, term_audit_state, term_name, 
       wechat_fee, alipay_fee, terminal_type)
     values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR}, #{posId,jdbcType=INTEGER}, 
-      #{terminalCode,jdbcType=VARCHAR}, #{innerTermCode,jdbcType=VARCHAR}, #{terminalBatch,jdbcType=VARCHAR}, 
+      #{terminalCode,jdbcType=VARCHAR}, #{channelTerminalCode,jdbcType=VARCHAR}, #{terminalBatch,jdbcType=VARCHAR}, 
       #{terminalPara,jdbcType=VARCHAR}, #{chargesType,jdbcType=INTEGER}, #{debitCardRate,jdbcType=VARCHAR}, 
       #{creditCardRate,jdbcType=VARCHAR}, #{debitCardFee,jdbcType=INTEGER}, #{creditCardFee,jdbcType=INTEGER}, 
       #{debitCardMaxFee,jdbcType=INTEGER}, #{creditCardMaxFee,jdbcType=INTEGER}, #{dealSwitch,jdbcType=VARCHAR}, 
@@ -90,7 +90,7 @@
       <if test="terminalCode != null" >
         terminal_code,
       </if>
-      <if test="innerTermCode != null" >
+      <if test="channelTerminalCode != null" >
         channel_terminal_code,
       </if>
       <if test="terminalBatch != null" >
@@ -155,8 +155,8 @@
       <if test="terminalCode != null" >
         #{terminalCode,jdbcType=VARCHAR},
       </if>
-      <if test="innerTermCode != null" >
-        #{innerTermCode,jdbcType=VARCHAR},
+      <if test="channelTerminalCode != null" >
+        #{channelTerminalCode,jdbcType=VARCHAR},
       </if>
       <if test="terminalBatch != null" >
         #{terminalBatch,jdbcType=VARCHAR},
@@ -221,8 +221,8 @@
       <if test="terminalCode != null" >
         terminal_code = #{terminalCode,jdbcType=VARCHAR},
       </if>
-      <if test="innerTermCode != null" >
-        channel_terminal_code = #{innerTermCode,jdbcType=VARCHAR},
+      <if test="channelTerminalCode != null" >
+        channel_terminal_code = #{channelTerminalCode,jdbcType=VARCHAR},
       </if>
       <if test="terminalBatch != null" >
         terminal_batch = #{terminalBatch,jdbcType=VARCHAR},
@@ -280,7 +280,7 @@
     set inner_code = #{innerCode,jdbcType=VARCHAR},
       pos_id = #{posId,jdbcType=INTEGER},
       terminal_code = #{terminalCode,jdbcType=VARCHAR},
-      channel_terminal_code = #{innerTermCode,jdbcType=VARCHAR},
+      channel_terminal_code = #{channelTerminalCode,jdbcType=VARCHAR},
       terminal_batch = #{terminalBatch,jdbcType=VARCHAR},
       terminal_para = #{terminalPara,jdbcType=VARCHAR},
       charges_type = #{chargesType,jdbcType=INTEGER},
@@ -357,7 +357,7 @@
     values 
    	   <foreach collection ="list" item="terMinal" index= "index" separator =",">
    	   (#{terMinal.id,jdbcType=INTEGER}, #{terMinal.innerCode,jdbcType=VARCHAR}, #{terMinal.posId,jdbcType=INTEGER}, 
-      #{terMinal.terminalCode,jdbcType=VARCHAR}, #{terMinal.innerTermCode,jdbcType=VARCHAR}, #{terMinal.terminalBatch,jdbcType=VARCHAR}, 
+      #{terMinal.terminalCode,jdbcType=VARCHAR}, #{terMinal.channelTerminalCode,jdbcType=VARCHAR}, #{terMinal.terminalBatch,jdbcType=VARCHAR}, 
       #{terMinal.terminalPara,jdbcType=VARCHAR}, #{terMinal.chargesType,jdbcType=INTEGER}, #{terMinal.debitCardRate,jdbcType=VARCHAR}, 
       #{terMinal.creditCardRate,jdbcType=VARCHAR}, #{terMinal.debitCardFee,jdbcType=INTEGER}, #{terMinal.creditCardFee,jdbcType=INTEGER}, 
       #{terMinal.debitCardMaxFee,jdbcType=INTEGER}, #{terMinal.creditCardMaxFee,jdbcType=INTEGER}, #{terMinal.dealSwitch,jdbcType=VARCHAR}, 

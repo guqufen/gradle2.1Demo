@@ -3,6 +3,7 @@ package net.fnsco.web.controller.act;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +44,7 @@ public class LoanApplyController extends BaseController {
      */
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     @ResponseBody
-//    @RequiresPermissions(value = { "sys:app:user:list" })
+    @RequiresPermissions(value = { "loan:list" })
     public ResultPageDTO<LoanApplyUserDO> query(LoanApplyUserDO loanApplyUserDO,Integer currentPageNum,Integer pageSize){
         ResultPageDTO<LoanApplyUserDO> result  = loanApplyUserService.page(loanApplyUserDO, currentPageNum, pageSize);
         List<LoanApplyUserDO> datas  = result.getList();
