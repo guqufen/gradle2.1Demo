@@ -24,7 +24,7 @@ public class MerchantTerminal extends DTO{
 
     private String terminalCode;
 
-    private String innerTermCode;
+    private String channelTerminalCode;
 
     private String terminalBatch;
 
@@ -89,13 +89,26 @@ public class MerchantTerminal extends DTO{
     public void setTerminalCode(String terminalCode) {
         this.terminalCode = terminalCode == null ? null : terminalCode.trim();
     }
-
-    public String getInnerTermCode() {
-        return innerTermCode;
+    /**
+     * channelTerminalCode
+     *
+     * @return  the channelTerminalCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getChannelTerminalCode() {
+        return channelTerminalCode;
     }
 
-    public void setInnerTermCode(String innerTermCode) {
-        this.innerTermCode = innerTermCode == null ? null : innerTermCode.trim();
+    /**
+     * channelTerminalCode
+     *
+     * @param   channelTerminalCode    the channelTerminalCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setChannelTerminalCode(String channelTerminalCode) {
+        this.channelTerminalCode = channelTerminalCode;
     }
 
     public String getTerminalBatch() {

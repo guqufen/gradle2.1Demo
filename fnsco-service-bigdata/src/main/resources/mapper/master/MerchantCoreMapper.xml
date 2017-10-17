@@ -654,4 +654,32 @@
     from m_merchant_core
     where business_license_num = #{businessLicenseNum,jdbcType=VARCHAR} AND inner_code  = (SELECT inner_code FROM m_merchant_bank WHERE account_no = #{accountNo} limit 1) limit 1
   </select>
+  <!-- 查询 身份证+银行卡+通道类型+通道商户号 -->
+  <select id="selectUniqueMer" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+	MC.*
+	FROM
+		m_merchant_core MC
+	WHERE
+		card_num = #{cardNum}
+	AND (
+		SELECT
+			COUNT(*)
+		FROM
+			m_merchant_bank MB
+		WHERE
+			account_no = #{accountNo}
+		AND MC.inner_code = MB.inner_code
+	) > 0
+	AND (
+		SELECT
+			COUNT(*)
+		FROM
+			m_merchant_channel MMC
+		WHERE
+			MC.inner_code = MMC.inner_code
+		AND channel_type = #{channelType}
+		AND channel_mer_id = #{channelMerId}
+	) > 0  LIMIT 1
+  </select>
 </mapper>
