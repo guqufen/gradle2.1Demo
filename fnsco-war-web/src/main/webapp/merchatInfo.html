@@ -68,25 +68,31 @@
 			<form id="formSearch" class="form-horizontal">
 				<div class="form-group" style="margin-top: 15px">
 					<div class="row col-sm-10">
-						<div class="row col-sm-10">
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<label class="control-label" for="txt_search_id">商户名：</label> <input
 									type="text" class="form-control" id="txt_search_id">
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<label class="control-label" for="txt_search_merId">商户号：</label> <input
 									type="text" class="form-control" id="txt_search_merId">
 							</div>
-						</div>
-						<div class="row col-sm-10">
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<label class="control-label" for="txt_search_name">法人姓名：</label>
 								<input type="text" class="form-control" id="txt_search_name">
 							</div>
-							<div class="col-sm-6">
+							<div class="col-sm-4">
 								<label class="control-label" for="txt_search_price">法人手机：</label>
 								<input type="text" class="form-control" id="txt_search_price">
 							</div>
+							<div class="col-sm-3">
+							<label class="control-label" for="channel_type">渠道类型:</label> <select
+								id="channel_type" name="channel_type" class="form-control">
+								<option value="04" selected>请选择</option>
+								<option value="00">拉卡拉</option>
+								<option value="01">浦发</option>
+								<option value="02">爱农</option>
+								<option value="03">法奈昇</option>
+							</select>
 						</div>
 					</div>
 					<div class="col-sm-2" style="text-align: right;">

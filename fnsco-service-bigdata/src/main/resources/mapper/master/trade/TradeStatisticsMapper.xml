@@ -13,7 +13,7 @@
   </resultMap>
   <!-- web端分页条件查询 -->
   <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="BaseResultMap">
-    SELECT * FROM r_trade_by_day_terminal 
+    SELECT * FROM r_trade_terminal_by_day 
      <where>
        <if test="condition.startTime != null and  condition.startTime != ''">
         AND trade_date &gt;= #{condition.startTime ,jdbcType=VARCHAR}
@@ -43,7 +43,7 @@
   </select>
   <!-- 条件查询总数 -->
   <select id="queryTotalByCondition" parameterType="net.fnsco.bigdata.service.domain.trade.TradeStatistics" resultType="java.lang.Integer">
-     SELECT count(*) FROM r_trade_by_day_terminal 
+     SELECT count(*) FROM r_trade_terminal_by_day 
      <where>
        <if test="startTime != null and  startTime != ''">
         AND trade_date &gt;= #{startTime ,jdbcType=VARCHAR}
@@ -71,7 +71,7 @@
   </select>
   <!-- 条件查询 -->
   <select id="queryByAllCondition" parameterType="net.fnsco.bigdata.service.domain.trade.TradeStatistics" resultMap="BaseResultMap">
-    SELECT * FROM r_trade_by_day_terminal 
+    SELECT * FROM r_trade_terminal_by_day 
      <where>
        <if test="startTime != null and  startTime != ''">
         AND trade_date &gt;= #{startTime ,jdbcType=VARCHAR}
