@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Compatibility.System;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -158,12 +159,15 @@ public class WithholdInfoService extends BaseService {
                 return ResultDTO.fail("该银行卡号暂不支持");
             }
             BankTradeLimitDO bankDo = bankTradeLimitDAO.getByBankCode(dto.getCode());
+            if(bankDo==null){
+                return ResultDTO.fail("该银行卡号暂不支持");
+            }
             //默认银行限额
             if (!bankDo.getTradeTimesLimit().equals("无限额")) {
-                int defaultLimt = Integer.valueOf(bankDo.getTradeTimesLimit());
-                BigDecimal big = withholdInfo.getAmount();
-                int afferentLimt = big.intValue();
-                if (defaultLimt * 10000 < afferentLimt) {
+                BigDecimal bigLimt=new BigDecimal(bankDo.getTradeTimesLimit());
+                BigDecimal bigDto = withholdInfo.getAmount();
+                //比较大小   bigDto大于bigLimt
+                if(bigDto.compareTo(bigLimt)==1){
                     return ResultDTO.fail("超过银行限额");
                 }
             }
@@ -194,7 +198,6 @@ public class WithholdInfoService extends BaseService {
         this.withholdInfoDAO.insert(withholdInfo);
         return ResultDTO.success();
     }
-
     // 修改
     public ResultDTO doUpdate(WithholdInfoDO withholdInfo, Integer loginUserId) {
         logger.info("开始修改WithholdInfoService.update,withholdInfo=" + withholdInfo.toString());
@@ -207,11 +210,14 @@ public class WithholdInfoService extends BaseService {
             }
             BankTradeLimitDO bankDo = bankTradeLimitDAO.getByBankCode(dto.getCode());
             //默认银行限额
+            if(bankDo==null){
+                return ResultDTO.fail("该银行卡号暂不支持");
+            }
             if (!bankDo.getTradeTimesLimit().equals("无限额")) {
-                int defaultLimt = Integer.valueOf(bankDo.getTradeTimesLimit());
-                BigDecimal big = withholdInfo.getAmount();
-                int afferentLimt = big.intValue();
-                if (defaultLimt * 10000 < afferentLimt) {
+                BigDecimal bigLimt=new BigDecimal(bankDo.getTradeTimesLimit());
+                BigDecimal bigDto = withholdInfo.getAmount();
+                //比较大小   bigDto大于bigLimt
+                if(bigDto.compareTo(bigLimt)==1){
                     return ResultDTO.fail("超过银行限额");
                 }
             }
