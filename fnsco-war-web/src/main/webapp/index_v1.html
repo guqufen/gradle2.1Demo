@@ -12,10 +12,21 @@
 	</style>
 </head>
 <body>
+	<a class="J_menuItem" onclick="clickAddTab('appusermanage.html','77','这只是个首页')">这只是一个首页</a>
 	<h1 style="color:#666;margin-left: 10px;font-size: 16px;">这只是一个首页</h1>
 	<div id="report_main"></div>
 </body>
+<script src="js/bootstrap/jquery.min.js"></script>
 <script src="js/echarts/echarts.simple.min.js"></script>
+<script>
+var win=window.parent.document.getElementById("addHref");
+function clickAddTab(href,dataIndex,html){
+	$(win).attr('href',href);
+	$(win).attr('data-index',dataIndex);
+	$(win).html(html);
+	win.click();
+}
+</script>
 <script type="text/javascript">
 var myChart = echarts.init(document.getElementById('report_main'));
 option = {
