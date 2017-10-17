@@ -63,10 +63,11 @@ public class MercAllocationProvider {
 
 			} else if (merAllocationDO.getReportStatus() == 1) {// 已生成,审核通过，status=1
 				sql.append(" AND c.inner_code in (select inner_code from risk_report_info r where r.`status`=1)");
-			} else if (merAllocationDO.getReportStatus() == 3) {// 生成中,待审核，status=0,待编辑3，审核失败2，提交带编辑4(除了1之外)
-				sql.append(" AND c.inner_code in (select inner_code from risk_report_info r where r.`status` !=1)");
-			} else if (merAllocationDO.getReportStatus() == 2) {// 未生成,report表没有数据
-				sql.append(" AND c.inner_code not in (select inner_code from risk_report_info r)");
+			} else if (merAllocationDO.getReportStatus() == 3) {// 生成中,待审核，status=0,审核失败2，提交带编辑4(除了1和3之外)
+				sql.append(" AND c.inner_code in (select inner_code from risk_report_info r where r.`status` !=1 AND r.`status` !=3)");
+			} else if (merAllocationDO.getReportStatus() == 2) {// 未生成,report表,待编辑3，
+//				sql.append(" AND c.inner_code not in (select inner_code from risk_report_info r)");
+				sql.append(" AND c.inner_code in (select distinct inner_code from risk_report_info r where r.`status`=3)");
 			}
 		}
 
@@ -109,10 +110,11 @@ public class MercAllocationProvider {
 
 			} else if (merAllocationDO.getReportStatus() == 1) {// 已生成,审核通过，status=1
 				sql.append(" AND c.inner_code in (select inner_code from risk_report_info r where r.`status`=1)");
-			} else if (merAllocationDO.getReportStatus() == 3) {// 生成中,待审核，status=0,待编辑3，审核失败2，提交带编辑4(除了1之外)
-				sql.append(" AND c.inner_code in (select inner_code from risk_report_info r where r.`status` !=1)");
-			} else if (merAllocationDO.getReportStatus() == 2) {// 未生成,report表没有数据
-				sql.append(" AND c.inner_code not in (select inner_code from risk_report_info r)");
+			} else if (merAllocationDO.getReportStatus() == 3) {// 生成中,待审核，status=0，审核失败2，提交带编辑4(除了1和3之外)
+				sql.append(" AND c.inner_code in (select inner_code from risk_report_info r where r.`status` !=1 AND r.`status` !=3)");
+			} else if (merAllocationDO.getReportStatus() == 2) {// 未生成,report表,待编辑3
+//				sql.append(" AND c.inner_code not in (select inner_code from risk_report_info r)");
+				sql.append(" AND c.inner_code in (select distinct inner_code from risk_report_info r where r.`status`=3)");
 			}
 		}
 
