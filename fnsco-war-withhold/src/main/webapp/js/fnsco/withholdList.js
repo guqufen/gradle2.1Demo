@@ -432,8 +432,19 @@ function operateFormatter(value, row, index) {
 function failDetails(auditFailReason){
 	//根据用户id查询失败原因
 	$(".auditfailreason").val("");
-	console.log(auditFailReason)
-	layer.alert(auditFailReason,{
+	console.log(auditFailReason);
+	var str="";
+	if(auditFailReason.indexOf("^") > 0 ){
+		var array=auditFailReason.split("^");
+		console.log(array)
+		for (i=0;i<array.length ;i++){
+			str+="<p style='margin:0;'>"+array[i]+"</p>";
+		} 
+		console.log(str)
+	}else{
+		str=auditFailReason;
+	}
+	layer.alert("<div>"+str+"</div>",{
 	    skin: 'layui-layer-lan'
 	    ,closeBtn: 0
 	    ,anim:5, //动画类型
@@ -673,7 +684,12 @@ $(".save_btn").click(function(){
 				$("body").removeClass("modal-open");
 				queryEvent("table");
 			} else if (!data.success) {
-				layer.msg(data.message);
+				if(data.data=="0"){
+					layer.msg("该银行卡号暂不支持");
+				}else{
+					layer.msg("扣款金额超过银行限额"+data.data/10000+"万");
+				}
+				
 			} else {
 				layer.msg('保存失败');
 			}
@@ -766,6 +782,16 @@ function checkFail(){
 		layer.msg('请填写审核失败原因');
 		return false;
 	}
+	if($(".auditfailreason").val().length>200){
+		layer.msg('审核失败原因最多输入200个字数');
+		return false;
+	}
+	var str=$(".auditfailreason").val();
+	var content = str.replace(/\s/g,"^");
+	console.log(content)
+	
+	console.log($(".auditfailreason").val().length>200);
+
 	layer.confirm('确定审核失败吗？', {
 		time : 20000, // 20s后自动关闭
 		btn : [ '确定', '取消' ]
@@ -796,7 +822,7 @@ function checkFail(){
 			dataType : "json",
 			data : {
 				'id' : $("#myCheckdetails .id").val(),
-				'auditFailReason':$(".auditfailreason").val()
+				'auditFailReason':content
 			},
 			success : function(data) {
 			},
