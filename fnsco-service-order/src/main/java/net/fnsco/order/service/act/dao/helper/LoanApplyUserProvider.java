@@ -33,8 +33,8 @@ public class LoanApplyUserProvider {
         if (StringUtils.isNotBlank(loanApplyUser.getLoanType())){
             SET("loan_type=#{loanApplyUser.loanType}");
         }
-        if (StringUtils.isNotBlank(loanApplyUser.getInnnerCode())){
-            SET("innner_code=#{loanApplyUser.innnerCode}");
+        if (StringUtils.isNotBlank(loanApplyUser.getInnerCode())){
+            SET("inner_code=#{loanApplyUser.innerCode}");
         }
         WHERE("id = #{loanApplyUser.id}");
         }}.toString();
@@ -73,11 +73,11 @@ public class LoanApplyUserProvider {
         if (StringUtils.isNotBlank(loanApplyUser.getLoanType())){
             WHERE("loan_type=#{loanApplyUser.loanType}");
         }
-        if (StringUtils.isNotBlank(loanApplyUser.getInnnerCode())){
-            WHERE("innner_code=#{loanApplyUser.innnerCode}");
+        if (StringUtils.isNotBlank(loanApplyUser.getInnerCode())){
+            WHERE("inner_code=#{loanApplyUser.innerCode}");
         }
         if(StringUtils.isNotBlank(loanApplyUser.getMerName())){
-            WHERE("innner_code in (select inner_code from m_merchant_core where mer_name like CONCAT('%',#{loanApplyUser.merName},'%'))");
+            WHERE("inner_code in (select inner_code from m_merchant_core where mer_name like CONCAT('%',#{loanApplyUser.merName},'%'))");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
@@ -106,11 +106,11 @@ public class LoanApplyUserProvider {
         if (StringUtils.isNotBlank(loanApplyUser.getLoanType())){
             WHERE("loan_type=#{loanApplyUser.loanType}");
         }
-        if (StringUtils.isNotBlank(loanApplyUser.getInnnerCode())){
-            WHERE("innner_code=#{loanApplyUser.innnerCode}");
+        if (StringUtils.isNotBlank(loanApplyUser.getInnerCode())){
+            WHERE("inner_code=#{loanApplyUser.innerCode}");
         }
         if(StringUtils.isNotBlank(loanApplyUser.getMerName())){
-            WHERE("innner_code in (select inner_code from m_merchant_core where mer_name like CONCAT('%',#{loanApplyUser.merName},'%'))");
+            WHERE("inner_code in (select inner_code from m_merchant_core where mer_name like CONCAT('%',#{loanApplyUser.merName},'%'))");
         }
         }}.toString();
     }

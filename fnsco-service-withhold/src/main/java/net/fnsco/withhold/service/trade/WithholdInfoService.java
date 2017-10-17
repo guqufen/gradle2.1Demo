@@ -154,11 +154,11 @@ public class WithholdInfoService extends BaseService {
             int cardLenth = withholdInfo.getBankCard().length();
             BankCodeDO dto = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(), cardLenth);
             if (dto == null) {
-                return ResultDTO.fail("该银行卡号暂不支持");
+                return ResultDTO.failForMessage("0");
             }
             BankTradeLimitDO bankDo = bankTradeLimitDAO.getByBankCode(dto.getCode());
             if(bankDo==null){
-                return ResultDTO.fail("该银行卡号暂不支持");
+                return ResultDTO.failForMessage("0");
             }
             //默认银行限额
             if (!bankDo.getTradeTimesLimit().equals("无限额")) {
@@ -166,7 +166,7 @@ public class WithholdInfoService extends BaseService {
                 BigDecimal bigDto = withholdInfo.getAmount();
                 //比较大小   bigDto大于bigLimt
                 if(bigDto.compareTo(bigLimt)==1){
-                    return ResultDTO.fail("超过银行限额");
+                    return ResultDTO.failForMessage(bankDo.getTradeTimesLimit());
                 }
             }
         }
@@ -204,19 +204,21 @@ public class WithholdInfoService extends BaseService {
             int cardLenth = withholdInfo.getBankCard().length();
             BankCodeDO dto = bankCodeDAO.getByCardNum(withholdInfo.getBankCard(), cardLenth);
             if (dto == null) {
-                return ResultDTO.fail("该银行卡号暂不支持");
+                //该银行卡号暂不支持 0 
+                return ResultDTO.failForMessage("0");
             }
             BankTradeLimitDO bankDo = bankTradeLimitDAO.getByBankCode(dto.getCode());
             //默认银行限额
             if(bankDo==null){
-                return ResultDTO.fail("该银行卡号暂不支持");
+                // 该银行卡号暂不支持 0 
+                return ResultDTO.failForMessage("0");
             }
             if (!bankDo.getTradeTimesLimit().equals("无限额")) {
                 BigDecimal bigLimt=new BigDecimal(bankDo.getTradeTimesLimit());
                 BigDecimal bigDto = withholdInfo.getAmount();
                 //比较大小   bigDto大于bigLimt
                 if(bigDto.compareTo(bigLimt)==1){
-                    return ResultDTO.fail("超过银行限额");
+                    return ResultDTO.failForMessage(bankDo.getTradeTimesLimit());
                 }
             }
         }

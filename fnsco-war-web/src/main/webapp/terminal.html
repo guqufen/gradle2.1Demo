@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="pragma" content="no -cache">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="expires" content="0">
+<title>终端管理-法奈昇大数据平台</title>
+<meta name="keywords" content="法奈昇大数据平台">
+<meta name="description" content="法奈昇大数据平台">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css"
+	rel="stylesheet">
+<link
+	href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
+<link href="css/plugins/bootstrap/fileinput.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+	<div class="panel-body animated fadeInRight">
+		<div class="panel panel-default">
+			<form id="formSearch" class="form-horizontal">
+				<div class="form-group" style="margin-top: 15px">
+					<div class="row col-sm-10">
+						<div class="col-sm-4">
+							<label class="control-label" for="mer_name">商户名:</label>
+							<input type="text" class="form-control" id="mer_name"
+								name="merName" placeholder="请输入需要搜索的商户名" />
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="channel_mer_id">结算商户号:</label> <input
+								type="text" class="form-control" id="channel_mer_id"
+								name="channel_mer_id" placeholder="请输入需要搜索的结算商户号" />
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="channel_terminal_code">通道终端号:</label> <input
+								type="text" class="form-control" id="channel_terminal_code"
+								name="channel_terminal_code" placeholder="请输入需要搜索的通道终端号">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="inner_code">内部商户号:</label> <input
+								type="text" class="form-control" id="inner_code"
+								name="inner_code" placeholder="请输入需要搜索的内部商户号">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="sn_code">SN:</label> <input
+								type="text" class="form-control" id="sn_code"
+								name="sn_code" placeholder="请输入需要搜索的SN">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="terminal_code">内部终端号:</label>
+							<input type="text" class="form-control" id="terminal_code"
+								name="terminal_code" placeholder="请输入需要搜索的内部终端号" />
+						</div>
+						<div class="col-sm-3" style="display:none;">
+							<label class="control-label" for="charges_type">收费类型:</label> <select
+								id="charges_type" name="charges_type" class="form-control">
+								<option value="0" selected>请选择</option>
+								<option value="1">按每笔百分比</option>
+								<option value="2">按每笔固定金额</option>
+								<option value="3">百分比封顶</option>
+							</select>
+						</div>
+						<div class="col-sm-3">
+							<label class="control-label" for="terminal_type">终端类型:</label> <select
+								id="terminal_type" name="terminal_type" class="form-control">
+								<option value="02" selected>请选择</option>
+								<option value="00">刷卡</option>
+								<option value="01">扫码</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-2" style="text-align: right;">
+						<button type="button" id="btn_query" class="btn btn-primary"
+							onclick="javascript:queryEvent();">
+							<span class="glyphicon glyphicon-search"></span>查询
+						</button>
+						<button type="button" id="btn_reset" class="btn btn-default"
+							onclick="javascript:resetEvent();">
+							<span class="glyphicon glyphicon-refresh"></span>重置
+						</button>
+					</div>
+				</div>
+			</form>
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="row row-lg">
+						<div class="col-sm-12">
+							<table id="table"></table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+	<script
+		src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<!-- <script src="js/content.min.js"></script> -->
+	<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+	<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+	<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+	<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="js/plugins/bootstrap/fileinput.js"></script>
+	<script src="js/plugins/bootstrap/zh.js"></script>
+	<script type="text/javascript" src="js/fnsco/common.js"></script>
+	<script type="text/javascript">
+	//在页面加载完成之后动态加载，避免因为缓存问题导致数据展示不对(在不人工清理缓存情况下)
+	loadJSRandom(document, "js/fnsco/terminal.js");
+</script>
+</body>
+</html>

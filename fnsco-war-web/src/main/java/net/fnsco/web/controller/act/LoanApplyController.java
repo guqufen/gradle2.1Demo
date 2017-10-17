@@ -49,8 +49,8 @@ public class LoanApplyController extends BaseController {
         ResultPageDTO<LoanApplyUserDO> result  = loanApplyUserService.page(loanApplyUserDO, currentPageNum, pageSize);
         List<LoanApplyUserDO> datas  = result.getList();
         for (LoanApplyUserDO loanApplyUserDO2 : datas) {
-            if(StringUtils.isNotBlank(loanApplyUserDO2.getInnnerCode())){
-                MerchantCore merCore = merchantCoreDao.selectByInnerCode(loanApplyUserDO2.getInnnerCode());
+            if(StringUtils.isNotBlank(loanApplyUserDO2.getInnerCode())){
+                MerchantCore merCore = merchantCoreDao.selectByInnerCode(loanApplyUserDO2.getInnerCode());
                 if(null != merCore){
                     loanApplyUserDO2.setMerName(merCore.getMerName());
                 }
