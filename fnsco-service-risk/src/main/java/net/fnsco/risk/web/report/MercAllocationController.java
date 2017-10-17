@@ -43,7 +43,7 @@ public class MercAllocationController extends BaseController{
 
 		String agentId = request.getParameter("userAgentId");
 
-		if(StringUtils.isBlank(agentId)){
+		if(StringUtils.isBlank(agentId) || agentId.equals("null")){
 			return fail("代理商ID为空！！");
 		}
 
@@ -69,7 +69,7 @@ public class MercAllocationController extends BaseController{
 		String agentId = request.getParameter("userAgentId");
 		String type = request.getParameter("type");
 
-		if(StringUtils.isBlank(agentId)){
+		if(StringUtils.isBlank(agentId)  || agentId.equals("null")){
 			return fail("代理商ID为空！！");
 		}
 
