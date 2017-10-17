@@ -144,7 +144,7 @@ public class MerchantController extends BaseController {
             params.add(merdo);
         }
 
-        Date startImportTime = new Date();
+        List<ImportErrorDO> errorDOs = Lists.newArrayList();
         if (params.size() != 0) {
             // excel导出的空数据是“null”，赋值一个空字符串
             int timeNum = 0;
@@ -153,19 +153,21 @@ public class MerchantController extends BaseController {
                 try {
                     //处理单个
                     ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(objs, 1, timeNum);
-                    JSONObject jsonObject = JSONObject.fromObject(result.getData());
-                    String errorMsg  = jsonObject.getString("result");
-                    if (!Strings.isNullOrEmpty(errorMsg) && !"null".equalsIgnoreCase(errorMsg)) {
-                        saveErrorMsgToDB(new Date(),null,null,1,timeNum,"浙付通接口同步导入",errorMsg,objs.toString(),null);
+                    if(!result.isSuccess()){
+                        StringBuffer errorMsg  = new StringBuffer("第").append(timeNum).append(result.getData());
+                        if (!Strings.isNullOrEmpty(errorMsg.toString()) && !"null".equalsIgnoreCase(errorMsg.toString())) {
+                            ImportErrorDO errorDo = saveErrorMsgToDB(new Date(),null,null,1,timeNum,"浙付通接口同步导入",errorMsg.toString(),objs.toString(),null);
+                            errorDOs.add(errorDo);
+                        }
                     }
+                    
                 } catch (ParseException e) {
                     logger.error("接口导入数据程序异常",e);
                     return ResultDTO.fail();
                 }
             }
         }
-        Date endImportTime = new Date();
-        List<ImportErrorDO> errorDOs = importErrorDAO.selectByCondition(ImportErrorMsgHelper.createImportErrorDO(null, startImportTime, endImportTime, 1, null, 0, null, null, null));
+        
         return ResultDTO.success(errorDOs);
     }
     
@@ -175,11 +177,12 @@ public class MerchantController extends BaseController {
      * @date      2017年9月25日 下午4:35:05
      * @return void    DOM对象
      */
-    private void saveErrorMsgToDB(Date createTime,Date startCreateTime,Date endCreateTime,Integer createUserId,Integer rowNumber,
+    private ImportErrorDO saveErrorMsgToDB(Date createTime,Date startCreateTime,Date endCreateTime,Integer createUserId,Integer rowNumber,
                                   String importFileName,String errorMsg,String data,Exception e){
         
         ImportErrorDO errorDo =  ImportErrorMsgHelper.createImportErrorDO(createTime, startCreateTime, endCreateTime, createUserId, rowNumber, 0, importFileName, errorMsg, data);
         importErrorDAO.insert(errorDo);
         logger.error("第" + rowNumber + errorMsg,e);
+        return errorDo;
     }
 }

@@ -58,12 +58,12 @@ var FileInput = function () {
         	//$('#importModal').modal("hide");
             return;
         }
-        var errorMsgStr = null;
+        var errorMsgStr = '';
         var errorMsg = data.data;
         for(var i in errorMsg){
         	errorMsgStr += '第'+errorMsg[i].rowNumber+'行数据有误!原因:'+errorMsg[i].errorMsg+';';
         }
-        if(!errorMsgStr){
+        if(errorMsgStr == ''){
         	errorMsgStr = data.message;
         }
         
