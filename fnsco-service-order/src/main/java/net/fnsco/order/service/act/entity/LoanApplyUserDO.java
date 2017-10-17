@@ -36,7 +36,7 @@ public class LoanApplyUserDO {
     /**
      * 内部商户号 15位
      */
-    private String innnerCode;
+    private String innerCode;
 
     private String merName;//商户名称
     
@@ -111,18 +111,31 @@ public class LoanApplyUserDO {
         this.loanType = loanType;
     }
 
-    public String getInnnerCode() {
-        return innnerCode;
+
+    /**
+     * innerCode
+     *
+     * @return  the innerCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getInnerCode() {
+        return innerCode;
     }
 
-    public void setInnnerCode(String innnerCode) {
-        this.innnerCode = innnerCode;
+    /**
+     * innerCode
+     *
+     * @param   innerCode    the innerCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setInnerCode(String innerCode) {
+        this.innerCode = innerCode;
     }
-
-
 
     @Override
     public String toString() {
-        return "[id="+ id + ", userName="+ userName + ", contactNum="+ contactNum + ", cardType="+ cardType + ", cardNum="+ cardNum + ", loanType="+ loanType + ", innnerCode="+ innnerCode + "]";
+        return "[id="+ id + ", userName="+ userName + ", contactNum="+ contactNum + ", cardType="+ cardType + ", cardNum="+ cardNum + ", loanType="+ loanType + ", innnerCode="+ innerCode + "]";
     }
 }

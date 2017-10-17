@@ -64,7 +64,7 @@ public interface WebUserOuterDAO {
 	@Select("SELECT name FROM m_agent WHERE id= #{id}")
 	public String queryTypeName(Integer id);
 
-	@Select("SELECT web_user_outer_id FROM risk_user_merc_rel WHERE inner_code = #{innerCode}")
+	@Select("SELECT id FROM risk_web_user_outer WHERE agent_id in(SELECT distinct agent_id FROM risk_user_merc_rel WHERE inner_code = #{innerCode})")
 	public List<Integer> getByInnercode(String innerCode);
 
 	@Results({ @Result(column = "real_name", property = "realName"),
