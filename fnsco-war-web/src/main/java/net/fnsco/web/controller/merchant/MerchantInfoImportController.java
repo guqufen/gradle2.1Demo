@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import net.fnsco.bigdata.api.dto.MerchantSynchronizationDTO;
 import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
@@ -68,7 +69,7 @@ public class MerchantInfoImportController extends BaseController {
         WebUserDTO adminUser = (WebUserDTO) getSessionUser();
         Integer userId = adminUser.getId();
         // 批量导入。参数：文件名，文件。
-        Date startImportTime = new Date();
+        List<ImportErrorDO> errorMsgs = Lists.newArrayList();
         if (customerList.size() != 0) {
             // excel导出的空数据是“null”，赋值一个空字符串
             int timeNum = 1;
@@ -82,20 +83,23 @@ public class MerchantInfoImportController extends BaseController {
                     //处理单个
                     MerchantSynchronizationDTO dto = MerchantSynchronizationDTO.installMerchantSynDto(objs);
                     ResultDTO<String> result1 = merchantInfoImportService.merchantBatchImportToDB(dto, userId, timeNum);
-                    JSONObject jsonObject = JSONObject.fromObject(result1.getData());
-                    String errorMsg = jsonObject.getString("result");
-                    if (!Strings.isNullOrEmpty(errorMsg) && !"null".equalsIgnoreCase(errorMsg)) {
-                        saveErrorMsgToDB(new Date(), null, null, userId, timeNum, name, errorMsg, dto.toString(), null);
+                    
+                    if(!result1.isSuccess()){
+                        StringBuffer errorMsg = new StringBuffer("第").append(timeNum).append(result1.getData());
+                        if (!Strings.isNullOrEmpty(errorMsg.toString()) && !"null".equalsIgnoreCase(errorMsg.toString())) {
+                            ImportErrorDO errorId = saveErrorMsgToDB(new Date(), null, null, userId, timeNum, name, errorMsg.toString(), dto.toString(), null);
+                            errorMsgs.add(errorId);
+                        }
                     }
+                   
                 } catch (ParseException e) {
                     logger.error("接口导入数据程序异常", e);
                     return ResultDTO.fail();
                 }
             }
         }
-        Date endImportTime = new Date();
-        List<ImportErrorDO> errorDOs = importErrorDAO.selectByCondition(ImportErrorMsgHelper.createImportErrorDO(null, startImportTime, endImportTime, 1, null, 0, null, null, null));
-        return ResultDTO.success(errorDOs);
+        
+        return ResultDTO.success(errorMsgs);
     }
 
     /**
@@ -104,11 +108,13 @@ public class MerchantInfoImportController extends BaseController {
      * @date      2017年9月25日 下午4:35:05
      * @return void    DOM对象
      */
-    private void saveErrorMsgToDB(Date createTime, Date startCreateTime, Date endCreateTime, Integer createUserId, Integer rowNumber, String importFileName, String errorMsg, String data,
+    private ImportErrorDO saveErrorMsgToDB(Date createTime, Date startCreateTime, Date endCreateTime, Integer createUserId, Integer rowNumber, String importFileName, String errorMsg, String data,
                                   Exception e) {
 
         ImportErrorDO errorDo = ImportErrorMsgHelper.createImportErrorDO(createTime, startCreateTime, endCreateTime, createUserId, rowNumber, 0, importFileName, errorMsg, data);
-        importErrorDAO.insert(errorDo);
+        Integer id = importErrorDAO.insert(errorDo);
         logger.error("第" + rowNumber + errorMsg, e);
+        errorDo.setId(id);
+        return errorDo;
     }
 }

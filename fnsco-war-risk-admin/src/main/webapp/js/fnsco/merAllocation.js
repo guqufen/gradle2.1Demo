@@ -86,23 +86,28 @@ function responseHandler(res) {
 		};
 	}
 }
-
+var win = window.parent.document.getElementById("addHref");
+function clickAddTab(href, dataIndex, html) {
+	$(win).attr('href', href);
+	$(win).attr('data-index', dataIndex);
+	$(win).html(html);
+	win.click();
+}
 // 操作格式化,添加、移除和详情(都需要带代理商ID跳转页面，详情查询所属； 添加查询非所属；移除查询所属)
 function operateFormatter(value, row, index) {
 	
-	var addUrl = "merAllocationAdd.html?agentId="+ row.agentId +"&id="+row.id;
-	var removeUrl = 'merAllocationRemove.html?agentId='+ row.agentId+"&id="+row.id;
-	var detailUrl = 'merAllocationDetail.html?agentId='+ row.agentId;
+//	var addUrl = 'merAllocationAdd.html?agentId='+ row.agentId +'&id='+row.id;
+//	var removeUrl = 'merAllocationRemove.html?agentId='+ row.agentId+"&id="+row.id;
+//	var detailUrl = 'merAllocationDetail.html?agentId='+ row.agentId;
 	
 	return [
-			'<a class="redact" href="'+ addUrl+'" title="添加">',
-//			'<a class="redact" href="'+ addUrl+'" title="添加">',
+			'<a class="redact" onclick="clickAddTab(\'merAllocationAdd.html?id='+row.id+'&agentId='+ row.agentId +'\',\'11\',\'商户分配-添加\')" title="商户分配-添加">',
 			'<i class="glyphicon glyphicon-plus">添加</i>',
 			'</a>  ',
-			'<a class="redact" href="'+removeUrl +'" title="移除" target="_blank">',
+			'<a class="redact" onclick="clickAddTab(\'merAllocationRemove.html?id='+row.id+'&agentId='+ row.agentId +'\',\'11\',\'商户分配-移除\')" title="商户分配-移除">',
 			'<i class="glyphicon glyphicon-trash">移除</i>',
 			'</a>  ',
-			'<a class="redact" href="'+ detailUrl +'" title="详情" target="_blank">',
+			'<a class="redact" onclick="clickAddTab(\'merAllocationDetail.html?id='+row.id+'&agentId='+ row.agentId +'\',\'11\',\'商户分配-详情\')" title="商户分配-详情">',
 			'<i class="glyphicon glyphicon-list-alt">详情</i>',
 			'</a>  '
 			]
@@ -117,3 +122,6 @@ function formatindex(value, row, index) {
 function formatTime(value, row, index) {
 	return formatDateUtil(new Date(value));
 }
+
+
+

@@ -67,6 +67,18 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     private Environment               env;
     
     private static final String TAICODE_BASE_URL = "qr.redrect.url";
+
+    /**
+     * 获取商户渠道信息信息
+     * @param merNum 商户号
+     * @param channelType
+     * @return
+     */
+    @Override
+    public MerchantChannel getMerChannel(String merCode, String channelType) {
+        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merCode, channelType);
+        return merchantChannel;
+    }
     /**
       * 
       * @param merNum 商户号

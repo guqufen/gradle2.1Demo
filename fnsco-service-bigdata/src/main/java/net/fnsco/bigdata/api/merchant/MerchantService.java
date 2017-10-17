@@ -14,6 +14,7 @@ import net.fnsco.bigdata.api.dto.PosInfoDTO;
 import net.fnsco.bigdata.api.dto.PosListDTO;
 import net.fnsco.bigdata.api.dto.TerminalDetailDTO;
 import net.fnsco.bigdata.api.dto.TerminalsDTO;
+import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.ResultDTO;
 
@@ -23,7 +24,13 @@ import net.fnsco.core.base.ResultDTO;
  */
 public interface MerchantService {
     String getMerCode(String merNum, String channelType);
-
+    /**
+     * 获取商户渠道信息信息
+     * @param merNum 商户号
+     * @param channelType
+     * @return
+     */
+    public MerchantChannel getMerChannel(String merCode, String channelType);
     /**
      * 
      * updatePosName:(更新pos机名称，拉卡拉机器使用)

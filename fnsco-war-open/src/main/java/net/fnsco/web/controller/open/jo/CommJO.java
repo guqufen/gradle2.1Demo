@@ -7,6 +7,54 @@ public class CommJO extends JO {
     private String  version;
     //安卓
     private Integer type;
+    //渠道商户号
+    private String  merCode;
+    //pos机的snCode码
+    private String  snCode;
+
+    /**
+     * merCode
+     *
+     * @return  the merCode
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getMerCode() {
+        return merCode;
+    }
+
+    /**
+     * merCode
+     *
+     * @param   merCode    the merCode to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setMerCode(String merCode) {
+        this.merCode = merCode;
+    }
+
+    /**
+     * snCode
+     *
+     * @return  the snCode
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getSnCode() {
+        return snCode;
+    }
+
+    /**
+     * snCode
+     *
+     * @param   snCode    the snCode to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setSnCode(String snCode) {
+        this.snCode = snCode;
+    }
 
     /**
      * type

@@ -18,7 +18,6 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.risk.service.report.MercAllocationService;
 import net.fnsco.risk.service.sys.WebUserOuterService;
 import net.fnsco.risk.service.sys.entity.AgentDO;
-import net.fnsco.risk.service.sys.entity.MerAllocationDO;
 import net.fnsco.risk.service.sys.entity.WebUserDO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 
@@ -171,13 +170,13 @@ public class AddUserController extends BaseController {
 				//通过商户名称模糊查询内部商户号，未找到则返回失败
 				List<String> merList = merAllocationService.getByMerName(merName);
 				if(merList.size() == 0){
-					return ResultDTO.success("该商户不存在！");
+					return ResultDTO.fail("该商户不存在！");
 				}
 				
 				//通过商户号查找agent_id,未找到则返回失败
 				agentList = merAllocationService.getByInnerCodeList(merList);
 				if(agentList.size() == 0){
-					return ResultDTO.success("商户对应的代理商未找到！");
+					return ResultDTO.fail("商户对应的代理商未找到！");
 				}
 			}
 			

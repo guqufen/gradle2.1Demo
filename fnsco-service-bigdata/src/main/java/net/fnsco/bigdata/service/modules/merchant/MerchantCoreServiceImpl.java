@@ -17,7 +17,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
-import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
@@ -316,7 +315,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         //        merchantTerminal.setChannelId(Integer.valueOf(request.getParameter("channelId")));
         //        merchantTerminal.setChannelName(request.getParameter("channelName"));
         merchantTerminal.setTerminalCode(request.getParameter("terminalCode"));
-        merchantTerminal.setInnerTermCode(request.getParameter("innerTermCode"));
+//        merchantTerminal.setInnerTermCode(request.getParameter("innerTermCode"));
         //        merchantTerminal.setSnCode(request.getParameter("snCode"));
         merchantTerminal.setTerminalBatch(request.getParameter("terminalBatch"));
         merchantTerminal.setTerminalPara(request.getParameter("terminalPara"));
@@ -372,16 +371,16 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             merchantCore.setModifyTime(new Date());
             merchantCore.setStatus(1);
             
-            if (Strings.isNullOrEmpty(merchantCore.getBusinessLicenseNum())) {
-                logger.error("营业执照为空 不能入库!");
-                return ResultDTO.fail();
-            }
-            
-            MerchantCore mc = selectBybusinessLicenseNum(merchantCore.getBusinessLicenseNum(),null);
-            if(null != mc){
-                logger.error("营业执照已经存在,不能入库!");
-                return ResultDTO.fail();
-            }
+//            if (Strings.isNullOrEmpty(merchantCore.getBusinessLicenseNum())) {
+//                logger.error("营业执照为空 不能入库!");
+//                return ResultDTO.fail();
+//            }
+//            
+//            MerchantCore mc = selectBybusinessLicenseNum(merchantCore.getBusinessLicenseNum(),null);
+//            if(null != mc){
+//                logger.error("营业执照已经存在,不能入库!");
+//                return ResultDTO.fail();
+//            }
             
             int res = merchantCoreDao.insertSelective(merchantCore);
             if (res != 1) {
@@ -437,7 +436,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         String innerCode = "";
         for (MerchantTerminal merchantTerminal : merchantTerminals) {
-            merchantTerminal.setInnerTermCode(merchantTerminal.getTerminalCode());
             if (null != merchantTerminal.getId()) {
                 merchantTerminalDao.updateByPrimaryKeySelective(merchantTerminal);
             } else {
@@ -647,5 +645,16 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     @Override
     public MerchantCore selectBybusinessLicenseNum(String businessLicenseNum,String accountNo) {
         return merchantCoreDao.selectBybusinessLicenseNum(businessLicenseNum,accountNo);
+    }
+    /**
+     * 
+     * (non-Javadoc)
+     * @see net.fnsco.bigdata.api.merchant.MerchantCoreService#selectUniqueMer(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     * @author tangliang
+     * @date 2017年10月10日 下午1:23:26
+     */
+    @Override
+    public MerchantCore selectUniqueMer(String cardNum, String accountNo, String channelType, String channelMerId) {
+        return merchantCoreDao.selectUniqueMer(cardNum, accountNo, channelType, channelMerId);
     }
 }

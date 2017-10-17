@@ -125,7 +125,7 @@ function queryParams(params) {
 		merName : $.trim($('#merName').val()),
 		tradingArea : $.trim($('#tradingArea').val()),
 		businessLicenseNum : $.trim($('#businessLicenseNum').val()),
-		webUserOuterId : webUserOuterId
+		agentId : agentId
 	}
 	return param;
 }
