@@ -64,7 +64,6 @@ public class MerchantInfoImportService extends BaseService {
     ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
 
     // 批量导入客户
-    @Transactional
     public ResultDTO<String> merchantBatchImportToDB(MerchantSynchronizationDTO dto, Integer userId, Integer timeNum) throws ParseException {
         
         /**
@@ -72,7 +71,7 @@ public class MerchantInfoImportService extends BaseService {
          */
         ResultDTO<String> fnsResult  = handlerMerchantCore(dto,"03",dto.getMerchantCode(),userId,"00");
         if(!fnsResult.isSuccess()){
-            return ResultDTO.success(fnsResult.getData());
+            return ResultDTO.failForMessage(fnsResult.getData());
         }
         
         /**
@@ -80,7 +79,7 @@ public class MerchantInfoImportService extends BaseService {
          */
         ResultDTO<String> aiResult  = handlerMerchantCore(dto,"02","929010048160219",userId,"01");
         if (!aiResult.isSuccess()) {
-            return ResultDTO.success(aiResult.getData());
+            return ResultDTO.failForMessage(aiResult.getData());
         }
         
         /**
@@ -90,7 +89,7 @@ public class MerchantInfoImportService extends BaseService {
             ResultDTO<String> pufaResult  = handlerMerchantCore(dto,"01",dto.getBusiCode(),userId,"01");
             if (!pufaResult.isSuccess()) {
                 logger.error("导入商户数据异常");
-                return ResultDTO.success(pufaResult.getData());
+                return ResultDTO.failForMessage(pufaResult.getData());
             }
         }
        
@@ -252,6 +251,7 @@ public class MerchantInfoImportService extends BaseService {
      * @date      2017年10月10日 下午1:44:50
      * @return ResultDTO<String>    DOM对象
      */
+    @Transactional
     private ResultDTO<String> handlerMerchantCore(MerchantSynchronizationDTO dto,String channelType,String channelMerId,Integer userId,String terminalType) throws ParseException{
         
         String innerCode = null;
