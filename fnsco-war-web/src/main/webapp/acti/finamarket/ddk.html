@@ -77,13 +77,13 @@ $(".submit").click(function(){
 		return;
 	}else if(isPhoneNo($("input[name='phoneNum']").val())==false){
 		layer.open({
-	    content: '手机号码合适错误！'
+	    content: '手机号码格式错误！'
 	    ,skin: 'msg'
 	    ,time: 2 //2秒后自动关闭
 		});	
 		return;
 	}else{
-		$.post("/mobile/act/addLoanApplyUser",
+		$.post("../mobile/act/addLoanApplyUser",
 	    {
 	      userName : $("input[name='name']").val(),
 	      cardNum: $("input[name='cardNum']").val() ,
