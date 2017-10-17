@@ -91,15 +91,22 @@ $(".submit").click(function(){
 	      innerCode : innerCode
 	    },
 	    function(data,status){
-	    	if(status.success){
+	    	console.log(data);
+	    	if(data.success==true){
+	    	// 	layer.open({
+				  //   content: '提交成功！正在跳转'
+				  //   ,skin: 'msg'
+				  //   ,time: 2 //2秒后自动关闭
+			  	// });	
+			  	// setTimeout(function(){
+					window.location.href="finamarket/ddk_page.html";
+			  	// },2000)
+	    	}else{
 	    		layer.open({
-				    content: '提交成功！正在跳转'
+				    content: '网络异常，请稍候再试！'
 				    ,skin: 'msg'
 				    ,time: 2 //2秒后自动关闭
 			  	});	
-			  	setTimeout(function(){
-					window.location.href="finamarket/ddk_page.html";
-			  	},2000)
 	    	}
 	      // alert("数据：" + data + "\n状态：" + status);
 	    });
