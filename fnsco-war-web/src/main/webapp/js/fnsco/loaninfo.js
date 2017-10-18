@@ -17,10 +17,11 @@ $('#table').bootstrapTable({
     queryParams:queryParams,
     responseHandler:responseHandler,//处理服务器返回数据
     columns: [{
-        field: 'id',
+        field: 'index',
         title: '序号',
         align: 'center',
-        width: 150
+        width: 150,
+        formatter : formatindex
     },{
         field: 'merName',
         title: '商户名称'
@@ -71,4 +72,8 @@ function queryEvent(){
 //重置按钮事件
 function resetEvent(){
 	   $('#formSearch')[0].reset();
+}
+//序号处理
+function formatindex(value, row, index) {
+	return [ index + 1 ].join('');
 }

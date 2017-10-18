@@ -77,6 +77,16 @@ public class MerchantCore extends DTO {
 	private List<MerchantBank> banks;// 关联的银行卡信息
 	private String openFixQr;
 	
+	private String channelType; //渠道类型
+	
+	public String getChannelType() {
+		return channelType;
+	}
+
+	public void setChannelType(String channelType) {
+		this.channelType = channelType;
+	}
+
 	/**
      * openFixQr
      *

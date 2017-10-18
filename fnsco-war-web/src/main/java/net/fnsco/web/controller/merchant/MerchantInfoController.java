@@ -67,7 +67,7 @@ public class MerchantInfoController extends BaseController {
 		return merchantCoreService.queryMerchantCore(merchantCore, currentPageNum, pageSize);
 	}
 	/**
-	 * 交易流水excel导出
+	 * 商户excel导出
 	 * @param tradeDataDTO
 	 * @param currentPageNum
 	 * @param pageSize
