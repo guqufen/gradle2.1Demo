@@ -211,7 +211,8 @@ function queryParams(params)
        merName :$.trim($('#txt_search_id').val()),
        merId :$.trim($('#txt_search_merId').val()),
        legalPerson:$.trim($('#txt_search_name').val()),
-       legalPersonMobile:$.trim($('#txt_search_price').val())
+       legalPersonMobile:$.trim($('#txt_search_price').val()),
+       channelType:$.trim($('#channel_type').val())
    }
    return param;
 }

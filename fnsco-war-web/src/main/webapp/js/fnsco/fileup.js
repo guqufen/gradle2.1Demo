@@ -2,10 +2,12 @@
 function exportEvent(){
 	//拼接参数
 	var merName =$('#txt_search_id').val();
+	var merId =$('#txt_search_merId').val();
     var legalPerson=$('#txt_search_name').val();
     var legalPersonMobile=$('#txt_search_price').val();
-	   var url=PROJECT_NAME+'/web/merchantinfo/export'+'?merName='+merName+'&legalPerson='+legalPerson
-		+'&legalPersonMobile='+legalPersonMobile;
+    var channelType=$('#channel_type').val();
+	   var url=PROJECT_NAME+'/web/merchantinfo/export'+'?merName='+merName+'&merId='+merId+'&legalPerson='+legalPerson
+		+'&legalPersonMobile='+legalPersonMobile+'&channelType='+channelType;
 	   window.open(url, 'Excel导出');
 }
 //模板下载按钮事件
