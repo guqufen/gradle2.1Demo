@@ -370,25 +370,12 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             merchantCore.setModifyUserId("admin");//待定
             merchantCore.setModifyTime(new Date());
             merchantCore.setStatus(1);
-            
-//            if (Strings.isNullOrEmpty(merchantCore.getBusinessLicenseNum())) {
-//                logger.error("营业执照为空 不能入库!");
-//                return ResultDTO.fail();
-//            }
-//            
-//            MerchantCore mc = selectBybusinessLicenseNum(merchantCore.getBusinessLicenseNum(),null);
-//            if(null != mc){
-//                logger.error("营业执照已经存在,不能入库!");
-//                return ResultDTO.fail();
-//            }
-            
             int res = merchantCoreDao.insertSelective(merchantCore);
             if (res != 1) {
                 return ResultDTO.fail();
             }
         } else {
             merchantCoreDao.updateByPrimaryKeySelective(merchantCore);
-            merchantCore = merchantCoreDao.selectByPrimaryKey(merchantCore.getId());
         }
 
         return new ResultDTO<>(true, merchantCore.getInnerCode(), CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));

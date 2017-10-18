@@ -155,10 +155,8 @@ public class MerchantController extends BaseController {
                     ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(objs, 1, timeNum);
                     if(!result.isSuccess()){
                         StringBuffer errorMsg  = new StringBuffer("第").append(timeNum).append(result.getData());
-                        if (!Strings.isNullOrEmpty(errorMsg.toString()) && !"null".equalsIgnoreCase(errorMsg.toString())) {
-                            ImportErrorDO errorDo = saveErrorMsgToDB(new Date(),null,null,1,timeNum,"浙付通接口同步导入",errorMsg.toString(),objs.toString(),null);
-                            errorDOs.add(errorDo);
-                        }
+                        ImportErrorDO errorDo = saveErrorMsgToDB(new Date(),null,null,1,timeNum,"浙付通接口同步导入",errorMsg.toString(),objs.toString(),null);
+                        errorDOs.add(errorDo);
                     }
                     
                 } catch (ParseException e) {
