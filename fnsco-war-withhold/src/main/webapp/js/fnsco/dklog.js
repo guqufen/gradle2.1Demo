@@ -260,33 +260,39 @@ function buton(id) {
 	});
 }
 function dk() {
-	var startTime;
-	if ($("#datetimepicker1").val()) {
-		startTime = $("#datetimepicker1").val().replace(/-/g, "") + "000000";
-	} else {
-		startTime = "";
-	}
-	var endTime;
-	if ($("#datetimepicker2").val()) {
-		endTime = $("#datetimepicker2").val().replace(/-/g, "") + "235959";
-	} else {
-		endTime = "";
-	}
-	$.ajax({
-		url : PROJECT_NAME + '/web/tradeData/checkCountTxnamt',
-		type : 'POST',
-		data : {
-			mobile : $.trim($('#mobile').val()),
-			userName : $.trim($('#userName').val()),
-			certifyId : $.trim($('#certifyId').val()),
-			withholdday : $("#withholdDate").find("option:selected").val(),
-			status : $("#stauts").find("option:selected").val(),
-			startDate : startTime,
-			endDate : endTime
-		},
-		success : function(data) {
-
-		}
-	});
-
+	$(".dk").css("display","none");
+	//判断是否选中已成功
+	console.log($("#stauts option:selected").val());
+    if($("#stauts option:selected").val()=="2"){
+    	$(".dk").css("display","block");
+    	var startTime;
+    	if ($("#datetimepicker1").val()) {
+    		startTime = $("#datetimepicker1").val().replace(/-/g, "") + "000000";
+    	} else {
+    		startTime = "";
+    	}
+    	var endTime;
+    	if ($("#datetimepicker2").val()) {
+    		endTime = $("#datetimepicker2").val().replace(/-/g, "") + "235959";
+    	} else {
+    		endTime = "";
+    	}
+    	$.ajax({
+    		url : PROJECT_NAME + '/web/tradeData/checkCountTxnamt',
+    		type : 'POST',
+    		data : {
+    			mobile : $.trim($('#mobile').val()),
+    			userName : $.trim($('#userName').val()),
+    			certifyId : $.trim($('#certifyId').val()),
+    			withholdday : $("#withholdDate").find("option:selected").val(),
+    			status :2,
+    			startDate : startTime,
+    			endDate : endTime
+    		},
+    		success : function(data) {
+    			$(".sum").html(data.data.result/100);
+    		}
+    	});
+    }
+	
 }
