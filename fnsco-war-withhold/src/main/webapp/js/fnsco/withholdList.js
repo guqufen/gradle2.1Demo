@@ -791,10 +791,6 @@ function checkFail(){
 	}
 	var str=$(".auditfailreason").val();
 	var content = str.replace(/\n/g,"^");
-	console.log(content)
-	
-	console.log($(".auditfailreason").val().length>200);
-
 	layer.confirm('确定审核失败吗？', {
 		time : 20000, // 20s后自动关闭
 		btn : [ '确定', '取消' ]
@@ -810,6 +806,7 @@ function checkFail(){
 			success : function(data) {
 				unloginHandler(data);
 				if (data.success) {
+					addAuditFailReasonById(content);
 					layer.msg('审核没有通过');
 					queryEvent("table");
 					$("#myCheckdetails").hide();
@@ -819,22 +816,24 @@ function checkFail(){
 				layer.msg('系统异常!' + e);
 			}
 		});
-		$.ajax({
-			url : PROJECT_NAME + '/web/withholdInfo/addAuditFailReasonById',
-			type : 'POST',
-			dataType : "json",
-			data : {
-				'id' : $("#myCheckdetails .id").val(),
-				'auditFailReason':content
-			},
-			success : function(data) {
-			},
-			error : function(e) {
-				layer.msg('系统异常!' + e);
-			}
-		});
 	}, function() {
 		layer.msg('取消成功');
+	});
+}
+function addAuditFailReasonById(content){
+	$.ajax({
+		url : PROJECT_NAME + '/web/withholdInfo/addAuditFailReasonById',
+		type : 'POST',
+		dataType : "json",
+		data : {
+			'id' : $("#myCheckdetails .id").val(),
+			'auditFailReason':content
+		},
+		success : function(data) {
+		},
+		error : function(e) {
+			layer.msg('系统异常!' + e);
+		}
 	});
 }
 function productTypeCodeelse(){
