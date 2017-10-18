@@ -429,9 +429,7 @@ public class TradeDataProvider {
             WHERE("withhold_date like CONCAT('%',#{tradeData.withholdday})");
         }
         if(tradeData.getStatus()!=null){
-            WHERE(" status = '"+tradeData.getStatus()+"'");
-        }else{
-            WHERE("status in (0,1,2,9)");
+            WHERE("status=#{tradeData.status}");
         }
         }}.toString();
     }
