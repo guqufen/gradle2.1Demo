@@ -89,14 +89,17 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
                     }
                 }
             }
-        }else if ("01".equals(tradeData.getChannelType())) {//爱农渠道
+        }else if ("02".equals(tradeData.getChannelType())) {//01浦发02爱农03法奈昇
             if (!Strings.isNullOrEmpty(tradeData.getMerId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
+                
                 MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getInnerCode(), tradeData.getChannelType());
                 if (channel != null) {
                     innerCode = channel.getInnerCode();
+                }else{
+                    logger.error("内部商户号没有渠道对应:"+tradeData.getInnerCode());
                 }
             }
-        }else if ("02".equals(tradeData.getChannelType())) {//浦发
+        }else if ("01".equals(tradeData.getChannelType())) {//01浦发02爱农03法奈昇
             MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
             if (channel != null) {
                 innerCode = channel.getInnerCode();
