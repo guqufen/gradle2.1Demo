@@ -12,7 +12,7 @@ public class TerminalInformation {
 
     private String terminalCode;
 
-    private String innerTermCode;
+    private String channelTerminalCode;
 
     private String terminalBatch;
 
@@ -118,12 +118,12 @@ public class TerminalInformation {
 		this.terminalCode = terminalCode;
 	}
 
-	public String getInnerTermCode() {
-		return innerTermCode;
+	public String getChannelTerminalCode() {
+		return channelTerminalCode;
 	}
 
-	public void setInnerTermCode(String innerTermCode) {
-		this.innerTermCode = innerTermCode;
+	public void setChannelTerminalCode(String channelTerminalCode) {
+		this.channelTerminalCode = channelTerminalCode;
 	}
 
 	public String getTerminalBatch() {

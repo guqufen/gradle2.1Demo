@@ -27,7 +27,7 @@
 					field : 'channelMerId',
 					title : '渠道商户号'
 				},  {
-					field : 'innerTermCode',
+					field : 'channelTerminalCode',
 					title : '通道终端号'
 				}, {
 					field : 'innerCode',
@@ -154,7 +154,7 @@
 			pageSize : this.pageSize,
 			merName : $.trim($('#mer_name').val()),
 			channelMerId : $.trim($('#channel_mer_id').val()),
-			innerTermCode : $.trim($('#channel_terminal_code').val()),
+			channelTerminalCode : $.trim($('#channel_terminal_code').val()),
 			innerCode : $.trim($('#inner_code').val()),
 			snCode : $.trim($('#sn_code').val()),
 			terminalCode : $.trim($('#terminal_code').val()),
