@@ -119,9 +119,16 @@ public class CommonController extends BaseController {
                 jo.setImageUrl(imageURL);
             }
             jo.setModifyTime(DateUtils.dateFormat1ToStr(msg.getModifyTime()));
+            jo.setSendTime(DateUtils.dateFormat1ToStr(msg.getSendTime()));
             jo.setMsgSubject(msg.getMsgSubject());
             jo.setMsgSubTitle(msg.getMsgSubTitle());
             resultList.add(jo);
+            
+            //更新状态
+            SysAppMessage record = new SysAppMessage();
+            record.setId(msg.getId());
+            record.setStatus(1);
+            sysAppMsgService.updateByPrimaryKeySelective(record);
         }
         return ResultDTO.success(resultList);
     }
