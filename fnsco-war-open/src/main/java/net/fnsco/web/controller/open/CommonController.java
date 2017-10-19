@@ -2,6 +2,7 @@ package net.fnsco.web.controller.open;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.order.api.appuser.ConmmService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
@@ -111,7 +113,11 @@ public class CommonController extends BaseController {
             MsgJO jo = new MsgJO();
             jo.setId(msg.getId());
             jo.setDetailUrl(msg.getDetailUrl());
-            jo.setImageUrl(msg.getImageUrl());
+            if(StringUtils.isNotEmpty(msg.getImageUrl())){
+                String path = msg.getImageUrl().substring(msg.getImageUrl().indexOf("^")+1);
+                String imageURL =  OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), path);
+                jo.setImageUrl(imageURL);
+            }
             jo.setModifyTime(DateUtils.dateFormat1ToStr(msg.getModifyTime()));
             jo.setMsgSubject(msg.getMsgSubject());
             jo.setMsgSubTitle(msg.getMsgSubTitle());
