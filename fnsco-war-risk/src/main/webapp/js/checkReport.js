@@ -51,6 +51,9 @@ $(function(){
 	data : {"merchantId":merchantId},
 	success : function(data){
 			var result=data.data;
+			
+			console.log(formatDateUtil(result.lastModifyTime));
+			$(".merTime span").html(formatDateUtil(result.lastModifyTime));
 			$(".merName span").html(result.merName);
 			$(".businessLicenseNum span").html(result.businessLicenseNum);
 			$(".businessAddress span").html(result.businessAddress);
