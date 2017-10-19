@@ -16,6 +16,30 @@ public class MsgJO extends JO {
     private String  msgSubTitle;
 
     private String  modifyTime;
+    
+    private String sendTime;
+    
+    /**
+     * sendTime
+     *
+     * @return  the sendTime
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getSendTime() {
+        return sendTime;
+    }
+
+    /**
+     * sendTime
+     *
+     * @param   sendTime    the sendTime to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setSendTime(String sendTime) {
+        this.sendTime = sendTime;
+    }
 
     /**
      * id

@@ -74,20 +74,34 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         long timer = System.currentTimeMillis();
         String innerCode = "";
         String merId = tradeData.getMerId();
-        if (!Strings.isNullOrEmpty(tradeData.getTermId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
-            MerchantTerminal merchantTerminal = merchantTerminalDao.selectOneByTermId(tradeData.getTermId(), tradeData.getChannelType());
-            if(null != merchantTerminal){
-                innerCode = merchantTerminal.getInnerCode();
+        //拉卡拉渠道
+        if ("00".equals(tradeData.getChannelType())) {
+            if (!Strings.isNullOrEmpty(tradeData.getTermId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
+                MerchantTerminal merchantTerminal = merchantTerminalDao.selectOneByTermId(tradeData.getTermId(), tradeData.getChannelType());
+                if (null != merchantTerminal) {
+                    innerCode = merchantTerminal.getInnerCode();
+                }
+            } else {
+                if (!Strings.isNullOrEmpty(tradeData.getMerId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
+                    MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
+                    if (channel != null) {
+                        innerCode = channel.getInnerCode();
+                    }
+                }
             }
-        }else{
-            if(!Strings.isNullOrEmpty(tradeData.getMerId())&& !Strings.isNullOrEmpty(tradeData.getChannelType())){
-                MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
-                if(channel != null){
+        }else if ("01".equals(tradeData.getChannelType())) {//爱农渠道
+            if (!Strings.isNullOrEmpty(tradeData.getMerId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
+                MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getInnerCode(), tradeData.getChannelType());
+                if (channel != null) {
                     innerCode = channel.getInnerCode();
                 }
             }
+        }else if ("02".equals(tradeData.getChannelType())) {//浦发
+            MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
+            if (channel != null) {
+                innerCode = channel.getInnerCode();
+            }
         }
-         
         logger.warn("插入流水，获取商户耗时" + (System.currentTimeMillis() - timer));
         TradeData tradeDataEntity = new TradeData();
         tradeDataEntity.setId(DbUtil.getUuid());
@@ -113,23 +127,23 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         tradeDataEntity.setInnerCode(innerCode);
         tradeDataEntity.setCreateTime(new Date());
         tradeDataEntity.setChannelTermCode(tradeData.getChannelTermCode());
-//        if(tradeData.getCreateTime()!=null) {
-//        	tradeDataEntity.setCreateTime(tradeData.getCreateTime());
-//        }
+        //        if(tradeData.getCreateTime()!=null) {
+        //        	tradeDataEntity.setCreateTime(tradeData.getCreateTime());
+        //        }
         tradeDataEntity.setRespCode(tradeData.getRespCode());
 
         tradeDataEntity.setCertifyId(tradeData.getCardNo());
         tradeDataEntity.setDcType(tradeData.getCardOrg());
         tradeDataEntity.setTxnType(tradeData.getTxnType());
         tradeDataEntity.setStatus("1");
-        
+
         tradeDataEntity.setPayMedium(tradeData.getPayMedium());
         tradeDataEntity.setChannelType(tradeData.getChannelType());
         String txnType = tradeData.getTxnType();
         if ("2".equals(txnType)) {
             tradeDataEntity.setStatus("0");
         }
-        if(!"1001".equals(tradeData.getRespCode())){
+        if (!"1001".equals(tradeData.getRespCode())) {
             tradeDataEntity.setStatus("0");
         }
         logger.error("保存交易流水信息" + JSON.toJSONString(tradeDataEntity));
@@ -144,6 +158,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         return true;
     }
+
     /**
      * 保存交易流水
      */
@@ -162,7 +177,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         logger.warn("插入流水，获取商户耗时" + (System.currentTimeMillis() - timer));
         String txnType = tradeData.getTxnType();
         if ("2".equals(txnType)) {
-        	tradeData.setStatus("0");
+            tradeData.setStatus("0");
         }
         logger.error("保存交易流水信息" + JSON.toJSONString(tradeData));
         tradeListDAO.insert(tradeData);
@@ -176,6 +191,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         return ResultDTO.success();
     }
+
     /**
      * 
      * @author sxf
@@ -193,7 +209,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         if (!CollectionUtils.isEmpty(merchantCore.getPayType())) {
             tradeData.setPaySubTypes(merchantCore.getPayType());
         }
-        if(!Strings.isNullOrEmpty(merchantCore.getPayMedium())){
+        if (!Strings.isNullOrEmpty(merchantCore.getPayMedium())) {
             tradeData.setPayMedium(merchantCore.getPayMedium());
         }
         //根据pos查询终端列表
@@ -238,7 +254,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             //设置商户号
             if (CollectionUtils.isEmpty(innerCodeList)) {
                 return result;
-            }else{
+            } else {
                 tradeData.setInnerCodeList(innerCodeList);
             }
         }
@@ -280,9 +296,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Override
     public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
         TradeData tradeData = new TradeData();
-        
-        if(tradeDataDTO.getPayType()!=null&&tradeDataDTO.getPayType().equals("02")) {
-        	tradeDataDTO.setPayType(null);
+
+        if (tradeDataDTO.getPayType() != null && tradeDataDTO.getPayType().equals("02")) {
+            tradeDataDTO.setPayType(null);
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
             tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
@@ -327,11 +343,12 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         int result = tradeListDAO.selectCountByIRT(tradeData);
         return result;
     }
+
     @Override
     public String queryTotalAmount(TradeDataDTO tradeDataDTO) {
         TradeData tradeData = new TradeData();
-        if(tradeDataDTO.getPayType().equals("02")) {
-        	tradeDataDTO.setPayType(null);
+        if (tradeDataDTO.getPayType().equals("02")) {
+            tradeDataDTO.setPayType(null);
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
             tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
@@ -347,15 +364,16 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             tradeDataDTO.setEndTime(DateUtils.getDateEndTime(tradeDataDTO.getEndTime()));
         }
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
-        
-        String totalAmountList=tradeListDAO.queryTotalAmount(tradeData);
+
+        String totalAmountList = tradeListDAO.queryTotalAmount(tradeData);
         return totalAmountList;
     }
+
     @Override
     public List<TradeData> queryDataList(TradeDataDTO tradeDataDTO) {
         TradeData tradeData = new TradeData();
-        if(tradeDataDTO.getPayType().equals("02")) {
-        	tradeDataDTO.setPayType(null);
+        if (tradeDataDTO.getPayType().equals("02")) {
+            tradeDataDTO.setPayType(null);
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
             tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
@@ -388,10 +406,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         return datas;
     }
-	@Override
-	public String queryByCertifyId(String certifyid) {
-		String cardTotalLength=String.valueOf(certifyid.trim().length());
-		String type=tradeListDAO.queryByCertifyId(certifyid,cardTotalLength);
-		return type;
-	}
+
+    @Override
+    public String queryByCertifyId(String certifyid) {
+        String cardTotalLength = String.valueOf(certifyid.trim().length());
+        String type = tradeListDAO.queryByCertifyId(certifyid, cardTotalLength);
+        return type;
+    }
 }
