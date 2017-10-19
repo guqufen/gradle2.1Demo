@@ -75,14 +75,6 @@ public class MerchantInfoImportService extends BaseService {
         }
         
         /**
-         * 爱农
-         */
-        ResultDTO<String> aiResult  = handlerMerchantCore(dto,"02","929010048160219",userId,"01");
-        if (!aiResult.isSuccess()) {
-            return ResultDTO.failForMessage(aiResult.getData());
-        }
-        
-        /**
          * 浦发
          */
         if (!Strings.isNullOrEmpty(dto.getBusiCode())) {
@@ -92,7 +84,15 @@ public class MerchantInfoImportService extends BaseService {
                 return ResultDTO.failForMessage(pufaResult.getData());
             }
         }
-       
+        
+        /**
+         * 爱农
+         */
+        ResultDTO<String> aiResult  = handlerMerchantCore(dto,"02","929010048160219",userId,"01");
+        if (!aiResult.isSuccess()) {
+            return ResultDTO.failForMessage(aiResult.getData());
+        }
+        
         return ResultDTO.success();
 
     }
@@ -352,6 +352,7 @@ public class MerchantInfoImportService extends BaseService {
         if("01".equals(channelType)){
             posName = "台码";
         }else if("02".equals(channelType)){
+            dto.setXx("支付宝0.55% 微信0.6%");
             posName = "二维码";
         }
         MerchantPos posInfo = merchantPosService.selectBySnCodeAndInnerCode(dto.getSnCode(), innerCode,channelId);
