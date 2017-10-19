@@ -57,9 +57,12 @@ function formatReDate(value, row, index) {
 }
 // 操作格式化
 function operateFormatter(value, row, index) {
-	return [ '<div class="redact" title="设置角色">',
+	return [ '<div class="redact" id="roleSet" title="设置角色">',
 			'<i class="glyphicon glyphicon-pencil"></i><span>角色修改</span>',
-			'</div>  ' ].join('');
+			'</div>  ',
+			'<div class="redact" id="roleList" title="角色查看">',
+			'<i class="glyphicon glyphicon-pencil"></i><span>角色查看</span>',
+			'</div>  '].join('');
 }
 // 推送类型格式化
 function formatPushType(value, row, index) {
@@ -132,7 +135,7 @@ function responseHandler(res) {
 }
 var mobile;
 $(function() {
-	$(document).on('click', '.redact', function() {
+	$(document).on('click', '#roleSet', function() {
 		$(".tab-content").html("");
 		mobile = $(this).parent().next().next().html();
 
@@ -149,9 +152,39 @@ $(function() {
 					layer.msg('该用户没有绑定任何商户');
 				} else {
 					showdates(data.data);
+					$('#myModalLabel').html('');
+					$('#myModalLabel').html('角色管理权限设置');
 					$('#myModal').modal();
 				}
 
+			}
+		});
+
+	})
+	$(document).on('click', '#roleList', function() {
+		$(".tab-content").html("");
+		mobile = $(this).parent().next().next().html();
+
+		var date = {
+			"mobile" : mobile
+		};
+		$.ajax({
+			url : PROJECT_NAME + '/web/appsuser/rolesList',
+			type : 'POST',
+			data : date,
+			success : function(data) {
+				unloginHandler(data);
+				if (data.data == null) {
+					layer.msg('该用户没有绑定任何商户');
+				} else {
+					showdates(data.data);
+					$('#modify').hide();
+					$('#myModalLabel').html('');
+					$('#myModalLabel').html('角色管理权限查看');
+					$('#shopName1').attr('disabled','disabled');
+					$('#shopRole').attr('disabled','disabled');
+					$('#myModal').modal();
+				}
 			}
 		});
 

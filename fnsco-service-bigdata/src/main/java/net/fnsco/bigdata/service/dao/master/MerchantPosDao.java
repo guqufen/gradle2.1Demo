@@ -28,6 +28,16 @@ public interface MerchantPosDao {
      * @return int    DOM对象
      */
     int deleteByChannelId(@Param("channelId")Integer channelId);
+    
+    /**
+     * deleteByMerCoreIds:( 根据core实体IDS删除关联数据)
+     * @param ids
+     * @return    设定文件
+     * @author    tangliang
+     * @date      2017年10月19日 上午10:11:06
+     * @return int    DOM对象
+     */
+    int deleteByMerCoreIds(Integer[] ids);
 
     int insert(MerchantPos record);
     

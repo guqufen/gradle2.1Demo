@@ -114,6 +114,13 @@ public class AppUserManageController extends BaseController {
 	public ResultDTO modifyRole(BandDto bandDto) {
 		return AppUserService.modifyRole(bandDto);
 	}
+	
+	@RequestMapping(value = "/rolesList", method = RequestMethod.POST)
+	@ResponseBody
+	@RequiresPermissions(value = { "sys:app:user:rolesList" })
+	public ResultDTO appRolesList(BandDto bandDto) {
+		return AppUserService.modifyRole(bandDto);
+	}
 
 	// 判断成为店主
 	@RequestMapping(value = "/judgeRoles", method = RequestMethod.POST)
