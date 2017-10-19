@@ -57,11 +57,11 @@ function formatReDate(value, row, index) {
 }
 // 操作格式化
 function operateFormatter(value, row, index) {
-	return [ '<div class="redact" id="roleSet" title="设置角色">',
+	return [ '<div style="float:left;" class="redact" id="roleSet" title="设置角色">',
 			'<i class="glyphicon glyphicon-pencil"></i><span>角色修改</span>',
 			'</div>  ',
-			'<div class="redact" id="roleList" title="角色查看">',
-			'<i class="glyphicon glyphicon-pencil"></i><span>角色查看</span>',
+			'<div style="float:left;" class="redact" id="roleList" title="角色查看">',
+			'<i class="glyphicon glyphicon-file"></i><span>角色查看</span>',
 			'</div>  '].join('');
 }
 // 推送类型格式化
