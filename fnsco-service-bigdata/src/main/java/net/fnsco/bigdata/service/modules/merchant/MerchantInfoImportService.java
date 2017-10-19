@@ -61,7 +61,7 @@ public class MerchantInfoImportService extends BaseService {
 
     private static final String IMAGE_PATH = "http://www.zheft.cn/static_img/";
     
-    ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+    ExecutorService cachedThreadPool = Executors.newFixedThreadPool(6);
 
     // 批量导入客户
     public ResultDTO<String> merchantBatchImportToDB(MerchantSynchronizationDTO dto, Integer userId, Integer timeNum) throws ParseException {
