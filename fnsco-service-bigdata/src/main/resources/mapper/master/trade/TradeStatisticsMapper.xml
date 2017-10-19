@@ -22,8 +22,8 @@
         AND trade_date &lt;= #{condition.endTime ,jdbcType=VARCHAR}
       </if>
       <if test="condition.merId != null and condition.merId !=''" >
-        AND inner_code in (
-         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{condition.merId ,jdbcType=VARCHAR} LIMIT 1)as t  
+         AND inner_code in (
+         	SELECT  DISTINCT t.inner_code FROM (select * from m_merchant_channel WHERE channel_mer_id = #{condition.merId ,jdbcType=VARCHAR})as t  
         )
       </if>
 	  <if test="condition.merName != null and condition.merName !=''" >
@@ -52,8 +52,8 @@
         AND trade_date &lt;= #{endTime ,jdbcType=VARCHAR}
       </if>
       <if test="merId != null and merId !=''" >
-        AND inner_code in (
-         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{merId ,jdbcType=VARCHAR} LIMIT 1)as t 
+         AND inner_code in (
+         	SELECT  DISTINCT t.inner_code FROM (select * from m_merchant_channel WHERE channel_mer_id = #{merId ,jdbcType=VARCHAR})as t  
         )
       </if>
 	  <if test="merName != null and merName !=''" >
@@ -81,7 +81,7 @@
       </if>
       <if test="merId != null and merId !=''" >
         AND inner_code in (
-         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{merId ,jdbcType=VARCHAR} LIMIT 1)as t  
+         	SELECT  DISTINCT t.inner_code FROM (select * from m_merchant_channel WHERE channel_mer_id = #{merId ,jdbcType=VARCHAR})as t  
         )
       </if>
 	  <if test="merName != null and merName !=''" >

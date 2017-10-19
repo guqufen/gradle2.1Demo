@@ -353,7 +353,12 @@
   	<where>
   	<if test="condition.merId != null and condition.merId != ''" >
          AND inner_code in (
-         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{condition.merId ,jdbcType=VARCHAR} LIMIT 1)as t  
+         	SELECT  DISTINCT t.inner_code FROM (select * from m_merchant_channel WHERE channel_mer_id = #{condition.merId ,jdbcType=VARCHAR})as t  
+        )
+      </if>
+      <if test="condition.channelType != null and condition.channelType != ''" >
+         AND inner_code in (
+         	SELECT DISTINCT c.inner_code FROM (select * from m_merchant_channel WHERE channel_type = #{condition.channelType ,jdbcType=VARCHAR}) as c
         )
       </if>
   	 <if test="condition.innerCode != null and condition.innerCode != ''" >
@@ -425,7 +430,12 @@
   	 <where>
   	 <if test="merId != null and merId != ''" >
          AND inner_code in (
-         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{merId ,jdbcType=VARCHAR} LIMIT 1)as t  
+         	SELECT  DISTINCT t.inner_code FROM (select * from m_merchant_channel WHERE channel_mer_id = #{merId ,jdbcType=VARCHAR})as t  
+        )
+      </if>
+      <if test="channelType != null and channelType != ''" >
+         AND inner_code in (
+         	SELECT DISTINCT c.inner_code FROM (select * from m_merchant_channel WHERE channel_type = #{channelType ,jdbcType=VARCHAR})as c
         )
       </if>
   	 	<if test="innerCode != null and innerCode != ''" >
@@ -495,8 +505,8 @@
    	 from m_merchant_core
    	 <where>
    	  <if test="merId != null and merId != ''" >
-         AND inner_code in (
-         	SELECT t.inner_code FROM (select * from t_trade_data WHERE mer_id = #{merId ,jdbcType=VARCHAR} LIMIT 1)as t  
+          AND inner_code in (
+         	SELECT  DISTINCT t.inner_code FROM (select * from m_merchant_channel WHERE channel_mer_id = #{merId ,jdbcType=VARCHAR})as t  
         )
       </if>
    	   <if test="innerCode != null" >
