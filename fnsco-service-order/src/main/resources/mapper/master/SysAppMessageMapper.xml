@@ -394,7 +394,7 @@
   <select id="queryActivityIng" resultMap="BaseResultMap" parameterType="java.lang.String">
     select 
      <include refid="Base_Column_List" />
-      from sys_msg_app where send_time &lt;=  NOW() AND status=0 and msg_type='3'
+      from sys_msg_app where send_time &lt;=  NOW()  and msg_type='3'
       order by send_time desc
   </select>
 </mapper>
