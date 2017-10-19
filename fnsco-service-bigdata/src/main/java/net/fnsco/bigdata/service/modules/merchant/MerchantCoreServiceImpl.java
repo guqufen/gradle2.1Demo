@@ -195,6 +195,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             merchantChannelDao.deleteByMerCoreIds(ids);
             merchantBankDao.deleteByMerCoreIds(ids);
             merchantTerminalDao.deleteByMerCoreIds(ids);
+            merchantPosDao.deleteByMerCoreIds(ids);
             //根据id找到innerCode  删除店铺绑定关系表和用户角色表
             merchantUserRelDao.deleteByMerCoreIds(ids);
             appUserMerchantDao.deleteByMerCoreIds(ids);
