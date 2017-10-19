@@ -18,6 +18,7 @@ import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.order.api.appuser.ConmmService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
@@ -111,7 +112,7 @@ public class CommonController extends BaseController {
             MsgJO jo = new MsgJO();
             jo.setId(msg.getId());
             jo.setDetailUrl(msg.getDetailUrl());
-            jo.setImageUrl(msg.getImageUrl());
+            jo.setImageUrl(OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), msg.getImageUrl()));
             jo.setModifyTime(DateUtils.dateFormat1ToStr(msg.getModifyTime()));
             jo.setMsgSubject(msg.getMsgSubject());
             jo.setMsgSubTitle(msg.getMsgSubTitle());
