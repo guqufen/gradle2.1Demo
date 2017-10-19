@@ -55,7 +55,7 @@ public class MenuProvider {
             pageNum = 1;
         }
         if (pageSize == null || pageSize == 0) {
-            pageSize = 50;
+            pageSize = 200;
         }
         int start = (pageNum - 1) * pageSize;
         int limit = pageSize;

@@ -443,11 +443,16 @@ public class DateUtils {
     }
     public static Date formateToDate(String timeStr){
         SimpleDateFormat sf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        SimpleDateFormat sfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            return sf.parse(timeStr);
+            return sfs.parse(timeStr);
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            logger.error("解析日期出错!"+timeStr,e);
+            try {
+                return sf.parse(timeStr);
+            } catch (ParseException e1) {
+                logger.error("解析日期出错!"+timeStr,e);
+                e1.printStackTrace();
+            }
         }
         return new Date();
     }

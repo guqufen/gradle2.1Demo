@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import io.swagger.annotations.Api;
@@ -155,10 +154,8 @@ public class MerchantController extends BaseController {
                     ResultDTO<String> result = merchantInfoImportService.merchantBatchImportToDB(objs, 1, timeNum);
                     if(!result.isSuccess()){
                         StringBuffer errorMsg  = new StringBuffer("第").append(timeNum).append(result.getData());
-                        if (!Strings.isNullOrEmpty(errorMsg.toString()) && !"null".equalsIgnoreCase(errorMsg.toString())) {
-                            ImportErrorDO errorDo = saveErrorMsgToDB(new Date(),null,null,1,timeNum,"浙付通接口同步导入",errorMsg.toString(),objs.toString(),null);
-                            errorDOs.add(errorDo);
-                        }
+                        ImportErrorDO errorDo = saveErrorMsgToDB(new Date(),null,null,1,timeNum,"浙付通接口同步导入",errorMsg.toString(),objs.toString(),null);
+                        errorDOs.add(errorDo);
                     }
                     
                 } catch (ParseException e) {

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.bigdata.api.dto.MerchantSynchronizationDTO;
@@ -25,7 +24,6 @@ import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.order.service.sys.dao.ImportErrorDAO;
 import net.fnsco.order.service.sys.dao.helper.ImportErrorMsgHelper;
 import net.fnsco.order.service.sys.entity.ImportErrorDO;
-import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping(value = "/web/merchantinfoImport")
@@ -86,10 +84,8 @@ public class MerchantInfoImportController extends BaseController {
                     
                     if(!result1.isSuccess()){
                         StringBuffer errorMsg = new StringBuffer("第").append(timeNum).append(result1.getData());
-                        if (!Strings.isNullOrEmpty(errorMsg.toString()) && !"null".equalsIgnoreCase(errorMsg.toString())) {
-                            ImportErrorDO errorId = saveErrorMsgToDB(new Date(), null, null, userId, timeNum, name, errorMsg.toString(), dto.toString(), null);
-                            errorMsgs.add(errorId);
-                        }
+                        ImportErrorDO errorId = saveErrorMsgToDB(new Date(), null, null, userId, timeNum, name, errorMsg.toString(), dto.toString(), null);
+                        errorMsgs.add(errorId);
                     }
                    
                 } catch (ParseException e) {
