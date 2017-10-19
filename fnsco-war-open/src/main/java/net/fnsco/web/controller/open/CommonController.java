@@ -112,7 +112,7 @@ public class CommonController extends BaseController {
             MsgJO jo = new MsgJO();
             jo.setId(msg.getId());
             jo.setDetailUrl(msg.getDetailUrl());
-            jo.setImageUrl(OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), msg.getImageUrl()));
+            jo.setImageUrl(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), msg.getImageUrl()));
             jo.setModifyTime(DateUtils.dateFormat1ToStr(msg.getModifyTime()));
             jo.setMsgSubject(msg.getMsgSubject());
             jo.setMsgSubTitle(msg.getMsgSubTitle());
