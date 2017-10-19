@@ -88,7 +88,7 @@ public class MerchantInfoImportService extends BaseService {
         /**
          * 爱农
          */
-        ResultDTO<String> aiResult  = handlerMerchantCore(dto,"02","929010048160219",userId,"01");
+        ResultDTO<String> aiResult  = handlerMerchantCore(dto,"02",dto.getInnerCode(),userId,"01");
         if (!aiResult.isSuccess()) {
             return ResultDTO.failForMessage(aiResult.getData());
         }
