@@ -367,7 +367,7 @@
    	 <where>
    	  <if test="condition.legalPerson != null and condition.legalPerson !=''" >
         AND inner_code in (
-           SELECT inner_code FROM m_merchant_core WHERE legal_person = #{condition.legalPerson ,jdbcType=VARCHAR}
+           SELECT inner_code FROM m_merchant_core WHERE legal_person  LIKE CONCAT('%',#{condition.legalPerson},'%')
         )
       </if>
 	  <if test="condition.merName != null and condition.merName !=''" >
@@ -564,7 +564,7 @@
      <where>
      <if test="legalPerson != null and legalPerson !=''" >
         AND inner_code in (
-           SELECT inner_code FROM m_merchant_core WHERE legal_person = #{legalPerson ,jdbcType=VARCHAR}
+          SELECT inner_code FROM m_merchant_core WHERE legal_person  LIKE CONCAT('%',#{legalPerson},'%')
         )
       </if>
       <if test="merName != null and merName !=''" >
