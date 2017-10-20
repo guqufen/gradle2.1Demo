@@ -333,6 +333,11 @@
 	}
 	//条件查询总金额
 	function queryTotalAmount() {
+		var amtyuan1 = $.trim($('#txt_search_price').val());
+		var amtyuan2 = "";
+		if(amtyuan1 !=null && amtyuan1 !=""){
+		amtyuan2 = amtyuan1*100;
+		}
 		$.ajax({
 			traditional : true,
 			url : PROJECT_NAME + '/web/trade/queryTotalAmount',
@@ -340,12 +345,12 @@
 				orderNo : $.trim($('#txt_search_id').val()),
 				merId : $.trim($('#txt_search_name').val()),
 				merName : $.trim($('#merName').val()),
-				amt : $.trim($('#txt_search_price').val()),
+				amt : amtyuan2,
 				startSendTime : $('#datetimepicker1').val(),
 				endSendTime : $('#datetimepicker2').val(),
 				startTime : $('#datetimepicker3').val(),
 				endTime : $('#datetimepicker4').val(),
-				legalPerson : $('#legal_person').val(),
+				legalPerson :  $.trim($('#legal_person').val()),
 				payType : $('#paytype').val(),
 				respCode : $('#resp_code').val(),
 			},
@@ -437,12 +442,16 @@
 		var orderNo = $.trim($('#txt_search_id').val());
 		var merId = $.trim($('#txt_search_name').val());
 		var merName = $.trim($('#merName').val());
-		var amt = $.trim($('#txt_search_price').val());
+		var amtyuan1 = $.trim($('#txt_search_price').val());
+		var amt="";
+		if(amtyuan1 !=null && amtyuan1 !=""){
+			amt = amtyuan1*100;
+		}
 		var startSendTime = $('#datetimepicker1').val();
 		var endSendTime = $('#datetimepicker2').val();
 		var startTime = $('#datetimepicker3').val();
 		var endTime = $('#datetimepicker4').val();
-		var legalPerson = $('#legal_person').val();
+		var legalPerson =  $.trim($('#legal_person').val());
 		var payType = $('#paytype').val();
 		var respCode = $('#resp_code').val();
 		var url = PROJECT_NAME + '/web/trade/export' + '?orderNo=' + orderNo
@@ -474,18 +483,23 @@
 
 	//组装请求参数
 	function queryParams(params) {
+		var amtyuan1 = $.trim($('#txt_search_price').val());
+		var amtyuan2 = "";
+		if(amtyuan1 !=null && amtyuan1 !=""){
+			amtyuan2 = amtyuan1*100;
+		}
 		var param = {
 			currentPageNum : this.pageNumber,
 			pageSize : this.pageSize,
 			orderNo : $.trim($('#txt_search_id').val()),
 			merId : $.trim($('#txt_search_name').val()),
 			merName : $.trim($('#merName').val()),
-			amt : $.trim($('#txt_search_price').val()),
+			amt : amtyuan2,
 			startSendTime : $('#datetimepicker1').val(),
 			endSendTime : $('#datetimepicker2').val(),
 			startTime : $('#datetimepicker3').val(),
 			endTime : $('#datetimepicker4').val(),
-			legalPerson : $('#legal_person').val(),
+			legalPerson :  $.trim($('#legal_person').val()),
 			payType : $('#paytype').val(),
 			respCode : $('#resp_code').val(),
 		}
