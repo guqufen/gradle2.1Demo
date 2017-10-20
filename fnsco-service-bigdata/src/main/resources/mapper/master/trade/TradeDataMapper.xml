@@ -408,8 +408,13 @@
       <if test="condition.tn != null and condition.tn !=''" >
         AND tn = #{condition.tn,jdbcType=VARCHAR}
       </if>
-      <if test="condition.respCode != null and condition.respCode !=''" >
-        AND resp_code = #{condition.respCode,jdbcType=VARCHAR}
+      <if test="condition.respCode != null and condition.respCode != ''" >
+	      <if test="condition.respCode == '1001'" >
+	        AND resp_code = #{condition.respCode,jdbcType=VARCHAR}
+          </if>
+          <if test="condition.respCode != '1001'" >
+	        AND resp_code !=1001
+          </if>
       </if>
       <if test="condition.respMsg != null and condition.respMsg !=''" >
         AND resp_msg = #{condition.respMsg,jdbcType=VARCHAR}
@@ -606,7 +611,12 @@
         AND tn = #{tn,jdbcType=VARCHAR}
       </if>
       <if test="respCode != null and respCode != ''" >
-        AND resp_code = #{respCode,jdbcType=VARCHAR}
+	      <if test="respCode == '1001'" >
+	        AND resp_code = #{respCode,jdbcType=VARCHAR}
+          </if>
+          <if test="respCode != '1001'" >
+	        AND resp_code !=1001
+          </if>
       </if>
       <if test="respMsg != null and respMsg != ''" >
         AND resp_msg = #{respMsg,jdbcType=VARCHAR}
@@ -801,7 +811,12 @@
         AND tn = #{tn,jdbcType=VARCHAR}
       </if>
       <if test="respCode != null and respCode != ''" >
-        AND resp_code = #{respCode,jdbcType=VARCHAR}
+	      <if test="respCode == '1001'" >
+	        AND resp_code = #{respCode,jdbcType=VARCHAR}
+          </if>
+          <if test="respCode != '1001'" >
+	        AND resp_code !=1001
+          </if>
       </if>
       <if test="respMsg != null and respMsg != ''" >
         AND resp_msg = #{respMsg,jdbcType=VARCHAR}
@@ -1019,7 +1034,12 @@
         AND tn = #{tn,jdbcType=VARCHAR}
       </if>
       <if test="respCode != null and respCode != ''" >
-        AND resp_code = #{respCode,jdbcType=VARCHAR}
+	      <if test="respCode == '1001'" >
+	        AND resp_code = #{respCode,jdbcType=VARCHAR}
+          </if>
+          <if test="respCode != '1001'" >
+	        AND resp_code !=1001
+          </if>
       </if>
       <if test="respMsg != null and respMsg != ''" >
         AND resp_msg = #{respMsg,jdbcType=VARCHAR}
@@ -1215,8 +1235,13 @@
       <if test="tn != null and tn !=''" >
         AND tn = #{tn,jdbcType=VARCHAR}
       </if>
-      <if test="respCode != null and respCode !=''" >
-        AND resp_code = #{respCode,jdbcType=VARCHAR}
+      <if test="respCode != null and respCode != ''" >
+	      <if test="respCode == '1001'" >
+	        AND resp_code = #{respCode,jdbcType=VARCHAR}
+          </if>
+          <if test="respCode != '1001'" >
+	        AND resp_code !=1001
+          </if>
       </if>
       <if test="respMsg != null and respMsg !=''" >
         AND resp_msg = #{respMsg,jdbcType=VARCHAR}

@@ -299,7 +299,6 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Override
     public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
         TradeData tradeData = new TradeData();
-
         if (tradeDataDTO.getPayType() != null && tradeDataDTO.getPayType().equals("02")) {
             tradeDataDTO.setPayType(null);
         }

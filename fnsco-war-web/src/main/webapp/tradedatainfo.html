@@ -75,6 +75,13 @@
 								<option value="01">扫码</option>
 							</select>
 						</div>
+						<div class="col-sm-3">
+							<label class="control-label" for="resp_code">交易状态:</label> <select
+								id="resp_code" name="resp_code" class="form-control">
+								<option value="1001" selected>成功</option>
+								<option value="1002">失败</option>
+							</select>
+						</div>
 					</div>
 					<div class="col-sm-2" style="text-align: right;">
 						<button type="button" id="btn_query" class="btn btn-primary"
@@ -340,6 +347,7 @@
 				endTime : $('#datetimepicker4').val(),
 				legalPerson : $('#legal_person').val(),
 				payType : $('#paytype').val(),
+				respCode : $('#resp_code').val(),
 			},
 			type : 'POST',
 			success : function(data) {
@@ -436,12 +444,13 @@
 		var endTime = $('#datetimepicker4').val();
 		var legalPerson = $('#legal_person').val();
 		var payType = $('#paytype').val();
+		var respCode = $('#resp_code').val();
 		var url = PROJECT_NAME + '/web/trade/export' + '?orderNo=' + orderNo
 				+ '&merId=' + merId + '&merName=' + merName + '&amt=' + amt
 				+ '&startSendTime=' + startSendTime + '&endSendTime='
 				+ endSendTime + '&startTime=' + startTime + '&endTime='
 				+ endTime + '&legalPerson=' + legalPerson + '&payType='
-				+ payType;
+				+ payType + '&respCode=' + respCode;
 		window.open(url, 'Excel导出');
 	}
 	window.operateEvents = {
@@ -478,6 +487,7 @@
 			endTime : $('#datetimepicker4').val(),
 			legalPerson : $('#legal_person').val(),
 			payType : $('#paytype').val(),
+			respCode : $('#resp_code').val(),
 		}
 		return param;
 	}
