@@ -34,7 +34,11 @@ $('#table').bootstrapTable({
     },{
         field: 'cardNum',
         title: '身份证号'
-    }]
+    }],
+    onLoadError: function (data) {
+    	$('#table').bootstrapTable('removeAll');
+    	layer.msg("服务器异常!", {time : 1500, icon : 2}); 
+    }
 });
 
 //组装请求参数
