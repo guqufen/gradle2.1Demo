@@ -68,7 +68,29 @@ public class MerchantSynchronizationDTO {
 	private String merchantCode;
 	private String terminalCode;
 	private String innerTermCode;
-	public String getMerchant() {
+	private String innerCode;
+	
+	/**
+     * innerCode
+     *
+     * @return  the innerCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getInnerCode() {
+        return innerCode;
+    }
+    /**
+     * innerCode
+     *
+     * @param   innerCode    the innerCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setInnerCode(String innerCode) {
+        this.innerCode = innerCode;
+    }
+    public String getMerchant() {
 		return merchant;
 	}
 	public void setMerchant(String merchant) {
@@ -568,7 +590,9 @@ public class MerchantSynchronizationDTO {
         dto.setTerminalCode(StringUtil.valueOf(objs[46]).trim());
         //innerTermCode
         dto.setInnerTermCode(StringUtil.valueOf(objs[47]).trim());
-
+        //innerCode
+        dto.setInnerCode(StringUtil.valueOf(objs[48]).trim());
+        
         return dto;
     }
     

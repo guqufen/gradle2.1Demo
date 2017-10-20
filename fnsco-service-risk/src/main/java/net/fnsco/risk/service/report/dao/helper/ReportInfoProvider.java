@@ -151,7 +151,7 @@ public class ReportInfoProvider {
         if (StringUtils.isNotBlank(reportInfo.getLoanCycle())){
             WHERE("loan_cycle=#{reportInfo.loanCycle}");
         }
-        if(reportInfo.getWebUserOuterId()!=null){
+        if(reportInfo.getAgentId()!=null){
             WHERE("inner_code in (SELECT inner_code FROM risk_user_merc_rel WHERE agent_id=#{reportInfo.agentId})");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
@@ -220,7 +220,7 @@ public class ReportInfoProvider {
         if (StringUtils.isNotBlank(reportInfo.getLoanCycle())){
             WHERE("loan_cycle=#{reportInfo.loanCycle}");
         }
-        if(reportInfo.getWebUserOuterId()!=null){
+        if(reportInfo.getAgentId()!=null){
             WHERE("inner_code in (SELECT inner_code FROM risk_user_merc_rel WHERE agent_id=#{reportInfo.agentId})");
         }
         }}.toString();
