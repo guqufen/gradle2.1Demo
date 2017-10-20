@@ -99,7 +99,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
                     logger.error("内部商户号没有渠道对应:"+tradeData.getInnerCode());
                 }
             }
-        }else if ("01".equals(tradeData.getChannelType())) {//01浦发02爱农03法奈昇
+        }else if ("01".equals(tradeData.getChannelType())||"03".equals(tradeData.getChannelType())) {//01浦发02爱农03法奈昇
             MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
             if (channel != null) {
                 innerCode = channel.getInnerCode();
@@ -222,7 +222,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             for (String posId : posList) {
                 List<TerminalInfoDTO> tempList = merchantTerminalDao.queryTerByPosId(Integer.parseInt(posId));
                 for (TerminalInfoDTO terminal : tempList) {
-                    terminalList.add(terminal.getTerminalCode());
+                    if(!Strings.isNullOrEmpty(terminal.getTerminalCode())){
+                        terminalList.add(terminal.getTerminalCode());
+                    }
                 }
             }
             if (!CollectionUtils.isEmpty(terminalList)) {
