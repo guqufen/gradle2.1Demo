@@ -1,4 +1,4 @@
-package net.fnsco.risk.web.sys;
+package net.fnsco.risk.web.admin.sys;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,16 +12,16 @@ import io.swagger.annotations.Api;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.risk.comm.RiskConstant;
-import net.fnsco.risk.service.sys.WebUserOuterService;
-import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
+import net.fnsco.risk.service.sys.WebUserService;
+import net.fnsco.risk.service.sys.entity.WebUserDO;
 
 @Controller
-@RequestMapping(value = "/web/userOuter", method = RequestMethod.POST)
-@Api(value = "/web/userOuter", tags = { "" })
-public class UserOuterController extends BaseController {
+@RequestMapping(value = "/web/user", method = RequestMethod.POST)
+@Api(value = "/web/user", tags = { "" })
+public class UserController extends BaseController {
 
-	 @Autowired
-	 private WebUserOuterService userOuterService;
+    @Autowired
+    private WebUserService userService;
 
     /**
      * 登录方法
@@ -37,9 +37,9 @@ public class UserOuterController extends BaseController {
             return ResultDTO.fail(RiskConstant.WEB_LOGIN_NULL);
         }
 
-        ResultDTO result = userOuterService.doLogin(account, password);
+        ResultDTO result = userService.doLogin(account, password);
         if (result.isSuccess()) {
-        	WebUserOuterDO user = (WebUserOuterDO) result.getData();
+            WebUserDO user = (WebUserDO) result.getData();
             setSessionUser(user, user.getId());
             addCookieUser(user.getName());
             return ResultDTO.success();
@@ -67,7 +67,7 @@ public class UserOuterController extends BaseController {
     @RequestMapping("/getCurrentUser")
     @ResponseBody
     public ResultDTO getCurrentUser() {
-    	WebUserOuterDO adminUser = (WebUserOuterDO) getSessionUser();
+        WebUserDO adminUser = (WebUserDO) getSessionUser();
         return ResultDTO.success(adminUser);
     }
 
@@ -86,6 +86,6 @@ public class UserOuterController extends BaseController {
         if (Strings.isNullOrEmpty(oldPassword)) {
             return ResultDTO.fail(RiskConstant.WEB_OLD_PASSWORD_NULL);
         }
-        return userOuterService.modifyPassword(name, newPassword, oldPassword);
+        return userService.modifyPassword(name, newPassword, oldPassword);
     }
 }

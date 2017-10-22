@@ -1,4 +1,4 @@
-package net.fnsco.risk.web.report;
+package net.fnsco.risk.web.admin;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

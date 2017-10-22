@@ -1,4 +1,4 @@
-package net.fnsco.risk.web.sys;
+package net.fnsco.risk.web.admin.sys;
 
 import java.util.List;
 
