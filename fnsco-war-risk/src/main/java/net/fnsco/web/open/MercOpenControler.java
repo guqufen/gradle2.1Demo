@@ -40,7 +40,8 @@ public class MercOpenControler extends BaseController {
         Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
-        ResultPageDTO<ReportInfoDO> pager = this.reportService.page(reportInfoDO, page, rows);
+        reportInfoDO.setUserId(getUserId());
+        ResultPageDTO<ReportInfoDO> pager = this.reportService.queryList(reportInfoDO, page, rows);
         return success(pager);
     }
 

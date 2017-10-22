@@ -43,12 +43,27 @@ public class ReportOpenController extends BaseController {
         ResultPageDTO<ReportInfoDO> pager = this.reportService.page(reportInfoDO, page, rows);
         return success(pager);
     }
+    //历史风控报表查询
 
     //查询全年风控曲线图
     @RequestMapping("queryYearReport")
     @ResponseBody
     public ResultDTO queryYearReport(@RequestParam String innerCode, @RequestParam String merchantId) {
         return reportService.queryYearReport(innerCode, NumberUtils.toInt(merchantId));
+    }
+
+    //经营流水趋势
+    @RequestMapping("queryTradingVolumeReport")
+    @ResponseBody
+    public ResultDTO queryTradingVolumeReport(@RequestParam String innerCode, @RequestParam String merchantId) {
+        return reportService.queryTradingVolumeReport(innerCode, NumberUtils.toInt(merchantId));
+    }
+
+    //日均客单价
+    @RequestMapping("queryUnitPriceReport")
+    @ResponseBody
+    public ResultDTO queryUnitPriceReport(@RequestParam String innerCode, @RequestParam String merchantId) {
+        return reportService.queryUnitPriceReport(innerCode, NumberUtils.toInt(merchantId));
     }
 
     //查询风控报告明细
