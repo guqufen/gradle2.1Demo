@@ -474,7 +474,8 @@
         AND channel_type = #{condition.channelType,jdbcType=VARCHAR}
       </if>
       <if test="condition.amt != null and condition.amt !=''" >
-       AND  amt = #{condition.amt,jdbcType=VARCHAR}
+       AND  amt &gt;= #{condition.amt,jdbcType=VARCHAR}
+       AND  amt &lt;= #{condition.amt,jdbcType=VARCHAR}
       </if>
       <if test="condition.orderNo != null and condition.orderNo !=''" >
        AND  order_no = #{condition.orderNo,jdbcType=VARCHAR}
@@ -676,7 +677,8 @@
         AND channel_type = #{channelType,jdbcType=VARCHAR}
       </if>
       <if test="amt != null and amt != ''" >
-       AND  amt = #{amt,jdbcType=VARCHAR}
+        AND  amt &gt;= #{amt,jdbcType=VARCHAR}
+       AND  amt &lt;= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo != ''" >
        AND  order_no = #{orderNo,jdbcType=VARCHAR}
@@ -876,7 +878,8 @@
         AND channel_type = #{channelType,jdbcType=VARCHAR}
       </if>
       <if test="amt != null and amt != ''" >
-       AND  amt = #{amt,jdbcType=VARCHAR}
+       AND  amt &gt;= #{amt,jdbcType=VARCHAR}
+       AND  amt &lt;= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo != ''" >
        AND  order_no = #{orderNo,jdbcType=VARCHAR}
@@ -1099,7 +1102,8 @@
         AND channel_type = #{channelType,jdbcType=VARCHAR}
       </if>
       <if test="amt != null and amt != ''" >
-       AND  amt = #{amt,jdbcType=VARCHAR}
+       AND  amt &gt;= #{amt,jdbcType=VARCHAR}
+       AND  amt &lt;= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo != ''" >
        AND  order_no = #{orderNo,jdbcType=VARCHAR}
@@ -1301,7 +1305,8 @@
         AND channel_type = #{channelType,jdbcType=VARCHAR}
       </if>
       <if test="amt != null and amt !=''" >
-       AND  amt = #{amt,jdbcType=VARCHAR}
+       AND  amt &gt;= #{amt,jdbcType=VARCHAR}
+       AND  amt &lt;= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo !=''" >
        AND  order_no = #{orderNo,jdbcType=VARCHAR}
