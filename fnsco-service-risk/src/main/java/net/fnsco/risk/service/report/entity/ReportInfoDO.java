@@ -5,9 +5,124 @@ import java.util.Date;
 public class ReportInfoDO {
     //agent_id
     private Integer agentId;
-    
+
     //判断三个月是否生成
     private Integer isTrue;
+    //登录用户ID
+    private Integer userId;
+    /**
+     * 
+     */
+    private Integer id;
+
+    /**
+     * 商户名（必须40个字符）
+     */
+    private String  merName;
+
+    /**
+     * 营业执照号码
+     */
+    private String  businessLicenseNum;
+
+    /**
+     * 经营地址
+     */
+    private String  businessAddress;
+
+    /**
+     * 营业期限
+     */
+    private String  businessDueTime;
+
+    /**
+     * 行业
+     */
+    private String  industry;
+
+    /**
+     * 商圈
+     */
+    private String  tradingArea;
+
+    /**
+     * 营业额
+     */
+    private String  turnover;
+
+    /**
+     * 规模
+     */
+    private Integer size;
+
+    /**
+     * 报告周期
+     */
+    private String  reportCycle;
+
+    /**
+     * 报告时间
+     */
+    private String  reportTimer;
+
+    /**
+     * 风险提醒
+     */
+    private String  riskWarning;
+
+    /**
+     * 额度
+     */
+    private String  quota;
+
+    /**
+     * 费率
+     */
+    private String  feeRate;
+
+    /**
+     * 贷款周期
+     */
+    private String  loanCycle;
+    /**
+     * 商户编码
+     */
+    private String  merNum;
+    /**
+     * 状态
+     */
+    private Integer status;
+    /**
+     * 创建时间
+     */
+    private Date    createTime;
+    /**
+     * 最后修改时间
+     */
+    private Date    lastModifyTime;
+
+    /**
+     * userId
+     *
+     * @return  the userId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getUserId() {
+        return userId;
+    }
+
+    /**
+     * userId
+     *
+     * @param   userId    the userId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     public Integer getAgentId() {
         return agentId;
     }
@@ -25,6 +140,7 @@ public class ReportInfoDO {
     }
 
     private String decorationLevel;
+
     public String getDecorationLevel() {
         return decorationLevel;
     }
@@ -34,6 +150,7 @@ public class ReportInfoDO {
     }
 
     private String innerCode;
+
     public String getInnerCode() {
         return innerCode;
     }
@@ -43,6 +160,7 @@ public class ReportInfoDO {
     }
 
     private Integer customerType;
+
     public Integer getCustomerType() {
         return customerType;
     }
@@ -52,6 +170,7 @@ public class ReportInfoDO {
     }
 
     private Integer webUserOuterId;
+
     public Integer getWebUserOuterId() {
         return webUserOuterId;
     }
@@ -60,96 +179,6 @@ public class ReportInfoDO {
         this.webUserOuterId = webUserOuterId;
     }
 
-    /**
-     * 
-     */
-    private Integer id;
-
-    /**
-     * 商户名（必须40个字符）
-     */
-    private String merName;
-
-    /**
-     * 营业执照号码
-     */
-    private String businessLicenseNum;
-
-    /**
-     * 经营地址
-     */
-    private String businessAddress;
-
-    /**
-     * 营业期限
-     */
-    private String businessDueTime;
-
-    /**
-     * 行业
-     */
-    private String industry;
-
-    /**
-     * 商圈
-     */
-    private String tradingArea;
-
-    /**
-     * 营业额
-     */
-    private String turnover;
-
-    /**
-     * 规模
-     */
-    private Integer size;
-
-    /**
-     * 报告周期
-     */
-    private String reportCycle;
-
-    /**
-     * 报告时间
-     */
-    private String reportTimer;
-
-    /**
-     * 风险提醒
-     */
-    private String riskWarning;
-
-    /**
-     * 额度
-     */
-    private String quota;
-
-    /**
-     * 费率
-     */
-    private String feeRate;
-
-    /**
-     * 贷款周期
-     */
-    private String loanCycle;
-    /**
-     * 商户编码
-     */
-    private String merNum;
-    /**
-     * 状态
-     */
-    private Integer status;
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-    /**
-     * 最后修改时间
-     */
-    private Date lastModifyTime;
     public String getMerNum() {
         return merNum;
     }
@@ -310,7 +339,5 @@ public class ReportInfoDO {
                + ", riskWarning=" + riskWarning + ", quota=" + quota + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status=" + status + ", createTime=" + createTime
                + ", lastModifyTime=" + lastModifyTime + "]";
     }
-
-  
 
 }

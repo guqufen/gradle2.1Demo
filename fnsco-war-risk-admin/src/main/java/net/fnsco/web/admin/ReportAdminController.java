@@ -1,4 +1,4 @@
-package net.fnsco.risk.web.admin;
+package net.fnsco.web.admin;
 
 import java.io.IOException;
 import java.math.BigDecimal;

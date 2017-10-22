@@ -1,4 +1,4 @@
-package net.fnsco.risk.web.open;
+package net.fnsco.web.open;
 
 import java.util.Map;
 
@@ -17,9 +17,18 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.risk.service.report.ReportService;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 
+/**
+ * 
+ * @desc    风控+页面对应controller
+ * @author   sxf
+ * @version  
+ * @since    Ver 1.1
+ * @Date	 2017年10月22日 上午9:27:35
+ *
+ */
 @Controller
 @RequestMapping(value = "web/report", method = RequestMethod.POST)
-public class ReportWebController extends BaseController{
+public class ReportOpenController extends BaseController {
     @Autowired
     private ReportService reportService;
 
@@ -31,32 +40,50 @@ public class ReportWebController extends BaseController{
         Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
-        ResultPageDTO<ReportInfoDO> pager = this.reportService.page(reportInfoDO, page,rows);
+        ResultPageDTO<ReportInfoDO> pager = this.reportService.page(reportInfoDO, page, rows);
         return success(pager);
     }
-    
+    //历史风控报表查询
+
     //查询全年风控曲线图
-    @RequestMapping("queryYearReport")  
+    @RequestMapping("queryYearReport")
     @ResponseBody
-    public ResultDTO queryYearReport(@RequestParam String innerCode,@RequestParam String merchantId){
-        return reportService.queryYearReport(innerCode,NumberUtils.toInt(merchantId));
+    public ResultDTO queryYearReport(@RequestParam String innerCode, @RequestParam String merchantId) {
+        return reportService.queryYearReport(innerCode, NumberUtils.toInt(merchantId));
     }
-    //查询风控报告明细
-    @RequestMapping("queryReportDetails")  
+
+    //经营流水趋势
+    @RequestMapping("queryTradingVolumeReport")
     @ResponseBody
-    public ResultDTO queryReportDetails(@RequestParam String merchantId){
+    public ResultDTO queryTradingVolumeReport(@RequestParam String innerCode, @RequestParam String merchantId) {
+        return reportService.queryTradingVolumeReport(innerCode, NumberUtils.toInt(merchantId));
+    }
+
+    //日均客单价
+    @RequestMapping("queryUnitPriceReport")
+    @ResponseBody
+    public ResultDTO queryUnitPriceReport(@RequestParam String innerCode, @RequestParam String merchantId) {
+        return reportService.queryUnitPriceReport(innerCode, NumberUtils.toInt(merchantId));
+    }
+
+    //查询风控报告明细
+    @RequestMapping("queryReportDetails")
+    @ResponseBody
+    public ResultDTO queryReportDetails(@RequestParam String merchantId) {
         return reportService.queryReportDetails(NumberUtils.toInt(merchantId));
     }
+
     //给后台人员发送生成报告消息
-    @RequestMapping("backPersonnelMes")  
+    @RequestMapping("backPersonnelMes")
     @ResponseBody
-    public ResultDTO backPersonnelMes(@RequestParam String userId,@RequestParam String merchantId){
-        return reportService.backPersonnelMes(NumberUtils.toInt(userId),NumberUtils.toInt(merchantId));
+    public ResultDTO backPersonnelMes(@RequestParam String userId, @RequestParam String merchantId) {
+        return reportService.backPersonnelMes(NumberUtils.toInt(userId), NumberUtils.toInt(merchantId));
     }
+
     //查询行业类别
-    @RequestMapping("queryIndustry")  
+    @RequestMapping("queryIndustry")
     @ResponseBody
-    public ResultDTO queryIndustry(@RequestParam String id){
+    public ResultDTO queryIndustry(@RequestParam String id) {
         return reportService.queryIndustry(NumberUtils.toInt(id));
     }
 }
