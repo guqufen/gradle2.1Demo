@@ -1,4 +1,4 @@
-package net.fnsco.risk.web.admin.sys;
+package net.fnsco.web.admin.sys;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
