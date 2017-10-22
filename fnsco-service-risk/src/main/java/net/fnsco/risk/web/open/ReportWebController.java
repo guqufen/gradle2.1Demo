@@ -1,4 +1,4 @@
-package net.fnsco.risk.web.report;
+package net.fnsco.risk.web.open;
 
 import java.util.Map;
 
