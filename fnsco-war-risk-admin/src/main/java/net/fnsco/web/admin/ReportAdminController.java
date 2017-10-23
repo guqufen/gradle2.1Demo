@@ -228,7 +228,7 @@ public class ReportAdminController extends BaseController{
      * @param reportId
      * @return
      */
-      @RequestMapping(value="queryReportBusiness", method = RequestMethod.GET)
+      @RequestMapping(value="queryReportBusiness", method = RequestMethod.POST)
       @ResponseBody
       public ResultDTO queryReportBusiness(@RequestParam Integer reportId){
     	    Integer num =1;
@@ -239,7 +239,7 @@ public class ReportAdminController extends BaseController{
        * @param reportId
        * @return
        */
-        @RequestMapping(value="queryReportUnit", method = RequestMethod.GET)
+        @RequestMapping(value="queryReportUnit", method = RequestMethod.POST)
         @ResponseBody
         public ResultDTO queryReportUnit(@RequestParam Integer reportId){
         	Integer num = 2;
