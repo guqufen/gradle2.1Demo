@@ -46,7 +46,13 @@
 			border-bottom: 1px solid #ccc;
 			border-top: 1px solid #ccc;
 		}
-		#trend-chart{
+		.trend-chart{
+			width: 980px;
+			height: 400px;
+			margin-left: -35px;
+			position: relative;
+		}
+		.trend-chart1{
 			width: 980px;
 			height: 400px;
 			margin-left: -35px;
@@ -62,7 +68,11 @@
 			z-index: 9;
 			border-left:1px dashed #131313;
 		}
-		#trend-chart #chart{
+		.trend-chart #chart{
+			position: absolute;
+			height: 100%;width: 100%;left: 0;top: 0;
+		}
+		.trend-chart1 #chart1{
 			position: absolute;
 			height: 100%;width: 100%;left: 0;top: 0;
 		}
@@ -122,10 +132,18 @@
 		</div>
 		<!-- 折线图 -->
 		<div class="chart-box">
-		<h3 id="that">还款能力评估趋势图</h3>
-			<div id="trend-chart">
+			<h3 id="that">还款能力评估趋势图</h3>
+			<div class="trend-chart">
 				<div class="bar"></div>
 				<div id="chart"></div>
+			</div>
+			<h3 id="that">经营流水趋势</h3>
+			<div class="trend-chart1">
+				<div id="chart1"></div>
+			</div>
+			<h3 id="that">日均客单价</h3>
+			<div class="trend-chart">
+				<div id="chart2"></div>
 			</div>
 		</div>
 		<h3>风险提醒：</h3>
