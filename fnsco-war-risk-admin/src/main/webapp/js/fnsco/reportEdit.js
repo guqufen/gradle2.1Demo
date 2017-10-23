@@ -17,6 +17,7 @@ var Request = new Object();
 Request = GetRequest();
 var merchantId=Request["merchantId"];
 console.log(merchantId);
+var innerCode = Request["innerCode"];
 
 //获取风控报告明细
 //生成数组参数
@@ -29,7 +30,7 @@ var getReportChart = function getReportChart(){
 		url : PROJECT_NAME + '/web/admin/report/queryReportPre',
 		type : 'POST',
 		dataType : "json",
-		data : {'reportId' : merchantId},
+		data : {'reportId' : merchantId,'innerCode':innerCode},
 		success : function(data){
 			if(data.success){
 				console.log(data);
@@ -125,7 +126,8 @@ $(function() {
 				}else{
 					$('h1').html( dd.merName+'的"风控+"报告编辑页面');
 					$('#riskWarning').html(dd.riskWarning);// 风险
-					$('#riskWarning').show();//显示textarea标签
+					$('#riskWarning').show();//显示风险textarea标签
+					$('#merEvaluating').show();//显示商家评估textarea标签
 					$('#btn_save').show();//显示保存修改按钮
 					$('#btn_import').show();//显示导入数据按钮
 				}
@@ -332,7 +334,11 @@ function saveOrUpdate(status){
 		layer.msg('请输入风险信息');
 		return false;
 	}
-
+	if(riskWarning.length > 500){
+		layer.msg('风险信息过长，请不要超过500字');
+		return false;
+	}
+/**  去掉建议栏
 	//额度
 	var quota = $('#quota').val();
 	if(quota == ""){
@@ -353,6 +359,17 @@ function saveOrUpdate(status){
 		layer.msg('请输入周期信息');
 		return false;
 	}
+**/
+	//商家评估
+	var evaluation = $('#evaluation').val();
+	if(evaluation == ""){
+		layer.msg('请输入商家评估信息');
+		return false;
+	}
+	if(evaluation.length > 500){
+		layer.msg('商家评估信息超长，请不要超过500字');
+		return false;
+	}
 
 	var params = {
 		'merName' : merName,
@@ -361,6 +378,7 @@ function saveOrUpdate(status){
 		'businessDueTime' : businessDueTime,
 		'industry' : industry,
 		'tradingArea' : tradingArea,
+		evaluation : evaluation,
 //		'turnover' : turnover,
 		'decorationLevel':decorationLevel,
 		'size' : size,
