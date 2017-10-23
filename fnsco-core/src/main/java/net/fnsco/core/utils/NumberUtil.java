@@ -25,6 +25,13 @@ public class NumberUtil {
         for (int i = 0; i < str.length; i++) {    
             rstr = rstr + u[Integer.parseInt(str[i] + "")];    
         }    
+        if(num == 10){
+            rstr = "十";
+        }else if(num == 11){
+            rstr = "十一";
+        }else if(num == 12){
+            rstr = "十二";
+        }
         return rstr;    
     }   
     
