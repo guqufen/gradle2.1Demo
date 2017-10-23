@@ -115,7 +115,7 @@ $(function(){
 	});
 	//查询经营流水
 	$.ajax({
-		url : PROJECT_NAME + '/web/report/queryYearReport',
+		url : PROJECT_NAME + '/web/report/queryTradingVolumeReport',
 		type : 'POST',
 		dataType : "json",
 		data : {"innerCode":innerCode,"merchantId":merchantId},
@@ -135,7 +135,7 @@ $(function(){
 	});
 	//查询日均客单价
 	$.ajax({
-		url : PROJECT_NAME + '/web/report/queryYearReport',
+		url : PROJECT_NAME + '/web/report/queryUnitPriceReport',
 		type : 'POST',
 		dataType : "json",
 		data : {"innerCode":innerCode,"merchantId":merchantId},
