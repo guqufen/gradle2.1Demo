@@ -77,7 +77,7 @@ public class ReportService extends BaseService {
         reportInfoDO.setAgentId(userDo.getAgentId());
         List<ReportInfoDO> pageList = Lists.newArrayList();
         boolean flag = false;
-        if (!Strings.isNullOrEmpty(reportInfoDO.getMerName()) || !Strings.isNullOrEmpty(reportInfoDO.getBusinessLicenseNum()) || !Strings.isNullOrEmpty(reportInfoDO.getTradingArea())) {
+        if ( null != reportInfoDO.getStatus() && 1== reportInfoDO.getStatus()) {
             flag = true;
         }
         if (flag) {
