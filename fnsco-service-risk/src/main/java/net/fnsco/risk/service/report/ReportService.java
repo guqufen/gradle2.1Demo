@@ -21,6 +21,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -94,7 +96,16 @@ public class ReportService extends BaseService {
     public ResultPageDTO<ReportInfoDO> queryList(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         WebUserOuterDO userDo = webUserOuterDAO.getById(reportInfoDO.getUserId());
         reportInfoDO.setAgentId(userDo.getAgentId());
-        List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
+        List<ReportInfoDO> pageList = Lists.newArrayList();
+        boolean flag = false;
+        if ( null != reportInfoDO.getStatus() && 1== reportInfoDO.getStatus()) {
+            flag = true;
+        }
+        if (flag) {
+            pageList = this.reportInfoDAO.pageListMercByCondition(reportInfoDO, pageNum, pageSize);
+        } else {
+            pageList = this.reportInfoDAO.pageListAllMerc(reportInfoDO, pageNum, pageSize);
+        }
         for (ReportInfoDO li : pageList) {
             try {
                 //订阅次数查询
