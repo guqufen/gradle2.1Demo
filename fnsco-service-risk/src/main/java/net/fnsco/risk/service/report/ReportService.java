@@ -113,8 +113,12 @@ public class ReportService extends BaseService {
                 e.printStackTrace();
             }
         }
-        Integer count = this.reportInfoDAO.pageListCount(reportInfoDO);
-
+        Integer count = 0;
+        if (flag) {
+        	count = this.reportInfoDAO.pageListMercByConditionCount(reportInfoDO);
+        } else {
+        	count = this.reportInfoDAO.pageListAllMercCount(reportInfoDO);
+        }
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }

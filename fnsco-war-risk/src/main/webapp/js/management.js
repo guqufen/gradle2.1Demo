@@ -2,7 +2,7 @@
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url : PROJECT_NAME + '/web/report/queryMerchants',
+	url : PROJECT_NAME + '/open/merc/queryList',
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	// toolbar: '#toolbar', //工具按钮用哪个容器
@@ -42,7 +42,8 @@ function queryParams(params) {
 	var param = {
 		currentPageNum : this.pageNumber,
 		pageSize : this.pageSize,
-		merName : $.trim($('#search').val()),
+		key : $.trim($('#search').val()),
+		status: $.trim($('#report_type').val())
 	}
 	return param;
 }

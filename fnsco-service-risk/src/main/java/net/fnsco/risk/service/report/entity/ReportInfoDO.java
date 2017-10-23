@@ -100,8 +100,22 @@ public class ReportInfoDO {
      * 最后修改时间
      */
     private Date    lastModifyTime;
-
+    
     /**
+     * 新增加KEY --商户姓名、法人姓名、营业执照号 
+     */
+    private String key;
+    
+
+    public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	/**
      * userId
      *
      * @return  the userId
