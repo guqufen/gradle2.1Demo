@@ -87,4 +87,18 @@ public class ReportOpenController extends BaseController {
     public ResultDTO queryIndustry(@RequestParam String id) {
         return reportService.queryIndustry(NumberUtils.toInt(id));
     }
+    
+    @RequestMapping("queryHistoryReport")
+    @ResponseBody
+    //查询最后四条历史风控报告
+    public ResultDTO queryHistoryReport() {
+    	return reportService.queryHistoryReport();
+    }
+    
+    @RequestMapping("updateViemNum")
+    @ResponseBody
+    //更新报告点击次数
+    public ResultDTO updateViemNum(@RequestParam Integer id) {
+    	return reportService.updateViemNum(id);
+    }
 }

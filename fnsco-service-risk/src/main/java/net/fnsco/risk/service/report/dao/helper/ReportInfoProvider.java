@@ -14,7 +14,26 @@ public class ReportInfoProvider {
     private Logger              logger     = LoggerFactory.getLogger(this.getClass());
 
     private static final String TABLE_NAME = "risk_report_info";
-
+    
+    /**
+     * updateViemNum:(更新点击次数)
+     *
+     * @param  @param params
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年10月23日 下午6:33:24
+     */
+    public String updateViemNum(Map<String, Object> params) {
+    	Integer id = (Integer) params.get("id");
+    	 return new SQL() {{
+    		 UPDATE(TABLE_NAME);
+    		 SET("view_num=view_num+1");
+    		 WHERE("id = #{id}");
+    	 }
+    	 }.toString();
+    }
+    
     public String update(Map<String, Object> params) {
         ReportInfoDO reportInfo = (ReportInfoDO) params.get("reportInfo");
         return new SQL() {
@@ -677,6 +696,33 @@ public class ReportInfoProvider {
                         WHERE("report.status in (2, 4)");
                     }
                 }
+            }
+        }.toString();
+    }
+    
+    /**
+     * queryHistoryReportInfo:(查询四条历史数据)
+     *
+     * @param  @param params
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年10月23日 下午5:57:18
+     */
+    public String queryHistoryReportInfo(Map<String, Object> params) {
+    	
+        Integer pageSize = (Integer) params.get("pageSize");
+        if (pageSize == null || pageSize == 0) {
+            pageSize = 4;
+        }
+        int start = 0;
+        int limit = pageSize;
+    	
+    	return new SQL() {
+            {
+                SELECT("*");
+                FROM(TABLE_NAME);
+                ORDER_BY("last_view_time desc limit " + start + ", " + limit);
             }
         }.toString();
     }

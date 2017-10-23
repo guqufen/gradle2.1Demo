@@ -100,8 +100,56 @@ public class ReportInfoDO {
      * 最后修改时间
      */
     private Date    lastModifyTime;
-
+    
     /**
+     * 新增加KEY --商户姓名、法人姓名、营业执照号 
+     */
+    private String key;
+    
+    /**
+     * 报告查看次数
+     */
+    private Integer viewNum;
+    /**
+     * 最后报告时间
+     */
+    private Date lastViewTime;
+    
+    private String lastViewTimeStr;
+    
+    public String getLastViewTimeStr() {
+		return lastViewTimeStr;
+	}
+
+	public void setLastViewTimeStr(String lastViewTimeStr) {
+		this.lastViewTimeStr = lastViewTimeStr;
+	}
+
+	public Integer getViewNum() {
+		return viewNum;
+	}
+
+	public void setViewNum(Integer viewNum) {
+		this.viewNum = viewNum;
+	}
+
+	public Date getLastViewTime() {
+		return lastViewTime;
+	}
+
+	public void setLastViewTime(Date lastViewTime) {
+		this.lastViewTime = lastViewTime;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	/**
      * userId
      *
      * @return  the userId
