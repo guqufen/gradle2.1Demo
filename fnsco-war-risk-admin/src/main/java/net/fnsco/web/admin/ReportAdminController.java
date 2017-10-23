@@ -213,7 +213,7 @@ public class ReportAdminController extends BaseController{
     }
     
   /**
-   * 查询全年风控曲线图(编辑页面)
+   * 查询全年风控还款能力历史与预测曲线图(编辑页面)
    * @param reportId
    * @return
    */
@@ -223,4 +223,26 @@ public class ReportAdminController extends BaseController{
 
         	return reportService.getByReportId(reportId);
     }
+    /**
+     * 查询全年风控经营流水趋势曲线图(编辑页面)
+     * @param reportId
+     * @return
+     */
+      @RequestMapping(value="queryReportBusiness", method = RequestMethod.GET)
+      @ResponseBody
+      public ResultDTO queryReportBusiness(@RequestParam Integer reportId){
+    	    Integer num =1;
+          	return reportService.getReportBusinessOrUnit(reportId,num);
+      }
+      /**
+       * 查询全年风控日均客单价测曲线图(编辑页面)
+       * @param reportId
+       * @return
+       */
+        @RequestMapping(value="queryReportUnit", method = RequestMethod.GET)
+        @ResponseBody
+        public ResultDTO queryReportUnit(@RequestParam Integer reportId){
+        	Integer num = 2;
+           	return reportService.getReportBusinessOrUnit(reportId,num);
+        }
 }
