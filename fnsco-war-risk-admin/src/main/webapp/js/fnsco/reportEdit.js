@@ -469,9 +469,9 @@ function saveOrUpdate(status){
 		'reportCycle' : reportCycle,
 		'reportTimer' : reportTimer,
 		'riskWarning' : riskWarning,
-		'quota' : quota,
-		'feeRate' : feeRate,
-		'loanCycle' : loanCycle,
+//		'quota' : quota,
+//		'feeRate' : feeRate,
+//		'loanCycle' : loanCycle,
 		'status' : status,
 		'id':merchantId
 	};
