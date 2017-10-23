@@ -22,7 +22,7 @@ public interface ReportInfoDAO {
                @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
                @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-               @Result(column = "decoration_level", property = "decorationLevel") })
+               @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation") })
     @Select("SELECT * FROM risk_report_info WHERE id = #{id}")
     public ReportInfoDO getById(@Param("id") Integer id);
 
@@ -32,7 +32,7 @@ public interface ReportInfoDAO {
                @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
                @Result(column = "inner_code", property = "innerCode"), @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"),
                @Result(column = "inner_code", property = "innerCode"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-               @Result(column = "decoration_level", property = "decorationLevel") })
+               @Result(column = "decoration_level", property = "decorationLevel") , @Result(column = "evaluation", property = "evaluation")})
     @Select("SELECT * FROM risk_report_info WHERE inner_code = #{innerCode} order by last_modify_time desc limit 1 ")
     public ReportInfoDO getByInnerCode(@Param("innerCode") String innerCode);
 
@@ -52,7 +52,7 @@ public interface ReportInfoDAO {
                @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
                @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-               @Result(column = "decoration_level", property = "decorationLevel") })
+               @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation") })
     @SelectProvider(type = ReportInfoProvider.class, method = "pageList")
     public List<ReportInfoDO> pageList(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
@@ -66,7 +66,7 @@ public interface ReportInfoDAO {
                @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
                @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-               @Result(column = "decoration_level", property = "decorationLevel") })
+               @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation") })
     @SelectProvider(type = ReportInfoProvider.class, method = "pageListBack")
     public List<ReportInfoDO> pageListBack(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
@@ -80,7 +80,7 @@ public interface ReportInfoDAO {
         @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
         @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
         @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-        @Result(column = "decoration_level", property = "decorationLevel") })
+        @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation") })
 
     @SelectProvider(type = ReportInfoProvider.class, method = "pageListAllMerc")
     public List<ReportInfoDO> pageListAllMerc(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
@@ -95,7 +95,7 @@ public interface ReportInfoDAO {
         @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
         @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
         @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-        @Result(column = "decoration_level", property = "decorationLevel") })
+        @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation") })
     @SelectProvider(type = ReportInfoProvider.class, method = "pageListMercByCondition")
     public List<ReportInfoDO> pageListMercByCondition(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 

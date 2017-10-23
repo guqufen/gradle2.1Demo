@@ -209,6 +209,7 @@ $(function() {
 					$('h1').html( dd.merName+'的"风控+"报告编辑页面');
 					$('#riskWarning').html(dd.riskWarning);// 风险
 					$('#riskWarning').show();//显示风险textarea标签
+					$('#evaluation').html(dd.evaluation);
 					$('#evaluation').show();//显示商家评估textarea标签
 					$('#btn_save').show();//显示保存修改按钮
 					$('#btn_import').show();//显示导入数据按钮

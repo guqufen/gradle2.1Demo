@@ -80,6 +80,9 @@ public class ReportInfoProvider {
                 if (reportInfo.getDecorationLevel() != null) {
                     SET("decoration_level=#{reportInfo.decorationLevel}");
                 }
+                if (reportInfo.getEvaluation() != null) {
+                    SET("evaluation=#{reportInfo.evaluation}");
+                }
                 WHERE("id = #{reportInfo.id}");
             }
         }.toString();

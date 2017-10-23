@@ -100,8 +100,18 @@ public class ReportInfoDO {
      * 最后修改时间
      */
     private Date    lastModifyTime;
+    
+    private String evaluation;
 
-    /**
+    public String getEvaluation() {
+		return evaluation;
+	}
+
+	public void setEvaluation(String evaluation) {
+		this.evaluation = evaluation;
+	}
+
+	/**
      * userId
      *
      * @return  the userId
