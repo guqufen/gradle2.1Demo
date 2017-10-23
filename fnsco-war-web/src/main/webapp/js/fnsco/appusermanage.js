@@ -21,7 +21,7 @@ $('#table').bootstrapTable({
 		title : '操作',
 		width : '10%',
 		align : 'center',
-		width : 150,
+		width : 80,
 		formatter : operateFormatter
 	}, {
 		field : 'userName',
@@ -58,10 +58,12 @@ function formatReDate(value, row, index) {
 // 操作格式化
 function operateFormatter(value, row, index) {
 	return [ '<div style="float:left;" class="redact" id="roleSet" title="设置角色">',
-			'<i class="glyphicon glyphicon-pencil"></i><span>角色修改</span>',
+			'<i class="glyphicon glyphicon-pencil"></i>',
+//			'<span>角色修改</span>',
 			'</div>  ',
-			'<div style="float:left;" class="redact" id="roleList" title="角色查看">',
-			'<i class="glyphicon glyphicon-file"></i><span>角色查看</span>',
+			'<div style="float:middle;" class="redact" id="roleList" title="角色查看">',
+			'<i class="glyphicon glyphicon-file"></i>',
+//			'<span>角色查看</span>',
 			'</div>  '].join('');
 }
 // 推送类型格式化
@@ -154,6 +156,7 @@ $(function() {
 					showdates(data.data);
 					$('#myModalLabel').html('');
 					$('#myModalLabel').html('角色管理权限设置');
+					$('#modify').show();
 					$('#myModal').modal();
 				}
 
