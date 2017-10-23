@@ -7,12 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.StringUtils;
 
+import net.fnsco.risk.service.report.entity.ReportBusiness;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 public class ReportRepaymentHistoryProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static final String TABLE_NAME = "risk_report_repayment_history";
+    private static final String TABLE_NAME1 = "r_trade_by_day";
 
     public String update(Map<String, Object> params) {
         ReportRepaymentHistoryDO reportRepaymentHistory = (ReportRepaymentHistoryDO) params.get("reportRepaymentHistory");
@@ -127,7 +129,24 @@ public class ReportRepaymentHistoryProvider {
         ORDER_BY("last_modify_time desc limit " + start + ", " + limit );
         }}.toString();
     }
-
+    
+    public String turnoverList(Map<String, Object> params) {
+    	ReportBusiness reportBusiness = (ReportBusiness) params.get("reportBusiness");
+        return new SQL() {{
+        SELECT("*");
+        FROM(TABLE_NAME1);
+        if (reportBusiness.getInnerCode() != null && reportBusiness.getInnerCode().equals("")) {
+            WHERE("inner_code =#{reportBusiness.innerCode}");
+        }
+        if (reportBusiness.getStartDay() != null && reportBusiness.getStartDay().equals("")) {
+            WHERE("trade_date >=#{reportBusiness.startDay}");
+        }
+        if (reportBusiness.getEndDay() != null && reportBusiness.getEndDay().equals("")) {
+            WHERE("trade_date <=#{reportBusiness.endDay}");
+        }
+        }}.toString();
+    }
+    
     public String pageListCount(Map<String, Object> params) {
         ReportRepaymentHistoryDO reportRepaymentHistory = (ReportRepaymentHistoryDO) params.get("reportRepaymentHistory");
         return new SQL() {{

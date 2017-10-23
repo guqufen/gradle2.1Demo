@@ -30,6 +30,7 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.TaskUtils;
 import net.fnsco.risk.service.report.dao.ReportInfoDAO;
 import net.fnsco.risk.service.report.dao.ReportRepaymentHistoryDAO;
+import net.fnsco.risk.service.report.entity.ReportBusiness;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 import net.fnsco.risk.service.report.entity.YearReportDO;
@@ -594,7 +595,51 @@ public class ReportService extends BaseService {
         }
         return ResultDTO.success(list);
     }
-
+    
+  //查找经营趋势数据或客单价
+    public ResultDTO getReportBusinessOrUnit(Integer id,Integer num ) {
+    	ReportBusiness report = new ReportBusiness();
+    	String innerCode = reportRepaymentHistoryDAO.getInnerCodeById(id);
+    	report.setInnerCode(innerCode);
+    	SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+    	Calendar c1 = Calendar.getInstance();
+    	c1.setTime(new Date());
+        c1.add(Calendar.DATE, - 1);
+        Date d1 = c1.getTime();
+        String startDay = format.format(d1);
+        report.setStartDay(startDay);
+        Calendar c2 = Calendar.getInstance();
+    	c2.setTime(new Date());
+        c2.add(Calendar.MONTH, -3);
+        Date d2 = c2.getTime();
+        String endDay = format.format(d2);
+        report.setEndDay(endDay);
+        List<ReportBusiness> reportBusiness = reportRepaymentHistoryDAO.getTurnover(report);
+        if (reportBusiness == null) {
+            return ResultDTO.fail("没有找到数据");
+        }
+        List<YearReportDO> list = new ArrayList<YearReportDO>();
+        if(num==1) {
+        	for(ReportBusiness rep : reportBusiness) {
+        		YearReportDO yearReportDO = new YearReportDO();
+        		yearReportDO.setDate(rep.getTradeDate());
+        		BigDecimal bd=new BigDecimal(rep.getTurnover());
+        		yearReportDO.setTurnover(bd);
+        		list.add(yearReportDO);
+        	}	
+        	return ResultDTO.success(list);
+        }else{
+        	for(ReportBusiness rep : reportBusiness) {
+        		YearReportDO yearReportDO = new YearReportDO();
+        		yearReportDO.setDate(rep.getTradeDate());
+        		BigDecimal bd=new BigDecimal(rep.getOrderPrice());
+        		yearReportDO.setTurnover(bd);
+        		list.add(yearReportDO);
+        	}	
+        	return ResultDTO.success(list);
+        }
+    }
+    
     public ResultDTO queryIndustry(int id) {
         IndustryDO dto = industryDAO.getById(id);
         return ResultDTO.success(dto);
