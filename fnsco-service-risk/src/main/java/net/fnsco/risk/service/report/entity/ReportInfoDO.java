@@ -106,8 +106,42 @@ public class ReportInfoDO {
      */
     private String key;
     
+    /**
+     * 报告查看次数
+     */
+    private Integer viewNum;
+    /**
+     * 最后报告时间
+     */
+    private Date lastViewTime;
+    
+    private String lastViewTimeStr;
+    
+    public String getLastViewTimeStr() {
+		return lastViewTimeStr;
+	}
 
-    public String getKey() {
+	public void setLastViewTimeStr(String lastViewTimeStr) {
+		this.lastViewTimeStr = lastViewTimeStr;
+	}
+
+	public Integer getViewNum() {
+		return viewNum;
+	}
+
+	public void setViewNum(Integer viewNum) {
+		this.viewNum = viewNum;
+	}
+
+	public Date getLastViewTime() {
+		return lastViewTime;
+	}
+
+	public void setLastViewTime(Date lastViewTime) {
+		this.lastViewTime = lastViewTime;
+	}
+
+	public String getKey() {
 		return key;
 	}
 
