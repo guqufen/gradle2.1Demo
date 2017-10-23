@@ -248,7 +248,8 @@ body{
 	color: #fff;
 	cursor: pointer;
 	filter: alpha(opacity=80);
-	opacity: .8
+	opacity: .8;
+	border: 2px solid #fff;
 }
 .close:hover, .close:focus {
     color: #000;
@@ -258,7 +259,7 @@ body{
     opacity: 1;
 }
 .close img{
-	margin-top: 2px;
+	margin-top: -3px;
 }
 .input{
 	width: 320px;

@@ -75,7 +75,7 @@
 				</a></li>
 				<li class="navList"><a href="management.html"> <i class="icon fk"></i> <span>商户管理</span>
 				</a></li>
-				<li class="navList"><a href="fengkong.html"> <i class="icon fk"></i> <span>风控+</span>
+				<li class="navList"><a href="risk.html"> <i class="icon fk"></i> <span>风控+</span>
 				</a></li>
 			</ul>
 		</div>
@@ -83,60 +83,73 @@
 		<div class="rightBox" id="rightBox">
 			<div  class="page-header">
                <div class="pull-right">企业名称：
-                	<a>法奈昇科技有限公司</a>
-            	</div>
-        	</div>  
-			<div class="form-group"
-			<div class="panel panel-default">
-  				<div class="panel-heading">
-    				<h3 class="panel-title">账户信息</h3>
-  				</div>
-  				<div class="panel-body">
-    				<div class="report-infos">
-						<div class="report-info merName">
-							账户余额：
-						<span></span>
-						</div>
-						<div class="report-info businessLicenseNum">
-							总值金额：
-						<span></span>
-						</div>
-						<div class="report-info businessAddress">
-							总收金额：
-						<span></span>
-						</div>
-					</div>  
-  				</div>
-			</div>
-			<div class="panel panel-default">
-  				<div class="panel-heading">
-    				<h3 class="panel-title">历史风控报告</h3>
-  				</div>
-  				<div class="panel-body">
-    				<div class="report-infos">
-						<div class="report-infos">
-						<div class="report-info merName">
-							关于XXX的反馈报告：
-						<span></span>
-						</div>
-						<div class="report-info businessLicenseNum">
-							关于XXX的反馈报告：
-						<span></span>
-						</div>
-						<div class="report-info businessAddress">
-							关于XXX的反馈报告：
-						<span></span>
-                		</div>  
-        				</div> 
-        			</div>	
-					</div>  
-  				</div>
-			</div>
-        	<div class="footer" >
-            	<div class="pull-right">© 2016-2018
-                	<a href="http://www.fnsco.net/" target="_blank">法奈昇科技有限公司</a>
+                	<span>法奈昇科技有限公司</span>
             	</div>
         	</div>
+			<div class="halfDiv">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">账户信息</h3>
+					</div>
+					<div class="panel-body">
+						<div class="report-infos">
+							<div class="report-info merName">
+								账户余额：
+							<span>0</span>元
+							<button class="recharge">充值</button>
+							</div>
+							<div class="report-info businessLicenseNum">
+								总值金额：
+							<span>0</span>元
+							</div>
+							<div class="report-info businessAddress">
+								总收金额：
+							<span>0</span>元
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+				<div class="halfDiv">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">历史风控报告</h3>
+						</div>
+						<div class="panel-body">
+							<div class="report-infos">
+								<div class="report-infos">
+								<div class="report-info merName">
+									关于XXX的反馈报告：
+								<span>某某的反馈报告</span>
+								</div>
+								<div class="report-info businessLicenseNum">
+									关于XXX的反馈报告：
+								<span>某某的反馈报告</span>
+								</div>
+								<div class="report-info businessAddress">
+									关于XXX的反馈报告：
+								<span>某某的反馈报告</span>
+								</div>  
+								</div> 
+							</div>	
+						</div>  
+					</div>
+				</div>
+				<div class="wholeDiv">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">系统公告</h3>
+						</div>
+						<div class="panel-body">
+							<div class="centenTit">
+								暂无公告
+							</div>
+						</div>  
+					</div>
+				</div>
+				
+			</div>
+			
         </div>  
 			<!-- 修改密码 -->
 			<div id="tk">
@@ -174,7 +187,7 @@
 </body>
 <script src="js/jquery.min.js"></script>
 <script src="js/layer/layer.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
@@ -188,6 +201,9 @@
 <script type="text/javascript" src="js/report.js"></script>
 <script src="js/layout.js"></script>
 <script type="text/javascript">
+	$(".recharge").click(function(){
+		layer.msg('充值功能暂未开放，敬请期待!');
+	})
 	$('.logout').attr('href', PROJECT_NAME + "/web/userOuter/logout");
 	//获取当前用户,将真实姓名显示出来
 	$(function() {
