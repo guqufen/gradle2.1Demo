@@ -93,11 +93,11 @@ function formatterIndex(value, row, index){
 function formatterOperation(value, row, index) {
 	//2、3、4待编辑
 	if (row.status == 2 ||  row.status == 4) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' ">编辑报告</a>' ].join('');
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' &innerCode='+row.innerCode+'" >编辑报告</a>' ].join('');
 	}
 	//0：待审核
 	if (row.status == 0) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' "  >审核报告</a>' ].join('');
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' &innerCode='+row.innerCode+' "  >审核报告</a>' ].join('');
 	}
 }
 // 0待审核1审核通过2审核失败3待编辑
@@ -142,7 +142,7 @@ function queryParams(params) {
 		currentPageNum : this.pageNumber,
 		pageSize : this.pageSize,
 		merName : $.trim($('#merName').val()),
-		tradingArea : $.trim($('#tradingArea').val()),
+//		tradingArea : $.trim($('#tradingArea').val()),//商圈查询条件去掉
 		businessLicenseNum : $.trim($('#businessLicenseNum').val()),
 		status : $('#status option:selected').val(),
 		customerType : customerType
