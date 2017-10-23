@@ -1,5 +1,6 @@
 package net.fnsco.risk.service.report;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,9 +20,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -60,32 +58,43 @@ public class ReportService extends BaseService {
 
     //前台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> page(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
-        WebUserOuterDO userDo = webUserOuterDAO.getById(reportInfoDO.getUserId());
-        reportInfoDO.setAgentId(userDo.getAgentId());
-        List<ReportInfoDO> pageList = pageList = this.reportInfoDAO.pageListMercByCondition(reportInfoDO, pageNum, pageSize);
+        List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
         for (ReportInfoDO li : pageList) {
-            li.setIsTrue(1);
-            li.setStatus(1);
+            try {
+                String time = tradeDataDAO.getByInnerCode(li.getInnerCode());
+                if (time != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                    Date old = sdf.parse(time);
+                    Date now = new Date();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(now);
+                    calendar.add(Calendar.MONTH, -3);
+                    //小于三个月 符合规则
+                    if (calendar.getTime().getTime() < old.getTime()) {
+                        li.setIsTrue(1);
+                    } else {
+                        //大于三个月 不符合规则
+                        li.setIsTrue(2);
+                    }
+                } else {
+                    //用户绑定的商铺流水产生的时间不正确或没有流水交易
+                    li.setIsTrue(3);
+                }
+            } catch (ParseException e) {
+                //该商铺没有流水
+                e.printStackTrace();
+            }
         }
-        Integer count = this.reportInfoDAO.pageListMercByConditionCount(reportInfoDO);
+        Integer count = this.reportInfoDAO.pageListCount(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }
 
-    //前台商务管理分页查询
+    //商务管理分页查询
     public ResultPageDTO<ReportInfoDO> queryList(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         WebUserOuterDO userDo = webUserOuterDAO.getById(reportInfoDO.getUserId());
         reportInfoDO.setAgentId(userDo.getAgentId());
-        List<ReportInfoDO> pageList = Lists.newArrayList();
-        boolean flag = false;
-        if (!Strings.isNullOrEmpty(reportInfoDO.getMerName()) || !Strings.isNullOrEmpty(reportInfoDO.getBusinessLicenseNum()) || !Strings.isNullOrEmpty(reportInfoDO.getTradingArea())) {
-            flag = true;
-        }
-        if (flag) {
-            pageList = this.reportInfoDAO.pageListMercByCondition(reportInfoDO, pageNum, pageSize);
-        } else {
-            pageList = this.reportInfoDAO.pageListAllMerc(reportInfoDO, pageNum, pageSize);
-        }
+        List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
         for (ReportInfoDO li : pageList) {
             try {
                 //订阅次数查询
@@ -114,7 +123,6 @@ public class ReportService extends BaseService {
             }
         }
         Integer count = this.reportInfoDAO.pageListCount(reportInfoDO);
-
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }
@@ -205,11 +213,11 @@ public class ReportService extends BaseService {
     }
 
     //查询12个月经营流水趋势(交易量)
-    public ResultDTO queryTradingVolumeReport(String innerCode, Integer reportId) {
+    public ResultDTO queryTradingVolumeReport(String innerCode, Integer merchantId) {
         List<YearReportDO> list = new ArrayList<YearReportDO>();
 
         ReportInfoDO reportInfoDO = reportInfoDAO.getByInnerCode(innerCode);
-        ReportRepaymentHistoryDO dto = reportRepaymentHistoryDAO.getByReportId(reportId);
+        ReportRepaymentHistoryDO dto = reportRepaymentHistoryDAO.getByReportId(merchantId);
         //如果查出来的月度营业额为空，则直接返回到页面；否则会报空指针异常
         if (dto == null) {
             return ResultDTO.success(list);
@@ -280,13 +288,12 @@ public class ReportService extends BaseService {
         }
         return ResultDTO.success(list);
     }
-
     //查询12个月日均客单价
-    public ResultDTO queryUnitPriceReport(String innerCode, Integer reportId) {
+    public ResultDTO queryUnitPriceReport(String innerCode, Integer merchantId) {
         List<YearReportDO> list = new ArrayList<YearReportDO>();
 
         ReportInfoDO reportInfoDO = reportInfoDAO.getByInnerCode(innerCode);
-        ReportRepaymentHistoryDO dto = reportRepaymentHistoryDAO.getByReportId(reportId);
+        ReportRepaymentHistoryDO dto = reportRepaymentHistoryDAO.getByReportId(merchantId);
         //如果查出来的月度营业额为空，则直接返回到页面；否则会报空指针异常
         if (dto == null) {
             return ResultDTO.success(list);
@@ -357,7 +364,6 @@ public class ReportService extends BaseService {
         }
         return ResultDTO.success(list);
     }
-
     /*    private String handleDateYear(Date date, Integer num) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
