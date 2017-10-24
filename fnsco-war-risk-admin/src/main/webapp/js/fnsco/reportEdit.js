@@ -26,9 +26,6 @@ var dateList=new Array();
 var getReportChart = function getReportChart(){
 //	console.log(merchantId);
 	//传过来的id为空，说明之前未生成过。不需要去查找曲线图
-	if(merchantId.trim() == "null"){
-		return ;
-	}
 	//查询全年风控曲线图
 	$.ajax({
 		url : PROJECT_NAME + '/web/admin/report/queryReportPre',
@@ -67,9 +64,6 @@ var getReportChart = function getReportChart(){
 var getReportBusiness = function getReportBusiness(){
 //	console.log(merchantId);
 	//传过来的id为空，说明之前未生成过。不需要去查找曲线图
-	if(merchantId.trim() == "null"){
-		return ;
-	}
 	//查询经营流水
 	$.ajax({
 		url : PROJECT_NAME + '/web/admin/report/queryTradingVolumeReport',
@@ -77,19 +71,23 @@ var getReportBusiness = function getReportBusiness(){
 		dataType : "json",
 		data : {"innerCode":innerCode,"merchantId":merchantId},
 		success : function(data){
-			console.log(data);
-			/*获取生成图表的参数*/
-			var json=data.data;
-			dateList=[];
-			dataList=[];
-			for(var i=0;i<json.length;i++){
-				dateList.push(json[i].date);
-				dataList.push(json[i].turnover);
+			if (data.success){
+				console.log(data);
+				/*获取生成图表的参数*/
+				var json=data.data;
+				dateList=[];
+				dataList=[];
+				for(var i=0;i<json.length;i++){
+					dateList.push(json[i].date);
+					dataList.push(json[i].turnover);
+				}
+				// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
+				// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
+				// chart(datatime,data);
+				chart1(myChart2,dateList,dataList)
+			}else{
+				layer.msg(data.message);
 			}
-			// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
-			// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
-			// chart(datatime,data);
-			chart1(myChart1,dateList,dataList)
 		}
 	});
 }
@@ -98,9 +96,6 @@ var getReportBusiness = function getReportBusiness(){
 var getReportUnit = function getReportUnit(){
 //	console.log(merchantId);
 	//传过来的id为空，说明之前未生成过。不需要去查找曲线图
-	if(merchantId.trim() == "null"){
-		return ;
-	}
 	//查询日均客单价
 	$.ajax({
 		url : PROJECT_NAME + '/web/admin/report/queryUnitPriceReport',
@@ -108,19 +103,23 @@ var getReportUnit = function getReportUnit(){
 		dataType : "json",
 		data : {"innerCode":innerCode,"merchantId":merchantId},
 		success : function(data){
-			console.log(data);
-			/*获取生成图表的参数*/
-			var json=data.data;
-			dateList=[];
-			dataList=[];
-			for(var i=0;i<json.length;i++){
-				dateList.push(json[i].date);
-				dataList.push(json[i].turnover);
+			if (data.success){
+				console.log(data);
+				/*获取生成图表的参数*/
+				var json=data.data;
+				dateList=[];
+				dataList=[];
+				for(var i=0;i<json.length;i++){
+					dateList.push(json[i].date);
+					dataList.push(json[i].turnover);
+				}
+				// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
+				// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
+				// chart(datatime,data);
+				chart1(myChart2,dateList,dataList)
+			}else{
+				layer.msg(data.message);
 			}
-			// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
-			// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
-			// chart(datatime,data);
-			chart1(myChart2,dateList,dataList)
 		}
 	});
 }
@@ -144,6 +143,8 @@ $(function() {
 
 				// 数据获取成功，则将获取到的数据赋值给当前页面
 				var dd = data.data;
+				
+				merchantId = dd.id;
 
 				$('#merName').val(dd.merName);// 商户名称
 				$('#merName').attr('disabled','disabled');
