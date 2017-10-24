@@ -86,8 +86,23 @@ public class ReportService extends BaseService {
         }
         if (flag) {
             pageList = this.reportInfoDAO.pageListMercByCondition(reportInfoDO, pageNum, pageSize);
+            for (ReportInfoDO reportInfoDO2 : pageList) {
+            	reportInfoDO2.setStatus(10);
+			}
         } else {
             pageList = this.reportInfoDAO.pageListAllMerc(reportInfoDO, pageNum, pageSize);
+            for (ReportInfoDO reportInfoDO2 : pageList) {
+            	
+            	if(reportInfoDO.getStatus()!= null && reportInfoDO.getStatus() == 20) {
+            		reportInfoDO2.setStatus(20);
+            	}else {
+            		if(DateUtils.is30dayBefore(reportInfoDO2.getReportTimer()) && reportInfoDO2.getStatus() == 1) {
+            			reportInfoDO2.setStatus(10);
+            		}else {
+            			reportInfoDO2.setStatus(20);
+            		}
+            	} 
+			}
         }
         Integer count = 0;
         if (flag) {

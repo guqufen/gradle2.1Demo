@@ -238,7 +238,8 @@
 				var hisDatas = data.data;
 				var conStr = '';
 				$.each(hisDatas, function(i, item){   
-					conStr += '<div class="report-info merName" onclick=seereport('+item.id+');>'+item.merName+'"风控+"报告      '+item.lastViewTimeStr+' </div>';
+					conStr += '<div class="report-info merName merName'+item.id+'"><a href="">'+item.merName+'"风控+"报告      <span class="time">'+item.lastViewTimeStr+' </span></a></div>';
+					seereport(item.id);
 				});
 				$('#history_report').html(conStr);
 			}
@@ -256,7 +257,9 @@
 				if (!data.success){
 					window.location = 'login.html';return;
 				}
-				window.open('http://localhost:8080/report.html?merchantId=6&innerCode=092916276563436');
+				$(".merName"+id+" a").attr('href',"http://localhost:8080/report.html?merchantId=6&innerCode=092916276563436"+id)
+				// return 'http://localhost:8080/report.html?merchantId=6&innerCode=092916276563436';
+				// window.open('http://localhost:8080/report.html?merchantId=6&innerCode=092916276563436');
 			}
 		});
 		

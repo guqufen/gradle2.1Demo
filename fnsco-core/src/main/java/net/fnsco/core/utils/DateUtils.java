@@ -154,7 +154,35 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
-
+    
+    /**
+	 * is30dayBefore:(根据传入的日期判断是否是30天之内的)
+	 *
+	 * @param  @param dateStr 格式yyyy-MM-dd
+	 * @param  @return    设定文件
+	 * @return boolean    DOM对象
+	 * @author tangliang
+	 * @date   2017年10月24日 上午10:05:17
+	 */
+	public static boolean is30dayBefore(String dateStr) {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd"); 
+		Calendar cal = Calendar.getInstance();
+		long time1 = cal.getTimeInMillis();   
+		try {
+			cal.setTime(sdf.parse(dateStr));
+			long time2 = cal.getTimeInMillis();         
+	        long between_days=(time1-time2)/(1000*3600*24);  
+	        int days = Integer.parseInt(String.valueOf(between_days));    
+	        if(days <= 30) {
+	        	return true;
+	        }
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}    
+		return false;
+	}
     /**
      * compare_date:(这里用一句话描述这个方法的作用) 比较时间
      *
