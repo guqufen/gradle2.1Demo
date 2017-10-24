@@ -40,8 +40,6 @@ var webUserOuterId = message.id;
 //生成宝贝参数
 var dataList=new Array();
 var dateList=new Array();
-var dataList1=new Array();
-var dateList1=new Array();
 //获取风控报告明细
 $(function(){
 	$.ajax({

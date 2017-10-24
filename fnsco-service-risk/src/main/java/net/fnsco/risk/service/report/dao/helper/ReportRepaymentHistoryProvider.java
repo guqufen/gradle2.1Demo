@@ -135,15 +135,16 @@ public class ReportRepaymentHistoryProvider {
         return new SQL() {{
         SELECT("*");
         FROM(TABLE_NAME1);
-        if (reportBusiness.getInnerCode() != null && reportBusiness.getInnerCode().equals("")) {
+        if (StringUtils.isNotBlank(reportBusiness.getInnerCode())) {
             WHERE("inner_code =#{reportBusiness.innerCode}");
         }
-        if (reportBusiness.getStartDay() != null && reportBusiness.getStartDay().equals("")) {
+        if (StringUtils.isNotBlank(reportBusiness.getStartDay())) {
             WHERE("trade_date >=#{reportBusiness.startDay}");
         }
-        if (reportBusiness.getEndDay() != null && reportBusiness.getEndDay().equals("")) {
+        if (StringUtils.isNotBlank(reportBusiness.getEndDay())) {
             WHERE("trade_date <=#{reportBusiness.endDay}");
         }
+        ORDER_BY ("trade_date");
         }}.toString();
     }
     

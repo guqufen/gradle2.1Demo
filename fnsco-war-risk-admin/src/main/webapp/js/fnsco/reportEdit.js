@@ -18,7 +18,7 @@ Request = GetRequest();
 var merchantId=Request["merchantId"];
 console.log(merchantId);
 var innerCode = Request["innerCode"];
-
+console.log(innerCode);
 //获取风控报告还款能力明细
 //生成数组参数
 var dataList=new Array();
@@ -60,8 +60,6 @@ var getReportChart = function getReportChart(){
 }
 //获取风控报告经营趋势明细
 //生成数组参数
-var dataList1=new Array();
-var dateList1=new Array();
 var getReportBusiness = function getReportBusiness(){
 //	console.log(merchantId);
 	//查询经营流水
@@ -69,7 +67,7 @@ var getReportBusiness = function getReportBusiness(){
 		url : PROJECT_NAME + '/web/admin/report/queryTradingVolumeReport',
 		type : 'POST',
 		dataType : "json",
-		data : {'reportId' : merchantId,'innerCode':innerCode},
+		data : {"innerCode":innerCode,"merchantId":merchantId},
 		success : function(data){
 			console.log(data);
 			/*获取生成图表的参数*/
@@ -83,14 +81,12 @@ var getReportBusiness = function getReportBusiness(){
 			// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
 			// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
 			// chart(datatime,data);
-			chart1(dateList,dataList)
+			chart1(myChart1,dateList,dataList)
 		}
 	});
 }
 //获取风控报告日均客单价明细
 //生成数组参数
-var dataList2=new Array();
-var dateList2=new Array();
 var getReportUnit = function getReportUnit(){
 //	console.log(merchantId);
 	//查询日均客单价
@@ -112,7 +108,7 @@ var getReportUnit = function getReportUnit(){
 			// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
 			// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
 			// chart(datatime,data);
-			chart2(dateList,dataList)
+			chart1(myChart2,dateList,dataList)
 		}
 	});
 }
@@ -677,88 +673,10 @@ function chart(dataTime,data){
 	myChart.setOption(option);
 }
 
-
 var myChart1 = echarts.init(document.getElementById('chart1')); 
-//生成图表
-function chart1(dataTime,data){
-	var option = {
-	    tooltip: {
-	        trigger: 'axis',
-	        axisPointer: { type: 'none' },
-	        // position: function (pt) {
-	        //     return [pt[0], '10%'];
-	        // }
-	    },
-	    xAxis: {
-	        type: 'category',
-	        boundaryGap: false,
-	        data: dataTime,
-	        lineStyle:{
-              color:'#333',
-              width:8,//这里是为了突出显示加上的
-          },
-          splitLine:{
-      　　　　show:true,
-              lineStyle: {
-                  color: '#eee',
-                  width: 1,
-                  type: 'solid'
-              }
-      　　}
-
-	    },
-	    grid: {
-      	// left:'0',
-      	// right:'7%'
-	    },
-	    yAxis: {
-	        type: 'value',
-	        boundaryGap: [0, '15%'],
-	        splitLine:{  
-      　　　　show:false  
-      　　 },
-        lineStyle:{
-              color:'#333',
-              width:8,//这里是为了突出显示加上的
-        } 
-	    },
-	    dataZoom: [{
-	        // type: 'inside',
-	        // start: 0,
-	        // end: 5000
-	        show:false
-	    },],
-	    roam: false,
-	    series: [
-	        {
-	            name:'金额',
-	            type:'line',
-	            smooth:true,
-	            //symbol: 'none',
-	            sampling: 'average',
-	            itemStyle: {
-	                normal: {
-                    //折线图颜色
-	                    color: '#666',
-	                    width:1,
-	                }
-	            },
-	            areaStyle: {
-                // 渐变区域
-	                normal: {
-                  	color: '#ccc'
-	                }
-	            },
-	            data: data
-	        }
-	       
-	    ]
-	};
-	myChart1.setOption(option);
-}
 var myChart2 = echarts.init(document.getElementById('chart2')); 
 //生成图表
-function chart2(dataTime,data){
+function chart1(id,dataTime,data){
 	var option = {
 	    tooltip: {
 	        trigger: 'axis',
@@ -772,33 +690,33 @@ function chart2(dataTime,data){
 	        boundaryGap: false,
 	        data: dataTime,
 	        lineStyle:{
-              color:'#333',
-              width:8,//这里是为了突出显示加上的
-          },
-          splitLine:{
-      　　　　show:true,
-              lineStyle: {
-                  color: '#eee',
-                  width: 1,
-                  type: 'solid'
-              }
-      　　}
+                color:'#333',
+                width:8,//这里是为了突出显示加上的
+            },
+            splitLine:{
+        　　　　show:true,
+                lineStyle: {
+                    color: '#eee',
+                    width: 1,
+                    type: 'solid'
+                }
+        　　}
 
 	    },
 	    grid: {
-      	// left:'0',
-      	// right:'7%'
+        	// left:'0',
+        	// right:'7%'
 	    },
 	    yAxis: {
 	        type: 'value',
 	        boundaryGap: [0, '15%'],
 	        splitLine:{  
-      　　　　show:false  
-      　　 },
-        lineStyle:{
-              color:'#333',
-              width:8,//这里是为了突出显示加上的
-        } 
+        　　　　show:false  
+        　　 },
+          lineStyle:{
+                color:'#333',
+                width:8,//这里是为了突出显示加上的
+          } 
 	    },
 	    dataZoom: [{
 	        // type: 'inside',
@@ -816,15 +734,15 @@ function chart2(dataTime,data){
 	            sampling: 'average',
 	            itemStyle: {
 	                normal: {
-                    //折线图颜色
+                      //折线图颜色
 	                    color: '#666',
 	                    width:1,
 	                }
 	            },
 	            areaStyle: {
-                // 渐变区域
+                  // 渐变区域
 	                normal: {
-                  	color: '#ccc'
+                    	color: '#ccc'
 	                }
 	            },
 	            data: data
@@ -832,5 +750,5 @@ function chart2(dataTime,data){
 	       
 	    ]
 	};
-	myChart2.setOption(option);
+	id.setOption(option);
 }

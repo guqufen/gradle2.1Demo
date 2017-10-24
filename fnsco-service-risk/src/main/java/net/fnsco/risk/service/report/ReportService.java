@@ -5,8 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -208,7 +213,7 @@ public class ReportService extends BaseService {
         return ResultDTO.success(list);
     }
 
-    //查询12个月经营流水趋势(交易量)
+    //查询3个月经营流水趋势(交易量)
     public ResultDTO queryTradingVolumeReport(String innerCode, Integer merchantId) {
     	ReportBusiness report = new ReportBusiness();
     	report.setInnerCode(innerCode);
@@ -217,29 +222,82 @@ public class ReportService extends BaseService {
     	c1.setTime(new Date());
         c1.add(Calendar.DATE, - 1);
         Date d1 = c1.getTime();
-        String startDay = format.format(d1);
-        report.setStartDay(startDay);
+        String endDay = format.format(d1);
+        report.setEndDay(endDay);
         Calendar c2 = Calendar.getInstance();
     	c2.setTime(new Date());
         c2.add(Calendar.MONTH, -3);
         Date d2 = c2.getTime();
-        String endDay = format.format(d2);
-        report.setEndDay(endDay);
+        String startDay = format.format(d2);
+        report.setStartDay(startDay);
         List<ReportBusiness> reportBusiness = reportRepaymentHistoryDAO.getTurnover(report);
         if (reportBusiness == null) {
             return ResultDTO.fail("没有找到数据");
         }
+        
+        Map<String,ReportBusiness> map =new HashMap<String,ReportBusiness>();
+    	for(ReportBusiness rep : reportBusiness) {
+    		String bb =rep.getTradeDate();
+    		map.put(bb, rep);
+    	}	
+    	
+    	Map<String,ReportBusiness> allMap =new HashMap<String,ReportBusiness>();
+    	Date startDate =null;
+    	Date endDate =null;
+    	try {
+    		startDate =format.parse(startDay);
+        	endDate =format.parse(endDay);
+    	  } catch (ParseException e) {
+    	   // TODO Auto-generated catch block
+    	   e.printStackTrace();
+    	  }
+    	Date temp = startDate;
+        while(true) {
+        	ReportBusiness temObj = new ReportBusiness();
+        	temObj.setTurnover("0");
+        	String nowDay = format.format(temp);
+        	temObj.setTradeDate(nowDay);
+        	Calendar st = Calendar.getInstance();
+        	st.setTime(temp);
+            st.add(Calendar.DATE, 1);
+            temp = st.getTime();
+            String addDay = format.format(temp);
+            allMap.put(addDay, temObj);
+        	
+        	if(endDate.before(temp)) {
+        		break;
+        	}
+        }
         List<YearReportDO> list = new ArrayList<YearReportDO>();
-        	for(ReportBusiness rep : reportBusiness) {
-        		YearReportDO yearReportDO = new YearReportDO();
-        		yearReportDO.setDate(rep.getTradeDate());
-        		BigDecimal bd=new BigDecimal(rep.getTurnover());
-        		yearReportDO.setTurnover(bd);
+        BigDecimal kong=new BigDecimal(0);
+        List<Map.Entry<String,ReportBusiness>> lists = new ArrayList<Map.Entry<String,ReportBusiness>>(allMap.entrySet());
+        Collections.sort(lists,new Comparator<Map.Entry<String,ReportBusiness>>() {
+            //升序排序
+            public int compare(Entry<String, ReportBusiness> o1,
+                    Entry<String, ReportBusiness> o2) {
+                return o1.getKey().compareTo(o2.getKey());
+            }
+
+        });
+        for(Map.Entry<String,ReportBusiness>  entry: lists) {
+        	YearReportDO yearReportDO = new YearReportDO();
+        	String key =entry.getValue().getTradeDate();
+        	ReportBusiness tempBusiness1 = map.get(key);
+        	if(null == tempBusiness1) {
+        		yearReportDO.setTurnover(kong);
+        		yearReportDO.setDate(key);
         		list.add(yearReportDO);
-        	}	
-        	return ResultDTO.success(list);
+        	}else {
+        		BigDecimal bd=new BigDecimal(tempBusiness1.getTurnover());
+        		yearReportDO.setTurnover(bd);
+        		yearReportDO.setDate(key);
+        		list.add(yearReportDO);
+        	}
+        }
+        return ResultDTO.success(list);
+        
     }
-    //查询12个月日均客单价
+    //查询3个月日均客单价
     public ResultDTO queryUnitPriceReport(String innerCode, Integer merchantId) {
     	ReportBusiness report = new ReportBusiness();
     	report.setInnerCode(innerCode);
@@ -248,27 +306,78 @@ public class ReportService extends BaseService {
     	c1.setTime(new Date());
         c1.add(Calendar.DATE, - 1);
         Date d1 = c1.getTime();
-        String startDay = format.format(d1);
-        report.setStartDay(startDay);
+        String endDay = format.format(d1);
+        report.setEndDay(endDay);
         Calendar c2 = Calendar.getInstance();
     	c2.setTime(new Date());
         c2.add(Calendar.MONTH, -3);
         Date d2 = c2.getTime();
-        String endDay = format.format(d2);
-        report.setEndDay(endDay);
+        String startDay = format.format(d2);
+        report.setStartDay(startDay);
         List<ReportBusiness> reportBusiness = reportRepaymentHistoryDAO.getTurnover(report);
         if (reportBusiness == null) {
             return ResultDTO.fail("没有找到数据");
         }
+        Map<String,ReportBusiness> map =new HashMap<String,ReportBusiness>();
+    	for(ReportBusiness rep : reportBusiness) {
+    		String bb =rep.getTradeDate();
+    		map.put(bb, rep);
+    	}	
+    	
+    	Map<String,ReportBusiness> allMap =new HashMap<String,ReportBusiness>();
+    	Date startDate =null;
+    	Date endDate =null;
+    	try {
+    		startDate =format.parse(startDay);
+        	endDate =format.parse(endDay);
+    	  } catch (ParseException e) {
+    	   // TODO Auto-generated catch block
+    	   e.printStackTrace();
+    	  }
+    	Date temp = startDate;
+        while(true) {
+        	ReportBusiness temObj = new ReportBusiness();
+        	temObj.setTurnover("0");
+        	String nowDay = format.format(temp);
+        	temObj.setTradeDate(nowDay);
+        	Calendar st = Calendar.getInstance();
+        	st.setTime(temp);
+            st.add(Calendar.DATE, 1);
+            temp = st.getTime();
+            String addDay = format.format(temp);
+            allMap.put(addDay, temObj);
+        	
+        	if(endDate.before(temp)) {
+        		break;
+        	}
+        }
         List<YearReportDO> list = new ArrayList<YearReportDO>();
-        	for(ReportBusiness rep : reportBusiness) {
-        		YearReportDO yearReportDO = new YearReportDO();
-        		yearReportDO.setDate(rep.getTradeDate());
-        		BigDecimal bd=new BigDecimal(rep.getOrderPrice());
-        		yearReportDO.setTurnover(bd);
+        BigDecimal kong=new BigDecimal(0);
+        List<Map.Entry<String,ReportBusiness>> lists = new ArrayList<Map.Entry<String,ReportBusiness>>(allMap.entrySet());
+        Collections.sort(lists,new Comparator<Map.Entry<String,ReportBusiness>>() {
+            //升序排序
+            public int compare(Entry<String, ReportBusiness> o1,
+                    Entry<String, ReportBusiness> o2) {
+                return o1.getKey().compareTo(o2.getKey());
+            }
+
+        });
+        for(Map.Entry<String,ReportBusiness>  entry: lists) {
+        	YearReportDO yearReportDO = new YearReportDO();
+        	String key =entry.getValue().getTradeDate();
+        	ReportBusiness tempBusiness1 = map.get(key);
+        	if(null == tempBusiness1) {
+        		yearReportDO.setTurnover(kong);
+        		yearReportDO.setDate(key);
         		list.add(yearReportDO);
-        	}	
-        	return ResultDTO.success(list);
+        	}else {
+        		BigDecimal bd=new BigDecimal(tempBusiness1.getOrderPrice());
+        		yearReportDO.setTurnover(bd);
+        		yearReportDO.setDate(key);
+        		list.add(yearReportDO);
+        	}
+        }
+        return ResultDTO.success(list);
     }
     /*    private String handleDateYear(Date date, Integer num) {
         Calendar calendar = Calendar.getInstance();
