@@ -112,13 +112,34 @@ public class ReportService extends BaseService {
     }
 
     //admin后台分页查询风控报告列表
+    public ResultPageDTO<ReportInfoDO> pageListForAdmin(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
+        WebUserOuterDO userDo = webUserOuterDAO.getById(reportInfoDO.getUserId());
+        reportInfoDO.setAgentId(userDo.getAgentId());
+        List<ReportInfoDO> pageList = Lists.newArrayList();
+        boolean flag = false;
+        if ( null != reportInfoDO.getStatus()) {
+            flag = true;
+        }
+        if (flag) {
+            pageList = this.reportInfoDAO.pageListMercByCondition(reportInfoDO, pageNum, pageSize);
+        } else {
+            pageList = this.reportInfoDAO.pageListAllMerc(reportInfoDO, pageNum, pageSize);
+        }
+        Integer count = 0;
+        if (flag) {
+            count = this.reportInfoDAO.pageListMercByConditionCount(reportInfoDO);
+        } else {
+            count = this.reportInfoDAO.pageListAllMercCount(reportInfoDO);
+        }
+        ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
+        return pager;
+    }
     public ResultPageDTO<ReportInfoDO> pageBack(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageListBack(reportInfoDO, pageNum, pageSize);
         Integer count = this.reportInfoDAO.pageListCountBack(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }
-
     //查询12个月风控历史
     public ResultDTO queryYearReport(String innerCode, Integer merchantId) {
         List<YearReportDO> list = new ArrayList<YearReportDO>();

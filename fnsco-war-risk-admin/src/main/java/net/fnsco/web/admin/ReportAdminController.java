@@ -45,7 +45,7 @@ public class ReportAdminController extends BaseController{
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
         reportInfoDO.setUserId(getUserId());
-        ResultPageDTO<ReportInfoDO> pager = this.reportService.pageBack(reportInfoDO, page,rows);
+        ResultPageDTO<ReportInfoDO> pager = this.reportService.pageListForAdmin(reportInfoDO, page,rows);
         return success(pager);
     }
     //通知商户风控报告
