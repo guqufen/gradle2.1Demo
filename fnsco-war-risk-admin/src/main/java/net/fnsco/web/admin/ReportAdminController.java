@@ -228,21 +228,19 @@ public class ReportAdminController extends BaseController{
      * @param reportId
      * @return
      */
-      @RequestMapping(value="queryReportBusiness", method = RequestMethod.POST)
+      @RequestMapping(value="queryTradingVolumeReport", method = RequestMethod.POST)
       @ResponseBody
-      public ResultDTO queryReportBusiness(@RequestParam Integer reportId){
-    	    Integer num =1;
-          	return reportService.getReportBusinessOrUnit(reportId,num);
+      public ResultDTO queryTradingVolumeReport(@RequestParam String innerCode, @RequestParam String merchantId) {
+          return reportService.queryTradingVolumeReport(innerCode, NumberUtils.toInt(merchantId));
       }
       /**
        * 查询全年风控日均客单价测曲线图(编辑页面)
        * @param reportId
        * @return
        */
-        @RequestMapping(value="queryReportUnit", method = RequestMethod.POST)
+        @RequestMapping(value="queryUnitPriceReport", method = RequestMethod.POST)
         @ResponseBody
-        public ResultDTO queryReportUnit(@RequestParam Integer reportId){
-        	Integer num = 2;
-           	return reportService.getReportBusinessOrUnit(reportId,num);
+        public ResultDTO queryUnitPriceReport(@RequestParam String innerCode, @RequestParam String merchantId) {
+            return reportService.queryUnitPriceReport(innerCode, NumberUtils.toInt(merchantId));
         }
 }

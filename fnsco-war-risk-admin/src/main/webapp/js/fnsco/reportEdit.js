@@ -30,7 +30,7 @@ var getReportChart = function getReportChart(){
 		url : PROJECT_NAME + '/web/admin/report/queryReportPre',
 		type : 'POST',
 		dataType : "json",
-		data : {'reportId' : merchantId,'innerCode':innerCode},
+		data : {'reportId' : merchantId},
 		success : function(data){
 			if(data.success){
 				console.log(data);
@@ -43,7 +43,6 @@ var getReportChart = function getReportChart(){
 				//置空，不然容易出现数据叠加
 				dateList = [];
 				dataList = [];
-
 				for(var i=0;i<json.length;i++){
 					dateList.push(json[i].date);
 					dataList.push(json[i].turnover);
@@ -65,37 +64,26 @@ var dataList1=new Array();
 var dateList1=new Array();
 var getReportBusiness = function getReportBusiness(){
 //	console.log(merchantId);
-	//查询全年风控曲线图
+	//查询经营流水
 	$.ajax({
-		url : PROJECT_NAME + '/web/admin/report/queryReportBusiness',
+		url : PROJECT_NAME + '/web/admin/report/queryTradingVolumeReport',
 		type : 'POST',
 		dataType : "json",
-		data : {'reportId' : merchantId},
+		data : {"innerCode":innerCode,"merchantId":merchantId},
 		success : function(data){
-			if(data.success){
-				console.log(data);
-				/*获取生成图表的参数*/
-				var json=data.data;
-
-				$('#business_trend').val(true);
-
-				console.log($('#business_trend').val());
-				//置空，不然容易出现数据叠加
-				dateList1 = [];
-				dataList1 = [];
-
-				for(var i=0;i<json.length;i++){
-					dateList1.push(json[i].date);
-					dataList1.push(json[i].turnover);
-				}
-				console.log(dateList1,dataList1);
-				
-				chart1(dateList1,dataList1);
-			}else{
-				$('#business_trend').val(false);
-				layer.msg(data.message);
+			console.log(data);
+			/*获取生成图表的参数*/
+			var json=data.data;
+			dateList=[];
+			dataList=[];
+			for(var i=0;i<json.length;i++){
+				dateList.push(json[i].date);
+				dataList.push(json[i].turnover);
 			}
-
+			// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
+			// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
+			// chart(datatime,data);
+			chart1(dateList,dataList)
 		}
 	});
 }
@@ -105,37 +93,26 @@ var dataList2=new Array();
 var dateList2=new Array();
 var getReportUnit = function getReportUnit(){
 //	console.log(merchantId);
-	//查询全年风控曲线图
+	//查询日均客单价
 	$.ajax({
-		url : PROJECT_NAME + '/web/admin/report/queryReportUnit',
+		url : PROJECT_NAME + '/web/admin/report/queryUnitPriceReport',
 		type : 'POST',
 		dataType : "json",
-		data : {'reportId' : merchantId},
+		data : {"innerCode":innerCode,"merchantId":merchantId},
 		success : function(data){
-			if(data.success){
-				console.log(data);
-				/*获取生成图表的参数*/
-				var json=data.data;
-
-				$('#unit_price').val(true);
-
-				console.log($('#unit_price').val());
-				//置空，不然容易出现数据叠加
-				dateList2 = [];
-				dataList2 = [];
-
-				for(var i=0;i<json.length;i++){
-					dateList2.push(json[i].date);
-					dataList2.push(json[i].turnover);
-				}
-				console.log(dateList2,dataList2);
-				
-				chart2(dateList2,dataList2);
-			}else{
-				$('#unit_price').val(false);
-				layer.msg(data.message);
+			console.log(data);
+			/*获取生成图表的参数*/
+			var json=data.data;
+			dateList=[];
+			dataList=[];
+			for(var i=0;i<json.length;i++){
+				dateList.push(json[i].date);
+				dataList.push(json[i].turnover);
 			}
-
+			// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
+			// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
+			// chart(datatime,data);
+			chart2(dateList,dataList)
 		}
 	});
 }
@@ -714,32 +691,33 @@ function chart1(dataTime,data){
 	        boundaryGap: false,
 	        data: dataTime,
 	        lineStyle:{
-                color:'#333',
-                width:8,//这里是为了突出显示加上的
-            },
-            splitLine:{
-        　　　　show:true,
-                lineStyle: {
-                    color: '#eee',
-                    width: 1,
-                    type: 'solid'
-                }
-        　　}
+              color:'#333',
+              width:8,//这里是为了突出显示加上的
+          },
+          splitLine:{
+      　　　　show:true,
+              lineStyle: {
+                  color: '#eee',
+                  width: 1,
+                  type: 'solid'
+              }
+      　　}
 
 	    },
 	    grid: {
-        	// right:'0%',
+      	// left:'0',
+      	// right:'7%'
 	    },
 	    yAxis: {
 	        type: 'value',
 	        boundaryGap: [0, '15%'],
 	        splitLine:{  
-        　　　　show:false 
-        　　 },
-          lineStyle:{
-                color:'#333',
-                width:8,//这里是为了突出显示加上的
-          } 
+      　　　　show:false  
+      　　 },
+        lineStyle:{
+              color:'#333',
+              width:8,//这里是为了突出显示加上的
+        } 
 	    },
 	    dataZoom: [{
 	        // type: 'inside',
@@ -747,61 +725,34 @@ function chart1(dataTime,data){
 	        // end: 5000
 	        show:false
 	    },],
+	    roam: false,
 	    series: [
-			{
-			    name:'销售额',
-			    type:'line',
-			    smooth:true,
-			    //symbol: 'none',
-			    sampling: 'average',
-			    itemStyle: {
-			        normal: {
-			          //折线图颜色
-			            color: '#333',
-			            width:1,
-			        }
-			    },
-			    areaStyle: {
-			      // 渐变区域
-			        normal: {
-			            color:'#ccc'
-			        }
-			    },
-			    data: [data[0],data[1],data[2],data[3],data[4],data[5]]
-			},
-			{
-			    name:'预测销售额',
-			    type:'line',
-			    smooth:true,
-			    //symbol: 'none',
-			    // sampling: 'average',
-			    lineStyle: {
-			        normal: {
-			            color: '#666',
-			            width:1,
-			            type: 'dashed'
-			        }
-			    },
-			    areaStyle: {
-			      // 渐变区域
-			        normal: {
-			            color: new echarts.graphic.LinearGradient(1,0,0,1,[
-			            {
-			                offset: 0,
-			                color: '#fff'
-			            },{
-			                offset: 1,
-			                color: '#ccc'
-			            }])
-			        }
-			    },
-			    data: ['-','-','-','-','-',data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12]]
-			},
+	        {
+	            name:'金额',
+	            type:'line',
+	            smooth:true,
+	            //symbol: 'none',
+	            sampling: 'average',
+	            itemStyle: {
+	                normal: {
+                    //折线图颜色
+	                    color: '#666',
+	                    width:1,
+	                }
+	            },
+	            areaStyle: {
+                // 渐变区域
+	                normal: {
+                  	color: '#ccc'
+	                }
+	            },
+	            data: data
+	        }
+	       
 	    ]
 	};
 	myChart1.setOption(option);
 }
-
 var myChart2 = echarts.init(document.getElementById('chart2')); 
 //生成图表
 function chart2(dataTime,data){
@@ -818,32 +769,33 @@ function chart2(dataTime,data){
 	        boundaryGap: false,
 	        data: dataTime,
 	        lineStyle:{
-                color:'#333',
-                width:8,//这里是为了突出显示加上的
-            },
-            splitLine:{
-        　　　　show:true,
-                lineStyle: {
-                    color: '#eee',
-                    width: 1,
-                    type: 'solid'
-                }
-        　　}
+              color:'#333',
+              width:8,//这里是为了突出显示加上的
+          },
+          splitLine:{
+      　　　　show:true,
+              lineStyle: {
+                  color: '#eee',
+                  width: 1,
+                  type: 'solid'
+              }
+      　　}
 
 	    },
 	    grid: {
-        	// right:'0%',
+      	// left:'0',
+      	// right:'7%'
 	    },
 	    yAxis: {
 	        type: 'value',
 	        boundaryGap: [0, '15%'],
 	        splitLine:{  
-        　　　　show:false 
-        　　 },
-          lineStyle:{
-                color:'#333',
-                width:8,//这里是为了突出显示加上的
-          } 
+      　　　　show:false  
+      　　 },
+        lineStyle:{
+              color:'#333',
+              width:8,//这里是为了突出显示加上的
+        } 
 	    },
 	    dataZoom: [{
 	        // type: 'inside',
@@ -851,56 +803,30 @@ function chart2(dataTime,data){
 	        // end: 5000
 	        show:false
 	    },],
+	    roam: false,
 	    series: [
-			{
-			    name:'销售额',
-			    type:'line',
-			    smooth:true,
-			    //symbol: 'none',
-			    sampling: 'average',
-			    itemStyle: {
-			        normal: {
-			          //折线图颜色
-			            color: '#333',
-			            width:1,
-			        }
-			    },
-			    areaStyle: {
-			      // 渐变区域
-			        normal: {
-			            color:'#ccc'
-			        }
-			    },
-			    data: [data[0],data[1],data[2],data[3],data[4],data[5]]
-			},
-			{
-			    name:'预测销售额',
-			    type:'line',
-			    smooth:true,
-			    //symbol: 'none',
-			    // sampling: 'average',
-			    lineStyle: {
-			        normal: {
-			            color: '#666',
-			            width:1,
-			            type: 'dashed'
-			        }
-			    },
-			    areaStyle: {
-			      // 渐变区域
-			        normal: {
-			            color: new echarts.graphic.LinearGradient(1,0,0,1,[
-			            {
-			                offset: 0,
-			                color: '#fff'
-			            },{
-			                offset: 1,
-			                color: '#ccc'
-			            }])
-			        }
-			    },
-			    data: ['-','-','-','-','-',data[5],data[6],data[7],data[8],data[9],data[10],data[11],data[12]]
-			},
+	        {
+	            name:'金额',
+	            type:'line',
+	            smooth:true,
+	            //symbol: 'none',
+	            sampling: 'average',
+	            itemStyle: {
+	                normal: {
+                    //折线图颜色
+	                    color: '#666',
+	                    width:1,
+	                }
+	            },
+	            areaStyle: {
+                // 渐变区域
+	                normal: {
+                  	color: '#ccc'
+	                }
+	            },
+	            data: data
+	        }
+	       
 	    ]
 	};
 	myChart2.setOption(option);
