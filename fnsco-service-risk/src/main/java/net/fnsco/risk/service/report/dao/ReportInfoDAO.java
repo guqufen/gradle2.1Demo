@@ -71,9 +71,9 @@ public interface ReportInfoDAO {
 	@Select("SELECT * FROM risk_report_info WHERE inner_code = #{innerCode} order by last_modify_time desc limit 1 ")
 	public ReportInfoDO getByInnerCode(@Param("innerCode") String innerCode);
 
-	@Insert("INSERT into risk_report_info(id, inner_code, mer_name,business_license_num,business_address,business_due_time,industry,trading_area,turnover,size,report_cycle,report_timer,risk_warning,quota,fee_rate,loan_cycle,mer_num,status,create_time,last_modify_time,decoration_level) VALUES (#{id},#{r.innerCode},#{r.merName},#{r.businessLicenseNum},#{r.businessAddress},#{r.businessDueTime},#{r.industry},#{r.tradingArea},#{r.turnover},#{r.size},#{r.reportCycle},#{r.reportTimer},#{r.riskWarning},#{r.quota},#{r.feeRate},#{r.loanCycle},#{r.merNum},#{r.status},#{r.createTime},#{r.lastModifyTime},#{r.decorationLevel})")
+	@Insert("INSERT into risk_report_info(inner_code, mer_name,business_license_num,business_address,business_due_time,industry,trading_area,turnover,size,report_cycle,report_timer,risk_warning,quota,fee_rate,loan_cycle,mer_num,status,create_time,last_modify_time,decoration_level) VALUES (#{innerCode},#{merName},#{businessLicenseNum},#{businessAddress},#{businessDueTime},#{industry},#{tradingArea},#{turnover},#{size},#{reportCycle},#{reportTimer},#{riskWarning},#{quota},#{feeRate},#{loanCycle},#{merNum},#{status},#{createTime},#{lastModifyTime},#{decorationLevel})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
-	public int insert(@Param("r") ReportInfoDO reportInfo);
+	public int insert(ReportInfoDO reportInfo);
 
 	@Delete("DELETE FROM risk_report_info WHERE id = #{id}")
 	public int deleteById(@Param("id") int id);

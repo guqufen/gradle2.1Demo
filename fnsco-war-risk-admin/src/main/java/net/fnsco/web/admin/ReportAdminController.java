@@ -74,15 +74,17 @@ public class ReportAdminController extends BaseController{
     	if(reportInfoDO.getId() == -1){
     		//先根据内部商户号查处一条数据
     		ReportInfoDO reportInfo = reportService.getByMercInnerCode(reportInfoDO);
+//    		reportInfoDO.setId(null);
     		reportInfo.setCreateTime(new Date());
     		reportInfo.setLastModifyTime(new Date());
+    		reportInfo.setStatus(4);
     		reportService.insert(reportInfo);
     		reportInfoDO = reportService.getByInnerCode(reportInfo.getInnerCode());
     	}
 
     	return reportService.getById(reportInfoDO);
     }
-    
+
     /**
      *  修改风控报告
      * @param reportInfoDO
