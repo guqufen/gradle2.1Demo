@@ -1,6 +1,6 @@
 //获取用户信息
 
-var customerType = function load_val2() {
+function load_val2() {
 	var result;
 	$.ajax({
 		dataType : 'json',
@@ -28,8 +28,9 @@ var customerType = function load_val2() {
 	});
 	return result;
 }
+
+var customerType = load_val2();
 /**
-//var customerType = load_val2();
 //审核人员
 if (customerType == 1) {
 //	$(".auditor").css("display", "none");
@@ -91,8 +92,12 @@ function formatterIndex(value, row, index){
 }
 
 function formatterOperation(value, row, index) {
-	//2、3、4待编辑
-	if (row.status == 2 ||  row.status == 4) {
+	//2、4待编辑
+	if (row.status == 2 ||  row.status == 4 ) {
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' &innerCode='+row.innerCode+'" >编辑报告</a>' ].join('');
+	}
+	//为空待编辑
+	if (row.status == null ) {
 		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' &innerCode='+row.innerCode+'" >编辑报告</a>' ].join('');
 	}
 	//0：待审核
@@ -100,7 +105,7 @@ function formatterOperation(value, row, index) {
 		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' &innerCode='+row.innerCode+' "  >审核报告</a>' ].join('');
 	}
 }
-// 0待审核1审核通过2审核失败3待编辑
+// 0待审核1审核通过2审核失败3待编辑;其他待编辑
 function formatterStatus(value, row, index) {
 	if (value == '0') {
 		return '待审核';
@@ -112,7 +117,9 @@ function formatterStatus(value, row, index) {
 		return '待编辑';
 	} else if(value == '4'){
 		return '待编辑';
-	} else {
+	} else if(value == null){
+		return '未生成';
+	}else{
 		return '-';
 	}
 }

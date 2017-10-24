@@ -635,6 +635,8 @@ public class ReportInfoProvider {
                         WHERE("report.status in (0)");
                     }
                 }
+
+                //用户权限为编辑用户，2-审核失败；4-提交待编辑
                 if (reportInfo.getCustomerType()!=null && reportInfo.getCustomerType() == 2) {
                     if (reportInfo.getStatus() != null) {
                         WHERE("report.status=#{reportInfo.status}");
@@ -642,8 +644,10 @@ public class ReportInfoProvider {
                         WHERE("report.status in (2, 4)");
                     }
                 }
-                if (reportInfo.getStatus() != null && 10==reportInfo.getStatus()) {
-                    WHERE("report.status=1");
+                
+                //用户权限为审核用户：0-待审核
+                if (reportInfo.getStatus() != null && 1==reportInfo.getStatus()) {
+                    WHERE("report.status=0");
                 }
                 ORDER_BY("report.id desc limit " + start + ", " + limit);
             }
@@ -720,6 +724,8 @@ public class ReportInfoProvider {
                 if (StringUtils.isNotBlank(reportInfo.getLoanCycle())) {
                     WHERE("report.loan_cycle=#{reportInfo.loanCycle}");
                 }
+                
+                //审核人员
                 if (reportInfo.getCustomerType()!=null && reportInfo.getCustomerType() == 1) {
                     if (reportInfo.getStatus() != null) {
                         WHERE("report.status=#{reportInfo.status}");
@@ -727,6 +733,8 @@ public class ReportInfoProvider {
                         WHERE("report.status in (0)");
                     }
                 }
+                
+                //编辑人员
                 if (reportInfo.getCustomerType()!=null && reportInfo.getCustomerType() == 2) {
                     if (reportInfo.getStatus() != null) {
                         WHERE("report.status=#{reportInfo.status}");
@@ -763,5 +771,29 @@ public class ReportInfoProvider {
                 ORDER_BY("last_view_time desc limit " + start + ", " + limit);
             }
         }.toString();
+    }
+    
+    public String getByMercInnerCode(Map<String, Object> params){
+    	ReportInfoDO reportInfo = (ReportInfoDO) params.get("reportInfoDO");
+    	
+    	return new SQL(){
+    		{
+    			SELECT( "c.inner_code,c.mer_name,c.business_license_num, c.regist_address as business_address, c.card_valid_time as business_due_time "
+//    					+ "(select report.trading_area from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) trading_area,"
+//    					+ "(select report.industry from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) industry,"
+//    					+ "(select report.decoration_level from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) decoration_level,"
+//    					+ "(select report.status from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) status,"
+//    					+ "(select report.view_num from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) viewNum,"
+//    					+ "(select report.report_timer from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) report_timer,"
+//    					+ "(select report.id from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) id,"
+//    					+ "(select report.risk_warning from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) risk_warning,"
+//    					+ "(select report.evaluation from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) evaluation,"
+//    					+ "(select report.size from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) size "
+    					+ "FROM m_merchant_core c" );
+              if(StringUtils.isNotBlank( reportInfo.getInnerCode())){
+            	  WHERE(" c.inner_code = #{reportInfoDO.innerCode} ");
+              }
+    		}
+    	}.toString();
     }
 }

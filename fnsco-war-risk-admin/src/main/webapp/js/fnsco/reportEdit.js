@@ -25,6 +25,10 @@ var dataList=new Array();
 var dateList=new Array();
 var getReportChart = function getReportChart(){
 //	console.log(merchantId);
+	//传过来的id为空，说明之前未生成过。不需要去查找曲线图
+	if(merchantId.trim() == "null"){
+		return ;
+	}
 	//查询全年风控曲线图
 	$.ajax({
 		url : PROJECT_NAME + '/web/admin/report/queryReportPre',
@@ -64,6 +68,10 @@ var dataList1=new Array();
 var dateList1=new Array();
 var getReportBusiness = function getReportBusiness(){
 //	console.log(merchantId);
+	//传过来的id为空，说明之前未生成过。不需要去查找曲线图
+	if(merchantId.trim() == "null"){
+		return ;
+	}
 	//查询经营流水
 	$.ajax({
 		url : PROJECT_NAME + '/web/admin/report/queryTradingVolumeReport',
@@ -93,6 +101,10 @@ var dataList2=new Array();
 var dateList2=new Array();
 var getReportUnit = function getReportUnit(){
 //	console.log(merchantId);
+	//传过来的id为空，说明之前未生成过。不需要去查找曲线图
+	if(merchantId.trim() == "null"){
+		return ;
+	}
 	//查询日均客单价
 	$.ajax({
 		url : PROJECT_NAME + '/web/admin/report/queryUnitPriceReport',
@@ -119,12 +131,17 @@ var getReportUnit = function getReportUnit(){
 
 $(function() {
 
+	console.log('id='+merchantId+'\t,innerCode='+innerCode);
+	//如果ID为空，表示report表尚未该条数据
+	if(merchantId.trim() == "null"){
+		merchantId = -1;
+	}
 	//ajax请求修改的数据<id=2>
 	$.ajax({
 		url : PROJECT_NAME + '/web/admin/report/getById',
 		type : 'post',
 		data : {
-			'id' : merchantId
+			'id' : merchantId,'innerCode':innerCode
 		},
 		success : function(data) {
 			if (data.success) {
@@ -453,6 +470,12 @@ function saveOrUpdate(status){
 		'status' : status,
 		'id':merchantId
 	};
+	//如果merchantId为空，说明是未生成过，此时需要插入一条数据
+	if(merchantId == null){
+		cUrl = PROJECT_NAME + '/web/admin/report/updateReport';
+	}else{
+		cUrl = PROJECT_NAME + '/web/admin/report/updateReport';
+	}
 
 	//用AJAX传给后台，返回修改成功/失败
 	$.ajax({

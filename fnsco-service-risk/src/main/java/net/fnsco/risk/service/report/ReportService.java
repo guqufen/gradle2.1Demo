@@ -121,6 +121,8 @@ public class ReportService extends BaseService {
         reportInfoDO.setCustomerType(userDo.getType());
         List<ReportInfoDO> pageList = Lists.newArrayList();
         boolean flag = false;
+        
+        //带状态的查询
         if ( null != reportInfoDO.getStatus()) {
             flag = true;
         }
@@ -391,6 +393,16 @@ public class ReportService extends BaseService {
         ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());
         return ResultDTO.success(reportInfo);
     }
+    
+    /**
+     * 根据innerCode查找(用于report表没有数据时)
+     * @param reportInfoDO
+     * @return
+     */
+    public ReportInfoDO getByMercInnerCode(ReportInfoDO reportInfoDO) {
+        ReportInfoDO reportInfo = reportInfoDAO.getByMercInnerCode(reportInfoDO);
+        return reportInfo;
+    }
 
     /**
      * 更新风控报告, yx
@@ -526,6 +538,10 @@ public class ReportService extends BaseService {
         return ResultDTO.success(dto);
     }
     
+    public void insert(ReportInfoDO reportInfoDO) {
+        Integer result = reportInfoDAO.insert(reportInfoDO);
+    }
+    
     /**
      * queryHistoryReport:(查询历史风控报高)
      *
@@ -555,4 +571,7 @@ public class ReportService extends BaseService {
     	return ResultDTO.fail();
     }
     
+    public ReportInfoDO getByInnerCode(String innerCode){
+    	return reportInfoDAO.getByInnerCode(innerCode);
+    }
 }

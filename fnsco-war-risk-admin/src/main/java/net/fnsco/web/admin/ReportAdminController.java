@@ -70,6 +70,16 @@ public class ReportAdminController extends BaseController{
     @RequestMapping(value = "/getById", method = RequestMethod.GET)
     public ResultDTO getById(ReportInfoDO reportInfoDO){
 
+    	//如果ID为-1，表示report表尚未该条数据，需要先新增一条数据
+    	if(reportInfoDO.getId() == -1){
+    		//先根据内部商户号查处一条数据
+    		ReportInfoDO reportInfo = reportService.getByMercInnerCode(reportInfoDO);
+    		reportInfo.setCreateTime(new Date());
+    		reportInfo.setLastModifyTime(new Date());
+    		reportService.insert(reportInfo);
+    		reportInfoDO = reportService.getByInnerCode(reportInfo.getInnerCode());
+    	}
+
     	return reportService.getById(reportInfoDO);
     }
     
