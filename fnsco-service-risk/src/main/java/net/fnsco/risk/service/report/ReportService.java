@@ -115,6 +115,7 @@ public class ReportService extends BaseService {
     public ResultPageDTO<ReportInfoDO> pageListForAdmin(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         WebUserOuterDO userDo = webUserOuterDAO.getById(reportInfoDO.getUserId());
         reportInfoDO.setAgentId(userDo.getAgentId());
+        reportInfoDO.setCustomerType(userDo.getType());
         List<ReportInfoDO> pageList = Lists.newArrayList();
         boolean flag = false;
         if ( null != reportInfoDO.getStatus()) {
