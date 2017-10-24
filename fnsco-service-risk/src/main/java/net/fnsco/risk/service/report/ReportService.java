@@ -1,6 +1,7 @@
 package net.fnsco.risk.service.report;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -244,8 +245,8 @@ public class ReportService extends BaseService {
         String startDay = format.format(d2);
         report.setStartDay(startDay);
         List<ReportBusiness> reportBusiness = reportRepaymentHistoryDAO.getTurnover(report);
-        if (reportBusiness == null) {
-            return ResultDTO.fail("没有找到数据");
+        if (reportBusiness.size()==0) {
+            return ResultDTO.fail("没有找到经营流水数据");
         }
         
         Map<String,ReportBusiness> map =new HashMap<String,ReportBusiness>();
@@ -261,7 +262,7 @@ public class ReportService extends BaseService {
     		startDate =format.parse(startDay);
         	endDate =format.parse(endDay);
     	  } catch (ParseException e) {
-    	   // TODO Auto-generated catch block
+    		  logger.error("日期格式转换出错" + startDate +endDate + ",确保真确格式");
     	   e.printStackTrace();
     	  }
     	Date temp = startDate;
@@ -328,8 +329,8 @@ public class ReportService extends BaseService {
         String startDay = format.format(d2);
         report.setStartDay(startDay);
         List<ReportBusiness> reportBusiness = reportRepaymentHistoryDAO.getTurnover(report);
-        if (reportBusiness == null) {
-            return ResultDTO.fail("没有找到数据");
+        if (reportBusiness.size()==0) {
+            return ResultDTO.fail("没有找到日均客单价数据");
         }
         Map<String,ReportBusiness> map =new HashMap<String,ReportBusiness>();
     	for(ReportBusiness rep : reportBusiness) {
@@ -344,7 +345,7 @@ public class ReportService extends BaseService {
     		startDate =format.parse(startDay);
         	endDate =format.parse(endDay);
     	  } catch (ParseException e) {
-    	   // TODO Auto-generated catch block
+    		  logger.error("日期格式转换出错" + startDate +endDate + ",确保真确格式");
     	   e.printStackTrace();
     	  }
     	Date temp = startDate;
