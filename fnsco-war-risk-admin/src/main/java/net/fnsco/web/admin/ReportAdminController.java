@@ -29,7 +29,7 @@ import net.fnsco.risk.service.report.ReportService;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 @Controller
-@RequestMapping(value = "web/admin/report", method = RequestMethod.POST)
+@RequestMapping(value = "/web/admin/report", method = RequestMethod.POST)
 public class ReportAdminController extends BaseController{
     @Autowired
     private ReportService reportService;
@@ -39,17 +39,18 @@ public class ReportAdminController extends BaseController{
     // 分页
     @ApiOperation(value = "分页查询", notes = "分页查询")
     @ResponseBody
-    @RequestMapping(value = "query", method = RequestMethod.GET)
+    @RequestMapping(value = "/query", method = RequestMethod.GET)
     public ResultDTO page(ReportInfoDO reportInfoDO) {
         Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
+        reportInfoDO.setUserId(getUserId());
         ResultPageDTO<ReportInfoDO> pager = this.reportService.pageBack(reportInfoDO, page,rows);
         return success(pager);
     }
     //通知商户风控报告
     @ResponseBody
-    @RequestMapping(value = "headPersonnelMes", method = RequestMethod.GET)
+    @RequestMapping(value = "/headPersonnelMes", method = RequestMethod.GET)
     public ResultDTO headPersonnelMes(@RequestParam String userId,@RequestParam String merchantId) {
         return reportService.headPersonnelMes(NumberUtils.toInt(userId),NumberUtils.toInt(merchantId));
     }
@@ -66,7 +67,7 @@ public class ReportAdminController extends BaseController{
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "getById", method = RequestMethod.GET)
+    @RequestMapping(value = "/getById", method = RequestMethod.GET)
     public ResultDTO getById(ReportInfoDO reportInfoDO){
 
     	return reportService.getById(reportInfoDO);
@@ -78,7 +79,7 @@ public class ReportAdminController extends BaseController{
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="updateReport", method = RequestMethod.GET)
+    @RequestMapping(value="/updateReport", method = RequestMethod.GET)
     public ResultDTO updateReport(ReportInfoDO reportInfoDO){
     	
     	//如果传过来的ID为空，返回失败
@@ -99,7 +100,7 @@ public class ReportAdminController extends BaseController{
      * @throws IOException
      */
     @ResponseBody
-    @RequestMapping(value="down", method = RequestMethod.GET)
+    @RequestMapping(value="/down", method = RequestMethod.GET)
     public void down() throws IOException{
 
     	String filePath = request.getSession().getServletContext().getRealPath("");
@@ -115,7 +116,7 @@ public class ReportAdminController extends BaseController{
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="doImport", method = RequestMethod.POST)
+    @RequestMapping(value="/doImport", method = RequestMethod.POST)
     public ResultDTO doImport(@Param("id") Integer id){
 
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -202,7 +203,7 @@ public class ReportAdminController extends BaseController{
      * @return
      */
     @ResponseBody
-    @RequestMapping(value="queryRepay", method = RequestMethod.GET)
+    @RequestMapping(value="/queryRepay", method = RequestMethod.GET)
     public ResultPageDTO pageRepay(Integer reportId){
 
     	Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize"});
@@ -217,7 +218,7 @@ public class ReportAdminController extends BaseController{
    * @param reportId
    * @return
    */
-    @RequestMapping(value="queryReportPre", method = RequestMethod.GET)
+    @RequestMapping(value="/queryReportPre", method = RequestMethod.GET)
     @ResponseBody
     public ResultDTO queryReportPre(@RequestParam Integer reportId){
 
@@ -228,7 +229,7 @@ public class ReportAdminController extends BaseController{
      * @param reportId
      * @return
      */
-      @RequestMapping(value="queryTradingVolumeReport", method = RequestMethod.POST)
+      @RequestMapping(value="/queryTradingVolumeReport", method = RequestMethod.POST)
       @ResponseBody
       public ResultDTO queryTradingVolumeReport(@RequestParam String innerCode, @RequestParam String merchantId) {
           return reportService.queryTradingVolumeReport(innerCode, NumberUtils.toInt(merchantId));
@@ -238,7 +239,7 @@ public class ReportAdminController extends BaseController{
        * @param reportId
        * @return
        */
-        @RequestMapping(value="queryUnitPriceReport", method = RequestMethod.POST)
+        @RequestMapping(value="/queryUnitPriceReport", method = RequestMethod.POST)
         @ResponseBody
         public ResultDTO queryUnitPriceReport(@RequestParam String innerCode, @RequestParam String merchantId) {
             return reportService.queryUnitPriceReport(innerCode, NumberUtils.toInt(merchantId));
