@@ -22,7 +22,7 @@ public class IndestryController extends BaseController{
 	private IndustryService industryService;
 	
 	@ResponseBody
-	@RequestMapping("queryAll")
+	@RequestMapping("/queryAll")
 	public ResultDTO queryAll(){
 		
 		return industryService.queryAll();
