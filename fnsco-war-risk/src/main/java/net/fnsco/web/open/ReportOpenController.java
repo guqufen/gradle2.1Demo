@@ -27,7 +27,7 @@ import net.fnsco.risk.service.report.entity.ReportInfoDO;
  *
  */
 @Controller
-@RequestMapping(value = "web/report", method = RequestMethod.POST)
+@RequestMapping(value = "/web/report", method = RequestMethod.POST)
 public class ReportOpenController extends BaseController {
     @Autowired
     private ReportService reportService;

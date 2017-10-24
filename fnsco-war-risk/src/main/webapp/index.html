@@ -118,18 +118,7 @@
 						<div class="panel-body">
 							<div class="report-infos">
 								<div class="report-infos" id ="history_report">
-								<div class="report-info merName">
-									关于XXX的反馈报告：
-								<span>某某的反馈报告</span>
-								</div>
-								<div class="report-info businessLicenseNum">
-									关于XXX的反馈报告：
-								<span>某某的反馈报告</span>
-								</div>
-								<div class="report-info businessAddress">
-									关于XXX的反馈报告：
-								<span>某某的反馈报告</span>
-								</div>  
+							
 								</div> 
 							</div>	
 						</div>  
@@ -239,8 +228,12 @@
 				var conStr = '';
 				var curWwwPath = getRootPath();
 				$('#history_report').html('');
-				$.each(hisDatas, function(i, item){   
-					conStr = '<div class="report-info merName merName'+item.id+'"><a href="">'+item.merName+'"风控+"报告      <span class="time">'+item.lastViewTimeStr+' </span></a></div>';
+				$.each(hisDatas, function(i, item){  
+					var lastViewTime = item.lastViewTimeStr;
+					if(!item.lastViewTimeStr || item.lastViewTimeStr == 'null'){
+						lastViewTime='';
+					}
+					conStr = '<div class="report-info merName merName'+item.id+'"><a target="_Blank" href="">'+item.merName+'"风控+"报告      <span class="time">'+lastViewTime+' </span></a></div>';
 					$('#history_report').append(conStr);
 					$(".merName"+item.id+" a").attr("href",curWwwPath+'/report.html?merchantId='+item.id+'&innerCode='+item.innerCode);
 				});
