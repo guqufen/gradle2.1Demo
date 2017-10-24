@@ -100,9 +100,13 @@ function formatterOperation(value, row, index) {
 	if (row.status == null ) {
 		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' &innerCode='+row.innerCode+'" >编辑报告</a>' ].join('');
 	}
-	//0：待审核
+	//0：待审核;编辑人员则不能出现按钮
 	if (row.status == 0) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' &innerCode='+row.innerCode+' "  >审核报告</a>' ].join('');
+		if(customerType != 2){
+			return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' &innerCode='+row.innerCode+' "  >审核报告</a>' ].join('');
+		}else{
+			return '-';
+		}
 	}
 }
 // 0待审核1审核通过2审核失败3待编辑;其他待编辑

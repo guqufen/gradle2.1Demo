@@ -144,6 +144,8 @@ $(function() {
 
 				// 数据获取成功，则将获取到的数据赋值给当前页面
 				var dd = data.data;
+				
+				merchantId = dd.id;
 
 				$('#merName').val(dd.merName);// 商户名称
 				$('#merName').attr('disabled','disabled');
