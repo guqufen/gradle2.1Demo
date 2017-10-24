@@ -64,7 +64,7 @@ $('#table').bootstrapTable({
 		field : 'merName',
 		title : '商户名称'
 	}, {
-		field : 'merNum',
+		field : 'innerCode',
 		title : '商户编码'
 	}, {
 		field : 'industry',

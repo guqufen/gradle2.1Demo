@@ -478,8 +478,14 @@ public class ReportInfoProvider {
                 if (StringUtils.isNotBlank(reportInfo.getKey())) {
                     WHERE("(tt.mer_name like CONCAT('%',#{reportInfo.key},'%') or tt.legal_person like CONCAT('%',#{reportInfo.key},'%') or tt.business_license_num like CONCAT('%',#{reportInfo.key},'%'))");
                 }
+                if (StringUtils.isNotBlank(reportInfo.getMerName())) {
+                    WHERE("tt.mer_name like CONCAT('%',#{reportInfo.merName},'%')");
+                }
+                if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())) {
+                    WHERE("tt.business_license_num like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
+                }
                 //后端未生成报表的查询
-                if (null != reportInfo.getStatus() && 2==reportInfo.getStatus()) {
+                if (null != reportInfo.getStatus() && 20==reportInfo.getStatus()) {
                     WHERE("tt.inner_code not in (select inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
                 }
                 ORDER_BY(" tt.id desc limit " + start + ", " + limit);
@@ -499,8 +505,14 @@ public class ReportInfoProvider {
                 if (StringUtils.isNotBlank(reportInfo.getKey())) {
                     WHERE("(tt.mer_name like CONCAT('%',#{reportInfo.key},'%') or tt.legal_person like CONCAT('%',#{reportInfo.key},'%') or tt.business_license_num like CONCAT('%',#{reportInfo.key},'%'))");
                 }
+                if (StringUtils.isNotBlank(reportInfo.getMerName())) {
+                    WHERE("tt.mer_name like CONCAT('%',#{reportInfo.merName},'%')");
+                }
+                if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())) {
+                    WHERE("tt.business_license_num like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
+                }
                 //未生成的
-                if (null != reportInfo.getStatus() && 2==reportInfo.getStatus()) {
+                if (null != reportInfo.getStatus() && 20==reportInfo.getStatus()) {
                     WHERE("tt.inner_code not in (select inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
                 }
             }
@@ -616,6 +628,9 @@ public class ReportInfoProvider {
                     } else {
                         WHERE("report.status in (2, 4)");
                     }
+                }
+                if (reportInfo.getStatus() != null && 10==reportInfo.getStatus()) {
+                    WHERE("report.status=1");
                 }
                 ORDER_BY("report.id desc limit " + start + ", " + limit);
             }
