@@ -107,7 +107,7 @@ public interface ReportInfoDAO {
         @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
         @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
         @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-        @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation") })
+        @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation"),@Result(column = "last_view_time", property = "lastViewTime"),@Result(column = "view_num", property = "viewNum") })
     @SelectProvider(type = ReportInfoProvider.class, method = "pageListMercByCondition")
     public List<ReportInfoDO> pageListMercByCondition(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 

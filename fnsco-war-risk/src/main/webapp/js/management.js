@@ -32,7 +32,7 @@ $('#table').bootstrapTable({
 		field : 'tradingArea',
 		title : '报告状态'
 	}, {
-		field : 'size',
+		field : 'viewNum',
 		title : '订阅数',
 	} ]
 });
