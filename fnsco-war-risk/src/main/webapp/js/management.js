@@ -40,16 +40,10 @@ $('#table').bootstrapTable({
 
 //状态格式化
 function formatStatus(value, row, index){
-	if(value == 0){
-		return '待审核';
-	}else if(value == 1){
-		return '审核通过';
-	}else if(value == 2){
-		return '审核失败';
-	}else if(value == 3){
-		return '待编辑';
-	}else if(value == 4){
-		return '已提交的待编辑';
+	if(value == 10){
+		return '已生成';
+	}else if(value == 20){
+		return '未生成';
 	}else {
 		return '未知';
 	}
