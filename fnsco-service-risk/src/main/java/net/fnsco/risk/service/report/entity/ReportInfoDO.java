@@ -117,6 +117,8 @@ public class ReportInfoDO {
     
     private String lastViewTimeStr;
     
+    private String evaluation;
+
     public String getLastViewTimeStr() {
 		return lastViewTimeStr;
 	}
@@ -147,6 +149,14 @@ public class ReportInfoDO {
 
 	public void setKey(String key) {
 		this.key = key;
+	}
+
+    public String getEvaluation() {
+		return evaluation;
+	}
+
+	public void setEvaluation(String evaluation) {
+		this.evaluation = evaluation;
 	}
 
 	/**
