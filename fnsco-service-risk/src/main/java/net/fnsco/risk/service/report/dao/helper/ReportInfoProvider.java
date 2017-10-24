@@ -474,8 +474,9 @@ public class ReportInfoProvider {
                        + "(select report.status from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) status,"
                        + "(select report.view_num from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) viewNum,"
                        + "(select report.report_timer from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) report_timer,"
+                       + "(select report.id from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) id,"
                        + "(select report.size from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) size " + "FROM " + "( " + "SELECT "
-                       + "c.id,c.legal_person,c.inner_code,c.mer_name,c.business_license_num, (" + "SELECT " + "MAX(time_stamp) " + "FROM " + "t_trade_data t " + "WHERE " + "t.inner_code = c.inner_code "
+                       + "c.legal_person,c.inner_code,c.mer_name,c.business_license_num, (" + "SELECT " + "MAX(time_stamp) " + "FROM " + "t_trade_data t " + "WHERE " + "t.inner_code = c.inner_code "
                        + ") as maxTime " + "FROM " + "m_merchant_core c " + "where c.inner_code in (select inner_code from risk_user_merc_rel rel where rel.inner_code=c.inner_code "
                        + agentWhere + ") " + ") tt  " );
                 WHERE("tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month)");
@@ -492,7 +493,7 @@ public class ReportInfoProvider {
                 if (null != reportInfo.getStatus() && 20==reportInfo.getStatus()) {
                     WHERE("tt.inner_code not in (select inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
                 }
-                ORDER_BY(" tt.id desc limit " + start + ", " + limit);
+                ORDER_BY(" tt.mer_name limit " + start + ", " + limit);
             }
         }.toString();
     }
