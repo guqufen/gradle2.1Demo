@@ -14,7 +14,26 @@ public class ReportInfoProvider {
     private Logger              logger     = LoggerFactory.getLogger(this.getClass());
 
     private static final String TABLE_NAME = "risk_report_info";
-
+    
+    /**
+     * updateViemNum:(更新点击次数)
+     *
+     * @param  @param params
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年10月23日 下午6:33:24
+     */
+    public String updateViemNum(Map<String, Object> params) {
+    	Integer id = (Integer) params.get("id");
+    	 return new SQL() {{
+    		 UPDATE(TABLE_NAME);
+    		 SET("view_num=view_num+1");
+    		 WHERE("id = #{id}");
+    	 }
+    	 }.toString();
+    }
+    
     public String update(Map<String, Object> params) {
         ReportInfoDO reportInfo = (ReportInfoDO) params.get("reportInfo");
         return new SQL() {
@@ -79,6 +98,9 @@ public class ReportInfoProvider {
                 }
                 if (reportInfo.getDecorationLevel() != null) {
                     SET("decoration_level=#{reportInfo.decorationLevel}");
+                }
+                if (reportInfo.getEvaluation() != null) {
+                    SET("evaluation=#{reportInfo.evaluation}");
                 }
                 WHERE("id = #{reportInfo.id}");
             }
@@ -450,8 +472,12 @@ public class ReportInfoProvider {
                        + ") as maxTime " + "FROM " + "m_merchant_core c " + "where c.inner_code in (select inner_code from risk_user_merc_rel rel where rel.inner_code=c.inner_code and agent_id='"
                        + reportInfo.getAgentId() + "') " + ") tt  " );
                 WHERE("tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month)");
-                if (StringUtils.isNotBlank(reportInfo.getMerName())) {
-                    WHERE("(tt.mer_name like CONCAT('%',#{reportInfo.merName},'%') or tt.legal_person like CONCAT('%',#{reportInfo.merName},'%') or tt.business_license_num like CONCAT('%',#{reportInfo.merName},'%'))");
+                if (StringUtils.isNotBlank(reportInfo.getKey())) {
+                    WHERE("(tt.mer_name like CONCAT('%',#{reportInfo.key},'%') or tt.legal_person like CONCAT('%',#{reportInfo.key},'%') or tt.business_license_num like CONCAT('%',#{reportInfo.key},'%'))");
+                }
+                //后端未生成报表的查询
+                if (null != reportInfo.getStatus() && 2==reportInfo.getStatus()) {
+                    WHERE("tt.inner_code not in (select inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
                 }
                 ORDER_BY(" tt.id desc limit " + start + ", " + limit);
             }
@@ -469,6 +495,10 @@ public class ReportInfoProvider {
                 WHERE("tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month)");
                 if (StringUtils.isNotBlank(reportInfo.getMerName())) {
                     WHERE("(tt.mer_name like CONCAT('%',#{reportInfo.merName},'%') or tt.legal_person like CONCAT('%',#{reportInfo.merName},'%') or tt.business_license_num like CONCAT('%',#{reportInfo.merName},'%'))");
+                }
+                //未生成的
+                if (null != reportInfo.getStatus() && 2==reportInfo.getStatus()) {
+                    WHERE("and tt.inner_code not in (select inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
                 }
             }
         }.toString();
@@ -669,6 +699,33 @@ public class ReportInfoProvider {
                         WHERE("report.status in (2, 4)");
                     }
                 }
+            }
+        }.toString();
+    }
+    
+    /**
+     * queryHistoryReportInfo:(查询四条历史数据)
+     *
+     * @param  @param params
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年10月23日 下午5:57:18
+     */
+    public String queryHistoryReportInfo(Map<String, Object> params) {
+    	
+        Integer pageSize = (Integer) params.get("pageSize");
+        if (pageSize == null || pageSize == 0) {
+            pageSize = 4;
+        }
+        int start = 0;
+        int limit = pageSize;
+    	
+    	return new SQL() {
+            {
+                SELECT("*");
+                FROM(TABLE_NAME);
+                ORDER_BY("last_view_time desc limit " + start + ", " + limit);
             }
         }.toString();
     }

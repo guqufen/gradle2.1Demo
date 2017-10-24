@@ -22,7 +22,7 @@ public interface ReportInfoDAO {
                @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
                @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-               @Result(column = "decoration_level", property = "decorationLevel") })
+               @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation") })
     @Select("SELECT * FROM risk_report_info WHERE id = #{id}")
     public ReportInfoDO getById(@Param("id") Integer id);
 
@@ -32,7 +32,7 @@ public interface ReportInfoDAO {
                @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
                @Result(column = "inner_code", property = "innerCode"), @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"),
                @Result(column = "inner_code", property = "innerCode"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-               @Result(column = "decoration_level", property = "decorationLevel") })
+               @Result(column = "decoration_level", property = "decorationLevel") , @Result(column = "evaluation", property = "evaluation")})
     @Select("SELECT * FROM risk_report_info WHERE inner_code = #{innerCode} order by last_modify_time desc limit 1 ")
     public ReportInfoDO getByInnerCode(@Param("innerCode") String innerCode);
 
@@ -45,6 +45,18 @@ public interface ReportInfoDAO {
 
     @UpdateProvider(type = ReportInfoProvider.class, method = "update")
     public int update(@Param("reportInfo") ReportInfoDO reportInfo);
+    
+    /**
+     * updateViemNum:(更新点击次数)
+     *
+     * @param  @param innerCode
+     * @param  @return    设定文件
+     * @return int    DOM对象
+     * @author tangliang
+     * @date   2017年10月23日 下午6:32:27
+     */
+    @UpdateProvider(type = ReportInfoProvider.class, method = "updateViemNum")
+    public int updateViemNum(@Param("id") Integer id);
 
     @Results({ @Result(column = "mer_name", property = "merName"), @Result(column = "business_license_num", property = "businessLicenseNum"),
                @Result(column = "business_address", property = "businessAddress"), @Result(column = "business_due_time", property = "businessDueTime"),
@@ -52,7 +64,7 @@ public interface ReportInfoDAO {
                @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
                @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-               @Result(column = "decoration_level", property = "decorationLevel") })
+               @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation") })
     @SelectProvider(type = ReportInfoProvider.class, method = "pageList")
     public List<ReportInfoDO> pageList(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
@@ -66,7 +78,7 @@ public interface ReportInfoDAO {
                @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
                @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-               @Result(column = "decoration_level", property = "decorationLevel") })
+               @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation") })
     @SelectProvider(type = ReportInfoProvider.class, method = "pageListBack")
     public List<ReportInfoDO> pageListBack(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
@@ -80,7 +92,7 @@ public interface ReportInfoDAO {
         @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
         @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
         @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-        @Result(column = "decoration_level", property = "decorationLevel") })
+        @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation") })
 
     @SelectProvider(type = ReportInfoProvider.class, method = "pageListAllMerc")
     public List<ReportInfoDO> pageListAllMerc(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
@@ -95,10 +107,29 @@ public interface ReportInfoDAO {
         @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
         @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
         @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-        @Result(column = "decoration_level", property = "decorationLevel") })
+        @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation") })
     @SelectProvider(type = ReportInfoProvider.class, method = "pageListMercByCondition")
     public List<ReportInfoDO> pageListMercByCondition(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
     @SelectProvider(type = ReportInfoProvider.class, method = "pageListMercByConditionCount")
     public Integer pageListMercByConditionCount(@Param("reportInfo") ReportInfoDO reportInfo);
+    
+    /**
+     * queryHistoryReportInfo:(查询四条历史报告)
+     *
+     * @param  @return    设定文件
+     * @return List<ReportInfoDO>    DOM对象
+     * @author tangliang
+     * @date   2017年10月23日 下午5:56:06
+     */
+    @Results({ @Result(column = "id", property = "id"),@Result(column = "mer_name", property = "merName"), @Result(column = "business_license_num", property = "businessLicenseNum"),
+        @Result(column = "business_address", property = "businessAddress"), @Result(column = "business_due_time", property = "businessDueTime"),
+        @Result(column = "trading_area", property = "tradingArea"), @Result(column = "report_cycle", property = "reportCycle"), @Result(column = "report_timer", property = "reportTimer"),
+        @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
+        @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
+        @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
+        @Result(column = "decoration_level", property = "decorationLevel"),@Result(column = "last_view_time", property = "lastViewTime"),@Result(column = "view_num", property = "viewNum")})
+    @SelectProvider(type = ReportInfoProvider.class, method = "queryHistoryReportInfo")
+    public List<ReportInfoDO> queryHistoryReportInfo(@Param("pageSize") Integer pageSize);
+    
 }

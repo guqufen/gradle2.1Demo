@@ -69,7 +69,7 @@ var getReportBusiness = function getReportBusiness(){
 		url : PROJECT_NAME + '/web/admin/report/queryTradingVolumeReport',
 		type : 'POST',
 		dataType : "json",
-		data : {"innerCode":innerCode,"merchantId":merchantId},
+		data : {'reportId' : merchantId,'innerCode':innerCode},
 		success : function(data){
 			console.log(data);
 			/*获取生成图表的参数*/
@@ -174,6 +174,8 @@ $(function() {
 					$('h1').html( dd.merName+'的"风控+"报告审核页面');
 					$('#riskWarning1').html(dd.riskWarning);// 风险
 					$('#riskWarning1').show();//显示p标签
+					$('#evaluation').html(dd.evaluation);//商家评估
+					$('#evaluation').show();//显示商家评估textarea标签
 					$('#btn_auditing').show();//显示审核成功按钮
 					$('#btn_auditingFail').show();//显示审核失败按钮
 					$('input').attr('disabled','disabled');//所有输入不可编辑
@@ -184,7 +186,8 @@ $(function() {
 					$('h1').html( dd.merName+'的"风控+"报告编辑页面');
 					$('#riskWarning').html(dd.riskWarning);// 风险
 					$('#riskWarning').show();//显示风险textarea标签
-					$('#merEvaluating').show();//显示商家评估textarea标签
+					$('#evaluation').html(dd.evaluation);
+					$('#evaluation').show();//显示商家评估textarea标签
 					$('#btn_save').show();//显示保存修改按钮
 					$('#btn_import').show();//显示导入数据按钮
 				}
@@ -444,9 +447,9 @@ function saveOrUpdate(status){
 		'reportCycle' : reportCycle,
 		'reportTimer' : reportTimer,
 		'riskWarning' : riskWarning,
-		'quota' : quota,
-		'feeRate' : feeRate,
-		'loanCycle' : loanCycle,
+//		'quota' : quota,
+//		'feeRate' : feeRate,
+//		'loanCycle' : loanCycle,
 		'status' : status,
 		'id':merchantId
 	};

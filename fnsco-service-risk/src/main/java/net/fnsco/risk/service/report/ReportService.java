@@ -60,34 +60,14 @@ public class ReportService extends BaseService {
 
     //前台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> page(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
-        List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
+        WebUserOuterDO userDo = webUserOuterDAO.getById(reportInfoDO.getUserId());
+        reportInfoDO.setAgentId(userDo.getAgentId());
+        List<ReportInfoDO> pageList = this.reportInfoDAO.pageListMercByCondition(reportInfoDO, pageNum, pageSize);
         for (ReportInfoDO li : pageList) {
-            try {
-                String time = tradeDataDAO.getByInnerCode(li.getInnerCode());
-                if (time != null) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-                    Date old = sdf.parse(time);
-                    Date now = new Date();
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(now);
-                    calendar.add(Calendar.MONTH, -3);
-                    //小于三个月 符合规则
-                    if (calendar.getTime().getTime() < old.getTime()) {
-                        li.setIsTrue(1);
-                    } else {
-                        //大于三个月 不符合规则
-                        li.setIsTrue(2);
-                    }
-                } else {
-                    //用户绑定的商铺流水产生的时间不正确或没有流水交易
-                    li.setIsTrue(3);
-                }
-            } catch (ParseException e) {
-                //该商铺没有流水
-                e.printStackTrace();
-            }
+            li.setIsTrue(1);
+            li.setStatus(1);
         }
-        Integer count = this.reportInfoDAO.pageListCount(reportInfoDO);
+        Integer count = this.reportInfoDAO.pageListMercByConditionCount(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }
@@ -133,7 +113,12 @@ public class ReportService extends BaseService {
                 e.printStackTrace();
             }
         }
-        Integer count = this.reportInfoDAO.pageListCount(reportInfoDO);
+        Integer count = 0;
+        if (flag) {
+        	count = this.reportInfoDAO.pageListMercByConditionCount(reportInfoDO);
+        } else {
+        	count = this.reportInfoDAO.pageListAllMercCount(reportInfoDO);
+        }
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }
@@ -527,4 +512,34 @@ public class ReportService extends BaseService {
         IndustryDO dto = industryDAO.getById(id);
         return ResultDTO.success(dto);
     }
+    
+    /**
+     * queryHistoryReport:(查询历史风控报高)
+     *
+     * @param  @return    设定文件
+     * @return ResultDTO    DOM对象
+     * @author tangliang
+     * @date   2017年10月23日 下午6:11:29
+     */
+    public ResultDTO queryHistoryReport() {
+    	List<ReportInfoDO> datas = reportInfoDAO.queryHistoryReportInfo(4);
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    	for (ReportInfoDO reportInfoDO : datas) {
+			if(null != reportInfoDO.getLastViewTime()) {
+				reportInfoDO.setLastViewTimeStr(sdf.format(reportInfoDO.getLastViewTime()));
+			}
+		}
+    	return ResultDTO.success(datas);
+    }
+    
+    public ResultDTO updateViemNum(Integer id) {
+    	if(id != null) {
+    		int res = reportInfoDAO.updateViemNum(id);
+    		if(res >0) {
+    			return ResultDTO.success();
+    		}
+    	}
+    	return ResultDTO.fail();
+    }
+    
 }

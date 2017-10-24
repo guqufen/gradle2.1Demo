@@ -117,7 +117,7 @@
 						</div>
 						<div class="panel-body">
 							<div class="report-infos">
-								<div class="report-infos">
+								<div class="report-infos" id ="history_report">
 								<div class="report-info merName">
 									关于XXX的反馈报告：
 								<span>某某的反馈报告</span>
@@ -207,6 +207,7 @@
 	$('.logout').attr('href', PROJECT_NAME + "/web/userOuter/logout");
 	//获取当前用户,将真实姓名显示出来
 	$(function() {
+		queryHistoryReport();
 		$.ajax({
 			url : PROJECT_NAME + '/web/userOuter/getCurrentUser',
 			dataType : 'json',
@@ -219,7 +220,47 @@
 			}
 		});
 	});
-
+	
+	/*
+	 * 查询风控报告
+	 */
+	function queryHistoryReport(){
+		$.ajax({
+			url : PROJECT_NAME + '/web/report/queryHistoryReport',
+			dataType : 'json',
+			type : 'POST',
+			success : function(data) {
+				unloginHandler(data);
+				if (!data.success){
+					window.location = 'login.html';return;
+				}
+				
+				var hisDatas = data.data;
+				var conStr = '';
+				$.each(hisDatas, function(i, item){   
+					conStr += '<div class="report-info merName" onclick=seereport('+item.id+');>'+item.merName+'"风控+"报告      '+item.lastViewTimeStr+' </div>';
+				});
+				$('#history_report').html(conStr);
+			}
+		});
+	}
+	
+	function seereport(id){
+		$.ajax({
+			url : PROJECT_NAME + '/web/report/updateViemNum',
+			dataType : 'json',
+			type : 'POST',
+			data :{'id':id},
+			success : function(data) {
+				unloginHandler(data);
+				if (!data.success){
+					window.location = 'login.html';return;
+				}
+				window.open('http://localhost:8080/report.html?merchantId=6&innerCode=092916276563436');
+			}
+		});
+		
+	}
 	//修改密码
 	$("#btn_submit").click(function() {
 		if($(".loginInput").val()==''){
