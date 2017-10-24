@@ -18,7 +18,6 @@ var message = load_val2();
 //console.log(message.id)
 var webUserOuterId = message.id;
 var agentId = message.agentId;
-console.log(message.agentId)
 // 分页查询用户绑定下的商户列表
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
@@ -74,14 +73,30 @@ function formatterOperation(value, row, index) {
 				.join('');
 	}
 	if (row.isTrue == 1&&value == 1) {
-		return [ '<a  class="check" style="color:#2964df;" target="_Blank" href="report.html?merchantId='
-				+ row.id+'&innerCode='+row.innerCode + ' ">查看报告</a>' ].join('');
+		return [ '<a  class="check" style="color:#2964df;" target="_Blank" href="javascript:forwordReport('+ row.id+',1'+row.innerCode + ' )">查看报告</a>' ].join('');
 	}
 	if (row.isTrue == 1&&value == 3) {
 		return [ '<a class="generate" style="color:#2964df;" onclick="javascript:sendEmail('
 				+ row.id + ')">生成报告</a> ' ].join('');
 	}
 }
+function forwordReport(merchantId,innerCode){
+	innerCode =innerCode+'';
+	$.ajax({
+		url : PROJECT_NAME + '/web/report/updateViemNum',
+		dataType : 'json',
+		type : 'POST',
+		data :{'id':merchantId},
+		success : function(data) {
+			unloginHandler(data);
+			if (!data.success){
+				window.location = 'login.html';return;
+			}
+			window.location ='report.html?merchantId='+ merchantId+'&innerCode='+innerCode.substring(1);
+		}
+	});
+}
+
 function formatterSize(value, row, index) {
 	if (value == 0) {
 		return "单店";

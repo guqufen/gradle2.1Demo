@@ -165,6 +165,10 @@ public class DateUtils {
 	 * @date   2017年10月24日 上午10:05:17
 	 */
 	public static boolean is30dayBefore(String dateStr) {
+		
+		if(Strings.isNullOrEmpty(dateStr)) {
+			return false;
+		}
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd"); 
 		Calendar cal = Calendar.getInstance();
 		long time1 = cal.getTimeInMillis();   
