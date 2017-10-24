@@ -44,6 +44,7 @@ public class ReportAdminController extends BaseController{
         Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
+        reportInfoDO.setUserId(getUserId());
         ResultPageDTO<ReportInfoDO> pager = this.reportService.pageBack(reportInfoDO, page,rows);
         return success(pager);
     }
