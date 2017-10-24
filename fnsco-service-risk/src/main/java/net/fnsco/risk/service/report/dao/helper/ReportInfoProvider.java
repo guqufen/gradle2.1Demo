@@ -270,7 +270,7 @@ public class ReportInfoProvider {
         return new SQL() {
             {
                 SELECT("r.mer_num, " + "r.create_time, " + "r.last_modify_time, " + "r.id, " + "r.mer_name, " + "r.business_license_num, " + "r.business_address, " + "r.business_due_time,"
-                       + "r.trading_area, " + "r.turnover, " + "r.size, " + "r.report_cycle, " + "r.report_timer, " + "r.risk_warning, " + "r.quota, " + "r.fee_rate, " + "r.loan_cycle, " + "r.status,"
+                       + "r.trading_area, " + "r.turnover, " + "r.size, " + "r.report_cycle, " + "r.report_timer, " + "r.risk_warning, " + "r.quota, " + "r.fee_rate, " + "r.loan_cycle, " + "r.status," + "r.inner_code,"
                        + "(select `first` from sys_industry i where id = r.industry) as industry");
                 FROM(TABLE_NAME + " r");
                 if (StringUtils.isNotBlank(reportInfo.getMerNum())) {
@@ -646,8 +646,12 @@ public class ReportInfoProvider {
                 }
                 
                 //用户权限为审核用户：0-待审核
-                if (reportInfo.getStatus() != null && 1==reportInfo.getStatus()) {
-                    WHERE("report.status=0");
+                if (reportInfo.getCustomerType()==null && reportInfo.getStatus() != null ){
+                    if(10==reportInfo.getStatus()) {
+                        WHERE("report.status=1");
+                    }else {
+                        WHERE("report.status=#{reportInfo.status}");
+                    }
                 }
                 ORDER_BY("report.id desc limit " + start + ", " + limit);
             }

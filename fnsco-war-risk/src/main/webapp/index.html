@@ -71,7 +71,7 @@
 			</div>
 			<!-- 导航列表 -->
 			<ul class="nav">
-				<li class="navList"><a href="index.html"> <i class="icon fk"></i> <span>首页</span>
+				<li class="navList"><a href="index.html" class="active"> <i class="icon fk"></i> <span>首页</span>
 				</a></li>
 				<li class="navList"><a href="management.html"> <i class="icon fk"></i> <span>商户管理</span>
 				</a></li>
@@ -118,18 +118,7 @@
 						<div class="panel-body">
 							<div class="report-infos">
 								<div class="report-infos" id ="history_report">
-								<div class="report-info merName">
-									关于XXX的反馈报告：
-								<span>某某的反馈报告</span>
-								</div>
-								<div class="report-info businessLicenseNum">
-									关于XXX的反馈报告：
-								<span>某某的反馈报告</span>
-								</div>
-								<div class="report-info businessAddress">
-									关于XXX的反馈报告：
-								<span>某某的反馈报告</span>
-								</div>  
+							
 								</div> 
 							</div>	
 						</div>  
@@ -237,33 +226,22 @@
 				
 				var hisDatas = data.data;
 				var conStr = '';
-				$.each(hisDatas, function(i, item){   
-					conStr += '<div class="report-info merName merName'+item.id+'"><a href="">'+item.merName+'"风控+"报告      <span class="time">'+item.lastViewTimeStr+' </span></a></div>';
-					seereport(item.id);
+				var curWwwPath = getRootPath();
+				$('#history_report').html('');
+				$.each(hisDatas, function(i, item){  
+					var lastViewTime = item.lastViewTimeStr;
+					if(!item.lastViewTimeStr || item.lastViewTimeStr == 'null'){
+						lastViewTime='';
+					}
+					conStr = '<div class="report-info merName merName'+item.id+'"><a target="_Blank" href="">'+item.merName+'"风控+"报告      <span class="time">'+lastViewTime+' </span></a></div>';
+					$('#history_report').append(conStr);
+					$(".merName"+item.id+" a").attr("href",curWwwPath+'/report.html?merchantId='+item.id+'&innerCode='+item.innerCode);
 				});
-				$('#history_report').html(conStr);
+				
 			}
 		});
 	}
 	
-	function seereport(id){
-		$.ajax({
-			url : PROJECT_NAME + '/web/report/updateViemNum',
-			dataType : 'json',
-			type : 'POST',
-			data :{'id':id},
-			success : function(data) {
-				unloginHandler(data);
-				if (!data.success){
-					window.location = 'login.html';return;
-				}
-				$(".merName"+id+" a").attr('href',"http://localhost:8080/report.html?merchantId=6&innerCode=092916276563436"+id)
-				// return 'http://localhost:8080/report.html?merchantId=6&innerCode=092916276563436';
-				// window.open('http://localhost:8080/report.html?merchantId=6&innerCode=092916276563436');
-			}
-		});
-		
-	}
 	//修改密码
 	$("#btn_submit").click(function() {
 		if($(".loginInput").val()==''){

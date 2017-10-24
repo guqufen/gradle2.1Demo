@@ -27,7 +27,7 @@ import net.fnsco.risk.service.report.entity.ReportInfoDO;
  *
  */
 @Controller
-@RequestMapping(value = "web/report", method = RequestMethod.POST)
+@RequestMapping(value = "/web/report", method = RequestMethod.POST)
 public class ReportOpenController extends BaseController {
     @Autowired
     private ReportService reportService;
@@ -41,6 +41,7 @@ public class ReportOpenController extends BaseController {
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
         reportInfoDO.setUserId(getUserId());
+        reportInfoDO.setStatus(1);//只查审核通过的
         ResultPageDTO<ReportInfoDO> pager = this.reportService.page(reportInfoDO, page, rows);
         return success(pager);
     }
@@ -100,5 +101,12 @@ public class ReportOpenController extends BaseController {
     //更新报告点击次数
     public ResultDTO updateViemNum(@RequestParam Integer id) {
     	return reportService.updateViemNum(id);
+    }
+    
+    @RequestMapping(value= "forwordToReport", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO forwordToReport(@RequestParam String merchantId,@RequestParam String innerCode) {
+    	reportService.updateViemNum(Integer.valueOf(merchantId));
+    	return ResultDTO.success();
     }
 }
