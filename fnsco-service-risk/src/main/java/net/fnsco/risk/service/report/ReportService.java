@@ -60,34 +60,14 @@ public class ReportService extends BaseService {
 
     //前台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> page(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
-        List<ReportInfoDO> pageList = this.reportInfoDAO.pageList(reportInfoDO, pageNum, pageSize);
+        WebUserOuterDO userDo = webUserOuterDAO.getById(reportInfoDO.getUserId());
+        reportInfoDO.setAgentId(userDo.getAgentId());
+        List<ReportInfoDO> pageList = this.reportInfoDAO.pageListMercByCondition(reportInfoDO, pageNum, pageSize);
         for (ReportInfoDO li : pageList) {
-            try {
-                String time = tradeDataDAO.getByInnerCode(li.getInnerCode());
-                if (time != null) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-                    Date old = sdf.parse(time);
-                    Date now = new Date();
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(now);
-                    calendar.add(Calendar.MONTH, -3);
-                    //小于三个月 符合规则
-                    if (calendar.getTime().getTime() < old.getTime()) {
-                        li.setIsTrue(1);
-                    } else {
-                        //大于三个月 不符合规则
-                        li.setIsTrue(2);
-                    }
-                } else {
-                    //用户绑定的商铺流水产生的时间不正确或没有流水交易
-                    li.setIsTrue(3);
-                }
-            } catch (ParseException e) {
-                //该商铺没有流水
-                e.printStackTrace();
-            }
+            li.setIsTrue(1);
+            li.setStatus(1);
         }
-        Integer count = this.reportInfoDAO.pageListCount(reportInfoDO);
+        Integer count = this.reportInfoDAO.pageListMercByConditionCount(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }
