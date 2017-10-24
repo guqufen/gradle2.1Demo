@@ -41,6 +41,7 @@ public class ReportOpenController extends BaseController {
         Integer page = params.get("currentPageNum");
         Integer rows = params.get("pageSize");
         reportInfoDO.setUserId(getUserId());
+        reportInfoDO.setStatus(1);//只查审核通过的
         ResultPageDTO<ReportInfoDO> pager = this.reportService.page(reportInfoDO, page, rows);
         return success(pager);
     }

@@ -642,8 +642,12 @@ public class ReportInfoProvider {
                         WHERE("report.status in (2, 4)");
                     }
                 }
-                if (reportInfo.getStatus() != null && 10==reportInfo.getStatus()) {
-                    WHERE("report.status=1");
+                if (reportInfo.getCustomerType()==null && reportInfo.getStatus() != null ){
+                    if(10==reportInfo.getStatus()) {
+                        WHERE("report.status=1");
+                    }else {
+                        WHERE("report.status=#{reportInfo.status}");
+                    }
                 }
                 ORDER_BY("report.id desc limit " + start + ", " + limit);
             }
