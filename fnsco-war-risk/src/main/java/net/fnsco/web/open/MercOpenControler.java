@@ -26,8 +26,8 @@ import net.fnsco.risk.service.report.entity.ReportInfoDO;
  *
  */
 @Controller
-@RequestMapping(value = "/open/merc", method = RequestMethod.POST)
-@Api(value = "/open/merc", tags = { "前端商务管理" })
+@RequestMapping(value = "/web/open/merc", method = RequestMethod.POST)
+@Api(value = "/web/open/merc", tags = { "前端商务管理" })
 public class MercOpenControler extends BaseController {
     @Autowired
     private ReportService reportService;
