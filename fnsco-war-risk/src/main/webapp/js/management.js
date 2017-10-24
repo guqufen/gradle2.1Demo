@@ -20,7 +20,7 @@ $('#table').bootstrapTable({
 		field : 'merName',
 		title : '商户名称'
 	}, {
-		field : 'merNum',
+		field : 'innerCode',
 		title : '商户编码'
 	}, {
 		field : 'industry',
@@ -29,14 +29,25 @@ $('#table').bootstrapTable({
 		field : 'businessLicenseNum',
 		title : '营业执照'
 	},  {
-		field : 'tradingArea',
-		title : '报告状态'
+		field : 'status',
+		title : '报告状态',
+		formatter : formatStatus
 	}, {
-		field : 'size',
-		title : '订阅数',
+		field : 'viewNum',
+		title : '订阅数'
 	} ]
 });
 
+//状态格式化
+function formatStatus(value, row, index){
+	if(value == 10){
+		return '已生成';
+	}else if(value == 20){
+		return '未生成';
+	}else {
+		return '未知';
+	}
+}
 // 组装请求参数
 function queryParams(params) {
 	var param = {
