@@ -173,7 +173,7 @@
                  SELECT LAST_INSERT_ID()
      </selectKey>
      insert into r_trade_date_temp (id, inner_code, amt, 
-      pay_sub_type, time_stamp,trade_date, trade_houre,procedure_fee,terminalCode)
+      pay_sub_type, time_stamp,trade_date, trade_houre,procedure_fee,terminal_code)
     values
      <foreach collection ="list" item="reddemCode" index= "index" separator =",">
       (#{reddemCode.id,jdbcType=INTEGER}, #{reddemCode.innerCode,jdbcType=VARCHAR}, #{reddemCode.amt,jdbcType=VARCHAR}, 
