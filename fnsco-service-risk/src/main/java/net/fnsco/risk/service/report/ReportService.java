@@ -1,7 +1,6 @@
 package net.fnsco.risk.service.report;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,8 +34,10 @@ import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 import net.fnsco.risk.service.report.entity.YearReportDO;
 import net.fnsco.risk.service.sys.dao.IndustryDAO;
+import net.fnsco.risk.service.sys.dao.WebUserDAO;
 import net.fnsco.risk.service.sys.dao.WebUserOuterDAO;
 import net.fnsco.risk.service.sys.entity.IndustryDO;
+import net.fnsco.risk.service.sys.entity.WebUserDO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 import net.fnsco.risk.service.trade.dao.TradeDataDAO;
 
@@ -47,6 +48,8 @@ public class ReportService extends BaseService {
     private ReportInfoDAO             reportInfoDAO;
     @Autowired
     private WebUserOuterDAO           webUserOuterDAO;
+    @Autowired
+    private WebUserDAO                webUserDAO;
     @Autowired
     private JavaMailSender            mailSender;
     @Autowired
@@ -98,8 +101,8 @@ public class ReportService extends BaseService {
 
     //admin后台分页查询风控报告列表
     public ResultPageDTO<ReportInfoDO> pageListForAdmin(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
-        WebUserOuterDO userDo = webUserOuterDAO.getById(reportInfoDO.getUserId());
-        reportInfoDO.setAgentId(userDo.getAgentId());
+        WebUserDO userDo = webUserDAO.getById(reportInfoDO.getUserId());
+        reportInfoDO.setAgentId(null);
         reportInfoDO.setCustomerType(userDo.getType());
         List<ReportInfoDO> pageList = Lists.newArrayList();
         boolean flag = false;
