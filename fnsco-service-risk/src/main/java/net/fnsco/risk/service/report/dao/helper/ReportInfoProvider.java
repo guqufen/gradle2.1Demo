@@ -469,8 +469,8 @@ public class ReportInfoProvider {
                        + ") as maxTime " + "FROM " + "m_merchant_core c " + "where c.inner_code in (select inner_code from risk_user_merc_rel rel where rel.inner_code=c.inner_code and agent_id='"
                        + reportInfo.getAgentId() + "') " + ") tt  " );
                 WHERE("tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month)");
-                if (StringUtils.isNotBlank(reportInfo.getMerName())) {
-                    WHERE("(tt.mer_name like CONCAT('%',#{reportInfo.merName},'%') or tt.legal_person like CONCAT('%',#{reportInfo.merName},'%') or tt.business_license_num like CONCAT('%',#{reportInfo.merName},'%'))");
+                if (StringUtils.isNotBlank(reportInfo.getKey())) {
+                    WHERE("(tt.mer_name like CONCAT('%',#{reportInfo.key},'%') or tt.legal_person like CONCAT('%',#{reportInfo.key},'%') or tt.business_license_num like CONCAT('%',#{reportInfo.key},'%'))");
                 }
                 //后端未生成报表的查询
                 if (null != reportInfo.getStatus() && 2==reportInfo.getStatus()) {
