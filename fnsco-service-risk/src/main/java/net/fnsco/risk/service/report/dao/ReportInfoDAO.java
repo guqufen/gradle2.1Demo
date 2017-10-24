@@ -103,13 +103,12 @@ public interface ReportInfoDAO {
 
     //按条件查询所有有3个月交易流水的商户信息
     @Results({ @Result(column = "mer_name", property = "merName"), @Result(column = "business_license_num", property = "businessLicenseNum"),
-               @Result(column = "business_address", property = "businessAddress"), @Result(column = "business_due_time", property = "businessDueTime"),
-               @Result(column = "trading_area", property = "tradingArea"), @Result(column = "report_cycle", property = "reportCycle"), @Result(column = "report_timer", property = "reportTimer"),
-               @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
-               @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
-               @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
-               @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "view_num", property = "viewNum"), @Result(column = "last_view_time", property = "lastViewTime"),
-               @Result(column = "evaluation", property = "evaluation") })
+        @Result(column = "business_address", property = "businessAddress"), @Result(column = "business_due_time", property = "businessDueTime"),
+        @Result(column = "trading_area", property = "tradingArea"), @Result(column = "report_cycle", property = "reportCycle"), @Result(column = "report_timer", property = "reportTimer"),
+        @Result(column = "risk_warning", property = "riskWarning"), @Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
+        @Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
+        @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
+        @Result(column = "decoration_level", property = "decorationLevel"), @Result(column = "evaluation", property = "evaluation"),@Result(column = "last_view_time", property = "lastViewTime"),@Result(column = "view_num", property = "viewNum")})
     @SelectProvider(type = ReportInfoProvider.class, method = "pageListMercByCondition")
     public List<ReportInfoDO> pageListMercByCondition(@Param("reportInfo") ReportInfoDO reportInfo, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 

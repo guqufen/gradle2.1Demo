@@ -1,7 +1,6 @@
 package net.fnsco.risk.service.report;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,8 +39,10 @@ import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 import net.fnsco.risk.service.report.entity.YearReportDO;
 import net.fnsco.risk.service.sys.dao.IndustryDAO;
+import net.fnsco.risk.service.sys.dao.WebUserDAO;
 import net.fnsco.risk.service.sys.dao.WebUserOuterDAO;
 import net.fnsco.risk.service.sys.entity.IndustryDO;
+import net.fnsco.risk.service.sys.entity.WebUserDO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
 import net.fnsco.risk.service.trade.dao.TradeDataDAO;
 
@@ -52,6 +53,8 @@ public class ReportService extends BaseService {
     private ReportInfoDAO             reportInfoDAO;
     @Autowired
     private WebUserOuterDAO           webUserOuterDAO;
+    @Autowired
+    private WebUserDAO                webUserDAO;
     @Autowired
     private JavaMailSender            mailSender;
     @Autowired
@@ -77,46 +80,34 @@ public class ReportService extends BaseService {
         return pager;
     }
 
-    //商务管理分页查询
+    //前端商务管理分页查询
     public ResultPageDTO<ReportInfoDO> queryList(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         WebUserOuterDO userDo = webUserOuterDAO.getById(reportInfoDO.getUserId());
         reportInfoDO.setAgentId(userDo.getAgentId());
         List<ReportInfoDO> pageList = Lists.newArrayList();
         boolean flag = false;
-        if ( null != reportInfoDO.getStatus() && 1== reportInfoDO.getStatus()) {
+        if ( null != reportInfoDO.getStatus() && 10== reportInfoDO.getStatus()) {
             flag = true;
         }
         if (flag) {
             pageList = this.reportInfoDAO.pageListMercByCondition(reportInfoDO, pageNum, pageSize);
+            for (ReportInfoDO reportInfoDO2 : pageList) {
+            	reportInfoDO2.setStatus(10);
+			}
         } else {
             pageList = this.reportInfoDAO.pageListAllMerc(reportInfoDO, pageNum, pageSize);
-        }
-        for (ReportInfoDO li : pageList) {
-            try {
-                //订阅次数查询
-                String time = tradeDataDAO.getByInnerCode(li.getInnerCode());
-                if (time != null) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-                    Date old = sdf.parse(time);
-                    Date now = new Date();
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(now);
-                    calendar.add(Calendar.MONTH, -3);
-                    //小于三个月 符合规则
-                    if (calendar.getTime().getTime() < old.getTime()) {
-                        li.setIsTrue(1);
-                    } else {
-                        //大于三个月 不符合规则
-                        li.setIsTrue(2);
-                    }
-                } else {
-                    //用户绑定的商铺流水产生的时间不正确或没有流水交易
-                    li.setIsTrue(3);
-                }
-            } catch (ParseException e) {
-                //该商铺没有流水
-                e.printStackTrace();
-            }
+            for (ReportInfoDO reportInfoDO2 : pageList) {
+            	
+            	if(reportInfoDO.getStatus()!= null && reportInfoDO.getStatus() == 20) {
+            		reportInfoDO2.setStatus(20);
+            	}else {
+            		if(DateUtils.is30dayBefore(reportInfoDO2.getReportTimer()) && reportInfoDO2.getStatus() == 1) {
+            			reportInfoDO2.setStatus(10);
+            		}else {
+            			reportInfoDO2.setStatus(20);
+            		}
+            	} 
+			}
         }
         Integer count = 0;
         if (flag) {
@@ -128,14 +119,36 @@ public class ReportService extends BaseService {
         return pager;
     }
 
-    //后台分页查询风控报告列表
+    //admin后台分页查询风控报告列表
+    public ResultPageDTO<ReportInfoDO> pageListForAdmin(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
+        WebUserDO userDo = webUserDAO.getById(reportInfoDO.getUserId());
+        reportInfoDO.setAgentId(null);
+        reportInfoDO.setCustomerType(userDo.getType());
+        List<ReportInfoDO> pageList = Lists.newArrayList();
+        boolean flag = false;
+        if ( null != reportInfoDO.getStatus()) {
+            flag = true;
+        }
+        if (flag) {
+            pageList = this.reportInfoDAO.pageListMercByCondition(reportInfoDO, pageNum, pageSize);
+        } else {
+            pageList = this.reportInfoDAO.pageListAllMerc(reportInfoDO, pageNum, pageSize);
+        }
+        Integer count = 0;
+        if (flag) {
+            count = this.reportInfoDAO.pageListMercByConditionCount(reportInfoDO);
+        } else {
+            count = this.reportInfoDAO.pageListAllMercCount(reportInfoDO);
+        }
+        ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
+        return pager;
+    }
     public ResultPageDTO<ReportInfoDO> pageBack(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageListBack(reportInfoDO, pageNum, pageSize);
         Integer count = this.reportInfoDAO.pageListCountBack(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }
-
     //查询12个月风控历史
     public ResultDTO queryYearReport(String innerCode, Integer merchantId) {
         List<YearReportDO> list = new ArrayList<YearReportDO>();

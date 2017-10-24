@@ -101,4 +101,11 @@ public class ReportOpenController extends BaseController {
     public ResultDTO updateViemNum(@RequestParam Integer id) {
     	return reportService.updateViemNum(id);
     }
+    
+    @RequestMapping(value= "forwordToReport", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO forwordToReport(@RequestParam String merchantId,@RequestParam String innerCode) {
+    	reportService.updateViemNum(Integer.valueOf(merchantId));
+    	return ResultDTO.success();
+    }
 }

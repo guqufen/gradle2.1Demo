@@ -1,4 +1,4 @@
-package net.fnsco.web.admin;
+package net.fnsco.web.admin.sys;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class SysConfigController extends BaseController{
 	private sysConfigService sysConfigService;
 
 	@ResponseBody
-	@RequestMapping(value="getByType", method=RequestMethod.GET)
+	@RequestMapping(value="/getByType", method=RequestMethod.GET)
 	public ResultDTO getByType(@Param("type") String type){
 		return sysConfigService.getByType(type);
 	}
