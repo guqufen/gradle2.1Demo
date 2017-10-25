@@ -61,7 +61,7 @@ $(function(){
 			$(".report-title").html(result.merName+"&quot;风控+&quot;报告");
 			$(".tradingArea span").html(result.tradingArea);
 			var level=result.decorationLevel;
-			if(level==0){
+			if(level==3){
 				$(".decorationLevel span").html("普通");
 			}else if(level==1){
 				$(".decorationLevel span").html("中级");
@@ -69,7 +69,7 @@ $(function(){
 				$(".decorationLevel span").html("高级");
 			}
 			var size=result.size;
-			if(size==0){
+			if(size==4){
 				$(".size span").html("单店");
 			}else if(size==1){
 				$(".size span").html("小型连锁");
