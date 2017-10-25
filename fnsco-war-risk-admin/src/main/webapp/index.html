@@ -91,12 +91,12 @@
                     </a>
                     <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
                         <li>
-                            <a class="J_menuItem" href="report.html" data-index="1">新增报告</a>
+                            <a class="J_menuItem" href="report.html" data-index="1" id="addReport" style="display:none">新增报告</a>
                         </li>
                     </ul>
                     <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
                         <li>
-                            <a class="J_menuItem" href="report.html" data-index="1">审核报告</a>
+                            <a class="J_menuItem" href="report.html" data-index="1" id="checkReport" style="display:none">审核报告</a>
                         </li>
                     </ul>
                 </li>
@@ -240,6 +240,10 @@ $(function(){
 			if(!data.success)
 				window.location='login.html';
 			   $('.indexPageUserName').html(data.data.realName);
+			   if(data.data.type ==  1)//审核权限
+				   $('#checkReport').show();
+			   else//修改权限
+				   $('#addReport').show();
 		}
 	});
 });
