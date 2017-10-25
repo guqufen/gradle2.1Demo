@@ -298,15 +298,25 @@ public class ReportService extends BaseService {
         for(Map.Entry<String,ReportBusiness>  entry: lists) {
         	YearReportDO yearReportDO = new YearReportDO();
         	String key =entry.getValue().getTradeDate();
+        	SimpleDateFormat date = new SimpleDateFormat("yyyy年MM月dd日");
+        	SimpleDateFormat dateKey = new SimpleDateFormat("yyyyMMdd");
+        	Date data=null;
+			try {
+				data = dateKey.parse(key);
+			} catch (ParseException e) {
+      		  logger.error("日期格式转换出错" + data + ",确保真确格式");
+      		  e.printStackTrace();
+      	  }
+        	String dateDay = date.format(data);
         	ReportBusiness tempBusiness1 = map.get(key);
         	if(null == tempBusiness1) {
         		yearReportDO.setTurnover(kong);
-        		yearReportDO.setDate(key);
+        		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}else {
         		BigDecimal bd=new BigDecimal(tempBusiness1.getTurnover());
         		yearReportDO.setTurnover(bd);
-        		yearReportDO.setDate(key);
+        		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}
         }
@@ -381,15 +391,25 @@ public class ReportService extends BaseService {
         for(Map.Entry<String,ReportBusiness>  entry: lists) {
         	YearReportDO yearReportDO = new YearReportDO();
         	String key =entry.getValue().getTradeDate();
+        	SimpleDateFormat date = new SimpleDateFormat("yyyy年MM月dd日");
+        	SimpleDateFormat dateKey = new SimpleDateFormat("yyyyMMdd");
+        	Date data=null;
+			try {
+				data = dateKey.parse(key);
+			} catch (ParseException e) {
+      		  logger.error("日期格式转换出错" + data + ",确保真确格式");
+      		  e.printStackTrace();
+      	  }
+        	String dateDay = date.format(data);
         	ReportBusiness tempBusiness1 = map.get(key);
         	if(null == tempBusiness1) {
         		yearReportDO.setTurnover(kong);
-        		yearReportDO.setDate(key);
+        		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}else {
         		BigDecimal bd=new BigDecimal(tempBusiness1.getOrderPrice());
         		yearReportDO.setTurnover(bd);
-        		yearReportDO.setDate(key);
+        		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}
         }

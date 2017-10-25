@@ -84,9 +84,7 @@ var getReportBusiness = function getReportBusiness(){
 				// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
 				// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
 				// chart(datatime,data);
-				chart1(myChart2,dateList,dataList)
-			}else{
-				layer.msg(data.message);
+				chart1(myChart1,dateList,dataList)
 			}
 		}
 	});
@@ -117,8 +115,6 @@ var getReportUnit = function getReportUnit(){
 				// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
 				// chart(datatime,data);
 				chart1(myChart2,dateList,dataList)
-			}else{
-				layer.msg(data.message);
 			}
 		}
 	});
