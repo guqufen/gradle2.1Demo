@@ -772,6 +772,7 @@ public class ReportInfoProvider {
             {
                 SELECT("*");
                 FROM(TABLE_NAME);
+                WHERE("view_num > 0");
                 ORDER_BY("last_view_time desc limit " + start + ", " + limit);
             }
         }.toString();
