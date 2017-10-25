@@ -29,6 +29,7 @@ public class ReportInfoProvider {
     	 return new SQL() {{
     		 UPDATE(TABLE_NAME);
     		 SET("view_num=view_num+1");
+    		 SET("last_view_time=now()");
     		 WHERE("id = #{id}");
     	 }
     	 }.toString();
