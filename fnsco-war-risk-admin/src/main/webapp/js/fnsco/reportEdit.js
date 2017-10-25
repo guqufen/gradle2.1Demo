@@ -640,7 +640,7 @@ function chart(dataTime,data){
 	    },],
 	    series: [
 			{
-			    name:'销售额',
+			    name:'还款能力',
 			    type:'line',
 			    smooth:true,
 			    //symbol: 'none',
@@ -661,7 +661,7 @@ function chart(dataTime,data){
 			    data: [data[0],data[1],data[2],data[3],data[4],data[5]]
 			},
 			{
-			    name:'预测销售额',
+			    name:'预测还款能力',
 			    type:'line',
 			    smooth:true,
 			    //symbol: 'none',
