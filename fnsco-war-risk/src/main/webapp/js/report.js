@@ -92,7 +92,7 @@ function forwordReport(merchantId,innerCode){
 			if (!data.success){
 				window.location = 'login.html';return;
 			}
-			window.location ='report.html?merchantId='+ merchantId+'&innerCode='+innerCode.substring(1);
+			window.open('report.html?merchantId='+ merchantId+'&innerCode='+innerCode.substring(1));
 		}
 	});
 }

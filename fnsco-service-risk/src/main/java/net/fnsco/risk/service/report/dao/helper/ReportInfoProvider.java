@@ -494,7 +494,7 @@ public class ReportInfoProvider {
                 if (null != reportInfo.getStatus() && 20==reportInfo.getStatus()) {
                     WHERE("tt.inner_code not in (select inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
                 }
-                ORDER_BY(" tt.mer_name limit " + start + ", " + limit);
+                ORDER_BY(" viewNum DESC limit " + start + ", " + limit);
             }
         }.toString();
     }
@@ -654,7 +654,7 @@ public class ReportInfoProvider {
                         WHERE("report.status=#{reportInfo.status}");
                     }
                 }
-                ORDER_BY("report.id desc limit " + start + ", " + limit);
+                ORDER_BY("report.view_num desc limit " + start + ", " + limit);
             }
         }.toString();
     }
