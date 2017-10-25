@@ -352,11 +352,12 @@ function saveOrUpdate(status){
 
 	//营业期限
 	var businessDueTime = $('#businessDueTime').val();
+	/**
 	if(businessDueTime == ""){
 		layer.msg('营业期限为空，请核对后联系相关人员录入');
 		return false;
 	}
-
+**/
 	//行业
 	var industry = $('#industry option:selected').val();
 	if(industry == "" || industry=="kk"){
