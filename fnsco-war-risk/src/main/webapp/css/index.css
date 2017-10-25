@@ -1,4 +1,4 @@
-/*鎼滅储妗�*/
+/*éŽ¼æ»…å‚¨å¦—ï¿½*/
 .inputDiv{
 	display: inline-block;
 	margin:10px 30px;
@@ -69,9 +69,16 @@
 	padding:50px 0;
 	text-align:center;
 }
-.report-info{
-	padding:10px;
+.report-infos{
+	height:150px;
 }
+.report-infos .report-info{
+	padding:12px 10px;
+}
+.report-infos #history_report .report-info{
+	padding: 6px 10px;
+}
+
 .report-info a:hover{
 	color: #000;
 }
@@ -85,9 +92,10 @@
 	float:right;
 	border:none;
 	background:rgba(22, 155, 213, 1);
-	padding:3px 10px;
+	padding: 5px 16px;
 	color:#fff;
 	border-radius:3px;
-	font-size:12px;
+	font-size: 14px;
 	cursor:pointer;
+	margin-top: -5px;
 }
