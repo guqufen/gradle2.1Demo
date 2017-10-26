@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.ReadExcel;
 import net.fnsco.risk.service.report.ReportService;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
@@ -77,6 +78,7 @@ public class ReportAdminController extends BaseController{
 //    		reportInfoDO.setId(null);
     		reportInfo.setCreateTime(new Date());
     		reportInfo.setLastModifyTime(new Date());
+    		reportInfo.setReportTimer(DateUtils.getYesterdayDateStr());
     		reportInfo.setStatus(4);
     		reportService.insert(reportInfo);
     		reportInfoDO = reportService.getByInnerCode(reportInfo.getInnerCode());
