@@ -206,6 +206,10 @@ $(function() {
 				getReportChart();
 				getReportBusiness();
 				getReportUnit();
+				
+				//0.初始化fileinput,文件导入初始化
+				var oFileInput = new FileInput();
+				oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + '/web/admin/report/doImport?id='+merchantId);
 			}
 		},
 		error : function(data) {
@@ -534,11 +538,11 @@ function downEvent(){
 function importEvent() {
 	$('#importModal').modal();
 }
-$(function() {
-	//0.初始化fileinput
-	var oFileInput = new FileInput();
-	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + '/web/admin/report/doImport?id='+merchantId);
-});
+//$(function() {
+//	//0.初始化fileinput
+//	var oFileInput = new FileInput();
+//	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + '/web/admin/report/doImport?id='+merchantId);
+//});
 //初始化fileinput
 var FileInput = function() {
 	var oFile = new Object();
