@@ -26,6 +26,7 @@
 		<module>fnsco-service-api-doc</module>
 		<module>fnsco-service-auth</module>
 		<module>fnsco-service-risk</module>
+		<module>fnsco-service-finance</module>
 		<!-- 数据接入web项目-->
 		<module>fnsco-war-withhold</module>
 		<module>fnsco-war-api-doc</module>

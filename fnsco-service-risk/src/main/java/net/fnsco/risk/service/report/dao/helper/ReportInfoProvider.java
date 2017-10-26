@@ -471,7 +471,7 @@ public class ReportInfoProvider {
                     agentWhere="and agent_id='" + reportInfo.getAgentId() + "'";
                 }
                 SELECT( "tt.*," + "(select report.trading_area from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) trading_area,"
-                       + "(select report.industry from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) industry,"
+                       + "(select `first` from sys_industry where id = (select report.industry from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1)) industry,"
                        + "(select report.status from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) status,"
                        + "(select report.view_num from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) viewNum,"
                        + "(select report.report_timer from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) report_timer,"
@@ -570,7 +570,8 @@ public class ReportInfoProvider {
                 if(null !=  reportInfo.getAgentId()){
                     agentWhere="and agent_id='" + reportInfo.getAgentId() + "'";
                 }
-                SELECT( "tt.*,report.id,report.trading_area ,report.industry ,report.size,report.status,report.status,report.view_num,report.report_timer " + " FROM " + "( " + "SELECT " + "c.inner_code,c.legal_person,c.mer_name,c.business_license_num, ("
+                SELECT( "tt.*,report.id,report.trading_area ,"
+                		+ "(select `first` from sys_industry where id = report.industry) industry ,report.size,report.status,report.view_num,report.report_timer " + " FROM " + "( " + "SELECT " + "c.inner_code,c.legal_person,c.mer_name,c.business_license_num, ("
                        + "SELECT " + "MAX(time_stamp) " + "FROM " + "t_trade_data t " + "WHERE " + "t.inner_code = c.inner_code " + ") as maxTime " + "FROM " + "m_merchant_core c "
                        + "where c.inner_code in (select inner_code from risk_user_merc_rel rel where rel.inner_code=c.inner_code " + agentWhere + ") "
                        + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)) report " );
@@ -640,7 +641,12 @@ public class ReportInfoProvider {
                 //用户权限为编辑用户，2-审核失败；4-提交待编辑
                 if (reportInfo.getCustomerType()!=null && reportInfo.getCustomerType() == 2) {
                     if (reportInfo.getStatus() != null) {
-                        WHERE("report.status=#{reportInfo.status}");
+                    	if(reportInfo.getStatus() == 40) {
+                    		WHERE("report.status in (3,4)");
+                    	}else {
+                    		WHERE("report.status=#{reportInfo.status}");
+                    	}
+                        
                     } else {
                         WHERE("report.status in (2, 4)");
                     }

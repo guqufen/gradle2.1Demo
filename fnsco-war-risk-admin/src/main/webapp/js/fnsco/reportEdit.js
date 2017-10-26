@@ -206,6 +206,10 @@ $(function() {
 				getReportChart();
 				getReportBusiness();
 				getReportUnit();
+				
+				//0.初始化fileinput,文件导入初始化
+				var oFileInput = new FileInput();
+				oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + '/web/admin/report/doImport?id='+merchantId);
 			}
 		},
 		error : function(data) {
@@ -352,11 +356,12 @@ function saveOrUpdate(status){
 
 	//营业期限
 	var businessDueTime = $('#businessDueTime').val();
+	/**
 	if(businessDueTime == ""){
 		layer.msg('营业期限为空，请核对后联系相关人员录入');
 		return false;
 	}
-
+**/
 	//行业
 	var industry = $('#industry option:selected').val();
 	if(industry == "" || industry=="kk"){
@@ -533,11 +538,11 @@ function downEvent(){
 function importEvent() {
 	$('#importModal').modal();
 }
-$(function() {
-	//0.初始化fileinput
-	var oFileInput = new FileInput();
-	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + '/web/admin/report/doImport?id='+merchantId);
-});
+//$(function() {
+//	//0.初始化fileinput
+//	var oFileInput = new FileInput();
+//	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + '/web/admin/report/doImport?id='+merchantId);
+//});
 //初始化fileinput
 var FileInput = function() {
 	var oFile = new Object();
