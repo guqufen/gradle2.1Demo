@@ -570,7 +570,8 @@ public class ReportInfoProvider {
                 if(null !=  reportInfo.getAgentId()){
                     agentWhere="and agent_id='" + reportInfo.getAgentId() + "'";
                 }
-                SELECT( "tt.*,report.id,report.trading_area ,report.industry ,report.size,report.status,report.view_num,report.report_timer " + " FROM " + "( " + "SELECT " + "c.inner_code,c.legal_person,c.mer_name,c.business_license_num, ("
+                SELECT( "tt.*,report.id,report.trading_area ,"
+                		+ "(select `first` from sys_industry where id = report.industry) industry ,report.size,report.status,report.view_num,report.report_timer " + " FROM " + "( " + "SELECT " + "c.inner_code,c.legal_person,c.mer_name,c.business_license_num, ("
                        + "SELECT " + "MAX(time_stamp) " + "FROM " + "t_trade_data t " + "WHERE " + "t.inner_code = c.inner_code " + ") as maxTime " + "FROM " + "m_merchant_core c "
                        + "where c.inner_code in (select inner_code from risk_user_merc_rel rel where rel.inner_code=c.inner_code " + agentWhere + ") "
                        + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)) report " );
