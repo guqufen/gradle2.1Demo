@@ -29,6 +29,7 @@ public class ReportInfoProvider {
     	 return new SQL() {{
     		 UPDATE(TABLE_NAME);
     		 SET("view_num=view_num+1");
+    		 SET("last_view_time=now()");
     		 WHERE("id = #{id}");
     	 }
     	 }.toString();
@@ -470,7 +471,7 @@ public class ReportInfoProvider {
                     agentWhere="and agent_id='" + reportInfo.getAgentId() + "'";
                 }
                 SELECT( "tt.*," + "(select report.trading_area from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) trading_area,"
-                       + "(select report.industry from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) industry,"
+                       + "(select `first` from sys_industry where id = (select report.industry from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1)) industry,"
                        + "(select report.status from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) status,"
                        + "(select report.view_num from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) viewNum,"
                        + "(select report.report_timer from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) report_timer,"
@@ -493,7 +494,7 @@ public class ReportInfoProvider {
                 if (null != reportInfo.getStatus() && 20==reportInfo.getStatus()) {
                     WHERE("tt.inner_code not in (select inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
                 }
-                ORDER_BY(" tt.mer_name limit " + start + ", " + limit);
+                ORDER_BY(" viewNum DESC limit " + start + ", " + limit);
             }
         }.toString();
     }
@@ -653,7 +654,7 @@ public class ReportInfoProvider {
                         WHERE("report.status=#{reportInfo.status}");
                     }
                 }
-                ORDER_BY("report.id desc limit " + start + ", " + limit);
+                ORDER_BY("report.view_num desc limit " + start + ", " + limit);
             }
         }.toString();
     }
@@ -772,6 +773,7 @@ public class ReportInfoProvider {
             {
                 SELECT("*");
                 FROM(TABLE_NAME);
+                WHERE("view_num > 0");
                 ORDER_BY("last_view_time desc limit " + start + ", " + limit);
             }
         }.toString();

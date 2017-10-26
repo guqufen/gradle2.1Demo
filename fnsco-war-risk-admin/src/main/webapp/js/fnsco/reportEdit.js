@@ -84,9 +84,7 @@ var getReportBusiness = function getReportBusiness(){
 				// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
 				// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
 				// chart(datatime,data);
-				chart1(myChart2,dateList,dataList)
-			}else{
-				layer.msg(data.message);
+				chart1(myChart1,dateList,dataList)
 			}
 		}
 	});
@@ -117,8 +115,6 @@ var getReportUnit = function getReportUnit(){
 				// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
 				// chart(datatime,data);
 				chart1(myChart2,dateList,dataList)
-			}else{
-				layer.msg(data.message);
 			}
 		}
 	});
@@ -356,11 +352,12 @@ function saveOrUpdate(status){
 
 	//营业期限
 	var businessDueTime = $('#businessDueTime').val();
+	/**
 	if(businessDueTime == ""){
 		layer.msg('营业期限为空，请核对后联系相关人员录入');
 		return false;
 	}
-
+**/
 	//行业
 	var industry = $('#industry option:selected').val();
 	if(industry == "" || industry=="kk"){
@@ -644,7 +641,7 @@ function chart(dataTime,data){
 	    },],
 	    series: [
 			{
-			    name:'销售额',
+			    name:'还款能力',
 			    type:'line',
 			    smooth:true,
 			    //symbol: 'none',
@@ -665,7 +662,7 @@ function chart(dataTime,data){
 			    data: [data[0],data[1],data[2],data[3],data[4],data[5]]
 			},
 			{
-			    name:'预测销售额',
+			    name:'预测还款能力',
 			    type:'line',
 			    smooth:true,
 			    //symbol: 'none',

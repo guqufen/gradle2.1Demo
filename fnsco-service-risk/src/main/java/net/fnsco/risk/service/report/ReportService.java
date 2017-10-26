@@ -298,15 +298,25 @@ public class ReportService extends BaseService {
         for(Map.Entry<String,ReportBusiness>  entry: lists) {
         	YearReportDO yearReportDO = new YearReportDO();
         	String key =entry.getValue().getTradeDate();
+        	SimpleDateFormat date = new SimpleDateFormat("yyyy年MM月dd日");
+        	SimpleDateFormat dateKey = new SimpleDateFormat("yyyyMMdd");
+        	Date data=null;
+			try {
+				data = dateKey.parse(key);
+			} catch (ParseException e) {
+      		  logger.error("日期格式转换出错" + data + ",确保真确格式");
+      		  e.printStackTrace();
+      	  }
+        	String dateDay = date.format(data);
         	ReportBusiness tempBusiness1 = map.get(key);
         	if(null == tempBusiness1) {
         		yearReportDO.setTurnover(kong);
-        		yearReportDO.setDate(key);
+        		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}else {
         		BigDecimal bd=new BigDecimal(tempBusiness1.getTurnover());
         		yearReportDO.setTurnover(bd);
-        		yearReportDO.setDate(key);
+        		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}
         }
@@ -381,15 +391,25 @@ public class ReportService extends BaseService {
         for(Map.Entry<String,ReportBusiness>  entry: lists) {
         	YearReportDO yearReportDO = new YearReportDO();
         	String key =entry.getValue().getTradeDate();
+        	SimpleDateFormat date = new SimpleDateFormat("yyyy年MM月dd日");
+        	SimpleDateFormat dateKey = new SimpleDateFormat("yyyyMMdd");
+        	Date data=null;
+			try {
+				data = dateKey.parse(key);
+			} catch (ParseException e) {
+      		  logger.error("日期格式转换出错" + data + ",确保真确格式");
+      		  e.printStackTrace();
+      	  }
+        	String dateDay = date.format(data);
         	ReportBusiness tempBusiness1 = map.get(key);
         	if(null == tempBusiness1) {
         		yearReportDO.setTurnover(kong);
-        		yearReportDO.setDate(key);
+        		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}else {
         		BigDecimal bd=new BigDecimal(tempBusiness1.getOrderPrice());
         		yearReportDO.setTurnover(bd);
-        		yearReportDO.setDate(key);
+        		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}
         }
@@ -581,62 +601,62 @@ public class ReportService extends BaseService {
             YearReportDO yearReportDO = new YearReportDO();
             if (j == 0) {
                 yearReportDO.setTurnover(dto.getMonthOne());
-                yearReportDO.setDate(handleDate(dd, -6));
+                yearReportDO.setDate(handleDate(dd, -6) + "月");
                 list.add(yearReportDO);
             }
             if (j == 1) {
                 yearReportDO.setTurnover(dto.getMonthTwo());
-                yearReportDO.setDate(handleDate(dd, -5));
+                yearReportDO.setDate(handleDate(dd, -5) + "月");
                 list.add(yearReportDO);
             }
             if (j == 2) {
                 yearReportDO.setTurnover(dto.getMonthThree());
-                yearReportDO.setDate(handleDate(dd, -4));
+                yearReportDO.setDate(handleDate(dd, -4) + "月");
                 list.add(yearReportDO);
             }
             if (j == 3) {
                 yearReportDO.setTurnover(dto.getMonthFore());
-                yearReportDO.setDate(handleDate(dd, -3));
+                yearReportDO.setDate(handleDate(dd, -3) + "月");
                 list.add(yearReportDO);
             }
             if (j == 4) {
                 yearReportDO.setTurnover(dto.getMonthFive());
-                yearReportDO.setDate(handleDate(dd, -2));
+                yearReportDO.setDate(handleDate(dd, -2) + "月");
                 list.add(yearReportDO);
             }
             if (j == 5) {
                 yearReportDO.setTurnover(dto.getMonthSix());
-                yearReportDO.setDate(handleDate(dd, -1));
+                yearReportDO.setDate(handleDate(dd, -1) + "月");
                 list.add(yearReportDO);
             }
             if (j == 6) {
                 yearReportDO.setTurnover(dto.getMonthSeven());
-                yearReportDO.setDate(handleDate(dd, 0));
+                yearReportDO.setDate(handleDate(dd, 0) + "月");
                 list.add(yearReportDO);
             }
             if (j == 7) {
                 yearReportDO.setTurnover(dto.getMonthEight());
-                yearReportDO.setDate(handleDate(dd, 1));
+                yearReportDO.setDate(handleDate(dd, 1) + "月");
                 list.add(yearReportDO);
             }
             if (j == 8) {
                 yearReportDO.setTurnover(dto.getMonthNine());
-                yearReportDO.setDate(handleDate(dd, 2));
+                yearReportDO.setDate(handleDate(dd, 2) + "月");
                 list.add(yearReportDO);
             }
             if (j == 9) {
                 yearReportDO.setTurnover(dto.getMonthTen());
-                yearReportDO.setDate(handleDate(dd, 3));
+                yearReportDO.setDate(handleDate(dd, 3) + "月");
                 list.add(yearReportDO);
             }
             if (j == 10) {
                 yearReportDO.setTurnover(dto.getMonthEleven());
-                yearReportDO.setDate(handleDate(dd, 4));
+                yearReportDO.setDate(handleDate(dd, 4) + "月");
                 list.add(yearReportDO);
             }
             if (j == 11) {
                 yearReportDO.setTurnover(dto.getMonthTwelve());
-                yearReportDO.setDate(handleDate(dd, 5));
+                yearReportDO.setDate(handleDate(dd, 5) + "月");
                 list.add(yearReportDO);
             }
         }

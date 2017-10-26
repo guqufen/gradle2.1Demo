@@ -168,7 +168,9 @@ public class MercAllocationProvider {
 		// 新增，不属于
 		sql.append(" AND c.inner_code not in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
 				+ ")");
-
+		//流水在三个月之内
+		sql.append(" AND (SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code = c.inner_code) >= SUBDATE(CURDATE(), INTERVAL 3 MONTH) ");
+		
 		sql.append(" group by id order by c.id desc limit " + start + ", " + limit);
 
 		logger.info("pageMerData:" + sql.toString());
@@ -201,7 +203,9 @@ public class MercAllocationProvider {
 		// 新增，不属于
 		sql.append(" AND c.inner_code not in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
 				+ ")");
-
+		//流水在三个月之内
+		sql.append(" AND (SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code = c.inner_code) >= SUBDATE(CURDATE(), INTERVAL 3 MONTH) ");
+		
 		logger.info("pageMerData:" + sql.toString());
 		return sql.toString();
 

@@ -61,7 +61,7 @@ $(function(){
 			$(".report-title").html(result.merName+"&quot;风控+&quot;报告");
 			$(".tradingArea span").html(result.tradingArea);
 			var level=result.decorationLevel;
-			if(level==0){
+			if(level==3){
 				$(".decorationLevel span").html("普通");
 			}else if(level==1){
 				$(".decorationLevel span").html("中级");
@@ -69,7 +69,7 @@ $(function(){
 				$(".decorationLevel span").html("高级");
 			}
 			var size=result.size;
-			if(size==0){
+			if(size==4){
 				$(".size span").html("单店");
 			}else if(size==1){
 				$(".size span").html("小型连锁");
@@ -83,12 +83,14 @@ $(function(){
 			$(".p1").html("1.额度:"+result.quota);
 			$(".p2").html("2.利率:"+result.feeRate);
 			$(".p3").html("3.周期:"+result.loanCycle);
-			var res=result.riskWarning;
-			var dto =res.replace(/\n/g,"^");
-			var array=dto.split("^");
-			for (i=0;i<array.length ;i++){
-				$(".tips").append("<p>"+array[i]+"</p>");
-			} 
+			
+			$('#riskWarning1').html(result.riskWarning);// 风险
+			$('#riskWarning1').show();//显示p标签
+			$('#evaluation1').html(result.evaluation);//商家评估
+			$('#evaluation1').show();//显示商家评估textarea标签
+			$('input').attr('disabled','disabled');//所有输入不可编辑
+			$('select').attr('disabled','disabled');//所有select不可选择
+			$('textarea').attr('disabled','disabled');//所有文本框不可编辑
 		}
 	});
 	//查询全年风控曲线图
