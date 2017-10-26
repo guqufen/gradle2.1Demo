@@ -471,7 +471,7 @@ public class ReportInfoProvider {
                     agentWhere="and agent_id='" + reportInfo.getAgentId() + "'";
                 }
                 SELECT( "tt.*," + "(select report.trading_area from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) trading_area,"
-                       + "(select report.industry from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) industry,"
+                       + "(select `first` from sys_industry where id = (select report.industry from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1)) industry,"
                        + "(select report.status from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) status,"
                        + "(select report.view_num from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) viewNum,"
                        + "(select report.report_timer from risk_report_info report where tt.inner_code = report.inner_code order by create_time desc limit 1) report_timer,"
