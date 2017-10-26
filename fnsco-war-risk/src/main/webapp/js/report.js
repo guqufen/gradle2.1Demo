@@ -98,7 +98,7 @@ function forwordReport(merchantId,innerCode){
 }
 
 function formatterSize(value, row, index) {
-	if (value == 0) {
+	if (value == 4) {
 		return "单店";
 	}
 	if (value == 1) {
