@@ -314,8 +314,9 @@ public class ReportService extends BaseService {
         		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}else {
-        		BigDecimal bd=new BigDecimal(tempBusiness1.getTurnover());
-        		yearReportDO.setTurnover(bd);
+        		BigDecimal bdFen=new BigDecimal(tempBusiness1.getTurnover());
+        		BigDecimal bdYuan=new BigDecimal("100").divide(bdFen, 2, BigDecimal.ROUND_UP);
+        		yearReportDO.setTurnover(bdYuan);
         		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}
@@ -407,8 +408,9 @@ public class ReportService extends BaseService {
         		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}else {
-        		BigDecimal bd=new BigDecimal(tempBusiness1.getOrderPrice());
-        		yearReportDO.setTurnover(bd);
+        		BigDecimal bdFen=new BigDecimal(tempBusiness1.getOrderPrice());
+        		BigDecimal bdYuan=new BigDecimal("100").divide(bdFen, 2, BigDecimal.ROUND_UP);
+        		yearReportDO.setTurnover(bdYuan);
         		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}
