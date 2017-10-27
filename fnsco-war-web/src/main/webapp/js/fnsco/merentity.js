@@ -24,27 +24,27 @@ $('#table').bootstrapTable({
         width: 150,
         formatter: operateFormatter
     },{
-        field: 'msgSubject',
+        field: 'mercName',
         title: '商户名称',
         width:'10%'
     },{
-        field: 'msgType',
+        field: 'legalPerson',
         title: '法人姓名'
     },{
-        field: 'msgSubTitle',
+        field: 'legalPersonMobile',
         title: '手机号',
         width:'10%'
     },{
-        field: 'modifyUser',
+        field: 'businessLicenseNum',
         title: '营业执照号'
     },{
-        field: 'sendTime',
-        title: '登记时间'
-//        formatter:formatTime
+        field: 'createTimer',
+        title: '登记时间',
+        formatter:formatTime
     },{
         field: 'status',
-        title: '状态'
-//        formatter: formatPushState
+        title: '状态',
+        formatter: formatStatus
     }]
 });
 //表格中操作按钮
@@ -70,9 +70,10 @@ function queryParams(params)
    var param ={
 	   currentPageNum : this.pageNumber,
 	   pageSize : this.pageSize,
-	   contactNum:$.trim($('#phoneNum').val()),
-	   merName:$.trim($('#merName').val()),
-	   cardNum:$.trim($('#cardNo').val())
+	   legalPerson:$.trim($('#legalPerson').val()),
+	   mercName:$.trim($('#merName').val()),
+	   legalPersonMobile:$.trim($('#legalPersonMobile').val()),
+	   status:$.trim($('#status').val())
    }
    return param;
 }
@@ -90,4 +91,27 @@ function responseHandler(res) {
             "total" : 0
         };
     }
+}
+function formatStatus(value, row, index){
+	if(!value){
+		return '--';
+	}
+	if(value == '0'){
+		return '删除';
+	}else if(value == '1'){
+		return '正常';
+	}else{
+		return '未知'
+	}
+}
+function formatTime(value, row, index){
+	return formatDateUtil(value);
+}
+//条件查询按钮事件
+function queryEvent() {
+	$('#table').bootstrapTable('refresh');
+}
+function resetEvent() {
+	$('#formSearch')[0].reset();
+	$('#table').bootstrapTable('refresh');
 }

@@ -41,6 +41,9 @@ public class MerchantEntityController extends BaseController {
 	@RequiresPermissions(value = { "m:merentity:list" })
 	public ResultPageDTO<MerchantEntity> merchatEntityIndex(MerchantEntity merchantEntity, Integer currentPageNum,
 			Integer pageSize) {
+		if(2 == merchantEntity.getStatus()) {
+			merchantEntity.setStatus(null);
+		}
 		logger.info("查询商户实体列表");
 		return merchantEntityService.queryPageList(merchantEntity, currentPageNum, pageSize);
 	}

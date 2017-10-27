@@ -211,13 +211,13 @@
   	<if test="condition.entityInnerCode != null" >
         and entity_inner_code = #{condition.entityInnerCode,jdbcType=VARCHAR}
       </if>
-      <if test="condition.mercName != null" >
-        and merc_name = #{condition.mercName,jdbcType=VARCHAR}
+      <if test="condition.mercName != null and condition.mercName != ''" >
+        and merc_name like CONCAT('%', #{condition.mercName,jdbcType=VARCHAR},'%')
       </if>
-      <if test="condition.legalPerson != null" >
+      <if test="condition.legalPerson != null and condition.legalPerson != ''" >
         and legal_person = #{condition.legalPerson,jdbcType=VARCHAR}
       </if>
-      <if test="condition.legalPersonMobile != null" >
+      <if test="condition.legalPersonMobile != null and condition.legalPersonMobile != ''" >
         and legal_person_mobile = #{condition.legalPersonMobile,jdbcType=VARCHAR}
       </if>
       <if test="condition.businessLicenseNum != null" >
@@ -226,7 +226,7 @@
       <if test="condition.cardType != null" >
         and card_type = #{condition.cardType,jdbcType=VARCHAR}
       </if>
-      <if test="condition.cardNum != null" >
+      <if test="condition.cardNum != null and condition.cardNum != ''" >
         and card_num = #{condition.cardNum,jdbcType=VARCHAR}
       </if>
       <if test="condition.status != null" >
@@ -254,18 +254,18 @@
   <!-- 条件查询总数 -->
   <select id="queryTotalByCondition" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" resultType="java.lang.Integer">
      select count(*)  from 
-     		m_merchant_core
+     		m_merchant_entity
   	 <where>
   	 <if test="entityInnerCode != null" >
         and entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR}
       </if>
       <if test="mercName != null" >
-       and  merc_name = #{mercName,jdbcType=VARCHAR}
+       and  merc_name CONCAT('%',#{mercName,jdbcType=VARCHAR},'%')
       </if>
-      <if test="legalPerson != null" >
+      <if test="legalPerson != null and legalPerson != ''" >
         and legal_person = #{legalPerson,jdbcType=VARCHAR}
       </if>
-      <if test="legalPersonMobile != null" >
+      <if test="legalPersonMobile != null and legalPersonMobile != ''" >
         and legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR}
       </if>
       <if test="businessLicenseNum != null" >
