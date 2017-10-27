@@ -123,4 +123,10 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 		return result;
 	}
 
+	@Override
+	public int addMerEntity(MerchantEntity record) {
+		
+		return 0;
+	}
+
 }
