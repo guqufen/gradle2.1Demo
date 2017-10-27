@@ -16,12 +16,13 @@
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
     <result column="last_modefy_timer" property="lastModefyTimer" jdbcType="TIMESTAMP" />
     <result column="last_modefy_user_id" property="lastModefyUserId" jdbcType="INTEGER" />
+    <result column="scores" property="scores" jdbcType="DECIMAL" />
   </resultMap>
   
   <sql id="Base_Column_List" >
     id, entity_inner_code, merc_name, legal_person, legal_person_mobile, business_license_num, 
     card_type, card_num, status, create_timer, create_source, create_user_id, last_modefy_timer, 
-    last_modefy_user_id
+    last_modefy_user_id,scores
   </sql>
  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -40,12 +41,12 @@
       legal_person, legal_person_mobile, business_license_num, 
       card_type, card_num, status, 
       create_timer, create_source, create_user_id, 
-      last_modefy_timer, last_modefy_user_id)
+      last_modefy_timer, last_modefy_user_id,scores)
     values (#{id,jdbcType=INTEGER}, #{entityInnerCode,jdbcType=VARCHAR}, #{mercName,jdbcType=VARCHAR}, 
       #{legalPerson,jdbcType=VARCHAR}, #{legalPersonMobile,jdbcType=VARCHAR}, #{businessLicenseNum,jdbcType=VARCHAR}, 
       #{cardType,jdbcType=VARCHAR}, #{cardNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{createTimer,jdbcType=TIMESTAMP}, #{createSource,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, 
-      #{lastModefyTimer,jdbcType=TIMESTAMP}, #{lastModefyUserId,jdbcType=INTEGER})
+      #{lastModefyTimer,jdbcType=TIMESTAMP}, #{lastModefyUserId,jdbcType=INTEGER}, #{scores,jdbcType=DECIMAL})
       )
   </insert>
   <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
@@ -93,6 +94,9 @@
       <if test="lastModefyUserId != null" >
         last_modefy_user_id,
       </if>
+      <if test="scores != null" >
+        scores,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -136,6 +140,9 @@
       </if>
       <if test="lastModefyUserId != null" >
         #{lastModefyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="scores != null" >
+        #{scores,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -182,6 +189,9 @@
       <if test="lastModefyUserId != null" >
         last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER},
       </if>
+      <if test="scores != null" >
+        scores = #{scores,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -199,7 +209,8 @@
       create_source = #{createSource,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=INTEGER},
       last_modefy_timer = #{lastModefyTimer,jdbcType=TIMESTAMP},
-      last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER}
+      last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER},
+      scores = #{scores,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!-- 条件分页查询 -->
@@ -211,13 +222,13 @@
   	<if test="condition.entityInnerCode != null" >
         and entity_inner_code = #{condition.entityInnerCode,jdbcType=VARCHAR}
       </if>
-      <if test="condition.mercName != null" >
-        and merc_name = #{condition.mercName,jdbcType=VARCHAR}
+      <if test="condition.mercName != null and condition.mercName != ''" >
+        and merc_name like CONCAT('%', #{condition.mercName,jdbcType=VARCHAR},'%')
       </if>
-      <if test="condition.legalPerson != null" >
+      <if test="condition.legalPerson != null and condition.legalPerson != ''" >
         and legal_person = #{condition.legalPerson,jdbcType=VARCHAR}
       </if>
-      <if test="condition.legalPersonMobile != null" >
+      <if test="condition.legalPersonMobile != null and condition.legalPersonMobile != ''" >
         and legal_person_mobile = #{condition.legalPersonMobile,jdbcType=VARCHAR}
       </if>
       <if test="condition.businessLicenseNum != null" >
@@ -226,7 +237,7 @@
       <if test="condition.cardType != null" >
         and card_type = #{condition.cardType,jdbcType=VARCHAR}
       </if>
-      <if test="condition.cardNum != null" >
+      <if test="condition.cardNum != null and condition.cardNum != ''" >
         and card_num = #{condition.cardNum,jdbcType=VARCHAR}
       </if>
       <if test="condition.status != null" >
@@ -247,6 +258,9 @@
       <if test="condition.lastModefyUserId != null" >
         and last_modefy_user_id = #{condition.lastModefyUserId,jdbcType=INTEGER}
       </if>
+      <if test="condition.scores != null" >
+        and scores = #{condition.scores,jdbcType=DECIMAL}
+      </if>
       </where>
       ORDER BY id DESC
       limit #{startRow} , #{perPageSize} 
@@ -254,18 +268,18 @@
   <!-- 条件查询总数 -->
   <select id="queryTotalByCondition" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" resultType="java.lang.Integer">
      select count(*)  from 
-     		m_merchant_core
+     		m_merchant_entity
   	 <where>
   	 <if test="entityInnerCode != null" >
         and entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR}
       </if>
-      <if test="mercName != null" >
-       and  merc_name = #{mercName,jdbcType=VARCHAR}
+      <if test="mercName != null and mercName != ''" >
+       and  merc_name like CONCAT('%',#{mercName,jdbcType=VARCHAR},'%')
       </if>
-      <if test="legalPerson != null" >
+      <if test="legalPerson != null and legalPerson != ''" >
         and legal_person = #{legalPerson,jdbcType=VARCHAR}
       </if>
-      <if test="legalPersonMobile != null" >
+      <if test="legalPersonMobile != null and legalPersonMobile != ''" >
         and legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR}
       </if>
       <if test="businessLicenseNum != null" >
@@ -294,6 +308,9 @@
       </if>
       <if test="lastModefyUserId != null" >
         and last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER}
+      </if>
+      <if test="scores != null" >
+        and scores = #{scores,jdbcType=DECIMAL}
       </if>
   	 </where>
   </select>

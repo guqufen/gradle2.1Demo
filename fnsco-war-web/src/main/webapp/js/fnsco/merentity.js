@@ -24,27 +24,30 @@ $('#table').bootstrapTable({
         width: 150,
         formatter: operateFormatter
     },{
-        field: 'msgSubject',
+        field: 'mercName',
         title: '商户名称',
         width:'10%'
     },{
-        field: 'msgType',
+        field: 'legalPerson',
         title: '法人姓名'
     },{
-        field: 'msgSubTitle',
+        field: 'legalPersonMobile',
         title: '手机号',
         width:'10%'
     },{
-        field: 'modifyUser',
+        field: 'businessLicenseNum',
         title: '营业执照号'
     },{
-        field: 'sendTime',
-        title: '登记时间'
-//        formatter:formatTime
+        field: 'cardNum',
+        title: '身份证'
+    },{
+        field: 'createTimer',
+        title: '登记时间',
+        formatter:formatTime
     },{
         field: 'status',
-        title: '状态'
-//        formatter: formatPushState
+        title: '状态',
+        formatter: formatStatus
     }]
 });
 //表格中操作按钮
@@ -70,9 +73,10 @@ function queryParams(params)
    var param ={
 	   currentPageNum : this.pageNumber,
 	   pageSize : this.pageSize,
-	   contactNum:$.trim($('#phoneNum').val()),
-	   merName:$.trim($('#merName').val()),
-	   cardNum:$.trim($('#cardNo').val())
+	   legalPerson:$.trim($('#search_legalPerson').val()),
+	   mercName:$.trim($('#merName').val()),
+	   legalPersonMobile:$.trim($('#search_legalPersonMobile').val()),
+	   status:$.trim($('#search_status').val())
    }
    return param;
 }
@@ -91,3 +95,86 @@ function responseHandler(res) {
         };
     }
 }
+function formatStatus(value, row, index){
+	if(!value){
+		return '--';
+	}
+	if(value == '0'){
+		return '删除';
+	}else if(value == '1'){
+		return '正常';
+	}else{
+		return '未知'
+	}
+}
+function formatTime(value, row, index){
+	return formatDateUtil(value);
+}
+//条件查询按钮事件
+function queryEvent() {
+	$('#table').bootstrapTable('refresh');
+}
+function resetEvent() {
+	$('#formSearch')[0].reset();
+	$('#table').bootstrapTable('refresh');
+}
+//新增按钮事件
+//$("#btn_add").click(function(){
+//    $("#myModalLabel").html("新增商户实体");
+//    $("#myModal input").val('').attr("disabled",false);
+//    $("#myModal select").attr("disabled",false);
+//    $(".sunmitBtn").show();
+//})
+$('.sunmitBtn').click(function(){
+    var mercName=$.trim($("#mercName").val());
+    var legalPerson=$.trim($("#legalPerson").val());
+    var legalPersonMobile=$.trim($("#legalPersonMobile").val());
+    var cardNum=$.trim($("#cardNum").val());
+    var businessLicenseNum=$.trim($("#businessLicenseNum").val());
+    
+    if(mercName=="" || (mercName != '' && mercName.length > 40)){
+        layer.msg('商户名称不合法!请重新输入');
+        return false;
+    }
+    
+    if(legalPerson=="" || (legalPerson != '' && legalPerson.length > 20)){
+        layer.msg('法人姓名不合法!请重新输入');
+        return false;
+    }
+    
+    var phonePattern = /^(?:13\d|15[890])-?\d{5}(\d{3}|\*{3})$/;
+    if(!phonePattern.test(legalPersonMobile)){
+        layer.msg('手机号码不合法!请重新输入');
+        return false;
+    }
+    
+    var cardNumPhonePattern = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;  
+    if(!cardNumPhonePattern.test(cardNum)){
+        layer.msg('身份证号不合法!请重新输入');
+        return false;
+    }
+    
+    if(businessLicenseNum == ''){
+        layer.msg('营业执照非法!请重新输入');
+        return false;
+    }
+    
+	$.ajax({
+		url:PROJECT_NAME+'/web/merchantentity/toAdd',
+		type:'POST',
+		data:$('#addForm').serialize(),
+		success:function(data){
+		   unloginHandler(data);
+		   if(data.success){
+	           layer.msg(data.message);
+	           $('#myModal').modal('hide');
+	           queryEvent("table");
+	        }else{
+	           layer.msg(data.message);
+	        }
+		},
+		error:function(e){
+			layer.msg('系统出错');
+		}
+	});
+});

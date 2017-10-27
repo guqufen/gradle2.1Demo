@@ -25,6 +25,13 @@ public interface MerchantEntityService {
 
     int updateByPrimaryKey(MerchantEntity record);
     
+    /**
+     * 增加
+     * @param record
+     * @return
+     */
+    int addMerEntity(MerchantEntity record);
+    
     /**分页查询
      * @param record
      * @param currentPageNum

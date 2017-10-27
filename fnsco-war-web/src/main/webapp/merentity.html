@@ -34,21 +34,21 @@
 					name="merName" placeholder="请输入需要搜索的商户名称">
 			  </div>
 			  <div class="col-sm-3">
-				<label class="control-label" for="txt_search_name">法人姓名:</label> <input
-					type="text" class="form-control" id="txt_search_name"
-					name="merId" placeholder="请输入需要搜索的法人姓名" />
+				<label class="control-label" for="search_legalPerson">法人姓名:</label> <input
+					type="text" class="form-control" id="search_legalPerson"
+					name="search_legalPerson" placeholder="请输入需要搜索的法人姓名" />
 			  </div>
 			  <div class="col-sm-3">
-				<label class="control-label" for="txt_search_name">手机号:</label> <input
-					type="text" class="form-control" id="txt_search_name"
-					name="merId" placeholder="请输入需要搜索的手机号" />
+				<label class="control-label" for="search_legalPersonMobile">手机号:</label> <input
+					type="text" class="form-control" id="search_legalPersonMobile"
+					name="search_legalPersonMobile" placeholder="请输入需要搜索的手机号" />
 			  </div>
 			  <div class="col-sm-3">
-				<label class="control-label" for="paytype">状态:</label> <select
-					id="paytype" name="paytype" class="form-control">
-					<option value="02" selected>全部</option>
-					<option value="00">刷卡</option>
-					<option value="01">扫码</option>
+				<label class="control-label" for="search_status">状态:</label> <select
+					id="search_status" name="search_status" class="form-control">
+					<option value='2' selected>全部</option>
+					<option value="0">删除</option>
+					<option value="1">正常</option>
 				</select>
 			  </div>
 	        </div>
@@ -83,6 +83,49 @@
 				</div>
 			</div>
 		</div>
+		<!-- model新增 start -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">新增商户实体</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tab-content">
+                            <form id="addForm" AUTOCOMPLETE="OFF">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="mercName">商户名称：</label>
+                                    <input type="text" class="form-control" id="mercName" name="mercName" required="required" placeholder="请输入合法的商户名称">
+                                </div>
+                                <div class="col-sm-12">
+                                   <label class="control-label" for="legalPerson">法人姓名：</label>
+                                    <input type="text" class="form-control" id="legalPerson" name="legalPerson" required="required" placeholder="请输入合法的法人姓名">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="legalPersonMobile">手机号码：</label>
+                                    <input type="text" value="" class="form-control" id="legalPersonMobile" name="legalPersonMobile" placeholder="请输入合法的手机号码">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="cardNum">身份证号：</label>
+                                    <input type="text" class="form-control" id="cardNum" name="cardNum" required="required" placeholder="请输入合法的身份证号">
+                                </div>
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="businessLicenseNum">营业执照：</label>
+                                    <input type="text" class="form-control" id="businessLicenseNum" name="businessLicenseNum" placeholder="请输入合法的营业执照">
+                                </div>
+                                <div class="col-sm-12">
+                                    <button class="sunmitBtn btn btn-primary" type="button">确认提交</button>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- model end -->
 	</div>
   </div>	
   <script src="js/bootstrap/jquery.min.js"></script>
