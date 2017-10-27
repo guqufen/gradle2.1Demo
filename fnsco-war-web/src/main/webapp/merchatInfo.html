@@ -73,7 +73,11 @@
 									type="text" class="form-control" id="txt_search_id">
 							</div>
 							<div class="col-sm-4">
-								<label class="control-label" for="txt_search_merId">商户号：</label> <input
+								<label class="control-label" for="txt_search_merId">渠道商户号：</label> <input
+									type="text" class="form-control" id="txt_search_merId">
+							</div>
+							<div class="col-sm-4">
+								<label class="control-label" for="txt_search_merId">内部商户号：</label> <input
 									type="text" class="form-control" id="txt_search_merId">
 							</div>
 							<div class="col-sm-4">
@@ -188,6 +192,11 @@
 								<div role="tabpanel" class="tab-pane active" id="home">
 									<form action="" id="mercore_form" method="post">
 										<div class="row">
+											<div class="col-sm-4">
+												<label class="control-label" for="merName">实体商户：</label> <input
+													type="text" class="form-control" id="merName"
+													name="merName" readonly="readonly" onclick="selectBusiness()">
+											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="merName">商户名：</label> <input
 													type="text" class="form-control" id="merName"
@@ -508,6 +517,11 @@
 										class="editBtn_save btn btn-success" id="editBtn_merchant"><span
 										class="glyphicon glyphicon-book"></span>保存</a>
 									<div class="row">
+										<div class="col-sm-4">
+											<label class="control-label" for="merName1">实体商户：</label> <input
+												type="text" class="form-control" id="merName1"
+												name="merName1" readonly="readonly" onclick="selectBusiness()">
+										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="merName1">商户名：</label> <input
 												type="text" class="form-control" id="merName1"
@@ -834,6 +848,11 @@
 								<!-- 基本信息 -->
 								<div role="tabpanel" class="tab-pane active" id="home2">
 									<div class="row">
+										<div class="col-sm-4">
+											<label class="control-label" for="merName2">实体商户：</label> <input
+												type="text" class="form-control" id="merName2"
+												name="merName2" readonly="readonly" onclick="selectBusiness()">
+										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="merName2">商户名：</label> <input
 												type="text" class="form-control" id="merName2"
@@ -1163,6 +1182,69 @@
 						</div>
 						<div class="modal-body" style="text-align: center;">
 							<img class="qrcode" width="500" height="500" src="" alt="生成二维码失败">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+			<!-- businessModel详情 start -->
+			<div class="modal " id="businessModal" tabindex="-1" role="dialog"
+				aria-labelledby="businessModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="businessModalLabel">支行信息</h4>
+						</div>
+						<div class="modal-body">
+							<form id="bankFormSearch" class="form-horizontal">
+								<div class="form-group" style="margin-top: 15px">
+									<div class="row col-sm-10">
+										<div class="col-sm-6">
+											<label class="control-label" for="txt_search_id">银行名称：</label>
+											<input type="text" class="form-control" id="txt_search_bank">
+										</div>
+										<div class="col-sm-6">
+											<label class="control-label" for="txt_search_name">所在省：</label>
+											<input type="text" class="form-control" id="txt_search_pro">
+										</div>
+										<div class="col-sm-6">
+											<label class="control-label" for="txt_search_price">所在市：</label>
+											<input type="text" class="form-control" id="txt_search_city">
+										</div>
+										<div class="col-sm-6">
+											<label class="control-label" for="txt_search_price">支行名称：</label>
+											<input type="text" class="form-control"
+												id="txt_search_branch">
+										</div>
+									</div>
+									<div class="col-sm-2" style="text-align: right;">
+										<button type="button" id="btn_query" class="btn btn-primary"
+											onclick="javascript:queryEvent('bankTable');">
+											<span class="glyphicon glyphicon-search"></span>查询
+										</button>
+										<button type="button" id="btn_reset" class="btn btn-default"
+											onclick="javascript:resetEvent('bankFormSearch','bankTable');">
+											<span class="glyphicon glyphicon-refresh"></span>重置
+										</button>
+									</div>
+								</div>
+							</form>
+							<div id="businessToolbar">
+								<button id="btn_select_business" type="button"
+									class="btn btn-success">
+									<span class="glyphicon glyphicon-file" aria-hidden="true"></span>确定选择
+								</button>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div id="businessTable" style="width: 100%;"></div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
