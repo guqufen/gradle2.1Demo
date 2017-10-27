@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantEntityDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantEntity" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
+    <result column="merc_name" property="mercName" jdbcType="VARCHAR" />
+    <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+    <result column="legal_person_mobile" property="legalPersonMobile" jdbcType="VARCHAR" />
+    <result column="business_license_num" property="businessLicenseNum" jdbcType="VARCHAR" />
+    <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+    <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_timer" property="createTimer" jdbcType="TIMESTAMP" />
+    <result column="create_source" property="createSource" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="last_modefy_timer" property="lastModefyTimer" jdbcType="TIMESTAMP" />
+    <result column="last_modefy_user_id" property="lastModefyUserId" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, entity_inner_code, merc_name, legal_person, legal_person_mobile, business_license_num, 
+    card_type, card_num, status, create_timer, create_source, create_user_id, last_modefy_timer, 
+    last_modefy_user_id
+  </sql>
+ 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_entity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from m_merchant_entity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+ 
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
+    insert into m_merchant_entity (id, entity_inner_code, merc_name, 
+      legal_person, legal_person_mobile, business_license_num, 
+      card_type, card_num, status, 
+      create_timer, create_source, create_user_id, 
+      last_modefy_timer, last_modefy_user_id)
+    values (#{id,jdbcType=INTEGER}, #{entityInnerCode,jdbcType=VARCHAR}, #{mercName,jdbcType=VARCHAR}, 
+      #{legalPerson,jdbcType=VARCHAR}, #{legalPersonMobile,jdbcType=VARCHAR}, #{businessLicenseNum,jdbcType=VARCHAR}, 
+      #{cardType,jdbcType=VARCHAR}, #{cardNum,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{createTimer,jdbcType=TIMESTAMP}, #{createSource,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, 
+      #{lastModefyTimer,jdbcType=TIMESTAMP}, #{lastModefyUserId,jdbcType=INTEGER})
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
+    insert into m_merchant_entity
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="entityInnerCode != null" >
+        entity_inner_code,
+      </if>
+      <if test="mercName != null" >
+        merc_name,
+      </if>
+      <if test="legalPerson != null" >
+        legal_person,
+      </if>
+      <if test="legalPersonMobile != null" >
+        legal_person_mobile,
+      </if>
+      <if test="businessLicenseNum != null" >
+        business_license_num,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="cardNum != null" >
+        card_num,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTimer != null" >
+        create_timer,
+      </if>
+      <if test="createSource != null" >
+        create_source,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="lastModefyTimer != null" >
+        last_modefy_timer,
+      </if>
+      <if test="lastModefyUserId != null" >
+        last_modefy_user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="entityInnerCode != null" >
+        #{entityInnerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mercName != null" >
+        #{mercName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPerson != null" >
+        #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonMobile != null" >
+        #{legalPersonMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseNum != null" >
+        #{businessLicenseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNum != null" >
+        #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTimer != null" >
+        #{createTimer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createSource != null" >
+        #{createSource,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastModefyTimer != null" >
+        #{lastModefyTimer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModefyUserId != null" >
+        #{lastModefyUserId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
+    update m_merchant_entity
+    <set >
+      <if test="entityInnerCode != null" >
+        entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mercName != null" >
+        merc_name = #{mercName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPerson != null" >
+        legal_person = #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonMobile != null" >
+        legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseNum != null" >
+        business_license_num = #{businessLicenseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNum != null" >
+        card_num = #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTimer != null" >
+        create_timer = #{createTimer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createSource != null" >
+        create_source = #{createSource,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastModefyTimer != null" >
+        last_modefy_timer = #{lastModefyTimer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModefyUserId != null" >
+        last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
+    update m_merchant_entity
+    set entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
+      merc_name = #{mercName,jdbcType=VARCHAR},
+      legal_person = #{legalPerson,jdbcType=VARCHAR},
+      legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR},
+      business_license_num = #{businessLicenseNum,jdbcType=VARCHAR},
+      card_type = #{cardType,jdbcType=VARCHAR},
+      card_num = #{cardNum,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_timer = #{createTimer,jdbcType=TIMESTAMP},
+      create_source = #{createSource,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      last_modefy_timer = #{lastModefyTimer,jdbcType=TIMESTAMP},
+      last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 条件分页查询 -->
+  <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+   	 from m_merchant_entity
+  	<where>
+  	<if test="condition.entityInnerCode != null" >
+        and entity_inner_code = #{condition.entityInnerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.mercName != null" >
+        and merc_name = #{condition.mercName,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.legalPerson != null" >
+        and legal_person = #{condition.legalPerson,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.legalPersonMobile != null" >
+        and legal_person_mobile = #{condition.legalPersonMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.businessLicenseNum != null" >
+        and business_license_num = #{condition.businessLicenseNum,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.cardType != null" >
+        and card_type = #{condition.cardType,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.cardNum != null" >
+        and card_num = #{condition.cardNum,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.status != null" >
+        and status = #{condition.status,jdbcType=INTEGER}
+      </if>
+      <if test="condition.createTimer != null" >
+        and create_timer = #{condition.createTimer,jdbcType=TIMESTAMP}
+      </if>
+      <if test="condition.createSource != null" >
+        and create_source = #{condition.createSource,jdbcType=VARCHAR}
+      </if>
+      <if test="condition.createUserId != null" >
+        and create_user_id = #{condition.createUserId,jdbcType=INTEGER}
+      </if>
+      <if test="condition.lastModefyTimer != null" >
+        and last_modefy_timer = #{condition.lastModefyTimer,jdbcType=TIMESTAMP}
+      </if>
+      <if test="condition.lastModefyUserId != null" >
+        and last_modefy_user_id = #{condition.lastModefyUserId,jdbcType=INTEGER}
+      </if>
+      </where>
+      ORDER BY id DESC
+      limit #{startRow} , #{perPageSize} 
+  </select>
+  <!-- 条件查询总数 -->
+  <select id="queryTotalByCondition" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" resultType="java.lang.Integer">
+     select count(*)  from 
+     		m_merchant_core
+  	 <where>
+  	 <if test="entityInnerCode != null" >
+        and entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="mercName != null" >
+       and  merc_name = #{mercName,jdbcType=VARCHAR}
+      </if>
+      <if test="legalPerson != null" >
+        and legal_person = #{legalPerson,jdbcType=VARCHAR}
+      </if>
+      <if test="legalPersonMobile != null" >
+        and legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR}
+      </if>
+      <if test="businessLicenseNum != null" >
+        and business_license_num = #{businessLicenseNum,jdbcType=VARCHAR}
+      </if>
+      <if test="cardType != null" >
+        and card_type = #{cardType,jdbcType=VARCHAR}
+      </if>
+      <if test="cardNum != null" >
+       and  card_num = #{cardNum,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null" >
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="createTimer != null" >
+       and  create_timer = #{createTimer,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createSource != null" >
+        and create_source = #{createSource,jdbcType=VARCHAR}
+      </if>
+      <if test="createUserId != null" >
+        and create_user_id = #{createUserId,jdbcType=INTEGER}
+      </if>
+      <if test="lastModefyTimer != null" >
+        and last_modefy_timer = #{lastModefyTimer,jdbcType=TIMESTAMP}
+      </if>
+      <if test="lastModefyUserId != null" >
+        and last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER}
+      </if>
+  	 </where>
+  </select>
+</mapper>
