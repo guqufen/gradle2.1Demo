@@ -1,5 +1,6 @@
 package net.fnsco.bigdata.service.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -38,6 +39,17 @@ public class MerchantEntity {
     private Date lastModefyTimer;
 
     private Integer lastModefyUserId;
+    
+    private BigDecimal scores;
+    
+
+	public BigDecimal getScores() {
+		return scores;
+	}
+
+	public void setScores(BigDecimal scores) {
+		this.scores = scores;
+	}
 
 	public Integer getId() {
 		return id;
