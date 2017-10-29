@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.beust.jcommander.Strings;
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
 
@@ -27,6 +28,7 @@ import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantContactDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileTempDao;
 import net.fnsco.bigdata.service.dao.master.MerchantPosDao;
@@ -37,6 +39,7 @@ import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantFileTemp;
@@ -92,6 +95,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     
     @Autowired
     private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
+    
+    @Autowired
+    private MerchantEntityDao   merchantEntityDao;
 
     /**
      * @todo 新增加商家
@@ -153,6 +159,14 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             if (temp != null) {
                 core.setOpenFixQr(temp);
             }
+            //查询名称
+            if(!Strings.isStringEmpty(core.getInnerCode())) {
+            	MerchantEntity merEntity = merchantEntityDao.queryMerEntityByInnerCode(core.getInnerCode());
+            	if(null != merEntity) {
+            		core.setEntityMerName(merEntity.getMercName());
+            	}
+            }
+            
         }
         int totalNum = merchantCoreDao.queryTotalByCondition(merchantCore);
         ResultPageDTO<MerchantCore> result = new ResultPageDTO<MerchantCore>(totalNum, datas);

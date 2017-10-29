@@ -59,4 +59,10 @@ public interface MerchantEntityDao {
      * @return
      */
     int queryTotalByCondition(MerchantEntity record);
+    /**
+     * 
+     * @param innerCode
+     * @return
+     */
+    MerchantEntity queryMerEntityByInnerCode(@Param("innerCode")String innerCode);
 }
