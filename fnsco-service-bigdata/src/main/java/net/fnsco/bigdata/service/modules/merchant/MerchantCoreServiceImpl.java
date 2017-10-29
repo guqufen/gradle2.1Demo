@@ -159,14 +159,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             if (temp != null) {
                 core.setOpenFixQr(temp);
             }
-            //查询名称
-            if(!Strings.isStringEmpty(core.getInnerCode())) {
-            	MerchantEntity merEntity = merchantEntityDao.queryMerEntityByInnerCode(core.getInnerCode());
-            	if(null != merEntity) {
-            		core.setEntityMerName(merEntity.getMercName());
-            	}
-            }
-            
         }
         int totalNum = merchantCoreDao.queryTotalByCondition(merchantCore);
         ResultPageDTO<MerchantCore> result = new ResultPageDTO<MerchantCore>(totalNum, datas);
@@ -241,6 +233,15 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         MerchantCore core = merchantCoreDao.queryAllById(id);
         if (core == null) {
             return result.fail();
+        }
+        
+      //查询名称
+        if(!Strings.isStringEmpty(core.getInnerCode())) {
+        	MerchantEntity merEntity = merchantEntityDao.queryMerEntityByInnerCode(core.getInnerCode());
+        	if(null != merEntity) {
+        		core.setEntityMerName(merEntity.getMercName());
+        		core.setEntityInnerCode(merEntity.getEntityInnerCode());
+        	}
         }
         return result.success(core);
     }
@@ -396,7 +397,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             if (res != 1) {
                 return ResultDTO.fail();
             }
-            
         } else {
             merchantCoreDao.updateByPrimaryKeySelective(merchantCore);
         }
