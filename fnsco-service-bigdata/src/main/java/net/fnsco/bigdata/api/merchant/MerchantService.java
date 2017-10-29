@@ -33,6 +33,17 @@ public interface MerchantService {
     public MerchantChannel getMerChannel(String merCode, String channelType);
     /**
      * 
+     * getMerChannelByInnerCodeType:(根据内部商务号和渠道类型获取渠道信息)
+     *
+     * @param innerCode
+     * @param channelType
+     * @return   MerchantChannel    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public MerchantChannel getMerChannelByInnerCodeType(String innerCode, String channelType);
+    /**
+     * 
      * updatePosName:(更新pos机名称，拉卡拉机器使用)
      *
      * @param snCode

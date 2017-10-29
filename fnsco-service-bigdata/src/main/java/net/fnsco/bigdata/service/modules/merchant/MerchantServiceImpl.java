@@ -80,6 +80,17 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         return merchantChannel;
     }
     /**
+     * 获取商户渠道信息信息
+     * @param merNum 商户号
+     * @param channelType
+     * @return
+     */
+    @Override
+    public MerchantChannel getMerChannelByInnerCodeType(String innerCode, String channelType) {
+        MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, channelType);
+        return merchantChannel;
+    }
+    /**
       * 
       * @param merNum 商户号
       * @param channelType

@@ -673,7 +673,10 @@ function selectBank(id){
   $("body").addClass('modal-open-custom');
   $('#subBankName'+id).addClass("active");
 }
-
+function selectBusiness(){
+  $("body").addClass('modal-open-custom');
+  $('#businessModal').modal('show')
+}
 //添加银行卡列表
 $("#btn_addBankCard").click(function(){
   BankCardlList=BankCardlList+1;
