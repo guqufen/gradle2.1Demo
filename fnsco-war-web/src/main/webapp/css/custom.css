@@ -7,6 +7,12 @@
 .bootstrap-table .table#bankTable{
 	padding:0!important;
 }
+.bootstrap-table .table#businessTable{
+	padding:0!important;
+}
+#businessToolbar{
+	padding:0 10px;
+}
 table thead{
 	/*color: #fff;
     background: #2f4050;*/
@@ -349,4 +355,7 @@ table td{
 .modal-open-custom .modal{
     overflow-x: hidden;
     overflow-y: auto;
+}
+#businessTable{
+	padding:0;
 }
