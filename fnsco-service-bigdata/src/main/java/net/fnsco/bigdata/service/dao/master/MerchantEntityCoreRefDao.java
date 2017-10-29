@@ -19,6 +19,13 @@ public interface MerchantEntityCoreRefDao {
     MerchantEntityCoreRef selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(MerchantEntityCoreRef record);
+    
+    /**
+     * 根据条件更新
+     * @param record
+     * @return
+     */
+    int updateByInnerCode(MerchantEntityCoreRef record);
 
     int updateByPrimaryKey(MerchantEntityCoreRef record);
     

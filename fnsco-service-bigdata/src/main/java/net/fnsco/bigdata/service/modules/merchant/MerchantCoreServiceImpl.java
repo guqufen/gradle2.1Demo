@@ -26,6 +26,7 @@ import net.fnsco.bigdata.service.dao.master.MerchantBankDao;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantContactDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileTempDao;
 import net.fnsco.bigdata.service.dao.master.MerchantPosDao;
@@ -36,6 +37,7 @@ import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantFileTemp;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
@@ -87,6 +89,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
     @Autowired
     private MerchantPosDao      merchantPosDao;
+    
+    @Autowired
+    private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
 
     /**
      * @todo 新增加商家
@@ -361,6 +366,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
      * @auth tangliang
      * @date 2017年6月30日 下午4:04:57
      */
+    @Transactional
     @Override
     public ResultDTO<String> doAddMerCore(MerchantCore merchantCore) {
 
@@ -375,10 +381,22 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             if (res != 1) {
                 return ResultDTO.fail();
             }
+            
         } else {
             merchantCoreDao.updateByPrimaryKeySelective(merchantCore);
         }
-
+        
+        MerchantEntityCoreRef record = new MerchantEntityCoreRef();
+        record.setInnerCode(merchantCore.getInnerCode());
+        int total = merchantEntityCoreRefDao.countByCondition(record);
+        record.setEntityInnerCode(merchantCore.getEntityInnerCode());
+        if(total == 0) {
+        	record.setCreateTime(new Date());
+        	merchantEntityCoreRefDao.insertSelective(record);
+        }else {
+        	merchantEntityCoreRefDao.updateByInnerCode(record);
+        }
+        
         return new ResultDTO<>(true, merchantCore.getInnerCode(), CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
 
     }

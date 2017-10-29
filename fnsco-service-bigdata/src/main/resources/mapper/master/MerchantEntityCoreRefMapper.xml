@@ -98,4 +98,20 @@
       </if>
     </where>
   </select>
+  <!-- 根据条件更新操作 -->
+  <update id="updateByInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef">
+     update m_merchant_core_entity_ref
+    <set >
+      <if test="entityInnerCode != null" >
+        entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="innerCode != null" >
+        inner_code = #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </update>
 </mapper>
