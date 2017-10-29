@@ -1372,9 +1372,9 @@ function editData(id){
             var mercFlag = $('input[name="mercFlag1"]').val();
             var agentId = $('#agentId1').val();
             var entityInnerCode = $('#entityMerName1').next('input[name="entityInnerCode"]').val();
-            
+            var innerCode=$('#innerCode').val();
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
-            		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode};
+            		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'innerCode':innerCode};
             
             console.log(params);
             $.ajax({

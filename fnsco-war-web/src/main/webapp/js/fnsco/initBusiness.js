@@ -123,3 +123,8 @@ $('#btn_select_business').click(function(){
     dataId=dataId.concat(select_data[i].id);
   }
 });
+
+//取消选择支行
+$("#businessModal .close").click(function(){
+  $(".entityMerName").removeClass('active');
+})
