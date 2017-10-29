@@ -1,9 +1,14 @@
 function selectBusiness(num){
   // num =0 等于新增
   // num =1 等于修改
-  $("#entityMerName"+num).addClass('active');
+  // if(num=null){//新增
+  //   $("#entityMerName").addClass('active');
+  // }else{
+    $("#entityMerName"+num).addClass('active');
+  // }
   $("body").addClass('modal-open-custom');
-  $('#businessModal').modal('show')
+  $('#businessModal').modal('show');
+  $("#businessFormSearch input").val('');
 }
 
 
@@ -84,7 +89,10 @@ function queryBusinessParams(params)
    var param ={
        currentPageNum : this.pageNumber,
        pageSize : this.pageSize,
-       status:'2'
+       status:'2',
+       legalPerson:$.trim($('#txt_search_legalPerson').val()),
+       mercName:$.trim($('#txt_search_merName').val()),
+       legalPersonMobile:$.trim($('#txt_search_phoneNum').val())  
    }
    return param;
 }
@@ -117,6 +125,7 @@ $('#btn_select_business').click(function(){
   $(".entityMerName.active").parents().next().next().next().next().next().find('.form-control').val(select_data.cardNum);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.form-control').val(select_data.businessLicenseNum);
   $('#businessModal').modal('hide');
+  $(".entityMerName").removeClass('active');
   // $(".subBankName").removeClass('active');
   var dataId=[];
   for(var i=0;i<select_data.length;i++){

@@ -131,55 +131,53 @@
         <!-- model详情start -->
         <div class="modal fade" id="myDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
             <div class="modal-dialog" role="document">
-                <div class="modal-content" style="width:1400px;margin-left:-320px">
+                <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel">商户实体详情</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="tab-content">
-                            <form id="formSearch" class="form-horizontal">
-						      <div class="form-group" style="margin-top: 15px">
-						        <div class="row col-sm-10">
-						          <div class="col-sm-4">
-									<label class="control-label" for="detail_merName">商户名称:</label> <input
-										type="text" class="form-control" id="detail_merName"
-										name="detail_merName" disabled="disabled">
-								  </div>
-								  <div class="col-sm-4">
-									<label class="control-label" for="detail_legalPerson">法人姓名:</label> <input
-										type="text" class="form-control" id="detail_legalPerson"
-										name="detail_legalPerson"disabled="disabled" />
-								  </div>
-								  <div class="col-sm-4">
-									<label class="control-label" for="detail_legalPersonMobile">手机号:</label> <input
-										type="text" class="form-control" id="detail_legalPersonMobile"
-										name="detail_legalPersonMobile" disabled="disabled"/>
-								  </div>
-								  <div class="col-sm-4">
-									<label class="control-label" for="detail_cardNum">身份证号:</label> <input
-										type="text" class="form-control" id="detail_cardNum"
-										name="detail_cardNum" disabled="disabled"/>
-								  </div>
-								   <div class="col-sm-4">
-									<label class="control-label" for="detail_businessLicenseNum">营业执照:</label> <input
-										type="text" class="form-control" id="detail_businessLicenseNum"
-										name="detail_businessLicenseNum" disabled="disabled"/>
-								  </div>
-						        </div>
-						      </div>
-						   </form>
-						   <div class="ibox float-e-margins">
-								<div class="ibox-content">
-									<div class="row row-lg">
-										<div class="col-sm-12">
-										    <input type="hidden" id="entityInnerCode">
-											<table id="detail_table"></table>
-										</div>
+                        <form id="formSearch" class="form-horizontal">
+					      <div class="form-group" style="margin-top: 15px">
+					        <div class="row col-sm-12">
+					          <div class="col-sm-4">
+								<label class="control-label" for="detail_merName">商户名称:</label> <input
+									type="text" class="form-control" id="detail_merName"
+									name="detail_merName" disabled="disabled">
+							  </div>
+							  <div class="col-sm-4">
+								<label class="control-label" for="detail_legalPerson">法人姓名:</label> <input
+									type="text" class="form-control" id="detail_legalPerson"
+									name="detail_legalPerson"disabled="disabled" />
+							  </div>
+							  <div class="col-sm-4">
+								<label class="control-label" for="detail_legalPersonMobile">手机号:</label> <input
+									type="text" class="form-control" id="detail_legalPersonMobile"
+									name="detail_legalPersonMobile" disabled="disabled"/>
+							  </div>
+							  <div class="col-sm-4">
+								<label class="control-label" for="detail_cardNum">身份证号:</label> <input
+									type="text" class="form-control" id="detail_cardNum"
+									name="detail_cardNum" disabled="disabled"/>
+							  </div>
+							   <div class="col-sm-4">
+								<label class="control-label" for="detail_businessLicenseNum">营业执照:</label> <input
+									type="text" class="form-control" id="detail_businessLicenseNum"
+									name="detail_businessLicenseNum" disabled="disabled"/>
+							  </div>
+					        </div>
+					      </div>
+					   </form>
+					   <div class="float-e-margins">
+							<div class="ibox-content">
+								<div class="row row-lg">
+									<div class="col-sm-12">
+									    <input type="hidden" id="entityInnerCode">
+										<table id="detail_table"></table>
 									</div>
 								</div>
 							</div>
-                        </div>
+						</div>
                     </div>
                 </div>
             </div>

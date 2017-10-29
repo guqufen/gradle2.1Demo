@@ -1040,10 +1040,11 @@ function contactHtml(num){
         var contactTelphone=$("#"+conId+" .contact-list").eq(i).find($('.contactTelphone')).val();
         var contactJobs=$("#"+conId+" .contact-list").eq(i).find($('.contactJobs')).val();
         var innerCode = $('#innerCode').val();
-        var id=$("#terminal-con1 .contact-list").eq(i).find($('.remove-icon')).attr('editId');
+        var id=$("#contact-con1 .contact-list").eq(i).find($('.remove-icon')).attr('editId');
         if(!innerCode){
           layer.msg('操作错误!');return ;
         }
+        console.log(id);
         if(!id || id<0){
             concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
           }else{
@@ -1192,6 +1193,9 @@ function editData(id){
         $('input[name="taxRegistCode1"]').val(data.data.taxRegistCode);
         $('input[name="registAddress1"]').val(data.data.registAddress);
         $('input[name="mercFlag1"]').val(data.data.mercFlag);
+
+        $('#entityMerName1').val(data.data.entityMerName);
+        $('#entityMerName1').next('.entityInnerCode').val(data.data.entityInnerCode);
         requestAgent(data.data.agentId);
 
         //资料文件
@@ -1505,6 +1509,9 @@ function detailsData(id){
         $('input[name="taxRegistCode2"]').val(data.data.taxRegistCode);
         $('input[name="registAddress2"]').val(data.data.registAddress);
         $('input[name="mercFlag2"]').val(data.data.mercFlag);
+
+        $('#entityMerName2').val(data.data.entityMerName);
+        $('#entityMerName2').next('.entityInnerCode').val(data.data.entityInnerCode);
         requestAgent(data.data.agentId);
         // 银行卡信息
         var bankCardLen=data.data.banks.length;

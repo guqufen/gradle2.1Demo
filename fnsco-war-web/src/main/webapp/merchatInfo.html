@@ -193,10 +193,10 @@
 									<form action="" id="mercore_form" method="post">
 										<div class="row">
 											<div class="col-sm-4">
-												<label class="control-label" for="entityMerName">实体商户：</label>
+												<label class="control-label" for="entityMerName0">实体商户：</label>
 												<input
-													type="text" class="form-control entityMerName" id="entityMerName"
-													name="entityMerName" readonly="readonly" required="required" onclick="selectBusiness()">
+													type="text" class="form-control entityMerName" id="entityMerName0"
+													name="entityMerName0" required="required" onclick="selectBusiness(0)">
 												<input type="hidden" name="entityInnerCode" class="entityInnerCode">
 											</div>
 											<div class="col-sm-4">
@@ -522,7 +522,7 @@
 										<div class="col-sm-4">
 											<label class="control-label" for="entityMerName1">实体商户：</label> <input
 												type="text" class="form-control entityMerName" id="entityMerName1"
-												name="entityMerName1" readonly="readonly" required="required" onclick="selectBusiness(1)">
+												name="entityMerName1" required="required" onclick="selectBusiness(1)">
 											<input type="hidden" name="entityInnerCode" class="entityInnerCode">
 										</div>
 										<div class="col-sm-4">
@@ -854,7 +854,7 @@
 										<div class="col-sm-4">
 											<label class="control-label" for="entityMerName2">实体商户：</label> <input
 												type="text" class="form-control entityMerName" id="entityMerName2"
-												name="entityMerName2" readonly="readonly" required="required" onclick="selectBusiness()">
+												name="entityMerName2" required="required" onclick="selectBusiness()">
 											<input type="hidden" name="entityInnerCode" class="entityInnerCode">
 										</div>
 										<div class="col-sm-4">
@@ -1205,37 +1205,29 @@
 							<h4 class="modal-title" id="businessModalLabel">实体商户</h4>
 						</div>
 						<div class="modal-body">
-							<form id="bankFormSearch" class="form-horizontal">
+							<form id="businessFormSearch" class="form-horizontal">
 								<div class="form-group" style="margin-top: 15px">
 									<div class="row col-sm-10">
 										<div class="col-sm-6">
-											<label class="control-label" for="txt_search_id">商户名称：</label>
-											<input type="text" class="form-control" id="txt_search_bank">
+											<label class="control-label" for="txt_search_merName">商户名称：</label>
+											<input type="text" class="form-control" id="txt_search_merName">
 										</div>
 										<div class="col-sm-6">
-											<label class="control-label" for="txt_search_name">法人姓名：</label>
-											<input type="text" class="form-control" id="txt_search_pro">
+											<label class="control-label" for="txt_search_legalPerson">法人姓名：</label>
+											<input type="text" class="form-control" id="txt_search_legalPerson">
 										</div>
 										<div class="col-sm-6">
-											<label class="control-label" for="txt_search_price">手机号：</label>
-											<input type="text" class="form-control" id="txt_search_city">
-										</div>
-										<div class="col-sm-6">
-											<label class="control-label" for="txt_search_price">状态：</label>
-											<select class="form-control">
-												<option value="0">全部</option>
-												<option value="1">删除</option>
-												<option value="2">正常</option>
-											</select>
+											<label class="control-label" for="txt_search_phoneNum">手机号：</label>
+											<input type="text" class="form-control" id="txt_search_phoneNum">
 										</div>
 									</div>
 									<div class="col-sm-2" style="text-align: right;">
 										<button type="button" id="btn_query" class="btn btn-primary"
-											onclick="javascript:queryEvent('bankTable');">
+											onclick="javascript:queryEvent('businessTable');">
 											<span class="glyphicon glyphicon-search"></span>查询
 										</button>
 										<button type="button" id="btn_reset" class="btn btn-default"
-											onclick="javascript:resetEvent('bankFormSearch','bankTable');">
+											onclick="javascript:resetEvent('businessFormSearch','businessTable');">
 											<span class="glyphicon glyphicon-refresh"></span>重置
 										</button>
 									</div>
