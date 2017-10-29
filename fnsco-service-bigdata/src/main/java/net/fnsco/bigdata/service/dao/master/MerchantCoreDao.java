@@ -88,6 +88,16 @@ public interface MerchantCoreDao {
      * @since  CodingExample　Ver 1.1
      */
     List<MerChantCoreDTO> queryAllByUseraId(@Param("userId")Integer userId);
+    /**
+     * 
+     * queryAllByUseraId:(这里用一句话描述这个方法的作用) 根据登录的APPUSERID查询关联的商户实体
+     * @param userId
+     * @return    设定文件
+     * @return List<MerchantCore>    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    MerChantCoreDTO getMerChantCoreByInnerCode(@Param("innerCode")String innerCode);
     
     /**
      * queryDetailById:(这里用一句话描述这个方法的作用) 根据商家ID 查询详情

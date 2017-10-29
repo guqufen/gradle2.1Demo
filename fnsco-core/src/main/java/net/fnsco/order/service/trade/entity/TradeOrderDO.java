@@ -1,6 +1,5 @@
 package net.fnsco.order.service.trade.entity;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class TradeOrderDO {
@@ -120,29 +119,7 @@ public class TradeOrderDO {
      */
     private String innerCode;
 
-    private String mercName;
 
-    /**
-     * mercName
-     *
-     * @return  the mercName
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public String getMercName() {
-        return mercName;
-    }
-
-    /**
-     * mercName
-     *
-     * @param   mercName    the mercName to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setMercName(String mercName) {
-        this.mercName = mercName;
-    }
 
     public Integer getId() {
         return id;
@@ -327,6 +304,8 @@ public class TradeOrderDO {
     public void setInnerCode(String innerCode) {
         this.innerCode = innerCode;
     }
+
+
 
     @Override
     public String toString() {

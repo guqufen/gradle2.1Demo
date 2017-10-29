@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.trade.TradeReportService;
+import net.fnsco.order.service.trade.TradeOrderService;
 
 @EnableScheduling
 public class TimerConfig {
@@ -19,7 +20,8 @@ public class TimerConfig {
     private AppPushService     appPushService;
     @Autowired
     private TradeReportService tradeReportService;
-
+    @Autowired
+    private TradeOrderService tradeOrderService;
     /**
      * spring boot 定时任务
      */
@@ -99,5 +101,13 @@ public class TimerConfig {
     @Scheduled(cron = "0 0 8 ? * MON") //每周一上午八点推送周报
     public void pushWeeklyData() {
         appPushService.sendWeeklyDataMgs();
+    }
+    
+    /**
+     * spring boot 定时更新订单
+     */
+    //    @Scheduled(cron = "0 */5 * * * ?")
+    public void getOrderStatues() {
+        tradeOrderService.updateOrderStatues();
     }
 }

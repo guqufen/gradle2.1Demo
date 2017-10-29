@@ -80,6 +80,21 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         return merchantChannel;
     }
     /**
+     * 查询渠道商户信息
+     * (non-Javadoc)
+     * @see net.fnsco.bigdata.api.merchant.MerchantService#getMerChantDetailById(java.lang.Integer)
+     * @auth tangliang
+     * @date 2017年6月30日 上午11:19:42
+     */
+    @Override
+    public MerChantCoreDTO getMerChantCoreByInnerCode(String innerCode) {
+        if (null == innerCode) {
+            return null;
+        }
+        MerChantCoreDTO result = merchantCoreDao.getMerChantCoreByInnerCode(innerCode);
+        return result;
+    }
+    /**
      * 获取商户渠道信息信息
      * @param merNum 商户号
      * @param channelType

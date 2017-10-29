@@ -172,4 +172,15 @@ public interface MerchantService {
      */
     MerchantTerminal getTerminalDetailByCode(String terminalCode);
     
+    /**
+     * 
+     * getMerChantCoreByInnerCode:(根据内部商务号查询商户信息)
+     *
+     * @param innerCode
+     * @return   MerChantCoreDTO    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    MerChantCoreDTO getMerChantCoreByInnerCode(String innerCode);
+    
 }
