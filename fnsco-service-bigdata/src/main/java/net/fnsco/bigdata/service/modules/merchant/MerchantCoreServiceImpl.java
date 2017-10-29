@@ -204,6 +204,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             //根据id找到innerCode  删除店铺绑定关系表和用户角色表
             merchantUserRelDao.deleteByMerCoreIds(ids);
             appUserMerchantDao.deleteByMerCoreIds(ids);
+            merchantEntityCoreRefDao.deleteByMerCoreIds(ids);
             result = ResultDTO.success("删除成功!");
         } else {
             result = ResultDTO.fail("删除失败");

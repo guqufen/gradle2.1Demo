@@ -212,6 +212,7 @@ function editData(id){
         type:'POST',
         data:{'id':id},
         success:function(data){
+        	unloginHandler(data);
         	var entity = data.data;
         	if(data.success){
         		var entity = data.data;
@@ -243,6 +244,7 @@ function detailsData(id){
         type:'POST',
         data:{'id':id},
         success:function(data){
+        	unloginHandler(data);
         	var entity = data.data;
         	if(data.success){
         		var entity = data.data;

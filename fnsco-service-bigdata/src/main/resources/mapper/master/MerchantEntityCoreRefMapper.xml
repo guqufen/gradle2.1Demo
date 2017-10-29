@@ -114,4 +114,13 @@
     </set>
     where inner_code = #{innerCode,jdbcType=VARCHAR}
   </update>
+  <!-- 按照渠道商户ID删除关系 -->
+  <delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
+     DELETE  FROM m_merchant_core_entity_ref WHERE inner_code in (
+		 SELECT inner_code FROM m_merchant_core WHERE id in 
+		  <foreach item="item" collection="array" open="(" separator="," close=")">
+	       #{item}
+	     </foreach>
+		)
+  </delete>
 </mapper>

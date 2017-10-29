@@ -20,6 +20,12 @@ public interface MerchantEntityCoreRefDao {
 
     int updateByPrimaryKeySelective(MerchantEntityCoreRef record);
     
+    /**删除关系
+     * @param ids
+     * @return
+     */
+    int deleteByMerCoreIds(Integer[] ids);
+    
     /**
      * 根据条件更新
      * @param record
