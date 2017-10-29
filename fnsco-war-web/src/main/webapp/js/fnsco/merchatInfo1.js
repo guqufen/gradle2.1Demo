@@ -51,7 +51,6 @@ $('.close').click(function(){
 //初始化表格
 initTableData();
 initBanksTableData();
-initBusiness();
 function initTableData(){
   $('#table').bootstrapTable({
         sidePagination:'server',
@@ -173,76 +172,6 @@ function initBanksTableData(){
             title: '开户行行号'
         }]
     });
-}
-function initBusiness(){
-  $('#businessTable').bootstrapTable({
-      search: false, //是否启动搜索栏
-      sidePagination:'server',
-      url:PROJECT_NAME+'/web/merchantentity/query',
-      showRefresh: false,//是否显示刷新按钮
-      showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
-      toolbar: '#toolbar',  //工具按钮用哪个容器
-      striped: true,   //是否显示行间隔色
-      cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-      pagination: true,   //是否显示分页（*）
-      sortable: true,   //是否启用排序
-      sortOrder: "asc",   //排序方式
-      pageNumber:1,   //初始化加载第一页，默认第一页
-      pageSize: 15,   //每页的记录行数（*）
-      pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
-      queryParams:queryParams,
-      responseHandler:responseHandler,//处理服务器返回数据
-      columns: [{
-          field: 'id',
-          title: '操作',
-          width:'10%',
-          align: 'center',
-          width: 150,
-          formatter: operateFormatter
-      },{
-          field: 'mercName',
-          title: '商户名称',
-          width:'10%'
-      },{
-          field: 'legalPerson',
-          title: '法人姓名'
-      },{
-          field: 'legalPersonMobile',
-          title: '手机号',
-          width:'10%'
-      },{
-          field: 'businessLicenseNum',
-          title: '营业执照号'
-      },{
-          field: 'cardNum',
-          title: '身份证'
-      },{
-          field: 'createTimer',
-          title: '登记时间',
-          formatter:formatTime
-      },{
-          field: 'status',
-          title: '状态',
-          formatter: formatStatus
-      }]
-  });
-}
-//格式化实体商户时间
-function formatTime(value, row, index){
-  return formatDateUtil(value);
-}
-//格式化实体商户状态
-function formatStatus(value, row, index){
-  if(!value){
-    return '--';
-  }
-  if(value == '0'){
-    return '删除';
-  }else if(value == '1'){
-    return '正常';
-  }else{
-    return '未知'
-  }
 }
 //商户注册来源格式处理
 function formatSource(value, row, index){
@@ -743,10 +672,6 @@ function bankCardHtml(num){
 function selectBank(id){
   $("body").addClass('modal-open-custom');
   $('#subBankName'+id).addClass("active");
-}
-function selectBusiness(){
-  $("body").addClass('modal-open-custom');
-  $('#businessModal').modal('show')
 }
 //添加银行卡列表
 $("#btn_addBankCard").click(function(){
@@ -1446,9 +1371,10 @@ function editData(id){
             var registAddress = $('input[name="registAddress1"]').val();
             var mercFlag = $('input[name="mercFlag1"]').val();
             var agentId = $('#agentId1').val();
+            var entityInnerCode = $('#entityMerName1').next('input[name="entityInnerCode"]').val();
             
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
-            		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId};
+            		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode};
             
             console.log(params);
             $.ajax({
