@@ -39,4 +39,10 @@ public interface MerchantEntityService {
      * @return
      */
     ResultPageDTO<MerchantEntity> queryPageList(MerchantEntity record,Integer currentPageNum,Integer pageSize);
+    
+    /**
+     * 获取商户实体innerCode
+     * @return
+     */
+    String getEntityInnerCode();
 }

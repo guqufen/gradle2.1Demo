@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
+import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.CodeUtil;
 
 /**
  * @desc 
@@ -127,6 +130,25 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 	public int addMerEntity(MerchantEntity record) {
 		
 		return 0;
+	}
+	
+	/**
+	 * 生成唯一最新的innerCode
+	 */
+	@Override
+	public String getEntityInnerCode() {
+		String entityInnerCode = null;
+		MerchantEntity record = new MerchantEntity();
+
+        while (true) {
+        	entityInnerCode = "1"+CodeUtil.generateMerchantCode("F");
+            record.setEntityInnerCode(entityInnerCode);
+            Integer total = merchantEntityDao.queryTotalByCondition(record);
+            if (total == 0) {
+                break;
+            }
+        }
+        return entityInnerCode;
 	}
 
 }

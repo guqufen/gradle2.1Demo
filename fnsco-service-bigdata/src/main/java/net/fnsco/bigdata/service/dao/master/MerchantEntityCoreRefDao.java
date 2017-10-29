@@ -21,4 +21,11 @@ public interface MerchantEntityCoreRefDao {
     int updateByPrimaryKeySelective(MerchantEntityCoreRef record);
 
     int updateByPrimaryKey(MerchantEntityCoreRef record);
+    
+    /**
+     * 返回满足条件的条数
+     * @param record
+     * @return
+     */
+    int countByCondition(MerchantEntityCoreRef record);
 }
