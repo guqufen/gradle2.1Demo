@@ -1198,28 +1198,31 @@
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 class="modal-title" id="businessModalLabel">支行信息</h4>
+							<h4 class="modal-title" id="businessModalLabel">实体商户</h4>
 						</div>
 						<div class="modal-body">
 							<form id="bankFormSearch" class="form-horizontal">
 								<div class="form-group" style="margin-top: 15px">
 									<div class="row col-sm-10">
 										<div class="col-sm-6">
-											<label class="control-label" for="txt_search_id">银行名称：</label>
+											<label class="control-label" for="txt_search_id">商户名称：</label>
 											<input type="text" class="form-control" id="txt_search_bank">
 										</div>
 										<div class="col-sm-6">
-											<label class="control-label" for="txt_search_name">所在省：</label>
+											<label class="control-label" for="txt_search_name">法人姓名：</label>
 											<input type="text" class="form-control" id="txt_search_pro">
 										</div>
 										<div class="col-sm-6">
-											<label class="control-label" for="txt_search_price">所在市：</label>
+											<label class="control-label" for="txt_search_price">手机号：</label>
 											<input type="text" class="form-control" id="txt_search_city">
 										</div>
 										<div class="col-sm-6">
-											<label class="control-label" for="txt_search_price">支行名称：</label>
-											<input type="text" class="form-control"
-												id="txt_search_branch">
+											<label class="control-label" for="txt_search_price">状态：</label>
+											<select class="form-control">
+												<option value="0">全部</option>
+												<option value="1">删除</option>
+												<option value="2">正常</option>
+											</select>
 										</div>
 									</div>
 									<div class="col-sm-2" style="text-align: right;">
