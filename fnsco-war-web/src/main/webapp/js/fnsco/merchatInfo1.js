@@ -673,10 +673,6 @@ function selectBank(id){
   $("body").addClass('modal-open-custom');
   $('#subBankName'+id).addClass("active");
 }
-function selectBusiness(){
-  $("body").addClass('modal-open-custom');
-  $('#businessModal').modal('show')
-}
 //添加银行卡列表
 $("#btn_addBankCard").click(function(){
   BankCardlList=BankCardlList+1;
@@ -1375,9 +1371,10 @@ function editData(id){
             var registAddress = $('input[name="registAddress1"]').val();
             var mercFlag = $('input[name="mercFlag1"]').val();
             var agentId = $('#agentId1').val();
-            
+            var entityInnerCode = $('#entityMerName1').next('input[name="entityInnerCode"]').val();
+            var innerCode=$('#innerCode').val();
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
-            		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId};
+            		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'innerCode':innerCode};
             
             console.log(params);
             $.ajax({

@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.CodeUtil;
 
 /**
  * @desc 
@@ -127,6 +129,39 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 	public int addMerEntity(MerchantEntity record) {
 		
 		return 0;
+	}
+	
+	/**
+	 * 生成唯一最新的innerCode
+	 */
+	@Override
+	public String getEntityInnerCode() {
+		String entityInnerCode = null;
+		MerchantEntity record = new MerchantEntity();
+
+        while (true) {
+        	entityInnerCode = "1"+CodeUtil.generateMerchantCode("F");
+            record.setEntityInnerCode(entityInnerCode);
+            Integer total = merchantEntityDao.queryTotalByCondition(record);
+            if (total == 0) {
+                break;
+            }
+        }
+        return entityInnerCode;
+	}
+	
+	/**
+	 * 分页查询
+	 */
+	@Override
+	public ResultPageDTO<ChannelMerchantDTO> queryChannelMerPageList(String entityInnerCode, Integer currentPageNum,
+			Integer pageSize) {
+		
+		PageDTO<String> pages = new PageDTO<String>(currentPageNum, pageSize, entityInnerCode);
+		List<ChannelMerchantDTO> datas = merchantEntityDao.queryPageChannelMerByEntityInnerCode(pages);
+		 Integer total = merchantEntityDao.queryCountChannelMerByEntityInnerCode(entityInnerCode);
+		ResultPageDTO<ChannelMerchantDTO> result = new ResultPageDTO<ChannelMerchantDTO>(total, datas);
+		return result;
 	}
 
 }

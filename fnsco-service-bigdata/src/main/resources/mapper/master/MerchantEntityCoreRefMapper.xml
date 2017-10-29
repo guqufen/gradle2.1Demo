@@ -14,21 +14,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from m_merchant_entity_core_ref
+    from m_merchant_core_entity_ref
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from m_merchant_entity_core_ref
+    delete from m_merchant_core_entity_ref
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    insert into m_merchant_entity_core_ref (id, entity_inner_code, inner_code, 
+    insert into m_merchant_core_entity_ref (id, entity_inner_code, inner_code, 
       create_time)
     values (#{id,jdbcType=INTEGER}, #{entityInnerCode,jdbcType=VARCHAR}, #{innerCode,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    insert into m_merchant_entity_core_ref
+    insert into m_merchant_core_entity_ref
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -59,7 +59,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    update m_merchant_entity_core_ref
+    update m_merchant_core_entity_ref
     <set >
       <if test="entityInnerCode != null" >
         entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
@@ -74,10 +74,53 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    update m_merchant_entity_core_ref
+    update m_merchant_core_entity_ref
     set entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
       inner_code = #{innerCode,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 条件查询总数 -->
+  <select id="countByCondition" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" resultType="java.lang.Integer">
+    select count(*) from m_merchant_core_entity_ref
+    <where>
+      <if test="id != null" >
+        and id = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="entityInnerCode != null" >
+        and entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="innerCode != null" >
+        and inner_code = #{innerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null" >
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  <!-- 根据条件更新操作 -->
+  <update id="updateByInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef">
+     update m_merchant_core_entity_ref
+    <set >
+      <if test="entityInnerCode != null" >
+        entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="innerCode != null" >
+        inner_code = #{innerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </update>
+  <!-- 按照渠道商户ID删除关系 -->
+  <delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
+     DELETE  FROM m_merchant_core_entity_ref WHERE inner_code in (
+		 SELECT inner_code FROM m_merchant_core WHERE id in 
+		  <foreach item="item" collection="array" open="(" separator="," close=")">
+	       #{item}
+	     </foreach>
+		)
+  </delete>
 </mapper>
