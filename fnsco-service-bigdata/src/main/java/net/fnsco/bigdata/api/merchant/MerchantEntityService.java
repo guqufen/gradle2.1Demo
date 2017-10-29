@@ -1,5 +1,6 @@
 package net.fnsco.bigdata.api.merchant;
 
+import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.ResultPageDTO;
 
@@ -24,6 +25,15 @@ public interface MerchantEntityService {
     int updateByPrimaryKeySelective(MerchantEntity record);
 
     int updateByPrimaryKey(MerchantEntity record);
+    
+    /**
+     * 分页查询
+     * @param entityInnerCode
+     * @param currentPageNum
+     * @param pageSize
+     * @return
+     */
+    ResultPageDTO<ChannelMerchantDTO> queryChannelMerPageList(String entityInnerCode,Integer currentPageNum,Integer pageSize);
     
     /**
      * 增加

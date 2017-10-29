@@ -4,11 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
+import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
-import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -149,6 +148,20 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
             }
         }
         return entityInnerCode;
+	}
+	
+	/**
+	 * 分页查询
+	 */
+	@Override
+	public ResultPageDTO<ChannelMerchantDTO> queryChannelMerPageList(String entityInnerCode, Integer currentPageNum,
+			Integer pageSize) {
+		
+		PageDTO<String> pages = new PageDTO<String>(currentPageNum, pageSize, entityInnerCode);
+		List<ChannelMerchantDTO> datas = merchantEntityDao.queryPageChannelMerByEntityInnerCode(pages);
+		 Integer total = merchantEntityDao.queryCountChannelMerByEntityInnerCode(entityInnerCode);
+		ResultPageDTO<ChannelMerchantDTO> result = new ResultPageDTO<ChannelMerchantDTO>(total, datas);
+		return result;
 	}
 
 }

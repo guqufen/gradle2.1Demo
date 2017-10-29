@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.beust.jcommander.Strings;
 
+import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
@@ -134,5 +135,23 @@ public class MerchantEntityController extends BaseController {
 		}
 		MerchantEntity entity = merchantEntityService.selectByPrimaryKey(id);
 		return ResultDTO.success(entity);
+	}
+	
+	/**
+	 * @param merchantEntity
+	 * @param currentPageNum
+	 * @param pageSize
+	 * @return
+	 */
+	@RequestMapping(value = "/queryChannelMer", method = RequestMethod.GET)
+	@ResponseBody
+	@RequiresPermissions(value = { "m:merentity:list" })
+	public ResultPageDTO<ChannelMerchantDTO> queryChannelMer(String entityInnerCode, Integer currentPageNum,
+			Integer pageSize) {
+		if(Strings.isStringEmpty(entityInnerCode)) {
+			return null;
+		}
+		logger.info("查询渠道商户实体列表");
+		return merchantEntityService.queryChannelMerPageList(entityInnerCode, currentPageNum, pageSize);
 	}
 }
