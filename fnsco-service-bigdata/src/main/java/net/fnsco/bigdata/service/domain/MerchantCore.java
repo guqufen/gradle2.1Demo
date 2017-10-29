@@ -81,7 +81,16 @@ public class MerchantCore extends DTO {
 	
 	private String entityInnerCode;//实体商户innerCode
 	
+	private String entityMerName;//实体商户名称
 	
+	public String getEntityMerName() {
+		return entityMerName;
+	}
+
+	public void setEntityMerName(String entityMerName) {
+		this.entityMerName = entityMerName;
+	}
+
 	public String getEntityInnerCode() {
 		return entityInnerCode;
 	}

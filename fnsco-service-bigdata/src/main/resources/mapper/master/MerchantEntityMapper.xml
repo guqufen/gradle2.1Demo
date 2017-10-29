@@ -376,4 +376,21 @@
 		) MC
 	LEFT JOIN m_merchant_channel MCH ON MC.inner_code = MCH.inner_code
   </select>
+  <!-- 根据innerCode查询实体信息 -->
+  <select id="queryMerEntityByInnerCode" parameterType="java.lang.String"  resultMap="BaseResultMap" >
+     SELECT
+		 <include refid="Base_Column_List" />
+		FROM
+			m_merchant_entity
+		WHERE
+			entity_inner_code = (
+				SELECT
+					entity_inner_code
+				FROM
+					m_merchant_core_entity_ref
+				WHERE
+					inner_code = #{innerCode}
+				LIMIT 1
+			)
+  </select>
 </mapper>
