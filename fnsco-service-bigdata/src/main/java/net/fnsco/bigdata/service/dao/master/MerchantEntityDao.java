@@ -2,6 +2,9 @@ package net.fnsco.bigdata.service.dao.master;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.PageDTO;
 /**
@@ -25,6 +28,19 @@ public interface MerchantEntityDao {
     int updateByPrimaryKeySelective(MerchantEntity record);
 
     int updateByPrimaryKey(MerchantEntity record);
+    
+    /**
+     * 查询绑定的渠道商户信息
+     * @return
+     */
+    List<ChannelMerchantDTO> queryPageChannelMerByEntityInnerCode(PageDTO<String> pages);
+    
+    /**
+     * 查询总数
+     * @param entityInnerCode
+     * @return
+     */
+    int queryCountChannelMerByEntityInnerCode(@Param("entityInnerCode")String entityInnerCode);
     
     /**
      * queryPageList:(分页条件)

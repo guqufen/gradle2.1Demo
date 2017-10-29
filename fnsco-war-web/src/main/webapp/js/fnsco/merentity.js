@@ -212,6 +212,7 @@ function editData(id){
         type:'POST',
         data:{'id':id},
         success:function(data){
+        	unloginHandler(data);
         	var entity = data.data;
         	if(data.success){
         		var entity = data.data;
@@ -235,6 +236,143 @@ function editData(id){
     });
 }
 //详情
+initDetailTable();
 function detailsData(id){
 	$("#myDetailModal").modal('show');
+	$.ajax({
+        url:PROJECT_NAME+'/web/merchantentity/querySingle',
+        type:'POST',
+        data:{'id':id},
+        success:function(data){
+        	unloginHandler(data);
+        	var entity = data.data;
+        	if(data.success){
+        		var entity = data.data;
+                $("#myDetailModal").modal();
+                $("#detail_merName").val(entity.mercName);
+                $("#detail_legalPerson").val(entity.legalPerson);
+                $("#detail_legalPersonMobile").val(entity.legalPersonMobile);
+                $("#detail_cardNum").val(entity.cardNum);
+                $("#detail_businessLicenseNum").val(entity.businessLicenseNum);
+                $('#entityInnerCode').val(entity.entityInnerCode);
+                $('#detail_table').bootstrapTable('refresh');
+        	}else{
+        		layer.msg('系统异常!'+e);
+        	}
+          
+        },
+        error:function(e)
+        {
+          layer.msg('系统异常!'+e);
+        }
+    });
+}
+
+//商户实体详情表格
+//初始化表格
+function initDetailTable(){
+	$('#detail_table').bootstrapTable({
+	    search: false, //是否启动搜索栏
+	    sidePagination:'server',
+	    url:PROJECT_NAME+'/web/merchantentity/queryChannelMer',
+	    showRefresh: false,//是否显示刷新按钮
+	    showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
+	    striped: true,   //是否显示行间隔色
+	    cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+	    pagination: true,   //是否显示分页（*）
+	    sortable: true,   //是否启用排序
+	    sortOrder: "asc",   //排序方式
+	    pageNumber:1,   //初始化加载第一页，默认第一页
+	    pageSize: 15,   //每页的记录行数（*）
+	    pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
+	    queryParams:queryDetailParams,
+	    responseHandler:responseDetailHandler,//处理服务器返回数据
+	    columns: [{
+	        field: 'id',
+	        title: '序号',
+	        width:'10%',
+	        align: 'center',
+	        width: 150,
+	        formatter:formatindex
+	    },{
+	        field: 'merName',
+	        title: '渠道商户名称',
+	        width:'10%'
+	    },{
+	        field: 'channelMerId',
+	        title: '渠道商户号'
+	    },{
+	        field: 'channelType',
+	        title: '渠道类型',
+	        width:'10%',
+	        formatter:formatChannelType
+	    },{
+	        field: 'posNums',
+	        title: '设备数量'
+	    },{
+	        field: 'createTime',
+	        title: '新增时间',
+	        formatter:formatTime
+	    },{
+	        field: 'status',
+	        title: '状态',
+	        formatter: formatChannelStatus
+	    }]
+	});
+	
+}
+//绑定状态
+function formatChannelStatus(value, row, index){
+	return '已绑定';
+}
+//表格中
+function formatindex(value, row, index) {
+	return [ index + 1 ].join('');
+}
+//渠道类型
+function formatChannelType(value, row, index){
+	if(!value){
+		return '--';
+	}
+	
+	if(value == '00'){
+		return '拉卡拉';
+	}else if(value =='01'){
+		return '浦发';
+	}else if(value =='01'){
+		return '浦发';
+	}else if(value =='02'){
+		return '爱农';
+	}else if(value =='03'){
+		return '法奈昇';
+	}else if(value =='04'){
+		return '聚惠分';
+	}else{
+		return '其他';
+	}
+}
+//组装请求参数
+function queryDetailParams(params)
+{
+   var param ={
+	   currentPageNum : this.pageNumber,
+	   pageSize : this.pageSize,
+	   entityInnerCode:$.trim($('#entityInnerCode').val())
+   }
+   return param;
+}
+//处理后台返回数据
+function responseDetailHandler(res) { 
+	unloginHandler(res);
+    if (res) {
+        return {
+            "rows" : res.list,
+            "total" : res.total
+        };
+    } else {
+        return {
+            "rows" : [],
+            "total" : 0
+        };
+    }
 }

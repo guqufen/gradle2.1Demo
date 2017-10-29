@@ -79,6 +79,17 @@ public class MerchantCore extends DTO {
 	
 	private String channelType; //渠道类型
 	
+	private String entityInnerCode;//实体商户innerCode
+	
+	
+	public String getEntityInnerCode() {
+		return entityInnerCode;
+	}
+
+	public void setEntityInnerCode(String entityInnerCode) {
+		this.entityInnerCode = entityInnerCode;
+	}
+
 	public String getChannelType() {
 		return channelType;
 	}

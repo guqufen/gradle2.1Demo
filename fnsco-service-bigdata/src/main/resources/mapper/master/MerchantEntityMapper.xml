@@ -314,4 +314,66 @@
       </if>
   	 </where>
   </select>
+  <!-- 查询渠道商户信息 -->
+  <select id="queryPageChannelMerByEntityInnerCode"  resultType="net.fnsco.bigdata.api.dto.ChannelMerchantDTO" parameterType="net.fnsco.core.base.PageDTO">
+     SELECT
+		MC.mer_name  AS merName,
+		MCH.channel_mer_id AS channelMerId,
+		MCH.channel_type AS channelType,
+		MC.create_time AS createTime,
+		(
+			SELECT
+				COUNT(*)
+			FROM
+				m_merchant_pos MP
+			WHERE
+				MP.inner_code = MC.inner_code
+			AND MP.channel_id = MCH.id
+		) AS posNums
+	FROM
+		(
+			SELECT
+				mer_name,
+				inner_code,
+				create_time
+			FROM
+				m_merchant_core
+			WHERE
+				inner_code IN (
+					SELECT
+						inner_code
+					FROM
+						m_merchant_core_entity_ref
+					WHERE
+						entity_inner_code = #{condition} 
+				)
+		) MC
+	LEFT JOIN m_merchant_channel MCH ON MC.inner_code = MCH.inner_code
+	ORDER BY createTime DESC
+    limit #{startRow} , #{perPageSize} 
+  </select>
+  <!-- 查询渠道商户总数 -->
+  <select id="queryCountChannelMerByEntityInnerCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+     SELECT
+	COUNT(*) 	
+	FROM
+		(
+			SELECT
+				mer_name,
+				inner_code,
+				create_time
+			FROM
+				m_merchant_core
+			WHERE
+				inner_code IN (
+					SELECT
+						inner_code
+					FROM
+						m_merchant_core_entity_ref
+					WHERE
+						entity_inner_code = #{entityInnerCode}
+				)
+		) MC
+	LEFT JOIN m_merchant_channel MCH ON MC.inner_code = MCH.inner_code
+  </select>
 </mapper>
