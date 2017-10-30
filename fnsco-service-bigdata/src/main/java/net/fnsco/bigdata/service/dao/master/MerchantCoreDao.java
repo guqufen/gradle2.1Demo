@@ -97,7 +97,7 @@ public interface MerchantCoreDao {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    MerChantCoreDTO getMerChantCoreByInnerCode(@Param("innerCode")String innerCode);
+    MerchantCore getMerChantCoreByInnerCode(@Param("innerCode")String innerCode);
     
     /**
      * queryDetailById:(这里用一句话描述这个方法的作用) 根据商家ID 查询详情

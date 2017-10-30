@@ -34,6 +34,7 @@ import net.fnsco.bigdata.service.dao.master.MerchantPosDao;
 import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
 import net.fnsco.bigdata.service.domain.Alias;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
+import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.bigdata.service.merchant.dao.MerchantPosSimpleDao;
@@ -87,11 +88,11 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      * @date 2017年6月30日 上午11:19:42
      */
     @Override
-    public MerChantCoreDTO getMerChantCoreByInnerCode(String innerCode) {
+    public MerchantCore getMerChantCoreByInnerCode(String innerCode) {
         if (null == innerCode) {
             return null;
         }
-        MerChantCoreDTO result = merchantCoreDao.getMerChantCoreByInnerCode(innerCode);
+        MerchantCore result = merchantCoreDao.getMerChantCoreByInnerCode(innerCode);
         return result;
     }
     /**

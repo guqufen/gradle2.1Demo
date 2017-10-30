@@ -18,9 +18,9 @@ import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
+import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.constant.ConstantEnum;
@@ -90,7 +90,7 @@ public class TradeController extends BaseController {
         //        commID  商户Id    必填
         //        unionId 客户ID    可选
         //        payCallBackParams   支付成功后回调参数   必填
-        url += "?commID=" + merchantChannelJhf.getChannelMerId() + "&payAmount=" + tradeJO.getPaymentAmount() + "&uniqueIdType=" + tradeJO.getInstallmentNum() + "unionId="
+        url += "?thirdPayNo="+tradeOrder.getOrderNo()+"&commID=" + merchantChannelJhf.getChannelMerId() + "&payAmount=" + tradeJO.getPaymentAmount() + "&uniqueIdType=" + tradeJO.getInstallmentNum() + "unionId="
                + merchantChannelJhf.getInnerCode() + "&npr=" + tradeOrder.getOrderNo() + "&payCallBackParams=";
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
@@ -185,13 +185,13 @@ public class TradeController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getOrderInfo")
+    @RequestMapping(value = "/getOrderInfo", method = RequestMethod.GET)
     @ApiOperation(value = "获取商户编号")
     public ResultDTO getOrderInfo(@RequestParam String orderNo) {
         TradeOrderDO tradeOrderDO = tradeOrderService.queryByOrderId(orderNo);
-        MerChantCoreDTO merChantCoreDTO = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
-        if (null != merChantCoreDTO) {
-            tradeOrderDO.setMercName(merChantCoreDTO.getMerName());
+        MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
+        if (null != merChantCore) {
+            tradeOrderDO.setMercName(merChantCore.getMerName());
         }
         return success(tradeOrderDO);
     }
