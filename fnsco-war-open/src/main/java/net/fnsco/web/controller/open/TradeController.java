@@ -9,6 +9,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
@@ -80,7 +81,7 @@ public class TradeController extends BaseController {
         tradeOrder.setPaySubType("03");
         tradeOrder.setTxnType(1);
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
-        tradeOrder.setSyncStatus(1);
+        tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
         String url = evn.getProperty("jhf.qr.pay.url");
         //        payAmount   支付金额    必填
@@ -186,7 +187,7 @@ public class TradeController extends BaseController {
      */
     @RequestMapping(value = "/getOrderInfo")
     @ApiOperation(value = "获取商户编号")
-    public ResultDTO getOrderInfo(String orderNo) {
+    public ResultDTO getOrderInfo(@RequestParam String orderNo) {
         TradeOrderDO tradeOrderDO = tradeOrderService.queryByOrderId(orderNo);
         MerChantCoreDTO merChantCoreDTO = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
         if (null != merChantCoreDTO) {
