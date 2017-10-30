@@ -1,7 +1,9 @@
 package net.fnsco.order.service.trade;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,13 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.beust.jcommander.internal.Maps;
 
+import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.DbUtil;
+import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.order.service.trade.dao.TradeOrderDAO;
 import net.fnsco.order.service.trade.entity.TradeOrderDO;
-import net.fnsco.core.base.BaseService;
-import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.utils.HttpUtils;
 
 @Service
 public class TradeOrderService extends BaseService {
@@ -39,6 +42,9 @@ public class TradeOrderService extends BaseService {
     // 添加
     public TradeOrderDO doAdd(TradeOrderDO tradeOrder) {
         logger.info("开始添加TradeOrderService.add,tradeOrder=" + tradeOrder.toString());
+        tradeOrder.setCreateTime(new Date());
+        //tradeOrder.setOrderCeateTime(new Date());
+        tradeOrder.setOrderNo(DateUtils.getNowDateStr() + tradeOrder.getMercId() + DbUtil.getRandomStr(3));
         this.tradeOrderDAO.insert(tradeOrder);
         return tradeOrder;
     }
@@ -83,8 +89,8 @@ public class TradeOrderService extends BaseService {
             Map<String, String> params = Maps.newHashMap();
             params.put("salesOrderNo", orderNo);
             String resultJson = HttpUtils.get(url, params);
-            TradeOrderJHFDTO tradeOrderDTO = JSON.parseObject(resultJson,TradeOrderJHFDTO.class);
-            
+            TradeOrderJHFDTO tradeOrderDTO = JSON.parseObject(resultJson, TradeOrderJHFDTO.class);
+
         }
     }
 }

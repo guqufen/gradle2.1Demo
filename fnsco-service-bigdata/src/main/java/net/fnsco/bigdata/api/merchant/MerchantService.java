@@ -15,6 +15,7 @@ import net.fnsco.bigdata.api.dto.PosListDTO;
 import net.fnsco.bigdata.api.dto.TerminalDetailDTO;
 import net.fnsco.bigdata.api.dto.TerminalsDTO;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
+import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.ResultDTO;
 
@@ -181,6 +182,6 @@ public interface MerchantService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    MerChantCoreDTO getMerChantCoreByInnerCode(String innerCode);
+    MerchantCore getMerChantCoreByInnerCode(String innerCode);
     
 }

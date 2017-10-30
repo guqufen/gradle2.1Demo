@@ -109,6 +109,75 @@ public class TradeOrderDO {
      * 创建时间
      */
     private Date createTime;
+    private String completeTimeStr;
+    private String orderCeateTimeStr;
+    private String createTimeStr;
+    
+    /**
+     * createTimeStr
+     *
+     * @return  the createTimeStr
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getCreateTimeStr() {
+        return createTimeStr;
+    }
+
+    /**
+     * createTimeStr
+     *
+     * @param   createTimeStr    the createTimeStr to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setCreateTimeStr(String createTimeStr) {
+        this.createTimeStr = createTimeStr;
+    }
+
+    /**
+     * completeTimeStr
+     *
+     * @return  the completeTimeStr
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getCompleteTimeStr() {
+        return completeTimeStr;
+    }
+
+    /**
+     * completeTimeStr
+     *
+     * @param   completeTimeStr    the completeTimeStr to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setCompleteTimeStr(String completeTimeStr) {
+        this.completeTimeStr = completeTimeStr;
+    }
+
+    /**
+     * orderCeateTimeStr
+     *
+     * @return  the orderCeateTimeStr
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOrderCeateTimeStr() {
+        return orderCeateTimeStr;
+    }
+
+    /**
+     * orderCeateTimeStr
+     *
+     * @param   orderCeateTimeStr    the orderCeateTimeStr to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOrderCeateTimeStr(String orderCeateTimeStr) {
+        this.orderCeateTimeStr = orderCeateTimeStr;
+    }
 
     /**
      * 同步状态0未同步1已同步

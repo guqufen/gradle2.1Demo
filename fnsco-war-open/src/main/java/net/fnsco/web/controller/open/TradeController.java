@@ -9,6 +9,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
@@ -17,11 +18,12 @@ import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
+import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.service.trade.TradeOrderService;
 import net.fnsco.order.service.trade.entity.TradeOrderDO;
@@ -80,7 +82,7 @@ public class TradeController extends BaseController {
         tradeOrder.setPaySubType("03");
         tradeOrder.setTxnType(1);
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
-        tradeOrder.setSyncStatus(1);
+        tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
         String url = evn.getProperty("jhf.qr.pay.url");
         //        payAmount   支付金额    必填
@@ -89,7 +91,7 @@ public class TradeController extends BaseController {
         //        commID  商户Id    必填
         //        unionId 客户ID    可选
         //        payCallBackParams   支付成功后回调参数   必填
-        url += "?commID=" + merchantChannelJhf.getChannelMerId() + "&payAmount=" + tradeJO.getPaymentAmount() + "&uniqueIdType=" + tradeJO.getInstallmentNum() + "unionId="
+        url += "?thirdPayNo="+tradeOrder.getOrderNo()+"&commID=" + merchantChannelJhf.getChannelMerId() + "&payAmount=" + tradeJO.getPaymentAmount() + "&uniqueIdType=" + tradeJO.getInstallmentNum() + "unionId="
                + merchantChannelJhf.getInnerCode() + "&npr=" + tradeOrder.getOrderNo() + "&payCallBackParams=";
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
@@ -139,6 +141,7 @@ public class TradeController extends BaseController {
         }
         tradeOrderDO.setRespCode(respCode);
         tradeOrderDO.setPayOrderNo(order.getSalesOrderNo());
+        
         //结算状态（0 未结算 1已结算   2结算中   3已退款）
         if (Strings.isNullOrEmpty(order.getSettlementStatus())) {
             try {
@@ -153,6 +156,7 @@ public class TradeController extends BaseController {
             tradeOrderDO.setTxnType(2);
             tradeOrderService.doAdd(tradeOrderDO);
         } else {
+            tradeOrderDO.setOrderCeateTime(new Date());
             tradeOrderService.doUpdate(tradeOrderDO);
         }
         return null;
@@ -184,13 +188,16 @@ public class TradeController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getOrderInfo")
+    @RequestMapping(value = "/getOrderInfo", method = RequestMethod.GET)
     @ApiOperation(value = "获取商户编号")
-    public ResultDTO getOrderInfo(String orderNo) {
+    public ResultDTO getOrderInfo(@RequestParam String orderNo) {
         TradeOrderDO tradeOrderDO = tradeOrderService.queryByOrderId(orderNo);
-        MerChantCoreDTO merChantCoreDTO = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
-        if (null != merChantCoreDTO) {
-            tradeOrderDO.setMercName(merChantCoreDTO.getMerName());
+        tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
+        tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
+        tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
+        MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
+        if (null != merChantCore) {
+            tradeOrderDO.setMercName(merChantCore.getMerName());
         }
         return success(tradeOrderDO);
     }

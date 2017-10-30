@@ -200,10 +200,16 @@ public class DateUtils {
      * @since  CodingExample　Ver 1.1
      */
     public static String dateFormatToStr(Date date) {
+        if(null == date){
+            return "";
+        }
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
     public static String dateFormat1ToStr(Date date) {
         String result = "";
+        if(null == date){
+            return "";
+        }
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
         result = sf.format(date);
         return result;
