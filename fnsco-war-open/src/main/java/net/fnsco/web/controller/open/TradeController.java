@@ -23,6 +23,7 @@ import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.service.trade.TradeOrderService;
 import net.fnsco.order.service.trade.entity.TradeOrderDO;
@@ -140,6 +141,7 @@ public class TradeController extends BaseController {
         }
         tradeOrderDO.setRespCode(respCode);
         tradeOrderDO.setPayOrderNo(order.getSalesOrderNo());
+        
         //结算状态（0 未结算 1已结算   2结算中   3已退款）
         if (Strings.isNullOrEmpty(order.getSettlementStatus())) {
             try {
@@ -154,6 +156,7 @@ public class TradeController extends BaseController {
             tradeOrderDO.setTxnType(2);
             tradeOrderService.doAdd(tradeOrderDO);
         } else {
+            tradeOrderDO.setOrderCeateTime(new Date());
             tradeOrderService.doUpdate(tradeOrderDO);
         }
         return null;
@@ -189,6 +192,9 @@ public class TradeController extends BaseController {
     @ApiOperation(value = "获取商户编号")
     public ResultDTO getOrderInfo(@RequestParam String orderNo) {
         TradeOrderDO tradeOrderDO = tradeOrderService.queryByOrderId(orderNo);
+        tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
+        tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
+        tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
         MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
         if (null != merChantCore) {
             tradeOrderDO.setMercName(merChantCore.getMerName());

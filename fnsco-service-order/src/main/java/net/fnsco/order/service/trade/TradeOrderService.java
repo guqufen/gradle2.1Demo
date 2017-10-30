@@ -43,7 +43,7 @@ public class TradeOrderService extends BaseService {
     public TradeOrderDO doAdd(TradeOrderDO tradeOrder) {
         logger.info("开始添加TradeOrderService.add,tradeOrder=" + tradeOrder.toString());
         tradeOrder.setCreateTime(new Date());
-        tradeOrder.setOrderCeateTime(new Date());
+        //tradeOrder.setOrderCeateTime(new Date());
         tradeOrder.setOrderNo(DateUtils.getNowDateStr() + tradeOrder.getMercId() + DbUtil.getRandomStr(3));
         this.tradeOrderDAO.insert(tradeOrder);
         return tradeOrder;
