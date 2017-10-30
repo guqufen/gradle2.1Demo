@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.fnsco.finance.service.dao.master.FinanceAccountBookDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.finance.api.dto.FinanceEveryDayDTO" >
+    <result column="account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="io_type_code" property="ioTypeCode" jdbcType="VARCHAR" />
+    <result column="cash_sum" property="spending" jdbcType="DECIMAL" />
+    <result column="create_day" property="Day" jdbcType="INTEGER" />
+    <result column="create_week" property="week" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="AmountResultMap" type="net.fnsco.finance.service.domain.FinanceAccountBook" >
+    <result column="cash" property="cash" jdbcType="DECIMAL" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="EntityResultMap" type="net.fnsco.finance.api.dto.AppUserEntityDTO" >
+    <result column="entityInnerCode" property="entityInnerCode" jdbcType="VARCHAR" />
+    <result column="mercName" property="mercName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="IoTypeResultMap" type="net.fnsco.finance.service.domain.FinanceIoType" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="account_id" property="accountId" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    account_id,type,io_type_code,SUM(cash) AS cash_sum ,DATE_FORMAT(create_time,'%d') as create_day,DATE_FORMAT(create_time,'%W') as create_week
+  </sql>
+  
+   
+  <!-- APP端记账分页条件查询 -->
+  <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="BaseResultMap">
+     select 
+     <include refid="Base_Column_List" />
+   	 FROM
+	 f_finance_account_book
+   	 <where>
+   	  <if test="condition.entityInnerCode != null and condition.entityInnerCode !=''" >
+        AND account_id in (
+		SELECT
+			AB.account_id
+		FROM
+			f_finance_account AS A,
+			m_merchant_shop AS S,
+			f_finance_account_book AS AB
+		WHERE
+			S.shop_inner_code = A.shop_inner_code
+		AND A.account_id = AB.account_id
+		AND S.entity_inner_code = #{condition.entityInnerCode}
+	)
+      </if>
+	  <if test="condition.startTime != null and condition.startTime !=''" >
+        AND create_time &gt;= #{condition.startTime}
+      </if>
+      <if test="condition.endTime != null and condition.endTime !=''" >
+        AND create_time &lt;= #{condition.endTime}
+      </if>
+   	 </where>
+   	 GROUP BY type ,io_type_code,create_day,create_week
+   	 order by create_day desc
+   	 limit #{startRow} , #{perPageSize}
+  </select>
+  <!-- APP端记账查询月收支金额 -->
+  <select id="queryAmount" parameterType="net.fnsco.finance.api.dto.FinanceQueryDTO" resultMap="AmountResultMap">
+     select 
+     type,
+	 sum(cash) AS cash
+   	 FROM
+	 f_finance_account_book
+   	 <where>
+   	  <if test="entityInnerCode != null and entityInnerCode !=''" >
+        AND account_id in (
+		SELECT
+			AB.account_id
+		FROM
+			f_finance_account AS A,
+			m_merchant_shop AS S,
+			f_finance_account_book AS AB
+		WHERE
+			S.shop_inner_code = A.shop_inner_code
+		AND A.account_id = AB.account_id
+		AND S.entity_inner_code = #{entityInnerCode}
+	)
+      </if>
+	  <if test="startTime != null and startTime !=''" >
+        AND create_time &gt;= #{startTime}
+      </if>
+      <if test="endTime != null and endTime !=''" >
+        AND create_time &lt;= #{endTime}
+      </if>
+   	 </where>
+   	 GROUP BY type
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from f_finance_account_book
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- APP端记账查询收支子类 -->
+  <select id="queryIoTypeList"  resultMap="IoTypeResultMap" >
+    SELECT
+	*
+	FROM
+	f_finance_io_type 
+  </select>
+  <!-- APP端记账查询店铺是否存在，是否生成account_id -->
+  <select id="queryShopInnerCode" parameterType="java.lang.String" resultMap="java.lang.String" >
+    SELECT
+		account_id
+	FROM
+		f_finance_account
+	WHERE
+		shop_inner_code = #{shopInnerCode,jdbcType=VARCHAR}
+  </select>
+  <!-- account_id生成时查重 -->
+  <select id="queryAccountId" parameterType="java.lang.String" resultMap="java.lang.String" >
+    SELECT
+		account_id
+	FROM
+		f_finance_account
+	WHERE
+		account_id = #{accountId,jdbcType=VARCHAR}
+  </select>
+  <!-- APP端记账查询商户信息 -->
+  <select id="queryEntityList" parameterType="java.lang.Integer" resultMap="EntityResultMap" >
+    SELECT
+		E.entity_inner_code AS entityInnerCode,
+		E.merc_name AS mercName
+	FROM
+		m_merchant_entity AS E,
+		m_merchant_user_rel AS R,
+		m_merchant_core_entity_ref AS ER
+	WHERE
+		R.inner_code=ER.inner_code
+		AND ER.entity_inner_code=E.entity_inner_code
+  		AND R.app_user_id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from f_finance_account_book
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+<!--   <insert id="insert" parameterType="cn.itcast.ssm.po.FFinanceAccountBook" >
+    insert into f_finance_account_book (id, account_id, cash, 
+      type, io_type_code, remark, 
+      create_time, last_modefy_time)
+    values (#{id,jdbcType=INTEGER}, #{accountId,jdbcType=INTEGER}, #{cash,jdbcType=DECIMAL}, 
+      #{type,jdbcType=INTEGER}, #{ioTypeCode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastModefyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.itcast.ssm.po.FFinanceAccountBook" >
+    insert into f_finance_account_book
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="accountId != null" >
+        account_id,
+      </if>
+      <if test="cash != null" >
+        cash,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="ioTypeCode != null" >
+        io_type_code,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="lastModefyTime != null" >
+        last_modefy_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="accountId != null" >
+        #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="cash != null" >
+        #{cash,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="ioTypeCode != null" >
+        #{ioTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModefyTime != null" >
+        #{lastModefyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.itcast.ssm.po.FFinanceAccountBook" >
+    update f_finance_account_book
+    <set >
+      <if test="accountId != null" >
+        account_id = #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="cash != null" >
+        cash = #{cash,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="ioTypeCode != null" >
+        io_type_code = #{ioTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModefyTime != null" >
+        last_modefy_time = #{lastModefyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.itcast.ssm.po.FFinanceAccountBook" >
+    update f_finance_account_book
+    set account_id = #{accountId,jdbcType=INTEGER},
+      cash = #{cash,jdbcType=DECIMAL},
+      type = #{type,jdbcType=INTEGER},
+      io_type_code = #{ioTypeCode,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_modefy_time = #{lastModefyTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update> -->
+</mapper>
