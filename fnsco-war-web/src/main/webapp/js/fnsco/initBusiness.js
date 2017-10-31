@@ -121,7 +121,8 @@ $('#btn_select_business').click(function(){
   $(".entityMerName.active").val(select_data.mercName);
   $(".entityMerName.active").next('.entityInnerCode').val(select_data.entityInnerCode);
   $(".entityMerName.active").parents().next().next().next().find('.form-control').val(select_data.legalPerson);
-  $(".entityMerName.active").parents().next().next().next().next().find('#legalPersonMobile').val(select_data.legalPersonMobile);
+  // console.log($(".entityMerName.active").parents().next().next().next().next().find('.form-control').val());
+  $(".entityMerName.active").parents().next().next().next().next().find('.legalPersonMobile').val(select_data.legalPersonMobile);
   $(".entityMerName.active").parents().next().next().next().next().next().find('.form-control').val(select_data.cardNum);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.form-control').val(select_data.businessLicenseNum);
   $('#businessModal').modal('hide');
