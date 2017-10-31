@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
@@ -24,10 +23,11 @@ import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.DbUtil;
 import net.fnsco.order.api.constant.ConstantEnum;
+import net.fnsco.order.api.dto.OrderDTO;
 import net.fnsco.order.service.trade.TradeOrderService;
 import net.fnsco.order.service.trade.entity.TradeOrderDO;
-import net.fnsco.web.controller.open.jo.OrderJO;
 import net.fnsco.web.controller.open.jo.TradeJO;
 
 /**
@@ -85,14 +85,27 @@ public class TradeController extends BaseController {
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
         String url = evn.getProperty("jhf.qr.pay.url");
-        //        payAmount   支付金额    必填
-        //        npr 唯一标识    必填
-        //        uniqueIdType    分期数 必填
-        //        commID  商户Id    必填
-        //        unionId 客户ID    可选
-        //        payCallBackParams   支付成功后回调参数   必填
-        url += "?thirdPayNo="+tradeOrder.getOrderNo()+"&commID=" + merchantChannelJhf.getChannelMerId() + "&payAmount=" + tradeJO.getPaymentAmount() + "&uniqueIdType=" + tradeJO.getInstallmentNum() + "unionId="
-               + merchantChannelJhf.getInnerCode() + "&npr=" + tradeOrder.getOrderNo() + "&payCallBackParams=";
+        String urlLocalhost = evn.getProperty("jhf.qr.pay.url");
+        //        commID  商户Id
+        //        thirdPayNo  订单号
+        //        payAmount   支付金额
+        //        npr 分期数
+        //        unionId 客户ID
+        //        transTime   交易时间
+        //        payNotifyUrl    通知URL
+        //        payCallBackUrl  支付结束的回调URL
+        //        payCallBackParams   支付成功后通知参数
+        //        singData    MD5签名
+        String createTimerStr = DateUtils.dateFormatToStr(tradeOrder.getCreateTime());
+        String payCallBackParams = JSON.toJSONString(tradeOrder);
+        //MD5(商户Id+订单号+支付金额+分期数+交易时间+通知URL+回调URL+通知参数)
+        String singDataStr =  merchantChannelJhf.getChannelMerId()+tradeOrder.getOrderNo()
+        +tradeJO.getPaymentAmount()+tradeOrder.getInstallmentNum()+createTimerStr;
+        url += "?thirdPayNo=" + tradeOrder.getOrderNo() + "&commID=" + merchantChannelJhf.getChannelMerId() +
+                "&payAmount=" + tradeJO.getPaymentAmount() + "&uniqueIdType="
+               + tradeJO.getInstallmentNum() + "unionId=" + merchantChannelJhf.getInnerCode() + 
+               "&transTime="+createTimerStr+
+               "&npr=" + tradeOrder.getInstallmentNum() + "&singData="+DbUtil.MD5(singDataStr)+"&payNotifyUrl="+urlLocalhost+"&payCallBackUrl=&payCallBackParams=";
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
         resultMap.put("orderNo", tradeOrder.getOrderNo());
@@ -115,51 +128,15 @@ public class TradeController extends BaseController {
     public ResultDTO payCompleteCallback(String salesOrderNo, String orderStatus, String settlementStatus, String payCallBackParams) {
         //保存订单信息
         //成功或失败则同步到交易流水信息
-        OrderJO order = new OrderJO();
+        OrderDTO order = new OrderDTO();
         order.setSalesOrderNo(salesOrderNo);
         order.setOrderStatus(orderStatus);
         order.setSettlementStatus(settlementStatus);
         order.setPayCallBackParams(payCallBackParams);
+        order.setOrderCeateTime(new Date());
         logger.error("支付完成时的回调入参：" + JSON.toJSONString(order));
-        ResultDTO result = saveOrderInfo(order);
+        ResultDTO result = tradeOrderService.updateOrderInfo(order);
         return success(result);
-    }
-
-    private ResultDTO saveOrderInfo(OrderJO order) {
-        String payCallBackParams = order.getPayCallBackParams();
-        TradeOrderDO tradeOrderTemp = JSON.parseObject(payCallBackParams, TradeOrderDO.class);
-        String orderNo = tradeOrderTemp.getOrderNo();
-        TradeOrderDO tradeOrderDO = tradeOrderService.queryByOrderId(orderNo);
-        if (null == tradeOrderDO) {
-            logger.error("订单不存在" + JSON.toJSONString(tradeOrderDO));
-            return fail("订单不存在");
-        }
-        //      orderStatus 订单状态    （0 未支付 1支付成功 2支付失败 3已退货）
-        String respCode = ConstantEnum.RESP_CODE_MAP.get(order.getOrderStatus());
-        if (Strings.isNullOrEmpty(respCode)) {
-            respCode = tradeOrderDO.getRespCode();
-        }
-        tradeOrderDO.setRespCode(respCode);
-        tradeOrderDO.setPayOrderNo(order.getSalesOrderNo());
-        
-        //结算状态（0 未结算 1已结算   2结算中   3已退款）
-        if (Strings.isNullOrEmpty(order.getSettlementStatus())) {
-            try {
-                tradeOrderDO.setSettleStatus(Integer.parseInt(order.getSettlementStatus()));
-                tradeOrderDO.setSettleDate(new Date());
-            } catch (Exception ex) {
-                logger.error("支付完成时回调时结算状态转换为int出错", ex);
-            }
-        }
-        if ("3".equals(order.getSettlementStatus())) {//3已退货
-            tradeOrderDO.setId(null);
-            tradeOrderDO.setTxnType(2);
-            tradeOrderService.doAdd(tradeOrderDO);
-        } else {
-            tradeOrderDO.setOrderCeateTime(new Date());
-            tradeOrderService.doUpdate(tradeOrderDO);
-        }
-        return null;
     }
 
     /**
@@ -172,13 +149,13 @@ public class TradeController extends BaseController {
     @ApiOperation(value = "支付完成时的通知")
     public ResultDTO payCompleteNotice(String salesOrderNo, String orderStatus, String settlementStatus, String payCallBackParams) {
         String url = evn.getProperty("jhf.qr.pay.url");
-        OrderJO order = new OrderJO();
+        OrderDTO order = new OrderDTO();
         order.setSalesOrderNo(salesOrderNo);
         order.setOrderStatus(orderStatus);
         order.setSettlementStatus(settlementStatus);
         order.setPayCallBackParams(payCallBackParams);
         logger.error("支付完成时的通知入参：" + JSON.toJSONString(order));
-        ResultDTO result = saveOrderInfo(order);
+        ResultDTO result = tradeOrderService.updateOrderInfo(order);
         return success(url);
     }
 
