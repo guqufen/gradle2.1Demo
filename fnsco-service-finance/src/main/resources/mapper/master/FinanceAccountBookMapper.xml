@@ -106,7 +106,7 @@
 	f_finance_io_type 
   </select>
   <!-- APP端记账查询店铺是否存在，是否生成account_id -->
-  <select id="queryShopInnerCode" parameterType="java.lang.String" resultMap="java.lang.String" >
+  <select id="queryShopInnerCode" parameterType="java.lang.String" resultType="java.lang.String">
     SELECT
 		account_id
 	FROM
@@ -115,7 +115,7 @@
 		shop_inner_code = #{shopInnerCode,jdbcType=VARCHAR}
   </select>
   <!-- account_id生成时查重 -->
-  <select id="queryAccountId" parameterType="java.lang.String" resultMap="java.lang.String" >
+  <select id="queryAccountId" parameterType="java.lang.String" resultType="java.lang.String" >
     SELECT
 		account_id
 	FROM
