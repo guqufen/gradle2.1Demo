@@ -209,6 +209,7 @@ function queryParams(params)
        currentPageNum : this.pageNumber,
        pageSize : this.pageSize,
        merName :$.trim($('#txt_search_id').val()),
+       innerCode :$.trim($('#txt_search_innerCode').val()),
        merId :$.trim($('#txt_search_merId').val()),
        legalPerson:$.trim($('#txt_search_name').val()),
        legalPersonMobile:$.trim($('#txt_search_price').val()),
@@ -1557,12 +1558,12 @@ function detailsData(id){
           bankOption+='<option value="'+data.data.banks[i].id+'">'+data.data.banks[i].subBankName+'</option>'
         }
 
-        //终端信息
-        var bankLen=data.data.banks.length;
-        bankOption='';
-        for(var i=0;i<bankLen;i++){
-          bankOption+='<option value="'+data.data.banks[i].id+'">'+data.data.banks[i].subBankName+'</option>'
-        }
+        // //终端信息
+        // var bankLen=data.data.banks.length;
+        // bankOption='';
+        // for(var i=0;i<bankLen;i++){
+        //   bankOption+='<option value="'+data.data.banks[i].id+'">'+data.data.banks[i].subBankName+'</option>'
+        // }
 
         $("#terminal-con2").html('');
         var channelsLen=data.data.channel.length;
@@ -1599,12 +1600,13 @@ function detailsData(id){
               var terminalLen=data.data.channel[i].posInfos[j].terminal.length;
               for(var o=0;o<terminalLen;o++){
                 if(data.data.channel[i].posInfos[j].terminal[o].terminalType=='00'){
-                  $('#terminal-con2 input[name="terminalCode2'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].terminalCode);
+                  $('#terminal-con2 input[name="terminalCode2'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].channelTerminalCode);
                   $('#terminal-con2 input[name="debitCardMaxFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].debitCardMaxFee);
                   $('#terminal-con2 input[name="debitCardRate'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].debitCardRate);
                   $('#terminal-con2 input[name="creditCardRate'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].creditCardRate);
                 }else if(data.data.channel[i].posInfos[j].terminal[o].terminalType=='01'){
-                  $('#terminal-con2 input[name="terminalCode1'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].terminalCode);
+                  // console.log($('#terminal-con2 input[name="terminalCode1'+data.data.channel[i].posInfos[j].id+'"]'),data.data.channel[i].posInfos[j].terminal[o].terminalCode)
+                  $('#terminal-con2 input[name="terminalCode1'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].channelTerminalCode);
                   $('#terminal-con2 input[name="alipayFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].alipayFee);
                   $('#terminal-con2 input[name="wechatFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].wechatFee);
                 }
