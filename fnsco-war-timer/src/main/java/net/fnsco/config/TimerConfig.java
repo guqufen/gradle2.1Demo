@@ -106,8 +106,16 @@ public class TimerConfig {
     /**
      * spring boot 定时更新订单
      */
-    //    @Scheduled(cron = "0 */5 * * * ?")
+    @Scheduled(cron = "0 */5 * * * ?")
     public void getOrderStatues() {
         tradeOrderService.updateOrderStatues();
+    }
+    
+    /**
+     * spring boot 同步订单交易数据
+     */
+    @Scheduled(cron = "0 */5 * * * ?")
+    public void syncOrderTradeData() {
+        tradeOrderService.syncOrderTradeData();
     }
 }

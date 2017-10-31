@@ -27,11 +27,18 @@ public class DbUtil {
         return fixLenthString.substring(1, strLength + 1);
     }
 
-    public final static String MD5(String arg) {
+    public final static String MD5S(String arg) {
         if (Strings.isNullOrEmpty(arg)) {
             arg = "";
         }
         arg += "1.断断续续的努力~=白努力。";
+        return MD5(arg);
+    }
+
+    public final static String MD5(String arg) {
+        if (Strings.isNullOrEmpty(arg)) {
+            arg = "";
+        }
         char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
         try {
             byte[] strTemp = arg.getBytes();
