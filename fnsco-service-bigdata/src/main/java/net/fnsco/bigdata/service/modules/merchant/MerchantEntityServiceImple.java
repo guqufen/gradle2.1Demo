@@ -140,7 +140,7 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 		MerchantEntity record = new MerchantEntity();
 
         while (true) {
-        	entityInnerCode = "1"+CodeUtil.generateMerchantCode("F");
+        	entityInnerCode = "E"+CodeUtil.generateMerchantCode("F");
             record.setEntityInnerCode(entityInnerCode);
             Integer total = merchantEntityDao.queryTotalByCondition(record);
             if (total == 0) {
