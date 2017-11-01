@@ -1,8 +1,10 @@
 package net.fnsco.web.controller.app.merchat.mershop;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,6 +61,13 @@ public class AppMerchantShopController extends BaseController {
 			return ResultDTO.fail(BigdataConstant.E_USERID_NULL);
 		}
 		List<MerchantShopDTO> datas = merchantEntityDao.queryAllShopDetail(merchant.getUserId());
+		Iterator<MerchantShopDTO> it = datas.iterator();
+		while(it.hasNext()){
+			MerchantShopDTO x = it.next();
+		    if(CollectionUtils.isEmpty(x.getEntitys())){
+		        it.remove();
+		    }
+		}
 		return ResultDTO.success(datas);
 	}
 	
