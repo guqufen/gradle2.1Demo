@@ -22,7 +22,6 @@ public class OrderDTO extends DTO {
     //payCallBackParams   商户上送参数
     private String time;             //   交易时间
     private String singData;
-
     /**
      * singData
      *

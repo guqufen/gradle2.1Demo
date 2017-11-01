@@ -44,12 +44,9 @@ public class HttpUtils {
     private static final String _POST           = "POST";  // POST
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-        String url = "https://ddk-api.vcredit.com/o2o/platform/api/security/register/introduction";
+        String url = "http://localhost:8080/admin/trade/jhf/payCompleteNotice";
         Map<String, String> params = Maps.newHashMap();
-        params.put("invitationCode", "kvrf64");
-        params.put("mobile", "18268008227");
-        params.put("password", "670b14728ad9902aecba32e22fa4f6bd");
-        params.put("smsCode", "414103");
+        params.put("rspData", "kvrf64");
         String result = post(url, params);
         System.out.println(result);
     }

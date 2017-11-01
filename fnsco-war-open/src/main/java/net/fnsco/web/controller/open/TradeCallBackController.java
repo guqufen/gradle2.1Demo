@@ -53,9 +53,9 @@ public class TradeCallBackController extends BaseController {
      */
     @RequestMapping(value = "/payCompleteNotice")
     @ApiOperation(value = "支付完成时的通知")
-    public ResultDTO payCompleteNotice(@RequestBody String rspData) {
+    public ResultDTO payCompleteNotice(String rspData) {
         logger.error("聚惠芬支付完成时的通知密文入参：" + rspData);
-        String keyStr =env.getProperty("jhf.api.AES.key");
+        String keyStr = env.getProperty("jhf.api.AES.key");
         String decodeStr = AESUtil.decode(rspData, keyStr);
         logger.error("聚惠芬支付完成时的通知解密后入参：" + decodeStr);
         OrderDTO order = JSON.parseObject(decodeStr, OrderDTO.class);

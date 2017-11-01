@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
@@ -138,7 +139,7 @@ public class TradeOrderService extends BaseService {
 
     //定时任务查询订单状态
     public void updateOrderStatues(String orderNoArg) {
-        String keyStr =env.getProperty("jhf.api.AES.key");
+        String keyStr = env.getProperty("jhf.api.AES.key");
         List<TradeOrderDO> tradeOrderList = this.tradeOrderDAO.queryAllNotComplete(orderNoArg);
         String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/queryPayOrderList";
         for (TradeOrderDO order : tradeOrderList) {
@@ -149,12 +150,8 @@ public class TradeOrderService extends BaseService {
             Map<String, String> param = Maps.newHashMap();
             String args = JSON.toJSONString(params);
             String reqData = "";
-            try {
-                reqData = URLEncoder.encode(AESUtil.encode(args, keyStr), "utf-8");
-            } catch (UnsupportedEncodingException e) {
-                logger.error("查询聚惠芬加密参数出错", e);
-            }
-            param.put("rspData", reqData);
+            reqData = AESUtil.encode(args, keyStr);
+            param.put("reqData", reqData);
             param.put("commID", order.getChannelMerId());
             String resultJson = "";
             try {
@@ -174,8 +171,13 @@ public class TradeOrderService extends BaseService {
             //payCallBackParams   商户上送参数
             if (!Strings.isNullOrEmpty(resultJson)) {
                 try {
-                    OrderDTO orderDto = JSON.parseObject(resultJson, OrderDTO.class);
-                    updateOrderInfo(orderDto);
+                    JSONObject jsonObj = JSON.parseObject(resultJson);
+                    String rspDataStr = jsonObj.getString("rspData");
+                    String decodeStr = AESUtil.decode(rspDataStr, keyStr);
+                    OrderDTO orderDto = JSON.parseObject(decodeStr, OrderDTO.class);
+                    if (null != orderDto) {
+                        updateOrderInfo(orderDto);
+                    }
                 } catch (Exception ex) {
                     logger.error("定时更新分期付状态数据出错", ex);
                 }
