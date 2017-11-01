@@ -156,10 +156,7 @@ public class AppMerchentLevelController extends BaseController{
 			integralRuleDTOList.add(integralRuleDTO);
 		}
 
-		IntegralRuleLog integralRuleLog = new IntegralRuleLog();
-		integralRuleLog.setEntityInnerCode("E102715166067306");
-		integralRuleLog.setRuleCode("006");
-		integralRuleLogService.insert(integralRuleLog);
+		integralRuleLogService.insert("E102715166067306", "001");
 
 		return success(integralRuleDTOList);
 	}

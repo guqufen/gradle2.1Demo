@@ -28,7 +28,7 @@ public interface IntegralRuleLogDAO {
 	 * @param integralRuleLog
 	 * @return :总积分
 	 */
-	public void insert(IntegralRuleLog integralRuleLog);
+	public int insert(IntegralRuleLog integralRuleLog);
 	
 	/**
 	 * 通过实体商户号+积分规则代码/积分日期查询次数

@@ -28,5 +28,5 @@ public interface IntegralRuleLogService {
 	 * @param integralRuleLog
 	 * @return :总积分
 	 */
-	public void insert(IntegralRuleLog integralRuleLog);
+	public void insert(String entityInnerCode, String ruleCode);
 }

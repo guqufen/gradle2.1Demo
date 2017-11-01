@@ -40,6 +40,20 @@ public interface MerchantEntityDao {
     List<MerchantShopDTO> queryAllShopDetail(@Param("userId")Integer userId);
     
     /**
+     * 通过实体内部商户号查找数据
+     * @param record
+     * @return
+     */
+    MerchantEntity selectByEntityInnerCode(@Param("entityInnerCode")String entityInnerCode);
+    
+    /**
+     * 通过实体商户号更新数据
+     * @param entityInnerCode
+     * @return
+     */
+    int updateByEntityInnerCode(MerchantEntity record);
+    
+    /**
      * queryPageList:(分页条件)
      *
      * @param  @param pages

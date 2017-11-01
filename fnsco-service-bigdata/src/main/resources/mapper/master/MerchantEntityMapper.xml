@@ -243,4 +243,60 @@
 				)
 		)
   </select>
+
+  <select id="selectByEntityInnerCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_entity
+    where entity_inner_code = #{entityInnerCode}
+  </select>
+
+  <update id="updateByEntityInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
+    update m_merchant_entity
+    <set >
+      <if test="entityInnerCode != null" >
+        entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mercName != null" >
+        merc_name = #{mercName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPerson != null" >
+        legal_person = #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonMobile != null" >
+        legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseNum != null" >
+        business_license_num = #{businessLicenseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNum != null" >
+        card_num = #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTimer != null" >
+        create_timer = #{createTimer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createSource != null" >
+        create_source = #{createSource,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastModefyTimer != null" >
+        last_modefy_timer = #{lastModefyTimer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModefyUserId != null" >
+        last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="scores != null" >
+        scores = #{scores,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR}
+  </update>
 </mapper>
