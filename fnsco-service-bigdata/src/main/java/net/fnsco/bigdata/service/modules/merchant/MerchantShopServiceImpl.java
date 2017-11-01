@@ -144,5 +144,34 @@ public class MerchantShopServiceImpl implements MerchantShopService {
         return shopInnerCode;
 
 	}
+	
+	/**
+	 * 按照条件更新
+	 * (non-Javadoc)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#updateByShopInnerCodeSelective(net.fnsco.bigdata.service.domain.MerchantShop)
+	 * @author tangliang
+	 * @date 2017年11月1日 上午10:15:00
+	 */
+	@Override
+	public int updateByShopInnerCodeSelective(MerchantShop record) {
+		
+		// TODO Auto-generated method stub
+		return merchantShopDao.updateByShopInnerCodeSelective(record);
+		
+	}
+	
+	/**
+	 * (non-Javadoc)按照shopInnerCode删除
+	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#deleteByShopInnerCode(java.lang.String)
+	 * @author tangliang
+	 * @date 2017年11月1日 上午11:43:20
+	 */
+	@Override
+	public int deleteByShopInnerCode(String shopInnerCode) {
+		
+		// TODO Auto-generated method stub
+		return merchantShopDao.deleteByShopInnerCode(shopInnerCode);
+		
+	}
 
 }

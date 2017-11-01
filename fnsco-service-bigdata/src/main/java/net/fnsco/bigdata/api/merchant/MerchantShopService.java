@@ -22,6 +22,28 @@ public interface MerchantShopService {
 	int insertSelective(MerchantShop record);
 
 	MerchantShop selectByPrimaryKey(Integer id);
+	
+	/**
+	 * deleteByShopInnerCode:(按照SHOPINNERCode删除)
+	 *
+	 * @param  @param shopInnerCode
+	 * @param  @return    设定文件
+	 * @return int    DOM对象
+	 * @author tangliang
+	 * @date   2017年11月1日 上午11:40:20
+	 */
+	int deleteByShopInnerCode(String shopInnerCode);
+	
+	/**
+	 * updateByShopInnerCodeSelective:(按照条件更新)
+	 *
+	 * @param  @param record
+	 * @param  @return    设定文件
+	 * @return int    DOM对象
+	 * @author tangliang
+	 * @date   2017年11月1日 上午10:10:38
+	 */
+	int updateByShopInnerCodeSelective(MerchantShop record);
 
 	int updateByPrimaryKeySelective(MerchantShop record);
 

@@ -22,7 +22,29 @@ public interface MerchantShopDao {
     int insertSelective(MerchantShop record);
 
     MerchantShop selectByPrimaryKey(Integer id);
-
+    
+    /**
+     * deleteByShopInnerCode:(按照shopInnerCode删除)
+     *
+     * @param  @param shopInnerCode
+     * @param  @return    设定文件
+     * @return int    DOM对象
+     * @author tangliang
+     * @date   2017年11月1日 上午11:41:07
+     */
+    int deleteByShopInnerCode(@Param("shopInnerCode")String shopInnerCode);
+    
+    /**
+     * updateByCondition:(按照条件更新)
+     *
+     * @param  @param record
+     * @param  @return    设定文件
+     * @return int    DOM对象
+     * @author tangliang
+     * @date   2017年11月1日 上午10:11:32
+     */
+    int updateByShopInnerCodeSelective(MerchantShop record);
+    
     int updateByPrimaryKeySelective(MerchantShop record);
 
     int updateByPrimaryKey(MerchantShop record);
