@@ -21,8 +21,48 @@ public class SysConfig {
     private Integer status;
 
     private String remark;
+    
+    private Integer orderNo;//排序号
+    
+    private String keep1;//保留字段1
+    
+    private String keep2;//保留字段2
+    
+    private String keep3;//保留字段3
 
-    public Integer getId() {
+    public Integer getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(Integer orderNo) {
+		this.orderNo = orderNo;
+	}
+
+	public String getKeep1() {
+		return keep1;
+	}
+
+	public void setKeep1(String keep1) {
+		this.keep1 = keep1;
+	}
+
+	public String getKeep2() {
+		return keep2;
+	}
+
+	public void setKeep2(String keep2) {
+		this.keep2 = keep2;
+	}
+
+	public String getKeep3() {
+		return keep3;
+	}
+
+	public void setKeep3(String keep3) {
+		this.keep3 = keep3;
+	}
+
+	public Integer getId() {
         return id;
     }
 
