@@ -66,7 +66,7 @@ public class ResultDTO<T extends Object> extends DTO {
     }
     
     public static ResultDTO failForMessage(String message) {
-        ResultDTO result = new ResultDTO(false, message, CoreConstants.E_COMM_BUSSICSS, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.E_COMM_BUSSICSS));
+        ResultDTO result = new ResultDTO(false, message, null, message);
         return result;
     }
     
