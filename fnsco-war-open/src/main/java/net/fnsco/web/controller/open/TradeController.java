@@ -103,16 +103,17 @@ public class TradeController extends BaseController {
         String createTimerStr = DateUtils.dateFormat1ToStr(tradeOrder.getCreateTime());
         String payCallBackParams = JSON.toJSONString(tradeOrder);
         //MD5(商户Id+订单号+支付金额+分期数+交易时间+通知URL+回调URL+通知参数)
+        BigDecimal amountTemp = tradeOrder.getTxnAmount();
+        BigDecimal amountTemps = amountTemp.divide(new BigDecimal("100"));
         String singDataStr =  merchantChannelJhf.getChannelMerId()+tradeOrder.getOrderNo()
-        +tradeOrder.getTxnAmount().toString()+String.valueOf(tradeOrder.getInstallmentNum())+createTimerStr+payNotifyUrl;
+        +amountTemps.toString()+String.valueOf(tradeOrder.getInstallmentNum())+createTimerStr+payNotifyUrl;
         logger.error("签名前数据"+singDataStr);
         String singData=JHFMd5Util.encode32(singDataStr);
         logger.error("签名"+singData);
         TradeJhfJO jhfJO = new TradeJhfJO();
         jhfJO.setCommID(tradeOrder.getChannelMerId());
         jhfJO.setPeriodNum(String.valueOf(tradeOrder.getInstallmentNum()));
-        BigDecimal amountTemp = tradeOrder.getTxnAmount();
-        BigDecimal amountTemps = amountTemp.divide(new BigDecimal("100"));
+        
         jhfJO.setPayAmount(amountTemps.toString());
         jhfJO.setPayCallBackParams("");
         jhfJO.setPayCallBackUrl("");//payCallBackUrl
