@@ -15,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.constant.MerShopDTO;
+import net.fnsco.bigdata.api.dto.MerEntityDTO;
 import net.fnsco.bigdata.api.dto.MerchantShopDTO;
 import net.fnsco.bigdata.api.merchant.MerchantShopService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
@@ -60,7 +61,27 @@ public class AppMerchantShopController extends BaseController {
 		List<MerchantShopDTO> datas = merchantEntityDao.queryAllShopDetail(merchant.getUserId());
 		return ResultDTO.success(datas);
 	}
+	
+	/**
+	 * queryMerEntityList:(查询所有商户实体列表)
+	 *
+	 * @param  @param merchant
+	 * @param  @return    设定文件
+	 * @return ResultDTO<List<MerEntityDTO>>    DOM对象
+	 * @author tangliang
+	 * @date   2017年11月1日 下午2:56:28
+	 */
+	@RequestMapping(value = "/queryMerEntityList")
+	@ApiOperation(value = "查询所有商户实体列表")
+	public ResultDTO<List<MerEntityDTO>> queryMerEntityList(@RequestBody MerShopDTO merchant) {
 
+		if (null == merchant.getUserId()) {
+			return ResultDTO.fail(BigdataConstant.E_USERID_NULL);
+		}
+		List<MerEntityDTO> datas = merchantEntityDao.queryAllMerEntity(merchant.getUserId());
+		return ResultDTO.success(datas);
+	}
+	
 	/**
 	 * addMerchantShop:(增加店铺接口)
 	 *

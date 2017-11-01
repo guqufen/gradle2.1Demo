@@ -1,0 +1,71 @@
+package net.fnsco.bigdata.api.dto;
+
+import net.fnsco.core.base.DTO;
+
+/**
+ * @desc 
+ * @author   tangliang
+ * @version  0.0.1-SNAPSHOT
+ * @since    Ver 1.1
+ * @Date	 2017年11月1日 下午2:55:06
+ */
+
+public class MerEntityDTO extends DTO {
+
+	/**
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）
+	 *
+	 * @since Ver 1.1
+	 */
+	
+	private static final long serialVersionUID = 7605966364767440546L;
+	
+	private String entityInnerCode;
+
+    private String mercName;
+
+	/**
+	 * entityInnerCode
+	 *
+	 * @return  the entityInnerCode
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getEntityInnerCode() {
+		return entityInnerCode;
+	}
+
+	/**
+	 * entityInnerCode
+	 *
+	 * @param   entityInnerCode    the entityInnerCode to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setEntityInnerCode(String entityInnerCode) {
+		this.entityInnerCode = entityInnerCode;
+	}
+
+	/**
+	 * mercName
+	 *
+	 * @return  the mercName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getMercName() {
+		return mercName;
+	}
+
+	/**
+	 * mercName
+	 *
+	 * @param   mercName    the mercName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setMercName(String mercName) {
+		this.mercName = mercName;
+	}
+    
+}
