@@ -50,7 +50,7 @@ public class TradeController extends BaseController {
     @Autowired
     private TradeOrderService tradeOrderService;
     @Autowired
-    private Environment       evn;
+    private Environment       env;
 
     /**
      * 获取聚惠分二维码url获取
@@ -86,8 +86,9 @@ public class TradeController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        String url = evn.getProperty("jhf.open.api.url")+"/api/thirdPay/dealPayOrder";
-        String payNotifyUrl = evn.getProperty("open.base.url")+"/trade/jhf/payCompleteNotice";
+        String url = env.getProperty("jhf.open.api.url")+"/api/thirdPay/dealPayOrder";
+        String keyStr =env.getProperty("jhf.api.AES.key");
+        String payNotifyUrl = env.getProperty("open.base.url")+"/trade/jhf/payCompleteNotice";
         //        commID  商户Id
         //        thirdPayNo  订单号
         //        payAmount   支付金额
@@ -98,26 +99,29 @@ public class TradeController extends BaseController {
         //        payCallBackUrl  支付结束的回调URL
         //        payCallBackParams   支付成功后通知参数
         //        singData    MD5签名
-        String createTimerStr = DateUtils.dateFormatToStr(tradeOrder.getCreateTime());
+        String createTimerStr = DateUtils.dateFormat1ToStr(tradeOrder.getCreateTime());
         String payCallBackParams = JSON.toJSONString(tradeOrder);
         //MD5(商户Id+订单号+支付金额+分期数+交易时间+通知URL+回调URL+通知参数)
         String singDataStr =  merchantChannelJhf.getChannelMerId()+tradeOrder.getOrderNo()
-        +tradeJO.getPaymentAmount()+tradeOrder.getInstallmentNum()+createTimerStr;
+        +tradeOrder.getTxnAmount().toString()+String.valueOf(tradeOrder.getInstallmentNum())+createTimerStr+payNotifyUrl;
+        logger.error("签名前数据"+singDataStr);
         String singData=JHFMd5Util.encode32(singDataStr);
+        logger.error("签名"+singData);
         TradeJhfJO jhfJO = new TradeJhfJO();
         jhfJO.setCommID(tradeOrder.getChannelMerId());
-        jhfJO.setNpr(String.valueOf(tradeOrder.getInstallmentNum()));
+        jhfJO.setPeriodNum(String.valueOf(tradeOrder.getInstallmentNum()));
         jhfJO.setPayAmount(tradeOrder.getTxnAmount().toString());
         jhfJO.setPayCallBackParams("");
         jhfJO.setPayCallBackUrl("");//payCallBackUrl
         jhfJO.setPayNotifyUrl(payNotifyUrl);
         jhfJO.setSingData(singData);
         jhfJO.setThirdPayNo(tradeOrder.getOrderNo());
-        jhfJO.setTransTime(DateUtils.dateFormat1ToStr(tradeOrder.getCreateTime()));
+        jhfJO.setTransTime(createTimerStr);
         jhfJO.setUnionId(tradeOrder.getMercId());
-        String reqData=JSON.toJSONString(jhfJO);
+        String reqData="";
+        String dateTemp = JSON.toJSONString(jhfJO);
         try {
-            reqData = URLEncoder.encode(AESUtil.encode(reqData, "UITN25LMUQC436IM"),"utf-8");
+            reqData = URLEncoder.encode(AESUtil.encode(dateTemp, keyStr),"utf-8");
         } catch (UnsupportedEncodingException e) {
             logger.error("生成分期付url时AES加密出错",e);
         }

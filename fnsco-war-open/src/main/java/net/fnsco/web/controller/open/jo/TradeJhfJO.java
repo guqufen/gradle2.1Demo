@@ -6,7 +6,7 @@ public class TradeJhfJO {
     private String commID;           //  商户Id
     private String thirdPayNo;       // 订单号
     private String payAmount;        //   支付金额
-    private String npr;              // 分期数
+    private String periodNum;        // 分期数
     private String unionId;          // 客户ID
     private String transTime;        //   交易时间
     private String payNotifyUrl;     //   通知URL
@@ -81,25 +81,25 @@ public class TradeJhfJO {
     }
 
     /**
-     * npr
+     * periodNum
      *
-     * @return  the npr
+     * @return  the periodNum
      * @since   CodingExample Ver 1.0
     */
 
-    public String getNpr() {
-        return npr;
+    public String getPeriodNum() {
+        return periodNum;
     }
 
     /**
-     * npr
+     * periodNum
      *
-     * @param   npr    the npr to set
+     * @param   periodNum    the periodNum to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setNpr(String npr) {
-        this.npr = npr;
+    public void setPeriodNum(String periodNum) {
+        this.periodNum = periodNum;
     }
 
     /**
