@@ -396,7 +396,7 @@ public class AppPushServiceImpl extends BaseService implements AppPushService {
             }
             AppUser appuser = appUserService.selectAppUserById(sysMsgAppFail.getAppUserId());
             //不在线不推送
-            if(null == appuser.getDeviceType()){
+            if(appuser == null || null == appuser.getDeviceType()){
                 continue;
             }
             //在线

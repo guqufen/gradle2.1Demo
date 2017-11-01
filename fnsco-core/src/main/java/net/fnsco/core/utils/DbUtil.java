@@ -9,7 +9,7 @@ import com.google.common.base.Strings;
 public class DbUtil {
     public static String getUuid() {
         UUID uuid = UUID.randomUUID();
-        return MD5(uuid.toString());
+        return MD5S(uuid.toString());
         // String uuidStr = uuid.toString();
         // uuidStr = uuidStr.toUpperCase();
         // // 替换 -
@@ -58,5 +58,8 @@ public class DbUtil {
 
             return null;
         }
+    }
+    public static void main(String[] args){
+        System.out.println(UUID.randomUUID());
     }
 }

@@ -1,7 +1,8 @@
 package net.fnsco.web.controller.open;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.net.URLEncoder;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,13 @@ import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
-import net.fnsco.core.utils.DbUtil;
+import net.fnsco.core.utils.dby.AESUtil;
+import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ConstantEnum;
-import net.fnsco.order.api.dto.OrderDTO;
 import net.fnsco.order.service.trade.TradeOrderService;
 import net.fnsco.order.service.trade.entity.TradeOrderDO;
 import net.fnsco.web.controller.open.jo.TradeJO;
+import net.fnsco.web.controller.open.jo.TradeJhfJO;
 
 /**
  * 
@@ -84,8 +86,8 @@ public class TradeController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        String url = evn.getProperty("jhf.qr.pay.url");
-        String urlLocalhost = evn.getProperty("jhf.qr.pay.url");
+        String url = evn.getProperty("jhf.open.api.url")+"/api/thirdPay/dealPayOrder";
+        String payNotifyUrl = evn.getProperty("open.base.url")+"/trade/jhf/payCompleteNotice";
         //        commID  商户Id
         //        thirdPayNo  订单号
         //        payAmount   支付金额
@@ -101,62 +103,30 @@ public class TradeController extends BaseController {
         //MD5(商户Id+订单号+支付金额+分期数+交易时间+通知URL+回调URL+通知参数)
         String singDataStr =  merchantChannelJhf.getChannelMerId()+tradeOrder.getOrderNo()
         +tradeJO.getPaymentAmount()+tradeOrder.getInstallmentNum()+createTimerStr;
-        url += "?thirdPayNo=" + tradeOrder.getOrderNo() + "&commID=" + merchantChannelJhf.getChannelMerId() +
-                "&payAmount=" + tradeJO.getPaymentAmount() + "&uniqueIdType="
-               + tradeJO.getInstallmentNum() + "unionId=" + merchantChannelJhf.getInnerCode() + 
-               "&transTime="+createTimerStr+
-               "&npr=" + tradeOrder.getInstallmentNum() + "&singData="+DbUtil.MD5(singDataStr)+"&payNotifyUrl="+urlLocalhost+"&payCallBackUrl=&payCallBackParams=";
+        String singData=JHFMd5Util.encode32(singDataStr);
+        TradeJhfJO jhfJO = new TradeJhfJO();
+        jhfJO.setCommID(tradeOrder.getChannelMerId());
+        jhfJO.setNpr(String.valueOf(tradeOrder.getInstallmentNum()));
+        jhfJO.setPayAmount(tradeOrder.getTxnAmount().toString());
+        jhfJO.setPayCallBackParams("");
+        jhfJO.setPayCallBackUrl("");//payCallBackUrl
+        jhfJO.setPayNotifyUrl(payNotifyUrl);
+        jhfJO.setSingData(singData);
+        jhfJO.setThirdPayNo(tradeOrder.getOrderNo());
+        jhfJO.setTransTime(DateUtils.dateFormat1ToStr(tradeOrder.getCreateTime()));
+        jhfJO.setUnionId(tradeOrder.getMercId());
+        String reqData=JSON.toJSONString(jhfJO);
+        try {
+            reqData = URLEncoder.encode(AESUtil.encode(reqData, "UITN25LMUQC436IM"),"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            logger.error("生成分期付url时AES加密出错",e);
+        }
+        url += "?commID="+tradeOrder.getChannelMerId()+"&reqData="+reqData;
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
         resultMap.put("orderNo", tradeOrder.getOrderNo());
         //，通知地址，回调地址。
         return success(resultMap);
-    }
-
-    //    salesOrderNo    订单号 
-    //    orderStatus 订单状态    （0 未支付 1支付成功 2支付失败 3已退货）
-    //    settlementStatus    结算状态    （0 未结算 1已结算   2结算中   3已退款）
-    //    payCallBackParams   商户上送参数  
-    /**
-     * 支付完成时的回调
-     *
-     * @param userName
-     * @return
-     */
-    @RequestMapping(value = "/payCompleteCallback")
-    @ApiOperation(value = "支付完成时的回调")
-    public ResultDTO payCompleteCallback(String salesOrderNo, String orderStatus, String settlementStatus, String payCallBackParams) {
-        //保存订单信息
-        //成功或失败则同步到交易流水信息
-        OrderDTO order = new OrderDTO();
-        order.setSalesOrderNo(salesOrderNo);
-        order.setOrderStatus(orderStatus);
-        order.setSettlementStatus(settlementStatus);
-        order.setPayCallBackParams(payCallBackParams);
-        order.setOrderCeateTime(new Date());
-        logger.error("支付完成时的回调入参：" + JSON.toJSONString(order));
-        ResultDTO result = tradeOrderService.updateOrderInfo(order);
-        return success(result);
-    }
-
-    /**
-     * 支付完成时的通知，显示我们自己的页面
-     *
-     * @param userName
-     * @return
-     */
-    @RequestMapping(value = "/payCompleteNotice")
-    @ApiOperation(value = "支付完成时的通知")
-    public ResultDTO payCompleteNotice(String salesOrderNo, String orderStatus, String settlementStatus, String payCallBackParams) {
-        String url = evn.getProperty("jhf.qr.pay.url");
-        OrderDTO order = new OrderDTO();
-        order.setSalesOrderNo(salesOrderNo);
-        order.setOrderStatus(orderStatus);
-        order.setSettlementStatus(settlementStatus);
-        order.setPayCallBackParams(payCallBackParams);
-        logger.error("支付完成时的通知入参：" + JSON.toJSONString(order));
-        ResultDTO result = tradeOrderService.updateOrderInfo(order);
-        return success(url);
     }
 
     /**

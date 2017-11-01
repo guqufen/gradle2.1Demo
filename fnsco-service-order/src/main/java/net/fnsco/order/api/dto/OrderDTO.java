@@ -21,6 +21,29 @@ public class OrderDTO extends DTO {
     //settlementStatus    结算状态
     //payCallBackParams   商户上送参数
     private String time;             //   交易时间
+    private String singData;
+
+    /**
+     * singData
+     *
+     * @return  the singData
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getSingData() {
+        return singData;
+    }
+
+    /**
+     * singData
+     *
+     * @param   singData    the singData to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setSingData(String singData) {
+        this.singData = singData;
+    }
 
     /**
      * time

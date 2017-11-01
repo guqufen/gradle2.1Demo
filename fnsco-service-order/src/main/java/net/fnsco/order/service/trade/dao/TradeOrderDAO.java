@@ -46,8 +46,9 @@ public interface TradeOrderDAO {
                @Result(column = "settle_amount", property = "settleAmount"), @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"),
                @Result(column = "create_user_id", property = "createUserId"), @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"),
                @Result(column = "inner_code", property = "innerCode") })
-    @Select("SELECT * FROM t_trade_order WHERE resp_code = '1000'")
-    public List<TradeOrderDO> queryAllNotComplete();
+    //@Select("SELECT * FROM t_trade_order WHERE resp_code = '1000'")
+    @SelectProvider(type = TradeOrderProvider.class, method = "queryAllNotComplete")
+    public List<TradeOrderDO> queryAllNotComplete(@Param("orderNo") String orderNo);
 
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "pay_order_no", property = "payOrderNo"), @Result(column = "txn_amount", property = "txnAmount"),
                @Result(column = "installment_num", property = "installmentNum"), @Result(column = "resp_code", property = "respCode"), @Result(column = "resp_msg", property = "respMsg"),
@@ -57,7 +58,7 @@ public interface TradeOrderDAO {
                @Result(column = "settle_amount", property = "settleAmount"), @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"),
                @Result(column = "create_user_id", property = "createUserId"), @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"),
                @Result(column = "inner_code", property = "innerCode") })
-    @Select("SELECT * FROM t_trade_order WHERE sync_status = '0'")
+    @Select("SELECT * FROM t_trade_order WHERE sync_status = '0' and resp_code ='1001' ")
     public List<TradeOrderDO> queryAllNotSyncDate();
 
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "pay_order_no", property = "payOrderNo"), @Result(column = "txn_amount", property = "txnAmount"),

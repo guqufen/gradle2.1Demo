@@ -108,7 +108,7 @@ public class TimerConfig {
      */
     @Scheduled(cron = "0 */5 * * * ?")
     public void getOrderStatues() {
-        tradeOrderService.updateOrderStatues();
+        tradeOrderService.updateOrderStatues("");
     }
     
     /**

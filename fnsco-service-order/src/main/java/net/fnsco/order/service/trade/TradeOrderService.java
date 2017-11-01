@@ -1,5 +1,7 @@
 package net.fnsco.order.service.trade;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.beust.jcommander.internal.Maps;
@@ -22,6 +25,7 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.DbUtil;
 import net.fnsco.core.utils.HttpUtils;
+import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.OrderDTO;
 import net.fnsco.order.service.trade.dao.TradeOrderDAO;
@@ -80,6 +84,10 @@ public class TradeOrderService extends BaseService {
     // 查询
     public TradeOrderDO queryByOrderId(String orderNo) {
         TradeOrderDO obj = this.tradeOrderDAO.queryByOrderId(orderNo);
+        if ("1000".equals(obj.getRespCode())) {//如果没有重新查询一次
+            updateOrderStatues(orderNo);
+        }
+        obj = this.tradeOrderDAO.queryByOrderId(orderNo);
         return obj;
     }
 
@@ -129,14 +137,29 @@ public class TradeOrderService extends BaseService {
     }
 
     //定时任务查询订单状态
-    public void updateOrderStatues() {
-        List<TradeOrderDO> tradeOrderList = this.tradeOrderDAO.queryAllNotComplete();
-        String url = env.getProperty("jhf.open.api.url");
+    public void updateOrderStatues(String orderNoArg) {
+        List<TradeOrderDO> tradeOrderList = this.tradeOrderDAO.queryAllNotComplete(orderNoArg);
+        String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/queryPayOrderList";
         for (TradeOrderDO order : tradeOrderList) {
             String orderNo = order.getOrderNo();
             Map<String, String> params = Maps.newHashMap();
-            params.put("salesOrderNo", orderNo);
-            String resultJson = HttpUtils.get(url, params);
+            params.put("thirdPayNo", orderNo);
+            params.put("commID", order.getChannelMerId());
+            Map<String, String> param = Maps.newHashMap();
+            String args = JSON.toJSONString(params);
+            String reqData = "";
+            try {
+                reqData = URLEncoder.encode(AESUtil.encode(args, "UITN25LMUQC436IM"), "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                logger.error("查询聚惠芬加密参数出错", e);
+            }
+            param.put("rspData", reqData);
+            String resultJson = "";
+            try {
+                resultJson = HttpUtils.post(url, param);
+            } catch (UnsupportedEncodingException e) {
+                logger.error("调用聚惠芬查询订单信息时出错", e);
+            }
             //thirdPayNo  订单号
             //commId  商户ID
             //payAmount   支付金额
@@ -147,9 +170,14 @@ public class TradeOrderService extends BaseService {
             //orderStatus 订单状态
             //settlementStatus    结算状态
             //payCallBackParams   商户上送参数
-
-            OrderDTO orderDto = JSON.parseObject(resultJson, OrderDTO.class);
-            updateOrderInfo(orderDto);
+            if (!Strings.isNullOrEmpty(resultJson)) {
+                try {
+                    OrderDTO orderDto = JSON.parseObject(resultJson, OrderDTO.class);
+                    updateOrderInfo(orderDto);
+                } catch (Exception ex) {
+                    logger.error("定时更新分期付状态数据出错", ex);
+                }
+            }
         }
     }
 
@@ -157,8 +185,41 @@ public class TradeOrderService extends BaseService {
     public void syncOrderTradeData() {
         List<TradeOrderDO> tradeOrderList = this.tradeOrderDAO.queryAllNotSyncDate();
         for (TradeOrderDO order : tradeOrderList) {
-            TradeDataDTO tradeData = new TradeDataDTO();
-            tradeDataService.saveTradeData(tradeData);
+            saveTradeData(order);
         }
+    }
+
+    @Transactional
+    public void saveTradeData(TradeOrderDO order) {
+        TradeDataDTO tradeData = new TradeDataDTO();
+        tradeData.setMerId(order.getMercId());
+        tradeData.setChannelType(order.getChannelType());
+        tradeData.setInnerCode(order.getInnerCode());
+        tradeData.setAmt(order.getTxnAmount().toString());
+        tradeData.setOrderNo(order.getOrderNo());
+        tradeData.setOrderTime(DateUtils.dateFormat1ToStr(order.getOrderCeateTime()));
+        tradeData.setOrderInfo("");
+        tradeData.setTimeStamp(DateUtils.dateFormat1ToStr(order.getCompleteTime()));
+        tradeData.setTradeDetail("");
+        tradeData.setTermId("");
+        tradeData.setBatchNo("");
+        tradeData.setSysTraceNo("");
+        tradeData.setAuthCode("");
+        tradeData.setOrderIdScan("");
+        tradeData.setSource("02");//来源00拉卡拉01导入02同步03法奈昇04浦发
+        tradeData.setSendTime(DateUtils.dateFormat1ToStr(order.getCreateTime()));
+        tradeData.setPayType(order.getPayType());
+        tradeData.setPaySubType(order.getPaySubType());
+        tradeData.setReferNo("");
+        tradeData.setChannelTermCode("");
+        tradeData.setRespCode(order.getRespCode());
+        tradeData.setCardNo("");
+        tradeData.setCardOrg("");
+        tradeData.setTxnType(String.valueOf(order.getTxnType()));
+        tradeData.setPayMedium("00");//支付媒介00pos机01app02台码
+        tradeData.setMd5(DbUtil.MD5(JSON.toJSONString(tradeData)));
+        tradeDataService.saveTradeData(tradeData);
+        order.setSyncStatus(1);//已同步数据
+        tradeOrderDAO.update(order);
     }
 }

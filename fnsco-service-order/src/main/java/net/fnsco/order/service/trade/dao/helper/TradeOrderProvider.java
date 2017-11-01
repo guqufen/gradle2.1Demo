@@ -87,7 +87,17 @@ public class TradeOrderProvider {
         WHERE("id = #{tradeOrder.id}");
         }}.toString();
     }
-
+    public String  queryAllNotComplete(Map<String, Object> params) {
+        String orderNo = (String)params.get("orderNo");
+        return new SQL() {{
+        SELECT("*");
+        FROM(TABLE_NAME);
+        WHERE("resp_code = '1000'");
+        if (StringUtils.isNotBlank(orderNo)){
+            WHERE("order_no=#{orderNo}");
+        }
+        }}.toString();
+    }
     public String pageList(Map<String, Object> params) {
         TradeOrderDO tradeOrder = (TradeOrderDO) params.get("tradeOrder");
         Integer pageNum = (Integer) params.get("pageNum");
