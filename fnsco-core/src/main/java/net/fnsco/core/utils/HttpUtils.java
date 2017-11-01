@@ -200,7 +200,8 @@ public class HttpUtils {
             out.close();
             int responseCode = http.getResponseCode();  
             if (responseCode != 200) {  
-                logger.error(url+"调用错，返回状态 Error===" + responseCode);  
+                
+                logger.error(url+"调用错，返回状态 Error===" + responseCode+",输入参数："+params);  
                 return null;
             } else {  
                 logger.info("Post Success!");  

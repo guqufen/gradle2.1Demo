@@ -37,7 +37,7 @@ public class TradeCallBackController extends BaseController {
     @Autowired
     private TradeOrderService tradeOrderService;
     @Autowired
-    private Environment       evn;
+    private Environment       env;
 
     //    thirdPayNo  订单号
     //    salesOrderNo    订单号 
@@ -55,7 +55,8 @@ public class TradeCallBackController extends BaseController {
     @ApiOperation(value = "支付完成时的通知")
     public ResultDTO payCompleteNotice(@RequestBody String rspData) {
         logger.error("聚惠芬支付完成时的通知密文入参：" + rspData);
-        String decodeStr = AESUtil.decode(rspData, "UITN25LMUQC436IM");
+        String keyStr =env.getProperty("jhf.api.AES.key");
+        String decodeStr = AESUtil.decode(rspData, keyStr);
         logger.error("聚惠芬支付完成时的通知解密后入参：" + decodeStr);
         OrderDTO order = JSON.parseObject(decodeStr, OrderDTO.class);
         //        OrderDTO order = new OrderDTO();
@@ -80,7 +81,7 @@ public class TradeCallBackController extends BaseController {
         //md5校验
         String singDataStr = thirdPayNo + salesOrderNo + orderStatus + settlementStatus + payCallBackParams + "78d496a2e2ba419d8e4f90af0431c763";
         String md5Str = DbUtil.MD5(singDataStr);
-        String url = evn.getProperty("jhf.qr.pay.url");
+        String url = env.getProperty("jhf.qr.pay.url");
         //保存订单信息
         //成功或失败则同步到交易流水信息
         OrderDTO order = new OrderDTO();

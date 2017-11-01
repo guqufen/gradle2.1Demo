@@ -138,6 +138,7 @@ public class TradeOrderService extends BaseService {
 
     //定时任务查询订单状态
     public void updateOrderStatues(String orderNoArg) {
+        String keyStr =env.getProperty("jhf.api.AES.key");
         List<TradeOrderDO> tradeOrderList = this.tradeOrderDAO.queryAllNotComplete(orderNoArg);
         String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/queryPayOrderList";
         for (TradeOrderDO order : tradeOrderList) {
@@ -149,11 +150,12 @@ public class TradeOrderService extends BaseService {
             String args = JSON.toJSONString(params);
             String reqData = "";
             try {
-                reqData = URLEncoder.encode(AESUtil.encode(args, "UITN25LMUQC436IM"), "utf-8");
+                reqData = URLEncoder.encode(AESUtil.encode(args, keyStr), "utf-8");
             } catch (UnsupportedEncodingException e) {
                 logger.error("查询聚惠芬加密参数出错", e);
             }
             param.put("rspData", reqData);
+            param.put("commID", order.getChannelMerId());
             String resultJson = "";
             try {
                 resultJson = HttpUtils.post(url, param);
