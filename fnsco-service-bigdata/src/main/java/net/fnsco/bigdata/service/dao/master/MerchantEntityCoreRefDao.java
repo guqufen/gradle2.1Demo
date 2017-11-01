@@ -1,5 +1,9 @@
 package net.fnsco.bigdata.service.dao.master;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 /**
  * @desc 商户店铺信息关系DAO
@@ -17,7 +21,7 @@ public interface MerchantEntityCoreRefDao {
     int insertSelective(MerchantEntityCoreRef record);
 
     MerchantEntityCoreRef selectByPrimaryKey(Integer id);
-
+    List<MerchantEntityCoreRef> selectByInnerCode(@Param("innerCode") String innerCode);
     int updateByPrimaryKeySelective(MerchantEntityCoreRef record);
     
     /**删除关系
