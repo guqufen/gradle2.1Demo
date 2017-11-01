@@ -112,8 +112,8 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         List<MerchantEntityCoreRef> entityRefList = entityCoreRefDao.selectByInnerCode(innerCode);
         for (MerchantEntityCoreRef ref : entityRefList) {
             if (!ref.getInnerCode().equals(innerCode)) {
-                merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, channelType);
-                if ("04".equals(merchantChannel.getChannelType())) {
+                merchantChannel = merchantChannelDao.selectByInnerCodeType(ref.getInnerCode(), channelType);
+                if (null != merchantChannel && "04".equals(merchantChannel.getChannelType())) {
                     break;
                 }
             }

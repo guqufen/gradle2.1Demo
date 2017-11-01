@@ -85,13 +85,17 @@ public class TradeOrderService extends BaseService {
     // 查询
     public TradeOrderDO queryByOrderId(String orderNo) {
         TradeOrderDO obj = this.tradeOrderDAO.queryByOrderId(orderNo);
+        return obj;
+    }
+ // 查询
+    public TradeOrderDO queryOneByOrderId(String orderNo) {
+        TradeOrderDO obj = this.tradeOrderDAO.queryByOrderId(orderNo);
         if ("1000".equals(obj.getRespCode())) {//如果没有重新查询一次
             updateOrderStatues(orderNo);
         }
         obj = this.tradeOrderDAO.queryByOrderId(orderNo);
         return obj;
     }
-
     public TradeOrderDO doQueryByPayOrderNo(String salesOrderNo) {
         TradeOrderDO obj = this.tradeOrderDAO.queryBySalesOrderNo(salesOrderNo);
         return obj;
@@ -129,8 +133,8 @@ public class TradeOrderService extends BaseService {
             tradeOrderDO.setCreateTime(new Date());
             doAdd(tradeOrderDO);
         } else {
-            if (null != order.getOrderCeateTime()) {//回调时更新订单创建时间
-                tradeOrderDO.setOrderCeateTime(order.getOrderCeateTime());
+            if (null != order.getTime()) {//回调时更新订单创建时间
+                tradeOrderDO.setOrderCeateTime(DateUtils.toParseYmdhms(order.getTime()));
             }
             doUpdate(tradeOrderDO);
         }
@@ -174,9 +178,13 @@ public class TradeOrderService extends BaseService {
                     JSONObject jsonObj = JSON.parseObject(resultJson);
                     String rspDataStr = jsonObj.getString("rspData");
                     String decodeStr = AESUtil.decode(rspDataStr, keyStr);
-                    OrderDTO orderDto = JSON.parseObject(decodeStr, OrderDTO.class);
-                    if (null != orderDto) {
-                        updateOrderInfo(orderDto);
+                    List<OrderDTO> orderDtoList = JSON.parseArray(decodeStr, OrderDTO.class);
+                    if (null != orderDtoList) {
+                        for (OrderDTO dto : orderDtoList) {
+                            if (null != dto) {
+                                updateOrderInfo(dto);
+                            }
+                        }
                     }
                 } catch (Exception ex) {
                     logger.error("定时更新分期付状态数据出错", ex);
