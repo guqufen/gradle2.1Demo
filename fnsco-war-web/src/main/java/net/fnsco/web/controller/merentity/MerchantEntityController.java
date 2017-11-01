@@ -115,7 +115,10 @@ public class MerchantEntityController extends BaseController {
 			return ResultDTO.failForMessage("该商户实体存在绑定关系，不能删除!");
 		}
 		
-		int res = merchantEntityService.deleteByPrimaryKey(id);
+		MerchantEntity recordEntity = new MerchantEntity();
+		recordEntity.setId(id);
+		recordEntity.setStatus(0);
+		int res = merchantEntityService.updateByPrimaryKeySelective(recordEntity);
 		if(res > 0) {
 			return ResultDTO.success();
 		}

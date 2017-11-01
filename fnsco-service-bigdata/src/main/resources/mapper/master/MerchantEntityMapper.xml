@@ -240,9 +240,6 @@
       <if test="condition.cardNum != null and condition.cardNum != ''" >
         and card_num = #{condition.cardNum,jdbcType=VARCHAR}
       </if>
-      <if test="condition.status != null" >
-        and status = #{condition.status,jdbcType=INTEGER}
-      </if>
       <if test="condition.createTimer != null" >
         and create_timer = #{condition.createTimer,jdbcType=TIMESTAMP}
       </if>
@@ -261,6 +258,7 @@
       <if test="condition.scores != null" >
         and scores = #{condition.scores,jdbcType=DECIMAL}
       </if>
+        and status = 1
       </where>
       ORDER BY id DESC
       limit #{startRow} , #{perPageSize} 
@@ -291,9 +289,6 @@
       <if test="cardNum != null" >
        and  card_num = #{cardNum,jdbcType=VARCHAR}
       </if>
-      <if test="status != null" >
-        and status = #{status,jdbcType=INTEGER}
-      </if>
       <if test="createTimer != null" >
        and  create_timer = #{createTimer,jdbcType=TIMESTAMP}
       </if>
@@ -312,6 +307,7 @@
       <if test="scores != null" >
         and scores = #{scores,jdbcType=DECIMAL}
       </if>
+      and status = 1
   	 </where>
   </select>
   <!-- 查询渠道商户信息 -->
