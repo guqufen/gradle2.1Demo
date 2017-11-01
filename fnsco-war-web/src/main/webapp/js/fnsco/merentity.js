@@ -76,7 +76,8 @@ function queryParams(params)
 	   legalPerson:$.trim($('#search_legalPerson').val()),
 	   mercName:$.trim($('#merName').val()),
 	   legalPersonMobile:$.trim($('#search_legalPersonMobile').val()),
-	   status:$.trim($('#search_status').val())
+       // status:$.trim($('#search_status').val())
+	   status:"2"
    }
    return param;
 }
