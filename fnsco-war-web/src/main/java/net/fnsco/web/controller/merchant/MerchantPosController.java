@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,13 +14,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO;
+import net.fnsco.bigdata.api.dto.WebMerchantTerminalDTO;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
 import net.fnsco.bigdata.service.domain.MerchantBank;
+import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
+import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
+import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.service.domain.IntegralRuleLog;
 import net.fnsco.web.controller.merchant.jo.MerchantChannelJO;
+import net.fnsco.web.controller.merchant.jo.MerchantPosJO;
 import net.fnsco.web.controller.merchant.jo.PosJO;
 
 /**
@@ -35,6 +43,10 @@ public class MerchantPosController extends BaseController {
     
     @Autowired
     private MerchantPosService merchantPosService;
+    @Autowired
+    private IntegralRuleLogService integralRuleLogService;
+    @Autowired
+    private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
     
     /**
      * toAddTerminal:(这里用一句话描述这个方法的作用)添加POS信息
@@ -44,12 +56,14 @@ public class MerchantPosController extends BaseController {
      * @date      2017年8月17日 上午11:37:59
      * @return ResultDTO<String>    DOM对象
      */
+    @Transactional
     @RequestMapping(value ="/toAddPosInfos",method= RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions(value = { "m:merchant:add"})
     public ResultDTO<String> toAddPosInfos(@RequestBody PosJO pos){
        // List<MerchantChannelJO> temp = Arrays.asList(posInfos);
     	List<MerchantChannelJO> posInfos =pos.getPoses();
+    	countPosScores(posInfos,pos.getInnerCode());
     	WebUserDTO obj = (WebUserDTO) session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
         List<WebMerchantPosDTO> params = MerchantHelper.toPosDTO(posInfos,pos.getInnerCode(),obj.getId());
         ResultDTO<String> result = merchantPosService.savePosInfo(params);
@@ -95,5 +109,32 @@ public class MerchantPosController extends BaseController {
         }
         List<MerchantBank> datas = merchantPosService.queryWebByInnerCode(innerCode);
         return ResultDTO.success(datas);
+    }
+    
+    /**
+     * countPosScores:(根据POS机信息来统计积分，只有新增加POS机子才去统计积分)
+     *
+     * @param  @param posInfos    设定文件
+     * @return void    DOM对象
+     * @author tangliang
+     * @date   2017年11月2日 下午2:25:31
+     */
+    private void countPosScores(List<MerchantChannelJO> params,String innerCode) {
+    	
+    	for (MerchantChannelJO webMerchantPosDTO : params) {
+    		List<MerchantPosJO> posInfos = webMerchantPosDTO.getPosInfos();
+    		for (MerchantPosJO webMerchantTerminalDTO : posInfos) {
+    			//等于空，才统计积分情况
+    			if(null == webMerchantTerminalDTO.getPosId()) {
+    				if(!Strings.isNullOrEmpty(innerCode)) {
+    					MerchantEntityCoreRef mecr = merchantEntityCoreRefDao.selectByInnerCode(innerCode);
+    					if(null != mecr && !Strings.isNullOrEmpty(mecr.getEntityInnerCode())) {
+    						integralRuleLogService.insert(mecr.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_SQ.getCode());
+    					}
+    				}
+    				
+    			}
+			}
+		}
     }
 }

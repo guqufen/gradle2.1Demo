@@ -14,21 +14,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from m_merchant_entity_core_ref
+    from m_merchant_core_entity_ref
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from m_merchant_entity_core_ref
+    delete from m_merchant_core_entity_ref
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    insert into m_merchant_entity_core_ref (id, entity_inner_code, inner_code, 
+    insert into m_merchant_core_entity_ref (id, entity_inner_code, inner_code, 
       create_time)
     values (#{id,jdbcType=INTEGER}, #{entityInnerCode,jdbcType=VARCHAR}, #{innerCode,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    insert into m_merchant_entity_core_ref
+    insert into m_merchant_core_entity_ref
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -59,7 +59,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    update m_merchant_entity_core_ref
+    update m_merchant_core_entity_ref
     <set >
       <if test="entityInnerCode != null" >
         entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
@@ -74,7 +74,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    update m_merchant_entity_core_ref
+    update m_merchant_core_entity_ref
     set entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
       inner_code = #{innerCode,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
@@ -84,7 +84,7 @@
   <select id="selectByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
      select 
     <include refid="Base_Column_List" />
-    from m_merchant_entity_core_ref
+    from m_merchant_core_entity_ref
     where inner_code = #{innerCode,jdbcType=VARCHAR} limit 1
   </select>
 </mapper>
