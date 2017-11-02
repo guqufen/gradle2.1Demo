@@ -6,7 +6,7 @@ import java.util.Date;
 public class FinanceAccountBook {
     private Integer id;
 
-    private Integer accountId;
+    private String accountId;
 
     private BigDecimal cash;
 
@@ -20,6 +20,9 @@ public class FinanceAccountBook {
 
     private Date lastModefyTime;
 
+    private String happenDate;
+    
+    private String icoUrl;
     public Integer getId() {
         return id;
     }
@@ -28,15 +31,15 @@ public class FinanceAccountBook {
         this.id = id;
     }
 
-    public Integer getAccountId() {
-        return accountId;
-    }
+    public String getAccountId() {
+		return accountId;
+	}
 
-    public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
-    }
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
 
-    public BigDecimal getCash() {
+	public BigDecimal getCash() {
         return cash;
     }
 
@@ -83,4 +86,21 @@ public class FinanceAccountBook {
     public void setLastModefyTime(Date lastModefyTime) {
         this.lastModefyTime = lastModefyTime;
     }
+
+	public String getHappenDate() {
+		return happenDate;
+	}
+
+	public void setHappenDate(String happenDate) {
+		this.happenDate = happenDate;
+	}
+
+	public String getIcoUrl() {
+		return icoUrl;
+	}
+
+	public void setIcoUrl(String icoUrl) {
+		this.icoUrl = icoUrl;
+	}
+    
 }

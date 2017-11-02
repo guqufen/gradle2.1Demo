@@ -7,8 +7,10 @@ package net.fnsco.finance.api.finance;
 
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.finance.api.dto.FinanceBookKeepingDTO;
+import net.fnsco.finance.api.dto.FinanceDetailDTO;
 import net.fnsco.finance.api.dto.FinanceQueryDTO;
 import net.fnsco.finance.api.dto.FinanceRecordDTO;
+import net.fnsco.finance.api.dto.QueryDetailDTO;
 import net.fnsco.finance.service.domain.FinanceIoType;
 
 /**
@@ -31,7 +33,21 @@ public interface AppFinanceService {
 	
 	/**
 	 * 每日一记新增记录
+	 * @param financeRecordDTO
 	 * @return
 	 */
 	ResultDTO addFinance(FinanceRecordDTO financeRecordDTO);
+	
+	/**
+	 * 编辑记账信息
+	 * @param financeRecordDTO
+	 * @return
+	 */
+	ResultDTO modifyFinance(FinanceRecordDTO financeRecordDTO);
+	/**
+	 * 查询当日的记账详情
+	 * @param queryDetailDTO
+	 * @return
+	 */
+	ResultDTO<FinanceDetailDTO> queryFinanceDetailsById(Integer id);
 }
