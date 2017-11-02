@@ -384,15 +384,17 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
      */
     @Transactional
     @Override
-    public ResultDTO<String> doAddMerCore(MerchantCore merchantCore) {
-
+    public ResultDTO<String> doAddMerCore(MerchantCore merchantCore,String userId) {
+    	
+    	merchantCore.setModifyUserId(userId);//待定
+        merchantCore.setModifyTime(new Date());
         if (null == merchantCore.getId()) {
             if(null == merchantCore.getSource()){
                 merchantCore.setSource(0);
             }
-            merchantCore.setModifyUserId("admin");//待定
-            merchantCore.setModifyTime(new Date());
             merchantCore.setStatus(1);
+            merchantCore.setLegalValidCardType("0");//身份证
+            
             int res = merchantCoreDao.insertSelective(merchantCore);
             if (res != 1) {
                 return ResultDTO.fail();
