@@ -35,4 +35,19 @@ public interface SysConfigDao {
     SysConfig selectByCondition(SysConfig record);
     
     List<SysConfig> selectAllByCondition(SysConfig record);
+    
+    /**
+     * 通过积分查询商户所在等级
+     * @param record
+     * @return
+     */
+    SysConfig selectLevelByScores(SysConfig record);
+    
+    
+    /**
+     * 通过积分查询商户所在等级
+     * @param record
+     * @return
+     */
+    SysConfig selectNextLevelByScores(SysConfig record);
 }

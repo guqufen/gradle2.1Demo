@@ -31,9 +31,8 @@ public class UserMerchantJO extends JO{
      * 终端设备ID
      */
     private Integer terId;
-    
-    
-    /**
+
+	/**
      * terId
      *
      * @return  the terId

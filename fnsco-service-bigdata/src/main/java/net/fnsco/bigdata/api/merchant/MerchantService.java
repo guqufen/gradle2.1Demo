@@ -16,6 +16,7 @@ import net.fnsco.bigdata.api.dto.TerminalDetailDTO;
 import net.fnsco.bigdata.api.dto.TerminalsDTO;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
+import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.ResultDTO;
 
 /**@desc 商户相关服务接口
@@ -73,6 +74,19 @@ public interface MerchantService {
      */
 
     ResultDTO<List<MerChantCoreDTO>> getMerchantsCoreByUserId(Integer userId);
+    
+    /**
+     * getMerchantsScoresByUserId：根据用户ID查询商户积分信息列表
+     * @param userId:用户ID
+     * @return
+     */
+    List<MerChantCoreDTO> getMerchantsScoresByUserId(Integer userId);
+    /**
+     * getMerchantsScoresByUserId：根据用户ID和内部商户号查询商户积分信息列表
+     * @param userId:用户ID
+     * @return
+     */
+    MerChantCoreDTO getScoreByUserIdInnerCode(MerchantUserRel merchantUserRel);
 
     /**
      * getMerchantTerminalByUserId:(这里用一句话描述这个方法的作用)根据用户ID 查询出关联的所有终端信息

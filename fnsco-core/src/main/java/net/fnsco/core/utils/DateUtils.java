@@ -497,4 +497,31 @@ public class DateUtils {
         result = sf.format(calendar.getTime());
         return result;
     }
+    /**
+     * 获取月第一天
+     * @return
+     */
+    public static String getMouthStartTime(int mouth) {
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        //获取前月的第一天
+        Calendar cal_1=Calendar.getInstance();//获取当前日期 
+        cal_1.add(Calendar.MONTH, mouth);
+        cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为该月第一天 
+        String startTime = format.format(cal_1.getTime());
+        return startTime;
+    }
+    
+    /**
+     * 获取月最后一天
+     * @return
+     */
+    public static String getMouthEndTime(int mouth) {
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    	//获取前月的最后一天
+        Calendar cale = Calendar.getInstance();  
+        cale.add(Calendar.MONTH, mouth+1);
+        cale.set(Calendar.DAY_OF_MONTH,0);//设置为1号,当前日期既为该月最后一天 
+        String endTime = format.format(cale.getTime());
+        return endTime;
+    }
 }

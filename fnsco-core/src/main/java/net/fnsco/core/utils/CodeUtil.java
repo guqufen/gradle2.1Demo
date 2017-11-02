@@ -26,6 +26,21 @@ public class CodeUtil {
 
 		return sb.toString();
 	}
+	
+	// 生成店铺账套号
+		public static String generateAccountId(String prefix) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(new Date());
+			int day = calendar.get(Calendar.DAY_OF_MONTH);
+			int month = calendar.get(Calendar.MONTH) + 1;
+			int hour = calendar.get(Calendar.HOUR_OF_DAY);
+			int value = (int) (Math.random() * (999999999 - 100000000) + 100000000);
+			StringBuilder sb = new StringBuilder();
+			sb.append(StringUtils.leftPad(String.valueOf(month), 2, '0')).append(StringUtils.leftPad(String.valueOf(day), 2, '0'))
+					.append(StringUtils.leftPad(String.valueOf(hour), 2, '0')).append(value);
+
+			return sb.toString();
+		}
 
 	// 生成单号
 	public static String generateOrderCode(String prefix) {
