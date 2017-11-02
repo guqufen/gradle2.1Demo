@@ -13,17 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
-import net.fnsco.bigdata.api.dto.IntegralRuleDTO;
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
-import net.fnsco.bigdata.api.merchant.IntegralRuleLogService;
-import net.fnsco.bigdata.api.merchant.IntegralRuleService;
 import net.fnsco.bigdata.api.merchant.MerchantService;
-import net.fnsco.bigdata.service.domain.IntegralRule;
-import net.fnsco.bigdata.service.domain.IntegralRuleLog;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.config.SysConfigService;
+import net.fnsco.order.api.dto.IntegralRuleDTO;
+import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.api.merchant.IntegralRuleService;
+import net.fnsco.order.service.domain.IntegralRule;
 import net.fnsco.order.service.domain.SysConfig;
 
 @RestController
@@ -156,7 +155,7 @@ public class AppMerchentLevelController extends BaseController{
 			integralRuleDTOList.add(integralRuleDTO);
 		}
 
-		integralRuleLogService.insert("E102715166067306", "001");
+//		integralRuleLogService.insert("E102715166067306", "001");
 
 		return success(integralRuleDTOList);
 	}
