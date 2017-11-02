@@ -54,24 +54,25 @@ public class ConmmController extends BaseController {
         if (discoveryJO.getDeviceType() == 2) {
             return success(env.getProperty(ApiConstant.THIS_IOS_URL));
         }
-        return success(env.getProperty(ApiConstant.THIS_ANDROID_URL));  
-     }
-    
+        return success(env.getProperty(ApiConstant.THIS_ANDROID_URL));
+    }
+
     //反馈
     @RequestMapping(value = "/suggest")
     @ApiOperation(value = "反馈页面")
     @ResponseBody
     public ResultDTO suggest(@RequestBody SuggestDTO suggestDTO) {
         ResultDTO result = conmmService.suggest(suggestDTO);
-         return result;  
-     }
+        return result;
+    }
+
+    //邀新
+    @RequestMapping(value = "/getInviteUrl", method = RequestMethod.GET)
+    @ApiOperation(value = "返回邀新链接地址")
+    @ResponseBody
+    public ResultDTO getInviteUrl(String entityInnerCode) {
+        String url = env.getProperty("web.base.url")+"?entityId="+entityInnerCode;
+        return ResultDTO.success(url);
+    }
+
 }
-
-
-
-
-
-
-
-
-
