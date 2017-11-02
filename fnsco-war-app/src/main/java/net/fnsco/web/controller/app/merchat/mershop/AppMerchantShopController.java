@@ -20,13 +20,13 @@ import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.constant.MerShopDTO;
 import net.fnsco.bigdata.api.dto.MerEntityDTO;
 import net.fnsco.bigdata.api.dto.MerchantShopDTO;
-import net.fnsco.bigdata.api.merchant.IntegralRuleLogService;
 import net.fnsco.bigdata.api.merchant.MerchantShopService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
-import net.fnsco.bigdata.service.domain.IntegralRuleLog;
 import net.fnsco.bigdata.service.domain.MerchantShop;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.service.domain.IntegralRuleLog;
 
 /**
  * @desc 商户店铺管理接口控制器

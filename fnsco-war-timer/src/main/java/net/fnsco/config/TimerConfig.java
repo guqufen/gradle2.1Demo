@@ -1,5 +1,8 @@
 package net.fnsco.config;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.order.api.merchant.IntegralRuleService;
 import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.trade.TradeReportService;
 
@@ -19,6 +23,8 @@ public class TimerConfig {
     private AppPushService     appPushService;
     @Autowired
     private TradeReportService tradeReportService;
+    @Autowired
+    private IntegralRuleService integralRuleService;
 
     /**
      * spring boot 定时任务
@@ -102,15 +108,17 @@ public class TimerConfig {
     }
     
     /**
-     * pushMagTimer:(统计积分)
+     * pushMagTimer:(统计积分)@Scheduled(cron = "0 5 * * * ?")
      *
      * @param      设定文件
      * @return void    DOM对象
      * @author tangliang
      * @date   2017年11月2日 上午9:38:37
      */
-    @Scheduled(cron = "0 * * * * ?") //每一分钟的0秒执行，每分钟执行一次
+    @Scheduled(cron = "20 * * * * ?") //每个小时的第五分钟执行，每小时执行一次
     public void countMerchantEntityScores() {
-        appPushService.sendSystemMgs();
+    	Timestamp startTime  = new Timestamp(DateUtils.getTimeByMinuteDate(-60).getTime());
+    	Timestamp endTime  = new Timestamp(new Date().getTime());
+    	integralRuleService.countTradeDataScores(startTime, endTime);
     }
 }

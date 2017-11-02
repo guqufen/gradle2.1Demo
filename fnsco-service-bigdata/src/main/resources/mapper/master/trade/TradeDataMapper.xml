@@ -981,7 +981,9 @@
            AND create_time >= #{startCreateTime,jdbcType=TIMESTAMP}
       </if>
       <if test="endCreateTime != null">
-           AND create_time < #{endCreateTime,jdbcType=TIMESTAMP}
+           <![CDATA[
+           AND create_time <  #{endCreateTime,jdbcType=TIMESTAMP}
+           ]]>
       </if>
             AND status = 1
             AND inner_code IN (

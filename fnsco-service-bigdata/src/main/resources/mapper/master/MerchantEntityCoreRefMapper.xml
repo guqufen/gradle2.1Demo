@@ -80,4 +80,11 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 根据innercode查询 -->
+  <select id="selectByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+     select 
+    <include refid="Base_Column_List" />
+    from m_merchant_entity_core_ref
+    where inner_code = #{innerCode,jdbcType=VARCHAR} limit 1
+  </select>
 </mapper>
