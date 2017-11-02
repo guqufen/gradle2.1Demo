@@ -83,8 +83,8 @@ a.btn{
     line-height: 2.3;
     -webkit-tap-highlight-color: transparent;
     background-color: #3595ff;
-    width: 60%;
-    margin-top: 1rem;
+    width: 80%;
+    margin: 1rem auto;
 }
 a.btn:after {
     position: absolute;
