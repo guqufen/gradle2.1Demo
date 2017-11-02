@@ -977,6 +977,12 @@
         	AND time_stamp < #{endTime,jdbcType=VARCHAR}
         ]]>
       </if>
+      <if test="startCreateTime != null">
+           AND create_time >= #{startCreateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endCreateTime != null">
+           AND create_time < #{endCreateTime,jdbcType=TIMESTAMP}
+      </if>
             AND status = 1
             AND inner_code IN (
 			 SELECT inner_code FROM m_merchant_core WHERE `status` = 1

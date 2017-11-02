@@ -100,4 +100,17 @@ public class TimerConfig {
     public void pushWeeklyData() {
         appPushService.sendWeeklyDataMgs();
     }
+    
+    /**
+     * pushMagTimer:(统计积分)
+     *
+     * @param      设定文件
+     * @return void    DOM对象
+     * @author tangliang
+     * @date   2017年11月2日 上午9:38:37
+     */
+    @Scheduled(cron = "0 * * * * ?") //每一分钟的0秒执行，每分钟执行一次
+    public void countMerchantEntityScores() {
+        appPushService.sendSystemMgs();
+    }
 }

@@ -1,5 +1,6 @@
 package net.fnsco.bigdata.service.modules.merchant;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ public class IntegralRuleServiceImpl implements IntegralRuleService{
 
 	@Autowired
 	private IntegralRuleDAO integralRuleDAO;
-
+	
+	
+	
 	@Override
 	public List<IntegralRule> queryListByCondition(IntegralRule integralRule) {
 		// TODO Auto-generated method stub
@@ -34,5 +37,17 @@ public class IntegralRuleServiceImpl implements IntegralRuleService{
 	 */
 	public IntegralRule queryIntegralByCode(String code){
 		return integralRuleDAO.queryIntegralByCode(code);
+	}
+	
+	/** 统计交易流水的积分信息
+	 * (non-Javadoc)
+	 * @see net.fnsco.bigdata.api.merchant.IntegralRuleService#countMerchantEntityScores(java.util.Date, java.util.Date)
+	 * @author tangliang
+	 * @date 2017年11月2日 上午9:52:08
+	 */
+	@Override
+	public void countTradeDataScores(Date startTime, Date endTime) {
+		
+		
 	}
 }
