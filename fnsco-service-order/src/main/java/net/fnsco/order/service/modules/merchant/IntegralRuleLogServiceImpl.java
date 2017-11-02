@@ -63,7 +63,7 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 		IntegralRule integralRule = integralRuleDAO.queryIntegralByCode(ruleCode);
 		String type = IntegralTypeEnum.getDataByCode(ruleCode);// 通过code查找类型，封顶/计次/其他
 
-		if ("1" == type) {// type=1表示封顶10分,code为001,002,007时
+		if ("1" == type) {// type=1表示封顶,code为001,002,007时
 
 			// 通过积分日期和code去查找
 			IntegralRuleLog integralRuleLog2 = new IntegralRuleLog();
@@ -75,8 +75,14 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 
 			// 判不为空，不然后面直接加减会报错
 			if (integralSum != null) {
-				if ((integralSum + integralRule.getIntegral()) > 10) {
-					return;
+				if ("007".equals(integralRuleLog.getRuleCode())) {// code=007表示记账，封顶10分
+					if ((integralSum + integralRule.getIntegral()) > 10) {// pos收银，封顶100分
+						return;
+					}
+				} else {
+					if ((integralSum + integralRule.getIntegral()) > 100) {// pos收银，封顶100分
+						return;
+					}
 				}
 			}
 		} else if ("2" == type) {// type=2表示每日第一次，code为003
