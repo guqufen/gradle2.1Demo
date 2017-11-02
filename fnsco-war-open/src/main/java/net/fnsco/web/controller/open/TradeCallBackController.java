@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -56,19 +57,25 @@ public class TradeCallBackController extends BaseController {
     @ApiOperation(value = "支付完成时的通知")
     @ResponseBody
     public ResultDTO payCompleteNotice(String rspData) {
-        logger.error("聚惠芬支付完成时的通知密文入参：" + rspData);
+        logger.error("聚惠分支付完成时的通知密文入参：" + rspData);
         String keyStr = env.getProperty("jhf.api.AES.key");
-        String decodeStr = AESUtil.decode(rspData, keyStr);
-        logger.error("聚惠芬支付完成时的通知解密后入参：" + decodeStr);
-        OrderDTO order = JSON.parseObject(decodeStr, OrderDTO.class);
-        //        OrderDTO order = new OrderDTO();
-        //        order.setThirdPayNo(thirdPayNo);
-        //        order.setSalesOrderNo(salesOrderNo);
-        //        order.setOrderStatus(orderStatus);
-        //        order.setSettlementStatus(settlementStatus);
-        //        order.setPayCallBackParams(payCallBackParams);
-        ResultDTO result = tradeOrderService.updateOrderInfo(order);
-        return success();
+        String result ="处理成功";
+        if (!Strings.isNullOrEmpty(rspData)) {
+            try {
+                String decodeStr = AESUtil.decode(rspData, keyStr);
+                logger.error("聚惠分支付完成时的通知解密后入参：" + decodeStr);
+                //聚惠芬支付完成时的通知解密后入参：{"payCallBackParams":"","settlementStatus":"0","thirdPayNo":"20171102155606073111374535549766","orderStatus":"2","singData":"001AA0CC08241A447BF7250B500C4B83"}
+                OrderDTO order = JSON.parseObject(decodeStr, OrderDTO.class);
+                return tradeOrderService.updateOrderInfo(order);
+            } catch (Exception ex) {
+                logger.error("聚惠分支付完成时的通知更新出错",ex);
+                result ="处理失败，业务处理异常";
+            }
+        }else{
+            logger.error("聚惠分支付完成时的通知密文入参为空");
+            result ="处理失败，入参为空";
+        }
+        return fail(result);
     }
 
     /**
@@ -85,13 +92,11 @@ public class TradeCallBackController extends BaseController {
         TradeOrderDO order = tradeOrderService.queryOneByOrderId(orderNo);
         //分期数
         //支付总金额
-        if(null == order){
+        if (null == order) {
             order = new TradeOrderDO();
         }
         //status = ConstantEnum.RespCodeEnum.getNameByCode(order.getRespCode());
-        return "redirect:" + url + "/pay/jhfPayCallback.html?paymentAmount="+order.getTxnAmount()+
-                "&installmentNum="+order.getInstallmentNum()+
-                "&orderDate="+DateUtils.dateFormat1ToStr(order.getCreateTime())+
-                "&status="+order.getRespCode();
+        return "redirect:" + url + "/pay/jhfPayCallback.html?paymentAmount=" + order.getTxnAmount() + "&installmentNum=" + order.getInstallmentNum() + "&orderDate="
+               + DateUtils.dateFormat1ToStr(order.getCreateTime()) + "&status=" + order.getRespCode();
     }
 }

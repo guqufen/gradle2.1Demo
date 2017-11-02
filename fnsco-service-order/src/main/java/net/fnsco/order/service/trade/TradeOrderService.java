@@ -121,12 +121,14 @@ public class TradeOrderService extends BaseService {
         tradeOrderDO.setPayOrderNo(order.getSalesOrderNo());
         if (!"0".equals(order.getSettlementStatus())) {
             tradeOrderDO.setCompleteTime(new Date());
-        } 
+        }
         //结算状态（0 未结算 1已结算   2结算中   3已退款）
-        if (Strings.isNullOrEmpty(order.getSettlementStatus())) {
+        if (!Strings.isNullOrEmpty(order.getSettlementStatus())) {
             try {
                 tradeOrderDO.setSettleStatus(Integer.parseInt(order.getSettlementStatus()));
-                tradeOrderDO.setSettleDate(new Date());
+                if ("1".equals(order.getSettlementStatus())) {
+                    tradeOrderDO.setSettleDate(new Date());
+                }
             } catch (Exception ex) {
                 logger.error("支付完成时回调时结算状态转换为int出错", ex);
             }
@@ -134,6 +136,7 @@ public class TradeOrderService extends BaseService {
         if ("3".equals(order.getSettlementStatus())) {//3已退货
             tradeOrderDO.setId(null);
             tradeOrderDO.setTxnType(2);
+            tradeOrderDO.setSyncStatus(0);
             tradeOrderDO.setCreateTime(new Date());
             doAdd(tradeOrderDO);
         } else {
