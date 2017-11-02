@@ -3,12 +3,14 @@ package net.fnsco.order.service.modules.merchant;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
+import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
 import net.fnsco.order.service.dao.master.IntegralRuleDAO;
@@ -18,7 +20,7 @@ import net.fnsco.order.service.domain.IntegralRuleLog;
 import net.fnsco.order.service.domain.IntegralRuleLog.IntegralTypeEnum;
 
 @Service
-public class IntegralRuleLogServiceImpl implements IntegralRuleLogService {
+public class IntegralRuleLogServiceImpl extends BaseService implements IntegralRuleLogService{
 
 	@Autowired
 	private IntegralRuleLogDAO integralRuleLogDAO;
@@ -47,6 +49,12 @@ public class IntegralRuleLogServiceImpl implements IntegralRuleLogService {
 	@Transactional
 	public void insert(String entityInnerCode, String ruleCode) {
 
+		//判断如果参数有一个为空
+		if(StringUtils.isBlank(entityInnerCode) || StringUtils.isBlank(ruleCode)){
+			logger.error("入参为空：entityInnerCode=["+entityInnerCode+"],ruleCode=["+ruleCode+"]");
+			return;
+		}
+		
 		IntegralRuleLog integralRuleLog = new IntegralRuleLog();
 		integralRuleLog.setEntityInnerCode(entityInnerCode);
 		integralRuleLog.setRuleCode(ruleCode);
@@ -107,7 +115,7 @@ public class IntegralRuleLogServiceImpl implements IntegralRuleLogService {
 		// 更新实体商户表里面的积分scores字段
 		// 先通过entityCode查找到更新前的scores，然后再将scores加上本次积分，接着更新积分
 		MerchantEntity merchantEntity = merchantEntityDao.selectByEntityInnerCode(integralRuleLog.getEntityInnerCode());
-		merchantEntity.setScores(merchantEntity.getScores() + integralRule.getIntegral().longValue());// 积分相加
+//		merchantEntity.setScores(merchantEntity.getScores() + integralRule.getIntegral().longValue());// 积分相加，改为sql直接加，不然会出现线程安全问题
 		merchantEntity.setLastModefyTimer(new Date());
 		merchantEntityDao.updateByEntityInnerCode(merchantEntity);// 通过实体商户号更新
 	}
