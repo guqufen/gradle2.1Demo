@@ -1,13 +1,13 @@
-package net.fnsco.bigdata.service.modules.merchant;
+package net.fnsco.order.service.modules.merchant;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.fnsco.bigdata.api.merchant.IntegralRuleService;
-import net.fnsco.bigdata.service.dao.master.IntegralRuleDAO;
-import net.fnsco.bigdata.service.domain.IntegralRule;
+import net.fnsco.order.api.merchant.IntegralRuleService;
+import net.fnsco.order.service.dao.master.IntegralRuleDAO;
+import net.fnsco.order.service.domain.IntegralRule;
 
 @Service
 public class IntegralRuleServiceImpl implements IntegralRuleService{

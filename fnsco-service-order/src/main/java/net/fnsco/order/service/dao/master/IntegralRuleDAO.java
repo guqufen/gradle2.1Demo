@@ -1,11 +1,11 @@
-package net.fnsco.bigdata.service.dao.master;
+package net.fnsco.order.service.dao.master;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import net.fnsco.bigdata.service.domain.IntegralRule;
+import net.fnsco.order.service.domain.IntegralRule;
 
 @Mapper
 public interface IntegralRuleDAO {
