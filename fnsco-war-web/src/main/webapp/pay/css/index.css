@@ -79,12 +79,12 @@ a.btn{
     color: #FFF;
     text-align: center;
     text-decoration: none;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     line-height: 2.3;
     -webkit-tap-highlight-color: transparent;
     background-color: #3595ff;
-    width: 90%;
-    margin-top: 2rem;
+    width: 60%;
+    margin-top: 1rem;
 }
 a.btn:after {
     position: absolute;
@@ -117,6 +117,10 @@ a.btn:after {
 .statusImg.close{
 	background: url(../img/close.png) no-repeat center;
 	background-size: contain;
+}
+.statusImg.being{
+    background: url(../img/being.png) no-repeat center;
+    background-size: contain;
 }
 .statusTxt{
 	text-align: center;

@@ -11,55 +11,76 @@
 	<div class="container">
 		<div class="status">
 			<div class="statusHead">
-				<div class="statusImg finish"></div>
-				<div class="statusTxt">交易完成</div>
+				<div class="statusImg"></div>
+				<div class="statusTxt"></div>
 			</div>
 			<div class="statusContainer">
 				<ul class="statusUl">
 					<li class="statusLi amount">
 						<div class="statusLi_tit">交易金额</div>
-						<div class="statusLi_con">0.01元</div>
+						<div class="statusLi_con"></div>
 					</li>
 					<li class="statusLi stages">
 						<div class="statusLi_tit">分期期数</div>
-						<div class="statusLi_con">支付宝支付</div>
+						<div class="statusLi_con"></div>
 					</li>
 					<li class="statusLi payTime">
 						<div class="statusLi_tit">交易时间</div>
-						<div class="statusLi_con">2016-12-20 14:30</div>
+						<div class="statusLi_con"></div>
 					</li>
 					<li class="statusLi payStatus">
 						<div class="statusLi_tit">交易状态</div>
-						<div class="statusLi_con">2016-12-20 15:30</div>
+						<div class="statusLi_con"></div>
 					</li>
 				</ul>
 			</div>
 		</div>
-		<a class="btn" onclick="click1()">关注公众号</a>
+		<a class="btn" href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzAxMzMxNzMyMA==&scene=124#wechat_redirect">关注公众号</a>
 	</div>
 </body>
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/setWidth.js"></script>
 	<script>
-	function getUrlParam(param){
-		var reg = new RegExp("(^|&)"+ param +"=([^&]*)(&|$)");
-		var r = window.location.search.substr(1).match(reg);
-		if(r!=null)return  unescape(r[2]); return null;
-	}
-	function formatTime(time){
-		console.log(time.substring(0,4));
-		return time.substring(0,4)+'-'+time.substring(4,6)+'-'+time.substring(6,8)+' '+time.substring(8,10)+':'+time.substring(10,12)+':'+time.substring(12,14);
-	}
-	$(".amount .statusLi_con").html("￥"+(getUrlParam('paymentAmount')/100).toFixed(2));
-	$(".stages .statusLi_con").html(getUrlParam('installmentNum')+'期');
-	$(".payTime .statusLi_con").html(formatTime(getUrlParam('orderDate')));
-	if(getUrlParam('status')==1001){
-		$(".payStatus .statusLi_con").html("成功");
-	}else if(getUrlParam('status')==1002){
-		$(".payStatus .statusLi_con").html("失败");
-	}else if(getUrlParam('status')==1000){
-		$(".payStatus .statusLi_con").html("处理中");
-	}
+		function getUrlParam(param){
+			var reg = new RegExp("(^|&)"+ param +"=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if(r!=null)return  unescape(r[2]); return null;
+		}
+		function formatTime(time){
+			if(time==null){
+				return '';
+			}else{
+				return time.substring(0,4)+'-'+time.substring(4,6)+'-'+time.substring(6,8)+' '+time.substring(8,10)+':'+time.substring(10,12)+':'+time.substring(12,14);
+			}
+		}
+		$(".amount .statusLi_con").html("￥"+(getUrlParam('paymentAmount')/100).toFixed(2));
+		if(getUrlParam('installmentNum')==null){
+			$(".stages .statusLi_con").html("");
+		}else{
+			$(".stages .statusLi_con").html(getUrlParam('installmentNum')+'期');
+		}
+		if(getUrlParam('status')==1001){
+			$(".payStatus .statusLi_con").html("成功");
+			$(".statusImg").addClass("finish");
+			$(".statusTxt").html("交易完成");
+		}else if(getUrlParam('status')==1002){
+			$(".payStatus .statusLi_con").html("失败");
+			$(".statusImg").addClass("colse");
+			$(".statusTxt").html("交易失败");
+		}else if(getUrlParam('status')==1000){
+			$(".payStatus .statusLi_con").html("处理中");
+			$(".statusImg").addClass("being");
+			$(".statusTxt").html("处理中");
+		}
+		$(".payTime .statusLi_con").html(formatTime(getUrlParam('orderDate')));
+		
+		//
+		if(/MicroMessenger/i.test(navigator.userAgent)){
+			$(".btn").show();
+			window.location.href="http://zheft.cn/zheft_v2.4.0.apk"
+		}else{
+			$(".btn").hide();
+		}
 	
 	</script>
 </html>
