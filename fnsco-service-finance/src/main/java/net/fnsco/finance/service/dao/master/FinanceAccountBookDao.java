@@ -2,37 +2,40 @@ package net.fnsco.finance.service.dao.master;
 
 import java.util.List;
 
-import net.fnsco.core.base.PageDTO;
 import net.fnsco.finance.api.dto.AppUserEntityDTO;
-import net.fnsco.finance.api.dto.FinanceEveryDayDTO;
+import net.fnsco.finance.api.dto.FinanceDetailDTO;
 import net.fnsco.finance.api.dto.FinanceQueryDTO;
+import net.fnsco.finance.api.dto.FinanceRecordDTO;
+import net.fnsco.finance.api.dto.QueryDetailDTO;
+import net.fnsco.finance.service.domain.FinanceAccount;
 import net.fnsco.finance.service.domain.FinanceAccountBook;
 import net.fnsco.finance.service.domain.FinanceIoType;
 
 public interface FinanceAccountBookDao {
 	
-	List<FinanceEveryDayDTO> queryPageList(PageDTO<FinanceQueryDTO> pages);
+	List<String> queryDates(FinanceQueryDTO financeQuery);
+	
+	List<FinanceAccountBook> queryList(FinanceQueryDTO financeQuery);
 	
 	List<FinanceAccountBook> queryAmount(FinanceQueryDTO financeQuery);
 	
-	List<AppUserEntityDTO> queryEntityList(Integer id);
+	List<AppUserEntityDTO> queryEntityList(String id);
 	
 	List<FinanceIoType> queryIoTypeList();
 	
-	String queryShopInnerCode(String shopInnerCode);
-	
-	String queryAccountId(String accountId);
+	FinanceAccount queryShopInnerCode(FinanceAccount financeAccount);
 	
     int deleteByPrimaryKey(Integer id);
 
-    //int insert(FinanceAccountBook record);
+    int insertAccount(FinanceAccount fa);
 
-    //int insertSelective(FinanceAccountBook record);
+    int insertAccountBook(FinanceRecordDTO financeRecordDTO);
 
 
     FinanceAccountBook selectByPrimaryKey(Integer id);
 
-    //int updateByPrimaryKeySelective(FinanceAccountBook record);
+    int updateAccountBook(FinanceRecordDTO financeRecordDTO);
 
-    //int updateByPrimaryKey(FinanceAccountBook record);
+    FinanceDetailDTO queryFinanceDetail(Integer id);
+
 }

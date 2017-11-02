@@ -7,11 +7,13 @@ public class FinanceIoType{
 
 	private Integer id;
 
-    private Integer accountId;
+    private Integer type;
 
     private Integer code;
 
     private String name;
+    
+    private String icoUrl;
 
     private Date createTime;
 
@@ -23,15 +25,15 @@ public class FinanceIoType{
         this.id = id;
     }
 
-    public Integer getAccountId() {
-        return accountId;
-    }
+    public Integer getType() {
+		return type;
+	}
 
-    public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
-    }
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
-    public Integer getCode() {
+	public Integer getCode() {
         return code;
     }
 
@@ -47,7 +49,15 @@ public class FinanceIoType{
         this.name = name == null ? null : name.trim();
     }
 
-    public Date getCreateTime() {
+    public String getIcoUrl() {
+		return icoUrl;
+	}
+
+	public void setIcoUrl(String icoUrl) {
+		this.icoUrl = icoUrl;
+	}
+
+	public Date getCreateTime() {
         return createTime;
     }
 

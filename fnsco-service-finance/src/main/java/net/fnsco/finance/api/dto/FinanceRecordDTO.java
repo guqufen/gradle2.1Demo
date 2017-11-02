@@ -13,7 +13,7 @@ public class FinanceRecordDTO extends DTO{
 
 	private Integer id;
 
-    private Integer accountId;
+    private String accountId;
 
     private BigDecimal cash;//金额
 
@@ -27,7 +27,7 @@ public class FinanceRecordDTO extends DTO{
 
     private Date lastModefyTime;//最后修改时间
     
-    private String createTimeStr;//创建时间字符串
+    private String happenDate;//账单发生日期YYYY-MM-DD
 
     private String lastModefyTimeStr;//最后修改时间字符串
     
@@ -41,11 +41,11 @@ public class FinanceRecordDTO extends DTO{
 		this.id = id;
 	}
 
-	public Integer getAccountId() {
+	public String getAccountId() {
 		return accountId;
 	}
 
-	public void setAccountId(Integer accountId) {
+	public void setAccountId(String accountId) {
 		this.accountId = accountId;
 	}
 
@@ -97,12 +97,12 @@ public class FinanceRecordDTO extends DTO{
 		this.lastModefyTime = lastModefyTime;
 	}
 
-	public String getCreateTimeStr() {
-		return createTimeStr;
+	public String getHappenDate() {
+		return happenDate;
 	}
 
-	public void setCreateTimeStr(String createTimeStr) {
-		this.createTimeStr = createTimeStr;
+	public void setHappenDate(String happenDate) {
+		this.happenDate = happenDate;
 	}
 
 	public String getLastModefyTimeStr() {

@@ -1,14 +1,17 @@
 package net.fnsco.finance.api.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import net.fnsco.core.base.DTO;
+import net.fnsco.finance.service.domain.FinanceAccountBook;
 
 public class FinanceEveryDayDTO extends DTO {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Integer id;//编号
 
 	private Integer Day;//记账日
 	
@@ -17,12 +20,16 @@ public class FinanceEveryDayDTO extends DTO {
 	private	BigDecimal spending;//记账支出
 	
 	private BigDecimal revenue;//记账收入
+	
+	private List<FinanceAccountBook> accountBook;//每项收支信息
 
-	private Integer type;//收支类型0.支出 1.收入
-	
-	private String ioTypeCode;//收支子类型
-	
-	private BigDecimal amount;//各项收支金额
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public Integer getDay() {
 		return Day;
@@ -56,28 +63,12 @@ public class FinanceEveryDayDTO extends DTO {
 		this.revenue = revenue;
 	}
 
-	public Integer getType() {
-		return type;
+	public List<FinanceAccountBook> getAccountBook() {
+		return accountBook;
 	}
 
-	public void setType(Integer type) {
-		this.type = type;
+	public void setAccountBook(List<FinanceAccountBook> accountBook) {
+		this.accountBook = accountBook;
 	}
 
-	public String getIoTypeCode() {
-		return ioTypeCode;
-	}
-
-	public void setIoTypeCode(String ioTypeCode) {
-		this.ioTypeCode = ioTypeCode;
-	}
-
-	public BigDecimal getAmount() {
-		return amount;
-	}
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
-	
 }

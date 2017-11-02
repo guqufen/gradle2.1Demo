@@ -5,7 +5,7 @@ import java.util.Date;
 public class FinanceAccount {
     private Integer id;
 
-    private Integer accountId;
+    private String accountId;
 
     private String shopInnerCode;
 
@@ -19,15 +19,16 @@ public class FinanceAccount {
         this.id = id;
     }
 
-    public Integer getAccountId() {
-        return accountId;
-    }
 
-    public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
-    }
+    public String getAccountId() {
+		return accountId;
+	}
 
-    public String getShopInnerCode() {
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+
+	public String getShopInnerCode() {
         return shopInnerCode;
     }
 
