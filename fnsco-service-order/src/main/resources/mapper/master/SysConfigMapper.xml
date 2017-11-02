@@ -9,9 +9,13 @@
     <result column="value" property="value" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="INTEGER" />
+    <result column="keep1" property="keep1" jdbcType="VARCHAR" />
+    <result column="keep2" property="keep2" jdbcType="VARCHAR" />
+    <result column="keep3" property="keep3" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, type, group_name, name, value, status, remark
+    id, type, group_name, name, value, status, remark, order_no, keep1, keep2, keep3
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -166,6 +170,26 @@
       <if test="remark != null" >
         AND remark = #{remark,jdbcType=VARCHAR}
       </if>
+      order by order_no asc
     </where>
+  </select>
+  
+  <!-- 通过积分查询所属等级 -->
+  <select id="selectLevelByScores" parameterType="net.fnsco.order.service.domain.SysConfig"  resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM sys_config
+    WHERE type = #{type}
+    AND CAST(value AS SIGNED) &gt;= CAST(#{value} AS SIGNED)<!-- 大于等于 -->
+    ORDER BY CAST(value AS SIGNED) ASC limit 1
+  </select>
+  <!-- 通过积分查询下一级等级信息(如果是最高等级会返回空) -->
+  <select id="selectNextLevelByScores" parameterType="net.fnsco.order.service.domain.SysConfig"  resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM sys_config
+    WHERE type = #{type}
+    AND CAST(value AS SIGNED) &gt; CAST(#{value} AS SIGNED)<!-- 大于，查询下一级 -->
+    ORDER BY CAST(value AS SIGNED) ASC limit 1
   </select>
 </mapper>

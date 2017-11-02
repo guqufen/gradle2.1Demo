@@ -174,4 +174,19 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
 
     }
 
+    /**
+     * 通过商户积分查询商户vip等级
+     */
+	@Override
+	public SysConfig selectLevelByScores(SysConfig record) {
+
+		return sysConfigDao.selectLevelByScores(record);
+	}
+
+	@Override
+	public SysConfig selectNextLevelByScores(SysConfig record) {
+		// TODO Auto-generated method stub
+		return sysConfigDao.selectNextLevelByScores(record);
+	}
+
 }

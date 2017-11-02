@@ -39,4 +39,17 @@ public interface SysConfigService {
     String getValueUrl(AppConfigDTO appConfigDTO);
     
     List<SysConfig> selectAllByCondition(SysConfig record);
+    
+    /**
+     * 通过商户积分查询所属vip等级
+     * @param record
+     * @return
+     */
+    SysConfig selectLevelByScores(SysConfig record);
+    /**
+     * 通过商户积分查询下一级vip等级
+     * @param record
+     * @return
+     */
+    SysConfig selectNextLevelByScores(SysConfig record);
 }

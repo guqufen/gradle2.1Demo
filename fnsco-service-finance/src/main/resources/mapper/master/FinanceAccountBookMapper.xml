@@ -198,6 +198,14 @@
         	AND create_time = #{createTime,jdbcType=TIMESTAMP}
      		</if>			    
 		</where>  
+  <!-- account_id生成时查重 -->
+  <select id="queryAccountId" parameterType="java.lang.String" resultType="java.lang.String" >
+    SELECT
+		account_id
+	FROM
+		f_finance_account
+	WHERE
+		account_id = #{accountId,jdbcType=VARCHAR}
   </select>
   <!-- APP端记账查询商户信息 -->
   <select id="queryEntityList" parameterType="java.lang.String" resultMap="EntityResultMap" >

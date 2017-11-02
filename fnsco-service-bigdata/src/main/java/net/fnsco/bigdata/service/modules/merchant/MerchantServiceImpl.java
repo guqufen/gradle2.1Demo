@@ -36,6 +36,7 @@ import net.fnsco.bigdata.service.domain.Alias;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
+import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.bigdata.service.merchant.dao.MerchantPosSimpleDao;
 import net.fnsco.bigdata.service.merchant.entity.MerchantPosDO;
 import net.fnsco.core.base.BaseService;
@@ -65,7 +66,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     private MerchantPosSimpleDao      merchantPosSimpleDao;
     @Autowired
     private Environment               env;
-    
+
     private static final String TAICODE_BASE_URL = "qr.redrect.url";
 
     /**
@@ -350,4 +351,23 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         }
         return innerCodes;
     }
+    
+	
+	/**
+     * getMerchantsScoresByUserId：根据用户ID查询商户积分信息
+     * @param userId:用户ID
+     * @return
+     */
+    @Override
+	public List<MerChantCoreDTO> getMerchantsScoresByUserId(Integer userId) {
+		
+        List<MerChantCoreDTO> datas = merchantCoreDao.getMerchantsScoresByUserId(userId);
+        
+        return datas;
+	}
+	@Override
+	public MerChantCoreDTO getScoreByUserIdInnerCode(MerchantUserRel merchantUserRel) {
+
+		return merchantCoreDao.getScoreByUserIdInnerCode(merchantUserRel);
+	}
 }
