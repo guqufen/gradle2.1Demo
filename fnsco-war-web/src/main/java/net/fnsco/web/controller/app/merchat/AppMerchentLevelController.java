@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +39,8 @@ public class AppMerchentLevelController extends BaseController{
 	private IntegralRuleService integralRuleService;
 	@Autowired
 	private IntegralRuleLogService integralRuleLogService;
+	@Autowired
+	private Environment env;
 	
 	// 商户等级查询(根据userid查询该用户下所有实体商户<等级和积分信息>列表)
 	@RequestMapping("/queryMercScore")
@@ -107,7 +110,7 @@ public class AppMerchentLevelController extends BaseController{
 				return success(merChantCoreDTO);
 			}
 			merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
-			BigDecimal b1 = new BigDecimal(sysConfig3.getValue());//获取下一级vip积分
+			BigDecimal b1 = new BigDecimal(sysConfig2.getValue());//获取下一级vip积分
 			merChantCoreDTO.setNextScores(b1);//设置下一级积分
 			merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()));//积分差值
 		}
@@ -124,6 +127,10 @@ public class AppMerchentLevelController extends BaseController{
 		sysConfig.setType("11");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
 
+		String prefix = env.getProperty("app.integral.pre.url");
+		for (SysConfig sysConfig2 : list) {
+			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
+		}
 		return success(list);
 	}
 	
@@ -134,7 +141,11 @@ public class AppMerchentLevelController extends BaseController{
 		SysConfig sysConfig = new SysConfig();
 		sysConfig.setType("10");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
-
+		
+		String prefix = env.getProperty("app.integral.pre.url");
+		for (SysConfig sysConfig2 : list) {
+			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
+		}
 		return success(list);
 	}
 	
