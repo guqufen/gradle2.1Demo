@@ -39,7 +39,7 @@ public interface MerchantCoreService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    ResultDTO<String> doAddMerCore(MerchantCore merchantCore);
+    ResultDTO<String> doAddMerCore(MerchantCore merchantCore,String userId);
 
     /**
      * doAddMerContact:(这里用一句话描述这个方法的作用) 保存联系方式
