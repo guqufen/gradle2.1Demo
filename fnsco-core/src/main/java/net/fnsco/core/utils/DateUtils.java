@@ -501,19 +501,13 @@ public class DateUtils {
      * 获取月第一天
      * @return
      */
-    public static Date getMouthStartTime(int mouth) {
-    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static String getMouthStartTime(int mouth) {
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         //获取前月的第一天
         Calendar cal_1=Calendar.getInstance();//获取当前日期 
         cal_1.add(Calendar.MONTH, mouth);
         cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为该月第一天 
-        String firstDay = format.format(cal_1.getTime());
-        Date startTime = null;
-        try {
-        	startTime = format.parse(firstDay);
-        } catch (ParseException e) {
-            logger.error("DateUtils.getDayEndTime()日志转换出错", e);
-        }
+        String startTime = format.format(cal_1.getTime());
         return startTime;
     }
     
@@ -521,18 +515,13 @@ public class DateUtils {
      * 获取月最后一天
      * @return
      */
-    public static Date getMouthEndTime(int mouth) {
-    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static String getMouthEndTime(int mouth) {
+    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     	//获取前月的最后一天
-        Calendar cale = Calendar.getInstance();   
-        cale.set(Calendar.DAY_OF_MONTH,mouth);//设置为1号,当前日期既为该月最后一天 
-        String lastDay = format.format(cale.getTime());
-        Date endTime = null;
-        try {
-        	endTime = format.parse(lastDay);
-        } catch (ParseException e) {
-            logger.error("DateUtils.getDayEndTime()日志转换出错", e);
-        }
+        Calendar cale = Calendar.getInstance();  
+        cale.add(Calendar.MONTH, mouth+1);
+        cale.set(Calendar.DAY_OF_MONTH,0);//设置为1号,当前日期既为该月最后一天 
+        String endTime = format.format(cale.getTime());
         return endTime;
     }
 }

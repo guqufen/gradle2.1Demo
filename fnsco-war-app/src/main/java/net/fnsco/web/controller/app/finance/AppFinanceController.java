@@ -3,6 +3,7 @@ package net.fnsco.web.controller.app.finance;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +14,9 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.finance.api.dto.FinanceBookKeepingDTO;
 import net.fnsco.finance.api.dto.FinanceQueryDTO;
 import net.fnsco.finance.api.dto.FinanceRecordDTO;
+import net.fnsco.finance.api.dto.QueryDetailDTO;
 import net.fnsco.finance.api.finance.AppFinanceService;
+import net.fnsco.finance.service.domain.FinanceAccountBook;
 import net.fnsco.finance.service.domain.FinanceIoType;
 
 
@@ -23,7 +26,7 @@ import net.fnsco.finance.service.domain.FinanceIoType;
  *
  */
 @RestController
-@RequestMapping(value = "/app/finance", method = RequestMethod.POST)
+@RequestMapping(value = "/app/finance")
 public class AppFinanceController extends BaseController {
 
     
@@ -34,9 +37,9 @@ public class AppFinanceController extends BaseController {
 	 * @param financeQuery
 	 * @return
 	 */
-    @RequestMapping(value = "/getFinance " , method = RequestMethod.POST)
+    @RequestMapping(value = "/getFinance" , method = RequestMethod.POST)
     @ApiOperation(value = "查询记账信息")
-    public ResultDTO<FinanceBookKeepingDTO> getFinance (FinanceQueryDTO financeQuery) {
+    public ResultDTO<FinanceBookKeepingDTO> getFinance (@RequestBody FinanceQueryDTO financeQuery) {
     	ResultDTO<FinanceBookKeepingDTO> dayResultPage = appFinanceService.queryFinanceDayList(financeQuery);
         return dayResultPage;
     }
@@ -50,24 +53,28 @@ public class AppFinanceController extends BaseController {
     	ResultDTO<FinanceIoType> IoType = appFinanceService.queryIoTypeList();
         return IoType;
     } 
-    
+    /**
+     * 新增记账信息
+     * @param financeRecordDTO
+     * @return
+     */
     @RequestMapping(value = "/addFinance" , method = RequestMethod.POST)
     @ApiOperation(value = "新增记账信息")
-    public ResultDTO addFinance(FinanceRecordDTO financeRecordDTO) {
+    public ResultDTO addFinance(@RequestBody FinanceRecordDTO financeRecordDTO) {
         return appFinanceService.addFinance(financeRecordDTO);
     } 
     
     @RequestMapping(value = "/modifyFinance" , method = RequestMethod.POST)
     @ApiOperation(value = "修改记账信息")
-    public ResultDTO modifyFinance(FinanceQueryDTO financeQuery) {
-    	ResultDTO<FinanceBookKeepingDTO> dayResultPage = appFinanceService.queryFinanceDayList(financeQuery);
-        return null;
+    public ResultDTO modifyFinance(@RequestBody FinanceRecordDTO financeRecordDTO) {
+    	 return appFinanceService.modifyFinance(financeRecordDTO);
     } 
     
     @RequestMapping(value = "/getFinanceDetails" , method = RequestMethod.POST)
     @ApiOperation(value = "查询记账详情")
-    public ResultDTO getFinanceDetails(FinanceQueryDTO financeQuery) {
-    	ResultDTO<FinanceBookKeepingDTO> dayResultPage = appFinanceService.queryFinanceDayList(financeQuery);
-        return null;
+    public ResultDTO getFinanceDetails(@RequestBody FinanceAccountBook financeAccountBook) {
+    	Integer id= financeAccountBook.getId();
+    	ResultDTO dayResultPage = appFinanceService.queryFinanceDetailsById(id);
+        return dayResultPage;
     } 
 }

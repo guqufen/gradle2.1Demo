@@ -14,13 +14,19 @@ public class FinanceDetailDTO  extends DTO{
 	
 	private String week;//星期
 	
+	private Integer type;//收支类型
+	
 	private String ioTypeCode;//收支子类型
 	
 	private BigDecimal cash;//金额
 	
 	private String remark;//备注
 	
-	private String entityInnerCode;//实体商户编号
+	private String shopInnerCode;//实体店铺编号
+	
+	private String shopName;//实体店铺名字
+	
+	private String icoUrl;//图片
 
 	public String getDates() {
 		return dates;
@@ -36,6 +42,14 @@ public class FinanceDetailDTO  extends DTO{
 
 	public void setWeek(String week) {
 		this.week = week;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	public String getIoTypeCode() {
@@ -62,12 +76,28 @@ public class FinanceDetailDTO  extends DTO{
 		this.remark = remark;
 	}
 
-	public String getEntityInnerCode() {
-		return entityInnerCode;
+	public String getShopInnerCode() {
+		return shopInnerCode;
 	}
 
-	public void setEntityInnerCode(String entityInnerCode) {
-		this.entityInnerCode = entityInnerCode;
+	public void setShopInnerCode(String shopInnerCode) {
+		this.shopInnerCode = shopInnerCode;
+	}
+
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
+
+	public String getIcoUrl() {
+		return icoUrl;
+	}
+
+	public void setIcoUrl(String icoUrl) {
+		this.icoUrl = icoUrl;
 	}
 	
 }
