@@ -294,7 +294,7 @@
         last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER},
       </if>
       <if test="scores != null" >
-        scores = #{scores,jdbcType=DECIMAL},
+        scores = scores + #{scores,jdbcType=DECIMAL},
       </if>
     </set>
     where entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR}

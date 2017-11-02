@@ -1,5 +1,6 @@
 package net.fnsco.order.api.merchant;
 
+import java.util.Date;
 import java.util.List;
 
 import net.fnsco.order.service.domain.IntegralRule;
@@ -32,4 +33,14 @@ public interface IntegralRuleService {
 	 * @return
 	 */
 	public IntegralRule queryIntegralByCode(String code);
+	
+	/**
+	 * countMerchantEntityScores:(统计积分)
+	 *
+	 * @param      设定文件
+	 * @return void    DOM对象
+	 * @author tangliang
+	 * @date   2017年11月2日 上午9:45:30
+	 */
+	void countTradeDataScores(Date startTime,Date endTime);
 }
