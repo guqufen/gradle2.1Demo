@@ -198,6 +198,7 @@
         	AND create_time = #{createTime,jdbcType=TIMESTAMP}
      		</if>			    
 		</where>  
+		</select>
   <!-- account_id生成时查重 -->
   <select id="queryAccountId" parameterType="java.lang.String" resultType="java.lang.String" >
     SELECT
