@@ -108,17 +108,15 @@ public class TimerConfig {
     }
     
     /**
-     * pushMagTimer:(统计积分)@Scheduled(cron = "0 5 * * * ?")
+     * pushMagTimer:(统计积分)
      *
      * @param      设定文件
      * @return void    DOM对象
      * @author tangliang
      * @date   2017年11月2日 上午9:38:37
      */
-    @Scheduled(cron = "20 * * * * ?") //每个小时的第五分钟执行，每小时执行一次
+    @Scheduled(cron = "5 5 * * * ?") //每个小时的第五分钟第五秒执行，每小时执行一次
     public void countMerchantEntityScores() {
-    	Timestamp startTime  = new Timestamp(DateUtils.getTimeByMinuteDate(-60).getTime());
-    	Timestamp endTime  = new Timestamp(new Date().getTime());
-    	integralRuleService.countTradeDataScores(startTime, endTime);
+    	integralRuleService.countTradeDataScores(DateUtils.getTimeByMinuteDate(-60), new Date());
     }
 }
