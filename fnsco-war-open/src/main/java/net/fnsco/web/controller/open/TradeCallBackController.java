@@ -1,13 +1,12 @@
 package net.fnsco.web.controller.open;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 
@@ -15,10 +14,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.DbUtil;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.dby.AESUtil;
+import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.dto.OrderDTO;
 import net.fnsco.order.service.trade.TradeOrderService;
+import net.fnsco.order.service.trade.entity.TradeOrderDO;
 
 /**
  * 
@@ -29,7 +30,7 @@ import net.fnsco.order.service.trade.TradeOrderService;
  * @Date	 2017年10月27日 上午11:53:16
  *
  */
-@RestController
+@Controller
 @RequestMapping(value = "/trade/jhf", method = RequestMethod.POST)
 @Api(value = "/trade/jhf", tags = { "聚惠芬回调接口" })
 public class TradeCallBackController extends BaseController {
@@ -53,6 +54,7 @@ public class TradeCallBackController extends BaseController {
      */
     @RequestMapping(value = "/payCompleteNotice")
     @ApiOperation(value = "支付完成时的通知")
+    @ResponseBody
     public ResultDTO payCompleteNotice(String rspData) {
         logger.error("聚惠芬支付完成时的通知密文入参：" + rspData);
         String keyStr = env.getProperty("jhf.api.AES.key");
@@ -70,29 +72,26 @@ public class TradeCallBackController extends BaseController {
     }
 
     /**
-     * 支付完成时的回调
+     * 支付完成时的回调页面
      *
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/payCompleteCallback")
+    @RequestMapping(value = "/payCompleteCallback", method = RequestMethod.GET)
     @ApiOperation(value = "支付完成时的回调")
-    public ResultDTO payCompleteCallback(String thirdPayNo, String salesOrderNo, String orderStatus, String settlementStatus, String payCallBackParams) {
-        //md5校验
-        String singDataStr = thirdPayNo + salesOrderNo + orderStatus + settlementStatus + payCallBackParams + "78d496a2e2ba419d8e4f90af0431c763";
-        String md5Str = DbUtil.MD5(singDataStr);
-        String url = env.getProperty("jhf.qr.pay.url");
-        //保存订单信息
-        //成功或失败则同步到交易流水信息
-        OrderDTO order = new OrderDTO();
-        order.setThirdPayNo(thirdPayNo);
-        order.setSalesOrderNo(salesOrderNo);
-        order.setOrderStatus(orderStatus);
-        order.setSettlementStatus(settlementStatus);
-        order.setPayCallBackParams(payCallBackParams);
-        order.setOrderCeateTime(new Date());
-        logger.error("聚惠芬支付完成时的回调入参：" + JSON.toJSONString(order));
-        ResultDTO result = tradeOrderService.updateOrderInfo(order);
-        return success(result);
+    public String payCompleteCallback(String orderNo) {
+        String url = env.getProperty("web.base.url");
+        logger.error("聚惠芬支付完成时的回调入参：" + orderNo);
+        TradeOrderDO order = tradeOrderService.queryOneByOrderId(orderNo);
+        //分期数
+        //支付总金额
+        if(null == order){
+            order = new TradeOrderDO();
+        }
+        //status = ConstantEnum.RespCodeEnum.getNameByCode(order.getRespCode());
+        return "redirect:" + url + "/pay/jhfPayCallback.html?paymentAmount="+order.getTxnAmount()+
+                "&installmentNum="+order.getInstallmentNum()+
+                "&orderDate="+DateUtils.dateFormat1ToStr(order.getCreateTime())+
+                "&status="+order.getRespCode();
     }
 }

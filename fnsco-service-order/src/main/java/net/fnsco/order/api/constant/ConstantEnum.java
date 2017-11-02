@@ -190,7 +190,7 @@ public class ConstantEnum {
 
     //贷记卡和借记卡
     public static enum RespCodeEnum {
-                                     HANDLING("1000", "处理中"), SUCCESS("1001", "成功"), FAIL("1002", "失败");
+                                     HANDLING("1000", "处理中"), SUCCESS("1001", "成功"), FAIL("1002", "失败"), REFUNDS("1003", "退款");
 
         private String code;
         private String name;

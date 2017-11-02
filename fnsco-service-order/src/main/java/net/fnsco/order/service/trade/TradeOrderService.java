@@ -91,10 +91,10 @@ public class TradeOrderService extends BaseService {
     // 查询
     public TradeOrderDO queryOneByOrderId(String orderNo) {
         TradeOrderDO obj = this.tradeOrderDAO.queryByOrderId(orderNo);
-        if ("1000".equals(obj.getRespCode())) {//如果没有重新查询一次
+        if (obj != null && "1000".equals(obj.getRespCode())) {//如果没有重新查询一次
             updateOrderStatues(orderNo);
+            obj = this.tradeOrderDAO.queryByOrderId(orderNo);
         }
-        obj = this.tradeOrderDAO.queryByOrderId(orderNo);
         return obj;
     }
 

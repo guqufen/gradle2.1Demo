@@ -3,6 +3,7 @@ package net.fnsco.web.controller.open;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,7 @@ public class TradeController extends BaseController {
         String url = env.getProperty("jhf.open.api.url")+"/api/thirdPay/dealPayOrder";
         String keyStr =env.getProperty("jhf.api.AES.key");
         String payNotifyUrl = env.getProperty("open.base.url")+"/trade/jhf/payCompleteNotice";
+        String payCallBackUrl = env.getProperty("open.base.url")+"/trade/jhf/payCompleteCallback?orderNo="+tradeOrder.getOrderNo();
         //        commID  商户Id
         //        thirdPayNo  订单号
         //        payAmount   支付金额
@@ -106,7 +108,7 @@ public class TradeController extends BaseController {
         BigDecimal amountTemp = tradeOrder.getTxnAmount();
         BigDecimal amountTemps = amountTemp.divide(new BigDecimal("100"));
         String singDataStr =  merchantChannelJhf.getChannelMerId()+tradeOrder.getOrderNo()
-        +amountTemps.toString()+String.valueOf(tradeOrder.getInstallmentNum())+createTimerStr+payNotifyUrl;
+        +amountTemps.toString()+String.valueOf(tradeOrder.getInstallmentNum())+createTimerStr+payNotifyUrl+payCallBackUrl;
         logger.error("签名前数据"+singDataStr);
         String singData=JHFMd5Util.encode32(singDataStr);
         logger.error("签名"+singData);
@@ -116,7 +118,7 @@ public class TradeController extends BaseController {
         
         jhfJO.setPayAmount(amountTemps.toString());
         jhfJO.setPayCallBackParams("");
-        jhfJO.setPayCallBackUrl("");//payCallBackUrl
+        jhfJO.setPayCallBackUrl(payCallBackUrl);//payCallBackUrl
         jhfJO.setPayNotifyUrl(payNotifyUrl);
         jhfJO.setSingData(singData);
         jhfJO.setThirdPayNo(tradeOrder.getOrderNo());
