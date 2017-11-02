@@ -74,7 +74,7 @@ public class TradeController extends BaseController {
         tradeOrder.setChannelMerId(merchantChannelJhf.getChannelMerId());
         tradeOrder.setChannelType("04");
         tradeOrder.setInstallmentNum(tradeJO.getInstallmentNum());
-        tradeOrder.setMercId(merchantChannelJhf.getInnerCode());
+        tradeOrder.setEntityInnerCode(merchantChannelJhf.getEntityInnerCode());
         tradeOrder.setCreateUserId(tradeJO.getSnCode());
         BigDecimal amountB = new BigDecimal(tradeJO.getPaymentAmount());
         BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
@@ -121,7 +121,7 @@ public class TradeController extends BaseController {
         jhfJO.setSingData(singData);
         jhfJO.setThirdPayNo(tradeOrder.getOrderNo());
         jhfJO.setTransTime(createTimerStr);
-        jhfJO.setUnionId(tradeOrder.getMercId());
+        jhfJO.setUnionId(tradeOrder.getInnerCode());
         String reqData="";
         String dateTemp = JSON.toJSONString(jhfJO);
         try {

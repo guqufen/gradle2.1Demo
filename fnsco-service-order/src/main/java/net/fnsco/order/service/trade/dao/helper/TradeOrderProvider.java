@@ -36,8 +36,8 @@ public class TradeOrderProvider {
         if (StringUtils.isNotBlank(tradeOrder.getRespMsg())){
             SET("resp_msg=#{tradeOrder.respMsg}");
         }
-        if (StringUtils.isNotBlank(tradeOrder.getMercId())){
-            SET("merc_id=#{tradeOrder.mercId}");
+        if (StringUtils.isNotBlank(tradeOrder.getEntityInnerCode())){
+            SET("entity_inner_code=#{tradeOrder.entityInnerCode}");
         }
         if (StringUtils.isNotBlank(tradeOrder.getChannelMerId())){
             SET("channel_mer_id=#{tradeOrder.channelMerId}");
@@ -134,8 +134,8 @@ public class TradeOrderProvider {
         if (StringUtils.isNotBlank(tradeOrder.getRespMsg())){
             WHERE("resp_msg=#{tradeOrder.respMsg}");
         }
-        if (StringUtils.isNotBlank(tradeOrder.getMercId())){
-            WHERE("merc_id=#{tradeOrder.mercId}");
+        if (StringUtils.isNotBlank(tradeOrder.getEntityInnerCode())){
+            WHERE("entity_inner_code=#{tradeOrder.entityInnerCode}");
         }
         if (StringUtils.isNotBlank(tradeOrder.getChannelMerId())){
             WHERE("channel_mer_id=#{tradeOrder.channelMerId}");
@@ -212,8 +212,8 @@ public class TradeOrderProvider {
         if (StringUtils.isNotBlank(tradeOrder.getRespMsg())){
             WHERE("resp_msg=#{tradeOrder.respMsg}");
         }
-        if (StringUtils.isNotBlank(tradeOrder.getMercId())){
-            WHERE("merc_id=#{tradeOrder.mercId}");
+        if (StringUtils.isNotBlank(tradeOrder.getEntityInnerCode())){
+            WHERE("entity_inner_code=#{tradeOrder.entityInnerCode}");
         }
         if (StringUtils.isNotBlank(tradeOrder.getChannelMerId())){
             WHERE("channel_mer_id=#{tradeOrder.channelMerId}");

@@ -114,6 +114,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
             if (!ref.getInnerCode().equals(innerCode)) {
                 merchantChannel = merchantChannelDao.selectByInnerCodeType(ref.getInnerCode(), channelType);
                 if (null != merchantChannel && "04".equals(merchantChannel.getChannelType())) {
+                    merchantChannel.setEntityInnerCode(ref.getEntityInnerCode());
                     break;
                 }
             }

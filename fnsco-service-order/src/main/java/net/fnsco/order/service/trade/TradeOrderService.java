@@ -57,7 +57,7 @@ public class TradeOrderService extends BaseService {
         logger.info("开始添加TradeOrderService.add,tradeOrder=" + tradeOrder.toString());
         tradeOrder.setCreateTime(new Date());
         //tradeOrder.setOrderCeateTime(new Date());
-        tradeOrder.setOrderNo(DateUtils.getNowDateStr() + tradeOrder.getMercId() + DbUtil.getRandomStr(3));
+        tradeOrder.setOrderNo(DateUtils.getNowDateStr() + tradeOrder.getInnerCode() + DbUtil.getRandomStr(3));
         this.tradeOrderDAO.insert(tradeOrder);
         return tradeOrder;
     }
@@ -87,7 +87,8 @@ public class TradeOrderService extends BaseService {
         TradeOrderDO obj = this.tradeOrderDAO.queryByOrderId(orderNo);
         return obj;
     }
- // 查询
+
+    // 查询
     public TradeOrderDO queryOneByOrderId(String orderNo) {
         TradeOrderDO obj = this.tradeOrderDAO.queryByOrderId(orderNo);
         if ("1000".equals(obj.getRespCode())) {//如果没有重新查询一次
@@ -96,6 +97,7 @@ public class TradeOrderService extends BaseService {
         obj = this.tradeOrderDAO.queryByOrderId(orderNo);
         return obj;
     }
+
     public TradeOrderDO doQueryByPayOrderNo(String salesOrderNo) {
         TradeOrderDO obj = this.tradeOrderDAO.queryBySalesOrderNo(salesOrderNo);
         return obj;
@@ -117,7 +119,9 @@ public class TradeOrderService extends BaseService {
         }
         tradeOrderDO.setRespCode(respCode);
         tradeOrderDO.setPayOrderNo(order.getSalesOrderNo());
-
+        if (!"0".equals(order.getSettlementStatus())) {
+            tradeOrderDO.setCompleteTime(new Date());
+        } 
         //结算状态（0 未结算 1已结算   2结算中   3已退款）
         if (Strings.isNullOrEmpty(order.getSettlementStatus())) {
             try {
@@ -133,7 +137,7 @@ public class TradeOrderService extends BaseService {
             tradeOrderDO.setCreateTime(new Date());
             doAdd(tradeOrderDO);
         } else {
-            if (null != order.getTime()) {//回调时更新订单创建时间
+            if (null == tradeOrderDO.getOrderCeateTime() && !Strings.isNullOrEmpty(order.getTime())) {//回调时更新订单创建时间
                 tradeOrderDO.setOrderCeateTime(DateUtils.toParseYmdhms(order.getTime()));
             }
             doUpdate(tradeOrderDO);
@@ -204,7 +208,7 @@ public class TradeOrderService extends BaseService {
     @Transactional
     public void saveTradeData(TradeOrderDO order) {
         TradeDataDTO tradeData = new TradeDataDTO();
-        tradeData.setMerId(order.getMercId());
+        tradeData.setMerId(order.getChannelMerId());
         tradeData.setChannelType(order.getChannelType());
         tradeData.setInnerCode(order.getInnerCode());
         tradeData.setAmt(order.getTxnAmount().toString());
