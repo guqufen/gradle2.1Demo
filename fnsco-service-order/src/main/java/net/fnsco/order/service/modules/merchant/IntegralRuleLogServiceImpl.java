@@ -1,4 +1,4 @@
-package net.fnsco.bigdata.service.modules.merchant;
+package net.fnsco.order.service.modules.merchant;
 
 import java.util.Date;
 import java.util.List;
@@ -7,15 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import net.fnsco.bigdata.api.merchant.IntegralRuleLogService;
-import net.fnsco.bigdata.service.dao.master.IntegralRuleDAO;
-import net.fnsco.bigdata.service.dao.master.IntegralRuleLogDAO;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
-import net.fnsco.bigdata.service.domain.IntegralRule;
-import net.fnsco.bigdata.service.domain.IntegralRuleLog;
-import net.fnsco.bigdata.service.domain.IntegralRuleLog.IntegralTypeEnum;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.service.dao.master.IntegralRuleDAO;
+import net.fnsco.order.service.dao.master.IntegralRuleLogDAO;
+import net.fnsco.order.service.domain.IntegralRule;
+import net.fnsco.order.service.domain.IntegralRuleLog;
+import net.fnsco.order.service.domain.IntegralRuleLog.IntegralTypeEnum;
 
 @Service
 public class IntegralRuleLogServiceImpl implements IntegralRuleLogService {
@@ -50,7 +50,7 @@ public class IntegralRuleLogServiceImpl implements IntegralRuleLogService {
 		IntegralRuleLog integralRuleLog = new IntegralRuleLog();
 		integralRuleLog.setEntityInnerCode(entityInnerCode);
 		integralRuleLog.setRuleCode(ruleCode);
-		
+
 		// 通过code查找积分数值
 		IntegralRule integralRule = integralRuleDAO.queryIntegralByCode(ruleCode);
 		String type = IntegralTypeEnum.getDataByCode(ruleCode);// 通过code查找类型，封顶/计次/其他
@@ -64,7 +64,7 @@ public class IntegralRuleLogServiceImpl implements IntegralRuleLogService {
 			integralRuleLog2.setIntegralDate(DateUtils.getDateStrYYYYMMDD(new Date()));// 设置积分日期
 
 			Integer integralSum = integralRuleLogDAO.querySumbyCondition(integralRuleLog2);
-			
+
 			// 判不为空，不然后面直接加减会报错
 			if (integralSum != null) {
 				if ((integralSum + integralRule.getIntegral()) > 10) {
@@ -96,19 +96,19 @@ public class IntegralRuleLogServiceImpl implements IntegralRuleLogService {
 			}
 		}
 
-		//将数据存入积分日志表
+		// 将数据存入积分日志表
 		integralRuleLog.setRuleCode(integralRule.getCode());// 规则积分代码
 		integralRuleLog.setIntegral(integralRule.getIntegral());// 设置积分
 		integralRuleLog.setIntegralDate(DateUtils.getDateStrYYYYMMDD(new Date()));// 设置积分日期
 		integralRuleLog.setDescription(integralRule.getDescription());// 设置积分描述
 		integralRuleLog.setCreateTime(new Date());// 创建时间
 		integralRuleLogDAO.insert(integralRuleLog);// 存入数据库
-		
-		//更新实体商户表里面的积分scores字段
-		//先通过entityCode查找到更新前的scores，然后再将scores加上本次积分，接着更新积分
+
+		// 更新实体商户表里面的积分scores字段
+		// 先通过entityCode查找到更新前的scores，然后再将scores加上本次积分，接着更新积分
 		MerchantEntity merchantEntity = merchantEntityDao.selectByEntityInnerCode(integralRuleLog.getEntityInnerCode());
-		merchantEntity.setScores(merchantEntity.getScores() + integralRule.getIntegral().longValue());//积分相加
+		merchantEntity.setScores(merchantEntity.getScores() + integralRule.getIntegral().longValue());// 积分相加
 		merchantEntity.setLastModefyTimer(new Date());
-		merchantEntityDao.updateByEntityInnerCode(merchantEntity);//通过实体商户号更新
+		merchantEntityDao.updateByEntityInnerCode(merchantEntity);// 通过实体商户号更新
 	}
 }

@@ -1,9 +1,9 @@
-package net.fnsco.bigdata.api.merchant;
+package net.fnsco.order.api.merchant;
 
 import java.util.Date;
 import java.util.List;
 
-import net.fnsco.bigdata.service.domain.IntegralRule;
+import net.fnsco.order.service.domain.IntegralRule;
 
 /**
  * 积分相关业务操作
