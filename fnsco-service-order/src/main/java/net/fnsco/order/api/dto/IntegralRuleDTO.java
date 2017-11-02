@@ -1,9 +1,9 @@
-package net.fnsco.bigdata.api.dto;
+package net.fnsco.order.api.dto;
 
 import java.util.List;
 
-import net.fnsco.bigdata.service.domain.IntegralRule;
 import net.fnsco.core.base.DTO;
+import net.fnsco.order.service.domain.IntegralRule;
 
 /**
  * 用于返回

@@ -1,10 +1,10 @@
-package net.fnsco.bigdata.service.dao.master;
+package net.fnsco.order.service.dao.master;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import net.fnsco.bigdata.service.domain.IntegralRuleLog;
+import net.fnsco.order.service.domain.IntegralRuleLog;
 
 @Mapper
 public interface IntegralRuleLogDAO {

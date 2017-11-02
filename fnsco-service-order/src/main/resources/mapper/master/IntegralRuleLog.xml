@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.bigdata.service.dao.master.IntegralRuleLogDAO">
+<mapper namespace="net.fnsco.order.service.dao.master.IntegralRuleLogDAO">
 	<resultMap id="BaseResultMap"
-		type="net.fnsco.bigdata.service.domain.IntegralRuleLog">
+		type="net.fnsco.order.service.domain.IntegralRuleLog">
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="entity_inner_code" property="entityInnerCode"
 			jdbcType="VARCHAR" />
@@ -18,7 +18,7 @@
 		integral,integral_date,create_time
 	</sql>
 	<!-- 条件查询日志记录 -->
-	<select id="queryListByCondition" parameterType="net.fnsco.bigdata.service.domain.IntegralRuleLog"
+	<select id="queryListByCondition" parameterType="net.fnsco.order.service.domain.IntegralRuleLog"
 		resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
@@ -52,7 +52,7 @@
 	<!-- 通过实体商户号entity_inner_code、积分规则代码rule_code和记分日期integral_date查找某天某类总共积分 
 		可以查看某商户某天/某类型总共积分 -->
 	<select id="querySumbyCondition" resultType="java.lang.Integer"
-		parameterType="net.fnsco.bigdata.service.domain.IntegralRuleLog">
+		parameterType="net.fnsco.order.service.domain.IntegralRuleLog">
 		select sum(integral) from i_integral_log
 		<where>
 			<if test="entityInnerCode != null and entityInnerCode != ''">
@@ -70,7 +70,7 @@
 	<!-- 通过实体商户号entity_inner_code、积分规则代码rule_code和记分日期integral_date查找某天某类总共积分 
 		可以查看某商户某天/某类型次数 -->
 	<select id="queryCountbyCondition" resultType="java.lang.Integer"
-		parameterType="net.fnsco.bigdata.service.domain.IntegralRuleLog">
+		parameterType="net.fnsco.order.service.domain.IntegralRuleLog">
 		select count(1) from i_integral_log
 		<where>
 			<if test="entityInnerCode != null and entityInnerCode != ''">
@@ -86,7 +86,7 @@
 	</select>
 
 	<!-- 插数据 -->
-	<insert id="insert" parameterType="net.fnsco.bigdata.service.domain.IntegralRuleLog">
+	<insert id="insert" parameterType="net.fnsco.order.service.domain.IntegralRuleLog">
 		insert into i_integral_log(
 		id,
 		entity_inner_code,

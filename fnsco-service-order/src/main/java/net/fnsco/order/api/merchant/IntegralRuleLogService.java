@@ -1,8 +1,8 @@
-package net.fnsco.bigdata.api.merchant;
+package net.fnsco.order.api.merchant;
 
 import java.util.List;
 
-import net.fnsco.bigdata.service.domain.IntegralRuleLog;
+import net.fnsco.order.service.domain.IntegralRuleLog;
 
 public interface IntegralRuleLogService {
 

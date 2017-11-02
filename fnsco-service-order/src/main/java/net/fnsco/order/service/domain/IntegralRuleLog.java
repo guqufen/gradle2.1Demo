@@ -1,4 +1,4 @@
-package net.fnsco.bigdata.service.domain;
+package net.fnsco.order.service.domain;
 
 import java.util.Date;
 
