@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDevDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
@@ -21,13 +21,13 @@
     delete from m_merchant_core_entity_ref
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev" >
     insert into m_merchant_core_entity_ref (id, entity_inner_code, inner_code, 
       create_time)
     values (#{id,jdbcType=INTEGER}, #{entityInnerCode,jdbcType=VARCHAR}, #{innerCode,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev" >
     insert into m_merchant_core_entity_ref
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -58,7 +58,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev" >
     update m_merchant_core_entity_ref
     <set >
       <if test="entityInnerCode != null" >
@@ -73,7 +73,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev" >
     update m_merchant_core_entity_ref
     set entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
       inner_code = #{innerCode,jdbcType=VARCHAR},

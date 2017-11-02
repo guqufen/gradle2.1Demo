@@ -10,7 +10,7 @@ import java.util.Date;
  * @Date	 2017年10月26日 下午2:47:10
  *
  */
-public class MerchantEntity {
+public class MerchantEntityDev {
 	private Integer id;
 
     private String entityInnerCode;

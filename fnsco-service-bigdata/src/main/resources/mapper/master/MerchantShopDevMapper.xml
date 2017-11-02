@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantShopDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantShop" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantShopDevDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantShopDev" >
      <id column="id" jdbcType="INTEGER" property="id" />
     <result column="entity_inner_code" jdbcType="VARCHAR" property="entityInnerCode" />
     <result column="shop_inner_code" jdbcType="VARCHAR" property="shopInnerCode" />
@@ -36,7 +36,7 @@
     delete from m_merchant_shop
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantShop" >
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantShopDev" >
     insert into m_merchant_shop (id, entity_inner_code, shop_inner_code, 
       shop_name, area, address, 
       create_timer, create_source, create_user_id, 
@@ -48,7 +48,7 @@
       #{lastModefyTimer,jdbcType=TIMESTAMP}, #{lastModefyUserId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantShop" >
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantShopDev" >
     insert into m_merchant_shop
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -128,7 +128,7 @@
     </trim>
   </insert>
  
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantShop" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantShopDev" >
     update m_merchant_shop
     <set>
       <if test="entityInnerCode != null">
@@ -167,7 +167,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantShop" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantShopDev" >
     update m_merchant_shop
     set entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
       shop_inner_code = #{shopInnerCode,jdbcType=VARCHAR},
@@ -188,7 +188,7 @@
   </select>
   
   <!-- 条件查询总数 -->
-  <select id="queryTotalByCondition" parameterType="net.fnsco.bigdata.service.domain.MerchantShop" resultType="java.lang.Integer">
+  <select id="queryTotalByCondition" parameterType="net.fnsco.bigdata.service.domain.MerchantShopDev" resultType="java.lang.Integer">
      select count(*) from m_merchant_shop
      <where>
        <if test="entityInnerCode != null">
@@ -227,7 +227,7 @@
      </where>
   </select>
   <!-- 按照条件更新 -->
-  <update id="updateByShopInnerCodeSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantShop">
+  <update id="updateByShopInnerCodeSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantShopDev">
      update m_merchant_shop
     <set>
       <if test="entityInnerCode != null">

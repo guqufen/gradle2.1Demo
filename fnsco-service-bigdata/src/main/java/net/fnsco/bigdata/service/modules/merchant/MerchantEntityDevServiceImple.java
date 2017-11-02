@@ -2,9 +2,9 @@ package net.fnsco.bigdata.service.modules.merchant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import net.fnsco.bigdata.api.merchant.MerchantEntityService;
-import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
-import net.fnsco.bigdata.service.domain.MerchantEntity;
+import net.fnsco.bigdata.api.merchant.MerchantEntityDevService;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityDevDao;
+import net.fnsco.bigdata.service.domain.MerchantEntityDev;
 
 /**
  * @desc 
@@ -14,13 +14,13 @@ import net.fnsco.bigdata.service.domain.MerchantEntity;
  * @Date	 2017年10月27日 上午10:59:03
  */
 
-public class MerchantEntityServiceImple implements MerchantEntityService {
+public class MerchantEntityDevServiceImple implements MerchantEntityDevService {
 	
 	@Autowired
-	private MerchantEntityDao merchantEntityDao;
+	private MerchantEntityDevDao merchantEntityDao;
 	/**
 	 * (non-Javadoc)
-	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityService#deleteByPrimaryKey(java.lang.Integer)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityDevService#deleteByPrimaryKey(java.lang.Integer)
 	 * @author tangliang
 	 * @date 2017年10月27日 上午10:59:03
 	 */
@@ -34,12 +34,12 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 
 	/**
 	 * (non-Javadoc)
-	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityService#insert(net.fnsco.bigdata.service.domain.MerchantEntity)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityDevService#insert(net.fnsco.bigdata.service.domain.MerchantEntityDev)
 	 * @author tangliang
 	 * @date 2017年10月27日 上午10:59:03
 	 */
 	@Override
-	public int insert(MerchantEntity record) {
+	public int insert(MerchantEntityDev record) {
 
 		// TODO Auto-generated method stub
 		return merchantEntityDao.insert(record);
@@ -48,12 +48,12 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 
 	/**
 	 * (non-Javadoc)
-	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityService#insertSelective(net.fnsco.bigdata.service.domain.MerchantEntity)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityDevService#insertSelective(net.fnsco.bigdata.service.domain.MerchantEntityDev)
 	 * @author tangliang
 	 * @date 2017年10月27日 上午10:59:03
 	 */
 	@Override
-	public int insertSelective(MerchantEntity record) {
+	public int insertSelective(MerchantEntityDev record) {
 
 		// TODO Auto-generated method stub
 		return merchantEntityDao.insertSelective(record);
@@ -62,12 +62,12 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 
 	/**
 	 * (non-Javadoc)
-	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityService#selectByPrimaryKey(java.lang.Integer)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityDevService#selectByPrimaryKey(java.lang.Integer)
 	 * @author tangliang
 	 * @date 2017年10月27日 上午10:59:03
 	 */
 	@Override
-	public MerchantEntity selectByPrimaryKey(Integer id) {
+	public MerchantEntityDev selectByPrimaryKey(Integer id) {
 
 		// TODO Auto-generated method stub
 		return merchantEntityDao.selectByPrimaryKey(id);
@@ -76,12 +76,12 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 
 	/**
 	 * (non-Javadoc)
-	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityService#updateByPrimaryKeySelective(net.fnsco.bigdata.service.domain.MerchantEntity)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityDevService#updateByPrimaryKeySelective(net.fnsco.bigdata.service.domain.MerchantEntityDev)
 	 * @author tangliang
 	 * @date 2017年10月27日 上午10:59:03
 	 */
 	@Override
-	public int updateByPrimaryKeySelective(MerchantEntity record) {
+	public int updateByPrimaryKeySelective(MerchantEntityDev record) {
 
 		// TODO Auto-generated method stub
 		return merchantEntityDao.updateByPrimaryKeySelective(record);
@@ -90,12 +90,12 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 
 	/**
 	 * (non-Javadoc)
-	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityService#updateByPrimaryKey(net.fnsco.bigdata.service.domain.MerchantEntity)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantEntityDevService#updateByPrimaryKey(net.fnsco.bigdata.service.domain.MerchantEntityDev)
 	 * @author tangliang
 	 * @date 2017年10月27日 上午10:59:03
 	 */
 	@Override
-	public int updateByPrimaryKey(MerchantEntity record) {
+	public int updateByPrimaryKey(MerchantEntityDev record) {
 
 		// TODO Auto-generated method stub
 		return merchantEntityDao.updateByPrimaryKey(record);
