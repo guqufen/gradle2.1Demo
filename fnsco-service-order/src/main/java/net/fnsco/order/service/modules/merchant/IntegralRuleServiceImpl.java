@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 
-import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDevDao;
 import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
-import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
+import net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
@@ -32,7 +32,7 @@ public class IntegralRuleServiceImpl extends BaseService implements IntegralRule
 	private IntegralRuleLogService integralRuleLogService;
 	
 	@Autowired
-	private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
+	private MerchantEntityCoreRefDevDao merchantEntityCoreRefDao;
 	
 	@Override
 	public List<IntegralRule> queryListByCondition(IntegralRule integralRule) {
@@ -88,7 +88,7 @@ public class IntegralRuleServiceImpl extends BaseService implements IntegralRule
 			}
 			
 			logger.info("id为"+tradeData.getId()+"流水交易金额为"+tradeData.getAmt()+"统计积分");
-			MerchantEntityCoreRef mcr = merchantEntityCoreRefDao.selectByInnerCode(tradeData.getInnerCode());
+			MerchantEntityCoreRefDev mcr = merchantEntityCoreRefDao.selectByInnerCode(tradeData.getInnerCode());
 			if(amtLong > firstLevel && amtLong <secLevel) {
 				integralRuleLogService.insert(mcr.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_POS01.getCode());
 			}else if(amtLong >= secLevel) {
