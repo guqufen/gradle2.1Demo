@@ -76,8 +76,9 @@ public class TradeController extends BaseController {
         tradeOrder.setInstallmentNum(tradeJO.getInstallmentNum());
         tradeOrder.setMercId(merchantChannelJhf.getInnerCode());
         tradeOrder.setCreateUserId(tradeJO.getSnCode());
-        String amount = tradeJO.getPaymentAmount().replaceAll("\\.", "");
-        tradeOrder.setTxnAmount(new BigDecimal(amount));
+        BigDecimal amountB = new BigDecimal(tradeJO.getPaymentAmount());
+        BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
+        tradeOrder.setTxnAmount(amountBs);
         //支付方式00刷卡01二维码02分期付
         tradeOrder.setPayType("02");
         //交易子类型00刷卡01微信02支付宝03聚惠分
@@ -102,15 +103,18 @@ public class TradeController extends BaseController {
         String createTimerStr = DateUtils.dateFormat1ToStr(tradeOrder.getCreateTime());
         String payCallBackParams = JSON.toJSONString(tradeOrder);
         //MD5(商户Id+订单号+支付金额+分期数+交易时间+通知URL+回调URL+通知参数)
+        BigDecimal amountTemp = tradeOrder.getTxnAmount();
+        BigDecimal amountTemps = amountTemp.divide(new BigDecimal("100"));
         String singDataStr =  merchantChannelJhf.getChannelMerId()+tradeOrder.getOrderNo()
-        +tradeOrder.getTxnAmount().toString()+String.valueOf(tradeOrder.getInstallmentNum())+createTimerStr+payNotifyUrl;
+        +amountTemps.toString()+String.valueOf(tradeOrder.getInstallmentNum())+createTimerStr+payNotifyUrl;
         logger.error("签名前数据"+singDataStr);
         String singData=JHFMd5Util.encode32(singDataStr);
         logger.error("签名"+singData);
         TradeJhfJO jhfJO = new TradeJhfJO();
         jhfJO.setCommID(tradeOrder.getChannelMerId());
         jhfJO.setPeriodNum(String.valueOf(tradeOrder.getInstallmentNum()));
-        jhfJO.setPayAmount(tradeOrder.getTxnAmount().toString());
+        
+        jhfJO.setPayAmount(amountTemps.toString());
         jhfJO.setPayCallBackParams("");
         jhfJO.setPayCallBackUrl("");//payCallBackUrl
         jhfJO.setPayNotifyUrl(payNotifyUrl);
@@ -142,7 +146,7 @@ public class TradeController extends BaseController {
     @RequestMapping(value = "/getOrderInfo", method = RequestMethod.GET)
     @ApiOperation(value = "获取商户编号")
     public ResultDTO getOrderInfo(@RequestParam String orderNo) {
-        TradeOrderDO tradeOrderDO = tradeOrderService.queryByOrderId(orderNo);
+        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
         tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
         tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
         tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
