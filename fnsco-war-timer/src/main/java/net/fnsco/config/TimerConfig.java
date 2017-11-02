@@ -116,6 +116,7 @@ public class TimerConfig {
      */
     @Scheduled(cron = "0 */5 * * * ?")
     public void syncOrderTradeData() {
+        logger.error("同步分期付订单交易数据定时任务启动");
         tradeOrderService.syncOrderTradeData();
     }
 }
