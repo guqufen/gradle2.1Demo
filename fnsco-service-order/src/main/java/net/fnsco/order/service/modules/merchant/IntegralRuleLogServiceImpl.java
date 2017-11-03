@@ -122,7 +122,10 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 		// 先通过entityCode查找到更新前的scores，然后再将scores加上本次积分，接着更新积分
 		MerchantEntityDev merchantEntity = merchantEntityDao.selectByEntityInnerCode(integralRuleLog.getEntityInnerCode());
 //		merchantEntity.setScores(merchantEntity.getScores() + integralRule.getIntegral().longValue());// 积分相加，改为sql直接加，不然会出现线程安全问题
-		merchantEntity.setLastModefyTimer(new Date());
-		merchantEntityDao.updateByEntityInnerCode(merchantEntity);// 通过实体商户号更新
+		if(null != merchantEntity){
+		    merchantEntity.setLastModefyTimer(new Date());
+		    merchantEntityDao.updateByEntityInnerCode(merchantEntity);// 通过实体商户号更新
+		}
+		
 	}
 }
