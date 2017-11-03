@@ -47,7 +47,31 @@ public class AppUserDTO extends DTO {
     
     private String snCode;//sn码
     
+    private String entityInnerCode;//实体商户innercode
+    
     /**
+	 * entityInnerCode
+	 *
+	 * @return  the entityInnerCode
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getEntityInnerCode() {
+		return entityInnerCode;
+	}
+
+	/**
+	 * entityInnerCode
+	 *
+	 * @param   entityInnerCode    the entityInnerCode to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setEntityInnerCode(String entityInnerCode) {
+		this.entityInnerCode = entityInnerCode;
+	}
+
+	/**
      * snCode
      *
      * @return  the snCode
