@@ -16,7 +16,10 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.appuser.ConmmService;
+import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.order.api.dto.AppUserDTO;
+import net.fnsco.order.api.dto.VersionDTO;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
 import net.fnsco.order.service.domain.IntegralRuleLog;
 
@@ -29,20 +32,27 @@ import net.fnsco.order.service.domain.IntegralRuleLog;
 public class H5UserAction extends BaseController {
 
     @Autowired
-    private AppUserService appUserService;
-    
+    private AppUserService         appUserService;
+
     @Autowired
     private IntegralRuleLogService integralRuleLogService;
+
+    @Autowired
+    private ConmmService           conmmService;
 
     @RequestMapping(value = "/register")
     @ApiOperation(value = "用户注册")
     @ResponseBody
     public ResultDTO register(@RequestBody AppUserDTO appUserDTO) {
         ResultDTO result = appUserService.insertSelective(appUserDTO);
-        if(Strings.isNullOrEmpty(appUserDTO.getEntityInnerCode())) {
-        	logger.info(appUserDTO.getMobile()+"该手机号注册没有实体商户邀请!");
-        }else {
-        	integralRuleLogService.insert(appUserDTO.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_YQ02.getCode());
+        if (!Strings.isNullOrEmpty(appUserDTO.getEntityInnerCode())) {
+            try {
+                integralRuleLogService.insert(appUserDTO.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_YQ02.getCode());
+            } catch (Exception ex) {
+                logger.error("邀请商户增加积分报错", ex);
+            }
+        } else {
+            logger.info(appUserDTO.getMobile() + "该手机号注册没有实体商户邀请!");
         }
         return result;
     }
@@ -56,4 +66,25 @@ public class H5UserAction extends BaseController {
         return result;
     }
 
+    /**
+     * 
+     * checkUpdate:(获取最新版本)
+     *
+     * @param sysVersionDTO
+     * @return   ResultDTO    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @RequestMapping(value = "/getLastVersion", method = RequestMethod.GET)
+    @ApiOperation(value = "获取最新版本")
+    @ResponseBody
+    public ResultDTO getLastVersion() {
+        String appCode = AppTypeEnum.LKL.getCode();
+        VersionDTO sysVersionDTO = new VersionDTO();
+        sysVersionDTO.setAppCode(appCode);
+        sysVersionDTO.setAppType(1);
+        sysVersionDTO.setVersion("0.0.0");
+        ResultDTO result = conmmService.queryLastVersionInfo(sysVersionDTO);
+        return result;
+    }
 }
