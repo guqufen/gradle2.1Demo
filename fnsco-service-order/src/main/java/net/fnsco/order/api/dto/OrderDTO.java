@@ -7,6 +7,7 @@ import net.fnsco.core.base.DTO;
 public class OrderDTO extends DTO {
     private String salesOrderNo;
     private String orderStatus;
+    //（0 未支付 1支付成功 2支付失败 3已退货）
     private String settlementStatus;
     private String payCallBackParams;
     private Date   orderCeateTime;
