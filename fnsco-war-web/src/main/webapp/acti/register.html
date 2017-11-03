@@ -51,6 +51,7 @@
 				</div>
 			</div>
 			<div class="btn login-btn" id="login_div" onclick="validate()">注册</div>
+			<a class="skip" href="download.html">跳过</a>
 		</div>
 	</div>
 </body>
@@ -75,12 +76,20 @@ function getCode(){
  		data:JSON.stringify(params),
         success:function(data){
         	console.log(data);
-        	layer.open({
-			    content: '发送成功'
-			    ,skin: 'msg'
-			    ,time: 2 //2秒后自动关闭
-		  	});
-		  	Interval();
+        	if(data.success){
+	        	layer.open({
+				    content: '发送成功'
+				    ,skin: 'msg'
+				    ,time: 2 //2秒后自动关闭
+			  	});
+			  	Interval();
+		  	}else{
+			  	layer.open({
+				    content: '手机号码已注册'
+				    ,skin: 'msg'
+				    ,time: 2 //2秒后自动关闭
+			  	});
+		  	}	
         }
 	})
 }

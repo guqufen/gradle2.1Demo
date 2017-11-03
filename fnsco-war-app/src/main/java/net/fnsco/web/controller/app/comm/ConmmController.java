@@ -71,7 +71,7 @@ public class ConmmController extends BaseController {
     @ApiOperation(value = "返回邀新链接地址")
     @ResponseBody
     public ResultDTO getInviteUrl(String entityInnerCode) {
-        String url = env.getProperty("web.base.url")+"?entityId="+entityInnerCode;
+        String url = env.getProperty("web.base.url")+"/acti/register.html?entityId="+entityInnerCode;
         return ResultDTO.success(url);
     }
 
