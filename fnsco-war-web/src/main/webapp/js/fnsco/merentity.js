@@ -314,11 +314,13 @@ function initDetailTable(){
 	        field: 'createTime',
 	        title: '新增时间',
 	        formatter:formatTime
-	    },{
-	        field: 'status',
-	        title: '状态',
-	        formatter: formatChannelStatus
-	    }]
+	    }
+     //    ,{
+	    //     field: 'status',
+	    //     title: '状态',
+	    //     formatter: formatChannelStatus
+	    // }
+        ]
 	});
 	
 }
