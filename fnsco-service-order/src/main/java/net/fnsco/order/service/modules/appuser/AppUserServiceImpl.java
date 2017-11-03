@@ -166,21 +166,24 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         return ResultDTO.success(map);
     }
 
-    private void insertRel(String InnerCode, AppUser appUser, String roleId) {
+    private void insertRel(String innerCode, AppUser appUser, String roleId) {
         MerchantUserRel rel = new MerchantUserRel();
         rel.setAppUserId(appUser.getId());
-        rel.setInnerCode(InnerCode);
+        rel.setInnerCode(innerCode);
         rel.setModefyTime(new Date());
         merchantUserRelDao.insertSelective(rel);
         AppUserMerchant dto = new AppUserMerchant();
         dto.setAppUserId(appUser.getId());
-        dto.setInnerCode(InnerCode);
+        dto.setInnerCode(innerCode);
         dto.setModefyTime(new Date());
         dto.setRoleId(roleId);
         appUserMerchantDao.insertSelective(dto);
         //推送消息
         try {
-            sysAppMsgService.pushMerChantMsg(InnerCode, appUser.getId());
+        	if(!Strings.isNullOrEmpty(innerCode)) {
+        		sysAppMsgService.pushMerChantMsg(innerCode, appUser.getId());
+        	}
+            
         } catch (Exception ex) {
             logger.error("绑定商户发送消息失败", ex);
         }
