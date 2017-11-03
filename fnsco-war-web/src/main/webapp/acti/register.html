@@ -50,7 +50,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="btn login-btn" id="login_div" onclick="validate()">登录</div>
+			<div class="btn login-btn" id="login_div" onclick="validate()">注册</div>
 		</div>
 	</div>
 </body>
@@ -67,7 +67,7 @@ function getCode(){
 		  });
 		return;
 	}
-	var params={'oprationType':0,'mobile':account};
+	var params={'oprationType':0,'mobile':account,'deviceId':0};
 	$.ajax({
 		url:'../h5/user/getValidateCode',
         type:'POST',
@@ -113,8 +113,8 @@ function validate(){
 	var verycode=$("#verycode").val();
 	var password=$("#password").val();
 	var entityId=getUrlparam('entityId');
-	var params={'mobile':account,'code':verycode,'password':password,'entityId':entityId}
-	console(params);
+	var params={'mobile':account,'code':verycode,'password':password,'entityInnerCode':entityId,'deviceId':0}
+	console.log(params);
 	$.ajax({
 		url:'../h5/user/register',
         type:'POST',
@@ -122,14 +122,19 @@ function validate(){
         data:JSON.stringify(params),
         success:function(data){
         	console.log(data);
-        	layer.open({
-			    content: '注册成功，正在跳转APP下载页'
-			    ,skin: 'msg'
-			    ,time: 2 //2秒后自动关闭
-		  	});
-		  	setTimeout(function(){
-		  		window.location.href="download.html";
-		  	},3000)
+        	if(data.success){
+	        	layer.open({
+				    content: '注册成功，正在跳转APP下载页'
+				    ,skin: 'msg'
+				    ,time: 2 //2秒后自动关闭
+			  	});
+			  	setTimeout(function(){
+			  		window.location.href="download.html";
+			  	},3000)
+		  	}else{
+
+		  	}
+		  	
         }
 	})
 }
