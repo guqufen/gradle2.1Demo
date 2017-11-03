@@ -27,6 +27,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.core.utils.dby.JHFMd5Util;
+import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.service.trade.TradeOrderService;
 import net.fnsco.order.service.trade.entity.TradeOrderDO;
@@ -68,7 +69,7 @@ public class TradeController extends BaseController {
         }
         MerchantChannel merchantChannelJhf = merchantService.getMerChannelByInnerCodeType(merchantChannel.getInnerCode(), "04");
         if (null == merchantChannelJhf) {
-            return ResultDTO.fail("聚惠分渠道信息不存在");
+            return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
         }
         TradeOrderDO tradeOrder = new TradeOrderDO();
         tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());

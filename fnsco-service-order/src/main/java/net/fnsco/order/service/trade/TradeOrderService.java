@@ -1,6 +1,7 @@
 package net.fnsco.order.service.trade;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
@@ -57,8 +58,11 @@ public class TradeOrderService extends BaseService {
         logger.info("开始添加TradeOrderService.add,tradeOrder=" + tradeOrder.toString());
         tradeOrder.setCreateTime(new Date());
         //tradeOrder.setOrderCeateTime(new Date());
-        tradeOrder.setOrderNo(DateUtils.getNowDateStr() + tradeOrder.getInnerCode() + DbUtil.getRandomStr(3));
+        if (Strings.isNullOrEmpty(tradeOrder.getOrderNo())) {
+            tradeOrder.setOrderNo(DateUtils.getNowDateStr() + tradeOrder.getInnerCode() + DbUtil.getRandomStr(3));
+        }
         this.tradeOrderDAO.insert(tradeOrder);
+
         return tradeOrder;
     }
 
@@ -66,6 +70,9 @@ public class TradeOrderService extends BaseService {
     public Integer doUpdate(TradeOrderDO tradeOrder) {
         logger.info("开始修改TradeOrderService.update,tradeOrder=" + tradeOrder.toString());
         int rows = this.tradeOrderDAO.update(tradeOrder);
+        if (rows == 0) {
+            logger.error("订单有可能出现问题，未能更新到数据" + JSON.toJSONString(tradeOrder));
+        }
         return rows;
     }
 
@@ -128,6 +135,7 @@ public class TradeOrderService extends BaseService {
                 tradeOrderDO.setSettleStatus(Integer.parseInt(order.getSettlementStatus()));
                 if ("1".equals(order.getSettlementStatus())) {
                     tradeOrderDO.setSettleDate(new Date());
+                    tradeOrderDO.setSettleAmount(new BigDecimal(order.getSettlementAmount()));
                 }
             } catch (Exception ex) {
                 logger.error("支付完成时回调时结算状态转换为int出错", ex);
@@ -138,13 +146,14 @@ public class TradeOrderService extends BaseService {
             tradeOrderDO.setId(null);
             tradeOrderDO.setTxnType(2);
             tradeOrderDO.setSyncStatus(0);
+            tradeOrderDO.setRespCode("1001");
             tradeOrderDO.setCreateTime(new Date());
             doAdd(tradeOrderDO);
         } else {
             if (null == tradeOrderDO.getOrderCeateTime() && !Strings.isNullOrEmpty(order.getTime())) {//回调时更新订单创建时间
                 tradeOrderDO.setOrderCeateTime(DateUtils.toParseYmdhms(order.getTime()));
             }
-            doUpdate(tradeOrderDO);
+            tradeOrderDAO.updateOnlyFail(tradeOrderDO);
         }
         return ResultDTO.success();
     }
@@ -181,12 +190,13 @@ public class TradeOrderService extends BaseService {
             //orderStatus 订单状态
             //settlementStatus    结算状态
             //payCallBackParams   商户上送参数
+            //调用聚惠芬查询订单信息解密后参数[{"periodNum":12,"payAmount":600.11,"salesOrderNo":"1509672149955","time":"2017-11-03 09:22:30 000000","settlementStatus":"0","thirdPayNo":"20171103092212073111374535549120","settlementAmount":558.10,"commercialRate":7.00,"cardHolderRate":0.00,"commId":32,"orderStatus":"0"},{"periodNum":12,"payAmount":600.11,"salesOrderNo":"1509672163885","time":"2017-11-03 09:22:44 000000","settlementStatus":"2","thirdPayNo":"20171103092212073111374535549120","settlementAmount":558.10,"commercialRate":7.00,"cardHolderRate":0.00,"commId":32,"orderStatus":"1"}]
             if (!Strings.isNullOrEmpty(resultJson)) {
                 try {
                     JSONObject jsonObj = JSON.parseObject(resultJson);
                     String rspDataStr = jsonObj.getString("rspData");
                     String decodeStr = AESUtil.decode(rspDataStr, keyStr);
-                    logger.error("调用聚惠芬查询订单信息解密后参数"+decodeStr);
+                    logger.error("调用聚惠芬查询订单信息解密后参数" + decodeStr);
                     List<OrderDTO> orderDtoList = JSON.parseArray(decodeStr, OrderDTO.class);
                     if (null != orderDtoList) {
                         for (OrderDTO dto : orderDtoList) {
@@ -206,7 +216,7 @@ public class TradeOrderService extends BaseService {
     public void syncOrderTradeData() {
         List<TradeOrderDO> tradeOrderList = this.tradeOrderDAO.queryAllNotSyncDate();
         for (TradeOrderDO order : tradeOrderList) {
-            logger.error("同步分期付订单交易数据"+order.getOrderNo());
+            logger.error("同步分期付订单交易数据" + order.getOrderNo());
             saveTradeData(order);
         }
     }

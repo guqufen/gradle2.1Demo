@@ -23,6 +23,76 @@ public class OrderDTO extends DTO {
     //payCallBackParams   商户上送参数
     private String time;             //   交易时间
     private String singData;
+    private String commercialRate;   //  商户费率
+    private String cardHolderRate;   //  持卡人费率
+    private String settlementAmount; //    结算金额
+
+    /**
+     * commercialRate
+     *
+     * @return  the commercialRate
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getCommercialRate() {
+        return commercialRate;
+    }
+
+    /**
+     * commercialRate
+     *
+     * @param   commercialRate    the commercialRate to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setCommercialRate(String commercialRate) {
+        this.commercialRate = commercialRate;
+    }
+
+    /**
+     * cardHolderRate
+     *
+     * @return  the cardHolderRate
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getCardHolderRate() {
+        return cardHolderRate;
+    }
+
+    /**
+     * cardHolderRate
+     *
+     * @param   cardHolderRate    the cardHolderRate to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setCardHolderRate(String cardHolderRate) {
+        this.cardHolderRate = cardHolderRate;
+    }
+
+    /**
+     * settlementAmount
+     *
+     * @return  the settlementAmount
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getSettlementAmount() {
+        return settlementAmount;
+    }
+
+    /**
+     * settlementAmount
+     *
+     * @param   settlementAmount    the settlementAmount to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setSettlementAmount(String settlementAmount) {
+        this.settlementAmount = settlementAmount;
+    }
+
     /**
      * singData
      *

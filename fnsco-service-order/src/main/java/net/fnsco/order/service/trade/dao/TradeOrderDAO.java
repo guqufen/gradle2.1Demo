@@ -58,7 +58,7 @@ public interface TradeOrderDAO {
                @Result(column = "settle_amount", property = "settleAmount"), @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"),
                @Result(column = "create_user_id", property = "createUserId"), @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"),
                @Result(column = "inner_code", property = "innerCode") })
-    @Select("SELECT * FROM t_trade_order WHERE sync_status = '0' and resp_code ='1001' ")
+    @Select("SELECT * FROM t_trade_order WHERE sync_status = '0' and resp_code ='1001' order by create_time desc ")
     public List<TradeOrderDO> queryAllNotSyncDate();
 
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "pay_order_no", property = "payOrderNo"), @Result(column = "txn_amount", property = "txnAmount"),
@@ -81,7 +81,9 @@ public interface TradeOrderDAO {
 
     @UpdateProvider(type = TradeOrderProvider.class, method = "update")
     public int update(@Param("tradeOrder") TradeOrderDO tradeOrder);
-
+    
+    @UpdateProvider(type = TradeOrderProvider.class, method = "updateOnlyFail")
+    public int updateOnlyFail(@Param("tradeOrder") TradeOrderDO tradeOrder);
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "pay_order_no", property = "payOrderNo"), @Result(column = "txn_amount", property = "txnAmount"),
                @Result(column = "installment_num", property = "installmentNum"), @Result(column = "resp_code", property = "respCode"), @Result(column = "resp_msg", property = "respMsg"),
                @Result(column = "entity_inner_code", property = "entityInnerCode"), @Result(column = "channel_mer_id", property = "channelMerId"), @Result(column = "channel_type", property = "channelType"),
