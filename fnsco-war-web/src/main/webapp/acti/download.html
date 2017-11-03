@@ -22,26 +22,31 @@
 				集合已购买智能POS机商户对APP进行关联和注册APP用户进行智能pos购买，并提供POS交易流水给相关店员或老板或进行查看、统计等功能，以及POS使用问题自助解决方式
 			</div>
 		</div>
-		<button onclick="checkPlatform()" class="download_btn">立即下载</button>
+		<button onclick="getDownload()" class="download_btn">立即下载</button>
 	</div>
 	<div class="wXshade">
 		<img class="WxAndroidImg" src="img/Wx.png">
 	</div>
 </body>
 <script type="text/javascript">
-function getDownloadUrl(){
-	$.ajax({
-		url:'../h5/user/getLastVersion',
-		type:'get',
-		success:function(data){
-			console.log(data);
-		}
-	})
-}
-getDownloadUrl();
-function checkPlatform(){
+
+function getDownload(){
 	if(/android/i.test(navigator.userAgent)){
-		// window.location.href="http://zheft.cn/zheft_v2.4.0.apk"//Android
+		$.ajax({
+			url:'../h5/user/getLastVersion',
+			type:'get',
+			success:function(data){
+				checkPlatform(data.data.downloadUrl1);
+			}
+		})
+	}
+	if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)){
+		checkPlatform();
+	}
+}
+function checkPlatform(androidUrl){
+	if(/android/i.test(navigator.userAgent)){
+		window.location.href=androidUrl;//Android
 	}
 	if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)){
 		window.location.href="https://itunes.apple.com/cn/app/%E6%B5%99%E4%BB%98%E9%80%9A-%E5%95%86%E6%88%B7%E7%A7%BB%E5%8A%A8%E7%AE%A1%E7%90%86%E6%94%B6%E5%8D%95%E5%B7%A5%E5%85%B7/id1125362726?mt=8"//IOS
@@ -53,12 +58,12 @@ function checkPlatform(){
 		if(/android/i.test(navigator.userAgent)){
 			// alert("微信里判断安卓");
 			$(".wXshade").show();
-			window.location.href="http://zheft.cn/zheft_v2.4.0.apk"//Android
+			window.location.href=androidUrl;//Android
 		}
 	}
 }
 $(document).ready(function(){
-    checkPlatform();
+    getDownload();
  });
 </script>
 </html>
