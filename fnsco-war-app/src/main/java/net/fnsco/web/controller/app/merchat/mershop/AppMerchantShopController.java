@@ -36,7 +36,7 @@ import net.fnsco.order.service.domain.IntegralRuleLog;
  */
 @RestController
 @RequestMapping(value = "/app/merchantshop/", method = RequestMethod.POST)
-@Api(value = "/app/merchant/shop", tags = { "商户店铺管理" })
+@Api(value = "/app/merchantshop/", tags = { "商户店铺管理" })
 public class AppMerchantShopController extends BaseController {
 
 	@Autowired
