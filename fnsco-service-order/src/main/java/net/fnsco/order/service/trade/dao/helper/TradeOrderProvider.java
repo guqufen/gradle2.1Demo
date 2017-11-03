@@ -164,7 +164,7 @@ public class TradeOrderProvider {
         return new SQL() {{
         SELECT("*");
         FROM(TABLE_NAME);
-        WHERE("resp_code = '1000'");
+        WHERE("resp_code = '1000' and create_time >date_sub(curdate(),interval 1 day)");
         if (StringUtils.isNotBlank(orderNo)){
             WHERE("order_no=#{orderNo}");
         }

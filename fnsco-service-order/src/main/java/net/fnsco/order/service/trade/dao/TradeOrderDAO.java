@@ -35,7 +35,7 @@ public interface TradeOrderDAO {
                @Result(column = "settle_amount", property = "settleAmount"), @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"),
                @Result(column = "create_user_id", property = "createUserId"), @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"),
                @Result(column = "inner_code", property = "innerCode") })
-    @Select("SELECT * FROM t_trade_order WHERE order_no = #{orderNo}")
+    @Select("SELECT * FROM t_trade_order WHERE order_no = #{orderNo} order by create_time limit 1 ")
     public TradeOrderDO queryByOrderId(@Param("orderNo") String orderNo);
 
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "pay_order_no", property = "payOrderNo"), @Result(column = "txn_amount", property = "txnAmount"),
