@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.ApiOperation;
@@ -20,7 +21,7 @@ import net.fnsco.order.api.dto.AppUserDTO;
  * @date 2017年6月20日 下午3:11:23
  */
 @Controller
-@RequestMapping(value = "/h5/user")
+@RequestMapping(value = "/h5/user", method = RequestMethod.POST)
 public class H5UserAction extends BaseController {
 
     @Autowired
