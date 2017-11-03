@@ -29,6 +29,16 @@
 	</div>
 </body>
 <script type="text/javascript">
+function getDownloadUrl(){
+	$.ajax({
+		url:'../h5/user/getLastVersion',
+		type:'get',
+		success:function(data){
+			console.log(data);
+		}
+	})
+}
+getDownloadUrl();
 function checkPlatform(){
 	if(/android/i.test(navigator.userAgent)){
 		// window.location.href="http://zheft.cn/zheft_v2.4.0.apk"//Android

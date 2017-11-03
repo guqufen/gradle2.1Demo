@@ -129,3 +129,11 @@ input.getCodeBtn{
 	line-height: 1rem;
 	width: 5.2rem;
 }
+
+.skip{
+	color: #3595FF;
+	display: block;
+	margin-top: 2rem;
+	font-size: 0.65rem;
+	text-align: center;
+}
