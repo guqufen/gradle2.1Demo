@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.bigdata.api.dto.MerEntityDTO;
 import net.fnsco.bigdata.api.dto.MerchantShopDTO;
-import net.fnsco.bigdata.service.domain.MerchantEntity;
+import net.fnsco.bigdata.service.domain.MerchantEntityDev;
 /**
  * @desc  商户店铺DAO
  * @author   tangliang
@@ -15,19 +15,19 @@ import net.fnsco.bigdata.service.domain.MerchantEntity;
  * @Date	 2017年10月26日 下午2:48:26
  *
  */
-public interface MerchantEntityDao {
+public interface MerchantEntityDevDao {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(MerchantEntity record);
+    int insert(MerchantEntityDev record);
 
-    int insertSelective(MerchantEntity record);
+    int insertSelective(MerchantEntityDev record);
 
-    MerchantEntity selectByPrimaryKey(Integer id);
+    MerchantEntityDev selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(MerchantEntity record);
+    int updateByPrimaryKeySelective(MerchantEntityDev record);
 
-    int updateByPrimaryKey(MerchantEntity record);
+    int updateByPrimaryKey(MerchantEntityDev record);
     
     /**
      * queryAllMerEntity:(实体商户列表概念)
@@ -55,14 +55,14 @@ public interface MerchantEntityDao {
      * @param record
      * @return
      */
-    MerchantEntity selectByEntityInnerCode(@Param("entityInnerCode")String entityInnerCode);
+    MerchantEntityDev selectByEntityInnerCode(@Param("entityInnerCode")String entityInnerCode);
     
     /**
      * 通过实体商户号更新数据
      * @param entityInnerCode
      * @return
      */
-    int updateByEntityInnerCode(MerchantEntity record);
+    int updateByEntityInnerCode(MerchantEntityDev record);
     
     /**
      * queryPageList:(分页条件)

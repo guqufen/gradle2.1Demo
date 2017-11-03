@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDevDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
     <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
@@ -14,21 +14,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
-    from m_merchant_entity_core_ref
+    from m_merchant_core_entity_ref
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from m_merchant_entity_core_ref
+    delete from m_merchant_core_entity_ref
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    insert into m_merchant_entity_core_ref (id, entity_inner_code, inner_code, 
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev" >
+    insert into m_merchant_core_entity_ref (id, entity_inner_code, inner_code, 
       create_time)
     values (#{id,jdbcType=INTEGER}, #{entityInnerCode,jdbcType=VARCHAR}, #{innerCode,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    insert into m_merchant_entity_core_ref
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev" >
+    insert into m_merchant_core_entity_ref
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -58,8 +58,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    update m_merchant_entity_core_ref
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev" >
+    update m_merchant_core_entity_ref
     <set >
       <if test="entityInnerCode != null" >
         entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
@@ -73,8 +73,8 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRef" >
-    update m_merchant_entity_core_ref
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev" >
+    update m_merchant_core_entity_ref
     set entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
       inner_code = #{innerCode,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
@@ -84,7 +84,7 @@
   <select id="selectByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
      select 
     <include refid="Base_Column_List" />
-    from m_merchant_entity_core_ref
+    from m_merchant_core_entity_ref
     where inner_code = #{innerCode,jdbcType=VARCHAR} limit 1
   </select>
 </mapper>

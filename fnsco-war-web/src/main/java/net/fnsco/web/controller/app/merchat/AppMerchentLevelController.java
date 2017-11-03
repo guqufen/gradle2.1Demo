@@ -127,7 +127,7 @@ public class AppMerchentLevelController extends BaseController{
 		sysConfig.setType("11");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
 
-		String prefix = env.getProperty("app.integral.pre.url");
+		String prefix = env.getProperty("web.base.url");
 		for (SysConfig sysConfig2 : list) {
 			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
 		}
@@ -142,7 +142,7 @@ public class AppMerchentLevelController extends BaseController{
 		sysConfig.setType("10");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
 		
-		String prefix = env.getProperty("app.integral.pre.url");
+		String prefix = env.getProperty("web.base.url");
 		for (SysConfig sysConfig2 : list) {
 			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
 		}

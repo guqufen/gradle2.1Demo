@@ -2,7 +2,7 @@ package net.fnsco.bigdata.service.dao.master;
 
 import org.apache.ibatis.annotations.Param;
 
-import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
+import net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev;
 /**
  * @desc 商户店铺信息关系DAO
  * @author   tangliang
@@ -10,19 +10,19 @@ import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
  * @Date	 2017年10月26日 下午2:57:13
  *
  */
-public interface MerchantEntityCoreRefDao {
+public interface MerchantEntityCoreRefDevDao {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(MerchantEntityCoreRef record);
+    int insert(MerchantEntityCoreRefDev record);
 
-    int insertSelective(MerchantEntityCoreRef record);
+    int insertSelective(MerchantEntityCoreRefDev record);
 
-    MerchantEntityCoreRef selectByPrimaryKey(Integer id);
+    MerchantEntityCoreRefDev selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(MerchantEntityCoreRef record);
+    int updateByPrimaryKeySelective(MerchantEntityCoreRefDev record);
 
-    int updateByPrimaryKey(MerchantEntityCoreRef record);
+    int updateByPrimaryKey(MerchantEntityCoreRefDev record);
     
     /**
      * selectByInnerCode:(根据innercode查询关系)
@@ -33,5 +33,5 @@ public interface MerchantEntityCoreRefDao {
      * @author tangliang
      * @date   2017年11月2日 上午10:54:11
      */
-    MerchantEntityCoreRef selectByInnerCode(@Param("innerCode")String innerCode);
+    MerchantEntityCoreRefDev selectByInnerCode(@Param("innerCode")String innerCode);
 }
