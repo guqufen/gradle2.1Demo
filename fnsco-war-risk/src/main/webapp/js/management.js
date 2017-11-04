@@ -22,10 +22,12 @@ $('#table').bootstrapTable({
 	}, {
 		field : 'innerCode',
 		title : '商户编码'
-	}, {
-		field : 'industry',
-		title : '法人姓名'
-	},{
+	}, 
+//	{
+//		field : 'merName',
+//		title : '法人姓名'
+//	},
+	{
 		field : 'businessLicenseNum',
 		title : '营业执照'
 	},  {
@@ -34,10 +36,17 @@ $('#table').bootstrapTable({
 		formatter : formatStatus
 	}, {
 		field : 'viewNum',
-		title : '订阅数'
+		title : '订阅数',
+		formatter : formatViewNum
 	} ]
 });
-
+//格式化订阅数
+function formatViewNum(value, row, index){
+	if(!value){
+		return '0';
+	}
+	return value;
+}
 //状态格式化
 function formatStatus(value, row, index){
 	if(value == 10){
