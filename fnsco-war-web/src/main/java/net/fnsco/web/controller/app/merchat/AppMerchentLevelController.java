@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.collect.Lists;
+
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
@@ -51,6 +53,22 @@ public class AppMerchentLevelController extends BaseController{
 		}
 
 		List<MerChantCoreDTO> datas = merchantService.getMerchantsScoresByUserId(merchantUserRel.getAppUserId());
+
+		//innerCode 不为空，则将需要返回的数据排序(将次innerCOde定为第一个)
+//		List<MerChantCoreDTO> dataTemp = Lists.newArrayList();
+//		List<MerChantCoreDTO> dataTemps1 = Lists.newArrayList();
+//		if(StringUtils.isNoneBlank(merchantUserRel.getInnerCode())){
+//			MerChantCoreDTO merChantCoreDTO = new MerChantCoreDTO();
+//			for (MerChantCoreDTO merChantCore : datas) {
+//				if(merChantCore.getInnerCode().equals(merchantUserRel.getInnerCode())){
+//					dataTemp.add(merChantCore);
+//					datas.remove(merChantCoreDTO);
+//				}
+//				dataTemps1.add(0,merChantCoreDTO);
+//			}
+//			dataTemp.addAll(datas);
+//		}
+
 		// 根据商户已有积分查询商户所属等级(v1-v7)
 		for (MerChantCoreDTO merChantCoreDTO : datas) {
 			if(merChantCoreDTO.getScores() == null){
@@ -82,12 +100,12 @@ public class AppMerchentLevelController extends BaseController{
 	public ResultDTO<MerChantCoreDTO> queryMercLevelDetail(@RequestBody MerchantUserRel merchantUserRel) {
 		
 		//判空
-		if (null == merchantUserRel.getAppUserId() || StringUtils.isBlank(merchantUserRel.getInnerCode())) {
+		if (null == merchantUserRel.getAppUserId() || StringUtils.isBlank(merchantUserRel.getEntityInnerCode())) {
 			return ResultDTO.fail(BigdataConstant.E_USERID_NULL);
 		}
 
 		//获取该条商户信息
-		MerChantCoreDTO merChantCoreDTO = merchantService.getScoreByUserIdInnerCode(merchantUserRel);
+		MerChantCoreDTO merChantCoreDTO = merchantService.selectByEntityInnerCode(merchantUserRel);
 		if(null == merChantCoreDTO){
 			return fail("该用户ID下未绑定该商户");
 		}

@@ -45,8 +45,10 @@
   <!-- APP商户列表实体结果集 -->
   <resultMap  id="CoreResultMap" type="net.fnsco.bigdata.api.dto.MerChantCoreDTO">
      <id column="id" property="id" jdbcType="INTEGER" />
+     <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
      <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
      <result column="mer_name" property="merName" jdbcType="VARCHAR" />
+     <result column="merc_name" property="mercName" jdbcType="VARCHAR" />
      <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
      <result column="regist_address" property="registAddress" jdbcType="VARCHAR" />
      <result column="scores" property="scores" jdbcType="DECIMAL" />
@@ -614,13 +616,13 @@
 		resultMap="CoreResultMap">
 		SELECT
 	      MER.inner_code,
-	      MER.mer_name,
+	      ENT.entity_inner_code,
+	      ENT.merc_name,
 	      IFNULL(ENT.scores, 0) scores
     FROM
 	(
 		SELECT
-			CO.inner_code,
-			CO.mer_name
+			CO.inner_code
 		FROM
 			m_merchant_core CO
 		RIGHT JOIN (
@@ -637,47 +639,33 @@
     INNER JOIN (
 	  SELECT
 		EN.scores,
+		CC.entity_inner_code,
+		EN.merc_name,
 		CC.inner_code
 	FROM
 		m_merchant_entity EN
 	RIGHT JOIN m_merchant_core_entity_ref CC ON CC.entity_inner_code = EN.entity_inner_code
     ) ENT ON MER.inner_code = ENT.inner_code
 	</select>
-	<!-- 根据userId和内部商户号查询关联的商户实体包括积分 -->
-	<select id="getScoreByUserIdInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantUserRel"
+	<!-- 根据userId和实体商户号查询关联的商户实体包括积分 -->
+	<select id="selectByEntityInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantUserRel"
 		resultMap="CoreResultMap">
-		SELECT
-	      MER.inner_code,
-	      MER.mer_name,
-	      IFNULL(ENT.scores, 0) scores
-    FROM
-	(
-		SELECT
-			CO.inner_code,
-			CO.mer_name
-		FROM
-			m_merchant_core CO
-		RIGHT JOIN (
-			SELECT
-				*
-			FROM
-				m_merchant_user_rel
-			WHERE
-				app_user_id = #{appUserId}
-			AND
-			    inner_code= #{innerCode}
-		) REL ON CO.inner_code = REL.inner_code
-		WHERE
-			CO. STATUS = 1
-	) MER
-    INNER JOIN (
-	  SELECT
-		EN.scores,
-		CC.inner_code
+	SELECT
+	    IFNULL(EN.scores, 0) scores,
+	    CC.inner_code,
+	    EN.entity_inner_code,
+	    EN.merc_name
 	FROM
-		m_merchant_entity EN
-	RIGHT JOIN m_merchant_core_entity_ref CC ON CC.entity_inner_code = EN.entity_inner_code
-    ) ENT ON MER.inner_code = ENT.inner_code
+	    m_merchant_entity EN, m_merchant_core_entity_ref CC
+	where 
+	    CC.entity_inner_code = EN.entity_inner_code AND
+	    CC.entity_inner_code=#{entityInnerCode} and 
+	    CC.inner_code in (SELECT
+	        inner_code
+	    FROM
+	        m_merchant_user_rel
+	    WHERE
+	        app_user_id = #{appUserId})
 	</select>
   <!-- APP根据ID查询详情信息 -->
   <select id="queryDetailById" parameterType="java.lang.Integer"  resultMap="DetailResultMap">
