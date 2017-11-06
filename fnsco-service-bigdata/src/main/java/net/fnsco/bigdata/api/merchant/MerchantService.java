@@ -86,7 +86,7 @@ public interface MerchantService {
      * @param userId:用户ID
      * @return
      */
-    MerChantCoreDTO getScoreByUserIdInnerCode(MerchantUserRel merchantUserRel);
+    MerChantCoreDTO selectByEntityInnerCode(MerchantUserRel merchantUserRel);
 
     /**
      * getMerchantTerminalByUserId:(这里用一句话描述这个方法的作用)根据用户ID 查询出关联的所有终端信息

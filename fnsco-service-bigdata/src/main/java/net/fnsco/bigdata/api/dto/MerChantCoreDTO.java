@@ -31,6 +31,10 @@ public class MerChantCoreDTO extends DTO {
 	private String registAddress;
 
 	private String innerCode;// 内部商户号
+	
+	private String entityInnerCode;//实体商户号
+	
+	private String mercName;//实体商户名称
 
 	private BigDecimal scores;// 商户积分
 
@@ -43,6 +47,36 @@ public class MerChantCoreDTO extends DTO {
 	private String nextLevelName;//下一级名称
 	
 	private BigDecimal distScores;//积分差值
+	
+	private String levelIcon;//等级图标
+
+	public String getMercName() {
+		return mercName;
+	}
+
+	public void setMercName(String mercName) {
+		this.mercName = mercName;
+	}
+
+	public String getEntityInnerCode() {
+		return entityInnerCode;
+	}
+
+	public void setEntityInnerCode(String entityInnerCode) {
+		this.entityInnerCode = entityInnerCode;
+	}
+
+	public String getLevelIcon() {
+		return levelIcon;
+	}
+
+	public void setLevelIcon(String levelIcon) {
+		this.levelIcon = levelIcon;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	public BigDecimal getNextScores() {
 		return nextScores;

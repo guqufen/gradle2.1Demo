@@ -6,10 +6,13 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.common.collect.Lists;
 
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
@@ -38,6 +41,8 @@ public class AppMerchentLevelController extends BaseController{
 	private IntegralRuleService integralRuleService;
 	@Autowired
 	private IntegralRuleLogService integralRuleLogService;
+	@Autowired
+	private Environment env;
 	
 	// 商户等级查询(根据userid查询该用户下所有实体商户<等级和积分信息>列表)
 	@RequestMapping("/queryMercScore")
@@ -48,12 +53,29 @@ public class AppMerchentLevelController extends BaseController{
 		}
 
 		List<MerChantCoreDTO> datas = merchantService.getMerchantsScoresByUserId(merchantUserRel.getAppUserId());
+
+		//innerCode 不为空，则将需要返回的数据排序(将次innerCOde定为第一个)
+//		List<MerChantCoreDTO> dataTemp = Lists.newArrayList();
+//		List<MerChantCoreDTO> dataTemps1 = Lists.newArrayList();
+//		if(StringUtils.isNoneBlank(merchantUserRel.getInnerCode())){
+//			MerChantCoreDTO merChantCoreDTO = new MerChantCoreDTO();
+//			for (MerChantCoreDTO merChantCore : datas) {
+//				if(merChantCore.getInnerCode().equals(merchantUserRel.getInnerCode())){
+//					dataTemp.add(merChantCore);
+//					datas.remove(merChantCoreDTO);
+//				}
+//				dataTemps1.add(0,merChantCoreDTO);
+//			}
+//			dataTemp.addAll(datas);
+//		}
+
 		// 根据商户已有积分查询商户所属等级(v1-v7)
 		for (MerChantCoreDTO merChantCoreDTO : datas) {
 			if(merChantCoreDTO.getScores() == null){
 				merChantCoreDTO.setScores(new BigDecimal(0));
 				merChantCoreDTO.setMercLevel("v1");
 				merChantCoreDTO.setLevelName("普通商家");
+				merChantCoreDTO.setLevelIcon("/integral/lv1.png");
 				continue;
 			}
 			SysConfig sysConfig = new SysConfig();
@@ -62,6 +84,7 @@ public class AppMerchentLevelController extends BaseController{
 			SysConfig sysConfig2 = sysConfigService.selectLevelByScores(sysConfig);//根据积分查询所属等级
 			merChantCoreDTO.setMercLevel(sysConfig2.getName());// vip等级：v1-v7
 			merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
+			merChantCoreDTO.setLevelIcon(sysConfig2.getKeep3());
 		}
 
 		// 通过userId查询绑定的商户信息(内部商户号，商户名称)
@@ -77,12 +100,12 @@ public class AppMerchentLevelController extends BaseController{
 	public ResultDTO<MerChantCoreDTO> queryMercLevelDetail(@RequestBody MerchantUserRel merchantUserRel) {
 		
 		//判空
-		if (null == merchantUserRel.getAppUserId() || StringUtils.isBlank(merchantUserRel.getInnerCode())) {
+		if (null == merchantUserRel.getAppUserId() || StringUtils.isBlank(merchantUserRel.getEntityInnerCode())) {
 			return ResultDTO.fail(BigdataConstant.E_USERID_NULL);
 		}
 
 		//获取该条商户信息
-		MerChantCoreDTO merChantCoreDTO = merchantService.getScoreByUserIdInnerCode(merchantUserRel);
+		MerChantCoreDTO merChantCoreDTO = merchantService.selectByEntityInnerCode(merchantUserRel);
 		if(null == merChantCoreDTO){
 			return fail("该用户ID下未绑定该商户");
 		}
@@ -107,7 +130,7 @@ public class AppMerchentLevelController extends BaseController{
 				return success(merChantCoreDTO);
 			}
 			merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
-			BigDecimal b1 = new BigDecimal(sysConfig3.getValue());//获取下一级vip积分
+			BigDecimal b1 = new BigDecimal(sysConfig2.getValue());//获取下一级vip积分
 			merChantCoreDTO.setNextScores(b1);//设置下一级积分
 			merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()));//积分差值
 		}
@@ -124,6 +147,10 @@ public class AppMerchentLevelController extends BaseController{
 		sysConfig.setType("11");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
 
+		String prefix = env.getProperty("web.base.url");
+		for (SysConfig sysConfig2 : list) {
+			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
+		}
 		return success(list);
 	}
 	
@@ -134,7 +161,11 @@ public class AppMerchentLevelController extends BaseController{
 		SysConfig sysConfig = new SysConfig();
 		sysConfig.setType("10");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
-
+		
+		String prefix = env.getProperty("web.base.url");
+		for (SysConfig sysConfig2 : list) {
+			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
+		}
 		return success(list);
 	}
 	

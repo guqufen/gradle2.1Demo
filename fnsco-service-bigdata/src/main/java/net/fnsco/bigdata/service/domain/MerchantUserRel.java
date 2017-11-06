@@ -20,12 +20,26 @@ public class MerchantUserRel extends DTO{
 	private Integer id;
 
     private String innerCode;
+    
+    private String entityInnerCode;//实体商户号
 
     private Integer appUserId;
 
     private Date modefyTime;
 
-    public Integer getId() {
+    public String getEntityInnerCode() {
+		return entityInnerCode;
+	}
+
+	public void setEntityInnerCode(String entityInnerCode) {
+		this.entityInnerCode = entityInnerCode;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public Integer getId() {
         return id;
     }
 

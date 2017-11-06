@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantEntityDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantEntity" >
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantEntityDevDao" >
+  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantEntityDev" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
     <result column="merc_name" property="mercName" jdbcType="VARCHAR" />
@@ -22,7 +22,7 @@
   <resultMap id="MerShopResultMap" type="net.fnsco.bigdata.api.dto.MerchantShopDTO" >
     <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
     <result column="merc_name" property="mercName" jdbcType="VARCHAR" />
-    <collection property="entitys" column="entity_inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantShopDao.selectByEntityInnerCode"/>
+    <collection property="entitys" column="entity_inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantShopDevDao.selectByEntityInnerCode"/>
   </resultMap>
   <sql id="Base_Column_List" >
     id, entity_inner_code, merc_name, legal_person, legal_person_mobile, business_license_num, 
@@ -41,7 +41,7 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
  
-  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
+  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityDev" >
     insert into m_merchant_entity (id, entity_inner_code, merc_name, 
       legal_person, legal_person_mobile, business_license_num, 
       card_type, card_num, status, 
@@ -55,7 +55,7 @@
       #{lastModefyTimer,jdbcType=TIMESTAMP}, #{lastModefyUserId,jdbcType=INTEGER}, #{scores,jdbcType=DECIMAL}
       )
   </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
+  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityDev" >
     insert into m_merchant_entity
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -153,7 +153,7 @@
     </trim>
   </insert>
   
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
+  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityDev" >
     update m_merchant_entity
     <set >
       <if test="entityInnerCode != null" >
@@ -201,7 +201,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
+  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityDev" >
     update m_merchant_entity
     set entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
       merc_name = #{mercName,jdbcType=VARCHAR},
@@ -251,7 +251,7 @@
     where entity_inner_code = #{entityInnerCode}
   </select>
 
-  <update id="updateByEntityInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
+  <update id="updateByEntityInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantEntityDev" >
     update m_merchant_entity
     <set >
       <if test="entityInnerCode != null" >
@@ -294,7 +294,7 @@
         last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER},
       </if>
       <if test="scores != null" >
-        scores = #{scores,jdbcType=DECIMAL},
+        scores = scores + #{scores,jdbcType=DECIMAL},
       </if>
     </set>
     where entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR}

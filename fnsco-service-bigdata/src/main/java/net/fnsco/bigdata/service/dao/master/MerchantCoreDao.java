@@ -102,7 +102,7 @@ public interface MerchantCoreDao {
      * @param userId
      * @return
      */
-    MerChantCoreDTO getScoreByUserIdInnerCode(MerchantUserRel merchantUserRel);
+    MerChantCoreDTO selectByEntityInnerCode(MerchantUserRel merchantUserRel);
     
     /**
      * queryDetailById:(这里用一句话描述这个方法的作用) 根据商家ID 查询详情

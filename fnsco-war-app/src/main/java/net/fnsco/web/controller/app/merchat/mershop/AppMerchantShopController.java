@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,10 +21,12 @@ import net.fnsco.bigdata.api.constant.MerShopDTO;
 import net.fnsco.bigdata.api.dto.MerEntityDTO;
 import net.fnsco.bigdata.api.dto.MerchantShopDTO;
 import net.fnsco.bigdata.api.merchant.MerchantShopService;
-import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
-import net.fnsco.bigdata.service.domain.MerchantShop;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityDevDao;
+import net.fnsco.bigdata.service.domain.MerchantShopDev;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.service.domain.IntegralRuleLog;
 
 /**
  * @desc 商户店铺管理接口控制器
@@ -33,15 +36,17 @@ import net.fnsco.core.base.ResultDTO;
  */
 @RestController
 @RequestMapping(value = "/app/merchantshop/", method = RequestMethod.POST)
-@Api(value = "/app/merchant/shop", tags = { "商户店铺管理" })
+@Api(value = "/app/merchantshop/", tags = { "商户店铺管理" })
 public class AppMerchantShopController extends BaseController {
 
 	@Autowired
-	private MerchantEntityDao merchantEntityDao;
+	private MerchantEntityDevDao merchantEntityDao;
 
 	@Autowired
 	private MerchantShopService merchantShopService;
-
+	
+	@Autowired
+	private IntegralRuleLogService integralRuleLogService;
 	/**
 	 * queryAllMerchantEntity:(查询商户实体列表)
 	 *
@@ -102,6 +107,7 @@ public class AppMerchantShopController extends BaseController {
 	 * @author tangliang
 	 * @date 2017年10月31日 下午4:16:06
 	 */
+	@Transactional
 	@RequestMapping(value = "/addMerchantShop")
 	@ApiOperation(value = "增加店铺信息接口")
 	public ResultDTO<List<MerchantShopDTO>> addMerchantShop(@RequestBody MerShopDTO merchant) {
@@ -110,7 +116,7 @@ public class AppMerchantShopController extends BaseController {
 			return ResultDTO.fail(BigdataConstant.APP_MER_ENTITY_INNERCODE_NULL);
 		}
 
-		MerchantShop recored = new MerchantShop();
+		MerchantShopDev recored = new MerchantShopDev();
 		recored.setAddress(merchant.getAddress());
 		recored.setArea(merchant.getArea());
 		recored.setEntityInnerCode(merchant.getEntityInnerCode());
@@ -124,6 +130,8 @@ public class AppMerchantShopController extends BaseController {
 		recored.setShopInnerCode(merchantShopService.getMerShopInnerCode());
 		int res = merchantShopService.insertSelective(recored);
 		if (res > 0) {
+			//进行积分处理
+			integralRuleLogService.insert(merchant.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_LR.getCode());
 			return ResultDTO.success();
 		}
 		return ResultDTO.fail();
@@ -148,7 +156,7 @@ public class AppMerchantShopController extends BaseController {
 			return ResultDTO.fail(BigdataConstant.APP_MER_SHOP_INNERCODE_NULL);
 		}
 
-		MerchantShop recored = new MerchantShop();
+		MerchantShopDev recored = new MerchantShopDev();
 		recored.setAddress(merchant.getAddress());
 		recored.setArea(merchant.getArea());
 		recored.setEntityInnerCode(merchant.getEntityInnerCode());

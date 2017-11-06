@@ -366,8 +366,8 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         return datas;
 	}
 	@Override
-	public MerChantCoreDTO getScoreByUserIdInnerCode(MerchantUserRel merchantUserRel) {
+	public MerChantCoreDTO selectByEntityInnerCode(MerchantUserRel merchantUserRel) {
 
-		return merchantCoreDao.getScoreByUserIdInnerCode(merchantUserRel);
+		return merchantCoreDao.selectByEntityInnerCode(merchantUserRel);
 	}
 }

@@ -122,6 +122,8 @@ public class TradeData {
     private String       endTime;        // 订单交易结束日期 20160510235959
     private String       status;         //交易状态0非正常交易（包括撤销交易和撤销原交易）1正常交易
     private String       merName;        //商户名称
+    private Date         startCreateTime;//开始创建时间
+    private Date         endCreateTime;  //结束创建时间
     //内部商务号列表
     private List<String> innerCodeList;
     //终端号列表
@@ -131,7 +133,51 @@ public class TradeData {
     
     private String  legalPerson;
     
-    public String getLegalPerson() {
+    /**
+	 * startCreateTime
+	 *
+	 * @return  the startCreateTime
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Date getStartCreateTime() {
+		return startCreateTime;
+	}
+
+	/**
+	 * startCreateTime
+	 *
+	 * @param   startCreateTime    the startCreateTime to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setStartCreateTime(Date startCreateTime) {
+		this.startCreateTime = startCreateTime;
+	}
+
+	/**
+	 * endCreateTime
+	 *
+	 * @return  the endCreateTime
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Date getEndCreateTime() {
+		return endCreateTime;
+	}
+
+	/**
+	 * endCreateTime
+	 *
+	 * @param   endCreateTime    the endCreateTime to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setEndCreateTime(Date endCreateTime) {
+		this.endCreateTime = endCreateTime;
+	}
+
+	public String getLegalPerson() {
 		return legalPerson;
 	}
 

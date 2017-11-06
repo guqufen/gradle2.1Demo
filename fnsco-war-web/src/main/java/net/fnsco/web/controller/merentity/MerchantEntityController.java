@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.fnsco.bigdata.service.domain.MerchantCore;
-import net.fnsco.bigdata.service.domain.MerchantEntity;
+import net.fnsco.bigdata.service.domain.MerchantEntityDev;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultPageDTO;
 
@@ -36,7 +36,7 @@ public class MerchantEntityController extends BaseController {
 	@RequestMapping(value = "/query", method = RequestMethod.GET)
 	@ResponseBody
 //	@RequiresPermissions(value = { "m:merchant:list" })
-	public ResultPageDTO<MerchantEntity> merchatInfoIndex(MerchantCore merchantCore, Integer currentPageNum,
+	public ResultPageDTO<MerchantEntityDev> merchatInfoIndex(MerchantCore merchantCore, Integer currentPageNum,
 			Integer pageSize) {
 		logger.info("查询商户列表");
 //		return merchantCoreService.queryMerchantCore(merchantCore, currentPageNum, pageSize);

@@ -190,6 +190,6 @@
     FROM sys_config
     WHERE type = #{type}
     AND CAST(value AS SIGNED) &gt; CAST(#{value} AS SIGNED)<!-- 大于，查询下一级 -->
-    ORDER BY CAST(value AS SIGNED) ASC limit 1
+    ORDER BY CAST(value AS SIGNED) ASC limit 1,1
   </select>
 </mapper>

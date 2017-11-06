@@ -1,5 +1,7 @@
 package net.fnsco.config;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.order.api.merchant.IntegralRuleService;
 import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.trade.TradeReportService;
 
@@ -19,6 +22,8 @@ public class TimerConfig {
     private AppPushService     appPushService;
     @Autowired
     private TradeReportService tradeReportService;
+    @Autowired
+    private IntegralRuleService integralRuleService;
 
     /**
      * spring boot 定时任务
@@ -99,5 +104,18 @@ public class TimerConfig {
     @Scheduled(cron = "0 0 8 ? * MON") //每周一上午八点推送周报
     public void pushWeeklyData() {
         appPushService.sendWeeklyDataMgs();
+    }
+    
+    /**
+     * pushMagTimer:(统计积分)
+     *
+     * @param      设定文件
+     * @return void    DOM对象
+     * @author tangliang
+     * @date   2017年11月2日 上午9:38:37
+     */
+    @Scheduled(cron = "5 5 * * * ?") //每个小时的第五分钟第五秒执行，每小时执行一次
+    public void countMerchantEntityScores() {
+    	integralRuleService.countTradeDataScores(DateUtils.getTimeByMinuteDate(-60), new Date());
     }
 }

@@ -3,7 +3,7 @@ package net.fnsco.bigdata.api.merchant;
 import java.util.List;
 
 import net.fnsco.bigdata.api.dto.MerShopDetailDTO;
-import net.fnsco.bigdata.service.domain.MerchantShop;
+import net.fnsco.bigdata.service.domain.MerchantShopDev;
 
 /**
  * @desc 实体店铺service
@@ -17,11 +17,11 @@ public interface MerchantShopService {
 
 	int deleteByPrimaryKey(Integer id);
 
-	int insert(MerchantShop record);
+	int insert(MerchantShopDev record);
 
-	int insertSelective(MerchantShop record);
+	int insertSelective(MerchantShopDev record);
 
-	MerchantShop selectByPrimaryKey(Integer id);
+	MerchantShopDev selectByPrimaryKey(Integer id);
 	
 	/**
 	 * deleteByShopInnerCode:(按照SHOPINNERCode删除)
@@ -43,11 +43,11 @@ public interface MerchantShopService {
 	 * @author tangliang
 	 * @date   2017年11月1日 上午10:10:38
 	 */
-	int updateByShopInnerCodeSelective(MerchantShop record);
+	int updateByShopInnerCodeSelective(MerchantShopDev record);
 
-	int updateByPrimaryKeySelective(MerchantShop record);
+	int updateByPrimaryKeySelective(MerchantShopDev record);
 
-	int updateByPrimaryKey(MerchantShop record);
+	int updateByPrimaryKey(MerchantShopDev record);
 
 	/**
 	 * selectByEntityInnerCode:(这里用一句话描述这个方法的作用)
