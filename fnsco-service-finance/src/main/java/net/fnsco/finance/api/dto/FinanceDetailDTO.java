@@ -10,13 +10,15 @@ public class FinanceDetailDTO  extends DTO{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String dates;//日期
+	private String happenDate;//日期
 	
 	private String week;//星期
 	
 	private Integer type;//收支类型
 	
 	private String ioTypeCode;//收支子类型
+	
+	private String ioTypeName;//收支子类型名称
 	
 	private BigDecimal cash;//金额
 	
@@ -28,12 +30,12 @@ public class FinanceDetailDTO  extends DTO{
 	
 	private String icoUrl;//图片
 
-	public String getDates() {
-		return dates;
+	public String getHappenDate() {
+		return happenDate;
 	}
 
-	public void setDates(String dates) {
-		this.dates = dates;
+	public void setHappenDate(String happenDate) {
+		this.happenDate = happenDate;
 	}
 
 	public String getWeek() {
@@ -58,6 +60,14 @@ public class FinanceDetailDTO  extends DTO{
 
 	public void setIoTypeCode(String ioTypeCode) {
 		this.ioTypeCode = ioTypeCode;
+	}
+
+	public String getIoTypeName() {
+		return ioTypeName;
+	}
+
+	public void setIoTypeName(String ioTypeName) {
+		this.ioTypeName = ioTypeName;
 	}
 
 	public BigDecimal getCash() {

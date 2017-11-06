@@ -21,6 +21,8 @@ public class FinanceBookKeepingDTO extends DTO{
 	
 	private String entityInnerCode;//实体商户号
 	
+	private String mercName;//商户名（必须40个字符）;
+	
 	private List<AppUserEntityDTO> appUserEntityDTOList;
 	
 	private List<FinanceEveryDayDTO> financeEveryDay;
@@ -63,6 +65,14 @@ public class FinanceBookKeepingDTO extends DTO{
 
 	public void setEntityInnerCode(String entityInnerCode) {
 		this.entityInnerCode = entityInnerCode;
+	}
+
+	public String getMercName() {
+		return mercName;
+	}
+
+	public void setMercName(String mercName) {
+		this.mercName = mercName;
 	}
 
 	public List<AppUserEntityDTO> getAppUserEntityDTOList() {

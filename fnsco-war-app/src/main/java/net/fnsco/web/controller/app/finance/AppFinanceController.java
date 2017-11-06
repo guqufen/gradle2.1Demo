@@ -14,6 +14,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.finance.api.dto.FinanceBookKeepingDTO;
 import net.fnsco.finance.api.dto.FinanceQueryDTO;
 import net.fnsco.finance.api.dto.FinanceRecordDTO;
+import net.fnsco.finance.api.dto.IoTypeAndShopDTO;
 import net.fnsco.finance.api.dto.QueryDetailDTO;
 import net.fnsco.finance.api.finance.AppFinanceService;
 import net.fnsco.finance.service.domain.FinanceAccountBook;
@@ -49,9 +50,10 @@ public class AppFinanceController extends BaseController {
      */
     @RequestMapping(value = "/getIoType" , method = RequestMethod.POST)
     @ApiOperation(value = "查询收支子类型信息")
-    public ResultDTO modifyFinance() {
-    	ResultDTO<FinanceIoType> IoType = appFinanceService.queryIoTypeList();
-        return IoType;
+    public ResultDTO<IoTypeAndShopDTO> getIoType(@RequestBody FinanceQueryDTO financeQuery) {
+    	String entityInnerCode =  financeQuery.getEntityInnerCode();
+    	ResultDTO<IoTypeAndShopDTO> ioTypeAndShop = appFinanceService.queryIoTypeAndShop(entityInnerCode);
+        return ioTypeAndShop;
     } 
     /**
      * 新增记账信息

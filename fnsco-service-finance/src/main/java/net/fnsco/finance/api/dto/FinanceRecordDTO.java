@@ -32,6 +32,8 @@ public class FinanceRecordDTO extends DTO{
     private String lastModefyTimeStr;//最后修改时间字符串
     
     private String shopInnerCode; //实体店铺编号
+    
+    private String entityInnerCode;//实体商户号
 
 	public Integer getId() {
 		return id;
@@ -120,6 +122,13 @@ public class FinanceRecordDTO extends DTO{
 	public void setShopInnerCode(String shopInnerCode) {
 		this.shopInnerCode = shopInnerCode;
 	}
-    
+
+	public String getEntityInnerCode() {
+		return entityInnerCode;
+	}
+
+	public void setEntityInnerCode(String entityInnerCode) {
+		this.entityInnerCode = entityInnerCode;
+	}
 }
 	

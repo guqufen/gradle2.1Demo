@@ -26,12 +26,22 @@ public class IntegralRule extends DTO {
 	private String description;// 规则描述
 
 	private Integer integral;// 无脚本积分
+	
+	private Boolean plusFlag;//积分正负号标识
 
 	private Integer status;// 状态：0-无效；1-有效
 
 	private Integer isScript;// 是否有脚本0-无；1-有
 
 	private Date createTime;// 创建时间
+
+	public Boolean getPlusFlag() {
+		return plusFlag;
+	}
+
+	public void setPlusFlag(Boolean plusFlag) {
+		this.plusFlag = plusFlag;
+	}
 
 	public Integer getId() {
 		return id;
@@ -70,6 +80,11 @@ public class IntegralRule extends DTO {
 	}
 
 	public void setIntegral(Integer integral) {
+		if(integral > 0){
+			plusFlag = true;
+		}else{
+			plusFlag = false;
+		}
 		this.integral = integral;
 	}
 

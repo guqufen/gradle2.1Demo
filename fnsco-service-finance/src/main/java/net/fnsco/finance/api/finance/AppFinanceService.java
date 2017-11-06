@@ -10,6 +10,7 @@ import net.fnsco.finance.api.dto.FinanceBookKeepingDTO;
 import net.fnsco.finance.api.dto.FinanceDetailDTO;
 import net.fnsco.finance.api.dto.FinanceQueryDTO;
 import net.fnsco.finance.api.dto.FinanceRecordDTO;
+import net.fnsco.finance.api.dto.IoTypeAndShopDTO;
 import net.fnsco.finance.api.dto.QueryDetailDTO;
 import net.fnsco.finance.service.domain.FinanceIoType;
 
@@ -29,7 +30,7 @@ public interface AppFinanceService {
 	 * 查询收支子类型
 	 * @return
 	 */
-	ResultDTO<FinanceIoType> queryIoTypeList();
+	ResultDTO<IoTypeAndShopDTO> queryIoTypeAndShop(String entityInnerCode);
 	
 	/**
 	 * 每日一记新增记录
