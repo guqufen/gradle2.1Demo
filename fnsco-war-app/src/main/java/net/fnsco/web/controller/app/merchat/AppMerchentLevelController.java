@@ -68,13 +68,14 @@ public class AppMerchentLevelController extends BaseController{
 //			dataTemp.addAll(datas);
 //		}
 
+		String prefix = env.getProperty("web.base.url");
 		// 根据商户已有积分查询商户所属等级(v1-v7)
 		for (MerChantCoreDTO merChantCoreDTO : datas) {
 			if(merChantCoreDTO.getScores() == null){
 				merChantCoreDTO.setScores(new BigDecimal(0));
 				merChantCoreDTO.setMercLevel("v1");
 				merChantCoreDTO.setLevelName("普通商家");
-				merChantCoreDTO.setLevelIcon("/integral/lv1.png");
+				merChantCoreDTO.setLevelIcon(prefix + "/integral/lv1.png");
 				continue;
 			}
 			SysConfig sysConfig = new SysConfig();
@@ -83,7 +84,7 @@ public class AppMerchentLevelController extends BaseController{
 			SysConfig sysConfig2 = sysConfigService.selectLevelByScores(sysConfig);//根据积分查询所属等级
 			merChantCoreDTO.setMercLevel(sysConfig2.getName());// vip等级：v1-v7
 			merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
-			merChantCoreDTO.setLevelIcon(sysConfig2.getKeep3());
+			merChantCoreDTO.setLevelIcon(prefix + sysConfig2.getKeep3());
 		}
 
 		// 通过userId查询绑定的商户信息(内部商户号，商户名称)
@@ -92,7 +93,7 @@ public class AppMerchentLevelController extends BaseController{
 
 	/**
 	 *  商户等级详情查询(包括积分和下一级)
-	 * @param userMerchant：需要带innerCode和userId来查询某个商户的积分等级数据
+	 * @param userMerchant：需要带entityInnerCode和userId来查询某个商户的积分等级数据
 	 * @return
 	 */
 	@RequestMapping("/queryMercLevelDetail")
