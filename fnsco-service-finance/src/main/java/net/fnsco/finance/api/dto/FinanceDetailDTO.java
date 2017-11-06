@@ -10,7 +10,7 @@ public class FinanceDetailDTO  extends DTO{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String dates;//日期
+	private String happenDate;//日期
 	
 	private String week;//星期
 	
@@ -30,12 +30,12 @@ public class FinanceDetailDTO  extends DTO{
 	
 	private String icoUrl;//图片
 
-	public String getDates() {
-		return dates;
+	public String getHappenDate() {
+		return happenDate;
 	}
 
-	public void setDates(String dates) {
-		this.dates = dates;
+	public void setHappenDate(String happenDate) {
+		this.happenDate = happenDate;
 	}
 
 	public String getWeek() {

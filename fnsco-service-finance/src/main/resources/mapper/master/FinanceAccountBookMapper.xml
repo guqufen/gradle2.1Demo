@@ -43,7 +43,7 @@
   <resultMap id="DetailResultMap" type="net.fnsco.finance.api.dto.FinanceDetailDTO" >
   	<result column="shop_inner_code" property="shopInnerCode" jdbcType="VARCHAR" />
     <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
-    <result column="happen_date" property="dates" jdbcType="VARCHAR" />
+    <result column="happen_date" property="happenDate" jdbcType="VARCHAR" />
     <result column="io_type_code" property="ioTypeCode" jdbcType="VARCHAR" />
     <result column="cash" property="cash" jdbcType="DECIMAL" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />

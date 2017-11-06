@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +50,9 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 	private FinanceAccountBookDao financeAccountBookDao;
 	@Autowired
 	private IntegralRuleLogService integralRuleLogService;
+	
+	@Autowired
+	private Environment env;
 	/**
 	 * 记账首页每日数据分页查询（每次显示5个）
 	 */
@@ -78,6 +82,7 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 			financeBookKeepingDTO.setYear(calendar.get(Calendar.YEAR));
 			financeBookKeepingDTO.setMonth(calendar.get(Calendar.MONTH)+1);
 		}else {
+			financeBookKeepingDTO.setEntityInnerCode(financeQuery.getEntityInnerCode());
 			for(AppUserEntityDTO aed : entityList) {
 				if(aed.getEntityInnerCode().equals(financeQuery.getEntityInnerCode())){
 					financeBookKeepingDTO.setMercName(aed.getMercName());
@@ -293,7 +298,7 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 			financeDetail.setCash(financeDetail.getCash());
 		}
 		financeDetail.setCash(getYuan(financeDetail.getCash()));
-		String date = financeDetail.getDates();
+		String date = financeDetail.getHappenDate();
 		String week =null;
 		try{  
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
