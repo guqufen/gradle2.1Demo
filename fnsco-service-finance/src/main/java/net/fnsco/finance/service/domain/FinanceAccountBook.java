@@ -13,6 +13,8 @@ public class FinanceAccountBook {
     private Integer type;
 
     private String ioTypeCode;
+    
+    private String ioTypeName;
 
     private String remark;
 
@@ -63,7 +65,15 @@ public class FinanceAccountBook {
         this.ioTypeCode = ioTypeCode == null ? null : ioTypeCode.trim();
     }
 
-    public String getRemark() {
+    public String getIoTypeName() {
+		return ioTypeName;
+	}
+
+	public void setIoTypeName(String ioTypeName) {
+		this.ioTypeName = ioTypeName;
+	}
+
+	public String getRemark() {
         return remark;
     }
 
