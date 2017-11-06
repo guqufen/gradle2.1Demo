@@ -8,8 +8,10 @@ public class FinanceAccountBook {
 
     private String accountId;
 
-    private BigDecimal cash;
-
+    private String cash;
+    
+    private BigDecimal cashDec;
+    
     private Integer type;
 
     private String ioTypeCode;
@@ -25,6 +27,8 @@ public class FinanceAccountBook {
     private String happenDate;
     
     private String icoUrl;
+    
+    private String icoUrlGray;
     public Integer getId() {
         return id;
     }
@@ -41,15 +45,23 @@ public class FinanceAccountBook {
 		this.accountId = accountId;
 	}
 
-	public BigDecimal getCash() {
-        return cash;
-    }
+	public String getCash() {
+		return cash;
+	}
 
-    public void setCash(BigDecimal cash) {
-        this.cash = cash;
-    }
+	public void setCash(String cash) {
+		this.cash = cash;
+	}
 
-    public Integer getType() {
+	public BigDecimal getCashDec() {
+		return cashDec;
+	}
+
+	public void setCashDec(BigDecimal cashDec) {
+		this.cashDec = cashDec;
+	}
+
+	public Integer getType() {
         return type;
     }
 
@@ -111,6 +123,14 @@ public class FinanceAccountBook {
 
 	public void setIcoUrl(String icoUrl) {
 		this.icoUrl = icoUrl;
+	}
+
+	public String getIcoUrlGray() {
+		return icoUrlGray;
+	}
+
+	public void setIcoUrlGray(String icoUrlGray) {
+		this.icoUrlGray = icoUrlGray;
 	}
     
 }
