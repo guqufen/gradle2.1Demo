@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.bigdata.api.dto.MerchantShopDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.ConmmService;
@@ -70,8 +71,8 @@ public class ConmmController extends BaseController {
     @RequestMapping(value = "/getInviteUrl", method = RequestMethod.GET)
     @ApiOperation(value = "返回邀新链接地址")
     @ResponseBody
-    public ResultDTO getInviteUrl(String entityInnerCode) {
-        String url = env.getProperty("web.base.url")+"/acti/register.html?entityId="+entityInnerCode;
+    public ResultDTO getInviteUrl(@RequestBody MerchantShopDTO merchantShop) {
+        String url = env.getProperty("web.base.url")+"/acti/register.html?entityId="+merchantShop.getEntityInnerCode();
         return ResultDTO.success(url);
     }
 
