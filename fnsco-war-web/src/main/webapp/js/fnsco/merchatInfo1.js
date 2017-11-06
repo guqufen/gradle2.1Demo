@@ -209,6 +209,7 @@ function queryParams(params)
        currentPageNum : this.pageNumber,
        pageSize : this.pageSize,
        merName :$.trim($('#txt_search_id').val()),
+       innerCode :$.trim($('#txt_search_innerCode').val()),
        merId :$.trim($('#txt_search_merId').val()),
        legalPerson:$.trim($('#txt_search_name').val()),
        legalPersonMobile:$.trim($('#txt_search_price').val()),
@@ -673,7 +674,6 @@ function selectBank(id){
   $("body").addClass('modal-open-custom');
   $('#subBankName'+id).addClass("active");
 }
-
 //添加银行卡列表
 $("#btn_addBankCard").click(function(){
   BankCardlList=BankCardlList+1;
@@ -783,7 +783,7 @@ var TerminalList=-100;
 function terminalHtml(num){
 	return '<div class="terminal-list"><div class="remove-terminalList remove-terminalList'+num+'" editId="'+num+'" ></div><div class="row addChannel">'+
         '<div class="col-sm-4"><label class="control-label" for="channelMerId'+num+'">渠道商户号：</label><input type="text" class="form-control channelMerId" id="channelMerId'+num+'" name="channelMerId'+num+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道名称：</label><select id="channelType'+num+'" name="channelType'+num+'" class="channelType form-control" ><option value="00">拉卡拉</option><option value="01">浦发</option><option value="02">爱农</option><option value="03">法奈昇</option></select></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道名称：</label><select id="channelType'+num+'" name="channelType'+num+'" class="channelType form-control" ><option value="00">拉卡拉</option><option value="01">浦发</option><option value="02">爱农</option><option value="03">法奈昇</option><option value="04">聚惠分</option></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">渠道Key：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'" required="required"></div>'+
         '<div class="posList" id="posList'+num+'">'+
         posHtml(num)+
@@ -1041,10 +1041,11 @@ function contactHtml(num){
         var contactTelphone=$("#"+conId+" .contact-list").eq(i).find($('.contactTelphone')).val();
         var contactJobs=$("#"+conId+" .contact-list").eq(i).find($('.contactJobs')).val();
         var innerCode = $('#innerCode').val();
-        var id=$("#terminal-con1 .contact-list").eq(i).find($('.remove-icon')).attr('editId');
+        var id=$("#contact-con1 .contact-list").eq(i).find($('.remove-icon')).attr('editId');
         if(!innerCode){
           layer.msg('操作错误!');return ;
         }
+        console.log(id);
         if(!id || id<0){
             concatContactArr={contactName,contactMobile,contactEmail,contactTelphone,contactJobs,innerCode}
           }else{
@@ -1193,6 +1194,9 @@ function editData(id){
         $('input[name="taxRegistCode1"]').val(data.data.taxRegistCode);
         $('input[name="registAddress1"]').val(data.data.registAddress);
         $('input[name="mercFlag1"]').val(data.data.mercFlag);
+
+        $('#entityMerName1').val(data.data.entityMerName);
+        $('#entityMerName1').next('.entityInnerCode').val(data.data.entityInnerCode);
         requestAgent(data.data.agentId);
 
         //资料文件
@@ -1372,9 +1376,10 @@ function editData(id){
             var registAddress = $('input[name="registAddress1"]').val();
             var mercFlag = $('input[name="mercFlag1"]').val();
             var agentId = $('#agentId1').val();
-            
+            var entityInnerCode = $('#entityMerName1').next('input[name="entityInnerCode"]').val();
+            var innerCode=$('#innerCode').val();
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
-            		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId};
+            		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'innerCode':innerCode};
             
             console.log(params);
             $.ajax({
@@ -1505,6 +1510,9 @@ function detailsData(id){
         $('input[name="taxRegistCode2"]').val(data.data.taxRegistCode);
         $('input[name="registAddress2"]').val(data.data.registAddress);
         $('input[name="mercFlag2"]').val(data.data.mercFlag);
+
+        $('#entityMerName2').val(data.data.entityMerName);
+        $('#entityMerName2').next('.entityInnerCode').val(data.data.entityInnerCode);
         requestAgent(data.data.agentId);
         // 银行卡信息
         var bankCardLen=data.data.banks.length;
@@ -1550,12 +1558,12 @@ function detailsData(id){
           bankOption+='<option value="'+data.data.banks[i].id+'">'+data.data.banks[i].subBankName+'</option>'
         }
 
-        //终端信息
-        var bankLen=data.data.banks.length;
-        bankOption='';
-        for(var i=0;i<bankLen;i++){
-          bankOption+='<option value="'+data.data.banks[i].id+'">'+data.data.banks[i].subBankName+'</option>'
-        }
+        // //终端信息
+        // var bankLen=data.data.banks.length;
+        // bankOption='';
+        // for(var i=0;i<bankLen;i++){
+        //   bankOption+='<option value="'+data.data.banks[i].id+'">'+data.data.banks[i].subBankName+'</option>'
+        // }
 
         $("#terminal-con2").html('');
         var channelsLen=data.data.channel.length;
@@ -1592,12 +1600,13 @@ function detailsData(id){
               var terminalLen=data.data.channel[i].posInfos[j].terminal.length;
               for(var o=0;o<terminalLen;o++){
                 if(data.data.channel[i].posInfos[j].terminal[o].terminalType=='00'){
-                  $('#terminal-con2 input[name="terminalCode2'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].terminalCode);
+                  $('#terminal-con2 input[name="terminalCode2'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].channelTerminalCode);
                   $('#terminal-con2 input[name="debitCardMaxFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].debitCardMaxFee);
                   $('#terminal-con2 input[name="debitCardRate'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].debitCardRate);
                   $('#terminal-con2 input[name="creditCardRate'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].creditCardRate);
                 }else if(data.data.channel[i].posInfos[j].terminal[o].terminalType=='01'){
-                  $('#terminal-con2 input[name="terminalCode1'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].terminalCode);
+                  // console.log($('#terminal-con2 input[name="terminalCode1'+data.data.channel[i].posInfos[j].id+'"]'),data.data.channel[i].posInfos[j].terminal[o].terminalCode)
+                  $('#terminal-con2 input[name="terminalCode1'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].channelTerminalCode);
                   $('#terminal-con2 input[name="alipayFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].alipayFee);
                   $('#terminal-con2 input[name="wechatFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].wechatFee);
                 }

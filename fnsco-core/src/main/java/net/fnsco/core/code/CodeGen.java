@@ -18,12 +18,12 @@ public class CodeGen {
         //auto.init("net.fnsco.auth", "sys", "sys_menu");
         //auto.init("net.fnsco.risk", "report", "risk_report_info");
         //auto.init("net.fnsco.risk", "report", "risk_report_repayment_history");
-        //auto.init("net.fnsco.order", "act", "act_loan_apply_user");
+        auto.init("net.fnsco.order", "trade", "t_trade_order");
         //auto.init("net.fnsco.risk", "trade", "t_trade_data");
         //auto.init("net.fnsco.withhold", "sys", "sys_bank_trade_limit");
-        auto.init("net.fnsco.risk", "trade", "risk_trade_pay_bill");
-        auto.init("net.fnsco.risk", "trade", "risk_trade_recharge_bill");
-        auto.init("net.fnsco.risk", "sys", "risk_user_sub_account");
-        auto.init("net.fnsco.risk", "sys", "risk_user_sub_account_seq");
+        //auto.init("net.fnsco.risk", "trade", "risk_trade_pay_bill");
+        //auto.init("net.fnsco.risk", "trade", "risk_trade_recharge_bill");
+        //auto.init("net.fnsco.risk", "sys", "risk_user_sub_account");
+        //auto.init("net.fnsco.risk", "sys", "risk_user_sub_account_seq");
     }
 }

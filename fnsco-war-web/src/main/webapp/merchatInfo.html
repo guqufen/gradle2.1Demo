@@ -81,6 +81,10 @@
 									type="text" class="form-control" id="txt_search_merId">
 							</div>
 							<div class="col-sm-4">
+								<label class="control-label" for="txt_search_innerCode">内部商户号：</label> <input
+									type="text" class="form-control" id="txt_search_innerCode">
+							</div>
+							<div class="col-sm-4">
 								<label class="control-label" for="txt_search_name">法人姓名：</label>
 								<input type="text" class="form-control" id="txt_search_name">
 							</div>
@@ -96,6 +100,7 @@
 								<option value="01">浦发</option>
 								<option value="02">爱农</option>
 								<option value="03">法奈昇</option>
+								<option value="04">聚惠分</option>
 							</select>
 						</div>
 					</div>
@@ -193,6 +198,13 @@
 									<form action="" id="mercore_form" method="post">
 										<div class="row">
 											<div class="col-sm-4">
+												<label class="control-label" for="entityMerName0">实体商户：</label>
+												<input
+													type="text" class="form-control entityMerName" id="entityMerName0"
+													name="entityMerName0" required="required" onclick="selectBusiness(0)">
+												<input type="hidden" name="entityInnerCode" class="entityInnerCode">
+											</div>
+											<div class="col-sm-4">
 												<label class="control-label" for="merName">商户名：</label> <input
 													type="text" class="form-control" id="merName"
 													name="merName" required="required">
@@ -204,15 +216,15 @@
 											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="legalPerson">商户法人姓名：</label>
-												<input type="text" class="form-control" id="legalPerson"
+												<input type="text" class="form-control legalPerson" id="legalPerson"
 													name="legalPerson">
 											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="legalPersonMobile">法人手机号码：</label>
-												<input type="number" class="form-control"
+												<input type="number" class="form-control legalPersonMobile"
 													id="legalPersonMobile" name="legalPersonMobile">
 											</div>
-											<div class="col-sm-4">
+											<!-- <div class="col-sm-4">
 												<label class="control-label " for="legalValidCardType">法人有效证件类型：</label>
 												<select id="legalValidCardType" name="legalValidCardType"
 													class="form-control">
@@ -222,10 +234,10 @@
 													<option value="3">军官证</option>
 													<option value="4">港澳台通行证</option>
 												</select>
-											</div>
+											</div> -->
 											<div class="col-sm-4">
-												<label class="control-label" for="cardNum">证件号码：</label> <input
-													type="text" class="form-control" id="cardNum"
+												<label class="control-label" for="cardNum">身份证号：</label> <input
+													type="text" class="form-control cardNum" id="cardNum"
 													name="cardNum">
 											</div>
 											<div class="col-sm-4">
@@ -235,7 +247,7 @@
 											</div>
 											<div class="col-sm-4">
 												<label class="control-label" for="businessLicenseNum">营业执照号码：</label>
-												<input type="text" class="form-control"
+												<input type="text" class="form-control businessLicenseNum"
 													id="businessLicenseNum" name="businessLicenseNum">
 											</div>
 											<div class="col-sm-4">
@@ -513,6 +525,12 @@
 										class="glyphicon glyphicon-book"></span>保存</a>
 									<div class="row">
 										<div class="col-sm-4">
+											<label class="control-label" for="entityMerName1">实体商户：</label> <input
+												type="text" class="form-control entityMerName" id="entityMerName1"
+												name="entityMerName1" required="required" onclick="selectBusiness(1)">
+											<input type="hidden" name="entityInnerCode" class="entityInnerCode">
+										</div>
+										<div class="col-sm-4">
 											<label class="control-label" for="merName1">商户名：</label> <input
 												type="text" class="form-control" id="merName1"
 												name="merName1" required="required">
@@ -524,15 +542,15 @@
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="legalPerson1">商户法人姓名：</label>
-											<input type="text" class="form-control" id="legalPerson1"
+											<input type="text" class="form-control legalPerson" id="legalPerson1"
 												name="legalPerson1">
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="legalPersonMobile1">法人手机号码：</label>
-											<input type="number" class="form-control"
+											<input type="number" class="form-control legalPersonMobile"
 												id="legalPersonMobile1" name="legalPersonMobile1">
 										</div>
-										<div class="col-sm-4">
+										<!-- <div class="col-sm-4">
 											<label class="control-label " for="legalValidCardType1">法人有效证件类型：</label>
 											<select id="legalValidCardType1" name="legalValidCardType1"
 												class="form-control">
@@ -542,10 +560,10 @@
 												<option value="3">军官证</option>
 												<option value="4">港澳台通行证</option>
 											</select>
-										</div>
+										</div> -->
 										<div class="col-sm-4">
-											<label class="control-label" for="cardNum1">证件号码：</label> <input
-												type="text" class="form-control" id="cardNum1"
+											<label class="control-label" for="cardNum1">身份证号：</label> <input
+												type="text" class="form-control cardNum" id="cardNum1"
 												name="cardNum1">
 										</div>
 										<div class="col-sm-4">
@@ -555,7 +573,7 @@
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="businessLicenseNum1">营业执照号码：</label>
-											<input type="text" class="form-control"
+											<input type="text" class="form-control businessLicenseNum"
 												id="businessLicenseNum1" name="businessLicenseNum1">
 										</div>
 										<div class="col-sm-4">
@@ -839,6 +857,12 @@
 								<div role="tabpanel" class="tab-pane active" id="home2">
 									<div class="row">
 										<div class="col-sm-4">
+											<label class="control-label" for="entityMerName2">实体商户：</label> <input
+												type="text" class="form-control entityMerName" id="entityMerName2"
+												name="entityMerName2" required="required" onclick="selectBusiness()">
+											<input type="hidden" name="entityInnerCode" class="entityInnerCode">
+										</div>
+										<div class="col-sm-4">
 											<label class="control-label" for="merName2">商户名：</label> <input
 												type="text" class="form-control" id="merName2"
 												name="merName2" required="required">
@@ -850,15 +874,15 @@
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="legalPerson2">商户法人姓名：</label>
-											<input type="text" class="form-control" id="legalPerson2"
+											<input type="text" class="form-control legalPerson" id="legalPerson2"
 												name="legalPerson2">
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="legalPersonMobile2">法人手机号码：</label>
-											<input type="number" class="form-control"
+											<input type="number" class="form-control legalPersonMobile"
 												id="legalPersonMobile2" name="legalPersonMobile2">
 										</div>
-										<div class="col-sm-4">
+										<!-- <div class="col-sm-4">
 											<label class="control-label " for="legalValidCardType2">法人有效证件类型：</label>
 											<select id="legalValidCardType2" name="legalValidCardType2"
 												class="form-control">
@@ -868,10 +892,10 @@
 												<option value="3">军官证</option>
 												<option value="4">港澳台通行证</option>
 											</select>
-										</div>
+										</div> -->
 										<div class="col-sm-4">
-											<label class="control-label" for="cardNum2">证件号码：</label> <input
-												type="text" class="form-control" id="cardNum2"
+											<label class="control-label" for="cardNum2">身份证号：</label> <input
+												type="text" class="form-control cardNum" id="cardNum2"
 												name="cardNum2">
 										</div>
 										<div class="col-sm-4">
@@ -881,7 +905,7 @@
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="businessLicenseNum2">营业执照号码：</label>
-											<input type="text" class="form-control"
+											<input type="text" class="form-control businessLicenseNum"
 												id="businessLicenseNum2" name="businessLicenseNum2">
 										</div>
 										<div class="col-sm-4">
@@ -1174,6 +1198,8 @@
 			<!-- model end -->
 			<!-- banksModel详情 start -->
 			<div class="modal fade" id="businessModal" tabindex="-1" role="dialog"
+			<!-- businessModel详情 start -->
+			<div class="modal " id="businessModal" tabindex="-1" role="dialog"
 				aria-labelledby="businessModalLabel" data-backdrop="static"
 				data-keyboard="false">
 				<div class="modal-dialog" role="document">
@@ -1205,6 +1231,23 @@
 											<label class="control-label" for="txt_search_price">支行名称：</label>
 											<input type="text" class="form-control"
 												id="txt_search_branch">
+							<h4 class="modal-title" id="businessModalLabel">实体商户</h4>
+						</div>
+						<div class="modal-body">
+							<form id="businessFormSearch" class="form-horizontal">
+								<div class="form-group" style="margin-top: 15px">
+									<div class="row col-sm-10">
+										<div class="col-sm-6">
+											<label class="control-label" for="txt_search_merName">商户名称：</label>
+											<input type="text" class="form-control" id="txt_search_merName">
+										</div>
+										<div class="col-sm-6">
+											<label class="control-label" for="txt_search_legalPerson">法人姓名：</label>
+											<input type="text" class="form-control" id="txt_search_legalPerson">
+										</div>
+										<div class="col-sm-6">
+											<label class="control-label" for="txt_search_phoneNum">手机号：</label>
+											<input type="text" class="form-control" id="txt_search_phoneNum">
 										</div>
 									</div>
 									<div class="col-sm-2" style="text-align: right;">
@@ -1214,6 +1257,11 @@
 										</button>
 										<button type="button" id="btn_reset" class="btn btn-default"
 											onclick="javascript:resetEvent('bankFormSearch','bankTable');">
+											onclick="javascript:queryEvent('businessTable');">
+											<span class="glyphicon glyphicon-search"></span>查询
+										</button>
+										<button type="button" id="btn_reset" class="btn btn-default"
+											onclick="javascript:resetEvent('businessFormSearch','businessTable');">
 											<span class="glyphicon glyphicon-refresh"></span>重置
 										</button>
 									</div>
@@ -1263,6 +1311,7 @@
 //在页面加载完成之后动态加载，避免因为缓存问题导致数据展示不对(在不人工清理缓存情况下)
 loadJSRandom(document, "js/fnsco/showPosArea.js");
 loadJSRandom(document, "js/fnsco/merchatInfo1.js");
+loadJSRandom(document, "js/fnsco/initBusiness.js");
 loadJSRandom(document, "js/fnsco/fileup.js");
 </script>
 </body>

@@ -177,7 +177,7 @@ public class MerchantInfoController extends BaseController {
 	@ResponseBody
 	@RequiresPermissions(value = { "m:merchant:add" })
 	public ResultDTO<String> toAddCore(MerchantCore merchantCore) {
-		ResultDTO<String> result = merchantCoreService.doAddMerCore(merchantCore);
+		ResultDTO<String> result = merchantCoreService.doAddMerCore(merchantCore,getUserId() == null?null:String.valueOf(getUserId()));
 		return result;
 	}
 

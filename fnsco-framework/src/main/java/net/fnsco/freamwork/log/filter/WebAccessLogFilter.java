@@ -117,7 +117,7 @@ public class WebAccessLogFilter extends RequestContextFilter {
                 StringBuilder message = new StringBuilder();
                 message.append("[(").append(requestURI).append(",").append(request.getMethod()).append(",").append(status).append(",").append(hasError ? "N" : "Y").append(",").append(elapsed)
                     .append("ms").append(",").append(getIp(request)).append(")]").append(traceId);
-                LoggerConstant.PAGE_DIGEST_LOGGER.debug(message.toString());
+                LoggerConstant.PAGE_DIGEST_LOGGER.error(message.toString());
 
             }
 

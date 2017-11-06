@@ -283,7 +283,7 @@ public class MerchantInfoImportService extends BaseService {
         
         MerchantCore fnsMerCore = MerchantImportHelper.createMerchantCore(merId, innerCode, dto);
         try {
-            merchantCoreService.doAddMerCore(fnsMerCore);
+            merchantCoreService.doAddMerCore(fnsMerCore,String.valueOf(userId));
         } catch (Exception e) {
             logger.error("导入商户数据异常", e);
             return ResultDTO.failForMessage("行数据的基本数据信息有误，导入失败");
