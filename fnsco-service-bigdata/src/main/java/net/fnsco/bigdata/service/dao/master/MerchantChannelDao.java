@@ -37,7 +37,7 @@ public interface MerchantChannelDao {
      * @return MerchantChannel    DOM对象
      */
     MerchantChannel selectByInnerCodeAndChannelCode(@Param("innerCode") String innerCode, @Param("channelMerId") String channelMerId,@Param("channelType")String channelType);
-    
+    MerchantChannel selectByInnerCodeType(@Param("innerCode") String innerCode, @Param("channelType")String channelType);
     /**
      * 根据innercode查询
      * @param innerCode

@@ -1,4 +1,4 @@
-package net.fnsco.bigdata.api.constant;
+package net.fnsco.bigdata.api.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.DTO;
@@ -45,6 +45,33 @@ public class MerShopDTO extends DTO {
 	 * 实体商户内部商户号
 	 */
 	private String entityInnerCode;
+	
+	/**
+	 * 分享类型 ("00":新浪微博,"01":微信聊天,"02":微信朋友圈,"04":QQ聊天,"05":QQ空间)
+	 */
+	private String shareType;
+	
+	/**
+	 * shareType
+	 *
+	 * @return  the shareType
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getShareType() {
+		return shareType;
+	}
+
+	/**
+	 * shareType
+	 *
+	 * @param   shareType    the shareType to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setShareType(String shareType) {
+		this.shareType = shareType;
+	}
 
 	/**
 	 * userId

@@ -104,6 +104,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             if (channel != null) {
                 innerCode = channel.getInnerCode();
             }
+        }else{
+            MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
+            if (channel != null) {
+                innerCode = channel.getInnerCode();
+            }
         }
         logger.warn("插入流水，获取商户耗时" + (System.currentTimeMillis() - timer));
         TradeData tradeDataEntity = new TradeData();

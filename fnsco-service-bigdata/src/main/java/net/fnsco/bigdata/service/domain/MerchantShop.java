@@ -8,7 +8,7 @@ import java.util.Date;
  * @since    Ver 1.1
  * @Date	 2017年10月27日 上午9:49:47
  */
-public class MerchantShopDev {
+public class MerchantShop {
 	private Integer id;
 
     private String entityInnerCode;

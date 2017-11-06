@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO;
-import net.fnsco.bigdata.api.dto.WebMerchantTerminalDTO;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
-import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDevDao;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
 import net.fnsco.bigdata.service.domain.MerchantBank;
-import net.fnsco.bigdata.service.domain.MerchantEntityCoreRefDev;
-import net.fnsco.bigdata.service.domain.MerchantPos;
+import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.freamwork.business.WebUserDTO;
@@ -46,7 +44,7 @@ public class MerchantPosController extends BaseController {
     @Autowired
     private IntegralRuleLogService integralRuleLogService;
     @Autowired
-    private MerchantEntityCoreRefDevDao merchantEntityCoreRefDao;
+    private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
     
     /**
      * toAddTerminal:(这里用一句话描述这个方法的作用)添加POS信息
@@ -127,7 +125,7 @@ public class MerchantPosController extends BaseController {
     			//等于空，才统计积分情况
     			if(null == webMerchantTerminalDTO.getPosId()) {
     				if(!Strings.isNullOrEmpty(innerCode)) {
-    					MerchantEntityCoreRefDev mecr = merchantEntityCoreRefDao.selectByInnerCode(innerCode);
+    					MerchantEntityCoreRef mecr = merchantEntityCoreRefDao.selectByInnerCodeLimit1(innerCode);
     					if(null != mecr && !Strings.isNullOrEmpty(mecr.getEntityInnerCode())) {
     						integralRuleLogService.insert(mecr.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_SQ.getCode());
     					}

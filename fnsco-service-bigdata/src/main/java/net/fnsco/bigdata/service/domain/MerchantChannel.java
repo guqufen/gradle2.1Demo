@@ -35,8 +35,31 @@ public class MerchantChannel extends DTO{
     private Integer modifyUserId;
     
     private List<MerchantPos> posInfos;//POS机信息列表
+    private String entityInnerCode;
     
 	/**
+     * entityInnerCode
+     *
+     * @return  the entityInnerCode
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getEntityInnerCode() {
+        return entityInnerCode;
+    }
+
+    /**
+     * entityInnerCode
+     *
+     * @param   entityInnerCode    the entityInnerCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEntityInnerCode(String entityInnerCode) {
+        this.entityInnerCode = entityInnerCode;
+    }
+
+    /**
      * posInfos
      *
      * @return  the posInfos

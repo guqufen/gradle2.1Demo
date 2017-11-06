@@ -12,6 +12,7 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.merchant.IntegralRuleService;
 import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.trade.TradeReportService;
+import net.fnsco.order.service.trade.TradeOrderService;
 
 @EnableScheduling
 public class TimerConfig {
@@ -24,7 +25,8 @@ public class TimerConfig {
     private TradeReportService tradeReportService;
     @Autowired
     private IntegralRuleService integralRuleService;
-
+    @Autowired
+    private TradeOrderService tradeOrderService;
     /**
      * spring boot 定时任务
      */
@@ -117,5 +119,21 @@ public class TimerConfig {
     @Scheduled(cron = "5 5 * * * ?") //每个小时的第五分钟第五秒执行，每小时执行一次
     public void countMerchantEntityScores() {
     	integralRuleService.countTradeDataScores(DateUtils.getTimeByMinuteDate(-60), new Date());
+    }
+    /*
+     * spring boot 定时更新订单
+     */
+    @Scheduled(cron = "0 */1 * * * ?")
+    public void getOrderStatues() {
+        tradeOrderService.updateOrderStatues("");
+    }
+    
+    /**
+     * spring boot 同步订单交易数据
+     */
+    @Scheduled(cron = "0 */5 * * * ?")
+    public void syncOrderTradeData() {
+        logger.error("同步分期付订单交易数据定时任务启动");
+        tradeOrderService.syncOrderTradeData();
     }
 }

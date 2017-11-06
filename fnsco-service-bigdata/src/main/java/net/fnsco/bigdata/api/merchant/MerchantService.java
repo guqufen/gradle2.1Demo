@@ -15,6 +15,7 @@ import net.fnsco.bigdata.api.dto.PosListDTO;
 import net.fnsco.bigdata.api.dto.TerminalDetailDTO;
 import net.fnsco.bigdata.api.dto.TerminalsDTO;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
+import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.ResultDTO;
@@ -32,6 +33,17 @@ public interface MerchantService {
      * @return
      */
     public MerchantChannel getMerChannel(String merCode, String channelType);
+    /**
+     * 
+     * getMerChannelByInnerCodeType:(根据内部商务号和渠道类型获取渠道信息)
+     *
+     * @param innerCode
+     * @param channelType
+     * @return   MerchantChannel    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    public MerchantChannel getMerChannelByInnerCodeType(String innerCode, String channelType);
     /**
      * 
      * updatePosName:(更新pos机名称，拉卡拉机器使用)
@@ -174,5 +186,16 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     MerchantTerminal getTerminalDetailByCode(String terminalCode);
+    
+    /**
+     * 
+     * getMerChantCoreByInnerCode:(根据内部商务号查询商户信息)
+     *
+     * @param innerCode
+     * @return   MerChantCoreDTO    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    MerchantCore getMerChantCoreByInnerCode(String innerCode);
     
 }
