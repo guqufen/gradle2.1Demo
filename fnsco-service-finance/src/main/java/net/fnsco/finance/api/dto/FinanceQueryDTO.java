@@ -11,7 +11,7 @@ public class FinanceQueryDTO extends DTO{
 	private String appUserId;//app用户登录id
 	
 	private String entityInnerCode;//实体商户号
-	
+		
 	private String dates;//查询日期
 	
 	private String happenDate;//账单发生日期YYYY-MM-DD

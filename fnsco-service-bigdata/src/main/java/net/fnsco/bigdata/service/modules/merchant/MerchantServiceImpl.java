@@ -30,10 +30,13 @@ import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.dao.master.AliasDAO;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
 import net.fnsco.bigdata.service.dao.master.MerchantPosDao;
 import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
 import net.fnsco.bigdata.service.domain.Alias;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
+import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
@@ -53,21 +56,22 @@ import net.fnsco.core.utils.StringUtil;
 public class MerchantServiceImpl extends BaseService implements MerchantService {
 
     @Autowired
-    private AliasDAO                  aliasDAO;
+    private AliasDAO                 aliasDAO;
     @Autowired
-    private MerchantChannelDao        merchantChannelDao;
+    private MerchantChannelDao       merchantChannelDao;
     @Autowired
-    private MerchantCoreDao           merchantCoreDao;
+    private MerchantCoreDao          merchantCoreDao;
     @Autowired
-    private MerchantTerminalDao       merchantTerminalDao;
+    private MerchantTerminalDao      merchantTerminalDao;
     @Autowired
-    private MerchantPosDao            merchantPosDao;
+    private MerchantPosDao           merchantPosDao;
     @Autowired
-    private MerchantPosSimpleDao      merchantPosSimpleDao;
+    private MerchantPosSimpleDao     merchantPosSimpleDao;
     @Autowired
-    private Environment               env;
-
     private static final String TAICODE_BASE_URL = "qr.redrect.url";
+    private Environment              env;
+    @Autowired
+    private MerchantEntityCoreRefDao entityCoreRefDao;
 
     /**
      * 获取商户渠道信息信息
@@ -80,6 +84,45 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merCode, channelType);
         return merchantChannel;
     }
+
+    /**
+     * 查询渠道商户信息
+     * (non-Javadoc)
+     * @see net.fnsco.bigdata.api.merchant.MerchantService#getMerChantDetailById(java.lang.Integer)
+     * @auth tangliang
+     * @date 2017年6月30日 上午11:19:42
+     */
+    @Override
+    public MerchantCore getMerChantCoreByInnerCode(String innerCode) {
+        if (null == innerCode) {
+            return null;
+        }
+        MerchantCore result = merchantCoreDao.getMerChantCoreByInnerCode(innerCode);
+        return result;
+    }
+
+    /**
+     * 获取商户渠道信息信息
+     * @param merNum 商户号
+     * @param channelType
+     * @return
+     */
+    @Override
+    public MerchantChannel getMerChannelByInnerCodeType(String innerCode, String channelType) {
+        MerchantChannel merchantChannel = null;
+        List<MerchantEntityCoreRef> entityRefList = entityCoreRefDao.selectByInnerCode(innerCode);
+        for (MerchantEntityCoreRef ref : entityRefList) {
+            if (!ref.getInnerCode().equals(innerCode)) {
+                merchantChannel = merchantChannelDao.selectByInnerCodeType(ref.getInnerCode(), channelType);
+                if (null != merchantChannel && "04".equals(merchantChannel.getChannelType())) {
+                    merchantChannel.setEntityInnerCode(ref.getEntityInnerCode());
+                    break;
+                }
+            }
+        }
+        return merchantChannel;
+    }
+
     /**
       * 
       * @param merNum 商户号
@@ -137,14 +180,14 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         List<MerChantCoreDTO> datas = merchantCoreDao.queryAllByUseraId(userId);
         //增加字段能够生成台码
         for (MerChantCoreDTO merChantCoreDTO : datas) {
-            if(null == merChantCoreDTO.getId()){
+            if (null == merChantCoreDTO.getId()) {
                 merChantCoreDTO.setCanCreateTaiCode(false);
                 continue;
             }
             int count = merchantChannelDao.countCanCreateTaiCode(merChantCoreDTO.getId());
-            if(count>0 ){
+            if (count > 0) {
                 merChantCoreDTO.setCanCreateTaiCode(true);
-            }else{
+            } else {
                 merChantCoreDTO.setCanCreateTaiCode(false);
             }
         }
@@ -184,8 +227,8 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         MerChantCoreDetailDTO datas = merchantCoreDao.queryDetailById(merId);
         //设置台码url,只为能生成台码的设置url
         int count = merchantChannelDao.countCanCreateTaiCode(merId);
-        if(count > 0){
-            datas.setTaiCodeUrl(env.getProperty(TAICODE_BASE_URL)+"?innerCode="+datas.getTaiCodeUrl());
+        if (count > 0) {
+            datas.setTaiCodeUrl(env.getProperty(TAICODE_BASE_URL) + "?innerCode=" + datas.getTaiCodeUrl());
         }
         ResultDTO<MerChantCoreDetailDTO> result = ResultDTO.success(datas);
         return result;
@@ -238,22 +281,22 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public List<PosListDTO> getAllPosInfo(MerchantDTO merchantDTO) {
-        
+
         List<PosListDTO> datas = merchantPosDao.selectAllPosInfo(merchantDTO.getUserId());
         //增加台码连接
-      //设置台码url,只为能生成台码的设置url
+        //设置台码url,只为能生成台码的设置url
         for (PosListDTO posListDTO : datas) {
             int count = merchantChannelDao.countCanCreateTai(posListDTO.getInnerCode());
-            if(count >0){
+            if (count > 0) {
                 List<PosInfosDTO> posInfo = posListDTO.getPosInfo();
                 PosInfosDTO posInfoDTO = new PosInfosDTO();
                 posInfoDTO.setPosName("台码");
-                posInfoDTO.setTaiCodeUrl(env.getProperty(TAICODE_BASE_URL)+"?innerCode="+posListDTO.getInnerCode());
+                posInfoDTO.setTaiCodeUrl(env.getProperty(TAICODE_BASE_URL) + "?innerCode=" + posListDTO.getInnerCode());
                 posInfoDTO.setPosId(0);
                 posInfo.add(posInfoDTO);
             }
         }
-        
+
         return datas;
     }
 
@@ -325,7 +368,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public void updatePosName(String snCode, String posName) {
-        merchantPosSimpleDao.updateBySnCode(snCode,posName);
+        merchantPosSimpleDao.updateBySnCode(snCode, posName);
     }
 
     /**
@@ -341,12 +384,12 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         }
         return null;
     }
-    
+
     @Override
     public List<String> getMerchantAppUser(String snCode) {
         List<String> innerCodes = Lists.newArrayList();
         List<MerchantPosDO> posList = merchantPosSimpleDao.selectBySnCodeChannelType(snCode);
-        for (MerchantPosDO merchantPos: posList) {
+        for (MerchantPosDO merchantPos : posList) {
             innerCodes.add(merchantPos.getInnerCode());
         }
         return innerCodes;

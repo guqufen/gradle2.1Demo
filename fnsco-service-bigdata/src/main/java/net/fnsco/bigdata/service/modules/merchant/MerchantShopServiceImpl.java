@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import net.fnsco.bigdata.api.dto.MerShopDetailDTO;
 import net.fnsco.bigdata.api.merchant.MerchantShopService;
-import net.fnsco.bigdata.service.dao.master.MerchantShopDevDao;
-import net.fnsco.bigdata.service.domain.MerchantShopDev;
+import net.fnsco.bigdata.service.dao.master.MerchantShopDao;
+import net.fnsco.bigdata.service.domain.MerchantShop;
 import net.fnsco.core.utils.CodeUtil;
 
 /**
@@ -22,7 +22,7 @@ import net.fnsco.core.utils.CodeUtil;
 public class MerchantShopServiceImpl implements MerchantShopService {
 	
 	@Autowired
-	private MerchantShopDevDao merchantShopDao;
+	private MerchantShopDao merchantShopDao;
 	/**
 	 * (non-Javadoc)
 	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#deleteByPrimaryKey(java.lang.Integer)
@@ -39,12 +39,12 @@ public class MerchantShopServiceImpl implements MerchantShopService {
 
 	/**
 	 * (non-Javadoc)
-	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#insert(net.fnsco.bigdata.service.domain.MerchantShopDev)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#insert(net.fnsco.bigdata.service.domain.MerchantShop)
 	 * @author tangliang
 	 * @date 2017年10月31日 下午4:27:49
 	 */
 	@Override
-	public int insert(MerchantShopDev record) {
+	public int insert(MerchantShop record) {
 
 		// TODO Auto-generated method stub
 		return merchantShopDao.insert(record);
@@ -53,12 +53,12 @@ public class MerchantShopServiceImpl implements MerchantShopService {
 
 	/**
 	 * (non-Javadoc)
-	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#insertSelective(net.fnsco.bigdata.service.domain.MerchantShopDev)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#insertSelective(net.fnsco.bigdata.service.domain.MerchantShop)
 	 * @author tangliang
 	 * @date 2017年10月31日 下午4:27:49
 	 */
 	@Override
-	public int insertSelective(MerchantShopDev record) {
+	public int insertSelective(MerchantShop record) {
 
 		// TODO Auto-generated method stub
 		return merchantShopDao.insertSelective(record);
@@ -72,7 +72,7 @@ public class MerchantShopServiceImpl implements MerchantShopService {
 	 * @date 2017年10月31日 下午4:27:49
 	 */
 	@Override
-	public MerchantShopDev selectByPrimaryKey(Integer id) {
+	public MerchantShop selectByPrimaryKey(Integer id) {
 
 		// TODO Auto-generated method stub
 		return merchantShopDao.selectByPrimaryKey(id);
@@ -81,12 +81,12 @@ public class MerchantShopServiceImpl implements MerchantShopService {
 
 	/**
 	 * (non-Javadoc)
-	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#updateByPrimaryKeySelective(net.fnsco.bigdata.service.domain.MerchantShopDev)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#updateByPrimaryKeySelective(net.fnsco.bigdata.service.domain.MerchantShop)
 	 * @author tangliang
 	 * @date 2017年10月31日 下午4:27:49
 	 */
 	@Override
-	public int updateByPrimaryKeySelective(MerchantShopDev record) {
+	public int updateByPrimaryKeySelective(MerchantShop record) {
 
 		// TODO Auto-generated method stub
 		return merchantShopDao.updateByPrimaryKeySelective(record);
@@ -95,12 +95,12 @@ public class MerchantShopServiceImpl implements MerchantShopService {
 
 	/**
 	 * (non-Javadoc)
-	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#updateByPrimaryKey(net.fnsco.bigdata.service.domain.MerchantShopDev)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#updateByPrimaryKey(net.fnsco.bigdata.service.domain.MerchantShop)
 	 * @author tangliang
 	 * @date 2017年10月31日 下午4:27:49
 	 */
 	@Override
-	public int updateByPrimaryKey(MerchantShopDev record) {
+	public int updateByPrimaryKey(MerchantShop record) {
 
 		// TODO Auto-generated method stub
 		return merchantShopDao.updateByPrimaryKey(record);
@@ -131,7 +131,7 @@ public class MerchantShopServiceImpl implements MerchantShopService {
 	public String getMerShopInnerCode() {
 
 		String shopInnerCode = null;
-		MerchantShopDev record = new MerchantShopDev();
+		MerchantShop record = new MerchantShop();
 
         while (true) {
         	shopInnerCode = "S"+CodeUtil.generateMerchantCode("F");
@@ -148,12 +148,12 @@ public class MerchantShopServiceImpl implements MerchantShopService {
 	/**
 	 * 按照条件更新
 	 * (non-Javadoc)
-	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#updateByShopInnerCodeSelective(net.fnsco.bigdata.service.domain.MerchantShopDev)
+	 * @see net.fnsco.bigdata.api.merchant.MerchantShopService#updateByShopInnerCodeSelective(net.fnsco.bigdata.service.domain.MerchantShop)
 	 * @author tangliang
 	 * @date 2017年11月1日 上午10:15:00
 	 */
 	@Override
-	public int updateByShopInnerCodeSelective(MerchantShopDev record) {
+	public int updateByShopInnerCodeSelective(MerchantShop record) {
 		
 		// TODO Auto-generated method stub
 		return merchantShopDao.updateByShopInnerCodeSelective(record);

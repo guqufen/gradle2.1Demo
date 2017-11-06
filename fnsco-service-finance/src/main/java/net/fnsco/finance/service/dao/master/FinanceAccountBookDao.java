@@ -3,10 +3,10 @@ package net.fnsco.finance.service.dao.master;
 import java.util.List;
 
 import net.fnsco.finance.api.dto.AppUserEntityDTO;
+import net.fnsco.finance.api.dto.AppUserShopDTO;
 import net.fnsco.finance.api.dto.FinanceDetailDTO;
 import net.fnsco.finance.api.dto.FinanceQueryDTO;
 import net.fnsco.finance.api.dto.FinanceRecordDTO;
-import net.fnsco.finance.api.dto.QueryDetailDTO;
 import net.fnsco.finance.service.domain.FinanceAccount;
 import net.fnsco.finance.service.domain.FinanceAccountBook;
 import net.fnsco.finance.service.domain.FinanceIoType;
@@ -22,6 +22,8 @@ public interface FinanceAccountBookDao {
 	List<AppUserEntityDTO> queryEntityList(String id);
 	
 	List<FinanceIoType> queryIoTypeList();
+	
+	List<AppUserShopDTO> queryShopList(String entityInnerCode);
 	
 	FinanceAccount queryShopInnerCode(FinanceAccount financeAccount);
 	

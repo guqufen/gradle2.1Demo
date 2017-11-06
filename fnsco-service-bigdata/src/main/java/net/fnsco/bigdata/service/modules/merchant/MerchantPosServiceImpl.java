@@ -113,7 +113,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
             if(null != merChannel){
                 if(null != merChannel.getId()){
                     merchantChannelDao.updateByPrimaryKeySelective(merChannel);
-                    updatePosInfoToDB(webMerchantPosDTO.getPosInfos(),merChannel.getId());
+                    updatePosInfoToDB(webMerchantPosDTO.getPosInfos(),merChannel);
                 }else{
                     merchantChannelDao.insertSelective(merChannel);
                     if(null != merChannel.getId()){
@@ -134,11 +134,11 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
      * @return void    DOM对象
      */
     @Transactional
-    private void updatePosInfoToDB(List<WebMerchantTerminalDTO> posInfos,Integer channelId){
+    private void updatePosInfoToDB(List<WebMerchantTerminalDTO> posInfos,MerchantChannel merchantChannel){
         for (WebMerchantTerminalDTO webMerchantTerminalDTO : posInfos) {
             MerchantPos merchantPos = webMerchantTerminalDTO.getMerchantPos();
             if(null != merchantPos){
-                merchantPos.setChannelId(channelId);
+                merchantPos.setChannelId(merchantChannel.getId());
                 if(null != merchantPos.getId()){
                     this.updateByPrimaryKeySelective(merchantPos);
                 }else{
@@ -148,6 +148,9 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
                 for (MerchantTerminal merchantTerminal : terminals) {
                     merchantTerminal.setPosId(merchantPos.getId());
                     if(merchantTerminal.getId() != null){
+                    	if("00".equals(merchantChannel.getChannelType())) {
+                    		merchantTerminal.setTerminalCode(merchantTerminal.getChannelTerminalCode());
+                    	}
                         merchantTerminalDao.updateByPrimaryKeySelective(merchantTerminal);
                     }else{
                         merchantTerminalDao.insertSelective(merchantTerminal);

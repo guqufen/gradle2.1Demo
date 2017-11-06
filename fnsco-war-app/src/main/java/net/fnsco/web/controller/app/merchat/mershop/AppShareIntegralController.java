@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
-import net.fnsco.bigdata.api.constant.MerShopDTO;
 import net.fnsco.bigdata.api.dto.MerchantShopDTO;
+import net.fnsco.bigdata.api.dto.ShareIntegralDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
@@ -44,7 +44,7 @@ public class AppShareIntegralController extends BaseController{
 	 */
 	@RequestMapping(value = "/recordIntegral")
 	@ApiOperation(value = "记录分享成功后积分处理")
-	public ResultDTO<List<MerchantShopDTO>> queryAllMerchantShop(@RequestBody MerShopDTO merchant) {
+	public ResultDTO<List<MerchantShopDTO>> queryAllMerchantShop(@RequestBody ShareIntegralDTO merchant) {
 
 		if (null == merchant.getEntityInnerCode()) {
 			return ResultDTO.fail(BigdataConstant.APP_MER_ENTITY_INNERCODE_NULL);

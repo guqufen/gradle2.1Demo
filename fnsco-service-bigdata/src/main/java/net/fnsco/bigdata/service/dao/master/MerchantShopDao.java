@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.bigdata.api.dto.MerShopDetailDTO;
-import net.fnsco.bigdata.service.domain.MerchantShopDev;
+import net.fnsco.bigdata.service.domain.MerchantShop;
 /**
  * @desc 店铺DAO
  * @author   tangliang
@@ -13,15 +13,19 @@ import net.fnsco.bigdata.service.domain.MerchantShopDev;
  * @since    Ver 1.1
  * @Date	 2017年10月27日 上午9:50:36
  */
-public interface MerchantShopDevDao {
+public interface MerchantShopDao {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(MerchantShopDev record);
+    int insert(MerchantShop record);
 
-    int insertSelective(MerchantShopDev record);
+    int insertSelective(MerchantShop record);
 
-    MerchantShopDev selectByPrimaryKey(Integer id);
+    MerchantShop selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(MerchantShop record);
+
+    int updateByPrimaryKey(MerchantShop record);
     
     /**
      * deleteByShopInnerCode:(按照shopInnerCode删除)
@@ -43,11 +47,7 @@ public interface MerchantShopDevDao {
      * @author tangliang
      * @date   2017年11月1日 上午10:11:32
      */
-    int updateByShopInnerCodeSelective(MerchantShopDev record);
-    
-    int updateByPrimaryKeySelective(MerchantShopDev record);
-
-    int updateByPrimaryKey(MerchantShopDev record);
+    int updateByShopInnerCodeSelective(MerchantShop record);
     
     /**
      * selectByEntityInnerCode:(这里用一句话描述这个方法的作用)
@@ -69,5 +69,5 @@ public interface MerchantShopDevDao {
      * @author tangliang
      * @date   2017年10月31日 下午4:32:09
      */
-    int queryTotalByCondition(MerchantShopDev record);
+    int queryTotalByCondition(MerchantShop record);
 }
