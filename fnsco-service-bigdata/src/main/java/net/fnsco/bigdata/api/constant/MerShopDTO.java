@@ -45,6 +45,33 @@ public class MerShopDTO extends DTO {
 	 * 实体商户内部商户号
 	 */
 	private String entityInnerCode;
+	
+	/**
+	 * 分享类型
+	 */
+	private String shareType;
+	
+	/**
+	 * shareType
+	 *
+	 * @return  the shareType
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getShareType() {
+		return shareType;
+	}
+
+	/**
+	 * shareType
+	 *
+	 * @param   shareType    the shareType to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setShareType(String shareType) {
+		this.shareType = shareType;
+	}
 
 	/**
 	 * userId
