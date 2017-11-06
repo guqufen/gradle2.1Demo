@@ -12,14 +12,19 @@
     <result column="last_modefy_time" property="lastModefyTime" jdbcType="TIMESTAMP" />
     <result column="happen_date" property="happenDate" jdbcType="VARCHAR" />
     <result column="ico_url" property="icoUrl" jdbcType="VARCHAR" />
+    <result column="name" property="ioTypeName" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="AmountResultMap" type="net.fnsco.finance.service.domain.FinanceAccountBook" >
     <result column="cash" property="cash" jdbcType="DECIMAL" />
     <result column="type" property="type" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="EntityResultMap" type="net.fnsco.finance.api.dto.AppUserEntityDTO" >
-    <result column="entityInnerCode" property="entityInnerCode" jdbcType="VARCHAR" />
-    <result column="mercName" property="mercName" jdbcType="VARCHAR" />
+    <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
+    <result column="merc_name" property="mercName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ShopResultMap" type="net.fnsco.finance.api.dto.AppUserShopDTO" >
+    <result column="shop_inner_code" property="shopInnerCode" jdbcType="VARCHAR" />
+    <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="IoTypeResultMap" type="net.fnsco.finance.service.domain.FinanceIoType" >
     <id column="id" property="id" jdbcType="INTEGER" />
@@ -43,13 +48,14 @@
     <result column="cash" property="cash" jdbcType="DECIMAL" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="ico_url" property="icoUrl" jdbcType="VARCHAR" />
+    <result column="name" property="ioTypeName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    ACB.id,ACB.type,ACB.io_type_code,ACB.cash,ACB.happen_date,IT.ico_url
+    ACB.id,ACB.type,ACB.io_type_code,ACB.cash,ACB.happen_date,IT.ico_url,IT.name
   </sql>
   <sql id="Detail_Column_List" >
     SS.shop_inner_code,SS.shop_name,T.happen_date,
-	T.type,T.io_type_code,T.cash,T.remark,IT.ico_url
+	T.type,T.io_type_code,T.cash,T.remark,IT.ico_url,IT.name
   </sql>
    
    <!-- APP端记账条件查询日期 -->
@@ -147,6 +153,16 @@
     <include refid="Base_Column_List" />
     from f_finance_account_book
     where id = #{id,jdbcType=INTEGER}
+  </select>
+	<!-- APP端记账查询查询店铺列表 -->
+  <select id="queryShopList"  parameterType="java.lang.String"    resultMap="ShopResultMap" >
+    SELECT
+		shop_inner_code,
+		shop_name
+	FROM
+		m_merchant_shop
+	WHERE
+		entity_inner_code = #{entityInnerCode}
   </select>
   <!-- APP端记账查询收支子类 -->
   <select id="queryIoTypeList"  resultMap="IoTypeResultMap" >

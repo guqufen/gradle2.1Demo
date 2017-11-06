@@ -18,6 +18,8 @@ public class FinanceDetailDTO  extends DTO{
 	
 	private String ioTypeCode;//收支子类型
 	
+	private String ioTypeName;//收支子类型名称
+	
 	private BigDecimal cash;//金额
 	
 	private String remark;//备注
@@ -58,6 +60,14 @@ public class FinanceDetailDTO  extends DTO{
 
 	public void setIoTypeCode(String ioTypeCode) {
 		this.ioTypeCode = ioTypeCode;
+	}
+
+	public String getIoTypeName() {
+		return ioTypeName;
+	}
+
+	public void setIoTypeName(String ioTypeName) {
+		this.ioTypeName = ioTypeName;
 	}
 
 	public BigDecimal getCash() {
