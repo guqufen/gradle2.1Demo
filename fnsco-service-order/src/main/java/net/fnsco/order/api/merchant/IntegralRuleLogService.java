@@ -13,6 +13,13 @@ public interface IntegralRuleLogService {
 	 * @return
 	 */
 	public List<IntegralRuleLog> queryListByCondition(IntegralRuleLog integralRuleLog);
+	/**
+     * 条件查询积分日志数据列表
+     * 
+     * @param integralRuleLog
+     * @return
+     */
+    public List<IntegralRuleLog> queryListByEntityInnerCode(String entityInnerCode);
 
 	/**
 	 * 通过实体商户号+积分规则代码/积分日期查询总积分
