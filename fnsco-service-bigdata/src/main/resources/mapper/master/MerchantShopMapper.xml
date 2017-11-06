@@ -7,7 +7,7 @@
     <result column="shop_inner_code" property="shopInnerCode" jdbcType="VARCHAR" />
     <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
     <result column="area" property="area" jdbcType="VARCHAR" />
-    <result column="regist_address" property="registAddress" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="create_timer" property="createTimer" jdbcType="TIMESTAMP" />
     <result column="create_source" property="createSource" jdbcType="VARCHAR" />
     <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
@@ -15,9 +15,14 @@
     <result column="last_modefy_user_id" property="lastModefyUserId" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
- 
+  <resultMap id="ListResultMap" type="net.fnsco.bigdata.api.dto.MerShopDetailDTO" >
+    <result column="shop_inner_code" jdbcType="VARCHAR" property="shopInnerCode" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+  </resultMap>
   <sql id="Base_Column_List" >
-    id, entity_inner_code, shop_inner_code, shop_name, area, regist_address, create_timer, 
+    id, entity_inner_code, shop_inner_code, shop_name, area, address, create_timer, 
     create_source, create_user_id, last_modefy_timer, last_modefy_user_id, status
   </sql>
  
@@ -33,12 +38,12 @@
   </delete>
   <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantShop" >
     insert into m_merchant_shop (id, entity_inner_code, shop_inner_code, 
-      shop_name, area, regist_address, 
+      shop_name, area, address, 
       create_timer, create_source, create_user_id, 
       last_modefy_timer, last_modefy_user_id, status
       )
     values (#{id,jdbcType=INTEGER}, #{entityInnerCode,jdbcType=VARCHAR}, #{shopInnerCode,jdbcType=VARCHAR}, 
-      #{shopName,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{registAddress,jdbcType=VARCHAR}, 
+      #{shopName,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
       #{createTimer,jdbcType=TIMESTAMP}, #{createSource,jdbcType=VARCHAR}, #{createUserId,jdbcType=INTEGER}, 
       #{lastModefyTimer,jdbcType=TIMESTAMP}, #{lastModefyUserId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}
       )
@@ -61,8 +66,8 @@
       <if test="area != null" >
         area,
       </if>
-      <if test="registAddress != null" >
-        regist_address,
+      <if test="address != null" >
+        address,
       </if>
       <if test="createTimer != null" >
         create_timer,
@@ -99,8 +104,8 @@
       <if test="area != null" >
         #{area,jdbcType=VARCHAR},
       </if>
-      <if test="registAddress != null" >
-        #{registAddress,jdbcType=VARCHAR},
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
       </if>
       <if test="createTimer != null" >
         #{createTimer,jdbcType=TIMESTAMP},
@@ -138,8 +143,8 @@
       <if test="area != null" >
         area = #{area,jdbcType=VARCHAR},
       </if>
-      <if test="registAddress != null" >
-        regist_address = #{registAddress,jdbcType=VARCHAR},
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
       </if>
       <if test="createTimer != null" >
         create_timer = #{createTimer,jdbcType=TIMESTAMP},
@@ -168,7 +173,7 @@
       shop_inner_code = #{shopInnerCode,jdbcType=VARCHAR},
       shop_name = #{shopName,jdbcType=VARCHAR},
       area = #{area,jdbcType=VARCHAR},
-      regist_address = #{registAddress,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
       create_timer = #{createTimer,jdbcType=TIMESTAMP},
       create_source = #{createSource,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=INTEGER},
@@ -177,4 +182,93 @@
       status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 按照删除 -->
+  <delete id="deleteByShopInnerCode" parameterType="java.lang.String">
+     delete from m_merchant_shop
+    where shop_inner_code = #{shopInnerCode,jdbcType=VARCHAR}
+  </delete>
+  <!-- 按照条件更新 -->
+  <update id="updateByShopInnerCodeSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantShop">
+     update m_merchant_shop
+    <set>
+      <if test="entityInnerCode != null">
+        entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopInnerCode != null">
+        shop_inner_code = #{shopInnerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="createTimer != null">
+        create_timer = #{createTimer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createSource != null">
+        create_source = #{createSource,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastModefyTimer != null">
+        last_modefy_timer = #{lastModefyTimer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModefyUserId != null">
+        last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+    </set>
+    where shop_inner_code = #{shopInnerCode,jdbcType=VARCHAR}
+  </update>
+  <!-- 按照entityInnerCode查询店铺集合 -->
+  <select id="selectByEntityInnerCode" parameterType="java.lang.String" resultMap="ListResultMap">
+    SELECT shop_name ,area,address,shop_inner_code FROM m_merchant_shop WHERE entity_inner_code = #{entityInnerCode} and status = 1
+  </select>
+  
+  <!-- 条件查询总数 -->
+  <select id="queryTotalByCondition" parameterType="net.fnsco.bigdata.service.domain.MerchantShop" resultType="java.lang.Integer">
+     select count(*) from m_merchant_shop
+     <where>
+       <if test="entityInnerCode != null">
+        and entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="shopInnerCode != null">
+        and shop_inner_code = #{shopInnerCode,jdbcType=VARCHAR}
+      </if>
+      <if test="shopName != null">
+        and shop_name = #{shopName,jdbcType=VARCHAR}
+      </if>
+      <if test="area != null">
+        and area = #{area,jdbcType=VARCHAR}
+      </if>
+      <if test="address != null">
+        and address = #{address,jdbcType=VARCHAR}
+      </if>
+      <if test="createTimer != null">
+        and create_timer = #{createTimer,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createSource != null">
+        and create_source = #{createSource,jdbcType=VARCHAR}
+      </if>
+      <if test="createUserId != null">
+        and create_user_id = #{createUserId,jdbcType=INTEGER}
+      </if>
+      <if test="lastModefyTimer != null">
+        and last_modefy_timer = #{lastModefyTimer,jdbcType=TIMESTAMP}
+      </if>
+      <if test="lastModefyUserId != null">
+       and  last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+     </where>
+  </select>
 </mapper>

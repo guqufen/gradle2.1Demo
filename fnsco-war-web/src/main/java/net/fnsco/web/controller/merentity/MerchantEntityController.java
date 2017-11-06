@@ -1,24 +1,16 @@
 package net.fnsco.web.controller.merentity;
 
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
- 
 import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
- 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
- 
-import net.fnsco.bigdata.service.domain.MerchantCore;
-import net.fnsco.bigdata.service.domain.MerchantEntityDev;
-import net.fnsco.core.base.BaseController;
- 
 import com.beust.jcommander.Strings;
 
 import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
@@ -28,7 +20,6 @@ import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-
 import net.fnsco.core.base.ResultPageDTO;
 
 /**
@@ -63,15 +54,6 @@ public class MerchantEntityController extends BaseController {
 	 */
 	@RequestMapping(value = "/query", method = RequestMethod.GET)
 	@ResponseBody
-//	@RequiresPermissions(value = { "m:merchant:list" })
-	public ResultPageDTO<MerchantEntityDev> merchatInfoIndex(MerchantCore merchantCore, Integer currentPageNum,
-			Integer pageSize) {
-		logger.info("查询商户列表");
-//		return merchantCoreService.queryMerchantCore(merchantCore, currentPageNum, pageSize);
-		return null;
-	}
-	
-	
 	@RequiresPermissions(value = { "m:merentity:list" })
 	public ResultPageDTO<MerchantEntity> merchatEntityIndex(MerchantEntity merchantEntity, Integer currentPageNum,
 			Integer pageSize) {

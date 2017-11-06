@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import net.fnsco.bigdata.service.dao.master.MerchantEntityDevDao;
-import net.fnsco.bigdata.service.domain.MerchantEntityDev;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
+import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
@@ -27,7 +27,7 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 	@Autowired
 	private IntegralRuleDAO integralRuleDAO;
 	@Autowired
-	private MerchantEntityDevDao merchantEntityDao;
+	private MerchantEntityDao merchantEntityDao;
 
 	@Override
 	public List<IntegralRuleLog> queryListByCondition(IntegralRuleLog integralRuleLog) {
@@ -120,7 +120,7 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 
 		// 更新实体商户表里面的积分scores字段
 		// 先通过entityCode查找到更新前的scores，然后再将scores加上本次积分，接着更新积分
-		MerchantEntityDev merchantEntity = merchantEntityDao.selectByEntityInnerCode(integralRuleLog.getEntityInnerCode());
+		MerchantEntity merchantEntity = merchantEntityDao.selectByEntityInnerCode(integralRuleLog.getEntityInnerCode());
 //		merchantEntity.setScores(merchantEntity.getScores() + integralRule.getIntegral().longValue());// 积分相加，改为sql直接加，不然会出现线程安全问题
 		if(null != merchantEntity){
 		    merchantEntity.setLastModefyTimer(new Date());

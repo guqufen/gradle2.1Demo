@@ -21,7 +21,9 @@ public interface MerchantEntityCoreRefDao {
     int insertSelective(MerchantEntityCoreRef record);
 
     MerchantEntityCoreRef selectByPrimaryKey(Integer id);
+    
     List<MerchantEntityCoreRef> selectByInnerCode(@Param("innerCode") String innerCode);
+    
     int updateByPrimaryKeySelective(MerchantEntityCoreRef record);
     
     /**删除关系
@@ -45,4 +47,15 @@ public interface MerchantEntityCoreRefDao {
      * @return
      */
     int countByCondition(MerchantEntityCoreRef record);
+    
+    /**
+     * selectByInnerCode:(根据innercode查询关系)
+     *
+     * @param  @param innerCode
+     * @param  @return    设定文件
+     * @return MerchantEntityCoreRef    DOM对象
+     * @author tangliang
+     * @date   2017年11月2日 上午10:54:11
+     */
+    MerchantEntityCoreRef selectByInnerCodeLimit1(@Param("innerCode")String innerCode);
 }

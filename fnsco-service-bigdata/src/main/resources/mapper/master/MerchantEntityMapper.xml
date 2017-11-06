@@ -24,7 +24,12 @@
     card_type, card_num, status, create_timer, create_source, create_user_id, last_modefy_timer, 
     last_modefy_user_id,scores
   </sql>
- 
+ <!-- 店铺列表结果集 -->
+  <resultMap id="MerShopResultMap" type="net.fnsco.bigdata.api.dto.MerchantShopDTO" >
+    <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
+    <result column="merc_name" property="mercName" jdbcType="VARCHAR" />
+    <collection property="entitys" column="entity_inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantShopDao.selectByEntityInnerCode"/>
+  </resultMap>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
@@ -389,4 +394,107 @@
 				LIMIT 1
 			)
   </select>
+  <select id="selectByEntityInnerCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_entity
+    where entity_inner_code = #{entityInnerCode}
+  </select>
+  <!-- 查询店铺列表 -->
+  <select id="queryAllShopDetail" parameterType="java.lang.Integer" resultMap="MerShopResultMap">
+     SELECT
+	merc_name,
+	entity_inner_code
+	FROM
+		m_merchant_entity
+	WHERE
+		entity_inner_code IN (
+			SELECT
+				entity_inner_code
+			FROM
+				m_merchant_core_entity_ref
+			WHERE
+				inner_code IN (
+					SELECT
+						inner_code
+					FROM
+						m_merchant_user_rel
+					WHERE
+						app_user_id = #{userId}
+				)
+		)
+  </select>
+  <!-- 查询实体商户列表集合 -->
+  <select id="queryAllMerEntity" parameterType="java.lang.Integer" resultType="net.fnsco.bigdata.api.dto.MerEntityDTO" >
+    SELECT
+	merc_name as mercName,
+	entity_inner_code as entityInnerCode
+	FROM
+		m_merchant_entity
+	WHERE
+		entity_inner_code IN (
+			SELECT
+				entity_inner_code
+			FROM
+				m_merchant_core_entity_ref
+			WHERE
+				inner_code IN (
+					SELECT
+						inner_code
+					FROM
+						m_merchant_user_rel
+					WHERE
+						app_user_id = #{userId}
+				)
+		)
+  </select>
+  <update id="updateByEntityInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantEntity" >
+    update m_merchant_entity
+    <set >
+      <if test="entityInnerCode != null" >
+        entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mercName != null" >
+        merc_name = #{mercName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPerson != null" >
+        legal_person = #{legalPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonMobile != null" >
+        legal_person_mobile = #{legalPersonMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseNum != null" >
+        business_license_num = #{businessLicenseNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNum != null" >
+        card_num = #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTimer != null" >
+        create_timer = #{createTimer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createSource != null" >
+        create_source = #{createSource,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="lastModefyTimer != null" >
+        last_modefy_timer = #{lastModefyTimer,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModefyUserId != null" >
+        last_modefy_user_id = #{lastModefyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="scores != null" >
+        scores = scores + #{scores,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR}
+  </update>
+  
 </mapper>

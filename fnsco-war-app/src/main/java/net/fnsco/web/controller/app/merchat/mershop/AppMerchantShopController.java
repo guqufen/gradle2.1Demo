@@ -21,8 +21,8 @@ import net.fnsco.bigdata.api.constant.MerShopDTO;
 import net.fnsco.bigdata.api.dto.MerEntityDTO;
 import net.fnsco.bigdata.api.dto.MerchantShopDTO;
 import net.fnsco.bigdata.api.merchant.MerchantShopService;
-import net.fnsco.bigdata.service.dao.master.MerchantEntityDevDao;
-import net.fnsco.bigdata.service.domain.MerchantShopDev;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
+import net.fnsco.bigdata.service.domain.MerchantShop;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
@@ -40,7 +40,7 @@ import net.fnsco.order.service.domain.IntegralRuleLog;
 public class AppMerchantShopController extends BaseController {
 
 	@Autowired
-	private MerchantEntityDevDao merchantEntityDao;
+	private MerchantEntityDao merchantEntityDao;
 
 	@Autowired
 	private MerchantShopService merchantShopService;
@@ -116,7 +116,7 @@ public class AppMerchantShopController extends BaseController {
 			return ResultDTO.fail(BigdataConstant.APP_MER_ENTITY_INNERCODE_NULL);
 		}
 
-		MerchantShopDev recored = new MerchantShopDev();
+		MerchantShop recored = new MerchantShop();
 		recored.setAddress(merchant.getAddress());
 		recored.setArea(merchant.getArea());
 		recored.setEntityInnerCode(merchant.getEntityInnerCode());
@@ -156,7 +156,7 @@ public class AppMerchantShopController extends BaseController {
 			return ResultDTO.fail(BigdataConstant.APP_MER_SHOP_INNERCODE_NULL);
 		}
 
-		MerchantShopDev recored = new MerchantShopDev();
+		MerchantShop recored = new MerchantShop();
 		recored.setAddress(merchant.getAddress());
 		recored.setArea(merchant.getArea());
 		recored.setEntityInnerCode(merchant.getEntityInnerCode());

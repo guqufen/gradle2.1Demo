@@ -9,7 +9,7 @@ import java.util.Date;
  * @Date	 2017年10月27日 上午9:49:47
  */
 public class MerchantShop {
-    private Integer id;
+	private Integer id;
 
     private String entityInnerCode;
 
@@ -19,7 +19,7 @@ public class MerchantShop {
 
     private String area;
 
-    private String registAddress;
+    private String address;
 
     private Date createTimer;
 
@@ -73,12 +73,12 @@ public class MerchantShop {
         this.area = area == null ? null : area.trim();
     }
 
-    public String getRegistAddress() {
-        return registAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setRegistAddress(String registAddress) {
-        this.registAddress = registAddress == null ? null : registAddress.trim();
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
     }
 
     public Date getCreateTimer() {
