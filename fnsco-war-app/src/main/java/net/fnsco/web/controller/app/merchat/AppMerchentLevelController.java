@@ -72,7 +72,7 @@ public class AppMerchentLevelController extends BaseController{
 				merChantCoreDTO.setScores(new BigDecimal(0));
 				merChantCoreDTO.setMercLevel("v1");
 				merChantCoreDTO.setLevelName("普通商家");
-				merChantCoreDTO.setLevelIcon(prefix + "/integral/image/lv1.png");
+				merChantCoreDTO.setLevelIcon(prefix + "/app/integral/image/lv1.png");
 				continue;
 			}
 			SysConfig sysConfig = new SysConfig();
@@ -151,7 +151,7 @@ public class AppMerchentLevelController extends BaseController{
 					merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
 					BigDecimal b1 = new BigDecimal(sysConfig3.getValue());//获取下一级vip积分
 					merChantCoreDTO.setNextScores(b1);//设置下一级积分
-					merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()));//积分差值
+					merChantCoreDTO.setDistScores(new BigDecimal("1"));//积分差值为1
 					return success(merChantCoreDTO);
 				}
 				merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
