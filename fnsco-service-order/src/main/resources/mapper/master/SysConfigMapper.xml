@@ -181,7 +181,7 @@
     FROM sys_config
     WHERE type = #{type}
     AND CAST(value AS SIGNED) &gt;= CAST(#{value} AS SIGNED)<!-- 大于等于，适合v1-v6都是不高于 -->
-    ORDER BY CAST(value AS SIGNED) ASC limit 1
+    ORDER BY order_no ASC limit 1
   </select>
   <!-- 通过积分查询下一级等级信息(如果是最高等级会返回空) -->
   <select id="selectNextLevelByScores" parameterType="net.fnsco.order.service.domain.SysConfig"  resultMap="BaseResultMap">
@@ -190,6 +190,6 @@
     FROM sys_config
     WHERE type = #{type}
     AND CAST(value AS SIGNED) &gt; CAST(#{value} AS SIGNED)<!-- 大于，查询下一级 -->
-    ORDER BY CAST(value AS SIGNED) ASC limit 1,1
+    ORDER BY order_no ASC limit 1,1
   </select>
 </mapper>

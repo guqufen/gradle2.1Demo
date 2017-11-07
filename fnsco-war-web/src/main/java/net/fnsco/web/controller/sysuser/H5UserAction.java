@@ -17,11 +17,11 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.ConmmService;
+import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.VersionDTO;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
-import net.fnsco.order.service.domain.IntegralRuleLog;
 
 /**@desc 后台管理系统登录控制器
  * @author tangliang
@@ -47,7 +47,7 @@ public class H5UserAction extends BaseController {
         ResultDTO result = appUserService.insertSelective(appUserDTO);
         if (!Strings.isNullOrEmpty(appUserDTO.getEntityInnerCode())) {
             try {
-                integralRuleLogService.insert(appUserDTO.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_YQ02.getCode());
+                integralRuleLogService.insert(appUserDTO.getEntityInnerCode(), ConstantEnum.IntegralTypeEnum.CODE_YQ02.getCode());
             } catch (Exception ex) {
                 logger.error("邀请商户增加积分报错", ex);
             }
@@ -79,7 +79,7 @@ public class H5UserAction extends BaseController {
     @ApiOperation(value = "获取最新版本")
     @ResponseBody
     public ResultDTO getLastVersion() {
-        String appCode = AppTypeEnum.LKL.getCode();
+        String appCode = AppTypeEnum.SQB.getCode();
         VersionDTO sysVersionDTO = new VersionDTO();
         sysVersionDTO.setAppCode(appCode);
         sysVersionDTO.setAppType(1);

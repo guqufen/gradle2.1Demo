@@ -15,6 +15,7 @@ import net.fnsco.bigdata.api.dto.MerchantShopDTO;
 import net.fnsco.bigdata.api.dto.ShareIntegralDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
 import net.fnsco.order.service.domain.IntegralRuleLog;
 
@@ -50,23 +51,23 @@ public class AppShareIntegralController extends BaseController{
 			return ResultDTO.fail(BigdataConstant.APP_MER_ENTITY_INNERCODE_NULL);
 		}
 		
-		String ruleCode = "";
 		String shareType = merchant.getShareType();
+		String description = "";
 		if("00".equals(shareType)) {
-			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ07.getCode();
+			description = ConstantEnum.IntegralTypeEnum.CODE_YQ07.getName();
 		}else if("01".equals(shareType)) {
-			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ03.getCode();
+			description = ConstantEnum.IntegralTypeEnum.CODE_YQ03.getName();
 		}else if("02".equals(shareType)) {
-			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ04.getCode();
+			description = ConstantEnum.IntegralTypeEnum.CODE_YQ04.getName();
 		}else if("04".equals(shareType)) {
-			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ05.getCode();
+			description = ConstantEnum.IntegralTypeEnum.CODE_YQ05.getName();
 		}else if("05".equals(shareType)) {
-			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ06.getCode();
+			description = ConstantEnum.IntegralTypeEnum.CODE_YQ06.getName();
 		}else {
-			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ01.getCode();
+			description = ConstantEnum.IntegralTypeEnum.CODE_YQ01.getName();
 		}
 		
-		integralRuleLogService.insert(merchant.getEntityInnerCode(), ruleCode);
+		integralRuleLogService.insert(merchant.getEntityInnerCode(), ConstantEnum.IntegralTypeEnum.CODE_YQ01.getCode(),description);
 		
 		return ResultDTO.success();
 	}
