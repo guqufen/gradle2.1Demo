@@ -65,14 +65,14 @@ public class AppMerchentLevelController extends BaseController{
 //			dataTemp.addAll(datas);
 //		}
 
-		String prefix = env.getProperty("web.base.url");
+		String prefix = env.getProperty("app.base.url");
 		// 根据商户已有积分查询商户所属等级(v1-v7)
 		for (MerChantCoreDTO merChantCoreDTO : datas) {
 			if(merChantCoreDTO.getScores() == null){
 				merChantCoreDTO.setScores(new BigDecimal(0));
 				merChantCoreDTO.setMercLevel("v1");
 				merChantCoreDTO.setLevelName("普通商家");
-				merChantCoreDTO.setLevelIcon(prefix + "/integral/lv1.png");
+				merChantCoreDTO.setLevelIcon(prefix + "/app/integral/image/lv1.png");
 				continue;
 			}
 			SysConfig sysConfig = new SysConfig();
@@ -145,10 +145,13 @@ public class AppMerchentLevelController extends BaseController{
 				merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
 				SysConfig sysConfig3 = sysConfigService.selectNextLevelByScores(sysConfig);// 根据积分查询下一级等级
 				if(null == sysConfig3){//找出来的为空，说明是最高级会员，设置下一级vip数据全为0
-					merChantCoreDTO.setNextLevelName(sysConfig2.getRemark());//下一级vip名称
-					BigDecimal b1 = new BigDecimal(sysConfig2.getValue());//获取下一级vip积分
+					sysConfig.setName("v7");
+					sysConfig.setValue(null);
+					sysConfig3 = sysConfigService.selectByCondition(sysConfig);
+					merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
+					BigDecimal b1 = new BigDecimal(sysConfig3.getValue());//获取下一级vip积分
 					merChantCoreDTO.setNextScores(b1);//设置下一级积分
-					merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()));//积分差值
+					merChantCoreDTO.setDistScores(new BigDecimal("1"));//积分差值为1
 					return success(merChantCoreDTO);
 				}
 				merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
@@ -170,7 +173,7 @@ public class AppMerchentLevelController extends BaseController{
 		sysConfig.setType("11");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
 
-		String prefix = env.getProperty("web.base.url");
+		String prefix = env.getProperty("app.base.url");
 		for (SysConfig sysConfig2 : list) {
 			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
 		}
@@ -185,7 +188,7 @@ public class AppMerchentLevelController extends BaseController{
 		sysConfig.setType("10");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
 		
-		String prefix = env.getProperty("web.base.url");
+		String prefix = env.getProperty("app.base.url");
 		for (SysConfig sysConfig2 : list) {
 			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
 		}

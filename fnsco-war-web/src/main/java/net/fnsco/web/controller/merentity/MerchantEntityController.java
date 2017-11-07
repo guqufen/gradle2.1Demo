@@ -104,7 +104,7 @@ public class MerchantEntityController extends BaseController {
 	 */
 	@RequestMapping(value = "/doDelete", method = RequestMethod.POST)
 	@ResponseBody
-	@RequiresPermissions(value = { "m:merentity:save" })
+	@RequiresPermissions(value = { "m:merentity:delete" })
 	public ResultDTO<String> deleteById(Integer id){
 		if(id== null ) {
 			return ResultDTO.failForMessage("ID为空!无法删除");
