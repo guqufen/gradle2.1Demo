@@ -90,9 +90,9 @@ function queryBusinessParams(params)
        currentPageNum : this.pageNumber,
        pageSize : this.pageSize,
        status:'2',
-       legalPerson:$.trim($('#txt_search_legalPerson').val()),
-       mercName:$.trim($('#txt_search_merName').val()),
-       legalPersonMobile:$.trim($('#txt_search_phoneNum').val())  
+       legalPerson:$.trim($('#search_legalPerson').val()),
+       mercName:$.trim($('#search_merName').val()),
+       legalPersonMobile:$.trim($('#search_legalPersonMobile').val())  
    }
    return param;
 }
@@ -111,7 +111,7 @@ function responseBusinessHandler(res) {
         };
     }
 }
-//选择银行支行事件
+//选择事件
 $('#btn_select_business').click(function(){
   var select_data = $('#businessTable').bootstrapTable('getSelections')[0];
   if(!select_data){
