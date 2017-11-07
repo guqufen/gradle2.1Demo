@@ -15,10 +15,8 @@ import net.fnsco.finance.api.dto.FinanceBookKeepingDTO;
 import net.fnsco.finance.api.dto.FinanceQueryDTO;
 import net.fnsco.finance.api.dto.FinanceRecordDTO;
 import net.fnsco.finance.api.dto.IoTypeAndShopDTO;
-import net.fnsco.finance.api.dto.QueryDetailDTO;
 import net.fnsco.finance.api.finance.AppFinanceService;
 import net.fnsco.finance.service.domain.FinanceAccountBook;
-import net.fnsco.finance.service.domain.FinanceIoType;
 
 
 /**
@@ -78,5 +76,12 @@ public class AppFinanceController extends BaseController {
     	Integer id= financeAccountBook.getId();
     	ResultDTO dayResultPage = appFinanceService.queryFinanceDetailsById(id);
         return dayResultPage;
+    } 
+    
+    @RequestMapping(value = "/deleteFinanceById" , method = RequestMethod.POST)
+    @ApiOperation(value = "删除记账")
+    public ResultDTO deleteFinanceById(@RequestBody FinanceAccountBook financeAccountBook) {
+    	Integer id= financeAccountBook.getId();
+    	return appFinanceService.deleteFinanceById(id);
     } 
 }

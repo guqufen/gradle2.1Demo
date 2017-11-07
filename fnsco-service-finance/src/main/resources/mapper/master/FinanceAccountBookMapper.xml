@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="net.fnsco.finance.service.domain.FinanceAccountBook" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="account_id" property="accountId" jdbcType="VARCHAR" />
-    <result column="cash" property="cash" jdbcType="DECIMAL" />
+    <result column="cash" property="cashDec" jdbcType="DECIMAL" />
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="io_type_code" property="ioTypeCode" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
@@ -12,10 +12,11 @@
     <result column="last_modefy_time" property="lastModefyTime" jdbcType="TIMESTAMP" />
     <result column="happen_date" property="happenDate" jdbcType="VARCHAR" />
     <result column="ico_url" property="icoUrl" jdbcType="VARCHAR" />
+    <result column="ico_url_gray" property="icoUrlGray" jdbcType="VARCHAR" />
     <result column="name" property="ioTypeName" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="AmountResultMap" type="net.fnsco.finance.service.domain.FinanceAccountBook" >
-    <result column="cash" property="cash" jdbcType="DECIMAL" />
+    <result column="cash" property="cashDec" jdbcType="DECIMAL" />
     <result column="type" property="type" jdbcType="INTEGER" />
   </resultMap>
   <resultMap id="EntityResultMap" type="net.fnsco.finance.api.dto.AppUserEntityDTO" >
@@ -41,20 +42,21 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <resultMap id="DetailResultMap" type="net.fnsco.finance.api.dto.FinanceDetailDTO" >
+  	<id column="id" property="id" jdbcType="INTEGER" />
   	<result column="shop_inner_code" property="shopInnerCode" jdbcType="VARCHAR" />
     <result column="shop_name" property="shopName" jdbcType="VARCHAR" />
     <result column="happen_date" property="happenDate" jdbcType="VARCHAR" />
     <result column="io_type_code" property="ioTypeCode" jdbcType="VARCHAR" />
-    <result column="cash" property="cash" jdbcType="DECIMAL" />
+    <result column="cash" property="cashDec" jdbcType="DECIMAL" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="ico_url" property="icoUrl" jdbcType="VARCHAR" />
     <result column="name" property="ioTypeName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    ACB.id,ACB.type,ACB.io_type_code,ACB.cash,ACB.happen_date,IT.ico_url,IT.name
+    ACB.id,ACB.type,ACB.io_type_code,ACB.cash,ACB.happen_date,IT.ico_url,IT.ico_url_gray,IT.name
   </sql>
   <sql id="Detail_Column_List" >
-    SS.shop_inner_code,SS.shop_name,T.happen_date,
+    SS.shop_inner_code,SS.shop_name,T.happen_date,T.id,
 	T.type,T.io_type_code,T.cash,T.remark,IT.ico_url,IT.name
   </sql>
    
@@ -179,6 +181,7 @@
 		m_merchant_shop AS SS,
 	(
 		SELECT
+			id,
 			account_id,
 			happen_date,
 			type,
@@ -238,7 +241,7 @@
 		AND ER.entity_inner_code=E.entity_inner_code
   		AND R.app_user_id = #{id,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteFinanceById" parameterType="java.lang.Integer" >
     delete from f_finance_account_book
     where id = #{id,jdbcType=INTEGER}
   </delete>

@@ -1,6 +1,5 @@
 package net.fnsco.finance.api.dto;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import net.fnsco.core.base.DTO;
@@ -17,9 +16,13 @@ public class FinanceEveryDayDTO extends DTO {
 	
 	private String week;//记账星期
 	
-	private	BigDecimal spending;//记账支出
+	private	String spending;//记账支出
 	
-	private BigDecimal revenue;//记账收入
+	private String revenue;//记账收入
+	
+	private	String spendingStr;//记账支出字符串
+	
+	private String revenueStr;//记账收入字符串
 	
 	private List<FinanceAccountBook> accountBook;//每项收支信息
 
@@ -47,19 +50,36 @@ public class FinanceEveryDayDTO extends DTO {
 		this.week = week;
 	}
 
-	public BigDecimal getSpending() {
+	public String getSpendingStr() {
+		return spendingStr;
+	}
+
+	public void setSpendingStr(String spendingStr) {
+		this.spendingStr = spendingStr;
+	}
+
+	public String getRevenueStr() {
+		return revenueStr;
+	}
+
+	public void setRevenueStr(String revenueStr) {
+		this.revenueStr = revenueStr;
+	}
+
+
+	public String getSpending() {
 		return spending;
 	}
 
-	public void setSpending(BigDecimal spending) {
+	public void setSpending(String spending) {
 		this.spending = spending;
 	}
 
-	public BigDecimal getRevenue() {
+	public String getRevenue() {
 		return revenue;
 	}
 
-	public void setRevenue(BigDecimal revenue) {
+	public void setRevenue(String revenue) {
 		this.revenue = revenue;
 	}
 

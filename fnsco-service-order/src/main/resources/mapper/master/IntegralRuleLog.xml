@@ -46,7 +46,7 @@
 				AND create_time = #{createTime}
 			</if>
 		</where>
-		order by code
+		order by rule_code
 	</select>
 
 	<!-- 通过实体商户号entity_inner_code、积分规则代码rule_code和记分日期integral_date查找某天某类总共积分 
