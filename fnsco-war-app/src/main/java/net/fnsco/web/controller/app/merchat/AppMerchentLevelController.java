@@ -133,16 +133,11 @@ public class AppMerchentLevelController extends BaseController{
 					sysConfig.setName("v7");
 					sysConfig.setValue(null);
 					sysConfig3 = sysConfigService.selectByCondition(sysConfig);
-					merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
-					BigDecimal b1 = new BigDecimal(sysConfig3.getValue());//获取下一级vip积分
-					merChantCoreDTO.setNextScores(b1);//设置下一级积分
-					merChantCoreDTO.setDistScores(new BigDecimal("1"));//积分差值为1
-					return success(merChantCoreDTO);
 				}
 				merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
-				BigDecimal b1 = new BigDecimal(sysConfig2.getValue());//获取下一级vip积分
-				merChantCoreDTO.setNextScores(b1);//设置下一级积分
-				merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()).add(new BigDecimal("1")));//积分差值
+				BigDecimal b1 = new BigDecimal(sysConfig3.getValue());//获取下一级vip积分
+				merChantCoreDTO.setNextScores(b1.add(new BigDecimal("1")));//设置下一级积分,要加1
+				merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()).add(new BigDecimal("1")));//积分差值,相减然后加1
 			}
 		}
 
