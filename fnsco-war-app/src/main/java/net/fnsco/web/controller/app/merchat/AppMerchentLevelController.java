@@ -145,8 +145,11 @@ public class AppMerchentLevelController extends BaseController{
 				merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
 				SysConfig sysConfig3 = sysConfigService.selectNextLevelByScores(sysConfig);// 根据积分查询下一级等级
 				if(null == sysConfig3){//找出来的为空，说明是最高级会员，设置下一级vip数据全为0
-					merChantCoreDTO.setNextLevelName(sysConfig2.getRemark());//下一级vip名称
-					BigDecimal b1 = new BigDecimal(sysConfig2.getValue());//获取下一级vip积分
+					sysConfig.setName("v7");
+					sysConfig.setValue(null);
+					sysConfig3 = sysConfigService.selectByCondition(sysConfig);
+					merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
+					BigDecimal b1 = new BigDecimal(sysConfig3.getValue());//获取下一级vip积分
 					merChantCoreDTO.setNextScores(b1);//设置下一级积分
 					merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()));//积分差值
 					return success(merChantCoreDTO);
