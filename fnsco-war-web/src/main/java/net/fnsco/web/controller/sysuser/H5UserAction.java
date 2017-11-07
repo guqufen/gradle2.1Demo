@@ -79,7 +79,7 @@ public class H5UserAction extends BaseController {
     @ApiOperation(value = "获取最新版本")
     @ResponseBody
     public ResultDTO getLastVersion() {
-        String appCode = AppTypeEnum.LKL.getCode();
+        String appCode = AppTypeEnum.SQB.getCode();
         VersionDTO sysVersionDTO = new VersionDTO();
         sysVersionDTO.setAppCode(appCode);
         sysVersionDTO.setAppType(1);
