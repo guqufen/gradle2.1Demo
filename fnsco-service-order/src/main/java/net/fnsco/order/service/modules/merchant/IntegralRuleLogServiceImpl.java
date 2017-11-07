@@ -167,7 +167,7 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 		if (StringUtils.isNotBlank(description)) {
 			integralRuleLog.setDescription(description);// 不为空，则取其值
 		} else {
-			integralRuleLog.setDescription(IntegralTypeEnum.getNameByCode(integralRule.getCode()));// 设置积分描述,设置为枚举里面的
+			integralRuleLog.setDescription(integralRule.getDescription());// 设置积分描述
 		}
 		integralRuleLog.setCreateTime(new Date());// 创建时间
 
