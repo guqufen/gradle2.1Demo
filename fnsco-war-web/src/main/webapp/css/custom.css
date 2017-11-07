@@ -141,7 +141,7 @@ table td{
     top: 0;
 }
 	/*下一步按钮*/
-	a.nextBtn,a.saveBtn{
+	a.nextBtn,a.saveBtn,a.staticBtn{
 		margin: 10px auto;
 		width: 20%;
 		height: 35px;
