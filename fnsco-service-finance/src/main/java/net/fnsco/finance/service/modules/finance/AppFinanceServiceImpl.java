@@ -63,6 +63,9 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 		//通过appUserId查询商户信息
 		String id = financeQuery.getAppUserId();
         List<AppUserEntityDTO> entityList = financeAccountBookDao.queryEntityList(id);
+        if(entityList.size()==0) {
+        	return ResultDTO.fail("没有绑定商户");
+        }
 		financeBookKeepingDTO.setAppUserEntityDTOList(entityList);
 		String nullEntityInnerCode=null;
 		String nullMercName=null;
