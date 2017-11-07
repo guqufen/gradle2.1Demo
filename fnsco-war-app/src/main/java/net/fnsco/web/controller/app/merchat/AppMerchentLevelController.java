@@ -50,21 +50,6 @@ public class AppMerchentLevelController extends BaseController{
 
 		List<MerChantCoreDTO> datas = merchantService.getMerchantsScoresByUserId(merchantUserRel.getAppUserId());
 
-		//innerCode 不为空，则将需要返回的数据排序(将次innerCOde定为第一个)
-//		List<MerChantCoreDTO> dataTemp = Lists.newArrayList();
-//		List<MerChantCoreDTO> dataTemps1 = Lists.newArrayList();
-//		if(StringUtils.isNoneBlank(merchantUserRel.getInnerCode())){
-//			MerChantCoreDTO merChantCoreDTO = new MerChantCoreDTO();
-//			for (MerChantCoreDTO merChantCore : datas) {
-//				if(merChantCore.getInnerCode().equals(merchantUserRel.getInnerCode())){
-//					dataTemp.add(merChantCore);
-//					datas.remove(merChantCoreDTO);
-//				}
-//				dataTemps1.add(0,merChantCoreDTO);
-//			}
-//			dataTemp.addAll(datas);
-//		}
-
 		String prefix = env.getProperty("app.base.url");
 		// 根据商户已有积分查询商户所属等级(v1-v7)
 		for (MerChantCoreDTO merChantCoreDTO : datas) {
@@ -122,9 +107,9 @@ public class AppMerchentLevelController extends BaseController{
 			merChantCoreDTO.setScores(new BigDecimal(0));
 			merChantCoreDTO.setMercLevel("v1");
 			merChantCoreDTO.setLevelName("普通商家");
-			merChantCoreDTO.setNextScores(new BigDecimal(1500));
+			merChantCoreDTO.setNextScores(new BigDecimal(501));
 			merChantCoreDTO.setNextLevelName("青铜商家");
-			merChantCoreDTO.setDistScores(new BigDecimal(1500));
+			merChantCoreDTO.setDistScores(new BigDecimal(501));
 		} else {
 			SysConfig sysConfig = new SysConfig();
 			sysConfig.setType("11");
@@ -132,7 +117,7 @@ public class AppMerchentLevelController extends BaseController{
 			//如果积分大于50000，则为最高等级v7，需要通过type和name(v7)来查询
 			if(merChantCoreDTO.getScores().longValue() > 50000L){
 				sysConfig.setName("v7");
-				SysConfig sysConfig2 = sysConfigService.selectByCondition(sysConfig);
+				SysConfig sysConfig2 = sysConfigService.selectByCondition(sysConfig);//当前等级
 				merChantCoreDTO.setMercLevel(sysConfig2.getName());// vip等级：v1-v7
 				merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
 				merChantCoreDTO.setNextLevelName(sysConfig2.getRemark());//下一级名称
@@ -157,7 +142,7 @@ public class AppMerchentLevelController extends BaseController{
 				merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
 				BigDecimal b1 = new BigDecimal(sysConfig2.getValue());//获取下一级vip积分
 				merChantCoreDTO.setNextScores(b1);//设置下一级积分
-				merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()));//积分差值
+				merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()).add(new BigDecimal("1")));//积分差值
 			}
 		}
 

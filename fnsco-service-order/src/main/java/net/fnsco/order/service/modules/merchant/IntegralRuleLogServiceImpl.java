@@ -12,7 +12,6 @@ import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
-import net.fnsco.core.utils.StringUtil;
 import net.fnsco.order.api.constant.ConstantEnum.IntegralTypeEnum;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
 import net.fnsco.order.service.dao.master.IntegralRuleDAO;
