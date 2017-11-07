@@ -25,8 +25,8 @@ import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantShop;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
-import net.fnsco.order.service.domain.IntegralRuleLog;
 
 /**
  * @desc 商户店铺管理接口控制器
@@ -131,7 +131,7 @@ public class AppMerchantShopController extends BaseController {
 		int res = merchantShopService.insertSelective(recored);
 		if (res > 0) {
 			//进行积分处理
-			integralRuleLogService.insert(merchant.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_LR.getCode());
+			integralRuleLogService.insert(merchant.getEntityInnerCode(), ConstantEnum.IntegralTypeEnum.CODE_LR.getCode());
 			return ResultDTO.successForSubmit();
 		}
 		return ResultDTO.fail();

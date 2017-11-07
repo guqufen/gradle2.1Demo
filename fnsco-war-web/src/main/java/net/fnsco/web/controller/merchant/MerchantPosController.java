@@ -22,8 +22,8 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
+import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
-import net.fnsco.order.service.domain.IntegralRuleLog;
 import net.fnsco.web.controller.merchant.jo.MerchantChannelJO;
 import net.fnsco.web.controller.merchant.jo.MerchantPosJO;
 import net.fnsco.web.controller.merchant.jo.PosJO;
@@ -127,7 +127,7 @@ public class MerchantPosController extends BaseController {
     				if(!Strings.isNullOrEmpty(innerCode)) {
     					MerchantEntityCoreRef mecr = merchantEntityCoreRefDao.selectByInnerCodeLimit1(innerCode);
     					if(null != mecr && !Strings.isNullOrEmpty(mecr.getEntityInnerCode())) {
-    						integralRuleLogService.insert(mecr.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_SQ.getCode());
+    						integralRuleLogService.insert(mecr.getEntityInnerCode(), ConstantEnum.IntegralTypeEnum.CODE_SQ.getCode());
     					}
     				}
     				
