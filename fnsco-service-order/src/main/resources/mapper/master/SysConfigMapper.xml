@@ -189,7 +189,7 @@
     <include refid="Base_Column_List" />
     FROM sys_config
     WHERE type = #{type}
-    AND CAST(value AS SIGNED) &gt; CAST(#{value} AS SIGNED)<!-- 大于，查询下一级 -->
+    AND CAST(value AS SIGNED) &gt;= CAST(#{value} AS SIGNED)<!-- 大于，查询下一级 -->
     ORDER BY order_no ASC limit 1,1
   </select>
 </mapper>
