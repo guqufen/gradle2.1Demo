@@ -140,7 +140,7 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 				//循环处理记账支出收入
 				for(FinanceAccountBook data : datasList) {
 					String url = data.getIcoUrlGray();
-					String prefix = env.getProperty("web.base.url");
+					String prefix = env.getProperty("app.base.url");
 					String icoUrl = prefix+url;
 					data.setIcoUrl(icoUrl);
 					if(data.getType()==0) {
@@ -206,7 +206,7 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 		List<FinanceIoType> ioType= financeAccountBookDao.queryIoTypeList();
 		for(FinanceIoType io : ioType) {
 			String url = io.getIcoUrl();
-			String prefix = env.getProperty("web.base.url");
+			String prefix = env.getProperty("app.base.url");
 			String icoUrl = prefix+url;
 			io.setIcoUrl(icoUrl);
 		}
@@ -300,7 +300,7 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 	public ResultDTO<FinanceDetailDTO> queryFinanceDetailsById(Integer id) {
 		FinanceDetailDTO financeDetail=financeAccountBookDao.queryFinanceDetail(id);
 		String url = financeDetail.getIcoUrl();
-		String prefix = env.getProperty("web.base.url");
+		String prefix = env.getProperty("app.base.url");
 		String icoUrl = prefix+url;
 		financeDetail.setIcoUrl(icoUrl);
 		if(financeDetail.getType()==0) {
