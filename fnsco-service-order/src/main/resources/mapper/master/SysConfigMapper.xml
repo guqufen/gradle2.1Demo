@@ -180,7 +180,7 @@
     <include refid="Base_Column_List" />
     FROM sys_config
     WHERE type = #{type}
-    AND CAST(value AS SIGNED) &gt;= CAST(#{value} AS SIGNED)<!-- 大于等于 -->
+    AND CAST(value AS SIGNED) &gt;= CAST(#{value} AS SIGNED)<!-- 大于等于，适合v1-v6都是不高于 -->
     ORDER BY CAST(value AS SIGNED) ASC limit 1
   </select>
   <!-- 通过积分查询下一级等级信息(如果是最高等级会返回空) -->
