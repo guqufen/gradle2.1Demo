@@ -132,7 +132,7 @@ public class AppMerchantShopController extends BaseController {
 		if (res > 0) {
 			//进行积分处理
 			integralRuleLogService.insert(merchant.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_LR.getCode());
-			return ResultDTO.success();
+			return ResultDTO.successForSubmit();
 		}
 		return ResultDTO.fail();
 	}
@@ -166,7 +166,7 @@ public class AppMerchantShopController extends BaseController {
 		recored.setShopInnerCode(merchant.getShopInnerCode());
 		int res = merchantShopService.updateByShopInnerCodeSelective(recored);
 		if (res > 0) {
-			return ResultDTO.success();
+			return ResultDTO.successForSubmit();
 		}
 		return ResultDTO.fail();
 	}
