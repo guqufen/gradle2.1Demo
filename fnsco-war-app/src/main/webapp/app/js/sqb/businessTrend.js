@@ -10,6 +10,13 @@ function max(data) {
   max=Math.ceil(max*1.1);
 	return max;
 }
+//筛选之后格式化显示的时间
+function changeTime(time){
+  var timeYear=time.substring(0,4);
+  var timeMonth=time.substring(5,7);
+  var timeDay=time.substring(8,10);
+  return timeYear+'年'+timeMonth+'月'+timeDay+'日';
+}
 /*
 * 初始化echarts图表
 */
@@ -101,57 +108,106 @@ function changeTwoDecimal(x) {
     return s_x;
 }
 //ajax请求
-trendData(getUrl("tokenId"),getUrl("userId"),null,null,null);
+console.log(decodeURI("%E6%9D%AD%E5%B7%9E"));
+trendData(getUrl("tokenId"),getUrl("userId"),getUrl("startTime"),getUrl("endTime"),getUrl("innerCode"));
+if(!getUrl("innerCode") || getUrl("innerCode")==''){
+  $(".filter-name").html("全部商铺");
+}else{
+  $(".filter-name").html(decodeURI(getUrl("innerCodeName")));
+}
 var titleName="营业额";
 var titleName1="订单数";
+var startDate;
+var endDate;
 function trendData(tokenId,userId,startDate,endDate,innerCode){
-  $.ajax({
-    url:'tradeReport/queryBusinessTrends?timer='+new Date().getTime(),
-    dataType : "json",
-    type:'POST',
-    headers: {
-      'tokenId': tokenId,
-      'identifier': userId
-    },
-    data:{
-      "userId":userId,
-      "startDate":startDate,
-      "endDate":endDate,
-      "innerCode":innerCode
-    },
-    success:function(data){
-      console.log(data);
-      $("#start-time").val(data.data.startDate);
-      $("#end-time").val(data.data.endDate);
-      $(".filter-startTime").html(changeTime(data.data.startDate));
-      $(".filter-endTime").html(changeTime(data.data.endDate));
-      /*获取生成图表的参数*/
-      $(".trend-total-sum-num").html(changeTwoDecimal(data.data.turnoverTotal/100));
-      $(".trend-total-order-num").html(data.data.orderNumTotal);
-      $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice/100));
-      var dataOrderNum=new Array();
-      var dataTurnover=new Array();
-      var dataTradeDate=new Array();
-      var returnDatd=data.data.tradeDayData;
-      for(var i=0;i<returnDatd.length;i++){
-        dataTradeDate.push(data.data.tradeDayData[i].tradeDate.substring(5,10));
-        dataOrderNum.push(data.data.tradeDayData[i].orderNum);
-        dataTurnover.push(data.data.tradeDayData[i].turnover/100);
+  //显示遮罩
+  $('#loader').shCircleLoader({color: "#fff"});
+  if(!tokenId || !userId){
+    mui.alert('获取用户信息失败');
+  }else{
+
+    var jsonstr = {
+      'userId': userId
+    };
+    var params = JSON.stringify(jsonstr);
+    $.ajax({
+      url:'../app/merchant/getShopOwnerMerChant?timer='+new Date().getTime(),
+      contentType: "application/json",
+      dataType : "json",
+      type:'POST',
+      headers:  {
+        'tokenId': tokenId,
+        'identifier': userId
+      },
+      data:params,
+      success:function(data){
+        console.log(data);
+        if(data.data.length==1){
+          $(".filter-name").html(data.data[0].merName);
+        }else{
+          $(".filter-name").html("全部商铺");
+        }
       }
-      console.log(dataTurnover);
-      //生成图表
-      chart(dataTradeDate,max(dataTurnover),dataTurnover,titleName);
-      /*点击切换图表*/
-      var amountBtn=$("#amount-chart-btn")[0];
-      var moneyBtn=$("#money-chart-btn")[0];
-      amountBtn.addEventListener('tap',function() {//按交易笔数
+    });
+    $.ajax({
+      url:'../app/tradeReport/queryBusinessTrends?timer='+new Date().getTime(),
+      dataType : "json",
+      type:'POST',
+      headers: {
+        'tokenId': tokenId,
+        'identifier': userId
+      },
+      data:{
+        "userId":userId,
+        "startDate":startDate,
+        "endDate":endDate,
+        "innerCode":innerCode
+      },
+      success:function(data){
+        console.log(data);
+        startDate=data.data.startDate;
+        endDate=data.data.endDate;
+        $("#start-time").val(data.data.startDate);
+        $("#end-time").val(data.data.endDate);
+        $(".filter-startTime").html(changeTime(data.data.startDate));
+        $(".filter-endTime").html(changeTime(data.data.endDate));
+        /*获取生成图表的参数*/
+        $(".trend-total-sum-num").html(changeTwoDecimal(data.data.turnoverTotal/100));
+        $(".trend-total-order-num").html(data.data.orderNumTotal);
+        $(".trend-total-average-num").html(changeTwoDecimal(data.data.orderPrice/100));
+        var dataOrderNum=new Array();
+        var dataTurnover=new Array();
+        var dataTradeDate=new Array();
+        var returnDatd=data.data.tradeDayData;
+        for(var i=0;i<returnDatd.length;i++){
+          dataTradeDate.push(data.data.tradeDayData[i].tradeDate.substring(5,10));
+          dataOrderNum.push(data.data.tradeDayData[i].orderNum);
+          dataTurnover.push(data.data.tradeDayData[i].turnover/100);
+        }
+        console.log(dataTurnover);
+        //生成图表
         chart(dataTradeDate,max(dataTurnover),dataTurnover,titleName);
-      })
-      moneyBtn.addEventListener('tap',function() {//按交易金额
-        chart(dataTradeDate,max(dataOrderNum),dataOrderNum,titleName1);
-      })
-    }
-  });
+        /*点击切换图表*/
+        var amountBtn=$("#amount-chart-btn")[0];
+        var moneyBtn=$("#money-chart-btn")[0];
+        amountBtn.addEventListener('tap',function() {//按交易笔数
+          chart(dataTradeDate,max(dataTurnover),dataTurnover,titleName);
+        })
+        moneyBtn.addEventListener('tap',function() {//按交易金额
+          chart(dataTradeDate,max(dataOrderNum),dataOrderNum,titleName1);
+        })
+        //筛选页面
+        $(".filter-btn").click(function(){
+          window.location.href='filtrate.html?back=true&userId='+getUrl("userId")+'&tokenId='+getUrl("tokenId")+'&startDate='+startDate+'&endDate='+endDate+'&type=1';
+        })
+      },
+      error: function(e) {
+        mui.toast(e.status,{ duration:'long', type:'div' })
+      } 
+    });
+    //隐藏遮罩
+    $(".mui-backdrop1").hide();
+  }
 }
 //获取URL携带的参数
 function getUrl(name){
@@ -171,34 +227,3 @@ $(".filter-ok-btn").click(function(){
   }
   trendData(getUrl("tokenId"),getUrl("userId"),startTime,endTime,innerCode);
 })
-//获取商户列表
-function getShopList(tokenId,userId){
-  var jsonstr = {
-      'userId': userId
-    };
-  var params = JSON.stringify(jsonstr);
-  $.ajax({
-    url:'merchant/getShopOwnerMerChant?timer='+new Date().getTime(),
-    contentType: "application/json",
-    dataType : "json",
-    type:'POST',
-    headers:  {
-      'tokenId': tokenId,
-      'identifier': userId
-    },
-    data:params,
-    success:function(data){
-      var shopList=$("#shop-list");
-      if(data.data.length>1){
-        shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部商铺</a></li>');
-        for(var i=0;i<data.data.length;i++){
-          shopList.append('<li class="mui-table-view-cell" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
-        }
-      }else if(data.data.length==1){
-        $(".filter-name").html(data.data[0].merName);
-        shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[0].innerCode+'"><a class="mui-navigate-right">'+data.data[0].merName+'</a></li>');
-      }
-    }
-  });
-}
-getShopList(getUrl("tokenId"),getUrl("userId"));
