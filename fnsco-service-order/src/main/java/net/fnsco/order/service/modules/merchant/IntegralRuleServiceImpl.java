@@ -13,11 +13,11 @@ import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
 import net.fnsco.order.api.merchant.IntegralRuleService;
 import net.fnsco.order.service.dao.master.IntegralRuleDAO;
 import net.fnsco.order.service.domain.IntegralRule;
-import net.fnsco.order.service.domain.IntegralRuleLog;
 
 @Service
 public class IntegralRuleServiceImpl extends BaseService implements IntegralRuleService{
@@ -90,9 +90,9 @@ public class IntegralRuleServiceImpl extends BaseService implements IntegralRule
 			logger.info("id为"+tradeData.getId()+"流水交易金额为"+tradeData.getAmt()+"统计积分");
 			MerchantEntityCoreRef mcr = merchantEntityCoreRefDao.selectByInnerCodeLimit1(tradeData.getInnerCode());
 			if(amtLong > firstLevel && amtLong <secLevel) {
-				integralRuleLogService.insert(mcr.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_POS01.getCode());
+				integralRuleLogService.insert(mcr.getEntityInnerCode(), ConstantEnum.IntegralTypeEnum.CODE_POS01.getCode());
 			}else if(amtLong >= secLevel) {
-				integralRuleLogService.insert(mcr.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_POS02.getCode());
+				integralRuleLogService.insert(mcr.getEntityInnerCode(), ConstantEnum.IntegralTypeEnum.CODE_POS02.getCode());
 			}
 		}
 	}
