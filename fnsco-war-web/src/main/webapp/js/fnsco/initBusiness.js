@@ -4,6 +4,7 @@ function selectBusiness(num){
   // if(num=null){//新增
   //   $("#entityMerName").addClass('active');
   // }else{
+  	queryEvent('businessTable');
     $("#entityMerName"+num).addClass('active');
   // }
   $("body").addClass('modal-open-custom');

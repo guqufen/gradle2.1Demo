@@ -12,12 +12,14 @@ import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.StringUtil;
+import net.fnsco.order.api.constant.ConstantEnum.IntegralTypeEnum;
 import net.fnsco.order.api.merchant.IntegralRuleLogService;
 import net.fnsco.order.service.dao.master.IntegralRuleDAO;
 import net.fnsco.order.service.dao.master.IntegralRuleLogDAO;
 import net.fnsco.order.service.domain.IntegralRule;
 import net.fnsco.order.service.domain.IntegralRuleLog;
-import net.fnsco.order.service.domain.IntegralRuleLog.IntegralTypeEnum;
+
 
 @Service
 public class IntegralRuleLogServiceImpl extends BaseService implements IntegralRuleLogService{
@@ -48,20 +50,67 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 	@Override
 	@Transactional
 	public void insert(String entityInnerCode, String ruleCode) {
+		insert(entityInnerCode, ruleCode, null);
 
-		//判断如果参数有一个为空
-		if(StringUtils.isBlank(entityInnerCode) || StringUtils.isBlank(ruleCode)){
-			logger.error("入参为空：entityInnerCode=["+entityInnerCode+"],ruleCode=["+ruleCode+"]");
+	}
+
+	/**
+	 * 查询积分,根据实体商户号查询邀请新商家成功的积分信息
+	 * 
+	 * @param integralRuleLog
+	 * @return
+	 */
+	public List<IntegralRuleLog> queryListByEntityInnerCode(String entityInnerCode) {
+		IntegralRuleLog integralRuleLog2 = new IntegralRuleLog();
+		integralRuleLog2.setEntityInnerCode(entityInnerCode);// 设置实体商户号
+		integralRuleLog2.setRuleCode("004");// 设置规则代码
+		return integralRuleLogDAO.queryListByCondition(integralRuleLog2);
+	}
+
+	// 特殊处理，针对有针对分享链接(传入描述)
+	@Transactional
+	public void insert(String entityInnerCode, String ruleCode, String description) {
+
+		// 判断如果参数有一个为空
+		if (StringUtils.isBlank(entityInnerCode) || StringUtils.isBlank(ruleCode)) {
+			logger.error("入参为空：entityInnerCode=[" + entityInnerCode + "],ruleCode=[" + ruleCode + "]");
 			return;
 		}
-		
+
+		IntegralRuleLog integralRuleLog = dealInsertData(entityInnerCode, ruleCode, description);
+		// 返回为空，则不用更新
+		if (null == integralRuleLog) {
+			return;
+		}
+		integralRuleLogDAO.insert(integralRuleLog);// 存入数据库
+
+		// 更新实体商户表里面的积分scores字段
+		// 先通过entityCode查找到更新前的scores，然后再将scores加上本次积分，接着更新积分
+		MerchantEntity merchantEntity = merchantEntityDao.selectByEntityInnerCode(integralRuleLog.getEntityInnerCode());
+		if (null != merchantEntity) {
+			merchantEntity.setLastModefyTimer(new Date());
+			merchantEntityDao.updateByEntityInnerCode(merchantEntity);// 通过实体商户号更新
+		}
+	}
+
+	// 处理插日志表公共部分，比如判断
+	public IntegralRuleLog dealInsertData(String entityInnerCode, String ruleCode, String description) {
+
 		IntegralRuleLog integralRuleLog = new IntegralRuleLog();
 		integralRuleLog.setEntityInnerCode(entityInnerCode);
 		integralRuleLog.setRuleCode(ruleCode);
 
 		// 通过code查找积分数值
 		IntegralRule integralRule = integralRuleDAO.queryIntegralByCode(ruleCode);
-		String type = IntegralTypeEnum.getDataByCode(ruleCode);// 通过code查找类型，封顶/计次/其他
+		if(null == integralRule){
+			return null;
+		}
+
+		// 通过code查找积分类型
+		String type = IntegralTypeEnum.getTypeByCode(integralRule.getCode());// 通过code查找类型，封顶/计次/其他
+		if(null == type){
+			return null;
+		}
 
 		if ("1" == type) {// type=1表示封顶,code为001,002,007时
 
@@ -77,11 +126,11 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 			if (integralSum != null) {
 				if ("007".equals(integralRuleLog.getRuleCode())) {// code=007表示记账，封顶10分
 					if ((integralSum + integralRule.getIntegral()) > 10) {// pos收银，封顶100分
-						return;
+						return null;
 					}
 				} else {
 					if ((integralSum + integralRule.getIntegral()) > 100) {// pos收银，封顶100分
-						return;
+						return null;
 					}
 				}
 			}
@@ -95,7 +144,7 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 			Integer integralCount = integralRuleLogDAO.queryCountbyCondition(integralRuleLog2);
 
 			if (integralCount > 0) {
-				return;
+				return null;
 			}
 		} else if ("3" == type) {// type=3表示所有前3次，code为006
 
@@ -106,7 +155,7 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 			Integer integralCount = integralRuleLogDAO.queryCountbyCondition(integralRuleLog2);
 
 			if (integralCount >= 3) {
-				return;
+				return null;
 			}
 		}
 
@@ -114,30 +163,15 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 		integralRuleLog.setRuleCode(integralRule.getCode());// 规则积分代码
 		integralRuleLog.setIntegral(integralRule.getIntegral());// 设置积分
 		integralRuleLog.setIntegralDate(DateUtils.getDateStrYYYYMMDD(new Date()));// 设置积分日期
-		integralRuleLog.setDescription(integralRule.getDescription());// 设置积分描述
-		integralRuleLog.setCreateTime(new Date());// 创建时间
-		integralRuleLogDAO.insert(integralRuleLog);// 存入数据库
-
-		// 更新实体商户表里面的积分scores字段
-		// 先通过entityCode查找到更新前的scores，然后再将scores加上本次积分，接着更新积分
-		MerchantEntity merchantEntity = merchantEntityDao.selectByEntityInnerCode(integralRuleLog.getEntityInnerCode());
-//		merchantEntity.setScores(merchantEntity.getScores() + integralRule.getIntegral().longValue());// 积分相加，改为sql直接加，不然会出现线程安全问题
-		if(null != merchantEntity){
-		    merchantEntity.setLastModefyTimer(new Date());
-		    merchantEntityDao.updateByEntityInnerCode(merchantEntity);// 通过实体商户号更新
+		// 如果传入描述是否为空
+		if (StringUtils.isNotBlank(description)) {
+			integralRuleLog.setDescription(description);// 不为空，则取其值
+		} else {
+			integralRuleLog.setDescription(integralRule.getDescription());// 设置积分描述
 		}
-		
+		integralRuleLog.setCreateTime(new Date());// 创建时间
+
+		return integralRuleLog;
 	}
-	/**
-     * 查询积分,根据实体商户号查询邀请新商家成功的积分信息
-     * 
-     * @param integralRuleLog
-     * @return
-     */
-    public List<IntegralRuleLog> queryListByEntityInnerCode(String entityInnerCode){
-        IntegralRuleLog integralRuleLog2 = new IntegralRuleLog();
-        integralRuleLog2.setEntityInnerCode(entityInnerCode);// 设置实体商户号
-        integralRuleLog2.setRuleCode("004");// 设置规则代码
-        return integralRuleLogDAO.queryListByCondition(integralRuleLog2);
-    }
 }
+

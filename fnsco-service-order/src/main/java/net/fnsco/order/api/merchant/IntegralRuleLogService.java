@@ -36,4 +36,12 @@ public interface IntegralRuleLogService {
 	 * @return :总积分
 	 */
 	public void insert(String entityInnerCode, String ruleCode);
+	
+	/**
+	 * 往商户积分表插入数据
+	 * 
+	 * @param integralRuleLog
+	 * @return :总积分
+	 */
+	public void insert(String entityInnerCode, String ruleCode, String description);
 }
