@@ -50,6 +50,20 @@ public class AppShareIntegralController extends BaseController{
 			return ResultDTO.fail(BigdataConstant.APP_MER_ENTITY_INNERCODE_NULL);
 		}
 		
+		String ruleCode = "";
+		String shareType = merchant.getShareType();
+		if("00".equals(shareType)) {
+			
+		}else if("01".equals(shareType)) {
+			
+		}else if("02".equals(shareType)) {
+			
+		}else if("04".equals(shareType)) {
+			
+		}else if("05".equals(shareType)) {
+			
+		}
+		
 		integralRuleLogService.insert(merchant.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_YQ01.getCode());
 		
 		return ResultDTO.success();
