@@ -53,18 +53,20 @@ public class AppShareIntegralController extends BaseController{
 		String ruleCode = "";
 		String shareType = merchant.getShareType();
 		if("00".equals(shareType)) {
-			
+			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ07.getCode();
 		}else if("01".equals(shareType)) {
-			
+			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ03.getCode();
 		}else if("02".equals(shareType)) {
-			
+			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ04.getCode();
 		}else if("04".equals(shareType)) {
-			
+			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ05.getCode();
 		}else if("05".equals(shareType)) {
-			
+			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ06.getCode();
+		}else {
+			ruleCode = IntegralRuleLog.IntegralTypeEnum.CODE_YQ01.getCode();
 		}
 		
-		integralRuleLogService.insert(merchant.getEntityInnerCode(), IntegralRuleLog.IntegralTypeEnum.CODE_YQ01.getCode());
+		integralRuleLogService.insert(merchant.getEntityInnerCode(), ruleCode);
 		
 		return ResultDTO.success();
 	}
