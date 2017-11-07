@@ -27,8 +27,6 @@ public interface FinanceAccountBookDao {
 	
 	FinanceAccount queryShopInnerCode(FinanceAccount financeAccount);
 	
-    int deleteByPrimaryKey(Integer id);
-
     int insertAccount(FinanceAccount fa);
 
     int insertAccountBook(FinanceRecordDTO financeRecordDTO);
