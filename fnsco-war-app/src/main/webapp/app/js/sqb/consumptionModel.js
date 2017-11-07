@@ -26,6 +26,13 @@ function chart(data,formatter){
 	};
 	myChart.setOption(option);
 }
+//筛选之后格式化显示的时间
+function changeTime(time){
+  var timeYear=time.substring(0,4);
+  var timeMonth=time.substring(5,7);
+  var timeDay=time.substring(8,10);
+  return timeYear+'年'+timeMonth+'月'+timeDay+'日';
+}
 //金额保留两位小数点
 function changeTwoDecimal(x) {
     var f_x = parseFloat(x);
@@ -46,111 +53,114 @@ function changeTwoDecimal(x) {
     return s_x;
 }
 //ajax请求
-modelData(getUrl("tokenId"),getUrl("userId"),null,null,null);
+console.log(decodeURI("%E6%9D%AD%E5%B7%9E"));
+modelData(getUrl("tokenId"),getUrl("userId"),getUrl("startTime"),getUrl("endTime"),getUrl("innerCode"));
+if(!getUrl("innerCode") || getUrl("innerCode")==''){
+  $(".filter-name").html("全部商铺");
+}else{
+  $(".filter-name").html(decodeURI(getUrl("innerCodeName")));
+}
 var titleName="营业额";
 var titleName1="订单数";
 function modelData(tokenId,userId,startDate,endDate,innerCode){
-  $.ajax({
-    url:'tradeReport/queryConsumption?timer='+new Date().getTime(),
-    dataType : "json",
-    type:'POST',
-    headers: {
-      'tokenId': tokenId,
-      'identifier': userId
-    },
-    data:{
-      "userId":userId,
-      "startDate":startDate,
-      "endDate":endDate,
-      "innerCode":innerCode
-    },
-    success:function(data){
-      console.log(data);
-      var formatter="笔";
-  		var formatter1="元";
-      var data1=[{value: data.data.aliOrderNumTot,name: '支付宝'}, {value: data.data.wxOrderNumTot,name: '微信'}, {value: data.data.bankOrderNumTot,name: '银行卡'},{value: data.data.otherOrderNumTot,name: '其他'}];
-  		var data2=[{value: data.data.aliTurnoverTot/100 ,name: '支付宝'}, {value: data.data.wxTurnoverTot/100,name: '微信'}, {value: data.data.bankTurnoverTot/100,name: '银行卡'},{value: data.data.otherTurnoverTot/100,name: '其他'}];
-  		$(".total-list.wx .total-list-rmb span").html(changeTwoDecimal(data.data.wxTurnoverTot/100));
-  		$(".total-list.alipay .total-list-rmb span").html(changeTwoDecimal(data.data.aliTurnoverTot/100));
-  		$(".total-list.bank .total-list-rmb span").html(changeTwoDecimal(data.data.bankTurnoverTot/100));
-  		$(".total-list.other .total-list-rmb span").html(changeTwoDecimal(data.data.otherTurnoverTot/100));
-  		$(".total-list.wx .total-list-num span").html(data.data.wxOrderNumTot);
-  		$(".total-list.alipay .total-list-num span").html(data.data.aliOrderNumTot);
-  		$(".total-list.bank .total-list-num span").html(data.data.bankOrderNumTot);
-  		$(".total-list.other .total-list-num span").html(data.data.otherOrderNumTot);
-		//默认加载笔数图表格
-		chart(data1,formatter);
+  //显示遮罩
+  $('#loader').shCircleLoader({color: "#fff"});
+  if(!tokenId || !userId){
+    mui.alert('获取用户信息失败');
+  }else{
+    var jsonstr = {
+        'userId': userId
+      };
+    var params = JSON.stringify(jsonstr);
+    $.ajax({
+      url:'../app/merchant/getShopOwnerMerChant?timer='+new Date().getTime(),
+      contentType: "application/json",
+      dataType : "json",
+      type:'POST',
+      headers:  {
+        'tokenId': tokenId,
+        'identifier': userId
+      },
+      data:params,
+      success:function(data){
+        console.log(data);
+        if(data.data.length==1){
+          $(".filter-name").html(data.data[0].merName);
+        }else{
+          $(".filter-name").html("全部商铺");
+        }
+      }
+    });
+    $.ajax({
+      url:'../app/tradeReport/queryConsumption?timer='+new Date().getTime(),
+      dataType : "json",
+      type:'POST',
+      headers: {
+        'tokenId': tokenId,
+        'identifier': userId
+      },
+      data:{
+        "userId":userId,
+        "startDate":startDate,
+        "endDate":endDate,
+        "innerCode":innerCode
+      },
+      success:function(data){
+        console.log(data);
+        var formatter="笔";
+    		var formatter1="元";
+        startDate=data.data.startDate;
+        endDate=data.data.endDate;  
+        var data1=[{value: data.data.aliOrderNumTot,name: '支付宝'}, {value: data.data.wxOrderNumTot,name: '微信'}, {value: data.data.bankOrderNumTot,name: '银行卡'},{value: data.data.otherOrderNumTot,name: '其他'}];
+    		var data2=[{value: data.data.aliTurnoverTot/100 ,name: '支付宝'}, {value: data.data.wxTurnoverTot/100,name: '微信'}, {value: data.data.bankTurnoverTot/100,name: '银行卡'},{value: data.data.otherTurnoverTot/100,name: '其他'}];
+    		$(".total-list.wx .total-list-rmb span").html(changeTwoDecimal(data.data.wxTurnoverTot/100));
+    		$(".total-list.alipay .total-list-rmb span").html(changeTwoDecimal(data.data.aliTurnoverTot/100));
+    		$(".total-list.bank .total-list-rmb span").html(changeTwoDecimal(data.data.bankTurnoverTot/100));
+    		$(".total-list.other .total-list-rmb span").html(changeTwoDecimal(data.data.otherTurnoverTot/100));
+    		$(".total-list.wx .total-list-num span").html(data.data.wxOrderNumTot);
+    		$(".total-list.alipay .total-list-num span").html(data.data.aliOrderNumTot);
+    		$(".total-list.bank .total-list-num span").html(data.data.bankOrderNumTot);
+    		$(".total-list.other .total-list-num span").html(data.data.otherOrderNumTot);
+    		//默认加载笔数图表格
+    		chart(data1,formatter);
       	$("#start-time").val(data.data.startDate);
       	$("#end-time").val(data.data.endDate);
-     	$(".filter-startTime").html(changeTime(data.data.startDate));
+     	  $(".filter-startTime").html(changeTime(data.data.startDate));
       	$(".filter-endTime").html(changeTime(data.data.endDate));
       	/*点击切换图表*/
-	  	var amountBtn=$("#amount-chart-btn")[0];
-		var moneyBtn=$("#money-chart-btn")[0];
-		amountBtn.addEventListener('tap',function() {//按交易笔数
-			chart(data1,formatter);
-		})
-		moneyBtn.addEventListener('tap',function() {//按交易金额
-			chart(data2,formatter1);
-		})
-    }
-  });
-}
-//筛选按钮
-$(".filter-ok-btn").click(function(){
-  var startTime=$("#start-time").val();
-  var endTime=$("#end-time").val();
-  var innerCode;
-  if($(".all-shop").hasClass('mui-selected')){
-    innerCode=null;
-  }else{
-    innerCode=$(".mui-table-view-cell.mui-selected").attr("innerCode");
+  	  	var amountBtn=$("#amount-chart-btn")[0];
+    		var moneyBtn=$("#money-chart-btn")[0];
+    		amountBtn.addEventListener('tap',function() {//按交易笔数
+    			chart(data1,formatter);
+    		})
+    		moneyBtn.addEventListener('tap',function() {//按交易金额
+    			chart(data2,formatter1);
+    		})
+        //筛选页面
+        $(".filter-btn").click(function(){
+          window.location.href='filtrate.html?back=true&userId='+getUrl("userId")+'&tokenId='+getUrl("tokenId")+'&startDate='+startDate+'&endDate='+endDate+'&type=2';
+        })
+      },
+      error: function(e) {
+        mui.toast(e.status,{ duration:'long', type:'div' })
+      } 
+    });
+    //隐藏遮罩
+    $(".mui-backdrop1").hide();
   }
-  modelData(getUrl("tokenId"),getUrl("userId"),startTime,endTime,innerCode);
-})
+}
 //获取URL携带的参数
 function getUrl(name){
      var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
      var r = window.location.search.substr(1).match(reg);
      if(r!=null)return  unescape(r[2]); return null;
 }
-//获取商户列表
-function getShopList(tokenId,userId){
-  var jsonstr = {
-      'userId': userId
-    };
-  var params = JSON.stringify(jsonstr);
-  $.ajax({
-    url:'merchant/getShopOwnerMerChant?timer='+new Date().getTime(),
-    contentType: "application/json",
-    dataType : "json",
-    type:'POST',
-    headers:  {
-      'tokenId': tokenId,
-      'identifier': userId
-    },
-    data:params,
-    success:function(data){
-      var shopList=$("#shop-list");
-      if(data.data.length>1){
-        shopList.append('<li class="all-shop mui-table-view-cell mui-selected" id="all-shop" innerCode=""><a class="mui-navigate-right">全部商铺</a></li>');
-        for(var i=0;i<data.data.length;i++){
-          shopList.append('<li class="mui-table-view-cell" innerCode="'+data.data[i].innerCode+'"><a class="mui-navigate-right">'+data.data[i].merName+'</a></li>');
-        }
-      }else if(data.data.length==1){
-        $(".filter-name").html(data.data[0].merName);
-        shopList.append('<li class="mui-table-view-cell mui-selected" innerCode="'+data.data[0].innerCode+'"><a class="mui-navigate-right">'+data.data[0].merName+'</a></li>');
-      }
 
-      //筛选店铺
-      // $(".shop-list li").click(function(){
-      //   $(".shop-list li").removeClass("mui-selected");
-      //   $(this).addClass("mui-selected");
-      //   if($(this).hasClass('all-shop')){
-      //     $(".shop-list li").addClass("mui-selected");
-      //   }
-      // })
-    }
-  });
-}
-getShopList(getUrl("tokenId"),getUrl("userId"));
+/*加载*/
+// $('#loader').shCircleLoader({
+//     keyframes:
+//        "0%   {background:white}\
+//         40%  {background:transparent}\
+//         60%  {background:transparent}\
+//         100% {background:white}"
+// });
