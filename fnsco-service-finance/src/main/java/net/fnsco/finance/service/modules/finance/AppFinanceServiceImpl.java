@@ -162,10 +162,9 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 			try{  
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
 				SimpleDateFormat sdf1= new SimpleDateFormat("dd");
-				SimpleDateFormat dateFm = new SimpleDateFormat("EEEE");
-				result = sdf.parse(da);  
+				result = sdf.parse(da);
 				day =Integer.valueOf(sdf1.format(result)).intValue();
-				week = dateFm.format(result);
+				week = getWeekCh(da);
 			}  
 			catch (ParseException e){ 
 				logger.error("日期格式转换出错" + da+ day + week + ",确保真确格式");
@@ -312,18 +311,7 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 			financeDetail.setCash("+"+getYuan(cashDec).toString());
 		}
 		String date = financeDetail.getHappenDate();
-		String week =null;
-		try{  
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
-			SimpleDateFormat dateFm = new SimpleDateFormat("EEEE");
-			Date result = sdf.parse(date);  
-			week = dateFm.format(result);  
-		}  
-		catch (ParseException e){ 
-			logger.error("日期格式转换出错" + week + ",确保真确格式");
-			return ResultDTO.fail("日期格式转换出错");
-		}  
-		financeDetail.setWeek(week);
+		financeDetail.setWeek(getWeekCh(date));
 		return ResultDTO.success(financeDetail);
 	}
 	
@@ -340,7 +328,7 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 	 * @param bigDecimal
 	 * @return
 	 */
-	public static BigDecimal getYuan(BigDecimal bigDecimal) {
+	private BigDecimal getYuan(BigDecimal bigDecimal) {
 		BigDecimal bdYuan=bigDecimal.divide(new BigDecimal(100), 2, BigDecimal.ROUND_UP);
 		return bdYuan;	
 	}
@@ -349,8 +337,39 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 	 * @param bigDecimal
 	 * @return
 	 */
-	public static BigDecimal getFen(BigDecimal bigDecimal) {
+	private BigDecimal getFen(BigDecimal bigDecimal) {
 		BigDecimal bdFen=bigDecimal.multiply(new BigDecimal(100));
 		return bdFen;	
+	}
+	
+	private String getWeekCh(String  dateStr) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
+		Date result =null;
+		try {
+			result = sdf.parse(dateStr);
+		} catch (ParseException e) {
+			logger.error("日期格式转换出错确保真确格式"+dateStr,e);
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(result);
+		int weekoFdAY = cal.get(Calendar.DAY_OF_WEEK);
+		
+		switch (weekoFdAY) {
+		case 7:
+			return "星期六";
+		case 1:
+			return "星期日";
+		case 2:
+			return "星期一";
+		case 3:
+			return "星期二";
+		case 4:
+			return "星期三";
+		case 5:
+			return "星期四";
+		case 6:
+			return "星期五";
+		}
+		return null;
 	}
 }
