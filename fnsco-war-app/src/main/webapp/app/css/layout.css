@@ -88,9 +88,11 @@ body{
 }
 .mui-segmented-control .mui-control-item{
 	line-height: 35px;
+	color: #fff;
 }
 .mui-segmented-control .mui-control-item.mui-active{
-	background-color: #3595FF;
+	background-color:#fff;
+	color: #3595FF;
 }
 #chart{
 	margin-top: 32px;
