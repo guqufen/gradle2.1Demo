@@ -51,4 +51,10 @@ public interface AppFinanceService {
 	 * @return
 	 */
 	ResultDTO<FinanceDetailDTO> queryFinanceDetailsById(Integer id);
+	/**
+	 * 更具id删除记账数据
+	 * @param id
+	 * @return
+	 */
+	ResultDTO deleteFinanceById(Integer id);
 }

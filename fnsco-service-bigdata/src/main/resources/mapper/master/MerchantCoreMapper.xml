@@ -650,22 +650,14 @@
 	<!-- 根据userId和实体商户号查询关联的商户实体包括积分 -->
 	<select id="selectByEntityInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantUserRel"
 		resultMap="CoreResultMap">
-	SELECT
-	    IFNULL(EN.scores, 0) scores,
-	    CC.inner_code,
-	    EN.entity_inner_code,
-	    EN.merc_name
-	FROM
-	    m_merchant_entity EN, m_merchant_core_entity_ref CC
-	where 
-	    CC.entity_inner_code = EN.entity_inner_code AND
-	    CC.entity_inner_code=#{entityInnerCode} and 
-	    CC.inner_code in (SELECT
-	        inner_code
-	    FROM
-	        m_merchant_user_rel
-	    WHERE
-	        app_user_id = #{appUserId})
+		SELECT
+		   IFNULL(scores, 0) scores,
+		   entity_inner_code,
+		   merc_name
+		FROM
+		   m_merchant_entity
+		where
+		   entity_inner_code=#{entityInnerCode}
 	</select>
   
   <select id="getMerChantCoreByInnerCode" parameterType="java.lang.String" resultMap="AllResultMap">

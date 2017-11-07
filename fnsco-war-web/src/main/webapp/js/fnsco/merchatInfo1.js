@@ -624,20 +624,28 @@ function seeImage(fileName,divId){
 
 //保存商户基本信息下一步按钮
 function saveMerCore(){
-  $.ajax({
-      url:PROJECT_NAME+'/web/merchantinfo/toAddCore',
-      data: $('#mercore_form').serialize(),
-      type:'POST',
-      success:function(data){
-    	  unloginHandler(data);  
-        if(data.success){
-           layer.msg('保存成功');
-           return true;
-        }else{
-           layer.msg('保存失败!系统已经存在该营业执照了');
+  if($("#entityMerName0").val()==''){
+    layer.msg('实体商户不能为空！');
+    return false;
+  }else{
+    console.log($('#mercore_form').serialize());
+    $.ajax({
+        url:PROJECT_NAME+'/web/merchantinfo/toAddCore',
+        data: $('#mercore_form').serialize(),
+        type:'POST',
+        success:function(data){
+      	  unloginHandler(data);  
+          if(data.success){
+             layer.msg('保存成功');
+             $(".nav-tabs li.active").removeClass('active').next().addClass('active');
+             $("#home").removeClass('active');
+             $("#bankCard_info").addClass('active');
+          }else{
+             layer.msg('保存失败!系统已经存在该营业执照了');
+          }
         }
-      }
-  });
+    });
+  }
 }
 
 //保存文件信息
@@ -1376,28 +1384,32 @@ function editData(id){
             var registAddress = $('input[name="registAddress1"]').val();
             var mercFlag = $('input[name="mercFlag1"]').val();
             var agentId = $('#agentId1').val();
+            var entityMerName = $('#entityMerName1').val();
             var entityInnerCode = $('#entityMerName1').next('input[name="entityInnerCode"]').val();
             var innerCode=$('#innerCode').val();
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
-            		'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'innerCode':innerCode};
-            
+                'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'entityMerName':entityMerName,'innerCode':innerCode};
             console.log(params);
-            $.ajax({
-     		      url:PROJECT_NAME+'/web/merchantinfo/toAddCore',
-       		    data: params,
-       		    type:'POST',
-       		    success:function(data){
-       		    	unloginHandler(data);
-       			    if(data.success)
-       			    {
-       				    layer.msg('保存成功');
-       				    return true;
-       			    }	
-       			    else{
-       				    layer.msg('保存失败');
-       			    }
-   		        }
-     	      })
+            if(entityMerName==''){
+              layer.msg('保存失败，实体商户不能为空');return
+            }else{
+              $.ajax({
+       		      url:PROJECT_NAME+'/web/merchantinfo/toAddCore',
+         		    data: params,
+         		    type:'POST',
+         		    success:function(data){
+         		    	unloginHandler(data);
+         			    if(data.success)
+         			    {
+         				    layer.msg('保存成功');
+         				    return true;
+         			    }	
+         			    else{
+         				    layer.msg('保存失败');
+         			    }
+     		        }
+       	      })
+            }
         });   
     }
   });
