@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
@@ -38,8 +37,6 @@ public class AppMerchentLevelController extends BaseController{
 	private MerchantService merchantService;
 	@Autowired
 	private IntegralRuleService integralRuleService;
-	@Autowired
-	private IntegralRuleLogService integralRuleLogService;
 	@Autowired
 	private Environment env;
 	
@@ -68,23 +65,33 @@ public class AppMerchentLevelController extends BaseController{
 //			dataTemp.addAll(datas);
 //		}
 
-		String prefix = env.getProperty("web.base.url");
+		String prefix = env.getProperty("app.base.url");
 		// 根据商户已有积分查询商户所属等级(v1-v7)
 		for (MerChantCoreDTO merChantCoreDTO : datas) {
 			if(merChantCoreDTO.getScores() == null){
 				merChantCoreDTO.setScores(new BigDecimal(0));
 				merChantCoreDTO.setMercLevel("v1");
 				merChantCoreDTO.setLevelName("普通商家");
-				merChantCoreDTO.setLevelIcon(prefix + "/integral/lv1.png");
+				merChantCoreDTO.setLevelIcon(prefix + "/app/integral/image/lv1.png");
 				continue;
 			}
 			SysConfig sysConfig = new SysConfig();
 			sysConfig.setType("11");
-			sysConfig.setValue(merChantCoreDTO.getScores().toString());
-			SysConfig sysConfig2 = sysConfigService.selectLevelByScores(sysConfig);//根据积分查询所属等级
-			merChantCoreDTO.setMercLevel(sysConfig2.getName());// vip等级：v1-v7
-			merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
-			merChantCoreDTO.setLevelIcon(prefix + sysConfig2.getKeep3());
+
+			//如果积分大于50000，则为最高等级v7，需要通过type和name(v7)来查询
+			if(merChantCoreDTO.getScores().longValue() > 50000L){
+				sysConfig.setName("v7");
+				SysConfig sysConfig2 = sysConfigService.selectByCondition(sysConfig);
+				merChantCoreDTO.setMercLevel(sysConfig2.getName());// vip等级：v1-v7
+				merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
+				merChantCoreDTO.setLevelIcon(prefix + sysConfig2.getKeep3());
+			}else{
+				sysConfig.setValue(merChantCoreDTO.getScores().toString());
+				SysConfig sysConfig2 = sysConfigService.selectLevelByScores(sysConfig);//根据积分查询所属等级
+				merChantCoreDTO.setMercLevel(sysConfig2.getName());// vip等级：v1-v7
+				merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
+				merChantCoreDTO.setLevelIcon(prefix + sysConfig2.getKeep3());
+			}
 		}
 
 		// 通过userId查询绑定的商户信息(内部商户号，商户名称)
@@ -121,18 +128,37 @@ public class AppMerchentLevelController extends BaseController{
 		} else {
 			SysConfig sysConfig = new SysConfig();
 			sysConfig.setType("11");
-			sysConfig.setValue(merChantCoreDTO.getScores().toString());
-			SysConfig sysConfig2 = sysConfigService.selectLevelByScores(sysConfig);// 根据积分查询所属等级
-			merChantCoreDTO.setMercLevel(sysConfig2.getName());// vip等级：v1-v7
-			merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
-			SysConfig sysConfig3 = sysConfigService.selectNextLevelByScores(sysConfig);// 根据积分查询下一级等级
-			if(null == sysConfig3){//找出来的为空，说明是最高级会员，不用设置下一级vip数据
-				return success(merChantCoreDTO);
+
+			//如果积分大于50000，则为最高等级v7，需要通过type和name(v7)来查询
+			if(merChantCoreDTO.getScores().longValue() > 50000L){
+				sysConfig.setName("v7");
+				SysConfig sysConfig2 = sysConfigService.selectByCondition(sysConfig);
+				merChantCoreDTO.setMercLevel(sysConfig2.getName());// vip等级：v1-v7
+				merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
+				merChantCoreDTO.setNextLevelName(sysConfig2.getRemark());//下一级名称
+				merChantCoreDTO.setNextScores(merChantCoreDTO.getScores());//设置下一级积分为当前商户积分
+				merChantCoreDTO.setDistScores(new BigDecimal("0"));//积分差值为0
+			}else{
+				sysConfig.setValue(merChantCoreDTO.getScores().toString());
+				SysConfig sysConfig2 = sysConfigService.selectLevelByScores(sysConfig);//根据积分查询所属等级
+				merChantCoreDTO.setMercLevel(sysConfig2.getName());// vip等级：v1-v7
+				merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
+				SysConfig sysConfig3 = sysConfigService.selectNextLevelByScores(sysConfig);// 根据积分查询下一级等级
+				if(null == sysConfig3){//找出来的为空，说明是最高级会员，设置下一级vip数据全为0
+					sysConfig.setName("v7");
+					sysConfig.setValue(null);
+					sysConfig3 = sysConfigService.selectByCondition(sysConfig);
+					merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
+					BigDecimal b1 = new BigDecimal(sysConfig3.getValue());//获取下一级vip积分
+					merChantCoreDTO.setNextScores(b1);//设置下一级积分
+					merChantCoreDTO.setDistScores(new BigDecimal("1"));//积分差值为1
+					return success(merChantCoreDTO);
+				}
+				merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
+				BigDecimal b1 = new BigDecimal(sysConfig2.getValue());//获取下一级vip积分
+				merChantCoreDTO.setNextScores(b1);//设置下一级积分
+				merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()));//积分差值
 			}
-			merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
-			BigDecimal b1 = new BigDecimal(sysConfig2.getValue());//获取下一级vip积分
-			merChantCoreDTO.setNextScores(b1);//设置下一级积分
-			merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()));//积分差值
 		}
 
 		// 通过userId查询绑定的商户信息(内部商户号，商户名称)
@@ -147,7 +173,7 @@ public class AppMerchentLevelController extends BaseController{
 		sysConfig.setType("11");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
 
-		String prefix = env.getProperty("web.base.url");
+		String prefix = env.getProperty("app.base.url");
 		for (SysConfig sysConfig2 : list) {
 			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
 		}
@@ -162,7 +188,7 @@ public class AppMerchentLevelController extends BaseController{
 		sysConfig.setType("10");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
 		
-		String prefix = env.getProperty("web.base.url");
+		String prefix = env.getProperty("app.base.url");
 		for (SysConfig sysConfig2 : list) {
 			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
 		}
@@ -185,8 +211,6 @@ public class AppMerchentLevelController extends BaseController{
 			integralRuleDTO.setRuleConditionList(list);
 			integralRuleDTOList.add(integralRuleDTO);
 		}
-
-//		integralRuleLogService.insert("E102715166067306", "001");
 
 		return success(integralRuleDTOList);
 	}

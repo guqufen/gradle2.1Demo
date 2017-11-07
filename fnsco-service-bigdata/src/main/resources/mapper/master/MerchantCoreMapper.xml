@@ -613,59 +613,49 @@
   </select>
 	<!-- 根据userId查询关联的商户实体包括积分 -->
 	<select id="getMerchantsScoresByUserId" parameterType="java.lang.Integer"
-		resultMap="CoreResultMap">
-		SELECT
-	      MER.inner_code,
-	      ENT.entity_inner_code,
-	      ENT.merc_name,
-	      IFNULL(ENT.scores, 0) scores
-    FROM
-	(
-		SELECT
-			CO.inner_code
-		FROM
-			m_merchant_core CO
-		RIGHT JOIN (
-			SELECT
-				*
-			FROM
-				m_merchant_user_rel
-			WHERE
-				app_user_id = #{userId}
-		) REL ON CO.inner_code = REL.inner_code
-		WHERE
-			CO. STATUS = 1
-	) MER
-    INNER JOIN (
-	  SELECT
-		EN.scores,
-		CC.entity_inner_code,
-		EN.merc_name,
-		CC.inner_code
+	resultMap="CoreResultMap">
+	SELECT
+	    entity_inner_code,
+	    merc_name,
+	    IFNULL(scores, 0) scores
 	FROM
-		m_merchant_entity EN
-	RIGHT JOIN m_merchant_core_entity_ref CC ON CC.entity_inner_code = EN.entity_inner_code
-    ) ENT ON MER.inner_code = ENT.inner_code
+	    m_merchant_entity
+	WHERE
+	    entity_inner_code IN (
+	        SELECT DISTINCT
+	            entity_inner_code
+	        FROM
+	            m_merchant_core_entity_ref
+	        WHERE
+	            inner_code IN (
+	        SELECT
+	            CO.inner_code
+	        FROM
+	            m_merchant_core CO
+	        RIGHT JOIN (
+	        SELECT 
+	             *
+	        FROM
+	           m_merchant_user_rel
+	        WHERE
+	           app_user_id = #{userId}) REL 
+	        ON 
+	           CO.inner_code = REL.inner_code
+	        WHERE
+	           CO. STATUS = 1)
+	     )
 	</select>
 	<!-- 根据userId和实体商户号查询关联的商户实体包括积分 -->
 	<select id="selectByEntityInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantUserRel"
 		resultMap="CoreResultMap">
-	SELECT
-	    IFNULL(EN.scores, 0) scores,
-	    CC.inner_code,
-	    EN.entity_inner_code,
-	    EN.merc_name
-	FROM
-	    m_merchant_entity EN, m_merchant_core_entity_ref CC
-	where 
-	    CC.entity_inner_code = EN.entity_inner_code AND
-	    CC.entity_inner_code=#{entityInnerCode} and 
-	    CC.inner_code in (SELECT
-	        inner_code
-	    FROM
-	        m_merchant_user_rel
-	    WHERE
-	        app_user_id = #{appUserId})
+		SELECT
+		   IFNULL(scores, 0) scores,
+		   entity_inner_code,
+		   merc_name
+		FROM
+		   m_merchant_entity
+		where
+		   entity_inner_code=#{entityInnerCode}
 	</select>
   
   <select id="getMerChantCoreByInnerCode" parameterType="java.lang.String" resultMap="AllResultMap">

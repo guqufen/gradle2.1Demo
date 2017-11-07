@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.ConmmService;
@@ -81,7 +83,13 @@ public class ConmmController extends BaseController {
     @ApiOperation(value = "返回邀新链接地址")
     @ResponseBody
     public ResultDTO getInviteUrl(@RequestParam String entityInnerCode) {
+        
+        if(Strings.isNullOrEmpty(entityInnerCode)) {
+        	 return ResultDTO.fail(BigdataConstant.APP_MER_ENTITY_INNERCODE_NULL);
+        }
+      
         String url = env.getProperty("web.base.url") + "/acti/register.html?entityId=" + entityInnerCode;
+        Map<String, Object> resultMap = Maps.newHashMap();
         List<IntegralRuleLog> list = integralRuleLogService.queryListByEntityInnerCode(entityInnerCode);
         Integer integral = 0;// 积分值 
         int count = 0;
@@ -91,7 +99,6 @@ public class ConmmController extends BaseController {
                 integral += log.getIntegral();
             }
         }
-        Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
         resultMap.put("integral", integral);
         resultMap.put("count", count);
