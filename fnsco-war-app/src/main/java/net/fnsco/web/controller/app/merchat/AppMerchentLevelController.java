@@ -65,14 +65,14 @@ public class AppMerchentLevelController extends BaseController{
 //			dataTemp.addAll(datas);
 //		}
 
-		String prefix = env.getProperty("web.base.url");
+		String prefix = env.getProperty("app.base.url");
 		// 根据商户已有积分查询商户所属等级(v1-v7)
 		for (MerChantCoreDTO merChantCoreDTO : datas) {
 			if(merChantCoreDTO.getScores() == null){
 				merChantCoreDTO.setScores(new BigDecimal(0));
 				merChantCoreDTO.setMercLevel("v1");
 				merChantCoreDTO.setLevelName("普通商家");
-				merChantCoreDTO.setLevelIcon(prefix + "/integral/lv1.png");
+				merChantCoreDTO.setLevelIcon(prefix + "/integral/image/lv1.png");
 				continue;
 			}
 			SysConfig sysConfig = new SysConfig();
@@ -173,7 +173,7 @@ public class AppMerchentLevelController extends BaseController{
 		sysConfig.setType("11");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
 
-		String prefix = env.getProperty("web.base.url");
+		String prefix = env.getProperty("app.base.url");
 		for (SysConfig sysConfig2 : list) {
 			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
 		}
@@ -188,7 +188,7 @@ public class AppMerchentLevelController extends BaseController{
 		sysConfig.setType("10");// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
 		
-		String prefix = env.getProperty("web.base.url");
+		String prefix = env.getProperty("app.base.url");
 		for (SysConfig sysConfig2 : list) {
 			sysConfig2.setKeep2(prefix + sysConfig2.getKeep2());
 		}
