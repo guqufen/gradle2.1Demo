@@ -119,6 +119,7 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         for (TradeData tradeData : tempDatas) {
             TradeDateTemp tradeDateTemp = new TradeDateTemp();
             String timeStamp = tradeData.getTimeStamp();
+            tradeDateTemp.setTimeStamp(timeStamp);
             tradeDateTemp.setTradeDate(timeStamp.substring(0, timeStamp.length() - 6));
             tradeDateTemp.setTradeHoure(timeStamp.substring(8, 10));
             tradeDateTemp.setAmt(tradeData.getAmt());

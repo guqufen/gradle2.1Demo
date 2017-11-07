@@ -139,16 +139,19 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 			if(datasList!=null) {
 				//循环处理记账支出收入
 				for(FinanceAccountBook data : datasList) {
+					String url = data.getIcoUrlGray();
+					String prefix = env.getProperty("web.base.url");
+					String icoUrl = prefix+url;
+					data.setIcoUrl(icoUrl);
 					if(data.getType()==0) {
-						BigDecimal cash=data.getCash();
-						BigDecimal spend = cash.negate();
-						data.setCash(spend);
-						spending = spending.add(cash);
+						BigDecimal cashDec=data.getCashDec();
+						BigDecimal spend = cashDec.negate();
+						data.setCash(getYuan(spend).toString());
+						spending = spending.add(cashDec);
 					}else {
-						data.setCash(data.getCash());
-						revenue = revenue.add(data.getCash());
+						data.setCash("+"+getYuan(data.getCashDec()).toString());
+						revenue = revenue.add(data.getCashDec());
 					}
-					data.setCash(getYuan(data.getCash()));
 				}
 				financeEveryDay.setAccountBook(datasList);
 			}
@@ -170,8 +173,8 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 			}  
 			financeEveryDay.setDay(day);
 			financeEveryDay.setWeek(week);
-			financeEveryDay.setSpending(getYuan(spending));
-			financeEveryDay.setRevenue(getYuan(revenue));
+			financeEveryDay.setSpending(getYuan(spending).toString());
+			financeEveryDay.setRevenue(getYuan(revenue).toString());
 			datasLists.add(financeEveryDay);
 		} 
 		
@@ -179,17 +182,17 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
         List<FinanceAccountBook> amountList = financeAccountBookDao.queryAmount(financeQuery);
         for(FinanceAccountBook account : amountList) {
         	if(account.getType()==0) {
-        		financeBookKeepingDTO.setTotalSpending(getYuan(account.getCash()));
+        		financeBookKeepingDTO.setTotalSpending(getYuan(account.getCashDec()).toString());
         	}else {
-        		financeBookKeepingDTO.setTotalRevenue(getYuan(account.getCash()));
+        		financeBookKeepingDTO.setTotalRevenue(getYuan(account.getCashDec()).toString());
         	}
         }
         BigDecimal bdc = new BigDecimal(0.00);
         if(financeBookKeepingDTO.getTotalRevenue()==null) {
-        	financeBookKeepingDTO.setTotalRevenue(getYuan(bdc));
+        	financeBookKeepingDTO.setTotalRevenue(getYuan(bdc).toString());
         }
         if(financeBookKeepingDTO.getTotalSpending()==null) {
-        	financeBookKeepingDTO.setTotalSpending(getYuan(bdc));;
+        	financeBookKeepingDTO.setTotalSpending(getYuan(bdc).toString());;
         }
 		return ResultDTO.success(financeBookKeepingDTO);
 	}
@@ -201,6 +204,12 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 	public ResultDTO<IoTypeAndShopDTO> queryIoTypeAndShop(String entityInnerCode) {
 		IoTypeAndShopDTO ioTypeAndShopDTO = new IoTypeAndShopDTO();
 		List<FinanceIoType> ioType= financeAccountBookDao.queryIoTypeList();
+		for(FinanceIoType io : ioType) {
+			String url = io.getIcoUrl();
+			String prefix = env.getProperty("web.base.url");
+			String icoUrl = prefix+url;
+			io.setIcoUrl(icoUrl);
+		}
 		ioTypeAndShopDTO.setFinanceIoTypeList(ioType);
 		List<AppUserShopDTO> shopList=financeAccountBookDao.queryShopList(entityInnerCode);
 		ioTypeAndShopDTO.setAppUserShopDTOList(shopList);
@@ -290,14 +299,18 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 	@Override
 	public ResultDTO<FinanceDetailDTO> queryFinanceDetailsById(Integer id) {
 		FinanceDetailDTO financeDetail=financeAccountBookDao.queryFinanceDetail(id);
+		String url = financeDetail.getIcoUrl();
+		String prefix = env.getProperty("web.base.url");
+		String icoUrl = prefix+url;
+		financeDetail.setIcoUrl(icoUrl);
 		if(financeDetail.getType()==0) {
-			BigDecimal cash=financeDetail.getCash();
-			BigDecimal spend = cash.negate();
-			financeDetail.setCash(spend);
+			BigDecimal cashDec=financeDetail.getCashDec();
+			BigDecimal spend = cashDec.negate();
+			financeDetail.setCash(getYuan(spend).toString());
 		}else {
-			financeDetail.setCash(financeDetail.getCash());
+			BigDecimal cashDec = financeDetail.getCashDec();
+			financeDetail.setCash("+"+getYuan(cashDec).toString());
 		}
-		financeDetail.setCash(getYuan(financeDetail.getCash()));
 		String date = financeDetail.getHappenDate();
 		String week =null;
 		try{  
@@ -312,6 +325,15 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 		}  
 		financeDetail.setWeek(week);
 		return ResultDTO.success(financeDetail);
+	}
+	
+	@Override
+	public ResultDTO deleteFinanceById(Integer id) {
+		int a = financeAccountBookDao.deleteFinanceById(id);
+		if(a<1) {
+			return ResultDTO.fail("删除失败"); 
+		}
+		return ResultDTO.success(); 
 	}
 	/**
 	 * 分转元

@@ -9,7 +9,8 @@ public class FinanceDetailDTO  extends DTO{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	private Integer id;
+	
 	private String happenDate;//日期
 	
 	private String week;//星期
@@ -20,7 +21,9 @@ public class FinanceDetailDTO  extends DTO{
 	
 	private String ioTypeName;//收支子类型名称
 	
-	private BigDecimal cash;//金额
+	private String cash;//金额字符串
+	
+	private BigDecimal cashDec;//金额
 	
 	private String remark;//备注
 	
@@ -29,6 +32,14 @@ public class FinanceDetailDTO  extends DTO{
 	private String shopName;//实体店铺名字
 	
 	private String icoUrl;//图片
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getHappenDate() {
 		return happenDate;
@@ -70,12 +81,20 @@ public class FinanceDetailDTO  extends DTO{
 		this.ioTypeName = ioTypeName;
 	}
 
-	public BigDecimal getCash() {
+	public String getCash() {
 		return cash;
 	}
 
-	public void setCash(BigDecimal cash) {
+	public void setCash(String cash) {
 		this.cash = cash;
+	}
+
+	public BigDecimal getCashDec() {
+		return cashDec;
+	}
+
+	public void setCashDec(BigDecimal cashDec) {
+		this.cashDec = cashDec;
 	}
 
 	public String getRemark() {

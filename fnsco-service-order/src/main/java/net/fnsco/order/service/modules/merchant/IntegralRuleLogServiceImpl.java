@@ -128,4 +128,16 @@ public class IntegralRuleLogServiceImpl extends BaseService implements IntegralR
 		}
 		
 	}
+	/**
+     * 查询积分,根据实体商户号查询邀请新商家成功的积分信息
+     * 
+     * @param integralRuleLog
+     * @return
+     */
+    public List<IntegralRuleLog> queryListByEntityInnerCode(String entityInnerCode){
+        IntegralRuleLog integralRuleLog2 = new IntegralRuleLog();
+        integralRuleLog2.setEntityInnerCode(entityInnerCode);// 设置实体商户号
+        integralRuleLog2.setRuleCode("004");// 设置规则代码
+        return integralRuleLogDAO.queryListByCondition(integralRuleLog2);
+    }
 }

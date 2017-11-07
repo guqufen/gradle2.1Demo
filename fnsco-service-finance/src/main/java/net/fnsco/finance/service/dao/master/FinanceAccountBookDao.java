@@ -33,6 +33,7 @@ public interface FinanceAccountBookDao {
 
     int insertAccountBook(FinanceRecordDTO financeRecordDTO);
 
+    int deleteFinanceById(Integer id);
 
     FinanceAccountBook selectByPrimaryKey(Integer id);
 

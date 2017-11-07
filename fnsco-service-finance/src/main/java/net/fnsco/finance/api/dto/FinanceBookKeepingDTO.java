@@ -1,6 +1,5 @@
 package net.fnsco.finance.api.dto;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import net.fnsco.core.base.DTO;
@@ -15,9 +14,9 @@ public class FinanceBookKeepingDTO extends DTO{
 	
 	private Integer month;//记账月
 	
-	private	BigDecimal totalSpending;//记账总支出
+	private	String totalSpending;//记账总支出
 	
-	private BigDecimal totalRevenue;//记账总收入
+	private String totalRevenue;//记账总收入
 	
 	private String entityInnerCode;//实体商户号
 	
@@ -27,22 +26,22 @@ public class FinanceBookKeepingDTO extends DTO{
 	
 	private List<FinanceEveryDayDTO> financeEveryDay;
 
-	public BigDecimal getTotalSpending() {
+	public String getTotalSpending() {
 		return totalSpending;
 	}
 
-	public void setTotalSpending(BigDecimal totalSpending) {
+	public void setTotalSpending(String totalSpending) {
 		this.totalSpending = totalSpending;
 	}
 
-	public BigDecimal getTotalRevenue() {
+	public String getTotalRevenue() {
 		return totalRevenue;
 	}
 
-	public void setTotalRevenue(BigDecimal totalRevenue) {
+	public void setTotalRevenue(String totalRevenue) {
 		this.totalRevenue = totalRevenue;
 	}
-	
+
 	public Integer getYear() {
 		return year;
 	}
