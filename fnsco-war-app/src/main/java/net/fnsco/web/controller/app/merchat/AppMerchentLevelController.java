@@ -52,6 +52,7 @@ public class AppMerchentLevelController extends BaseController{
 		}
 
 		List<MerChantCoreDTO> datas = merchantService.getMerchantsScoresByUserId(merchantUserRel.getAppUserId());
+		
 
 		String prefix = env.getProperty("app.base.url");
 		// 根据商户已有积分查询商户所属等级(v1-v7)
@@ -64,15 +65,16 @@ public class AppMerchentLevelController extends BaseController{
 //				continue;
 			}
 			SysConfig sysConfig = new SysConfig();
-			sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE);//type="11"
+			sysConfig.setType("11");//type="11"
+			SysConfig sysconfigMax = sysConfigService.selectMaxByType("11");//通过type查找最大值
 
-			//如果积分大于50000，则为最高等级v7，需要通过type和name(v7)来查询
-			if(merChantCoreDTO.getScores().longValue() > 50000L){
-				sysConfig.setName("v7");
-				SysConfig sysConfig2 = sysConfigService.selectByCondition(sysConfig);
-				merChantCoreDTO.setMercLevel(sysConfig2.getName());// vip等级：v1-v7
-				merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
-				merChantCoreDTO.setLevelIcon(prefix + sysConfig2.getKeep3());
+			//如果积分大于查找出来的最大值，则为最高等级，通过找出来的最大的给当前赋值
+			if(merChantCoreDTO.getScores().longValue() > Long.parseLong(sysconfigMax.getValue())){
+//				sysConfig.setName(sysconfigMax.getName());
+//				SysConfig sysConfig2 = sysConfigService.selectByCondition(sysConfig);
+				merChantCoreDTO.setMercLevel(sysconfigMax.getName());// vip等级：v1-v7
+				merChantCoreDTO.setLevelName(sysconfigMax.getRemark());// vip名称
+				merChantCoreDTO.setLevelIcon(prefix + sysconfigMax.getKeep3());
 			}else{
 				sysConfig.setValue(merChantCoreDTO.getScores().toString());
 				SysConfig sysConfig2 = sysConfigService.selectLevelByScores(sysConfig);//根据积分查询所属等级
@@ -116,15 +118,16 @@ public class AppMerchentLevelController extends BaseController{
 //			merChantCoreDTO.setDistScores(new BigDecimal(501));
 		} 
 			SysConfig sysConfig = new SysConfig();
-			sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE);//type="11"
+			sysConfig.setType("11");//type="11"
+			SysConfig sysconfigMax = sysConfigService.selectMaxByType("11");//通过type查找最大值
 
-			//如果积分大于50000，则为最高等级v7，需要通过type和name(v7)来查询
-			if(merChantCoreDTO.getScores().longValue() > 50000L){
-				sysConfig.setName("v7");
-				SysConfig sysConfig2 = sysConfigService.selectByCondition(sysConfig);//当前等级
-				merChantCoreDTO.setMercLevel(sysConfig2.getName());// vip等级：v1-v7
-				merChantCoreDTO.setLevelName(sysConfig2.getRemark());// vip名称
-				merChantCoreDTO.setNextLevelName(sysConfig2.getRemark());//下一级名称
+			//如果积分大于查找出来的最大值，则为最高等级，通过找出来的最大的给当前赋值
+			if(merChantCoreDTO.getScores().longValue() > Long.parseLong(sysconfigMax.getValue())){
+//				sysConfig.setName("v7");
+//				SysConfig sysConfig2 = sysConfigService.selectByCondition(sysConfig);//当前等级
+				merChantCoreDTO.setMercLevel(sysconfigMax.getName());// vip等级：v1-v7
+				merChantCoreDTO.setLevelName(sysconfigMax.getRemark());// vip名称
+				merChantCoreDTO.setNextLevelName(sysconfigMax.getRemark());//下一级名称
 				merChantCoreDTO.setNextScores(merChantCoreDTO.getScores());//设置下一级积分为当前商户积分
 				merChantCoreDTO.setDistScores(new BigDecimal("0"));//积分差值为0
 			}else{
