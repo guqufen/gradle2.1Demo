@@ -21,7 +21,7 @@ import net.fnsco.finance.api.dto.IoTypeAndShopDTO;
 import net.fnsco.finance.api.finance.AppFinanceService;
 import net.fnsco.finance.service.domain.FinanceAccountBook;
 import net.fnsco.finance.service.domain.FinanceIoType;
-import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.api.merchant.IntegralLogService;
 
 
 /**
@@ -37,7 +37,7 @@ public class AppFinanceController extends BaseController {
 	@Autowired
 	private AppFinanceService appFinanceService;
 	@Autowired
-	private IntegralRuleLogService integralRuleLogService;
+	private IntegralLogService integralRuleLogService;
 	/**
 	 * 根据app用户id，实体商户以及时间查询当前用户的记账信息
 	 * @param financeQuery
