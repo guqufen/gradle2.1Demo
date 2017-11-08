@@ -45,10 +45,11 @@ public class AppMerchentLevelController extends BaseController{
 	
 	// 商户等级查询(根据userid查询该用户下所有实体商户<等级和积分信息>列表)
 	@RequestMapping("/queryMercScore")
-	public ResultDTO<List<MerChantCoreDTO>> queryMercScore(@RequestBody MerchantUserRel merchantUserRel) {
+	public ResultDTO queryMercScore(@RequestBody MerchantUserRel merchantUserRel) {
 
 		if (null == merchantUserRel.getAppUserId()) {
-			return ResultDTO.fail(BigdataConstant.E_USERID_NULL);
+			logger.error("入参ID为null");
+			return ResultDTO.fail("入参ID为null");
 		}
 
 		List<MerChantCoreDTO> datas = merchantService.getMerchantsScoresByUserId(merchantUserRel.getAppUserId());
@@ -94,16 +95,18 @@ public class AppMerchentLevelController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/queryMercLevelDetail")
-	public ResultDTO<MerChantCoreDTO> queryMercLevelDetail(@RequestBody MerchantUserRel merchantUserRel) {
+	public ResultDTO queryMercLevelDetail(@RequestBody MerchantUserRel merchantUserRel) {
 		
 		//判空
 		if (null == merchantUserRel.getAppUserId() || StringUtils.isBlank(merchantUserRel.getEntityInnerCode())) {
-			return ResultDTO.fail(BigdataConstant.E_USERID_NULL);
+			logger.error("入参ID为null或实体商户号为空");
+			return ResultDTO.fail("入参ID为null或实体商户号为空");
 		}
 
 		//获取该条商户信息
 		MerChantCoreDTO merChantCoreDTO = merchantService.selectByEntityInnerCode(merchantUserRel);
 		if(null == merChantCoreDTO){
+			logger.error("该用户ID下未绑定该商户");
 			return fail("该用户ID下未绑定该商户");
 		}
 
