@@ -113,7 +113,10 @@
 		)
       </if>
 	  <if test="startTime != null and startTime !=''" >
-        AND ACB.happen_date = #{happenDate}
+        AND happen_date &gt;= #{startTime}
+      </if>
+      <if test="endTime != null and endTime !=''" >
+        AND happen_date &lt;= #{endTime}
       </if>
       AND ACB.io_type_code=IT.code
    	 </where>
