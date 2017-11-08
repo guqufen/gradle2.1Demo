@@ -111,6 +111,10 @@ public class IntegralLogServiceImpl extends BaseService implements IntegralLogSe
 			logger.error("未通过积分规则代码找到相关数据ruleCode=["+integralRule.getCode()+"]，请核查");
 			return null;
 		}
+		if(integralRule.getStatus() != 1){//1为启用，不为1表示禁用
+			logger.error("ruleCode=["+integralRule.getCode()+"]规则状态status=["+integralRule.getStatus()+"],未启用状态，请核查");
+			return null;
+		}
 
 		// 通过code查找积分类型
 		String type = IntegralTypeEnum.getTypeByCode(integralRule.getCode());// 通过code查找类型，封顶/计次/其他

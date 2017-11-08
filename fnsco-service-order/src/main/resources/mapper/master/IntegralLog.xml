@@ -4,12 +4,10 @@
 	<resultMap id="BaseResultMap"
 		type="net.fnsco.order.service.domain.IntegralLog">
 		<id column="id" property="id" jdbcType="INTEGER" />
-		<result column="entity_inner_code" property="entityInnerCode"
-			jdbcType="VARCHAR" />
+		<result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
 		<result column="rule_code" property="ruleCode" jdbcType="VARCHAR" />
 		<result column="integral" property="integral" jdbcType="INTEGER" />
-		<result column="integral_date" property="integralDate"
-			jdbcType="VARCHAR" />
+		<result column="integral_date" property="integralDate" jdbcType="VARCHAR" />
 		<result column="description" property="description" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 	</resultMap>
