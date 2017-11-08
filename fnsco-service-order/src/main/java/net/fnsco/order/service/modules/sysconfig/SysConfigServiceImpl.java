@@ -189,4 +189,12 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
 		return sysConfigDao.selectNextLevelByScores(record);
 	}
 
+	/**
+     * 通过type查询最大值，便于积分判断
+     * @param type
+     * @return
+     */
+    public SysConfig selectMaxByType(String type){
+    	return sysConfigDao.selectMaxByType(type);
+    }
 }
