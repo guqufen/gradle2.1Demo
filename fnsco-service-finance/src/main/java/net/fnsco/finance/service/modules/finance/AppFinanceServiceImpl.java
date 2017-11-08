@@ -211,7 +211,7 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 	 */
 	@Override
 	@Transactional
-	public int addFinance(FinanceRecordDTO financeRecordDTO) {
+	public void addFinance(FinanceRecordDTO financeRecordDTO) {
 		financeRecordDTO.setCash(getFen(financeRecordDTO.getCash()));
 		FinanceAccount financeAccount = new FinanceAccount();
 		String shopInnerCode= financeRecordDTO.getShopInnerCode();
@@ -237,7 +237,7 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 			financeRecordDTO.setAccountId(account.getAccountId());
 		}	
 		financeRecordDTO.setCreateTime(new Date());
-		return financeAccountBookDao.insertAccountBook(financeRecordDTO);
+		financeAccountBookDao.insertAccountBook(financeRecordDTO);
 	}
 	
 	/**
