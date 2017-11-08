@@ -26,7 +26,7 @@ import net.fnsco.bigdata.service.domain.MerchantShop;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.constant.ConstantEnum;
-import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.api.merchant.IntegralLogService;
 
 /**
  * @desc 商户店铺管理接口控制器
@@ -46,7 +46,7 @@ public class AppMerchantShopController extends BaseController {
 	private MerchantShopService merchantShopService;
 	
 	@Autowired
-	private IntegralRuleLogService integralRuleLogService;
+	private IntegralLogService integralRuleLogService;
 	/**
 	 * queryAllMerchantEntity:(查询商户实体列表)
 	 *

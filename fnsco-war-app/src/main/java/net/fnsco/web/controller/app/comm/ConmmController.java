@@ -25,7 +25,7 @@ import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.order.api.dto.ProtocolDTO;
 import net.fnsco.order.api.dto.SuggestDTO;
 import net.fnsco.order.api.dto.VersionDTO;
-import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.api.merchant.IntegralLogService;
 import net.fnsco.order.service.domain.IntegralRuleLog;
 import net.fnsco.web.controller.app.jo.DiscoveryJO;
 
@@ -38,7 +38,7 @@ public class ConmmController extends BaseController {
     @Autowired
     private Environment            env;
     @Autowired
-    private IntegralRuleLogService integralRuleLogService;
+    private IntegralLogService integralRuleLogService;
 
     @RequestMapping(value = "/checkUpdate")
     @ApiOperation(value = "版本更新")

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
+
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
@@ -20,8 +22,9 @@ import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.config.SysConfigService;
+import net.fnsco.order.api.constant.ConstantEnum.IntegralTypeEnum;
 import net.fnsco.order.api.dto.IntegralRuleDTO;
-import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.api.merchant.IntegralLogService;
 import net.fnsco.order.api.merchant.IntegralRuleService;
 import net.fnsco.order.service.domain.IntegralRule;
 import net.fnsco.order.service.domain.SysConfig;
@@ -55,13 +58,13 @@ public class AppMerchentLevelController extends BaseController{
 		for (MerChantCoreDTO merChantCoreDTO : datas) {
 			if(merChantCoreDTO.getScores() == null){
 				merChantCoreDTO.setScores(new BigDecimal(0));
-				merChantCoreDTO.setMercLevel("v1");
-				merChantCoreDTO.setLevelName("普通商家");
-				merChantCoreDTO.setLevelIcon(prefix + "/app/integral/image/lv1.png");
-				continue;
+//				merChantCoreDTO.setMercLevel("v1");
+//				merChantCoreDTO.setLevelName("普通商家");
+//				merChantCoreDTO.setLevelIcon(prefix + "/app/integral/image/lv1.png");
+//				continue;
 			}
 			SysConfig sysConfig = new SysConfig();
-			sysConfig.setType("11");
+			sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE);//type="11"
 
 			//如果积分大于50000，则为最高等级v7，需要通过type和name(v7)来查询
 			if(merChantCoreDTO.getScores().longValue() > 50000L){
@@ -104,15 +107,16 @@ public class AppMerchentLevelController extends BaseController{
 
 		// 根据商户已有积分查询商户所属等级(v1-v7)
 		if (merChantCoreDTO.getScores() == null) {
+			
 			merChantCoreDTO.setScores(new BigDecimal(0));
-			merChantCoreDTO.setMercLevel("v1");
-			merChantCoreDTO.setLevelName("普通商家");
-			merChantCoreDTO.setNextScores(new BigDecimal(501));
-			merChantCoreDTO.setNextLevelName("青铜商家");
-			merChantCoreDTO.setDistScores(new BigDecimal(501));
-		} else {
+//			merChantCoreDTO.setMercLevel("v1");
+//			merChantCoreDTO.setLevelName("普通商家");
+//			merChantCoreDTO.setNextScores(new BigDecimal(501));
+//			merChantCoreDTO.setNextLevelName("青铜商家");
+//			merChantCoreDTO.setDistScores(new BigDecimal(501));
+		} 
 			SysConfig sysConfig = new SysConfig();
-			sysConfig.setType("11");
+			sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE);//type="11"
 
 			//如果积分大于50000，则为最高等级v7，需要通过type和name(v7)来查询
 			if(merChantCoreDTO.getScores().longValue() > 50000L){
@@ -135,11 +139,11 @@ public class AppMerchentLevelController extends BaseController{
 					sysConfig3 = sysConfigService.selectByCondition(sysConfig);
 				}
 				merChantCoreDTO.setNextLevelName(sysConfig3.getRemark());//下一级vip名称
-				BigDecimal b1 = new BigDecimal(sysConfig3.getValue());//获取下一级vip积分
+				BigDecimal b1 = new BigDecimal(sysConfig2.getValue());//获取下一级vip积分
 				merChantCoreDTO.setNextScores(b1.add(new BigDecimal("1")));//设置下一级积分,要加1
 				merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()).add(new BigDecimal("1")));//积分差值,相减然后加1
 			}
-		}
+		
 
 		// 通过userId查询绑定的商户信息(内部商户号，商户名称)
 		return success(merChantCoreDTO);

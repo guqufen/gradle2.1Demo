@@ -23,7 +23,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.freamwork.business.WebUserDTO;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
-import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.api.merchant.IntegralLogService;
 import net.fnsco.web.controller.merchant.jo.MerchantChannelJO;
 import net.fnsco.web.controller.merchant.jo.MerchantPosJO;
 import net.fnsco.web.controller.merchant.jo.PosJO;
@@ -42,7 +42,7 @@ public class MerchantPosController extends BaseController {
     @Autowired
     private MerchantPosService merchantPosService;
     @Autowired
-    private IntegralRuleLogService integralRuleLogService;
+    private IntegralLogService integralRuleLogService;
     @Autowired
     private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
     

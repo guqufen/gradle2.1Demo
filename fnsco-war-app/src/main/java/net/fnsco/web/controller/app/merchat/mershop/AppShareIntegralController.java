@@ -16,7 +16,7 @@ import net.fnsco.bigdata.api.dto.ShareIntegralDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.constant.ConstantEnum;
-import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.api.merchant.IntegralLogService;
 import net.fnsco.order.service.domain.IntegralRuleLog;
 
 /**
@@ -32,7 +32,7 @@ import net.fnsco.order.service.domain.IntegralRuleLog;
 public class AppShareIntegralController extends BaseController{
 	
 	@Autowired
-	private IntegralRuleLogService integralRuleLogService;
+	private IntegralLogService integralRuleLogService;
 	
 	/**
 	 * queryAllMerchantShop:(分享成功后统计积分接口)

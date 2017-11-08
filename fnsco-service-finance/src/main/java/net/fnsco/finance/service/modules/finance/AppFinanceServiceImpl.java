@@ -35,7 +35,7 @@ import net.fnsco.finance.service.dao.master.FinanceAccountBookDao;
 import net.fnsco.finance.service.domain.FinanceAccount;
 import net.fnsco.finance.service.domain.FinanceAccountBook;
 import net.fnsco.finance.service.domain.FinanceIoType;
-import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.api.merchant.IntegralLogService;
 
 
 /**
@@ -49,7 +49,7 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 	@Autowired
 	private FinanceAccountBookDao financeAccountBookDao;
 	@Autowired
-	private IntegralRuleLogService integralRuleLogService;
+	private IntegralLogService integralRuleLogService;
 	
 	@Autowired
 	private Environment env;

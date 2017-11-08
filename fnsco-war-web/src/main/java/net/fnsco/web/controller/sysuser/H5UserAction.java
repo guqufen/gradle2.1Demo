@@ -21,7 +21,7 @@ import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.VersionDTO;
-import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.api.merchant.IntegralLogService;
 
 /**@desc 后台管理系统登录控制器
  * @author tangliang
@@ -35,7 +35,7 @@ public class H5UserAction extends BaseController {
     private AppUserService         appUserService;
 
     @Autowired
-    private IntegralRuleLogService integralRuleLogService;
+    private IntegralLogService integralRuleLogService;
 
     @Autowired
     private ConmmService           conmmService;
