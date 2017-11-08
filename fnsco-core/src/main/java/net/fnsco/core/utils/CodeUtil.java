@@ -36,7 +36,7 @@ public class CodeUtil {
 			int hour = calendar.get(Calendar.HOUR_OF_DAY);
 			int value = (int) (Math.random() * (999999999 - 100000000) + 100000000);
 			StringBuilder sb = new StringBuilder();
-			sb.append(StringUtils.leftPad(String.valueOf(month), 2, '0')).append(StringUtils.leftPad(String.valueOf(day), 2, '0'))
+			sb.append(prefix).append(StringUtils.leftPad(String.valueOf(month), 2, '0')).append(StringUtils.leftPad(String.valueOf(day), 2, '0'))
 					.append(StringUtils.leftPad(String.valueOf(hour), 2, '0')).append(value);
 
 			return sb.toString();

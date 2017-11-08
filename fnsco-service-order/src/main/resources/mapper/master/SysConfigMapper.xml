@@ -192,4 +192,12 @@
     AND CAST(value AS SIGNED) &gt;= CAST(#{value} AS SIGNED)<!-- 大于，查询下一级 -->
     ORDER BY order_no ASC limit 1,1
   </select>
+   <!-- 通过类型查询最大值所在列 -->
+  <select id="selectMaxByType" parameterType="java.lang.String"  resultMap="BaseResultMap">
+    SELECT 
+     <include refid="Base_Column_List" />
+    FROM sys_config
+    WHERE type = #{type}
+    ORDER BY CAST(value AS SIGNED) DESC LIMIT 1
+  </select>
 </mapper>

@@ -14,7 +14,7 @@ import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.order.api.constant.ConstantEnum;
-import net.fnsco.order.api.merchant.IntegralRuleLogService;
+import net.fnsco.order.api.merchant.IntegralLogService;
 import net.fnsco.order.api.merchant.IntegralRuleService;
 import net.fnsco.order.service.dao.master.IntegralRuleDAO;
 import net.fnsco.order.service.domain.IntegralRule;
@@ -29,7 +29,7 @@ public class IntegralRuleServiceImpl extends BaseService implements IntegralRule
 	private TradeDataDAO    tradeDataDAO;
 	
 	@Autowired
-	private IntegralRuleLogService integralRuleLogService;
+	private IntegralLogService integralRuleLogService;
 	
 	@Autowired
 	private MerchantEntityCoreRefDao merchantEntityCoreRefDao;

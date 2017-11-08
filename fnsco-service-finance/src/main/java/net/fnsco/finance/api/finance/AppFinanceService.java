@@ -5,7 +5,10 @@ package net.fnsco.finance.api.finance;
 
 
 
+import java.util.List;
+
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.finance.api.dto.AppUserShopDTO;
 import net.fnsco.finance.api.dto.FinanceBookKeepingDTO;
 import net.fnsco.finance.api.dto.FinanceDetailDTO;
 import net.fnsco.finance.api.dto.FinanceQueryDTO;
@@ -30,21 +33,26 @@ public interface AppFinanceService {
 	 * 查询收支子类型
 	 * @return
 	 */
-	ResultDTO<IoTypeAndShopDTO> queryIoTypeAndShop(String entityInnerCode);
+	List<FinanceIoType> queryIoType();
+	/**
+	 * 查询店铺信息
+	 * @return
+	 */
+	List<AppUserShopDTO> queryShop(String entityInnerCode);
 	
 	/**
 	 * 每日一记新增记录
 	 * @param financeRecordDTO
 	 * @return
 	 */
-	ResultDTO addFinance(FinanceRecordDTO financeRecordDTO);
+	int addFinance(FinanceRecordDTO financeRecordDTO);
 	
 	/**
 	 * 编辑记账信息
 	 * @param financeRecordDTO
 	 * @return
 	 */
-	ResultDTO modifyFinance(FinanceRecordDTO financeRecordDTO);
+	int modifyFinance(FinanceRecordDTO financeRecordDTO);
 	/**
 	 * 查询当日的记账详情
 	 * @param queryDetailDTO
@@ -56,5 +64,5 @@ public interface AppFinanceService {
 	 * @param id
 	 * @return
 	 */
-	ResultDTO deleteFinanceById(Integer id);
+	void deleteFinanceById(Integer id);
 }

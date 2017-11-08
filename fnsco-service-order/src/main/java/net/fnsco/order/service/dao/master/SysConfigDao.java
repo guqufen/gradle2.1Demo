@@ -50,4 +50,11 @@ public interface SysConfigDao {
      * @return
      */
     SysConfig selectNextLevelByScores(SysConfig record);
+    
+    /**
+     * 通过type查询最大值所在列，便于积分判断
+     * @param type
+     * @return
+     */
+    SysConfig selectMaxByType(String type);
 }
