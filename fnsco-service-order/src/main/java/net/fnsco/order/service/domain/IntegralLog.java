@@ -10,7 +10,7 @@ import net.fnsco.core.base.DTO;
  * @author Administrator
  *
  */
-public class IntegralRuleLog extends DTO {
+public class IntegralLog extends DTO {
 
 	/**
 	 * 
