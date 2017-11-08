@@ -229,7 +229,7 @@
   </update>
   <!-- 按照entityInnerCode查询店铺集合 -->
   <select id="selectByEntityInnerCode" parameterType="java.lang.String" resultMap="ListResultMap">
-    SELECT shop_name ,area,address,shop_inner_code FROM m_merchant_shop WHERE entity_inner_code = #{entityInnerCode} and status = 1
+    SELECT shop_name ,area,address,shop_inner_code FROM m_merchant_shop WHERE entity_inner_code = #{entityInnerCode} and status = 1 order by create_timer desc 
   </select>
   
   <!-- 条件查询总数 -->
