@@ -2,6 +2,8 @@ package net.fnsco.web.controller.app.finance;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,12 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.finance.api.dto.AppUserShopDTO;
 import net.fnsco.finance.api.dto.FinanceBookKeepingDTO;
 import net.fnsco.finance.api.dto.FinanceQueryDTO;
 import net.fnsco.finance.api.dto.FinanceRecordDTO;
 import net.fnsco.finance.api.dto.IoTypeAndShopDTO;
 import net.fnsco.finance.api.finance.AppFinanceService;
 import net.fnsco.finance.service.domain.FinanceAccountBook;
+import net.fnsco.finance.service.domain.FinanceIoType;
+import net.fnsco.order.api.merchant.IntegralRuleLogService;
 
 
 /**
@@ -31,6 +36,8 @@ public class AppFinanceController extends BaseController {
     
 	@Autowired
 	private AppFinanceService appFinanceService;
+	@Autowired
+	private IntegralRuleLogService integralRuleLogService;
 	/**
 	 * 根据app用户id，实体商户以及时间查询当前用户的记账信息
 	 * @param financeQuery
@@ -49,9 +56,13 @@ public class AppFinanceController extends BaseController {
     @RequestMapping(value = "/getIoType" , method = RequestMethod.POST)
     @ApiOperation(value = "查询收支子类型信息")
     public ResultDTO<IoTypeAndShopDTO> getIoType(@RequestBody FinanceQueryDTO financeQuery) {
+    	List<FinanceIoType> ioList = appFinanceService.queryIoType();
     	String entityInnerCode =  financeQuery.getEntityInnerCode();
-    	ResultDTO<IoTypeAndShopDTO> ioTypeAndShop = appFinanceService.queryIoTypeAndShop(entityInnerCode);
-        return ioTypeAndShop;
+    	List<AppUserShopDTO> shopList = appFinanceService.queryShop(entityInnerCode);
+    	IoTypeAndShopDTO ioTypeAndShop = new IoTypeAndShopDTO();
+    	ioTypeAndShop.setFinanceIoTypeList(ioList);
+    	ioTypeAndShop.setAppUserShopDTOList(shopList);
+        return  ResultDTO.success(ioTypeAndShop);
     } 
     /**
      * 新增记账信息
@@ -61,13 +72,20 @@ public class AppFinanceController extends BaseController {
     @RequestMapping(value = "/addFinance" , method = RequestMethod.POST)
     @ApiOperation(value = "新增记账信息")
     public ResultDTO addFinance(@RequestBody FinanceRecordDTO financeRecordDTO) {
-        return appFinanceService.addFinance(financeRecordDTO);
+        int i= appFinanceService.addFinance(financeRecordDTO);
+        String entityInnerCode = financeRecordDTO.getEntityInnerCode();		
+		integralRuleLogService.insert(entityInnerCode, "007");
+		return ResultDTO.success();
     } 
     
     @RequestMapping(value = "/modifyFinance" , method = RequestMethod.POST)
     @ApiOperation(value = "修改记账信息")
     public ResultDTO modifyFinance(@RequestBody FinanceRecordDTO financeRecordDTO) {
-    	 return appFinanceService.modifyFinance(financeRecordDTO);
+    	int i =appFinanceService.modifyFinance(financeRecordDTO);
+    	if(i==0) {
+    		ResultDTO.fail("记账信息修改失败");
+    	}
+    	 return ResultDTO.success();
     } 
     
     @RequestMapping(value = "/getFinanceDetails" , method = RequestMethod.POST)
@@ -80,8 +98,8 @@ public class AppFinanceController extends BaseController {
     
     @RequestMapping(value = "/deleteFinanceById" , method = RequestMethod.POST)
     @ApiOperation(value = "删除记账")
-    public ResultDTO deleteFinanceById(@RequestBody FinanceAccountBook financeAccountBook) {
+    public void deleteFinanceById(@RequestBody FinanceAccountBook financeAccountBook) {
     	Integer id= financeAccountBook.getId();
-    	return appFinanceService.deleteFinanceById(id);
+    	appFinanceService.deleteFinanceById(id);
     } 
 }
