@@ -20,7 +20,7 @@ import net.fnsco.order.api.merchant.IntegralLogService;
 import net.fnsco.order.service.dao.master.IntegralRuleDAO;
 import net.fnsco.order.service.dao.master.IntegralLogDAO;
 import net.fnsco.order.service.domain.IntegralRule;
-import net.fnsco.order.service.domain.IntegralRuleLog;
+import net.fnsco.order.service.domain.IntegralLog;
 
 
 @Service
@@ -34,13 +34,13 @@ public class IntegralLogServiceImpl extends BaseService implements IntegralLogSe
 	private MerchantEntityDao merchantEntityDao;
 
 	@Override
-	public List<IntegralRuleLog> queryListByCondition(IntegralRuleLog integralRuleLog) {
+	public List<IntegralLog> queryListByCondition(IntegralLog integralRuleLog) {
 
 		return integralLogDAO.queryListByCondition(integralRuleLog);
 	}
 
 	@Override
-	public Integer querySumbyCondition(IntegralRuleLog integralRuleLog) {
+	public Integer querySumbyCondition(IntegralLog integralRuleLog) {
 
 		return integralLogDAO.querySumbyCondition(integralRuleLog);
 	}
@@ -61,8 +61,8 @@ public class IntegralLogServiceImpl extends BaseService implements IntegralLogSe
 	 * @param integralRuleLog
 	 * @return
 	 */
-	public List<IntegralRuleLog> queryListByEntityInnerCode(String entityInnerCode) {
-		IntegralRuleLog integralRuleLog2 = new IntegralRuleLog();
+	public List<IntegralLog> queryListByEntityInnerCode(String entityInnerCode) {
+		IntegralLog integralRuleLog2 = new IntegralLog();
 		integralRuleLog2.setEntityInnerCode(entityInnerCode);// 设置实体商户号
 		integralRuleLog2.setRuleCode("004");// 设置规则代码
 		return integralLogDAO.queryListByCondition(integralRuleLog2);
@@ -78,7 +78,7 @@ public class IntegralLogServiceImpl extends BaseService implements IntegralLogSe
 			return -1;
 		}
 
-		IntegralRuleLog integralRuleLog = dealInsertData(entityInnerCode, ruleCode, description);
+		IntegralLog integralRuleLog = dealInsertData(entityInnerCode, ruleCode, description);
 		// 返回为空，则不用更新
 		if (null == integralRuleLog) {
 			return 1;
@@ -99,9 +99,9 @@ public class IntegralLogServiceImpl extends BaseService implements IntegralLogSe
 	}
 
 	// 处理插日志表公共部分，比如判断
-	public IntegralRuleLog dealInsertData(String entityInnerCode, String ruleCode, String description) {
+	public IntegralLog dealInsertData(String entityInnerCode, String ruleCode, String description) {
 
-		IntegralRuleLog integralRuleLog = new IntegralRuleLog();
+		IntegralLog integralRuleLog = new IntegralLog();
 		integralRuleLog.setEntityInnerCode(entityInnerCode);
 		integralRuleLog.setRuleCode(ruleCode);
 
@@ -122,7 +122,7 @@ public class IntegralLogServiceImpl extends BaseService implements IntegralLogSe
 		if ("1" == type) {// type=1表示封顶,code为001,002,007时
 
 			// 通过积分日期和code去查找
-			IntegralRuleLog integralRuleLog2 = new IntegralRuleLog();
+			IntegralLog integralRuleLog2 = new IntegralLog();
 			integralRuleLog2.setEntityInnerCode(integralRuleLog.getEntityInnerCode());// 设置实体商户号
 			integralRuleLog2.setRuleCode(integralRuleLog.getRuleCode());// 设置规则代码
 			integralRuleLog2.setIntegralDate(DateUtils.getDateStrYYYYMMDD(new Date()));// 设置积分日期
@@ -146,7 +146,7 @@ public class IntegralLogServiceImpl extends BaseService implements IntegralLogSe
 		} else if ("2" == type) {// type=2表示每日第一次，code为003
 
 			// 通过积分日期和code去查找
-			IntegralRuleLog integralRuleLog2 = new IntegralRuleLog();
+			IntegralLog integralRuleLog2 = new IntegralLog();
 			integralRuleLog2.setEntityInnerCode(integralRuleLog.getEntityInnerCode());// 设置实体商户号
 			integralRuleLog2.setRuleCode(integralRuleLog.getRuleCode());// 设置规则代码
 			integralRuleLog2.setIntegralDate(DateUtils.getDateStrYYYYMMDD(new Date()));// 设置积分日期
@@ -159,7 +159,7 @@ public class IntegralLogServiceImpl extends BaseService implements IntegralLogSe
 		} else if ("3" == type) {// type=3表示所有前3次，code为006
 
 			// 通过积分日期和code去查找
-			IntegralRuleLog integralRuleLog2 = new IntegralRuleLog();
+			IntegralLog integralRuleLog2 = new IntegralLog();
 			integralRuleLog2.setEntityInnerCode(integralRuleLog.getEntityInnerCode());// 设置实体商户号
 			integralRuleLog2.setRuleCode(integralRuleLog.getRuleCode());// 设置规则代码
 			Integer integralCount = integralLogDAO.queryCountbyCondition(integralRuleLog2);

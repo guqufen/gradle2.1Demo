@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import net.fnsco.order.service.domain.IntegralRuleLog;
+import net.fnsco.order.service.domain.IntegralLog;
 
 @Mapper
 public interface IntegralLogDAO {
@@ -14,26 +14,26 @@ public interface IntegralLogDAO {
 	 * @param integralRuleLog
 	 * @return
 	 */
-	public List<IntegralRuleLog> queryListByCondition(IntegralRuleLog integralRuleLog);
+	public List<IntegralLog> queryListByCondition(IntegralLog integralRuleLog);
 	
 	/**
 	 * 通过实体商户号+积分规则代码/积分日期查询总积分
 	 * @param integralRuleLog
 	 * @return :总积分
 	 */
-	public Integer querySumbyCondition(IntegralRuleLog integralRuleLog);
+	public Integer querySumbyCondition(IntegralLog integralRuleLog);
 	
 	/**
 	 * 往商户积分表插入数据
 	 * @param integralRuleLog
 	 * @return :总积分
 	 */
-	public int insert(IntegralRuleLog integralRuleLog);
+	public int insert(IntegralLog integralRuleLog);
 	
 	/**
 	 * 通过实体商户号+积分规则代码/积分日期查询次数
 	 * @param integralRuleLog
 	 * @return :总积分
 	 */
-	public Integer queryCountbyCondition(IntegralRuleLog integralRuleLog);
+	public Integer queryCountbyCondition(IntegralLog integralRuleLog);
 }

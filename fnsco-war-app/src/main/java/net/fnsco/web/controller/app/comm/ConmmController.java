@@ -26,7 +26,7 @@ import net.fnsco.order.api.dto.ProtocolDTO;
 import net.fnsco.order.api.dto.SuggestDTO;
 import net.fnsco.order.api.dto.VersionDTO;
 import net.fnsco.order.api.merchant.IntegralLogService;
-import net.fnsco.order.service.domain.IntegralRuleLog;
+import net.fnsco.order.service.domain.IntegralLog;
 import net.fnsco.web.controller.app.jo.DiscoveryJO;
 
 @RestController
@@ -90,12 +90,12 @@ public class ConmmController extends BaseController {
       
         String url = env.getProperty("web.base.url") + "/acti/register.html?entityId=" + entityInnerCode;
         Map<String, Object> resultMap = Maps.newHashMap();
-        List<IntegralRuleLog> list = integralRuleLogService.queryListByEntityInnerCode(entityInnerCode);
+        List<IntegralLog> list = integralRuleLogService.queryListByEntityInnerCode(entityInnerCode);
         Integer integral = 0;// 积分值 
         int count = 0;
         if (list != null) {
             count = list.size();
-            for (IntegralRuleLog log : list) {
+            for (IntegralLog log : list) {
                 integral += log.getIntegral();
             }
         }
