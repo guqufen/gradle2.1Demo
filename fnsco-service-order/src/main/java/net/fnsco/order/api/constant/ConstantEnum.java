@@ -245,6 +245,7 @@ public class ConstantEnum {
 		private String code;
 		private String type;
 		private String name;
+		public static String INTEGRAL_TYPE="11";
 
 		private IntegralTypeEnum(String code, String type, String name) {
 			this.code = code;

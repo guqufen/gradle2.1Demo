@@ -65,8 +65,8 @@ public class AppMerchentLevelController extends BaseController{
 //				continue;
 			}
 			SysConfig sysConfig = new SysConfig();
-			sysConfig.setType("11");//type="11"
-			SysConfig sysconfigMax = sysConfigService.selectMaxByType("11");//通过type查找最大值
+			sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE);//type="11"
+			SysConfig sysconfigMax = sysConfigService.selectMaxByType(IntegralTypeEnum.INTEGRAL_TYPE);//通过type查找最大值
 
 			//如果积分大于查找出来的最大值，则为最高等级，通过找出来的最大的给当前赋值
 			if(merChantCoreDTO.getScores().longValue() > Long.parseLong(sysconfigMax.getValue())){
@@ -118,8 +118,8 @@ public class AppMerchentLevelController extends BaseController{
 //			merChantCoreDTO.setDistScores(new BigDecimal(501));
 		} 
 			SysConfig sysConfig = new SysConfig();
-			sysConfig.setType("11");//type="11"
-			SysConfig sysconfigMax = sysConfigService.selectMaxByType("11");//通过type查找最大值
+			sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE);//type="11"
+			SysConfig sysconfigMax = sysConfigService.selectMaxByType(IntegralTypeEnum.INTEGRAL_TYPE);//通过type查找最大值
 
 			//如果积分大于查找出来的最大值，则为最高等级，通过找出来的最大的给当前赋值
 			if(merChantCoreDTO.getScores().longValue() > Long.parseLong(sysconfigMax.getValue())){
