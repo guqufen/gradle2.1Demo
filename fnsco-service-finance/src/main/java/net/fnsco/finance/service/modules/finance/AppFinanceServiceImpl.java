@@ -120,30 +120,29 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 		
 		List<FinanceEveryDayDTO> datasLists=new ArrayList<FinanceEveryDayDTO>();
 		List<String> datas = financeAccountBookDao.queryDates(financeQuery);
+		List<FinanceAccountBook> everyDatasList = financeAccountBookDao.queryList(financeQuery);
 		for(String da : datas) {
-			financeQuery.setHappenDate(da);
+			String prefix = env.getProperty("app.base.url");
 			FinanceEveryDayDTO financeEveryDay = new FinanceEveryDayDTO();
+			List<FinanceAccountBook> datasList =new ArrayList<FinanceAccountBook>();
 			BigDecimal spending = new BigDecimal(0);
 			BigDecimal revenue = new BigDecimal(0);
-			List<FinanceAccountBook> datasList = financeAccountBookDao.queryList(financeQuery);
-			if(datasList!=null) {
-				//循环处理记账支出收入
-				String prefix = env.getProperty("app.base.url");
-				for(FinanceAccountBook data : datasList) {
-					String url = data.getIcoUrlGray();
+			for(FinanceAccountBook edl : everyDatasList) {
+				if(da==edl.getHappenDate()) {
+					String url = edl.getIcoUrlGray();
 					String icoUrl = prefix+url;
-					data.setIcoUrl(icoUrl);
-					if(data.getType()==0) {
-						BigDecimal cashDec=data.getCashDec();
+					edl.setIcoUrl(icoUrl);
+					if(edl.getType()==0) {
+						BigDecimal cashDec=edl.getCashDec();
 						BigDecimal spend = cashDec.negate();
-						data.setCash(getYuan(spend).toString());
+						edl.setCash(getYuan(spend).toString());
 						spending = spending.add(cashDec);
 					}else {
-						data.setCash("+"+getYuan(data.getCashDec()).toString());
-						revenue = revenue.add(data.getCashDec());
+						edl.setCash("+"+getYuan(edl.getCashDec()).toString());
+						revenue = revenue.add(edl.getCashDec());
 					}
+					datasList.add(edl);
 				}
-				financeEveryDay.setAccountBook(datasList);
 			}
 			//获取日期的星期以及天
 			Date date = null;
@@ -164,9 +163,9 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 			financeEveryDay.setWeek(week);
 			financeEveryDay.setSpending(getYuan(spending).toString());
 			financeEveryDay.setRevenue(getYuan(revenue).toString());
+			financeEveryDay.setAccountBook(datasList);
 			datasLists.add(financeEveryDay);
-		} 
-		
+		}
         financeBookKeepingDTO.setFinanceEveryDay(datasLists);
         List<FinanceAccountBook> amountList = financeAccountBookDao.queryAmount(financeQuery);
         for(FinanceAccountBook account : amountList) {
