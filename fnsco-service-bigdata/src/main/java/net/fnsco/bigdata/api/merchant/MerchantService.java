@@ -26,6 +26,7 @@ import net.fnsco.core.base.ResultDTO;
  */
 public interface MerchantService {
     String getMerCode(String merNum, String channelType);
+
     /**
      * 获取商户渠道信息信息
      * @param merNum 商户号
@@ -33,6 +34,7 @@ public interface MerchantService {
      * @return
      */
     public MerchantChannel getMerChannel(String merCode, String channelType);
+
     /**
      * 
      * getMerChannelByInnerCodeType:(根据内部商务号和渠道类型获取渠道信息)
@@ -43,7 +45,10 @@ public interface MerchantService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public MerchantChannel getMerChannelByInnerCodeType(String innerCode, String channelType);
+    MerchantChannel getMerChannelByInnerCodeType(String innerCode, String channelType);
+
+    MerchantChannel getMerChannelByMerChannelInnerCodeType(String merChannelInnerCode, String channelType);
+
     /**
      * 
      * updatePosName:(更新pos机名称，拉卡拉机器使用)
@@ -65,6 +70,7 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     String getPosName(String snCode);
+
     /**
      * 
      * getPosName:(查询pos机对应的app用户)
@@ -75,6 +81,7 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     List<String> getMerchantAppUser(String snCode);
+
     /**
      * getMerchantsCoreByUserId:(这里用一句话描述这个方法的作用) 根据用户ID 查询商户列表
      *
@@ -86,13 +93,14 @@ public interface MerchantService {
      */
 
     ResultDTO<List<MerChantCoreDTO>> getMerchantsCoreByUserId(Integer userId);
-    
+
     /**
      * getMerchantsScoresByUserId：根据用户ID查询商户积分信息列表
      * @param userId:用户ID
      * @return
      */
     List<MerChantCoreDTO> getMerchantsScoresByUserId(Integer userId);
+
     /**
      * getMerchantsScoresByUserId：根据用户ID和内部商户号查询商户积分信息列表
      * @param userId:用户ID
@@ -186,7 +194,7 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     MerchantTerminal getTerminalDetailByCode(String terminalCode);
-    
+
     /**
      * 
      * getMerChantCoreByInnerCode:(根据内部商务号查询商户信息)
@@ -197,5 +205,5 @@ public interface MerchantService {
      * @since  CodingExample　Ver 1.1
      */
     MerchantCore getMerChantCoreByInnerCode(String innerCode);
-    
+
 }
