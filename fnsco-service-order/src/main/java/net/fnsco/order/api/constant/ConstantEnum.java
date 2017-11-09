@@ -240,12 +240,13 @@ public class ConstantEnum {
 		CODE_YQ04("009", "2", "邀请新商家分享连接-微信朋友圈"),
 		CODE_YQ05("010", "2", "邀请新商家分享连接-QQ聊天"),
 		CODE_YQ06("011", "2", "邀请新商家分享连接-QQ空间"),
-		CODE_YQ07("012", "2", "邀请新商家分享连接-新浪微博");
+		CODE_YQ07("012", "2", "邀请新商家分享连接-新浪微博"),
+    	INTEGRAL_TYPE("11","11","11");
 
 		private String code;
 		private String type;
 		private String name;
-		public static String INTEGRAL_TYPE="11";
+//		public static String INTEGRAL_TYPE="11";
 
 		private IntegralTypeEnum(String code, String type, String name) {
 			this.code = code;

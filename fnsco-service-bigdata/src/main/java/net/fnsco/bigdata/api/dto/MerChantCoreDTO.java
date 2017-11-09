@@ -49,6 +49,16 @@ public class MerChantCoreDTO extends DTO {
 	private BigDecimal distScores;//积分差值
 	
 	private String levelIcon;//等级图标
+	
+	private String description;//描述，类似：距离'xx商家'还差xxx积分/已达到最高级别
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public String getMercName() {
 		return mercName;

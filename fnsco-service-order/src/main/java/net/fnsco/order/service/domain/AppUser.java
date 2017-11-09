@@ -5,55 +5,101 @@ import java.util.Date;
 public class AppUser {
     private Integer id;
 
-    private String userName;
+    private String  userName;
 
-    private String mobile;
+    private String  mobile;
 
-    private String password;
+    private String  password;
 
-    private String realName;
+    private String  realName;
 
-    private String deviceId;
+    private String  deviceId;
 
     private Integer gesState;
 
-    private String gesPassword;
+    private String  gesPassword;
 
     private Integer gesTrail;
 
-    private String payPassword;
+    private String  payPassword;
 
     private Integer deviceType;
 
-    private String deviceToken;
+    private String  deviceToken;
 
     private Integer passwordErrorNum;
 
-    private Date passwordErrorDate;
+    private Date    passwordErrorDate;
 
-    private String remark;
+    private String  remark;
 
-    private Date regTime;
+    private Date    regTime;
 
-    private Date lastLoginTime;
+    private Date    lastLoginTime;
 
-    private Date modifyTime;
+    private Date    modifyTime;
 
     private Integer state;
-    
+
     private Integer forcedLoginOut;
-    
+
     private Integer sex;
 
-    private String headImagePath;
+    private String  headImagePath;
+    private String  inviteEntityInnnerCode;
+    private Integer inviteStatus;
+
+    /**
+     * inviteEntityInnnerCode
+     *
+     * @return  the inviteEntityInnnerCode
+     * @since   CodingExample Ver 1.0
+    */
     
+    public String getInviteEntityInnnerCode() {
+        return inviteEntityInnnerCode;
+    }
+
+    /**
+     * inviteEntityInnnerCode
+     *
+     * @param   inviteEntityInnnerCode    the inviteEntityInnnerCode to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setInviteEntityInnnerCode(String inviteEntityInnnerCode) {
+        this.inviteEntityInnnerCode = inviteEntityInnnerCode;
+    }
+
+    /**
+     * inviteStatus
+     *
+     * @return  the inviteStatus
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getInviteStatus() {
+        return inviteStatus;
+    }
+
+    /**
+     * inviteStatus
+     *
+     * @param   inviteStatus    the inviteStatus to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setInviteStatus(Integer inviteStatus) {
+        this.inviteStatus = inviteStatus;
+    }
+
     /**
      * sex
      *
      * @return  the sex
      * @since   CodingExample Ver 1.0
     */
-    
+
     public Integer getSex() {
         return sex;
     }
@@ -64,7 +110,7 @@ public class AppUser {
      * @param   sex    the sex to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setSex(Integer sex) {
         this.sex = sex;
     }
@@ -75,7 +121,7 @@ public class AppUser {
      * @return  the headImagePath
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getHeadImagePath() {
         return headImagePath;
     }
@@ -86,7 +132,7 @@ public class AppUser {
      * @param   headImagePath    the headImagePath to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setHeadImagePath(String headImagePath) {
         this.headImagePath = headImagePath;
     }
@@ -97,7 +143,7 @@ public class AppUser {
      * @return  the forcedLoginOut
      * @since   CodingExample Ver 1.0
     */
-    
+
     public Integer getForcedLoginOut() {
         return forcedLoginOut;
     }
@@ -108,7 +154,7 @@ public class AppUser {
      * @param   forcedLoginOut    the forcedLoginOut to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setForcedLoginOut(Integer forcedLoginOut) {
         this.forcedLoginOut = forcedLoginOut;
     }

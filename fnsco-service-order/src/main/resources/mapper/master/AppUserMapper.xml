@@ -26,6 +26,8 @@
 		<result column="forced_login_out" jdbcType="INTEGER" property="forcedLoginOut" />
 		<result column="sex" jdbcType="INTEGER" property="sex" />
 		<result column="head_image_path" jdbcType="VARCHAR" property="headImagePath" />
+		<result column="invite_status" jdbcType="INTEGER" property="inviteStatus" />
+		<result column="invite_entity_innner_code" jdbcType="VARCHAR" property="inviteEntityInnnerCode" />
 	</resultMap>
 	<!-- WEB页面用 -->
 	<resultMap id="PageResultMap" type="net.fnsco.order.api.dto.AppUserManageDTO" >
@@ -50,7 +52,7 @@
 		id, user_name, mobile, password, real_name, device_id, ges_state,
 		ges_password, ges_trail,
 		pay_password, device_type, device_token, password_error_num, password_error_date,
-		remark, reg_time, last_login_time, modify_time, state,forced_login_out,sex,head_image_path
+		remark, reg_time, last_login_time, modify_time, state,forced_login_out,sex,head_image_path,invite_entity_innner_code,invite_status
 	</sql>
 	<!-- 根据手机号更新用户 密码 -->
 	<update id="updatePasswordByPhone" parameterType="java.lang.String">
@@ -329,5 +331,12 @@
 		<include refid="Base_Column_List" />
 		from m_app_user
 		WHERE state = 1 
+  </select>
+  <!-- 查询所有被邀请的用户 -->
+  <select id="selectAllInviteAppUser" resultMap="BaseResultMap">
+      select
+		<include refid="Base_Column_List" />
+		from m_app_user
+		WHERE state = 1 and invite_status='0'
   </select>
 </mapper>

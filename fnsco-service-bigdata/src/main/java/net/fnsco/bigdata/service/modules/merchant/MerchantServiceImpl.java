@@ -110,11 +110,12 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     @Override
     public MerchantChannel getMerChannelByInnerCodeType(String innerCode, String channelType) {
         MerchantChannel merchantChannel = null;
+        //根据innerCode查询实体商户
         List<MerchantEntityCoreRef> entityRefList = entityCoreRefDao.selectByInnerCode(innerCode);
         for (MerchantEntityCoreRef ref : entityRefList) {
-            if (!ref.getInnerCode().equals(innerCode)) {
+            if (!ref.getInnerCode().equals(innerCode)) {//根据关系找不同渠道的商户信息
                 merchantChannel = merchantChannelDao.selectByInnerCodeType(ref.getInnerCode(), channelType);
-                if (null != merchantChannel && "04".equals(merchantChannel.getChannelType())) {
+                if (null != merchantChannel) {
                     merchantChannel.setEntityInnerCode(ref.getEntityInnerCode());
                     break;
                 }
@@ -122,7 +123,10 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         }
         return merchantChannel;
     }
-
+    @Override
+    public MerchantChannel getMerChannelByMerChannelInnerCodeType(String merChannelInnerCode, String channelType) {
+        return merchantChannelDao.selectByInnerCodeType(merChannelInnerCode, channelType);
+    }
     /**
       * 
       * @param merNum 商户号

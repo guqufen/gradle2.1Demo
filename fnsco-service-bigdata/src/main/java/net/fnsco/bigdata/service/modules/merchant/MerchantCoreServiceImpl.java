@@ -680,4 +680,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     public MerchantCore selectUniqueMer(String cardNum, String accountNo, String channelType, String channelMerId) {
         return merchantCoreDao.selectUniqueMer(cardNum, accountNo, channelType, channelMerId);
     }
+    
+    @Override
+    public List<MerchantEntityCoreRef> queryEntityCoreRefByInnerCode(String innerCode) {
+        return merchantEntityCoreRefDao.selectByInnerCode(innerCode);
+    }
 }
