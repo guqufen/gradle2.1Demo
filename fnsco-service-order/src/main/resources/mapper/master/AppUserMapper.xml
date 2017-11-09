@@ -86,7 +86,7 @@
 		insert into m_app_user(id, user_name, mobile, password, real_name,
 		device_id, ges_state, ges_password, ges_trail,
 		pay_password, device_type, device_token, password_error_num, password_error_date,
-		remark, reg_time, last_login_time, modify_time, state,forced_login_out)
+		remark, reg_time, last_login_time, modify_time, state,forced_login_out,invite_entity_innner_code,invite_status)
 		values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
 		#{mobile,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},
 		#{realName,jdbcType=VARCHAR}, #{deviceId,jdbcType=VARCHAR},
@@ -96,7 +96,8 @@
 		#{passwordErrorNum,jdbcType=INTEGER},
 		#{passwordErrorDate,jdbcType=TIMESTAMP},
 		#{remark,jdbcType=VARCHAR}, #{regTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP},
-		#{modifyTime,jdbcType=TIMESTAMP},#{state,jdbcType=INTEGER},#{forcedLoginOut,jdbcType=INTEGER})
+		#{modifyTime,jdbcType=TIMESTAMP},#{state,jdbcType=INTEGER},#{forcedLoginOut,jdbcType=INTEGER},
+		#{inviteEntityInnnerCode,jdbcType=VARCHAR},#{inviteStatus,jdbcType=INTEGER})
 	</insert>
 	<!-- 修改用户信息 -->
 	<update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.AppUser">

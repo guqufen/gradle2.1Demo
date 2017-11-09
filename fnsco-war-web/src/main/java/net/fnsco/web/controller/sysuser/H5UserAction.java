@@ -15,6 +15,7 @@ import com.google.common.base.Strings;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.ConmmService;
 import net.fnsco.order.api.constant.ConstantEnum;
@@ -44,6 +45,8 @@ public class H5UserAction extends BaseController {
     @ApiOperation(value = "用户注册")
     @ResponseBody
     public ResultDTO register(@RequestBody AppUserDTO appUserDTO) {
+        String password = Md5Util.getInstance().pwdEncrypt(appUserDTO.getPassword());
+        appUserDTO.setPassword(password);
         ResultDTO result = appUserService.insertSelective(appUserDTO);
         return result;
     }
