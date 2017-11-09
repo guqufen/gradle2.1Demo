@@ -48,7 +48,10 @@
 	<script type="text/javascript">
 	
 		$(".login").click(function(){
-				var data={"loginName":$(".loginName").val(),"passwd":$(".passwd").val()};
+				var data={
+						"loginName":$(".loginName").val(),
+						"passwd":$(".passwd").val()
+						};
 				console.log(data);
 				$.ajax({
 					url:"http://localhost:8080/web/login",
