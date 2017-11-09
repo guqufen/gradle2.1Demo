@@ -58,8 +58,8 @@ public class AppMerchentLevelController extends BaseController{
 			}
 
 			SysConfig sysConfig = new SysConfig();
-			sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE);//type="11"
-			SysConfig sysconfigMax = sysConfigService.selectMaxByType(IntegralTypeEnum.INTEGRAL_TYPE);//通过type查找最大值
+			sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE.getCode());//type="11"
+			SysConfig sysconfigMax = sysConfigService.selectMaxByType(IntegralTypeEnum.INTEGRAL_TYPE.getCode());//通过type查找最大值
 
 			//如果积分大于查找出来的最大值，则为最高等级，通过找出来的最大的给当前赋值
 			if(merChantCoreDTO.getScores().longValue() > Long.parseLong(sysconfigMax.getValue())){
@@ -100,14 +100,16 @@ public class AppMerchentLevelController extends BaseController{
 			return fail("该用户ID下未绑定该商户");
 		}
 
+		String prefix = env.getProperty("app.base.url");
+
 		// 根据商户已有积分查询商户所属等级(v1-v7)
 		if (merChantCoreDTO.getScores() == null) {
 
 			merChantCoreDTO.setScores(new BigDecimal(0));
 		}
 		SysConfig sysConfig = new SysConfig();
-		sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE);// type="11"
-		SysConfig sysconfigMax = sysConfigService.selectMaxByType(IntegralTypeEnum.INTEGRAL_TYPE);// 通过type查找最大值
+		sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE.getCode());// type="11"
+		SysConfig sysconfigMax = sysConfigService.selectMaxByType(IntegralTypeEnum.INTEGRAL_TYPE.getCode());// 通过type查找最大值
 
 		// 判断是否是最高级会员
 		sysConfig.setValue(merChantCoreDTO.getScores().toString());
@@ -121,6 +123,7 @@ public class AppMerchentLevelController extends BaseController{
 			merChantCoreDTO.setNextScores(null);// 设置下一级积分为当前商户积分
 			merChantCoreDTO.setDistScores(null);// 积分差值为0
 			merChantCoreDTO.setDescription("已达到最高级别");
+			merChantCoreDTO.setLevelIcon(prefix + sysconfigMax.getKeep3());
 
 		} else {// 不为空，说明不是最高级，有下一级别
 			SysConfig sysConfig2 = sysConfigService.selectLevelByScores(sysConfig);// 根据积分查询所属等级
@@ -130,6 +133,7 @@ public class AppMerchentLevelController extends BaseController{
 			BigDecimal b1 = new BigDecimal(sysConfig2.getValue());// 获取下一级vip积分
 			merChantCoreDTO.setNextScores(b1);// 设置下一级积分
 			merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()));// 积分差值
+			merChantCoreDTO.setLevelIcon(prefix + sysConfig2.getKeep3());
 			merChantCoreDTO
 					.setDescription("距离'" + sysConfig3.getRemark() + "'还差" + merChantCoreDTO.getDistScores() + "积分");
 		}
@@ -143,7 +147,7 @@ public class AppMerchentLevelController extends BaseController{
 	public ResultDTO queryLevelList(@RequestBody MerchantUserRel merchantUserRel) {
 
 		SysConfig sysConfig = new SysConfig();
-		sysConfig.setType("11");// 等级列表(v1-v7)，type类型为11
+		sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE.getCode());// 等级列表(v1-v7)，type类型为11
 		List<SysConfig> list = sysConfigService.selectAllByCondition(sysConfig);
 
 		String prefix = env.getProperty("app.base.url");
