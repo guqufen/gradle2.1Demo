@@ -116,8 +116,8 @@ public class TimerConfig {
      * @author tangliang
      * @date   2017年11月2日 上午9:38:37
      */
-    //@Scheduled(cron = "5 5 * * * ?") //每个小时的第五分钟第五秒执行，每小时执行一次
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "5 5 * * * ?") //每个小时的第五分钟第五秒执行，每小时执行一次
+    //@Scheduled(cron = "0 */1 * * * ?")
     public void countMerchantEntityScores() {
         logger.error("定时统计积分开始");
     	integralRuleService.countTradeDataScores(DateUtils.getTimeByMinuteDate(-60), new Date());

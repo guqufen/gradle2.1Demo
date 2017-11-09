@@ -124,6 +124,8 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 		String prefix = env.getProperty("app.base.url");
 		BigDecimal totalSpending = new BigDecimal(0);
 		BigDecimal totalRevenue = new BigDecimal(0);
+		String zcName = "支出";
+		String srName = "收入";
 		for(String da : datas) {
 			FinanceEveryDayDTO financeEveryDay = new FinanceEveryDayDTO();
 			List<FinanceAccountBook> datasList =new ArrayList<FinanceAccountBook>();
@@ -135,11 +137,13 @@ public class AppFinanceServiceImpl extends BaseService implements AppFinanceServ
 					String icoUrl = prefix+url;
 					edl.setIcoUrl(icoUrl);
 					if(edl.getType()==0) {
+						edl.setIoTypeName(edl.getIoTypeName()+zcName);
 						BigDecimal cashDec=edl.getCashDec();
 						BigDecimal spend = cashDec.negate();
 						edl.setCash(getYuan(spend).toString());
 						spending = spending.add(cashDec);
 					}else {
+						edl.setIoTypeName(edl.getIoTypeName()+srName);
 						edl.setCash("+"+getYuan(edl.getCashDec()).toString());
 						revenue = revenue.add(edl.getCashDec());
 					}
