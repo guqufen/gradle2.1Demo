@@ -120,7 +120,7 @@ public class AppMerchentLevelController extends BaseController{
 			merChantCoreDTO.setMercLevel(sysconfigMax.getName());// vip等级：v1-v7
 			merChantCoreDTO.setLevelName(sysconfigMax.getRemark());// vip名称
 			merChantCoreDTO.setNextLevelName(null);// 下一级名称
-			merChantCoreDTO.setNextScores(null);// 设置下一级积分为当前商户积分
+			merChantCoreDTO.setNextScores(merChantCoreDTO.getScores());// 设置下一级积分为当前商户积分
 			merChantCoreDTO.setDistScores(null);// 积分差值为0
 			merChantCoreDTO.setDescription("已达到最高级别");
 			merChantCoreDTO.setLevelIcon(prefix + sysconfigMax.getKeep3());
