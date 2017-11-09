@@ -125,6 +125,10 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUser.setDeviceType(appUserDTO.getDeviceType());
         appUser.setState(1);
         appUser.setRegTime(new Date());
+        if(!Strings.isNullOrEmpty(appUserDTO.getEntityInnerCode())){
+            appUser.setInviteEntityInnnerCode(appUserDTO.getEntityInnerCode());
+            appUser.setInviteStatus(0);
+        }
         //appUser.setLastLoginTime(new Date());
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         appUser.setPassword(password);
@@ -624,5 +628,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Override
     public List<MerchantUserRel> getAppUserMerchantByInnerCode(String innerCode) {
         return merchantUserRelDao.selectByInnerCode(innerCode);
+    }
+    @Override
+    public List<AppUser> selectAllInviteAppUser(){
+        return appUserDao.selectAllInviteAppUser();
     }
 }

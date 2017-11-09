@@ -12,6 +12,7 @@ import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -207,4 +208,14 @@ public interface MerchantCoreService {
      * @return MerchantCore    DOM对象
      */
     MerchantCore selectUniqueMer(String cardNum, String accountNo,String channelType,String channelMerId);
+    /**
+     * 
+     * queryEntityCoreRefByInnerCode:(根据内部商务号查询渠道商户与实体商户的关系)
+     *
+     * @param innerCode
+     * @return   List<MerchantEntityCoreRef>    返回Result对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    List<MerchantEntityCoreRef> queryEntityCoreRefByInnerCode(String innerCode);
 }

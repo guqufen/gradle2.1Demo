@@ -5,18 +5,23 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
+import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
+import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.merchant.IntegralLogService;
 import net.fnsco.order.api.merchant.IntegralRuleService;
 import net.fnsco.order.service.dao.master.IntegralRuleDAO;
+import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.order.service.domain.IntegralRule;
 
 @Service
@@ -34,6 +39,10 @@ public class IntegralRuleServiceImpl extends BaseService implements IntegralRule
 	@Autowired
 	private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
 	
+	@Autowired
+    private AppUserService appUserService;
+	@Autowired
+    private MerchantUserRelDao merchantUserRelDao;
 	@Override
 	public List<IntegralRule> queryListByCondition(IntegralRule integralRule) {
 		// TODO Auto-generated method stub
@@ -95,5 +104,20 @@ public class IntegralRuleServiceImpl extends BaseService implements IntegralRule
 				integralRuleLogService.insert(mcr.getEntityInnerCode(), ConstantEnum.IntegralTypeEnum.CODE_POS02.getCode());
 			}
 		}
+        List<AppUser> appUserList = appUserService.selectAllInviteAppUser();
+        for (AppUser user : appUserList) {
+            logger.info("被邀请用户被查到"+user.getUserName());
+            List<MerchantUserRel> userRel = merchantUserRelDao.selectByUserId(user.getId());
+            if (!CollectionUtils.isEmpty(userRel)) {
+                try {
+                    logger.error("邀请商户增加积分"+user.getId());
+                    integralRuleLogService.insert(user.getInviteEntityInnnerCode(), ConstantEnum.IntegralTypeEnum.CODE_YQ02.getCode());
+                } catch (Exception ex) {
+                    logger.error("邀请商户增加积分报错", ex);
+                }
+            } else {
+                logger.info(user.getMobile() + "该手机号注册了但没绑定商户!");
+            }
+        }
 	}
 }

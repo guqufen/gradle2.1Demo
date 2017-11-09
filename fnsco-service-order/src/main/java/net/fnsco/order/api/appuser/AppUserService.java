@@ -76,4 +76,5 @@ public interface AppUserService {
     ResultDTO<String> getUserInfo(AppUserDTO appUserDTO);
     
     List<MerchantUserRel> getAppUserMerchantByInnerCode(String innerCode);
+    List<AppUser> selectAllInviteAppUser();
 }
