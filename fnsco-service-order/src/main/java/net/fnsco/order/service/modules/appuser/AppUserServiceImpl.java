@@ -633,4 +633,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     public List<AppUser> selectAllInviteAppUser(){
         return appUserDao.selectAllInviteAppUser();
     }
+    @Override
+    public boolean updateAppUser(AppUser appUser){
+        return appUserDao.updateByPrimaryKeySelective(appUser);
+    }
 }

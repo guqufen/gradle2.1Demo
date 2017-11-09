@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.google.common.base.Strings;
@@ -18,6 +19,7 @@ import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ConstantEnum;
+import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.merchant.IntegralLogService;
 import net.fnsco.order.api.merchant.IntegralRuleService;
 import net.fnsco.order.service.dao.master.IntegralRuleDAO;
@@ -71,6 +73,7 @@ public class IntegralRuleServiceImpl extends BaseService implements IntegralRule
 	 * @date 2017年11月2日 上午9:52:08
 	 */
 	@Override
+	@Transactional
 	public void countTradeDataScores(Date startTime, Date endTime) {
 		
 		TradeData record = new TradeData();
@@ -112,6 +115,8 @@ public class IntegralRuleServiceImpl extends BaseService implements IntegralRule
                 try {
                     logger.error("邀请商户增加积分"+user.getId());
                     integralRuleLogService.insert(user.getInviteEntityInnnerCode(), ConstantEnum.IntegralTypeEnum.CODE_YQ02.getCode());
+                    user.setInviteStatus(1);
+                    appUserService.updateAppUser(user);
                 } catch (Exception ex) {
                     logger.error("邀请商户增加积分报错", ex);
                 }

@@ -77,4 +77,5 @@ public interface AppUserService {
     
     List<MerchantUserRel> getAppUserMerchantByInnerCode(String innerCode);
     List<AppUser> selectAllInviteAppUser();
+    boolean updateAppUser(AppUser appUser);
 }

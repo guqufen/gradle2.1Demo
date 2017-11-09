@@ -166,6 +166,13 @@
 			<if test="headImagePath != null">
 				head_image_path = #{headImagePath,jdbcType=VARCHAR},
 			</if>
+			<if test="inviteStatus != null">
+				invite_status = #{inviteStatus,jdbcType=INTEGER},
+			</if>
+			<if test="inviteEntityInnnerCode != null">
+				invite_entity_innner_code = #{inviteEntityInnnerCode,jdbcType=VARCHAR},
+			</if>
+			
 		</set>
 		where id = #{id,jdbcType=INTEGER}
 	</update>
