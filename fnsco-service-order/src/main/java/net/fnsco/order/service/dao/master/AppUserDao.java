@@ -83,4 +83,5 @@ public interface AppUserDao {
      */
     List<AppUser> selectAllInlineByRoleId(@Param("roleId")String roleId);
     List<QueryBandDTO> selectInnercode(@Param("mobile")String mobile);
+    List<AppUser> selectAllInviteAppUser();
 }

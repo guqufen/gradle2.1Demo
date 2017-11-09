@@ -45,15 +45,6 @@ public class H5UserAction extends BaseController {
     @ResponseBody
     public ResultDTO register(@RequestBody AppUserDTO appUserDTO) {
         ResultDTO result = appUserService.insertSelective(appUserDTO);
-        if (!Strings.isNullOrEmpty(appUserDTO.getEntityInnerCode())) {
-            try {
-                integralRuleLogService.insert(appUserDTO.getEntityInnerCode(), ConstantEnum.IntegralTypeEnum.CODE_YQ02.getCode());
-            } catch (Exception ex) {
-                logger.error("邀请商户增加积分报错", ex);
-            }
-        } else {
-            logger.info(appUserDTO.getMobile() + "该手机号注册没有实体商户邀请!");
-        }
         return result;
     }
 

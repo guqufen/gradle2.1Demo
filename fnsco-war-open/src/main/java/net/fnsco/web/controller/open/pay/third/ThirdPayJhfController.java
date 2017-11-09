@@ -3,6 +3,7 @@ package net.fnsco.web.controller.open.pay.third;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,12 @@ import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantEntity;
+import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
@@ -48,11 +52,13 @@ import net.fnsco.web.controller.open.jo.TradeJhfJO;
 @Api(value = "/trade/thirdPay", tags = { "聚惠分相关功能接口" })
 public class ThirdPayJhfController extends BaseController {
     @Autowired
-    private MerchantService   merchantService;
+    private MerchantService     merchantService;
     @Autowired
-    private TradeOrderService tradeOrderService;
+    private TradeOrderService   tradeOrderService;
     @Autowired
-    private Environment       env;
+    private MerchantCoreService merchantCoreService;
+    @Autowired
+    private Environment         env;
 
     /**
      * 收银台获取聚惠分二维码url获取，入参为渠道商户号
@@ -63,8 +69,8 @@ public class ThirdPayJhfController extends BaseController {
     @RequestMapping(value = "/getQRUrl")
     @ApiOperation(value = "第三方接入获取聚惠分二维码url")
     @ResponseBody
-    public ResultDTO dealPayOrder(String merCode, String rspData) {
-        if (Strings.isNullOrEmpty(rspData)) {
+    public ResultDTO dealPayOrder(String merCode, String reqData) {
+        if (Strings.isNullOrEmpty(reqData)) {
             logger.error("第三方接入获取二维码url密文入参为空");
             fail("失败，rspData入参为空");
         }
@@ -75,7 +81,7 @@ public class ThirdPayJhfController extends BaseController {
         String keyStr = merchantChannelJhf.getChannelMerKey();
         TradeJO tradeJO = new TradeJO();
         try {
-            String decodeStr = AESUtil.decode(rspData, keyStr);
+            String decodeStr = AESUtil.decode(reqData, keyStr);
             logger.error("第三方接入获取二维码url解密后入参：" + decodeStr);
             //聚惠芬支付完成时的通知解密后入参：{"payCallBackParams":"","settlementStatus":"0","thirdPayNo":"20171102155606073111374535549766","orderStatus":"2","singData":"001AA0CC08241A447BF7250B500C4B83"}
             tradeJO = JSON.parseObject(decodeStr, TradeJO.class);
@@ -83,13 +89,18 @@ public class ThirdPayJhfController extends BaseController {
             logger.error("第三方接入获取二维码url出错", ex);
             return fail("失败，解密处理异常");
         }
-        
+        List<MerchantEntityCoreRef> refList = merchantCoreService.queryEntityCoreRefByInnerCode(merchantChannelJhf.getInnerCode());
+        String entityInnerCode = "";
+        for (MerchantEntityCoreRef temp : refList) {
+            entityInnerCode = temp.getEntityInnerCode();
+            break;
+        }
         TradeOrderDO tradeOrder = new TradeOrderDO();
         tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
         tradeOrder.setChannelMerId(merchantChannelJhf.getChannelMerId());
         tradeOrder.setChannelType("04");
         tradeOrder.setInstallmentNum(tradeJO.getInstallmentNum());
-        tradeOrder.setEntityInnerCode(merchantChannelJhf.getEntityInnerCode());
+        tradeOrder.setEntityInnerCode(entityInnerCode);
         tradeOrder.setCreateUserId(tradeJO.getSnCode());
         BigDecimal amountB = new BigDecimal(tradeJO.getPaymentAmount());
         BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
@@ -102,7 +113,7 @@ public class ThirdPayJhfController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        
+
         String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteNotice";
         String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteCallback?orderNo=" + tradeOrder.getOrderNo();
         //        commID  商户Id
@@ -137,21 +148,22 @@ public class ThirdPayJhfController extends BaseController {
         jhfJO.setThirdPayNo(tradeOrder.getOrderNo());
         jhfJO.setTransTime(createTimerStr);
         jhfJO.setUnionId(tradeOrder.getInnerCode());
-        String reqData = "";
+        String rspData = "";
         String dateTemp = JSON.toJSONString(jhfJO);
         try {
-            reqData = URLEncoder.encode(AESUtil.encode(dateTemp, keyStr), "utf-8");
+            rspData = URLEncoder.encode(AESUtil.encode(dateTemp, keyStr), "utf-8");
         } catch (UnsupportedEncodingException e) {
             logger.error("第三方接入支付生成分期付url时AES加密出错", e);
         }
         String url = env.getProperty("open.base.url") + "/trade/thirdPay/dealPayOrder";
-        url += "?orderNo="+tradeOrder.getOrderNo()+"&commID=" + tradeOrder.getChannelMerId() + "&reqData=" + reqData;
+        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=" + rspData;
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
         resultMap.put("orderNo", tradeOrder.getOrderNo());
         //，通知地址，回调地址。
         return success(resultMap);
     }
+
     /**
      * 收银台获取聚惠分二维码url获取(暂时未使用)
      *
@@ -160,11 +172,12 @@ public class ThirdPayJhfController extends BaseController {
      */
     @RequestMapping(value = "/dealPayOrder", method = RequestMethod.GET)
     @ApiOperation(value = "获取聚惠分二维码url")
-    public String dealPayOrder(String orderNo,String commID, String reqData) {
+    public String dealPayOrder(String orderNo, String commID, String reqData) {
         String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
         url += "?commID=" + commID + "&reqData=" + reqData;
-        return "forward:"+url;
+        return "redirect:" + url;
     }
+
     /**
      * 收银台查询单条订单信息
      *
