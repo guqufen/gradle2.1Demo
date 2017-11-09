@@ -45,7 +45,7 @@ public interface AppFinanceService {
 	 * @param financeRecordDTO
 	 * @return
 	 */
-	int addFinance(FinanceRecordDTO financeRecordDTO);
+	void addFinance(FinanceRecordDTO financeRecordDTO);
 	
 	/**
 	 * 编辑记账信息

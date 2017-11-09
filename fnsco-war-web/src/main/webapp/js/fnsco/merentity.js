@@ -141,7 +141,7 @@ $('.sunmitBtn').click(function(){
         return false;
     }
     
-    var phonePattern = /^(?:13\d|15[890]|18\d|1\d)-?\d{5}(\d{3}|\*{3})$/;
+    var phonePattern = /^1[0-9]{10}$/;
     if(!phonePattern.test(legalPersonMobile)){
         layer.msg('手机号码不合法!请重新输入');
         return false;

@@ -21,6 +21,7 @@ import net.fnsco.finance.api.dto.IoTypeAndShopDTO;
 import net.fnsco.finance.api.finance.AppFinanceService;
 import net.fnsco.finance.service.domain.FinanceAccountBook;
 import net.fnsco.finance.service.domain.FinanceIoType;
+import net.fnsco.order.api.constant.ConstantEnum.IntegralTypeEnum;
 import net.fnsco.order.api.merchant.IntegralLogService;
 
 
@@ -72,9 +73,9 @@ public class AppFinanceController extends BaseController {
     @RequestMapping(value = "/addFinance" , method = RequestMethod.POST)
     @ApiOperation(value = "新增记账信息")
     public ResultDTO addFinance(@RequestBody FinanceRecordDTO financeRecordDTO) {
-        int i= appFinanceService.addFinance(financeRecordDTO);
+        appFinanceService.addFinance(financeRecordDTO);
         String entityInnerCode = financeRecordDTO.getEntityInnerCode();		
-		integralRuleLogService.insert(entityInnerCode, "007");
+		integralRuleLogService.insert(entityInnerCode, IntegralTypeEnum.CODE_JZ.getCode());
 		return ResultDTO.success();
     } 
     
@@ -98,8 +99,9 @@ public class AppFinanceController extends BaseController {
     
     @RequestMapping(value = "/deleteFinanceById" , method = RequestMethod.POST)
     @ApiOperation(value = "删除记账")
-    public void deleteFinanceById(@RequestBody FinanceAccountBook financeAccountBook) {
+    public ResultDTO deleteFinanceById(@RequestBody FinanceAccountBook financeAccountBook) {
     	Integer id= financeAccountBook.getId();
     	appFinanceService.deleteFinanceById(id);
+    	return ResultDTO.success();
     } 
 }
