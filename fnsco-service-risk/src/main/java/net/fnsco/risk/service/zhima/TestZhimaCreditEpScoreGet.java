@@ -2,9 +2,22 @@ package net.fnsco.risk.service.zhima;
 
 import com.antgroup.zmxy.openplatform.api.DefaultZhimaClient;
 import com.antgroup.zmxy.openplatform.api.ZhimaApiException;
-import com.antgroup.zmxy.openplatform.api.request.ZhimaCreditEpScoreGetRequest;
-import com.antgroup.zmxy.openplatform.api.response.ZhimaCreditEpScoreGetResponse;
+import com.antgroup.zmxy.openplatform.api.request.ZhimaCreditEpInfoGetRequest;
+import com.antgroup.zmxy.openplatform.api.request.ZhimaCreditEpLawsuitDetailGetRequest;
+import com.antgroup.zmxy.openplatform.api.request.ZhimaCreditEpLawsuitRecordGetRequest;
+import com.antgroup.zmxy.openplatform.api.response.ZhimaCreditEpInfoGetResponse;
+import com.antgroup.zmxy.openplatform.api.response.ZhimaCreditEpLawsuitDetailGetResponse;
+import com.antgroup.zmxy.openplatform.api.response.ZhimaCreditEpLawsuitRecordGetResponse;
 
+/**
+ * 企业涉诉记录查询
+ * @desc 
+ * @author   sxf
+ * @version  
+ * @since    Ver 1.1
+ * @Date	 2017年11月10日 上午11:43:17
+ *
+ */
 public class TestZhimaCreditEpScoreGet {
     //芝麻开放平台地址
     private String gatewayUrl     = "https://zmopenapi.zmxy.com.cn/openapi.do";
@@ -15,16 +28,60 @@ public class TestZhimaCreditEpScoreGet {
     //芝麻 RSA 公钥
     private String zhimaPublicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDgxK9xYXf3tjwjC33JkLBjkc6TCzYPPzLuZR0DhbFxOKuFk38u+GNs33qvFrfEISHahHUquUYlNpcKXbLI4hhVIZ84E32KHyquQ8FY9micODA6LYv3maEwZ1GCqjMADxBawUKaHqsSDkZRxLGTnd26cbw/h2CZpaisOE6Vq2GD3wIDAQAB";
 
-    public void  testZhimaCreditEpScoreGet() {
-        ZhimaCreditEpScoreGetRequest req = new ZhimaCreditEpScoreGetRequest();
+    //企业涉诉记录查询
+    public void testZhimaCreditEpLawsuitRecordGet() {
+        ZhimaCreditEpLawsuitRecordGetRequest req = new ZhimaCreditEpLawsuitRecordGetRequest();
         req.setChannel("apppc");
         req.setPlatform("zmop");
-        req.setOpenId("268810000007909449496");// 必要参数 
+
         req.setTransactionId("201512100936588040000000465158");// 必要参数 
-        req.setProductCode("w1010100003000001418");// 必要参数 
+        req.setProductCode("w1010100300000000001");// 必要参数 
+        req.setOrgNo("69655606-5");// 必要参数 
+        req.setCompanyName("北京首钢建设集团");// 必要参数 
+        req.setLawsuitType("cpws");// 
         DefaultZhimaClient client = new DefaultZhimaClient(gatewayUrl, appId, privateKey, zhimaPublicKey);
         try {
-            ZhimaCreditEpScoreGetResponse response = client.execute(req);
+            ZhimaCreditEpLawsuitRecordGetResponse response = client.execute(req);
+            System.out.println(response.isSuccess());
+            System.out.println(response.getErrorCode());
+            System.out.println(response.getErrorMessage());
+        } catch (ZhimaApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //企业工商信息查询（按企业查询）
+    public void testZhimaCreditEpInfoGet() {
+        ZhimaCreditEpInfoGetRequest req = new ZhimaCreditEpInfoGetRequest();
+        req.setChannel("apppc");
+        req.setPlatform("zmop");
+        req.setTransactionId("201512100936588040000000465158");// 必要参数 
+        req.setProductCode("w1010100300000000004");// 必要参数 
+        req.setDataType("2");// 必要参数    查询类型。1-社会信用代码；2-企业名称；3-企业注册号；4-组织机构代码。
+        req.setDataValue("杭州法奈昇科技有限公司");// 必要参数 
+        DefaultZhimaClient client = new DefaultZhimaClient(gatewayUrl, appId, privateKey, zhimaPublicKey);
+        try {
+            ZhimaCreditEpInfoGetResponse response = client.execute(req);
+            System.out.println(response.isSuccess());
+            System.out.println(response.getErrorCode());
+            System.out.println(response.getErrorMessage());
+        } catch (ZhimaApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 企业涉诉详情查询
+    public void testZhimaCreditEpLawsuitDetailGet() {
+        ZhimaCreditEpLawsuitDetailGetRequest req = new ZhimaCreditEpLawsuitDetailGetRequest();
+        req.setChannel("apppc");
+        req.setPlatform("zmop");
+        req.setTransactionId("201512100936588040000000465158");// 必要参数 
+        req.setProductCode("w1010100300000000002");// 必要参数 
+        req.setLawsuitType("cpws");// 必要参数 
+        req.setLawsuitId("9134736");// 必要参数 
+        DefaultZhimaClient client = new DefaultZhimaClient(gatewayUrl, appId, privateKey, zhimaPublicKey);
+        try {
+            ZhimaCreditEpLawsuitDetailGetResponse response = client.execute(req);
             System.out.println(response.isSuccess());
             System.out.println(response.getErrorCode());
             System.out.println(response.getErrorMessage());
@@ -34,7 +91,9 @@ public class TestZhimaCreditEpScoreGet {
     }
 
     public static void main(String[] args) {
-        TestZhimaCreditEpScoreGet result = new  TestZhimaCreditEpScoreGet();
-        result.testZhimaCreditEpScoreGet();
+        TestZhimaCreditEpScoreGet result = new TestZhimaCreditEpScoreGet();
+        //result.testZhimaCreditEpLawsuitRecordGet();
+
+        result.testZhimaCreditEpInfoGet();
     }
 }
