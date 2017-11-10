@@ -88,9 +88,9 @@ public class AppMerchentLevelController extends BaseController{
 	public ResultDTO queryMercLevelDetail(@RequestBody MerchantUserRel merchantUserRel) {
 
 		// 判空
-		if (null == merchantUserRel.getAppUserId() || StringUtils.isBlank(merchantUserRel.getEntityInnerCode())) {
-			logger.error("入参ID为null或实体商户号为空");
-			return ResultDTO.fail("入参ID为null或实体商户号为空");
+		if (StringUtils.isBlank(merchantUserRel.getEntityInnerCode())) {
+			logger.error("入参实体商户号为空");
+			return ResultDTO.fail("入参实体商户号为空");
 		}
 
 		// 获取该条商户信息
