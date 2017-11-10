@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.open;
+package net.fnsco.web.controller.open.pay.jhf;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

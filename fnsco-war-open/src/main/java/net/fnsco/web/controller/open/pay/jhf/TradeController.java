@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.open;
+package net.fnsco.web.controller.open.pay.jhf;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
