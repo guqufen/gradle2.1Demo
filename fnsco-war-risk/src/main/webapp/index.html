@@ -60,6 +60,7 @@
 			<div class="headerIcon">
 				<img class="headerImg" src="img/login/bg1.jpg" alt="">
 				<div class="headNav" id="headNav">
+					<strong class="font-bold indexDepartment">拉卡拉风控+</strong>
 					<strong class="font-bold indexPageUserName">拉卡拉风控+</strong>
 					<div class="triangle-down"></div>
 					<ul class="headNav-list" id="headNav-list">
@@ -205,6 +206,9 @@
 				unloginHandler(data);
 				if (!data.success)
 					window.location = 'login.html';
+				
+				$('.indexDepartment').html(data.data.department);
+				$('.indexPageUserName').hide();
 				$('.indexPageUserName').html(data.data.name);
 			}
 		});

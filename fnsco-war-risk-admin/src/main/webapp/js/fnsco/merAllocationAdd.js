@@ -95,6 +95,7 @@ function queryParams(params) {
 		pageSize : this.pageSize,
 		agentId:$('#merBelong option:selected').val(),
 		legalPerson:$('#legalPerson').val(),
+		merName : $('#merName').val(),//商户名称
 		userAgentId : agentId
 	}
 	return param;

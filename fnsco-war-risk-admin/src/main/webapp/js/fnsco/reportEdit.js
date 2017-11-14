@@ -153,7 +153,6 @@ $(function() {
 				$('#businessAddress').attr('disabled','disabled');
 
 				$('#businessDueTime').val(dd.businessDueTime);// 营业期限
-				$('#businessDueTime').attr('disabled','disabled');
 
 				//获取行业数据(option)，放入行业(select)
 				getIndest(dd.industry);
