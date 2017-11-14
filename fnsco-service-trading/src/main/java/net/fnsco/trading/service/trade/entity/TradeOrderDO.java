@@ -1,4 +1,4 @@
-package net.fnsco.order.service.trade.entity;
+package net.fnsco.trading.service.trade.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;

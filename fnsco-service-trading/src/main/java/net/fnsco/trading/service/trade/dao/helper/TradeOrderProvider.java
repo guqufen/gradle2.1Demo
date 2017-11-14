@@ -1,13 +1,13 @@
-package net.fnsco.order.service.trade.dao.helper;
+package net.fnsco.trading.service.trade.dao.helper;
 
-import org.apache.ibatis.jdbc.SQL;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang3.StringUtils;
 
-import net.fnsco.order.service.trade.entity.TradeOrderDO;
+import net.fnsco.trading.service.trade.entity.TradeOrderDO;
 public class TradeOrderProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

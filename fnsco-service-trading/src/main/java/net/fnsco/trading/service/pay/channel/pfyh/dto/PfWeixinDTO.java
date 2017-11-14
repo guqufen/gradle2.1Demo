@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.pay.dto;
+package net.fnsco.trading.service.pay.channel.pfyh.dto;
 
 //"return_code;//SUCCESS",
 //"return_msg;//OK",

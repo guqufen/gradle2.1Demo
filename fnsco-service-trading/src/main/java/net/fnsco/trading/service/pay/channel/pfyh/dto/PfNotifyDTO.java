@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.pay.dto;
+package net.fnsco.trading.service.pay.channel.pfyh.dto;
 
 //"BEGIN_TIME": "2017-07-14 15:59:24",
 //"END_TIME": "2017-07-14 15:59:30",

@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.open.pay.third;
+package net.fnsco.web.controller.open.pay.jhf;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -24,7 +24,6 @@ import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
-import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -33,8 +32,8 @@ import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
-import net.fnsco.order.service.trade.TradeOrderService;
-import net.fnsco.order.service.trade.entity.TradeOrderDO;
+import net.fnsco.trading.service.trade.TradeOrderService;
+import net.fnsco.trading.service.trade.entity.TradeOrderDO;
 import net.fnsco.web.controller.open.jo.TradeJO;
 import net.fnsco.web.controller.open.jo.TradeJhfJO;
 

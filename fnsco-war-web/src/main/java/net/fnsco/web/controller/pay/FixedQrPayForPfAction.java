@@ -2,7 +2,6 @@ package net.fnsco.web.controller.pay;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,8 +35,9 @@ import net.fnsco.core.utils.QrUtil;
 import net.fnsco.core.utils.dto.QrDTO;
 import net.fnsco.freamwork.aop.HttpHelper;
 import net.fnsco.order.api.push.AppPushService;
-import net.fnsco.web.controller.pay.dto.PfDTO;
-import net.fnsco.web.controller.pay.dto.PfNotifyDTO;
+import net.fnsco.trading.service.pay.channel.pfyh.FixedQrPaymentService;
+import net.fnsco.trading.service.pay.channel.pfyh.dto.PfDTO;
+import net.fnsco.trading.service.pay.channel.pfyh.dto.PfNotifyDTO;
 
 /**
  * Created by sxf on 2017/7/12.
@@ -49,33 +48,21 @@ import net.fnsco.web.controller.pay.dto.PfNotifyDTO;
 public class FixedQrPayForPfAction extends BaseController {
 
     @Autowired
-    private MerchantCoreService merchantCoreService;
+    private MerchantCoreService   merchantCoreService;
     @Autowired
-    private TradeDataService    tradeDataService;
+    private TradeDataService      tradeDataService;
     @Autowired
-    private AppPushService      appPushService;
+    private AppPushService        appPushService;
 
     @Autowired
-    private Environment         env;
+    private Environment           env;
+    @Autowired
+    private FixedQrPaymentService fixedQrPaymentService;
 
     @RequestMapping("/fixedQr")
     public void onlinePay(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        String busiCode = "";
         String innerCode = req.getParameter("innerCode");
-        if (Strings.isNullOrEmpty(innerCode)) {
-            logger.error("固定二维码扫描参数为空");
-        } else {
-            List<MerchantChannel> channelList = merchantCoreService.findChannelByInnerCode(innerCode);
-            for (MerchantChannel channel : channelList) {
-                if (BigdataConstant.ChannelTypeEnum.PF.getCode().equals(channel.getChannelType())) {
-                    busiCode = channel.getChannelMerId();
-                }
-            }
-            if (CollectionUtils.isEmpty(channelList)) {
-                logger.error("固定二维码扫描,商户不存在，innerCode = " + innerCode);
-            }
-        }
-        String payUrl = env.getProperty("pf.fixed.pay.url") + "?id=" + busiCode;//+"&_type=json";
+        String payUrl = fixedQrPaymentService.getFixedQrUrl(innerCode);
         res.sendRedirect(payUrl);
         //return "redirect:" + payUrl + "?id=" + busiCode;
         //return new ModelAndView(new RedirectView(payUrl));
@@ -118,58 +105,31 @@ public class FixedQrPayForPfAction extends BaseController {
         } else {
             logger.error("浦发回调签名错误");
         }
-        TradeDataDTO tradeDataDTO = new TradeDataDTO();
-        tradeDataDTO.setMerId(dto.getBUSI_ID());
-        tradeDataDTO.setChannelType(BigdataConstant.ChannelTypeEnum.PF.getCode());
-        tradeDataDTO.setAmt(dto.getAMT());
-        tradeDataDTO.setTxnType("1");//消费
-        tradeDataDTO.setPayType("01");//二维码
-        tradeDataDTO.setPayMedium(BigdataConstant.PayMediumEnum.FIX_QR.getCode());
-        if (dto.getCHANNEL_TYPE().compareTo(1) == 0) {// 1   支付宝2   微信
-            tradeDataDTO.setPaySubType(ServiceConstant.PaySubTypeEnum.ZFB_PAY.getCode());
-        } else if (dto.getCHANNEL_TYPE().compareTo(2) == 0) {// 1   支付宝2   微信
-            tradeDataDTO.setPaySubType(ServiceConstant.PaySubTypeEnum.WX_PAY.getCode());
-        }
-        tradeDataDTO.setSource(BigdataConstant.SourceEnum.PF.getCode());
-        tradeDataDTO.setOrderNo(dto.getCHARGE_CODE());
-        //tradeDataDTO.setTermId(dto.getDEV_ID());
-        String txnTime = dto.getBEGIN_TIME();
-        txnTime = txnTime.replaceAll(" ", "");
-        txnTime = txnTime.replaceAll("-", "");
-        txnTime = txnTime.replaceAll(":", "");
-        tradeDataDTO.setOrderTime(txnTime);
-        String succTime = dto.getEND_TIME();
-        succTime = succTime.replaceAll(" ", "");
-        succTime = succTime.replaceAll("-", "");
-        succTime = succTime.replaceAll(":", "");
-        tradeDataDTO.setTimeStamp(succTime);
-        Integer state = dto.getSTATE();
-        //tradeDataDTO.setRespMsg(BigdataConstant.payStateNameMap.get(state));
-        tradeDataDTO.setRespCode(BigdataConstant.payStateCodeMap.get(state));
-        tradeDataDTO.setSendTime(DateUtils.getNowTimeStr());
-        tradeDataService.saveTradeData(tradeDataDTO);
+        fixedQrPaymentService.fixedQrCallbackPF(dto);
         //发送台码提醒消息
-        sendMsg(tradeDataDTO.getAmt(), merchantChannel.getInnerCode());
+        sendMsg(dto.getAMT(), merchantChannel.getInnerCode());
         return JSON.toJSONString(result);
     }
+
     @RequestMapping("/sendTestQrMsg")
     @ResponseBody
-    public ResultDTO sendTestQrMsg(@RequestParam("innerCode") String innerCode,@RequestParam("amt") String amt) {
-        sendMsg(amt,innerCode);
+    public ResultDTO sendTestQrMsg(@RequestParam("innerCode") String innerCode, @RequestParam("amt") String amt) {
+        sendMsg(amt, innerCode);
         return ResultDTO.success();
     }
+
     private void sendMsg(String strAmt, String innerCode) {
         String tempAmt = "";
-        if(strAmt.length()==1){
-            tempAmt = "0.0"+strAmt;
-        }else if (strAmt.length()==2){
-            tempAmt = "0."+strAmt;
-        }else if (strAmt.length()>2){
-            String temp = strAmt.substring(strAmt.length()-2, strAmt.length());
-            if(temp.equals("00")){
-                tempAmt = strAmt.substring(0, strAmt.length()-2);
-            }else{
-                tempAmt = strAmt.substring(0, strAmt.length()-2)+"."+temp;
+        if (strAmt.length() == 1) {
+            tempAmt = "0.0" + strAmt;
+        } else if (strAmt.length() == 2) {
+            tempAmt = "0." + strAmt;
+        } else if (strAmt.length() > 2) {
+            String temp = strAmt.substring(strAmt.length() - 2, strAmt.length());
+            if (temp.equals("00")) {
+                tempAmt = strAmt.substring(0, strAmt.length() - 2);
+            } else {
+                tempAmt = strAmt.substring(0, strAmt.length() - 2) + "." + temp;
             }
         }
         appPushService.sendFixQRMsg(innerCode, "数钱吧到账" + tempAmt + "元");
@@ -179,50 +139,7 @@ public class FixedQrPayForPfAction extends BaseController {
     @RequestMapping("/getQrImage")
     @ResponseBody
     public ResultDTO getQrImage(@RequestParam("id") Integer id) {
-        ResultDTO<MerchantCore> result = merchantCoreService.queryAllById(id);
-        if (!result.isSuccess()) {
-            return ResultDTO.fail("商户不存在" + id);
-        }
-        MerchantCore core = result.getData();
-        String innerCode = core.getInnerCode();
-        String host = env.getProperty("web.base.url");
-        boolean flag = false;
-        List<MerchantChannel> channelList = merchantCoreService.findChannelByInnerCode(innerCode);
-        for (MerchantChannel channel : channelList) {
-            if (BigdataConstant.ChannelTypeEnum.PF.getCode().equals(channel.getChannelType())) {
-                flag = true;
-            }
-        }
-        if (!flag) {
-            logger.error("二维码生成出错，该商户未开通浦发扫码支付" + innerCode);
-            return ResultDTO.fail("二维码生成出错，该商户未开通浦发扫码支付");
-        }
-        String content = env.getProperty("qr.redrect.url");
-        String format = env.getProperty("qr.format");
-        String fileName = innerCode + "." + format;
-        String filePath = env.getProperty("qr.filePath");
-        if (Strings.isNullOrEmpty(filePath)) {
-            filePath = request.getSession().getServletContext().getRealPath("") + "/qr/";
-        }
-        String fileUrl = env.getProperty("qr.fileUrl");
-        File f = new File(filePath + fileName);
-        if (f.exists()) {
-            ResultDTO.success(fileUrl + fileName);
-        }
-        QrDTO qrDTO = new QrDTO();
-        qrDTO.setFileName(fileName);
-        qrDTO.setContent(content + "?innerCode=" + innerCode);
-        qrDTO.setFilePath(filePath);
-        qrDTO.setHeight(Integer.parseInt(env.getProperty("qr.height")));
-        qrDTO.setFormat(format);
-        qrDTO.setWidth(Integer.parseInt(env.getProperty("qr.width")));
-        try {
-            QrUtil.createImage(qrDTO);
-        } catch (Exception ex) {
-            logger.error("生成二维码出错", ex);
-            return ResultDTO.fail("生成二维码出错");
-        }
-        return ResultDTO.success(fileUrl + fileName);
+        return fixedQrPaymentService.getQrImage(id,request);
     }
 
     /**

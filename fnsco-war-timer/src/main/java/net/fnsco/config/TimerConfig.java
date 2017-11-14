@@ -12,7 +12,7 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.merchant.IntegralRuleService;
 import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.trade.TradeReportService;
-import net.fnsco.order.service.trade.TradeOrderService;
+import net.fnsco.trading.service.trade.TradeOrderService;
 
 @EnableScheduling
 public class TimerConfig {

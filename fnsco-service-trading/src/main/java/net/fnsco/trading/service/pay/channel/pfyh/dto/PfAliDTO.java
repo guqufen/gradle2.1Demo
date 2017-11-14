@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.pay.dto;
+package net.fnsco.trading.service.pay.channel.pfyh.dto;
 
 //"ali": {
 //    "trade_no;//2017071421001004070273111491",

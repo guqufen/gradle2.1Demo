@@ -51,6 +51,11 @@
 	</profiles>
 	<dependencies>
 		<dependency>
+			<groupId>net.fnsco</groupId>
+			<artifactId>fnsco-service-trading</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>

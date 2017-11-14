@@ -1,18 +1,19 @@
-package net.fnsco.order.service.trade.dao;
+package net.fnsco.trading.service.trade.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Options;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import net.fnsco.order.service.trade.entity.TradeOrderDO;
-import net.fnsco.order.service.trade.dao.helper.TradeOrderProvider;
 
-import java.util.List;;
+import net.fnsco.trading.service.trade.dao.helper.TradeOrderProvider;
+import net.fnsco.trading.service.trade.entity.TradeOrderDO;;
 
 public interface TradeOrderDAO {
 

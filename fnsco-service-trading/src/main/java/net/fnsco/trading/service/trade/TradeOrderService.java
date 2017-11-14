@@ -1,8 +1,7 @@
-package net.fnsco.order.service.trade;
+package net.fnsco.trading.service.trade;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.core.base.BaseService;
@@ -28,10 +28,9 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.DbUtil;
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.core.utils.dby.AESUtil;
-import net.fnsco.order.api.constant.ConstantEnum;
-import net.fnsco.order.api.dto.OrderDTO;
-import net.fnsco.order.service.trade.dao.TradeOrderDAO;
-import net.fnsco.order.service.trade.entity.TradeOrderDO;
+import net.fnsco.trading.service.trade.dao.TradeOrderDAO;
+import net.fnsco.trading.service.trade.dto.OrderDTO;
+import net.fnsco.trading.service.trade.entity.TradeOrderDO;
 
 @Service
 public class TradeOrderService extends BaseService {
@@ -120,7 +119,7 @@ public class TradeOrderService extends BaseService {
             return ResultDTO.fail("订单不存在");
         }
         //      orderStatus 订单状态    （0 未支付 1支付成功 2支付失败 3已退货）
-        String respCode = ConstantEnum.RESP_CODE_MAP.get(order.getOrderStatus());
+        String respCode = BigdataConstant.RESP_CODE_MAP.get(order.getOrderStatus());
         if (Strings.isNullOrEmpty(respCode)) {
             respCode = tradeOrderDO.getRespCode();
         }
