@@ -117,5 +117,38 @@ public class IndustryProvider {
         }
         }}.toString();
     }
+    
+    public String pageNameList(Map<String, Object> params) {
+        IndustryDO industry = (IndustryDO) params.get("industry");
+        Integer pageNum = (Integer) params.get("pageNum");
+        Integer pageSize = (Integer) params.get("pageSize");
+        if (pageNum == null || pageNum == 0) {
+            pageNum = 1;
+        }
+        if (pageSize == null || pageSize == 0) {
+            pageSize = 20;
+        }
+        int start = (pageNum - 1) * pageSize;
+        int limit = pageSize;
+        return new SQL() {{
+        SELECT("*");
+        FROM(TABLE_NAME);
+        if (StringUtils.isNotBlank(industry.getBusinessForm())){
+            WHERE("CONCAT_WS(business_form,first,third,fourth) LIKE CONCAT('%', #{industry.businessForm}, '%')");
+        }
+        ORDER_BY("id desc limit " + start + ", " + limit );
+        }}.toString();
+    }
+
+    public String pageNameListCount(Map<String, Object> params) {
+        IndustryDO industry = (IndustryDO) params.get("industry");
+        return new SQL() {{
+        SELECT("count(1)");
+        FROM(TABLE_NAME);
+        if (StringUtils.isNotBlank(industry.getBusinessForm())){
+            WHERE("CONCAT_WS(business_form,first,third,fourth) LIKE CONCAT('%', #{industry.businessForm}, '%')");
+        }
+        }}.toString();
+    }
 }
 

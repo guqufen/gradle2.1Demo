@@ -46,4 +46,11 @@ public interface IndustryDAO {
     	@Result( column = "third",property = "third"), @Result( column = "fourth",property = "fourth"), @Result( column = "status",property = "status"), @Result( column = "remark",property = "remark")})
     @Select("select * FROM sys_industry")
     public List<IndustryDO> queryAll();
+    
+    @Results({@Result( column = "business_form",property = "businessForm") })
+    @SelectProvider(type = IndustryProvider.class, method = "pageNameList")
+    public List<IndustryDO> pageNameList(@Param("industry") IndustryDO industry, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
+
+    @SelectProvider(type = IndustryProvider.class, method = "pageNameListCount")
+    public Integer pageNameListCount(@Param("industry") IndustryDO industry);
 }
