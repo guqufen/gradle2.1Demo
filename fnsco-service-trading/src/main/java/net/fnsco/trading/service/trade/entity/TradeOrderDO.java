@@ -104,7 +104,10 @@ public class TradeOrderDO {
      * 创建人id
      */
     private String     createUserId;
-
+    /**
+     * 处理次数
+     */
+    private Integer    handleNum;
     /**
      * 创建时间
      */
@@ -112,6 +115,75 @@ public class TradeOrderDO {
     private String     completeTimeStr;
     private String     orderCeateTimeStr;
     private String     createTimeStr;
+
+    private String     orderNoAfter6;
+    private String     orderTop10;
+
+    /**
+     * handleNum
+     *
+     * @return  the handleNum
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getHandleNum() {
+        return handleNum;
+    }
+
+    /**
+     * handleNum
+     *
+     * @param   handleNum    the handleNum to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setHandleNum(Integer handleNum) {
+        this.handleNum = handleNum;
+    }
+
+    /**
+     * orderNoAfter6
+     *
+     * @return  the orderNoAfter6
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOrderNoAfter6() {
+        return orderNoAfter6;
+    }
+
+    /**
+     * orderNoAfter6
+     *
+     * @param   orderNoAfter6    the orderNoAfter6 to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOrderNoAfter6(String orderNoAfter6) {
+        this.orderNoAfter6 = orderNoAfter6;
+    }
+
+    /**
+     * orderTop10
+     *
+     * @return  the orderTop10
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOrderTop10() {
+        return orderTop10;
+    }
+
+    /**
+     * orderTop10
+     *
+     * @param   orderTop10    the orderTop10 to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOrderTop10(String orderTop10) {
+        this.orderTop10 = orderTop10;
+    }
 
     /**
      * createTimeStr

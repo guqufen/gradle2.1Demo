@@ -3,6 +3,7 @@ package net.fnsco.web.controller.open.pay.jhf;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.core.utils.dby.JHFMd5Util;
@@ -60,7 +62,7 @@ public class TradeController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getQRUrl")
-    @ApiOperation(value = "获取商户编号")
+    @ApiOperation(value = "获取分闪付url")
     public ResultDTO getMerCode(@RequestBody TradeJO tradeJO) {
         MerchantChannel merchantChannel = merchantService.getMerChannel(tradeJO.getMerCode(), "00");
         if (null == merchantChannel) {
@@ -88,10 +90,9 @@ public class TradeController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        String url = env.getProperty("jhf.open.api.url")+"/api/thirdPay/dealPayOrder";
-        String keyStr =env.getProperty("jhf.api.AES.key");
-        String payNotifyUrl = env.getProperty("open.base.url")+"/trade/jhf/payCompleteNotice";
-        String payCallBackUrl = env.getProperty("open.base.url")+"/trade/jhf/payCompleteCallback?orderNo="+tradeOrder.getOrderNo();
+        String keyStr = env.getProperty("jhf.api.AES.key");
+        String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteNotice";
+        String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteCallback?orderNo=" + tradeOrder.getOrderNo();
         //        commID  商户Id
         //        thirdPayNo  订单号
         //        payAmount   支付金额
@@ -107,15 +108,15 @@ public class TradeController extends BaseController {
         //MD5(商户Id+订单号+支付金额+分期数+交易时间+通知URL+回调URL+通知参数)
         BigDecimal amountTemp = tradeOrder.getTxnAmount();
         BigDecimal amountTemps = amountTemp.divide(new BigDecimal("100"));
-        String singDataStr =  merchantChannelJhf.getChannelMerId()+tradeOrder.getOrderNo()
-        +amountTemps.toString()+String.valueOf(tradeOrder.getInstallmentNum())+createTimerStr+payNotifyUrl+payCallBackUrl;
-        logger.error("签名前数据"+singDataStr);
-        String singData=JHFMd5Util.encode32(singDataStr);
-        logger.error("签名"+singData);
+        String singDataStr = merchantChannelJhf.getChannelMerId() + tradeOrder.getOrderNo() + amountTemps.toString() + String.valueOf(tradeOrder.getInstallmentNum()) + createTimerStr + payNotifyUrl
+                             + payCallBackUrl;
+        logger.error("签名前数据" + singDataStr);
+        String singData = JHFMd5Util.encode32(singDataStr);
+        logger.error("签名" + singData);
         TradeJhfJO jhfJO = new TradeJhfJO();
         jhfJO.setCommID(tradeOrder.getChannelMerId());
         jhfJO.setPeriodNum(String.valueOf(tradeOrder.getInstallmentNum()));
-        
+
         jhfJO.setPayAmount(amountTemps.toString());
         jhfJO.setPayCallBackParams("");
         jhfJO.setPayCallBackUrl(payCallBackUrl);//payCallBackUrl
@@ -124,19 +125,47 @@ public class TradeController extends BaseController {
         jhfJO.setThirdPayNo(tradeOrder.getOrderNo());
         jhfJO.setTransTime(createTimerStr);
         jhfJO.setUnionId(tradeOrder.getInnerCode());
-        String reqData="";
+        String reqData = "";
         String dateTemp = JSON.toJSONString(jhfJO);
         try {
-            reqData = URLEncoder.encode(AESUtil.encode(dateTemp, keyStr),"utf-8");
+            reqData = URLEncoder.encode(AESUtil.encode(dateTemp, keyStr), "utf-8");
         } catch (UnsupportedEncodingException e) {
-            logger.error("生成分期付url时AES加密出错",e);
+            logger.error("生成分期付url时AES加密出错", e);
         }
-        url += "?commID="+tradeOrder.getChannelMerId()+"&reqData="+reqData;
+        //String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
+        //url += "?commID=" + tradeOrder.getChannelMerId() + "&reqData=" + reqData;
+        String url = env.getProperty("open.base.url") + "/trade/thirdPay/dealPayOrder";
+        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=" + reqData;
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
         resultMap.put("orderNo", tradeOrder.getOrderNo());
         //，通知地址，回调地址。
         return success(resultMap);
+    }
+
+    /**
+     * 收银台获取聚惠分二维码url获取(暂时未使用)
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/dealPayOrder", method = RequestMethod.GET)
+    @ApiOperation(value = "获取聚惠分二维码url")
+    public String dealPayOrder(String orderNo, String commID, String reqData) {
+        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
+        String url = env.getProperty("open.base.url") + "/pay/dealPayFail.html";
+        if (null != tradeOrderDO) {
+            Integer handleNum = tradeOrderDO.getHandleNum();
+            if (null == handleNum || handleNum == 0) {
+                url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
+                url += "?commID=" + commID + "&reqData=" + reqData;
+                TradeOrderDO tradeOrderTemp = new TradeOrderDO();
+                tradeOrderTemp.setId(tradeOrderDO.getId());
+                tradeOrderTemp.setHandleNum(1);
+                tradeOrderService.doUpdate(tradeOrderTemp);
+            }
+        }
+        return "redirect:" + url;
     }
 
     /**
@@ -159,4 +188,34 @@ public class TradeController extends BaseController {
         return success(tradeOrderDO);
     }
 
+    /**
+     * 单条订单查询
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/getOrderList", method = RequestMethod.GET)
+    @ApiOperation(value = "获取商户编号")
+    public ResultDTO getOrderList(@RequestBody TradeJO tradeJO) {
+        MerchantChannel merchantChannel = merchantService.getMerChannel(tradeJO.getMerCode(), "00");
+        if (null == merchantChannel) {
+            return fail("拉卡拉渠道信息不存在");
+        }
+        TradeOrderDO tradeOrder = new TradeOrderDO();
+        tradeOrder.setOrderNoAfter6(tradeJO.getOrderNo());
+        tradeOrder.setOrderTop10(tradeJO.getDate());
+        tradeOrder.setInnerCode(merchantChannel.getInnerCode());
+        ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder, tradeJO.getPageNum(), tradeJO.getPageSize());
+        List<TradeOrderDO> resultList = resultDTO.getList();
+        for (TradeOrderDO tradeOrderDO : resultList) {
+            tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
+            tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
+            tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
+            //MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
+            //if (null != merChantCore) {
+            //    tradeOrderDO.setMercName(merChantCore.getMerName());
+            //}
+        }
+        return success(resultList);
+    }
 }
