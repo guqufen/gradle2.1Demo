@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
+import net.fnsco.bigdata.api.dto.PermissionsDTO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseController;
@@ -85,7 +86,7 @@ public class AppMerchentLevelController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/queryMercLevelDetail")
-	public ResultDTO queryMercLevelDetail(@RequestBody MerchantUserRel merchantUserRel) {
+	public ResultDTO<MerChantCoreDTO> queryMercLevelDetail(@RequestBody MerchantUserRel merchantUserRel) {
 
 		// 判空
 		if (StringUtils.isBlank(merchantUserRel.getEntityInnerCode())) {
@@ -134,10 +135,22 @@ public class AppMerchentLevelController extends BaseController{
 			merChantCoreDTO.setNextScores(b1);// 设置下一级积分
 			merChantCoreDTO.setDistScores(b1.subtract(merChantCoreDTO.getScores()));// 积分差值
 			merChantCoreDTO.setLevelIcon(prefix + sysConfig2.getKeep3());
-			merChantCoreDTO
-					.setDescription("距离'" + sysConfig3.getRemark() + "'还差" + merChantCoreDTO.getDistScores() + "积分");
+			merChantCoreDTO.setDescription("距离'" + sysConfig3.getRemark() + "'还差" + merChantCoreDTO.getDistScores() + "积分");
 		}
-
+		
+		List<PermissionsDTO> permissionsList = sysConfigService.selectLevelPrivilege();
+		String name = merChantCoreDTO.getMercLevel();
+		for(PermissionsDTO permissions : permissionsList) {
+			String lvName = permissions.getVipLevel();
+			if(name.compareTo(lvName)<0) {
+				permissions.setStatus(0);
+				permissions.setIcoUrl(prefix + permissions.getIcoUrlGray());
+			}else {
+				permissions.setStatus(1);
+				permissions.setIcoUrl(prefix + permissions.getIcoUrl());
+			}
+		}
+		merChantCoreDTO.setPermissionsList(permissionsList);
 		// 通过userId查询绑定的商户信息(内部商户号，商户名称)
 		return success(merChantCoreDTO);
 	}

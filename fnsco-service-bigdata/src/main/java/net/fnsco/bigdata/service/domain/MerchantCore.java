@@ -67,6 +67,10 @@ public class MerchantCore extends DTO {
 	private Integer status;
 
 	private Integer agentId;
+	
+	private Date createTime;
+	
+	private String createTimeStr;
 
 	private List<MerchantFile> files;// 关联的所有文件信息
 
@@ -405,5 +409,21 @@ public class MerchantCore extends DTO {
 
 	public void setSourceStr(String sourceStr) {
 		this.sourceStr = sourceStr;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getCreateTimeStr() {
+		return createTimeStr;
+	}
+
+	public void setCreateTimeStr(String createTimeStr) {
+		this.createTimeStr = createTimeStr;
 	}
 }

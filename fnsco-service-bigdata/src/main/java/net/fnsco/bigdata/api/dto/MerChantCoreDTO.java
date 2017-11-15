@@ -1,6 +1,7 @@
 package net.fnsco.bigdata.api.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import net.fnsco.core.base.DTO;
 
@@ -51,6 +52,8 @@ public class MerChantCoreDTO extends DTO {
 	private String levelIcon;//等级图标
 	
 	private String description;//描述，类似：距离'xx商家'还差xxx积分/已达到最高级别
+	
+	private List<PermissionsDTO> permissionsList;//权限列表
 
 	public String getDescription() {
 		return description;
@@ -262,6 +265,14 @@ public class MerChantCoreDTO extends DTO {
 
 	public void setRegistAddress(String registAddress) {
 		this.registAddress = registAddress;
+	}
+
+	public List<PermissionsDTO> getPermissionsList() {
+		return permissionsList;
+	}
+
+	public void setPermissionsList(List<PermissionsDTO> permissionsList) {
+		this.permissionsList = permissionsList;
 	}
 
 }
