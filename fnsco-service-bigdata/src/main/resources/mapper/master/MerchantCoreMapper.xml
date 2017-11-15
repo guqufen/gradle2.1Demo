@@ -26,6 +26,33 @@
     <result column="agent_id" property="agentId" jdbcType="INTEGER" />
     <result column="mer_id" property="merId" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="QueryMerchantMap" type="net.fnsco.bigdata.service.domain.MerchantCore" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+    <result column="mer_name" property="merName" jdbcType="VARCHAR" />
+    <result column="abbreviation" property="abbreviation" jdbcType="VARCHAR" />
+    <result column="en_name" property="enName" jdbcType="VARCHAR" />
+    <result column="sign_date" property="signDate" jdbcType="VARCHAR" />
+    <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+    <result column="legal_person_mobile" property="legalPersonMobile" jdbcType="VARCHAR" />
+    <result column="legal_person_tel" property="legalPersonTel" jdbcType="VARCHAR" />
+    <result column="legal_valid_card_type" property="legalValidCardType" jdbcType="VARCHAR" />
+    <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+    <result column="card_valid_time" property="cardValidTime" jdbcType="VARCHAR" />
+    <result column="business_license_num" property="businessLicenseNum" jdbcType="VARCHAR" />
+    <result column="business_license_valid_time" property="businessLicenseValidTime" jdbcType="VARCHAR" />
+    <result column="tax_regist_code" property="taxRegistCode" jdbcType="VARCHAR" />
+    <result column="regist_address" property="registAddress" jdbcType="VARCHAR" />
+    <result column="merc_flag" property="mercFlag" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="modify_user_id" property="modifyUserId" jdbcType="VARCHAR" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="mer_id" property="merId" jdbcType="VARCHAR" />
+    <result column="channel_type" property="channelType" jdbcType="VARCHAR" />
+  </resultMap>
   <!-- APP商户终端列表结果集 -->
   <resultMap  id="TerminalResultMap" type="net.fnsco.bigdata.api.dto.MerTerminalsDTO">
     	<result column="mer_name" property="merName" jdbcType="VARCHAR" />
@@ -87,6 +114,12 @@
     legal_person_tel, legal_valid_card_type, card_num, card_valid_time, business_license_num, 
     business_license_valid_time, tax_regist_code, regist_address, merc_flag, source, 
     modify_user_id, modify_time, status
+  </sql>
+  <sql id="Base_Column_CH_List" >
+    CO.id, CO.agent_id,CO.inner_code, CO.mer_name, CO.abbreviation, CO.en_name, CO.sign_date, CO.legal_person, CO.legal_person_mobile, 
+    CO.legal_person_tel, CO.legal_valid_card_type, CO.card_num, CO.card_valid_time, CO.business_license_num, 
+    CO.business_license_valid_time, CO.tax_regist_code, CO.regist_address, CO.merc_flag, CO.source, 
+    CO.modify_user_id, CO.modify_time,CO.create_time, CO.status , CH.channel_type
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -350,81 +383,81 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!-- 条件分页查询 -->
-  <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="BaseResultMap">
+  <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="QueryMerchantMap">
      select 
-     <include refid="Base_Column_List" />
-   	 from m_merchant_core
+     <include refid="Base_Column_CH_List" />
+   	 from m_merchant_core AS CO LEFT JOIN m_merchant_channel AS CH ON CO.inner_code = CH.inner_code
   	<where>
   	<if test="condition.merId != null and condition.merId != ''" >
-         AND inner_code in (
+         AND CO.inner_code in (
          	SELECT  DISTINCT t.inner_code FROM (select * from m_merchant_channel WHERE channel_mer_id = #{condition.merId ,jdbcType=VARCHAR})as t  
         )
       </if>
       <if test="condition.channelType != null and condition.channelType != ''" >
-         AND inner_code in (
+         AND CO.inner_code in (
          	SELECT DISTINCT c.inner_code FROM (select * from m_merchant_channel WHERE channel_type = #{condition.channelType ,jdbcType=VARCHAR}) as c
         )
       </if>
   	 <if test="condition.innerCode != null and condition.innerCode != ''" >
-        AND inner_code = #{condition.innerCode,jdbcType=VARCHAR}
+        AND CO.inner_code = #{condition.innerCode,jdbcType=VARCHAR}
       </if>
       <if test="condition.merName != null and condition.merName != ''" >
-        AND mer_name LIKE CONCAT('%', #{condition.merName}, '%')
+        AND CO.mer_name LIKE CONCAT('%', #{condition.merName}, '%')
       </if>
       <if test="condition.abbreviation != null and condition.abbreviation != ''" >
-        AND abbreviation = #{condition.abbreviation,jdbcType=VARCHAR},
+        AND CO.abbreviation = #{condition.abbreviation,jdbcType=VARCHAR},
       </if>
       <if test="condition.enName != null and condition.enName != ''" >
-        AND en_name = #{condition.enName,jdbcType=VARCHAR}
+        AND CO.en_name = #{condition.enName,jdbcType=VARCHAR}
       </if>
       <if test="condition.signDate != null and condition.signDate != ''" >
-        AND sign_date = #{condition.signDate,jdbcType=VARCHAR}
+        AND CO.sign_date = #{condition.signDate,jdbcType=VARCHAR}
       </if>
       <if test="condition.legalPerson != null and condition.legalPerson != ''" >
-        AND legal_person LIKE CONCAT('%', #{condition.legalPerson}, '%')
+        AND CO.legal_person LIKE CONCAT('%', #{condition.legalPerson}, '%')
       </if>
       <if test="condition.legalPersonMobile != null and condition.legalPersonMobile != ''" >
-        AND legal_person_mobile = #{condition.legalPersonMobile,jdbcType=VARCHAR}
+        AND CO.legal_person_mobile = #{condition.legalPersonMobile,jdbcType=VARCHAR}
       </if>
       <if test="condition.legalPersonTel != null and condition.legalPersonTel != ''" >
-        AND legal_person_tel = #{condition.legalPersonTel,jdbcType=VARCHAR}
+        AND CO.legal_person_tel = #{condition.legalPersonTel,jdbcType=VARCHAR}
       </if>
       <if test="condition.legalValidCardType != null and condition.legalValidCardType != ''" >
-        AND legal_valid_card_type = #{condition.legalValidCardType,jdbcType=VARCHAR}
+        AND CO.legal_valid_card_type = #{condition.legalValidCardType,jdbcType=VARCHAR}
       </if>
       <if test="condition.cardNum != null and condition.cardNum != ''" >
-        AND card_num = #{condition.cardNum,jdbcType=VARCHAR}
+        AND CO.card_num = #{condition.cardNum,jdbcType=VARCHAR}
       </if>
       <if test="condition.cardValidTime != null and condition.cardValidTime != ''" >
-        AND card_valid_time = #{condition.cardValidTime,jdbcType=VARCHAR}
+        AND CO.card_valid_time = #{condition.cardValidTime,jdbcType=VARCHAR}
       </if>
       <if test="condition.businessLicenseNum != null and condition.businessLicenseNum != ''" >
-        AND business_license_num = #{condition.businessLicenseNum,jdbcType=VARCHAR}
+        AND CO.business_license_num = #{condition.businessLicenseNum,jdbcType=VARCHAR}
       </if>
       <if test="condition.businessLicenseValidTime != null and condition.businessLicenseValidTime != ''" >
-        AND business_license_valid_time = #{condition.businessLicenseValidTime,jdbcType=VARCHAR}
+        AND CO.business_license_valid_time = #{condition.businessLicenseValidTime,jdbcType=VARCHAR}
       </if>
       <if test="condition.taxRegistCode != null and condition.taxRegistCode != ''" >
-        AND tax_regist_code = #{condition.taxRegistCode,jdbcType=VARCHAR}
+        AND CO.tax_regist_code = #{condition.taxRegistCode,jdbcType=VARCHAR}
       </if>
       <if test="condition.registAddress != null and condition.registAddress != ''" >
-        AND regist_address = #{condition.registAddress,jdbcType=VARCHAR}
+        AND CO.regist_address = #{condition.registAddress,jdbcType=VARCHAR}
       </if>
       <if test="condition.mercFlag != null and condition.mercFlag != ''" >
-        AND merc_flag = #{condition.mercFlag,jdbcType=VARCHAR}
+        AND CO.merc_flag = #{condition.mercFlag,jdbcType=VARCHAR}
       </if>
       <if test="condition.source != null and condition.source != ''" >
-        AND source = #{condition.source,jdbcType=INTEGER}
+        AND CO.source = #{condition.source,jdbcType=INTEGER}
       </if>
       <if test="condition.modifyUserId != null and condition.modifyUserId != ''" >
-        AND modify_user_id = #{condition.modifyUserId,jdbcType=VARCHAR}
+        AND CO.modify_user_id = #{condition.modifyUserId,jdbcType=VARCHAR}
       </if>
       <if test="condition.modifyTime != null and condition.modifyTime != ''" >
-        AND modify_time = #{condition.modifyTime,jdbcType=TIMESTAMP}
+        AND CO.modify_time = #{condition.modifyTime,jdbcType=TIMESTAMP}
       </if>
-        AND status = 1
+        AND CO.status = 1
       </where>
-      ORDER BY modify_time DESC
+      ORDER BY CO.modify_time DESC
       limit #{startRow} , #{perPageSize} 
   </select>
   <!-- 条件查询总数 -->

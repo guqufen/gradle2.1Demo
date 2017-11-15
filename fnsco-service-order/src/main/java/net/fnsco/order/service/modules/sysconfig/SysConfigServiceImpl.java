@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.api.dto.PermissionsDTO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.freamwork.comm.Md5Util;
@@ -197,4 +198,9 @@ public class SysConfigServiceImpl extends BaseService implements SysConfigServic
     public SysConfig selectMaxByType(String type){
     	return sysConfigDao.selectMaxByType(type);
     }
+
+	@Override
+	public List<PermissionsDTO> selectLevelPrivilege() {		
+		return sysConfigDao.selectLevelPrivilege();
+	}
 }
