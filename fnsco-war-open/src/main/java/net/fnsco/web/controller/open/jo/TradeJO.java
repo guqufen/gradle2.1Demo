@@ -3,13 +3,128 @@ package net.fnsco.web.controller.open.jo;
 import net.fnsco.core.base.JO;
 
 public class TradeJO extends JO {
-    private String merCode;
-    private String channelType;
-    private String snCode;
+    private String  merCode;
+    private String  channelType;
+    private String  snCode;
     //分期数
     private Integer installmentNum;
     //支付总金额
-    private String paymentAmount;
+    private String  paymentAmount;
+    private String  innerCode;
+    private String  date;
+    private String  orderNo;
+    private Integer pageNum;
+    private Integer pageSize;
+
+    /**
+     * innerCode
+     *
+     * @return  the innerCode
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getInnerCode() {
+        return innerCode;
+    }
+
+    /**
+     * innerCode
+     *
+     * @param   innerCode    the innerCode to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setInnerCode(String innerCode) {
+        this.innerCode = innerCode;
+    }
+
+    /**
+     * date
+     *
+     * @return  the date
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * date
+     *
+     * @param   date    the date to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    /**
+     * orderNo
+     *
+     * @return  the orderNo
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    /**
+     * orderNo
+     *
+     * @param   orderNo    the orderNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    /**
+     * pageNum
+     *
+     * @return  the pageNum
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    /**
+     * pageNum
+     *
+     * @param   pageNum    the pageNum to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    /**
+     * pageSize
+     *
+     * @return  the pageSize
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    /**
+     * pageSize
+     *
+     * @param   pageSize    the pageSize to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
 
     /**
      * installmentNum

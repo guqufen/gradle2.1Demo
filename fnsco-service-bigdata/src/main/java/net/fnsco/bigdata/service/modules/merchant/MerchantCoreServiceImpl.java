@@ -151,6 +151,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             for (MerchantChannel channel : chanelList) {
                 if (BigdataConstant.ChannelTypeEnum.PF.getCode().equals(channel.getChannelType())) {
                     innerMap.put(channel.getInnerCode(), "1");
+                }else if (BigdataConstant.ChannelTypeEnum.JHF.getCode().equals(channel.getChannelType())) {
+                    innerMap.put(channel.getInnerCode(), "1");
                 }
             }
         }

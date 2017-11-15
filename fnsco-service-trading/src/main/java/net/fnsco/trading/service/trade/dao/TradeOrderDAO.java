@@ -24,7 +24,7 @@ public interface TradeOrderDAO {
                @Result(column = "txn_sub_type", property = "txnSubType"), @Result(column = "pay_type", property = "payType"), @Result(column = "pay_sub_type", property = "paySubType"),
                @Result(column = "settle_amount", property = "settleAmount"), @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"),
                @Result(column = "create_user_id", property = "createUserId"), @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"),
-               @Result(column = "inner_code", property = "innerCode") })
+               @Result(column = "inner_code", property = "innerCode"),@Result(column = "handle_num", property = "handleNum") })
     @Select("SELECT * FROM t_trade_order WHERE id = #{id}")
     public TradeOrderDO getById(@Param("id") int id);
 
@@ -35,7 +35,7 @@ public interface TradeOrderDAO {
                @Result(column = "txn_sub_type", property = "txnSubType"), @Result(column = "pay_type", property = "payType"), @Result(column = "pay_sub_type", property = "paySubType"),
                @Result(column = "settle_amount", property = "settleAmount"), @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"),
                @Result(column = "create_user_id", property = "createUserId"), @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"),
-               @Result(column = "inner_code", property = "innerCode") })
+               @Result(column = "inner_code", property = "innerCode"),@Result(column = "handle_num", property = "handleNum") })
     @Select("SELECT * FROM t_trade_order WHERE order_no = #{orderNo} order by create_time limit 1 ")
     public TradeOrderDO queryByOrderId(@Param("orderNo") String orderNo);
 
@@ -73,7 +73,7 @@ public interface TradeOrderDAO {
     @Select("SELECT * FROM t_trade_order WHERE pay_order_no = #{salesOrderNo}")
     public TradeOrderDO queryBySalesOrderNo(@Param("salesOrderNo") String salesOrderNo);
 
-    @Insert("INSERT into t_trade_order(id,order_no,pay_order_no,txn_amount,installment_num,resp_code,resp_msg,entity_inner_code,channel_mer_id,channel_type,complete_time,order_ceate_time,txn_type,txn_sub_type,pay_type,pay_sub_type,settle_amount,settle_date,settle_status,create_user_id,create_time,sync_status,inner_code) VALUES (#{id},#{orderNo},#{payOrderNo},#{txnAmount},#{installmentNum},#{respCode},#{respMsg},#{entityInnerCode},#{channelMerId},#{channelType},#{completeTime},#{orderCeateTime},#{txnType},#{txnSubType},#{payType},#{paySubType},#{settleAmount},#{settleDate},#{settleStatus},#{createUserId},#{createTime},#{syncStatus},#{innerCode})")
+    @Insert("INSERT into t_trade_order(id,order_no,pay_order_no,txn_amount,installment_num,resp_code,resp_msg,entity_inner_code,channel_mer_id,channel_type,complete_time,order_ceate_time,txn_type,txn_sub_type,pay_type,pay_sub_type,settle_amount,settle_date,settle_status,create_user_id,create_time,sync_status,inner_code,handle_num) VALUES (#{id},#{orderNo},#{payOrderNo},#{txnAmount},#{installmentNum},#{respCode},#{respMsg},#{entityInnerCode},#{channelMerId},#{channelType},#{completeTime},#{orderCeateTime},#{txnType},#{txnSubType},#{payType},#{paySubType},#{settleAmount},#{settleDate},#{settleStatus},#{createUserId},#{createTime},#{syncStatus},#{innerCode},#{handleNum})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(TradeOrderDO tradeOrder);
 

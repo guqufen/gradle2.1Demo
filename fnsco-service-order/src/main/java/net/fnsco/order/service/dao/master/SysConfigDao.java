@@ -2,6 +2,7 @@ package net.fnsco.order.service.dao.master;
 
 import java.util.List;
 
+import net.fnsco.bigdata.api.dto.PermissionsDTO;
 import net.fnsco.order.service.domain.SysConfig;
 /**
  * @desc 配置DAO
@@ -57,4 +58,9 @@ public interface SysConfigDao {
      * @return
      */
     SysConfig selectMaxByType(String type);
+    /**
+     * 查询积分等级权限
+     * @return
+     */
+    List<PermissionsDTO> selectLevelPrivilege();
 }

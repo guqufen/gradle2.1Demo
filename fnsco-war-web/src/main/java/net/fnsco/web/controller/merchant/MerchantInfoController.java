@@ -83,11 +83,11 @@ public class MerchantInfoController extends BaseController {
 		List<MerchantCore> dataList= merchantCoreService.queryMerchantList(merchantCore);
 		if (dataList != null) {
 						for (MerchantCore merchantdo : dataList) {
-							Date li = merchantdo.getModifyTime();
+							Date li = merchantdo.getCreateTime();
 						if (li != null) {
 								SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 								String dateString = formatter.format(li);
-								merchantdo.setModifyTimeStr(dateString);;
+								merchantdo.setCreateTimeStr(dateString);
 							}
 						if (null != merchantdo.getLegalValidCardType()) {
 							if (merchantdo.getSource()==0) {
@@ -110,13 +110,27 @@ public class MerchantInfoController extends BaseController {
 								merchantdo.setLegalValidCardType("护照");
 							}
 						}
+						// 渠道类型
+						if (null != merchantdo.getChannelType()) {
+							if ("00".equals(merchantdo.getChannelType())) {
+								merchantdo.setChannelType("拉卡拉");
+							} else if ("01".equals(merchantdo.getChannelType())) {
+								merchantdo.setChannelType("浦发");
+							}else if ("02".equals(merchantdo.getChannelType())) {
+								merchantdo.setChannelType("爱农");
+							}else if ("03".equals(merchantdo.getChannelType())) {
+								merchantdo.setChannelType("法奈昇");
+							}else if ("04".equals(merchantdo.getChannelType())) {
+								merchantdo.setChannelType("聚惠分");
+							}
+						}
 						}
 					}
 		JSONObject jObject = new JSONObject();
         jObject.put("data", dataList);
         List<MerchantCore> list = (List<MerchantCore>) jObject.get("data");
-        String itemMark = "merName,innerCode,legalPerson,legalPersonMobile,legalValidCardType,cardNum,cardValidTime,businessLicenseNum,businessLicenseValidTime,taxRegistCode,registAddress,mercFlag,sourceStr,modifyTimeStr";
-        String itemParap = "商户名, 内部商户号, 商户法人姓名, 法人手机号码, 法人有效证件类型, 证件号码, 证件有效期, 营业执照号码, 营业执照有效期, 税务登记号, 商户注册地址, 商户标签, 商户注册来源,创建日期";
+        String itemMark = "merName,innerCode,legalPerson,legalPersonMobile,legalValidCardType,cardNum,cardValidTime,businessLicenseNum,businessLicenseValidTime,taxRegistCode,registAddress,mercFlag,sourceStr,createTimeStr,channelType";
+        String itemParap = "商户名, 内部商户号, 商户法人姓名, 法人手机号码, 法人有效证件类型, 证件号码, 证件有效期, 营业执照号码, 营业执照有效期, 税务登记号, 商户注册地址, 商户标签, 商户注册来源,创建日期,渠道类型";
         String[] itemMarks = itemMark.split(",");// 键
         String[] itemParaps = itemParap.split(",");// 列头
 

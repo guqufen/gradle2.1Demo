@@ -111,17 +111,22 @@ public class FixedQrPaymentService extends BaseService {
         String innerCode = core.getInnerCode();
         String host = env.getProperty("web.base.url");
         boolean flag = false;
+        String content = "";
         List<MerchantChannel> channelList = merchantCoreService.findChannelByInnerCode(innerCode);
         for (MerchantChannel channel : channelList) {
             if (BigdataConstant.ChannelTypeEnum.PF.getCode().equals(channel.getChannelType())) {
                 flag = true;
+                content = env.getProperty("qr.redrect.url");
+            }else if (BigdataConstant.ChannelTypeEnum.JHF.getCode().equals(channel.getChannelType())) {
+                flag = true;
+                content = env.getProperty("fsf.qr.redrect.url");
             }
         }
         if (!flag) {
             logger.error("二维码生成出错，该商户未开通浦发扫码支付" + innerCode);
             return ResultDTO.fail("二维码生成出错，该商户未开通浦发扫码支付");
         }
-        String content = env.getProperty("qr.redrect.url");
+         
         String format = env.getProperty("qr.format");
         String fileName = innerCode + "." + format;
         String filePath = env.getProperty("qr.filePath");

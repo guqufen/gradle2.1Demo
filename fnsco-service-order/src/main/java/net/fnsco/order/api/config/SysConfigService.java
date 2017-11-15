@@ -2,6 +2,7 @@ package net.fnsco.order.api.config;
 
 import java.util.List;
 
+import net.fnsco.bigdata.api.dto.PermissionsDTO;
 import net.fnsco.order.api.dto.AppConfigDTO;
 import net.fnsco.order.service.domain.SysConfig;
 
@@ -59,4 +60,9 @@ public interface SysConfigService {
      * @return
      */
     SysConfig selectMaxByType(String type);
+    /**
+     * 获取等级权限
+     * @return
+     */
+    List<PermissionsDTO> selectLevelPrivilege();
 }
