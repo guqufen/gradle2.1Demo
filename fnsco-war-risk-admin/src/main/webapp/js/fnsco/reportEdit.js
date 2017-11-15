@@ -153,10 +153,9 @@ $(function() {
 				$('#businessAddress').attr('disabled','disabled');
 
 				$('#businessDueTime').val(dd.businessDueTime);// 营业期限
-				$('#businessDueTime').attr('disabled','disabled');
 
-				//获取行业数据(option)，放入行业(select)
-				getIndest(dd.industry);
+//				获取行业数据(option)，放入行业(select)
+				$('#industry').val(dd.industryName);// 行业
 
 				$('#tradingArea').val(dd.tradingArea);// 商圈
 				
@@ -219,37 +218,101 @@ $(function() {
 
 });
 
-/**
- * 请求行业数据
- */
-function getIndest(value) {
-	$.ajax({
-		url:PROJECT_NAME + '/industry/queryAll',
-		type:'post',
-		success:function(data){
-			console.log(data);
-			if(data.success){
-
-				for(var i=0; i < data.data.length; i++){
-					if(data.data[i].fourth != ""){
-						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'--'+data.data[i].third+'--'+data.data[i].fourth+'</option>');
-					}else if(data.data[i].third != ""){
-						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'--'+data.data[i].third+'</option>');
-					}else if(data.data[i].first != ""){
-						$('#industry').append('<option value='+data.data[i].id+'>'+data.data[i].first+'</option>');
-					}
-				}
-				if(value == null || value == ""){
-					value = "kk";
-				}
-				$('select[id="industry"]').find("option[value=" + value + "]").attr("selected", true);// 行业
-			}
-		},
-		error : function(data) {
-
-		}
-	});
+// 初始化表格
+initIndustryTableData();
+function initIndustryTableData(){
+	  $('#industryTable').bootstrapTable({
+	        sidePagination:'server',
+	        search: false, // 是否启动搜索栏
+	        url:PROJECT_NAME + '/industry/queryList',
+	        showRefresh: true,// 是否显示刷新按钮
+	        showPaginationSwitch: false,// 是否显示 数据条数选择框(分页是否显示)
+	        toolbar: '#banksToolbar',  // 工具按钮用哪个容器
+	        striped: true,   // 是否显示行间隔色
+	        cache: false,   // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+	        pagination: true,   // 是否显示分页（*）
+	        sortable: true,   // 是否启用排序
+	        sortOrder: "asc",   // 排序方式
+	        pageNumber:1,   // 初始化加载第一页，默认第一页
+	        pageSize: 5,   // 每页的记录行数（*）
+	        pageList: [15, 20, 50, 100], // 可供选择的每页的行数（*）
+	        queryParams:queryParams,	
+	        responseHandler:responseHandler,// 处理服务器返回数据
+	        columns: [{
+	            field: 'state',
+	            radio: true,
+	            rowspan:1,
+	            align: 'center',
+	            valign: 'middle'
+	        },{
+	            field: 'businessForm',
+	            title: '行业分类'
+	        },{
+	            field: 'first',
+	            title: '分类说明'
+	        }, {
+	            field: 'third',
+	            title: '适用范围'
+	        }, {
+	            width:120,
+	            field: 'fourth',
+	            title: '手续费率'
+	        }]
+	    });
 }
+//组装请求参数
+function queryParams(params)
+{
+   var param ={
+       currentPageNum : this.pageNumber,
+       pageSize : this.pageSize,
+       businessForm :$.trim($('#txt_search_businessForm').val())
+   }
+   return param;
+}
+//处理后台返回数据
+function responseHandler(res) { 
+	unloginHandler(res);
+    if (res.success) {
+        return {
+            "rows" : res.data.list,
+            "total" : res.data.total
+        };
+    } else {
+        return {
+            "rows" : [],
+            "total" : 0
+        };
+    }
+}
+//条件查询按钮事件
+function queryEvent(id){
+   $('#'+id).bootstrapTable('refresh');
+}
+
+//重置按钮事件
+function resetEvent(form,id){
+   $('#'+form)[0].reset();
+   $('#'+id).bootstrapTable('refresh');
+}
+$('#btn_select_industry').click(function(){
+	var select_data = $('#industryTable').bootstrapTable('getSelections')[0];
+	  if(!select_data){
+	    layer.msg('请选择行业!');return
+	  }
+	  var indust = "";
+	  if(select_data.fourth != ""){
+		  indust = select_data.first+'--'+select_data.third+'--'+select_data.fourth;
+		}else if(select_data.third != ""){
+			indust = select_data.first+'--'+select_data.third;
+		}else if(select_data.first != ""){
+			indust = select_data.first;
+		}
+
+	  $('#industryModal').modal('hide');
+	  $("#industry").val(indust);
+	  $("#industryId").val(select_data.id);
+});
 
 /**
  * 获取规模请求列表数据
@@ -363,8 +426,8 @@ function saveOrUpdate(status){
 	}
 **/
 	//行业
-	var industry = $('#industry option:selected').val();
-	if(industry == "" || industry=="kk"){
+	var industry = $('#industryId').val();
+	if(industry == ""){
 		layer.msg('请选择行业');
 		return false;
 	}
@@ -415,28 +478,7 @@ function saveOrUpdate(status){
 		layer.msg('风险信息过长，请不要超过500字');
 		return false;
 	}
-/**  去掉建议栏
-	//额度
-	var quota = $('#quota').val();
-	if(quota == ""){
-		layer.msg('请输入额度信息');
-		return false;
-	}
 
-	//费率
-	var feeRate = $('#feeRate').val();
-	if(feeRate == ""){
-		layer.msg('请输入费率信息');
-		return false;
-	}
-
-	//周期
-	var loanCycle = $('#loanCycle').val();
-	if(loanCycle == ""){
-		layer.msg('请输入周期信息');
-		return false;
-	}
-**/
 	//商家评估
 	var evaluation = $('#evaluation').val();
 	if(evaluation == ""){

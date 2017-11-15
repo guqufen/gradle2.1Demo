@@ -39,6 +39,11 @@ public class ReportInfoDO {
      * 行业
      */
     private String  industry;
+    
+    /**
+     * 行业名称
+     */
+    private String  industryName;
 
     /**
      * 商圈
@@ -119,7 +124,15 @@ public class ReportInfoDO {
     
     private String evaluation;
 
-    public String getLastViewTimeStr() {
+    public String getIndustryName() {
+		return industryName;
+	}
+
+	public void setIndustryName(String industryName) {
+		this.industryName = industryName;
+	}
+
+	public String getLastViewTimeStr() {
 		return lastViewTimeStr;
 	}
 

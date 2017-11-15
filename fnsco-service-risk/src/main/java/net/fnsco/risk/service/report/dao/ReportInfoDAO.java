@@ -24,14 +24,18 @@ public interface ReportInfoDAO {
 			@Result(column = "report_cycle", property = "reportCycle"),
 			@Result(column = "report_timer", property = "reportTimer"),
 			@Result(column = "risk_warning", property = "riskWarning"),
-			@Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
-			@Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"),
+			@Result(column = "fee_rate", property = "feeRate"), 
+			@Result(column = "loan_cycle", property = "loanCycle"),
+			@Result(column = "mer_num", property = "merNum"), 
+			@Result(column = "status", property = "status"),
 			@Result(column = "inner_code", property = "innerCode"),
 			@Result(column = "create_time", property = "createTime"),
+			@Result(column = "industry", property = "industry"),
+			@Result(column = "industryName", property = "industryName"),
 			@Result(column = "last_modify_time", property = "lastModifyTime"),
 			@Result(column = "decoration_level", property = "decorationLevel"),
 			@Result(column = "evaluation", property = "evaluation") })
-	@Select("SELECT * FROM risk_report_info WHERE id = #{id}")
+	@Select("SELECT r.*,(select first from sys_industry s where s.id=r.industry limit 1) as industryName FROM risk_report_info r WHERE id = #{id}")
 	public ReportInfoDO getById(@Param("id") Integer id);
 
 	@Results({ @Result(column = "mer_name", property = "merName"),
