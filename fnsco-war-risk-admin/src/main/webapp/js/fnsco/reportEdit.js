@@ -17,8 +17,8 @@ var Request = new Object();
 Request = GetRequest();
 var merchantId=Request["merchantId"];
 console.log(merchantId);
-var innerCode = Request["innerCode"];
-console.log(innerCode);
+var entityInnerCode = Request["entityInnerCode"];
+console.log(entityInnerCode);
 //获取风控报告还款能力明细
 //生成数组参数
 var dataList=new Array();
@@ -69,7 +69,7 @@ var getReportBusiness = function getReportBusiness(){
 		url : PROJECT_NAME + '/web/admin/report/queryTradingVolumeReport',
 		type : 'POST',
 		dataType : "json",
-		data : {"innerCode":innerCode,"merchantId":merchantId},
+		data : {"entityInnerCode":entityInnerCode,"merchantId":merchantId},
 		success : function(data){
 			if (data.success){
 				console.log(data);
@@ -81,9 +81,7 @@ var getReportBusiness = function getReportBusiness(){
 					dateList.push(json[i].date);
 					dataList.push(json[i].turnover);
 				}
-				// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
-				// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
-				// chart(datatime,data);
+
 				chart1(myChart1,dateList,dataList)
 			}
 		}
@@ -99,7 +97,7 @@ var getReportUnit = function getReportUnit(){
 		url : PROJECT_NAME + '/web/admin/report/queryUnitPriceReport',
 		type : 'POST',
 		dataType : "json",
-		data : {"innerCode":innerCode,"merchantId":merchantId},
+		data : {"entityInnerCode":entityInnerCode,"merchantId":merchantId},
 		success : function(data){
 			if (data.success){
 				console.log(data);
@@ -111,9 +109,6 @@ var getReportUnit = function getReportUnit(){
 					dateList.push(json[i].date);
 					dataList.push(json[i].turnover);
 				}
-				// var datatime=['2017-01','2017-02','2017-03','2017-04','2017-05','2017-06','2017-07','2017-08','2017-09','2017-10','2017-11','2017-12'];
-				// var data=['50000','24000000','24000','24000','24000','24000','24000','24000','24000','24000','24000','24000'];
-				// chart(datatime,data);
 				chart1(myChart2,dateList,dataList)
 			}
 		}
@@ -122,7 +117,7 @@ var getReportUnit = function getReportUnit(){
 
 $(function() {
 
-	console.log('id='+merchantId+'\t,innerCode='+innerCode);
+	console.log('id='+merchantId+'\t,entityInnerCode='+entityInnerCode);
 	//如果ID为空，表示report表尚未该条数据
 	if(merchantId.trim() == "null"){
 		merchantId = -1;
@@ -132,7 +127,7 @@ $(function() {
 		url : PROJECT_NAME + '/web/admin/report/getById',
 		type : 'post',
 		data : {
-			'id' : merchantId,'innerCode':innerCode
+			'id' : merchantId,'entityInnerCode':entityInnerCode
 		},
 		success : function(data) {
 			if (data.success) {
@@ -156,6 +151,7 @@ $(function() {
 
 //				获取行业数据(option)，放入行业(select)
 				$('#industry').val(dd.industryName);// 行业
+				$('#industryId').val(dd.industry);// 行业
 
 				$('#tradingArea').val(dd.tradingArea);// 商圈
 				

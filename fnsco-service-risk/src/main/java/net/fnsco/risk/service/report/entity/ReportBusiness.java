@@ -1,17 +1,30 @@
 package net.fnsco.risk.service.report.entity;
 
+import java.math.BigDecimal;
+
 public class ReportBusiness {
+
+	private String entityInnerCode;
+
 	private String innerCode;
-	
+
 	private String startDay;
-	
+
 	private String endDay;
-	
+
 	private String tradeDate;
-	
-	private String turnover;
-	
+
+	private BigDecimal turnover;
+
 	private String orderPrice;
+
+	public String getEntityInnerCode() {
+		return entityInnerCode;
+	}
+
+	public void setEntityInnerCode(String entityInnerCode) {
+		this.entityInnerCode = entityInnerCode;
+	}
 
 	public String getInnerCode() {
 		return innerCode;
@@ -45,11 +58,11 @@ public class ReportBusiness {
 		this.tradeDate = tradeDate;
 	}
 
-	public String getTurnover() {
+	public BigDecimal getTurnover() {
 		return turnover;
 	}
 
-	public void setTurnover(String turnover) {
+	public void setTurnover(BigDecimal turnover) {
 		this.turnover = turnover;
 	}
 

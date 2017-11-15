@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -200,7 +201,6 @@ public class WebUserOuterProvider {
 		WebUserOuterDO webUserOuter = (WebUserOuterDO) params.get("webUserOuter");
 		Integer pageNum = (Integer) params.get("pageNum");
 		Integer pageSize = (Integer) params.get("pageSize");
-		List<Integer> agentList = (List<Integer>) params.get("agentList");
 
 		if (pageNum == null || pageNum == 0) {
 			pageNum = 1;
@@ -210,38 +210,35 @@ public class WebUserOuterProvider {
 		}
 		int start = (pageNum - 1) * pageSize;
 		int limit = pageSize;
-
-		String sql = "select * from risk_web_user_outer where 1=1 ";
-
-		if (StringUtils.isNotBlank(webUserOuter.getDepartment().trim())) {
-			sql = sql + "AND department like '%" + webUserOuter.getDepartment().trim() + "%'";
-		}
-		if (agentList != null) {
-			String str = Joiner.on(",").join(agentList);
-			sql = sql + "AND agent_id in (" + str + ")";
-		}
-		sql = sql + " order by id desc limit " + start + ", " + limit;
-		logger.info("pageMerAlloList:" + sql);
-		return sql;
+		
+		return new SQL(){{
+			SELECT("w.*, (select name from m_agent m where m.id = w.type) as typeName");
+	        FROM(TABLE_NAME +" w");
+	        if( !Strings.isNullOrEmpty(webUserOuter.getMerName()) ){
+	        	WHERE("agent_id in ( select distinct agent_id from risk_user_merc_rel where inner_code in ( select distinct entity_inner_code from m_merchant_entity where merc_name like CONCAT('%',#{webUserOuter.merName},'%')))");
+	        }
+	        if( !Strings.isNullOrEmpty(webUserOuter.getDepartment()) ){
+	        	WHERE("department LIKE CONCAT('%', #{webUserOuter.department}, '%')");
+	        }
+	        ORDER_BY("id desc limit " + start + ", " + limit );
+		}}.toString();
 	}
 
 	@SuppressWarnings("unchecked")
 	public String pageMerAlloListCount(Map<String, Object> params) {
 
-		String department = (String) params.get("department");
-		List<Integer> agentList = (List<Integer>) params.get("agentList");
+		WebUserOuterDO webUserOuter = (WebUserOuterDO) params.get("webUserOuter");
 
-		String sql = "select count(1) from risk_web_user_outer where 1=1 ";
-
-		if (StringUtils.isNotBlank(department.trim())) {
-			sql = sql + "AND department like '%" + department.trim() + "%'";
-		}
-		if (agentList != null) {
-			String str = Joiner.on(",").join(agentList);
-			sql = sql + "AND agent_id in (" + str + ")";
-		}
-		logger.info("pageMerAlloListCount:" + sql);
-		return sql;
+		return new SQL(){{
+			SELECT("count(*)");
+	        FROM(TABLE_NAME);
+	        if( !Strings.isNullOrEmpty(webUserOuter.getMerName()) ){
+	        	WHERE("agent_id in ( select distinct agent_id from risk_user_merc_rel where inner_code in ( select distinct entity_inner_code from m_merchant_entity where merc_name like CONCAT('%',#{webUserOuter.merName},'%')))");
+	        }
+	        if( !Strings.isNullOrEmpty(webUserOuter.getDepartment()) ){
+	        	WHERE("department LIKE CONCAT('%', #{webUserOuter.department}, '%')");
+	        }
+		}}.toString();
 	}
 }
 

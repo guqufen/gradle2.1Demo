@@ -163,26 +163,8 @@ public class AddUserController extends BaseController {
 		@ResponseBody
 		 public ResultDTO<WebUserOuterDO> queryAllUser(WebUserOuterDO webUserDO,String merName, @RequestParam("currentPageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
 			
-			List<Integer> agentList = null;
-			//如果商户名称不为空，则先查找找商户inner_code，再查找绑定的agent_id
-			if(StringUtils.isNotBlank(merName)){
-				
-				//通过商户名称模糊查询内部商户号，未找到则返回失败
-				List<String> merList = merAllocationService.getByMerName(merName);
-				if(merList.size() == 0){
-					return ResultDTO.fail("该商户不存在！");
-				}
-				
-				//通过商户号查找agent_id,未找到则返回失败
-				agentList = merAllocationService.getByInnerCodeList(merList);
-				if(agentList.size() == 0){
-					return ResultDTO.fail("商户对应的代理商未找到！");
-				}
-			}
-			
-			ResultPageDTO<WebUserOuterDO> result=userOuterService.pageMercAllo(webUserDO, agentList, pageNum, pageSize);
-			
-			
+			ResultPageDTO<WebUserOuterDO> result=userOuterService.pageMercAllo(webUserDO, pageNum, pageSize);
+
 		     return success(result);
 		 }
 }

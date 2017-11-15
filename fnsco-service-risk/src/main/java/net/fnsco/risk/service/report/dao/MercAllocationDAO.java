@@ -43,8 +43,12 @@ public interface MercAllocationDAO {
 //	public Integer pageMerDataCount(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId,@Param("type")Integer type);//type:0-详情查询；1-添加查询
 	public Integer pageMerDataCount(@Param("merAllocationDO") MerAllocationDO merAllocationDO,@Param("agentId")Integer agentId);
 
-	
-	@Select("select inner_code from m_merchant_core where mer_name like CONCAT('%', #{merName}, '%')")
+	/**
+	 * 通过商户名称查找实体商户号
+	 * @param merName
+	 * @return
+	 */
+	@Select("select entity_inner_code from m_merchant_core where merc_name like CONCAT('%', #{merName}, '%')")
 	public List<String> getByMerName(@Param("merName")String merName);
 
 }

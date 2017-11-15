@@ -13,9 +13,9 @@ public class WebUserOuterDO {
 	/**
 	 * 用户类型1管理员2合作者3消费者
 	 */
-	private Integer type;
+	private Integer type;//用户代理商ID
 
-	private String typeName;
+	private String typeName;//用户代理商名称
 
 	/**
 	 * 用户名
@@ -102,6 +102,7 @@ public class WebUserOuterDO {
 	 */
 	private Date createrTime;
 
+	private String merName;// 商户名称
 	/**
 	 * 代理ID下的绑定的内部商户号集合
 	 * 
@@ -115,6 +116,14 @@ public class WebUserOuterDO {
 
 	public void setInnerCodeList(List<String> innerCodeList) {
 		this.innerCodeList = innerCodeList;
+	}
+
+	public String getMerName() {
+		return merName;
+	}
+
+	public void setMerName(String merName) {
+		this.merName = merName;
 	}
 
 	public Integer getId() {

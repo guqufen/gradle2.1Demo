@@ -62,10 +62,10 @@ $('#table').bootstrapTable({
 		title : '序号',
 		formatter:formatterIndex
 	},{
-		field : 'merName',
+		field : 'mercName',
 		title : '商户名称'
 	}, {
-		field : 'innerCode',
+		field : 'entityInnerCode',
 		title : '商户编码'
 	}, {
 		field : 'industry',
@@ -94,16 +94,16 @@ function formatterIndex(value, row, index){
 function formatterOperation(value, row, index) {
 	//2、4待编辑
 	if (row.status == 2 ||  row.status == 4 ) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' &innerCode='+row.innerCode+'" >编辑报告</a>' ].join('');
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' &entityInnerCode='+row.entityInnerCode+'" >编辑报告</a>' ].join('');
 	}
 	//为空待编辑
 	if (row.status == null ) {
-		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' &innerCode='+row.innerCode+'" >编辑报告</a>' ].join('');
+		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' &entityInnerCode='+row.entityInnerCode+'" >编辑报告</a>' ].join('');
 	}
 	//0：待审核;编辑人员则不能出现按钮
 	if (row.status == 0) {
 		if(customerType != 2){
-			return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' &innerCode='+row.innerCode+' "  >审核报告</a>' ].join('');
+			return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id + '&userId=' + row.webUserOuterId+' &entityInnerCode='+row.entityInnerCode+' "  >审核报告</a>' ].join('');
 		}else{
 			return '-';
 		}
@@ -152,7 +152,7 @@ function queryParams(params) {
 	var param = {
 		currentPageNum : this.pageNumber,
 		pageSize : this.pageSize,
-		merName : $.trim($('#merName').val()),
+		mercName : $.trim($('#mercName').val()),
 //		tradingArea : $.trim($('#tradingArea').val()),//商圈查询条件去掉
 		businessLicenseNum : $.trim($('#businessLicenseNum').val()),
 		status : $('#status option:selected').val(),

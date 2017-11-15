@@ -3,128 +3,149 @@ package net.fnsco.risk.service.report.entity;
 import java.util.Date;
 
 public class ReportInfoDO {
-    //agent_id
-    private Integer agentId;
+	// agent_id
+	private Integer agentId;
 
-    //判断三个月是否生成
-    private Integer isTrue;
-    //登录用户ID
-    private Integer userId;
-    /**
-     * 
-     */
-    private Integer id;
+	// 判断三个月是否生成
+	private Integer isTrue;
+	// 登录用户ID
+	private Integer userId;
 
-    /**
-     * 商户名（必须40个字符）
-     */
-    private String  merName;
+	private String innerCode;
 
-    /**
-     * 营业执照号码
-     */
-    private String  businessLicenseNum;
+	private String entityInnerCode;
+	/**
+	 * 
+	 */
+	private Integer id;
 
-    /**
-     * 经营地址
-     */
-    private String  businessAddress;
+	/**
+	 * 商户名（必须40个字符）
+	 */
+	private String merName;
 
-    /**
-     * 营业期限
-     */
-    private String  businessDueTime;
+	/**
+	 * 实体商户名（必须40个字符）
+	 */
+	private String mercName;
 
-    /**
-     * 行业
-     */
-    private String  industry;
-    
-    /**
-     * 行业名称
-     */
-    private String  industryName;
+	/**
+	 * 营业执照号码
+	 */
+	private String businessLicenseNum;
 
-    /**
-     * 商圈
-     */
-    private String  tradingArea;
+	/**
+	 * 经营地址
+	 */
+	private String businessAddress;
 
-    /**
-     * 营业额
-     */
-    private String  turnover;
+	/**
+	 * 营业期限
+	 */
+	private String businessDueTime;
 
-    /**
-     * 规模
-     */
-    private Integer size;
+	/**
+	 * 行业
+	 */
+	private String industry;
 
-    /**
-     * 报告周期
-     */
-    private String  reportCycle;
+	/**
+	 * 行业名称
+	 */
+	private String industryName;
 
-    /**
-     * 报告时间
-     */
-    private String  reportTimer;
+	/**
+	 * 商圈
+	 */
+	private String tradingArea;
 
-    /**
-     * 风险提醒
-     */
-    private String  riskWarning;
+	/**
+	 * 营业额
+	 */
+	private String turnover;
 
-    /**
-     * 额度
-     */
-    private String  quota;
+	/**
+	 * 规模
+	 */
+	private Integer size;
 
-    /**
-     * 费率
-     */
-    private String  feeRate;
+	/**
+	 * 报告周期
+	 */
+	private String reportCycle;
 
-    /**
-     * 贷款周期
-     */
-    private String  loanCycle;
-    /**
-     * 商户编码
-     */
-    private String  merNum;
-    /**
-     * 状态
-     */
-    private Integer status;
-    /**
-     * 创建时间
-     */
-    private Date    createTime;
-    /**
-     * 最后修改时间
-     */
-    private Date    lastModifyTime;
-    
-    /**
-     * 新增加KEY --商户姓名、法人姓名、营业执照号 
-     */
-    private String key;
-    
-    /**
-     * 报告查看次数
-     */
-    private Integer viewNum;
-    /**
-     * 最后报告时间
-     */
-    private Date lastViewTime;
-    
-    private String lastViewTimeStr;
-    
-    private String evaluation;
+	/**
+	 * 报告时间
+	 */
+	private String reportTimer;
 
-    public String getIndustryName() {
+	/**
+	 * 风险提醒
+	 */
+	private String riskWarning;
+
+	/**
+	 * 额度
+	 */
+	private String quota;
+
+	/**
+	 * 费率
+	 */
+	private String feeRate;
+
+	/**
+	 * 贷款周期
+	 */
+	private String loanCycle;
+	/**
+	 * 商户编码
+	 */
+	private String merNum;
+	/**
+	 * 状态
+	 */
+	private Integer status;
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
+
+	private Integer customerType;
+	/**
+	 * 最后修改时间
+	 */
+	private Date lastModifyTime;
+
+	/**
+	 * 新增加KEY --商户姓名、法人姓名、营业执照号
+	 */
+	private String key;
+
+	/**
+	 * 报告查看次数
+	 */
+	private Integer viewNum;
+	/**
+	 * 最后报告时间
+	 */
+	private Date lastViewTime;
+
+	private String decorationLevel;
+
+	private String lastViewTimeStr;
+
+	private String evaluation;
+
+	public String getMercName() {
+		return mercName;
+	}
+
+	public void setMercName(String mercName) {
+		this.mercName = mercName;
+	}
+
+	public String getIndustryName() {
 		return industryName;
 	}
 
@@ -164,7 +185,7 @@ public class ReportInfoDO {
 		this.key = key;
 	}
 
-    public String getEvaluation() {
+	public String getEvaluation() {
 		return evaluation;
 	}
 
@@ -173,242 +194,248 @@ public class ReportInfoDO {
 	}
 
 	/**
-     * userId
-     *
-     * @return  the userId
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public Integer getUserId() {
-        return userId;
-    }
+	 * userId
+	 *
+	 * @return the userId
+	 * @since CodingExample Ver 1.0
+	 */
 
-    /**
-     * userId
-     *
-     * @param   userId    the userId to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
+	public Integer getUserId() {
+		return userId;
+	}
 
-    public Integer getAgentId() {
-        return agentId;
-    }
+	/**
+	 * userId
+	 *
+	 * @param userId
+	 *            the userId to set
+	 * @since CodingExample Ver 1.0
+	 */
 
-    public void setAgentId(Integer agentId) {
-        this.agentId = agentId;
-    }
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 
-    public Integer getIsTrue() {
-        return isTrue;
-    }
+	public Integer getAgentId() {
+		return agentId;
+	}
 
-    public void setIsTrue(Integer isTrue) {
-        this.isTrue = isTrue;
-    }
+	public void setAgentId(Integer agentId) {
+		this.agentId = agentId;
+	}
 
-    private String decorationLevel;
+	public Integer getIsTrue() {
+		return isTrue;
+	}
 
-    public String getDecorationLevel() {
-        return decorationLevel;
-    }
+	public void setIsTrue(Integer isTrue) {
+		this.isTrue = isTrue;
+	}
 
-    public void setDecorationLevel(String decorationLevel) {
-        this.decorationLevel = decorationLevel;
-    }
+	public String getDecorationLevel() {
+		return decorationLevel;
+	}
 
-    private String innerCode;
+	public void setDecorationLevel(String decorationLevel) {
+		this.decorationLevel = decorationLevel;
+	}
 
-    public String getInnerCode() {
-        return innerCode;
-    }
+	public String getEntityInnerCode() {
+		return entityInnerCode;
+	}
 
-    public void setInnerCode(String innerCode) {
-        this.innerCode = innerCode;
-    }
+	public void setEntityInnerCode(String entityInnerCode) {
+		this.entityInnerCode = entityInnerCode;
+	}
 
-    private Integer customerType;
+	public String getInnerCode() {
+		return innerCode;
+	}
 
-    public Integer getCustomerType() {
-        return customerType;
-    }
+	public void setInnerCode(String innerCode) {
+		this.innerCode = innerCode;
+	}
 
-    public void setCustomerType(Integer customerType) {
-        this.customerType = customerType;
-    }
+	public Integer getCustomerType() {
+		return customerType;
+	}
 
-    private Integer webUserOuterId;
+	public void setCustomerType(Integer customerType) {
+		this.customerType = customerType;
+	}
 
-    public Integer getWebUserOuterId() {
-        return webUserOuterId;
-    }
+	private Integer webUserOuterId;
 
-    public void setWebUserOuterId(Integer webUserOuterId) {
-        this.webUserOuterId = webUserOuterId;
-    }
+	public Integer getWebUserOuterId() {
+		return webUserOuterId;
+	}
 
-    public String getMerNum() {
-        return merNum;
-    }
+	public void setWebUserOuterId(Integer webUserOuterId) {
+		this.webUserOuterId = webUserOuterId;
+	}
 
-    public void setMerNum(String merNum) {
-        this.merNum = merNum;
-    }
+	public String getMerNum() {
+		return merNum;
+	}
 
-    public Integer getStatus() {
-        return status;
-    }
+	public void setMerNum(String merNum) {
+		this.merNum = merNum;
+	}
 
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+	public Integer getStatus() {
+		return status;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public Date getLastModifyTime() {
-        return lastModifyTime;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public void setLastModifyTime(Date lastModifyTime) {
-        this.lastModifyTime = lastModifyTime;
-    }
+	public Date getLastModifyTime() {
+		return lastModifyTime;
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public void setLastModifyTime(Date lastModifyTime) {
+		this.lastModifyTime = lastModifyTime;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getMerName() {
-        return merName;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setMerName(String merName) {
-        this.merName = merName;
-    }
+	public String getMerName() {
+		return merName;
+	}
 
-    public String getBusinessLicenseNum() {
-        return businessLicenseNum;
-    }
+	public void setMerName(String merName) {
+		this.merName = merName;
+	}
 
-    public void setBusinessLicenseNum(String businessLicenseNum) {
-        this.businessLicenseNum = businessLicenseNum;
-    }
+	public String getBusinessLicenseNum() {
+		return businessLicenseNum;
+	}
 
-    public String getBusinessAddress() {
-        return businessAddress;
-    }
+	public void setBusinessLicenseNum(String businessLicenseNum) {
+		this.businessLicenseNum = businessLicenseNum;
+	}
 
-    public void setBusinessAddress(String businessAddress) {
-        this.businessAddress = businessAddress;
-    }
+	public String getBusinessAddress() {
+		return businessAddress;
+	}
 
-    public String getBusinessDueTime() {
-        return businessDueTime;
-    }
+	public void setBusinessAddress(String businessAddress) {
+		this.businessAddress = businessAddress;
+	}
 
-    public void setBusinessDueTime(String businessDueTime) {
-        this.businessDueTime = businessDueTime;
-    }
+	public String getBusinessDueTime() {
+		return businessDueTime;
+	}
 
-    public String getIndustry() {
-        return industry;
-    }
+	public void setBusinessDueTime(String businessDueTime) {
+		this.businessDueTime = businessDueTime;
+	}
 
-    public void setIndustry(String industry) {
-        this.industry = industry;
-    }
+	public String getIndustry() {
+		return industry;
+	}
 
-    public String getTradingArea() {
-        return tradingArea;
-    }
+	public void setIndustry(String industry) {
+		this.industry = industry;
+	}
 
-    public void setTradingArea(String tradingArea) {
-        this.tradingArea = tradingArea;
-    }
+	public String getTradingArea() {
+		return tradingArea;
+	}
 
-    public String getTurnover() {
-        return turnover;
-    }
+	public void setTradingArea(String tradingArea) {
+		this.tradingArea = tradingArea;
+	}
 
-    public void setTurnover(String turnover) {
-        this.turnover = turnover;
-    }
+	public String getTurnover() {
+		return turnover;
+	}
 
-    public Integer getSize() {
-        return size;
-    }
+	public void setTurnover(String turnover) {
+		this.turnover = turnover;
+	}
 
-    public void setSize(Integer size) {
-        this.size = size;
-    }
+	public Integer getSize() {
+		return size;
+	}
 
-    public String getReportCycle() {
-        return reportCycle;
-    }
+	public void setSize(Integer size) {
+		this.size = size;
+	}
 
-    public void setReportCycle(String reportCycle) {
-        this.reportCycle = reportCycle;
-    }
+	public String getReportCycle() {
+		return reportCycle;
+	}
 
-    public String getReportTimer() {
-        return reportTimer;
-    }
+	public void setReportCycle(String reportCycle) {
+		this.reportCycle = reportCycle;
+	}
 
-    public void setReportTimer(String reportTimer) {
-        this.reportTimer = reportTimer;
-    }
+	public String getReportTimer() {
+		return reportTimer;
+	}
 
-    public String getRiskWarning() {
-        return riskWarning;
-    }
+	public void setReportTimer(String reportTimer) {
+		this.reportTimer = reportTimer;
+	}
 
-    public void setRiskWarning(String riskWarning) {
-        this.riskWarning = riskWarning;
-    }
+	public String getRiskWarning() {
+		return riskWarning;
+	}
 
-    public String getQuota() {
-        return quota;
-    }
+	public void setRiskWarning(String riskWarning) {
+		this.riskWarning = riskWarning;
+	}
 
-    public void setQuota(String quota) {
-        this.quota = quota;
-    }
+	public String getQuota() {
+		return quota;
+	}
 
-    public String getFeeRate() {
-        return feeRate;
-    }
+	public void setQuota(String quota) {
+		this.quota = quota;
+	}
 
-    public void setFeeRate(String feeRate) {
-        this.feeRate = feeRate;
-    }
+	public String getFeeRate() {
+		return feeRate;
+	}
 
-    public String getLoanCycle() {
-        return loanCycle;
-    }
+	public void setFeeRate(String feeRate) {
+		this.feeRate = feeRate;
+	}
 
-    public void setLoanCycle(String loanCycle) {
-        this.loanCycle = loanCycle;
-    }
+	public String getLoanCycle() {
+		return loanCycle;
+	}
 
-    @Override
-    public String toString() {
-        return "ReportInfoDO [agentId=" + agentId + ", isTrue=" + isTrue + ", decorationLevel=" + decorationLevel + ", innerCode=" + innerCode + ", customerType=" + customerType + ", webUserOuterId="
-               + webUserOuterId + ", id=" + id + ", merName=" + merName + ", businessLicenseNum=" + businessLicenseNum + ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime
-               + ", industry=" + industry + ", tradingArea=" + tradingArea + ", turnover=" + turnover + ", size=" + size + ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer
-               + ", riskWarning=" + riskWarning + ", quota=" + quota + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum + ", status=" + status + ", createTime=" + createTime
-               + ", lastModifyTime=" + lastModifyTime + "]";
-    }
+	public void setLoanCycle(String loanCycle) {
+		this.loanCycle = loanCycle;
+	}
+
+	@Override
+	public String toString() {
+		return "ReportInfoDO [agentId=" + agentId + ", isTrue=" + isTrue + ", decorationLevel=" + decorationLevel
+				+ ", innerCode=" + innerCode + ", customerType=" + customerType + ", webUserOuterId=" + webUserOuterId
+				+ ", id=" + id + ", merName=" + merName + ", businessLicenseNum=" + businessLicenseNum
+				+ ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime + ", industry="
+				+ industry + ", tradingArea=" + tradingArea + ", turnover=" + turnover + ", size=" + size
+				+ ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer + ", riskWarning=" + riskWarning
+				+ ", quota=" + quota + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum
+				+ ", status=" + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
+	}
 
 }
