@@ -91,6 +91,8 @@ public class ReportService extends BaseService {
         reportInfoDO.setAgentId(userDo.getAgentId());
         List<ReportInfoDO> pageList = Lists.newArrayList();
         boolean flag = false;
+        
+        //10-已生成
         if ( null != reportInfoDO.getStatus() && 10== reportInfoDO.getStatus()) {
             flag = true;
         }
@@ -103,13 +105,13 @@ public class ReportService extends BaseService {
             pageList = this.reportInfoDAO.pageListAllMerc(reportInfoDO, pageNum, pageSize);
             for (ReportInfoDO reportInfoDO2 : pageList) {
             	
-            	if(reportInfoDO.getStatus()!= null && reportInfoDO.getStatus() == 20) {
+            	if(reportInfoDO.getStatus()!= null && reportInfoDO.getStatus() == 20) {//未生成
             		reportInfoDO2.setStatus(20);
             	}else {
-            		if(DateUtils.is30dayBefore(reportInfoDO2.getReportTimer()) && reportInfoDO2.getStatus() == 1) {
-            			reportInfoDO2.setStatus(10);
+            		if(DateUtils.is30dayBefore(reportInfoDO2.getReportTimer()) && reportInfoDO2.getStatus() == 1) {//如果是30天天之前报告日期
+            			reportInfoDO2.setStatus(10);//状态改为未生成
             		}else {
-            			reportInfoDO2.setStatus(20);
+            			reportInfoDO2.setStatus(20);//已生成
             		}
             	} 
 			}
