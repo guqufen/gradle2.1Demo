@@ -1,4 +1,4 @@
-package net.fnsco.trading.util;
+package net.fnsco.trading.service.pay.channel.zxyh.util;
 
 import java.util.HashMap;
 import java.util.Map;

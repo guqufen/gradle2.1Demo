@@ -1,4 +1,4 @@
-package net.fnsco.trading.service.trade.dao.helper;
+package net.fnsco.trading.service.order.dao.helper;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.fnsco.trading.service.trade.entity.TradeOrderDO;
+import net.fnsco.trading.service.order.entity.TradeOrderDO;
 public class TradeOrderProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -83,6 +83,9 @@ public class TradeOrderProvider {
         if (StringUtils.isNotBlank(tradeOrder.getInnerCode())){
             SET("inner_code=#{tradeOrder.innerCode}");
         }
+        if (tradeOrder.getHandleNum() != null){
+            SET("handle_num=#{tradeOrder.handleNum}");
+        }
         WHERE("id = #{tradeOrder.id} and resp_code !='1001' ");
         }}.toString();
     }
@@ -155,6 +158,9 @@ public class TradeOrderProvider {
         }
         if (StringUtils.isNotBlank(tradeOrder.getInnerCode())){
             SET("inner_code=#{tradeOrder.innerCode}");
+        }
+        if (tradeOrder.getHandleNum() != null){
+            SET("handle_num=#{tradeOrder.handleNum}");
         }
         WHERE("id = #{tradeOrder.id}");
         }}.toString();
@@ -257,7 +263,7 @@ public class TradeOrderProvider {
         if (StringUtils.isNotBlank(tradeOrder.getOrderTop10())||StringUtils.isNotBlank(tradeOrder.getOrderNoAfter6())){
             WHERE("order_no like CONCAT(#{tradeOrder.orderTop10},'%',#{tradeOrder.orderNoAfter6})");
         }
-        ORDER_BY("id desc limit " + start + ", " + limit );
+        ORDER_BY("create_time desc limit " + start + ", " + limit );
         }};
         
         return sql.toString();

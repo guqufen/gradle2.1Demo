@@ -1,7 +1,8 @@
-package net.fnsco.trading.service.trade;
+package net.fnsco.trading.service.order;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import com.google.common.base.Strings;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
+import net.fnsco.bigdata.service.sys.SequenceService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -28,9 +30,11 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.DbUtil;
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.core.utils.dby.AESUtil;
-import net.fnsco.trading.service.trade.dao.TradeOrderDAO;
-import net.fnsco.trading.service.trade.dto.OrderDTO;
-import net.fnsco.trading.service.trade.entity.TradeOrderDO;
+import net.fnsco.core.utils.dby.JHFMd5Util;
+import net.fnsco.trading.service.order.dao.TradeOrderDAO;
+import net.fnsco.trading.service.order.dto.OrderDTO;
+import net.fnsco.trading.service.order.dto.TradeJhfJO;
+import net.fnsco.trading.service.order.entity.TradeOrderDO;
 
 @Service
 public class TradeOrderService extends BaseService {
@@ -42,6 +46,54 @@ public class TradeOrderService extends BaseService {
     private Environment      env;
     @Autowired
     private TradeDataService tradeDataService;
+    @Autowired
+    private SequenceService  sequenceService;
+
+    public String getReqData(TradeOrderDO tradeOrder) {
+        String keyStr = env.getProperty("jhf.api.AES.key");
+        String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteNotice";
+        String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteCallback?orderNo=" + tradeOrder.getOrderNo();
+        //        commID  商户Id
+        //        thirdPayNo  订单号
+        //        payAmount   支付金额
+        //        npr 分期数
+        //        unionId 客户ID
+        //        transTime   交易时间
+        //        payNotifyUrl    通知URL
+        //        payCallBackUrl  支付结束的回调URL
+        //        payCallBackParams   支付成功后通知参数
+        //        singData    MD5签名
+        String createTimerStr = DateUtils.dateFormat1ToStr(tradeOrder.getCreateTime());
+        String payCallBackParams = JSON.toJSONString(tradeOrder);
+        //MD5(商户Id+订单号+支付金额+分期数+交易时间+通知URL+回调URL+通知参数)
+        BigDecimal amountTemp = tradeOrder.getTxnAmount();
+        BigDecimal amountTemps = amountTemp.divide(new BigDecimal("100"));
+        String singDataStr = tradeOrder.getChannelMerId() + tradeOrder.getOrderNo() + amountTemps.toString() + String.valueOf(tradeOrder.getInstallmentNum()) + createTimerStr + payNotifyUrl
+                             + payCallBackUrl;
+        logger.error("签名前数据" + singDataStr);
+        String singData = JHFMd5Util.encode32(singDataStr);
+        logger.error("签名" + singData);
+        TradeJhfJO jhfJO = new TradeJhfJO();
+        jhfJO.setCommID(tradeOrder.getChannelMerId());
+        jhfJO.setPeriodNum(String.valueOf(tradeOrder.getInstallmentNum()));
+
+        jhfJO.setPayAmount(amountTemps.toString());
+        jhfJO.setPayCallBackParams("");
+        jhfJO.setPayCallBackUrl(payCallBackUrl);//payCallBackUrl
+        jhfJO.setPayNotifyUrl(payNotifyUrl);
+        jhfJO.setSingData(singData);
+        jhfJO.setThirdPayNo(tradeOrder.getOrderNo());
+        jhfJO.setTransTime(createTimerStr);
+        jhfJO.setUnionId(tradeOrder.getInnerCode());
+        String reqData = "";
+        String dateTemp = JSON.toJSONString(jhfJO);
+        try {
+            reqData = URLEncoder.encode(AESUtil.encode(dateTemp, keyStr), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            logger.error("生成分期付url时AES加密出错", e);
+        }
+        return reqData;
+    }
 
     // 分页
     public ResultPageDTO<TradeOrderDO> page(TradeOrderDO tradeOrder, Integer pageNum, Integer pageSize) {
@@ -58,7 +110,7 @@ public class TradeOrderService extends BaseService {
         tradeOrder.setCreateTime(new Date());
         //tradeOrder.setOrderCeateTime(new Date());
         if (Strings.isNullOrEmpty(tradeOrder.getOrderNo())) {
-            tradeOrder.setOrderNo(DateUtils.getNowDateStr() + tradeOrder.getInnerCode() + DbUtil.getRandomStr(3));
+            tradeOrder.setOrderNo(DateUtils.getNowYMDOnlyStr() + tradeOrder.getInnerCode() + sequenceService.getOrderSequence("t_trade_order"));
         }
         this.tradeOrderDAO.insert(tradeOrder);
 
