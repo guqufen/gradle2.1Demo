@@ -83,6 +83,28 @@
 								<option value="">全部</option>
 							</select>
 						</div>
+						<div class="col-sm-7">
+						<label class="control-label" for="resp_code">渠道类型:</label>
+							<button type="button" id="channelAll" class="btn btn-primary"
+							onclick="javascript:Determine(id);">全部
+							</button>
+							<button type="button" id="channelLkl" class="btn btn-default"
+							onclick="javascript:Determine(id);">拉卡拉
+							</button>
+							<button type="button" id="channelPf" class="btn btn-default"
+							onclick="javascript:Determine(id);">浦发
+							</button>
+							<button type="button" id="channelAn" class="btn btn-default"
+							onclick="javascript:Determine(id);">爱农
+							</button>
+							<button type="button" id="channelFns" class="btn btn-default"
+							onclick="javascript:Determine(id);">法奈昇
+							</button>
+							<button type="button" id="channelJhf" class="btn btn-default"
+							onclick="javascript:Determine(id);">聚惠分
+							</button>
+							</select>
+						</div>
 					</div>
 					<div class="col-sm-2" style="text-align: right;">
 						<button type="button" id="btn_query" class="btn btn-primary"
@@ -214,6 +236,10 @@
 					field : 'merName',
 					title : '商户名'
 				}, {
+		            field: 'channelType',
+		            title: '渠道类型',
+		            formatter: channelTypeFormatter
+		        }, {
 					field : 'merId',
 					title : '结算商户号'
 				}, {
@@ -263,7 +289,20 @@
 					formatter : formatStatus
 				} ]
 			});
-
+	//判断渠道类型
+	function channelTypeFormatter(value, row, index){
+	  if(value == '00'){
+	    return '拉卡拉';
+	  }else if(value == '01'){
+	    return '浦发';
+	  }else if(value == '02'){
+	    return '爱农';
+	  }else if(value == '03'){
+	    return '法奈昇';
+	  }else if(value == '04'){
+	    return '聚惠分';
+	  }
+	}
 	//商户注册来源格式处理
 	function formatSource(value, row, index) {
 		if (!value) {
@@ -338,6 +377,7 @@
 		if(amtyuan1 !=null && amtyuan1 !=""){
 		amtyuan2 = amtyuan1*100;
 		}
+		determineJudgment();
 		$.ajax({
 			traditional : true,
 			url : PROJECT_NAME + '/web/trade/queryTotalAmount',
@@ -353,6 +393,12 @@
 				legalPerson :  $.trim($('#legal_person').val()),
 				payType : $('#paytype').val(),
 				respCode : $('#resp_code').val(),
+				channelType : channelType,
+			 	channelLkl : channelLkl,
+			 	channelPf : channelPf,
+			 	channelAn : channelAn,
+			 	channelFns : channelFns,
+			 	channelJhf : channelJhf,
 			},
 			type : 'POST',
 			success : function(data) {
@@ -380,6 +426,91 @@
 	//导入按钮事件
 	function importEvent() {
 		$('#importModal').modal();
+	}
+	//渠道类型全部选择按钮事件
+	var channelAll = 1;
+	var channelLkl = 0;
+	var channelPf = 0;
+	var channelAn = 0;
+	var channelFns = 0;
+	var channelJhf = 0;
+	function Determine(id) {
+		if(id=="channelAll"){
+			if (channelAll % 2 == 0) {
+				document.getElementById(id).className = "btn btn-primary";//点击选中变蓝
+				document.getElementById("channelLkl").className = "btn btn-default";
+				document.getElementById("channelPf").className = "btn btn-default";
+				document.getElementById("channelAn").className = "btn btn-default";
+				document.getElementById("channelFns").className = "btn btn-default";
+				document.getElementById("channelJhf").className = "btn btn-default";
+				  }
+			if (channelAll % 2 == 1) {
+				document.getElementById(id).className = "btn btn-default";//不选中变白 
+				  }
+			channelAll++;
+		}
+		if(id=="channelLkl"){
+			determineMethod(channelLkl,id);
+			channelLkl++;
+		}
+		if(id=="channelPf"){
+			determineMethod(channelPf,id);
+			channelPf++;
+		}
+		if(id=="channelAn"){
+			determineMethod(channelAn,id);
+			channelAn++;
+		}
+		if(id=="channelFns"){
+			determineMethod(channelFns,id);
+			channelFns++;
+		}
+		if(id=="channelJhf"){
+			determineMethod(channelJhf,id);
+			channelJhf++;
+		}
+	}
+	//渠道选中按钮方法
+	function determineMethod(type,id) {
+		if (type % 2 == 0) {
+			document.getElementById(id).className = "btn btn-primary";//点击选中变蓝
+			  }
+		if (type % 2 == 1) {
+			document.getElementById(id).className = "btn btn-default";//不选中变白 
+			  }
+	}
+	//渠道选中按钮条件值判断
+	function determineJudgment() {
+		if(document.getElementById("channelAll").className=="btn btn-primary"){
+			channelType = null;
+		}else{
+			channelType = "x";
+		}
+		if(document.getElementById("channelLkl").className=="btn btn-primary"){
+			channelLkl = "00";
+		}else{
+			channelLkl = null;
+		}
+		if(document.getElementById("channelPf").className=="btn btn-primary"){
+			channelPf = "01";
+		}else{
+			channelPf = null;
+		}
+		if(document.getElementById("channelAn").className=="btn btn-primary"){
+			channelAn = "02";
+		}else{
+			channelAn = null;
+		}
+		if(document.getElementById("channelFns").className=="btn btn-primary"){
+			channelFns = "03";
+		}else{
+			channelFns = null;
+		}
+		if(document.getElementById("channelJhf").className=="btn btn-primary"){
+			channelJhf = "04";
+		}else{
+			channelJhf = null;
+		}
 	}
 	$(function() {
 		//0.初始化fileinput
@@ -439,6 +570,7 @@
 	//导出按钮事件
 	function exportEvent() {
 		//拼接参数
+		determineJudgment();
 		var orderNo = $.trim($('#txt_search_id').val());
 		var merId = $.trim($('#txt_search_name').val());
 		var merName = $.trim($('#merName').val());
@@ -459,7 +591,10 @@
 				+ '&startSendTime=' + startSendTime + '&endSendTime='
 				+ endSendTime + '&startTime=' + startTime + '&endTime='
 				+ endTime + '&legalPerson=' + legalPerson + '&payType='
-				+ payType + '&respCode=' + respCode;
+				+ payType + '&respCode=' + respCode+ '&channelType=' 
+				+ channelType + '&channelLkl=' + channelLkl+ '&channelPf='
+				+ channelPf+ '&channelAn=' + channelAn + '&channelFns=' 
+				+ channelFns+ '&channelJhf=' + channelJhf;
 		window.open(url, 'Excel导出');
 	}
 	window.operateEvents = {
@@ -482,12 +617,19 @@
 	}
 
 	//组装请求参数
+	var channelType=null;
+	var channelLkl=null;
+	var channelPf=null;
+	var channelAn=null;
+	var channelFns=null;
+	var channelJhf=null;
 	function queryParams(params) {
 		var amtyuan1 = $.trim($('#txt_search_price').val());
 		var amtyuan2 = "";
 		if(amtyuan1 !=null && amtyuan1 !=""){
 			amtyuan2 = amtyuan1*100;
 		}
+		determineJudgment();
 		var param = {
 			currentPageNum : this.pageNumber,
 			pageSize : this.pageSize,
@@ -502,6 +644,12 @@
 			legalPerson :  $.trim($('#legal_person').val()),
 			payType : $('#paytype').val(),
 			respCode : $('#resp_code').val(),
+			channelType : channelType,
+		 	channelLkl : channelLkl,
+		 	channelPf : channelPf,
+		 	channelAn : channelAn,
+		 	channelFns : channelFns,
+		 	channelJhf : channelJhf,
 		}
 		return param;
 	}
