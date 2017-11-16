@@ -57,15 +57,15 @@ public class ReportOpenController extends BaseController {
     //经营流水趋势
     @RequestMapping("queryTradingVolumeReport")
     @ResponseBody
-    public ResultDTO queryTradingVolumeReport(@RequestParam String innerCode, @RequestParam String merchantId) {
-        return reportService.queryTradingVolumeReport(innerCode, NumberUtils.toInt(merchantId));
+    public ResultDTO queryTradingVolumeReport(@RequestParam String entityInnerCode, @RequestParam String merchantId) {
+        return reportService.queryTradingVolumeReport(entityInnerCode, NumberUtils.toInt(merchantId));
     }
 
     //日均客单价
     @RequestMapping("queryUnitPriceReport")
     @ResponseBody
-    public ResultDTO queryUnitPriceReport(@RequestParam String innerCode, @RequestParam String merchantId) {
-        return reportService.queryUnitPriceReport(innerCode, NumberUtils.toInt(merchantId));
+    public ResultDTO queryUnitPriceReport(@RequestParam String entityInnerCode, @RequestParam String merchantId) {
+        return reportService.queryUnitPriceReport(entityInnerCode, NumberUtils.toInt(merchantId));
     }
 
     //查询风控报告明细
@@ -83,11 +83,11 @@ public class ReportOpenController extends BaseController {
     }
 
     //查询行业类别
-    @RequestMapping("queryIndustry")
-    @ResponseBody
-    public ResultDTO queryIndustry(@RequestParam String id) {
-        return reportService.queryIndustry(NumberUtils.toInt(id));
-    }
+//    @RequestMapping("queryIndustry")
+//    @ResponseBody
+//    public ResultDTO queryIndustry(@RequestParam String id) {
+//        return reportService.queryIndustry(NumberUtils.toInt(id));
+//    }
     
     @RequestMapping("queryHistoryReport")
     @ResponseBody
@@ -105,7 +105,7 @@ public class ReportOpenController extends BaseController {
     
     @RequestMapping(value= "forwordToReport", method = RequestMethod.POST)
     @ResponseBody
-    public ResultDTO forwordToReport(@RequestParam String merchantId,@RequestParam String innerCode) {
+    public ResultDTO forwordToReport(@RequestParam String merchantId) {
     	reportService.updateViemNum(Integer.valueOf(merchantId));
     	return ResultDTO.success();
     }

@@ -79,7 +79,13 @@ public class ReportService extends BaseService {
         return pager;
     }
 
-    //前端商务管理分页查询
+    /**
+     * 前端商务管理分页查询
+     * @param reportInfoDO status:10-已生成；20-未生成/已生成，在表中且有效；未生成-不在表中
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     public ResultPageDTO<ReportInfoDO> queryList(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         WebUserOuterDO userDo = webUserOuterDAO.getById(reportInfoDO.getUserId());
         reportInfoDO.setAgentId(userDo.getAgentId());
