@@ -21,6 +21,7 @@ import com.google.common.base.Strings;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
+import net.fnsco.bigdata.service.sys.SequenceService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -42,7 +43,8 @@ public class TradeOrderService extends BaseService {
     private Environment      env;
     @Autowired
     private TradeDataService tradeDataService;
-
+    @Autowired
+    private SequenceService sequenceService;
     // 分页
     public ResultPageDTO<TradeOrderDO> page(TradeOrderDO tradeOrder, Integer pageNum, Integer pageSize) {
         logger.info("开始分页查询TradeOrderService.page, tradeOrder=" + tradeOrder.toString());
@@ -58,7 +60,7 @@ public class TradeOrderService extends BaseService {
         tradeOrder.setCreateTime(new Date());
         //tradeOrder.setOrderCeateTime(new Date());
         if (Strings.isNullOrEmpty(tradeOrder.getOrderNo())) {
-            tradeOrder.setOrderNo(DateUtils.getNowYMDOnlyStr() + tradeOrder.getInnerCode() + DbUtil.getRandomStr(6));
+            tradeOrder.setOrderNo(DateUtils.getNowYMDOnlyStr() + tradeOrder.getInnerCode() + sequenceService.getOrderSequence("t_trade_order"));
         }
         this.tradeOrderDAO.insert(tradeOrder);
 
