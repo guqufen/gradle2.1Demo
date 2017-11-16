@@ -144,31 +144,6 @@ public class TradeController extends BaseController {
     }
 
     /**
-     * 收银台获取聚惠分二维码url获取(暂时未使用)
-     *
-     * @param userName
-     * @return
-     */
-    @RequestMapping(value = "/dealPayOrder", method = RequestMethod.GET)
-    @ApiOperation(value = "获取聚惠分二维码url")
-    public String dealPayOrder(String orderNo, String commID, String reqData) {
-        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
-        String url = env.getProperty("open.base.url") + "/pay/dealPayFail.html";
-        if (null != tradeOrderDO) {
-            Integer handleNum = tradeOrderDO.getHandleNum();
-            if (null == handleNum || handleNum == 0) {
-                url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-                url += "?commID=" + commID + "&reqData=" + reqData;
-                TradeOrderDO tradeOrderTemp = new TradeOrderDO();
-                tradeOrderTemp.setId(tradeOrderDO.getId());
-                tradeOrderTemp.setHandleNum(1);
-                tradeOrderService.doUpdate(tradeOrderTemp);
-            }
-        }
-        return "redirect:" + url;
-    }
-
-    /**
      * 单条订单查询
      *
      * @param userName
