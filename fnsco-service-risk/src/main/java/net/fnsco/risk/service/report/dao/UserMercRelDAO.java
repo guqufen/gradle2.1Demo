@@ -16,17 +16,17 @@ import java.util.List;;
 
 public interface UserMercRelDAO {
 
-    @Results({@Result( column = "agent_id",property = "agentId"),@Result( column = "inner_code",property = "innerCode") })
+    @Results({@Result( column = "agent_id",property = "agentId"),@Result( column = "entity_inner_code",property = "entityInnerCode") })
     @Select("SELECT * FROM risk_user_merc_rel WHERE id = #{id}")
     public UserMercRelDO getById(@Param("id") int id);
 
     //根据innerCode查询风控信息
-    @Results({@Result( column = "agent_id",property = "agentId"),@Result( column = "inner_code",property = "innerCode") })
-    @Select("SELECT * FROM risk_user_merc_rel WHERE inner_code = #{innerCode}")
-    public UserMercRelDO getByInnerCode(@Param("innerCode") String innerCode);
+    @Results({@Result( column = "agent_id",property = "agentId"),@Result( column = "entity_inner_code",property = "entityInnerCode") })
+    @Select("SELECT * FROM risk_user_merc_rel WHERE entity_inner_code = #{entityInnerCode}")
+    public UserMercRelDO getByInnerCode(@Param("entityInnerCode") String entityInnerCode);
 
     
-    @Insert("INSERT into risk_user_merc_rel(id, agent_id, inner_code) VALUES (#{id},#{agentId},#{innerCode})")
+    @Insert("INSERT into risk_user_merc_rel(id, agent_id, entity_inner_code) VALUES (#{id},#{agentId},#{entityInnerCode})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(UserMercRelDO userMercRel);
 
@@ -36,7 +36,7 @@ public interface UserMercRelDAO {
     @UpdateProvider(type = UserMercRelProvider.class, method = "update")
     public int update(@Param("userMercRel") UserMercRelDO  userMercRel);
 
-    @Results({@Result( column = "agent_id",property = "agentId"),@Result( column = "inner_code",property = "innerCode") })
+    @Results({@Result( column = "agent_id",property = "agentId"),@Result( column = "entity_inner_code",property = "entityInnerCode") })
     @SelectProvider(type = UserMercRelProvider.class, method = "pageList")
     public List<UserMercRelDO> pageList(@Param("userMercRel") UserMercRelDO userMercRel, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
@@ -54,9 +54,7 @@ public interface UserMercRelDAO {
     /**
      * 通过agentId和innerCode移除数据
      */
-    @Delete("delete FROM risk_user_merc_rel WHERE agent_id = #{userMercRel.agentId} AND inner_code = #{userMercRel.innerCode}")
-    public int deleteByagentInnerId(@Param("userMercRel")UserMercRelDO userMercRel);
-    
-    @Select("<script>SELECT distinct agent_id FROM risk_user_merc_rel where inner_code in <foreach item='item' index='index' collection='innerCodeList' open='(' separator=',' close=')'> #{item} </foreach> </script>")
-    public List<Integer> getByInnerCodeList( @Param("innerCodeList") List<String> innerCodeList);
+    @Delete("delete FROM risk_user_merc_rel WHERE agent_id = #{userMercRel.agentId} AND entity_inner_code = #{userMercRel.entityInnerCode}")
+    public int deleteByagentEntityInnerCode(@Param("userMercRel")UserMercRelDO userMercRel);
+
 }

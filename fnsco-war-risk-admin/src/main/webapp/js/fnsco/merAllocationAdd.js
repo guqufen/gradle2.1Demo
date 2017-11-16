@@ -54,12 +54,12 @@ $('#table').bootstrapTable({
 		width : 20,
 		formatter : formatindex
 	}, {
-		field : 'merName',
+		field : 'mercName',
 		title : '商户名称',
 		align : 'center',
 		width : '10%'
 	}, {
-		field : 'innerCode',
+		field : 'entityInnerCode',
 		title : '商户编号',
 		align : 'center',
 	}, {
@@ -95,7 +95,7 @@ function queryParams(params) {
 		pageSize : this.pageSize,
 		agentId:$('#merBelong option:selected').val(),
 		legalPerson:$('#legalPerson').val(),
-		merName : $('#merName').val(),//商户名称
+		mercName : $('#mercName').val(),//商户名称
 		userAgentId : agentId
 	}
 	return param;
@@ -175,7 +175,7 @@ function add(){
 		}
 		var dataId = [];
 		for (var i = 0; i < selectData.length; i++) {
-			dataId = dataId.concat(selectData[i].innerCode);
+			dataId = dataId.concat(selectData[i].entityInnerCode);
 		}
 
 		$.ajax({

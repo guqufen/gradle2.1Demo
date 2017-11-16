@@ -42,7 +42,7 @@ public interface ReportRepaymentHistoryDAO {
     @UpdateProvider(type = ReportRepaymentHistoryProvider.class, method = "update")
     public int update(@Param("reportRepaymentHistory") ReportRepaymentHistoryDO  reportRepaymentHistory);
 
-   //根据inner_code查询每日金额
+   //根据entity_inner_code查询每日金额
     @Results({@Result( column = "trade_date",property = "tradeDate"),@Result( column = "turnover",property = "turnover"),@Result( column = "order_price",property = "orderPrice") })
     @SelectProvider(type = ReportRepaymentHistoryProvider.class, method = "turnoverList")
     public List<ReportBusiness> getTurnover(@Param("reportBusiness") ReportBusiness reportBusiness);

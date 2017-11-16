@@ -133,10 +133,10 @@ public class ReportRepaymentHistoryProvider {
     public String turnoverList(Map<String, Object> params) {
     	ReportBusiness reportBusiness = (ReportBusiness) params.get("reportBusiness");
         return new SQL() {{
-        SELECT("*");
+        SELECT("trade_date, truncate(SUM(turnover)/count(1),2) as turnover, truncate(SUM(order_price)/count(1),2) as order_price");
         FROM(TABLE_NAME1);
-        if (StringUtils.isNotBlank(reportBusiness.getInnerCode())) {
-            WHERE("inner_code =#{reportBusiness.innerCode}");
+        if (StringUtils.isNotBlank(reportBusiness.getEntityInnerCode())) {
+            WHERE("inner_code in (select inner_code from m_merchant_core_entity_ref where entity_inner_code = #{reportBusiness.entityInnerCode})");
         }
         if (StringUtils.isNotBlank(reportBusiness.getStartDay())) {
             WHERE("trade_date >=#{reportBusiness.startDay}");
@@ -144,6 +144,7 @@ public class ReportRepaymentHistoryProvider {
         if (StringUtils.isNotBlank(reportBusiness.getEndDay())) {
             WHERE("trade_date <=#{reportBusiness.endDay}");
         }
+        GROUP_BY("trade_date");
         ORDER_BY ("trade_date");
         }}.toString();
     }

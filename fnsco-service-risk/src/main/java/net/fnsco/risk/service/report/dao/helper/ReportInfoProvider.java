@@ -97,9 +97,6 @@ public class ReportInfoProvider {
                 if (StringUtils.isNotBlank(reportInfo.getLoanCycle())) {
                     SET("loan_cycle=#{reportInfo.loanCycle}");
                 }
-                if (reportInfo.getDecorationLevel() != null) {
-                    SET("decoration_level=#{reportInfo.decorationLevel}");
-                }
                 if (reportInfo.getEvaluation() != null) {
                     SET("evaluation=#{reportInfo.evaluation}");
                 }
@@ -179,7 +176,7 @@ public class ReportInfoProvider {
                     WHERE("loan_cycle=#{reportInfo.loanCycle}");
                 }
                 if (reportInfo.getAgentId() != null) {
-                    WHERE("inner_code in (SELECT inner_code FROM risk_user_merc_rel WHERE agent_id=#{reportInfo.agentId})");
+                    WHERE("entity_inner_code in (SELECT entity_inner_code FROM m_merchant_entity WHERE agent_id=#{reportInfo.agentId})");
                 }
                 ORDER_BY("id desc limit " + start + ", " + limit);
             }
@@ -250,7 +247,7 @@ public class ReportInfoProvider {
                     WHERE("loan_cycle=#{reportInfo.loanCycle}");
                 }
                 if (reportInfo.getAgentId() != null) {
-                    WHERE("inner_code in (SELECT inner_code FROM risk_user_merc_rel WHERE agent_id=#{reportInfo.agentId})");
+                	WHERE("entity_inner_code in (SELECT entity_inner_code FROM m_merchant_entity WHERE agent_id=#{reportInfo.agentId})");
                 }
             }
         }.toString();
@@ -271,7 +268,7 @@ public class ReportInfoProvider {
         return new SQL() {
             {
                 SELECT("r.mer_num, " + "r.create_time, " + "r.last_modify_time, " + "r.id, " + "r.mer_name, " + "r.business_license_num, " + "r.business_address, " + "r.business_due_time,"
-                       + "r.trading_area, " + "r.turnover, " + "r.size, " + "r.report_cycle, " + "r.report_timer, " + "r.risk_warning, " + "r.quota, " + "r.fee_rate, " + "r.loan_cycle, " + "r.status," + "r.inner_code,"
+                       + "r.trading_area, " + "r.turnover, " + "r.size, " + "r.report_cycle, " + "r.report_timer, " + "r.risk_warning, " + "r.quota, " + "r.fee_rate, " + "r.loan_cycle, " + "r.status," + "r.entity_inner_code,"
                        + "(select `first` from sys_industry i where id = r.industry) as industry");
                 FROM(TABLE_NAME + " r");
                 if (StringUtils.isNotBlank(reportInfo.getMerNum())) {
@@ -451,7 +448,7 @@ public class ReportInfoProvider {
     ) tt 
     WHERE
     tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month)
-    order by tt.id*/
+    order by tt.id
     public String pageListAllMerc(Map<String, Object> params) {
         ReportInfoDO reportInfo = (ReportInfoDO) params.get("reportInfo");
         Integer pageNum = (Integer) params.get("pageNum");
@@ -497,8 +494,57 @@ public class ReportInfoProvider {
                 ORDER_BY(" viewNum DESC limit " + start + ", " + limit);
             }
         }.toString();
-    }
+    }*/
 
+    //查询所有有3个月交易流水的商户信息,联合风控+表查找相关数据
+    public String pageListAllMerc(Map<String, Object> params) {
+        ReportInfoDO reportInfo = (ReportInfoDO) params.get("reportInfo");
+        Integer pageNum = (Integer) params.get("pageNum");
+        Integer pageSize = (Integer) params.get("pageSize");
+        if (pageNum == null || pageNum == 0) {
+            pageNum = 1;
+        }
+        if (pageSize == null || pageSize == 0) {
+            pageSize = 20;
+        }
+        int start = (pageNum - 1) * pageSize;
+        int limit = pageSize;
+        return new SQL() {
+            {
+                String agentWhere ="";
+                if(null !=  reportInfo.getAgentId()){
+                    agentWhere="and ent.agent_id='" + reportInfo.getAgentId() + "'";
+                }
+                SELECT( "tt.*," + "(select report.trading_area from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) trading_area,"
+                       + "(select `first` from sys_industry where id = (select report.industry from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1)) industry,"
+                       + "(select report.status from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) status,"
+                       + "(select report.view_num from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) viewNum,"
+                       + "(select report.report_timer from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) report_timer,"
+                       + "(select report.id from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) id,"
+                       + "(select report.size from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) size " + "FROM "
+                       + "(SELECT ent.legal_person,ent.entity_inner_code,ent.merc_name,ent.business_license_num, " 
+                       + "(SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code = ref.inner_code ) as maxTime " 
+                       + "FROM m_merchant_entity ent, m_merchant_core_entity_ref ref where ent.entity_inner_code = ref.entity_inner_code "
+                       + agentWhere + ") tt  " );
+                WHERE("tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month)");
+                if (StringUtils.isNotBlank(reportInfo.getKey())) {
+                    WHERE("(tt.merc_name like CONCAT('%',#{reportInfo.key},'%') or tt.legal_person like CONCAT('%',#{reportInfo.key},'%') or tt.business_license_num like CONCAT('%',#{reportInfo.key},'%'))");
+                }
+                if (StringUtils.isNotBlank(reportInfo.getMercName())) {
+                    WHERE("tt.merc_name like CONCAT('%',#{reportInfo.mercName},'%')");
+                }
+                if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())) {
+                    WHERE("tt.business_license_num like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
+                }
+                //后端未生成报表的查询
+                if (null != reportInfo.getStatus() && 20==reportInfo.getStatus()) {
+                    WHERE("tt.entity_inner_code not in (select entity_inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
+                }
+                ORDER_BY(" viewNum DESC limit " + start + ", " + limit);
+            }
+        }.toString();
+    }
+    
     //查询所有有3个月交易流水的商户信息
     public String pageListAllMercCount(Map<String, Object> params) {
         ReportInfoDO reportInfo = (ReportInfoDO) params.get("reportInfo");
@@ -506,24 +552,25 @@ public class ReportInfoProvider {
             {
                 String agentWhere ="";
                 if(null !=  reportInfo.getAgentId()){
-                    agentWhere="and agent_id='" + reportInfo.getAgentId() + "'";
+                    agentWhere="and ent.agent_id='" + reportInfo.getAgentId() + "'";
                 }
-                SELECT( "count(1) " + " FROM " + "( " + "SELECT " + "c.id,c.legal_person,c.inner_code,c.mer_name,c.business_license_num, (" + "SELECT " + "MAX(time_stamp) " + "FROM " + "t_trade_data t "
-                       + "WHERE " + "t.inner_code = c.inner_code " + ") as maxTime " + "FROM " + "m_merchant_core c "
-                       + "where c.inner_code in (select inner_code from risk_user_merc_rel rel where rel.inner_code=c.inner_code " + agentWhere + " ) " + ") tt  ");
+                SELECT( "count(1) FROM ( SELECT ent.id,ent.legal_person,ent.entity_inner_code,ent.merc_name,ent.business_license_num, " 
+                + "( SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code = ref.inner_code ) as maxTime " 
+                + "FROM m_merchant_entity ent, m_merchant_core_entity_ref ref where ent.entity_inner_code = ref.entity_inner_code " 
+                + agentWhere + " ) tt  ");
                 WHERE("tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month)");
                 if (StringUtils.isNotBlank(reportInfo.getKey())) {
-                    WHERE("(tt.mer_name like CONCAT('%',#{reportInfo.key},'%') or tt.legal_person like CONCAT('%',#{reportInfo.key},'%') or tt.business_license_num like CONCAT('%',#{reportInfo.key},'%'))");
+                    WHERE("(tt.merc_name like CONCAT('%',#{reportInfo.key},'%') or tt.legal_person like CONCAT('%',#{reportInfo.key},'%') or tt.business_license_num like CONCAT('%',#{reportInfo.key},'%'))");
                 }
-                if (StringUtils.isNotBlank(reportInfo.getMerName())) {
-                    WHERE("tt.mer_name like CONCAT('%',#{reportInfo.merName},'%')");
+                if (StringUtils.isNotBlank(reportInfo.getMercName())) {
+                    WHERE("tt.merc_name like CONCAT('%',#{reportInfo.mercName},'%')");
                 }
                 if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())) {
                     WHERE("tt.business_license_num like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
                 }
                 //未生成的
                 if (null != reportInfo.getStatus() && 20==reportInfo.getStatus()) {
-                    WHERE("tt.inner_code not in (select inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
+                    WHERE("tt.entity_inner_code not in (select entity_inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
                 }
             }
         }.toString();
@@ -571,13 +618,15 @@ public class ReportInfoProvider {
                     agentWhere="and agent_id='" + reportInfo.getAgentId() + "'";
                 }
                 SELECT( "tt.*,report.id,report.trading_area ,"
-                		+ "(select `first` from sys_industry where id = report.industry) industry ,report.size,report.status,report.view_num,report.report_timer " + " FROM " + "( " + "SELECT " + "c.inner_code,c.legal_person,c.mer_name,c.business_license_num, ("
-                       + "SELECT " + "MAX(time_stamp) " + "FROM " + "t_trade_data t " + "WHERE " + "t.inner_code = c.inner_code " + ") as maxTime " + "FROM " + "m_merchant_core c "
-                       + "where c.inner_code in (select inner_code from risk_user_merc_rel rel where rel.inner_code=c.inner_code " + agentWhere + ") "
+                		+ "(select `first` from sys_industry where id = report.industry) industry ,report.size,report.status,report.view_num,report.report_timer " 
+                		+ " FROM " 
+                		+ "( SELECT ent.entity_inner_code,ent.legal_person,ent.merc_name,ent.business_license_num, "
+                		+ "( SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code = ref.inner_code ) as maxTime FROM m_merchant_entity ent, m_merchant_core_entity_ref ref "
+                       + "where ent.entity_inner_code = ref.entity_inner_code " + agentWhere + " "
                        + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)) report " );
-                WHERE(" tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month) and tt.inner_code = report.inner_code ");
+                WHERE(" tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month) and tt.entity_inner_code = report.entity_inner_code ");
                 if (StringUtils.isNotBlank(reportInfo.getMerNum())) {
-                    WHERE("report.mer_num=#{reportInfo.merNum}");
+                    WHERE("report.merc_num=#{reportInfo.merNum}");
                 }
                 if (reportInfo.getCreateTime() != null) {
                     WHERE("report.create_time=#{reportInfo.createTime}");
@@ -588,8 +637,8 @@ public class ReportInfoProvider {
                 if (reportInfo.getId() != null) {
                     WHERE("report.id=#{reportInfo.id}");
                 }
-                if (StringUtils.isNotBlank(reportInfo.getMerName())) {
-                    WHERE("tt.mer_name like CONCAT('%',#{reportInfo.merName},'%')");
+                if (StringUtils.isNotBlank(reportInfo.getMercName())) {
+                    WHERE("tt.merc_name like CONCAT('%',#{reportInfo.mercName},'%')");
                 }
                 if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())) {
                     WHERE("tt.business_license_num like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
@@ -673,16 +722,15 @@ public class ReportInfoProvider {
                 if(null !=  reportInfo.getAgentId()){
                     agentWhere="and agent_id='" + reportInfo.getAgentId() + "'";
                 }
-                SELECT( "count(1) " + " FROM " + "( " + "SELECT " + "c.id,c.inner_code,c.mer_name,c.business_license_num, (" + "SELECT " + "MAX(time_stamp) " + "FROM " + "t_trade_data t "
-                       + "WHERE " + "t.inner_code = c.inner_code " + ") as maxTime " + "FROM " + "m_merchant_core c "
-                       + "where c.inner_code in (select inner_code from risk_user_merc_rel rel where rel.inner_code=c.inner_code " + agentWhere + ") "
-                       + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)) report " );
-                WHERE(" tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month) and tt.inner_code = report.inner_code ");
+                SELECT( "count(1) FROM " 
+                + "( SELECT ent.id,ent.entity_inner_code,ent.merc_name,ent.business_license_num, "
+                + "( SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code = ref.inner_code ) as maxTime " 
+                + "FROM " 
+                + "m_merchant_entity ent, m_merchant_core_entity_ref ref where ent.entity_inner_code = ref.entity_inner_code " + agentWhere
+                + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)) report " );
+                WHERE(" tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month) and tt.entity_inner_code = report.entity_inner_code ");
                 if (StringUtils.isNotBlank(reportInfo.getMerNum())) {
-                    WHERE("report.mer_num=#{reportInfo.merNum}");
-                }
-                if (reportInfo.getStatus() != null) {
-                    WHERE("report.status=#{reportInfo.status}");
+                    WHERE("report.merc_num=#{reportInfo.merNum}");
                 }
                 if (reportInfo.getCreateTime() != null) {
                     WHERE("report.create_time=#{reportInfo.createTime}");
@@ -693,8 +741,8 @@ public class ReportInfoProvider {
                 if (reportInfo.getId() != null) {
                     WHERE("report.id=#{reportInfo.id}");
                 }
-                if (StringUtils.isNotBlank(reportInfo.getMerName())) {
-                    WHERE("tt.mer_name like CONCAT('%', #{reportInfo.merName}, '%')");
+                if (StringUtils.isNotBlank(reportInfo.getMercName())) {
+                    WHERE("tt.merc_name like CONCAT('%', #{reportInfo.mercName}, '%')");
                 }
                 if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())) {
                     WHERE("tt.business_license_num LIKE concat('%', #{reportInfo.businessLicenseNum}, '%')");
@@ -785,12 +833,12 @@ public class ReportInfoProvider {
         }.toString();
     }
     
-    public String getByMercInnerCode(Map<String, Object> params){
+    public String getByMercEntityInnerCode(Map<String, Object> params){
     	ReportInfoDO reportInfo = (ReportInfoDO) params.get("reportInfoDO");
     	
     	return new SQL(){
     		{
-    			SELECT( "c.inner_code,c.mer_name,c.business_license_num, c.regist_address as business_address, c.card_valid_time as business_due_time "
+    			SELECT( "ent.entity_inner_code,ent.merc_name,ent.business_license_num, ent.regist_address as business_address "
 //    					+ "(select report.trading_area from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) trading_area,"
 //    					+ "(select report.industry from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) industry,"
 //    					+ "(select report.decoration_level from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) decoration_level,"
@@ -801,9 +849,9 @@ public class ReportInfoProvider {
 //    					+ "(select report.risk_warning from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) risk_warning,"
 //    					+ "(select report.evaluation from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) evaluation,"
 //    					+ "(select report.size from risk_report_info report where c.inner_code = report.inner_code order by create_time desc limit 1) size "
-    					+ "FROM m_merchant_core c" );
-              if(StringUtils.isNotBlank( reportInfo.getInnerCode())){
-            	  WHERE(" c.inner_code = #{reportInfoDO.innerCode} ");
+    					+ " FROM m_merchant_entity ent" );
+              if(StringUtils.isNotBlank( reportInfo.getEntityInnerCode())){
+            	  WHERE(" ent.entity_inner_code = #{reportInfoDO.entityInnerCode} ");
               }
     		}
     	}.toString();

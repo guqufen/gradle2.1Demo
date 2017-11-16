@@ -2,7 +2,6 @@ package net.fnsco.web.admin.sys;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,6 @@ import io.swagger.annotations.Api;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.risk.service.report.MercAllocationService;
 import net.fnsco.risk.service.sys.WebUserOuterService;
 import net.fnsco.risk.service.sys.entity.AgentDO;
 import net.fnsco.risk.service.sys.entity.WebUserDO;
@@ -29,8 +27,6 @@ public class AddUserController extends BaseController {
 	 @Autowired
 	 private WebUserOuterService userOuterService;
 
-	 @Autowired
-	 private MercAllocationService merAllocationService;
 	 /**
 		 * 页面信息查询
 		 * @param dept
@@ -44,6 +40,7 @@ public class AddUserController extends BaseController {
 			 ResultPageDTO<WebUserOuterDO> result=userOuterService.page(webUserDO, pageNum, pageSize);
 		     return success(result);
 		 }
+
 		/**
 		 * 通过id查询删除对象（状态改0）
 		 * @param id
@@ -58,6 +55,7 @@ public class AddUserController extends BaseController {
 		    ResultDTO<String> result=userOuterService.doDelete(adminUser, id);
 			return result;
 		}
+
 		/**
 		 * 添加用户
 		 * @param dept
@@ -69,6 +67,7 @@ public class AddUserController extends BaseController {
 			userOuterService.doAdd(user);
 			return ResultDTO.successForSave(null);
 		}
+
 		/**
 		 * 通过id查询修改对象的数据
 		 * @param id
@@ -80,6 +79,7 @@ public class AddUserController extends BaseController {
 			WebUserOuterDO result = userOuterService.doQueryById(id);
 			return success(result);
 		}
+
 		/**
 		 * 通过用户名查询是否重复
 		 * @param name
@@ -91,6 +91,7 @@ public class AddUserController extends BaseController {
 			boolean result = userOuterService.getUserByName(name);
 			return result;
 		}
+
 		/**
 		 * 用户信息修改
 		 * @param dept
@@ -106,6 +107,7 @@ public class AddUserController extends BaseController {
 			Integer rows = userOuterService.doUpdate(user);
 			return ResultDTO.success();
 		}
+
 		/**
 		 * 通过id停用
 		 * @param dept  
@@ -120,6 +122,7 @@ public class AddUserController extends BaseController {
 			}
 			return ResultDTO.success();
 		}
+
 		/**
 		 * 通过id启用
 		 * @param dept
@@ -134,6 +137,7 @@ public class AddUserController extends BaseController {
 			}
 			return ResultDTO.success();
 		}
+
 		/**
 		 * 查询所有类型
 		 * @return
@@ -163,26 +167,8 @@ public class AddUserController extends BaseController {
 		@ResponseBody
 		 public ResultDTO<WebUserOuterDO> queryAllUser(WebUserOuterDO webUserDO,String merName, @RequestParam("currentPageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
 			
-			List<Integer> agentList = null;
-			//如果商户名称不为空，则先查找找商户inner_code，再查找绑定的agent_id
-			if(StringUtils.isNotBlank(merName)){
-				
-				//通过商户名称模糊查询内部商户号，未找到则返回失败
-				List<String> merList = merAllocationService.getByMerName(merName);
-				if(merList.size() == 0){
-					return ResultDTO.fail("该商户不存在！");
-				}
-				
-				//通过商户号查找agent_id,未找到则返回失败
-				agentList = merAllocationService.getByInnerCodeList(merList);
-				if(agentList.size() == 0){
-					return ResultDTO.fail("商户对应的代理商未找到！");
-				}
-			}
-			
-			ResultPageDTO<WebUserOuterDO> result=userOuterService.pageMercAllo(webUserDO, agentList, pageNum, pageSize);
-			
-			
+			ResultPageDTO<WebUserOuterDO> result=userOuterService.pageMercAllo(webUserDO, pageNum, pageSize);
+
 		     return success(result);
 		 }
 }

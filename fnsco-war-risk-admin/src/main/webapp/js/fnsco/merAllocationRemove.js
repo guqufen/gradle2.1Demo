@@ -54,12 +54,12 @@ $('#table').bootstrapTable({
 		width : 20,
 		formatter : formatindex
 	}, {
-		field : 'merName',
+		field : 'mercName',
 		title : '商户名称',
 		align : 'center',
 		width : '10%'
 	}, {
-		field : 'innerCode',
+		field : 'entityInnerCode',
 		title : '商户编号',
 		align : 'center',
 	}, {
@@ -93,7 +93,7 @@ function queryParams(params) {
 	var param = {
 		currentPageNum : this.pageNumber,
 		pageSize : this.pageSize,
-		merName : $('#merName').val(),//商户名称
+		mercName : $('#mercName').val(),//商户名称
 		legalPerson:$('#legalPerson').val(),//法人姓名
 		reportStatus:$('#reportStatus').val(),//报告状态
 		userAgentId : agentId
@@ -168,7 +168,7 @@ function remove() {
 		//获取选中的内部商户号list
 		var dataId = [];
 		for (var i = 0; i < selectData.length; i++) {
-			dataId = dataId.concat(selectData[i].innerCode);
+			dataId = dataId.concat(selectData[i].entityInnerCode);
 		}
 
 		$.ajax({

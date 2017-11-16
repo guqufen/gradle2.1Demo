@@ -63,8 +63,6 @@ public class ReportService extends BaseService {
     @Autowired
     private ReportRepaymentHistoryDAO reportRepaymentHistoryDAO;
     @Autowired
-    private TradeDataDAO              tradeDataDAO;
-    @Autowired
     private IndustryDAO               industryDAO;
 
     //前台分页查询风控报告列表
@@ -146,6 +144,7 @@ public class ReportService extends BaseService {
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
         return pager;
     }
+
     public ResultPageDTO<ReportInfoDO> pageBack(ReportInfoDO reportInfoDO, Integer pageNum, Integer pageSize) {
         List<ReportInfoDO> pageList = this.reportInfoDAO.pageListBack(reportInfoDO, pageNum, pageSize);
         Integer count = this.reportInfoDAO.pageListCountBack(reportInfoDO);
@@ -153,10 +152,10 @@ public class ReportService extends BaseService {
         return pager;
     }
     //查询12个月风控历史
-    public ResultDTO queryYearReport(String innerCode, Integer merchantId) {
+    public ResultDTO queryYearReport(String entityInnerCode, Integer merchantId) {
         List<YearReportDO> list = new ArrayList<YearReportDO>();
 
-        ReportInfoDO reportInfoDO = reportInfoDAO.getByInnerCode(innerCode);
+        ReportInfoDO reportInfoDO = reportInfoDAO.getByEntityInnerCode(entityInnerCode);
         ReportRepaymentHistoryDO dto = reportRepaymentHistoryDAO.getByReportId(merchantId);
         //如果查出来的月度营业额为空，则直接返回到页面；否则会报空指针异常
         if (dto == null) {
@@ -230,9 +229,9 @@ public class ReportService extends BaseService {
     }
 
     //查询3个月经营流水趋势(交易量)
-    public ResultDTO queryTradingVolumeReport(String innerCode, Integer merchantId) {
+    public ResultDTO queryTradingVolumeReport(String entityInnerCode, Integer merchantId) {
     	ReportBusiness report = new ReportBusiness();
-    	report.setInnerCode(innerCode);
+    	report.setEntityInnerCode(entityInnerCode);
     	SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
     	Calendar c1 = Calendar.getInstance();
     	c1.setTime(new Date());
@@ -246,6 +245,8 @@ public class ReportService extends BaseService {
         Date d2 = c2.getTime();
         String startDay = format.format(d2);
         report.setStartDay(startDay);
+        
+        //获取交易额
         List<ReportBusiness> reportBusiness = reportRepaymentHistoryDAO.getTurnover(report);
         if (reportBusiness.size()==0) {
             return ResultDTO.fail("没有找到经营流水数据");
@@ -270,7 +271,7 @@ public class ReportService extends BaseService {
     	Date temp = startDate;
         while(true) {
         	ReportBusiness temObj = new ReportBusiness();
-        	temObj.setTurnover("0");
+        	temObj.setTurnover(new BigDecimal(0));
         	String nowDay = format.format(temp);
         	temObj.setTradeDate(nowDay);
         	Calendar st = Calendar.getInstance();
@@ -314,7 +315,7 @@ public class ReportService extends BaseService {
         		yearReportDO.setDate(dateDay);
         		list.add(yearReportDO);
         	}else {
-        		BigDecimal bdFen=new BigDecimal(tempBusiness1.getTurnover());
+        		BigDecimal bdFen=tempBusiness1.getTurnover();
         		BigDecimal bdYuan=bdFen.divide(new BigDecimal(100), 2, BigDecimal.ROUND_UP);
         		yearReportDO.setTurnover(bdYuan);
         		yearReportDO.setDate(dateDay);
@@ -325,9 +326,9 @@ public class ReportService extends BaseService {
         
     }
     //查询3个月日均客单价
-    public ResultDTO queryUnitPriceReport(String innerCode, Integer merchantId) {
+    public ResultDTO queryUnitPriceReport(String entityInnerCode, Integer merchantId) {
     	ReportBusiness report = new ReportBusiness();
-    	report.setInnerCode(innerCode);
+    	report.setEntityInnerCode(entityInnerCode);
     	SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
     	Calendar c1 = Calendar.getInstance();
     	c1.setTime(new Date());
@@ -341,6 +342,8 @@ public class ReportService extends BaseService {
         Date d2 = c2.getTime();
         String startDay = format.format(d2);
         report.setStartDay(startDay);
+        
+        handleDate(new Date(), -1);
         List<ReportBusiness> reportBusiness = reportRepaymentHistoryDAO.getTurnover(report);
         if (reportBusiness.size()==0) {
             return ResultDTO.fail("没有找到日均客单价数据");
@@ -364,7 +367,7 @@ public class ReportService extends BaseService {
     	Date temp = startDate;
         while(true) {
         	ReportBusiness temObj = new ReportBusiness();
-        	temObj.setTurnover("0");
+        	temObj.setTurnover(new BigDecimal(0));
         	String nowDay = format.format(temp);
         	temObj.setTradeDate(nowDay);
         	Calendar st = Calendar.getInstance();
@@ -531,8 +534,8 @@ public class ReportService extends BaseService {
      * @param reportInfoDO
      * @return
      */
-    public ReportInfoDO getByMercInnerCode(ReportInfoDO reportInfoDO) {
-        ReportInfoDO reportInfo = reportInfoDAO.getByMercInnerCode(reportInfoDO);
+    public ReportInfoDO getByMercEntityInnerCode(ReportInfoDO reportInfoDO) {
+        ReportInfoDO reportInfo = reportInfoDAO.getByMercEntityInnerCode(reportInfoDO);
         return reportInfo;
     }
 
@@ -552,7 +555,7 @@ public class ReportService extends BaseService {
         ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());//根据ID查找数据
         //审核成功，则发邮件通知用户
         if (1 == reportInfo.getStatus()) {
-            List<Integer> userIdList = webUserOuterDAO.getByInnercode(reportInfo.getInnerCode().trim());
+            List<Integer> userIdList = webUserOuterDAO.getByEntityInnercode(reportInfo.getEntityInnerCode().trim());
             //邮件通知用户
             for (Integer userId : userIdList) {
                 headPersonnelMes(userId, reportInfoDO.getId());
@@ -703,7 +706,7 @@ public class ReportService extends BaseService {
     	return ResultDTO.fail();
     }
     
-    public ReportInfoDO getByInnerCode(String innerCode){
-    	return reportInfoDAO.getByInnerCode(innerCode);
+    public ReportInfoDO getByEntityInnerCode(String innerCode){
+    	return reportInfoDAO.getByEntityInnerCode(innerCode);
     }
 }

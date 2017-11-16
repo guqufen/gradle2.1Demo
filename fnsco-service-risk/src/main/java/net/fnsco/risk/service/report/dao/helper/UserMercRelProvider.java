@@ -21,8 +21,8 @@ public class UserMercRelProvider {
         if (userMercRel.getAgentId() != null) {
             SET("agent_id=#{userMercRel.agentId}");
         }
-        if (StringUtils.isNotBlank(userMercRel.getInnerCode())){
-            SET("inner_code=#{userMercRel.innerCode}");
+        if (StringUtils.isNotBlank(userMercRel.getEntityInnerCode())){
+            SET("entity_inner_code=#{userMercRel.entityInnerCode}");
         }
         WHERE("id = #{userMercRel.id}");
         }}.toString();
@@ -49,8 +49,8 @@ public class UserMercRelProvider {
         if (userMercRel.getAgentId() != null) {
             WHERE("agent_id=#{userMercRel.agentId}");
         }
-        if (StringUtils.isNotBlank(userMercRel.getInnerCode())){
-            WHERE("inner_code=#{userMercRel.innerCode}");
+        if (StringUtils.isNotBlank(userMercRel.getEntityInnerCode())){
+            WHERE("entity_inner_code=#{userMercRel.entityInnerCode}");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
@@ -67,8 +67,8 @@ public class UserMercRelProvider {
         if (userMercRel.getAgentId() != null) {
             WHERE("agent_id=#{userMercRel.agentId}");
         }
-        if (StringUtils.isNotBlank(userMercRel.getInnerCode())){
-            WHERE("inner_code=#{userMercRel.innerCode}");
+        if (StringUtils.isNotBlank(userMercRel.getEntityInnerCode())){
+            WHERE("entity_inner_code=#{userMercRel.entityInnerCode}");
         }
         }}.toString();
     }

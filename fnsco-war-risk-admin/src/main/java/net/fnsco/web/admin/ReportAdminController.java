@@ -49,6 +49,7 @@ public class ReportAdminController extends BaseController{
         ResultPageDTO<ReportInfoDO> pager = this.reportService.pageListForAdmin(reportInfoDO, page,rows);
         return success(pager);
     }
+
     //通知商户风控报告
     @ResponseBody
     @RequestMapping(value = "/headPersonnelMes", method = RequestMethod.GET)
@@ -74,14 +75,14 @@ public class ReportAdminController extends BaseController{
     	//如果ID为-1，表示report表尚未该条数据，需要先新增一条数据
     	if(reportInfoDO.getId() == -1){
     		//先根据内部商户号查处一条数据
-    		ReportInfoDO reportInfo = reportService.getByMercInnerCode(reportInfoDO);
-//    		reportInfoDO.setId(null);
+    		ReportInfoDO reportInfo = reportService.getByMercEntityInnerCode(reportInfoDO);
     		reportInfo.setCreateTime(new Date());
     		reportInfo.setLastModifyTime(new Date());
     		reportInfo.setReportTimer(DateUtils.getYesterdayDateStr());
+    		reportInfo.setMerName(reportInfo.getMercName());//商户实体表商户名称和风控+数据表商户名称字段不一样，需要重新设置一下
     		reportInfo.setStatus(4);
     		reportService.insert(reportInfo);
-    		reportInfoDO = reportService.getByInnerCode(reportInfo.getInnerCode());
+    		reportInfoDO = reportService.getByEntityInnerCode(reportInfo.getEntityInnerCode());
     	}
 
     	return reportService.getById(reportInfoDO);
@@ -245,8 +246,8 @@ public class ReportAdminController extends BaseController{
      */
       @RequestMapping(value="/queryTradingVolumeReport", method = RequestMethod.POST)
       @ResponseBody
-      public ResultDTO queryTradingVolumeReport(@RequestParam String innerCode, @RequestParam String merchantId) {
-          return reportService.queryTradingVolumeReport(innerCode, NumberUtils.toInt(merchantId));
+      public ResultDTO queryTradingVolumeReport(@RequestParam String entityInnerCode, @RequestParam String merchantId) {
+          return reportService.queryTradingVolumeReport(entityInnerCode, NumberUtils.toInt(merchantId));
       }
       /**
        * 查询全年风控日均客单价测曲线图(编辑页面)
@@ -255,7 +256,7 @@ public class ReportAdminController extends BaseController{
        */
         @RequestMapping(value="/queryUnitPriceReport", method = RequestMethod.POST)
         @ResponseBody
-        public ResultDTO queryUnitPriceReport(@RequestParam String innerCode, @RequestParam String merchantId) {
-            return reportService.queryUnitPriceReport(innerCode, NumberUtils.toInt(merchantId));
+        public ResultDTO queryUnitPriceReport(@RequestParam String entityInnerCode, @RequestParam String merchantId) {
+            return reportService.queryUnitPriceReport(entityInnerCode, NumberUtils.toInt(merchantId));
         }
 }
