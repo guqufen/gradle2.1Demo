@@ -26,6 +26,11 @@
 	<script src="js/jquery.min.js"></script>
 	<script src="js/mui.min.js"></script>
 	<script type="text/javascript">
+		$(".installmentNum").click(function(){
+			$(".remove").remove();
+			$(".installmentNum").addClass("active");
+		});
+
 		$(".installmentNum").change(function(){
 			$(".installmentNum").addClass("active");
 			if($(".installmentNum").val()==0){
