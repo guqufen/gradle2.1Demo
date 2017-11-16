@@ -24,7 +24,7 @@ import net.fnsco.order.service.modules.trade.TradeWebReportService;
  * @Date     2017年7月12日 上午9:52:53
  */
 @Controller
-@RequestMapping(value = "/web/report")
+@RequestMapping(value = "/h5/report")
 @Api(value = "/web/report", tags = { "大屏幕报表" })
 public class TradeReportController extends BaseController {
 
