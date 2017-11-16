@@ -196,10 +196,10 @@ public class TradeController extends BaseController {
      */
     @RequestMapping(value = "/getOrderList", method = RequestMethod.GET)
     @ApiOperation(value = "获取商户编号")
-    public ResultPageDTO<TradeOrderDO> getOrderList(@RequestBody TradeJO tradeJO) {
+    public ResultDTO<TradeOrderDO> getOrderList(@RequestBody TradeJO tradeJO) {
         MerchantChannel merchantChannel = merchantService.getMerChannel(tradeJO.getMerCode(), "00");
         if (null == merchantChannel) {
-            return new ResultPageDTO<TradeOrderDO>(0,null);
+            return fail("拉卡拉渠道信息不存在");
         }
         TradeOrderDO tradeOrder = new TradeOrderDO();
         tradeOrder.setOrderNoAfter6(tradeJO.getOrderNo());
@@ -216,6 +216,6 @@ public class TradeController extends BaseController {
             //    tradeOrderDO.setMercName(merChantCore.getMerName());
             //}
         }
-        return resultDTO;
+        return success(resultDTO);
     }
 }
