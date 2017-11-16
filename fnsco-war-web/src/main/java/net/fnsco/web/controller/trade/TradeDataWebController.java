@@ -79,7 +79,6 @@ public class TradeDataWebController extends BaseController {
     @ResponseBody
     @RequiresPermissions(value = { "m:trade:list" })
     public ResultPageDTO<TradeData> query(TradeDataDTO tradeDataDTO, Integer currentPageNum, Integer pageSize) {
-
         return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize);
     }
     /**

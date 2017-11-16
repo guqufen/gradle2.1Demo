@@ -30,8 +30,8 @@ import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
-import net.fnsco.trading.service.trade.TradeOrderService;
-import net.fnsco.trading.service.trade.entity.TradeOrderDO;
+import net.fnsco.trading.service.order.TradeOrderService;
+import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.open.jo.TradeJO;
 import net.fnsco.web.controller.open.jo.TradeJhfJO;
 
@@ -196,7 +196,7 @@ public class TradeController extends BaseController {
      */
     @RequestMapping(value = "/getOrderList", method = RequestMethod.GET)
     @ApiOperation(value = "获取商户编号")
-    public ResultDTO getOrderList(@RequestBody TradeJO tradeJO) {
+    public ResultDTO<TradeOrderDO> getOrderList(@RequestBody TradeJO tradeJO) {
         MerchantChannel merchantChannel = merchantService.getMerChannel(tradeJO.getMerCode(), "00");
         if (null == merchantChannel) {
             return fail("拉卡拉渠道信息不存在");
@@ -216,6 +216,6 @@ public class TradeController extends BaseController {
             //    tradeOrderDO.setMercName(merChantCore.getMerName());
             //}
         }
-        return success(resultList);
+        return success(resultDTO);
     }
 }

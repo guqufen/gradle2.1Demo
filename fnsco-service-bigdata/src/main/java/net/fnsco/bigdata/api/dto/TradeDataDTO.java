@@ -1,6 +1,7 @@
 package net.fnsco.bigdata.api.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import net.fnsco.core.base.DTO;
 
@@ -209,6 +210,11 @@ public class TradeDataDTO extends DTO {
 
     private String payMedium;    //支付媒介00pos机01app02台码
     private String channelType;  //渠道
+    private String channelLkl;  //渠道拉卡拉
+    private String channelPf;  //渠道浦发
+    private String channelAn;  //渠道爱农
+    private String channelFns;  //渠道法奈昇
+    private String channelJhf;  //渠道聚惠分
 
     /**
      * payMedium
@@ -254,7 +260,48 @@ public class TradeDataDTO extends DTO {
         this.channelType = channelType;
     }
 
-    /**
+
+	public String getChannelLkl() {
+		return channelLkl;
+	}
+
+	public void setChannelLkl(String channelLkl) {
+		this.channelLkl = channelLkl;
+	}
+
+	public String getChannelPf() {
+		return channelPf;
+	}
+
+	public void setChannelPf(String channelPf) {
+		this.channelPf = channelPf;
+	}
+
+	public String getChannelAn() {
+		return channelAn;
+	}
+
+	public void setChannelAn(String channelAn) {
+		this.channelAn = channelAn;
+	}
+
+	public String getChannelFns() {
+		return channelFns;
+	}
+
+	public void setChannelFns(String channelFns) {
+		this.channelFns = channelFns;
+	}
+
+	public String getChannelJhf() {
+		return channelJhf;
+	}
+
+	public void setChannelJhf(String channelJhf) {
+		this.channelJhf = channelJhf;
+	}
+
+	/**
 >>>>>>> 66c23d160a3a16ae1deefd5afc452cde023a9778
      * startTime
      *

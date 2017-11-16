@@ -10,6 +10,7 @@ public class TradeJO extends JO {
     private Integer installmentNum;
     //支付总金额
     private String  paymentAmount;
+    //内部商务号
     private String  innerCode;
     private String  date;
     private String  orderNo;

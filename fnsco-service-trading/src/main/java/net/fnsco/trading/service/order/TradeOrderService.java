@@ -1,4 +1,4 @@
-package net.fnsco.trading.service.trade;
+package net.fnsco.trading.service.order;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -21,6 +21,7 @@ import com.google.common.base.Strings;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
+import net.fnsco.bigdata.service.sys.SequenceService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -28,9 +29,9 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.DbUtil;
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.core.utils.dby.AESUtil;
-import net.fnsco.trading.service.trade.dao.TradeOrderDAO;
-import net.fnsco.trading.service.trade.dto.OrderDTO;
-import net.fnsco.trading.service.trade.entity.TradeOrderDO;
+import net.fnsco.trading.service.order.dao.TradeOrderDAO;
+import net.fnsco.trading.service.order.dto.OrderDTO;
+import net.fnsco.trading.service.order.entity.TradeOrderDO;
 
 @Service
 public class TradeOrderService extends BaseService {
@@ -42,7 +43,8 @@ public class TradeOrderService extends BaseService {
     private Environment      env;
     @Autowired
     private TradeDataService tradeDataService;
-
+    @Autowired
+    private SequenceService sequenceService;
     // 分页
     public ResultPageDTO<TradeOrderDO> page(TradeOrderDO tradeOrder, Integer pageNum, Integer pageSize) {
         logger.info("开始分页查询TradeOrderService.page, tradeOrder=" + tradeOrder.toString());
@@ -58,7 +60,7 @@ public class TradeOrderService extends BaseService {
         tradeOrder.setCreateTime(new Date());
         //tradeOrder.setOrderCeateTime(new Date());
         if (Strings.isNullOrEmpty(tradeOrder.getOrderNo())) {
-            tradeOrder.setOrderNo(DateUtils.getNowDateStr() + tradeOrder.getInnerCode() + DbUtil.getRandomStr(3));
+            tradeOrder.setOrderNo(DateUtils.getNowYMDOnlyStr() + tradeOrder.getInnerCode() + sequenceService.getOrderSequence("t_trade_order"));
         }
         this.tradeOrderDAO.insert(tradeOrder);
 
