@@ -57,10 +57,14 @@
 				mui.alert('请选择分期期数');
 				return;
 			}
+			var param={'innerCode':innerCode,'paymentAmount':paymentAmount,'installmentNum':installmentNum};
+			var params = JSON.stringify(param);
 			$.ajax({
 				url:'../trade/h5Pay/dealPayOrder',
 				type:'POST',
-				data:{'innerCode':innerCode,'paymentAmount':paymentAmount,'installmentNum':installmentNum},
+				contentType: "application/json",
+      			dataType : "json",
+				data:params,
 				success:function(data){
 					console.log(data);
 				}
