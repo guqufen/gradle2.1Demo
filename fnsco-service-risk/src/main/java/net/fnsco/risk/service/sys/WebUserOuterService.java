@@ -149,14 +149,11 @@ public class WebUserOuterService extends BaseService {
      * @return
      * @author jiangw
      */
-    public ResultPageDTO<WebUserOuterDO> pageMercAllo(WebUserOuterDO user, List<Integer> agentList,Integer pageNum, Integer pageSize) {
+    public ResultPageDTO<WebUserOuterDO> pageMercAllo(WebUserOuterDO user,Integer pageNum, Integer pageSize) {
         logger.info("开始分页查询UserService.pageMerAllo");
-        List<WebUserOuterDO> pageList = this.userOuterDAO.pageMercAlloList(user, agentList, pageNum, pageSize);
-        for(WebUserOuterDO list : pageList) {
-        	String typeName=this.userOuterDAO.queryTypeName(list.getType());
-        	list.setTypeName(typeName);
-        }
-        Integer count = this.userOuterDAO.pageMercAlloListCount(user.getDepartment(), agentList);
+        List<WebUserOuterDO> pageList = this.userOuterDAO.pageMercAlloList(user,  pageNum, pageSize);
+
+        Integer count = this.userOuterDAO.pageMercAlloListCount(user);
         ResultPageDTO<WebUserOuterDO> pager = new ResultPageDTO<WebUserOuterDO>(count, pageList);
         return pager;
     }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.bigdata.api.constant.BigdataConstant;
@@ -94,7 +95,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      */
     @Override
     public MerchantCore getMerChantCoreByInnerCode(String innerCode) {
-        if (null == innerCode) {
+        if (Strings.isNullOrEmpty(innerCode)) {
             return null;
         }
         MerchantCore result = merchantCoreDao.getMerChantCoreByInnerCode(innerCode);

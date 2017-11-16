@@ -73,7 +73,7 @@ function formatterOperation(value, row, index) {
 				.join('');
 	}
 	if (row.isTrue == 1&&value == 1) {
-		return [ '<a  class="check" style="color:#2964df;" target="_Blank" href="javascript:forwordReport('+ row.id+',1'+row.innerCode + ' )">查看报告</a>' ].join('');
+		return [ '<a  class="check" style="color:#2964df;" target="_Blank" href="javascript:forwordReport('+ row.id+',1'+row.entityInnerCode + ' )">查看报告</a>' ].join('');
 	}
 	if (row.isTrue == 1&&value == 3) {
 		return [ '<a class="generate" style="color:#2964df;" onclick="javascript:sendEmail('
@@ -92,7 +92,7 @@ function forwordReport(merchantId,innerCode){
 			if (!data.success){
 				window.location = 'login.html';return;
 			}
-			window.open('report.html?merchantId='+ merchantId+'&innerCode='+innerCode.substring(1));
+			window.open('report.html?merchantId='+ merchantId+'&entityInnerCode='+entityInnerCode.substring(1));
 		}
 	});
 }

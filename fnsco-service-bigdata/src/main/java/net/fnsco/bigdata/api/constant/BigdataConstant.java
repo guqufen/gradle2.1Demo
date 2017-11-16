@@ -34,7 +34,7 @@ public class BigdataConstant extends CoreConstants {
      */
     public enum ChannelTypeEnum {
                                  //渠道类型00拉卡拉01浦发02爱农03法奈昇
-                                 LKL("00", "拉卡拉"), PF("01", "浦发"), AN("02", "爱农"), FNS("03", "法奈昇");
+                                 LKL("00", "拉卡拉"), PF("01", "浦发"), AN("02", "爱农"), FNS("03", "法奈昇"), JHF("04", "聚惠分");
         private String code;
         private String name;
 

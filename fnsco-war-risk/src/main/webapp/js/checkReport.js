@@ -13,7 +13,7 @@ function GetRequest() {
 }
 var Request = new Object();
 Request = GetRequest();
-var merchantId=Request["merchantId"];
+var entityInnerCode=Request["merchantId"];
 var innerCode=Request["innerCode"];
 console.log(innerCode)
 //获取用户信息
@@ -98,7 +98,7 @@ $(function(){
 		url : PROJECT_NAME + '/web/report/queryYearReport',
 		type : 'POST',
 		dataType : "json",
-		data : {"innerCode":innerCode,"merchantId":merchantId},
+		data : {"entityInnerCode":entityInnerCode,"merchantId":merchantId},
 		success : function(data){
 			console.log(data);
 			/*获取生成图表的参数*/

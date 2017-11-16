@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.beust.jcommander.internal.Maps;
 
-import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.HttpUtils;
+import net.fnsco.trading.service.pay.OrderPaymentService;
 import net.fnsco.trading.util.SignUtil;
 
 @Service
-public class ZxyhPaymentService extends BaseService {
+public class ZxyhPaymentService extends OrderPaymentService {
     @Autowired
     private Environment env;
 

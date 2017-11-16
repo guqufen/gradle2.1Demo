@@ -182,7 +182,7 @@ public class TradeOrderProvider {
         }
         int start = (pageNum - 1) * pageSize;
         int limit = pageSize;
-        return new SQL() {{
+        SQL sql = new SQL() {{
         SELECT("*");
         FROM(TABLE_NAME);
         if (tradeOrder.getId() != null) {
@@ -254,8 +254,13 @@ public class TradeOrderProvider {
         if (StringUtils.isNotBlank(tradeOrder.getInnerCode())){
             WHERE("inner_code=#{tradeOrder.innerCode}");
         }
+        if (StringUtils.isNotBlank(tradeOrder.getOrderTop10())||StringUtils.isNotBlank(tradeOrder.getOrderNoAfter6())){
+            WHERE("order_no like CONCAT(#{tradeOrder.orderTop10},'%',#{tradeOrder.orderNoAfter6})");
+        }
         ORDER_BY("id desc limit " + start + ", " + limit );
-        }}.toString();
+        }};
+        
+        return sql.toString();
     }
 
     public String pageListCount(Map<String, Object> params) {
@@ -331,6 +336,9 @@ public class TradeOrderProvider {
         }
         if (StringUtils.isNotBlank(tradeOrder.getInnerCode())){
             WHERE("inner_code=#{tradeOrder.innerCode}");
+        }
+        if (StringUtils.isNotBlank(tradeOrder.getOrderTop10())||StringUtils.isNotBlank(tradeOrder.getOrderNoAfter6())){
+            WHERE("order_no like CONCAT(#{tradeOrder.orderTop10},'%',#{tradeOrder.orderNoAfter6})");
         }
         }}.toString();
     }

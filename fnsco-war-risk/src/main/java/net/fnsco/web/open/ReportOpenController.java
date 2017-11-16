@@ -50,8 +50,8 @@ public class ReportOpenController extends BaseController {
     //查询全年风控曲线图
     @RequestMapping("queryYearReport")
     @ResponseBody
-    public ResultDTO queryYearReport(@RequestParam String innerCode, @RequestParam String merchantId) {
-        return reportService.queryYearReport(innerCode, NumberUtils.toInt(merchantId));
+    public ResultDTO queryYearReport(@RequestParam String entityInnerCode, @RequestParam String merchantId) {
+        return reportService.queryYearReport(entityInnerCode, NumberUtils.toInt(merchantId));
     }
 
     //经营流水趋势

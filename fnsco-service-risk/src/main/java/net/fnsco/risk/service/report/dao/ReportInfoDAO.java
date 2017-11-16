@@ -28,7 +28,7 @@ public interface ReportInfoDAO {
 			@Result(column = "loan_cycle", property = "loanCycle"),
 			@Result(column = "mer_num", property = "merNum"), 
 			@Result(column = "status", property = "status"),
-			@Result(column = "inner_code", property = "innerCode"),
+			@Result(column = "entity_inner_code", property = "entityInnerCode"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "industry", property = "industry"),
 			@Result(column = "industryName", property = "industryName"),
@@ -38,7 +38,7 @@ public interface ReportInfoDAO {
 	@Select("SELECT r.*,(select first from sys_industry s where s.id=r.industry limit 1) as industryName FROM risk_report_info r WHERE id = #{id}")
 	public ReportInfoDO getById(@Param("id") Integer id);
 
-	@Results({ @Result(column = "mer_name", property = "merName"),
+	@Results({ @Result(column = "merc_name", property = "mercName"),
 			@Result(column = "business_license_num", property = "businessLicenseNum"),
 			@Result(column = "business_address", property = "businessAddress"),
 			@Result(column = "business_due_time", property = "businessDueTime"),
@@ -48,14 +48,14 @@ public interface ReportInfoDAO {
 			@Result(column = "risk_warning", property = "riskWarning"),
 			@Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
 			@Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"),
-			@Result(column = "inner_code", property = "innerCode"),
+			@Result(column = "entity_inner_code", property = "entityInnerCode"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "last_modify_time", property = "lastModifyTime"),
 			@Result(column = "decoration_level", property = "decorationLevel"),
 			@Result(column = "evaluation", property = "evaluation") })
 //	@Select("SELECT r.* FROM risk_report_info r WHERE inner_code = #{reportInfoDO.innerCode}")
-	@SelectProvider(type = ReportInfoProvider.class, method = "getByMercInnerCode")
-	public ReportInfoDO getByMercInnerCode(@Param("reportInfoDO") ReportInfoDO reportInfoDO);
+	@SelectProvider(type = ReportInfoProvider.class, method = "getByMercEntityInnerCode")
+	public ReportInfoDO getByMercEntityInnerCode(@Param("reportInfoDO") ReportInfoDO reportInfoDO);
 
 	@Results({ @Result(column = "id", property = "id"),@Result(column = "mer_name", property = "merName"),
 			@Result(column = "business_license_num", property = "businessLicenseNum"),
@@ -66,16 +66,16 @@ public interface ReportInfoDAO {
 			@Result(column = "report_timer", property = "reportTimer"),
 			@Result(column = "risk_warning", property = "riskWarning"),
 			@Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
-			@Result(column = "inner_code", property = "innerCode"), @Result(column = "mer_num", property = "merNum"),
+			@Result(column = "entity_inner_code", property = "entityInnerCode"), @Result(column = "mer_num", property = "merNum"),
 			@Result(column = "status", property = "status"), @Result(column = "inner_code", property = "innerCode"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "last_modify_time", property = "lastModifyTime"),
 			@Result(column = "decoration_level", property = "decorationLevel"),
 			@Result(column = "evaluation", property = "evaluation") })
-	@Select("SELECT * FROM risk_report_info WHERE inner_code = #{innerCode} order by last_modify_time desc limit 1 ")
-	public ReportInfoDO getByInnerCode(@Param("innerCode") String innerCode);
+	@Select("SELECT * FROM risk_report_info WHERE entity_inner_code = #{entityInnerCode} order by last_modify_time desc limit 1 ")
+	public ReportInfoDO getByEntityInnerCode(@Param("entityInnerCode") String entityInnerCode);
 
-	@Insert("INSERT into risk_report_info(inner_code, mer_name,business_license_num,business_address,business_due_time,industry,trading_area,turnover,size,report_cycle,report_timer,risk_warning,quota,fee_rate,loan_cycle,mer_num,status,create_time,last_modify_time,decoration_level) VALUES (#{innerCode},#{merName},#{businessLicenseNum},#{businessAddress},#{businessDueTime},#{industry},#{tradingArea},#{turnover},#{size},#{reportCycle},#{reportTimer},#{riskWarning},#{quota},#{feeRate},#{loanCycle},#{merNum},#{status},#{createTime},#{lastModifyTime},#{decorationLevel})")
+	@Insert("INSERT into risk_report_info(entity_inner_code, mer_name,business_license_num,business_address,business_due_time,industry,trading_area,turnover,size,report_cycle,report_timer,risk_warning,quota,fee_rate,loan_cycle,mer_num,status,create_time,last_modify_time,decoration_level) VALUES (#{entityInnerCode},#{merName},#{businessLicenseNum},#{businessAddress},#{businessDueTime},#{industry},#{tradingArea},#{turnover},#{size},#{reportCycle},#{reportTimer},#{riskWarning},#{quota},#{feeRate},#{loanCycle},#{merNum},#{status},#{createTime},#{lastModifyTime},#{decorationLevel})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public int insert(ReportInfoDO reportInfo);
 
@@ -109,7 +109,7 @@ public interface ReportInfoDAO {
 			@Result(column = "risk_warning", property = "riskWarning"),
 			@Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
 			@Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"),
-			@Result(column = "inner_code", property = "innerCode"),
+			@Result(column = "entity_inner_code", property = "entityInnerCode"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "last_modify_time", property = "lastModifyTime"),
 			@Result(column = "decoration_level", property = "decorationLevel"),
@@ -132,7 +132,7 @@ public interface ReportInfoDAO {
 			@Result(column = "risk_warning", property = "riskWarning"),
 			@Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
 			@Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"),
-			@Result(column = "inner_code", property = "innerCode"),
+			@Result(column = "entity_inner_code", property = "entityInnerCode"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "last_modify_time", property = "lastModifyTime"),
 			@Result(column = "decoration_level", property = "decorationLevel"),
@@ -155,7 +155,7 @@ public interface ReportInfoDAO {
 			@Result(column = "risk_warning", property = "riskWarning"),
 			@Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
 			@Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"),
-			@Result(column = "inner_code", property = "innerCode"),
+			@Result(column = "entity_inner_code", property = "entityInnerCode"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "last_modify_time", property = "lastModifyTime"),
 			@Result(column = "decoration_level", property = "decorationLevel"),
@@ -181,7 +181,7 @@ public interface ReportInfoDAO {
 			@Result(column = "risk_warning", property = "riskWarning"),
 			@Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
 			@Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"),
-			@Result(column = "inner_code", property = "innerCode"),
+			@Result(column = "entity_inner_code", property = "entityInnerCode"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "last_modify_time", property = "lastModifyTime"),
 			@Result(column = "decoration_level", property = "decorationLevel"),
@@ -214,7 +214,7 @@ public interface ReportInfoDAO {
 			@Result(column = "risk_warning", property = "riskWarning"),
 			@Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
 			@Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"),
-			@Result(column = "inner_code", property = "innerCode"),
+			@Result(column = "entity_inner_code", property = "entityInnerCode"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "last_modify_time", property = "lastModifyTime"),
 			@Result(column = "decoration_level", property = "decorationLevel"),

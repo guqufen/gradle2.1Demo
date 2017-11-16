@@ -64,18 +64,17 @@ public interface WebUserOuterDAO {
 	@Select("SELECT name FROM m_agent WHERE id= #{id}")
 	public String queryTypeName(Integer id);
 
-	@Select("SELECT id FROM risk_web_user_outer WHERE agent_id in(SELECT distinct agent_id FROM risk_user_merc_rel WHERE inner_code = #{innerCode})")
-	public List<Integer> getByInnercode(String innerCode);
-
 	@Results({ @Result(column = "real_name", property = "realName"),
 			@Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),
 			@Result(column = "modify_time", property = "modifyTime"),
 			@Result(column = "modify_user_id", property = "modifyUserId"),
 			@Result(column = "creater_time", property = "createrTime") })
 	@SelectProvider(type = WebUserOuterProvider.class, method = "pageMerAlloList")
-	public List<WebUserOuterDO> pageMercAlloList(@Param("webUserOuter") WebUserOuterDO webUserOuter,@Param("agentList") List<Integer> agentList,
-			@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
+	public List<WebUserOuterDO> pageMercAlloList(@Param("webUserOuter") WebUserOuterDO webUserOuter, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
 	@SelectProvider(type = WebUserOuterProvider.class, method = "pageMerAlloListCount")
-	public Integer pageMercAlloListCount(@Param("department") String department,@Param("agentList") List<Integer> agentList);
+	public Integer pageMercAlloListCount(@Param("webUserOuter") WebUserOuterDO webUserOuter);
+	
+	@Select("SELECT id FROM risk_web_user_outer WHERE agent_id in(SELECT distinct agent_id FROM risk_user_merc_rel WHERE entity_inner_code = #{entityInnerCode})")
+	public List<Integer> getByEntityInnercode(String entityInnerCode);
 }

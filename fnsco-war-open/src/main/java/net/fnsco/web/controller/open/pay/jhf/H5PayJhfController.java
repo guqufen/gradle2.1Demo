@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,9 +48,9 @@ import net.fnsco.web.controller.open.jo.TradeJhfJO;
  *
  */
 @Controller
-@RequestMapping(value = "/trade/thirdPay", method = RequestMethod.POST)
-@Api(value = "/trade/thirdPay", tags = { "聚惠分相关功能接口" })
-public class ThirdPayJhfController extends BaseController {
+@RequestMapping(value = "/trade/h5Pay", method = RequestMethod.POST)
+@Api(value = "/trade/h5Pay", tags = { "聚惠分相关功能接口" })
+public class H5PayJhfController extends BaseController {
     @Autowired
     private MerchantService     merchantService;
     @Autowired
@@ -65,28 +66,13 @@ public class ThirdPayJhfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getQRUrl")
+    @RequestMapping(value = "/dealPayOrder")
     @ApiOperation(value = "第三方接入获取聚惠分二维码url")
     @ResponseBody
-    public ResultDTO dealPayOrder(String innerCode, String reqData) {
-        if (Strings.isNullOrEmpty(reqData)) {
-            logger.error("第三方接入获取二维码url密文入参为空");
-            fail("失败，rspData入参为空");
-        }
-        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByMerChannelInnerCodeType(innerCode, "04");
+    public ResultDTO dealPayOrder(@RequestBody TradeJO tradeJO) {
+        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByMerChannelInnerCodeType(tradeJO.getInnerCode(), "04");
         if (null == merchantChannelJhf) {
             return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
-        }
-        String keyStr = merchantChannelJhf.getChannelMerKey();
-        TradeJO tradeJO = new TradeJO();
-        try {
-            String decodeStr = AESUtil.decode(reqData, keyStr);
-            logger.error("第三方接入获取二维码url解密后入参：" + decodeStr);
-            //聚惠芬支付完成时的通知解密后入参：{"payCallBackParams":"","settlementStatus":"0","thirdPayNo":"20171102155606073111374535549766","orderStatus":"2","singData":"001AA0CC08241A447BF7250B500C4B83"}
-            tradeJO = JSON.parseObject(decodeStr, TradeJO.class);
-        } catch (Exception ex) {
-            logger.error("第三方接入获取二维码url出错", ex);
-            return fail("失败，解密处理异常");
         }
         List<MerchantEntityCoreRef> refList = merchantCoreService.queryEntityCoreRefByInnerCode(merchantChannelJhf.getInnerCode());
         String entityInnerCode = "";
@@ -155,58 +141,13 @@ public class ThirdPayJhfController extends BaseController {
         } catch (UnsupportedEncodingException e) {
             logger.error("第三方接入支付生成分期付url时AES加密出错", e);
         }
-        String url = env.getProperty("open.base.url") + "/trade/thirdPay/dealPayOrder";
-        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=" + rspData;
+        String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
+        url += "?commID=" + tradeOrder.getChannelMerId() + "&reqData=" + rspData;
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
         resultMap.put("orderNo", tradeOrder.getOrderNo());
         //，通知地址，回调地址。
         return success(resultMap);
-    }
-
-    /**
-     * 收银台获取聚惠分二维码url获取(暂时未使用)
-     *
-     * @param userName
-     * @return
-     */
-    @RequestMapping(value = "/dealPayOrder", method = RequestMethod.GET)
-    @ApiOperation(value = "获取聚惠分二维码url")
-    public String dealPayOrder(String orderNo, String commID, String reqData) {
-        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
-        String url = env.getProperty("open.base.url") + "/pay/dealPayFail.html";
-        if (null != tradeOrderDO) {
-            Integer handleNum = tradeOrderDO.getHandleNum();
-            if (null == handleNum || handleNum == 0) {
-                url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-                url += "?commID=" + commID + "&reqData=" + reqData;
-                TradeOrderDO tradeOrderTemp = new TradeOrderDO();
-                tradeOrderTemp.setId(tradeOrderDO.getId());
-                tradeOrderTemp.setHandleNum(1);
-                tradeOrderService.doUpdate(tradeOrderTemp);
-            }
-        }
-        return "redirect:" + url;
-    }
-    /**
-     * 收银台查询单条订单信息
-     *
-     * @param userName
-     * @return
-     */
-    @RequestMapping(value = "/getOrderInfo", method = RequestMethod.GET)
-    @ApiOperation(value = "获取商户编号")
-    @ResponseBody
-    public ResultDTO getOrderInfo(@RequestParam String orderNo) {
-        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
-        tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
-        tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
-        tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
-        MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
-        if (null != merChantCore) {
-            tradeOrderDO.setMercName(merChantCore.getMerName());
-        }
-        return success(tradeOrderDO);
     }
 
 }

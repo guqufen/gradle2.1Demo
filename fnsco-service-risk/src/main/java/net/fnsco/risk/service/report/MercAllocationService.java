@@ -63,7 +63,7 @@ public class MercAllocationService extends BaseService{
 		for (int i = 0; i < innerCode.length; i++) {
 			UserMercRelDO userMercRel = new UserMercRelDO();
 			userMercRel.setAgentId(agentId);
-			userMercRel.setInnerCode(innerCode[i]);
+			userMercRel.setEntityInnerCode(innerCode[i]);
 			userMercRelDAO.insert(userMercRel);
 		}
 		return ResultDTO.success();
@@ -79,25 +79,10 @@ public class MercAllocationService extends BaseService{
 		for (int i = 0; i < innerCode.length; i++) {
 			UserMercRelDO userMercRel = new UserMercRelDO();
 			userMercRel.setAgentId(agentId);
-			userMercRel.setInnerCode(innerCode[i]);
-			userMercRelDAO.deleteByagentInnerId(userMercRel);
+			userMercRel.setEntityInnerCode(innerCode[i]);
+			userMercRelDAO.deleteByagentEntityInnerCode(userMercRel);
 		}
 
 		return ResultDTO.success();
-	}
-	
-	/**
-	 * 通过商户名称模糊查找内部商户号<集合>
-	 * @param merName:商户名称
-	 * @return
-	 */
-	public List<String> getByMerName(String merName){
-		List<String> list = merAllocationDAO.getByMerName(merName);
-		return list;
-	}
-	
-	public List<Integer> getByInnerCodeList(List<String> merCodeList){
-		List<Integer> list = userMercRelDAO.getByInnerCodeList(merCodeList);
-		return list;
 	}
 }
