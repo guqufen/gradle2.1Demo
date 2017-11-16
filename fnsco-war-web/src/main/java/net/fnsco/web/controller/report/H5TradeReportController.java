@@ -27,7 +27,6 @@ import net.fnsco.order.service.modules.trade.TradeWebReportService;
 @RequestMapping(value = "/h5/report")
 @Api(value = "/h5/report", tags = { "大屏幕报表" })
 public class H5TradeReportController extends BaseController {
-
     @Autowired
     private TradeWebReportService tradeWebReportService;
 

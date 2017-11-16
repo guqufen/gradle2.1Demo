@@ -32,10 +32,10 @@ import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
-import net.fnsco.trading.service.trade.TradeOrderService;
-import net.fnsco.trading.service.trade.entity.TradeOrderDO;
+import net.fnsco.trading.service.order.TradeOrderService;
+import net.fnsco.trading.service.order.dto.TradeJhfJO;
+import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.open.jo.TradeJO;
-import net.fnsco.web.controller.open.jo.TradeJhfJO;
 
 /**
  * 
@@ -68,7 +68,7 @@ public class ThirdPayJhfController extends BaseController {
     @RequestMapping(value = "/getQRUrl")
     @ApiOperation(value = "第三方接入获取聚惠分二维码url")
     @ResponseBody
-    public ResultDTO dealPayOrder(String innerCode, String reqData) {
+    public ResultDTO getQRUrl(String innerCode, String reqData) {
         if (Strings.isNullOrEmpty(reqData)) {
             logger.error("第三方接入获取二维码url密文入参为空");
             fail("失败，rspData入参为空");
@@ -155,7 +155,7 @@ public class ThirdPayJhfController extends BaseController {
         } catch (UnsupportedEncodingException e) {
             logger.error("第三方接入支付生成分期付url时AES加密出错", e);
         }
-        String url = env.getProperty("open.base.url") + "/trade/thirdPay/dealPayOrder";
+        String url = env.getProperty("open.base.url") + "/trade/pay/dealPayOrder";
         url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=" + rspData;
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
@@ -163,31 +163,7 @@ public class ThirdPayJhfController extends BaseController {
         //，通知地址，回调地址。
         return success(resultMap);
     }
-
-    /**
-     * 收银台获取聚惠分二维码url获取(暂时未使用)
-     *
-     * @param userName
-     * @return
-     */
-    @RequestMapping(value = "/dealPayOrder", method = RequestMethod.GET)
-    @ApiOperation(value = "获取聚惠分二维码url")
-    public String dealPayOrder(String orderNo, String commID, String reqData) {
-        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
-        String url = env.getProperty("open.base.url") + "/pay/dealPayFail.html";
-        if (null != tradeOrderDO) {
-            Integer handleNum = tradeOrderDO.getHandleNum();
-            if (null == handleNum || handleNum == 0) {
-                url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-                url += "?commID=" + commID + "&reqData=" + reqData;
-                TradeOrderDO tradeOrderTemp = new TradeOrderDO();
-                tradeOrderTemp.setId(tradeOrderDO.getId());
-                tradeOrderTemp.setHandleNum(1);
-                tradeOrderService.doUpdate(tradeOrderTemp);
-            }
-        }
-        return "redirect:" + url;
-    }
+   
     /**
      * 收银台查询单条订单信息
      *
