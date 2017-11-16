@@ -245,14 +245,14 @@ function initIndustryTableData(){
 	            title: '行业分类'
 	        },{
 	            field: 'first',
-	            title: '分类说明'
+	            title: '一级分类'
 	        }, {
 	            field: 'third',
-	            title: '适用范围'
+	            title: '二级分类'
 	        }, {
 	            width:120,
 	            field: 'fourth',
-	            title: '手续费率'
+	            title: '三级分类'
 	        }]
 	    });
 }
@@ -413,14 +413,13 @@ function saveOrUpdate(status){
 		return false;
 	}
 
-	//营业期限
+	//营业时长
 	var businessDueTime = $('#businessDueTime').val();
-	/**
 	if(businessDueTime == ""){
-		layer.msg('营业期限为空，请核对后联系相关人员录入');
+		layer.msg('营业时长不能为空');
 		return false;
 	}
-**/
+
 	//行业
 	var industry = $('#industryId').val();
 	if(industry == ""){

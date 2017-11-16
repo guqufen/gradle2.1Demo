@@ -3,8 +3,11 @@ package net.fnsco.risk.service.report.dao.helper;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
 
 import net.fnsco.risk.service.sys.entity.MerAllocationDO;
 
@@ -28,100 +31,89 @@ public class MercAllocationProvider {
 		int start = (pageNum - 1) * pageSize;
 		int limit = pageSize;
 
-		// 直接用字符串写需要注意，字串之间的空格，容易出现因没给空格导致语法错误
-		StringBuffer sql = new StringBuffer(
-				"SELECT distinct c.id, c.inner_code, c.mer_name, c.abbreviation, c.en_name, "
-						+ "c.sign_date, c.legal_person, c.legal_person_mobile, c.legal_person_tel, "
-						+ "c.legal_valid_card_type,  "
-						+ "c.card_num, c.card_valid_time, c.business_license_num, c.business_license_valid_time,"
-						+ "c.tax_regist_code, c.regist_address, c.merc_flag, "
-						+ "c.modify_user_id, c.modify_time, c.status, c.source, (SELECT name from m_agent where id ="
-						+ agentId + ") as agentStr" + " from m_merchant_core c where 1=1");
+		return new SQL() {
+			{
+				SELECT("ent.id, ent.entity_inner_code, ent.merc_name, ent.legal_person, ent.card_type, ent.card_num, ent.business_license_num, ent.regist_address");
+				FROM("m_merchant_entity ent");
+				// 商户所属代理商ID，默认为0-全部
+				if (merAllocationDO.getAgentId() != null) {
+					if (merAllocationDO.getAgentId() != 0) {
+						WHERE("ent.agent_id=#{merAllocationDO.agentId}");
+					}
+				}
+				// 商户名称不为空，则模糊查找
+				if (!Strings.isNullOrEmpty(merAllocationDO.getMercName())) {
+					WHERE("ent.merc_name like CONCAT('%', #{merAllocationDO.mercName}, '%')");
+				}
+				// 法人姓名不为空，则模糊查找
+				if (StringUtils.isNotBlank(merAllocationDO.getLegalPerson())) {
+					WHERE("ent.legal_person like CONCAT('%' , #{merAllocationDO.legalPerson}, '%')");
+				}
+				// 必须是绑定关系
+				WHERE("ent.entity_inner_code in (select entity_inner_code from risk_user_merc_rel WHERE agent_id =  #{agentId})");
+				// 风控报告状态
+				if (merAllocationDO.getReportStatus() != null) {
+					if (merAllocationDO.getReportStatus() == 0) {// 默认全部,不做任何查询处理
 
-		// 商户所属代理商ID，默认为0-全部
-		if (merAllocationDO.getAgentId() != null) {
-			if (merAllocationDO.getAgentId() != 0) {
-				sql.append(" AND c.agent_id=" + merAllocationDO.getAgentId());
+					} else if (merAllocationDO.getReportStatus() == 1) {// 已生成,审核通过，status=1
+						WHERE("ent.entity_inner_code in (select entity_inner_code from risk_report_info r where r.`status`=1)");
+					} else if (merAllocationDO.getReportStatus() == 3) {// 生成中,待审核，status=0,审核失败2，提交带编辑4(除了1和3之外)
+						WHERE("ent.entity_inner_code in (select entity_inner_code from risk_report_info r where r.`status` !=1 AND r.`status` !=3)");
+					} else if (merAllocationDO.getReportStatus() == 2) {// 未生成,report表,待编辑3，或者该表不存在数据
+						WHERE("(ent.entity_inner_code in (select distinct entity_inner_code from risk_report_info r where r.`status`=3) or ent.entity_inner_code not in (select distinct entity_inner_code from risk_report_info r))");
+					}
+				}
+				ORDER_BY("id desc limit " + start + ", " + limit);
 			}
-		}
-
-		// 商户名称不为空，则模糊查找
-		if (StringUtils.isNotBlank(merAllocationDO.getMerName())) {
-			sql.append(" AND c.mer_name like '%" + merAllocationDO.getMerName() + "%'");
-		}
-
-		// 法人姓名不为空，则模糊查找
-		if (StringUtils.isNotBlank(merAllocationDO.getLegalPerson())) {
-			sql.append(" AND c.legal_person like '%" + merAllocationDO.getLegalPerson() + "%'");
-		}
-
-		sql.append(" AND c.inner_code in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId + ")");
-
-		// 风控报告状态
-		if (merAllocationDO.getReportStatus() != null) {
-			if (merAllocationDO.getReportStatus() == 0) {// 默认全部,不做任何查询处理
-
-			} else if (merAllocationDO.getReportStatus() == 1) {// 已生成,审核通过，status=1
-				sql.append(" AND c.inner_code in (select inner_code from risk_report_info r where r.`status`=1)");
-			} else if (merAllocationDO.getReportStatus() == 3) {// 生成中,待审核，status=0,审核失败2，提交带编辑4(除了1和3之外)
-				sql.append(" AND c.inner_code in (select inner_code from risk_report_info r where r.`status` !=1 AND r.`status` !=3)");
-			} else if (merAllocationDO.getReportStatus() == 2) {// 未生成,report表,待编辑3，
-//				sql.append(" AND c.inner_code not in (select inner_code from risk_report_info r)");
-				sql.append(" AND c.inner_code in (select distinct inner_code from risk_report_info r where r.`status`=3)");
-			}
-		}
-
-		sql.append(" group by id order by c.id desc limit " + start + ", " + limit);
-
-		logger.info("pageMerData:" + sql.toString());
-		return sql.toString();
-
+		}.toString();
 	}
-    
+
 	public String pageMerDataCount(Map<String, Object> params) {
 
 		MerAllocationDO merAllocationDO = (MerAllocationDO) params.get("merAllocationDO");
 		Integer agentId = (Integer) params.get("agentId");// 当前外部用户所属代理商ID
 
-		StringBuffer sql = new StringBuffer("SELECT COUNT(1) from m_merchant_core c where 1=1");
+		return new SQL() {
+			{
+				SELECT("COUNT(*)");
+				FROM("m_merchant_entity ent");
+				// 商户所属代理商ID，默认为0-全部
+				if (merAllocationDO.getAgentId() != null) {
+					if (merAllocationDO.getAgentId() != 0) {
+						WHERE("ent.agent_id=#{merAllocationDO.agentId}");
+					}
+				}
+				// 商户名称不为空，则模糊查找
+				if (!Strings.isNullOrEmpty(merAllocationDO.getMercName())) {
+					WHERE("ent.merc_name like CONCAT('%', #{merAllocationDO.mercName}, '%')");
+				}
+				// 法人姓名不为空，则模糊查找
+				if (StringUtils.isNotBlank(merAllocationDO.getLegalPerson())) {
+					WHERE("ent.legal_person like CONCAT('%' , #{merAllocationDO.legalPerson}, '%')");
+				}
+				// 必须是绑定关系
+				WHERE("ent.entity_inner_code in (select entity_inner_code from risk_user_merc_rel WHERE agent_id =  #{agentId})");
+				// 风控报告状态
+				if (merAllocationDO.getReportStatus() != null) {
+					if (merAllocationDO.getReportStatus() == 0) {// 默认全部,不做任何查询处理
 
-		// 商户所属代理商ID，默认为0-全部
-		if (merAllocationDO.getAgentId() != null) {
-			if (merAllocationDO.getAgentId() != 0) {
-				sql.append(" AND c.agent_id=" + merAllocationDO.getAgentId());
+					} else if (merAllocationDO.getReportStatus() == 1) {// 已生成,审核通过，status=1
+						WHERE("ent.entity_inner_code in (select entity_inner_code from risk_report_info r where r.`status`=1)");
+					} else if (merAllocationDO.getReportStatus() == 3) {// 生成中,待审核，status=0,审核失败2，提交带编辑4(除了1和3之外)
+						WHERE("ent.entity_inner_code in (select entity_inner_code from risk_report_info r where r.`status` !=1 AND r.`status` !=3)");
+					} else if (merAllocationDO.getReportStatus() == 2) {// 未生成,report表,待编辑3，或者该表没有数据
+						WHERE("(ent.entity_inner_code in (select distinct entity_inner_code from risk_report_info r where r.`status`=3) or ent.entity_inner_code not in (select distinct entity_inner_code from risk_report_info r))");
+					}
+				}
 			}
-		}
-
-		// 商户名称不为空，则模糊查找
-		if (StringUtils.isNotBlank(merAllocationDO.getMerName())) {
-			sql.append(" AND c.mer_name like '%" + merAllocationDO.getMerName() + "%'");
-		}
-
-		// 法人姓名不为空，则模糊查找
-		if (StringUtils.isNotBlank(merAllocationDO.getLegalPerson())) {
-			sql.append(" AND c.legal_person like '%" + merAllocationDO.getLegalPerson() + "%'");
-		}
-
-		sql.append(" AND c.inner_code in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId + ")");
-
-		// 风控报告状态
-		if (merAllocationDO.getReportStatus() != null) {
-			if (merAllocationDO.getReportStatus() == 0) {// 默认全部,不做任何查询处理
-
-			} else if (merAllocationDO.getReportStatus() == 1) {// 已生成,审核通过，status=1
-				sql.append(" AND c.inner_code in (select inner_code from risk_report_info r where r.`status`=1)");
-			} else if (merAllocationDO.getReportStatus() == 3) {// 生成中,待审核，status=0，审核失败2，提交带编辑4(除了1和3之外)
-				sql.append(" AND c.inner_code in (select inner_code from risk_report_info r where r.`status` !=1 AND r.`status` !=3)");
-			} else if (merAllocationDO.getReportStatus() == 2) {// 未生成,report表,待编辑3
-//				sql.append(" AND c.inner_code not in (select inner_code from risk_report_info r)");
-				sql.append(" AND c.inner_code in (select distinct inner_code from risk_report_info r where r.`status`=3)");
-			}
-		}
-
-		logger.info("pageMerData:" + sql.toString());
-		return sql.toString();
+		}.toString();
 	}
 	
+	/**
+	 * 商户分配-添加，需要查找实体商户表中，没有绑定关系且3个月内有交易数据的实体商户
+	 * @param params
+	 * @return
+	 */
 	public String pageAddMerDataList(Map<String, Object> params) {
 
 		MerAllocationDO merAllocationDO = (MerAllocationDO) params.get("merAllocationDO");
@@ -138,77 +130,61 @@ public class MercAllocationProvider {
 		int start = (pageNum - 1) * pageSize;
 		int limit = pageSize;
 
-		// 直接用字符串写需要注意，字串之间的空格，容易出现因没给空格导致语法错误
-		StringBuffer sql = new StringBuffer(
-				"SELECT distinct c.id, c.inner_code, c.mer_name, c.abbreviation, c.en_name, "
-						+ "c.sign_date, c.legal_person, c.legal_person_mobile, c.legal_person_tel, "
-						+ "c.legal_valid_card_type,  "
-						+ "c.card_num, c.card_valid_time, c.business_license_num, c.business_license_valid_time,"
-						+ "c.tax_regist_code, c.regist_address, c.merc_flag, "
-						+ "c.modify_user_id, c.modify_time, c.status, c.source, (SELECT name from m_agent where id ="
-						+ agentId + ") as agentStr" + " from m_merchant_core c where 1=1");
+		return new SQL(){{
+			SELECT("ent.id, ent.entity_inner_code, ent.merc_name, ent.legal_person, ent.card_type, ent.card_num, ent.business_license_num, ent.regist_address");
+			FROM("m_merchant_entity ent");
 
-		// 商户所属代理商ID，默认为0-全部
-		if (merAllocationDO.getAgentId() != null) {
-			if (merAllocationDO.getAgentId() != 0) {
-				sql.append(" AND c.agent_id=" + merAllocationDO.getAgentId());
+			// 商户所属代理商ID，默认为0-全部
+			if (merAllocationDO.getAgentId() != null) {
+				if (merAllocationDO.getAgentId() != 0) {
+					WHERE("ent.agent_id=#{merAllocationDO.agentId}");
+				}
 			}
-		}
+			// 商户名称不为空，则模糊查找
+			if ( !Strings.isNullOrEmpty(merAllocationDO.getMercName()) ) {
+				WHERE("ent.merc_name like CONCAT('%', #{merAllocationDO.mercName}, '%')");
+			}
+			// 法人姓名不为空，则模糊查找
+			if (StringUtils.isNotBlank(merAllocationDO.getLegalPerson())) {
+				WHERE("ent.legal_person like CONCAT('%' , #{merAllocationDO.legalPerson}, '%')");
+			}
+			// 商户分配-添加，没有绑定关系
+			WHERE("ent.entity_inner_code not in (select entity_inner_code from risk_user_merc_rel WHERE agent_id =  #{agentId})");
+			//3个月内有流水
+			WHERE("(SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code in( select distinct inner_code from m_merchant_core_entity_ref ref where ref.entity_inner_code = ent.entity_inner_code)) >= SUBDATE(CURDATE(), INTERVAL 3 MONTH)");
+			ORDER_BY("id desc limit " + start + ", " + limit );
+		}}.toString();
 
-		// 商户名称不为空，则模糊查找
-		if (StringUtils.isNotBlank(merAllocationDO.getMerName())) {
-			sql.append(" AND c.mer_name like '%" + merAllocationDO.getMerName() + "%'");
-		}
-
-		// 法人姓名不为空，则模糊查找
-		if (StringUtils.isNotBlank(merAllocationDO.getLegalPerson())) {
-			sql.append(" AND c.legal_person like '%" + merAllocationDO.getLegalPerson() + "%'");
-		}
-
-		// 新增，不属于
-		sql.append(" AND c.inner_code not in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
-				+ ")");
-		//流水在三个月之内
-		sql.append(" AND (SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code = c.inner_code) >= SUBDATE(CURDATE(), INTERVAL 3 MONTH) ");
-		
-		sql.append(" group by id order by c.id desc limit " + start + ", " + limit);
-
-		logger.info("pageMerData:" + sql.toString());
-		return sql.toString();
 	}
 
 	public String pageAddMerDataCount(Map<String, Object> params) {
 
 		MerAllocationDO merAllocationDO = (MerAllocationDO) params.get("merAllocationDO");
 		Integer agentId = (Integer) params.get("agentId");// 当前外部用户所属代理商ID
-
-		StringBuffer sql = new StringBuffer("SELECT COUNT(1) from m_merchant_core c where 1=1");
-
-		// 商户所属代理商ID，默认为0-全部
-		if (merAllocationDO.getAgentId() != null) {
-			if (merAllocationDO.getAgentId() != 0) {
-				sql.append(" AND c.agent_id=" + merAllocationDO.getAgentId());
-			}
-		}
-
-		// 商户名称不为空，则模糊查找
-		if (StringUtils.isNotBlank(merAllocationDO.getMerName())) {
-			sql.append(" AND c.mer_name like '%" + merAllocationDO.getMerName() + "%'");
-		}
-
-		// 法人姓名不为空，则模糊查找
-		if (StringUtils.isNotBlank(merAllocationDO.getLegalPerson())) {
-			sql.append(" AND c.legal_person like '%" + merAllocationDO.getLegalPerson() + "%'");
-		}
-		// 新增，不属于
-		sql.append(" AND c.inner_code not in (Select inner_code from risk_user_merc_rel WHERE agent_id = " + agentId
-				+ ")");
-		//流水在三个月之内
-		sql.append(" AND (SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code = c.inner_code) >= SUBDATE(CURDATE(), INTERVAL 3 MONTH) ");
 		
-		logger.info("pageMerData:" + sql.toString());
-		return sql.toString();
+		return new SQL(){{
+			SELECT("COUNT(*)");
+			FROM("m_merchant_entity ent");
 
+			// 商户所属代理商ID，默认为0-全部
+			if (merAllocationDO.getAgentId() != null) {
+				if (merAllocationDO.getAgentId() != 0) {
+					WHERE("ent.agent_id=#{merAllocationDO.agentId}");
+				}
+			}
+			// 商户名称不为空，则模糊查找
+			if ( !Strings.isNullOrEmpty(merAllocationDO.getMercName()) ) {
+				WHERE("ent.merc_name LIKE CONCAT('%', #{merAllocationDO.mercName}, '%')");
+			}
+			// 法人姓名不为空，则模糊查找
+			if (StringUtils.isNotBlank(merAllocationDO.getLegalPerson())) {
+				WHERE("ent.legal_person LIKE CONCAT('%' , #{merAllocationDO.legalPerson}, '%')");
+			}
+			// 商户分配-添加，没有绑定关系
+			WHERE("ent.entity_inner_code not in (select entity_inner_code from risk_user_merc_rel WHERE agent_id =  #{agentId})");
+			//3个月内有流水
+			WHERE("(SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code in( select distinct inner_code from m_merchant_core_entity_ref ref where ref.entity_inner_code = ent.entity_inner_code)) >= SUBDATE(CURDATE(), INTERVAL 3 MONTH)");
+		}}.toString();
 	}
 	
 }

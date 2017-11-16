@@ -555,7 +555,7 @@ public class ReportService extends BaseService {
         ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());//根据ID查找数据
         //审核成功，则发邮件通知用户
         if (1 == reportInfo.getStatus()) {
-            List<Integer> userIdList = webUserOuterDAO.getByInnercode(reportInfo.getInnerCode().trim());
+            List<Integer> userIdList = webUserOuterDAO.getByEntityInnercode(reportInfo.getEntityInnerCode().trim());
             //邮件通知用户
             for (Integer userId : userIdList) {
                 headPersonnelMes(userId, reportInfoDO.getId());

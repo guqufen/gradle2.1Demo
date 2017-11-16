@@ -215,7 +215,7 @@ public class WebUserOuterProvider {
 			SELECT("w.*, (select name from m_agent m where m.id = w.type) as typeName");
 	        FROM(TABLE_NAME +" w");
 	        if( !Strings.isNullOrEmpty(webUserOuter.getMerName()) ){
-	        	WHERE("agent_id in ( select distinct agent_id from risk_user_merc_rel where inner_code in ( select distinct entity_inner_code from m_merchant_entity where merc_name like CONCAT('%',#{webUserOuter.merName},'%')))");
+	        	WHERE("agent_id in ( select distinct agent_id from risk_user_merc_rel where entity_inner_code in ( select distinct entity_inner_code from m_merchant_entity where merc_name like CONCAT('%',#{webUserOuter.merName},'%')))");
 	        }
 	        if( !Strings.isNullOrEmpty(webUserOuter.getDepartment()) ){
 	        	WHERE("department LIKE CONCAT('%', #{webUserOuter.department}, '%')");
@@ -233,7 +233,7 @@ public class WebUserOuterProvider {
 			SELECT("count(*)");
 	        FROM(TABLE_NAME);
 	        if( !Strings.isNullOrEmpty(webUserOuter.getMerName()) ){
-	        	WHERE("agent_id in ( select distinct agent_id from risk_user_merc_rel where inner_code in ( select distinct entity_inner_code from m_merchant_entity where merc_name like CONCAT('%',#{webUserOuter.merName},'%')))");
+	        	WHERE("agent_id in ( select distinct agent_id from risk_user_merc_rel where entity_inner_code in ( select distinct entity_inner_code from m_merchant_entity where merc_name like CONCAT('%',#{webUserOuter.merName},'%')))");
 	        }
 	        if( !Strings.isNullOrEmpty(webUserOuter.getDepartment()) ){
 	        	WHERE("department LIKE CONCAT('%', #{webUserOuter.department}, '%')");

@@ -14,6 +14,8 @@ public class MerAllocationDO implements Serializable {
 	private String entityInnerCode;// 实体商户号
 
 	private String merName;// 商户名称
+	
+	private String mercName;//实体商户名称
 
 	private String abbreviation;//
 
@@ -60,6 +62,14 @@ public class MerAllocationDO implements Serializable {
 	private Integer reportStatus;// 商户报表状态：0待审核1审核通过2审核失败3待编辑4已提交的待编辑
 
 	private String openFixQr;
+
+	public String getMercName() {
+		return mercName;
+	}
+
+	public void setMercName(String mercName) {
+		this.mercName = mercName;
+	}
 
 	public Integer getReportStatus() {
 		return reportStatus;
