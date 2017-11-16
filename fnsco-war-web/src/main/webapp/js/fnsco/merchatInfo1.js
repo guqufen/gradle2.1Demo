@@ -88,6 +88,10 @@ function initTableData(){
             field: 'merName',
             title: '商户名'
         }, {
+            field: 'channelType',
+            title: '渠道类型',
+            formatter: channelTypeFormatter
+        }, {
             field: 'innerCode',
             title: '内部商户号'
         }, {
@@ -187,6 +191,20 @@ function formatSource(value, row, index){
   else{
     return '其他';
   } 
+}
+//判断渠道类型
+function channelTypeFormatter(value, row, index){
+  if(value == '00'){
+    return '拉卡拉';
+  }else if(value == '01'){
+    return '浦发';
+  }else if(value == '02'){
+    return '爱农';
+  }else if(value == '03'){
+    return '法奈昇';
+  }else if(value == '04'){
+    return '聚惠分';
+  }
 }
 //判断法人证件类型
 function judgeCardType(value, row, index){

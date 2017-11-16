@@ -67,6 +67,12 @@ public class TradeData {
     private String       subOpenId;
 
     private String       channelType;
+    
+    private String channelLkl;  //渠道拉卡拉
+    private String channelPf;  //渠道浦发
+    private String channelAn;  //渠道爱农
+    private String channelFns;  //渠道法奈昇
+    private String channelJhf;  //渠道聚惠分
 
     private String       amt;
 
@@ -718,7 +724,47 @@ public class TradeData {
         this.channelType = channelType == null ? null : channelType.trim();
     }
 
-    public String getAmt() {
+    public String getChannelLkl() {
+		return channelLkl;
+	}
+
+	public void setChannelLkl(String channelLkl) {
+		this.channelLkl = channelLkl;
+	}
+
+	public String getChannelPf() {
+		return channelPf;
+	}
+
+	public void setChannelPf(String channelPf) {
+		this.channelPf = channelPf;
+	}
+
+	public String getChannelAn() {
+		return channelAn;
+	}
+
+	public void setChannelAn(String channelAn) {
+		this.channelAn = channelAn;
+	}
+
+	public String getChannelFns() {
+		return channelFns;
+	}
+
+	public void setChannelFns(String channelFns) {
+		this.channelFns = channelFns;
+	}
+
+	public String getChannelJhf() {
+		return channelJhf;
+	}
+
+	public void setChannelJhf(String channelJhf) {
+		this.channelJhf = channelJhf;
+	}
+
+	public String getAmt() {
         return amt;
     }
 

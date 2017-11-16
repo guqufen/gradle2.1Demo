@@ -471,7 +471,12 @@
         AND sub_open_id = #{condition.subOpenId,jdbcType=VARCHAR}
       </if>
       <if test="condition.channelType != null and condition.channelType !=''" >
-        AND channel_type = #{condition.channelType,jdbcType=VARCHAR}
+        AND channel_type in (#{condition.channelType,jdbcType=VARCHAR},
+        #{condition.channelLkl,jdbcType=VARCHAR},
+        #{condition.channelPf,jdbcType=VARCHAR},
+        #{condition.channelAn,jdbcType=VARCHAR},
+        #{condition.channelFns,jdbcType=VARCHAR},
+        #{condition.channelJhf,jdbcType=VARCHAR}) 
       </if>
       <if test="condition.amt != null and condition.amt !=''" >
        AND  amt &gt;= #{condition.amt,jdbcType=VARCHAR}
@@ -674,7 +679,12 @@
         AND sub_open_id = #{subOpenId,jdbcType=VARCHAR}
       </if>
       <if test="channelType != null and channelType != ''" >
-        AND channel_type = #{channelType,jdbcType=VARCHAR}
+      AND channel_type in (#{channelType,jdbcType=VARCHAR},
+        #{channelLkl,jdbcType=VARCHAR},
+        #{channelPf,jdbcType=VARCHAR},
+        #{channelAn,jdbcType=VARCHAR},
+        #{channelFns,jdbcType=VARCHAR},
+        #{channelJhf,jdbcType=VARCHAR}) 
       </if>
       <if test="amt != null and amt != ''" >
         AND  amt &gt;= #{amt,jdbcType=VARCHAR}
@@ -875,7 +885,15 @@
         AND sub_open_id = #{subOpenId,jdbcType=VARCHAR}
       </if>
       <if test="channelType != null and channelType != ''" >
-        AND channel_type = #{channelType,jdbcType=VARCHAR}
+        AND channel_type in (#{channelType,jdbcType=VARCHAR},
+        #{channelLkl,jdbcType=VARCHAR},
+        #{channelPf,jdbcType=VARCHAR},
+        #{channelAn,jdbcType=VARCHAR},
+        #{channelFns,jdbcType=VARCHAR},
+        #{channelJhf,jdbcType=VARCHAR}) 
+      </if>
+      <if test="channelJhf != null and channelJhf !=''" >
+        OR channel_type = #{channelJhf,jdbcType=VARCHAR}
       </if>
       <if test="amt != null and amt != ''" >
        AND  amt &gt;= #{amt,jdbcType=VARCHAR}
@@ -1310,7 +1328,15 @@
         AND sub_open_id = #{subOpenId,jdbcType=VARCHAR}
       </if>
       <if test="channelType != null and channelType !=''" >
-        AND channel_type = #{channelType,jdbcType=VARCHAR}
+        AND channel_type in (#{channelType,jdbcType=VARCHAR},
+        #{channelLkl,jdbcType=VARCHAR},
+        #{channelPf,jdbcType=VARCHAR},
+        #{channelAn,jdbcType=VARCHAR},
+        #{channelFns,jdbcType=VARCHAR},
+        #{channelJhf,jdbcType=VARCHAR}) 
+      </if>
+      <if test="channelJhf != null and channelJhf !=''" >
+        OR channel_type = #{channelJhf,jdbcType=VARCHAR}
       </if>
       <if test="amt != null and amt !=''" >
        AND  amt &gt;= #{amt,jdbcType=VARCHAR}
