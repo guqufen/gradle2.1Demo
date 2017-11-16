@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.open.jo;
+package net.fnsco.trading.service.order.dto;
 
 import net.fnsco.core.base.JO;
 
