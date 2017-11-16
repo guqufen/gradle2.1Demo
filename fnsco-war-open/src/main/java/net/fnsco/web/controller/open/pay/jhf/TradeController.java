@@ -90,82 +90,16 @@ public class TradeController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        String keyStr = env.getProperty("jhf.api.AES.key");
-        String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteNotice";
-        String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteCallback?orderNo=" + tradeOrder.getOrderNo();
-        //        commID  商户Id
-        //        thirdPayNo  订单号
-        //        payAmount   支付金额
-        //        npr 分期数
-        //        unionId 客户ID
-        //        transTime   交易时间
-        //        payNotifyUrl    通知URL
-        //        payCallBackUrl  支付结束的回调URL
-        //        payCallBackParams   支付成功后通知参数
-        //        singData    MD5签名
-        String createTimerStr = DateUtils.dateFormat1ToStr(tradeOrder.getCreateTime());
-        String payCallBackParams = JSON.toJSONString(tradeOrder);
-        //MD5(商户Id+订单号+支付金额+分期数+交易时间+通知URL+回调URL+通知参数)
-        BigDecimal amountTemp = tradeOrder.getTxnAmount();
-        BigDecimal amountTemps = amountTemp.divide(new BigDecimal("100"));
-        String singDataStr = merchantChannelJhf.getChannelMerId() + tradeOrder.getOrderNo() + amountTemps.toString() + String.valueOf(tradeOrder.getInstallmentNum()) + createTimerStr + payNotifyUrl
-                             + payCallBackUrl;
-        logger.error("签名前数据" + singDataStr);
-        String singData = JHFMd5Util.encode32(singDataStr);
-        logger.error("签名" + singData);
-        TradeJhfJO jhfJO = new TradeJhfJO();
-        jhfJO.setCommID(tradeOrder.getChannelMerId());
-        jhfJO.setPeriodNum(String.valueOf(tradeOrder.getInstallmentNum()));
 
-        jhfJO.setPayAmount(amountTemps.toString());
-        jhfJO.setPayCallBackParams("");
-        jhfJO.setPayCallBackUrl(payCallBackUrl);//payCallBackUrl
-        jhfJO.setPayNotifyUrl(payNotifyUrl);
-        jhfJO.setSingData(singData);
-        jhfJO.setThirdPayNo(tradeOrder.getOrderNo());
-        jhfJO.setTransTime(createTimerStr);
-        jhfJO.setUnionId(tradeOrder.getInnerCode());
-        String reqData = "";
-        String dateTemp = JSON.toJSONString(jhfJO);
-        try {
-            reqData = URLEncoder.encode(AESUtil.encode(dateTemp, keyStr), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            logger.error("生成分期付url时AES加密出错", e);
-        }
         //String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
         //url += "?commID=" + tradeOrder.getChannelMerId() + "&reqData=" + reqData;
         String url = env.getProperty("open.base.url") + "/trade/thirdPay/dealPayOrder";
-        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=" + reqData;
+        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=123";
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
         resultMap.put("orderNo", tradeOrder.getOrderNo());
         //，通知地址，回调地址。
         return success(resultMap);
-    }
-
-    /**
-     * 收银台获取聚惠分二维码url获取(暂时未使用)
-     *
-     * @param userName
-     * @return
-     */
-    @RequestMapping(value = "/dealPayOrder", method = RequestMethod.GET)
-    @ApiOperation(value = "获取聚惠分二维码url")
-    public String dealPayOrder(String orderNo, String commID, String reqData) {
-        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
-        String url = env.getProperty("open.base.url") + "/pay/dealPayFail.html";
-        if (null != tradeOrderDO) {
-            Integer handleNum = tradeOrderDO.getHandleNum();
-            if (null == handleNum || handleNum == 0) {
-                url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-                url += "?commID=" + commID + "&reqData=" + reqData;
-                TradeOrderDO tradeOrderTemp = new TradeOrderDO();
-                tradeOrderTemp.setId(tradeOrderDO.getId());
-                tradeOrderTemp.setHandleNum(1);
-                tradeOrderService.doUpdate(tradeOrderTemp);
-            }
-        }
-        return "redirect:" + url;
     }
 
     /**

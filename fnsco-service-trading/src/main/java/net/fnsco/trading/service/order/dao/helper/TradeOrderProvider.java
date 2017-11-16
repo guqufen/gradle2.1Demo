@@ -83,6 +83,9 @@ public class TradeOrderProvider {
         if (StringUtils.isNotBlank(tradeOrder.getInnerCode())){
             SET("inner_code=#{tradeOrder.innerCode}");
         }
+        if (tradeOrder.getHandleNum() != null){
+            SET("handle_num=#{tradeOrder.handleNum}");
+        }
         WHERE("id = #{tradeOrder.id} and resp_code !='1001' ");
         }}.toString();
     }
@@ -155,6 +158,9 @@ public class TradeOrderProvider {
         }
         if (StringUtils.isNotBlank(tradeOrder.getInnerCode())){
             SET("inner_code=#{tradeOrder.innerCode}");
+        }
+        if (tradeOrder.getHandleNum() != null){
+            SET("handle_num=#{tradeOrder.handleNum}");
         }
         WHERE("id = #{tradeOrder.id}");
         }}.toString();
