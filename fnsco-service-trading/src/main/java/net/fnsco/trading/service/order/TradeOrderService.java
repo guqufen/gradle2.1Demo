@@ -1,4 +1,4 @@
-package net.fnsco.trading.service.trade;
+package net.fnsco.trading.service.order;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -28,9 +28,9 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.DbUtil;
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.core.utils.dby.AESUtil;
-import net.fnsco.trading.service.trade.dao.TradeOrderDAO;
-import net.fnsco.trading.service.trade.dto.OrderDTO;
-import net.fnsco.trading.service.trade.entity.TradeOrderDO;
+import net.fnsco.trading.service.order.dao.TradeOrderDAO;
+import net.fnsco.trading.service.order.dto.OrderDTO;
+import net.fnsco.trading.service.order.entity.TradeOrderDO;
 
 @Service
 public class TradeOrderService extends BaseService {
@@ -58,7 +58,7 @@ public class TradeOrderService extends BaseService {
         tradeOrder.setCreateTime(new Date());
         //tradeOrder.setOrderCeateTime(new Date());
         if (Strings.isNullOrEmpty(tradeOrder.getOrderNo())) {
-            tradeOrder.setOrderNo(DateUtils.getNowDateStr() + tradeOrder.getInnerCode() + DbUtil.getRandomStr(3));
+            tradeOrder.setOrderNo(DateUtils.getNowYMDOnlyStr() + tradeOrder.getInnerCode() + DbUtil.getRandomStr(6));
         }
         this.tradeOrderDAO.insert(tradeOrder);
 

@@ -105,7 +105,12 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
-
+    public static String getNowYMDOnlyStr() {
+        String result = "";
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        result = sf.format(new Date());
+        return result;
+    }
     public static String getNowDateDayStr() {
         String result = "";
         SimpleDateFormat sf = new SimpleDateFormat("dd");

@@ -1,4 +1,4 @@
-package net.fnsco.trading.service.trade.dto;
+package net.fnsco.trading.service.order.dto;
 
 import java.util.Date;
 

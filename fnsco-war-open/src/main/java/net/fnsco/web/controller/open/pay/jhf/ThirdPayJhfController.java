@@ -32,8 +32,8 @@ import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
-import net.fnsco.trading.service.trade.TradeOrderService;
-import net.fnsco.trading.service.trade.entity.TradeOrderDO;
+import net.fnsco.trading.service.order.TradeOrderService;
+import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.open.jo.TradeJO;
 import net.fnsco.web.controller.open.jo.TradeJhfJO;
 
