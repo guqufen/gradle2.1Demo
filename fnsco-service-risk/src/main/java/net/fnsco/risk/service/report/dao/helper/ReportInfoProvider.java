@@ -554,7 +554,7 @@ public class ReportInfoProvider {
                 	//前端查找未生成， 不再风控表里面  或者  在风控表里面但是状态不为审核通过
                 	}else{
                 		WHERE("(tt.entity_inner_code not in (select entity_inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) ) or "
-                				+ "(select status from risk_report_info r where r.entity_inner_code = tt.entity_inner_code order by last_modify_time desc limit 1) != 1)");
+                				+ "(select status from risk_report_info r where r.entity_inner_code = tt.entity_inner_code order by report_timer desc limit 1) != 1)");
                 	}
                 }
                 ORDER_BY(" viewNum DESC limit " + start + ", " + limit);
@@ -596,7 +596,7 @@ public class ReportInfoProvider {
                 	//前端查找未生成， 不再风控表里面  或者  在风控表里面但是状态不为审核通过
                 	}else{
                 		WHERE("(tt.entity_inner_code not in (select entity_inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) ) or "
-                				+ "(select status from risk_report_info r where r.entity_inner_code = tt.entity_inner_code order by last_modify_time desc limit 1) != 1)");
+                				+ "(select status from risk_report_info r where r.entity_inner_code = tt.entity_inner_code order by report_timer desc limit 1) != 1)");
                 	}
                 }
             }
@@ -651,7 +651,7 @@ public class ReportInfoProvider {
                 		+ "( SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code in (select distinct inner_code from m_merchant_core_entity_ref ref where ref.entity_inner_code = ent.entity_inner_code) ORDER BY time_stamp desc limit 1 ) as maxTime " 
                         + "FROM m_merchant_entity ent WHERE 1=1 "
                 		+ agentWhere + " "
-                       + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)order by last_modify_time desc) report " );
+                       + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)order by report_timer desc) report " );
                 WHERE(" tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month) and tt.entity_inner_code = report.entity_inner_code ");
                 if (StringUtils.isNotBlank(reportInfo.getMerNum())) {
                     WHERE("report.merc_num=#{reportInfo.merNum}");
@@ -757,7 +757,7 @@ public class ReportInfoProvider {
                 + "( SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code in (select distinct inner_code from m_merchant_core_entity_ref ref where ref.entity_inner_code = ent.entity_inner_code) ORDER BY time_stamp desc limit 1 ) as maxTime " 
                 + "FROM m_merchant_entity ent WHERE 1=1 " 
                 + agentWhere
-                + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)order by last_modify_time desc) report " );
+                + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)order by report_timer desc) report " );
                 WHERE(" tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month) and tt.entity_inner_code = report.entity_inner_code ");
                 if (StringUtils.isNotBlank(reportInfo.getMerNum())) {
                     WHERE("report.merc_num=#{reportInfo.merNum}");
