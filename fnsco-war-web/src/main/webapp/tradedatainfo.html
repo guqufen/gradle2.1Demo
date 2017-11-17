@@ -416,6 +416,12 @@
 	//重置按钮事件
 	function resetEvent() {
 		$('#formSearch')[0].reset();
+		document.getElementById("channelAll").className = "btn btn-primary";
+		document.getElementById("channelLkl").className = "btn btn-default";
+		document.getElementById("channelPf").className = "btn btn-default";
+		document.getElementById("channelAn").className = "btn btn-default";
+		document.getElementById("channelFns").className = "btn btn-default";
+		document.getElementById("channelJhf").className = "btn btn-default";
 		queryEvent();
 	}
 	//模板下载按钮事件
@@ -474,6 +480,7 @@
 	function determineMethod(type,id) {
 		if (type % 2 == 0) {
 			document.getElementById(id).className = "btn btn-primary";//点击选中变蓝
+			document.getElementById("channelAll").className = "btn btn-default";//不选中变白
 			  }
 		if (type % 2 == 1) {
 			document.getElementById(id).className = "btn btn-default";//不选中变白 

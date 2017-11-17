@@ -242,17 +242,21 @@ function initIndustryTableData(){
 	            valign: 'middle'
 	        },{
 	            field: 'businessForm',
-	            title: '行业分类'
+	            title: '行业分类',
+	            width:'25%'
 	        },{
 	            field: 'first',
-	            title: '一级分类'
+	            title: '一级分类',
+	            width:'25%'
 	        }, {
 	            field: 'third',
-	            title: '二级分类'
+	            title: '二级分类',
+	            width:'25%'
 	        }, {
 	            width:120,
 	            field: 'fourth',
-	            title: '三级分类'
+	            title: '三级分类',
+	            width:'25%'
 	        }]
 	    });
 }

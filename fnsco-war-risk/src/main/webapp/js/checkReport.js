@@ -13,9 +13,9 @@ function GetRequest() {
 }
 var Request = new Object();
 Request = GetRequest();
-var entityInnerCode=Request["merchantId"];
-var innerCode=Request["innerCode"];
-console.log(innerCode)
+var merchantId=Request["merchantId"];
+var entityInnerCode=Request["entityInnerCode"];
+console.log(entityInnerCode)
 //获取用户信息
 function load_val2() {
 	var result;
@@ -78,11 +78,8 @@ $(function(){
 			}else if(size==3){
 				$(".size span").html("大型连锁");
 			}
-			var industry=result.industry;
-			queryIndustry(industry);
-			$(".p1").html("1.额度:"+result.quota);
-			$(".p2").html("2.利率:"+result.feeRate);
-			$(".p3").html("3.周期:"+result.loanCycle);
+			var industryName=result.industryName;
+			$(".industry span").html(industryName);
 			
 			$('#riskWarning1').html(result.riskWarning);// 风险
 			$('#riskWarning1').show();//显示p标签
@@ -120,7 +117,7 @@ $(function(){
 		url : PROJECT_NAME + '/web/report/queryTradingVolumeReport',
 		type : 'POST',
 		dataType : "json",
-		data : {"innerCode":innerCode,"merchantId":merchantId},
+		data : {"entityInnerCode":entityInnerCode,"merchantId":merchantId},
 		success : function(data){
 			console.log(data);
 			/*获取生成图表的参数*/
@@ -142,7 +139,7 @@ $(function(){
 		url : PROJECT_NAME + '/web/report/queryUnitPriceReport',
 		type : 'POST',
 		dataType : "json",
-		data : {"innerCode":innerCode,"merchantId":merchantId},
+		data : {"entityInnerCode":entityInnerCode,"merchantId":merchantId},
 		success : function(data){
 			console.log(data);
 			/*获取生成图表的参数*/
@@ -160,20 +157,6 @@ $(function(){
 		}
 	});
 })
-
-//查询行业类别
-   function queryIndustry(industry){
-	$.ajax({
-		url : PROJECT_NAME + '/web/report/queryIndustry',
-		type : 'POST',
-		dataType : "json",
-		data : {"id":industry},
-		success : function(data){
-			console.log(data)
-			$(".industry span").html(data.data.first);
-		}
-	});
-}
 
 var myChart = echarts.init(document.getElementById('chart')); 
 //生成图表

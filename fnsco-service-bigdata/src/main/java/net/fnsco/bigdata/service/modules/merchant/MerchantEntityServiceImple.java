@@ -164,4 +164,26 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 		return result;
 	}
 
+	/**
+	 * 
+	 */
+	@Override
+	public Integer getEtps_TypeByEtps_attra(int etps_attr) {
+		switch (etps_attr) {
+		case 1:
+			return 1;
+		case 2:
+			return 1;
+		case 3:
+			return 1;
+		case 4:
+			return 1;
+		case 5:
+			return 2;
+		case 6:
+			return 1;
+		}
+		return null;
+	}
+
 }
