@@ -212,6 +212,11 @@ $(function() {
 		}
 	});
 
+//	$('#industryModal').on('shown.bs.modal',function(){
+//		$('#txt_search_businessForm').val(null);
+//		initIndustryTableData();
+//		resetEvent('industryFormSearch', 'industryTable');
+//	})
 });
 
 // 初始化表格
@@ -230,7 +235,7 @@ function initIndustryTableData(){
 	        sortable: true,   // 是否启用排序
 	        sortOrder: "asc",   // 排序方式
 	        pageNumber:1,   // 初始化加载第一页，默认第一页
-	        pageSize: 5,   // 每页的记录行数（*）
+	        pageSize: 15,   // 每页的记录行数（*）
 	        pageList: [15, 20, 50, 100], // 可供选择的每页的行数（*）
 	        queryParams:queryParams,	
 	        responseHandler:responseHandler,// 处理服务器返回数据
@@ -260,6 +265,7 @@ function initIndustryTableData(){
 	        }]
 	    });
 }
+
 //组装请求参数
 function queryParams(params)
 {
