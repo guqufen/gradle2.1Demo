@@ -4,6 +4,7 @@ package net.fnsco.web.controller.merentity;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,6 +77,13 @@ public class MerchantEntityController extends BaseController {
 		int res = 0;
 		merchantEntity.setLastModefyTimer(new Date());
 		merchantEntity.setLastModefyUserId(getUserId());
+		//根据商户性质获取商户种类
+		if(merchantEntity.getEtps_attr() != null){
+			int etps_tp = merchantEntityService.getEtps_TypeByEtps_attra(merchantEntity.getEtps_attr());
+			merchantEntity.setEtps_tp(etps_tp);
+		}
+		//拼接详细信息
+		
 		if(null == merchantEntity.getId()) {
 			merchantEntity.setCreateSource("0");
 			merchantEntity.setCreateTimer(new Date());

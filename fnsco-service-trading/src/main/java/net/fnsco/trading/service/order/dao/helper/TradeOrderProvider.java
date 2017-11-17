@@ -86,6 +86,18 @@ public class TradeOrderProvider {
         if (tradeOrder.getHandleNum() != null){
             SET("handle_num=#{tradeOrder.handleNum}");
         }
+        if (tradeOrder.getOrderAmount() != null) {
+            SET("order_amount=#{tradeOrder.orderAmount}");
+        }
+        if (tradeOrder.getPeriodNum() != null) {
+            SET("period_num=#{tradeOrder.periodNum}");
+        }
+        if (tradeOrder.getEachMoney() != null) {
+            SET("each_money=#{tradeOrder.eachMoney}");
+        }
+        if (StringUtils.isNotBlank(tradeOrder.getCardHolderRate())){
+            SET("card_holder_rate=#{tradeOrder.cardHolderRate}");
+        }
         WHERE("id = #{tradeOrder.id} and resp_code !='1001' ");
         }}.toString();
     }
@@ -161,6 +173,18 @@ public class TradeOrderProvider {
         }
         if (tradeOrder.getHandleNum() != null){
             SET("handle_num=#{tradeOrder.handleNum}");
+        }
+        if (tradeOrder.getOrderAmount() != null) {
+            SET("order_amount=#{tradeOrder.orderAmount}");
+        }
+        if (tradeOrder.getPeriodNum() != null) {
+            SET("period_num=#{tradeOrder.periodNum}");
+        }
+        if (tradeOrder.getEachMoney() != null) {
+            SET("each_money=#{tradeOrder.eachMoney}");
+        }
+        if (StringUtils.isNotBlank(tradeOrder.getCardHolderRate())){
+            SET("card_holder_rate=#{tradeOrder.cardHolderRate}");
         }
         WHERE("id = #{tradeOrder.id}");
         }}.toString();

@@ -109,6 +109,26 @@ public class TradeOrderDO {
      */
     private Integer    handleNum;
     /**
+     * 订单总价格
+     */
+    private BigDecimal orderAmount;
+
+    /**
+     * 分期数
+     */
+    private Integer periodNum;
+
+    /**
+     * 每期金额
+     */
+    private BigDecimal eachMoney;
+
+    /**
+     * 持卡人费率
+     */
+    private String cardHolderRate;
+
+    /**
      * 创建时间
      */
     private Date       createTime;
@@ -118,6 +138,94 @@ public class TradeOrderDO {
 
     private String     orderNoAfter6;
     private String     orderTop10;
+
+    /**
+     * orderAmount
+     *
+     * @return  the orderAmount
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
+    }
+
+    /**
+     * orderAmount
+     *
+     * @param   orderAmount    the orderAmount to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    /**
+     * periodNum
+     *
+     * @return  the periodNum
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer getPeriodNum() {
+        return periodNum;
+    }
+
+    /**
+     * periodNum
+     *
+     * @param   periodNum    the periodNum to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPeriodNum(Integer periodNum) {
+        this.periodNum = periodNum;
+    }
+
+    /**
+     * eachMoney
+     *
+     * @return  the eachMoney
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public BigDecimal getEachMoney() {
+        return eachMoney;
+    }
+
+    /**
+     * eachMoney
+     *
+     * @param   eachMoney    the eachMoney to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEachMoney(BigDecimal eachMoney) {
+        this.eachMoney = eachMoney;
+    }
+
+    /**
+     * cardHolderRate
+     *
+     * @return  the cardHolderRate
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getCardHolderRate() {
+        return cardHolderRate;
+    }
+
+    /**
+     * cardHolderRate
+     *
+     * @param   cardHolderRate    the cardHolderRate to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setCardHolderRate(String cardHolderRate) {
+        this.cardHolderRate = cardHolderRate;
+    }
 
     /**
      * handleNum
