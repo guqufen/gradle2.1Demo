@@ -144,7 +144,7 @@ public interface ReportInfoDAO {
 	@SelectProvider(type = ReportInfoProvider.class, method = "pageListCountBack")
 	public Integer pageListCountBack(@Param("reportInfo") ReportInfoDO reportInfo);
 
-	// 查询所有有3个月交易流水的商户信息
+	// 查询所有有3个月交易流水的商户信息，非已生成
 	@Results({ @Result(column = "mer_name", property = "merName"),
 			@Result(column = "business_license_num", property = "businessLicenseNum"),
 			@Result(column = "business_address", property = "businessAddress"),
@@ -170,7 +170,7 @@ public interface ReportInfoDAO {
 	@SelectProvider(type = ReportInfoProvider.class, method = "pageListAllMercCount")
 	public Integer pageListAllMercCount(@Param("reportInfo") ReportInfoDO reportInfo);
 
-	// 按条件查询所有有3个月交易流水的商户信息
+	// 按条件查询所有有3个月交易流水的商户信息，已生成
 	@Results({ @Result(column = "mer_name", property = "merName"),
 			@Result(column = "business_license_num", property = "businessLicenseNum"),
 			@Result(column = "business_address", property = "businessAddress"),

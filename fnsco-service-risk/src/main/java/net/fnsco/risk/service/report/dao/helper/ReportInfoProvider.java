@@ -544,9 +544,18 @@ public class ReportInfoProvider {
                 if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())) {
                     WHERE("tt.business_license_num like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
                 }
-                //后端未生成报表的查询
+                //未生成报表的查询
                 if (null != reportInfo.getStatus() && 20==reportInfo.getStatus()) {
-                    WHERE("tt.entity_inner_code not in (select entity_inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
+                	
+                	//后端查找未生成，数据不在风控+表里面
+                	if(null ==  reportInfo.getAgentId()){
+                		WHERE("tt.entity_inner_code not in (select entity_inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
+                	
+                	//前端查找未生成， 不再风控表里面  或者  在风控表里面但是状态不为审核通过
+                	}else{
+                		WHERE("(tt.entity_inner_code not in (select entity_inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) ) or "
+                				+ "(select status from risk_report_info r where r.entity_inner_code = tt.entity_inner_code order by last_modify_time desc limit 1) != 1)");
+                	}
                 }
                 ORDER_BY(" viewNum DESC limit " + start + ", " + limit);
             }
@@ -576,9 +585,19 @@ public class ReportInfoProvider {
                 if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())) {
                     WHERE("tt.business_license_num like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
                 }
-                //未生成的
+
+              //未生成报表的查询
                 if (null != reportInfo.getStatus() && 20==reportInfo.getStatus()) {
-                    WHERE("tt.entity_inner_code not in (select entity_inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
+                	
+                	//后端查找未生成，数据不在风控+表里面
+                	if(null ==  reportInfo.getAgentId()){
+                		WHERE("tt.entity_inner_code not in (select entity_inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) )");
+
+                	//前端查找未生成， 不再风控表里面  或者  在风控表里面但是状态不为审核通过
+                	}else{
+                		WHERE("(tt.entity_inner_code not in (select entity_inner_code from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id) ) or "
+                				+ "(select status from risk_report_info r where r.entity_inner_code = tt.entity_inner_code order by last_modify_time desc limit 1) != 1)");
+                	}
                 }
             }
         }.toString();
@@ -632,7 +651,7 @@ public class ReportInfoProvider {
                 		+ "( SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code in (select distinct inner_code from m_merchant_core_entity_ref ref where ref.entity_inner_code = ent.entity_inner_code) ORDER BY time_stamp desc limit 1 ) as maxTime " 
                         + "FROM m_merchant_entity ent WHERE 1=1 "
                 		+ agentWhere + " "
-                       + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)) report " );
+                       + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)order by last_modify_time desc) report " );
                 WHERE(" tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month) and tt.entity_inner_code = report.entity_inner_code ");
                 if (StringUtils.isNotBlank(reportInfo.getMerNum())) {
                     WHERE("report.merc_num=#{reportInfo.merNum}");
@@ -688,6 +707,8 @@ public class ReportInfoProvider {
                 if (StringUtils.isNotBlank(reportInfo.getLoanCycle())) {
                     WHERE("report.loan_cycle=#{reportInfo.loanCycle}");
                 }
+                
+                //用户权限为审核用户：0-待审核
                 if (reportInfo.getCustomerType()!=null && reportInfo.getCustomerType() == 1) {
                     if (reportInfo.getStatus() != null) {
                         WHERE("report.status=#{reportInfo.status}");
@@ -700,17 +721,17 @@ public class ReportInfoProvider {
                 if (reportInfo.getCustomerType()!=null && reportInfo.getCustomerType() == 2) {
                     if (reportInfo.getStatus() != null) {
                     	if(reportInfo.getStatus() == 40) {
-                    		WHERE("report.status in (3,4)");
+                    		WHERE("report.status in (3, 4)");
                     	}else {
                     		WHERE("report.status=#{reportInfo.status}");
                     	}
                         
                     } else {
-                        WHERE("report.status in (2, 4)");
+                        WHERE("report.status in (2, 3, 4)");
                     }
                 }
-                
-                //用户权限为审核用户：0-待审核
+
+                //前端用户
                 if (reportInfo.getCustomerType()==null && reportInfo.getStatus() != null ){
                     if(10==reportInfo.getStatus()) {
                         WHERE("report.status=1");
@@ -736,7 +757,7 @@ public class ReportInfoProvider {
                 + "( SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code in (select distinct inner_code from m_merchant_core_entity_ref ref where ref.entity_inner_code = ent.entity_inner_code) ORDER BY time_stamp desc limit 1 ) as maxTime " 
                 + "FROM m_merchant_entity ent WHERE 1=1 " 
                 + agentWhere
-                + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)) report " );
+                + ") tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)order by last_modify_time desc) report " );
                 WHERE(" tt.maxTime >=SUBDATE(CURDATE(),INTERVAL 3 month) and tt.entity_inner_code = report.entity_inner_code ");
                 if (StringUtils.isNotBlank(reportInfo.getMerNum())) {
                     WHERE("report.merc_num=#{reportInfo.merNum}");
@@ -808,6 +829,15 @@ public class ReportInfoProvider {
                         WHERE("report.status=#{reportInfo.status}");
                     } else {
                         WHERE("report.status in (2, 4)");
+                    }
+                }
+                
+              //前端用户
+                if (reportInfo.getCustomerType()==null && reportInfo.getStatus() != null ){
+                    if(10==reportInfo.getStatus()) {
+                        WHERE("report.status=1");
+                    }else {
+                        WHERE("report.status=#{reportInfo.status}");
                     }
                 }
             }
