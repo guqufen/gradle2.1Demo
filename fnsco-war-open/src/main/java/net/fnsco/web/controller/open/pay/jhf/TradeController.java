@@ -31,9 +31,9 @@ import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
+import net.fnsco.trading.service.order.dto.TradeJhfJO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.open.jo.TradeJO;
-import net.fnsco.web.controller.open.jo.TradeJhfJO;
 
 /**
  * 
@@ -93,7 +93,7 @@ public class TradeController extends BaseController {
 
         //String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
         //url += "?commID=" + tradeOrder.getChannelMerId() + "&reqData=" + reqData;
-        String url = env.getProperty("open.base.url") + "/trade/thirdPay/dealPayOrder";
+        String url = env.getProperty("open.base.url") + "/trade/pay/dealPayOrder";
         url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=123";
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);

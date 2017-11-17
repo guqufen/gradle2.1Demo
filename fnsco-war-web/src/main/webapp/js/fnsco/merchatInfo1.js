@@ -129,6 +129,10 @@ function initTableData(){
             field: 'source',
             title: '商户注册来源',
             formatter:formatSource
+        }, {
+            field: 'status',
+            title: '商户状态',
+            formatter:formatStatus
         }]
     });
 }
@@ -190,6 +194,15 @@ function formatSource(value, row, index){
   }
   else{
     return '其他';
+  } 
+}
+//商户注册来源格式处理
+function formatStatus(value, row, index){
+  if(value == 0)
+  {
+    return '删除';
+  }else{
+    return '正常';
   } 
 }
 //判断渠道类型

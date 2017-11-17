@@ -17,10 +17,10 @@ $('#table').bootstrapTable({
 	queryParams : queryParams,
 	responseHandler : responseHandler,// 处理服务器返回数据
 	columns : [ {
-		field : 'merName',
+		field : 'mercName',
 		title : '商户名称'
 	}, {
-		field : 'innerCode',
+		field : 'entityInnerCode',
 		title : '商户编码'
 	}, 
 //	{

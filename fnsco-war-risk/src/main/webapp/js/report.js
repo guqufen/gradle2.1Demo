@@ -41,15 +41,15 @@ $('#table').bootstrapTable({
 		title : '操作',
 		formatter : formatterOperation
 	}, {
-		field : 'merName',
+		field : 'mercName',
 		title : '商户名称'
 	}, {
-		field : 'innerCode',
+		field : 'entityInnerCode',
 		title : '商户编码'
 	}, {
 		field : 'industry',
-		title : '行业',
-		formatter : formatterIndustry
+		title : '行业'
+//		formatter : formatterIndustry
 	}, {
 		field : 'tradingArea',
 		title : '商圈'
@@ -73,15 +73,15 @@ function formatterOperation(value, row, index) {
 				.join('');
 	}
 	if (row.isTrue == 1&&value == 1) {
-		return [ '<a  class="check" style="color:#2964df;" target="_Blank" href="javascript:forwordReport('+ row.id+',1'+row.entityInnerCode + ' )">查看报告</a>' ].join('');
+		return [ '<a  class="check" style="color:#2964df;" target="_Blank" href="javascript:forwordReport('+ row.id+',\''+row.entityInnerCode + '\')">查看报告</a>' ].join('');
 	}
 	if (row.isTrue == 1&&value == 3) {
 		return [ '<a class="generate" style="color:#2964df;" onclick="javascript:sendEmail('
 				+ row.id + ')">生成报告</a> ' ].join('');
 	}
 }
-function forwordReport(merchantId,innerCode){
-	innerCode =innerCode+'';
+function forwordReport(merchantId,entityInnerCode){
+	entityInnerCode =entityInnerCode;
 	$.ajax({
 		url : PROJECT_NAME + '/web/report/updateViemNum',
 		dataType : 'json',
@@ -92,7 +92,7 @@ function forwordReport(merchantId,innerCode){
 			if (!data.success){
 				window.location = 'login.html';return;
 			}
-			window.open('report.html?merchantId='+ merchantId+'&entityInnerCode='+entityInnerCode.substring(1));
+			window.open('report.html?merchantId='+ merchantId+'&entityInnerCode='+entityInnerCode);
 		}
 	});
 }
@@ -111,27 +111,27 @@ function formatterSize(value, row, index) {
 		return "大型连锁";
 	}
 }
-function formatterIndustry(value, row, index){
-	var val=queryIndustry(value);
-	console.log(val)
-	return val;
-}
+//function formatterIndustry(value, row, index){
+//	var val=queryIndustry(value);
+//	console.log(val)
+//	return val;
+//}
 
-function queryIndustry(value){
-	var result;
-	$.ajax({
-		url : PROJECT_NAME + '/web/report/queryIndustry',
-		type : 'POST',
-		async: false,
-		dataType : "json",
-		data : {"id":value},
-		success : function(data){
-			result = data.data.first;
-			console.log(result)
-		}
-	});
-	return result;
-}
+//function queryIndustry(value){
+//	var result;
+//	$.ajax({
+//		url : PROJECT_NAME + '/web/report/queryIndustry',
+//		type : 'POST',
+//		async: false,
+//		dataType : "json",
+//		data : {"id":value},
+//		success : function(data){
+//			result = data.data.first;
+//			console.log(result)
+//		}
+//	});
+//	return result;
+//}
 // 组装请求参数
 function queryParams(params) {
 	var param = {
