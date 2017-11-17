@@ -27,7 +27,6 @@ function processSelect(num,flag) {
 	var id;
 	var areaId;
 	var lastId;
-
 	//省份改变，将市/区置空
 	if(flag){
 		id=$("#provinceId"+num)[0];
@@ -48,7 +47,6 @@ function processSelect(num,flag) {
 	if(id.value == ""){
 		return;
 	}
-
 	$.ajax({
 		type : 'get',
 		url : PROJECT_NAME + "/area/areaChange",
@@ -116,3 +114,108 @@ function posProvince(num) {
 		}
 	});
 }
+
+
+
+
+
+
+/*
+*基本信息页面
+*选择省市区控件
+*/
+
+// 需要移除的下拉框
+function removeMerOption(id) {
+	$(id).empty();
+	$(id).append("<option value=''>---请选择---</option>");
+}
+function merProcessSelect(flag) {
+
+	var id;
+	var areaId;
+	var lastId;
+	//省份改变，将市/区置空
+	if(flag){
+		id=$("#regist_province")[0];
+		areaId=$("#regist_city")[0];
+		lastId=$("#regist_area")[0];
+
+		removeMerOption(areaId);// 移除市下拉框内容并默认选中"---请选择---"
+		removeMerOption(lastId);// 移除区下拉框内容并默认选中"---请选择---"
+
+		//市改变，将区置空
+	}else{
+		id=$("#regist_city")[0];
+		areaId=$("#regist_area")[0];
+		removeMerOption(areaId);// 移除区下拉框内容并默认选中"---请选择---"
+	}
+
+	//判断若值为空，则直接返回，以免传空值导致后台处理异常
+	if(id.value == ""){
+		return;
+	}
+	$.ajax({
+		type : 'get',
+		url : PROJECT_NAME + "/area/areaChange",
+		data : {
+			'areaId' : id.value
+		},
+		async : false,//同步获取数据
+		success : function(data) {
+			console.log(data);
+			if (data.success) {
+
+				// 给下拉框赋值
+				var areaList = data.data;
+
+				// 没有数据则隐藏下拉框
+				if (areaList.length > 0) {
+
+					for (var i = 0; i < areaList.length; i++) {
+						$("#" + areaId.name).append(
+								"<option value='" + areaList[i].id + "'>"
+										+ areaList[i].name + "</option>");
+					}
+				}
+			} else {
+				layer.msg(data.message);
+			}
+		}
+	});
+	return;
+}
+function merProvince(){
+	// 移除市/区
+	removeMerOption("#regist_city");
+	removeMerOption("#regist_area");
+	// 获取全部省市区，然后循环赋值到相应地方
+	$.ajax({
+		type : 'get',
+		url : PROJECT_NAME + '/area/showProvinceCityArea',
+		async : false,//同步获取数据
+		success : function(data) {
+
+			console.log(data);
+
+			if (data.success) {
+
+				var areaList = data.data;
+				if (areaList.length > 0) {
+
+					for (var i = 0; i < areaList.length; i++) {
+						$("#regist_province").append(
+								"<option value='" + areaList[i].id + "'>"
+										+ areaList[i].name + "</option>");
+					}
+				}
+			} else {
+				layer.message("省份数据加载失败");
+			}
+		}
+	});
+}
+
+$("#regist_province").change(function(){
+	console.log($("this").html());
+})
