@@ -123,6 +123,7 @@ function resetEvent() {
 $("#btn_add").click(function(){
     $("#myModalLabel").html("新增商户实体");
     $('#addForm')[0].reset();
+    merProvince();
 })
 $('.sunmitBtn').click(function(){
     var mercName=$.trim($("#mercName").val());
