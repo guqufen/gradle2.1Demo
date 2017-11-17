@@ -55,6 +55,9 @@ public class MerchantCore extends DTO {
 
 	private Integer source;
 	private String sourceStr;
+	
+	//新增省市区字段，商户性质商户类别
+	
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
