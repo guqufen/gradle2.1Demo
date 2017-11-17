@@ -46,8 +46,8 @@ public class MerchantEntity {
     private Integer regist_province;//省
     private Integer regist_city;//市
     private Integer regist_area;//区
-    private String etps_attr;//商户性质
-    private String etps_tp;//商户种类
+    private Integer etps_attr;//商户性质
+    private Integer etps_tp;//商户种类
 
 	public Integer getRegist_province() {
 		return regist_province;
@@ -73,19 +73,19 @@ public class MerchantEntity {
 		this.regist_area = regist_area;
 	}
 
-	public String getEtps_attr() {
+	public Integer getEtps_attr() {
 		return etps_attr;
 	}
 
-	public void setEtps_attr(String etps_attr) {
+	public void setEtps_attr(Integer etps_attr) {
 		this.etps_attr = etps_attr;
 	}
 
-	public String getEtps_tp() {
+	public Integer getEtps_tp() {
 		return etps_tp;
 	}
 
-	public void setEtps_tp(String etps_tp) {
+	public void setEtps_tp(Integer etps_tp) {
 		this.etps_tp = etps_tp;
 	}
 
