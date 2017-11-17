@@ -180,6 +180,25 @@ public class TradeOrderService extends BaseService {
         if (!"0".equals(order.getOrderStatus())) {
             tradeOrderDO.setCompleteTime(new Date());
         }
+        //（0 未支付 1支付成功 2支付失败 3已退货）
+        if ("1".equals(order.getOrderStatus())) {
+            BigDecimal orderAmountB = new BigDecimal("0");
+            BigDecimal eachMoneyB = new BigDecimal("0");
+            Integer periodNum = null ;
+            try{
+                orderAmountB = new BigDecimal(order.getOrderAmount());
+                orderAmountB = orderAmountB.multiply(new BigDecimal("100"));
+                eachMoneyB = new BigDecimal(order.getEachMoney());
+                eachMoneyB = orderAmountB.multiply(new BigDecimal("100"));
+                periodNum = Integer.valueOf(order.getPeriodNum());
+            }catch(Exception ex){
+                logger.error("聚惠分支付完成，返回金额数据转换出错",ex);
+            }
+            tradeOrderDO.setOrderAmount(orderAmountB);
+            tradeOrderDO.setPeriodNum(periodNum);
+            tradeOrderDO.setEachMoney(eachMoneyB);
+            tradeOrderDO.setCardHolderRate(order.getCardHolderRate());
+        }
         //结算状态（0 未结算 1已结算   2结算中   3已退款）
         if (!Strings.isNullOrEmpty(order.getSettlementStatus())) {
             try {

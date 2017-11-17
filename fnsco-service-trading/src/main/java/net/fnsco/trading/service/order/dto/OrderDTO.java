@@ -27,6 +27,76 @@ public class OrderDTO extends DTO {
     private String cardHolderRate;   //  持卡人费率
     private String settlementAmount; //    结算金额
 
+    private String orderAmount;// 订单总价格
+    private String periodNum;//   分期数
+    private String eachMoney;//   每期金额
+
+    /**
+     * orderAmount
+     *
+     * @return  the orderAmount
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getOrderAmount() {
+        return orderAmount;
+    }
+
+    /**
+     * orderAmount
+     *
+     * @param   orderAmount    the orderAmount to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setOrderAmount(String orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    /**
+     * periodNum
+     *
+     * @return  the periodNum
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getPeriodNum() {
+        return periodNum;
+    }
+
+    /**
+     * periodNum
+     *
+     * @param   periodNum    the periodNum to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPeriodNum(String periodNum) {
+        this.periodNum = periodNum;
+    }
+
+    /**
+     * eachMoney
+     *
+     * @return  the eachMoney
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getEachMoney() {
+        return eachMoney;
+    }
+
+    /**
+     * eachMoney
+     *
+     * @param   eachMoney    the eachMoney to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setEachMoney(String eachMoney) {
+        this.eachMoney = eachMoney;
+    }
+
     /**
      * commercialRate
      *
