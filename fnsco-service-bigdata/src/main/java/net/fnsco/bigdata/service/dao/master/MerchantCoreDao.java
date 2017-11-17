@@ -10,6 +10,7 @@ import net.fnsco.bigdata.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.bigdata.api.dto.MerTerminalsDTO;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
+import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.PageDTO;
 /**
  * @desc 商户基本信息DAO
@@ -157,4 +158,11 @@ public interface MerchantCoreDao {
      * @return MerchantCore    DOM对象
      */
     MerchantCore selectUniqueMer(@Param("cardNum") String cardNum,@Param("accountNo") String accountNo,@Param("channelType") String channelType,@Param("channelMerId") String channelMerId);
+
+    /**
+     * 根据id查询核心商户信息
+     * @param id
+     * @return
+     */
+    MerchantCoreEntityZxyhDTO queryMercCoreById(@Param("id") Integer id);
 }

@@ -44,6 +44,7 @@ import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantFileTemp;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
+import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -687,4 +688,10 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     public List<MerchantEntityCoreRef> queryEntityCoreRefByInnerCode(String innerCode) {
         return merchantEntityCoreRefDao.selectByInnerCode(innerCode);
     }
+
+	@Override
+	public MerchantCoreEntityZxyhDTO queryMercCoreById(Integer id) {
+		
+		 return merchantCoreDao.queryMercCoreById(id);
+	}
 }

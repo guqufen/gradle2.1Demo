@@ -55,4 +55,11 @@ public interface MerchantEntityService {
      * @return
      */
     String getEntityInnerCode();
+
+    /**
+     * 根据商户性质获取商户种类
+     * @param etps_attr
+     * @return
+     */
+	Integer getEtps_TypeByEtps_attra(int etps_attr);
 }
