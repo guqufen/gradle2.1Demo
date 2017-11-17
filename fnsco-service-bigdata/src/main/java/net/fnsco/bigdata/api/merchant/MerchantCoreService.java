@@ -14,6 +14,7 @@ import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
+import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
@@ -218,4 +219,11 @@ public interface MerchantCoreService {
      * @since  CodingExample　Ver 1.1
      */
     List<MerchantEntityCoreRef> queryEntityCoreRefByInnerCode(String innerCode);
+    
+    /**
+     * 根据id查询核心商户信息
+     * @param id
+     * @return
+     */
+    MerchantCoreEntityZxyhDTO queryMercCoreById(Integer id);
 }

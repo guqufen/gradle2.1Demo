@@ -315,6 +315,9 @@ function operateFormatter(value, row, index) {
 	        '</a>',
 	        '<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码">',
 	        '<i class="glyphicon glyphicon-qrcode"></i>',
+	        '</a>  ',
+	        '<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行">',
+	        '<i class="glyphicon glyphicon-qrcode"></i>',
 	        '</a>  '
 	    ].join('');
     }else{
@@ -330,7 +333,11 @@ function operateFormatter(value, row, index) {
 	        '</a>',
 	        '<a class="details" href="javascript:;">',
 	        '<i class="glyphicon"></i>',
+	        '</a>  ',
+	        '<a class="details" href="javascript:;">',
+	        '<i class="glyphicon"></i>',
 	        '</a>  '
+	        
 	    ].join('');
     }
 }
@@ -1701,4 +1708,20 @@ function showQrcode(id){
 	    }
 	})
 	$('#showQrcode').modal();
+}
+
+//调用中信银行接口入驻独立商户
+function zxyhChannel(id){
+	$.ajax({
+	    url:PROJECT_NAME+'/web/zxyh/basicInfo',
+	    type:'get',
+	    dataType : "json",
+//	    data:{'id':id},
+	    data:{'id':1743},
+	    success:function(data){
+	    	console.log(data.data.result);
+	    	$(".qrcode").attr('src',data.data.result)
+	    }
+	})
+	$('#zxyhChannel').modal();
 }

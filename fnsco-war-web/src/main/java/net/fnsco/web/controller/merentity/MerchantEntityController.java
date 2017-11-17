@@ -82,6 +82,8 @@ public class MerchantEntityController extends BaseController {
 			int etps_tp = merchantEntityService.getEtps_TypeByEtps_attra(merchantEntity.getEtps_attr());
 			merchantEntity.setEtps_tp(etps_tp);
 		}
+		//拼接详细信息
+		
 		if(null == merchantEntity.getId()) {
 			merchantEntity.setCreateSource("0");
 			merchantEntity.setCreateTimer(new Date());
