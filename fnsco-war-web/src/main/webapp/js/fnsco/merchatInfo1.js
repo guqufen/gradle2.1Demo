@@ -431,6 +431,12 @@ $('#btn_delete').click(function(){
   });
 });
 
+
+
+$("#btn_add").click(function(){
+  merProvince();
+})
+
 //选择银行支行事件
 $('#btn_select_bank').click(function(){
   var select_data = $('#bankTable').bootstrapTable('getSelections')[0];
@@ -643,6 +649,7 @@ function seeImage(fileName,divId){
 //保存商户基本信息下一步按钮
 function saveMerCore(){
   if($("#entityMerName0").val()==''){
+    console.log($('#mercore_form').serialize());
     layer.msg('实体商户不能为空！');
     return false;
   }else{
@@ -688,6 +695,7 @@ function bankCardHtml(num){
             '<div class="col-sm-4"><label class="control-label" for="accountName'+num+'">账户开户名：</label><input type="text" class="form-control accountName" id="accountName'+num+'" name="accountName'+num+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="accountNo'+num+'">开户账号：</label><input type="text" class="form-control accountNo" id="accountNo'+num+'" name="accountNo'+num+'"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="accountCardId'+num+'">开户人身份证号：</label><input type="text" class="form-control accountCardId" id="accountCardId'+num+'" name="accountCardId'+num+'"></div>'+
+            '<div class="col-sm-4"><label class="control-label" for="accountPhone'+num+'">开户手机号：</label><input type="text" class="form-control accountPhone" id="accountPhone'+num+'" name="accountPhone'+num+'"></div>'+
             // '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">结算周期：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'"></div></div>'+
             '<div class="col-sm-4"><label class="control-label" for="subBankName'+num+'">支行名称:</label><input type="text" class="form-control subBankName" onclick="selectBank('+num+')" id="subBankName'+num+'" name="subBankName'+num+'" readonly="readonly" data-toggle="modal" data-target="#banksModal"></div>'+
             '<div class="col-sm-4"><label class="control-label" for="openBank'+num+'">开户行:</label><input type="text" class="form-control openBank" id="openBank'+num+'" name="openBank'+num+'" disabled="disabled"></div>'+
@@ -737,12 +745,14 @@ function saveBankCardParams(conId){
     var accountNo=$("#"+conId+" .bankCard-list").eq(i).find($('.accountNo')).val();
     var accountName=$("#"+conId+" .bankCard-list").eq(i).find($('.accountName')).val();
     var accountCardId=$("#"+conId+" .bankCard-list").eq(i).find($('.accountCardId')).val();
+    var accountPhone=$("#"+conId+" .bankCard-list").eq(i).find($('.accountPhone')).val();
     var subBankName=$("#"+conId+" .bankCard-list").eq(i).find($('.subBankName')).val();
     var openBankPrince=$("#"+conId+" .bankCard-list").eq(i).find($('.openBankPrince')).val();
     var openBank=$("#"+conId+" .bankCard-list").eq(i).find($('.openBank')).val();
     var openBankCity=$("#"+conId+" .bankCard-list").eq(i).find($('.openBankCity')).val();
     var openBankNum=$("#"+conId+" .bankCard-list").eq(i).find($('.openBankNum')).val();
     var innerCode=$("#innerCode").val();
+    console.log(accountPhone);
     if(!innerCode){
       layer.msg('操作错误!');return;
     }
@@ -807,7 +817,7 @@ $("#btn_saveBankCard").click(function(){
 //添加终端信息列表
 var TerminalList=-100;
 function terminalHtml(num){
-	return '<div class="terminal-list"><div class="remove-terminalList remove-terminalList'+num+'" editId="'+num+'" ></div><div class="row addChannel">'+
+  return '<div class="terminal-list"><div class="remove-terminalList remove-terminalList'+num+'" editId="'+num+'" ></div><div class="row addChannel">'+
         '<div class="col-sm-4"><label class="control-label" for="channelMerId'+num+'">渠道商户号：</label><input type="text" class="form-control channelMerId" id="channelMerId'+num+'" name="channelMerId'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道名称：</label><select id="channelType'+num+'" name="channelType'+num+'" class="channelType form-control" ><option value="00">拉卡拉</option><option value="01">浦发</option><option value="02">爱农</option><option value="03">法奈昇</option><option value="04">聚惠分</option></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">渠道Key：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'" required="required"></div>'+
@@ -815,6 +825,10 @@ function terminalHtml(num){
         posHtml(num)+
         '</div>'+
         '<div class="btn-div"><button onclick="addPos('+num+')" type="button" class="btn btn-primary btn_addPos"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增设备</button></div>'+
+        '<div class="terminalRatesList" id="terminalRatesList'+num+'">'+
+        terminalRatesHtml(num)+
+        '</div>'+
+        '<div class="btn-div"><button onclick="addTerminalRates('+num+')" type="button" class="btn btn-primary btn_addterminalRates"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增终端</button></div>'+
         '</div></div>';
 }
 function posHtml(num){
@@ -828,29 +842,35 @@ function posHtml(num){
         '<div class="col-sm-4"><label class="control-label" for="posFactory'+num+'">机具厂家：</label><input type="text" class="form-control posFactory" id="posFactory'+num+'" name="posFactory'+num+'" required="required" value="福建联迪商用设备有限公司"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="installAddr'+num+'">POS装机地址：</label>'+
         '<select  class="form-control posProvince" id="provinceId' + num + '" name="provinceId' + num + '" style="type=province" onchange=processSelect('+ num + ',' + true + ')>' + 
-			'<option value="">--选择省--</option>' +
-		'</select></div>' +
+      '<option value="">--选择省--</option>'+
+    '</select></div>' +
         '<div class="col-sm-4"><label class="control-label"></label><select  class="form-control posCity" id="cityId' + num + '" name="cityId' + num + '" onchange=processSelect(' + num + ','+ false + ')>' + 
-        	'<option value="">--选择市--</option>' + 
-		'</select></div>' +
-		'<div class="col-sm-4"><label class="control-label"></label><select class="form-control posArea" id="areaId' + num + '" name="areaId' + num + '" >' + 
-			'<option value="">--选择区--</option>' +
-		'</select></div>' +
-		
-		'<div class="col-sm-12"><label class="control-label" for="installAddr'+num+'">POS装机详细地址：</label>'+
-		'<input type="text" class="form-control installAddr" id="installAddr'+num+'" name="installAddr'+num+'" required="required">'+
-        '</div>'+
-        '<h2>扫码：</h2>'+
+          '<option value="">--选择市--</option>' + 
+    '</select></div>' +
+    '<div class="col-sm-4"><label class="control-label"></label><select class="form-control posArea" id="areaId' + num + '" name="areaId' + num + '" >' + 
+      '<option value="">--选择区--</option>' +
+    '</select></div>' +
+    
+    '<div class="col-sm-12"><label class="control-label" for="installAddr'+num+'">POS装机详细地址：</label>'+
+    '<input type="text" class="form-control installAddr" id="installAddr'+num+'" name="installAddr'+num+'" required="required">'+
+        '</div></div>';
+}
+function terminalRatesHtml(num){
+        return '<div class="addTerminalRates addTerminalRates'+num+'">'+
+        '<div class="remove-icon remove-terminalRatesList'+num+'" editid="'+num+'" onclick="removeTerminalRates('+num+')"><span class="glyphicon glyphicon-remove"></span></div>'+
         '<input type="hidden" class="form-control terminalId1" id="terminalId1'+num+'" name="terminalId1'+num+'">'+
+        '<div class="col-sm-4"><label class="control-label" for="bankId'+num+'">支付方式：</label><select id="bankId'+num+'" name="bankId'+num+'" class="bankId form-control"><option value="00">扫码</option><option value="01">刷卡</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="terminalCode1'+num+'">终端编号：</label><input type="text" class="form-control terminalCode1" id="terminalCode1'+num+'" name="terminalCode1'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="alipayFee'+num+'">支付宝费率：</label><input type="text" class="form-control alipayFee" id="alipayFee'+num+'" name="alipayFee'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="wechatFee'+num+'">微信费率：</label><input type="text" class="form-control wechatFee" id="wechatFee'+num+'" name="wechatFee'+num+'" required="required"></div>'+
-        '<h2>刷卡：</h2>'+
-        '<input type="hidden" class="form-control terminalId2" id="terminalId2'+num+'" name="terminalId2'+num+'">'+
-        '<div class="col-sm-4"><label class="control-label" for="terminalCode2'+num+'">终端编号：</label><input type="text" class="form-control terminalCode2" id="terminalCode2'+num+'" name="terminalCode2'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="debitCardRate'+num+'">借记卡费率：</label><input type="text" class="form-control debitCardRate" id="debitCardRate'+num+'" name="debitCardRate'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="creditCardRate'+num+'">贷记卡费率：</label><input type="text" class="form-control creditCardRate" id="creditCardRate'+num+'" name="creditCardRate'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="debitCardMaxFee'+num+'">借记卡封顶值：</label><input type="number" class="form-control debitCardMaxFee" id="debitCardMaxFee'+num+'" name="debitCardMaxFee'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="bankId'+num+'">结算周期：</label><select id="bankId'+num+'" name="bankId'+num+'" class="bankId form-control"><option value="00">T1</option><option value="01">D1</option><option value="02">D0</option></select></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="debitCardMaxFee'+num+'">公众号ID：</label><input type="number" class="form-control debitCardMaxFee" id="debitCardMaxFee'+num+'" name="debitCardMaxFee'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="debitCardMaxFee'+num+'">域名：</label><input type="number" class="form-control debitCardMaxFee" id="debitCardMaxFee'+num+'" name="debitCardMaxFee'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="bankId'+num+'">一级类目：</label><select id="bankId'+num+'" name="bankId'+num+'" class="bankId form-control"><option value="00">T1</option><option value="01">D1</option><option value="02">D0</option></select></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="bankId'+num+'">二级类目：</label><select id="bankId'+num+'" name="bankId'+num+'" class="bankId form-control"><option value="00">T1</option><option value="01">D1</option><option value="02">D0</option></select></div>'+
         '</div>';
 }
 
@@ -911,6 +931,35 @@ function removePos(num){
       });
     }
   }
+  //添加渠道列表
+  function addTerminalRates(num){
+    TerminalList=TerminalList+1;
+    $("#terminalRatesList"+num).append(terminalRatesHtml(TerminalList));
+    posProvince(TerminalList);
+  }
+  //删除渠道列表
+  function removeTerminalRates(num){
+    if(num){
+        layer.confirm('确定删除吗？', {
+          btn: ['确定', '取消']
+        }, function(){
+          $.ajax({
+            url:PROJECT_NAME+'/web/merchantpos/deletePosInfo',
+            type:'POST',
+            data:{'id':num},
+            success:function(data){
+              unloginHandler(data);
+              $('.remove-terminalRatesList'+num).parent().remove();
+              layer.msg('删除成功');
+            }
+          });
+        }, function(){
+          layer.msg('取消成功');
+        });
+      }
+  }
+
+
   //获取终端参数结果集保存
   function saveTerminalParams(conId){
     var listLen=$("#"+conId+" .terminal-list").length;
@@ -1158,6 +1207,7 @@ $(".nextBtn").click(function(){
 
 //生成表格里的编辑事件
 function editData(id){
+    posProvince('Change');
    $.ajax({
     url:PROJECT_NAME+'/web/merchantinfo/queryAllById',
     type:'POST',
@@ -1256,6 +1306,7 @@ function editData(id){
           $('select[name="accountType'+data.data.banks[i].id+'"]').find("option[value="+data.data.banks[i].accountType+"]").attr("selected",true);
           $('input[name="accountName'+data.data.banks[i].id+'"]').val(data.data.banks[i].accountName);
           $('input[name="accountCardId'+data.data.banks[i].id+'"]').val(data.data.banks[i].accountCardId);
+          $('input[name="accountPhone'+data.data.banks[i].id+'"]').val(data.data.banks[i].accountPhone);
           $('input[name="accountNo'+data.data.banks[i].id+'"]').val(data.data.banks[i].accountNo);
           $('input[name="openBank'+data.data.banks[i].id+'"]').val(data.data.banks[i].openBank);
           $('input[name="openBankCity'+data.data.banks[i].id+'"]').val(data.data.banks[i].openBankCity);

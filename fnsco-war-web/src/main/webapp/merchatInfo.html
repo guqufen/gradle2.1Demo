@@ -28,7 +28,7 @@
 	width: 100%;
 }
 
-.addPos {
+.addPos,.addTerminalRates {
 	float: left;
 	padding: 20px 5px;
 	margin: 10px 15px;
@@ -59,6 +59,7 @@
 
 .addChannel .btn {
 	margin-left: 15px;
+	margin-bottom: 10px;
 }
 </style>
 </head>
@@ -68,33 +69,33 @@
 			<form id="formSearch" class="form-horizontal">
 				<div class="form-group" style="margin-top: 15px">
 					<div class="row col-sm-10">
-							<div class="col-sm-4">
-								<label class="control-label" for="txt_search_id">商户名：</label> <input
-									type="text" class="form-control" id="txt_search_id">
-							</div>
-							<div class="col-sm-4">
-								<label class="control-label" for="txt_search_merId">渠道商户号：</label> <input
-									type="text" class="form-control" id="txt_search_merId">
-							</div>
-							<div class="col-sm-4">
-								<label class="control-label" for="txt_search_merId">内部商户号：</label> <input
-									type="text" class="form-control" id="txt_search_merId">
-							</div>
-							<div class="col-sm-4">
-								<label class="control-label" for="txt_search_innerCode">内部商户号：</label> <input
-									type="text" class="form-control" id="txt_search_innerCode">
-							</div>
-							<div class="col-sm-4">
-								<label class="control-label" for="txt_search_name">法人姓名：</label>
-								<input type="text" class="form-control" id="txt_search_name">
-							</div>
-							<div class="col-sm-4">
-								<label class="control-label" for="txt_search_price">法人手机：</label>
-								<input type="text" class="form-control" id="txt_search_price">
-							</div>
-							<div class="col-sm-3">
-							<label class="control-label" for="channel_type">渠道类型:</label> <select
-								id="channel_type" name="channel_type" class="form-control">
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_id">商户名：</label> <input
+								type="text" class="form-control" id="txt_search_id">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_merId">渠道商户号：</label> <input
+								type="text" class="form-control" id="txt_search_merId">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_merId">内部商户号：</label> <input
+								type="text" class="form-control" id="txt_search_merId">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_innerCode">内部商户号：</label> <input
+								type="text" class="form-control" id="txt_search_innerCode">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_name">法人姓名：</label>
+							<input type="text" class="form-control" id="txt_search_name">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="txt_search_price">法人手机：</label>
+							<input type="text" class="form-control" id="txt_search_price">
+						</div>
+						<div class="col-sm-4">
+							<label class="control-label" for="channel_type">渠道类型:</label> 
+							<select id="channel_type" name="channel_type" class="form-control">
 								<option value="" selected>请选择</option>
 								<option value="00">拉卡拉</option>
 								<option value="01">浦发</option>
@@ -261,15 +262,47 @@
 												<input type="text" class="form-control" id="registAddress"
 													name="registAddress">
 											</div>
-											<div class="col-sm-4">
+											<!-- <div class="col-sm-4">
 												<label class="control-label" for="mercFlag">商户标签：</label> <input
 													type="text" class="form-control" id="mercFlag"
 													name="mercFlag">
-											</div>
+											</div> -->
 											<div class="col-sm-4">
 												<label class="control-label" for="agentId">代理商：</label> <select
 													id="agentId" name="agentId" class="form-control">
 												</select>
+											</div>
+											<div class="col-sm-4">
+												<label class="control-label" for="etps_attr">商户性质：</label> 
+												<select  class="form-control etps_attr" id="etps_attr" name="etps_attr">
+													<option value="1">政府机构</option>
+													<option value="2">国营企业</option>
+													<option value="3">私营企业</option>
+													<option value="4">外资企业</option>
+													<option value="5" selected>个体工商户</option>
+													<option value="6">事业单位</option>
+												</select>
+											</div>
+											<div class="col-sm-4 regist_add">
+												<label class="control-label" for="regist_province">商户所属省：</label> 
+												<select  class="form-control" id="regist_province" name="regist_province" onchange="merProcessSelect(true)">
+													<option value="">--选择省--</option>
+												</select>
+												<input type="hidden" class="regist_province_name" name="regist_province_name">
+											</div>
+											<div class="col-sm-4 regist_add">
+												<label class="control-label" for="regist_city">商户所属市：</label> 
+												<select  class="form-control" id="regist_city" name="regist_city" onchange="merProcessSelect(false)">
+													<option value="">--选择市--</option>
+												</select>
+												<input type="hidden" class="regist_city_name" name="regist_city_name">
+											</div>
+											<div class="col-sm-4 regist_add">
+												<label class="control-label" for="regist_area">商户所属区：</label> 
+												<select  class="form-control" id="regist_area" name="regist_area">
+													<option value="">--选择区--</option>
+												</select>
+												<input type="hidden" class="regist_area_name" name="regist_area_name">
 											</div>
 											<input type="hidden" name="innerCode" />
 										</div>
@@ -586,14 +619,43 @@
 											<input type="text" class="form-control" id="registAddress1"
 												name="registAddress1">
 										</div>
-										<div class="col-sm-4">
+										<!-- <div class="col-sm-4">
 											<label class="control-label" for="mercFlag1">商户标签：</label> <input
 												type="text" class="form-control" id="mercFlag1"
 												name="mercFlag1">
-										</div>
+										</div> -->
 										<div class="col-sm-4">
 											<label class="control-label" for="agentId1">代理商：</label> <select
 												id="agentId1" name="agentId1" class="form-control">
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="mercFlag">商户性质：</label> 
+											<select  class="form-control mercFlag" id="mercFlag">
+												<option value="1">政府机构</option>
+												<option value="2">国营企业</option>
+												<option value="3">私营企业</option>
+												<option value="4">外资企业</option>
+												<option value="5" selected>个体工商户</option>
+												<option value="6">事业单位</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="provinceIdChange">商户所属省：</label> 
+											<select  class="form-control posProvince" id="provinceIdChange" name="provinceIdChange" onchange="processSelect('Change',true)">
+												<option value="">--选择省--</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="cityIdChange">商户所属市：</label> 
+											<select  class="form-control posCity" id="cityIdChange" name="cityIdChange" onchange="processSelect('Change',false)">
+												<option value="">--选择市--</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="areaIdChange">商户所属区：</label> 
+											<select  class="form-control posArea" id="areaIdChange" name="areaIdChange">
+												<option value="">--选择区--</option>
 											</select>
 										</div>
 										<input type="hidden" name="merId" />
@@ -782,7 +844,7 @@
 										id="editBtn_terminal_info"><span
 										class="glyphicon glyphicon-book"></span>保存</a>
 									<div id="terminal-con1">
-										<!-- js获取终端数据 -->
+										<!-- js获取数据 -->
 									</div>
 <!-- 									<button id="btn_addTerminal1" type="button" -->
 <!-- 										class="btn btn-primary btn-addList"> -->
@@ -796,7 +858,7 @@
 										class="editBtn_save btn btn-success" id="editBtn_channel_info"><span
 										class="glyphicon glyphicon-book"></span>保存</a>
 									<div id="channel-con1">
-										<!-- js获取终端数据 -->
+										<!-- js获取数据 -->
 									</div>
 									<button id="btn_addChannel1" type="button"
 										class="btn btn-primary btn-addList">
@@ -810,7 +872,7 @@
 										class="editBtn_save btn btn-success" id="editBtn_bank_info"><span
 										class="glyphicon glyphicon-book"></span>保存</a>
 									<div id="bankCard-con1">
-										<!-- js获取终端数据 -->
+										<!-- js获取数据 -->
 									</div>
 									<button id="btn_addBankCard1" type="button"
 										class="btn btn-primary btn-addList">
@@ -918,14 +980,43 @@
 											<input type="text" class="form-control" id="registAddress2"
 												name="registAddress2">
 										</div>
-										<div class="col-sm-4">
+										<!-- <div class="col-sm-4">
 											<label class="control-label" for="mercFlag2">商户标签：</label> <input
 												type="text" class="form-control" id="mercFlag2"
 												name="mercFlag2">
-										</div>
+										</div> -->
 										<div class="col-sm-4">
 											<label class="control-label" for="agentId2">代理商：</label> <select
 												id="agentId2" name="agentId2" class="form-control">
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="mercFlag">商户性质：</label> 
+											<select  class="form-control mercFlag" id="mercFlag">
+												<option value="1">政府机构</option>
+												<option value="2">国营企业</option>
+												<option value="3">私营企业</option>
+												<option value="4">外资企业</option>
+												<option value="5" selected>个体工商户</option>
+												<option value="6">事业单位</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="provinceIdDetails">商户所属省：</label> 
+											<select  class="form-control posProvince" id="provinceIdDetails" name="provinceIdDetails" onchange="processSelect('Details',true)">
+												<option value="">--选择省--</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="cityIdChange">商户所属市：</label> 
+											<select  class="form-control posCity" id="cityIdDetails" name="cityIdDetails" onchange="processSelect('Details',false)">
+												<option value="">--选择市--</option>
+											</select>
+										</div>
+										<div class="col-sm-4">
+											<label class="control-label" for="areaIdDetails">商户所属区：</label> 
+											<select  class="form-control posArea" id="areaIdDetails" name="areaIdDetails">
+												<option value="">--选择区--</option>
 											</select>
 										</div>
 										<input type="hidden" name="merId" />
