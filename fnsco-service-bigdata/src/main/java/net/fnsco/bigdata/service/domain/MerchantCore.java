@@ -96,9 +96,37 @@ public class MerchantCore extends DTO {
 	 private Integer registArea;//区
 	 private Integer etpsAttr;//商户性质
 	 private Integer etpsTp;//商户种类 
-	 private String registAddressDetail;                                                                              
+	 private String registAddressDetail;      
+	 
+	 private Integer registProvinceName;//省
+	 private Integer registCityName;//市
+	 private Integer registAreaName;//区
 	
 	
+
+	public Integer getRegistProvinceName() {
+		return registProvinceName;
+	}
+
+	public void setRegistProvinceName(Integer registProvinceName) {
+		this.registProvinceName = registProvinceName;
+	}
+
+	public Integer getRegistCityName() {
+		return registCityName;
+	}
+
+	public void setRegistCityName(Integer registCityName) {
+		this.registCityName = registCityName;
+	}
+
+	public Integer getRegistAreaName() {
+		return registAreaName;
+	}
+
+	public void setRegistAreaName(Integer registAreaName) {
+		this.registAreaName = registAreaName;
+	}
 
 	public String getRegistAddressDetail() {
 		return registAddressDetail;

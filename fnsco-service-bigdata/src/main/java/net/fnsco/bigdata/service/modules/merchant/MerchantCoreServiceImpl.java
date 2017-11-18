@@ -394,17 +394,24 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     	
     	merchantCore.setModifyUserId(userId);//待定
         merchantCore.setModifyTime(new Date());
+      //根据商户性质获取商户种类
+        if(merchantCore.getEtpsAttr() != null){
+			int etps_tp = merchantEntityService.getEtpsTypeByEtpsAttra(merchantCore.getEtpsAttr());
+			merchantCore.setEtpsTp(etps_tp);
+		}
+      //拼接详细信息
+      	StringBuilder sb = new StringBuilder();
+      	merchantCore.setRegistAddress(sb.append(merchantCore.getRegistProvinceName())
+      						.append(merchantCore.getRegistCityName())
+      						.append(merchantCore.getRegistAreaName())
+      						.append(merchantCore.getRegistAddressDetail()).toString());
         if (null == merchantCore.getId()) {
             if(null == merchantCore.getSource()){
                 merchantCore.setSource(0);
             }
             merchantCore.setStatus(1);
             merchantCore.setLegalValidCardType("0");//身份证
-          //根据商户性质获取商户种类
-            if(merchantCore.getEtpsAttr() != null){
-    			int etps_tp = merchantEntityService.getEtpsTypeByEtpsAttra(merchantCore.getEtpsAttr());
-    			merchantCore.setEtpsTp(etps_tp);
-    		}
+          
             int res = merchantCoreDao.insertSelective(merchantCore);
             if (res != 1) {
                 return ResultDTO.fail();
