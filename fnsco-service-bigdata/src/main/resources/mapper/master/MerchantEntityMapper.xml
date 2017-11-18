@@ -22,7 +22,7 @@
   <sql id="Base_Column_List" >
     id, entity_inner_code, merc_name, legal_person, legal_person_mobile, business_license_num, 
     card_type, card_num, status, create_timer, create_source, create_user_id, last_modefy_timer, 
-    last_modefy_user_id,scores
+    last_modefy_user_id,scores,regist_province,regist_city,regist_area,regist_address_detail,etps_attr
   </sql>
  <!-- 店铺列表结果集 -->
   <resultMap id="MerShopResultMap" type="net.fnsco.bigdata.api.dto.MerchantShopDTO" >
