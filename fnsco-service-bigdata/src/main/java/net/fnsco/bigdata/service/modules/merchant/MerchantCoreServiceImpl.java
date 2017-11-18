@@ -689,9 +689,47 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         return merchantEntityCoreRefDao.selectByInnerCode(innerCode);
     }
 
+    /**
+     * 入驻中信的商户信息
+     */
 	@Override
-	public MerchantCoreEntityZxyhDTO queryMercCoreById(Integer id) {
-		
-		 return merchantCoreDao.queryMercCoreById(id);
+	public ResultDTO<MerchantCore> queryZXYHInfoById(Integer id) {
+		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
+		MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO = new MerchantCoreEntityZxyhDTO();
+		MerchantCore core = merchantCoreDao.queryAllById(id);
+        if (core == null) {
+            return result.fail();
+        }
+        MerchantContact merchantContact = core.getContacts().get(0);//获取商户联系人信息
+        MerchantBank merchantBank = core.getBanks().get(0); //获取商户的开户行信息
+        if(merchantContact == null || merchantBank == null){
+//        	break;
+        }
+        merchantCoreEntityZxyhDTO.setMchtNm(core.getMerName());//商户全称
+        merchantCoreEntityZxyhDTO.setMchtCnAbbr(core.getAbbreviation());//商户简称
+        merchantCoreEntityZxyhDTO.setEtpsAttr(core.getEtps_attr().toString());//商户性质
+        merchantCoreEntityZxyhDTO.setEtpsTp(core.getEtps_tp().toString());//商户种类
+        merchantCoreEntityZxyhDTO.setMchtTel(core.getLegalPersonMobile());//商户电话
+        merchantCoreEntityZxyhDTO.setContact(merchantContact.getContactName());//联系人姓名
+        merchantCoreEntityZxyhDTO.setCommTel(merchantContact.getContactMobile());//联系人电话
+        merchantCoreEntityZxyhDTO.setCommEmail(merchantContact.getContactEmail());//联系人邮箱
+        merchantCoreEntityZxyhDTO.setLicenceNo(core.getBusinessLicenseNum());//营业执照号
+        merchantCoreEntityZxyhDTO.setManager(core.getLegalPerson());//法人姓名
+        merchantCoreEntityZxyhDTO.setIdentityNo(core.getCardNum());//法人身份证号码   正确身份证格式
+        merchantCoreEntityZxyhDTO.setProvCode(core.getRegist_province().toString());//商户所属省
+        merchantCoreEntityZxyhDTO.setCityCode(core.getRegist_city().toString());//商户所属市
+        merchantCoreEntityZxyhDTO.setAreaCode(core.getRegist_area().toString());//商户所属区
+        merchantCoreEntityZxyhDTO.setAddr(core.getRegistAddress());//详细地址  20字以内
+        merchantCoreEntityZxyhDTO.setSettleAcctNm(merchantBank.getAccountName());//结算开户名
+        merchantCoreEntityZxyhDTO.setSettleAcct(merchantBank.getAccountNo());//开户账号  40以内数字
+        merchantCoreEntityZxyhDTO.setAccIdeNo(merchantBank.getAccountCardId());//开户人身份证号
+        merchantCoreEntityZxyhDTO.setAccPhone(core.getLegalPersonMobile());//开户手机号（11位以内数字）  目前写入了法人手机号需确定 
+        merchantCoreEntityZxyhDTO.setSettleBankAllName(merchantBank.getOpenBank());//收款银行全称
+        merchantCoreEntityZxyhDTO.setSettleBankCode(merchantBank.getOpenBankNum());//开户行行号
+        
+        
+        return null;
+//        return result.success();
 	}
+
 }

@@ -109,30 +109,7 @@
   	<collection property="contacts" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantContactDao.queryByInnerCode" />
   	<collection property="banks" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantBankDao.queryWebByInnerCode" />
   </resultMap>	
-  <!-- 根据id查询入驻中信银行所需信息 -->
-   <resultMap id="EntityZXYHMercInfoMap" type="net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO" >
-    <result column="mchtNm" property="mchtNm" jdbcType="VARCHAR" />
-    <result column="mchtCnAbbr" property="mchtCnAbbr" jdbcType="VARCHAR" />
-    <result column="etpsAttr" property="etpsAttr" jdbcType="VARCHAR" />
-    <result column="etpsTp" property="etpsTp" jdbcType="VARCHAR" />
-    <result column="mchtTel" property="mchtTel" jdbcType="VARCHAR" />
-    <result column="contact" property="contact" jdbcType="VARCHAR" />
-    <result column="commTel" property="commTel" jdbcType="VARCHAR" />
-    <result column="commEmail" property="commEmail" jdbcType="VARCHAR" />
-    <result column="licenceNo" property="licenceNo" jdbcType="VARCHAR" />
-    <result column="manager" property="manager" jdbcType="VARCHAR" />
-    <result column="identityNo" property="identityNo" jdbcType="VARCHAR" />
-    <result column="provCode" property="provCode" jdbcType="VARCHAR" />
-    <result column="cityCode" property="cityCode" jdbcType="VARCHAR" />
-    <result column="areaCode" property="areaCode" jdbcType="VARCHAR" />
-    <result column="addr" property="addr" jdbcType="VARCHAR" />
-    <result column="settleAcctNm" property="settleAcctNm" jdbcType="VARCHAR" />
-    <result column="settleAcct" property="settleAcct" jdbcType="VARCHAR" />
-    <result column="accIdeNo" property="accIdeNo" jdbcType="VARCHAR" />
-    <result column="accPhone" property="accPhone" jdbcType="VARCHAR" />
-    <result column="settleBankAllName" property="settleBankAllName" jdbcType="VARCHAR" />
-    <result column="settleBankCode" property="settleBankCode" jdbcType="VARCHAR" />
-  </resultMap>
+  
   <sql id="Base_Column_List" >
     id, agent_id,inner_code, mer_name, abbreviation, en_name, sign_date, legal_person, legal_person_mobile, 
     legal_person_tel, legal_valid_card_type, card_num, card_valid_time, business_license_num, 
@@ -145,16 +122,7 @@
     CO.business_license_valid_time, CO.tax_regist_code, CO.regist_address, CO.merc_flag, CO.source, 
     CO.modify_user_id, CO.modify_time,CO.create_time, CO.status , CH.channel_type
   </sql>
-  <sql id="Base_Column_ZXYH_List" >
-   		m_merchant_core.mer_name ,m_merchant_core.abbreviation ,m_merchant_core.etps_attr,
-		m_merchant_core.etps_tp ,m_merchant_core.legal_person_mobile ,
-		m_merchant_contact.contact_name,m_merchant_contact.contact_mobile,m_merchant_contact.contact_email,
-		m_merchant_core.business_license_num, m_merchant_core.legal_person,m_merchant_core.card_num,
-		m_merchant_core.regist_province,m_merchant_core.regist_city,m_merchant_core.regist_area,
-		m_merchant_core.regist_address_detail,m_merchant_bank.open_bank,m_merchant_bank.account_no,
-		m_merchant_bank.account_card_id,m_merchant_bank.account_phone,m_merchant_bank.open_bank,m_merchant_bank.open_bank_num
-   	
-  </sql>
+ 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
@@ -811,11 +779,4 @@ WHERE
 	) > 0  LIMIT 1
   </select>
   
-  
-  <select id="queryMercCoreById" resultMap="EntityZXYHMercInfoMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_ZXYH_List" />
-    from m_merchant_core,m_merchant_contact ,m_merchant_bank 
-    where  (m_merchant_core.inner_code = m_merchant_contact.inner_code) AND (m_merchant_contact.inner_code = m_merchant_bank.inner_code) and id = #{id,jdbcType=INTEGER}
-  </select>
 </mapper>

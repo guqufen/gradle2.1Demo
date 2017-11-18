@@ -1764,7 +1764,7 @@ function showQrcode(id){
 //调用中信银行接口入驻独立商户
 function zxyhChannel(id){
 	$.ajax({
-	    url:PROJECT_NAME+'/web/zxyh/basicInfo',
+	    url:PROJECT_NAME+'/web/zxyh/enterMerc',
 	    type:'get',
 	    dataType : "json",
 //	    data:{'id':id},
