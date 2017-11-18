@@ -630,33 +630,36 @@
 											</select>
 										</div>
 										<div class="col-sm-4">
-											<label class="control-label" for="etpsAttr">商户性质：</label> 
-											<select  class="form-control etpsAttr" id="etpsAttr">
+											<label class="control-label" for="etpsAttr1">商户性质：</label> 
+											<select  class="form-control etpsAttr1" id="etpsAttr1" name="etpsAttr1">
 												<option value="1">政府机构</option>
 												<option value="2">国营企业</option>
 												<option value="3">私营企业</option>
 												<option value="4">外资企业</option>
-												<option value="5">个体工商户</option>
+												<option value="5" selected="selected">个体工商户</option>
 												<option value="6">事业单位</option>
 											</select>
 										</div>
 										<div class="col-sm-4">
-											<label class="control-label" for="provinceIdChange">商户所属省：</label> 
-											<select  class="form-control posProvince" id="provinceIdChange" name="provinceIdChange" onchange="processSelect('Change',true)">
+											<label class="control-label" for="registProvince1">商户所属省：</label> 
+											<select  class="form-control addSelect " id="registProvince1" name="registProvince1" onchange="processSelect('Change',true)">
 												<option value="">--选择省--</option>
 											</select>
+											<input type="hidden" name="registProvinceName">
 										</div>
 										<div class="col-sm-4">
 											<label class="control-label" for="cityIdChange">商户所属市：</label> 
-											<select  class="form-control posCity" id="cityIdChange" name="cityIdChange" onchange="processSelect('Change',false)">
+											<select  class="form-control addSelect registCity" id="registCity1" name="registCity1" onchange="processSelect('Change',false)">
 												<option value="">--选择市--</option>
 											</select>
+											<input type="hidden" name="registCityName">
 										</div>
 										<div class="col-sm-4">
-											<label class="control-label" for="areaIdChange">商户所属区：</label> 
-											<select  class="form-control posArea" id="areaIdChange" name="areaIdChange">
+											<label class="control-label" for="registArea1">商户所属区：</label> 
+											<select  class="form-control registArea addSelect" id="registArea1" name="registArea1">
 												<option value="">--选择区--</option>
 											</select>
+											<input type="hidden" name="registAreaName">
 										</div>
 										<input type="hidden" name="merId" />
 									</div>
