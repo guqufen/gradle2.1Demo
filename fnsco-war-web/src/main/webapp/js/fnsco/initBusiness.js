@@ -125,11 +125,17 @@ $('#btn_select_business').click(function(){
   $(".entityMerName.active").parents().next().next().next().next().find('.legalPersonMobile').val(select_data.legalPersonMobile);
   $(".entityMerName.active").parents().next().next().next().next().next().find('.cardNum').val(select_data.cardNum);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
-  
+
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().find('.registAddress').val(select_data.registAddressDetail);
-  $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
-  $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
-  $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
+  $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().next().next().find('.etpsAttr').find("option[value="+select_data.etpsAttr+"]").attr("selected",true);
+  $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().next().next().next().find('.registProvince').find("option[value="+select_data.registProvince+"]").attr("selected",true);
+  merProcessSelect(true);
+  $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().next().next().next().next().find('.registCity').find("option[value="+select_data.registCity+"]").attr("selected",true);
+  merProcessSelect(false);
+  $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().next().next().next().next().next().find('.registArea').find("option[value="+select_data.registArea+"]").attr("selected",true);
+  // $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
+  // $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
+  // $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
   $('#businessModal').modal('hide');
   $(".entityMerName").removeClass('active');
   // $(".subBankName").removeClass('active');
