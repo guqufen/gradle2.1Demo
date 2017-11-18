@@ -118,6 +118,9 @@
       <if test="etpsTp != null" >
         etps_tp,
       </if>
+      <if test="registAddressDetail != null" >
+        regist_address_detail,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -167,20 +170,24 @@
       </if>
       <!-- 新增地区、商户性质商户类别字段 -->
       <if test="registProvince != null" >
-        #{regist_province,jdbcType=VARCHAR},
+        #{registProvince,jdbcType=VARCHAR},
       </if>
       <if test="registCity != null" >
-        #{regist_city,jdbcType=VARCHAR},
+        #{registCity,jdbcType=VARCHAR},
       </if>
       <if test="registArea != null" >
-        #{regist_area,jdbcType=VARCHAR},
+        #{registArea,jdbcType=VARCHAR},
       </if>
       <if test="etpsAttr != null" >
-        #{etps_attr,jdbcType=INTEGER},
+        #{etpsAttr,jdbcType=INTEGER},
       </if>
       <if test="etpsTp != null" >
-        #{etps_tp,jdbcType=INTEGER},
+        #{etpsTp,jdbcType=INTEGER},
       </if>
+      <if test="registAddressDetail != null" >
+        #{registAddressDetail,jdbcType=VARCHAR},
+      </if>
+      
     </trim>
   </insert>
   

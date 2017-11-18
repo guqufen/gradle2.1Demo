@@ -48,10 +48,19 @@ public class MerchantEntity {
     private Integer registArea;//区
     private Integer etpsAttr;//商户性质
     private Integer etpsTp;//商户种类
+    private String registAddressDetail;//手写详细地址
 
 	
 
 	
+
+	public String getRegistAddressDetail() {
+		return registAddressDetail;
+	}
+
+	public void setRegistAddressDetail(String registAddressDetail) {
+		this.registAddressDetail = registAddressDetail;
+	}
 
 	public Integer getRegistProvince() {
 		return registProvince;
