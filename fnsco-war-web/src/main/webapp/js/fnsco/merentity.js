@@ -251,12 +251,12 @@ function editData(id){
                 $("#businessLicenseNum").val(entity.businessLicenseNum);
                 $("#id").val(entity.id);
                 $("#etpsAttr").find("option[value="+entity.etpsAttr+"]").attr("selected",true);
-                merProvince();
-                $("#registProvince").find("option[value="+entity.registProvince+"]").attr("selected",true);
-                merProcessSelect(true);
-                $("#registCity").find("option[value="+entity.registCity+"]").attr("selected",true);
-                merProcessSelect(false);
-                $("#registArea").find("option[value="+entity.registArea+"]").attr("selected",true);
+                merProvince("0");
+                $("#registProvince0").find("option[value="+entity.registProvince+"]").attr("selected",true);
+                merProcessSelect("0",true);
+                $("#registCity0").find("option[value="+entity.registCity+"]").attr("selected",true);
+                merProcessSelect("0",false);
+                $("#registArea0").find("option[value="+entity.registArea+"]").attr("selected",true);
                 $("#registAddressDetail").val(entity.registAddressDetail);
         	}else{
         		layer.msg('系统异常!'+e);

@@ -1625,6 +1625,16 @@ function detailsData(id){
         $('input[name="registAddress2"]').val(data.data.registAddress);
         $('input[name="mercFlag2"]').val(data.data.mercFlag);
 
+        $('#etpsAttr2').find("option[value="+data.data.etpsAttr+"]").attr("selected",true);
+        merProvince("2");
+        $('#registProvince2').find("option[value="+data.data.registProvince+"]").attr("selected",true);
+        merProcessSelect("2",true);
+        $('#registCity2').find("option[value="+data.data.registCity+"]").attr("selected",true);
+        merProcessSelect("2",false);
+        $('#registArea2').find("option[value="+data.data.registArea+"]").attr("selected",true);
+
+
+
         $('#entityMerName2').val(data.data.entityMerName);
         $('#entityMerName2').next('.entityInnerCode').val(data.data.entityInnerCode);
         requestAgent(data.data.agentId);
