@@ -1227,7 +1227,6 @@ $(".nextBtn").click(function(){
 
 //生成表格里的编辑事件
 function editData(id){
-    posProvince('Change');
    $.ajax({
     url:PROJECT_NAME+'/web/merchantinfo/queryAllById',
     type:'POST',
