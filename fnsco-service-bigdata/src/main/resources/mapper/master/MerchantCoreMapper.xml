@@ -104,6 +104,11 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="agent_id" property="agentId" jdbcType="INTEGER" />
+    <result column="regist_province" property="registProvince" jdbcType="INTEGER" />
+    <result column="regist_city" property="registCity" jdbcType="INTEGER" />
+    <result column="regist_area" property="etpsAttr" jdbcType="INTEGER" />
+    <result column="regist_address_detail" property="registAddressDetail" jdbcType="INTEGER" />
+    <result column="etps_attr" property="etpsTp" jdbcType="INTEGER" />
   	<collection property="channel" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantChannelDao.selectByInnerCode" />
   	<collection property="files" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantFileDao.queryByInnerCode"/>
   	<collection property="contacts" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantContactDao.queryByInnerCode" />
@@ -114,7 +119,7 @@
     id, agent_id,inner_code, mer_name, abbreviation, en_name, sign_date, legal_person, legal_person_mobile, 
     legal_person_tel, legal_valid_card_type, card_num, card_valid_time, business_license_num, 
     business_license_valid_time, tax_regist_code, regist_address, merc_flag, source, 
-    modify_user_id, modify_time, status
+    modify_user_id, modify_time, status,regist_province,regist_city,regist_area,regist_address_detail,etps_attr
   </sql>
   <sql id="Base_Column_CH_List" >
     CO.id, CO.agent_id,CO.inner_code, CO.mer_name, CO.abbreviation, CO.en_name, CO.sign_date, CO.legal_person, CO.legal_person_mobile, 
@@ -220,6 +225,22 @@
       <if test="agentId != null" >
         agent_id,
       </if>
+      <!-- 新增字段 -->
+      <if test="registProvince != null" >
+        regist_province,
+      </if>
+      <if test="registCity != null" >
+        regist_city,
+      </if>
+      <if test="registArea != null" >
+        regist_area,
+      </if>
+      <if test="etpsAttr != null" >
+        etps_attr,
+      </if>
+      <if test="etpsTp != null" >
+        etps_tp,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -287,6 +308,22 @@
       </if>
       <if test="agentId != null" >
         #{agentId,jdbcType=INTEGER},
+      </if>
+      <!-- 新增字段 -->
+      <if test="registProvince != null" >
+         #{registProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="registCity != null" >
+        #{registCity,jdbcType=VARCHAR},
+      </if>
+      <if test="registArea != null" >
+        #{registArea,jdbcType=VARCHAR},
+      </if>
+      <if test="etpsAttr != null" >
+        #{etpsAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="etpsTp != null" >
+        #{etpsTp,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
