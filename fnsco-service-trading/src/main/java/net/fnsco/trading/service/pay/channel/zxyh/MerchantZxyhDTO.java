@@ -1,5 +1,7 @@
 package net.fnsco.trading.service.pay.channel.zxyh;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 public class MerchantZxyhDTO {
     public void init(String pid) {
         this.setIsISV("1");//填写数字，1=是，0=否
@@ -36,7 +38,7 @@ public class MerchantZxyhDTO {
     private String WXActive;         //   是否开通微信  String  必填  Y-是 N-否
     private String mainMchtTp;       //  微信主商户号类型    String  WXActive=Y时必填   00-医疗教育类 01-公共事业类 02-其他类 
     //            03-WAP
-    //            olCode1 微信支付方式  String  WXActive=Y时必填   支付方式编码，可填多个，以“|”分割
+    private String olCode1;          //微信支付方式  String  WXActive=Y时必填   支付方式编码，可填多个，以“|”分割
     //            01-被扫  
     //            02-主扫  
     //            03-公众号支付
@@ -515,7 +517,7 @@ public class MerchantZxyhDTO {
      * @return  the wXActive
      * @since   CodingExample Ver 1.0
     */
-
+    @JSONField(name = "WXActive")
     public String getWXActive() {
         return WXActive;
     }
@@ -669,7 +671,7 @@ public class MerchantZxyhDTO {
      * @return  the zFBActive
      * @since   CodingExample Ver 1.0
     */
-
+    @JSONField(name = "ZFBActive")
     public String getZFBActive() {
         return ZFBActive;
     }
@@ -845,7 +847,7 @@ public class MerchantZxyhDTO {
      * @return  the bDActive
      * @since   CodingExample Ver 1.0
     */
-
+    @JSONField(name = "BDActive")
     public String getBDActive() {
         return BDActive;
     }
@@ -856,7 +858,7 @@ public class MerchantZxyhDTO {
      * @param   bDActive    the bDActive to set
      * @since   CodingExample Ver 1.0
      */
-
+    @JSONField(name = "BDActive")
     public void setBDActive(String bDActive) {
         BDActive = bDActive;
     }

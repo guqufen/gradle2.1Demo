@@ -28,11 +28,13 @@ public class ZxyhPaymentService extends OrderPaymentService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public void mchtadd() {
-        String pid = env.getProperty("alipay.pid");
+    public void mechAdd() {
+        String pid = env.getProperty("zxyh.alipay.pid");
+        String merId = env.getProperty("zxyh.merId");
         String url = "/MPayTransaction/ind/mchtadd.do";
         MerchantZxyhDTO mercDTO = new MerchantZxyhDTO();
         mercDTO.init(pid);
+        mercDTO.setMerId(merId);
         String mercStr = JSON.toJSONString(mercDTO);
         Map<String, String> mercMap = JSON.parseObject(mercStr, Map.class);
         String respStr = ZxyhPayMD5Util.request(mercMap, url);

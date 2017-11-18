@@ -19,6 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
+
+import net.fnsco.trading.service.pay.channel.zxyh.MerchantZxyhDTO;
 
 /**
  * 中信银行杭州分行-移动收单平台接口MD5签名/验签示例代码
@@ -39,12 +42,12 @@ public class ZxyhPayMD5Util {
      * 请求的目标URL
      * 配置在此处仅为演示方便，正式生产代码中，应该做外置可配置处理
      */
-    private static String         reqUrl               = "https://120.27.165.177:9001/MPay/backTransAction.do";
+    private static String         reqUrl               = "https://120.27.165.177:9001";                                                     ///MPay/backTransAction.do";
     /**MD5加密方式
      * 用于数据电子签名使用的MD5密钥，由中信银行开商户时自动生成，请妥善保管
      * 配置在此处仅为演示方便，正式生产代码中，商户应该将其外置于安全的地方，且妥善保护该密钥，如有泄露，请第一时间通知我行进行变更！！！
      */
-    private static String         md5key               = "85925831831191481934561344882551";
+    private static String         md5key               = "83091094209057371094820737983886";
 
     private final static String[] hexDigits            = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
 
@@ -201,21 +204,20 @@ public class ZxyhPayMD5Util {
 
         //尾部加上md5key签名		
         sb.append("&key=").append(md5key);
-        System.out.println("加签报文：" + sb.substring(1));
+        logger.info("加签报文：" + sb.substring(1));
 
         try {
 
             String signAture = MD5Encode(sb.substring(1)).toUpperCase();
-            System.out.println("本地加签后的：" + signAture);
-            String respSign = respJs.get("signAture").toString();
-            respSign = respSign.substring(1, respSign.length() - 1);
-            System.out.println("接收报文中的：" + respSign);
+            logger.info("本地加签后的：" + signAture);
+            String respSign = (String) respJs.get("signAture");
+            logger.info("接收报文中的：" + respSign);
 
-            if (respSign.equals(signAture)) {
-                System.out.println("md5 OK!");
-            } else
-                System.out.println("md5 ERROR!");
-
+            if (signAture.equals(respSign)) {
+                logger.info("md5 OK!");
+            } else {
+                logger.error("md5 ERROR!");
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -280,7 +282,7 @@ public class ZxyhPayMD5Util {
         return postReq(requrl, req, DEFAULT_CONN_TIMEOUT, DEFAULT_READ_TIMEOUT);
     }
 
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         //构建演示用报文！！！注意，此为演示用报文，请勿用于生产！！！
         Map<String, String> reqMap = new HashMap<String, String>();
         reqMap.put("backEndUrl", "http://www.baidu.com"); //后台通知地址,商户端接收支付网关异步通知回调地址，此处配置仅做演示
@@ -308,5 +310,63 @@ public class ZxyhPayMD5Util {
         //解析返回报文
         Map<String, Object> respMap = getResp(respStr);
         System.out.println(JSON.toJSON(respMap).toString());
+    }
+    
+    public static void main(String[] args){
+        String pid = "2088022294504639";
+        String merId = "994400000000009";
+        String url = "/MPayTransaction/ind/mchtadd.do";
+        MerchantZxyhDTO mercDTO = new MerchantZxyhDTO();
+        mercDTO.init(pid);
+        mercDTO.setMerId(merId);
+        mercDTO.setMchtNm("杭州法奈昇科技有限公司");
+        mercDTO.setMchtCnAbbr("法奈昇科");
+        mercDTO.setEtpsAttr("3");
+        mercDTO.setEtpsTp("1");
+        mercDTO.setMchtTel("18668096830");
+        mercDTO.setContact("胡滨");
+        mercDTO.setCommTel("18668096830");
+        mercDTO.setCommEmail("18668096830@139.com");
+        mercDTO.setLicenceNo("913301030536607660");
+        mercDTO.setManager("胡滨");
+        mercDTO.setIdentityNo("330182198109183158");
+        mercDTO.setProvCode("330000");
+        mercDTO.setCityCode("330100");
+        mercDTO.setAreaCode("330109");
+        mercDTO.setAddr("信息港");
+        /////////////////////
+        mercDTO.setWXActive("N");
+        mercDTO.setMainMchtTp("02");
+         
+        //////////支付宝//////////////////
+        mercDTO.setZFBActive("Y");
+        mercDTO.setMainMchtTpA("D1");
+        mercDTO.setOlCodeA("D1|D2");//支付方式编码，可填多个，以“|”分割；D1-二清被扫 D2-二清主扫
+        mercDTO.setCategIdC("2016042200000148");
+        mercDTO.setFeeRateA("1");
+        mercDTO.setSettleCycleA("D0");//---填写字母，T1一工作日、D1一天、D0
+        //////////百度///////////
+        mercDTO.setBDActive("N");
+        //////////银行信息///////////
+        mercDTO.setThirdMchtNo("071211347434539");
+        mercDTO.setIsOrNotZxMchtNo("N");
+        mercDTO.setAcctType("1");//填写数字1-企业账户，2-个人账 户。
+        mercDTO.setSettleAcctNm("胡滨");
+        mercDTO.setSettleAcct("6210580199002792916");
+        mercDTO.setAccIdeNo("330182198109183158");
+        mercDTO.setAccPhone("18668096830");
+        mercDTO.setSettleBankAllName("杭州联合农村商业银行股份有限公司吴山支行");
+        mercDTO.setSettleBankCode("402331000912");
+        mercDTO.setApType("1");//1-新增 
+        mercDTO.setSignMethod("02");//02-MD5  03-RSA
+        
+        String mercStr = JSON.toJSONString(mercDTO);
+        Map<String, String> mercMap = JSON.parseObject(mercStr, Map.class);
+        String respStr = ZxyhPayMD5Util.request(mercMap, url);
+        //解析返回报文
+        Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+        //{respMsg=签名校验异常, txnTime=20171116161243314, respCode=5017}
+        //{"respCode":"0000","signMethod":"02","respMsg":"新增商户成功","secMerId":"999900000010598","signAture":"5E335BBAF3FF5BD7C988416B85156F8D","txnTime":"20171117110340745"}
+        String resultJson = "";
     }
 }
