@@ -131,6 +131,10 @@ $('.sunmitBtn').click(function(){
     var legalPersonMobile=$.trim($("#legalPersonMobile").val());
     var cardNum=$.trim($("#cardNum").val());
     var businessLicenseNum=$.trim($("#businessLicenseNum").val());
+    var etpsAttr=$.trim($("#etpsAttr").val());
+    var registProvince=$.trim($("#registProvince").val());
+    var registCity=$.trim($("#registCity").val());
+    var registArea=$.trim($("#registArea").val());
     
     if(mercName=="" || (mercName != '' && mercName.length > 40)){
         layer.msg('商户名称不合法!请重新输入');
@@ -159,6 +163,25 @@ $('.sunmitBtn').click(function(){
         return false;
     }
     
+    if(etpsAttr==''){
+        layer.msg('商户性质不合法!请重新输入');
+        return false;
+    }
+
+    if(registProvince==''){
+        layer.msg('请选择商户所在省！');
+        return false;
+    }
+    if(registCity==''){
+        layer.msg('请选择商户所在市！');
+        return false;
+    }
+    if(registArea==''){
+        layer.msg('请选择商户所在区县！');
+        return false;
+    }
+    console.log($('#addForm').serialize());
+    return;
 	$.ajax({
 		url:PROJECT_NAME+'/web/merchantentity/toAdd',
 		type:'POST',
@@ -216,6 +239,7 @@ function editData(id){
         success:function(data){
         	unloginHandler(data);
         	var entity = data.data;
+            console.log(data);
         	if(data.success){
         		var entity = data.data;
                 $("#myModal").modal();
