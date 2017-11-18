@@ -180,7 +180,7 @@
       </if>
       <!-- 新增地区、商户性质商户类别字段 -->
       <if test="registAddress != null" >
-        #{regist_address,jdbcType=VARCHAR},
+        #{registAddress,jdbcType=VARCHAR},
       </if>
       <if test="registProvince != null" >
         #{registProvince,jdbcType=VARCHAR},
