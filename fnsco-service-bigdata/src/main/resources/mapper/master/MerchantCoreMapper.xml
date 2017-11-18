@@ -220,6 +220,22 @@
       <if test="agentId != null" >
         agent_id,
       </if>
+      <!-- 新增字段 -->
+      <if test="registProvince != null" >
+        regist_province,
+      </if>
+      <if test="registCity != null" >
+        regist_city,
+      </if>
+      <if test="registArea != null" >
+        regist_area,
+      </if>
+      <if test="etpsAttr != null" >
+        etps_attr,
+      </if>
+      <if test="etpsTp != null" >
+        etps_tp,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -287,6 +303,22 @@
       </if>
       <if test="agentId != null" >
         #{agentId,jdbcType=INTEGER},
+      </if>
+      <!-- 新增字段 -->
+      <if test="registProvince != null" >
+         #{registProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="registCity != null" >
+        #{registCity,jdbcType=VARCHAR},
+      </if>
+      <if test="registArea != null" >
+        #{registArea,jdbcType=VARCHAR},
+      </if>
+      <if test="etpsAttr != null" >
+        #{etpsAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="etpsTp != null" >
+        #{etpsTp,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

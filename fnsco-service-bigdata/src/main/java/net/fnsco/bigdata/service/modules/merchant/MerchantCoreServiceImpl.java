@@ -21,6 +21,7 @@ import com.beust.jcommander.internal.Maps;
 
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
+import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.AgentDao;
 import net.fnsco.bigdata.service.dao.master.AppUserMerchant1Dao;
 import net.fnsco.bigdata.service.dao.master.MerchantBankDao;
@@ -99,6 +100,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     
     @Autowired
     private MerchantEntityDao   merchantEntityDao;
+    @Autowired
+	private MerchantEntityService merchantEntityService;
 
     /**
      * @todo 新增加商家
@@ -397,7 +400,11 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             }
             merchantCore.setStatus(1);
             merchantCore.setLegalValidCardType("0");//身份证
-            
+          //根据商户性质获取商户种类
+            if(merchantCore.getEtpsAttr() != null){
+    			int etps_tp = merchantEntityService.getEtpsTypeByEtpsAttra(merchantCore.getEtpsAttr());
+    			merchantCore.setEtpsTp(etps_tp);
+    		}
             int res = merchantCoreDao.insertSelective(merchantCore);
             if (res != 1) {
                 return ResultDTO.fail();
@@ -707,8 +714,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         merchantCoreEntityZxyhDTO.setMchtNm(core.getMerName());//商户全称
         merchantCoreEntityZxyhDTO.setMchtCnAbbr(core.getAbbreviation());//商户简称
-        merchantCoreEntityZxyhDTO.setEtpsAttr(core.getEtps_attr().toString());//商户性质
-        merchantCoreEntityZxyhDTO.setEtpsTp(core.getEtps_tp().toString());//商户种类
+        merchantCoreEntityZxyhDTO.setEtpsAttr(core.getEtpsAttr().toString());//商户性质
+        merchantCoreEntityZxyhDTO.setEtpsTp(core.getEtpsTp().toString());//商户种类
         merchantCoreEntityZxyhDTO.setMchtTel(core.getLegalPersonMobile());//商户电话
         merchantCoreEntityZxyhDTO.setContact(merchantContact.getContactName());//联系人姓名
         merchantCoreEntityZxyhDTO.setCommTel(merchantContact.getContactMobile());//联系人电话
@@ -716,9 +723,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         merchantCoreEntityZxyhDTO.setLicenceNo(core.getBusinessLicenseNum());//营业执照号
         merchantCoreEntityZxyhDTO.setManager(core.getLegalPerson());//法人姓名
         merchantCoreEntityZxyhDTO.setIdentityNo(core.getCardNum());//法人身份证号码   正确身份证格式
-        merchantCoreEntityZxyhDTO.setProvCode(core.getRegist_province().toString());//商户所属省
-        merchantCoreEntityZxyhDTO.setCityCode(core.getRegist_city().toString());//商户所属市
-        merchantCoreEntityZxyhDTO.setAreaCode(core.getRegist_area().toString());//商户所属区
+        merchantCoreEntityZxyhDTO.setProvCode(core.getRegistProvince().toString());//商户所属省
+        merchantCoreEntityZxyhDTO.setCityCode(core.getRegistCity().toString());//商户所属市
+        merchantCoreEntityZxyhDTO.setAreaCode(core.getRegistArea().toString());//商户所属区
         merchantCoreEntityZxyhDTO.setAddr(core.getRegistAddress());//详细地址  20字以内
         merchantCoreEntityZxyhDTO.setSettleAcctNm(merchantBank.getAccountName());//结算开户名
         merchantCoreEntityZxyhDTO.setSettleAcct(merchantBank.getAccountNo());//开户账号  40以内数字
