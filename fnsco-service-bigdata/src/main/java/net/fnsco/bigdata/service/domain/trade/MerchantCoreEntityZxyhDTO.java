@@ -4,8 +4,9 @@ import java.util.List;
 
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantContact;
+import net.fnsco.core.base.DTO;
 
-public class MerchantCoreEntityZxyhDTO {
+public class MerchantCoreEntityZxyhDTO{
 		
 		private Integer id;
 	    public Integer getId() {

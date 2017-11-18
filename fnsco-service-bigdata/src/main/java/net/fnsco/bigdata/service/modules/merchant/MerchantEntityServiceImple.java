@@ -168,7 +168,7 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 	 * 
 	 */
 	@Override
-	public Integer getEtps_TypeByEtps_attra(int etps_attr) {
+	public Integer getEtpsTypeByEtpsAttra(int etps_attr) {
 		switch (etps_attr) {
 		case 1:
 			return 1;

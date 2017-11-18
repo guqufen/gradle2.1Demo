@@ -43,50 +43,54 @@ public class MerchantEntity {
     private BigDecimal scores;
     
     //新增字段
-    private Integer regist_province;//省
-    private Integer regist_city;//市
-    private Integer regist_area;//区
-    private Integer etps_attr;//商户性质
-    private Integer etps_tp;//商户种类
+    private Integer registProvince;//省
+    private Integer registCity;//市
+    private Integer registArea;//区
+    private Integer etpsAttr;//商户性质
+    private Integer etpsTp;//商户种类
 
-	public Integer getRegist_province() {
-		return regist_province;
+	
+
+	
+
+	public Integer getRegistProvince() {
+		return registProvince;
 	}
 
-	public void setRegist_province(Integer regist_province) {
-		this.regist_province = regist_province;
+	public void setRegistProvince(Integer registProvince) {
+		this.registProvince = registProvince;
 	}
 
-	public Integer getRegist_city() {
-		return regist_city;
+	public Integer getRegistCity() {
+		return registCity;
 	}
 
-	public void setRegist_city(Integer regist_city) {
-		this.regist_city = regist_city;
+	public void setRegistCity(Integer registCity) {
+		this.registCity = registCity;
 	}
 
-	public Integer getRegist_area() {
-		return regist_area;
+	public Integer getRegistArea() {
+		return registArea;
 	}
 
-	public void setRegist_area(Integer regist_area) {
-		this.regist_area = regist_area;
+	public void setRegistArea(Integer registArea) {
+		this.registArea = registArea;
 	}
 
-	public Integer getEtps_attr() {
-		return etps_attr;
+	public Integer getEtpsAttr() {
+		return etpsAttr;
 	}
 
-	public void setEtps_attr(Integer etps_attr) {
-		this.etps_attr = etps_attr;
+	public void setEtpsAttr(Integer etpsAttr) {
+		this.etpsAttr = etpsAttr;
 	}
 
-	public Integer getEtps_tp() {
-		return etps_tp;
+	public Integer getEtpsTp() {
+		return etpsTp;
 	}
 
-	public void setEtps_tp(Integer etps_tp) {
-		this.etps_tp = etps_tp;
+	public void setEtpsTp(Integer etpsTp) {
+		this.etpsTp = etpsTp;
 	}
 
 	public BigDecimal getScores() {

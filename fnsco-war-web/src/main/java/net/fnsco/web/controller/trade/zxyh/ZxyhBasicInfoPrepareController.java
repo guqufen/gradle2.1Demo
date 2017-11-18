@@ -30,8 +30,8 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 	
 	@Autowired
 	private MerchantCoreService merchantCoreService;
-	@Autowired
-	private MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO;
+//	@Autowired
+//	private MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO;
 	
 	/**
 	 * 入驻中信银行的controller
