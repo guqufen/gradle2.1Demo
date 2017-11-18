@@ -43,16 +43,51 @@ public class MerchantEntity {
     private BigDecimal scores;
     
     //新增字段
-    private Integer registProvince;//省
+    private String registAddress; //拼接的详细地址
+	private Integer registProvince;//省
     private Integer registCity;//市
     private Integer registArea;//区
     private Integer etpsAttr;//商户性质
     private Integer etpsTp;//商户种类
     private String registAddressDetail;//手写详细地址
+    
+    private String registProvinceName;  //省名称
+    private Integer registCityName; //市名称
+    private Integer registAreaName; //区名称
 
 	
 
-	
+    public String getRegistAddress() {
+		return registAddress;
+	}
+
+	public void setRegistAddress(String registAddress) {
+		this.registAddress = registAddress;
+	}
+
+	public String getRegistProvinceName() {
+		return registProvinceName;
+	}
+
+	public void setRegistProvinceName(String registProvinceName) {
+		this.registProvinceName = registProvinceName;
+	}
+
+	public Integer getRegistCityName() {
+		return registCityName;
+	}
+
+	public void setRegistCityName(Integer registCityName) {
+		this.registCityName = registCityName;
+	}
+
+	public Integer getRegistAreaName() {
+		return registAreaName;
+	}
+
+	public void setRegistAreaName(Integer registAreaName) {
+		this.registAreaName = registAreaName;
+	}
 
 	public String getRegistAddressDetail() {
 		return registAddressDetail;

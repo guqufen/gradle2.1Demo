@@ -17,7 +17,7 @@
     <result column="last_modefy_timer" property="lastModefyTimer" jdbcType="TIMESTAMP" />
     <result column="last_modefy_user_id" property="lastModefyUserId" jdbcType="INTEGER" />
     <result column="scores" property="scores" jdbcType="DECIMAL" />
-    
+    <result column="regist_address" property="registAddress" jdbcType="VARCHAR" />
     <result column="regist_province" property="registProvince" jdbcType="INTEGER" />
     <result column="regist_city" property="registCity" jdbcType="INTEGER" />
     <result column="regist_area" property="registArea" jdbcType="INTEGER" />
@@ -29,7 +29,7 @@
   <sql id="Base_Column_List" >
     id, entity_inner_code, merc_name, legal_person, legal_person_mobile, business_license_num, 
     card_type, card_num, status, create_timer, create_source, create_user_id, last_modefy_timer, 
-    last_modefy_user_id,scores,regist_province,regist_city,regist_area,regist_address_detail,etps_attr
+    last_modefy_user_id,scores,regist_address,regist_province,regist_city,regist_area,regist_address_detail,etps_attr
   </sql>
  <!-- 店铺列表结果集 -->
   <resultMap id="MerShopResultMap" type="net.fnsco.bigdata.api.dto.MerchantShopDTO" >
@@ -110,6 +110,9 @@
         scores,
       </if>
       <!-- 新增地区、商户性质商户类别字段 -->
+      <if test="registAddress != null" >
+        regist_address,
+      </if>
       <if test="registProvince != null" >
         regist_province,
       </if>
@@ -176,6 +179,9 @@
         #{scores,jdbcType=DECIMAL},
       </if>
       <!-- 新增地区、商户性质商户类别字段 -->
+      <if test="registAddress != null" >
+        #{regist_address,jdbcType=VARCHAR},
+      </if>
       <if test="registProvince != null" >
         #{registProvince,jdbcType=VARCHAR},
       </if>
@@ -244,6 +250,9 @@
         scores = #{scores,jdbcType=DECIMAL},
       </if>
       <!-- 新增字段 -->
+       <if test="registAddress != null" >
+        regist_address = #{registAddress,jdbcType=VARCHAR},
+      </if>
       <if test="registProvince != null" >
         regist_province = #{registProvince,jdbcType=INTEGER},
       </if>

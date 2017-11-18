@@ -83,7 +83,11 @@ public class MerchantEntityController extends BaseController {
 			merchantEntity.setEtpsTp(etps_tp);
 		}
 		//拼接详细信息
-		
+		StringBuilder sb = new StringBuilder();
+		merchantEntity.setRegistAddress(sb.append(merchantEntity.getRegistProvinceName())
+						.append(merchantEntity.getRegistCityName())
+						.append(merchantEntity.getRegistAreaName())
+						.append(merchantEntity.getRegistAddressDetail()).toString());
 		if(null == merchantEntity.getId()) {
 			merchantEntity.setCreateSource("0");
 			merchantEntity.setCreateTimer(new Date());
