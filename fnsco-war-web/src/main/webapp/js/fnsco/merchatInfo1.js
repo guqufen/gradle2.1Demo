@@ -454,7 +454,7 @@ $('#btn_delete').click(function(){
 
 
 $("#btn_add").click(function(){
-  merProvince();
+  merProvince("0");
 })
 
 //选择银行支行事件
@@ -1290,6 +1290,14 @@ function editData(id){
         $('input[name="registAddress1"]').val(data.data.registAddress);
         $('input[name="mercFlag1"]').val(data.data.mercFlag);
 
+        $('#etpsAttr1').find("option[value="+data.data.etpsAttr+"]").attr("selected",true);
+        merProvince("1");
+        $('#registProvince1').find("option[value="+data.data.registProvince+"]").attr("selected",true);
+        merProcessSelect("1",true);
+        $('#registCity1').find("option[value="+data.data.registCity+"]").attr("selected",true);
+        merProcessSelect("1",false);
+        $('#registArea1').find("option[value="+data.data.registArea+"]").attr("selected",true);
+
         $('#entityMerName1').val(data.data.entityMerName);
         $('#entityMerName1').next('.entityInnerCode').val(data.data.entityInnerCode);
         requestAgent(data.data.agentId);
@@ -1475,8 +1483,14 @@ function editData(id){
             var entityMerName = $('#entityMerName1').val();
             var entityInnerCode = $('#entityMerName1').next('input[name="entityInnerCode"]').val();
             var innerCode=$('#innerCode').val();
+            // 新增字段 商户性质 商户所属省市区
+            var  etpsAttr=$("#etpsAttr1").val();
+            var  registProvince=$("#registProvince1").val();
+            var  registCity=$("#registCity1").val();
+            var  registArea=$("#registArea1").val();
+
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
-                'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'entityMerName':entityMerName,'innerCode':innerCode};
+                'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'entityMerName':entityMerName,'innerCode':innerCode,'etpsAttr':etpsAttr,'registProvince':registProvince,'registCity':registCity,'registArea':registArea};
             console.log(params);
             if(entityMerName==''){
               layer.msg('保存失败，实体商户不能为空');return
