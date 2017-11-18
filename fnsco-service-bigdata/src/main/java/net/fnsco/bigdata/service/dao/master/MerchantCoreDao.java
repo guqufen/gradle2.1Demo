@@ -159,10 +159,5 @@ public interface MerchantCoreDao {
      */
     MerchantCore selectUniqueMer(@Param("cardNum") String cardNum,@Param("accountNo") String accountNo,@Param("channelType") String channelType,@Param("channelMerId") String channelMerId);
 
-    /**
-     * 根据id查询核心商户信息
-     * @param id
-     * @return
-     */
-    MerchantCoreEntityZxyhDTO queryMercCoreById(@Param("id") Integer id);
+   
 }

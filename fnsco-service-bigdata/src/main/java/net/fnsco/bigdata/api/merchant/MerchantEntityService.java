@@ -61,5 +61,5 @@ public interface MerchantEntityService {
      * @param etps_attr
      * @return
      */
-	Integer getEtps_TypeByEtps_attra(int etps_attr);
+	Integer getEtpsTypeByEtpsAttra(int etps_attr);
 }

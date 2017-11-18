@@ -103,19 +103,19 @@
         scores,
       </if>
       <!-- 新增地区、商户性质商户类别字段 -->
-      <if test="regist_province != null" >
+      <if test="registProvince != null" >
         regist_province,
       </if>
-      <if test="regist_city != null" >
+      <if test="registCity != null" >
         regist_city,
       </if>
-      <if test="regist_area != null" >
+      <if test="registArea != null" >
         regist_area,
       </if>
-      <if test="etps_attr != null" >
+      <if test="etpsAttr != null" >
         etps_attr,
       </if>
-      <if test="etps_tp != null" >
+      <if test="etpsTp != null" >
         etps_tp,
       </if>
     </trim>
@@ -166,20 +166,20 @@
         #{scores,jdbcType=DECIMAL},
       </if>
       <!-- 新增地区、商户性质商户类别字段 -->
-      <if test="regist_province != null" >
-        #{regist_province,jdbcType=INTEGER},
+      <if test="registProvince != null" >
+        #{regist_province,jdbcType=VARCHAR},
       </if>
-      <if test="regist_city != null" >
-        #{regist_city,jdbcType=INTEGER},
+      <if test="registCity != null" >
+        #{regist_city,jdbcType=VARCHAR},
       </if>
-      <if test="regist_area != null" >
-        #{regist_area,jdbcType=INTEGER},
+      <if test="registArea != null" >
+        #{regist_area,jdbcType=VARCHAR},
       </if>
-      <if test="etps_attr != null" >
-        #{etps_attr,jdbcType=VARCHAR},
+      <if test="etpsAttr != null" >
+        #{etps_attr,jdbcType=INTEGER},
       </if>
-      <if test="etps_tp != null" >
-        #{etps_tp,jdbcType=VARCHAR},
+      <if test="etpsTp != null" >
+        #{etps_tp,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
