@@ -394,6 +394,24 @@
       <if test="agentId != null" >
         agent_id = #{agentId,jdbcType=INTEGER},
       </if>
+	  <if test="registProvince != null" >
+        regist_province = #{registProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="registCity != null" >
+        regist_city = #{registCity,jdbcType=VARCHAR},
+      </if>
+      <if test="registArea != null" >
+        regist_area = #{registArea,jdbcType=VARCHAR},
+      </if>
+      <if test="etpsAttr != null" >
+        etps_attr = #{etpsAttr,jdbcType=INTEGER},
+      </if>
+      <if test="etpsTp != null" >
+        etps_tp = #{etpsTp,jdbcType=INTEGER},
+      </if>
+      <if test="registAddressDetail != null" >
+        regist_address_detail = #{registAddressDetail,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>

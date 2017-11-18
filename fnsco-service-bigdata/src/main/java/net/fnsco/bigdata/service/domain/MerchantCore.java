@@ -96,7 +96,7 @@ public class MerchantCore extends DTO {
 	 private Integer registArea;//区
 	 private Integer etpsAttr;//商户性质
 	 private Integer etpsTp;//商户种类 
-	 private String registAddressDetail;
+	 private String registAddressDetail;                                                                              
 	
 	
 
