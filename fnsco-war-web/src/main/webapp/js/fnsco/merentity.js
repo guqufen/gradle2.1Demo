@@ -135,6 +135,7 @@ $('.sunmitBtn').click(function(){
     var registProvince=$.trim($("#registProvince").val());
     var registCity=$.trim($("#registCity").val());
     var registArea=$.trim($("#registArea").val());
+    var registAddressDetail=$.trim($("#registAddressDetail").val());
     
     if(mercName=="" || (mercName != '' && mercName.length > 40)){
         layer.msg('商户名称不合法!请重新输入');
@@ -181,7 +182,6 @@ $('.sunmitBtn').click(function(){
         return false;
     }
     console.log($('#addForm').serialize());
-    return;
 	$.ajax({
 		url:PROJECT_NAME+'/web/merchantentity/toAdd',
 		type:'POST',
