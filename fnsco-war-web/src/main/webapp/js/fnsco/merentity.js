@@ -135,6 +135,7 @@ $('.sunmitBtn').click(function(){
     var registProvince=$.trim($("#registProvince").val());
     var registCity=$.trim($("#registCity").val());
     var registArea=$.trim($("#registArea").val());
+    var registAddressDetail=$.trim($("#registAddressDetail").val());
     
     if(mercName=="" || (mercName != '' && mercName.length > 40)){
         layer.msg('商户名称不合法!请重新输入');
@@ -181,7 +182,6 @@ $('.sunmitBtn').click(function(){
         return false;
     }
     console.log($('#addForm').serialize());
-    return;
 	$.ajax({
 		url:PROJECT_NAME+'/web/merchantentity/toAdd',
 		type:'POST',
@@ -250,6 +250,14 @@ function editData(id){
                 $("#cardNum").val(entity.cardNum);
                 $("#businessLicenseNum").val(entity.businessLicenseNum);
                 $("#id").val(entity.id);
+                $("#etpsAttr").find("option[value="+entity.etpsAttr+"]").attr("selected",true);
+                merProvince();
+                $("#registProvince").find("option[value="+entity.registProvince+"]").attr("selected",true);
+                merProcessSelect(true);
+                $("#registCity").find("option[value="+entity.registCity+"]").attr("selected",true);
+                merProcessSelect(false);
+                $("#registArea").find("option[value="+entity.registArea+"]").attr("selected",true);
+                $("#registAddressDetail").val(entity.registAddressDetail);
         	}else{
         		layer.msg('系统异常!'+e);
         	}
