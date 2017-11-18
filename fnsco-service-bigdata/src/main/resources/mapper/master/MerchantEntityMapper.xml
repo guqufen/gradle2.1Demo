@@ -17,6 +17,13 @@
     <result column="last_modefy_timer" property="lastModefyTimer" jdbcType="TIMESTAMP" />
     <result column="last_modefy_user_id" property="lastModefyUserId" jdbcType="INTEGER" />
     <result column="scores" property="scores" jdbcType="DECIMAL" />
+    
+    <result column="regist_province" property="registProvince" jdbcType="INTEGER" />
+    <result column="regist_city" property="registCity" jdbcType="INTEGER" />
+    <result column="regist_area" property="registArea" jdbcType="INTEGER" />
+    <result column="regist_address_detail" property="registAddressDetail" jdbcType="VARCHAR" />
+    <result column="etps_tp" property="etpsTp" jdbcType="INTEGER" />
+    <result column="etps_attr" property="etpsAttr" jdbcType="INTEGER" />
   </resultMap>
   
   <sql id="Base_Column_List" >
