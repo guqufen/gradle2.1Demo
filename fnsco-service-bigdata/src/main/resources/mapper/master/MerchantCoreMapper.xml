@@ -106,9 +106,10 @@
     <result column="agent_id" property="agentId" jdbcType="INTEGER" />
     <result column="regist_province" property="registProvince" jdbcType="INTEGER" />
     <result column="regist_city" property="registCity" jdbcType="INTEGER" />
-    <result column="regist_area" property="etpsAttr" jdbcType="INTEGER" />
-    <result column="regist_address_detail" property="registAddressDetail" jdbcType="INTEGER" />
-    <result column="etps_attr" property="etpsTp" jdbcType="INTEGER" />
+    <result column="regist_area" property="registArea" jdbcType="INTEGER" />
+    <result column="regist_address_detail" property="registAddressDetail" jdbcType="VARCHAR" />
+    <result column="etps_attr" property="etpsAttr" jdbcType="INTEGER" />
+    <result column="etps_tp" property="etpsTp" jdbcType="INTEGER" />
   	<collection property="channel" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantChannelDao.selectByInnerCode" />
   	<collection property="files" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantFileDao.queryByInnerCode"/>
   	<collection property="contacts" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantContactDao.queryByInnerCode" />
