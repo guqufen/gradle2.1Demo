@@ -216,6 +216,6 @@ function merProvince(){
 	});
 }
 
-$("#registProvince").change(function(){
-	console.log($("this").html());
+$(".addSelect").change(function(){
+	$(this).next().val($(this).find("option[value="+$(this).val()+"]").html());
 })

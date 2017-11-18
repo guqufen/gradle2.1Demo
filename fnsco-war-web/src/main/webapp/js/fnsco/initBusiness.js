@@ -122,9 +122,13 @@ $('#btn_select_business').click(function(){
   $(".entityMerName.active").val(select_data.mercName);
   $(".entityMerName.active").next('.entityInnerCode').val(select_data.entityInnerCode);
   $(".entityMerName.active").parents().next().next().next().find('.legalPerson').val(select_data.legalPerson);
-  // console.log($(".entityMerName.active").parents().next().next().next().next().find('.form-control').val());
   $(".entityMerName.active").parents().next().next().next().next().find('.legalPersonMobile').val(select_data.legalPersonMobile);
   $(".entityMerName.active").parents().next().next().next().next().next().find('.cardNum').val(select_data.cardNum);
+  $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
+  
+  $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().find('.registAddress').val(select_data.registAddressDetail);
+  $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
+  $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
   $('#businessModal').modal('hide');
   $(".entityMerName").removeClass('active');

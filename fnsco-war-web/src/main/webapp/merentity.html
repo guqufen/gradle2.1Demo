@@ -134,21 +134,24 @@
 								</div>
 								<div class="col-sm-4">
 									<label class="control-label" for="registProvince">商户所属省：</label> 
-									<select  class="form-control" id="registProvince" name="registProvince" onchange="merProcessSelect(true)">
+									<select  class="form-control addSelect" id="registProvince" name="registProvince" onchange="merProcessSelect(true)">
 										<option value="">--选择省--</option>
 									</select>
+									<input type="hidden" name="registProvinceName">
 								</div>
 								<div class="col-sm-4">
 									<label class="control-label" for="registCity">商户所属市：</label> 
-									<select  class="form-control" id="registCity" name="registCity" onchange="merProcessSelect(false)">
+									<select  class="form-control addSelect" id="registCity" name="registCity" onchange="merProcessSelect(false)">
 										<option value="">--选择市--</option>
 									</select>
+									<input type="hidden" name="registCityName">
 								</div>
 								<div class="col-sm-4">
 									<label class="control-label" for="registArea">商户所属区：</label> 
-									<select  class="form-control" id="registArea" name="registArea">
+									<select  class="form-control addSelect" id="registArea" name="registArea">
 										<option value="">--选择区--</option>
 									</select>
+									<input type="hidden" name="registAreaName">
 								</div>
 								<div class="col-sm-4">
 									<label class="control-label" for="registAddressDetail">详细地址：</label> 
