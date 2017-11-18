@@ -52,12 +52,28 @@ public class MerchantEntity {
     private String registAddressDetail;//手写详细地址
     
     private String registProvinceName;  //省名称
-    private Integer registCityName; //市名称
-    private Integer registAreaName; //区名称
+    private String registCityName; //市名称
+    private String registAreaName; //区名称
 
 	
 
-    public String getRegistAddress() {
+    public String getRegistCityName() {
+		return registCityName;
+	}
+
+	public void setRegistCityName(String registCityName) {
+		this.registCityName = registCityName;
+	}
+
+	public String getRegistAreaName() {
+		return registAreaName;
+	}
+
+	public void setRegistAreaName(String registAreaName) {
+		this.registAreaName = registAreaName;
+	}
+
+	public String getRegistAddress() {
 		return registAddress;
 	}
 
@@ -73,21 +89,7 @@ public class MerchantEntity {
 		this.registProvinceName = registProvinceName;
 	}
 
-	public Integer getRegistCityName() {
-		return registCityName;
-	}
-
-	public void setRegistCityName(Integer registCityName) {
-		this.registCityName = registCityName;
-	}
-
-	public Integer getRegistAreaName() {
-		return registAreaName;
-	}
-
-	public void setRegistAreaName(Integer registAreaName) {
-		this.registAreaName = registAreaName;
-	}
+	
 
 	public String getRegistAddressDetail() {
 		return registAddressDetail;
