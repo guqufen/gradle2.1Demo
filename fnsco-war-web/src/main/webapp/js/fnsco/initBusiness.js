@@ -126,7 +126,7 @@ $('#btn_select_business').click(function(){
   $(".entityMerName.active").parents().next().next().next().next().next().find('.cardNum').val(select_data.cardNum);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
 
-  $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().find('.registAddress').val(select_data.registAddressDetail);
+  $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().find('.registAddress').val(select_data.registAddress);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().next().next().find('.etpsAttr').find("option[value="+select_data.etpsAttr+"]").attr("selected",true);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().next().next().next().find('.registProvince').find("option[value="+select_data.registProvince+"]").attr("selected",true);
   merProcessSelect(true);
