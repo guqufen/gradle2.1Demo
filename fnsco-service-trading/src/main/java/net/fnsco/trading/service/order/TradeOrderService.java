@@ -195,7 +195,6 @@ public class TradeOrderService extends BaseService {
                 logger.error("聚惠分支付完成，返回金额数据转换出错",ex);
             }
             tradeOrderDO.setOrderAmount(orderAmountB);
-            tradeOrderDO.setPeriodNum(periodNum);
             tradeOrderDO.setEachMoney(eachMoneyB);
             tradeOrderDO.setCardHolderRate(order.getCardHolderRate());
         }

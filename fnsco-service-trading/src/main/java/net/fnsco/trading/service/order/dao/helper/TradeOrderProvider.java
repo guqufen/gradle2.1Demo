@@ -89,9 +89,6 @@ public class TradeOrderProvider {
         if (tradeOrder.getOrderAmount() != null) {
             SET("order_amount=#{tradeOrder.orderAmount}");
         }
-        if (tradeOrder.getPeriodNum() != null) {
-            SET("period_num=#{tradeOrder.periodNum}");
-        }
         if (tradeOrder.getEachMoney() != null) {
             SET("each_money=#{tradeOrder.eachMoney}");
         }
@@ -176,9 +173,6 @@ public class TradeOrderProvider {
         }
         if (tradeOrder.getOrderAmount() != null) {
             SET("order_amount=#{tradeOrder.orderAmount}");
-        }
-        if (tradeOrder.getPeriodNum() != null) {
-            SET("period_num=#{tradeOrder.periodNum}");
         }
         if (tradeOrder.getEachMoney() != null) {
             SET("each_money=#{tradeOrder.eachMoney}");
