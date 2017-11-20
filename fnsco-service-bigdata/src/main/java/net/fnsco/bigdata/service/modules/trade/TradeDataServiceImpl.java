@@ -166,6 +166,33 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         return true;
     }
+    
+    @Transactional
+    public boolean saveTradeData(TradeData tradeData) {
+    	
+    	if (!Strings.isNullOrEmpty(tradeData.getMd5())) {
+            //需要校验
+            TradeData temp = tradeListDAO.selectByMd5(tradeData.getMd5());
+            if (null != temp) {
+                logger.error("交易流水已存在" + tradeData.getOrderNo() + ",丢弃该交易流水");
+                return true;
+            }
+        }
+    	
+    	long timer = System.currentTimeMillis();
+        tradeListDAO.insert(tradeData);
+        logger.warn("插入流水总耗时" + (System.currentTimeMillis() - timer));
+        String txnType = tradeData.getTxnType();
+        if ("2".equals(txnType)) {
+            TradeData tmp = tradeListDAO.selectByIRT(tradeData);
+            TradeData data = new TradeData();
+            data.setStatus("0");
+            data.setId(tmp.getId());
+            tradeListDAO.updateByPrimaryKeySelective(data);
+        }
+
+    	return false;
+    }
 
     /**
      * 保存交易流水

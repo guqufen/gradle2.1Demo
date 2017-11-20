@@ -82,7 +82,8 @@ public class ServiceConstant {
                                        SK_PAY("00", "刷卡支付"), WX_PAY("01", "微信支付"),
                                        ZFB_PAY("02", "支付宝支付"), YL_PAY("03", "银联钱包"),
                                        BD_PAY("04", "百度钱包"),JD_PAY("05", "京东钱包"),
-                                       LKL_PAY("06", "拉卡拉钱包");
+                                       LKL_PAY("06", "拉卡拉钱包"),QQ_PAY("07","QQ钱包"),
+                                       QT_PAY("08", "其他(无卡或者现金)");
         private String code;
         private String name;
 

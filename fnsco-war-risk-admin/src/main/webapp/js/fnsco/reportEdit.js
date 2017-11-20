@@ -426,7 +426,7 @@ function saveOrUpdate(status){
 	//营业时长
 	var businessDueTime = $('#businessDueTime').val();
 	if(businessDueTime == ""){
-		layer.msg('营业时长不能为空');
+		layer.msg('经营时间不能为空');
 		return false;
 	}
 
