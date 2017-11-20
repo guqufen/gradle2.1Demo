@@ -123,7 +123,7 @@ function resetEvent() {
 $("#btn_add").click(function(){
     $("#myModalLabel").html("新增商户实体");
     $('#addForm')[0].reset();
-    merProvince();
+    merProvince("0");
 })
 $('.sunmitBtn').click(function(){
     var mercName=$.trim($("#mercName").val());
@@ -132,9 +132,9 @@ $('.sunmitBtn').click(function(){
     var cardNum=$.trim($("#cardNum").val());
     var businessLicenseNum=$.trim($("#businessLicenseNum").val());
     var etpsAttr=$.trim($("#etpsAttr").val());
-    var registProvince=$.trim($("#registProvince").val());
-    var registCity=$.trim($("#registCity").val());
-    var registArea=$.trim($("#registArea").val());
+    var registProvince=$.trim($("#registProvince0").val());
+    var registCity=$.trim($("#registCity0").val());
+    var registArea=$.trim($("#registArea0").val());
     var registAddressDetail=$.trim($("#registAddressDetail").val());
     
     if(mercName=="" || (mercName != '' && mercName.length > 40)){
