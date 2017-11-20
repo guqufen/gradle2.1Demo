@@ -114,11 +114,6 @@ public class TradeOrderDO {
     private BigDecimal orderAmount;
 
     /**
-     * 分期数
-     */
-    private Integer periodNum;
-
-    /**
      * 每期金额
      */
     private BigDecimal eachMoney;
@@ -159,28 +154,6 @@ public class TradeOrderDO {
     
     public void setOrderAmount(BigDecimal orderAmount) {
         this.orderAmount = orderAmount;
-    }
-
-    /**
-     * periodNum
-     *
-     * @return  the periodNum
-     * @since   CodingExample Ver 1.0
-    */
-    
-    public Integer getPeriodNum() {
-        return periodNum;
-    }
-
-    /**
-     * periodNum
-     *
-     * @param   periodNum    the periodNum to set
-     * @since   CodingExample Ver 1.0
-     */
-    
-    public void setPeriodNum(Integer periodNum) {
-        this.periodNum = periodNum;
     }
 
     /**
