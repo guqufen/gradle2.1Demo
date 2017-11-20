@@ -983,7 +983,8 @@ function removePos(num){
   function saveTerminalParams(conId){
     var listLen=$("#"+conId+" .terminal-list").length;
     var poses=new Array();
-    var posInfos=new Array();
+    // var posInfos=new Array();
+    var posDeviceInfos=new Array();
     var terminaInfos=new Array();
     var innerCode = $('#innerCode').val();
     poses=[];
@@ -993,7 +994,8 @@ function removePos(num){
       var channelMerKey=$("#"+conId+" .terminal-list").eq(i).find($('.channelMerKey')).val();
       var id=$("#"+conId+" .terminal-list").eq(i).find($('.remove-terminalList')).attr('editid');
       var posLen=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).length;
-      posInfos=[];
+      // posInfos=[];
+      posDeviceInfos=[];
       console.log("渠道ID："+id);
       for(var j=0;j<posLen;j++){
           var posName=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posName')).val();
@@ -1008,9 +1010,11 @@ function removePos(num){
           var posAddr=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.installAddr')).val();//POS装机地址
           var posId=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.remove-icon')).attr('editid');
           if(!posId || posId<0){
-            posInfos=posInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr});
+            // posInfos=posInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr});
+            posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr});
           }else{
-            posInfos=posInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,posId});  
+            // posInfos=posInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,posId});  
+            posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,posId});  
           }
           console.log("PosID："+id);  
       }
@@ -1042,9 +1046,11 @@ function removePos(num){
 
 
       if(!id || id<0){
-        poses=poses.concat({merChannel:{channelMerId,channelType,channelMerKey},posInfos,terminaInfos});
+        // poses=poses.concat({merChannel:{channelMerId,channelType,channelMerKey},posInfos,terminaInfos});
+        poses=poses.concat({merChannel:{channelMerId,channelType,channelMerKey},posDeviceInfos,terminaInfos});
       }else{
-        poses=poses.concat({merChannel:{channelMerId,channelType,channelMerKey,id},posInfos,terminaInfos});  
+        // poses=poses.concat({merChannel:{channelMerId,channelType,channelMerKey,id},posInfos,terminaInfos});  
+        poses=poses.concat({merChannel:{channelMerId,channelType,channelMerKey,id},posDeviceInfos,terminaInfos});  
       }
     }
     console.log({poses,"innerCode":$('input[name="innerCode"]').val()});  
