@@ -15,6 +15,9 @@ public interface TradeDataService {
     boolean saveTradeData(TradeDataDTO tradeData);
     
     ResultDTO<String> batchSaveTradeData(TradeData tradeData);
+
+    boolean saveTradeData(TradeData tradeData);
+
     /**
      * 条件查询所有数据
      * @param merchantCore
