@@ -7,6 +7,11 @@ import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.JO;
 
+/**
+ * web页面渠道信息、pos信息、终端信息新增修改接收实体
+ * @author Administrator
+ *
+ */
 public class MerchantChannelJO extends JO {
     /**
      * 渠道信息
@@ -17,34 +22,7 @@ public class MerchantChannelJO extends JO {
      * POS机子信息
      */
     private List<MerchantPosJO> posInfos;
-    
-    /**
-     * pos设备信息
-     */
-    private List<MerchantPos> posDeviceInfos;
    
-
-	/**
-     * 终端信息
-     */
-    private List<MerchantTerminal> terminaInfos;
-
-
-    public List<MerchantPos> getPosDeviceInfos() {
-		return posDeviceInfos;
-	}
-
-	public void setPosDeviceInfos(List<MerchantPos> posDeviceInfos) {
-		this.posDeviceInfos = posDeviceInfos;
-	}
-
-	public List<MerchantTerminal> getTerminaInfos() {
-		return terminaInfos;
-	}
-
-	public void setTerminaInfos(List<MerchantTerminal> terminaInfos) {
-		this.terminaInfos = terminaInfos;
-	}
 
 	/**
      * merChannel
