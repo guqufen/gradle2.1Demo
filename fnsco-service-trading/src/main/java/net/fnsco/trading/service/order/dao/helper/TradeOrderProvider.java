@@ -7,6 +7,8 @@ import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 public class TradeOrderProvider {
 
@@ -279,6 +281,12 @@ public class TradeOrderProvider {
             WHERE("inner_code=#{tradeOrder.innerCode}");
         }
         if (StringUtils.isNotBlank(tradeOrder.getOrderTop10())||StringUtils.isNotBlank(tradeOrder.getOrderNoAfter6())){
+            if(Strings.isNullOrEmpty(tradeOrder.getOrderTop10())){
+                tradeOrder.setOrderTop10("");
+            }
+            if(Strings.isNullOrEmpty(tradeOrder.getOrderNoAfter6())){
+                tradeOrder.setOrderNoAfter6("");
+            }
             WHERE("order_no like CONCAT(#{tradeOrder.orderTop10},'%',#{tradeOrder.orderNoAfter6})");
         }
         ORDER_BY("create_time desc limit " + start + ", " + limit );
