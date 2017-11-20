@@ -78,12 +78,16 @@ public class MerchantEntityController extends BaseController {
 		merchantEntity.setLastModefyTimer(new Date());
 		merchantEntity.setLastModefyUserId(getUserId());
 		//根据商户性质获取商户种类
-		if(merchantEntity.getEtps_attr() != null){
-			int etps_tp = merchantEntityService.getEtps_TypeByEtps_attra(merchantEntity.getEtps_attr());
-			merchantEntity.setEtps_tp(etps_tp);
+		if(merchantEntity.getEtpsAttr() != null){
+			int etps_tp = merchantEntityService.getEtpsTypeByEtpsAttra(merchantEntity.getEtpsAttr());
+			merchantEntity.setEtpsTp(etps_tp);
 		}
 		//拼接详细信息
-		
+		StringBuilder sb = new StringBuilder();
+		merchantEntity.setRegistAddress(sb.append(merchantEntity.getRegistProvinceName())
+						.append(merchantEntity.getRegistCityName())
+						.append(merchantEntity.getRegistAreaName())
+						.append(merchantEntity.getRegistAddressDetail()).toString());
 		if(null == merchantEntity.getId()) {
 			merchantEntity.setCreateSource("0");
 			merchantEntity.setCreateTimer(new Date());

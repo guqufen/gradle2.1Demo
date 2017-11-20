@@ -454,7 +454,7 @@ $('#btn_delete').click(function(){
 
 
 $("#btn_add").click(function(){
-  merProvince();
+  merProvince("0");
 })
 
 //选择银行支行事件
@@ -1227,7 +1227,6 @@ $(".nextBtn").click(function(){
 
 //生成表格里的编辑事件
 function editData(id){
-    posProvince('Change');
    $.ajax({
     url:PROJECT_NAME+'/web/merchantinfo/queryAllById',
     type:'POST',
@@ -1290,6 +1289,14 @@ function editData(id){
         $('input[name="taxRegistCode1"]').val(data.data.taxRegistCode);
         $('input[name="registAddress1"]').val(data.data.registAddress);
         $('input[name="mercFlag1"]').val(data.data.mercFlag);
+
+        $('#etpsAttr1').find("option[value="+data.data.etpsAttr+"]").attr("selected",true);
+        merProvince("1");
+        $('#registProvince1').find("option[value="+data.data.registProvince+"]").attr("selected",true);
+        merProcessSelect("1",true);
+        $('#registCity1').find("option[value="+data.data.registCity+"]").attr("selected",true);
+        merProcessSelect("1",false);
+        $('#registArea1').find("option[value="+data.data.registArea+"]").attr("selected",true);
 
         $('#entityMerName1').val(data.data.entityMerName);
         $('#entityMerName1').next('.entityInnerCode').val(data.data.entityInnerCode);
@@ -1476,8 +1483,14 @@ function editData(id){
             var entityMerName = $('#entityMerName1').val();
             var entityInnerCode = $('#entityMerName1').next('input[name="entityInnerCode"]').val();
             var innerCode=$('#innerCode').val();
+            // 新增字段 商户性质 商户所属省市区
+            var  etpsAttr=$("#etpsAttr1").val();
+            var  registProvince=$("#registProvince1").val();
+            var  registCity=$("#registCity1").val();
+            var  registArea=$("#registArea1").val();
+
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
-                'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'entityMerName':entityMerName,'innerCode':innerCode};
+                'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'entityMerName':entityMerName,'innerCode':innerCode,'etpsAttr':etpsAttr,'registProvince':registProvince,'registCity':registCity,'registArea':registArea};
             console.log(params);
             if(entityMerName==''){
               layer.msg('保存失败，实体商户不能为空');return
@@ -1611,6 +1624,16 @@ function detailsData(id){
         $('input[name="taxRegistCode2"]').val(data.data.taxRegistCode);
         $('input[name="registAddress2"]').val(data.data.registAddress);
         $('input[name="mercFlag2"]').val(data.data.mercFlag);
+
+        $('#etpsAttr2').find("option[value="+data.data.etpsAttr+"]").attr("selected",true);
+        merProvince("2");
+        $('#registProvince2').find("option[value="+data.data.registProvince+"]").attr("selected",true);
+        merProcessSelect("2",true);
+        $('#registCity2').find("option[value="+data.data.registCity+"]").attr("selected",true);
+        merProcessSelect("2",false);
+        $('#registArea2').find("option[value="+data.data.registArea+"]").attr("selected",true);
+
+
 
         $('#entityMerName2').val(data.data.entityMerName);
         $('#entityMerName2').next('.entityInnerCode').val(data.data.entityInnerCode);
@@ -1764,7 +1787,7 @@ function showQrcode(id){
 //调用中信银行接口入驻独立商户
 function zxyhChannel(id){
 	$.ajax({
-	    url:PROJECT_NAME+'/web/zxyh/basicInfo',
+	    url:PROJECT_NAME+'/web/zxyh/enterMerc',
 	    type:'get',
 	    dataType : "json",
 //	    data:{'id':id},

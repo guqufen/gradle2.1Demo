@@ -57,8 +57,59 @@ public class MerchantTerminal extends DTO{
     private String alipayFee;
 
     private String terminalType;
+    
+    //新增终端相关字段
+    private Integer subAappId;
+    private Integer qGroupId;
+    private Integer categroryId;
+    private String settleCycle;
+    private String jsapiPath;
 
-    public Integer getId() {
+    public Integer getSubAappId() {
+		return subAappId;
+	}
+
+	public void setSubAappId(Integer subAappId) {
+		this.subAappId = subAappId;
+	}
+
+	public Integer getqGroupId() {
+		return qGroupId;
+	}
+
+	public void setqGroupId(Integer qGroupId) {
+		this.qGroupId = qGroupId;
+	}
+
+	public Integer getCategroryId() {
+		return categroryId;
+	}
+
+	public void setCategroryId(Integer categroryId) {
+		this.categroryId = categroryId;
+	}
+
+	public String getSettleCycle() {
+		return settleCycle;
+	}
+
+	public void setSettleCycle(String settleCycle) {
+		this.settleCycle = settleCycle;
+	}
+
+	public String getJsapiPath() {
+		return jsapiPath;
+	}
+
+	public void setJsapiPath(String jsapiPath) {
+		this.jsapiPath = jsapiPath;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public Integer getId() {
         return id;
     }
 

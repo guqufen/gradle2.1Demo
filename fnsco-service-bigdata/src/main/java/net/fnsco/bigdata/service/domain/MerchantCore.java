@@ -91,50 +91,89 @@ public class MerchantCore extends DTO {
 	private String entityMerName;//实体商户名称
 	
 	//新增省市区字段，商户性质商户类别
-	 private Integer regist_province;//省
-	 private Integer regist_city;//市
-	 private Integer regist_area;//区
-	 private Integer etps_attr;//商户性质
-	 private Integer etps_tp;//商户种类 
+	 private Integer registProvince;//省
+	 private Integer registCity;//市
+	 private Integer registArea;//区
+	 private Integer etpsAttr;//商户性质
+	 private Integer etpsTp;//商户种类 
+	 private String registAddressDetail;      
+	 
+	 private Integer registProvinceName;//省
+	 private Integer registCityName;//市
+	 private Integer registAreaName;//区
 	
-	public Integer getRegist_province() {
-		return regist_province;
+	
+
+	public Integer getRegistProvinceName() {
+		return registProvinceName;
 	}
 
-	public void setRegist_province(Integer regist_province) {
-		this.regist_province = regist_province;
+	public void setRegistProvinceName(Integer registProvinceName) {
+		this.registProvinceName = registProvinceName;
 	}
 
-	public Integer getRegist_city() {
-		return regist_city;
+	public Integer getRegistCityName() {
+		return registCityName;
 	}
 
-	public void setRegist_city(Integer regist_city) {
-		this.regist_city = regist_city;
+	public void setRegistCityName(Integer registCityName) {
+		this.registCityName = registCityName;
 	}
 
-	public Integer getRegist_area() {
-		return regist_area;
+	public Integer getRegistAreaName() {
+		return registAreaName;
 	}
 
-	public void setRegist_area(Integer regist_area) {
-		this.regist_area = regist_area;
+	public void setRegistAreaName(Integer registAreaName) {
+		this.registAreaName = registAreaName;
 	}
 
-	public Integer getEtps_attr() {
-		return etps_attr;
+	public String getRegistAddressDetail() {
+		return registAddressDetail;
 	}
 
-	public void setEtps_attr(Integer etps_attr) {
-		this.etps_attr = etps_attr;
+	public void setRegistAddressDetail(String registAddressDetail) {
+		this.registAddressDetail = registAddressDetail;
 	}
 
-	public Integer getEtps_tp() {
-		return etps_tp;
+	public Integer getRegistProvince() {
+		return registProvince;
 	}
 
-	public void setEtps_tp(Integer etps_tp) {
-		this.etps_tp = etps_tp;
+	public void setRegistProvince(Integer registProvince) {
+		this.registProvince = registProvince;
+	}
+
+	public Integer getRegistCity() {
+		return registCity;
+	}
+
+	public void setRegistCity(Integer registCity) {
+		this.registCity = registCity;
+	}
+
+	public Integer getRegistArea() {
+		return registArea;
+	}
+
+	public void setRegistArea(Integer registArea) {
+		this.registArea = registArea;
+	}
+
+	public Integer getEtpsAttr() {
+		return etpsAttr;
+	}
+
+	public void setEtpsAttr(Integer etpsAttr) {
+		this.etpsAttr = etpsAttr;
+	}
+
+	public Integer getEtpsTp() {
+		return etpsTp;
+	}
+
+	public void setEtpsTp(Integer etpsTp) {
+		this.etpsTp = etpsTp;
 	}
 
 	public String getEntityMerName() {
