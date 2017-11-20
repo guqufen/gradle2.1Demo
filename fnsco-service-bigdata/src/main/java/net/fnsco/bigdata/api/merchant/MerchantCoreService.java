@@ -220,7 +220,7 @@ public interface MerchantCoreService {
      */
     List<MerchantEntityCoreRef> queryEntityCoreRefByInnerCode(String innerCode);
 
-    ResultDTO<MerchantCore>  queryZXYHInfoById(Integer id);
+    MerchantCoreEntityZxyhDTO  queryZXYHInfoById(Integer id);
     
     
 }

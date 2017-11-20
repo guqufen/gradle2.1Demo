@@ -707,17 +707,17 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
      * 入驻中信的商户信息
      */
 	@Override
-	public ResultDTO<MerchantCore> queryZXYHInfoById(Integer id) {
+	public MerchantCoreEntityZxyhDTO queryZXYHInfoById(Integer id) {
 		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
 		MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO = new MerchantCoreEntityZxyhDTO();
 		MerchantCore core = merchantCoreDao.queryAllById(id);
         if (core == null) {
-            return result.fail();
+            
         }
         MerchantContact merchantContact = core.getContacts().get(0);//获取商户联系人信息
         MerchantBank merchantBank = core.getBanks().get(0); //获取商户的开户行信息
         if(merchantContact == null || merchantBank == null){
-//        	break;
+
         }
         merchantCoreEntityZxyhDTO.setMchtNm(core.getMerName());//商户全称
         merchantCoreEntityZxyhDTO.setMchtCnAbbr(core.getAbbreviation());//商户简称
@@ -740,10 +740,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         merchantCoreEntityZxyhDTO.setAccPhone(core.getLegalPersonMobile());//开户手机号（11位以内数字）  目前写入了法人手机号需确定 
         merchantCoreEntityZxyhDTO.setSettleBankAllName(merchantBank.getOpenBank());//收款银行全称
         merchantCoreEntityZxyhDTO.setSettleBankCode(merchantBank.getOpenBankNum());//开户行行号
-        
-        
-        return null;
-//        return result.success();
+        return merchantCoreEntityZxyhDTO;
 	}
 
 }
