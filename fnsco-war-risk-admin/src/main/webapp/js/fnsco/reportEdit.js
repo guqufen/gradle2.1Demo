@@ -404,24 +404,24 @@ function saveOrUpdate(status){
 
 	//商户名称
 	var merName = $('#merName').val();
-	if(merName == ""){
-		layer.msg('商户名称为空，请核对后联系相关人员录入');
-		return false;
-	}
+//	if(merName == ""){
+//		layer.msg('商户名称为空，请核对后联系相关人员录入');
+//		return false;
+//	}
 
 	//营业执照
 	var businessLicenseNum = $('#businessLicenseNum').val();
-	if(businessLicenseNum == ""){
-		layer.msg('营业执照为空，请核对后联系相关人员录入');
-		return false;
-	}
+//	if(businessLicenseNum == ""){
+//		layer.msg('营业执照为空，请核对后联系相关人员录入');
+//		return false;
+//	}
 
 	//经营地址
 	var businessAddress = $('#businessAddress').val();
-	if(businessAddress == ""){
-		layer.msg('经营地址为空，请核对后联系相关人员录入');
-		return false;
-	}
+//	if(businessAddress == ""){
+//		layer.msg('经营地址为空，请核对后联系相关人员录入');
+//		return false;
+//	}
 
 	//营业时长
 	var businessDueTime = $('#businessDueTime').val();

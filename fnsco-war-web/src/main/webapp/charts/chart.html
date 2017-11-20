@@ -93,19 +93,19 @@ function getValue(type){
 		}
 	})
 }
-function changeVal(){
-	newTotalNum=totalNum+parseInt(Math.random()*1000);
-	newTotalCountNum=totalCountNum+parseInt(Math.random()*10);
-	changeValue('total-number',totalNum,newTotalNum,0,2);
-	changeValue('total-count-num',totalCountNum,newTotalCountNum,0,2);
-	$("#scroll-ul").append('<li><div class="card-num">支付宝支付</div><div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">'+parseInt(Math.random()*1000)+'</span></div></li>');
-	totalNum=newTotalNum;
-	totalCountNum=newTotalCountNum;
-	console.log(totalNum,totalCountNum);
-}
-setInterval(function(){
-	changeVal();
-},3000)	
+// function changeVal(){
+// 	newTotalNum=totalNum+parseInt(Math.random()*1000);
+// 	newTotalCountNum=totalCountNum+parseInt(Math.random()*10);
+// 	changeValue('total-number',totalNum,newTotalNum,0,2);
+// 	changeValue('total-count-num',totalCountNum,newTotalCountNum,0,2);
+// 	$("#scroll-ul").append('<li><div class="card-num">支付宝支付</div><div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">'+parseInt(Math.random()*1000)+'</span></div></li>');
+// 	totalNum=newTotalNum;
+// 	totalCountNum=newTotalCountNum;
+// 	console.log(totalNum,totalCountNum);
+// }
+// setInterval(function(){
+// 	changeVal();
+// },3000)	
 
 //格式化时间
 Date.prototype.Format = function (fmt) { //author: meizz 
