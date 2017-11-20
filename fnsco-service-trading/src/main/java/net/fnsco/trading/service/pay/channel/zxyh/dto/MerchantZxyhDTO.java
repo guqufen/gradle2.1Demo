@@ -1,11 +1,27 @@
-package net.fnsco.trading.service.pay.channel.zxyh;
+package net.fnsco.trading.service.pay.channel.zxyh.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
 public class MerchantZxyhDTO {
-    public void init(String pid) {
+    public void init(String pid, String merId) {
         this.setIsISV("1");//填写数字，1=是，0=否
         this.setIsvpid(pid);
+        this.setBDActive("N");
+        this.setApType("1");//1-新增 
+        this.setSignMethod("02");//02-MD5  03-RSA
+        this.setMerId(merId);
+        this.setMainMchtTpA("D1");//D1-普通类
+        this.setOlCodeA("D1|D2");//支付方式编码，可填多个，以“|”分割；D1-二清被扫 D2-二清主扫
+        this.setMainMchtTp("02");//微信主商户号类型
+        //        00-医疗教育类 01-公共事业类 02-其他类 
+        //        03-WAP
+
+        this.setOlCode1("01|02|03|06");//支付方式编码，可填多个，以“|”分割
+        //        01-被扫  
+        //        02-主扫  
+        //        03-公众号支付
+        //        06-H5
+
     }
 
     private String mchtNm;           //     商户全称    String  申请类型=1 时，必填，20位以内   
@@ -92,6 +108,28 @@ public class MerchantZxyhDTO {
     private String apType;           //  申请类型    String  必填  1-新增 
     private String signMethod;       //  验签方式    String  必填  02-MD5  03-RSA
     private String signAture;        //  签名  String  必填  填写对报文摘要的签名
+
+    /**
+     * olCode1
+     *
+     * @return  the olCode1
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getOlCode1() {
+        return olCode1;
+    }
+
+    /**
+     * olCode1
+     *
+     * @param   olCode1    the olCode1 to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setOlCode1(String olCode1) {
+        this.olCode1 = olCode1;
+    }
 
     /**
      * mchtNm

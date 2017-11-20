@@ -13,6 +13,7 @@ import com.beust.jcommander.internal.Maps;
 
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.trading.service.pay.OrderPaymentService;
+import net.fnsco.trading.service.pay.channel.zxyh.dto.MerchantZxyhDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.util.SignUtil;
 import net.fnsco.trading.service.pay.channel.zxyh.util.ZxyhPayMD5Util;
 
@@ -33,8 +34,8 @@ public class ZxyhPaymentService extends OrderPaymentService {
         String merId = env.getProperty("zxyh.merId");
         String url = "/MPayTransaction/ind/mchtadd.do";
         MerchantZxyhDTO mercDTO = new MerchantZxyhDTO();
-        mercDTO.init(pid);
-        mercDTO.setMerId(merId);
+        mercDTO.init(pid,merId);
+       
         String mercStr = JSON.toJSONString(mercDTO);
         Map<String, String> mercMap = JSON.parseObject(mercStr, Map.class);
         String respStr = ZxyhPayMD5Util.request(mercMap, url);
