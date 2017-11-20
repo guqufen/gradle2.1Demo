@@ -41,7 +41,7 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
     @ResponseBody
 	public ResultDTO<Object> enterMerc(Integer id){
 		//根据id获取入驻中信银行商户所需的必须信息
-		ResultDTO<MerchantCore> core = merchantCoreService.queryZXYHInfoById(id);
+		MerchantCoreEntityZxyhDTO core = merchantCoreService.queryZXYHInfoById(id);
 		
 //		MerchantContact merchantContact = core.getContacts().get(0);
 		//只能入驻一次，不能二次点击
