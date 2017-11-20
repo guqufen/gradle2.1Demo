@@ -186,6 +186,7 @@ $(function() {
 					$('input').attr('disabled','disabled');//所有输入不可编辑
 					$('select').attr('disabled','disabled');//所有select不可选择
 					$('textarea').attr('disabled','disabled');//所有文本框不可编辑
+					$('#industry').removeAttr("readonly");
 				//待编辑状态
 				}else{
 					$('h1').html( dd.merName+'的"风控+"报告编辑页面');
@@ -426,7 +427,7 @@ function saveOrUpdate(status){
 	//营业时长
 	var businessDueTime = $('#businessDueTime').val();
 	if(businessDueTime == ""){
-		layer.msg('营业时长不能为空');
+		layer.msg('经营时间不能为空');
 		return false;
 	}
 

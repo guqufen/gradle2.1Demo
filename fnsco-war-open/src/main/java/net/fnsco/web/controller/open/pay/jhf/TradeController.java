@@ -135,10 +135,15 @@ public class TradeController extends BaseController {
         if (null == merchantChannel) {
             return fail("拉卡拉渠道信息不存在");
         }
+        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByInnerCodeType(merchantChannel.getInnerCode(), "04");
+        if (null == merchantChannelJhf) {
+            return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
+        }
         TradeOrderDO tradeOrder = new TradeOrderDO();
         tradeOrder.setOrderNoAfter6(tradeJO.getOrderNo());
         tradeOrder.setOrderTop10(tradeJO.getDate());
-        tradeOrder.setInnerCode(merchantChannel.getInnerCode());
+        tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
+        tradeOrder.setRespCode("1001");
         ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder, tradeJO.getPageNum(), tradeJO.getPageSize());
         List<TradeOrderDO> resultList = resultDTO.getList();
         for (TradeOrderDO tradeOrderDO : resultList) {

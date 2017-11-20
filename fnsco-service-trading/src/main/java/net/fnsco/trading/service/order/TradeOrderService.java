@@ -195,7 +195,6 @@ public class TradeOrderService extends BaseService {
                 logger.error("聚惠分支付完成，返回金额数据转换出错",ex);
             }
             tradeOrderDO.setOrderAmount(orderAmountB);
-            tradeOrderDO.setPeriodNum(periodNum);
             tradeOrderDO.setEachMoney(eachMoneyB);
             tradeOrderDO.setCardHolderRate(order.getCardHolderRate());
         }
@@ -205,7 +204,9 @@ public class TradeOrderService extends BaseService {
                 tradeOrderDO.setSettleStatus(Integer.parseInt(order.getSettlementStatus()));
                 if ("1".equals(order.getSettlementStatus())) {
                     tradeOrderDO.setSettleDate(new Date());
-                    tradeOrderDO.setSettleAmount(new BigDecimal(order.getSettlementAmount()));
+                    BigDecimal settleAmount = new BigDecimal(order.getSettlementAmount());
+                    settleAmount = settleAmount.multiply(new BigDecimal("100"));
+                    tradeOrderDO.setSettleAmount(settleAmount);
                 }
             } catch (Exception ex) {
                 logger.error("支付完成时回调时结算状态转换为int出错", ex);
