@@ -130,24 +130,24 @@ function removeMerOption(id) {
 	$(id).empty();
 	$(id).append("<option value=''>---请选择---</option>");
 }
-function merProcessSelect(flag) {
+function merProcessSelect(num,flag) {
 
 	var id;
 	var areaId;
 	var lastId;
 	//省份改变，将市/区置空
 	if(flag){
-		id=$("#registProvince")[0];
-		areaId=$("#registCity")[0];
-		lastId=$("#registArea")[0];
+		id=$("#registProvince"+num)[0];
+		areaId=$("#registCity"+num)[0];
+		lastId=$("#registArea"+num)[0];
 
 		removeMerOption(areaId);// 移除市下拉框内容并默认选中"---请选择---"
 		removeMerOption(lastId);// 移除区下拉框内容并默认选中"---请选择---"
 
 		//市改变，将区置空
 	}else{
-		id=$("#registCity")[0];
-		areaId=$("#registArea")[0];
+		id=$("#registCity"+num)[0];
+		areaId=$("#registArea"+num)[0];
 		removeMerOption(areaId);// 移除区下拉框内容并默认选中"---请选择---"
 	}
 
@@ -173,7 +173,7 @@ function merProcessSelect(flag) {
 				if (areaList.length > 0) {
 
 					for (var i = 0; i < areaList.length; i++) {
-						$("#" + areaId.name).append(
+						$("#" + areaId.name+num).append(
 								"<option value='" + areaList[i].id + "'>"
 										+ areaList[i].name + "</option>");
 					}
@@ -185,10 +185,10 @@ function merProcessSelect(flag) {
 	});
 	return;
 }
-function merProvince(){
+function merProvince(num){
 	// 移除市/区
-	removeMerOption("#registCity");
-	removeMerOption("#registArea");
+	removeMerOption("#registCity"+num);
+	removeMerOption("#registArea"+num);
 	// 获取全部省市区，然后循环赋值到相应地方
 	$.ajax({
 		type : 'get',
@@ -204,7 +204,7 @@ function merProvince(){
 				if (areaList.length > 0) {
 
 					for (var i = 0; i < areaList.length; i++) {
-						$("#registProvince").append(
+						$("#registProvince"+num).append(
 								"<option value='" + areaList[i].id + "'>"
 										+ areaList[i].name + "</option>");
 					}
@@ -216,6 +216,6 @@ function merProvince(){
 	});
 }
 
-$("#registProvince").change(function(){
-	console.log($("this").html());
+$(".addSelect").change(function(){
+	$(this).next().val($(this).find("option[value="+$(this).val()+"]").html());
 })

@@ -237,7 +237,7 @@
 								<div class="form-group" style="margin-top: 15px">
 										<div class="col-sm-6">
 											<label class="control-label" for="txt_search_id">行业名称：</label>
-											<input type="text" class="form-control" id="txt_search_businessForm">
+											<input type="text" class="form-control" id="txt_search_businessForm" onkeydown="if(event.keyCode==13) {queryEvent('industryTable'); return false;}">
 										</div>
 									<div class="col-sm-4" style="text-align: right;">
 										<button type="button" id="btn_query" class="btn btn-primary"
@@ -252,7 +252,7 @@
 								</div>
 							</form>
 							<div id="industryToolbar">
-								<button id="btn_select_industry" type="button" class="btn btn-success">
+								<button type="button" id="btn_select_industry" class="btn btn-success">
 									<span class="glyphicon glyphicon-file" aria-hidden="true"></span>确定选择
 								</button>
 							</div>

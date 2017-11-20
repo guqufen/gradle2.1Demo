@@ -219,11 +219,8 @@ public interface MerchantCoreService {
      * @since  CodingExample　Ver 1.1
      */
     List<MerchantEntityCoreRef> queryEntityCoreRefByInnerCode(String innerCode);
+
+    ResultDTO<MerchantCore>  queryZXYHInfoById(Integer id);
     
-    /**
-     * 根据id查询核心商户信息
-     * @param id
-     * @return
-     */
-    MerchantCoreEntityZxyhDTO queryMercCoreById(Integer id);
+    
 }

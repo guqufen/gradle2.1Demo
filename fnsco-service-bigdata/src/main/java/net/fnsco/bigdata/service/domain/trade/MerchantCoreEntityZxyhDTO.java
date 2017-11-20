@@ -1,8 +1,21 @@
 package net.fnsco.bigdata.service.domain.trade;
 
-public class MerchantCoreEntityZxyhDTO {
-	
-	    private String mchtNm;           //商户全称
+import java.util.List;
+
+import net.fnsco.bigdata.service.domain.MerchantBank;
+import net.fnsco.bigdata.service.domain.MerchantContact;
+import net.fnsco.core.base.DTO;
+
+public class MerchantCoreEntityZxyhDTO{
+		
+		private Integer id;
+	    public Integer getId() {
+			return id;
+		}
+		public void setId(Integer id) {
+			this.id = id;
+		}
+		private String mchtNm;           //商户全称
 	    private String mchtCnAbbr;       // 商户简称    String  申请类型=1 时，必填，12位以内   
 	    private String etpsAttr;         //  商户性质    String  必填  1-政府机构
 	    //            2-国营企业
@@ -31,6 +44,22 @@ public class MerchantCoreEntityZxyhDTO {
 	    private String accPhone;         //   开户手机号   String  账户类型=2 时必填  11位以内数字
 	    private String settleBankAllName;//  收款银行全称  String  申请类型=1 时，必填 
 	    private String settleBankCode;   // 收款银行行号  String  非中信账户必填 12 位数字联行号
+	    
+	    private List<MerchantContact> contacts;// 关联的联系人信息
+	    private List<MerchantBank> banks;// 关联的银行卡信息
+	    
+		public List<MerchantContact> getContacts() {
+			return contacts;
+		}
+		public void setContacts(List<MerchantContact> contacts) {
+			this.contacts = contacts;
+		}
+		public List<MerchantBank> getBanks() {
+			return banks;
+		}
+		public void setBanks(List<MerchantBank> banks) {
+			this.banks = banks;
+		}
 		public String getMchtNm() {
 			return mchtNm;
 		}
