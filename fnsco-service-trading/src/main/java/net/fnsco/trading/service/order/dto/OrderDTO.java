@@ -30,6 +30,29 @@ public class OrderDTO extends DTO {
     private String orderAmount;// 订单总价格
     private String periodNum;//   分期数
     private String eachMoney;//   每期金额
+    private String payAmount;
+    
+    /**
+     * payAmount
+     *
+     * @return  the payAmount
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getPayAmount() {
+        return payAmount;
+    }
+
+    /**
+     * payAmount
+     *
+     * @param   payAmount    the payAmount to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPayAmount(String payAmount) {
+        this.payAmount = payAmount;
+    }
 
     /**
      * orderAmount

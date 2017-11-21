@@ -65,7 +65,7 @@ public interface TradeOrderDAO {
                @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"), @Result(column = "create_user_id", property = "createUserId"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"), @Result(column = "inner_code", property = "innerCode"),
                @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"), @Result(column = "card_holder_rate", property = "cardHolderRate") })
-    @Select("SELECT * FROM t_trade_order WHERE sync_status = '0' and resp_code ='1001' order by create_time desc ")
+    @Select("SELECT * FROM t_trade_order WHERE sync_status = '0' and resp_code ='1001' order by create_time ")
     public List<TradeOrderDO> queryAllNotSyncDate();
 
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "pay_order_no", property = "payOrderNo"), @Result(column = "txn_amount", property = "txnAmount"),
