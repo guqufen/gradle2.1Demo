@@ -127,7 +127,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
             }
             for (MerchantTerminal terminal : webMerchantPosDTO.getTerminals()) {
 				if(null != terminal.getId()){
-					merchantTerminalDao.updateByPrimaryKey(terminal);
+					merchantTerminalDao.updateByPrimaryKeySelective(terminal);
 				}else{
 					merchantTerminalDao.insertSelective(terminal);
 				}

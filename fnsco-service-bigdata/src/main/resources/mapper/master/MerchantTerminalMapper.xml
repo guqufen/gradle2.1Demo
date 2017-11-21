@@ -141,6 +141,22 @@
       <if test="terminalType != null" >
         terminal_type,
       </if>
+      <!-- 新增字段 -->
+      <if test="subAappId != null" >
+        sub_app_id,
+      </if>
+      <if test="qGroupId != null" >
+        q_group_id,
+      </if>
+      <if test="categroryId != null" >
+        categrory_id,
+      </if>
+      <if test="settleCycle != null" >
+        settle_cycle,
+      </if>
+      <if test="jsapiPath != null" >
+        jsapi_path,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -205,6 +221,22 @@
       </if>
       <if test="terminalType != null" >
         #{terminalType,jdbcType=VARCHAR},
+      </if>
+      <!--  -->
+       <if test="subAappId != null" >
+        #{subAappId,jdbcType=INTEGER},
+      </if>
+      <if test="qGroupId != null" >
+       #{qGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="categroryId != null" >
+       #{categroryId,jdbcType=INTEGER},
+      </if>
+      <if test="settleCycle != null" >
+       #{settleCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="jsapiPath != null" >
+        #{jsapiPath,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -271,6 +303,22 @@
       </if>
       <if test="terminalType != null" >
         terminal_type = #{terminalType,jdbcType=VARCHAR},
+      </if>
+      <!--  -->
+      <if test="subAappId != null" >
+        sub_app_id = #{subAappId,jdbcType=VARCHAR},
+      </if>
+      <if test="qGroupId != null" >
+        q_group_id = #{qGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="categroryId != null" >
+        categrory_id = #{categroryId,jdbcType=VARCHAR},
+      </if>
+      <if test="settleCycle != null" >
+        settle_cycle = #{settleCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="jsapiPath != null" >
+        jsapi_path = #{jsapiPath,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
