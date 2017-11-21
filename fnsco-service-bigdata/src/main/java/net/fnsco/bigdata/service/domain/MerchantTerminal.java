@@ -60,8 +60,8 @@ public class MerchantTerminal extends DTO{
     
     //新增终端相关字段
     private Integer subAappId;
-    private Integer qGroupId;
-    private Integer categroryId;
+    private String qGroupId;
+    private String categroryId;
     private String settleCycle;
     private String jsapiPath;
 
@@ -73,19 +73,19 @@ public class MerchantTerminal extends DTO{
 		this.subAappId = subAappId;
 	}
 
-	public Integer getqGroupId() {
+	public String getqGroupId() {
 		return qGroupId;
 	}
 
-	public void setqGroupId(Integer qGroupId) {
+	public void setqGroupId(String qGroupId) {
 		this.qGroupId = qGroupId;
 	}
 
-	public Integer getCategroryId() {
+	public String getCategroryId() {
 		return categroryId;
 	}
 
-	public void setCategroryId(Integer categroryId) {
+	public void setCategroryId(String categroryId) {
 		this.categroryId = categroryId;
 	}
 
