@@ -22,7 +22,7 @@ import net.fnsco.core.base.ResultDTO;
 
 @Controller
 @RequestMapping("/categroty")
-public class WXCategroty extends net.fnsco.core.base.BaseController{
+public class WXCategrotyController extends net.fnsco.core.base.BaseController{
 	
 	@Autowired
 	private PayCategroryWxService payCategroryWxService;
