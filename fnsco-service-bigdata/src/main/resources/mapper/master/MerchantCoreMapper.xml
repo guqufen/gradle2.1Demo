@@ -114,8 +114,8 @@
   	<collection property="files" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantFileDao.queryByInnerCode"/>
   	<collection property="contacts" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantContactDao.queryByInnerCode" />
   	<collection property="banks" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantBankDao.queryWebByInnerCode" />
-  	<collection property="posDeviceInfos" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantPosDao.selectByInnerCode" />
-  	<collection property="terminaInfos" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantTerminalDao.selectByInnerCode" />
+  	<!-- <collection property="posDeviceInfos" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantPosDao.selectByInnerCode" />
+  	<collection property="terminaInfos" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantTerminalDao.selectByInnerCode" /> -->
   </resultMap>	
   
   <sql id="Base_Column_List" >
