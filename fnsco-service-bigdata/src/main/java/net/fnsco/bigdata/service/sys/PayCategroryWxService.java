@@ -53,4 +53,16 @@ public class PayCategroryWxService extends BaseService {
      PayCategroryWxDO obj = this.payCategroryWxDAO.getById(id);
      return obj;
  }
+//根据商户性质获取微信一级分类
+public List<PayCategroryWxDO> getFirstCategrotyList(String etpAttr) {
+	List<PayCategroryWxDO> list = this.payCategroryWxDAO.getFirstCategrotyListByEtpAttr(etpAttr);
+	return list;
+}
+
+//查询微信二级分类
+public List<PayCategroryWxDO> getSecondCategrotyList(String etpAttr, Integer group_id) {
+	List<PayCategroryWxDO> list = this.payCategroryWxDAO.getSecondCategrotyListByContion(etpAttr,group_id);
+	return list;
+}
+
 }
