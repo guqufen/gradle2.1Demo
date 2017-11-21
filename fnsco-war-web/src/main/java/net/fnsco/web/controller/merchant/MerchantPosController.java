@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO;
+import net.fnsco.bigdata.api.dto.WebMerchantPosDTO2;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
 import net.fnsco.bigdata.service.domain.MerchantBank;
@@ -29,7 +30,8 @@ import net.fnsco.order.api.merchant.IntegralLogService;
 import net.fnsco.web.controller.merchant.jo.MerchantChannelJO;
 import net.fnsco.web.controller.merchant.jo.MerchantPosJO;
 import net.fnsco.web.controller.merchant.jo.PosJO;
-
+import net.fnsco.web.controller.merchant.pos.MerchantChannelJO2;
+import net.fnsco.web.controller.merchant.pos.PosJO2;
 /**
  * @desc Pos相关业务控制器
  * @author tangliang
@@ -84,14 +86,12 @@ public class MerchantPosController extends BaseController {
 	@RequestMapping(value = "/toAddPosInfos", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions(value = { "m:merchant:add" })
-	public ResultDTO<String> toAddPosInfos2(@RequestBody PosJO pos) {
-		// 获取新增终端的全部信息（通道、pos机设备、终端）
-		//数据处理
-		List<MerchantChannelJO> posInfos = pos.getPoses();
-		countPosScores(posInfos, pos.getInnerCode());
+	public ResultDTO<String> toAddPosInfos2(@RequestBody PosJO2 pos) {
+		List<MerchantChannelJO2> posInfos = pos.getPoses();
+		countPosScores2(posInfos.get(0).getPosDeviceInfos(), pos.getInnerCode());
 		WebUserDTO obj = (WebUserDTO) session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
-		List<WebMerchantPosDTO> params = MerchantHelper.toPosDTO(posInfos, pos.getInnerCode(), obj.getId());
-		ResultDTO<String> result = merchantPosService.savePosInfo(params);
+		List<WebMerchantPosDTO2> params = MerchantHelper.toPosDTO2(posInfos, pos.getInnerCode(), obj.getId());
+		ResultDTO<String> result = merchantPosService.savePosInfo2(params);
 		return result;
 	}
 
@@ -147,6 +147,24 @@ public class MerchantPosController extends BaseController {
 	 * @author tangliang
 	 * @date 2017年11月2日 下午2:25:31
 	 */
+	
+	private void countPosScores2(List<MerchantPos> params, String innerCode) {
+		for (MerchantPos merchantPos : params) {
+			if (null == merchantPos.getId()) {
+				// 等于空，才统计积分情况
+				if (!Strings.isNullOrEmpty(innerCode)) {
+					MerchantEntityCoreRef mecr = merchantEntityCoreRefDao.selectByInnerCodeLimit1(innerCode);
+					if (null != mecr && !Strings.isNullOrEmpty(mecr.getEntityInnerCode())) {
+						integralRuleLogService.insert(mecr.getEntityInnerCode(),
+								ConstantEnum.IntegralTypeEnum.CODE_SQ.getCode());
+					}
+				}
+
+			}
+		}
+	}
+	
+	
 	private void countPosScores(List<MerchantChannelJO> params, String innerCode) {
 
 		for (MerchantChannelJO webMerchantPosDTO : params) {
