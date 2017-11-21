@@ -32,11 +32,11 @@ public class WXCategrotyController extends net.fnsco.core.base.BaseController{
 	 */
 	@RequestMapping("showFirstClassify")
 	@ResponseBody
-	public ResultDTO<PayCategroryWxDO> showFirstClassify(@RequestParam("etpAttr") String etpAttr, @RequestParam("terminal_type") String terminal_type){
-		if(!"02".equals(terminal_type)){//选择微信才去查询分类
-			return null;
-		}
-		List<PayCategroryWxDO> categroty = payCategroryWxService.getFirstCategrotyList(etpAttr);
+	public ResultDTO<PayCategroryWxDO> showFirstClassify(@RequestParam("innerCode") String innerCode){
+//		if(!"02".equals(terminal_type)){//选择微信才去查询分类
+//			return null;
+//		}
+		List<PayCategroryWxDO> categroty = payCategroryWxService.getFirstCategrotyList(innerCode);
 		return success(categroty);
 	}
 	

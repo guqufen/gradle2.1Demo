@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.dto.MerChantCoreDetailDTO;
@@ -158,6 +159,9 @@ public interface MerchantCoreDao {
      * @return MerchantCore    DOM对象
      */
     MerchantCore selectUniqueMer(@Param("cardNum") String cardNum,@Param("accountNo") String accountNo,@Param("channelType") String channelType,@Param("channelMerId") String channelMerId);
+
+    @Select("Select etps_attr from m_merchant_core WHERE inner_code =#{innerCode} ")
+	Integer getEtpsAttrByInnerCode(String innerCode);
 
    
 }
