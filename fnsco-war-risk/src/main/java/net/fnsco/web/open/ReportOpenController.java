@@ -83,11 +83,11 @@ public class ReportOpenController extends BaseController {
     }
 
     //查询行业类别
-//    @RequestMapping("queryIndustry")
-//    @ResponseBody
-//    public ResultDTO queryIndustry(@RequestParam String id) {
-//        return reportService.queryIndustry(NumberUtils.toInt(id));
-//    }
+    @RequestMapping("queryIndustry")
+    @ResponseBody
+    public ResultDTO queryIndustry(@RequestParam String id) {
+        return reportService.queryIndustry(NumberUtils.toInt(id));
+    }
     
     @RequestMapping("queryHistoryReport")
     @ResponseBody

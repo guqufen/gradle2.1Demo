@@ -161,6 +161,8 @@ public interface ReportInfoDAO {
 			@Result(column = "decoration_level", property = "decorationLevel"),
 			@Result(column = "view_num", property = "viewNum"),
 			@Result(column = "last_view_time", property = "lastViewTime"),
+			@Result(column = "industry", property = "industry"),
+			@Result(column = "industryName", property = "industryName"),
 			@Result(column = "evaluation", property = "evaluation") })
 
 	@SelectProvider(type = ReportInfoProvider.class, method = "pageListAllMerc")
@@ -187,6 +189,8 @@ public interface ReportInfoDAO {
 			@Result(column = "decoration_level", property = "decorationLevel"),
 			@Result(column = "evaluation", property = "evaluation"),
 			@Result(column = "last_view_time", property = "lastViewTime"),
+			@Result(column = "industry", property = "industry"),
+			@Result(column = "industryName", property = "industryName"),
 			@Result(column = "view_num", property = "viewNum") })
 	@SelectProvider(type = ReportInfoProvider.class, method = "pageListMercByCondition")
 	public List<ReportInfoDO> pageListMercByCondition(@Param("reportInfo") ReportInfoDO reportInfo,

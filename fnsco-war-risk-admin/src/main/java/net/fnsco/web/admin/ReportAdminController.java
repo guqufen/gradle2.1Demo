@@ -259,4 +259,11 @@ public class ReportAdminController extends BaseController{
         public ResultDTO queryUnitPriceReport(@RequestParam String entityInnerCode, @RequestParam String merchantId) {
             return reportService.queryUnitPriceReport(entityInnerCode, NumberUtils.toInt(merchantId));
         }
+        
+        //查询行业类别
+        @RequestMapping("queryIndustry")
+        @ResponseBody
+        public ResultDTO queryIndustry(@RequestParam String id) {
+            return reportService.queryIndustry(NumberUtils.toInt(id));
+        }
 }

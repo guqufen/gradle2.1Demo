@@ -42,8 +42,9 @@ public class FuiouController extends BaseController{
 	@ResponseBody
 	public ResultDTO saveTradeFuiou(@RequestBody String req)throws ParseException {
 
-//		String tradeDataStr = request.getParameter("req");
+		String tradeDataStr = request.getParameter("req");
 		logger.info("富友实时交易流水数据" + req);
+		logger.info("富友实时交易流水数据参数req=" + tradeDataStr);
 
 		FuiouJO fuiouJO = JSONObject.parseObject(req, FuiouJO.class);//将JSON字符串转换为实体对象
 

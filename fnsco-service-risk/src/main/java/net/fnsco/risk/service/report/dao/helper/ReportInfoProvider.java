@@ -524,7 +524,8 @@ public class ReportInfoProvider {
                     agentWhere="and ent.agent_id='" + reportInfo.getAgentId() + "'";
                 }
                 SELECT( "tt.*," + "(select report.trading_area from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) trading_area,"
-                       + "(select `first` from sys_industry where id = (select report.industry from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1)) industry,"
+                		+"(select report.industry from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) industry,"
+                       + "(select `first` from sys_industry where id = (select report.industry from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1)) industryName,"
                        + "(select report.status from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) status,"
                        + "(select report.view_num from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) viewNum,"
                        + "(select report.report_timer from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) report_timer,"
@@ -645,7 +646,7 @@ public class ReportInfoProvider {
                     agentWhere="and agent_id='" + reportInfo.getAgentId() + "'";
                 }
                 SELECT( "tt.*,report.id,report.trading_area ,"
-                		+ "(select `first` from sys_industry where id = report.industry) industry ,report.size,report.status,report.view_num,report.report_timer " 
+                		+ "(select `first` from sys_industry where id = report.industry) industryName ,report.industry,report.size,report.status,report.view_num,report.report_timer " 
                 		+ " FROM " 
                 		+ "( SELECT ent.entity_inner_code,ent.legal_person,ent.merc_name,ent.business_license_num, "
                 		+ "( SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code in (select distinct inner_code from m_merchant_core_entity_ref ref where ref.entity_inner_code = ent.entity_inner_code) ORDER BY time_stamp desc limit 1 ) as maxTime " 
