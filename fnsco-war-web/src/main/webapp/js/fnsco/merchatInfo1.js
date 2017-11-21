@@ -904,26 +904,26 @@ function changeTerminalType(num){
 	$("#settleCycle"+num).html('');
 	$("#qGroupId"+num).html('');
 	$("#categroryId"+num).html('');
-	if(typeVal=='00'){
+	if(typeVal=='00'){//刷卡
 		$("#debitCardRate"+num).attr('disabdle',false);
 		$("#creditCardRate"+num).attr('disabled',false);
 		$("#debitCardMaxFee"+num).attr('disabled',false);
-	}else if(typeVal=='01'){
+	}else if(typeVal=='01'){//扫码
 		$("#alipayFee"+num).attr('disabled',false);
 		$("#wechatFee"+num).attr('disabled',false);
-	}else if(typeVal=='02'){
+	}else if(typeVal=='02'){//微信
 		$("#wechatFee"+num).attr('disabled',false);
 		$("#settleCycle"+num).attr('disabled',false);
 		$("#qGroupId"+num).attr('disabled',false);
 		$("#categroryId"+num).attr('disabled',false);
 		$("#settleCycle"+num).html(settleCycleHtml());
-	}else if(typeVal=='03'){
+	}else if(typeVal=='03'){//支付宝
 		$("#alipayFee"+num).attr('disabled',false);
 		$("#settleCycle"+num).attr('disabled',false);
 		$("#qGroupId"+num).attr('disabled',false);
 		$("#qGroupId"+num).html(alipayQGroupId());
 		$("#settleCycle"+num).html(settleCycleHtml());
-	}else if(typeVal=='04'){
+	}else if(typeVal=='04'){//微信公众号
 		$("#wechatFee"+num).attr('disabled',false);
 		$("#settleCycle"+num).attr('disabled',false);
 		$("#qGroupId"+num).attr('disabled',false);
@@ -948,12 +948,12 @@ function alipayQGroupId(){
 function mertType(){
 	return '<option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option>';
 }
-getWechat("个体工商户");
+getWechat("112116321067137");
 function getWechat(etpsAttrId){
 	$.ajax({
 		url:PROJECT_NAME+'/categroty/showFirstClassify',
 		type:'POST',
-		data:{'etpAttr':etpsAttrId,'terminal_type':'02'},
+		data:{'etpAttr':etpsAttrId},
 		success:function(data){
 			unloginHandler(data);
 			console.log(data);
@@ -1085,7 +1085,6 @@ function removePos(num){
           }
           console.log("PosID："+id);  
       }
-
       var terminalLen=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).length;
       // console.log(terminalLen);
       // return;
