@@ -37,7 +37,7 @@ public class TradePayController extends BaseController {
     private Environment         env;
 
     /**
-     * 收银台获取聚惠分二维码url获取(暂时未使用)
+     * 扫码后跳转到聚惠分平台
      *
      * @param userName
      * @return
