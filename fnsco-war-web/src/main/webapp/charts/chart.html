@@ -133,10 +133,11 @@ Date.prototype.Format = function (fmt) { //author: meizz
 }
 
 function getList(){
+	$("#scroll-ul").html('');
 	$.ajax({
 		url:'../h5/report/getTradeDataList',
 		type:'get',
-		data:{'startDate':'2016-01-01 00:00:00','pageSize':8},
+		data:{'startDate':'2017-01-01 00:00:00','pageSize':20},
 		success:function(data){
 			console.log(data);
 			for(var i=0;i<data.data.length;i++){
@@ -154,6 +155,7 @@ $(document).ready(function(){
 setInterval(function(){
 	// console.log("重新刷新了");
 	getValue("0");
+	getList();
 },20000)	
 </script>
 </html>
