@@ -893,8 +893,55 @@ function terminalRatesHtml(num){
         '</div>';
 }
 
+function noSelect(){
+	'<option value="">--请选择--</option>';
+}
+// 结算周期
+function settleCycleHtml(){
+	return '<option value="00">T1</option><option value="01">D1</option><option value="02">D0</option>';
+}
+// 支付宝一级类目
+function alipayQGroupId(){
+	return '<option value="2015050700000000">美食</option><option value="2015091000052157">超市便利店</option><option value="2015063000020189">生活服务</option><option value="2015062600004525">休闲娱乐</option><option value="2015062600002758">购物</option><option value="2016062900190124">爱车</option><option value="2016042200000148">教育培训</option><option value="2016062900190296">医疗健康</option><option value="2015080600000001">航旅</option><option value="2016062900190337">专业销售/批发</option><option value="2016062900190371">政府/社会组织</option>';
+}
+// 选择商铺type
+function mertType(){
+	return '<option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option>';
+}
+function getWechat(num,innerCode){
+	$.ajax({
+		url:PROJECT_NAME+'/categroty/showFirstClassify',
+		type:'POST',
+		data:{'innerCode':innerCode},
+		success:function(data){
+			unloginHandler(data.data);
+			var html='';
+			for(var i=0;i<data.data.length;i++){
+				html+='<option value='+data.data[i].groupId+'>'+data.data[i].groupName+'</option>';
+			}
+			$("#qGroupId"+num).html(html);
+		}
+    });
+}
+function getWechat1(num,innerCode,group_id){
+	$.ajax({
+		url:PROJECT_NAME+'/categroty/showSecondClassify',
+		type:'POST',
+		data:{'innerCode':innerCode,'group_id':group_id},
+		success:function(data){
+			console.log(data);
+			var html='';
+			for(var i=0;i<data.data.length;i++){
+				html+='<option value='+data.data[i].groupId+'>'+data.data[i].groupName+'</option>';
+			}
+			$("#categroryId"+num).html(html);
+		}
+    });
+}
 function changeTerminalType(num){
 	var typeVal=$("#terminalType"+num).val();
+	var innerCode=$("#innerCode").val();
+	console.log(innerCode);
 	$(".addTerminalRates"+num).find("input").attr('disabled',true);
 	$(".addTerminalRates"+num).find("select").attr('disabled',true);
 	$("#terminalType"+num).attr('disabled',false);
@@ -914,9 +961,13 @@ function changeTerminalType(num){
 	}else if(typeVal=='02'){//微信
 		$("#wechatFee"+num).attr('disabled',false);
 		$("#settleCycle"+num).attr('disabled',false);
-		$("#qGroupId"+num).attr('disabled',false);
-		$("#categroryId"+num).attr('disabled',false);
 		$("#settleCycle"+num).html(settleCycleHtml());
+		$("#qGroupId"+num).attr('disabled',false);
+		getWechat(num,innerCode);
+		$("#qGroupId"+num).change(function(){
+			getWechat1(num,innerCode,$("#qGroupId"+num).val());
+		})
+		$("#categroryId"+num).attr('disabled',false);
 	}else if(typeVal=='03'){//支付宝
 		$("#alipayFee"+num).attr('disabled',false);
 		$("#settleCycle"+num).attr('disabled',false);
@@ -933,33 +984,7 @@ function changeTerminalType(num){
 		$("#settleCycle"+num).html(settleCycleHtml());
 	}
 }
-function noSelect(){
-	'<option value="">--请选择--</option>';
-}
-// 结算周期
-function settleCycleHtml(){
-	return '<option value="00">T1</option><option value="01">D1</option><option value="02">D0</option>';
-}
-// 支付宝一级类目
-function alipayQGroupId(){
-	return '<option value="2015050700000000">美食</option><option value="2015091000052157">超市便利店</option><option value="2015063000020189">生活服务</option><option value="2015062600004525">休闲娱乐</option><option value="2015062600002758">购物</option><option value="2016062900190124">爱车</option><option value="2016042200000148">教育培训</option><option value="2016062900190296">医疗健康</option><option value="2015080600000001">航旅</option><option value="2016062900190337">专业销售/批发</option><option value="2016062900190371">政府/社会组织</option>';
-}
-// 选择商铺type
-function mertType(){
-	return '<option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option>';
-}
-getWechat("112110492139624");
-function getWechat(innerCode){
-	$.ajax({
-		url:PROJECT_NAME+'/categroty/showFirstClassify',
-		type:'POST',
-		data:{'innerCode':innerCode},
-		success:function(data){
-			unloginHandler(data);
-			console.log(data);
-		}
-    });
-}
+
 /**
  * 终端信息界面的 新增设备按钮  触发的事件
  * @param num
