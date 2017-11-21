@@ -118,6 +118,8 @@ public class TradeDataWebController extends BaseController {
                     merchantdo.setPayType("刷卡");
                 } else if ("01".equals(merchantdo.getPayType())) {
                     merchantdo.setPayType("扫码");
+                }else if ("02".equals(merchantdo.getPayType())){
+                	merchantdo.setPayType("分期付");
                 }
                 // 处理金额
                 if (null != merchantdo.getAmt()) {

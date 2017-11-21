@@ -37,6 +37,7 @@ public class MerchantChannel extends DTO{
     private List<MerchantPos> posInfos;//POS机信息列表
   
   	private List<MerchantTerminal> terminaInfos;//关联所有终端信息
+  	
     public List<MerchantTerminal> getTerminaInfos() {
 		return terminaInfos;
 	}

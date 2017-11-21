@@ -84,15 +84,18 @@ function getValue(type){
 				changeValue('total-count-num',0,count,0,2);
 				totalNum=Number(Math.round(data.data.amtTot));
 				totalCountNum=Number(data.data.count);
-				// console.log("默认请求:"+totalNum,totalCountNum);
+				console.log("默认请求:"+totalNum,totalCountNum);
 			}else{
 				amtTot=Number(Math.round(data.data.amtTot));
 				count=Number(Math.round(data.data.count));
-				changeValue('total-number',totalNum,amtTot+addAmt,0,2);
-				changeValue('total-count-num',totalCountNum,count+addCount,0,2);
-				totalNum=amtTot;
-				totalCountNum=count;
-				// console.log("请求来的值:"+amtTot,count,"显示的值:"+(amtTot+addAmt),count+addCount);
+				showTot=amtTot+addAmt;
+				showCount=count+addCount;
+				console.log(showTot,showCount);
+				changeValue('total-number',totalNum,showTot,0,2);
+				changeValue('total-count-num',totalCountNum,showCount,0,2);
+				totalNum=showTot;
+				totalCountNum=showCount;
+				console.log("请求来的值:"+amtTot,count,"显示的值:"+(amtTot+addAmt),count+addCount);
 			}
 		}
 	})
@@ -109,7 +112,7 @@ function changeVal(){
 	totalCountNum=newTotalCountNum;
 	addAmt=Number(addRandom+addAmt);
 	addCount=Number(addRandom1+addCount);
-	// console.log("新增金额："+addAmt,"新增笔数："+addCount);
+	console.log("新增金额："+addAmt,"新增笔数："+addCount);
 }
 setInterval(function(){
 	changeVal();
@@ -132,30 +135,37 @@ Date.prototype.Format = function (fmt) { //author: meizz
     return fmt;
 }
 
-function getList(){
-	$("#scroll-ul").html('');
+function getList(num,data){
+	dataTime=data+'-01 00:00:00';
 	$.ajax({
 		url:'../h5/report/getTradeDataList',
 		type:'get',
-		data:{'startDate':'2017-01-01 00:00:00','pageSize':20},
+		data:{'startDate':dataTime,'pageSize':20},
 		success:function(data){
-			console.log(data);
+			// $("#scroll-ul").html('');
 			for(var i=0;i<data.data.length;i++){
 				$("#scroll-ul").append('<li><div class="card-num">'+data.data[i].payType+'</div><div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">'+data.data[i].amt+'</span></div></li>')
 			}
-			$("#scrollDiv").textSlider({line:1,speed:500,timer:3000});
+			if(num=='0'){
+				$("#scrollDiv").textSlider({line:1,speed:800,timer:3000});
+			}
 		}
 	})
+	
 }
+var data=new Date();
+var time=data.getFullYear()+'-'+(data.getMonth()+1);
+console.log(data.getFullYear(),data.getMonth()+1,time);
 //设置
 $(document).ready(function(){
 	getValue();
-	getList();
+	getList("0",time);
 });
 setInterval(function(){
-	// console.log("重新刷新了");
+	console.log("重新刷新了");
 	getValue("0");
 	getList();
+	// $("#scrollDiv").textSlider({line:1,speed:800,timer:3000});
 },20000)	
 </script>
 </html>

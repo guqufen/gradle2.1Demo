@@ -31,7 +31,7 @@ public interface TradeDataSimpleDAO {
         @Result(column = "term_id", property = "termId"), @Result(column = "batch_no", property = "batchNo"), @Result(column = "trace_no", property = "traceNo"),
         @Result(column = "refer_no", property = "referNo"), @Result(column = "auth_code", property = "authCode"), @Result(column = "order_id_scan", property = "orderIdScan"),
         @Result(column = "send_time", property = "sendTime"), @Result(column = "create_time", property = "createTime") })
-    @Select("SELECT * FROM t_trade_data where create_time > #{startDate} limit ${pageSize} ")
+    @Select("SELECT * FROM t_trade_data where create_time > #{startDate} order by create_time desc limit ${pageSize} ")
     public List<TradeDataDO> getTradeDataList(@Param("startDate") String startDate, @Param("pageSize") Integer pageSize);
     
     @Results({ @Result(column = "inner_code", property = "innerCode"), @Result(column = "txn_type", property = "txnType"), @Result(column = "txn_sub_type", property = "txnSubType"),
