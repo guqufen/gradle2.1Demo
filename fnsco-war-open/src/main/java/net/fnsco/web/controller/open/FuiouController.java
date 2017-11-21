@@ -29,18 +29,22 @@ import net.fnsco.core.utils.DbUtil;
 import net.fnsco.web.controller.open.jo.FuiouJO;
 
 @Controller
-@RequestMapping(value="/syncData/fuiou", method=RequestMethod.POST)
-@Api(value="/open/fuiou", tags={"富友交易实时传输交口"})
+@RequestMapping(value="/syncData/fuiou", method=RequestMethod.GET)
+@Api(value="/syncData/fuiou", tags={"富友交易实时传输交口"})
 public class FuiouController extends BaseController{
 
 	@Autowired
 	private TradeDataService   tradeDataService;
 	@Autowired
 	private Environment env;
-	
+
 	@RequestMapping("/transtradeSave")
 	@ResponseBody
-	public ResultDTO saveTradeFuiou(@RequestBody String req)throws ParseException {
+	public ResultDTO saveTradeFuiou(String req)throws ParseException {
+
+		if(Strings.isNullOrEmpty(req)){
+			return null;
+		}
 
 		String tradeDataStr = request.getParameter("req");
 		logger.info("富友实时交易流水数据" + req);
