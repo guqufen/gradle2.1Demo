@@ -458,6 +458,18 @@ public class ReportService extends BaseService {
     //查询风控报告明细
     public ResultDTO queryReportDetails(Integer merchantId) {
         ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
+        if (!Strings.isNullOrEmpty(reportInfoDO.getIndustry())) {
+			IndustryDO industryDO = industryDAO.getById(Integer.parseInt(reportInfoDO.getIndustry()));
+			if (!Strings.isNullOrEmpty(industryDO.getFourth())) {
+				reportInfoDO.setIndustryName(
+						industryDO.getFirst() + "--" + industryDO.getThird() + "--" + industryDO.getFourth());
+			} else if (!Strings.isNullOrEmpty(industryDO.getThird())) {
+				reportInfoDO.setIndustryName(industryDO.getFirst() + "--" + industryDO.getThird());
+			} else {
+				reportInfoDO.setIndustryName(industryDO.getFirst());
+			}
+//			reportInfoDO.setIndustryName(industryDO.getFirst());
+		}
         return ResultDTO.success(reportInfoDO);
     }
 

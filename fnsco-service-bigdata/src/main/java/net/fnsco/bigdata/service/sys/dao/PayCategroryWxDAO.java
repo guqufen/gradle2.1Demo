@@ -38,4 +38,9 @@ public interface PayCategroryWxDAO {
     @SelectProvider(type = PayCategroryWxProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("payCategroryWx") PayCategroryWxDO payCategroryWx);
 
+    @Select("SELECT DISTINCT(group_id) group_id,group_name FROM sys_pay_categrory_wx WHERE etps_attr=#{etpAttr} ")
+	public List<PayCategroryWxDO> getFirstCategrotyListByEtpAttr(String etpAttr);
+    @Select("SELECT * FROM sys_pay_categrory_wx Where etps_attr = #{0}  and group_id=#{1} ")
+	public List<PayCategroryWxDO> getSecondCategrotyListByContion(String etpAttr, Integer group_id);
+
 }

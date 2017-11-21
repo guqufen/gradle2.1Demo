@@ -69,7 +69,8 @@ $('#table').bootstrapTable({
 		title : '商户编码'
 	}, {
 		field : 'industry',
-		title : '行业'
+		title : '行业',
+		formatter : formatterIndustry
 	}, {
 		field : 'tradingArea',
 		title : '商圈'
@@ -126,6 +127,36 @@ function formatterStatus(value, row, index) {
 	}else{
 		return '-';
 	}
+}
+function formatterIndustry(value, row, index){
+	if(value == null){
+		return "-";
+	}
+	var val=queryIndustry(value);
+	console.log(val)
+	return val;
+}
+function queryIndustry(value){
+	var result;
+	$.ajax({
+		url : PROJECT_NAME + '/web/admin/report/queryIndustry',
+		type : 'POST',
+		async: false,
+		dataType : "json",
+		data : {"id":value},
+		success : function(data){
+			if(data.data.fourth != ""){
+				result = data.data.first+'--'+data.data.third+'--'+data.data.fourth;
+				}else if(data.data.third != ""){
+					result = data.data.first+'--'+data.data.third;
+				}else if(data.data.first != ""){
+					result = data.data.first;
+				}
+//			result = data.data.first;
+//			console.log(result)
+		}
+	});
+	return result;
 }
 // 条件查询按钮事件
 function queryEvent() {

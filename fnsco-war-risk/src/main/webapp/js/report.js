@@ -48,8 +48,8 @@ $('#table').bootstrapTable({
 		title : '商户编码'
 	}, {
 		field : 'industry',
-		title : '行业'
-//		formatter : formatterIndustry
+		title : '行业',
+		formatter : formatterIndustry
 	}, {
 		field : 'tradingArea',
 		title : '商圈'
@@ -111,27 +111,37 @@ function formatterSize(value, row, index) {
 		return "大型连锁";
 	}
 }
-//function formatterIndustry(value, row, index){
-//	var val=queryIndustry(value);
+function formatterIndustry(value, row, index){
+	if(value == null){
+		return "-";
+	}
+	var val=queryIndustry(value);
 //	console.log(val)
-//	return val;
-//}
+	return val;
+}
 
-//function queryIndustry(value){
-//	var result;
-//	$.ajax({
-//		url : PROJECT_NAME + '/web/report/queryIndustry',
-//		type : 'POST',
-//		async: false,
-//		dataType : "json",
-//		data : {"id":value},
-//		success : function(data){
+function queryIndustry(value){
+	var result;
+	$.ajax({
+		url : PROJECT_NAME + '/web/report/queryIndustry',
+		type : 'POST',
+		async: false,
+		dataType : "json",
+		data : {"id":value},
+		success : function(data){
+			if(data.data.fourth != ""){
+				result = data.data.first+'--'+data.data.third+'--'+data.data.fourth;
+				}else if(data.data.third != ""){
+					result = data.data.first+'--'+data.data.third;
+				}else if(data.data.first != ""){
+					result = data.data.first;
+				}
 //			result = data.data.first;
 //			console.log(result)
-//		}
-//	});
-//	return result;
-//}
+		}
+	});
+	return result;
+}
 // 组装请求参数
 function queryParams(params) {
 	var param = {
