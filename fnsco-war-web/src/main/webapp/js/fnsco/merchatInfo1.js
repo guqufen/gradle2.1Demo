@@ -900,7 +900,7 @@ function changeTerminalType(num){
 	$("#terminalType"+num).attr('disabled',false);
 	$("#terminalCode"+num).attr('disabled',false);
 	$("#settleCycle"+num).html(settleCycleHtml());
-	$(".addTerminalRates"+num).find("input").val('');
+	// $(".addTerminalRates"+num).find("input").val('');
 	$("#settleCycle"+num).html('');
 	$("#qGroupId"+num).html('');
 	$("#categroryId"+num).html('');
@@ -948,7 +948,7 @@ function alipayQGroupId(){
 function mertType(){
 	return '<option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option>';
 }
-getWechat("112115977945661");
+getWechat("112110492139624");
 function getWechat(innerCode){
 	$.ajax({
 		url:PROJECT_NAME+'/categroty/showFirstClassify',
@@ -1030,7 +1030,7 @@ function removePos(num){
           btn: ['确定', '取消']
         }, function(){
           $.ajax({
-            url:PROJECT_NAME+'/web/merchantpos/deletePosInfo',
+            url:PROJECT_NAME+'/web/merchantpos/deleteTerminalInfo',
             type:'POST',
             data:{'id':num},
             success:function(data){
@@ -1469,7 +1469,7 @@ function editData(id){
             }
             var terminaLen=data.data.channel[i].terminaInfos.length;
             for(var o=0;o<terminaLen;o++){
-            	console.log(data.data.channel[i].terminaInfos[o].terminalType,data.data.channel[i].terminaInfos[o].id);
+            	console.log(data.data.channel[i].terminaInfos[o].alipayFee,data.data.channel[i].terminaInfos[o].id);
             	$("#terminalRatesList"+data.data.channel[i].id).append(terminalRatesHtml(data.data.channel[i].terminaInfos[o].id));
             	$('select[name="terminalType'+data.data.channel[i].terminaInfos[o].id+'"]').find("option[value='"+data.data.channel[i].terminaInfos[o].terminalType+"']").attr("selected",true);
             	$('input[name="terminalCode'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].terminalCode);
@@ -1481,9 +1481,9 @@ function editData(id){
             	$('select[name="settleCycle'+data.data.channel[i].terminaInfos[o].id+'"]').find("option[value='"+data.data.channel[i].terminaInfos[o].settleCycle+"']").attr("selected",true);
             	$('input[name="subAppId'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].subAppId);
             	$('input[name="jsapiPath'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].jsapiPath);
+            	changeTerminalType(data.data.channel[i].terminaInfos[o].id);
             	$('select[name="qGroupId'+data.data.channel[i].terminaInfos[o].id+'"]').find("option[value='"+data.data.channel[i].terminaInfos[o].qGroupId+"']").attr("selected",true);
             	$('select[name="categroryId'+data.data.channel[i].terminaInfos[o].id+'"]').find("option[value='"+data.data.channel[i].terminaInfos[o].categroryId+"']").attr("selected",true);
-            	changeTerminalType(data.data.channel[i].terminaInfos[o].id);
             }
         }
         // 联系信息
