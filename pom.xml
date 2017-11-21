@@ -16,6 +16,7 @@
 		<module>fnsco-war-web</module>
 		<module>fnsco-war-timer</module>
 		<module>fnsco-war-app</module>
+		<module>fnsco-war-app-zft</module>
 		<module>fnsco-war-open</module>
 		<module>fnsco-war-risk</module>
 		<module>fnsco-war-risk-admin</module>

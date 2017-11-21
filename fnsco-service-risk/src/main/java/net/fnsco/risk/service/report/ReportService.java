@@ -26,6 +26,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.core.base.BaseService;
@@ -534,6 +535,15 @@ public class ReportService extends BaseService {
      */
     public ResultDTO getById(ReportInfoDO reportInfoDO) {
         ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());
+
+        IndustryDO industryDO = industryDAO.getById(Integer.parseInt(reportInfo.getIndustry()));
+        if( !Strings.isNullOrEmpty(industryDO.getFourth())){
+        	reportInfo.setIndustryName(industryDO.getFirst()+"--"+industryDO.getThird()+"--"+industryDO.getFourth());
+  		}else if( !Strings.isNullOrEmpty(industryDO.getThird() )){
+  			reportInfo.setIndustryName(industryDO.getFirst()+"--"+industryDO.getThird());
+  		}else{
+  			reportInfo.setIndustryName(industryDO.getFirst());
+  		}
         return ResultDTO.success(reportInfo);
     }
     

@@ -545,4 +545,24 @@ public class DateUtils {
         String endTime = format.format(cale.getTime());
         return endTime;
     }
+    
+    /**
+     * 
+     * @param str:格式yyyyMMddHHmmss
+     * @return :格式yyyy-MM-dd HH:mm:ss
+     */
+    public static Date StrToDate(String str){
+    	 SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+         SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMddHHmmss");
+         Date date2 = null;
+         try {
+			Date date = sf1.parse(str);
+			String tmp = sf.format(date);
+			date2 = sf.parse(tmp);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+         return date2;
+    }
 }
