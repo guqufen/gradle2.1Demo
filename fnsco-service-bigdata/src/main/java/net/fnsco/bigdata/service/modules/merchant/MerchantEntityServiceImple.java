@@ -180,7 +180,7 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 			return 1;
 		case 5:
 			return 2;
-		case 6:
+		case 7:
 			return 1;
 		}
 		return null;
