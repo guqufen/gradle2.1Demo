@@ -191,7 +191,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             tradeListDAO.updateByPrimaryKeySelective(data);
         }
 
-    	return false;
+    	return true;
     }
 
     /**
