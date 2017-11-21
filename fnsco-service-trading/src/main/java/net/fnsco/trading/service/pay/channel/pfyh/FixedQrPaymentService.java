@@ -19,12 +19,12 @@ import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.comm.ServiceConstant;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.modules.merchant.MerchantServiceImpl;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.QrUtil;
 import net.fnsco.core.utils.dto.QrDTO;
-import net.fnsco.trading.service.pay.channel.pfyh.dto.PfDTO;
 import net.fnsco.trading.service.pay.channel.pfyh.dto.PfNotifyDTO;
 
 /**
@@ -116,7 +116,7 @@ public class FixedQrPaymentService extends BaseService {
         for (MerchantChannel channel : channelList) {
             if (BigdataConstant.ChannelTypeEnum.PF.getCode().equals(channel.getChannelType())) {
                 flag = true;
-                content = env.getProperty("qr.redrect.url");
+                content = env.getProperty(MerchantServiceImpl.TAICODE_BASE_URL);
             }else if (BigdataConstant.ChannelTypeEnum.JHF.getCode().equals(channel.getChannelType())) {
                 flag = true;
                 content = env.getProperty("fsf.qr.redrect.url");

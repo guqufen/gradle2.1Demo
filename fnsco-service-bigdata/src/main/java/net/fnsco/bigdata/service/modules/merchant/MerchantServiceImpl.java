@@ -69,7 +69,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     @Autowired
     private MerchantPosSimpleDao     merchantPosSimpleDao;
     @Autowired
-    private static final String TAICODE_BASE_URL = "qr.redrect.url";
+    public static final String TAICODE_BASE_URL = "pf.qr.redrect.url";
     private Environment              env;
     @Autowired
     private MerchantEntityCoreRefDao entityCoreRefDao;

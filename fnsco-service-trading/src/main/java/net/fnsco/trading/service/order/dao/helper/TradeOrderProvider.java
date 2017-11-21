@@ -370,7 +370,14 @@ public class TradeOrderProvider {
             WHERE("inner_code=#{tradeOrder.innerCode}");
         }
         if (StringUtils.isNotBlank(tradeOrder.getOrderTop10())||StringUtils.isNotBlank(tradeOrder.getOrderNoAfter6())){
+            if(Strings.isNullOrEmpty(tradeOrder.getOrderTop10())){
+                tradeOrder.setOrderTop10("");
+            }
+            if(Strings.isNullOrEmpty(tradeOrder.getOrderNoAfter6())){
+                tradeOrder.setOrderNoAfter6("");
+            }
             WHERE("order_no like CONCAT(#{tradeOrder.orderTop10},'%',#{tradeOrder.orderNoAfter6})");
+        
         }
         }}.toString();
     }

@@ -58,6 +58,7 @@ public class TradePayController extends BaseController {
                 tradeOrderService.doUpdate(tradeOrderTemp);
             }
         }
+        logger.error("分闪付跳转到聚惠分平台前的url"+url);
         return "redirect:" + url;
     }
 
