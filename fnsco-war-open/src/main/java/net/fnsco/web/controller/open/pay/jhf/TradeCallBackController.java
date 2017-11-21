@@ -83,10 +83,10 @@ public class TradeCallBackController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/payCompleteCallback", method = RequestMethod.GET)
-    @ApiOperation(value = "支付完成时的回调")
+    @ApiOperation(value = "支付页面完成时的回调")
     public String payCompleteCallback(String orderNo) {
         String url = env.getProperty("web.base.url");
-        logger.error("聚惠芬支付完成时的回调入参：" + orderNo);
+        logger.error("聚惠芬支付页面完成时的回调入参：" + orderNo);
         TradeOrderDO order = tradeOrderService.queryOneByOrderId(orderNo);
         //分期数
         //支付总金额
