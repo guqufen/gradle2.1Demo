@@ -82,6 +82,14 @@ public class MerchantCore extends DTO {
 	private List<MerchantChannel> channel;// 关联的渠道信息
 
 	private List<MerchantBank> banks;// 关联的银行卡信息
+	
+	//关联所有pos设备信息
+	private List<MerchantPos> posDeviceInfos;
+	//关联所有终端信息
+	private List<MerchantTerminal> terminaInfos;
+	
+	
+
 	private String openFixQr;
 	
 	private String channelType; //渠道类型
@@ -514,5 +522,22 @@ public class MerchantCore extends DTO {
 
 	public void setCreateTimeStr(String createTimeStr) {
 		this.createTimeStr = createTimeStr;
+	}
+	
+	
+	public List<MerchantPos> getPosDeviceInfos() {
+		return posDeviceInfos;
+	}
+
+	public void setPosDeviceInfos(List<MerchantPos> posDeviceInfos) {
+		this.posDeviceInfos = posDeviceInfos;
+	}
+
+	public List<MerchantTerminal> getTerminaInfos() {
+		return terminaInfos;
+	}
+
+	public void setTerminaInfos(List<MerchantTerminal> terminaInfos) {
+		this.terminaInfos = terminaInfos;
 	}
 }

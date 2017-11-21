@@ -65,6 +65,13 @@
     from m_merchant_pos
     where sn_code = #{snCode,jdbcType=VARCHAR}
   </select>
+  <select id="selectByInnerCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_pos
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from m_merchant_pos
     where id = #{id,jdbcType=INTEGER}
