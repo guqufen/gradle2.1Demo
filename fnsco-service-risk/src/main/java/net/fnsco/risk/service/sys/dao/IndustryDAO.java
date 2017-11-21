@@ -18,7 +18,7 @@ public interface IndustryDAO {
 
     @Results({@Result( column = "id",property = "id") ,@Result( column = "code",property = "code") ,@Result( column = "business_form",property = "businessForm"), @Result( column = "first",property = "first"),
         @Result( column = "third",property = "third"), @Result( column = "fourth",property = "fourth"), @Result( column = "status",property = "status"), @Result( column = "remark",property = "remark")})
-    @Select("SELECT * FROM sys_industry WHERE id = #{id}")
+    @Select("SELECT * FROM sys_industry WHERE id = #{id} limit 1")
     public IndustryDO getById(@Param("id") int id);
 
     @Insert("INSERT into sys_industry(id,code,business_form,first,third,fourth,status,remark) VALUES (#{id},#{code},#{businessForm},#{first},#{third},#{fourth},#{status},#{remark})")

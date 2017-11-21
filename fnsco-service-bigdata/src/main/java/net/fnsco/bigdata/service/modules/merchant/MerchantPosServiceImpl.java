@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO;
+import net.fnsco.bigdata.api.dto.WebMerchantPosDTO2;
 import net.fnsco.bigdata.api.dto.WebMerchantTerminalDTO;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
 import net.fnsco.bigdata.service.dao.master.MerchantBankDao;
@@ -38,6 +39,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
     private MerchantTerminalDao merchantTerminalDao;
     @Autowired
     private MerchantBankDao merchantBankDao;
+  
     
     @Override
     public int deleteByPrimaryKey(Integer id) {
@@ -105,6 +107,37 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
      * @date 2017年8月17日 上午11:43:59
      */
     @Transactional
+	@Override
+	public ResultDTO<String> savePosInfo2(List<WebMerchantPosDTO2> record) {
+		for (WebMerchantPosDTO2 webMerchantPosDTO : record) {
+            MerchantChannel  merChannel = webMerchantPosDTO.getMerChannel();
+            if(null != merChannel){
+                if(null != merChannel.getId()){
+                    merchantChannelDao.updateByPrimaryKeySelective(merChannel);
+                }else{
+                    merchantChannelDao.insertSelective(merChannel);
+                }
+            }
+            for(MerchantPos pos :webMerchantPosDTO.getPosInfos()){
+            	if(null != pos.getId()){
+            		merchantPosDao.updateByPrimaryKeySelective(pos);
+            	}else{
+            		merchantPosDao.insertSelective(pos);
+            	}
+            }
+            for (MerchantTerminal terminal : webMerchantPosDTO.getTerminals()) {
+				if(null != terminal.getId()){
+					merchantTerminalDao.updateByPrimaryKey(terminal);
+				}else{
+					merchantTerminalDao.insertSelective(terminal);
+				}
+			}
+        }
+        return ResultDTO.successForSave(null);
+	}
+    
+    
+    @Transactional
     @Override
     public ResultDTO<String> savePosInfo(List<WebMerchantPosDTO> record) {
         
@@ -125,6 +158,8 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
         return ResultDTO.successForSave(null);
         
     }
+    
+    
     /**
      * updatePosInfoToDB:(这里用一句话描述这个方法的作用)更新操作
      * @param posInfos
@@ -221,4 +256,5 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
     public MerchantPos selectBySnCodeAndInnerCode(String snCode, String innerCode,Integer channelId) {
         return merchantPosDao.selectBySnCodeAndInnerCode(snCode, innerCode,channelId);
     }
+
 }

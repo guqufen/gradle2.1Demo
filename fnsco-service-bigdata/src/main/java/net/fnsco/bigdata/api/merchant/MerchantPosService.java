@@ -3,6 +3,7 @@ package net.fnsco.bigdata.api.merchant;
 import java.util.List;
 
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO;
+import net.fnsco.bigdata.api.dto.WebMerchantPosDTO2;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.core.base.ResultDTO;
@@ -44,6 +45,7 @@ public interface MerchantPosService {
      * @return ResultDTO<String>    DOM对象
      */
     ResultDTO<String> savePosInfo(List<WebMerchantPosDTO> record);
+    ResultDTO<String> savePosInfo2(List<WebMerchantPosDTO2> record);
     /**
      * deleteByPosId:(这里用一句话描述这个方法的作用)根据id删除关联终端等信息
      * @param posId

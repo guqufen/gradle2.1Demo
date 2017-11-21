@@ -32,4 +32,9 @@ public class IndustryService extends BaseService{
 		ResultPageDTO<IndustryDO> pager = new ResultPageDTO<>(total, list);
 		 return pager;
 	}
+	
+	public ResultDTO getById(IndustryDO industryDO){
+		IndustryDO industryDO2 = industryDAO.getById(industryDO.getId());
+		return ResultDTO.success(industryDO);
+	}
 }
