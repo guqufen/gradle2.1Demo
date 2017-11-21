@@ -184,13 +184,11 @@ public class TradeOrderService extends BaseService {
         if ("1".equals(order.getOrderStatus())) {
             BigDecimal orderAmountB = new BigDecimal("0");
             BigDecimal eachMoneyB = new BigDecimal("0");
-            Integer periodNum = null;
             try {
                 orderAmountB = new BigDecimal(order.getOrderAmount());
                 orderAmountB = orderAmountB.multiply(new BigDecimal("100"));
                 eachMoneyB = new BigDecimal(order.getEachMoney());
-                eachMoneyB = orderAmountB.multiply(new BigDecimal("100"));
-                periodNum = Integer.valueOf(order.getPeriodNum());
+                eachMoneyB = eachMoneyB.multiply(new BigDecimal("100"));
             } catch (Exception ex) {
                 logger.error("聚惠分支付完成，返回金额数据转换出错", ex);
             }
