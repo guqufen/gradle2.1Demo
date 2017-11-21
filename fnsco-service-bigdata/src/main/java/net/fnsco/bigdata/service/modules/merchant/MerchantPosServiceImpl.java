@@ -236,6 +236,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
         }
         return true;
     }
+
     
     /**
      * (non-Javadoc)获取所有银行卡信息

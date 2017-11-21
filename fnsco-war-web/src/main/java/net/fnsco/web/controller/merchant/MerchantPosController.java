@@ -17,10 +17,13 @@ import com.google.common.base.Strings;
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO;
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO2;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
+import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
+import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.MerchantPos;
+import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.freamwork.business.WebUserDTO;
@@ -49,6 +52,8 @@ public class MerchantPosController extends BaseController {
 	private IntegralLogService integralRuleLogService;
 	@Autowired
 	private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
+	@Autowired
+	private MerchantTerminalDao merchantTerminalDao;
 
 	/**
 	 * toAddTerminal:(这里用一句话描述这个方法的作用)添加POS信息
@@ -104,7 +109,7 @@ public class MerchantPosController extends BaseController {
 	 * @date 2017年8月17日 下午2:11:23
 	 * @return ResultDTO<String> DOM对象
 	 */
-	@RequestMapping(value = "/deletePosInfo", method = RequestMethod.POST)
+//	@RequestMapping(value = "/deletePosInfo", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions(value = { "m:merchant:delete" })
 	public ResultDTO deletePosInfo(@RequestParam(value = "id") Integer id) {
@@ -117,7 +122,37 @@ public class MerchantPosController extends BaseController {
 		}
 		return ResultDTO.success();
 	}
+	//新方法
+	@RequestMapping(value = "/deletePosInfo", method = RequestMethod.POST)
+	@ResponseBody
+	@RequiresPermissions(value = { "m:merchant:delete" })
+	public ResultDTO deletePosInfo2(@RequestParam(value = "id") Integer id) {
+		if (null == id) {
+			return ResultDTO.fail();
+		}
+		int result = merchantPosService.deleteByPrimaryKey(id);
+		if (result == 1 ) {
+			return ResultDTO.fail();
+		}
+		return ResultDTO.success();
+	}
 
+	@RequestMapping(value = "/deleteTerminalInfo", method = RequestMethod.POST)
+	@ResponseBody
+	@RequiresPermissions(value = { "m:merchant:delete" })
+	public ResultDTO deleteTerminalInfo(@RequestParam(value = "id") Integer id) {
+		if (null == id) {
+			return ResultDTO.fail();
+		}
+		int result = merchantTerminalDao.deleteByPrimaryKey(id);
+		if (result == 1 ) {
+			return ResultDTO.fail();
+		}
+		return ResultDTO.success();
+	}
+	
+	
+	
 	/**
 	 * getPosInfo:(这里用一句话描述这个方法的作用)获取所有银行卡信息
 	 * 
