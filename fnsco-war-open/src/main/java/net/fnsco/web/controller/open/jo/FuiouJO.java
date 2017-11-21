@@ -279,5 +279,4 @@ public class FuiouJO extends JO {
 	public void setKey_sign(String key_sign) {
 		this.key_sign = key_sign;
 	}
-
 }
