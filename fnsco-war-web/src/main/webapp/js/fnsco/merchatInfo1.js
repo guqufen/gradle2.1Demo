@@ -891,7 +891,6 @@ function terminalRatesHtml(num){
         '<div class="col-sm-4"><label class="control-label" for="qGroupId'+num+'">一级类目：</label><select id="qGroupId'+num+'" name="qGroupId'+num+'" class="qGroupId form-control"><option value="00">T1</option><option value="01">D1</option><option value="02">D0</option></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="categroryId'+num+'">二级类目：</label><select id="categroryId'+num+'" name="categroryId'+num+'" class="categroryId form-control"><option value="00">T1</option><option value="01">D1</option><option value="02">D0</option></select></div>'+
         '</div>';
-
 }
 
 function changeTerminalType(num){
@@ -900,6 +899,11 @@ function changeTerminalType(num){
 	$(".addTerminalRates"+num).find("select").attr('disabled',true);
 	$("#terminalType"+num).attr('disabled',false);
 	$("#terminalCode"+num).attr('disabled',false);
+	$("#settleCycle"+num).html(settleCycleHtml());
+	$(".addTerminalRates"+num).find("input").val('');
+	$("#settleCycle"+num).html('');
+	$("#qGroupId"+num).html('');
+	$("#categroryId"+num).html('');
 	if(typeVal=='00'){
 		$("#debitCardRate"+num).attr('disabdle',false);
 		$("#creditCardRate"+num).attr('disabled',false);
@@ -912,10 +916,13 @@ function changeTerminalType(num){
 		$("#settleCycle"+num).attr('disabled',false);
 		$("#qGroupId"+num).attr('disabled',false);
 		$("#categroryId"+num).attr('disabled',false);
+		$("#settleCycle"+num).html(settleCycleHtml());
 	}else if(typeVal=='03'){
 		$("#alipayFee"+num).attr('disabled',false);
 		$("#settleCycle"+num).attr('disabled',false);
 		$("#qGroupId"+num).attr('disabled',false);
+		$("#qGroupId"+num).html(alipayQGroupId());
+		$("#settleCycle"+num).html(settleCycleHtml());
 	}else if(typeVal=='04'){
 		$("#wechatFee"+num).attr('disabled',false);
 		$("#settleCycle"+num).attr('disabled',false);
@@ -923,13 +930,35 @@ function changeTerminalType(num){
 		$("#categroryId"+num).attr('disabled',false);
 		$("#subAppId"+num).attr('disabled',false);
 		$("#jsapiPath"+num).attr('disabled',false);
+		$("#settleCycle"+num).html(settleCycleHtml());
 	}
 }
 function noSelect(){
 	'<option value="">--请选择--</option>';
 }
+// 结算周期
 function settleCycleHtml(){
 	return '<option value="00">T1</option><option value="01">D1</option><option value="02">D0</option>';
+}
+// 支付宝一级类目
+function alipayQGroupId(){
+	return '<option value="2015050700000000">美食</option><option value="2015091000052157">超市便利店</option><option value="2015063000020189">生活服务</option><option value="2015062600004525">休闲娱乐</option><option value="2015062600002758">购物</option><option value="2016062900190124">爱车</option><option value="2016042200000148">教育培训</option><option value="2016062900190296">医疗健康</option><option value="2015080600000001">航旅</option><option value="2016062900190337">专业销售/批发</option><option value="2016062900190371">政府/社会组织</option>';
+}
+// 选择商铺type
+function mertType(){
+	return '<option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option>';
+}
+getWechat("个体工商户");
+function getWechat(etpsAttrId){
+	$.ajax({
+		url:PROJECT_NAME+'/categroty/showFirstClassify',
+		type:'POST',
+		data:{'etpAttr':etpsAttrId,'terminal_type':'02'},
+		success:function(data){
+			unloginHandler(data);
+			console.log(data);
+		}
+    });
 }
 /**
  * 终端信息界面的 新增设备按钮  触发的事件
@@ -1417,10 +1446,9 @@ function editData(id){
             $("#terminal-con1").append(terminalHtml(data.data.channel[i].innerCode));
             $("#posList"+data.data.channel[i].innerCode).html('');
             $("#terminalRatesList"+data.data.channel[i].innerCode).html('');
-
-            $('input[name="channelMerKey'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerKey);
-            $('input[name="channelMerId'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerId);
-            $('select[name="channelType'+data.data.channel[i].id+'"]').find("option[value="+data.data.channel[i].channelType+"]").attr("selected",true);
+            $('input[name="channelMerKey'+data.data.channel[i].innerCode+'"]').val(data.data.channel[i].channelMerKey);
+            $('input[name="channelMerId'+data.data.channel[i].innerCode+'"]').val(data.data.channel[i].channelMerId);
+            $('select[name="channelType'+data.data.channel[i].innerCode+'"]').find("option[value="+data.data.channel[i].channelType+"]").attr("selected",true);
             var posLen=data.data.channel[i].posInfos.length;
             for(var j=0;j<posLen;j++){
               $("#posList"+data.data.channel[i].innerCode).append(posHtml(data.data.channel[i].posInfos[j].id));
