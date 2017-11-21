@@ -35,7 +35,17 @@ public class MerchantChannel extends DTO{
     private Integer modifyUserId;
     
     private List<MerchantPos> posInfos;//POS机信息列表
-    private String entityInnerCode;
+  
+  	private List<MerchantTerminal> terminaInfos;//关联所有终端信息
+    public List<MerchantTerminal> getTerminaInfos() {
+		return terminaInfos;
+	}
+
+	public void setTerminaInfos(List<MerchantTerminal> terminaInfos) {
+		this.terminaInfos = terminaInfos;
+	}
+
+	private String entityInnerCode;
     
 	/**
      * entityInnerCode
