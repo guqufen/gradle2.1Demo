@@ -25,8 +25,8 @@ public interface TradeOrderDAO {
                @Result(column = "pay_type", property = "payType"), @Result(column = "pay_sub_type", property = "paySubType"), @Result(column = "settle_amount", property = "settleAmount"),
                @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"), @Result(column = "create_user_id", property = "createUserId"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"), @Result(column = "inner_code", property = "innerCode"),
-               @Result(column = "handle_num", property = "handleNum"), @Result(column = "order_amount", property = "orderAmount"), @Result(column = "period_num", property = "periodNum"),
-               @Result(column = "each_money", property = "eachMoney"), @Result(column = "card_holder_rate", property = "cardHolderRate") })
+               @Result(column = "handle_num", property = "handleNum"), @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"),
+               @Result(column = "card_holder_rate", property = "cardHolderRate") })
     @Select("SELECT * FROM t_trade_order WHERE id = #{id}")
     public TradeOrderDO getById(@Param("id") int id);
 
@@ -38,8 +38,8 @@ public interface TradeOrderDAO {
                @Result(column = "pay_type", property = "payType"), @Result(column = "pay_sub_type", property = "paySubType"), @Result(column = "settle_amount", property = "settleAmount"),
                @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"), @Result(column = "create_user_id", property = "createUserId"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"), @Result(column = "inner_code", property = "innerCode"),
-               @Result(column = "handle_num", property = "handleNum"), @Result(column = "order_amount", property = "orderAmount"), @Result(column = "period_num", property = "periodNum"),
-               @Result(column = "each_money", property = "eachMoney"), @Result(column = "card_holder_rate", property = "cardHolderRate") })
+               @Result(column = "handle_num", property = "handleNum"), @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"),
+               @Result(column = "card_holder_rate", property = "cardHolderRate") })
     @Select("SELECT * FROM t_trade_order WHERE order_no = #{orderNo} order by create_time limit 1 ")
     public TradeOrderDO queryByOrderId(@Param("orderNo") String orderNo);
 
@@ -51,8 +51,7 @@ public interface TradeOrderDAO {
                @Result(column = "pay_type", property = "payType"), @Result(column = "pay_sub_type", property = "paySubType"), @Result(column = "settle_amount", property = "settleAmount"),
                @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"), @Result(column = "create_user_id", property = "createUserId"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"), @Result(column = "inner_code", property = "innerCode"),
-               @Result(column = "order_amount", property = "orderAmount"), @Result(column = "period_num", property = "periodNum"), @Result(column = "each_money", property = "eachMoney"),
-               @Result(column = "card_holder_rate", property = "cardHolderRate") })
+               @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"), @Result(column = "card_holder_rate", property = "cardHolderRate") })
     //@Select("SELECT * FROM t_trade_order WHERE resp_code = '1000'")
     @SelectProvider(type = TradeOrderProvider.class, method = "queryAllNotComplete")
     public List<TradeOrderDO> queryAllNotComplete(@Param("orderNo") String orderNo);
@@ -65,9 +64,8 @@ public interface TradeOrderDAO {
                @Result(column = "pay_type", property = "payType"), @Result(column = "pay_sub_type", property = "paySubType"), @Result(column = "settle_amount", property = "settleAmount"),
                @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"), @Result(column = "create_user_id", property = "createUserId"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"), @Result(column = "inner_code", property = "innerCode"),
-               @Result(column = "order_amount", property = "orderAmount"), @Result(column = "period_num", property = "periodNum"), @Result(column = "each_money", property = "eachMoney"),
-               @Result(column = "card_holder_rate", property = "cardHolderRate") })
-    @Select("SELECT * FROM t_trade_order WHERE sync_status = '0' and resp_code ='1001' order by create_time desc ")
+               @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"), @Result(column = "card_holder_rate", property = "cardHolderRate") })
+    @Select("SELECT * FROM t_trade_order WHERE sync_status = '0' and resp_code ='1001' order by create_time ")
     public List<TradeOrderDO> queryAllNotSyncDate();
 
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "pay_order_no", property = "payOrderNo"), @Result(column = "txn_amount", property = "txnAmount"),
@@ -78,12 +76,11 @@ public interface TradeOrderDAO {
                @Result(column = "pay_type", property = "payType"), @Result(column = "pay_sub_type", property = "paySubType"), @Result(column = "settle_amount", property = "settleAmount"),
                @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"), @Result(column = "create_user_id", property = "createUserId"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"), @Result(column = "inner_code", property = "innerCode"),
-               @Result(column = "order_amount", property = "orderAmount"), @Result(column = "period_num", property = "periodNum"), @Result(column = "each_money", property = "eachMoney"),
-               @Result(column = "card_holder_rate", property = "cardHolderRate") })
+               @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"), @Result(column = "card_holder_rate", property = "cardHolderRate") })
     @Select("SELECT * FROM t_trade_order WHERE pay_order_no = #{salesOrderNo}")
     public TradeOrderDO queryBySalesOrderNo(@Param("salesOrderNo") String salesOrderNo);
 
-    @Insert("INSERT into t_trade_order(id,order_no,pay_order_no,txn_amount,installment_num,resp_code,resp_msg,entity_inner_code,channel_mer_id,channel_type,complete_time,order_ceate_time,txn_type,txn_sub_type,pay_type,pay_sub_type,settle_amount,settle_date,settle_status,create_user_id,create_time,sync_status,inner_code,handle_num,order_amount,period_num,each_money,card_holder_rate) VALUES (#{id},#{orderNo},#{payOrderNo},#{txnAmount},#{installmentNum},#{respCode},#{respMsg},#{entityInnerCode},#{channelMerId},#{channelType},#{completeTime},#{orderCeateTime},#{txnType},#{txnSubType},#{payType},#{paySubType},#{settleAmount},#{settleDate},#{settleStatus},#{createUserId},#{createTime},#{syncStatus},#{innerCode},#{handleNum},#{orderAmount},#{periodNum},#{eachMoney},#{cardHolderRate})")
+    @Insert("INSERT into t_trade_order(id,order_no,pay_order_no,txn_amount,installment_num,resp_code,resp_msg,entity_inner_code,channel_mer_id,channel_type,complete_time,order_ceate_time,txn_type,txn_sub_type,pay_type,pay_sub_type,settle_amount,settle_date,settle_status,create_user_id,create_time,sync_status,inner_code,handle_num,order_amount,each_money,card_holder_rate) VALUES (#{id},#{orderNo},#{payOrderNo},#{txnAmount},#{installmentNum},#{respCode},#{respMsg},#{entityInnerCode},#{channelMerId},#{channelType},#{completeTime},#{orderCeateTime},#{txnType},#{txnSubType},#{payType},#{paySubType},#{settleAmount},#{settleDate},#{settleStatus},#{createUserId},#{createTime},#{syncStatus},#{innerCode},#{handleNum},#{orderAmount},#{eachMoney},#{cardHolderRate})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(TradeOrderDO tradeOrder);
 
@@ -104,8 +101,7 @@ public interface TradeOrderDAO {
                @Result(column = "pay_type", property = "payType"), @Result(column = "pay_sub_type", property = "paySubType"), @Result(column = "settle_amount", property = "settleAmount"),
                @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"), @Result(column = "create_user_id", property = "createUserId"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"), @Result(column = "inner_code", property = "innerCode"),
-               @Result(column = "order_amount", property = "orderAmount"), @Result(column = "period_num", property = "periodNum"), @Result(column = "each_money", property = "eachMoney"),
-               @Result(column = "card_holder_rate", property = "cardHolderRate") })
+               @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"), @Result(column = "card_holder_rate", property = "cardHolderRate") })
     @SelectProvider(type = TradeOrderProvider.class, method = "pageList")
     public List<TradeOrderDO> pageList(@Param("tradeOrder") TradeOrderDO tradeOrder, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 

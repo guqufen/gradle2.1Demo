@@ -3,8 +3,15 @@ package net.fnsco.web.controller.merchant.jo;
 import java.util.List;
 
 import net.fnsco.bigdata.service.domain.MerchantChannel;
+import net.fnsco.bigdata.service.domain.MerchantPos;
+import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.JO;
 
+/**
+ * web页面渠道信息、pos信息、终端信息新增修改接收实体
+ * @author Administrator
+ *
+ */
 public class MerchantChannelJO extends JO {
     /**
      * 渠道信息
@@ -15,8 +22,9 @@ public class MerchantChannelJO extends JO {
      * POS机子信息
      */
     private List<MerchantPosJO> posInfos;
+   
 
-    /**
+	/**
      * merChannel
      *
      * @return  the merChannel

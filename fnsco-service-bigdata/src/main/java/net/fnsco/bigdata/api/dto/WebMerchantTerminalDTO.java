@@ -7,7 +7,7 @@ import net.fnsco.bigdata.service.domain.MerchantTerminal;
 
 /**
  * 
- * @desc
+ * @desc   pos信息和终端信息
  * @author   tangliang
  * @version  0.0.1-SNAPSHOT
  * @since    Ver 1.1
@@ -19,8 +19,8 @@ public class WebMerchantTerminalDTO {
      * POS机子信息
      */
     private MerchantPos merchantPos;
-    
-    /**
+  
+	/**
      * 终端信息
      */
     private List<MerchantTerminal>  terminals;
@@ -53,7 +53,6 @@ public class WebMerchantTerminalDTO {
      * @return  the terminals
      * @since   CodingExample Ver 1.0
     */
-    
     public List<MerchantTerminal> getTerminals() {
         return terminals;
     }

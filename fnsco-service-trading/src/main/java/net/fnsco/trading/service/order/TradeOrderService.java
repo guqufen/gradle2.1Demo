@@ -184,18 +184,17 @@ public class TradeOrderService extends BaseService {
         if ("1".equals(order.getOrderStatus())) {
             BigDecimal orderAmountB = new BigDecimal("0");
             BigDecimal eachMoneyB = new BigDecimal("0");
-            Integer periodNum = null ;
-            try{
+            Integer periodNum = null;
+            try {
                 orderAmountB = new BigDecimal(order.getOrderAmount());
                 orderAmountB = orderAmountB.multiply(new BigDecimal("100"));
                 eachMoneyB = new BigDecimal(order.getEachMoney());
                 eachMoneyB = orderAmountB.multiply(new BigDecimal("100"));
                 periodNum = Integer.valueOf(order.getPeriodNum());
-            }catch(Exception ex){
-                logger.error("聚惠分支付完成，返回金额数据转换出错",ex);
+            } catch (Exception ex) {
+                logger.error("聚惠分支付完成，返回金额数据转换出错", ex);
             }
             tradeOrderDO.setOrderAmount(orderAmountB);
-            tradeOrderDO.setPeriodNum(periodNum);
             tradeOrderDO.setEachMoney(eachMoneyB);
             tradeOrderDO.setCardHolderRate(order.getCardHolderRate());
         }
@@ -205,7 +204,9 @@ public class TradeOrderService extends BaseService {
                 tradeOrderDO.setSettleStatus(Integer.parseInt(order.getSettlementStatus()));
                 if ("1".equals(order.getSettlementStatus())) {
                     tradeOrderDO.setSettleDate(new Date());
-                    tradeOrderDO.setSettleAmount(new BigDecimal(order.getSettlementAmount()));
+                    BigDecimal settleAmount = new BigDecimal(order.getSettlementAmount());
+                    settleAmount = settleAmount.multiply(new BigDecimal("100"));
+                    tradeOrderDO.setSettleAmount(settleAmount);
                 }
             } catch (Exception ex) {
                 logger.error("支付完成时回调时结算状态转换为int出错", ex);
@@ -265,12 +266,17 @@ public class TradeOrderService extends BaseService {
                 try {
                     JSONObject jsonObj = JSON.parseObject(resultJson);
                     String rspDataStr = jsonObj.getString("rspData");
+                    if (Strings.isNullOrEmpty(rspDataStr)) {
+                        logger.error("调用聚惠芬查询订单信息参数为空,入参" + param.toString());
+                        return;
+                    }
                     String decodeStr = AESUtil.decode(rspDataStr, keyStr);
                     logger.error("调用聚惠芬查询订单信息解密后参数" + decodeStr);
                     List<OrderDTO> orderDtoList = JSON.parseArray(decodeStr, OrderDTO.class);
                     if (null != orderDtoList) {
                         for (OrderDTO dto : orderDtoList) {
                             if (null != dto) {
+                                dto.setOrderAmount(dto.getPayAmount());
                                 updateOrderInfo(dto);
                             }
                         }

@@ -20,7 +20,7 @@ import net.fnsco.risk.service.sys.entity.IndustryDO;
  */
 @Controller
 @RequestMapping("/industry")
-public class IndestryController extends BaseController{
+public class IndustryController extends BaseController{
 
 	@Autowired
 	private IndustryService industryService;

@@ -26,6 +26,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.core.base.BaseService;
@@ -457,6 +458,18 @@ public class ReportService extends BaseService {
     //查询风控报告明细
     public ResultDTO queryReportDetails(Integer merchantId) {
         ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
+        if (!Strings.isNullOrEmpty(reportInfoDO.getIndustry())) {
+			IndustryDO industryDO = industryDAO.getById(Integer.parseInt(reportInfoDO.getIndustry()));
+			if (!Strings.isNullOrEmpty(industryDO.getFourth())) {
+				reportInfoDO.setIndustryName(
+						industryDO.getFirst() + "--" + industryDO.getThird() + "--" + industryDO.getFourth());
+			} else if (!Strings.isNullOrEmpty(industryDO.getThird())) {
+				reportInfoDO.setIndustryName(industryDO.getFirst() + "--" + industryDO.getThird());
+			} else {
+				reportInfoDO.setIndustryName(industryDO.getFirst());
+			}
+//			reportInfoDO.setIndustryName(industryDO.getFirst());
+		}
         return ResultDTO.success(reportInfoDO);
     }
 
@@ -534,6 +547,19 @@ public class ReportService extends BaseService {
      */
     public ResultDTO getById(ReportInfoDO reportInfoDO) {
         ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());
+
+		if (!Strings.isNullOrEmpty(reportInfo.getIndustry())) {
+			IndustryDO industryDO = industryDAO.getById(Integer.parseInt(reportInfo.getIndustry()));
+			if (!Strings.isNullOrEmpty(industryDO.getFourth())) {
+				reportInfo.setIndustryName(
+						industryDO.getFirst() + "--" + industryDO.getThird() + "--" + industryDO.getFourth());
+			} else if (!Strings.isNullOrEmpty(industryDO.getThird())) {
+				reportInfo.setIndustryName(industryDO.getFirst() + "--" + industryDO.getThird());
+			} else {
+				reportInfo.setIndustryName(industryDO.getFirst());
+			}
+		}
+        
         return ResultDTO.success(reportInfo);
     }
     

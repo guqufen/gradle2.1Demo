@@ -35,7 +35,7 @@ public interface ReportInfoDAO {
 			@Result(column = "last_modify_time", property = "lastModifyTime"),
 			@Result(column = "decoration_level", property = "decorationLevel"),
 			@Result(column = "evaluation", property = "evaluation") })
-	@Select("SELECT r.*,(select first from sys_industry s where s.id=r.industry limit 1) as industryName FROM risk_report_info r WHERE id = #{id}")
+	@Select("SELECT r.* FROM risk_report_info r WHERE id = #{id}")
 	public ReportInfoDO getById(@Param("id") Integer id);
 
 	@Results({ @Result(column = "merc_name", property = "mercName"),
@@ -161,6 +161,8 @@ public interface ReportInfoDAO {
 			@Result(column = "decoration_level", property = "decorationLevel"),
 			@Result(column = "view_num", property = "viewNum"),
 			@Result(column = "last_view_time", property = "lastViewTime"),
+			@Result(column = "industry", property = "industry"),
+			@Result(column = "industryName", property = "industryName"),
 			@Result(column = "evaluation", property = "evaluation") })
 
 	@SelectProvider(type = ReportInfoProvider.class, method = "pageListAllMerc")
@@ -187,6 +189,8 @@ public interface ReportInfoDAO {
 			@Result(column = "decoration_level", property = "decorationLevel"),
 			@Result(column = "evaluation", property = "evaluation"),
 			@Result(column = "last_view_time", property = "lastViewTime"),
+			@Result(column = "industry", property = "industry"),
+			@Result(column = "industryName", property = "industryName"),
 			@Result(column = "view_num", property = "viewNum") })
 	@SelectProvider(type = ReportInfoProvider.class, method = "pageListMercByCondition")
 	public List<ReportInfoDO> pageListMercByCondition(@Param("reportInfo") ReportInfoDO reportInfo,

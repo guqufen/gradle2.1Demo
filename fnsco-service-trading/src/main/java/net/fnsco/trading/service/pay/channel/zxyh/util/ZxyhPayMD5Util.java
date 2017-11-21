@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 
-import net.fnsco.trading.service.pay.channel.zxyh.MerchantZxyhDTO;
+import net.fnsco.trading.service.pay.channel.zxyh.dto.MerchantZxyhDTO;
 
 /**
  * 中信银行杭州分行-移动收单平台接口MD5签名/验签示例代码
@@ -317,8 +317,7 @@ public class ZxyhPayMD5Util {
         String merId = "994400000000009";
         String url = "/MPayTransaction/ind/mchtadd.do";
         MerchantZxyhDTO mercDTO = new MerchantZxyhDTO();
-        mercDTO.init(pid);
-        mercDTO.setMerId(merId);
+        mercDTO.init(pid,merId);
         mercDTO.setMchtNm("杭州法奈昇科技有限公司");
         mercDTO.setMchtCnAbbr("法奈昇科");
         mercDTO.setEtpsAttr("3");
@@ -336,12 +335,9 @@ public class ZxyhPayMD5Util {
         mercDTO.setAddr("信息港");
         /////////////////////
         mercDTO.setWXActive("N");
-        mercDTO.setMainMchtTp("02");
-         
+
         //////////支付宝//////////////////
         mercDTO.setZFBActive("Y");
-        mercDTO.setMainMchtTpA("D1");
-        mercDTO.setOlCodeA("D1|D2");//支付方式编码，可填多个，以“|”分割；D1-二清被扫 D2-二清主扫
         mercDTO.setCategIdC("2016042200000148");
         mercDTO.setFeeRateA("1");
         mercDTO.setSettleCycleA("D0");//---填写字母，T1一工作日、D1一天、D0
