@@ -51,6 +51,10 @@ var totalCountNum;
 var totalNum;
 var amtTot;
 var count;
+var addRandom;
+var addRandom1;
+var addAmt=new Number();
+var addCount=new Number();
 function changeValue(target, startVal, endVal, decimals, duration, options){
      var options = {
       useEasing : true, //使用缓和效果
@@ -80,32 +84,36 @@ function getValue(type){
 				changeValue('total-count-num',0,count,0,2);
 				totalNum=Number(Math.round(data.data.amtTot));
 				totalCountNum=Number(data.data.count);
-				console.log("默认请求:"+totalNum,totalCountNum);
+				// console.log("默认请求:"+totalNum,totalCountNum);
 			}else{
 				amtTot=Number(Math.round(data.data.amtTot));
 				count=Number(Math.round(data.data.count));
-				changeValue('total-number',totalNum,amtTot,0,2);
-				changeValue('total-count-num',totalCountNum,count,0,2);
+				changeValue('total-number',totalNum,amtTot+addAmt,0,2);
+				changeValue('total-count-num',totalCountNum,count+addCount,0,2);
 				totalNum=amtTot;
-				totalCountNum=count; 	
-				console.log("保存的值:"+totalNum,totalCountNum+"<br />获取的值:"+amtTot,count);
+				totalCountNum=count;
+				// console.log("请求来的值:"+amtTot,count,"显示的值:"+(amtTot+addAmt),count+addCount);
 			}
 		}
 	})
 }
-// function changeVal(){
-// 	newTotalNum=totalNum+parseInt(Math.random()*1000);
-// 	newTotalCountNum=totalCountNum+parseInt(Math.random()*10);
-// 	changeValue('total-number',totalNum,newTotalNum,0,2);
-// 	changeValue('total-count-num',totalCountNum,newTotalCountNum,0,2);
-// 	$("#scroll-ul").append('<li><div class="card-num">支付宝支付</div><div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">'+parseInt(Math.random()*1000)+'</span></div></li>');
-// 	totalNum=newTotalNum;
-// 	totalCountNum=newTotalCountNum;
-// 	console.log(totalNum,totalCountNum);
-// }
-// setInterval(function(){
-// 	changeVal();
-// },3000)	
+function changeVal(){
+	newTotalNum=totalNum+parseInt(Math.random()*1000);
+	newTotalCountNum=totalCountNum+parseInt(Math.random()*10);
+	changeValue('total-number',totalNum,newTotalNum,0,2);
+	changeValue('total-count-num',totalCountNum,newTotalCountNum,0,2);
+	// $("#scroll-ul").append('<li><div class="card-num">支付宝支付</div><div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">'+parseInt(Math.random()*1000)+'</span></div></li>');
+	addRandom=newTotalNum-totalNum;
+	addRandom1=newTotalCountNum-totalCountNum;
+	totalNum=newTotalNum;
+	totalCountNum=newTotalCountNum;
+	addAmt=Number(addRandom+addAmt);
+	addCount=Number(addRandom1+addCount);
+	// console.log("新增金额："+addAmt,"新增笔数："+addCount);
+}
+setInterval(function(){
+	changeVal();
+},3000)	
 
 //格式化时间
 Date.prototype.Format = function (fmt) { //author: meizz 
@@ -123,7 +131,6 @@ Date.prototype.Format = function (fmt) { //author: meizz
     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 }
-
 
 function getList(){
 	$.ajax({
@@ -144,5 +151,9 @@ $(document).ready(function(){
 	getValue();
 	getList();
 });
+setInterval(function(){
+	// console.log("重新刷新了");
+	getValue("0");
+},20000)	
 </script>
 </html>

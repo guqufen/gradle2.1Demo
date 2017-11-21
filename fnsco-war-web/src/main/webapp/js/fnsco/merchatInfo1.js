@@ -317,7 +317,7 @@ function operateFormatter(value, row, index) {
 	        '<i class="glyphicon glyphicon-qrcode"></i>',
 	        '</a>  ',
 	        '<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行">',
-	        '<i class="glyphicon glyphicon-qrcode"></i>',
+	        '<i class="glyphicon glyphicon-import"></i>',
 	        '</a>  '
 	    ].join('');
     }else{
