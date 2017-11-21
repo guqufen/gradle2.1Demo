@@ -35,7 +35,7 @@ public interface ReportInfoDAO {
 			@Result(column = "last_modify_time", property = "lastModifyTime"),
 			@Result(column = "decoration_level", property = "decorationLevel"),
 			@Result(column = "evaluation", property = "evaluation") })
-	@Select("SELECT r.*,(select first from sys_industry s where s.id=r.industry limit 1) as industryName FROM risk_report_info r WHERE id = #{id}")
+	@Select("SELECT r.* FROM risk_report_info r WHERE id = #{id}")
 	public ReportInfoDO getById(@Param("id") Integer id);
 
 	@Results({ @Result(column = "merc_name", property = "mercName"),
