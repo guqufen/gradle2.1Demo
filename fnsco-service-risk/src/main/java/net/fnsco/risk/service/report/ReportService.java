@@ -536,14 +536,18 @@ public class ReportService extends BaseService {
     public ResultDTO getById(ReportInfoDO reportInfoDO) {
         ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());
 
-        IndustryDO industryDO = industryDAO.getById(Integer.parseInt(reportInfo.getIndustry()));
-        if( !Strings.isNullOrEmpty(industryDO.getFourth())){
-        	reportInfo.setIndustryName(industryDO.getFirst()+"--"+industryDO.getThird()+"--"+industryDO.getFourth());
-  		}else if( !Strings.isNullOrEmpty(industryDO.getThird() )){
-  			reportInfo.setIndustryName(industryDO.getFirst()+"--"+industryDO.getThird());
-  		}else{
-  			reportInfo.setIndustryName(industryDO.getFirst());
-  		}
+		if (!Strings.isNullOrEmpty(reportInfo.getIndustry())) {
+			IndustryDO industryDO = industryDAO.getById(Integer.parseInt(reportInfo.getIndustry()));
+			if (!Strings.isNullOrEmpty(industryDO.getFourth())) {
+				reportInfo.setIndustryName(
+						industryDO.getFirst() + "--" + industryDO.getThird() + "--" + industryDO.getFourth());
+			} else if (!Strings.isNullOrEmpty(industryDO.getThird())) {
+				reportInfo.setIndustryName(industryDO.getFirst() + "--" + industryDO.getThird());
+			} else {
+				reportInfo.setIndustryName(industryDO.getFirst());
+			}
+		}
+        
         return ResultDTO.success(reportInfo);
     }
     

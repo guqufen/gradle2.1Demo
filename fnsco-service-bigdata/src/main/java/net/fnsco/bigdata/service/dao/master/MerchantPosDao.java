@@ -109,6 +109,9 @@ public interface MerchantPosDao {
      * @since  CodingExample　Ver 1.1
      */
     List<MerchantPos> selectBySnCode(@Param("snCode") String snCode);
+    
+    
+    List<MerchantPos> selectByInnerCode(@Param("innerCode") String innerCode);
     /**
      * selectBySnCodeAndInnerCode:(通过sncode和innercode查询)
      * @return    设定文件
