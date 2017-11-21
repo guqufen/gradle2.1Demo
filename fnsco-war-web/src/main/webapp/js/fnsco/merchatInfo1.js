@@ -1376,18 +1376,19 @@ function editData(id){
         $("#terminal-con1").html('');
         var channelsLen=data.data.channel.length;
         for(var i=0;i<channelsLen;i++){
-            $("#terminal-con1").append(terminalHtml(data.data.channel[i].id));
-            $("#posList"+data.data.channel[i].id).html('');
+            $("#terminal-con1").append(terminalHtml(data.data.channel[i].innerCode));
+            $("#posList"+data.data.channel[i].innerCode).html('');
+            $("#terminalRatesList"+data.data.channel[i].innerCode).html('');
+
             $('input[name="channelMerKey'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerKey);
             $('input[name="channelMerId'+data.data.channel[i].id+'"]').val(data.data.channel[i].channelMerId);
             $('select[name="channelType'+data.data.channel[i].id+'"]').find("option[value="+data.data.channel[i].channelType+"]").attr("selected",true);
             var posLen=data.data.channel[i].posInfos.length;
             for(var j=0;j<posLen;j++){
-              $("#posList"+data.data.channel[i].id).append(posHtml(data.data.channel[i].posInfos[j].id));
+              $("#posList"+data.data.channel[i].innerCode).append(posHtml(data.data.channel[i].posInfos[j].id));
               $('input[name="posName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posName);
               $('input[name="snCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].snCode);
               $('input[name="installAddr'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posAddr);//装机地址数据放入
-
               //选中省份/市/区
               posProvince(data.data.channel[i].posInfos[j].id);
               $('select[name="provinceId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posProvince+"']").attr("selected",true);
@@ -1395,26 +1396,28 @@ function editData(id){
               $('select[name="cityId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posCity+"']").attr("selected",true);
               processSelect(data.data.channel[i].posInfos[j].id, false);//通过选中的市，获取区的数据
               $('select[name="areaId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posArea+"']").attr("selected",true);
-              
               $('select[name="bankId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value="+data.data.channel[i].posInfos[j].bankId+"]").attr("selected",true);
               $('input[name="posType'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posType);
               $('input[name="mercReferName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].mercReferName);
               $('input[name="posFactory'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posFactory);
-              var terminalLen=data.data.channel[i].posInfos[j].terminal.length;
-              for(var o=0;o<terminalLen;o++){
-                if(data.data.channel[i].posInfos[j].terminal[o].terminalType=='00'){
-                  $('input[name="terminalCode2'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].channelTerminalCode);
-                  $('input[name="debitCardMaxFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].debitCardMaxFee);
-                  $('input[name="debitCardRate'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].debitCardRate);
-                  $('input[name="creditCardRate'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].creditCardRate);
-                  $('input[name="terminalId2'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].id);
-                }else if(data.data.channel[i].posInfos[j].terminal[o].terminalType=='01'){
-                  $('input[name="terminalCode1'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].channelTerminalCode);
-                  $('input[name="alipayFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].alipayFee);
-                  $('input[name="wechatFee'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].wechatFee);
-                  $('input[name="terminalId1'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].terminal[o].id);
-                }
-              }
+            }
+            var terminaLen=data.data.channel[i].terminaInfos.length;
+            for(var o=0;o<terminaLen;o++){
+            	$("#terminalRatesList"+data.data.channel[i].innerCode).append(terminalRatesHtml(data.data.channel[i].terminaInfos[o].id));
+            	$('input[name="terminalType'+data.data.channel[i].terminaInfos[o].id+'"]').find("option[value='"+data.data.channel[i].terminaInfos[o].terminalType+"']").attr("selected",true);
+            	$('input[name="terminalCode'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].terminalCode);
+            	$('input[name="alipayFee'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].alipayFee);
+            	$('input[name="wechatFee'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].wechatFee);
+            	$('input[name="debitCardRate'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].debitCardRate);
+            	$('input[name="creditCardRate'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].creditCardRate);
+            	$('input[name="debitCardMaxFee'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].debitCardMaxFee);
+            	$('input[name="settleCycle'+data.data.channel[i].terminaInfos[o].id+'"]').find("option[value='"+data.data.channel[i].terminaInfos[o].settleCycle+"']").attr("selected",true);
+            	$('input[name="subAppId'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].subAppId);
+            	$('input[name="jsapiPath'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].jsapiPath);
+            	$('input[name="qGroupId'+data.data.channel[i].terminaInfos[o].id+'"]').find("option[value='"+data.data.channel[i].terminaInfos[o].qGroupId+"']").attr("selected",true);
+            	$('input[name="categroryId'+data.data.channel[i].terminaInfos[o].id+'"]').find("option[value='"+data.data.channel[i].terminaInfos[o].categroryId+"']").attr("selected",true);
+
+
             }
         }
         // 联系信息
