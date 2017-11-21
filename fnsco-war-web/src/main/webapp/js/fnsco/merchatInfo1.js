@@ -878,21 +878,59 @@ function terminalRatesHtml(num){
         return '<div class="addTerminalRates addTerminalRates'+num+'">'+
         '<div class="remove-icon remove-terminalRatesList'+num+'" editid="'+num+'" onclick="removeTerminalRates('+num+')"><span class="glyphicon glyphicon-remove"></span></div>'+
         '<input type="hidden" class="form-control terminalId1" id="terminalId1'+num+'" name="terminalId1'+num+'">'+
-        '<div class="col-sm-4"><label class="control-label" for="terminalType'+num+'">支付方式：</label><select id="terminalType'+num+'" name="terminalType'+num+'" class="terminalType form-control"><option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option></select></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="terminalType'+num+'">支付方式：</label><select id="terminalType'+num+'" name="terminalType'+num+'" class="terminalType form-control" onchange=changeTerminalType('+ num + ')><option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="terminalCode'+num+'">终端编号：</label><input type="text" class="form-control terminalCode" id="terminalCode'+num+'" name="terminalCode'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="alipayFee'+num+'">支付宝费率：</label><input type="text" class="form-control alipayFee" id="alipayFee'+num+'" name="alipayFee'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="wechatFee'+num+'">微信费率：</label><input type="text" class="form-control wechatFee" id="wechatFee'+num+'" name="wechatFee'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="debitCardRate'+num+'">借记卡费率：</label><input type="text" class="form-control debitCardRate" id="debitCardRate'+num+'" name="debitCardRate'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="creditCardRate'+num+'">贷记卡费率：</label><input type="text" class="form-control creditCardRate" id="creditCardRate'+num+'" name="creditCardRate'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="debitCardMaxFee'+num+'">借记卡封顶值：</label><input type="number" class="form-control debitCardMaxFee" id="debitCardMaxFee'+num+'" name="debitCardMaxFee'+num+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="settleCycle'+num+'">结算周期：</label><select id="settleCycle'+num+'" name="settleCycle'+num+'" class="settleCycle form-control"><option value="00">T1</option><option value="01">D1</option><option value="02">D0</option></select></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="settleCycle'+num+'">结算周期：</label><select id="settleCycle'+num+'" name="settleCycle'+num+'" class="settleCycle form-control"></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="subAppId'+num+'">公众号ID：</label><input type="text" class="form-control subAppId" id="subAppId'+num+'" name="subAppId'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="jsapiPath'+num+'">域名：</label><input type="text" class="form-control jsapiPath" id="jsapiPath'+num+'" name="jsapiPath'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="qGroupId'+num+'">一级类目：</label><select id="qGroupId'+num+'" name="qGroupId'+num+'" class="qGroupId form-control"><option value="00">T1</option><option value="01">D1</option><option value="02">D0</option></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="categroryId'+num+'">二级类目：</label><select id="categroryId'+num+'" name="categroryId'+num+'" class="categroryId form-control"><option value="00">T1</option><option value="01">D1</option><option value="02">D0</option></select></div>'+
         '</div>';
+
 }
 
+function changeTerminalType(num){
+	var typeVal=$("#terminalType"+num).val();
+	$(".addTerminalRates"+num).find("input").attr('disabled',true);
+	$(".addTerminalRates"+num).find("select").attr('disabled',true);
+	$("#terminalType"+num).attr('disabled',false);
+	$("#terminalCode"+num).attr('disabled',false);
+	if(typeVal=='00'){
+		$("#debitCardRate"+num).attr('disabdle',false);
+		$("#creditCardRate"+num).attr('disabled',false);
+		$("#debitCardMaxFee"+num).attr('disabled',false);
+	}else if(typeVal=='01'){
+		$("#alipayFee"+num).attr('disabled',false);
+		$("#wechatFee"+num).attr('disabled',false);
+	}else if(typeVal=='02'){
+		$("#wechatFee"+num).attr('disabled',false);
+		$("#settleCycle"+num).attr('disabled',false);
+		$("#qGroupId"+num).attr('disabled',false);
+		$("#categroryId"+num).attr('disabled',false);
+	}else if(typeVal=='03'){
+		$("#alipayFee"+num).attr('disabled',false);
+		$("#settleCycle"+num).attr('disabled',false);
+		$("#qGroupId"+num).attr('disabled',false);
+	}else if(typeVal=='04'){
+		$("#wechatFee"+num).attr('disabled',false);
+		$("#settleCycle"+num).attr('disabled',false);
+		$("#qGroupId"+num).attr('disabled',false);
+		$("#categroryId"+num).attr('disabled',false);
+		$("#subAppId"+num).attr('disabled',false);
+		$("#jsapiPath"+num).attr('disabled',false);
+	}
+}
+function noSelect(){
+	'<option value="">--请选择--</option>';
+}
+function settleCycleHtml(){
+	return '<option value="00">T1</option><option value="01">D1</option><option value="02">D0</option>';
+}
 /**
  * 终端信息界面的 新增设备按钮  触发的事件
  * @param num
@@ -1416,8 +1454,6 @@ function editData(id){
             	$('input[name="jsapiPath'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].jsapiPath);
             	$('input[name="qGroupId'+data.data.channel[i].terminaInfos[o].id+'"]').find("option[value='"+data.data.channel[i].terminaInfos[o].qGroupId+"']").attr("selected",true);
             	$('input[name="categroryId'+data.data.channel[i].terminaInfos[o].id+'"]').find("option[value='"+data.data.channel[i].terminaInfos[o].categroryId+"']").attr("selected",true);
-
-
             }
         }
         // 联系信息
