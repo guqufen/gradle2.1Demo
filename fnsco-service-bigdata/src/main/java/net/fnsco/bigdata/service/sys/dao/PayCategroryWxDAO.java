@@ -39,10 +39,11 @@ public interface PayCategroryWxDAO {
     public Integer pageListCount(@Param("payCategroryWx") PayCategroryWxDO payCategroryWx);
 
     @Results({@Result( column = "group_id",property = "groupId"),@Result( column = "group_name",property = "groupName")})
-    @Select("SELECT DISTINCT(group_id) group_id,group_name FROM sys_pay_categrory_wx WHERE etps_attr = #{etpsAttrStr}  ")
+    @Select("SELECT DISTINCT(group_id) group_id,group_name FROM sys_pay_categrory_wx WHERE etps_attr like concat(concat('%',#{etpsAttrStr}),'%')  ")
 	public List<PayCategroryWxDO> getFirstCategrotyListByEtpAttr(@Param("etpsAttrStr")  String etpsAttrStr);
     
-    @Select("SELECT * FROM sys_pay_categrory_wx Where etps_attr like CONCAT('%',#{etpAttr},'%')  and group_id=#{1} ")
-	public List<PayCategroryWxDO> getSecondCategrotyListByContion(String etpAttr, Integer group_id);
+    @Results({@Result( column = "categrory_id",property = "categroryId"),@Result( column = "categrory_name",property = "categroryName")})
+    @Select("SELECT categrory_id,categrory_name FROM sys_pay_categrory_wx Where etps_attr like concat(concat('%',#{etpsAttrStr}),'%')  and group_id=#{group_id} ")
+	public List<PayCategroryWxDO> getSecondCategrotyListByContion(@Param("etpsAttrStr") String etpsAttrStr,@Param("group_id")  Integer group_id);
 
 }

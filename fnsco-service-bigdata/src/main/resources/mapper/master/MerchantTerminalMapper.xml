@@ -148,7 +148,7 @@
         terminal_type,
       </if>
       <!-- 新增字段 -->
-      <if test="subAappId != null" >
+      <if test="subAppId != null" >
         sub_app_id,
       </if>
       <if test="qGroupId != null" >
@@ -229,14 +229,14 @@
         #{terminalType,jdbcType=VARCHAR},
       </if>
       <!--  -->
-       <if test="subAappId != null" >
-        #{subAappId,jdbcType=INTEGER},
+       <if test="subAppId != null" >
+        #{subAppId,jdbcType=INTEGER},
       </if>
       <if test="qGroupId != null" >
-       #{qGroupId,jdbcType=INTEGER},
+       #{qGroupId,jdbcType=VARCHAR},
       </if>
       <if test="categroryId != null" >
-       #{categroryId,jdbcType=INTEGER},
+       #{categroryId,jdbcType=VARCHAR},
       </if>
       <if test="settleCycle != null" >
        #{settleCycle,jdbcType=VARCHAR},
@@ -311,8 +311,8 @@
         terminal_type = #{terminalType,jdbcType=VARCHAR},
       </if>
       <!--  -->
-      <if test="subAappId != null" >
-        sub_app_id = #{subAappId,jdbcType=INTEGER},
+      <if test="subAppId != null" >
+        sub_app_id = #{subAppId,jdbcType=INTEGER},
       </if>
       <if test="qGroupId != null" >
         q_group_id = #{qGroupId,jdbcType=VARCHAR},
