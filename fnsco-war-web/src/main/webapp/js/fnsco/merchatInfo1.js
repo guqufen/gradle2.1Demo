@@ -948,12 +948,12 @@ function alipayQGroupId(){
 function mertType(){
 	return '<option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option>';
 }
-getWechat("112116321067137");
-function getWechat(etpsAttrId){
+getWechat("112115977945661");
+function getWechat(innerCode){
 	$.ajax({
 		url:PROJECT_NAME+'/categroty/showFirstClassify',
 		type:'POST',
-		data:{'etpAttr':etpsAttrId},
+		data:{'innerCode':innerCode},
 		success:function(data){
 			unloginHandler(data);
 			console.log(data);
@@ -1075,13 +1075,13 @@ function removePos(num){
           var posCity=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posCity')).val();//POS装机市
           var posArea=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posArea')).val();//POS装机区
           var posAddr=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.installAddr')).val();//POS装机地址
-          var posId=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.remove-icon')).attr('editid');
-          if(!posId || posId<0){
+          var id=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.remove-icon')).attr('editid');
+          if(!id || id<0){
             // posInfos=posInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr});
             posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr});
           }else{
             // posInfos=posInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,posId});  
-            posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,posId});  
+            posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,id});  
           }
           console.log("PosID："+id);  
       }
@@ -1102,11 +1102,12 @@ function removePos(num){
         var jsapiPath=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.jsapiPath')).val();
         var qGroupId=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.qGroupId')).val();
         var categroryId=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.categroryId')).val();
-        var terminalId=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.remove-icon')).attr('editid');
-        if(!terminalId || terminalId<0){
+        var id=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.remove-icon')).attr('editid');
+        console.log(id);
+        if(!id || id<0){
             terminaInfos=terminaInfos.concat({terminalType,terminalCode,alipayFee,wechatFee,debitCardRate,creditCardRate,debitCardMaxFee,settleCycle,subAppId,jsapiPath,qGroupId,categroryId});
         }else{
-            terminaInfos=terminaInfos.concat({terminalType,terminalCode,alipayFee,wechatFee,debitCardRate,creditCardRate,debitCardMaxFee,settleCycle,subAppId,jsapiPath,qGroupId,categroryId,terminalId});
+            terminaInfos=terminaInfos.concat({terminalType,terminalCode,alipayFee,wechatFee,debitCardRate,creditCardRate,debitCardMaxFee,settleCycle,subAppId,jsapiPath,qGroupId,categroryId,id});
         }
       }
 
