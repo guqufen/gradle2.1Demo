@@ -44,6 +44,7 @@ import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantFileTemp;
+import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.PageDTO;
@@ -240,6 +241,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         if (core == null) {
             return result.fail();
         }
+        //通道
         List<MerchantChannel> channelList = core.getChannel();
         if(CollectionUtils.isEmpty(channelList)){
         	channelList = Lists.newArrayList();
@@ -249,6 +251,26 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         	channelList.add(channel);
         	core.setChannel(channelList);
         }
+        //pos设备
+        List<MerchantPos> posList = core.getChannel().get(0).getPosInfos();
+        if(CollectionUtils.isEmpty(posList)){
+        	posList = Lists.newArrayList();
+        	MerchantPos pos = new MerchantPos();
+        	pos.setId(0);
+        	pos.setInnerCode(core.getInnerCode());
+        	posList.add(pos);
+        	core.getChannel().get(0).setPosInfos(posList);
+        }
+        //终端
+        List<MerchantTerminal> terminalList = core.getChannel().get(0).getTerminaInfos();
+        if(CollectionUtils.isEmpty(terminalList));
+        terminalList = Lists.newArrayList();
+        MerchantTerminal terminal = new MerchantTerminal();
+        terminal.setId(0);
+        terminal.setInnerCode(core.getInnerCode());
+        terminalList.add(terminal);
+        core.getChannel().get(0).setTerminaInfos(terminalList);
+        
       //查询名称
         if(!Strings.isStringEmpty(core.getInnerCode())) {
         	MerchantEntity merEntity = merchantEntityDao.queryMerEntityByInnerCode(core.getInnerCode());
