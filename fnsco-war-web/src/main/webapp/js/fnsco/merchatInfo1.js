@@ -302,7 +302,7 @@ window.operateEvents = {
 };
 //表格中操作按钮
 function operateFormatter(value, row, index) {
-	if(row.openFixQr=="1"){
+	if(row.openFixQr=="1" && row.channelType == "00" ){
 	    return [
 	        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
 	        '<i class="glyphicon glyphicon-pencil"></i>',
@@ -316,7 +316,7 @@ function operateFormatter(value, row, index) {
 	        '<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码">',
 	        '<i class="glyphicon glyphicon-qrcode"></i>',
 	        '</a>  ',
-	        '<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行">',
+	        '<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行入建">',
 	        '<i class="glyphicon glyphicon-import"></i>',
 	        '</a>  '
 	    ].join('');
@@ -331,9 +331,6 @@ function operateFormatter(value, row, index) {
 	        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
 	        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
 	        '</a>',
-	        '<a class="details" href="javascript:;">',
-	        '<i class="glyphicon"></i>',
-	        '</a>  ',
 	        '<a class="details" href="javascript:;">',
 	        '<i class="glyphicon"></i>',
 	        '</a>  '
