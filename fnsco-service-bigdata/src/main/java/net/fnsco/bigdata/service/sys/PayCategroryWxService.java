@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.sys.dao.PayCategroryWxDAO;
 import net.fnsco.bigdata.service.sys.entity.PayCategroryWxDO;
@@ -75,6 +77,9 @@ public List<PayCategroryWxDO> getSecondCategrotyList(String innerCode, Integer g
 
 
 public String getEtpsAttrStr(String innerCode){
+	if(Strings.isNullOrEmpty(innerCode)){
+		return null;
+	}
 	Integer etpsAttr = this.merchantCoreDao.getEtpsAttrByInnerCode(innerCode);
 	switch (etpsAttr) {
 	case 1:
