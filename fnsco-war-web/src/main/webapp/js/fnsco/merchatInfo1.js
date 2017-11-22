@@ -898,7 +898,7 @@ function noSelect(){
 }
 // 结算周期
 function settleCycleHtml(){
-	return '<option value="00">T1</option><option value="01">D1</option><option value="02">D0</option>';
+	return '<option value="00">T1</option><option value="01">D1</option><option value="02">D0</option><option value="03">T0</option>';
 }
 // 支付宝一级类目
 function alipayQGroupId(){
@@ -1525,6 +1525,9 @@ function editData(id){
             	var innerCode=data.data.innerCode;
             	if(data.data.channel[i].terminaInfos[o].terminalType=='02'){
             		changeTerminalType(id,innerCode,data.data.channel[i].terminaInfos[o].qGroupId,data.data.channel[i].terminaInfos[o].categroryId);
+            	}
+            	if(data.data.channel[i].terminaInfos[o].terminalType=='03'){
+            		$('#qGroupId'+data.data.channel[i].terminaInfos[o].id).html(alipayQGroupId());
             	}
             	$('#qGroupId'+data.data.channel[i].terminaInfos[o].id).find("option[value='"+data.data.channel[i].terminaInfos[o].qGroupId+"']").attr("selected",true);
 				// getWechat1(data.data.channel[i].terminaInfos[o].id,data.data.innerCode,$("#qGroupId"+data.data.channel[i].terminaInfos[o].id).val());
