@@ -151,12 +151,12 @@
       <if test="subAppId != null" >
         sub_app_id,
       </if>
-      <if test="qGroupId != null" >
+      <!-- <if test="qGroupId != null" > -->
         q_group_id,
-      </if>
-      <if test="categroryId != null" >
+      <!-- </if> -->
+      <!-- <if test="categroryId != null" > -->
         categrory_id,
-      </if>
+     <!--  </if> -->
       <if test="settleCycle != null" >
         settle_cycle,
       </if>
@@ -232,12 +232,12 @@
        <if test="subAppId != null" >
         #{subAppId,jdbcType=INTEGER},
       </if>
-      <if test="qGroupId != null" >
+      <!-- <if test="qGroupId != null" > -->
        #{qGroupId,jdbcType=VARCHAR},
-      </if>
-      <if test="categroryId != null" >
+      <!-- </if> -->
+      <!-- <if test="categroryId != null" > -->
        #{categroryId,jdbcType=VARCHAR},
-      </if>
+      <!-- </if> -->
       <if test="settleCycle != null" >
        #{settleCycle,jdbcType=VARCHAR},
       </if>
