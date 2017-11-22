@@ -53,7 +53,7 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 		
 		//调用入驻接口将参数传过去-
 //		zxyhPaymentService.mchtadd();
-		return null;
+		return ResultDTO.successForSubmit();
 		
 	}
 }
