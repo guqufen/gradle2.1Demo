@@ -909,12 +909,16 @@ function mertType(){
 	return '<option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option>';
 }
 function getWechat(num,innerCode,weChat1){
+	if(!innerCode){
+		var innerCode=$("#innerCode").val();
+	}
 	$.ajax({
 		url:PROJECT_NAME+'/categroty/showFirstClassify',
 		type:'POST',
 		data:{'innerCode':innerCode},
 		success:function(data){
-			unloginHandler(data.data);
+			// unloginHandler(data.data);
+			console.log(data);
 			$("#qGroupId"+num).html('');
 			for(var i=0;i<data.data.length;i++){
 				$("#qGroupId"+num).append('<option value='+data.data[i].groupId+'>'+data.data[i].groupName+'</option>');
