@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.internal.Maps;
 
+import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.trading.service.pay.OrderPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.MerchantZxyhDTO;
@@ -18,7 +19,7 @@ import net.fnsco.trading.service.pay.channel.zxyh.util.SignUtil;
 import net.fnsco.trading.service.pay.channel.zxyh.util.ZxyhPayMD5Util;
 
 @Service
-public class ZxyhPaymentService extends OrderPaymentService {
+public class ZxyhPaymentService extends BaseService implements OrderPaymentService {
     @Autowired
     private Environment env;
 
@@ -34,8 +35,8 @@ public class ZxyhPaymentService extends OrderPaymentService {
         String merId = env.getProperty("zxyh.merId");
         String url = "/MPayTransaction/ind/mchtadd.do";
         MerchantZxyhDTO mercDTO = new MerchantZxyhDTO();
-        mercDTO.init(pid,merId);
-       
+        mercDTO.init(pid, merId);
+
         String mercStr = JSON.toJSONString(mercDTO);
         Map<String, String> mercMap = JSON.parseObject(mercStr, Map.class);
         String respStr = ZxyhPayMD5Util.request(mercMap, url);
