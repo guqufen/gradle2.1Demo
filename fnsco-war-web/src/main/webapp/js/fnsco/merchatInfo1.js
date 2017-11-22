@@ -302,7 +302,7 @@ window.operateEvents = {
 };
 //表格中操作按钮
 function operateFormatter(value, row, index) {
-	if(row.openFixQr=="1" && row.channelType == "00" ){
+	if(row.openFixQr=="1" ){
 	    return [
 	        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
 	        '<i class="glyphicon glyphicon-pencil"></i>',

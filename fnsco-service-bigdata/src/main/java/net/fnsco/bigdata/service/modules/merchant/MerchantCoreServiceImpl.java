@@ -263,13 +263,15 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         //终端
         List<MerchantTerminal> terminalList = core.getChannel().get(0).getTerminaInfos();
-        if(CollectionUtils.isEmpty(terminalList));
-        terminalList = Lists.newArrayList();
-        MerchantTerminal terminal = new MerchantTerminal();
-//        terminal.setId(0);
-        terminal.setInnerCode(core.getInnerCode());
-        terminalList.add(terminal);
-        core.getChannel().get(0).setTerminaInfos(terminalList);
+        if(CollectionUtils.isEmpty(terminalList)){
+        	 terminalList = Lists.newArrayList();
+             MerchantTerminal terminal = new MerchantTerminal();
+//             terminal.setId(0);
+             terminal.setInnerCode(core.getInnerCode());
+             terminalList.add(terminal);
+             core.getChannel().get(0).setTerminaInfos(terminalList);
+        }
+       
         
       //查询名称
         if(!Strings.isStringEmpty(core.getInnerCode())) {
