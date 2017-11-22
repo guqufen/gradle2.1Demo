@@ -24,7 +24,7 @@
     <result column="alipay_fee" property="alipayFee" jdbcType="VARCHAR" />
     <result column="terminal_type" property="terminalType" jdbcType="VARCHAR" />
     <!--  -->
-    <result column="sub_app_id" property="subAappId" jdbcType="INTEGER" />
+    <result column="sub_app_id" property="subAppId" jdbcType="INTEGER" />
     <result column="q_group_id" property="qGroupId" jdbcType="VARCHAR" />
     <result column="categrory_id" property="categroryId" jdbcType="VARCHAR" />
     <result column="settle_cycle" property="settleCycle" jdbcType="VARCHAR" />
