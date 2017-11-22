@@ -241,13 +241,14 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             return result.fail();
         }
         List<MerchantChannel> channelList = core.getChannel();
-//        if(CollectionUtils.isEmpty(channelList)){
-//        	channelList = Lists.newArrayList();
-//        	MerchantChannel channel = new MerchantChannel();
-//        	channel.setId(0);
-//        	channelList.add(channel);
-//        	core.setChannel(channelList);
-//        }
+        if(CollectionUtils.isEmpty(channelList)){
+        	channelList = Lists.newArrayList();
+        	MerchantChannel channel = new MerchantChannel();
+        	channel.setId(0);
+        	channel.setInnerCode(core.getInnerCode());
+        	channelList.add(channel);
+        	core.setChannel(channelList);
+        }
       //查询名称
         if(!Strings.isStringEmpty(core.getInnerCode())) {
         	MerchantEntity merEntity = merchantEntityDao.queryMerEntityByInnerCode(core.getInnerCode());
