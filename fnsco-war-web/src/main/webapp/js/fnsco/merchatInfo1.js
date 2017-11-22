@@ -874,7 +874,6 @@ function posHtml(num){
 function terminalRatesHtml(num){
         return '<div class="addTerminalRates addTerminalRates'+num+'">'+
         '<div class="remove-icon remove-terminalRatesList'+num+'" editid="'+num+'" onclick="removeTerminalRates('+num+')"><span class="glyphicon glyphicon-remove"></span></div>'+
-        '<input type="hidden" class="form-control terminalId1" id="terminalId1'+num+'" name="terminalId1'+num+'">'+
         '<div class="col-sm-4"><label class="control-label" for="terminalType'+num+'">支付方式：</label><select id="terminalType'+num+'" name="terminalType'+num+'" class="terminalType form-control" onchange=changeTerminalType('+ num + ')><option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="terminalCode'+num+'">终端编号：</label><input type="text" class="form-control terminalCode" id="terminalCode'+num+'" name="terminalCode'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="alipayFee'+num+'">支付宝费率：</label><input type="text" class="form-control alipayFee" id="alipayFee'+num+'" name="alipayFee'+num+'" required="required"></div>'+
@@ -961,18 +960,66 @@ function changeTerminalType(num,innerCode,weChat1,weChat2){
 	var innerCode=$("#innerCode").val();
 	$(".addTerminalRates"+num).find("input").attr('disabled',true);
 	$(".addTerminalRates"+num).find("select").attr('disabled',true);
-	$("#terminalType"+num).attr('disabled',false);
-	$("#terminalCode"+num).attr('disabled',false);
+  $("#terminalType"+num).attr('disabled',false);//支付方式
+  $("#terminalCode"+num).attr('disabled',false);//终端编号
+  $("#settleCycle"+num).attr('disabled',false);//结算周期
 	// $("#qGroupId"+num).html('');
 	// $("#categroryId"+num).html('');
 	if(typeVal=='00'){//刷卡
 		$("#debitCardRate"+num).attr('disabdle',false);
 		$("#creditCardRate"+num).attr('disabled',false);
-		$("#debitCardMaxFee"+num).attr('disabled',false);
+    $("#debitCardMaxFee"+num).attr('disabled',false);
+		$("#debitCardRate"+num).attr('disabled',false);
+    $("#alipayFee"+num).val('');//支付宝费率
+    $("#wechatFee"+num).val('');//微信费率
+    $("#subAppId"+num).val('');//公众号ID
+    $("#jsapiPath"+num).val('');//域名
+    $("#qGroupId"+num).html('');//一级类目
+    $("#categroryId"+num).html('');//二级类目
 	}else if(typeVal=='01'){//扫码
 		$("#alipayFee"+num).attr('disabled',false);
 		$("#wechatFee"+num).attr('disabled',false);
+    $("#debitCardRate"+num).val('');//借记卡费率
+    $("#creditCardRate"+num).val('');//贷记卡费率
+    $("#debitCardMaxFee"+num).val('');//借记卡封顶值
+    $("#alipayFee"+num).val('');//支付宝费率
+    $("#wechatFee"+num).val('');//微信费率
+    $("#subAppId"+num).val('');//公众号ID
+    $("#jsapiPath"+num).val('');//域名
+    $("#qGroupId"+num).html('');//一级类目
+    $("#categroryId"+num).html('');//二级类目
 	}else if(typeVal=='02'){//微信
+		$("#wechatFee"+num).attr('disabled',false);
+		$("#qGroupId"+num).attr('disabled',false);
+		if(!weChat1){
+			getWechat(num,innerCode);
+			$("#qGroupId"+num).change(function(){
+				getWechat1(num,innerCode,$("#qGroupId"+num).val());
+			})
+		}else{
+			getWechat(num,innerCode,weChat1);
+			getWechat1(num,innerCode,weChat1,weChat2);
+		}
+		$("#categroryId"+num).attr('disabled',false);
+    $("#subAppId"+num).val('');//公众号ID
+    $("#jsapiPath"+num).val('');//域名
+    $("#debitCardRate"+num).val('');//借记卡费率
+    $("#creditCardRate"+num).val('');//贷记卡费率
+    $("#debitCardMaxFee"+num).val('');//借记卡封顶值
+    $("#alipayFee"+num).val('');//支付宝费率    
+	}else if(typeVal=='03'){//支付宝
+		$("#alipayFee"+num).attr('disabled',false);
+		$("#settleCycle"+num).attr('disabled',false);
+		$("#qGroupId"+num).attr('disabled',false);
+		$("#qGroupId"+num).html(alipayQGroupId());
+    $("#subAppId"+num).val('');//公众号ID
+    $("#jsapiPath"+num).val('');//域名
+    $("#debitCardRate"+num).val('');//借记卡费率
+    $("#creditCardRate"+num).val('');//贷记卡费率
+    $("#debitCardMaxFee"+num).val('');//借记卡封顶值
+    $("#wechatFee"+num).val('');//微信费率
+    $("#categroryId"+num).html('');//二级类目
+	}else if(typeVal=='04'){//微信公众号
 		$("#wechatFee"+num).attr('disabled',false);
 		$("#settleCycle"+num).attr('disabled',false);
 		$("#qGroupId"+num).attr('disabled',false);
@@ -984,22 +1031,14 @@ function changeTerminalType(num,innerCode,weChat1,weChat2){
 		}else{
 			getWechat(num,innerCode,weChat1);
 			getWechat1(num,innerCode,weChat1,weChat2);
-			
 		}
-		
-		$("#categroryId"+num).attr('disabled',false);
-	}else if(typeVal=='03'){//支付宝
-		$("#alipayFee"+num).attr('disabled',false);
-		$("#settleCycle"+num).attr('disabled',false);
-		$("#qGroupId"+num).attr('disabled',false);
-		$("#qGroupId"+num).html(alipayQGroupId());
-	}else if(typeVal=='04'){//微信公众号
-		$("#wechatFee"+num).attr('disabled',false);
-		$("#settleCycle"+num).attr('disabled',false);
-		$("#qGroupId"+num).attr('disabled',false);
 		$("#categroryId"+num).attr('disabled',false);
 		$("#subAppId"+num).attr('disabled',false);
 		$("#jsapiPath"+num).attr('disabled',false);
+    $("#alipayFee"+num).val('');//支付宝费率  
+    $("#debitCardRate"+num).val('');//借记卡费率
+    $("#creditCardRate"+num).val('');//贷记卡费率
+    $("#debitCardMaxFee"+num).val('');//借记卡封顶值
 	}
 }
 
@@ -1527,7 +1566,7 @@ function editData(id){
             	$('#terminal-con1 input[name="jsapiPath'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].jsapiPath);
             	var id=data.data.channel[i].terminaInfos[o].id;
             	var innerCode=data.data.innerCode;
-            	if(data.data.channel[i].terminaInfos[o].terminalType=='02'){
+            	if(data.data.channel[i].terminaInfos[o].terminalType=='02'||data.data.channel[i].terminaInfos[o].terminalType=='04'){
             		changeTerminalType(id,innerCode,data.data.channel[i].terminaInfos[o].qGroupId,data.data.channel[i].terminaInfos[o].categroryId);
             	}
             	if(data.data.channel[i].terminaInfos[o].terminalType=='03'){
