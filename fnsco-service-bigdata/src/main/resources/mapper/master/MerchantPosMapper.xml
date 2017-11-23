@@ -58,6 +58,9 @@
   <sql id="Base_Column_List" >
     id, inner_code, channel_id, pos_name, sn_code, pos_factory, pos_type, status, bank_id, merc_refer_name,pos_addr,pos_province,pos_city,pos_area,terminal_code,channel_terminal_code,qr_channel_terminal_code
   </sql>
+  <sql id="T_Base_Column_List" >
+  p.id, p.inner_code, channel_id, pos_name, sn_code, pos_factory, pos_type, status, bank_id, merc_refer_name,pos_addr,pos_province,pos_city,pos_area,terminal_code,channel_terminal_code,qr_channel_terminal_code
+  </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
@@ -324,4 +327,15 @@
     from m_merchant_pos
     where terminal_code = #{terminalCode,jdbcType=VARCHAR} or qr_channel_terminal_code = #{terminalCode,jdbcType=VARCHAR}  limit 1
 	</select>
+	
+	<select id="selectOneByTerminalCodeChannelType" resultMap="BaseResultMap">
+    select 
+     <include refid="T_Base_Column_List" />
+    from m_merchant_pos p,m_merchant_channel c 
+    where 
+     p.channel_id=c.id 
+    and p.terminal_code=#{termId,jdbcType=VARCHAR}
+     and c.channel_type=#{channelType,jdbcType=VARCHAR}
+     limit 1
+  </select>
 </mapper>
