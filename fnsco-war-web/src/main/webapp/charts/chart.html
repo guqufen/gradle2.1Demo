@@ -135,12 +135,12 @@ Date.prototype.Format = function (fmt) { //author: meizz
     return fmt;
 }
 
-function getList(data){
+function getList(data,size){
 	dataTime=data+'-01 00:00:00';
 	$.ajax({
 		url:'../h5/report/getTradeDataList',
 		type:'get',
-		data:{'startDate':dataTime,'pageSize':15},
+		data:{'startDate':dataTime,'pageSize':size},
 		success:function(data){
 			// $("#scroll-ul").html('');
 			for(var i=0;i<data.data.length;i++){
@@ -165,12 +165,12 @@ console.log(data.getFullYear(),data.getMonth()+1,time);
 //设置
 $(document).ready(function(){
 	getValue();
-	getList(time);
+	getList(time,15);
 });
 setInterval(function(){
 	console.log("重新刷新了");
 	getValue("0");
-	getList(time);
+	getList(time,7);
 	// $("#scrollDiv").textSlider({line:1,speed:800,timer:3000});
 },20000)	
 </script>
