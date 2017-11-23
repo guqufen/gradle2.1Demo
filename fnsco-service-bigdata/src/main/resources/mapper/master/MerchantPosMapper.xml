@@ -17,6 +17,9 @@
     <result column="pos_area" property="posArea" jdbcType="INTEGER"/>
     <result column="merc_refer_name" property="mercReferName" jdbcType="VARCHAR" />
     <result column="pos_addr" property="posAddr" jdbcType="VARCHAR" />
+    <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
+    <result column="channel_terminal_code" property="channelTerminalCode" jdbcType="VARCHAR" />
+    <result column="qr_channel_terminal_code" property="qrChannelTerminalCode" jdbcType="VARCHAR" />
   </resultMap>
   <!-- 查询POS所有数据，包括终端信息 -->
   <resultMap id="AllResultMap" type="net.fnsco.bigdata.service.domain.MerchantPos" >
@@ -51,7 +54,7 @@
     <collection property="terNames" column="id" select="net.fnsco.bigdata.service.dao.master.MerchantTerminalDao.queryTerByPosId"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, inner_code, channel_id, pos_name, sn_code, pos_factory, pos_type, status, bank_id, merc_refer_name,pos_addr,pos_province,pos_city,pos_area
+    id, inner_code, channel_id, pos_name, sn_code, pos_factory, pos_type, status, bank_id, merc_refer_name,pos_addr,pos_province,pos_city,pos_area,terminal_code,channel_terminal_code,qr_channel_terminal_code
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -132,6 +135,15 @@
       <if test="mercReferName != null" >
         merc_refer_name,
       </if>
+      <if test="terminalCode != null" >
+        terminal_code,
+      </if>
+      <if test="channelTerminalCode != null" >
+        channel_terminal_code,
+      </if>
+      <if test="qrChannelTerminalCode != null" >
+        qr_channel_terminal_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -175,6 +187,15 @@
       </if>
       <if test="mercReferName != null" >
         #{mercReferName,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalCode != null" >
+        #{terminalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelTerminalCode != null" >
+        #{channelTerminalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qrChannelTerminalCode != null" >
+        #{qrChannelTerminalCode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -220,6 +241,15 @@
       </if>
       <if test="mercReferName != null" >
         merc_refer_name = #{mercReferName,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalCode != null" >
+        terminal_code = #{terminalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channelTerminalCode != null" >
+        channel_terminal_code = #{channelTerminalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qrChannelTerminalCode != null" >
+        qr_channel_terminal_code = #{qrChannelTerminalCode,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
