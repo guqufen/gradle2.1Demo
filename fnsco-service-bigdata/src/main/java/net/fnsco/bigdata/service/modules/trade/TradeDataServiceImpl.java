@@ -192,7 +192,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         logger.warn("插入流水总耗时" + (System.currentTimeMillis() - timer));
         String txnType = tradeData.getTxnType();
         if ("2".equals(txnType)) {
-            TradeData tmp = tradeListDAO.selectByIRT(tradeData);
+        	if(Strings.isNullOrEmpty(tradeData.getMerId()) || Strings.isNullOrEmpty(tradeData.getChannelTermCode())){
+        		logger.info("渠道终端号或商户号为空，不能查找到原交易");
+        		return false;
+        	}
+            TradeData tmp = tradeListDAO.selectByCMT(tradeData);
             TradeData data = new TradeData();
             data.setStatus("0");
             data.setId(tmp.getId());
