@@ -23,11 +23,13 @@ import net.fnsco.bigdata.api.dto.TradeDataQueryDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
+import net.fnsco.bigdata.service.dao.master.MerchantPosDao;
 import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
 import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
@@ -55,6 +57,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     private MerchantCoreDao     merchantCoreDao;
     @Autowired
     private MerchantTerminalDao merchantTerminalDao;
+    @Autowired
+    private MerchantPosDao      merchantPosDao;
 
     /**
      * 保存交易流水
@@ -75,45 +79,36 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         String merId = tradeData.getMerId();
         //拉卡拉渠道
         if ("00".equals(tradeData.getChannelType())) {
-            if (!Strings.isNullOrEmpty(tradeData.getTermId())
-                && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
-                MerchantTerminal merchantTerminal = merchantTerminalDao
-                    .selectOneByTermId(tradeData.getTermId(), tradeData.getChannelType());
-                if (null != merchantTerminal) {
-                    innerCode = merchantTerminal.getInnerCode();
+            if (!Strings.isNullOrEmpty(tradeData.getTermId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
+                MerchantPos merchantPos = merchantPosDao.selectOneByTerminalCodeChannelType(tradeData.getTermId(), tradeData.getChannelType());
+                if (null != merchantPos) {
+                    innerCode = merchantPos.getInnerCode();
                 }
             } else {
-                if (!Strings.isNullOrEmpty(tradeData.getMerId())
-                    && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
-                    MerchantChannel channel = merchantChannelDao
-                        .selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
+                if (!Strings.isNullOrEmpty(tradeData.getMerId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
+                    MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
                     if (channel != null) {
                         innerCode = channel.getInnerCode();
                     }
                 }
             }
         } else if ("02".equals(tradeData.getChannelType())) {//01浦发02爱农03法奈昇
-            if (!Strings.isNullOrEmpty(tradeData.getMerId())
-                && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
+            if (!Strings.isNullOrEmpty(tradeData.getMerId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
 
-                MerchantChannel channel = merchantChannelDao
-                    .selectByMerCode(tradeData.getInnerCode(), tradeData.getChannelType());
+                MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getInnerCode(), tradeData.getChannelType());
                 if (channel != null) {
                     innerCode = channel.getInnerCode();
                 } else {
                     logger.error("内部商户号没有渠道对应:" + tradeData.getInnerCode());
                 }
             }
-        } else if ("01".equals(tradeData.getChannelType())
-                   || "03".equals(tradeData.getChannelType())) {//01浦发02爱农03法奈昇
-            MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(),
-                tradeData.getChannelType());
+        } else if ("01".equals(tradeData.getChannelType()) || "03".equals(tradeData.getChannelType())) {//01浦发02爱农03法奈昇
+            MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
             if (channel != null) {
                 innerCode = channel.getInnerCode();
             }
         } else {
-            MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(),
-                tradeData.getChannelType());
+            MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
             if (channel != null) {
                 innerCode = channel.getInnerCode();
             }
@@ -195,19 +190,19 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         logger.warn("插入流水总耗时" + (System.currentTimeMillis() - timer));
         String txnType = tradeData.getTxnType();
         if ("2".equals(txnType)) {
-        	if(Strings.isNullOrEmpty(tradeData.getMerId()) || Strings.isNullOrEmpty(tradeData.getChannelTermCode())){
-        		logger.info("渠道终端号或商户号为空，不能查找到原交易");
-        		return false;
-        	}
+            if (Strings.isNullOrEmpty(tradeData.getMerId()) || Strings.isNullOrEmpty(tradeData.getChannelTermCode())) {
+                logger.info("渠道终端号或商户号为空，不能查找到原交易");
+                return false;
+            }
             TradeData tmp = tradeListDAO.selectByCMT(tradeData);
-			if (tmp == null) {
-				logger.info("没有找到原交易记录merId=["+tradeData.getMerId()+"],channerTermCode=["+tradeData.getChannelTermCode()+"],referNo=["+tradeData.getOrgMerOrderId()+"]");
-				return false;
-			}
-			TradeData data = new TradeData();
-			data.setStatus("0");
-			data.setId(tmp.getId());
-			tradeListDAO.updateByPrimaryKeySelective(data);
+            if (tmp == null) {
+                logger.info("没有找到原交易记录merId=[" + tradeData.getMerId() + "],channerTermCode=[" + tradeData.getChannelTermCode() + "],referNo=[" + tradeData.getOrgMerOrderId() + "]");
+                return false;
+            }
+            TradeData data = new TradeData();
+            data.setStatus("0");
+            data.setId(tmp.getId());
+            tradeListDAO.updateByPrimaryKeySelective(data);
         }
 
         return true;
@@ -221,8 +216,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         long timer = System.currentTimeMillis();
         String innerCode = "";
         String merId = tradeData.getMerId();
-        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId,
-            tradeData.getSource());
+        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId, tradeData.getSource());
         if (null == merchantChannel) {
             logger.error("渠道商户不存在" + merId + ":" + tradeData.getSource() + ",丢弃该交易流水");
             return ResultDTO.fail("渠道商户不存在" + merId + ":" + tradeData.getSource() + ",丢弃该交易流水");
@@ -272,8 +266,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         if (!CollectionUtils.isEmpty(posList)) {
             List<String> terminalList = Lists.newArrayList();
             for (String posId : posList) {
-                List<TerminalInfoDTO> tempList = merchantTerminalDao
-                    .queryTerByPosId(Integer.parseInt(posId));
+                List<TerminalInfoDTO> tempList = merchantTerminalDao.queryTerByPosId(Integer.parseInt(posId));
                 for (TerminalInfoDTO terminal : tempList) {
                     if (!Strings.isNullOrEmpty(terminal.getTerminalCode())) {
                         terminalList.add(terminal.getTerminalCode());
@@ -316,8 +309,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             tradeData.setInnerCodeList(innerCodeList);
         }
 
-        PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(),
-            merchantCore.getPerPageSize(), tradeData);
+        PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(), merchantCore.getPerPageSize(), tradeData);
         List<TradeData> datas = tradeListDAO.queryPageList(pages);
         int total = tradeListDAO.queryTotalByCondition(tradeData);
         result.setTotal(total);
@@ -352,15 +344,13 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      * @date 2017年6月28日 下午5:13:54
      */
     @Override
-    public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum,
-                                                   int perPageSize) {
+    public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
         TradeData tradeData = new TradeData();
         if (tradeDataDTO.getPayType() != null && tradeDataDTO.getPayType().equals("03")) {
             tradeDataDTO.setPayType(null);
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
-            tradeDataDTO
-                .setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
+            tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
@@ -410,8 +400,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             tradeDataDTO.setPayType(null);
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
-            tradeDataDTO
-                .setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
+            tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
@@ -436,8 +425,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             tradeDataDTO.setPayType(null);
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
-            tradeDataDTO
-                .setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
+            tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));

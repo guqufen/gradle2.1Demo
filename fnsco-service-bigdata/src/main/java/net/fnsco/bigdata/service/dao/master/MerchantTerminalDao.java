@@ -141,7 +141,6 @@ public interface MerchantTerminalDao {
      */
      String querySnCode(@Param("id") String id,@Param("code") String code);
      
-     MerchantTerminal selectOneByTermId(@Param("termId") String termId, @Param("channelType") String channelType);
      /**
       * selectByTerminalType:(查询)
       * @param posId
