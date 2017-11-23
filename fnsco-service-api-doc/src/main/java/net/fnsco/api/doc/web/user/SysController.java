@@ -34,7 +34,7 @@ public class SysController extends BaseController {
             LoginParamInfo loginParamInfo = new LoginParamInfo();
             loginParamInfo.setToken(userName);
             ResultDTO result = loginService.loginByToken(loginParamInfo);
-            if (!result.isSuccess()) {
+            if (result== null || !result.isSuccess()) {
                 return "redirect:/login.html";
             }
             UserInfo sysUser = (UserInfo) result.getData();
