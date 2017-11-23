@@ -1,7 +1,6 @@
 package net.fnsco.web.controller.open;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.beust.jcommander.internal.Maps;
-import com.lakala.sign.LKLApiException;
 import com.lakala.sign.LKLSignature;
 
 import io.swagger.annotations.Api;
-import net.fnsco.bigdata.api.trade.TradeDataService;
+import net.fnsco.bigdata.api.constant.BigdataConstant;
+import net.fnsco.bigdata.comm.ServiceConstant;
 import net.fnsco.core.base.BaseController;
+import net.fnsco.order.service.trade.TradeDataLklService;
+import net.fnsco.order.service.trade.entity.TradeDataLklDO;
 import net.fnsco.web.controller.open.jo.LklTradeDataJO;
 import net.sf.json.JSONObject;
 
@@ -32,7 +32,7 @@ import net.sf.json.JSONObject;
 @Api(value = "/syncData/lkl", tags = { "拉卡拉交易实时传输交口" })
 public class LklTradeDateSyncController extends BaseController {
     @Autowired
-    private TradeDataService    tradeDataService;
+    private TradeDataLklService tradeDataLklService;
     @Autowired
     private Environment         env;
     private final static String publickeyFile = "rsa_public_key.pem";
@@ -75,13 +75,13 @@ public class LklTradeDateSyncController extends BaseController {
     } 
     
     源数据date:{"mch_id":"822121063000020","device_info":"98673463","result_code":"SUCCESS","trade_type":"012001","total_fee":"000000000000002","transaction_id":"17072551699348","out_trade_no":"201710010005462173","time_end":"20170725165108","pay_type":"00","card_no":"622384*******9421","pay_amt":"000000000000002","batchbillno":"000003","systraceno":"000013","orderid_scan":"","bank_type":"03110000","refernumber":"072551699348","coupon_fee":"","openid":""}
-私匙加签sign:PakEuHGvFDthtdqnKKc0POjDQ2FgaAZ98eoChRaipaQ+VMBjIVfhEKG0qKM2JoEpl9olk0wGULgQvApOZpX6f+1jhl4CKp4ZR1vLrQkRI3hihONO+8GkWZyTMDx4WFpMxyCzIFP0NvvjJsjw3hM+SCMJ6vF/lVipcVgnWXPotxw=
+    私匙加签sign:PakEuHGvFDthtdqnKKc0POjDQ2FgaAZ98eoChRaipaQ+VMBjIVfhEKG0qKM2JoEpl9olk0wGULgQvApOZpX6f+1jhl4CKp4ZR1vLrQkRI3hihONO+8GkWZyTMDx4WFpMxyCzIFP0NvvjJsjw3hM+SCMJ6vF/lVipcVgnWXPotxw=
     */
     @RequestMapping("/transtradeSave")
     @ResponseBody
     public Object transtradeSave(@RequestParam String sign, @RequestParam String data) {
         logger.error("拉卡拉同步数据输入参数：" + data);
-        LklTradeDataJO DataJO = JSON.parseObject(data, LklTradeDataJO.class);
+        LklTradeDataJO dataJO = JSON.parseObject(data, LklTradeDataJO.class);
         Map<String, String> dataMap = toLinkedHashMap(data);
         String path = request.getServletContext().getRealPath("WEB-INF/" + publickeyFile);
         // 获取到的公匙
@@ -89,14 +89,40 @@ public class LklTradeDateSyncController extends BaseController {
         // 把数字证书放到map里准备验签
         dataMap.put("sign", sign);
         // 验签返回结果true或false
-        boolean unsignReslut = true;
+        boolean unsignReslut = false;
         try {
             unsignReslut = LKLSignature.rsaCheckV1(dataMap, publicKey, charset);
         } catch (Exception e) {
             logger.error("拉卡拉同步数据验签异常", e);
         }
+        TradeDataLklDO tradeDataLkl = new TradeDataLklDO();
+        tradeDataLkl.setMerId(dataJO.getMch_id());
+        if ("SUCCESS".equals(dataJO.getResult_code())) {
+            tradeDataLkl.setRespCode(ServiceConstant.TradeStateEnum.SUCCESS.getCode());
+        } else {
+            tradeDataLkl.setRespCode(ServiceConstant.TradeStateEnum.FAIL.getCode());
+        }
+        tradeDataLkl.setRespMsg(dataJO.getErr_code() + dataJO.getErr_code_des());
+        tradeDataLkl.setAmt(dataJO.getTotal_fee());
+        tradeDataLkl.setTxnType("1");
+        tradeDataLkl.setTxnSubType(dataJO.getTrade_type());//交易类型
+        tradeDataLkl.setOrderNo(dataJO.getTransaction_id());
+        tradeDataLkl.setTimeStamp(dataJO.getTime_end());
+        tradeDataLkl.setPayType(ServiceConstant.PAY_TYPE_MAP.get(dataJO.getPay_type()));
+        tradeDataLkl.setCertifyId(dataJO.getCard_no());
+        tradeDataLkl.setBatchNo(dataJO.getBatchbillno());
+        tradeDataLkl.setTraceNo(dataJO.getSystraceno());
+        tradeDataLkl.setOrderIdScan(dataJO.getOrderid_scan());
+        tradeDataLkl.setReferNo(dataJO.getRefernumber());
+        tradeDataLkl.setBankId(dataJO.getBank_type());//付款银行
+        tradeDataLkl.setSource("00");
+        tradeDataLkl.setPayMedium(BigdataConstant.PayMediumEnum.POS.getCode());
+        tradeDataLkl.setChannelTermCode(dataJO.getDevice_info());
+        tradeDataLkl.setTermId(dataJO.getDevice_info());
+        tradeDataLkl.setChannelType(BigdataConstant.ChannelTypeEnum.LKL.getCode());
+        tradeDataLklService.doAdd(tradeDataLkl);
         JSONObject jsonObject = new JSONObject();
-        if (unsignReslut) {
+        if (!unsignReslut) {
             //验签失败，返回FAIL，会执行重发
             jsonObject.element("return_code", "FAIL");
             jsonObject.element("return_msg", "验签失败");

@@ -200,10 +200,12 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         		return false;
         	}
             TradeData tmp = tradeListDAO.selectByCMT(tradeData);
-            TradeData data = new TradeData();
-            data.setStatus("0");
-            data.setId(tmp.getId());
-            tradeListDAO.updateByPrimaryKeySelective(data);
+			if (tmp != null) {
+				TradeData data = new TradeData();
+				data.setStatus("0");
+				data.setId(tmp.getId());
+				tradeListDAO.updateByPrimaryKeySelective(data);
+			}
         }
 
         return true;
