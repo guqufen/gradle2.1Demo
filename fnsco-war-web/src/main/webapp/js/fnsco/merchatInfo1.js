@@ -302,7 +302,6 @@ window.operateEvents = {
 };
 //表格中操作按钮
 function operateFormatter(value, row, index) {
-  console.log(row);
   var returnHtml='';
 	if(row.openFixQr=="1"){
     returnHtml+='<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码"><i class="glyphicon glyphicon-qrcode"></i></a>';
