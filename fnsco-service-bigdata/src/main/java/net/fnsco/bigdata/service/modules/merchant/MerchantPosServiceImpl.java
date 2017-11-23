@@ -186,7 +186,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
                 }
                 List<MerchantTerminal>  terminals = webMerchantTerminalDTO.getTerminals();
                 for (MerchantTerminal merchantTerminal : terminals) {
-                    merchantTerminal.setPosId(merchantPos.getId());
+//                    merchantTerminal.setPosId(merchantPos.getId());
                     if(merchantTerminal.getId() != null){
                     	if("00".equals(merchantChannel.getChannelType())) {
                     		merchantTerminal.setTerminalCode(merchantTerminal.getChannelTerminalCode());
@@ -217,7 +217,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
                 if(null != merchantPos.getId()){
                     List<MerchantTerminal>  terminals = webMerchantTerminalDTO.getTerminals();
                     for (MerchantTerminal merchantTerminal : terminals) {
-                        merchantTerminal.setPosId(merchantPos.getId());
+//                        merchantTerminal.setPosId(merchantPos.getId());
                     }
                     merchantTerminalDao.insertBatch(terminals);
                 }
@@ -262,5 +262,12 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
     public MerchantPos selectBySnCodeAndInnerCode(String snCode, String innerCode,Integer channelId) {
         return merchantPosDao.selectBySnCodeAndInnerCode(snCode, innerCode,channelId);
     }
+
+	@Override
+	public MerchantPos selectByTerminalCode(String terminalCode) {
+		
+		return merchantPosDao.selectByTerminalCode(terminalCode);
+		
+	}
 
 }

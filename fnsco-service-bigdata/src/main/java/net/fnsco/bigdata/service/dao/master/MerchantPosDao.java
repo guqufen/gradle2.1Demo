@@ -120,4 +120,15 @@ public interface MerchantPosDao {
      * @return MerchantPos    DOM对象
      */
     MerchantPos selectBySnCodeAndInnerCode(@Param("snCode")String snCode,@Param("innerCode")String innerCode,@Param("channelId")Integer channelId);
+    
+    /**
+     * selectByTerminalCode:(根据终端号查询SN号 )
+     *
+     * @param  @param terminalCode
+     * @param  @return    设定文件
+     * @return MerchantPos    DOM对象
+     * @author tangliang
+     * @date   2017年11月23日 下午1:53:39
+     */
+    MerchantPos selectByTerminalCode(@Param("terminalCode")String terminalCode);
 }

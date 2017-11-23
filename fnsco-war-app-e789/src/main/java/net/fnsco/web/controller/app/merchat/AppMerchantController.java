@@ -93,54 +93,6 @@ public class AppMerchantController extends BaseController {
     }
 
     /**
-     * getAllTerminal:(这里用一句话描述这个方法的作用) 查询用户终端信息
-     *
-     * @param userMerchant
-     * @return    设定文件
-     * @return ResultDTO<List<MerchantCore>>    DOM对象
-     * @throws 
-     * @since  CodingExample　Ver 1.1
-     */
-    @RequestMapping("/getAllTerminal")
-    @ApiOperation(value = "APP用户查询设备列表")
-    public ResultDTO<List<MerTerminalsDTO>> getAllTerminal(@RequestBody UserMerchantJO userMerchant) {
-        return merchantService.getMerchantTerminalByUserId(userMerchant.getUserId());
-    }
-    
-    /**
-     * getTerminalDetail:(这里用一句话描述这个方法的作用)查询终端详情
-     *
-     * @param userMerchant
-     * @return    设定文件
-     * @return ResultDTO<TerminalDetailDTO>    DOM对象
-     * @throws 
-     * @since  CodingExample　Ver 1.1
-     */
-    @RequestMapping("/getTerminalDetail")
-    @ApiOperation(value = "APP用户查询设备详情")
-    public ResultDTO<TerminalDetailDTO> getTerminalDetail(@RequestBody UserMerchantJO userMerchant){
-        return merchantService.getTerminalDetailByTerId(userMerchant.getTerId());
-    }
-    
-    /**
-     * updateTerName:(这里用一句话描述这个方法的作用)修改设备名称
-     *
-     * @param terminalJO
-     * @return    设定文件
-     * @return ResultDTO<String>    DOM对象
-     * @throws 
-     * @since  CodingExample　Ver 1.1
-     */
-    @RequestMapping("/updatetTerminalName")
-    @ApiOperation(value = "APP用户修改设备信息")
-    public ResultDTO<TerminalsDTO> updateTerName(@RequestBody TerminalJO terminalJO){
-        logger.info("APP修改设备名称操作!");
-        TerminalsDTO terminalsDTO = new TerminalsDTO();
-        terminalsDTO.setId(terminalJO.getTerId());
-        terminalsDTO.setTermName(terminalJO.getTermName());
-        return merchantService.updateTerminal(terminalsDTO);
-    }
-    /**
      * getShopOwnerMerChant:(这里用一句话描述这个方法的作用)根据userId查询是店主的商户信息
      *
      * @param merchant
