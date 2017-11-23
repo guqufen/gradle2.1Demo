@@ -72,6 +72,8 @@ public class FuiouController extends BaseController{
 
 		TradeData tradeData = new TradeData();
 
+		tradeData.setAmt(fuiouJO.getTotal_fee());//交易金额
+
 		//如果富友退款订单号(原交易订单号)为空，则表示退款或者撤销交易
 		if( Strings.isNullOrEmpty(fuiouJO.getOut_refund_no()) ){
 			tradeData.setTxnType(TradeTypeEnum.CONSUMER.getCode());//交易类型1-消费；2-撤销
@@ -79,6 +81,7 @@ public class FuiouController extends BaseController{
 		}else{
 			tradeData.setTxnType(TradeTypeEnum.CANCEL.getCode());
 			tradeData.setStatus("0");
+			tradeData.setAmt(fuiouJO.getRefund_fee());//撤销类交易，交易金额赋值为退款金额(撤销类交易不带交易金额字段)
 		}
 
 		/**
@@ -108,10 +111,8 @@ public class FuiouController extends BaseController{
 		tradeData.setRefAmt(fuiouJO.getRefund_fee());//退款金额
 
 		tradeData.setChannelType("90");//渠道类型，90表示富友
-		tradeData.setAmt(fuiouJO.getTotal_fee());//交易金额
 		tradeData.setOrderNo(fuiouJO.getOut_trade_no());//订单号
 		tradeData.setOrderTime(fuiouJO.getCreatetime());//订单时间
-
 		tradeData.setTimeStamp(fuiouJO.getCreatetime());//订单时间戳
 		tradeData.setTradeDetail(req);//交易详情(JSON字串)
 
@@ -144,7 +145,7 @@ public class FuiouController extends BaseController{
 			tradeData.setReferNo(fuiouJO.getRetri_ref_no());//参考号
 			tradeData.setOrderIdScan(fuiouJO.getRetri_ref_no());//订单号(扫码支付订单号)
 		}
-		tradeData.setSource("02");//来源00拉卡拉01导入02同步03法奈昇04浦发
+		tradeData.setSource("05");//来源00拉卡拉01导入02同步03法奈昇04浦发05富友同步
 		tradeData.setMerId(fuiouJO.getMerchantno_fuiou());//结算商户号(富友商户号)
 		tradeData.setCreateTime(DateUtils.StrToDate(fuiouJO.getCreatetime()));//交易创建时间
 		tradeData.setPayMedium("00");//支付媒介00pos机01app02台码
