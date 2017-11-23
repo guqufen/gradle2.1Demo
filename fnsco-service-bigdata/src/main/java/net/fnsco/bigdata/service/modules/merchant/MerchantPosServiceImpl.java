@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO;
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO2;
 import net.fnsco.bigdata.api.dto.WebMerchantTerminalDTO;
@@ -119,6 +121,9 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
                 }
             }
             for(MerchantPos pos :webMerchantPosDTO.getPosInfos()){
+            	if(!Strings.isNullOrEmpty(pos.getChannelTerminalCode())) {
+            		pos.setTerminalCode(pos.getChannelTerminalCode());
+            	}
             	if(null != pos.getId()){
             		merchantPosDao.updateByPrimaryKeySelective(pos);
             	}else{
@@ -127,7 +132,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
             }
             for (MerchantTerminal terminal : webMerchantPosDTO.getTerminals()) {
 				if(null != terminal.getId()){
-					merchantTerminalDao.updateByPrimaryKey(terminal);
+					merchantTerminalDao.updateByPrimaryKeySelective(terminal);
 				}else{
 					merchantTerminalDao.insertSelective(terminal);
 				}
@@ -236,6 +241,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
         }
         return true;
     }
+
     
     /**
      * (non-Javadoc)获取所有银行卡信息

@@ -277,6 +277,8 @@ function operateFormatter(value, row, index) {
         '</a>'
     ].join('');
 }
+
+
   //表格中删除按钮事件
   function delete_btn_event(td_obj){
   	var ids =[];

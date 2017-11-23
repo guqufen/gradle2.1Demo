@@ -42,9 +42,9 @@ public class WXCategrotyController extends net.fnsco.core.base.BaseController{
 	
 	@RequestMapping("showSecondClassify")
 	@ResponseBody
-	public ResultDTO<PayCategroryWxDO> showSecondClassify(@RequestParam("etpAttr") String etpAttr, 
+	public ResultDTO<PayCategroryWxDO> showSecondClassify(@RequestParam("innerCode") String innerCode, 
 				@RequestParam("group_id") Integer group_id){
-		List<PayCategroryWxDO> categroty = payCategroryWxService.getSecondCategrotyList(etpAttr,group_id);
+		List<PayCategroryWxDO> categroty = payCategroryWxService.getSecondCategrotyList(innerCode,group_id);
 		return success(categroty);
 	}
 	

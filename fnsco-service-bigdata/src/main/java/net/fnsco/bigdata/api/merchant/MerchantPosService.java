@@ -77,4 +77,6 @@ public interface MerchantPosService {
 	 * @since  CodingExample　Ver 1.1
 	 */
 	List<MerchantPos> selectBySnCode(String snCode);
+
+	
 }

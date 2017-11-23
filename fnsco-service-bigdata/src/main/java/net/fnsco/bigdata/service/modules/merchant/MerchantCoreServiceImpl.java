@@ -44,6 +44,7 @@ import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantFileTemp;
+import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.PageDTO;
@@ -240,6 +241,37 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         if (core == null) {
             return result.fail();
         }
+        //通道
+        List<MerchantChannel> channelList = core.getChannel();
+        if(CollectionUtils.isEmpty(channelList)){
+        	channelList = Lists.newArrayList();
+        	MerchantChannel channel = new MerchantChannel();
+//        	channel.setId(null);
+        	channel.setInnerCode(core.getInnerCode());
+        	channelList.add(channel);
+        	core.setChannel(channelList);
+        }
+        //pos设备
+        List<MerchantPos> posList = core.getChannel().get(0).getPosInfos();
+        if(CollectionUtils.isEmpty(posList)){
+        	posList = Lists.newArrayList();
+        	MerchantPos pos = new MerchantPos();
+//        	pos.setId(0);
+        	pos.setInnerCode(core.getInnerCode());
+        	posList.add(pos);
+        	core.getChannel().get(0).setPosInfos(posList);
+        }
+        //终端
+        List<MerchantTerminal> terminalList = core.getChannel().get(0).getTerminaInfos();
+        if(CollectionUtils.isEmpty(terminalList)){
+        	 terminalList = Lists.newArrayList();
+             MerchantTerminal terminal = new MerchantTerminal();
+//             terminal.setId(0);
+             terminal.setInnerCode(core.getInnerCode());
+             terminalList.add(terminal);
+             core.getChannel().get(0).setTerminaInfos(terminalList);
+        }
+       
         
       //查询名称
         if(!Strings.isStringEmpty(core.getInnerCode())) {
@@ -394,6 +426,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     	
     	merchantCore.setModifyUserId(userId);//待定
         merchantCore.setModifyTime(new Date());
+        merchantCore.setStatus(1);
+        merchantCore.setLegalValidCardType("0");//身份证
       //根据商户性质获取商户种类
         if(merchantCore.getEtpsAttr() != null){
 			int etps_tp = merchantEntityService.getEtpsTypeByEtpsAttra(merchantCore.getEtpsAttr());
@@ -409,9 +443,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             if(null == merchantCore.getSource()){
                 merchantCore.setSource(0);
             }
-            merchantCore.setStatus(1);
-            merchantCore.setLegalValidCardType("0");//身份证
-          
             int res = merchantCoreDao.insertSelective(merchantCore);
             if (res != 1) {
                 return ResultDTO.fail();

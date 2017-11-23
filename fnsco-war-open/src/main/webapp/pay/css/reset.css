@@ -20,6 +20,12 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {color:#99
 input:-moz-placeholder, textarea:-moz-placeholder {color: #999;}
 input::-moz-placeholder, textarea::-moz-placeholder {color: #999;}
 input:-ms-input-placeholder, textarea:-ms-input-placeholder {color: #999;}
+select{
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    border:1px solid #ccc;
+}
 /* 初始化结束 */
 
 /*二维码失效提示*/
@@ -40,15 +46,25 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {color: #999;}
     color:#666;
 }
 
-
+html{
+    overflow: hidden;
+}
 .fq{
-    padding-top: 6rem;
+    padding-top: 9rem;
+    height: 32rem;
+    position: relative;
+    background:url(../img/fq_bg.jpg) no-repeat top;
+    background-size:contain;
+    background-color: rgb(56,125,255);
 }
 .payDiv{
     text-align: center;
 }
+input.paymentAmount{
+    color: #000;
+}
 input.paymentAmount,select.installmentNum,button{
-    width: 15rem;
+    width: 13rem;
     height: 1.7rem;
     margin: 0.3rem auto;
     border:1px solid #ccc !important;
@@ -68,8 +84,11 @@ select.installmentNum{
     color: #000;
 }
 .submit{
-    background-color: rgb(52,149,254);
+    width: 7rem;
+    background-color: rgb(253, 141, 43);
     color: #fff;
+    margin-top: 0.6rem;
+    border-radius: 1rem;
     border:none !important;
     text-indent: 0;
 }

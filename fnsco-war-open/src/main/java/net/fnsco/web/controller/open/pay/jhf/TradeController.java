@@ -151,11 +151,15 @@ public class TradeController extends BaseController {
             tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
             tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
             BigDecimal eachMoney = tradeOrderDO.getEachMoney();
-            eachMoney = eachMoney.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-            tradeOrderDO.setEachMoney(eachMoney);
+            if (null != eachMoney) {
+                eachMoney = eachMoney.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+                tradeOrderDO.setEachMoney(eachMoney);
+            }
             BigDecimal orderAmount = tradeOrderDO.getOrderAmount();
-            orderAmount = orderAmount.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-            tradeOrderDO.setOrderAmount(orderAmount);
+            if (null != orderAmount) {
+                orderAmount = orderAmount.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+                tradeOrderDO.setOrderAmount(orderAmount);
+            }
             //MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
             //if (null != merChantCore) {
             //    tradeOrderDO.setMercName(merChantCore.getMerName());

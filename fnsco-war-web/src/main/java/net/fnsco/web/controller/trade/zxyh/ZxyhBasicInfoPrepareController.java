@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.base.Strings;
+
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
@@ -39,7 +41,10 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 	 */
 	@RequestMapping("/enterMerc")
     @ResponseBody
-	public ResultDTO<Object> enterMerc(Integer id){
+	public ResultDTO<String> enterMerc(Integer id){
+		if(null == id){
+			return ResultDTO.fail();
+		}
 		//根据id获取入驻中信银行商户所需的必须信息
 		MerchantCoreEntityZxyhDTO core = merchantCoreService.queryZXYHInfoById(id);
 		
@@ -48,7 +53,7 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 		
 		//调用入驻接口将参数传过去-
 //		zxyhPaymentService.mchtadd();
-		return null;
+		return ResultDTO.successForSubmit();
 		
 	}
 }

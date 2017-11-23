@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.sys.dao.PayCategroryWxDAO;
 import net.fnsco.bigdata.service.sys.entity.PayCategroryWxDO;
@@ -61,22 +63,24 @@ public class PayCategroryWxService extends BaseService {
 //根据商户性质获取微信一级分类
 public List<PayCategroryWxDO> getFirstCategrotyList(String innerCode) {
 	//根据内部商户号获取商户性质
-	Integer etpsAttr = this.merchantCoreDao.getEtpsAttrByInnerCode(innerCode);
-	String etpsAttrStr = getEtpsAttrStr(etpsAttr);
+	String etpsAttrStr = getEtpsAttrStr(innerCode);
 	List<PayCategroryWxDO> list = this.payCategroryWxDAO.getFirstCategrotyListByEtpAttr(etpsAttrStr);
 	return list;
 }
 
 //查询微信二级分类
 public List<PayCategroryWxDO> getSecondCategrotyList(String innerCode, Integer group_id) {
-	Integer etpsAttr = this.merchantCoreDao.getEtpsAttrByInnerCode(innerCode);
-	String etpsAttrStr = getEtpsAttrStr(etpsAttr);
+	String etpsAttrStr = getEtpsAttrStr(innerCode);
 	List<PayCategroryWxDO> list = this.payCategroryWxDAO.getSecondCategrotyListByContion(etpsAttrStr,group_id);
 	return list;
 }
 
 
-public String getEtpsAttrStr(Integer etpsAttr){
+public String getEtpsAttrStr(String innerCode){
+	if(Strings.isNullOrEmpty(innerCode)){
+		return null;
+	}
+	Integer etpsAttr = this.merchantCoreDao.getEtpsAttrByInnerCode(innerCode);
 	switch (etpsAttr) {
 	case 1:
 		return "政府机构";

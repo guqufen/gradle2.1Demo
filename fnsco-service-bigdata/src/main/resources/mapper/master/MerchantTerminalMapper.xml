@@ -23,6 +23,12 @@
     <result column="wechat_fee" property="wechatFee" jdbcType="VARCHAR" />
     <result column="alipay_fee" property="alipayFee" jdbcType="VARCHAR" />
     <result column="terminal_type" property="terminalType" jdbcType="VARCHAR" />
+    <!--  -->
+    <result column="sub_app_id" property="subAppId" jdbcType="INTEGER" />
+    <result column="q_group_id" property="qGroupId" jdbcType="VARCHAR" />
+    <result column="categrory_id" property="categroryId" jdbcType="VARCHAR" />
+    <result column="settle_cycle" property="settleCycle" jdbcType="VARCHAR" />
+    <result column="jsapi_path" property="jsapiPath" jdbcType="VARCHAR" />
   </resultMap>
   <!-- APP端使用 -->
   <resultMap id="ListResultMap" type="net.fnsco.bigdata.api.dto.TerminalsDTO">
@@ -41,7 +47,7 @@
     id, inner_code, pos_id, terminal_code, channel_terminal_code, terminal_batch, terminal_para, 
     charges_type, debit_card_rate, credit_card_rate, debit_card_fee, credit_card_fee, 
     debit_card_max_fee, credit_card_max_fee, deal_switch, record_state, term_audit_state, 
-    term_name, wechat_fee, alipay_fee, terminal_type
+    term_name, wechat_fee, alipay_fee, terminal_type,sub_app_id,q_group_id,categrory_id,settle_cycle,jsapi_path
   </sql>
   <sql id="T_Base_Column_List" >
     t.id, t.inner_code, pos_id, terminal_code, channel_terminal_code, terminal_batch, terminal_para, 
@@ -141,6 +147,22 @@
       <if test="terminalType != null" >
         terminal_type,
       </if>
+      <!-- 新增字段 -->
+      <if test="subAppId != null" >
+        sub_app_id,
+      </if>
+      <!-- <if test="qGroupId != null" > -->
+        q_group_id,
+      <!-- </if> -->
+      <!-- <if test="categroryId != null" > -->
+        categrory_id,
+     <!--  </if> -->
+      <if test="settleCycle != null" >
+        settle_cycle,
+      </if>
+      <if test="jsapiPath != null" >
+        jsapi_path,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -205,6 +227,22 @@
       </if>
       <if test="terminalType != null" >
         #{terminalType,jdbcType=VARCHAR},
+      </if>
+      <!--  -->
+       <if test="subAppId != null" >
+        #{subAppId,jdbcType=INTEGER},
+      </if>
+      <!-- <if test="qGroupId != null" > -->
+       #{qGroupId,jdbcType=VARCHAR},
+      <!-- </if> -->
+      <!-- <if test="categroryId != null" > -->
+       #{categroryId,jdbcType=VARCHAR},
+      <!-- </if> -->
+      <if test="settleCycle != null" >
+       #{settleCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="jsapiPath != null" >
+        #{jsapiPath,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -271,6 +309,22 @@
       </if>
       <if test="terminalType != null" >
         terminal_type = #{terminalType,jdbcType=VARCHAR},
+      </if>
+      <!--  -->
+      <if test="subAppId != null" >
+        sub_app_id = #{subAppId,jdbcType=INTEGER},
+      </if>
+      <if test="qGroupId != null" >
+        q_group_id = #{qGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="categroryId != null" >
+        categrory_id = #{categroryId,jdbcType=VARCHAR},
+      </if>
+      <if test="settleCycle != null" >
+        settle_cycle = #{settleCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="jsapiPath != null" >
+        jsapi_path = #{jsapiPath,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}

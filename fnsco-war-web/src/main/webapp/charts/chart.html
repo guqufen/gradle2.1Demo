@@ -146,6 +146,7 @@ function getList(num,data){
 			for(var i=0;i<data.data.length;i++){
 				$("#scroll-ul").append('<li><div class="card-num">'+data.data[i].payType+'</div><div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">'+data.data[i].amt+'</span></div></li>')
 			}
+			console.log($("#scroll-ul").html());
 			if(num=='0'){
 				$("#scrollDiv").textSlider({line:1,speed:800,timer:3000});
 			}

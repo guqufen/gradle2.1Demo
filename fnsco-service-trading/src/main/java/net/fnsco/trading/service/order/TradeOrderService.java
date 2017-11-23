@@ -202,9 +202,11 @@ public class TradeOrderService extends BaseService {
                 tradeOrderDO.setSettleStatus(Integer.parseInt(order.getSettlementStatus()));
                 if ("1".equals(order.getSettlementStatus())) {
                     tradeOrderDO.setSettleDate(new Date());
-                    BigDecimal settleAmount = new BigDecimal(order.getSettlementAmount());
-                    settleAmount = settleAmount.multiply(new BigDecimal("100"));
-                    tradeOrderDO.setSettleAmount(settleAmount);
+                    if (null != order.getSettlementAmount()) {//通知接口未返回结算金额
+                        BigDecimal settleAmount = new BigDecimal(order.getSettlementAmount());
+                        settleAmount = settleAmount.multiply(new BigDecimal("100"));
+                        tradeOrderDO.setSettleAmount(settleAmount);
+                    }
                 }
             } catch (Exception ex) {
                 logger.error("支付完成时回调时结算状态转换为int出错", ex);
