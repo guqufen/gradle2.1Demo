@@ -285,12 +285,12 @@ public class MerchantImportHelper{
             merchantTerminal1.setCreditCardMaxFee(Integer.valueOf(creditCardMaxFee));
         }
         
-        merchantTerminal1.setPosId(posId);
+//        merchantTerminal1.setPosId(posId);
         String termName = "扫码";
         if ("00".equals(terminalType)) {
             termName = "刷卡";
         }
-        merchantTerminal1.setTermName(termName);
+//        merchantTerminal1.setTermName(termName);
         merchantTerminal1.setTerminalType(terminalType);
         merchantTerminal1.setTerminalCode(dto.getInnerTermCode());
         merchantTerminal1.setChannelTerminalCode(dto.getTerminalCode());
