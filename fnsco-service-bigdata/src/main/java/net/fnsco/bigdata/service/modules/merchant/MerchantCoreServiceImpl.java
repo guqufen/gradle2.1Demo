@@ -1,5 +1,6 @@
 package net.fnsco.bigdata.service.modules.merchant;
 
+import java.awt.geom.Area;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.AgentDao;
 import net.fnsco.bigdata.service.dao.master.AppUserMerchant1Dao;
+import net.fnsco.bigdata.service.dao.master.AreaDAO;
 import net.fnsco.bigdata.service.dao.master.MerchantBankDao;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantContactDao;
@@ -103,7 +105,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     private MerchantEntityDao   merchantEntityDao;
     @Autowired
 	private MerchantEntityService merchantEntityService;
-
+    @Autowired
+    private AreaDAO areaDao;
+  
     /**
      * @todo 新增加商家
      * @author tangliang
@@ -803,9 +807,13 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
              merchantCoreEntityZxyhDTO.setLicenceNo(core.getBusinessLicenseNum());//营业执照号
              merchantCoreEntityZxyhDTO.setManager(core.getLegalPerson());//法人姓名
              merchantCoreEntityZxyhDTO.setIdentityNo(core.getCardNum());//法人身份证号码   正确身份证格式
-             merchantCoreEntityZxyhDTO.setProvCode(core.getRegistProvince().toString());//商户所属省
-             merchantCoreEntityZxyhDTO.setCityCode(core.getRegistCity().toString());//商户所属市
-             merchantCoreEntityZxyhDTO.setAreaCode(core.getRegistArea().toString());//商户所属区
+             net.fnsco.bigdata.service.domain.Area area = new net.fnsco.bigdata.service.domain.Area();
+             area = areaDao.getById(core.getRegistProvince());
+             merchantCoreEntityZxyhDTO.setProvCode(area.getZxyh_code());//商户所属省
+             area = areaDao.getById(core.getRegistCity());
+             merchantCoreEntityZxyhDTO.setCityCode(area.getZxyh_code());//商户所属市
+             area = areaDao.getById(core.getRegistArea());
+             merchantCoreEntityZxyhDTO.setAreaCode(area.getZxyh_code());//商户所属区
              merchantCoreEntityZxyhDTO.setAddr(core.getRegistAddress());//详细地址  20字以内
              
              merchantCoreEntityZxyhDTO.setSettleAcctNm(merchantBank.getAccountName());//结算开户名

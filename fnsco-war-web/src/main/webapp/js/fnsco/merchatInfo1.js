@@ -2030,8 +2030,8 @@ function zxyhChannel(id){
 	    url:PROJECT_NAME+'/web/zxyh/enterMerc',
 	    type:'get',
 	    dataType : "json",
-//	    data:{'id':id},
-	    data:{'id':1743},
+	    data:{'id':id},
+//	    data:{'id':1743},
 	    success:function(data){
 	    	console.log(data.data.result);
 	    	$(".qrcode").attr('src',data.data.result)
