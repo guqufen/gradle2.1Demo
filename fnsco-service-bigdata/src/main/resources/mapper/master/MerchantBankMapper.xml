@@ -13,6 +13,7 @@
     <result column="open_bank" property="openBank" jdbcType="VARCHAR" />
     <result column="open_bank_city" property="openBankCity" jdbcType="VARCHAR" />
     <result column="open_bank_num" property="openBankNum" jdbcType="VARCHAR" />
+    <result column="account_phone" property="accountPhone" jdbcType="VARCHAR" />
   </resultMap>
   <!-- APP银行卡显示信息 -->
   <resultMap id="MerResultMap" type="net.fnsco.bigdata.api.dto.MerChantBankDTO" >
@@ -22,7 +23,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, inner_code,account_type, account_no, account_name, account_card_id, sub_bank_name, open_bank_prince, 
-    open_bank, open_bank_city, open_bank_num
+    open_bank, open_bank_city, open_bank_num,account_phone
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -80,6 +81,9 @@
       <if test="openBankNum != null" >
         open_bank_num,
       </if>
+      <if test="accountPhone != null" >
+        account_phone,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -115,6 +119,9 @@
       <if test="openBankNum != null" >
         #{openBankNum,jdbcType=VARCHAR},
       </if>
+      <if test="accountPhone != null" >
+        #{accountPhone,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantBank" >
@@ -149,6 +156,9 @@
       </if>
       <if test="openBankNum != null" >
         open_bank_num = #{openBankNum,jdbcType=VARCHAR},
+      </if>
+       <if test="accountPhone != null" >
+        account_phone = #{accountPhone,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
