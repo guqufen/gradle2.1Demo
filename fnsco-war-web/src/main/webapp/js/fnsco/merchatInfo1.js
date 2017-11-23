@@ -832,7 +832,7 @@ function terminalHtml(num){
         '<div class="terminalRatesList" id="terminalRatesList'+num+'">'+
         terminalRatesHtml(num)+
         '</div>'+
-        '<div class="btn-div"><button onclick="addTerminalRates('+num+')" type="button" class="btn btn-primary btn_addterminalRates"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增终端</button></div>'+
+        '<div class="btn-div"><button onclick="addTerminalRates('+num+')" type="button" class="btn btn-info btn_addterminalRates"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>支付费率</button></div>'+
         '</div></div>';
 }
 function posHtml(num){
@@ -1151,15 +1151,15 @@ function removePos(num){
           var posAddr=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.installAddr')).val();//POS装机地址
           var channelTerminalCode=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.channelTerminalCode')).val();//刷卡终端
           var qrChannelTerminalCode=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.qrChannelTerminalCode')).val();//扫码终端
-          var id=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.remove-icon')).attr('editid');
-          if(!id || id<0){
+          var posId=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.remove-icon')).attr('editid');
+          if(!posId || posId<0){
             // posInfos=posInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr});
             posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,channelTerminalCode,qrChannelTerminalCode});
           }else{
             // posInfos=posInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,posId});  
-            posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,channelTerminalCode,qrChannelTerminalCode,id});  
+            posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,channelTerminalCode,qrChannelTerminalCode,posId});  
           }
-          console.log("PosID："+id);  
+          console.log("PosID："+posId);  
       }
       var terminalLen=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).length;
       // console.log(terminalLen);
@@ -1178,12 +1178,12 @@ function removePos(num){
         var jsapiPath=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.jsapiPath')).val();
         var qGroupId=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.qGroupId')).val();
         var categroryId=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.categroryId')).val();
-        var id=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.remove-icon')).attr('editid');
-        console.log(id);
-        if(!id || id<0){
+        var terminalId=$("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.remove-icon')).attr('editid');
+        console.log(terminalId);
+        if(!terminalId || terminalId<0){
             terminaInfos=terminaInfos.concat({terminalType,terminalCode,alipayFee,wechatFee,debitCardRate,creditCardRate,debitCardMaxFee,settleCycle,subAppId,jsapiPath,qGroupId,categroryId});
         }else{
-            terminaInfos=terminaInfos.concat({terminalType,terminalCode,alipayFee,wechatFee,debitCardRate,creditCardRate,debitCardMaxFee,settleCycle,subAppId,jsapiPath,qGroupId,categroryId,id});
+            terminaInfos=terminaInfos.concat({terminalType,terminalCode,alipayFee,wechatFee,debitCardRate,creditCardRate,debitCardMaxFee,settleCycle,subAppId,jsapiPath,qGroupId,categroryId,terminalId});
         }
       }
 

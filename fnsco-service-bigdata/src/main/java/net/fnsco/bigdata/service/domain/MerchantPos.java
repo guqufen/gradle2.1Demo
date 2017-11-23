@@ -52,6 +52,29 @@ public class MerchantPos extends DTO {
 	private String channelTerminalCode;
 	private String qrChannelTerminalCode;
 	
+    private Integer posId;
+    
+	/**
+	 * posId
+	 *
+	 * @return  the posId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getPosId() {
+		return posId;
+	}
+
+	/**
+	 * posId
+	 *
+	 * @param   posId    the posId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setPosId(Integer posId) {
+		this.posId = posId;
+	}
 
 	/**
 	 * terminalCode
