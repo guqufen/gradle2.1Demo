@@ -47,10 +47,6 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 		}
 		//根据id获取入驻中信银行商户所需的必须信息
 		MerchantCoreEntityZxyhDTO core = merchantCoreService.queryZXYHInfoById(id);
-		
-//		MerchantContact merchantContact = core.getContacts().get(0);
-		//只能入驻一次，不能二次点击
-		
 		//调用入驻接口将参数传过去-
 //		zxyhPaymentService.mchtadd();
 		return ResultDTO.successForSubmit();
