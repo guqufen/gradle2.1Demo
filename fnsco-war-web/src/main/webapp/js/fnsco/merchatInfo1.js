@@ -489,10 +489,10 @@ function requestAgent(type){
 				   }
 			   })
 			   if(!type){
-				   $('#agentId').html();
+				   $('#agentId').html('');
 				   $('#agentId').append(html_opt);
 			   }else{
-				   $('#agentId1').html();
+				   $('#agentId1').html('');
 				   $('#agentId1').append(html_opt);
 				   $('#agentId2').append(html_opt);
 			   }

@@ -309,7 +309,7 @@
 	</delete>
 	<!-- 根据POSid查询 -->
 	<select id="queryTerByPosId" parameterType="java.lang.Integer" resultType="net.fnsco.bigdata.api.dto.TerminalInfoDTO">
-	  SELECT term_name AS terName,terminal_code AS terminalCode FROM m_merchant_terminal WHERE pos_id = #{posId}
+	  SELECT terminal_code AS terminalCode FROM m_merchant_terminal WHERE pos_id = #{posId}
 	</select>
 	<!-- 批量插入数据 -->
 	<insert id="insertBatch"  parameterType="java.util.List">
