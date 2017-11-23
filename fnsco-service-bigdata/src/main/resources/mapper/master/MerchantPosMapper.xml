@@ -51,7 +51,9 @@
     <result column="sn_code" property="snCode" jdbcType="VARCHAR" />
     <result column="pos_factory" property="posFactory" jdbcType="VARCHAR" />
     <result column="pos_type" property="posType" jdbcType="VARCHAR" />
-    <collection property="terNames" column="id" select="net.fnsco.bigdata.service.dao.master.MerchantTerminalDao.queryTerByPosId"/>
+    <result column="terminal_code" property="terminalCode" jdbcType="VARCHAR" />
+    <result column="qr_channel_terminal_code" property="qrChannelTerminalCode" jdbcType="VARCHAR" />
+<!--     <collection property="terNames" column="id" select="net.fnsco.bigdata.service.dao.master.MerchantTerminalDao.queryTerByPosId"/> -->
   </resultMap>
   <sql id="Base_Column_List" >
     id, inner_code, channel_id, pos_name, sn_code, pos_factory, pos_type, status, bank_id, merc_refer_name,pos_addr,pos_province,pos_city,pos_area,terminal_code,channel_terminal_code,qr_channel_terminal_code
@@ -281,7 +283,7 @@
   </select>
   <!-- 根据ID查询详情 -->
   <select id="selectDetailById" parameterType="java.lang.Integer" resultMap="PosInfoResultMap">
-     SELECT id,pos_name,pos_factory,pos_type,sn_code  FROM m_merchant_pos WHERE id = #{id} AND status = 1
+     SELECT id,pos_name,pos_factory,pos_type,sn_code,terminal_code,qr_channel_terminal_code  FROM m_merchant_pos WHERE id = #{id} AND status = 1
   </select>
   <!-- 根据channelId删除数据 -->
   <delete id="deleteByChannelId" parameterType="java.lang.Integer">
@@ -315,4 +317,11 @@
 	     </foreach>
 		)
 	</delete>
+	<!-- 根据终端号查询 -->
+	<select id="selectByTerminalCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+	  select 
+    <include refid="Base_Column_List" />
+    from m_merchant_pos
+    where terminal_code = #{terminalCode,jdbcType=VARCHAR} or qr_channel_terminal_code = #{terminalCode,jdbcType=VARCHAR}  limit 1
+	</select>
 </mapper>

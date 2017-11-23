@@ -77,6 +77,16 @@ public interface MerchantPosService {
 	 * @since  CodingExample　Ver 1.1
 	 */
 	List<MerchantPos> selectBySnCode(String snCode);
-
+	
+	/**
+	 * selectByTerminalCode:(根据终端号查询)
+	 *
+	 * @param  @param terminalCode
+	 * @param  @return    设定文件
+	 * @return MerchantPos    DOM对象
+	 * @author tangliang
+	 * @date   2017年11月23日 下午1:56:41
+	 */
+	MerchantPos selectByTerminalCode(String terminalCode);
 	
 }

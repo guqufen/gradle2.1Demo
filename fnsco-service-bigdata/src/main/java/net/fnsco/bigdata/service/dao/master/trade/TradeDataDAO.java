@@ -78,6 +78,13 @@ public interface TradeDataDAO {
      */
     TradeData selectByIRT(TradeData record);
     
+    /**
+     * 通过渠道终端号商户号和订单号查找交易
+     * @param record
+     * @return
+     */
+    TradeData selectByCMT(TradeData record);
+    
     int selectCountByIRT(TradeData record);
     
     Map querySumByCondition(TradeData record);

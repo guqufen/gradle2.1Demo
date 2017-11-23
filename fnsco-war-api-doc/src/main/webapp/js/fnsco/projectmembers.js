@@ -35,29 +35,18 @@ $('#table').bootstrapTable({
 function formatReDate(value, row, index) {
 	return formatDateUtil(value);
 }
-// 绑定店铺
-function formatMerNames(value, row, index) {
-	if (value && '' != value) {
-		return value.substr(0, value.length - 1);
-	}
-}
-// 格式化时间
-function formatReDate(value, row, index) {
-	return formatDateUtil(value);
-
-}
-// 操作格式化
-function operateFormatter(value, row, index) {
-	index++;
-	return "<div i='" + value + "' class='j'>" + index + "</div>";
-// return [index+1].join('');
-}
 function statusFormatter(value, row, index){
 	if(value=="0"){
 		return "停用";
 	}else if(value=="1"){
 		return "启用";
 	}
+}
+//操作格式化
+function operateFormatter(value, row, index) {
+	index++;
+	return "<div i='" + value + "' class='j'>" + index + "</div>";
+// return [index+1].join('');
 }
 // 条件查询按钮事件
 function queryEvent() {
@@ -104,7 +93,7 @@ function responseHandler(res) {
 }
 $(".modify").click(function(){
 	if(!(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test($("#name").val()))){ 
-		 layer.msg("手机号码有误，请重填");
+		 layer.msg("邮箱格式有误，请重填");
 		 return false;
 	 }
 	 $.ajax({
