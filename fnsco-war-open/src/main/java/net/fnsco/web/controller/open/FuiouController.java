@@ -72,14 +72,16 @@ public class FuiouController extends BaseController{
 
 		TradeData tradeData = new TradeData();
 
+		tradeData.setAmt(fuiouJO.getTotal_fee());//交易金额
+
 		//如果富友退款订单号(原交易订单号)为空，则表示退款或者撤销交易
 		if( Strings.isNullOrEmpty(fuiouJO.getOut_refund_no()) ){
 			tradeData.setTxnType(TradeTypeEnum.CONSUMER.getCode());//交易类型1-消费；2-撤销
 			tradeData.setStatus("1");//交易状态0非正常交易（包括撤销交易和撤销原交易）1正常交易
-			tradeData.setAmt(fuiouJO.getRefund_fee());//撤销类交易，交易金额赋值为退款金额(撤销类交易不带交易金额字段)
 		}else{
 			tradeData.setTxnType(TradeTypeEnum.CANCEL.getCode());
 			tradeData.setStatus("0");
+			tradeData.setAmt(fuiouJO.getRefund_fee());//撤销类交易，交易金额赋值为退款金额(撤销类交易不带交易金额字段)
 		}
 
 		/**
@@ -109,7 +111,6 @@ public class FuiouController extends BaseController{
 		tradeData.setRefAmt(fuiouJO.getRefund_fee());//退款金额
 
 		tradeData.setChannelType("90");//渠道类型，90表示富友
-		tradeData.setAmt(fuiouJO.getTotal_fee());//交易金额
 		tradeData.setOrderNo(fuiouJO.getOut_trade_no());//订单号
 		tradeData.setOrderTime(fuiouJO.getCreatetime());//订单时间
 		tradeData.setTimeStamp(fuiouJO.getCreatetime());//订单时间戳
