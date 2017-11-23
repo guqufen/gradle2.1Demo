@@ -859,22 +859,26 @@ function posHtml(num){
         '<div class="col-sm-4"><label class="control-label" for="posFactory'+num+'">机具厂家：</label><input type="text" class="form-control posFactory" id="posFactory'+num+'" name="posFactory'+num+'" required="required" value="福建联迪商用设备有限公司"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="installAddr'+num+'">POS装机地址：</label>'+
         '<select  class="form-control posProvince" id="provinceId' + num + '" name="provinceId' + num + '" style="type=province" onchange=processSelect('+ num + ',' + true + ')>' + 
-      '<option value="">--选择省--</option>'+
-    '</select></div>' +
-        '<div class="col-sm-4"><label class="control-label"></label><select  class="form-control posCity" id="cityId' + num + '" name="cityId' + num + '" onchange=processSelect(' + num + ','+ false + ')>' + 
-          '<option value="">--选择市--</option>' + 
-    '</select></div>' +
-    '<div class="col-sm-4"><label class="control-label"></label><select class="form-control posArea" id="areaId' + num + '" name="areaId' + num + '" >' + 
-      '<option value="">--选择区--</option>' +
-    '</select></div>' +
-    '<div class="col-sm-12"><label class="control-label" for="installAddr'+num+'">POS装机详细地址：</label>'+
-    '<input type="text" class="form-control installAddr" id="installAddr'+num+'" name="installAddr'+num+'" required="required">'+
-        '</div></div>';
+        '<option value="">--选择省--</option>'+
+        '</select></div>' +
+          '<div class="col-sm-4"><label class="control-label"></label><select  class="form-control posCity" id="cityId' + num + '" name="cityId' + num + '" onchange=processSelect(' + num + ','+ false + ')>' + 
+            '<option value="">--选择市--</option>' + 
+        '</select></div>' +
+        '<div class="col-sm-4"><label class="control-label"></label><select class="form-control posArea" id="areaId' + num + '" name="areaId' + num + '" >' + 
+        '<option value="">--选择区--</option>' +
+        '</select></div>' +
+        '<div class="col-sm-12"><label class="control-label" for="installAddr'+num+'">POS装机详细地址：</label>'+
+        '<input type="text" class="form-control installAddr" id="installAddr'+num+'" name="installAddr'+num+'" required="required"></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="channelTerminalCode'+num+'">刷卡终端编号：</label>'+
+        '<input type="text" class="form-control channelTerminalCode" id="channelTerminalCode'+num+'" name="channelTerminalCode'+num+'" required="required">'+
+          '</div>'+
+        '<div class="col-sm-4"><label class="control-label" for="qrChannelTerminalCode'+num+'">扫码终端编号：</label>'+
+        '<input type="text" class="form-control qrChannelTerminalCode" id="qrChannelTerminalCode'+num+'" name="qrChannelTerminalCode'+num+'" required="required">'+
+          '</div></div>';
 }
 function terminalRatesHtml(num){
         return '<div class="addTerminalRates addTerminalRates'+num+'">'+
         '<div class="remove-icon remove-terminalRatesList'+num+'" editid="'+num+'" onclick="removeTerminalRates('+num+')"><span class="glyphicon glyphicon-remove"></span></div>'+
-        '<input type="hidden" class="form-control terminalId1" id="terminalId1'+num+'" name="terminalId1'+num+'">'+
         '<div class="col-sm-4"><label class="control-label" for="terminalType'+num+'">支付方式：</label><select id="terminalType'+num+'" name="terminalType'+num+'" class="terminalType form-control" onchange=changeTerminalType('+ num + ')><option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="terminalCode'+num+'">终端编号：</label><input type="text" class="form-control terminalCode" id="terminalCode'+num+'" name="terminalCode'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="alipayFee'+num+'">支付宝费率：</label><input type="text" class="form-control alipayFee" id="alipayFee'+num+'" name="alipayFee'+num+'" required="required"></div>'+
@@ -961,18 +965,66 @@ function changeTerminalType(num,innerCode,weChat1,weChat2){
 	var innerCode=$("#innerCode").val();
 	$(".addTerminalRates"+num).find("input").attr('disabled',true);
 	$(".addTerminalRates"+num).find("select").attr('disabled',true);
-	$("#terminalType"+num).attr('disabled',false);
-	$("#terminalCode"+num).attr('disabled',false);
+  $("#terminalType"+num).attr('disabled',false);//支付方式
+  $("#terminalCode"+num).attr('disabled',false);//终端编号
+  $("#settleCycle"+num).attr('disabled',false);//结算周期
 	// $("#qGroupId"+num).html('');
 	// $("#categroryId"+num).html('');
 	if(typeVal=='00'){//刷卡
 		$("#debitCardRate"+num).attr('disabdle',false);
 		$("#creditCardRate"+num).attr('disabled',false);
-		$("#debitCardMaxFee"+num).attr('disabled',false);
+    $("#debitCardMaxFee"+num).attr('disabled',false);
+		$("#debitCardRate"+num).attr('disabled',false);
+    $("#alipayFee"+num).val('');//支付宝费率
+    $("#wechatFee"+num).val('');//微信费率
+    $("#subAppId"+num).val('');//公众号ID
+    $("#jsapiPath"+num).val('');//域名
+    $("#qGroupId"+num).html('');//一级类目
+    $("#categroryId"+num).html('');//二级类目
 	}else if(typeVal=='01'){//扫码
 		$("#alipayFee"+num).attr('disabled',false);
 		$("#wechatFee"+num).attr('disabled',false);
+    $("#debitCardRate"+num).val('');//借记卡费率
+    $("#creditCardRate"+num).val('');//贷记卡费率
+    $("#debitCardMaxFee"+num).val('');//借记卡封顶值
+    $("#alipayFee"+num).val('');//支付宝费率
+    $("#wechatFee"+num).val('');//微信费率
+    $("#subAppId"+num).val('');//公众号ID
+    $("#jsapiPath"+num).val('');//域名
+    $("#qGroupId"+num).html('');//一级类目
+    $("#categroryId"+num).html('');//二级类目
 	}else if(typeVal=='02'){//微信
+		$("#wechatFee"+num).attr('disabled',false);
+		$("#qGroupId"+num).attr('disabled',false);
+		if(!weChat1){
+			getWechat(num,innerCode);
+			$("#qGroupId"+num).change(function(){
+				getWechat1(num,innerCode,$("#qGroupId"+num).val());
+			})
+		}else{
+			getWechat(num,innerCode,weChat1);
+			getWechat1(num,innerCode,weChat1,weChat2);
+		}
+		$("#categroryId"+num).attr('disabled',false);
+    $("#subAppId"+num).val('');//公众号ID
+    $("#jsapiPath"+num).val('');//域名
+    $("#debitCardRate"+num).val('');//借记卡费率
+    $("#creditCardRate"+num).val('');//贷记卡费率
+    $("#debitCardMaxFee"+num).val('');//借记卡封顶值
+    $("#alipayFee"+num).val('');//支付宝费率    
+	}else if(typeVal=='03'){//支付宝
+		$("#alipayFee"+num).attr('disabled',false);
+		$("#settleCycle"+num).attr('disabled',false);
+		$("#qGroupId"+num).attr('disabled',false);
+		$("#qGroupId"+num).html(alipayQGroupId());
+    $("#subAppId"+num).val('');//公众号ID
+    $("#jsapiPath"+num).val('');//域名
+    $("#debitCardRate"+num).val('');//借记卡费率
+    $("#creditCardRate"+num).val('');//贷记卡费率
+    $("#debitCardMaxFee"+num).val('');//借记卡封顶值
+    $("#wechatFee"+num).val('');//微信费率
+    $("#categroryId"+num).html('');//二级类目
+	}else if(typeVal=='04'){//微信公众号
 		$("#wechatFee"+num).attr('disabled',false);
 		$("#settleCycle"+num).attr('disabled',false);
 		$("#qGroupId"+num).attr('disabled',false);
@@ -984,22 +1036,14 @@ function changeTerminalType(num,innerCode,weChat1,weChat2){
 		}else{
 			getWechat(num,innerCode,weChat1);
 			getWechat1(num,innerCode,weChat1,weChat2);
-			
 		}
-		
-		$("#categroryId"+num).attr('disabled',false);
-	}else if(typeVal=='03'){//支付宝
-		$("#alipayFee"+num).attr('disabled',false);
-		$("#settleCycle"+num).attr('disabled',false);
-		$("#qGroupId"+num).attr('disabled',false);
-		$("#qGroupId"+num).html(alipayQGroupId());
-	}else if(typeVal=='04'){//微信公众号
-		$("#wechatFee"+num).attr('disabled',false);
-		$("#settleCycle"+num).attr('disabled',false);
-		$("#qGroupId"+num).attr('disabled',false);
 		$("#categroryId"+num).attr('disabled',false);
 		$("#subAppId"+num).attr('disabled',false);
 		$("#jsapiPath"+num).attr('disabled',false);
+    $("#alipayFee"+num).val('');//支付宝费率  
+    $("#debitCardRate"+num).val('');//借记卡费率
+    $("#creditCardRate"+num).val('');//贷记卡费率
+    $("#debitCardMaxFee"+num).val('');//借记卡封顶值
 	}
 }
 
@@ -1118,13 +1162,15 @@ function removePos(num){
           var posCity=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posCity')).val();//POS装机市
           var posArea=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posArea')).val();//POS装机区
           var posAddr=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.installAddr')).val();//POS装机地址
+          var channelTerminalCode=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.channelTerminalCode')).val();//刷卡终端
+          var qrChannelTerminalCode=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.qrChannelTerminalCode')).val();//扫码终端
           var id=$("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.remove-icon')).attr('editid');
           if(!id || id<0){
             // posInfos=posInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr});
-            posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr});
+            posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,channelTerminalCode,qrChannelTerminalCode});
           }else{
             // posInfos=posInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,posId});  
-            posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,id});  
+            posDeviceInfos=posDeviceInfos.concat({posName,snCode,bankId,posType,mercReferName,posFactory,posProvince,posCity,posArea,posAddr,channelTerminalCode,qrChannelTerminalCode,id});  
           }
           console.log("PosID："+id);  
       }
@@ -1499,6 +1545,8 @@ function editData(id){
               $('#terminal-con1 input[name="posName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posName);
               $('#terminal-con1 input[name="snCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].snCode);
               $('#terminal-con1 input[name="installAddr'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posAddr);//装机地址数据放入
+              $('#terminal-con1 input[name="channelTerminalCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].channelTerminalCode);//刷卡终端编号数据放入
+              $('#terminal-con1 input[name="qrChannelTerminalCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].qrChannelTerminalCode);//扫码终端编号数据放入
               //选中省份/市/区
               posProvince(data.data.channel[i].posInfos[j].id);
               $('#terminal-con1 select[name="provinceId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posProvince+"']").attr("selected",true);
@@ -1527,7 +1575,7 @@ function editData(id){
             	$('#terminal-con1 input[name="jsapiPath'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].jsapiPath);
             	var id=data.data.channel[i].terminaInfos[o].id;
             	var innerCode=data.data.innerCode;
-            	if(data.data.channel[i].terminaInfos[o].terminalType=='02'){
+            	if(data.data.channel[i].terminaInfos[o].terminalType=='02'||data.data.channel[i].terminaInfos[o].terminalType=='04'){
             		changeTerminalType(id,innerCode,data.data.channel[i].terminaInfos[o].qGroupId,data.data.channel[i].terminaInfos[o].categroryId);
             	}
             	if(data.data.channel[i].terminaInfos[o].terminalType=='03'){
@@ -1849,6 +1897,8 @@ function detailsData(id){
               $('#terminal-con2 input[name="posName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posName);
               $('#terminal-con2 input[name="snCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].snCode);
               $('#terminal-con2 input[name="installAddr'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posAddr);//装机地址数据放入
+              $('#terminal-con2 input[name="channelTerminalCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].channelTerminalCode);//刷卡终端编号数据放入
+              $('#terminal-con2 input[name="qrChannelTerminalCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].qrChannelTerminalCode);//扫码终端编号数据放入
               //选中省份/市/区
               posProvince(data.data.channel[i].posInfos[j].id);
               $('#terminal-con2 select[name="provinceId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posProvince+"']").attr("selected",true);

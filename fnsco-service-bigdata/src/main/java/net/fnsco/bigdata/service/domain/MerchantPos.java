@@ -46,6 +46,78 @@ public class MerchantPos extends DTO {
 	private Integer posArea;
 
 	private List<MerchantTerminal> terminal;// POS机下终端信息
+	
+	//第九期新增加字段
+	private String terminalCode;
+	private String channelTerminalCode;
+	private String qrChannelTerminalCode;
+	
+
+	/**
+	 * terminalCode
+	 *
+	 * @return  the terminalCode
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getTerminalCode() {
+		return terminalCode;
+	}
+
+	/**
+	 * terminalCode
+	 *
+	 * @param   terminalCode    the terminalCode to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setTerminalCode(String terminalCode) {
+		this.terminalCode = terminalCode;
+	}
+
+	/**
+	 * channelTerminalCode
+	 *
+	 * @return  the channelTerminalCode
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getChannelTerminalCode() {
+		return channelTerminalCode;
+	}
+
+	/**
+	 * channelTerminalCode
+	 *
+	 * @param   channelTerminalCode    the channelTerminalCode to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setChannelTerminalCode(String channelTerminalCode) {
+		this.channelTerminalCode = channelTerminalCode;
+	}
+
+	/**
+	 * qrChannelTerminalCode
+	 *
+	 * @return  the qrChannelTerminalCode
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getQrChannelTerminalCode() {
+		return qrChannelTerminalCode;
+	}
+
+	/**
+	 * qrChannelTerminalCode
+	 *
+	 * @param   qrChannelTerminalCode    the qrChannelTerminalCode to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setQrChannelTerminalCode(String qrChannelTerminalCode) {
+		this.qrChannelTerminalCode = qrChannelTerminalCode;
+	}
 
 	/**
 	 * mercReferName
