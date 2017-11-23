@@ -28,7 +28,7 @@ import net.fnsco.core.utils.DbUtil;
 import net.fnsco.web.controller.open.jo.FuiouJO;
 
 @Controller
-@RequestMapping(value="/open/syncData/fuiou", method=RequestMethod.POST)
+@RequestMapping(value="/syncData/fuiou", method=RequestMethod.POST)
 @Api(value="/syncData/fuiou", tags={"富友交易实时传输交口"})
 public class FuiouController extends BaseController{
 
