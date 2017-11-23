@@ -7,7 +7,6 @@ import java.text.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +28,7 @@ import net.fnsco.core.utils.DbUtil;
 import net.fnsco.web.controller.open.jo.FuiouJO;
 
 @Controller
-@RequestMapping(value="/syncData/fuiou", method=RequestMethod.GET)
+@RequestMapping(value="/syncData/fuiou", method=RequestMethod.POST)
 @Api(value="/syncData/fuiou", tags={"富友交易实时传输交口"})
 public class FuiouController extends BaseController{
 
@@ -149,8 +148,8 @@ public class FuiouController extends BaseController{
 		tradeData.setChannelTermCode(fuiouJO.getTerminal_id());//渠道终端号
 		tradeData.setMd5(fuiouJO.getKey_sign());//MD5签名
 		tradeData.setId(DbUtil.getUuid());//设置主键Id
-		
-		
+		tradeData.setRemark(fuiouJO.getReference());//备注
+
 //		String md5 = md5Encrypt();
 //		System.out.println("keyMd5:" + keyMd5);
 		
