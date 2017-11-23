@@ -48,6 +48,8 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 		}
 		//调用入驻接口将参数传过去-
 		zxyhPaymentService.mechAdd(core);
+		//入建中信成功后该商户信息不可修改
+		
 		return ResultDTO.successForSubmit();
 		
 	}
