@@ -70,6 +70,9 @@ public interface MerchantTerminalDao {
      * @return
      */
     List<MerchantTerminal> selectByInnerCode(@Param("innerCode")String innerCode);
+    
+    MerchantTerminal selectByInnerCodeWX(@Param("innerCode")String innerCode);
+    MerchantTerminal selectByInnerCodeZFB(@Param("innerCode")String innerCode);
     /**
      * 
      * queryByInnerCode:(这里用一句话描述这个方法的作用) APP端使用

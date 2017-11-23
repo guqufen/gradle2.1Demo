@@ -81,6 +81,13 @@ public interface MerchantCoreDao {
      * @return
      */
     MerchantCore queryAllById(Integer id);
+    
+    /**
+     * 根据id查询出入建中信商户所需的数据
+     * @param id
+     * @return
+     */
+    MerchantCore queryAllByIdForAddZXMerc(Integer id);
     /**
      * 
      * queryAllByUseraId:(这里用一句话描述这个方法的作用) 根据登录的APPUSERID查询关联的商户实体
@@ -162,6 +169,8 @@ public interface MerchantCoreDao {
 
     @Select("Select etps_attr from m_merchant_core WHERE inner_code =#{innerCode} ")
 	Integer getEtpsAttrByInnerCode(String innerCode);
+
+	
 
    
 }

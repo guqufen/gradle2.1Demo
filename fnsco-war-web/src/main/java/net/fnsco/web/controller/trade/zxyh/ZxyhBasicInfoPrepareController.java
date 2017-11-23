@@ -43,6 +43,9 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 		}
 		//根据id获取入驻中信银行商户所需的必须信息
 		MerchantCoreEntityZxyhDTO core = merchantCoreService.queryZXYHInfoById(id);
+		if(core == null){
+			return ResultDTO.fail();
+		}
 		//调用入驻接口将参数传过去-
 		zxyhPaymentService.mechAdd(core);
 		return ResultDTO.successForSubmit();

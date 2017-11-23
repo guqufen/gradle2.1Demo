@@ -88,7 +88,35 @@ public class MerchantCore extends DTO {
 	//关联所有终端信息
 	private List<MerchantTerminal> terminaInfos;
 	
+	private MerchantTerminal terminaInfosWX;
+	private MerchantTerminal terminaInfosZFB;
+	private MerchantTerminal terminaInfosGZH;
 	
+	
+
+	public MerchantTerminal getTerminaInfosGZH() {
+		return terminaInfosGZH;
+	}
+
+	public void setTerminaInfosGZH(MerchantTerminal terminaInfosGZH) {
+		this.terminaInfosGZH = terminaInfosGZH;
+	}
+
+	public MerchantTerminal getTerminaInfosWX() {
+		return terminaInfosWX;
+	}
+
+	public void setTerminaInfosWX(MerchantTerminal terminaInfosWX) {
+		this.terminaInfosWX = terminaInfosWX;
+	}
+
+	public MerchantTerminal getTerminaInfosZFB() {
+		return terminaInfosZFB;
+	}
+
+	public void setTerminaInfosZFB(MerchantTerminal terminaInfosZFB) {
+		this.terminaInfosZFB = terminaInfosZFB;
+	}
 
 	private String openFixQr;
 	

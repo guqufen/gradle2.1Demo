@@ -360,6 +360,25 @@
     from m_merchant_terminal
     where inner_code = #{innerCode,jdbcType=VARCHAR}
   </select>
+  <!-- 根据innercode查询出 -->
+  <select id="selectByInnerCodeWX" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from m_merchant_terminal
+    where inner_code = #{innerCode,jdbcType=VARCHAR} AND terminal_type ='02' LIMIT 1
+  </select>
+   <select id="selectByInnerCodeZFB" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from m_merchant_terminal
+    where inner_code = #{innerCode,jdbcType=VARCHAR} AND terminal_type ='03' LIMIT 1
+  </select>
+   <select id="selectByInnerCodeGZH" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from m_merchant_terminal
+    where inner_code = #{innerCode,jdbcType=VARCHAR} AND terminal_type ='04' LIMIT 1
+  </select>
   <!-- 根据userId连表查询出终端信息 -->
   <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     SELECT

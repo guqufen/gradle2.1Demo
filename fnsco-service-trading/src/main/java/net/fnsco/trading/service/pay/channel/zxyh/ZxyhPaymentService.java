@@ -3,6 +3,7 @@ package net.fnsco.trading.service.pay.channel.zxyh;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -54,14 +55,33 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
         mercDTO.setAreaCode(core.getAreaCode());
         mercDTO.setAddr(core.getAddr());
         //是否开通微信
-        mercDTO.setWXActive("Y"); // Y默认开通
-        mercDTO.setSubAppid(core.getChannels().get(0).getTerminaInfos().get(0).getSubAppId().toString());  //微信公众号
-        mercDTO.setqGroupId(core.getChannels().get(0).getTerminaInfos().get(0).getqGroupId());
-        mercDTO.setCategroryId(core.getChannels().get(0).getTerminaInfos().get(0).getCategroryId());
-        mercDTO.setFeeRate(core.getChannels().get(0).getTerminaInfos().get(0).getWechatFee());//微信费率
-        mercDTO.setSettleCycle(core.getChannels().get(0).getTerminaInfos().get(0).getSettleCycle());
-        
-//        mercDTO.setqGroupId(core.getqGroupId);
+        mercDTO.setWXActive(core.getWXActive()); 
+        if(StringUtils.equals("Y", core.getWXActive())){
+        	mercDTO.setqGroupId(core.getqGroupId());
+        	mercDTO.setCategroryId(core.getCategroryId());
+        	mercDTO.setFeeRate(core.getFeeRate());
+        	mercDTO.setSettleCycle(core.getSettleCycle());
+        }
+        //公众号
+        mercDTO.setSubAppid(core.getSubAppid());
+        mercDTO.setJsapiPath(core.getJsapiPath());
+        //支付宝
+        mercDTO.setZFBActive(core.getZFBActive());
+        if(StringUtils.equals("Y", core.getZFBActive())){
+        	mercDTO.setCategIdC(core.getqGroupId());
+            mercDTO.setFeeRateA(core.getFeeRate());
+            mercDTO.setSettleCycleA(core.getSettleCycle());
+        }
+        //银行信息
+        mercDTO.setThirdMchtNo(core.getThirdMchtNo());//第三方平台子商户号
+        mercDTO.setIsOrNotZxMchtNo(core.getIsOrNotZxMchtNo());
+        mercDTO.setAcctType(core.getAcctType());//账户类型 填写数字 1-企业账户，2-个人账户
+        mercDTO.setSettleAcctNm(core.getSettleAcctNm());
+        mercDTO.setSettleAcct(core.getSettleAcct());
+        mercDTO.setAccIdeNo(core.getAccIdeNo());
+        mercDTO.setAccPhone(core.getAccPhone());
+        mercDTO.setSettleBankAllName(core.getSettleBankAllName());
+        mercDTO.setSettleBankCode(core.getSettleBankCode());
         
 
         String mercStr = JSON.toJSONString(mercDTO);
