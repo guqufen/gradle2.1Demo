@@ -775,9 +775,9 @@ function saveBankCardParams(conId){
     }
     var id=$("#bankCard-con1 .bankCard-list").eq(i).find($('.remove-icon')).attr('editId');
     if(!id || id<0){     
-      concatBankCardArr={accountType,accountNo,accountName,accountCardId,subBankName,openBankPrince,openBank,openBankCity,openBankNum,innerCode}
+      concatBankCardArr={accountType,accountNo,accountName,accountCardId,accountPhone,subBankName,openBankPrince,openBank,openBankCity,openBankNum,innerCode}
     }else{
-      concatBankCardArr={accountType,accountNo,accountName,accountCardId,subBankName,openBankPrince,openBank,openBankCity,openBankNum,innerCode,id}
+      concatBankCardArr={accountType,accountNo,accountName,accountCardId,accountPhone,subBankName,openBankPrince,openBank,openBankCity,openBankNum,innerCode,id}
     }
     bankCardArr=bankCardArr.concat(concatBankCardArr);
   }
@@ -1837,6 +1837,7 @@ function detailsData(id){
           $('select[name="accountType'+data.data.banks[i].id+'"]').find("option[value="+data.data.banks[i].accountType+"]").attr("selected",true);
           $('input[name="accountName'+data.data.banks[i].id+'"]').val(data.data.banks[i].accountName);
           $('input[name="accountCardId'+data.data.banks[i].id+'"]').val(data.data.banks[i].accountCardId);
+          $('input[name="accountPhone'+data.data.banks[i].id+'"]').val(data.data.banks[i].accountPhone);
           $('input[name="accountNo'+data.data.banks[i].id+'"]').val(data.data.banks[i].accountNo);
           $('input[name="openBank'+data.data.banks[i].id+'"]').val(data.data.banks[i].openBank);
           $('input[name="openBankCity'+data.data.banks[i].id+'"]').val(data.data.banks[i].openBankCity);
