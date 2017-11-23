@@ -17,7 +17,6 @@ import net.fnsco.bigdata.api.dto.TradeDataPageDTO;
 import net.fnsco.bigdata.api.dto.TradeDataQueryDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
-import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.comm.ServiceConstant.PaySubTypeAllEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.PaySubTypeEnum;
@@ -25,7 +24,6 @@ import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.TradeTypeEnum;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantPos;
-import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -44,8 +42,6 @@ public class TradeDataController extends BaseController {
     private TradeDataService    tradeDataService;
     @Autowired
     private MerchantCoreService merchantCoreService;
-    @Autowired
-    private MerchantService     merchantService;
     @Autowired
     private MerchantPosService  merchantPosService;
 
@@ -186,12 +182,9 @@ public class TradeDataController extends BaseController {
         //查询snCode
         String snCode = "";
         if (!Strings.isNullOrEmpty(tradeData.getTermId())) {
-            MerchantTerminal terminalDto = merchantService.getTerminalDetailByCode(tradeData.getTermId());
+        	MerchantPos terminalDto = merchantPosService.selectByTerminalCode(tradeData.getTermId());
             if (terminalDto != null) {
-                MerchantPos merchantPos = merchantPosService.selectByPrimaryKey(terminalDto.getPosId());
-                if (null != merchantPos) {
-                    snCode = merchantPos.getSnCode();
-                }
+                    snCode = terminalDto.getSnCode();
             }
         } //查询snCode结束
 

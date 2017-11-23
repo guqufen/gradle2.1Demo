@@ -131,6 +131,11 @@ public class UserBasicService extends BaseService {
         ResultPageDTO<UserBasicDO> pager = new ResultPageDTO<UserBasicDO>(count, pageList);
         return pager;
     }
+    
+    public List<String> queryUserBasicEmail() {
+    	List<String> list= userBasicDAO.queryEmail();
+		return list;
+    }
 
     public ResultDTO addMembers(UserBasicDO dto) {
         dto.setCreateDate(new Date());

@@ -62,7 +62,7 @@ public interface MerchantTerminalDao {
      * @date      2017年8月30日 下午1:38:33
      * @return MerchantTerminal    DOM对象
      */
-    MerchantTerminal selectByTerminalCode(@Param("terCode")String terCode);
+    List<MerchantTerminal> selectByTerminalCode(@Param("terCode")String terCode);
     
     /**
      * 根据innercode查询出实体

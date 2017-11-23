@@ -137,12 +137,11 @@ public class FuiouController extends BaseController{
 			}else if("8".equals(fuiouJO.getPay_type())){
 				tradeData.setPaySubType(PaySubTypeAllEnum.JD_PAY.getCode());
 			}
-			tradeData.setReferNo(fuiouJO.getRetri_ref_no());//扫码支付参考号
+			tradeData.setReferNo(fuiouJO.getRetri_ref_no());//参考号
+			tradeData.setOrderIdScan(fuiouJO.getRetri_ref_no());//订单号(扫码支付订单号)
 		}
-
 		tradeData.setSource("02");//来源00拉卡拉01导入02同步03法奈昇04浦发
 		tradeData.setMerId(fuiouJO.getMerchantno_fuiou());//结算商户号(富友商户号)
-		tradeData.setOrderIdScan(fuiouJO.getOut_trade_no());//订单号
 		tradeData.setCreateTime(DateUtils.StrToDate(fuiouJO.getCreatetime()));//交易创建时间
 		tradeData.setPayMedium("00");//支付媒介00pos机01app02台码
 		tradeData.setChannelTermCode(fuiouJO.getTerminal_id());//渠道终端号

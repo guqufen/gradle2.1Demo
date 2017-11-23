@@ -91,6 +91,18 @@
     order by create_time
     limit 1
   </select>
+
+	<select id="selectByCMT" resultMap="BaseResultMap"
+		parameterType="net.fnsco.bigdata.service.domain.trade.TradeData">
+		select
+		<include refid="Base_Column_List" />
+		from t_trade_data
+		where refer_no = #{orgMerOrderId, jdbcType=VARCHAR}
+		and channel_term_code = #{channelTermCode,jdbcType=VARCHAR}
+		and mer_id= #{merId,jdbcType=VARCHAR}
+		order by create_time
+		limit 1
+	</select>
   
   <select id="queryByCertifyId" parameterType="java.lang.String"  resultType="java.lang.String"> 
     SELECT

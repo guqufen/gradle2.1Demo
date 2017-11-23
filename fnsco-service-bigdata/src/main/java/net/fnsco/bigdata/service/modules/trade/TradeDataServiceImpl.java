@@ -175,6 +175,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         return true;
     }
 
+    /**
+     * 富友流水同步导入到交易表
+     */
     @Transactional
     public boolean saveTradeData(TradeData tradeData) {
 
@@ -192,11 +195,17 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         logger.warn("插入流水总耗时" + (System.currentTimeMillis() - timer));
         String txnType = tradeData.getTxnType();
         if ("2".equals(txnType)) {
-            TradeData tmp = tradeListDAO.selectByIRT(tradeData);
-            TradeData data = new TradeData();
-            data.setStatus("0");
-            data.setId(tmp.getId());
-            tradeListDAO.updateByPrimaryKeySelective(data);
+        	if(Strings.isNullOrEmpty(tradeData.getMerId()) || Strings.isNullOrEmpty(tradeData.getChannelTermCode())){
+        		logger.info("渠道终端号或商户号为空，不能查找到原交易");
+        		return false;
+        	}
+            TradeData tmp = tradeListDAO.selectByCMT(tradeData);
+			if (tmp != null) {
+				TradeData data = new TradeData();
+				data.setStatus("0");
+				data.setId(tmp.getId());
+				tradeListDAO.updateByPrimaryKeySelective(data);
+			}
         }
 
         return true;
