@@ -1664,9 +1664,13 @@ function editData(id){
             var  registProvince=$("#registProvince1").val();
             var  registCity=$("#registCity1").val();
             var  registArea=$("#registArea1").val();
-
+            var  registProvinceName=$("#registProvince1").find("option:selected").text();
+            var  registCityName=$("#registCity1").find("option:selected").text();
+            var  registAreaName=$("#registArea1").find("option:selected").text();
+            
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
-                'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddressDetail':registAddressDetail,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'entityMerName':entityMerName,'innerCode':innerCode,'etpsAttr':etpsAttr,'registProvince':registProvince,'registCity':registCity,'registArea':registArea};
+                'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddressDetail':registAddressDetail,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'entityMerName':entityMerName,'innerCode':innerCode,
+                'etpsAttr':etpsAttr,'registProvince':registProvince,'registCity':registCity,'registArea':registArea,'registProvinceName':registProvinceName,'registCityName':registCityName,'registAreaName':registAreaName};
             console.log(params);
             if(entityMerName==''){
               layer.msg('保存失败，实体商户不能为空');return
