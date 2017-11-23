@@ -186,12 +186,9 @@ public class TradeDataController extends BaseController {
         //查询snCode
         String snCode = "";
         if (!Strings.isNullOrEmpty(tradeData.getTermId())) {
-            MerchantTerminal terminalDto = merchantService.getTerminalDetailByCode(tradeData.getTermId());
-            if (terminalDto != null) {
-                MerchantPos merchantPos = merchantPosService.selectByPrimaryKey(terminalDto.getPosId());
-                if (null != merchantPos) {
-                    snCode = merchantPos.getSnCode();
-                }
+            MerchantPos merchantPos = merchantPosService.selectByTerminalCode(tradeData.getTermId());
+            if (null != merchantPos) {
+                snCode = merchantPos.getSnCode();
             }
         } //查询snCode结束
 

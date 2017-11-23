@@ -190,10 +190,38 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         /**
          * 根据交易渠道类型来计算费率。
          */
-        MerchantTerminal merTer = merchantTerminalDao.selectByTerminalCode(terminalCode);
-        if(null == merTer){
+        List<MerchantTerminal> merTer = merchantTerminalDao.selectByTerminalCode(terminalCode);
+        if(null == merTer || CollectionUtils.isEmpty(merTer)){
             return result;
         }
+        
+        String creditCardRate = null;
+        String debitCardRate = null;
+        String wechatFee = null;
+        String alipayFee = null;
+        Integer debitCardMaxFee = null;
+        
+        for (MerchantTerminal merchantTerminal : merTer) {
+			if(!Strings.isNullOrEmpty(merchantTerminal.getCreditCardRate())) {
+				creditCardRate = merchantTerminal.getCreditCardRate();
+			}
+			
+			if(!Strings.isNullOrEmpty(merchantTerminal.getDebitCardRate())) {
+				debitCardRate = merchantTerminal.getDebitCardRate();
+			}
+			
+			if(null != merchantTerminal.getDebitCardMaxFee()) {
+				debitCardMaxFee = merchantTerminal.getDebitCardMaxFee();
+			}
+			
+			if(!Strings.isNullOrEmpty(merchantTerminal.getWechatFee())) {
+				wechatFee = merchantTerminal.getWechatFee();
+			}
+			
+			if(!Strings.isNullOrEmpty(merchantTerminal.getAlipayFee())) {
+				alipayFee = merchantTerminal.getAlipayFee();
+			}
+		}
         
         //刷卡需要区分借记卡和贷记卡
         if(ConstantEnum.PayTypeEnum.PAYBYCARD.getCode().equals(paySubType)){
@@ -204,17 +232,17 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
           //贷记卡
             if(dcType.startsWith(ConstantEnum.DcTypeEnum.INLANDCREDITCARD.getCode()) || dcType.startsWith(ConstantEnum.DcTypeEnum.OVERSEASCREDITCARD.getCode())){
                 
-                result = NumberUtil.multiplication(tradeData.getAmt(), merTer.getCreditCardRate());
+                result = NumberUtil.multiplication(tradeData.getAmt(), creditCardRate);
                 
             }else if(dcType.startsWith(ConstantEnum.DcTypeEnum.DOMESTICDEBITCARD.getCode()) || dcType.startsWith(ConstantEnum.DcTypeEnum.OVERSEASDEBITCARD.getCode())){
                 //借记卡
-                BigDecimal rate = NumberUtil.multiplication(tradeData.getAmt(), merTer.getDebitCardRate());
+                BigDecimal rate = NumberUtil.multiplication(tradeData.getAmt(), debitCardRate);
                 //跟设置的峰值比较，如果大于峰值则峰值，否则借记卡费率
                 BigDecimal bd1 = rate.divide(new BigDecimal(100));
-                if(null == merTer.getDebitCardMaxFee()){
-                    merTer.setDebitCardMaxFee(20);
+                if(null == debitCardMaxFee){
+                	debitCardMaxFee = 20;
                 }
-                BigDecimal db2 = new BigDecimal(merTer.getDebitCardMaxFee());
+                BigDecimal db2 = new BigDecimal(debitCardMaxFee);
                 if(bd1.compareTo(db2) > 0){
                     result = db2;
                 }else{
@@ -225,12 +253,12 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         } //微信
          else if(ConstantEnum.PayTypeEnum.PAYBYWX.getCode().equals(paySubType)){
              BigDecimal rate = new BigDecimal(tradeData.getAmt());
-             BigDecimal db2 = new BigDecimal(merTer.getWechatFee());
+             BigDecimal db2 = new BigDecimal(wechatFee);
              result = rate.multiply(db2);
         }//支付宝
          else if(ConstantEnum.PayTypeEnum.PAYBYALIPAY.getCode().equals(paySubType)){
              BigDecimal rate = new BigDecimal(tradeData.getAmt());
-             BigDecimal db2 = new BigDecimal(merTer.getAlipayFee());
+             BigDecimal db2 = new BigDecimal(alipayFee);
              result = rate.multiply(db2);
          }
         return result;

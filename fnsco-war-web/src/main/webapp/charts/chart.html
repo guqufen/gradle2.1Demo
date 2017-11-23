@@ -135,37 +135,42 @@ Date.prototype.Format = function (fmt) { //author: meizz
     return fmt;
 }
 
-function getList(num,data){
+function getList(data,size){
 	dataTime=data+'-01 00:00:00';
 	$.ajax({
 		url:'../h5/report/getTradeDataList',
 		type:'get',
-		data:{'startDate':dataTime,'pageSize':20},
+		data:{'startDate':dataTime,'pageSize':size},
 		success:function(data){
 			// $("#scroll-ul").html('');
 			for(var i=0;i<data.data.length;i++){
 				$("#scroll-ul").append('<li><div class="card-num">'+data.data[i].payType+'</div><div class="trading"><span class="trading-title">交易金额  ￥</span><span class="trading-num">'+data.data[i].amt+'</span></div></li>')
 			}
-			console.log($("#scroll-ul").html());
-			if(num=='0'){
-				$("#scrollDiv").textSlider({line:1,speed:800,timer:3000});
-			}
 		}
 	})
 	
 }
+var i=1;
+setInterval(function(){
+	$("#scroll-ul").animate({top:"-"+Number(51*i)+"px"});
+	setTimeout(function(){
+		$("#scroll-ul").find("li:eq(0)").remove();
+		$("#scroll-ul").css({top:"0px"});
+	},1000)
+},3000)
+
 var data=new Date();
 var time=data.getFullYear()+'-'+(data.getMonth()+1);
 console.log(data.getFullYear(),data.getMonth()+1,time);
 //设置
 $(document).ready(function(){
 	getValue();
-	getList("0",time);
+	getList(time,15);
 });
 setInterval(function(){
 	console.log("重新刷新了");
 	getValue("0");
-	getList("1",time);
+	getList(time,7);
 	// $("#scrollDiv").textSlider({line:1,speed:800,timer:3000});
 },20000)	
 </script>

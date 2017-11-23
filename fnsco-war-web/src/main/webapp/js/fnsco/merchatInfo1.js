@@ -306,14 +306,13 @@ window.operateEvents = {
 };
 //表格中操作按钮
 function operateFormatter(value, row, index) {
-  console.log(row);
   var returnHtml='';
 	if(row.openFixQr=="1"){
     returnHtml+='<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码"><i class="glyphicon glyphicon-qrcode"></i></a>';
   }else{
     returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
   }
-  if(row.channelType=="02" && row.status=="1"){
+  if(row.channelType=="05" && row.status=="1"){
     returnHtml+='<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行入建"><i class="glyphicon glyphicon-import"></i></a>';  
   }else{
     returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
@@ -494,10 +493,10 @@ function requestAgent(type){
 				   }
 			   })
 			   if(!type){
-				   $('#agentId').html();
+				   $('#agentId').html('');
 				   $('#agentId').append(html_opt);
 			   }else{
-				   $('#agentId1').html();
+				   $('#agentId1').html('');
 				   $('#agentId1').append(html_opt);
 				   $('#agentId2').append(html_opt);
 			   }

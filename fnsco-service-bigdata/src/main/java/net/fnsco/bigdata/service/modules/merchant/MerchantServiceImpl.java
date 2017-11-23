@@ -201,22 +201,6 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
 
     }
 
-    /**根据用户ID 查询出终端设备信息
-     * (non-Javadoc)
-     * @see net.fnsco.bigdata.api.merchant.MerchantService#getMerchantTerminalByUserId(java.lang.Integer)
-     * @auth tangliang
-     * @date 2017年6月29日 下午4:43:23
-     */
-    @Override
-    public ResultDTO<List<MerTerminalsDTO>> getMerchantTerminalByUserId(Integer userId) {
-        if (null == userId) {
-            return ResultDTO.fail(BigdataConstant.E_USERID_NULL);
-        }
-        List<MerTerminalsDTO> datas = merchantCoreDao.queryMerTerminalsByUserId(userId);
-        ResultDTO<List<MerTerminalsDTO>> result = ResultDTO.success(datas);
-        return result;
-    }
-
     /**
      * 查询详情
      * (non-Javadoc)
@@ -238,21 +222,6 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         ResultDTO<MerChantCoreDetailDTO> result = ResultDTO.success(datas);
         return result;
 
-    }
-
-    /**
-     * (non-Javadoc)查询设备详情
-     * @see net.fnsco.bigdata.api.merchant.MerchantService#getTerminalDetailByTerId(java.lang.Integer)
-     * @auth tangliang
-     * @date 2017年6月30日 下午1:45:17
-     */
-    @Override
-    public ResultDTO<TerminalDetailDTO> getTerminalDetailByTerId(Integer terId) {
-        if (null == terId) {
-            return ResultDTO.fail(BigdataConstant.E_USERID_NULL);
-        }
-        TerminalDetailDTO data = merchantTerminalDao.queryDetailById(terId);
-        return ResultDTO.success(data);
     }
 
     /**
@@ -314,15 +283,22 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     @Override
     public PosDetailDTO getPosDetail(Integer posId) {
         PosDetailDTO data = merchantPosDao.selectDetailById(posId);
-        List<TerminalInfoDTO> terNames = data.getTerNames();
-        if (!CollectionUtils.isEmpty(terNames)) {
-            int i = 1;
-            for (TerminalInfoDTO terminalInfoDTO : terNames) {
-                String title = NumberUtil.TER_TITLE_NAME + NumberUtil.numToUpper(i);
-                terminalInfoDTO.setTerTitle(title);
-                i++;
-            }
-        }
+        
+        List<TerminalInfoDTO> terNames = Lists.newArrayList();
+        TerminalInfoDTO dto1 = new TerminalInfoDTO();
+        dto1.setTerminalCode(data.getTerminalCode());
+        dto1.setTerName("刷卡");
+        dto1.setTerTitle(NumberUtil.TER_TITLE_NAME + NumberUtil.numToUpper(1));
+        terNames.add(dto1);
+        
+        TerminalInfoDTO dto2 = new TerminalInfoDTO();
+        dto2.setTerminalCode(data.getTerminalCode());
+        dto2.setTerName("扫码");
+        dto2.setTerTitle(NumberUtil.TER_TITLE_NAME + NumberUtil.numToUpper(2));
+        terNames.add(dto2);
+        
+        data.setTerNames(terNames);
+        
         return data;
     }
 
@@ -361,8 +337,8 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      * @date 2017年8月31日 下午5:01:20
      */
     @Override
-    public MerchantTerminal getTerminalDetailByCode(String terminalCode) {
-        MerchantTerminal merchantTerminal = merchantTerminalDao.selectByTerminalCode(terminalCode);
+    public List<MerchantTerminal> getTerminalDetailByCode(String terminalCode) {
+    	List<MerchantTerminal> merchantTerminal = merchantTerminalDao.selectByTerminalCode(terminalCode);
         return merchantTerminal;
     }
 

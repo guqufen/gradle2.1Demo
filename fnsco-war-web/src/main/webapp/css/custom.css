@@ -57,13 +57,13 @@ table td{
 .form-group .control-label{
 	display: inline-block;
 	padding-top: 8px;
-	min-width: 80px;
+	min-width: 85px;
 }
 .form-group .form-control{
 	width: 72%;
-	width: -moz-calc(100% - 86px);
-  	width: -webkit-calc(100% - 86px);
-	width: calc(100% - 86px);
+	width: -moz-calc(100% - 100px);
+  	width: -webkit-calc(100% - 100px);
+	width: calc(100% - 100px);
 	display: inline-block;
 }
 .form-group .query-time .form-control{

@@ -81,9 +81,12 @@ public class FuiouController extends BaseController{
 		}
 
 		/**
-		 * 应答码,1-成功；其他-失败
+		 * 应答码,交易状态描述：1.支付成功，2退款成功，3撤销成功，4冲正成功
 		 */
-		if( "1".equals(fuiouJO.getPay_status())){
+		if( "1".equals(fuiouJO.getPay_status()) 
+				||"2".equals(fuiouJO.getPay_status())
+				||"3".equals(fuiouJO.getPay_status())
+				||"4".equals(fuiouJO.getPay_status())){
 			tradeData.setRespCode(TradeStateEnum.SUCCESS.getCode());
 		}else{
 			tradeData.setRespCode(TradeStateEnum.FAIL.getCode());
@@ -137,12 +140,11 @@ public class FuiouController extends BaseController{
 			}else if("8".equals(fuiouJO.getPay_type())){
 				tradeData.setPaySubType(PaySubTypeAllEnum.JD_PAY.getCode());
 			}
-			tradeData.setReferNo(fuiouJO.getRetri_ref_no());//扫码支付参考号
+			tradeData.setReferNo(fuiouJO.getRetri_ref_no());//参考号
+			tradeData.setOrderIdScan(fuiouJO.getRetri_ref_no());//订单号(扫码支付订单号)
 		}
-
 		tradeData.setSource("02");//来源00拉卡拉01导入02同步03法奈昇04浦发
 		tradeData.setMerId(fuiouJO.getMerchantno_fuiou());//结算商户号(富友商户号)
-		tradeData.setOrderIdScan(fuiouJO.getOut_trade_no());//订单号
 		tradeData.setCreateTime(DateUtils.StrToDate(fuiouJO.getCreatetime()));//交易创建时间
 		tradeData.setPayMedium("00");//支付媒介00pos机01app02台码
 		tradeData.setChannelTermCode(fuiouJO.getTerminal_id());//渠道终端号
