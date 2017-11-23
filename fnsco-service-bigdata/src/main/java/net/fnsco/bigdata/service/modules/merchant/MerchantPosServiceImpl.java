@@ -124,6 +124,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
             	if(!Strings.isNullOrEmpty(pos.getChannelTerminalCode())) {
             		pos.setTerminalCode(pos.getChannelTerminalCode());
             	}
+            	pos.setId(pos.getPosId());
             	if(null != pos.getId()){
             		merchantPosDao.updateByPrimaryKeySelective(pos);
             	}else{
@@ -131,6 +132,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
             	}
             }
             for (MerchantTerminal terminal : webMerchantPosDTO.getTerminals()) {
+            	terminal.setId(terminal.getTerminalId());
 				if(null != terminal.getId()){
 					merchantTerminalDao.updateByPrimaryKeySelective(terminal);
 				}else{
