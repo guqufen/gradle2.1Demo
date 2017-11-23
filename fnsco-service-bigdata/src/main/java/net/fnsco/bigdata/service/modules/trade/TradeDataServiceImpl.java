@@ -175,6 +175,9 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         return true;
     }
 
+    /**
+     * 富友流水同步导入到交易表
+     */
     @Transactional
     public boolean saveTradeData(TradeData tradeData) {
 
