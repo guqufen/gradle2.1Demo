@@ -337,8 +337,8 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
      * @date 2017年8月31日 下午5:01:20
      */
     @Override
-    public MerchantTerminal getTerminalDetailByCode(String terminalCode) {
-        MerchantTerminal merchantTerminal = merchantTerminalDao.selectByTerminalCode(terminalCode);
+    public List<MerchantTerminal> getTerminalDetailByCode(String terminalCode) {
+    	List<MerchantTerminal> merchantTerminal = merchantTerminalDao.selectByTerminalCode(terminalCode);
         return merchantTerminal;
     }
 

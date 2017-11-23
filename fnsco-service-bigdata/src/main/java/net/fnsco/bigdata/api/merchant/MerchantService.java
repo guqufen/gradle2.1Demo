@@ -171,7 +171,7 @@ public interface MerchantService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    MerchantTerminal getTerminalDetailByCode(String terminalCode);
+    List<MerchantTerminal> getTerminalDetailByCode(String terminalCode);
 
     /**
      * 

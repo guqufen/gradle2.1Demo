@@ -84,7 +84,6 @@ function processSelect(num,flag) {
  * @returns {String}
  */
 function posProvince(num) {
-
 	// 移除市/区
 	removeOption("#cityId" + num);
 	removeOption("#areaId" + num);
@@ -96,10 +95,7 @@ function posProvince(num) {
 		async : false,//同步获取数据
 		success : function(data) {
 
-			console.log(data);
-
 			if (data.success) {
-
 				var areaList = data.data;
 				if (areaList.length > 0) {
 
