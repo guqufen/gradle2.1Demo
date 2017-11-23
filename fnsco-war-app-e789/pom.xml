@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.fnsco</groupId>
-	<artifactId>fnsco-war-app-zft</artifactId>
+	<artifactId>fnsco-war-app-e789</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>fnsco-war-app-zft</name>
+	<name>fnsco-war-app-e789</name>
 	<description>fnsco-war-app project for Spring Boot</description>
 
 	<parent>
