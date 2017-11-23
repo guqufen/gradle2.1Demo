@@ -7,6 +7,7 @@ import java.text.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -108,7 +109,7 @@ public class FuiouController extends BaseController{
 
 		tradeData.setChannelType("90");//渠道类型，90表示富友
 		tradeData.setAmt(fuiouJO.getTotal_fee());//交易金额
-		tradeData.setOrderNo(fuiouJO.getChannel_trade_no());//订单号
+		tradeData.setOrderNo(fuiouJO.getOut_trade_no());//订单号
 		tradeData.setOrderTime(fuiouJO.getCreatetime());//订单时间
 
 		tradeData.setTimeStamp(fuiouJO.getCreatetime());//订单时间戳
