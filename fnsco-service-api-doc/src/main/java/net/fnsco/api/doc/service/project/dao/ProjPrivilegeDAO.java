@@ -20,7 +20,7 @@ public interface ProjPrivilegeDAO {
     @Select("SELECT * FROM t_proj_privilege WHERE id = #{id}")
     public ProjPrivilegeDO getById(@Param("id") int id);
 
-    @Insert("INSERT into t_proj_privilege(id,create_date,modify_date,code,name,description) VALUES (#{id},#{createDate},#{modifyDate},#{code},#{name},#{description})")
+    @Insert("INSERT into t_proj_privilege(id,create_date,modify_date,code,name,description,status) VALUES (#{id},#{createDate},#{modifyDate},#{code},#{name},#{description},#{status})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(ProjPrivilegeDO projPrivilege);
 

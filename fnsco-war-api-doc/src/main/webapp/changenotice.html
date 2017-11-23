@@ -29,7 +29,7 @@
 								<div class="form-group">
 									<label class="control-label col-lg-2">邮件标题</label>
 									<div class="col-lg-8">
-										<input type="text" name="title" class="form-control" value="接口变更通知" data-bv-field="title">
+										<input type="text" id="title" name="title" class="form-control" value="接口变更通知" data-bv-field="title">
 										<small class="help-block" data-bv-validator="notEmpty" data-bv-for="title" data-bv-result="NOT_VALIDATED" style="display: none;">邮件标题不能为空</small></div>
 								</div>
 <!-- 								<div class="form-group">
@@ -44,8 +44,8 @@
 								<div class="form-group">
 									<label class="control-label col-lg-2">通知角色类型</label>
 									<div class="col-lg-8">
-										<select name="receiverRole" class="form-control">
-											<option value="">所有成员</option>
+										<select id="receiverRole" name="receiverRole" class="form-control">
+											<option value=1>所有成员</option>
 <!-- 											<option value="guest">访客</option>
 											<option value="admin">管理员</option>
 											<option value="none">无</option> -->
@@ -55,13 +55,13 @@
 								<div class="form-group">
 									<label class="control-label col-lg-2">其他通知邮箱</label>
 									<div class="col-lg-8">
-										<textarea name="otherReceivers" class="form-control" placeholder="多个邮箱以';'分隔"></textarea>
+										<textarea id="otherReceivers" name="otherReceivers" class="form-control" placeholder="多个邮箱以';'分隔"></textarea>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="control-label col-lg-2">内容</label>
 									<div class="col-lg-8">
-										<textarea name="otherReceivers" class="form-control" placeholder="多个邮箱以';'分隔"></textarea>
+										<textarea id="content" name="content" class="form-control" placeholder="填写邮件内容"></textarea>
 									</div>
 								</div>
 								<div class="form-group">
@@ -91,4 +91,24 @@
 		<script src="js/layer/layer.js"></script>
 		<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
 	</body>
+	<script type="text/javascript">
+	$("#saveBtn").click(function(){
+		 $.ajax({
+	         type: 'POST',
+	         url: 'http://localhost:8080/web/emailInform',
+	         data:{
+	        	 subject : $("#title").val(),
+	        	 roleType : $("#receiverRole").val(),
+	        	 otherSubject : $("#otherReceivers").val(),
+	        	 content : $("#content").val()
+	        	 },
+	         success: function(data){
+	        	 console.log(data);
+	        	 if(data.success){
+	        		 layer.msg("邮件发送成功");
+	        	 }
+	         }
+	     });
+	})
+	</script>
 </html>
