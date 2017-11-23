@@ -29,7 +29,7 @@
 								<label class="control-label col-lg-3">项目编码</label>
 
 								<div class="col-lg-6">
-									<input type="text" name="code" value="rr" class="form-control" data-bv-field="code">
+									<input type="text" name="code" id="code" class="form-control" data-bv-field="code">
 									<small class="help-block" data-bv-validator="notEmpty" data-bv-for="code" data-bv-result="NOT_VALIDATED" style="display: none;">项目编码不能为空</small></div>
 							</div>
 
@@ -37,7 +37,7 @@
 								<label class="control-label col-lg-3">项目名称</label>
 
 								<div class="col-lg-6">
-									<input type="text" name="name" value="rer" class="form-control" data-bv-field="name">
+									<input type="text" name="name" id="name" class="form-control" data-bv-field="name">
 									<small class="help-block" data-bv-validator="notEmpty" data-bv-for="name" data-bv-result="NOT_VALIDATED" style="display: none;">项目名称不能为空</small></div>
 							</div>
 
@@ -45,16 +45,16 @@
 								<label class="control-label col-lg-3">项目描述</label>
 
 								<div class="col-lg-6">
-									<textarea name="description" class="form-control" rows="10"></textarea>
+									<textarea id="description" name="description" class="form-control" rows="10"></textarea>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-lg-3">状态</label>
 
 								<div class="col-lg-6">
-									<select name="status" class="form-control" data-initvalue="open">
-										<option value="open">开启</option>
-										<option value="close">关闭</option>
+									<select id="status" name="status" class="form-control" data-initvalue="open">
+										<option value=1>开启</option>
+										<option value=0>关闭</option>
 									</select>
 								</div>
 							</div>
@@ -84,4 +84,24 @@
 		<script src="js/layer/layer.js"></script>
 		<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
 	</body>
+	<script type="text/javascript">
+	$("#saveProjInfoBtn").click(function(){
+		 $.ajax({
+	         type: 'POST',
+	         url: 'http://localhost:8080/web/addPrivilege',
+	         data:{
+	        	 code : $("#code").val(),
+	        	 name : $("#name").val(),
+	        	 description : $("#description").val(),
+	        	 status : $("#status").val()
+	        	 },
+	         success: function(data){
+	        	 console.log(data);
+	        	 if(data.success){
+	        		 layer.msg("项目保存成功");
+	        	 }
+	         }
+	     });
+	})
+	</script>
 </html>

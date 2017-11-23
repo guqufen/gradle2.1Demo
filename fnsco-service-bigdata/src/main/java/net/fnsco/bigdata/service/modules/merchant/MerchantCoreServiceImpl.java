@@ -411,7 +411,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             }
             merchantCore.setStatus(1);
             merchantCore.setLegalValidCardType("0");//身份证
-          
             int res = merchantCoreDao.insertSelective(merchantCore);
             if (res != 1) {
                 return ResultDTO.fail();
