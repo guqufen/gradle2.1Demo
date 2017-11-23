@@ -81,9 +81,14 @@ public class TradeWebReportService extends BaseService {
         List<TradeDataDO> tradeList = tradeDataSimpleDAO.getTradeDataList(startDate, pageSize);
         for (TradeDataDO data : tradeList) {
             TradeDataListResultDTO resultDTO = new TradeDataListResultDTO();
-            BigDecimal amt = new BigDecimal(data.getAmt());
-            amt = amt.divide(new BigDecimal("100"));
-            resultDTO.setAmt(amt.toString());
+            resultDTO.setAmt("0");
+            try{
+	            BigDecimal amt = new BigDecimal(data.getAmt());
+	            amt = amt.divide(new BigDecimal("100"));
+	            resultDTO.setAmt(amt.toString());
+            }catch(Exception ex){
+            	logger.error("大屏查询",ex);
+            }
             resultDTO.setPayType(ServiceConstant.PaySubTypeEnum.getNameByCode(data.getPaySubType()));
             resultDTO.setCreateTime(DateUtils.dateFormatToStr(data.getCreateTime()));
             resultDTO.setTermId(data.getTermId());
