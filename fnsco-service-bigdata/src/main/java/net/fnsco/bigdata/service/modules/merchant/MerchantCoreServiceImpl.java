@@ -1,6 +1,7 @@
 package net.fnsco.bigdata.service.modules.merchant;
 
 import java.awt.geom.Area;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -772,7 +773,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
              MerchantTerminal terminalWX = core.getTerminaInfosWX();
              if(terminalWX != null){
             	 merchantCoreEntityZxyhDTO.setWXActive("Y");
-            	 merchantCoreEntityZxyhDTO.setqGroupId(terminalWX.getqGroupId());
+            	 //微信分类编码不足两位前面补0
+            	 DecimalFormat df=new DecimalFormat("00");
+            	 merchantCoreEntityZxyhDTO.setqGroupId(df.format(Integer.parseInt(terminalWX.getqGroupId())));
                  merchantCoreEntityZxyhDTO.setCategroryId(terminalWX.getCategroryId());
                  merchantCoreEntityZxyhDTO.setFeeRate(terminalWX.getWechatFee());
                  merchantCoreEntityZxyhDTO.setSettleCycle(terminalWX.getSettleCycle());
