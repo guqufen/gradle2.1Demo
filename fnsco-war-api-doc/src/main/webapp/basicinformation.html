@@ -53,8 +53,8 @@
 
 								<div class="col-lg-6">
 									<select id="status" name="status" class="form-control" data-initvalue="open">
-										<option value=1>开启</option>
-										<option value=0>关闭</option>
+										<option value="open">开启</option>
+										<option value="close">关闭</option>
 									</select>
 								</div>
 							</div>
@@ -88,7 +88,7 @@
 	$("#saveProjInfoBtn").click(function(){
 		 $.ajax({
 	         type: 'POST',
-	         url: 'http://localhost:8080/web/addPrivilege',
+	         url: 'http://localhost:8080/web/addProj',
 	         data:{
 	        	 code : $("#code").val(),
 	        	 name : $("#name").val(),

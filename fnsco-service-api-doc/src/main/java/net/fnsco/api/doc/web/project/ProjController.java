@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.api.doc.service.project.PrivilegeService;
-import net.fnsco.api.doc.service.project.entity.ProjPrivilegeDO;
+import net.fnsco.api.doc.service.project.ProjService;
+import net.fnsco.api.doc.service.project.entity.ProjDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 
@@ -25,17 +25,17 @@ import net.fnsco.core.base.ResultDTO;
 @Controller
 @RequestMapping(value = "/web")
 @Api(value = "/web", tags = { "项目基本信息" })
-public class PrivilegeController extends BaseController{
+public class ProjController extends BaseController{
     
     @Autowired
-    private PrivilegeService privilegeService;
+    private ProjService projService;
    
-    @RequestMapping(value = "/addPrivilege", method = RequestMethod.POST)
+    @RequestMapping(value = "/addProj", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存项目基本信息", notes = "保存项目基本信息")
-    public ResultDTO addPrivilege(ProjPrivilegeDO projPrivilege){
-    	projPrivilege.setCreateDate(new Date());
-    	privilegeService.add(projPrivilege);
+    public ResultDTO addPrivilege(ProjDO projDO){
+    	projDO.setCreateDate(new Date());
+    	projService.add(projDO);
         return ResultDTO.success();
     }
 }

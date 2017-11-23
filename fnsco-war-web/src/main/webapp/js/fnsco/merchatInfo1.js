@@ -217,6 +217,10 @@ function channelTypeFormatter(value, row, index){
     return '法奈昇';
   }else if(value == '04'){
     return '聚惠分';
+  }else if(value == '05'){
+    return '中信银行';
+  }else if(value == '90'){
+    return '富友';
   }
 }
 //判断法人证件类型
