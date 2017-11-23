@@ -832,7 +832,7 @@ function terminalHtml(num){
         '<div class="terminalRatesList" id="terminalRatesList'+num+'">'+
         terminalRatesHtml(num)+
         '</div>'+
-        '<div class="btn-div"><button onclick="addTerminalRates('+num+')" type="button" class="btn btn-primary btn_addterminalRates"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增终端</button></div>'+
+        '<div class="btn-div"><button onclick="addTerminalRates('+num+')" type="button" class="btn btn-info btn_addterminalRates"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>支付费率</button></div>'+
         '</div></div>';
 }
 function posHtml(num){
