@@ -306,9 +306,13 @@ function operateFormatter(value, row, index) {
   var returnHtml='';
 	if(row.openFixQr=="1"){
     returnHtml+='<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码"><i class="glyphicon glyphicon-qrcode"></i></a>';
+  }else{
+    returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
   }
-  if(row.channelType="02" && row.status=="1"){
+  if(row.channelType=="02" && row.status=="1"){
     returnHtml+='<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行入建"><i class="glyphicon glyphicon-import"></i></a>';  
+  }else{
+    returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
   }
 	return [
     '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
