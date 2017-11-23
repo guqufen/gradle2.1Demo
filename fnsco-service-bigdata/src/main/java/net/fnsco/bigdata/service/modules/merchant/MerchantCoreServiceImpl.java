@@ -377,8 +377,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         merchantTerminal.setTerminalCode(request.getParameter("terminalCode"));
 //        merchantTerminal.setInnerTermCode(request.getParameter("innerTermCode"));
         //        merchantTerminal.setSnCode(request.getParameter("snCode"));
-        merchantTerminal.setTerminalBatch(request.getParameter("terminalBatch"));
-        merchantTerminal.setTerminalPara(request.getParameter("terminalPara"));
+//        merchantTerminal.setTerminalBatch(request.getParameter("terminalBatch"));
+//        merchantTerminal.setTerminalPara(request.getParameter("terminalPara"));
         merchantTerminal.setChargesType(Integer.valueOf(request.getParameter("chargesType")));
         merchantTerminal.setDebitCardRate(request.getParameter("debitCardRate"));
         merchantTerminal.setCreditCardRate(request.getParameter("creditCardRate"));
@@ -386,10 +386,10 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         merchantTerminal.setCreditCardFee(Integer.valueOf(request.getParameter("creditCardFee")));
         merchantTerminal.setDebitCardMaxFee(Integer.valueOf(request.getParameter("debitCardMaxFee")));
         merchantTerminal.setCreditCardMaxFee(Integer.valueOf(request.getParameter("creditCardMaxFee")));
-        merchantTerminal.setDealSwitch(request.getParameter("dealSwitch"));
-        merchantTerminal.setRecordState(request.getParameter("recordState"));
-        merchantTerminal.setTermAuditState(request.getParameter("termAuditState"));
-        merchantTerminal.setTermName(request.getParameter("termName"));
+//        merchantTerminal.setDealSwitch(request.getParameter("dealSwitch"));
+//        merchantTerminal.setRecordState(request.getParameter("recordState"));
+//        merchantTerminal.setTermAuditState(request.getParameter("termAuditState"));
+//        merchantTerminal.setTermName(request.getParameter("termName"));
         //        merchantTerminal.setPosFactory(request.getParameter("posFactory"));
         //        merchantTerminal.setPosType(request.getParameter("posType"));
         //        merchantTerminal.setMercReferName(request.getParameter("mercReferName"));

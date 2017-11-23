@@ -20,15 +20,15 @@ public class MerchantTerminal extends DTO{
 
     private String innerCode;
 
-    private Integer posId;
+//    private Integer posId; 第九版需求删除
 
     private String terminalCode;
 
     private String channelTerminalCode;
 
-    private String terminalBatch;
+//    private String terminalBatch;第九版需求删除
 
-    private String terminalPara;
+//    private String terminalPara;第九版需求删除
 
     private Integer chargesType;
 
@@ -44,13 +44,13 @@ public class MerchantTerminal extends DTO{
 
     private Integer creditCardMaxFee;
 
-    private String dealSwitch;
+//    private String dealSwitch;第九版需求删除	
 
-    private String recordState;
+//    private String recordState;第九版需求删除
 
-    private String termAuditState;
+//    private String termAuditState;第九版需求删除
 
-    private String termName;
+//    private String termName;第九版需求删除
 
     private String wechatFee;
 
@@ -125,14 +125,6 @@ public class MerchantTerminal extends DTO{
         this.innerCode = innerCode == null ? null : innerCode.trim();
     }
 
-    public Integer getPosId() {
-        return posId;
-    }
-
-    public void setPosId(Integer posId) {
-        this.posId = posId;
-    }
-
     public String getTerminalCode() {
         return terminalCode;
     }
@@ -160,22 +152,6 @@ public class MerchantTerminal extends DTO{
     
     public void setChannelTerminalCode(String channelTerminalCode) {
         this.channelTerminalCode = channelTerminalCode;
-    }
-
-    public String getTerminalBatch() {
-        return terminalBatch;
-    }
-
-    public void setTerminalBatch(String terminalBatch) {
-        this.terminalBatch = terminalBatch == null ? null : terminalBatch.trim();
-    }
-
-    public String getTerminalPara() {
-        return terminalPara;
-    }
-
-    public void setTerminalPara(String terminalPara) {
-        this.terminalPara = terminalPara == null ? null : terminalPara.trim();
     }
 
     public Integer getChargesType() {
@@ -233,39 +209,6 @@ public class MerchantTerminal extends DTO{
     public void setCreditCardMaxFee(Integer creditCardMaxFee) {
         this.creditCardMaxFee = creditCardMaxFee;
     }
-
-    public String getDealSwitch() {
-        return dealSwitch;
-    }
-
-    public void setDealSwitch(String dealSwitch) {
-        this.dealSwitch = dealSwitch == null ? null : dealSwitch.trim();
-    }
-
-    public String getRecordState() {
-        return recordState;
-    }
-
-    public void setRecordState(String recordState) {
-        this.recordState = recordState == null ? null : recordState.trim();
-    }
-
-    public String getTermAuditState() {
-        return termAuditState;
-    }
-
-    public void setTermAuditState(String termAuditState) {
-        this.termAuditState = termAuditState == null ? null : termAuditState.trim();
-    }
-
-    public String getTermName() {
-        return termName;
-    }
-
-    public void setTermName(String termName) {
-        this.termName = termName == null ? null : termName.trim();
-    }
-
 
     /**
      * wechatFee

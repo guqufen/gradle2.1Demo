@@ -28,11 +28,55 @@ public class PosDetailDTO extends DTO {
     private String posFactory;
 
     private String posType;
+    
+    private String terminalCode;
+    private String qrChannelTerminalCode;
     /**
      * 终端名称
      */
     private List<TerminalInfoDTO> terNames;
+    
     /**
+	 * terminalCode
+	 *
+	 * @return  the terminalCode
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getTerminalCode() {
+		return terminalCode;
+	}
+	/**
+	 * terminalCode
+	 *
+	 * @param   terminalCode    the terminalCode to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setTerminalCode(String terminalCode) {
+		this.terminalCode = terminalCode;
+	}
+	/**
+	 * qrChannelTerminalCode
+	 *
+	 * @return  the qrChannelTerminalCode
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getQrChannelTerminalCode() {
+		return qrChannelTerminalCode;
+	}
+	/**
+	 * qrChannelTerminalCode
+	 *
+	 * @param   qrChannelTerminalCode    the qrChannelTerminalCode to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setQrChannelTerminalCode(String qrChannelTerminalCode) {
+		this.qrChannelTerminalCode = qrChannelTerminalCode;
+	}
+	/**
      * posName
      *
      * @return  the posName
