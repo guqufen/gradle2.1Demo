@@ -21,7 +21,8 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="modify_user_id" property="modifyUserId" jdbcType="INTEGER" />
-    <collection property="posInfos" column="id" select="net.fnsco.bigdata.service.dao.master.MerchantPosDao.selectByChannelId"/>
+   <!--  <collection property="posInfos" column="id" select="net.fnsco.bigdata.service.dao.master.MerchantPosDao.selectByChannelId"/>  -->
+    <collection property="posInfos" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantPosDao.selectByInnerCode"/>
     <collection property="terminaInfos" column="inner_code" select="net.fnsco.bigdata.service.dao.master.MerchantTerminalDao.selectByInnerCode" />
   </resultMap>
   <sql id="Base_Column_List" >

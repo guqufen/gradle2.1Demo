@@ -36,8 +36,34 @@ public class MerchantBank extends DTO{
     private String openBankCity;
 
     private String openBankNum;
+    
+    //新需求第九版增加
+    private String accountPhone;
+    
 
-    public Integer getId() {
+    /**
+	 * accountPhone
+	 *
+	 * @return  the accountPhone
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getAccountPhone() {
+		return accountPhone;
+	}
+
+	/**
+	 * accountPhone
+	 *
+	 * @param   accountPhone    the accountPhone to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setAccountPhone(String accountPhone) {
+		this.accountPhone = accountPhone;
+	}
+
+	public Integer getId() {
         return id;
     }
 

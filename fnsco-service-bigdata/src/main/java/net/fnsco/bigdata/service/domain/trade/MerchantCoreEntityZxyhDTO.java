@@ -3,6 +3,7 @@ package net.fnsco.bigdata.service.domain.trade;
 import java.util.List;
 
 import net.fnsco.bigdata.service.domain.MerchantBank;
+import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.core.base.DTO;
 
@@ -47,7 +48,14 @@ public class MerchantCoreEntityZxyhDTO{
 	    
 	    private List<MerchantContact> contacts;// 关联的联系人信息
 	    private List<MerchantBank> banks;// 关联的银行卡信息
+	    private List<MerchantChannel> channels;//关联的通道及相关信息
 	    
+		public List<MerchantChannel> getChannels() {
+			return channels;
+		}
+		public void setChannels(List<MerchantChannel> channels) {
+			this.channels = channels;
+		}
 		public List<MerchantContact> getContacts() {
 			return contacts;
 		}

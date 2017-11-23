@@ -21,7 +21,6 @@ import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.dto.TradeDataPageDTO;
 import net.fnsco.bigdata.api.dto.TradeDataQueryDTO;
 import net.fnsco.bigdata.api.trade.TradeDataService;
-import net.fnsco.bigdata.comm.ServiceConstant;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
@@ -76,36 +75,45 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         String merId = tradeData.getMerId();
         //拉卡拉渠道
         if ("00".equals(tradeData.getChannelType())) {
-            if (!Strings.isNullOrEmpty(tradeData.getTermId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
-                MerchantTerminal merchantTerminal = merchantTerminalDao.selectOneByTermId(tradeData.getTermId(), tradeData.getChannelType());
+            if (!Strings.isNullOrEmpty(tradeData.getTermId())
+                && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
+                MerchantTerminal merchantTerminal = merchantTerminalDao
+                    .selectOneByTermId(tradeData.getTermId(), tradeData.getChannelType());
                 if (null != merchantTerminal) {
                     innerCode = merchantTerminal.getInnerCode();
                 }
             } else {
-                if (!Strings.isNullOrEmpty(tradeData.getMerId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
-                    MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
+                if (!Strings.isNullOrEmpty(tradeData.getMerId())
+                    && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
+                    MerchantChannel channel = merchantChannelDao
+                        .selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
                     if (channel != null) {
                         innerCode = channel.getInnerCode();
                     }
                 }
             }
-        }else if ("02".equals(tradeData.getChannelType())) {//01浦发02爱农03法奈昇
-            if (!Strings.isNullOrEmpty(tradeData.getMerId()) && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
-                
-                MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getInnerCode(), tradeData.getChannelType());
+        } else if ("02".equals(tradeData.getChannelType())) {//01浦发02爱农03法奈昇
+            if (!Strings.isNullOrEmpty(tradeData.getMerId())
+                && !Strings.isNullOrEmpty(tradeData.getChannelType())) {
+
+                MerchantChannel channel = merchantChannelDao
+                    .selectByMerCode(tradeData.getInnerCode(), tradeData.getChannelType());
                 if (channel != null) {
                     innerCode = channel.getInnerCode();
-                }else{
-                    logger.error("内部商户号没有渠道对应:"+tradeData.getInnerCode());
+                } else {
+                    logger.error("内部商户号没有渠道对应:" + tradeData.getInnerCode());
                 }
             }
-        }else if ("01".equals(tradeData.getChannelType())||"03".equals(tradeData.getChannelType())) {//01浦发02爱农03法奈昇
-            MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
+        } else if ("01".equals(tradeData.getChannelType())
+                   || "03".equals(tradeData.getChannelType())) {//01浦发02爱农03法奈昇
+            MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(),
+                tradeData.getChannelType());
             if (channel != null) {
                 innerCode = channel.getInnerCode();
             }
-        }else{
-            MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(), tradeData.getChannelType());
+        } else {
+            MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeData.getMerId(),
+                tradeData.getChannelType());
             if (channel != null) {
                 innerCode = channel.getInnerCode();
             }
@@ -166,11 +174,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         return true;
     }
-    
+
     @Transactional
     public boolean saveTradeData(TradeData tradeData) {
-    	
-    	if (!Strings.isNullOrEmpty(tradeData.getMd5())) {
+
+        if (!Strings.isNullOrEmpty(tradeData.getMd5())) {
             //需要校验
             TradeData temp = tradeListDAO.selectByMd5(tradeData.getMd5());
             if (null != temp) {
@@ -178,8 +186,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
                 return true;
             }
         }
-    	
-    	long timer = System.currentTimeMillis();
+
+        long timer = System.currentTimeMillis();
         tradeListDAO.insert(tradeData);
         logger.warn("插入流水总耗时" + (System.currentTimeMillis() - timer));
         String txnType = tradeData.getTxnType();
@@ -191,7 +199,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             tradeListDAO.updateByPrimaryKeySelective(data);
         }
 
-    	return false;
+        return true;
     }
 
     /**
@@ -202,7 +210,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         long timer = System.currentTimeMillis();
         String innerCode = "";
         String merId = tradeData.getMerId();
-        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId, tradeData.getSource());
+        MerchantChannel merchantChannel = merchantChannelDao.selectByMerCode(merId,
+            tradeData.getSource());
         if (null == merchantChannel) {
             logger.error("渠道商户不存在" + merId + ":" + tradeData.getSource() + ",丢弃该交易流水");
             return ResultDTO.fail("渠道商户不存在" + merId + ":" + tradeData.getSource() + ",丢弃该交易流水");
@@ -252,9 +261,10 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         if (!CollectionUtils.isEmpty(posList)) {
             List<String> terminalList = Lists.newArrayList();
             for (String posId : posList) {
-                List<TerminalInfoDTO> tempList = merchantTerminalDao.queryTerByPosId(Integer.parseInt(posId));
+                List<TerminalInfoDTO> tempList = merchantTerminalDao
+                    .queryTerByPosId(Integer.parseInt(posId));
                 for (TerminalInfoDTO terminal : tempList) {
-                    if(!Strings.isNullOrEmpty(terminal.getTerminalCode())){
+                    if (!Strings.isNullOrEmpty(terminal.getTerminalCode())) {
                         terminalList.add(terminal.getTerminalCode());
                     }
                 }
@@ -270,33 +280,33 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         result.setMerTotal(tempList.size());
         result.setCount("0");
         result.setAmtTot("0.00");
-        if (CollectionUtils.isEmpty(terminalList)) {//无终端则查询按商户查询
-            List<String> innerCodeList = Lists.newArrayList();
-            //查询条件没有转入内部商户号时查询用户的所有商户信息
-            if (CollectionUtils.isEmpty(merchantCore.getInnerCodes())) {
-                logger.info("查询流水，内部商务号为空");
-                if (!CollectionUtils.isEmpty(tempList)) {
-                    for (MerchantUserRel rel : tempList) {
-                        innerCodeList.add(rel.getInnerCode());
-                    }
+
+        List<String> innerCodeList = Lists.newArrayList();
+        //查询条件没有转入内部商户号时查询用户的所有商户信息
+        if (CollectionUtils.isEmpty(merchantCore.getInnerCodes())) {
+            logger.info("查询流水，内部商务号为空");
+            if (!CollectionUtils.isEmpty(tempList)) {
+                for (MerchantUserRel rel : tempList) {
+                    innerCodeList.add(rel.getInnerCode());
                 }
-                if (null == innerCodeList || innerCodeList.size() == 0) {
-                    logger.info("查询流水，内部商务号没有");
-                    return result;
-                }
-            } else {
-                logger.info("查询流水，内部商务号不为空");
-                innerCodeList = merchantCore.getInnerCodes();
             }
-            //设置商户号
-            if (CollectionUtils.isEmpty(innerCodeList)) {
+            if (null == innerCodeList || innerCodeList.size() == 0) {
+                logger.info("查询流水，内部商务号没有");
                 return result;
-            } else {
-                tradeData.setInnerCodeList(innerCodeList);
             }
+        } else {
+            logger.info("查询流水，内部商务号不为空");
+            innerCodeList = merchantCore.getInnerCodes();
+        }
+        //设置商户号
+        if (CollectionUtils.isEmpty(innerCodeList)) {
+            return result;
+        } else {
+            tradeData.setInnerCodeList(innerCodeList);
         }
 
-        PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(), merchantCore.getPerPageSize(), tradeData);
+        PageDTO<TradeData> pages = new PageDTO<TradeData>(merchantCore.getCurrentPageNum(),
+            merchantCore.getPerPageSize(), tradeData);
         List<TradeData> datas = tradeListDAO.queryPageList(pages);
         int total = tradeListDAO.queryTotalByCondition(tradeData);
         result.setTotal(total);
@@ -331,13 +341,15 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
      * @date 2017年6月28日 下午5:13:54
      */
     @Override
-    public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum, int perPageSize) {
+    public ResultPageDTO<TradeData> queryTradeData(TradeDataDTO tradeDataDTO, int currentPageNum,
+                                                   int perPageSize) {
         TradeData tradeData = new TradeData();
         if (tradeDataDTO.getPayType() != null && tradeDataDTO.getPayType().equals("03")) {
             tradeDataDTO.setPayType(null);
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
-            tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
+            tradeDataDTO
+                .setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
@@ -387,7 +399,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             tradeDataDTO.setPayType(null);
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
-            tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
+            tradeDataDTO
+                .setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));
@@ -412,7 +425,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
             tradeDataDTO.setPayType(null);
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
-            tradeDataDTO.setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
+            tradeDataDTO
+                .setStartSendTime(DateUtils.getDateStartTime(tradeDataDTO.getStartSendTime()));
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getEndSendTime())) {
             tradeDataDTO.setEndSendTime(DateUtils.getDateEndTime(tradeDataDTO.getEndSendTime()));

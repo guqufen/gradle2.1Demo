@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
-import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
-import net.fnsco.bigdata.service.domain.MerchantContact;
-import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.trading.service.pay.channel.zxyh.ZxyhPaymentService;
 
 
 @Controller
@@ -30,8 +28,8 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 	
 	@Autowired
 	private MerchantCoreService merchantCoreService;
-//	@Autowired
-//	private MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO;
+	@Autowired
+	private ZxyhPaymentService zxyhPaymentService;
 	
 	/**
 	 * 入驻中信银行的controller
@@ -39,16 +37,15 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 	 */
 	@RequestMapping("/enterMerc")
     @ResponseBody
-	public ResultDTO<Object> enterMerc(Integer id){
+	public ResultDTO<String> enterMerc(Integer id){
+		if(null == id){
+			return ResultDTO.fail();
+		}
 		//根据id获取入驻中信银行商户所需的必须信息
 		MerchantCoreEntityZxyhDTO core = merchantCoreService.queryZXYHInfoById(id);
-		
-//		MerchantContact merchantContact = core.getContacts().get(0);
-		//只能入驻一次，不能二次点击
-		
 		//调用入驻接口将参数传过去-
-//		zxyhPaymentService.mchtadd();
-		return null;
+		zxyhPaymentService.mechAdd(core);
+		return ResultDTO.successForSubmit();
 		
 	}
 }

@@ -7,7 +7,6 @@ import java.text.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,29 +28,47 @@ import net.fnsco.core.utils.DbUtil;
 import net.fnsco.web.controller.open.jo.FuiouJO;
 
 @Controller
-@RequestMapping(value="/open/fuiou", method=RequestMethod.POST)
-@Api(value="/open/fuiou", tags={"富友交易实时传输交口"})
+@RequestMapping(value="/syncData/fuiou", method=RequestMethod.POST)
+@Api(value="/syncData/fuiou", tags={"富友交易实时传输交口"})
 public class FuiouController extends BaseController{
 
 	@Autowired
 	private TradeDataService   tradeDataService;
 	@Autowired
 	private Environment env;
-	
-	@RequestMapping("/TranstradeSave")
+
+	@RequestMapping("/transtradeSave")
 	@ResponseBody
-	public ResultDTO saveTradeFuiou(@RequestBody String req)throws ParseException {
+	public ResultDTO saveTradeFuiou(String req)throws ParseException {
+
+		if(Strings.isNullOrEmpty(req)){
+			return null;
+		}
 
 		String tradeDataStr = request.getParameter("req");
 		logger.info("富友实时交易流水数据" + req);
-		logger.info("富友实时交易流水数据参数req=" + tradeDataStr);
+//		logger.info("富友实时交易流水数据参数req=" + tradeDataStr);
+
+		int len = req.lastIndexOf("key_sign");
+		String keySign = req.substring(len);
+		String keyMd5 = env.getProperty("channel.fuiou.md5");
+		String keySignData = req.substring(0,len-2)+keyMd5;
+		System.out.println("获取待进行MD5计算的签名数据："+keySignData);
+		try {
+			String ccc = md5Encrypt(keySignData);
+			System.out.println("计算出来的签名值为："+ccc);
+			System.out.println("JSON字串待校验的签名值:"+keySign);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		FuiouJO fuiouJO = JSONObject.parseObject(req, FuiouJO.class);//将JSON字符串转换为实体对象
 
 		if(null == fuiouJO){
 			return null;
 		}
-		
+
 		TradeData tradeData = new TradeData();
 
 		//如果富友退款订单号(原交易订单号)为空，则表示退款或者撤销交易
@@ -131,10 +148,10 @@ public class FuiouController extends BaseController{
 		tradeData.setChannelTermCode(fuiouJO.getTerminal_id());//渠道终端号
 		tradeData.setMd5(fuiouJO.getKey_sign());//MD5签名
 		tradeData.setId(DbUtil.getUuid());//设置主键Id
-		
-		String keyMd5 = env.getProperty("channel.fuiou.md5");
+		tradeData.setRemark(fuiouJO.getReference());//备注
+
 //		String md5 = md5Encrypt();
-		System.out.println("keyMd5:" + keyMd5);
+//		System.out.println("keyMd5:" + keyMd5);
 		
 		tradeDataService.saveTradeData(tradeData);//数据插表
 

@@ -22,7 +22,7 @@ import net.fnsco.core.base.ResultDTO;
 
 @Controller
 @RequestMapping("/categroty")
-public class WXCategroty extends net.fnsco.core.base.BaseController{
+public class WXCategrotyController extends net.fnsco.core.base.BaseController{
 	
 	@Autowired
 	private PayCategroryWxService payCategroryWxService;
@@ -32,19 +32,19 @@ public class WXCategroty extends net.fnsco.core.base.BaseController{
 	 */
 	@RequestMapping("showFirstClassify")
 	@ResponseBody
-	public ResultDTO<PayCategroryWxDO> showFirstClassify(@RequestParam("etpAttr") String etpAttr, @RequestParam("terminal_type") String terminal_type){
-		if(!"02".equals(terminal_type)){//选择微信才去查询分类
-			return null;
-		}
-		List<PayCategroryWxDO> categroty = payCategroryWxService.getFirstCategrotyList(etpAttr);
+	public ResultDTO<PayCategroryWxDO> showFirstClassify(@RequestParam("innerCode") String innerCode){
+//		if(!"02".equals(terminal_type)){//选择微信才去查询分类
+//			return null;
+//		}
+		List<PayCategroryWxDO> categroty = payCategroryWxService.getFirstCategrotyList(innerCode);
 		return success(categroty);
 	}
 	
 	@RequestMapping("showSecondClassify")
 	@ResponseBody
-	public ResultDTO<PayCategroryWxDO> showSecondClassify(@RequestParam("etpAttr") String etpAttr, 
+	public ResultDTO<PayCategroryWxDO> showSecondClassify(@RequestParam("innerCode") String innerCode, 
 				@RequestParam("group_id") Integer group_id){
-		List<PayCategroryWxDO> categroty = payCategroryWxService.getSecondCategrotyList(etpAttr,group_id);
+		List<PayCategroryWxDO> categroty = payCategroryWxService.getSecondCategrotyList(innerCode,group_id);
 		return success(categroty);
 	}
 	
