@@ -302,41 +302,25 @@ window.operateEvents = {
 };
 //表格中操作按钮
 function operateFormatter(value, row, index) {
-	if(row.openFixQr=="1" ){
-	    return [
-	        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
-	        '<i class="glyphicon glyphicon-pencil"></i>',
-	        '</a>  ',
-	        '<a class="details" href="javascript:detailsData('+value+');" title="查看详情">',
-	        '<i class="glyphicon glyphicon-file"></i>',
-	        '</a>  ',
-	        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
-	        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
-	        '</a>',
-	        '<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码">',
-	        '<i class="glyphicon glyphicon-qrcode"></i>',
-	        '</a>  ',
-	        '<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行入建">',
-	        '<i class="glyphicon glyphicon-import"></i>',
-	        '</a>  '
-	    ].join('');
-    }else{
-    	return [
-	        '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
-	        '<i class="glyphicon glyphicon-pencil"></i>',
-	        '</a>  ',
-	        '<a class="details" href="javascript:detailsData('+value+');" title="查看详情">',
-	        '<i class="glyphicon glyphicon-file"></i>',
-	        '</a>  ',
-	        '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
-	        '<i class="glyphicon glyphicon glyphicon-trash"></i>',
-	        '</a>',
-	        '<a class="details" href="javascript:;">',
-	        '<i class="glyphicon"></i>',
-	        '</a>  '
-	        
-	    ].join('');
-    }
+  console.log(row);
+  var returnHtml='';
+	if(row.openFixQr=="1"){
+    returnHtml+='<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码"><i class="glyphicon glyphicon-qrcode"></i></a>';
+  }
+  if(row.channelType="02" && row.status=="1"){
+    returnHtml+='<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行入建"><i class="glyphicon glyphicon-import"></i></a>';  
+  }
+	return [
+    '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
+    '<i class="glyphicon glyphicon-pencil"></i>',
+    '</a>  ',
+    '<a class="details" href="javascript:detailsData('+value+');" title="查看详情">',
+    '<i class="glyphicon glyphicon-file"></i>',
+    '</a>  ',
+    '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
+    '<i class="glyphicon glyphicon glyphicon-trash"></i>',
+    '</a>'+returnHtml
+  ].join('');
 }
 //表格中删除按钮事件
 function delete_btn_event(td_obj){
@@ -836,7 +820,7 @@ var TerminalList=-100;
 function terminalHtml(num){
   return '<div class="terminal-list"><div class="remove-terminalList remove-terminalList'+num+'" editId="'+num+'" ></div><div class="row addChannel">'+
         '<div class="col-sm-4"><label class="control-label" for="channelMerId'+num+'">渠道商户号：</label><input type="text" class="form-control channelMerId" id="channelMerId'+num+'" name="channelMerId'+num+'" required="required"></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道名称：</label><select id="channelType'+num+'" name="channelType'+num+'" class="channelType form-control" ><option value="00">拉卡拉</option><option value="01">浦发</option><option value="02">爱农</option><option value="03">法奈昇</option><option value="04">聚惠分</option></select></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="channelType'+num+'">渠道名称：</label><select id="channelType'+num+'" name="channelType'+num+'" class="channelType form-control" ><option value="00">拉卡拉</option><option value="01">浦发</option><option value="02">爱农</option><option value="03">法奈昇</option><option value="04">聚惠分</option><option value="05">中信银行</option><option value="90">富友</option></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="channelMerKey'+num+'">渠道Key：</label><input type="text" class="form-control channelMerKey" id="channelMerKey'+num+'" name="channelMerKey'+num+'" required="required"></div>'+
         '<div class="posList" id="posList'+num+'">'+
         posHtml(num)+
