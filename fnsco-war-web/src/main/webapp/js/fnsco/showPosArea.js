@@ -28,6 +28,7 @@ function processSelect(num,flag) {
 	var areaId;
 	var lastId;
 	//省份改变，将市/区置空
+
 	if(flag){
 		id=$("#provinceId"+num)[0];
 		areaId=$("#cityId"+num)[0];
