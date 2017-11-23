@@ -73,6 +73,9 @@ public class LklTradeDateSyncController extends BaseController {
     "coupon_fee_$n": 910076,
     "is_subscribe": "822491007630166"
     } 
+    
+    源数据date:{"mch_id":"822121063000020","device_info":"98673463","result_code":"SUCCESS","trade_type":"012001","total_fee":"000000000000002","transaction_id":"17072551699348","out_trade_no":"201710010005462173","time_end":"20170725165108","pay_type":"00","card_no":"622384*******9421","pay_amt":"000000000000002","batchbillno":"000003","systraceno":"000013","orderid_scan":"","bank_type":"03110000","refernumber":"072551699348","coupon_fee":"","openid":""}
+私匙加签sign:PakEuHGvFDthtdqnKKc0POjDQ2FgaAZ98eoChRaipaQ+VMBjIVfhEKG0qKM2JoEpl9olk0wGULgQvApOZpX6f+1jhl4CKp4ZR1vLrQkRI3hihONO+8GkWZyTMDx4WFpMxyCzIFP0NvvjJsjw3hM+SCMJ6vF/lVipcVgnWXPotxw=
     */
     @RequestMapping("/transtradeSave")
     @ResponseBody

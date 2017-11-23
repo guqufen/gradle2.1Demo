@@ -33,6 +33,10 @@ public class ProjPrivilegeDO {
      * 描述
      */
     private String description;
+    /**
+     * 状态
+     */
+    private Integer status;
 
 
 
@@ -84,10 +88,16 @@ public class ProjPrivilegeDO {
         this.description = description;
     }
 
+    public Integer getStatus() {
+		return status;
+	}
 
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 
-    @Override
+	@Override
     public String toString() {
-        return "[id="+ id + ", createDate="+ createDate + ", modifyDate="+ modifyDate + ", code="+ code + ", name="+ name + ", description="+ description + "]";
+        return "[id="+ id + ", createDate="+ createDate + ", modifyDate="+ modifyDate + ", code="+ code + ", name="+ name + ", description="+ description + ",status=\"+ status + \"]";
     }
 }

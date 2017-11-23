@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.beust.jcommander.Strings;
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
+import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
@@ -274,7 +274,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
        
         
       //查询名称
-        if(!Strings.isStringEmpty(core.getInnerCode())) {
+        if(!Strings.isNullOrEmpty(core.getInnerCode())) {
         	MerchantEntity merEntity = merchantEntityDao.queryMerEntityByInnerCode(core.getInnerCode());
         	if(null != merEntity) {
         		core.setEntityMerName(merEntity.getMercName());
@@ -435,10 +435,27 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		}
       //拼接详细信息
       	StringBuilder sb = new StringBuilder();
-      	merchantCore.setRegistAddress(sb.append(merchantCore.getRegistProvinceName())
-      						.append(merchantCore.getRegistCityName())
-      						.append(merchantCore.getRegistAreaName())
-      						.append(merchantCore.getRegistAddressDetail()).toString());
+      	if(!Strings.isNullOrEmpty(merchantCore.getRegistProvinceName())) {
+      		sb.append(merchantCore.getRegistProvinceName());
+      	}
+      	
+      	if(!Strings.isNullOrEmpty(merchantCore.getRegistCityName())) {
+      		sb.append(merchantCore.getRegistCityName());
+      	}
+      	
+      	if(!Strings.isNullOrEmpty(merchantCore.getRegistAreaName())) {
+      		sb.append(merchantCore.getRegistAreaName());
+      	}
+      	
+      	if(!Strings.isNullOrEmpty(merchantCore.getRegistAddressDetail())) {
+      		sb.append(merchantCore.getRegistAddressDetail());
+      	}
+      	
+      	if(!Strings.isNullOrEmpty(sb.toString())) {
+      		merchantCore.setRegistAddress(sb.toString());
+      	}
+      	
+      	
         if (null == merchantCore.getId()) {
             if(null == merchantCore.getSource()){
                 merchantCore.setSource(0);

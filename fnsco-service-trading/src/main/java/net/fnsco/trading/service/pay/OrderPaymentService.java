@@ -1,8 +1,6 @@
 package net.fnsco.trading.service.pay;
 
-import org.springframework.stereotype.Service;
-
-import net.fnsco.core.base.BaseService;
+import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 
 public interface OrderPaymentService {
     /**
@@ -12,7 +10,7 @@ public interface OrderPaymentService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public void mechAdd();
+    public void mechAdd(MerchantCoreEntityZxyhDTO core);
     //    public void pay(){
     //        if (Constant.ChannelTypeEnum.PF_PAY.getCode().equals(merchantInfoDO.getChannelType())) {
     //            orderPaymentResult = pFOrderPaymentService.beisaoPaySendPost(orderPayment);
