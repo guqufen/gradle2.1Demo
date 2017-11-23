@@ -1451,7 +1451,7 @@ function editData(id){
         $('input[name="businessLicenseNum1"]').val(data.data.businessLicenseNum);
         $('input[name="businessLicenseValidTime1"]').val(data.data.businessLicenseValidTime);
         $('input[name="taxRegistCode1"]').val(data.data.taxRegistCode);
-        $('input[name="registAddress1"]').val(data.data.registAddress);
+        $('input[name="registAddress1"]').val(data.data.registAddressDetail);
         $('input[name="mercFlag1"]').val(data.data.mercFlag);
 
         $('#etpsAttr1').find("option[value="+data.data.etpsAttr+"]").attr("selected",true);
@@ -1653,7 +1653,7 @@ function editData(id){
             var businessLicenseNum = $('input[name="businessLicenseNum1"]').val();
             var businessLicenseValidTime = $('input[name="businessLicenseValidTime1"]').val();
             var taxRegistCode = $('input[name="taxRegistCode1"]').val();
-            var registAddress = $('input[name="registAddress1"]').val();
+            var registAddressDetail = $('input[name="registAddress1"]').val();
             var mercFlag = $('input[name="mercFlag1"]').val();
             var agentId = $('#agentId1').val();
             var entityMerName = $('#entityMerName1').val();
@@ -1666,7 +1666,7 @@ function editData(id){
             var  registArea=$("#registArea1").val();
 
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
-                'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddress':registAddress,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'entityMerName':entityMerName,'innerCode':innerCode,'etpsAttr':etpsAttr,'registProvince':registProvince,'registCity':registCity,'registArea':registArea};
+                'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddressDetail':registAddressDetail,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'entityMerName':entityMerName,'innerCode':innerCode,'etpsAttr':etpsAttr,'registProvince':registProvince,'registCity':registCity,'registArea':registArea};
             console.log(params);
             if(entityMerName==''){
               layer.msg('保存失败，实体商户不能为空');return
