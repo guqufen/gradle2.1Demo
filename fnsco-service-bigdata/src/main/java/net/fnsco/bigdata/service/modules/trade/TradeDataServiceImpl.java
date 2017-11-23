@@ -200,12 +200,14 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         		return false;
         	}
             TradeData tmp = tradeListDAO.selectByCMT(tradeData);
-			if (tmp != null) {
-				TradeData data = new TradeData();
-				data.setStatus("0");
-				data.setId(tmp.getId());
-				tradeListDAO.updateByPrimaryKeySelective(data);
+			if (tmp == null) {
+				logger.info("没有找到原交易记录merId=["+tradeData.getMerId()+"],channerTermCode=["+tradeData.getChannelTermCode()+"],referNo=["+tradeData.getOrgMerOrderId()+"]");
+				return false;
 			}
+			TradeData data = new TradeData();
+			data.setStatus("0");
+			data.setId(tmp.getId());
+			tradeListDAO.updateByPrimaryKeySelective(data);
         }
 
         return true;

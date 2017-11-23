@@ -97,7 +97,7 @@
 		select
 		<include refid="Base_Column_List" />
 		from t_trade_data
-		where refer_no = #{orgMerOrderId, jdbcType=VARCHAR}
+		where order_no = #{orgMerOrderId, jdbcType=VARCHAR}
 		and channel_term_code = #{channelTermCode,jdbcType=VARCHAR}
 		and mer_id= #{merId,jdbcType=VARCHAR}
 		order by create_time
