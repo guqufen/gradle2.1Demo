@@ -1545,6 +1545,8 @@ function editData(id){
               $('#terminal-con1 input[name="posName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posName);
               $('#terminal-con1 input[name="snCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].snCode);
               $('#terminal-con1 input[name="installAddr'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posAddr);//装机地址数据放入
+              $('#terminal-con1 input[name="channelTerminalCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].channelTerminalCode);//刷卡终端编号数据放入
+              $('#terminal-con1 input[name="qrChannelTerminalCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].qrChannelTerminalCode);//扫码终端编号数据放入
               //选中省份/市/区
               posProvince(data.data.channel[i].posInfos[j].id);
               $('#terminal-con1 select[name="provinceId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posProvince+"']").attr("selected",true);
@@ -1895,6 +1897,8 @@ function detailsData(id){
               $('#terminal-con2 input[name="posName'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posName);
               $('#terminal-con2 input[name="snCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].snCode);
               $('#terminal-con2 input[name="installAddr'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].posAddr);//装机地址数据放入
+              $('#terminal-con2 input[name="channelTerminalCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].channelTerminalCode);//刷卡终端编号数据放入
+              $('#terminal-con2 input[name="qrChannelTerminalCode'+data.data.channel[i].posInfos[j].id+'"]').val(data.data.channel[i].posInfos[j].qrChannelTerminalCode);//扫码终端编号数据放入
               //选中省份/市/区
               posProvince(data.data.channel[i].posInfos[j].id);
               $('#terminal-con2 select[name="provinceId'+data.data.channel[i].posInfos[j].id+'"]').find("option[value='"+data.data.channel[i].posInfos[j].posProvince+"']").attr("selected",true);
