@@ -171,8 +171,8 @@ public interface MerchantCoreDao {
     @Select("Select etps_attr from m_merchant_core WHERE inner_code =#{innerCode} ")
 	Integer getEtpsAttrByInnerCode(String innerCode);
 
-    @Update("UPDATE m_merchant_core set STATUS = 5 WHERE inner_code = #{innerCode}")
-	void updateStatusByInnerCode(String innerCode);
+   
+	int updateStatusByInnerCode(@Param("innerCode") String innerCode);
 
 	
 

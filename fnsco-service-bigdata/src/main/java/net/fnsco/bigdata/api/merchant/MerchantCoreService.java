@@ -222,7 +222,9 @@ public interface MerchantCoreService {
 
     MerchantCoreEntityZxyhDTO  queryZXYHInfoById(Integer id);
 
-	void updateStatusByInnerCode(String innerCode);
+//	void updateStatusByInnerCode(String innerCode);
+
+	void updateInfoByInnerCode(String innerCode, String secMerId);
     
     
 }
