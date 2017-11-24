@@ -158,4 +158,73 @@ public class TradeConstants {
         TXT_TYPE_MAP.put("999912", "1");//拉卡拉POS贷刷卡还款
 
     }
+    
+
+    public static enum PayTypeEnum {
+                                    WX_PAY("41", "微信支付"), ZFB_PAY("42", "支付宝支付");
+        private String code;
+        private String name;
+
+        private PayTypeEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        /**
+         * @return the code
+         */
+        public String getCode() {
+            return code;
+        }
+
+        /**
+         * @return the name
+         */
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(String code) {
+            for (PayTypeEnum eopen : PayTypeEnum.values()) {
+                if (eopen.code.equals(code)) {
+                    return eopen.name;
+                }
+            }
+            return "";
+        }
+    }
+
+    public static enum ChannelTypeEnum {
+                                        AN_PAY("00", "爱农渠道"), PF_PAY("01", "浦发渠道");
+        private String code;
+        private String name;
+
+        private ChannelTypeEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        /**
+         * @return the code
+         */
+        public String getCode() {
+            return code;
+        }
+
+        /**
+         * @return the name
+         */
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(String code) {
+            for (ChannelTypeEnum eopen : ChannelTypeEnum.values()) {
+                if (eopen.code.equals(code)) {
+                    return eopen.name;
+                }
+            }
+            return "";
+        }
+    }
 }
