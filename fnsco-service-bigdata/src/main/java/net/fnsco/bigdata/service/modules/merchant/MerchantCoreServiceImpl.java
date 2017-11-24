@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -432,6 +433,18 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         merchantCore.setModifyTime(new Date());
         merchantCore.setStatus(1);
         merchantCore.setLegalValidCardType("0");//身份证
+        if(!Strings.isNullOrEmpty(merchantCore.getLegalPersonMobile())){
+        	int max = 18;
+        	if(StringUtils.trim(merchantCore.getLegalPersonMobile()).length() > max){
+        		return ResultDTO.failForMessage("手机号不合法，请重新输入");
+        	}
+        }
+        if(!Strings.isNullOrEmpty(merchantCore.getCardNum())){
+        	boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", merchantCore.getCardNum());
+        	if(b == false){
+        		return ResultDTO.failForMessage("身份证格式不正确请重新输入");
+        	}
+        }
       //根据商户性质获取商户种类
         if(merchantCore.getEtpsAttr() != null){
 			int etps_tp = merchantEntityService.getEtpsTypeByEtpsAttra(merchantCore.getEtpsAttr());
@@ -607,6 +620,20 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         String innerCode = "";
         for (MerchantBank merchantBank : merchantBanks) {
+        	//校验手机号
+        	if(!Strings.isNullOrEmpty(merchantBank.getAccountPhone())){
+            	int max = 11;
+            	if(StringUtils.trim(merchantBank.getAccountPhone()).length() > max){
+            		return ResultDTO.failForMessage("手机号不合法，请重新输入");
+            	}
+            }
+        	//校验身份证
+        	  if(!Strings.isNullOrEmpty(merchantBank.getAccountCardId())){
+              	boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", merchantBank.getAccountCardId());
+              	if(b == false){
+              		return ResultDTO.failForMessage("身份证格式不正确请重新输入");
+              	}
+        	  }
             if (null != merchantBank.getId()) {
                 merchantBankDao.updateByPrimaryKeySelective(merchantBank);
             } else {
