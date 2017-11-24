@@ -83,11 +83,11 @@ select.installmentNum{
     color: #000;
 }
 .submit{
-    width: 6rem;
-    background-color: rgb(236, 88, 76);
+    /* width: 6rem; */
+    background-color: rgb(39, 146, 228);
     color: #fff;
     margin-top: 0.6rem;
-    border-radius: 1rem;
+    /* border-radius: 1rem; */
     border:none !important;
     text-indent: 0;
 }
