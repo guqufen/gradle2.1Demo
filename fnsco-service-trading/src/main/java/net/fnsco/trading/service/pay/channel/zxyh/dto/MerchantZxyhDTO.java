@@ -65,7 +65,10 @@ public class MerchantZxyhDTO {
     //            示例:http://www.qq.com/wechat1/|http://www.qq.com/wechat2/|http://www.qq.com/wechat3/
     //            subscribeAppid  推荐关注公众号 String  非必填 微信分配的服务商公众号APPID,可与subAppid相同。
     //            示例：wx931386123456789e
-    private String qGroupId;         //  微信一级类目  String  WXActive=Y时必填   参见《微信类目表》 
+    private String jsapiPath;
+    
+
+	private String qGroupId;         //  微信一级类目  String  WXActive=Y时必填   参见《微信类目表》 
     private String categroryId;      //微信二级类目  String  WXActive=Y时必填   参见《微信类目表》 
     private String feeRate;          //微信手续费(%)    String  WXActive=Y时必填，  不能低于平台商户成本费率。数值范围(10以内最多3位小数，0至9.999)。如 0.1%的费率，填写0.1
     private String settleCycle;      //微信结算周期  String  WXActive=Y时必填   填写字母，T1、D1、D0
@@ -615,6 +618,13 @@ public class MerchantZxyhDTO {
         this.subAppid = subAppid;
     }
 
+    public String getJsapiPath() {
+		return jsapiPath;
+	}
+
+	public void setJsapiPath(String jsapiPath) {
+		this.jsapiPath = jsapiPath;
+	}
     /**
      * qGroupId
      *
