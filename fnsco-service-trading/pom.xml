@@ -28,6 +28,14 @@
 	</properties>
 
 	<dependencies>
+		<!-- 浦发银行支付接口 -->
+		<dependency>
+			<groupId>com.sosopay</groupId>
+			<artifactId>sosopay-sdk</artifactId>
+			<version>1.0.3</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/sosopay-sdk.jar</systemPath>
+		</dependency>
 		<!-- Spring Boot Mybatis 依赖 -->
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
@@ -52,13 +60,13 @@
 			<artifactId>fnsco-core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.fnsco</groupId>
 			<artifactId>fnsco-service-bigdata</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
+
 		<!-- Junit -->
 		<dependency>
 			<groupId>junit</groupId>

@@ -12,7 +12,10 @@ public interface OrderPaymentService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
+	
+	
     public Map<String, Object> mechAdd(MerchantCoreEntityZxyhDTO core);
+    
     //    public void pay(){
     //        if (Constant.ChannelTypeEnum.PF_PAY.getCode().equals(merchantInfoDO.getChannelType())) {
     //            orderPaymentResult = pFOrderPaymentService.beisaoPaySendPost(orderPayment);

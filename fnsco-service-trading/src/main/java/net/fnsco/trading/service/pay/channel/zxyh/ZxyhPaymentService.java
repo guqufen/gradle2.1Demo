@@ -1,17 +1,20 @@
 package net.fnsco.trading.service.pay.channel.zxyh;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.internal.Maps;
 
+import net.fnsco.bigdata.api.merchant.MerchantChannelService;
+import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.HttpUtils;
@@ -24,6 +27,10 @@ import net.fnsco.trading.service.pay.channel.zxyh.util.ZxyhPayMD5Util;
 public class ZxyhPaymentService extends BaseService implements OrderPaymentService {
     @Autowired
     private Environment env;
+    @Autowired
+	private MerchantChannelService merchantChannelService;
+    @Autowired
+	private MerchantCoreService merchantCoreService;
 
     /**
      * 
@@ -69,8 +76,8 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
         mercDTO.setZFBActive(core.getZFBActive());
         if(StringUtils.equals("Y", core.getZFBActive())){
         	mercDTO.setCategIdC(core.getqGroupId());
-            mercDTO.setFeeRateA(core.getFeeRate());
-            mercDTO.setSettleCycleA(core.getSettleCycle());
+            mercDTO.setFeeRateA(core.getFeeRateA());
+            mercDTO.setSettleCycleA(core.getSettleCycleA());
         }
         //银行信息
         mercDTO.setThirdMchtNo(core.getThirdMchtNo());//第三方平台子商户号
