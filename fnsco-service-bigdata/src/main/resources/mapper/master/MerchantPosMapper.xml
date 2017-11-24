@@ -334,7 +334,7 @@
     from m_merchant_pos p,m_merchant_channel c 
     where 
      p.channel_id=c.id 
-    and p.terminal_code=#{termId,jdbcType=VARCHAR}
+    and (p.terminal_code=#{termId,jdbcType=VARCHAR} or p.qr_channel_terminal_code=#{termId,jdbcType=VARCHAR})
      and c.channel_type=#{channelType,jdbcType=VARCHAR}
      limit 1
   </select>

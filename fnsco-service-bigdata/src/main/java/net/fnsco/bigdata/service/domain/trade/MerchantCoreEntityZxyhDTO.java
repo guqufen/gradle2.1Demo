@@ -30,7 +30,9 @@ public class MerchantCoreEntityZxyhDTO{
 //	        //        06-H5
 //
 //	    }
-	    private String mchtNm;           //     商户全称    String  申请类型=1 时，必填，20位以内   
+		private String innerCode;
+	    
+		private String mchtNm;           //     商户全称    String  申请类型=1 时，必填，20位以内   
 	    private String mchtCnAbbr;       // 商户简称    String  申请类型=1 时，必填，12位以内   
 	    private String manageScope;      //经营范围    String  非必填 
 	    private String etpsAttr;         //  商户性质    String  必填  1-政府机构
@@ -124,6 +126,15 @@ public class MerchantCoreEntityZxyhDTO{
 	    private List<MerchantContact> contacts;// 关联的联系人信息
 	    private List<MerchantBank> banks;// 关联的银行卡信息
 	    private List<MerchantChannel> channels;//关联的通道及相关信息
+	    
+	    
+	    public String getInnerCode() {
+			return innerCode;
+		}
+
+		public void setInnerCode(String innerCode) {
+			this.innerCode = innerCode;
+		}
 	    /**
 	     * olCode1
 	     *

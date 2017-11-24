@@ -1,8 +1,10 @@
 package net.fnsco.bigdata.service.dao.master;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 
@@ -72,4 +74,7 @@ public interface MerchantChannelDao {
     int countCanCreateTaiCode(@Param("merId") Integer merId);
     
     int countCanCreateTai(@Param("innerCode") String  innerCode);
+
+    @Update("UPDATE m_merchant_channel set channel_mer_id =#{0},modify_time=#{1} where inner_code=#{2}")
+	void updateChannelMercIdByInnerCode(String secMerId,Date modifyTime,String innerCode);
 }

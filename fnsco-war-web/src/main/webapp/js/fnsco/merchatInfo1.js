@@ -670,7 +670,8 @@ function saveMerCore(){
              $("#home").removeClass('active');
              $("#bankCard_info").addClass('active');
           }else{
-             layer.msg('保存失败!系统已经存在该营业执照了');
+//             layer.msg('保存失败!系统已经存在该营业执照了');
+        	  layer.msg(data.data);
           }
         }
     });
@@ -1230,7 +1231,83 @@ function removePos(num){
        unloginHandler(data);
        layer.msg(data.message);// 返回innerCode
        console.log(data);
-     },
+        var channelsLen=data.data.length;
+        for(var i=0;i<channelsLen;i++){
+            $('#'+conId+' input[name="channelMerKey'+data.data[i].id+'"]').val(data.data[i].channelMerKey);
+            $('#'+conId+' input[name="channelMerId'+data.data[i].id+'"]').val(data.data[i].channelMerId);
+            $('#'+conId+' select[name="channelType'+data.data[i].id+'"]').find("option[value="+data.data[i].channelType+"]").attr("selected",true);
+            var posLen=data.data[i].posInfos.length;
+            for(var j=0;j<posLen;j++){
+              $('#'+conId+' input[name="posName'+data.data[i].posInfos[j].id+'"]').val(data.data[i].posInfos[j].posName);
+              $('#'+conId+' input[name="snCode'+data.data[i].posInfos[j].id+'"]').val(data.data[i].posInfos[j].snCode);
+              $('#'+conId+' input[name="installAddr'+data.data[i].posInfos[j].id+'"]').val(data.data[i].posInfos[j].posAddr);// 装机地址数据放入
+              $('#'+conId+' input[name="channelTerminalCode'+data.data[i].posInfos[j].id+'"]').val(data.data[i].posInfos[j].channelTerminalCode);// 刷卡终端编号数据放入
+              $('#'+conId+' input[name="qrChannelTerminalCode'+data.data[i].posInfos[j].id+'"]').val(data.data[i].posInfos[j].qrChannelTerminalCode);// 扫码终端编号数据放入
+              // 选中省份/市/区
+              $('#'+conId+' select[name="provinceId'+data.data[i].posInfos[j].id+'"]').find("option[value='"+data.data[i].posInfos[j].posProvince+"']").attr("selected",true);
+              $('#'+conId+' select[name="cityId'+data.data[i].posInfos[j].id+'"]').find("option[value='"+data.data[i].posInfos[j].posCity+"']").attr("selected",true);
+              $('#'+conId+' select[name="areaId'+data.data[i].posInfos[j].id+'"]').find("option[value='"+data.data[i].posInfos[j].posArea+"']").attr("selected",true);
+              $('#'+conId+' select[name="bankId'+data.data[i].posInfos[j].id+'"]').find("option[value="+data.data[i].posInfos[j].bankId+"]").attr("selected",true);
+              $('#'+conId+' input[name="posType'+data.data[i].posInfos[j].id+'"]').val(data.data[i].posInfos[j].posType);
+              $('#'+conId+' input[name="mercReferName'+data.data[i].posInfos[j].id+'"]').val(data.data[i].posInfos[j].mercReferName);
+              $('#'+conId+' input[name="posFactory'+data.data[i].posInfos[j].id+'"]').val(data.data[i].posInfos[j].posFactory);
+            }
+            var terminaLen=data.data[i].terminaInfos.length;
+            for(var o=0;o<terminaLen;o++){
+              $('#'+conId+' select[name="terminalType'+data.data[i].terminaInfos[o].id+'"]').find("option[value='"+data.data[i].terminaInfos[o].terminalType+"']").attr("selected",true);
+              $('#'+conId+' input[name="terminalCode'+data.data[i].terminaInfos[o].id+'"]').val(data.data[i].terminaInfos[o].terminalCode);
+              $('#'+conId+' input[name="alipayFee'+data.data[i].terminaInfos[o].id+'"]').val(data.data[i].terminaInfos[o].alipayFee);
+              $('#'+conId+' input[name="wechatFee'+data.data[i].terminaInfos[o].id+'"]').val(data.data[i].terminaInfos[o].wechatFee);
+              $('#'+conId+' input[name="debitCardRate'+data.data[i].terminaInfos[o].id+'"]').val(data.data[i].terminaInfos[o].debitCardRate);
+              $('#'+conId+' input[name="creditCardRate'+data.data[i].terminaInfos[o].id+'"]').val(data.data[i].terminaInfos[o].creditCardRate);
+              $('#'+conId+' input[name="debitCardMaxFee'+data.data[i].terminaInfos[o].id+'"]').val(data.data[i].terminaInfos[o].debitCardMaxFee);
+              $('#'+conId+' select[name="settleCycle'+data.data[i].terminaInfos[o].id+'"]').find("option[value='"+data.data[i].terminaInfos[o].settleCycle+"']").attr("selected",true);
+              $('#'+conId+' input[name="subAppId'+data.data[i].terminaInfos[o].id+'"]').val(data.data[i].terminaInfos[o].subAppId);
+              $('#'+conId+' input[name="jsapiPath'+data.data[i].terminaInfos[o].id+'"]').val(data.data[i].terminaInfos[o].jsapiPath);
+              var id=data.data[i].terminaInfos[o].id;
+              var innerCode=data.data.innerCode;
+              $('#'+conId+' #qGroupId'+data.data[i].terminaInfos[o].id).find("option[value='"+data.data[i].terminaInfos[o].qGroupId+"']").attr("selected",true);
+              $('#'+conId+' select[name="categroryId'+data.data[i].terminaInfos[o].id+'"]').find("option[value='"+data.data[i].terminaInfos[o].categroryId+"']").attr("selected",true);
+            }
+        }
+      },
+
+    // for (var i=0;i<data.data.length;i++){
+    //   $("#"+conId+" .terminal-list").eq(i).find($('.channelMerId')).val(channelMerId);
+    //   $("#"+conId+" .terminal-list").eq(i).find($('.channelType')).val(channelType);
+    //   $("#"+conId+" .terminal-list").eq(i).find($('.channelMerKey')).val(channelMerKey);
+    //   $("#"+conId+" .terminal-list").eq(i).find($('.remove-terminalList')).attr('editid',id);
+    //   for(var j=0;j<data.data[i].posInfos.length;j++){
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posName')).val(posName);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.snCode')).val(snCode);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.bankId')).val(bankId);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posType')).val(posType);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.mercReferName')).val(mercReferName);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posFactory')).val(posFactory);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posProvince')).val(posProvince);// POS装机省份
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posCity')).val(posCity);// POS装机市
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.posArea')).val(posArea);// POS装机区
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.installAddr')).val(posAddr);// POS装机地址
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.channelTerminalCode')).val(channelTerminalCode);// 刷卡终端
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.qrChannelTerminalCode')).val(qrChannelTerminalCode);// 扫码终端
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.posList .addPos')).eq(j).find($('.remove-icon')).attr('editid',posId);
+    //   }
+    //   for(var j=0;j<terminalLen;j++){
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.terminalType')).val(terminalType);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.terminalCode')).val(terminalCode);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.alipayFee')).val(alipayFee);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.wechatFee')).val(wechatFee);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.debitCardRate')).val(debitCardRate);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.creditCardRate')).val(creditCardRate);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.debitCardMaxFee')).val(debitCardMaxFee);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.settleCycle')).val(settleCycle);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.subAppId')).val(subAppId);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.jsapiPath')).val(jsapiPath);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.qGroupId')).val(qGroupId);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.categroryId')).val(categroryId);
+    //     $("#"+conId+" .terminal-list").eq(i).find($('.terminalRatesList .addTerminalRates')).eq(j).find($('.remove-icon')).attr('editid',terminalId);
+    //   }
+    //  },
      error:function(){
        layer.msg('系统错误');
      }

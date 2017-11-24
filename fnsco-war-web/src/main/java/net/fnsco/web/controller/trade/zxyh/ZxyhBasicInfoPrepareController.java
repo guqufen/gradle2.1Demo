@@ -8,12 +8,17 @@
 package net.fnsco.web.controller.trade.zxyh;
 
 
+import java.util.Date;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.Api;
+import net.fnsco.bigdata.api.merchant.MerchantChannelService;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.BaseController;
@@ -30,11 +35,14 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 	private MerchantCoreService merchantCoreService;
 	@Autowired
 	private ZxyhPaymentService zxyhPaymentService;
+	@Autowired
+	private MerchantChannelService merchantChannelService;
 	
 	/**
 	 * 入驻中信银行的controller
 	 * @return
 	 */
+	@Transactional
 	@RequestMapping("/enterMerc")
     @ResponseBody
 	public ResultDTO<String> enterMerc(Integer id){
@@ -47,9 +55,16 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 			return ResultDTO.fail();
 		}
 		//调用入驻接口将参数传过去-
-		zxyhPaymentService.mechAdd(core);
+		Map<String, Object> map = zxyhPaymentService.mechAdd(core);
 		//入建中信成功后该商户信息不可修改
-		
+		//{signAture=2C50EBEAC574A33C4B40EB055942086D, respMsg=新增商户成功, txnTime=20171123180153397, 
+		// secMerId=999900000010708, respCode=0000, signMethod=02}
+//		System.out.println(map.get("respCode"));
+		if("0000".equals(map.get("respCode"))){
+			merchantCoreService.updateStatusByInnerCode(core.getInnerCode());
+			merchantChannelService.updateChannel_Merc_IdByInnerCode(map.get("secMerId").toString(),new Date(),core.getInnerCode());
+			
+		}
 		return ResultDTO.successForSubmit();
 		
 	}
