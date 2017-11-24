@@ -1550,7 +1550,7 @@ function editData(id){
         $('input[name="businessLicenseNum1"]').val(data.data.businessLicenseNum);
         $('input[name="businessLicenseValidTime1"]').val(data.data.businessLicenseValidTime);
         $('input[name="taxRegistCode1"]').val(data.data.taxRegistCode);
-        $('input[name="registAddress1"]').val(data.data.registAddress);
+        $('input[name="registAddress1"]').val(data.data.registAddressDetail);
         $('input[name="mercFlag1"]').val(data.data.mercFlag);
 
         $('#etpsAttr1').find("option[value="+data.data.etpsAttr+"]").attr("selected",true);
@@ -1752,7 +1752,7 @@ function editData(id){
             var businessLicenseNum = $('input[name="businessLicenseNum1"]').val();
             var businessLicenseValidTime = $('input[name="businessLicenseValidTime1"]').val();
             var taxRegistCode = $('input[name="taxRegistCode1"]').val();
-            var registAddressDetail = $('input[name="registAddress1"]').val();
+            var registAddressDetail= $('input[name="registAddress1"]').val();
             var mercFlag = $('input[name="mercFlag1"]').val();
             var agentId = $('#agentId1').val();
             var entityMerName = $('#entityMerName1').val();
@@ -1764,8 +1764,17 @@ function editData(id){
             var  registCity=$("#registCity1").val();
             var  registArea=$("#registArea1").val();
             var  registProvinceName=$("#registProvince1").find("option:selected").text();
+            if(!registProvinceName || registProvinceName.indexOf('选择')<=0){
+            	registProvinceName = '';
+            }
             var  registCityName=$("#registCity1").find("option:selected").text();
+            if(!registCityName || !registCityName.indexOf('选择')<=0){
+            	registCityName = '';
+            }
             var  registAreaName=$("#registArea1").find("option:selected").text();
+            if(!registAreaName || !registAreaName.indexOf('选择')<=0){
+            	registAreaName = '';
+            }
             
             var params ={'id':mer_id,'merName':merName,'abbreviation':abbreviation,'enName':enName,'legalPerson':legalPerson,'legalPersonMobile':legalPersonMobile,'legalValidCardType':legalValidCardType,'cardNum':cardNum,'businessLicenseValidTime':businessLicenseValidTime,
                 'cardValidTime':cardValidTime,'businessLicenseNum':businessLicenseNum,'taxRegistCode':taxRegistCode,'registAddressDetail':registAddressDetail,'mercFlag':mercFlag,'agentId':agentId,'entityInnerCode':entityInnerCode,'entityMerName':entityMerName,'innerCode':innerCode,
@@ -1901,7 +1910,7 @@ function detailsData(id){
         $('input[name="businessLicenseNum2"]').val(data.data.businessLicenseNum);
         $('input[name="businessLicenseValidTime2"]').val(data.data.businessLicenseValidTime);
         $('input[name="taxRegistCode2"]').val(data.data.taxRegistCode);
-        $('input[name="registAddress2"]').val(data.data.registAddress);
+        $('input[name="registAddress2"]').val(data.data.registAddressDetail);
         $('input[name="mercFlag2"]').val(data.data.mercFlag);
 
         $('#etpsAttr2').find("option[value="+data.data.etpsAttr+"]").attr("selected",true);
