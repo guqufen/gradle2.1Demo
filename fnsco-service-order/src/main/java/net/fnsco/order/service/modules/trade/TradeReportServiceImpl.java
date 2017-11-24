@@ -862,10 +862,17 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
         if(null != turnoverData){
             resultDto.setTotalTurnover(NumberUtil.format(NumberUtil.divide(turnoverData.getTurnover(), 100),2));
             resultDto.setTotalOrderNum(turnoverData.getOrderNum());
+            
             /**
              * 总应结金额=总额-手术费
              */
-            BigDecimal totalSettlementAmount = new BigDecimal(turnoverData.getTurnover()).subtract(new BigDecimal(turnoverData.getProcedureFee())).divide(new BigDecimal(100));
+            BigDecimal totalSettlementAmount = null;
+            if(!Strings.isNullOrEmpty(turnoverData.getTurnover()) && !Strings.isNullOrEmpty(turnoverData.getProcedureFee())) {
+            	totalSettlementAmount = new BigDecimal(turnoverData.getTurnover()).subtract(new BigDecimal(turnoverData.getProcedureFee())).divide(new BigDecimal(100));
+            }else {
+            	totalSettlementAmount = new BigDecimal(0);
+            }
+            
             resultDto.setTotalSettlementAmount(NumberUtil.format(totalSettlementAmount, 2));
         }else{
             turnoverData = new FinanceTurnoverDTO();
