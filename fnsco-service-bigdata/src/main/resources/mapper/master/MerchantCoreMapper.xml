@@ -480,6 +480,12 @@
       agent_id = #{agentId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 更新商户状态 -->
+  <update id="updateStatusByInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantCore" >
+    update m_merchant_core
+    set status = 5
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </update>
   <!-- 条件分页查询 -->
   <select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="QueryMerchantMap">
      select 

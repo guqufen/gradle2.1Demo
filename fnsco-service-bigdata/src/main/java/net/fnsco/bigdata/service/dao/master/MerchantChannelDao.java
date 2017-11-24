@@ -75,6 +75,5 @@ public interface MerchantChannelDao {
     
     int countCanCreateTai(@Param("innerCode") String  innerCode);
 
-    @Update("UPDATE m_merchant_channel set channel_mer_id =#{0},modify_time=#{1} where inner_code=#{2}")
-	void updateChannelMercIdByInnerCode(String secMerId,Date modifyTime,String innerCode);
+	int updateChannelMercIdByInnerCode(MerchantChannel merchantChannel);
 }

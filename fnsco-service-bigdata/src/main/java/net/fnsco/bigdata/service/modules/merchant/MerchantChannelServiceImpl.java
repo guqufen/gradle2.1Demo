@@ -13,10 +13,10 @@ public class MerchantChannelServiceImpl implements MerchantChannelService {
 	@Autowired
 	private MerchantChannelDao merchantChannelDao;
 
-	@Override
-	public void updateChannel_Merc_IdByInnerCode(String secMerId,Date modifyTime,String innerCode) {
-		
-		merchantChannelDao.updateChannelMercIdByInnerCode(secMerId,modifyTime,innerCode);
-	}
+//	@Override
+//	public void updateChannel_Merc_IdByInnerCode(String secMerId,Date modifyTime,String innerCode) {
+//		
+//		merchantChannelDao.updateChannelMercIdByInnerCode(secMerId,modifyTime,innerCode);
+//	}
 
 }
