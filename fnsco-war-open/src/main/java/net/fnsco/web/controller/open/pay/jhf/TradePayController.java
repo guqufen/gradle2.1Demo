@@ -25,7 +25,7 @@ import net.fnsco.trading.service.order.entity.TradeOrderDO;
  */
 @Controller
 @RequestMapping(value = "/trade/pay", method = RequestMethod.POST)
-@Api(value = "/trade/thirdPay", tags = { "聚惠分相关功能接口" })
+@Api(value = "/trade/pay", tags = { "聚惠分相关功能接口" })
 public class TradePayController extends BaseController {
     @Autowired
     private MerchantService     merchantService;
@@ -37,7 +37,7 @@ public class TradePayController extends BaseController {
     private Environment         env;
 
     /**
-     * 扫码后跳转到聚惠分平台
+     * 二维码扫码后跳转到聚惠分平台
      *
      * @param userName
      * @return
