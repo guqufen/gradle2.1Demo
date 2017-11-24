@@ -32,7 +32,7 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public void mechAdd(MerchantCoreEntityZxyhDTO core) {
+    public Map<String, Object> mechAdd(MerchantCoreEntityZxyhDTO core) {
         String pid = env.getProperty("zxyh.alipay.pid");
         String merId = env.getProperty("zxyh.merId");
         String url = "/MPayTransaction/ind/mchtadd.do";
@@ -89,8 +89,8 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
         String respStr = ZxyhPayMD5Util.request(mercMap, url);
         //解析返回报文
         Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
-        System.out.println(respMap);
-        String resultJson = "";
+//        String resultJson = "";
+        return respMap;
     }
 
     public void test() {

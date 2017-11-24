@@ -670,7 +670,8 @@ function saveMerCore(){
              $("#home").removeClass('active');
              $("#bankCard_info").addClass('active');
           }else{
-             layer.msg('保存失败!系统已经存在该营业执照了');
+//             layer.msg('保存失败!系统已经存在该营业执照了');
+        	  layer.msg(data.data);
           }
         }
     });
