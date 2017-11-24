@@ -378,19 +378,4 @@ public class MerchantInfoController extends BaseController {
 		return merchantCoreService.queryAllAgent();
 	}
 	
-	/**
-	 * queryAllAgent:(这里用一句话描述这个方法的作用)
-	 *
-	 * @param  @return    设定文件
-	 * @return ResultDTO<List<Agent>>    DOM对象
-	 * @author tangliang
-	 * @date   2017年11月24日 上午10:42:16
-	 */
-	@RequestMapping(value = "/queryAllChannelInfo", method = RequestMethod.POST)
-	@ResponseBody
-	@RequiresPermissions(value = { "m:merchant:list"})
-	public ResultDTO<List<MerchantChannel>> queryAllChannelInfo(@RequestParam(value = "innerCode") String innerCode) {
-		List<MerchantChannel> datas = merchantCoreService.findChannelByInnerCode(innerCode);
-		return ResultDTO.success(datas);
-	}
 }

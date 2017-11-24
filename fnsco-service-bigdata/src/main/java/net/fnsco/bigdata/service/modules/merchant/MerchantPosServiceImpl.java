@@ -12,6 +12,7 @@ import com.google.common.base.Strings;
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO;
 import net.fnsco.bigdata.api.dto.WebMerchantPosDTO2;
 import net.fnsco.bigdata.api.dto.WebMerchantTerminalDTO;
+import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
 import net.fnsco.bigdata.service.dao.master.MerchantBankDao;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
@@ -42,6 +43,8 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
     private MerchantTerminalDao merchantTerminalDao;
     @Autowired
     private MerchantBankDao merchantBankDao;
+    @Autowired
+	private MerchantCoreService merchantCoreService;
   
     
     @Override
@@ -112,8 +115,12 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
     @Transactional
 	@Override
 	public ResultDTO<String> savePosInfo2(List<WebMerchantPosDTO2> record,Integer userId) {
+    	String innerCode = null;
 		for (WebMerchantPosDTO2 webMerchantPosDTO : record) {
             MerchantChannel  merChannel = webMerchantPosDTO.getMerChannel();
+            if(Strings.isNullOrEmpty(innerCode)) {
+            	innerCode = merChannel.getInnerCode();
+            }
             if(null != merChannel){
             	merChannel.setModifyTime(new Date());
             	merChannel.setModifyUserId(userId);
@@ -129,6 +136,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
             		pos.setTerminalCode(pos.getChannelTerminalCode());
             	}
             	pos.setId(pos.getPosId());
+            	pos.setChannelId(merChannel.getId());
             	if(null != pos.getId()){
             		merchantPosDao.updateByPrimaryKeySelective(pos);
             	}else{
@@ -144,7 +152,8 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
 				}
 			}
         }
-        return ResultDTO.successForSave(null);
+		List<MerchantChannel> datas = merchantCoreService.findChannelByInnerCode(innerCode);
+        return ResultDTO.successForSave(datas);
 	}
     
     
