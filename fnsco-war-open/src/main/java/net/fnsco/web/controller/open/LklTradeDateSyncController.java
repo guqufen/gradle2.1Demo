@@ -115,7 +115,7 @@ public class LklTradeDateSyncController extends BaseController {
         tradeDataLkl.setOrderIdScan(dataJO.getOrderid_scan());
         tradeDataLkl.setReferNo(dataJO.getRefernumber());
         tradeDataLkl.setBankId(dataJO.getBank_type());//付款银行
-        tradeDataLkl.setSource("00");
+        tradeDataLkl.setSource("06");
         tradeDataLkl.setPayMedium(BigdataConstant.PayMediumEnum.POS.getCode());
         tradeDataLkl.setChannelTermCode(dataJO.getDevice_info());
         tradeDataLkl.setTermId(dataJO.getDevice_info());
