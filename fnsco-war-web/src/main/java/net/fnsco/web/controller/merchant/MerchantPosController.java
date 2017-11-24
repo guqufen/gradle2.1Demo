@@ -94,7 +94,7 @@ public class MerchantPosController extends BaseController {
 		countPosScores2(posInfos.get(0).getPosDeviceInfos(), pos.getInnerCode());
 		WebUserDTO obj = (WebUserDTO) session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
 		List<WebMerchantPosDTO2> params = MerchantHelper.toPosDTO2(posInfos, pos.getInnerCode(), obj.getId());
-		ResultDTO<String> result = merchantPosService.savePosInfo2(params);
+		ResultDTO<String> result = merchantPosService.savePosInfo2(params,getUserId());
 		return result;
 	}
 
