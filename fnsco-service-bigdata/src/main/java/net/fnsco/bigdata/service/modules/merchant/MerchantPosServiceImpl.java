@@ -1,5 +1,6 @@
 package net.fnsco.bigdata.service.modules.merchant;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,13 +111,16 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
      */
     @Transactional
 	@Override
-	public ResultDTO<String> savePosInfo2(List<WebMerchantPosDTO2> record) {
+	public ResultDTO<String> savePosInfo2(List<WebMerchantPosDTO2> record,Integer userId) {
 		for (WebMerchantPosDTO2 webMerchantPosDTO : record) {
             MerchantChannel  merChannel = webMerchantPosDTO.getMerChannel();
             if(null != merChannel){
+            	merChannel.setModifyTime(new Date());
+            	merChannel.setModifyUserId(userId);
                 if(null != merChannel.getId()){
                     merchantChannelDao.updateByPrimaryKeySelective(merChannel);
                 }else{
+                	merChannel.setCreateTime(new Date());
                     merchantChannelDao.insertSelective(merChannel);
                 }
             }
