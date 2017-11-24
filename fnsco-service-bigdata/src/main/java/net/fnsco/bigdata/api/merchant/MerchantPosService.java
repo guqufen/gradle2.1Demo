@@ -45,7 +45,7 @@ public interface MerchantPosService {
      * @return ResultDTO<String>    DOM对象
      */
     ResultDTO<String> savePosInfo(List<WebMerchantPosDTO> record);
-    ResultDTO<String> savePosInfo2(List<WebMerchantPosDTO2> record);
+    ResultDTO<String> savePosInfo2(List<WebMerchantPosDTO2> record,Integer userId);
     /**
      * deleteByPosId:(这里用一句话描述这个方法的作用)根据id删除关联终端等信息
      * @param posId
