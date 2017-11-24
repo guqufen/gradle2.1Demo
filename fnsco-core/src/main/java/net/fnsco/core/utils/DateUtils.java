@@ -14,6 +14,10 @@ import com.google.common.base.Strings;
 public class DateUtils {
     private static Logger logger = LoggerFactory.getLogger(DateUtils.class);
 
+    public static Date getNowTime() {
+        return new Date();
+    }
+
     public static Date getDayEndTime(int dates) {
         Date result = null;
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -105,12 +109,14 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
+
     public static String getNowYMDOnlyStr() {
         String result = "";
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
         result = sf.format(new Date());
         return result;
     }
+
     public static String getNowDateDayStr() {
         String result = "";
         SimpleDateFormat sf = new SimpleDateFormat("dd");
@@ -159,39 +165,40 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
-    
+
     /**
-	 * is30dayBefore:(根据传入的日期判断是否是30天之内的)
-	 *
-	 * @param  @param dateStr 格式yyyy-MM-dd
-	 * @param  @return    设定文件
-	 * @return boolean    DOM对象
-	 * @author tangliang
-	 * @date   2017年10月24日 上午10:05:17
-	 */
-	public static boolean is30dayBefore(String dateStr) {
-		
-		if(Strings.isNullOrEmpty(dateStr)) {
-			return false;
-		}
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd"); 
-		Calendar cal = Calendar.getInstance();
-		long time1 = cal.getTimeInMillis();   
-		try {
-			cal.setTime(sdf.parse(dateStr));
-			long time2 = cal.getTimeInMillis();         
-	        long between_days=(time1-time2)/(1000*3600*24);  
-	        int days = Integer.parseInt(String.valueOf(between_days));    
-	        if(days <= 30) {
-	        	return true;
-	        }
-			
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}    
-		return false;
-	}
+     * is30dayBefore:(根据传入的日期判断是否是30天之内的)
+     *
+     * @param  @param dateStr 格式yyyy-MM-dd
+     * @param  @return    设定文件
+     * @return boolean    DOM对象
+     * @author tangliang
+     * @date   2017年10月24日 上午10:05:17
+     */
+    public static boolean is30dayBefore(String dateStr) {
+
+        if (Strings.isNullOrEmpty(dateStr)) {
+            return false;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        long time1 = cal.getTimeInMillis();
+        try {
+            cal.setTime(sdf.parse(dateStr));
+            long time2 = cal.getTimeInMillis();
+            long between_days = (time1 - time2) / (1000 * 3600 * 24);
+            int days = Integer.parseInt(String.valueOf(between_days));
+            if (days <= 30) {
+                return true;
+            }
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     /**
      * compare_date:(这里用一句话描述这个方法的作用) 比较时间
      *
@@ -237,30 +244,33 @@ public class DateUtils {
      * @since  CodingExample　Ver 1.1
      */
     public static String dateFormatToStr(Date date) {
-        if(null == date){
+        if (null == date) {
             return "";
         }
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
-    public static Date toParseYmdhms(String source){
+
+    public static Date toParseYmdhms(String source) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             return df.parse(source);
         } catch (ParseException e) {
             e.printStackTrace();
-            
+
         }
         return null;
     }
+
     public static String dateFormat1ToStr(Date date) {
         String result = "";
-        if(null == date){
+        if (null == date) {
             return "";
         }
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
         result = sf.format(date);
         return result;
     }
+
     /**
      * getTimeByMinute:(这里用一句话描述这个方法的作用)获取当前时间前或后N分钟的时间字符串
      *
@@ -494,7 +504,8 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
-    public static Date formateToDate(String timeStr){
+
+    public static Date formateToDate(String timeStr) {
         SimpleDateFormat sf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         SimpleDateFormat sfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
@@ -503,13 +514,14 @@ public class DateUtils {
             try {
                 return sf.parse(timeStr);
             } catch (ParseException e1) {
-                logger.error("解析日期出错!"+timeStr,e);
+                logger.error("解析日期出错!" + timeStr, e);
                 e1.printStackTrace();
             }
         }
         return new Date();
     }
-    public static String getDateStrYYYYMMDD(Date date,int days) {
+
+    public static String getDateStrYYYYMMDD(Date date, int days) {
         String result = "";
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -518,51 +530,52 @@ public class DateUtils {
         result = sf.format(calendar.getTime());
         return result;
     }
+
     /**
      * 获取月第一天
      * @return
      */
     public static String getMouthStartTime(int mouth) {
-    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         //获取前月的第一天
-        Calendar cal_1=Calendar.getInstance();//获取当前日期 
+        Calendar cal_1 = Calendar.getInstance();//获取当前日期 
         cal_1.add(Calendar.MONTH, mouth);
-        cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为该月第一天 
+        cal_1.set(Calendar.DAY_OF_MONTH, 1);//设置为1号,当前日期既为该月第一天 
         String startTime = format.format(cal_1.getTime());
         return startTime;
     }
-    
+
     /**
      * 获取月最后一天
      * @return
      */
     public static String getMouthEndTime(int mouth) {
-    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    	//获取前月的最后一天
-        Calendar cale = Calendar.getInstance();  
-        cale.add(Calendar.MONTH, mouth+1);
-        cale.set(Calendar.DAY_OF_MONTH,0);//设置为1号,当前日期既为该月最后一天 
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        //获取前月的最后一天
+        Calendar cale = Calendar.getInstance();
+        cale.add(Calendar.MONTH, mouth + 1);
+        cale.set(Calendar.DAY_OF_MONTH, 0);//设置为1号,当前日期既为该月最后一天 
         String endTime = format.format(cale.getTime());
         return endTime;
     }
-    
+
     /**
      * 
      * @param str:格式yyyyMMddHHmmss
      * @return :格式yyyy-MM-dd HH:mm:ss
      */
-    public static Date StrToDate(String str){
-    	 SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-         SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMddHHmmss");
-         Date date2 = null;
-         try {
-			Date date = sf1.parse(str);
-			String tmp = sf.format(date);
-			date2 = sf.parse(tmp);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-         return date2;
+    public static Date StrToDate(String str) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date2 = null;
+        try {
+            Date date = sf1.parse(str);
+            String tmp = sf.format(date);
+            date2 = sf.parse(tmp);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return date2;
     }
 }

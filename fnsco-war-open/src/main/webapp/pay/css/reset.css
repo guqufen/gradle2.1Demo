@@ -50,12 +50,11 @@ html{
     overflow: hidden;
 }
 .fq{
-    padding-top: 9rem;
-    height: 32rem;
+    padding-top: 13rem;
     position: relative;
-    background:url(../img/fq_bg.jpg) no-repeat top;
-    background-size:contain;
-    background-color: rgb(56,125,255);
+    background: url(../img/fq_bg.jpg) no-repeat top;
+    background-size: 100%;
+    background-color: rgb(255, 199, 80);
 }
 .payDiv{
     text-align: center;
@@ -64,7 +63,7 @@ input.paymentAmount{
     color: #000;
 }
 input.paymentAmount,select.installmentNum,button{
-    width: 13rem;
+    width: 12rem;
     height: 1.7rem;
     margin: 0.3rem auto;
     border:1px solid #ccc !important;
@@ -84,11 +83,11 @@ select.installmentNum{
     color: #000;
 }
 .submit{
-    width: 7rem;
-    background-color: rgb(253, 141, 43);
+    /* width: 6rem; */
+    background-color: rgb(39, 146, 228);
     color: #fff;
     margin-top: 0.6rem;
-    border-radius: 1rem;
+    /* border-radius: 1rem; */
     border:none !important;
     text-indent: 0;
 }

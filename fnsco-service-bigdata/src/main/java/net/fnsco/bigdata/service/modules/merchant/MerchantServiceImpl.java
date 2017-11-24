@@ -293,7 +293,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         terNames.add(dto1);
         
         TerminalInfoDTO dto2 = new TerminalInfoDTO();
-        dto2.setTerminalCode(data.getTerminalCode());
+        dto2.setTerminalCode(data.getQrChannelTerminalCode());
         dto2.setTerName("扫码");
         dto2.setTerTitle(NumberUtil.TER_TITLE_NAME + NumberUtil.numToUpper(2));
         terNames.add(dto2);
