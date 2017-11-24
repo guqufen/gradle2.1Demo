@@ -140,6 +140,7 @@ public class MerchantPosServiceImpl extends BaseService implements MerchantPosSe
             	if(null != pos.getId()){
             		merchantPosDao.updateByPrimaryKeySelective(pos);
             	}else{
+            		pos.setStatus("1");
             		merchantPosDao.insertSelective(pos);
             	}
             }
