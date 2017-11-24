@@ -29,7 +29,7 @@ import net.fnsco.web.controller.open.jo.LklTradeDataJO;
 import net.sf.json.JSONObject;
 
 @Controller
-@RequestMapping(value = "/syncData/lkl", method = RequestMethod.POST)
+@RequestMapping(value = "/syncData/lkl")
 @Api(value = "/syncData/lkl", tags = { "拉卡拉交易实时传输交口" })
 public class LklTradeDateSyncController extends BaseController {
     @Autowired
@@ -80,7 +80,7 @@ public class LklTradeDateSyncController extends BaseController {
     */
     @RequestMapping("/transtradeSave")
     @ResponseBody
-    public Object transtradeSave(@RequestParam String sign, @RequestParam String data) {
+    public Object transtradeSave(String sign, String data) {
         logger.error("拉卡拉同步数据输入参数：" + data);
         LklTradeDataJO dataJO = JSON.parseObject(data, LklTradeDataJO.class);
         Map<String, String> dataMap = toLinkedHashMap(data);
