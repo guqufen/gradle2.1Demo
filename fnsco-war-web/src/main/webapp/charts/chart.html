@@ -3,39 +3,73 @@
 <head>
 	<meta charset="UTF-8">
 	<title>杭州法奈昇大数据平台</title>
+	<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="css/chart.css">
 </head>
 <body>
-	<div class="container">
-		<div class="container-title">
-			杭州法奈昇大数据平台
-		</div>
-		<div class="box">
-			<div class="left-box">
-				<div class="china-chart">
-					<div id="chart"></div>
-					<div class="addres"><img src="img/fnsLogo.png"></div>
+	<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+	  <!-- Indicators -->
+	  <!-- <ol class="carousel-indicators">
+	    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+	    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+	    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+	  </ol> -->
+	  <!-- Wrapper for slides -->
+	  <div class="carousel-inner" role="listbox">
+	    <div class="item active">
+		    <div class="container chart">
+				<div class="container-title">
+					杭州法奈昇大数据平台
+				</div>
+				<div class="box">
+					<div class="left-box">
+						<div class="china-chart">
+							<div id="chart"></div>
+							<div class="addres"><img src="img/fnsLogo.png"></div>
+						</div>
+					</div>
+					<div class="right-box">
+						<div class="total">
+							<div class="total-num">
+								<span class="counter" id="total-number"></span>元
+							</div>
+							<div class="total-count">
+								<span class="counter" id="total-count-num"></span>笔
+							</div>
+						</div>
+						<div class="time" id="scrollDiv">
+							<div class="scroll" class="scrollText">
+								<ul id="scroll-ul">
+									
+								</ul>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="right-box">
-				<div class="total">
-					<div class="total-num">
-						<span class="counter" id="total-number"></span>元
-					</div>
-					<div class="total-count">
-						<span class="counter" id="total-count-num"></span>笔
-					</div>
-				</div>
-				<div class="time" id="scrollDiv">
-					<div class="scroll" class="scrollText">
-						<ul id="scroll-ul">
-							
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-		
+	    </div>
+	    <div class="item">
+	      <div class="container">
+	        <img src="img/timg.jpg" alt="公司简介">
+	      </div>
+	    </div>
+	    <div class="item">
+	      <div class="container">
+	        <img src="img/timg.jpg" alt="公司简介">
+	      </div>
+	    </div>
+	  </div>
+
+	  <!-- Controls -->
+	 <!--  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+	    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+	    <span class="sr-only">Previous</span>
+	  </a>
+	  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+	    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+	    <span class="sr-only">Next</span>
+	  </a> -->
 	</div>
 	
 </body>
@@ -46,6 +80,7 @@
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/scroll.js"></script>
 <script type="text/javascript" src="js/countup.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script type="text/javascript">
 var totalCountNum;
 var totalNum;
@@ -84,7 +119,7 @@ function getValue(type){
 				changeValue('total-count-num',0,count,0,2);
 				totalNum=Number(Math.round(data.data.amtTot));
 				totalCountNum=Number(data.data.count);
-				console.log("默认请求:"+totalNum,totalCountNum);
+				// console.log("默认请求:"+totalNum,totalCountNum);
 			}else{
 				amtTot=Number(Math.round(data.data.amtTot));
 				count=Number(Math.round(data.data.count));
@@ -95,7 +130,7 @@ function getValue(type){
 				changeValue('total-count-num',totalCountNum,showCount,0,2);
 				totalNum=showTot;
 				totalCountNum=showCount;
-				console.log("请求来的值:"+amtTot,count,"显示的值:"+(amtTot+addAmt),count+addCount);
+				// console.log("请求来的值:"+amtTot,count,"显示的值:"+(amtTot+addAmt),count+addCount);
 			}
 		}
 	})
@@ -112,7 +147,7 @@ function changeVal(){
 	totalCountNum=newTotalCountNum;
 	addAmt=Number(addRandom+addAmt);
 	addCount=Number(addRandom1+addCount);
-	console.log("新增金额："+addAmt,"新增笔数："+addCount);
+	// console.log("新增金额："+addAmt,"新增笔数："+addCount);
 }
 setInterval(function(){
 	changeVal();
@@ -168,10 +203,16 @@ $(document).ready(function(){
 	getList(time,15);
 });
 setInterval(function(){
-	console.log("重新刷新了");
+	// console.log("重新刷新了");
 	getValue("0");
 	getList(time,7);
 	// $("#scrollDiv").textSlider({line:1,speed:800,timer:3000});
-},20000)	
+},20000)
+$('#carousel-example-generic').carousel(
+{
+  interval: 300000,
+  pause:null
+}
+);
 </script>
 </html>
