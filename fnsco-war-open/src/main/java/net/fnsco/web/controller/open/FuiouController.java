@@ -145,6 +145,8 @@ public class FuiouController extends BaseController{
 			tradeData.setReferNo(fuiouJO.getRetri_ref_no());//参考号
 			tradeData.setOrderIdScan(fuiouJO.getRetri_ref_no());//订单号(扫码支付订单号)
 		}
+		tradeData.setSendTime(fuiouJO.getCreatetime());//发送时间
+		tradeData.setTermId(fuiouJO.getTerminal_id());//终端号取富友渠道终端号
 		tradeData.setSource("05");//来源00拉卡拉01导入02同步03法奈昇04浦发05富友同步
 		tradeData.setMerId(fuiouJO.getMerchantno_fuiou());//结算商户号(富友商户号)
 		tradeData.setCreateTime(DateUtils.StrToDate(fuiouJO.getCreatetime()));//交易创建时间
