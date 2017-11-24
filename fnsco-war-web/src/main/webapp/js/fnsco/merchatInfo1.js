@@ -1472,7 +1472,7 @@ function editData(id){
         $('input[name="businessLicenseNum1"]').val(data.data.businessLicenseNum);
         $('input[name="businessLicenseValidTime1"]').val(data.data.businessLicenseValidTime);
         $('input[name="taxRegistCode1"]').val(data.data.taxRegistCode);
-        $('input[name="registAddress1"]').val(data.data.registAddressDetail);
+        $('input[name="registAddress1"]').val(data.data.registAddress);
         $('input[name="mercFlag1"]').val(data.data.mercFlag);
 
         $('#etpsAttr1').find("option[value="+data.data.etpsAttr+"]").attr("selected",true);
@@ -1893,6 +1893,7 @@ function detailsData(id){
         // }
 
         $("#terminal-con2").html('');
+        $("#terminal-con1 .terminal-list").remove();
         var channelsLen=data.data.channel.length;
         for(var i=0;i<channelsLen;i++){
             $("#terminal-con2").append(terminalHtml(data.data.channel[i].id));

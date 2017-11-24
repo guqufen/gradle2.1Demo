@@ -16,7 +16,6 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import net.fnsco.bigdata.api.dto.TerminalInfoDTO;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.dto.TradeDataPageDTO;
 import net.fnsco.bigdata.api.dto.TradeDataQueryDTO;
@@ -30,7 +29,6 @@ import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantPos;
-import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
@@ -266,18 +264,20 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         if (!CollectionUtils.isEmpty(posList)) {
             List<String> terminalList = Lists.newArrayList();
             for (String posId : posList) {
-                List<TerminalInfoDTO> tempList = merchantTerminalDao.queryTerByPosId(Integer.parseInt(posId));
-                for (TerminalInfoDTO terminal : tempList) {
-                    if (!Strings.isNullOrEmpty(terminal.getTerminalCode())) {
-                        terminalList.add(terminal.getTerminalCode());
-                    }
-                }
+            	MerchantPos merPos = merchantPosDao.selectByPrimaryKey(Integer.parseInt(posId));
+            	
+            	if(!Strings.isNullOrEmpty(merPos.getTerminalCode())) {
+            		terminalList.add(merPos.getTerminalCode());
+            	}
+            	
+            	if(!Strings.isNullOrEmpty(merPos.getQrChannelTerminalCode())) {
+            		terminalList.add(merPos.getQrChannelTerminalCode());
+            	}
             }
             if (!CollectionUtils.isEmpty(terminalList)) {
                 tradeData.setTerminalList(terminalList);
             }
         }
-        List<String> terminalList = tradeData.getTerminalList();
 
         Integer appUserId = merchantCore.getUserId();
         List<MerchantUserRel> tempList = merchantUserRelDao.selectByUserId(appUserId);

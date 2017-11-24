@@ -24,6 +24,7 @@ import net.fnsco.bigdata.comm.ServiceConstant;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.order.service.trade.TradeDataLklService;
 import net.fnsco.order.service.trade.entity.TradeDataLklDO;
+import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.web.controller.open.jo.LklTradeDataJO;
 import net.sf.json.JSONObject;
 
@@ -104,7 +105,7 @@ public class LklTradeDateSyncController extends BaseController {
         }
         tradeDataLkl.setRespMsg(dataJO.getErr_code() + dataJO.getErr_code_des());
         tradeDataLkl.setAmt(dataJO.getTotal_fee());
-        tradeDataLkl.setTxnType("1");
+        tradeDataLkl.setTxnType(TradeConstants.TXT_TYPE_MAP.get(dataJO.getTrade_type()));
         tradeDataLkl.setTxnSubType(dataJO.getTrade_type());//交易类型
         tradeDataLkl.setOrderNo(dataJO.getTransaction_id());
         tradeDataLkl.setTimeStamp(dataJO.getTime_end());
@@ -115,7 +116,7 @@ public class LklTradeDateSyncController extends BaseController {
         tradeDataLkl.setOrderIdScan(dataJO.getOrderid_scan());
         tradeDataLkl.setReferNo(dataJO.getRefernumber());
         tradeDataLkl.setBankId(dataJO.getBank_type());//付款银行
-        tradeDataLkl.setSource("00");
+        tradeDataLkl.setSource("06");
         tradeDataLkl.setPayMedium(BigdataConstant.PayMediumEnum.POS.getCode());
         tradeDataLkl.setChannelTermCode(dataJO.getDevice_info());
         tradeDataLkl.setTermId(dataJO.getDevice_info());

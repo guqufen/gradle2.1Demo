@@ -115,15 +115,6 @@ public interface MerchantTerminalDao {
      * @since  CodingExample　Ver 1.1
      */
     int deleteByMerCoreIds(Integer[] ids);
-    /**
-     * queryTerByPosId:(这里用一句话描述这个方法的作用)根据POS ID获取
-     * @param posId
-     * @return    设定文件
-     * @author    tangliang
-     * @date      2017年8月16日 下午2:09:34
-     * @return List<String>    DOM对象
-     */
-    List<TerminalInfoDTO> queryTerByPosId(@Param("posId")Integer posId);
     
     /**
      * queryAllTerByPosId:(这里用一句话描述这个方法的作用)查询所有数据
