@@ -1,6 +1,5 @@
 package net.fnsco.bigdata.service.modules.merchant;
 
-import java.awt.geom.Area;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
@@ -765,6 +764,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO = new MerchantCoreEntityZxyhDTO();
 		MerchantCore core = merchantCoreDao.queryAllByIdForAddZXMerc(id);
         if (core != null) {
+        	merchantCoreEntityZxyhDTO.setInnerCode(core.getInnerCode());
         	 MerchantContact merchantContact = core.getContacts().get(0);//获取商户联系人信息
              MerchantBank merchantBank = core.getBanks().get(0); //获取商户的开户行信息
              if(merchantContact == null || merchantBank == null){
@@ -837,6 +837,11 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         return null;
        
+	}
+
+	@Override
+	public void updateStatusByInnerCode(String innerCode) {
+		merchantCoreDao.updateStatusByInnerCode(innerCode);
 	}
 
 }
