@@ -217,6 +217,10 @@ function channelTypeFormatter(value, row, index){
     return '法奈昇';
   }else if(value == '04'){
     return '聚惠分';
+  }else if(value == '05'){
+    return '中信银行';
+  }else if(value == '90'){
+    return '富友';
   }
 }
 // 判断法人证件类型
@@ -787,6 +791,15 @@ function saveBankCardParams(conId){
     success:function(data){
       unloginHandler(data);
       layer.msg(data.message);
+      if(data.success==false){
+        return;
+      }else{
+        if(conId=='bankCard-con'){
+          $(".nav-tabs li.active").removeClass('active').next().addClass('active');
+          $("#bankCard_info").removeClass('active');
+          $("#profile").addClass('active');
+        }
+      }
       // $("#myModal").hide();
       queryEvent("table");
       console.log(innerCode);
@@ -1418,14 +1431,18 @@ function contactHtml(num){
   			url:PROJECT_NAME+'/web/merchantinfo/toAddContact',
   			dataType:"json", 
   			type:'POST',
-  		    contentType:"application/json",
+  		  contentType:"application/json",
   			data:JSON.stringify(contactArr),
   			success:function(data){
   				unloginHandler(data);
   				layer.msg(data.message);
-          $("#myModal").modal('hide');
-          $("#editModal").modal('hide');
-          $('body').removeClass('modal-open-custom');
+          if(data.success==false){
+            return;
+          }else{
+            $("#myModal").modal('hide');
+            $("#editModal").modal('hide');
+            $('body').removeClass('modal-open-custom');
+          }
   			},
   			error:function(){
   				layer.msg('系统错误');

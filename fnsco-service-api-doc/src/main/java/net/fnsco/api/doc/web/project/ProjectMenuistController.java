@@ -1,6 +1,7 @@
 package net.fnsco.api.doc.web.project;
 
-import java.util.Date;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.api.doc.service.project.PrivilegeService;
-import net.fnsco.api.doc.service.project.entity.ProjPrivilegeDO;
+import net.fnsco.api.doc.service.project.ProjectMenuistService;
+import net.fnsco.api.doc.service.project.entity.ProjDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 
@@ -24,18 +25,17 @@ import net.fnsco.core.base.ResultDTO;
  */
 @Controller
 @RequestMapping(value = "/web")
-@Api(value = "/web", tags = { "项目基本信息" })
-public class PrivilegeController extends BaseController{
+@Api(value = "/web", tags = { "查询项目菜单" })
+public class ProjectMenuistController extends BaseController{
     
     @Autowired
-    private PrivilegeService privilegeService;
+    private ProjectMenuistService projectMenuistService;
    
-    @RequestMapping(value = "/addPrivilege", method = RequestMethod.POST)
+    @RequestMapping(value = "/queryProjectMenuist", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "保存项目基本信息", notes = "保存项目基本信息")
-    public ResultDTO addPrivilege(ProjPrivilegeDO projPrivilege){
-    	projPrivilege.setCreateDate(new Date());
-    	privilegeService.add(projPrivilege);
-        return ResultDTO.success();
+    @ApiOperation(value = "查询项目菜单", notes = "查询项目菜单")
+    public ResultDTO<List<ProjDO>> queryProjectMenuist(){
+    	List<ProjDO> list = projectMenuistService.queryMenuist();
+        return ResultDTO.success(list);
     }
 }

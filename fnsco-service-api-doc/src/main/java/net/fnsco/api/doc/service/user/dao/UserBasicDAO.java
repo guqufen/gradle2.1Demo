@@ -28,6 +28,9 @@ public interface UserBasicDAO {
     
     @Select("SELECT email FROM t_user_basic ")
     public List<String> queryEmail();
+    
+    @Select("SELECT id FROM t_user_basic WHERE email =#{email}")
+    public Long queryUserIdByEmail(@Param("email") String email);
 
     @Select(" select b.id as user_id,b.email,b.role,b.valid,b.locked," + "b.create_date as regist_date,d.nick_name,d.head_url " + "from t_user_basic b inner join t_user_detail d on b.id = d.user_id "
             + "where b.id = #{userId}")

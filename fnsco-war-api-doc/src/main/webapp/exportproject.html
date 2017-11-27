@@ -28,15 +28,14 @@
 								<label class="control-label col-lg-3">项目编码</label>
 
 								<div class="col-lg-6">
-									<input type="text" name="code" value="rr" class="form-control" data-bv-field="code">
+									<input type="text" name="code" placeholder="请输入需要项目编码" class="form-control" data-bv-field="code">
 									<small class="help-block" data-bv-validator="notEmpty" data-bv-for="code" data-bv-result="NOT_VALIDATED" style="display: none;">项目编码不能为空</small></div>
 							</div>
 
 							<div class="form-group">
 								<label class="control-label col-lg-3">项目名称</label>
-
 								<div class="col-lg-6">
-									<input type="text" name="name" value="rer" class="form-control" data-bv-field="name">
+									<input type="text" name="name" placeholder="请输入需要项目名称" class="form-control" data-bv-field="name">
 									<small class="help-block" data-bv-validator="notEmpty" data-bv-for="name" data-bv-result="NOT_VALIDATED" style="display: none;">项目名称不能为空</small></div>
 							</div>
 
@@ -44,7 +43,7 @@
 								<label class="control-label col-lg-3">项目描述</label>
 
 								<div class="col-lg-6">
-									<textarea name="description" class="form-control" rows="10" id="description"></textarea>
+									<textarea name="description" placeholder="请输入需要项目描述"  class="form-control" rows="10" id="description"></textarea>
 								</div>
 							</div>
 							<div class="form-group">
@@ -89,8 +88,11 @@
 				  url:'/web/exportJson',
 				  type:'POST',
 				  data:{'jsonParams':params},
-				  success:function(){
-					  
+				  success:function(data){
+					  console.log(data);
+			        	 if(data.success){
+			        		 layer.msg("项目保存成功");
+			        	 }
 				  },
 				  error:function(e){
 					  alert(e);

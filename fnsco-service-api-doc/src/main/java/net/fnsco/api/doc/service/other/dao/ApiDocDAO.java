@@ -20,6 +20,10 @@ public interface ApiDocDAO {
     @Select("SELECT * FROM t_api_doc WHERE id = #{id}")
     public ApiDocDO getById(@Param("id") int id);
 
+    @Results({@Result( column = "id",property = "id"),@Result( column = "proj_id",property = "projId"),@Result( column = "title",property = "title"),@Result( column = "base_path",property = "basePath") })
+    @Select("SELECT id,proj_id,title,base_path FROM t_api_doc")
+    public List<ApiDocDO> queryMenuist();
+    
     @Insert("INSERT into t_api_doc(id,create_date,modify_date,proj_id,title,description,host,base_path,pub,open,scheme,consume,produce,version) VALUES (#{id},#{createDate},#{modifyDate},#{projId},#{title},#{description},#{host},#{basePath},#{pub},#{open},#{scheme},#{consume},#{produce},#{version})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(ApiDocDO apiDoc);
