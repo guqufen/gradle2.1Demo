@@ -351,6 +351,6 @@
   <select id="selectAllNewUserFormZFT" resultMap="BaseResultMap">
      select
 		<include refid="Base_Column_List" />
-		from m_app_user  where user_name = '1200002'
+		from m_app_user  where remark = '-1200002'
   </select>
 </mapper>
