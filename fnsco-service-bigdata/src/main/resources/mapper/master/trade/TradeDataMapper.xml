@@ -904,9 +904,6 @@
         #{channelFns,jdbcType=VARCHAR},
         #{channelJhf,jdbcType=VARCHAR}) 
       </if>
-      <if test="channelJhf != null and channelJhf !=''" >
-        OR channel_type = #{channelJhf,jdbcType=VARCHAR}
-      </if>
       <if test="amt != null and amt != ''" >
        AND  amt &gt;= #{amt,jdbcType=VARCHAR}
        AND  amt &lt;= #{amt,jdbcType=VARCHAR}
@@ -1346,9 +1343,6 @@
         #{channelAn,jdbcType=VARCHAR},
         #{channelFns,jdbcType=VARCHAR},
         #{channelJhf,jdbcType=VARCHAR}) 
-      </if>
-      <if test="channelJhf != null and channelJhf !=''" >
-        OR channel_type = #{channelJhf,jdbcType=VARCHAR}
       </if>
       <if test="amt != null and amt !=''" >
        AND  amt &gt;= #{amt,jdbcType=VARCHAR}
