@@ -33,11 +33,13 @@ import net.fnsco.bigdata.api.constant.BigdataConstant.ChannelTypeEnum;
 import net.fnsco.bigdata.api.constant.BigdataConstant.DataSourceEnum;
 import net.fnsco.bigdata.api.constant.BigdataConstant.PayMediumEnum;
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
+import net.fnsco.bigdata.api.trade.LklTradeDataService;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.comm.ServiceConstant.PaySubTypeAllEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.PayTypeEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
+import net.fnsco.bigdata.service.domain.trade.TradeDataLkl;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -65,6 +67,9 @@ public class TradeDataWebController extends BaseController {
     private TradeDataService       tradeDataService;
     @Autowired
     private TradeDataImportService tradeDataImportService;
+    @Autowired
+    private LklTradeDataService    tradeDataLklService;
+    
     private ExecutorService        cachedThreadPool = Executors.newCachedThreadPool();
 
     /**
@@ -81,6 +86,7 @@ public class TradeDataWebController extends BaseController {
     public ResultPageDTO<TradeData> query(TradeDataDTO tradeDataDTO, Integer currentPageNum, Integer pageSize) {
         return tradeDataService.queryTradeData(tradeDataDTO, currentPageNum, pageSize);
     }
+    
     /**
      * 查询总金额
      * @param tradeDataDTO
@@ -91,6 +97,34 @@ public class TradeDataWebController extends BaseController {
     @RequiresPermissions(value = { "m:trade:list" })
     public ResultDTO<String>  queryTotalAmount(TradeDataDTO tradeDataDTO){
     	String total= tradeDataService.queryTotalAmount(tradeDataDTO);
+    	return ResultDTO.success(total);
+    }
+    
+    /**
+     * 拉卡拉交易统计分页查询
+     * 
+     * @param tradeDataDTO
+     * @param currentPageNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = "/queryLkl", method = RequestMethod.GET)
+    @ResponseBody
+    @RequiresPermissions(value = { "m:trade:list" })
+    public ResultPageDTO<TradeDataLkl> queryLkl(TradeDataDTO tradeDataDTO, Integer currentPageNum, Integer pageSize) {
+        return tradeDataLklService.queryTradeData(tradeDataDTO, currentPageNum, pageSize);
+    }
+    
+    /**
+     * 拉卡拉查询总金额
+     * @param tradeDataDTO
+     * @return
+     */
+    @RequestMapping(value="queryLklTotalAmount",method=RequestMethod.POST)
+    @ResponseBody
+    @RequiresPermissions(value = { "m:trade:list" })
+    public ResultDTO<String>  queryLklTotalAmount(TradeDataDTO tradeDataDTO){
+    	String total= tradeDataLklService.queryTotalAmount(tradeDataDTO);
     	return ResultDTO.success(total);
     }
     
@@ -475,4 +509,116 @@ public class TradeDataWebController extends BaseController {
         }
         return success();
     }
+    
+    
+    /**
+     * 交易流水excel导出
+     * 
+     * @param tradeDataDTO
+     * @param currentPageNum
+     * @param pageSize
+     * @param req
+     * @param response
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/exportLkl", method = RequestMethod.GET)
+    @ResponseBody
+    @RequiresPermissions(value = { "m:trade:export" })
+    public void exportLkl(TradeDataDTO tradeDataDTO, HttpServletRequest req, HttpServletResponse response) throws IOException {
+        List<TradeDataLkl> dataList = tradeDataLklService.queryDataList(tradeDataDTO);
+        // 转换日期显示
+        if (dataList != null) {
+            for (TradeDataLkl merchantdo : dataList) {
+                // 支付方式
+                if ("00".equals(merchantdo.getPayType())) {
+                    merchantdo.setPayType("刷卡");
+                } else if ("01".equals(merchantdo.getPayType())) {
+                    merchantdo.setPayType("扫码");
+                }else if ("02".equals(merchantdo.getPayType())){
+                	merchantdo.setPayType("分期付");
+                }
+                // 处理金额
+                if (null != merchantdo.getAmt()) {
+                    BigDecimal str = new BigDecimal(merchantdo.getAmt());
+                    double resu = str.divide(new BigDecimal(100)).doubleValue();
+                    DecimalFormat df = new DecimalFormat("#0.00");
+                    merchantdo.setAmt(df.format(resu));
+                }
+                // 处理来源
+                if (null != merchantdo.getSource()) {
+                    if ("00".equals(merchantdo.getSource())) {
+                        merchantdo.setSource("拉卡拉");
+                    } else {
+                        merchantdo.setSource("其他");
+                    }
+                }
+                // 处理交易类型
+                if (null != merchantdo.getTxnType()) {
+                    if ("1".equals(merchantdo.getTxnType())) {
+                        merchantdo.setTxnType("消费");
+                    } else if ("2".equals(merchantdo.getTxnType())) {
+                        merchantdo.setTxnType("撤销");
+                    }
+                }
+                // 处理状态
+                if ("0".equals(merchantdo.getStatus())) {
+                    merchantdo.setStatus("非正常交易");
+                } else if ("1".equals(merchantdo.getStatus())) {
+                    merchantdo.setStatus("正常交易");
+                }
+                String li0 = merchantdo.getTimeStamp();
+                String li1 = merchantdo.getOrderTime();
+                Date li2 = merchantdo.getCreateTime();
+                if (li0 != null) {
+                    String year = li0.substring(0, 4);
+                    String month = li0.substring(4, 6);
+                    String day = li0.substring(6, 8);
+                    String hour = li0.substring(8, 10);
+                    String minutes = li0.substring(10, 12);
+                    String seconds = li0.substring(12, 14);
+                    String dateString0 = year + "-" + month + "-" + day + ' ' + hour + ':' + minutes + ':' + seconds;
+                    merchantdo.setTimeStamp(dateString0);
+                }
+                if (li1 != null) {
+                    String year = li1.substring(0, 4);
+                    String month = li1.substring(4, 6);
+                    String day = li1.substring(6, 8);
+                    String hour = li1.substring(8, 10);
+                    String minutes = li1.substring(10, 12);
+                    String seconds = li1.substring(12, 14);
+                    String dateString1 = year + "-" + month + "-" + day + ' ' + hour + ':' + minutes + ':' + seconds;
+                    merchantdo.setOrderTime(dateString1);
+                }
+                if (li2 != null) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateString2 = formatter.format(li2);
+                    merchantdo.setCreateTimeStr(dateString2);
+                }
+            }
+        }
+
+        JSONObject jObject = new JSONObject();
+        jObject.put("data", dataList);
+        List<TradeDataLkl> list = (List<TradeDataLkl>) jObject.get("data");
+        String itemMark = "orderNo,orderIdScan,merName,innerCode,snCode,referNo,txnType,merId,timeStamp,payType,amt,certifyId,orderTime,termId,batchNo,sysTraceNo,authCode,source,createTimeStr,status";
+        String itemParap = "订单号,扫码交易的订单号,商户名,内部商户号,终端SN码,参考号,交易类型,结算商户号,支付时间,支付方式,交易金额(元),持卡人卡号,订单时间,终端号,批次号,凭证号,授权码,来源,创建时间,状态";
+
+        String[] itemMarks = itemMark.split(",");// 键
+        String[] itemParaps = itemParap.split(",");// 列头
+
+        HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "交易流水");
+
+        response.setContentType("application/vnd.ms-excel;");
+        String nowStr = DateUtils.getNowYMDStr();
+        String fileName = "交易流水" + nowStr + ".xls";
+        response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
+
+        OutputStream ouputStream = response.getOutputStream();
+        workbook.write(ouputStream);
+
+        ouputStream.flush();
+        ouputStream.close();
+    }
+
 }
