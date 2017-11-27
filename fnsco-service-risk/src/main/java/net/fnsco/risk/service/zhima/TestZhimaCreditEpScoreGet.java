@@ -7,9 +7,11 @@ import com.antgroup.zmxy.openplatform.api.ZhimaApiException;
 import com.antgroup.zmxy.openplatform.api.domain.EpElement;
 import com.antgroup.zmxy.openplatform.api.domain.EpInfo;
 import com.antgroup.zmxy.openplatform.api.domain.LawsuitRecord;
+import com.antgroup.zmxy.openplatform.api.request.ZhimaAuthInfoAuthqueryRequest;
 import com.antgroup.zmxy.openplatform.api.request.ZhimaCreditEpLawsuitDetailGetRequest;
 import com.antgroup.zmxy.openplatform.api.request.ZhimaCreditEpLawsuitRecordGetRequest;
 import com.antgroup.zmxy.openplatform.api.request.ZhimaCreditEpScoreGetRequest;
+import com.antgroup.zmxy.openplatform.api.response.ZhimaAuthInfoAuthqueryResponse;
 import com.antgroup.zmxy.openplatform.api.response.ZhimaCreditEpLawsuitDetailGetResponse;
 import com.antgroup.zmxy.openplatform.api.response.ZhimaCreditEpLawsuitRecordGetResponse;
 import com.antgroup.zmxy.openplatform.api.response.ZhimaCreditEpScoreGetResponse;
@@ -48,7 +50,7 @@ public class TestZhimaCreditEpScoreGet {
         try {
             ZhimaCreditEpLawsuitRecordGetResponse response = client.execute(req);
             //{"success":true,"biz_no":"ZM201711243000000323200561955220","lawsuit_record":{}}
-//{"success":false,"error_code":"ZMCREDIT.no_valid_arrangement","error_message":"合约已被冻结"}
+            //{"success":false,"error_code":"ZMCREDIT.no_valid_arrangement","error_message":"合约已被冻结"}
             System.out.println(response.isSuccess());
             System.out.println(response.getErrorCode());
             System.out.println(response.getErrorMessage());
@@ -92,8 +94,9 @@ public class TestZhimaCreditEpScoreGet {
             e.printStackTrace();
         }
     }
-//
-    public void  testZhimaCreditEpScoreGet() {
+
+    //
+    public void testZhimaCreditEpScoreGet() {
         ZhimaCreditEpScoreGetRequest req = new ZhimaCreditEpScoreGetRequest();
         req.setChannel("apppc");
         req.setPlatform("zmop");
@@ -110,10 +113,32 @@ public class TestZhimaCreditEpScoreGet {
             e.printStackTrace();
         }
     }
+
+    //查询个人征信产品接口
+    public void testZhimaAuthInfoAuthquery() {
+        ZhimaAuthInfoAuthqueryRequest req = new ZhimaAuthInfoAuthqueryRequest();
+        req.setChannel("apppc");
+        req.setPlatform("zmop");
+        req.setIdentityType("0");// 必要参数 
+        req.setIdentityParam("{\"openId\":\"268801234567890123456\"}");// 必要参数 
+        req.setAuthCategory("C2B");// 必要参数 
+        DefaultZhimaClient client = new DefaultZhimaClient(gatewayUrl, appId, privateKey, zhimaPublicKey);
+        try {
+            ZhimaAuthInfoAuthqueryResponse response = client.execute(req);
+            System.out.println(response.isSuccess());
+            System.out.println(response.getErrorCode());
+            System.out.println(response.getErrorMessage());
+        } catch (ZhimaApiException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         TestZhimaCreditEpScoreGet result = new TestZhimaCreditEpScoreGet();
         //result.testZhimaCreditEpLawsuitRecordGet();
 
-        result.testZhimaCreditEpLawsuitRecordGet();
+        // result.testZhimaCreditEpLawsuitRecordGet();
+        //个人征信查询
+        result.testZhimaAuthInfoAuthquery();
     }
 }
