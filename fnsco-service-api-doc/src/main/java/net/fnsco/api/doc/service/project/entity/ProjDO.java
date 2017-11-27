@@ -43,6 +43,11 @@ public class ProjDO {
      * 项目状态
      */
     private String status;
+    
+    /**
+     * 项目json
+     */
+    private String jsonStr;
 
 
 
@@ -110,9 +115,15 @@ public class ProjDO {
         this.status = status;
     }
 
+    public String getJsonStr() {
+		return jsonStr;
+	}
 
+	public void setJsonStr(String jsonStr) {
+		this.jsonStr = jsonStr;
+	}
 
-    @Override
+	@Override
     public String toString() {
         return "[id="+ id + ", createDate="+ createDate + ", modifyDate="+ modifyDate + ", userId="+ userId + ", code="+ code + ", name="+ name + ", description="+ description + ", status="+ status + "]";
     }

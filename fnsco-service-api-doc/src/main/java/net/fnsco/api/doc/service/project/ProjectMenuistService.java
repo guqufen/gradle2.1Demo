@@ -1,4 +1,6 @@
 package net.fnsco.api.doc.service.project;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,16 +9,16 @@ import net.fnsco.api.doc.service.project.entity.ProjDO;
 import net.fnsco.core.base.BaseService;
 
 /**
- * @desc 项目基本信息service
+ * @desc 查询项目菜单service
  * @author   hjt
  *
  */
 @Service
-public class ProjService extends BaseService{
+public class ProjectMenuistService extends BaseService{
 	@Autowired
 	private ProjDAO projDAO;
 	
-    public void add(ProjDO projDO) {
-    	projDAO.insert(projDO);
+    public List<ProjDO> queryMenuist() {
+    	return projDAO.queryMenuist();
     }
 }

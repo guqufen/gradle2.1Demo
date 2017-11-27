@@ -29,7 +29,7 @@
 								<label class="control-label col-lg-3">项目编码</label>
 
 								<div class="col-lg-6">
-									<input type="text" name="code" id="code" class="form-control" data-bv-field="code">
+									<input type="text" name="code" id="code" class="form-control" data-bv-field="code" placeholder="请输入需要项目编码">
 									<small class="help-block" data-bv-validator="notEmpty" data-bv-for="code" data-bv-result="NOT_VALIDATED" style="display: none;">项目编码不能为空</small></div>
 							</div>
 
@@ -37,7 +37,7 @@
 								<label class="control-label col-lg-3">项目名称</label>
 
 								<div class="col-lg-6">
-									<input type="text" name="name" id="name" class="form-control" data-bv-field="name">
+									<input type="text" name="name" id="name" class="form-control" data-bv-field="name" placeholder="请输入需要项目名称">
 									<small class="help-block" data-bv-validator="notEmpty" data-bv-for="name" data-bv-result="NOT_VALIDATED" style="display: none;">项目名称不能为空</small></div>
 							</div>
 
@@ -45,7 +45,14 @@
 								<label class="control-label col-lg-3">项目描述</label>
 
 								<div class="col-lg-6">
-									<textarea id="description" name="description" class="form-control" rows="10"></textarea>
+									<textarea id="description" name="description" class="form-control" rows="3" placeholder="请输入需要项目描述"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-lg-3">项目json</label>
+
+								<div class="col-lg-6">
+									<textarea id="jsonStr" name="jsonStr" class="form-control" rows="7" placeholder="请输入需要项目JSON"></textarea>
 								</div>
 							</div>
 							<div class="form-group">
@@ -88,12 +95,13 @@
 	$("#saveProjInfoBtn").click(function(){
 		 $.ajax({
 	         type: 'POST',
-	         url: 'http://localhost:8080/web/addProj',
+	         url: 'http://localhost:8080/web/addProject',
 	         data:{
 	        	 code : $("#code").val(),
 	        	 name : $("#name").val(),
 	        	 description : $("#description").val(),
-	        	 status : $("#status").val()
+	        	 status : $("#status").val(),
+	        	 jsonStr : $("#jsonStr").val()
 	        	 },
 	         success: function(data){
 	        	 console.log(data);
