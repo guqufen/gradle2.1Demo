@@ -396,7 +396,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Override
     public String queryTotalAmount(TradeDataDTO tradeDataDTO) {
         TradeData tradeData = new TradeData();
-        if (tradeDataDTO.getPayType().equals("03")) {
+        if (tradeDataDTO.getPayType() != null &&tradeDataDTO.getPayType().equals("03")) {
             tradeDataDTO.setPayType(null);
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
@@ -421,7 +421,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Override
     public List<TradeData> queryDataList(TradeDataDTO tradeDataDTO) {
         TradeData tradeData = new TradeData();
-        if (tradeDataDTO.getPayType().equals("03")) {
+        if (tradeDataDTO.getPayType() != null &&tradeDataDTO.getPayType().equals("03")) {
             tradeDataDTO.setPayType(null);
         }
         if (!StringUtils.isEmpty(tradeDataDTO.getStartSendTime())) {
