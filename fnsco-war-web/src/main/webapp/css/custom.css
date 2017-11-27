@@ -68,9 +68,9 @@ table td{
 }
 .form-group .query-time .form-control{
 	width: 40%;
-	width: -moz-calc(50% - 50px);
-  	width: -webkit-calc(50% - 50px);
-	width: calc(50% - 50px);
+	width: -moz-calc(50% - 56px);
+  	width: -webkit-calc(50% - 56px);
+	width: calc(50% - 56px);
 }
 .form-group div{
 	margin: 5px 0;
