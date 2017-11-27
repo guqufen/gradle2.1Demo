@@ -50,7 +50,7 @@ public class ProjService extends BaseService {
 	 */
 	public boolean createFile(String name, String filecontent) {
 		Boolean bool = false;
-		String prefix = env.getProperty("app.base.url");
+		String prefix = env.getProperty("web.base.url");
 		String path = prefix + "1";
 		String filenameTemp = path + name + ".txt";// 文件路径+名称+文件类型
 		File file = new File(filenameTemp);
