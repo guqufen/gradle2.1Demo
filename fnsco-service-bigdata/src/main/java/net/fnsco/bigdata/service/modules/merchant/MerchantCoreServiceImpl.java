@@ -252,32 +252,31 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         if(CollectionUtils.isEmpty(channelList)){
         	channelList = Lists.newArrayList();
         	MerchantChannel channel = new MerchantChannel();
-//        	channel.setId(null);
+        	channel.setId(-888);
         	channel.setInnerCode(core.getInnerCode());
         	channelList.add(channel);
         	core.setChannel(channelList);
+        	
+        	//pos设备
+            List<MerchantPos> posList = Lists.newArrayList();
+            if(CollectionUtils.isEmpty(posList)){
+            	MerchantPos pos = new MerchantPos();
+            	pos.setId(-888);
+            	pos.setInnerCode(core.getInnerCode());
+            	posList.add(pos);
+            	core.getChannel().get(0).setPosInfos(posList);
+            }
+            //终端
+            List<MerchantTerminal> terminalList = Lists.newArrayList();
+            if(CollectionUtils.isEmpty(terminalList)){
+                 MerchantTerminal terminal = new MerchantTerminal();
+                 terminal.setId(-888);
+                 terminal.setInnerCode(core.getInnerCode());
+                 terminalList.add(terminal);
+                 core.getChannel().get(0).setTerminaInfos(terminalList);
+            }
+           
         }
-        //pos设备
-        List<MerchantPos> posList = core.getChannel().get(0).getPosInfos();
-        if(CollectionUtils.isEmpty(posList)){
-        	posList = Lists.newArrayList();
-        	MerchantPos pos = new MerchantPos();
-//        	pos.setId(0);
-        	pos.setInnerCode(core.getInnerCode());
-        	posList.add(pos);
-        	core.getChannel().get(0).setPosInfos(posList);
-        }
-        //终端
-        List<MerchantTerminal> terminalList = core.getChannel().get(0).getTerminaInfos();
-        if(CollectionUtils.isEmpty(terminalList)){
-        	 terminalList = Lists.newArrayList();
-             MerchantTerminal terminal = new MerchantTerminal();
-//             terminal.setId(0);
-             terminal.setInnerCode(core.getInnerCode());
-             terminalList.add(terminal);
-             core.getChannel().get(0).setTerminaInfos(terminalList);
-        }
-       
         
       //查询名称
         if(!Strings.isNullOrEmpty(core.getInnerCode())) {

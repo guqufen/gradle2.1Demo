@@ -79,19 +79,19 @@
 		</div>
 		<!--左侧导航开始-->
 		<nav class="navbar-default navbar-static-side" role="navigation">
-	<div class="nav-close">
-		<i class="fa fa-times-circle"></i>
-	</div>
-	<div class="slimScrollDiv" style="position: relative; width: auto; height: 100%;">
-		<div class="sidebar-collapse" style="width: auto; height: 100%;">
-			<ul class="nav" id="side-menu" style="display: block;">
-				<li class="nav-header">
-					<div class="dropdown profile-element">
-						<span><img alt="image" src="img/fnsLogo.png"></span>
-					</div>
-					<div class="logo-element">HB</div>
-				</li>
-				<li class="">
+			<div class="nav-close">
+				<i class="fa fa-times-circle"></i>
+			</div>
+			<div class="slimScrollDiv"
+				style="position: relative; width: auto; height: 100%;">
+				<div class="sidebar-collapse" style="width: auto; height: 100%;">
+					<ul class="nav" id="side-menu" style="display: block;">
+						<li class="nav-header">
+							<div class="dropdown profile-element">
+								<span><img alt="image" src="img/fnsLogo.png"></span>
+							</div>
+							<div class="logo-element">HB</div>
+						<!-- <li class="">
 					<a href="#"> <i class="glyphicon glyphicon-home"></i> <span class="nav-label">项目1接口</span>
 						<span class="fa arrow"></span>
 					</a>
@@ -119,27 +119,24 @@
 							<a class="J_menuItem" href="doc2.html" data-index="1">版本3接口详情</a>
 						</li>
 					</ul>
-				</li>
-						<li class="">
-					<a href="#"> <i class="glyphicon glyphicon-home"></i> <span class="nav-label">项目管理</span>
-						<span class="fa arrow"></span>
-					</a>
-					<ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
-						<li>
-							<a class="J_menuItem" href="basicinformation.html" data-index="1">项目基本信息</a>
-						</li>
-						<li>
-							<a class="J_menuItem" href="projectmembers.html" data-index="1">项目成员</a>
-						</li>
-						<li>
-							<a class="J_menuItem" href="changenotice.html" data-index="1">变更通知</a>
-						</li>
+				</li> -->
+						<li class=""><a href="#"> <i
+								class="glyphicon glyphicon-home"></i> <span class="nav-label">项目管理</span>
+								<span class="fa arrow"></span>
+						</a>
+							<ul class="nav nav-second-level collapse" aria-expanded="false"
+								style="height: 0px;">
+								<li><a class="J_menuItem" href="basicinformation.html"
+									data-index="1">项目基本信息</a></li>
+								<li><a class="J_menuItem" href="projectmembers.html"
+									data-index="1">项目成员</a></li>
+								<li><a class="J_menuItem" href="changenotice.html"
+									data-index="1">变更通知</a></li>
+							</ul></li>
 					</ul>
-				</li>
-			</ul>
-		</div>
-	</div>
-</nav>
+				</div>
+			</div>
+		</nav>
 		<!--左侧导航结束-->
 		<!--右侧部分开始-->
 		<div id="page-wrapper" class="gray-bg dashbard-1">
@@ -229,16 +226,44 @@
 		<!--右侧部分结束-->
 	</div>
 	<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
-	<script
-		src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-	<script src="js/metisMenu/jquery.metisMenu.js"></script>
-	<script src="js/slimscroll/jquery.slimscroll.min.js"></script>
-	<script type="text/javascript" src="js/contabs/contabs.min.js"></script>
-	<script src="js/pace/pace.min.js"></script>
-	<script src="js/hplus/hplus.min.js"></script>
-	<script src="js/layer/layer.js"></script>
-	<script type="text/javascript" src="js/fnsco/common.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+	$(document).ready(function() {
+		var menu = $('#side-menu');
+			// 组包发给后台
+			$.ajax({
+				type : 'POST',
+				url : PROJECT_NAME + "/web/queryProjectMenuist",
+				async: false,//同步加载
+				success : function(data) {
+					if (data.success) {
+						var menuList = data.data;
+						var editStr = "<li class=''>"+
+						"<a href='#'>"+
+						"<i class='glyphicon glyphicon-home'></i>"+
+						"<span class='nav-label'>项目名称</span><span class='fa arrow'></span>"+
+						"</a><ul class='nav nav-second-level collapse' aria-expanded='false' style='height: 0px;'>"
+						for(var i =0; i< menuList.length; i++){
+								var menuP = menuList[i];
+						        editStr = editStr + "<li>"+
+						        "<a class='J_menuItem' href='doc.html' data-index="+menuP.id+">"+menuP.name+"</a></li>";
+						}
+						editStr = editStr + "</ul></li>";
+						menu.append(editStr);
+					}else if (!data.success) {
+						layer.msg(data.message);
+					}
+				},
+				error:function(data){
+					layer.msg("操作失败");
+				}
+			});
+			
+			//隐藏掉菜单管理页面
+//			$('#menu_69').hide();
+		});
+	
+	
 		//			$('.logout').attr('href', PROJECT_NAME + "/web/user/logout");
 		//			//获取当前用户,将真实姓名显示出来
 		//			$(function() {
@@ -283,6 +308,14 @@
 		//
 		//			})
 	</script>
+	<script src="js/metisMenu/jquery.metisMenu.js"></script>
+	<script src="js/slimscroll/jquery.slimscroll.min.js"></script>
+	<script type="text/javascript" src="js/contabs/contabs.min.js"></script>
+	<script src="js/pace/pace.min.js"></script>
+	<script src="js/hplus/hplus.min.js"></script>
+	<script src="js/layer/layer.js"></script>
+	<script type="text/javascript" src="js/fnsco/common.js"></script>
+	
 </body>
 
 </html>
