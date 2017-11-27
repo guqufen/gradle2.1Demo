@@ -491,8 +491,7 @@
         #{condition.channelJhf,jdbcType=VARCHAR}) 
       </if>
       <if test="condition.amt != null and condition.amt !=''" >
-       AND  amt &gt;= #{condition.amt,jdbcType=VARCHAR}
-       AND  amt &lt;= #{condition.amt,jdbcType=VARCHAR}
+       AND  cast(amt as SIGNED)= #{condition.amt,jdbcType=VARCHAR}
       </if>
       <if test="condition.orderNo != null and condition.orderNo !=''" >
        AND  order_no = #{condition.orderNo,jdbcType=VARCHAR}
@@ -699,8 +698,7 @@
         #{channelJhf,jdbcType=VARCHAR}) 
       </if>
       <if test="amt != null and amt != ''" >
-        AND  amt &gt;= #{amt,jdbcType=VARCHAR}
-       AND  amt &lt;= #{amt,jdbcType=VARCHAR}
+        AND  cast(amt as SIGNED)= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo != ''" >
        AND  order_no = #{orderNo,jdbcType=VARCHAR}
@@ -904,12 +902,8 @@
         #{channelFns,jdbcType=VARCHAR},
         #{channelJhf,jdbcType=VARCHAR}) 
       </if>
-      <if test="channelJhf != null and channelJhf !=''" >
-        OR channel_type = #{channelJhf,jdbcType=VARCHAR}
-      </if>
       <if test="amt != null and amt != ''" >
-       AND  amt &gt;= #{amt,jdbcType=VARCHAR}
-       AND  amt &lt;= #{amt,jdbcType=VARCHAR}
+       AND cast(amt as SIGNED)= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo != ''" >
        AND  order_no = #{orderNo,jdbcType=VARCHAR}
@@ -993,7 +987,6 @@
 	  		)
 	  </if>	
    	 </where>		
-	  order by CAST(amt as SIGNED)
   </select>
   <!-- 条件查询集合 ,返回临时表数据-->
   <select id="queryTempByCondition" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" resultMap="BaseResultMap">
@@ -1140,8 +1133,7 @@
         AND channel_type = #{channelType,jdbcType=VARCHAR}
       </if>
       <if test="amt != null and amt != ''" >
-       AND  amt &gt;= #{amt,jdbcType=VARCHAR}
-       AND  amt &lt;= #{amt,jdbcType=VARCHAR}
+       AND  cast(amt as SIGNED)= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo != ''" >
        AND  order_no = #{orderNo,jdbcType=VARCHAR}
@@ -1347,12 +1339,8 @@
         #{channelFns,jdbcType=VARCHAR},
         #{channelJhf,jdbcType=VARCHAR}) 
       </if>
-      <if test="channelJhf != null and channelJhf !=''" >
-        OR channel_type = #{channelJhf,jdbcType=VARCHAR}
-      </if>
       <if test="amt != null and amt !=''" >
-       AND  amt &gt;= #{amt,jdbcType=VARCHAR}
-       AND  amt &lt;= #{amt,jdbcType=VARCHAR}
+       AND cast(amt as SIGNED)= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo !=''" >
        AND  order_no = #{orderNo,jdbcType=VARCHAR}

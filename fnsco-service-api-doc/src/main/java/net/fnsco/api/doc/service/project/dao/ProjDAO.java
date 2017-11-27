@@ -20,6 +20,10 @@ public interface ProjDAO {
     @Select("SELECT * FROM t_proj WHERE id = #{id}")
     public ProjDO getById(@Param("id") int id);
 
+    @Results({@Result( column = "code",property = "code"),@Result( column = "name",property = "name") })
+    @Select("SELECT code,name FROM t_proj")
+    public List<ProjDO> queryMenuist();
+    
     @Insert("INSERT into t_proj(id,create_date,modify_date,user_id,code,name,description,status) VALUES (#{id},#{createDate},#{modifyDate},#{userId},#{code},#{name},#{description},#{status})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(ProjDO proj);

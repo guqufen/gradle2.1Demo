@@ -260,6 +260,9 @@ public class TradeReportServiceImpl extends BaseService implements TradeReportSe
              BigDecimal rate = new BigDecimal(tradeData.getAmt());
              BigDecimal db2 = new BigDecimal(alipayFee);
              result = rate.multiply(db2);
+         }//聚惠分
+         else if(ConstantEnum.PayTypeEnum.PAYBY_JUHUIFEN.getCode().equals(paySubType)) {
+        	 
          }
         return result;
         
