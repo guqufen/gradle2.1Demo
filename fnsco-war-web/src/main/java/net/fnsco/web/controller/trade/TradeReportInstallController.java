@@ -118,6 +118,7 @@ public class TradeReportInstallController extends BaseController {
 		for (AppUser appUser : allUsers) {
 			if(!Strings.isNullOrEmpty(appUser.getPassword())) {
 				appUser.setPassword(Md5Util.getInstance().md5(appUser.getPassword()));
+				appUser.setInviteStatus(0);
 				appUserDao.updateByPrimaryKeySelective(appUser);
 			}
 		}
