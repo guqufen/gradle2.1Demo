@@ -54,11 +54,9 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 		}
 		//调用入驻接口将参数传过去-
 		Map<String, Object> map = zxyhPaymentService.mechAdd(core);
-		if("0001".equals(map.get("respCode"))){
+		if("0000".equals(map.get("respCode"))){
 			//回调并更新信息
 			String secMerId = map.get("secMerId").toString();
-//			String secMerId = "999900000010717";
-//			logger.info("中信渠道商户号="+secMerId);
 			if(!Strings.isNullOrEmpty(secMerId)){
 				this.merchantCoreService.updateInfoByInnerCode(core.getInnerCode(),secMerId);
 				
