@@ -30,11 +30,11 @@ public class ProjService extends BaseService {
 		projDAO.insert(projDO);
 	}
 
-	public boolean exportJson(String name, String jsonParams) {
+	public boolean exportJson(String filePath,String name, String jsonParams) {
 		if (Strings.isNullOrEmpty(jsonParams)) {
 			return false;
 		}
-		createFile(name, jsonParams);
+		createFile(filePath,name, jsonParams);
 
 		return false;
 	}
@@ -48,10 +48,9 @@ public class ProjService extends BaseService {
 	 *            文件内容
 	 * @return 是否创建成功，成功则返回true
 	 */
-	public boolean createFile(String name, String filecontent) {
+	public boolean createFile(String filePath,String name, String filecontent) {
 		Boolean bool = false;
-		String prefix = env.getProperty("app.base.url");
-		String path = prefix + "1";
+		String path = filePath + "jsonTxt/";
 		String filenameTemp = path + name + ".txt";// 文件路径+名称+文件类型
 		File file = new File(filenameTemp);
 		try {
