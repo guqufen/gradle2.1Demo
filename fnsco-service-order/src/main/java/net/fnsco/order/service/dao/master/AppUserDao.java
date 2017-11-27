@@ -84,4 +84,14 @@ public interface AppUserDao {
     List<AppUser> selectAllInlineByRoleId(@Param("roleId")String roleId);
     List<QueryBandDTO> selectInnercode(@Param("mobile")String mobile);
     List<AppUser> selectAllInviteAppUser();
+    
+    /**
+     * selectAllNewUserFormZFT:(查询所有来自浙付通用户的数据)
+     *
+     * @param  @return    设定文件
+     * @return List<AppUser>    DOM对象
+     * @author tangliang
+     * @date   2017年11月27日 上午11:20:40
+     */
+    List<AppUser> selectAllNewUserFormZFT();
 }
