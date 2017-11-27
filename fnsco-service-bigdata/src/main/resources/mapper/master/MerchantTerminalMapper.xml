@@ -275,6 +275,25 @@
     from m_merchant_terminal
     where inner_code = #{innerCode,jdbcType=VARCHAR}
   </select>
+  <!-- 根据innercode查询出 -->
+  <select id="selectByInnerCodeWX" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from m_merchant_terminal
+    where inner_code = #{innerCode,jdbcType=VARCHAR} AND terminal_type ='02' LIMIT 1
+  </select>
+   <select id="selectByInnerCodeZFB" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from m_merchant_terminal
+    where inner_code = #{innerCode,jdbcType=VARCHAR} AND terminal_type ='03' LIMIT 1
+  </select>
+   <select id="selectByInnerCodeGZH" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from m_merchant_terminal
+    where inner_code = #{innerCode,jdbcType=VARCHAR} AND terminal_type ='04' LIMIT 1
+  </select>
   <!-- 根据userId连表查询出终端信息 -->
   <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     SELECT
@@ -307,10 +326,6 @@
 	     </foreach>
 		)
 	</delete>
-	<!-- 根据POSid查询 -->
-	<select id="queryTerByPosId" parameterType="java.lang.Integer" resultType="net.fnsco.bigdata.api.dto.TerminalInfoDTO">
-	  SELECT terminal_code AS terminalCode FROM m_merchant_terminal WHERE pos_id = #{posId}
-	</select>
 	<!-- 批量插入数据 -->
 	<insert id="insertBatch"  parameterType="java.util.List">
 	  <selectKey resultType ="java.lang.Integer" keyProperty= "id" order= "AFTER">
@@ -362,16 +377,6 @@
     where terminal_code=#{id,jdbcType=VARCHAR} AND inner_code=#{code,jdbcType=VARCHAR}) limit 1
   </select>
   
-  <select id="selectOneByTermId" resultMap="BaseResultMap">
-    select 
-     <include refid="T_Base_Column_List" />
-    from m_merchant_terminal t ,m_merchant_pos p,m_merchant_channel c 
-    where 
-    t.pos_id=p.id and p.channel_id=c.id 
-    and t.terminal_code=#{termId,jdbcType=VARCHAR}
-     and c.channel_type=#{channelType,jdbcType=VARCHAR}
-     limit 1
-  </select>
   <!-- 查询 -->
   <select id="selectByTerminalType"  resultMap="BaseResultMap">
      select 

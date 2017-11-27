@@ -8,28 +8,32 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
-import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
+import net.fnsco.bigdata.service.dao.master.MerchantPosDao;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
-import net.fnsco.bigdata.service.domain.MerchantTerminal;
+import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.DbUtil;
+import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.service.trade.dao.TradeDataLklDAO;
 import net.fnsco.order.service.trade.entity.TradeDataLklDO;
 
 @Service
 public class TradeDataLklService extends BaseService {
 
-    private Logger          logger = LoggerFactory.getLogger(this.getClass());
+    private Logger             logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    private TradeDataLklDAO tradeDataLklDAO;
+    private TradeDataLklDAO    tradeDataLklDAO;
     @Autowired
-    private MerchantTerminalDao merchantTerminalDao;
+    private MerchantPosDao     merchantPosDao;
     @Autowired
-    private MerchantChannelDao  merchantChannelDao;
+    private MerchantChannelDao merchantChannelDao;
+
     // 分页
     public ResultPageDTO<TradeDataLklDO> page(TradeDataLklDO tradeDataLkl, Integer pageNum, Integer pageSize) {
         logger.info("开始分页查询TradeDataLklService.page, tradeDataLkl=" + tradeDataLkl.toString());
@@ -46,18 +50,14 @@ public class TradeDataLklService extends BaseService {
         String merId = tradeDataLkl.getMerId();
         //拉卡拉渠道
         if ("00".equals(tradeDataLkl.getChannelType())) {
-            if (!Strings.isNullOrEmpty(tradeDataLkl.getTermId())
-                && !Strings.isNullOrEmpty(tradeDataLkl.getChannelType())) {
-                MerchantTerminal merchantTerminal = merchantTerminalDao
-                    .selectOneByTermId(tradeDataLkl.getTermId(), tradeDataLkl.getChannelType());
-                if (null != merchantTerminal) {
-                    innerCode = merchantTerminal.getInnerCode();
+            if (!Strings.isNullOrEmpty(tradeDataLkl.getTermId()) && !Strings.isNullOrEmpty(tradeDataLkl.getChannelType())) {
+                MerchantPos merchantPos = merchantPosDao.selectOneByTerminalCodeChannelType(tradeDataLkl.getTermId(), tradeDataLkl.getChannelType());
+                if (null != merchantPos) {
+                    innerCode = merchantPos.getInnerCode();
                 }
             } else {
-                if (!Strings.isNullOrEmpty(tradeDataLkl.getMerId())
-                    && !Strings.isNullOrEmpty(tradeDataLkl.getChannelType())) {
-                    MerchantChannel channel = merchantChannelDao
-                        .selectByMerCode(tradeDataLkl.getMerId(), tradeDataLkl.getChannelType());
+                if (!Strings.isNullOrEmpty(tradeDataLkl.getMerId()) && !Strings.isNullOrEmpty(tradeDataLkl.getChannelType())) {
+                    MerchantChannel channel = merchantChannelDao.selectByMerCode(tradeDataLkl.getMerId(), tradeDataLkl.getChannelType());
                     if (channel != null) {
                         innerCode = channel.getInnerCode();
                     }
@@ -67,7 +67,9 @@ public class TradeDataLklService extends BaseService {
         tradeDataLkl.setInnerCode(innerCode);
         tradeDataLkl.setId(DbUtil.getUuid());
         tradeDataLkl.setCreateTime(new Date());
+        tradeDataLkl.setSendTime(DateUtils.getNowDateStr());
         tradeDataLkl.setStatus("1");
+        tradeDataLkl.setMd5(Md5Util.string2MD5(JSON.toJSONString(tradeDataLkl)));
         this.tradeDataLklDAO.insert(tradeDataLkl);
         return tradeDataLkl;
     }

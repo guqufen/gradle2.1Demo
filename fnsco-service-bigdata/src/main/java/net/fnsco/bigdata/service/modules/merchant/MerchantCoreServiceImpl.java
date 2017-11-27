@@ -1,8 +1,11 @@
 package net.fnsco.bigdata.service.modules.merchant;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,6 +27,7 @@ import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.AgentDao;
 import net.fnsco.bigdata.service.dao.master.AppUserMerchant1Dao;
+import net.fnsco.bigdata.service.dao.master.AreaDAO;
 import net.fnsco.bigdata.service.dao.master.MerchantBankDao;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantContactDao;
@@ -103,7 +107,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
     private MerchantEntityDao   merchantEntityDao;
     @Autowired
 	private MerchantEntityService merchantEntityService;
-
+    @Autowired
+    private AreaDAO areaDao;
+  
     /**
      * @todo 新增加商家
      * @author tangliang
@@ -246,32 +252,31 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         if(CollectionUtils.isEmpty(channelList)){
         	channelList = Lists.newArrayList();
         	MerchantChannel channel = new MerchantChannel();
-//        	channel.setId(null);
+        	channel.setId(-888);
         	channel.setInnerCode(core.getInnerCode());
         	channelList.add(channel);
         	core.setChannel(channelList);
+        	
+        	//pos设备
+            List<MerchantPos> posList = Lists.newArrayList();
+            if(CollectionUtils.isEmpty(posList)){
+            	MerchantPos pos = new MerchantPos();
+            	pos.setId(-888);
+            	pos.setInnerCode(core.getInnerCode());
+            	posList.add(pos);
+            	core.getChannel().get(0).setPosInfos(posList);
+            }
+            //终端
+            List<MerchantTerminal> terminalList = Lists.newArrayList();
+            if(CollectionUtils.isEmpty(terminalList)){
+                 MerchantTerminal terminal = new MerchantTerminal();
+                 terminal.setId(-888);
+                 terminal.setInnerCode(core.getInnerCode());
+                 terminalList.add(terminal);
+                 core.getChannel().get(0).setTerminaInfos(terminalList);
+            }
+           
         }
-        //pos设备
-        List<MerchantPos> posList = core.getChannel().get(0).getPosInfos();
-        if(CollectionUtils.isEmpty(posList)){
-        	posList = Lists.newArrayList();
-        	MerchantPos pos = new MerchantPos();
-//        	pos.setId(0);
-        	pos.setInnerCode(core.getInnerCode());
-        	posList.add(pos);
-        	core.getChannel().get(0).setPosInfos(posList);
-        }
-        //终端
-        List<MerchantTerminal> terminalList = core.getChannel().get(0).getTerminaInfos();
-        if(CollectionUtils.isEmpty(terminalList)){
-        	 terminalList = Lists.newArrayList();
-             MerchantTerminal terminal = new MerchantTerminal();
-//             terminal.setId(0);
-             terminal.setInnerCode(core.getInnerCode());
-             terminalList.add(terminal);
-             core.getChannel().get(0).setTerminaInfos(terminalList);
-        }
-       
         
       //查询名称
         if(!Strings.isNullOrEmpty(core.getInnerCode())) {
@@ -428,6 +433,23 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         merchantCore.setModifyTime(new Date());
         merchantCore.setStatus(1);
         merchantCore.setLegalValidCardType("0");//身份证
+        if(merchantCore != null){
+        	if(Strings.isNullOrEmpty(merchantCore.getMerName())){
+        		return ResultDTO.failForMessage("商户名不能为空");
+        	}
+        	if(Strings.isNullOrEmpty(merchantCore.getAbbreviation())){
+        		return ResultDTO.failForMessage("商户名简称不能为空");
+        	}
+        	
+        	int max = 18;
+        	if(StringUtils.trim(merchantCore.getLegalPersonMobile()).length() > max){
+        		return ResultDTO.failForMessage("手机号不合法，请重新输入");
+        	}
+        	boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", merchantCore.getCardNum());
+        	if(b == false){
+        		return ResultDTO.failForMessage("身份证格式不正确请重新输入");
+        	}
+        }
       //根据商户性质获取商户种类
         if(merchantCore.getEtpsAttr() != null){
 			int etps_tp = merchantEntityService.getEtpsTypeByEtpsAttra(merchantCore.getEtpsAttr());
@@ -450,7 +472,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
       	if(!Strings.isNullOrEmpty(merchantCore.getRegistAddressDetail())) {
       		sb.append(merchantCore.getRegistAddressDetail());
       	}
-      	
+      	if(sb.toString().length() > 20){
+      		return ResultDTO.failForMessage("详细地址超长");
+      	}
       	if(!Strings.isNullOrEmpty(sb.toString())) {
       		merchantCore.setRegistAddress(sb.toString());
       	}
@@ -498,6 +522,16 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         String innerCode = "";
         for (MerchantContact merchantContact : merchantContacts) {
+        	//联系人手机
+        	int max = 18;
+        	if(StringUtils.trim(merchantContact.getContactMobile()).length() > 18){
+        		return ResultDTO.failForMessage("联系人手机有误请重新输入");
+        	}
+        	//校验邮箱
+        	boolean b = checkEmail(merchantContact.getContactEmail());
+        	if(b == false){
+        		return ResultDTO.failForMessage("邮箱输入有误请重新输入");
+        	}
             if (null != merchantContact.getId()) {
                 merchantContactDao.updateByPrimaryKeySelective(merchantContact);
             } else {
@@ -509,6 +543,17 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         return new ResultDTO<>(true, innerCode, CoreConstants.WEB_SAVE_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SAVE_OK));
 
     }
+    
+    public static boolean checkEmail(String email){
+	     boolean tag = true; 
+	     final String pattern1 = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$"; 
+	     final Pattern pattern = Pattern.compile(pattern1); 
+	     final Matcher mat = pattern.matcher(email); 
+	     if (!mat.find()) { 
+	         tag = false; 
+	     } 
+	     return tag;  
+    } 
 
     /**
      * (non-Javadoc)保存终端信息
@@ -603,6 +648,23 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         String innerCode = "";
         for (MerchantBank merchantBank : merchantBanks) {
+        	//开户手机号
+            	int max = 11;
+            	if(StringUtils.trim(merchantBank.getAccountPhone()).length() > max){
+            		return ResultDTO.failForMessage("手机号不合法，请重新输入");
+            	}
+          
+        	//开户身份证
+              	boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", merchantBank.getAccountCardId());
+              	if(b == false){
+              		return ResultDTO.failForMessage("身份证格式不正确请重新输入");
+              	}
+            //开户账号40位以内
+            int accountMax = 40;
+            if(StringUtils.trim(merchantBank.getAccountNo()).length() > accountMax){
+        		return ResultDTO.failForMessage("开户账号有误，请重新输入");
+        	}
+            
             if (null != merchantBank.getId()) {
                 merchantBankDao.updateByPrimaryKeySelective(merchantBank);
             } else {
@@ -758,37 +820,104 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 	public MerchantCoreEntityZxyhDTO queryZXYHInfoById(Integer id) {
 		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
 		MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO = new MerchantCoreEntityZxyhDTO();
-		MerchantCore core = merchantCoreDao.queryAllById(id);
+		MerchantCore core = merchantCoreDao.queryAllByIdForAddZXMerc(id);
         if (core == null) {
-            
+        	return null;
         }
-        MerchantContact merchantContact = core.getContacts().get(0);//获取商户联系人信息
-        MerchantBank merchantBank = core.getBanks().get(0); //获取商户的开户行信息
-        if(merchantContact == null || merchantBank == null){
-
-        }
-        merchantCoreEntityZxyhDTO.setMchtNm(core.getMerName());//商户全称
-        merchantCoreEntityZxyhDTO.setMchtCnAbbr(core.getAbbreviation());//商户简称
-        merchantCoreEntityZxyhDTO.setEtpsAttr(core.getEtpsAttr().toString());//商户性质
-        merchantCoreEntityZxyhDTO.setEtpsTp(core.getEtpsTp().toString());//商户种类
-        merchantCoreEntityZxyhDTO.setMchtTel(core.getLegalPersonMobile());//商户电话
-        merchantCoreEntityZxyhDTO.setContact(merchantContact.getContactName());//联系人姓名
-        merchantCoreEntityZxyhDTO.setCommTel(merchantContact.getContactMobile());//联系人电话
-        merchantCoreEntityZxyhDTO.setCommEmail(merchantContact.getContactEmail());//联系人邮箱
-        merchantCoreEntityZxyhDTO.setLicenceNo(core.getBusinessLicenseNum());//营业执照号
-        merchantCoreEntityZxyhDTO.setManager(core.getLegalPerson());//法人姓名
-        merchantCoreEntityZxyhDTO.setIdentityNo(core.getCardNum());//法人身份证号码   正确身份证格式
-        merchantCoreEntityZxyhDTO.setProvCode(core.getRegistProvince().toString());//商户所属省
-        merchantCoreEntityZxyhDTO.setCityCode(core.getRegistCity().toString());//商户所属市
-        merchantCoreEntityZxyhDTO.setAreaCode(core.getRegistArea().toString());//商户所属区
-        merchantCoreEntityZxyhDTO.setAddr(core.getRegistAddress());//详细地址  20字以内
-        merchantCoreEntityZxyhDTO.setSettleAcctNm(merchantBank.getAccountName());//结算开户名
-        merchantCoreEntityZxyhDTO.setSettleAcct(merchantBank.getAccountNo());//开户账号  40以内数字
-        merchantCoreEntityZxyhDTO.setAccIdeNo(merchantBank.getAccountCardId());//开户人身份证号
-        merchantCoreEntityZxyhDTO.setAccPhone(core.getLegalPersonMobile());//开户手机号（11位以内数字）  目前写入了法人手机号需确定 
-        merchantCoreEntityZxyhDTO.setSettleBankAllName(merchantBank.getOpenBank());//收款银行全称
-        merchantCoreEntityZxyhDTO.setSettleBankCode(merchantBank.getOpenBankNum());//开户行行号
-        return merchantCoreEntityZxyhDTO;
+        	merchantCoreEntityZxyhDTO.setInnerCode(core.getInnerCode());
+        	MerchantContact merchantContact = null;
+        	MerchantBank merchantBank = null;
+        	if(core.getContacts().size() > 0){
+        		merchantContact = core.getContacts().get(0);//获取商户联系人信息
+        	}
+        	if(core.getBanks().size() > 0){
+        		merchantBank = core.getBanks().get(0); //获取商户的开户行信息
+        	}
+             if(merchantContact == null || merchantBank == null){
+            	 return null;
+             }
+             MerchantTerminal terminalWX = core.getTerminaInfosWX();
+             if(terminalWX != null){
+            	 merchantCoreEntityZxyhDTO.setWXActive("Y");
+            	 //微信分类编码不足两位前面补0
+            	 DecimalFormat df=new DecimalFormat("00");
+            	 merchantCoreEntityZxyhDTO.setqGroupId(df.format(Integer.parseInt(terminalWX.getqGroupId())));
+                 merchantCoreEntityZxyhDTO.setCategroryId(terminalWX.getCategroryId());
+                 merchantCoreEntityZxyhDTO.setFeeRate(terminalWX.getWechatFee());
+                 merchantCoreEntityZxyhDTO.setSettleCycle(terminalWX.getSettleCycle());
+             }else{
+            	 merchantCoreEntityZxyhDTO.setWXActive("N");
+             }
+             //公众号
+             MerchantTerminal terminalGZH = core.getTerminaInfosGZH();
+             if(terminalGZH != null){
+            	 merchantCoreEntityZxyhDTO.setSubAppid(terminalGZH.getSubAppId().toString());//关联公众号
+            	 merchantCoreEntityZxyhDTO.setJsapiPath(terminalGZH.getJsapiPath());
+             }
+             MerchantTerminal terminalZFB = core.getTerminaInfosZFB();
+             if(terminalZFB != null){
+            	 merchantCoreEntityZxyhDTO.setZFBActive("Y");
+            	 merchantCoreEntityZxyhDTO.setqGroupId(terminalZFB.getqGroupId());
+//            	 merchantCoreEntityZxyhDTO.setCategIdC(terminalZFB.getqGroupId());
+            	 merchantCoreEntityZxyhDTO.setFeeRateA(terminalZFB.getAlipayFee());
+            	 merchantCoreEntityZxyhDTO.setSettleCycleA(terminalZFB.getSettleCycle());
+             }else{
+            	 merchantCoreEntityZxyhDTO.setZFBActive("N");
+             }
+             
+             
+             merchantCoreEntityZxyhDTO.setMchtNm(core.getMerName());//商户全称
+             merchantCoreEntityZxyhDTO.setMchtCnAbbr(core.getAbbreviation());//商户简称
+             merchantCoreEntityZxyhDTO.setEtpsAttr(core.getEtpsAttr().toString());//商户性质
+             merchantCoreEntityZxyhDTO.setEtpsTp(core.getEtpsTp().toString());//商户种类
+             merchantCoreEntityZxyhDTO.setMchtTel(core.getLegalPersonMobile());//商户电话
+             merchantCoreEntityZxyhDTO.setContact(merchantContact.getContactName());//联系人姓名
+             merchantCoreEntityZxyhDTO.setCommTel(merchantContact.getContactMobile());//联系人电话
+             merchantCoreEntityZxyhDTO.setCommEmail(merchantContact.getContactEmail());//联系人邮箱
+             merchantCoreEntityZxyhDTO.setLicenceNo(core.getBusinessLicenseNum());//营业执照号
+             merchantCoreEntityZxyhDTO.setManager(core.getLegalPerson());//法人姓名
+             merchantCoreEntityZxyhDTO.setIdentityNo(core.getCardNum());//法人身份证号码   正确身份证格式
+             net.fnsco.bigdata.service.domain.Area area = new net.fnsco.bigdata.service.domain.Area();
+             area = areaDao.getById(core.getRegistProvince());
+             merchantCoreEntityZxyhDTO.setProvCode(area.getZxyh_code());//商户所属省
+             area = areaDao.getById(core.getRegistCity());
+             merchantCoreEntityZxyhDTO.setCityCode(area.getZxyh_code());//商户所属市
+             area = areaDao.getById(core.getRegistArea());
+             merchantCoreEntityZxyhDTO.setAreaCode(area.getZxyh_code());//商户所属区
+             merchantCoreEntityZxyhDTO.setAddr(core.getRegistAddress());//详细地址  20字以内
+             
+             merchantCoreEntityZxyhDTO.setSettleAcctNm(merchantBank.getAccountName());//结算开户名
+             merchantCoreEntityZxyhDTO.setSettleAcct(merchantBank.getAccountNo());//开户账号  40以内数字
+             merchantCoreEntityZxyhDTO.setAccIdeNo(merchantBank.getAccountCardId());//开户人身份证号
+             merchantCoreEntityZxyhDTO.setAccPhone(merchantBank.getAccountPhone());//开户手机号（11位以内数字）  
+             merchantCoreEntityZxyhDTO.setSettleBankAllName(merchantBank.getOpenBank());//收款银行全称
+             merchantCoreEntityZxyhDTO.setSettleBankCode(merchantBank.getOpenBankNum());//开户行行号
+             
+             merchantCoreEntityZxyhDTO.setThirdMchtNo(core.getInnerCode());//第三方平台子商户号 对应我们内部商户号
+             merchantCoreEntityZxyhDTO.setIsOrNotZxMchtNo("Y");
+             if(StringUtils.equals("0", merchantBank.getAccountType()) ){
+            	 merchantBank.setAccountType("2");
+             }
+             merchantCoreEntityZxyhDTO.setAcctType(merchantBank.getAccountType());//账户类型
+             
+             return merchantCoreEntityZxyhDTO;
+       
 	}
+
+	//进件中信商户后回调函数
+	@Transactional
+	@Override
+	public void updateInfoByInnerCode(String innerCode, String secMerId) {
+		//更新渠道商户信息状态
+		this.merchantCoreDao.updateStatusByInnerCode(innerCode);
+		
+		//更新通道信息表
+		MerchantChannel channel = new MerchantChannel();
+		channel.setInnerCode(innerCode);
+		channel.setChannelMerId(secMerId);
+		channel.setModifyTime(new Date());
+		this.merchantChannelDao.updateChannelMercIdByInnerCode(channel);
+		
+	} 
 
 }

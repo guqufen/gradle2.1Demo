@@ -221,6 +221,10 @@ public interface MerchantCoreService {
     List<MerchantEntityCoreRef> queryEntityCoreRefByInnerCode(String innerCode);
 
     MerchantCoreEntityZxyhDTO  queryZXYHInfoById(Integer id);
+
+//	void updateStatusByInnerCode(String innerCode);
+
+	void updateInfoByInnerCode(String innerCode, String secMerId);
     
     
 }

@@ -64,8 +64,33 @@ public class MerchantTerminal extends DTO{
     private String categroryId;
     private String settleCycle;
     private String jsapiPath;
+    
+    private Integer terminalId;
+    
 
-    public Integer getSubAppId() {
+    /**
+	 * terminalId
+	 *
+	 * @return  the terminalId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getTerminalId() {
+		return terminalId;
+	}
+
+	/**
+	 * terminalId
+	 *
+	 * @param   terminalId    the terminalId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setTerminalId(Integer terminalId) {
+		this.terminalId = terminalId;
+	}
+
+	public Integer getSubAppId() {
   		return subAppId;
   	}
 

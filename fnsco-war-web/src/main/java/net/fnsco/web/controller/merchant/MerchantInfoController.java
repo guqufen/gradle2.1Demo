@@ -377,4 +377,5 @@ public class MerchantInfoController extends BaseController {
 	public ResultDTO<List<Agent>> queryAllAgent() {
 		return merchantCoreService.queryAllAgent();
 	}
+	
 }

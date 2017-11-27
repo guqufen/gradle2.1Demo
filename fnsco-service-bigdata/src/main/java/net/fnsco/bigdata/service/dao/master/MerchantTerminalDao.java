@@ -70,6 +70,10 @@ public interface MerchantTerminalDao {
      * @return
      */
     List<MerchantTerminal> selectByInnerCode(@Param("innerCode")String innerCode);
+    
+    MerchantTerminal selectByInnerCodeWX(@Param("innerCode")String innerCode);
+    MerchantTerminal selectByInnerCodeZFB(@Param("innerCode")String innerCode);
+    MerchantTerminal selectByInnerCodeGZH(@Param("innerCode")String innerCode);
     /**
      * 
      * queryByInnerCode:(这里用一句话描述这个方法的作用) APP端使用
@@ -111,15 +115,6 @@ public interface MerchantTerminalDao {
      * @since  CodingExample　Ver 1.1
      */
     int deleteByMerCoreIds(Integer[] ids);
-    /**
-     * queryTerByPosId:(这里用一句话描述这个方法的作用)根据POS ID获取
-     * @param posId
-     * @return    设定文件
-     * @author    tangliang
-     * @date      2017年8月16日 下午2:09:34
-     * @return List<String>    DOM对象
-     */
-    List<TerminalInfoDTO> queryTerByPosId(@Param("posId")Integer posId);
     
     /**
      * queryAllTerByPosId:(这里用一句话描述这个方法的作用)查询所有数据
@@ -137,7 +132,6 @@ public interface MerchantTerminalDao {
      */
      String querySnCode(@Param("id") String id,@Param("code") String code);
      
-     MerchantTerminal selectOneByTermId(@Param("termId") String termId, @Param("channelType") String channelType);
      /**
       * selectByTerminalType:(查询)
       * @param posId

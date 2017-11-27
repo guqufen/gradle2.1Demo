@@ -27,6 +27,15 @@ public class Area {
 	 */
 	private Integer level;
 
+	private String zxyh_code;
+	public String getZxyh_code() {
+		return zxyh_code;
+	}
+
+	public void setZxyh_code(String zxyh_code) {
+		this.zxyh_code = zxyh_code;
+	}
+
 	public Integer getId() {
 		return id;
 	}
