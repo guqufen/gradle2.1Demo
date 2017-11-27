@@ -40,6 +40,7 @@ public class ProjController extends BaseController{
     @ResponseBody
     @ApiOperation(value = "新增项目", notes = "新增项目")
     public ResultDTO addProject(ProjDO projDO){
+    	String filePath = request.getSession().getServletContext().getRealPath("");
     	//获取当前登录的用户
     	UserInfo user = (UserInfo) getSessionUser();
     	Long userId = userBasicDAO.queryUserIdByEmail(user.getEmail());
@@ -47,7 +48,7 @@ public class ProjController extends BaseController{
     	projDO.setCreateDate(new Date());
     	projDO.setModifyDate(new Date());
     	projService.add(projDO);
-    	boolean succsss = projService.exportJson(projDO.getName(),projDO.getJsonStr());
+    	boolean succsss = projService.exportJson(filePath,projDO.getName(),projDO.getJsonStr());
     	if(!succsss){
             return ResultDTO.fail();
         }
