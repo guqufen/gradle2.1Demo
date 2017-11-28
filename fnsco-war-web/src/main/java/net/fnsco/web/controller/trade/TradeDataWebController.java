@@ -143,6 +143,9 @@ public class TradeDataWebController extends BaseController {
     @ResponseBody
     @RequiresPermissions(value = { "m:trade:export" })
     public void export(TradeDataDTO tradeDataDTO, HttpServletRequest req, HttpServletResponse response) throws IOException {
+    	if("null".equals(tradeDataDTO.getChannelType())) {
+    		tradeDataDTO.setChannelType(null);
+    	}
         List<TradeData> dataList = tradeDataService.queryDataList(tradeDataDTO);
         // 转换日期显示
         if (dataList != null) {
@@ -526,6 +529,9 @@ public class TradeDataWebController extends BaseController {
     @ResponseBody
     @RequiresPermissions(value = { "m:trade:export" })
     public void exportLkl(TradeDataDTO tradeDataDTO, HttpServletRequest req, HttpServletResponse response) throws IOException {
+    	if("null".equals(tradeDataDTO.getChannelType())) {
+    		tradeDataDTO.setChannelType(null);
+    	}
         List<TradeDataLkl> dataList = tradeDataLklService.queryDataList(tradeDataDTO);
         // 转换日期显示
         if (dataList != null) {
@@ -607,11 +613,11 @@ public class TradeDataWebController extends BaseController {
         String[] itemMarks = itemMark.split(",");// 键
         String[] itemParaps = itemParap.split(",");// 列头
 
-        HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "交易流水");
+        HSSFWorkbook workbook = ExcelUtils.getInputStream(itemParaps.length, itemMarks, itemParaps, list, "拉卡拉交易流水");
 
         response.setContentType("application/vnd.ms-excel;");
         String nowStr = DateUtils.getNowYMDStr();
-        String fileName = "交易流水" + nowStr + ".xls";
+        String fileName = "拉卡拉交易流水" + nowStr + ".xls";
         response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("GB2312"), "ISO8859_1"));// 设定输出文件头
 
         OutputStream ouputStream = response.getOutputStream();

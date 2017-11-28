@@ -143,7 +143,15 @@
 <script type="text/javascript" src="swagger/drore-document-ui/ace/bootstrap.min.js"></script>
 <script type="text/javascript" src="swagger/drore-document-ui/ace/ace.min.js"></script>
 <script type="text/javascript">
-DApiUI.init("v2/api-docs?group=web");
+
+function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  decodeURI(r[2]); return null;
+}
+var v = GetQueryString('url');
+DApiUI.init(v);
 </script>
 <!----jsonhandle-->
 </body>

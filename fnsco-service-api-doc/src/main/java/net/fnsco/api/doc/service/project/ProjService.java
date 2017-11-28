@@ -3,9 +3,9 @@ package net.fnsco.api.doc.service.project;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
@@ -13,6 +13,7 @@ import com.google.common.base.Strings;
 import net.fnsco.api.doc.service.project.dao.ProjDAO;
 import net.fnsco.api.doc.service.project.entity.ProjDO;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultPageDTO;
 
 /**
  * @desc 新增项目service
@@ -23,8 +24,15 @@ import net.fnsco.core.base.BaseService;
 public class ProjService extends BaseService {
 	@Autowired
 	private ProjDAO projDAO;
-	@Autowired
-	private Environment env;
+	
+	public ResultPageDTO<ProjDO> queryProj(ProjDO projDO, Integer currentPageNum, Integer pageSize){
+		logger.info("开始分页查询TradeDataService.page, tradeData=" + projDO.toString());
+        List<ProjDO> datas = projDAO.pageList(projDO, currentPageNum, pageSize);
+        Integer total = projDAO.pageListCount(projDO);
+        ResultPageDTO<ProjDO> result = new ResultPageDTO<ProjDO>(total, datas);
+        result.setCurrentPage(currentPageNum);
+        return result;
+	}
 
 	public void add(ProjDO projDO) {
 		projDAO.insert(projDO);
@@ -34,9 +42,7 @@ public class ProjService extends BaseService {
 		if (Strings.isNullOrEmpty(jsonParams)) {
 			return false;
 		}
-		createFile(filePath,name, jsonParams);
-
-		return false;
+		return createFile(filePath,name, jsonParams);
 	}
 
 	/**
@@ -63,6 +69,7 @@ public class ProjService extends BaseService {
 				writeFileContent(filenameTemp, filecontent);
 			}
 		} catch (Exception e) {
+			logger.error("创建"+ name +".txt失败 ");
 			e.printStackTrace();
 		}
 
@@ -80,7 +87,7 @@ public class ProjService extends BaseService {
 	 * @throws IOException
 	 */
 	public boolean writeFileContent(String filepath, String newstr) throws IOException {
-		Boolean bool = false;
+		Boolean bool = true;
 		{
 			try {
 				// 创建文件对象
@@ -92,7 +99,7 @@ public class ProjService extends BaseService {
 				// 关闭
 				fileWriter.close();
 			} catch (IOException e) {
-				//
+				logger.error("导入txt失败 ");
 				e.printStackTrace();
 			}
 			return bool;

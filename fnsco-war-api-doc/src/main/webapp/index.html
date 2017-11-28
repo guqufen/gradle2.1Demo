@@ -126,7 +126,7 @@
 						</a>
 							<ul class="nav nav-second-level collapse" aria-expanded="false"
 								style="height: 0px;">
-								<li><a class="J_menuItem" href="basicinformation.html"
+								<li><a class="J_menuItem" href="projectadminister.html"
 									data-index="1">项目基本信息</a></li>
 								<li><a class="J_menuItem" href="projectmembers.html"
 									data-index="1">项目成员</a></li>
@@ -241,12 +241,14 @@
 						var editStr = "<li class=''>"+
 						"<a href='#'>"+
 						"<i class='glyphicon glyphicon-home'></i>"+
-						"<span class='nav-label'>项目名称</span><span class='fa arrow'></span>"+
+						"<span class='nav-label'>项目列表</span><span class='fa arrow'></span>"+
 						"</a><ul class='nav nav-second-level collapse' aria-expanded='false' style='height: 0px;'>"
 						for(var i =0; i< menuList.length; i++){
 								var menuP = menuList[i];
+								var url = "doc.html?url=" +menuP.url;
+								url=encodeURI(url); 
 						        editStr = editStr + "<li>"+
-						        "<a class='J_menuItem' href='doc.html' data-index="+menuP.id+">"+menuP.name+"</a></li>";
+						        "<a class='J_menuItem' href='"+url+"' data-index="+menuP.id+">"+menuP.name+"</a></li>";
 						}
 						editStr = editStr + "</ul></li>";
 						menu.append(editStr);

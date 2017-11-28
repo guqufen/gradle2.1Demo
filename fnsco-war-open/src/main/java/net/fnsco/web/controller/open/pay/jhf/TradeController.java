@@ -144,6 +144,7 @@ public class TradeController extends BaseController {
         tradeOrder.setOrderTop10(tradeJO.getDate());
         tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
         tradeOrder.setRespCode("1001");
+        //tradeOrder.setSettleStatus(4);
         ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder, tradeJO.getPageNum(), tradeJO.getPageSize());
         List<TradeOrderDO> resultList = resultDTO.getList();
         for (TradeOrderDO tradeOrderDO : resultList) {
