@@ -1,4 +1,4 @@
-package net.fnsco.bigdata.service.domain.trade;
+package net.fnsco.bigdata.api.dto;
 
 import java.util.List;
 
@@ -10,26 +10,6 @@ import net.fnsco.bigdata.service.domain.MerchantContact;
 import net.fnsco.core.base.DTO;
 
 public class MerchantCoreEntityZxyhDTO{
-//	    public void init(String pid, String merId) {
-//	        this.setIsISV("1");//填写数字，1=是，0=否
-//	        this.setIsvpid(pid);
-//	        this.setBDActive("N");
-//	        this.setApType("1");//1-新增 
-//	        this.setSignMethod("02");//02-MD5  03-RSA
-//	        this.setMerId(merId);
-//	        this.setMainMchtTpA("D1");//D1-普通类
-//	        this.setOlCodeA("D1|D2");//支付方式编码，可填多个，以“|”分割；D1-二清被扫 D2-二清主扫
-//	        this.setMainMchtTp("02");//微信主商户号类型
-//	        //        00-医疗教育类 01-公共事业类 02-其他类 
-//	        //        03-WAP
-//
-//	        this.setOlCode1("01|02|03|06");//支付方式编码，可填多个，以“|”分割
-//	        //        01-被扫  
-//	        //        02-主扫  
-//	        //        03-公众号支付
-//	        //        06-H5
-//
-//	    }
 		private String innerCode;
 	    
 		private String mchtNm;           //     商户全称    String  申请类型=1 时，必填，20位以内   

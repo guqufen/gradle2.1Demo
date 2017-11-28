@@ -23,6 +23,7 @@ import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.constant.BigdataConstant;
+import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.AgentDao;
@@ -50,7 +51,6 @@ import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantFileTemp;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
-import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
