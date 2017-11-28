@@ -52,6 +52,7 @@
     <result column="agent_id" property="agentId" jdbcType="INTEGER" />
     <result column="mer_id" property="merId" jdbcType="VARCHAR" />
     <result column="channel_type" property="channelType" jdbcType="VARCHAR" />
+    <result column="merc_name" property="entityMerName" jdbcType="VARCHAR" />
   </resultMap>
   <!-- APP商户终端列表结果集 -->
   <resultMap  id="TerminalResultMap" type="net.fnsco.bigdata.api.dto.MerTerminalsDTO">
@@ -166,7 +167,7 @@
     CO.id, CO.agent_id,CO.inner_code, CO.mer_name, CO.abbreviation, CO.en_name, CO.sign_date, CO.legal_person, CO.legal_person_mobile, 
     CO.legal_person_tel, CO.legal_valid_card_type, CO.card_num, CO.card_valid_time, CO.business_license_num, 
     CO.business_license_valid_time, CO.tax_regist_code, CO.regist_address, CO.merc_flag, CO.source, 
-    CO.modify_user_id, CO.modify_time,CO.create_time, CO.status , CH.channel_type
+    CO.modify_user_id, CO.modify_time,CO.create_time, CO.status , CH.channel_type,ME.merc_name
   </sql>
  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -491,6 +492,8 @@
      select 
      <include refid="Base_Column_CH_List" />
    	 from m_merchant_core AS CO LEFT JOIN m_merchant_channel AS CH ON CO.inner_code = CH.inner_code
+   	 LEFT JOIN m_merchant_core_entity_ref AS CER ON CO.inner_code = CER.inner_code
+	 LEFT JOIN m_merchant_entity AS ME ON CER.entity_inner_code = ME.entity_inner_code
   	<where>
   	<if test="condition.merId != null and condition.merId != ''" >
          AND CO.inner_code in (
