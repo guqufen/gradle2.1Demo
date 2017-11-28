@@ -12,9 +12,9 @@ public interface OrderPaymentService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
+	public Map<String, Object> generateQRCodeWeiXin(String innerCode,String orderBody,String txnAmt);
 	
-	
-	public Map<String, Object> generateQRCodeAliPay();
+	public Map<String, Object> generateQRCodeAliPay(String innerCode,String ip,String orderBody,String txnAmt);
 	
     public Map<String, Object> mechAdd(MerchantCoreEntityZxyhDTO core);
     
