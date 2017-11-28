@@ -462,4 +462,20 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         String type = tradeListDAO.queryByCertifyId(certifyid, cardTotalLength);
         return type;
     }
+    
+    /**
+     * 通过渠道终端号商户号和订单号查找交易
+     * @param record
+     * @return
+     */
+   public TradeData selectByCMT(TradeData record){
+	   return tradeListDAO.selectByCMT(record);
+   }
+   
+   /**
+    * 
+    */
+   public int updateByPrimaryKeySelective(TradeData record){
+	   return tradeListDAO.updateByPrimaryKey(record);
+   }
 }
