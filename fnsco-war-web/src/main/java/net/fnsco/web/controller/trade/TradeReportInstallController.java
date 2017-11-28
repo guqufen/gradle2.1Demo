@@ -119,6 +119,7 @@ public class TradeReportInstallController extends BaseController {
 			if(!Strings.isNullOrEmpty(appUser.getPassword())) {
 				appUser.setPassword(Md5Util.getInstance().md5(appUser.getPassword()));
 				appUser.setInviteStatus(0);
+				appUser.setRemark("数据来自浙付通");
 				appUserDao.updateByPrimaryKeySelective(appUser);
 			}
 		}

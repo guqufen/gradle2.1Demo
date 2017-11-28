@@ -2,6 +2,7 @@ package net.fnsco.trading.service.pay.channel.zxyh;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.StringUtils;
@@ -15,11 +16,14 @@ import com.beust.jcommander.internal.Maps;
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.merchant.MerchantChannelService;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
+
+import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.sys.SequenceService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
+
 import net.fnsco.bigdata.comm.ServiceConstant.PaySubTypeAllEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.PayTypeEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
@@ -41,6 +45,8 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
     private Environment env;
     @Autowired
     private MerchantChannelDao merchantChannelDao;
+    @Autowired
+    private TradeDataService tradeDataService;
     @Autowired
 	private MerchantChannelService merchantChannelService;
     @Autowired
@@ -223,39 +229,28 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
      * @param reqStr：被扫实体对象
      * @return:被扫交易应答JSON字符串
      */
-    public String PassivePay(PassivePayDTO passivePayDTO){
+    public String PassivePay(String innerCode, PassivePayDTO passivePayDTO){
 
     	String url = "/MPay/misRequest.do";
     	PassivePayDTO passDTO = new PassivePayDTO();
     	passDTO.init();
 
     	//通过内部商户号查找绑定的中信商户号
-    	MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(passivePayDTO.getStdmercno(), "05");
+    	MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, "05");
     	if( null == merchantChannel){
-    		logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=["+passivePayDTO.getStdmercno()+"");
-    		return null;
+    		logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=["+innerCode+"");
+    		Map<String, String> map = new HashMap<>();
+    		map.put("respCode", "9999");
+    		map.put("respMsg", "系统异常");
+    		return map.toString();
     	}
     	passDTO.setStdmercno2(merchantChannel.getChannelMerId());//二级商户号，使用分账功能时上传，是与stdmercno关联的分账子商户号
-
+    	passDTO.setStdprocode(passivePayDTO.getStdprocode());//交易码，481000：微信消费 481003：支付宝二清消费
+    	passDTO.setStddiscamt(passivePayDTO.getStddiscamt());//不可优惠金额，支付宝必填
     	passDTO.setStdmsgtype("48");// 消息类型 M String(4) "48"
-    	if( "ZFB_PAY".equals(passivePayDTO.getStdprocode()) ){
-    		//不可优惠金额，支付宝必填
-    		if( org.apache.commons.lang3.StringUtils.isNotEmpty(passivePayDTO.getStddiscamt()) ){
-    			passDTO.setStddiscamt(passivePayDTO.getStddiscamt());
-    		}else{
-    			passDTO.setStddiscamt("0");
-    		}
-    		passDTO.setStdprocode("481003");//交易码，481000：微信消费 481003：支付宝二清消费
-    	}else if("WX_PAY".equals(passivePayDTO.getStdprocode())){
-    		passDTO.setStdprocode("481000");//交易码，481000：微信消费 481003：支付宝二清消费
-    	}else{
-    		return "交易码错误"+passivePayDTO.getStdprocode();
-    	}
-
     	passDTO.setStdorderid(System.currentTimeMillis() + "");//商户订单号，32个字符内
     	passDTO.setStdtrancur("156");// 交易币种 M String(3) 默认是156：人民币
     	passDTO.setNeedBankType("Y");// 值为“Y”时，支付成功、查询支付成功的订单会返回付款银行类型bankType
-
     	passDTO.setStdbegtime(DateUtils.getNowDateStr());//交易起始时间,yyyyMMddHHmmss
     	passDTO.setStd400memo(passivePayDTO.getStd400memo());//商品描述
     	passDTO.setStdtranamt(passivePayDTO.getStdtranamt());//交易金额,整数，以分为单位
@@ -264,7 +259,7 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
     	//插表处理
     	TradeData tradeData = new TradeData();
     	tradeData.setId(DbUtil.getUuid());//设置ID
-    	tradeData.setInnerCode(passivePayDTO.getStdmercno());//设置内部商户号
+    	tradeData.setInnerCode(innerCode);//设置内部商户号
     	tradeData.setTxnType(TradeTypeEnum.CONSUMER.getCode());//设置交易类型
     	tradeData.setCurrency(passDTO.getStdtrancur());//设置交易币种
     	tradeData.setBody(passDTO.getStd400memo());//商品描述
@@ -284,12 +279,14 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
     	String passiveStr = JSON.toJSONString(passDTO);//将对象转换为JSON字符串
     	tradeData.setTradeDetail(passiveStr);//设置交易详情，整个请求JSON字符串
     	tradeData.setMerId(passDTO.getStdmercno2());//设置结算商户号(二级商户号)
+    	tradeData.setSource("07");//设置来源，07-中信银行扫码
     	tradeData.setMd5(passivePayDTO.getSignAture());//设置md5唯一标识
     	tradeData.setSendTime(passDTO.getStdbegtime());//交易传送时间
     	tradeData.setCreateTime(new Date());//设置交易创建时间
-    	tradeData.setStatus(TradeStateEnum.SUCCESS.getCode());//设置交易状态1-正常交易；0非正常交易（包括撤销交易和撤销原交易
+    	tradeData.setStatus("1");//设置交易状态1-正常交易；0非正常交易（包括撤销交易和撤销原交易
     	tradeData.setPayMedium("01");//设置支付媒介，00-POS机；01-APP；02-台码
     	tradeData.setChannelTermCode(passDTO.getStdtermid());//设置渠道终端编号
+    	tradeDataService.saveTradeData(tradeData);//保存数据
     	
     	Map<String, String> passiveMap = JSON.parseObject(passiveStr, Map.class);//将JSON字符串转换为map
     	String respStr = ZxyhPayMD5Util.request(passiveMap, url, "https://120.27.165.177:8099");
@@ -299,9 +296,37 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
         System.out.println(respMap);
         String json = JSON.toJSONString(respMap);
         PassivePayDTO passDTO1 = JSON.parseObject(json, PassivePayDTO.class);
-        
-        
-//        String resultJson = "";
+
+        tradeData.setOrgMerOrderId(passDTO.getStdorderid());//设置原商户订单号为当前商户订单号
+    	TradeData tradeData2 = tradeDataService.selectByCMT(tradeData);//通过渠道终端号商户号和原订单号查找该笔交易(主要查找到主键key)
+    	if( null == tradeData2){
+    		logger.info("没有找到该交易请求交易,order_no=["+tradeData.getOrgMerOrderId()+"],channel_term_code=["+tradeData.getChannelTermCode()+"],mer_id=["+tradeData.getMerId()+"]");
+    		Map<String, String> map = new HashMap<>();
+    		map.put("respCode", "9999");
+    		map.put("respMsg", "系统异常");
+    		return map.toString();
+    	}
+
+        //支付成功，则直接更新交易状态
+        if("0000".equals(passDTO1.getStd400mgid())){
+        	tradeData2.setRespCode(TradeStateEnum.SUCCESS.getCode());//设置响应应答码
+        	
+        	tradeData2.setSuccTime(passDTO1.getEndTime());//交易成功时间(支付完成时间，成功时返回)
+        	
+        	tradeData2.setSettleAmount(passDTO1.getQstranamt());//清算金额
+        	tradeData2.setSettleCurrency(passDTO1.getQstrancur());//清算币种
+        	tradeData2.setSettleDate(passDTO1.getQs400trdt());//清算日起
+        	
+        }else if("1111".equals(passDTO1.getStd400mgid())){//进行中
+        	
+        }else{//交易失败
+        	tradeData2.setRespCode(TradeStateEnum.FAIL.getCode());//设置响应应答码
+        }
+        tradeData2.setRespMsg(passDTO1.getStdrtninfo());//设置响应信息
+        tradeData2.setTn(passDTO1.getStdrefnum());//受理订单号(取字段平台交易流水号)
+        tradeData2.setOrderIdScan(passDTO1.getTransactionId());//渠道订单号，交易成功返回，供后续退货/撤销使用
+        tradeDataService.updateByPrimaryKeySelective(tradeData2);//通过主键更新应答数据
+
 		return null;
     	
     }
