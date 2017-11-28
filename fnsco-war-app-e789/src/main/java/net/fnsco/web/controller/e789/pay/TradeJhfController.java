@@ -39,8 +39,8 @@ import net.fnsco.trading.service.order.entity.TradeOrderDO;
  *
  */
 @RestController
-@RequestMapping(value = "/e789/trade/jhf", method = RequestMethod.POST)
-@Api(value = "/e789/trade/jhf", tags = { "聚惠分相关功能接口" })
+@RequestMapping(value = "/mobile/trade/jhf", method = RequestMethod.POST)
+@Api(value = "/mobile/trade/jhf", tags = { "聚惠分相关功能接口" })
 public class TradeJhfController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
