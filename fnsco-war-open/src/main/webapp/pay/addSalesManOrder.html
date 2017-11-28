@@ -69,7 +69,11 @@
       			dataType : "json",
 				data:params,
 				success:function(data){
-					// console.log(data.data);
+					console.log(data);
+					if(data.code!='2000'){
+						mui.alert('网络正忙，请稍候再试！');
+						return;
+					}
 					window.location.href=data.data.url;
 				},
 				error: function(e) { 

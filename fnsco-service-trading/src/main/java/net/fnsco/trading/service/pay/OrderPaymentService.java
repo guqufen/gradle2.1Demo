@@ -1,8 +1,12 @@
 package net.fnsco.trading.service.pay;
 
+
+import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
+
 import java.util.Map;
 
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
+
 
 public interface OrderPaymentService {
     /**
