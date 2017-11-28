@@ -2,13 +2,14 @@
  * Created by xiaoym on 2017/4/17.
  */
 
-(function ($) {
+//(function ($) {
     //初始化类
     var DApiUI={};
 
-    DApiUI.init=function () {
+    DApiUI.init=function (argUrl) {
         $.ajax({
-            url:"v2/api-docs?group=web",
+            url:argUrl,
+            //url:"v2/api-docs?group=web",
             //url:"menu1.json",
             dataType:"json",
             type:"get",
@@ -1022,4 +1023,4 @@
 
 
 
-})(jQuery)
+//})(jQuery)

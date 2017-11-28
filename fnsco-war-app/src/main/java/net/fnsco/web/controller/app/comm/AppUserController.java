@@ -27,7 +27,6 @@ import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
-import net.fnsco.core.utils.OssUtil;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;

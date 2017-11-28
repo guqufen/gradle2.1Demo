@@ -31,7 +31,6 @@ import net.fnsco.web.controller.app.jo.DiscoveryJO;
 
 @RestController
 @RequestMapping(value = "/app/user", method = RequestMethod.POST)
-
 public class ConmmController extends BaseController {
     @Autowired
     private ConmmService           conmmService;

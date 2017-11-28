@@ -9,6 +9,19 @@ package net.fnsco.trading.service.pay.channel.zxyh.dto;
 
 */
 public class ActiveAlipayDTO {
+	 public void init(String merId) {
+	        this.setSignMethod("02");//02-MD5  03-RSA
+	        this.setTxnType("01");//消费
+	        this.setTxnSubType("010302");//支付宝二清主扫码消费
+	        this.setChannelType("6002");//商户互联网渠道
+	        this.setMerId(merId);//普通商户或一级商户的商户号
+	        this.setCurrencyType("156"); //默认是156：人民币
+
+	    }
+	
+	
+	
+	
     private String encoding;                  //  编码方式        M   String(10)  UTF-8
     private String signMethod;                // 签名方法      M   String(2)   签名方式：
     //    02：MD5

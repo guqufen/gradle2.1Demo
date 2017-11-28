@@ -144,6 +144,13 @@
       modify_user_id = #{modifyUserId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!-- 更新渠道商户号 -->
+  <update id="updateChannelMercIdByInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantChannel" >
+    update m_merchant_channel
+    	set channel_mer_id = #{channelMerId,jdbcType=VARCHAR},
+     		 modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+    where inner_code = #{innerCode,jdbcType=VARCHAR}
+  </update>
   <select id="selectByMerCode" resultMap="BaseResultMap"  >
     select 
     <include refid="Base_Column_List" />

@@ -12,19 +12,23 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.beust.jcommander.internal.Maps;
 
+import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
+import net.fnsco.bigdata.api.merchant.MerchantChannelService;
+import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.comm.ServiceConstant.PaySubTypeAllEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.PayTypeEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.TradeTypeEnum;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
-import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.DbUtil;
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.trading.service.pay.OrderPaymentService;
+import net.fnsco.trading.service.pay.channel.zxyh.dto.ActiveAlipayDTO;
+import net.fnsco.trading.service.pay.channel.zxyh.dto.ActiveWeiXinDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.MerchantZxyhDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.util.SignUtil;
@@ -36,6 +40,10 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
     private Environment env;
     @Autowired
     private MerchantChannelDao merchantChannelDao;
+    @Autowired
+	private MerchantChannelService merchantChannelService;
+    @Autowired
+	private MerchantCoreService merchantCoreService;
 
     /**
      * 
@@ -44,10 +52,10 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    public void mechAdd(MerchantCoreEntityZxyhDTO core) {
+    public Map<String, Object> mechAdd(MerchantCoreEntityZxyhDTO core) {
         String pid = env.getProperty("zxyh.alipay.pid");
         String merId = env.getProperty("zxyh.merId");
-        String url = "/MPayTransaction/ind/mchtadd.do";
+        String url = ":9001/MPayTransaction/ind/mchtadd.do";
         MerchantZxyhDTO mercDTO = new MerchantZxyhDTO();
         mercDTO.init(pid, merId);
         //赋值
@@ -81,8 +89,8 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
         mercDTO.setZFBActive(core.getZFBActive());
         if(StringUtils.equals("Y", core.getZFBActive())){
         	mercDTO.setCategIdC(core.getqGroupId());
-            mercDTO.setFeeRateA(core.getFeeRate());
-            mercDTO.setSettleCycleA(core.getSettleCycle());
+            mercDTO.setFeeRateA(core.getFeeRateA());
+            mercDTO.setSettleCycleA(core.getSettleCycleA());
         }
         //银行信息
         mercDTO.setThirdMchtNo(core.getThirdMchtNo());//第三方平台子商户号
@@ -100,10 +108,79 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
         String respStr = ZxyhPayMD5Util.request(mercMap, url);
         //解析返回报文
         Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
-        System.out.println(respMap);
-        String resultJson = "";
+        return respMap;
     }
 
+    
+    /**
+     * 微信主扫
+     */
+    public void generateQRCodeWeiXin(){
+    	String merId = env.getProperty("zxyh.merId");
+    	ActiveWeiXinDTO weiXinDTO = new ActiveWeiXinDTO();
+    	weiXinDTO.init(merId);
+    	String url = ":8099/MPay/backTransAction.do"; //生产是8092
+    	weiXinDTO.setEncoding("UTF-8");
+    	weiXinDTO.setBackEndUrl(""); //接收支付网关异步通知回调地址
+//        activeAlipayDTO.setMerId("994400000000009");//普通商户或平台商户的商户号
+    	weiXinDTO.setSecMerId("");//独立商户号  
+    	weiXinDTO.setTermIp("192.168.1.162");//发起支付的客户端真实IP
+    	weiXinDTO.setOrderId(""); //商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
+    	weiXinDTO.setOrderTime(""); //订单生成时间，格式 为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒 表示为20091225091010
+    	weiXinDTO.setOrderBody(""); //商品或支付单简要描述
+    	weiXinDTO.setOrderDetail("");//商品详细描述
+    	weiXinDTO.setTxnAmt("");//订单总金额(交易单位为分，例:1.23元=123) 只能整数
+        
+    	weiXinDTO.setAccountFlag("Y");//必填  Y
+    	weiXinDTO.setSecMerFeeRate("");//
+    	weiXinDTO.setNeedBankType("");//
+    	weiXinDTO.setIndependentTransactionFlag("Y");//必填Y
+        
+        String aliPayStr = JSON.toJSONString(weiXinDTO);
+        Map<String, String> aliPayMap = JSON.parseObject(aliPayStr, Map.class);
+        //发送中信报文
+        String respStr = ZxyhPayMD5Util.request(aliPayMap, url);
+        //解析返回报文
+        Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+        System.out.println(JSON.toJSON(respMap).toString());
+    }
+    
+    
+    /**
+     * 支付宝主扫
+     *
+     */
+    public Map<String, Object> generateQRCodeAliPay(){
+    	String merId = env.getProperty("zxyh.merId");
+    	ActiveAlipayDTO activeAlipayDTO = new ActiveAlipayDTO();
+    	activeAlipayDTO.init(merId);
+    	String url = ":8099/MPay/backTransAction.do";
+        activeAlipayDTO.setEncoding("UTF-8");
+        activeAlipayDTO.setBackEndUrl(""); //接收支付网关异步通知回调地址
+//        activeAlipayDTO.setMerId("994400000000009");//普通商户或平台商户的商户号
+        activeAlipayDTO.setSecMerId("");//独立商户号  
+        activeAlipayDTO.setTermIp("192.168.1.162");//发起支付的客户端真实IP
+        activeAlipayDTO.setOrderId(""); //商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
+        activeAlipayDTO.setOrderTime(""); //订单生成时间，格式 为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒 表示为20091225091010
+        activeAlipayDTO.setOrderBody(""); //商品或支付单简要描述
+        activeAlipayDTO.setOrderDetail("");//商品详细描述
+        activeAlipayDTO.setTxnAmt("");//订单总金额(交易单位为分，例:1.23元=123) 只能整数
+        
+        activeAlipayDTO.setAccountFlag("Y");//必填  Y
+        activeAlipayDTO.setSecMerFeeRate("");//
+        activeAlipayDTO.setNeedBankType("");//
+        activeAlipayDTO.setIndependentTransactionFlag("Y");//必填Y
+        
+        String aliPayStr = JSON.toJSONString(activeAlipayDTO);
+        Map<String, String> aliPayMap = JSON.parseObject(aliPayStr, Map.class);
+        //发送中信报文
+        String respStr = ZxyhPayMD5Util.request(aliPayMap, url);
+        //解析返回报文
+        Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+//        System.out.println(JSON.toJSON(respMap).toString());
+        return respMap;
+    }
+    
     public void test() {
         Map<String, String> parameterMap = Maps.newHashMap();
         String signAture = SignUtil.zxyhSign(parameterMap);

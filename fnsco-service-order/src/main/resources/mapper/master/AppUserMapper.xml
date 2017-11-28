@@ -347,4 +347,10 @@
 		from m_app_user
 		WHERE state = 1 and invite_status='0'
   </select>
+  <!-- 查询所有用户 -->
+  <select id="selectAllNewUserFormZFT" resultMap="BaseResultMap">
+     select
+		<include refid="Base_Column_List" />
+		from m_app_user  where remark = '-1200002'
+  </select>
 </mapper>

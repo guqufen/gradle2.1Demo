@@ -5,13 +5,13 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.bigdata.api.dto.MerTerminalsDTO;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantUserRel;
-import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.PageDTO;
 /**
  * @desc 商户基本信息DAO
@@ -169,6 +169,9 @@ public interface MerchantCoreDao {
 
     @Select("Select etps_attr from m_merchant_core WHERE inner_code =#{innerCode} ")
 	Integer getEtpsAttrByInnerCode(String innerCode);
+
+   
+	int updateStatusByInnerCode(@Param("innerCode") String innerCode);
 
 	
 
