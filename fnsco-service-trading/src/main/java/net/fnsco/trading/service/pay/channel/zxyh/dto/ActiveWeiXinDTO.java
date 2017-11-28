@@ -1,20 +1,21 @@
 package net.fnsco.trading.service.pay.channel.zxyh.dto;
 
-/*功能介绍2.1.8 支付宝二清主扫消费
-步骤（1）：用户从非微信浏览器的站点导航，进入商家网页，用户挑选需购买商
-品，选择支付方式为支付宝扫码支付，发起购买流程；
+/*功能介绍2.1.8 微信主扫消费
+步骤（1）：进入商家网页，用户挑选需购买商
+品，选择支付方式为扫码支付，发起购买流程；
 步骤（2）：商户调用本接口，得到二维码URL；
 步骤（3）：商户根据URL生成二维码，供用户扫码支付；
 步骤（4）：用户扫码并支付成功，商户后台得到支付成功的通知。
 
 */
-public class ActiveAlipayDTO {
+public class ActiveWeiXinDTO {
 	 public void init(String merId) {
 	        this.setSignMethod("02");//02-MD5  03-RSA
 	        this.setTxnType("01");//消费
-	        this.setTxnSubType("010302");//支付宝二清主扫码消费
+	        this.setTxnSubType("010130");//主扫码消费
 	        this.setChannelType("6002");//商户互联网渠道
 	        this.setMerId(merId);//普通商户或一级商户的商户号
+	        this.setPayAccessType("02");
 	        this.setCurrencyType("156"); //默认是156：人民币
 
 	    }
@@ -30,6 +31,7 @@ public class ActiveAlipayDTO {
     private String txnType;                   // 交易类型 M   String(2)   01：消费；
     private String txnSubType;                //交易子类型 M   String(6)   010302：支付宝二清主扫码消费
     private String channelType;               //接入渠道 M   String(4)   6002：商户互联网渠道;
+    private String payAccessType;			//02：接口支付
     private String backEndUrl;                //后台通知地址 M   String(512) 接收支付网关异步通知回调地址，POST方式
     private String merId;                     //商户编号  M   String(15)  普通商户或一级商户的商户号
     private String secMerId;                  // 分账子商户号   C   String(15)  使用分账功能时上传，是与merId关联的分账子商户号
@@ -37,18 +39,72 @@ public class ActiveAlipayDTO {
     private String termIp;                    //客户端真实IP M   String(16)  发起支付的客户端真实IP
     private String orderId;                   //商户订单号  M   String(32)  商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
     private String orderTime;                 //交易起始时间   M   String(14)  订单生成时间，格式为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒表示为20091225091010
+    private String productId;					//商品ID C 此id为二维码中包含的商品ID，商户自行定义。
     private String orderBody;                 //商品描述  M   String(20)  商品或支付单简要描述
     private String orderDetail;               //商品详细 C   String(100) 商品详细描述
+    private String orderGoodsTag;				//商品标记，代金券或立减优惠功能的参数
+    
     private String txnAmt;                    //交易金额  M   String(12)  订单总金额(交易单位为分，例:1.23元=123)，只能整数
     private String currencyType;              //交易币种     M   String(3)   默认是156：人民币
     private String accountFlag;               //分账标识 C   String(1)   使用分账功能时上传，当值为Y时，表示交易为分账交易，分账子商户号secMerId必传Y-分账 其它或不传-不分账
     private String secMerFeeRate;             // 分账子商户交易费率 C   String(16)  使用分账功能时上传，是分账子商户secMerId的交易费率（若费率是0.3%，此值传0.003，小数点后最多四位），此费率值不能比平台商户merId的费率低
-    private String disablePayChannels;        //要禁用的信用渠道  C   String(256) 禁用支付渠道 creditCard  信用卡；credit_group所有信用渠道，包含（信用卡，花呗）
+    private String attach;						// 附加数据 c 仅微信、QQ钱包适用；附加数据，在支付通知中原样返回，该字段主要用于商户携带订单的自定义数据，要求格式如下： bank_mch_name=xxxxx&bank_mch_id=xxxx&商户自定义参数
+    private String limitPay;					//指定支付方式	C	String(32)	仅微信适用；no_credit--指定不能使用信用卡支付
+//    private String disablePayChannels;        //要禁用的信用渠道  C   String(256) 禁用支付渠道 creditCard  信用卡；credit_group所有信用渠道，包含（信用卡，花呗）
 
     private String needBankType;              // 是否需要获取支付行类型   C   String(1)   传“Y”，即会在查询订单以及异步通知时返回“bankType”（支付行类型）、“orderOpenId”（支付用户id）字段
     private String independentTransactionFlag;//独立商户交易标识    C   String(1)   传“Y”，并且accountFlag也传“Y”时，即代表为独立商户交易
+    private String orderType;					//R	String(1)	京东支付必填，固定值：0或者1（0：：实物，1：虚拟）
 
-    /**
+    public String getPayAccessType() {
+		return payAccessType;
+	}
+
+	public void setPayAccessType(String payAccessType) {
+		this.payAccessType = payAccessType;
+	}
+
+	public String getProductId() {
+		return productId;
+	}
+
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+
+	public String getOrderGoodsTag() {
+		return orderGoodsTag;
+	}
+
+	public void setOrderGoodsTag(String orderGoodsTag) {
+		this.orderGoodsTag = orderGoodsTag;
+	}
+
+	public String getAttach() {
+		return attach;
+	}
+
+	public void setAttach(String attach) {
+		this.attach = attach;
+	}
+
+	public String getLimitPay() {
+		return limitPay;
+	}
+
+	public void setLimitPay(String limitPay) {
+		this.limitPay = limitPay;
+	}
+
+	public String getOrderType() {
+		return orderType;
+	}
+
+	public void setOrderType(String orderType) {
+		this.orderType = orderType;
+	}
+
+	/**
      * encoding
      *
      * @return  the encoding
@@ -464,28 +520,6 @@ public class ActiveAlipayDTO {
 
     public void setSecMerFeeRate(String secMerFeeRate) {
         this.secMerFeeRate = secMerFeeRate;
-    }
-
-    /**
-     * disablePayChannels
-     *
-     * @return  the disablePayChannels
-     * @since   CodingExample Ver 1.0
-    */
-
-    public String getDisablePayChannels() {
-        return disablePayChannels;
-    }
-
-    /**
-     * disablePayChannels
-     *
-     * @param   disablePayChannels    the disablePayChannels to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setDisablePayChannels(String disablePayChannels) {
-        this.disablePayChannels = disablePayChannels;
     }
 
     /**

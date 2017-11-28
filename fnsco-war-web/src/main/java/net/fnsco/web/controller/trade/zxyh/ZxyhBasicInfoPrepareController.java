@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
+import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.merchant.MerchantChannelService;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
-import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.OrderPaymentService;
