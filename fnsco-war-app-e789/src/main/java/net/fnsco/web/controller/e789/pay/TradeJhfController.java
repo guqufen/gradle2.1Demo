@@ -1,6 +1,5 @@
 package net.fnsco.web.controller.e789.pay;
 
- 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +83,8 @@ public class TradeJhfController extends BaseController {
         //String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
         //url += "?commID=" + tradeOrder.getChannelMerId() + "&reqData=" + reqData;
         String url = env.getProperty("open.base.url") + "/trade/pay/dealPayOrder";
-        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=123";
+        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId()
+               + "&reqData=123";
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
         resultMap.put("orderNo", tradeOrder.getOrderNo());
@@ -98,14 +98,16 @@ public class TradeJhfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getOrderInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/getOrderInfo")
     @ApiOperation(value = "获取商户编号")
-    public ResultDTO getOrderInfo(@RequestParam String orderNo) {
-        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
+    public ResultDTO getOrderInfo(@RequestBody TradeJO tradeJO) {
+        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(tradeJO.getOrderNo());
         tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
         tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
-        tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
-        MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
+        tradeOrderDO
+            .setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
+        MerchantCore merChantCore = merchantService
+            .getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
         if (null != merChantCore) {
             tradeOrderDO.setMercName(merChantCore.getMerName());
         }
@@ -118,7 +120,7 @@ public class TradeJhfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getOrderList", method = RequestMethod.GET)
+    @RequestMapping(value = "/getOrderList")
     @ApiOperation(value = "获取商户编号")
     public ResultDTO<TradeOrderDO> getOrderList(@RequestBody TradeJO tradeJO) {
         MerchantChannel merchantChannelJhf = new MerchantChannel();
@@ -128,20 +130,25 @@ public class TradeJhfController extends BaseController {
         tradeOrder.setOrderTop10(tradeJO.getDate());
         tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
         tradeOrder.setRespCode("1001");
-        ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder, tradeJO.getPageNum(), tradeJO.getPageSize());
+        ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder,
+            tradeJO.getPageNum(), tradeJO.getPageSize());
         List<TradeOrderDO> resultList = resultDTO.getList();
         for (TradeOrderDO tradeOrderDO : resultList) {
-            tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
+            tradeOrderDO
+                .setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
             tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
-            tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
+            tradeOrderDO
+                .setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
             BigDecimal eachMoney = tradeOrderDO.getEachMoney();
             if (null != eachMoney) {
-                eachMoney = eachMoney.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+                eachMoney = eachMoney.divide(new BigDecimal("100")).setScale(2,
+                    BigDecimal.ROUND_HALF_UP);
                 tradeOrderDO.setEachMoney(eachMoney);
             }
             BigDecimal orderAmount = tradeOrderDO.getOrderAmount();
             if (null != orderAmount) {
-                orderAmount = orderAmount.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+                orderAmount = orderAmount.divide(new BigDecimal("100")).setScale(2,
+                    BigDecimal.ROUND_HALF_UP);
                 tradeOrderDO.setOrderAmount(orderAmount);
             }
             //MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
