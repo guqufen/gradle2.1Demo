@@ -267,6 +267,9 @@
         agent_id,
       </if>
       <!-- 新增字段 -->
+      <if test="registAddressDetail != null" >
+        regist_address_detail,
+      </if>
       <if test="registProvince != null" >
         regist_province,
       </if>
@@ -351,6 +354,9 @@
         #{agentId,jdbcType=INTEGER},
       </if>
       <!-- 新增字段 -->
+      <if test="registAddressDetail != null" >
+         #{registAddressDetail,jdbcType=VARCHAR},
+      </if>
       <if test="registProvince != null" >
          #{registProvince,jdbcType=VARCHAR},
       </if>
