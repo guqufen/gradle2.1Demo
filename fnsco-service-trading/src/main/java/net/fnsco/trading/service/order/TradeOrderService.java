@@ -215,7 +215,9 @@ public class TradeOrderService extends BaseService {
         //（0 未支付 1支付成功 2支付失败 3已退货）
         if ("3".equals(order.getOrderStatus())) {//3已退货
             //先修改为无效订单再添加退货订单
-            tradeOrderDAO.updateOnlyFail(tradeOrderDO);
+            TradeOrderDO tradeOrderTemp = queryByOrderId(order.getThirdPayNo());
+            tradeOrderTemp.setSettleStatus(3);
+            tradeOrderDAO.update(tradeOrderTemp);
             tradeOrderDO.setId(null);
             tradeOrderDO.setTxnType(2);
             tradeOrderDO.setSyncStatus(0);
