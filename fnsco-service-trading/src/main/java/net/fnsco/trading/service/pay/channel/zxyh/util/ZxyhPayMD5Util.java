@@ -168,7 +168,119 @@ public class ZxyhPayMD5Util {
 
         return respStr;
     }
+    
+    /**
+     * 对Map报文进行签名，并发送
+     * @param reqMap:请求的MAP数据
+     * @param url：请求地址URL
+     * @param prefix：前缀
+     * @return
+     */
+	public static String request(Map<String, String> reqMap, String url, String prefix) {
 
+		// 将reqMap排序
+		SortedMap<String, String> sm = new TreeMap<String, String>(reqMap);
+		// 按序拼接
+		StringBuilder sb = new StringBuilder();
+		for (Entry<String, String> sme : sm.entrySet()) {
+			String v = sme.getValue();
+			// 空字段不参加签名
+			if (null == v || v.length() == 0)
+				continue;
+			sb.append("&").append(sme.getKey()).append("=").append(v);
+		}
+		// System.out.println(sb.substring(1));
+
+		// 尾部加上md5key签名
+		sb.append("&key=").append(md5key);
+
+		System.out.println("加签报文：" + sb.substring(1));
+
+		try {
+
+			String signAture = MD5Encode(sb.substring(1)).toUpperCase();
+			System.out.println("本地加签后的：" + signAture);
+			// 将签名信息加入原始请求报文map
+			reqMap.put("signAture", signAture);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		// 将Map转成Json
+		// Json2 reqJs = Json2.make(reqMap);
+		String reqStr = JSON.toJSONString(reqMap);
+		// Map<String,Object> reqJs = JSON.parseObject(mapStr, Map.class);
+		// 生成json字符串
+		// String reqStr = reqJs.toString();
+		// System.out.println(reqStr);
+		// 再将json字符串用base64编码,并对一些特殊字符进行置换
+		String b64ReqStr = null;
+		try {
+			b64ReqStr = Base64.encodeBase64String(reqStr.getBytes("utf-8")).replaceAll("\\+", "#");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		// 生成最后的报文
+		String finalB64ReqStr = "sendData=" + b64ReqStr;
+		System.out.println("req :" + finalB64ReqStr);
+
+		// HTTP POST方式发送报文，并获取返回结果
+		String respStr = postReq(prefix + url, finalB64ReqStr);
+
+		return respStr;
+	}
+
+	/**
+	 * 将map按照中信银行JSON字串处理要求组装，并加上签名
+	 * @param reqMap
+	 * @return：转换处理后的JSON字串，带签名
+	 */
+	public String convZxyhJsonStr(Map<String, String> reqMap, String md5Key) {
+		// 将reqMap排序
+		SortedMap<String, String> sm = new TreeMap<String, String>(reqMap);
+		// 按序拼接
+		StringBuilder sb = new StringBuilder();
+		for (Entry<String, String> sme : sm.entrySet()) {
+			String v = sme.getValue();
+			// 空字段不参加签名
+			if (null == v || v.length() == 0)
+				continue;
+			sb.append("&").append(sme.getKey()).append("=").append(v);
+		}
+
+		// 尾部加上md5key签名
+		sb.append("&key=").append(md5Key);
+
+		System.out.println("加签报文：" + sb.substring(1));
+
+		try {
+
+			String signAture = MD5Encode(sb.substring(1)).toUpperCase();
+			System.out.println("本地加签后的：" + signAture);
+			// 将签名信息加入原始请求报文map
+			reqMap.put("signAture", signAture);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		// 将Map转成Json
+		// Json2 reqJs = Json2.make(reqMap);
+		String reqStr = JSON.toJSONString(reqMap);
+		// Map<String,Object> reqJs = JSON.parseObject(mapStr, Map.class);
+		// 生成json字符串
+		// String reqStr = reqJs.toString();
+		// System.out.println(reqStr);
+		// 再将json字符串用base64编码,并对一些特殊字符进行置换
+		String b64ReqStr = null;
+		try {
+			b64ReqStr = Base64.encodeBase64String(reqStr.getBytes("utf-8")).replaceAll("\\+", "#");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		// 生成最后的报文
+		String finalB64ReqStr = "sendData=" + b64ReqStr;
+		System.out.println("req :" + finalB64ReqStr);
+		return finalB64ReqStr;
+	}
+	
     /**
      * 解析返回的报文，并验签:
      * @param finalRespStr

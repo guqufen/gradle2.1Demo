@@ -39,8 +39,8 @@ import net.fnsco.trading.service.order.entity.TradeOrderDO;
  *
  */
 @RestController
-@RequestMapping(value = "/e789/trade/jhf", method = RequestMethod.POST)
-@Api(value = "/e789/trade/jhf", tags = { "聚惠分相关功能接口" })
+@RequestMapping(value = "/mobile/trade/jhf", method = RequestMethod.POST)
+@Api(value = "/mobile/trade/jhf", tags = { "聚惠分相关功能接口" })
 public class TradeJhfController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
@@ -59,9 +59,9 @@ public class TradeJhfController extends BaseController {
     @ApiOperation(value = "获取分闪付url")
     public ResultDTO getMerCode(@RequestBody TradeJO tradeJO) {
         MerchantChannel merchantChannelJhf = new MerchantChannel();
-        merchantChannelJhf.setInnerCode("");//
+        merchantChannelJhf.setInnerCode("110319624699094");//
         merchantChannelJhf.setChannelMerId("32");//
-        merchantChannelJhf.setEntityInnerCode("");//
+        merchantChannelJhf.setEntityInnerCode("E110715100196188");//
         TradeOrderDO tradeOrder = new TradeOrderDO();
         tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
         tradeOrder.setChannelMerId(merchantChannelJhf.getChannelMerId());
@@ -122,7 +122,7 @@ public class TradeJhfController extends BaseController {
     @ApiOperation(value = "获取商户编号")
     public ResultDTO<TradeOrderDO> getOrderList(@RequestBody TradeJO tradeJO) {
         MerchantChannel merchantChannelJhf = new MerchantChannel();
-        merchantChannelJhf.setInnerCode("innerCode");
+        merchantChannelJhf.setInnerCode("110319624699094");
         TradeOrderDO tradeOrder = new TradeOrderDO();
         tradeOrder.setOrderNoAfter6(tradeJO.getOrderNo());
         tradeOrder.setOrderTop10(tradeJO.getDate());

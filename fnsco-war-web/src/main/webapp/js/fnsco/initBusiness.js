@@ -125,13 +125,23 @@ $('#btn_select_business').click(function(){
   $(".entityMerName.active").parents().next().next().next().next().find('.legalPersonMobile').val(select_data.legalPersonMobile);
   $(".entityMerName.active").parents().next().next().next().next().next().find('.cardNum').val(select_data.cardNum);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
-
-  $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().find('.registAddress').val(select_data.registAddress);
+  // $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().find('.registAddressDetail').val("666");
+  $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().find('.registAddressDetail').val(select_data.registAddress);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().next().next().find('.etpsAttr').find("option[value="+select_data.etpsAttr+"]").attr("selected",true);
+  var num=$(".entityMerName.active").attr('id');
+  console.log(num);
+  if(num=='entityMerName0'){
+    num=0;
+  }else if(num=='entityMerName1'){
+    num=1;
+  }else if(num=='entityMerName2'){
+    num=2;
+  }
+  posProvince(num);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().next().next().next().find('.registProvince').find("option[value="+select_data.registProvince+"]").attr("selected",true);
-  merProcessSelect("0",true);
+  merProcessSelect(num,true);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().next().next().next().next().find('.registCity').find("option[value="+select_data.registCity+"]").attr("selected",true);
-  merProcessSelect("0",false);
+  merProcessSelect(num,false);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().next().next().next().next().next().find('.registArea').find("option[value="+select_data.registArea+"]").attr("selected",true);
   // $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
   // $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
