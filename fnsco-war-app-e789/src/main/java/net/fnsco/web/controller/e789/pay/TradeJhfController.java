@@ -1,8 +1,7 @@
-package net.fnsco.web.controller.open.pay.jhf;
+package net.fnsco.web.controller.e789.pay;
 
-import java.io.UnsupportedEncodingException;
+ 
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
@@ -26,14 +24,10 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
-import net.fnsco.core.utils.dby.AESUtil;
-import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
-import net.fnsco.trading.service.order.dto.TradeJhfJO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
-import net.fnsco.web.controller.open.jo.TradeJO;
 
 /**
  * 
@@ -41,13 +35,13 @@ import net.fnsco.web.controller.open.jo.TradeJO;
  * @author   sxf
  * @version  
  * @since    Ver 1.1
- * @Date	 2017年10月27日 上午11:53:16
+ * @Date     2017年10月27日 上午11:53:16
  *
  */
 @RestController
-@RequestMapping(value = "/open/trade/jhf", method = RequestMethod.POST)
-@Api(value = "/open/trade/jhf", tags = { "聚惠分相关功能接口" })
-public class TradeController extends BaseController {
+@RequestMapping(value = "/mobile/trade/jhf", method = RequestMethod.POST)
+@Api(value = "/mobile/trade/jhf", tags = { "聚惠分相关功能接口" })
+public class TradeJhfController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
     @Autowired
@@ -64,21 +58,17 @@ public class TradeController extends BaseController {
     @RequestMapping(value = "/getQRUrl")
     @ApiOperation(value = "获取分闪付url")
     public ResultDTO getMerCode(@RequestBody TradeJO tradeJO) {
-        MerchantChannel merchantChannel = merchantService.getMerChannel(tradeJO.getMerCode(), "00");
-        if (null == merchantChannel) {
-            return ResultDTO.fail("拉卡拉渠道信息不存在");
-        }
-        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByInnerCodeType(merchantChannel.getInnerCode(), "04");
-        if (null == merchantChannelJhf) {
-            return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
-        }
+        MerchantChannel merchantChannelJhf = new MerchantChannel();
+        merchantChannelJhf.setInnerCode("110319624699094");//
+        merchantChannelJhf.setChannelMerId("32");//
+        merchantChannelJhf.setEntityInnerCode("E110715100196188");//
         TradeOrderDO tradeOrder = new TradeOrderDO();
         tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
         tradeOrder.setChannelMerId(merchantChannelJhf.getChannelMerId());
         tradeOrder.setChannelType("04");
         tradeOrder.setInstallmentNum(tradeJO.getInstallmentNum());
         tradeOrder.setEntityInnerCode(merchantChannelJhf.getEntityInnerCode());
-        tradeOrder.setCreateUserId(tradeJO.getSnCode());
+        tradeOrder.setCreateUserId("");
         BigDecimal amountB = new BigDecimal(tradeJO.getPaymentAmount());
         BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
         tradeOrder.setTxnAmount(amountBs);
@@ -131,20 +121,13 @@ public class TradeController extends BaseController {
     @RequestMapping(value = "/getOrderList", method = RequestMethod.GET)
     @ApiOperation(value = "获取商户编号")
     public ResultDTO<TradeOrderDO> getOrderList(@RequestBody TradeJO tradeJO) {
-        MerchantChannel merchantChannel = merchantService.getMerChannel(tradeJO.getMerCode(), "00");
-        if (null == merchantChannel) {
-            return fail("拉卡拉渠道信息不存在");
-        }
-        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByInnerCodeType(merchantChannel.getInnerCode(), "04");
-        if (null == merchantChannelJhf) {
-            return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
-        }
+        MerchantChannel merchantChannelJhf = new MerchantChannel();
+        merchantChannelJhf.setInnerCode("110319624699094");
         TradeOrderDO tradeOrder = new TradeOrderDO();
         tradeOrder.setOrderNoAfter6(tradeJO.getOrderNo());
         tradeOrder.setOrderTop10(tradeJO.getDate());
         tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
         tradeOrder.setRespCode("1001");
-        tradeOrder.setSettleStatus(4);
         ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder, tradeJO.getPageNum(), tradeJO.getPageSize());
         List<TradeOrderDO> resultList = resultDTO.getList();
         for (TradeOrderDO tradeOrderDO : resultList) {

@@ -6,7 +6,7 @@
 <meta http-equiv="pragma" content="no -cache">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <meta http-equiv="expires" content="0">
-<title>交易统计-法奈昇大数据平台</title>
+<title>拉卡拉交易统计-法奈昇大数据平台</title>
 <meta name="keywords" content="法奈昇大数据平台">
 <meta name="description" content="法奈昇大数据平台">
 <link rel="shortcut icon" href="favicon.ico">
@@ -43,7 +43,7 @@
 							<input type="text" class="form-control" id="merName"
 								name="merName" placeholder="请输入需要搜索的商户名" />
 						</div>
-						<div class="col-sm-4 query-time">
+						<div class="col-sm-8 query-time">
 							<label class="control-label" for="txt_search_price">支付日期:</label>
 							<input type="text" value="" class="form-control"
 								id="datetimepicker3" name="startTime"> - <input
@@ -55,19 +55,19 @@
 							<input type="text" class="form-control" id="txt_search_price"
 								name="amt" placeholder="请输入需要搜索的金额" />
 						</div>
-						<div class="col-sm-4 query-time">
+						<div class="col-sm-8 query-time">
 							<label class="control-label" for="txt_search_price">发送日期:</label>
 							<input type="text" value="" class="form-control"
 								id="datetimepicker1" name="startSendTime"> - <input
 								type="text" value="" class="form-control" id="datetimepicker2"
 								name="endSendTime">
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-5">
 							<label class="control-label" for="txt_search_price">法人姓名:</label>
 							<input type="text" class="form-control" id="legal_person"
 								name="legal_person" placeholder="请输入需要搜索的法人姓名" />
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<label class="control-label" for="paytype">支付方式:</label> <select
 								id="paytype" name="paytype" class="form-control">
 								<option value="03" selected>全部</option>
@@ -76,7 +76,7 @@
 								<option value="02">分期付</option>
 							</select>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<label class="control-label" for="resp_code">交易状态:</label> <select
 								id="resp_code" name="resp_code" class="form-control">
 								<option value="1001" selected>成功</option>
@@ -84,7 +84,7 @@
 								<option value="">全部</option>
 							</select>
 						</div>
-						<div class="col-sm-12">
+						<div class="col-sm-7">
 						<label class="control-label" for="resp_code">渠道类型:</label>
 							<button type="button" id="channelAll" class="btn btn-primary"
 							onclick="javascript:Determine(id);">全部
@@ -120,10 +120,10 @@
 							onclick="javascript:exportEvent();">
 							<span class="glyphicon glyphicon-export"></span>导出
 						</button>
-						<button type="button" id="btn_import" class="btn btn-info"
-							onclick="javascript:importEvent();">
-							<span class="glyphicon glyphicon-import"></span>导入
-						</button>
+<!-- 						<button type="button" id="btn_import" class="btn btn-info" -->
+<!-- 							onclick="javascript:importEvent();"> -->
+<!-- 							<span class="glyphicon glyphicon-import"></span>导入 -->
+<!-- 						</button> -->
 					</div>
 				</div>
 			</form>
@@ -198,7 +198,7 @@
 			{
 				search : false, //是否启动搜索栏
 				sidePagination : 'server',
-				url : PROJECT_NAME + '/web/trade/query',
+				url : PROJECT_NAME + '/web/trade/queryLkl',
 				showRefresh : false,//是否显示刷新按钮
 				showPaginationSwitch : false,//是否显示 数据条数选择框(分页是否显示)
 				toolbar : '#toolbar', //工具按钮用哪个容器
@@ -383,7 +383,7 @@
 		determineJudgment();
 		$.ajax({
 			traditional : true,
-			url : PROJECT_NAME + '/web/trade/queryTotalAmount',
+			url : PROJECT_NAME + '/web/trade/queryLklTotalAmount',
 			data : {
 				orderNo : $.trim($('#txt_search_id').val()),
 				merId : $.trim($('#txt_search_name').val()),
@@ -492,34 +492,34 @@
 	//渠道选中按钮条件值判断
 	function determineJudgment() {
 		if(document.getElementById("channelAll").className=="btn btn-primary"){
-			channelType = "";
+			channelType = null;
 		}else{
 			channelType = "x";
 		}
 		if(document.getElementById("channelLkl").className=="btn btn-primary"){
 			channelLkl = "00";
 		}else{
-			channelLkl = "";
+			channelLkl = null;
 		}
 		if(document.getElementById("channelPf").className=="btn btn-primary"){
 			channelPf = "01";
 		}else{
-			channelPf = "";
+			channelPf = null;
 		}
 		if(document.getElementById("channelAn").className=="btn btn-primary"){
 			channelAn = "02";
 		}else{
-			channelAn = "";
+			channelAn = null;
 		}
 		if(document.getElementById("channelFns").className=="btn btn-primary"){
 			channelFns = "03";
 		}else{
-			channelFns = "";
+			channelFns = null;
 		}
 		if(document.getElementById("channelJhf").className=="btn btn-primary"){
 			channelJhf = "04";
 		}else{
-			channelJhf = "";
+			channelJhf = null;
 		}
 	}
 	$(function() {
@@ -596,7 +596,7 @@
 		var legalPerson =  $.trim($('#legal_person').val());
 		var payType = $('#paytype').val();
 		var respCode = $('#resp_code').val();
-		var url = PROJECT_NAME + '/web/trade/export' + '?orderNo=' + orderNo
+		var url = PROJECT_NAME + '/web/trade/exportLkl' + '?orderNo=' + orderNo
 				+ '&merId=' + merId + '&merName=' + merName + '&amt=' + amt
 				+ '&startSendTime=' + startSendTime + '&endSendTime='
 				+ endSendTime + '&startTime=' + startTime + '&endTime='
@@ -627,12 +627,12 @@
 	}
 
 	//组装请求参数
-	var channelType="";
-	var channelLkl="";
-	var channelPf="";
-	var channelAn="";
-	var channelFns="";
-	var channelJhf="";
+	var channelType=null;
+	var channelLkl=null;
+	var channelPf=null;
+	var channelAn=null;
+	var channelFns=null;
+	var channelJhf=null;
 	function queryParams(params) {
 		var amtyuan1 = $.trim($('#txt_search_price').val());
 		var amtyuan2 = "";

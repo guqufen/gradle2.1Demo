@@ -1567,7 +1567,7 @@ function editData(id){
         $('input[name="businessLicenseNum1"]').val(data.data.businessLicenseNum);
         $('input[name="businessLicenseValidTime1"]').val(data.data.businessLicenseValidTime);
         $('input[name="taxRegistCode1"]').val(data.data.taxRegistCode);
-        $('input[name="registAddress1"]').val(data.data.registAddressDetail);
+        $('input[name="registAddressDetail1"]').val(data.data.registAddressDetail);
         $('input[name="mercFlag1"]').val(data.data.mercFlag);
 
         $('#etpsAttr1').find("option[value="+data.data.etpsAttr+"]").attr("selected",true);
@@ -1757,7 +1757,7 @@ function editData(id){
         })
         // 基本信息保存按钮操作
         $('#editBtn_merchant').click(function(){
-        	  var mer_id = $('input[name=merId]').val();
+        	var mer_id = $('input[name=merId]').val();
             var merName = $('input[name="merName1"]').val();
             var abbreviation = $('input[name="abbreviation1"]').val();
             var enName = $('input[name="enName1"]').val();
@@ -1769,7 +1769,7 @@ function editData(id){
             var businessLicenseNum = $('input[name="businessLicenseNum1"]').val();
             var businessLicenseValidTime = $('input[name="businessLicenseValidTime1"]').val();
             var taxRegistCode = $('input[name="taxRegistCode1"]').val();
-            var registAddressDetail= $('input[name="registAddress1"]').val();
+            var registAddressDetail= $('input[name="registAddressDetail1"]').val();
             var mercFlag = $('input[name="mercFlag1"]').val();
             var agentId = $('#agentId1').val();
             var entityMerName = $('#entityMerName1').val();
@@ -1927,7 +1927,7 @@ function detailsData(id){
         $('input[name="businessLicenseNum2"]').val(data.data.businessLicenseNum);
         $('input[name="businessLicenseValidTime2"]').val(data.data.businessLicenseValidTime);
         $('input[name="taxRegistCode2"]').val(data.data.taxRegistCode);
-        $('input[name="registAddress2"]').val(data.data.registAddressDetail);
+        $('input[name="registAddressDetail2"]').val(data.data.registAddressDetail);
         $('input[name="mercFlag2"]').val(data.data.mercFlag);
 
         $('#etpsAttr2').find("option[value="+data.data.etpsAttr+"]").attr("selected",true);

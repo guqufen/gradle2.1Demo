@@ -42,7 +42,8 @@ public class ZxyhPayMD5Util {
      * 请求的目标URL
      * 配置在此处仅为演示方便，正式生产代码中，应该做外置可配置处理
      */
-    private static String         reqUrl               = "https://120.27.165.177:9001";                                                     ///MPay/backTransAction.do";
+    private static String         reqUrl               = "https://120.27.165.177:9001";  //入建
+//    private static String         reqUrl               = " https://120.27.165.177:8099";  //主扫
     /**MD5加密方式
      * 用于数据电子签名使用的MD5密钥，由中信银行开商户时自动生成，请妥善保管
      * 配置在此处仅为演示方便，正式生产代码中，商户应该将其外置于安全的地方，且妥善保护该密钥，如有泄露，请第一时间通知我行进行变更！！！
@@ -167,7 +168,119 @@ public class ZxyhPayMD5Util {
 
         return respStr;
     }
+    
+    /**
+     * 对Map报文进行签名，并发送
+     * @param reqMap:请求的MAP数据
+     * @param url：请求地址URL
+     * @param prefix：前缀
+     * @return
+     */
+	public static String request(Map<String, String> reqMap, String url, String prefix) {
 
+		// 将reqMap排序
+		SortedMap<String, String> sm = new TreeMap<String, String>(reqMap);
+		// 按序拼接
+		StringBuilder sb = new StringBuilder();
+		for (Entry<String, String> sme : sm.entrySet()) {
+			String v = sme.getValue();
+			// 空字段不参加签名
+			if (null == v || v.length() == 0)
+				continue;
+			sb.append("&").append(sme.getKey()).append("=").append(v);
+		}
+		// System.out.println(sb.substring(1));
+
+		// 尾部加上md5key签名
+		sb.append("&key=").append(md5key);
+
+		System.out.println("加签报文：" + sb.substring(1));
+
+		try {
+
+			String signAture = MD5Encode(sb.substring(1)).toUpperCase();
+			System.out.println("本地加签后的：" + signAture);
+			// 将签名信息加入原始请求报文map
+			reqMap.put("signAture", signAture);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		// 将Map转成Json
+		// Json2 reqJs = Json2.make(reqMap);
+		String reqStr = JSON.toJSONString(reqMap);
+		// Map<String,Object> reqJs = JSON.parseObject(mapStr, Map.class);
+		// 生成json字符串
+		// String reqStr = reqJs.toString();
+		// System.out.println(reqStr);
+		// 再将json字符串用base64编码,并对一些特殊字符进行置换
+		String b64ReqStr = null;
+		try {
+			b64ReqStr = Base64.encodeBase64String(reqStr.getBytes("utf-8")).replaceAll("\\+", "#");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		// 生成最后的报文
+		String finalB64ReqStr = "sendData=" + b64ReqStr;
+		System.out.println("req :" + finalB64ReqStr);
+
+		// HTTP POST方式发送报文，并获取返回结果
+		String respStr = postReq(prefix + url, finalB64ReqStr);
+
+		return respStr;
+	}
+
+	/**
+	 * 将map按照中信银行JSON字串处理要求组装，并加上签名
+	 * @param reqMap
+	 * @return：转换处理后的JSON字串，带签名
+	 */
+	public String convZxyhJsonStr(Map<String, String> reqMap, String md5Key) {
+		// 将reqMap排序
+		SortedMap<String, String> sm = new TreeMap<String, String>(reqMap);
+		// 按序拼接
+		StringBuilder sb = new StringBuilder();
+		for (Entry<String, String> sme : sm.entrySet()) {
+			String v = sme.getValue();
+			// 空字段不参加签名
+			if (null == v || v.length() == 0)
+				continue;
+			sb.append("&").append(sme.getKey()).append("=").append(v);
+		}
+
+		// 尾部加上md5key签名
+		sb.append("&key=").append(md5Key);
+
+		System.out.println("加签报文：" + sb.substring(1));
+
+		try {
+
+			String signAture = MD5Encode(sb.substring(1)).toUpperCase();
+			System.out.println("本地加签后的：" + signAture);
+			// 将签名信息加入原始请求报文map
+			reqMap.put("signAture", signAture);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		// 将Map转成Json
+		// Json2 reqJs = Json2.make(reqMap);
+		String reqStr = JSON.toJSONString(reqMap);
+		// Map<String,Object> reqJs = JSON.parseObject(mapStr, Map.class);
+		// 生成json字符串
+		// String reqStr = reqJs.toString();
+		// System.out.println(reqStr);
+		// 再将json字符串用base64编码,并对一些特殊字符进行置换
+		String b64ReqStr = null;
+		try {
+			b64ReqStr = Base64.encodeBase64String(reqStr.getBytes("utf-8")).replaceAll("\\+", "#");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		// 生成最后的报文
+		String finalB64ReqStr = "sendData=" + b64ReqStr;
+		System.out.println("req :" + finalB64ReqStr);
+		return finalB64ReqStr;
+	}
+	
     /**
      * 解析返回的报文，并验签:
      * @param finalRespStr
@@ -281,7 +394,97 @@ public class ZxyhPayMD5Util {
     public static String postReq(String requrl, String req) {
         return postReq(requrl, req, DEFAULT_CONN_TIMEOUT, DEFAULT_READ_TIMEOUT);
     }
+    
+    
+    /**
+     * 支付宝主扫测试
+     * @param args
+     */
+    public static void main3(String[] args) {
+    	String url = "/MPay/backTransAction.do";
+        Map<String, String> reqMap = new HashMap<String, String>();
+        reqMap.put("encoding", "UTF-8"); //
+        reqMap.put("signMethod", "02"); //
+        reqMap.put("txnType", "01"); //
+        reqMap.put("txnSubType", "010302"); //
+        reqMap.put("channelType", "6002"); //
+//        reqMap.put("payAccessType", "02"); //
+        reqMap.put("backEndUrl", "http://www.baidu.com"); //接收支付网关异步通知回调地址
+        reqMap.put("merId", "994400000000009"); //普通商户或平台商户的商户号
+        reqMap.put("secMerId", "999900000010728"); //独立商户号  
+//        reqMap.put("termId", "WEB");
+        reqMap.put("termIp", "192.168.1.162");
+        reqMap.put("orderId", "O10000"); //商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
+        reqMap.put("orderTime", System.currentTimeMillis() + ""); //订单生成时间，格式 为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒 表示为20091225091010
+//        reqMap.put("productId", "");
+        reqMap.put("orderBody", "零食"); //商品或支付单简要描述
+        reqMap.put("orderDetail", ""); 
+//        reqMap.put("orderGoodsTag", ""); 
+        reqMap.put("txnAmt", "100"); //订单总金额(交易单位为分，例:1.23元=123) 只能整数
+        reqMap.put("currencyType", "156"); //默认是156：人民币
+        
+        reqMap.put("accountFlag", "Y");
+        reqMap.put("secMerFeeRate", "");
+        reqMap.put("attach", "");
+        reqMap.put("limitPay", "");
+        reqMap.put("needBankType", "");
+        reqMap.put("independentTransactionFlag", "Y");
+        reqMap.put("orderType", "");
+        
+        //发送中信报文
+//        String respStr = request(reqMap, url);
+        String respStr = ZxyhPayMD5Util.request(reqMap, url);
+        //解析返回报文
+        Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+        System.out.println(JSON.toJSON(respMap).toString());
+    }
+    
 
+    /**
+     * 微信主扫测试
+     * @param args
+     */
+    public static void main2(String[] args) {
+    	String url = "/MPay/backTransAction.do";
+        Map<String, String> reqMap = new HashMap<String, String>();
+        reqMap.put("encoding", "UTF-8"); //
+        reqMap.put("signMethod", "02"); //
+        reqMap.put("txnType", "01"); //
+        reqMap.put("txnSubType", "010130"); //
+        reqMap.put("channelType", "6002"); //
+        reqMap.put("payAccessType", "02"); //
+        reqMap.put("backEndUrl", "http://www.baidu.com"); //接收支付网关异步通知回调地址
+        reqMap.put("merId", "994400000000009"); //普通商户或平台商户的商户号  
+//        reqMap.put("secMerId", ""); //独立商户号  
+        reqMap.put("secMerId", "999900000010727"); //独立商户号  999900000010724
+        reqMap.put("termId", "WEB");
+        reqMap.put("termIp", "");
+        reqMap.put("orderId", "O10000"); //商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
+        reqMap.put("orderTime", System.currentTimeMillis() + ""); //订单生成时间，格式 为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒 表示为20091225091010
+        reqMap.put("productId", "");
+        reqMap.put("orderBody", "零食"); //商品或支付单简要描述
+        reqMap.put("orderDetail", ""); 
+        reqMap.put("orderGoodsTag", ""); 
+        reqMap.put("txnAmt", "100"); //订单总金额(交易单位为分，例:1.23元=123) 只能整数
+        reqMap.put("currencyType", "156"); //默认是156：人民币
+        
+        reqMap.put("accountFlag", "Y");
+        reqMap.put("secMerFeeRate", "");
+        reqMap.put("attach", "");
+        reqMap.put("limitPay", "");
+        reqMap.put("needBankType", "");
+        reqMap.put("independentTransactionFlag", "Y");
+        reqMap.put("orderType", "");
+        
+        //发送中信报文
+//        String respStr = request(reqMap, url);
+        String respStr = ZxyhPayMD5Util.request(reqMap, url);
+        //解析返回报文
+        Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+        System.out.println(JSON.toJSON(respMap).toString());
+    }
+    
+    
     public static void main1(String[] args) {
         //构建演示用报文！！！注意，此为演示用报文，请勿用于生产！！！
         Map<String, String> reqMap = new HashMap<String, String>();
@@ -314,7 +517,7 @@ public class ZxyhPayMD5Util {
     
     public static void main(String[] args){
         String pid = "2088022294504639";
-        String merId = "994400000000009";
+        String merId = "994400000000009"; 
         String url = "/MPayTransaction/ind/mchtadd.do";
         MerchantZxyhDTO mercDTO = new MerchantZxyhDTO();
         mercDTO.init(pid,merId);
@@ -334,7 +537,13 @@ public class ZxyhPayMD5Util {
         mercDTO.setAreaCode("330109");
         mercDTO.setAddr("信息港");
         /////////////////////
-        mercDTO.setWXActive("N");
+        mercDTO.setWXActive("Y");
+        mercDTO.setMainMchtTp("00");
+        mercDTO.setOlCode1("01|02|06");
+        mercDTO.setqGroupId("01");
+        mercDTO.setCategroryId("143");
+        mercDTO.setFeeRate("1");
+        mercDTO.setSettleCycle("T1");
 
         //////////支付宝//////////////////
         mercDTO.setZFBActive("Y");

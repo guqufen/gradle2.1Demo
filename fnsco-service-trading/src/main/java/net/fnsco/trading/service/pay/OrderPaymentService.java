@@ -1,8 +1,12 @@
 package net.fnsco.trading.service.pay;
 
+
+import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
+
 import java.util.Map;
 
-import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
+import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
+
 
 public interface OrderPaymentService {
     /**
@@ -13,6 +17,8 @@ public interface OrderPaymentService {
      * @since  CodingExample　Ver 1.1
      */
 	
+	
+	public Map<String, Object> generateQRCodeAliPay();
 	
     public Map<String, Object> mechAdd(MerchantCoreEntityZxyhDTO core);
     
