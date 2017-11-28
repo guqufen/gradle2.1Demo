@@ -1,8 +1,8 @@
 package net.fnsco.api.doc.web.project;
 
 
-import java.beans.Transient;
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +18,7 @@ import net.fnsco.api.doc.service.user.dao.UserBasicDAO;
 import net.fnsco.api.doc.service.vo.UserInfo;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
 
 /**
  * @desc
@@ -35,6 +36,14 @@ public class ProjController extends BaseController{
     private ProjService projService;
     @Autowired
     private UserBasicDAO userBasicDAO;
+    
+    
+    @ApiOperation(value = "分页查询项目信息", notes = "分页查询项目信息")
+    @RequestMapping(value = "/queryProj", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultPageDTO<ProjDO> queryProj(ProjDO projDO, Integer currentPageNum, Integer pageSize) {
+        return projService.queryProj(projDO, currentPageNum, pageSize);
+    }
    
     @RequestMapping(value = "/addProject", method = RequestMethod.POST)
     @ResponseBody
@@ -47,11 +56,13 @@ public class ProjController extends BaseController{
     	projDO.setUserId(userId);
     	projDO.setCreateDate(new Date());
     	projDO.setModifyDate(new Date());
-    	projService.add(projDO);
     	boolean succsss = projService.exportJson(filePath,projDO.getName(),projDO.getJsonStr());
     	if(!succsss){
             return ResultDTO.fail();
         }
+    	String url="jsonTxt/"+projDO.getName()+".txt";
+    	projDO.setUrl(url);
+    	projService.add(projDO);
         return ResultDTO.success();
     }
 }
