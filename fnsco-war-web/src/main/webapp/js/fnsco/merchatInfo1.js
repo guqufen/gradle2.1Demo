@@ -85,6 +85,10 @@ function initTableData(){
             // events: operateEvents
         },{
             width: 100,
+            field: 'entityMerName',
+            title: '实体商户名'
+        },{
+            width: 100,
             field: 'merName',
             title: '商户名'
         }, {

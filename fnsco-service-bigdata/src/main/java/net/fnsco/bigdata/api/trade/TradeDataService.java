@@ -61,4 +61,13 @@ public interface TradeDataService {
      * @since  CodingExample　Ver 1.1
      */
     int selectCountByIRT(TradeData tradeData);
+    
+    /**
+     * 通过渠道终端号商户号和订单号(放于原订单号字段)查找交易
+     * @param record
+     * @return
+     */
+    TradeData selectByCMT(TradeData record);
+    
+    int updateByPrimaryKeySelective(TradeData record);
 }

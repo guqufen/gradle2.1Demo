@@ -126,7 +126,7 @@ $('#btn_select_business').click(function(){
   $(".entityMerName.active").parents().next().next().next().next().next().find('.cardNum').val(select_data.cardNum);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().find('.businessLicenseNum').val(select_data.businessLicenseNum);
   // $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().find('.registAddressDetail').val("666");
-  $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().find('.registAddressDetail').val(select_data.registAddress);
+  $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().find('.registAddressDetail').val(select_data.registAddressDetail);
   $(".entityMerName.active").parents().next().next().next().next().next().next().next().next().next().next().next().find('.etpsAttr').find("option[value="+select_data.etpsAttr+"]").attr("selected",true);
   var num=$(".entityMerName.active").attr('id');
   console.log(num);

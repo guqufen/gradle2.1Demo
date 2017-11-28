@@ -492,34 +492,34 @@
 	//渠道选中按钮条件值判断
 	function determineJudgment() {
 		if(document.getElementById("channelAll").className=="btn btn-primary"){
-			channelType = "";
+			channelType = null;
 		}else{
 			channelType = "x";
 		}
 		if(document.getElementById("channelLkl").className=="btn btn-primary"){
 			channelLkl = "00";
 		}else{
-			channelLkl = "";
+			channelLkl = null;
 		}
 		if(document.getElementById("channelPf").className=="btn btn-primary"){
 			channelPf = "01";
 		}else{
-			channelPf = "";
+			channelPf = null;
 		}
 		if(document.getElementById("channelAn").className=="btn btn-primary"){
 			channelAn = "02";
 		}else{
-			channelAn = "";
+			channelAn = null;
 		}
 		if(document.getElementById("channelFns").className=="btn btn-primary"){
 			channelFns = "03";
 		}else{
-			channelFns = "";
+			channelFns = null;
 		}
 		if(document.getElementById("channelJhf").className=="btn btn-primary"){
 			channelJhf = "04";
 		}else{
-			channelJhf = "";
+			channelJhf = null;
 		}
 	}
 	$(function() {
@@ -627,12 +627,12 @@
 	}
 
 	//组装请求参数
-	var channelType="";
-	var channelLkl="";
-	var channelPf="";
-	var channelAn="";
-	var channelFns="";
-	var channelJhf="";
+	var channelType=null;
+	var channelLkl=null;
+	var channelPf=null;
+	var channelAn=null;
+	var channelFns=null;
+	var channelJhf=null;
 	function queryParams(params) {
 		var amtyuan1 = $.trim($('#txt_search_price').val());
 		var amtyuan2 = "";

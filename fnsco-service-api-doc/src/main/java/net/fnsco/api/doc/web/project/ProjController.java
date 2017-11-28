@@ -65,4 +65,12 @@ public class ProjController extends BaseController{
     	projService.add(projDO);
         return ResultDTO.success();
     }
+    
+    @ApiOperation(value = "查询项目详情", notes = "查询项目详情")
+    @RequestMapping(value = "/queryDetail", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO<ProjDO> queryDetailById(Integer id) {
+    	ProjDO proj = projService.queryById(id);
+    	return ResultDTO.success(proj);
+    }
 }
