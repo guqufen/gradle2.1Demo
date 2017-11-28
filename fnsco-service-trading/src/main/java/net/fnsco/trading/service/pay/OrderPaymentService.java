@@ -1,6 +1,7 @@
 package net.fnsco.trading.service.pay;
 
 import net.fnsco.bigdata.service.domain.trade.MerchantCoreEntityZxyhDTO;
+import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
 
 public interface OrderPaymentService {
     /**
@@ -18,4 +19,6 @@ public interface OrderPaymentService {
     //            orderPaymentResult = aNOrderPaymentService.beisaoPaySendPost(orderPayment);
     //        }
     //    }
+    
+    public String PassivePay(PassivePayDTO passivePayDTO);
 }
