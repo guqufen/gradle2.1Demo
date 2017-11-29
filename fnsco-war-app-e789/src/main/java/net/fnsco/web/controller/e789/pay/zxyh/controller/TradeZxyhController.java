@@ -25,6 +25,8 @@ public class TradeZxyhController extends BaseController{
 	
 	@Autowired
 	private ZxyhPaymentService zxyhPaymentService;
+
+	
 	
 	
 	
@@ -69,6 +71,19 @@ public class TradeZxyhController extends BaseController{
 		}
 		Map<String, Object> reqMap = zxyhPaymentService.generateQRCodeAliPay(innerCode,ip,orderBody,txnAmt);
 		return  success(reqMap);
+	}
+	
+	
+	@RequestMapping(value = "/aliCallBack")
+	@ApiOperation(value = "支付宝主扫回调")
+	public void aliCallBack(String resultStr) {
+		zxyhPaymentService.aliCallBack(resultStr);
+	}
+	
+	@RequestMapping(value = "/weChatCallBack")
+	@ApiOperation(value = "微信主扫回调")
+	public void weChatCallBack(String resultStr) {
+		zxyhPaymentService.weChatCallBack(resultStr);
 	}
 	
 

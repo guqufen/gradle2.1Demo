@@ -51,6 +51,7 @@ public class TestZhimaCreditEpScoreGet {
             ZhimaCreditEpLawsuitRecordGetResponse response = client.execute(req);
             //{"success":true,"biz_no":"ZM201711243000000323200561955220","lawsuit_record":{}}
             //{"success":false,"error_code":"ZMCREDIT.no_valid_arrangement","error_message":"合约已被冻结"}
+            //{"success":true,"biz_no":"ZM201711283000000343400604733863","lawsuit_record":{"cpws_list":[{"ep_element_list":[{"key":"sortTime","value":"1506355200000"},{"key":"cym"},{"key":"caseType","value":"民事判决书"},{"key":"body","value":"原告:杭州法奈昇科技有限公司;被告:卓谨信..."},{"key":"createTime","value":"1508688000000"},{"key":"title","value":"杭州法奈昇科技有限公司与卓谨信息科技（常州）有限公司计算机软件开发合同纠纷一审民事判决书"},{"key":"dataType","value":"cpws"},{"key":"sortTimeString","value":"2017年09月26日"},{"key":"cpwsId","value":"c2017330109minchu4584_t20170926@cG5hbWU65p2t5bee5rOV5aWI5piH56eR5oqA5pyJ6ZmQ5YWs5Y%2B4QA=="},{"key":"court","value":"杭州市萧山区人民法院"},{"key":"caseNo","value":"（2017）浙0109民初4584号"}]}]}}
             System.out.println(response.isSuccess());
             System.out.println(response.getErrorCode());
             System.out.println(response.getErrorMessage());
@@ -136,9 +137,9 @@ public class TestZhimaCreditEpScoreGet {
     public static void main(String[] args) {
         TestZhimaCreditEpScoreGet result = new TestZhimaCreditEpScoreGet();
         //result.testZhimaCreditEpLawsuitRecordGet();
-
-        // result.testZhimaCreditEpLawsuitRecordGet();
+        //企业涉诉记录查询
+        result.testZhimaCreditEpLawsuitRecordGet();
         //个人征信查询
-        result.testZhimaAuthInfoAuthquery();
+        // result.testZhimaAuthInfoAuthquery();
     }
 }

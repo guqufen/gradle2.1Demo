@@ -30,8 +30,11 @@ public class ProjService extends BaseService {
         List<ProjDO> datas = projDAO.pageList(projDO, currentPageNum, pageSize);
         Integer total = projDAO.pageListCount(projDO);
         ResultPageDTO<ProjDO> result = new ResultPageDTO<ProjDO>(total, datas);
-        result.setCurrentPage(currentPageNum);
         return result;
+	}
+	
+	public ProjDO queryById(Integer id) {
+		return projDAO.getById(id);
 	}
 
 	public void add(ProjDO projDO) {

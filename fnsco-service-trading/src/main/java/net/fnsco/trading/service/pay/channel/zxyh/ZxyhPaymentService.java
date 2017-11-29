@@ -2,6 +2,8 @@ package net.fnsco.trading.service.pay.channel.zxyh;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +19,8 @@ import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
+import net.fnsco.bigdata.api.dto.TradeAliPayCallBackDTO;
+import net.fnsco.bigdata.api.dto.TradeWeChatCallBackDTO;
 import net.fnsco.bigdata.api.merchant.MerchantChannelService;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.comm.ServiceConstant.PaySubTypeAllEnum;
@@ -29,9 +33,11 @@ import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.sys.SequenceService;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.trading.service.order.TradeOrderService;
+import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.OrderPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.ActiveAlipayDTO;
@@ -59,6 +65,9 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
     private SequenceService  sequenceService;
     @Autowired
     private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
+    @Autowired
+    private TradeOrderDAO orderDAO;
+
 
     /**
      * 
@@ -135,7 +144,7 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
     	String merId = env.getProperty("zxyh.merId");
     	ActiveWeiXinDTO weiXinDTO = new ActiveWeiXinDTO();
     	weiXinDTO.init(merId);
-    	String url = ":8099/MPay/backTransAction.do"; //生产是8092
+    	String url = "/MPay/backTransAction.do"; 
     	weiXinDTO.setEncoding("UTF-8");
     	weiXinDTO.setBackEndUrl(""); //接收支付网关异步通知回调地址
     	MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
@@ -165,7 +174,7 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
         String aliPayStr = JSON.toJSONString(weiXinDTO);
         Map<String, String> aliPayMap = JSON.parseObject(aliPayStr, Map.class);
         //发送中信报文
-        String respStr = ZxyhPayMD5Util.request(aliPayMap, url);
+        String respStr = ZxyhPayMD5Util.request(aliPayMap, url,"https://120.27.165.177:8099");  //生产是8092
         //解析返回报文
         Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
 //        System.out.println(JSON.toJSON(respMap).toString());
@@ -181,7 +190,7 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
     	String merId = env.getProperty("zxyh.merId");
     	ActiveAlipayDTO activeAlipayDTO = new ActiveAlipayDTO();
     	activeAlipayDTO.init(merId);
-    	String url = ":8099/MPay/backTransAction.do";
+    	String url = "/MPay/backTransAction.do";
     	
         activeAlipayDTO.setEncoding("UTF-8");
         activeAlipayDTO.setBackEndUrl(""); //接收支付网关异步通知回调地址
@@ -207,11 +216,16 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
         String aliPayStr = JSON.toJSONString(activeAlipayDTO);
         Map<String, String> aliPayMap = JSON.parseObject(aliPayStr, Map.class);
         //发送中信报文
-        String respStr = ZxyhPayMD5Util.request(aliPayMap, url);
+        String respStr = ZxyhPayMD5Util.request(aliPayMap, url,"https://120.27.165.177:8099");
         //解析返回报文
         Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
 //        System.out.println(JSON.toJSON(respMap).toString());
         return respMap;
+    }
+    
+    
+    public void aliCallBack(){
+    	
     }
     
     public void test() {
@@ -395,12 +409,113 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
 				tradeOrderDO.setRespCode(TradeStateEnum.FAIL.getCode());// 设置响应码
 			}
 
-			tradeOrderDO.setRespMsg(passDTO1.getOrgrtninfo());// 设置响应信息
-			tradeOrderDO1.setRespMsg(passDTO1.getStdrtninfo());// 设置响应信息
-			tradeOrderDO1.setPayOrderNo(passDTO1.getTransactionId());//支付订单号(渠道订单号)
+			tradeOrderDO.setRespMsg(passDTO1.getStdrtninfo());// 设置响应信息
+			tradeOrderDO.setPayOrderNo(passDTO1.getTransactionId());//支付订单号(渠道订单号)
 			tradeOrderService.doUpdate(tradeOrderDO);// 通过主键更新应答数据
 		}
 
 		return null;
+    }
+
+    /**
+     * 支付宝主扫回调函数
+     */
+	public ResultDTO<Object> aliCallBack(String respStr) {
+		//解析返回报文
+        Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+        String json = JSON.toJSONString(respMap);
+        TradeAliPayCallBackDTO aliDTO = JSON.parseObject(json, TradeAliPayCallBackDTO.class);
+        if(aliDTO == null){
+        	return ResultDTO.fail("中信返回数据有误");
+        }
+        TradeOrderDO tradeOrderDO = new TradeOrderDO();
+        tradeOrderDO.setOrderNo(aliDTO.getOrderId());//商户订单号
+        tradeOrderDO.setPayOrderNo(aliDTO.getTransactionId());//渠道(扫码)订单号
+        BigDecimal txnAmount = new BigDecimal(aliDTO.getTxnAmt());
+        tradeOrderDO.setTxnAmount(txnAmount);//交易金额
+        tradeOrderDO.setRespCode(aliDTO.getRespCode());//交易返回码
+        tradeOrderDO.setRespMsg(aliDTO.getRespMsg());
+        tradeOrderDO.setEntityInnerCode("");//实体商户内部商户号
+        tradeOrderDO.setChannelMerId("");//渠道商户号
+        tradeOrderDO.setChannelType("05");//渠道类型
+        Date tradeEndTime = DateUtils.formateToDate(aliDTO.getEndTime());
+        tradeOrderDO.setCompleteTime(tradeEndTime);//交易完成时间
+        tradeOrderDO.setOrderCeateTime(DateUtils.formateToDate(aliDTO.getOrderTime()));//订单创建时间
+        tradeOrderDO.setTxnType(1);//消费
+//        tradeOrderDO.setTxnSubType();//交易子类型
+        tradeOrderDO.setPayType("01");//支付方式  二维码
+        tradeOrderDO.setPaySubType("02");//交易子类型  支付宝
+        tradeOrderDO.setSettleAmount(new BigDecimal(aliDTO.getSettleAmt()));//清算金额
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+        String settleDateStr = aliDTO.getSettleDate();
+        try {
+			tradeOrderDO.setSettleDate(sdf.parse(settleDateStr + String.format("%1$0"+(14 - settleDateStr.length())+"d",0) ));//清算日期 [yyyyMMdd]
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+        int i = tradeOrderDO.getSettleAmount().compareTo(new BigDecimal(0));
+        if(i > 0){
+        	tradeOrderDO.setSettleStatus(1);
+        }else{
+        	tradeOrderDO.setSettleStatus(2);
+        }
+        tradeOrderDO.setInnerCode("");//内部商户号
+        orderDAO.insert(tradeOrderDO);
+        if(tradeOrderDO.getId() != null){
+        	return ResultDTO.success();
+        }else{
+        	return ResultDTO.fail("支付宝主扫交易插入失败");
+        }
+	}
+
+	/**
+     * 微信主扫回调函数
+     */
+	public ResultDTO<Object> weChatCallBack(String respStr) {
+		//解析返回报文
+        Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+        String json = JSON.toJSONString(respMap);
+        TradeWeChatCallBackDTO weChatDTO = JSON.parseObject(json, TradeWeChatCallBackDTO.class);
+        if(weChatDTO == null){
+        	return ResultDTO.fail("中信返回数据有误");
+        }
+        TradeOrderDO tradeOrderDO = new TradeOrderDO();
+        tradeOrderDO.setOrderNo(weChatDTO.getOrderId());//商户订单号
+        tradeOrderDO.setPayOrderNo(weChatDTO.getTransactionId());//渠道(扫码)订单号
+        BigDecimal txnAmount = new BigDecimal(weChatDTO.getTxnAmt());
+        tradeOrderDO.setTxnAmount(txnAmount);//交易金额
+        tradeOrderDO.setRespCode(weChatDTO.getRespCode());//交易返回码
+        tradeOrderDO.setRespMsg(weChatDTO.getRespMsg());
+        tradeOrderDO.setEntityInnerCode("");//实体商户内部商户号
+        tradeOrderDO.setChannelMerId("");//渠道商户号
+        tradeOrderDO.setChannelType("05");//渠道类型
+        Date tradeEndTime = DateUtils.formateToDate(weChatDTO.getEndTime());
+        tradeOrderDO.setCompleteTime(tradeEndTime);//交易完成时间
+        tradeOrderDO.setOrderCeateTime(DateUtils.formateToDate(weChatDTO.getOrderTime()));//订单创建时间
+        tradeOrderDO.setTxnType(1);//消费
+//        tradeOrderDO.setTxnSubType();//交易子类型
+        tradeOrderDO.setPayType("01");//支付方式  二维码
+        tradeOrderDO.setPaySubType("01");//交易子类型  微信
+        tradeOrderDO.setSettleAmount(new BigDecimal(weChatDTO.getSettleAmt()));//清算金额
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+        String settleDateStr = weChatDTO.getSettleDate();
+        try {
+			tradeOrderDO.setSettleDate(sdf.parse(settleDateStr + String.format("%1$0"+(14 - settleDateStr.length())+"d",0) ));//清算日期 [yyyyMMdd]
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+        int i = tradeOrderDO.getSettleAmount().compareTo(new BigDecimal(0));
+        if(i > 0){
+        	tradeOrderDO.setSettleStatus(1);
+        }else{
+        	tradeOrderDO.setSettleStatus(2);
+        }
+        tradeOrderDO.setInnerCode("");//内部商户号
+        orderDAO.insert(tradeOrderDO);
+        if(tradeOrderDO.getId() != null){
+        	return ResultDTO.success();
+        }else{
+        	return ResultDTO.fail("支付宝主扫交易插入失败");
+        }
 	}
 }

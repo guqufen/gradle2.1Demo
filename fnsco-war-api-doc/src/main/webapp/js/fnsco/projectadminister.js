@@ -1,7 +1,7 @@
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url :"http://localhost:8080/queryProj",
+	url :"http://localhost:8080/web/queryProj",
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
 	 toolbar: '#toolbar', // 工具按钮用哪个容器
@@ -26,11 +26,11 @@ $('#table').bootstrapTable({
 		title : '编号',
 	    align : 'center',
 	    width : '10%'
-	},{
+	},/*{
 		field : 'email',
 		title : '创建者',
 		align : 'center'
-	}, {
+	},*/ {
 		field : 'code',
 		title : '项目编码',
 		align : 'center'
@@ -108,8 +108,8 @@ function responseHandler(res) {
 	unloginHandler(res);
 	if (res) {
 		return {
-			"rows" : res.data.list,
-			"total" : res.data.total
+			"rows" : res.list,
+			"total" : res.total
 		};
 	} else {
 		return {
@@ -119,9 +119,9 @@ function responseHandler(res) {
 	}
 }
 //详情点击事件
-function querySingle(value) {
+function querySingle(id) {
 	$.ajax({
-		url : PROJECT_NAME + '/web/syssuggest/querySuggestInfo',
+		url : PROJECT_NAME + '/web/queryDetail',
 		type : 'POST',
 		dataType : "json",
 		data : {
@@ -133,14 +133,10 @@ function querySingle(value) {
 			console.log(data.data);
 
 			// 基本信息
-			$('input[name=mobile]').val(data.data.mobile);
-			$('input[name="userName"]').val(data.data.userName);
-			var subTime = data.data.submitTime;
-			if(subTime){
-				subTime = subTime.substr(0,subTime.length-2);
-			}
-			$('input[name="submitTime"]').val(subTime);
-			$('textarea[name="content"]').val(data.data.content);
+			$('input[name=code2]').val(data.data.code);
+			$('input[name="name2"]').val(data.data.name);
+			$('textarea[name="description2"]').val(data.data.description);
+			$('textarea[name="jsonStr2"]').val(data.data.jsonStr);
 
 			$('#detailMyModal').modal();
 			// 全部默认不可编辑
@@ -148,11 +144,6 @@ function querySingle(value) {
 			$("#detailsModal").find('select').attr('disabled', true);
 			$("#detailsModal").find('textarea').attr('disabled', true);
 			$("#detailsModal .subBankName").attr('readonly', false);
-			$(".remove-icon").hide();
-			$(".btn-addList").hide();
-			$(".deletefileImg").hide();
-			$(".uploadify").hide();
-
 		}
 	});
 }
