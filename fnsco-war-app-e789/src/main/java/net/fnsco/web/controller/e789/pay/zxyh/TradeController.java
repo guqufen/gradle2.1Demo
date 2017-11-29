@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.e789.pay.zxyh.controller;
+package net.fnsco.web.controller.e789.pay.zxyh;
 
 import java.util.Map;
 
@@ -21,7 +21,7 @@ import net.fnsco.web.controller.e789.pay.zxyh.jo.GenerateQRCodeWeChatJO;
 @RestController
 @RequestMapping(value = "/e789/trade/zxyh", method = RequestMethod.POST)
 @Api(value = "/e789/trade/zxyh", tags = { "中信银行主扫相关功能接口" })
-public class TradeZxyhController extends BaseController{
+public class TradeController extends BaseController{
 	
 	@Autowired
 	private ZxyhPaymentService zxyhPaymentService;

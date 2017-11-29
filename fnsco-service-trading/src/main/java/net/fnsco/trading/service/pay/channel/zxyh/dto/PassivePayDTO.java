@@ -9,14 +9,18 @@ public class PassivePayDTO {
 	/**
 	 * 初始化一些数据域
 	 */
-	public void init() {
-		this.setStdmercno("994400000000009");//商户编号 M String(15) 普通商户或一级商户的商户号，指中信内部15位商户号
+	public void init(String merId) {
+		this.setStdmercno(merId);// 商户编号 M String(15)
+												// 普通商户或一级商户的商户号，指中信内部15位商户号
 		this.setSignMethod("02");// 签名方法 M String(2) 签名方式：02：MD5,03：RSA
 		this.setStd400chnl("6005");// 接入渠道 M String(4) 6005 持牌机构MIS接入
 		this.setStdpaytype("02");// 接入支付类型 M String(2) 02：接口支付。
-		this.setStdtermid("WEB");//终端编号
-		this.setAccountFlag("Y");//分账标识 C String(1) 使用分账功能时上传，当值为Y时，表示交易为分账交易，分账子商户号stdmercno2必传 Y-分账其它或不传-不分账
-		this.setIndependentTransactionFlag("Y");//独立商户交易标识 C String(1)传“Y”，并且accountFlag也传“Y”时，即代表为独立商户交易
+		this.setStdtermid("WEB");// 终端编号
+		this.setAccountFlag("Y");// 分账标识 C String(1)
+									// 使用分账功能时上传，当值为Y时，表示交易为分账交易，分账子商户号stdmercno2必传
+									// Y-分账其它或不传-不分账
+		this.setIndependentTransactionFlag("Y");// 独立商户交易标识 C
+												// String(1)传“Y”，并且accountFlag也传“Y”时，即代表为独立商户交易
 	}
 
 	private String signMethod; // 签名方法 M String(2) 签名方式：02：MD5,03：RSA
@@ -68,9 +72,12 @@ public class PassivePayDTO {
 	private String transactionId;// 渠道订单号,R,订单支付成功时返回
 	private String endTime;// 支付完成时间，R,订单支付成功时返回
 
-	private String orgorderid;//原支付交易的中信订单号或原支付交易的商户订单号
-	
-	private String orgrefnum;//原支付交易的中信订单号
+	private String orgorderid;// 原支付交易的中信订单号或原支付交易的商户订单号
+
+	private String srg400mgid;// 原交易应答码
+	private String orgrtninfo;// 原交易应答信息
+
+	private String orgrefnum;// 原支付交易的中信订单号
 
 	public String getSignMethod() {
 		return signMethod;
@@ -366,6 +373,22 @@ public class PassivePayDTO {
 
 	public void setOrgrefnum(String orgrefnum) {
 		this.orgrefnum = orgrefnum;
+	}
+
+	public String getSrg400mgid() {
+		return srg400mgid;
+	}
+
+	public void setSrg400mgid(String srg400mgid) {
+		this.srg400mgid = srg400mgid;
+	}
+
+	public String getOrgrtninfo() {
+		return orgrtninfo;
+	}
+
+	public void setOrgrtninfo(String orgrtninfo) {
+		this.orgrtninfo = orgrtninfo;
 	}
 
 }
