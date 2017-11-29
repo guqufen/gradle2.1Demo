@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.trade.zxyh;
+package net.fnsco.web.controller.e789.pay.zxyh.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.merchant.MerchantChannelService;
 import net.fnsco.core.base.BaseController;
-import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.ZxyhPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
-import net.fnsco.web.controller.trade.jo.zxyh.ZxyhPassivePayJO;
+import net.fnsco.web.controller.e789.pay.zxyh.jo.ZxyhPassivePayJO;
 
 @Controller
 @RequestMapping(value="/app/zxyh/PassivePay", method=RequestMethod.POST)
@@ -31,7 +30,7 @@ public class ZxyhPassivePayController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/pay")
-	public ResultDTO ZxyhPassivePay(@RequestBody ZxyhPassivePayJO zxyhPassivePayJO){
+	public String ZxyhPassivePay(@RequestBody ZxyhPassivePayJO zxyhPassivePayJO){
 		
 		//对接收的报文进行处理
 		
@@ -59,8 +58,8 @@ public class ZxyhPassivePayController extends BaseController{
 		passivePayDTO.setSignAture(zxyhPassivePayJO.getSignAture());//签名
 
 		//调用service处理(值补全和存储以及发送请求给中信银行)
-		zxyhPaymentService.PassivePay(zxyhPassivePayJO.getInnerCode(), passivePayDTO);
-		return null;
+		
+		return zxyhPaymentService.PassivePay(zxyhPassivePayJO.getInnerCode(), passivePayDTO);
 	}
 	
 	/**
@@ -69,21 +68,25 @@ public class ZxyhPassivePayController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/queryPayResult")
-	public ResultDTO ZxyhPassivePayResult(@RequestBody PassivePayDTO passivePayDTO){
+	public String ZxyhPassivePayResult(@RequestBody ZxyhPassivePayJO zxyhPassivePayJO) {
 
-		zxyhPaymentService.PassivePayResult(passivePayDTO);
-		return null;
-	}
-	
-	/**
-	 * 退货
-	 * @param passivePayDTO
-	 * @return
-	 */
-	@RequestMapping("/payRefund")
-	public ResultDTO ZxyhPassivePayRefund(@RequestBody PassivePayDTO passivePayDTO){
-		zxyhPaymentService.PassivePayRefund(passivePayDTO);
-		return null;
-		
+		// 对接收的报文进行处理
+
+		// 签名校验
+
+		PassivePayDTO passivePayDTO = new PassivePayDTO();
+		if ("ZFB_CX".equals(zxyhPassivePayJO.getPayType())) {
+			passivePayDTO.setStdprocode("381003");// 交易码，381003：支付宝二清消费
+		} else if ("WX_CX".equals(zxyhPassivePayJO.getPayType())) {
+			passivePayDTO.setStdprocode("381000");// 交易码，381000：微信消费
+		} else {
+			logger.info("交易码错误" + passivePayDTO.getStdprocode());
+			return null;
+		}
+
+		passivePayDTO.setOrgorderid((zxyhPassivePayJO.getOrgOrderId()));// 原商户订单号
+		passivePayDTO.setSignAture(zxyhPassivePayJO.getSignAture());// 签名
+
+		return zxyhPaymentService.PassivePayResult(zxyhPassivePayJO.getInnerCode(), passivePayDTO);
 	}
 }

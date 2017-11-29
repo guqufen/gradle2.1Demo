@@ -207,6 +207,7 @@ public class ZxyhPayMD5Util {
 		}
 		// 将Map转成Json
 		// Json2 reqJs = Json2.make(reqMap);
+		System.out.println("req=["+reqMap+"]");
 		String reqStr = JSON.toJSONString(reqMap);
 		// Map<String,Object> reqJs = JSON.parseObject(mapStr, Map.class);
 		// 生成json字符串
