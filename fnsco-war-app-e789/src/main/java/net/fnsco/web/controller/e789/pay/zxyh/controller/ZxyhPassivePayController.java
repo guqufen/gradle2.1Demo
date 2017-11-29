@@ -1,5 +1,8 @@
 package net.fnsco.web.controller.e789.pay.zxyh.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +24,6 @@ public class ZxyhPassivePayController extends BaseController{
 
 	@Autowired
 	private ZxyhPaymentService zxyhPaymentService;
-	@Autowired
-	private MerchantChannelService merchantChannelService;
 
 	/**
 	 * 支付
@@ -49,7 +50,10 @@ public class ZxyhPassivePayController extends BaseController{
     		passivePayDTO.setStdprocode("481000");//交易码，481000：微信消费 481003：支付宝二清消费
     	}else{
     		logger.info("交易码错误"+passivePayDTO.getStdprocode());
-    		return null;
+    		Map<String, String> map = new HashMap<>();
+			map.put("respCode", "9999");
+			map.put("respMsg", "交易码错误");
+    		return map.toString();
     	}
 
 		passivePayDTO.setStdtranamt(zxyhPassivePayJO.getAmt());//交易金额
@@ -57,8 +61,7 @@ public class ZxyhPassivePayController extends BaseController{
 		passivePayDTO.setStdauthid(zxyhPassivePayJO.getAuthid());//授权码
 		passivePayDTO.setSignAture(zxyhPassivePayJO.getSignAture());//签名
 
-		//调用service处理(值补全和存储以及发送请求给中信银行)
-		
+		//调用service处理(值补全和存储以及发送请求给中信银行),并返回应答
 		return zxyhPaymentService.PassivePay(zxyhPassivePayJO.getInnerCode(), passivePayDTO);
 	}
 	
@@ -81,7 +84,10 @@ public class ZxyhPassivePayController extends BaseController{
 			passivePayDTO.setStdprocode("381000");// 交易码，381000：微信消费
 		} else {
 			logger.info("交易码错误" + passivePayDTO.getStdprocode());
-			return null;
+			Map<String, String> map = new HashMap<>();
+			map.put("respCode", "9999");
+			map.put("respMsg", "交易码错误");
+			return map.toString();
 		}
 
 		passivePayDTO.setOrgorderid((zxyhPassivePayJO.getOrgOrderId()));// 原商户订单号
