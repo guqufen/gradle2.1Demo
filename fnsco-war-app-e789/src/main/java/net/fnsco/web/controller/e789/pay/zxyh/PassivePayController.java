@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.e789.pay.zxyh.controller;
+package net.fnsco.web.controller.e789.pay.zxyh;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import net.fnsco.web.controller.e789.pay.zxyh.jo.ZxyhPassivePayJO;
 @Controller
 @RequestMapping(value="/app/zxyh/PassivePay", method=RequestMethod.POST)
 @Api(value="/app/zxyh/PassivePay", tags={"中信银行被扫支付接口"})
-public class ZxyhPassivePayController extends BaseController{
+public class PassivePayController extends BaseController{
 
 	@Autowired
 	private ZxyhPaymentService zxyhPaymentService;
