@@ -220,10 +220,7 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
         return respMap;
     }
     
-    
-    public void aliCallBack(){
-    	
-    }
+
     
     public void test() {
         Map<String, String> parameterMap = Maps.newHashMap();
