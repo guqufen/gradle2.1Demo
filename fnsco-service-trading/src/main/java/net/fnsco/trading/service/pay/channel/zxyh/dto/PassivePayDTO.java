@@ -37,11 +37,7 @@ public class PassivePayDTO {
 	private String stdbegtime; // 交易起始时间 M String(14)
 								// 商户上送交易时间，格式为[yyyyMMddHHmmss],如2009年12月25日9点10分10秒，表示为20091225091010
 	private String std400memo; // 商品描述 M String(127) 商品描述
-	private String stdtranamt; // 交易金额 M String(12) 订单总金额(交易单位为分，例:1.23元=123),
-								// 只能整数
-	// 若交易码为信e通消费，且消费类型为
-	// 01则代表权益次数，消费类型为
-	// 02则代表积分值
+	private String stdtranamt; // 交易金额 M String(12) 订单总金额(交易单位为分，例:1.23元=123),只能整数,若交易码为信e通消费，且消费类型为 01则代表权益次数,消费类型为02则代表积分值
 	private String stddiscamt; // 不可优惠金额 C String(12) 支付宝不可优惠金额支付宝交易本字段必填。
 	private String stdtrancur; // 交易币种 M String(3) 默认是156：人民币
 	private String stdauthid; // 授权码 M String((128) 扫码支付授权码，设备读取用户微信信息
@@ -54,8 +50,7 @@ public class PassivePayDTO {
 	private String signAture; // 签名 M String(1024) 填写对报文摘要的签名
 	private String needBankType; // 返回bankType标识 C String(1)
 									// 当值为“Y”时，支付成功、查询支付成功的订单会返回付款银行类型bankType
-	private String independentTransactionFlag;// 独立商户交易标识 C String(1)
-												// 传“Y”，并且accountFlag也传“Y”时，即代表为独立商户交易
+	private String independentTransactionFlag;// 独立商户交易标识 C String(1),传“Y”，并且accountFlag也传“Y”时，即代表为独立商户交易
 
 	private String stdreciamt;// 实收金额,R
 	private String stdpreamt;// 优惠金额,R
