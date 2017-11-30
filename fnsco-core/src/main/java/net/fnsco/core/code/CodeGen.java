@@ -18,7 +18,7 @@ public class CodeGen {
         //auto.init("net.fnsco.auth", "sys", "sys_menu");
         //auto.init("net.fnsco.risk", "report", "risk_report_info");
         //auto.init("net.fnsco.risk", "report", "risk_report_repayment_history");
-        auto.init("net.fnsco.order", "trade", "t_trade_data_lkl");
+        auto.init("net.fnsco.risk", "zhimainfo", "rist_data_access_third");
         //auto.init("net.fnsco.risk", "trade", "t_trade_data");
         //auto.init("net.fnsco.withhold", "sys", "sys_bank_trade_limit");
         //auto.init("net.fnsco.risk", "trade", "risk_trade_pay_bill");
