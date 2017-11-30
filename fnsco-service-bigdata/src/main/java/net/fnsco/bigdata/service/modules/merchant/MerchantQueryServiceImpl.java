@@ -13,7 +13,6 @@ import net.fnsco.bigdata.service.dao.master.AliasDAO;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
-import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.BaseService;
 
@@ -32,8 +31,6 @@ public class MerchantQueryServiceImpl extends BaseService implements MerchantQue
     private MerchantCoreDao     merchantCoreDao;
     @Autowired
     private MerchantTerminalDao merchantTerminalDao;
-    @Autowired
-    private MerchantUserRelDao  merchantUserRelDao;
     @Override
     public List<MerchantTerminal> selectTerminalByIdList(List<Integer> innerIdList) {
         

@@ -16,13 +16,14 @@ import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.dto.PermissionsDTO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
-import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.order.api.appuser.AppUserMerchantService;
 import net.fnsco.order.api.config.SysConfigService;
 import net.fnsco.order.api.constant.ConstantEnum.IntegralTypeEnum;
 import net.fnsco.order.api.dto.IntegralRuleDTO;
 import net.fnsco.order.api.merchant.IntegralRuleService;
+import net.fnsco.order.service.domain.AppUserMerchant;
 import net.fnsco.order.service.domain.IntegralRule;
 import net.fnsco.order.service.domain.SysConfig;
 
@@ -39,10 +40,12 @@ public class AppMerchentLevelController extends BaseController{
 	private IntegralRuleService integralRuleService;
 	@Autowired
 	private Environment env;
+	@Autowired
+	private AppUserMerchantService appUserMerchantService;
 	
 	// 商户等级查询(根据userid查询该用户下所有实体商户<等级和积分信息>列表)
 	@RequestMapping("/queryMercScore")
-	public ResultDTO queryMercScore(@RequestBody MerchantUserRel merchantUserRel) {
+	public ResultDTO queryMercScore(@RequestBody AppUserMerchant merchantUserRel) {
 
 		if (null == merchantUserRel.getAppUserId()) {
 			logger.error("入参ID为null");
@@ -86,7 +89,7 @@ public class AppMerchentLevelController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/queryMercLevelDetail")
-	public ResultDTO<MerChantCoreDTO> queryMercLevelDetail(@RequestBody MerchantUserRel merchantUserRel) {
+	public ResultDTO<MerChantCoreDTO> queryMercLevelDetail(@RequestBody AppUserMerchant merchantUserRel) {
 
 		// 判空
 		if (StringUtils.isBlank(merchantUserRel.getEntityInnerCode())) {
@@ -95,7 +98,7 @@ public class AppMerchentLevelController extends BaseController{
 		}
 
 		// 获取该条商户信息
-		MerChantCoreDTO merChantCoreDTO = merchantService.selectByEntityInnerCode(merchantUserRel);
+		MerChantCoreDTO merChantCoreDTO = appUserMerchantService.selectByEntityInnerCode(merchantUserRel);
 		if (null == merChantCoreDTO) {
 			logger.error("该用户ID下未绑定该商户");
 			return fail("该用户ID下未绑定该商户");
@@ -157,7 +160,7 @@ public class AppMerchentLevelController extends BaseController{
 
 	// 等级列表查询(v1-v7,普通商家-至尊商家，xxxx积分)
 	@RequestMapping("/queryLevelList")
-	public ResultDTO queryLevelList(@RequestBody MerchantUserRel merchantUserRel) {
+	public ResultDTO queryLevelList(@RequestBody AppUserMerchant merchantUserRel) {
 
 		SysConfig sysConfig = new SysConfig();
 		sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE.getCode());// 等级列表(v1-v7)，type类型为11
@@ -172,7 +175,7 @@ public class AppMerchentLevelController extends BaseController{
 	
 	// 商户等级详情页面下的获取经验格子
 	@RequestMapping("/queryExpList")
-	public ResultDTO queryExpList(@RequestBody MerchantUserRel merchantUserRel) {
+	public ResultDTO queryExpList(@RequestBody AppUserMerchant merchantUserRel) {
 
 		SysConfig sysConfig = new SysConfig();
 		sysConfig.setType("10");// 等级列表(v1-v7)，type类型为11
@@ -186,7 +189,7 @@ public class AppMerchentLevelController extends BaseController{
 	}
 	
 	@RequestMapping("/queryRules")
-	public ResultDTO queryRules(@RequestBody MerchantUserRel merchantUserRel) {
+	public ResultDTO queryRules(@RequestBody AppUserMerchant merchantUserRel) {
 
 		List<String> nameList = integralRuleService.queryDistinctName();
 		

@@ -792,7 +792,7 @@ WHERE
 	)
 	</select>
 	<!-- 根据实体商户号查询关联的商户实体包括积分 -->
-	<select id="selectByEntityInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantUserRel"
+	<select id="selectByEntityInnerCode" parameterType="java.lang.String"
 		resultMap="CoreResultMap">
 		SELECT
 		   IFNULL(scores, 0) scores,

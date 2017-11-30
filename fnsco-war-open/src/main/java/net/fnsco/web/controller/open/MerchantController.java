@@ -17,12 +17,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.dto.MerchantSynchronizationDTO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
-import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.bigdata.service.modules.merchant.MerchantInfoImportService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.order.service.domain.AppUserMerchant;
 import net.fnsco.order.service.sys.dao.ImportErrorDAO;
 import net.fnsco.order.service.sys.dao.helper.ImportErrorMsgHelper;
 import net.fnsco.order.service.sys.entity.ImportErrorDO;
@@ -103,11 +103,11 @@ public class MerchantController extends BaseController {
         }
         String flag = "0";
         for (String innerCode : innerCodeList) {
-            List<MerchantUserRel> tempList = appUserService.getAppUserMerchantByInnerCode(innerCode);
+            List<AppUserMerchant> tempList = appUserService.getAppUserMerchantByInnerCode(innerCode);
             if (!CollectionUtils.isEmpty(tempList) && "0".equals(flag)) {
                 flag = "1";
             }
-            for (MerchantUserRel userRel : tempList) {
+            for (AppUserMerchant userRel : tempList) {
                 AppUser user = appUserService.selectAppUserById(userRel.getAppUserId());
                 if (user != null && user.getLastLoginTime() != null) {
                     flag = "2";

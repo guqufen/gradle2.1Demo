@@ -1,7 +1,6 @@
 package net.fnsco.risk.service.zhima;
 
 import java.util.List;
-
 import com.alibaba.fastjson.JSON;
 import com.antgroup.zmxy.openplatform.api.DefaultZhimaClient;
 import com.antgroup.zmxy.openplatform.api.ZhimaApiException;
@@ -40,7 +39,6 @@ public class TestZhimaCreditEpScoreGet {
         ZhimaCreditEpLawsuitRecordGetRequest req = new ZhimaCreditEpLawsuitRecordGetRequest();
         req.setChannel("apppc");
         req.setPlatform("zmop");
-
         req.setTransactionId("2017112100936588040000000465159");// 必要参数 
         req.setProductCode("w1010100300000000001");// 必要参数 
         req.setOrgNo("");//69655606-5");// 必要参数 

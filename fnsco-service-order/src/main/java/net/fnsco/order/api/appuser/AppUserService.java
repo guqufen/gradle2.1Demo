@@ -2,7 +2,6 @@ package net.fnsco.order.api.appuser;
 
 import java.util.List;
 
-import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.order.api.dto.AppUserDTO;
@@ -75,7 +74,7 @@ public interface AppUserService {
     ResultDTO modifyInfo(AppUserDTO appUserDTO);
     ResultDTO<String> getUserInfo(AppUserDTO appUserDTO);
     
-    List<MerchantUserRel> getAppUserMerchantByInnerCode(String innerCode);
+    List<AppUserMerchant> getAppUserMerchantByInnerCode(String innerCode);
     List<AppUser> selectAllInviteAppUser();
     boolean updateAppUser(AppUser appUser);
 }
