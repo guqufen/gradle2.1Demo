@@ -21,10 +21,8 @@ import com.google.common.collect.Maps;
 
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
-import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantPos;
-import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
@@ -66,8 +64,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private AppUserDao                     appUserDao;
     @Autowired
     private MerchantCoreDao                merchantCoreDao;
-    @Autowired
-    private MerchantUserRelDao             merchantUserRelDao;
     @Autowired
     private AppUserMerchantDao             appUserMerchantDao;
     @Autowired
@@ -171,11 +167,11 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     }
 
     private void insertRel(String innerCode, AppUser appUser, String roleId) {
-        MerchantUserRel rel = new MerchantUserRel();
-        rel.setAppUserId(appUser.getId());
-        rel.setInnerCode(innerCode);
-        rel.setModefyTime(new Date());
-        merchantUserRelDao.insertSelective(rel);
+//        MerchantUserRel rel = new MerchantUserRel();
+//        rel.setAppUserId(appUser.getId());
+//        rel.setInnerCode(innerCode);
+//        rel.setModefyTime(new Date());
+//        merchantUserRelDao.insertSelective(rel);
         AppUserMerchant dto = new AppUserMerchant();
         dto.setAppUserId(appUser.getId());
         dto.setInnerCode(innerCode);
@@ -398,7 +394,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         map.put("appUserId", appUser.getId());
         //查询用户绑定商户数量 根据用户id查询数量
         int merchantNums = 0;
-        List<MerchantUserRel> rel = merchantUserRelDao.selectByUserId(appUser.getId());
+        List<AppUserMerchant> rel = appUserMerchantDao.selectByUserId(appUser.getId());
         if (!CollectionUtils.isEmpty(rel)) {
             merchantNums = rel.size();
         }
@@ -626,8 +622,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     }
 
     @Override
-    public List<MerchantUserRel> getAppUserMerchantByInnerCode(String innerCode) {
-        return merchantUserRelDao.selectByInnerCode(innerCode);
+    public List<AppUserMerchant> getAppUserMerchantByInnerCode(String innerCode) {
+        return appUserMerchantDao.selectByInnerCode(innerCode);
     }
     @Override
     public List<AppUser> selectAllInviteAppUser(){

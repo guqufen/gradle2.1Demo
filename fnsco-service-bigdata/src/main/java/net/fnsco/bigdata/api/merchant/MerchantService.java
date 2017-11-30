@@ -7,17 +7,14 @@ import java.util.List;
 
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.dto.MerChantCoreDetailDTO;
-import net.fnsco.bigdata.api.dto.MerTerminalsDTO;
 import net.fnsco.bigdata.api.dto.MerchantDTO;
 import net.fnsco.bigdata.api.dto.PosDetailDTO;
 import net.fnsco.bigdata.api.dto.PosInfoDTO;
 import net.fnsco.bigdata.api.dto.PosListDTO;
-import net.fnsco.bigdata.api.dto.TerminalDetailDTO;
 import net.fnsco.bigdata.api.dto.TerminalsDTO;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
-import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.ResultDTO;
 
 /**@desc 商户相关服务接口
@@ -100,13 +97,6 @@ public interface MerchantService {
      * @return
      */
     List<MerChantCoreDTO> getMerchantsScoresByUserId(Integer userId);
-
-    /**
-     * getMerchantsScoresByUserId：根据用户ID和内部商户号查询商户积分信息列表
-     * @param userId:用户ID
-     * @return
-     */
-    MerChantCoreDTO selectByEntityInnerCode(MerchantUserRel merchantUserRel);
 
     /**
      * 

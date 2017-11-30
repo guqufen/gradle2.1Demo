@@ -15,10 +15,8 @@ import com.google.common.base.Strings;
 import net.fnsco.bigdata.api.dto.MerchantDTO;
 import net.fnsco.bigdata.service.dao.master.AliasDAO;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
-import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.domain.Alias;
 import net.fnsco.bigdata.service.domain.MerchantCore;
-import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
@@ -41,8 +39,6 @@ public class MerchantOrderServiceImpl extends BaseService implements MerchantOrd
     private AliasDAO            aliasDAO;
     @Autowired
     private MerchantCoreDao     merchantCoreDao;
-    @Autowired
-    private MerchantUserRelDao  merchantUserRelDao;
     @Autowired
     private SysAppMsgService    sysAppMsgService;
     @Autowired
@@ -70,7 +66,7 @@ public class MerchantOrderServiceImpl extends BaseService implements MerchantOrd
         if (currentDate.after(deadLime)) {
             return ResultDTO.fail(ApiConstant.E_MERCHANT_CODE_OVERDUE);//些商铺码已过期，请到pos机查询最新的商铺码
         }
-        MerchantUserRel merchantUserRel = merchantUserRelDao.selectByUserIdInnerCode(merchantDTO.getUserId(), alias.getInnerCode());
+        AppUserMerchant merchantUserRel = appUserMerchantDao.selectByUserIdInnerCode(merchantDTO.getUserId(), alias.getInnerCode());
         if (null != merchantUserRel) {
             return ResultDTO.fail(ApiConstant.E_MERCHANT_ALREADY_REF);//已关联此商铺，请勿重复关联
         }
@@ -78,11 +74,11 @@ public class MerchantOrderServiceImpl extends BaseService implements MerchantOrd
         if (null == merchantCore) {
             return ResultDTO.fail(ApiConstant.E_MERCHANT_IS_DEL);//此商户已删除，关联失败
         }
-        MerchantUserRel muRel = new MerchantUserRel();
-        muRel.setAppUserId(merchantDTO.getUserId());
-        muRel.setInnerCode(alias.getInnerCode());
-        muRel.setModefyTime(new Date());
-        merchantUserRelDao.insert(muRel);
+//        MerchantUserRel muRel = new MerchantUserRel();
+//        muRel.setAppUserId(merchantDTO.getUserId());
+//        muRel.setInnerCode(alias.getInnerCode());
+//        muRel.setModefyTime(new Date());
+//        merchantUserRelDao.insert(muRel);
         //用户管理表新增记录
         AppUserMerchant dto = new AppUserMerchant();
         dto.setAppUserId(merchantDTO.getUserId());
@@ -122,8 +118,8 @@ public class MerchantOrderServiceImpl extends BaseService implements MerchantOrd
     public boolean deleteMerchantRelation(Integer merId, Integer userId) {
         
         int ar = appUserMerchantDao.deleteByMerIdAndUserId(userId, merId);
-        int au = merchantUserRelDao.deleteByMerIdAndUserId(userId, merId);
-        if(ar+au>0){
+//        int au = merchantUserRelDao.deleteByMerIdAndUserId(userId, merId);
+        if(ar>0){
             return true;
         }
         return false;
