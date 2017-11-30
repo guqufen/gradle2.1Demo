@@ -29,13 +29,7 @@ public class TomcatApplication extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
-//        SpringApplication.run(TomcatApplication.class, args);
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
-        try {
-			System.out.println(sdf.parse("20140502" + String.format("%1$0"+(14 - "abc".length())+"d",0) ));//清算日期 [yyyyMMdd]
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+        SpringApplication.run(TomcatApplication.class, args);
     	  
     }
 
