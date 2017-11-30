@@ -382,7 +382,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			map.put("respCode", "9999");
 			map.put("respMsg", "系统异常");
 			map.put("orderId", passivePayDTO.getOrgorderid());
-			map.put("begTime", DateUtils.dateFormatToStr(new Date()));
+			map.put("begTime", DateUtils.getNowDateStr());
 			return map.toString();
 		}
 
@@ -393,7 +393,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			map.put("respCode", tradeOrderDO.getRespCode());
 			map.put("respMsg", tradeOrderDO.getRespMsg());
 			map.put("orderId", passivePayDTO.getOrgorderid());
-			map.put("begTime", tradeOrderDO.getOrderCeateTimeStr());
+			map.put("begTime", DateUtils.dateFormat1ToStr(tradeOrderDO.getOrderCeateTime()));
 			return map.toString();
 		}
 
@@ -455,7 +455,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		map.put("reciAmt", passDTO1.getStdreciamt());//实收金额
 		map.put("preAmt", passDTO1.getStdpreamt());//优惠金额
 
-		return null;
+		return map.toString();
     }
 
 	/**
