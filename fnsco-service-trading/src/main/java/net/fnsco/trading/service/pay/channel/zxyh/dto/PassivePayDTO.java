@@ -9,14 +9,18 @@ public class PassivePayDTO {
 	/**
 	 * 初始化一些数据域
 	 */
-	public void init() {
-		this.setStdmercno("994400000000009");//商户编号 M String(15) 普通商户或一级商户的商户号，指中信内部15位商户号
+	public void init(String merId) {
+		this.setStdmercno(merId);// 商户编号 M String(15)
+												// 普通商户或一级商户的商户号，指中信内部15位商户号
 		this.setSignMethod("02");// 签名方法 M String(2) 签名方式：02：MD5,03：RSA
 		this.setStd400chnl("6005");// 接入渠道 M String(4) 6005 持牌机构MIS接入
 		this.setStdpaytype("02");// 接入支付类型 M String(2) 02：接口支付。
-		this.setStdtermid("WEB");//终端编号
-		this.setAccountFlag("Y");//分账标识 C String(1) 使用分账功能时上传，当值为Y时，表示交易为分账交易，分账子商户号stdmercno2必传 Y-分账其它或不传-不分账
-		this.setIndependentTransactionFlag("Y");//独立商户交易标识 C String(1)传“Y”，并且accountFlag也传“Y”时，即代表为独立商户交易
+		this.setStdtermid("WEB");// 终端编号
+		this.setAccountFlag("Y");// 分账标识 C String(1)
+									// 使用分账功能时上传，当值为Y时，表示交易为分账交易，分账子商户号stdmercno2必传
+									// Y-分账其它或不传-不分账
+		this.setIndependentTransactionFlag("Y");// 独立商户交易标识 C
+												// String(1)传“Y”，并且accountFlag也传“Y”时，即代表为独立商户交易
 	}
 
 	private String signMethod; // 签名方法 M String(2) 签名方式：02：MD5,03：RSA
@@ -33,11 +37,7 @@ public class PassivePayDTO {
 	private String stdbegtime; // 交易起始时间 M String(14)
 								// 商户上送交易时间，格式为[yyyyMMddHHmmss],如2009年12月25日9点10分10秒，表示为20091225091010
 	private String std400memo; // 商品描述 M String(127) 商品描述
-	private String stdtranamt; // 交易金额 M String(12) 订单总金额(交易单位为分，例:1.23元=123),
-								// 只能整数
-	// 若交易码为信e通消费，且消费类型为
-	// 01则代表权益次数，消费类型为
-	// 02则代表积分值
+	private String stdtranamt; // 交易金额 M String(12) 订单总金额(交易单位为分，例:1.23元=123),只能整数,若交易码为信e通消费，且消费类型为 01则代表权益次数,消费类型为02则代表积分值
 	private String stddiscamt; // 不可优惠金额 C String(12) 支付宝不可优惠金额支付宝交易本字段必填。
 	private String stdtrancur; // 交易币种 M String(3) 默认是156：人民币
 	private String stdauthid; // 授权码 M String((128) 扫码支付授权码，设备读取用户微信信息
@@ -50,8 +50,7 @@ public class PassivePayDTO {
 	private String signAture; // 签名 M String(1024) 填写对报文摘要的签名
 	private String needBankType; // 返回bankType标识 C String(1)
 									// 当值为“Y”时，支付成功、查询支付成功的订单会返回付款银行类型bankType
-	private String independentTransactionFlag;// 独立商户交易标识 C String(1)
-												// 传“Y”，并且accountFlag也传“Y”时，即代表为独立商户交易
+	private String independentTransactionFlag;// 独立商户交易标识 C String(1),传“Y”，并且accountFlag也传“Y”时，即代表为独立商户交易
 
 	private String stdreciamt;// 实收金额,R
 	private String stdpreamt;// 优惠金额,R
@@ -68,9 +67,12 @@ public class PassivePayDTO {
 	private String transactionId;// 渠道订单号,R,订单支付成功时返回
 	private String endTime;// 支付完成时间，R,订单支付成功时返回
 
-	private String orgorderid;//原支付交易的中信订单号或原支付交易的商户订单号
-	
-	private String orgrefnum;//原支付交易的中信订单号
+	private String orgorderid;// 原支付交易的中信订单号或原支付交易的商户订单号
+
+	private String srg400mgid;// 原交易应答码
+	private String orgrtninfo;// 原交易应答信息
+
+	private String orgrefnum;// 原支付交易的中信订单号
 
 	public String getSignMethod() {
 		return signMethod;
@@ -366,6 +368,22 @@ public class PassivePayDTO {
 
 	public void setOrgrefnum(String orgrefnum) {
 		this.orgrefnum = orgrefnum;
+	}
+
+	public String getSrg400mgid() {
+		return srg400mgid;
+	}
+
+	public void setSrg400mgid(String srg400mgid) {
+		this.srg400mgid = srg400mgid;
+	}
+
+	public String getOrgrtninfo() {
+		return orgrtninfo;
+	}
+
+	public void setOrgrtninfo(String orgrtninfo) {
+		this.orgrtninfo = orgrtninfo;
 	}
 
 }

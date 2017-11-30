@@ -24,7 +24,7 @@ import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.OrderPaymentService;
-import net.fnsco.trading.service.pay.channel.zxyh.ZxyhPaymentService;
+import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 
 
 @Controller
@@ -35,7 +35,7 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 	@Autowired
 	private MerchantCoreService merchantCoreService;
 	@Autowired
-	private ZxyhPaymentService zxyhPaymentService;
+	private PaymentService zxyhPaymentService;
 	
 	/**
 	 * 入驻中信银行的controller

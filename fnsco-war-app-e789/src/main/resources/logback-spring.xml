@@ -11,14 +11,14 @@
 	 <!-- 时间滚动输出 level为 DEBUG 日志 -->
 	<appender name="file—debug"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_PATH}/app_zft/debug.log</file>
+		<file>${LOG_PATH}/app_e789/debug.log</file>
 		<filter class="net.fnsco.freamwork.log.LevelFilter">
 			<level>DEBUG</level>
 			<onMatch>ACCEPT</onMatch>  
 	        <onMismatch>DENY</onMismatch>  
 		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>${LOG_PATH}/app_zft/debug.%d{yyyy-MM-dd}.log
+			<FileNamePattern>${LOG_PATH}/app_e789/debug.%d{yyyy-MM-dd}.log
 			</FileNamePattern>
 			<MaxHistory>5</MaxHistory>
 		</rollingPolicy>
@@ -29,14 +29,14 @@
 	<!-- 时间滚动输出 level为 DEBUG 日志 -->
 	<appender name="file—info"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_PATH}/app_zft/info.log</file>
+		<file>${LOG_PATH}/app_e789/info.log</file>
 		<filter class="net.fnsco.freamwork.log.LevelFilter">
 			<level>INFO</level>
 			<onMatch>ACCEPT</onMatch>  
 	        <onMismatch>DENY</onMismatch>  
 		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>${LOG_PATH}/app_zft/info.%d{yyyy-MM-dd}.log
+			<FileNamePattern>${LOG_PATH}/app_e789/info.%d{yyyy-MM-dd}.log
 			</FileNamePattern>
 			<MaxHistory>5</MaxHistory>
 		</rollingPolicy>
@@ -47,14 +47,14 @@
 	</appender>
 	<appender name="file—error"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_PATH}/app_zft/warn.log</file>
+		<file>${LOG_PATH}/app_e789/warn.log</file>
 		<filter class="net.fnsco.freamwork.log.LevelFilter">
 			<level>WARN</level>
 			<onMatch>ACCEPT</onMatch>  
 	        <onMismatch>DENY</onMismatch>  
 		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>${LOG_PATH}/app_zft/warn.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>${LOG_PATH}/app_e789/warn.%d{yyyy-MM-dd}.log</FileNamePattern>
 			<MaxHistory>300</MaxHistory>
 		</rollingPolicy>
 		<encoder charset="UTF-8">
@@ -64,7 +64,7 @@
 	<!-- 时间滚动输出 level为 ERROR 日志 -->
 	<appender name="file—error"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_PATH}/app_zft/error.log</file>
+		<file>${LOG_PATH}/app_e789/error.log</file>
 		<filter class="net.fnsco.freamwork.log.LevelFilter">
 			<level>ERROR</level>
 			<onMatch>ACCEPT</onMatch>  
@@ -81,12 +81,12 @@
 	<!-- 时间滚动输出 level为 ERROR 日志 -->
 	<appender name="SYS-PAGE-DIGEST"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_PATH}/app_zft/SYS-PAGE-DIGEST.log</file>
+		<file>${LOG_PATH}/app_e789/SYS-PAGE-DIGEST.log</file>
 		<filter class="net.fnsco.freamwork.log.LogNameFilter">
 			<name>SYS-PAGE-DIGEST</name>
 		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>${LOG_PATH}/app_zft/SYS-PAGE-DIGEST.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>${LOG_PATH}/app_e789/SYS-PAGE-DIGEST.%d{yyyy-MM-dd}.log</FileNamePattern>
 			<MaxHistory>300</MaxHistory>
 		</rollingPolicy>
 		<encoder charset="UTF-8">
