@@ -43,7 +43,7 @@ public interface AppUserMerchantDao {
     
     AppUserMerchant selectByUserIdInnerCode(@Param("appUserId") Integer appUserId, @Param("innerCode") String innerCode);
     
-    List<AppUserMerchant> selectByInnerCode(@Param("innerCode") String innerCode);
+    List<AppUserMerchant> selectAllByInnerCode(@Param("innerCode") String innerCode);
     
     List<AppUserMerchant> selectByUserId(@Param("appUserId") Integer appUserId);
 }

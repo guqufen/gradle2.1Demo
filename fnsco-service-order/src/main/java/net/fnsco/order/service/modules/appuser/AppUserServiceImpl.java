@@ -623,7 +623,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
     @Override
     public List<AppUserMerchant> getAppUserMerchantByInnerCode(String innerCode) {
-        return appUserMerchantDao.selectByInnerCode(innerCode);
+        return appUserMerchantDao.selectAllByInnerCode(innerCode);
     }
     @Override
     public List<AppUser> selectAllInviteAppUser(){

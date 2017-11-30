@@ -166,7 +166,7 @@
     limit 1
   </select>
   
-  <select id="selectByInnerCode" resultMap="BaseResultMap" >
+  <select id="selectAllByInnerCode" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
     from u_app_user_merchant
