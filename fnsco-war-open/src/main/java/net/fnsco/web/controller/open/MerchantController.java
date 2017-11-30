@@ -95,7 +95,7 @@ public class MerchantController extends BaseController {
      * @since  CodingExample　Ver 1.1
      */
     @RequestMapping(value = "/isHaveAppUser")
-    @ApiOperation(value = "获取商户pos机名称")
+    @ApiOperation(value = "pos是否绑定了App用户")
     public ResultDTO isHaveAppUser(@RequestBody MerchantJO merchant) {
         List<String> innerCodeList = merchantService.getMerchantAppUser(merchant.getSnCode());
         if (CollectionUtils.isEmpty(innerCodeList)) {
