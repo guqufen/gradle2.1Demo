@@ -1,8 +1,10 @@
-package net.fnsco.web.controller.e789.pay;
+package net.fnsco.web.controller.e789.pay.jo;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.JO;
 
 public class TradeJO extends JO {
+    @ApiModelProperty(value = "用户名", name = "username", example = "xingguo")
     private String  merCode;
     private String  channelType;
     private String  snCode;
