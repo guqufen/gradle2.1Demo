@@ -47,7 +47,7 @@ import net.fnsco.trading.service.pay.channel.zxyh.util.SignUtil;
 import net.fnsco.trading.service.pay.channel.zxyh.util.ZxyhPayMD5Util;
 
 @Service
-public class ZxyhPaymentService extends BaseService implements OrderPaymentService {
+public class PaymentService extends BaseService implements OrderPaymentService {
     @Autowired
     private Environment env;
     @Autowired
@@ -424,6 +424,43 @@ public class ZxyhPaymentService extends BaseService implements OrderPaymentServi
 
 		return null;
     }
+
+	public String PassiveAuthIdCheck(String innerCode, PassivePayDTO passivePayDTO) {
+		String url = "/MPay/misRequest.do";
+		String merId = env.getProperty("zxyh.merId");
+		PassivePayDTO passDTO = new PassivePayDTO();
+		passDTO.init(merId);
+
+		passDTO.setStdmsgtype("07");// 消息类型 M String(4) "07"
+		// 交易码
+		passDTO.setStdprocode("070101");
+
+		// 通过内部商户号查找绑定的中信商户号
+		MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, "05");
+		if (null == merchantChannel) {
+			logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=[" + innerCode + "");
+			Map<String, String> map = new HashMap<>();
+			map.put("respCode", "9999");
+			map.put("respMsg", "系统异常");
+			return map.toString();
+		}
+		passDTO.setStdmercno2(merchantChannel.getChannelMerId());// 二级商户号，使用分账功能时上传，是与stdmercno关联的分账子商户号
+		passDTO.setStdauthid(passivePayDTO.getStdauthid());// 设置授权码
+		passDTO.setStdorderid(
+				DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_order"));// 商户订单号，32个字符内
+		
+		String passiveStr = JSON.toJSONString(passDTO);// 将对象转换为JSON字符串
+		Map<String, String> passiveMap = JSON.parseObject(passiveStr, Map.class);// 将JSON字符串转换为map
+		String respStr = ZxyhPayMD5Util.request(passiveMap, url, "https://120.27.165.177:8099");
+		
+		// 解析返回报文
+		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+		System.out.println(respMap);
+		String json = JSON.toJSONString(respMap);
+		PassivePayDTO passDTO1 = JSON.parseObject(json, PassivePayDTO.class);
+		System.out.println("["+passDTO1+"]");
+		return innerCode;
+	}
 
     /**
      * 支付宝主扫回调函数
