@@ -2,7 +2,7 @@ package net.fnsco.web.controller.e789.pay.zxyh.jo;
 
 import net.fnsco.core.base.JO;
 
-public class ZxyhPassivePayJO extends JO {
+public class PassivePayJO extends JO {
 
 	private static final long serialVersionUID = 1L;
 

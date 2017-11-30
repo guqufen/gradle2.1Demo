@@ -13,7 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.trading.service.pay.channel.zxyh.ZxyhPaymentService;
+import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.web.controller.e789.pay.zxyh.jo.GenerateQRCodeAliPayJO;
 import net.fnsco.web.controller.e789.pay.zxyh.jo.GenerateQRCodeWeChatJO;
 
@@ -24,7 +24,7 @@ import net.fnsco.web.controller.e789.pay.zxyh.jo.GenerateQRCodeWeChatJO;
 public class TradeController extends BaseController{
 	
 	@Autowired
-	private ZxyhPaymentService zxyhPaymentService;
+	private PaymentService zxyhPaymentService;
 
 	
 	
