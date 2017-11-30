@@ -5,13 +5,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.bigdata.api.dto.MerTerminalsDTO;
 import net.fnsco.bigdata.service.domain.MerchantCore;
-import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.core.base.PageDTO;
 /**
  * @desc 商户基本信息DAO
@@ -121,7 +119,7 @@ public interface MerchantCoreDao {
      * @param userId
      * @return
      */
-    MerChantCoreDTO selectByEntityInnerCode(MerchantUserRel merchantUserRel);
+    MerChantCoreDTO selectByEntityInnerCode(@Param("entityInnerCode")String entityInnerCode);
     
     /**
      * queryDetailById:(这里用一句话描述这个方法的作用) 根据商家ID 查询详情

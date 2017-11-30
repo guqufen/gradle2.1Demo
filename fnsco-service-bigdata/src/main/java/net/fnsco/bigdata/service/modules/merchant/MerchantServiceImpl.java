@@ -6,7 +6,6 @@ package net.fnsco.bigdata.service.modules.merchant;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -18,13 +17,11 @@ import com.google.common.collect.Lists;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.dto.MerChantCoreDetailDTO;
-import net.fnsco.bigdata.api.dto.MerTerminalsDTO;
 import net.fnsco.bigdata.api.dto.MerchantDTO;
 import net.fnsco.bigdata.api.dto.PosDetailDTO;
 import net.fnsco.bigdata.api.dto.PosInfoDTO;
 import net.fnsco.bigdata.api.dto.PosInfosDTO;
 import net.fnsco.bigdata.api.dto.PosListDTO;
-import net.fnsco.bigdata.api.dto.TerminalDetailDTO;
 import net.fnsco.bigdata.api.dto.TerminalInfoDTO;
 import net.fnsco.bigdata.api.dto.TerminalsDTO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
@@ -40,7 +37,6 @@ import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.bigdata.service.domain.MerchantTerminal;
-import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.bigdata.service.merchant.dao.MerchantPosSimpleDao;
 import net.fnsco.bigdata.service.merchant.entity.MerchantPosDO;
 import net.fnsco.core.base.BaseService;
@@ -389,10 +385,5 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         List<MerChantCoreDTO> datas = merchantCoreDao.getMerchantsScoresByUserId(userId);
         
         return datas;
-	}
-	@Override
-	public MerChantCoreDTO selectByEntityInnerCode(MerchantUserRel merchantUserRel) {
-
-		return merchantCoreDao.selectByEntityInnerCode(merchantUserRel);
 	}
 }

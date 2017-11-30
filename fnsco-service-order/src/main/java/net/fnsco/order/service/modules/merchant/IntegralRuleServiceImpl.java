@@ -11,19 +11,18 @@ import org.springframework.util.CollectionUtils;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
-import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
-import net.fnsco.bigdata.service.domain.MerchantUserRel;
 import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ConstantEnum;
-import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.merchant.IntegralLogService;
 import net.fnsco.order.api.merchant.IntegralRuleService;
+import net.fnsco.order.service.dao.master.AppUserMerchantDao;
 import net.fnsco.order.service.dao.master.IntegralRuleDAO;
 import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.order.service.domain.AppUserMerchant;
 import net.fnsco.order.service.domain.IntegralRule;
 
 @Service
@@ -44,7 +43,7 @@ public class IntegralRuleServiceImpl extends BaseService implements IntegralRule
 	@Autowired
     private AppUserService appUserService;
 	@Autowired
-    private MerchantUserRelDao merchantUserRelDao;
+    private AppUserMerchantDao appUserMerchantDao;
 	@Override
 	public List<IntegralRule> queryListByCondition(IntegralRule integralRule) {
 		// TODO Auto-generated method stub
@@ -110,7 +109,7 @@ public class IntegralRuleServiceImpl extends BaseService implements IntegralRule
         List<AppUser> appUserList = appUserService.selectAllInviteAppUser();
         for (AppUser user : appUserList) {
             logger.info("被邀请用户被查到"+user.getUserName());
-            List<MerchantUserRel> userRel = merchantUserRelDao.selectByUserId(user.getId());
+            List<AppUserMerchant> userRel = appUserMerchantDao.selectByUserId(user.getId());
             if (!CollectionUtils.isEmpty(userRel)) {
                 try {
                     logger.error("邀请商户增加积分"+user.getId());

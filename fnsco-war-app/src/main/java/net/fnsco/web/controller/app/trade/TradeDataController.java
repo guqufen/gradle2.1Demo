@@ -28,6 +28,7 @@ import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.order.service.modules.trade.TradeDataAppServiceImpl;
 import net.fnsco.web.controller.app.jo.TradeDataJO;
 
 /**
@@ -44,6 +45,8 @@ public class TradeDataController extends BaseController {
     private MerchantCoreService merchantCoreService;
     @Autowired
     private MerchantPosService  merchantPosService;
+    @Autowired
+    private TradeDataAppServiceImpl    tradeDataAppService;
 
     /**
      * 查询交易流水信息
@@ -60,7 +63,7 @@ public class TradeDataController extends BaseController {
             tradeQueryDTO.setStartDate(DateUtils.getNextMonthDayStr());
             tradeQueryDTO.setEndDate(DateUtils.getNowYMDStr());
         }
-        TradeDataPageDTO<TradeData> temp = tradeDataService.queryAllByCondition(tradeQueryDTO);
+        TradeDataPageDTO<TradeData> temp = tradeDataAppService.queryAllByCondition(tradeQueryDTO);
         List<TradeData> list = temp.getList();
         List<TradeDataJO> resultList = Lists.newArrayList();
         if (null != list) {

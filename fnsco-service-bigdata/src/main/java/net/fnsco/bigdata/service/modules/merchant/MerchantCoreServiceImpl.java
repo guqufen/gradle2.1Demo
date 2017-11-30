@@ -39,7 +39,6 @@ import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileTempDao;
 import net.fnsco.bigdata.service.dao.master.MerchantPosDao;
 import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
-import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.domain.Agent;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
@@ -93,9 +92,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
     @Autowired
     private AppUserMerchant1Dao appUserMerchantDao;
-
-    @Autowired
-    private MerchantUserRelDao  merchantUserRelDao;
 
     @Autowired
     private MerchantPosDao      merchantPosDao;
@@ -221,7 +217,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             merchantTerminalDao.deleteByMerCoreIds(ids);
             merchantPosDao.deleteByMerCoreIds(ids);
             //根据id找到innerCode  删除店铺绑定关系表和用户角色表
-            merchantUserRelDao.deleteByMerCoreIds(ids);
+//            merchantUserRelDao.deleteByMerCoreIds(ids);
             appUserMerchantDao.deleteByMerCoreIds(ids);
             merchantEntityCoreRefDao.deleteByMerCoreIds(ids);
             result = ResultDTO.success("删除成功!");

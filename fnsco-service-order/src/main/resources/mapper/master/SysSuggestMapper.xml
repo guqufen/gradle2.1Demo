@@ -141,20 +141,20 @@
     <!-- 根据ID查询出所有商户关联的数据 -->
   <select id="queryById" parameterType="java.lang.Integer" resultMap="PageResultMap">
 		SELECT
-			sys_suggest.*, m_app_user.user_name
+			sys_suggest.*, u_app_user.user_name
 		FROM
 			sys_suggest
-		LEFT JOIN m_app_user ON sys_suggest.app_user_id = m_app_user.id
+		LEFT JOIN u_app_user ON sys_suggest.app_user_id = u_app_user.id
 		where sys_suggest.id = #{id,jdbcType=INTEGER}
   </select>
   
   <!-- 条件分页查询 -->
 	<select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="PageResultMap">
 		SELECT
-			sys_suggest.*, m_app_user.user_name
+			sys_suggest.*, u_app_user.user_name
 		FROM
 			sys_suggest
-		LEFT JOIN m_app_user ON sys_suggest.app_user_id = m_app_user.id
+		LEFT JOIN u_app_user ON sys_suggest.app_user_id = u_app_user.id
 		<where>
 			<if test="condition.startTime != null and condition.startTime != ''" >
         	AND submit_time >= #{condition.startTime,jdbcType=TIMESTAMP}
