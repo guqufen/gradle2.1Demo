@@ -222,10 +222,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
         return respMap;
     }
     
-    
-    public void aliCallBack(){
-    	
-    }
+
     
     public void test() {
         Map<String, String> parameterMap = Maps.newHashMap();
