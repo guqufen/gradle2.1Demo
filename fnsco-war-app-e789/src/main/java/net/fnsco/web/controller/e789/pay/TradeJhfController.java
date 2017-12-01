@@ -23,8 +23,8 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
-import net.fnsco.web.controller.e789.pay.jo.TradeJO;
-import net.fnsco.web.controller.e789.pay.vo.GetQRUrlResultVO;
+import net.fnsco.web.controller.e789.jo.TradeJO;
+import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 
 /**
  * 

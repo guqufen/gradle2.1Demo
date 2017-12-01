@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.e789.pay.bank;
+package net.fnsco.web.controller.e789.bank;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,11 +23,11 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
-import net.fnsco.web.controller.e789.pay.jo.BankListJO;
-import net.fnsco.web.controller.e789.pay.jo.BindBankCardJO;
-import net.fnsco.web.controller.e789.pay.jo.TradeJO;
-import net.fnsco.web.controller.e789.pay.jo.UnBindBankCardJO;
-import net.fnsco.web.controller.e789.pay.vo.GetQRUrlResultVO;
+import net.fnsco.web.controller.e789.jo.BankListJO;
+import net.fnsco.web.controller.e789.jo.BindBankCardJO;
+import net.fnsco.web.controller.e789.jo.TradeJO;
+import net.fnsco.web.controller.e789.jo.UnBindBankCardJO;
+import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 
 /**
  * 

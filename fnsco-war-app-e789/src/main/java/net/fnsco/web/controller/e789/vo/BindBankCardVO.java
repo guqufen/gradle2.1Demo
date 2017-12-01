@@ -1,9 +1,9 @@
-package net.fnsco.web.controller.e789.pay.vo;
+package net.fnsco.web.controller.e789.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
-public class UnBindBankCardVO extends VO {
+public class BindBankCardVO extends VO {
     @ApiModelProperty(value="返回码",name="resultCode",example="0000")
     private String resultCode;
     @ApiModelProperty(value="返回信息",name="resultMessage",example="绑定成功")
@@ -34,5 +34,12 @@ public class UnBindBankCardVO extends VO {
 		this.resultMessage = resultMessage;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "BindBankCardVO [resultCode=" + resultCode + ", resultMessage=" + resultMessage + "]";
+	}
 
 }
