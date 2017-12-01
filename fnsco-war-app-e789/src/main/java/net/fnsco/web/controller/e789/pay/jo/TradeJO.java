@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.JO;
 
 public class TradeJO extends JO {
-    @ApiModelProperty(value = "用户名", name = "username", example = "xingguo")
+    @ApiModelProperty(value = "渠道商户编号", name = "merCode", example = "00001", required = false)
     private String  merCode;
     private String  channelType;
     private String  snCode;
