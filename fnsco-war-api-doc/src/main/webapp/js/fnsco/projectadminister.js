@@ -132,6 +132,7 @@ function queryEmail() {
 			console.log(data.data);
 			var agtS = data.data;
 			   var html_opt = '';
+			   	html_opt += '<option value="0" selected ="selected">'+"不发送"+'</option>';
 			   $.each(agtS,function(index,value){
 				   /*if(type && type == value.id){
 					   html_opt += '<option value="'+value.id+'" selected ="selected">'+value.emailName+'</option>';
