@@ -2,7 +2,6 @@ package net.fnsco.api.doc.web.project;
 
 
 import java.util.Date;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +28,7 @@ import net.fnsco.core.base.ResultPageDTO;
  */
 @Controller
 @RequestMapping(value = "/web")
-@Api(value = "/web", tags = { "新增项目" })
+@Api(value = "/web", tags = { "项目管理" })
 public class ProjController extends BaseController{
     
     @Autowired
@@ -52,7 +51,7 @@ public class ProjController extends BaseController{
     	String filePath = request.getSession().getServletContext().getRealPath("");
     	//获取当前登录的用户
     	UserInfo user = (UserInfo) getSessionUser();
-    	Long userId = userBasicDAO.queryUserIdByEmail(user.getEmail());
+    	long userId = userBasicDAO.queryUserIdByEmail(user.getEmail());
     	projDO.setUserId(userId);
     	projDO.setCreateDate(new Date());
     	projDO.setModifyDate(new Date());
@@ -60,17 +59,31 @@ public class ProjController extends BaseController{
     	if(!succsss){
             return ResultDTO.fail();
         }
-    	String url="jsonTxt/"+projDO.getName()+".txt";
+    	String url="jsonTxt/"+projDO.getName()+".js";
     	projDO.setUrl(url);
     	projService.add(projDO);
         return ResultDTO.success();
+    }
+    
+    @ApiOperation(value = "修改项目", notes = "修改项目")
+    @RequestMapping(value = "/modifProjById", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO modifProjById(ProjDO projDO) {
+    	String filePath = request.getSession().getServletContext().getRealPath("");
+    	//获取当前登录的用户
+    	UserInfo user = (UserInfo) getSessionUser();
+    	long userId = userBasicDAO.queryUserIdByEmail(user.getEmail());
+    	projDO.setUserId(userId);
+    	projDO.setModifyDate(new Date());
+    	return projService.modifProj(filePath,projDO);
     }
     
     @ApiOperation(value = "查询项目详情", notes = "查询项目详情")
     @RequestMapping(value = "/queryDetail", method = RequestMethod.POST)
     @ResponseBody
     public ResultDTO<ProjDO> queryDetailById(Integer id) {
-    	ProjDO proj = projService.queryById(id);
+    	String filePath = request.getSession().getServletContext().getRealPath("");
+    	ProjDO proj = projService.queryById(filePath,id);
     	return ResultDTO.success(proj);
     }
 }

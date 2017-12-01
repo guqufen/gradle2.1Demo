@@ -1,6 +1,8 @@
 package net.fnsco.api.doc.service.project;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -13,6 +15,7 @@ import com.google.common.base.Strings;
 import net.fnsco.api.doc.service.project.dao.ProjDAO;
 import net.fnsco.api.doc.service.project.entity.ProjDO;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 /**
@@ -33,8 +36,31 @@ public class ProjService extends BaseService {
         return result;
 	}
 	
-	public ProjDO queryById(Integer id) {
-		return projDAO.getById(id);
+	public ResultDTO modifProj(String path,ProjDO projDO) {
+		int i=projDAO.update(projDO);
+		if(i<1) {
+			return ResultDTO.fail();
+		}
+		long idl = projDO.getId();
+		int id=(int)idl;
+		ProjDO proj = projDAO.getById(id);
+		String filePath = path+proj.getUrl();
+		clearInfoForFile(filePath);
+		try {
+			writeFileContent(filePath, projDO.getJsonStr());
+		} catch (IOException e) {
+			logger.error("导入js失败 ");
+			e.printStackTrace();
+		}
+		return ResultDTO.success();
+	}
+	
+	public ProjDO queryById(String path,Integer id) {
+		ProjDO projDO = projDAO.getById(id);
+		String filePath = path+projDO.getUrl();
+		File file = new File(filePath);
+		projDO.setJsonStr(readFileString(file));
+		return projDO;
 	}
 
 	public void add(ProjDO projDO) {
@@ -54,13 +80,13 @@ public class ProjService extends BaseService {
 	 * @param fileName
 	 *            文件名称
 	 * @param filecontent
-	 *            文件内容
+	 *            文件内容	
 	 * @return 是否创建成功，成功则返回true
 	 */
 	public boolean createFile(String filePath,String name, String filecontent) {
 		Boolean bool = false;
 		String path = filePath + "jsonTxt/";
-		String filenameTemp = path + name + ".txt";// 文件路径+名称+文件类型
+		String filenameTemp = path + name + ".js";// 文件路径+名称+文件类型
 		File file = new File(filenameTemp);
 		try {
 			// 如果文件不存在，则创建新的文件
@@ -72,7 +98,7 @@ public class ProjService extends BaseService {
 				writeFileContent(filenameTemp, filecontent);
 			}
 		} catch (Exception e) {
-			logger.error("创建"+ name +".txt失败 ");
+			logger.error("创建"+ name +".js失败 ");
 			e.printStackTrace();
 		}
 
@@ -120,4 +146,40 @@ public class ProjService extends BaseService {
 		 * if(file.exists()){ file.delete(); bool = true; } } catch (Exception e) { //
 		 * TODO: handle exception } return bool; }
 		 */
+	
+	/**
+     * 读取txt文件的内容
+     * @param file 想要读取的文件对象
+     * @return 返回文件内容
+     */
+    public String readFileString(File file){
+        StringBuilder result = new StringBuilder();
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
+            String s = null;
+            while((s = br.readLine())!=null){//使用readLine方法，一次读一行
+                result.append(System.lineSeparator()+s);
+            }
+            br.close();    
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return result.toString();
+    }
+    
+ // 清空已有的文件内容，以便下次重新写入新的内容
+    public void clearInfoForFile(String fileName) {
+        File file =new File(fileName);
+        try {
+            if(!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fileWriter =new FileWriter(file);
+            fileWriter.write("");
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

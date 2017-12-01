@@ -146,8 +146,10 @@ public class TradeDataWebController extends BaseController {
     	if("null".equals(tradeDataDTO.getChannelType())) {
     		tradeDataDTO.setChannelType(null);
     	}
+    	System.out.println(new Date());
         List<TradeData> dataList = tradeDataService.queryDataList(tradeDataDTO);
         // 转换日期显示
+        System.out.println(new Date());
         if (dataList != null) {
             for (TradeData merchantdo : dataList) {
                 // 支付方式
@@ -159,14 +161,14 @@ public class TradeDataWebController extends BaseController {
                 	merchantdo.setPayType("分期付");
                 }
                 // 处理金额
-                if (null != merchantdo.getAmt()) {
+                if (Strings.isNullOrEmpty(merchantdo.getAmt())) {
                     BigDecimal str = new BigDecimal(merchantdo.getAmt());
                     double resu = str.divide(new BigDecimal(100)).doubleValue();
                     DecimalFormat df = new DecimalFormat("#0.00");
                     merchantdo.setAmt(df.format(resu));
                 }
                 // 处理来源
-                if (null != merchantdo.getSource()) {
+                if (Strings.isNullOrEmpty(merchantdo.getSource())) {
                     if ("00".equals(merchantdo.getSource())) {
                         merchantdo.setSource("拉卡拉");
                     } else {
@@ -174,7 +176,7 @@ public class TradeDataWebController extends BaseController {
                     }
                 }
                 // 处理交易类型
-                if (null != merchantdo.getTxnType()) {
+                if (Strings.isNullOrEmpty(merchantdo.getTxnType()) ) {
                     if ("1".equals(merchantdo.getTxnType())) {
                         merchantdo.setTxnType("消费");
                     } else if ("2".equals(merchantdo.getTxnType())) {
