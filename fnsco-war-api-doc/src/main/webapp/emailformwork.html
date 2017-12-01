@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>项目管理-法奈昇大数据平台</title>
+<title>邮件模板管理-法奈昇大数据平台</title>
 <meta name="keywords" content="法奈昇大数据平台">
 <meta name="description" content="法奈昇大数据平台">
 <link rel="shortcut icon" href="favicon.ico">
@@ -71,39 +71,44 @@
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 class="modal-title" id="addModalLabel">新增项目</h4>
+							<h4 class="modal-title" id="addModalLabel">新增模板</h4>
 						</div>
 						<div class="modal-body">
 							<div class="tab-content">
 								<div class="row">
 										<div class="col-lg-6">
-										<label class="control-label col-lg-3">项目编码</label>
-											<input type="text" name="code" id="code" class="form-control"
-												data-bv-field="code" placeholder="请输入需要项目编码"> 
+										<label class="control-label col-lg-3">模板名称</label>
+											<input type="text" name="emailName" id="emailName" class="form-control"
+												data-bv-field="code" placeholder="请输入模板名称"> 
 										</div>
 										<div class="col-lg-6">
-										<label class="control-label col-lg-3">项目名称</label>
-											<input type="text" name="name" id="name" class="form-control"
-												data-bv-field="name" placeholder="请输入需要项目名称">
+										<label class="control-label col-lg-3">邮件标题</label>
+											<input type="text" name="subject" id="subject" class="form-control"
+												data-bv-field="name" placeholder="请输入邮件标题">
+										</div>
+										<div class="col-sm-12">
+	                                		<label class="control-label" id="role" for="role">通知角色：</label>
+	                                		<textarea id="roleType" name="roleType" class="form-control"
+												rows="2" placeholder="点击选择需要发送邮件的用户"></textarea>
+	                            		</div>
+										<div class="col-lg-12">
+										<label class="control-label col-lg-3">其他通知邮箱</label>
+											<textarea id="otherSubject" name="otherSubject" class="form-control"
+												rows="3" placeholder="多个邮箱用；分隔"></textarea>
 										</div>
 										<div class="col-lg-12">
-										<label class="control-label col-lg-3">项目描述</label>
-											<textarea id="description" name="description"
-												class="form-control" rows="3" placeholder="请输入需要项目描述"></textarea>
+										<label class="control-label col-lg-3">邮件内容</label>
+											<textarea id="content" name="content"
+												class="form-control" rows="3" placeholder="请输入邮件内容"></textarea>
 										</div>
-										<div class="col-lg-12">
-										<label class="control-label col-lg-3">项目json</label>
-											<textarea id="jsonStr" name="jsonStr" class="form-control"
-												rows="7" placeholder="请输入需要项目JSON"></textarea>
-										</div>
-										<div class="col-lg-6">
+										<!--<div class="col-lg-6">
 										<label class="control-label col-lg-3">状态</label>
 											<select id="status" name="status" class="form-control"
 												data-initvalue="open">
 												<option value="open" >开启</option>
 												<option value="close">关闭</option>
 											</select>
-										</div>
+										</div>-->
 								</div>
 							</div>
 							<a class="modify btn btn-primary" id = "saveProjInfoBtn"
@@ -124,40 +129,45 @@
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 class="modal-title" id="modifModalLabel">修改项目</h4>
+							<h4 class="modal-title" id="modifModalLabel">修改模板</h4>
 						</div>
 						<div class="modal-body">
 							<div class="tab-content">
 								<div class="row">
 								<input type="hidden" name="field＿name" id = "hides" value="value"> 
 										<div class="col-lg-6">
-										<label class="control-label col-lg-3">项目编码</label>
-											<input type="text" name="code1" id="code1" class="form-control"
-												data-bv-field="code" placeholder="请输入需要项目编码"> 
+										<label class="control-label col-lg-3">模板名称</label>
+											<input type="text" name="emailName1" id="emailName1" class="form-control"
+												data-bv-field="code" placeholder="请输入模板名称"> 
 										</div>
 										<div class="col-lg-6">
-										<label class="control-label col-lg-3">项目名称</label>
-											<input type="text" name="name1" id="name1" class="form-control"
-												data-bv-field="name" placeholder="请输入需要项目名称">
+										<label class="control-label col-lg-3">邮件标题</label>
+											<input type="text" name="subject1" id="subject1" class="form-control"
+												data-bv-field="name" placeholder="请输入邮件标题">
+										</div>
+										<div class="col-sm-12">
+	                                		<label class="control-label" id="role" for="role">通知角色：</label>
+	                                		<textarea id="roleType1" name="roleType1" class="form-control"
+												rows="2" placeholder="点击选择需要发送邮件的用户"></textarea>
+	                            		</div>
+										<div class="col-lg-12">
+										<label class="control-label col-lg-3">其他通知邮箱</label>
+											<textarea id="otherSubject1" name="otherSubject1" class="form-control"
+												rows="3" placeholder="多个邮箱用；分隔"></textarea>
 										</div>
 										<div class="col-lg-12">
-										<label class="control-label col-lg-3">项目描述</label>
-											<textarea id="description1" name="description1"
-												class="form-control" rows="3" placeholder="请输入需要项目描述"></textarea>
+										<label class="control-label col-lg-3">邮件内容</label>
+											<textarea id="content1" name="content1"
+												class="form-control" rows="3" placeholder="请输入邮件内容"></textarea>
 										</div>
-										<div class="col-lg-12">
-										<label class="control-label col-lg-3">项目json</label>
-											<textarea id="jsonStr1" name="jsonStr1" class="form-control"
-												rows="7" placeholder="请输入需要项目JSON"></textarea>
-										</div>
-										<div class="col-lg-6">
+										<!--<div class="col-lg-6">
 										<label class="control-label col-lg-3">状态</label>
-											<select  id="status1" name="status1" class="form-control"
+											<select id="status" name="status" class="form-control"
 												data-initvalue="open">
-												<option value="open">开启</option>
+												<option value="open" >开启</option>
 												<option value="close">关闭</option>
 											</select>
-										</div>
+										</div>-->
 								</div>
 							</div>
 							<a class="modify btn btn-primary" id= "modifProjInfoBtn"
@@ -178,39 +188,44 @@
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
-							<h4 class="modal-title" id="detailModalLabel">项目详情</h4>
+							<h4 class="modal-title" id="detailModalLabel">模板详情</h4>
 						</div>
 						<div class="modal-body">
 							<div class="tab-content">
 								<div class="row">
 										<div class="col-lg-6">
-										<label class="control-label col-lg-3">项目编码</label>
-											<input type="text" name="code2" id="code2" class="form-control"
-												data-bv-field="code" placeholder="请输入需要项目编码"> 
+										<label class="control-label col-lg-3">模板名称</label>
+											<input type="text" name="emailName2" id="emailName2" class="form-control"
+												data-bv-field="code"> 
 										</div>
 										<div class="col-lg-6">
-										<label class="control-label col-lg-3">项目名称</label>
-											<input type="text" name="name2" id="name2" class="form-control"
-												data-bv-field="name" placeholder="请输入需要项目名称">
+										<label class="control-label col-lg-3">邮件标题</label>
+											<input type="text" name="subject2" id="subject2" class="form-control"
+												data-bv-field="name">
+										</div>
+										<div class="col-sm-12">
+	                                		<label class="control-label" id="role" for="role">通知角色：</label>
+	                                		<textarea id="roleType3" name="roleType3" class="form-control"
+												rows="2" ></textarea>
+	                            		</div>
+										<div class="col-lg-12">
+										<label class="control-label col-lg-3">其他通知邮箱</label>
+											<textarea id="otherSubject2" name="otherSubject2" class="form-control"
+												rows="3"></textarea>
 										</div>
 										<div class="col-lg-12">
-										<label class="control-label col-lg-3">项目描述</label>
-											<textarea id="description2" name="description2"
-												class="form-control" rows="3" placeholder="请输入需要项目描述"></textarea>
+										<label class="control-label col-lg-3">邮件内容</label>
+											<textarea id="content2" name="content2"
+												class="form-control" rows="3"></textarea>
 										</div>
-										<div class="col-lg-12">
-										<label class="control-label col-lg-3">项目json</label>
-											<textarea id="jsonStr2" name="jsonStr2" class="form-control"
-												rows="7" placeholder="请输入需要项目JSON"></textarea>
-										</div>
-										<div class="col-lg-6">
+										<!--<div class="col-lg-6">
 										<label class="control-label col-lg-3">状态</label>
-											<select id="status2" name="status2" class="form-control"
+											<select id="status" name="status" class="form-control"
 												data-initvalue="open">
-												<option value="open">开启</option>
+												<option value="open" >开启</option>
 												<option value="close">关闭</option>
 											</select>
-										</div>
+										</div>-->
 								</div>
 							</div>
 						</div>
@@ -218,8 +233,36 @@
 				</div>
 			</div>
 			<!-- model end -->
-		</div>
-	</div>
+			<!-- model选择邮箱 start -->
+			<div class="modal fade" id="emailMyModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="emailModalLabel">邮箱选择</h4>
+						</div>
+						<div id="toolbar">
+						<div class="modal-body">
+							<div class="tab-content">
+								<div class="row">
+									<button id="btn_save" type="button" class="modify btn btn-primary" 
+									style="margin-left: 45%; margin-bottom: 0px;">确认
+									</button>
+									<div class="col-sm-12">
+										<div id="emailTable" style="width: 100%;"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
 	<!-- end -->
 	<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
 	<script
@@ -237,6 +280,6 @@
 	<script src="js/layer/layer.js"></script>
 	<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
 	<script type="text/javascript" src="js/fnsco/common.js"></script>
-	<script type="text/javascript" src="js/fnsco/projectadminister.js"></script>
+	<script type="text/javascript" src="js/fnsco/emailformwork.js"></script>
 </body>
 </html>
