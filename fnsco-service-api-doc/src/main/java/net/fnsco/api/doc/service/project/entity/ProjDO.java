@@ -53,6 +53,10 @@ public class ProjDO {
      * 项目json路径
      */
     private String url;
+    /**
+     * 发送邮件对象类型
+     */
+    private Integer emailId;
     public Long getId() {
         return id;
     }
@@ -131,6 +135,14 @@ public class ProjDO {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public Integer getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(Integer emailId) {
+		this.emailId = emailId;
 	}
 
 	@Override

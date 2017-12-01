@@ -227,4 +227,60 @@ public class TradeConstants {
             return "";
         }
     }
+    /**
+     * 中信银行微信/支付宝被扫消息类型
+     * @author Administrator
+     *
+     */
+	public static enum ZxyhPassivePayType {
+		BS_PAY_TYPE("48","被扫支付类型码"),
+		BS_CX_TYPE("38","被扫结果查询类型码"),
+		BS_AUTH_TYPE("07","微信支付授权码查询类型码");
+
+		private String code;
+		private String name;
+
+		private ZxyhPassivePayType(String code, String name) {
+			this.code = code;
+			this.name = name;
+		}
+
+		public String getCode() {
+			return code;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
+	
+	/**
+	 * 中信银行微信/支付宝被扫交易码
+	 * @author Administrator
+	 *
+	 */
+	public static enum ZxyhPassivePayCode {
+
+		WX_BS_PAY("481000", "微信被扫支付"),
+		ZFB_BS_PAY("481003", "支付宝被扫支付"), 
+		WX_BS_CX("381000", "微信交易结果状态查询"), 
+		ZFB_BS_CX("381003", "支付宝交易结果状态查询"),
+		WX_AUTH_CK("070101","微信支付授权码查询交易码");
+
+		private String code;
+		private String name;
+
+		private ZxyhPassivePayCode(String code, String name) {
+			this.code = code;
+			this.name = name;
+		}
+
+		public String getCode() {
+			return code;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
 }
