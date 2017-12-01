@@ -54,29 +54,6 @@ public class MerchantPosController extends BaseController {
 	private MerchantTerminalDao merchantTerminalDao;
 
 	/**
-	 * toAddTerminal:(这里用一句话描述这个方法的作用)添加POS信息
-	 * 
-	 * @param posInfos
-	 * @return 设定文件
-	 * @author tangliang
-	 * @date 2017年8月17日 上午11:37:59
-	 * @return ResultDTO<String> DOM对象
-	 */
-	@Transactional
-//	@RequestMapping(value = "/toAddPosInfos", method = RequestMethod.POST)
-	@ResponseBody
-	@RequiresPermissions(value = { "m:merchant:add" })
-	public ResultDTO<String> toAddPosInfos(@RequestBody PosJO pos) {
-		// List<MerchantChannelJO> temp = Arrays.asList(posInfos);
-		List<MerchantChannelJO> posInfos = pos.getPoses();
-		countPosScores(posInfos, pos.getInnerCode());
-		WebUserDTO obj = (WebUserDTO) session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
-		List<WebMerchantPosDTO> params = MerchantHelper.toPosDTO(posInfos, pos.getInnerCode(), obj.getId());
-		ResultDTO<String> result = merchantPosService.savePosInfo(params);
-		return result;
-	}
-
-	/**
 	 * toAddTerminal:添加POS信息（pos和终端分离）
 	 * 
 	 * @param posInfos

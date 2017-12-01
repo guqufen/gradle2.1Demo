@@ -84,6 +84,9 @@ public class ProjController extends BaseController{
     		return ResultDTO.fail();
     	}
     	EmailDO	emailInform  = emailService.queryEmailById(projDO.getEmailId());
+    	if(emailInform==null) {
+    		return ResultDTO.success();
+    	}
     	List<String> emailList = new ArrayList<>();
     	String email = emailInform.getRoleType();
     	if(!Strings.isNullOrEmpty(email)) {
@@ -122,6 +125,9 @@ public class ProjController extends BaseController{
             return ResultDTO.fail();
         }
     	EmailDO	emailInform  = emailService.queryEmailById(projDO.getEmailId());
+    	if(emailInform==null) {
+    		return ResultDTO.success();
+    	}
     	List<String> emailList = new ArrayList<>();
     	String email = emailInform.getRoleType();
     	if(!Strings.isNullOrEmpty(email)) {
