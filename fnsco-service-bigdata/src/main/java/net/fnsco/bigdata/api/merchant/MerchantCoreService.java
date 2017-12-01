@@ -5,8 +5,6 @@ package net.fnsco.bigdata.api.merchant;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.service.domain.Agent;
 import net.fnsco.bigdata.service.domain.MerchantBank;
@@ -23,14 +21,6 @@ import net.fnsco.core.base.ResultPageDTO;
  * @date 2017年6月21日 下午2:19:07
  */
 public interface MerchantCoreService {
-
-    /**
-     * 保存商家信息
-     * @param merchantInfo
-     * @param loginUserId
-     * @return
-     */
-    ResultDTO<Integer> doAdd(HttpServletRequest request);
 
     /**
      * doAddMerCore:(这里用一句话描述这个方法的作用)添加商户基本信息

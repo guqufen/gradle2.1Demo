@@ -120,6 +120,42 @@ function responseHandler(res) {
 		};
 	}
 }
+//查询邮件发送对象列表
+function queryEmail() {
+	$.ajax({
+		url : PROJECT_NAME + '/web/queryEmail',
+		type : 'POST',
+		dataType : "json",
+		success : function(data) {
+			unloginHandler(data);
+			// data.data就是所有数据集
+			console.log(data.data);
+			var agtS = data.data;
+			   var html_opt = '';
+			   	html_opt += '<option value="0" selected ="selected">'+"不发送"+'</option>';
+			   $.each(agtS,function(index,value){
+				   /*if(type && type == value.id){
+					   html_opt += '<option value="'+value.id+'" selected ="selected">'+value.emailName+'</option>';
+				   }else{*/
+					   html_opt += '<option value="'+value.id+'">'+value.emailName+'</option>';
+			   })
+			   $('#roleType').html(html_opt);
+			   $('#roleType1').html(html_opt);
+		},
+		   error:function(e){
+			   layer.msg('服务器出错');
+		   }
+	});
+}
+//新增项目点击事件
+$("#btn_add").click(function() {
+	queryEmail();
+	$("#code").val(null);
+	$("#name").val(null);
+	$("#description").val(null);
+	$("#jsonStr").val(null);
+	$('#addMyModal').modal();
+});
 //详情点击事件
 function querySingle(id) {
 	$.ajax({
@@ -144,7 +180,6 @@ function querySingle(id) {
 			$('textarea[name="jsonStr2"]').val(data.data.jsonStr);
 			$("#status2 option[value=" + data.data.status + "]").attr(
 					"selected", "selected");
-
 			$('#detailMyModal').modal();
 			// 全部默认不可编辑
 			$("#detailMyModal").find('input').attr('disabled', true);
@@ -176,7 +211,8 @@ $("#saveProjInfoBtn").click(function() {
 			name : $("#name").val(),
 			description : $("#description").val(),
 			status : $("#status").val(),
-			jsonStr : $("#jsonStr").val()
+			jsonStr : $("#jsonStr").val(),
+			emailId : $("#roleType1").val()
 		},
 		success : function(data) {
 			console.log(data);
@@ -213,6 +249,7 @@ function modif(id){
 			$('textarea[name="jsonStr1"]').val(data.data.jsonStr);
 			$("#status1 option[value=" + data.data.status + "]").attr(
 					"selected", "selected");
+			queryEmail();
 			$('#modifMyModal').modal();
 		}
 	});
@@ -240,7 +277,8 @@ $("#modifProjInfoBtn").click(function() {
 			name : $("#name1").val(),
 			description : $("#description1").val(),
 			status : $("#status1").val(),
-			jsonStr : $("#jsonStr1").val()
+			jsonStr : $("#jsonStr1").val(),
+			emailId : $("#roleType1").val()
 		},
 		success : function(data) {
 			console.log(data);
@@ -251,3 +289,13 @@ $("#modifProjInfoBtn").click(function() {
 		}
 	});
 })
+/*// 添加邮件发送对象下拉框
+function addSelect(type) {
+	var html_opt = '';
+	for(){
+		if(type == "roleType"){
+			html_opt += '<button id="btn_save" onclick="saveEmail(this);" type="button" class="modify btn btn-primary" style="margin-left: 45%; margin-bottom: 0px;">确认</button>';
+		}
+	}
+	   $('#type_btn').html(html_opt);
+	}*/

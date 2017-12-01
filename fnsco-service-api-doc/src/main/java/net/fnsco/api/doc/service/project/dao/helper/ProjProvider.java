@@ -39,6 +39,9 @@ public class ProjProvider {
         if (StringUtils.isNotBlank(proj.getStatus())){
             SET("status=#{proj.status}");
         }
+        if (StringUtils.isNotBlank(proj.getUrl())){
+            SET("url=#{proj.url}");
+        }
         WHERE("id = #{proj.id}");
         }}.toString();
     }

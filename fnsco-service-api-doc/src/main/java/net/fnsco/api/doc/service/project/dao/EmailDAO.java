@@ -20,6 +20,10 @@ public interface EmailDAO {
     @Results({@Result( column = "email_name",property = "emailName"),@Result( column = "role_type",property = "roleType"),@Result( column = "other_subject",property = "otherSubject"),@Result( column = "create_date",property = "createDate"),@Result( column = "modify_date",property = "modifyDate"),@Result( column = "user_id",property = "userId") })
     @Select("SELECT * FROM t_email WHERE id = #{id}")
     public EmailDO getById(@Param("id") int id);
+    
+    @Results({@Result( column = "id",property = "id") ,@Result( column = "email_name",property = "emailName") })
+    @Select("SELECT id,email_name FROM t_email")
+    public List<EmailDO> getEmailList();
 
     @Insert("INSERT into t_email(id,email_name,subject,role_type,other_subject,content,create_date,modify_date,user_id) VALUES (#{id},#{emailName},#{subject},#{roleType},#{otherSubject},#{content},#{createDate},#{modifyDate},#{userId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")

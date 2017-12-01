@@ -1,7 +1,9 @@
 package net.fnsco.api.doc.web.project;
 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,9 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.common.base.Strings;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.api.doc.service.mail.MailMsg;
+import net.fnsco.api.doc.service.mail.MailMsgType;
+import net.fnsco.api.doc.service.mail.MailService;
+import net.fnsco.api.doc.service.project.EmailService;
 import net.fnsco.api.doc.service.project.ProjService;
+import net.fnsco.api.doc.service.project.entity.EmailDO;
 import net.fnsco.api.doc.service.project.entity.ProjDO;
 import net.fnsco.api.doc.service.user.dao.UserBasicDAO;
 import net.fnsco.api.doc.service.vo.UserInfo;
@@ -35,7 +44,10 @@ public class ProjController extends BaseController{
     private ProjService projService;
     @Autowired
     private UserBasicDAO userBasicDAO;
-    
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private MailService mailService;
     
     @ApiOperation(value = "分页查询项目信息", notes = "分页查询项目信息")
     @RequestMapping(value = "/queryProj", method = RequestMethod.GET)
@@ -55,13 +67,46 @@ public class ProjController extends BaseController{
     	projDO.setUserId(userId);
     	projDO.setCreateDate(new Date());
     	projDO.setModifyDate(new Date());
-    	boolean succsss = projService.exportJson(filePath,projDO.getName(),projDO.getJsonStr());
+    	int i =projService.add(projDO);
+    	if(i<1) {
+    		return ResultDTO.fail();
+    	}
+    	boolean succsss = projService.exportJson(filePath,"proj"+projDO.getId(),projDO.getJsonStr());
     	if(!succsss){
             return ResultDTO.fail();
         }
-    	String url="jsonTxt/"+projDO.getName()+".js";
-    	projDO.setUrl(url);
-    	projService.add(projDO);
+    	String url="jsonTxt/"+"proj"+projDO.getId()+".json";
+    	ProjDO proj = new ProjDO();
+    	proj.setId(projDO.getId());
+    	proj.setUrl(url);
+    	int m = projService.update(proj);
+    	if(i<m) {
+    		return ResultDTO.fail();
+    	}
+    	EmailDO	emailInform  = emailService.queryEmailById(projDO.getEmailId());
+    	if(emailInform==null) {
+    		return ResultDTO.success();
+    	}
+    	List<String> emailList = new ArrayList<>();
+    	String email = emailInform.getRoleType();
+    	if(!Strings.isNullOrEmpty(email)) {
+    		String a[] = email.split(";"); 
+    		for(int j=0;j<a.length;j++) {
+    			emailList.add(a[j]);
+    		}
+    		String otherEmail = emailInform.getOtherSubject();
+    		if(!Strings.isNullOrEmpty(otherEmail)) {
+    			String b[] = otherEmail.split(";"); 
+        		for(int k=0;k<b.length;k++) {
+        			emailList.add(b[k]);
+        		}
+    		}
+    	}
+    	MailMsg mailMsg = new MailMsg();
+    	mailMsg.setSubject(emailInform.getSubject());
+    	mailMsg.setContent(emailInform.getContent());
+    	mailMsg.setType(MailMsgType.text);
+    	mailService.sendMail(emailList, mailMsg);
         return ResultDTO.success();
     }
     
@@ -75,7 +120,35 @@ public class ProjController extends BaseController{
     	long userId = userBasicDAO.queryUserIdByEmail(user.getEmail());
     	projDO.setUserId(userId);
     	projDO.setModifyDate(new Date());
-    	return projService.modifProj(filePath,projDO);
+    	boolean succsss = projService.modifProj(filePath,projDO);
+    	if(!succsss){
+            return ResultDTO.fail();
+        }
+    	EmailDO	emailInform  = emailService.queryEmailById(projDO.getEmailId());
+    	if(emailInform==null) {
+    		return ResultDTO.success();
+    	}
+    	List<String> emailList = new ArrayList<>();
+    	String email = emailInform.getRoleType();
+    	if(!Strings.isNullOrEmpty(email)) {
+    		String a[] = email.split(";"); 
+    		for(int j=0;j<a.length;j++) {
+    			emailList.add(a[j]);
+    		}
+    		String otherEmail = emailInform.getOtherSubject();
+    		if(!Strings.isNullOrEmpty(otherEmail)) {
+    			String b[] = otherEmail.split(";"); 
+        		for(int k=0;k<b.length;k++) {
+        			emailList.add(b[k]);
+        		}
+    		}
+    	}
+    	MailMsg mailMsg = new MailMsg();
+    	mailMsg.setSubject(emailInform.getSubject());
+    	mailMsg.setContent(emailInform.getContent());
+    	mailMsg.setType(MailMsgType.text);
+    	mailService.sendMail(emailList, mailMsg);
+    	return ResultDTO.success();
     }
     
     @ApiOperation(value = "查询项目详情", notes = "查询项目详情")
