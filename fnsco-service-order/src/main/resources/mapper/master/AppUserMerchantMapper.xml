@@ -157,4 +157,26 @@
     </set>
     where inner_code = #{innerCode,jdbcType=VARCHAR} and  app_user_id = #{appUserId,jdbcType=INTEGER}
  </update>
+ <select id="selectByUserIdInnerCode" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from u_app_user_merchant
+    where app_user_id = #{appUserId,jdbcType=INTEGER}
+    and inner_code = #{innerCode,jdbcType=VARCHAR}
+    limit 1
+  </select>
+  
+  <select id="selectAllByInnerCode" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from u_app_user_merchant
+    where  inner_code = #{innerCode,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByUserId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from u_app_user_merchant
+    where app_user_id = #{appUserId,jdbcType=INTEGER}
+  </select>
 </mapper>

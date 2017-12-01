@@ -24,7 +24,7 @@ import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.OrderPaymentService;
-import net.fnsco.trading.service.pay.channel.zxyh.ZxyhPaymentService;
+import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 
 
 @Controller
@@ -35,7 +35,7 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 	@Autowired
 	private MerchantCoreService merchantCoreService;
 	@Autowired
-	private ZxyhPaymentService zxyhPaymentService;
+	private PaymentService zxyhPaymentService;
 	
 	/**
 	 * 入驻中信银行的controller
@@ -48,17 +48,17 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 			return ResultDTO.fail();
 		}
 		//根据id获取入驻中信银行商户所需的必须信息
-		MerchantCoreEntityZxyhDTO core = merchantCoreService.queryZXYHInfoById(id);
-		if(core == null){
+		ResultDTO<MerchantCoreEntityZxyhDTO> core = merchantCoreService.queryZXYHInfoById(id);
+		if(core.getData() == null){
 			return ResultDTO.failForMessage("进件失败,请联系管理员");
 		}
 		//调用入驻接口将参数传过去-
-		Map<String, Object> map = zxyhPaymentService.mechAdd(core);
+		Map<String, Object> map = zxyhPaymentService.mechAdd(core.getData());
 		if("0000".equals(map.get("respCode"))){
 			//回调并更新信息
 			String secMerId = map.get("secMerId").toString();
 			if(!Strings.isNullOrEmpty(secMerId)){
-				this.merchantCoreService.updateInfoByInnerCode(core.getInnerCode(),secMerId);
+				this.merchantCoreService.updateInfoByInnerCode(core.getData().getInnerCode(),secMerId);
 				
 			}
 			return ResultDTO.successForSubmit();

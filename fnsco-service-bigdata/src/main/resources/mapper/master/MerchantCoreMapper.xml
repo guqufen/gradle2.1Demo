@@ -268,6 +268,9 @@
         agent_id,
       </if>
       <!-- 新增字段 -->
+      <if test="registAddressDetail != null" >
+        regist_address_detail,
+      </if>
       <if test="registProvince != null" >
         regist_province,
       </if>
@@ -352,6 +355,9 @@
         #{agentId,jdbcType=INTEGER},
       </if>
       <!-- 新增字段 -->
+      <if test="registAddressDetail != null" >
+         #{registAddressDetail,jdbcType=VARCHAR},
+      </if>
       <if test="registProvince != null" >
          #{registProvince,jdbcType=VARCHAR},
       </if>
@@ -786,7 +792,7 @@ WHERE
 	)
 	</select>
 	<!-- 根据实体商户号查询关联的商户实体包括积分 -->
-	<select id="selectByEntityInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantUserRel"
+	<select id="selectByEntityInnerCode" parameterType="java.lang.String"
 		resultMap="CoreResultMap">
 		SELECT
 		   IFNULL(scores, 0) scores,

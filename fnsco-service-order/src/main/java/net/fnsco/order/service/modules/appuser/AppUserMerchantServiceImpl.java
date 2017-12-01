@@ -11,8 +11,8 @@ import org.springframework.util.CollectionUtils;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
-import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -35,8 +35,6 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
     private MerchantCoreDao    merchantCoreDao;
     @Autowired
     private AppUserDao         appUserDao;
-    @Autowired
-    private MerchantUserRelDao merchantUserRelDao;
     /**
      * 根据用户u
      * (non-Javadoc)
@@ -175,10 +173,18 @@ public class AppUserMerchantServiceImpl extends BaseService implements AppUserMe
     @Transactional
     public ResultDTO deletedBindPeople(BandDto bandDto) {
         Integer appUserId = bandDto.getUserId();
-        merchantUserRelDao.deleteByPrimaryKey(bandDto.getInnerCode(),appUserId);
+//        merchantUserRelDao.deleteByPrimaryKey(bandDto.getInnerCode(),appUserId);
         appUserMerchantDao.deleteByPrimaryKey(bandDto.getInnerCode(),appUserId);
         return ResultDTO.success();
     }
+
+	@Override
+	public MerChantCoreDTO selectByEntityInnerCode(AppUserMerchant merchantUserRel) {
+		
+		// TODO Auto-generated method stub
+		return  merchantCoreDao.selectByEntityInnerCode(merchantUserRel.getEntityInnerCode());
+		
+	}
 }
 
 

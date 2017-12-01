@@ -10,19 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.base.Strings;
-
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.ConmmService;
-import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.VersionDTO;
-import net.fnsco.order.api.merchant.IntegralLogService;
 
 /**@desc 后台管理系统登录控制器
  * @author tangliang
@@ -34,9 +30,6 @@ public class H5UserAction extends BaseController {
 
     @Autowired
     private AppUserService         appUserService;
-
-    @Autowired
-    private IntegralLogService integralRuleLogService;
 
     @Autowired
     private ConmmService           conmmService;

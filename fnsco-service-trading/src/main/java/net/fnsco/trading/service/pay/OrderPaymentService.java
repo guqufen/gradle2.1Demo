@@ -4,6 +4,7 @@ package net.fnsco.trading.service.pay;
 import java.util.Map;
 
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
+import net.fnsco.core.base.ResultDTO;
 
 
 public interface OrderPaymentService {
@@ -14,6 +15,8 @@ public interface OrderPaymentService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
+	public ResultDTO<Object> aliCallBack(String resultStr);
+	
 	public Map<String, Object> generateQRCodeWeiXin(String innerCode,String orderBody,String txnAmt);
 	
 	public Map<String, Object> generateQRCodeAliPay(String innerCode,String ip,String orderBody,String txnAmt);

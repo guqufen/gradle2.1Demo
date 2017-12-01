@@ -12,8 +12,33 @@ public class AppUserMerchant {
     private Integer appUserId;
 
     private Date modefyTime;
+    
+    private String entityInnerCode;//实体商户号
+    
 
-    public Integer getId() {
+    /**
+	 * entityInnerCode
+	 *
+	 * @return  the entityInnerCode
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getEntityInnerCode() {
+		return entityInnerCode;
+	}
+
+	/**
+	 * entityInnerCode
+	 *
+	 * @param   entityInnerCode    the entityInnerCode to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setEntityInnerCode(String entityInnerCode) {
+		this.entityInnerCode = entityInnerCode;
+	}
+
+	public Integer getId() {
         return id;
     }
 

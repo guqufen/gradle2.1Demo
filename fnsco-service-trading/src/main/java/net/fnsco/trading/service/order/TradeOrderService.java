@@ -105,6 +105,7 @@ public class TradeOrderService extends BaseService {
     }
 
     // 添加
+    @Transactional
     public TradeOrderDO doAdd(TradeOrderDO tradeOrder) {
         logger.info("开始添加TradeOrderService.add,tradeOrder=" + tradeOrder.toString());
         tradeOrder.setCreateTime(new Date());
@@ -118,6 +119,7 @@ public class TradeOrderService extends BaseService {
     }
 
     // 修改
+    @Transactional
     public Integer doUpdate(TradeOrderDO tradeOrder) {
         logger.info("开始修改TradeOrderService.update,tradeOrder=" + tradeOrder.toString());
         int rows = this.tradeOrderDAO.update(tradeOrder);

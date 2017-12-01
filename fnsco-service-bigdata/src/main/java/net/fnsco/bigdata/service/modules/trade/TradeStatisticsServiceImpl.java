@@ -3,22 +3,11 @@ package net.fnsco.bigdata.service.modules.trade;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.base.Strings;
-
-import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.trade.TradeStatisticsService;
-import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
-import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
-import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
-import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
-import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.bigdata.service.dao.master.trade.TradeStatisticsDAO;
-import net.fnsco.bigdata.service.domain.MerchantCore;
-import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.bigdata.service.domain.trade.TradeStatistics;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
@@ -34,10 +23,6 @@ import net.fnsco.core.utils.DateUtils;
 public class TradeStatisticsServiceImpl extends BaseService implements TradeStatisticsService {
     @Autowired
     private TradeStatisticsDAO        tradeListDAO;
-    @Autowired
-    private MerchantCoreDao     merchantCoreDao;
-    @Autowired
-    private MerchantTerminalDao merchantTerminalDao;
 
     /**
      * 条件分页查询

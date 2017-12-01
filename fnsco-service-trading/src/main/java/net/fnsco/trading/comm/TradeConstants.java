@@ -10,10 +10,10 @@ public class TradeConstants {
     public static Map<String, String> TXT_TYPE_MAP = Maps.newHashMap();
     static {
         TXT_TYPE_MAP.put("012001", "1");//消费交易
-        TXT_TYPE_MAP.put("012002", "0");//消费撤销交易
+        TXT_TYPE_MAP.put("012002", "2");//消费撤销交易
         TXT_TYPE_MAP.put("012003", "1");//退货交易
         TXT_TYPE_MAP.put("012004", "1");//预授权交易
-        TXT_TYPE_MAP.put("012005", "0");//预授权撤销交易
+        TXT_TYPE_MAP.put("012005", "2");//预授权撤销交易
         TXT_TYPE_MAP.put("012006", "1");//预授权完成交易
         TXT_TYPE_MAP.put("012007", "1");//风险信息上送交易
         TXT_TYPE_MAP.put("012008", "1");//调账交易
@@ -26,9 +26,9 @@ public class TradeConstants {
         TXT_TYPE_MAP.put("012015", "1");//预授权完成交易
         TXT_TYPE_MAP.put("012016", "1");//TC上送交易
         TXT_TYPE_MAP.put("012017", "1");//脚本执行结果通知交易
-        TXT_TYPE_MAP.put("012018", "0");//预授权完成撤销交易
+        TXT_TYPE_MAP.put("012018", "2");//预授权完成撤销交易
         TXT_TYPE_MAP.put("012019", "1");//POS卡卡转账交易
-        TXT_TYPE_MAP.put("012020", "0");//POS卡卡转账撤销交易
+        TXT_TYPE_MAP.put("012020", "2");//POS卡卡转账撤销交易
         TXT_TYPE_MAP.put("012021", "1");//分期付款交易
         TXT_TYPE_MAP.put("012022", "1");//POS凭条电子化获取交易
         TXT_TYPE_MAP.put("012023", "1");//机场VIP查询交易
@@ -37,8 +37,8 @@ public class TradeConstants {
         TXT_TYPE_MAP.put("012031", "1");//报账通POS户名回显交易
         TXT_TYPE_MAP.put("012040", "1");//自动冲正POS类交易
         TXT_TYPE_MAP.put("012041", "1");//地区银联接入离线预授权完成交易
-        TXT_TYPE_MAP.put("012043", "0");//消费撤消冲正交易
-        TXT_TYPE_MAP.put("012044", "0");//预授权完成撤消冲正交易
+        TXT_TYPE_MAP.put("012043", "2");//消费撤消冲正交易
+        TXT_TYPE_MAP.put("012044", "2");//预授权完成撤消冲正交易
         TXT_TYPE_MAP.put("012045", "1");//银联后台脚本通知交易
         TXT_TYPE_MAP.put("012046", "1");//指定账户圈存、现金充值、现金充值撤销冲正交易
         TXT_TYPE_MAP.put("012047", "1");//非指定账户圈存冲正交易
@@ -58,7 +58,7 @@ public class TradeConstants {
         TXT_TYPE_MAP.put("012073", "1");//非指定账户圈存冲正交易
         TXT_TYPE_MAP.put("012074", "1");//现金充值交易
         TXT_TYPE_MAP.put("012075", "1");//现金充值冲正交易
-        TXT_TYPE_MAP.put("012076", "0");//现金充值撤销交易
+        TXT_TYPE_MAP.put("012076", "2");//现金充值撤销交易
         TXT_TYPE_MAP.put("012077", "1");//现金充值撤销冲正交易
         TXT_TYPE_MAP.put("012080", "1");//助农取款交易
         TXT_TYPE_MAP.put("012081", "1");//助农取款冲正交易
@@ -78,16 +78,16 @@ public class TradeConstants {
         TXT_TYPE_MAP.put("112205", "1");//大额转账代付
         TXT_TYPE_MAP.put("112206", "1");//银联全渠道交易结果查询
         TXT_TYPE_MAP.put("012401", "1");//扫码支付(微信、支付宝等）
-        TXT_TYPE_MAP.put("012402", "0");//扫码撤销(微信、支付宝等）
-        TXT_TYPE_MAP.put("012403", "1");//扫码退货
+        TXT_TYPE_MAP.put("012402", "2");//扫码撤销(微信、支付宝等）
+        TXT_TYPE_MAP.put("012403", "2");//扫码退货
         TXT_TYPE_MAP.put("012411", "1");//主扫订单生成
-        TXT_TYPE_MAP.put("012412", "1");//主扫订单关闭
-        TXT_TYPE_MAP.put("012413", "1");//主扫订单退货
+        TXT_TYPE_MAP.put("012412", "2");//主扫订单关闭
+        TXT_TYPE_MAP.put("012413", "2");//主扫订单退货
         TXT_TYPE_MAP.put("012466", "1");//微信被扫交易查询
         TXT_TYPE_MAP.put("012467", "1");//主扫订单查询(主扫退货查询)
-        TXT_TYPE_MAP.put("012493", "1");//页面扫码退货
+        TXT_TYPE_MAP.put("012493", "2");//页面扫码退货
         TXT_TYPE_MAP.put("012501", "1");//银联增值服务消费
-        TXT_TYPE_MAP.put("012502", "0");//银联增值服务消费撤销
+        TXT_TYPE_MAP.put("012502", "2");//银联增值服务消费撤销
         TXT_TYPE_MAP.put("012503", "1");//银联增值服务退货
         TXT_TYPE_MAP.put("012510", "1");//银联增值服务消费冲正
         TXT_TYPE_MAP.put("012511", "1");//银联增值服务消费撤销冲正
@@ -98,12 +98,12 @@ public class TradeConstants {
         TXT_TYPE_MAP.put("022061", "1");//预留POS签退
         TXT_TYPE_MAP.put("022001", "1");//POS消费
         TXT_TYPE_MAP.put("022010", "1");//POS消费冲正
-        TXT_TYPE_MAP.put("022002", "0");//POS消费撤销
+        TXT_TYPE_MAP.put("022002", "2");//POS消费撤销
         TXT_TYPE_MAP.put("022011", "1");//POS消费撤销冲正
         TXT_TYPE_MAP.put("022003", "1");//POS消费退货
         TXT_TYPE_MAP.put("022004", "1");//POS预授权
         TXT_TYPE_MAP.put("022012", "1");//POS预授权冲正
-        TXT_TYPE_MAP.put("022005", "0");//POS预授权撤销
+        TXT_TYPE_MAP.put("022005", "2");//POS预授权撤销
         TXT_TYPE_MAP.put("022064", "1");//POS批上送
         TXT_TYPE_MAP.put("022009", "1");//POS批结算
         TXT_TYPE_MAP.put("022066", "1");//POS查询余额
@@ -124,13 +124,13 @@ public class TradeConstants {
         TXT_TYPE_MAP.put("016006", "1");//行业卡积分
         TXT_TYPE_MAP.put("016007", "1");//行业卡积分兑换
         TXT_TYPE_MAP.put("016008", "1");//行业卡管理员改密","1");//
-        TXT_TYPE_MAP.put("016009", "0");//行业卡积分撤销
+        TXT_TYPE_MAP.put("016009", "2");//行业卡积分撤销
         TXT_TYPE_MAP.put("016010", "1");//行业卡积分兑换撤销
         TXT_TYPE_MAP.put("016011", "1");//行业卡会员卡转账","1");//
         TXT_TYPE_MAP.put("016012", "1");//行业卡查询
         TXT_TYPE_MAP.put("016013", "1");//行业卡联机改密
         TXT_TYPE_MAP.put("016014", "1");//行业卡联机消费
-        TXT_TYPE_MAP.put("016015", "0");//行业卡消费撤销
+        TXT_TYPE_MAP.put("016015", "2");//行业卡消费撤销
         TXT_TYPE_MAP.put("016016", "1");//行业卡现金充值
         TXT_TYPE_MAP.put("016017", "1");//行业卡联机续期
         TXT_TYPE_MAP.put("016021", "1");//行业卡银行卡充值","1");//

@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.e789.pay.zxyh.controller;
+package net.fnsco.web.controller.e789.pay.zxyh;
 
 import java.util.Map;
 
@@ -13,7 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.trading.service.pay.channel.zxyh.ZxyhPaymentService;
+import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.web.controller.e789.pay.zxyh.jo.GenerateQRCodeAliPayJO;
 import net.fnsco.web.controller.e789.pay.zxyh.jo.GenerateQRCodeWeChatJO;
 
@@ -21,10 +21,12 @@ import net.fnsco.web.controller.e789.pay.zxyh.jo.GenerateQRCodeWeChatJO;
 @RestController
 @RequestMapping(value = "/e789/trade/zxyh", method = RequestMethod.POST)
 @Api(value = "/e789/trade/zxyh", tags = { "中信银行主扫相关功能接口" })
-public class TradeZxyhController extends BaseController{
+public class TradeController extends BaseController{
 	
 	@Autowired
-	private ZxyhPaymentService zxyhPaymentService;
+	private PaymentService zxyhPaymentService;
+
+	
 	
 	
 	
@@ -69,6 +71,19 @@ public class TradeZxyhController extends BaseController{
 		}
 		Map<String, Object> reqMap = zxyhPaymentService.generateQRCodeAliPay(innerCode,ip,orderBody,txnAmt);
 		return  success(reqMap);
+	}
+	
+	
+	@RequestMapping(value = "/aliCallBack")
+	@ApiOperation(value = "支付宝主扫回调")
+	public void aliCallBack(String resultStr) {
+		zxyhPaymentService.aliCallBack(resultStr);
+	}
+	
+	@RequestMapping(value = "/weChatCallBack")
+	@ApiOperation(value = "微信主扫回调")
+	public void weChatCallBack(String resultStr) {
+		zxyhPaymentService.weChatCallBack(resultStr);
 	}
 	
 
