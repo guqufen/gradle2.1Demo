@@ -185,7 +185,7 @@
 				SELECT DISTINCT
 					(app_user_id)
 				FROM
-					m_merchant_user_rel
+					u_app_user_merchant
 				WHERE
 					inner_code = #{innerCode}
 			) RE
@@ -216,7 +216,7 @@
 							MU.*, RE.inner_code
 						FROM
 							 u_app_user MU
-						LEFT JOIN m_merchant_user_rel RE ON MU.id = RE.app_user_id
+						LEFT JOIN u_app_user_merchant RE ON MU.id = RE.app_user_id
 					) MR
 				LEFT JOIN  m_merchant_core MC ON MR.inner_code = MC.inner_code
 			) TA
@@ -254,7 +254,7 @@
 							 u_app_user
 							  
 							MU
-						LEFT JOIN m_merchant_user_rel RE ON MU.id = RE.app_user_id
+						LEFT JOIN u_app_user_merchant RE ON MU.id = RE.app_user_id
 					) MR
 				LEFT JOIN 
 				   m_merchant_core 

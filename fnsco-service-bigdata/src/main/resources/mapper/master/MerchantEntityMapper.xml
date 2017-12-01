@@ -492,7 +492,7 @@
 					SELECT
 						inner_code
 					FROM
-						m_merchant_user_rel
+						u_app_user_merchant
 					WHERE
 						app_user_id = #{userId}
 				)
@@ -516,7 +516,7 @@
 					SELECT
 						inner_code
 					FROM
-						m_merchant_user_rel
+						u_app_user_merchant
 					WHERE
 						app_user_id = #{userId}
 				)

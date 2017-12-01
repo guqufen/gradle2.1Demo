@@ -568,7 +568,8 @@
       <if test="condition.modifyTime != null and condition.modifyTime != ''" >
         AND CO.modify_time = #{condition.modifyTime,jdbcType=TIMESTAMP}
       </if>
-        AND CO.status = 1
+        <!-- AND CO.status = 1 -->
+        AND CO.status in (1,5)
       </where>
       ORDER BY CO.modify_time DESC
       limit #{startRow} , #{perPageSize} 
@@ -759,7 +760,7 @@
 			SELECT
 				*
 			FROM
-				m_merchant_user_rel
+				u_app_user_merchant
 			WHERE
 				app_user_id = #{userId}
 		) REL ON CO.inner_code = REL.inner_code WHERE CO.status=1
@@ -784,7 +785,7 @@ WHERE
 						SELECT
 							inner_code
 						FROM
-							m_merchant_user_rel
+							u_app_user_merchant
 						WHERE
 							app_user_id = #{userId}
 						AND STATUS = 1
@@ -839,7 +840,7 @@ WHERE
 					SELECT
 						inner_code
 					FROM
-						m_merchant_user_rel
+						u_app_user_merchant
 					WHERE
 						app_user_id = #{userId}
 				) REL
