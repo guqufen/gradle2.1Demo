@@ -18,10 +18,16 @@ import net.fnsco.api.doc.service.mail.MailMsg;
 import net.fnsco.api.doc.service.mail.MailMsgType;
 import net.fnsco.api.doc.service.mail.MailService;
 import net.fnsco.api.doc.service.project.EmailInformService;
+import net.fnsco.api.doc.service.project.EmailService;
+import net.fnsco.api.doc.service.project.entity.EmailDO;
+import net.fnsco.api.doc.service.project.entity.ProjDO;
 import net.fnsco.api.doc.service.user.UserBasicService;
+import net.fnsco.api.doc.service.user.dao.UserBasicDAO;
+import net.fnsco.api.doc.service.vo.UserInfo;
 import net.fnsco.api.doc.web.dto.EmailInformDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
 
 /**
  * @desc
@@ -36,14 +42,73 @@ import net.fnsco.core.base.ResultDTO;
 public class EmailInformController extends BaseController{
     
     @Autowired
-    private EmailInformService emailInformService;
-    
+    private EmailService emailService;
     @Autowired
     private UserBasicService userBasicService;
-    
+    @Autowired
+    private UserBasicDAO userBasicDAO;
     @Autowired
     private MailService mailService;
    
+    @ApiOperation(value = "分页查询邮件模板信息", notes = "分页查询邮件模板信息")
+    @RequestMapping(value = "/page", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultPageDTO<EmailDO> page(EmailDO email, Integer currentPageNum, Integer pageSize) {
+        return emailService.page(email, currentPageNum, pageSize);
+    }
+    
+    @RequestMapping(value = "/doAdd", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "新增邮件模板", notes = "新增邮件模板")
+    public ResultDTO doAdd (EmailDO email){
+    	//获取当前登录的用户
+    	UserInfo user = (UserInfo) getSessionUser();
+    	long userIdl = userBasicDAO.queryUserIdByEmail(user.getEmail());
+    	int userId = (int)userIdl;
+    	email.setUserId(userId);
+    	email.setCreateDate(new Date());
+    	email.setModifyDate(new Date());
+    	emailService.doAdd(email,userId);
+        return ResultDTO.success();
+    }
+    
+    @ApiOperation(value = "修改邮件模板", notes = "修改邮件模板")
+    @RequestMapping(value = "/doUpdate", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO doUpdate (EmailDO email) {
+    	//获取当前登录的用户
+    	UserInfo user = (UserInfo) getSessionUser();
+    	long userIdl = userBasicDAO.queryUserIdByEmail(user.getEmail());
+    	int userId = (int)userIdl;
+    	email.setUserId(userId);
+    	email.setModifyDate(new Date());
+    	Integer i = emailService.doUpdate(email, userId);
+    	if(i<1) {
+    		return ResultDTO.fail();
+    	}
+    	return ResultDTO.success();
+    }
+    
+    @ApiOperation(value = "查询邮件模板详情", notes = "查询邮件模板详情")
+    @RequestMapping(value = "/doQueryById", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO<EmailDO> doQueryById(Integer id) {
+    	EmailDO email = emailService.doQueryById(id);
+    	return ResultDTO.success(email);
+    }
+    
+    @ApiOperation(value = "删除邮件模板", notes = "删除邮件模板")
+    @RequestMapping(value = "/doDelete", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO doDelete(Integer id) {
+    	//获取当前登录的用户
+    	UserInfo user = (UserInfo) getSessionUser();
+    	long userIdl = userBasicDAO.queryUserIdByEmail(user.getEmail());
+    	int userId = (int)userIdl;
+    	emailService.doDeleteById(id,userId);
+    	return ResultDTO.success();
+    }
+    
     @RequestMapping(value = "/emailInform", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "接口变更通知", notes = "接口变更通知")
