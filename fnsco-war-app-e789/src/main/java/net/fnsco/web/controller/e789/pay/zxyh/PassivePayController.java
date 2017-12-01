@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
@@ -26,6 +27,7 @@ public class PassivePayController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/pay")
+	@ApiOperation(value="中信银行支付宝/微信被扫支付交易接口url")
 	public String ZxyhPassivePay(@RequestBody PassivePayJO zxyhPassivePayJO){
 		
 		//对接收的报文进行处理
@@ -49,6 +51,7 @@ public class PassivePayController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/queryPayResult")
+	@ApiOperation(value="中信银行支付宝/微信支付结果查询接口url")
 	public String ZxyhPassivePayResult(@RequestBody PassivePayJO zxyhPassivePayJO) {
 
 		// 对接收的报文进行处理
@@ -59,6 +62,6 @@ public class PassivePayController extends BaseController{
 		passivePayDTO.setOrgorderid((zxyhPassivePayJO.getOrgOrderId()));// 原商户订单号
 		passivePayDTO.setSignAture(zxyhPassivePayJO.getSignAture());// 签名
 
-		return PaymentService.PassivePayResult(zxyhPassivePayJO.getInnerCode(), passivePayDTO);
+		return PaymentService.PassivePayResult(zxyhPassivePayJO.getOrgOrderId());
 	}
 }
