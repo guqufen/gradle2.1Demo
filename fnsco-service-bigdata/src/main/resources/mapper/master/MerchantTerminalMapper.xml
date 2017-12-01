@@ -304,7 +304,7 @@
 			SELECT
 				*
 			FROM
-				m_merchant_user_rel
+				u_app_user_merchant
 			WHERE
 				app_user_id = #{userId}
 		) REL ON CO.inner_code = REL.inner_code

@@ -17,7 +17,6 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.order.api.merchant.IntegralLogService;
-import net.fnsco.order.service.domain.IntegralLog;
 
 /**
  * @desc 

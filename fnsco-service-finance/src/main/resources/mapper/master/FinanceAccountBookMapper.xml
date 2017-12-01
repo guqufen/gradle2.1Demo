@@ -238,7 +238,7 @@
 		E.merc_name AS mercName
 	FROM
 		m_merchant_entity AS E,
-		m_merchant_user_rel AS R,
+		u_app_user_merchant AS R,
 		m_merchant_core_entity_ref AS ER
 	WHERE
 		R.inner_code=ER.inner_code

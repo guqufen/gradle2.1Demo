@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
@@ -42,6 +43,7 @@ import net.fnsco.order.api.dto.AppUserDTO;
  */
 @RestController
 @RequestMapping(value = "/app/user", method = RequestMethod.POST)
+@Api(value = "/app/user", tags = { "App用户管理接口" })
 public class AppUserController extends BaseController {
     @Autowired
     private AppUserService        appUserService;

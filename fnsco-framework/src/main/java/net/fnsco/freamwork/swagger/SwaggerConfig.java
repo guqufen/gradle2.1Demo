@@ -91,6 +91,14 @@ public class SwaggerConfig {
             .select().paths(or(regex("/syncData/.*")))//过滤的接口
             .build().apiInfo(demoApiInfo());
     }
+    @Bean
+    public Docket tradeApi() {
+        return new Docket(DocumentationType.SWAGGER_2).groupName("trade").genericModelSubstitutes(DeferredResult.class)
+            //              .genericModelSubstitutes(ResponseEntity.class)
+            .useDefaultResponseMessages(false).forCodeGeneration(false).pathMapping("/")//base
+            .select().paths(or(regex("/trade/.*")))//过滤的接口
+            .build().apiInfo(demoApiInfo());
+    }
     private ApiInfo testApiInfo() {
         return new ApiInfoBuilder().title("给APP用的接口")//大标题
             .description("")//详细描述

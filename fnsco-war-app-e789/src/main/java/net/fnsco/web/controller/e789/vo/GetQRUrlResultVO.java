@@ -1,11 +1,12 @@
-package net.fnsco.web.controller.e789.pay.vo;
+package net.fnsco.web.controller.e789.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 public class GetQRUrlResultVO extends VO {
-    @ApiModelProperty(value="用户名",name="username",example="xingguo")
+    @ApiModelProperty(value = "二维码url", name = "username", example = "http://")
     private String url;
+    @ApiModelProperty(value = "订单号")
     private String orderNo;
 
     /**
