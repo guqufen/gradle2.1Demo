@@ -760,7 +760,7 @@
 			SELECT
 				*
 			FROM
-				m_merchant_user_rel
+				u_app_user_merchant
 			WHERE
 				app_user_id = #{userId}
 		) REL ON CO.inner_code = REL.inner_code WHERE CO.status=1
@@ -785,7 +785,7 @@ WHERE
 						SELECT
 							inner_code
 						FROM
-							m_merchant_user_rel
+							u_app_user_merchant
 						WHERE
 							app_user_id = #{userId}
 						AND STATUS = 1
@@ -840,7 +840,7 @@ WHERE
 					SELECT
 						inner_code
 					FROM
-						m_merchant_user_rel
+						u_app_user_merchant
 					WHERE
 						app_user_id = #{userId}
 				) REL

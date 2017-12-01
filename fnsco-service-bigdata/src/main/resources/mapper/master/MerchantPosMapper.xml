@@ -282,7 +282,7 @@
   </select>
   <!-- 根据用户ID 查询所有POS设备信息 -->
   <select id="selectAllPosInfo" parameterType="java.lang.Integer" resultMap="PosResultMap">
-    SELECT mer_name,inner_code FROM m_merchant_core WHERE inner_code IN (SELECT inner_code FROM m_merchant_user_rel WHERE app_user_id = #{userId}) AND status = 1
+    SELECT mer_name,inner_code FROM m_merchant_core WHERE inner_code IN (SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{userId}) AND status = 1
   </select>
   <!-- 根据ID查询详情 -->
   <select id="selectDetailById" parameterType="java.lang.Integer" resultMap="PosInfoResultMap">
@@ -302,7 +302,7 @@
   </select>
   <!-- 根据userID查询POS列表 -->
   <select id="selectAllByUserId" parameterType="java.lang.Integer" resultType="net.fnsco.bigdata.api.dto.PosInfoDTO">
-    SELECT id AS posId,pos_name AS posName FROM m_merchant_pos WHERE inner_code IN( SELECT inner_code FROM m_merchant_user_rel WHERE app_user_id = #{userId}) AND status = 1
+    SELECT id AS posId,pos_name AS posName FROM m_merchant_pos WHERE inner_code IN( SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{userId}) AND status = 1
   </select>
   <!-- 根据snCode和innerCode组合查询 -->
   <select id="selectBySnCodeAndInnerCode" resultMap="BaseResultMap">
