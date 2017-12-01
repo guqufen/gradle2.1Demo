@@ -1,7 +1,5 @@
 package net.fnsco.order.api.dto;
 
-import java.util.Date;
-
 import net.fnsco.core.base.DTO;
 
 public class SysSuggestDTO extends DTO{

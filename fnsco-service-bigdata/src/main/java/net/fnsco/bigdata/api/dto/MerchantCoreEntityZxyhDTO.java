@@ -7,7 +7,6 @@ import com.alibaba.fastjson.annotation.JSONField;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantContact;
-import net.fnsco.core.base.DTO;
 
 public class MerchantCoreEntityZxyhDTO{
 		private String innerCode;
