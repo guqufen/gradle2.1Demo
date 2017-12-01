@@ -26,6 +26,16 @@ public class EmailService extends BaseService {
    ResultPageDTO<EmailDO> pager =  new ResultPageDTO<EmailDO>(count,pageList);
      return pager;
  }
+ 
+//查询所有模板
+ public List<EmailDO> queryEmail() {
+	 return this.emailDAO.getEmailList();
+ }
+ 
+//查询所有模板
+public EmailDO queryEmailById(Integer id) {
+	 return this.emailDAO.getById(id);
+}
 
  // 添加
  public void doAdd (EmailDO email,int loginUserId) {

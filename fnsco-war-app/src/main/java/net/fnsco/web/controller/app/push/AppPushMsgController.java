@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -25,6 +26,7 @@ import net.fnsco.web.controller.app.jo.AppPushMsgJO;
  */
 @RestController
 @RequestMapping(value = "/app/push", method = RequestMethod.POST)
+@Api(value = "/app/push", tags = { "推送消息相关功能接口" })
 public class AppPushMsgController extends BaseController{
     
     @Autowired

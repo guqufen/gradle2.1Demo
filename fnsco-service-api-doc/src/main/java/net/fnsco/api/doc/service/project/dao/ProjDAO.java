@@ -26,7 +26,7 @@ public interface ProjDAO {
     
     @Insert("INSERT into t_proj(id,create_date,modify_date,user_id,code,name,description,status,url) VALUES (#{id},#{createDate},#{modifyDate},#{userId},#{code},#{name},#{description},#{status},#{url})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    public void insert(ProjDO proj);
+    public int insert(ProjDO proj);
 
     @Delete("DELETE FROM t_proj WHERE id = #{id}")
     public int deleteById(@Param("id") int id);

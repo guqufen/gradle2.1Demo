@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.dto.PermissionsDTO;
 import net.fnsco.bigdata.api.merchant.MerchantService;
@@ -45,7 +46,8 @@ public class AppMerchentLevelController extends BaseController{
 	
 	// 商户等级查询(根据userid查询该用户下所有实体商户<等级和积分信息>列表)
 	@RequestMapping("/queryMercScore")
-	public ResultDTO queryMercScore(@RequestBody AppUserMerchant merchantUserRel) {
+	@ApiOperation(value = "商户等级查询")
+	public ResultDTO<List<MerChantCoreDTO>> queryMercScore(@RequestBody AppUserMerchant merchantUserRel) {
 
 		if (null == merchantUserRel.getAppUserId()) {
 			logger.error("入参ID为null");
@@ -89,6 +91,7 @@ public class AppMerchentLevelController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/queryMercLevelDetail")
+	@ApiOperation(value = "商户等级详情查询")
 	public ResultDTO<MerChantCoreDTO> queryMercLevelDetail(@RequestBody AppUserMerchant merchantUserRel) {
 
 		// 判空
@@ -160,7 +163,8 @@ public class AppMerchentLevelController extends BaseController{
 
 	// 等级列表查询(v1-v7,普通商家-至尊商家，xxxx积分)
 	@RequestMapping("/queryLevelList")
-	public ResultDTO queryLevelList(@RequestBody AppUserMerchant merchantUserRel) {
+	@ApiOperation(value = "等级列表查询")
+	public ResultDTO<List<SysConfig>> queryLevelList(@RequestBody AppUserMerchant merchantUserRel) {
 
 		SysConfig sysConfig = new SysConfig();
 		sysConfig.setType(IntegralTypeEnum.INTEGRAL_TYPE.getCode());// 等级列表(v1-v7)，type类型为11
@@ -175,7 +179,8 @@ public class AppMerchentLevelController extends BaseController{
 	
 	// 商户等级详情页面下的获取经验格子
 	@RequestMapping("/queryExpList")
-	public ResultDTO queryExpList(@RequestBody AppUserMerchant merchantUserRel) {
+	@ApiOperation(value = "商户等级详情页面下的获取经验格子")
+	public ResultDTO<List<SysConfig>> queryExpList(@RequestBody AppUserMerchant merchantUserRel) {
 
 		SysConfig sysConfig = new SysConfig();
 		sysConfig.setType("10");// 等级列表(v1-v7)，type类型为11
@@ -189,7 +194,8 @@ public class AppMerchentLevelController extends BaseController{
 	}
 	
 	@RequestMapping("/queryRules")
-	public ResultDTO queryRules(@RequestBody AppUserMerchant merchantUserRel) {
+	@ApiOperation(value = "查询积分规则信息")
+	public ResultDTO<List<IntegralRuleDTO>> queryRules(@RequestBody AppUserMerchant merchantUserRel) {
 
 		List<String> nameList = integralRuleService.queryDistinctName();
 		

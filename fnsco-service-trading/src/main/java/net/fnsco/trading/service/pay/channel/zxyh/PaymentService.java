@@ -35,6 +35,8 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.HttpUtils;
+import net.fnsco.trading.comm.TradeConstants.ZxyhPassivePayCode;
+import net.fnsco.trading.comm.TradeConstants.ZxyhPassivePayType;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
@@ -264,10 +266,21 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		passDTO.setStdauthid(passivePayDTO.getStdauthid());// 授权码
 
 		//校验微信授权码，如果校验成功，则
-		if( CheckAuthid(passivePayDTO) ){
-			passDTO.setStdprocode("481000");// 交易码，481000：微信消费,481003：支付宝二清消费
+		String resp = CheckAuthid(passDTO);
+
+		//应答码6002-支付授权已过去，请刷新再试,说明当前的是微信付款码
+		if("6002".equals(resp)){
+			logger.info("微信付款码已经过期，请重新扫付款码");
+			map.put("respCode", "1002");
+			map.put("respMsg", "付款码已经过期,请重新扫付款码");
+			return map.toString();
+		}
+
+		//应答码为0000-成功，表示可以直接用微信进行支付了
+		if( "0000".equals(resp) ){
+			passDTO.setStdprocode(ZxyhPassivePayCode.WX_BS_PAY.getCode());// 交易码，481000：微信消费,481003：支付宝二清消费
 		}else{
-			passDTO.setStdprocode("481003");// 交易码，481000：微信消费,481003：支付宝二清消费
+			passDTO.setStdprocode(ZxyhPassivePayCode.ZFB_BS_PAY.getCode());// 交易码，481000：微信消费,481003：支付宝二清消费
 			//不可优惠金额，支付宝必填
     		if( !Strings.isNullOrEmpty(passivePayDTO.getStddiscamt()) ){
     			passDTO.setStddiscamt(passivePayDTO.getStddiscamt());
@@ -276,7 +289,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     		}
 		}
 
-		passDTO.setStdmsgtype("48");// 消息类型 M String(4) "48"
+		passDTO.setStdmsgtype(ZxyhPassivePayType.BS_PAY_TYPE.getCode());// 消息类型 M String(4) "48"
 		passDTO.setStdorderid(
 				DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_order"));// 商户订单号，32个字符内
 		passDTO.setStdtrancur("156");// 交易币种 M String(3) 默认是156：人民币
@@ -295,9 +308,9 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setTxnType(Integer.parseInt(TradeTypeEnum.CONSUMER.getCode()));// 设置交易类型
 		tradeOrderDO.setPayType(PayTypeEnum.CODE_PAY.getCode());// 设置支付方式，01-二维码
 		// 设置支付子类型，01-微信；02-支付宝
-		if ("481003".equals(passDTO.getStdprocode())) {
+		if (ZxyhPassivePayCode.ZFB_BS_PAY.getCode().equals(passDTO.getStdprocode())) {
 			tradeOrderDO.setPaySubType(PaySubTypeAllEnum.ZFB_PAY.getCode());
-		} else if ("481000".equals(passDTO.getStdprocode())) {
+		} else if (ZxyhPassivePayCode.WX_BS_PAY.getCode().equals(passDTO.getStdprocode())) {
 			tradeOrderDO.setPaySubType(PaySubTypeAllEnum.WX_PAY.getCode());
 		}
 		tradeOrderDO.setSettleStatus(0);// 设置结算状态0-未结算
@@ -369,30 +382,30 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	 * @param passivePayDTO
 	 * @return
 	 */
-	public String PassivePayResult(String innerCode, PassivePayDTO passivePayDTO) {
+	public String PassivePayResult(String  orgorderid) {
 
 		String url = "/MPay/misRequest.do";
 		Map<String, String> map = new HashMap<>();
 		// 通过原支付商户订单号查询原交易状态结果，结果为1000进行中，才发状态查询交易给中信银行那边
 		// 通过订单号查询交易
-		TradeOrderDO tradeOrderDO = tradeOrderService.queryByOrderId(passivePayDTO.getOrgorderid());
+		TradeOrderDO tradeOrderDO = tradeOrderService.queryByOrderId(orgorderid);
 		if (null == tradeOrderDO) {
-			logger.info("没有找到该交易请求交易,order_no=[" + passivePayDTO.getOrgorderid() + "]");
-//			Map<String, String> map = new HashMap<>();
+			logger.info("没有找到该交易请求交易,order_no=[" + orgorderid + "]");
+
 			map.put("respCode", "9999");
 			map.put("respMsg", "系统异常");
-			map.put("orderId", passivePayDTO.getOrgorderid());
+			map.put("orderId", orgorderid);
 			map.put("begTime", DateUtils.getNowDateStr());
 			return map.toString();
 		}
 
 		// 如果原消费交易是非(进行状态的或者应答码为空)的，则可以直接返回应答
 		if (!"1000".equals(tradeOrderDO.getRespCode()) && !Strings.isNullOrEmpty(tradeOrderDO.getRespCode())) {
-			logger.info("该交易为有确定结果的交易,不用再去中信银行那边查询结果,将直接返回。order_no=[" + passivePayDTO.getOrgorderid() + "]");
-//			Map<String, String> map = new HashMap<>();
+			logger.info("该交易为有确定结果的交易,不用再去中信银行那边查询结果,将直接返回。order_no=[" + orgorderid + "]");
+
 			map.put("respCode", tradeOrderDO.getRespCode());
 			map.put("respMsg", tradeOrderDO.getRespMsg());
-			map.put("orderId", passivePayDTO.getOrgorderid());
+			map.put("orderId", orgorderid);
 			map.put("begTime", DateUtils.dateFormat1ToStr(tradeOrderDO.getOrderCeateTime()));
 			return map.toString();
 		}
@@ -401,23 +414,23 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		PassivePayDTO passDTO = new PassivePayDTO();
 		passDTO.init(merId);
 
-		passDTO.setStdmsgtype("38");// 消息类型 M String(4) "38"
+		passDTO.setStdmsgtype(ZxyhPassivePayType.BS_CX_TYPE.getCode());// 消息类型 M String(4) "38"
 		// 根据原交易支付子类型判断支付宝还是微信支付,还是其他不支持的交易，设置交易码
 		if (PaySubTypeAllEnum.ZFB_PAY.getCode().equals(tradeOrderDO.getPaySubType())) {
-			passDTO.setStdprocode("381003");
+			passDTO.setStdprocode(ZxyhPassivePayCode.ZFB_BS_CX.getCode());
 		} else if (PaySubTypeAllEnum.WX_PAY.getCode().equals(tradeOrderDO.getPaySubType())) {
-			passDTO.setStdprocode("381000");
+			passDTO.setStdprocode(ZxyhPassivePayCode.WX_BS_CX.getCode());
 		} else {
-			logger.info("该订单号原支付子类型为非微信和支付宝，请核查后重新交易。order_no=[" + passivePayDTO.getOrgorderid() + "]");
+			logger.info("该订单号原支付子类型为非微信和支付宝，请核查后重新交易。order_no=[" + orgorderid + "]");
 			map.put("respCode", "9999");
 			map.put("respMsg", "系统异常");
 			return map.toString();
 		}
 
 		passDTO.setStdmercno2(tradeOrderDO.getChannelMerId());// 二级商户号，使用分账功能时上传，是与stdmercno关联的分账子商户号
-		passDTO.setOrgorderid(passivePayDTO.getOrgorderid());// 原支付交易的中信订单号或原支付交易的商户订单号
+		passDTO.setOrgorderid(orgorderid);// 原支付交易的中信订单号或原支付交易的商户订单号
 		passDTO.setStdorderid(
-				DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_order"));// 商户订单号，32个字符内
+				DateUtils.getNowYMDOnlyStr() + tradeOrderDO.getInnerCode() + sequenceService.getOrderSequence("t_trade_order"));// 商户订单号，32个字符内
 		passDTO.setStdbegtime(DateUtils.getNowDateStr());// 交易起始时间
 
 		String passiveStr = JSON.toJSONString(passDTO);// 将对象转换为JSON字符串
@@ -451,7 +464,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		map.put("orderId", tradeOrderDO.getOrderNo());//商户订单号
 		map.put("begTime", passDTO.getStdbegtime());//交易起始时间
 		map.put("endTime", passDTO1.getEndTime());//支付结束时间
-		map.put("amt", passivePayDTO.getStdtranamt());//交易金额
+		map.put("amt", passDTO1.getStdtranamt());//交易金额
 		map.put("reciAmt", passDTO1.getStdreciamt());//实收金额
 		map.put("preAmt", passDTO1.getStdpreamt());//优惠金额
 
@@ -463,14 +476,14 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	 * @param passivePayDTO
 	 * @return：true为微信授权码，可用此码进行微信交易;false为非微信授权码，可用此码尝试进行支付宝交易
 	 */
-	public boolean CheckAuthid(PassivePayDTO passivePayDTO){
+	public String CheckAuthid(PassivePayDTO passivePayDTO){
 		String url = "/MPay/misRequest.do";
 		String merId = env.getProperty("zxyh.merId");
 		PassivePayDTO passDTO = new PassivePayDTO();
 		passDTO.init(merId);
 
-		passDTO.setStdmsgtype("07");// 消息类型 M String(4) "07"
-		passDTO.setStdprocode("070101");// 交易码
+		passDTO.setStdmsgtype(ZxyhPassivePayType.BS_AUTH_TYPE.getCode());// 消息类型 M String(4) "07"
+		passDTO.setStdprocode(ZxyhPassivePayCode.WX_AUTH_CK.getCode());// 交易码
 
 		passDTO.setStdmercno2(passivePayDTO.getStdmercno2());// 二级商户号，使用分账功能时上传，是与stdmercno关联的分账子商户号
 		passDTO.setStdauthid(passivePayDTO.getStdauthid());// 设置授权码
@@ -487,12 +500,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		String json = JSON.toJSONString(respMap);
 		PassivePayDTO passDTO1 = JSON.parseObject(json, PassivePayDTO.class);
 
-		//查询成功
-		if("SUCCESS".equals(passDTO1.getStd400mgid())){
-			return true;
-		}
-		//默认其他返回码都为失败，失败包含：AUTH_CODE_INVALID表示授权码非威信授权码;0001表示商户为交易商户不对(非开通微信被扫商户)
-		return false;
+		return passDTO1.getStd400mgid();
 	}
 
     /**

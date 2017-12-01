@@ -47,7 +47,7 @@
 			</form> -->
 			<div id="toolbar">
 				<button id="btn_add" type="button" class="btn btn-success"
-					data-toggle="modal" data-target="#addMyModal">
+					data-toggle="modal">
 					<span class="glyphicon glyphicon-plus add" aria-hidden="true"></span>新增
 				</button>
 			</div>
@@ -104,6 +104,12 @@
 												<option value="close">关闭</option>
 											</select>
 										</div>
+										<div class="col-lg-6">
+										<label class="control-label col-lg-3">邮件对象</label>
+											<select id="roleType" name="roleType" class="form-control"
+												data-initvalue="open">
+											</select>
+										</div>
 								</div>
 							</div>
 							<a class="modify btn btn-primary" id = "saveProjInfoBtn"
@@ -156,6 +162,12 @@
 												data-initvalue="open">
 												<option value="open">开启</option>
 												<option value="close">关闭</option>
+											</select>
+										</div>
+										<div class="col-lg-6">
+										<label class="control-label col-lg-3">邮件对象</label>
+											<select id="roleType1" name="roleType1" class="form-control"
+												data-initvalue="open">
 											</select>
 										</div>
 								</div>

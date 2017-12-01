@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.core.base.BaseController;
@@ -31,6 +32,7 @@ import net.fnsco.web.controller.app.jo.DiscoveryJO;
 
 @RestController
 @RequestMapping(value = "/app/user", method = RequestMethod.POST)
+@Api(value = "/app/user", tags = { "APP常用信息管理接口" })
 public class ConmmController extends BaseController {
     @Autowired
     private ConmmService           conmmService;
@@ -81,7 +83,7 @@ public class ConmmController extends BaseController {
     @RequestMapping(value = "/getInviteUrl", method = RequestMethod.GET)
     @ApiOperation(value = "返回邀新链接地址")
     @ResponseBody
-    public ResultDTO getInviteUrl(@RequestParam String entityInnerCode) {
+    public ResultDTO<Map<String, Object>> getInviteUrl(@RequestParam String entityInnerCode) {
         
         if(Strings.isNullOrEmpty(entityInnerCode)) {
         	 return ResultDTO.fail(BigdataConstant.APP_MER_ENTITY_INNERCODE_NULL);
