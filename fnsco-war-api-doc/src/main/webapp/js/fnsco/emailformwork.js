@@ -35,11 +35,6 @@ $('#table').bootstrapTable({
 		title : '邮件标题',
 		align : 'center'
 	}, {
-		field : 'roleType',
-		title : '通知角色类型',
-		align : 'center',
-		formatter : formatstatus
-	}, {
 		field : 'createDate',
 		title : '创建时间',
 		align : 'center',
@@ -55,12 +50,6 @@ $('#table').bootstrapTable({
 //格式化时间
 function formatReDate(value, row, index) {
 	return formatDateUtil(value);
-}
-//正常禁用图形化显示
-function formatstatus(value, row, index) {
-	if(value === 1){
-		return "所有成员";
-	}
 }
 //操作格式化
 function operateFormatter(value, row, index) {
@@ -137,13 +126,15 @@ function querySingle(id) {
 			$("#subject2").val(null);
 			$("#otherSubject2").val(null);
 			$("#content2").val(null);
+			$("#roleType2").val(null);
 			// 基本信息
 			$('input[name=emailName2]').val(data.data.emailName);
 			$('input[name="subject2"]').val(data.data.subject);
 			$('textarea[name="otherSubject2"]').val(data.data.otherSubject);
 			$('textarea[name="content2"]').val(data.data.content);
-			$("#roleType2 option[value=" + data.data.roleType + "]").attr(
-					"selected", "selected");
+			$('textarea[name="roleType2"]').val(data.data.roleType);
+			/*$("#roleType2 option[value=" + data.data.roleType + "]").attr(
+					"selected", "selected");*/
 
 			$('#detailMyModal').modal();
 			// 全部默认不可编辑
@@ -154,6 +145,15 @@ function querySingle(id) {
 		}
 	});
 }
+//新增点击
+$("#btn_add").click(function() {
+	$("#emailName").val(null);
+	$("#subject").val(null);
+	$("#otherSubject").val(null);
+	$("#content").val(null);
+	$("#roleType").val(null);
+	$('#addMyModal').modal();
+})
 //新增项目
 $("#saveProjInfoBtn").click(function() {
 	if ($("#emailName").val() == null || $("#emailName").val() == "") {
@@ -231,14 +231,16 @@ function modif(id){
 			$("#subject1").val(null);
 			$("#otherSubject1").val(null);
 			$("#content1").val(null);
+			$("#roleType1").val(null);
 			// 基本信息
 			$('#hides').val(id);
 			$('input[name=emailName1]').val(data.data.emailName);
 			$('input[name="subject1"]').val(data.data.subject);
 			$('textarea[name="otherSubject1"]').val(data.data.otherSubject);
 			$('textarea[name="content1"]').val(data.data.content);
-			$("#roleType1 option[value=" + data.data.roleType + "]").attr(
-					"selected", "selected");
+			$('textarea[name="roleType1"]').val(data.data.roleType);
+			/*$("#roleType1 option[value=" + data.data.roleType + "]").attr(
+					"selected", "selected");*/
 			$('#modifMyModal').modal();
 		}
 	});
@@ -277,13 +279,27 @@ $("#modifProjInfoBtn").click(function() {
 		}
 	});
 })
+// 添加选择button
+function addbtn(type) {
+	var html_opt = '';
+		if(type == "roleType"){
+			html_opt += '<button id="btn_save" onclick="saveEmail(this);" type="button" class="modify btn btn-primary" style="margin-left: 45%; margin-bottom: 0px;">确认</button>';
+		}else{
+			html_opt += '<button id="btn_save1" onclick="saveEmail(this);" type="button" class="modify btn btn-primary" style="margin-left: 45%; margin-bottom: 0px;">确认</button>';
+		  }
+	   $('#type_btn').html(html_opt);
+	}
 //邮箱点击事件
 $('#roleType').click(function() {
+	addbtn("roleType");
+	$('#emailTable').bootstrapTable('refresh');
 	$('#emailMyModal').modal();
 	dotext();
 });
 //邮箱点击事件
 $('#roleType1').click(function() {
+	addbtn("roleType1");
+	$('#emailTable').bootstrapTable('refresh');
 	$('#emailMyModal').modal();
 	dotext();
 });
@@ -350,52 +366,35 @@ function dotext() {
 			};
 		}
 	}
-	/*layer.open({
-		type : 1,
-		offset : '50px',
-		skin : 'layui-layer-molv',
-		title : "选择邮箱",
-		area : [ '300px', '450px' ],
-		shade : 0,
-		shadeClose : false,
-		content : jQuery("#emailTable"),
-		btn : [ '确定', '取消' ],
-		btn1 : function(index) {
-			var node = dept_ztree.getSelectedNodes();
-			//选择上级部门
-			if(a==1){
-				$("#parentName").val(node[0].name);
-				$('#deptId').val(node[0].id);
-			}else if(a==2){
-				$('#deptId1').val(node[0].id);
-				$("#parentName1").val(node[0].name);
-			}
-			layer.close(index);
-		}
-	});*/
 }
-//批量删除按钮事件
-$('#btn_save').click(function(){
-  var select_data = $('#emailTable').bootstrapTable('getSelections');  
-  if(select_data.length == 0){
-    layer.msg('请最少选择一个邮箱!');
-    return false;
-  };
-  var dataEmailStr="";
-  for(var i=0;i<select_data.length;i++){
-	  if(i+1<select_data.length){
-		  dataEmailStr=dataEmailStr+select_data[i].email+";";
-	  }else{
-		  dataEmailStr=dataEmailStr+select_data[i].email;
+
+//邮件选择按钮事件
+function saveEmail(email) {
+	 var select_data = $('#emailTable').bootstrapTable('getSelections');  
+	  if(select_data.length == 0){
+	    layer.msg('请最少选择一个邮箱!');
+	    return false;
+	  };
+	  var dataEmailStr="";
+	  for(var i=0;i<select_data.length;i++){
+		  if(i+1<select_data.length){
+			  dataEmailStr=dataEmailStr+select_data[i].email+";";
+		  }else{
+			  dataEmailStr=dataEmailStr+select_data[i].email;
+		  }
 	  }
-  }
-  layer.confirm('确定选中邮箱吗？', {
-        time: 20000, //20s后自动关闭
-        btn: ['确定', '取消']
-    }, function(){
-    	$('textarea[name="roleType"]').val(dataEmailStr);
-    	$('#emailMyModal').hide();
-    }, function(){
-      layer.msg('取消成功');
-  });  
-});
+	  layer.confirm('确定选中邮箱吗？', {
+	        time: 20000, //20s后自动关闭
+	        btn: ['确定', '取消']
+	    }, function(){
+	    	if($(email).attr('id')=="btn_save"){
+	    		$('textarea[name="roleType"]').val(dataEmailStr);
+	    	}else{
+	    		$('textarea[name="roleType1"]').val(dataEmailStr);
+	    	}
+	    	$('#emailMyModal').modal("hide");
+	    	layer.msg('选择成功');
+	    }, function(){
+	      layer.msg('取消成功');
+	  });  
+}

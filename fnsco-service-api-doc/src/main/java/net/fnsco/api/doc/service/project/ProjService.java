@@ -35,11 +35,11 @@ public class ProjService extends BaseService {
         ResultPageDTO<ProjDO> result = new ResultPageDTO<ProjDO>(total, datas);
         return result;
 	}
-	
-	public ResultDTO modifProj(String path,ProjDO projDO) {
+	public boolean modifProj(String path,ProjDO projDO) {
+		boolean bool = false; 
 		int i=projDAO.update(projDO);
 		if(i<1) {
-			return ResultDTO.fail();
+			return bool;
 		}
 		long idl = projDO.getId();
 		int id=(int)idl;
@@ -47,12 +47,12 @@ public class ProjService extends BaseService {
 		String filePath = path+proj.getUrl();
 		clearInfoForFile(filePath);
 		try {
-			writeFileContent(filePath, projDO.getJsonStr());
+			bool = writeFileContent(filePath, projDO.getJsonStr());
 		} catch (IOException e) {
-			logger.error("导入js失败 ");
+			logger.error("导入json失败 ");
 			e.printStackTrace();
 		}
-		return ResultDTO.success();
+		return bool;
 	}
 	
 	public ProjDO queryById(String path,Integer id) {
@@ -63,8 +63,12 @@ public class ProjService extends BaseService {
 		return projDO;
 	}
 
-	public void add(ProjDO projDO) {
-		projDAO.insert(projDO);
+	public int add(ProjDO projDO) {
+		return projDAO.insert(projDO);
+	}
+	
+	public int update(ProjDO projDO) {
+		return projDAO.update(projDO);
 	}
 
 	public boolean exportJson(String filePath,String name, String jsonParams) {
@@ -86,7 +90,7 @@ public class ProjService extends BaseService {
 	public boolean createFile(String filePath,String name, String filecontent) {
 		Boolean bool = false;
 		String path = filePath + "jsonTxt/";
-		String filenameTemp = path + name + ".js";// 文件路径+名称+文件类型
+		String filenameTemp = path + name + ".json";// 文件路径+名称+文件类型
 		File file = new File(filenameTemp);
 		try {
 			// 如果文件不存在，则创建新的文件
@@ -98,7 +102,7 @@ public class ProjService extends BaseService {
 				writeFileContent(filenameTemp, filecontent);
 			}
 		} catch (Exception e) {
-			logger.error("创建"+ name +".js失败 ");
+			logger.error("创建"+ name +".json失败 ");
 			e.printStackTrace();
 		}
 
@@ -128,7 +132,7 @@ public class ProjService extends BaseService {
 				// 关闭
 				fileWriter.close();
 			} catch (IOException e) {
-				logger.error("导入txt失败 ");
+				logger.error("导入json失败 ");
 				e.printStackTrace();
 			}
 			return bool;

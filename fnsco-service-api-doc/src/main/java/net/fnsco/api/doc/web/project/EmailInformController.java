@@ -17,10 +17,8 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.api.doc.service.mail.MailMsg;
 import net.fnsco.api.doc.service.mail.MailMsgType;
 import net.fnsco.api.doc.service.mail.MailService;
-import net.fnsco.api.doc.service.project.EmailInformService;
 import net.fnsco.api.doc.service.project.EmailService;
 import net.fnsco.api.doc.service.project.entity.EmailDO;
-import net.fnsco.api.doc.service.project.entity.ProjDO;
 import net.fnsco.api.doc.service.user.UserBasicService;
 import net.fnsco.api.doc.service.user.dao.UserBasicDAO;
 import net.fnsco.api.doc.service.vo.UserInfo;
@@ -55,6 +53,14 @@ public class EmailInformController extends BaseController{
     @ResponseBody
     public ResultPageDTO<EmailDO> page(EmailDO email, Integer currentPageNum, Integer pageSize) {
         return emailService.page(email, currentPageNum, pageSize);
+    }
+    
+    @ApiOperation(value = "查询邮件模板信息", notes = "查询邮件模板信息")
+    @RequestMapping(value = "/queryEmail", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO<List<EmailDO>> queryEmail() {
+    	List<EmailDO> list = emailService.queryEmail();
+    	return ResultDTO.success(list);
     }
     
     @RequestMapping(value = "/doAdd", method = RequestMethod.POST)
