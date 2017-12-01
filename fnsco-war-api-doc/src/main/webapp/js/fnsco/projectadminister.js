@@ -1,10 +1,10 @@
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
-	url :"http://localhost:8080/web/queryProj",
+	url : PROJECT_NAME + "/web/queryProj",
 	showRefresh : false,// 是否显示刷新按钮
 	showPaginationSwitch : false,// 是否显示 数据条数选择框(分页是否显示)
-	 toolbar: '#toolbar', // 工具按钮用哪个容器
+	toolbar : '#toolbar', // 工具按钮用哪个容器
 	striped : true, // 是否显示行间隔色
 	cache : false, // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
 	pagination : true, // 是否显示分页（*）
@@ -12,25 +12,25 @@ $('#table').bootstrapTable({
 	sortOrder : "asc", // 排序方式
 	pageNumber : 1, // 初始化加载第一页，默认第一页
 	pageSize : 10, // 每页的记录行数（*）
-	pageList : [10,50,100], // 可供选择的每页的行数（*）
+	pageList : [ 10, 50, 100 ], // 可供选择的每页的行数（*）
 	queryParams : queryParams,
 	responseHandler : responseHandler,// 处理服务器返回数据
 	columns : [ {
 		field : 'id',
 		title : '操作',
-	    align : 'center',
-	    width : '10%',
-        formatter: operateFormatter
+		align : 'center',
+		width : '10%',
+		formatter : operateFormatter
 	}, {
 		field : 'id',
 		title : '编号',
-	    align : 'center',
-	    width : '10%'
+		align : 'center',
+		width : '10%'
 	},/*{
-		field : 'email',
-		title : '创建者',
-		align : 'center'
-	},*/ {
+			field : 'email',
+			title : '创建者',
+			align : 'center'
+		},*/{
 		field : 'code',
 		title : '项目编码',
 		align : 'center'
@@ -43,7 +43,7 @@ $('#table').bootstrapTable({
 		title : '项目状态',
 		align : 'center',
 		formatter : formatstatus
-	},{
+	}, {
 		field : 'createDate',
 		title : '创建时间',
 		align : 'center',
@@ -53,7 +53,7 @@ $('#table').bootstrapTable({
 		title : '创建时间',
 		align : 'center',
 		formatter : formatReDate
-	}]
+	} ]
 });
 
 //格式化时间
@@ -62,18 +62,20 @@ function formatReDate(value, row, index) {
 }
 //正常禁用图形化显示
 function formatstatus(value, row, index) {
-	return value === "open" ? 
-			'<span class="label label-primary">开启</span>' :
-			'<span class="label label-danger">关闭</span>' ;
+	return value === "open" ? '<span class="label label-primary">开启</span>'
+			: '<span class="label label-danger">关闭</span>';
 }
 //操作格式化
 function operateFormatter(value, row, index) {
 	index++;
 	return [
-		'<a class="redact" href="javascript:querySingle(' + value
-		+ ');" title="查看详情">',
-'<i class="glyphicon glyphicon-file"></i>', '</a>  ' ].join('');;
-// return [index+1].join('');
+			'<a class="redact" href="javascript:querySingle(' + value
+					+ ');" title="查看详情">',
+			'<i class="glyphicon glyphicon-file"></i>', '</a>  ' ,
+			'<a class="redact" href="javascript:modif(' + value
+					+ ');" title="修改项目">',
+			'<i class="glyphicon glyphicon-pencil"></i>', '</a>  ' ].join('');
+	// return [index+1].join('');
 }
 // 条件查询按钮事件
 function queryEvent() {
@@ -131,94 +133,121 @@ function querySingle(id) {
 			unloginHandler(data);
 			// data.data就是所有数据集
 			console.log(data.data);
-
+			$("#code2").val(null);
+			$("#name2").val(null);
+			$("#description2").val(null);
+			$("#jsonStr2").val(null);
 			// 基本信息
 			$('input[name=code2]').val(data.data.code);
 			$('input[name="name2"]').val(data.data.name);
 			$('textarea[name="description2"]').val(data.data.description);
 			$('textarea[name="jsonStr2"]').val(data.data.jsonStr);
+			$("#status2 option[value=" + data.data.status + "]").attr(
+					"selected", "selected");
 
 			$('#detailMyModal').modal();
 			// 全部默认不可编辑
-			$("#detailsModal").find('input').attr('disabled', true);
-			$("#detailsModal").find('select').attr('disabled', true);
-			$("#detailsModal").find('textarea').attr('disabled', true);
-			$("#detailsModal .subBankName").attr('readonly', false);
+			$("#detailMyModal").find('input').attr('disabled', true);
+			$("#detailMyModal").find('select').attr('disabled', true);
+			$("#detailMyModal").find('textarea').attr('disabled', true);
+			$("#detailMyModal .subBankName").attr('readonly', false);
 		}
 	});
 }
 //新增项目
-$("#saveProjInfoBtn").click(function(){
-	if($("#code").val()==null||$("#code").val()==""){
+$("#saveProjInfoBtn").click(function() {
+	if ($("#code").val() == null || $("#code").val() == "") {
 		layer.msg("项目编码不能为空");
-		 return false;
+		return false;
 	}
-	if($("#name").val()==null||$("#name").val()==""){
+	if ($("#name").val() == null || $("#name").val() == "") {
 		layer.msg("项目名称不能为空");
-		 return false;
+		return false;
 	}
-	if($("#jsonStr").val()==null||$("#jsonStr").val()==""){
+	if ($("#jsonStr").val() == null || $("#jsonStr").val() == "") {
 		layer.msg("项目json不能为空");
-		 return false;
+		return false;
 	}
-	 $.ajax({
-        type: 'POST',
-        url: 'http://localhost:8080/web/addProject',
-        data:{
-       	 code : $("#code").val(),
-       	 name : $("#name").val(),
-       	 description : $("#description").val(),
-       	 status : $("#status").val(),
-       	 jsonStr : $("#jsonStr").val()
-       	 },
-        success: function(data){
-       	 console.log(data);
-       	 if(data.success){
-       		 layer.msg("项目保存成功");
-       	 }
-        }
-    });
+	$.ajax({
+		type : 'POST',
+		url : PROJECT_NAME + '/web/addProject',
+		data : {
+			code : $("#code").val(),
+			name : $("#name").val(),
+			description : $("#description").val(),
+			status : $("#status").val(),
+			jsonStr : $("#jsonStr").val()
+		},
+		success : function(data) {
+			console.log(data);
+			if (data.success) {
+				layer.msg("项目保存成功");
+				queryEvent();
+			}
+		}
+	});
 })
+//修改点击
+function modif(id){
+	$.ajax({
+		url : PROJECT_NAME + '/web/queryDetail',
+		type : 'POST',
+		dataType : "json",
+		data : {
+			'id' : id
+		},
+		success : function(data) {
+			unloginHandler(data);
+			// data.data就是所有数据集
+			console.log(data.data);
+			$("#code1").val(null);
+			$("#name1").val(null);
+			$("#description1").val(null);
+			$("#jsonStr1").val(null);
+			// 基本信息
+			$('#hides').val(id);
+			$('input[name=code1]').val(data.data.code);
+			$('input[name="name1"]').val(data.data.name);
+			$('textarea[name="description1"]').val(
+					data.data.description);
+			$('textarea[name="jsonStr1"]').val(data.data.jsonStr);
+			$("#status1 option[value=" + data.data.status + "]").attr(
+					"selected", "selected");
+			$('#modifMyModal').modal();
+		}
+	});
+}
 //修改项目
-$("#modifProjInfoBtn").click(function(){
-	if($("#code1").val()==null||$("#code1").val()==""){
+$("#modifProjInfoBtn").click(function() {
+	if ($("#code1").val() == null || $("#code1").val() == "") {
 		layer.msg("项目编码不能为空");
-		 return false;
+		return false;
 	}
-	if($("#name1").val()==null||$("#name1").val()==""){
+	if ($("#name1").val() == null || $("#name1").val() == "") {
 		layer.msg("项目名称不能为空");
-		 return false;
+		return false;
 	}
-	if($("#jsonStr1").val()==null||$("#jsonStr1").val()==""){
+	if ($("#jsonStr1").val() == null || $("#jsonStr1").val() == "") {
 		layer.msg("项目json不能为空");
-		 return false;
+		return false;
 	}
-	 $.ajax({
-        type: 'POST',
-        url: 'http://localhost:8080/web/addProject',
-        data:{
-       	 code : $("#code1").val(),
-       	 name : $("#name1").val(),
-       	 description : $("#description1").val(),
-       	 status : $("#status1").val(),
-       	 jsonStr : $("#jsonStr1").val()
-       	 },
-        success: function(data){
-       	 console.log(data);
-       	 if(data.success){
-       		 layer.msg("项目保存成功");
-       	 }
-        }
-    });
+	$.ajax({
+		type : 'POST',
+		url : PROJECT_NAME +'/web/modifProjById',
+		data : {
+			id : $("#hides").val(),
+			code : $("#code1").val(),
+			name : $("#name1").val(),
+			description : $("#description1").val(),
+			status : $("#status1").val(),
+			jsonStr : $("#jsonStr1").val()
+		},
+		success : function(data) {
+			console.log(data);
+			if (data.success) {
+				layer.msg("项目修改成功");
+				queryEvent();
+			}
+		}
+	});
 })
-
-
-
-
-
-
-
-
-
-
-

@@ -39,7 +39,6 @@ import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileTempDao;
 import net.fnsco.bigdata.service.dao.master.MerchantPosDao;
 import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
-import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.domain.Agent;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
@@ -93,9 +92,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
     @Autowired
     private AppUserMerchant1Dao appUserMerchantDao;
-
-    @Autowired
-    private MerchantUserRelDao  merchantUserRelDao;
 
     @Autowired
     private MerchantPosDao      merchantPosDao;
@@ -221,7 +217,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
             merchantTerminalDao.deleteByMerCoreIds(ids);
             merchantPosDao.deleteByMerCoreIds(ids);
             //根据id找到innerCode  删除店铺绑定关系表和用户角色表
-            merchantUserRelDao.deleteByMerCoreIds(ids);
+//            merchantUserRelDao.deleteByMerCoreIds(ids);
             appUserMerchantDao.deleteByMerCoreIds(ids);
             merchantEntityCoreRefDao.deleteByMerCoreIds(ids);
             result = ResultDTO.success("删除成功!");
@@ -433,23 +429,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         merchantCore.setModifyTime(new Date());
         merchantCore.setStatus(1);
         merchantCore.setLegalValidCardType("0");//身份证
-        if(merchantCore != null){
-        	if(Strings.isNullOrEmpty(merchantCore.getMerName())){
-        		return ResultDTO.failForMessage("商户名不能为空");
-        	}
-        	if(Strings.isNullOrEmpty(merchantCore.getAbbreviation())){
-        		return ResultDTO.failForMessage("商户名简称不能为空");
-        	}
-        	
-        	int max = 18;
-        	if(StringUtils.trim(merchantCore.getLegalPersonMobile()).length() > max){
-        		return ResultDTO.failForMessage("手机号不合法，请重新输入");
-        	}
-        	boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", merchantCore.getCardNum());
-        	if(b == false){
-        		return ResultDTO.failForMessage("身份证格式不正确请重新输入");
-        	}
-        }
+        
       //根据商户性质获取商户种类
         if(merchantCore.getEtpsAttr() != null){
 			int etps_tp = merchantEntityService.getEtpsTypeByEtpsAttra(merchantCore.getEtpsAttr());
@@ -522,16 +502,16 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         String innerCode = "";
         for (MerchantContact merchantContact : merchantContacts) {
-        	//联系人手机
-        	int max = 18;
-        	if(StringUtils.trim(merchantContact.getContactMobile()).length() > 18){
-        		return ResultDTO.failForMessage("联系人手机有误请重新输入");
-        	}
-        	//校验邮箱
-        	boolean b = checkEmail(merchantContact.getContactEmail());
-        	if(b == false){
-        		return ResultDTO.failForMessage("邮箱输入有误请重新输入");
-        	}
+//        	//联系人手机
+//        	int max = 18;
+//        	if(StringUtils.trim(merchantContact.getContactMobile()).length() > 18){
+//        		return ResultDTO.failForMessage("联系人手机有误请重新输入");
+//        	}
+//        	//校验邮箱
+//        	boolean b = checkEmail(merchantContact.getContactEmail());
+//        	if(b == false){
+//        		return ResultDTO.failForMessage("邮箱输入有误请重新输入");
+//        	}
             if (null != merchantContact.getId()) {
                 merchantContactDao.updateByPrimaryKeySelective(merchantContact);
             } else {
@@ -544,6 +524,11 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
     }
     
+    /**
+     * 邮箱校验
+     * @param email
+     * @return
+     */
     public static boolean checkEmail(String email){
 	     boolean tag = true; 
 	     final String pattern1 = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$"; 
@@ -648,22 +633,22 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
         }
         String innerCode = "";
         for (MerchantBank merchantBank : merchantBanks) {
-        	//开户手机号
-            	int max = 11;
-            	if(StringUtils.trim(merchantBank.getAccountPhone()).length() > max){
-            		return ResultDTO.failForMessage("手机号不合法，请重新输入");
-            	}
-          
-        	//开户身份证
-              	boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", merchantBank.getAccountCardId());
-              	if(b == false){
-              		return ResultDTO.failForMessage("身份证格式不正确请重新输入");
-              	}
-            //开户账号40位以内
-            int accountMax = 40;
-            if(StringUtils.trim(merchantBank.getAccountNo()).length() > accountMax){
-        		return ResultDTO.failForMessage("开户账号有误，请重新输入");
-        	}
+//        	//开户手机号
+//            	int max = 11;
+//            	if(StringUtils.trim(merchantBank.getAccountPhone()).length() > max){
+//            		return ResultDTO.failForMessage("手机号不合法，请重新输入");
+//            	}
+//          
+//        	//开户身份证
+//              	boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", merchantBank.getAccountCardId());
+//              	if(b == false){
+//              		return ResultDTO.failForMessage("身份证格式不正确请重新输入");
+//              	}
+//            //开户账号40位以内
+//            int accountMax = 40;
+//            if(StringUtils.trim(merchantBank.getAccountNo()).length() > accountMax){
+//        		return ResultDTO.failForMessage("开户账号有误，请重新输入");
+//        	}
             
             if (null != merchantBank.getId()) {
                 merchantBankDao.updateByPrimaryKeySelective(merchantBank);
@@ -817,21 +802,67 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
      * 入驻中信的商户信息
      */
 	@Override
-	public MerchantCoreEntityZxyhDTO queryZXYHInfoById(Integer id) {
+	public ResultDTO<MerchantCoreEntityZxyhDTO>  queryZXYHInfoById(Integer id) {
 		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
 		MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO = new MerchantCoreEntityZxyhDTO();
 		MerchantCore core = merchantCoreDao.queryAllByIdForAddZXMerc(id);
+		//渠道商戶信息
         if (core == null) {
         	return null;
+        }else{
+        	if(Strings.isNullOrEmpty(core.getMerName())){
+        		return ResultDTO.failForMessage("商户名不能为空");
+        	}
+        	if(Strings.isNullOrEmpty(core.getAbbreviation())){
+        		return ResultDTO.failForMessage("商户名简称不能为空");
+        	}
+        	
+        	int max = 18;
+        	if(StringUtils.trim(core.getLegalPersonMobile()).length() > max){
+        		return ResultDTO.failForMessage("手机号不合法，请重新输入");
+        	}
+        	boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", core.getCardNum());
+        	if(b == false){
+        		return ResultDTO.failForMessage("身份证格式不正确请重新输入");
+        	}
+        	
         }
         	merchantCoreEntityZxyhDTO.setInnerCode(core.getInnerCode());
+        //联系人信息
         	MerchantContact merchantContact = null;
         	MerchantBank merchantBank = null;
         	if(core.getContacts().size() > 0){
         		merchantContact = core.getContacts().get(0);//获取商户联系人信息
+        		//联系人手机
+            	int mobilMax = 18;
+            	if(StringUtils.trim(merchantContact.getContactMobile()).length() > mobilMax){
+            		return ResultDTO.failForMessage("联系人手机有误请重新输入");
+            	}
+            	//校验邮箱
+            	boolean email = checkEmail(merchantContact.getContactEmail());
+            	if(email == false){
+            		return ResultDTO.failForMessage("邮箱输入有误请重新输入");
+            	}
         	}
+        //开户行信息
         	if(core.getBanks().size() > 0){
         		merchantBank = core.getBanks().get(0); //获取商户的开户行信息
+        		//开户手机号
+            	int max = 11;
+            	if(StringUtils.trim(merchantBank.getAccountPhone()).length() > max){
+            		return ResultDTO.failForMessage("手机号不合法，请重新输入");
+            	}
+          
+        	//开户身份证
+              	boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", merchantBank.getAccountCardId());
+              	if(b == false){
+              		return ResultDTO.failForMessage("身份证格式不正确请重新输入");
+              	}
+            //开户账号40位以内
+            int accountMax = 40;
+            if(StringUtils.trim(merchantBank.getAccountNo()).length() > accountMax){
+        		return ResultDTO.failForMessage("开户账号有误，请重新输入");
+        	}
         	}
              if(merchantContact == null || merchantBank == null){
             	 return null;
@@ -857,8 +888,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
              MerchantTerminal terminalZFB = core.getTerminaInfosZFB();
              if(terminalZFB != null){
             	 merchantCoreEntityZxyhDTO.setZFBActive("Y");
-            	 merchantCoreEntityZxyhDTO.setqGroupId(terminalZFB.getqGroupId());
-//            	 merchantCoreEntityZxyhDTO.setCategIdC(terminalZFB.getqGroupId());
+//            	 merchantCoreEntityZxyhDTO.setqGroupId(terminalZFB.getqGroupId());
+            	 merchantCoreEntityZxyhDTO.setCategIdC(terminalZFB.getqGroupId());
             	 merchantCoreEntityZxyhDTO.setFeeRateA(terminalZFB.getAlipayFee());
             	 merchantCoreEntityZxyhDTO.setSettleCycleA(terminalZFB.getSettleCycle());
              }else{
@@ -900,7 +931,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
              }
              merchantCoreEntityZxyhDTO.setAcctType(merchantBank.getAccountType());//账户类型
              
-             return merchantCoreEntityZxyhDTO;
+             return result.success(merchantCoreEntityZxyhDTO);
        
 	}
 

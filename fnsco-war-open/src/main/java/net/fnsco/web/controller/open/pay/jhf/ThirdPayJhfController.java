@@ -47,8 +47,8 @@ import net.fnsco.web.controller.open.jo.TradeJO;
  *
  */
 @Controller
-@RequestMapping(value = "/trade/thirdPay", method = RequestMethod.POST)
-@Api(value = "/trade/thirdPay", tags = { "聚惠分相关功能接口" })
+@RequestMapping(value = "/trade/thirdPay")
+@Api(value = "/trade/thirdPay", tags = { "聚惠分第三方调用相关功能接口" })
 public class ThirdPayJhfController extends BaseController {
     @Autowired
     private MerchantService     merchantService;
@@ -65,7 +65,7 @@ public class ThirdPayJhfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getQRUrl")
+    @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
     @ApiOperation(value = "第三方接入获取聚惠分二维码url")
     @ResponseBody
     public ResultDTO getQRUrl(String innerCode, String reqData) {
@@ -112,51 +112,9 @@ public class ThirdPayJhfController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-
-        String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteNotice";
-        String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteCallback?orderNo=" + tradeOrder.getOrderNo();
-        //        commID  商户Id
-        //        thirdPayNo  订单号
-        //        payAmount   支付金额
-        //        npr 分期数
-        //        unionId 客户ID
-        //        transTime   交易时间
-        //        payNotifyUrl    通知URL
-        //        payCallBackUrl  支付结束的回调URL
-        //        payCallBackParams   支付成功后通知参数
-        //        singData    MD5签名
-        String createTimerStr = DateUtils.dateFormat1ToStr(tradeOrder.getCreateTime());
-        String payCallBackParams = JSON.toJSONString(tradeOrder);
-        //MD5(商户Id+订单号+支付金额+分期数+交易时间+通知URL+回调URL+通知参数)
-        BigDecimal amountTemp = tradeOrder.getTxnAmount();
-        BigDecimal amountTemps = amountTemp.divide(new BigDecimal("100"));
-        String singDataStr = merchantChannelJhf.getChannelMerId() + tradeOrder.getOrderNo() + amountTemps.toString() + String.valueOf(tradeOrder.getInstallmentNum()) + createTimerStr + payNotifyUrl
-                             + payCallBackUrl;
-        logger.error("第三方接入支付签名前数据" + singDataStr);
-        String singData = JHFMd5Util.encode32(singDataStr);
-        logger.error("第三方接入支付签名" + singData);
-        TradeJhfJO jhfJO = new TradeJhfJO();
-        jhfJO.setCommID(tradeOrder.getChannelMerId());
-        jhfJO.setPeriodNum(String.valueOf(tradeOrder.getInstallmentNum()));
-
-        jhfJO.setPayAmount(amountTemps.toString());
-        jhfJO.setPayCallBackParams("");
-        jhfJO.setPayCallBackUrl(payCallBackUrl);//payCallBackUrl
-        jhfJO.setPayNotifyUrl(payNotifyUrl);
-        jhfJO.setSingData(singData);
-        jhfJO.setThirdPayNo(tradeOrder.getOrderNo());
-        jhfJO.setTransTime(createTimerStr);
-        jhfJO.setUnionId(tradeOrder.getInnerCode());
-        String rspData = "";
-        String dateTemp = JSON.toJSONString(jhfJO);
-        try {
-            String jhfKey = env.getProperty("jhf.api.AES.key");
-            rspData = URLEncoder.encode(AESUtil.encode(dateTemp, jhfKey), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            logger.error("第三方接入支付生成分期付url时AES加密出错", e);
-        }
+        
         String url = env.getProperty("open.base.url") + "/trade/pay/dealPayOrder";
-        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=" + rspData;
+        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=123" + "&reqData=123";
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
         resultMap.put("orderNo", tradeOrder.getOrderNo());

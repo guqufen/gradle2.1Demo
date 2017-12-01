@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.base.Strings;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -33,6 +34,7 @@ import net.fnsco.order.api.trade.TradeReportService;
  */
 @RestController
 @RequestMapping(value = "/app/tradeReport", method = RequestMethod.POST)
+@Api(value = "/app/tradeReport", tags = { "交易统计相关业务接口" })
 public class TradeReportController extends BaseController{
     
     @Autowired

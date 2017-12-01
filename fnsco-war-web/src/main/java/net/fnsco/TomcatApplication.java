@@ -1,8 +1,5 @@
 package net.fnsco;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +11,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 import net.fnsco.config.WebConfig;
-import net.fnsco.core.utils.DateUtils;
 import net.fnsco.freamwork.log.filter.WebAccessLogFilter;
 
 @SpringBootApplication
@@ -29,13 +25,7 @@ public class TomcatApplication extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
-//        SpringApplication.run(TomcatApplication.class, args);
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
-        try {
-			System.out.println(sdf.parse("20140502" + String.format("%1$0"+(14 - "abc".length())+"d",0) ));//清算日期 [yyyyMMdd]
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+        SpringApplication.run(TomcatApplication.class, args);
     	  
     }
 

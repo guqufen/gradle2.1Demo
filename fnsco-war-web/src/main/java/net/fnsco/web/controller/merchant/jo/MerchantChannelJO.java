@@ -3,8 +3,6 @@ package net.fnsco.web.controller.merchant.jo;
 import java.util.List;
 
 import net.fnsco.bigdata.service.domain.MerchantChannel;
-import net.fnsco.bigdata.service.domain.MerchantPos;
-import net.fnsco.bigdata.service.domain.MerchantTerminal;
 import net.fnsco.core.base.JO;
 
 /**

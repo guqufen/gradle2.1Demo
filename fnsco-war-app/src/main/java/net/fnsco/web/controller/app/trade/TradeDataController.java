@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.dto.TradeDataPageDTO;
 import net.fnsco.bigdata.api.dto.TradeDataQueryDTO;
@@ -28,6 +29,7 @@ import net.fnsco.bigdata.service.domain.trade.TradeData;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.order.service.modules.trade.TradeDataAppServiceImpl;
 import net.fnsco.web.controller.app.jo.TradeDataJO;
 
 /**
@@ -37,6 +39,7 @@ import net.fnsco.web.controller.app.jo.TradeDataJO;
  */
 @RestController
 @RequestMapping(value = "/app/trade", method = RequestMethod.POST)
+@Api(value = "/app/trade", tags = { "交易流水接口" })
 public class TradeDataController extends BaseController {
     @Autowired
     private TradeDataService    tradeDataService;
@@ -44,6 +47,8 @@ public class TradeDataController extends BaseController {
     private MerchantCoreService merchantCoreService;
     @Autowired
     private MerchantPosService  merchantPosService;
+    @Autowired
+    private TradeDataAppServiceImpl    tradeDataAppService;
 
     /**
      * 查询交易流水信息
@@ -54,13 +59,13 @@ public class TradeDataController extends BaseController {
     //@ApiIgnore //使用该注解忽略这个API
     @RequestMapping(value = "/queryList")
     @ApiOperation(value = "查询交易流水")
-    public ResultDTO queryList(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
+    public ResultDTO<TradeDataPageDTO<TradeDataJO>> queryList(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
         logger.warn("/queryList查询交易流水入参:" + JSON.toJSONString(tradeQueryDTO));
         if(Strings.isNullOrEmpty(tradeQueryDTO.getEndDate())&&Strings.isNullOrEmpty(tradeQueryDTO.getStartDate())){
             tradeQueryDTO.setStartDate(DateUtils.getNextMonthDayStr());
             tradeQueryDTO.setEndDate(DateUtils.getNowYMDStr());
         }
-        TradeDataPageDTO<TradeData> temp = tradeDataService.queryAllByCondition(tradeQueryDTO);
+        TradeDataPageDTO<TradeData> temp = tradeDataAppService.queryAllByCondition(tradeQueryDTO);
         List<TradeData> list = temp.getList();
         List<TradeDataJO> resultList = Lists.newArrayList();
         if (null != list) {
@@ -124,7 +129,7 @@ public class TradeDataController extends BaseController {
     //@ApiIgnore //使用该注解忽略这个API
     @RequestMapping(value = "/information")
     @ApiOperation(value = "查询交易流水")
-    public ResultDTO information(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
+    public ResultDTO<TradeDataJO> information(@RequestBody TradeDataQueryDTO tradeQueryDTO) {
         TradeDataJO result = new TradeDataJO();
         TradeData tradeData = tradeDataService.queryByTradeId(tradeQueryDTO.getTradeId());
         if (null == tradeData) {

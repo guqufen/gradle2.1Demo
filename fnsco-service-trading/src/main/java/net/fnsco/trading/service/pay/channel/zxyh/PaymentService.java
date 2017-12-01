@@ -113,7 +113,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
         //支付宝
         mercDTO.setZFBActive(core.getZFBActive());
         if(StringUtils.equals("Y", core.getZFBActive())){
-        	mercDTO.setCategIdC(core.getqGroupId());
+        	mercDTO.setCategIdC(core.getCategIdC());
             mercDTO.setFeeRateA(core.getFeeRateA());
             mercDTO.setSettleCycleA(core.getSettleCycleA());
         }

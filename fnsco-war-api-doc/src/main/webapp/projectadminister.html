@@ -50,10 +50,6 @@
 					data-toggle="modal" data-target="#addMyModal">
 					<span class="glyphicon glyphicon-plus add" aria-hidden="true"></span>新增
 				</button>
-				<button id="btn_modif" type="button" class="btn btn-warning"
-					data-toggle="modal" data-target="#modifMyModal">
-					<span class="glyphicon glyphicon-plus modif" aria-hidden="true"></span>修改
-				</button>
 			</div>
 			<div class="ibox float-e-margins">
 				<div class="ibox-content">
@@ -104,7 +100,7 @@
 										<label class="control-label col-lg-3">状态</label>
 											<select id="status" name="status" class="form-control"
 												data-initvalue="open">
-												<option value="open">开启</option>
+												<option value="open" >开启</option>
 												<option value="close">关闭</option>
 											</select>
 										</div>
@@ -133,6 +129,7 @@
 						<div class="modal-body">
 							<div class="tab-content">
 								<div class="row">
+								<input type="hidden" name="field＿name" id = "hides" value="value"> 
 										<div class="col-lg-6">
 										<label class="control-label col-lg-3">项目编码</label>
 											<input type="text" name="code1" id="code1" class="form-control"
@@ -155,7 +152,7 @@
 										</div>
 										<div class="col-lg-6">
 										<label class="control-label col-lg-3">状态</label>
-											<select id="status1" name="status1" class="form-control"
+											<select  id="status1" name="status1" class="form-control"
 												data-initvalue="open">
 												<option value="open">开启</option>
 												<option value="close">关闭</option>

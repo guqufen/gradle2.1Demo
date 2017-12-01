@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>邮件模板管理-法奈昇大数据平台</title>
+<meta name="keywords" content="法奈昇大数据平台">
+<meta name="description" content="法奈昇大数据平台">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css"
+	rel="stylesheet">
+<link
+	href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+	<div class="panel-body animated fadeInRight">
+		<div class="panel panel-default">
+			<!-- 			<form id="formSearch" class="form-horizontal">
+				<div class="form-group" style="margin-top: 15px;">
+					<div class="col-sm-10">
+						<div class="col-sm-4">
+							<label class="control-label">状态:</label> <select
+								class="form-control status">
+								<option value="">全部</option>
+								<option value="1">启用</option>
+								<option value="0">停用</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-2" style="text-align: right;">
+						<button type="button" id="btn_query" class="btn btn-primary"
+							onclick="javascript:queryEvent('table');">
+							<span class="glyphicon glyphicon-search"></span>查询
+						</button>
+						<button type="button" id="btn_reset" class="btn btn-default"
+							onclick="javascript:resetEvent('formSearch');">
+							<span class="glyphicon glyphicon-refresh"></span>重置
+						</button>
+					</div>
+				</div>
+			</form> -->
+			<div id="toolbar">
+				<button id="btn_add" type="button" class="btn btn-success"
+					data-toggle="modal" data-target="#addMyModal">
+					<span class="glyphicon glyphicon-plus add" aria-hidden="true"></span>新增
+				</button>
+			</div>
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="row row-lg">
+						<div class="col-sm-12">
+							<table id="table"></table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model新增 start -->
+			<div class="modal fade" id="addMyModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="addModalLabel">新增模板</h4>
+						</div>
+						<div class="modal-body">
+							<div class="tab-content">
+								<div class="row">
+										<div class="col-lg-6">
+										<label class="control-label col-lg-3">模板名称</label>
+											<input type="text" name="emailName" id="emailName" class="form-control"
+												data-bv-field="code" placeholder="请输入模板名称"> 
+										</div>
+										<div class="col-lg-6">
+										<label class="control-label col-lg-3">邮件标题</label>
+											<input type="text" name="subject" id="subject" class="form-control"
+												data-bv-field="name" placeholder="请输入邮件标题">
+										</div>
+										<div class="col-sm-12">
+	                                		<label class="control-label" id="role" for="role">通知角色：</label>
+	                                		<textarea id="roleType" name="roleType" class="form-control"
+												rows="2" placeholder="点击选择需要发送邮件的用户"></textarea>
+	                            		</div>
+										<div class="col-lg-12">
+										<label class="control-label col-lg-3">其他通知邮箱</label>
+											<textarea id="otherSubject" name="otherSubject" class="form-control"
+												rows="3" placeholder="多个邮箱用；分隔"></textarea>
+										</div>
+										<div class="col-lg-12">
+										<label class="control-label col-lg-3">邮件内容</label>
+											<textarea id="content" name="content"
+												class="form-control" rows="3" placeholder="请输入邮件内容"></textarea>
+										</div>
+										<!--<div class="col-lg-6">
+										<label class="control-label col-lg-3">状态</label>
+											<select id="status" name="status" class="form-control"
+												data-initvalue="open">
+												<option value="open" >开启</option>
+												<option value="close">关闭</option>
+											</select>
+										</div>-->
+								</div>
+							</div>
+							<a class="modify btn btn-primary" id = "saveProjInfoBtn"
+								style="margin-left: 45%; margin-bottom: 10px;">确定</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+			<!-- model修改 start -->
+			<div class="modal fade" id="modifMyModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="modifModalLabel">修改模板</h4>
+						</div>
+						<div class="modal-body">
+							<div class="tab-content">
+								<div class="row">
+								<input type="hidden" name="field＿name" id = "hides" value="value"> 
+										<div class="col-lg-6">
+										<label class="control-label col-lg-3">模板名称</label>
+											<input type="text" name="emailName1" id="emailName1" class="form-control"
+												data-bv-field="code" placeholder="请输入模板名称"> 
+										</div>
+										<div class="col-lg-6">
+										<label class="control-label col-lg-3">邮件标题</label>
+											<input type="text" name="subject1" id="subject1" class="form-control"
+												data-bv-field="name" placeholder="请输入邮件标题">
+										</div>
+										<div class="col-sm-12">
+	                                		<label class="control-label" id="role" for="role">通知角色：</label>
+	                                		<textarea id="roleType1" name="roleType1" class="form-control"
+												rows="2" placeholder="点击选择需要发送邮件的用户"></textarea>
+	                            		</div>
+										<div class="col-lg-12">
+										<label class="control-label col-lg-3">其他通知邮箱</label>
+											<textarea id="otherSubject1" name="otherSubject1" class="form-control"
+												rows="3" placeholder="多个邮箱用；分隔"></textarea>
+										</div>
+										<div class="col-lg-12">
+										<label class="control-label col-lg-3">邮件内容</label>
+											<textarea id="content1" name="content1"
+												class="form-control" rows="3" placeholder="请输入邮件内容"></textarea>
+										</div>
+										<!--<div class="col-lg-6">
+										<label class="control-label col-lg-3">状态</label>
+											<select id="status" name="status" class="form-control"
+												data-initvalue="open">
+												<option value="open" >开启</option>
+												<option value="close">关闭</option>
+											</select>
+										</div>-->
+								</div>
+							</div>
+							<a class="modify btn btn-primary" id= "modifProjInfoBtn"
+								style="margin-left: 45%; margin-bottom: 10px;">确定</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+			<!-- model详情 start -->
+			<div class="modal fade" id="detailMyModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="detailModalLabel">模板详情</h4>
+						</div>
+						<div class="modal-body">
+							<div class="tab-content">
+								<div class="row">
+										<div class="col-lg-6">
+										<label class="control-label col-lg-3">模板名称</label>
+											<input type="text" name="emailName2" id="emailName2" class="form-control"
+												data-bv-field="code"> 
+										</div>
+										<div class="col-lg-6">
+										<label class="control-label col-lg-3">邮件标题</label>
+											<input type="text" name="subject2" id="subject2" class="form-control"
+												data-bv-field="name">
+										</div>
+										<div class="col-sm-12">
+	                                		<label class="control-label" id="role" for="role">通知角色：</label>
+	                                		<textarea id="roleType3" name="roleType3" class="form-control"
+												rows="2" ></textarea>
+	                            		</div>
+										<div class="col-lg-12">
+										<label class="control-label col-lg-3">其他通知邮箱</label>
+											<textarea id="otherSubject2" name="otherSubject2" class="form-control"
+												rows="3"></textarea>
+										</div>
+										<div class="col-lg-12">
+										<label class="control-label col-lg-3">邮件内容</label>
+											<textarea id="content2" name="content2"
+												class="form-control" rows="3"></textarea>
+										</div>
+										<!--<div class="col-lg-6">
+										<label class="control-label col-lg-3">状态</label>
+											<select id="status" name="status" class="form-control"
+												data-initvalue="open">
+												<option value="open" >开启</option>
+												<option value="close">关闭</option>
+											</select>
+										</div>-->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+			<!-- model选择邮箱 start -->
+			<div class="modal fade" id="emailMyModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="emailModalLabel">邮箱选择</h4>
+						</div>
+						<div id="toolbar">
+						<div class="modal-body">
+							<div class="tab-content">
+								<div class="row">
+									<button id="btn_save" type="button" class="modify btn btn-primary" 
+									style="margin-left: 45%; margin-bottom: 0px;">确认
+									</button>
+									<div class="col-sm-12">
+										<div id="emailTable" style="width: 100%;"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+	<!-- end -->
+	<script src="https://cdn.staticfile.org/jquery/2.1.4/jquery.min.js"></script>
+	<script
+		src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<!-- <script src="js/content.min.js"></script> -->
+	<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+	<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+	<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+	<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+	<script src="js/layer/layer.js"></script>
+	<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
+	<script type="text/javascript" src="js/fnsco/common.js"></script>
+	<script type="text/javascript" src="js/fnsco/emailformwork.js"></script>
+</body>
+</html>

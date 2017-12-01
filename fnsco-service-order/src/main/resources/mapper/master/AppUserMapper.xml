@@ -56,7 +56,7 @@
 	</sql>
 	<!-- 根据手机号更新用户 密码 -->
 	<update id="updatePasswordByPhone" parameterType="java.lang.String">
-		update m_app_user set password = #{password,jdbcType=VARCHAR} where mobile =
+		update u_app_user set password = #{password,jdbcType=VARCHAR} where mobile =
 		#{mobile,jdbcType=VARCHAR}
 	</update>
 	<!-- 根据手机号查询用户实体 -->
@@ -64,26 +64,26 @@
 		parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
-		from m_app_user
+		from u_app_user
 		where mobile = #{mobile,jdbcType=VARCHAR}
 	</select>
     <!-- 根据手机号和用户状态查询用户实体 -->
 	<select id="selectAppUserByMobileAndState" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from m_app_user
+		from u_app_user
 		where mobile = #{mobile,jdbcType=VARCHAR} and state = #{state,jdbcType=INTEGER}
 	</select>
 	<!-- 根据id查询用户实体 -->
 	<select id="selectAppUserById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
 		select
 		<include refid="Base_Column_List" />
-		from m_app_user
+		from u_app_user
 		where id = #{id,jdbcType=INTEGER}
 	</select>
 	<!-- 新增注册记录 -->
 	<insert id="insertSelective" parameterType="net.fnsco.order.service.domain.AppUser">
-		insert into m_app_user(id, user_name, mobile, password, real_name,
+		insert into u_app_user(id, user_name, mobile, password, real_name,
 		device_id, ges_state, ges_password, ges_trail,
 		pay_password, device_type, device_token, password_error_num, password_error_date,
 		remark, reg_time, last_login_time, modify_time, state,forced_login_out,invite_entity_innner_code,invite_status)
@@ -101,7 +101,7 @@
 	</insert>
 	<!-- 修改用户信息 -->
 	<update id="updateByPrimaryKeySelective" parameterType="net.fnsco.order.service.domain.AppUser">
-		update m_app_user
+		update u_app_user
 		<set>
 			<if test="mobile != null">
 				mobile = #{mobile,jdbcType=VARCHAR},
@@ -185,11 +185,11 @@
 				SELECT DISTINCT
 					(app_user_id)
 				FROM
-					m_merchant_user_rel
+					u_app_user_merchant
 				WHERE
 					inner_code = #{innerCode}
 			) RE
-		LEFT JOIN m_app_user MU ON RE.app_user_id = MU.id
+		LEFT JOIN u_app_user MU ON RE.app_user_id = MU.id
 	</select>
 	<!-- 条件分页查询 -->
 	<select id="queryPageList" parameterType="net.fnsco.core.base.PageDTO" resultMap="PageResultMap">
@@ -215,8 +215,8 @@
 						SELECT
 							MU.*, RE.inner_code
 						FROM
-							 m_app_user MU
-						LEFT JOIN m_merchant_user_rel RE ON MU.id = RE.app_user_id
+							 u_app_user MU
+						LEFT JOIN u_app_user_merchant RE ON MU.id = RE.app_user_id
 					) MR
 				LEFT JOIN  m_merchant_core MC ON MR.inner_code = MC.inner_code
 			) TA
@@ -251,10 +251,10 @@
 						SELECT
 							MU.*, RE.inner_code
 						FROM
-							 m_app_user
+							 u_app_user
 							  
 							MU
-						LEFT JOIN m_merchant_user_rel RE ON MU.id = RE.app_user_id
+						LEFT JOIN u_app_user_merchant RE ON MU.id = RE.app_user_id
 					) MR
 				LEFT JOIN 
 				   m_merchant_core 
@@ -282,7 +282,7 @@
 			SELECT
 				*
 			FROM
-				m_app_user
+				u_app_user
 			WHERE
 				mobile = #{mobile,jdbcType=VARCHAR}
 		) User ON REL.app_user_id = User.id
@@ -291,25 +291,25 @@
   <select id="queryAllPushUser" resultMap="BaseResultMap">
     select
 		<include refid="Base_Column_List" />
-		from m_app_user
+		from u_app_user
 		where state = 1 and device_token &lt;&gt; '' and device_token is not null
   </select>
   <update id="updateDeviceToken">
-		update m_app_user set device_token = #{deviceToken,jdbcType=VARCHAR} ,device_type=#{deviceType,jdbcType=INTEGER}, device_id=#{deviceId,jdbcType=VARCHAR} where mobile =
+		update u_app_user set device_token = #{deviceToken,jdbcType=VARCHAR} ,device_type=#{deviceType,jdbcType=INTEGER}, device_id=#{deviceId,jdbcType=VARCHAR} where mobile =
 		#{mobile,jdbcType=VARCHAR}
   </update>
    <update id="updateDeviceTokenById">
-		update m_app_user set device_token = #{deviceToken,jdbcType=VARCHAR} ,device_type=#{deviceType,jdbcType=INTEGER}, device_id=#{deviceId,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER}
+		update u_app_user set device_token = #{deviceToken,jdbcType=VARCHAR} ,device_type=#{deviceType,jdbcType=INTEGER}, device_id=#{deviceId,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER}
   </update>
 	<!-- 根据deviceToken查找到用户-->
 	<select id="queryBydeviceToken" resultMap="BaseResultMap">
     select
 		<include refid="Base_Column_List" />
-		from m_app_user
+		from u_app_user
 		where state = 1 and device_token = #{deviceToken,jdbcType=VARCHAR}
   </select>
   <update id="updateByPrimaryKey" parameterType="net.fnsco.order.service.domain.AppUser">
-  	  	update m_app_user set
+  	  	update u_app_user set
   	  	user_name=#{userName,jdbcType=VARCHAR},
 		mobile=#{mobile,jdbcType=VARCHAR},password=#{password,jdbcType=VARCHAR},
 		real_name=#{realName,jdbcType=VARCHAR}, device_id=#{deviceId,jdbcType=VARCHAR},
@@ -326,7 +326,7 @@
   <select id="selectAllInlineByRoleId" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
 		<include refid="Base_Column_List" />
-		from m_app_user
+		from u_app_user
 		WHERE state = 1 and device_token &lt;&gt; '' and device_token is not null and id IN ( SELECT app_user_id FROM u_app_user_merchant WHERE role_id = #{roleId})
   </select>
   <!-- 查询手机号的关联信息 -->
@@ -337,20 +337,20 @@
   <select id="selectAllValid" resultMap="BaseResultMap">
       select
 		<include refid="Base_Column_List" />
-		from m_app_user
+		from u_app_user
 		WHERE state = 1 
   </select>
   <!-- 查询所有被邀请的用户 -->
   <select id="selectAllInviteAppUser" resultMap="BaseResultMap">
       select
 		<include refid="Base_Column_List" />
-		from m_app_user
+		from u_app_user
 		WHERE state = 1 and invite_status='0'
   </select>
   <!-- 查询所有用户 -->
   <select id="selectAllNewUserFormZFT" resultMap="BaseResultMap">
      select
 		<include refid="Base_Column_List" />
-		from m_app_user  where remark = '-1200002'
+		from u_app_user  where remark = '-1200002'
   </select>
 </mapper>

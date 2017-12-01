@@ -23,6 +23,10 @@ public class UserBasicDO {
      * 手机号
      */
     private String phone;
+    /**
+     * 姓名
+     */
+    private String Name;
 
     /**
      * 邮箱
@@ -93,7 +97,15 @@ public class UserBasicDO {
         this.phone = phone;
     }
 
-    public String getEmail() {
+    public String getName() {
+		return Name;
+	}
+
+	public void setName(String name) {
+		Name = name;
+	}
+
+	public String getEmail() {
         return email;
     }
 

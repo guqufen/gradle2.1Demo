@@ -40,4 +40,10 @@ public interface AppUserMerchantDao {
     List<TradeMerchantDTO> selectByUserIdAndRoleId(@Param("appUserId")Integer appUserId,@Param("roleId")String roleId);
     
     int updateByUserIdAndInnerCode(AppUserMerchant record);
+    
+    AppUserMerchant selectByUserIdInnerCode(@Param("appUserId") Integer appUserId, @Param("innerCode") String innerCode);
+    
+    List<AppUserMerchant> selectAllByInnerCode(@Param("innerCode") String innerCode);
+    
+    List<AppUserMerchant> selectByUserId(@Param("appUserId") Integer appUserId);
 }

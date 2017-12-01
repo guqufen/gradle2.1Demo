@@ -2,19 +2,16 @@ package net.fnsco.web.controller.e789.pay;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.collect.Maps;
-
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
@@ -23,10 +20,11 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
-import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
+import net.fnsco.web.controller.e789.jo.TradeJO;
+import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 
 /**
  * 
@@ -56,7 +54,7 @@ public class TradeJhfController extends BaseController {
      */
     @RequestMapping(value = "/getQRUrl")
     @ApiOperation(value = "获取分闪付url")
-    public ResultDTO getMerCode(@RequestBody TradeJO tradeJO) {
+    public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody TradeJO tradeJO) {
         MerchantChannel merchantChannelJhf = new MerchantChannel();
         merchantChannelJhf.setInnerCode("110319624699094");//
         merchantChannelJhf.setChannelMerId("32");//
@@ -83,13 +81,12 @@ public class TradeJhfController extends BaseController {
         //String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
         //url += "?commID=" + tradeOrder.getChannelMerId() + "&reqData=" + reqData;
         String url = env.getProperty("open.base.url") + "/trade/pay/dealPayOrder";
-        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId()
-               + "&reqData=123";
-        Map<String, Object> resultMap = Maps.newHashMap();
-        resultMap.put("url", url);
-        resultMap.put("orderNo", tradeOrder.getOrderNo());
+        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=123";
+        GetQRUrlResultVO result = new GetQRUrlResultVO();
+        result.setUrl(url);
+        result.setOrderNo(tradeOrder.getOrderNo());
         //，通知地址，回调地址。
-        return success(resultMap);
+        return success(result);
     }
 
     /**
@@ -100,14 +97,13 @@ public class TradeJhfController extends BaseController {
      */
     @RequestMapping(value = "/getOrderInfo")
     @ApiOperation(value = "获取商户编号")
-    public ResultDTO getOrderInfo(@RequestBody TradeJO tradeJO) {
+    @ApiImplicitParam(name = "xxx", value = "组织", required = false, dataType="Xxx",paramType="body")
+    public ResultDTO<TradeOrderDO> getOrderInfo( @RequestBody   TradeJO tradeJO ) {
         TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(tradeJO.getOrderNo());
         tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
         tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
-        tradeOrderDO
-            .setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
-        MerchantCore merChantCore = merchantService
-            .getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
+        tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
+        MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
         if (null != merChantCore) {
             tradeOrderDO.setMercName(merChantCore.getMerName());
         }
@@ -130,15 +126,12 @@ public class TradeJhfController extends BaseController {
         tradeOrder.setOrderTop10(tradeJO.getDate());
         tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
         tradeOrder.setRespCode("1001");
-        ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder,
-            tradeJO.getPageNum(), tradeJO.getPageSize());
+        ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder, tradeJO.getPageNum(), tradeJO.getPageSize());
         List<TradeOrderDO> resultList = resultDTO.getList();
         for (TradeOrderDO tradeOrderDO : resultList) {
-            tradeOrderDO
-                .setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
+            tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
             tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
-            tradeOrderDO
-                .setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
+            tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
             //            BigDecimal eachMoney = tradeOrderDO.getEachMoney();
             //            if (null != eachMoney) {
             //                eachMoney = eachMoney.divide(new BigDecimal("100")).setScale(2,
