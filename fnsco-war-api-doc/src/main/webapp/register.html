@@ -93,7 +93,7 @@ body.signin {
 				var data={"nickName":$(".nickName").val(),"loginName":$(".loginName").val(),"passwd":$(".passwd").val()};
 				console.log(data);
 				$.ajax({
-					url:"http://localhost:8080/web/regist/regist",
+					url:PROJECT_NAME +"/web/regist/regist",
 					data:data,
 					type:'GET',
 					success:function(data){
