@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -27,6 +28,7 @@ import net.fnsco.order.api.dto.AppConfigDTO;
  */
 @RestController
 @RequestMapping(value = "/app/config", method = RequestMethod.POST)
+@Api(value = "/app/config", tags = { "获取配置信息管理接口" })
 public class AppConfigController extends BaseController {
     
     @Autowired

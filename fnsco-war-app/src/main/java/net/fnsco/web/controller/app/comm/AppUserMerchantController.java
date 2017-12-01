@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -19,6 +20,7 @@ import net.fnsco.order.api.dto.BandDto;
 
 @RestController
 @RequestMapping(value = "/app/user", method = RequestMethod.POST)
+@Api(value = "/app/user", tags = { "店铺关系信息管理接口" })
 public class AppUserMerchantController extends BaseController {
     @Autowired
     private AppUserMerchantService appUserMerchantService;
