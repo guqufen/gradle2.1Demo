@@ -59,7 +59,7 @@ public class BankCardController extends BaseController {
     @ApiOperation(value = "绑定银行卡")
     public ResultDTO<BindBankCardJO> addBankCard(@RequestBody BindBankCardJO bindBankCardJO) {
        
-        return success();
+        return success(bindBankCardJO);
     }
 
     /**
@@ -69,11 +69,11 @@ public class BankCardController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/unBindBankCard")
-    @ApiOperation(value = "获取商户编号")
+    @ApiOperation(value = "解绑银行卡")
     @ApiImplicitParam(name = "xxx", value = "解绑银行卡", required = false, dataType="Xxx",paramType="body")
     public ResultDTO<UnBindBankCardJO> deleteBankCard( @RequestBody  UnBindBankCardJO unBindBankCardJO ) {
         
-        return success();
+        return success(unBindBankCardJO);
     }
 
     /**
@@ -83,7 +83,7 @@ public class BankCardController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getBankCardList")
-    @ApiOperation(value = "获取商户编号")
+    @ApiOperation(value = "银行卡列表查询")
     public ResultDTO<BankListJO> getBankCardList(@RequestBody BankListJO bankListJO) {
        
         return success();
