@@ -35,7 +35,6 @@ public class PassivePayController extends BaseController{
 		//签名校验
 		
 		PassivePayDTO passivePayDTO = new PassivePayDTO();
-		passivePayDTO.setStddiscamt(zxyhPassivePayJO.getDiscamt());//不可优惠金额，支付宝必填
 		passivePayDTO.setStdtranamt(zxyhPassivePayJO.getAmt());//交易金额
 		passivePayDTO.setStd400memo(zxyhPassivePayJO.getBody());//商品描述
 		passivePayDTO.setStdauthid(zxyhPassivePayJO.getAuthid());//授权码

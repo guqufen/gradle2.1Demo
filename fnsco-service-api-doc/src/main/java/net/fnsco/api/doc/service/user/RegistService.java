@@ -89,6 +89,7 @@ public class RegistService extends BaseService {
     private Long saveUserInfo(RegistParamInfo registParamInfo) {
         //处理用户基本信息
         UserBasicDO userBasic = new UserBasicDO();
+        userBasic.setName(registParamInfo.getNickName());
         userBasic.setEmail(registParamInfo.getEmail());
         userBasic.setLocked(0);
         userBasic.setRegisterIp(registParamInfo.getRegistIp());
