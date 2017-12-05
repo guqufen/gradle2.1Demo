@@ -83,9 +83,6 @@ public class TradeFsfController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-
-        //String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-        //url += "?commID=" + tradeOrder.getChannelMerId() + "&reqData=" + reqData;
         String url = env.getProperty("open.base.url") + "/trade/pay/dealPayOrder";
         url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=123";
         GetQRUrlResultVO result = new GetQRUrlResultVO();
@@ -118,50 +115,4 @@ public class TradeFsfController extends BaseController {
         return success(result);
     }
 
-    /**
-     * 订单列表查询
-     *
-     * @param userName
-     * @return
-     */
-    @RequestMapping(value = "/getOrderList", method = RequestMethod.GET)
-    @ApiOperation(value = "获取商户编号")
-    public ResultDTO<TradeOrderDO> getOrderList(@RequestBody TradeJO tradeJO) {
-        MerchantChannel merchantChannel = merchantService.getMerChannel(tradeJO.getMerCode(), "00");
-        if (null == merchantChannel) {
-            return fail("拉卡拉渠道信息不存在");
-        }
-        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByInnerCodeType(merchantChannel.getInnerCode(), "04");
-        if (null == merchantChannelJhf) {
-            return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
-        }
-        TradeOrderDO tradeOrder = new TradeOrderDO();
-        tradeOrder.setOrderNoAfter6(tradeJO.getOrderNo());
-        tradeOrder.setOrderTop10(tradeJO.getDate());
-        tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
-        tradeOrder.setRespCode("1001");
-        //tradeOrder.setSettleStatus(4);
-        ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder, tradeJO.getPageNum(), tradeJO.getPageSize());
-        List<TradeOrderDO> resultList = resultDTO.getList();
-        for (TradeOrderDO tradeOrderDO : resultList) {
-            tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
-            tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
-            tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
-            //            BigDecimal eachMoney = tradeOrderDO.getEachMoney();
-            //            if (null != eachMoney) {
-            //                eachMoney = eachMoney.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-            //                tradeOrderDO.setEachMoney(eachMoney);
-            //            }
-            //            BigDecimal orderAmount = tradeOrderDO.getOrderAmount();
-            //            if (null != orderAmount) {
-            //                orderAmount = orderAmount.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-            //                tradeOrderDO.setOrderAmount(orderAmount);
-            //            }
-            //MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
-            //if (null != merChantCore) {
-            //    tradeOrderDO.setMercName(merChantCore.getMerName());
-            //}
-        }
-        return success(resultDTO);
-    }
 }
