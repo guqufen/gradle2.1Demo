@@ -14,7 +14,7 @@ import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
 import net.fnsco.web.controller.e789.pay.zxyh.jo.PassivePayJO;
 
 @RestController
-@RequestMapping(value="/app/zxyh/PassivePay", method=RequestMethod.POST)
+@RequestMapping(value="/app2c/zxyh/PassivePay", method=RequestMethod.POST)
 @Api(value="/app/zxyh/PassivePay", tags={"中信银行被扫支付接口"})
 public class PassivePayController extends BaseController{
 

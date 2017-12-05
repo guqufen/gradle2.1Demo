@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +28,7 @@ import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.core.utils.dby.JHFMd5Util;
@@ -73,30 +75,19 @@ public class ThirdPayJhfController extends BaseController {
             logger.error("第三方接入获取二维码url密文入参为空");
             fail("失败，rspData入参为空");
         }
-        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByMerChannelInnerCodeType(innerCode, "04");
-        if (null == merchantChannelJhf) {
+        TradeJO tradeJO = getReqData(innerCode, reqData);
+        if (null == tradeJO) {
             return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
         }
-        String keyStr = merchantChannelJhf.getChannelMerKey();
-        TradeJO tradeJO = new TradeJO();
-        try {
-            String decodeStr = AESUtil.decode(reqData, keyStr);
-            logger.error("第三方接入获取二维码url解密后入参：" + decodeStr);
-            //聚惠芬支付完成时的通知解密后入参：{"payCallBackParams":"","settlementStatus":"0","thirdPayNo":"20171102155606073111374535549766","orderStatus":"2","singData":"001AA0CC08241A447BF7250B500C4B83"}
-            tradeJO = JSON.parseObject(decodeStr, TradeJO.class);
-        } catch (Exception ex) {
-            logger.error("第三方接入获取二维码url出错", ex);
-            return fail("失败，解密处理异常");
-        }
-        List<MerchantEntityCoreRef> refList = merchantCoreService.queryEntityCoreRefByInnerCode(merchantChannelJhf.getInnerCode());
+        List<MerchantEntityCoreRef> refList = merchantCoreService.queryEntityCoreRefByInnerCode(tradeJO.getInnerCode());
         String entityInnerCode = "";
         for (MerchantEntityCoreRef temp : refList) {
             entityInnerCode = temp.getEntityInnerCode();
             break;
         }
         TradeOrderDO tradeOrder = new TradeOrderDO();
-        tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
-        tradeOrder.setChannelMerId(merchantChannelJhf.getChannelMerId());
+        tradeOrder.setInnerCode(tradeJO.getInnerCode());
+        tradeOrder.setChannelMerId(tradeJO.getChannelMerId());
         tradeOrder.setChannelType("04");
         tradeOrder.setInstallmentNum(tradeJO.getInstallmentNum());
         tradeOrder.setEntityInnerCode(entityInnerCode);
@@ -112,7 +103,7 @@ public class ThirdPayJhfController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        
+
         String url = env.getProperty("open.base.url") + "/trade/pay/dealPayOrder";
         url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=123" + "&reqData=123";
         Map<String, Object> resultMap = Maps.newHashMap();
@@ -121,18 +112,42 @@ public class ThirdPayJhfController extends BaseController {
         //，通知地址，回调地址。
         return success(resultMap);
     }
-   
+
+    private TradeJO getReqData(String innerCode, String reqData) {
+        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByMerChannelInnerCodeType(innerCode, "04");
+        if (null == merchantChannelJhf) {
+            return null;
+        }
+        String keyStr = merchantChannelJhf.getChannelMerKey();
+        TradeJO tradeJO = new TradeJO();
+        tradeJO.setChannelMerId(merchantChannelJhf.getChannelMerId());
+        try {
+            String decodeStr = AESUtil.decode(reqData, keyStr);
+            logger.error("第三方接入获取二维码url解密后入参：" + decodeStr);
+            //聚惠芬支付完成时的通知解密后入参：{"payCallBackParams":"","settlementStatus":"0","thirdPayNo":"20171102155606073111374535549766","orderStatus":"2","singData":"001AA0CC08241A447BF7250B500C4B83"}
+            tradeJO = JSON.parseObject(decodeStr, TradeJO.class);
+        } catch (Exception ex) {
+            logger.error("第三方接入获取二维码url出错", ex);
+            return null;
+        }
+        return tradeJO;
+    }
+
     /**
      * 收银台查询单条订单信息
      *
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getOrderInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/getOrderInfo", method = RequestMethod.POST)
     @ApiOperation(value = "获取商户编号")
     @ResponseBody
-    public ResultDTO getOrderInfo(@RequestParam String orderNo) {
-        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
+    public ResultDTO getOrderInfo(String innerCode, String reqData) {
+        TradeJO tradeJO = getReqData(innerCode, reqData);
+        if (null == tradeJO) {
+            return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
+        }
+        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(tradeJO.getOrderNo());
         tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
         tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
         tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
@@ -143,4 +158,46 @@ public class ThirdPayJhfController extends BaseController {
         return success(tradeOrderDO);
     }
 
+    /**
+     * 单条订单查询
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/getOrderList", method = RequestMethod.POST)
+    @ApiOperation(value = "获取商户编号")
+    public ResultDTO<TradeOrderDO> getOrderList(String innerCode, String reqData) {
+        TradeJO tradeJO = getReqData(innerCode, reqData);
+        if (null == tradeJO) {
+            return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
+        }
+        TradeOrderDO tradeOrder = new TradeOrderDO();
+        tradeOrder.setOrderNoAfter6(tradeJO.getOrderNo());
+        tradeOrder.setOrderTop10(tradeJO.getDate());
+        tradeOrder.setInnerCode(tradeJO.getInnerCode());
+        tradeOrder.setRespCode("1001");
+        //tradeOrder.setSettleStatus(4);
+        ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder, tradeJO.getPageNum(), tradeJO.getPageSize());
+        List<TradeOrderDO> resultList = resultDTO.getList();
+        for (TradeOrderDO tradeOrderDO : resultList) {
+            tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
+            tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
+            tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
+            //            BigDecimal eachMoney = tradeOrderDO.getEachMoney();
+            //            if (null != eachMoney) {
+            //                eachMoney = eachMoney.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+            //                tradeOrderDO.setEachMoney(eachMoney);
+            //            }
+            //            BigDecimal orderAmount = tradeOrderDO.getOrderAmount();
+            //            if (null != orderAmount) {
+            //                orderAmount = orderAmount.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+            //                tradeOrderDO.setOrderAmount(orderAmount);
+            //            }
+            //MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
+            //if (null != merChantCore) {
+            //    tradeOrderDO.setMercName(merChantCore.getMerName());
+            //}
+        }
+        return success(resultDTO);
+    }
 }
