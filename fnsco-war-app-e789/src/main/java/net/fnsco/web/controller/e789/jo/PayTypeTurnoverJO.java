@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.e789.jo;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.JO;
 
 /**
@@ -20,8 +21,13 @@ public class PayTypeTurnoverJO extends JO {
 	
 	private static final long serialVersionUID = 2401665445233019020L;
 	
+	@ApiModelProperty(value = "条件查询开始日期", name = "startDate", example = "")
 	private String startDate;
+	
+	@ApiModelProperty(value = "条件查询结束日期", name = "endDate", example = "")
 	private String endDate;
+	
+	@ApiModelProperty(value = "APP登录用户ID", name = "userId", example = "")
 	private Integer userId;
 	/**
 	 * startDate

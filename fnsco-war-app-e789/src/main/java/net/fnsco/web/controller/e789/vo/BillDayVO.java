@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.e789.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 /**
@@ -12,10 +13,21 @@ import net.fnsco.core.base.VO;
 
 public class BillDayVO extends VO {
 	
+	/**
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）
+	 *
+	 * @since Ver 1.1
+	 */
+	
+	private static final long serialVersionUID = 2065318222831467840L;
+
+	@ApiModelProperty(value = "账单类型", name = "billType", example = "")
 	private String billType;
 	
+	@ApiModelProperty(value = "账单日期", name = "billDayDate", example = "")
 	private String billDayDate;
 	
+	@ApiModelProperty(value = "账单金额", name = "billDayDate", example = "")
 	private String amount;
 
 	/**

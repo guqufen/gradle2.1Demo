@@ -2,6 +2,7 @@ package net.fnsco.web.controller.e789.vo;
 
 import java.util.List;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 /**
@@ -22,13 +23,17 @@ public class BillVO extends VO {
 	
 	private static final long serialVersionUID = -5286210613589072764L;
 	
+	@ApiModelProperty(value = "账单日期(yyyy-MM)", name = "billDate", example = "")
 	private String billDate;
 	
+	@ApiModelProperty(value = "账单总支出", name = "totalExpenditure", example = "")
 	private String totalExpenditure;
 	
+	@ApiModelProperty(value = "账单总收入", name = "totalRevenue", example = "")
 	private String totalRevenue;
 	
-	private List<BillDayVO> billDetail;
+	@ApiModelProperty(value = "每日账单列表", name = "billDetails", example = "")
+	private List<BillDayVO> billDetails;
 
 	/**
 	 * billDate
@@ -97,25 +102,25 @@ public class BillVO extends VO {
 	}
 
 	/**
-	 * billDetail
+	 * billDetails
 	 *
-	 * @return  the billDetail
+	 * @return  the billDetails
 	 * @since   CodingExample Ver 1.0
 	*/
 	
-	public List<BillDayVO> getBillDetail() {
-		return billDetail;
+	public List<BillDayVO> getBillDetails() {
+		return billDetails;
 	}
 
 	/**
-	 * billDetail
+	 * billDetails
 	 *
-	 * @param   billDetail    the billDetail to set
+	 * @param   billDetails    the billDetails to set
 	 * @since   CodingExample Ver 1.0
 	 */
 	
-	public void setBillDetail(List<BillDayVO> billDetail) {
-		this.billDetail = billDetail;
+	public void setBillDetails(List<BillDayVO> billDetails) {
+		this.billDetails = billDetails;
 	}
 	
 }
