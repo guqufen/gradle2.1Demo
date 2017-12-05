@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.e789.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 /**
@@ -19,18 +20,25 @@ public class MerchantInfoVO extends VO {
 	
 	private static final long serialVersionUID = -4558187864205219793L;
 	
+	@ApiModelProperty(value = "商户名称", name = "merName", example = "")
 	private String merName;
 	
+	@ApiModelProperty(value = "营业执照", name = "businessLicenseNum", example = "")
 	private String businessLicenseNum;
 	
+	@ApiModelProperty(value = "法人名称", name = "legalPerson", example = "")
 	private String legalPerson;
 	
+	@ApiModelProperty(value = "法人手机", name = "legalPersonMobile", example = "")
 	private String legalPersonMobile;
 	
+	@ApiModelProperty(value = "法人身份证号", name = "cardNum", example = "")
 	private String cardNum;
 	
+	@ApiModelProperty(value = "开户银行", name = "openBank", example = "")
 	private String openBank;
 	
+	@ApiModelProperty(value = "入账存储卡号", name = "accountNo", example = "")
 	private String accountNo;
 
 	/**

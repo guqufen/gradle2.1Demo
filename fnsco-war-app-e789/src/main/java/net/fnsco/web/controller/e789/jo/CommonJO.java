@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.e789.jo;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.JO;
 
 /**
@@ -19,6 +20,7 @@ public class CommonJO extends JO {
 	
 	private static final long serialVersionUID = 3956747728247959233L;
 	
+	@ApiModelProperty(value = "APP登录用户ID", name = "userId", example = "")
 	private Integer userId;
 
 	/**
