@@ -15,6 +15,7 @@ import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
 import net.fnsco.web.controller.e789.pay.zxyh.jo.PassivePayJO;
 import net.fnsco.web.controller.e789.pay.zxyh.jo.PassiveResultQueryJO;
+import net.fnsco.web.controller.e789.vo.PassiveVO;
 
 @RestController
 @RequestMapping(value="/app/zxyh/PassivePay", method=RequestMethod.POST)
@@ -31,7 +32,7 @@ public class PassivePayController extends BaseController{
 	 */
 	@RequestMapping("/pay")
 	@ApiOperation(value="中信银行支付宝/微信被扫支付交易接口url")
-	public String ZxyhPassivePay(@RequestBody PassivePayJO passivePayJO){
+	public PassiveVO ZxyhPassivePay(@RequestBody PassivePayJO passivePayJO){
 		
 		//对接收的报文进行处理
 		String str = JSON.toJSONString(passivePayJO);
@@ -45,8 +46,11 @@ public class PassivePayController extends BaseController{
 		passivePayDTO.setStdauthid(passivePayJO.getAuthid());//授权码
 		passivePayDTO.setSignAture(passivePayJO.getSignAture());//签名
 
-		//调用service处理(值补全和存储以及发送请求给中信银行),并返回应答
-		return PaymentService.PassivePay(passivePayJO.getInnerCode(), passivePayDTO);
+		//调用service处理(值补全和存储以及发送请求给中信银行),并返回应答字符串
+		String result = PaymentService.PassivePay(passivePayJO.getInnerCode(), passivePayDTO);
+		//将应答字符串放入对象，并返回对象给APP
+		PassiveVO passiveVO = JSON.parseObject(result, PassiveVO.class);
+		return passiveVO;
 	}
 
 	/**
@@ -56,7 +60,7 @@ public class PassivePayController extends BaseController{
 	 */
 	@RequestMapping("/queryPayResult")
 	@ApiOperation(value="中信银行支付宝/微信支付结果查询接口url")
-	public String ZxyhPassivePayResult(@RequestBody PassiveResultQueryJO passiveResultQueryJO) {
+	public PassiveVO ZxyhPassivePayResult(@RequestBody PassiveResultQueryJO passiveResultQueryJO) {
 
 		// 对接收的报文进行处理
 
@@ -66,6 +70,8 @@ public class PassivePayController extends BaseController{
 		passivePayDTO.setOrgorderid((passiveResultQueryJO.getOrgOrderId()));// 原商户订单号
 		passivePayDTO.setSignAture(passiveResultQueryJO.getSignAture());// 签名
 
-		return PaymentService.PassivePayResult(passiveResultQueryJO.getOrgOrderId());
+		String result = PaymentService.PassivePayResult(passiveResultQueryJO.getOrgOrderId());
+		PassiveVO passiveVO = JSON.parseObject(result, PassiveVO.class);
+		return passiveVO;
 	}
 }

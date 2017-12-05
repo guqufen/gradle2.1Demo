@@ -257,7 +257,6 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, "05");
 		if (null == merchantChannel) {
 			logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=[" + innerCode + "");
-//			Map<String, String> map = new HashMap<>();
 			map.put("respCode", "9999");
 			map.put("respMsg", "系统异常");
 			return map.toString();
