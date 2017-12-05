@@ -5,7 +5,7 @@
  * @author Administrator
  *
  */
-package net.fnsco.web.controller.e789.pay.zxyh.jo;
+package net.fnsco.web.controller.e789.jo;
 
 import net.fnsco.core.base.JO;
 
