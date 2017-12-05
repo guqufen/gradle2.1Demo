@@ -127,6 +127,9 @@ public class ProjService extends BaseService {
 				File fileText = new File(filepath);
 				// 向文件写入对象写入信息
 				FileWriter fileWriter = new FileWriter(fileText);
+				if(!Strings.isNullOrEmpty(newstr)) {
+					newstr = newstr.trim();
+				}
 				// 写文件
 				fileWriter.write(newstr);
 				// 关闭
@@ -162,7 +165,7 @@ public class ProjService extends BaseService {
             BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
             String s = null;
             while((s = br.readLine())!=null){//使用readLine方法，一次读一行
-                result.append(System.lineSeparator()+s);
+                result.append(s+System.lineSeparator());
             }
             br.close();    
         }catch(Exception e){

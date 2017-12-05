@@ -208,6 +208,7 @@ function querySingle(id){
         type:'POST',
         data:{'id':id},
         success:function(data){
+        	unloginHandler(data);
         	if(data.success){
                 $("#myModal").modal();
                 $("#myModalLabel").html("活动推送消息详情");
