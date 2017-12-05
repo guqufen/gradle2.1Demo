@@ -13,18 +13,16 @@ public class PassivePayJO extends JO {
 
 	private static final long serialVersionUID = 1L;
 
-	@ApiModelProperty(value="内部商户号")
+	@ApiModelProperty(value = "内部商户号")
 	private String innerCode;// 内部商户号
-	@ApiModelProperty(value="商品描述")
+	@ApiModelProperty(value = "商品描述")
 	private String body;// 商品描述
-	@ApiModelProperty(value="交易金额")
+	@ApiModelProperty(value = "交易金额")
 	private String amt;// 交易金额
-	@ApiModelProperty(value="授权码(付款码)")
+	@ApiModelProperty(value = "授权码(付款码)")
 	private String authid;// 授权码，扫码支付授权码
-	@ApiModelProperty(value="签名")
+	@ApiModelProperty(value = "签名")
 	private String signAture;// 签名
-	@ApiModelProperty(value="原支付订单号(用于交易状态查询)")
-	private String orgOrderId;// 原支付商户订单号(原交易返回，此处便于交易状态查询交易)
 
 	public String getInnerCode() {
 		return innerCode;
@@ -68,14 +66,6 @@ public class PassivePayJO extends JO {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-
-	public String getOrgOrderId() {
-		return orgOrderId;
-	}
-
-	public void setOrgOrderId(String orgOrderId) {
-		this.orgOrderId = orgOrderId;
 	}
 
 }

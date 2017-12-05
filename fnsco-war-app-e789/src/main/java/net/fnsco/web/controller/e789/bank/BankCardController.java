@@ -1,8 +1,5 @@
 package net.fnsco.web.controller.e789.bank;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,20 +11,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.merchant.MerchantService;
-import net.fnsco.bigdata.service.domain.MerchantChannel;
-import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.utils.DateUtils;
-import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
-import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.e789.jo.BankListJO;
 import net.fnsco.web.controller.e789.jo.BindBankCardJO;
-import net.fnsco.web.controller.e789.jo.TradeJO;
 import net.fnsco.web.controller.e789.jo.UnBindBankCardJO;
+import net.fnsco.web.controller.e789.vo.BankListVO;
+import net.fnsco.web.controller.e789.vo.BindBankCardVO;
 import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
+import net.fnsco.web.controller.e789.vo.UnBindBankCardVO;
 
 /**
  * 
@@ -39,8 +32,8 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
  *
  */
 @RestController
-@RequestMapping(value = "/app/e789/bankcard", method = RequestMethod.POST)
-@Api(value = "/app/e789/bankcard", tags = { "银行卡相关功能接口" })
+@RequestMapping(value = "/app2c/e789/bankcard", method = RequestMethod.POST)
+@Api(value = "/app2c/e789/bankcard", tags = { "银行卡相关功能接口" })
 public class BankCardController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
@@ -57,9 +50,10 @@ public class BankCardController extends BaseController {
      */
     @RequestMapping(value = "/bindBankCard")
     @ApiOperation(value = "绑定银行卡")
-    public ResultDTO<BindBankCardJO> addBankCard(@RequestBody BindBankCardJO bindBankCardJO) {
-       
-        return success();
+    public ResultDTO<BindBankCardVO> addBankJO(@RequestBody BindBankCardJO bindBankCardJO) {
+    	BindBankCardVO bindBankCardVO = new BindBankCardVO();
+    	
+        return success(bindBankCardVO);
     }
 
     /**
@@ -69,11 +63,12 @@ public class BankCardController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/unBindBankCard")
-    @ApiOperation(value = "获取商户编号")
+    @ApiOperation(value = "解绑银行卡")
     @ApiImplicitParam(name = "xxx", value = "解绑银行卡", required = false, dataType="Xxx",paramType="body")
-    public ResultDTO<UnBindBankCardJO> deleteBankCard( @RequestBody  UnBindBankCardJO unBindBankCardJO ) {
-        
-        return success();
+    public ResultDTO<UnBindBankCardVO> deleteBankJO( @RequestBody  UnBindBankCardJO unBindBankCardJO ) {
+    	UnBindBankCardVO unBindBankCardVO = new UnBindBankCardVO();
+    	
+        return success(unBindBankCardVO);
     }
 
     /**
@@ -83,9 +78,10 @@ public class BankCardController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getBankCardList")
-    @ApiOperation(value = "获取商户编号")
-    public ResultDTO<BankListJO> getBankCardList(@RequestBody BankListJO bankListJO) {
-       
-        return success();
+    @ApiOperation(value = "银行卡列表查询")
+    public ResultDTO<BankListVO> getBankJOList(@RequestBody BankListJO bankListJO) {
+    	BankListVO bankListVO = new BankListVO();
+    	
+        return success(bankListVO);
     }
 }
