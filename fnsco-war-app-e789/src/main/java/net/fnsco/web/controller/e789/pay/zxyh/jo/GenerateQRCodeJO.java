@@ -9,13 +9,47 @@ package net.fnsco.web.controller.e789.pay.zxyh.jo;
 
 import net.fnsco.core.base.JO;
 
-public class GenerateQRCodeWeChatJO extends JO {
+public class GenerateQRCodeJO extends JO {
 	
     private String  innerCode; 		// 内部商户号
     private String  ip; 			//发起支付的客户端真实IP
     private String  orderBody;	 	//商品或支付单简要描述
     private String txnAmt;			//订单总金额(交易单位为分，例:1.23元=123) 只能整数
     
+    /**
+     * 交易子类型41微信42支付宝
+     */
+    private String     paySubType;
+    /**
+     * 渠道类型00拉卡拉01浦发02爱农03法奈昇04聚惠分05中信银行90富友
+     */
+    private String channelType;
+    
+    
+	/**
+	 * @return the channelType
+	 */
+	public String getChannelType() {
+		return channelType;
+	}
+	/**
+	 * @param channelType the channelType to set
+	 */
+	public void setChannelType(String channelType) {
+		this.channelType = channelType;
+	}
+	/**
+	 * @return the paySubType
+	 */
+	public String getPaySubType() {
+		return paySubType;
+	}
+	/**
+	 * @param paySubType the paySubType to set
+	 */
+	public void setPaySubType(String paySubType) {
+		this.paySubType = paySubType;
+	}
 	public String getInnerCode() {
 		return innerCode;
 	}

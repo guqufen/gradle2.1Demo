@@ -22,6 +22,8 @@ public class PassiveVO extends VO {
 	private String reciAmt;
 	@ApiModelProperty(value = "优惠金额")
 	private String preAmt;
+	@ApiModelProperty(value = "签名")
+	private String signAture;// 签名
 
 	public String getRespCode() {
 		return respCode;
@@ -85,6 +87,18 @@ public class PassiveVO extends VO {
 
 	public void setPreAmt(String preAmt) {
 		this.preAmt = preAmt;
+	}
+
+	public String getSignAture() {
+		return signAture;
+	}
+
+	public void setSignAture(String signAture) {
+		this.signAture = signAture;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }
