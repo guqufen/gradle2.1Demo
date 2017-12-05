@@ -85,7 +85,7 @@ public class ProjProvider {
         if (StringUtils.isNotBlank(proj.getStatus())){
             WHERE("status=#{proj.status}");
         }
-        ORDER_BY("id desc limit " + start + ", " + limit );
+        ORDER_BY("name  limit " + start + ", " + limit );
         }}.toString();
     }
 

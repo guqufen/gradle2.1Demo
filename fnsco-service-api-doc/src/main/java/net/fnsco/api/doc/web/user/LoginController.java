@@ -1,5 +1,8 @@
 package net.fnsco.api.doc.web.user;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +18,6 @@ import net.fnsco.api.doc.comm.AppConstants;
 import net.fnsco.api.doc.comm.RegexUtil;
 import net.fnsco.api.doc.service.user.LoginService;
 import net.fnsco.api.doc.service.user.UserTokenService;
-import net.fnsco.api.doc.service.user.entity.UserTokenDO;
 import net.fnsco.api.doc.service.vo.LoginParamInfo;
 import net.fnsco.api.doc.service.vo.UserInfo;
 import net.fnsco.core.base.BaseController;
@@ -100,14 +102,40 @@ public class LoginController extends BaseController {
 
         return ResultDTO.success();
     }
+    
+    /**
+     * 退出登录
+     * @return
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logOut() {
+        removeSessionUser();
+        removeCookieUser();
+        return "redirect:/login.html";
+    }
 
+    /**
+     * 获取当前用户
+     * @return
+     */
+    @RequestMapping(value = "/getCurrentUser", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> getCurrentUser() {
+        Map<String, Object> result = new HashMap<>();
+        //获取当前登录的用户
+    	UserInfo adminUser = (UserInfo) getSessionUser();
+        result.put("sessionUser", adminUser);
+        return result;
+    }
+    
     /**
      * 
     		*@name 退出
     		*@Description  
     		*@CreateDate 2015年7月11日下午2:05:24
      */
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    
+   /* @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @ApiOperation(value = "退出", notes = "退出")
     @ResponseBody
     public ResultDTO logout() {
@@ -129,7 +157,7 @@ public class LoginController extends BaseController {
         request.getSession().invalidate();
 
         return ResultDTO.success();//"user/login";
-    }
+    }*/
 
     /**
      * 
