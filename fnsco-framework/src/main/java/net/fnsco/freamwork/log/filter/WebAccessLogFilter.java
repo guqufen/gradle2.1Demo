@@ -89,7 +89,10 @@ public class WebAccessLogFilter extends RequestContextFilter {
         if (!filterApplied || requestURI.indexOf(".") > 0) {
             filterChain.doFilter(request, response);
             return;
-        }
+        } 
+        //else{
+        //   logger.error("session超时时间，" + request.getSession().getMaxInactiveInterval()); 
+        //}
         boolean hasError = false;
 
         long startTime = System.currentTimeMillis();

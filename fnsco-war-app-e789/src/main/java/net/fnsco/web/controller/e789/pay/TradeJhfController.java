@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
@@ -96,8 +95,8 @@ public class TradeJhfController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getOrderInfo")
-    @ApiOperation(value = "获取商户编号")
-    @ApiImplicitParam(name = "xxx", value = "组织", required = false, dataType="Xxx",paramType="body")
+    @ApiOperation(value = "获取订单信息")
+    //@ApiImplicitParam(name = "xxx", value = "组织", required = false, dataType="Xxx",paramType="body")
     public ResultDTO<TradeOrderDO> getOrderInfo( @RequestBody   TradeJO tradeJO ) {
         TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(tradeJO.getOrderNo());
         tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
@@ -117,7 +116,7 @@ public class TradeJhfController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getOrderList")
-    @ApiOperation(value = "获取商户编号")
+    @ApiOperation(value = "获取订单列表")
     public ResultDTO<TradeOrderDO> getOrderList(@RequestBody TradeJO tradeJO) {
         MerchantChannel merchantChannelJhf = new MerchantChannel();
         merchantChannelJhf.setInnerCode("110319624699094");

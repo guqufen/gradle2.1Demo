@@ -1233,8 +1233,8 @@
   <select id="queryByAllCondition" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" resultMap="BaseResultMap">
 		  select 
      <include refid="Base_AllColumn_List" />
-   	 from t_trade_data AS TD LEFT JOIN m_merchant_pos AS MP ON TD.term_id = MP.terminal_code
-		AND	TD.inner_code = MP.inner_code
+   	 from t_trade_data TD,m_merchant_pos MP WHERE (TD.term_id=MP.terminal_code
+		OR TD.term_id = MP.qr_channel_terminal_code) AND TD.inner_code = MP.inner_code
    	 <where>
    	 <if test="legalPerson != null and legalPerson !=''" >
         AND TD.inner_code in (
