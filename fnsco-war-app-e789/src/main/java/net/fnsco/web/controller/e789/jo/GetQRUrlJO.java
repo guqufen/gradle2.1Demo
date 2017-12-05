@@ -1,15 +1,19 @@
 package net.fnsco.web.controller.e789.jo;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.JO;
 
 public class GetQRUrlJO extends JO {
     /**
      * app用户ID
      */
+    @ApiModelProperty(value = "APP用户id")
     private Integer userId;
     //分期数
+    @ApiModelProperty(value = "分期数")
     private Integer installmentNum;
     //支付总金额
+    @ApiModelProperty(value = "支付金额")
     private String  paymentAmount;
 
     /**
