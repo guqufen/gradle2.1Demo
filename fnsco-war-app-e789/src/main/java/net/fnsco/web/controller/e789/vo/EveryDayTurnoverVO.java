@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.e789.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 /**
@@ -23,16 +24,19 @@ public class EveryDayTurnoverVO extends VO {
 	/**
 	 * 统计日期
 	 */
+	@ApiModelProperty(value = "统计日期(yyyy-MM-dd)", name = "turnoverDate", example = "")
 	private String turnoverDate;
 	
 	/**
 	 * 订单笔数
 	 */
+	@ApiModelProperty(value = "笔数", name = "orderNum", example = "")
 	private String orderNum;
 	
 	/**
 	 * 交易额
 	 */
+	@ApiModelProperty(value = "交易额", name = "turnover", example = "")
 	private String turnover;
 
 	/**
