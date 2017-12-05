@@ -268,7 +268,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		//校验微信授权码，如果校验成功，则
 		String resp = CheckAuthid(passDTO);
 
-		//应答码6002-支付授权已过去，请刷新再试,说明当前的是微信付款码
+		//应答码6002-支付授权已过期，请刷新再试,说明当前的是微信付款码
 		if("6002".equals(resp)){
 			logger.info("微信付款码已经过期，请重新扫付款码");
 			map.put("respCode", "1002");
