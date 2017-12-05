@@ -95,7 +95,9 @@ public class RechangeController extends BaseController {
      */
     @RequestMapping(value = "/dealPayOrder")
     @ApiOperation(value = "跳转到聚惠分平台进行支付")
-    public String dealPayOrder(@ApiParam(value="请求参数") String orderNo, String commID) {
+    public String dealPayOrder(@ApiParam(value = "请求参数") String reqData) {
+        String orderNo = "";
+        String commID = "";
         TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
         String url = env.getProperty("open.base.url") + "/pay/dealPayFail.html";
         if (null != tradeOrderDO) {

@@ -115,5 +115,31 @@ public class TradeFsfController extends BaseController {
         result.setRespCode(tradeOrderDO.getRespCode());
         return success(result);
     }
-
+    /**
+     * 二维码扫码后跳转到聚惠分平台
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/dealPayOrder")
+    @ApiOperation(value = "充值跳转到聚惠分平台进行支付")
+    public String dealPayOrder(@ApiParam(value = "请求参数") String reqData) {
+        String orderNo = "";
+        String commID = "";
+        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
+        String url = env.getProperty("open.base.url") + "/pay/dealPayFail.html";
+        if (null != tradeOrderDO) {
+            Integer handleNum = tradeOrderDO.getHandleNum();
+            if (null == handleNum || handleNum == 0) {
+                url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
+                url += "?commID=" + tradeOrderDO.getChannelMerId() + "&reqData=" + tradeOrderService.getReqData(tradeOrderDO);
+                TradeOrderDO tradeOrderTemp = new TradeOrderDO();
+                tradeOrderTemp.setId(tradeOrderDO.getId());
+                tradeOrderTemp.setHandleNum(1);
+                tradeOrderService.doUpdate(tradeOrderTemp);
+            }
+        }
+        logger.error("分闪付跳转到聚惠分平台前的url" + url);
+        return "redirect:" + url;
+    }
 }
