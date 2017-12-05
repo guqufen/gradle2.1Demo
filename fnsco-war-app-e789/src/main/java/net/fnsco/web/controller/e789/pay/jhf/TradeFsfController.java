@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
@@ -39,8 +40,8 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
  *
  */
 @RestController
-@RequestMapping(value = "/open2c/trade/jhf", method = RequestMethod.POST)
-@Api(value = "/open2c/trade/jhf", tags = { "e789中的分闪付支付接口" })
+@RequestMapping(value = "/app2c/trade/jhf", method = RequestMethod.POST)
+@Api(value = "/app2c/trade/jhf", tags = { "分闪付支付接口" })
 public class TradeFsfController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
@@ -57,7 +58,7 @@ public class TradeFsfController extends BaseController {
      */
     @RequestMapping(value = "/getQRUrl")
     @ApiOperation(value = "获取分闪付url")
-    public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestParam GetQRUrlJO getQRUrlJO) {
+    public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String innerCode = "";
         Integer userId = getQRUrlJO.getUserId();
         //根据用户id获取绑定的分闪付商户信息
@@ -98,9 +99,9 @@ public class TradeFsfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getOrderInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/getOrderInfo")
     @ApiOperation(value = "获取商户编号")
-    public ResultDTO<GetOrderInfoResultVO> getOrderInfo(@RequestParam String orderNo) {
+    public ResultDTO<GetOrderInfoResultVO> getOrderInfo(@ApiParam(value = "订单号") @RequestParam String orderNo) {
         TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
         tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
         tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));

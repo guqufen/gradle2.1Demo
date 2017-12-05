@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.core.base.BaseController;
@@ -21,6 +23,7 @@ import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.e789.jo.GetQRUrlJO;
 import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
+
 /**
  * 
  * @desc e789中的分闪付充值相关功能
@@ -31,8 +34,8 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
  *
  */
 @RestController
-@RequestMapping(value = "/open2c/trade/jhf", method = RequestMethod.POST)
-@Api(value = "/open2c/trade/jhf", tags = { "e789中的分闪付支付接口" })
+@RequestMapping(value = "/app2c/rechange/jhf", method = RequestMethod.POST)
+@Api(value = "/app2c/rechange/jhf", tags = { "分闪付充值接口" })
 public class RechangeController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
@@ -48,8 +51,8 @@ public class RechangeController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getQRUrl")
-    @ApiOperation(value = "获取分闪付url")
-    public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestParam GetQRUrlJO getQRUrlJO) {
+    @ApiOperation(value = "充值金额提交保存")
+    public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String innerCode = "";
         Integer userId = getQRUrlJO.getUserId();
         //根据用户id获取绑定的分闪付商户信息
@@ -84,4 +87,29 @@ public class RechangeController extends BaseController {
         return success(result);
     }
 
+    /**
+     * 二维码扫码后跳转到聚惠分平台
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/dealPayOrder")
+    @ApiOperation(value = "跳转到聚惠分平台进行支付")
+    public String dealPayOrder(@ApiParam(value="请求参数") String orderNo, String commID) {
+        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
+        String url = env.getProperty("open.base.url") + "/pay/dealPayFail.html";
+        if (null != tradeOrderDO) {
+            Integer handleNum = tradeOrderDO.getHandleNum();
+            if (null == handleNum || handleNum == 0) {
+                url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
+                url += "?commID=" + tradeOrderDO.getChannelMerId() + "&reqData=" + tradeOrderService.getReqData(tradeOrderDO);
+                TradeOrderDO tradeOrderTemp = new TradeOrderDO();
+                tradeOrderTemp.setId(tradeOrderDO.getId());
+                tradeOrderTemp.setHandleNum(1);
+                tradeOrderService.doUpdate(tradeOrderTemp);
+            }
+        }
+        logger.error("分闪付跳转到聚惠分平台前的url" + url);
+        return "redirect:" + url;
+    }
 }
