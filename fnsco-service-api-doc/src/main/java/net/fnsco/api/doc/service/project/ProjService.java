@@ -127,6 +127,9 @@ public class ProjService extends BaseService {
 				File fileText = new File(filepath);
 				// 向文件写入对象写入信息
 				FileWriter fileWriter = new FileWriter(fileText);
+				if(!Strings.isNullOrEmpty(newstr)) {
+					newstr = newstr.trim();
+				}
 				// 写文件
 				fileWriter.write(newstr);
 				// 关闭
