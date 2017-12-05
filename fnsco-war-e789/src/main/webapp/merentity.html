@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="pragma" content="no -cache">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="expires" content="0">
+<title>商户实体-法奈昇大数据平台</title>
+<meta name="keywords" content="法奈昇大数据平台">
+<meta name="description" content="法奈昇大数据平台">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css"
+	rel="stylesheet">
+<link
+	href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
+<link href="css/plugins/bootstrap/fileinput.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
+<style type="text/css">
+	#addForm .col-sm-6{
+		margin: 10px 0;
+	}
+</style>
+</head>
+
+<body class="gray-bg">
+  <div class="panel-body animated fadeInRight">
+	<div class="panel panel-default">
+	   <form id="formSearch" class="form-horizontal">
+	      <div class="form-group" style="margin-top: 15px">
+	        <div class="row col-sm-10">
+	          <div class="col-sm-4">
+				<label class="control-label" for="merName">商户名称:</label> <input
+					type="text" class="form-control" id="merName"
+					name="merName" placeholder="商户名称">
+			  </div>
+			  <div class="col-sm-4">
+				<label class="control-label" for="search_legalPerson">法人姓名:</label> <input
+					type="text" class="form-control" id="search_legalPerson"
+					name="search_legalPerson" placeholder="法人姓名" />
+			  </div>
+			  <div class="col-sm-4">
+				<label class="control-label" for="search_legalPersonMobile">手机号:</label> <input
+					type="text" class="form-control" id="search_legalPersonMobile"
+					name="search_legalPersonMobile" placeholder="手机号" />
+			  </div>
+			  <!-- <div class="col-sm-3">
+				<label class="control-label" for="search_status">状态:</label> <select
+					id="search_status" name="search_status" class="form-control">
+					<option value='2' selected>全部</option>
+					<option value="0">删除</option>
+					<option value="1">正常</option>
+				</select>
+			  </div> -->
+	        </div>
+	        <div class="col-sm-2" style="text-align: right;">
+	           <!-- <button type="button" id="btn_import" class="btn btn-info"
+					onclick="javascript:importEvent();">
+					<span class="glyphicon glyphicon-import"></span>导入
+				</button> -->
+				<button type="button" id="btn_query" class="btn btn-primary"
+					onclick="javascript:queryEvent();">
+					<span class="glyphicon glyphicon-search"></span>查询
+				</button>
+				<button type="button" id="btn_reset" class="btn btn-default"
+					onclick="javascript:resetEvent();">
+					<span class="glyphicon glyphicon-refresh"></span>重置
+				</button>
+			</div>
+	      </div>
+	   </form>
+	   <div class="ibox float-e-margins">
+			<div class="ibox-content">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<div id="toolbar">
+							<button id="btn_add" type="button" class="btn btn-success"
+								data-toggle="modal" data-target="#myModal">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+							</button>
+						</div>
+						<table id="table"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- model新增 start -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">新增商户实体</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="tab-content">
+                            <form id="addForm" AUTOCOMPLETE="OFF">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label class="control-label" for="mercName">商户名称：</label>
+                                    <input type="text" class="form-control" id="mercName" name="mercName" required="required" placeholder="请输入合法的商户名称">
+                                </div>
+                                <div class="col-sm-4">
+                                   <label class="control-label" for="legalPerson">法人姓名：</label>
+                                    <input type="text" class="form-control" id="legalPerson" name="legalPerson" required="required" placeholder="请输入合法的法人姓名">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="control-label" for="legalPersonMobile">手机号码：</label>
+                                    <input type="text" value="" class="form-control" id="legalPersonMobile" name="legalPersonMobile" placeholder="请输入合法的手机号码">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="control-label" for="cardNum">身份证号：</label>
+                                    <input type="text" class="form-control" id="cardNum" name="cardNum" required="required" placeholder="请输入合法的身份证号">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="control-label" for="businessLicenseNum">营业执照：</label>
+                                    <input type="text" class="form-control" id="businessLicenseNum" name="businessLicenseNum" placeholder="请输入合法的营业执照">
+                                </div>
+                                <!-- 实体商户新增地区、性质、类型字段 -->
+                                <div class="col-sm-4">
+									<label class="control-label" for="etpsAttr">商户性质：</label> 
+									<select  class="form-control etpsAttr" id="etpsAttr" name="etpsAttr">
+										<option value="1">政府机构</option>
+										<option value="2">国营企业</option>
+										<option value="3">私营企业</option>
+										<option value="4">外资企业</option>
+										<option value="5" selected>个体工商户</option>
+										<option value="7">事业单位</option>
+									</select>
+								</div>
+								<div class="col-sm-4">
+									<label class="control-label" for="registProvince0">商户所属省：</label> 
+									<select  class="form-control addSelect" id="registProvince0" name="registProvince" onchange="merProcessSelect('0',true)">
+										<option value="">--选择省--</option>
+									</select>
+									<input type="hidden" name="registProvinceName">
+								</div>
+								<div class="col-sm-4">
+									<label class="control-label" for="registCity0">商户所属市：</label> 
+									<select  class="form-control addSelect" id="registCity0" name="registCity" onchange="merProcessSelect('0',false)">
+										<option value="">--选择市--</option>
+									</select>
+									<input type="hidden" name="registCityName">
+								</div>
+								<div class="col-sm-4">
+									<label class="control-label" for="registArea0">商户所属区：</label> 
+									<select  class="form-control addSelect" id="registArea0" name="registArea">
+										<option value="">--选择区--</option>
+									</select>
+									<input type="hidden" name="registAreaName">
+								</div>
+								<div class="col-sm-4">
+									<label class="control-label" for="registAddressDetail">详细地址：</label> 
+                                    <input type="text" class="form-control" id="registAddressDetail" name="registAddressDetail" placeholder="请输入详细地址">
+								</div>
+                                
+                                <div class="col-sm-12">
+                                    <input type="hidden" name="id" id="id">
+                                    <button class="sunmitBtn btn btn-primary" type="button">确认提交</button>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- model end -->
+        
+        <!-- model详情start -->
+        <div class="modal fade" id="myDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">商户实体详情</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formSearch" class="form-horizontal">
+					      <div class="form-group" style="margin-top: 15px">
+					        <div class="row col-sm-12">
+					          <div class="col-sm-6">
+								<label class="control-label" for="detail_merName">商户名称:</label> <input
+									type="text" class="form-control" id="detail_merName"
+									name="detail_merName" disabled="disabled">
+							  </div>
+							  <div class="col-sm-6">
+								<label class="control-label" for="detail_cardNum">身份证号:</label> <input
+									type="text" class="form-control" id="detail_cardNum"
+									name="detail_cardNum" disabled="disabled"/>
+							  </div>
+							  <div class="col-sm-6">
+								<label class="control-label" for="detail_legalPerson">法人姓名:</label> <input
+									type="text" class="form-control" id="detail_legalPerson"
+									name="detail_legalPerson"disabled="disabled" />
+							  </div>
+							  <div class="col-sm-6">
+								<label class="control-label" for="detail_legalPersonMobile">手机号:</label> <input
+									type="text" class="form-control" id="detail_legalPersonMobile"
+									name="detail_legalPersonMobile" disabled="disabled"/>
+							  </div>
+							   <div class="col-sm-6">
+								<label class="control-label" for="detail_businessLicenseNum">营业执照:</label> <input
+									type="text" class="form-control" id="detail_businessLicenseNum"
+									name="detail_businessLicenseNum" disabled="disabled"/>
+							  </div>
+					        </div>
+					      </div>
+					   </form>
+					   <div class="float-e-margins">
+							<div class="ibox-content">
+								<div class="row row-lg">
+									<div class="col-sm-12">
+									    <input type="hidden" id="entityInnerCode">
+										<table id="detail_table"></table>
+									</div>
+								</div>
+							</div>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- model end -->
+	</div>
+  </div>	
+  <script src="js/bootstrap/jquery.min.js"></script>
+	<script src="js/bootstrap/js/bootstrap.min.js"></script>
+	<!-- <script src="js/content.min.js"></script> -->
+	<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+	<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+	<script src="js/layer/layer.js"></script>
+	<script src="js/plugins/bootstrap/fileinput.js"></script>
+	<script src="js/plugins/bootstrap/zh.js"></script>
+	<script type="text/javascript" src="js/fnsco/common.js"></script>	
+	<script type="text/javascript">
+		//在页面加载完成之后动态加载，避免因为缓存问题导致数据展示不对(在不人工清理缓存情况下)
+		loadJSRandom(document, "js/fnsco/showPosArea.js");
+		loadJSRandom(document, "js/fnsco/merentity.js");
+	</script>
+</body>

@@ -16,6 +16,29 @@ public class TradeJO extends JO {
     private String  orderNo;
     private Integer pageNum;
     private Integer pageSize;
+    private String channelMerId;
+    
+    /**
+     * channelMerId
+     *
+     * @return  the channelMerId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getChannelMerId() {
+        return channelMerId;
+    }
+
+    /**
+     * channelMerId
+     *
+     * @param   channelMerId    the channelMerId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setChannelMerId(String channelMerId) {
+        this.channelMerId = channelMerId;
+    }
 
     /**
      * innerCode
