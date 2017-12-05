@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.e789.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 /**
@@ -20,38 +21,46 @@ public class PayTypeTurnoverVO extends VO {
 	
 	private static final long serialVersionUID = -6139842225299775525L;
 	
+	@ApiModelProperty(value = "条件查询开始日期")
 	private String startDate;
 	
+	@ApiModelProperty(value = "条件查询结束日期")
 	private String endDate;
 	
 	/**
 	 * 扫码笔数
 	 */
+	@ApiModelProperty(value = "扫码笔数")
 	private Integer qRNum;
 	
 	/**
 	 * 扫码交易额s
 	 */
+	@ApiModelProperty(value = "扫码交易额")
 	private String qRTurnover;
 	
 	/**
 	 * 台码交易笔数
 	 */
+	@ApiModelProperty(value = "台码交易笔数")
 	private Integer taiKNum;
 	
 	/**
 	 * 台码交易额
 	 */
+	@ApiModelProperty(value = "台码交易额")
 	private String taiKTurnover;
 	
 	/**
 	 * 分闪付交易笔数
 	 */
+	@ApiModelProperty(value = "分闪付交易笔数")
 	private Integer fenshanfuNum;
 	
 	/**
 	 * 分闪付交易额
 	 */
+	@ApiModelProperty(value = "分闪付交易额")
 	private String fenshanfu;
 
 	/**

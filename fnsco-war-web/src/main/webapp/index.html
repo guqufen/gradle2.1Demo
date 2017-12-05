@@ -284,7 +284,7 @@ $(function(){
 			unloginHandler(data);
 			if(!data.sessionUser)
 			window.location='login.html';
-			$('.indexPageUserName').html(data.sessionUser.name);
+			$('.indexPageUserName').html(data.data.name);
 		}
 	});
 });

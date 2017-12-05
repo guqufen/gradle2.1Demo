@@ -67,6 +67,7 @@ public class SwaggerConfig {
             .select().paths(or(regex("/open/.*")))//过滤的接口
             .build().apiInfo(demoApiInfo());
     }
+
     @Bean
     public Docket mobileApi() {
         return new Docket(DocumentationType.SWAGGER_2).groupName("mobile").genericModelSubstitutes(DeferredResult.class)
@@ -75,6 +76,7 @@ public class SwaggerConfig {
             .select().paths(or(regex("/mobile/.*")))//过滤的接口
             .build().apiInfo(demoApiInfo());
     }
+
     @Bean
     public Docket h5Api() {
         return new Docket(DocumentationType.SWAGGER_2).groupName("h5").genericModelSubstitutes(DeferredResult.class)
@@ -83,6 +85,7 @@ public class SwaggerConfig {
             .select().paths(or(regex("/h5/.*")))//过滤的接口
             .build().apiInfo(demoApiInfo());
     }
+
     @Bean
     public Docket syncDataApi() {
         return new Docket(DocumentationType.SWAGGER_2).groupName("syncData").genericModelSubstitutes(DeferredResult.class)
@@ -91,6 +94,7 @@ public class SwaggerConfig {
             .select().paths(or(regex("/syncData/.*")))//过滤的接口
             .build().apiInfo(demoApiInfo());
     }
+
     @Bean
     public Docket tradeApi() {
         return new Docket(DocumentationType.SWAGGER_2).groupName("trade").genericModelSubstitutes(DeferredResult.class)
@@ -99,6 +103,16 @@ public class SwaggerConfig {
             .select().paths(or(regex("/trade/.*")))//过滤的接口
             .build().apiInfo(demoApiInfo());
     }
+
+    @Bean
+    public Docket app2cApi() {
+        return new Docket(DocumentationType.SWAGGER_2).groupName("app2c").genericModelSubstitutes(DeferredResult.class)
+            //              .genericModelSubstitutes(ResponseEntity.class)
+            .useDefaultResponseMessages(false).forCodeGeneration(false).pathMapping("/")//base
+            .select().paths(or(regex("/app2c/.*")))//过滤的接口
+            .build().apiInfo(demoApiInfo());
+    }
+
     private ApiInfo testApiInfo() {
         return new ApiInfoBuilder().title("给APP用的接口")//大标题
             .description("")//详细描述

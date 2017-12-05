@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.e789.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 /**
@@ -20,11 +21,12 @@ public class TotalTurnoverVO extends VO {
 	 */
 	
 	private static final long serialVersionUID = 6362944390003339158L;
-
+	
+	@ApiModelProperty(value = "昨日营业额")
 	private String yesterdayTurnover;
-	
+	@ApiModelProperty(value = "今日营业额")
 	private String todayTurnover;
-	
+	@ApiModelProperty(value = "本月营业额")
 	private String thisMonthTurnover;
 
 	/**

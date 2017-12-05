@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.e789.jo;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.JO;
 
 /**
@@ -22,16 +23,19 @@ public class BillJO extends JO {
 	/**
 	 * APP登录用户ID
 	 */
+	@ApiModelProperty(value = "APP登录用户ID", name = "userId", example = "")
 	private Integer userId;
 	
 	/**
-	 * 页码数
+	 * 当前页码数
 	 */
+	@ApiModelProperty(value = "当前页码数", name = "pageNum", example = "")
 	private Integer pageNum;
 	
 	/**
 	 * 页码大小
 	 */
+	@ApiModelProperty(value = "页码大小", name = "pageSize", example = "")
 	private Integer pageSize;
 
 	/**

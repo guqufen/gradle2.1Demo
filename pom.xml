@@ -13,6 +13,7 @@
 		<module>fnsco-core</module>
 		<!-- web打包用 -->
 		<module>fnsco-config</module>
+		<module>fnsco-config-e789</module>
 		<module>fnsco-war-web</module>
 		<module>fnsco-war-e789</module>
 		<module>fnsco-war-timer</module>
