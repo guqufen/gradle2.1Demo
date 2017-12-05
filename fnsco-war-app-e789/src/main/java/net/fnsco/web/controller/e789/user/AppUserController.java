@@ -83,9 +83,9 @@ public class AppUserController extends BaseController {
 
     //根据手机号码找回密码
     @ResponseBody
-    @RequestMapping(value = "/findPasswordByPhone")
+    @RequestMapping(value = "/findPassword")
     @ApiOperation(value = "找回密码")
-    public ResultDTO<String> findPasswordByPhone(@RequestBody AppUserDTO appUserDTO) {
+    public ResultDTO<String> findPassword(@RequestBody AppUserDTO appUserDTO) {
         ResultDTO<String> result = appUserService.findPassword(appUserDTO);
         return result;
     }
