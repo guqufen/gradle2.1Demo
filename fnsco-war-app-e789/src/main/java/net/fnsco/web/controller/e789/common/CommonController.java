@@ -21,7 +21,7 @@ import net.fnsco.order.api.dto.VersionDTO;
 @RestController
 @RequestMapping(value = "/app2c/e789/user", method = RequestMethod.POST)
 @Api(value = "/app2c/e789/user", tags = { "APP常用信息管理接口" })
-public class ConmmController extends BaseController {
+public class CommonController extends BaseController {
     @Autowired
     private ConmmService           conmmService;
     @Autowired
