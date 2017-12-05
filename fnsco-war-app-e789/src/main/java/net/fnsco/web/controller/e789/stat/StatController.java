@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.e789.statistics;
+package net.fnsco.web.controller.e789.stat;
 
 import java.util.List;
 
@@ -25,9 +25,9 @@ import net.fnsco.web.controller.e789.vo.TotalTurnoverVO;
  * @Date	 2017年12月5日 上午10:22:52
  */
 @RestController
-@RequestMapping(value = "/app2c/e789/statistics", method = RequestMethod.POST)
-@Api(value = "/app2c/e789/statistics", tags = { "统计相关功能接口" })
-public class StatisticsController extends BaseController {
+@RequestMapping(value = "/app2c/e789/stat", method = RequestMethod.POST)
+@Api(value = "/app2c/e789/stat", tags = { "统计相关功能接口" })
+public class StatController extends BaseController {
 	
 	/**
 	 * 
