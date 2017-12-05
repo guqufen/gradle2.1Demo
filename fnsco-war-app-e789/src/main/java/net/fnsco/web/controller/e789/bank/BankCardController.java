@@ -19,7 +19,6 @@ import net.fnsco.web.controller.e789.jo.BindBankCardJO;
 import net.fnsco.web.controller.e789.jo.UnBindBankCardJO;
 import net.fnsco.web.controller.e789.vo.BankListVO;
 import net.fnsco.web.controller.e789.vo.BindBankCardVO;
-import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 import net.fnsco.web.controller.e789.vo.UnBindBankCardVO;
 
 /**
