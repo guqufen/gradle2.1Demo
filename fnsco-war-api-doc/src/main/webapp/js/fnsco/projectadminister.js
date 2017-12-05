@@ -215,6 +215,7 @@ $("#saveProjInfoBtn").click(function() {
 			emailId : $("#roleType1").val()
 		},
 		success : function(data) {
+			unloginHandler(data);
 			console.log(data);
 			if (data.success) {
 				layer.msg("项目保存成功");
@@ -281,6 +282,7 @@ $("#modifProjInfoBtn").click(function() {
 			emailId : $("#roleType1").val()
 		},
 		success : function(data) {
+			unloginHandler(data);
 			console.log(data);
 			if (data.success) {
 				layer.msg("项目修改成功");

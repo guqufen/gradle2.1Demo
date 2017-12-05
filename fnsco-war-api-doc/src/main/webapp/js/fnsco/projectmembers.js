@@ -101,6 +101,7 @@ $(".modify").click(function(){
          url: "http://localhost:8080/pass/user/addMembers",
          data:{"email":$("#name").val()},
          success: function(data){
+        	 unloginHandler(data);
         	 console.log(data);
         	 if(data.success){
         		 $("#myModal").hide();

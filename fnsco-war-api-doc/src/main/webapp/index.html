@@ -238,6 +238,7 @@
 				url : PROJECT_NAME + "/web/queryProjectMenuist",
 				async: false,//同步加载
 				success : function(data) {
+					unloginHandler(data);
 					if (data.success) {
 						var menuList = data.data;
 						var editStr = "<li class=''>"+
