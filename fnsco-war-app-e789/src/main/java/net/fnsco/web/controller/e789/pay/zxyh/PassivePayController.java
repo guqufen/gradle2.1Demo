@@ -18,8 +18,8 @@ import net.fnsco.web.controller.e789.pay.zxyh.jo.PassiveResultQueryJO;
 import net.fnsco.web.controller.e789.vo.PassiveVO;
 
 @RestController
-@RequestMapping(value="/app/zxyh/PassivePay", method=RequestMethod.POST)
-@Api(value="/app/zxyh/PassivePay", tags={"中信银行被扫支付接口"})
+@RequestMapping(value="/app2c/zxyh/PassivePay", method=RequestMethod.POST)
+@Api(value="/app2c/zxyh/PassivePay", tags={"中信银行被扫支付接口"})
 public class PassivePayController extends BaseController{
 
 	@Autowired
