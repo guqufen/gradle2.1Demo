@@ -259,7 +259,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=[" + innerCode + "");
 			map.put("respCode", "9999");
 			map.put("respMsg", "系统异常");
-			return map.toString();
+			return JSON.toJSONString(map);
 		}
 		passDTO.setStdmercno2(merchantChannel.getChannelMerId());// 二级商户号，使用分账功能时上传，是与stdmercno关联的分账子商户号
 		passDTO.setStdauthid(passivePayDTO.getStdauthid());// 授权码
@@ -272,7 +272,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			logger.info("微信付款码已经过期，请重新扫付款码");
 			map.put("respCode", "1002");
 			map.put("respMsg", "付款码已经过期,请重新扫付款码");
-			return map.toString();
+			return JSON.toJSONString(map);
 		}
 
 		//应答码为0000-成功，表示可以直接用微信进行支付了
@@ -343,7 +343,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			map.put("respMsg", "系统异常");
 			map.put("orderId", tradeOrderDO.getOrderNo());
 			map.put("begTime", DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
-			return map.toString();
+			return JSON.toJSONString(map);
 		}
 
 		// 支付成功，则直接更新交易状态
@@ -372,7 +372,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		map.put("reciAmt", passDTO1.getStdreciamt());//实收金额
 		map.put("preAmt", passDTO1.getStdpreamt());//优惠金额
 
-		return map.toString();
+//		return map.toString();
+		return JSON.toJSONString(map);
 	}
 
 	/**
@@ -395,7 +396,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			map.put("respMsg", "系统异常");
 			map.put("orderId", orgorderid);
 			map.put("begTime", DateUtils.getNowDateStr());
-			return map.toString();
+			return JSON.toJSONString(map);
 		}
 
 		// 如果原消费交易是非(进行状态的或者应答码为空)的，则可以直接返回应答
@@ -406,7 +407,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			map.put("respMsg", tradeOrderDO.getRespMsg());
 			map.put("orderId", orgorderid);
 			map.put("begTime", DateUtils.dateFormat1ToStr(tradeOrderDO.getOrderCeateTime()));
-			return map.toString();
+			return JSON.toJSONString(map);
 		}
 
 		String merId = env.getProperty("zxyh.merId");
@@ -423,7 +424,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			logger.info("该订单号原支付子类型为非微信和支付宝，请核查后重新交易。order_no=[" + orgorderid + "]");
 			map.put("respCode", "9999");
 			map.put("respMsg", "系统异常");
-			return map.toString();
+			return JSON.toJSONString(map);
 		}
 
 		passDTO.setStdmercno2(tradeOrderDO.getChannelMerId());// 二级商户号，使用分账功能时上传，是与stdmercno关联的分账子商户号
@@ -467,7 +468,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		map.put("reciAmt", passDTO1.getStdreciamt());//实收金额
 		map.put("preAmt", passDTO1.getStdpreamt());//优惠金额
 
-		return map.toString();
+		return JSON.toJSONString(map);
     }
 
 	/**
