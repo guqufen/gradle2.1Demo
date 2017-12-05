@@ -33,6 +33,12 @@ import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppSettingDTO;
 import net.fnsco.order.api.dto.AppUserDTO;
+import net.fnsco.web.controller.e789.jo.FindPasswordJO;
+import net.fnsco.web.controller.e789.jo.GetValidateCodeJO;
+import net.fnsco.web.controller.e789.jo.ModifyPasswordJO;
+import net.fnsco.web.controller.e789.jo.LoginJO;
+import net.fnsco.web.controller.e789.jo.ModifyInfoJO;
+import net.fnsco.web.controller.e789.jo.RegisterJO;
 
 /**
  * @author   hjt
@@ -57,7 +63,14 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/register")
     @ApiOperation(value = "用户注册")
     @ResponseBody
-    public ResultDTO register(@RequestBody AppUserDTO appUserDTO) {
+    public ResultDTO register(@RequestBody RegisterJO registerJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setCode(registerJO.getCode());
+    	appUserDTO.setDeviceId(registerJO.getDeviceId());
+    	appUserDTO.setDeviceToken(registerJO.getDeviceToken());
+    	appUserDTO.setDeviceType(registerJO.getDeviceType());
+    	appUserDTO.setMobile(registerJO.getMobile());
+    	appUserDTO.setPassword(registerJO.getPassword());
         ResultDTO result = appUserService.insertSelective(appUserDTO);
         return result;
     }
@@ -66,7 +79,10 @@ public class AppUserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/getValidateCode")
     @ApiOperation(value = "获取验证码")
-    public ResultDTO getValidateCode(@RequestBody AppUserDTO appUserDTO) {
+    public ResultDTO getValidateCode(@RequestBody GetValidateCodeJO getValidateCodeJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setDeviceId(getValidateCodeJO.getDeviceId());
+    	appUserDTO.setMobile(getValidateCodeJO.getMobile());
         ResultDTO result = appUserService.getValidateCode(appUserDTO);
         return result;
     }
@@ -75,7 +91,11 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/modifyPassword")
     @ResponseBody
     @ApiOperation(value = "修改密码")
-    public ResultDTO<String> modifyPassword(@RequestBody AppUserDTO appUserDTO) {
+    public ResultDTO<String> modifyPassword(@RequestBody ModifyPasswordJO modifyPasswordJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setUserId(modifyPasswordJO.getUserId());
+    	appUserDTO.setMobile(modifyPasswordJO.getMobile());
+    	appUserDTO.setPassword(modifyPasswordJO.getPassword());
         ResultDTO<String> result = new ResultDTO<>();
         result = appUserService.modifyPassword(appUserDTO);
         return result;
@@ -85,7 +105,12 @@ public class AppUserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/findPassword")
     @ApiOperation(value = "找回密码")
-    public ResultDTO<String> findPassword(@RequestBody AppUserDTO appUserDTO) {
+    public ResultDTO<String> findPassword(@RequestBody FindPasswordJO findPasswordJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setCode(findPasswordJO.getCode());
+    	appUserDTO.setDeviceId(findPasswordJO.getDeviceId());
+    	appUserDTO.setMobile(findPasswordJO.getMobile());
+    	appUserDTO.setPassword(findPasswordJO.getPassword());
         ResultDTO<String> result = appUserService.findPassword(appUserDTO);
         return result;
     }
@@ -94,7 +119,13 @@ public class AppUserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/login")
     @ApiOperation(value = "用户登录")
-    public ResultDTO<String> login(@RequestBody AppUserDTO appUserDTO) {
+    public ResultDTO<String> login(@RequestBody LoginJO loginJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setDeviceId(loginJO.getDeviceId());
+    	appUserDTO.setDeviceType(loginJO.getDeviceType());
+    	appUserDTO.setDeviceToken(loginJO.getDeviceToken());
+    	appUserDTO.setMobile(loginJO.getMobile());
+    	appUserDTO.setPassword(loginJO.getPassword());
         ResultDTO<String> result = appUserService.loginByMoblie(appUserDTO);
         return result;
     }
@@ -119,7 +150,10 @@ public class AppUserController extends BaseController {
      */
     @RequestMapping(value = "/modifyInfo")
     @ApiOperation(value = "修改个人信息")
-    public ResultDTO modifyInfo(@RequestBody AppUserDTO appUserDTO) {
+    public ResultDTO modifyInfo(@RequestBody ModifyInfoJO modifyInfoJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setUserId(modifyInfoJO.getUserId());
+    	appUserDTO.setUserName(modifyInfoJO.getUserName());
         if (null == appUserDTO.getUserId()) {
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }

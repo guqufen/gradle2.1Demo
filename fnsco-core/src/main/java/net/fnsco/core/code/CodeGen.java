@@ -27,6 +27,8 @@ public class CodeGen {
         //auto.init("net.fnsco.risk", "trade", "risk_trade_recharge_bill");
         //auto.init("net.fnsco.risk", "sys", "risk_user_sub_account");
         //auto.init("net.fnsco.order", "sys", "sys_sequence");
-        auto.init("net.fnsco.bigdata", "withdraw", "t_trade_withdraw_red");
+//        auto.init("net.fnsco.order", "trade", "t_email");
+        auto.init("net.fnsco.order", "sys", "sys_app_ad");
+//        auto.init("net.fnsco.bigdata", "withdraw", "t_trade_withdraw_red");
     }
 }
