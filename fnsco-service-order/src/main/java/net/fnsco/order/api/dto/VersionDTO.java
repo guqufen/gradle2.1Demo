@@ -8,8 +8,8 @@ public class VersionDTO extends DTO {
     private String  version;
 	@ApiModelProperty(value ="类型 1:安卓/2: IOS")
     private Integer appType;
-	@ApiModelProperty(value ="deviceId")
-    private String  deviceId;
+	@ApiModelProperty(value ="deviceType")
+    private String  deviceType;
 	@ApiModelProperty(value ="app编号,手动分配")
     private String  appCode;
 
@@ -65,12 +65,26 @@ public class VersionDTO extends DTO {
         this.appType = appType;
     }
 
-    public String getDeviceId() {
-        return deviceId;
-    }
+	/**
+	 * deviceType
+	 *
+	 * @return  the deviceType
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getDeviceType() {
+		return deviceType;
+	}
 
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
+	/**
+	 * deviceType
+	 *
+	 * @param   deviceType    the deviceType to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setDeviceType(String deviceType) {
+		this.deviceType = deviceType;
+	}
 
 }

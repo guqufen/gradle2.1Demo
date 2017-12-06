@@ -1,9 +1,9 @@
-package net.fnsco.bigdata.service.withdraw.entity;
+package net.fnsco.trading.service.withdraw.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class TradeWithdrawRedDO {
+public class TradeWithdrawDO {
 
     /**
      * 
@@ -34,6 +34,11 @@ public class TradeWithdrawRedDO {
      * 手续费(分)
      */
     private BigDecimal fee;
+
+    /**
+     * 清算金额（扣除手续费后的交易金额）
+     */
+    private BigDecimal settleMoney;
 
     /**
      * 余额(分)
@@ -71,24 +76,19 @@ public class TradeWithdrawRedDO {
     private String respMsg;
 
     /**
-     * 交易成功时间
-     */
-    private String succTime;
-
-    /**
-     * 清算金额（扣除手续费后的交易金额）
-     */
-    private BigDecimal settleMoney;
-
-    /**
      * 预约提现日期yyyy-MM-dd
      */
     private String paymentDate;
 
     /**
+     * 交易成功时间
+     */
+    private String succTime;
+
+    /**
      * 后台通知地址
      */
-    private String backurl;
+    private String backUrl;
 
     /**
      * 账户类型0对私1对公
@@ -185,6 +185,14 @@ public class TradeWithdrawRedDO {
         this.fee = fee;
     }
 
+    public BigDecimal getSettleMoney() {
+        return settleMoney;
+    }
+
+    public void setSettleMoney(BigDecimal settleMoney) {
+        this.settleMoney = settleMoney;
+    }
+
     public BigDecimal getFund() {
         return fund;
     }
@@ -241,22 +249,6 @@ public class TradeWithdrawRedDO {
         this.respMsg = respMsg;
     }
 
-    public String getSuccTime() {
-        return succTime;
-    }
-
-    public void setSuccTime(String succTime) {
-        this.succTime = succTime;
-    }
-
-    public BigDecimal getSettleMoney() {
-        return settleMoney;
-    }
-
-    public void setSettleMoney(BigDecimal settleMoney) {
-        this.settleMoney = settleMoney;
-    }
-
     public String getPaymentDate() {
         return paymentDate;
     }
@@ -265,12 +257,20 @@ public class TradeWithdrawRedDO {
         this.paymentDate = paymentDate;
     }
 
-    public String getBackurl() {
-        return backurl;
+    public String getSuccTime() {
+        return succTime;
     }
 
-    public void setBackurl(String backurl) {
-        this.backurl = backurl;
+    public void setSuccTime(String succTime) {
+        this.succTime = succTime;
+    }
+
+    public String getBackUrl() {
+        return backUrl;
+    }
+
+    public void setBackUrl(String backUrl) {
+        this.backUrl = backUrl;
     }
 
     public String getBankAccountType() {
@@ -349,6 +349,6 @@ public class TradeWithdrawRedDO {
 
     @Override
     public String toString() {
-        return "[id="+ id + ", orderNo="+ orderNo + ", originalOrderNo="+ originalOrderNo + ", appUserId="+ appUserId + ", amount="+ amount + ", fee="+ fee + ", fund="+ fund + ", tradeType="+ tradeType + ", status="+ status + ", createTime="+ createTime + ", updateTime="+ updateTime + ", respCode="+ respCode + ", respMsg="+ respMsg + ", succTime="+ succTime + ", settleMoney="+ settleMoney + ", paymentDate="+ paymentDate + ", backurl="+ backurl + ", bankAccountType="+ bankAccountType + ", bankAccountNo="+ bankAccountNo + ", bankAccountName="+ bankAccountName + ", bankAccountCardId="+ bankAccountCardId + ", bankSubBankName="+ bankSubBankName + ", bankOpenBank="+ bankOpenBank + ", bankOpenBankNum="+ bankOpenBankNum + ", bankAccountPhone="+ bankAccountPhone + ", channelMerId="+ channelMerId + "]";
+        return "[id="+ id + ", orderNo="+ orderNo + ", originalOrderNo="+ originalOrderNo + ", appUserId="+ appUserId + ", amount="+ amount + ", fee="+ fee + ", settleMoney="+ settleMoney + ", fund="+ fund + ", tradeType="+ tradeType + ", status="+ status + ", createTime="+ createTime + ", updateTime="+ updateTime + ", respCode="+ respCode + ", respMsg="+ respMsg + ", paymentDate="+ paymentDate + ", succTime="+ succTime + ", backUrl="+ backUrl + ", bankAccountType="+ bankAccountType + ", bankAccountNo="+ bankAccountNo + ", bankAccountName="+ bankAccountName + ", bankAccountCardId="+ bankAccountCardId + ", bankSubBankName="+ bankSubBankName + ", bankOpenBank="+ bankOpenBank + ", bankOpenBankNum="+ bankOpenBankNum + ", bankAccountPhone="+ bankAccountPhone + ", channelMerId="+ channelMerId + "]";
     }
 }

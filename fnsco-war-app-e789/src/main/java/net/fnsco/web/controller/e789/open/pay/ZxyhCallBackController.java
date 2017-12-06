@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.e789.pay.zxyh;
+package net.fnsco.web.controller.e789.open.pay;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,23 +18,21 @@ import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
  * @author Administrator
  *
  */
-public class CallBackController extends BaseController{
-	
-	@Autowired
-	private PaymentService zxyhPaymentService;
-	
-	@RequestMapping(value = "/payQueryCallBack")
-	@ApiOperation(value = "支付宝主扫回调")
-	public void payQueryCallBack(String resultStr) {
-		zxyhPaymentService.aliCallBack(resultStr);
-	}
-	
-	@RequestMapping(value = "/weChatCallBack")
-	@ApiOperation(value = "微信主扫回调")
-	public void weChatCallBack(String resultStr) {
-		zxyhPaymentService.weChatCallBack(resultStr);
-	}
-	
-	
+public class ZxyhCallBackController extends BaseController {
+
+    @Autowired
+    private PaymentService zxyhPaymentService;
+
+    @RequestMapping(value = "/payQueryCallBack")
+    @ApiOperation(value = "支付宝主扫回调")
+    public void payQueryCallBack(String resultStr) {
+        zxyhPaymentService.aliCallBack(resultStr);
+    }
+
+    @RequestMapping(value = "/weChatCallBack")
+    @ApiOperation(value = "微信主扫回调")
+    public void weChatCallBack(String resultStr) {
+        zxyhPaymentService.weChatCallBack(resultStr);
+    }
 
 }
