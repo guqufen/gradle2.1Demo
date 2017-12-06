@@ -4,9 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 public class BankListVO extends VO {
-	@ApiModelProperty(value="银行卡号",name="cardNum",example="0000")
+	@ApiModelProperty(value="银行卡号",name="cardNum",example="411****5211")
 	private String cardNum;
-	@ApiModelProperty(value="开户行银行名称",name="bankCodeName",example="0000")
+	@ApiModelProperty(value="开户行银行名称",name="bankCodeName",example="招商银行")
 	private String bankCodeName;
 	
 	/**
