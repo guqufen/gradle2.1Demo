@@ -141,13 +141,15 @@ public class PaymentService extends BaseService implements OrderPaymentService {
      * 微信主扫
      * @return 
      */
-    public Map<String, Object> generateQRCodeWeiXin(String innerCode,String orderBody,String txnAmt){
+    public Map<String, Object> generateQRCodeWeiXin(Integer userId,String orderBody,String txnAmt){
     	String merId = env.getProperty("zxyh.merId");
     	ActiveWeiXinDTO weiXinDTO = new ActiveWeiXinDTO();
     	weiXinDTO.init(merId);
     	String url = "/MPay/backTransAction.do"; 
     	weiXinDTO.setEncoding("UTF-8");
     	weiXinDTO.setBackEndUrl(""); //接收支付网关异步通知回调地址
+    	//根据userId获取内部商户号
+    	String innerCode = "";
     	MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
     	if(channel != null){
     		weiXinDTO.setMerId(channel.getChannelMerId()); //商户编号	M	String(15)	普通商户或平台商户的商户号
@@ -187,7 +189,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
      * 支付宝主扫
      *
      */
-    public Map<String, Object> generateQRCodeAliPay(String innerCode,String ip,String orderBody,String txnAmt){
+    public Map<String, Object> generateQRCodeAliPay(Integer userId,String ip,String orderBody,String txnAmt){
     	String merId = env.getProperty("zxyh.merId");
     	ActiveAlipayDTO activeAlipayDTO = new ActiveAlipayDTO();
     	activeAlipayDTO.init(merId);
@@ -195,6 +197,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     	
         activeAlipayDTO.setEncoding("UTF-8");
         activeAlipayDTO.setBackEndUrl(""); //接收支付网关异步通知回调地址
+        String innerCode = "";
         //根据内部商户号获取独立商户号
         MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
         if(channel != null){

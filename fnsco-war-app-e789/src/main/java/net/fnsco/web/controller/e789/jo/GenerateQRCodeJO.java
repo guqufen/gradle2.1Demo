@@ -11,12 +11,25 @@ import net.fnsco.core.base.JO;
 
 public class GenerateQRCodeJO extends JO {
 	
-    private String  innerCode; 		// 内部商户号
+//    private String  innerCode; 		// 内部商户号
     private String  ip; 			//发起支付的客户端真实IP
     private String  orderBody;	 	//商品或支付单简要描述
     private String txnAmt;			//订单总金额(交易单位为分，例:1.23元=123) 只能整数
     
+    private Integer userId;
     /**
+	 * @return the userId
+	 */
+	public Integer getUserId() {
+		return userId;
+	}
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+	/**
      * 交易子类型41微信42支付宝
      */
     private String     paySubType;
@@ -50,12 +63,12 @@ public class GenerateQRCodeJO extends JO {
 	public void setPaySubType(String paySubType) {
 		this.paySubType = paySubType;
 	}
-	public String getInnerCode() {
-		return innerCode;
-	}
-	public void setInnerCode(String innerCode) {
-		this.innerCode = innerCode;
-	}
+//	public String getInnerCode() {
+//		return innerCode;
+//	}
+//	public void setInnerCode(String innerCode) {
+//		this.innerCode = innerCode;
+//	}
 	public String getIp() {
 		return ip;
 	}
