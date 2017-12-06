@@ -24,8 +24,12 @@ public class TomcatApplication extends SpringBootServletInitializer {
         return application.sources(TomcatApplication.class);
     }
 
-    public static void main(String[] args) {
+    public static void main_(String[] args) {
         SpringApplication.run(TomcatApplication.class, args);
+    }
+    
+    public static void main(String[] args) {
+        
     }
 
     @Bean
@@ -38,25 +42,5 @@ public class TomcatApplication extends SpringBootServletInitializer {
         registration.setOrder(1);
         return registration;
     }
-    //    @Bean
-    //    AppAuthorizeFilter getAppAuthorizeFilter() {
-    //        return new AppAuthorizeFilter();
-    //    }
-    //    @Bean  
-    //    public FilterRegistrationBean  filterRegistrationBean() {  
-    //        FilterRegistrationBean registrationBean = new FilterRegistrationBean();  
-    //        registrationBean.setFilter(getAppAuthorizeFilter());  
-    //        List<String> urlPatterns = new ArrayList<String>();  
-    //        urlPatterns.add("/app/*");  
-    //        registrationBean.setUrlPatterns(urlPatterns);  
-    //        registrationBean.setOrder(2);
-    //        return registrationBean;  
-    //    }  
-    //    @Bean
-    //    public ServletListenerRegistrationBean servletListenerRegistrationBean() {
-    //        ServletListenerRegistrationBean servletListenerRegistrationBean = new ServletListenerRegistrationBean();
-    //        servletListenerRegistrationBean.setListener(new IndexListener());
-    //        return servletListenerRegistrationBean;
-    //    }
 
 }

@@ -40,7 +40,7 @@ public class ScannedTradeController extends BaseController{
 
 
 	@RequestMapping(value = "/getQRUrl")
-	@ApiOperation(value = "获取（用户）主扫二维码url，（中信银行或者浦发通道） ")
+	@ApiOperation(value = "获取付款二维码url，（中信银行或者浦发通道） ")
 	public ResultDTO<Object> generateQRCode(GenerateQRCodeJO qrJO){
 		GetQRUrlResultVO qrVo = new GetQRUrlResultVO();
 //		String innerCode = qrJO.getInnerCode();

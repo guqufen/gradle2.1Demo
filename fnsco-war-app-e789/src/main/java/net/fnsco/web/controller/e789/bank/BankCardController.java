@@ -51,6 +51,7 @@ public class BankCardController extends BaseController {
     @ApiOperation(value = "绑定银行卡")
     public ResultDTO<BindBankCardVO> addBankJO(@RequestBody BindBankCardJO bindBankCardJO) {
     	BindBankCardVO bindBankCardVO = new BindBankCardVO();
+    	//校验是否已进行身份认证
     	
         return success(bindBankCardVO);
     }
