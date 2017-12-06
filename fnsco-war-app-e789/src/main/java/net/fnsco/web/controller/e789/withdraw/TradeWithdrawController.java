@@ -20,7 +20,7 @@ import net.fnsco.web.controller.e789.vo.CommonVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/withdraw", method = RequestMethod.POST)
-@Api(value = "/app2c/withdraw", tags = { "提现和充值相关功能接口" })
+@Api(value = "/app2c/withdraw", tags = { "我的-提现和充值相关功能接口" })
 public class TradeWithdrawController extends BaseController {
 
 	/**

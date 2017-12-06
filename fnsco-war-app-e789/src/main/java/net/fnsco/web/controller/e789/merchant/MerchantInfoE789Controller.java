@@ -21,7 +21,7 @@ import net.fnsco.web.controller.e789.vo.MerchantInfoVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/merchant", method = RequestMethod.POST)
-@Api(value = "/app2c/merchantInfo", tags = { "商户信息相关功能接口" })
+@Api(value = "/app2c/merchantInfo", tags = { "我的-商户信息相关功能接口" })
 public class MerchantInfoE789Controller extends BaseController {
 	
 	/**
