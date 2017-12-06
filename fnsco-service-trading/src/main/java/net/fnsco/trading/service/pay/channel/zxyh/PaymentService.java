@@ -600,7 +600,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
         if(tradeOrderDO.getId() != null){
         	return ResultDTO.success();
         }else{
-        	return ResultDTO.fail("支付宝主扫交易插入失败");
+        	return ResultDTO.fail("微信主扫交易插入失败");
         }
 	}
 }

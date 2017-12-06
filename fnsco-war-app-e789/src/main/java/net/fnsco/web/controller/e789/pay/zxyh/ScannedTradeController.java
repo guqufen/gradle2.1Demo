@@ -24,9 +24,14 @@ import springfox.documentation.spring.web.json.Json;
 
 
 @RestController
-@RequestMapping(value = "/app2c/e789/trade", method = RequestMethod.POST)
-@Api(value = "/app2c/e789/trade", tags = { "扫一扫和付款相关功能接口" })
-public class TradeController extends BaseController{
+@RequestMapping(value = "/app2c/trade/zxyh", method = RequestMethod.POST)
+@Api(value = "/app2c/trade/zxyh", tags = { "扫一扫和付款相关功能接口" })
+/**
+ * 商户被扫接口
+ * @author Administrator
+ *
+ */
+public class ScannedTradeController extends BaseController{
 	
 	@Autowired
 	private PaymentService zxyhPaymentService;
@@ -122,13 +127,13 @@ public class TradeController extends BaseController{
 	}
 	
 	
-	@RequestMapping(value = "/queryMercScannedTrade")
-	@ApiOperation(value = "查询商户被扫交易记录")
-	public void queryMercScannedTrade() {
-//		zxyhPaymentService.queryMercScannedTrade(resultStr);
-		
-		
-	}
+//	@RequestMapping(value = "/queryMercScannedTrade")
+//	@ApiOperation(value = "查询商户被扫交易记录")
+//	public void queryMercScannedTrade() {
+////		zxyhPaymentService.queryMercScannedTrade(resultStr);
+//		
+//		
+//	}
 	
 	
 

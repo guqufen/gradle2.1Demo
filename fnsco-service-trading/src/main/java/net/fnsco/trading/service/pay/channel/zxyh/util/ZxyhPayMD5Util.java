@@ -398,11 +398,50 @@ public class ZxyhPayMD5Util {
     }
     
     
+  
+    
+    /**
+     * 支付宝微信交易查詢
+     * @param args
+     */
+    public static void main(String[] args) {
+    	String url = "/MPay/backTransAction.do";
+        Map<String, String> reqMap = new HashMap<String, String>();
+        reqMap.put("encoding", "UTF-8"); //
+        reqMap.put("signMethod", "02"); //
+        reqMap.put("txnType", "38"); //
+        reqMap.put("txnSubType", "383000"); //
+        reqMap.put("channelType", "6002"); //
+       ///////
+        reqMap.put("payAccessType", "02"); //
+        reqMap.put("origOrderId", "fns_wx_001");
+        reqMap.put("origOrderTime", "1512459476396");
+        reqMap.put("orderTime", "20171205153834");
+//        
+        
+        ///////
+        reqMap.put("merId", "994400000000009"); //普通商户或平台商户的商户号
+        reqMap.put("secMerId", "999900000010727");//必填
+        
+        
+        reqMap.put("seqId", "fns_order_001");//该字段填原交易中信流水号或原交易商户订单号
+        
+        reqMap.put("accountFlag", "Y");
+        reqMap.put("independentTransactionFlag", "Y");
+        
+        //发送中信报文
+//        String respStr = request(reqMap, url);
+        String respStr = ZxyhPayMD5Util.request(reqMap, url);
+        //解析返回报文
+        Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+        System.out.println(JSON.toJSON(respMap).toString());
+    }
+    
     /**
      * 公众号支付测试
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main5(String[] args) {
     	String url = "/MPay/backTransAction.do";
         Map<String, String> reqMap = new HashMap<String, String>();
         reqMap.put("encoding", "UTF-8"); //
@@ -447,7 +486,7 @@ public class ZxyhPayMD5Util {
      * 支付宝主扫测试
      * @param args
      */
-    public static void main3(String[] args) {
+    public static void main_(String[] args) {
     	String url = "/MPay/backTransAction.do";
         Map<String, String> reqMap = new HashMap<String, String>();
         reqMap.put("encoding", "UTF-8"); //
@@ -461,13 +500,13 @@ public class ZxyhPayMD5Util {
         reqMap.put("secMerId", "999900000010728"); //独立商户号  
 //        reqMap.put("termId", "WEB");
         reqMap.put("termIp", "192.168.1.162");
-        reqMap.put("orderId", "O10000"); //商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
+        reqMap.put("orderId", "fns_order_001"); //商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
         reqMap.put("orderTime", System.currentTimeMillis() + ""); //订单生成时间，格式 为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒 表示为20091225091010
 //        reqMap.put("productId", "");
         reqMap.put("orderBody", "零食"); //商品或支付单简要描述
         reqMap.put("orderDetail", ""); 
 //        reqMap.put("orderGoodsTag", ""); 
-        reqMap.put("txnAmt", "100"); //订单总金额(交易单位为分，例:1.23元=123) 只能整数
+        reqMap.put("txnAmt", "10"); //订单总金额(交易单位为分，例:1.23元=123) 只能整数
         reqMap.put("currencyType", "156"); //默认是156：人民币
         
         reqMap.put("accountFlag", "Y");
@@ -491,7 +530,7 @@ public class ZxyhPayMD5Util {
      * 微信主扫测试
      * @param args
      */
-    public static void main2(String[] args) {
+    public static void main____(String[] args) {
     	String url = "/MPay/backTransAction.do";
         Map<String, String> reqMap = new HashMap<String, String>();
         reqMap.put("encoding", "UTF-8"); //
@@ -506,13 +545,13 @@ public class ZxyhPayMD5Util {
         reqMap.put("secMerId", "999900000010727"); //独立商户号  999900000010724
         reqMap.put("termId", "WEB");
         reqMap.put("termIp", "");
-        reqMap.put("orderId", "O10000"); //商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
+        reqMap.put("orderId", "fns_wx_001"); //商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
         reqMap.put("orderTime", System.currentTimeMillis() + ""); //订单生成时间，格式 为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒 表示为20091225091010
         reqMap.put("productId", "");
-        reqMap.put("orderBody", "零食"); //商品或支付单简要描述
+        reqMap.put("orderBody", "辣条"); //商品或支付单简要描述
         reqMap.put("orderDetail", ""); 
         reqMap.put("orderGoodsTag", ""); 
-        reqMap.put("txnAmt", "100"); //订单总金额(交易单位为分，例:1.23元=123) 只能整数
+        reqMap.put("txnAmt", "1"); //订单总金额(交易单位为分，例:1.23元=123) 只能整数
         reqMap.put("currencyType", "156"); //默认是156：人民币
         
         reqMap.put("accountFlag", "Y");
