@@ -8,7 +8,7 @@ public class VersionDTO extends DTO {
     private String  version;
 	@ApiModelProperty(value ="类型 1:安卓/2: IOS")
     private Integer appType;
-	@ApiModelProperty(value ="deviceType")
+	@ApiModelProperty(value ="类型 1:安卓/2: IOS")
     private String  deviceType;
 	@ApiModelProperty(value ="app编号,手动分配")
     private String  appCode;

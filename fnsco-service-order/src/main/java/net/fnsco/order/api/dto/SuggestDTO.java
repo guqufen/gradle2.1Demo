@@ -19,7 +19,7 @@ public class SuggestDTO extends DTO{
     private String mobile;
 	@ApiModelProperty(value="提交时间",example="不用填写")
     private Date submitTime;
-	@ApiModelProperty(value="replyUserId",example="不用填写")
+	@ApiModelProperty(value="处理人id",example="不用填写")
     private String replyUserId;
 
     public Integer getUserId() {
