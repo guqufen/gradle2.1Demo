@@ -130,14 +130,14 @@ public class AppUserController extends BaseController {
         return result;
     }
 
-    /*//退出登录
+    //退出登录
     @ResponseBody
     @RequestMapping(value = "/loginOut")
     @ApiOperation(value = "退出登录")
     public ResultDTO<String> loginOut(@RequestBody AppUserDTO appUserDTO) {
         ResultDTO<String> result = appUserService.loginOut(appUserDTO);
         return result;
-    }*/
+    }
 
     /**
      * modifyInfo:(这里用一句话描述这个方法的作用)修改个人信息
