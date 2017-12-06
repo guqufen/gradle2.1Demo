@@ -44,7 +44,7 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/rechange")
-@Api(value = "/app2c/rechange", tags = { "充值相关接口" })
+@Api(value = "/app2c/rechange", tags = { "我的页面-钱包-充值相关接口" })
 public class RechangeController extends BaseController {
     @Autowired
     private MerchantService   merchantService;

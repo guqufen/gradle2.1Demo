@@ -21,7 +21,7 @@ import net.fnsco.web.controller.e789.vo.AccountBalanceVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/account", method = RequestMethod.POST)
-@Api(value = "/app2c/account", tags = { "帐号信息相关功能接口" })
+@Api(value = "/app2c/account", tags = { "我的-帐号信息相关功能接口" })
 public class AccountBalanceController extends BaseController {
 	
 	/**
@@ -34,7 +34,7 @@ public class AccountBalanceController extends BaseController {
 	 * @date   2017年12月4日 下午5:07:55
 	 */
  	@RequestMapping(value = "/queryBalance")
-    @ApiOperation(value = "获取帐号余额接口")
+    @ApiOperation(value = "我的-钱包-获取帐号余额接口")
     public ResultDTO<AccountBalanceVO> queryBalance(@RequestBody AccountBalanceJO accountBalanceJO) {
  		
         return success(null);

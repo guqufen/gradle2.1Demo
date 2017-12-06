@@ -21,7 +21,7 @@ import net.fnsco.order.api.dto.VersionResultDTO;
 
 @RestController
 @RequestMapping(value = "/app2c/user", method = RequestMethod.POST)
-@Api(value = "/app2c/user", tags = { "APP常用信息管理接口" })
+@Api(value = "/app2c/user", tags = { "我的-APP常用信息管理接口" })
 public class CommonController extends BaseController {
     @Autowired
     private ConmmService           conmmService;
@@ -29,7 +29,7 @@ public class CommonController extends BaseController {
     private Environment            env;
 
     @RequestMapping(value = "/checkUpdate")
-    @ApiOperation(value = "版本更新")
+    @ApiOperation(value = "我的-设置-关于我们-版本更新")
     @ResponseBody
     public ResultDTO<VersionResultDTO> checkUpdate(@RequestBody VersionDTO sysVersionDTO) {
         String appCode = AppTypeEnum.SQB.getCode();
@@ -59,7 +59,7 @@ public class CommonController extends BaseController {
 
     //反馈
     @RequestMapping(value = "/suggest")
-    @ApiOperation(value = "反馈页面")
+    @ApiOperation(value = "我的-帮助与反馈-反馈页面")
     @ResponseBody
     public ResultDTO<String> suggest(@RequestBody SuggestDTO suggestDTO) {
         ResultDTO result = conmmService.suggest(suggestDTO);

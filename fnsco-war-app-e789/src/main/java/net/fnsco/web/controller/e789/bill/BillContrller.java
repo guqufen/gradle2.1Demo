@@ -23,7 +23,7 @@ import net.fnsco.web.controller.e789.vo.BillVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/bill", method = RequestMethod.POST)
-@Api(value = "/app2c/bill", tags = { "账单信息相关功能接口" })
+@Api(value = "/app2c/bill", tags = { "我的-钱包-账单信息相关功能接口" })
 public class BillContrller extends BaseController {
 	
 	/**
@@ -36,7 +36,7 @@ public class BillContrller extends BaseController {
 	 * @date   2017年12月4日 下午6:04:22
 	 */
 	@RequestMapping(value = "/queryBillList")
-    @ApiOperation(value = "获取账单列表接口")
+    @ApiOperation(value = "我的-钱包-我的账单-获取账单列表接口")
     public ResultDTO<List<BillVO>> queryBillList(@RequestBody BillJO billJO) {
         return success(null);
     }

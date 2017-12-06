@@ -1,7 +1,5 @@
 package net.fnsco.web.controller.e789.vo;
 
-import java.util.List;
-
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 

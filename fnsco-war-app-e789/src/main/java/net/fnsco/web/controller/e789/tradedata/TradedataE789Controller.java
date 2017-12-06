@@ -23,7 +23,7 @@ import net.fnsco.web.controller.e789.vo.TradeDataVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/tradeData", method = RequestMethod.POST)
-@Api(value = "/app2c/tradeData", tags = { "流水相关功能接口" })
+@Api(value = "/app2c/tradeData", tags = { "首页-流水相关功能接口" })
 public class TradedataE789Controller extends BaseController {
 	
 	/**
@@ -36,7 +36,7 @@ public class TradedataE789Controller extends BaseController {
 	 * @date   2017年12月5日 下午4:03:41
 	 */
 	@RequestMapping(value = "/query")
-	@ApiOperation(value = "查询交易流水列表")
+	@ApiOperation(value = "首页-查询交易流水列表")
 	public ResultDTO<TradeDataVO> queryTradeDataList(@RequestBody TradeDataJO tradeDataJO){
 		return null;
 	}
@@ -52,7 +52,7 @@ public class TradedataE789Controller extends BaseController {
 	 * @date   2017年12月5日 下午4:07:33
 	 */
 	@RequestMapping(value = "/queryDetail")
-	@ApiOperation(value = "查询交易流水详情")
+	@ApiOperation(value = "首页-流水详情-查询交易流水详情")
 	public ResultDTO<TradeDataDetailVO> queryTradeDataDetail(@RequestBody TradeDataDetailJO tradeDataDetailJO){
 		return null;
 	}

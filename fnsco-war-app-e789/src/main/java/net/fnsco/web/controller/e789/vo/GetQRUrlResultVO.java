@@ -4,9 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 public class GetQRUrlResultVO extends VO {
-    @ApiModelProperty(value = "二维码url", name = "username", example = "weixin://wxpay/bizpayurl?pr=d2qgy0w")
+    @ApiModelProperty(value = "二维码url", name = "username", example = "二维码url")
     private String url;
-    @ApiModelProperty(value = "订单号",example = "")
+    @ApiModelProperty(value = "订单号",example = "订单号")
     private String orderNo;
 
     /**
