@@ -33,7 +33,7 @@ public class TradeWithdrawController extends BaseController {
 	 * @date   2017年12月4日 下午5:31:24
 	 */
 	@RequestMapping(value = "/withdrawals")
-    @ApiOperation(value = "提现接口")
+    @ApiOperation(value = "我的-钱包-提现-提现接口")
     public ResultDTO<CommonVO> withdrawals(@RequestBody WithdrawCashJO withdrawCashJO) {
  		
         return success(null);
@@ -50,7 +50,7 @@ public class TradeWithdrawController extends BaseController {
 	 * @date   2017年12月4日 下午5:35:18
 	 */
 	@RequestMapping(value = "/rechargeBalance")
-    @ApiOperation(value = "分闪付充值接口")
+    @ApiOperation(value = "我的-钱包-充值-分闪付充值接口")
     public ResultDTO<CommonVO> rechargeBalance(@RequestBody WithdrawCashJO withdrawCashJO) {
  		
         return success(null);
