@@ -1,7 +1,6 @@
 package net.fnsco.web.controller.e789.pay.jhf;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -19,14 +18,12 @@ import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.e789.jo.GetQRUrlJO;
-import net.fnsco.web.controller.e789.jo.TradeJO;
 import net.fnsco.web.controller.e789.vo.GetOrderInfoResultVO;
 import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 
@@ -42,7 +39,7 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 @RestController
 @RequestMapping(value = "/app2c/trade/jhf")
 @Api(value = "/app2c/trade/jhf", tags = { "分闪付支付接口" })
-public class TradeFsfController extends BaseController {
+public class PayFsfController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
     @Autowired
