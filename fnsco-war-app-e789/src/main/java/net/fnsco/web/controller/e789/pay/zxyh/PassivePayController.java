@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
 import net.fnsco.web.controller.e789.jo.PassivePayJO;
@@ -18,8 +19,8 @@ import net.fnsco.web.controller.e789.jo.PassiveResultQueryJO;
 import net.fnsco.web.controller.e789.vo.PassiveVO;
 
 @RestController
-@RequestMapping(value="/app2c/zxyh/PassivePay", method=RequestMethod.POST)
-@Api(value="/app2c/zxyh/PassivePay", tags={"中信银行被扫支付接口"})
+@RequestMapping(value="/app2c/zxyh/passivePay", method=RequestMethod.POST)
+@Api(value="/app2c/zxyh/passivePay", tags={"扫一扫支付接口"})
 public class PassivePayController extends BaseController{
 
 	@Autowired
@@ -31,8 +32,8 @@ public class PassivePayController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/pay")
-	@ApiOperation(value="中信银行支付宝/微信被扫支付交易接口url")
-	public PassiveVO ZxyhPassivePay(@RequestBody PassivePayJO passivePayJO){
+	@ApiOperation(value="扫一扫支付交易接口url")
+	public ResultDTO<PassiveVO> ZxyhPassivePay(@RequestBody PassivePayJO passivePayJO){
 		
 		//对接收的报文进行处理
 		String str = JSON.toJSONString(passivePayJO);
@@ -46,11 +47,7 @@ public class PassivePayController extends BaseController{
 		passivePayDTO.setStdauthid(passivePayJO.getAuthid());//授权码
 		passivePayDTO.setSignAture(passivePayJO.getSignAture());//签名
 
-		//调用service处理(值补全和存储以及发送请求给中信银行),并返回应答字符串
-		String result = PaymentService.PassivePay(passivePayJO.getInnerCode(), passivePayDTO);
-		//将应答字符串放入对象，并返回对象给APP
-		PassiveVO passiveVO = JSON.parseObject(result, PassiveVO.class);
-		return passiveVO;
+		return PaymentService.PassivePay(passivePayJO.getInnerCode(), passivePayDTO);
 	}
 
 	/**
@@ -59,8 +56,8 @@ public class PassivePayController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/queryPayResult")
-	@ApiOperation(value="中信银行支付宝/微信支付结果查询接口url")
-	public PassiveVO ZxyhPassivePayResult(@RequestBody PassiveResultQueryJO passiveResultQueryJO) {
+	@ApiOperation(value="扫一扫支付结果查询接口url")
+	public ResultDTO<PassiveVO> ZxyhPassivePayResult(@RequestBody PassiveResultQueryJO passiveResultQueryJO) {
 
 		// 对接收的报文进行处理
 
@@ -70,8 +67,8 @@ public class PassivePayController extends BaseController{
 		passivePayDTO.setOrgorderid((passiveResultQueryJO.getOrgOrderId()));// 原商户订单号
 		passivePayDTO.setSignAture(passiveResultQueryJO.getSignAture());// 签名
 
-		String result = PaymentService.PassivePayResult(passiveResultQueryJO.getOrgOrderId());
-		PassiveVO passiveVO = JSON.parseObject(result, PassiveVO.class);
-		return passiveVO;
+//		String result = PaymentService.PassivePayResult(passiveResultQueryJO.getOrgOrderId());
+//		PassiveVO passiveVO = JSON.parseObject(result, PassiveVO.class);
+		return PaymentService.PassivePayResult(passiveResultQueryJO.getOrgOrderId());
 	}
 }

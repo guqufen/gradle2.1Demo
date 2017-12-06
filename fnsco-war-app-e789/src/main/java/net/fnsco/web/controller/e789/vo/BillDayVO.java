@@ -21,13 +21,13 @@ public class BillDayVO extends VO {
 	
 	private static final long serialVersionUID = 2065318222831467840L;
 
-	@ApiModelProperty(value = "账单类型", name = "billType", example = "")
+	@ApiModelProperty(value = "账单类型", name = "billType", example = "账单类型")
 	private String billType;
 	
-	@ApiModelProperty(value = "账单日期", name = "billDayDate", example = "")
+	@ApiModelProperty(value = "账单日期", name = "billDayDate", example = "账单日期")
 	private String billDayDate;
 	
-	@ApiModelProperty(value = "账单金额", name = "billDayDate", example = "")
+	@ApiModelProperty(value = "账单金额", name = "billDayDate", example = "账单金额")
 	private String amount;
 
 	/**

@@ -22,7 +22,7 @@ public class LoginJO extends JO {
 	@ApiModelProperty(value="设备类型1:安卓/2: IOS")
 	private Integer deviceType;// 设备类型1:安卓/2: IOS
 	@ApiModelProperty(value="友盟设备号")
-	private String DeviceToken;// 友盟设备号
+	private String deviceToken;// 友盟设备号
 	public String getMobile() {
 		return mobile;
 	}
@@ -48,10 +48,10 @@ public class LoginJO extends JO {
 		this.deviceType = deviceType;
 	}
 	public String getDeviceToken() {
-		return DeviceToken;
+		return deviceToken;
 	}
 	public void setDeviceToken(String deviceToken) {
-		DeviceToken = deviceToken;
+		deviceToken = deviceToken;
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;

@@ -24,13 +24,13 @@ public class AccountBalanceVO extends VO {
 	/**
 	 * 帐号余额
 	 */
-	@ApiModelProperty(value="帐号可提现余额",name="accountBalance",example="0.00")
+	@ApiModelProperty(value="帐号可提现余额",name="accountBalance",example="帐号可提现余额")
 	private String accountBalance;
 	
 	/**
 	 * APP登录用户ID
 	 */
-	@ApiModelProperty(value="APP登录用户ID",name="userId",example="")
+	@ApiModelProperty(value="APP登录用户ID",name="userId",example="APP登录用户ID")
 	private Integer userId;
 
 	/**
