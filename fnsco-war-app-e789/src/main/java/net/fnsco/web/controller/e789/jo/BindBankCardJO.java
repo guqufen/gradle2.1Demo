@@ -4,42 +4,60 @@ import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.JO;
 
 public class BindBankCardJO extends JO {
-    @ApiModelProperty(value = "内部商户号", name = "innerCode", example = "092916342476171")
-    private String innerCode;
-    @ApiModelProperty(value = "持卡人", name = "cardholder", example = "")
-    private String cardholder; 
-    @ApiModelProperty(value = "卡号", name = "cardNum", example = "")
-    private String cardNum;
-    @ApiModelProperty(value = "手机号", name = "mobile", example = "")
+//    @ApiModelProperty(value = "内部商户号", name = "innerCode", example = "092916342476171")
+//    private String innerCode;
+    @ApiModelProperty(value = "持卡人姓名", name = "cardholder", example = "张三")
+    private String bankCardholder; 
+    @ApiModelProperty(value = "卡号", name = "cardNum", example = "623******2825")
+    private String bankCardNum;
+    @ApiModelProperty(value = "手机号", name = "mobile", example = "13233332222")
     private String mobile;
+    @ApiModelProperty(value = "app用户id", name = "userId", example = "22")
+    private String userId;
 
-    /**
-	 * @return the cardholder
+    
+	/**
+	 * @return the userId
 	 */
-	public String getCardholder() {
-		return cardholder;
+	public String getUserId() {
+		return userId;
 	}
 
 	/**
-	 * @param cardholder the cardholder to set
+	 * @param userId the userId to set
 	 */
-	public void setCardholder(String cardholder) {
-		this.cardholder = cardholder;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	/**
-	 * @return the cardNum
+	 * @return the bankCardholder
 	 */
-	public String getCardNum() {
-		return cardNum;
+	public String getBankCardholder() {
+		return bankCardholder;
 	}
 
 	/**
-	 * @param cardNum the cardNum to set
+	 * @param bankCardholder the bankCardholder to set
 	 */
-	public void setCardNum(String cardNum) {
-		this.cardNum = cardNum;
+	public void setBankCardholder(String bankCardholder) {
+		this.bankCardholder = bankCardholder;
 	}
+
+	/**
+	 * @return the bankCardNum
+	 */
+	public String getBankCardNum() {
+		return bankCardNum;
+	}
+
+	/**
+	 * @param bankCardNum the bankCardNum to set
+	 */
+	public void setBankCardNum(String bankCardNum) {
+		this.bankCardNum = bankCardNum;
+	}
+
 
 	/**
 	 * @return the mobile
@@ -62,29 +80,5 @@ public class BindBankCardJO extends JO {
      * @since   CodingExample Ver 1.0
     */
 
-    public String getInnerCode() {
-        return innerCode;
-    }
-
-    /**
-     * innerCode
-     *
-     * @param   innerCode    the innerCode to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setInnerCode(String innerCode) {
-        this.innerCode = innerCode;
-    }
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "BindBankCardJO [innerCode=" + innerCode + ", cardholder=" + cardholder + ", cardNum=" + cardNum
-				+ ", mobile=" + mobile + "]";
-	}
-
-    
+  
 }

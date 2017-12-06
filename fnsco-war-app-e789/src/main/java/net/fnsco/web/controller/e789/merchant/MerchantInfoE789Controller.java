@@ -9,7 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.web.controller.e789.jo.CommonJO;
+import net.fnsco.web.controller.e789.jo.TradeDataJO;
 import net.fnsco.web.controller.e789.vo.MerchantInfoVO;
 
 /**
@@ -35,7 +35,7 @@ public class MerchantInfoE789Controller extends BaseController {
 	 */
 	@RequestMapping(value = "/queryMerchant")
     @ApiOperation(value = "获取商户信息接口")
-    public ResultDTO<MerchantInfoVO> queryBalance(@RequestBody CommonJO commonJO) {
+    public ResultDTO<MerchantInfoVO> queryBalance(@RequestBody TradeDataJO tradeDataJO) {
  		
         return success(null);
     }
