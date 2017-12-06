@@ -60,13 +60,13 @@ public class TradeController extends BaseController{
 	@ApiOperation(value = "获取（用户）主扫二维码url，（中信银行或者浦发通道） ")
 	public ResultDTO<Object> generateQRCode(GenerateQRCodeJO qrJO){
 		GetQRUrlResultVO qrVo = new GetQRUrlResultVO();
-		String innerCode = qrJO.getInnerCode();
+		Integer userID = qrJO.getUserId();
 		String ip = qrJO.getIp();
 		String orderBody = qrJO.getOrderBody();
 		String txnAmt = qrJO.getTxnAmt();
 		String paySubType = qrJO.getPaySubType();//
-		if(Strings.isNullOrEmpty(innerCode)){
-			return ResultDTO.fail("内部商户号为空");
+		if(userID == null){
+			return ResultDTO.fail("用户id为空");
 		}
 		if(Strings.isNullOrEmpty(ip)){
 			return ResultDTO.fail("ip为空");
@@ -85,11 +85,11 @@ public class TradeController extends BaseController{
 		Map<String, Object> reqMap = new HashMap<>();
 		if("05".equals(qrJO.getChannelType())){//中信通道
 			if("41".equals(paySubType)){//微信
-				reqMap = zxyhPaymentService.generateQRCodeWeiXin(innerCode,orderBody,txnAmt);
+				reqMap = zxyhPaymentService.generateQRCodeWeiXin(userID,orderBody,txnAmt);
 				qrVo.setUrl(reqMap.get("codeUrl").toString());
 			
 			}else if("42".equals(paySubType)){//支付宝
-				reqMap = zxyhPaymentService.generateQRCodeAliPay(innerCode,ip,orderBody,txnAmt);
+				reqMap = zxyhPaymentService.generateQRCodeAliPay(userID,ip,orderBody,txnAmt);
 				qrVo.setUrl(reqMap.get("codeUrl").toString());
 			}
 			return  success(qrVo);
