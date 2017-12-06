@@ -32,7 +32,6 @@ public class BillVO extends VO {
 	@ApiModelProperty(value = "账单总收入", name = "totalRevenue", example = "账单总收入")
 	private String totalRevenue;
 	
-	@ApiModelProperty(value = "每日账单列表", name = "billDetails", example = "每日账单列表")
 	private List<BillDayVO> billDetails;
 
 	/**
