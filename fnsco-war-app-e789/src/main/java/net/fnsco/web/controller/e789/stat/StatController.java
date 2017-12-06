@@ -26,7 +26,7 @@ import net.fnsco.web.controller.e789.vo.TotalTurnoverVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/stat", method = RequestMethod.POST)
-@Api(value = "/app2c/stat", tags = { "统计相关功能接口" })
+@Api(value = "/app2c/stat", tags = { "首页-统计相关功能接口" })
 public class StatController extends BaseController {
 	
 	/**

@@ -21,7 +21,7 @@ import net.fnsco.web.controller.e789.vo.AccountBalanceVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/account", method = RequestMethod.POST)
-@Api(value = "/app2c/account", tags = { "帐号信息相关功能接口" })
+@Api(value = "/app2c/account", tags = { "我的-帐号信息相关功能接口" })
 public class AccountBalanceController extends BaseController {
 	
 	/**
