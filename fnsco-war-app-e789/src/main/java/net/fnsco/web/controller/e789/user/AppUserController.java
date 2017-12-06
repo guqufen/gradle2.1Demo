@@ -1,5 +1,11 @@
 package net.fnsco.web.controller.e789.user;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Calendar;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -7,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
@@ -15,16 +24,19 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
+import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.FindPasswordJO;
 import net.fnsco.web.controller.e789.jo.GetValidateCodeJO;
 import net.fnsco.web.controller.e789.jo.LoginJO;
 import net.fnsco.web.controller.e789.jo.ModifyInfoJO;
 import net.fnsco.web.controller.e789.jo.ModifyPasswordJO;
 import net.fnsco.web.controller.e789.jo.RegisterJO;
+import net.fnsco.web.controller.e789.vo.LoginVO;
 
 /**
  * @author   hjt
@@ -49,7 +61,7 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/register")
     @ApiOperation(value = "用户注册")
     @ResponseBody
-    public ResultDTO register(@RequestBody RegisterJO registerJO) {
+    public ResultDTO<LoginVO> register(@RequestBody RegisterJO registerJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setCode(registerJO.getCode());
     	appUserDTO.setDeviceId(registerJO.getDeviceId());
@@ -58,7 +70,8 @@ public class AppUserController extends BaseController {
     	appUserDTO.setMobile(registerJO.getMobile());
     	appUserDTO.setPassword(registerJO.getPassword());
         ResultDTO result = appUserService.insertSelective(appUserDTO);
-        return result;
+        LoginVO loginVO = new LoginVO();
+        return ResultDTO.success(loginVO);
     }
 
     //获取验证码
@@ -80,8 +93,8 @@ public class AppUserController extends BaseController {
     public ResultDTO<String> modifyPassword(@RequestBody ModifyPasswordJO modifyPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(modifyPasswordJO.getUserId());
-    	appUserDTO.setMobile(modifyPasswordJO.getMobile());
     	appUserDTO.setPassword(modifyPasswordJO.getPassword());
+    	appUserDTO.setPassword(modifyPasswordJO.getOldPassword());
         ResultDTO<String> result = new ResultDTO<>();
         result = appUserService.modifyPassword(appUserDTO);
         return result;
@@ -91,21 +104,22 @@ public class AppUserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/findPassword")
     @ApiOperation(value = "找回密码")
-    public ResultDTO<String> findPassword(@RequestBody FindPasswordJO findPasswordJO) {
+    public ResultDTO<LoginVO> findPassword(@RequestBody FindPasswordJO findPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setCode(findPasswordJO.getCode());
     	appUserDTO.setDeviceId(findPasswordJO.getDeviceId());
     	appUserDTO.setMobile(findPasswordJO.getMobile());
     	appUserDTO.setPassword(findPasswordJO.getPassword());
         ResultDTO<String> result = appUserService.findPassword(appUserDTO);
-        return result;
+        LoginVO loginVO = new LoginVO();
+        return ResultDTO.success(loginVO);
     }
 
     //登录
     @ResponseBody
     @RequestMapping(value = "/login")
     @ApiOperation(value = "用户登录")
-    public ResultDTO<String> login(@RequestBody LoginJO loginJO) {
+    public ResultDTO<LoginVO> login(@RequestBody LoginJO loginJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(loginJO.getDeviceId());
     	appUserDTO.setDeviceType(loginJO.getDeviceType());
@@ -113,14 +127,17 @@ public class AppUserController extends BaseController {
     	appUserDTO.setMobile(loginJO.getMobile());
     	appUserDTO.setPassword(loginJO.getPassword());
         ResultDTO<String> result = appUserService.loginByMoblie(appUserDTO);
-        return result;
+        LoginVO loginVO = new LoginVO();
+        return ResultDTO.success(loginVO);
     }
 
     //退出登录
     @ResponseBody
     @RequestMapping(value = "/loginOut")
     @ApiOperation(value = "退出登录")
-    public ResultDTO<String> loginOut(@RequestBody AppUserDTO appUserDTO) {
+    public ResultDTO<String> loginOut(@RequestBody CommonJO commonJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setUserId(commonJO.getUserId());
         ResultDTO<String> result = appUserService.loginOut(appUserDTO);
         return result;
     }
@@ -157,7 +174,7 @@ public class AppUserController extends BaseController {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    /*@RequestMapping(value = "/uploadImage")
+    @RequestMapping(value = "/uploadImage")
     @ApiOperation(value = "上传头像文件")
     public ResultDTO<String> uploadImage() {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -230,16 +247,16 @@ public class AppUserController extends BaseController {
             }
         }
         return null;
-    }*/
+    }
 
     //获取个人信息
-    /*@ResponseBody
+    @ResponseBody
     @RequestMapping(value = "/getUserInfo")
     @ApiOperation(value = "获取个人信息")
     public ResultDTO<String> getPersonInfo(@RequestBody AppUserDTO appUserDTO) {
         ResultDTO<String> result = appUserService.getUserInfo(appUserDTO);
         return result;
-    }*/
+    }
 
     /**
      * updateSettingStatus:(更新app用户消息通知状态)
