@@ -257,7 +257,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, "05");
 		if (null == merchantChannel) {
 			logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=[" + innerCode + "");
-			return ResultDTO.fail("9999");
+			return ResultDTO.fail("1002");
 		}
 		passDTO.setStdmercno2(merchantChannel.getChannelMerId());// 二级商户号，使用分账功能时上传，是与stdmercno关联的分账子商户号
 		passDTO.setStdauthid(passivePayDTO.getStdauthid());// 授权码
@@ -341,7 +341,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 //			map.put("respMsg", "系统异常");
 //			map.put("orderId", tradeOrderDO.getOrderNo());
 //			map.put("begTime", DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
-			return ResultDTO.fail("9999");
+			return ResultDTO.fail("1002");
 //			return JSON.toJSONString(map);
 		}
 
