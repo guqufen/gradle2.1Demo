@@ -28,10 +28,6 @@ public class TomcatApplication extends SpringBootServletInitializer {
         SpringApplication.run(TomcatApplication.class, args);
     }
     
-    public static void main(String[] args) {
-        
-    }
-
     @Bean
     public FilterRegistrationBean registFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
