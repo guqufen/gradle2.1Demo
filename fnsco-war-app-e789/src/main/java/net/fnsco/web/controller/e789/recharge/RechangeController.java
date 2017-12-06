@@ -1,24 +1,33 @@
 package net.fnsco.web.controller.e789.recharge;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.dby.AESUtil;
+import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
+import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.e789.jo.GetQRUrlJO;
@@ -34,8 +43,8 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
  *
  */
 @RestController
-@RequestMapping(value = "/app2c/rechange/jhf")
-@Api(value = "/app2c/rechange/jhf", tags = { "分闪付充值接口" })
+@RequestMapping(value = "/app2c/rechange")
+@Api(value = "/app2c/rechange", tags = { "充值相关接口" })
 public class RechangeController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
@@ -45,13 +54,13 @@ public class RechangeController extends BaseController {
     private Environment       env;
 
     /**
-     * 获取聚惠分二维码url获取
+     * 获取聚惠分url，不生成二维码
      *
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
-    @ApiOperation(value = "充值金额提交保存")
+    @RequestMapping(value = "/jhf/getQRUrl", method = RequestMethod.POST)
+    @ApiOperation(value = "聚惠分充值保存，返回的url跳转到h5页面")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String innerCode = "";
         Integer userId = getQRUrlJO.getUserId();
@@ -78,8 +87,8 @@ public class RechangeController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        String url = env.getProperty("open.base.url") + "/trade/pay/dealPayOrder";
-        url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=123";
+        String url = env.getProperty("open.base.url") + "/trade/fsf/rechange/dealPayOrder";
+        url += "?commID=&reqData=" + getReqData(tradeOrder.getOrderNo());
         GetQRUrlResultVO result = new GetQRUrlResultVO();
         result.setUrl(url);
         result.setOrderNo(tradeOrder.getOrderNo());
@@ -87,31 +96,23 @@ public class RechangeController extends BaseController {
         return success(result);
     }
 
-    /**
-     * 二维码扫码后跳转到聚惠分平台
-     *
-     * @param userName
-     * @return
-     */
-    @RequestMapping(value = "/dealPayOrder", method = RequestMethod.GET)
-    @ApiOperation(value = "跳转到聚惠分平台进行支付")
-    public String dealPayOrder(@ApiParam(value = "请求参数") String reqData) {
-        String orderNo = "";
-        String commID = "";
-        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
-        String url = env.getProperty("open.base.url") + "/pay/dealPayFail.html";
-        if (null != tradeOrderDO) {
-            Integer handleNum = tradeOrderDO.getHandleNum();
-            if (null == handleNum || handleNum == 0) {
-                url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-                url += "?commID=" + tradeOrderDO.getChannelMerId() + "&reqData=" + tradeOrderService.getReqData(tradeOrderDO);
-                TradeOrderDO tradeOrderTemp = new TradeOrderDO();
-                tradeOrderTemp.setId(tradeOrderDO.getId());
-                tradeOrderTemp.setHandleNum(1);
-                tradeOrderService.doUpdate(tradeOrderTemp);
-            }
+    private String getReqData(String orderNo) {
+        String reqData = "";
+        String transTime = DateUtils.dateFormat1ToStr(new Date());
+        Map<String, String> result = Maps.newHashMap();
+        result.put("orderNo", orderNo);
+        result.put("transTime", transTime);
+        String singDataStr = orderNo + transTime;
+        logger.error("签名前数据" + singDataStr);
+        String singData = JHFMd5Util.encode32(singDataStr);
+        result.put("singData", singData);
+        String dateTemp = JSON.toJSONString(result);
+        try {
+            reqData = URLEncoder.encode(AESUtil.encode(dateTemp, TradeConstants.RECHANGE_AES_KEY), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            logger.error("生成分期付url时AES加密出错", e);
         }
-        logger.error("分闪付跳转到聚惠分平台前的url" + url);
-        return "redirect:" + url;
+        return reqData;
     }
+
 }
