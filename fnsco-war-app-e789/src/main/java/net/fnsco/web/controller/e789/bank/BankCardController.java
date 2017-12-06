@@ -49,8 +49,14 @@ public class BankCardController extends BaseController {
      */
     @RequestMapping(value = "/bindBankCard")
     @ApiOperation(value = "绑定银行卡")
-    public ResultDTO<BindBankCardVO> addBankJO(@RequestBody BindBankCardJO bindBankCardJO) {
+    public ResultDTO<BindBankCardVO> addBankJO(@RequestBody BindBankCardJO jo) {
     	BindBankCardVO bindBankCardVO = new BindBankCardVO();
+    	//校验是否已进行身份认证
+    	String userId = jo.getUserId();
+    	String mobile = jo.getMobile();
+    	String bankCardNum = jo.getBankCardNum();
+    	String bankCardholder = jo.getBankCardholder();
+    	
     	
         return success(bindBankCardVO);
     }

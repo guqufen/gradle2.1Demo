@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.e789.pay.zxyh.jo;
+package net.fnsco.web.controller.e789.jo;
 
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.JO;

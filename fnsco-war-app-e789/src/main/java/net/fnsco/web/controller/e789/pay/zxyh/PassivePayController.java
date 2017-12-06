@@ -12,8 +12,8 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
-import net.fnsco.web.controller.e789.pay.zxyh.jo.PassivePayJO;
-import net.fnsco.web.controller.e789.pay.zxyh.jo.PassiveResultQueryJO;
+import net.fnsco.web.controller.e789.jo.PassivePayJO;
+import net.fnsco.web.controller.e789.jo.PassiveResultQueryJO;
 import net.fnsco.web.controller.e789.vo.PassiveVO;
 
 @RestController
