@@ -15,20 +15,58 @@ public class ModifyInfoJO extends JO {
 
 	@ApiModelProperty(value="APP用户ID")
 	private Integer userId;// APP用户ID
-	@ApiModelProperty(value="用户昵称")
-	private String userName;// 用户昵称
+	@ApiModelProperty(value="修改类型（1修改昵称，2修改图片）")
+	private Integer modifyType;// 修改类型（1修改昵称，2修改图片）
+	@ApiModelProperty(value="修改内容")
+	private String modifyContent;// 修改内容
+	/**
+	 * @return the userId
+	 */
 	public Integer getUserId() {
 		return userId;
 	}
+
+
+	/**
+	 * @param userId the userId to set
+	 */
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	public String getUserName() {
-		return userName;
+
+
+	/**
+	 * @return the modifyType
+	 */
+	public Integer getModifyType() {
+		return modifyType;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+
+
+	/**
+	 * @param modifyType the modifyType to set
+	 */
+	public void setModifyType(Integer modifyType) {
+		this.modifyType = modifyType;
 	}
+
+
+	/**
+	 * @return the modifyContent
+	 */
+	public String getModifyContent() {
+		return modifyContent;
+	}
+
+
+	/**
+	 * @param modifyContent the modifyContent to set
+	 */
+	public void setModifyContent(String modifyContent) {
+		this.modifyContent = modifyContent;
+	}
+
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
