@@ -1,0 +1,65 @@
+package net.fnsco.web.controller.e789.jo;
+
+import io.swagger.annotations.ApiModelProperty;
+import net.fnsco.core.base.JO;
+
+/**
+ * app修改密码JO
+ * 
+ * @author hjt
+ *
+ */
+public class ModifyPayPasswordJO extends JO {
+
+	private static final long serialVersionUID = 1L;
+
+	@ApiModelProperty(value="密码")
+	private String password;// 密码
+	@ApiModelProperty(value="原密码")
+	private String oldPassword;// 原密码
+	@ApiModelProperty(value="用户id")
+	private Integer userId;// 用户id
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	/**
+	 * @return the oldPassword
+	 */
+	public String getOldPassword() {
+		return oldPassword;
+	}
+	/**
+	 * @param oldPassword the oldPassword to set
+	 */
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
+	}
+	/**
+	 * @return the userId
+	 */
+	public Integer getUserId() {
+		return userId;
+	}
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+	/**
+	 * @return the serialversionuid
+	 */
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+}
