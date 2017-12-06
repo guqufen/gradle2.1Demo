@@ -18,9 +18,8 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.channel.pfyh.PFOrderPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
-import net.fnsco.web.controller.e789.pay.zxyh.jo.GenerateQRCodeJO;
+import net.fnsco.web.controller.e789.jo.GenerateQRCodeJO;
 import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
-import springfox.documentation.spring.web.json.Json;
 
 
 @RestController
