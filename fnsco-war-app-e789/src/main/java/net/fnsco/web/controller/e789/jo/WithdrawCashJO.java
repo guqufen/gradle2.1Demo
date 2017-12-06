@@ -43,6 +43,28 @@ public class WithdrawCashJO extends JO{
 	private String payPassword;
 	
 	/**
+	 * payPassword
+	 *
+	 * @return  the payPassword
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getPayPassword() {
+		return payPassword;
+	}
+
+	/**
+	 * payPassword
+	 *
+	 * @param   payPassword    the payPassword to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
+	}
+
+	/**
 	 * userId
 	 *
 	 * @return  the userId
