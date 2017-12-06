@@ -19,8 +19,8 @@ import net.fnsco.web.controller.e789.vo.CommonVO;
  * @Date	 2017年12月4日 下午5:19:55
  */
 @RestController
-@RequestMapping(value = "/app2c/e789/withdraw", method = RequestMethod.POST)
-@Api(value = "/app2c/e789/withdraw", tags = { "提现和充值相关功能接口" })
+@RequestMapping(value = "/app2c/withdraw", method = RequestMethod.POST)
+@Api(value = "/app2c/withdraw", tags = { "提现和充值相关功能接口" })
 public class TradeWithdrawController extends BaseController {
 
 	/**

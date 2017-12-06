@@ -31,8 +31,8 @@ import net.fnsco.web.controller.e789.vo.UnBindBankCardVO;
  *
  */
 @RestController
-@RequestMapping(value = "/app2c/e789/bankcard", method = RequestMethod.POST)
-@Api(value = "/app2c/e789/bankcard", tags = { "银行卡相关功能接口" })
+@RequestMapping(value = "/app2c/bankcard", method = RequestMethod.POST)
+@Api(value = "/app2c/bankcard", tags = { "银行卡相关功能接口" })
 public class BankCardController extends BaseController {
     @Autowired
     private MerchantService   merchantService;

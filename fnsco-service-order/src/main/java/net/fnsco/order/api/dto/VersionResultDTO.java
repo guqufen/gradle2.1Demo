@@ -1,12 +1,21 @@
 package net.fnsco.order.api.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class VersionResultDTO {
+	@ApiModelProperty(value = "强制升级 0否 1是",example = "强制升级 0否 1是")
     private String  forceUpdate;
+	@ApiModelProperty(value = "版本号",example = "强制升级 0否 1是")
     private String  version;
+	@ApiModelProperty(value = "下载地址",example = "下载地址")
     private String  downloadUrl1;
+	@ApiModelProperty(value = "下载地址2",example = "下载地址2")
     private String  downloadUrl2;
+	@ApiModelProperty(value = "是否需要更新",example = "是否需要更新")
     private Boolean isUpdate;
+	@ApiModelProperty(value = "说明",example = "说明")
     private String  remark;
+	@ApiModelProperty(value = "版本说明",example = "版本说明")
     private String  versionDesc;
     
     /**

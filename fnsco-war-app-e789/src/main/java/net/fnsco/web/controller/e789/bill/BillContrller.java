@@ -22,8 +22,8 @@ import net.fnsco.web.controller.e789.vo.BillVO;
  * @Date	 2017年12月4日 下午5:58:22
  */
 @RestController
-@RequestMapping(value = "/app2c/e789/bill", method = RequestMethod.POST)
-@Api(value = "/app2c/e789/bill", tags = { "账单信息相关功能接口" })
+@RequestMapping(value = "/app2c/bill", method = RequestMethod.POST)
+@Api(value = "/app2c/bill", tags = { "账单信息相关功能接口" })
 public class BillContrller extends BaseController {
 	
 	/**

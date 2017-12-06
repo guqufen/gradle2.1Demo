@@ -25,8 +25,8 @@ import net.fnsco.web.controller.e789.vo.TotalTurnoverVO;
  * @Date	 2017年12月5日 上午10:22:52
  */
 @RestController
-@RequestMapping(value = "/app2c/e789/stat", method = RequestMethod.POST)
-@Api(value = "/app2c/e789/stat", tags = { "统计相关功能接口" })
+@RequestMapping(value = "/app2c/stat", method = RequestMethod.POST)
+@Api(value = "/app2c/stat", tags = { "统计相关功能接口" })
 public class StatController extends BaseController {
 	
 	/**
