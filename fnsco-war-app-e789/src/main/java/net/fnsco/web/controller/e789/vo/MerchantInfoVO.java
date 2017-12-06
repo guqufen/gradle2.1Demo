@@ -20,25 +20,25 @@ public class MerchantInfoVO extends VO {
 	
 	private static final long serialVersionUID = -4558187864205219793L;
 	
-	@ApiModelProperty(value = "商户名称", name = "merName", example = "")
+	@ApiModelProperty(value = "商户名称", name = "merName", example = "商户名称")
 	private String merName;
 	
-	@ApiModelProperty(value = "营业执照", name = "businessLicenseNum", example = "")
+	@ApiModelProperty(value = "营业执照", name = "businessLicenseNum", example = "营业执照")
 	private String businessLicenseNum;
 	
-	@ApiModelProperty(value = "法人名称", name = "legalPerson", example = "")
+	@ApiModelProperty(value = "法人名称", name = "legalPerson", example = "法人名称")
 	private String legalPerson;
 	
-	@ApiModelProperty(value = "法人手机", name = "legalPersonMobile", example = "")
+	@ApiModelProperty(value = "法人手机", name = "legalPersonMobile", example = "法人手机")
 	private String legalPersonMobile;
 	
-	@ApiModelProperty(value = "法人身份证号", name = "cardNum", example = "")
+	@ApiModelProperty(value = "法人身份证号", name = "cardNum", example = "法人身份证号")
 	private String cardNum;
 	
-	@ApiModelProperty(value = "开户银行", name = "openBank", example = "")
+	@ApiModelProperty(value = "开户银行", name = "openBank", example = "开户银行")
 	private String openBank;
 	
-	@ApiModelProperty(value = "入账存储卡号", name = "accountNo", example = "")
+	@ApiModelProperty(value = "入账存储卡号", name = "accountNo", example = "入账存储卡号")
 	private String accountNo;
 
 	/**
