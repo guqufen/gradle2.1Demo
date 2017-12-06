@@ -29,12 +29,14 @@ import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
+import net.fnsco.web.controller.e789.jo.AddPayPasswordJO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.FindPasswordJO;
 import net.fnsco.web.controller.e789.jo.GetValidateCodeJO;
 import net.fnsco.web.controller.e789.jo.LoginJO;
 import net.fnsco.web.controller.e789.jo.ModifyInfoJO;
 import net.fnsco.web.controller.e789.jo.ModifyPasswordJO;
+import net.fnsco.web.controller.e789.jo.ModifyPayPasswordJO;
 import net.fnsco.web.controller.e789.jo.RegisterJO;
 import net.fnsco.web.controller.e789.vo.LoginVO;
 
@@ -99,6 +101,33 @@ public class AppUserController extends BaseController {
         result = appUserService.modifyPassword(appUserDTO);
         return result;
     }
+    
+  //新增支付密码
+    @RequestMapping(value = "/addPayPassword")
+    @ResponseBody
+    @ApiOperation(value = "新增支付密码 ")
+    public ResultDTO<String> addPayPassword(@RequestBody AddPayPasswordJO addPayPasswordJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setUserId(addPayPasswordJO.getUserId());
+    	appUserDTO.setPassword(addPayPasswordJO.getPassword());
+        ResultDTO<String> result = new ResultDTO<>();
+        result = appUserService.modifyPassword(appUserDTO);
+        return result;
+    }
+    
+  //修改支付密码     旧密码和新密码
+    @RequestMapping(value = "/modifyPayPassword")
+    @ResponseBody
+    @ApiOperation(value = "修改支付密码")
+    public ResultDTO<String> modifyPayPassword(@RequestBody ModifyPayPasswordJO modifyPayPasswordJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setUserId(modifyPayPasswordJO.getUserId());
+    	appUserDTO.setPassword(modifyPayPasswordJO.getPassword());
+    	appUserDTO.setPassword(modifyPayPasswordJO.getOldPassword());
+        ResultDTO<String> result = new ResultDTO<>();
+        result = appUserService.modifyPassword(appUserDTO);
+        return result;
+    }
 
     //根据手机号码找回密码
     @ResponseBody
@@ -156,7 +185,6 @@ public class AppUserController extends BaseController {
     public ResultDTO modifyInfo(@RequestBody ModifyInfoJO modifyInfoJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(modifyInfoJO.getUserId());
-    	appUserDTO.setUserName(modifyInfoJO.getUserName());
         if (null == appUserDTO.getUserId()) {
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
