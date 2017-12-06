@@ -34,7 +34,7 @@ public class MerchantInfoE789Controller extends BaseController {
 	 * @date   2017年12月5日 上午10:18:24
 	 */
 	@RequestMapping(value = "/queryMerchant")
-    @ApiOperation(value = "获取商户信息接口")
+    @ApiOperation(value = "我的-商户信息-获取商户信息接口")
     public ResultDTO<MerchantInfoVO> queryBalance(@RequestBody TradeDataJO tradeDataJO) {
  		
         return success(null);
