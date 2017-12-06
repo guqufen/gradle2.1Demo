@@ -27,11 +27,11 @@ public class AccountBalanceVO extends VO {
 	@ApiModelProperty(value="帐号可提现余额",name="accountBalance",example="帐号可提现余额")
 	private String accountBalance;
 	
-	/**
-	 * APP登录用户ID
-	 */
-	@ApiModelProperty(value="APP登录用户ID",name="userId",example="APP登录用户ID")
-	private Integer userId;
+//	/**
+//	 * APP登录用户ID
+//	 */
+//	@ApiModelProperty(value="APP登录用户ID",name="userId",example="APP登录用户ID")
+//	private Integer userId;
 
 	/**
 	 * accountBalance
@@ -55,27 +55,5 @@ public class AccountBalanceVO extends VO {
 		this.accountBalance = accountBalance;
 	}
 
-	/**
-	 * userId
-	 *
-	 * @return  the userId
-	 * @since   CodingExample Ver 1.0
-	*/
-	
-	public Integer getUserId() {
-		return userId;
-	}
-
-	/**
-	 * userId
-	 *
-	 * @param   userId    the userId to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-	
 
 }

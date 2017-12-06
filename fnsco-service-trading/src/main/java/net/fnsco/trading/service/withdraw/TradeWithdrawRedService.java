@@ -1,4 +1,4 @@
-package net.fnsco.bigdata.service.withdraw;
+package net.fnsco.trading.service.withdraw;
 
 import java.util.List;
 
@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.fnsco.bigdata.service.withdraw.dao.TradeWithdrawRedDAO;
-import net.fnsco.bigdata.service.withdraw.entity.TradeWithdrawRedDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.trading.service.withdraw.dao.TradeWithdrawRedDAO;
+import net.fnsco.trading.service.withdraw.entity.TradeWithdrawRedDO;
 
 @Service
 public class TradeWithdrawRedService extends BaseService {
