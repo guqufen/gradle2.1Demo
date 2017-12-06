@@ -26,7 +26,7 @@ public class IDAuthenticationController extends BaseController {
 	
 	
 	@RequestMapping(value = "/auth")
-    @ApiOperation(value = "身份证认证接口")
+    @ApiOperation(value = "登陆模块_个人信息页_身份认证页_身份证认证接口")
     public ResultDTO<AccountBalanceVO> idAuth(@RequestBody AccountBalanceJO accountBalanceJO) {
  		
         return success(null);
