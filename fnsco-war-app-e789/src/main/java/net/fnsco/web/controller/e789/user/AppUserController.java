@@ -38,6 +38,7 @@ import net.fnsco.web.controller.e789.jo.ModifyInfoJO;
 import net.fnsco.web.controller.e789.jo.ModifyPasswordJO;
 import net.fnsco.web.controller.e789.jo.ModifyPayPasswordJO;
 import net.fnsco.web.controller.e789.jo.RegisterJO;
+import net.fnsco.web.controller.e789.vo.GetPersonInfoVO;
 import net.fnsco.web.controller.e789.vo.LoginVO;
 
 /**
@@ -281,9 +282,12 @@ public class AppUserController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/getUserInfo")
     @ApiOperation(value = "获取个人信息")
-    public ResultDTO<String> getPersonInfo(@RequestBody AppUserDTO appUserDTO) {
+    public ResultDTO<GetPersonInfoVO> getPersonInfo(@RequestBody CommonJO commonJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setUserId(commonJO.getUserId());
         ResultDTO<String> result = appUserService.getUserInfo(appUserDTO);
-        return result;
+        GetPersonInfoVO getPersonInfoVO = new GetPersonInfoVO();
+        return ResultDTO.success(getPersonInfoVO);
     }
 
     /**
