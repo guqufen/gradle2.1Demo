@@ -6,8 +6,8 @@ import net.fnsco.core.base.DTO;
 public class VersionDTO extends DTO {
 	@ApiModelProperty(value ="版本号")
     private String  version;
-//	@ApiModelProperty(value ="类型 1:安卓/2: IOS")
-//    private Integer appType;
+	@ApiModelProperty(value ="类型 1:安卓/2: IOS")
+    private Integer appType;
 	@ApiModelProperty(value ="类型 1:安卓/2: IOS")
     private String  deviceType;
 	@ApiModelProperty(value ="app编号,手动分配")
@@ -43,27 +43,27 @@ public class VersionDTO extends DTO {
         this.version = version;
     }
 
-//    /**
-//     * appType
-//     *
-//     * @return  the appType
-//     * @since   CodingExample Ver 1.0
-//    */
-//
-//    public Integer getAppType() {
-//        return appType;
-//    }
-//
-//    /**
-//     * appType
-//     *
-//     * @param   appType    the appType to set
-//     * @since   CodingExample Ver 1.0
-//     */
-//
-//    public void setAppType(Integer appType) {
-//        this.appType = appType;
-//    }
+    /**
+     * appType
+     *
+     * @return  the appType
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Integer getAppType() {
+        return appType;
+    }
+
+    /**
+     * appType
+     *
+     * @param   appType    the appType to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setAppType(Integer appType) {
+        this.appType = appType;
+    }
 
 	/**
 	 * deviceType
