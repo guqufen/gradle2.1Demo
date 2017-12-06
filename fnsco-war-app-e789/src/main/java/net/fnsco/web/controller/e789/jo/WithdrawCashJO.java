@@ -38,7 +38,10 @@ public class WithdrawCashJO extends JO{
 	 */
 	@ApiModelProperty(value = "提现到银行卡ID(获取绑定银行卡有返回)", name = "bankCardId", example = "")
 	private Integer bankCardId;
-
+	
+	@ApiModelProperty(value = "支付密码", name = "payPassword", example = "")
+	private String payPassword;
+	
 	/**
 	 * userId
 	 *
