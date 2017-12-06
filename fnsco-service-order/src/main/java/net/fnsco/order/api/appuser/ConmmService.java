@@ -14,5 +14,5 @@ public interface ConmmService {
     //获取用户协议
     ResultDTO<Map<String, String>> getProtocol(ProtocolDTO protocolDTO);
     //用户建议
-    ResultDTO suggest(SuggestDTO suggestDTO);
+    ResultDTO<String> suggest(SuggestDTO suggestDTO);
 }

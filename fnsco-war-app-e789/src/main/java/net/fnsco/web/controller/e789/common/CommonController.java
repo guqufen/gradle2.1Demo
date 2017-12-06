@@ -61,7 +61,7 @@ public class CommonController extends BaseController {
     @RequestMapping(value = "/suggest")
     @ApiOperation(value = "反馈页面")
     @ResponseBody
-    public ResultDTO suggest(@RequestBody SuggestDTO suggestDTO) {
+    public ResultDTO<String> suggest(@RequestBody SuggestDTO suggestDTO) {
         ResultDTO result = conmmService.suggest(suggestDTO);
         return result;
     }

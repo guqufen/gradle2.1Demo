@@ -182,7 +182,7 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
     }
     //建议
     @Override
-    public ResultDTO suggest(SuggestDTO suggestDTO) {
+    public ResultDTO<String> suggest(SuggestDTO suggestDTO) {
         if(suggestDTO.getUserId()==null){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
          }
