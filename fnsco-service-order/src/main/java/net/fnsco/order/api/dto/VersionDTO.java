@@ -1,11 +1,16 @@
 package net.fnsco.order.api.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.DTO;
 
 public class VersionDTO extends DTO {
+	@ApiModelProperty(value ="版本号")
     private String  version;
+	@ApiModelProperty(value ="类型 1:安卓/2: IOS")
     private Integer appType;
+	@ApiModelProperty(value ="deviceId")
     private String  deviceId;
+	@ApiModelProperty(value ="app编号,手动分配")
     private String  appCode;
 
     /**

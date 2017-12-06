@@ -2,21 +2,24 @@ package net.fnsco.order.api.dto;
 
 import java.util.Date;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.DTO;
 
 public class SuggestDTO extends DTO{
+	
+	@ApiModelProperty(value="id",example="不用填写")
     private Integer id;
-
+	@ApiModelProperty(value="类型",example="类型")
     private String type;
-
+	@ApiModelProperty(value="内容",example="内容")
     private String content;
-
+	@ApiModelProperty(value="用户ID",example="用户ID")
     private Integer userId;
-
+	@ApiModelProperty(value="用户手机号",example="用户手机号")
     private String mobile;
-
+	@ApiModelProperty(value="提交时间",example="不用填写")
     private Date submitTime;
-
+	@ApiModelProperty(value="replyUserId",example="不用填写")
     private String replyUserId;
 
     public Integer getUserId() {

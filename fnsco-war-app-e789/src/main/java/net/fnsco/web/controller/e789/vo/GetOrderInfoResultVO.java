@@ -11,62 +11,62 @@ public class GetOrderInfoResultVO extends VO {
     /**
      * 
      */
-    @ApiModelProperty(value = "记录ID")
+    @ApiModelProperty(value = "记录ID", example = "记录ID")
     private Integer    id;
 
     /**
      * 订单ID
      */
-    @ApiModelProperty(value = "订单ID")
+    @ApiModelProperty(value = "订单ID", example = "订单ID")
     private String     orderNo;
 
     /**
      * 交易总金额
      */
 
-    @ApiModelProperty(value = "交易总金额")
+    @ApiModelProperty(value = "交易总金额", example = "交易总金额")
     private BigDecimal txnAmount;
 
     /**
      * 分期付款数
      */
-    @ApiModelProperty(value = "分期付款数")
+    @ApiModelProperty(value = "分期付款数", example = "分期付款数")
     private Integer    installmentNum;
 
     /**
      * 应答码1000处理中1001成功1002失败1003已退货
      */
-    @ApiModelProperty(value = "应答码1000处理中1001成功1002失败1003已退货")
+    @ApiModelProperty(value = "应答码1000处理中1001成功1002失败1003已退货", example = "应答码1000处理中1001成功1002失败1003已退货")
     private String     respCode;
 
     /**
      * 应答信息
      */
-    @ApiModelProperty(value = "应答信息")
+    @ApiModelProperty(value = "应答信息", example = "应答信息")
     private String     respMsg;
 
     /**
      * 结算状态0 未结算 1已结算   2结算中   3已退款
      */
-    @ApiModelProperty(value = "结算状态0 未结算 1已结算   2结算中   3已退款")
+    @ApiModelProperty(value = "结算状态0 未结算 1已结算   2结算中   3已退款", example = "结算状态0 未结算 1已结算   2结算中   3已退款")
     private Integer    settleStatus;
 
     /**
      * 订单总价格
      */
-    @ApiModelProperty(value = "订单总价格")
+    @ApiModelProperty(value = "订单总价格", example = "订单总价格")
     private BigDecimal orderAmount;
 
     /**
      * 每期金额
      */
-    @ApiModelProperty(value = "每期金额")
+    @ApiModelProperty(value = "每期金额", example = "每期金额")
     private BigDecimal eachMoney;
 
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间", example = "创建时间")
     private Date       createTime;
 
     /**

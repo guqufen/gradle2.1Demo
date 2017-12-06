@@ -63,7 +63,7 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
     }
 
     @Override
-    public ResultDTO queryLastVersionInfo(VersionDTO sysVersionDTO) {
+    public ResultDTO<VersionResultDTO> queryLastVersionInfo(VersionDTO sysVersionDTO) {
         ResultDTO valResult = validateVersion(sysVersionDTO);
         if (!valResult.isSuccess()) {
             return valResult;
@@ -101,7 +101,7 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
 
     //获取用户协议
     @Override
-    public ResultDTO getProtocol(ProtocolDTO protocolDTO) {
+    public ResultDTO<Map<String, String>> getProtocol(ProtocolDTO protocolDTO) {
         Map<String, String> map = new HashMap<>();
         try {
             if (protocolDTO.getProtocol() == 1) {
@@ -182,7 +182,7 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
     }
     //建议
     @Override
-    public ResultDTO suggest(SuggestDTO suggestDTO) {
+    public ResultDTO<String> suggest(SuggestDTO suggestDTO) {
         if(suggestDTO.getUserId()==null){
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
          }
