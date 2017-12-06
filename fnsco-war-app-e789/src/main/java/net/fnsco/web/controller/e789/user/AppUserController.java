@@ -62,7 +62,7 @@ public class AppUserController extends BaseController {
     private MerchantService       merchantService;
 
     @RequestMapping(value = "/register")
-    @ApiOperation(value = "用户注册")
+    @ApiOperation(value = "登陆模块_注册页_用户注册")
     @ResponseBody
     public ResultDTO<LoginVO> register(@RequestBody RegisterJO registerJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
@@ -92,7 +92,7 @@ public class AppUserController extends BaseController {
     //修改密码     旧密码和新密码
     @RequestMapping(value = "/modifyPassword")
     @ResponseBody
-    @ApiOperation(value = "修改密码")
+    @ApiOperation(value = "我的页面_设置_修改登录密码")
     public ResultDTO<String> modifyPassword(@RequestBody ModifyPasswordJO modifyPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(modifyPasswordJO.getUserId());
@@ -106,7 +106,7 @@ public class AppUserController extends BaseController {
   //新增支付密码
     @RequestMapping(value = "/addPayPassword")
     @ResponseBody
-    @ApiOperation(value = "新增支付密码 ")
+    @ApiOperation(value = "我的页面_设置_新增支付密码 ")
     public ResultDTO<String> addPayPassword(@RequestBody AddPayPasswordJO addPayPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(addPayPasswordJO.getUserId());
@@ -119,7 +119,7 @@ public class AppUserController extends BaseController {
   //修改支付密码     旧密码和新密码
     @RequestMapping(value = "/modifyPayPassword")
     @ResponseBody
-    @ApiOperation(value = "修改支付密码")
+    @ApiOperation(value = "我的页面_设置_修改支付密码")
     public ResultDTO<String> modifyPayPassword(@RequestBody ModifyPayPasswordJO modifyPayPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(modifyPayPasswordJO.getUserId());
@@ -133,7 +133,7 @@ public class AppUserController extends BaseController {
     //根据手机号码找回密码
     @ResponseBody
     @RequestMapping(value = "/findPassword")
-    @ApiOperation(value = "找回密码")
+    @ApiOperation(value = "登陆模块_注册页_找回密码")
     public ResultDTO<LoginVO> findPassword(@RequestBody FindPasswordJO findPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setCode(findPasswordJO.getCode());
@@ -148,7 +148,7 @@ public class AppUserController extends BaseController {
     //登录
     @ResponseBody
     @RequestMapping(value = "/login")
-    @ApiOperation(value = "用户登录")
+    @ApiOperation(value = "登陆模块_用户登录")
     public ResultDTO<LoginVO> login(@RequestBody LoginJO loginJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(loginJO.getDeviceId());
@@ -182,7 +182,7 @@ public class AppUserController extends BaseController {
      * @since  CodingExample　Ver 1.1
      */
     @RequestMapping(value = "/modifyInfo")
-    @ApiOperation(value = "修改个人信息")
+    @ApiOperation(value = "我的页面_个人信息页_修改个人信息")
     public ResultDTO modifyInfo(@RequestBody ModifyInfoJO modifyInfoJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(modifyInfoJO.getUserId());
@@ -202,7 +202,7 @@ public class AppUserController extends BaseController {
      * @return ResultDTO<String>    DOM对象
      * @throws 
      * @since  CodingExample　Ver 1.1
-     */
+     *//*
     @RequestMapping(value = "/uploadImage")
     @ApiOperation(value = "上传头像文件")
     public ResultDTO<String> uploadImage() {
@@ -276,12 +276,12 @@ public class AppUserController extends BaseController {
             }
         }
         return null;
-    }
+    }*/
 
     //获取个人信息
     @ResponseBody
     @RequestMapping(value = "/getUserInfo")
-    @ApiOperation(value = "获取个人信息")
+    @ApiOperation(value = "我的页面_个人信息页_获取个人信息")
     public ResultDTO<GetPersonInfoVO> getPersonInfo(@RequestBody CommonJO commonJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(commonJO.getUserId());

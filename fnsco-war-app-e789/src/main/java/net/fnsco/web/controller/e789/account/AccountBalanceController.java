@@ -34,7 +34,7 @@ public class AccountBalanceController extends BaseController {
 	 * @date   2017年12月4日 下午5:07:55
 	 */
  	@RequestMapping(value = "/queryBalance")
-    @ApiOperation(value = "获取帐号余额接口")
+    @ApiOperation(value = "我的-钱包-获取帐号余额接口")
     public ResultDTO<AccountBalanceVO> queryBalance(@RequestBody AccountBalanceJO accountBalanceJO) {
  		
         return success(null);
