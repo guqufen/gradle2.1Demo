@@ -15,14 +15,12 @@ public class PassivePayJO extends JO {
 
 	@ApiModelProperty(value = "内部商户号")
 	private String innerCode;// 内部商户号
-	@ApiModelProperty(value = "商品描述")
-	private String body;// 商品描述
+	@ApiModelProperty(value = "app用户ID")
+	private String appUserId;// app用户ID
 	@ApiModelProperty(value = "交易金额")
 	private String amt;// 交易金额
 	@ApiModelProperty(value = "授权码(付款码)")
-	private String authid;// 授权码，扫码支付授权码
-	@ApiModelProperty(value = "签名")
-	private String signAture;// 签名
+	private String authId;// 授权码，扫码支付授权码
 
 	public String getInnerCode() {
 		return innerCode;
@@ -32,12 +30,12 @@ public class PassivePayJO extends JO {
 		this.innerCode = innerCode;
 	}
 
-	public String getBody() {
-		return body;
+	public String getAppUserId() {
+		return appUserId;
 	}
 
-	public void setBody(String body) {
-		this.body = body;
+	public void setAppUserId(String appUserId) {
+		this.appUserId = appUserId;
 	}
 
 	public String getAmt() {
@@ -48,20 +46,12 @@ public class PassivePayJO extends JO {
 		this.amt = amt;
 	}
 
-	public String getAuthid() {
-		return authid;
+	public void setAuthId(String authId) {
+		this.authId = authId;
 	}
 
-	public void setAuthid(String authid) {
-		this.authid = authid;
-	}
-
-	public String getSignAture() {
-		return signAture;
-	}
-
-	public void setSignAture(String signAture) {
-		this.signAture = signAture;
+	public String getAuthId() {
+		return authId;
 	}
 
 	public static long getSerialversionuid() {
