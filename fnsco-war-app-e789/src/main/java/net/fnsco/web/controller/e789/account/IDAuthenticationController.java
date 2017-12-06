@@ -21,12 +21,12 @@ import net.fnsco.web.controller.e789.vo.AccountBalanceVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/id", method = RequestMethod.POST)
-@Api(value = "/app2c/id", tags = { "身份证认证相关功能接口" })
+@Api(value = "/app2c/id", tags = { "我的-身份证认证相关功能接口" })
 public class IDAuthenticationController extends BaseController {
 	
 	
 	@RequestMapping(value = "/auth")
-    @ApiOperation(value = "我的-个人信息-身份证认证接口")
+    @ApiOperation(value = "个人信息-身份证认证接口")
     public ResultDTO<AccountBalanceVO> idAuth(@RequestBody AccountBalanceJO accountBalanceJO) {
  		
         return success(null);

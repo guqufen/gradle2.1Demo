@@ -49,9 +49,9 @@ import net.fnsco.web.controller.e789.vo.LoginVO;
  *
  */
 @RestController
-@RequestMapping(value = "/app2c/user", method = RequestMethod.POST)
-@Api(value = "/app2c/user", tags = { "登陆模块-App用户管理接口" })
-public class AppUserController extends BaseController {
+@RequestMapping(value = "/app2c/myself", method = RequestMethod.POST)
+@Api(value = "/app2c/myself", tags = { "我的页面-App用户管理接口" })
+public class MyselfController extends BaseController {
     @Autowired
     private AppUserService        appUserService;
     @Autowired
@@ -61,76 +61,47 @@ public class AppUserController extends BaseController {
     @Autowired
     private MerchantService       merchantService;
 
-    @RequestMapping(value = "/register")
-    @ApiOperation(value = "注册页-用户注册")
+    //修改密码     旧密码和新密码
+    @RequestMapping(value = "/modifyPassword")
     @ResponseBody
-    public ResultDTO<LoginVO> register(@RequestBody RegisterJO registerJO) {
+    @ApiOperation(value = "设置-修改登录密码")
+    public ResultDTO<String> modifyPassword(@RequestBody ModifyPasswordJO modifyPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
-    	appUserDTO.setCode(registerJO.getCode());
-    	appUserDTO.setDeviceId(registerJO.getDeviceId());
-    	appUserDTO.setDeviceToken(registerJO.getDeviceToken());
-    	appUserDTO.setDeviceType(registerJO.getDeviceType());
-    	appUserDTO.setMobile(registerJO.getMobile());
-    	appUserDTO.setPassword(registerJO.getPassword());
-        ResultDTO result = appUserService.insertSelective(appUserDTO);
-        LoginVO loginVO = new LoginVO();
-        return ResultDTO.success(loginVO);
+    	appUserDTO.setUserId(modifyPasswordJO.getUserId());
+    	appUserDTO.setPassword(modifyPasswordJO.getPassword());
+    	appUserDTO.setPassword(modifyPasswordJO.getOldPassword());
+        ResultDTO<String> result = new ResultDTO<>();
+        result = appUserService.modifyPassword(appUserDTO);
+        return result;
     }
-
-    //获取验证码
+    
+  //新增支付密码
+    @RequestMapping(value = "/addPayPassword")
     @ResponseBody
-    @RequestMapping(value = "/getValidateCode")
-    @ApiOperation(value = "获取验证码")
-    public ResultDTO getValidateCode(@RequestBody GetValidateCodeJO getValidateCodeJO) {
+    @ApiOperation(value = "设置-新增支付密码 ")
+    public ResultDTO<String> addPayPassword(@RequestBody AddPayPasswordJO addPayPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
-    	appUserDTO.setDeviceId(getValidateCodeJO.getDeviceId());
-    	appUserDTO.setMobile(getValidateCodeJO.getMobile());
-        ResultDTO result = appUserService.getValidateCode(appUserDTO);
+    	appUserDTO.setUserId(addPayPasswordJO.getUserId());
+    	appUserDTO.setPassword(addPayPasswordJO.getPassword());
+        ResultDTO<String> result = new ResultDTO<>();
+        result = appUserService.modifyPassword(appUserDTO);
+        return result;
+    }
+    
+  //修改支付密码     旧密码和新密码
+    @RequestMapping(value = "/modifyPayPassword")
+    @ResponseBody
+    @ApiOperation(value = "设置-修改支付密码")
+    public ResultDTO<String> modifyPayPassword(@RequestBody ModifyPayPasswordJO modifyPayPasswordJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setUserId(modifyPayPasswordJO.getUserId());
+    	appUserDTO.setPassword(modifyPayPasswordJO.getPassword());
+    	appUserDTO.setPassword(modifyPayPasswordJO.getOldPassword());
+        ResultDTO<String> result = new ResultDTO<>();
+        result = appUserService.modifyPassword(appUserDTO);
         return result;
     }
 
-
-    //根据手机号码找回密码
-    @ResponseBody
-    @RequestMapping(value = "/findPassword")
-    @ApiOperation(value = "注册页-找回密码")
-    public ResultDTO<LoginVO> findPassword(@RequestBody FindPasswordJO findPasswordJO) {
-    	AppUserDTO appUserDTO = new AppUserDTO();
-    	appUserDTO.setCode(findPasswordJO.getCode());
-    	appUserDTO.setDeviceId(findPasswordJO.getDeviceId());
-    	appUserDTO.setMobile(findPasswordJO.getMobile());
-    	appUserDTO.setPassword(findPasswordJO.getPassword());
-        ResultDTO<String> result = appUserService.findPassword(appUserDTO);
-        LoginVO loginVO = new LoginVO();
-        return ResultDTO.success(loginVO);
-    }
-
-    //登录
-    @ResponseBody
-    @RequestMapping(value = "/login")
-    @ApiOperation(value = "用户登录")
-    public ResultDTO<LoginVO> login(@RequestBody LoginJO loginJO) {
-    	AppUserDTO appUserDTO = new AppUserDTO();
-    	appUserDTO.setDeviceId(loginJO.getDeviceId());
-    	appUserDTO.setDeviceType(loginJO.getDeviceType());
-    	appUserDTO.setDeviceToken(loginJO.getDeviceToken());
-    	appUserDTO.setMobile(loginJO.getMobile());
-    	appUserDTO.setPassword(loginJO.getPassword());
-        ResultDTO<String> result = appUserService.loginByMoblie(appUserDTO);
-        LoginVO loginVO = new LoginVO();
-        return ResultDTO.success(loginVO);
-    }
-
-    //退出登录
-    @ResponseBody
-    @RequestMapping(value = "/loginOut")
-    @ApiOperation(value = "退出登录")
-    public ResultDTO<String> loginOut(@RequestBody CommonJO commonJO) {
-    	AppUserDTO appUserDTO = new AppUserDTO();
-    	appUserDTO.setUserId(commonJO.getUserId());
-        ResultDTO<String> result = appUserService.loginOut(appUserDTO);
-        return result;
-    }
 
     /**
      * modifyInfo:(这里用一句话描述这个方法的作用)修改个人信息
@@ -141,6 +112,19 @@ public class AppUserController extends BaseController {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
+    @RequestMapping(value = "/modifyInfo")
+    @ApiOperation(value = "个人信息-修改个人信息")
+    public ResultDTO modifyInfo(@RequestBody ModifyInfoJO modifyInfoJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setUserId(modifyInfoJO.getUserId());
+        if (null == appUserDTO.getUserId()) {
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+        if (!Strings.isNullOrEmpty(appUserDTO.getUserName()) && appUserDTO.getUserName().length() > 19) {
+            return ResultDTO.fail(ApiConstant.E_STRING_TOO_LENGTH);
+        }
+        return appUserService.modifyInfo(appUserDTO);
+    }
 
     /**
      * uploadImage:(这里用一句话描述这个方法的作用)文件上传
@@ -224,6 +208,19 @@ public class AppUserController extends BaseController {
         }
         return null;
     }*/
+
+    //获取个人信息
+    @ResponseBody
+    @RequestMapping(value = "/getUserInfo")
+    @ApiOperation(value = "个人信息页-获取个人信息")
+    public ResultDTO<GetPersonInfoVO> getPersonInfo(@RequestBody CommonJO commonJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setUserId(commonJO.getUserId());
+        ResultDTO<String> result = appUserService.getUserInfo(appUserDTO);
+        GetPersonInfoVO getPersonInfoVO = new GetPersonInfoVO();
+        return ResultDTO.success(getPersonInfoVO);
+    }
+
     /**
      * updateSettingStatus:(更新app用户消息通知状态)
      * @param appSettingDTO
