@@ -40,7 +40,7 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
  *
  */
 @RestController
-@RequestMapping(value = "/app2c/trade/jhf", method = RequestMethod.POST)
+@RequestMapping(value = "/app2c/trade/jhf")
 @Api(value = "/app2c/trade/jhf", tags = { "分闪付支付接口" })
 public class TradeFsfController extends BaseController {
     @Autowired
@@ -56,7 +56,7 @@ public class TradeFsfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getQRUrl")
+    @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
     @ApiOperation(value = "获取分闪付url")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String innerCode = "";
@@ -99,7 +99,7 @@ public class TradeFsfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getOrderInfo")
+    @RequestMapping(value = "/getOrderInfo", method = RequestMethod.POST)
     @ApiOperation(value = "获取商户编号")
     public ResultDTO<GetOrderInfoResultVO> getOrderInfo(@ApiParam(value = "订单号") @RequestParam String orderNo) {
         TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
@@ -115,13 +115,14 @@ public class TradeFsfController extends BaseController {
         result.setRespCode(tradeOrderDO.getRespCode());
         return success(result);
     }
+
     /**
-     * 二维码扫码后跳转到聚惠分平台
+     * 充值跳转到聚惠分平台进行支付
      *
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/dealPayOrder")
+    @RequestMapping(value = "/dealPayOrder", method = RequestMethod.GET)
     @ApiOperation(value = "充值跳转到聚惠分平台进行支付")
     public String dealPayOrder(@ApiParam(value = "请求参数") String reqData) {
         String orderNo = "";
