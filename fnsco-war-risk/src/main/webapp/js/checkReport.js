@@ -61,21 +61,21 @@ $(function(){
 			$(".report-title").html(result.merName+"&quot;风控+&quot;报告");
 			$(".tradingArea span").html(result.tradingArea);
 			var level=result.decorationLevel;
-			if(level==3){
+			if(level==1){
 				$(".decorationLevel span").html("普通");
-			}else if(level==1){
-				$(".decorationLevel span").html("中级");
 			}else if(level==2){
+				$(".decorationLevel span").html("中级");
+			}else if(level==3){
 				$(".decorationLevel span").html("高级");
 			}
 			var size=result.size;
-			if(size==4){
+			if(size==1){
 				$(".size span").html("单店");
-			}else if(size==1){
-				$(".size span").html("小型连锁");
 			}else if(size==2){
-				$(".size span").html("中型连锁");
+				$(".size span").html("小型连锁");
 			}else if(size==3){
+				$(".size span").html("中型连锁");
+			}else if(size==4){
 				$(".size span").html("大型连锁");
 			}
 			var industryName=result.industryName;
