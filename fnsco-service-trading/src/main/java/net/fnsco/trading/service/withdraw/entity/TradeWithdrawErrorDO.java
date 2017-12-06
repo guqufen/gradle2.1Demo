@@ -1,4 +1,4 @@
-package net.fnsco.bigdata.service.withdraw.entity;
+package net.fnsco.trading.service.withdraw.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;

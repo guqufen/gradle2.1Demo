@@ -1,4 +1,4 @@
-package net.fnsco.bigdata.service.withdraw.dao;
+package net.fnsco.trading.service.withdraw.dao;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -9,8 +9,9 @@ import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import net.fnsco.bigdata.service.withdraw.entity.TradeWithdrawDO;
-import net.fnsco.bigdata.service.withdraw.dao.helper.TradeWithdrawProvider;
+
+import net.fnsco.trading.service.withdraw.dao.helper.TradeWithdrawProvider;
+import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 
 import java.util.List;;
 

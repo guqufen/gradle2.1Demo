@@ -1,13 +1,14 @@
-package net.fnsco.bigdata.service.withdraw.dao.helper;
+package net.fnsco.trading.service.withdraw.dao.helper;
 
 import org.apache.ibatis.jdbc.SQL;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang3.StringUtils;
 
-import net.fnsco.bigdata.service.withdraw.entity.TradeWithdrawErrorDO;
+import net.fnsco.trading.service.withdraw.entity.TradeWithdrawErrorDO;
+
+import org.apache.commons.lang3.StringUtils;
 public class TradeWithdrawErrorProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
