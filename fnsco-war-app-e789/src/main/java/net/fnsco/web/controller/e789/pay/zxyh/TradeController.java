@@ -24,8 +24,8 @@ import springfox.documentation.spring.web.json.Json;
 
 
 @RestController
-@RequestMapping(value = "/e789/trade", method = RequestMethod.POST)
-@Api(value = "/e789/trade", tags = { "扫一扫和付款相关功能接口" })
+@RequestMapping(value = "/app2c/trade", method = RequestMethod.POST)
+@Api(value = "/app2c/trade", tags = { "扫一扫和付款相关功能接口" })
 public class TradeController extends BaseController{
 	
 	@Autowired
