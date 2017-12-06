@@ -23,7 +23,7 @@ import net.fnsco.web.controller.e789.vo.TradeDataVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/tradeData", method = RequestMethod.POST)
-@Api(value = "/app2c/tradeData", tags = { "流水相关功能接口" })
+@Api(value = "/app2c/tradeData", tags = { "首页-流水相关功能接口" })
 public class TradedataE789Controller extends BaseController {
 	
 	/**

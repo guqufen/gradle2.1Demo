@@ -23,7 +23,7 @@ import net.fnsco.web.controller.e789.vo.BillVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/bill", method = RequestMethod.POST)
-@Api(value = "/app2c/bill", tags = { "账单信息相关功能接口" })
+@Api(value = "/app2c/bill", tags = { "我的-钱包-账单信息相关功能接口" })
 public class BillContrller extends BaseController {
 	
 	/**

@@ -47,7 +47,7 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/trade/fsf")
-@Api(value = "/app2c/trade/fsf", tags = { "分闪付支付接口" })
+@Api(value = "/app2c/trade/fsf", tags = { "首页-分闪付支付接口" })
 public class PayFsfController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
