@@ -20,8 +20,8 @@ import net.fnsco.web.controller.e789.vo.AccountBalanceVO;
  * @Date	 2017年12月5日 上午9:45:15
  */
 @RestController
-@RequestMapping(value = "/app2c/e789/id", method = RequestMethod.POST)
-@Api(value = "/app2c/e789/id", tags = { "身份证认证相关功能接口" })
+@RequestMapping(value = "/app2c/id", method = RequestMethod.POST)
+@Api(value = "/app2c/id", tags = { "身份证认证相关功能接口" })
 public class IDAuthenticationController extends BaseController {
 	
 	

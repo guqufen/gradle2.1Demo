@@ -1,7 +1,6 @@
 package net.fnsco.web.controller.e789.pay.jhf;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -13,19 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.e789.jo.GetQRUrlJO;
-import net.fnsco.web.controller.e789.jo.TradeJO;
 import net.fnsco.web.controller.e789.vo.GetOrderInfoResultVO;
 import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 
@@ -39,9 +37,9 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
  *
  */
 @RestController
-@RequestMapping(value = "/open2c/trade/jhf", method = RequestMethod.POST)
-@Api(value = "/open2c/trade/jhf", tags = { "e789中的分闪付支付接口" })
-public class TradeFsfController extends BaseController {
+@RequestMapping(value = "/app2c/trade/jhf")
+@Api(value = "/app2c/trade/jhf", tags = { "分闪付支付接口" })
+public class PayFsfController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
     @Autowired
@@ -55,9 +53,9 @@ public class TradeFsfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getQRUrl")
+    @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
     @ApiOperation(value = "获取分闪付url")
-    public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestParam GetQRUrlJO getQRUrlJO) {
+    public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String innerCode = "";
         Integer userId = getQRUrlJO.getUserId();
         //根据用户id获取绑定的分闪付商户信息
@@ -83,9 +81,6 @@ public class TradeFsfController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-
-        //String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-        //url += "?commID=" + tradeOrder.getChannelMerId() + "&reqData=" + reqData;
         String url = env.getProperty("open.base.url") + "/trade/pay/dealPayOrder";
         url += "?orderNo=" + tradeOrder.getOrderNo() + "&commID=" + tradeOrder.getChannelMerId() + "&reqData=123";
         GetQRUrlResultVO result = new GetQRUrlResultVO();
@@ -101,9 +96,9 @@ public class TradeFsfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getOrderInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/getOrderInfo", method = RequestMethod.POST)
     @ApiOperation(value = "获取商户编号")
-    public ResultDTO<GetOrderInfoResultVO> getOrderInfo(@RequestParam String orderNo) {
+    public ResultDTO<GetOrderInfoResultVO> getOrderInfo(@ApiParam(value = "订单号") @RequestParam String orderNo) {
         TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
         tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
         tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
@@ -119,49 +114,30 @@ public class TradeFsfController extends BaseController {
     }
 
     /**
-     * 订单列表查询
+     * 充值跳转到聚惠分平台进行支付
      *
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getOrderList", method = RequestMethod.GET)
-    @ApiOperation(value = "获取商户编号")
-    public ResultDTO<TradeOrderDO> getOrderList(@RequestBody TradeJO tradeJO) {
-        MerchantChannel merchantChannel = merchantService.getMerChannel(tradeJO.getMerCode(), "00");
-        if (null == merchantChannel) {
-            return fail("拉卡拉渠道信息不存在");
+    @RequestMapping(value = "/dealPayOrder", method = RequestMethod.GET)
+    @ApiOperation(value = "充值跳转到聚惠分平台进行支付")
+    public String dealPayOrder(@ApiParam(value = "请求参数") String reqData) {
+        String orderNo = "";
+        String commID = "";
+        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
+        String url = env.getProperty("open.base.url") + "/pay/dealPayFail.html";
+        if (null != tradeOrderDO) {
+            Integer handleNum = tradeOrderDO.getHandleNum();
+            if (null == handleNum || handleNum == 0) {
+                url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
+                url += "?commID=" + tradeOrderDO.getChannelMerId() + "&reqData=" + tradeOrderService.getReqData(tradeOrderDO);
+                TradeOrderDO tradeOrderTemp = new TradeOrderDO();
+                tradeOrderTemp.setId(tradeOrderDO.getId());
+                tradeOrderTemp.setHandleNum(1);
+                tradeOrderService.doUpdate(tradeOrderTemp);
+            }
         }
-        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByInnerCodeType(merchantChannel.getInnerCode(), "04");
-        if (null == merchantChannelJhf) {
-            return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
-        }
-        TradeOrderDO tradeOrder = new TradeOrderDO();
-        tradeOrder.setOrderNoAfter6(tradeJO.getOrderNo());
-        tradeOrder.setOrderTop10(tradeJO.getDate());
-        tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
-        tradeOrder.setRespCode("1001");
-        //tradeOrder.setSettleStatus(4);
-        ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder, tradeJO.getPageNum(), tradeJO.getPageSize());
-        List<TradeOrderDO> resultList = resultDTO.getList();
-        for (TradeOrderDO tradeOrderDO : resultList) {
-            tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
-            tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
-            tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
-            //            BigDecimal eachMoney = tradeOrderDO.getEachMoney();
-            //            if (null != eachMoney) {
-            //                eachMoney = eachMoney.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-            //                tradeOrderDO.setEachMoney(eachMoney);
-            //            }
-            //            BigDecimal orderAmount = tradeOrderDO.getOrderAmount();
-            //            if (null != orderAmount) {
-            //                orderAmount = orderAmount.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-            //                tradeOrderDO.setOrderAmount(orderAmount);
-            //            }
-            //MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
-            //if (null != merChantCore) {
-            //    tradeOrderDO.setMercName(merChantCore.getMerName());
-            //}
-        }
-        return success(resultDTO);
+        logger.error("分闪付跳转到聚惠分平台前的url" + url);
+        return "redirect:" + url;
     }
 }

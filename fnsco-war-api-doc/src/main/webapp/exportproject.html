@@ -89,6 +89,7 @@
 				  type:'POST',
 				  data:{'jsonParams':params},
 				  success:function(data){
+					  unloginHandler(data);
 					  console.log(data);
 			        	 if(data.success){
 			        		 layer.msg("项目保存成功");

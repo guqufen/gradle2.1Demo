@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-    <meta http-equiv="pragma" content="no -cache">
-    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
-    <meta http-equiv="expires" content="0">
     <title>Swagger-Bootstrap-UI-前后端api接口文档</title>
     <link rel="shortcut icon" href="swagger/drore-document-ui/images/api.ico"/>
     <link rel="stylesheet" type="text/css" href="swagger/drore-document-ui/drore/DUI.css" />
@@ -145,7 +142,17 @@
 <script type="text/javascript" src="swagger/drore-document-ui/drore/DApiUI.js"></script>
 <script type="text/javascript" src="swagger/drore-document-ui/ace/bootstrap.min.js"></script>
 <script type="text/javascript" src="swagger/drore-document-ui/ace/ace.min.js"></script>
+<script type="text/javascript">
 
+function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  decodeURI(r[2]); return null;
+}
+var v = GetQueryString('url');
+DApiUI.init(v);
+</script>
 <!----jsonhandle-->
 </body>
 </html>

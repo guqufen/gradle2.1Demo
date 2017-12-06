@@ -20,8 +20,8 @@ import net.fnsco.web.controller.e789.vo.AccountBalanceVO;
  * @Date	 2017年12月4日 下午5:01:12
  */
 @RestController
-@RequestMapping(value = "/app2c/e789/account", method = RequestMethod.POST)
-@Api(value = "/app2c/e789/account", tags = { "帐号信息相关功能接口" })
+@RequestMapping(value = "/app2c/account", method = RequestMethod.POST)
+@Api(value = "/app2c/account", tags = { "帐号信息相关功能接口" })
 public class AccountBalanceController extends BaseController {
 	
 	/**
