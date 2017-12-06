@@ -40,7 +40,7 @@ public class StatController extends BaseController {
 	 * @date   2017年12月5日 上午10:30:10
 	 */
 	@RequestMapping(value = "/getTotalTurnover")
-	@ApiOperation(value = "获取今日昨天本月交易额接口")
+	@ApiOperation(value = "首页-统计-获取今日昨天本月交易额接口")
 	public ResultDTO<TotalTurnoverVO> getTotalTurnover(@RequestBody CommonJO commonJO){
 		
 		return null;
@@ -56,7 +56,7 @@ public class StatController extends BaseController {
 	 * @date   2017年12月5日 上午10:40:17
 	 */
 	@RequestMapping(value = "/getTurnoverByPayType")
-	@ApiOperation(value = "按照交易类型来获取交易数据")
+	@ApiOperation(value = "首页-统计-按照交易类型来获取交易数据")
 	public ResultDTO<PayTypeTurnoverVO>  getTurnoverByPayType(@RequestBody PayTypeTurnoverJO payTypeTurnoverJO){
 		
 		return null;
@@ -72,7 +72,7 @@ public class StatController extends BaseController {
 	 * @date   2017年12月5日 上午10:50:59
 	 */
 	@RequestMapping(value = "/getEveryDayTurnover")
-	@ApiOperation(value = "获取最近7天的订单量和销售额")
+	@ApiOperation(value = "首页-统计-获取最近7天的订单量和销售额")
 	public ResultDTO<List<EveryDayTurnoverVO>> getEveryDayTurnover(@RequestBody CommonJO commonJO){
 		return null;
 	}
