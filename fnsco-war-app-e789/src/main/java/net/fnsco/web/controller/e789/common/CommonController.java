@@ -17,10 +17,11 @@ import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.order.api.dto.ProtocolDTO;
 import net.fnsco.order.api.dto.SuggestDTO;
 import net.fnsco.order.api.dto.VersionDTO;
+import net.fnsco.order.api.dto.VersionResultDTO;
 
 @RestController
-@RequestMapping(value = "/app2c/e789/user", method = RequestMethod.POST)
-@Api(value = "/app2c/e789/user", tags = { "APP常用信息管理接口" })
+@RequestMapping(value = "/app2c/user", method = RequestMethod.POST)
+@Api(value = "/app2c/user", tags = { "APP常用信息管理接口" })
 public class CommonController extends BaseController {
     @Autowired
     private ConmmService           conmmService;
@@ -30,10 +31,10 @@ public class CommonController extends BaseController {
     @RequestMapping(value = "/checkUpdate")
     @ApiOperation(value = "版本更新")
     @ResponseBody
-    public ResultDTO checkUpdate(@RequestBody VersionDTO sysVersionDTO) {
+    public ResultDTO<VersionResultDTO> checkUpdate(@RequestBody VersionDTO sysVersionDTO) {
         String appCode = AppTypeEnum.SQB.getCode();
         sysVersionDTO.setAppCode(appCode);
-        ResultDTO result = conmmService.queryLastVersionInfo(sysVersionDTO);
+        ResultDTO<VersionResultDTO> result = conmmService.queryLastVersionInfo(sysVersionDTO);
         return result;
     }
 

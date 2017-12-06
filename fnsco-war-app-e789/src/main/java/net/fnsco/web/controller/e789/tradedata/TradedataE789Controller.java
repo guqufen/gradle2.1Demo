@@ -19,8 +19,8 @@ import net.fnsco.web.controller.e789.jo.CommonJO;
  * @Date	 2017年12月5日 下午3:12:47
  */
 @RestController
-@RequestMapping(value = "/app2c/e789/tradeData", method = RequestMethod.POST)
-@Api(value = "/app2c/e789/tradeData", tags = { "流水相关功能接口" })
+@RequestMapping(value = "/app2c/tradeData", method = RequestMethod.POST)
+@Api(value = "/app2c/tradeData", tags = { "流水相关功能接口" })
 public class TradedataE789Controller extends BaseController {
 	
 	/**
