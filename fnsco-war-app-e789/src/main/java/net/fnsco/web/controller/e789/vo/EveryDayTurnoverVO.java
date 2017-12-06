@@ -24,19 +24,19 @@ public class EveryDayTurnoverVO extends VO {
 	/**
 	 * 统计日期
 	 */
-	@ApiModelProperty(value = "统计日期(yyyy-MM-dd)", name = "turnoverDate", example = "")
+	@ApiModelProperty(value = "统计日期(yyyy-MM-dd)", name = "turnoverDate", example = "统计日期(yyyy-MM-dd)")
 	private String turnoverDate;
 	
 	/**
 	 * 订单笔数
 	 */
-	@ApiModelProperty(value = "笔数", name = "orderNum", example = "")
+	@ApiModelProperty(value = "笔数", name = "orderNum", example = "笔数")
 	private String orderNum;
 	
 	/**
 	 * 交易额
 	 */
-	@ApiModelProperty(value = "交易额", name = "turnover", example = "")
+	@ApiModelProperty(value = "交易额", name = "turnover", example = "交易额")
 	private String turnover;
 
 	/**
