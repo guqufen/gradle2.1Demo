@@ -34,7 +34,7 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
  *
  */
 @RestController
-@RequestMapping(value = "/app2c/rechange/jhf", method = RequestMethod.POST)
+@RequestMapping(value = "/app2c/rechange/jhf")
 @Api(value = "/app2c/rechange/jhf", tags = { "分闪付充值接口" })
 public class RechangeController extends BaseController {
     @Autowired
@@ -50,7 +50,7 @@ public class RechangeController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getQRUrl")
+    @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
     @ApiOperation(value = "充值金额提交保存")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String innerCode = "";
@@ -93,7 +93,7 @@ public class RechangeController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/dealPayOrder")
+    @RequestMapping(value = "/dealPayOrder", method = RequestMethod.GET)
     @ApiOperation(value = "跳转到聚惠分平台进行支付")
     public String dealPayOrder(@ApiParam(value = "请求参数") String reqData) {
         String orderNo = "";

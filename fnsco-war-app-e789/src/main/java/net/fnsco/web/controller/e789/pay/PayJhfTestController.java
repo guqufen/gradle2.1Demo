@@ -37,7 +37,7 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 @RestController
 @RequestMapping(value = "/mobile/trade/jhf", method = RequestMethod.POST)
 @Api(value = "/mobile/trade/jhf", tags = { "聚惠分相关功能接口" })
-public class TradeJhfTestController extends BaseController {
+public class PayJhfTestController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
     @Autowired

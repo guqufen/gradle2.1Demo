@@ -245,7 +245,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
      * @param reqStr：被扫实体对象
      * @return:被扫交易应答JSON字符串
      */
-	public String PassivePay(String innerCode, PassivePayDTO passivePayDTO) {
+	public ResultDTO PassivePay(String innerCode, PassivePayDTO passivePayDTO) {
 
 		String url = "/MPay/misRequest.do";
 		String merId = env.getProperty("zxyh.merId");
@@ -257,9 +257,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, "05");
 		if (null == merchantChannel) {
 			logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=[" + innerCode + "");
-			map.put("respCode", "9999");
-			map.put("respMsg", "系统异常");
-			return JSON.toJSONString(map);
+			return ResultDTO.fail("1002");
 		}
 		passDTO.setStdmercno2(merchantChannel.getChannelMerId());// 二级商户号，使用分账功能时上传，是与stdmercno关联的分账子商户号
 		passDTO.setStdauthid(passivePayDTO.getStdauthid());// 授权码
@@ -270,9 +268,9 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		//应答码6002-支付授权已过期，请刷新再试,说明当前的是微信付款码
 		if("6002".equals(resp)){
 			logger.info("微信付款码已经过期，请重新扫付款码");
-			map.put("respCode", "1002");
-			map.put("respMsg", "付款码已经过期,请重新扫付款码");
-			return JSON.toJSONString(map);
+//			map.put("respCode", "1002");
+//			map.put("respMsg", "付款码已经过期,请重新扫付款码");
+			return ResultDTO.fail("1002");
 		}
 
 		//应答码为0000-成功，表示可以直接用微信进行支付了
@@ -339,11 +337,12 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		if (null == tradeOrderDO1) {
 			logger.info("没有找到该交易请求交易,order_no=[" + tradeOrderDO.getOrderNo() + "]");
 			
-			map.put("respCode", "9999");
-			map.put("respMsg", "系统异常");
-			map.put("orderId", tradeOrderDO.getOrderNo());
-			map.put("begTime", DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
-			return JSON.toJSONString(map);
+//			map.put("respCode", "9999");
+//			map.put("respMsg", "系统异常");
+//			map.put("orderId", tradeOrderDO.getOrderNo());
+//			map.put("begTime", DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
+			return ResultDTO.fail("1002");
+//			return JSON.toJSONString(map);
 		}
 
 		// 支付成功，则直接更新交易状态
@@ -373,7 +372,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		map.put("preAmt", passDTO1.getStdpreamt());//优惠金额
 
 //		return map.toString();
-		return JSON.toJSONString(map);
+		return ResultDTO.success(map);
 	}
 
 	/**
@@ -382,7 +381,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	 * @param passivePayDTO
 	 * @return
 	 */
-	public String PassivePayResult(String  orgorderid) {
+	public ResultDTO PassivePayResult(String  orgorderid) {
 
 		String url = "/MPay/misRequest.do";
 		Map<String, String> map = new HashMap<>();
@@ -392,22 +391,23 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		if (null == tradeOrderDO) {
 			logger.info("没有找到该交易请求交易,order_no=[" + orgorderid + "]");
 
-			map.put("respCode", "9999");
-			map.put("respMsg", "系统异常");
-			map.put("orderId", orgorderid);
-			map.put("begTime", DateUtils.getNowDateStr());
-			return JSON.toJSONString(map);
+//			map.put("respCode", "9999");
+//			map.put("respMsg", "系统异常");
+//			map.put("orderId", orgorderid);
+//			map.put("begTime", DateUtils.getNowDateStr());
+			return ResultDTO.fail("9999");
+//			return JSON.toJSONString(map);
 		}
 
 		// 如果原消费交易是非(进行状态的或者应答码为空)的，则可以直接返回应答
 		if (!"1000".equals(tradeOrderDO.getRespCode()) && !Strings.isNullOrEmpty(tradeOrderDO.getRespCode())) {
 			logger.info("该交易为有确定结果的交易,不用再去中信银行那边查询结果,将直接返回。order_no=[" + orgorderid + "]");
 
-			map.put("respCode", tradeOrderDO.getRespCode());
-			map.put("respMsg", tradeOrderDO.getRespMsg());
-			map.put("orderId", orgorderid);
-			map.put("begTime", DateUtils.dateFormat1ToStr(tradeOrderDO.getOrderCeateTime()));
-			return JSON.toJSONString(map);
+//			map.put("respCode", tradeOrderDO.getRespCode());
+//			map.put("respMsg", tradeOrderDO.getRespMsg());
+//			map.put("orderId", orgorderid);
+//			map.put("begTime", DateUtils.dateFormat1ToStr(tradeOrderDO.getOrderCeateTime()));
+			return ResultDTO.fail("9999");
 		}
 
 		String merId = env.getProperty("zxyh.merId");
@@ -422,9 +422,9 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			passDTO.setStdprocode(ZxyhPassivePayCode.WX_BS_CX.getCode());
 		} else {
 			logger.info("该订单号原支付子类型为非微信和支付宝，请核查后重新交易。order_no=[" + orgorderid + "]");
-			map.put("respCode", "9999");
-			map.put("respMsg", "系统异常");
-			return JSON.toJSONString(map);
+//			map.put("respCode", "9999");
+//			map.put("respMsg", "系统异常");
+			return ResultDTO.fail("9999");
 		}
 
 		passDTO.setStdmercno2(tradeOrderDO.getChannelMerId());// 二级商户号，使用分账功能时上传，是与stdmercno关联的分账子商户号
@@ -468,7 +468,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		map.put("reciAmt", passDTO1.getStdreciamt());//实收金额
 		map.put("preAmt", passDTO1.getStdpreamt());//优惠金额
 
-		return JSON.toJSONString(map);
+		return ResultDTO.success(map);
     }
 
 	/**

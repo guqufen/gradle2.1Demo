@@ -1,7 +1,6 @@
 package net.fnsco.web.controller.e789.pay.jhf;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -19,14 +18,12 @@ import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.e789.jo.GetQRUrlJO;
-import net.fnsco.web.controller.e789.jo.TradeJO;
 import net.fnsco.web.controller.e789.vo.GetOrderInfoResultVO;
 import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 
@@ -40,9 +37,9 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
  *
  */
 @RestController
-@RequestMapping(value = "/app2c/trade/jhf", method = RequestMethod.POST)
+@RequestMapping(value = "/app2c/trade/jhf")
 @Api(value = "/app2c/trade/jhf", tags = { "分闪付支付接口" })
-public class TradeFsfController extends BaseController {
+public class PayFsfController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
     @Autowired
@@ -56,7 +53,7 @@ public class TradeFsfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getQRUrl")
+    @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
     @ApiOperation(value = "获取分闪付url")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String innerCode = "";
@@ -99,7 +96,7 @@ public class TradeFsfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/getOrderInfo")
+    @RequestMapping(value = "/getOrderInfo", method = RequestMethod.POST)
     @ApiOperation(value = "获取商户编号")
     public ResultDTO<GetOrderInfoResultVO> getOrderInfo(@ApiParam(value = "订单号") @RequestParam String orderNo) {
         TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
@@ -115,13 +112,14 @@ public class TradeFsfController extends BaseController {
         result.setRespCode(tradeOrderDO.getRespCode());
         return success(result);
     }
+
     /**
-     * 二维码扫码后跳转到聚惠分平台
+     * 充值跳转到聚惠分平台进行支付
      *
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/dealPayOrder")
+    @RequestMapping(value = "/dealPayOrder", method = RequestMethod.GET)
     @ApiOperation(value = "充值跳转到聚惠分平台进行支付")
     public String dealPayOrder(@ApiParam(value = "请求参数") String reqData) {
         String orderNo = "";
