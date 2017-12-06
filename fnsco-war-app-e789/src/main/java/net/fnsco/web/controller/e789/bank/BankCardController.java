@@ -1,5 +1,8 @@
 package net.fnsco.web.controller.e789.bank;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,7 +76,7 @@ public class BankCardController extends BaseController {
     public ResultDTO<UnBindBankCardVO> deleteBankJO( @RequestBody  UnBindBankCardJO unBindBankCardJO ) {
     	UnBindBankCardVO unBindBankCardVO = new UnBindBankCardVO();
     	
-        return success(unBindBankCardVO);
+        return ResultDTO.success();
     }
 
     /**
@@ -84,9 +87,9 @@ public class BankCardController extends BaseController {
      */
     @RequestMapping(value = "/getBankCardList")
     @ApiOperation(value = "银行卡列表查询")
-    public ResultDTO<BankListVO> getBankJOList(@RequestBody BankListJO bankListJO) {
-    	BankListVO bankListVO = new BankListVO();
+    public ResultDTO<List<BankListVO>> getBankJOList(@RequestBody BankListJO bankListJO) {
+    	List<BankListVO> bankList = new ArrayList<>();
     	
-        return success(bankListVO);
+        return success(bankList);
     }
 }
