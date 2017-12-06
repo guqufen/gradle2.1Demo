@@ -18,7 +18,7 @@ import net.fnsco.web.controller.e789.vo.PassiveVO;
 
 @RestController
 @RequestMapping(value = "/app2c/trade/passivePay", method = RequestMethod.POST)
-@Api(value = "/app2c/trade/passivePay", tags = { "E2-2 扫一扫支付接口" })
+@Api(value = "/app2c/trade/passivePay", tags = { "扫一扫" })
 public class PassivePayController extends BaseController {
 
 	@Autowired
