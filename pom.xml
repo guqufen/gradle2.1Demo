@@ -17,11 +17,14 @@
 		<module>fnsco-war-web</module>
 		<module>fnsco-war-e789</module>
 		<module>fnsco-war-timer</module>
+		<module>fnsco-war-timer-e789</module>
 		<module>fnsco-war-app</module>
 		<module>fnsco-war-app-e789</module>
 		<module>fnsco-war-open</module>
 		<module>fnsco-war-risk</module>
 		<module>fnsco-war-risk-admin</module>
+		<module>fnsco-war-car</module>
+		<module>fnsco-war-car-admin</module>
 		<!-- 数据接入service项目-->
 		<module>fnsco-service-order</module>
 		<module>fnsco-service-bigdata</module>
@@ -29,6 +32,7 @@
 		<module>fnsco-service-api-doc</module>
 		<module>fnsco-service-auth</module>
 		<module>fnsco-service-risk</module>
+		<module>fnsco-service-car</module>
 		<module>fnsco-service-finance</module>
 		<module>fnsco-service-trading</module>
 		<module>fnsco-web-bigdata</module>

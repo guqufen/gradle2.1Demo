@@ -22,11 +22,16 @@ public interface UserDAO {
                @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
     @Select("SELECT * FROM sys_user WHERE id = #{id}")
     public UserDO getById(@Param("id") int id);
-    
+
     @Results({ @Result(column = "real_name", property = "realName"), @Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),
                @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
     @Select("SELECT * FROM sys_user WHERE name=#{name} and password = #{password} and status ='1' ")
     public UserDO getByUserName(@Param("name") String name, @Param("password") String password);
+
+    @Results({ @Result(column = "real_name", property = "realName"), @Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),
+               @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
+    @Select("SELECT * FROM sys_user WHERE name=#{name}  and status ='1' ")
+    public UserDO getByUserName(@Param("name") String name);
 
     @Results({ @Result(column = "real_name", property = "realName"), @Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),
                @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
@@ -51,7 +56,7 @@ public interface UserDAO {
     @SelectProvider(type = UserProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("user") UserDO user);
 
-    @Results({ @Result(column = "perms", property = "perms")})
+    @Results({ @Result(column = "perms", property = "perms") })
     @SelectProvider(type = UserProvider.class, method = "queryAllPerms")
     public List<String> queryAllPerms(@Param("userId") Integer userId);
 }

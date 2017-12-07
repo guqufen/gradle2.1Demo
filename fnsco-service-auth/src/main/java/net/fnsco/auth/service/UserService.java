@@ -34,6 +34,10 @@ public class UserService extends BaseService {
 	@Autowired
 	private UserRoleDAO userRoleDAO;
 
+    public UserDO getUserByName(String userName){
+	    UserDO auser = userDAO.getByUserName(userName);
+	    return auser;
+	}
 	public ResultDTO<UserDO> doLogin(String userName, String password) {
 		String pwd = Md5Util.getInstance().md5(password);
 		UserDO auser = userDAO.getByUserName(userName, pwd);

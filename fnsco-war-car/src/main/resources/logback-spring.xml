@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<springProperty scope="context" name="LOG_PATH" source="logging.path"/>
+	<!-- 控制台输出 -->
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder charset="UTF-8">
+			<pattern>%date [%-5level] [%thread] %logger{80} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	 <!-- 时间滚动输出 level为 DEBUG 日志 -->
+	<appender name="file—debug"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/debug.log</file>
+		<filter class="net.fnsco.freamwork.log.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>  
+	        <onMismatch>DENY</onMismatch>  
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${LOG_PATH}/debug.%d{yyyy-MM-dd_HH}.log
+			</FileNamePattern>
+			<MaxHistory>5</MaxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%date [%-5level] [%thread] %logger{80} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<!-- 时间滚动输出 level为 DEBUG 日志 -->
+	<appender name="file—info"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/info.log</file>
+		<filter class="net.fnsco.freamwork.log.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>  
+	        <onMismatch>DENY</onMismatch>  
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${LOG_PATH}/info.%d{yyyy-MM-dd_HH}.log
+			</FileNamePattern>
+			<MaxHistory>5</MaxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<!-- <pattern>%date [%-5level] [%thread] %logger{80} - %msg%n</pattern> -->
+			<pattern>%date [%-5level] [%thread] %logger{80} - %msg%X{traceId}%n</pattern>
+		</encoder>
+	</appender>
+	<!-- 时间滚动输出 level为 ERROR 日志 -->
+	<appender name="file—error"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/error.log</file>
+		<filter class="net.fnsco.freamwork.log.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>  
+	        <onMismatch>DENY</onMismatch>  
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${LOG_PATH}/error.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<MaxHistory>300</MaxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%date [%-5level] [%thread] %logger{80} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	<!-- 时间滚动输出 level为 ERROR 日志 -->
+	<appender name="SYS-PAGE-DIGEST"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH}/SYS-PAGE-DIGEST.log</file>
+		<filter class="net.fnsco.freamwork.log.LogNameFilter">
+			<name>SYS-PAGE-DIGEST</name>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${LOG_PATH}/SYS-PAGE-DIGEST.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<MaxHistory>300</MaxHistory>
+		</rollingPolicy>
+		<encoder charset="UTF-8">
+			<pattern>%date [%-5level] [%thread] %logger{80}%line{traceId} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	   
+  
+	<root level="DUBUG">
+		<appender-ref ref="stdout" />
+		<appender-ref ref="file—debug" />
+		<appender-ref ref="file—info" />
+		<appender-ref ref="file—error" />
+		<appender-ref ref="SYS-PAGE-DIGEST" />
+	</root>
+<!--日志异步到数据库 -->  
+   <!--  <appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+           <dataSource class="com.mchange.v2.c3p0.ComboPooledDataSource">
+              <driverClass>com.mysql.jdbc.Driver</driverClass>
+              <url>jdbc:mysql://127.0.0.1:3306/databaseName</url>
+              <user>root</user>
+              <password>root</password>
+            </dataSource>
+        </connectionSource>
+  </appender> -->
+</configuration>
