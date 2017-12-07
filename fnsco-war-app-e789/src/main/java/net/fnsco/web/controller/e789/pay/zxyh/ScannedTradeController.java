@@ -22,8 +22,8 @@ import net.fnsco.web.controller.e789.vo.GenerateQRVO;
 
 
 @RestController
-@RequestMapping(value = "/app2c/trade/zxyh", method = RequestMethod.POST)
-@Api(value = "/app2c/trade/zxyh", tags = { "首页-付款相关功能接口" })
+@RequestMapping(value = "/app2c/trade", method = RequestMethod.POST)
+@Api(value = "/app2c/trade", tags = { "首页-付款相关功能接口" })
 /**
  * 商户被扫接口
  * @author Administrator
@@ -42,15 +42,12 @@ public class ScannedTradeController extends BaseController{
 	public ResultDTO<GenerateQRVO> generateQRCode(@RequestBody GenerateQRJO qrJO){
 		GenerateQRVO qrVo = new GenerateQRVO();
 		Integer userId = qrJO.getUserId();
-		String ip = qrJO.getIp();
+		String ip = this.getIp();
 		String orderBody = qrJO.getOrderBody();
 		String txnAmt = qrJO.getTxnAmt();
 		String paySubType = qrJO.getPaySubType();//
 		if(userId == null){
 			return ResultDTO.fail("userId为空");
-		}
-		if(Strings.isNullOrEmpty(ip)){
-			return ResultDTO.fail("ip为空");
 		}
 		if(Strings.isNullOrEmpty(orderBody)){
 			return ResultDTO.fail("商品或支付单简要描述为空");
@@ -62,29 +59,18 @@ public class ScannedTradeController extends BaseController{
 		if(Strings.isNullOrEmpty(paySubType)){
 			return ResultDTO.fail("交易子类型为空");
 		}
-		qrJO.setChannelType("05");//需求暂未定，设置默认中信通道
+		
 		Map<String, Object> reqMap = new HashMap<>();
-		if("05".equals(qrJO.getChannelType())){//中信通道
-			if("41".equals(paySubType)){//微信
-				reqMap = zxyhPaymentService.generateQRCodeWeiXin(userId,orderBody,txnAmt);
-				qrVo.setUrl(reqMap.get("codeUrl").toString());
-			
-			}else if("42".equals(paySubType)){//支付宝
-				reqMap = zxyhPaymentService.generateQRCodeAliPay(userId,ip,orderBody,txnAmt);
-				qrVo.setUrl(reqMap.get("codeUrl").toString());
-			}
-			return  ResultDTO.success(qrVo);
-		}else if("01".equals(qrJO.getChannelType())){//浦发通道
-//			TradeOrderDO orderPayment = new TradeOrderDO();
-//			//赋值
-//			
-//			orderPayment = pfOrderPaymentService.beisaoPaySendPost(orderPayment);
-//			String reqMapStr = JSON.toJSONString(orderPayment);
-//			Map<String, Object> resultMap = JSON.parseObject(reqMapStr);
-//			return success(resultMap);
-			
+		if("41".equals(paySubType)){//微信
+			reqMap = zxyhPaymentService.generateQRCodeWeiXin(userId,orderBody,txnAmt);
+			qrVo.setUrl(reqMap.get("codeUrl").toString());
+		
+		}else if("42".equals(paySubType)){//支付宝
+			reqMap = zxyhPaymentService.generateQRCodeAliPay(userId,ip,orderBody,txnAmt);
+			qrVo.setUrl(reqMap.get("codeUrl").toString());
 		}
-		return ResultDTO.fail("请联系管理员");
+		return  ResultDTO.success(qrVo);
+			
 	}
 	
 	
