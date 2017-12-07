@@ -14,7 +14,7 @@ public class LoginVO extends VO {
 	private String userName; 
 	@ApiModelProperty(value="头像地址",name="headImagePath",example="头像地址")
 	private String headImagePath;
-	@ApiModelProperty(value="用户权限",name="loginRights",example="用户权限")
+	@ApiModelProperty(value="用户权限 no:没有商户 yes：有商户",name="loginRights",example="用户权限no:没有商户 yes：有商户")
 	private String loginRights;
 	@ApiModelProperty(value="是否有支付密码",name="loginRights",example="是否有支付密码")
 	private boolean beingPayPassword;

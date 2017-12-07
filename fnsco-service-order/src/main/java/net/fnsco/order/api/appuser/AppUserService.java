@@ -6,6 +6,7 @@ import java.util.Map;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.order.api.dto.AppUserDTO;
+import net.fnsco.order.api.dto.AppUserInfoDTO;
 import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.order.api.dto.AppUserManageDTO;
 import net.fnsco.order.api.dto.AppUserMerchantDTO;
@@ -24,11 +25,18 @@ public interface AppUserService {
 	ResultDTO<String> findPassword(AppUserDTO appUserDTO);
 	//根据手机号查询用户实体
 	ResultDTO<String> loginByMoblie(AppUserDTO appUserDTO);
+	//e789用户注册方法接口
+	ResultDTO<AppUser> e789InsertSelective(AppUserDTO appUserDTO);
 	//e789根据手机号查询用户实体
 	ResultDTO<String> e789LoginByMoblie(AppUserDTO appUserDTO);
 	//e789查询登录信息
 	AppUserLoginInfoDTO getLoginInfor(AppUserDTO appUserDTO);
-	
+	//e789新增支付密码接口
+	ResultDTO<String> addPayPassword(AppUserDTO appUserDTO);
+	//e789修改支付密码接口  
+	ResultDTO<String> modifyPayPassword(AppUserDTO appUserDTO);
+	//e789获取个人信息接口
+	AppUserInfoDTO getMyselfInfo(Integer id);
 	//退出登录
 	ResultDTO<String> loginOut(AppUserDTO appUserDTO);
 

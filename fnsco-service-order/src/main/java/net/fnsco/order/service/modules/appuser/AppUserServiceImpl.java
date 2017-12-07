@@ -420,6 +420,63 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         map.put("appSettings", settingstatus);
         return ResultDTO.success(map);
     }
+    //e789注册
+    @Override
+    @Transactional
+    public ResultDTO e789InsertSelective(AppUserDTO appUserDTO) {
+        //非空判断
+        if (Strings.isNullOrEmpty(appUserDTO.getMobile())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
+        } else if (Strings.isNullOrEmpty(appUserDTO.getPassword())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+        }
+        if (Strings.isNullOrEmpty(appUserDTO.getCode())) {
+            return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
+        }
+        //对比验证码
+        ResultDTO<String> res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), appUserDTO.getMobile());
+        if (!res.isSuccess()) {
+            return res;
+        }
+        //根据手机号查询用户实体是否存在
+        AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+        if (user != null) {
+            return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
+        }
+        //根据deviceToken查找记录 如果存在就清空
+        List<AppUser> items = appUserDao.queryBydeviceToken(appUserDTO.getDeviceToken());
+        if (items.isEmpty()) {
+            logger.warn("该设备之前没有注册过账号或该设备之前注册的账号已注销");
+        }
+        for (AppUser item : items) {
+            String deviceToken = null;
+            String deviceId = null;
+            Integer deviceType = null;
+            if (!appUserDao.updateDeviceToken(item.getMobile(), deviceToken, deviceId, deviceType)) {
+                return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
+            }
+        }
+        AppUser appUser = new AppUser();
+        final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
+        appUser.setUserName("sqb" + code);
+        appUser.setDeviceId(appUserDTO.getDeviceId());
+        appUser.setDeviceToken(appUserDTO.getDeviceToken());
+        appUser.setMobile(appUserDTO.getMobile());
+        appUser.setDeviceType(appUserDTO.getDeviceType());
+        appUser.setState(1);
+        appUser.setRegTime(new Date());
+        if(!Strings.isNullOrEmpty(appUserDTO.getEntityInnerCode())){
+            appUser.setInviteEntityInnnerCode(appUserDTO.getEntityInnerCode());
+            appUser.setInviteStatus(0);
+        }
+        //appUser.setLastLoginTime(new Date());
+        String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
+        appUser.setPassword(password);
+        if (!appUserDao.insertSelective(appUser)) {
+            return ResultDTO.fail(ApiConstant.E_REGISTER_ERROR);
+        }
+        return ResultDTO.success();
+    }
   //e789根据手机号码和密码登录
     @Override
     public ResultDTO e789LoginByMoblie(AppUserDTO appUserDTO) {
@@ -503,6 +560,94 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         map.put("appSettings", settingstatus);*/
         return appUserLoginInfoDTO;
     }
+  //e789新增支付密码
+    @Override
+    public ResultDTO<String> addPayPassword(AppUserDTO appUserDTO) {
+        Integer id = appUserDTO.getUserId();
+        //非空判断
+        if (id == null) {
+            return ResultDTO.fail(ApiConstant.E_APP_ID_EMPTY);
+        }
+        if (Strings.isNullOrEmpty(appUserDTO.getPayPassword())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+        }
+        String payPassword = Md5Util.getInstance().md5(appUserDTO.getPayPassword());
+        AppUser appUser = new AppUser();
+        //根据id查询用户是否存在获取原密码
+        AppUser mAppUser = appUserDao.selectAppUserById(id);
+        if (null == mAppUser) {
+            return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+        }
+        appUser.setPayPassword(payPassword);
+        appUser.setId(id);
+        if (!appUserDao.updateByPrimaryKeySelective(appUser)) {
+            return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
+        }
+        /*//更新到deviceToken
+        String deviceToken = null;
+        String deviceId = null;
+        Integer deviceType = null;
+        if (!appUserDao.updateDeviceTokenById(id, deviceToken, deviceId, deviceType)) {
+            return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
+        }*/
+        return ResultDTO.success();
+    }
+    //e789修改支付密码
+    @Override
+    public ResultDTO<String> modifyPayPassword(AppUserDTO appUserDTO) {
+        Integer id = appUserDTO.getUserId();
+        //非空判断
+        if (id == null) {
+            return ResultDTO.fail(ApiConstant.E_APP_ID_EMPTY);
+        }
+        if (Strings.isNullOrEmpty(appUserDTO.getPassword())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+        } else if (Strings.isNullOrEmpty(appUserDTO.getOldPassword())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+        }
+        String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
+        String oldPassword = Md5Util.getInstance().md5(appUserDTO.getOldPassword());
+        AppUser appUser = new AppUser();
+        //根据id查询用户是否存在获取原密码
+        AppUser mAppUser = appUserDao.selectAppUserById(id);
+        if (null == mAppUser) {
+            return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+        }
+        //查到的密码和原密码做比较
+        if (!oldPassword.equals(mAppUser.getPayPassword())) {
+            return ResultDTO.fail(ApiConstant.E_OLDPASSWORD_ERROR);
+        }
+        appUser.setPayPassword(password);
+        appUser.setId(id);
+        if (!appUserDao.updateByPrimaryKeySelective(appUser)) {
+            return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
+        }
+        /*//更新到deviceToken
+        String deviceToken = null;
+        String deviceId = null;
+        Integer deviceType = null;
+        if (!appUserDao.updateDeviceTokenById(id, deviceToken, deviceId, deviceType)) {
+            return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
+        }*/
+        return ResultDTO.success();
+    }
+  //e789获取个人信息
+    @Override
+    public AppUserInfoDTO getMyselfInfo(Integer id) {
+        AppUser appUser = appUserDao.selectAppUserById(id);
+        AppUserInfoDTO dto = new AppUserInfoDTO();
+        dto.setSex(appUser.getSex());
+        dto.setUserName(appUser.getUserName());
+        String headImagePath = appUser.getHeadImagePath();
+        if (!Strings.isNullOrEmpty(headImagePath)) {
+            String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
+            dto.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+        }
+        dto.setMoblie(appUser.getMobile());
+        dto.setRealName(appUser.getRealName());
+        return dto;
+    }
+
 
     //退出登录
     @Override
