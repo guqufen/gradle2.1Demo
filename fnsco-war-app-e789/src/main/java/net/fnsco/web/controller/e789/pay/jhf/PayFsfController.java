@@ -63,7 +63,7 @@ public class PayFsfController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
-    @ApiOperation(value = "获取分闪付url，用于生成二维码")
+    @ApiOperation(value = "首页-分闪付支付-获取分闪付url，用于生成二维码")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String innerCode = "";
         Integer userId = getQRUrlJO.getUserId();
@@ -106,7 +106,7 @@ public class PayFsfController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getOrderInfo", method = RequestMethod.POST)
-    @ApiOperation(value = "获取商户编号")
+    @ApiOperation(value = "首页-分闪付支付-获取订单信息")
     public ResultDTO<GetOrderInfoResultVO> getOrderInfo(@ApiParam(value = "订单号") @RequestParam String orderNo) {
         TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
         tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
