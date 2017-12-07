@@ -43,14 +43,10 @@ public class ScannedTradeController extends BaseController{
 		GenerateQRVO qrVo = new GenerateQRVO();
 		Integer userId = qrJO.getUserId();
 		String ip = this.getIp();
-		String orderBody = qrJO.getOrderBody();
 		String txnAmt = qrJO.getTxnAmt();
 		String paySubType = qrJO.getPaySubType();//
 		if(userId == null){
 			return ResultDTO.fail("userId为空");
-		}
-		if(Strings.isNullOrEmpty(orderBody)){
-			return ResultDTO.fail("商品或支付单简要描述为空");
 		}
 		if(Strings.isNullOrEmpty(txnAmt)){
 			return ResultDTO.fail("交易金额为空");
@@ -62,11 +58,11 @@ public class ScannedTradeController extends BaseController{
 		
 		Map<String, Object> reqMap = new HashMap<>();
 		if("41".equals(paySubType)){//微信
-			reqMap = zxyhPaymentService.generateQRCodeWeiXin(userId,orderBody,txnAmt);
+			reqMap = zxyhPaymentService.generateQRCodeWeiXin(userId,txnAmt);
 			qrVo.setUrl(reqMap.get("codeUrl").toString());
 		
 		}else if("42".equals(paySubType)){//支付宝
-			reqMap = zxyhPaymentService.generateQRCodeAliPay(userId,ip,orderBody,txnAmt);
+			reqMap = zxyhPaymentService.generateQRCodeAliPay(userId,ip,txnAmt);
 			qrVo.setUrl(reqMap.get("codeUrl").toString());
 		}
 		return  ResultDTO.success(qrVo);
