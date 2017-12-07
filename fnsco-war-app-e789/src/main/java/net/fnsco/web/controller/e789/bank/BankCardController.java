@@ -1,5 +1,8 @@
 package net.fnsco.web.controller.e789.bank;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +35,7 @@ import net.fnsco.web.controller.e789.vo.UnBindBankCardVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/bankcard", method = RequestMethod.POST)
-@Api(value = "/app2c/bankcard", tags = { "银行卡相关功能接口" })
+@Api(value = "/app2c/bankcard", tags = { "我的-银行卡相关功能接口" })
 public class BankCardController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
@@ -48,7 +51,7 @@ public class BankCardController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/bindBankCard")
-    @ApiOperation(value = "绑定银行卡")
+    @ApiOperation(value = "绑定银行卡页-新增银行卡")
     public ResultDTO<BindBankCardVO> addBankJO(@RequestBody BindBankCardJO jo) {
     	BindBankCardVO bindBankCardVO = new BindBankCardVO();
     	//校验是否已进行身份认证
@@ -68,12 +71,12 @@ public class BankCardController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/unBindBankCard")
-    @ApiOperation(value = "解绑银行卡")
-    @ApiImplicitParam(name = "xxx", value = "解绑银行卡", required = false, dataType="Xxx",paramType="body")
+    @ApiOperation(value = "银行卡信息页-解绑银行卡")
+//    @ApiImplicitParam(name = "xxx", value = "解绑银行卡", required = false, dataType="Xxx",paramType="body")
     public ResultDTO<UnBindBankCardVO> deleteBankJO( @RequestBody  UnBindBankCardJO unBindBankCardJO ) {
     	UnBindBankCardVO unBindBankCardVO = new UnBindBankCardVO();
     	
-        return success(unBindBankCardVO);
+        return ResultDTO.success();
     }
 
     /**
@@ -83,10 +86,10 @@ public class BankCardController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getBankCardList")
-    @ApiOperation(value = "银行卡列表查询")
-    public ResultDTO<BankListVO> getBankJOList(@RequestBody BankListJO bankListJO) {
-    	BankListVO bankListVO = new BankListVO();
+    @ApiOperation(value = "银行卡信息页-银行卡列表查询")
+    public ResultDTO<List<BankListVO>> getBankJOList(@RequestBody BankListJO bankListJO) {
+    	List<BankListVO> bankList = new ArrayList<>();
     	
-        return success(bankListVO);
+        return ResultDTO.success(bankList);
     }
 }

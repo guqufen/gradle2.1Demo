@@ -4,24 +4,24 @@ import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.JO;
 
 public class BankListJO extends JO {
-    @ApiModelProperty(value = "手机号", name = "mobile", example = "")
-    private String mobile;
+    @ApiModelProperty(value = "用户id", name = "userId", example = "66")
+    private String userId;
+
+	/**
+	 * @return the userId
+	 */
+	public String getUserId() {
+		return userId;
+	}
+
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
  
-
-	/**
-	 * @return the mobile
-	 */
-	public String getMobile() {
-		return mobile;
-	}
-
-	/**
-	 * @param mobile the mobile to set
-	 */
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
 
     
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
-import net.fnsco.bigdata.service.sys.entity.AppAdDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -34,7 +33,7 @@ public class AdvertiseController extends BaseController{
 	 @ApiOperation(value = "新增广告或资讯")
 	 @ResponseBody
 	 @RequiresPermissions(value = { "sys:advertise:save" })
-	 public ResultDTO<String> addAdvertise(AppAdDO appAdDO) {
+	 public ResultDTO<String> addAdvertise() {
 			
 	      return success(null);
 	 }
@@ -59,13 +58,13 @@ public class AdvertiseController extends BaseController{
 	}
 	
 	
-	@RequestMapping(value = "/query")
-	@ApiOperation(value = "查詢广告或资讯")
-	@ResponseBody
-	@RequiresPermissions(value = {"sys:advertise:query"})
-	public ResultPageDTO<AppAdDO> query(AppAdDO appAdDO,Integer currentPageNum,Integer pageSize) {
-		
-      return null;
-	}
+//	@RequestMapping(value = "/query")
+//	@ApiOperation(value = "查詢广告或资讯")
+//	@ResponseBody
+//	@RequiresPermissions(value = {"sys:advertise:query"})
+//	public ResultPageDTO<> query( Integer currentPageNum,Integer pageSize) {
+//		
+//      return null;
+//	}
 	
 }

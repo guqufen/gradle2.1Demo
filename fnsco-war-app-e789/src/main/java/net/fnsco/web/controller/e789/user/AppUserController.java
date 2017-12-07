@@ -50,7 +50,7 @@ import net.fnsco.web.controller.e789.vo.LoginVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/user", method = RequestMethod.POST)
-@Api(value = "/app2c/user", tags = { "登陆模块-App用户管理接口" })
+@Api(value = "/app2c/user", tags = { "登陆-App用户管理接口" })
 public class AppUserController extends BaseController {
     @Autowired
     private AppUserService        appUserService;
