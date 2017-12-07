@@ -280,5 +280,35 @@ public class TradeWithdrawProvider {
         }
         }}.toString();
     }
+    
+    /**
+     * queryTotalAmount:(按照月份查询某用户总账单和)
+     *
+     * @param  @param params
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年12月7日 上午11:47:48
+     */
+    public String queryTotalAmount(Map<String, Object> params) {
+    	Integer appUserId = (Integer) params.get("appUserId");
+    	String tradeMonth =  (String)params.get("tradeMonth");
+    	Integer status = (Integer) params.get("status");
+    	
+    	return new SQL() {{
+    		SELECT("SUM(amount)");
+    		FROM(TABLE_NAME);
+    		if(StringUtils.isNotBlank(tradeMonth)) {
+    			WHERE("DATE_FORMAT(create_time,'%Y-%m') = #{tradeMonth}");
+    		}
+    		if(null != appUserId) {
+    			WHERE("app_user_id = #{appUserId}");
+    		}
+    		if(null != status) {
+    			WHERE("status = #{status}");
+    		}
+    		
+    	}}.toString();
+    }
 }
 
