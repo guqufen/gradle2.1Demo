@@ -60,7 +60,7 @@ public class RechangeController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/jhf/getQRUrl", method = RequestMethod.POST)
-    @ApiOperation(value = "聚惠分充值保存，返回的url跳转到h5页面")
+    @ApiOperation(value = "我的页面-钱包-分闪付充值保存，返回的url跳转到h5页面")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String innerCode = "";
         Integer userId = getQRUrlJO.getUserId();
