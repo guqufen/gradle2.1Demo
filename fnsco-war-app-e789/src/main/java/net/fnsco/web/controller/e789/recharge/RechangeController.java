@@ -44,7 +44,7 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/rechange")
-@Api(value = "/app2c/rechange", tags = { "我的页面-钱包-充值相关接口" })
+@Api(value = "/app2c/rechange", tags = { "我的-钱包-充值相关接口" })
 public class RechangeController extends BaseController {
     @Autowired
     private MerchantService   merchantService;
@@ -60,7 +60,7 @@ public class RechangeController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/jhf/getQRUrl", method = RequestMethod.POST)
-    @ApiOperation(value = "聚惠分充值保存，返回的url跳转到h5页面")
+    @ApiOperation(value = "我的页面-钱包-分闪付充值保存，返回的url跳转到h5页面")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String innerCode = "";
         Integer userId = getQRUrlJO.getUserId();

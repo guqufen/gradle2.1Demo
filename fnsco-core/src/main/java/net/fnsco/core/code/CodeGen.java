@@ -29,6 +29,8 @@ public class CodeGen {
         //auto.init("net.fnsco.order", "sys", "sys_sequence");
 //        auto.init("net.fnsco.order", "trade", "t_email");
         auto.init("net.fnsco.trading", "order", "r_trade_order_date_temp");
+        auto.init("net.fnsco.bigdata", "ad", "sys_ad");
+        auto.init("net.fnsco.trading", "appUser", "u_app_user");
 //        auto.init("net.fnsco.bigdata", "withdraw", "t_trade_withdraw_red");
     }
 }

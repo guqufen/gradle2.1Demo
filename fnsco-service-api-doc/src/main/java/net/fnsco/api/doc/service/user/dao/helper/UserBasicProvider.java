@@ -27,6 +27,9 @@ public class UserBasicProvider {
         if (StringUtils.isNotBlank(userBasic.getPhone())){
             SET("phone=#{userBasic.phone}");
         }
+        if (StringUtils.isNotBlank(userBasic.getName())){
+            SET("name=#{userBasic.Name}");
+        }
         if (StringUtils.isNotBlank(userBasic.getEmail())){
             SET("email=#{userBasic.email}");
         }

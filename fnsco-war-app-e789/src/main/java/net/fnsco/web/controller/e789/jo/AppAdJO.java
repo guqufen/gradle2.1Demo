@@ -24,7 +24,7 @@ public class AppAdJO extends JO{
 	/**
 	 * APP登录用户ID
 	 */
-	@ApiModelProperty(value = "APP登录用户ID", name = "userId", example = "")
+	@ApiModelProperty(value = "APP登录用户ID", name = "userId", example = "66")
 	private Integer userId;
 
 	/**

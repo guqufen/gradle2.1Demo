@@ -29,6 +29,7 @@ import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
+import net.fnsco.order.api.dto.AppUserInfoDTO;
 import net.fnsco.web.controller.e789.jo.AddPayPasswordJO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.FindPasswordJO;
@@ -49,8 +50,8 @@ import net.fnsco.web.controller.e789.vo.LoginVO;
  *
  */
 @RestController
-@RequestMapping(value = "/app2c/myself", method = RequestMethod.POST)
-@Api(value = "/app2c/myself", tags = { "我的页面-App用户管理接口" })
+@RequestMapping(value = "/app2c/user", method = RequestMethod.POST)
+@Api(value = "/app2c/user", tags = { "我的-App用户管理接口" })
 public class MyselfController extends BaseController {
     @Autowired
     private AppUserService        appUserService;
@@ -82,10 +83,8 @@ public class MyselfController extends BaseController {
     public ResultDTO<String> addPayPassword(@RequestBody AddPayPasswordJO addPayPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(addPayPasswordJO.getUserId());
-    	appUserDTO.setPassword(addPayPasswordJO.getPassword());
-        ResultDTO<String> result = new ResultDTO<>();
-        result = appUserService.modifyPassword(appUserDTO);
-        return result;
+    	appUserDTO.setPayPassword(addPayPasswordJO.getPassword());
+        return appUserService.addPayPassword(appUserDTO);
     }
     
   //修改支付密码     旧密码和新密码
@@ -95,11 +94,9 @@ public class MyselfController extends BaseController {
     public ResultDTO<String> modifyPayPassword(@RequestBody ModifyPayPasswordJO modifyPayPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(modifyPayPasswordJO.getUserId());
-    	appUserDTO.setPassword(modifyPayPasswordJO.getPassword());
-    	appUserDTO.setPassword(modifyPayPasswordJO.getOldPassword());
-        ResultDTO<String> result = new ResultDTO<>();
-        result = appUserService.modifyPassword(appUserDTO);
-        return result;
+    	appUserDTO.setPassword(modifyPayPasswordJO.getPayPassword());
+    	appUserDTO.setOldPassword(modifyPayPasswordJO.getOldPayPassword());
+        return appUserService.modifyPayPassword(appUserDTO);
     }
 
 
@@ -214,46 +211,21 @@ public class MyselfController extends BaseController {
     @RequestMapping(value = "/getUserInfo")
     @ApiOperation(value = "个人信息页-获取个人信息")
     public ResultDTO<GetPersonInfoVO> getPersonInfo(@RequestBody CommonJO commonJO) {
-    	AppUserDTO appUserDTO = new AppUserDTO();
-    	appUserDTO.setUserId(commonJO.getUserId());
-        ResultDTO<String> result = appUserService.getUserInfo(appUserDTO);
+    	if (commonJO.getUserId() == null) {
+            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+    	AppUserInfoDTO appUserInfoDTO = appUserService.getMyselfInfo(commonJO.getUserId());
+    	if(appUserInfoDTO==null) {
+    		return ResultDTO.fail(ApiConstant.E_ACCOUNTLOCKOUT_ERROR);
+    	}
         GetPersonInfoVO getPersonInfoVO = new GetPersonInfoVO();
+        getPersonInfoVO.setMobile(appUserInfoDTO.getMoblie());
+        getPersonInfoVO.setHeadImagePath(appUserInfoDTO.getHeadImagePath());
+        getPersonInfoVO.setUserName(appUserInfoDTO.getUserName());
+        getPersonInfoVO.setName(appUserInfoDTO.getRealName());
+       // getPersonInfoVO.setBindingBankCard(bindingBankCard);
         return ResultDTO.success(getPersonInfoVO);
     }
 
-    /**
-     * updateSettingStatus:(更新app用户消息通知状态)
-     * @param appSettingDTO
-     * @return    设定文件
-     * @author    tangliang
-     * @date      2017年9月12日 下午4:41:21
-     * @return ResultDTO<String>    DOM对象
-     */
-    /*@RequestMapping(value = "/updateSettingStatus")
-    @ApiOperation(value = "更新消息通知设置状态")
-    public ResultDTO<String> updateSettingStatus(@RequestBody AppSettingDTO appSettingDTO) {
-        if (null == appSettingDTO.getUserId()) {
-            return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
-        }
-        if (Strings.isNullOrEmpty(appSettingDTO.getNoticeType()) || Strings.isNullOrEmpty(appSettingDTO.getOpenStatus())) {
-            return ResultDTO.fail(ApiConstant.E_SETTING_STATUS_NULL);
-        }
-        int result = appUserSettingService.updateByPrimaryKeySelective(appSettingDTO);
-        if (result > 0) {
-            return ResultDTO.success();
-        }
-        return ResultDTO.fail();
-    }*/
-
-   /* @RequestMapping(value = "/isOpenFixedQr")
-    @ApiOperation(value = "该用户绑定的所有商户是否开通台码功能")
-    public ResultDTO isOpenFixedQr(@RequestBody AppUserDTO appUserDTO) {
-        ResultDTO<List<MerChantCoreDTO>> result = merchantService.getMerchantsCoreByUserId(appUserDTO.getUserId());
-        List<MerChantCoreDTO> resultList = result.getData();
-        if (!CollectionUtils.isEmpty(resultList)) {
-            return ResultDTO.success("true");
-        }
-        return ResultDTO.success("false");
-    }*/
 
 }
