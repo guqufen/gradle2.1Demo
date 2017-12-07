@@ -1,18 +1,20 @@
 package net.fnsco.trading.service.order.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Options;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import net.fnsco.trading.service.order.entity.TradeOrderByPayTypeDO;
-import net.fnsco.trading.service.order.dao.helper.TradeOrderByPayTypeProvider;
 
-import java.util.List;;
+import net.fnsco.trading.service.order.dao.helper.TradeOrderByPayTypeProvider;
+import net.fnsco.trading.service.order.dto.OrderPayTypeDTO;
+import net.fnsco.trading.service.order.entity.TradeOrderByPayTypeDO;;
 
 public interface TradeOrderByPayTypeDAO {
 
@@ -36,5 +38,21 @@ public interface TradeOrderByPayTypeDAO {
 
     @SelectProvider(type = TradeOrderByPayTypeProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("tradeOrderByPayType") TradeOrderByPayTypeDO tradeOrderByPayType);
+    
+    /**
+     * selectByCondition:(按照条件查询)
+     *
+     * @param  @param startTradeDate
+     * @param  @param endTradeDate
+     * @param  @param userId
+     * @param  @return    设定文件
+     * @return OrderPayTypeDTO    DOM对象
+     * @author tangliang
+     * @date   2017年12月7日 下午4:58:58
+     */
+    @Results({@Result( column = "pay_type",property = "payType"),@Result( column = "order_num",property = "orderNum"),@Result( column = "turnover",property = "turnover")})
+    @Select("SELECT SUM(turnover) AS turnover , SUM(order_num) AS orderNum,pay_type AS payType FROM r_trade_order_by_pay_type WHERE inner_code IN "
+    		+ "(SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{userId}) AND trade_date >= #{startTradeDate} AND trade_date <= #{endTradeDate} GROUP BY pay_type")
+    public List<OrderPayTypeDTO> selectByCondition(@Param("startTradeDate") String startTradeDate,@Param("endTradeDate") String endTradeDate,@Param("userId")Integer userId);
 
 }

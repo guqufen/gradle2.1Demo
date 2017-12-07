@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import net.fnsco.trading.service.order.entity.TradeOrderByDayDO;
 import net.fnsco.trading.service.order.dao.helper.TradeOrderByDayProvider;
+import net.fnsco.trading.service.order.dto.OrderDayDTO;
 
 import java.util.List;;
 
@@ -43,4 +44,8 @@ public interface TradeOrderByDayDAO {
     
     @Select("SELECT SUM(turnover) FROM r_trade_order_by_day WHERE trade_date >= #{startTradeDate}  AND trade_date >= #{endTradeDate} AND inner_code IN (SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{userId})")
     public String selectTotalTurnover(@Param("startTradeDate") String startTradeDate,@Param("endTradeDate") String endTradeDate,@Param("userId")Integer userId);
+    
+    @Select("SELECT SUM(turnover) AS turnover , SUM(order_num) AS orderNum,trade_date AS tradeDate FROM r_trade_order_by_day  WHERE "
+    		+ "inner_code IN (SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{userId}) AND trade_date >= #{startTradeDate} AND trade_date <= #{endTradeDate} GROUP BY trade_date")
+    public List<OrderDayDTO> selectTurnoverByCondition(@Param("startTradeDate") String startTradeDate,@Param("endTradeDate") String endTradeDate,@Param("userId")Integer userId);
 }
