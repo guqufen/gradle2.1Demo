@@ -1,0 +1,360 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="pragma" content="no -cache">
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+    <meta http-equiv="expires" content="0">
+
+
+    <title>商户信息-法奈昇大数据平台</title>
+    <meta name="keywords" content="法奈昇大数据平台">
+    <meta name="description" content="法奈昇大数据平台">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+
+
+</head>
+
+<body class="gray-bg">
+<div class="panel-body animated fadeInRight">
+    <div class="panel panel-default">
+        <form id="formSearch" class="form-horizontal">
+            <div class="form-group" style="margin-top:15px">
+                <div class="row col-sm-10">
+                    <div class="col-sm-4">
+                        <label class="control-label" for="txt_search_id">手机号码：</label>
+                        <input type="text" class="form-control" id="txt_search_id">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label" for="txt_search_name">商户号：</label>
+                        <input type="text" class="form-control" id="txt_search_name">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label" for="txt_search_price">交易金额：</label>
+                        <input type="text" class="form-control" id="txt_search_price">
+                    </div>
+                    <div class="col-sm-4">
+                        <label class="control-label" for="txt_search_price">交易金额：</label>
+                        <input type="text" class="form-control" id="txt_search_price">
+                    </div>
+                </div>
+                <div class="col-sm-2" style="text-align: right;">
+                    <button type="button" id="btn_query" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>查询</button>
+                    <button type="button" id="btn_reset" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span>重置</button>
+                </div>
+            </div>
+        </form>
+        <!-- start -->
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div id="toolbar" >
+                            <button id="btn_add" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                            </button>
+                            <button id="btn_delete" type="button" class="btn btn-danger">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>批量删除
+                            </button>
+                        </div>
+                        <table id="table" style="width:3500px"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end  -->
+        <!-- model -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">新增商户</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">商户基本信息</a></li>
+                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">资质文件</a></li>
+                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">终端信息</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">商户名:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">商户名手机号:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">签购单名称:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">商户销售人员:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">商户名英文名:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">商户电话:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">商户类型:</label>
+                                <select class="form-control">
+                                    <option>集团商户</option>
+                                    <option>私人商户</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">商户属性:</label>
+                                <select class="form-control">
+                                    <option>集团商户</option>
+                                    <option>私人商户</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">MCC码:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                             <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">商户标签:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                             <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">组织机构代码:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                             <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">注册地区:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                             <div class="col-sm-4 date">
+                                <label class="control-label" for="txt_search_id">开始营业时间:</label>
+                                <input type="text" class="form-control">
+                            </div>
+                             <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">结束营业时间:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                             <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">实际经营范围:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                             <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">合作机构编号:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+
+                        </div>
+                        <a class="nextBtn" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">下一步</a>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="profile">
+                    <table class="table table-bordered">
+                      <thead>
+                          <th>材料名称</th>
+                          <th>操作</th>
+                      </thead>
+                      <tr>
+                          <td>银行卡正面</td>
+                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"></td>
+                      </tr>
+                      <tr>
+                          <td>银行卡反面</td>
+                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"></td>
+                      </tr>
+                      <tr>
+                          <td>营业执照</td>
+                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"></td>
+                      </tr>
+                      <tr>
+                          <td>签约协议照片</td>
+                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"></td>
+                      </tr>
+                      <tr>
+                          <td>房屋租赁合同照片</td>
+                          <td><input type="file" name="file" class="webuploader-element-invisible" multiple="multiple" accept="image/*"></td>
+                      </tr>
+                    </table>
+                        <a class="nextBtn"  href="#messages" aria-controls="messages" role="tab" data-toggle="tab">下一步</a>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="messages">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">MCC码:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                                </div>
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">商户标签:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label" for="txt_search_id">组织机构代码:</label>
+                                <input type="text" class="form-control" id="txt_search_id">
+                            </div>
+                        </div>
+                        <a class="saveBtn">保存</a>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+        <!-- end -->
+    </div> 
+    
+</div>
+<script src="js/bootstrap/jquery.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<!-- <script src="js/content.min.js"></script> -->
+<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+</body>
+<script type="text/javascript">
+    var json =[{"id":1120,"code":"848347592236002","innerCode":"062114825580516","joinType":1,"mobile":"13250836559","channelMerchant":"通道商户名称","salesSlip":"咯哦","coopNum":null,"merType":null,"mccID":0,"merSort":null,"accountName":"看看咯","accountNo":"6214855712753736","merArea":null,"signDate":"2017-06-21","merAttr":null,"isOpenTBus":null,"autoClear":null,"merchant":"咯哦","merSaler":null,"merEnName":null,"merTel":null,"coopOrgnCode":null,"registArea":null,"startBusTime":"00:01","endBusTime":"23:59","realBusScope":null,"merLegalPerson":"看看咯","legalPersonTel":null,"legalValidPaperType":null,"paperNum":"330324198505245757","paperValidTime":null,"businessLicenseNum":null,"businessLicenseValidTime":null,"taxRegistCode":null,"linkMan":null,"linkManTel":null,"linkManEmail":null,"merRegistAddress":null,"financeLinkMan":null,"financeLinkManTel":null,"financeLinkManEmail":null,"merPrincipal":null,"merPrincipalTel":null,"merPrincipalEmail":null,"installArea":null,"merInstallArea":null,"accountType":"to_private","subBankName":"吉林银行松原聚源储蓄所","openBankPrince":"吉林","openBank":"吉林银行","openBankCity":"松原市","accountHolderID":null,"openBankNum":"313252007026","closedCircle":null,"entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":0,"createUser":null,"createOemUserId":1,"createOemUserName":"OEM","createTime":"2017-06-21 14:21:15","createTimeString":null,"updateTime":"2017-06-21 14:21:15","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1452,"workOrderId":null,"isOpenQR":1,"mercFlag":null,"weChatFee":"0.55","aliPay":"0.6","accountMethod":"to_app_account","source":1,"busiCode":"952010530900","privateKye":"14435276D82843923A32B2A1B13852871E8BC8F2","channelType":"01","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"","merSortName":"","merAttrName":"","legalValidPaperTypeName":"","accountTypeName":"对私","accountMethodName":"App余额","joinTypeName":"集团商户"},{"id":1119,"code":"848347592236001","innerCode":"062111176402314","joinType":3,"mobile":"18357702278","channelMerchant":"测试通商名","salesSlip":"1","coopNum":"1","merType":"merc_personal","mccID":5542,"merSort":"general_type","accountName":"1","accountNo":"1","merArea":"1","signDate":"2017-06-21","merAttr":"merattr_b","isOpenTBus":null,"autoClear":null,"merchant":"测试开关","merSaler":"1","merEnName":"OKK","merTel":"1","coopOrgnCode":"1","registArea":"1","startBusTime":"00:05","endBusTime":"23:55","realBusScope":"1","merLegalPerson":"1","legalPersonTel":"1","legalValidPaperType":"id_card","paperNum":"1","paperValidTime":"2020-06-21","businessLicenseNum":"1","businessLicenseValidTime":"2020-06-21","taxRegistCode":"1","linkMan":"1","linkManTel":"1","linkManEmail":"1","merRegistAddress":"1","financeLinkMan":"1","financeLinkManTel":"1","financeLinkManEmail":"1","merPrincipal":"1","merPrincipalTel":"1","merPrincipalEmail":"1","installArea":"1","merInstallArea":"1","accountType":"to_private","subBankName":"中国农业银行股份有限公司塔城165团分理处","openBankPrince":"新疆","openBank":"中国农业银行","openBankCity":"额敏县","accountHolderID":"1","openBankNum":"103901276052","closedCircle":"1","entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":355,"createUser":"法奈昇代理商","createOemUserId":353,"createOemUserName":null,"createTime":"2017-06-21 11:33:26","createTimeString":null,"updateTime":"2017-06-21 11:33:26","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1451,"workOrderId":null,"isOpenQR":1,"mercFlag":"1","weChatFee":"","aliPay":"","accountMethod":"to_bank_card","source":0,"busiCode":"","privateKye":"","channelType":"00","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"个体商户","merSortName":"一般类","merAttrName":"B","legalValidPaperTypeName":"身份证","accountTypeName":"对私","accountMethodName":"银行卡","joinTypeName":"二级商户"},{"id":1118,"code":"848347592236001","innerCode":"062110357411827","joinType":1,"mobile":"18357702278","channelMerchant":"火麒麟","salesSlip":"1","coopNum":"1","merType":"","mccID":9705,"merSort":"house_car_top_type","accountName":"小强","accountNo":"11112222333344446","merArea":"1","signDate":"2017-06-21","merAttr":"","isOpenTBus":null,"autoClear":null,"merchant":"火麒麟","merSaler":"1","merEnName":"HHL","merTel":"1","coopOrgnCode":"1","registArea":"1","startBusTime":"01:05","endBusTime":"23:55","realBusScope":"1","merLegalPerson":"1","legalPersonTel":"1","legalValidPaperType":"id_card","paperNum":"1","paperValidTime":"2020-06-21","businessLicenseNum":"1","businessLicenseValidTime":"2020-06-21","taxRegistCode":"1","linkMan":"1","linkManTel":"1","linkManEmail":"1","merRegistAddress":"1","financeLinkMan":"1","financeLinkManTel":"1","financeLinkManEmail":"1","merPrincipal":"1","merPrincipalTel":"1","merPrincipalEmail":"1","installArea":"1","merInstallArea":"1","accountType":"to_private","subBankName":"中国工商银行股份有限公司富蕴支行","openBankPrince":"新疆","openBank":"中国工商银行","openBankCity":"富蕴县","accountHolderID":"123456789999999999","openBankNum":"102902300018","closedCircle":"1","entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":355,"createUser":"法奈昇代理商","createOemUserId":null,"createOemUserName":null,"createTime":"2017-06-21 11:18:49","createTimeString":null,"updateTime":"2017-06-21 11:18:49","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1450,"workOrderId":null,"isOpenQR":1,"mercFlag":"1","weChatFee":"","aliPay":"","accountMethod":"to_bank_card","source":0,"busiCode":"952010524110","privateKye":"2CF4B554B6DF92AD6E5A7A73DFADD39214746BAB","channelType":"01","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"","merSortName":"房车类封顶","merAttrName":"","legalValidPaperTypeName":"身份证","accountTypeName":"对私","accountMethodName":"银行卡","joinTypeName":"集团商户"},{"id":1117,"code":"848347592236001","innerCode":"062110295790836","joinType":1,"mobile":"18357702278","channelMerchant":"魑通道商户名称","salesSlip":"魑","coopNum":"","merType":"","mccID":0,"merSort":"","accountName":"水麒麟","accountNo":"1111222233334444666","merArea":"","signDate":"2017-06-21","merAttr":"","isOpenTBus":null,"autoClear":null,"merchant":"魑","merSaler":"1","merEnName":"1","merTel":"1","coopOrgnCode":"1","registArea":"1","startBusTime":"00:01","endBusTime":"23:59","realBusScope":"1","merLegalPerson":"水麒麟","legalPersonTel":"1","legalValidPaperType":"","paperNum":"123456789987654321","paperValidTime":"","businessLicenseNum":"1","businessLicenseValidTime":"","taxRegistCode":"1","linkMan":"1","linkManTel":"1","linkManEmail":"","merRegistAddress":"","financeLinkMan":"1","financeLinkManTel":"1","financeLinkManEmail":"","merPrincipal":"1","merPrincipalTel":"1","merPrincipalEmail":"","installArea":"","merInstallArea":"1","accountType":"to_private","subBankName":"中国建设银行股份有限公司赣州章贡支行","openBankPrince":"江西","openBank":"建设银行","openBankCity":"赣州市","accountHolderID":"","openBankNum":"105428000052","closedCircle":"1","entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":0,"createUser":null,"createOemUserId":null,"createOemUserName":null,"createTime":"2017-06-21 11:05:56","createTimeString":null,"updateTime":"2017-06-21 11:05:56","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1449,"workOrderId":null,"isOpenQR":1,"mercFlag":"1","weChatFee":"0.55","aliPay":"0.6","accountMethod":"to_app_account","source":0,"busiCode":"952010524110","privateKye":"2CF4B554B6DF92AD6E5A7A73DFADD39214746BAB","channelType":"01","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"","merSortName":"","merAttrName":"","legalValidPaperTypeName":"","accountTypeName":"对私","accountMethodName":"App余额","joinTypeName":"集团商户"},{"id":1116,"code":"848347592236002","innerCode":"062017598443474","joinType":1,"mobile":"18357707818","channelMerchant":"通道商户名称","salesSlip":"咯哦","coopNum":null,"merType":null,"mccID":0,"merSort":null,"accountName":"图我一样","accountNo":"2222222222222222222","merArea":null,"signDate":"2017-06-20","merAttr":"merattr_b","isOpenTBus":null,"autoClear":null,"merchant":"咯哦","merSaler":"1","merEnName":null,"merTel":"1","coopOrgnCode":"1","registArea":"1","startBusTime":"00:01","endBusTime":"23:59","realBusScope":"1","merLegalPerson":"图我一样","legalPersonTel":"1","legalValidPaperType":null,"paperNum":"33032419850524575t","paperValidTime":null,"businessLicenseNum":"1","businessLicenseValidTime":null,"taxRegistCode":"1","linkMan":"1","linkManTel":"1","linkManEmail":null,"merRegistAddress":null,"financeLinkMan":"1","financeLinkManTel":"1","financeLinkManEmail":null,"merPrincipal":"1","merPrincipalTel":"1","merPrincipalEmail":null,"installArea":null,"merInstallArea":"1","accountType":"to_private","subBankName":"深圳龙岗鼎业村镇银行水贝支行","openBankPrince":"广东","openBank":"深圳龙岗鼎业村镇银行","openBankCity":"深圳市","accountHolderID":"3","openBankNum":"320584000023","closedCircle":"1","entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":355,"createUser":"法奈昇代理商","createOemUserId":1,"createOemUserName":"OEM","createTime":"2017-06-20 17:40:38","createTimeString":null,"updateTime":"2017-06-20 17:58:17","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1447,"workOrderId":null,"isOpenQR":2,"mercFlag":"1","weChatFee":"0.8","aliPay":"0.7","accountMethod":"to_bank_card","source":1,"busiCode":"952010532806","privateKye":"7B14141B88678A813B42F1420B3D183B85AAAC35","channelType":"01","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"","merSortName":"","merAttrName":"B","legalValidPaperTypeName":"","accountTypeName":"对私","accountMethodName":"银行卡","joinTypeName":"集团商户"},{"id":127,"code":"305565054110001","innerCode":"062015204824434","joinType":2,"mobile":"15797188600","channelMerchant":"1+1 费率","salesSlip":"财务部测试","coopNum":"0","merType":"merc_withoutlicense","mccID":null,"merSort":"minsheng_type","accountName":"史祎","accountNo":"6230910199024056208","merArea":"","signDate":"2016-06-20 16:13:43","merAttr":"merattr_d","isOpenTBus":null,"autoClear":null,"merchant":"个体户史祎杭州市白石路","merSaler":"史祎","merEnName":"","merTel":"15797188600","coopOrgnCode":"0","registArea":"浙江省-杭州市","startBusTime":"06:00","endBusTime":"23:59","realBusScope":"咨询","merLegalPerson":"史祎","legalPersonTel":"15797188600","legalValidPaperType":"id_card","paperNum":"420621199302285720","paperValidTime":"2022-02-21","businessLicenseNum":"0","businessLicenseValidTime":"2026-06-17","taxRegistCode":"0","linkMan":"史祎","linkManTel":"15797188600","linkManEmail":"","merRegistAddress":"","financeLinkMan":"史祎","financeLinkManTel":"15797188600","financeLinkManEmail":"","merPrincipal":"史祎","merPrincipalTel":"15797188600","merPrincipalEmail":"","installArea":"杭州市-下城区","merInstallArea":"杭州市下城区白石路318号","accountType":"to_private","subBankName":"杭州联合农村商业银行股份有限公司灯塔支行","openBankPrince":"浙江","openBank":"杭州联合农村商业银行","openBankCity":"杭州市","accountHolderID":"420621199302285720","openBankNum":"402331001528","closedCircle":"T+1","entryWay":"aotu_entry","delStatus":0,"activateStatus":1,"createUserId":355,"createUser":"法奈昇代理商","createOemUserId":null,"createOemUserName":null,"createTime":"2017-06-20 16:59:49","createTimeString":null,"updateTime":"2017-06-20 16:59:49","updateTimeString":null,"groupId":"餐饮","applicationId":87,"channelId":1803,"userId":366,"workOrderId":null,"isOpenQR":1,"mercFlag":null,"weChatFee":"0.6","aliPay":"0.55","accountMethod":"to_bank_card","source":0,"busiCode":null,"privateKye":null,"channelType":"00","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"1+1","merTypeName":"特殊商户","merSortName":"民生类","merAttrName":"D","legalValidPaperTypeName":"身份证","accountTypeName":"对私","accountMethodName":"银行卡","joinTypeName":"普通商户"},{"id":1113,"code":"848347592236001","innerCode":"061914745625609","joinType":2,"mobile":"18612965344","channelMerchant":"正义","salesSlip":"1","coopNum":"1","merType":"merc_personal","mccID":9705,"merSort":"general_top_type","accountName":"正义","accountNo":"111122223333444488","merArea":"1","signDate":"2017-06-19","merAttr":"merattr_c","isOpenTBus":null,"autoClear":null,"merchant":"天降正义1","merSaler":"1","merEnName":"PL","merTel":"1","coopOrgnCode":"1","registArea":"1","startBusTime":"00:05","endBusTime":"23:55","realBusScope":"1","merLegalPerson":"1","legalPersonTel":"1","legalValidPaperType":"id_card","paperNum":"1","paperValidTime":"2020-06-19","businessLicenseNum":"1","businessLicenseValidTime":"2020-06-19","taxRegistCode":"1","linkMan":"1","linkManTel":"1","linkManEmail":"1","merRegistAddress":"1","financeLinkMan":"1","financeLinkManTel":"1","financeLinkManEmail":"1","merPrincipal":"1","merPrincipalTel":"1","merPrincipalEmail":"1","installArea":"1","merInstallArea":"1","accountType":"to_private","subBankName":"中国建设银行股份有限公司石河子市分行","openBankPrince":"新疆","openBank":"中国建设银行","openBankCity":"石河子市","accountHolderID":"987654321123456789","openBankNum":"105902800014","closedCircle":"1","entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":355,"createUser":"法奈昇代理商","createOemUserId":353,"createOemUserName":null,"createTime":"2017-06-19 14:31:34","createTimeString":null,"updateTime":"2017-06-20 16:27:59","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1444,"workOrderId":null,"isOpenQR":1,"mercFlag":"1","weChatFee":"0.01","aliPay":"0.01","accountMethod":"to_bank_card","source":0,"busiCode":"0.01","privateKye":"0.01","channelType":"01","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"个体商户","merSortName":"一般类封顶","merAttrName":"C","legalValidPaperTypeName":"身份证","accountTypeName":"对私","accountMethodName":"银行卡","joinTypeName":"普通商户"},{"id":1115,"code":"848347592236001","innerCode":"062014512680068","joinType":1,"mobile":"18612965744","channelMerchant":"卡不卡","salesSlip":"卡不卡","coopNum":null,"merType":null,"mccID":0,"merSort":null,"accountName":"不可理喻","accountNo":"9999888877776666333","merArea":null,"signDate":"2017-06-20","merAttr":null,"isOpenTBus":null,"autoClear":null,"merchant":"卡不卡","merSaler":null,"merEnName":null,"merTel":null,"coopOrgnCode":null,"registArea":null,"startBusTime":"00:01","endBusTime":"23:59","realBusScope":null,"merLegalPerson":"不可理喻","legalPersonTel":null,"legalValidPaperType":null,"paperNum":"123456789987654321","paperValidTime":null,"businessLicenseNum":"","businessLicenseValidTime":null,"taxRegistCode":null,"linkMan":null,"linkManTel":null,"linkManEmail":null,"merRegistAddress":"","financeLinkMan":null,"financeLinkManTel":null,"financeLinkManEmail":null,"merPrincipal":null,"merPrincipalTel":null,"merPrincipalEmail":null,"installArea":null,"merInstallArea":null,"accountType":"to_private","subBankName":"江苏昆山农村商业银行股份有限公司铜山支行","openBankPrince":"江苏","openBank":"昆山农村商业银行","openBankCity":"徐州市","accountHolderID":null,"openBankNum":"314303000018","closedCircle":null,"entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":0,"createUser":null,"createOemUserId":1,"createOemUserName":"OEM","createTime":"2017-06-20 16:16:16","createTimeString":null,"updateTime":"2017-06-20 16:16:16","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1446,"workOrderId":null,"isOpenQR":1,"mercFlag":null,"weChatFee":"0.55","aliPay":"0.6","accountMethod":"to_app_account","source":1,"busiCode":"952010524110","privateKye":"2CF4B554B6DF92AD6E5A7A73DFADD39214746BAB","channelType":"01","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"","merSortName":"","merAttrName":"","legalValidPaperTypeName":"","accountTypeName":"对私","accountMethodName":"App余额","joinTypeName":"集团商户"},{"id":1114,"code":"848347592236002","innerCode":"062014636928430","joinType":1,"mobile":"18358170008","channelMerchant":"通道商户名称","salesSlip":"来咯吗","coopNum":null,"merType":null,"mccID":0,"merSort":null,"accountName":"可口可乐了","accountNo":"6214855712753736","merArea":null,"signDate":"2017-06-20","merAttr":null,"isOpenTBus":null,"autoClear":null,"merchant":"来咯吗","merSaler":null,"merEnName":null,"merTel":null,"coopOrgnCode":null,"registArea":null,"startBusTime":"00:01","endBusTime":"23:59","realBusScope":null,"merLegalPerson":"可口可乐了","legalPersonTel":null,"legalValidPaperType":null,"paperNum":"33032419850524575t","paperValidTime":null,"businessLicenseNum":null,"businessLicenseValidTime":null,"taxRegistCode":null,"linkMan":null,"linkManTel":null,"linkManEmail":null,"merRegistAddress":null,"financeLinkMan":null,"financeLinkManTel":null,"financeLinkManEmail":null,"merPrincipal":null,"merPrincipalTel":null,"merPrincipalEmail":null,"installArea":null,"merInstallArea":null,"accountType":"to_private","subBankName":"浙江省农村信用社联合社","openBankPrince":"浙江","openBank":"浙江省农村信用社","openBankCity":"杭州市","accountHolderID":null,"openBankNum":"402331000007","closedCircle":null,"entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":0,"createUser":null,"createOemUserId":1,"createOemUserName":"OEM","createTime":"2017-06-20 14:41:17","createTimeString":null,"updateTime":"2017-06-20 14:41:17","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1445,"workOrderId":null,"isOpenQR":1,"mercFlag":null,"weChatFee":"0.55","aliPay":"0.6","accountMethod":"to_bank_card","source":1,"busiCode":"952010530900","privateKye":"14435276D82843923A32B2A1B13852871E8BC8F2","channelType":"00","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"","merSortName":"","merAttrName":"","legalValidPaperTypeName":"","accountTypeName":"对私","accountMethodName":"银行卡","joinTypeName":"集团商户"},{"id":1111,"code":"848347592236002","innerCode":"061615140721137","joinType":1,"mobile":"15957113645","channelMerchant":"通道商户名称","salesSlip":"商户名2","coopNum":null,"merType":null,"mccID":0,"merSort":null,"accountName":"法人名称","accountNo":"6214855712753736","merArea":null,"signDate":"2017-06-16","merAttr":null,"isOpenTBus":null,"autoClear":null,"merchant":"商户名2","merSaler":null,"merEnName":null,"merTel":null,"coopOrgnCode":null,"registArea":null,"startBusTime":"00:01","endBusTime":"23:59","realBusScope":null,"merLegalPerson":"法人名称","legalPersonTel":null,"legalValidPaperType":null,"paperNum":"33032419850524575X","paperValidTime":null,"businessLicenseNum":"","businessLicenseValidTime":null,"taxRegistCode":null,"linkMan":null,"linkManTel":null,"linkManEmail":null,"merRegistAddress":"","financeLinkMan":null,"financeLinkManTel":null,"financeLinkManEmail":null,"merPrincipal":null,"merPrincipalTel":null,"merPrincipalEmail":null,"installArea":null,"merInstallArea":null,"accountType":"to_private","subBankName":"招商银行股份有限公司杭州之江支行","openBankPrince":"浙江","openBank":"招商银行","openBankCity":"杭州市","accountHolderID":null,"openBankNum":"308331012126","closedCircle":null,"entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":0,"createUser":null,"createOemUserId":1,"createOemUserName":"OEM","createTime":"2017-06-20 14:17:57","createTimeString":null,"updateTime":"2017-06-20 14:17:57","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1440,"workOrderId":null,"isOpenQR":1,"mercFlag":null,"weChatFee":"0.55","aliPay":"0.6","accountMethod":"to_bank_card","source":1,"busiCode":"952010530900","privateKye":"14435276D82843923A32B2A1B13852871E8BC8F2","channelType":"01","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"","merSortName":"","merAttrName":"","legalValidPaperTypeName":"","accountTypeName":"对私","accountMethodName":"银行卡","joinTypeName":"集团商户"},{"id":1112,"code":"848347592236001","innerCode":"061910186258674","joinType":3,"mobile":"18612965344","channelMerchant":"天降","salesSlip":"1","coopNum":"1","merType":"merc_personal","mccID":8351,"merSort":"house_car_top_type","accountName":"天降","accountNo":"111122223333444466","merArea":"1","signDate":"2017-06-19","merAttr":"merattr_b","isOpenTBus":null,"autoClear":null,"merchant":"天降正义","merSaler":"1","merEnName":"KK","merTel":"1","coopOrgnCode":"1","registArea":"1","startBusTime":"01:00","endBusTime":"23:55","realBusScope":"1","merLegalPerson":"1","legalPersonTel":"1","legalValidPaperType":"id_card","paperNum":"1","paperValidTime":"2020-06-19","businessLicenseNum":"1","businessLicenseValidTime":"2020-06-19","taxRegistCode":"1","linkMan":"1","linkManTel":"1","linkManEmail":"1","merRegistAddress":"1","financeLinkMan":"1","financeLinkManTel":"1","financeLinkManEmail":"1","merPrincipal":"1","merPrincipalTel":"1","merPrincipalEmail":"1","installArea":"1","merInstallArea":"1","accountType":"to_private","subBankName":"中国农业银行股份有限公司乌苏供销支行","openBankPrince":"新疆","openBank":"中国农业银行","openBankCity":"乌苏市","accountHolderID":"123456789987654321","openBankNum":"103901320055","closedCircle":"1","entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":355,"createUser":"法奈昇代理商","createOemUserId":353,"createOemUserName":null,"createTime":"2017-06-19 14:30:45","createTimeString":null,"updateTime":"2017-06-19 14:30:45","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1443,"workOrderId":null,"isOpenQR":0,"mercFlag":"1","weChatFee":"","aliPay":"","accountMethod":"","source":0,"busiCode":"","privateKye":"","channelType":"","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"个体商户","merSortName":"房车类封顶","merAttrName":"B","legalValidPaperTypeName":"身份证","accountTypeName":"对私","accountMethodName":"","joinTypeName":"二级商户"},{"id":1099,"code":"848347592236001","innerCode":"061509228388381","joinType":3,"mobile":"18614235221","channelMerchant":"天天天1通道商户名称","salesSlip":"2","coopNum":"2","merType":"merc_personal","mccID":5599,"merSort":"house_car_top_type","accountName":"2","accountNo":"2","merArea":"2","signDate":"2017-06-15","merAttr":"merattr_b","isOpenTBus":null,"autoClear":null,"merchant":"天天天天天1","merSaler":"2","merEnName":"PLL","merTel":"2","coopOrgnCode":"2","registArea":"2","startBusTime":"01:00","endBusTime":"23:55","realBusScope":"2","merLegalPerson":"2","legalPersonTel":"2","legalValidPaperType":"officer_card","paperNum":"2","paperValidTime":"2020-06-15","businessLicenseNum":"2","businessLicenseValidTime":"2020-06-15","taxRegistCode":"2","linkMan":"2","linkManTel":"2","linkManEmail":"2","merRegistAddress":"2","financeLinkMan":"2","financeLinkManTel":"2","financeLinkManEmail":"2","merPrincipal":"2","merPrincipalTel":"2","merPrincipalEmail":"2","installArea":"2","merInstallArea":"2","accountType":"to_private","subBankName":"中国建设银行股份有限公司富蕴支行","openBankPrince":"新疆","openBank":"中国建设银行","openBankCity":"富蕴县","accountHolderID":"2","openBankNum":"105902300010","closedCircle":"2","entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":355,"createUser":"法奈昇代理商","createOemUserId":353,"createOemUserName":null,"createTime":"2017-06-15 10:13:33","createTimeString":null,"updateTime":"2017-06-19 10:37:09","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1427,"workOrderId":null,"isOpenQR":1,"mercFlag":"2","weChatFee":"","aliPay":"","accountMethod":"to_bank_card","source":0,"busiCode":"952010524110","privateKye":"2CF4B554B6DF92AD6E5A7A73DFADD39214746BAB","channelType":"01","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"个体商户","merSortName":"房车类封顶","merAttrName":"B","legalValidPaperTypeName":"军官证","accountTypeName":"对私","accountMethodName":"银行卡","joinTypeName":"二级商户"},{"id":150,"code":"305565054110001","innerCode":"062815195830765","joinType":0,"mobile":"15957115132","channelMerchant":"1+1 费率","salesSlip":"益诚烟酒","coopNum":"0","merType":"merc_withoutlicense","mccID":5139,"merSort":"general_top_type","accountName":"陈娇君","accountNo":"6230399991004320145","merArea":"浙江-杭州市","signDate":"2016-06-28","merAttr":"merattr_b","isOpenTBus":null,"autoClear":null,"merchant":"个体户陈娇君0765","merSaler":"朱彬彬","merEnName":"","merTel":"18072968062","coopOrgnCode":"0","registArea":"浙江-杭州市","startBusTime":"06:00","endBusTime":"23:59","realBusScope":"烟酒零售","merLegalPerson":"陈娇君","legalPersonTel":"18072968062","legalValidPaperType":"id_card","paperNum":"332623196510266320","paperValidTime":"2026-10-16","businessLicenseNum":"0","businessLicenseValidTime":"2026-06-23","taxRegistCode":"0","linkMan":"陈娇君","linkManTel":"18072968062","linkManEmail":"","merRegistAddress":"杭州市西湖区转塘杭新路7号","financeLinkMan":"陈娇君","financeLinkManTel":"18072968062","financeLinkManEmail":"","merPrincipal":"陈娇君","merPrincipalTel":"18072968062","merPrincipalEmail":"","installArea":"浙江-杭州市","merInstallArea":"杭州市西湖区转塘杭新路7号","accountType":"to_private","subBankName":"台州银行股份有限公司温岭支行","openBankPrince":"浙江","openBank":"城市商业银行","openBankCity":"温岭市","accountHolderID":"332623196510266320","openBankNum":"313345405089","closedCircle":"T+1","entryWay":"aotu_entry","delStatus":0,"activateStatus":1,"createUserId":355,"createUser":"法奈昇代理商","createOemUserId":null,"createOemUserName":null,"createTime":"2017-06-16 15:46:22","createTimeString":null,"updateTime":"2017-06-16 15:49:05","updateTimeString":null,"groupId":"餐饮","applicationId":87,"channelId":1803,"userId":405,"workOrderId":null,"isOpenQR":0,"mercFlag":"11","weChatFee":"0.6","aliPay":"0.55","accountMethod":"to_app_account","source":0,"busiCode":null,"privateKye":null,"channelType":"00","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"1+1","merTypeName":"特殊商户","merSortName":"一般类封顶","merAttrName":"B","legalValidPaperTypeName":"身份证","accountTypeName":"对私","accountMethodName":"App余额","joinTypeName":""},{"id":1110,"code":"848347592236002","innerCode":"061615349131984","joinType":1,"mobile":"15957113645","channelMerchant":"通道商户名称","salesSlip":"1","coopNum":"","merType":"merc_company","mccID":8398,"merSort":"general_top_type","accountName":"1","accountNo":"1","merArea":"","signDate":"2017-06-16","merAttr":"","isOpenTBus":null,"autoClear":null,"merchant":"1","merSaler":"1","merEnName":"","merTel":"1","coopOrgnCode":"1","registArea":"1","startBusTime":"14:00","endBusTime":"16:00","realBusScope":"1","merLegalPerson":"1","legalPersonTel":"1","legalValidPaperType":"hk_macao_taiwan_passport","paperNum":"1","paperValidTime":"2017-07-01","businessLicenseNum":"1","businessLicenseValidTime":"2017-07-01","taxRegistCode":"1","linkMan":"1","linkManTel":"1","linkManEmail":"","merRegistAddress":"","financeLinkMan":"1","financeLinkManTel":"1","financeLinkManEmail":"","merPrincipal":"1","merPrincipalTel":"1","merPrincipalEmail":"","installArea":"1","merInstallArea":"1","accountType":"to_private","subBankName":"中国农业银行股份有限公司哈巴河县支行","openBankPrince":"新疆","openBank":"中国农业银行","openBankCity":"哈巴河县","accountHolderID":"1","openBankNum":"103902515604","closedCircle":"1","entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":null,"createUser":"法奈昇代理商","createOemUserId":354,"createOemUserName":"朱玉","createTime":"2017-06-16 15:24:27","createTimeString":null,"updateTime":"2017-06-16 15:24:27","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1439,"workOrderId":null,"isOpenQR":0,"mercFlag":"1","weChatFee":"","aliPay":"","accountMethod":"","source":0,"busiCode":"","privateKye":"","channelType":"","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"企业商户","merSortName":"一般类封顶","merAttrName":"","legalValidPaperTypeName":"港澳台通行证","accountTypeName":"对私","accountMethodName":"","joinTypeName":"集团商户"},{"id":165,"code":"305565054110001","innerCode":"070109702543518","joinType":2,"mobile":"15957103547","channelMerchant":"1+1 费率","salesSlip":"米厨餐厅","coopNum":"","merType":"merc_withoutlicense","mccID":5139,"merSort":"general_top_type","accountName":"林丽","accountNo":"6212261202002589324","merArea":"浙江-杭州市","signDate":"2016-07-01","merAttr":"merattr_b","isOpenTBus":null,"autoClear":null,"merchant":"个体户林丽杭州市艮山西路1","merSaler":"毛自雄","merEnName":"","merTel":"13372551959","coopOrgnCode":"0","registArea":"浙江-杭州市","startBusTime":"06:00","endBusTime":"23:59","realBusScope":"餐饮","merLegalPerson":"林丽","legalPersonTel":"13372551959","legalValidPaperType":"id_card","paperNum":"330328197303030022","paperValidTime":"2030-02-23","businessLicenseNum":"0","businessLicenseValidTime":"2036-07-24","taxRegistCode":"0","linkMan":"林丽","linkManTel":"13372551959","linkManEmail":"","merRegistAddress":"浙江省杭州市江干区艮山西路168号","financeLinkMan":"林丽","financeLinkManTel":"13372551959","financeLinkManEmail":"","merPrincipal":"林丽","merPrincipalTel":"13372551959","merPrincipalEmail":"","installArea":"浙江-杭州市","merInstallArea":"浙江省杭州市江干区艮山西路168号","accountType":"to_private","subBankName":"中国工商银行杭州市艮山支行","openBankPrince":"浙江","openBank":"中国工商银行","openBankCity":"杭州市","accountHolderID":"330328197303030022","openBankNum":"102331002237","closedCircle":"T+1","entryWay":"aotu_entry","delStatus":0,"activateStatus":1,"createUserId":355,"createUser":"法奈昇代理商","createOemUserId":null,"createOemUserName":null,"createTime":"2017-06-16 13:44:19","createTimeString":null,"updateTime":"2017-06-16 15:15:29","updateTimeString":null,"groupId":"餐饮","applicationId":87,"channelId":1803,"userId":427,"workOrderId":null,"isOpenQR":1,"mercFlag":"11","weChatFee":"0.6","aliPay":"0.55","accountMethod":"to_bank_card","source":0,"busiCode":"5","privateKye":"6","channelType":"01","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"1+1","merTypeName":"特殊商户","merSortName":"一般类封顶","merAttrName":"B","legalValidPaperTypeName":"身份证","accountTypeName":"对私","accountMethodName":"银行卡","joinTypeName":"普通商户"},{"id":166,"code":"305565054110001","innerCode":"070110648401240","joinType":2,"mobile":"15957103547","channelMerchant":"1+1 费率","salesSlip":"米厨餐厅","coopNum":"","merType":"merc_withoutlicense","mccID":9311,"merSort":"general_top_type","accountName":"林丽","accountNo":"6212261202002589324","merArea":"浙江-杭州市","signDate":"2016-07-01","merAttr":"merattr_b","isOpenTBus":null,"autoClear":null,"merchant":"个体户林丽杭州市艮山西路2","merSaler":"毛自雄","merEnName":"","merTel":"13372551959","coopOrgnCode":"0","registArea":"浙江-杭州市","startBusTime":"06:00","endBusTime":"23:59","realBusScope":"餐饮","merLegalPerson":"林丽","legalPersonTel":"13372551959","legalValidPaperType":"id_card","paperNum":"330328197303030022","paperValidTime":"2030-02-23","businessLicenseNum":"0","businessLicenseValidTime":"2036-07-24","taxRegistCode":"0","linkMan":"林丽","linkManTel":"13372551959","linkManEmail":"","merRegistAddress":"浙江省杭州市江干区艮山西路168号","financeLinkMan":"林丽","financeLinkManTel":"13372551959","financeLinkManEmail":"","merPrincipal":"林丽","merPrincipalTel":"13372551959","merPrincipalEmail":"","installArea":"浙江-杭州市","merInstallArea":"浙江省杭州市江干区艮山西路168号","accountType":"to_private","subBankName":"中国工商银行杭州市艮山支行","openBankPrince":"浙江","openBank":"中国工商银行","openBankCity":"杭州市","accountHolderID":"330328197303030022","openBankNum":"102331002237","closedCircle":"T+1","entryWay":"aotu_entry","delStatus":0,"activateStatus":1,"createUserId":355,"createUser":"法奈昇代理商","createOemUserId":null,"createOemUserName":null,"createTime":"2017-06-16 14:41:55","createTimeString":null,"updateTime":"2017-06-16 14:41:55","updateTimeString":null,"groupId":"餐饮","applicationId":87,"channelId":1803,"userId":429,"workOrderId":null,"isOpenQR":1,"mercFlag":"11","weChatFee":"0.6","aliPay":"0.55","accountMethod":"to_bank_card","source":0,"busiCode":null,"privateKye":null,"channelType":"00","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"1+1","merTypeName":"特殊商户","merSortName":"一般类封顶","merAttrName":"B","legalValidPaperTypeName":"身份证","accountTypeName":"对私","accountMethodName":"银行卡","joinTypeName":"普通商户"},{"id":1107,"code":"1","innerCode":"061518207841869","joinType":1,"mobile":"13857064458","channelMerchant":"1","salesSlip":"1","coopNum":"1","merType":"merc_company","mccID":9223,"merSort":"general_top_type","accountName":"1","accountNo":"1","merArea":"1","signDate":"2017-06-15","merAttr":"merattr_a","isOpenTBus":null,"autoClear":null,"merchant":"1","merSaler":"1","merEnName":"","merTel":"1","coopOrgnCode":"1","registArea":"1","startBusTime":"17:00","endBusTime":"17:00","realBusScope":"1","merLegalPerson":"1","legalPersonTel":"1","legalValidPaperType":"hk_macao_taiwan_passport","paperNum":"1","paperValidTime":"2017-06-15","businessLicenseNum":"1","businessLicenseValidTime":"2017-06-16","taxRegistCode":"1","linkMan":"1","linkManTel":"1","linkManEmail":"1","merRegistAddress":"1","financeLinkMan":"1","financeLinkManTel":"1","financeLinkManEmail":"1","merPrincipal":"1","merPrincipalTel":"1","merPrincipalEmail":"1","installArea":"1","merInstallArea":"1","accountType":"","subBankName":"电子联行转换中心","openBankPrince":"北京","openBank":"农村信用合作社","openBankCity":"北京市","accountHolderID":"1","openBankNum":"998800006","closedCircle":"1","entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":null,"createUser":"1","createOemUserId":354,"createOemUserName":"朱玉","createTime":"2017-06-16 13:16:41","createTimeString":null,"updateTime":"2017-06-16 13:16:41","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1801,"userId":1436,"workOrderId":null,"isOpenQR":1,"mercFlag":"1","weChatFee":"","aliPay":"","accountMethod":"to_bank_card","source":0,"busiCode":"","privateKye":"","channelType":"00","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"北京联银","merTypeName":"企业商户","merSortName":"一般类封顶","merAttrName":"A","legalValidPaperTypeName":"港澳台通行证","accountTypeName":"","accountMethodName":"银行卡","joinTypeName":"集团商户"},{"id":1109,"code":"848347592236001","innerCode":"061611843830158","joinType":1,"mobile":"18888888888","channelMerchant":"拒绝","salesSlip":"君姐姐","coopNum":null,"merType":null,"mccID":0,"merSort":null,"accountName":"好好","accountNo":"5664616616194919916","merArea":null,"signDate":"2017-06-16","merAttr":null,"isOpenTBus":null,"autoClear":null,"merchant":"君姐姐","merSaler":null,"merEnName":null,"merTel":null,"coopOrgnCode":null,"registArea":null,"startBusTime":"00:01","endBusTime":"23:59","realBusScope":null,"merLegalPerson":"好好","legalPersonTel":null,"legalValidPaperType":null,"paperNum":"334646316165455664","paperValidTime":null,"businessLicenseNum":null,"businessLicenseValidTime":null,"taxRegistCode":null,"linkMan":null,"linkManTel":null,"linkManEmail":null,"merRegistAddress":null,"financeLinkMan":null,"financeLinkManTel":null,"financeLinkManEmail":null,"merPrincipal":null,"merPrincipalTel":null,"merPrincipalEmail":null,"installArea":null,"merInstallArea":null,"accountType":"to_private","subBankName":"江西赣州银座村镇银行股份有限公司石城支行","openBankPrince":"江西","openBank":"江西赣州银座村镇银行","openBankCity":"赣州市","accountHolderID":null,"openBankNum":"320429980126","closedCircle":null,"entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":0,"createUser":null,"createOemUserId":1,"createOemUserName":"OEM","createTime":"2017-06-16 11:48:39","createTimeString":null,"updateTime":"2017-06-16 11:48:39","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1438,"workOrderId":null,"isOpenQR":1,"mercFlag":null,"weChatFee":"0.55","aliPay":"0.6","accountMethod":"to_app_account","source":1,"busiCode":"","privateKye":"","channelType":"00","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"","merSortName":"","merAttrName":"","legalValidPaperTypeName":"","accountTypeName":"对私","accountMethodName":"App余额","joinTypeName":"集团商户"},{"id":1108,"code":"848347592236001","innerCode":"061611664037866","joinType":1,"mobile":"13857064458","channelMerchant":"哈哈哈","salesSlip":"哈哈哈","coopNum":null,"merType":null,"mccID":0,"merSort":null,"accountName":"哈哈哈","accountNo":"6228464313646488484","merArea":null,"signDate":"2017-06-16","merAttr":null,"isOpenTBus":null,"autoClear":null,"merchant":"哈哈哈","merSaler":null,"merEnName":null,"merTel":null,"coopOrgnCode":null,"registArea":null,"startBusTime":"00:01","endBusTime":"23:59","realBusScope":null,"merLegalPerson":"哈哈哈","legalPersonTel":null,"legalValidPaperType":null,"paperNum":"336464616919494994","paperValidTime":null,"businessLicenseNum":null,"businessLicenseValidTime":null,"taxRegistCode":null,"linkMan":null,"linkManTel":null,"linkManEmail":null,"merRegistAddress":null,"financeLinkMan":null,"financeLinkManTel":null,"financeLinkManEmail":null,"merPrincipal":null,"merPrincipalTel":null,"merPrincipalEmail":null,"installArea":null,"merInstallArea":null,"accountType":"to_private","subBankName":"江西赣州银座村镇银行股份有限公司寻乌支行","openBankPrince":"江西","openBank":"江西赣州银座村镇银行","openBankCity":"赣州市","accountHolderID":null,"openBankNum":"320429880184","closedCircle":null,"entryWay":null,"delStatus":0,"activateStatus":1,"createUserId":0,"createUser":null,"createOemUserId":1,"createOemUserName":"OEM","createTime":"2017-06-16 11:32:33","createTimeString":null,"updateTime":"2017-06-16 11:32:33","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":1437,"workOrderId":null,"isOpenQR":0,"mercFlag":null,"weChatFee":"0.55","aliPay":"0.6","accountMethod":"to_app_account","source":1,"busiCode":"","privateKye":"","channelType":"00","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"","merSortName":"","merAttrName":"","legalValidPaperTypeName":"","accountTypeName":"对私","accountMethodName":"App余额","joinTypeName":"集团商户"},{"id":320,"code":"848347472986010","innerCode":"080313809098550","joinType":1,"mobile":"15168366366","channelMerchant":"杭州市长河街道12号个体陈达耀足浴-钱宝","salesSlip":"杭州市白马湖建国饭店","coopNum":null,"merType":"merc_withoutlicense","mccID":4814,"merSort":"general_type","accountName":"陈达耀","accountNo":"6228480329447193973","merArea":null,"signDate":"2016-08-03","merAttr":null,"isOpenTBus":null,"autoClear":null,"merchant":"杭州市长江南路336号个体陈达耀足浴","merSaler":"法奈昇","merEnName":"mcht_en_abbr","merTel":"15168366366","coopOrgnCode":"0","registArea":"浙江-杭州市","startBusTime":"00:00","endBusTime":"23:59","realBusScope":"酒店","merLegalPerson":"陈达耀","legalPersonTel":"15168366366","legalValidPaperType":"id_card","paperNum":"445281198205261231","paperValidTime":"2036-09-02","businessLicenseNum":"无执照","businessLicenseValidTime":null,"taxRegistCode":"0","linkMan":"陈达耀","linkManTel":"15168366366","linkManEmail":null,"merRegistAddress":"杭州市滨江区长江南路336号白马湖建国饭店地下一层","financeLinkMan":"陈达耀","financeLinkManTel":"15168366366","financeLinkManEmail":null,"merPrincipal":"陈达耀","merPrincipalTel":"15168366366","merPrincipalEmail":null,"installArea":null,"merInstallArea":"杭州市滨江区长江南路336号白马湖建国饭店地下一层","accountType":"to_private","subBankName":"中国农业银行杭州长河支行","openBankPrince":"浙江","openBank":"中国农业银行","openBankCity":"杭州市","accountHolderID":"445281198205261231","openBankNum":"103331004555","closedCircle":"T+1","entryWay":"aotu_entry","delStatus":0,"activateStatus":1,"createUserId":355,"createUser":"法奈昇代理商","createOemUserId":null,"createOemUserName":null,"createTime":"2016-08-03 13:45:11","createTimeString":null,"updateTime":"2017-06-16 10:47:17","updateTimeString":null,"groupId":null,"applicationId":87,"channelId":1804,"userId":606,"workOrderId":null,"isOpenQR":0,"mercFlag":"有效商户（POS商户）","weChatFee":"0.6","aliPay":"0.55","accountMethod":"to_app_account","source":0,"busiCode":null,"privateKye":null,"channelType":"00","attachname":null,"attachpath":null,"fileTypeKey":null,"editFieldArray":null,"fileList":null,"isAppUserApply":null,"channelName":"钱宝","merTypeName":"特殊商户","merSortName":"一般类","merAttrName":"","legalValidPaperTypeName":"身份证","accountTypeName":"对私","accountMethodName":"App余额","joinTypeName":"集团商户"}];
+    $('#table').bootstrapTable({
+        data:json,
+        search: true, //是否启动搜索栏 
+        showRefresh: false,//是否显示刷新按钮
+        showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
+        toolbar: '#toolbar',  //工具按钮用哪个容器
+        striped: true,   //是否显示行间隔色
+        cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+        pagination: true,   //是否显示分页（*）
+        sortable: true,   //是否启用排序
+        sortOrder: "asc",   //排序方式
+        pageNumber:1,   //初始化加载第一页，默认第一页
+        pageSize: 15,   //每页的记录行数（*）
+        pageList: [15, 20, 50, 100], //可供选择的每页的行数（*）
+        columns: [{
+            field: 'state',
+            checkbox: true,
+            rowspan:1,
+            align: 'center',
+            valign: 'middle'
+        },{
+            field: 'operate',
+            title: '操作',
+            width:'160',
+            align: 'center',
+            formatter: operateFormatter,
+            // events: operateEvents
+        },{
+            field: 'merchant',
+            title: '商户名'
+        },{
+            field: 'createUser',
+            title: '代理商名称'
+        },{
+            field: 'mobile',
+            title: '手机号'
+        },{
+            field: 'innerCode',
+            title: '内部商户号'
+        },{
+            field: 'joinTypeName',
+            title: '加盟类型'
+        },{
+            field: 'salesSlip',
+            title: '签购单名称'
+        },{
+            field: 'merTypeName',
+            title: '商户类型'
+        },{
+            field: 'accountName',
+            title: '商户法人名字'
+        },{
+            field: 'mccID',
+            title: 'MCC'
+        },{
+            field: 'merSortName',
+            title: '商户类别'
+        },{
+            field: 'merArea',
+            title: '商户地区'
+        },{
+            field: 'merAttrName',
+            title: '商户属性'
+        },{
+            field: 'merLegalPerson',
+            title: '账户开户名'
+        },{
+            field: 'accountNo',
+            title: '开户账号'
+        },{
+            field: 'openBank',
+            title: '开户行'
+        },{
+            field: 'subBankName',
+            title: '支行名称'
+        },{
+            field: 'openBankNum',
+            title: '联行号'
+        },{
+            field: 'signDate',
+            title: '登记时间'
+        },{
+            field: 'channelName',
+            title: '通道'
+        },{
+            field: 'createTime',
+            title: '创建时间',
+        },{
+            field: 'updateTime',
+            title: '更新时间'
+        }]
+    });
+    window.operateEvents = {
+        'click .redact': function (e, value, row, index) {
+            alert('You click like action, row: ' + JSON.stringify(row));
+        },
+        'click .remove': function (e, value, row, index) {
+            $table.bootstrapTable('remove', {
+                field: 'id',
+                values: [row.id]
+            });
+        }
+    };
+    function operateFormatter(value, row, index) {
+        return [
+            '<a class="redact" href="javascript:void(0)" title="编辑">',
+            '<i class="glyphicon glyphicon-pencil"></i>',
+            '</a>  ',
+            '<a class="remove" href="javascript:void(0)" title="删除">',
+            '<i class="glyphicon glyphicon glyphicon-trash"></i>',
+            '</a>'
+        ].join('');
+    }
+
+    /*弹框下一步按钮事件*/
+    $(".nextBtn").click(function(){
+        $(".nav-tabs li.active").removeClass('active').next().addClass('active');
+    })
+
+</script>
+</html>
