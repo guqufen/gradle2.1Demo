@@ -21,8 +21,8 @@ import net.fnsco.web.controller.e789.vo.AppAdVO;
  * @Date	 2017年12月4日 下午5:01:12
  */
 @RestController
-@RequestMapping(value = "/app2c/e789/ad", method = RequestMethod.POST)
-@Api(value = "/app2c/e789/ad", tags = { "广告资讯相关功能接口" })
+@RequestMapping(value = "/app2c/ad", method = RequestMethod.POST)
+@Api(value = "/app2c/ad", tags = { "账户-广告资讯相关功能接口" })
 public class AdController extends BaseController {
 	
 	/**
@@ -33,8 +33,9 @@ public class AdController extends BaseController {
  	@RequestMapping(value = "/queryAd")
     @ApiOperation(value = "查询广告资讯")
     public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
+ 		AppAdVO vo = new AppAdVO();
  		
-        return success(null);
+        return success(vo);
     }
 
 }

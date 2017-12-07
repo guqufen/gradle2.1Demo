@@ -14,7 +14,7 @@ import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 @RequestMapping(value = "/trade/zxyh", method = RequestMethod.POST)
 @Api(value = "/trade/zxyh", tags = { "中信银行回调" })
 /**
- * 商户被扫接口
+ * 商户被扫接口回调
  * @author Administrator
  *
  */
