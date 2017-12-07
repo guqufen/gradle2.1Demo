@@ -22,7 +22,7 @@ import net.fnsco.web.controller.e789.vo.AppAdVO;
  */
 @RestController
 @RequestMapping(value = "/app2c/ad", method = RequestMethod.POST)
-@Api(value = "/app2c/ad", tags = { "账户页-广告资讯相关功能接口" })
+@Api(value = "/app2c/ad", tags = { "账户-广告资讯相关功能接口" })
 public class AdController extends BaseController {
 	
 	/**
