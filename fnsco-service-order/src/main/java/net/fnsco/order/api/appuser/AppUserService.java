@@ -1,10 +1,12 @@
 package net.fnsco.order.api.appuser;
 
 import java.util.List;
+import java.util.Map;
 
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.order.api.dto.AppUserDTO;
+import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.order.api.dto.AppUserManageDTO;
 import net.fnsco.order.api.dto.AppUserMerchantDTO;
 import net.fnsco.order.api.dto.BandDto;
@@ -22,7 +24,11 @@ public interface AppUserService {
 	ResultDTO<String> findPassword(AppUserDTO appUserDTO);
 	//根据手机号查询用户实体
 	ResultDTO<String> loginByMoblie(AppUserDTO appUserDTO);
-
+	//e789根据手机号查询用户实体
+	ResultDTO<String> e789LoginByMoblie(AppUserDTO appUserDTO);
+	//e789查询登录信息
+	AppUserLoginInfoDTO getLoginInfor(AppUserDTO appUserDTO);
+	
 	//退出登录
 	ResultDTO<String> loginOut(AppUserDTO appUserDTO);
 

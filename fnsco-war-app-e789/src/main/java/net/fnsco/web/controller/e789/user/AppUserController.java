@@ -29,6 +29,7 @@ import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
+import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.web.controller.e789.jo.AddPayPasswordJO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.FindPasswordJO;
@@ -116,8 +117,27 @@ public class AppUserController extends BaseController {
     	appUserDTO.setDeviceToken(loginJO.getDeviceToken());
     	appUserDTO.setMobile(loginJO.getMobile());
     	appUserDTO.setPassword(loginJO.getPassword());
-        ResultDTO<String> result = appUserService.loginByMoblie(appUserDTO);
+        ResultDTO<String> result = appUserService.e789LoginByMoblie(appUserDTO);
+        if(!result.isSuccess()) {
+        	return result.fail();
+        }
+        AppUserLoginInfoDTO appUserLoginInfoDTO = appUserService.getLoginInfor(appUserDTO);
         LoginVO loginVO = new LoginVO();
+        loginVO.setHeadImagePath(appUserLoginInfoDTO.getHeadImagePath());
+        loginVO.setUserId(appUserLoginInfoDTO.getUserId());
+        loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
+        int num = appUserLoginInfoDTO.getMerchantNums();
+        if(num==0) {
+        	loginVO.setLoginRights("no");
+        }else {
+        	loginVO.setLoginRights("yes");
+        }
+        if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getPayPassword())) {
+        	loginVO.setBeingPayPassword(false);
+        }else {
+        	loginVO.setBeingPayPassword(true);
+        }
+        loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
         return ResultDTO.success(loginVO);
     }
 

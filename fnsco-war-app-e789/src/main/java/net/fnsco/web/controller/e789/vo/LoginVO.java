@@ -6,6 +6,10 @@ import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 public class LoginVO extends VO {
+	@ApiModelProperty(value="app用户id",name="userId",example="app用户id")
+	private Integer userId;
+	@ApiModelProperty(value="手机号",name="mobile",example="手机号")
+	private String mobile; 
 	@ApiModelProperty(value="用户名",name="userName",example="用户名")
 	private String userName; 
 	@ApiModelProperty(value="头像地址",name="headImagePath",example="头像地址")
@@ -16,6 +20,31 @@ public class LoginVO extends VO {
 	private boolean beingPayPassword;
 	@ApiModelProperty(value="未读取消息列表",name="unReadMsgIds",example="未读取消息列表")
 	private List<Integer> unReadMsgIds;
+	
+	/**
+	 * @return the userId
+	 */
+	public Integer getUserId() {
+		return userId;
+	}
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+	/**
+	 * @return the mobile
+	 */
+	public String getMobile() {
+		return mobile;
+	}
+	/**
+	 * @param mobile the mobile to set
+	 */
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
 	/**
 	 * @return the userName
 	 */

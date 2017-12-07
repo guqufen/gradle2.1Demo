@@ -38,6 +38,7 @@ import net.fnsco.order.api.dto.AppOldListDTO;
 import net.fnsco.order.api.dto.AppOldPeopleDTO;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserInfoDTO;
+import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.order.api.dto.AppUserManageDTO;
 import net.fnsco.order.api.dto.AppUserMerchantDTO;
 import net.fnsco.order.api.dto.AppUserSettingDTO;
@@ -418,6 +419,89 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         List<AppUserSettingDTO> settingstatus = appUserSettingService.installSettingStatus(appUserId);
         map.put("appSettings", settingstatus);
         return ResultDTO.success(map);
+    }
+  //e789根据手机号码和密码登录
+    @Override
+    public ResultDTO e789LoginByMoblie(AppUserDTO appUserDTO) {
+        //非空判断
+        if (Strings.isNullOrEmpty(appUserDTO.getMobile())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
+        } else if (Strings.isNullOrEmpty(appUserDTO.getPassword())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+        }
+        String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
+        //根据手机号查询用户实体是否存在
+        AppUser appUser = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+        if (appUser == null) {
+            return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+        }
+        //密码错误
+        if (!password.equals(appUser.getPassword())) {
+            return ResultDTO.fail(ApiConstant.E_LOGINMSG_ERROR);
+        }
+        //把原先的deviceToken清空
+        //根据deviceToken查找记录 如果存在就清空
+        List<AppUser> items = appUserDao.queryBydeviceToken(appUserDTO.getDeviceToken());
+        if (items.isEmpty()) {
+            logger.warn("该设备之前没有注册过账号或该设备之前注册的账号已注销");
+        }
+        for (AppUser item : items) {
+            String deviceToken = null;
+            String deviceId = null;
+            Integer deviceType = null;
+            if (!appUserDao.updateDeviceToken(item.getMobile(), deviceToken, deviceId, deviceType)) {
+                return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
+            }
+        }
+        AppUser adminUser = new AppUser();
+        adminUser.setDeviceId(appUserDTO.getDeviceId());
+        adminUser.setLastLoginTime(new Date());
+        adminUser.setDeviceType(appUserDTO.getDeviceType());
+        adminUser.setDeviceToken(appUserDTO.getDeviceToken());
+        adminUser.setId(appUser.getId());
+        adminUser.setForcedLoginOut(0);
+        //更新到实体
+        if (!appUserDao.updateByPrimaryKeySelective(adminUser)) {
+            return ResultDTO.fail(ApiConstant.E_LOGIN_ERROR);
+        }
+        return ResultDTO.success();
+    }
+  //e789获取登录信息
+    @Override
+    public AppUserLoginInfoDTO getLoginInfor(AppUserDTO appUserDTO) {
+    	AppUserLoginInfoDTO appUserLoginInfoDTO = new AppUserLoginInfoDTO();
+    	AppUser appUser = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+    	String headImagePath = appUser.getHeadImagePath();
+        if (!Strings.isNullOrEmpty(headImagePath)) {
+            String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
+            appUserLoginInfoDTO.setHeadImagePath(path);
+           // map.put("headImagePath", OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+        } else {
+        	appUserLoginInfoDTO.setHeadImagePath(null);
+        }
+        appUserLoginInfoDTO.setUserName(appUser.getUserName());
+        appUserLoginInfoDTO.setMoblie(appUser.getMobile());
+        appUserLoginInfoDTO.setUserId(appUser.getId());
+        appUserLoginInfoDTO.setPayPassword(appUser.getPayPassword());
+        //查询用户绑定商户数量 根据用户id查询数量
+        int merchantNums = 0;
+        List<AppUserMerchant> rel = appUserMerchantDao.selectByUserId(appUser.getId());
+        if (!CollectionUtils.isEmpty(rel)) {
+            merchantNums = rel.size();
+        }
+        appUserLoginInfoDTO.setMerchantNums(merchantNums);
+        Integer appUserId = appUser.getId();
+        //登录获取未读消息信息
+        List<SysMsgAppSucc> unReadInfo = sysMsgAppSuccDao.selectTotalUnread(appUserId);
+        List<Integer> unReadMsgIds = Lists.newArrayList();
+        for (SysMsgAppSucc sysMsgAppSucc : unReadInfo) {
+            unReadMsgIds.add(sysMsgAppSucc.getMsgId());
+        }
+        appUserLoginInfoDTO.setUnReadMsgIds(unReadMsgIds);
+        /*//返回值增加设置状态
+        List<AppUserSettingDTO> settingstatus = appUserSettingService.installSettingStatus(appUserId);
+        map.put("appSettings", settingstatus);*/
+        return appUserLoginInfoDTO;
     }
 
     //退出登录
