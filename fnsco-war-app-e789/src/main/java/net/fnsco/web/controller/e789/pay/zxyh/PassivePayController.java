@@ -18,7 +18,7 @@ import net.fnsco.web.controller.e789.vo.PassiveVO;
 
 @RestController
 @RequestMapping(value = "/app2c/trade/passivePay", method = RequestMethod.POST)
-@Api(value = "/app2c/trade/passivePay", tags = { "E2-2 扫一扫支付接口" })
+@Api(value = "/app2c/trade/passivePay", tags = { "扫一扫" })
 public class PassivePayController extends BaseController {
 
 	@Autowired
@@ -31,7 +31,7 @@ public class PassivePayController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/pay")
-	@ApiOperation(value = "扫一扫支付交易接口url")
+	@ApiOperation(value = "扫一扫-支付交易接口url")
 	public ResultDTO<PassiveVO> ZxyhPassivePay(@RequestBody PassivePayJO passivePayJO) {
 
 		PassivePayDTO passivePayDTO = new PassivePayDTO();
@@ -50,7 +50,7 @@ public class PassivePayController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/queryPayResult")
-	@ApiOperation(value = "扫一扫支付结果查询接口url")
+	@ApiOperation(value = "扫一扫-支付结果查询接口url")
 	public ResultDTO<PassiveVO> ZxyhPassivePayResult(@RequestBody PassiveResultQueryJO passiveResultQueryJO) {
 
 		PassivePayDTO passivePayDTO = new PassivePayDTO();
