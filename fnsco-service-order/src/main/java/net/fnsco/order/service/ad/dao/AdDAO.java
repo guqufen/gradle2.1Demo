@@ -36,5 +36,9 @@ public interface AdDAO {
 
     @SelectProvider(type = AdProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("ad") AdDO ad);
+    
+    
+    @Select("SELECT * FROM sys_ad")
+	public List<AdDO> queryAdList();
 
 }

@@ -18,6 +18,7 @@ public class AdDO {
      * 图片路径
      */
     private String imgPath;
+    private String url;
 
     /**
      * 类别（1广告、2资讯）
@@ -51,7 +52,21 @@ public class AdDO {
 
 
 
-    public Integer getId() {
+    /**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public Integer getId() {
         return id;
     }
 

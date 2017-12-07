@@ -1,12 +1,18 @@
 package net.fnsco.order.service.ad;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.codec.binary.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.order.service.ad.dao.AdDAO;
 import net.fnsco.order.service.ad.entity.AdDO;
@@ -53,4 +59,30 @@ public class AdService extends BaseService {
      AdDO obj = this.adDAO.getById(id);
      return obj;
  }
+
+
+ 
+ /**
+  * e789获取广告资讯
+  */
+ public ResultDTO<Map<String, List>> queryAdList() {
+	 	List<AdDO> adList = null;
+		List<AdDO> newsList = null;
+		Map<String, List> map = new HashMap<>();
+		List<AdDO> allList = this.adDAO.queryAdList();
+		if(allList.isEmpty()){
+			return ResultDTO.failForMessage("未发现相关信息");
+		}
+		for (AdDO adDO : allList) {
+			if(StringUtils.equals("1", adDO.getCategory().toString())){
+				adList.add(adDO);
+			}else{
+				newsList.add(adDO);
+			}
+			map.put("ad", adList);
+			map.put("news", newsList);
+		}
+		
+		return ResultDTO.success(map);
+	}
 }
