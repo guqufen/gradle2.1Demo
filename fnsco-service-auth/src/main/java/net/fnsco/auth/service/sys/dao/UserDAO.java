@@ -30,11 +30,6 @@ public interface UserDAO {
 
     @Results({ @Result(column = "real_name", property = "realName"), @Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),
                @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
-    @Select("SELECT * FROM sys_user WHERE name=#{name}  and status ='1' ")
-    public UserDO getByUserName(@Param("name") String name);
-
-    @Results({ @Result(column = "real_name", property = "realName"), @Result(column = "alias_name", property = "aliasName"), @Result(column = "agent_id", property = "agentId"),
-               @Result(column = "modify_time", property = "modifyTime"), @Result(column = "modify_user_id", property = "modifyUserId") })
     @Select("SELECT * FROM sys_user WHERE name=#{name}")
     public UserDO getByName(@Param("name") String name);
 

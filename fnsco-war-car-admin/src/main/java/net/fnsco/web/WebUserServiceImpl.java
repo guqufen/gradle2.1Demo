@@ -33,7 +33,7 @@ public class WebUserServiceImpl extends BaseService implements WebService {
             return user;
         }
         String userName = cookeiUser.toString().substring(cookeiUser.toString().lastIndexOf("#") + 1, cookeiUser.toString().length());
-        UserDO temp = userService.getUserByName(userName);
+        UserDO temp = userService.getByName(userName);
         if (temp != null) {
             user = new WebUserDTO();
             user.setId(temp.getId());
