@@ -103,4 +103,5 @@ public interface MerchantEntityDao {
      */
     int updateByEntityInnerCode(MerchantEntity record);
     
+    MerchantEntity selectByAppUserId(@Param("userId")Integer userId);
 }

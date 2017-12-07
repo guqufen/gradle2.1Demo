@@ -534,5 +534,21 @@
     </set>
     where entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR}
   </update>
-  
+  <!-- 根据APPUSERID查询一条实体信息 -->
+  <select id="selectByAppUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT
+		<include refid="Base_Column_List" />
+	FROM
+		m_merchant_entity
+	WHERE
+		entity_inner_code IN (
+			SELECT
+				entity_inner_code
+			FROM
+				u_app_user_merchant_entity
+			WHERE
+				app_user_id = #{userId}
+		)
+	LIMIT 1
+  </select>
 </mapper>

@@ -14,34 +14,34 @@ public class ModifyPayPasswordJO extends JO {
 	private static final long serialVersionUID = 1L;
 
 	@ApiModelProperty(value="密码")
-	private String password;// 密码
+	private String payPassword;// 密码
 	@ApiModelProperty(value="原密码")
-	private String oldPassword;// 原密码
+	private String oldPayPassword;// 原密码
 	@ApiModelProperty(value="用户id")
 	private Integer userId;// 用户id
 	/**
-	 * @return the password
+	 * @return the payPassword
 	 */
-	public String getPassword() {
-		return password;
+	public String getPayPassword() {
+		return payPassword;
 	}
 	/**
-	 * @param password the password to set
+	 * @param payPassword the payPassword to set
 	 */
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
 	}
 	/**
-	 * @return the oldPassword
+	 * @return the oldPayPassword
 	 */
-	public String getOldPassword() {
-		return oldPassword;
+	public String getOldPayPassword() {
+		return oldPayPassword;
 	}
 	/**
-	 * @param oldPassword the oldPassword to set
+	 * @param oldPayPassword the oldPayPassword to set
 	 */
-	public void setOldPassword(String oldPassword) {
-		this.oldPassword = oldPassword;
+	public void setOldPayPassword(String oldPayPassword) {
+		this.oldPayPassword = oldPayPassword;
 	}
 	/**
 	 * @return the userId
