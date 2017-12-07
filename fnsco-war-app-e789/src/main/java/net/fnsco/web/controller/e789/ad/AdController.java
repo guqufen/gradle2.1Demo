@@ -1,4 +1,8 @@
 package net.fnsco.web.controller.e789.ad;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.order.service.ad.AdService;
 import net.fnsco.web.controller.e789.jo.AccountBalanceJO;
 import net.fnsco.web.controller.e789.jo.AppAdJO;
 import net.fnsco.web.controller.e789.vo.AccountBalanceVO;
@@ -25,6 +30,8 @@ import net.fnsco.web.controller.e789.vo.AppAdVO;
 @Api(value = "/app2c/ad", tags = { "账户-广告资讯相关功能接口" })
 public class AdController extends BaseController {
 	
+	@Autowired
+	private AdService adService;
 	/**
 	 * 
 	 * @param accountBalanceJO
@@ -34,8 +41,10 @@ public class AdController extends BaseController {
     @ApiOperation(value = "查询广告资讯")
     public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
  		AppAdVO vo = new AppAdVO();
- 		
-        return success(vo);
+ 		ResultDTO<Map<String, List>> map = adService.queryAdList();
+ 		vo.setAdList(map.getData().get("ad"));
+ 		vo.setNewsList(map.getData().get("news"));
+        return ResultDTO.success(vo);
     }
 
 }

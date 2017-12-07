@@ -205,4 +205,11 @@
 	<delete id="deleteByInnerCode" parameterType="java.lang.String">
 	  DELETE FROM m_merchant_bank WHERE inner_code = #{innerCode}
 	</delete>
+	<!-- 根据appUserId查询 -->
+	<select id="selectByAppUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select 
+	     <include refid="Base_Column_List" />
+	     from m_merchant_bank
+	     where inner_code in (select inner_code from u_app_user_merchant where app_user_id = #{userId}) limit 1
+	</select>
 </mapper>

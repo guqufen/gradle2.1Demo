@@ -2,6 +2,7 @@ package net.fnsco.web.controller.e789.stat;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,6 +12,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.DateUtils;
+import net.fnsco.order.api.constant.ApiConstant;
+import net.fnsco.trading.service.order.dao.TradeOrderByDayDAO;
+import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.PayTypeTurnoverJO;
 import net.fnsco.web.controller.e789.vo.EveryDayTurnoverVO;
@@ -29,6 +34,10 @@ import net.fnsco.web.controller.e789.vo.TotalTurnoverVO;
 @Api(value = "/app2c/stat", tags = { "首页-统计相关功能接口" })
 public class StatController extends BaseController {
 	
+	@Autowired
+	private TradeOrderByDayDAO tradeOrderByDayDAO;
+	@Autowired
+	private TradeOrderDAO tradeOrderDAO;
 	/**
 	 * 
 	 * getTotalTurnover:(这里用一句话描述这个方法的作用)
@@ -43,7 +52,22 @@ public class StatController extends BaseController {
 	@ApiOperation(value = "首页-统计-获取今日昨天本月交易额接口")
 	public ResultDTO<TotalTurnoverVO> getTotalTurnover(@RequestBody CommonJO commonJO){
 		
-		return null;
+		if(null == commonJO.getUserId()) {
+ 			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+ 		}
+		
+		TotalTurnoverVO resultVO =  new TotalTurnoverVO();
+		String tradeToday = DateUtils.getDateStrByMonth(0,0);//yyyy-MM-dd
+		String totalToday = tradeOrderDAO.queryTotalAmount(tradeToday, commonJO.getUserId());
+		
+		String tradeYesterday = DateUtils.getDateStrByMonth(0,0);//yyyy-MM-dd
+		String  totalTesterday = tradeOrderByDayDAO.selectDayTurnover(tradeYesterday, commonJO.getUserId());
+		resultVO.setYesterdayTurnover(totalTesterday);
+		
+		
+		String tradeMonth = DateUtils.getNowDateMonthStr();//yyyy-MM
+		
+		return success(resultVO);
 	}
 	
 	/**

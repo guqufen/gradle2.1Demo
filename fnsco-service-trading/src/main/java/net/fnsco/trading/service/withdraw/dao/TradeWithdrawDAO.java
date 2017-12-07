@@ -37,5 +37,18 @@ public interface TradeWithdrawDAO {
 
     @SelectProvider(type = TradeWithdrawProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("tradeWithdraw") TradeWithdrawDO tradeWithdraw);
+    
+    /**
+     * queryTotalAmount:(按照月份查询某用户总账单和)
+     *
+     * @param  @param appUserId
+     * @param  @param tradeMonth
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年12月7日 上午11:46:23
+     */
+    @SelectProvider(type = TradeWithdrawProvider.class, method = "queryTotalAmount")
+    public String queryTotalAmount(@Param("appUserId") Integer appUserId,@Param("tradeMonth") String tradeMonth,@Param("status")Integer status);
 
 }

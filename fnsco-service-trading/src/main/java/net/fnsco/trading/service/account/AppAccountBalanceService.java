@@ -54,4 +54,19 @@ public class AppAccountBalanceService extends BaseService {
      AppAccountBalanceDO obj = this.appAccountBalanceDAO.getById(id);
      return obj;
  }
+ 
+ 
+ /**
+  * doQueryByAppUserId:(// 查询)
+  *
+  * @param  @param appUserId
+  * @param  @return    设定文件
+  * @return AppAccountBalanceDO    DOM对象
+  * @author tangliang
+  * @date   2017年12月7日 上午9:53:07
+  */
+ public AppAccountBalanceDO doQueryByAppUserId (Integer appUserId) {
+     AppAccountBalanceDO obj = this.appAccountBalanceDAO.getByAppUserId(appUserId);
+     return obj;
+ }
 }
