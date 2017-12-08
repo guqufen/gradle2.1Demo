@@ -37,4 +37,8 @@ public interface DicCityDAO {
     @SelectProvider(type = DicCityProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("dicCity") DicCityDO dicCity);
 
+    @Results({@Result( column = "id",property = "id"),@Result( column = "name",property = "name") })
+    @Select("SELECT id,name FROM car_dic_city")
+	public List<DicCityDO> queryAll();
+
 }

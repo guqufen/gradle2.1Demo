@@ -12,11 +12,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.car.service.buy.OrderBuyService;
 import net.fnsco.car.service.buy.entity.OrderBuyDO;
+import net.fnsco.car.service.city.DicCityService;
+import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.web.jo.BuyCarJO;
-import net.fnsco.web.jo.QueryCityJO;
 import net.fnsco.web.vo.BuyCarVO;
 import net.fnsco.web.vo.QueryCityVO;
 
@@ -27,6 +28,8 @@ public class BuyCarApplyController extends BaseController{
 	
 	@Autowired
 	private OrderBuyService orderBuyService;
+	@Autowired
+	private DicCityService dicCityService;
 	
 	
 	@RequestMapping(value = "/add")
@@ -54,7 +57,16 @@ public class BuyCarApplyController extends BaseController{
 	@RequestMapping(value = "/queryCity")
 	@ApiOperation(value = "买车申请-查询城市")
 	public ResultDTO<List<QueryCityVO>> queryCityList(){
-		
-		return null;
+		List<QueryCityVO> resultList = null;
+		QueryCityVO queryCity = new QueryCityVO();
+		List<DicCityDO> list = dicCityService.queryCityList();
+		if(list.size()>0){
+			for (DicCityDO dicCityDO : list) {
+				queryCity.setId(dicCityDO.getId());
+				queryCity.setName(dicCityDO.getName());
+				resultList.add(queryCity);
+			}
+		}
+		return ResultDTO.success(resultList);
 	}
 }

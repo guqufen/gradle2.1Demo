@@ -54,4 +54,9 @@ public class DicCityService extends BaseService {
      DicCityDO obj = this.dicCityDAO.getById(id);
      return obj;
  }
+
+public List<DicCityDO> queryCityList() {
+	List<DicCityDO> list = this.dicCityDAO.queryAll();
+	return list;
+}
 }
