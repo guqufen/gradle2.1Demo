@@ -18,6 +18,10 @@ public class OrderFinanceService extends BaseService {
  private Logger logger = LoggerFactory.getLogger(this.getClass());
  @Autowired
  private OrderFinanceDAO orderFinanceDAO;
+ //保存理财申请信息
+ public OrderFinanceDO saveFinance() {
+   return null;
+ }
 
  // 分页
  public ResultPageDTO<OrderFinanceDO> page(OrderFinanceDO orderFinance, Integer pageNum, Integer pageSize) {
