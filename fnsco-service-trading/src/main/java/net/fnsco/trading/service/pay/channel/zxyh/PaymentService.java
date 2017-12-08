@@ -141,7 +141,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
      * 微信主扫
      * @return 
      */
-    public Map<String, Object> generateQRCodeWeiXin(Integer userId,String orderBody,String txnAmt){
+    public Map<String, Object> generateQRCodeWeiXin(Integer userId,String txnAmt){
     	String merId = env.getProperty("zxyh.merId");
     	ActiveWeiXinDTO weiXinDTO = new ActiveWeiXinDTO();
     	weiXinDTO.init(merId);
@@ -162,6 +162,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     	weiXinDTO.setOrderId(DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_order")); //商户系统内部的订单号 M ,32 个字符内、可包含字母, 确保在商户系统唯一
     	weiXinDTO.setOrderTime(DateUtils.getNowDateStr()); //订单生成时间，M 格式 为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒 表示为20091225091010
     	weiXinDTO.setProductId("");	//商品ID	C	Strng(32)	此id为二维码中包含的商品ID，商户自行定义。
+    	String orderBody = "商品描述";
     	weiXinDTO.setOrderBody(orderBody); //商品或支付单简要描述 	M
     	weiXinDTO.setOrderDetail("");//商品详细描述 	C
     	weiXinDTO.setOrderGoodsTag("");//商品标记	C	String(32)	商品标记，代金券或立减优惠功能的参数
@@ -189,7 +190,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
      * 支付宝主扫
      *
      */
-    public Map<String, Object> generateQRCodeAliPay(Integer userId,String ip,String orderBody,String txnAmt){
+    public Map<String, Object> generateQRCodeAliPay(Integer userId,String ip,String txnAmt){
     	String merId = env.getProperty("zxyh.merId");
     	ActiveAlipayDTO activeAlipayDTO = new ActiveAlipayDTO();
     	activeAlipayDTO.init(merId);
@@ -207,6 +208,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
         activeAlipayDTO.setTermIp(ip);//发起支付的客户端真实IP
         activeAlipayDTO.setOrderId(DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_order")); //商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
         activeAlipayDTO.setOrderTime(DateUtils.getNowDateStr()); //订单生成时间，格式 为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒 表示为20091225091010
+        String orderBody = "商品描述";
         activeAlipayDTO.setOrderBody(orderBody); //商品或支付单简要描述
         activeAlipayDTO.setOrderDetail("");//C	String(100)	商品详细描述
         activeAlipayDTO.setTxnAmt(txnAmt);//订单总金额(交易单位为分，例:1.23元=123) 只能整数
