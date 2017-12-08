@@ -59,14 +59,14 @@ public class AppUserController extends BaseController {
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
-        	loginVO.setLoginRights("no");
+        	loginVO.setIsMerchant(false);
         }else {
-        	loginVO.setLoginRights("yes");
+        	loginVO.setIsMerchant(true);
         }
         if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getPayPassword())) {
-        	loginVO.setBeingPayPassword(false);
+        	loginVO.setHasPayPassword(false);
         }else {
-        	loginVO.setBeingPayPassword(true);
+        	loginVO.setHasPayPassword(true);
         }
         loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
         return ResultDTO.success(loginVO);
@@ -106,14 +106,14 @@ public class AppUserController extends BaseController {
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
-        	loginVO.setLoginRights("no");
+        	loginVO.setIsMerchant(false);
         }else {
-        	loginVO.setLoginRights("yes");
+        	loginVO.setIsMerchant(true);
         }
         if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getPayPassword())) {
-        	loginVO.setBeingPayPassword(false);
+        	loginVO.setHasPayPassword(false);
         }else {
-        	loginVO.setBeingPayPassword(true);
+        	loginVO.setHasPayPassword(true);
         }
         loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
         return ResultDTO.success(loginVO);
@@ -141,14 +141,14 @@ public class AppUserController extends BaseController {
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
-        	loginVO.setLoginRights("no");
+        	loginVO.setIsMerchant(false);
         }else {
-        	loginVO.setLoginRights("yes");
+        	loginVO.setIsMerchant(true);
         }
         if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getPayPassword())) {
-        	loginVO.setBeingPayPassword(false);
+        	loginVO.setHasPayPassword(false);
         }else {
-        	loginVO.setBeingPayPassword(true);
+        	loginVO.setHasPayPassword(true);
         }
         loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
         return ResultDTO.success(loginVO);

@@ -24,7 +24,7 @@ public class TradeDataListVO extends VO {
 	/**
 	 * 交易状态
 	 */
-	@ApiModelProperty(value="交易状态",example="交易状态")
+	@ApiModelProperty(value="交易状态1000处理中1001成功1002失败1003已退货",example="交易状态1000处理中1001成功1002失败1003已退货")
 	private String tradeStatus;
 	
 	/**
@@ -42,6 +42,92 @@ public class TradeDataListVO extends VO {
 	@ApiModelProperty(value="流水ID",example="流水ID，可以根据该ID 查询出详情")
 	private String traId;
 	
+	@ApiModelProperty(value="交易子类型00刷卡01微信02支付宝03聚惠分",example="交易子类型00刷卡01微信02支付宝03聚惠分")
+	private String paySubType;
+	
+	@ApiModelProperty(value="订单号",example="订单号")
+	private String orderNo;
+	
+	@ApiModelProperty(value = "交易状态名称", example = "交易状态名称")
+	private String tradeStatusName;
+	
+	
+	/**
+	 * tradeStatusName
+	 *
+	 * @return  the tradeStatusName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getTradeStatusName() {
+		return tradeStatusName;
+	}
+
+	/**
+	 * tradeStatusName
+	 *
+	 * @param   tradeStatusName    the tradeStatusName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setTradeStatusName(String tradeStatusName) {
+		this.tradeStatusName = tradeStatusName;
+	}
+
+	/**
+	 * paySubType
+	 *
+	 * @return  the paySubType
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getPaySubType() {
+		return paySubType;
+	}
+
+	/**
+	 * paySubType
+	 *
+	 * @param   paySubType    the paySubType to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setPaySubType(String paySubType) {
+		this.paySubType = paySubType;
+	}
+
+	/**
+	 * orderNo
+	 *
+	 * @return  the orderNo
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getOrderNo() {
+		return orderNo;
+	}
+
+	/**
+	 * orderNo
+	 *
+	 * @param   orderNo    the orderNo to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
+
+	/**
+	 * serialversionuid
+	 *
+	 * @return  the serialversionuid
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	/**
 	 * traId

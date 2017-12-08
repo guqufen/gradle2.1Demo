@@ -85,6 +85,7 @@ public class RechangeController extends BaseController {
         //00pos机01app02台码
         tradeOrder.setPayMedium(TradeConstants.PayMediumEnum.APP.getCode());
         tradeOrder.setTxnType(1);
+        tradeOrder.setTxnSubType(11);//交易子类型10购买消费11充值消费20购买撤销21充值撤销
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);

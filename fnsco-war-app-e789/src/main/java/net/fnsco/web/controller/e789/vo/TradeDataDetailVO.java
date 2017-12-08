@@ -5,6 +5,7 @@ import net.fnsco.core.base.VO;
 
 public class TradeDataDetailVO extends VO {
 	
+	
 	@ApiModelProperty(value="流水ID",example="流水ID，可以根据该ID 查询出详情")
 	private String traId;
 	
@@ -14,8 +15,14 @@ public class TradeDataDetailVO extends VO {
 	@ApiModelProperty(value="订单金额",example="订单金额(格式'0.00'，单位:元)")
 	private String orderAmt;
 	
-	@ApiModelProperty(value="支付方式",example="支付方式")
-	private String payType;
+	@ApiModelProperty(value="交易子类型00刷卡01微信02支付宝03聚惠分",example="交易子类型00刷卡01微信02支付宝03聚惠分")
+	private String paySubType;
+	
+	@ApiModelProperty(value="交易状态:1000处理中1001成功1002失败1003已退货",example="交易状态:1000处理中1001成功1002失败1003已退货")
+	private String tradeStatus;
+	
+	@ApiModelProperty(value = "交易状态名称", example = "交易状态名称")
+	private String tradeStatusName;
 	
 	/**
 	 * 创建时间
@@ -28,6 +35,77 @@ public class TradeDataDetailVO extends VO {
 	
 	@ApiModelProperty(value = "订单号", example = "订单号")
 	private String orderNo;
+	
+	
+	@ApiModelProperty(value = "交易信息", example = "交易信息")
+	private String respMsg;   // 交易信息
+	
+	
+	/**
+	 * respMsg
+	 *
+	 * @return  the respMsg
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getRespMsg() {
+		return respMsg;
+	}
+
+	/**
+	 * respMsg
+	 *
+	 * @param   respMsg    the respMsg to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setRespMsg(String respMsg) {
+		this.respMsg = respMsg;
+	}
+
+	/**
+	 * tradeStatusName
+	 *
+	 * @return  the tradeStatusName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getTradeStatusName() {
+		return tradeStatusName;
+	}
+
+	/**
+	 * tradeStatusName
+	 *
+	 * @param   tradeStatusName    the tradeStatusName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setTradeStatusName(String tradeStatusName) {
+		this.tradeStatusName = tradeStatusName;
+	}
+
+	/**
+	 * tradeStatus
+	 *
+	 * @return  the tradeStatus
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getTradeStatus() {
+		return tradeStatus;
+	}
+
+	/**
+	 * tradeStatus
+	 *
+	 * @param   tradeStatus    the tradeStatus to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setTradeStatus(String tradeStatus) {
+		this.tradeStatus = tradeStatus;
+	}
 
 	/**
 	 * traId
@@ -74,25 +152,25 @@ public class TradeDataDetailVO extends VO {
 	}
 
 	/**
-	 * payType
+	 * paySubType
 	 *
-	 * @return  the payType
+	 * @return  the paySubType
 	 * @since   CodingExample Ver 1.0
 	*/
 	
-	public String getPayType() {
-		return payType;
+	public String getPaySubType() {
+		return paySubType;
 	}
 
 	/**
-	 * payType
+	 * paySubType
 	 *
-	 * @param   payType    the payType to set
+	 * @param   paySubType    the paySubType to set
 	 * @since   CodingExample Ver 1.0
 	 */
 	
-	public void setPayType(String payType) {
-		this.payType = payType;
+	public void setPaySubType(String paySubType) {
+		this.paySubType = paySubType;
 	}
 
 	/**

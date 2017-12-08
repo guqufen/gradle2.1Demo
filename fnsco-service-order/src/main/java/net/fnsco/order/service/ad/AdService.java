@@ -1,6 +1,5 @@
 package net.fnsco.order.service.ad;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +15,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.order.service.ad.dao.AdDAO;
 import net.fnsco.order.service.ad.entity.AdDO;
+import net.fnsco.order.service.ad.entity.AdDTO;
 
 @Service
 public class AdService extends BaseService {
@@ -66,18 +66,27 @@ public class AdService extends BaseService {
   * e789获取广告资讯
   */
  public ResultDTO<Map<String, List>> queryAdList() {
-	 	List<AdDO> adList = null;
-		List<AdDO> newsList = null;
+	 	List<AdDTO> adList = null;
+		List<AdDTO> newsList = null;
 		Map<String, List> map = new HashMap<>();
 		List<AdDO> allList = this.adDAO.queryAdList();
 		if(allList.isEmpty()){
 			return ResultDTO.failForMessage("未发现相关信息");
 		}
+		AdDTO adDTO = new AdDTO();
 		for (AdDO adDO : allList) {
 			if(StringUtils.equals("1", adDO.getCategory().toString())){
-				adList.add(adDO);
+				adDTO.setImgPath(adDO.getImgPath());
+				adDTO.setSummary(adDO.getSummary());
+				adDTO.setTitle(adDO.getTitle());
+				adDTO.setUrl(adDO.getUrl());
+				adList.add(adDTO);
 			}else{
-				newsList.add(adDO);
+				adDTO.setImgPath(adDO.getImgPath());
+				adDTO.setSummary(adDO.getSummary());
+				adDTO.setTitle(adDO.getTitle());
+				adDTO.setUrl(adDO.getUrl());
+				newsList.add(adDTO);
 			}
 			map.put("ad", adList);
 			map.put("news", newsList);

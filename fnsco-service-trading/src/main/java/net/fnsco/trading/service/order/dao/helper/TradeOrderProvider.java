@@ -314,6 +314,9 @@ public class TradeOrderProvider {
                     }
                     WHERE("order_no like CONCAT(#{tradeOrder.orderTop10},'%',#{tradeOrder.orderNoAfter6})");
                 }
+                if(null != tradeOrder.getUserId()) {
+                	WHERE("inner_code  in (select inner_code from u_app_user_merchant where app_user_id = #{tradeOrder.userId})");
+                }
                 ORDER_BY("create_time desc limit " + start + ", " + limit);
             }
         };
@@ -412,6 +415,10 @@ public class TradeOrderProvider {
                     }
                     WHERE("order_no like CONCAT(#{tradeOrder.orderTop10},'%',#{tradeOrder.orderNoAfter6})");
 
+                }
+                
+                if(null != tradeOrder.getUserId()) {
+                	WHERE("inner_code  in (select inner_code from u_app_user_merchant where app_user_id = #{tradeOrder.userId})");
                 }
             }
         }.toString();

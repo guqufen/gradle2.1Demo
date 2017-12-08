@@ -38,6 +38,7 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.trading.comm.TradeConstants.ZxyhPassivePayCode;
 import net.fnsco.trading.comm.TradeConstants.ZxyhPassivePayType;
+import net.fnsco.trading.service.merchant.AppUserMerchantService;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
@@ -71,6 +72,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     private TradeOrderDAO orderDAO;
     @Autowired
     private AppUserMerchant1Dao appUserMerchant1Dao;
+    @Autowired
+    private AppUserMerchantService appUserMerchantService;
 
     /**
      * 
@@ -143,7 +146,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
      * 微信主扫
      * @return 
      */
-    public Map<String, Object> generateQRCodeWeiXin(Integer userId,String txnAmt){
+    public ResultDTO<Map<String, Object>> generateQRCodeWeiXin(Integer userId,String txnAmt){
     	String merId = env.getProperty("zxyh.merId");
     	ActiveWeiXinDTO weiXinDTO = new ActiveWeiXinDTO();
     	weiXinDTO.init(merId);
@@ -151,7 +154,10 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     	weiXinDTO.setEncoding("UTF-8");
     	weiXinDTO.setBackEndUrl(""); //接收支付网关异步通知回调地址
     	//根据userId获取内部商户号
-    	String innerCode = "";
+    	String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
+    	if(Strings.isNullOrEmpty(innerCode)){
+    		return ResultDTO.fail("没找到userid="+userId+"对应的内部商户号");
+    	}
     	MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
     	if(channel != null){
     		weiXinDTO.setMerId(channel.getChannelMerId()); //商户编号	M	String(15)	普通商户或平台商户的商户号
@@ -161,7 +167,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     	weiXinDTO.setTermId("");//终端编号	C	String(8)	终端编号默认WEB
     	weiXinDTO.setTermIp("");//终端IP	C	String(16)	APP和网页支付提交用户端ip，主扫支付填调用付API的机器IP
     	
-    	weiXinDTO.setOrderId(DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_order")); //商户系统内部的订单号 M ,32 个字符内、可包含字母, 确保在商户系统唯一
+    	weiXinDTO.setOrderId(DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_data")); //商户系统内部的订单号 M ,32 个字符内、可包含字母, 确保在商户系统唯一
     	weiXinDTO.setOrderTime(DateUtils.getNowDateStr()); //订单生成时间，M 格式 为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒 表示为20091225091010
     	weiXinDTO.setProductId("");	//商品ID	C	Strng(32)	此id为二维码中包含的商品ID，商户自行定义。
     	String orderBody = "商品描述";
@@ -184,7 +190,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
         //解析返回报文
         Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
 //        System.out.println(JSON.toJSON(respMap).toString());
-        return respMap;
+        return ResultDTO.success(respMap);
     }
     
     
@@ -192,7 +198,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
      * 支付宝主扫
      *
      */
-    public Map<String, Object> generateQRCodeAliPay(Integer userId,String ip,String txnAmt){
+    public ResultDTO<Map<String, Object>> generateQRCodeAliPay(Integer userId,String ip,String txnAmt){
     	String merId = env.getProperty("zxyh.merId");
     	ActiveAlipayDTO activeAlipayDTO = new ActiveAlipayDTO();
     	activeAlipayDTO.init(merId);
@@ -228,7 +234,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
         //解析返回报文
         Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
 //        System.out.println(JSON.toJSON(respMap).toString());
-        return respMap;
+        return ResultDTO.success(respMap);
     }
     
 
