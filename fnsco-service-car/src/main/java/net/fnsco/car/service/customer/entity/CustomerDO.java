@@ -1,4 +1,4 @@
-package net.fnsco.car.customer.entity;
+package net.fnsco.car.service.customer.entity;
 
 import java.util.Date;
 

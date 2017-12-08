@@ -1,4 +1,4 @@
-package net.fnsco.car.customer.dao;
+package net.fnsco.car.service.customer.dao;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -10,8 +10,8 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
-import net.fnsco.car.customer.dao.helper.CustomerProvider;
-import net.fnsco.car.customer.entity.CustomerDO;
+import net.fnsco.car.service.customer.dao.helper.CustomerProvider;
+import net.fnsco.car.service.customer.entity.CustomerDO;
 
 import java.util.List;;
 

@@ -1,5 +1,6 @@
 package net.fnsco.car.service.safe.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class OrderSafeDO {

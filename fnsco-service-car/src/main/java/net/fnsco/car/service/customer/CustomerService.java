@@ -1,4 +1,4 @@
-package net.fnsco.car.customer;
+package net.fnsco.car.service.customer;
 
 import java.util.Date;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.fnsco.car.customer.dao.CustomerDAO;
-import net.fnsco.car.customer.entity.CustomerDO;
+import net.fnsco.car.service.customer.dao.CustomerDAO;
+import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
