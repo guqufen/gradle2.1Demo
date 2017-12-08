@@ -114,10 +114,30 @@ public class TradedataE789Controller extends BaseController {
 	public ResultDTO<TradeDataDetailVO> queryTradeDataDetail(@RequestBody TradeDataDetailJO tradeDataDetailJO){
 		
 		if(Strings.isNullOrEmpty(tradeDataDetailJO.getOrderNo())) {
-			return ResultDTO.fail();
+			return ResultDTO.fail(ApiConstant.E_ORDER_NO_NULL);
 		}
+		TradeOrderDO tradeOrderDO =  tradeOrderService.queryByOrderId(tradeDataDetailJO.getOrderNo());
+		TradeDataDetailVO vo = new TradeDataDetailVO();
 		
-		return null;
+		vo.setCreateDate(DateUtils.strToDate(tradeOrderDO.getCreateTime()));
+		vo.setOrderAmt(StringUtil.formatRMBNumber(tradeOrderDO.getTxnAmount().toString()));
+		vo.setOrderNo(tradeOrderDO.getOrderNo());
+		vo.setPayDate(DateUtils.strToDate(tradeOrderDO.getCompleteTime()));
+		vo.setPaySubType(tradeOrderDO.getPaySubType());
+		vo.setTraId(tradeOrderDO.getId().toString());
+		vo.setTradeStatus(tradeOrderDO.getRespCode());
+		if("1000".equals(tradeOrderDO.getRespCode())) {
+			vo.setTradeStatusName("处理中");
+		}else if("1001".equals(tradeOrderDO.getRespCode())) {
+			vo.setTradeStatusName("成功");
+		}else if("1002".equals(tradeOrderDO.getRespCode())) {
+			vo.setTradeStatusName("失败");
+		}else if("1003".equals(tradeOrderDO.getRespCode())) {
+			vo.setTradeStatusName("已退货");
+		}
+		vo.setRespMsg(tradeOrderDO.getRespMsg());
+		
+		return success(vo);
 	}
 	
 	
