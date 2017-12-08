@@ -1,5 +1,6 @@
 package net.fnsco.trading.service.order.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
@@ -114,4 +115,22 @@ public interface TradeOrderDAO {
 
     @Select("SELECT SUM(txn_amount) FROM t_trade_order WHERE DATE_FORMAT(complete_time,'%Y-%m-%d') = #{tradeDate} AND inner_code IN (SELECT inner_code FROM u_app_user_merchant WHERE app_user_id=#{userId})")
     public String queryTotalAmount(@Param("tradeDate") String tradeDate, @Param("userId") Integer userId);
+    
+    /**
+     * 查询中信支付的当天所有进行中的交易
+     * @param startTime
+     * @return
+     */
+    @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "pay_order_no", property = "payOrderNo"), @Result(column = "txn_amount", property = "txnAmount"),
+        @Result(column = "installment_num", property = "installmentNum"), @Result(column = "resp_code", property = "respCode"), @Result(column = "resp_msg", property = "respMsg"),
+        @Result(column = "entity_inner_code", property = "entityInnerCode"), @Result(column = "channel_mer_id", property = "channelMerId"),
+        @Result(column = "channel_type", property = "channelType"), @Result(column = "complete_time", property = "completeTime"),
+        @Result(column = "order_ceate_time", property = "orderCeateTime"), @Result(column = "txn_type", property = "txnType"), @Result(column = "txn_sub_type", property = "txnSubType"),
+        @Result(column = "pay_type", property = "payType"), @Result(column = "pay_sub_type", property = "paySubType"), @Result(column = "settle_amount", property = "settleAmount"),
+        @Result(column = "settle_date", property = "settleDate"), @Result(column = "settle_status", property = "settleStatus"), @Result(column = "create_user_id", property = "createUserId"),
+        @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"), @Result(column = "inner_code", property = "innerCode"),
+        @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"), @Result(column = "card_holder_rate", property = "cardHolderRate"),
+        @Result(column = "pay_medium", property = "payMedium") })
+    @Select("select * from t_trade_order where channel_type='05' and create_time >= #{startTime} and resp_code = '1000'")
+    public List<TradeOrderDO> queryOnGoing(@Param("startTime") Date startTime);
 }

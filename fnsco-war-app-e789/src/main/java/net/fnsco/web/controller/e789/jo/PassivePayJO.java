@@ -13,29 +13,19 @@ public class PassivePayJO extends JO {
 
 	private static final long serialVersionUID = 1L;
 
-	@ApiModelProperty(value = "内部商户号",example="内部商户号")
-	private String innerCode;// 内部商户号
-	@ApiModelProperty(value = "app用户ID",example="app用户ID")
-	private String appUserId;// app用户ID
-	@ApiModelProperty(value = "交易金额",example="交易金额")
+	@ApiModelProperty(value = "app用户ID", example = "app用户ID")
+	private Integer userId;// app用户ID
+	@ApiModelProperty(value = "交易金额", example = "交易金额")
 	private String amt;// 交易金额
-	@ApiModelProperty(value = "授权码(付款码)",example="授权码(付款码)")
+	@ApiModelProperty(value = "授权码(付款码)", example = "授权码(付款码)")
 	private String authId;// 授权码，扫码支付授权码
 
-	public String getInnerCode() {
-		return innerCode;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setInnerCode(String innerCode) {
-		this.innerCode = innerCode;
-	}
-
-	public String getAppUserId() {
-		return appUserId;
-	}
-
-	public void setAppUserId(String appUserId) {
-		this.appUserId = appUserId;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
 	public String getAmt() {
