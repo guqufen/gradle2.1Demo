@@ -121,12 +121,16 @@ public class TradeOrderDO {
     /**
      * 持卡人费率
      */
-    private String cardHolderRate;
+    private String     cardHolderRate;
 
     /**
      * 创建时间
      */
     private Date       createTime;
+    /**
+     * 支付媒介00pos机01app02台码
+     */
+    private String     payMedium;
     private String     completeTimeStr;
     private String     orderCeateTimeStr;
     private String     createTimeStr;
@@ -135,12 +139,34 @@ public class TradeOrderDO {
     private String     orderTop10;
 
     /**
+     * payMedium
+     *
+     * @return  the payMedium
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getPayMedium() {
+        return payMedium;
+    }
+
+    /**
+     * payMedium
+     *
+     * @param   payMedium    the payMedium to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setPayMedium(String payMedium) {
+        this.payMedium = payMedium;
+    }
+
+    /**
      * orderAmount
      *
      * @return  the orderAmount
      * @since   CodingExample Ver 1.0
     */
-    
+
     public BigDecimal getOrderAmount() {
         return orderAmount;
     }
@@ -151,7 +177,7 @@ public class TradeOrderDO {
      * @param   orderAmount    the orderAmount to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setOrderAmount(BigDecimal orderAmount) {
         this.orderAmount = orderAmount;
     }
@@ -162,7 +188,7 @@ public class TradeOrderDO {
      * @return  the eachMoney
      * @since   CodingExample Ver 1.0
     */
-    
+
     public BigDecimal getEachMoney() {
         return eachMoney;
     }
@@ -173,7 +199,7 @@ public class TradeOrderDO {
      * @param   eachMoney    the eachMoney to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setEachMoney(BigDecimal eachMoney) {
         this.eachMoney = eachMoney;
     }
@@ -184,7 +210,7 @@ public class TradeOrderDO {
      * @return  the cardHolderRate
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getCardHolderRate() {
         return cardHolderRate;
     }
@@ -195,7 +221,7 @@ public class TradeOrderDO {
      * @param   cardHolderRate    the cardHolderRate to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setCardHolderRate(String cardHolderRate) {
         this.cardHolderRate = cardHolderRate;
     }
@@ -206,7 +232,7 @@ public class TradeOrderDO {
      * @return  the handleNum
      * @since   CodingExample Ver 1.0
     */
-    
+
     public Integer getHandleNum() {
         return handleNum;
     }
@@ -217,7 +243,7 @@ public class TradeOrderDO {
      * @param   handleNum    the handleNum to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setHandleNum(Integer handleNum) {
         this.handleNum = handleNum;
     }
@@ -228,7 +254,7 @@ public class TradeOrderDO {
      * @return  the orderNoAfter6
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getOrderNoAfter6() {
         return orderNoAfter6;
     }
@@ -239,7 +265,7 @@ public class TradeOrderDO {
      * @param   orderNoAfter6    the orderNoAfter6 to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setOrderNoAfter6(String orderNoAfter6) {
         this.orderNoAfter6 = orderNoAfter6;
     }
@@ -250,7 +276,7 @@ public class TradeOrderDO {
      * @return  the orderTop10
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getOrderTop10() {
         return orderTop10;
     }
@@ -261,7 +287,7 @@ public class TradeOrderDO {
      * @param   orderTop10    the orderTop10 to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setOrderTop10(String orderTop10) {
         this.orderTop10 = orderTop10;
     }
@@ -567,8 +593,8 @@ public class TradeOrderDO {
     @Override
     public String toString() {
         return "[id=" + id + ", orderNo=" + orderNo + ", payOrderNo=" + payOrderNo + ", txnAmount=" + txnAmount + ", installmentNum=" + installmentNum + ", respCode=" + respCode + ", respMsg="
-               + respMsg + ", entityInnerCode=" + entityInnerCode + ", channelMerId=" + channelMerId + ", channelType=" + channelType + ", completeTime=" + completeTime + ", orderCeateTime=" + orderCeateTime
-               + ", txnType=" + txnType + ", txnSubType=" + txnSubType + ", payType=" + payType + ", paySubType=" + paySubType + ", settleAmount=" + settleAmount + ", settleDate=" + settleDate
-               + ", settleStatus=" + settleStatus + ", createUserId=" + createUserId + ", createTime=" + createTime + ", syncStatus=" + syncStatus + ", innerCode=" + innerCode + "]";
+               + respMsg + ", entityInnerCode=" + entityInnerCode + ", channelMerId=" + channelMerId + ", channelType=" + channelType + ", completeTime=" + completeTime + ", orderCeateTime="
+               + orderCeateTime + ", txnType=" + txnType + ", txnSubType=" + txnSubType + ", payType=" + payType + ", paySubType=" + paySubType + ", settleAmount=" + settleAmount + ", settleDate="
+               + settleDate + ", settleStatus=" + settleStatus + ", createUserId=" + createUserId + ", createTime=" + createTime + ", syncStatus=" + syncStatus + ", innerCode=" + innerCode + "]";
     }
 }

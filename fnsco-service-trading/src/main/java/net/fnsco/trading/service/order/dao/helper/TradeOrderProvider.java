@@ -100,6 +100,9 @@ public class TradeOrderProvider {
                 if (StringUtils.isNotBlank(tradeOrder.getCardHolderRate())) {
                     SET("card_holder_rate=#{tradeOrder.cardHolderRate}");
                 }
+                if (StringUtils.isNotBlank(tradeOrder.getPayMedium())) {
+                    SET("pay_medium=#{tradeOrder.payMedium}");
+                }
                 WHERE("id = #{tradeOrder.id} and resp_code !='1001' ");
             }
         }.toString();
@@ -187,6 +190,9 @@ public class TradeOrderProvider {
                 }
                 if (StringUtils.isNotBlank(tradeOrder.getCardHolderRate())) {
                     SET("card_holder_rate=#{tradeOrder.cardHolderRate}");
+                }
+                if (StringUtils.isNotBlank(tradeOrder.getPayMedium())) {
+                    SET("pay_medium=#{tradeOrder.payMedium}");
                 }
                 WHERE("id = #{tradeOrder.id}");
             }
@@ -296,7 +302,9 @@ public class TradeOrderProvider {
                 if (StringUtils.isNotBlank(tradeOrder.getInnerCode())) {
                     WHERE("inner_code=#{tradeOrder.innerCode}");
                 }
-
+                if (StringUtils.isNotBlank(tradeOrder.getPayMedium())) {
+                    SET("pay_medium=#{tradeOrder.payMedium}");
+                }
                 if (StringUtils.isNotBlank(tradeOrder.getOrderTop10()) || StringUtils.isNotBlank(tradeOrder.getOrderNoAfter6())) {
                     if (Strings.isNullOrEmpty(tradeOrder.getOrderTop10())) {
                         tradeOrder.setOrderTop10("");
@@ -391,6 +399,9 @@ public class TradeOrderProvider {
                 }
                 if (StringUtils.isNotBlank(tradeOrder.getInnerCode())) {
                     WHERE("inner_code=#{tradeOrder.innerCode}");
+                }
+                if (StringUtils.isNotBlank(tradeOrder.getPayMedium())) {
+                    SET("pay_medium=#{tradeOrder.payMedium}");
                 }
                 if (StringUtils.isNotBlank(tradeOrder.getOrderTop10()) || StringUtils.isNotBlank(tradeOrder.getOrderNoAfter6())) {
                     if (Strings.isNullOrEmpty(tradeOrder.getOrderTop10())) {
