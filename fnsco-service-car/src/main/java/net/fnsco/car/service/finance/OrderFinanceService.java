@@ -2,15 +2,16 @@ package net.fnsco.car.service.finance;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import net.fnsco.car.customer.dao.CustomerDAO;
+import net.fnsco.car.customer.entity.CustomerDO;
 import net.fnsco.car.service.finance.dao.OrderFinanceDAO;
 import net.fnsco.car.service.finance.entity.OrderFinanceDO;
 import net.fnsco.core.base.BaseService;
-import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 @Service
@@ -19,13 +20,20 @@ public class OrderFinanceService extends BaseService {
  private Logger logger = LoggerFactory.getLogger(this.getClass());
  @Autowired
  private OrderFinanceDAO orderFinanceDAO;
+ @Autowired
+ private CustomerDAO customerDAO;
  //保存理财申请信息
- public OrderFinanceDO saveFinance() {
+ public void saveFinance() {
+	 CustomerDO customerDO =  new CustomerDO();
 	 OrderFinanceDO orderFinance = new OrderFinanceDO();
+	 customerDO.setName(null);
+	 customerDO.setMobile(null);
+	 customerDO.setCreateTime(new Date());
+	 this.customerDAO.insert(customerDO);
+	 orderFinance.setCustomerId(customerDO.getId());
 	 orderFinance.setCreateTime(new Date());
 	 orderFinance.setLastUpdateTime(new Date());
 	 this.orderFinanceDAO.insert(orderFinance);
-   return null;
  }
 
  // 分页
