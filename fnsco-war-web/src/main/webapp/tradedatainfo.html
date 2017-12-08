@@ -252,6 +252,10 @@
 					title : '支付方式',
 					formatter : formatPayType
 				}, {
+					field : 'dcType',
+					title : '卡类型',
+					formatter : dcTypeFormatter
+				},{
 					field : 'amt',
 					title : '交易金额(元)',
 					formatter : formatAmt,
@@ -302,6 +306,20 @@
 	    return '法奈昇';
 	  }else if(value == '04'){
 	    return '聚惠分';
+	  }
+	}
+	//卡类型
+	function dcTypeFormatter(value, row, index){
+	  if(!value){
+		return '-';
+	  }else if(value == '00'){
+	    return '境内借记卡';
+	  }else if(value == '01'){
+	    return '境内贷记卡';
+	  }else if(value == '60'){
+	    return '境外借记卡';
+	  }else if(value == '61'){
+	    return ' 境外贷记卡';
 	  }
 	}
 	//商户注册来源格式处理

@@ -161,14 +161,14 @@ public class TradeDataWebController extends BaseController {
                 	merchantdo.setPayType("分期付");
                 }
                 // 处理金额
-                if (Strings.isNullOrEmpty(merchantdo.getAmt())) {
+                if (!Strings.isNullOrEmpty(merchantdo.getAmt())) {
                     BigDecimal str = new BigDecimal(merchantdo.getAmt());
                     double resu = str.divide(new BigDecimal(100)).doubleValue();
                     DecimalFormat df = new DecimalFormat("#0.00");
                     merchantdo.setAmt(df.format(resu));
                 }
                 // 处理来源
-                if (Strings.isNullOrEmpty(merchantdo.getSource())) {
+                if (!Strings.isNullOrEmpty(merchantdo.getSource())) {
                     if ("00".equals(merchantdo.getSource())) {
                         merchantdo.setSource("拉卡拉");
                     } else {
@@ -176,12 +176,25 @@ public class TradeDataWebController extends BaseController {
                     }
                 }
                 // 处理交易类型
-                if (Strings.isNullOrEmpty(merchantdo.getTxnType()) ) {
+                if (!Strings.isNullOrEmpty(merchantdo.getTxnType()) ) {
                     if ("1".equals(merchantdo.getTxnType())) {
                         merchantdo.setTxnType("消费");
                     } else if ("2".equals(merchantdo.getTxnType())) {
                         merchantdo.setTxnType("撤销");
                     }
+                }
+                // 借贷类型
+                if (!Strings.isNullOrEmpty(merchantdo.getDcType()) ) {
+                    if ("00".equals(merchantdo.getDcType())) {
+                        merchantdo.setDcType("境内借记卡");
+                    } else if ("01 ".equals(merchantdo.getDcType())) {
+                        merchantdo.setDcType("境内贷记卡");
+                    }else if (" 60 ".equals(merchantdo.getDcType())) {
+                        merchantdo.setDcType("境外借记卡");
+                    }else if (" 61 ".equals(merchantdo.getDcType())) {
+                        merchantdo.setDcType("境外贷记卡");
+                    }
+
                 }
                 // 处理状态
                 if ("0".equals(merchantdo.getStatus())) {
@@ -223,8 +236,8 @@ public class TradeDataWebController extends BaseController {
         JSONObject jObject = new JSONObject();
         jObject.put("data", dataList);
         List<TradeData> list = (List<TradeData>) jObject.get("data");
-        String itemMark = "orderNo,orderIdScan,merName,innerCode,snCode,referNo,txnType,merId,timeStamp,payType,amt,certifyId,orderTime,termId,batchNo,sysTraceNo,authCode,source,createTimeStr,status";
-        String itemParap = "订单号,扫码交易的订单号,商户名,内部商户号,终端SN码,参考号,交易类型,结算商户号,支付时间,支付方式,交易金额(元),持卡人卡号,订单时间,终端号,批次号,凭证号,授权码,来源,创建时间,状态";
+        String itemMark = "orderNo,orderIdScan,merName,innerCode,snCode,referNo,txnType,merId,timeStamp,payType,amt,certifyId,dcType,orderTime,termId,batchNo,sysTraceNo,authCode,source,createTimeStr,status";
+        String itemParap = "订单号,扫码交易的订单号,商户名,内部商户号,终端SN码,参考号,交易类型,结算商户号,支付时间,支付方式,交易金额(元),持卡人卡号,卡类型,订单时间,终端号,批次号,凭证号,授权码,来源,创建时间,状态";
 
         String[] itemMarks = itemMark.split(",");// 键
         String[] itemParaps = itemParap.split(",");// 列头
