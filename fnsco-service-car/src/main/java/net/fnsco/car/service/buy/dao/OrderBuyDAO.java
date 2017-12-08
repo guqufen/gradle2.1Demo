@@ -1,4 +1,4 @@
-package net.fnsco.car.buy.dao;
+package net.fnsco.car.service.buy.dao;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
-import net.fnsco.car.buy.dao.helper.OrderBuyProvider;
-import net.fnsco.car.buy.entity.OrderBuyDO;;
+import net.fnsco.car.service.buy.dao.helper.OrderBuyProvider;
+import net.fnsco.car.service.buy.entity.OrderBuyDO;;
 
 public interface OrderBuyDAO {
 

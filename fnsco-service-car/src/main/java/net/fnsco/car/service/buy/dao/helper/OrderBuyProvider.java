@@ -1,4 +1,4 @@
-package net.fnsco.car.buy.dao.helper;
+package net.fnsco.car.service.buy.dao.helper;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.fnsco.car.buy.entity.OrderBuyDO;
+import net.fnsco.car.service.buy.entity.OrderBuyDO;
 public class OrderBuyProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

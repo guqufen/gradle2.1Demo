@@ -1,4 +1,4 @@
-package net.fnsco.car.customer.dao.helper;
+package net.fnsco.car.service.customer.dao.helper;
 
 import org.apache.ibatis.jdbc.SQL;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.fnsco.car.customer.entity.CustomerDO;
+import net.fnsco.car.service.customer.entity.CustomerDO;
 
 import org.apache.commons.lang3.StringUtils;
 public class CustomerProvider {

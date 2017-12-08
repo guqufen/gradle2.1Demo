@@ -1,4 +1,4 @@
-package net.fnsco.car.buy;
+package net.fnsco.car.service.buy;
 
 import java.util.Date;
 import java.util.List;
@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import net.fnsco.car.buy.dao.OrderBuyDAO;
-import net.fnsco.car.buy.entity.OrderBuyDO;
-import net.fnsco.car.customer.CustomerService;
-import net.fnsco.car.customer.entity.CustomerDO;
+import net.fnsco.car.service.buy.dao.OrderBuyDAO;
+import net.fnsco.car.service.buy.entity.OrderBuyDO;
+import net.fnsco.car.service.customer.CustomerService;
+import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;

@@ -1,5 +1,7 @@
 package net.fnsco.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,14 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.car.buy.OrderBuyService;
-import net.fnsco.car.buy.entity.OrderBuyDO;
-import net.fnsco.car.customer.CustomerService;
-import net.fnsco.car.customer.entity.CustomerDO;
+import net.fnsco.car.service.buy.OrderBuyService;
+import net.fnsco.car.service.buy.entity.OrderBuyDO;
+import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.web.jo.BuyCarJO;
+import net.fnsco.web.jo.QueryCityJO;
 import net.fnsco.web.vo.BuyCarVO;
+import net.fnsco.web.vo.QueryCityVO;
 
 @RestController
 @RequestMapping(value = "/api/buy", method = RequestMethod.POST)
@@ -48,4 +51,10 @@ public class BuyCarApplyController extends BaseController{
 	}
 	
 	//查询城市接口
+	@RequestMapping(value = "/queryCity")
+	@ApiOperation(value = "买车申请-查询城市")
+	public ResultDTO<List<QueryCityVO>> queryCityList(){
+		
+		return null;
+	}
 }
