@@ -35,13 +35,11 @@ import net.fnsco.web.controller.e789.dto.TradeDTO;
 @Api(value = "/trade/fsf", tags = { "分闪付支付处理相关接口" })
 public class PayDealFsfController extends BaseController {
     @Autowired
-    private MerchantService     merchantService;
+    private MerchantService   merchantService;
     @Autowired
-    private TradeOrderService   tradeOrderService;
+    private TradeOrderService tradeOrderService;
     @Autowired
-    private MerchantCoreService merchantCoreService;
-    @Autowired
-    private Environment         env;
+    private Environment       env;
 
     /**
      * App支付,用户二维码扫描转到聚惠分平台进行支付
