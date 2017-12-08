@@ -11,4 +11,7 @@
      </foreach>
 	)
 </delete>
+<select id="selectInnerCodeByUserId" parameterType="java.lang.Integer" resultType="java.lang.String">
+	select inner_code from u_app_user_merchant where app_user_id = #{userId} limit 1
+</select>
 </mapper>

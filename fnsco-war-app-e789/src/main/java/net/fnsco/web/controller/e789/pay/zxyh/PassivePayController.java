@@ -39,7 +39,7 @@ public class PassivePayController extends BaseController {
 		passivePayDTO.setStd400memo("扫码支付");// 商品描述
 		passivePayDTO.setStdauthid(passivePayJO.getAuthId());// 授权码
 
-		return PaymentService.PassivePay(passivePayJO.getInnerCode(), passivePayDTO);
+		return PaymentService.PassivePay(passivePayJO.getUserId(), passivePayDTO);
 	}
 
 	/**
@@ -49,13 +49,13 @@ public class PassivePayController extends BaseController {
 	 * @param PassiveResultQueryJO:入参对象
 	 * @return
 	 */
-	@RequestMapping("/queryPayResult")
-	@ApiOperation(value = "扫一扫-支付结果查询接口url")
-	public ResultDTO<PassiveVO> ZxyhPassivePayResult(@RequestBody PassiveResultQueryJO passiveResultQueryJO) {
-
-		PassivePayDTO passivePayDTO = new PassivePayDTO();
-		passivePayDTO.setOrgorderid((passiveResultQueryJO.getOrderNo()));// 商户订单号
-
-		return PaymentService.PassivePayResult(passiveResultQueryJO.getOrderNo());
-	}
+//	@RequestMapping("/queryPayResult")
+//	@ApiOperation(value = "扫一扫-支付结果查询接口url")
+//	public ResultDTO<PassiveVO> ZxyhPassivePayResult(@RequestBody PassiveResultQueryJO passiveResultQueryJO) {
+//
+//		PassivePayDTO passivePayDTO = new PassivePayDTO();
+//		passivePayDTO.setOrgorderid((passiveResultQueryJO.getOrderNo()));// 商户订单号
+//
+//		return PaymentService.PassivePayResult(passiveResultQueryJO.getOrderNo());
+//	}
 }
