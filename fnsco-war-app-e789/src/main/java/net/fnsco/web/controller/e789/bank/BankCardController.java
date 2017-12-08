@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.merchant.MerchantService;
+import net.fnsco.bigdata.service.bank.AppUserBankService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.order.TradeOrderService;
@@ -43,6 +46,8 @@ public class BankCardController extends BaseController {
     private TradeOrderService tradeOrderService;
     @Autowired
     private Environment       env;
+    @Autowired
+    private AppUserBankService appUserBankService;
 
     /**
      * 新增银行卡
@@ -73,10 +78,22 @@ public class BankCardController extends BaseController {
     @RequestMapping(value = "/unBindBankCard")
     @ApiOperation(value = "银行卡信息页-解绑银行卡")
 //    @ApiImplicitParam(name = "xxx", value = "解绑银行卡", required = false, dataType="Xxx",paramType="body")
-    public ResultDTO<UnBindBankCardVO> deleteBankJO( @RequestBody  UnBindBankCardJO unBindBankCardJO ) {
-    	UnBindBankCardVO unBindBankCardVO = new UnBindBankCardVO();
-    	
-        return ResultDTO.success();
+    public ResultDTO<UnBindBankCardVO> deleteBankJO(@RequestBody  UnBindBankCardJO jo) {
+    	String userID = jo.getUserId();
+    	String bankId = jo.getBankID();
+    	if(Strings.isNullOrEmpty(userID)){
+    		return ResultDTO.fail("用户id为空");
+    	}
+    	if(Strings.isNullOrEmpty(bankId)){
+    		return ResultDTO.fail("银行卡id为空");
+    	}
+    	Integer row = appUserBankService.unBindBankCard(userID,Integer.parseInt(bankId));
+    	if(row == 1){
+    		return ResultDTO.success("解绑成功");
+    		
+    	}else{
+    		return ResultDTO.fail("解绑失败");
+    	}
     }
 
     /**

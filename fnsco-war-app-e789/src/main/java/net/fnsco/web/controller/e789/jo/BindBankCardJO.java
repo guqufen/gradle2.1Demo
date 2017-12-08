@@ -4,8 +4,6 @@ import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.JO;
 
 public class BindBankCardJO extends JO {
-//    @ApiModelProperty(value = "内部商户号", name = "innerCode", example = "092916342476171")
-//    private String innerCode;
     @ApiModelProperty(value = "持卡人姓名", name = "cardholder", example = "张三")
     private String bankCardholder; 
     @ApiModelProperty(value = "卡号", name = "cardNum", example = "623******2825")
@@ -72,13 +70,6 @@ public class BindBankCardJO extends JO {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-
-	/**
-     * innerCode
-     *
-     * @return  the innerCode
-     * @since   CodingExample Ver 1.0
-    */
 
   
 }
