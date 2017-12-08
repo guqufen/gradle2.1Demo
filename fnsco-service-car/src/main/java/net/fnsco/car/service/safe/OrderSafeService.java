@@ -1,15 +1,17 @@
 package net.fnsco.car.service.safe;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import net.fnsco.car.customer.dao.CustomerDAO;
+import net.fnsco.car.customer.entity.CustomerDO;
 import net.fnsco.car.service.safe.dao.OrderSafeDAO;
 import net.fnsco.car.service.safe.entity.OrderSafeDO;
 import net.fnsco.core.base.BaseService;
-import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 @Service
@@ -18,7 +20,28 @@ public class OrderSafeService extends BaseService {
  private Logger logger = LoggerFactory.getLogger(this.getClass());
  @Autowired
  private OrderSafeDAO orderSafeDAO;
-
+ @Autowired
+ private CustomerDAO customerDAO;
+ //保存理财申请信息
+ public void saveSafe() {
+	 CustomerDO customerDO =  new CustomerDO();
+	 OrderSafeDO orderSafe = new OrderSafeDO();
+	 customerDO.setName(null);
+	 customerDO.setMobile(null);
+	 customerDO.setCreateTime(new Date());
+	 this.customerDAO.insert(customerDO);
+	 orderSafe.setCustomerId(customerDO.getId());
+	 orderSafe.setCityId(null);
+	 //orderSafe.setCarOriginalPrice();
+	 orderSafe.setInsuCompanyId(null);
+	 //orderSafe.setEstiPremiums(null);
+	 orderSafe.setSuggestCode(null);
+	 orderSafe.setCreateTime(new Date());
+	 orderSafe.setLastUpdateTime(new Date());
+	 orderSafe.setStatus(0);
+	 this.orderSafeDAO.insert(orderSafe);
+ }
+ 
  // 分页
  public ResultPageDTO<OrderSafeDO> page(OrderSafeDO orderSafe, Integer pageNum, Integer pageSize) {
      logger.info("开始分页查询OrderSafeService.page, orderSafe=" + orderSafe.toString());

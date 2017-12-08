@@ -26,6 +26,9 @@ public class InsuranceController extends BaseController {
 	private OrderSafeService orderSafeService;
 	
 	private ResultDTO<String> saveSafe(SaveSafeJO saveSafeJO) {
+		saveSafeJO.getCode();
+		//appUserService.getValidateCode(appUserDTO);
+		orderSafeService.saveSafe();
         return ResultDTO.success();
     }
 }
