@@ -1,17 +1,30 @@
 package net.fnsco.web.controller.e789.tradedata;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.StringUtil;
+import net.fnsco.order.api.constant.ApiConstant;
+import net.fnsco.trading.service.order.TradeOrderService;
+import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.e789.jo.TradeDataDetailJO;
 import net.fnsco.web.controller.e789.jo.TradeDataJO;
 import net.fnsco.web.controller.e789.vo.TradeDataDetailVO;
+import net.fnsco.web.controller.e789.vo.TradeDataListVO;
 import net.fnsco.web.controller.e789.vo.TradeDataVO;
 
 /**
@@ -26,6 +39,9 @@ import net.fnsco.web.controller.e789.vo.TradeDataVO;
 @Api(value = "/app2c/tradeData", tags = { "首页-流水相关功能接口" })
 public class TradedataE789Controller extends BaseController {
 	
+	@Autowired
+	private TradeOrderService tradeOrderService;
+	
 	/**
 	 * queryTradeDataList:(查询流水列表)
 	 *
@@ -38,7 +54,49 @@ public class TradedataE789Controller extends BaseController {
 	@RequestMapping(value = "/query")
 	@ApiOperation(value = "首页-查询交易流水列表")
 	public ResultDTO<TradeDataVO> queryTradeDataList(@RequestBody TradeDataJO tradeDataJO){
-		return null;
+		if(null == tradeDataJO.getUserId()) {
+			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+		}
+		if(null == tradeDataJO.getPageNum()) {
+			tradeDataJO.setPageNum(1);
+		}
+		if(null == tradeDataJO.getPageSize()) {
+			tradeDataJO.setPageSize(20);
+		}
+		TradeOrderDO tradeOrderDO = new TradeOrderDO();
+		tradeOrderDO.setUserId(tradeDataJO.getUserId());
+		ResultPageDTO<TradeOrderDO> resultData = tradeOrderService.page(tradeOrderDO, tradeDataJO.getPageNum(), tradeDataJO.getPageSize());
+		
+		TradeDataVO resultVO = new TradeDataVO();
+		resultVO.setCurrentPageNum(tradeDataJO.getPageNum());
+		resultVO.setPageSize(tradeDataJO.getPageSize());
+		resultVO.setTotalPage(resultData.getTotal());
+		List<TradeOrderDO> data = resultData.getList();
+		List<TradeDataListVO> datas = Lists.newArrayList();
+		for (TradeOrderDO tradeOrderDO2 : data) {
+			TradeDataListVO vo = new TradeDataListVO();
+			vo.setOrderNo(tradeOrderDO2.getOrderNo());
+			vo.setPaySubType(tradeOrderDO2.getPaySubType());
+			vo.setTradeAmt(StringUtil.formatRMBNumber(tradeOrderDO2.getTxnAmount().toString()));
+			vo.setTradeStatus(tradeOrderDO2.getRespCode());
+			if("1000".equals(tradeOrderDO2.getRespCode())) {
+				vo.setTradeStatusName("处理中");
+			}else if("1001".equals(tradeOrderDO2.getRespCode())) {
+				vo.setTradeStatusName("成功");
+			}else if("1002".equals(tradeOrderDO2.getRespCode())) {
+				vo.setTradeStatusName("失败");
+			}else if("1003".equals(tradeOrderDO2.getRespCode())) {
+				vo.setTradeStatusName("已退货");
+			}
+			vo.setTradeDate(DateUtils.strToDate(tradeOrderDO2.getCompleteTime()));
+			vo.setTraId(tradeOrderDO2.getId().toString());
+			
+			datas.add(vo);
+		}
+		
+		resultVO.setDatas(datas);
+		
+		return success(resultVO);
 	}
 	
 	
@@ -54,6 +112,11 @@ public class TradedataE789Controller extends BaseController {
 	@RequestMapping(value = "/queryDetail")
 	@ApiOperation(value = "首页-流水详情-查询交易流水详情")
 	public ResultDTO<TradeDataDetailVO> queryTradeDataDetail(@RequestBody TradeDataDetailJO tradeDataDetailJO){
+		
+		if(Strings.isNullOrEmpty(tradeDataDetailJO.getOrderNo())) {
+			return ResultDTO.fail();
+		}
+		
 		return null;
 	}
 	

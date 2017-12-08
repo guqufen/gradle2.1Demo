@@ -578,5 +578,17 @@ public class DateUtils {
         }
         return date2;
     }
+    
+    public static String strToDate(Date date) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd HH:mm:ss");
+        String tmp = null;
+        try {
+             tmp = sf.format(date);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return tmp;
+    }
 
 }

@@ -137,8 +137,32 @@ public class TradeOrderDO {
 
     private String     orderNoAfter6;
     private String     orderTop10;
-
+    
+    private Integer userId;
+    
     /**
+	 * userId
+	 *
+	 * @return  the userId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getUserId() {
+		return userId;
+	}
+
+	/**
+	 * userId
+	 *
+	 * @param   userId    the userId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	/**
      * payMedium
      *
      * @return  the payMedium

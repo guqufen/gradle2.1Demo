@@ -1,5 +1,6 @@
 package net.fnsco.core.utils;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -7,6 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
+
+import com.google.common.base.Strings;
 
 /**
  * 
@@ -88,4 +91,21 @@ public class StringUtil {
         }
         return String.valueOf(obj);
     }
+    
+    /**
+	 * formatRMBNumber:(改为保留两位小数 RMB显示)
+	 *
+	 * @param  @param str
+	 * @param  @return    设定文件
+	 * @return String    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月7日 下午6:09:41
+	 */
+	public static String formatRMBNumber(String str) {
+		if(Strings.isNullOrEmpty(str)) {
+			return String.format("%.2f", 0);
+		}else {
+			return String.format("%.2f", new BigDecimal(str).divide(new BigDecimal(100)).doubleValue());
+		}
+	}
 }
