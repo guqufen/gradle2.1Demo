@@ -14,13 +14,12 @@ public class LoginVO extends VO {
 	private String userName; 
 	@ApiModelProperty(value="头像地址",name="headImagePath",example="头像地址")
 	private String headImagePath;
-	@ApiModelProperty(value="用户权限 no:没有商户 yes：有商户",name="loginRights",example="用户权限no:没有商户 yes：有商户")
-	private String loginRights;
-	@ApiModelProperty(value="是否有支付密码",name="loginRights",example="是否有支付密码")
-	private boolean beingPayPassword;
+	@ApiModelProperty(value="用户权限 true/false",name="loginRights",example="用户权限 true/false")
+	private boolean isMerchant;
+	@ApiModelProperty(value="是否有支付密码 true/false",name="loginRights",example="是否有支付密码 true/false")
+	private boolean hasPayPassword;
 	@ApiModelProperty(value="未读取消息列表",name="unReadMsgIds",example="未读取消息列表")
 	private List<Integer> unReadMsgIds;
-	
 	/**
 	 * @return the userId
 	 */
@@ -70,28 +69,28 @@ public class LoginVO extends VO {
 		this.headImagePath = headImagePath;
 	}
 	/**
-	 * @return the loginRights
+	 * @return the isMerchant
 	 */
-	public String getLoginRights() {
-		return loginRights;
+	public boolean getIsMerchant() {
+		return isMerchant;
 	}
 	/**
-	 * @param loginRights the loginRights to set
+	 * @param isMerchant the isMerchant to set
 	 */
-	public void setLoginRights(String loginRights) {
-		this.loginRights = loginRights;
+	public void setIsMerchant(boolean isMerchant) {
+		this.isMerchant = isMerchant;
 	}
 	/**
-	 * @return the beingPayPassword
+	 * @return the hasPayPassword
 	 */
-	public boolean isBeingPayPassword() {
-		return beingPayPassword;
+	public boolean getHasPayPassword() {
+		return hasPayPassword;
 	}
 	/**
-	 * @param beingPayPassword the beingPayPassword to set
+	 * @param hasPayPassword the hasPayPassword to set
 	 */
-	public void setBeingPayPassword(boolean beingPayPassword) {
-		this.beingPayPassword = beingPayPassword;
+	public void setHasPayPassword(boolean hasPayPassword) {
+		this.hasPayPassword = hasPayPassword;
 	}
 	/**
 	 * @return the unReadMsgIds

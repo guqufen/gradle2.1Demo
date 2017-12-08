@@ -1,12 +1,15 @@
 package net.fnsco.web.controller.open;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import net.fnsco.car.service.finance.OrderFinanceService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.web.controller.jo.SaveFinanceJO;
 
 /**
  * 
@@ -19,8 +22,12 @@ import net.fnsco.core.base.ResultDTO;
 @RequestMapping(value = "/web/car", method = RequestMethod.POST)
 @Api(value = "/web/car", tags = { "业务申请-理财申请接口" })
 public class MoneyManageController extends BaseController {
-	//car_order_safe
-	private ResultDTO<String> addApplyUser() {
+	@Autowired
+	private OrderFinanceService orderFinanceService;
+	private ResultDTO<String> saveFinance(SaveFinanceJO saveFinanceJO) {
+		saveFinanceJO.getCode();
+		//appUserService.getValidateCode(appUserDTO);
+		orderFinanceService.saveFinance();
         return ResultDTO.success();
     }
 }
