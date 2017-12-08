@@ -98,7 +98,10 @@ public class H5PayJhfController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        String rspData = tradeOrderService.getReqData(tradeOrder);
+        String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteNotice";
+        String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteCallback?orderNo=" + tradeOrder.getOrderNo();
+        
+        String rspData = tradeOrderService.getReqData(tradeOrder,payNotifyUrl,payCallBackUrl);
         String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
         url += "?commID=" + tradeOrder.getChannelMerId() + "&reqData=" + rspData;
         Map<String, Object> resultMap = Maps.newHashMap();

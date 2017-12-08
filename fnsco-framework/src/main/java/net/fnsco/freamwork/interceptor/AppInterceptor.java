@@ -61,7 +61,8 @@ public class AppInterceptor implements HandlerInterceptor {
             return false;
         }
         String identifier = request.getHeader("identifier");
-        String temp = FrameworkConstant.TOKEN_ID + identifier;
+        //String temp = FrameworkConstant.TOKEN_ID + identifier;
+        String temp = env.getProperty("app.token.md5") + identifier;
         String trueTokenId = Md5Util.getInstance().md5(temp);
         if (!trueTokenId.equals(tokenId)) {
             logger.error("TokenId不对", "传入id为" + tokenId + "生成后的id为" + trueTokenId);
