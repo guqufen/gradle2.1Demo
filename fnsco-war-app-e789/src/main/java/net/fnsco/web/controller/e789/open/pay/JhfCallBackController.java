@@ -39,19 +39,13 @@ public class JhfCallBackController extends BaseController {
     @Autowired
     private Environment       env;
 
-    //    thirdPayNo  订单号
-    //    salesOrderNo    订单号 
-    //    orderStatus 订单状态    （0 未支付 1支付成功 2支付失败 3已退货）
-    //    settlementStatus    结算状态    （0 未结算 1已结算   2结算中   3已退款）
-    //    payCallBackParams   商户上送参数  
-    //    singData
     /**
-     * 支付完成时的通知，显示我们自己的页面
-     *
-     * @param userName
-     * @return
-     */
-    @RequestMapping(value = "/payCompleteNotice")
+    * 支付完成时的通知，显示我们自己的页面
+    *
+    * @param userName
+    * @return
+    */
+    @RequestMapping(value = "/pay/payCompleteNotice")
     @ApiOperation(value = "交易和充值支付完成时的通知")
     @ResponseBody
     public ResultDTO payCompleteNotice(String rspData) {
@@ -82,11 +76,64 @@ public class JhfCallBackController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/payCompleteCallback", method = RequestMethod.GET)
+    @RequestMapping(value = "/pay/payCompleteCallback", method = RequestMethod.GET)
     @ApiOperation(value = "交易和充值支付页面完成时的回调")
     public String payCompleteCallback(String orderNo) {
         String url = env.getProperty("web.base.url");
         logger.error("聚惠芬支付页面完成时的回调入参：" + orderNo);
+        TradeOrderDO order = tradeOrderService.queryOneByOrderId(orderNo);
+        //分期数
+        //支付总金额
+        if (null == order) {
+            order = new TradeOrderDO();
+        }
+        //status = ConstantEnum.RespCodeEnum.getNameByCode(order.getRespCode());
+        return "redirect:" + url + "/pay/jhfPayCallback.html?paymentAmount=" + order.getTxnAmount() + "&installmentNum=" + order.getInstallmentNum() + "&orderDate="
+               + DateUtils.dateFormat1ToStr(order.getCreateTime()) + "&status=" + order.getRespCode();
+    }
+
+    /**
+     * 充值完成时的通知，显示我们自己的页面
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/rechange/payCompleteNotice")
+    @ApiOperation(value = "充值完成时的通知")
+    @ResponseBody
+    public ResultDTO rechangePayCompleteNotice(String rspData) {
+        logger.error("聚惠充值完成时的通知密文入参：" + rspData);
+        String keyStr = env.getProperty("jhf.api.AES.key");
+        String result = "处理成功";
+        if (!Strings.isNullOrEmpty(rspData)) {
+            try {
+                String decodeStr = AESUtil.decode(rspData, keyStr);
+                logger.error("聚惠分支付完成时的通知解密后入参：" + decodeStr);
+                //聚惠芬支付完成时的通知解密后入参：{"payCallBackParams":"","settlementStatus":"0","thirdPayNo":"20171102155606073111374535549766","orderStatus":"2","singData":"001AA0CC08241A447BF7250B500C4B83"}
+                OrderDTO order = JSON.parseObject(decodeStr, OrderDTO.class);
+                return tradeOrderService.updateOrderInfo(order);
+            } catch (Exception ex) {
+                logger.error("聚惠分支付完成时的通知更新出错", ex);
+                result = "处理失败，业务处理异常";
+            }
+        } else {
+            logger.error("聚惠分支付完成时的通知密文入参为空");
+            result = "处理失败，入参为空";
+        }
+        return fail(result);
+    }
+
+    /**
+     * 充值完成时的回调页面
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/rechange/payCompleteCallback", method = RequestMethod.GET)
+    @ApiOperation(value = "充值页面完成时的回调")
+    public String rechangePayCompleteCallback(String orderNo) {
+        String url = env.getProperty("web.base.url");
+        logger.error("聚惠芬充值页面完成时的回调入参：" + orderNo);
         TradeOrderDO order = tradeOrderService.queryOneByOrderId(orderNo);
         //分期数
         //支付总金额

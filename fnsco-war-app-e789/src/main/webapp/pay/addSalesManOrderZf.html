@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>中付支付</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" type="text/css" href="css/mui.min.css">
+		<link rel="stylesheet" type="text/css" href="css/reset.css">
+	</head>
+	<body class="zf">
+		<div class="payDiv">
+			<input class="paymentAmount" type="number" name="paymentAmount" placeholder="分期金额">
+		</div>
+		<div class="payDiv">
+			<select class="installmentNum">
+				<option class="remove" value="0">选择分期期数</option><option value="6">6期</option><option value="12">12期</option><option value="24">24期</option>
+			</select>
+		</div>
+		<div class="payDiv">
+			<button class="submit">下一步</button>
+		</div>
+	</body>
+	<script src="js/setWidth.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/mui.min.js"></script>
+	<script type="text/javascript">
+		$(".installmentNum").click(function(){
+			$(".installmentNum").addClass("active");
+		});
+		$(".installmentNum").change(function(){
+			console.log($(".installmentNum").val());
+			if($(".installmentNum").val()=="0"){
+				$(".installmentNum").removeClass("active");
+			}
+		});
+		//获取URL携带的参数
+		function getUrl(name){
+		     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		     var r = window.location.search.substr(1).match(reg);
+		     if(r!=null)return  unescape(r[2]); return null;
+		}
+
+		
+		$(".submit").click(function(){
+			var innerCode=getUrl('innerCode');
+			var paymentAmount=$(".paymentAmount").val();
+			var installmentNum=$(".installmentNum").val();
+			console.log(paymentAmount);
+			if(!innerCode){
+				mui.alert('获取商户号错误！');
+				return;
+			}
+			if(paymentAmount<600 || paymentAmount>40000){
+				mui.alert('分期金额不能小于600,不能大于40000！');
+				return;
+			}
+			if(installmentNum<1){
+				mui.alert('请选择分期期数');
+				return;
+			}
+			var param={'innerCode':innerCode,'paymentAmount':paymentAmount,'installmentNum':installmentNum};
+			var params = JSON.stringify(param);
+			$.ajax({
+				url:'../trade/h5Pay/dealPayOrder',
+				type:'POST',
+				contentType: "application/json",
+      			dataType : "json",
+				data:params,
+				success:function(data){
+					console.log(data);
+					if(data.code!='2000'){
+						mui.alert('网络正忙，请稍候再试！');
+						return;
+					}
+					window.location.href=data.data.url;
+				},
+				error: function(e) { 
+					mui.alert('网络正忙，请稍候再试！');
+				} 
+			})
+		})
+		
+	</script>
+</html>

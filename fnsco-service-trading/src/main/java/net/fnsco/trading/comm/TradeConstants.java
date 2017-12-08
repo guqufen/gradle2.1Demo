@@ -6,9 +6,9 @@ import com.google.common.collect.Maps;
 
 public class TradeConstants {
     //个人用户充值使用秘钥
-    public static final String        RECHANGE_AES_KEY       = "a8bc3defec5916b469d9c1fa095b5b43";
+    public static final String        RECHANGE_AES_KEY = "a8bc3defec5916b469d9c1fa095b5b43";
     //交易类型
-    public static Map<String, String> TXT_TYPE_MAP = Maps.newHashMap();
+    public static Map<String, String> TXT_TYPE_MAP     = Maps.newHashMap();
     static {
         TXT_TYPE_MAP.put("012001", "1");//消费交易
         TXT_TYPE_MAP.put("012002", "2");//消费撤销交易
@@ -278,6 +278,41 @@ public class TradeConstants {
 
         public String getName() {
             return name;
+        }
+    }
+
+    //00pos机01app02台码
+    public static enum PayMediumEnum {
+                                      POS("00", "pos机"), APP("01", "app"), QR("02", "台码");
+        private String code;
+        private String name;
+
+        private PayMediumEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        /**
+        * @return the code
+        */
+        public String getCode() {
+            return code;
+        }
+
+        /**
+        * @return the name
+        */
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(String code) {
+            for (PayTypeEnum eopen : PayTypeEnum.values()) {
+                if (eopen.code.equals(code)) {
+                    return eopen.name;
+                }
+            }
+            return "";
         }
     }
 }

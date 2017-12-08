@@ -62,10 +62,9 @@ public class RechangeController extends BaseController {
     @RequestMapping(value = "/jhf/getQRUrl", method = RequestMethod.POST)
     @ApiOperation(value = "我的页面-钱包-分闪付充值保存，返回的url跳转到h5页面")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
-        String innerCode = "";
-        Integer userId = getQRUrlJO.getUserId();
+        String innerCode = env.getProperty("rechange.fsf.fns.innerCode");
         //根据用户id获取绑定的分闪付商户信息
-        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByInnerCodeType(innerCode, "04");
+        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByMerChannelInnerCodeType(innerCode, "04");
         if (null == merchantChannelJhf) {
             return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
         }
@@ -83,11 +82,13 @@ public class RechangeController extends BaseController {
         tradeOrder.setPayType("02");
         //交易子类型00刷卡01微信02支付宝03聚惠分
         tradeOrder.setPaySubType("03");
+        //00pos机01app02台码
+        tradeOrder.setPayMedium(TradeConstants.PayMediumEnum.APP.getCode());
         tradeOrder.setTxnType(1);
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        String url = env.getProperty("open.base.url") + "/trade/fsf/rechange/dealPayOrder";
+        String url = env.getProperty("app.base.url") + "/trade/fsf/rechange/dealPayOrder";
         url += "?commID=&reqData=" + getReqData(tradeOrder.getOrderNo());
         GetQRUrlResultVO result = new GetQRUrlResultVO();
         result.setUrl(url);

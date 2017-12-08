@@ -5,6 +5,7 @@ import java.util.List;
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 import net.fnsco.order.service.ad.entity.AdDO;
+import net.fnsco.order.service.ad.entity.AdDTO;
 
 /**
  * @desc 
@@ -26,31 +27,31 @@ public class AppAdVO extends VO {
 	
 	
 	@ApiModelProperty(value = "广告数组", name = "adList", example = "")
-	private List<AdDO> adList;
+	private List<AdDTO> adList;
 	@ApiModelProperty(value = "资讯数组", name = "newsList", example = "")
-	private List<AdDO> newsList;
+	private List<AdDTO> newsList;
 	/**
 	 * @return the adList
 	 */
-	public List<AdDO> getAdList() {
+	public List<AdDTO> getAdList() {
 		return adList;
 	}
 	/**
 	 * @param adList the adList to set
 	 */
-	public void setAdList(List<AdDO> adList) {
+	public void setAdList(List<AdDTO> adList) {
 		this.adList = adList;
 	}
 	/**
 	 * @return the newsList
 	 */
-	public List<AdDO> getNewsList() {
+	public List<AdDTO> getNewsList() {
 		return newsList;
 	}
 	/**
 	 * @param newsList the newsList to set
 	 */
-	public void setNewsList(List<AdDO> newsList) {
+	public void setNewsList(List<AdDTO> newsList) {
 		this.newsList = newsList;
 	}
 	

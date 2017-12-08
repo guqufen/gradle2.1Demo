@@ -110,4 +110,15 @@ public interface MerchantBankDao {
      * @return int    DOM对象
      */
     int countBanksByInnerCodeAndAccountNo(@Param("innerCode") String innerCode,@Param("accountNo") String accountNo);
+    
+    /**
+     * selectByAppUserId:(根据appUserId查询实体商户结构下的银行卡信息)
+     *
+     * @param  @param userId
+     * @param  @return    设定文件
+     * @return MerchantBank    DOM对象
+     * @author tangliang
+     * @date   2017年12月7日 下午2:23:59
+     */
+    MerchantBank selectByAppUserId(@Param("userId") Integer userId);
 }
