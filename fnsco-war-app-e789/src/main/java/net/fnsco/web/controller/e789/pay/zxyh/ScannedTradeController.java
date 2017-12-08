@@ -55,14 +55,16 @@ public class ScannedTradeController extends BaseController{
 		if(Strings.isNullOrEmpty(paySubType)){
 			return ResultDTO.fail("交易子类型为空");
 		}
-		
+		ResultDTO<Map<String, Object>> dto = new ResultDTO<>();
 		Map<String, Object> reqMap = new HashMap<>();
 		if("41".equals(paySubType)){//微信
-			reqMap = zxyhPaymentService.generateQRCodeWeiXin(userId,txnAmt);
+			dto = zxyhPaymentService.generateQRCodeWeiXin(userId,txnAmt);
+			reqMap = dto.getData();
 			qrVo.setUrl(reqMap.get("codeUrl").toString());
 		
 		}else if("42".equals(paySubType)){//支付宝
-			reqMap = zxyhPaymentService.generateQRCodeAliPay(userId,ip,txnAmt);
+			dto = zxyhPaymentService.generateQRCodeAliPay(userId,ip,txnAmt);
+			reqMap = dto.getData();
 			qrVo.setUrl(reqMap.get("codeUrl").toString());
 		}
 		return  ResultDTO.success(qrVo);
