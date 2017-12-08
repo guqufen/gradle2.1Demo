@@ -17,6 +17,8 @@ public class TradeDataDetailVO extends VO {
 	@ApiModelProperty(value="支付方式",example="支付方式")
 	private String payType;
 	
+	@ApiModelProperty(value="交易状态:1000处理中1001成功1002失败1003已退货",example="交易状态:1000处理中1001成功1002失败1003已退货")
+	private String tradeStatus;
 	/**
 	 * 创建时间
 	 */
@@ -28,6 +30,28 @@ public class TradeDataDetailVO extends VO {
 	
 	@ApiModelProperty(value = "订单号", example = "订单号")
 	private String orderNo;
+	
+	/**
+	 * tradeStatus
+	 *
+	 * @return  the tradeStatus
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getTradeStatus() {
+		return tradeStatus;
+	}
+
+	/**
+	 * tradeStatus
+	 *
+	 * @param   tradeStatus    the tradeStatus to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setTradeStatus(String tradeStatus) {
+		this.tradeStatus = tradeStatus;
+	}
 
 	/**
 	 * traId

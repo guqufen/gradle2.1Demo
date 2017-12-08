@@ -31,7 +31,7 @@ public class EveryDayTurnoverVO extends VO {
 	 * 订单笔数
 	 */
 	@ApiModelProperty(value = "笔数", name = "orderNum", example = "笔数")
-	private String orderNum;
+	private Integer orderNum;
 	
 	/**
 	 * 交易额
@@ -68,7 +68,7 @@ public class EveryDayTurnoverVO extends VO {
 	 * @since   CodingExample Ver 1.0
 	*/
 	
-	public String getOrderNum() {
+	public Integer getOrderNum() {
 		return orderNum;
 	}
 
@@ -79,7 +79,7 @@ public class EveryDayTurnoverVO extends VO {
 	 * @since   CodingExample Ver 1.0
 	 */
 	
-	public void setOrderNum(String orderNum) {
+	public void setOrderNum(Integer orderNum) {
 		this.orderNum = orderNum;
 	}
 

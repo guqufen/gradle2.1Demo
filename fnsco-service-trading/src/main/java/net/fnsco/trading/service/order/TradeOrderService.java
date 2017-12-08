@@ -49,10 +49,8 @@ public class TradeOrderService extends BaseService {
     @Autowired
     private SequenceService  sequenceService;
 
-    public String getReqData(TradeOrderDO tradeOrder) {
+    public String getReqData(TradeOrderDO tradeOrder,String payNotifyUrl,String payCallBackUrl) {
         String keyStr = env.getProperty("jhf.api.AES.key");
-        String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteNotice";
-        String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteCallback?orderNo=" + tradeOrder.getOrderNo();
         //        commID  商户Id
         //        thirdPayNo  订单号
         //        payAmount   支付金额
