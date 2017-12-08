@@ -1,4 +1,4 @@
-package net.fnsco.web.jo;
+package net.fnsco.web.controller.jo;
 
 import io.swagger.annotations.ApiModelProperty;
 
