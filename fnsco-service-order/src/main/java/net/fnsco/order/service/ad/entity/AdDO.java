@@ -2,6 +2,8 @@ package net.fnsco.order.service.ad.entity;
 
 import java.util.Date;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class AdDO {
 
     /**
