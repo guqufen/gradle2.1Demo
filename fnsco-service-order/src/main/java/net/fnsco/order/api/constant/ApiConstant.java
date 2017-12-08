@@ -24,6 +24,7 @@ public class ApiConstant extends CoreConstants {
     public static String E_CONFIG_NAME_NULL        = "5031";                            //type为空
     public static String E_STRING_TOO_LENGTH       = "5032";                            //入参太常
     public static String E_SETTING_STATUS_NULL     = "5033";                            //设置状态为空
+    public static String E_ORDER_NO_NULL           = "5034";                            //订单号不能为空
 
     public static String E_APP_PHONE_EMPTY         = "5011";                            //非法请求,没有手机号
     public static String E_APP_PHONE_ERROR         = "5012";                            //非法请求,手机号不正确
@@ -96,6 +97,8 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_CONFIG_NAME_NULL, "资源类型不能为空");
         ERROR_MESSGE_MAP.put(E_STRING_TOO_LENGTH, "输入参数太长");
         ERROR_MESSGE_MAP.put(E_SETTING_STATUS_NULL, "设置状态为空");
+        ERROR_MESSGE_MAP.put(E_ORDER_NO_NULL, "订单号不能为空");
+        
         //APP
         ERROR_MESSGE_MAP.put(E_USERID_NULL, "入参ID为null");
         ERROR_MESSGE_MAP.put(E_UPDATE_FAIL, "更新失败");
