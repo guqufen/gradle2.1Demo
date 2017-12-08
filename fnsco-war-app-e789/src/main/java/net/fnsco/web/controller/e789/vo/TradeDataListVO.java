@@ -48,6 +48,32 @@ public class TradeDataListVO extends VO {
 	@ApiModelProperty(value="订单号",example="订单号")
 	private String orderNo;
 	
+	@ApiModelProperty(value = "交易状态名称", example = "交易状态名称")
+	private String tradeStatusName;
+	
+	
+	/**
+	 * tradeStatusName
+	 *
+	 * @return  the tradeStatusName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getTradeStatusName() {
+		return tradeStatusName;
+	}
+
+	/**
+	 * tradeStatusName
+	 *
+	 * @param   tradeStatusName    the tradeStatusName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setTradeStatusName(String tradeStatusName) {
+		this.tradeStatusName = tradeStatusName;
+	}
+
 	/**
 	 * paySubType
 	 *
