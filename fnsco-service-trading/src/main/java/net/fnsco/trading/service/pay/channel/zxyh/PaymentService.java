@@ -150,6 +150,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     	weiXinDTO.setBackEndUrl(""); //接收支付网关异步通知回调地址
     	//根据userId获取内部商户号
     	String innerCode = "";
+    	
     	MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
     	if(channel != null){
     		weiXinDTO.setMerId(channel.getChannelMerId()); //商户编号	M	String(15)	普通商户或平台商户的商户号
@@ -159,7 +160,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     	weiXinDTO.setTermId("");//终端编号	C	String(8)	终端编号默认WEB
     	weiXinDTO.setTermIp("");//终端IP	C	String(16)	APP和网页支付提交用户端ip，主扫支付填调用付API的机器IP
     	
-    	weiXinDTO.setOrderId(DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_order")); //商户系统内部的订单号 M ,32 个字符内、可包含字母, 确保在商户系统唯一
+    	weiXinDTO.setOrderId(DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_data")); //商户系统内部的订单号 M ,32 个字符内、可包含字母, 确保在商户系统唯一
     	weiXinDTO.setOrderTime(DateUtils.getNowDateStr()); //订单生成时间，M 格式 为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒 表示为20091225091010
     	weiXinDTO.setProductId("");	//商品ID	C	Strng(32)	此id为二维码中包含的商品ID，商户自行定义。
     	String orderBody = "商品描述";

@@ -1,13 +1,14 @@
-package net.fnsco.bigdata.service.bank.dao.helper;
+package net.fnsco.trading.service.bank.dao.helper;
 
 import org.apache.ibatis.jdbc.SQL;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang3.StringUtils;
 
-import net.fnsco.bigdata.service.bank.entity.AppUserBankDO;
+import net.fnsco.trading.service.bank.entity.AppUserBankDO;
+
+import org.apache.commons.lang3.StringUtils;
 public class AppUserBankProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());

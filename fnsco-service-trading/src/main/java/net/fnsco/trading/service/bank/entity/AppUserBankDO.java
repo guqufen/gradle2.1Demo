@@ -1,4 +1,4 @@
-package net.fnsco.bigdata.service.bank.entity;
+package net.fnsco.trading.service.bank.entity;
 
 
 public class AppUserBankDO {
