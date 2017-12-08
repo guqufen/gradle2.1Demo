@@ -26,6 +26,7 @@ public class MoneyManageController extends BaseController {
 	private OrderFinanceService orderFinanceService;
 	private ResultDTO<String> saveFinance(SaveFinanceJO saveFinanceJO) {
 		saveFinanceJO.getCode();
+		//appUserService.getValidateCode(appUserDTO);
 		orderFinanceService.saveFinance();
         return ResultDTO.success();
     }

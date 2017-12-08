@@ -1,5 +1,6 @@
 package net.fnsco.car.service.finance;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -20,6 +21,10 @@ public class OrderFinanceService extends BaseService {
  private OrderFinanceDAO orderFinanceDAO;
  //保存理财申请信息
  public OrderFinanceDO saveFinance() {
+	 OrderFinanceDO orderFinance = new OrderFinanceDO();
+	 orderFinance.setCreateTime(new Date());
+	 orderFinance.setLastUpdateTime(new Date());
+	 this.orderFinanceDAO.insert(orderFinance);
    return null;
  }
 
