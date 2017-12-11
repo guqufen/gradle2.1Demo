@@ -16,7 +16,7 @@ import net.fnsco.car.service.carBrand.entity.CarBrandDO;
 import net.fnsco.core.base.ResultDTO;
 
 @RestController
-@RequestMapping(value = "/api/carBrand", method = RequestMethod.POST)
+@RequestMapping(value = "/api/carBrand")
 @Api(value = "/api/carBrand", tags = { "汽车品牌" })
 public class CarBrandController {
 

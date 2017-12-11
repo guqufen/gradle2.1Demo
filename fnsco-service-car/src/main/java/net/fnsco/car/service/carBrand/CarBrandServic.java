@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.car.service.carBrand.dao.CarBrandDAO;
@@ -21,6 +21,8 @@ public class CarBrandServic extends BaseService {
 
 	@Autowired
 	private CarBrandDAO carBrandDAO;
+	@Autowired
+	private Environment env;
 
 	/**
 	 * 分页查询，汽车品牌
@@ -54,6 +56,9 @@ public class CarBrandServic extends BaseService {
 		CarBrandDO carBrandDO = new CarBrandDO();
 		carBrandDO.setIsHot(1);
 		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO);
+		for (CarBrandDO carBrandDO2 : list) {
+			carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
+		}
 		return ResultDTO.success(list);
 	}
 
