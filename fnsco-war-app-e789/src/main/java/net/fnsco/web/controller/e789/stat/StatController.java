@@ -108,6 +108,7 @@ public class StatController extends BaseController {
 			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
 		}
 		
+		formatInputDate(payTypeTurnoverJO);
 		PayTypeTurnoverVO payTypeTurnoverVO = new PayTypeTurnoverVO();
 		List<OrderPayTypeDTO> datas = tradeOrderByPayTypeDAO.selectByCondition(payTypeTurnoverJO.getStartDate(), payTypeTurnoverJO.getEndDate(), payTypeTurnoverJO.getUserId());
 		if(null != datas) {
@@ -175,4 +176,22 @@ public class StatController extends BaseController {
 			return String.format("%.2f", new BigDecimal(str).divide(new BigDecimal(100)).doubleValue());
 		}
 	}
+	
+	/**
+     * formatInputDate:(这里用一句话描述这个方法的作用)格式化输入日期参数
+     *
+     * @param tradeReportDTO
+     * @return    设定文件
+     * @return TradeReportDTO    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    private PayTypeTurnoverJO formatInputDate(PayTypeTurnoverJO tradeReportDTO) {
+        //如果没有传递时间和商家，则默认上周和全部商户数据
+        if (Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate())) {
+            tradeReportDTO.setStartDate(DateUtils.getDateStrByMonth(0,-1));
+            tradeReportDTO.setEndDate(DateUtils.getDateStrByMonth(0,-8));
+        }
+        return tradeReportDTO;
+    }
 }
