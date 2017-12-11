@@ -49,7 +49,7 @@ public class TradeOrderService extends BaseService {
     @Autowired
     private SequenceService  sequenceService;
 
-    public String getReqData(TradeOrderDO tradeOrder,String payNotifyUrl,String payCallBackUrl) {
+    public String getReqData(TradeOrderDO tradeOrder, String payNotifyUrl, String payCallBackUrl) {
         String keyStr = env.getProperty("jhf.api.AES.key");
         //        commID  商户Id
         //        thirdPayNo  订单号
@@ -100,6 +100,20 @@ public class TradeOrderService extends BaseService {
         Integer count = this.tradeOrderDAO.pageListCount(tradeOrder);
         ResultPageDTO<TradeOrderDO> pager = new ResultPageDTO<TradeOrderDO>(count, pageList);
         return pager;
+    }
+
+    // 充值
+    @Transactional
+    public TradeOrderDO research(TradeOrderDO tradeOrder) {
+        logger.info("开始添加TradeOrderService.add,tradeOrder=" + tradeOrder.toString());
+        tradeOrder.setCreateTime(new Date());
+        //tradeOrder.setOrderCeateTime(new Date());
+        if (Strings.isNullOrEmpty(tradeOrder.getOrderNo())) {
+            tradeOrder.setOrderNo(DateUtils.getNowYMDOnlyStr() + tradeOrder.getInnerCode() + sequenceService.getOrderSequence("t_trade_order"));
+        }
+        this.tradeOrderDAO.insert(tradeOrder);
+
+        return tradeOrder;
     }
 
     // 添加
@@ -213,18 +227,18 @@ public class TradeOrderService extends BaseService {
             }
         }
         //（0 未支付 1支付成功 2支付失败 3已退货）
-        if ("3".equals(order.getOrderStatus())||"1".equals(order.getSettlementStatus())) {//3已退货
+        if ("3".equals(order.getOrderStatus()) || "1".equals(order.getSettlementStatus())) {//3已退货
             //先修改为无效订单再添加退货订单
             //TradeOrderDO tradeOrderTemp = queryByOrderId(order.getThirdPayNo());
             //tradeOrderTemp.setSettleStatus(3);
             tradeOrderDAO.update(tradeOrderDO);
-//            tradeOrderDO.setId(null);
-//            tradeOrderDO.setTxnType(2);
-//            tradeOrderDO.setSyncStatus(0);
-//            tradeOrderDO.setRespCode("1001");
-//            tradeOrderDO.setCreateTime(new Date());
-//            tradeOrderDO.setOrderCeateTime(new Date());
-//            doAdd(tradeOrderDO);
+            //            tradeOrderDO.setId(null);
+            //            tradeOrderDO.setTxnType(2);
+            //            tradeOrderDO.setSyncStatus(0);
+            //            tradeOrderDO.setRespCode("1001");
+            //            tradeOrderDO.setCreateTime(new Date());
+            //            tradeOrderDO.setOrderCeateTime(new Date());
+            //            doAdd(tradeOrderDO);
         } else {
             if (null == tradeOrderDO.getOrderCeateTime() && !Strings.isNullOrEmpty(order.getTime())) {//回调时更新订单创建时间
                 tradeOrderDO.setOrderCeateTime(DateUtils.toParseYmdhms(order.getTime()));

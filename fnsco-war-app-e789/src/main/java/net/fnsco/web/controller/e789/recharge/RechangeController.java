@@ -54,7 +54,7 @@ public class RechangeController extends BaseController {
     private Environment       env;
 
     /**
-     * 获取聚惠分url，不生成二维码
+     * 获取聚惠分url，不生成二维码，个人充值使用的是固定秘钥
      *
      * @param userName
      * @return
@@ -85,10 +85,12 @@ public class RechangeController extends BaseController {
         //00pos机01app02台码
         tradeOrder.setPayMedium(TradeConstants.PayMediumEnum.APP.getCode());
         tradeOrder.setTxnType(1);
+        //交易子类型10购买消费11充值消费20购买撤销21充值撤销
+        tradeOrder.setTxnSubType(TradeConstants.TxnSubTypeEnum.RESEARCH_CONSUME.getCode());
         tradeOrder.setTxnSubType(11);//交易子类型10购买消费11充值消费20购买撤销21充值撤销
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
-        tradeOrderService.doAdd(tradeOrder);
+        tradeOrderService.research(tradeOrder);
         String url = env.getProperty("app.base.url") + "/trade/fsf/rechange/dealPayOrder";
         url += "?commID=&reqData=" + getReqData(tradeOrder.getOrderNo());
         GetQRUrlResultVO result = new GetQRUrlResultVO();
