@@ -118,4 +118,9 @@ public class CarBrandService extends BaseService {
 		 CarBrandDO obj = this.carBrandDAO.getById(id);
 	     return obj;
 	 }
+
+	public List<CarBrandDO> queryCityList() {
+		List<CarBrandDO> list = this.carBrandDAO.getFirstLevel();
+		return list;
+	}
 }
