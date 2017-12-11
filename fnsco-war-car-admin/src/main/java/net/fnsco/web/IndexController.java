@@ -23,7 +23,7 @@ public class IndexController extends BaseController {
 
         Object obj = getSessionUser();
         if (null == obj) {
-            return "forward:/idx";
+            return "forward:/web/goLogin";
         }
         return "redirect:/index.html";
     }

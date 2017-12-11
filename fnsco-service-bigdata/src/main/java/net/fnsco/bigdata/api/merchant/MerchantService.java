@@ -174,4 +174,11 @@ public interface MerchantService {
      */
     MerchantCore getMerChantCoreByInnerCode(String innerCode);
 
+    /**
+     * 获取商户渠道信息信息
+     * @param innerCode 实体商户号
+     * @param channelType 渠道类型
+     * @return
+     */
+    public MerchantChannel getMerChannelByEntityInnerCodeType(String entityInnerCode, String channelType);
 }

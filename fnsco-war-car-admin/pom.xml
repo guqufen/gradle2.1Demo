@@ -74,7 +74,11 @@
 			<artifactId>fnsco-core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
- 
+ 		<dependency>
+			<groupId>net.fnsco</groupId>
+			<artifactId>fnsco-service-car</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>

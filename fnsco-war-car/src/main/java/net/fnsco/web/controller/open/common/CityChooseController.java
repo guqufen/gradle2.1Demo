@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.open.city;
+package net.fnsco.web.controller.open.common;
 
 import java.util.List;
 
