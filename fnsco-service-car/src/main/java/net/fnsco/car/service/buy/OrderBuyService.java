@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.car.service.buy.dao.OrderBuyDAO;
 import net.fnsco.car.service.buy.entity.OrderBuyDO;
+import net.fnsco.car.service.carBrand.CarBrandService;
+import net.fnsco.car.service.carBrand.entity.CarBrandDO;
 import net.fnsco.car.service.city.DicCityService;
 import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.customer.CustomerService;
@@ -29,6 +31,8 @@ public class OrderBuyService extends BaseService {
 	private CustomerService customerService;
 	@Autowired
 	private DicCityService dicCityService;
+	@Autowired
+	private CarBrandService carBrandService;
 
 	// 分页
 	public ResultPageDTO<OrderBuyDO> page(OrderBuyDO orderBuy, Integer pageNum, Integer pageSize) {
@@ -39,6 +43,7 @@ public class OrderBuyService extends BaseService {
 				CustomerDO customerDO = customerService.doQueryById(orderBuyDO.getCustomerId());
 				if (null != customerDO) {
 					orderBuyDO.setCustomerName(customerDO.getName());
+					orderBuyDO.setCustomerPhone(customerDO.getMobile());
 				}
 			}
 
@@ -51,6 +56,10 @@ public class OrderBuyService extends BaseService {
 
 			if (null != orderBuyDO.getCarTypeId()) {
 
+				CarBrandDO carBrandDO = carBrandService.doQueryById(orderBuyDO.getCarTypeId());
+				if (null != carBrandDO) {
+					orderBuyDO.setCarTypeName(carBrandDO.getName());
+				}
 			}
 		}
 		Integer count = this.orderBuyDAO.pageListCount(orderBuy);
@@ -87,7 +96,6 @@ public class OrderBuyService extends BaseService {
 
 	@Transactional
 	public ResultDTO<Object> addJo(OrderBuyDO orderBuy, CustomerDO customer) {
-
 		customer = customerService.addCustomer(customer);
 		if (customer.getId() == null) {
 			return ResultDTO.fail("客户信息新增失败");

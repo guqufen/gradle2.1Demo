@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>保险申请</title>
+	<link href="css/mui.css" rel="stylesheet" type="text/css" media="all">
+	<link href="css/reset.css" rel="stylesheet" type="text/css" media="all">
+	<link href="css/input.css" rel="stylesheet" type="text/css" media="all">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+</head>
+<body>
+	<header>
+		<div class="head-title">保险申请</div>
+	</header>
+	<div class="main">
+		<div class="mui-content input">
+			<div class="mui-input-row">
+				<label>投保人</label>
+				<input class="name" placeholder="输入投保人姓名" type="text">
+			</div>
+			<div class="mui-input-row">
+				<label>所在城市</label>
+				<input class="city" id='showCityPicker' placeholder="选择所在城市" type="text">
+				<input type="hidden" id="cityId" name="cityId">
+			</div>
+			<div class="mui-input-row rmb">
+				<label>汽车原价</label>
+				<input class="car-money" placeholder="输入汽车原价" type="text">
+				<span>元</span>
+			</div>
+			<div class="mui-input-row">
+				<label>意向投保公司</label>
+				<input class="insurance-company" id="showInsuranceCompanyPicker" placeholder="选择意向投保公司" type="text">
+				<input id="insuranceCompanyId" name="insuranceCompanyId" type="hidden">
+			</div>
+			<div class="mui-input-row phone">
+				<label>手机号码</label>
+				<input class="phone-num" placeholder="输入手机号码" type="text">
+				<button class="send-code">发送验证码</button>
+			</div>
+			<div class="mui-input-row">
+				<label>短信验证码</label>
+				<input class="phone-code" placeholder="输入短信验证码" type="text">
+			</div>
+			<div class="mui-input-row">
+				<label>推荐码</label>
+				<input class="refrral-code" placeholder="输入推荐码" type="text">
+			</div>
+			<button class="sub-btn mui-btn" type="button" data-loading-text="提交中">提交审核</button>
+		</div>
+		<!-- 页尾提示栏 -->
+		<div class="footer-bar">—— 我也是有底线的 ——</div>
+	</div>
+	<footer>
+		<!-- 底部导航栏 -->
+		<div class="footer-nav mui-row">
+			<!-- 首页 -->
+			<div class="mui-col-xs-6 home">
+				<a href="index.html">
+					<i></i>
+					<p>首页</p>
+				</a>
+			</div>
+			<!-- 贷款 -->
+			<div class="mui-col-xs-6 loans">
+				<a href="loans.html">
+					<i></i>
+					<p>贷款</p>
+				</a>
+			</div>
+		</div>
+	</footer>
+</body>
+<script type="text/javascript" src="js/setWidth.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/mui.js"></script>
+<script type="text/javascript" src="js/mui.picker.js"></script>
+<script type="text/javascript" src="js/mui.poppicker.js"></script>
+<script type="text/javascript">
+	//右划关闭
+    mui.init({
+		swipeBack: true //启用右滑关闭功能
+	});
+    //弹框
+    (function($, doc) {
+		$.init();
+		$.ready(function() {
+			//选择城市
+			var cityPicker = new $.PopPicker();
+			cityPicker.setData([{
+				value: 1,
+				text: "上海市"
+			}, {
+				value: 2,
+				text: '杭州市'
+			}, {
+				value: 3,
+				text: '苏州市'
+			},{
+				value: 4,
+				text: '南京市'
+			}]);
+			var insuranceCompanyPicker = new $.PopPicker();
+			insuranceCompanyPicker.setData([{
+				value: 1,
+				text: "太平洋保险有限公司"
+			}, {
+				value: 2,
+				text: '中国人寿保险有限公司'
+			}, {
+				value: 3,
+				text: '平安保险有限公司'
+			},{
+				value: 4,
+				text: '新华保险有限公司'
+			}]);
+			var showCityPickerButton = doc.getElementById('showCityPicker');
+			var cityId = doc.getElementById('cityId');
+			showCityPickerButton.addEventListener('tap', function(event) {
+				cityPicker.show(function(items) {
+					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,4);
+					cityId.value = JSON.stringify(items[0].value);
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+				});
+			}, false);
+			var showInsuranceCompanyPickerButton = doc.getElementById('showInsuranceCompanyPicker');
+			var insuranceCompanyId = doc.getElementById('insuranceCompanyId');
+			showInsuranceCompanyPickerButton.addEventListener('tap', function(event) {
+				insuranceCompanyPicker.show(function(items) {
+					var dataLen=JSON.stringify(items[0].text).length;
+					showInsuranceCompanyPickerButton.value = JSON.stringify(items[0].text).substring(1,dataLen-1);
+					insuranceCompanyId.value = JSON.stringify(items[0].value);
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+				});
+			}, false);
+		});
+	})(mui, document);
+</script>
+
+
+</html>

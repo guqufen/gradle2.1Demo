@@ -135,30 +135,3 @@ function formatindex(value, row, index) {
 	return [ index + 1 ].join('');
 }
 
-function editData(id){
-	layer.confirm('确定要更新状态？', {
-        btn: ['确认','取消'] 
-    }, function(){
-    	$.ajax({
-            url:PROJECT_NAME+'/web/order/updateStatus',
-            type:'POST',
-            data:{'id':id,"status":9},
-            success:function(data){
-              unloginHandler(data);
-              if(data.success){
-                layer.msg('更新状态成功');
-                queryEvent("table");
-              }else{
-                layer.msg(data.message);
-              } 
-            },
-            error:function(e)
-            {
-              layer.msg('系统异常!'+e);
-            }
-        });
-    }, function(){
-      layer.msg('取消成功');
-      return false;
-    });
-}

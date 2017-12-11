@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.car.service.carBrand.CarBrandServic;
+import net.fnsco.car.service.carBrand.CarBrandService;
 import net.fnsco.car.service.carBrand.entity.CarBrandDO;
 import net.fnsco.core.base.ResultDTO;
 
 @RestController
-@RequestMapping(value = "/api/carBrand", method = RequestMethod.POST)
+@RequestMapping(value = "/api/carBrand")
 @Api(value = "/api/carBrand", tags = { "汽车品牌" })
 public class CarBrandController {
 
 	@Autowired
-	private CarBrandServic carBrandServic;
+	private CarBrandService carBrandServic;
 
 	@RequestMapping("/selectHot")
 	@ApiOperation("查询热门汽车品牌")
