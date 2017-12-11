@@ -1,0 +1,114 @@
+/*修改mui选择器按钮样式*/
+.mui-btn-blue, .mui-btn-primary, input[type=submit]{
+    background-color: #fd6804;
+    border-color: #e25c02;
+}
+.sub-btn.mui-btn .mui-spinner{
+    vertical-align: middle;
+}
+/*over*/
+.mui-content.input{
+    background: #fff;
+    font-size: 0.65rem;
+}
+.mui-input-row{
+    font-size: 0.65rem;
+    padding:0.5rem 0 0.2rem 0;
+    /*border-bottom: 1px solid #ccc;*/
+    position: relative;
+}
+.mui-input-row:before{
+    content: '';
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    bottom: 0;
+    right: -0.55rem;
+    background-color: #ccc;
+    transform: scale(1,0.5);
+}
+.mui-input-row.phone .send-code{
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.35rem;
+    font-size: 0.65rem;
+    padding: 0.25rem 0.5rem;
+}
+.mui-input-row.rmb span{
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.2rem;
+    height: 1.8rem;
+    line-height: 1.8rem;
+}
+.mui-input-row input{
+    font-size: 0.65rem;
+    height: 1.8rem;
+    padding: 0;
+    line-height: 1.8rem;
+}
+.mui-input-row label{
+    height: 1.8rem;
+    padding: 0 0.55rem;
+    line-height: 1.8rem;
+}
+.mui-input-row.phone input{
+    float: left;
+    width: 5.5rem;
+}
+.mui-input-row.rmb input{
+    float: left;
+    width: 8rem;
+}
+.sub-btn{
+    margin: 1rem 5%;
+    width: 90%;
+    background-color: #fd6804;
+    color:#fff;
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+    font-size: 0.65rem;
+    border-color: #e25c02;
+}
+/*贷款*/
+a:active{
+    color:#cc5200;
+}
+.mui-bar.top-bar{
+    top: 0;
+    font-size: 0.65rem;
+    box-shadow:none;
+    height: 2rem;
+    line-height: 2rem;
+    position: inherit;
+}
+.mui-bar-tab .mui-tab-item{
+    height: 2.5rem;
+    line-height: 1;
+}
+.mui-bar-tab .mui-tab-item.mui-active{
+    border-bottom: 0.1rem solid #fd6804;
+}
+.car-info-tab,.loan-information-tab{
+    display: table-cell;
+    overflow: hidden;
+    width: 1%;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #929292;
+    height: 2rem;
+    line-height: 2rem;
+}
+.loan-information-tab.mui-active,.car-info-tab.mui-active{
+    border-bottom: 2px solid #fd6804;
+    color: #fd6804;
+    font-weight: bold;
+}
+
+.mui-bar-tab ~ .mui-content{
+    padding: 0;
+    background: #fff;
+}
