@@ -35,8 +35,6 @@ import net.fnsco.web.controller.e789.dto.TradeDTO;
 @Api(value = "/trade/fsf", tags = { "分闪付支付处理相关接口" })
 public class PayDealFsfController extends BaseController {
     @Autowired
-    private MerchantService   merchantService;
-    @Autowired
     private TradeOrderService tradeOrderService;
     @Autowired
     private Environment       env;
@@ -53,13 +51,13 @@ public class PayDealFsfController extends BaseController {
         TradeDTO trade = getReqData(reqData);
         String orderNo = trade.getOrderNo();
         TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
-        String url = env.getProperty("open.base.url") + "/pay/dealPayFail.html";
+        String url = env.getProperty("app.base.url") + "/pay/dealPayFail.html";
         if (null != tradeOrderDO) {
             Integer handleNum = tradeOrderDO.getHandleNum();
             if (null == handleNum || handleNum == 0) {
                 url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-                String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteNotice";
-                String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteCallback?orderNo=" + orderNo;
+                String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/pay/payCompleteNotice";
+                String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/pay/payCompleteCallback?orderNo=" + orderNo;
                 url += "?commID=" + tradeOrderDO.getChannelMerId() + "&reqData=" + tradeOrderService.getReqData(tradeOrderDO, payNotifyUrl, payCallBackUrl);
                 TradeOrderDO tradeOrderTemp = new TradeOrderDO();
                 tradeOrderTemp.setId(tradeOrderDO.getId());
@@ -88,8 +86,8 @@ public class PayDealFsfController extends BaseController {
             Integer handleNum = tradeOrderDO.getHandleNum();
             if (null == handleNum || handleNum == 0) {
                 url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-                String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteNotice";
-                String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteCallback?orderNo=" + orderNo;
+                String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/rechange/payCompleteNotice";
+                String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/rechange/payCompleteCallback?orderNo=" + orderNo;
                 url += "?commID=" + tradeOrderDO.getChannelMerId() + "&reqData=" + tradeOrderService.getReqData(tradeOrderDO, payNotifyUrl, payCallBackUrl);
                 TradeOrderDO tradeOrderTemp = new TradeOrderDO();
                 tradeOrderTemp.setId(tradeOrderDO.getId());
@@ -101,34 +99,15 @@ public class PayDealFsfController extends BaseController {
         return "redirect:" + url;
     }
 
-    private TradeDTO getReqData(String innerCode, String reqData) {
-        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByMerChannelInnerCodeType(innerCode, "04");
-        if (null == merchantChannelJhf) {
-            return null;
-        }
-        String keyStr = merchantChannelJhf.getChannelMerKey();
-        String decodeStr = "";
-        TradeDTO resultDto = null;
-        try {
-            decodeStr = AESUtil.decode(reqData, keyStr);
-            logger.error("第三方接入获取二维码url解密后入参：" + decodeStr);
-            resultDto = JSON.parseObject(decodeStr, TradeDTO.class);
-        } catch (Exception ex) {
-            logger.error("第三方接入获取二维码url出错", ex);
-            return null;
-        }
-        return resultDto;
-    }
-
     private TradeDTO getReqData(String reqData) {
         String decodeStr = "";
         TradeDTO resultDto = null;
         try {
             decodeStr = AESUtil.decode(reqData, TradeConstants.RECHANGE_AES_KEY);
-            logger.error("第三方接入获取二维码url解密后入参：" + decodeStr);
+            logger.error("e789充值和支付获取二维码url解密后入参：" + decodeStr);
             resultDto = JSON.parseObject(decodeStr, TradeDTO.class);
         } catch (Exception ex) {
-            logger.error("第三方接入获取二维码url出错", ex);
+            logger.error("e789充值和支付获取二维码url出错", ex);
             return null;
         }
         return resultDto;
