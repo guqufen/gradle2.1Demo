@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.fnsco.car.service.buy.OrderBuyService;
 import net.fnsco.car.service.buy.entity.OrderBuyDO;
 import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 /**
@@ -41,7 +42,31 @@ public class BuyOrderWebController extends BaseController{
 	@RequiresPermissions(value = { "car:buy:list" })
 	public ResultPageDTO<OrderBuyDO>  query(OrderBuyDO orderBuy ,Integer currentPageNum,Integer pageSize){
 		logger.info("查询购车订单列表");
+		if(-1 ==orderBuy.getStatus()) {
+			orderBuy.setStatus(null);
+		}
 		ResultPageDTO<OrderBuyDO> result  = orderBuyService.page(orderBuy, currentPageNum, pageSize);
 		return result;
+	}
+	
+	/**
+	 * updateStatus:(更新状态)
+	 *
+	 * @param  @param orderBuy
+	 * @param  @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月11日 下午4:42:47
+	 */
+	@RequestMapping(value = "/updateStatus", method = RequestMethod.POST)
+	@ResponseBody
+	@RequiresPermissions(value = { "car:buy:update" })
+	public ResultDTO<String>  updateStatus(OrderBuyDO orderBuy){
+		logger.info("更新订单状态");
+		if(-1 ==orderBuy.getStatus()) {
+			orderBuy.setStatus(null);
+		}
+		orderBuyService.doUpdate(orderBuy, getUserId());
+		return success();
 	}
 }

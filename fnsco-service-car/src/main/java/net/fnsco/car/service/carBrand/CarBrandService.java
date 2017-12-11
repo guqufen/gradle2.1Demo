@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 @Service
-public class CarBrandServic extends BaseService {
+public class CarBrandService extends BaseService {
 
 	@Autowired
 	private CarBrandDAO carBrandDAO;
@@ -95,4 +94,10 @@ public class CarBrandServic extends BaseService {
 		List<CarBrandDO> list = carBrandDAO.selectChild(id);
 		return ResultDTO.success(list);
 	}
+	
+	// 查询
+	 public CarBrandDO doQueryById (Integer id) {
+		 CarBrandDO obj = this.carBrandDAO.getById(id);
+	     return obj;
+	 }
 }
