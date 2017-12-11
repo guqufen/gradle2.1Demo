@@ -55,8 +55,9 @@ public class OrderBuyService extends BaseService {
 			}
 
 			if (null != orderBuyDO.getCarTypeId()) {
+
 				CarBrandDO carBrandDO = carBrandService.doQueryById(orderBuyDO.getCarTypeId());
-				if(null != carBrandDO) {
+				if (null != carBrandDO) {
 					orderBuyDO.setCarTypeName(carBrandDO.getName());
 				}
 			}
@@ -95,7 +96,6 @@ public class OrderBuyService extends BaseService {
 
 	@Transactional
 	public ResultDTO<Object> addJo(OrderBuyDO orderBuy, CustomerDO customer) {
-
 		customer = customerService.addCustomer(customer);
 		if (customer.getId() == null) {
 			return ResultDTO.fail("客户信息新增失败");
