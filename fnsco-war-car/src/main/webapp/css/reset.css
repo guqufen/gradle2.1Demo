@@ -80,6 +80,17 @@ header .head-title{
     line-height: 2rem;
     font-size: 0.65rem;
 }
+header .back{
+    position: absolute;
+    left: 0.5rem;
+    top: 0.75rem;
+    display: none;
+    display: inline-block;
+    border-left: 0.1rem solid #fff; border-bottom: 0.1rem solid #fff;  
+    width: 0.5rem; height: 0.5rem;  
+    transform: rotate(45deg); 
+    display: none;
+}
 .banner{
     width: 100%;
     height: 10.2rem;
