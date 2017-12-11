@@ -54,7 +54,7 @@ public class CarBrandProvider {
 		        if (brandDO.getIsHot() != null) {
 		        	WHERE("is_hot = #{carBrandDO.isHot}");
 				}
-		        ORDER_BY("id desc limit " + start + ", " + limit );
+		        ORDER_BY("id asc limit " + start + ", " + limit );
 			}
 		}.toString();
 	}

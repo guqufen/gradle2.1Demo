@@ -36,9 +36,12 @@ public class CarBrandService extends BaseService {
 	 * @return
 	 */
 	public ResultPageDTO<CarBrandDO> page(CarBrandDO carBrandDO, Integer pageNum, Integer pageSize) {
-		List<CarBrandDO> list = carBrandDAO.pageList(carBrandDO, pageNum, pageSize);
+		List<CarBrandDO> pageList = carBrandDAO.pageList(carBrandDO, pageNum, pageSize);
+		for (CarBrandDO carBrandDO2 : pageList) {
+			carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
+		}
 		Integer count = carBrandDAO.pageListCount(carBrandDO);
-		ResultPageDTO<CarBrandDO> pager = new ResultPageDTO<CarBrandDO>(count, list);
+		ResultPageDTO<CarBrandDO> pager = new ResultPageDTO<CarBrandDO>(count, pageList);
 		return pager;
 	}
 
