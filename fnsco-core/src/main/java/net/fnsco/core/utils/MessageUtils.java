@@ -73,7 +73,7 @@ public class MessageUtils {
 	 * @param mobile
 	 * @return
 	 */
-	public ResultDTO validateCode(String deviceId, String code, String mobile) {
+	public ResultDTO<Object> validateCode(String deviceId, String code, String mobile) {
 		// 非空判断
 		if (Strings.isNullOrEmpty(deviceId)) {
 			return ResultDTO.fail("非法请求,没有deviceId");

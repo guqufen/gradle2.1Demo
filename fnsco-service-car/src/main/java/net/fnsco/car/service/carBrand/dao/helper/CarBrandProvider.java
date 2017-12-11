@@ -34,27 +34,27 @@ public class CarBrandProvider {
 				SELECT("*");
 		        FROM(TABLE_NAME);
 		        if(brandDO.getId() != null){
-		        	WHERE("id = #{brandDO.id}");
+		        	WHERE("id = #{carBrandDO.id}");
 		        }
 		        if ( !Strings.isNullOrEmpty(brandDO.getName()) ) {
-		        	WHERE("name = #{brandDO.name}");
+		        	WHERE("name = #{carBrandDO.name}");
 				}
 		        if (brandDO.getSupperId() != null) {
-		        	WHERE("supper_id = #{brandDO.supperId}");
+		        	WHERE("supper_id = #{carBrandDO.supperId}");
 				}
 		        if (brandDO.getLevel() != null) {
-		        	WHERE("level = #{brandDO.level}");
+		        	WHERE("level = #{carBrandDO.level}");
 				}
 		        if ( !Strings.isNullOrEmpty(brandDO.getIconImgPath()) ) {
-		        	WHERE("icon_img_path = #{brandDO.iconImgPath}");
+		        	WHERE("icon_img_path = #{carBrandDO.iconImgPath}");
 				}
 		        if (!Strings.isNullOrEmpty(brandDO.getModal())) {
-		        	WHERE("model = #{brandDO.model}");
+		        	WHERE("model = #{carBrandDO.model}");
 				}
 		        if (brandDO.getIsHot() != null) {
-		        	WHERE("is_hot = #{brandDO.isHot}");
+		        	WHERE("is_hot = #{carBrandDO.isHot}");
 				}
-		        ORDER_BY("id desc limit " + start + ", " + limit );
+		        ORDER_BY("id asc limit " + start + ", " + limit );
 			}
 		}.toString();
 	}
@@ -67,25 +67,25 @@ public class CarBrandProvider {
 				SELECT("count(*)");
 				FROM(TABLE_NAME);
 				if (brandDO.getId() != null) {
-					WHERE("id = #{brandDO.id}");
+					WHERE("id = #{carBrandDO.id}");
 				}
 				if (!Strings.isNullOrEmpty(brandDO.getName())) {
-					WHERE("name = #{brandDO.name}");
+					WHERE("name = #{carBrandDO.name}");
 				}
 				if (brandDO.getSupperId() != null) {
-					WHERE("supper_id = #{brandDO.supperId}");
+					WHERE("supper_id = #{carBrandDO.supperId}");
 				}
 				if (brandDO.getLevel() != null) {
-					WHERE("level = #{brandDO.level}");
+					WHERE("level = #{carBrandDO.level}");
 				}
 				if (!Strings.isNullOrEmpty(brandDO.getIconImgPath())) {
-					WHERE("icon_img_path = #{brandDO.iconImgPath}");
+					WHERE("icon_img_path = #{carBrandDO.iconImgPath}");
 				}
 				if (!Strings.isNullOrEmpty(brandDO.getModal())) {
-					WHERE("model = #{brandDO.model}");
+					WHERE("model = #{carBrandDO.model}");
 				}
 				if (brandDO.getIsHot() != null) {
-					WHERE("is_hot = #{brandDO.isHot}");
+					WHERE("is_hot = #{carBrandDO.isHot}");
 				}
 			}
 		}.toString();
@@ -98,25 +98,25 @@ public class CarBrandProvider {
 				SELECT("*");
 		        FROM(TABLE_NAME);
 		        if(brandDO.getId() != null){
-		        	WHERE("id = #{brandDO.id}");
+		        	WHERE("id = #{carBrandDO.id}");
 		        }
 		        if ( !Strings.isNullOrEmpty(brandDO.getName()) ) {
-		        	WHERE("name = #{brandDO.name}");
+		        	WHERE("name = #{carBrandDO.name}");
 				}
 		        if (brandDO.getSupperId() != null) {
-		        	WHERE("supper_id = #{brandDO.supperId}");
+		        	WHERE("supper_id = #{carBrandDO.supperId}");
 				}
 		        if (brandDO.getLevel() != null) {
-		        	WHERE("level = #{brandDO.level}");
+		        	WHERE("level = #{carBrandDO.level}");
 				}
 		        if ( !Strings.isNullOrEmpty(brandDO.getIconImgPath()) ) {
-		        	WHERE("icon_img_path = #{brandDO.iconImgPath}");
+		        	WHERE("icon_img_path = #{carBrandDO.iconImgPath}");
 				}
 		        if (!Strings.isNullOrEmpty(brandDO.getModal())) {
-		        	WHERE("model = #{brandDO.model}");
+		        	WHERE("model = #{carBrandDO.model}");
 				}
 		        if (brandDO.getIsHot() != null) {
-		        	WHERE("is_hot = #{brandDO.isHot}");
+		        	WHERE("is_hot = #{carBrandDO.isHot}");
 				}
 		        ORDER_BY("id desc limit 8" );
 			}

@@ -66,4 +66,8 @@ public interface CarBrandDAO {
 		@Result(column = "is_hot", property = "isHot") })
 	@Select("SELECT * FROM car_dic_type WHERE id = #{id}")
 	public CarBrandDO getById(@Param("id") int id);
+
+	@Results({ @Result(column = "id", property = "id"), @Result(column = "name", property = "name"),})
+	@Select("SELECT id,name FROM car_dic_type WHERE supper_id = '0'")
+	public List<CarBrandDO> getFirstLevel();
 }

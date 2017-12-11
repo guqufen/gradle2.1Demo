@@ -20,8 +20,8 @@ import net.fnsco.web.controller.jo.BuyCarJO;
 import net.fnsco.web.controller.vo.BuyCarVO;
 
 @RestController
-@RequestMapping(value = "/api/buy", method = RequestMethod.POST)
-@Api(value = "/api/buy", tags = { "业务申请-买车申请" })
+@RequestMapping(value = "/h5/buy", method = RequestMethod.POST)
+@Api(value = "/h5/buy", tags = { "业务申请-买车申请" })
 public class BuyCarApplyController extends BaseController {
 
 	@Autowired
@@ -37,8 +37,10 @@ public class BuyCarApplyController extends BaseController {
 		}
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
-		utils.validateCode("fns", jo.getVerCode(), jo.getMobile());
-		
+		ResultDTO<Object> rt = utils.validateCode("fns", jo.getVerCode(), jo.getMobile());
+		if(!rt.isSuccess()){
+			return ResultDTO.fail(rt.getMessage());
+		}
 		CustomerDO customer = new CustomerDO();
 		customer.setName(jo.getName());
 		customer.setMobile(jo.getMobile());
