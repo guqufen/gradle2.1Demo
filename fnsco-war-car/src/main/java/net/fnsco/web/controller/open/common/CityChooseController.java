@@ -28,10 +28,11 @@ public class CityChooseController extends BaseController {
 	@ApiOperation(value = "买车申请-查询城市")
 	public ResultDTO<List<QueryCityVO>> queryCityList() {
 		List<QueryCityVO> resultList = new ArrayList<>();
-		QueryCityVO queryCity = new QueryCityVO();
+//		QueryCityVO queryCity = new QueryCityVO();
 		List<DicCityDO> list = dicCityService.queryCityList();
 		if (list.size() > 0) {
 			for (DicCityDO dicCityDO : list) {
+				QueryCityVO queryCity = new QueryCityVO();
 				queryCity.setValue(dicCityDO.getId());
 				queryCity.setText(dicCityDO.getName());
 				resultList.add(queryCity);
