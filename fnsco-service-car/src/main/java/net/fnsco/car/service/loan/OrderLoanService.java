@@ -41,6 +41,29 @@ public class OrderLoanService extends BaseService {
 	public ResultPageDTO<OrderLoanDO> page(OrderLoanDO orderLoan, Integer pageNum, Integer pageSize) {
 		logger.info("开始分页查询OrderLoanService.page, orderLoan=" + orderLoan.toString());
 		List<OrderLoanDO> pageList = this.orderLoanDAO.pageList(orderLoan, pageNum, pageSize);
+		for (OrderLoanDO orderLoanDO : pageList) {
+			if (null != orderLoanDO.getCustomerId()) {
+				CustomerDO customerDO = customerService.doQueryById(orderLoanDO.getCustomerId());
+				if (null != customerDO) {
+					orderLoanDO.setCustomerName(customerDO.getName());
+					orderLoanDO.setCustomerPhone(customerDO.getMobile());
+				}
+			}
+
+			if (null != orderLoanDO.getCityId()) {
+				DicCityDO dicCityDO = dicCityService.doQueryById(orderLoanDO.getCityId());
+				if (null != dicCityDO) {
+					orderLoanDO.setCityName(dicCityDO.getName());
+				}
+			}
+
+			if (null != orderLoanDO.getCarTypeId()) {
+				CarBrandDO carBrandDO = carBrandService.doQueryById(orderLoanDO.getCarTypeId());
+				if (null != carBrandDO) {
+					orderLoanDO.setCarTypeName(carBrandDO.getName());
+				}
+			}
+		}
 		Integer count = this.orderLoanDAO.pageListCount(orderLoan);
 		ResultPageDTO<OrderLoanDO> pager = new ResultPageDTO<OrderLoanDO>(count, pageList);
 		return pager;
