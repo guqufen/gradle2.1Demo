@@ -79,6 +79,9 @@
 	text-align: center;
 	font-size: 0.55rem;
 	color: #333;
+	white-space:nowrap; 
+	overflow:hidden; 
+	text-overflow:ellipsis;
 }
 /*brand 品牌*/
 .brand-list-list{
