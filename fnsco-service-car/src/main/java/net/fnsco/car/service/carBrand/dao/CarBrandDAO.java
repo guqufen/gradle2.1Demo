@@ -35,7 +35,14 @@ public interface CarBrandDAO {
 			@Result(column = "icon_img_path", property = "iconImgPath"), @Result(column = "model", property = "model"),
 			@Result(column = "is_hot", property = "isHot") })
 	@Select("select * from car_dic_type where level='1' order by CONVERT(name USING gbk) asc")
-	public List<CarBrandDO> selectAll();
+	public List<CarBrandDO> selectAllFirstLevel();
+	
+	@Results({ @Result(column = "id", property = "id"), @Result(column = "name", property = "name"),
+			@Result(column = "supper_id", property = "supperId"), @Result(column = "level", property = "level"),
+			@Result(column = "icon_img_path", property = "iconImgPath"), @Result(column = "model", property = "model"),
+			@Result(column = "is_hot", property = "isHot") })
+	@Select("select * from car_dic_type order by id")
+	public List<CarBrandDO> queryAll();
 
 	@Results({ @Result(column = "id", property = "id"), @Result(column = "name", property = "name"),
 			@Result(column = "supper_id", property = "supperId"), @Result(column = "level", property = "level"),
