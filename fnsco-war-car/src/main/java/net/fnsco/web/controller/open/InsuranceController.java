@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aliyun.oss.common.comm.ServiceClient.Request;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.car.service.config.ConfigService;
@@ -52,7 +54,11 @@ public class InsuranceController extends BaseController {
 		OrderSafeDO orderSafe = new OrderSafeDO();
 		orderSafe.setCityId(saveSafeJO.getCityId());
 		orderSafe.setCarOriginalPrice(saveSafeJO.getCarOriginalPrice());
-		orderSafe.setInsuCompanyId(saveSafeJO.getInsuCompanyId());
+		Integer id = configService.queryIdByName(saveSafeJO.getName());
+		if(id==null) {
+			return ResultDTO.fail("没有找到相应的保险公司");
+		}
+		orderSafe.setInsuCompanyId(id);
 		orderSafe.setEstiPremiums(saveSafeJO.getEstiPremiums());
 		orderSafe.setSuggestCode(saveSafeJO.getSuggestCode());
 		ResultDTO<Object> res = orderSafeService.saveSafe(customerDO,orderSafe);
@@ -64,7 +70,11 @@ public class InsuranceController extends BaseController {
 	private ResultDTO<QueryInsuVO> queryInsu() {
 		QueryInsuVO queryInsuVO = new QueryInsuVO();
 		List<ConfigDO> res = configService.queryAll();
-		queryInsuVO.setInsuList(res);
+		List<String> insuList = new ArrayList<String>();
+		for(ConfigDO cf : res) {
+			insuList.add(cf.getName());
+		}
+		queryInsuVO.setInsuList(insuList);
 		return ResultDTO.success(queryInsuVO);
 	}
 	

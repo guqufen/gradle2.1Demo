@@ -8,19 +8,19 @@ import net.fnsco.core.base.VO;
 
 public class QueryInsuVO extends VO {
 	@ApiModelProperty(value="保险公司列表",name="insuList",example="保险公司列表")
-	private List<ConfigDO> insuList;// 保险公司列表
+	private List<String> insuList;// 保险公司列表
 
 	/**
 	 * @return the insuList
 	 */
-	public List<ConfigDO> getInsuList() {
+	public List<String> getInsuList() {
 		return insuList;
 	}
 
 	/**
 	 * @param insuList the insuList to set
 	 */
-	public void setInsuList(List<ConfigDO> insuList) {
+	public void setInsuList(List<String> insuList) {
 		this.insuList = insuList;
 	}
 
