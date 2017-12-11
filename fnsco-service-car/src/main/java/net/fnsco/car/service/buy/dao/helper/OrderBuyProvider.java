@@ -94,6 +94,13 @@ public class OrderBuyProvider {
         if (orderBuy.getStatus() != null) {
             WHERE("status=#{orderBuy.status}");
         }
+        if(StringUtils.isNotBlank(orderBuy.getCustomerName())) {
+        	WHERE("customer_id in (select id from car_customer where name like CONCAT('%',#{orderBuy.customerName},'%'))");
+        }
+        if(StringUtils.isNotBlank(orderBuy.getCustomerPhone())) {
+        	WHERE("customer_id in (select id from car_customer where mobile = #{orderBuy.customerPhone})");
+        }
+        
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -132,6 +139,12 @@ public class OrderBuyProvider {
         }
         if (orderBuy.getStatus() != null) {
             WHERE("status=#{orderBuy.status}");
+        }
+        if(StringUtils.isNotBlank(orderBuy.getCustomerName())) {
+        	WHERE("customer_id in (select id from car_customer where name like CONCAT('%',#{orderBuy.customerName},'%'))");
+        }
+        if(StringUtils.isNotBlank(orderBuy.getCustomerPhone())) {
+        	WHERE("customer_id in (select id from car_customer where mobile = #{orderBuy.customerPhone})");
         }
         }}.toString();
     }

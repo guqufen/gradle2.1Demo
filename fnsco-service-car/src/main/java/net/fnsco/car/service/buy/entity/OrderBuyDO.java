@@ -18,6 +18,11 @@ public class OrderBuyDO {
      * 顾客名称
      */
     private String customerName;
+    
+    /**
+     * 顾客手机号
+     */
+    private String customerPhone;
 
     /**
      * 所在城市
@@ -68,9 +73,30 @@ public class OrderBuyDO {
      * 状态0申请9完成
      */
     private Integer status;
-
-
+    
     /**
+	 * customerPhone
+	 *
+	 * @return  the customerPhone
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getCustomerPhone() {
+		return customerPhone;
+	}
+
+	/**
+	 * customerPhone
+	 *
+	 * @param   customerPhone    the customerPhone to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCustomerPhone(String customerPhone) {
+		this.customerPhone = customerPhone;
+	}
+
+	/**
 	 * customerName
 	 *
 	 * @return  the customerName

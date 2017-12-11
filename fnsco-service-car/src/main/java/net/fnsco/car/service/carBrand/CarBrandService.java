@@ -20,7 +20,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 @Service
-public class CarBrandServic extends BaseService {
+public class CarBrandService extends BaseService {
 
 	@Autowired
 	private CarBrandDAO carBrandDAO;
@@ -112,4 +112,10 @@ public class CarBrandServic extends BaseService {
 		List<CarBrandDO> list = carBrandDAO.selectChild(id);
 		return ResultDTO.success(list);
 	}
+	
+	// 查询
+	 public CarBrandDO doQueryById (Integer id) {
+		 CarBrandDO obj = this.carBrandDAO.getById(id);
+	     return obj;
+	 }
 }

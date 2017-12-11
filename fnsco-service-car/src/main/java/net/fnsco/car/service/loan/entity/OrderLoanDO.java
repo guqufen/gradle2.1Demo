@@ -14,11 +14,42 @@ public class OrderLoanDO {
 	 * 顾客ID
 	 */
 	private Integer customerId;
+	
+	/**
+     * 顾客名称
+     */
+    private String customerName;
+    
+    /**
+     * 顾客手机号
+     */
+    private String customerPhone;
 
 	/**
 	 * 所在城市
 	 */
 	private Integer cityId;
+	
+	/**
+     * 城市名称
+     */
+    private String cityName;
+    
+    /**
+     * 汽车品牌
+     */
+    private Integer carTypeId;
+    
+    /**
+     * 	汽车品牌名称
+     */
+    private String carTypeName;
+
+    /**
+     * 汽车型号
+     */
+    private String carModel;
+
 
 	/**
 	 * 贷款金额
@@ -44,6 +75,138 @@ public class OrderLoanDO {
 	 * 状态0申请9完成
 	 */
 	private Integer status;
+	
+	/**
+	 * customerName
+	 *
+	 * @return  the customerName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	/**
+	 * customerName
+	 *
+	 * @param   customerName    the customerName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	/**
+	 * customerPhone
+	 *
+	 * @return  the customerPhone
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getCustomerPhone() {
+		return customerPhone;
+	}
+
+	/**
+	 * customerPhone
+	 *
+	 * @param   customerPhone    the customerPhone to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCustomerPhone(String customerPhone) {
+		this.customerPhone = customerPhone;
+	}
+
+	/**
+	 * cityName
+	 *
+	 * @return  the cityName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getCityName() {
+		return cityName;
+	}
+
+	/**
+	 * cityName
+	 *
+	 * @param   cityName    the cityName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+	/**
+	 * carTypeId
+	 *
+	 * @return  the carTypeId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getCarTypeId() {
+		return carTypeId;
+	}
+
+	/**
+	 * carTypeId
+	 *
+	 * @param   carTypeId    the carTypeId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCarTypeId(Integer carTypeId) {
+		this.carTypeId = carTypeId;
+	}
+
+	/**
+	 * carTypeName
+	 *
+	 * @return  the carTypeName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getCarTypeName() {
+		return carTypeName;
+	}
+
+	/**
+	 * carTypeName
+	 *
+	 * @param   carTypeName    the carTypeName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCarTypeName(String carTypeName) {
+		this.carTypeName = carTypeName;
+	}
+
+	/**
+	 * carModel
+	 *
+	 * @return  the carModel
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getCarModel() {
+		return carModel;
+	}
+
+	/**
+	 * carModel
+	 *
+	 * @param   carModel    the carModel to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCarModel(String carModel) {
+		this.carModel = carModel;
+	}
 
 	public Integer getId() {
 		return id;

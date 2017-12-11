@@ -7,45 +7,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import net.fnsco.car.service.buy.OrderBuyService;
 import net.fnsco.car.service.buy.entity.OrderBuyDO;
+import net.fnsco.car.service.loan.OrderLoanService;
+import net.fnsco.car.service.loan.entity.OrderLoanDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 /**
- * @desc 购车订单管理
+ * @desc 贷款订单管理
  * @author   tangliang
  * @version  0.0.1-SNAPSHOT
  * @since    Ver 1.1
- * @Date	 2017年12月11日 下午3:11:56
+ * @Date	 2017年12月11日 下午4:49:53
  */
 @Controller
 @RequestMapping(value = "/web/order")
-public class BuyOrderWebController extends BaseController{
+public class LoanOrderWebController extends BaseController {
 	
 	@Autowired
-	private OrderBuyService orderBuyService;
+	private OrderLoanService orderLoanService;
 	/**
-	 * query:(表格分页数据)
+	 * query:(分页查询)
 	 *
 	 * @param  @param orderBuy
 	 * @param  @param currentPageNum
 	 * @param  @param pageSize
 	 * @param  @return    设定文件
-	 * @return ResultDTO<Object>    DOM对象
+	 * @return ResultPageDTO<OrderLoanDO>    DOM对象
 	 * @author tangliang
-	 * @date   2017年12月11日 下午3:15:44
+	 * @date   2017年12月11日 下午4:52:57
 	 */
-	@RequestMapping(value = "/buy", method = RequestMethod.GET)
+	@RequestMapping(value = "/loan", method = RequestMethod.GET)
 	@ResponseBody
-	@RequiresPermissions(value = { "car:buy:list" })
-	public ResultPageDTO<OrderBuyDO>  query(OrderBuyDO orderBuy ,Integer currentPageNum,Integer pageSize){
+	@RequiresPermissions(value = { "car:loan:list" })
+	public ResultPageDTO<OrderLoanDO>  query(OrderLoanDO orderBuy ,Integer currentPageNum,Integer pageSize){
 		logger.info("查询购车订单列表");
 		if(-1 ==orderBuy.getStatus()) {
 			orderBuy.setStatus(null);
 		}
-		ResultPageDTO<OrderBuyDO> result  = orderBuyService.page(orderBuy, currentPageNum, pageSize);
+		ResultPageDTO<OrderLoanDO> result  = orderLoanService.page(orderBuy, currentPageNum, pageSize);
 		return result;
 	}
 	
@@ -58,15 +59,15 @@ public class BuyOrderWebController extends BaseController{
 	 * @author tangliang
 	 * @date   2017年12月11日 下午4:42:47
 	 */
-	@RequestMapping(value = "/updateStatus", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateLoanStatus", method = RequestMethod.POST)
 	@ResponseBody
-	@RequiresPermissions(value = { "car:buy:update" })
-	public ResultDTO<String>  updateStatus(OrderBuyDO orderBuy){
+	@RequiresPermissions(value = { "car:loan:update" })
+	public ResultDTO<String>  updateStatus(OrderLoanDO orderBuy){
 		logger.info("更新订单状态");
 		if(-1 ==orderBuy.getStatus()) {
 			orderBuy.setStatus(null);
 		}
-		orderBuyService.doUpdate(orderBuy, getUserId());
+		orderLoanService.doUpdate(orderBuy, getUserId());
 		return success();
 	}
 }
