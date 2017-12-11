@@ -2,13 +2,14 @@ package net.fnsco.car.service.finance;
 
 import java.util.Date;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.fnsco.car.customer.dao.CustomerDAO;
-import net.fnsco.car.customer.entity.CustomerDO;
+import net.fnsco.car.service.customer.dao.CustomerDAO;
+import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.car.service.finance.dao.OrderFinanceDAO;
 import net.fnsco.car.service.finance.entity.OrderFinanceDO;
 import net.fnsco.core.base.BaseService;
