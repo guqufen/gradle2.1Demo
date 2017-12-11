@@ -2,7 +2,7 @@
 $('#table').bootstrapTable({
     search: false, //是否启动搜索栏
     sidePagination:'server',
-    url:PROJECT_NAME+'/web/order/buy',
+    url:PROJECT_NAME+'/web/order/loan',
     showRefresh: false,//是否显示刷新按钮
     showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
     toolbar: '#toolbar',  //工具按钮用哪个容器
@@ -53,21 +53,11 @@ $('#table').bootstrapTable({
         title: '申请时间',
         formatter:formatTime
     },{
-        field: '',
-        title: '购车价格(元)',
-        formatter:formatTime
+        field: 'amount',
+        title: '贷款额度(元)'
     },{
         field: '',
-        title: '首付比例'
-    },{
-        field: '',
-        title: '月供期限(期数)'
-    },{
-        field: '',
-        title: '分期额度(元)'
-    },{
-        field: '',
-        title: '运营商'
+        title: '贷款期限'
     },{
         field: 'status',
         title: '进度状态',
@@ -134,13 +124,12 @@ function resetEvent() {
 function formatindex(value, row, index) {
 	return [ index + 1 ].join('');
 }
-
 function editData(id){
 	layer.confirm('确定要更新状态？', {
         btn: ['确认','取消'] 
     }, function(){
     	$.ajax({
-            url:PROJECT_NAME+'/web/order/updateStatus',
+            url:PROJECT_NAME+'/web/order/updateLoanStatus',
             type:'POST',
             data:{'id':id,"status":9},
             success:function(data){

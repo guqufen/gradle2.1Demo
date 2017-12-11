@@ -1,8 +1,10 @@
 package net.fnsco.car.service.carBrand;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -12,12 +14,13 @@ import org.springframework.stereotype.Service;
 
 import net.fnsco.car.service.carBrand.dao.CarBrandDAO;
 import net.fnsco.car.service.carBrand.entity.CarBrandDO;
+import net.fnsco.car.service.carBrand.entity.CarBrandDTO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 @Service
-public class CarBrandServic extends BaseService {
+public class CarBrandService extends BaseService {
 
 	@Autowired
 	private CarBrandDAO carBrandDAO;
@@ -67,10 +70,12 @@ public class CarBrandServic extends BaseService {
 	 * 
 	 * @return
 	 */
-	public ResultDTO<Map<String, Set<CarBrandDO>>> selectAll() {
+	public ResultDTO<List<CarBrandDTO>> selectAll() {
 
 		List<CarBrandDO> list = carBrandDAO.selectAll();
 		Map<String, Set<CarBrandDO>> map = new TreeMap<>();
+
+		List<CarBrandDTO> carList = new ArrayList<>();
 
 		for (CarBrandDO carBrandDO : list) {
 
@@ -91,7 +96,14 @@ public class CarBrandServic extends BaseService {
 			}
 		}
 
-		return ResultDTO.success(map);
+		for ( Entry<String, Set<CarBrandDO>> m : map.entrySet()) {
+			CarBrandDTO carBrandDTO = new CarBrandDTO();
+			carBrandDTO.setLetter(m.getKey());
+			carBrandDTO.setBody(m.getValue());
+			carList.add(carBrandDTO);
+		}
+
+		return ResultDTO.success(carList);
 	}
 
 	public ResultDTO selectChild(Integer id) {
@@ -100,4 +112,10 @@ public class CarBrandServic extends BaseService {
 		List<CarBrandDO> list = carBrandDAO.selectChild(id);
 		return ResultDTO.success(list);
 	}
+	
+	// 查询
+	 public CarBrandDO doQueryById (Integer id) {
+		 CarBrandDO obj = this.carBrandDAO.getById(id);
+	     return obj;
+	 }
 }
