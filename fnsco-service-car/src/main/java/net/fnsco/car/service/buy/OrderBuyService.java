@@ -11,12 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.car.service.buy.dao.OrderBuyDAO;
 import net.fnsco.car.service.buy.entity.OrderBuyDO;
+import net.fnsco.car.service.city.DicCityService;
+import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.customer.CustomerService;
 import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.utils.MessageUtils;
 
 @Service
 public class OrderBuyService extends BaseService {
@@ -26,13 +27,34 @@ public class OrderBuyService extends BaseService {
  private OrderBuyDAO orderBuyDAO;
  @Autowired
  private CustomerService customerService;
+ @Autowired
+ private DicCityService dicCityService;
 
  // 分页
  public ResultPageDTO<OrderBuyDO> page(OrderBuyDO orderBuy, Integer pageNum, Integer pageSize) {
      logger.info("开始分页查询OrderBuyService.page, orderBuy=" + orderBuy.toString());
      List<OrderBuyDO> pageList = this.orderBuyDAO.pageList(orderBuy, pageNum, pageSize);
+     for (OrderBuyDO orderBuyDO : pageList) {
+		if(null != orderBuyDO.getCustomerId()) {
+			CustomerDO customerDO = customerService.doQueryById(orderBuyDO.getCustomerId());
+			if(null != customerDO) {
+				orderBuyDO.setCustomerName(customerDO.getName());
+			}
+		}
+		
+		if(null != orderBuyDO.getCityId()) {
+			DicCityDO dicCityDO = dicCityService.doQueryById(orderBuyDO.getCityId());
+			if(null != dicCityDO) {
+				orderBuyDO.setCityName(dicCityDO.getName());
+			}
+		}
+		
+		if(null != orderBuyDO.getCarTypeId()) {
+			
+		}
+	}
      Integer count = this.orderBuyDAO.pageListCount(orderBuy);
-   ResultPageDTO<OrderBuyDO> pager =  new ResultPageDTO<OrderBuyDO>(count,pageList);
+     ResultPageDTO<OrderBuyDO> pager =  new ResultPageDTO<OrderBuyDO>(count,pageList);
      return pager;
  }
 
