@@ -1,5 +1,6 @@
 package net.fnsco.car.service.safe;
 
+import java.beans.Transient;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.car.service.safe.dao.OrderSafeDAO;
 import net.fnsco.car.service.safe.entity.OrderSafeDO;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 @Service
@@ -24,23 +26,19 @@ public class OrderSafeService extends BaseService {
  @Autowired
  private CustomerDAO customerDAO;
  //保存理财申请信息
- public void saveSafe() {
-	 CustomerDO customerDO =  new CustomerDO();
-	 OrderSafeDO orderSafe = new OrderSafeDO();
-	 customerDO.setName(null);
-	 customerDO.setMobile(null);
+ @Transient
+ public ResultDTO<Object> saveSafe(CustomerDO customerDO,OrderSafeDO orderSafe) {
 	 customerDO.setCreateTime(new Date());
 	 this.customerDAO.insert(customerDO);
+	 if(customerDO.getId()==null) {
+		 return ResultDTO.fail("投资人姓名插入失败");
+	 }
 	 orderSafe.setCustomerId(customerDO.getId());
-	 orderSafe.setCityId(null);
-	 //orderSafe.setCarOriginalPrice();
-	 orderSafe.setInsuCompanyId(null);
-	 //orderSafe.setEstiPremiums(null);
-	 orderSafe.setSuggestCode(null);
 	 orderSafe.setCreateTime(new Date());
 	 orderSafe.setLastUpdateTime(new Date());
 	 orderSafe.setStatus(0);
 	 this.orderSafeDAO.insert(orderSafe);
+	 return ResultDTO.success();
  }
  
  // 分页

@@ -1,5 +1,6 @@
 package net.fnsco.car.service.finance;
 
+import java.beans.Transient;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.car.service.finance.dao.OrderFinanceDAO;
 import net.fnsco.car.service.finance.entity.OrderFinanceDO;
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 @Service
@@ -24,17 +26,19 @@ public class OrderFinanceService extends BaseService {
  @Autowired
  private CustomerDAO customerDAO;
  //保存理财申请信息
- public void saveFinance() {
-	 CustomerDO customerDO =  new CustomerDO();
-	 OrderFinanceDO orderFinance = new OrderFinanceDO();
-	 customerDO.setName(null);
-	 customerDO.setMobile(null);
+ @Transient
+ public ResultDTO<Object> saveFinance(CustomerDO customerDO,OrderFinanceDO orderFinance) {
 	 customerDO.setCreateTime(new Date());
 	 this.customerDAO.insert(customerDO);
+	 if(customerDO.getId()==null) {
+		 return ResultDTO.fail("投资人姓名插入失败");
+	 }
 	 orderFinance.setCustomerId(customerDO.getId());
 	 orderFinance.setCreateTime(new Date());
 	 orderFinance.setLastUpdateTime(new Date());
+	 orderFinance.setStatus(0);
 	 this.orderFinanceDAO.insert(orderFinance);
+	 return ResultDTO.success();
  }
 
  // 分页
