@@ -39,7 +39,7 @@ public class OrderLoanService extends BaseService {
 		List<OrderLoanDO> pageList = this.orderLoanDAO.pageList(orderLoan, pageNum, pageSize);
 		for (OrderLoanDO orderLoanDO : pageList) {
 			if (null != orderLoanDO.getCustomerId()) {
-				CustomerDO customerDO = customerService.doQueryById(orderLoan.getCustomerId());
+				CustomerDO customerDO = customerService.doQueryById(orderLoanDO.getCustomerId());
 				if (null != customerDO) {
 					orderLoanDO.setCustomerName(customerDO.getName());
 					orderLoanDO.setCustomerPhone(customerDO.getMobile());
