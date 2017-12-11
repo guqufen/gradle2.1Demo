@@ -51,6 +51,9 @@ public class CarBrandProvider {
 		        if (!Strings.isNullOrEmpty(brandDO.getModal())) {
 		        	WHERE("model = #{brandDO.model}");
 				}
+		        if (brandDO.getIsHot() != null) {
+		        	WHERE("is_hot = #{brandDO.isHot}");
+				}
 		        ORDER_BY("id desc limit " + start + ", " + limit );
 			}
 		}.toString();
@@ -81,6 +84,9 @@ public class CarBrandProvider {
 				if (!Strings.isNullOrEmpty(brandDO.getModal())) {
 					WHERE("model = #{brandDO.model}");
 				}
+				if (brandDO.getIsHot() != null) {
+					WHERE("is_hot = #{brandDO.isHot}");
+				}
 			}
 		}.toString();
 	}
@@ -109,6 +115,10 @@ public class CarBrandProvider {
 		        if (!Strings.isNullOrEmpty(brandDO.getModal())) {
 		        	WHERE("model = #{brandDO.model}");
 				}
+		        if (brandDO.getIsHot() != null) {
+		        	WHERE("is_hot = #{brandDO.isHot}");
+				}
+		        ORDER_BY("id desc limit 8" );
 			}
 		}.toString();
 	}
