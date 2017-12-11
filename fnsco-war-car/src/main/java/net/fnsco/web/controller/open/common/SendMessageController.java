@@ -15,8 +15,8 @@ public class SendMessageController {
 	
 	public ResultDTO sendMessage(String mobile){
 		String deviceId = "fns";
-		MessageUtils rt = new MessageUtils();
-		ResultDTO result = rt.sendValidateCode(deviceId, mobile);
+		MessageUtils mUtils = new MessageUtils();
+		ResultDTO result = mUtils.sendValidateCode(deviceId, mobile);
 		return result;
 	}
 

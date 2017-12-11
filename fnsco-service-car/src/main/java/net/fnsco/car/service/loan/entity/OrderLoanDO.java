@@ -3,6 +3,8 @@ package net.fnsco.car.service.loan.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class OrderLoanDO {
 
 	/**
@@ -44,6 +46,39 @@ public class OrderLoanDO {
 	 * 状态0申请9完成
 	 */
 	private Integer status;
+	
+	
+	private Integer carTypeId;
+	
+	private String carModel;
+
+	/**
+	 * @return the carTypeId
+	 */
+	public Integer getCarTypeId() {
+		return carTypeId;
+	}
+
+	/**
+	 * @param carTypeId the carTypeId to set
+	 */
+	public void setCarTypeId(Integer carTypeId) {
+		this.carTypeId = carTypeId;
+	}
+
+	/**
+	 * @return the carModel
+	 */
+	public String getCarModel() {
+		return carModel;
+	}
+
+	/**
+	 * @param carModel the carModel to set
+	 */
+	public void setCarModel(String carModel) {
+		this.carModel = carModel;
+	}
 
 	public Integer getId() {
 		return id;
@@ -109,10 +144,13 @@ public class OrderLoanDO {
 		this.status = status;
 	}
 
+	
 	@Override
 	public String toString() {
-		return "[id=" + id + ", customerId=" + customerId + ", cityId=" + cityId + ", amount=" + amount
+		return "OrderLoanDO [id=" + id + ", customerId=" + customerId + ", cityId=" + cityId + ", amount=" + amount
 				+ ", suggestCode=" + suggestCode + ", createTime=" + createTime + ", lastUpdateTime=" + lastUpdateTime
-				+ ", status=" + status + "]";
+				+ ", status=" + status + ", carTypeId=" + carTypeId + ", carModel=" + carModel + "]";
 	}
+
+	
 }

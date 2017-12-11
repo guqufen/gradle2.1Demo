@@ -22,82 +22,81 @@ import net.fnsco.core.base.ResultPageDTO;
 @Service
 public class OrderBuyService extends BaseService {
 
- private Logger logger = LoggerFactory.getLogger(this.getClass());
- @Autowired
- private OrderBuyDAO orderBuyDAO;
- @Autowired
- private CustomerService customerService;
- @Autowired
- private DicCityService dicCityService;
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	@Autowired
+	private OrderBuyDAO orderBuyDAO;
+	@Autowired
+	private CustomerService customerService;
+	@Autowired
+	private DicCityService dicCityService;
 
- // 分页
- public ResultPageDTO<OrderBuyDO> page(OrderBuyDO orderBuy, Integer pageNum, Integer pageSize) {
-     logger.info("开始分页查询OrderBuyService.page, orderBuy=" + orderBuy.toString());
-     List<OrderBuyDO> pageList = this.orderBuyDAO.pageList(orderBuy, pageNum, pageSize);
-     for (OrderBuyDO orderBuyDO : pageList) {
-		if(null != orderBuyDO.getCustomerId()) {
-			CustomerDO customerDO = customerService.doQueryById(orderBuyDO.getCustomerId());
-			if(null != customerDO) {
-				orderBuyDO.setCustomerName(customerDO.getName());
+	// 分页
+	public ResultPageDTO<OrderBuyDO> page(OrderBuyDO orderBuy, Integer pageNum, Integer pageSize) {
+		logger.info("开始分页查询OrderBuyService.page, orderBuy=" + orderBuy.toString());
+		List<OrderBuyDO> pageList = this.orderBuyDAO.pageList(orderBuy, pageNum, pageSize);
+		for (OrderBuyDO orderBuyDO : pageList) {
+			if (null != orderBuyDO.getCustomerId()) {
+				CustomerDO customerDO = customerService.doQueryById(orderBuyDO.getCustomerId());
+				if (null != customerDO) {
+					orderBuyDO.setCustomerName(customerDO.getName());
+				}
+			}
+
+			if (null != orderBuyDO.getCityId()) {
+				DicCityDO dicCityDO = dicCityService.doQueryById(orderBuyDO.getCityId());
+				if (null != dicCityDO) {
+					orderBuyDO.setCityName(dicCityDO.getName());
+				}
+			}
+
+			if (null != orderBuyDO.getCarTypeId()) {
+
 			}
 		}
-		
-		if(null != orderBuyDO.getCityId()) {
-			DicCityDO dicCityDO = dicCityService.doQueryById(orderBuyDO.getCityId());
-			if(null != dicCityDO) {
-				orderBuyDO.setCityName(dicCityDO.getName());
-			}
-		}
-		
-		if(null != orderBuyDO.getCarTypeId()) {
-			
-		}
+		Integer count = this.orderBuyDAO.pageListCount(orderBuy);
+		ResultPageDTO<OrderBuyDO> pager = new ResultPageDTO<OrderBuyDO>(count, pageList);
+		return pager;
 	}
-     Integer count = this.orderBuyDAO.pageListCount(orderBuy);
-     ResultPageDTO<OrderBuyDO> pager =  new ResultPageDTO<OrderBuyDO>(count,pageList);
-     return pager;
- }
 
- // 添加
- public OrderBuyDO doAdd (OrderBuyDO orderBuy,int loginUserId) {
-     logger.info("开始添加OrderBuyService.add,orderBuy=" + orderBuy.toString());
-     this.orderBuyDAO.insert(orderBuy);
-     return orderBuy;
- }
-
- // 修改
- public Integer doUpdate (OrderBuyDO orderBuy,Integer loginUserId) {
-     logger.info("开始修改OrderBuyService.update,orderBuy=" + orderBuy.toString());
-     int rows=this.orderBuyDAO.update(orderBuy);
-     return rows;
- }
-
- // 删除
- public Integer doDelete (OrderBuyDO orderBuy,Integer loginUserId) {
-     logger.info("开始删除OrderBuyService.delete,orderBuy=" + orderBuy.toString());
-     int rows=this.orderBuyDAO.deleteById(orderBuy.getId());
-     return rows;
- }
-
- // 查询
- public OrderBuyDO doQueryById (Integer id) {
-     OrderBuyDO obj = this.orderBuyDAO.getById(id);
-     return obj;
- }
-
-@Transactional
-public ResultDTO<Object> addJo(OrderBuyDO orderBuy,CustomerDO customer) {
-	
-	
-	customer = customerService.addCustomer(customer);
-	if(customer.getId() == null){
-		return ResultDTO.fail("客户信息新增失败");
+	// 添加
+	public OrderBuyDO doAdd(OrderBuyDO orderBuy, int loginUserId) {
+		logger.info("开始添加OrderBuyService.add,orderBuy=" + orderBuy.toString());
+		this.orderBuyDAO.insert(orderBuy);
+		return orderBuy;
 	}
-	orderBuy.setCustomerId(customer.getId());
-	orderBuy.setCreateTime(new Date());
-	orderBuy.setLastUpdateTime(new Date());
-	orderBuy.setStatus(0);
-	orderBuyDAO.insert(orderBuy);
-	return ResultDTO.success();
-}
+
+	// 修改
+	public Integer doUpdate(OrderBuyDO orderBuy, Integer loginUserId) {
+		logger.info("开始修改OrderBuyService.update,orderBuy=" + orderBuy.toString());
+		int rows = this.orderBuyDAO.update(orderBuy);
+		return rows;
+	}
+
+	// 删除
+	public Integer doDelete(OrderBuyDO orderBuy, Integer loginUserId) {
+		logger.info("开始删除OrderBuyService.delete,orderBuy=" + orderBuy.toString());
+		int rows = this.orderBuyDAO.deleteById(orderBuy.getId());
+		return rows;
+	}
+
+	// 查询
+	public OrderBuyDO doQueryById(Integer id) {
+		OrderBuyDO obj = this.orderBuyDAO.getById(id);
+		return obj;
+	}
+
+	@Transactional
+	public ResultDTO<Object> addJo(OrderBuyDO orderBuy, CustomerDO customer) {
+
+		customer = customerService.addCustomer(customer);
+		if (customer.getId() == null) {
+			return ResultDTO.fail("客户信息新增失败");
+		}
+		orderBuy.setCustomerId(customer.getId());
+		orderBuy.setCreateTime(new Date());
+		orderBuy.setLastUpdateTime(new Date());
+		orderBuy.setStatus(0);
+		orderBuyDAO.insert(orderBuy);
+		return ResultDTO.success();
+	}
 }

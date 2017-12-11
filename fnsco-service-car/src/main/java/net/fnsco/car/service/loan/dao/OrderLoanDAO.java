@@ -20,7 +20,7 @@ public interface OrderLoanDAO {
     @Select("SELECT * FROM car_order_loan WHERE id = #{id}")
     public OrderLoanDO getById(@Param("id") int id);
 
-    @Insert("INSERT into car_order_loan(id,customer_id,city_id,amount,suggest_code,create_time,last_update_time,status) VALUES (#{id},#{customerId},#{cityId},#{amount},#{suggestCode},#{createTime},#{lastUpdateTime},#{status})")
+    @Insert("INSERT into car_order_loan(id,customer_id,city_id,amount,suggest_code,create_time,last_update_time,status,car_type_id,car_model) VALUES (#{id},#{customerId},#{cityId},#{amount},#{suggestCode},#{createTime},#{lastUpdateTime},#{status},#{carTypeId},#{carModel})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(OrderLoanDO orderLoan);
 
