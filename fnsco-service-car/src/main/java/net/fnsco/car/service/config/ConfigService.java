@@ -22,6 +22,10 @@ public class ConfigService extends BaseService {
  public List<ConfigDO> queryAll() {
 	 return configDAO.getAll();
  }
+ //根据保险公司名字查询id
+ public Integer queryIdByName(String name) {
+	 return configDAO.getId(name);
+ }
  // 分页
  public ResultPageDTO<ConfigDO> page(ConfigDO config, Integer pageNum, Integer pageSize) {
      logger.info("开始分页查询ConfigService.page, config=" + config.toString());

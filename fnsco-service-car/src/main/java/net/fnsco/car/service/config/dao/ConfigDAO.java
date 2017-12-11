@@ -16,9 +16,13 @@ import java.util.List;;
 
 public interface ConfigDAO {
 
-    @Results({@Result( column = "id",property = "id"),@Result( column = "name",property = "name") })
-    @Select("SELECT id,name FROM car_config")
+    @Results({@Result( column = "name",property = "name") })
+    @Select("SELECT name FROM car_config")
     public List<ConfigDO> getAll();
+    
+    @Results({@Result( column = "id",property = "id") })
+    @Select("SELECT id FROM car_config WHERE name= #{name}")
+    public Integer getId(@Param("name") String name);
     
     @Results({@Result( column = "group_name",property = "groupName"),@Result( column = "order_no",property = "orderNo") })
     @Select("SELECT * FROM car_config WHERE id = #{id}")
