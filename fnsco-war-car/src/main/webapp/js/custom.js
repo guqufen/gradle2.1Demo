@@ -17,7 +17,7 @@ function getCarBrand(boole){
 				$(".brand-list").append(html);
 
 				/*赋给侧边导航栏*/
-				html='<a href="javascript:;" onclick="javascript:document.getElementById('+data.data[i].letter+').scrollIntoView()">'+data.data[i].letter+'</a>';
+				html='<a href="javascript:;" onclick="scrolInto('+data.data[i].letter+')">'+data.data[i].letter+'</a>';
 				$(".brand-nav").append(html);
 
 				/*循环获取排序列表下的品牌*/
@@ -37,23 +37,24 @@ function getCarBrand(boole){
 *获取汽车热门品牌
 *
 */
-
-$.ajax({
-	url:'../api/carBrand/selectHot',
-	type:'get',
-	contentType : "application/json",
-	success:function(data){
-		console.log(data);
-		// var html='';
-		// for(var i=0;i<data.data.length;i++){
-		// 	if(data.data[i].iconImgPath==null){
-		// 		data.data[i].iconImgPath='img/brand/m_111_100.jpg';
-		// 	}
-		// 	html+='<div class="mui-col-xs-3"><a href="javascript:getChildBrand('+data.data[i].id+');"><div class="hot-img"><img src="'+data.data[i].iconImgPath+'"></div><div class="hot-text">'+data.data[i].name+'</div></a></div>'
-		// }
-		// $(".hot .mui-row").append(html);
-	}
-})
+function getHotCarBrand(boole){
+	$.ajax({
+		url:'../api/carBrand/selectHot',
+		type:'get',
+		contentType : "application/json",
+		success:function(data){
+			console.log(data);
+			var html='';
+			for(var i=0;i<data.data.length;i++){
+				// if(data.data[i].iconImgPath==null){
+				// 	data.data[i].iconImgPath='img/brand/m_111_100.jpg';
+				// }
+				html+='<div class="mui-col-xs-3"><a href="javascript:getChildBrand('+data.data[i].id+','+boole+');"><div class="hot-img"><img src="'+data.data[i].iconImgPath+'"></div><div class="hot-text">'+data.data[i].name+'</div></a></div>'
+			}
+			$(".hot .mui-row").append(html);
+		}
+	})
+}
 
 /*
 *获取父品牌的子型号
@@ -70,7 +71,7 @@ function getChildBrand(id,boole){
 			console.log(data.data);
 			var html='';
 			for(var i=0;i<data.data.length;i++){
-				if(data.data[i].id==id){
+				if(data.data[i].id==id && boole==false){
 					$(".head-title").html(data.data[i].name);
 				}
 				if(data.data[i].level==2){
@@ -82,7 +83,7 @@ function getChildBrand(id,boole){
 								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12">'+data.data[j].name+'</div></li>');
 								$(".back").show();
 							}else{
-								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12" onclick="hideChildBrand('+data.data[j].id+')">'+data.data[j].name+'</div></li>');
+								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12" onclick="hideChildBrand('+data.data[j].id+',\''+data.data[j].name+'\')">'+data.data[j].name+'</div></li>');
 							}
 						}
 					}
@@ -97,16 +98,52 @@ function getChildBrand(id,boole){
 /*
 *选中子型号事件
 */
-function hideChildBrand(id){
+function hideChildBrand(id,name){
+	$("#carBrand").val(name);
+	$("#carBrand").next().val(id);
+	$(".mui-content").show();
 	$(".child-brand").hide();
+	$(".brand-list").html('<div class="hot"><div class="title" id="hot">热门品牌</div><div class="mui-row"></div></div>');
+	$(".hot .mui-row").html('');
+	$(".brand-nav").html('<a href="javascript:;" onclick="scrolInto(hot)">热</a>');
+	$(".child-brand").html('');
 }
 
 /*
-*
+*选择品牌进入子类返回事件
 */
 $(".back").click(function(){
 	$(".head-title").html("汽车品牌");
 	$(".child-brand").hide();
 	$(".brand").show();
 	$(".back").hide();
+})
+
+/*
+*关闭选择品牌
+*/
+$(".close").click(function(){
+	$(".mui-content").show();
+	$(".child-brand").hide();
+	$(".brand.popup").hide();
+	$(".brand-list").html('<div class="hot"><div class="title" id="hot">热门品牌</div><div class="mui-row"></div></div>');
+	$(".hot .mui-row").html('');
+	$(".brand-nav").html('<a href="javascript:;" onclick="scrolInto(hot)">热</a>');
+	$(".child-brand").html('');
+})
+/*
+*点击滚动
+*/
+function scrolInto(id){
+	scrollTo('#'+id,3000);
+	console.log(id);
+}
+
+
+/*选择品牌事件*/
+$("#carBrand").click(function(){
+	$(".mui-content").hide();
+	getCarBrand(true);
+	getHotCarBrand(true);
+	$(".brand.popup").show();
 })
