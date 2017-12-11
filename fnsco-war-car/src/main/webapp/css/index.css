@@ -1,101 +1,129 @@
-/*éŽ¼æ»…å‚¨å¦—ï¿½*/
-.inputDiv{
-	display: inline-block;
-	margin:10px 30px;
-	border:1px solid #c6d3dd;
+/*
+*统计
+*/
+.total-bar{
+    height: 3rem;
+    background-color: #fff;
+    font-size: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom:1px solid #e3e3e3;
 }
-.inputDiv label{
-	background-color: #e9edf0;
-	width: 100px;
-	display: inline-block;
-	color: #4d5f84;
-	height: 41px;
-	text-align: center;
-	line-height: 40px;
-	margin: 0;
+.total-bar .mui-row{
+    height: 2rem;
+    padding: 0 1.5rem;
 }
-.inputDiv input{
-	border: none;
-	width: 200px;
-	padding-left: 10px;
-	height: 40px;
-	line-height: 40px;
+.total-bar .mui-row.border-right{
+    border-right: 1px solid #ccc;
 }
-.inputDiv input.long{
-	width:300px;
+.total-bar .mui-row p{
+    margin-top: 0.3rem;
+    color: #000;
 }
-.inputDiv select{
-	border: none;
-	width: 200px;
-	padding-left: 10px;
-	height: 40px;
-	line-height: 40px;
+.total-bar .mui-row p span{
+    color:#FF0033;
+    font-size: 0.75rem;
+    margin-right: 0.3rem;
 }
-.inputDiv input:focus{
-	outline: none;
+.total-bar .mui-row .total-icon{
+    text-align: center;
+}
+.total-bar .mui-row .total-icon img{
+    width: 1.8rem;
+    margin-top: 0.1rem;
+}
+/*
+*首页产品导航入口
+*/
+.product-nav{
+    height: 4rem;
+    margin-top: 0.25rem;
+    background-color: #fff;
+    border-top:1px solid #e3e3e3;
+    border-bottom:1px solid #e3e3e3;
+    padding:0.5rem 0;
+}
+.nav{
+    text-align: center;
+}
+.nav i{
+    width: 1.5rem;
+    height: 1.5rem;
+    display: block;
+    margin: 0.25rem auto;
+    background: #000;
+}
+.nav.payCar i{
+    background: url(../img/product1.png) no-repeat center;
+    background-size: contain;
+}
+.nav.loans i{
+    background: url(../img/product2.png) no-repeat center;
+    background-size: contain;
+}
+.nav.insurance i{
+    background: url(../img/product3.png) no-repeat center;
+    background-size: contain;
+}
+.nav.brand i{
+    background: url(../img/product4.png) no-repeat center;
+    background-size: contain;
+}
+.nav p{
+    text-align: center;
+    color: #000;
+}
+/*
+*产品展示列表
+*/
+.product-list{
+
+}
+.product{
+    width: 100%;
+    /*height: 8rem;*/
+    background: #fff;
+    border-top:1px solid #e3e3e3;
+    border-bottom:1px solid #e3e3e3;
+    margin: 0.25rem auto;
+    padding: 1rem;
+    text-align:center;
+}
+.product-title{
+    font-size: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+.product-title span{
+    font-size: 0.55rem;
+    color: #666;
+    margin-left: 0.3rem;
+}
+.product-rate{
+    color: #ff0033;
+    font-size: 0.65rem;
+}
+.product-rate span{
+    font-size: 2rem;
+    margin-right: 0.3rem;
+}
+.product-intro{
+    color: #666;
+    font-size: 0.55rem;
+    margin-top: 0.3rem;
+}
+a.product-link{
+    width: 7rem;
+    height: 1.75rem;
+    line-height: 1.75rem;
+    display: block;
+    text-align: center;
+    margin:0.75rem auto 0 auto;
+    background: #fa5f02;
+    color: #fff;
+    border-radius: 1rem;
 }
 
-.page-header{
-	height:50px;
-	width:100%;
-	background:#fff;
-	margin:0;
-	padding:0;
-	line-height:50px;
-	font-size:14px;
-	padding-right:20px;
-}
-.page-header span{
-	font-size:16px;
-	font-weight:bolder;	
-}
-.halfDiv{
-	width:50%;
-	float:left;
-}
-.halfDiv .panel{
-	margin:10px;
-	font-size:16px;
-}
-.wholeDiv{
-	float:left;
-	width:100%;
-}
-.wholeDiv .panel{
-	margin:10px;
-	font-size:16px;
-}
-.centenTit{
-	padding:50px 0;
-	text-align:center;
-}
-.report-infos{
-	height:150px;
-}
-.report-infos .report-info{
-	padding:12px 10px;
-}
-.report-infos #history_report .report-info{
-	padding: 6px 10px;
-}
 
-.report-info a:hover{
-	color: #000;
-}
-.report-info .time{
-	float: right;
-}
-.panel-title{
-	font-size:16px;
-}
-.recharge{
-	float:right;
-	border:none;
-	background:rgba(22, 155, 213, 1);
-	padding: 5px 16px;
-	color:#fff;
-	border-radius:3px;
-	font-size: 14px;
-	cursor:pointer;
-	margin-top: -5px;
-}
+
+
+
+
