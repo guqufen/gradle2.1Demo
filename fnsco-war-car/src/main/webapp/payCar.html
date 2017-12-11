@@ -23,6 +23,7 @@
 			<div class="mui-input-row">
 				<label>所在城市</label>
 				<input class="city" id='showCityPicker' placeholder="选择所在城市" type="text">
+				<input type="hidden" id="cityId">
 			</div>
 			<div class="mui-input-row">
 				<label>汽车品牌</label>
@@ -115,19 +116,14 @@
 		$.ready(function() {
 			//选择城市
 			var cityPicker = new $.PopPicker();
-			cityPicker.setData([{
-				value: '上海市',
-				text: "上海市"
-			}, {
-				value: '杭州市',
-				text: '杭州市'
-			}, {
-				value: '苏州市',
-				text: '苏州市'
-			},{
-				value: '南京市',
-				text: '南京市'
-			}]);
+			$.ajax({
+				url:'../h5/city/queryCity',
+				type:'get',
+				success:function(data){
+					cityPicker.setData(data.data);
+				}
+			})
+
 			var byStagesPicker = new $.PopPicker();
 			byStagesPicker.setData([{
 				value: 12,
@@ -139,10 +135,13 @@
 				value: 36,
 				text: '36期'
 			}]);
+
 			var showCityPickerButton = doc.getElementById('showCityPicker');
+			var cityId = doc.getElementById('cityId');
 			showCityPickerButton.addEventListener('tap', function(event) {
 				cityPicker.show(function(items) {
-					showCityPickerButton.value = JSON.stringify(items[0].value).substring(1,4);
+					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,4);
+					cityId.value = JSON.stringify(items[0].value);
 					//返回 false 可以阻止选择框的关闭
 					//return false;
 				});
@@ -155,6 +154,7 @@
 					//return false;
 				});
 			}, false);
+
 		});
 	})(mui, document);
 </script>
