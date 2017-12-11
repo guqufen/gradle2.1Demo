@@ -25,6 +25,10 @@ public class ApiConstant extends CoreConstants {
     public static String E_STRING_TOO_LENGTH       = "5032";                            //入参太常
     public static String E_SETTING_STATUS_NULL     = "5033";                            //设置状态为空
     public static String E_ORDER_NO_NULL           = "5034";                            //订单号不能为空
+    public static String E_CASH_ACCOUNT_NULL       = "5035";                            //提现金额不能为空
+    public static String E_BANK_CARDID_NULL        = "5036";                            //提现银行卡不能为空
+    public static String E_PAY_PASSWORD_NULL       = "5037";                            //支付密码不能为空
+    public static String E_ACCOUNT_BALANCE_NULL    = "5038";                            //您余额不足
 
     public static String E_APP_PHONE_EMPTY         = "5011";                            //非法请求,没有手机号
     public static String E_APP_PHONE_ERROR         = "5012";                            //非法请求,手机号不正确
@@ -98,6 +102,10 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_STRING_TOO_LENGTH, "输入参数太长");
         ERROR_MESSGE_MAP.put(E_SETTING_STATUS_NULL, "设置状态为空");
         ERROR_MESSGE_MAP.put(E_ORDER_NO_NULL, "订单号不能为空");
+        ERROR_MESSGE_MAP.put(E_CASH_ACCOUNT_NULL, "提现金额不能为空");
+        ERROR_MESSGE_MAP.put(E_BANK_CARDID_NULL, "提现银行卡不能为空");
+        ERROR_MESSGE_MAP.put(E_PAY_PASSWORD_NULL, "支付密码不正确");
+        ERROR_MESSGE_MAP.put(E_ACCOUNT_BALANCE_NULL, "您余额不足");
         
         //APP
         ERROR_MESSGE_MAP.put(E_USERID_NULL, "入参ID为null");

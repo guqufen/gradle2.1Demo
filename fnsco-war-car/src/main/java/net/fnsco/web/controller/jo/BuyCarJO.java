@@ -38,9 +38,27 @@ public class BuyCarJO {
 		@ApiModelProperty(value = "suggestCode", name = "suggestCode", example = "推荐码")
 	    private Integer suggestCode;
 
-		
+		/**
+	     * 验证码
+	     */
+		@ApiModelProperty(value = "verCode", name = "verCode", example = "验证码")
+		private String verCode;
 
 	    /**
+		 * @return the verCode
+		 */
+		public String getVerCode() {
+			return verCode;
+		}
+
+		/**
+		 * @param verCode the verCode to set
+		 */
+		public void setVerCode(String verCode) {
+			this.verCode = verCode;
+		}
+
+		/**
 		 * @return the name
 		 */
 		public String getName() {

@@ -16,6 +16,7 @@ import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.MessageUtils;
 
 @Service
 public class OrderBuyService extends BaseService {
@@ -64,6 +65,8 @@ public class OrderBuyService extends BaseService {
 
 @Transactional
 public ResultDTO<Object> addJo(OrderBuyDO orderBuy,CustomerDO customer) {
+	
+	
 	customer = customerService.addCustomer(customer);
 	if(customer.getId() == null){
 		return ResultDTO.fail("客户信息新增失败");
