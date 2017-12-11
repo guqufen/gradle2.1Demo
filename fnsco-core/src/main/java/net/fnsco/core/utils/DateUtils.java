@@ -591,4 +591,24 @@ public class DateUtils {
         return tmp;
     }
 
+    /**
+     * 将指定Date转换为零点零分的date
+     * @param date
+     * @return
+     */
+    public static Date getStartDayTime(Date date) {
+        String result = "";
+        if (null == date) {
+            date = new Date();
+        }
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMddHHmmss");
+        try {
+        	String str = sf1.format(date);
+        	date = sf1.parse(str.substring(0, 8) + "000000");
+        } catch (Exception e) {
+            logger.error("DateUtils.getStartDayTime()日期转换出错", e);
+            return null;
+        }
+        return date;
+    }
 }
