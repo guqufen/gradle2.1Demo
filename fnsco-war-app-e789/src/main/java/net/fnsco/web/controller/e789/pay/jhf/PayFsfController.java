@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiParam;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
@@ -30,6 +31,7 @@ import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
+import net.fnsco.trading.service.merchantentity.AppUserMerchantEntityService;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.e789.jo.GetQRUrlJO;
@@ -54,6 +56,8 @@ public class PayFsfController extends BaseController {
     @Autowired
     private TradeOrderService tradeOrderService;
     @Autowired
+    private AppUserMerchantEntityService entityService;
+    @Autowired
     private Environment       env;
 
     /**
@@ -65,13 +69,14 @@ public class PayFsfController extends BaseController {
     @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
     @ApiOperation(value = "首页-分闪付支付-获取分闪付url，用于生成二维码")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
-        String innerCode = "";
         Integer userId = getQRUrlJO.getUserId();
+        MerchantEntity merchantEntity = entityService.queryMerInfoByUserId(userId);
         //根据用户id获取绑定的分闪付商户信息
-        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByInnerCodeType(innerCode, "04");
+        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByEntityInnerCodeType(merchantEntity.getEntityInnerCode(), "04");
         if (null == merchantChannelJhf) {
             return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
         }
+        String innerCode = merchantChannelJhf.getInnerCode();
         TradeOrderDO tradeOrder = new TradeOrderDO();
         tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
         tradeOrder.setChannelMerId(merchantChannelJhf.getChannelMerId());
@@ -90,7 +95,7 @@ public class PayFsfController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        String url = env.getProperty("open.base.url") + "/trade/fsf/pay/dealPayOrder";
+        String url = env.getProperty("app.base.url") + "/trade/fsf/pay/dealPayOrder";
         url += "?" + "&commID=" + innerCode + "&reqData=" + getReqData(tradeOrder.getOrderNo(), innerCode);
         GetQRUrlResultVO result = new GetQRUrlResultVO();
         result.setUrl(url);
