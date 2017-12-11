@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.car.service.carBrand.dao.CarBrandDAO;
 import net.fnsco.car.service.carBrand.entity.CarBrandDO;
 import net.fnsco.car.service.carBrand.entity.CarBrandDTO;
@@ -38,7 +40,9 @@ public class CarBrandService extends BaseService {
 	public ResultPageDTO<CarBrandDO> page(CarBrandDO carBrandDO, Integer pageNum, Integer pageSize) {
 		List<CarBrandDO> pageList = carBrandDAO.pageList(carBrandDO, pageNum, pageSize);
 		for (CarBrandDO carBrandDO2 : pageList) {
-			carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
+			if( !Strings.isNullOrEmpty(carBrandDO2.getIconImgPath()) ){
+				carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
+			}
 		}
 		Integer count = carBrandDAO.pageListCount(carBrandDO);
 		ResultPageDTO<CarBrandDO> pager = new ResultPageDTO<CarBrandDO>(count, pageList);
@@ -63,11 +67,36 @@ public class CarBrandService extends BaseService {
 		carBrandDO.setIsHot(1);
 		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO);
 		for (CarBrandDO carBrandDO2 : list) {
-			carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
+				carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
 		}
 		return ResultDTO.success(list);
 	}
 
+	/**
+	 * 查询菜单树
+	 * @param carBrandDO
+	 * @return
+	 */
+	public ResultDTO selectMenuTree() {
+		List<CarBrandDO> list = carBrandDAO.queryAll();
+		// 添加顶级菜单
+		CarBrandDO root = new CarBrandDO();
+	
+		for (CarBrandDO carBrandDO2 : list) {
+			if( !Strings.isNullOrEmpty(carBrandDO2.getIconImgPath()) ){
+				carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
+			}
+		}
+
+		root.setId(0);
+		root.setName("总菜单");
+		root.setSupperId(-1);
+		root.setLevel(-1);
+		list.add(root);
+
+		return ResultDTO.success(list);
+	}
+	
 	/**
 	 * 查询所有的汽车品牌,并按照第一个汉字的首字母排序，分配集合
 	 * 
@@ -75,7 +104,7 @@ public class CarBrandService extends BaseService {
 	 */
 	public ResultDTO<List<CarBrandDTO>> selectAll() {
 
-		List<CarBrandDO> list = carBrandDAO.selectAll();
+		List<CarBrandDO> list = carBrandDAO.selectAllFirstLevel();
 		Map<String, Set<CarBrandDO>> map = new TreeMap<>();
 
 		List<CarBrandDTO> carList = new ArrayList<>();

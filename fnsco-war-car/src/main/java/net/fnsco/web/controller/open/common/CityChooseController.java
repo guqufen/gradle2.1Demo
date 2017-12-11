@@ -17,7 +17,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.web.controller.vo.QueryCityVO;
 
 @RestController
-@RequestMapping(value = "/h5/city", method = RequestMethod.POST)
+@RequestMapping(value = "/h5/city", method = RequestMethod.GET)
 @Api(value = "/h5/city", tags = { "业务申请-查询城市" })
 public class CityChooseController extends BaseController {
 	@Autowired
