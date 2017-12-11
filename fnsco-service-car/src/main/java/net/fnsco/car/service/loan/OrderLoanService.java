@@ -9,6 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.fnsco.car.service.carBrand.CarBrandService;
+import net.fnsco.car.service.carBrand.entity.CarBrandDO;
+import net.fnsco.car.service.city.DicCityService;
+import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.customer.CustomerService;
 import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.car.service.file.OrderFileService;
@@ -29,6 +33,9 @@ public class OrderLoanService extends BaseService {
 	private CustomerService customerService;
 	@Autowired
 	private OrderFileService orderFileService;
+	private DicCityService dicCityService;
+	@Autowired
+	private CarBrandService carBrandService;
 
 	// 分页
 	public ResultPageDTO<OrderLoanDO> page(OrderLoanDO orderLoan, Integer pageNum, Integer pageSize) {
@@ -66,8 +73,8 @@ public class OrderLoanService extends BaseService {
 		return obj;
 	}
 
-	public ResultDTO<Object> addJo(OrderLoanDO orderLoan, CustomerDO customer, String fileIds) {
 
+	public ResultDTO<Object> addJo(OrderLoanDO orderLoan, CustomerDO customer, String fileIds) {
 		customer = customerService.addCustomer(customer);
 		if (customer.getId() == null) {
 			return ResultDTO.fail("客户信息新增失败");
