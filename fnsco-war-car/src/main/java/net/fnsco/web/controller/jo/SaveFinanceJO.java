@@ -28,8 +28,6 @@ public class SaveFinanceJO extends JO {
 	private String code;//验证码
 	@ApiModelProperty(value="推荐码",name="suggestCode",example="推荐码")
 	private Integer suggestCode;// 推荐码
-	@ApiModelProperty(value = "申请类型", name = "type", example = "申请类型")
-	private String type;
 	/**
 	 * @return the name
 	 */
@@ -120,17 +118,4 @@ public class SaveFinanceJO extends JO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	/**
-	 * @return the type
-	 */
-	public String getType() {
-		return type;
-	}
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
-	
 }

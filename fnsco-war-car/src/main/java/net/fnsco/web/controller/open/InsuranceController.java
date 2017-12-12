@@ -53,7 +53,6 @@ public class InsuranceController extends BaseController {
 	private ResultDTO<Object> saveSafe(@RequestBody SaveSafeJO saveSafeJO) {
 		String code = saveSafeJO.getCode();
 		String mobile = saveSafeJO.getMobile();
-		String type = saveSafeJO.getType();
 		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
 			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
 		}

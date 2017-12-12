@@ -37,7 +37,6 @@ public class MoneyManageController extends BaseController {
 	private ResultDTO<Object> saveFinance(@RequestBody SaveFinanceJO saveFinanceJO) {
 		String code = saveFinanceJO.getCode();
 		String mobile = saveFinanceJO.getMobile();
-		String type = saveFinanceJO.getType();
 		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
 			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
 		}
