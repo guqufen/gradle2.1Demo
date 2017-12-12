@@ -97,9 +97,6 @@ public class OrderBuyService extends BaseService {
 	@Transactional
 	public ResultDTO<Object> addJo(OrderBuyDO orderBuy, CustomerDO customer) {
 		customer = customerService.addCustomer(customer);
-		if(customer != null){
-			return ResultDTO.fail();
-		}
 		orderBuy.setCustomerId(customer.getId());
 		orderBuy.setCreateTime(new Date());
 		orderBuy.setLastUpdateTime(new Date());
