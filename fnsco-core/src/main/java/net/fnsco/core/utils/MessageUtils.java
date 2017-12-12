@@ -27,7 +27,7 @@ public class MessageUtils {
 	
 	
 	
-	public MessageValidateDTO getValidateCode(String deviceId, String mobile, String type) {
+	public MessageValidateDTO getValidateCode(String mobile) {
 		// 生成6位验证码
 		final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
 		MessageValidateDTO object = new MessageValidateDTO(code, System.currentTimeMillis());

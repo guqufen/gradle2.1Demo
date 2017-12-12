@@ -4,6 +4,7 @@ package net.fnsco.web.controller.open;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.car.comm.CarServiceConstant;
 import net.fnsco.car.service.buy.OrderBuyService;
 import net.fnsco.car.service.buy.entity.OrderBuyDO;
 import net.fnsco.car.service.city.DicCityService;
@@ -43,7 +45,12 @@ public class BuyCarApplyController extends BaseController {
 		final HttpSession httpSession=req.getSession();
 		String code = jo.getVerCode();
 		String mobile = jo.getMobile();
-		MessageValidateDTO mDTO = (MessageValidateDTO) httpSession.getAttribute("fns"+mobile);
+		String type = jo.getBuyType();
+		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)||StringUtils.isEmpty(type)){
+			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
+		}
+		//获取session中验证码信息
+		MessageValidateDTO mDTO = (MessageValidateDTO) httpSession.getAttribute(CarServiceConstant.ApplyType.BUY_CAR_TYPE.getNameByType(type)+mobile);
 		if(mDTO == null){
 			return ResultDTO.fail();
 		}
