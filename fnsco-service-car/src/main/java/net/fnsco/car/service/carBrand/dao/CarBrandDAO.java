@@ -58,11 +58,16 @@ public interface CarBrandDAO {
 	@SelectProvider(type = CarBrandProvider.class, method = "selectByCondition")
 	public List<CarBrandDO> selectByCondition(@Param("carBrandDO") CarBrandDO carBrandDO, @Param("limit") Integer limit);
 
+	/**
+	 * 多级查找父id关联
+	 * @param id
+	 * @return
+	 */
 	@Results({ @Result(column = "id", property = "id"), @Result(column = "name", property = "name"),
 			@Result(column = "supper_id", property = "supperId"), @Result(column = "level", property = "level"),
 			@Result(column = "icon_img_path", property = "iconImgPath"), @Result(column = "model", property = "model"),
 			@Result(column = "is_hot", property = "isHot") })
-	@Select("select * from car_dic_type where supper_id = #{id} or supper_id in (select distinct id from car_dic_type where supper_id =#{id}) or id =#{id} order by id")
+	@Select("select * from car_dic_type where supper_id = #{id} or supper_id in (select distinct id from car_dic_type where supper_id =#{id}) or supper_id in (select distinct id from car_dic_type where supper_id in (select distinct id from car_dic_type where supper_id =#{id})) or id =#{id} order by id")
 	public List<CarBrandDO> selectChild(Integer id);
 	
 	/**

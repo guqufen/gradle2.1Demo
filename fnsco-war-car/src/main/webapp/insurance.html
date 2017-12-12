@@ -21,7 +21,7 @@
 			</div>
 			<div class="mui-input-row">
 				<label>所在城市</label>
-				<input class="city" id='showCityPicker' placeholder="选择所在城市" type="text">
+				<input class="city" id='showCityPicker' readonly="true" placeholder="选择所在城市" type="text">
 				<input type="hidden" id="cityId" name="cityId">
 			</div>
 			<div class="mui-input-row rmb">
@@ -31,7 +31,7 @@
 			</div>
 			<div class="mui-input-row">
 				<label>意向投保公司</label>
-				<input class="insurance-company" id="showInsuranceCompanyPicker" placeholder="选择意向投保公司" type="text">
+				<input class="insurance-company" id="showInsuranceCompanyPicker" readonly="true" placeholder="选择意向投保公司" type="text">
 				<input id="insuranceCompanyId" name="insuranceCompanyId" type="hidden">
 			</div>
 			<div class="mui-input-row phone">
@@ -77,67 +77,9 @@
 <script type="text/javascript" src="js/mui.js"></script>
 <script type="text/javascript" src="js/mui.picker.js"></script>
 <script type="text/javascript" src="js/mui.poppicker.js"></script>
+<script type="text/javascript" src="js/custom.js"></script>
 <script type="text/javascript">
-	//右划关闭
-    mui.init({
-		swipeBack: true //启用右滑关闭功能
-	});
-    //弹框
-    (function($, doc) {
-		$.init();
-		$.ready(function() {
-			//选择城市
-			var cityPicker = new $.PopPicker();
-			cityPicker.setData([{
-				value: 1,
-				text: "上海市"
-			}, {
-				value: 2,
-				text: '杭州市'
-			}, {
-				value: 3,
-				text: '苏州市'
-			},{
-				value: 4,
-				text: '南京市'
-			}]);
-			var insuranceCompanyPicker = new $.PopPicker();
-			insuranceCompanyPicker.setData([{
-				value: 1,
-				text: "太平洋保险有限公司"
-			}, {
-				value: 2,
-				text: '中国人寿保险有限公司'
-			}, {
-				value: 3,
-				text: '平安保险有限公司'
-			},{
-				value: 4,
-				text: '新华保险有限公司'
-			}]);
-			var showCityPickerButton = doc.getElementById('showCityPicker');
-			var cityId = doc.getElementById('cityId');
-			showCityPickerButton.addEventListener('tap', function(event) {
-				cityPicker.show(function(items) {
-					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,4);
-					cityId.value = JSON.stringify(items[0].value);
-					//返回 false 可以阻止选择框的关闭
-					//return false;
-				});
-			}, false);
-			var showInsuranceCompanyPickerButton = doc.getElementById('showInsuranceCompanyPicker');
-			var insuranceCompanyId = doc.getElementById('insuranceCompanyId');
-			showInsuranceCompanyPickerButton.addEventListener('tap', function(event) {
-				insuranceCompanyPicker.show(function(items) {
-					var dataLen=JSON.stringify(items[0].text).length;
-					showInsuranceCompanyPickerButton.value = JSON.stringify(items[0].text).substring(1,dataLen-1);
-					insuranceCompanyId.value = JSON.stringify(items[0].value);
-					//返回 false 可以阻止选择框的关闭
-					//return false;
-				});
-			}, false);
-		});
-	})(mui, document);
+	start(true,false,true);
 </script>
 
 

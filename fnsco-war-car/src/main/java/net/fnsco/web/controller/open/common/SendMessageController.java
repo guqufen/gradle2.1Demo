@@ -22,13 +22,13 @@ import net.fnsco.core.utils.dto.MessageValidateDTO;
 public class SendMessageController extends BaseController{
 	
 	
-	@RequestMapping(value = "/sendMessage",method = RequestMethod.GET)
+	@RequestMapping(value = "/sendMessage",method = RequestMethod.POST)
 	@ApiOperation(value = "发送验证码")
 	public ResultDTO sendMessage(String mobile,String type){
 		MessageUtils mUtils = new MessageUtils();
 		//获取六位验证码
 		MessageValidateDTO mvDTO = mUtils.getValidateCode(mobile);
-		this.session.setAttribute(CarServiceConstant.ApplyType.BUY_CAR_TYPE.getNameByType(type)+mobile,mvDTO);  //验证码放入session
+		this.session.setAttribute(mobile,mvDTO);  //验证码放入session
 	    String code = mvDTO.getCode();
 		//发送验证码
 		ResultDTO result = mUtils.sendValidateCode(mobile,code);
