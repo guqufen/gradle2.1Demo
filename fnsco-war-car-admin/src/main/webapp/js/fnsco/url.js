@@ -13,5 +13,5 @@ var json={
 	auth_dept_queryDeptById : PROJECT_NAME+'/web/auth/dept/queryDeptById',
 	auth_dept_querytree : PROJECT_NAME+'/web/auth/dept/querytree',
 	auth_dept_deleteDeptById : PROJECT_NAME+'/web/auth/dept/deleteDeptById',
-	web_merchantinfo_queryAgents:PROJECT_NAME+'/web/merchantinfo/queryAgents'
+	web_merchantinfo_queryAgents:PROJECT_NAME+'/web/agent/queryAll'
 }
