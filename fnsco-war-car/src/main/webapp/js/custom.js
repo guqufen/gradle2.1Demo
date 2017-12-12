@@ -216,21 +216,9 @@ function start(city,stages,insuranceCompany){
 				type:'get',
 				success:function(data){
 					console.log(data);
+					insuranceCompanyPicker.setData(data.data.insuList);
 				}
 			})
-			insuranceCompanyPicker.setData([{
-				value: 1,
-				text: "太平洋保险有限公司"
-			}, {
-				value: 2,
-				text: '中国人寿保险有限公司'
-			}, {
-				value: 3,
-				text: '平安保险有限公司'
-			},{
-				value: 4,
-				text: '新华保险有限公司'
-			}]);
 			var showInsuranceCompanyPickerButton = doc.getElementById('showInsuranceCompanyPicker');
 			var insuranceCompanyId = doc.getElementById('insuranceCompanyId');
 			showInsuranceCompanyPickerButton.addEventListener('tap', function(event) {
