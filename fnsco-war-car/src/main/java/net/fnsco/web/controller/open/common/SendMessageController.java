@@ -1,22 +1,27 @@
 package net.fnsco.web.controller.open.common;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.MessageUtils;
 
 @RestController
-@RequestMapping(value = "/api/send", method = RequestMethod.POST)
-@Api(value = "/api/send", tags = { "发送验证码" })
+@RequestMapping(value = "/h5", method = RequestMethod.POST)
+@Api(value = "/h5", tags = { "发送验证码" })
 public class SendMessageController {
 	
-	public ResultDTO sendMessage(String mobile){
+	
+	@RequestMapping(value = "/sendMessage")
+	@ApiOperation(value = "发送验证码")
+	public ResultDTO sendMessage(@RequestBody String mobile){
 		String deviceId = "fns";
-		MessageUtils rt = new MessageUtils();
-		ResultDTO result = rt.sendValidateCode(deviceId, mobile);
+		MessageUtils mUtils = new MessageUtils();
+		ResultDTO result = mUtils.sendValidateCode(deviceId, mobile);
 		return result;
 	}
 

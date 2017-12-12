@@ -18,10 +18,14 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.MessageUtils;
 import net.fnsco.web.controller.jo.BuyCarJO;
 import net.fnsco.web.controller.vo.BuyCarVO;
-
+/**
+ * 
+ * @author Administrator
+ *
+ */
 @RestController
-@RequestMapping(value = "/api/buy", method = RequestMethod.POST)
-@Api(value = "/api/buy", tags = { "业务申请-买车申请" })
+@RequestMapping(value = "/h5/buyCar", method = RequestMethod.POST)
+@Api(value = "/h5/buyCar", tags = { "业务申请-买车申请" })
 public class BuyCarApplyController extends BaseController {
 
 	@Autowired
@@ -32,13 +36,12 @@ public class BuyCarApplyController extends BaseController {
 	@RequestMapping(value = "/add")
 	@ApiOperation(value = "买车申请-添加申请")
 	public ResultDTO<BuyCarVO> addJO(@RequestBody BuyCarJO jo) {
-		if(null == jo){
-			return ResultDTO.fail("非法请求，请检查参数");
-		}
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
-		utils.validateCode("fns", jo.getVerCode(), jo.getMobile());
-		
+		ResultDTO<Object> rt = utils.validateCode("fns", jo.getVerCode(), jo.getMobile());
+		if(!rt.isSuccess()){
+			return ResultDTO.fail(rt.getMessage());
+		}
 		CustomerDO customer = new CustomerDO();
 		customer.setName(jo.getName());
 		customer.setMobile(jo.getMobile());
@@ -50,11 +53,11 @@ public class BuyCarApplyController extends BaseController {
 		orderBuy.setSuggestCode(jo.getSuggestCode());
 
 		ResultDTO<Object> result = orderBuyService.addJo(orderBuy, customer);
-		if (result.isSuccess()) {
-			return ResultDTO.success("提交成功");
-		} else {
+		if (!result.isSuccess()) {
+		
 			return ResultDTO.fail("提交失败");
 		}
+		return ResultDTO.success("提交成功");
 	}
 
 }

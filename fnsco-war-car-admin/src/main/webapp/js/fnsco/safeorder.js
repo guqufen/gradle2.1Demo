@@ -2,7 +2,7 @@
 $('#table').bootstrapTable({
     search: false, //是否启动搜索栏
     sidePagination:'server',
-    url:PROJECT_NAME+'/web/order/loan',
+    url:PROJECT_NAME+'/web/order/safe',
     showRefresh: false,//是否显示刷新按钮
     showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
     toolbar: '#toolbar',  //工具按钮用哪个容器
@@ -46,18 +46,23 @@ $('#table').bootstrapTable({
         title: '所在城市',
         width:'10%'
     },{
-        field: 'carTypeName',
-        title: '汽车品牌&型号'
+        field: 'carOriginalPrice',
+        title: '汽车原价',
+        formatter:formatRMB
+    },{
+        field: 'insuCompanyName',
+        title: '保险公司'
+    },{
+        field: 'estiPremiums',
+        title: '预估保费',
+        formatter:formatRMB
     },{
         field: 'createTime',
         title: '申请时间',
         formatter:formatTime
     },{
-        field: 'amount',
-        title: '贷款额度(元)'
-    },{
         field: '',
-        title: '贷款期限'
+        title: '运营商'
     },{
         field: 'status',
         title: '进度状态',
@@ -109,6 +114,13 @@ function formatStatus(value, row, index){
 		return '未知'
 	}
 }
+//金额除以100
+function formatRMB(value, row, index){
+	if(value){
+		return value/100;
+	}
+	return '--';
+}
 function formatTime(value, row, index){
 	return formatDateUtil(value);
 }
@@ -129,7 +141,7 @@ function editData(id){
         btn: ['确认','取消'] 
     }, function(){
     	$.ajax({
-            url:PROJECT_NAME+'/web/order/updateLoanStatus',
+            url:PROJECT_NAME+'/web/order/updateSafeStatus',
             type:'POST',
             data:{'id':id,"status":9},
             success:function(data){
