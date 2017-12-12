@@ -12,6 +12,7 @@ import net.fnsco.car.service.finance.entity.OrderFinanceDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.freamwork.business.WebUserDTO;
 
 /**
  * @desc 理财订单管理
@@ -35,6 +36,12 @@ public class FinanceOrderWebController extends BaseController {
 		if(-1 ==orderBuy.getStatus()) {
 			orderBuy.setStatus(null);
 		}
+		
+		WebUserDTO adminUser = (WebUserDTO) getSessionUser();
+		 if(null != adminUser && null != adminUser.getType() && adminUser.getType() == 2) {
+			 orderBuy.setSysUserId(adminUser.getId());
+		 }
+		
 		ResultPageDTO<OrderFinanceDO> result  = orderFinanceService.page(orderBuy, currentPageNum, pageSize);
 		return result;
 	}

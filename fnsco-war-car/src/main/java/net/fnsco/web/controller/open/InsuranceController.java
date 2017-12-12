@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import com.aliyun.oss.common.comm.ServiceClient.Request;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.car.comm.CarServiceConstant;
 import net.fnsco.car.service.config.ConfigService;
 import net.fnsco.car.service.config.entity.ConfigDO;
 import net.fnsco.car.service.customer.entity.CustomerDO;
@@ -23,6 +25,7 @@ import net.fnsco.car.service.safe.entity.OrderSafeDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.MessageUtils;
+import net.fnsco.core.utils.dto.MessageValidateDTO;
 import net.fnsco.web.controller.jo.EstiPremiumsJO;
 import net.fnsco.web.controller.jo.SaveSafeJO;
 import net.fnsco.web.controller.vo.EstiPremiumsVO;
@@ -48,9 +51,20 @@ public class InsuranceController extends BaseController {
 	@RequestMapping(value = "/saveSafe")
 	@ApiOperation(value = "保险申请-添加申请")
 	private ResultDTO<Object> saveSafe(@RequestBody SaveSafeJO saveSafeJO) {
+		String code = saveSafeJO.getCode();
+		String mobile = saveSafeJO.getMobile();
+		String type = saveSafeJO.getType();
+		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)||StringUtils.isEmpty(type)){
+			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
+		}
+		//获取session中验证码信息
+		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(CarServiceConstant.ApplyType.BUY_CAR_TYPE.getNameByType(type)+mobile);
+		if(mDTO == null){
+			return ResultDTO.fail();
+		}
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
-		ResultDTO<Object> rt = utils.validateCode("fns", saveSafeJO.getCode(), saveSafeJO.getMobile());
+		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);
 		if(!rt.isSuccess()){
 			return ResultDTO.fail(rt.getMessage());
 		}
