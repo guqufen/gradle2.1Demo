@@ -18,9 +18,11 @@ public class SaveFinanceJO extends JO {
 	private String name;// 投资人姓名
 	@ApiModelProperty(value="所在城市id",name="cityId",example="所在城市id")
 	private Integer cityId;// 所在城市id
-	/*@ApiModelProperty(value="理财产品id",name="buyType",example="理财产品id")
-	private String buyType;// 理财产品id
-*/	@ApiModelProperty(value="手机号码",name="mobile",example="手机号码")
+	@ApiModelProperty(value="理财产品id",name="buyType",example="理财产品id")
+	private Integer buyType;// 理财产品id
+	@ApiModelProperty(value="预计收益",name="earnings",example="预计收益")
+	private Integer earnings;// 预计收益
+	@ApiModelProperty(value="手机号码",name="mobile",example="手机号码")
 	private String mobile;// 手机号码
 	@ApiModelProperty(value="验证码",name="code",example="验证码")
 	private String code;//验证码
@@ -54,16 +56,28 @@ public class SaveFinanceJO extends JO {
 	}
 	/**
 	 * @return the buyType
-	 *//*
-	public String getBuyType() {
+	 */
+	public Integer getBuyType() {
 		return buyType;
 	}
-	*//**
+	/**
 	 * @param buyType the buyType to set
-	 *//*
-	public void setBuyType(String buyType) {
+	 */
+	public void setBuyType(Integer buyType) {
 		this.buyType = buyType;
-	}*/
+	}
+	/**
+	 * @return the earnings
+	 */
+	public Integer getEarnings() {
+		return earnings;
+	}
+	/**
+	 * @param earnings the earnings to set
+	 */
+	public void setEarnings(Integer earnings) {
+		this.earnings = earnings;
+	}
 	/**
 	 * @return the mobile
 	 */
