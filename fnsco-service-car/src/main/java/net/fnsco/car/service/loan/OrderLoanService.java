@@ -33,6 +33,7 @@ public class OrderLoanService extends BaseService {
 	private CustomerService customerService;
 	@Autowired
 	private OrderFileService orderFileService;
+	@Autowired
 	private DicCityService dicCityService;
 	@Autowired
 	private CarBrandService carBrandService;
