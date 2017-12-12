@@ -67,6 +67,22 @@ public class SmsUtil {
 
         return result;
     }
+    
+    public static String ZRCode(String mobile, String code) throws IOException, URISyntaxException {
+
+        //修改为您的apikey.apikey可在官网（http://www.yuanpian.com)登录后获取
+        String apikey = "0425f962446c4b2de94e6e08e72120ad ";
+
+        //设置模板ID，如使用1号模板:【#company#】您的验证码是#code#
+        long tpl_id = 1;
+        //设置对应的模板变量值
+
+        String tpl_value = URLEncoder.encode("#code#", ENCODING) + "=" + URLEncoder.encode(code, ENCODING) + "&" + URLEncoder.encode("#company#", ENCODING) + "=" + URLEncoder.encode("中融通盛", ENCODING);
+
+        String result = tplSendSms(apikey, tpl_id, tpl_value, mobile);
+
+        return result;
+    }
 
     public static String applyUser(String mobile, String userName, String contactNum, String mercName) throws IOException {
         //修改为您的apikey.apikey可在官网（http://www.yuanpian.com)登录后获取
