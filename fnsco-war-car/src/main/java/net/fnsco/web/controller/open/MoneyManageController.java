@@ -13,6 +13,7 @@ import net.fnsco.car.service.finance.OrderFinanceService;
 import net.fnsco.car.service.finance.entity.OrderFinanceDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.MessageUtils;
 import net.fnsco.web.controller.jo.SaveFinanceJO;
 
 /**
@@ -23,22 +24,26 @@ import net.fnsco.web.controller.jo.SaveFinanceJO;
  * @Date 2017年12月8日 上午11:43:36
  */
 @RestController
-@RequestMapping(value = "/web/car", method = RequestMethod.POST)
-@Api(value = "/web/car", tags = { "业务申请-理财申请接口" })
+@RequestMapping(value = "/h5/manage", method = RequestMethod.POST)
+@Api(value = "/h5/manage", tags = { "业务申请-理财申请接口" })
 public class MoneyManageController extends BaseController {
 	@Autowired
 	private OrderFinanceService orderFinanceService;
 	@RequestMapping(value = "/saveFinance")
 	@ApiOperation(value = "理财申请-添加申请")
 	private ResultDTO<Object> saveFinance(@RequestBody SaveFinanceJO saveFinanceJO) {
-		saveFinanceJO.getCode();
-		//appUserService.getValidateCode(appUserDTO);
+		//校验验证码是否正确
+		MessageUtils utils = new MessageUtils();
+		ResultDTO<Object> rt = utils.validateCode("fns", saveFinanceJO.getCode(), saveFinanceJO.getMobile());
+		if(!rt.isSuccess()){
+			return ResultDTO.fail(rt.getMessage());
+		}
 		CustomerDO customerDO =  new CustomerDO();
 		customerDO.setName(saveFinanceJO.getName());
 		customerDO.setMobile(saveFinanceJO.getMobile());
 		OrderFinanceDO orderFinance = new OrderFinanceDO();
 		orderFinance.setCityId(saveFinanceJO.getCityId());
-		orderFinance.setBuyType(saveFinanceJO.getBuyType());
+		//orderFinance.setBuyType(saveFinanceJO.getBuyType());
 		orderFinance.setSuggestCode(saveFinanceJO.getSuggestCode());
 		ResultDTO<Object> res = orderFinanceService.saveFinance(customerDO,orderFinance);
         return res;
