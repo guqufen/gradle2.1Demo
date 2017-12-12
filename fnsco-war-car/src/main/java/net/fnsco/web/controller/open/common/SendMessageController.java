@@ -22,7 +22,7 @@ import net.fnsco.core.utils.dto.MessageValidateDTO;
 public class SendMessageController extends BaseController{
 	
 	
-	@RequestMapping(value = "/sendMessage",method = RequestMethod.GET)
+	@RequestMapping(value = "/sendMessage",method = RequestMethod.POST)
 	@ApiOperation(value = "发送验证码")
 	public ResultDTO sendMessage(String mobile,String type){
 		MessageUtils mUtils = new MessageUtils();
