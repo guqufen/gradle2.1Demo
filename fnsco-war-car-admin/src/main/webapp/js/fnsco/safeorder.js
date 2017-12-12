@@ -36,7 +36,7 @@ $('#table').bootstrapTable({
         width:'10%'
     },{
         field: 'customerName',
-        title: '投保人'
+        title: '姓名'
     },{
         field: 'customerPhone',
         title: '手机号码',
