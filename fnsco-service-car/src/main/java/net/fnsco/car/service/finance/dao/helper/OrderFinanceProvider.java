@@ -88,6 +88,9 @@ public class OrderFinanceProvider {
         if(StringUtils.isNotBlank(orderFinance.getCustomerPhone())) {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderFinance.customerPhone})");
         }
+        if(orderFinance.getSysUserId() != null) {
+        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderFinance.sysUserId} AND type = 3)");
+        }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -126,6 +129,9 @@ public class OrderFinanceProvider {
         }
         if(StringUtils.isNotBlank(orderFinance.getCustomerPhone())) {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderFinance.customerPhone})");
+        }
+        if(orderFinance.getSysUserId() != null) {
+        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderFinance.sysUserId} AND type = 3) ");
         }
         }}.toString();
     }

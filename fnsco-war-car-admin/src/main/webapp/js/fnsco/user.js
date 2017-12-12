@@ -327,38 +327,37 @@ function clearDate(){
 //新增按钮事件
 $('#btn_add').click(function() {
 	clearDate();
-	requestAgent(null);
 	queryRole("role");
 	$('#addModal').modal();
 	$('#sexhide').hide();
 	$('#agentIdhide').hide();
 	$('#aliasnamehide').hide();
-	$('#mobilehide').hide();
-	$('#remarkhide').hide();
 });
 //新增确认按钮事件
 $('#btn_yes').click(function() {
 			var roleid=getRoleId("role");
 			 //获得当前选中的值
-			//var sex = $('#sex').val();
+//			var sex = $('#sex').val();
+			var type = $('#type').val();
 			var status = $('#status').val();
 			var username = $('#username').val();
 			var password = $('#password').val();
-			//var mobile = $('#mobile').val();
+			var mobile = $('#mobile').val();
 			var department = $('#department').val();
-			//var remark =$('#remark').val();
+			var remark =$('#remark').val();
 			var date = {
 					"name" : username,
 					"password" : password,
 					"roleList" : roleid,
-					//"mobile" : mobile,
+					"mobile" : mobile,
 					"department" : department,
+					'type':type,
 					//"sex" : sex,
 					"status" : status,
 					"realName" : $('#realname').val(),
 					//"aliasName" : $('#aliasname').val(),
 					//"agentId" : $('#agentId').val(),
-					//"remark" : remark
+					"remark" : remark
 				};
 			if (username == null || username.length == 0) {
 				layer.msg('用户名不能为空!');
