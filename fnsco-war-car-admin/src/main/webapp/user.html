@@ -115,10 +115,21 @@
 		                                   <option value="2">禁用</option>
 		                                </select>
 		                            </div>
-		                         	<div id="remarkhide" class="col-sm-8">
-	                                <label class="control-label" for="remark">备注：</label>
-	                                <textarea id="remark" name="remark" class="form-control" placeholder="最多50个字" rows="2"></textarea>	                                
-	                            </div>
+		                             <div class="col-sm-4">
+		                                <label class="control-label " for="type">帐号类型：</label>
+		                                <select id="type" name="type" class="form-control">
+		                                   <option value="1">管理员</option>
+		                                   <option value="2">运营商账号</option>
+		                                </select>
+		                            </div>
+		                            <div id="aliasnamehide" class="col-sm-4">
+		                                <label class="control-label" for="aliasname">所在城市：</label>
+		                                <input type="text" class="form-control" id="remark" name="aliasname" required="required" placeholder="所在城市">
+	                                </div>
+<!-- 		                         	<div id="remarkhide" class="col-sm-8"> -->
+<!-- 	                                <label class="control-label" for="remark">备注：</label> -->
+<!-- 	                                <textarea id="remark" name="remark" class="form-control" placeholder="最多50个字" rows="2"></textarea>	                                 -->
+<!-- 	                            </div> -->
 	                            <div>
 	                            <div class="col-sm-12">
 	                                <label class="control-label" for="role">角色：</label>

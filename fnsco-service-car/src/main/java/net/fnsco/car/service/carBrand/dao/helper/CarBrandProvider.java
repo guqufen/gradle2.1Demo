@@ -31,8 +31,8 @@ public class CarBrandProvider {
 
 		return new SQL() {
 			{
-				SELECT("*");
-		        FROM(TABLE_NAME);
+				SELECT("r.*, (select name from car_dic_type where id = r.supper_id) supperName");
+		        FROM(TABLE_NAME+" r");
 		        if(brandDO.getId() != null){
 		        	WHERE("id = #{carBrandDO.id}");
 		        }
@@ -93,10 +93,11 @@ public class CarBrandProvider {
 	
 	public String selectByCondition(Map<String, Object> params) {
 		CarBrandDO brandDO = (CarBrandDO) params.get("carBrandDO");
+		Integer limit = (Integer) params.get("limit");
 		return new SQL() {
 			{
-				SELECT("*");
-		        FROM(TABLE_NAME);
+				SELECT("r.*, (select name from car_dic_type where id = r.supper_id) supperName");
+		        FROM(TABLE_NAME+" r");
 		        if(brandDO.getId() != null){
 		        	WHERE("id = #{carBrandDO.id}");
 		        }
@@ -118,7 +119,38 @@ public class CarBrandProvider {
 		        if (brandDO.getIsHot() != null) {
 		        	WHERE("is_hot = #{carBrandDO.isHot}");
 				}
-		        ORDER_BY("id desc limit 8" );
+		        if( limit != null){
+		        	ORDER_BY("id desc limit 8" );
+		        }
+			}
+		}.toString();
+	}
+	
+	public String update(Map<String, Object> params) {
+		CarBrandDO brandDO = (CarBrandDO) params.get("carBrandDO");
+		return new SQL() {
+			{
+				UPDATE(TABLE_NAME);
+		        if ( !Strings.isNullOrEmpty(brandDO.getName()) ) {
+		        	SET("name = #{carBrandDO.name}");
+				}
+		        if (brandDO.getSupperId() != null) {
+		        	SET("supper_id = #{carBrandDO.supperId}");
+				}
+		        if (brandDO.getLevel() != null) {
+		        	SET("level = #{carBrandDO.level}");
+				}
+		        if ( !Strings.isNullOrEmpty(brandDO.getIconImgPath()) ) {
+		        	SET("icon_img_path = #{carBrandDO.iconImgPath}");
+				}
+		        if (!Strings.isNullOrEmpty(brandDO.getModal())) {
+		        	SET("model = #{carBrandDO.model}");
+				}
+		        if (brandDO.getIsHot() != null) {
+		        	SET("is_hot = #{carBrandDO.isHot}");
+				}
+		        WHERE("id = #{carBrandDO.id}");
+		    
 			}
 		}.toString();
 	}
