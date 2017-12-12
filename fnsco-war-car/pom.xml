@@ -89,7 +89,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>risk</finalName>
+		<finalName>car</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

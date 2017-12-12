@@ -1,8 +1,13 @@
 package net.fnsco.web.carBrand;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.alibaba.fastjson.JSONArray;
+
 import io.swagger.annotations.Api;
 import net.fnsco.car.service.carBrand.CarBrandService;
 import net.fnsco.car.service.carBrand.entity.CarBrandDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.OssLoaclUtil;
 
 @RestController
 @RequestMapping(value="/web/carBrand")
@@ -87,19 +95,92 @@ public class carBrandController extends BaseController{
 			return null;
 		}
 		
-		File f = new File("E:\\img\\brand\\"+name);
+		// 保存文件的路径
+		String prefix = name.substring(name.lastIndexOf(".") + 1);
+		
+		// 数据库存的路径
+		Calendar cal = Calendar.getInstance();
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH) + 1;
+		String stry = this.env.getProperty("fileUpload.url") + year;// +"\\"+month+"\\";
+		File yearPath = new File(stry);
 
-		try {
-			file.transferTo(f);
-			resultPath = "/img/brand/"+name;
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// 如果文件夹不存在则创建
+		if (!yearPath.exists()) {
+			logger.info("年份目录不存在");
+			yearPath.mkdirs();
+		} else {
+			logger.info("年份目录已存在");
 		}
 		
-		return ResultDTO.success(resultPath);
+		String strm = this.env.getProperty("fileUpload.url")  + year + month;
+		File monthPath = new File(strm);
+		if (!monthPath.exists()) {
+			logger.info("月份目录不存在");
+			monthPath.mkdirs();
+		} else {
+			logger.info("月份目录已存在");
+		}
+		
+		String yearMonthPath = year + month + "";
+		String newFileName = System.currentTimeMillis() + "." + prefix;
+		String fileKey = year + "/" + month + "/" + newFileName;
+		String filepath = yearMonthPath + newFileName;
+
+		String fileURL = this.env.getProperty("fileUpload.url") + filepath;
+		
+		if (!file.isEmpty()) {
+			try {
+				byte[] bytes = file.getBytes();
+				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileURL));
+				stream.write(bytes);
+				stream.close();
+				// 上传阿里云OSS文件服务器
+				OssLoaclUtil.uploadFile(fileURL, fileKey);
+				String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+//				fileInfo.setFilePath(newUrl);
+//				fileInfo.setFileType(fileType);
+//				fileInfo.setFileName(fileName);
+//				fileInfo.setCreateTime(new Date());
+//				ResultDTO<Integer> result = orderFileService.doAddToDB(fileInfo);
+//				if (result.isSuccess()) {
+//					ResultDTO<TreeMap<String, String>> appResult = null;
+//
+//					TreeMap<String, String> paras = new TreeMap<>();
+//					paras.put("id", String.valueOf(result.getData()));
+//					paras.put("url", newUrl);
+//					paras.put("fileType", fileType);
+//
+//					appResult = ResultDTO.success(paras);
+//					String json = isApp ? JSONArray.toJSONString(appResult) : JSONArray.toJSONString(paras);
+//					response.getWriter().write(json);
+//				} else {
+//					logger.error(fileName + "上传失败");
+//					throw new RuntimeException();
+//				}
+				return ResultDTO.success(newUrl);
+			} catch (Exception e) {
+				logger.error(name + "上传失败！" + e);
+				throw new RuntimeException();
+			}
+		} else {
+			logger.error(name + "上传失败");
+			throw new RuntimeException();
+		}
+		
+//		File f = new File("E:\\img\\brand\\"+name);
+//
+//		try {
+//			file.transferTo(f);
+//			resultPath = "/img/brand/"+name;
+//		} catch (IllegalStateException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+//		return fail();
 	}
 }
