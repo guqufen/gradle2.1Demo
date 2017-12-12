@@ -272,6 +272,8 @@ function sendCode(type){
 		type:'post',
 		data:{'mobile':$(".phone-num").val(),'type':type},
 		suceess:function(data){
+			console.log(data);
+			var setTime;
 			var time=60;
 			setTime=setInterval(function(){
                 if(time<=0){
