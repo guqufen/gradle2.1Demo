@@ -41,16 +41,15 @@ public class BuyCarApplyController extends BaseController {
 
 	@RequestMapping(value = "/add")
 	@ApiOperation(value = "买车申请-添加申请")
-	public ResultDTO<BuyCarVO> addJO(@RequestBody BuyCarJO jo,final HttpServletRequest req) {
-		final HttpSession httpSession=req.getSession();
+	public ResultDTO<BuyCarVO> addJO(@RequestBody BuyCarJO jo) {
 		String code = jo.getVerCode();
 		String mobile = jo.getMobile();
-		String type = jo.getBuyType();
+		String type = jo.getType();
 		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)||StringUtils.isEmpty(type)){
 			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
 		}
 		//获取session中验证码信息
-		MessageValidateDTO mDTO = (MessageValidateDTO) httpSession.getAttribute(CarServiceConstant.ApplyType.BUY_CAR_TYPE.getNameByType(type)+mobile);
+		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(CarServiceConstant.ApplyType.BUY_CAR_TYPE.getNameByType(type)+mobile);
 		if(mDTO == null){
 			return ResultDTO.fail();
 		}
