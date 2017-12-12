@@ -138,6 +138,7 @@ public class AppUserController extends BaseController {
         LoginVO loginVO = new LoginVO();
         loginVO.setHeadImagePath(appUserLoginInfoDTO.getHeadImagePath());
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
+        loginVO.setUserName(appUserLoginInfoDTO.getUserName());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {

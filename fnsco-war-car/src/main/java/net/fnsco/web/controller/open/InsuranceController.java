@@ -53,7 +53,8 @@ public class InsuranceController extends BaseController {
 		customerDO.setMobile(saveSafeJO.getMobile());
 		OrderSafeDO orderSafe = new OrderSafeDO();
 		orderSafe.setCityId(saveSafeJO.getCityId());
-		orderSafe.setCarOriginalPrice(saveSafeJO.getCarOriginalPrice());
+		BigDecimal carPrice = saveSafeJO.getCarOriginalPrice().multiply(new BigDecimal(100));
+		orderSafe.setCarOriginalPrice(carPrice);
 		Integer id = configService.queryIdByName(saveSafeJO.getName());
 		if(id==null) {
 			return ResultDTO.fail("没有找到相应的保险公司");
