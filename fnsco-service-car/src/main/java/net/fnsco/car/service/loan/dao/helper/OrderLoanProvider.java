@@ -82,6 +82,12 @@ public class OrderLoanProvider {
         if (orderLoan.getStatus() != null) {
             WHERE("status=#{orderLoan.status}");
         }
+        if(StringUtils.isNotBlank(orderLoan.getCustomerName())) {
+        	WHERE("customer_id in (select id from car_customer where name like CONCAT('%',#{orderLoan.customerName},'%'))");
+        }
+        if(StringUtils.isNotBlank(orderLoan.getCustomerPhone())) {
+        	WHERE("customer_id in (select id from car_customer where mobile = #{orderLoan.customerPhone})");
+        }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -114,6 +120,12 @@ public class OrderLoanProvider {
         }
         if (orderLoan.getStatus() != null) {
             WHERE("status=#{orderLoan.status}");
+        }
+        if(StringUtils.isNotBlank(orderLoan.getCustomerName())) {
+        	WHERE("customer_id in (select id from car_customer where name like CONCAT('%',#{orderLoan.customerName},'%'))");
+        }
+        if(StringUtils.isNotBlank(orderLoan.getCustomerPhone())) {
+        	WHERE("customer_id in (select id from car_customer where mobile = #{orderLoan.customerPhone})");
         }
         }}.toString();
     }

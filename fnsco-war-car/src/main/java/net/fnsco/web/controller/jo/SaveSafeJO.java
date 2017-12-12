@@ -16,21 +16,21 @@ public class SaveSafeJO extends JO {
 
 	private static final long serialVersionUID = 1L;
 
-	@ApiModelProperty(value="投资人姓名")
+	@ApiModelProperty(value="投资人姓名",name="name",example="投资人姓名")
 	private String name;// 投资人姓名
-	@ApiModelProperty(value="所在城市id")
+	@ApiModelProperty(value="所在城市id",name="cityId",example="所在城市id")
 	private Integer cityId;// 所在城市id
-	@ApiModelProperty(value="汽车原价")
+	@ApiModelProperty(value="汽车原价",name="carOriginalPrice",example="汽车原价")
 	private BigDecimal carOriginalPrice;// 汽车原价
-	@ApiModelProperty(value="保险公司ID")
-	private Integer insuCompanyId;// 保险公司ID
-	@ApiModelProperty(value="预估保费")
+	@ApiModelProperty(value="保险公司id",name="insuCompanyId",example="保险公司id")
+	private Integer insuCompanyId;// 保险公司id
+	/*@ApiModelProperty(value="预估保费",name="estiPremiums",example="预估保费")
 	private BigDecimal estiPremiums;// 预估保费
-	@ApiModelProperty(value="手机号码")
+*/	@ApiModelProperty(value="手机号码",name="mobile",example="手机号码")
 	private String mobile;// 手机号码
-	@ApiModelProperty(value="验证码")
+	@ApiModelProperty(value="验证码",name="code",example="验证码")
 	private String code;//验证码
-	@ApiModelProperty(value="推荐码")
+	@ApiModelProperty(value="推荐码",name="suggestCode",example="推荐码")
 	private Integer suggestCode;// 推荐码
 	/**
 	 * @return the name
@@ -82,16 +82,16 @@ public class SaveSafeJO extends JO {
 	}
 	/**
 	 * @return the estiPremiums
-	 */
+	 *//*
 	public BigDecimal getEstiPremiums() {
 		return estiPremiums;
 	}
-	/**
+	*//**
 	 * @param estiPremiums the estiPremiums to set
-	 */
+	 *//*
 	public void setEstiPremiums(BigDecimal estiPremiums) {
 		this.estiPremiums = estiPremiums;
-	}
+	}*/
 	/**
 	 * @return the mobile
 	 */
