@@ -22,7 +22,7 @@
 			</div>
 			<div class="mui-input-row">
 				<label>所在城市</label>
-				<input class="city" id='showCityPicker' placeholder="选择所在城市" type="text">
+				<input class="city" id='showCityPicker' placeholder="选择所在城市" readonly="true" type="text">
 				<input type="hidden" id="cityId">
 			</div>
 			<div class="mui-input-row">
@@ -37,11 +37,12 @@
 			<div class="mui-input-row">
 				<label>分期方案</label>
 				<input class="by-stages" id="showByStagesPicker" placeholder="选择分期方案" type="text">
+				<input id="byStages" type="hidden">
 			</div>
 			<div class="mui-input-row phone">
 				<label>手机号码</label>
 				<input class="phone-num" placeholder="输入手机号码" type="text">
-				<button class="send-code">发送验证码</button>
+				<button class="send-code" onclick="sendCode('01')">发送验证码</button>
 			</div>
 			<div class="mui-input-row">
 				<label>短信验证码</label>
@@ -51,7 +52,7 @@
 				<label>推荐码</label>
 				<input class="refrral-code" placeholder="输入推荐码" type="text">
 			</div>
-			<button class="sub-btn mui-btn" type="button" data-loading-text="提交中">提交</button>
+			<button class="sub-btn" onclick="subData('01')" type="button">提交</button>
 		</div>
 
 		<!-- 选择品牌 -->
@@ -106,58 +107,6 @@
 <script type="text/javascript" src="js/mui.poppicker.js"></script>
 <script type="text/javascript" src="js/custom.js"></script>
 <script type="text/javascript">
-	//右划关闭
-    mui.init({
-		swipeBack: true //启用右滑关闭功能
-	});
-    //弹框
-    (function($, doc) {
-		$.init();
-		$.ready(function() {
-			//选择城市
-			var cityPicker = new $.PopPicker();
-			$.ajax({
-				url:'../h5/city/queryCity',
-				type:'get',
-				success:function(data){
-					cityPicker.setData(data.data);
-				}
-			})
-
-			var byStagesPicker = new $.PopPicker();
-			byStagesPicker.setData([{
-				value: 12,
-				text: "12期"
-			}, {
-				value: 24,
-				text: '24期'
-			}, {
-				value: 36,
-				text: '36期'
-			}]);
-
-			var showCityPickerButton = doc.getElementById('showCityPicker');
-			var cityId = doc.getElementById('cityId');
-			showCityPickerButton.addEventListener('tap', function(event) {
-				cityPicker.show(function(items) {
-					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,4);
-					cityId.value = JSON.stringify(items[0].value);
-					//返回 false 可以阻止选择框的关闭
-					//return false;
-				});
-			}, false);
-			var showByStagesPickerBuuton =doc.getElementById('showByStagesPicker');
-			showByStagesPickerBuuton.addEventListener('tap', function(event) {
-				byStagesPicker.show(function(items) {
-					showByStagesPickerBuuton.value = JSON.stringify(items[0].value);
-					//返回 false 可以阻止选择框的关闭
-					//return false;
-				});
-			}, false);
-
-		});
-	})(mui, document);
+	start(true,true,false);
 </script>
-
-
 </html>
