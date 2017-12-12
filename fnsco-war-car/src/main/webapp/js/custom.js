@@ -177,7 +177,8 @@ function start(city,stages,insuranceCompany){
 			var cityId = doc.getElementById('cityId');
 			showCityPickerButton.addEventListener('tap', function(event) {
 				cityPicker.show(function(items) {
-					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,4);
+					var len=JSON.stringify(items[0].text).length;
+					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,len-1);
 					cityId.value = JSON.stringify(items[0].value);
 					//返回 false 可以阻止选择框的关闭
 					//return false;
@@ -199,9 +200,12 @@ function start(city,stages,insuranceCompany){
 				text: '36期'
 			}]);
 			var showByStagesPickerBuuton =doc.getElementById('showByStagesPicker');
+			var byStages =doc.getElementById('byStages');
 			showByStagesPickerBuuton.addEventListener('tap', function(event) {
 				byStagesPicker.show(function(items) {
-					showByStagesPickerBuuton.value = JSON.stringify(items[0].value);
+					var len=JSON.stringify(items[0].text).length;
+					showByStagesPickerBuuton.value = JSON.stringify(items[0].text).substring(1,len-1);
+					byStages.value= JSON.stringify(items[0].value);
 					//返回 false 可以阻止选择框的关闭
 					//return false;
 				});
@@ -223,8 +227,8 @@ function start(city,stages,insuranceCompany){
 			var insuranceCompanyId = doc.getElementById('insuranceCompanyId');
 			showInsuranceCompanyPickerButton.addEventListener('tap', function(event) {
 				insuranceCompanyPicker.show(function(items) {
-					var dataLen=JSON.stringify(items[0].text).length;
-					showInsuranceCompanyPickerButton.value = JSON.stringify(items[0].text).substring(1,dataLen-1);
+					var len=JSON.stringify(items[0].text).length;
+					showInsuranceCompanyPickerButton.value = JSON.stringify(items[0].text).substring(1,len-1);
 					insuranceCompanyId.value = JSON.stringify(items[0].value);
 					//返回 false 可以阻止选择框的关闭
 					//return false;
@@ -233,4 +237,75 @@ function start(city,stages,insuranceCompany){
 		}
 
 	})(mui, document);
+}
+
+
+//验证手机号码
+function istel(tel) {  
+    var rtn = false;  
+    //移动号段  
+    var regtel = /^((13[4-9])|(15([0-2]|[7-9]))|(18[2|3|4|7|8])|(178)|(147))[\d]{8}$/;  
+    if (regtel.test(tel)) {  
+        rtn = true;  
+    }  
+    //电信号段  
+    regtel = /^((133)|(153)|(18[0|1|9])|(177))[\d]{8}$/;  
+    if (regtel.test(tel)) {  
+        rtn = true;  
+    }  
+    //联通号段  
+    regtel = /^((13[0-2])|(145)|(15[5-6])|(176)|(18[5-6]))[\d]{8}$/;  
+    if (regtel.test(tel)) {  
+        rtn = true;  
+    }  
+    return rtn;  
+}
+
+//绑定按钮获取验证码
+function sendCode(type){
+	if(istel($(".phone-num").val())==false){ 
+	  	mui.alert("请输入正确的手机号"); 
+	  	return;
+	}
+	$.ajax({
+		url:'../h5/sendMessage',
+		type:'post',
+		data:{'mobile':$(".phone-num").val(),'type':type},
+		suceess:function(data){
+			var time=60;
+			setTime=setInterval(function(){
+                if(time<=0){
+                    clearInterval(setTime);
+                    $(".send-code").html('发送验证码');
+                	$(".send-code").attr('disabled',false);
+                    return;
+                }
+                time--;
+                $(".send-code").attr('disabled',true);
+				$(".send-code").html('重新发送'+time+'s');
+            },1000)
+		}
+	})
+}
+
+//提交按钮
+function subData(type){
+	for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
+		if($(".mui-content .mui-input-row").eq(i).find('input[type="text"]').val()==''){
+			var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
+			mui.alert(title+'不能为空');
+			return;
+		}else if(istel($(".phone-num").val())==false){ 
+			  mui.alert("请输入正确的手机号"); 
+			  return;
+		}
+	}
+	var name=$(".name").val();			//姓名
+	var cityId=$("#cityId").val();		//所在城市
+	var carTypeId=$(".carId").val();	//汽车品牌
+	var carModel=$(".model").val();		//汽车型号
+	var buyType=$("#byStages").val();	//分期方案
+	var mobile=$(".mobile").val();		//手机号码
+	var verCode=$(".phone-code").val();	//验证码
+	var suggestCode=$(".mobile").val();	//邀请码
 }

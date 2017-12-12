@@ -37,11 +37,12 @@
 			<div class="mui-input-row">
 				<label>分期方案</label>
 				<input class="by-stages" id="showByStagesPicker" placeholder="选择分期方案" type="text">
+				<input id="byStages" type="hidden">
 			</div>
 			<div class="mui-input-row phone">
 				<label>手机号码</label>
 				<input class="phone-num" placeholder="输入手机号码" type="text">
-				<button class="send-code">发送验证码</button>
+				<button class="send-code" onclick="sendCode(01)">发送验证码</button>
 			</div>
 			<div class="mui-input-row">
 				<label>短信验证码</label>
@@ -51,7 +52,7 @@
 				<label>推荐码</label>
 				<input class="refrral-code" placeholder="输入推荐码" type="text">
 			</div>
-			<button class="sub-btn mui-btn" type="button" data-loading-text="提交中">提交</button>
+			<button class="sub-btn" onclick="subData()" type="button">提交</button>
 		</div>
 
 		<!-- 选择品牌 -->
@@ -107,15 +108,5 @@
 <script type="text/javascript" src="js/custom.js"></script>
 <script type="text/javascript">
 	start(true,true,false);
-	$(".send-code").click(function(){
-		$.ajax({
-			url:'../h5/sendMessage',
-			type:'post',
-			data:{'mobile':$(".phone-num").val()},
-			suceess:function(data){
-				console.log(data);
-			}
-		})
-	})
 </script>
 </html>
