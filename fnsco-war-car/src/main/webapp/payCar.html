@@ -107,5 +107,15 @@
 <script type="text/javascript" src="js/custom.js"></script>
 <script type="text/javascript">
 	start(true,true,false);
+	$(".send-code").click(function(){
+		$.ajax({
+			url:'../h5/sendMessage',
+			type:'post',
+			data:{'mobile':$(".phone-num").val()},
+			suceess:function(data){
+				console.log(data);
+			}
+		})
+	})
 </script>
 </html>

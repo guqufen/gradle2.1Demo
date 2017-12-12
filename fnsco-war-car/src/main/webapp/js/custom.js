@@ -215,7 +215,7 @@ function start(city,stages,insuranceCompany){
 				url:'../h5/insu/queryInsu',
 				type:'get',
 				success:function(data){
-					console.log(data);
+					// console.log(data);
 					insuranceCompanyPicker.setData(data.data.insuList);
 				}
 			})
