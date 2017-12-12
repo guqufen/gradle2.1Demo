@@ -3,6 +3,8 @@ package net.fnsco.car.service.loan.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class OrderLoanDO {
 
 	/**
@@ -76,6 +78,10 @@ public class OrderLoanDO {
 	 */
 	private Integer status;
 	
+
+	/**
+	 * @return the carTypeId
+	 */
 	/**
 	 * customerName
 	 *
@@ -123,7 +129,7 @@ public class OrderLoanDO {
 	/**
 	 * cityName
 	 *
-	 * @return  the cityName
+	 * @return  the cityName 
 	 * @since   CodingExample Ver 1.0
 	*/
 	
@@ -154,22 +160,13 @@ public class OrderLoanDO {
 	}
 
 	/**
-	 * carTypeId
-	 *
-	 * @param   carTypeId    the carTypeId to set
-	 * @since   CodingExample Ver 1.0
+	 * @param carTypeId the carTypeId to set
 	 */
-	
+
 	public void setCarTypeId(Integer carTypeId) {
 		this.carTypeId = carTypeId;
 	}
 
-	/**
-	 * carTypeName
-	 *
-	 * @return  the carTypeName
-	 * @since   CodingExample Ver 1.0
-	*/
 	
 	public String getCarTypeName() {
 		return carTypeName;
@@ -198,12 +195,9 @@ public class OrderLoanDO {
 	}
 
 	/**
-	 * carModel
-	 *
-	 * @param   carModel    the carModel to set
-	 * @since   CodingExample Ver 1.0
+	 * @param carModel the carModel to set
 	 */
-	
+
 	public void setCarModel(String carModel) {
 		this.carModel = carModel;
 	}
@@ -272,10 +266,13 @@ public class OrderLoanDO {
 		this.status = status;
 	}
 
+	
 	@Override
 	public String toString() {
-		return "[id=" + id + ", customerId=" + customerId + ", cityId=" + cityId + ", amount=" + amount
+		return "OrderLoanDO [id=" + id + ", customerId=" + customerId + ", cityId=" + cityId + ", amount=" + amount
 				+ ", suggestCode=" + suggestCode + ", createTime=" + createTime + ", lastUpdateTime=" + lastUpdateTime
-				+ ", status=" + status + "]";
+				+ ", status=" + status + ", carTypeId=" + carTypeId + ", carModel=" + carModel + "]";
 	}
+
+	
 }

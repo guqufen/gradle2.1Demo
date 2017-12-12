@@ -7,6 +7,9 @@
     top: 0;
     z-index: 999;
     background: #efeff4;
+    min-height: 100%;
+    width: 100%;
+    display: none;
 }
 .brand-nav{
 	position: fixed;
@@ -14,7 +17,6 @@
 	top: 0;
 	right: 0;
 	width: 1rem;
-	height: 100%;
 	background: #efeff4;
 }
 .brand-nav a{
@@ -79,6 +81,9 @@
 	text-align: center;
 	font-size: 0.55rem;
 	color: #333;
+	white-space:nowrap; 
+	overflow:hidden; 
+	text-overflow:ellipsis;
 }
 /*brand 品牌*/
 .brand-list-list{
@@ -143,4 +148,46 @@
 }
 .brand-con:last-child .brand-text:before{
 	height: 0;
+}
+
+/*品牌子系列*/
+.child-brand{
+	display: none;
+}
+.child-brand.popup{
+	position: absolute;
+	top: 0;
+	width: 100%;
+	background: #f4f4f4;
+	z-index: 999;
+	display: none;
+}
+
+.close{
+	position: absolute;
+	right: 0.5rem;
+	top: 0.5rem;
+	z-index: 999;
+	width: 0.8rem;
+	height: 0.8rem;
+}
+.close span{
+	width: 0.8rem;
+	height: 0.1rem;
+	background: #fd6804;
+	line-height: 0;
+	font-size:0;
+	vertical-align: middle;
+	-webkit-transform: rotate(45deg);
+	position: absolute;
+	top: 0.4rem;
+	left: 0;
+}
+.close span:after{
+	content:'/';
+	display:block;
+	width: 0.8rem;
+	height: 0.1rem;
+	background: #fd6804;
+	-webkit-transform: rotate(-90deg);
 }

@@ -3,6 +3,7 @@ package net.fnsco.car.service.loan;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import net.fnsco.car.service.city.DicCityService;
 import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.customer.CustomerService;
 import net.fnsco.car.service.customer.entity.CustomerDO;
+import net.fnsco.car.service.file.OrderFileService;
+import net.fnsco.car.service.file.entity.OrderFileDO;
 import net.fnsco.car.service.loan.dao.OrderLoanDAO;
 import net.fnsco.car.service.loan.entity.OrderLoanDO;
 import net.fnsco.core.base.BaseService;
@@ -29,6 +32,7 @@ public class OrderLoanService extends BaseService {
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
+	private OrderFileService orderFileService;
 	private DicCityService dicCityService;
 	@Autowired
 	private CarBrandService carBrandService;
@@ -92,7 +96,8 @@ public class OrderLoanService extends BaseService {
 		return obj;
 	}
 
-	public ResultDTO<Object> addJo(OrderLoanDO orderLoan, CustomerDO customer) {
+
+	public ResultDTO<Object> addJo(OrderLoanDO orderLoan, CustomerDO customer, String fileIds) {
 		customer = customerService.addCustomer(customer);
 		if (customer.getId() == null) {
 			return ResultDTO.fail("客户信息新增失败");
@@ -102,6 +107,19 @@ public class OrderLoanService extends BaseService {
 		orderLoan.setLastUpdateTime(new Date());
 		orderLoan.setStatus(0);
 		orderLoanDAO.insert(orderLoan);
+		if (orderLoan.getId() == null) {
+			return ResultDTO.fail();
+		}
+		// 更新文件信息
+		if (!StringUtils.isEmpty(fileIds)) {
+			OrderFileDO orderFile = new OrderFileDO();
+			String[] ids = fileIds.split(",");
+			for (String id : ids) {
+				orderFile.setId(Integer.parseInt(id));
+				orderFile.setOrderNo(orderLoan.getId().toString());
+				orderFileService.doUpdate(orderFile, 0);
+			}
+		}
 		return ResultDTO.success();
 	}
 }

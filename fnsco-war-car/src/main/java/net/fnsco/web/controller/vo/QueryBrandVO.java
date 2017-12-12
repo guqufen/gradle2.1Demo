@@ -2,7 +2,7 @@ package net.fnsco.web.controller.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class QueryCityVO {
+public class QueryBrandVO {
 	 
 	@ApiModelProperty(value = "value", name = "value", example = "城市id")
     private Integer value;
@@ -36,6 +36,14 @@ public class QueryCityVO {
 	 */
 	public void setText(String text) {
 		this.text = text;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "QueryBrandVO [value=" + value + ", text=" + text + "]";
 	}
 
 	

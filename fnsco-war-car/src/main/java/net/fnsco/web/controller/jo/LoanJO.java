@@ -28,6 +28,82 @@ public class LoanJO {
 	 */
 	@ApiModelProperty(value = "suggestCode", name = "suggestCode", example = "推荐码")
 	private Integer suggestCode;
+	
+	
+	/////////////////////////////////////////
+	/**
+	 * 验证码
+	 */
+	@ApiModelProperty(value = "verCode", name = "verCode", example = "验证码")
+	private String verCode;
+	/**
+	 * 车品牌
+	 */
+	@ApiModelProperty(value = "carTypeId", name = "carTypeId", example = "车品牌")
+	private Integer carTypeId;
+	/**
+	 * 车型号
+	 */
+	@ApiModelProperty(value = "carModel", name = "carModel", example = "车型号")
+	private String carModel;
+
+	@ApiModelProperty(value = "fileIds", name = "fileIds", example = "文件id")
+	private String fileIds;
+	/**
+	 * @return the fileIds
+	 */
+	public String getFileIds() {
+		return fileIds;
+	}
+
+	/**
+	 * @param fileIds the fileIds to set
+	 */
+	public void setFileIds(String fileIds) {
+		this.fileIds = fileIds;
+	}
+
+	/**
+	 * @return the verCode
+	 */
+	public String getVerCode() {
+		return verCode;
+	}
+
+	/**
+	 * @param verCode the verCode to set
+	 */
+	public void setVerCode(String verCode) {
+		this.verCode = verCode;
+	}
+
+	/**
+	 * @return the carTypeId
+	 */
+	public Integer getCarTypeId() {
+		return carTypeId;
+	}
+
+	/**
+	 * @param carTypeId the carTypeId to set
+	 */
+	public void setCarTypeId(Integer carTypeId) {
+		this.carTypeId = carTypeId;
+	}
+
+	/**
+	 * @return the carModel
+	 */
+	public String getCarModel() {
+		return carModel;
+	}
+
+	/**
+	 * @param carModel the carModel to set
+	 */
+	public void setCarModel(String carModel) {
+		this.carModel = carModel;
+	}
 
 	/**
 	 * @return the name

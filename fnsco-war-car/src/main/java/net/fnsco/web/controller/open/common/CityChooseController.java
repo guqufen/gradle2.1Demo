@@ -1,5 +1,6 @@
 package net.fnsco.web.controller.open.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.web.controller.vo.QueryCityVO;
 
 @RestController
-@RequestMapping(value = "/api/city", method = RequestMethod.POST)
-@Api(value = "/api/city", tags = { "业务申请-查询城市" })
+@RequestMapping(value = "/h5/city", method = RequestMethod.GET)
+@Api(value = "/h5/city", tags = { "业务申请-查询城市" })
 public class CityChooseController extends BaseController {
 	@Autowired
 	private DicCityService dicCityService;
@@ -26,13 +27,14 @@ public class CityChooseController extends BaseController {
 	@RequestMapping(value = "/queryCity")
 	@ApiOperation(value = "买车申请-查询城市")
 	public ResultDTO<List<QueryCityVO>> queryCityList() {
-		List<QueryCityVO> resultList = null;
-		QueryCityVO queryCity = new QueryCityVO();
+		List<QueryCityVO> resultList = new ArrayList<>();
+//		QueryCityVO queryCity = new QueryCityVO();
 		List<DicCityDO> list = dicCityService.queryCityList();
 		if (list.size() > 0) {
 			for (DicCityDO dicCityDO : list) {
-				queryCity.setId(dicCityDO.getId());
-				queryCity.setName(dicCityDO.getName());
+				QueryCityVO queryCity = new QueryCityVO();
+				queryCity.setValue(dicCityDO.getId());
+				queryCity.setText(dicCityDO.getName());
 				resultList.add(queryCity);
 			}
 		}
