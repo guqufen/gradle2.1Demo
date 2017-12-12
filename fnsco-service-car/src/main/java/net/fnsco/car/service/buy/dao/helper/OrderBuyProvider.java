@@ -101,7 +101,7 @@ public class OrderBuyProvider {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderBuy.customerPhone})");
         }
         if(orderBuy.getSysUserId() != null) {
-        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderBuy.sysUserId})  AND type = 0");
+        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderBuy.sysUserId} AND type = 0)");
         }
         
         ORDER_BY("id desc limit " + start + ", " + limit );
