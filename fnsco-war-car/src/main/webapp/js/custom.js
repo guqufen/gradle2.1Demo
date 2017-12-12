@@ -147,3 +147,102 @@ $("#carBrand").click(function(){
 	getHotCarBrand(true);
 	$(".brand.popup").show();
 })
+
+
+/*
+*start传参为boole值
+*	city是否启动城市选择
+	stages是否启动分期方案
+	insuranceCompany是否意向投保公司
+*/
+function start(city,stages,insuranceCompany){
+	//右划关闭
+	mui.init({
+		swipeBack: true //启用右滑关闭功能
+	});
+	//弹框
+	(function($, doc) {
+		$.init();
+		if(city==true){
+			//选择城市
+			var cityPicker = new $.PopPicker();
+			$.ajax({
+				url:'../h5/city/queryCity',
+				type:'get',
+				success:function(data){
+					cityPicker.setData(data.data);
+				}
+			})
+			var showCityPickerButton = doc.getElementById('showCityPicker');
+			var cityId = doc.getElementById('cityId');
+			showCityPickerButton.addEventListener('tap', function(event) {
+				cityPicker.show(function(items) {
+					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,4);
+					cityId.value = JSON.stringify(items[0].value);
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+				});
+			}, false);
+		}
+
+		if(stages==true){
+			//选择分期方案
+			var byStagesPicker = new $.PopPicker();
+			byStagesPicker.setData([{
+				value: 12,
+				text: "12期"
+			}, {
+				value: 24,
+				text: '24期'
+			}, {
+				value: 36,
+				text: '36期'
+			}]);
+			var showByStagesPickerBuuton =doc.getElementById('showByStagesPicker');
+			showByStagesPickerBuuton.addEventListener('tap', function(event) {
+				byStagesPicker.show(function(items) {
+					showByStagesPickerBuuton.value = JSON.stringify(items[0].value);
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+				});
+			}, false);
+		}
+
+		if(insuranceCompany==true){
+			//选择意向投保公司
+			var insuranceCompanyPicker = new $.PopPicker();
+			$.ajax({
+				url:'../h5/insu/queryInsu',
+				type:'get',
+				success:function(data){
+					console.log(data);
+				}
+			})
+			insuranceCompanyPicker.setData([{
+				value: 1,
+				text: "太平洋保险有限公司"
+			}, {
+				value: 2,
+				text: '中国人寿保险有限公司'
+			}, {
+				value: 3,
+				text: '平安保险有限公司'
+			},{
+				value: 4,
+				text: '新华保险有限公司'
+			}]);
+			var showInsuranceCompanyPickerButton = doc.getElementById('showInsuranceCompanyPicker');
+			var insuranceCompanyId = doc.getElementById('insuranceCompanyId');
+			showInsuranceCompanyPickerButton.addEventListener('tap', function(event) {
+				insuranceCompanyPicker.show(function(items) {
+					var dataLen=JSON.stringify(items[0].text).length;
+					showInsuranceCompanyPickerButton.value = JSON.stringify(items[0].text).substring(1,dataLen-1);
+					insuranceCompanyId.value = JSON.stringify(items[0].value);
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+				});
+			}, false);
+		}
+
+	})(mui, document);
+}
