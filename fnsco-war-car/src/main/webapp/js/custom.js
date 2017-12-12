@@ -271,8 +271,9 @@ function sendCode(type){
 		url:'../h5/sendMessage',
 		type:'post',
 		data:{'mobile':$(".phone-num").val(),'type':type},
-		suceess:function(data){
-			console.log(data);
+		success:function(data){
+			console.log(data.data);
+			mui.toast('验证码已发送');
 			var setTime;
 			var time=60;
 			setTime=setInterval(function(){
@@ -304,10 +305,30 @@ function subData(type){
 	}
 	var name=$(".name").val();			//姓名
 	var cityId=$("#cityId").val();		//所在城市
-	var carTypeId=$(".carId").val();	//汽车品牌
+	var carTypeId=$("#carId").val();	//汽车品牌
 	var carModel=$(".model").val();		//汽车型号
 	var buyType=$("#byStages").val();	//分期方案
-	var mobile=$(".mobile").val();		//手机号码
+	var mobile=$(".phone-num").val();	//手机号码
 	var verCode=$(".phone-code").val();	//验证码
-	var suggestCode=$(".mobile").val();	//邀请码
+	var suggestCode=$(".refrral-code").val();	//邀请码
+
+	var data;//提交参数
+	var url;//提交请求地址
+
+	if(type==01){//买车申请
+		data={'name':name,'cityId':cityId,'carTypeId':carTypeId,'carModel':carModel,'buyType':buyType,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
+		url='../h5/buyCar/add';
+		console.log(data,url)
+	}
+	$.ajax({
+		url:url,
+		type:'post',
+		data:data,
+		// dataType:'json',
+		contentType:'application/json',
+		success:function(data){
+			console.log(data);
+			mui.toast('提交成功');
+		}
+	})
 }

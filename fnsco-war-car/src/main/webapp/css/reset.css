@@ -214,3 +214,24 @@ button:enabled:active,.mui-btn:enabled:active, .mui-btn.mui-active:enabled{
 .mui-popup-button:first-child:last-child {
     border-radius: 0 0 0.5rem 0.5rem;
 }
+
+.mui-toast-container{
+    line-height: 0.75rem;
+    position: fixed;
+    z-index: 9999;
+    bottom: 50%;
+    left: 50%;
+    -webkit-transition: opacity .3s;
+    transition: opacity .3s;
+    -webkit-transform: translate(-50%, 0);
+    transform: translate(-50%, 0);
+    opacity: 0;
+}
+.mui-toast-message {
+    font-size: 0.55rem;
+    padding: 0.4rem 1.4rem;
+    text-align: center;
+    color: #fff;
+    border-radius: 0.3rem;
+    background-color: #323232;
+}
