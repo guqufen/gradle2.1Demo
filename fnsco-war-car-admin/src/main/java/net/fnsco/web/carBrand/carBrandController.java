@@ -1,8 +1,16 @@
 package net.fnsco.web.carBrand;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import io.swagger.annotations.Api;
 import net.fnsco.car.service.carBrand.CarBrandService;
@@ -18,6 +26,8 @@ public class carBrandController extends BaseController{
 
 	@Autowired
 	private CarBrandService carBrandService;
+	@Autowired
+	private Environment env;
 	
 	@RequestMapping(value = "/list")
 //	@RequiresPermissions(value = { "car:brand:list" })
@@ -51,5 +61,46 @@ public class carBrandController extends BaseController{
 
 //		carBrandService.delete(carBrandDO);
 		return carBrandService.delete(carBrandDO);
+	}
+	
+	/**
+	 * 图片上传(导入)
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/doImport")
+	public ResultDTO doImport(@Param("id") Integer id){
+		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+		MultipartFile file = fileMap.get("excel_file_risk_inf");
+		
+		// 判断文件是否为空
+		if (file == null) {
+			return null;
+		}
+		// 获取文件名
+		String name = file.getOriginalFilename();
+		String resultPath = null;
+
+		// 判断文件是否为空（即判断其大小是否为0或其名称是否为null）
+		long size = file.getSize();
+		if (name == null || ("").equals(name) && size == 0) {
+			return null;
+		}
+		
+		File f = new File("E:\\img\\brand\\"+name);
+
+		try {
+			file.transferTo(f);
+			resultPath = "/img/brand/"+name;
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return ResultDTO.success(resultPath);
 	}
 }
