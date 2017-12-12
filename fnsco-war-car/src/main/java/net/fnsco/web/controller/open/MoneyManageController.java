@@ -42,7 +42,7 @@ public class MoneyManageController extends BaseController {
 			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
 		}
 		//获取session中验证码信息
-		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(CarServiceConstant.ApplyType.BUY_CAR_TYPE.getNameByType(type)+mobile);
+		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
 		if(mDTO == null){
 			return ResultDTO.fail();
 		}

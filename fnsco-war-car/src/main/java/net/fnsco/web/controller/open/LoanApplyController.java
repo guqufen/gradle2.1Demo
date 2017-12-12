@@ -12,11 +12,13 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +28,7 @@ import com.alibaba.fastjson.JSONArray;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.car.comm.CarServiceConstant;
 import net.fnsco.car.service.city.DicCityService;
 import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.customer.entity.CustomerDO;
@@ -37,6 +40,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.MessageUtils;
 import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.core.utils.dto.MessageValidateDTO;
 import net.fnsco.web.controller.jo.LoanJO;
 import net.fnsco.web.controller.vo.LoanVO;
 import net.fnsco.web.controller.vo.QueryCityVO;
@@ -56,15 +60,24 @@ public class LoanApplyController extends BaseController {
 	@RequestMapping(value = "/add")
 	@ApiOperation(value = "贷款申请-添加申请")
 	public ResultDTO<LoanVO> addJO(@RequestBody LoanJO jo) {
-		//校验验证码
-		String deviceId = "fns";
-		String verCode = jo.getVerCode();
-		MessageUtils mUtils = new MessageUtils();
-		ResultDTO<Object> rt = mUtils.validateCode(deviceId, verCode, jo.getMobile());
-		if(!rt.isSuccess()){
+		// 校验验证码
+		String code = jo.getVerCode();
+		String mobile = jo.getMobile();
+		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
+			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
+		}
+		// 获取session中验证码信息
+		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
+		if (mDTO == null) {
+			return ResultDTO.fail();
+		}
+		// 校验验证码是否正确
+		MessageUtils utils = new MessageUtils();
+		ResultDTO<Object> rt = utils.validateCode2(code, mobile, mDTO);
+		if (!rt.isSuccess()) {
 			return ResultDTO.fail(rt.getMessage());
 		}
-		
+
 		CustomerDO customer = new CustomerDO();
 		customer.setName(jo.getName());
 		customer.setMobile(jo.getMobile());
@@ -73,11 +86,11 @@ public class LoanApplyController extends BaseController {
 		orderLoan.setCityId(jo.getCityId());
 		orderLoan.setAmount(jo.getAmount());
 		orderLoan.setSuggestCode(jo.getSuggestCode());
-		orderLoan.setCarTypeId(jo.getCarTypeId());//车品牌id
-		orderLoan.setCarModel(jo.getMobile());//车型号
-		
-		String fileIds = jo.getFileIds();//上传的图片id
-		ResultDTO<Object> result = orderLoanService.addJo(orderLoan, customer,fileIds);
+		orderLoan.setCarTypeId(jo.getCarTypeId());// 车品牌id
+		orderLoan.setCarModel(jo.getMobile());// 车型号
+
+		String fileIds = jo.getFileIds();// 上传的图片id
+		ResultDTO<Object> result = orderLoanService.addJo(orderLoan, customer, fileIds);
 		if (result.isSuccess()) {
 			return ResultDTO.success("提交成功");
 		} else {
@@ -85,14 +98,13 @@ public class LoanApplyController extends BaseController {
 		}
 	}
 
-	
 	@ResponseBody
 	@RequestMapping(value = "/fileInfo/upload", produces = "text/html;charset=UTF-8")
-	public String upload() {
+	@ApiOperation(value = "上传图片")
+	public String upload( MultipartFile importFile) {
 		return commImport(request, response, true);
 	}
 
-	
 	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();

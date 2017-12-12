@@ -28,7 +28,7 @@ public class SendMessageController extends BaseController{
 		MessageUtils mUtils = new MessageUtils();
 		//获取六位验证码
 		MessageValidateDTO mvDTO = mUtils.getValidateCode(mobile);
-		this.session.setAttribute(CarServiceConstant.ApplyType.BUY_CAR_TYPE.getNameByType(type)+mobile,mvDTO);  //验证码放入session
+		this.session.setAttribute(mobile,mvDTO);  //验证码放入session
 	    String code = mvDTO.getCode();
 		//发送验证码
 		ResultDTO result = mUtils.sendValidateCode(mobile,code);
