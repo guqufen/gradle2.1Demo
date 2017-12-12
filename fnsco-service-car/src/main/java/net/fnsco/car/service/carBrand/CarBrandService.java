@@ -63,24 +63,40 @@ public class CarBrandService extends BaseService {
 	 * 
 	 * @param carBrandDO
 	 */
-	public void update(CarBrandDO carBrandDO) {
+	public ResultDTO update(CarBrandDO carBrandDO) {
+
+		// 先通过id查找更新前数据
+		CarBrandDO carBrandDO2 = carBrandDAO.getById(carBrandDO.getId());
+
+		// 如果上级菜单id发生变化，则通过supperId=id去查找该id是否下挂下级菜单
+		if (carBrandDO2.getSupperId() != carBrandDO.getSupperId()) {
+			CarBrandDO carBrandDO3 = new CarBrandDO();
+
+			// 设置supperId，查询是否含有下级id
+			carBrandDO3.setSupperId(carBrandDO.getId());
+			List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO3, null);
+			if (list.size() > 0) {
+				return ResultDTO.fail("有下级菜单，请先处理好下级菜单再执行本次更新，本次更新无效");
+			}
+		}
 		carBrandDAO.update(carBrandDO);
+		return ResultDTO.success();
 	}
-	
+
 	/**
 	 * 根据ID删除数据
 	 * 
 	 * @param carBrandDO
 	 */
 	public ResultDTO<Object> delete(CarBrandDO carBrandDO) {
-		if (carBrandDO.getLevel() != 3) {
+
 			CarBrandDO carBrandDO2 = new CarBrandDO();
 			carBrandDO2.setSupperId(carBrandDO.getId());
 			List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO2, null);
 			if (list.size() > 0) {
-				return ResultDTO.fail("有下级菜单，请先将下级菜单删除再执行本次删除");
+				return ResultDTO.fail("有下级菜单，请先处理好下级菜单再执行本次删除,本次删除无效");
 			}
-		}
+
 		carBrandDAO.delete(carBrandDO);
 		return ResultDTO.success();
 	}
@@ -169,7 +185,7 @@ public class CarBrandService extends BaseService {
 
 	public ResultDTO selectChild(Integer id) {
 
-		// 通过父id查找关联的子Id(二级子id和三级子id)
+		// 通过父id查找关联的子Id(二级子id和三级子id和四级id)
 		List<CarBrandDO> list = carBrandDAO.selectChild(id);
 		return ResultDTO.success(list);
 	}

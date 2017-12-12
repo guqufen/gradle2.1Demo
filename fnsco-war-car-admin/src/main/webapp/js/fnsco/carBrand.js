@@ -50,7 +50,7 @@ function initTableData() {
 			formatter:formatIcon
 		}, {
 			field : 'level',
-			title : '类型',
+			title : '级别',
 			width : 40,
 			formatter:formatType
 		}, {
@@ -94,21 +94,17 @@ function queryParams(params) {
  */
 function formatIcon(value, row, index) {
 	if(row.level == 1){
-		return '<img src="'+value+'" class="img-responsive" alt="Cinque Terre">';
+		return '<img src="'+value+'" class="img-responsive" alt="Cinque Terre" height="30" width="30">';
 	}else{
 		return '-';
 	}
 }
 
 function formatType(value, row, index) {
-	if (value === 1) {
-		return '<span class="label label-primary">一级菜单</span>';
-	}
-	if (value === 2) {
-		return '<span class="label label-success">二级菜单</span>';
-	}
-	if (value === 3) {
-		return '<span class="label label-warning">三级菜单</span>';
+	if (value != null) {
+		return '<span>'+value+'级菜单</span>';
+	}else{
+		return '';
 	}
 }
 
@@ -132,31 +128,8 @@ function clearInput(){
 	$('#isHot').val(null);
 	$('#iconImgPath').val(null);
 	$('#model').val(null);
-	$(':radio').attr('checked', false);
+	$('#level').val(null);
 }
-
-// 绑定按钮点击事件(目录/菜单/按钮所展示的页面不同)
-$(':radio').click(function() {
-	if(this.value == "1"){
-
-		$('#menuNameDiv').show();
-		$('#parentNameDiv').show();
-		$('#iconImgPathDiv').show();
-		$('#isHotDiv').show();
-	}else if(this.value == "2"){
-
-		$('#menuNameDiv').show();
-		$('#parentNameDiv').show();
-		$('#iconImgPathDiv').hide();
-		$('#isHotDiv').hide();
-	}else if(this.value == "3"){
-
-		$('#menuNameDiv').show();
-		$('#parentNameDiv').show();
-		$('#iconImgPathDiv').hide();
-		$('#isHotDiv').hide();
-	}
-});
 
 //菜单数树
 function getMenuTree(id){
@@ -179,7 +152,6 @@ function getMenuTree(id){
 	$.ajax({
 		type : 'POST',
 		url : PROJECT_NAME + '/web/carBrand/selectMenuTree',
-//		data:{'level':$('input[name="team"]:checked').val()-1},
 		async: false,//同步加载
 		success : function(data) {
 			if (data.success) {
@@ -233,6 +205,7 @@ function MenuTreeGet() {
 			if (node.length != 0) {
 				$('#parentName').val(node[0].name);
 				$('#parentId').val(node[0].id);
+				$('#level').val(node[0].level+1);
 				layer.close(index);
 
 			} else {
@@ -249,12 +222,6 @@ $('#btn_add').click(function() {
 	
 	//先清掉相关数据，设置menuType默认选中,并展示相应菜单
 	clearInput();
-	$('input[id=menuType]').prop('checked', 'checked');//固有属性用prop
-
-	$('#menuNameDiv').show();
-	$('#parentNameDiv').show();
-	$('#iconImgPathDiv').hide();
-	$('#isHotDiv').hide();
 
 	//给当前菜单ID置空,防止与修改功能串线
 	$('#id').val(null);
@@ -289,39 +256,19 @@ $('#btn_edit').click(
 				$('#id').val(selectContent[0].id);
 
 				$('#menuName').val(selectContent[0].name);
-				$('#parentId').val(selectContent[0].supperId);
-				$('#parentName').val(selectContent[0].supperName);
+				if(selectContent[0].supperId != 0){
+					$('#parentId').val(selectContent[0].supperId);
+					$('#parentName').val(selectContent[0].supperName);
+				}else{
+					$('#parentId').val(0);
+					$('#parentName').val("总菜单");
+				}
+
 				$('#model').val(selectContent[0].model);
 				$('#iconImgPath').val(selectContent[0].iconImgPath);
 				$('#isHot option[value=' + selectContent[0].isHot + ']').attr(
 						'selected', true);
-
-				// 设置单选按钮的值
-				$("input[name=team]").each(function() {
-					if (this.value == selectContent[0].level) {
-
-						this.checked = true;// 修改默认选中
-						if (this.value == "1") {
-
-							$('#menuNameDiv').show();
-							$('#parentNameDiv').show();
-							$('#iconImgPathDiv').show();
-							$('#isHotDiv').show();
-						} else if (this.value == "2") {
-
-							$('#menuNameDiv').show();
-							$('#parentNameDiv').show();
-							$('#iconImgPathDiv').hide();
-							$('#isHotDiv').hide();
-						} else if (this.value == "3") {
-
-							$('#menuNameDiv').show();
-							$('#parentNameDiv').show();
-							$('#iconImgPathDiv').hide();
-							$('#isHotDiv').hide();
-						}
-					}
-				});
+				$('#level').val(selectContent[0].level);
 			}
 		})
 
@@ -372,7 +319,7 @@ function saveOrUpdate() {
 		'id' : $('#id').val(),//当前菜单ID(修改时会带这个值)
 		'name' : $('#menuName').val(),//菜单名称
 		'supperId':$('#parentId').val(),
-		'level' : $('input[name="team"]:checked').val(),
+		'level' : $('#level').val(),
 		'model':$('#model').val(),
 		'iconImgPath':$('#iconImgPath').val()
 	}

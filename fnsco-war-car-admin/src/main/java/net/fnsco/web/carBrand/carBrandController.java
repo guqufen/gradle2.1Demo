@@ -52,8 +52,7 @@ public class carBrandController extends BaseController{
 	@RequestMapping(value = "/doUpdate")
 	public ResultDTO doUpdate(CarBrandDO carBrandDO) {
 
-		carBrandService.update(carBrandDO);
-		return success();
+		return carBrandService.update(carBrandDO);
 	}
 	
 	@RequestMapping(value = "/delete")

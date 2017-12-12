@@ -75,10 +75,11 @@ textarea {
 								<div role="tabpanel" class="tab-pane active" id="home">
 									<form class="form-horizontal">
 										<div class="form-group">
-											<div class="col-sm-2 control-label" id="oType">类型</div>
+										<div class="col-sm-2 control-label" id="level"></div>
+											<!-- <div class="col-sm-2 control-label" id="oType">级别</div>
 											<input id="contentType" value="1" name="team" type="radio" />一级汽车品牌
 											<input id="menuType" value="2" name="team" type="radio" />二级汽车品牌
-											<input id="btnType" value="3" name="team" type="radio" />三级汽车品牌
+											<input id="btnType" value="3" name="team" type="radio" />三级汽车品牌 -->
 										</div>
 
 										<div class="form-group" id="menuNameDiv">
@@ -103,22 +104,16 @@ textarea {
 
 										<div class="form-group" id="iconImgPathDiv">
 											<div class="col-sm-2 control-label">图标地址URL</div>
+											<div class="col-sm-10">
 											<input type="text" class="form-control" name="iconImgPath"
 													id="iconImgPath" disabled="disabled" />
+											</div>
 											<div class="col-sm-10">
 												<button type="button" id="btn_import" class="btn btn-info"
 													onclick="javascript:importEvent();">
 													<span class="glyphicon glyphicon-import"></span>导入图标
 												</button>
-												<!-- <div id="trend-chart" style="height: 40px">
-													<div class="bar"></div>
-													<div id="chart"></div>
-												</div> -->
 											</div>
-											<!-- <div class="col-sm-10">
-												<input type="text" class="form-control" name="iconImgPath"
-													id="iconImgPath" placeholder="图标地址URL,图片上传功能" />
-											</div> -->
 										</div>
 										<div class="form-group" id="modelDiv">
 											<div class="col-sm-2 control-label">所属车型</div>
@@ -162,10 +157,6 @@ textarea {
 						<div class="modal-body">
 							<div class="tab-content">
 								<div class="modal-header">
-									<!-- <button type="button" id="btn_down" class="btn btn-info"
-										onclick="javascript:downEvent();">
-										<span class="glyphicon glyphicon-download-alt"></span>下载模板
-									</button> -->
 								</div>
 								<input type="file" name="excel_file_risk_inf"
 									id="excel_file_risk_inf" multiple class="file-loading" />
