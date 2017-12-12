@@ -27,8 +27,8 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             SET("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (StringUtils.isNotBlank(orderBuy.getCarModel())){
-            SET("car_model=#{orderBuy.carModel}");
+        if (StringUtils.isNotBlank(orderBuy.getCarSubTypeId())){
+            SET("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
             SET("buy_type=#{orderBuy.buyType}");
@@ -76,8 +76,8 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             WHERE("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (StringUtils.isNotBlank(orderBuy.getCarModel())){
-            WHERE("car_model=#{orderBuy.carModel}");
+        if (StringUtils.isNotBlank(orderBuy.getCarSubTypeId())){
+            WHERE("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
             WHERE("buy_type=#{orderBuy.buyType}");
@@ -99,6 +99,9 @@ public class OrderBuyProvider {
         }
         if(StringUtils.isNotBlank(orderBuy.getCustomerPhone())) {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderBuy.customerPhone})");
+        }
+        if(orderBuy.getSysUserId() != null) {
+        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderBuy.sysUserId} AND type = 0)");
         }
         
         ORDER_BY("id desc limit " + start + ", " + limit );
@@ -122,8 +125,8 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             WHERE("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (StringUtils.isNotBlank(orderBuy.getCarModel())){
-            WHERE("car_model=#{orderBuy.carModel}");
+        if (StringUtils.isNotBlank(orderBuy.getCarSubTypeId())){
+            WHERE("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
             WHERE("buy_type=#{orderBuy.buyType}");
@@ -145,6 +148,9 @@ public class OrderBuyProvider {
         }
         if(StringUtils.isNotBlank(orderBuy.getCustomerPhone())) {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderBuy.customerPhone})");
+        }
+        if(orderBuy.getSysUserId() != null) {
+        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderBuy.sysUserId}  AND type = 0)");
         }
         }}.toString();
     }

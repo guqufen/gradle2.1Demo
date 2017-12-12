@@ -75,42 +75,9 @@
 <script type="text/javascript" src="js/mui.js"></script>
 <script type="text/javascript" src="js/mui.picker.js"></script>
 <script type="text/javascript" src="js/mui.poppicker.js"></script>
+<script type="text/javascript" src="js/custom.js"></script>
 <script type="text/javascript">
-	//右划关闭
-    mui.init({
-		swipeBack: true //启用右滑关闭功能
-	});
-    //弹框
-    (function($, doc) {
-		$.init();
-		$.ready(function() {
-			//选择城市
-			var cityPicker = new $.PopPicker();
-			cityPicker.setData([{
-				value: 1,
-				text: "上海市"
-			}, {
-				value: 2,
-				text: '杭州市'
-			}, {
-				value: 3,
-				text: '苏州市'
-			},{
-				value: 4,
-				text: '南京市'
-			}]);
-			var showCityPickerButton = doc.getElementById('showCityPicker');
-			var cityId = doc.getElementById('cityId');
-			showCityPickerButton.addEventListener('tap', function(event) {
-				cityPicker.show(function(items) {
-					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,4);
-					cityId.value = JSON.stringify(items[0].value);
-					//返回 false 可以阻止选择框的关闭
-					//return false;
-				});
-			}, false);
-		});
-	})(mui, document);
+	start(true,false,false);
 </script>
 
 

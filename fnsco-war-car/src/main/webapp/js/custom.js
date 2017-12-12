@@ -147,3 +147,188 @@ $("#carBrand").click(function(){
 	getHotCarBrand(true);
 	$(".brand.popup").show();
 })
+
+
+/*
+*start传参为boole值
+*	city是否启动城市选择
+	stages是否启动分期方案
+	insuranceCompany是否意向投保公司
+*/
+function start(city,stages,insuranceCompany){
+	//右划关闭
+	mui.init({
+		swipeBack: true //启用右滑关闭功能
+	});
+	//弹框
+	(function($, doc) {
+		$.init();
+		if(city==true){
+			//选择城市
+			var cityPicker = new $.PopPicker();
+			$.ajax({
+				url:'../h5/city/queryCity',
+				type:'get',
+				success:function(data){
+					cityPicker.setData(data.data);
+				}
+			})
+			var showCityPickerButton = doc.getElementById('showCityPicker');
+			var cityId = doc.getElementById('cityId');
+			showCityPickerButton.addEventListener('tap', function(event) {
+				cityPicker.show(function(items) {
+					var len=JSON.stringify(items[0].text).length;
+					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,len-1);
+					cityId.value = JSON.stringify(items[0].value);
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+				});
+			}, false);
+		}
+
+		if(stages==true){
+			//选择分期方案
+			var byStagesPicker = new $.PopPicker();
+			byStagesPicker.setData([{
+				value: 12,
+				text: "12期"
+			}, {
+				value: 24,
+				text: '24期'
+			}, {
+				value: 36,
+				text: '36期'
+			}]);
+			var showByStagesPickerBuuton =doc.getElementById('showByStagesPicker');
+			var byStages =doc.getElementById('byStages');
+			showByStagesPickerBuuton.addEventListener('tap', function(event) {
+				byStagesPicker.show(function(items) {
+					var len=JSON.stringify(items[0].text).length;
+					showByStagesPickerBuuton.value = JSON.stringify(items[0].text).substring(1,len-1);
+					byStages.value= JSON.stringify(items[0].value);
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+				});
+			}, false);
+		}
+
+		if(insuranceCompany==true){
+			//选择意向投保公司
+			var insuranceCompanyPicker = new $.PopPicker();
+			$.ajax({
+				url:'../h5/insu/queryInsu',
+				type:'get',
+				success:function(data){
+					// console.log(data);
+					insuranceCompanyPicker.setData(data.data.insuList);
+				}
+			})
+			var showInsuranceCompanyPickerButton = doc.getElementById('showInsuranceCompanyPicker');
+			var insuranceCompanyId = doc.getElementById('insuranceCompanyId');
+			showInsuranceCompanyPickerButton.addEventListener('tap', function(event) {
+				insuranceCompanyPicker.show(function(items) {
+					var len=JSON.stringify(items[0].text).length;
+					showInsuranceCompanyPickerButton.value = JSON.stringify(items[0].text).substring(1,len-1);
+					insuranceCompanyId.value = JSON.stringify(items[0].value);
+					//返回 false 可以阻止选择框的关闭
+					//return false;
+				});
+			}, false);
+		}
+
+	})(mui, document);
+}
+
+
+//验证手机号码
+function istel(tel) {  
+    var rtn = false;  
+    //移动号段  
+    var regtel = /^((13[4-9])|(15([0-2]|[7-9]))|(18[2|3|4|7|8])|(178)|(147))[\d]{8}$/;  
+    if (regtel.test(tel)) {  
+        rtn = true;  
+    }  
+    //电信号段  
+    regtel = /^((133)|(153)|(18[0|1|9])|(177))[\d]{8}$/;  
+    if (regtel.test(tel)) {  
+        rtn = true;  
+    }  
+    //联通号段  
+    regtel = /^((13[0-2])|(145)|(15[5-6])|(176)|(18[5-6]))[\d]{8}$/;  
+    if (regtel.test(tel)) {  
+        rtn = true;  
+    }  
+    return rtn;  
+}
+
+//绑定按钮获取验证码
+function sendCode(type){
+	if(istel($(".phone-num").val())==false){ 
+	  	mui.alert("请输入正确的手机号"); 
+	  	return;
+	}
+	$.ajax({
+		url:'../h5/sendMessage',
+		type:'post',
+		data:{'mobile':$(".phone-num").val(),'type':type},
+		success:function(data){
+			console.log(data.data);
+			mui.toast('验证码已发送');
+			var setTime;
+			var time=60;
+			setTime=setInterval(function(){
+                if(time<=0){
+                    clearInterval(setTime);
+                    $(".send-code").html('发送验证码');
+                	$(".send-code").attr('disabled',false);
+                    return;
+                }
+                time--;
+                $(".send-code").attr('disabled',true);
+				$(".send-code").html('重新发送'+time+'s');
+            },1000)
+		}
+	})
+}
+
+//提交按钮
+function subData(type){
+	for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
+		if($(".mui-content .mui-input-row").eq(i).find('input[type="text"]').val()==''){
+			var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
+			mui.alert(title+'不能为空');
+			return;
+		}else if(istel($(".phone-num").val())==false){ 
+			  mui.alert("请输入正确的手机号"); 
+			  return;
+		}
+	}
+	var name=$(".name").val();			//姓名
+	var cityId=$("#cityId").val();		//所在城市
+	var carTypeId=$("#carId").val();	//汽车品牌
+	var carSubTypeId=$(".model").val();		//汽车型号
+	var buyType=$("#byStages").val();	//分期方案
+	var mobile=$(".phone-num").val();	//手机号码
+	var verCode=$(".phone-code").val();	//验证码
+	var suggestCode=$(".refrral-code").val();	//邀请码
+
+	var data;//提交参数
+	var url;//提交请求地址
+
+	if(type==01){//买车申请
+		data={'name':name,'cityId':cityId,'carTypeId':carTypeId,'carSubTypeId':carSubTypeId,'buyType':buyType,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
+		url='../h5/buyCar/add';
+		console.log(data,url)
+	}
+	$.ajax({
+		url:url,
+		type:'post',
+		data:JSON.stringify(data),
+		dataType:'json',
+		contentType:'application/json',
+		success:function(data){
+			console.log(data);
+			mui.toast(data.message);
+		}
+	})
+}

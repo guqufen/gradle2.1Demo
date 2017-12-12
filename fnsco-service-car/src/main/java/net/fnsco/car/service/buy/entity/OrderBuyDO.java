@@ -47,7 +47,7 @@ public class OrderBuyDO {
     /**
      * 汽车型号
      */
-    private String carModel;
+    private String carSubTypeId;
 
     /**
      * 金融方案
@@ -75,6 +75,34 @@ public class OrderBuyDO {
     private Integer status;
     
     /**
+     * 所属运营商帐号ID
+     */
+    private Integer sysUserId;
+    
+    
+    /**
+	 * sysUserId
+	 *
+	 * @return  the sysUserId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getSysUserId() {
+		return sysUserId;
+	}
+
+	/**
+	 * sysUserId
+	 *
+	 * @param   sysUserId    the sysUserId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setSysUserId(Integer sysUserId) {
+		this.sysUserId = sysUserId;
+	}
+
+	/**
 	 * customerPhone
 	 *
 	 * @return  the customerPhone
@@ -194,12 +222,12 @@ public class OrderBuyDO {
         this.carTypeId = carTypeId;
     }
 
-    public String getCarModel() {
-        return carModel;
+    public String getCarSubTypeId() {
+        return carSubTypeId;
     }
 
-    public void setCarModel(String carModel) {
-        this.carModel = carModel;
+    public void setCarSubTypeId(String carSubTypeId) {
+        this.carSubTypeId = carSubTypeId;
     }
 
     public String getBuyType() {
@@ -246,6 +274,6 @@ public class OrderBuyDO {
 
     @Override
     public String toString() {
-        return "[id="+ id + ", customerId="+ customerId + ", cityId="+ cityId + ", carTypeId="+ carTypeId + ", carModel="+ carModel + ", buyType="+ buyType + ", suggestCode="+ suggestCode + ", createTime="+ createTime + ", lastUpdateTime="+ lastUpdateTime + ", status="+ status + "]";
+        return "[id="+ id + ", customerId="+ customerId + ", cityId="+ cityId + ", carTypeId="+ carTypeId + ", carSubTypeId="+ carSubTypeId + ", buyType="+ buyType + ", suggestCode="+ suggestCode + ", createTime="+ createTime + ", lastUpdateTime="+ lastUpdateTime + ", status="+ status + "]";
     }
 }

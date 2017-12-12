@@ -74,9 +74,36 @@ public class OrderSafeDO {
      * 状态0申请9完成
      */
     private Integer status;
-
+    
+    /**
+     * 所属运营商帐号ID
+     */
+    private Integer sysUserId;
+    
 
     /**
+	 * sysUserId
+	 *
+	 * @return  the sysUserId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getSysUserId() {
+		return sysUserId;
+	}
+
+	/**
+	 * sysUserId
+	 *
+	 * @param   sysUserId    the sysUserId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setSysUserId(Integer sysUserId) {
+		this.sysUserId = sysUserId;
+	}
+
+	/**
 	 * customerName
 	 *
 	 * @return  the customerName

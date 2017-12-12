@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="pragma" content="no -cache">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="expires" content="0">
+<title>中融汽车-汽车品牌管理</title>
+<meta name="keywords" content="中融汽车管理后台">
+<meta name="description" content="中融汽车管理后台">
+<link rel="shortcut icon" href="favicon.ico">
+ <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+    <link href="css/plugins/bootstrap/fileinput.css" rel="stylesheet">
+
+<link rel="stylesheet" href="js/viewer/viewer.min.css">
+<link href="js/ztree/metroStyle/metroStyle.css" rel="stylesheet">
+<style>
+textarea {
+	resize: none;
+}
+
+</style>
+</head>
+<body class="gray-bg">
+	<div class="panel-body animated fadeInRight">
+		<div class="panel panel-default">
+
+			<!-- start -->
+			<div class="ibox float-e-margins">
+				<div class="ibox-content">
+					<div class="row row-lg">
+						<div class="col-sm-12">
+							<div id="toolbar">
+								<button id="btn_add" type="button" class="btn btn-success"
+									data-toggle="modal" data-target="#myModal">
+									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+								</button>
+								<button id="btn_edit" type="button" class="btn btn-warning"
+									data-toggle="modal" data-target="#myModal">
+									<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>修改
+								</button>
+								<button id="btn_delete" type="button" class="btn btn-danger">
+									<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+								</button>
+							</div>
+							<table id="table" style="min-width: 260px;"></table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end  -->
+
+			<!-- model新增 start -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+				aria-labelledby="myModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"></h4>
+						</div>
+
+						<div class="modal-body">
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="home">
+									<form class="form-horizontal">
+										<div class="form-group">
+										<div class="col-sm-2 control-label" id="level"></div>
+											<!-- <div class="col-sm-2 control-label" id="oType">级别</div>
+											<input id="contentType" value="1" name="team" type="radio" />一级汽车品牌
+											<input id="menuType" value="2" name="team" type="radio" />二级汽车品牌
+											<input id="btnType" value="3" name="team" type="radio" />三级汽车品牌 -->
+										</div>
+
+										<div class="form-group" id="menuNameDiv">
+											<!-- 加一个ID区分新增和修改 ，修改时ID给值-->
+											<div id="id"></div>
+											<div class="col-sm-2 control-label" id="parentId">汽车品牌名称</div>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" name="menuName"
+													id="menuName" placeholder="汽车品牌名称" />
+											</div>
+										</div>
+
+										<div class="form-group" id="parentNameDiv">
+											<div class="col-sm-2 control-label" id="parentId">上级汽车品牌</div>
+											<div class="col-sm-10">
+												<input type="text" class="form-control"
+													style="cursor: pointer;" name="parentName" id="parentName"
+													onclick="javascript:MenuTreeGet()" readonly="readonly"
+													placeholder="上级汽车品牌" />
+											</div>
+										</div>
+
+										<div class="form-group" id="iconImgPathDiv">
+											<div class="col-sm-2 control-label">图标地址URL</div>
+											<div class="col-sm-10">
+											<input type="text" class="form-control" name="iconImgPath"
+													id="iconImgPath" disabled="disabled" />
+											</div>
+											<div class="col-sm-10">
+												<button type="button" id="btn_import" class="btn btn-info"
+													onclick="javascript:importEvent();">
+													<span class="glyphicon glyphicon-import"></span>导入图标
+												</button>
+											</div>
+										</div>
+										<div class="form-group" id="modelDiv">
+											<div class="col-sm-2 control-label">所属车型</div>
+											<div class="col-sm-10">
+												<input type="text" class="form-control" name="model"
+													id="model" placeholder="小型车、suv车等" />
+											</div>
+										</div>
+										<div class="form-group" id="isHotDiv">
+											<div class="col-sm-2 control-label">是否热门</div>
+											<div class="col-sm-10">
+												<select id="isHot">
+													<option value="0">否</option>
+													<option value="1">是</option>
+												</select>
+											</div>
+										</div>
+										<a class="saveBtn" id="btn_save">确定</a>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- model end -->
+
+			<!-- 导入 -->
+			<div class="modal fade" id="importModal" tabindex="-1" role="dialog"
+				aria-labelledby="importModalLabel" data-backdrop="static"
+				data-keyboard="false">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="importModalLabel">请选择Excel文件</h4>
+						</div>
+						<div class="modal-body">
+							<div class="tab-content">
+								<div class="modal-header">
+								</div>
+								<input type="file" name="excel_file_risk_inf"
+									id="excel_file_risk_inf" multiple class="file-loading" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<!-- 选择上级菜单 -->
+	<div id="upMenuLayer" style="display: none;padding:10px;">
+	<ul id="upMenuTree" class="ztree"></ul>
+</div>
+<script src="js/bootstrap/jquery.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="js/layer/layer.js"></script>
+<script src="js/plugins/bootstrap/fileinput.js"></script>
+<script src="js/plugins/bootstrap/zh.js"></script>
+<script src="js/uploadify-v3.1/jquery.uploadify.js"></script>
+<script type="text/javascript" src="js/fnsco/common.js"></script>
+<script src="js/ztree/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="js/fnsco/carBrand.js"></script>
+<!-- <script type="text/javascript">
+//在页面加载完成之后动态加载，避免因为缓存问题导致数据展示不对(在不人工清理缓存情况下)
+loadJSRandom(document, "js/fnsco/carBrand.js");
+</script> -->
+</body>
+</html>
