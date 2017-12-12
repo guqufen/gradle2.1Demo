@@ -1,4 +1,4 @@
-package net.fnsco.trading.service.phoneCharge;
+package net.fnsco.trading.service.third.phoneCharge;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -26,8 +26,8 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.trading.service.pay.channel.zxyh.demo.MD5;
-import net.fnsco.trading.service.phoneCharge.dto.FlowPackageCheckDTO;
-import net.fnsco.trading.service.phoneCharge.dto.JuheDTO;
+import net.fnsco.trading.service.third.phoneCharge.dto.FlowPackageCheckDTO;
+import net.fnsco.trading.service.third.phoneCharge.dto.JuheDTO;
 
 @Service
 public class PrepaidRefillService extends BaseService{

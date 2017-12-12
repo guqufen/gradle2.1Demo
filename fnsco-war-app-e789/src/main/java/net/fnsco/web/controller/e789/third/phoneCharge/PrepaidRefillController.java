@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.e789.phoneCharge;
+package net.fnsco.web.controller.e789.third.phoneCharge;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.trading.service.phoneCharge.PrepaidRefillService;
-import net.fnsco.trading.service.phoneCharge.dto.FlowPackageCheckDTO;
-import net.fnsco.trading.service.phoneCharge.dto.JuheDTO;
+import net.fnsco.trading.service.third.phoneCharge.PrepaidRefillService;
+import net.fnsco.trading.service.third.phoneCharge.dto.FlowPackageCheckDTO;
+import net.fnsco.trading.service.third.phoneCharge.dto.JuheDTO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 
