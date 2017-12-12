@@ -44,23 +44,7 @@ public class BuyCarJO {
 		@ApiModelProperty(value = "verCode", name = "verCode", example = "验证码")
 		private String verCode;
 		
-		@ApiModelProperty(value = "type", name = "type", example = "申请类型")
-		private String type;
-
-	    /**
-		 * @return the type
-		 */
-		public String getType() {
-			return type;
-		}
-
-		/**
-		 * @param type the type to set
-		 */
-		public void setType(String type) {
-			this.type = type;
-		}
-
+		
 		/**
 		 * @return the verCode
 		 */
