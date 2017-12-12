@@ -27,8 +27,8 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             SET("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (StringUtils.isNotBlank(orderBuy.getCarModel())){
-            SET("car_model=#{orderBuy.carModel}");
+        if (StringUtils.isNotBlank(orderBuy.getCarSubTypeId())){
+            SET("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
             SET("buy_type=#{orderBuy.buyType}");
@@ -76,8 +76,8 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             WHERE("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (StringUtils.isNotBlank(orderBuy.getCarModel())){
-            WHERE("car_model=#{orderBuy.carModel}");
+        if (StringUtils.isNotBlank(orderBuy.getCarSubTypeId())){
+            WHERE("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
             WHERE("buy_type=#{orderBuy.buyType}");
@@ -125,8 +125,8 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             WHERE("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (StringUtils.isNotBlank(orderBuy.getCarModel())){
-            WHERE("car_model=#{orderBuy.carModel}");
+        if (StringUtils.isNotBlank(orderBuy.getCarSubTypeId())){
+            WHERE("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
             WHERE("buy_type=#{orderBuy.buyType}");

@@ -4,6 +4,7 @@ package net.fnsco.web.controller.open;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.car.comm.CarServiceConstant;
 import net.fnsco.car.service.buy.OrderBuyService;
 import net.fnsco.car.service.buy.entity.OrderBuyDO;
 import net.fnsco.car.service.city.DicCityService;
@@ -39,11 +41,14 @@ public class BuyCarApplyController extends BaseController {
 
 	@RequestMapping(value = "/add")
 	@ApiOperation(value = "买车申请-添加申请")
-	public ResultDTO<BuyCarVO> addJO(@RequestBody BuyCarJO jo,final HttpServletRequest req) {
-		final HttpSession httpSession=req.getSession();
+	public ResultDTO<BuyCarVO> addJO(@RequestBody BuyCarJO jo) {
 		String code = jo.getVerCode();
 		String mobile = jo.getMobile();
-		MessageValidateDTO mDTO = (MessageValidateDTO) httpSession.getAttribute("fns"+mobile);
+		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
+			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
+		}
+		//获取session中验证码信息
+		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
 		if(mDTO == null){
 			return ResultDTO.fail();
 		}
@@ -59,7 +64,7 @@ public class BuyCarApplyController extends BaseController {
 		OrderBuyDO orderBuy = new OrderBuyDO();
 		orderBuy.setCityId(jo.getCityId());
 		orderBuy.setCarTypeId(jo.getCarTypeId());// 汽车品牌
-		orderBuy.setCarModel(jo.getCarModel());
+		orderBuy.setCarSubTypeId(jo.getCarSubTypeId());
 		orderBuy.setBuyType(jo.getBuyType());
 		orderBuy.setSuggestCode(jo.getSuggestCode());
 

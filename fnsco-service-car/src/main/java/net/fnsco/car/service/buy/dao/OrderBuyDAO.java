@@ -21,7 +21,7 @@ public interface OrderBuyDAO {
     @Select("SELECT * FROM car_order_buy WHERE id = #{id}")
     public OrderBuyDO getById(@Param("id") int id);
 
-    @Insert("INSERT into car_order_buy(id,customer_id,city_id,car_type_id,car_model,buy_type,suggest_code,create_time,last_update_time,status) VALUES (#{id},#{customerId},#{cityId},#{carTypeId},#{carModel},#{buyType},#{suggestCode},#{createTime},#{lastUpdateTime},#{status})")
+    @Insert("INSERT into car_order_buy(id,customer_id,city_id,car_type_id,car_sub_type_id,buy_type,suggest_code,create_time,last_update_time,status) VALUES (#{id},#{customerId},#{cityId},#{carTypeId},#{carSubTypeId},#{buyType},#{suggestCode},#{createTime},#{lastUpdateTime},#{status})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(OrderBuyDO orderBuy);
 

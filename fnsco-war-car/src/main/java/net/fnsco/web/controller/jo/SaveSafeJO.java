@@ -134,5 +134,4 @@ public class SaveSafeJO extends JO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
 }

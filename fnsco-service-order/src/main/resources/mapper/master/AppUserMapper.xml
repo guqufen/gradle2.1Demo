@@ -65,14 +65,14 @@
 		select
 		<include refid="Base_Column_List" />
 		from u_app_user
-		where mobile = #{mobile,jdbcType=VARCHAR}
+		where mobile = #{mobile,jdbcType=VARCHAR} LIMIT 1
 	</select>
     <!-- 根据手机号和用户状态查询用户实体 -->
 	<select id="selectAppUserByMobileAndState" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from u_app_user
-		where mobile = #{mobile,jdbcType=VARCHAR} and state = #{state,jdbcType=INTEGER}
+		where mobile = #{mobile,jdbcType=VARCHAR} and state = #{state,jdbcType=INTEGER} LIMIT 1
 	</select>
 	<!-- 根据id查询用户实体 -->
 	<select id="selectAppUserById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -111,6 +111,9 @@
 			</if>
 			<if test="password != null">
 				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="idCardNumber != null">
+				id_card_number = #{idCardNumber,jdbcType=VARCHAR},
 			</if>
 			<if test="realName != null">
 				real_name = #{realName,jdbcType=VARCHAR},

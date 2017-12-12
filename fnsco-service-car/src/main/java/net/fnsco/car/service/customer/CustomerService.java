@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.car.service.customer.dao.CustomerDAO;
 import net.fnsco.car.service.customer.entity.CustomerDO;
@@ -57,6 +58,7 @@ public class CustomerService extends BaseService {
      return obj;
  }
 //客户添加
+ @Transactional
  public CustomerDO addCustomer(CustomerDO customer) {
 	 customer.setCreateTime(new Date());
 	 this.customerDAO.insert(customer);
