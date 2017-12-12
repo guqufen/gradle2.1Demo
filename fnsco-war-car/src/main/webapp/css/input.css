@@ -30,8 +30,8 @@
 .mui-input-row.phone .send-code{
     position: absolute;
     right: 0.5rem;
-    bottom: 0.35rem;
-    font-size: 0.65rem;
+    bottom: 0.5rem;
+    font-size: 0.55rem;
     padding: 0.25rem 0.5rem;
 }
 .mui-input-row.rmb span{

@@ -23,8 +23,8 @@ public class BuyCarJO {
 	    /**
 	     * 汽车型号
 	     */
-		@ApiModelProperty(value = "carModel", name = "carModel", example = "汽车型号")
-	    private String carModel;
+		@ApiModelProperty(value = "carSubTypeId", name = "carSubTypeId", example = "汽车型号")
+	    private String carSubTypeId;
 
 	    /**
 	     * 金融方案
@@ -44,23 +44,7 @@ public class BuyCarJO {
 		@ApiModelProperty(value = "verCode", name = "verCode", example = "验证码")
 		private String verCode;
 		
-		@ApiModelProperty(value = "type", name = "type", example = "申请类型")
-		private String type;
-
-	    /**
-		 * @return the type
-		 */
-		public String getType() {
-			return type;
-		}
-
-		/**
-		 * @param type the type to set
-		 */
-		public void setType(String type) {
-			this.type = type;
-		}
-
+		
 		/**
 		 * @return the verCode
 		 */
@@ -119,12 +103,12 @@ public class BuyCarJO {
 	        this.carTypeId = carTypeId;
 	    }
 
-	    public String getCarModel() {
-	        return carModel;
+	    public String getCarSubTypeId() {
+	        return carSubTypeId;
 	    }
 
-	    public void setCarModel(String carModel) {
-	        this.carModel = carModel;
+	    public void setCarSubTypeId(String carSubTypeId) {
+	        this.carSubTypeId = carSubTypeId;
 	    }
 
 	    public String getBuyType() {

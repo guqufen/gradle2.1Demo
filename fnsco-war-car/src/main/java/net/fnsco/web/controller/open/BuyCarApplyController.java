@@ -44,12 +44,11 @@ public class BuyCarApplyController extends BaseController {
 	public ResultDTO<BuyCarVO> addJO(@RequestBody BuyCarJO jo) {
 		String code = jo.getVerCode();
 		String mobile = jo.getMobile();
-		String type = jo.getType();
-		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)||StringUtils.isEmpty(type)){
+		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
 			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
 		}
 		//获取session中验证码信息
-		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(CarServiceConstant.ApplyType.BUY_CAR_TYPE.getNameByType(type)+mobile);
+		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
 		if(mDTO == null){
 			return ResultDTO.fail();
 		}
@@ -65,7 +64,7 @@ public class BuyCarApplyController extends BaseController {
 		OrderBuyDO orderBuy = new OrderBuyDO();
 		orderBuy.setCityId(jo.getCityId());
 		orderBuy.setCarTypeId(jo.getCarTypeId());// 汽车品牌
-		orderBuy.setCarModel(jo.getCarModel());
+		orderBuy.setCarSubTypeId(jo.getCarSubTypeId());
 		orderBuy.setBuyType(jo.getBuyType());
 		orderBuy.setSuggestCode(jo.getSuggestCode());
 

@@ -47,7 +47,7 @@ public class OrderBuyDO {
     /**
      * 汽车型号
      */
-    private String carModel;
+    private String carSubTypeId;
 
     /**
      * 金融方案
@@ -222,12 +222,12 @@ public class OrderBuyDO {
         this.carTypeId = carTypeId;
     }
 
-    public String getCarModel() {
-        return carModel;
+    public String getCarSubTypeId() {
+        return carSubTypeId;
     }
 
-    public void setCarModel(String carModel) {
-        this.carModel = carModel;
+    public void setCarSubTypeId(String carSubTypeId) {
+        this.carSubTypeId = carSubTypeId;
     }
 
     public String getBuyType() {
@@ -274,6 +274,6 @@ public class OrderBuyDO {
 
     @Override
     public String toString() {
-        return "[id="+ id + ", customerId="+ customerId + ", cityId="+ cityId + ", carTypeId="+ carTypeId + ", carModel="+ carModel + ", buyType="+ buyType + ", suggestCode="+ suggestCode + ", createTime="+ createTime + ", lastUpdateTime="+ lastUpdateTime + ", status="+ status + "]";
+        return "[id="+ id + ", customerId="+ customerId + ", cityId="+ cityId + ", carTypeId="+ carTypeId + ", carSubTypeId="+ carSubTypeId + ", buyType="+ buyType + ", suggestCode="+ suggestCode + ", createTime="+ createTime + ", lastUpdateTime="+ lastUpdateTime + ", status="+ status + "]";
     }
 }
