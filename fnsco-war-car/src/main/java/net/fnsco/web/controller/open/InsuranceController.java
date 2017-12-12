@@ -54,7 +54,7 @@ public class InsuranceController extends BaseController {
 		String code = saveSafeJO.getCode();
 		String mobile = saveSafeJO.getMobile();
 		String type = saveSafeJO.getType();
-		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)||StringUtils.isEmpty(type)){
+		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
 			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
 		}
 		//获取session中验证码信息
