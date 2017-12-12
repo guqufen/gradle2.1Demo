@@ -57,6 +57,33 @@ public class CarBrandService extends BaseService {
 	public void insert(CarBrandDO carBrandDO) {
 		carBrandDAO.insert(carBrandDO);
 	}
+	
+	/**
+	 * 更新数据
+	 * 
+	 * @param carBrandDO
+	 */
+	public void update(CarBrandDO carBrandDO) {
+		carBrandDAO.update(carBrandDO);
+	}
+	
+	/**
+	 * 根据ID删除数据
+	 * 
+	 * @param carBrandDO
+	 */
+	public ResultDTO<Object> delete(CarBrandDO carBrandDO) {
+		if (carBrandDO.getLevel() != 3) {
+			CarBrandDO carBrandDO2 = new CarBrandDO();
+			carBrandDO2.setSupperId(carBrandDO.getId());
+			List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO2, null);
+			if (list.size() > 0) {
+				return ResultDTO.fail("有下级菜单，请先将下级菜单删除再执行本次删除");
+			}
+		}
+		carBrandDAO.delete(carBrandDO);
+		return ResultDTO.success();
+	}
 
 	/**
 	 * 查询汽车热门品牌
@@ -65,7 +92,7 @@ public class CarBrandService extends BaseService {
 	public ResultDTO selectHot() {
 		CarBrandDO carBrandDO = new CarBrandDO();
 		carBrandDO.setIsHot(1);
-		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO);
+		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO, 8);
 		for (CarBrandDO carBrandDO2 : list) {
 				carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
 		}
@@ -78,16 +105,18 @@ public class CarBrandService extends BaseService {
 	 * @return
 	 */
 	public ResultDTO selectMenuTree() {
-		List<CarBrandDO> list = carBrandDAO.queryAll();
-		// 添加顶级菜单
-		CarBrandDO root = new CarBrandDO();
-	
+
+		CarBrandDO carBrandDO = new CarBrandDO();
+		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO, null);
+
 		for (CarBrandDO carBrandDO2 : list) {
-			if( !Strings.isNullOrEmpty(carBrandDO2.getIconImgPath()) ){
-				carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
+			if (!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())) {
+				carBrandDO2.setIconImgPath(env.getProperty("web.base.url") + carBrandDO2.getIconImgPath());
 			}
 		}
 
+		// 添加顶级菜单
+		CarBrandDO root = new CarBrandDO();
 		root.setId(0);
 		root.setName("总菜单");
 		root.setSupperId(-1);
