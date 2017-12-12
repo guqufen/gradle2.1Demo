@@ -53,12 +53,9 @@ public class LoanApplyController extends BaseController {
 	@Autowired
 	private OrderFileService orderFileService;
 
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	@RequestMapping(value = "/add")
 	@ApiOperation(value = "贷款申请-添加申请")
 	public ResultDTO<LoanVO> addJO(@RequestBody LoanJO jo) {
-		if(jo == null){
-			return ResultDTO.fail();
-		}
 		//校验验证码
 		String deviceId = "fns";
 		String verCode = jo.getVerCode();
@@ -91,8 +88,8 @@ public class LoanApplyController extends BaseController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/fileInfo/upload", produces = "text/html;charset=UTF-8")
-	public String upload(HttpServletRequest req, HttpServletResponse response) {
-		return commImport(req, response, true);
+	public String upload() {
+		return commImport(request, response, true);
 	}
 
 	

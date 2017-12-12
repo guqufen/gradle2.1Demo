@@ -38,7 +38,6 @@ public class CarTypeChooseController {
 				resultList.add(queryBrand);
 			}
 		}
-		System.out.println(queryBrand);
 		return ResultDTO.success(resultList);
 	}
 

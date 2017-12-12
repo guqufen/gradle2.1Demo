@@ -99,17 +99,13 @@ public class OrderLoanService extends BaseService {
 
 	public ResultDTO<Object> addJo(OrderLoanDO orderLoan, CustomerDO customer, String fileIds) {
 		customer = customerService.addCustomer(customer);
-		if (customer.getId() == null) {
-			return ResultDTO.fail("客户信息新增失败");
-		}
+		
 		orderLoan.setCustomerId(customer.getId());
 		orderLoan.setCreateTime(new Date());
 		orderLoan.setLastUpdateTime(new Date());
 		orderLoan.setStatus(0);
 		orderLoanDAO.insert(orderLoan);
-		if (orderLoan.getId() == null) {
-			return ResultDTO.fail();
-		}
+		
 		// 更新文件信息
 		if (!StringUtils.isEmpty(fileIds)) {
 			OrderFileDO orderFile = new OrderFileDO();
