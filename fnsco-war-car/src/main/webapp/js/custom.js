@@ -323,8 +323,8 @@ function subData(type){
 	$.ajax({
 		url:url,
 		type:'post',
-		data:data,
-		// dataType:'json',
+		data:JSON.stringify(data),
+		dataType:'json',
 		contentType:'application/json',
 		success:function(data){
 			console.log(data);
