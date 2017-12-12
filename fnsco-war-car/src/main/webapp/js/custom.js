@@ -303,23 +303,34 @@ function subData(type){
 			  return;
 		}
 	}
-	var name=$(".name").val();			//姓名
-	var cityId=$("#cityId").val();		//所在城市
-	var carTypeId=$("#carId").val();	//汽车品牌
-	var carSubTypeId=$(".model").val();		//汽车型号
-	var buyType=$("#byStages").val();	//分期方案
-	var mobile=$(".phone-num").val();	//手机号码
-	var verCode=$(".phone-code").val();	//验证码
-	var suggestCode=$(".refrral-code").val();	//邀请码
+	var name=$(".name").val();						//姓名
+	var cityId=$("#cityId").val();					//所在城市
+	var carTypeId=$("#carId").val();				//汽车品牌
+	var carSubTypeId=$(".car-model").val();			//汽车型号
+	var buyType=$("#byStages").val();				//分期方案
+	var mobile=$(".phone-num").val();				//手机号码
+	var verCode=$(".phone-code").val();				//验证码
+	var suggestCode=$(".refrral-code").val();		//邀请码
+
+	var financeType=$("#financeType").val();	//理财产品
+	var earnings=$("#earnings").val();				//预计收益
 
 	var data;//提交参数
 	var url;//提交请求地址
+
+	// type类型 01买车 02贷款 03保险 04理财
 
 	if(type==01){//买车申请
 		data={'name':name,'cityId':cityId,'carTypeId':carTypeId,'carSubTypeId':carSubTypeId,'buyType':buyType,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
 		url='../h5/buyCar/add';
 		console.log(data,url)
 	}
+	
+	if(type==04){//理财申请
+		data={'name':name,'cityId':cityId,'financeType':financeType,'earnings':earnings,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
+		url='../h5/manage/saveFinance';
+	}
+
 	$.ajax({
 		url:url,
 		type:'post',

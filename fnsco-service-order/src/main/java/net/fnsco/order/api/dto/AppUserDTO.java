@@ -49,6 +49,7 @@ public class AppUserDTO extends DTO {
     
     private String entityInnerCode;//实体商户innercode
     
+    private String idCardNumber;//身份证号
     /**
 	 * entityInnerCode
 	 *
@@ -320,5 +321,19 @@ public class AppUserDTO extends DTO {
     public void setState(Integer state) {
         this.state = state;
     }
+
+	/**
+	 * @return the idCardNumber
+	 */
+	public String getIdCardNumber() {
+		return idCardNumber;
+	}
+
+	/**
+	 * @param idCardNumber the idCardNumber to set
+	 */
+	public void setIdCardNumber(String idCardNumber) {
+		this.idCardNumber = idCardNumber;
+	}
 
 }

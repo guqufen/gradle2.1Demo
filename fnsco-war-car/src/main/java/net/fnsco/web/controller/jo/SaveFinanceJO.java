@@ -18,16 +18,16 @@ public class SaveFinanceJO extends JO {
 	private String name;// 投资人姓名
 	@ApiModelProperty(value="所在城市id",name="cityId",example="所在城市id")
 	private Integer cityId;// 所在城市id
-	/*@ApiModelProperty(value="理财产品id",name="buyType",example="理财产品id")
-	private String buyType;// 理财产品id
-*/	@ApiModelProperty(value="手机号码",name="mobile",example="手机号码")
+	@ApiModelProperty(value="理财产品id",name="financeType",example="理财产品id")
+	private Integer financeType;// 理财产品id
+	@ApiModelProperty(value="预计收益",name="earnings",example="预计收益")
+	private Integer earnings;// 预计收益
+	@ApiModelProperty(value="手机号码",name="mobile",example="手机号码")
 	private String mobile;// 手机号码
-	@ApiModelProperty(value="验证码",name="code",example="验证码")
-	private String code;//验证码
+	@ApiModelProperty(value="验证码",name="verCode",example="验证码")
+	private String verCode;//验证码
 	@ApiModelProperty(value="推荐码",name="suggestCode",example="推荐码")
 	private Integer suggestCode;// 推荐码
-	@ApiModelProperty(value = "type", name = "type", example = "申请类型")
-	private String type;
 	/**
 	 * @return the name
 	 */
@@ -53,17 +53,29 @@ public class SaveFinanceJO extends JO {
 		this.cityId = cityId;
 	}
 	/**
-	 * @return the buyType
-	 *//*
-	public String getBuyType() {
-		return buyType;
+	 * @return the financeType
+	 */
+	public Integer getFinanceType() {
+		return financeType;
 	}
-	*//**
-	 * @param buyType the buyType to set
-	 *//*
-	public void setBuyType(String buyType) {
-		this.buyType = buyType;
-	}*/
+	/**
+	 * @param financeType the financeType to set
+	 */
+	public void setFinanceType(Integer financeType) {
+		this.financeType = financeType;
+	}
+	/**
+	 * @return the earnings
+	 */
+	public Integer getEarnings() {
+		return earnings;
+	}
+	/**
+	 * @param earnings the earnings to set
+	 */
+	public void setEarnings(Integer earnings) {
+		this.earnings = earnings;
+	}
 	/**
 	 * @return the mobile
 	 */
@@ -77,16 +89,16 @@ public class SaveFinanceJO extends JO {
 		this.mobile = mobile;
 	}
 	/**
-	 * @return the code
+	 * @return the verCode
 	 */
-	public String getCode() {
-		return code;
+	public String getVerCode() {
+		return verCode;
 	}
 	/**
-	 * @param code the code to set
+	 * @param verCode the verCode to set
 	 */
-	public void setCode(String code) {
-		this.code = code;
+	public void setVerCode(String verCode) {
+		this.verCode = verCode;
 	}
 	/**
 	 * @return the suggestCode
@@ -106,17 +118,4 @@ public class SaveFinanceJO extends JO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	/**
-	 * @return the type
-	 */
-	public String getType() {
-		return type;
-	}
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
-	
 }
