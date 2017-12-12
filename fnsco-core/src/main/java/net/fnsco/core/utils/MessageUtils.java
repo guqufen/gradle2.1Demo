@@ -30,9 +30,7 @@ public class MessageUtils {
 	 * @return
 	 */
 	public ResultDTO sendValidateCode(String deviceId,String mobile) {
-		if (Strings.isNullOrEmpty(deviceId)) {
-			return ResultDTO.fail("deviceId为空");
-		} else if (Strings.isNullOrEmpty(mobile)) {
+		if (Strings.isNullOrEmpty(mobile)) {
 			return ResultDTO.fail("手机号为空");
 		}
 		// 生成6位验证码

@@ -50,7 +50,7 @@ public class AppUserController extends BaseController {
     	appUserDTO.setPassword(registerJO.getPassword());
         ResultDTO result = appUserService.e789InsertSelective(appUserDTO);
         if(!result.isSuccess()) {
-        	return result.fail();
+        	return result.fail(result.getCode());
         }
         AppUserLoginInfoDTO appUserLoginInfoDTO = appUserService.getLoginInfor(appUserDTO);
         LoginVO loginVO = new LoginVO();
@@ -97,7 +97,7 @@ public class AppUserController extends BaseController {
     	appUserDTO.setPassword(findPasswordJO.getPassword());
         ResultDTO<String> result = appUserService.findPassword(appUserDTO);
         if(!result.isSuccess()) {
-        	return result.fail();
+        	return result.fail(result.getCode());
         }
         AppUserLoginInfoDTO appUserLoginInfoDTO = appUserService.getLoginInfor(appUserDTO);
         LoginVO loginVO = new LoginVO();
@@ -132,7 +132,7 @@ public class AppUserController extends BaseController {
     	appUserDTO.setPassword(loginJO.getPassword());
         ResultDTO<String> result = appUserService.e789LoginByMoblie(appUserDTO);
         if(!result.isSuccess()) {
-        	return result.fail();
+        	return result.fail(result.getCode());
         }
         AppUserLoginInfoDTO appUserLoginInfoDTO = appUserService.getLoginInfor(appUserDTO);
         LoginVO loginVO = new LoginVO();
