@@ -51,9 +51,8 @@ public class InsuranceController extends BaseController {
 	@RequestMapping(value = "/saveSafe")
 	@ApiOperation(value = "保险申请-添加申请")
 	private ResultDTO<Object> saveSafe(@RequestBody SaveSafeJO saveSafeJO) {
-		String code = saveSafeJO.getCode();
+		String code = saveSafeJO.getVerCode();
 		String mobile = saveSafeJO.getMobile();
-		String type = saveSafeJO.getType();
 		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
 			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
 		}

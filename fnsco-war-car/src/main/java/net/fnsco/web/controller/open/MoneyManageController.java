@@ -35,9 +35,8 @@ public class MoneyManageController extends BaseController {
 	@RequestMapping(value = "/saveFinance")
 	@ApiOperation(value = "理财申请-添加申请")
 	private ResultDTO<Object> saveFinance(@RequestBody SaveFinanceJO saveFinanceJO) {
-		String code = saveFinanceJO.getCode();
+		String code = saveFinanceJO.getVerCode();
 		String mobile = saveFinanceJO.getMobile();
-		String type = saveFinanceJO.getType();
 		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
 			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
 		}
