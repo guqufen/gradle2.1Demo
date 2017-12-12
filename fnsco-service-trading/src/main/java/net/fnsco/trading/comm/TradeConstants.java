@@ -4,8 +4,14 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-public class TradeConstants {
-    //个人用户充值使用秘钥
+import net.fnsco.core.constants.CoreConstants;
+
+public class TradeConstants extends CoreConstants {
+    public static String E_ENTITY_MERCHANT_NOT_EXIT_ERROR = "6000";
+    static {
+        ERROR_MESSGE_MAP.put(E_ENTITY_MERCHANT_NOT_EXIT_ERROR, "该用户还未成为商户");
+    }
+    //e789个人用户充值和企业用户支付使用秘钥
     public static final String        RECHANGE_AES_KEY = "a8bc3defec5916b469d9c1fa095b5b43";
     //交易类型
     public static Map<String, String> TXT_TYPE_MAP     = Maps.newHashMap();
@@ -315,4 +321,41 @@ public class TradeConstants {
             return "";
         }
     }
+
+    // //交易子类型10购买消费11充值消费20购买撤销21充值撤销
+    public static enum TxnSubTypeEnum {
+                                       BUY_CONSUME(10, "购买消费"), RESEARCH_CONSUME(11, "充值消费"), BUY_UNDO(20, "购买撤销"), RESEARCH_UNDO(21, "充值撤销");
+
+        private Integer code;
+        private String  name;
+
+        private TxnSubTypeEnum(Integer code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        /**
+        * @return the code
+        */
+        public Integer getCode() {
+            return code;
+        }
+
+        /**
+        * @return the name
+        */
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(Integer code) {
+            for (TxnSubTypeEnum eopen : TxnSubTypeEnum.values()) {
+                if (eopen.code.equals(code)) {
+                    return eopen.name;
+                }
+            }
+            return "";
+        }
+    }
+
 }

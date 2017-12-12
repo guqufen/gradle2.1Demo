@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>品牌</title>
+	<link href="css/mui.css" rel="stylesheet" type="text/css" media="all">
+	<link href="css/reset.css" rel="stylesheet" type="text/css" media="all">
+	<link href="css/brand.css" rel="stylesheet" type="text/css" media="all">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+</head>
+<body>
+	<header>
+		<div class="back"></div>
+		<div class="head-title">品牌</div>
+	</header>
+	<div class="main">
+		<div class="brand">
+			<div class="brand-nav">
+				<a href="javascript:;" onclick="javascript:document.getElementById('hot').scrollIntoView()">热</a>
+			</div>
+			<div class="brand-list">
+				<!-- 热门品牌 -->
+				<div class="hot">
+					<div class="title" id="hot">热门品牌</div>
+					<div class="mui-row">
+						<!-- <div class="mui-col-xs-3">
+							<a href="javascript:getChildBrand(1)">
+								<div class="hot-img">
+									<img src="img/brand/m_100_100.jpg">
+								</div>
+								<div class="hot-text">
+									英菲尼迪
+								</div>
+							</a>
+						</div> -->
+					</div>
+				</div>
+				<!-- end -->
+			</div>
+		</div>
+		<div class="child-brand">
+			<!-- <div class="title" id="C">C</div>
+			<ul class="brand-list-list">
+				<li class="brand-con mui-row">
+					<div class="brand-text mui-col-xs-12">
+						奔驰
+					</div>
+				</li>
+			</ul> -->
+		</div>
+		<!-- 页尾提示栏 -->
+		<div class="footer-bar">—— 我也是有底线的 ——</div>
+	</div>
+	<footer>
+		<!-- 底部导航栏 -->
+		<div class="footer-nav mui-row">
+			<!-- 首页 -->
+			<div class="mui-col-xs-6 home">
+				<a href="index.html">
+					<i></i>
+					<p>首页</p>
+				</a>
+			</div>
+			<!-- 贷款 -->
+			<div class="mui-col-xs-6 loans">
+				<a href="loans.html">
+					<i></i>
+					<p>贷款</p>
+				</a>
+			</div>
+		</div>
+	</footer>
+</body>
+<script type="text/javascript" src="js/setWidth.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/mui.js"></script>
+<script type="text/javascript" src="js/custom.js"></script>
+<script type="text/javascript">
+	getCarBrand(false);
+	getHotCarBrand(false);
+</script>
+</html>

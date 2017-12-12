@@ -23,6 +23,7 @@ import io.swagger.annotations.ApiParam;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
@@ -30,6 +31,8 @@ import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
+import net.fnsco.trading.comm.TradeConstants;
+import net.fnsco.trading.service.merchantentity.AppUserMerchantEntityService;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.e789.jo.GetQRUrlJO;
@@ -50,14 +53,16 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 @Api(value = "/app2c/trade/fsf", tags = { "首页-分闪付支付接口" })
 public class PayFsfController extends BaseController {
     @Autowired
-    private MerchantService   merchantService;
+    private MerchantService              merchantService;
     @Autowired
-    private TradeOrderService tradeOrderService;
+    private TradeOrderService            tradeOrderService;
     @Autowired
-    private Environment       env;
+    private AppUserMerchantEntityService entityService;
+    @Autowired
+    private Environment                  env;
 
     /**
-     * 获取聚惠分二维码url，生成二维码用
+     * 获取聚惠分二维码url，生成二维码用，支付使用固定秘钥
      *
      * @param userName
      * @return
@@ -65,13 +70,17 @@ public class PayFsfController extends BaseController {
     @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
     @ApiOperation(value = "首页-分闪付支付-获取分闪付url，用于生成二维码")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
-        String innerCode = "";
         Integer userId = getQRUrlJO.getUserId();
+        MerchantEntity merchantEntity = entityService.queryMerInfoByUserId(userId);
+        if (null == merchantEntity) {
+            return ResultDTO.fail(TradeConstants.E_ENTITY_MERCHANT_NOT_EXIT_ERROR);
+        }
         //根据用户id获取绑定的分闪付商户信息
-        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByInnerCodeType(innerCode, "04");
+        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByEntityInnerCodeType(merchantEntity.getEntityInnerCode(), "04");
         if (null == merchantChannelJhf) {
             return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
         }
+        String innerCode = merchantChannelJhf.getInnerCode();
         TradeOrderDO tradeOrder = new TradeOrderDO();
         tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
         tradeOrder.setChannelMerId(merchantChannelJhf.getChannelMerId());
@@ -87,11 +96,15 @@ public class PayFsfController extends BaseController {
         //交易子类型00刷卡01微信02支付宝03聚惠分
         tradeOrder.setPaySubType("03");
         tradeOrder.setTxnType(1);
+        //交易子类型10购买消费11充值消费20购买撤销21充值撤销
+        tradeOrder.setTxnSubType(TradeConstants.TxnSubTypeEnum.BUY_CONSUME.getCode());
+        //00pos机01app02台码
+        tradeOrder.setPayMedium(TradeConstants.PayMediumEnum.APP.getCode());
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        String url = env.getProperty("open.base.url") + "/trade/fsf/pay/dealPayOrder";
-        url += "?" + "&commID=" + innerCode + "&reqData=" + getReqData(tradeOrder.getOrderNo(), innerCode);
+        String url = env.getProperty("app.base.url") + "/trade/fsf/pay/dealPayOrder";
+        url += "?" + "&commID=" + innerCode + "&reqData=" + getReqData(innerCode, tradeOrder.getOrderNo());
         GetQRUrlResultVO result = new GetQRUrlResultVO();
         result.setUrl(url);
         result.setOrderNo(tradeOrder.getOrderNo());
@@ -128,7 +141,6 @@ public class PayFsfController extends BaseController {
         if (null == merchantChannelJhf) {
             return reqData;
         }
-        String keyStr = merchantChannelJhf.getChannelMerKey();
         String transTime = DateUtils.dateFormat1ToStr(new Date());
         Map<String, String> result = Maps.newHashMap();
         result.put("innerCode", innerCode);
@@ -140,7 +152,7 @@ public class PayFsfController extends BaseController {
         result.put("singData", singData);
         String dateTemp = JSON.toJSONString(result);
         try {
-            reqData = URLEncoder.encode(AESUtil.encode(dateTemp, keyStr), "utf-8");
+            reqData = URLEncoder.encode(AESUtil.encode(dateTemp, TradeConstants.RECHANGE_AES_KEY), "utf-8");
         } catch (UnsupportedEncodingException e) {
             logger.error("生成分期付url时AES加密出错", e);
         }

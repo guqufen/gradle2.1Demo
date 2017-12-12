@@ -1,6 +1,5 @@
 package net.fnsco.web.controller.open;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,17 +12,16 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.car.service.buy.OrderBuyService;
 import net.fnsco.car.service.buy.entity.OrderBuyDO;
 import net.fnsco.car.service.city.DicCityService;
-import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.MessageUtils;
 import net.fnsco.web.controller.jo.BuyCarJO;
 import net.fnsco.web.controller.vo.BuyCarVO;
-import net.fnsco.web.controller.vo.QueryCityVO;
 
 @RestController
-@RequestMapping(value = "/api/buy", method = RequestMethod.POST)
-@Api(value = "/api/buy", tags = { "业务申请-买车申请" })
+@RequestMapping(value = "/h5/buy", method = RequestMethod.POST)
+@Api(value = "/h5/buy", tags = { "业务申请-买车申请" })
 public class BuyCarApplyController extends BaseController {
 
 	@Autowired
@@ -34,6 +32,15 @@ public class BuyCarApplyController extends BaseController {
 	@RequestMapping(value = "/add")
 	@ApiOperation(value = "买车申请-添加申请")
 	public ResultDTO<BuyCarVO> addJO(@RequestBody BuyCarJO jo) {
+		if(null == jo){
+			return ResultDTO.fail("非法请求，请检查参数");
+		}
+		//校验验证码是否正确
+		MessageUtils utils = new MessageUtils();
+		ResultDTO<Object> rt = utils.validateCode("fns", jo.getVerCode(), jo.getMobile());
+		if(!rt.isSuccess()){
+			return ResultDTO.fail(rt.getMessage());
+		}
 		CustomerDO customer = new CustomerDO();
 		customer.setName(jo.getName());
 		customer.setMobile(jo.getMobile());

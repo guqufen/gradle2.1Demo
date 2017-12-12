@@ -4,39 +4,41 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class QueryCityVO {
 	 
-	@ApiModelProperty(value = "id", name = "id", example = "城市id")
-    private Integer id;
+	@ApiModelProperty(value = "value", name = "value", example = "城市id")
+    private Integer value;
 
-	@ApiModelProperty(value = "name", name = "name", example = "城市名称")
-    private String name;
+	@ApiModelProperty(value = "text", name = "text", example = "城市名称")
+    private String text;
 
 	/**
-	 * @return the id
+	 * @return the value
 	 */
-	public Integer getId() {
-		return id;
+	public Integer getValue() {
+		return value;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param value the value to set
 	 */
-	public void setId(Integer id) {
-		this.id = id;
+	public void setValue(Integer value) {
+		this.value = value;
 	}
 
 	/**
-	 * @return the name
+	 * @return the text
 	 */
-	public String getName() {
-		return name;
+	public String getText() {
+		return text;
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param text the text to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setText(String text) {
+		this.text = text;
 	}
+
+	
 	
 
 }

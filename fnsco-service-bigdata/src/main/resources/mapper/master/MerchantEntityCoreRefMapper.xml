@@ -25,6 +25,13 @@
     where entity_inner_code in (select entity_inner_code from m_merchant_core_entity_ref where inner_code = #{innerCode,jdbcType=VARCHAR})
   </select>
   
+  <select id="selectByEntityInnerCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_core_entity_ref
+    where entity_inner_code = #{entityInnerCode,jdbcType=VARCHAR}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from m_merchant_core_entity_ref
     where id = #{id,jdbcType=INTEGER}

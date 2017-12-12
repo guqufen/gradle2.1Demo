@@ -29,7 +29,7 @@ public class MessageUtils {
 	 * @param mobile
 	 * @return
 	 */
-	public ResultDTO getValidateCode(String deviceId,String mobile) {
+	public ResultDTO sendValidateCode(String deviceId,String mobile) {
 		if (Strings.isNullOrEmpty(deviceId)) {
 			return ResultDTO.fail("deviceId为空");
 		} else if (Strings.isNullOrEmpty(mobile)) {
@@ -73,7 +73,7 @@ public class MessageUtils {
 	 * @param mobile
 	 * @return
 	 */
-	private ResultDTO validateCode(String deviceId, String code, String mobile) {
+	public ResultDTO<Object> validateCode(String deviceId, String code, String mobile) {
 		// 非空判断
 		if (Strings.isNullOrEmpty(deviceId)) {
 			return ResultDTO.fail("非法请求,没有deviceId");

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="pragma" content="no -cache">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="expires" content="0">
+<title>贷款订单-中融汽车</title>
+<meta name="keywords" content="中融汽车">
+<meta name="description" content="中融汽车">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css"
+	rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="css/custom.css" rel="stylesheet">
+<style type="text/css">
+	#addForm .col-sm-6{
+		margin: 10px 0;
+	}
+</style>
+</head>
+
+<body class="gray-bg">
+  <div class="panel-body animated fadeInRight">
+	<div class="panel panel-default">
+	   <form id="formSearch" class="form-horizontal">
+	      <div class="form-group" style="margin-top: 15px">
+	        <div class="row col-sm-10">
+	          <div class="col-sm-4">
+				<label class="control-label" for="customerName">购车人:</label> <input
+					type="text" class="form-control" id="customerName"
+					name="customerName" placeholder="购车人">
+			  </div>
+			  <div class="col-sm-4">
+				<label class="control-label" for="search_legalPersonMobile">联系电话:</label> <input
+					type="text" class="form-control" id="search_legalPersonMobile"
+					name="search_legalPersonMobile" placeholder="联系电话" />
+			  </div>
+			  <div class="col-sm-4">
+				<label class="control-label" for="search_status">状态:</label>
+				<select id="search_status" class="form-control" >
+				  <option value="-1">全部</option>
+				  <option value="0">已申请</option>
+				  <option value="9">已下单</option>
+				</select>
+			  </div>
+	        </div>
+	        <div class="col-sm-2" style="text-align: right;">
+				<button type="button" id="btn_query" class="btn btn-primary"
+					onclick="javascript:queryEvent();">
+					<span class="glyphicon glyphicon-search"></span>查询
+				</button>
+				<button type="button" id="btn_reset" class="btn btn-default"
+					onclick="javascript:resetEvent();">
+					<span class="glyphicon glyphicon-refresh"></span>重置
+				</button>
+			</div>
+	      </div>
+	   </form>
+	   <div class="ibox float-e-margins">
+			<div class="ibox-content">
+				<div class="row row-lg">
+					<div class="col-sm-12">
+						<table id="table"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+  </div>	
+  <script src="js/bootstrap/jquery.min.js"></script>
+	<script src="js/bootstrap/js/bootstrap.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+	<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+	<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+	<script src="js/layer/layer.js"></script>
+	<script src="js/plugins/bootstrap/fileinput.js"></script>
+	<script src="js/plugins/bootstrap/zh.js"></script>
+	<script type="text/javascript" src="js/fnsco/common.js"></script>	
+	<script type="text/javascript">
+		//在页面加载完成之后动态加载，避免因为缓存问题导致数据展示不对(在不人工清理缓存情况下)
+		loadJSRandom(document, "js/fnsco/loanorder.js");
+	</script>
+</body>

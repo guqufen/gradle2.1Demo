@@ -8,10 +8,12 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
 import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
 import net.fnsco.trading.service.account.dao.helper.AppAccountBalanceProvider;
 
+import java.math.BigDecimal;
 import java.util.List;;
 
 public interface AppAccountBalanceDAO {
@@ -49,5 +51,18 @@ public interface AppAccountBalanceDAO {
     @Results({@Result( column = "app_user_id",property = "appUserId"),@Result( column = "freeze_amount",property = "freezeAmount"),@Result( column = "update_time",property = "updateTime"),@Result( column = "create_time",property = "createTime") })
     @Select("SELECT * FROM u_app_account_balance WHERE appUserId = #{appUserId} limit 1")
     public AppAccountBalanceDO getByAppUserId(@Param("appUserId") int appUserId);
+    
+    /**
+     * updateFund:(更新余额)
+     *
+     * @param  @param fund
+     * @param  @param appUserId
+     * @param  @return    设定文件
+     * @return int    DOM对象
+     * @author tangliang
+     * @date   2017年12月11日 上午11:38:13
+     */
+    @Update("UPDATE u_app_account_balance SET fund = fund - #{fund} WHERE app_user_id = #{appUserId} AND fund = fund - #{fund} >=0")
+    public int updateFund(@Param("fund") BigDecimal  fund,@Param("appUserId") int appUserId);
 
 }

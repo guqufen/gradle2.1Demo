@@ -58,4 +58,6 @@ public interface MerchantEntityCoreRefDao {
      * @date   2017年11月2日 上午10:54:11
      */
     MerchantEntityCoreRef selectByInnerCodeLimit1(@Param("innerCode")String innerCode);
+    
+    List<MerchantEntityCoreRef> selectByEntityInnerCode(@Param("entityInnerCode") String entityInnerCode);
 }

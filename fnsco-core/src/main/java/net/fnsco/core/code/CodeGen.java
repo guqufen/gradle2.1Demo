@@ -35,6 +35,6 @@ public class CodeGen {
 //        auto.init("net.fnsco.trading", "appUser", "u_app_user");
 //        auto.init("net.fnsco.bigdata", "withdraw", "t_trade_withdraw_red");
        // auto.init("net.fnsco.car", "config", "car_config");
-        auto.init("net.fnsco.car", "loan", "car_order_loan");
+        auto.init("net.fnsco.car", "ftemp", "car_order_file_temp");
     }
 }

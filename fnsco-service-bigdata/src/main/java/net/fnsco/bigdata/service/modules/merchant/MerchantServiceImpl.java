@@ -101,8 +101,8 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
 
     /**
      * 获取商户渠道信息信息
-     * @param merNum 商户号
-     * @param channelType
+     * @param innerCode 拉卡拉渠道商户号
+     * @param channelType 渠道类型
      * @return
      */
     @Override
@@ -386,4 +386,25 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
         
         return datas;
 	}
+    
+    /**
+     * 获取商户渠道信息信息
+     * @param innerCode 实体商户号
+     * @param channelType 渠道类型
+     * @return
+     */
+    @Override
+    public MerchantChannel getMerChannelByEntityInnerCodeType(String entityInnerCode, String channelType) {
+        MerchantChannel merchantChannel = null;
+        //根据innerCode查询实体商户
+        List<MerchantEntityCoreRef> entityRefList = entityCoreRefDao.selectByEntityInnerCode(entityInnerCode);
+        for (MerchantEntityCoreRef ref : entityRefList) {
+            merchantChannel = merchantChannelDao.selectByInnerCodeType(ref.getInnerCode(), channelType);
+            if (null != merchantChannel) {
+                merchantChannel.setEntityInnerCode(ref.getEntityInnerCode());
+                break;
+            }
+        }
+        return merchantChannel;
+    }
 }
