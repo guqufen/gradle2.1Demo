@@ -460,6 +460,12 @@ function importEvent() {
 	$('#importModal').modal();
 }
 
+$(function() {
+	//0.初始化fileinput,文件导入初始化
+	var oFileInput = new FileInput();
+	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME + '/web/carBrand/doImport?id='+$('#id').val());
+});
+
 //初始化fileinput
 var FileInput = function() {
 	var oFile = new Object();
@@ -472,16 +478,18 @@ var FileInput = function() {
 		control.fileinput({
 			language : 'zh', //设置语言
 			uploadUrl : uploadUrl, //上传的地址
-			allowedFileExtensions : [ 'image' ],//接收的文件后缀
+			allowedPreviewTypes: ['image'],
+            allowedFileTypes: ['image'],
+			allowedFileExtensions : [ 'jpg', 'png' ],//接收的文件后缀
 			showUpload : true, //是否显示上传按钮
 			showCaption : false,//是否显示标题
 			browseClass : "btn btn-primary", //按钮样式     
-			//dropZoneEnabled: false,//是否显示拖拽区域
+//			dropZoneEnabled: false,//是否显示拖拽区域
 			//minImageWidth: 50, //图片的最小宽度
 			//minImageHeight: 50,//图片的最小高度
 			//maxImageWidth: 1000,//图片的最大宽度
 			//maxImageHeight: 1000,//图片的最大高度
-			maxFileSize : 0,//单位为kb，如果为0表示不限制文件大小
+			maxFileSize : 2000,//单位为kb，如果为0表示不限制文件大小
 			//minFileCount: 0,
 			maxFileCount : 1, //表示允许同时上传的最大文件个数
 			enctype : 'multipart/form-data',
@@ -495,9 +503,7 @@ var FileInput = function() {
 			if (resp.success) {
 				$('#importModal').modal('hide');
 				layer.msg('导入成功');
-//				$('#table').bootstrapTable('refresh');
-				//重新获取折线图
-				getReportChart();
+				$('#iconImgPath').val(resp.data.result);
 
 				return;
 			}else{
@@ -505,7 +511,7 @@ var FileInput = function() {
 			}
 
 		});
-		//导入文件上传完成之后的事件
+		//导入文件上传完成之后的事件,在空白区域显示预览图片
 	}
 	return oFile;
 };
