@@ -113,4 +113,34 @@ public class CarServiceConstant {
             return "";
         }
     }
+    
+    public static enum ApplyType {
+		BUY_CAR_TYPE("01", "买车申请"), LOAN_APPLY_TYPE("02", "贷款申请"), INSURANCE_APPLY_TYPE("03", "保险申请"), MANAGE_APPLY_TYPE("04", "理财申请");
+
+		private String type;
+		private String name;
+
+		private ApplyType(String type, String name) {
+			this.type = type;
+			this.name = name;
+		}
+
+		public String getType() {
+			return type;
+		}
+
+		public String getName() {
+			return name;
+		}
+		
+		
+		 public static String getNameByType(String type) {
+	            for (ApplyType eopen : ApplyType.values()) {
+	                if (eopen.type.equals(type)) {
+	                    return eopen.name;
+	                }
+	            }
+	            return "";
+	        }
+	}
 }

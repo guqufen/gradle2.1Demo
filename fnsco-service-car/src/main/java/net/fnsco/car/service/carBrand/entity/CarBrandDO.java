@@ -8,8 +8,10 @@ public class CarBrandDO {
 	private Integer id;
 	@ApiModelProperty(value = "名称", example = "名称")
 	private String name;
-	@ApiModelProperty(value = "上级地址id", example = "上级地址id")
+	@ApiModelProperty(value = "上级菜单id", example = "上级菜单id")
 	private Integer supperId;
+	@ApiModelProperty(value = "上级菜单名称", example = "上级菜单名称")
+	private String supperName;
 	@ApiModelProperty(value = "级别", example = "级别")
 	private Integer level;
 	@ApiModelProperty(value = "图标地址", example = "图标地址")
@@ -41,6 +43,14 @@ public class CarBrandDO {
 
 	public void setSupperId(Integer supperId) {
 		this.supperId = supperId;
+	}
+
+	public String getSupperName() {
+		return supperName;
+	}
+
+	public void setSupperName(String supperName) {
+		this.supperName = supperName;
 	}
 
 	public Integer getLevel() {

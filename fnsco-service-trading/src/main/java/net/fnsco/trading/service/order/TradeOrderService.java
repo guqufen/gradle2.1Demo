@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
@@ -31,23 +32,29 @@ import net.fnsco.core.utils.DbUtil;
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.core.utils.dby.JHFMd5Util;
+import net.fnsco.trading.comm.TradeConstants;
+import net.fnsco.trading.comm.TradeConstants.WithdrawStateEnum;
 import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.trading.service.order.dto.OrderDTO;
 import net.fnsco.trading.service.order.dto.TradeJhfJO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
+import net.fnsco.trading.service.withdraw.TradeWithdrawService;
+import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 
 @Service
 public class TradeOrderService extends BaseService {
 
-    private Logger           logger = LoggerFactory.getLogger(this.getClass());
+    private Logger               logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    private TradeOrderDAO    tradeOrderDAO;
+    private TradeOrderDAO        tradeOrderDAO;
     @Autowired
-    private Environment      env;
+    private Environment          env;
     @Autowired
-    private TradeDataService tradeDataService;
+    private TradeDataService     tradeDataService;
     @Autowired
-    private SequenceService  sequenceService;
+    private SequenceService      sequenceService;
+    @Autowired
+    private TradeWithdrawService tradeWithdrawService;
 
     public String getReqData(TradeOrderDO tradeOrder, String payNotifyUrl, String payCallBackUrl) {
         String keyStr = env.getProperty("jhf.api.AES.key");
@@ -106,18 +113,21 @@ public class TradeOrderService extends BaseService {
     @Transactional
     public TradeOrderDO research(TradeOrderDO tradeOrder) {
         logger.info("开始添加TradeOrderService.add,tradeOrder=" + tradeOrder.toString());
-        tradeOrder.setCreateTime(new Date());
-        //tradeOrder.setOrderCeateTime(new Date());
-        if (Strings.isNullOrEmpty(tradeOrder.getOrderNo())) {
-            tradeOrder.setOrderNo(DateUtils.getNowYMDOnlyStr() + tradeOrder.getInnerCode() + sequenceService.getOrderSequence("t_trade_order"));
-        }
-        this.tradeOrderDAO.insert(tradeOrder);
-
+        this.doAdd(tradeOrder);
+        TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
+        tradeWithdraw.setOriginalOrderNo(tradeOrder.getOrderNo());
+        tradeWithdraw.setAppUserId(Integer.parseInt(tradeOrder.getCreateUserId()));
+        tradeWithdraw.setAmount(tradeOrder.getTxnAmount());
+        tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());
+        tradeWithdraw.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());
+        tradeWithdraw.setStatus(WithdrawStateEnum.INIT.getCode());
+        tradeWithdraw.setFee(BigDecimal.ZERO);
+        tradeWithdrawService.doAdd(tradeWithdraw);
         return tradeOrder;
     }
 
     // 添加
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public TradeOrderDO doAdd(TradeOrderDO tradeOrder) {
         logger.info("开始添加TradeOrderService.add,tradeOrder=" + tradeOrder.toString());
         tradeOrder.setCreateTime(new Date());
