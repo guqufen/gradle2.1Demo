@@ -358,4 +358,120 @@ public class TradeConstants extends CoreConstants {
         }
     }
 
+    //贷记卡和借记卡
+    public static enum RespCodeEnum {
+                                     HANDLING("1000", "处理中"), SUCCESS("1001", "成功"), FAIL("1002", "失败"), REFUNDS("1003", "退款");
+
+        private String code;
+        private String name;
+
+        private RespCodeEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        /**
+         * @return the code
+         */
+        public String getCode() {
+            return code;
+        }
+
+        /**
+        * @return the name
+        */
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(String code) {
+            for (RespCodeEnum eopen : RespCodeEnum.values()) {
+                if (eopen.code.equals(code)) {
+                    return eopen.name;
+                }
+            }
+            return "";
+        }
+    }
+
+    //交易类型 1提现/2收入/3新人红包/4预约提现/5提现手续费6收入撤销
+    public enum TradeTypeEnum {
+                               WITHDRAW(1, "提现"), INCOME(2, "交易收入"), RED_ENVELOPE(3, "新人红包"), RESE_WITHDRAW(4, "预约提现"), WITHDRAW_FEE(5, "提现手续费"), UNDO_INCOME(6, "收入撤销");
+        private Integer code;
+        private String  name;
+
+        private TradeTypeEnum(Integer code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        /**
+         * @return the code
+         */
+        public Integer getCode() {
+            return code;
+        }
+
+        /**
+        * @return the name
+        */
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(String code) {
+            for (TradeTypeEnum eopen : TradeTypeEnum.values()) {
+                if (eopen.code.equals(code)) {
+                    return eopen.name;
+                }
+            }
+            return "";
+        }
+    }
+    /**
+     * 预约提现状态表
+     * 
+     * @author sxf
+     * @version $Id: WithdrawPrepStateEnum.java, v 0.1 2017年3月21日 下午6:01:34 sxf Exp $
+     */
+    public enum WithdrawStateEnum {
+                                       //状态 状态 0未执行1执行中2失败3成功
+                                       INIT(0, "未执行"), PROCESSING(1, "执行中"), FAIL(2, "失败"), SUCCESS(3, "成功");
+
+        private Integer code;
+        private String  name;
+
+        private WithdrawStateEnum(Integer code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public static String getTypeName(Integer code) {
+            for (WithdrawStateEnum taskType : values()) {
+                if (taskType.getCode() == code) {
+                    return taskType.getName();
+                }
+            }
+            return "";
+        }
+
+        /**
+         * Getter method for property <tt>code</tt>.
+         * 
+         * @return property value of code
+         */
+        public Integer getCode() {
+            return code;
+        }
+
+        /**
+         * Getter method for property <tt>name</tt>.
+         * 
+         * @return property value of name
+         */
+        public String getName() {
+            return name;
+        }
+
+    }
 }

@@ -119,7 +119,7 @@ public class TradeWithdrawController extends BaseController {
     	tradeWithdraw.setTradeType(1);
     	tradeWithdraw.setFee(new BigDecimal(0));
     	tradeWithdraw.setUpdateTime(new Date());//还没做完
-    	tradeWithdrawService.doAdd(tradeWithdraw, getUserId());
+    	tradeWithdrawService.doAdd(tradeWithdraw);
     	
     	
     	/**
