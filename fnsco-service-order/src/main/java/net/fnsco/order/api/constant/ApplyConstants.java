@@ -1,8 +1,8 @@
-package net.fnsco.comm;
+package net.fnsco.order.api.constant;
 
 
 
-public class Constants {
+public class ApplyConstants {
 	public static enum ApplyType {
 		BUY_CAR_TYPE("01", "买车申请"), LOAN_APPLY_TYPE("02", "贷款申请"), INSURANCE_APPLY_TYPE("03", "保险申请"), MANAGE_APPLY_TYPE("04", "理财申请");
 

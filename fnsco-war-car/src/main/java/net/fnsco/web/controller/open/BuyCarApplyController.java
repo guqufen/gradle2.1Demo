@@ -1,6 +1,9 @@
 package net.fnsco.web.controller.open;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,7 @@ import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.MessageUtils;
+import net.fnsco.core.utils.dto.MessageValidateDTO;
 import net.fnsco.web.controller.jo.BuyCarJO;
 import net.fnsco.web.controller.vo.BuyCarVO;
 /**
@@ -35,10 +39,17 @@ public class BuyCarApplyController extends BaseController {
 
 	@RequestMapping(value = "/add")
 	@ApiOperation(value = "买车申请-添加申请")
-	public ResultDTO<BuyCarVO> addJO(@RequestBody BuyCarJO jo) {
+	public ResultDTO<BuyCarVO> addJO(@RequestBody BuyCarJO jo,final HttpServletRequest req) {
+		final HttpSession httpSession=req.getSession();
+		String code = jo.getVerCode();
+		String mobile = jo.getMobile();
+		MessageValidateDTO mDTO = (MessageValidateDTO) httpSession.getAttribute("fns"+mobile);
+		if(mDTO == null){
+			return ResultDTO.fail();
+		}
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
-		ResultDTO<Object> rt = utils.validateCode("fns", jo.getVerCode(), jo.getMobile());
+		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);
 		if(!rt.isSuccess()){
 			return ResultDTO.fail(rt.getMessage());
 		}
