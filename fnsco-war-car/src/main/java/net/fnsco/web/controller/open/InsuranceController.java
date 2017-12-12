@@ -51,7 +51,7 @@ public class InsuranceController extends BaseController {
 	@RequestMapping(value = "/saveSafe")
 	@ApiOperation(value = "保险申请-添加申请")
 	private ResultDTO<Object> saveSafe(@RequestBody SaveSafeJO saveSafeJO) {
-		String code = saveSafeJO.getCode();
+		String code = saveSafeJO.getVerCode();
 		String mobile = saveSafeJO.getMobile();
 		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
 			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
@@ -59,7 +59,7 @@ public class InsuranceController extends BaseController {
 		//获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
 		if(mDTO == null){
-			return ResultDTO.fail();
+			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("2021"));
 		}
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
