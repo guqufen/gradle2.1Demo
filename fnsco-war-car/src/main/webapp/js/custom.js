@@ -306,7 +306,7 @@ function subData(type){
 	var name=$(".name").val();			//姓名
 	var cityId=$("#cityId").val();		//所在城市
 	var carTypeId=$("#carId").val();	//汽车品牌
-	var carModel=$(".model").val();		//汽车型号
+	var carSubTypeId=$(".model").val();		//汽车型号
 	var buyType=$("#byStages").val();	//分期方案
 	var mobile=$(".phone-num").val();	//手机号码
 	var verCode=$(".phone-code").val();	//验证码
@@ -316,7 +316,7 @@ function subData(type){
 	var url;//提交请求地址
 
 	if(type==01){//买车申请
-		data={'name':name,'cityId':cityId,'carTypeId':carTypeId,'carModel':carModel,'buyType':buyType,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
+		data={'name':name,'cityId':cityId,'carTypeId':carTypeId,'carSubTypeId':carSubTypeId,'buyType':buyType,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
 		url='../h5/buyCar/add';
 		console.log(data,url)
 	}
@@ -328,7 +328,7 @@ function subData(type){
 		contentType:'application/json',
 		success:function(data){
 			console.log(data);
-			mui.toast('提交成功');
+			mui.toast(data.message);
 		}
 	})
 }
