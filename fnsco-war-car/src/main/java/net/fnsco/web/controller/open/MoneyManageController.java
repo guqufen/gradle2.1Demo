@@ -34,8 +34,8 @@ public class MoneyManageController extends BaseController {
 	@RequestMapping(value = "/saveFinance")
 	@ApiOperation(value = "理财申请-添加申请")
 	private ResultDTO saveFinance(@RequestBody SaveFinanceJO saveFinanceJO) {
-		String code = saveSafeJO.getVerCode();
-		String mobile = saveSafeJO.getMobile();
+		String code = saveFinanceJO.getVerCode();
+		String mobile = saveFinanceJO.getMobile();
 		//获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
 		//校验验证码是否正确
