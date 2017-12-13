@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -213,7 +214,7 @@ public class PrepaidRefillService extends BaseService{
 
 		String result = null;
 		String url = "http://v.juhe.cn/flow/recharge";// 请求接口地址
-		JuheDTO juhe = new JuheDTO();
+//		JuheDTO juhe = new JuheDTO();
 		String orderid = DateUtils.getNowYMDOnlyStr() + phone + sequenceService.getOrderSequence("t_trade_order");
 
 		//md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
@@ -221,16 +222,25 @@ public class PrepaidRefillService extends BaseService{
 
 		StringBuffer sb = new StringBuffer();
 		String sendData = sb.append("?key=").append(APPKEYFLOW).append("&phone=").append(phone).append("&pid=")
-				.append(pid).append("&orderid=").append(orderid).append("&sign").append(sign).toString();
+				.append(pid).append("&orderid=").append(orderid).append("&sign=").append(sign).toString();
 		try {
 			result = net(url, sendData, "GET");
 			System.out.println(result);
+			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
+			if(juhe.getError_code() == 0){
+				Map<String, String> map = new HashMap<>();
+				map.put("orderNo", map.get("orderid"));
+				return ResultDTO.success(map);
+			}else{
+				return ResultDTO.success(juhe.getReason());
+			}
 		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
 		return null;
 	}
+
 	/**
 	 * 
 	 * @param strUrl:提交的url

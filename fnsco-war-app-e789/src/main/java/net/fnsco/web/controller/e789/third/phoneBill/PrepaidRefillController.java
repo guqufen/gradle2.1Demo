@@ -21,9 +21,14 @@ import net.fnsco.trading.service.third.phoneBill.dto.JuheDTO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 
+/**
+ * 功能：账户页-手机充值的话费充值和流量充值控制器url
+ * @author yx，
+ *
+ */
 @RestController
-@RequestMapping(value="/app2c/e789/phoneCharge", method=RequestMethod.POST)
-@Api(value="/app2c/e789/phoneCharge", tags={"账户页-手机充值"})
+@RequestMapping(value="/app2c/phoneCharge", method=RequestMethod.POST)
+@Api(value="/app2c/phoneCharge", tags={"账户页-手机充值"})
 public class PrepaidRefillController extends BaseController {
 
 	@Autowired
