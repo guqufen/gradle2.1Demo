@@ -295,7 +295,7 @@ function sendCode(type){
 function subData(type){
 
 	for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
-		if(!type){//贷款特殊判断
+		if(type==2){//贷款特殊判断
 			if($(".mui-content #loan-information .mui-input-row").eq(i).find('input[type="text"]').val()==''){
 				var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
@@ -360,31 +360,30 @@ function subData(type){
 		url='../h5/manage/saveFinance';
 	}
 
-
-		$.ajax({
-			url:url,
-			type:'post',
-			data:JSON.stringify(data),
-			dataType:'json',
-			contentType:'application/json',
-			success:function(data){
-				console.log(data);        
-				if(data.code==2000){
-					if(type==03){
-						$(".loan-information-tab").removeClass('mui-active');
-						$(".car-info-tab").addClass('mui-active');
-						$("#loan-information").removeClass('mui-active');
-						$("#car-info").addClass('mui-active');
-					}else{
-						mui.toast("提交成功!");
-						// setInterval(function(){
-						// 	window.location.href='../index.html';
-						// },2000)
-					}
+	$.ajax({
+		url:url,
+		type:'post',
+		data:JSON.stringify(data),
+		dataType:'json',
+		contentType:'application/json',
+		success:function(data){
+			console.log(data);        
+			if(data.code==2000){
+				if(type==03){
+					$(".loan-information-tab").removeClass('mui-active');
+					$(".car-info-tab").addClass('mui-active');
+					$("#loan-information").removeClass('mui-active');
+					$("#car-info").addClass('mui-active');
 				}else{
-					mui.toast(data.message);
+					mui.toast("提交成功!");
+					// setInterval(function(){
+					// 	window.location.href='../index.html';
+					// },2000)
 				}
+			}else{
+				mui.toast(data.message);
 			}
-		})
+		}
+	})
 
 }
