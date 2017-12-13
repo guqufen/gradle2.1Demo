@@ -48,6 +48,19 @@ public class AgentProvider {
         if (agent.getSuggestCode() != null) {
             SET("suggest_code=#{agent.suggestCode}");
         }
+        //////
+        if (StringUtils.isNotBlank(agent.getMobile())){
+            SET("mobile=#{agent.mobile}");
+        }
+        if (StringUtils.isNotBlank(agent.getShortName())){
+            SET("short_name=#{agent.shortName}");
+        }
+        if (StringUtils.isNotBlank(agent.getPrincipal())){
+            SET("principal=#{agent.principal}");
+        }
+        if (agent.getCreateTime()!=null){
+            SET("create_time=#{agent.createTime}");
+        }
         WHERE("id = #{agent.id}");
         }}.toString();
     }
@@ -100,6 +113,19 @@ public class AgentProvider {
         if (agent.getSuggestCode() != null) {
             WHERE("suggest_code=#{agent.suggestCode}");
         }
+        ///
+        if (StringUtils.isNotBlank(agent.getMobile())){
+        	WHERE("mobile=#{agent.mobile}");
+        }
+        if (StringUtils.isNotBlank(agent.getShortName())){
+        	WHERE("short_name=#{agent.shortName}");
+        }
+        if (StringUtils.isNotBlank(agent.getPrincipal())){
+        	WHERE("principal=#{agent.principal}");
+        }
+        if (agent.getCreateTime()!=null){
+        	WHERE("create_time=#{agent.createTime}");
+        }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -141,6 +167,18 @@ public class AgentProvider {
         }
         if (agent.getSuggestCode() != null) {
             WHERE("suggest_code=#{agent.suggestCode}");
+        }
+        if (StringUtils.isNotBlank(agent.getMobile())){
+        	WHERE("mobile=#{agent.mobile}");
+        }
+        if (StringUtils.isNotBlank(agent.getShortName())){
+        	WHERE("short_name=#{agent.shortName}");
+        }
+        if (StringUtils.isNotBlank(agent.getPrincipal())){
+        	WHERE("principal=#{agent.principal}");
+        }
+        if (agent.getCreateTime()!=null){
+        	WHERE("create_time=#{agent.createTime}");
         }
         }}.toString();
     }

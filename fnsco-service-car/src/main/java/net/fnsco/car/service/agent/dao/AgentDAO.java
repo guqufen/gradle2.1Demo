@@ -20,7 +20,7 @@ public interface AgentDAO {
     @Select("SELECT * FROM car_agent WHERE id = #{id}")
     public AgentDO getById(@Param("id") int id);
 
-    @Insert("INSERT into car_agent(id,name,type,provinceId,provinceName,cityId,cityName,areaId,areaName,address,suggest_code) VALUES (#{id},#{name},#{type},#{provinceid},#{provincename},#{cityid},#{cityname},#{areaid},#{areaname},#{address},#{suggestCode})")
+    @Insert("INSERT into car_agent(id,name,type,provinceId,provinceName,cityId,cityName,areaId,areaName,address,suggest_code,mobile,short_name,principal,create_time) VALUES (#{id},#{name},#{type},#{provinceid},#{provincename},#{cityid},#{cityname},#{areaid},#{areaname},#{address},#{suggestCode},#{mobile},#{shortName},#{principal},#{createTime})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(AgentDO agent);
 
