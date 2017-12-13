@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.e789.third.phoneCharge;
+package net.fnsco.web.controller.e789.third.phoneBill;
 
 import java.util.List;
 
@@ -15,19 +15,30 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.trading.service.third.phoneCharge.PrepaidRefillService;
-import net.fnsco.trading.service.third.phoneCharge.dto.FlowPackageCheckDTO;
-import net.fnsco.trading.service.third.phoneCharge.dto.JuheDTO;
+import net.fnsco.trading.service.third.phoneBill.PrepaidRefillService;
+import net.fnsco.trading.service.third.phoneBill.dto.FlowPackageCheckDTO;
+import net.fnsco.trading.service.third.phoneBill.dto.JuheDTO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 
+/**
+ * 功能：账户页-手机充值的话费充值和流量充值控制器url
+ * @author yx，
+ *
+ */
 @RestController
-@RequestMapping(value="/app2c/e789/phoneCharge", method=RequestMethod.POST)
-@Api(value="/app2c/e789/phoneCharge", tags={"账户页-手机充值"})
+@RequestMapping(value="/app2c/phoneCharge", method=RequestMethod.POST)
+@Api(value="/app2c/phoneCharge", tags={"账户页-手机充值"})
 public class PrepaidRefillController extends BaseController {
 
 	@Autowired
 	private PrepaidRefillService prepaidRefillService;
+
+	@RequestMapping("/prepaidRefillCheck")
+	@ApiOperation(value = "手机号码充值套餐资费查询url")
+	public ResultDTO prepaidRefillCheck(@RequestBody FlowPackageCheckJO flowPackageCheckJO) {
+		return prepaidRefillService.prepaidRefillCheck(flowPackageCheckJO.getPhone());
+	}
 
 	@RequestMapping("/prepaidRefill")
 	@ApiOperation(value = "手机号码充值url")
@@ -44,7 +55,7 @@ public class PrepaidRefillController extends BaseController {
 	@RequestMapping("/flowCharge")
 	@ApiOperation(value = "手机流量充值url")
 	public ResultDTO flowCharge(@RequestBody FlowChargeJO fl) {
-		return null;
+		return prepaidRefillService.flowCharge(fl.getPhone(), fl.getPid());
 	}
 
 	@RequestMapping("/demo")

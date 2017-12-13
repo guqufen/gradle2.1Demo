@@ -45,14 +45,8 @@ public class BuyCarApplyController extends BaseController {
 	public ResultDTO<BuyCarVO> addJO(@RequestBody BuyCarJO jo) {
 		String code = jo.getVerCode();
 		String mobile = jo.getMobile();
-		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
-			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
-		}
 		//获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
-		if(mDTO == null){
-			return ResultDTO.fail();
-		}
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
 		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);

@@ -17,9 +17,14 @@ import net.fnsco.car.service.carBrand.entity.CarBrandDO;
 import net.fnsco.car.service.carBrand.entity.CarBrandDTO;
 import net.fnsco.core.base.ResultDTO;
 
+/**
+ * 
+ * @author yx
+ *
+ */
 @RestController
-@RequestMapping(value = "/api/carBrand")
-@Api(value = "/api/carBrand", tags = { "汽车品牌" })
+@RequestMapping(value = "/h5/carBrand",method=RequestMethod.GET)
+@Api(value = "/h5/carBrand", tags = { "汽车品牌" })
 public class CarBrandController {
 
 	@Autowired
@@ -27,7 +32,7 @@ public class CarBrandController {
 
 	@RequestMapping("/selectHot")
 	@ApiOperation("查询热门汽车品牌")
-	public ResultDTO selectHot(){
+	public ResultDTO<List<CarBrandDO>> selectHot(){
 		return carBrandServic.selectHot();
 	}
 
@@ -39,7 +44,7 @@ public class CarBrandController {
 
 	@RequestMapping("/selectChild")
 	@ApiOperation("通过父id查询汽车品牌子对象数据")
-	public ResultDTO selectChild( Integer id) {
+	public ResultDTO<List<CarBrandDO>> selectChild( Integer id) {
 		return carBrandServic.selectChild(id);
 	}
 }

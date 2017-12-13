@@ -3,6 +3,7 @@ package net.fnsco.web.controller.open;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +29,7 @@ import com.alibaba.fastjson.JSONArray;
 import ch.qos.logback.core.CoreConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.car.comm.CarConstant;
 import net.fnsco.car.comm.CarServiceConstant;
 import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.car.service.file.OrderFileService;
@@ -38,6 +41,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.MessageUtils;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.dto.MessageValidateDTO;
+import net.fnsco.freamwork.comm.FrameworkConstant;
 import net.fnsco.web.controller.jo.LoanJO;
 import net.fnsco.web.controller.jo.LoanJO2;
 import net.fnsco.web.controller.vo.LoanVO;
@@ -60,14 +64,9 @@ public class LoanApplyController extends BaseController {
 		// 校验验证码
 		String code = jo.getVerCode();
 		String mobile = jo.getMobile();
-		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
-			return ResultDTO.fail();
-		}
 		// 获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
-		if (mDTO == null) {
-			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("2021"));
-		}
+		
 		// 校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
 		ResultDTO<Object> rt = utils.validateCode2(code, mobile, mDTO);
@@ -87,8 +86,8 @@ public class LoanApplyController extends BaseController {
 //		String fileIds = jo.getFileIds();// 上传的图片id
 		ResultDTO<Object> result = orderLoanService.addJo(orderLoan, customer);
 		LoanVO loanVO = new LoanVO();
-		loanVO = (LoanVO)result.getData();
-		loanVO.setOrderNo(loanVO.getOrderNo());
+		Integer orderId = (Integer)result.getData();
+		loanVO.setOrderNo(orderId);
 		if (result.isSuccess()) {
 			return ResultDTO.success(loanVO);
 		} else {
@@ -96,23 +95,8 @@ public class LoanApplyController extends BaseController {
 		}
 	}
 	
-	
-	@ResponseBody
-	@RequestMapping(value = "/update", produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "贷款申请-更新信息")
-	public ResultDTO<Object> updateLoanJO(@RequestBody LoanJO2 jo){
-		if(jo.getOrderId() == null){
-			return ResultDTO.failForMessage(CarServiceConstant.anErrorMap.get("0001"));
-		}
-		OrderLoanDO orderLoan = new OrderLoanDO();
-		orderLoan.setId(jo.getOrderId());
-		orderLoan.setCarTypeId(jo.getCarTypeId());
-		orderLoan.setCarSubTypeId(jo.getCarSubTypeId());
-		orderLoan.setLastUpdateTime(new Date());
-		orderLoanService.doUpdate(orderLoan, 0);
-		return ResultDTO.success();
-	}
 
+	
 	@ResponseBody
 	@RequestMapping(value = "/fileInfo/upload", produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "上传图片")
@@ -120,17 +104,35 @@ public class LoanApplyController extends BaseController {
 		return commImport(request, response, true);
 	}
 
+	@Transactional
 	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
-		String fileType = request.getParameter("type");//文件类型
-		String orderId = request.getParameter("orderId");
+		String orderId = request.getParameter("orderNo");
+		String carTypeId = request.getParameter("carTypeId");//汽车品牌
+		String carSubTypeId = request.getParameter("carSubTypeId");//汽车型号
+		//更新贷款申请表单
+		OrderLoanDO orderLoan = new OrderLoanDO();
+		orderLoan.setId(Integer.parseInt(orderId));
+		orderLoan.setCarTypeId(Integer.parseInt(carTypeId));
+		orderLoan.setCarSubTypeId(Integer.parseInt(carSubTypeId));
+		orderLoan.setLastUpdateTime(new Date());
+		orderLoanService.doUpdate(orderLoan, 0);
+		
+		//获取图片信息
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+		
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
 			// 上传文件原名
 			MultipartFile file = entity.getValue();
-
+			String file_type = entity.getKey();
+			if(StringUtils.equals("xs", file_type)){
+				file_type = "0";
+			}else if(StringUtils.equals("dj", file_type)){
+				file_type = "1";
+			}else if(StringUtils.equals("cl", file_type)){
+				file_type = "2";
+			}
 			OrderFileDO fileInfo = new OrderFileDO();
-//			String fileType = req.getParameter("fileTypeKey");
 			String fileName = file.getOriginalFilename();
 			String line = System.getProperty("file.separator");// 文件分割符
 			// 保存文件的路径
@@ -175,22 +177,26 @@ public class LoanApplyController extends BaseController {
 					OssLoaclUtil.uploadFile(fileURL, fileKey);
 					String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
 					fileInfo.setFilePath(newUrl);
-					fileInfo.setFileType(fileType);
+					fileInfo.setFileType(file_type);
 					fileInfo.setFileName(fileName);
 					fileInfo.setOrderNo(orderId);
 					fileInfo.setCreateTime(new Date());
 					ResultDTO<Integer> result = orderFileService.doAddToDB(fileInfo);
 					if (result.isSuccess()) {
-						ResultDTO<TreeMap<String, String>> appResult = null;
-
-						TreeMap<String, String> paras = new TreeMap<>();
-						paras.put("id", String.valueOf(result.getData()));
-						paras.put("url", newUrl);
-						paras.put("fileType", fileType);
-
-						appResult = ResultDTO.success(paras);
-						String json = isApp ? JSONArray.toJSONString(appResult) : JSONArray.toJSONString(paras);
-						response.getWriter().write(json);
+//						ResultDTO<TreeMap<String, String>> appResult = null;
+//						TreeMap<String, String> paras = new TreeMap<>();
+//						paras.put("id", String.valueOf(result.getData()));
+//						paras.put("fileType", file_type);
+//
+//						appResult = ResultDTO.success(paras);
+//						String json = isApp ? JSONArray.toJSONString(appResult) : JSONArray.toJSONString(paras);
+						
+						response.setHeader("Content-type", "text/html;charset=UTF-8");  
+						//这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859  
+						response.setCharacterEncoding("UTF-8");  
+						String data = "提交成功";  
+						PrintWriter pw = response.getWriter();  
+						pw.write(data); 
 					} else {
 						logger.error(fileName + "上传失败");
 						throw new RuntimeException();
