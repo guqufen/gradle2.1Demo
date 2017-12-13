@@ -58,8 +58,8 @@ public class OrderLoanService extends BaseService {
 				}
 			}
 
-			if (null != orderLoanDO.getCarTypeId()) {
-				CarBrandDO carBrandDO = carBrandService.doQueryById(orderLoanDO.getCarTypeId());
+			if (null != orderLoanDO.getCarSubTypeId()) {
+				CarBrandDO carBrandDO = carBrandService.doQueryById(orderLoanDO.getCarSubTypeId());
 				if (null != carBrandDO) {
 					orderLoanDO.setCarTypeName(carBrandDO.getName());
 				}
