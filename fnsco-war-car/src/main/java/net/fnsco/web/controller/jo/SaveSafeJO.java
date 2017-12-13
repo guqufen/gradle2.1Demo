@@ -31,7 +31,7 @@ public class SaveSafeJO extends JO {
 	@ApiModelProperty(value="验证码",name="verCode",example="验证码")
 	private String verCode;//验证码
 	@ApiModelProperty(value="推荐码",name="suggestCode",example="推荐码")
-	private Integer suggestCode;// 推荐码
+	private String suggestCode;// 推荐码
 	/**
 	 * @return the name
 	 */
@@ -119,13 +119,13 @@ public class SaveSafeJO extends JO {
 	/**
 	 * @return the suggestCode
 	 */
-	public Integer getSuggestCode() {
+	public String getSuggestCode() {
 		return suggestCode;
 	}
 	/**
 	 * @param suggestCode the suggestCode to set
 	 */
-	public void setSuggestCode(Integer suggestCode) {
+	public void setSuggestCode(String suggestCode) {
 		this.suggestCode = suggestCode;
 	}
 	/**
