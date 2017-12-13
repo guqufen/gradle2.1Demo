@@ -86,7 +86,7 @@ public class LoanApplyController extends BaseController {
 		orderLoan.setCityId(jo.getCityId());
 		orderLoan.setAmount(jo.getAmount());
 		orderLoan.setSuggestCode(jo.getSuggestCode());
-		orderLoan.setCarTypeId(jo.getCarTypeId());// 车品牌id
+		orderLoan.setCarSubTypeId(jo.getCarSubTypeId());// 车品牌id
 		orderLoan.setCarModel(jo.getMobile());// 车型号
 
 		String fileIds = jo.getFileIds();// 上传的图片id

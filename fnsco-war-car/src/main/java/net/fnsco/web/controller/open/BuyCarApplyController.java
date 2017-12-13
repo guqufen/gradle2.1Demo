@@ -26,7 +26,11 @@ import net.fnsco.web.controller.jo.BuyCarJO;
 import net.fnsco.web.controller.vo.BuyCarVO;
 /**
  * 
- * @author Administrator
+ * @deprecated 
+ * @author   binghui.li
+ * @version  
+ * @since    Ver 1.1
+ * @Date	 2017 2017年12月12日 下午6:15:10
  *
  */
 @RestController

@@ -114,10 +114,10 @@ function formatStatus(value, row, index){
 		return '未知'
 	}
 }
-//金额除以100
+//金额除以1000000
 function formatRMB(value, row, index){
 	if(value){
-		return value/100;
+		return value/1000000;
 	}
 	return '--';
 }

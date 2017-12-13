@@ -24,7 +24,7 @@ public class BuyCarJO {
 	     * 汽车型号
 	     */
 		@ApiModelProperty(value = "汽车型号",  example = "汽车型号")
-	    private String carSubTypeId;
+	    private Integer carSubTypeId;
 
 	    /**
 	     * 金融方案
@@ -103,11 +103,11 @@ public class BuyCarJO {
 	        this.carTypeId = carTypeId;
 	    }
 
-	    public String getCarSubTypeId() {
+	    public Integer getCarSubTypeId() {
 	        return carSubTypeId;
 	    }
 
-	    public void setCarSubTypeId(String carSubTypeId) {
+	    public void setCarSubTypeId(Integer carSubTypeId) {
 	        this.carSubTypeId = carSubTypeId;
 	    }
 

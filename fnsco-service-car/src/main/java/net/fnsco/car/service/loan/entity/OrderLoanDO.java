@@ -40,7 +40,7 @@ public class OrderLoanDO {
     /**
      * 汽车品牌
      */
-    private Integer carTypeId;
+    private Integer carSubTypeId;
     
     /**
      * 	汽车品牌名称
@@ -181,16 +181,16 @@ public class OrderLoanDO {
 	 * @since   CodingExample Ver 1.0
 	*/
 	
-	public Integer getCarTypeId() {
-		return carTypeId;
+	public Integer getCarSubTypeId() {
+		return carSubTypeId;
 	}
 
 	/**
 	 * @param carTypeId the carTypeId to set
 	 */
 
-	public void setCarTypeId(Integer carTypeId) {
-		this.carTypeId = carTypeId;
+	public void setCarSubTypeId(Integer carSubTypeId) {
+		this.carSubTypeId = carSubTypeId;
 	}
 
 	
@@ -297,7 +297,7 @@ public class OrderLoanDO {
 	public String toString() {
 		return "OrderLoanDO [id=" + id + ", customerId=" + customerId + ", cityId=" + cityId + ", amount=" + amount
 				+ ", suggestCode=" + suggestCode + ", createTime=" + createTime + ", lastUpdateTime=" + lastUpdateTime
-				+ ", status=" + status + ", carTypeId=" + carTypeId + ", carModel=" + carModel + "]";
+				+ ", status=" + status + ", carSubTypeId=" + carSubTypeId + ", carModel=" + carModel + "]";
 	}
 
 	

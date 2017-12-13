@@ -27,7 +27,7 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             SET("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (orderBuy.getCarSubTypeId() != null){
+        if (orderBuy.getCarSubTypeId()!= null){
             SET("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
@@ -76,7 +76,7 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             WHERE("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (orderBuy.getCarSubTypeId() != null){
+        if (orderBuy.getCarSubTypeId()!=null){
             WHERE("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
@@ -125,7 +125,7 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             WHERE("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (orderBuy.getCarSubTypeId() != null){
+        if (orderBuy.getCarSubTypeId()!=null){
             WHERE("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
