@@ -113,11 +113,11 @@ public class LoanApplyController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/fileInfo/upload", produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "上传图片")
-	public String upload( MultipartFile importFile) {
+	public ResultDTO<Object> upload( MultipartFile importFile) {
 		return commImport(request, response, true);
 	}
 
-	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
+	private ResultDTO<Object> commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
 		String orderId = request.getParameter("orderNo");
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
@@ -134,7 +134,6 @@ public class LoanApplyController extends BaseController {
 				file_type = "2";
 			}
 			OrderFileDO fileInfo = new OrderFileDO();
-//			String fileType = req.getParameter("fileTypeKey");
 			String fileName = file.getOriginalFilename();
 			String line = System.getProperty("file.separator");// 文件分割符
 			// 保存文件的路径
@@ -185,16 +184,7 @@ public class LoanApplyController extends BaseController {
 					fileInfo.setCreateTime(new Date());
 					ResultDTO<Integer> result = orderFileService.doAddToDB(fileInfo);
 					if (result.isSuccess()) {
-						ResultDTO<TreeMap<String, String>> appResult = null;
-
-						TreeMap<String, String> paras = new TreeMap<>();
-						paras.put("id", String.valueOf(result.getData()));
-						paras.put("url", newUrl);
-						paras.put("fileType", file_type);
-
-						appResult = ResultDTO.success(paras);
-						String json = isApp ? JSONArray.toJSONString(appResult) : JSONArray.toJSONString(paras);
-						response.getWriter().write(json);
+						return ResultDTO.success();
 					} else {
 						logger.error(fileName + "上传失败");
 						throw new RuntimeException();
