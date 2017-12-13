@@ -6,6 +6,7 @@
 	<link href="css/mui.css" rel="stylesheet" type="text/css" media="all">
 	<link href="css/reset.css" rel="stylesheet" type="text/css" media="all">
 	<link href="css/input.css" rel="stylesheet" type="text/css" media="all">
+	<link href="css/brand.css" rel="stylesheet" type="text/css" media="all">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 </head>
@@ -23,7 +24,7 @@
 			</a>
 		</nav>
 		<div class="mui-content">
-			<div id="loan-information" class="mui-control-content">
+			<div id="loan-information" class="mui-control-content mui-active">
 				<div class="mui-input-row">
 					<label>借款人姓名</label>
 					<input class="name" placeholder="借款人姓名" type="text">
@@ -35,12 +36,12 @@
 				</div>
 				<div class="mui-input-row rmb">
 					<label>贷款金额</label>
-					<input class="input-rmbnum" placeholder="贷款金额" type="text">
+					<input class="input-rmbnum" placeholder="贷款金额" type="number">
 					<span>万元</span>
 				</div>
 				<div class="mui-input-row phone">
 					<label>手机号码</label>
-					<input class="phone-num" placeholder="输入手机号码" type="text">
+					<input class="phone-num" placeholder="输入手机号码" type="number">
 					<button class="send-code">发送验证码</button>
 				</div>
 				<div class="mui-input-row">
@@ -51,9 +52,9 @@
 					<label>推荐码</label>
 					<input class="refrral-code" placeholder="输入推荐码" type="text">
 				</div>
-				<button class="sub-btn">下一步</button>
+				<button class="sub-btn" onclick="subData()">下一步</button>
 			</div>
-			<div id="car-info" class="mui-control-content mui-active">
+			<div id="car-info" class="mui-control-content">
 				<div class="mui-input-row">
 					<label>车品牌</label>
 					<input class="car-brand" id="carBrand" placeholder="选择车品牌" type="text">
@@ -64,7 +65,7 @@
 				</div>
 				<div class="mui-input-row">
 					<label>行驶证</label>
-					<input type="file" name="_f" id="_f" /> 
+					<input type="file" id="xs" /> 
 				</div>
 				<div class="mui-input-row">
 					<label>车辆登记证</label>
@@ -74,44 +75,30 @@
 					<label>车辆大本</label>
 					<input type="file" name="_f" id="_f" /> 
 				</div>
-				<button class="sub-btn">提交</button>
+				<button class="sub-btn" onclick="subData('03')">提交</button>
 			</div>
 		</div>
-		<!-- <div class="mui-content input">
-			<div class="mui-input-row">
-				<label>投保人</label>
-				<input class="name" placeholder="输入投保人姓名" type="text">
+		<!-- 选择品牌 -->
+		<div class="brand popup">
+			<div class="close">
+				<span></span>
 			</div>
-			<div class="mui-input-row">
-				<label>所在城市</label>
-				<input class="city" id='showCityPicker' placeholder="选择所在城市" type="text">
-				<input type="hidden" id="cityId" name="cityId">
+			<div class="brand-nav">
+				<a href="javascript:;" onclick="javascript:document.getElementById('hot').scrollIntoView()">热</a>
 			</div>
-			<div class="mui-input-row rmb">
-				<label>汽车原价</label>
-				<input class="carMoney" placeholder="输入汽车原价" type="text">
-				<span>元</span>
+			<div class="brand-list">
+				<!-- 热门品牌 -->
+				<div class="hot">
+					<div class="title" id="hot">热门品牌</div>
+					<div class="mui-row">
+						
+					</div>
+				</div>
+				<!-- end -->
 			</div>
-			<div class="mui-input-row">
-				<label>意向投保公司</label>
-				<input class="insurance-company" id="showInsuranceCompanyPicker" placeholder="选择意向投保公司" type="text">
-				<input id="insuranceCompanyId" name="insuranceCompanyId" type="hidden">
-			</div>
-			<div class="mui-input-row phone">
-				<label>手机号码</label>
-				<input class="phone-num" placeholder="输入手机号码" type="text">
-				<button class="send-code">发送验证码</button>
-			</div>
-			<div class="mui-input-row">
-				<label>短信验证码</label>
-				<input class="phone-code" placeholder="输入短信验证码" type="text">
-			</div>
-			<div class="mui-input-row">
-				<label>推荐码</label>
-				<input class="refrral-code" placeholder="输入推荐码" type="text">
-			</div>
-			<button class="sub-btn mui-btn" type="button" data-loading-text="提交中">提交审核</button>
-		</div> -->
+		</div>
+		<!-- 选择品牌下的车型 -->
+		<div class="child-brand popup"></div>
 		<!-- 页尾提示栏 -->
 		<div class="footer-bar">—— 我也是有底线的 ——</div>
 	</div>
@@ -140,6 +127,7 @@
 <script type="text/javascript" src="js/mui.js"></script>
 <script type="text/javascript" src="js/mui.picker.js"></script>
 <script type="text/javascript" src="js/mui.poppicker.js"></script>
+<script type="text/javascript" src="js/custom.js"></script>
 <script type="text/javascript">
 	//右划关闭
     mui.init({
