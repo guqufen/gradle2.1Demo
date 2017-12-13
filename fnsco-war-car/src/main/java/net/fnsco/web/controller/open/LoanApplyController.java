@@ -103,8 +103,13 @@ public class LoanApplyController extends BaseController {
 		if(jo.getOrderId() == null){
 			return ResultDTO.failForMessage(CarServiceConstant.anErrorMap.get("0001"));
 		}
-		
-		return null;
+		OrderLoanDO orderLoan = new OrderLoanDO();
+		orderLoan.setId(jo.getOrderId());
+		orderLoan.setCarTypeId(jo.getCarTypeId());
+		orderLoan.setCarSubTypeId(jo.getCarSubTypeId());
+		orderLoan.setLastUpdateTime(new Date());
+		orderLoanService.doUpdate(orderLoan, 0);
+		return ResultDTO.success();
 	}
 
 	@ResponseBody
@@ -115,6 +120,8 @@ public class LoanApplyController extends BaseController {
 	}
 
 	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
+		String type = request.getParameter("type");//文件类型
+		String orderId = request.getParameter("orderId");
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {

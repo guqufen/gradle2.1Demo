@@ -39,6 +39,13 @@ public class OrderLoanProvider {
         if (orderLoan.getStatus() != null) {
             SET("status=#{orderLoan.status}");
         }
+        
+        if (orderLoan.getCarTypeId() != null) {
+            SET("car_type_id=#{orderLoan.carTypeId}");
+        }
+        if (orderLoan.getCarSubTypeId() != null) {
+            SET("car_sub_type_id=#{orderLoan.carSubTypeId}");
+        }
         WHERE("id = #{orderLoan.id}");
         }}.toString();
     }
