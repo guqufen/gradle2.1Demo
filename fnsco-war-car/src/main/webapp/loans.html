@@ -24,7 +24,7 @@
 			</a>
 		</nav>
 		<div class="mui-content">
-			<div id="loan-information" class="mui-control-content">
+			<div id="loan-information" class="mui-control-content mui-active">
 				<div class="mui-input-row">
 					<label>借款人姓名</label>
 					<input class="name" placeholder="借款人姓名" type="text">
@@ -54,7 +54,7 @@
 				</div>
 				<button class="sub-btn" onclick="subData('02')">下一步</button>
 			</div>
-			<div id="car-info" class="mui-control-content mui-active">
+			<div id="car-info" class="mui-control-content">
 				<form name="carInfoForm" id="carInfoForm" method="post" enctype="multipart/form-data">
 					<div class="mui-input-row">
 						<label>车品牌</label>
@@ -134,4 +134,7 @@
 <script type="text/javascript" src="js/mui.poppicker.js"></script>
 <script type="text/javascript" src="js/jquery.form.js"></script>
 <script type="text/javascript" src="js/custom.js"></script>
+<script type="text/javascript">
+	start(true,false,false,true);
+</script>
 </html>
