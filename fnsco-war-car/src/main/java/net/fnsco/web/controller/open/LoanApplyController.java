@@ -113,11 +113,11 @@ public class LoanApplyController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/fileInfo/upload", produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "上传图片")
-	public ResultDTO<Object> upload( MultipartFile importFile) {
+	public String upload( MultipartFile importFile) {
 		return commImport(request, response, true);
 	}
 
-	private ResultDTO<Object> commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
+	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
 		String orderId = request.getParameter("orderNo");
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
@@ -184,7 +184,15 @@ public class LoanApplyController extends BaseController {
 					fileInfo.setCreateTime(new Date());
 					ResultDTO<Integer> result = orderFileService.doAddToDB(fileInfo);
 					if (result.isSuccess()) {
-						return ResultDTO.success();
+						ResultDTO<TreeMap<String, String>> appResult = null;
+
+//						TreeMap<String, String> paras = new TreeMap<>();
+//						paras.put("id", String.valueOf(result.getData()));
+//						paras.put("fileType", file_type);
+//
+//						appResult = ResultDTO.success(paras);
+//						String json = isApp ? JSONArray.toJSONString(appResult) : JSONArray.toJSONString(paras);
+						response.getWriter().write("提交成功");
 					} else {
 						logger.error(fileName + "上传失败");
 						throw new RuntimeException();
