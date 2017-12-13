@@ -87,8 +87,8 @@ public class LoanApplyController extends BaseController {
 //		String fileIds = jo.getFileIds();// 上传的图片id
 		ResultDTO<Object> result = orderLoanService.addJo(orderLoan, customer);
 		LoanVO loanVO = new LoanVO();
-		loanVO = (LoanVO)result.getData();
-		loanVO.setOrderNo(loanVO.getOrderNo());
+		Integer orderId = (Integer)result.getData();
+		loanVO.setOrderNo(orderId);
 		if (result.isSuccess()) {
 			return ResultDTO.success(loanVO);
 		} else {
