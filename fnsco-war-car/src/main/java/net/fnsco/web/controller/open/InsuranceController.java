@@ -32,7 +32,7 @@ import net.fnsco.web.controller.vo.QueryInsuVO;
 
 /**
  * 
- * @desc TODO
+ * @desc 保险申请接口
  * @author hjt
  * @version 
  * @Date 2017年12月8日 上午11:43:36

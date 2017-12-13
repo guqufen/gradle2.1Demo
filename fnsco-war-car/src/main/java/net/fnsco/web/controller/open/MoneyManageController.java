@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.car.comm.CarServiceConstant;
 import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.car.service.finance.OrderFinanceService;
 import net.fnsco.car.service.finance.entity.OrderFinanceDO;
@@ -21,7 +20,7 @@ import net.fnsco.web.controller.jo.SaveFinanceJO;
 
 /**
  * 
- * @desc 
+ * @desc 理财申请接口
  * @author hjt
  * @version 
  * @Date 2017年12月8日 上午11:43:36
