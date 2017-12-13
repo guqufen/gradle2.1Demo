@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONArray;
+import com.google.common.base.Strings;
 
 import ch.qos.logback.core.CoreConstants;
 import io.swagger.annotations.Api;
@@ -106,9 +107,13 @@ public class LoanApplyController extends BaseController {
 
 	@Transactional
 	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
+		response.setHeader("Content-type", "text/html;charset=UTF-8");  
+		response.setCharacterEncoding("UTF-8");  
+		 
 		String orderId = request.getParameter("orderNo");
-		String carTypeId = request.getParameter("carTypeId");//汽车品牌
+		String carTypeId = request.getParameter("carId");//汽车品牌
 		String carSubTypeId = request.getParameter("carSubTypeId");//汽车型号
+		
 		//更新贷款申请表单
 		OrderLoanDO orderLoan = new OrderLoanDO();
 		orderLoan.setId(Integer.parseInt(orderId));
@@ -183,19 +188,8 @@ public class LoanApplyController extends BaseController {
 					fileInfo.setCreateTime(new Date());
 					ResultDTO<Integer> result = orderFileService.doAddToDB(fileInfo);
 					if (result.isSuccess()) {
-//						ResultDTO<TreeMap<String, String>> appResult = null;
-//						TreeMap<String, String> paras = new TreeMap<>();
-//						paras.put("id", String.valueOf(result.getData()));
-//						paras.put("fileType", file_type);
-//
-//						appResult = ResultDTO.success(paras);
-//						String json = isApp ? JSONArray.toJSONString(appResult) : JSONArray.toJSONString(paras);
-						
-						response.setHeader("Content-type", "text/html;charset=UTF-8");  
-						//这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859  
-						response.setCharacterEncoding("UTF-8");  
+						PrintWriter pw = response.getWriter();
 						String data = "提交成功";  
-						PrintWriter pw = response.getWriter();  
 						pw.write(data); 
 					} else {
 						logger.error(fileName + "上传失败");
