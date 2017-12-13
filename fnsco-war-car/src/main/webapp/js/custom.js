@@ -316,6 +316,7 @@ function subData(type){
 		}
 	}
 
+	//买车
 	var name=$(".name").val();						//姓名
 	var cityId=$("#cityId").val();					//所在城市
 	var carTypeId=$("#carId").val();				//汽车品牌
@@ -330,6 +331,9 @@ function subData(type){
 	// 保险
 	var carOriginalPrice=$(".car-money").val();		//汽车原价
 	var insuCompanyId=$("#insuranceCompanyId").val();//意向保险公司
+	//	贷款
+	var amount=$(".input-rmbnum").val();			//贷款金额
+
 	//	请求
 	var data;//提交参数
 	var url;//提交请求地址
@@ -339,6 +343,11 @@ function subData(type){
 	if(type==01){//买车申请
 		data={'name':name,'cityId':cityId,'carTypeId':carTypeId,'carSubTypeId':carSubTypeId,'buyType':buyType,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
 		url='../h5/buyCar/add';
+	}
+
+	if(type==02){//贷款申请
+		data={'name':name,'cityId':cityId,'amount':amount,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
+		url='../h5/loan/add';
 	}
 
 	if(type==03){//保险申请
@@ -351,12 +360,7 @@ function subData(type){
 		url='../h5/manage/saveFinance';
 	}
 
-	if(!type){//贷款特殊判断
-		$(".loan-information-tab").removeClass('mui-active');
-		$(".car-info-tab").addClass('mui-active');
-		$("#loan-information").removeClass('mui-active');
-		$("#car-info").addClass('mui-active');
-	}else{
+
 		$.ajax({
 			url:url,
 			type:'post',
@@ -364,10 +368,23 @@ function subData(type){
 			dataType:'json',
 			contentType:'application/json',
 			success:function(data){
-				console.log(data);
-				mui.toast(data.message);
+				console.log(data);        
+				if(data.code==2000){
+					if(type==03){
+						$(".loan-information-tab").removeClass('mui-active');
+						$(".car-info-tab").addClass('mui-active');
+						$("#loan-information").removeClass('mui-active');
+						$("#car-info").addClass('mui-active');
+					}else{
+						mui.toast("提交成功!");
+						// setInterval(function(){
+						// 	window.location.href='../index.html';
+						// },2000)
+					}
+				}else{
+					mui.toast(data.message);
+				}
 			}
 		})
-	}
 
 }
