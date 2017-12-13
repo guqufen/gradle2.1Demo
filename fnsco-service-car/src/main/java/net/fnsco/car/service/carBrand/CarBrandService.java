@@ -20,6 +20,7 @@ import net.fnsco.car.service.carBrand.entity.CarBrandDTO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.ChineseInital;
 import net.fnsco.core.utils.OssLoaclUtil;
 
 @Service
@@ -110,7 +111,7 @@ public class CarBrandService extends BaseService {
 	 * 查询汽车热门品牌
 	 * @return
 	 */
-	public ResultDTO selectHot() {
+	public ResultDTO<List<CarBrandDO>> selectHot() {
 		CarBrandDO carBrandDO = new CarBrandDO();
 		carBrandDO.setIsHot(1);
 		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO, 8);
@@ -157,7 +158,7 @@ public class CarBrandService extends BaseService {
 		List<CarBrandDTO> carList = new ArrayList<>();
 
 		for (CarBrandDO carBrandDO : list) {
-
+			
 			/**
 			 * 获取名称的每个汉字的首字母
 			 */

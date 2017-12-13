@@ -29,6 +29,12 @@ public class PrepaidRefillController extends BaseController {
 	@Autowired
 	private PrepaidRefillService prepaidRefillService;
 
+	@RequestMapping("/prepaidRefillCheck")
+	@ApiOperation(value = "手机号码充值套餐资费查询url")
+	public ResultDTO prepaidRefillCheck(@RequestBody FlowPackageCheckJO flowPackageCheckJO) {
+		return prepaidRefillService.prepaidRefillCheck(flowPackageCheckJO.getPhone());
+	}
+
 	@RequestMapping("/prepaidRefill")
 	@ApiOperation(value = "手机号码充值url")
 	public ResultDTO prepaidRefill() {
@@ -44,7 +50,7 @@ public class PrepaidRefillController extends BaseController {
 	@RequestMapping("/flowCharge")
 	@ApiOperation(value = "手机流量充值url")
 	public ResultDTO flowCharge(@RequestBody FlowChargeJO fl) {
-		return null;
+		return prepaidRefillService.flowCharge(fl.getPhone(), fl.getPid());
 	}
 
 	@RequestMapping("/demo")

@@ -21,6 +21,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.JuheDemoUtil;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
