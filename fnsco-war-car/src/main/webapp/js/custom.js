@@ -369,7 +369,7 @@ function subData(type){
 		console.log("已点击");
         $('#carInfoForm').ajaxSubmit({
             type: 'post', // 提交方式 get/post
-            url: 'http://192.168.1.162:8080/h5/loan/fileInfo/upload', // 需要提交的 url
+            url: '../h5/loan/fileInfo/upload', // 需要提交的 url
             success: function(data) { 
                 // data 保存提交后返回的数据，一般为 json 数据
                 // 此处可对 data 作相关处理
