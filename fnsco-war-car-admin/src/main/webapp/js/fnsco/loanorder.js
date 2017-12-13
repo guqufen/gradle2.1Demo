@@ -54,7 +54,8 @@ $('#table').bootstrapTable({
         formatter:formatTime
     },{
         field: 'amount',
-        title: '贷款额度(元)'
+        title: '贷款额度(万元)',
+        formatter:formatRMB
     },{
         field: '',
         title: '贷款期限'
@@ -111,6 +112,13 @@ function formatStatus(value, row, index){
 }
 function formatTime(value, row, index){
 	return formatDateUtil(value);
+}
+//金额除以1000000
+function formatRMB(value, row, index){
+	if(value){
+		return value/1000000;
+	}
+	return '--';
 }
 //条件查询按钮事件
 function queryEvent() {

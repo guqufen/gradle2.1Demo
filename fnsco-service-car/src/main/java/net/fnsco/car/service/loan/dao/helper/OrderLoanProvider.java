@@ -89,7 +89,7 @@ public class OrderLoanProvider {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderLoan.customerPhone})");
         }
         if(orderLoan.getSysUserId() != null) {
-        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderLoan.orderLoan} and  AND type = 1)");
+        	WHERE("suggest_code in (SELECT suggest_code FROM car_agent WHERE id in (SELECT agent_id FROM sys_user WHERE id=#{orderLoan.sysUserId}))");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
@@ -131,7 +131,7 @@ public class OrderLoanProvider {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderLoan.customerPhone})");
         }
         if(orderLoan.getSysUserId() != null) {
-        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderLoan.orderLoan} and  AND type = 1)");
+        	WHERE("suggest_code in (SELECT suggest_code FROM car_agent WHERE id in (SELECT agent_id FROM sys_user WHERE id=#{orderLoan.sysUserId}))");
         }
         }}.toString();
     }

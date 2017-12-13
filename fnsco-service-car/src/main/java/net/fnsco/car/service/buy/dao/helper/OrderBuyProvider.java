@@ -27,7 +27,7 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             SET("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (StringUtils.isNotBlank(orderBuy.getCarSubTypeId())){
+        if (orderBuy.getCarSubTypeId()!= null){
             SET("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
@@ -76,7 +76,7 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             WHERE("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (StringUtils.isNotBlank(orderBuy.getCarSubTypeId())){
+        if (orderBuy.getCarSubTypeId()!=null){
             WHERE("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
@@ -101,7 +101,7 @@ public class OrderBuyProvider {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderBuy.customerPhone})");
         }
         if(orderBuy.getSysUserId() != null) {
-        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderBuy.sysUserId} AND type = 0)");
+        	WHERE("suggest_code in (SELECT suggest_code FROM car_agent WHERE id in (SELECT agent_id FROM sys_user WHERE id=#{orderBuy.sysUserId}))");
         }
         
         ORDER_BY("id desc limit " + start + ", " + limit );
@@ -125,7 +125,7 @@ public class OrderBuyProvider {
         if (orderBuy.getCarTypeId() != null) {
             WHERE("car_type_id=#{orderBuy.carTypeId}");
         }
-        if (StringUtils.isNotBlank(orderBuy.getCarSubTypeId())){
+        if (orderBuy.getCarSubTypeId()!=null){
             WHERE("car_sub_type_id=#{orderBuy.carSubTypeId}");
         }
         if (StringUtils.isNotBlank(orderBuy.getBuyType())){
@@ -150,7 +150,7 @@ public class OrderBuyProvider {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderBuy.customerPhone})");
         }
         if(orderBuy.getSysUserId() != null) {
-        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderBuy.sysUserId}  AND type = 0)");
+        	WHERE("suggest_code in (SELECT suggest_code FROM car_agent WHERE id in (SELECT agent_id FROM sys_user WHERE id=#{orderBuy.sysUserId}))");
         }
         }}.toString();
     }

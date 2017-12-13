@@ -327,6 +327,7 @@ function clearDate(){
 //新增按钮事件
 $('#btn_add').click(function() {
 	clearDate();
+	requestAgent(null);
 	queryRole("role");
 	$('#addModal').modal();
 	$('#sexhide').hide();
@@ -344,7 +345,7 @@ $('#btn_yes').click(function() {
 			var password = $('#password').val();
 			var mobile = $('#mobile').val();
 			var department = $('#department').val();
-			var remark =$('#remark').val();
+//			var remark =$('#remark').val();
 			var date = {
 					"name" : username,
 					"password" : password,
@@ -356,8 +357,8 @@ $('#btn_yes').click(function() {
 					"status" : status,
 					"realName" : $('#realname').val(),
 					//"aliasName" : $('#aliasname').val(),
-					//"agentId" : $('#agentId').val(),
-					"remark" : remark
+					"agentId" : $('#agentId').val(),
+//					"remark" : remark
 				};
 			if (username == null || username.length == 0) {
 				layer.msg('用户名不能为空!');

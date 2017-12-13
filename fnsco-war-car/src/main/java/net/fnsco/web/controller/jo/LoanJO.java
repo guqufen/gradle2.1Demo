@@ -48,7 +48,7 @@ public class LoanJO extends JO{
 	 * 车型号
 	 */
 	@ApiModelProperty(value = "车型号",  example = "车型号")
-	private String carModel;
+	private Integer carSubTypeId;
 
 	@ApiModelProperty(value = "文件id", example = "文件id")
 	private String fileIds;
@@ -114,15 +114,15 @@ public class LoanJO extends JO{
 	/**
 	 * @return the carModel
 	 */
-	public String getCarModel() {
-		return carModel;
+	public Integer getCarSubTypeId() {
+		return carSubTypeId;
 	}
 
 	/**
 	 * @param carModel the carModel to set
 	 */
-	public void setCarModel(String carModel) {
-		this.carModel = carModel;
+	public void setCarSubTypeId(Integer carSubTypeId) {
+		this.carSubTypeId = carSubTypeId;
 	}
 
 	/**
