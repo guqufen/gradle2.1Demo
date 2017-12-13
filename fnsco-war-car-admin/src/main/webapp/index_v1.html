@@ -1,23 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"> 
+<meta http-equiv="pragma" content="no -cache">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<meta http-equiv="expires" content="0">
+<meta name="keywords" content="中融汽车">
+<meta name="description" content="中融汽车">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
 	<title>首页</title>
 	<style type="text/css">
-		#report_main{
-			width: 50%;
-			height: 500px;
-			float: left;
-		}
+		#info{
+            margin: 30px;padding: 20px;
+        }
+        #info div{
+            padding: 0;
+        }
+        #info .title{
+            font-size: 18px;
+            color: #ff6700;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        #info .col-md-6{
+            padding: 20px 0;
+            font-size: 14px;
+            position: relative;
+        }
+        #info .col-md-6:before{
+            content: '';
+            position: absolute;
+            height: 1px;
+            width:95%;
+            background: #f3f3f3;
+            bottom: 0;
+        }
+        .info-title{
+            display: bold;
+            width: 100px;
+        }
 	</style>
 </head>
 <body>
-	<a class="J_menuItem" onclick="clickAddTab('appusermanage.html','77','这只是个首页')">这只是一个首页</a>
-	<h1 style="color:#666;margin-left: 10px;font-size: 16px;">这只是一个首页</h1>
-	<div id="report_main"></div>
+	<!-- <a class="J_menuItem" onclick="clickAddTab('appusermanage.html','77','这只是个首页')">这只是一个首页</a> -->
+    <div class="row" id="info">
+        <div class="col-md-12 title">基本信息</div>
+        <div class="col-md-6 name">
+            <span class="info-title">公司名称：</span><span class="content">浙江元通汽车有限公司</span>
+        </div>
+        <div class="col-md-6 shortName">
+            <span class="info-title">简称：</span><span class="content">浙江元通</span>
+        </div>
+        <div class="col-md-6 cityname">
+            <span class="info-title">所在城市：</span><span class="content">杭州市</span>
+        </div>
+        <div class="col-md-6 suggestCode">
+            <span class="info-title">邀请码：</span><span class="content">ZJ0012</span>
+        </div>
+        <div class="col-md-6 principal">
+            <span class="info-title">负责人：</span><span class="content">厉害了</span>
+        </div>
+        <div class="col-md-6 mobile">
+            <span class="info-title">手机号码：</span><span class="content">13333333333</span>
+        </div>
+
+    </div>
 </body>
 <script src="js/bootstrap/jquery.min.js"></script>
-<script src="js/echarts/echarts.simple.min.js"></script>
 <script>
 var win=window.parent.document.getElementById("addHref");
 function clickAddTab(href,dataIndex,html){
@@ -26,75 +78,18 @@ function clickAddTab(href,dataIndex,html){
 	$(win).html(html);
 	win.click();
 }
+$.ajax({
+    url:'../web/agent/getAgentInfo',
+    type:'post',
+    contentType : "application/json",
+    success:function(data){
+        $(".name .content").html(data.data.name);
+        $(".shortName .content").html(data.data.shortName);
+        $(".cityname .content").html(data.data.cityname);
+        $(".suggestCode .content").html(data.data.suggestCode);
+        $(".principal .content").html(data.data.principal);
+        $(".mobile .content").html(data.data.mobile);
+    }
+})
 </script>
-<script type="text/javascript">
-var myChart = echarts.init(document.getElementById('report_main'));
-option = {
-    title: {
-        text: "某站点用户访问来源",
-        subtext: "纯属虚构",
-        x: "center"
-    },
-    tooltip: {
-        trigger: "item",
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
-    },
-    legend: {
-        orient: "vertical",
-        x: "left",
-        data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
-    },
-    toolbox: {
-        show: true,
-        feature: {
-            mark: {
-                show: true
-            },
-            dataView: {
-                show: true,
-                readOnly: true
-            },
-            restore: {
-                show: true
-            },
-            saveAsImage: {
-                show: true
-            }
-        }
-    },
-    calculable: true,
-    series: [
-        {
-            name: "访问来源",
-            type: "pie",
-            radius: "55%",
-            center: ["50%", "60%"],
-            data: [
-                {
-                    value: 335,
-                    name: "直接访问"
-                },
-                {
-                    value: 310,
-                    name: "邮件营销"
-                },
-                {
-                    value: 234,
-                    name: "联盟广告"
-                },
-                {
-                    value: 135,
-                    name: "视频广告"
-                },
-                {
-                    value: 1548,
-                    name: "搜索引擎"
-                }
-            ]
-        }
-    ]
-};
-myChart.setOption(option);
-</script>
-<script src="js/echarts/walden.js"></script>
 </html>

@@ -60,6 +60,7 @@ public class UserLoginAction extends BaseController {
         webUser.setId(user.getId());
         webUser.setName(user.getName());
         webUser.setType(user.getType());
+        webUser.setAgentId(user.getAgentId());
 
         CookieUtils.addCookie(response, CoreConstants.COOKIE_USER_KEY, user.getName());
         String tokenId = userTokenService.createToken(user.getId());

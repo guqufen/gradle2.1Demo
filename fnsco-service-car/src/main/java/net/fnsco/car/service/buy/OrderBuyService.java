@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.fnsco.car.service.agent.dao.AgentDAO;
+import net.fnsco.car.service.agent.entity.AgentDO;
 import net.fnsco.car.service.buy.dao.OrderBuyDAO;
 import net.fnsco.car.service.buy.entity.OrderBuyDO;
 import net.fnsco.car.service.carBrand.CarBrandService;
@@ -33,6 +35,8 @@ public class OrderBuyService extends BaseService {
 	private DicCityService dicCityService;
 	@Autowired
 	private CarBrandService carBrandService;
+	@Autowired
+	private AgentDAO agentDAO;
 
 	// 分页
 	public ResultPageDTO<OrderBuyDO> page(OrderBuyDO orderBuy, Integer pageNum, Integer pageSize) {
@@ -64,7 +68,18 @@ public class OrderBuyService extends BaseService {
 			
 			if(null != orderBuyDO.getCarSubTypeId()) {
 				CarBrandDO carBrandDO = carBrandService.doQueryById(orderBuyDO.getCarSubTypeId());
+				if(null != carBrandDO) {
+					orderBuyDO.setCarTypeName(orderBuyDO.getCarTypeName()+"&"+carBrandDO.getName());
+				}
 			}
+			
+			if(null != orderBuyDO.getSuggestCode()) {
+				AgentDO agentDO = agentDAO.getBySuggestCode(orderBuyDO.getSuggestCode());
+				if(null != agentDO) {
+					orderBuyDO.setAgentName(agentDO.getName());
+				}
+			}
+			
 		}
 		Integer count = this.orderBuyDAO.pageListCount(orderBuy);
 		ResultPageDTO<OrderBuyDO> pager = new ResultPageDTO<OrderBuyDO>(count, pageList);

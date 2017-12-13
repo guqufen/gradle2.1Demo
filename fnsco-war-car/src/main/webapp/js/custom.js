@@ -293,16 +293,29 @@ function sendCode(type){
 
 //提交按钮
 function subData(type){
+
 	for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
-		if($(".mui-content .mui-input-row").eq(i).find('input[type="text"]').val()==''){
-			var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
-			mui.alert(title+'不能为空');
-			return;
-		}else if(istel($(".phone-num").val())==false){ 
+		if(!type){//贷款特殊判断
+			if($(".mui-content #loan-information .mui-input-row").eq(i).find('input[type="text"]').val()==''){
+				var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
+				mui.alert(title+'不能为空');
+				return;
+			}else if(istel($(".phone-num").val())==false){ 
 			  mui.alert("请输入正确的手机号"); 
 			  return;
+			}
+		}else{
+			if($(".mui-content .mui-input-row").eq(i).find('input[type="text"]').val()==''){
+				var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
+				mui.alert(title+'不能为空');
+				return;
+			}else if(istel($(".phone-num").val())==false){ 
+				  mui.alert("请输入正确的手机号"); 
+				  return;
+			}
 		}
 	}
+
 	var name=$(".name").val();						//姓名
 	var cityId=$("#cityId").val();					//所在城市
 	var carTypeId=$("#carId").val();				//汽车品牌
@@ -311,10 +324,13 @@ function subData(type){
 	var mobile=$(".phone-num").val();				//手机号码
 	var verCode=$(".phone-code").val();				//验证码
 	var suggestCode=$(".refrral-code").val();		//邀请码
-
-	var financeType=$("#financeType").val();	//理财产品
+	// 理财
+	var financeType=$("#financeType").val();		//理财产品
 	var earnings=$("#earnings").val();				//预计收益
-
+	// 保险
+	var carOriginalPrice=$(".car-money").val();		//汽车原价
+	var insuCompanyId=$("#insuranceCompanyId").val();//意向保险公司
+	//	请求
 	var data;//提交参数
 	var url;//提交请求地址
 
@@ -323,7 +339,11 @@ function subData(type){
 	if(type==01){//买车申请
 		data={'name':name,'cityId':cityId,'carTypeId':carTypeId,'carSubTypeId':carSubTypeId,'buyType':buyType,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
 		url='../h5/buyCar/add';
-		console.log(data,url)
+	}
+
+	if(type==03){//保险申请
+		data={'name':name,'cityId':cityId,'carOriginalPrice':carOriginalPrice,'insuCompanyId':insuCompanyId,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
+		url='../h5/insu/saveSafe';
 	}
 	
 	if(type==04){//理财申请
@@ -331,15 +351,23 @@ function subData(type){
 		url='../h5/manage/saveFinance';
 	}
 
-	$.ajax({
-		url:url,
-		type:'post',
-		data:JSON.stringify(data),
-		dataType:'json',
-		contentType:'application/json',
-		success:function(data){
-			console.log(data);
-			mui.toast(data.message);
-		}
-	})
+	if(!type){//贷款特殊判断
+		$(".loan-information-tab").removeClass('mui-active');
+		$(".car-info-tab").addClass('mui-active');
+		$("#loan-information").removeClass('mui-active');
+		$("#car-info").addClass('mui-active');
+	}else{
+		$.ajax({
+			url:url,
+			type:'post',
+			data:JSON.stringify(data),
+			dataType:'json',
+			contentType:'application/json',
+			success:function(data){
+				console.log(data);
+				mui.toast(data.message);
+			}
+		})
+	}
+
 }
