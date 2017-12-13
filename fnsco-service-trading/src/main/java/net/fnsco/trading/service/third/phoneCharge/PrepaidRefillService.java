@@ -133,6 +133,21 @@ public class PrepaidRefillService extends BaseService{
 				System.out.println(map);
 				phChargePackageDTO.setCompany(map.get("company").toString());
 				List<Map<String, String>> lists = JSONObject.parseObject(map.get("flows").toString(), List.class);
+				for (Map<String, String> map2 : lists) {
+					/**
+					 * 返回的套餐资费list
+					 * id string 套餐ID; 
+					 * p string 套餐流量名称 ;
+					 * v string 套餐流量值 ;
+					 * inprice string 价格;
+					 */
+					PhoneChargeDTO phChargeDTO = new PhoneChargeDTO();
+					phChargeDTO.setId(map2.get("id"));
+					phChargeDTO.setName(map2.get("p"));
+					phChargeDTO.setInprice(map2.get("inprice"));
+					list.add(phChargeDTO);
+				}
+				phChargePackageDTO.setList(list);
 				System.out.println(lists);
 				PhoneChargeDTO phChargeDTO = new PhoneChargeDTO();
 				
