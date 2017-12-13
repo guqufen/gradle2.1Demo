@@ -3,6 +3,7 @@ package net.fnsco.web.controller.open;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
@@ -109,11 +110,17 @@ public class LoanApplyController extends BaseController {
 	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
 		response.setHeader("Content-type", "text/html;charset=UTF-8");  
 		response.setCharacterEncoding("UTF-8");  
-		 
+		
 		String orderId = request.getParameter("orderNo");
 		String carTypeId = request.getParameter("carId");//汽车品牌
 		String carSubTypeId = request.getParameter("carSubTypeId");//汽车型号
-		
+		if(Strings.isNullOrEmpty(orderId)||Strings.isNullOrEmpty(carTypeId)||Strings.isNullOrEmpty(carSubTypeId)){
+			try {
+				response.getWriter().write("检查参数");;
+			} catch (IOException e) {
+				
+			}
+		}
 		//更新贷款申请表单
 		OrderLoanDO orderLoan = new OrderLoanDO();
 		orderLoan.setId(Integer.parseInt(orderId));
@@ -189,7 +196,7 @@ public class LoanApplyController extends BaseController {
 					ResultDTO<Integer> result = orderFileService.doAddToDB(fileInfo);
 					if (result.isSuccess()) {
 						PrintWriter pw = response.getWriter();
-						String data = "提交成功";  
+						String data = "true";  
 						pw.write(data); 
 					} else {
 						logger.error(fileName + "上传失败");
