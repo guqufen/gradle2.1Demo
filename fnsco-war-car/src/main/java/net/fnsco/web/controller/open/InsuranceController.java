@@ -72,7 +72,7 @@ public class InsuranceController extends BaseController {
 		customerDO.setMobile(saveSafeJO.getMobile());
 		OrderSafeDO orderSafe = new OrderSafeDO();
 		orderSafe.setCityId(saveSafeJO.getCityId());
-		BigDecimal carPrice = saveSafeJO.getCarOriginalPrice().multiply(new BigDecimal(100));
+		BigDecimal carPrice = saveSafeJO.getCarOriginalPrice().multiply(new BigDecimal(1000000));
 		orderSafe.setCarOriginalPrice(carPrice);
 		/*Integer id = configService.queryIdByName(saveSafeJO.getInsuCompanyName());
 		if(id==null) {
