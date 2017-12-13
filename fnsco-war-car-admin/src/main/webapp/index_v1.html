@@ -48,22 +48,22 @@
 	<!-- <a class="J_menuItem" onclick="clickAddTab('appusermanage.html','77','这只是个首页')">这只是一个首页</a> -->
     <div class="row" id="info">
         <div class="col-md-12 title">基本信息</div>
-        <div class="col-md-6 companyName">
+        <div class="col-md-6 name">
             <span class="info-title">公司名称：</span><span class="content">浙江元通汽车有限公司</span>
         </div>
         <div class="col-md-6 shortName">
             <span class="info-title">简称：</span><span class="content">浙江元通</span>
         </div>
-        <div class="col-md-6 shortName">
+        <div class="col-md-6 cityname">
             <span class="info-title">所在城市：</span><span class="content">杭州市</span>
         </div>
-        <div class="col-md-6 shortName">
+        <div class="col-md-6 suggestCode">
             <span class="info-title">邀请码：</span><span class="content">ZJ0012</span>
         </div>
-        <div class="col-md-6 shortName">
+        <div class="col-md-6 principal">
             <span class="info-title">负责人：</span><span class="content">厉害了</span>
         </div>
-        <div class="col-md-6 shortName">
+        <div class="col-md-6 mobile">
             <span class="info-title">手机号码：</span><span class="content">13333333333</span>
         </div>
 
@@ -83,7 +83,12 @@ $.ajax({
     type:'post',
     contentType : "application/json",
     success:function(data){
-        console.log(data);
+        $(".name .content").html(data.data.name);
+        $(".shortName .content").html(data.data.shortName);
+        $(".cityname .content").html(data.data.cityname);
+        $(".suggestCode .content").html(data.data.suggestCode);
+        $(".principal .content").html(data.data.principal);
+        $(".mobile .content").html(data.data.mobile);
     }
 })
 </script>
