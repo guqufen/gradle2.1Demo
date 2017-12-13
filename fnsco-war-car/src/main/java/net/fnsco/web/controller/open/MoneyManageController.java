@@ -42,7 +42,7 @@ public class MoneyManageController extends BaseController {
 		MessageUtils utils = new MessageUtils();
 		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);
 		if(!rt.isSuccess()){
-			return rt;
+			return ResultDTO.fail(rt.getMessage());
 		}
 		CustomerDO customerDO =  new CustomerDO();
 		customerDO.setName(saveFinanceJO.getName());
