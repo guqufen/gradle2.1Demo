@@ -59,6 +59,9 @@ public class MoneyManageController extends BaseController {
 		//orderFinance.setBuyType(saveFinanceJO.getBuyType());
 		orderFinance.setSuggestCode(saveFinanceJO.getSuggestCode());
 		ResultDTO<Object> res = orderFinanceService.saveFinance(customerDO,orderFinance);
-        return res;
+		if (!res.isSuccess()) {
+			return ResultDTO.fail("提交失败");
+		}
+		return ResultDTO.success("提交成功");
     }
 }
