@@ -71,7 +71,7 @@ public class BuyCarApplyController extends BaseController {
 		ResultDTO<Object> result = orderBuyService.addJo(orderBuy, customer);
 		if (!result.isSuccess()) {
 		
-			return ResultDTO.fail("提交失败");
+			return ResultDTO.fail();
 		}
 		return ResultDTO.success("提交成功");
 	}
