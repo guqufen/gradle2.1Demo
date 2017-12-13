@@ -16,7 +16,10 @@ import java.util.List;;
 
 public interface AgentDAO {
 
-    @Results({@Result( column = "provinceId",property = "provinceid"),@Result( column = "provinceName",property = "provincename"),@Result( column = "cityId",property = "cityid"),@Result( column = "cityName",property = "cityname"),@Result( column = "areaId",property = "areaid"),@Result( column = "areaName",property = "areaname"),@Result( column = "suggest_code",property = "suggestCode") })
+    @Results({@Result( column = "provinceId",property = "provinceid"),@Result( column = "provinceName",property = "provincename"),
+    @Result( column = "cityId",property = "cityid"),@Result( column = "cityName",property = "cityname"),@Result( column = "areaId",property = "areaid"),@Result( column = "areaName",property = "areaname"),
+    @Result( column = "suggest_code",property = "suggestCode"),@Result( column = "mobile",property = "mobile"),@Result( column = "short_name",property = "shortName"),@Result( column = "principal",property = "principal")
+    ,@Result( column = "create_time",property = "createTime")})
     @Select("SELECT * FROM car_agent WHERE id = #{id}")
     public AgentDO getById(@Param("id") int id);
 
@@ -30,7 +33,9 @@ public interface AgentDAO {
     @UpdateProvider(type = AgentProvider.class, method = "update")
     public int update(@Param("agent") AgentDO  agent);
 
-    @Results({@Result( column = "provinceId",property = "provinceid"),@Result( column = "provinceName",property = "provincename"),@Result( column = "cityId",property = "cityid"),@Result( column = "cityName",property = "cityname"),@Result( column = "areaId",property = "areaid"),@Result( column = "areaName",property = "areaname"),@Result( column = "suggest_code",property = "suggestCode") })
+    @Results({@Result( column = "provinceId",property = "provinceid"),@Result( column = "provinceName",property = "provincename"),@Result( column = "cityId",property = "cityid"),@Result( column = "cityName",property = "cityname"),
+    @Result( column = "areaId",property = "areaid"),@Result( column = "areaName",property = "areaname"),@Result( column = "suggest_code",property = "suggestCode"),@Result( column = "mobile",property = "mobile"),@Result( column = "short_name",property = "shortName"),@Result( column = "principal",property = "principal")
+    ,@Result( column = "create_time",property = "createTime") })
     @SelectProvider(type = AgentProvider.class, method = "pageList")
     public List<AgentDO> pageList(@Param("agent") AgentDO agent, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
