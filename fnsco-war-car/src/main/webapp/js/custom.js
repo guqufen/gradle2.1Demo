@@ -4,7 +4,7 @@
 */
 function getCarBrand(boole){
 	$.ajax({
-		url:'../api/carBrand/selectAll',
+		url:'../h5/carBrand/selectAll',
 		type:'get',
 		contentType : "application/json",
 		success:function(data){
@@ -39,7 +39,7 @@ function getCarBrand(boole){
 */
 function getHotCarBrand(boole){
 	$.ajax({
-		url:'../api/carBrand/selectHot',
+		url:'../h5/carBrand/selectHot',
 		type:'get',
 		contentType : "application/json",
 		success:function(data){
@@ -63,7 +63,7 @@ function getHotCarBrand(boole){
 */
 function getChildBrand(id,boole){
 	$.ajax({
-		url:'../api/carBrand/selectChild',
+		url:'../h5/carBrand/selectChild',
 		type:'get',
 		contentType:'application/json',
 		data:{'id':id},
@@ -261,7 +261,7 @@ function istel(tel) {
     return rtn;  
 }
 
-//绑定按钮获取验证码
+//获取验证码
 function sendCode(type){
 	if(istel($(".phone-num").val())==false){ 
 	  	mui.alert("请输入正确的手机号"); 
@@ -293,16 +293,21 @@ function sendCode(type){
 
 //提交按钮
 function subData(type){
-
 	for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
-		if(!type){//贷款特殊判断
+		if(type=='02'){//贷款特殊判断
 			if($(".mui-content #loan-information .mui-input-row").eq(i).find('input[type="text"]').val()==''){
-				var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
+				var title=$(".mui-content #loan-information .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
 			}else if(istel($(".phone-num").val())==false){ 
 			  mui.alert("请输入正确的手机号"); 
 			  return;
+			}
+		}else if(type=='021'){
+			if($(".mui-content #car-info .mui-input-row").eq(i).find('input').val()==''){
+				var title=$(".mui-content #car-info .mui-input-row").eq(i).find('label').html();
+				mui.alert(title+'不能为空');
+				return;
 			}
 		}else{
 			if($(".mui-content .mui-input-row").eq(i).find('input[type="text"]').val()==''){
@@ -316,6 +321,7 @@ function subData(type){
 		}
 	}
 
+	//买车
 	var name=$(".name").val();						//姓名
 	var cityId=$("#cityId").val();					//所在城市
 	var carTypeId=$("#carId").val();				//汽车品牌
@@ -330,32 +336,53 @@ function subData(type){
 	// 保险
 	var carOriginalPrice=$(".car-money").val();		//汽车原价
 	var insuCompanyId=$("#insuranceCompanyId").val();//意向保险公司
+	//	贷款
+	var amount=$(".input-rmbnum").val();			//贷款金额
+
 	//	请求
 	var data;//提交参数
 	var url;//提交请求地址
 
-	// type类型 01买车 02贷款 03保险 04理财
+	// type类型string 01买车 02贷款 03保险 04理财
 
-	if(type==01){//买车申请
+	if(type=='01'){//买车申请
 		data={'name':name,'cityId':cityId,'carTypeId':carTypeId,'carSubTypeId':carSubTypeId,'buyType':buyType,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
 		url='../h5/buyCar/add';
 	}
 
-	if(type==03){//保险申请
+	if(type=='02'){//贷款申请
+		data={'name':name,'cityId':cityId,'amount':amount,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
+		url='../h5/loan/add';
+	}
+
+	if(type=='03'){//保险申请
 		data={'name':name,'cityId':cityId,'carOriginalPrice':carOriginalPrice,'insuCompanyId':insuCompanyId,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
 		url='../h5/insu/saveSafe';
 	}
 	
-	if(type==04){//理财申请
+	if(type=='04'){//理财申请
 		data={'name':name,'cityId':cityId,'financeType':financeType,'earnings':earnings,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
 		url='../h5/manage/saveFinance';
 	}
 
-	if(!type){//贷款特殊判断
-		$(".loan-information-tab").removeClass('mui-active');
-		$(".car-info-tab").addClass('mui-active');
-		$("#loan-information").removeClass('mui-active');
-		$("#car-info").addClass('mui-active');
+	if(type=='021'){//贷款上传图片
+		console.log("已点击");
+        $('#carInfoForm').ajaxSubmit({
+            type: 'post', // 提交方式 get/post
+            url: 'http://192.168.1.162:8080/h5/loan/fileInfo/upload', // 需要提交的 url
+            success: function(data) { 
+                // data 保存提交后返回的数据，一般为 json 数据
+                // 此处可对 data 作相关处理
+                console.log(data);
+                // alert('提交成功！');
+            }
+        });
+            
+		   
+	    console.log('ddd');
+		// $("#carInfoForm").submit(function(data){
+		// 	console.log(data);
+		// });
 	}else{
 		$.ajax({
 			url:url,
@@ -364,10 +391,47 @@ function subData(type){
 			dataType:'json',
 			contentType:'application/json',
 			success:function(data){
-				console.log(data);
-				mui.toast(data.message);
+				console.log(data);        
+				if(data.code==2000){
+					if(type==02){
+						$(".loan-information-tab").removeClass('mui-active');
+						$(".car-info-tab").addClass('mui-active');
+						$("#loan-information").removeClass('mui-active');
+						$("#car-info").addClass('mui-active');
+						$("#orderNo").val(data.data.orderNo);
+					}else{
+						mui.toast("提交成功!");
+						// setInterval(function(){
+						// 	window.location.href='../index.html';
+						// },2000)
+					}
+				}else{
+					mui.toast(data.message);
+				}
 			}
 		})
 	}
 
+}
+
+
+
+
+
+/*
+*上传图片
+*/
+function upload(type){
+	var formData= new FormData();
+	formData.append("file",$("#file"+type)[0].files[0]);
+	$.ajax({
+		url:'/h5/loan/fileInfo/upload',
+		type:'post',
+		// data:{'importFile':formData,'type':type},
+		// processData:false,
+		// contentType:false,
+		success:function(data){
+			console.log(data);
+		}
+	})
 }
