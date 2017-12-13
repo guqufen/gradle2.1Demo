@@ -82,7 +82,10 @@ public class InsuranceController extends BaseController {
 		//orderSafe.setEstiPremiums(saveSafeJO.getEstiPremiums());
 		orderSafe.setSuggestCode(saveSafeJO.getSuggestCode());
 		ResultDTO<Object> res = orderSafeService.saveSafe(customerDO,orderSafe);
-        return res;
+		if (!res.isSuccess()) {
+			return ResultDTO.fail("提交失败");
+		}
+		return ResultDTO.success("提交成功");
     }
 	
 	@RequestMapping(value = "/queryInsu" , method = RequestMethod.GET)
