@@ -118,14 +118,21 @@ public class LoanApplyController extends BaseController {
 	}
 
 	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
-		String fileType = request.getParameter("type");//文件类型
-		String orderId = request.getParameter("orderId");
+		String orderId = request.getParameter("orderNo");
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+		
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
 			// 上传文件原名
 			MultipartFile file = entity.getValue();
-
+			String file_type = entity.getKey();
+			if(StringUtils.equals("xs", file_type)){
+				file_type = "0";
+			}else if(StringUtils.equals("dj", file_type)){
+				file_type = "1";
+			}else if(StringUtils.equals("cl", file_type)){
+				file_type = "2";
+			}
 			OrderFileDO fileInfo = new OrderFileDO();
 //			String fileType = req.getParameter("fileTypeKey");
 			String fileName = file.getOriginalFilename();
@@ -172,7 +179,7 @@ public class LoanApplyController extends BaseController {
 					OssLoaclUtil.uploadFile(fileURL, fileKey);
 					String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
 					fileInfo.setFilePath(newUrl);
-					fileInfo.setFileType(fileType);
+					fileInfo.setFileType(file_type);
 					fileInfo.setFileName(fileName);
 					fileInfo.setOrderNo(orderId);
 					fileInfo.setCreateTime(new Date());
@@ -183,7 +190,7 @@ public class LoanApplyController extends BaseController {
 						TreeMap<String, String> paras = new TreeMap<>();
 						paras.put("id", String.valueOf(result.getData()));
 						paras.put("url", newUrl);
-						paras.put("fileType", fileType);
+						paras.put("fileType", file_type);
 
 						appResult = ResultDTO.success(paras);
 						String json = isApp ? JSONArray.toJSONString(appResult) : JSONArray.toJSONString(paras);
