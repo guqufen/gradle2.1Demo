@@ -89,7 +89,7 @@ public class OrderFinanceProvider {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderFinance.customerPhone})");
         }
         if(orderFinance.getSysUserId() != null) {
-        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderFinance.sysUserId} AND type = 3)");
+        	WHERE("suggest_code in (SELECT suggest_code FROM car_agent WHERE id in (SELECT agent_id FROM sys_user WHERE id=#{orderFinance.sysUserId}))");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
@@ -131,7 +131,7 @@ public class OrderFinanceProvider {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderFinance.customerPhone})");
         }
         if(orderFinance.getSysUserId() != null) {
-        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderFinance.sysUserId} AND type = 3) ");
+        	WHERE("suggest_code in (SELECT suggest_code FROM car_agent WHERE id in (SELECT agent_id FROM sys_user WHERE id=#{orderFinance.sysUserId})) ");
         }
         }}.toString();
     }
