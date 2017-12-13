@@ -37,11 +37,11 @@ import com.google.common.collect.Maps;
  * 
  */
 public class HttpUtils {
-    private static Logger logger = LoggerFactory.getLogger(HttpUtils.class);
-    private static final String DEFAULT_CHARSET = "UTF-8"; // 默认字符集
+    private static Logger       logger          = LoggerFactory.getLogger(HttpUtils.class);
+    private static final String DEFAULT_CHARSET = "UTF-8";                                 // 默认字符集
 
-    private static final String _GET            = "GET";   // GET
-    private static final String _POST           = "POST";  // POST
+    private static final String _GET            = "GET";                                   // GET
+    private static final String _POST           = "POST";                                  // POST
 
     public static void main(String[] args) throws UnsupportedEncodingException {
         String url = "http://localhost:8080/admin/trade/jhf/payCompleteNotice";
@@ -68,8 +68,8 @@ public class HttpUtils {
         // 读取超时 --服务器响应比较慢，增大时间
         http.setReadTimeout(25000);
         http.setRequestMethod(method);
-        http.setRequestProperty("accept", "*/*");  
-        http.setRequestProperty("connection", "Keep-Alive");  
+        http.setRequestProperty("accept", "*/*");
+        http.setRequestProperty("connection", "Keep-Alive");
         http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         http.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.146 Safari/537.36");
         if (null != headers && !headers.isEmpty()) {
@@ -195,14 +195,14 @@ public class HttpUtils {
             out.write(params.getBytes(DEFAULT_CHARSET));
             out.flush();
             out.close();
-            int responseCode = http.getResponseCode();  
-            if (responseCode != 200) {  
-                
-                logger.error(url+"调用错，返回状态 Error===" + responseCode+",输入参数："+params);  
+            int responseCode = http.getResponseCode();
+            if (responseCode != 200) {
+
+                logger.error(url + "调用错，返回状态 Error===" + responseCode + ",输入参数：" + params);
                 return null;
-            } else {  
-                logger.info("Post Success!");  
-            }  
+            } else {
+                logger.info("Post Success!");
+            }
             InputStream in = http.getInputStream();
             BufferedReader read = new BufferedReader(new InputStreamReader(in, DEFAULT_CHARSET));
             String valueString = null;
@@ -217,7 +217,7 @@ public class HttpUtils {
             }
             return bufferRes.toString();
         } catch (Exception e) {
-            logger.error("http调用报错",e);
+            logger.error("http调用报错", e);
             return null;
         }
     }
@@ -231,7 +231,7 @@ public class HttpUtils {
      * @throws UnsupportedEncodingException
      */
     public static String post(String url, Map<String, String> params) throws UnsupportedEncodingException {
-        return post(url, map2Url(params), null);
+            return post(url, map2Url(params), null);
     }
 
     /**

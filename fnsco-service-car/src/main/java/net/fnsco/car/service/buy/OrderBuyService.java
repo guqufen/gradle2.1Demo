@@ -61,6 +61,10 @@ public class OrderBuyService extends BaseService {
 					orderBuyDO.setCarTypeName(carBrandDO.getName());
 				}
 			}
+			
+			if(null != orderBuyDO.getCarSubTypeId()) {
+				CarBrandDO carBrandDO = carBrandService.doQueryById(orderBuyDO.getCarSubTypeId());
+			}
 		}
 		Integer count = this.orderBuyDAO.pageListCount(orderBuy);
 		ResultPageDTO<OrderBuyDO> pager = new ResultPageDTO<OrderBuyDO>(count, pageList);

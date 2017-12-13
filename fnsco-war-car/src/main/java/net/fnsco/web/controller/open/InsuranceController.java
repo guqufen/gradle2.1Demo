@@ -51,16 +51,15 @@ public class InsuranceController extends BaseController {
 	@RequestMapping(value = "/saveSafe")
 	@ApiOperation(value = "保险申请-添加申请")
 	private ResultDTO<Object> saveSafe(@RequestBody SaveSafeJO saveSafeJO) {
-		String code = saveSafeJO.getCode();
+		String code = saveSafeJO.getVerCode();
 		String mobile = saveSafeJO.getMobile();
-		String type = saveSafeJO.getType();
 		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
 			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
 		}
 		//获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
 		if(mDTO == null){
-			return ResultDTO.fail();
+			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("2021"));
 		}
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
@@ -73,7 +72,7 @@ public class InsuranceController extends BaseController {
 		customerDO.setMobile(saveSafeJO.getMobile());
 		OrderSafeDO orderSafe = new OrderSafeDO();
 		orderSafe.setCityId(saveSafeJO.getCityId());
-		BigDecimal carPrice = saveSafeJO.getCarOriginalPrice().multiply(new BigDecimal(100));
+		BigDecimal carPrice = saveSafeJO.getCarOriginalPrice().multiply(new BigDecimal(1000000));
 		orderSafe.setCarOriginalPrice(carPrice);
 		/*Integer id = configService.queryIdByName(saveSafeJO.getInsuCompanyName());
 		if(id==null) {
@@ -83,7 +82,10 @@ public class InsuranceController extends BaseController {
 		//orderSafe.setEstiPremiums(saveSafeJO.getEstiPremiums());
 		orderSafe.setSuggestCode(saveSafeJO.getSuggestCode());
 		ResultDTO<Object> res = orderSafeService.saveSafe(customerDO,orderSafe);
-        return res;
+		if (!res.isSuccess()) {
+			return ResultDTO.fail("提交失败");
+		}
+		return ResultDTO.success("提交成功");
     }
 	
 	@RequestMapping(value = "/queryInsu" , method = RequestMethod.GET)

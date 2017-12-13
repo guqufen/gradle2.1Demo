@@ -99,9 +99,14 @@ public class IDAuthenticationController extends BaseController {
                     OssLoaclUtil.uploadFile(fileURL, fileKey);
                     String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
                     AppUserDTO appUserDto = new AppUserDTO();
+                    
+                    
                     appUserDto.setUserId(userId);
-                    appUserDto.setHeadImagePath(newUrl);
+                    appUserDto.setRealName(null);
+                    appUserDto.setIdCardNumber(null);
                     appUserService.modifyInfo(appUserDto);
+                    
+                    
                     String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), fileKey);
                     Map<String, String> datas = Maps.newHashMap();
                     datas.put("headImageUrl", imageUrl);
