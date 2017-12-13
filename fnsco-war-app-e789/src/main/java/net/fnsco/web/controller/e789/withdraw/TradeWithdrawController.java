@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.service.dao.master.AppUserDao;
@@ -119,6 +120,7 @@ public class TradeWithdrawController extends BaseController {
     	tradeWithdraw.setTradeType(1);
     	tradeWithdraw.setFee(new BigDecimal(0));
     	tradeWithdraw.setUpdateTime(new Date());//还没做完
+    	tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
     	tradeWithdrawService.doAdd(tradeWithdraw);
     	
     	
@@ -127,6 +129,8 @@ public class TradeWithdrawController extends BaseController {
     	 */
     	int result = appAccountBalanceDAO.updateFund(new BigDecimal(withdrawCashJO.getCashAccount()), withdrawCashJO.getUserId());
     	if(result <= 0) {
+    		tradeWithdraw.setStatus(2);
+    		tradeWithdrawService.doUpdate(tradeWithdraw, getUserId());
     		return ResultDTO.fail(ApiConstant.E_ACCOUNT_BALANCE_NULL);
     	}
     	

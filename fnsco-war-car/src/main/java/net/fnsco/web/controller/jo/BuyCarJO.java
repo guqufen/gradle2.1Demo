@@ -4,44 +4,44 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class BuyCarJO {
 
-		@ApiModelProperty(value = "name", name = "name", example = "购车人")
+		@ApiModelProperty(value = "购车人", example = "购车人")
 		private String name;
-		@ApiModelProperty(value = "mobile", name = "mobile", example = "手机号")
+		@ApiModelProperty(value = "手机号",  example = "手机号")
 		private String mobile;
 	    /**
 	     * 所在城市
 	     */
-		@ApiModelProperty(value = "cityId", name = "cityId", example = "所在城市")
+		@ApiModelProperty(value = "所在城市", example = "所在城市")
 	    private Integer cityId;
 
 	    /**
 	     * 汽车品牌
 	     */
-		@ApiModelProperty(value = "carTypeId", name = "carTypeId", example = "汽车品牌")
+		@ApiModelProperty(value = "汽车品牌", example = "汽车品牌")
 	    private Integer carTypeId;
 
 	    /**
 	     * 汽车型号
 	     */
-		@ApiModelProperty(value = "carSubTypeId", name = "carSubTypeId", example = "汽车型号")
-	    private String carSubTypeId;
+		@ApiModelProperty(value = "汽车型号",  example = "汽车型号")
+	    private Integer carSubTypeId;
 
 	    /**
 	     * 金融方案
 	     */
-		@ApiModelProperty(value = "buyType", name = "buyType", example = "金融方案")
+		@ApiModelProperty(value = "金融方案", example = "金融方案")
 	    private String buyType;
 
 	    /**
 	     * 推荐码
 	     */
-		@ApiModelProperty(value = "suggestCode", name = "suggestCode", example = "推荐码")
+		@ApiModelProperty(value = "推荐码",  example = "推荐码")
 	    private Integer suggestCode;
 
 		/**
 	     * 验证码
 	     */
-		@ApiModelProperty(value = "verCode", name = "verCode", example = "验证码")
+		@ApiModelProperty(value = "验证码",  example = "验证码")
 		private String verCode;
 		
 		
@@ -103,11 +103,11 @@ public class BuyCarJO {
 	        this.carTypeId = carTypeId;
 	    }
 
-	    public String getCarSubTypeId() {
+	    public Integer getCarSubTypeId() {
 	        return carSubTypeId;
 	    }
 
-	    public void setCarSubTypeId(String carSubTypeId) {
+	    public void setCarSubTypeId(Integer carSubTypeId) {
 	        this.carSubTypeId = carSubTypeId;
 	    }
 

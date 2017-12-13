@@ -43,7 +43,7 @@ public class MoneyManageController extends BaseController {
 		//获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
 		if(mDTO == null){
-			return ResultDTO.fail();
+			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("2021"));
 		}
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();

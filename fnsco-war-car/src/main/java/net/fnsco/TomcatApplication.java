@@ -20,7 +20,7 @@ import net.fnsco.freamwork.log.filter.WebAccessLogFilter;
 @MapperScan("net.fnsco.car")
 @Import({ TimerConfig.class, WebConfig.class })
 public class TomcatApplication extends SpringBootServletInitializer {
-	
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(TomcatApplication.class);
