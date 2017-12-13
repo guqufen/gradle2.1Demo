@@ -23,6 +23,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.JuheDemoUtil;
 import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.core.utils.dto.IdCardDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
@@ -46,14 +47,16 @@ public class IDAuthenticationController extends BaseController {
 	 private Environment           env;
 	@RequestMapping(value = "/auth")
     @ApiOperation(value = "个人信息-身份证认证接口")
-    public ResultDTO<AccountBalanceVO> idAuth(@RequestBody AccountBalanceJO accountBalanceJO) {
+    public ResultDTO idAuth(@RequestBody AccountBalanceJO accountBalanceJO) {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+        IdCardDTO idCard =new IdCardDTO();
+        Integer userId = accountBalanceJO.getUserId();
+        if (userId == null) {
+        	return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-        	Integer userId = accountBalanceJO.getUserId();
-    		if (userId == null) {
-    			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
-    		}
+        	String side = entity.getKey();
             // 上传文件原名
             MultipartFile file = entity.getValue();
             String fileName = file.getOriginalFilename();
@@ -84,43 +87,25 @@ public class IDAuthenticationController extends BaseController {
             }
 
             String yearMonthPath = year + line + month + line;
-            String newFileName = System.currentTimeMillis() + "." + prefix;
+            String newFileName = userId +"-"+ System.currentTimeMillis() + "." + prefix;
             String fileKey = year + "/" + month + "/" + newFileName;
             String filepath = yearMonthPath + newFileName;
 
             String fileURL = this.env.getProperty("fileUpload.url") + line + filepath;
-
-            if (!file.isEmpty()) {
-                try {
-                    byte[] bytes = file.getBytes();
-                    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileURL));
-                    stream.write(bytes);
-                    stream.close();
-                    //上传阿里云OSS文件服务器
-                    OssLoaclUtil.uploadFile(fileURL, fileKey);
-                    String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
-                    AppUserDTO appUserDto = new AppUserDTO();
-                    
-                    
-                    appUserDto.setUserId(userId);
-                    appUserDto.setRealName(null);
-                    appUserDto.setIdCardNumber(null);
-                    appUserService.modifyInfo(appUserDto);
-                    
-                    
-                    String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), fileKey);
-                    Map<String, String> datas = Maps.newHashMap();
-                    datas.put("headImageUrl", imageUrl);
-                    return ResultDTO.success(datas);
-                } catch (Exception e) {
-                    logger.error(fileName + "上传失败！" + e);
-                    throw new RuntimeException();
-                }
-            } else {
-                logger.error(fileName + "上传失败");
-                throw new RuntimeException();
+            if("front".equals(side)) {
+            	idCard = JuheDemoUtil.idVerification(fileURL,side);
+            	if(idCard.getErrorCode()==0) {
+            		return ResultDTO.fail("图片扫描失败");
+            	}else if(idCard.getRes()==2) {
+            		return ResultDTO.fail("身份证有误，姓名与身份证号码不匹配");
+            	}
             }
         }
-        return success(null);
+        AppUserDTO appUserDto = new AppUserDTO();
+        appUserDto.setUserId(userId);
+        appUserDto.setRealName(idCard.getRealname());
+        appUserDto.setIdCardNumber(idCard.getIdcard());
+        appUserService.modifyInfo(appUserDto);
+        return ResultDTO.success();
     }
 }
