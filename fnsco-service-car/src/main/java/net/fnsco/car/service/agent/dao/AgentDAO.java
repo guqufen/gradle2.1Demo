@@ -48,5 +48,18 @@ public interface AgentDAO {
     @Results({@Result( column = "provinceId",property = "provinceid"),@Result( column = "provinceName",property = "provincename"),@Result( column = "cityId",property = "cityid"),@Result( column = "cityName",property = "cityname"),@Result( column = "areaId",property = "areaid"),@Result( column = "areaName",property = "areaname"),@Result( column = "suggest_code",property = "suggestCode") })
     @Select("SELECT * FROM car_agent ")
     public List<AgentDO> getAll();
+    
+    /**
+     * getBySuggestCode:(根据推荐码获取运营商信息)
+     *
+     * @param  @param suggestCode
+     * @param  @return    设定文件
+     * @return AgentDO    DOM对象
+     * @author tangliang
+     * @date   2017年12月13日 上午9:40:13
+     */
+    @Results({@Result( column = "provinceId",property = "provinceid"),@Result( column = "provinceName",property = "provincename"),@Result( column = "cityId",property = "cityid"),@Result( column = "cityName",property = "cityname"),@Result( column = "areaId",property = "areaid"),@Result( column = "areaName",property = "areaname"),@Result( column = "suggest_code",property = "suggestCode") })
+    @Select("SELECT * FROM car_agent where suggest_code = #{suggestCode} limit 1")
+    public AgentDO getBySuggestCode(@Param("suggestCode") Integer suggestCode);
 
 }

@@ -64,7 +64,7 @@ public class BuyCarApplyController extends BaseController {
 		OrderBuyDO orderBuy = new OrderBuyDO();
 		orderBuy.setCityId(jo.getCityId());
 		orderBuy.setCarTypeId(jo.getCarTypeId());// 汽车品牌
-		orderBuy.setCarSubTypeId(jo.getCarSubTypeId());
+		orderBuy.setCarSubTypeId(Integer.valueOf(jo.getCarSubTypeId()));
 		orderBuy.setBuyType(jo.getBuyType());
 		orderBuy.setSuggestCode(jo.getSuggestCode());
 
