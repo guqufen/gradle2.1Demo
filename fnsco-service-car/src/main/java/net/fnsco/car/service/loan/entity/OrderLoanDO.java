@@ -256,24 +256,7 @@ public class OrderLoanDO {
 		this.carTypeName = carTypeName;
 	}
 
-	/**
-	 * carModel
-	 *
-	 * @return  the carModel
-	 * @since   CodingExample Ver 1.0
-	*/
-	
-	public String getCarModel() {
-		return carModel;
-	}
 
-	/**
-	 * @param carModel the carModel to set
-	 */
-
-	public void setCarModel(String carModel) {
-		this.carModel = carModel;
-	}
 
 	public Integer getId() {
 		return id;
@@ -344,7 +327,7 @@ public class OrderLoanDO {
 	public String toString() {
 		return "OrderLoanDO [id=" + id + ", customerId=" + customerId + ", cityId=" + cityId + ", amount=" + amount
 				+ ", suggestCode=" + suggestCode + ", createTime=" + createTime + ", lastUpdateTime=" + lastUpdateTime
-				+ ", status=" + status + ", carSubTypeId=" + carSubTypeId + ", carModel=" + carModel + "]";
+				+ ", status=" + status + ", carSubTypeId=" + carSubTypeId +"]";
 	}
 
 	
