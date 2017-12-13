@@ -65,7 +65,7 @@ $('#table').bootstrapTable({
         field: '',
         title: '分期额度(万元)'
     },{
-        field: '',
+        field: 'agentName',
         title: '运营商'
     },{
         field: 'status',

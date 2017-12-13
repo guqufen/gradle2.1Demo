@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -18,7 +17,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,11 +24,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONArray;
 
+import ch.qos.logback.core.CoreConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.car.comm.CarServiceConstant;
-import net.fnsco.car.service.city.DicCityService;
-import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.car.service.file.OrderFileService;
 import net.fnsco.car.service.file.entity.OrderFileDO;
@@ -42,8 +39,8 @@ import net.fnsco.core.utils.MessageUtils;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.dto.MessageValidateDTO;
 import net.fnsco.web.controller.jo.LoanJO;
+import net.fnsco.web.controller.jo.LoanJO2;
 import net.fnsco.web.controller.vo.LoanVO;
-import net.fnsco.web.controller.vo.QueryCityVO;
 
 @RestController
 @RequestMapping(value = "/h5/loan", method = RequestMethod.POST)
@@ -57,14 +54,14 @@ public class LoanApplyController extends BaseController {
 	@Autowired
 	private OrderFileService orderFileService;
 
-	@RequestMapping(value = "/add")
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ApiOperation(value = "贷款申请-添加申请")
 	public ResultDTO<LoanVO> addJO(@RequestBody LoanJO jo) {
 		// 校验验证码
 		String code = jo.getVerCode();
 		String mobile = jo.getMobile();
 		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
-			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
+			return ResultDTO.fail();
 		}
 		// 获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
@@ -86,16 +83,34 @@ public class LoanApplyController extends BaseController {
 		orderLoan.setCityId(jo.getCityId());
 		orderLoan.setAmount(jo.getAmount());
 		orderLoan.setSuggestCode(jo.getSuggestCode());
-		orderLoan.setCarTypeId(jo.getCarTypeId());// 车品牌id
-		orderLoan.setCarModel(jo.getMobile());// 车型号
 
-		String fileIds = jo.getFileIds();// 上传的图片id
-		ResultDTO<Object> result = orderLoanService.addJo(orderLoan, customer, fileIds);
+//		String fileIds = jo.getFileIds();// 上传的图片id
+		ResultDTO<Object> result = orderLoanService.addJo(orderLoan, customer);
+		LoanVO loanVO = new LoanVO();
+		loanVO = (LoanVO)result.getData();
+		loanVO.setOrderNo(loanVO.getOrderNo());
 		if (result.isSuccess()) {
-			return ResultDTO.success("提交成功");
+			return ResultDTO.success(loanVO);
 		} else {
 			return ResultDTO.fail("提交失败");
 		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/update", produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "贷款申请-更新信息")
+	public ResultDTO<Object> updateLoanJO(@RequestBody LoanJO2 jo){
+		if(jo.getOrderId() == null){
+			return ResultDTO.failForMessage(CarServiceConstant.anErrorMap.get("0001"));
+		}
+		OrderLoanDO orderLoan = new OrderLoanDO();
+		orderLoan.setId(jo.getOrderId());
+		orderLoan.setCarTypeId(jo.getCarTypeId());
+		orderLoan.setCarSubTypeId(jo.getCarSubTypeId());
+		orderLoan.setLastUpdateTime(new Date());
+		orderLoanService.doUpdate(orderLoan, 0);
+		return ResultDTO.success();
 	}
 
 	@ResponseBody
@@ -106,6 +121,8 @@ public class LoanApplyController extends BaseController {
 	}
 
 	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
+		String fileType = request.getParameter("type");//文件类型
+		String orderId = request.getParameter("orderId");
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
@@ -113,7 +130,7 @@ public class LoanApplyController extends BaseController {
 			MultipartFile file = entity.getValue();
 
 			OrderFileDO fileInfo = new OrderFileDO();
-			String fileType = req.getParameter("fileTypeKey");
+//			String fileType = req.getParameter("fileTypeKey");
 			String fileName = file.getOriginalFilename();
 			String line = System.getProperty("file.separator");// 文件分割符
 			// 保存文件的路径
@@ -160,6 +177,7 @@ public class LoanApplyController extends BaseController {
 					fileInfo.setFilePath(newUrl);
 					fileInfo.setFileType(fileType);
 					fileInfo.setFileName(fileName);
+					fileInfo.setOrderNo(orderId);
 					fileInfo.setCreateTime(new Date());
 					ResultDTO<Integer> result = orderFileService.doAddToDB(fileInfo);
 					if (result.isSuccess()) {

@@ -101,7 +101,7 @@ public class OrderBuyProvider {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderBuy.customerPhone})");
         }
         if(orderBuy.getSysUserId() != null) {
-        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderBuy.sysUserId} AND type = 0)");
+        	WHERE("suggest_code in (SELECT suggest_code FROM car_agent WHERE id in (SELECT agent_id FROM sys_user WHERE id=#{orderBuy.sysUserId}))");
         }
         
         ORDER_BY("id desc limit " + start + ", " + limit );
@@ -150,7 +150,7 @@ public class OrderBuyProvider {
         	WHERE("customer_id in (select id from car_customer where mobile = #{orderBuy.customerPhone})");
         }
         if(orderBuy.getSysUserId() != null) {
-        	WHERE("id in (SELECT order_id FROM car_user_order_ref WHERE user_id = #{orderBuy.sysUserId}  AND type = 0)");
+        	WHERE("suggest_code in (SELECT suggest_code FROM car_agent WHERE id in (SELECT agent_id FROM sys_user WHERE id=#{orderBuy.sysUserId}))");
         }
         }}.toString();
     }

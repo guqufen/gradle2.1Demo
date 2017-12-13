@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.fnsco.car.service.agent.dao.AgentDAO;
+import net.fnsco.car.service.agent.entity.AgentDO;
 import net.fnsco.car.service.city.DicCityService;
 import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.config.ConfigService;
@@ -33,6 +35,8 @@ public class OrderSafeService extends BaseService {
 	private DicCityService dicCityService;
 	@Autowired
 	private ConfigService configService;
+	@Autowired
+	private AgentDAO agentDAO;
 
 	// 保存理财申请信息
 	@Transient
@@ -70,6 +74,12 @@ public class OrderSafeService extends BaseService {
 				ConfigDO configDO = configService.doQueryById(orderSafeDO.getInsuCompanyId());
 				if(null != configDO) {
 					orderSafeDO.setInsuCompanyName(configDO.getName());
+				}
+			}
+			if(null != orderSafeDO.getSuggestCode()) {
+				AgentDO agentDO = agentDAO.getBySuggestCode(orderSafeDO.getSuggestCode());
+				if(null != agentDO) {
+					orderSafeDO.setAgentName(agentDO.getName());
 				}
 			}
 		}

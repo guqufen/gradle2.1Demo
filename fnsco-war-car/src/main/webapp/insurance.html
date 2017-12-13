@@ -26,7 +26,7 @@
 			</div>
 			<div class="mui-input-row rmb">
 				<label>汽车原价</label>
-				<input class="car-money" placeholder="输入汽车原价" type="text">
+				<input class="car-money" placeholder="输入汽车原价" type="number">
 				<span>元</span>
 			</div>
 			<div class="mui-input-row">
@@ -36,8 +36,8 @@
 			</div>
 			<div class="mui-input-row phone">
 				<label>手机号码</label>
-				<input class="phone-num" placeholder="输入手机号码" type="text">
-				<button class="send-code">发送验证码</button>
+				<input class="phone-num" placeholder="输入手机号码" type="number">
+				<button class="send-code" onclick="sendCode('03')">发送验证码</button>
 			</div>
 			<div class="mui-input-row">
 				<label>短信验证码</label>
@@ -47,7 +47,7 @@
 				<label>推荐码</label>
 				<input class="refrral-code" placeholder="输入推荐码" type="text">
 			</div>
-			<button class="sub-btn mui-btn" type="button" data-loading-text="提交中">提交审核</button>
+			<button class="sub-btn" type="button" onclick="subData('03')">提交审核</button>
 		</div>
 		<!-- 页尾提示栏 -->
 		<div class="footer-bar">—— 我也是有底线的 ——</div>

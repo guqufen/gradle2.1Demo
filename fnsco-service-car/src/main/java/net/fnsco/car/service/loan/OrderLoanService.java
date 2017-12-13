@@ -8,7 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import net.fnsco.car.service.agent.dao.AgentDAO;
+import net.fnsco.car.service.agent.entity.AgentDO;
 import net.fnsco.car.service.carBrand.CarBrandService;
 import net.fnsco.car.service.carBrand.entity.CarBrandDO;
 import net.fnsco.car.service.city.DicCityService;
@@ -37,6 +40,8 @@ public class OrderLoanService extends BaseService {
 	private DicCityService dicCityService;
 	@Autowired
 	private CarBrandService carBrandService;
+	@Autowired
+	private AgentDAO agentDAO;
 
 	// 分页
 	public ResultPageDTO<OrderLoanDO> page(OrderLoanDO orderLoan, Integer pageNum, Integer pageSize) {
@@ -62,6 +67,20 @@ public class OrderLoanService extends BaseService {
 				CarBrandDO carBrandDO = carBrandService.doQueryById(orderLoanDO.getCarTypeId());
 				if (null != carBrandDO) {
 					orderLoanDO.setCarTypeName(carBrandDO.getName());
+				}
+			}
+			
+			if(null != orderLoanDO.getCarSubTypeId()) {
+				CarBrandDO carBrandDO = carBrandService.doQueryById(orderLoanDO.getCarSubTypeId());
+				if (null != carBrandDO) {
+					orderLoanDO.setCarTypeName(orderLoanDO.getCarTypeName()+"&"+carBrandDO.getName());
+				}
+			}
+			
+			if(null != orderLoanDO.getSuggestCode()) {
+				AgentDO agentDO = agentDAO.getBySuggestCode(orderLoanDO.getSuggestCode());
+				if(null != agentDO) {
+					orderLoanDO.setAgentName(agentDO.getName());
 				}
 			}
 		}
@@ -98,7 +117,8 @@ public class OrderLoanService extends BaseService {
 	}
 
 
-	public ResultDTO<Object> addJo(OrderLoanDO orderLoan, CustomerDO customer, String fileIds) {
+	@Transactional
+	public ResultDTO<Object> addJo(OrderLoanDO orderLoan, CustomerDO customer) {
 		customer = customerService.addCustomer(customer);
 		
 		orderLoan.setCustomerId(customer.getId());
@@ -108,15 +128,15 @@ public class OrderLoanService extends BaseService {
 		orderLoanDAO.insert(orderLoan);
 		
 		// 更新文件信息
-		if (!StringUtils.isEmpty(fileIds)) {
-			OrderFileDO orderFile = new OrderFileDO();
-			String[] ids = fileIds.split(",");
-			for (String id : ids) {
-				orderFile.setId(Integer.parseInt(id));
-				orderFile.setOrderNo(orderLoan.getId().toString());
-				orderFileService.doUpdate(orderFile, 0);
-			}
-		}
-		return ResultDTO.success();
+//		if (!StringUtils.isEmpty(fileIds)) {
+//			OrderFileDO orderFile = new OrderFileDO();
+//			String[] ids = fileIds.split(",");
+//			for (String id : ids) {
+//				orderFile.setId(Integer.parseInt(id));
+//				orderFile.setOrderNo(orderLoan.getId().toString());
+//				orderFileService.doUpdate(orderFile, 0);
+//			}
+//		}
+		return ResultDTO.success(orderLoan.getId());
 	}
 }

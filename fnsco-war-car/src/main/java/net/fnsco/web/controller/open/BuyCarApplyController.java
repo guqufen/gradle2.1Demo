@@ -1,9 +1,6 @@
 package net.fnsco.web.controller.open;
 
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,7 +65,7 @@ public class BuyCarApplyController extends BaseController {
 		OrderBuyDO orderBuy = new OrderBuyDO();
 		orderBuy.setCityId(jo.getCityId());
 		orderBuy.setCarTypeId(jo.getCarTypeId());// 汽车品牌
-		orderBuy.setCarSubTypeId(jo.getCarSubTypeId());
+		orderBuy.setCarSubTypeId(Integer.valueOf(jo.getCarSubTypeId()));
 		orderBuy.setBuyType(jo.getBuyType());
 		orderBuy.setSuggestCode(jo.getSuggestCode());
 
