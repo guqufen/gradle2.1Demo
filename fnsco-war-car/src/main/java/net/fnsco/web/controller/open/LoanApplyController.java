@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -94,23 +95,8 @@ public class LoanApplyController extends BaseController {
 		}
 	}
 	
-	
-	@ResponseBody
-	@RequestMapping(value = "/update", produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "贷款申请-更新信息")
-	public ResultDTO<Object> updateLoanJO(@RequestBody LoanJO2 jo){
-		if(jo.getOrderId() == null){
-			return ResultDTO.failForMessage(CarServiceConstant.anErrorMap.get("0001"));
-		}
-		OrderLoanDO orderLoan = new OrderLoanDO();
-		orderLoan.setId(jo.getOrderId());
-		orderLoan.setCarTypeId(jo.getCarTypeId());
-		orderLoan.setCarSubTypeId(jo.getCarSubTypeId());
-		orderLoan.setLastUpdateTime(new Date());
-		orderLoanService.doUpdate(orderLoan, 0);
-		return ResultDTO.success();
-	}
 
+	
 	@ResponseBody
 	@RequestMapping(value = "/fileInfo/upload", produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "上传图片")
@@ -118,8 +104,20 @@ public class LoanApplyController extends BaseController {
 		return commImport(request, response, true);
 	}
 
+	@Transactional
 	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
 		String orderId = request.getParameter("orderNo");
+		String carTypeId = request.getParameter("carTypeId");//汽车品牌
+		String carSubTypeId = request.getParameter("carSubTypeId");//汽车型号
+		//更新贷款申请表单
+		OrderLoanDO orderLoan = new OrderLoanDO();
+		orderLoan.setId(Integer.parseInt(orderId));
+		orderLoan.setCarTypeId(Integer.parseInt(carTypeId));
+		orderLoan.setCarSubTypeId(Integer.parseInt(carSubTypeId));
+		orderLoan.setLastUpdateTime(new Date());
+		orderLoanService.doUpdate(orderLoan, 0);
+		
+		//获取图片信息
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		
