@@ -192,7 +192,7 @@ public class LoanApplyController extends BaseController {
 //
 //						appResult = ResultDTO.success(paras);
 //						String json = isApp ? JSONArray.toJSONString(appResult) : JSONArray.toJSONString(paras);
-						response.getWriter().write("提交成功");
+						response.getWriter().write("2000");
 					} else {
 						logger.error(fileName + "上传失败");
 						throw new RuntimeException();
