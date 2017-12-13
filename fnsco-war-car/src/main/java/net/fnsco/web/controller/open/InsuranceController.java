@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aliyun.oss.common.comm.ServiceClient.Request;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,7 +18,6 @@ import net.fnsco.car.comm.CarServiceConstant;
 import net.fnsco.car.service.config.ConfigService;
 import net.fnsco.car.service.config.entity.ConfigDO;
 import net.fnsco.car.service.customer.entity.CustomerDO;
-import net.fnsco.car.service.finance.entity.OrderFinanceDO;
 import net.fnsco.car.service.safe.OrderSafeService;
 import net.fnsco.car.service.safe.entity.OrderSafeDO;
 import net.fnsco.core.base.BaseController;
@@ -65,7 +63,7 @@ public class InsuranceController extends BaseController {
 		MessageUtils utils = new MessageUtils();
 		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);
 		if(!rt.isSuccess()){
-			return ResultDTO.fail(rt.getMessage());
+			return rt;
 		}
 		CustomerDO customerDO =  new CustomerDO();
 		customerDO.setName(saveSafeJO.getName());
@@ -81,10 +79,7 @@ public class InsuranceController extends BaseController {
 		orderSafe.setInsuCompanyId(saveSafeJO.getInsuCompanyId());
 		//orderSafe.setEstiPremiums(saveSafeJO.getEstiPremiums());
 		orderSafe.setSuggestCode(saveSafeJO.getSuggestCode());
-		ResultDTO<Object> res = orderSafeService.saveSafe(customerDO,orderSafe);
-		if (!res.isSuccess()) {
-			return ResultDTO.fail("提交失败");
-		}
+		orderSafeService.saveSafe(customerDO,orderSafe);
 		return ResultDTO.success("提交成功");
     }
 	

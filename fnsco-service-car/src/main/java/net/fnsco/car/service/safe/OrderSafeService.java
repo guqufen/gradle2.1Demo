@@ -36,18 +36,14 @@ public class OrderSafeService extends BaseService {
 
 	// 保存理财申请信息
 	@Transient
-	public ResultDTO<Object> saveSafe(CustomerDO customerDO, OrderSafeDO orderSafe) {
+	public void saveSafe(CustomerDO customerDO, OrderSafeDO orderSafe) {
 		customerDO.setCreateTime(new Date());
 		this.customerDAO.insert(customerDO);
-		if (customerDO.getId() == null) {
-			return ResultDTO.fail("投资人姓名插入失败");
-		}
 		orderSafe.setCustomerId(customerDO.getId());
 		orderSafe.setCreateTime(new Date());
 		orderSafe.setLastUpdateTime(new Date());
 		orderSafe.setStatus(0);
 		this.orderSafeDAO.insert(orderSafe);
-		return ResultDTO.success();
 	}
 
 	// 分页

@@ -32,18 +32,14 @@ public class OrderFinanceService extends BaseService {
 
 	// 保存理财申请信息
 	@Transient
-	public ResultDTO<Object> saveFinance(CustomerDO customerDO, OrderFinanceDO orderFinance) {
+	public void saveFinance(CustomerDO customerDO, OrderFinanceDO orderFinance) {
 		customerDO.setCreateTime(new Date());
 		this.customerDAO.insert(customerDO);
-		if (customerDO.getId() == null) {
-			return ResultDTO.fail("投资人姓名插入失败");
-		}
 		orderFinance.setCustomerId(customerDO.getId());
 		orderFinance.setCreateTime(new Date());
 		orderFinance.setLastUpdateTime(new Date());
 		orderFinance.setStatus(0);
 		this.orderFinanceDAO.insert(orderFinance);
-		return ResultDTO.success();
 	}
 
 	// 分页
