@@ -1,4 +1,4 @@
-package net.fnsco.trading.service.third.phoneCharge.dto;
+package net.fnsco.trading.service.third.phoneBill.dto;
 
 import java.util.List;
 

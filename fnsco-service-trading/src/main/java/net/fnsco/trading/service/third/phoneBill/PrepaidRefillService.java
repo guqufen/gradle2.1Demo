@@ -1,4 +1,4 @@
-package net.fnsco.trading.service.third.phoneCharge;
+package net.fnsco.trading.service.third.phoneBill;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -33,10 +33,10 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.freamwork.comm.Md5Util;
-import net.fnsco.trading.service.third.phoneCharge.dto.FlowPackageCheckDTO;
-import net.fnsco.trading.service.third.phoneCharge.dto.JuheDTO;
-import net.fnsco.trading.service.third.phoneCharge.dto.PhoneChargeDTO;
-import net.fnsco.trading.service.third.phoneCharge.dto.PhoneChargePackageDTO;
+import net.fnsco.trading.service.third.phoneBill.dto.FlowPackageCheckDTO;
+import net.fnsco.trading.service.third.phoneBill.dto.JuheDTO;
+import net.fnsco.trading.service.third.phoneBill.dto.PhoneChargeDTO;
+import net.fnsco.trading.service.third.phoneBill.dto.PhoneChargePackageDTO;
 
 @Service
 public class PrepaidRefillService extends BaseService{
@@ -64,7 +64,8 @@ public class PrepaidRefillService extends BaseService{
 	 * @param phone
 	 * @return
 	 */
-	public ResultDTO prepaidRefillCheck(String phone) {
+	public ResultDTO<PhoneChargePackageDTO> prepaidRefillCheck(String phone) {
+
 		Integer[] denos = { 10, 20, 30, 50, 100, 200, 300 };
 		String result;
 		PhoneChargePackageDTO phChargePackageDTO = new PhoneChargePackageDTO();
@@ -73,6 +74,19 @@ public class PrepaidRefillService extends BaseService{
 		for (Integer done : denos) {
 
 			try {
+				/**
+				 * 充值资费查询，聚合数据返回
+				 * { 
+				 * "reason": "成功", 
+				 * "result": { 
+				 * 		"cardid": "191404", //卡类ID
+				 * 		"cardname": "江苏电信话费100元直充", //卡类名称 
+				 * 		"inprice": 98.4, //购买价格
+				 * 		"game_area": "江苏苏州电信" //手机号码归属地 
+				 * },
+				 * "error_code": 0 
+				 * }
+				 */
 				result = get(telQueryUrl.replace("*", done + "").replace("!", phone), 0);
 				System.out.println(result);
 
@@ -119,6 +133,31 @@ public class PrepaidRefillService extends BaseService{
 		String sendData = sb.append("?phone=").append(phone).append("&key=").append(APPKEYFLOW).toString();
 
 		try {
+			/**
+			 * 数据返回格式如下：
+			 * { 
+			 *  "reason": "success", 
+			 *  "result":
+			 *  [ 
+			 * 		{
+			 * 			"city": "全国",			//支持城市
+			 * 			"company": "中国移动", 		//运营商
+			 * 			"companytype": "2", 		//运营商ID
+			 * 			"name": "中国移动全国流量套餐",	//套餐名称
+			 * 			"type": "1", 			//支持类型1：全国 2：城市
+			 * 			"flows": [ 				//流量套餐列表
+			 * 			{ 
+			 * 				"id": "3", 		//套餐ID
+			 * 				"p": "10M", 		//套餐流量名称
+			 * 				"v": "10",			//套餐流量值
+			 * 				"inprice": "2.90" 	//价格
+			 * 			}
+			 * 		] 
+			 * 		} 
+			 * ], 
+			 * "error_code": 0
+			 * }
+			 */
 			result = net(url, sendData, "GET");
 			JuheDTO juhe =  JSONObject.parseObject(result, JuheDTO.class);
 
@@ -129,6 +168,9 @@ public class PrepaidRefillService extends BaseService{
 				// 获取需要返回的数据域(套餐类型)
 				JSONArray jsonArray = (JSONArray) juhe.getResult();
 				String str = jsonArray.get(0).toString();
+				/**
+				 * 
+				 */
 				Map<String, Object> map = JSONObject.parseObject(str, Map.class);
 				System.out.println(map);
 				phChargePackageDTO.setCompany(map.get("company").toString());
@@ -148,11 +190,8 @@ public class PrepaidRefillService extends BaseService{
 					list.add(phChargeDTO);
 				}
 				phChargePackageDTO.setList(list);
-				System.out.println(lists);
-				PhoneChargeDTO phChargeDTO = new PhoneChargeDTO();
-				
-				FlowPackageCheckDTO flow = JSONObject.parseObject(str, FlowPackageCheckDTO.class);
-				return ResultDTO.success(flow);
+
+				return ResultDTO.success(phChargePackageDTO);
 			} else {
 				System.out.println(juhe.getError_code() + ":" + juhe.getReason());
 				return ResultDTO.fail(juhe.getReason());
