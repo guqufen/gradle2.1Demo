@@ -1,5 +1,6 @@
 package net.fnsco.car.service.agent.entity;
 
+import java.util.Date;
 
 public class AgentDO {
 
@@ -57,10 +58,103 @@ public class AgentDO {
      * 推荐码
      */
     private Integer suggestCode;
+    
+    private String mobile;
+    private String shortName;
+    private String principal;
+    private Date createTime;
 
 
 
-    public Integer getId() {
+    /**
+	 * mobile
+	 *
+	 * @return  the mobile
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getMobile() {
+		return mobile;
+	}
+
+	/**
+	 * mobile
+	 *
+	 * @param   mobile    the mobile to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	/**
+	 * shortName
+	 *
+	 * @return  the shortName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getShortName() {
+		return shortName;
+	}
+
+	/**
+	 * shortName
+	 *
+	 * @param   shortName    the shortName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
+	/**
+	 * principal
+	 *
+	 * @return  the principal
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getPrincipal() {
+		return principal;
+	}
+
+	/**
+	 * principal
+	 *
+	 * @param   principal    the principal to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setPrincipal(String principal) {
+		this.principal = principal;
+	}
+
+	/**
+	 * createTime
+	 *
+	 * @return  the createTime
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	/**
+	 * createTime
+	 *
+	 * @param   createTime    the createTime to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Integer getId() {
         return id;
     }
 

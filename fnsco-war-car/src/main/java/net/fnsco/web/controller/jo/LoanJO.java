@@ -39,19 +39,7 @@ public class LoanJO extends JO{
 	 */
 	@ApiModelProperty(value = "验证码",  example = "验证码")
 	private String verCode;
-	/**
-	 * 车品牌
-	 */
-	@ApiModelProperty(value = "车品牌",  example = "车品牌")
-	private Integer carTypeId;
-	/**
-	 * 车型号
-	 */
-	@ApiModelProperty(value = "车型号",  example = "车型号")
-	private Integer carSubTypeId;
 
-	@ApiModelProperty(value = "文件id", example = "文件id")
-	private String fileIds;
 	
 	@ApiModelProperty(value = "申请类型", example = "申请类型")
 	private String type;
@@ -69,19 +57,6 @@ public class LoanJO extends JO{
 		this.type = type;
 	}
 
-	/**
-	 * @return the fileIds
-	 */
-	public String getFileIds() {
-		return fileIds;
-	}
-
-	/**
-	 * @param fileIds the fileIds to set
-	 */
-	public void setFileIds(String fileIds) {
-		this.fileIds = fileIds;
-	}
 
 	/**
 	 * @return the verCode
@@ -97,33 +72,7 @@ public class LoanJO extends JO{
 		this.verCode = verCode;
 	}
 
-	/**
-	 * @return the carTypeId
-	 */
-	public Integer getCarTypeId() {
-		return carTypeId;
-	}
-
-	/**
-	 * @param carTypeId the carTypeId to set
-	 */
-	public void setCarTypeId(Integer carTypeId) {
-		this.carTypeId = carTypeId;
-	}
-
-	/**
-	 * @return the carModel
-	 */
-	public Integer getCarSubTypeId() {
-		return carSubTypeId;
-	}
-
-	/**
-	 * @param carModel the carModel to set
-	 */
-	public void setCarSubTypeId(Integer carSubTypeId) {
-		this.carSubTypeId = carSubTypeId;
-	}
+	
 
 	/**
 	 * @return the name
