@@ -80,8 +80,31 @@ public class OrderSafeDO {
      */
     private Integer sysUserId;
     
-
+    private String agentName;
+    
     /**
+	 * agentName
+	 *
+	 * @return  the agentName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getAgentName() {
+		return agentName;
+	}
+
+	/**
+	 * agentName
+	 *
+	 * @param   agentName    the agentName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
+	/**
 	 * sysUserId
 	 *
 	 * @return  the sysUserId

@@ -1,9 +1,6 @@
 package net.fnsco.web.controller.open;
 
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +23,11 @@ import net.fnsco.web.controller.jo.BuyCarJO;
 import net.fnsco.web.controller.vo.BuyCarVO;
 /**
  * 
- * @author Administrator
+ * @deprecated 
+ * @author   binghui.li
+ * @version  
+ * @since    Ver 1.1
+ * @Date	 2017 2017年12月12日 下午6:15:10
  *
  */
 @RestController
@@ -44,14 +45,8 @@ public class BuyCarApplyController extends BaseController {
 	public ResultDTO<BuyCarVO> addJO(@RequestBody BuyCarJO jo) {
 		String code = jo.getVerCode();
 		String mobile = jo.getMobile();
-		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
-			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
-		}
 		//获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
-		if(mDTO == null){
-			return ResultDTO.fail();
-		}
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
 		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);
@@ -64,7 +59,7 @@ public class BuyCarApplyController extends BaseController {
 		OrderBuyDO orderBuy = new OrderBuyDO();
 		orderBuy.setCityId(jo.getCityId());
 		orderBuy.setCarTypeId(jo.getCarTypeId());// 汽车品牌
-		orderBuy.setCarSubTypeId(jo.getCarSubTypeId());
+		orderBuy.setCarSubTypeId(Integer.valueOf(jo.getCarSubTypeId()));
 		orderBuy.setBuyType(jo.getBuyType());
 		orderBuy.setSuggestCode(jo.getSuggestCode());
 

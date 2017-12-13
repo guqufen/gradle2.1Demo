@@ -21,7 +21,7 @@ import net.fnsco.web.controller.jo.SaveFinanceJO;
 
 /**
  * 
- * @desc TODO
+ * @desc 
  * @author hjt
  * @version 
  * @Date 2017年12月8日 上午11:43:36
@@ -34,22 +34,16 @@ public class MoneyManageController extends BaseController {
 	private OrderFinanceService orderFinanceService;
 	@RequestMapping(value = "/saveFinance")
 	@ApiOperation(value = "理财申请-添加申请")
-	private ResultDTO<Object> saveFinance(@RequestBody SaveFinanceJO saveFinanceJO) {
+	private ResultDTO saveFinance(@RequestBody SaveFinanceJO saveFinanceJO) {
 		String code = saveFinanceJO.getVerCode();
 		String mobile = saveFinanceJO.getMobile();
-		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
-			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
-		}
 		//获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
-		if(mDTO == null){
-			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("2021"));
-		}
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
 		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);
 		if(!rt.isSuccess()){
-			return ResultDTO.fail(rt.getMessage());
+			return rt;
 		}
 		CustomerDO customerDO =  new CustomerDO();
 		customerDO.setName(saveFinanceJO.getName());
@@ -58,7 +52,7 @@ public class MoneyManageController extends BaseController {
 		orderFinance.setCityId(saveFinanceJO.getCityId());
 		//orderFinance.setBuyType(saveFinanceJO.getBuyType());
 		orderFinance.setSuggestCode(saveFinanceJO.getSuggestCode());
-		ResultDTO<Object> res = orderFinanceService.saveFinance(customerDO,orderFinance);
-        return res;
+		orderFinanceService.saveFinance(customerDO,orderFinance);
+		return ResultDTO.success("提交成功");
     }
 }

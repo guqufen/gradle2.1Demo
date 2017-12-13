@@ -54,8 +54,7 @@ $('#table').bootstrapTable({
         formatter:formatTime
     },{
         field: '',
-        title: '购车价格(元)',
-        formatter:formatTime
+        title: '购车价格(万元)'
     },{
         field: '',
         title: '首付比例'
@@ -64,9 +63,9 @@ $('#table').bootstrapTable({
         title: '月供期限(期数)'
     },{
         field: '',
-        title: '分期额度(元)'
+        title: '分期额度(万元)'
     },{
-        field: '',
+        field: 'agentName',
         title: '运营商'
     },{
         field: 'status',

@@ -20,6 +20,8 @@ import net.fnsco.car.service.carBrand.entity.CarBrandDTO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.ChineseInital;
+import net.fnsco.core.utils.OssLoaclUtil;
 
 @Service
 public class CarBrandService extends BaseService {
@@ -40,9 +42,13 @@ public class CarBrandService extends BaseService {
 	public ResultPageDTO<CarBrandDO> page(CarBrandDO carBrandDO, Integer pageNum, Integer pageSize) {
 		List<CarBrandDO> pageList = carBrandDAO.pageList(carBrandDO, pageNum, pageSize);
 		for (CarBrandDO carBrandDO2 : pageList) {
-			if( !Strings.isNullOrEmpty(carBrandDO2.getIconImgPath()) ){
-				carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
-			}
+//			if( !Strings.isNullOrEmpty(carBrandDO2.getIconImgPath()) ){
+//				carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
+//			}
+			if(!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())){
+                String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^")+1);
+                carBrandDO2.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+            }
 		}
 		Integer count = carBrandDAO.pageListCount(carBrandDO);
 		ResultPageDTO<CarBrandDO> pager = new ResultPageDTO<CarBrandDO>(count, pageList);
@@ -105,12 +111,15 @@ public class CarBrandService extends BaseService {
 	 * 查询汽车热门品牌
 	 * @return
 	 */
-	public ResultDTO selectHot() {
+	public ResultDTO<List<CarBrandDO>> selectHot() {
 		CarBrandDO carBrandDO = new CarBrandDO();
 		carBrandDO.setIsHot(1);
 		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO, 8);
 		for (CarBrandDO carBrandDO2 : list) {
-				carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
+			if(!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())){
+                String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^")+1);
+                carBrandDO2.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+            }
 		}
 		return ResultDTO.success(list);
 	}
@@ -124,12 +133,6 @@ public class CarBrandService extends BaseService {
 
 		CarBrandDO carBrandDO = new CarBrandDO();
 		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO, null);
-
-		for (CarBrandDO carBrandDO2 : list) {
-			if (!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())) {
-				carBrandDO2.setIconImgPath(env.getProperty("web.base.url") + carBrandDO2.getIconImgPath());
-			}
-		}
 
 		// 添加顶级菜单
 		CarBrandDO root = new CarBrandDO();
@@ -155,7 +158,7 @@ public class CarBrandService extends BaseService {
 		List<CarBrandDTO> carList = new ArrayList<>();
 
 		for (CarBrandDO carBrandDO : list) {
-
+			
 			/**
 			 * 获取名称的每个汉字的首字母
 			 */

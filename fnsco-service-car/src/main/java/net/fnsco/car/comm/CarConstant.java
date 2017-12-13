@@ -2,7 +2,7 @@ package net.fnsco.car.comm;
 
 import net.fnsco.core.constants.CoreConstants;
 
-public class CarConstant extends CoreConstants {
+public class CarConstant extends CoreConstants{
     public static String AN_PAY_URL               = "anPayURL";
     public static String AN_PAY_KEY               = "merchant.payKey";
     public static String MER_ID                   = "merchant.code";  //商户号

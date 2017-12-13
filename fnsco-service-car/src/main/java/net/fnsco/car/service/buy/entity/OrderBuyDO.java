@@ -47,7 +47,7 @@ public class OrderBuyDO {
     /**
      * 汽车型号
      */
-    private String carSubTypeId;
+    private Integer carSubTypeId;
 
     /**
      * 金融方案
@@ -79,8 +79,35 @@ public class OrderBuyDO {
      */
     private Integer sysUserId;
     
+    /**
+     * 运营商名称
+     */
+    private String agentName;
+    
     
     /**
+	 * agentName
+	 *
+	 * @return  the agentName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getAgentName() {
+		return agentName;
+	}
+
+	/**
+	 * agentName
+	 *
+	 * @param   agentName    the agentName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
+	/**
 	 * sysUserId
 	 *
 	 * @return  the sysUserId
@@ -222,11 +249,11 @@ public class OrderBuyDO {
         this.carTypeId = carTypeId;
     }
 
-    public String getCarSubTypeId() {
+    public Integer getCarSubTypeId() {
         return carSubTypeId;
     }
 
-    public void setCarSubTypeId(String carSubTypeId) {
+    public void setCarSubTypeId(Integer carSubTypeId) {
         this.carSubTypeId = carSubTypeId;
     }
 
