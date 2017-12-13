@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.car.service.agent.dao.AgentDAO;
 import net.fnsco.car.service.agent.entity.AgentDO;
@@ -116,7 +117,8 @@ public class OrderLoanService extends BaseService {
 	}
 
 
-	public ResultDTO<Object> addJo(OrderLoanDO orderLoan, CustomerDO customer, String fileIds) {
+	@Transactional
+	public ResultDTO<Object> addJo(OrderLoanDO orderLoan, CustomerDO customer) {
 		customer = customerService.addCustomer(customer);
 		
 		orderLoan.setCustomerId(customer.getId());
@@ -126,15 +128,15 @@ public class OrderLoanService extends BaseService {
 		orderLoanDAO.insert(orderLoan);
 		
 		// 更新文件信息
-		if (!StringUtils.isEmpty(fileIds)) {
-			OrderFileDO orderFile = new OrderFileDO();
-			String[] ids = fileIds.split(",");
-			for (String id : ids) {
-				orderFile.setId(Integer.parseInt(id));
-				orderFile.setOrderNo(orderLoan.getId().toString());
-				orderFileService.doUpdate(orderFile, 0);
-			}
-		}
-		return ResultDTO.success();
+//		if (!StringUtils.isEmpty(fileIds)) {
+//			OrderFileDO orderFile = new OrderFileDO();
+//			String[] ids = fileIds.split(",");
+//			for (String id : ids) {
+//				orderFile.setId(Integer.parseInt(id));
+//				orderFile.setOrderNo(orderLoan.getId().toString());
+//				orderFileService.doUpdate(orderFile, 0);
+//			}
+//		}
+		return ResultDTO.success(orderLoan.getId());
 	}
 }

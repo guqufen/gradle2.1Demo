@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -18,7 +17,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,8 +27,6 @@ import com.alibaba.fastjson.JSONArray;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.car.comm.CarServiceConstant;
-import net.fnsco.car.service.city.DicCityService;
-import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.car.service.file.OrderFileService;
 import net.fnsco.car.service.file.entity.OrderFileDO;
@@ -42,8 +38,8 @@ import net.fnsco.core.utils.MessageUtils;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.dto.MessageValidateDTO;
 import net.fnsco.web.controller.jo.LoanJO;
+import net.fnsco.web.controller.jo.LoanJO2;
 import net.fnsco.web.controller.vo.LoanVO;
-import net.fnsco.web.controller.vo.QueryCityVO;
 
 @RestController
 @RequestMapping(value = "/h5/loan", method = RequestMethod.POST)
@@ -86,16 +82,29 @@ public class LoanApplyController extends BaseController {
 		orderLoan.setCityId(jo.getCityId());
 		orderLoan.setAmount(jo.getAmount());
 		orderLoan.setSuggestCode(jo.getSuggestCode());
-		orderLoan.setCarTypeId(jo.getCarTypeId());// 车品牌id
-		orderLoan.setCarSubTypeId(jo.getCarSubTypeId());// 车型号id
 
-		String fileIds = jo.getFileIds();// 上传的图片id
-		ResultDTO<Object> result = orderLoanService.addJo(orderLoan, customer, fileIds);
+//		String fileIds = jo.getFileIds();// 上传的图片id
+		ResultDTO<Object> result = orderLoanService.addJo(orderLoan, customer);
+		LoanVO loanVO = new LoanVO();
+		loanVO = (LoanVO)result.getData();
+		loanVO.setOrderNo(loanVO.getOrderNo());
 		if (result.isSuccess()) {
-			return ResultDTO.success("提交成功");
+			return ResultDTO.success(loanVO);
 		} else {
 			return ResultDTO.fail("提交失败");
 		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/update", produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "贷款申请-更新信息")
+	public ResultDTO<Object> updateLoanJO(LoanJO2 jo){
+		if(jo.getOrderId() == null){
+			return ResultDTO.failForMessage(CarServiceConstant.anErrorMap.get("0001"));
+		}
+		
+		return null;
 	}
 
 	@ResponseBody
