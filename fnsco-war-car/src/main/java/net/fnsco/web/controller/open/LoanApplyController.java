@@ -3,6 +3,7 @@ package net.fnsco.web.controller.open;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -184,15 +185,20 @@ public class LoanApplyController extends BaseController {
 					fileInfo.setCreateTime(new Date());
 					ResultDTO<Integer> result = orderFileService.doAddToDB(fileInfo);
 					if (result.isSuccess()) {
-						ResultDTO<TreeMap<String, String>> appResult = null;
-
+//						ResultDTO<TreeMap<String, String>> appResult = null;
 //						TreeMap<String, String> paras = new TreeMap<>();
 //						paras.put("id", String.valueOf(result.getData()));
 //						paras.put("fileType", file_type);
 //
 //						appResult = ResultDTO.success(paras);
 //						String json = isApp ? JSONArray.toJSONString(appResult) : JSONArray.toJSONString(paras);
-						response.getWriter().write("提交成功");
+						
+						response.setHeader("Content-type", "text/html;charset=UTF-8");  
+						//这句话的意思，是告诉servlet用UTF-8转码，而不是用默认的ISO8859  
+						response.setCharacterEncoding("UTF-8");  
+						String data = "提交成功";  
+						PrintWriter pw = response.getWriter();  
+						pw.write(data); 
 					} else {
 						logger.error(fileName + "上传失败");
 						throw new RuntimeException();
