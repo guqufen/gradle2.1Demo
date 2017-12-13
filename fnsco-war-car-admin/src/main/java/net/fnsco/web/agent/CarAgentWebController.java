@@ -12,6 +12,7 @@ import net.fnsco.car.service.agent.dao.AgentDAO;
 import net.fnsco.car.service.agent.entity.AgentDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.freamwork.business.WebUserDTO;
 
 /**
  * @desc 
@@ -39,5 +40,25 @@ public class CarAgentWebController extends BaseController {
 	public ResultDTO<List<AgentDO>> queryAll(){
 		List<AgentDO> datas = agentDAO.getAll();
 		return success(datas);
+	}
+	
+	
+	/**
+	 * getAgentInfo:(查询登录用户单个信息)
+	 *
+	 * @param  @return    设定文件
+	 * @return ResultDTO<AgentDO>    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月13日 上午11:33:28
+	 */
+	@RequestMapping(value = "/getAgentInfo",method = RequestMethod.POST)
+	@ResponseBody
+	public ResultDTO<AgentDO> getAgentInfo(){
+		WebUserDTO adminUser = (WebUserDTO) getSessionUser();
+		 if(null != adminUser && null != adminUser.getType() && adminUser.getType() == 2) {
+			 
+			 
+		 }
+		 return ResultDTO.success(new AgentDO());
 	}
 }
