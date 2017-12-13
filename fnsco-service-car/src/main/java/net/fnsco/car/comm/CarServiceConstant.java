@@ -4,7 +4,9 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-public class CarServiceConstant {
+import ch.qos.logback.core.CoreConstants;
+
+public class CarServiceConstant{
     public static Map<String, String> anErrorMap = Maps.newHashMap();
     static {
         //anErrorMap.put("0000", "接受通知成功（异步交易时才会出现）");
