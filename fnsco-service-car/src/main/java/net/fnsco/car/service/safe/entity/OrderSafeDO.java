@@ -58,7 +58,7 @@ public class OrderSafeDO {
     /**
      * 推荐码
      */
-    private Integer suggestCode;
+    private String suggestCode;
 
     /**
      * 创建时间
@@ -262,11 +262,11 @@ public class OrderSafeDO {
         this.estiPremiums = estiPremiums;
     }
 
-    public Integer getSuggestCode() {
+    public String getSuggestCode() {
         return suggestCode;
     }
 
-    public void setSuggestCode(Integer suggestCode) {
+    public void setSuggestCode(String suggestCode) {
         this.suggestCode = suggestCode;
     }
 
