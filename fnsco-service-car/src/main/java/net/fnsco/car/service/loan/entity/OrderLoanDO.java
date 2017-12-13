@@ -3,8 +3,6 @@ package net.fnsco.car.service.loan.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import io.swagger.annotations.ApiModelProperty;
-
 public class OrderLoanDO {
 
 	/**
@@ -40,17 +38,17 @@ public class OrderLoanDO {
     /**
      * 汽车品牌
      */
+    private Integer carTypeId;
+    
+    /**
+     * 汽车型号
+     */
     private Integer carSubTypeId;
     
     /**
      * 	汽车品牌名称
      */
     private String carTypeName;
-
-    /**
-     * 汽车型号
-     */
-    private String carModel;
 
 
 	/**
@@ -83,6 +81,55 @@ public class OrderLoanDO {
      */
     private Integer sysUserId;
     
+    /**
+     * 运营商名称
+     */
+    private String agentName;
+    
+	/**
+	 * carTypeId
+	 *
+	 * @return  the carTypeId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getCarTypeId() {
+		return carTypeId;
+	}
+
+	/**
+	 * carTypeId
+	 *
+	 * @param   carTypeId    the carTypeId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCarTypeId(Integer carTypeId) {
+		this.carTypeId = carTypeId;
+	}
+
+	/**
+	 * agentName
+	 *
+	 * @return  the agentName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getAgentName() {
+		return agentName;
+	}
+
+	/**
+	 * agentName
+	 *
+	 * @param   agentName    the agentName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
 	/**
 	 * sysUserId
 	 *

@@ -61,7 +61,7 @@ $('#table').bootstrapTable({
         title: '申请时间',
         formatter:formatTime
     },{
-        field: '',
+        field: 'agentName',
         title: '运营商'
     },{
         field: 'status',
