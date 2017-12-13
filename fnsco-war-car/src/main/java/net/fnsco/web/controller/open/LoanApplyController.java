@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONArray;
 
+import ch.qos.logback.core.CoreConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.car.comm.CarServiceConstant;
@@ -53,14 +54,14 @@ public class LoanApplyController extends BaseController {
 	@Autowired
 	private OrderFileService orderFileService;
 
-	@RequestMapping(value = "/add")
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ApiOperation(value = "贷款申请-添加申请")
 	public ResultDTO<LoanVO> addJO(@RequestBody LoanJO jo) {
 		// 校验验证码
 		String code = jo.getVerCode();
 		String mobile = jo.getMobile();
 		if(StringUtils.isEmpty(code)||StringUtils.isEmpty(mobile)){
-			return ResultDTO.fail(CarServiceConstant.anErrorMap.get("0001"));
+			return ResultDTO.fail();
 		}
 		// 获取session中验证码信息
 		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
@@ -99,7 +100,7 @@ public class LoanApplyController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/update", produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "贷款申请-更新信息")
-	public ResultDTO<Object> updateLoanJO(LoanJO2 jo){
+	public ResultDTO<Object> updateLoanJO(@RequestBody LoanJO2 jo){
 		if(jo.getOrderId() == null){
 			return ResultDTO.failForMessage(CarServiceConstant.anErrorMap.get("0001"));
 		}
@@ -120,7 +121,7 @@ public class LoanApplyController extends BaseController {
 	}
 
 	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
-		String type = request.getParameter("type");//文件类型
+		String fileType = request.getParameter("type");//文件类型
 		String orderId = request.getParameter("orderId");
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
@@ -129,7 +130,7 @@ public class LoanApplyController extends BaseController {
 			MultipartFile file = entity.getValue();
 
 			OrderFileDO fileInfo = new OrderFileDO();
-			String fileType = req.getParameter("fileTypeKey");
+//			String fileType = req.getParameter("fileTypeKey");
 			String fileName = file.getOriginalFilename();
 			String line = System.getProperty("file.separator");// 文件分割符
 			// 保存文件的路径
@@ -176,6 +177,7 @@ public class LoanApplyController extends BaseController {
 					fileInfo.setFilePath(newUrl);
 					fileInfo.setFileType(fileType);
 					fileInfo.setFileName(fileName);
+					fileInfo.setOrderNo(orderId);
 					fileInfo.setCreateTime(new Date());
 					ResultDTO<Integer> result = orderFileService.doAddToDB(fileInfo);
 					if (result.isSuccess()) {
