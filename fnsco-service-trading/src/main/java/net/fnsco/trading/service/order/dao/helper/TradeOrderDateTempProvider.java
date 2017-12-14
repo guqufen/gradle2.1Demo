@@ -144,7 +144,7 @@ public class TradeOrderDateTempProvider {
         sb.append("INSERT INTO r_trade_order_date_temp ");  
         sb.append("(id,inner_code,amt,pay_sub_type,time_stamp,trade_date,trade_houre,procedure_fee,pay_medium)");  
         sb.append("VALUES ");  
-        MessageFormat mf = new MessageFormat("(null,#{list[{0}].innerCode},#{{list[{0}].amt},#{{list[{0}].paySubType},#{{list[{0}].timeStamp},#{{list[{0}].tradeDate},#{{list[{0}].tradeHoure},#{{list[{0}].procedureFee},#{{list[{0}].payMedium})");  
+        MessageFormat mf = new MessageFormat("(null,#'{'list[{0}].innerCode},#'{'list[{0}].amt},#'{'list[{0}].paySubType},#'{'list[{0}].timeStamp},#'{'list[{0}].tradeDate},#'{'list[{0}].tradeHoure},#'{'list[{0}].procedureFee},#'{'list[{0}].payMedium})");  
         for (int i = 0; i < lists.size(); i++) {  
             sb.append(mf.format(new Object[]{i}));  
             if (i < lists.size() - 1) {  
