@@ -45,6 +45,8 @@ public class IndexCarController extends BaseController {
 		num= num + number;
 		Integer numberAmt =new Random().nextInt(10000)+10000;
 		numberAmt = numberAmt * 100;
+		Integer numKeep = Integer.valueOf(keep);
+		numberAmt = numberAmt + numKeep;
 		amt = new BigDecimal(numberAmt);
 		amt = amt.divide(new BigDecimal(10000000), 2, BigDecimal.ROUND_HALF_UP);
 		String numAmt = numberAmt.toString();
