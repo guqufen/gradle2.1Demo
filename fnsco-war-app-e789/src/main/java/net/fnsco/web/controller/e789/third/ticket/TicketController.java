@@ -8,15 +8,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.beust.jcommander.internal.Lists;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.trading.service.order.TradeOrderService;
+import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.trading.service.third.ticket.TicketContactService;
+import net.fnsco.trading.service.third.ticket.TicketService;
+import net.fnsco.trading.service.third.ticket.TicketSiteService;
+import net.fnsco.trading.service.third.ticket.dto.ticketsAvailableDTO;
+import net.fnsco.trading.service.third.ticket.entity.TicketContactDO;
+import net.fnsco.trading.service.third.ticket.entity.TicketSiteDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
-import net.fnsco.web.controller.e789.jo.TradeDataDetailJO;
+import net.fnsco.web.controller.e789.third.ticket.jo.PassengerJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.SiteJO;
-import net.fnsco.web.controller.e789.third.ticket.jo.TicketJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.TicketOrderJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.TrainQueryJO;
 import net.fnsco.web.controller.e789.third.ticket.vo.PassengerVO;
@@ -37,7 +44,27 @@ import net.fnsco.web.controller.e789.third.ticket.vo.TrainVO;
 public class TicketController extends BaseController {
 
     @Autowired
-    private TradeOrderService tradeOrderService;
+    private TicketSiteService    ticketSiteService;
+    @Autowired
+    private TicketService        ticketService;
+    @Autowired
+    private TicketContactService ticketContactService;
+
+    /**
+     * queryTradeDataDetail:(查询交易流水详情)
+     *
+     * @param  @param tradeDataDetailJO
+     * @param  @return    设定文件
+     * @return ResultDTO<TradeDataDetailVO>    DOM对象
+     * @author sxfei
+     * @date   2017年12月13日 下午4:07:33
+     */
+    @RequestMapping(value = "/importSite")
+    @ApiOperation(value = "站点列表导入")
+    public ResultDTO<List<SiteVO>> importSite() {
+        ticketSiteService.importSite();
+        return success();
+    }
 
     /**
      * queryTradeDataDetail:(查询交易流水详情)
@@ -51,8 +78,16 @@ public class TicketController extends BaseController {
     @RequestMapping(value = "/querySiteList")
     @ApiOperation(value = "模糊查询站点列表")
     public ResultDTO<List<SiteVO>> querySiteList(@RequestBody SiteJO siteJO) {
-
-        return success();
+        List<TicketSiteDO> result = ticketSiteService.querySiteList(siteJO.getSiteName());
+        List<SiteVO> resultList = Lists.newArrayList();
+        for (TicketSiteDO site : result) {
+            SiteVO vo = new SiteVO();
+            vo.setSiteCode(site.getCode());
+            vo.setSiteName(site.getName());
+            vo.setSitePyName(site.getPyName());
+            resultList.add(vo);
+        }
+        return success(result);
     }
 
     /**
@@ -67,7 +102,7 @@ public class TicketController extends BaseController {
     @RequestMapping(value = "/queryTicketList")
     @ApiOperation(value = "查询火车票列表")
     public ResultDTO<List<TrainVO>> queryTicketList(@RequestBody TrainQueryJO ticketJO) {
-
+        List<ticketsAvailableDTO> resultList = ticketService.queryTicketList(ticketJO.getStartSite(), ticketJO.getEndSite(), ticketJO.getBuyDate());
         return success();
     }
 
@@ -80,15 +115,15 @@ public class TicketController extends BaseController {
      * @author sxfei
      * @date   2017年12月13日 下午4:07:33
      */
-    @RequestMapping(value = "/queryTicketDetail")
-    @ApiOperation(value = "查询火车票详情")
-    public ResultDTO<TrainVO> queryTicketDetail(@RequestBody TicketJO ticketJO) {
-
-        return success();
-    }
+    //@RequestMapping(value = "/queryTicketDetail")
+    //@ApiOperation(value = "查询火车票详情")
+    //public ResultDTO<TrainVO> queryTicketDetail(@RequestBody TicketJO ticketJO) {
+    //
+    //    return success();
+    //}
 
     /**
-     * queryTradeDataDetail:(查询交易流水详情)
+     * queryTradeDataDetail:(添加乘客)
      *
      * @param  @param tradeDataDetailJO
      * @param  @return    设定文件
@@ -98,13 +133,19 @@ public class TicketController extends BaseController {
      */
     @RequestMapping(value = "/addPassenger")
     @ApiOperation(value = "添加乘客")
-    public ResultDTO addPassenger(@RequestBody TradeDataDetailJO tradeDataDetailJO) {
-
+    public ResultDTO addPassenger(@RequestBody PassengerJO passengerJO) {
+        TicketContactDO ticketContact = new TicketContactDO();
+        ticketContact.setAppUserId(String.valueOf(passengerJO.getUserId()));
+        ticketContact.setCardNum(passengerJO.getCardNum());
+        ticketContact.setCardType(passengerJO.getCardType());
+        //ticketContact.setMobile(passengerJO.get());
+        ticketContact.setTicketType(passengerJO.getTicketType());
+        ticketContactService.doAdd(ticketContact);
         return success();
     }
 
     /**
-     * queryTradeDataDetail:(查询交易流水详情)
+     * queryTradeDataDetail:(查询乘客信息列表)
      *
      * @param  @param tradeDataDetailJO
      * @param  @return    设定文件
@@ -113,14 +154,16 @@ public class TicketController extends BaseController {
      * @date   2017年12月13日 下午4:07:33
      */
     @RequestMapping(value = "/queryPassengerList")
-    @ApiOperation(value = "查询乘客")
-    public ResultDTO<PassengerVO> queryPassenger(@RequestBody CommonJO commonJO) {
-
-        return success();
+    @ApiOperation(value = "查询我的乘客列表")
+    public ResultPageDTO<TicketContactDO> queryPassenger(@RequestBody CommonJO commonJO) {
+        TicketContactDO ticketContact = new TicketContactDO();
+        ticketContact.setAppUserId(String.valueOf(commonJO.getUserId()));
+        ResultPageDTO<TicketContactDO> result = ticketContactService.page(ticketContact, 1, 15);
+        return result;
     }
 
     /**
-     * queryTradeDataDetail:(查询交易流水详情)
+     * queryTradeDataDetail:(提交订单)
      *
      * @param  @param tradeDataDetailJO
      * @param  @return    设定文件

@@ -3,7 +3,9 @@ package net.fnsco.trading.service.order.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
@@ -54,5 +56,28 @@ public interface TradeOrderByPayTypeDAO {
     @Select("SELECT SUM(turnover) AS turnover , SUM(order_num) AS orderNum,pay_type AS payType FROM r_trade_order_by_pay_type WHERE inner_code IN "
     		+ "(SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{userId}) AND trade_date >= #{startTradeDate} AND trade_date <= #{endTradeDate} GROUP BY pay_type")
     public List<OrderPayTypeDTO> selectByCondition(@Param("startTradeDate") String startTradeDate,@Param("endTradeDate") String endTradeDate,@Param("userId")Integer userId);
-
+    
+    /**
+     * deleteByCondition:(条件删除数据)
+     *
+     * @param  @param tradeOrderByPayType
+     * @param  @return    设定文件
+     * @return int    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午1:54:35
+     */
+    @DeleteProvider(type = TradeOrderByPayTypeProvider.class, method = "deleteByCondition")
+    public int deleteByCondition(@Param("tradeOrderByPayType") TradeOrderByPayTypeDO tradeOrderByPayType);
+    
+    /**
+     * insertBatch:(批量插入数据)
+     *
+     * @param  @param datas
+     * @param  @return    设定文件
+     * @return int    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午3:21:30
+     */
+    @InsertProvider(type = TradeOrderByPayTypeProvider.class, method = "insertBatch")
+    public int insertBatch(@Param("list")List<TradeOrderByPayTypeDO> datas);
 }

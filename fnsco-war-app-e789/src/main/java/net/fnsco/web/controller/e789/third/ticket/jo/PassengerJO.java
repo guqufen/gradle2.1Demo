@@ -1,9 +1,9 @@
 package net.fnsco.web.controller.e789.third.ticket.jo;
 
 import io.swagger.annotations.ApiModelProperty;
-import net.fnsco.core.base.JO;
+import net.fnsco.web.controller.e789.jo.CommonJO;
 
-public class PassengerJO extends JO{
+public class PassengerJO extends CommonJO {
 
     @ApiModelProperty(value = "姓名", example = "姓名")
     private String name;

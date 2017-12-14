@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import net.fnsco.car.service.config.dao.ConfigDAO;
 import net.fnsco.car.service.config.entity.ConfigDO;
 import net.fnsco.core.base.BaseService;
-import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 
 @Service
@@ -25,6 +24,10 @@ public class ConfigService extends BaseService {
  //根据保险公司名字查询id
  public Integer queryIdByName(String name) {
 	 return configDAO.getId(name);
+ }
+ //查询首页总金额以及销售量
+ public ConfigDO queryIndex() {
+	 return configDAO.getIndex();
  }
  // 分页
  public ResultPageDTO<ConfigDO> page(ConfigDO config, Integer pageNum, Integer pageSize) {

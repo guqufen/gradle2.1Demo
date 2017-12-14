@@ -140,7 +140,54 @@ public class TradeOrderDO {
     
     private Integer userId;
     
+    private Date startCreateDate;//开始时间 条件查询
+    private Date endCreateDate;//结束时间 条件查询
+    
     /**
+	 * startCreateDate
+	 *
+	 * @return  the startCreateDate
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Date getStartCreateDate() {
+		return startCreateDate;
+	}
+
+	/**
+	 * startCreateDate
+	 *
+	 * @param   startCreateDate    the startCreateDate to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setStartCreateDate(Date startCreateDate) {
+		this.startCreateDate = startCreateDate;
+	}
+
+	/**
+	 * endCreateDate
+	 *
+	 * @return  the endCreateDate
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Date getEndCreateDate() {
+		return endCreateDate;
+	}
+
+	/**
+	 * endCreateDate
+	 *
+	 * @param   endCreateDate    the endCreateDate to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setEndCreateDate(Date endCreateDate) {
+		this.endCreateDate = endCreateDate;
+	}
+
+	/**
 	 * userId
 	 *
 	 * @return  the userId

@@ -7,7 +7,7 @@ public class SiteVO extends VO {
     @ApiModelProperty(value = "站点名称", example = "站点名称")
     private String siteName;
     @ApiModelProperty(value = "站点拼音名称", example = "站点拼音名称")
-    private String siteEName;
+    private String sitePyName;
     @ApiModelProperty(value = "站点代码", example = "站点代码")
     private String siteCode;
 
@@ -34,25 +34,25 @@ public class SiteVO extends VO {
     }
 
     /**
-     * siteEName
+     * sitePyName
      *
-     * @return  the siteEName
+     * @return  the sitePyName
      * @since   CodingExample Ver 1.0
     */
 
-    public String getSiteEName() {
-        return siteEName;
+    public String getSitePyName() {
+        return sitePyName;
     }
 
     /**
-     * siteEName
+     * sitePyName
      *
-     * @param   siteEName    the siteEName to set
+     * @param   sitePyName    the sitePyName to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setSiteEName(String siteEName) {
-        this.siteEName = siteEName;
+    public void setSitePyName(String sitePyName) {
+        this.sitePyName = sitePyName;
     }
 
     /**

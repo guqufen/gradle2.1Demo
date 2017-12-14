@@ -1,11 +1,13 @@
 package net.fnsco.trading.service.order.dao.helper;
 
-import org.apache.ibatis.jdbc.SQL;
+import java.text.MessageFormat;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang3.StringUtils;
 
 import net.fnsco.trading.service.order.entity.TradeOrderByPayTypeDO;
 public class TradeOrderByPayTypeProvider {
@@ -107,6 +109,74 @@ public class TradeOrderByPayTypeProvider {
             WHERE("order_price=#{tradeOrderByPayType.orderPrice}");
         }
         }}.toString();
+    }
+    
+    /**
+     * deleteByCondition:(条件删除数据)
+     *
+     * @param  @param params
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午1:56:12
+     */
+    public String deleteByCondition(Map<String, Object> params) {
+    	TradeOrderByPayTypeDO tradeOrderByPayType = (TradeOrderByPayTypeDO) params.get("tradeOrderByPayType");
+    	return new SQL() {{
+    		DELETE_FROM(TABLE_NAME);
+    		if (tradeOrderByPayType.getId() != null) {
+                WHERE("id=#{tradeOrderByPayType.id}");
+            }
+            if (StringUtils.isNotBlank(tradeOrderByPayType.getPayType())){
+                WHERE("pay_type=#{tradeOrderByPayType.payType}");
+            }
+            if (StringUtils.isNotBlank(tradeOrderByPayType.getTradeDate())){
+                WHERE("trade_date=#{tradeOrderByPayType.tradeDate}");
+            }
+            if (StringUtils.isNotBlank(tradeOrderByPayType.getInnerCode())){
+                WHERE("inner_code=#{tradeOrderByPayType.innerCode}");
+            }
+            if (tradeOrderByPayType.getTurnover() != null) {
+                WHERE("turnover=#{tradeOrderByPayType.turnover}");
+            }
+            if (tradeOrderByPayType.getOrderNum() != null) {
+                WHERE("order_num=#{tradeOrderByPayType.orderNum}");
+            }
+            if (tradeOrderByPayType.getOrderPrice() != null) {
+                WHERE("order_price=#{tradeOrderByPayType.orderPrice}");
+            }
+            if(StringUtils.isNotBlank(tradeOrderByPayType.getStartTradeDate())) {
+            	WHERE("trade_date >= #{tradeOrderByPayType.startTradeDate}");
+            }
+            if(StringUtils.isNotBlank(tradeOrderByPayType.getEndTradeDate())) {
+            	WHERE("trade_date < #{tradeOrderByPayType.endTradeDate}");
+            }
+    	}}.toString();
+    }
+    
+    /**
+     * insertBatch:(批量插入)
+     *
+     * @param  @param params
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午3:43:54
+     */
+    public String insertBatch(Map<String, Object> params) {
+    	List<TradeOrderByPayTypeDO> lists = (List<TradeOrderByPayTypeDO>) params.get("list");
+    	StringBuilder sb = new StringBuilder();  
+        sb.append("INSERT INTO r_trade_order_by_pay_type ");  
+        sb.append("(id,pay_type,trade_date,inner_code,turnover,order_num,order_price)");  
+        sb.append("VALUES ");  
+        MessageFormat mf = new MessageFormat("(#'{'list[{0}].id},#'{'list[{0}].payType},#'{'list[{0}].tradeDate},#'{'list[{0}].innerCode},#'{'list[{0}].turnover},#'{'list[{0}].orderNum},#'{'list[{0}].orderPrice})");  
+        for (int i = 0; i < lists.size(); i++) {  
+            sb.append(mf.format(new Object[]{i}));  
+            if (i < lists.size() - 1) {  
+                sb.append(",");  
+            }  
+        }  
+        return sb.toString();  
     }
 }
 

@@ -30,6 +30,7 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
+import net.fnsco.order.api.appuser.AppUserMerchantService;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
@@ -75,6 +76,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private AppUserSettingService          appUserSettingService;
     @Autowired
     private MerchantPosService             merchantPosService;
+    @Autowired
+    private AppUserMerchantService         appUserMerchantService;
 
     //注册
     @Override
@@ -542,6 +545,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUserLoginInfoDTO.setPayPassword(appUser.getPayPassword());
         //查询用户绑定商户数量 根据用户id查询数量
         int merchantNums = 0;
+        List<AppUserMerchant> rel1 = appUserMerchantService.selectByUserId(appUser.getId());
         List<AppUserMerchant> rel = appUserMerchantDao.selectByUserId(appUser.getId());
         if (!CollectionUtils.isEmpty(rel)) {
             merchantNums = rel.size();

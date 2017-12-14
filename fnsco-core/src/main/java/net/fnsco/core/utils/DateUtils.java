@@ -33,7 +33,23 @@ public class DateUtils {
         }
         return result;
     }
-
+    
+    public static Date getDayStartTime(int dates) {
+        Date result = null;
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_WEEK, dates);
+        String tempStr = sf.format(calendar.getTime());
+        tempStr += " 00:00:00";
+        try {
+            result = sf1.parse(tempStr);
+        } catch (ParseException e) {
+            logger.error("DateUtils.getDayEndTime()日志转换出错", e);
+        }
+        return result;
+    }
+    
     public static String getDateStartTime(String date) {
         String result = "";
         if (Strings.isNullOrEmpty(date)) {
@@ -591,6 +607,32 @@ public class DateUtils {
         return tmp;
     }
 
+    
+    
+    public static String strToDate1(Date date) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        String tmp = null;
+        try {
+             tmp = sf.format(date);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return tmp;
+    }
+    
+    public static String strToDate2(Date date) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        String tmp = null;
+        try {
+             tmp = sf.format(date);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return tmp;
+    }
+    
     /**
      * 将指定Date转换为零点零分的date
      * @param date

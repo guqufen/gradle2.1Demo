@@ -42,7 +42,8 @@ function initTableData() {
 		}, {
 			field : 'supperName',
 			title : '上级汽车名称',
-			width : 80
+			width : 80,
+			formatter:formatSupperName
 		}, {
 			field : 'iconImgPath',
 			title : '图标',
@@ -56,7 +57,8 @@ function initTableData() {
 		}, {
 			field : 'model',
 			title : '所属车型',
-			width : 40
+			width : 40,
+			formatter:formatModel
 		}]
 	});
 }
@@ -93,10 +95,31 @@ function queryParams(params) {
  * @returns
  */
 function formatIcon(value, row, index) {
-	if(row.level == 1){
+	if(value != null){
 		return '<img src="'+value+'" class="img-responsive" alt="Cinque Terre" height="30" width="30">';
 	}else{
 		return '-';
+	}
+}
+function formatModel(value, row, index) {
+	if( value == 1){
+		return 'SUV';
+	}else if(value ==2){
+		return '豪华车';
+	}else if(value ==3){
+		return '商户中级车';
+	}else if(value ==4){
+		return '三厢';
+	}else if(value ==5){
+		return '两厢';
+	}
+}
+
+function formatSupperName(value, row, index) {
+	if(row.level == 1){
+		return '总菜单';
+	}else{
+		return value;
 	}
 }
 
@@ -131,6 +154,7 @@ function clearInput(){
 	$('#level').val(null);
 }
 
+var fIcon = "";
 //菜单数树
 function getMenuTree(id){
 	
@@ -206,6 +230,11 @@ function MenuTreeGet() {
 				$('#parentName').val(node[0].name);
 				$('#parentId').val(node[0].id);
 				$('#level').val(node[0].level+1);
+
+				if(('#level').value >1){
+					fIcon = node[0].iconImgPath;
+				}
+
 				layer.close(index);
 
 			} else {
@@ -265,7 +294,9 @@ $('#btn_edit').click(
 				}
 
 				$('#model').val(selectContent[0].model);
-				$('#iconImgPath').val(selectContent[0].iconImgPath);
+//				$('#iconImgPath').val(selectContent[0].iconImgPath);
+				$('#isHot option[value=' + selectContent[0].iconImgPath + ']').attr(
+						'selected', true);
 				$('#isHot option[value=' + selectContent[0].isHot + ']').attr(
 						'selected', true);
 				$('#level').val(selectContent[0].level);
@@ -302,17 +333,31 @@ function saveOrUpdate() {
 		layer.msg('请选择上级菜单!');
 		return;
 	}
+	
+	//判断如果当前ID等于父ID，直接报错
+	if($('#parentId').val() == $('#id').val()){
+		layer.msg('父菜单不能为当前菜单，请重新选择上级菜单!');
+		return;
+	}
 
 	// 获取菜单树数据的父菜单名称
 	if (!$('#parentName').val()) {
 		layer.msg('请选择上级菜单!');
 		return;
 	}
-	
+
+	console.log($('#model option:selected').val());
+	console.log($('#model option:selected').innerHtml);
+
 	// 获取车型
-	if (!$('#model').val()) {
-		layer.msg('请输入车型!');
+	if (!$('#model option:selected').val()) {
+		layer.msg('请选择车型!');
 		return;
+	}
+	
+	//一级菜单不变更
+	if($('#level').val() == 1){
+		fIcon = $('#iconImgPath').val();
 	}
 
 	var param = {
@@ -320,8 +365,8 @@ function saveOrUpdate() {
 		'name' : $('#menuName').val(),//菜单名称
 		'supperId':$('#parentId').val(),
 		'level' : $('#level').val(),
-		'model':$('#model').val(),
-		'iconImgPath':$('#iconImgPath').val()
+		'model':$('#model option:selected').val(),
+		'iconImgPath':fIcon
 	}
 
 	// 组包发给后台

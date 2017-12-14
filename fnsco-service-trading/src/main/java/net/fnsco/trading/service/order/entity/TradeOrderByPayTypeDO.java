@@ -39,9 +39,54 @@ public class TradeOrderByPayTypeDO {
      */
     private BigDecimal orderPrice;
 
+    private String startTradeDate;//开始交易时间  主要用于条件查询
+    private String endTradeDate;//结束交易时间 主要用于条件查询
+    
+    /**
+	 * startTradeDate
+	 *
+	 * @return  the startTradeDate
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getStartTradeDate() {
+		return startTradeDate;
+	}
 
+	/**
+	 * startTradeDate
+	 *
+	 * @param   startTradeDate    the startTradeDate to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setStartTradeDate(String startTradeDate) {
+		this.startTradeDate = startTradeDate;
+	}
 
-    public Integer getId() {
+	/**
+	 * endTradeDate
+	 *
+	 * @return  the endTradeDate
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getEndTradeDate() {
+		return endTradeDate;
+	}
+
+	/**
+	 * endTradeDate
+	 *
+	 * @param   endTradeDate    the endTradeDate to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setEndTradeDate(String endTradeDate) {
+		this.endTradeDate = endTradeDate;
+	}
+
+	public Integer getId() {
         return id;
     }
 

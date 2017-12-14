@@ -8,6 +8,8 @@ import net.fnsco.core.base.DTO;
 public class PhoneChargePackageDTO extends DTO {
 
 	private static final long serialVersionUID = 1L;
+	@ApiModelProperty(value = "支持类型1：全国 2：城市,仅限流量", example = "支持类型1：全国 2：城市,仅限流量")
+	private String type;
 	@ApiModelProperty(value = "运营商:中国联通/移动/电信", example = "运营商:中国联通/移动/电信")
 	private String company;
 	@ApiModelProperty(value = "号码归属地", example = "号码归属地")
@@ -41,6 +43,14 @@ public class PhoneChargePackageDTO extends DTO {
 
 	public void setList(List<PhoneChargeDTO> list) {
 		this.list = list;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

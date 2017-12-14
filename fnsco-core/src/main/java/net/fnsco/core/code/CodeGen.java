@@ -6,8 +6,8 @@ public class CodeGen {
 
         //AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "fnsco_big_data", "root", "123456");
         //AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "hb-withhold-platform", "root", "123456");
-    	//AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "fnsco_e789_data", "root", "123456");
-    	AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "zrts_car_finance", "root", "123456");
+    	AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "fnsco_e789_data", "root", "123456");
+    	//AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "zrts_car_finance", "root", "123456");
         auto.setCreateBiz(false);
         auto.setCreateAction(false);
         auto.setCreateService(true);
@@ -35,6 +35,8 @@ public class CodeGen {
 //        auto.init("net.fnsco.trading", "appUser", "u_app_user");
 //        auto.init("net.fnsco.bigdata", "withdraw", "t_trade_withdraw_red");
        // auto.init("net.fnsco.car", "config", "car_config");
-        auto.init("net.fnsco.car", "agent", "car_agent");
+        //auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_site");
+        auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_contact");
+        auto.init("net.fnsco.trading", "order", "r_trade_order_by_pay_medium");
     }
 }

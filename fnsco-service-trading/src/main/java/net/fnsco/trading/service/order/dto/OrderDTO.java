@@ -27,18 +27,88 @@ public class OrderDTO extends DTO {
     private String cardHolderRate;   //  持卡人费率
     private String settlementAmount; //    结算金额
 
-    private String orderAmount;// 订单总价格
-    private String periodNum;//   分期数
-    private String eachMoney;//   每期金额
-    private String payAmount;
-    
+    private String orderAmount;      // 订单总价格
+    private String periodNum;        //   分期数
+    private String eachMoney;        //   每期金额
+    private String payAmount;        //支付金额
+
+    private String creditName;       //  用户名
+    private String creditCard;       //  信用卡号
+    private String userPhone;        //  手机号
+
+    /**
+     * creditName
+     *
+     * @return  the creditName
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getCreditName() {
+        return creditName;
+    }
+
+    /**
+     * creditName
+     *
+     * @param   creditName    the creditName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setCreditName(String creditName) {
+        this.creditName = creditName;
+    }
+
+    /**
+     * creditCard
+     *
+     * @return  the creditCard
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getCreditCard() {
+        return creditCard;
+    }
+
+    /**
+     * creditCard
+     *
+     * @param   creditCard    the creditCard to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setCreditCard(String creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    /**
+     * userPhone
+     *
+     * @return  the userPhone
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    /**
+     * userPhone
+     *
+     * @param   userPhone    the userPhone to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
     /**
      * payAmount
      *
      * @return  the payAmount
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getPayAmount() {
         return payAmount;
     }
@@ -49,7 +119,7 @@ public class OrderDTO extends DTO {
      * @param   payAmount    the payAmount to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setPayAmount(String payAmount) {
         this.payAmount = payAmount;
     }
@@ -60,7 +130,7 @@ public class OrderDTO extends DTO {
      * @return  the orderAmount
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getOrderAmount() {
         return orderAmount;
     }
@@ -71,7 +141,7 @@ public class OrderDTO extends DTO {
      * @param   orderAmount    the orderAmount to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setOrderAmount(String orderAmount) {
         this.orderAmount = orderAmount;
     }
@@ -82,7 +152,7 @@ public class OrderDTO extends DTO {
      * @return  the periodNum
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getPeriodNum() {
         return periodNum;
     }
@@ -93,7 +163,7 @@ public class OrderDTO extends DTO {
      * @param   periodNum    the periodNum to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setPeriodNum(String periodNum) {
         this.periodNum = periodNum;
     }
@@ -104,7 +174,7 @@ public class OrderDTO extends DTO {
      * @return  the eachMoney
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getEachMoney() {
         return eachMoney;
     }
@@ -115,7 +185,7 @@ public class OrderDTO extends DTO {
      * @param   eachMoney    the eachMoney to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setEachMoney(String eachMoney) {
         this.eachMoney = eachMoney;
     }
