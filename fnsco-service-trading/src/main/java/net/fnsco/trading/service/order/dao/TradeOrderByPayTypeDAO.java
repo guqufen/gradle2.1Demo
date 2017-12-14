@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
@@ -67,4 +68,16 @@ public interface TradeOrderByPayTypeDAO {
      */
     @DeleteProvider(type = TradeOrderByPayTypeProvider.class, method = "deleteByCondition")
     public int deleteByCondition(@Param("tradeOrderByPayType") TradeOrderByPayTypeDO tradeOrderByPayType);
+    
+    /**
+     * insertBatch:(批量插入数据)
+     *
+     * @param  @param datas
+     * @param  @return    设定文件
+     * @return int    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午3:21:30
+     */
+    @InsertProvider(type = TradeOrderByPayTypeProvider.class, method = "insertBatch")
+    public int insertBatch(@Param("list")List<TradeOrderByPayTypeDO> datas);
 }

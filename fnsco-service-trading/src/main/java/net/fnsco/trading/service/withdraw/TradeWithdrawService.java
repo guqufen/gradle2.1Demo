@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.trading.service.withdraw.dao.TradeWithdrawDAO;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 
@@ -40,6 +41,7 @@ public class TradeWithdrawService extends BaseService {
         logger.info("开始添加TradeWithdrawService.add,tradeWithdraw=" + tradeWithdraw.toString());
         tradeWithdraw.setCreateTime(new Date());
         tradeWithdraw.setUpdateTime(new Date());
+    	tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
         //设置账户金额
         //扣除或增加账户余额
         this.tradeWithdrawDAO.insert(tradeWithdraw);
