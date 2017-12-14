@@ -48,6 +48,14 @@ public class TimerConfig {
 		}
     }
     
+    /**
+     * buildReportDate:(报表统计生成)
+     *
+     * @param      设定文件
+     * @return void    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午4:35:13
+     */
     @Scheduled(cron = "1 0 0 * * ?") //每天凌晨00:00:01秒执行一次
     public void buildReportDate() {
     	reportStatService.createReportData(DateUtils.getDayStartTime(-1), DateUtils.getDayStartTime(0));
