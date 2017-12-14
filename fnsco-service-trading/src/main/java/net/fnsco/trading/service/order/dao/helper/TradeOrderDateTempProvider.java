@@ -1,11 +1,13 @@
 package net.fnsco.trading.service.order.dao.helper;
 
-import org.apache.ibatis.jdbc.SQL;
+import java.text.MessageFormat;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang3.StringUtils;
 
 import net.fnsco.trading.service.order.entity.TradeOrderDateTempDO;
 public class TradeOrderDateTempProvider {
@@ -39,8 +41,8 @@ public class TradeOrderDateTempProvider {
         if (tradeOrderDateTemp.getProcedureFee() != null) {
             SET("procedure_fee=#{tradeOrderDateTemp.procedureFee}");
         }
-        if (StringUtils.isNotBlank(tradeOrderDateTemp.getTerminalCode())){
-            SET("terminal_code=#{tradeOrderDateTemp.terminalCode}");
+        if (StringUtils.isNotBlank(tradeOrderDateTemp.getPayMedium())){
+            SET("pay_medium=#{tradeOrderDateTemp.payMedium}");
         }
         WHERE("id = #{tradeOrderDateTemp.id}");
         }}.toString();
@@ -85,8 +87,8 @@ public class TradeOrderDateTempProvider {
         if (tradeOrderDateTemp.getProcedureFee() != null) {
             WHERE("procedure_fee=#{tradeOrderDateTemp.procedureFee}");
         }
-        if (StringUtils.isNotBlank(tradeOrderDateTemp.getTerminalCode())){
-            WHERE("terminal_code=#{tradeOrderDateTemp.terminalCode}");
+        if (StringUtils.isNotBlank(tradeOrderDateTemp.getPayMedium())){
+            WHERE("pay_medium=#{tradeOrderDateTemp.payMedium}");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
@@ -121,10 +123,35 @@ public class TradeOrderDateTempProvider {
         if (tradeOrderDateTemp.getProcedureFee() != null) {
             WHERE("procedure_fee=#{tradeOrderDateTemp.procedureFee}");
         }
-        if (StringUtils.isNotBlank(tradeOrderDateTemp.getTerminalCode())){
-            WHERE("terminal_code=#{tradeOrderDateTemp.terminalCode}");
+        if (StringUtils.isNotBlank(tradeOrderDateTemp.getPayMedium())){
+            WHERE("pay_medium=#{tradeOrderDateTemp.payMedium}");
         }
         }}.toString();
+    }
+    
+    /**
+     * insertBatch:(批量插入)
+     *
+     * @param  @param params
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 上午9:47:47
+     */
+    public String insertBatch(Map<String, Object> params) {
+    	List<TradeOrderDateTempDO> lists = (List<TradeOrderDateTempDO>) params.get("list");
+    	StringBuilder sb = new StringBuilder();  
+        sb.append("INSERT INTO r_trade_order_date_temp ");  
+        sb.append("(id,inner_code,amt,pay_sub_type,time_stamp,trade_date,trade_houre,procedure_fee,pay_medium)");  
+        sb.append("VALUES ");  
+        MessageFormat mf = new MessageFormat("(#{list[{0}].innerCode},#{{list[{0}].amt},#{{list[{0}].paySubType},#{{list[{0}].timeStamp},#{{list[{0}].tradeDate},#{{list[{0}].tradeHoure},#{{list[{0}].procedureFee},#{{list[{0}].payMedium})");  
+        for (int i = 0; i < lists.size(); i++) {  
+            sb.append(mf.format(new Object[]{i}));  
+            if (i < lists.size() - 1) {  
+                sb.append(",");  
+            }  
+        }  
+        return sb.toString();  
     }
 }
 

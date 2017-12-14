@@ -45,9 +45,9 @@ public class TradeOrderDateTempDO {
     private BigDecimal procedureFee;
 
     /**
-     * 内部终端号
+     * 支付媒介00pos机01app02台码
      */
-    private String terminalCode;
+    private String payMedium;
 
 
 
@@ -115,18 +115,30 @@ public class TradeOrderDateTempDO {
         this.procedureFee = procedureFee;
     }
 
-    public String getTerminalCode() {
-        return terminalCode;
-    }
+    /**
+	 * payMedium
+	 *
+	 * @return  the payMedium
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getPayMedium() {
+		return payMedium;
+	}
 
-    public void setTerminalCode(String terminalCode) {
-        this.terminalCode = terminalCode;
-    }
+	/**
+	 * payMedium
+	 *
+	 * @param   payMedium    the payMedium to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setPayMedium(String payMedium) {
+		this.payMedium = payMedium;
+	}
 
-
-
-    @Override
+	@Override
     public String toString() {
-        return "[id="+ id + ", innerCode="+ innerCode + ", amt="+ amt + ", paySubType="+ paySubType + ", timeStamp="+ timeStamp + ", tradeDate="+ tradeDate + ", tradeHoure="+ tradeHoure + ", procedureFee="+ procedureFee + ", terminalCode="+ terminalCode + "]";
+        return "[id="+ id + ", innerCode="+ innerCode + ", amt="+ amt + ", paySubType="+ paySubType + ", timeStamp="+ timeStamp + ", tradeDate="+ tradeDate + ", tradeHoure="+ tradeHoure + ", procedureFee="+ procedureFee + ", payMedium="+ payMedium + "]";
     }
 }
