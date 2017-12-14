@@ -108,11 +108,18 @@
 </body>
 <script type="text/javascript" src="js/setWidth.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<!-- <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
-<script>
-    var city = remote_ip_info['city'];
-    console.log(city);
-</script> -->
+<script type="text/javascript">
+	$.ajax({
+		url:'h5/index',
+		type:'post',
+		dataType:'json',
+		contentType:'application/json',
+		success:function(data){
+			console.log(data);
+		}
+
+	})
+</script>
 
 
 </html>
