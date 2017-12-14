@@ -95,9 +95,14 @@ public class IDAuthenticationController extends BaseController {
             if("front".equals(side)) {
             	idCard = JuheDemoUtil.idVerification(fileURL,side);
             	if(idCard.getErrorCode()==0) {
-            		return ResultDTO.fail("图片扫描失败");
+            		return ResultDTO.fail("证件正面扫描失败");
             	}else if(idCard.getRes()==2) {
             		return ResultDTO.fail("身份证有误，姓名与身份证号码不匹配");
+            	}
+            }else if("back".equals(side)) {
+            	idCard = JuheDemoUtil.idVerification(fileURL,side);
+            	if(idCard.getErrorCode()==0) {
+            		return ResultDTO.fail("证件反面扫描失败");
             	}
             }
         }

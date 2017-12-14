@@ -37,7 +37,7 @@ public class JuheDemoUtil {
      */
     public static IdCardDTO idVerification(String image,String side) {
     	IdCardDTO idCard = valiIdImage(image, side);
-    	if(idCard.getErrorCode()==0) {
+    	if("front".equals(side)&&idCard.getErrorCode()==0) {
     		return valiIdCard(idCard.getIdcard(),idCard.getRealname());
     	}
     	return idCard;
