@@ -153,5 +153,21 @@ public class TradeOrderDateTempProvider {
         }  
         return sb.toString();  
     }
+    
+    /**
+     * selectTradeDataByDay:(查询天数据)
+     *
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午2:45:06
+     */
+    public String selectTradeDataByDay() {
+    	 return new SQL() {{
+    		 SELECT("SUM(amt) AS turnover,SUM(procedure_fee) AS procedureFee,inner_code AS innerCode,COUNT(*) AS orderNum,cast((SUM(amt) / COUNT(*)) AS DECIMAL (16, 2)) AS orderPrice,trade_date AS tradeDate");
+    		 FROM(TABLE_NAME);
+    		 GROUP_BY("inner_code,trade_date");
+    	 }}.toString();
+    }
 }
 

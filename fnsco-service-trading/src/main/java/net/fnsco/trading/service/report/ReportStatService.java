@@ -11,8 +11,14 @@ import com.google.common.collect.Lists;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.trading.service.order.dao.TradeOrderByDayDAO;
+import net.fnsco.trading.service.order.dao.TradeOrderByPayMediumDAO;
+import net.fnsco.trading.service.order.dao.TradeOrderByPayTypeDAO;
 import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.trading.service.order.dao.TradeOrderDateTempDAO;
+import net.fnsco.trading.service.order.entity.TradeOrderByDayDO;
+import net.fnsco.trading.service.order.entity.TradeOrderByPayMediumDO;
+import net.fnsco.trading.service.order.entity.TradeOrderByPayTypeDO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.order.entity.TradeOrderDateTempDO;
 
@@ -30,6 +36,12 @@ public class ReportStatService extends BaseService {
 	private TradeOrderDateTempDAO tradeOrderDateTempDAO;
 	@Autowired
 	private TradeOrderDAO tradeOrderDAO;
+	@Autowired
+	private TradeOrderByDayDAO tradeOrderByDayDAO;
+	@Autowired
+	private TradeOrderByPayTypeDAO tradeOrderByPayTypeDAO;
+	@Autowired
+	private TradeOrderByPayMediumDAO tradeOrderByPayMediumDAO;
 	/**
 	 * createReportData:(报表统计生成)
 	 *
@@ -66,6 +78,23 @@ public class ReportStatService extends BaseService {
 		tradeOrderDateTempDAO.insertBatch(tempData);
 		
 		//统计之前先删除，防止重复统计
+		String startTradeDate = DateUtils.strToDate1(startDate);
+		String endTradeDate = DateUtils.strToDate1(endDate);
+		TradeOrderByDayDO tradeOrderByDay = new TradeOrderByDayDO();
+		tradeOrderByDay.setStartTradeDate(startTradeDate);
+		tradeOrderByDay.setEndTradeDate(endTradeDate);
+		tradeOrderByDayDAO.deleteByCondition(tradeOrderByDay);
+		TradeOrderByPayTypeDO tradeOrderByPayType = new TradeOrderByPayTypeDO();
+		tradeOrderByPayType.setStartTradeDate(startTradeDate);
+		tradeOrderByPayType.setEndTradeDate(endTradeDate);
+		tradeOrderByPayTypeDAO.deleteByCondition(tradeOrderByPayType);
+		TradeOrderByPayMediumDO tradeOrderByPayMedium = new TradeOrderByPayMediumDO();
+		tradeOrderByPayMedium.setStartTradeDate(startTradeDate);
+		tradeOrderByPayMedium.setEndTradeDate(endTradeDate);
+		tradeOrderByPayMediumDAO.deleteByCondition(tradeOrderByPayMedium);
+		
+		//分别按天、支付渠道、支付媒介,统计查询且插入对应表中
+		List<TradeOrderByDayDO> tradeDateDayList = tradeOrderDateTempDAO.selectTradeDataByDay();
 		
 	}
 	
