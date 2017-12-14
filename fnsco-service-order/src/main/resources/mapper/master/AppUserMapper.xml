@@ -356,4 +356,8 @@
 		<include refid="Base_Column_List" />
 		from u_app_user  where remark = '-1200002'
   </select>
+  <!-- 判断app用户是否已身份认证 -->
+	<select id="selectIdAuth" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+		SELECT id_card_number FROM u_app_user WHERE id = #{id,jdbcType=INTEGER}
+	</select>
 </mapper>

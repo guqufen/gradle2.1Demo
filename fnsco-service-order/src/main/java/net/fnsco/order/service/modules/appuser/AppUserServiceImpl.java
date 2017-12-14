@@ -862,4 +862,10 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     public boolean updateAppUser(AppUser appUser){
         return appUserDao.updateByPrimaryKeySelective(appUser);
     }
+
+	@Override
+	public String getIdAuth(String userId) {
+		String id_card_num = appUserDao.getIdAuth(userId);
+		return id_card_num;
+	}
 }

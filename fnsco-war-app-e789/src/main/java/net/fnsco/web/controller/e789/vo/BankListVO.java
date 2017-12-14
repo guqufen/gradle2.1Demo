@@ -6,9 +6,51 @@ import net.fnsco.core.base.VO;
 public class BankListVO extends VO {
 	@ApiModelProperty(value="银行卡号",name="cardNum",example="411****5211")
 	private String cardNum;
-	@ApiModelProperty(value="开户行银行名称",name="bankCodeName",example="招商银行")
-	private String bankCodeName;
+	@ApiModelProperty(value="银行卡名称",name="bankName",example="招商银行")
+	private String bankName;
+	@ApiModelProperty(value="卡类型",name="type",example="信用卡/储蓄卡")
+	private String type;
 	
+	/**
+	 * bankName
+	 *
+	 * @return  the bankName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getBankName() {
+		return bankName;
+	}
+	/**
+	 * bankName
+	 *
+	 * @param   bankName    the bankName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+	/**
+	 * type
+	 *
+	 * @return  the type
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getType() {
+		return type;
+	}
+	/**
+	 * type
+	 *
+	 * @param   type    the type to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setType(String type) {
+		this.type = type;
+	}
 	/**
 	 * @return the cardNum
 	 */
@@ -20,18 +62,6 @@ public class BankListVO extends VO {
 	 */
 	public void setCardNum(String cardNum) {
 		this.cardNum = cardNum;
-	}
-	/**
-	 * @return the bankCodeName
-	 */
-	public String getBankCodeName() {
-		return bankCodeName;
-	}
-	/**
-	 * @param bankCodeName the bankCodeName to set
-	 */
-	public void setBankCodeName(String bankCodeName) {
-		this.bankCodeName = bankCodeName;
 	}
 	
 
