@@ -3,6 +3,7 @@ package net.fnsco.trading.service.report;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,6 +62,11 @@ public class ReportStatService extends BaseService {
 		conTradeOrder.setRespCode("1001");//只统计成功的数据
 		
 		List<TradeOrderDO> tempDatas = tradeOrderDAO.queryByCondition(conTradeOrder);
+		//如果没有数据直接返回
+        if(CollectionUtils.isEmpty(tempDatas)){
+            return;
+        }
+        
 		List<TradeOrderDateTempDO> tempData = Lists.newArrayList();
 		for (TradeOrderDO tradeOrderDO : tempDatas) {
 			TradeOrderDateTempDO tradeOrderDateTemp = new TradeOrderDateTempDO();
@@ -78,8 +84,8 @@ public class ReportStatService extends BaseService {
 		tradeOrderDateTempDAO.insertBatch(tempData);
 		
 		//统计之前先删除，防止重复统计
-		String startTradeDate = DateUtils.strToDate1(startDate);
-		String endTradeDate = DateUtils.strToDate1(endDate);
+		String startTradeDate = DateUtils.strToDate2(startDate);
+		String endTradeDate = DateUtils.strToDate2(endDate);
 		TradeOrderByDayDO tradeOrderByDay = new TradeOrderByDayDO();
 		tradeOrderByDay.setStartTradeDate(startTradeDate);
 		tradeOrderByDay.setEndTradeDate(endTradeDate);
@@ -95,6 +101,9 @@ public class ReportStatService extends BaseService {
 		
 		//分别按天、支付渠道、支付媒介,统计查询且插入对应表中
 		List<TradeOrderByDayDO> tradeDateDayList = tradeOrderDateTempDAO.selectTradeDataByDay();
+		for (TradeOrderByDayDO tradeOrderByDayDO : tradeDateDayList) {
+			tradeOrderByDayDO.setCreateTime(new Date());
+		}
 		tradeOrderByDayDAO.insertBatch(tradeDateDayList);
 		List<TradeOrderByPayTypeDO> tradeDatePayTypeList = tradeOrderDateTempDAO.selectTradeDataByPayType();
 		tradeOrderByPayTypeDAO.insertBatch(tradeDatePayTypeList);
