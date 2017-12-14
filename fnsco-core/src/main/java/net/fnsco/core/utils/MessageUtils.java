@@ -67,7 +67,7 @@ public class MessageUtils {
 			return ResultDTO.fail("非法请求,没有手机号");
 		}
 		if (mDTO == null) {
-			return ResultDTO.fail("非法请求，验证码已过期");
+			return ResultDTO.fail("非法请求，请先获取验证码");
 		}
 		if (mDTO.getCode() == null) {
 			return ResultDTO.fail("非法请求,验证码不正确");

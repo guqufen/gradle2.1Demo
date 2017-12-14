@@ -36,7 +36,7 @@ public class BuyCarJO {
 	     * 推荐码
 	     */
 		@ApiModelProperty(value = "推荐码",  example = "推荐码")
-	    private Integer suggestCode;
+	    private String suggestCode;
 
 		/**
 	     * 验证码
@@ -119,11 +119,11 @@ public class BuyCarJO {
 	        this.buyType = buyType;
 	    }
 
-	    public Integer getSuggestCode() {
+	    public String getSuggestCode() {
 	        return suggestCode;
 	    }
 
-	    public void setSuggestCode(Integer suggestCode) {
+	    public void setSuggestCode(String suggestCode) {
 	        this.suggestCode = suggestCode;
 	    }
 
