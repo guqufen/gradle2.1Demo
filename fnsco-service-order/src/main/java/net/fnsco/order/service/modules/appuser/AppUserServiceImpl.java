@@ -21,7 +21,9 @@ import com.google.common.collect.Maps;
 
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
@@ -77,7 +79,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Autowired
     private MerchantPosService             merchantPosService;
     @Autowired
-    private AppUserMerchantService         appUserMerchantService;
+    private MerchantEntityDao         merchantEntityDao;
 
     //注册
     @Override
@@ -545,10 +547,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUserLoginInfoDTO.setPayPassword(appUser.getPayPassword());
         //查询用户绑定商户数量 根据用户id查询数量
         int merchantNums = 0;
-        List<AppUserMerchant> rel1 = appUserMerchantService.selectByUserId(appUser.getId());
-        List<AppUserMerchant> rel = appUserMerchantDao.selectByUserId(appUser.getId());
-        if (!CollectionUtils.isEmpty(rel)) {
-            merchantNums = rel.size();
+        MerchantEntity merchantEntity = merchantEntityDao.selectByAppUserId(appUser.getId());
+        if (!(merchantEntity==null)) {
+            merchantNums = 1;
         }
         appUserLoginInfoDTO.setMerchantNums(merchantNums);
         Integer appUserId = appUser.getId();
