@@ -1,14 +1,18 @@
 package net.fnsco.trading.service.order.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-public class TradeOrderByDayDO {
+public class TradeOrderByPayMediumDO {
 
     /**
      * 主键ID
      */
     private Integer id;
+
+    /**
+     * 支付媒介00pos机01app02台码
+     */
+    private String payMedium;
 
     /**
      * 交易日期
@@ -35,20 +39,9 @@ public class TradeOrderByDayDO {
      */
     private BigDecimal orderPrice;
 
-    /**
-     * 手续费用
-     */
-    private BigDecimal procedureFee;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-    
     private String startTradeDate;//开始交易时间  主要用于条件查询
     private String endTradeDate;//结束交易时间 主要用于条件查询
-
-
+    
     /**
 	 * startTradeDate
 	 *
@@ -101,6 +94,14 @@ public class TradeOrderByDayDO {
         this.id = id;
     }
 
+    public String getPayMedium() {
+        return payMedium;
+    }
+
+    public void setPayMedium(String payMedium) {
+        this.payMedium = payMedium;
+    }
+
     public String getTradeDate() {
         return tradeDate;
     }
@@ -141,26 +142,10 @@ public class TradeOrderByDayDO {
         this.orderPrice = orderPrice;
     }
 
-    public BigDecimal getProcedureFee() {
-        return procedureFee;
-    }
-
-    public void setProcedureFee(BigDecimal procedureFee) {
-        this.procedureFee = procedureFee;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
 
 
     @Override
     public String toString() {
-        return "[id="+ id + ", tradeDate="+ tradeDate + ", innerCode="+ innerCode + ", turnover="+ turnover + ", orderNum="+ orderNum + ", orderPrice="+ orderPrice + ", procedureFee="+ procedureFee + ", createTime="+ createTime + "]";
+        return "[id="+ id + ", payMedium="+ payMedium + ", tradeDate="+ tradeDate + ", innerCode="+ innerCode + ", turnover="+ turnover + ", orderNum="+ orderNum + ", orderPrice="+ orderPrice + "]";
     }
 }

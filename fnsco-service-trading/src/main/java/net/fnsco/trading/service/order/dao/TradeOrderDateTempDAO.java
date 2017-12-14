@@ -1,18 +1,21 @@
 package net.fnsco.trading.service.order.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Options;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import net.fnsco.trading.service.order.entity.TradeOrderDateTempDO;
-import net.fnsco.trading.service.order.dao.helper.TradeOrderDateTempProvider;
 
-import java.util.List;;
+import net.fnsco.trading.service.order.dao.helper.TradeOrderDateTempProvider;
+import net.fnsco.trading.service.order.entity.TradeOrderByDayDO;
+import net.fnsco.trading.service.order.entity.TradeOrderDateTempDO;;
 
 public interface TradeOrderDateTempDAO {
 
@@ -36,5 +39,39 @@ public interface TradeOrderDateTempDAO {
 
     @SelectProvider(type = TradeOrderDateTempProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("tradeOrderDateTemp") TradeOrderDateTempDO tradeOrderDateTemp);
+    
+    /**
+     * deleteAll:(删除全表数据，从新统计)
+     *
+     * @param  @return    设定文件
+     * @return int    DOM对象
+     * @author tangliang
+     * @date   2017年12月13日 下午4:55:56
+     */
+    @Delete("DELETE FROM r_trade_order_date_temp")
+    public int deleteAll();
+    
+    /**
+     * insertBatch:(批量插入数据)
+     *
+     * @param  @param datas
+     * @param  @return    设定文件
+     * @return int    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 上午9:55:30
+     */
+    @InsertProvider(type = TradeOrderDateTempProvider.class, method = "insertBatch")
+    public int insertBatch(@Param("list")List<TradeOrderDateTempDO> datas);
+    
+    /**
+     * selectTradeDataByDay:(按照天统计)
+     *
+     * @param  @return    设定文件
+     * @return List<TradeOrderByDayDO>    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午2:43:59
+     */
+    @SelectProvider(type = TradeOrderDateTempProvider.class, method = "selectTradeDataByDay")
+    public List<TradeOrderByDayDO> selectTradeDataByDay();
 
 }

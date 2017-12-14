@@ -591,6 +591,21 @@ public class DateUtils {
         return tmp;
     }
 
+    
+    
+    public static String strToDate1(Date date) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        String tmp = null;
+        try {
+             tmp = sf.format(date);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return tmp;
+    }
+
+    
     /**
      * 将指定Date转换为零点零分的date
      * @param date
