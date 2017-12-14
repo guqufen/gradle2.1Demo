@@ -167,7 +167,7 @@ function start(city,stages,insuranceCompany){
 			//选择城市
 			var cityPicker = new $.PopPicker();
 			$.ajax({
-				url:'../h5/city/queryCity',
+				url:'../../h5/city/queryCity',
 				type:'get',
 				success:function(data){
 					cityPicker.setData(data.data);
@@ -216,7 +216,7 @@ function start(city,stages,insuranceCompany){
 			//选择意向投保公司
 			var insuranceCompanyPicker = new $.PopPicker();
 			$.ajax({
-				url:'../h5/insu/queryInsu',
+				url:'../../h5/insu/queryInsu',
 				type:'get',
 				success:function(data){
 					// console.log(data);
@@ -268,7 +268,7 @@ function sendCode(type){
 	  	return;
 	}
 	$.ajax({
-		url:'../h5/sendMessage',
+		url:'../../h5/sendMessage',
 		type:'post',
 		data:{'mobile':$(".phone-num").val(),'type':type},
 		success:function(data){
@@ -347,22 +347,22 @@ function subData(type){
 
 	if(type=='01'){//买车申请
 		data={'name':name,'cityId':cityId,'carTypeId':carTypeId,'carSubTypeId':carSubTypeId,'buyType':buyType,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../h5/buyCar/add';
+		url='../../h5/buyCar/add';
 	}
 
 	if(type=='02'){//贷款申请
 		data={'name':name,'cityId':cityId,'amount':amount,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../h5/loan/add';
+		url='../../h5/loan/add';
 	}
 
 	if(type=='03'){//保险申请
 		data={'name':name,'cityId':cityId,'carOriginalPrice':carOriginalPrice,'insuCompanyId':insuCompanyId,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../h5/insu/saveSafe';
+		url='../../h5/insu/saveSafe';
 	}
 	
 	if(type=='04'){//理财申请
 		data={'name':name,'cityId':cityId,'financeType':financeType,'earnings':earnings,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../h5/manage/saveFinance';
+		url='../../h5/manage/saveFinance';
 	}
 
 	if(type=='021'){//贷款上传图片

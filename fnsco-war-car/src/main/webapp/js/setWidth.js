@@ -38,6 +38,9 @@ function resizeRoot(){
     if(wWidth > wHeight){
         wWidth = wHeight;
     }
+    // if(wWidth>414){
+    //     wWidth=414;
+    // }
     // wFsize = wWidth > 1080 ? 144 : wWidth / 7.5;
     // wFsize = wFsize > 32 ? wFsize : 32;
     wFsize = wWidth > 1080 ? 67.5 : wWidth / 16;
@@ -66,5 +69,7 @@ function resizeRoot(){
     }
     // alert("fz="+wFsize+";dpr="+window.devicePixelRatio+";UA="+uAgent+";width="+wWidth+";sw="+screen.width+";wiw="+window.innerWidth+";wsw="+window.screen.width+window.screen.availWidth);
     // console.log("fz="+wFsize+";dpr="+window.devicePixelRatio+";UA="+uAgent+";width="+wWidth+";sw="+screen.width+";wiw="+window.innerWidth+";wsw="+window.screen.width+window.screen.availWidth);
+
+    console.log(wWidth);
 }
 resizeRoot();
