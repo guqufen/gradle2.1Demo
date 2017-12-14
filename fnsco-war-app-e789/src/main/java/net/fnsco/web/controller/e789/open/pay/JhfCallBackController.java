@@ -46,7 +46,7 @@ public class JhfCallBackController extends BaseController {
     * @return
     */
     @RequestMapping(value = "/pay/payCompleteNotice")
-    @ApiOperation(value = "交易和充值支付完成时的通知")
+    @ApiOperation(value = "支付完成时的通知")
     @ResponseBody
     public ResultDTO payCompleteNotice(String rspData) {
         logger.error("聚惠分支付完成时的通知密文入参：" + rspData);
@@ -77,7 +77,7 @@ public class JhfCallBackController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/pay/payCompleteCallback", method = RequestMethod.GET)
-    @ApiOperation(value = "交易和充值支付页面完成时的回调")
+    @ApiOperation(value = "支付页面完成时的回调")
     public String payCompleteCallback(String orderNo) {
         String url = env.getProperty("web.base.url");
         logger.error("聚惠芬支付页面完成时的回调入参：" + orderNo);

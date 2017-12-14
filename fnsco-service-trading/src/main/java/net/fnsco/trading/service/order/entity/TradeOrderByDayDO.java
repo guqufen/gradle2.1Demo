@@ -44,10 +44,56 @@ public class TradeOrderByDayDO {
      * 创建时间
      */
     private Date createTime;
+    
+    private String startTradeDate;//开始交易时间  主要用于条件查询
+    private String endTradeDate;//结束交易时间 主要用于条件查询
 
 
+    /**
+	 * startTradeDate
+	 *
+	 * @return  the startTradeDate
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getStartTradeDate() {
+		return startTradeDate;
+	}
 
-    public Integer getId() {
+	/**
+	 * startTradeDate
+	 *
+	 * @param   startTradeDate    the startTradeDate to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setStartTradeDate(String startTradeDate) {
+		this.startTradeDate = startTradeDate;
+	}
+
+	/**
+	 * endTradeDate
+	 *
+	 * @return  the endTradeDate
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getEndTradeDate() {
+		return endTradeDate;
+	}
+
+	/**
+	 * endTradeDate
+	 *
+	 * @param   endTradeDate    the endTradeDate to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setEndTradeDate(String endTradeDate) {
+		this.endTradeDate = endTradeDate;
+	}
+
+	public Integer getId() {
         return id;
     }
 

@@ -12,8 +12,7 @@ import net.fnsco.core.utils.dto.IdCardDTO;
 import sun.misc.BASE64Encoder;
 
 /**
- * 身份证验证http接口的java代码调用示例
- * @desc TODO
+ * @desc 身份证验证http接口的java代码调用示例
  * @author hjt
  * @version 
  * @Date 2017年12月12日 下午4:11:30
@@ -23,7 +22,8 @@ public class JuheDemoUtil {
 	public static final String IMAGE_APPKEY ="541432479017131ffa89cd68a5ed561c";
 	
 	//配置您申请的身份证实名认证KEY
-		public static final String CARD_APPKEY ="d3abde4405b87887b184956b69a7c7b3";
+	public static final String CARD_APPKEY ="d3abde4405b87887b184956b69a7c7b3";
+		
     //身份证识别的http地址
     private static String  URI_ID_IMAGE     = "http://apis.juhe.cn/idimage/verify";
     
@@ -37,7 +37,7 @@ public class JuheDemoUtil {
      */
     public static IdCardDTO idVerification(String image,String side) {
     	IdCardDTO idCard = valiIdImage(image, side);
-    	if("成功".equals(idCard.getReason())) {
+    	if("front".equals(side)&&idCard.getErrorCode()==0) {
     		return valiIdCard(idCard.getIdcard(),idCard.getRealname());
     	}
     	return idCard;
@@ -48,7 +48,7 @@ public class JuheDemoUtil {
      * @param side
      * @return
      */
-    private static IdCardDTO valiIdImage(String image,String side) {
+    public static IdCardDTO valiIdImage(String image,String side) {
     	IdCardDTO idCard = new IdCardDTO();
     	Map<String,String> params = Maps.newHashMap();
     	params.put("key", IMAGE_APPKEY);
@@ -61,10 +61,11 @@ public class JuheDemoUtil {
     	 JSONObject obj = json.getJSONObject("result");
     	 String realname = obj.getString("realname");
     	 String idcard = obj.getString("idcard");
+    	 int errorCode = json.getInteger("error_code");
     	 idCard.setReason(reason);
     	 idCard.setRealname(realname);
     	 idCard.setIdcard(idcard);
-    	 System.out.println(reason+";"+realname+";"+idcard);
+    	 idCard.setErrorCode(errorCode);
     	return idCard;
     }
     /**
@@ -73,7 +74,7 @@ public class JuheDemoUtil {
      * @param realname
      * @return
      */
-    private static IdCardDTO valiIdCard(String idcard,String realname) {
+    public static IdCardDTO valiIdCard(String idcard,String realname) {
     	IdCardDTO idCard = new IdCardDTO();
     	Map<String,String> params = Maps.newHashMap();
     	params.put("key", CARD_APPKEY);
@@ -88,8 +89,8 @@ public class JuheDemoUtil {
     	 String res = obj.getString("res");
     	 idCard.setReason(reason);
     	 idCard.setRealname(name);
+    	 idCard.setIdcard(card);
     	 idCard.setRes(Integer.valueOf(res));
-    	 System.out.println(reason+";"+name+";"+card+";"+res);
     	return idCard;
     }
     /**

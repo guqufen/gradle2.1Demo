@@ -9,6 +9,7 @@ package net.fnsco.core.utils.dto;
  */
 public class IdCardDTO {
     private String reason;/*是否成功*/
+    private int errorCode;
     private String realname;/*姓名*/
     private String sex;/*性别*/
     private String nation;/*民族*/
@@ -32,6 +33,18 @@ public class IdCardDTO {
 	 */
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	/**
+	 * @return the errorCode
+	 */
+	public int getErrorCode() {
+		return errorCode;
+	}
+	/**
+	 * @param errorCode the errorCode to set
+	 */
+	public void setErrorCode(int errorCode) {
+		this.errorCode = errorCode;
 	}
 	/**
 	 * @return the realname

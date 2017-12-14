@@ -35,7 +35,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localInterceptor()).addPathPatterns("/web/**");
-        registry.addInterceptor(appInterceptor()).addPathPatterns("/app/**");
+        registry.addInterceptor(appInterceptor()).addPathPatterns("/app2c/**");
         registry.addInterceptor(openInterceptor()).addPathPatterns("/open/**");
     }
     

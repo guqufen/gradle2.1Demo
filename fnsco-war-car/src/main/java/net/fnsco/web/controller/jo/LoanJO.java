@@ -30,7 +30,7 @@ public class LoanJO extends JO{
 	 * 推荐码
 	 */
 	@ApiModelProperty(value = "验证码",  example = "验证码")
-	private Integer suggestCode;
+	private String suggestCode;
 	
 	
 	/////////////////////////////////////////
@@ -107,7 +107,7 @@ public class LoanJO extends JO{
 	/**
 	 * @return the suggestCode
 	 */
-	public Integer getSuggestCode() {
+	public String getSuggestCode() {
 		return suggestCode;
 	}
 
@@ -115,7 +115,7 @@ public class LoanJO extends JO{
 	 * @param suggestCode
 	 *            the suggestCode to set
 	 */
-	public void setSuggestCode(Integer suggestCode) {
+	public void setSuggestCode(String suggestCode) {
 		this.suggestCode = suggestCode;
 	}
 
