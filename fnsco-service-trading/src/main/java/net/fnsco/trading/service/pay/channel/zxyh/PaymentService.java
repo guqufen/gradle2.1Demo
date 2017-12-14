@@ -156,7 +156,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     	//根据userId获取内部商户号
     	String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
     	if(Strings.isNullOrEmpty(innerCode)){
-    		return ResultDTO.fail("没找到userid="+userId+"对应的内部商户号");
+    		return ResultDTO.fail("没找到对应的内部商户号");
     	}
     	MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
     	if(channel != null){
@@ -268,7 +268,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 
 		String innerCode = appUserMerchant1Dao.selectInnerCodeByUserId(userId);
 		if (null == innerCode) {
-			logger.info("该用户没有绑定内部商户号，请核查后重新交易,userId=[" + userId + "");
+			logger.info("该用户没有绑定内部商户号，请核查后重新交易");
 			return ResultDTO.fail("1002");
 		}
 
