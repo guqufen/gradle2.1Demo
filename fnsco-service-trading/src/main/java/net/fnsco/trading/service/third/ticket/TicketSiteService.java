@@ -40,6 +40,15 @@ public class TicketSiteService extends BaseService {
         }
     }
 
+    public List<TicketSiteDO> querySiteList(String siteName) {
+        TicketSiteDO ticketSite = new TicketSiteDO();
+        ticketSite.setNameLike(siteName);
+        ticketSite.setCodeLike(siteName.toUpperCase());
+        ticketSite.setPyNameLike(siteName.toLowerCase());
+        List<TicketSiteDO> pageList = this.ticketSiteDAO.pageList(ticketSite, 0, 1000);
+        return pageList;
+    }
+
     // 分页
     public ResultPageDTO<TicketSiteDO> page(TicketSiteDO ticketSite, Integer pageNum, Integer pageSize) {
         logger.info("开始分页查询TicketSiteService.page, ticketSite=" + ticketSite.toString());
