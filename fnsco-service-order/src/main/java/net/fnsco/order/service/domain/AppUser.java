@@ -10,6 +10,8 @@ public class AppUser {
     private String  mobile;
 
     private String  password;
+    
+    private String  idCardNumber;
 
     private String  realName;
 
@@ -190,8 +192,16 @@ public class AppUser {
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
     }
+    
+	public String getIdCardNumber() {
+		return idCardNumber;
+	}
+	
+	public void setIdCardNumber(String idCardNumber) {
+		this.idCardNumber = idCardNumber;
+	}
 
-    public String getRealName() {
+	public String getRealName() {
         return realName;
     }
 

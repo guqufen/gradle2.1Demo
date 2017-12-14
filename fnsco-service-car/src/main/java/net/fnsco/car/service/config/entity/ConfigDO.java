@@ -1,5 +1,6 @@
 package net.fnsco.car.service.config.entity;
 
+import java.util.Date;
 
 public class ConfigDO {
 
@@ -42,7 +43,10 @@ public class ConfigDO {
      * 排序号
      */
     private Integer orderNo;
-
+    /**
+     * 修改日期
+     */
+    private Date modifyTime;
     /**
      * 保存字段1
      */
@@ -123,8 +127,16 @@ public class ConfigDO {
     public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
     }
+    
+	public Date getModifyTime() {
+		return modifyTime;
+	}
+	
+	public void setModifyTime(Date modifyTime) {
+		this.modifyTime = modifyTime;
+	}
 
-    public String getKeep1() {
+	public String getKeep1() {
         return keep1;
     }
 
