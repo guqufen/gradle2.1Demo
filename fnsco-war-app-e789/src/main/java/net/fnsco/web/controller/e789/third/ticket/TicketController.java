@@ -12,7 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.trading.service.order.TradeOrderService;
+import net.fnsco.trading.service.third.ticket.TicketSiteService;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.TradeDataDetailJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.SiteJO;
@@ -37,8 +37,22 @@ import net.fnsco.web.controller.e789.third.ticket.vo.TrainVO;
 public class TicketController extends BaseController {
 
     @Autowired
-    private TradeOrderService tradeOrderService;
-
+    private TicketSiteService ticketSiteService;
+    /**
+     * queryTradeDataDetail:(查询交易流水详情)
+     *
+     * @param  @param tradeDataDetailJO
+     * @param  @return    设定文件
+     * @return ResultDTO<TradeDataDetailVO>    DOM对象
+     * @author sxfei
+     * @date   2017年12月13日 下午4:07:33
+     */
+    @RequestMapping(value = "/importSite")
+    @ApiOperation(value = "模糊查询站点列表")
+    public ResultDTO<List<SiteVO>> importSite() {
+        ticketSiteService.importSite();
+        return success();
+    }
     /**
      * queryTradeDataDetail:(查询交易流水详情)
      *
