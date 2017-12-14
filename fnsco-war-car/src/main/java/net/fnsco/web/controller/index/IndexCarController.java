@@ -36,16 +36,17 @@ public class IndexCarController extends BaseController {
 		Date date = config.getModifyTime();
 		if (DateUtils.isSameDay(new Date(), date)){
 		     //如果时间和第一天处于同一天
-			amt = amt.divide(new BigDecimal(10000), 2);
+			amt = amt.divide(new BigDecimal(10000000), 2);
 			index.setAmount(amt);
 			index.setNumber(num);
 			return ResultDTO.success(index);
 		}
 		Integer number = new Random().nextInt(6)+5;
 		num= num + number;
-		Integer numberAmt =new Random().nextInt(5000)+5000;
+		Integer numberAmt =new Random().nextInt(10000)+10000;
 		numberAmt = numberAmt * 100;
 		amt = new BigDecimal(numberAmt);
+		amt = amt.divide(new BigDecimal(10000000), 2);
 		String numAmt = numberAmt.toString();
 		index.setAmount(amt);
 		index.setNumber(num);
