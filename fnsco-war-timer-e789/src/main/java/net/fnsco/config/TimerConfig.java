@@ -13,6 +13,7 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
+import net.fnsco.trading.service.report.ReportStatService;
 
 @EnableScheduling
 public class TimerConfig {
@@ -22,15 +23,18 @@ public class TimerConfig {
     private TradeOrderDAO tradeOrderDAO;
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private ReportStatService reportStatService;
 
     /**
      * spring boot 定时任务
      */
-    //    @Scheduled(cron = "0 */5 * * * ?")
+//        @Scheduled(cron = "0 * * * * ?")
     public void reportCurrentTime() {
         System.out.println("定时任务执行");
+        reportStatService.createReportData(DateUtils.getDayStartTime(-3), DateUtils.getDayStartTime(0));
     }
-
+    
     /**
      * 每隔3秒定时查询查询中信银行扫一扫支付结果
      */
@@ -42,5 +46,10 @@ public class TimerConfig {
     	for (TradeOrderDO tradeDO : tradeList) {
     		paymentService.PassivePayResult(tradeDO);
 		}
+    }
+    
+    @Scheduled(cron = "1 0 0 * * ?") //每天凌晨00:00:01秒执行一次
+    public void buildReportDate() {
+    	reportStatService.createReportData(DateUtils.getDayStartTime(-1), DateUtils.getDayStartTime(0));
     }
 }

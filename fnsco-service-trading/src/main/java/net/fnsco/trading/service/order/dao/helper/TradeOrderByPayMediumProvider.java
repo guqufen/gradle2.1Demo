@@ -169,7 +169,7 @@ public class TradeOrderByPayMediumProvider {
         sb.append("INSERT INTO r_trade_order_by_pay_medium ");  
         sb.append("(id,pay_medium,trade_date,inner_code,turnover,order_num,order_price)");  
         sb.append("VALUES ");  
-        MessageFormat mf = new MessageFormat("(#{list[{0}].id},#{list[{0}].payMedium},#{list[{0}].tradeDate},#{list[{0}].innerCode},#{list[{0}].turnover},#{list[{0}].orderNum},#{list[{0}].orderPrice})");  
+        MessageFormat mf = new MessageFormat("(#'{'list[{0}].id},#'{'list[{0}].payMedium},#'{'list[{0}].tradeDate},#'{'list[{0}].innerCode},#'{'list[{0}].turnover},#'{'list[{0}].orderNum},#'{'list[{0}].orderPrice})");  
         for (int i = 0; i < lists.size(); i++) {  
             sb.append(mf.format(new Object[]{i}));  
             if (i < lists.size() - 1) {  
