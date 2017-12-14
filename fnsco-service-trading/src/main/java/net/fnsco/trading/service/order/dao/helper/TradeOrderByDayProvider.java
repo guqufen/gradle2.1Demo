@@ -117,5 +117,52 @@ public class TradeOrderByDayProvider {
         }
         }}.toString();
     }
+    
+    /**
+     * deleteByCondition:(按照条件删除数据)
+     *
+     * @param  @param params
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午1:38:00
+     */
+    public String deleteByCondition(Map<String, Object> params) {
+    	
+    	TradeOrderByDayDO tradeOrderByDay = (TradeOrderByDayDO) params.get("tradeOrderByDay");
+    	 return new SQL() {{
+    		 DELETE_FROM(TABLE_NAME);
+    		 if (tradeOrderByDay.getId() != null) {
+    	            WHERE("id=#{tradeOrderByDay.id}");
+    	        }
+    	        if (StringUtils.isNotBlank(tradeOrderByDay.getTradeDate())){
+    	            WHERE("trade_date=#{tradeOrderByDay.tradeDate}");
+    	        }
+    	        if (StringUtils.isNotBlank(tradeOrderByDay.getInnerCode())){
+    	            WHERE("inner_code=#{tradeOrderByDay.innerCode}");
+    	        }
+    	        if (tradeOrderByDay.getTurnover() != null) {
+    	            WHERE("turnover=#{tradeOrderByDay.turnover}");
+    	        }
+    	        if (tradeOrderByDay.getOrderNum() != null) {
+    	            WHERE("order_num=#{tradeOrderByDay.orderNum}");
+    	        }
+    	        if (tradeOrderByDay.getOrderPrice() != null) {
+    	            WHERE("order_price=#{tradeOrderByDay.orderPrice}");
+    	        }
+    	        if (tradeOrderByDay.getProcedureFee() != null) {
+    	            WHERE("procedure_fee=#{tradeOrderByDay.procedureFee}");
+    	        }
+    	        if (tradeOrderByDay.getCreateTime() != null) {
+    	            WHERE("create_time=#{tradeOrderByDay.createTime}");
+    	        }
+    	        if(StringUtils.isNotBlank(tradeOrderByDay.getStartTradeDate())) {
+    	        	WHERE("trade_date >= #{tradeOrderByDay.startTradeDate}");
+    	        }
+    	        if(StringUtils.isNotBlank(tradeOrderByDay.getEndTradeDate())) {
+    	        	WHERE("trade_date < #{tradeOrderByDay.endTradeDate}");
+    	        }
+    	 }}.toString();
+    }
 }
 

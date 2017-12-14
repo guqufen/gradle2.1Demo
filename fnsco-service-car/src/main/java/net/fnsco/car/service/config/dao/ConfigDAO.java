@@ -17,7 +17,7 @@ import java.util.List;;
 public interface ConfigDAO {
 
     @Results({@Result( column = "id",property = "id"), @Result( column = "name",property = "name") })
-    @Select("SELECT id,name FROM car_config WHERE status=1 ORDER BY order_no")
+    @Select("SELECT id,name FROM car_config WHERE status=1 AND type='00' ORDER BY order_no")
     public List<ConfigDO> getAll();
     
     @Results({@Result( column = "id",property = "id") })
