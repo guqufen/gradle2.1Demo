@@ -57,7 +57,7 @@ public class AgentDO {
     /**
      * 推荐码
      */
-    private Integer suggestCode;
+    private String suggestCode;
     
     private String mobile;
     private String shortName;
@@ -234,11 +234,11 @@ public class AgentDO {
         this.address = address;
     }
 
-    public Integer getSuggestCode() {
+    public String getSuggestCode() {
         return suggestCode;
     }
 
-    public void setSuggestCode(Integer suggestCode) {
+    public void setSuggestCode(String suggestCode) {
         this.suggestCode = suggestCode;
     }
 

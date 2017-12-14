@@ -3,6 +3,8 @@ package net.fnsco.web.controller.open;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONArray;
+import com.google.common.base.Strings;
 
 import ch.qos.logback.core.CoreConstants;
 import io.swagger.annotations.Api;
@@ -93,32 +97,39 @@ public class LoanApplyController extends BaseController {
 		}
 	}
 	
-	
-	@ResponseBody
-	@RequestMapping(value = "/update", produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "贷款申请-更新信息")
-	public ResultDTO<Object> updateLoanJO(@RequestBody LoanJO2 jo){
-		if(jo.getOrderId() == null){
-			return ResultDTO.failForMessage(CarServiceConstant.anErrorMap.get("0001"));
-		}
-		OrderLoanDO orderLoan = new OrderLoanDO();
-		orderLoan.setId(jo.getOrderId());
-		orderLoan.setCarTypeId(jo.getCarTypeId());
-		orderLoan.setCarSubTypeId(jo.getCarSubTypeId());
-		orderLoan.setLastUpdateTime(new Date());
-		orderLoanService.doUpdate(orderLoan, 0);
-		return ResultDTO.success();
-	}
 
+	
 	@ResponseBody
 	@RequestMapping(value = "/fileInfo/upload", produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "上传图片")
-	public ResultDTO<Object> upload( MultipartFile importFile) {
+	public String upload( MultipartFile importFile) {
 		return commImport(request, response, true);
 	}
 
-	private ResultDTO<Object> commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
+	@Transactional
+	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
+		response.setHeader("Content-type", "text/html;charset=UTF-8");  
+		response.setCharacterEncoding("UTF-8");  
+		
 		String orderId = request.getParameter("orderNo");
+		String carTypeId = request.getParameter("carId");//汽车品牌
+		String carSubTypeId = request.getParameter("carSubTypeId");//汽车型号
+		if(Strings.isNullOrEmpty(orderId)||Strings.isNullOrEmpty(carTypeId)||Strings.isNullOrEmpty(carSubTypeId)){
+			try {
+				response.getWriter().write("检查参数");;
+			} catch (IOException e) {
+				
+			}
+		}
+		//更新贷款申请表单
+		OrderLoanDO orderLoan = new OrderLoanDO();
+		orderLoan.setId(Integer.parseInt(orderId));
+		orderLoan.setCarTypeId(Integer.parseInt(carTypeId));
+		orderLoan.setCarSubTypeId(Integer.parseInt(carSubTypeId));
+		orderLoan.setLastUpdateTime(new Date());
+		orderLoanService.doUpdate(orderLoan, 0);
+		
+		//获取图片信息
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		
@@ -184,7 +195,9 @@ public class LoanApplyController extends BaseController {
 					fileInfo.setCreateTime(new Date());
 					ResultDTO<Integer> result = orderFileService.doAddToDB(fileInfo);
 					if (result.isSuccess()) {
-						return ResultDTO.success();
+						PrintWriter pw = response.getWriter();
+						String data = "true";  
+						pw.write(data); 
 					} else {
 						logger.error(fileName + "上传失败");
 						throw new RuntimeException();
