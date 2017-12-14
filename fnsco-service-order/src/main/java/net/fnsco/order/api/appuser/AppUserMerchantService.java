@@ -23,6 +23,4 @@ public interface AppUserMerchantService {
      * @return
      */
     MerChantCoreDTO selectByEntityInnerCode(AppUserMerchant merchantUserRel);
-    
-    List<AppUserMerchant> selectByUserId( Integer appUserId);
 }

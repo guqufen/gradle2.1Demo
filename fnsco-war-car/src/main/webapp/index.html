@@ -23,7 +23,7 @@
 			<div class="mui-col-xs-6 mui-row border-right">
 				<div class="mui-col-xs-8">
 					<p>累计贷款额</p>
-					<p><span>23.6</span>千万</p>
+					<p><span class="total-money">23.6</span>千万</p>
 				</div>
 				<div class="mui-col-xs-4 total-icon">
 					<img src="img/total-money.png">
@@ -32,7 +32,7 @@
 			<div class="mui-col-xs-6 mui-row">
 				<div class="mui-col-xs-8">
 					<p>累计购车数</p>
-					<p><span>2950</span>辆</p>
+					<p><span class="total-num">2950</span>辆</p>
 				</div>
 				<div class="mui-col-xs-4 total-icon">
 					<img src="img/total-num.png">
@@ -108,11 +108,20 @@
 </body>
 <script type="text/javascript" src="js/setWidth.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<!-- <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
-<script>
-    var city = remote_ip_info['city'];
-    console.log(city);
-</script> -->
+<script type="text/javascript">
+	$.ajax({
+		url:'h5/index/doRequest',
+		type:'post',
+		dataType:'json',
+		contentType:'application/json',
+		success:function(data){
+			console.log(data);
+			$(".total-money").html(data.data.amount);
+			$(".total-num").html(data.data.number);
+		}
+
+	})
+</script>
 
 
 </html>
