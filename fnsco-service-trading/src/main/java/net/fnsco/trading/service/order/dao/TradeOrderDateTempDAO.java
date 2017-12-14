@@ -15,6 +15,8 @@ import org.apache.ibatis.annotations.UpdateProvider;
 
 import net.fnsco.trading.service.order.dao.helper.TradeOrderDateTempProvider;
 import net.fnsco.trading.service.order.entity.TradeOrderByDayDO;
+import net.fnsco.trading.service.order.entity.TradeOrderByPayMediumDO;
+import net.fnsco.trading.service.order.entity.TradeOrderByPayTypeDO;
 import net.fnsco.trading.service.order.entity.TradeOrderDateTempDO;;
 
 public interface TradeOrderDateTempDAO {
@@ -73,5 +75,27 @@ public interface TradeOrderDateTempDAO {
      */
     @SelectProvider(type = TradeOrderDateTempProvider.class, method = "selectTradeDataByDay")
     public List<TradeOrderByDayDO> selectTradeDataByDay();
+    
+    /**
+     * selectTradeDataByPayType:(按照支付方式统计)
+     *
+     * @param  @return    设定文件
+     * @return List<TradeOrderByPayTypeDO>    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午3:14:33
+     */
+    @SelectProvider(type = TradeOrderDateTempProvider.class, method = "selectTradeDataByPayType")
+    public List<TradeOrderByPayTypeDO> selectTradeDataByPayType();
+    
+    /**
+     * selectTradeDataByPayMedium:(按照支付媒介统计)
+     *
+     * @param  @return    设定文件
+     * @return List<TradeOrderByPayMediumDO>    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午3:51:08
+     */
+    @SelectProvider(type = TradeOrderDateTempProvider.class, method = "selectTradeDataByPayMedium")
+    public List<TradeOrderByPayMediumDO> selectTradeDataByPayMedium();
 
 }

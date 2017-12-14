@@ -1,6 +1,7 @@
 package net.fnsco.trading.service.order.dao;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Options;
@@ -74,5 +75,17 @@ public interface TradeOrderByDayDAO {
 	 */
 	@DeleteProvider(type = TradeOrderByDayProvider.class, method = "deleteByCondition")
 	public int deleteByCondition(@Param("tradeOrderByDay") TradeOrderByDayDO tradeOrderByDay);
+	
+	/**
+	 * insertBatch:(批量插入数据)
+	 *
+	 * @param  @param datas
+	 * @param  @return    设定文件
+	 * @return int    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月14日 下午3:08:11
+	 */
+	@InsertProvider(type = TradeOrderByDayProvider.class, method = "insertBatch")
+	public int insertBatch(@Param("list") List<TradeOrderByDayDO> datas);
 
 }
