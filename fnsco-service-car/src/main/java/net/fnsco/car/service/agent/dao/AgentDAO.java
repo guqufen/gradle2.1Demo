@@ -65,6 +65,6 @@ public interface AgentDAO {
      */
     @Results({@Result( column = "provinceId",property = "provinceid"),@Result( column = "provinceName",property = "provincename"),@Result( column = "cityId",property = "cityid"),@Result( column = "cityName",property = "cityname"),@Result( column = "areaId",property = "areaid"),@Result( column = "areaName",property = "areaname"),@Result( column = "suggest_code",property = "suggestCode") })
     @Select("SELECT * FROM car_agent where suggest_code = #{suggestCode} limit 1")
-    public AgentDO getBySuggestCode(@Param("suggestCode") Integer suggestCode);
+    public AgentDO getBySuggestCode(@Param("suggestCode") String suggestCode);
 
 }
