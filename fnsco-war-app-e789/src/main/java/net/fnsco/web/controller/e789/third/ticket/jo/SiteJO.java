@@ -5,7 +5,7 @@ import net.fnsco.core.base.JO;
 
 public class SiteJO extends JO {
     @ApiModelProperty(value = "站点名称", example = "站点名称")
-    
+
     private String siteName;
 
     /**
@@ -29,9 +29,5 @@ public class SiteJO extends JO {
     public void setSiteName(String siteName) {
         this.siteName = siteName;
     }
-
-       @ApiModelProperty(value = "车号", example = "车号")
-        private String carNumber;
-    
 
 }
