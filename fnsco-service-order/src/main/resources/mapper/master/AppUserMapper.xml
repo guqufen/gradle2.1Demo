@@ -28,6 +28,8 @@
 		<result column="head_image_path" jdbcType="VARCHAR" property="headImagePath" />
 		<result column="invite_status" jdbcType="INTEGER" property="inviteStatus" />
 		<result column="invite_entity_innner_code" jdbcType="VARCHAR" property="inviteEntityInnnerCode" />
+		
+		<result column="id_card_number" jdbcType="VARCHAR" property="idCardNumber" />
 	</resultMap>
 	<!-- WEB页面用 -->
 	<resultMap id="PageResultMap" type="net.fnsco.order.api.dto.AppUserManageDTO" >
