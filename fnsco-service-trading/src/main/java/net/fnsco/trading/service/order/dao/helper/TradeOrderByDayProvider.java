@@ -182,7 +182,7 @@ public class TradeOrderByDayProvider {
         sb.append("INSERT INTO r_trade_order_by_day ");  
         sb.append("(id,trade_date,inner_code,turnover,order_num,order_price,procedure_fee,create_time)");  
         sb.append("VALUES ");  
-        MessageFormat mf = new MessageFormat("(#{list[{0}].id},#{list[{0}].tradeDate},#{list[{0}].innerCode},#{list[{0}].turnover},#{list[{0}].orderNum},#{list[{0}].orderPrice},#{list[{0}].procedureFee},#{list[{0}].createTime})");  
+        MessageFormat mf = new MessageFormat("(#'{'list[{0}].id},#'{'list[{0}].tradeDate},#'{'list[{0}].innerCode},#'{'list[{0}].turnover},#'{'list[{0}].orderNum},#'{'list[{0}].orderPrice},#'{'list[{0}].procedureFee},#'{'list[{0}].createTime})");  
         for (int i = 0; i < lists.size(); i++) {  
             sb.append(mf.format(new Object[]{i}));  
             if (i < lists.size() - 1) {  

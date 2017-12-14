@@ -42,13 +42,13 @@ public class CarBrandService extends BaseService {
 	public ResultPageDTO<CarBrandDO> page(CarBrandDO carBrandDO, Integer pageNum, Integer pageSize) {
 		List<CarBrandDO> pageList = carBrandDAO.pageList(carBrandDO, pageNum, pageSize);
 		for (CarBrandDO carBrandDO2 : pageList) {
-//			if( !Strings.isNullOrEmpty(carBrandDO2.getIconImgPath()) ){
-//				carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
-//			}
-			if(!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())){
-                String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^")+1);
-                carBrandDO2.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
-            }
+			// if( !Strings.isNullOrEmpty(carBrandDO2.getIconImgPath()) ){
+			// carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
+			// }
+			if (!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())) {
+				String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^") + 1);
+				carBrandDO2.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+			}
 		}
 		Integer count = carBrandDAO.pageListCount(carBrandDO);
 		ResultPageDTO<CarBrandDO> pager = new ResultPageDTO<CarBrandDO>(count, pageList);
@@ -63,7 +63,7 @@ public class CarBrandService extends BaseService {
 	public void insert(CarBrandDO carBrandDO) {
 		carBrandDAO.insert(carBrandDO);
 	}
-	
+
 	/**
 	 * 更新数据
 	 * 
@@ -74,6 +74,11 @@ public class CarBrandService extends BaseService {
 		// 先通过id查找更新前数据
 		CarBrandDO carBrandDO2 = carBrandDAO.getById(carBrandDO.getId());
 
+		// 如果图标地址以http开头，说明是网址，不用更新
+		if (carBrandDO.getIconImgPath().startsWith("http")) {
+			carBrandDO.setIconImgPath(null);
+		}
+
 		// 如果上级菜单id发生变化，则通过supperId=id去查找该id是否下挂下级菜单
 		if (carBrandDO2.getSupperId() != carBrandDO.getSupperId()) {
 			CarBrandDO carBrandDO3 = new CarBrandDO();
@@ -81,7 +86,10 @@ public class CarBrandService extends BaseService {
 			// 设置supperId，查询是否含有下级id
 			carBrandDO3.setSupperId(carBrandDO.getId());
 			List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO3, null);
+
+			// 如果有下级菜单
 			if (list.size() > 0) {
+
 				return ResultDTO.fail("有下级菜单，请先处理好下级菜单再执行本次更新，本次更新无效");
 			}
 		}
@@ -96,12 +104,15 @@ public class CarBrandService extends BaseService {
 	 */
 	public ResultDTO<Object> delete(CarBrandDO carBrandDO) {
 
-			CarBrandDO carBrandDO2 = new CarBrandDO();
-			carBrandDO2.setSupperId(carBrandDO.getId());
-			List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO2, null);
-			if (list.size() > 0) {
-				return ResultDTO.fail("有下级菜单，请先处理好下级菜单再执行本次删除,本次删除无效");
-			}
+		CarBrandDO carBrandDO2 = new CarBrandDO();
+		carBrandDO2.setSupperId(carBrandDO.getId());
+		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO2, null);
+
+		// 如果下级菜单等于1，且父ID等于当前ID，则可以直接删除
+		if (list.size() > 0) {
+
+			return ResultDTO.fail("有下级菜单，请先处理好下级菜单再执行本次删除,本次删除无效");
+		}
 
 		carBrandDAO.delete(carBrandDO);
 		return ResultDTO.success();
@@ -109,6 +120,7 @@ public class CarBrandService extends BaseService {
 
 	/**
 	 * 查询汽车热门品牌
+	 * 
 	 * @return
 	 */
 	public ResultDTO<List<CarBrandDO>> selectHot() {
@@ -116,16 +128,17 @@ public class CarBrandService extends BaseService {
 		carBrandDO.setIsHot(1);
 		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO, 8);
 		for (CarBrandDO carBrandDO2 : list) {
-			if(!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())){
-                String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^")+1);
-                carBrandDO2.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
-            }
+			if (!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())) {
+				String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^") + 1);
+				carBrandDO2.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+			}
 		}
 		return ResultDTO.success(list);
 	}
 
 	/**
 	 * 查询菜单树
+	 * 
 	 * @param carBrandDO
 	 * @return
 	 */
@@ -144,7 +157,7 @@ public class CarBrandService extends BaseService {
 
 		return ResultDTO.success(list);
 	}
-	
+
 	/**
 	 * 查询所有的汽车品牌,并按照第一个汉字的首字母排序，分配集合
 	 * 
@@ -158,7 +171,7 @@ public class CarBrandService extends BaseService {
 		List<CarBrandDTO> carList = new ArrayList<>();
 
 		for (CarBrandDO carBrandDO : list) {
-			
+
 			/**
 			 * 获取名称的每个汉字的首字母
 			 */
@@ -176,7 +189,7 @@ public class CarBrandService extends BaseService {
 			}
 		}
 
-		for ( Entry<String, Set<CarBrandDO>> m : map.entrySet()) {
+		for (Entry<String, Set<CarBrandDO>> m : map.entrySet()) {
 			CarBrandDTO carBrandDTO = new CarBrandDTO();
 			carBrandDTO.setLetter(m.getKey());
 			carBrandDTO.setBody(m.getValue());
@@ -192,12 +205,12 @@ public class CarBrandService extends BaseService {
 		List<CarBrandDO> list = carBrandDAO.selectChild(id);
 		return ResultDTO.success(list);
 	}
-	
+
 	// 查询
-	 public CarBrandDO doQueryById (Integer id) {
-		 CarBrandDO obj = this.carBrandDAO.getById(id);
-	     return obj;
-	 }
+	public CarBrandDO doQueryById(Integer id) {
+		CarBrandDO obj = this.carBrandDAO.getById(id);
+		return obj;
+	}
 
 	public List<CarBrandDO> queryCityList() {
 		List<CarBrandDO> list = this.carBrandDAO.getFirstLevel();
