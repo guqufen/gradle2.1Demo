@@ -1,11 +1,13 @@
 package net.fnsco.trading.service.order.dao.helper;
 
-import org.apache.ibatis.jdbc.SQL;
+import java.text.MessageFormat;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang3.StringUtils;
 
 import net.fnsco.trading.service.order.entity.TradeOrderByDayDO;
 public class TradeOrderByDayProvider {
@@ -163,6 +165,31 @@ public class TradeOrderByDayProvider {
     	        	WHERE("trade_date < #{tradeOrderByDay.endTradeDate}");
     	        }
     	 }}.toString();
+    }
+    
+    /**
+     * insertBatch:(批量插入数据)
+     *
+     * @param  @param params
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午3:10:20
+     */
+    public String insertBatch(Map<String, Object> params) {
+    	List<TradeOrderByDayDO> lists = (List<TradeOrderByDayDO>) params.get("list");
+    	StringBuilder sb = new StringBuilder();  
+        sb.append("INSERT INTO r_trade_order_by_day ");  
+        sb.append("(id,trade_date,inner_code,turnover,order_num,order_price,procedure_fee,create_time)");  
+        sb.append("VALUES ");  
+        MessageFormat mf = new MessageFormat("(#{list[{0}].id},#{list[{0}].tradeDate},#{list[{0}].innerCode},#{list[{0}].turnover},#{list[{0}].orderNum},#{list[{0}].orderPrice},#{list[{0}].procedureFee},#{list[{0}].createTime})");  
+        for (int i = 0; i < lists.size(); i++) {  
+            sb.append(mf.format(new Object[]{i}));  
+            if (i < lists.size() - 1) {  
+                sb.append(",");  
+            }  
+        }  
+        return sb.toString();  
     }
 }
 

@@ -1,6 +1,7 @@
 package net.fnsco.trading.service.order.dao;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Options;
@@ -39,7 +40,7 @@ public interface TradeOrderByPayMediumDAO {
     public Integer pageListCount(@Param("tradeOrderByPayMedium") TradeOrderByPayMediumDO tradeOrderByPayMedium);
     
     /**
-     * deleteByCondition:(批量删除数据)
+     * deleteByCondition:(条件删除数据)
      *
      * @param  @param tradeOrderByPayMedium
      * @param  @return    设定文件
@@ -49,5 +50,16 @@ public interface TradeOrderByPayMediumDAO {
      */
     @DeleteProvider(type = TradeOrderByPayMediumProvider.class, method = "deleteByCondition")
     public int deleteByCondition(@Param("tradeOrderByPayMedium") TradeOrderByPayMediumDO tradeOrderByPayMedium);
-
+    
+    /**
+     * insertBatch:(批量插入数据)
+     *
+     * @param  @param datas
+     * @param  @return    设定文件
+     * @return int    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午3:54:42
+     */
+    @InsertProvider(type = TradeOrderByPayMediumProvider.class, method = "insertBatch")
+    public int insertBatch(@Param("list")List<TradeOrderByPayMediumDO> datas);
 }

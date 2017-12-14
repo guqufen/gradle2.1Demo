@@ -115,12 +115,9 @@ public class TradeWithdrawController extends BaseController {
     	tradeWithdraw.setBankOpenBank(appUserBank.getOpenBank());
     	tradeWithdraw.setBankOpenBankNum(appUserBank.getOpenBankNum());
     	tradeWithdraw.setBankSubBankName(appUserBank.getSubBankName());
-    	tradeWithdraw.setCreateTime(new Date());
     	tradeWithdraw.setStatus(1);
     	tradeWithdraw.setTradeType(1);
     	tradeWithdraw.setFee(new BigDecimal(0));
-    	tradeWithdraw.setUpdateTime(new Date());//还没做完
-    	tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
     	tradeWithdrawService.doAdd(tradeWithdraw);
     	
     	

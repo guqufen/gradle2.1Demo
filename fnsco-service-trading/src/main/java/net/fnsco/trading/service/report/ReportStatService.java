@@ -95,7 +95,11 @@ public class ReportStatService extends BaseService {
 		
 		//分别按天、支付渠道、支付媒介,统计查询且插入对应表中
 		List<TradeOrderByDayDO> tradeDateDayList = tradeOrderDateTempDAO.selectTradeDataByDay();
-		
+		tradeOrderByDayDAO.insertBatch(tradeDateDayList);
+		List<TradeOrderByPayTypeDO> tradeDatePayTypeList = tradeOrderDateTempDAO.selectTradeDataByPayType();
+		tradeOrderByPayTypeDAO.insertBatch(tradeDatePayTypeList);
+		List<TradeOrderByPayMediumDO> tradeOrderByPayMediumList = tradeOrderDateTempDAO.selectTradeDataByPayMedium();
+		tradeOrderByPayMediumDAO.insertBatch(tradeOrderByPayMediumList);
 	}
 	
 }
