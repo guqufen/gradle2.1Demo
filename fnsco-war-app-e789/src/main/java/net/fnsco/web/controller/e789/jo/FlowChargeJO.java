@@ -17,7 +17,7 @@ public class FlowChargeJO extends JO {
 	@ApiModelProperty(value = "流量套餐ID", example = "流量套餐ID")
 	private String pid;
 	@ApiModelProperty(value = "登录用户id", example = "登录用户id")
-	private String userId;
+	private Integer userId;
 
 	public String getPhone() {
 		return phone;
@@ -35,11 +35,11 @@ public class FlowChargeJO extends JO {
 		this.pid = pid;
 	}
 
-	public String getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 

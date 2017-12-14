@@ -42,7 +42,8 @@ function initTableData() {
 		}, {
 			field : 'supperName',
 			title : '上级汽车名称',
-			width : 80
+			width : 80,
+			formatter:formatSupperName
 		}, {
 			field : 'iconImgPath',
 			title : '图标',
@@ -97,6 +98,14 @@ function formatIcon(value, row, index) {
 		return '<img src="'+value+'" class="img-responsive" alt="Cinque Terre" height="30" width="30">';
 	}else{
 		return '-';
+	}
+}
+
+function formatSupperName(value, row, index) {
+	if(row.level == 1){
+		return '总菜单';
+	}else{
+		return value;
 	}
 }
 
@@ -300,6 +309,12 @@ function saveOrUpdate() {
 	// 获取菜单树数据的父菜单ID
 	if (!$('#parentId').val()) {
 		layer.msg('请选择上级菜单!');
+		return;
+	}
+	
+	//判断如果当前ID等于父ID，直接报错
+	if($('#parentId').val() == $('#id').val()){
+		layer.msg('父菜单不能为当前菜单，请重新选择上级菜单!');
 		return;
 	}
 
