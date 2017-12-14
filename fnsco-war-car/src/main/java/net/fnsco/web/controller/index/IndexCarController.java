@@ -25,7 +25,7 @@ public class IndexCarController extends BaseController {
 	
 	@Autowired
 	private ConfigService configService;
-	@RequestMapping(value = "/doRequest")
+	@RequestMapping(value = "/doRequest" , method = RequestMethod.GET)
 	@ApiOperation(value = "首页请求金额销售额")
 	private ResultDTO<IndexVO> doRequest() {
 		IndexVO index = new IndexVO();

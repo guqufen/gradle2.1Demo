@@ -3,6 +3,8 @@ package net.fnsco.order.api.appuser;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.dto.AppUserMerchantOutDTO;
@@ -21,4 +23,6 @@ public interface AppUserMerchantService {
      * @return
      */
     MerChantCoreDTO selectByEntityInnerCode(AppUserMerchant merchantUserRel);
+    
+    List<AppUserMerchant> selectByUserId( Integer appUserId);
 }
