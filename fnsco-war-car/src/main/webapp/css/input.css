@@ -48,7 +48,7 @@
     margin: 0.4rem 0;
     line-height: 1rem;
 }
-.mui-input-row input#showCityPicker,.mui-input-row input#showByStagesPicker,.mui-input-row input#showInsuranceCompanyPicker{
+.mui-input-row input#showCityPicker,.mui-input-row input#showByStagesPicker,.mui-input-row input#showInsuranceCompanyPicker,.mui-input-row input.car-model{
     margin: 0;
     padding: 0.4rem 0;
     height: 1.8rem;
