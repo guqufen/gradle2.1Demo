@@ -440,7 +440,8 @@ $('#btn_delete').click(function() {
 //导入按钮事件
 function importEvent() {
 	$('#importModal').modal();
-//	$('#excel_file_risk_inf').fileinput('destroy');
+	$('.fileinput-remove').click();
+//	$('#excel_file_risk_inf').fileinput('destroy'); fileinput-remove
 }
 
 $(function() {
