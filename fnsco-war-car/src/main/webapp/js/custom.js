@@ -134,6 +134,7 @@ function hideChildBrand(id,name,typeId){
 function backBrand(){
 	$(".child-brand").hide();
 	$(".brand").show();
+	$(".child-brand").html('');
 }
 
 /*
