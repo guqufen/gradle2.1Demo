@@ -61,8 +61,9 @@ public class BuyCarApplyController extends BaseController {
 			return ResultDTO.fail("推荐码不存在");
 			
 		}
+		String type =CarServiceConstant.ApplyType.getNameByType("01");
 		//获取session中验证码信息
-		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
+		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(type+mobile);
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
 		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);
