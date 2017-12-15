@@ -47,6 +47,11 @@ a:visited{
 input,button{
     outline: none;
 }
+input[disabled], textarea[diabled]{
+    -webkit-text-fill-color: #000;
+    -webkit-opacity: 1;
+    color: #000;
+}
 /*以上为初始化css代码*/
 html{
     height: 100%;
@@ -236,4 +241,11 @@ button:enabled:active,.mui-btn:enabled:active, .mui-btn.mui-active:enabled{
     color: #fff;
     border-radius: 0.3rem;
     background-color: #323232;
+}
+
+.mui-poppicker{
+    opacity: 0;
+}
+.mui-poppicker.mui-active{
+    opacity: 1;
 }

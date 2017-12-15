@@ -107,7 +107,7 @@ function formatModel(value, row, index) {
 	}else if(value ==2){
 		return '豪华车';
 	}else if(value ==3){
-		return '商户中级车';
+		return '商务中级车';
 	}else if(value ==4){
 		return '三厢';
 	}else if(value ==5){
@@ -439,6 +439,7 @@ $('#btn_delete').click(function() {
 //导入按钮事件
 function importEvent() {
 	$('#importModal').modal();
+	$('#excel_file_risk_inf').val('');
 }
 
 $(function() {

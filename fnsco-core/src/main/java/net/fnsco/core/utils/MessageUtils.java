@@ -61,23 +61,23 @@ public class MessageUtils {
 	public ResultDTO<Object> validateCode2(String code, String mobile, MessageValidateDTO mDTO) {
 		// 非空判断
 		if (Strings.isNullOrEmpty(code)) {
-			return ResultDTO.fail("非法请求,没有验证码");
+			return ResultDTO.fail("没有验证码");
 		}
 		if (Strings.isNullOrEmpty(mobile)) {
-			return ResultDTO.fail("非法请求,没有手机号");
+			return ResultDTO.fail("没有手机号");
 		}
 		if (mDTO == null) {
-			return ResultDTO.fail("非法请求，请先获取验证码");
+			return ResultDTO.fail("请先获取验证码");
 		}
 		if (mDTO.getCode() == null) {
-			return ResultDTO.fail("非法请求,验证码不正确");
+			return ResultDTO.fail("验证码不正确");
 		}
 
 		long newTime = System.currentTimeMillis();
 
 		if (!StringUtils.equals(code, mDTO.getCode())) {
-			logger.warn("非法请求,验证码不正确");
-			return ResultDTO.fail("非法请求,验证码不正确");
+			logger.warn("验证码不正确");
+			return ResultDTO.fail("验证码不正确");
 
 		} else if ((newTime - mDTO.getTime()) / 1000 / 60 > 30) {// 验证码超过30分钟
 			logger.warn("验证码超时");

@@ -86,7 +86,7 @@ function getChildBrand(id,boole){
 							if(boole==false){
 								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12">'+data.data[j].name+'</div></li>');
 							}else{
-								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12" onclick="hideChildBrand('+data.data[j].id+',\''+data.data[j].name+'\')">'+data.data[j].name+'</div></li>');
+								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12" onclick="hideChildBrand('+data.data[j].id+',\''+data.data[j].name+'\','+data.data[j].model+')">'+data.data[j].name+'</div></li>');
 							}
 						}
 					}
@@ -101,7 +101,7 @@ function getChildBrand(id,boole){
 /*
 *选中子型号事件
 */
-function hideChildBrand(id,name){
+function hideChildBrand(id,name,typeId){
 	$("#carBrand").val(name);
 	$("#carBrand").next().val(id);
 	$(".mui-content").show();
@@ -110,6 +110,18 @@ function hideChildBrand(id,name){
 	$(".hot .mui-row").html('');
 	$(".brand-nav").html('<a href="javascript:;" onclick="scrolInto(hot)">热</a>');
 	$(".child-brand").html('');
+	$("#carModelId").val(typeId);
+	if(typeId=='1'){
+		$(".car-model").val("SUV")
+	}else if(typeId=='2'){
+		$(".car-model").val("豪华车")
+	}else if(typeId=='3'){
+		$(".car-model").val("商务中级车")
+	}else if(typeId=='4'){
+		$(".car-model").val("三厢")
+	}else if(typeId=='5'){
+		$(".car-model").val("两厢")
+	}
 }
 
 /*
@@ -283,7 +295,8 @@ function sendCode(type){
 	$.ajax({
 		url:'h5/sendMessage',
 		type:'post',
-		data:{'mobile':$(".phone-num").val(),'type':type},
+		contentType:'application/json',
+		data:JSON.stringify({'mobile':$(".phone-num").val(),'type':type}),
 		success:function(data){
 			console.log(data.data);
 			mui.toast('验证码已发送');
@@ -338,7 +351,7 @@ function subData(type){
 	var name=$(".name").val();						//姓名
 	var cityId=$("#cityId").val();					//所在城市
 	var carTypeId=$("#carId").val();				//汽车品牌
-	var carSubTypeId=$(".car-model").val();			//汽车型号
+	var carSubTypeId=$("#carModelId").val();			//汽车型号
 	var buyType=$("#byStages").val();				//分期方案
 	var mobile=$(".phone-num").val();				//手机号码
 	var verCode=$(".phone-code").val();				//验证码

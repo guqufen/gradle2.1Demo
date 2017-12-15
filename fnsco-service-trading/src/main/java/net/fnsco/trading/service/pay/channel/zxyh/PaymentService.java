@@ -334,6 +334,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setInnerCode(innerCode);// 设置内部商户号
 		tradeOrderDO.setSettleStatus(0);//设置清算状态0-未清算
 		tradeOrderDO.setSyncStatus(0);//设置同步状态0-未同步
+		tradeOrderDO.setPayMedium("01");
 		//设置实体内部商户号
 		MerchantEntityCoreRef  mer = merchantEntityCoreRefDao.selectByInnerCodeLimit1(innerCode);
 		if( null != mer){
