@@ -24,7 +24,7 @@ public interface AgentDAO {
     public AgentDO getById(@Param("id") int id);
     
     @Results({@Result( column = "id",property = "id"),@Result( column = "suggest_code",property = "suggestCode")})
-    @Select("SELECT * FROM car_agent WHERE suggest_code = #{suggestCode} LIMIT 1")
+    @Select("SELECT suggest_code FROM car_agent WHERE suggest_code = #{suggestCode} LIMIT 1")
     public AgentDO getByCode(@Param("suggestCode") String suggestCode);
 
     @Insert("INSERT into car_agent(id,name,type,provinceId,provinceName,cityId,cityName,areaId,areaName,address,suggest_code,mobile,short_name,principal,create_time) VALUES (#{id},#{name},#{type},#{provinceid},#{provincename},#{cityid},#{cityname},#{areaid},#{areaname},#{address},#{suggestCode},#{mobile},#{shortName},#{principal},#{createTime})")
