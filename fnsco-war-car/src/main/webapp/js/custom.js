@@ -325,9 +325,6 @@ function subData(type){
 				var title=$(".mui-content #loan-information .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
-			}else if(istel($(".phone-num").val())==false){ 
-			  mui.alert("请输入正确的手机号"); 
-			  return;
 			}
 		}else if(type=='021'){
 			if($(".mui-content #car-info .mui-input-row").eq(i).find('input').val()==''){
@@ -340,11 +337,12 @@ function subData(type){
 				var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
-			}else if(istel($(".phone-num").val())==false){ 
-				  mui.alert("请输入正确的手机号"); 
-				  return;
 			}
 		}
+	}
+	if(istel($(".phone-num").val())==false){ 
+	  mui.alert("请输入正确的手机号"); 
+	  return;
 	}
 
 	//买车
@@ -403,8 +401,9 @@ function subData(type){
                 console.log(data);
                 if(data=='truetruetrue'){
 					$("#car-info .sub-btn").attr('disabled',false);
-                	mui.toast("提交成功!");
                 	$("#carInfoForm").resetForm();
+					window.location.href='result.html?type='+type;
+                	// mui.toast("提交成功!");
                 }
             }
         });
@@ -428,11 +427,9 @@ function subData(type){
 						$("#car-info").addClass('mui-active');
 						$("#orderNo").val(data.data.orderNo);
 					}else{
-						mui.toast("提交成功!");
-						// setInterval(function(){
-						// 	window.location.href='index.html';
-						// },2000)
-						$('input').val('');
+						// mui.toast("提交成功!");
+						window.location.href='result.html?type='+type;
+						// $('input').val('');
 					}
 				}else{
 					mui.toast(data.message);

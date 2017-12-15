@@ -92,4 +92,5 @@ public interface AppUserService {
     List<AppUser> selectAllInviteAppUser();
     boolean updateAppUser(AppUser appUser);
 	String getIdAuth(Integer userId);
+	AppUser e789QueryAppUserByMobile(String mobile);
 }

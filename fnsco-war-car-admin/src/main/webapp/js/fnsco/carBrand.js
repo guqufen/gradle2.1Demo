@@ -289,9 +289,9 @@ $('#btn_edit').click(
 				}
 
 				$('#model').val(selectContent[0].model);
-//				$('#iconImgPath').val(selectContent[0].iconImgPath);
-				$('#isHot option[value=' + selectContent[0].iconImgPath + ']').attr(
-						'selected', true);
+				$('#iconImgPath').val(selectContent[0].iconImgPath);
+//				$('#isHot option[value=' + selectContent[0].iconImgPath + ']').attr(
+//						'selected', true);
 				$('#isHot option[value=' + selectContent[0].isHot + ']').attr(
 						'selected', true);
 				$('#level').val(selectContent[0].level);
@@ -355,6 +355,7 @@ function saveOrUpdate() {
 		'supperId':$('#parentId').val(),
 		'level' : $('#level').val(),
 		'model':$('#model option:selected').val(),
+		'isHot':$('#isHot option:selected').val(),
 		'iconImgPath':$('#iconImgPath').val()
 	}
 
@@ -439,7 +440,6 @@ $('#btn_delete').click(function() {
 //导入按钮事件
 function importEvent() {
 	$('#importModal').modal();
-	$('#excel_file_risk_inf').val('');
 }
 
 $(function() {
