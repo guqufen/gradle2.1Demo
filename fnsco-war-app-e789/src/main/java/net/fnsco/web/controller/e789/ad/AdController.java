@@ -41,10 +41,15 @@ public class AdController extends BaseController {
     @ApiOperation(value = "查询广告资讯")
     public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
  		AppAdVO vo = new AppAdVO();
- 		ResultDTO<Map<String, List>> map = adService.queryAdList();
- 		vo.setAdList(map.getData().get("ad"));
- 		vo.setNewsList(map.getData().get("news"));
-        return ResultDTO.success(vo);
+ 		ResultDTO<Map<String, List>> result = adService.queryAdList();
+ 		if(result.getData() != null){
+ 			vo.setAdList(result.getData().get("ad"));
+ 	 		vo.setNewsList(result.getData().get("news"));
+ 	 		return ResultDTO.success(vo);
+ 		}else{
+ 			return ResultDTO.fail();
+ 		}
+ 		
     }
 
 }
