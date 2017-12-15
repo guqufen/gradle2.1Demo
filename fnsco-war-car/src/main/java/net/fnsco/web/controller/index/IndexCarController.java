@@ -19,7 +19,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.web.controller.vo.IndexVO;
 
 @RestController
-@RequestMapping(value = "/h5/index", method = RequestMethod.POST)
+@RequestMapping(value = "/h5/index")
 @Api(value = "/h5/index", tags = { "首页显示接口" })
 public class IndexCarController extends BaseController {
 	
