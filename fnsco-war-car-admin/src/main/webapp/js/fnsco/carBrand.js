@@ -439,6 +439,7 @@ $('#btn_delete').click(function() {
 //导入按钮事件
 function importEvent() {
 	$('#importModal').modal();
+	$('#excel_file_risk_inf').val('');
 }
 
 $(function() {

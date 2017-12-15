@@ -28,8 +28,6 @@ public class CarBrandService extends BaseService {
 
 	@Autowired
 	private CarBrandDAO carBrandDAO;
-	@Autowired
-	private Environment env;
 
 	/**
 	 * 分页查询，汽车品牌
@@ -42,9 +40,7 @@ public class CarBrandService extends BaseService {
 	public ResultPageDTO<CarBrandDO> page(CarBrandDO carBrandDO, Integer pageNum, Integer pageSize) {
 		List<CarBrandDO> pageList = carBrandDAO.pageList(carBrandDO, pageNum, pageSize);
 		for (CarBrandDO carBrandDO2 : pageList) {
-			// if( !Strings.isNullOrEmpty(carBrandDO2.getIconImgPath()) ){
-			// carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
-			// }
+
 			if (!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())) {
 				String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^") + 1);
 				carBrandDO2.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
@@ -171,6 +167,11 @@ public class CarBrandService extends BaseService {
 		List<CarBrandDTO> carList = new ArrayList<>();
 
 		for (CarBrandDO carBrandDO : list) {
+
+			if (!Strings.isNullOrEmpty(carBrandDO.getIconImgPath())) {
+				String path = carBrandDO.getIconImgPath().substring(carBrandDO.getIconImgPath().indexOf("^") + 1);
+				carBrandDO.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+			}
 
 			/**
 			 * 获取名称的每个汉字的首字母
