@@ -41,7 +41,7 @@ public class MessageUtils {
 			@Override
 			public void run() {
 				try {
-					String callback = SmsUtil.Code(mobile, code);
+					String callback = SmsUtil.ZRCode(mobile, code);
 					JSONObject callbackJson = (JSONObject) JSONObject.parse(callback);
 					String resultCode = callbackJson.getString("code");
 					if ("0".equals(resultCode)) {
