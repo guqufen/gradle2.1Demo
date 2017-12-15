@@ -19,10 +19,12 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.trading.service.order.dao.TradeOrderByDayDAO;
+import net.fnsco.trading.service.order.dao.TradeOrderByPayMediumDAO;
 import net.fnsco.trading.service.order.dao.TradeOrderByPayTypeDAO;
 import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.trading.service.order.dto.OrderDayDTO;
 import net.fnsco.trading.service.order.dto.OrderPayTypeDTO;
+import net.fnsco.trading.service.order.entity.TradeOrderByPayMediumDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.PayTypeTurnoverJO;
 import net.fnsco.web.controller.e789.vo.EveryDayTurnoverVO;
@@ -47,6 +49,8 @@ public class StatController extends BaseController {
 	private TradeOrderDAO tradeOrderDAO;
 	@Autowired
 	private TradeOrderByPayTypeDAO tradeOrderByPayTypeDAO;
+	@Autowired
+	private TradeOrderByPayMediumDAO tradeOrderByPayMediumDAO;
 	/**
 	 * 
 	 * getTotalTurnover:(这里用一句话描述这个方法的作用)
@@ -111,20 +115,36 @@ public class StatController extends BaseController {
 		formatInputDate(payTypeTurnoverJO);
 		PayTypeTurnoverVO payTypeTurnoverVO = new PayTypeTurnoverVO();
 		List<OrderPayTypeDTO> datas = tradeOrderByPayTypeDAO.selectByCondition(payTypeTurnoverJO.getStartDate(), payTypeTurnoverJO.getEndDate(), payTypeTurnoverJO.getUserId());
+		Integer orderNum = 0;
+		BigDecimal turnover =  new BigDecimal(0);
 		if(null != datas) {
 			for (OrderPayTypeDTO orderPayTypeDTO : datas) {
 				//扫码
-				if("00".equals(orderPayTypeDTO.getPayType())) {
-					payTypeTurnoverVO.setqRTurnover(formatRMBNumber(orderPayTypeDTO.getTurnover().toString()));
-					payTypeTurnoverVO.setqRNum(orderPayTypeDTO.getOrderNum());
-				}else if("01".equals(orderPayTypeDTO.getPayType())) {
-					payTypeTurnoverVO.setTaiKTurnover(formatRMBNumber(orderPayTypeDTO.getTurnover().toString()));
-					payTypeTurnoverVO.setTaiKNum(orderPayTypeDTO.getOrderNum());
-				}else if("02".equals(orderPayTypeDTO.getPayType())) {
+				if("01".equals(orderPayTypeDTO.getPayType()) ||"02".equals(orderPayTypeDTO.getPayType())) {
+					orderNum += orderPayTypeDTO.getOrderNum();
+					if(null != orderPayTypeDTO.getTurnover()) {
+						turnover = turnover.add(orderPayTypeDTO.getTurnover());
+					}
+				}else if("03".equals(orderPayTypeDTO.getPayType())) {
 					payTypeTurnoverVO.setFenshanfu(formatRMBNumber(orderPayTypeDTO.getTurnover().toString()));
 					payTypeTurnoverVO.setFenshanfuNum(orderPayTypeDTO.getOrderNum());
 				}
 			}
+		}
+		payTypeTurnoverVO.setqRTurnover(formatRMBNumber(turnover.toString()));
+		payTypeTurnoverVO.setqRNum(orderNum);
+		/**
+		 * 台码需要单独查询
+		 */
+		TradeOrderByPayMediumDO tradeOrderByPayMedium = new TradeOrderByPayMediumDO();
+		tradeOrderByPayMedium.setUserId(payTypeTurnoverJO.getUserId());
+		tradeOrderByPayMedium.setPayMedium("02");
+		tradeOrderByPayMedium.setStartTradeDate(payTypeTurnoverJO.getStartDate());
+		tradeOrderByPayMedium.setEndTradeDate(payTypeTurnoverJO.getEndDate());
+		List<OrderPayTypeDTO> taikaData = tradeOrderByPayMediumDAO.countSUMTurnover(tradeOrderByPayMedium);
+		if(null != taikaData && taikaData.size() == 1) {
+			payTypeTurnoverVO.setTaiKTurnover(formatRMBNumber(taikaData.get(0).getTurnover().toString()));
+			payTypeTurnoverVO.setTaiKNum(taikaData.get(0).getOrderNum());
 		}
 		
 		return success(payTypeTurnoverVO);

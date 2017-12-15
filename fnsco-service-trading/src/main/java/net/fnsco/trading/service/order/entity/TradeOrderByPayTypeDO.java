@@ -41,8 +41,31 @@ public class TradeOrderByPayTypeDO {
 
     private String startTradeDate;//开始交易时间  主要用于条件查询
     private String endTradeDate;//结束交易时间 主要用于条件查询
+    private Integer userId;//用户ID
     
     /**
+	 * userId
+	 *
+	 * @return  the userId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getUserId() {
+		return userId;
+	}
+
+	/**
+	 * userId
+	 *
+	 * @param   userId    the userId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	/**
 	 * startTradeDate
 	 *
 	 * @return  the startTradeDate
