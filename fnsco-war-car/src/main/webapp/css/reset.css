@@ -47,6 +47,11 @@ a:visited{
 input,button{
     outline: none;
 }
+input[disabled], textarea[diabled]{
+    -webkit-text-fill-color: #000;
+    -webkit-opacity: 1;
+    color: #000;
+}
 /*以上为初始化css代码*/
 html{
     height: 100%;
