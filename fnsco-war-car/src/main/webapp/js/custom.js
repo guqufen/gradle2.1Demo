@@ -174,8 +174,8 @@ function start(city,stages,insuranceCompany){
 				}
 			})
 			var showCityPickerButton = doc.getElementById('showCityPicker');
-			var cityId = doc.getElementById('cityId');
 			showCityPickerButton.addEventListener('tap', function(event) {
+				showCityPickerButton.focus();
 				cityPicker.show(function(items) {
 					var len=JSON.stringify(items[0].text).length;
 					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,len-1);
@@ -184,6 +184,7 @@ function start(city,stages,insuranceCompany){
 					//return false;
 				});
 			}, false);
+
 		}
 
 		if(stages==true){
@@ -202,6 +203,7 @@ function start(city,stages,insuranceCompany){
 			var showByStagesPickerBuuton =doc.getElementById('showByStagesPicker');
 			var byStages =doc.getElementById('byStages');
 			showByStagesPickerBuuton.addEventListener('tap', function(event) {
+				showByStagesPickerBuuton.focus();
 				byStagesPicker.show(function(items) {
 					var len=JSON.stringify(items[0].text).length;
 					showByStagesPickerBuuton.value = JSON.stringify(items[0].text).substring(1,len-1);
@@ -226,6 +228,7 @@ function start(city,stages,insuranceCompany){
 			var showInsuranceCompanyPickerButton = doc.getElementById('showInsuranceCompanyPicker');
 			var insuranceCompanyId = doc.getElementById('insuranceCompanyId');
 			showInsuranceCompanyPickerButton.addEventListener('tap', function(event) {
+				showInsuranceCompanyPickerButton.focus();
 				insuranceCompanyPicker.show(function(items) {
 					var len=JSON.stringify(items[0].text).length;
 					showInsuranceCompanyPickerButton.value = JSON.stringify(items[0].text).substring(1,len-1);
@@ -406,6 +409,7 @@ function subData(type){
 						// setInterval(function(){
 						// 	window.location.href='index.html';
 						// },2000)
+						$('input').val('');
 					}
 				}else{
 					mui.toast(data.message);
