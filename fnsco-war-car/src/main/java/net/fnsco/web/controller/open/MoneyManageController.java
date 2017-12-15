@@ -50,7 +50,7 @@ public class MoneyManageController extends BaseController {
 			return ResultDTO.fail(rt.getMessage());
 		}
 		AgentDO agent = agentService.doQueryByCode(saveFinanceJO.getSuggestCode());
-		if(!agent.getSuggestCode().equals(saveFinanceJO.getSuggestCode())) {
+		if(agent==null) {
 			return ResultDTO.fail("推荐码不存在");
 		}
 		CustomerDO customerDO =  new CustomerDO();
