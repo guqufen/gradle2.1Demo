@@ -65,10 +65,77 @@ public class AppUserBankDO {
     private String accountPhone;
     
     private String status;
-    private Date createTime;
-    private Date updateTime;
-    private String bankName;
-    private String type;
+    private Date create_time;
+    private Date update_time;
+    private String bank_name;
+    
+    /**
+	 * create_time
+	 *
+	 * @return  the create_time
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Date getCreate_time() {
+		return create_time;
+	}
+
+	/**
+	 * create_time
+	 *
+	 * @param   create_time    the create_time to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCreate_time(Date create_time) {
+		this.create_time = create_time;
+	}
+
+	/**
+	 * update_time
+	 *
+	 * @return  the update_time
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Date getUpdate_time() {
+		return update_time;
+	}
+
+	/**
+	 * update_time
+	 *
+	 * @param   update_time    the update_time to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setUpdate_time(Date update_time) {
+		this.update_time = update_time;
+	}
+
+	/**
+	 * bank_name
+	 *
+	 * @return  the bank_name
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getBank_name() {
+		return bank_name;
+	}
+
+	/**
+	 * bank_name
+	 *
+	 * @param   bank_name    the bank_name to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setBank_name(String bank_name) {
+		this.bank_name = bank_name;
+	}
+
+	private String type;
 
 
 
@@ -94,71 +161,7 @@ public class AppUserBankDO {
 		this.status = status;
 	}
 
-	/**
-	 * createTime
-	 *
-	 * @return  the createTime
-	 * @since   CodingExample Ver 1.0
-	*/
 	
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	/**
-	 * createTime
-	 *
-	 * @param   createTime    the createTime to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	/**
-	 * updateTime
-	 *
-	 * @return  the updateTime
-	 * @since   CodingExample Ver 1.0
-	*/
-	
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	/**
-	 * updateTime
-	 *
-	 * @param   updateTime    the updateTime to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
-
-	/**
-	 * bankName
-	 *
-	 * @return  the bankName
-	 * @since   CodingExample Ver 1.0
-	*/
-	
-	public String getBankName() {
-		return bankName;
-	}
-
-	/**
-	 * bankName
-	 *
-	 * @param   bankName    the bankName to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
-	}
 
 	/**
 	 * type
@@ -288,10 +291,12 @@ public class AppUserBankDO {
 				+ accountNo + ", accountName=" + accountName + ", accountCardId=" + accountCardId + ", subBankName="
 				+ subBankName + ", openBankPrince=" + openBankPrince + ", openBank=" + openBank + ", openBankCity="
 				+ openBankCity + ", openBankNum=" + openBankNum + ", accountPhone=" + accountPhone + ", status="
-				+ status + ", createTime=" + createTime + ", updateTime=" + updateTime + ", bankName=" + bankName
+				+ status + ", create_time=" + create_time + ", update_time=" + update_time + ", bank_name=" + bank_name
 				+ ", type=" + type + "]";
 	}
 
+	
+    
 
 
     

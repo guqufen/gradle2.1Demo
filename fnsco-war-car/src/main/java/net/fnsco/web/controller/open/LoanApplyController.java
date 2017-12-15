@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -33,6 +34,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.car.comm.CarConstant;
 import net.fnsco.car.comm.CarServiceConstant;
+import net.fnsco.car.service.agent.AgentService;
+import net.fnsco.car.service.agent.entity.AgentDO;
 import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.car.service.file.OrderFileService;
 import net.fnsco.car.service.file.entity.OrderFileDO;
@@ -59,6 +62,8 @@ public class LoanApplyController extends BaseController {
 	private Environment env;
 	@Autowired
 	private OrderFileService orderFileService;
+	@Autowired
+	private AgentService agentService;
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	@ApiOperation(value = "贷款申请-添加申请")
@@ -66,8 +71,18 @@ public class LoanApplyController extends BaseController {
 		// 校验验证码
 		String code = jo.getVerCode();
 		String mobile = jo.getMobile();
+		String suggestCode = jo.getSuggestCode();
+		if(Strings.isNullOrEmpty(code)||Strings.isNullOrEmpty(code)||Strings.isNullOrEmpty(code)){
+			return ResultDTO.fail(CarConstant.E_PARAMETER_NOT_NULL);
+		}
+		AgentDO agent = agentService.doQueryByCode(suggestCode);
+		if(agent == null){
+			return ResultDTO.fail("推荐码不存在");
+			
+		}
+		String type =CarServiceConstant.ApplyType.getNameByType("02");
 		// 获取session中验证码信息
-		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
+		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(type+mobile);
 		
 		// 校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
@@ -82,7 +97,7 @@ public class LoanApplyController extends BaseController {
 
 		OrderLoanDO orderLoan = new OrderLoanDO();
 		orderLoan.setCityId(jo.getCityId());
-		orderLoan.setAmount(jo.getAmount());
+		orderLoan.setAmount(jo.getAmount().multiply(new BigDecimal("1000000")));//转换为分
 		orderLoan.setSuggestCode(jo.getSuggestCode());
 
 //		String fileIds = jo.getFileIds();// 上传的图片id

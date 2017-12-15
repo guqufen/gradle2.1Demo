@@ -869,8 +869,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     }
 
 	@Override
-	public String getIdAuth(String userId) {
-		String id_card_num = appUserDao.getIdAuth(userId);
-		return id_card_num;
+	public String getIdAuth(Integer userId) {
+		List<AppUser> list = appUserDao.selectIdAuth(userId);
+		if(list.size()>0){
+			return list.get(0).getIdCardNumber();
+		}else{
+			return "";
+		}
 	}
 }

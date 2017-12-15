@@ -46,6 +46,8 @@ public class CarServiceConstant{
         anErrorMap.put("9999", "系统繁忙");
     }
 
+    
+    
     //状态0扣款中1扣款失败2扣款成功9补收
     public static enum AnPayResultEnum {
                                         AN_PAY_SUCC("1001", "成功"), AN_PAY_FAIL("1002", "失败"), AN_PAYING("1111", "进行中");
