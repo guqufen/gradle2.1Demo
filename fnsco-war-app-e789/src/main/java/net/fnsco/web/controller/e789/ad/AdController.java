@@ -42,12 +42,12 @@ public class AdController extends BaseController {
     public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
  		AppAdVO vo = new AppAdVO();
  		ResultDTO<Map<String, List>> result = adService.queryAdList();
- 		if(result.getData() != null){
+ 		if(result.isSuccess()){
  			vo.setAdList(result.getData().get("ad"));
  	 		vo.setNewsList(result.getData().get("news"));
  	 		return ResultDTO.success(vo);
  		}else{
- 			return ResultDTO.fail();
+ 			return ResultDTO.fail(result.getMessage());
  		}
  		
     }
