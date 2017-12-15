@@ -154,7 +154,6 @@ function clearInput(){
 	$('#level').val(null);
 }
 
-var fIcon = "";
 //菜单数树
 function getMenuTree(id){
 	
@@ -230,10 +229,6 @@ function MenuTreeGet() {
 				$('#parentName').val(node[0].name);
 				$('#parentId').val(node[0].id);
 				$('#level').val(node[0].level+1);
-
-				if(('#level').value >1){
-					fIcon = node[0].iconImgPath;
-				}
 
 				layer.close(index);
 
@@ -347,17 +342,11 @@ function saveOrUpdate() {
 	}
 
 	console.log($('#model option:selected').val());
-	console.log($('#model option:selected').innerHtml);
 
 	// 获取车型
 	if (!$('#model option:selected').val()) {
 		layer.msg('请选择车型!');
 		return;
-	}
-	
-	//一级菜单不变更
-	if($('#level').val() == 1){
-		fIcon = $('#iconImgPath').val();
 	}
 
 	var param = {
@@ -366,7 +355,7 @@ function saveOrUpdate() {
 		'supperId':$('#parentId').val(),
 		'level' : $('#level').val(),
 		'model':$('#model option:selected').val(),
-		'iconImgPath':fIcon
+		'iconImgPath':$('#iconImgPath').val()
 	}
 
 	// 组包发给后台
