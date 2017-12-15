@@ -295,6 +295,7 @@ function sendCode(type){
 	$.ajax({
 		url:'h5/sendMessage',
 		type:'post',
+		contentType:'application/json',
 		data:JSON.stringify({'mobile':$(".phone-num").val(),'type':type}),
 		success:function(data){
 			console.log(data.data);
