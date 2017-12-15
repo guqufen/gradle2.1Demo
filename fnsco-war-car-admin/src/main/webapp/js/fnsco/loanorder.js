@@ -19,7 +19,6 @@ $('#table').bootstrapTable({
     columns: [{
         field: 'id',
         title: '序号',
-        width:'10%',
         align: 'center',
         width: 150,
         formatter: formatindex
@@ -61,7 +60,6 @@ $('#table').bootstrapTable({
         title: '操作',
         width:'10%',
         align: 'center',
-        width: 150,
         formatter: operateFormatter
     }]
 });
