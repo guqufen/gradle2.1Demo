@@ -19,7 +19,6 @@ $('#table').bootstrapTable({
     columns: [{
         field: 'id',
         title: '序号',
-        width:'10%',
         align: 'center',
         width: 150,
         formatter: formatindex
@@ -40,7 +39,7 @@ $('#table').bootstrapTable({
         width:'10%'
     },{
         field: 'carOriginalPrice',
-        title: '汽车原价',
+        title: '汽车原价(万元)',
         formatter:formatRMB
     },{
         field: 'insuCompanyName',
@@ -61,7 +60,6 @@ $('#table').bootstrapTable({
         title: '操作',
         width:'10%',
         align: 'center',
-        width: 150,
         formatter: operateFormatter
     }]
 });

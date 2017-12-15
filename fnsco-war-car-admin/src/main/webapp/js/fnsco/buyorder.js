@@ -19,7 +19,6 @@ $('#table').bootstrapTable({
     columns: [{
         field: 'id',
         title: '序号',
-        width:'10%',
         align: 'center',
         width: 150,
         formatter: formatindex
@@ -52,7 +51,7 @@ $('#table').bootstrapTable({
         field: '',
         title: '首付比例'
     },{
-        field: '',
+        field: 'buyType',
         title: '月供期限(期数)'
     },{
         field: '',
@@ -69,7 +68,6 @@ $('#table').bootstrapTable({
         title: '操作',
         width:'10%',
         align: 'center',
-        width: 150,
         formatter: operateFormatter
     }]
 });
