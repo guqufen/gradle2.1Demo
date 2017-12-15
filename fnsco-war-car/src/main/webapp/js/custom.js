@@ -69,14 +69,18 @@ function getChildBrand(id,boole){
 		data:{'id':id},
 		success:function(data){
 			console.log(data.data);
-			var html='';
+			if(boole==true){
+				var html='<header><div class="back" style="display:block" onclick="backBrand();"></div><div class="head-title">'+data.data[0].name+'</div></header>';
+			}else{
+				var html='';
+			}
 			for(var i=0;i<data.data.length;i++){
 				if(data.data[i].id==id && boole==false){
 					$(".head-title").html(data.data[i].name);
 				}
 				if(data.data[i].level==2){
 					$(".child-brand").html('');
-					html='<div class="title" id="'+data.data[i].id+'">'+data.data[i].name+'</div><ul class="brand-list-list" id="brand-list-list'+data.data[i].id+'"></ul>';
+					html+='<div class="title" id="'+data.data[i].id+'">'+data.data[i].name+'</div><ul class="brand-list-list" id="brand-list-list'+data.data[i].id+'"></ul>';
 					$(".child-brand").append(html);
 					if(boole==false){
 						$(".back").show();
@@ -122,6 +126,14 @@ function hideChildBrand(id,name,typeId){
 	}else if(typeId=='5'){
 		$(".car-model").val("两厢")
 	}
+}
+
+/*
+*
+*/
+function backBrand(){
+	$(".child-brand").hide();
+	$(".brand").show();
 }
 
 /*
