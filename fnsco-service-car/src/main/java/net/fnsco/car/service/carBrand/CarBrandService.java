@@ -80,7 +80,7 @@ public class CarBrandService extends BaseService {
 		}
 
 		// 如果上级菜单id发生变化，则通过supperId=id去查找该id是否下挂下级菜单
-		if (carBrandDO2.getSupperId() != carBrandDO.getSupperId()) {
+		if ( !carBrandDO2.getSupperId().equals(carBrandDO.getSupperId()) ) {
 			CarBrandDO carBrandDO3 = new CarBrandDO();
 
 			// 设置supperId，查询是否含有下级id
