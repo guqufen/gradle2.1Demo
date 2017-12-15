@@ -79,7 +79,7 @@ public class SmsUtil {
         long tpl_id = 2100980;
         //设置对应的模板变量值
 
-        String tpl_value = URLEncoder.encode("#code#", ENCODING) + "=" + URLEncoder.encode(code, ENCODING) + "&" + URLEncoder.encode("#company#", ENCODING) + "=" + URLEncoder.encode("中融汽车", ENCODING);
+        String tpl_value = URLEncoder.encode("#code#", ENCODING) + "=" + URLEncoder.encode(code, ENCODING);// + "&" + URLEncoder.encode("#company#", ENCODING) + "=" + URLEncoder.encode("中融汽车", ENCODING);
 
         String result = tplSendSms(apikey, tpl_id, tpl_value, mobile);
 
