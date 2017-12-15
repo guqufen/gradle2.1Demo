@@ -70,6 +70,7 @@
     </div>
 </body>
 <script src="js/bootstrap/jquery.min.js"></script>
+<script type="text/javascript" src="js/fnsco/common.js"></script>
 <script>
 var win=window.parent.document.getElementById("addHref");
 function clickAddTab(href,dataIndex,html){
@@ -79,7 +80,7 @@ function clickAddTab(href,dataIndex,html){
 	win.click();
 }
 $.ajax({
-    url:'../web/agent/getAgentInfo',
+    url:PROJECT_NAME+'/web/agent/getAgentInfo',
     type:'post',
     contentType : "application/json",
     success:function(data){
