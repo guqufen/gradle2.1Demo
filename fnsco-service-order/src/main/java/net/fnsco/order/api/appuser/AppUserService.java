@@ -91,4 +91,6 @@ public interface AppUserService {
     List<AppUserMerchant> getAppUserMerchantByInnerCode(String innerCode);
     List<AppUser> selectAllInviteAppUser();
     boolean updateAppUser(AppUser appUser);
+	String getIdAuth(Integer userId);
+	AppUser e789QueryAppUserByMobile(String mobile);
 }

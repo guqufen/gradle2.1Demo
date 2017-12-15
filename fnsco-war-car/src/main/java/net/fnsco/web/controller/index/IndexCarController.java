@@ -19,13 +19,13 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.web.controller.vo.IndexVO;
 
 @RestController
-@RequestMapping(value = "/h5/index", method = RequestMethod.POST)
+@RequestMapping(value = "/h5/index")
 @Api(value = "/h5/index", tags = { "首页显示接口" })
 public class IndexCarController extends BaseController {
 	
 	@Autowired
 	private ConfigService configService;
-	@RequestMapping(value = "/doRequest")
+	@RequestMapping(value = "/doRequest" , method = RequestMethod.GET)
 	@ApiOperation(value = "首页请求金额销售额")
 	private ResultDTO<IndexVO> doRequest() {
 		IndexVO index = new IndexVO();
@@ -45,7 +45,7 @@ public class IndexCarController extends BaseController {
 		num= num + number;
 		Integer numberAmt =new Random().nextInt(10000)+10000;
 		numberAmt = numberAmt * 100;
-		Integer numKeep = Integer.valueOf(keep);
+		Integer numKeep = Integer.valueOf(keep).intValue();
 		numberAmt = numberAmt + numKeep;
 		amt = new BigDecimal(numberAmt);
 		amt = amt.divide(new BigDecimal(10000000), 2, BigDecimal.ROUND_HALF_UP);

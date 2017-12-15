@@ -4,7 +4,7 @@
 */
 function getCarBrand(boole){
 	$.ajax({
-		url:'../h5/carBrand/selectAll',
+		url:'h5/carBrand/selectAll',
 		type:'get',
 		contentType : "application/json",
 		success:function(data){
@@ -39,7 +39,7 @@ function getCarBrand(boole){
 */
 function getHotCarBrand(boole){
 	$.ajax({
-		url:'../h5/carBrand/selectHot',
+		url:'h5/carBrand/selectHot',
 		type:'get',
 		contentType : "application/json",
 		success:function(data){
@@ -63,7 +63,7 @@ function getHotCarBrand(boole){
 */
 function getChildBrand(id,boole){
 	$.ajax({
-		url:'../h5/carBrand/selectChild',
+		url:'h5/carBrand/selectChild',
 		type:'get',
 		contentType:'application/json',
 		data:{'id':id},
@@ -75,15 +75,18 @@ function getChildBrand(id,boole){
 					$(".head-title").html(data.data[i].name);
 				}
 				if(data.data[i].level==2){
+					$(".child-brand").html('');
 					html='<div class="title" id="'+data.data[i].id+'">'+data.data[i].name+'</div><ul class="brand-list-list" id="brand-list-list'+data.data[i].id+'"></ul>';
 					$(".child-brand").append(html);
+					if(boole==false){
+						$(".back").show();
+					}
 					for(var j=0;j<data.data.length;j++){
 						if(data.data[j].supperId==data.data[i].id){
 							if(boole==false){
 								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12">'+data.data[j].name+'</div></li>');
-								$(".back").show();
 							}else{
-								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12" onclick="hideChildBrand('+data.data[j].id+',\''+data.data[j].name+'\')">'+data.data[j].name+'</div></li>');
+								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12" onclick="hideChildBrand('+data.data[j].id+',\''+data.data[j].name+'\','+data.data[j].model+')">'+data.data[j].name+'</div></li>');
 							}
 						}
 					}
@@ -98,7 +101,7 @@ function getChildBrand(id,boole){
 /*
 *选中子型号事件
 */
-function hideChildBrand(id,name){
+function hideChildBrand(id,name,typeId){
 	$("#carBrand").val(name);
 	$("#carBrand").next().val(id);
 	$(".mui-content").show();
@@ -107,6 +110,18 @@ function hideChildBrand(id,name){
 	$(".hot .mui-row").html('');
 	$(".brand-nav").html('<a href="javascript:;" onclick="scrolInto(hot)">热</a>');
 	$(".child-brand").html('');
+	$("#carModelId").val(typeId);
+	if(typeId=='1'){
+		$(".car-model").val("SUV")
+	}else if(typeId=='2'){
+		$(".car-model").val("豪华车")
+	}else if(typeId=='3'){
+		$(".car-model").val("商务中级车")
+	}else if(typeId=='4'){
+		$(".car-model").val("三厢")
+	}else if(typeId=='5'){
+		$(".car-model").val("两厢")
+	}
 }
 
 /*
@@ -143,6 +158,7 @@ function scrolInto(id){
 /*选择品牌事件*/
 $("#carBrand").click(function(){
 	$(".mui-content").hide();
+	$("#carBrand").blur();
 	getCarBrand(true);
 	getHotCarBrand(true);
 	$(".brand.popup").show();
@@ -167,23 +183,26 @@ function start(city,stages,insuranceCompany){
 			//选择城市
 			var cityPicker = new $.PopPicker();
 			$.ajax({
-				url:'../../h5/city/queryCity',
+				url:'h5/city/queryCity',
 				type:'get',
 				success:function(data){
 					cityPicker.setData(data.data);
 				}
 			})
 			var showCityPickerButton = doc.getElementById('showCityPicker');
-			var cityId = doc.getElementById('cityId');
 			showCityPickerButton.addEventListener('tap', function(event) {
+				showCityPickerButton.focus();
+				showCityPickerButton.blur();
 				cityPicker.show(function(items) {
 					var len=JSON.stringify(items[0].text).length;
 					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,len-1);
 					cityId.value = JSON.stringify(items[0].value);
 					//返回 false 可以阻止选择框的关闭
 					//return false;
+					showCityPickerButton.blur();
 				});
 			}, false);
+
 		}
 
 		if(stages==true){
@@ -202,12 +221,15 @@ function start(city,stages,insuranceCompany){
 			var showByStagesPickerBuuton =doc.getElementById('showByStagesPicker');
 			var byStages =doc.getElementById('byStages');
 			showByStagesPickerBuuton.addEventListener('tap', function(event) {
+				showByStagesPickerBuuton.focus();
+				showByStagesPickerBuuton.blur();
 				byStagesPicker.show(function(items) {
 					var len=JSON.stringify(items[0].text).length;
 					showByStagesPickerBuuton.value = JSON.stringify(items[0].text).substring(1,len-1);
 					byStages.value= JSON.stringify(items[0].value);
 					//返回 false 可以阻止选择框的关闭
 					//return false;
+					showByStagesPickerBuuton.blur();
 				});
 			}, false);
 		}
@@ -216,7 +238,7 @@ function start(city,stages,insuranceCompany){
 			//选择意向投保公司
 			var insuranceCompanyPicker = new $.PopPicker();
 			$.ajax({
-				url:'../../h5/insu/queryInsu',
+				url:'h5/insu/queryInsu',
 				type:'get',
 				success:function(data){
 					// console.log(data);
@@ -226,12 +248,15 @@ function start(city,stages,insuranceCompany){
 			var showInsuranceCompanyPickerButton = doc.getElementById('showInsuranceCompanyPicker');
 			var insuranceCompanyId = doc.getElementById('insuranceCompanyId');
 			showInsuranceCompanyPickerButton.addEventListener('tap', function(event) {
+				showInsuranceCompanyPickerButton.focus();
+				showInsuranceCompanyPickerButton.blur();
 				insuranceCompanyPicker.show(function(items) {
 					var len=JSON.stringify(items[0].text).length;
 					showInsuranceCompanyPickerButton.value = JSON.stringify(items[0].text).substring(1,len-1);
 					insuranceCompanyId.value = JSON.stringify(items[0].value);
 					//返回 false 可以阻止选择框的关闭
 					//return false;
+					showInsuranceCompanyPickerButton.blur();
 				});
 			}, false);
 		}
@@ -268,9 +293,10 @@ function sendCode(type){
 	  	return;
 	}
 	$.ajax({
-		url:'../../h5/sendMessage',
+		url:'h5/sendMessage',
 		type:'post',
-		data:{'mobile':$(".phone-num").val(),'type':type},
+		contentType:'application/json',
+		data:JSON.stringify({'mobile':$(".phone-num").val(),'type':type}),
 		success:function(data){
 			console.log(data.data);
 			mui.toast('验证码已发送');
@@ -299,9 +325,6 @@ function subData(type){
 				var title=$(".mui-content #loan-information .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
-			}else if(istel($(".phone-num").val())==false){ 
-			  mui.alert("请输入正确的手机号"); 
-			  return;
 			}
 		}else if(type=='021'){
 			if($(".mui-content #car-info .mui-input-row").eq(i).find('input').val()==''){
@@ -314,18 +337,19 @@ function subData(type){
 				var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
-			}else if(istel($(".phone-num").val())==false){ 
-				  mui.alert("请输入正确的手机号"); 
-				  return;
 			}
 		}
+	}
+	if(istel($(".phone-num").val())==false){ 
+	  mui.alert("请输入正确的手机号"); 
+	  return;
 	}
 
 	//买车
 	var name=$(".name").val();						//姓名
 	var cityId=$("#cityId").val();					//所在城市
 	var carTypeId=$("#carId").val();				//汽车品牌
-	var carSubTypeId=$(".car-model").val();			//汽车型号
+	var carSubTypeId=$("#carModelId").val();			//汽车型号
 	var buyType=$("#byStages").val();				//分期方案
 	var mobile=$(".phone-num").val();				//手机号码
 	var verCode=$(".phone-code").val();				//验证码
@@ -347,22 +371,22 @@ function subData(type){
 
 	if(type=='01'){//买车申请
 		data={'name':name,'cityId':cityId,'carTypeId':carTypeId,'carSubTypeId':carSubTypeId,'buyType':buyType,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../../h5/buyCar/add';
+		url='h5/buyCar/add';
 	}
 
 	if(type=='02'){//贷款申请
 		data={'name':name,'cityId':cityId,'amount':amount,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../../h5/loan/add';
+		url='h5/loan/add';
 	}
 
 	if(type=='03'){//保险申请
 		data={'name':name,'cityId':cityId,'carOriginalPrice':carOriginalPrice,'insuCompanyId':insuCompanyId,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../../h5/insu/saveSafe';
+		url='h5/insu/saveSafe';
 	}
 	
 	if(type=='04'){//理财申请
 		data={'name':name,'cityId':cityId,'financeType':financeType,'earnings':earnings,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../../h5/manage/saveFinance';
+		url='h5/manage/saveFinance';
 	}
 
 	if(type=='021'){//贷款上传图片
@@ -370,15 +394,16 @@ function subData(type){
         $('#carInfoForm').ajaxSubmit({
             type: 'post', // 提交方式 get/post
             // url: 'http://192.168.1.162:8080/h5/loan/fileInfo/upload', // 需要提交的 url
-            url: '../h5/loan/fileInfo/upload', // 需要提交的 url
+            url: 'h5/loan/fileInfo/upload', // 需要提交的 url
             success: function(data) { 
                 // data 保存提交后返回的数据，一般为 json 数据
                 // 此处可对 data 作相关处理
                 console.log(data);
                 if(data=='truetruetrue'){
 					$("#car-info .sub-btn").attr('disabled',false);
-                	mui.toast("提交成功!");
                 	$("#carInfoForm").resetForm();
+					window.location.href='result.html?type='+type;
+                	// mui.toast("提交成功!");
                 }
             }
         });
@@ -402,10 +427,9 @@ function subData(type){
 						$("#car-info").addClass('mui-active');
 						$("#orderNo").val(data.data.orderNo);
 					}else{
-						mui.toast("提交成功!");
-						// setInterval(function(){
-						// 	window.location.href='../index.html';
-						// },2000)
+						// mui.toast("提交成功!");
+						window.location.href='result.html?type='+type;
+						// $('input').val('');
 					}
 				}else{
 					mui.toast(data.message);
@@ -416,24 +440,3 @@ function subData(type){
 
 }
 
-
-
-
-
-/*
-*上传图片
-*/
-function upload(type){
-	var formData= new FormData();
-	formData.append("file",$("#file"+type)[0].files[0]);
-	$.ajax({
-		url:'/h5/loan/fileInfo/upload',
-		type:'post',
-		// data:{'importFile':formData,'type':type},
-		// processData:false,
-		// contentType:false,
-		success:function(data){
-			console.log(data);
-		}
-	})
-}

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.car.comm.CarServiceConstant;
+import net.fnsco.car.service.agent.AgentService;
+import net.fnsco.car.service.agent.entity.AgentDO;
 import net.fnsco.car.service.config.ConfigService;
 import net.fnsco.car.service.config.entity.ConfigDO;
 import net.fnsco.car.service.customer.entity.CustomerDO;
@@ -45,19 +46,26 @@ public class InsuranceController extends BaseController {
 	private OrderSafeService orderSafeService;
 	@Autowired
 	private ConfigService configService;
+	@Autowired
+	private AgentService agentService;
 	
 	@RequestMapping(value = "/saveSafe")
 	@ApiOperation(value = "保险申请-添加申请")
 	private ResultDTO saveSafe(@RequestBody SaveSafeJO saveSafeJO) {
 		String code = saveSafeJO.getVerCode();
 		String mobile = saveSafeJO.getMobile();
+		String type =CarServiceConstant.ApplyType.getNameByType("03");
 		//获取session中验证码信息
-		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(mobile);
+		MessageValidateDTO mDTO = (MessageValidateDTO) session.getAttribute(type+mobile);
 		//校验验证码是否正确
 		MessageUtils utils = new MessageUtils();
 		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);
 		if(!rt.isSuccess()){
 			return ResultDTO.fail(rt.getMessage());
+		}
+		AgentDO agent = agentService.doQueryByCode(saveSafeJO.getSuggestCode());
+		if(agent==null) {
+			return ResultDTO.fail("推荐码不存在");
 		}
 		CustomerDO customerDO =  new CustomerDO();
 		customerDO.setName(saveSafeJO.getName());

@@ -23,7 +23,7 @@
 			<div class="mui-col-xs-6 mui-row border-right">
 				<div class="mui-col-xs-8">
 					<p>累计贷款额</p>
-					<p><span>23.6</span>千万</p>
+					<p><span class="total-money"></span>千万</p>
 				</div>
 				<div class="mui-col-xs-4 total-icon">
 					<img src="img/total-money.png">
@@ -32,7 +32,7 @@
 			<div class="mui-col-xs-6 mui-row">
 				<div class="mui-col-xs-8">
 					<p>累计购车数</p>
-					<p><span>2950</span>辆</p>
+					<p><span class="total-num"></span>辆</p>
 				</div>
 				<div class="mui-col-xs-4 total-icon">
 					<img src="img/total-num.png">
@@ -82,6 +82,30 @@
 				</div>
 				<a href="financing.html" class="product-link">我要投资</a>
 			</div>
+			<div class="product">
+				<div class="product-title">
+					汽车贷款<span>审批简便 放款快</span>
+				</div>
+				<div class="product-rate">
+					<span>12.0</span>%
+				</div>
+				<div class="product-intro">
+					项目期限12个月
+				</div>
+				<a href="loans.html" class="product-link">我要贷款</a>
+			</div>
+			<div class="product">
+				<div class="product-title">
+					购车首付贷<span>购车无忧 轻松快捷</span>
+				</div>
+				<div class="product-rate">
+					<span>10.0</span>%
+				</div>
+				<div class="product-intro">
+					随借随还
+				</div>
+				<a href="payCar.html" class="product-link">我要买车</a>
+			</div>
 		</div>
 		<!-- 页尾提示栏 -->
 		<div class="footer-bar">—— 我也是有底线的 ——</div>
@@ -108,11 +132,20 @@
 </body>
 <script type="text/javascript" src="js/setWidth.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<!-- <script src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
-<script>
-    var city = remote_ip_info['city'];
-    console.log(city);
-</script> -->
+<script type="text/javascript">
+	$.ajax({
+		url:'h5/index/doRequest',
+		type:'get',
+		dataType:'json',
+		contentType:'application/json',
+		success:function(data){
+			console.log(data);
+			$(".total-money").html(data.data.amount);
+			$(".total-num").html(data.data.number);
+		}
+
+	})
+</script>
 
 
 </html>

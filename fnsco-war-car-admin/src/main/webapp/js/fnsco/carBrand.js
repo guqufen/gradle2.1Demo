@@ -57,7 +57,8 @@ function initTableData() {
 		}, {
 			field : 'model',
 			title : '所属车型',
-			width : 40
+			width : 40,
+			formatter:formatModel
 		}]
 	});
 }
@@ -94,10 +95,23 @@ function queryParams(params) {
  * @returns
  */
 function formatIcon(value, row, index) {
-	if(row.level == 1){
+	if(value != null){
 		return '<img src="'+value+'" class="img-responsive" alt="Cinque Terre" height="30" width="30">';
 	}else{
 		return '-';
+	}
+}
+function formatModel(value, row, index) {
+	if( value == 1){
+		return 'SUV';
+	}else if(value ==2){
+		return '豪华车';
+	}else if(value ==3){
+		return '商务中级车';
+	}else if(value ==4){
+		return '三厢';
+	}else if(value ==5){
+		return '两厢';
 	}
 }
 
@@ -215,6 +229,7 @@ function MenuTreeGet() {
 				$('#parentName').val(node[0].name);
 				$('#parentId').val(node[0].id);
 				$('#level').val(node[0].level+1);
+
 				layer.close(index);
 
 			} else {
@@ -275,6 +290,8 @@ $('#btn_edit').click(
 
 				$('#model').val(selectContent[0].model);
 				$('#iconImgPath').val(selectContent[0].iconImgPath);
+//				$('#isHot option[value=' + selectContent[0].iconImgPath + ']').attr(
+//						'selected', true);
 				$('#isHot option[value=' + selectContent[0].isHot + ']').attr(
 						'selected', true);
 				$('#level').val(selectContent[0].level);
@@ -323,10 +340,12 @@ function saveOrUpdate() {
 		layer.msg('请选择上级菜单!');
 		return;
 	}
-	
+
+	console.log($('#model option:selected').val());
+
 	// 获取车型
-	if (!$('#model').val()) {
-		layer.msg('请输入车型!');
+	if (!$('#model option:selected').val()) {
+		layer.msg('请选择车型!');
 		return;
 	}
 
@@ -335,7 +354,8 @@ function saveOrUpdate() {
 		'name' : $('#menuName').val(),//菜单名称
 		'supperId':$('#parentId').val(),
 		'level' : $('#level').val(),
-		'model':$('#model').val(),
+		'model':$('#model option:selected').val(),
+		'isHot':$('#isHot option:selected').val(),
 		'iconImgPath':$('#iconImgPath').val()
 	}
 
@@ -420,6 +440,8 @@ $('#btn_delete').click(function() {
 //导入按钮事件
 function importEvent() {
 	$('#importModal').modal();
+	$('.fileinput-remove').click();
+//	$('#excel_file_risk_inf').fileinput('destroy'); fileinput-remove
 }
 
 $(function() {

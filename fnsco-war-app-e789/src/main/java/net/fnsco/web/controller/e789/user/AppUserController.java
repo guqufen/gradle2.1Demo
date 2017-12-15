@@ -14,8 +14,10 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
+import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.FindPasswordJO;
 import net.fnsco.web.controller.e789.jo.GetValidateCodeJO;
@@ -77,9 +79,15 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/getValidateCode")
     @ApiOperation(value = "获取验证码")
     public ResultDTO getValidateCode(@RequestBody GetValidateCodeJO getValidateCodeJO) {
+    	if(getValidateCodeJO.getType()==0) {
+    		AppUser user = appUserService.e789QueryAppUserByMobile(getValidateCodeJO.getMobile());
+    		if(user != null) {
+    			return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
+    		}
+    	}
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(getValidateCodeJO.getDeviceId());
-    	appUserDTO.setMobile(getValidateCodeJO.getMobile());
+    	appUserDTO.setMobile(getValidateCodeJO.getType()+getValidateCodeJO.getMobile());
         ResultDTO result = appUserService.getValidateCode(appUserDTO);
         return result;
     }

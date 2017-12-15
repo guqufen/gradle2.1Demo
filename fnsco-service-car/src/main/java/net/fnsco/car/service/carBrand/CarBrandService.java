@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Strings;
@@ -28,8 +27,6 @@ public class CarBrandService extends BaseService {
 
 	@Autowired
 	private CarBrandDAO carBrandDAO;
-	@Autowired
-	private Environment env;
 
 	/**
 	 * 分页查询，汽车品牌
@@ -42,9 +39,7 @@ public class CarBrandService extends BaseService {
 	public ResultPageDTO<CarBrandDO> page(CarBrandDO carBrandDO, Integer pageNum, Integer pageSize) {
 		List<CarBrandDO> pageList = carBrandDAO.pageList(carBrandDO, pageNum, pageSize);
 		for (CarBrandDO carBrandDO2 : pageList) {
-			// if( !Strings.isNullOrEmpty(carBrandDO2.getIconImgPath()) ){
-			// carBrandDO2.setIconImgPath(env.getProperty("web.base.url")+carBrandDO2.getIconImgPath());
-			// }
+
 			if (!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())) {
 				String path = carBrandDO2.getIconImgPath().substring(carBrandDO2.getIconImgPath().indexOf("^") + 1);
 				carBrandDO2.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
@@ -80,7 +75,7 @@ public class CarBrandService extends BaseService {
 		}
 
 		// 如果上级菜单id发生变化，则通过supperId=id去查找该id是否下挂下级菜单
-		if (carBrandDO2.getSupperId() != carBrandDO.getSupperId()) {
+		if ( !carBrandDO2.getSupperId().equals(carBrandDO.getSupperId()) ) {
 			CarBrandDO carBrandDO3 = new CarBrandDO();
 
 			// 设置supperId，查询是否含有下级id
@@ -126,6 +121,7 @@ public class CarBrandService extends BaseService {
 	public ResultDTO<List<CarBrandDO>> selectHot() {
 		CarBrandDO carBrandDO = new CarBrandDO();
 		carBrandDO.setIsHot(1);
+		carBrandDO.setLevel(1);
 		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO, 8);
 		for (CarBrandDO carBrandDO2 : list) {
 			if (!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())) {
@@ -171,6 +167,11 @@ public class CarBrandService extends BaseService {
 		List<CarBrandDTO> carList = new ArrayList<>();
 
 		for (CarBrandDO carBrandDO : list) {
+
+			if (!Strings.isNullOrEmpty(carBrandDO.getIconImgPath())) {
+				String path = carBrandDO.getIconImgPath().substring(carBrandDO.getIconImgPath().indexOf("^") + 1);
+				carBrandDO.setIconImgPath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+			}
 
 			/**
 			 * 获取名称的每个汉字的首字母

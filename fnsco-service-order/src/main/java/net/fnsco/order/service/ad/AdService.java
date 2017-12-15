@@ -1,6 +1,5 @@
 package net.fnsco.order.service.ad;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.beust.jcommander.internal.Maps;
+import com.google.common.collect.Lists;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
@@ -66,23 +68,27 @@ public class AdService extends BaseService {
   * e789获取广告资讯
   */
  public ResultDTO<Map<String, List>> queryAdList() {
-	 	List<AdDTO> adList = null;
-		List<AdDTO> newsList = null;
-		Map<String, List> map = new HashMap<>();
+	 	List<AdDTO> adList = Lists.newArrayList();
+		List<AdDTO> newsList = Lists.newArrayList();
+		Map<String, List<AdDTO>> map = Maps.newHashMap();
 		List<AdDO> allList = this.adDAO.queryAdList();
 		if(allList.isEmpty()){
 			return ResultDTO.failForMessage("未发现相关信息");
 		}
-		AdDTO adDTO = new AdDTO();
 		for (AdDO adDO : allList) {
-			if(StringUtils.equals("1", adDO.getCategory().toString())){
-				adDTO.setImgPath(adDO.getImgPath());
+			if(adDO.getCategory() == null){
+				continue;
+			}
+			if(1 == adDO.getCategory()){
+				AdDTO adDTO = new AdDTO();
+				adDTO.setImgPath(adDO.getImg_path());
 				adDTO.setSummary(adDO.getSummary());
 				adDTO.setTitle(adDO.getTitle());
 				adDTO.setUrl(adDO.getUrl());
 				adList.add(adDTO);
-			}else{
-				adDTO.setImgPath(adDO.getImgPath());
+			}else if(2 == adDO.getCategory()){
+				AdDTO adDTO = new AdDTO();
+				adDTO.setImgPath(adDO.getImg_path());
 				adDTO.setSummary(adDO.getSummary());
 				adDTO.setTitle(adDO.getTitle());
 				adDTO.setUrl(adDO.getUrl());
@@ -91,7 +97,8 @@ public class AdService extends BaseService {
 			map.put("ad", adList);
 			map.put("news", newsList);
 		}
-		
 		return ResultDTO.success(map);
+		
+		
 	}
 }

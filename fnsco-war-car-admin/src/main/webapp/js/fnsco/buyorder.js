@@ -18,15 +18,7 @@ $('#table').bootstrapTable({
     responseHandler:responseHandler,//处理服务器返回数据
     columns: [{
         field: 'id',
-        title: '操作',
-        width:'10%',
-        align: 'center',
-        width: 150,
-        formatter: operateFormatter
-    },{
-        field: 'id',
         title: '序号',
-        width:'10%',
         align: 'center',
         width: 150,
         formatter: formatindex
@@ -59,7 +51,7 @@ $('#table').bootstrapTable({
         field: '',
         title: '首付比例'
     },{
-        field: '',
+        field: 'buyType',
         title: '月供期限(期数)'
     },{
         field: '',
@@ -71,13 +63,19 @@ $('#table').bootstrapTable({
         field: 'status',
         title: '进度状态',
         formatter: formatStatus
+    },{
+        field: 'id',
+        title: '操作',
+        width:'10%',
+        align: 'center',
+        formatter: operateFormatter
     }]
 });
 //表格中操作按钮
 function operateFormatter(value, row, index) {
 	return [
-        '<a class="redact" href="javascript:editData('+value+');" title="查看">',
-        '<i class="glyphicon glyphicon-file"></i>',
+        '<a class="redact" href="javascript:editData('+value+');" title="更新">',
+        '<i class="glyphicon glyphicon-file"></i>更新状态',
         '</a>  '
     ].join('');
 }
@@ -111,9 +109,9 @@ function responseHandler(res) {
 function formatStatus(value, row, index){
 	
 	if(value == '0'){
-		return '申请';
+		return '已申请';
 	}else if(value == '9'){
-		return '完成';
+		return '已完成';
 	}else{
 		return '未知'
 	}

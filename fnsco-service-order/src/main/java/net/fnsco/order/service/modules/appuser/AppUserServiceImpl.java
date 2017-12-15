@@ -21,7 +21,9 @@ import com.google.common.collect.Maps;
 
 import net.fnsco.bigdata.api.merchant.MerchantPosService;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantCore;
+import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.bigdata.service.domain.MerchantPos;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.PageDTO;
@@ -30,6 +32,7 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
+import net.fnsco.order.api.appuser.AppUserMerchantService;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
@@ -75,6 +78,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private AppUserSettingService          appUserSettingService;
     @Autowired
     private MerchantPosService             merchantPosService;
+    @Autowired
+    private MerchantEntityDao         merchantEntityDao;
 
     //注册
     @Override
@@ -91,7 +96,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
         }
         //对比验证码
-        ResultDTO<String> res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), appUserDTO.getMobile());
+        ResultDTO<String> res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 0+appUserDTO.getMobile());
         if (!res.isSuccess()) {
             return res;
         }
@@ -285,7 +290,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         //对比验证码
-        ResultDTO res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), appUserDTO.getMobile());
+        ResultDTO res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 1+appUserDTO.getMobile());
         if (!res.isSuccess()) {
             return res;
         }
@@ -420,6 +425,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         map.put("appSettings", settingstatus);
         return ResultDTO.success(map);
     }
+  //e789注册查询是否存在
+    @Override
+    public AppUser e789QueryAppUserByMobile(String mobile) {
+    	//根据手机号查询用户实体是否存在
+        return appUserDao.selectAppUserByMobileAndState(mobile, 1);
+    }
     //e789注册
     @Override
     @Transactional
@@ -542,9 +553,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUserLoginInfoDTO.setPayPassword(appUser.getPayPassword());
         //查询用户绑定商户数量 根据用户id查询数量
         int merchantNums = 0;
-        List<AppUserMerchant> rel = appUserMerchantDao.selectByUserId(appUser.getId());
-        if (!CollectionUtils.isEmpty(rel)) {
-            merchantNums = rel.size();
+        MerchantEntity merchantEntity = merchantEntityDao.selectByAppUserId(appUser.getId());
+        if (!(merchantEntity==null)) {
+            merchantNums = 1;
         }
         appUserLoginInfoDTO.setMerchantNums(merchantNums);
         Integer appUserId = appUser.getId();
@@ -862,4 +873,14 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     public boolean updateAppUser(AppUser appUser){
         return appUserDao.updateByPrimaryKeySelective(appUser);
     }
+
+	@Override
+	public String getIdAuth(Integer userId) {
+		List<AppUser> list = appUserDao.selectIdAuth(userId);
+		if(list.size()>0){
+			return list.get(0).getIdCardNumber();
+		}else{
+			return "";
+		}
+	}
 }

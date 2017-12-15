@@ -69,14 +69,6 @@ public class CarBrandDO {
 		this.iconImgPath = iconImgPath;
 	}
 
-	public String getModal() {
-		return model;
-	}
-
-	public void setModal(String model) {
-		this.model = model;
-	}
-
 	public String getModel() {
 		return model;
 	}

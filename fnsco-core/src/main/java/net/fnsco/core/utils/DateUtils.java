@@ -33,7 +33,7 @@ public class DateUtils {
         }
         return result;
     }
-    
+
     public static Date getDayStartTime(int dates) {
         Date result = null;
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -49,7 +49,7 @@ public class DateUtils {
         }
         return result;
     }
-    
+
     public static String getDateStartTime(String date) {
         String result = "";
         if (Strings.isNullOrEmpty(date)) {
@@ -452,6 +452,23 @@ public class DateUtils {
         }
         return null;
     }
+    
+    public static String getDateStrByStr(String dateStr, int day) {
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMdd");
+        Date date;
+        try {
+            date = sf1.parse(dateStr);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_WEEK, day);
+            return sf1.format(calendar.getTime());
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static String strFormatToStr(String date) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
@@ -594,12 +611,15 @@ public class DateUtils {
         }
         return date2;
     }
-    
+
     public static String strToDate(Date date) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy年MM月dd HH:mm:ss");
         String tmp = null;
+        if (date == null) {
+            return tmp;
+        }
         try {
-             tmp = sf.format(date);
+            tmp = sf.format(date);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -607,32 +627,30 @@ public class DateUtils {
         return tmp;
     }
 
-    
-    
     public static String strToDate1(Date date) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
         String tmp = null;
         try {
-             tmp = sf.format(date);
+            tmp = sf.format(date);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return tmp;
     }
-    
+
     public static String strToDate2(Date date) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
         String tmp = null;
         try {
-             tmp = sf.format(date);
+            tmp = sf.format(date);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return tmp;
     }
-    
+
     /**
      * 将指定Date转换为零点零分的date
      * @param date
@@ -645,8 +663,8 @@ public class DateUtils {
         }
         SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMddHHmmss");
         try {
-        	String str = sf1.format(date);
-        	date = sf1.parse(str.substring(0, 8) + "000000");
+            String str = sf1.format(date);
+            date = sf1.parse(str.substring(0, 8) + "000000");
         } catch (Exception e) {
             logger.error("DateUtils.getStartDayTime()日期转换出错", e);
             return null;

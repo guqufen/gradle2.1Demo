@@ -33,18 +33,26 @@
     bottom: 0.5rem;
     font-size: 0.55rem;
     padding: 0.25rem 0.5rem;
+    line-height: 1;
 }
 .mui-input-row.rmb span{
     position: absolute;
-    right: 0.5rem;
+    right: 1rem;
     bottom: 0.2rem;
     height: 1.8rem;
     line-height: 1.8rem;
 }
 .mui-input-row input{
     font-size: 0.65rem;
-    height: 1.8rem;
+    height: 1rem;
     padding: 0;
+    margin: 0.4rem 0;
+    line-height: 1rem;
+}
+.mui-input-row input#showCityPicker,.mui-input-row input#showByStagesPicker,.mui-input-row input#showInsuranceCompanyPicker,.mui-input-row input.car-model{
+    margin: 0;
+    padding: 0.4rem 0;
+    height: 1.8rem;
     line-height: 1.8rem;
 }
 .mui-input-row label{

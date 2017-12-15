@@ -22,7 +22,7 @@ public class AdProvider {
         if (StringUtils.isNotBlank(ad.getTitle())){
             SET("title=#{ad.title}");
         }
-        if (StringUtils.isNotBlank(ad.getImgPath())){
+        if (StringUtils.isNotBlank(ad.getImg_path())){
             SET("img_path=#{ad.imgPath}");
         }
         if (ad.getCategory() != null) {
@@ -68,7 +68,7 @@ public class AdProvider {
         if (StringUtils.isNotBlank(ad.getTitle())){
             WHERE("title=#{ad.title}");
         }
-        if (StringUtils.isNotBlank(ad.getImgPath())){
+        if (StringUtils.isNotBlank(ad.getImg_path())){
             WHERE("img_path=#{ad.imgPath}");
         }
         if (ad.getCategory() != null) {
@@ -104,7 +104,7 @@ public class AdProvider {
         if (StringUtils.isNotBlank(ad.getTitle())){
             WHERE("title=#{ad.title}");
         }
-        if (StringUtils.isNotBlank(ad.getImgPath())){
+        if (StringUtils.isNotBlank(ad.getImg_path())){
             WHERE("img_path=#{ad.imgPath}");
         }
         if (ad.getCategory() != null) {

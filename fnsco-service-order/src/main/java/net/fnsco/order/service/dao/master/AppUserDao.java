@@ -94,4 +94,6 @@ public interface AppUserDao {
      * @date   2017年11月27日 上午11:20:40
      */
     List<AppUser> selectAllNewUserFormZFT();
+    
+    List<AppUser> selectIdAuth(Integer id);
 }

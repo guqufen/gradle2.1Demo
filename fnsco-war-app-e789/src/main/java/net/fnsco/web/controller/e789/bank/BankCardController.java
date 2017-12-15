@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.base.Strings;
+import com.mysql.jdbc.StringUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,7 +19,10 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.bank.AppUserBankService;
+import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.web.controller.e789.jo.BankListJO;
 import net.fnsco.web.controller.e789.jo.BindBankCardJO;
@@ -41,13 +45,9 @@ import net.fnsco.web.controller.e789.vo.UnBindBankCardVO;
 @Api(value = "/app2c/bankcard", tags = { "我的-银行卡相关功能接口" })
 public class BankCardController extends BaseController {
     @Autowired
-    private MerchantService   merchantService;
-    @Autowired
-    private TradeOrderService tradeOrderService;
-    @Autowired
-    private Environment       env;
-    @Autowired
     private AppUserBankService appUserBankService;
+    @Autowired
+    private AppUserService        appUserService;
 
     /**
      * 新增银行卡
@@ -59,14 +59,31 @@ public class BankCardController extends BaseController {
     @ApiOperation(value = "绑定银行卡页-新增银行卡")
     public ResultDTO<BindBankCardVO> addBankJO(@RequestBody BindBankCardJO jo) {
     	BindBankCardVO bindBankCardVO = new BindBankCardVO();
-    	//校验是否已进行身份认证
     	String userId = jo.getUserId();
     	String mobile = jo.getMobile();
     	String bankCardNum = jo.getBankCardNum();
     	String bankCardholder = jo.getBankCardholder();
+    	//判断是否已进行身份认证
+    	if(Strings.isNullOrEmpty(userId)||Strings.isNullOrEmpty(mobile)||Strings.isNullOrEmpty(bankCardNum)||Strings.isNullOrEmpty(bankCardholder)){
+    		return ResultDTO.fail(TradeConstants.E_PARAMETER_NOT_NULL);
+    	}
+    	String id_card_num = appUserService.getIdAuth(Integer.parseInt(userId));
+    	if(Strings.isNullOrEmpty(id_card_num)){
+    		return ResultDTO.fail(TradeConstants.NOT_ID_AUTH);//未认证
+		}
+    	//校验银行卡信息
+    	
+    	//保存银行卡信息
+    	Integer row = appUserBankService.doAppAdd(userId,mobile,bankCardNum,bankCardholder,id_card_num);
+    	if(row == 1){
+    		return ResultDTO.success();
+    	}else{
+    		return ResultDTO.fail();
+    	}
     	
     	
-        return success(bindBankCardVO);
+    	
+    	
     }
 
     /**
@@ -79,15 +96,11 @@ public class BankCardController extends BaseController {
     @ApiOperation(value = "银行卡信息页-解绑银行卡")
 //    @ApiImplicitParam(name = "xxx", value = "解绑银行卡", required = false, dataType="Xxx",paramType="body")
     public ResultDTO<UnBindBankCardVO> deleteBankJO(@RequestBody  UnBindBankCardJO jo) {
-    	String userID = jo.getUserId();
     	String bankId = jo.getBankID();
-    	if(Strings.isNullOrEmpty(userID)){
-    		return ResultDTO.fail("用户id为空");
-    	}
     	if(Strings.isNullOrEmpty(bankId)){
-    		return ResultDTO.fail("银行卡id为空");
+    		return ResultDTO.fail(TradeConstants.E_PARAMETER_NOT_NULL);
     	}
-    	Integer row = appUserBankService.unBindBankCard(userID,Integer.parseInt(bankId));
+    	Integer row = appUserBankService.unBindBankCard(Integer.parseInt(bankId));
     	if(row == 1){
     		return ResultDTO.success("解绑成功");
     		
@@ -106,7 +119,26 @@ public class BankCardController extends BaseController {
     @ApiOperation(value = "银行卡信息页-银行卡列表查询")
     public ResultDTO<List<BankListVO>> getBankJOList(@RequestBody BankListJO bankListJO) {
     	List<BankListVO> bankList = new ArrayList<>();
-    	
-        return ResultDTO.success(bankList);
+    	String userId = bankListJO.getUserId();
+    	if(StringUtils.isNullOrEmpty(userId)){
+    		return ResultDTO.fail(TradeConstants.E_PARAMETER_NOT_NULL);
+    	}
+    	List<AppUserBankDO> list = appUserBankService.getBankList(userId);
+    	if(list.size()>0){
+    		BankListVO vo = new BankListVO();
+    		for (AppUserBankDO appUserBankDO : list) {
+    			int length = appUserBankDO.getAccountNo().length();
+    			String transCardNo = appUserBankDO.getAccountNo();
+    			if(length>10){
+    				transCardNo = transCardNo.substring(0, 6)+"******"+transCardNo.substring(length-4);
+    			}
+    			vo.setCardNum(transCardNo);//卡号
+    			vo.setBankName(appUserBankDO.getBank_name());//银行卡名称
+    			//转换卡类型
+    			vo.setType(TradeConstants.BankTypeEnum.getNameByCode(appUserBankDO.getType()));
+    			bankList.add(vo);
+			}
+    	}
+    	return ResultDTO.success(bankList);
     }
 }

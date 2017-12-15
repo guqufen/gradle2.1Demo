@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,8 @@ public class SysDeptService extends BaseService {
 	private DeptDAO deptDAO;
 	@Autowired
 	private RoleDeptDAO roleDeptDAO;
+	@Autowired
+	private Environment env;
 
 	/**
 	 * 分页查询部门管理首页信息
@@ -71,7 +74,7 @@ public class SysDeptService extends BaseService {
 			// 添加顶级菜单
 			DeptDO root = new DeptDO();
 			root.setId(0);
-			root.setName("杭州法奈昇有限公司");
+			root.setName(env.getProperty("web.compony.name"));
 			root.setParentId(-1);
 			data.add(root);
 		}
