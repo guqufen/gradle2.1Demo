@@ -28,6 +28,8 @@
 		<result column="head_image_path" jdbcType="VARCHAR" property="headImagePath" />
 		<result column="invite_status" jdbcType="INTEGER" property="inviteStatus" />
 		<result column="invite_entity_innner_code" jdbcType="VARCHAR" property="inviteEntityInnnerCode" />
+		
+		<result column="id_card_number" jdbcType="VARCHAR" property="idCardNumber" />
 	</resultMap>
 	<!-- WEB页面用 -->
 	<resultMap id="PageResultMap" type="net.fnsco.order.api.dto.AppUserManageDTO" >
@@ -356,4 +358,8 @@
 		<include refid="Base_Column_List" />
 		from u_app_user  where remark = '-1200002'
   </select>
+  <!-- 判断app用户是否已身份认证 -->
+	<select id="selectIdAuth" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+		SELECT id_card_number FROM u_app_user WHERE id = #{id,jdbcType=INTEGER}
+	</select>
 </mapper>

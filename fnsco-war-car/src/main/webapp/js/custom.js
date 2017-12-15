@@ -4,7 +4,7 @@
 */
 function getCarBrand(boole){
 	$.ajax({
-		url:'../h5/carBrand/selectAll',
+		url:'h5/carBrand/selectAll',
 		type:'get',
 		contentType : "application/json",
 		success:function(data){
@@ -39,7 +39,7 @@ function getCarBrand(boole){
 */
 function getHotCarBrand(boole){
 	$.ajax({
-		url:'../h5/carBrand/selectHot',
+		url:'h5/carBrand/selectHot',
 		type:'get',
 		contentType : "application/json",
 		success:function(data){
@@ -63,7 +63,7 @@ function getHotCarBrand(boole){
 */
 function getChildBrand(id,boole){
 	$.ajax({
-		url:'../h5/carBrand/selectChild',
+		url:'h5/carBrand/selectChild',
 		type:'get',
 		contentType:'application/json',
 		data:{'id':id},
@@ -167,7 +167,7 @@ function start(city,stages,insuranceCompany){
 			//选择城市
 			var cityPicker = new $.PopPicker();
 			$.ajax({
-				url:'../../h5/city/queryCity',
+				url:'h5/city/queryCity',
 				type:'get',
 				success:function(data){
 					cityPicker.setData(data.data);
@@ -216,7 +216,7 @@ function start(city,stages,insuranceCompany){
 			//选择意向投保公司
 			var insuranceCompanyPicker = new $.PopPicker();
 			$.ajax({
-				url:'../../h5/insu/queryInsu',
+				url:'h5/insu/queryInsu',
 				type:'get',
 				success:function(data){
 					// console.log(data);
@@ -268,7 +268,7 @@ function sendCode(type){
 	  	return;
 	}
 	$.ajax({
-		url:'../../h5/sendMessage',
+		url:'h5/sendMessage',
 		type:'post',
 		data:{'mobile':$(".phone-num").val(),'type':type},
 		success:function(data){
@@ -347,22 +347,22 @@ function subData(type){
 
 	if(type=='01'){//买车申请
 		data={'name':name,'cityId':cityId,'carTypeId':carTypeId,'carSubTypeId':carSubTypeId,'buyType':buyType,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../../h5/buyCar/add';
+		url='h5/buyCar/add';
 	}
 
 	if(type=='02'){//贷款申请
 		data={'name':name,'cityId':cityId,'amount':amount,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../../h5/loan/add';
+		url='h5/loan/add';
 	}
 
 	if(type=='03'){//保险申请
 		data={'name':name,'cityId':cityId,'carOriginalPrice':carOriginalPrice,'insuCompanyId':insuCompanyId,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../../h5/insu/saveSafe';
+		url='h5/insu/saveSafe';
 	}
 	
 	if(type=='04'){//理财申请
 		data={'name':name,'cityId':cityId,'financeType':financeType,'earnings':earnings,'mobile':mobile,'verCode':verCode,'suggestCode':suggestCode};
-		url='../../h5/manage/saveFinance';
+		url='h5/manage/saveFinance';
 	}
 
 	if(type=='021'){//贷款上传图片
@@ -370,7 +370,7 @@ function subData(type){
         $('#carInfoForm').ajaxSubmit({
             type: 'post', // 提交方式 get/post
             // url: 'http://192.168.1.162:8080/h5/loan/fileInfo/upload', // 需要提交的 url
-            url: '../h5/loan/fileInfo/upload', // 需要提交的 url
+            url: 'h5/loan/fileInfo/upload', // 需要提交的 url
             success: function(data) { 
                 // data 保存提交后返回的数据，一般为 json 数据
                 // 此处可对 data 作相关处理
@@ -404,7 +404,7 @@ function subData(type){
 					}else{
 						mui.toast("提交成功!");
 						// setInterval(function(){
-						// 	window.location.href='../index.html';
+						// 	window.location.href='index.html';
 						// },2000)
 					}
 				}else{
@@ -416,24 +416,3 @@ function subData(type){
 
 }
 
-
-
-
-
-/*
-*上传图片
-*/
-function upload(type){
-	var formData= new FormData();
-	formData.append("file",$("#file"+type)[0].files[0]);
-	$.ajax({
-		url:'/h5/loan/fileInfo/upload',
-		type:'post',
-		// data:{'importFile':formData,'type':type},
-		// processData:false,
-		// contentType:false,
-		success:function(data){
-			console.log(data);
-		}
-	})
-}

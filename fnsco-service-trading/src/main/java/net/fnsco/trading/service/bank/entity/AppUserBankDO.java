@@ -1,5 +1,6 @@
 package net.fnsco.trading.service.bank.entity;
 
+import java.util.Date;
 
 public class AppUserBankDO {
 
@@ -62,10 +63,126 @@ public class AppUserBankDO {
      * 开户手机号
      */
     private String accountPhone;
+    
+    private String status;
+    private Date createTime;
+    private Date updateTime;
+    private String bankName;
+    private String type;
 
 
 
-    public Integer getId() {
+    /**
+	 * status
+	 *
+	 * @return  the status
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * status
+	 *
+	 * @param   status    the status to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	/**
+	 * createTime
+	 *
+	 * @return  the createTime
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	/**
+	 * createTime
+	 *
+	 * @param   createTime    the createTime to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	/**
+	 * updateTime
+	 *
+	 * @return  the updateTime
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	/**
+	 * updateTime
+	 *
+	 * @param   updateTime    the updateTime to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	/**
+	 * bankName
+	 *
+	 * @return  the bankName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getBankName() {
+		return bankName;
+	}
+
+	/**
+	 * bankName
+	 *
+	 * @param   bankName    the bankName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+
+	/**
+	 * type
+	 *
+	 * @return  the type
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * type
+	 *
+	 * @param   type    the type to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Integer getId() {
         return id;
     }
 
@@ -161,10 +278,21 @@ public class AppUserBankDO {
         this.accountPhone = accountPhone;
     }
 
+	/**
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AppUserBankDO [id=" + id + ", appUserId=" + appUserId + ", accountType=" + accountType + ", accountNo="
+				+ accountNo + ", accountName=" + accountName + ", accountCardId=" + accountCardId + ", subBankName="
+				+ subBankName + ", openBankPrince=" + openBankPrince + ", openBank=" + openBank + ", openBankCity="
+				+ openBankCity + ", openBankNum=" + openBankNum + ", accountPhone=" + accountPhone + ", status="
+				+ status + ", createTime=" + createTime + ", updateTime=" + updateTime + ", bankName=" + bankName
+				+ ", type=" + type + "]";
+	}
 
 
-    @Override
-    public String toString() {
-        return "[id="+ id + ", appUserId="+ appUserId + ", accountType="+ accountType + ", accountNo="+ accountNo + ", accountName="+ accountName + ", accountCardId="+ accountCardId + ", subBankName="+ subBankName + ", openBankPrince="+ openBankPrince + ", openBank="+ openBank + ", openBankCity="+ openBankCity + ", openBankNum="+ openBankNum + ", accountPhone="+ accountPhone + "]";
-    }
+
+    
 }
