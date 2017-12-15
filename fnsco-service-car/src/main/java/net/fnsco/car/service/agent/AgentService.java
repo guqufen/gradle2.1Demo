@@ -54,4 +54,10 @@ public class AgentService extends BaseService {
      AgentDO obj = this.agentDAO.getById(id);
      return obj;
  }
+ 
+ //查询
+ public AgentDO doQueryByCode (String code) {
+	 AgentDO obj = this.agentDAO.getByCode(code);
+	 return obj;
+}
 }

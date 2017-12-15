@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.car.service.agent.AgentService;
+import net.fnsco.car.service.agent.entity.AgentDO;
 import net.fnsco.car.service.customer.entity.CustomerDO;
 import net.fnsco.car.service.finance.OrderFinanceService;
 import net.fnsco.car.service.finance.entity.OrderFinanceDO;
@@ -31,6 +33,9 @@ import net.fnsco.web.controller.jo.SaveFinanceJO;
 public class MoneyManageController extends BaseController {
 	@Autowired
 	private OrderFinanceService orderFinanceService;
+	@Autowired
+	private AgentService agentService;
+	
 	@RequestMapping(value = "/saveFinance")
 	@ApiOperation(value = "理财申请-添加申请")
 	private ResultDTO saveFinance(@RequestBody SaveFinanceJO saveFinanceJO) {
@@ -43,6 +48,10 @@ public class MoneyManageController extends BaseController {
 		ResultDTO<Object> rt = utils.validateCode2(code, mobile,mDTO);
 		if(!rt.isSuccess()){
 			return ResultDTO.fail(rt.getMessage());
+		}
+		AgentDO agent = agentService.doQueryByCode(saveFinanceJO.getSuggestCode());
+		if(agent==null) {
+			return ResultDTO.fail("推荐码不存在");
 		}
 		CustomerDO customerDO =  new CustomerDO();
 		customerDO.setName(saveFinanceJO.getName());
