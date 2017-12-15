@@ -95,5 +95,5 @@ public interface AppUserDao {
      */
     List<AppUser> selectAllNewUserFormZFT();
     
-	String getIdAuth(String userId);
+    List<AppUser> selectIdAuth(Integer id);
 }

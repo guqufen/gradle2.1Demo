@@ -67,7 +67,7 @@ public class BankCardController extends BaseController {
     	if(Strings.isNullOrEmpty(userId)||Strings.isNullOrEmpty(mobile)||Strings.isNullOrEmpty(bankCardNum)||Strings.isNullOrEmpty(bankCardholder)){
     		return ResultDTO.fail(TradeConstants.E_PARAMETER_NOT_NULL);
     	}
-    	String id_card_num = appUserService.getIdAuth(userId);
+    	String id_card_num = appUserService.getIdAuth(Integer.parseInt(userId));
     	if(Strings.isNullOrEmpty(id_card_num)){
     		return ResultDTO.fail(TradeConstants.NOT_ID_AUTH);//未认证
 		}
@@ -133,7 +133,7 @@ public class BankCardController extends BaseController {
     				transCardNo = transCardNo.substring(0, 6)+"******"+transCardNo.substring(length-4);
     			}
     			vo.setCardNum(transCardNo);//卡号
-    			vo.setBankName(appUserBankDO.getBankName());//银行卡名称
+    			vo.setBankName(appUserBankDO.getBank_name());//银行卡名称
     			//转换卡类型
     			vo.setType(TradeConstants.BankTypeEnum.getNameByCode(appUserBankDO.getType()));
     			bankList.add(vo);
