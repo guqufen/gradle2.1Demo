@@ -36,7 +36,7 @@
 }
 .mui-input-row.rmb span{
     position: absolute;
-    right: 0.5rem;
+    right: 1rem;
     bottom: 0.2rem;
     height: 1.8rem;
     line-height: 1.8rem;
@@ -48,7 +48,7 @@
     margin: 0.4rem 0;
     line-height: 1rem;
 }
-.mui-input-row input#showCityPicker,.mui-input-row input#showByStagesPicker,.mui-input-row input#showInsuranceCompanyPicker{
+.mui-input-row input#showCityPicker,.mui-input-row input#showByStagesPicker,.mui-input-row input#showInsuranceCompanyPicker,.mui-input-row input.car-model{
     margin: 0;
     padding: 0.4rem 0;
     height: 1.8rem;
