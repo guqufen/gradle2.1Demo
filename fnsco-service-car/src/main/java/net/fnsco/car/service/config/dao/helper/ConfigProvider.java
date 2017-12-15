@@ -48,6 +48,9 @@ public class ConfigProvider {
         if (StringUtils.isNotBlank(config.getKeep3())){
             SET("keep3=#{config.keep3}");
         }
+        if (config.getModifyTime() != null){
+            SET("modify_time=#{config.modifyTime}");
+        }
         WHERE("id = #{config.id}");
         }}.toString();
     }
