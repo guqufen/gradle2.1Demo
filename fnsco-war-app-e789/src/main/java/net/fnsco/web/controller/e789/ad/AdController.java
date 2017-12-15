@@ -47,7 +47,7 @@ public class AdController extends BaseController {
  	 		vo.setNewsList(result.getData().get("news"));
  	 		return ResultDTO.success(vo);
  		}else{
- 			return ResultDTO.fail(result.getMessage());
+ 			return ResultDTO.success(result.getData());
  		}
  		
     }

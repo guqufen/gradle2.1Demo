@@ -76,7 +76,10 @@ public class AdService extends BaseService {
 			return ResultDTO.failForMessage("未发现相关信息");
 		}
 		for (AdDO adDO : allList) {
-			if(StringUtils.equals("1", adDO.getCategory().toString())){
+			if(adDO.getCategory() == null){
+				continue;
+			}
+			if(1 == adDO.getCategory()){
 				AdDTO adDTO = new AdDTO();
 				adDTO.setImgPath(adDO.getImgPath());
 				adDTO.setSummary(adDO.getSummary());
