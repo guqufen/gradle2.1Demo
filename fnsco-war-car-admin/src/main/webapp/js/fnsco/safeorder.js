@@ -40,7 +40,7 @@ $('#table').bootstrapTable({
         width:'10%'
     },{
         field: 'carOriginalPrice',
-        title: '汽车原价',
+        title: '汽车原价(万元)',
         formatter:formatRMB
     },{
         field: 'insuCompanyName',
