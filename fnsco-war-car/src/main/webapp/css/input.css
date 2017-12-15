@@ -43,8 +43,15 @@
 }
 .mui-input-row input{
     font-size: 0.65rem;
-    height: 1.8rem;
+    height: 1rem;
     padding: 0;
+    margin: 0.4rem 0;
+    line-height: 1rem;
+}
+.mui-input-row input#showCityPicker,.mui-input-row input#showByStagesPicker,.mui-input-row input#showInsuranceCompanyPicker{
+    margin: 0;
+    padding: 0.4rem 0;
+    height: 1.8rem;
     line-height: 1.8rem;
 }
 .mui-input-row label{
