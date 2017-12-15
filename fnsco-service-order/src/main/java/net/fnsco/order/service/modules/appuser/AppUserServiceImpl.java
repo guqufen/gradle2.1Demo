@@ -96,7 +96,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
         }
         //对比验证码
-        ResultDTO<String> res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), appUserDTO.getMobile());
+        ResultDTO<String> res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 0+appUserDTO.getMobile());
         if (!res.isSuccess()) {
             return res;
         }
@@ -290,7 +290,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         //对比验证码
-        ResultDTO res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), appUserDTO.getMobile());
+        ResultDTO res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 1+appUserDTO.getMobile());
         if (!res.isSuccess()) {
             return res;
         }

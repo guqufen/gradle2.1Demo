@@ -79,7 +79,7 @@ public class AppUserController extends BaseController {
     public ResultDTO getValidateCode(@RequestBody GetValidateCodeJO getValidateCodeJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(getValidateCodeJO.getDeviceId());
-    	appUserDTO.setMobile(getValidateCodeJO.getMobile());
+    	appUserDTO.setMobile(getValidateCodeJO.getType()+getValidateCodeJO.getMobile());
         ResultDTO result = appUserService.getValidateCode(appUserDTO);
         return result;
     }
