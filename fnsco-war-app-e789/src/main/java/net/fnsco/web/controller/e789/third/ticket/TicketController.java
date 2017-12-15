@@ -18,15 +18,16 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.trading.service.third.ticket.TicketContactService;
 import net.fnsco.trading.service.third.ticket.TicketService;
 import net.fnsco.trading.service.third.ticket.TicketSiteService;
+import net.fnsco.trading.service.third.ticket.dto.TicketOrderDTO;
 import net.fnsco.trading.service.third.ticket.dto.ticketsAvailableDTO;
 import net.fnsco.trading.service.third.ticket.entity.TicketContactDO;
 import net.fnsco.trading.service.third.ticket.entity.TicketSiteDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
+import net.fnsco.web.controller.e789.third.ticket.jo.CancelOrderJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.PassengerJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.SiteJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.TicketOrderJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.TrainQueryJO;
-import net.fnsco.web.controller.e789.third.ticket.vo.PassengerVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.SiteVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.TicketOrderVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.TrainVO;
@@ -174,6 +175,23 @@ public class TicketController extends BaseController {
     @RequestMapping(value = "/addOrder")
     @ApiOperation(value = "提交订单")
     public ResultDTO<TicketOrderVO> addOrder(@RequestBody TicketOrderJO ticketOrderJO) {
+        TicketOrderDTO ticketOrderDTO = new TicketOrderDTO();
+        ticketService.addOrder(ticketOrderDTO);
+        return success();
+    }
+
+    /**
+     * queryTradeDataDetail:(确认支付)
+     *
+     * @param  @param tradeDataDetailJO
+     * @param  @return    设定文件
+     * @return ResultDTO<TradeDataDetailVO>    DOM对象
+     * @author sxfei
+     * @date   2017年12月13日 下午4:07:33
+     */
+    @RequestMapping(value = "/cancelOrder")
+    @ApiOperation(value = "取消订单")
+    public ResultDTO cancelOrder(@RequestBody CancelOrderJO cancelOrderJO) {
 
         return success();
     }
