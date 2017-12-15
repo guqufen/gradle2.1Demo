@@ -239,8 +239,8 @@ button:enabled:active,.mui-btn:enabled:active, .mui-btn.mui-active:enabled{
 }
 
 .mui-poppicker{
-    display: none;
+    opacity: 0;
 }
 .mui-poppicker.mui-active{
-    display: block;
+    opacity: 1;
 }
