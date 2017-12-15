@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -177,6 +178,35 @@ public class TradeOrderByPayMediumProvider {
             }  
         }  
         return sb.toString();  
+    }
+    
+    /**
+     * countSUMTurnover:(按照条件统计)
+     *
+     * @param  @param params
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @author tangliang
+     * @date   2017年12月15日 下午4:37:08
+     */
+    public String countSUMTurnover(Map<String, Object> params) {
+    	TradeOrderByPayMediumDO tradeOrderByPayMedium = (TradeOrderByPayMediumDO) params.get("list");
+    	return new SQL() {{
+    		SELECT("SUM(turnover) AS turnover, COUNT(order_num) AS orderNum,pay_medium AS payType");
+    		FROM(TABLE_NAME);
+    		if (StringUtils.isNotBlank(tradeOrderByPayMedium.getPayMedium())){
+                WHERE("pay_medium=#{tradeOrderByPayMedium.payMedium}");
+            }
+    		if(StringUtils.isNotBlank(tradeOrderByPayMedium.getStartTradeDate())) {
+            	WHERE("trade_date >= #{tradeOrderByPayMedium.startTradeDate}");
+            }
+            if(StringUtils.isNotBlank(tradeOrderByPayMedium.getEndTradeDate())) {
+            	WHERE("trade_date < #{tradeOrderByPayMedium.endTradeDate}");
+            }
+            if(null != tradeOrderByPayMedium.getUserId()) {
+            	WHERE("inner_code IN (SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{userId})");
+            }
+    	}}.toString();
     }
 }
 

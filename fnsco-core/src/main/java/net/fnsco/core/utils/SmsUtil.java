@@ -76,7 +76,7 @@ public class SmsUtil {
         String apikey = "a3f3ca7d03903c0aa4d789972cac2d21 ";
 
         //设置模板ID，如使用1号模板:【#company#】您的验证码是#code#
-        long tpl_id = 3;
+        long tpl_id = 2100980;
         //设置对应的模板变量值
 
         String tpl_value = URLEncoder.encode("#code#", ENCODING) + "=" + URLEncoder.encode(code, ENCODING) + "&" + URLEncoder.encode("#company#", ENCODING) + "=" + URLEncoder.encode("中融汽车", ENCODING);
