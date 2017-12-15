@@ -1,5 +1,7 @@
 package net.fnsco.web.order;
 
+import java.util.Date;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -73,6 +75,7 @@ public class LoanOrderWebController extends BaseController {
 		if(-1 ==orderBuy.getStatus()) {
 			orderBuy.setStatus(null);
 		}
+		orderBuy.setLastUpdateTime(new Date());
 		orderLoanService.doUpdate(orderBuy, getUserId());
 		return success();
 	}
