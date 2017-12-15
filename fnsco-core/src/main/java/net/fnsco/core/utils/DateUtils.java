@@ -452,6 +452,23 @@ public class DateUtils {
         }
         return null;
     }
+    
+    public static String getDateStrByStr(String dateStr, int day) {
+        SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMdd");
+        Date date;
+        try {
+            date = sf1.parse(dateStr);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_WEEK, day);
+            return sf1.format(calendar.getTime());
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static String strFormatToStr(String date) {
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");

@@ -140,7 +140,7 @@ public class StatController extends BaseController {
 		tradeOrderByPayMedium.setUserId(payTypeTurnoverJO.getUserId());
 		tradeOrderByPayMedium.setPayMedium("02");
 		tradeOrderByPayMedium.setStartTradeDate(payTypeTurnoverJO.getStartDate());
-		tradeOrderByPayMedium.setEndTradeDate(payTypeTurnoverJO.getEndDate());
+		tradeOrderByPayMedium.setEndTradeDate(DateUtils.getDateStrByStr(payTypeTurnoverJO.getEndDate(),1));
 		List<OrderPayTypeDTO> taikaData = tradeOrderByPayMediumDAO.countSUMTurnover(tradeOrderByPayMedium);
 		if(null != taikaData && taikaData.size() == 1) {
 			payTypeTurnoverVO.setTaiKTurnover(formatRMBNumber(taikaData.get(0).getTurnover().toString()));
@@ -207,6 +207,13 @@ public class StatController extends BaseController {
      * @since  CodingExample　Ver 1.1
      */
     private PayTypeTurnoverJO formatInputDate(PayTypeTurnoverJO tradeReportDTO) {
+    	
+    	if (!Strings.isNullOrEmpty(tradeReportDTO.getStartDate())) {
+            tradeReportDTO.setStartDate(DateUtils.formatDateStrInput(tradeReportDTO.getStartDate()));
+        }
+        if (!Strings.isNullOrEmpty(tradeReportDTO.getEndDate())) {
+            tradeReportDTO.setEndDate(DateUtils.formatDateStrInput(tradeReportDTO.getEndDate()));
+        }
         //如果没有传递时间和商家，则默认上周和全部商户数据
         if (Strings.isNullOrEmpty(tradeReportDTO.getStartDate()) || Strings.isNullOrEmpty(tradeReportDTO.getEndDate())) {
             tradeReportDTO.setStartDate(DateUtils.getDateStrByMonth(0,-1));
