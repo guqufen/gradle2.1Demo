@@ -62,7 +62,7 @@ public class InsuranceController extends BaseController {
 			return ResultDTO.fail(rt.getMessage());
 		}
 		AgentDO agent = agentService.doQueryByCode(saveSafeJO.getSuggestCode());
-		if(!agent.getSuggestCode().equals(saveSafeJO.getSuggestCode())) {
+		if(agent==null) {
 			return ResultDTO.fail("推荐码不存在");
 		}
 		CustomerDO customerDO =  new CustomerDO();
