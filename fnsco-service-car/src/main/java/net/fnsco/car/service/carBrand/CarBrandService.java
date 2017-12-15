@@ -122,6 +122,7 @@ public class CarBrandService extends BaseService {
 	public ResultDTO<List<CarBrandDO>> selectHot() {
 		CarBrandDO carBrandDO = new CarBrandDO();
 		carBrandDO.setIsHot(1);
+		carBrandDO.setLevel(1);
 		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO, 8);
 		for (CarBrandDO carBrandDO2 : list) {
 			if (!Strings.isNullOrEmpty(carBrandDO2.getIconImgPath())) {

@@ -70,6 +70,9 @@ body{
     background:#efeff4;
     font-size: 0.65rem;
 }
+body.result{
+    background:#ffffff;
+}
 /*body .container{
     overflow-x:hidden;
     overflow-y:auto;
@@ -248,4 +251,14 @@ button:enabled:active,.mui-btn:enabled:active, .mui-btn.mui-active:enabled{
 }
 .mui-poppicker.mui-active{
     opacity: 1;
+}
+
+/*申请结果页面文字*/
+.result-text{
+    padding-top: 5rem;
+}
+.result-text p{
+    text-align: center;
+    color: #000;
+    margin: 1rem 0;
 }
