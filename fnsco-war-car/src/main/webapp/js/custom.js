@@ -326,10 +326,6 @@ function subData(type){
 				mui.alert(title+'不能为空');
 				return;
 			}
-			if(istel($(".phone-num").val())==false){ 
-			  mui.alert("请输入正确的手机号"); 
-			  return;
-			}
 		}else if(type=='021'){
 			if($(".mui-content #car-info .mui-input-row").eq(i).find('input').val()==''){
 				var title=$(".mui-content #car-info .mui-input-row").eq(i).find('label').html();
@@ -342,11 +338,11 @@ function subData(type){
 				mui.alert(title+'不能为空');
 				return;
 			}
-			if(istel($(".phone-num").val())==false){ 
-				  mui.alert("请输入正确的手机号"); 
-				  return;
-			}
 		}
+	}
+	if(istel($(".phone-num").val())==false){ 
+	  mui.alert("请输入正确的手机号"); 
+	  return;
 	}
 
 	//买车

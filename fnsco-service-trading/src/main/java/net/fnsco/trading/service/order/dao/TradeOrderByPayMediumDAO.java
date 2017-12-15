@@ -1,20 +1,22 @@
 package net.fnsco.trading.service.order.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Options;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.DeleteProvider;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import net.fnsco.trading.service.order.entity.TradeOrderByPayMediumDO;
-import net.fnsco.trading.service.order.dao.helper.TradeOrderByPayMediumProvider;
 
-import java.util.List;;
+import net.fnsco.trading.service.order.dao.helper.TradeOrderByPayMediumProvider;
+import net.fnsco.trading.service.order.dto.OrderPayTypeDTO;
+import net.fnsco.trading.service.order.entity.TradeOrderByPayMediumDO;;
 
 public interface TradeOrderByPayMediumDAO {
 
@@ -62,4 +64,16 @@ public interface TradeOrderByPayMediumDAO {
      */
     @InsertProvider(type = TradeOrderByPayMediumProvider.class, method = "insertBatch")
     public int insertBatch(@Param("list")List<TradeOrderByPayMediumDO> datas);
+    
+    /**
+     * countSUMTurnover:(条件统计一段时间类总数)
+     *
+     * @param  @param tradeOrderByPayMedium
+     * @param  @return    设定文件
+     * @return OrderPayTypeDTO    DOM对象
+     * @author tangliang
+     * @date   2017年12月15日 下午4:35:18
+     */
+    @SelectProvider(type = TradeOrderByPayMediumProvider.class, method = "countSUMTurnover")
+    public List<OrderPayTypeDTO> countSUMTurnover(@Param("tradeOrderByPayMedium") TradeOrderByPayMediumDO tradeOrderByPayMedium);
 }
