@@ -425,6 +425,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         map.put("appSettings", settingstatus);
         return ResultDTO.success(map);
     }
+  //e789注册查询是否存在
+    @Override
+    public AppUser e789QueryAppUserByMobile(String mobile) {
+    	//根据手机号查询用户实体是否存在
+        return appUserDao.selectAppUserByMobileAndState(mobile, 1);
+    }
     //e789注册
     @Override
     @Transactional
