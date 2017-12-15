@@ -75,13 +75,16 @@ function getChildBrand(id,boole){
 					$(".head-title").html(data.data[i].name);
 				}
 				if(data.data[i].level==2){
+					$(".child-brand").html('');
 					html='<div class="title" id="'+data.data[i].id+'">'+data.data[i].name+'</div><ul class="brand-list-list" id="brand-list-list'+data.data[i].id+'"></ul>';
 					$(".child-brand").append(html);
+					if(boole==false){
+						$(".back").show();
+					}
 					for(var j=0;j<data.data.length;j++){
 						if(data.data[j].supperId==data.data[i].id){
 							if(boole==false){
 								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12">'+data.data[j].name+'</div></li>');
-								$(".back").show();
 							}else{
 								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12" onclick="hideChildBrand('+data.data[j].id+',\''+data.data[j].name+'\')">'+data.data[j].name+'</div></li>');
 							}
@@ -143,6 +146,7 @@ function scrolInto(id){
 /*选择品牌事件*/
 $("#carBrand").click(function(){
 	$(".mui-content").hide();
+	$("#carBrand").blur();
 	getCarBrand(true);
 	getHotCarBrand(true);
 	$(".brand.popup").show();
@@ -176,12 +180,14 @@ function start(city,stages,insuranceCompany){
 			var showCityPickerButton = doc.getElementById('showCityPicker');
 			showCityPickerButton.addEventListener('tap', function(event) {
 				showCityPickerButton.focus();
+				showCityPickerButton.blur();
 				cityPicker.show(function(items) {
 					var len=JSON.stringify(items[0].text).length;
 					showCityPickerButton.value = JSON.stringify(items[0].text).substring(1,len-1);
 					cityId.value = JSON.stringify(items[0].value);
 					//返回 false 可以阻止选择框的关闭
 					//return false;
+					showCityPickerButton.blur();
 				});
 			}, false);
 
@@ -204,12 +210,14 @@ function start(city,stages,insuranceCompany){
 			var byStages =doc.getElementById('byStages');
 			showByStagesPickerBuuton.addEventListener('tap', function(event) {
 				showByStagesPickerBuuton.focus();
+				showByStagesPickerBuuton.blur();
 				byStagesPicker.show(function(items) {
 					var len=JSON.stringify(items[0].text).length;
 					showByStagesPickerBuuton.value = JSON.stringify(items[0].text).substring(1,len-1);
 					byStages.value= JSON.stringify(items[0].value);
 					//返回 false 可以阻止选择框的关闭
 					//return false;
+					showByStagesPickerBuuton.blur();
 				});
 			}, false);
 		}
@@ -229,12 +237,14 @@ function start(city,stages,insuranceCompany){
 			var insuranceCompanyId = doc.getElementById('insuranceCompanyId');
 			showInsuranceCompanyPickerButton.addEventListener('tap', function(event) {
 				showInsuranceCompanyPickerButton.focus();
+				showInsuranceCompanyPickerButton.blur();
 				insuranceCompanyPicker.show(function(items) {
 					var len=JSON.stringify(items[0].text).length;
 					showInsuranceCompanyPickerButton.value = JSON.stringify(items[0].text).substring(1,len-1);
 					insuranceCompanyId.value = JSON.stringify(items[0].value);
 					//返回 false 可以阻止选择框的关闭
 					//return false;
+					showInsuranceCompanyPickerButton.blur();
 				});
 			}, false);
 		}
