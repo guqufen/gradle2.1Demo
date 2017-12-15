@@ -34,10 +34,13 @@ public class SendMessageController extends BaseController{
 		//获取六位验证码
 		MessageValidateDTO mvDTO = mUtils.getValidateCode(jo.getMobile());
 		this.session.setAttribute(type+mobile,mvDTO);  //验证码放入session
-		logger.warn("将验证码key=["+type+mobile+"]"+"验证码value=["+mvDTO.getCode()+"]放入session");
 	    String code = mvDTO.getCode();
 		//发送验证码
 		ResultDTO result = mUtils.sendValidateCode(mobile,code);
+		if(result.isSuccess()){
+			logger.warn("将验证码key=["+type+mobile+"]"+"验证码value=["+mvDTO.getCode()+"]放入session");
+			
+		}
 		return result;
 	}
 
