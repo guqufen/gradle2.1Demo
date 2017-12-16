@@ -780,6 +780,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 			merchantCoreEntityZxyhDTO.setWXActive("Y");
 			// 微信分类编码不足两位前面补0
 			DecimalFormat df = new DecimalFormat("00");
+//			merchantCoreEntityZxyhDTO.setMainMchtTp("02");//微信主商户号类	WXActive=Y时必填00-医疗教育类 01-公共事业类 02-其他类 03-WAP
+
 			merchantCoreEntityZxyhDTO.setqGroupId(df.format(Integer.parseInt(terminalWX.getqGroupId())));
 			merchantCoreEntityZxyhDTO.setCategroryId(terminalWX.getCategroryId());
 			merchantCoreEntityZxyhDTO.setFeeRate(terminalWX.getWechatFee());
@@ -796,7 +798,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		MerchantTerminal terminalZFB = core.getTerminaInfosZFB();
 		if (terminalZFB != null) {
 			merchantCoreEntityZxyhDTO.setZFBActive("Y");
-			// merchantCoreEntityZxyhDTO.setqGroupId(terminalZFB.getqGroupId());
 			merchantCoreEntityZxyhDTO.setCategIdC(terminalZFB.getqGroupId());
 			merchantCoreEntityZxyhDTO.setFeeRateA(terminalZFB.getAlipayFee());
 			merchantCoreEntityZxyhDTO.setSettleCycleA(terminalZFB.getSettleCycle());
