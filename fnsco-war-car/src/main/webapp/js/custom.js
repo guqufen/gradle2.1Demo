@@ -69,7 +69,7 @@ function getChildBrand(id,boole){
 		data:{'id':id},
 		success:function(data){
 			if(boole==true){
-				var headHtml='<header><div class="back" style="display:block" onclick="backBrand();"></div><div class="head-title">选择子型号</div></header>';
+				var headHtml='<header><div class="back" style="display:block" onclick="backBrand();"></div><div class="head-title">'+data.data[0].name+'</div></header>';
 			}else{
 				var headHtml='';
 				$(".back").show();
