@@ -333,21 +333,25 @@ function sendCode(type){
 
 //提交按钮
 function subData(type){
-	for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
-		if(type=='02'){//贷款特殊判断
-			if($(".mui-content #loan-information .mui-input-row").eq(i).find('input[type="text"]').val()==''){
+	if(type=='02'){//贷款特殊判断
+		for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
+			if($(".mui-content #loan-information .mui-input-row").eq(i).find('input').val()==''){
 				var title=$(".mui-content #loan-information .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
 			}
-		}else if(type=='021'){
+		}
+	}else if(type=='021'){
+		for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
 			if($(".mui-content #car-info .mui-input-row").eq(i).find('input').val()==''){
 				var title=$(".mui-content #car-info .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
 			}
-		}else{
-			if($(".mui-content .mui-input-row").eq(i).find('input[type="text"]').val()==''){
+		}
+	}else{
+		for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
+			if($(".mui-content .mui-input-row").eq(i).find('input').val()==''){
 				var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
