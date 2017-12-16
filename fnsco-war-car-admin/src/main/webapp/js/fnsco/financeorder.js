@@ -137,7 +137,7 @@ function editData(id){
             success:function(data){
               unloginHandler(data);
               if(data.success){
-                layer.msg('更新状态成功');
+                layer.msg('审核成功');
                 queryEvent("table");
               }else{
                 layer.msg(data.message);
