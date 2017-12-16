@@ -412,7 +412,6 @@ function subData(type){
 	}
 
 	if(type=='021'){//贷款上传图片
-		alert($("#file0").val());
 		$("#car-info .sub-btn").attr('disabled',true);
         $('#carInfoForm').ajaxSubmit({
             type: 'post', // 提交方式 get/post
