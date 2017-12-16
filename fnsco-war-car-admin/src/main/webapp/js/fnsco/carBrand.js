@@ -350,6 +350,13 @@ function saveOrUpdate() {
 		layer.msg('请选择上级菜单!');
 		return;
 	}
+	//一级菜单需要判断图标不能为空
+	if( $('#level').val() == 1){
+		if( !$('#iconImgPath').val()){
+			layer.msg('请上传图标!');
+			return;
+		}
+	}
 
 	console.log($('#model option:selected').val());
 
