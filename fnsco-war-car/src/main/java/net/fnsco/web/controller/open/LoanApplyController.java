@@ -231,4 +231,15 @@ public class LoanApplyController extends BaseController {
 
 		return null;
 	}
+	
+	
+	
+
+	@RequestMapping(value = "/getFileUrl", method = RequestMethod.POST)
+	@ApiOperation(value = "demo-获取图片url")
+	public String getFileUrl() {
+		String url = OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), "2017/12/1513399023993.jpg");
+		return url;
+	}
+	
 }
