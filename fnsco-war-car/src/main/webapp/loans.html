@@ -24,7 +24,7 @@
 			</a>
 		</nav>
 		<div class="mui-content">
-			<div id="loan-information" class="mui-control-content mui-active">
+			<div id="loan-information" class="mui-control-content">
 				<div class="mui-input-row">
 					<label>借款人姓名</label>
 					<input class="name" placeholder="借款人姓名" type="text">
@@ -54,7 +54,7 @@
 				</div>
 				<button class="sub-btn" onclick="subData('02')">下一步</button>
 			</div>
-			<div id="car-info" class="mui-control-content">
+			<div id="car-info" class="mui-control-content mui-active">
 				<form name="carInfoForm" id="carInfoForm" method="post" enctype="multipart/form-data">
 					<div class="mui-input-row">
 						<label>车品牌</label>
@@ -68,15 +68,15 @@
 					</div>
 					<div class="mui-input-row">
 						<label>行驶证</label>
-						<input type="file" id="file0" name="xs" /> 
+						<input type="file" id="file0" accept="image/*" name="xs" /> 
 					</div>
 					<div class="mui-input-row">
 						<label>车辆登记证</label>
-						<input type="file" id="file1" name='dj' /> 
+						<input type="file" id="file1" accept="image/*" name='dj' /> 
 					</div>
 					<div class="mui-input-row">
 						<label>车辆大本</label>
-						<input type="file" id="file1" name="cl" /> 
+						<input type="file" id="file1" accept="image/*" name="cl" /> 
 					</div>
 					<input id="orderNo" type="hidden" name="orderNo" value="">
 					<!-- <button class="sub-btn" onclick="subData('021')">提交</button> -->
