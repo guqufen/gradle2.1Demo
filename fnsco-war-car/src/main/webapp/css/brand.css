@@ -73,9 +73,13 @@
 .hot .mui-row .mui-col-xs-3{
 	padding:0.5rem 0.7rem;
 }
+.hot-img{
+	text-align: center;
+}
 .hot-img img{
-	width: 60%;
-	margin-left: 20%;
+	width: 1.5rem;
+	height: 1.5rem;
+	margin: 0 auto;
 }
 .hot-text{
 	text-align: center;

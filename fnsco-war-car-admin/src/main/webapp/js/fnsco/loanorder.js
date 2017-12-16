@@ -18,6 +18,12 @@ $('#table').bootstrapTable({
     responseHandler:responseHandler,//处理服务器返回数据
     columns: [{
         field: 'id',
+        title: '操作',
+        width:'10%',
+        align: 'center',
+        formatter: operateFormatter
+    },{
+        field: 'id',
         title: '序号',
         align: 'center',
         width: 150,
@@ -39,7 +45,8 @@ $('#table').bootstrapTable({
         width:'10%'
     },{
         field: 'carTypeName',
-        title: '汽车品牌&型号'
+        title: '汽车品牌&型号',
+        formatter:formatcarTypeName
     },{
         field: 'createTime',
         title: '申请时间',
@@ -55,19 +62,13 @@ $('#table').bootstrapTable({
         field: 'status',
         title: '进度状态',
         formatter: formatStatus
-    },{
-        field: 'id',
-        title: '操作',
-        width:'10%',
-        align: 'center',
-        formatter: operateFormatter
     }]
 });
 //表格中操作按钮
 function operateFormatter(value, row, index) {
 	return [
         '<a class="redact" href="javascript:editData('+value+');" title="更新">',
-        '<i class="glyphicon glyphicon-file"></i>更新状态',
+        '<i class="glyphicon glyphicon-file"></i>',
         '</a>  '
     ].join('');
 }
@@ -118,6 +119,19 @@ function formatRMB(value, row, index){
 	}
 	return '--';
 }
+function formatcarTypeName(value, row, index){
+	if(row.carSubTypeId == 1){
+		return value+'&SUV';
+	}else if(row.carSubTypeId == 2){
+		return value+'&豪华车';
+	}else if(row.carSubTypeId == 3){
+		return value+'&商务中级车';
+	}else if(row.carSubTypeId == 4){
+		return value+'&三厢';
+	}else if(row.carSubTypeId == 5){
+		return value+'&两厢';
+	}
+}
 //条件查询按钮事件
 function queryEvent() {
 	$('#table').bootstrapTable('refresh');
@@ -141,7 +155,7 @@ function editData(id){
             success:function(data){
               unloginHandler(data);
               if(data.success){
-                layer.msg('更新状态成功');
+                layer.msg('审核成功');
                 queryEvent("table");
               }else{
                 layer.msg(data.message);
