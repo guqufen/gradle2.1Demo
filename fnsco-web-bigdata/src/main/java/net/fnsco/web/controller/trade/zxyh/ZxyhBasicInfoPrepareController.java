@@ -48,17 +48,17 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 			return ResultDTO.fail();
 		}
 		//根据id获取入驻中信银行商户所需的必须信息
-		ResultDTO<MerchantCoreEntityZxyhDTO> core = merchantCoreService.queryZXYHInfoById(id);
-		if(core.getData() == null){
+		MerchantCoreEntityZxyhDTO core = merchantCoreService.queryZXYHInfoById(id);
+		if(core == null){
 			return ResultDTO.failForMessage("进件失败,请联系管理员");
 		}
 		//调用入驻接口将参数传过去-
-		Map<String, Object> map = zxyhPaymentService.mechAdd(core.getData());
+		Map<String, Object> map = zxyhPaymentService.mechAdd(core);
 		if("0000".equals(map.get("respCode"))){
 			//回调并更新信息
 			String secMerId = map.get("secMerId").toString();
 			if(!Strings.isNullOrEmpty(secMerId)){
-				this.merchantCoreService.updateInfoByInnerCode(core.getData().getInnerCode(),secMerId);
+				this.merchantCoreService.updateInfoByInnerCode(core.getInnerCode(),secMerId);
 				
 			}
 			return ResultDTO.successForSubmit();

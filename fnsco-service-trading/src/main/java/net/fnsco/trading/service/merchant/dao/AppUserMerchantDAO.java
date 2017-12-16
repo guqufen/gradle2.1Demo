@@ -38,7 +38,7 @@ public interface AppUserMerchantDAO {
     @SelectProvider(type = AppUserMerchantProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("appUserMerchant") AppUserMerchantDO appUserMerchant);
 
-    @Select("SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{userId}")
+    @Select("SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{userId} limit 1")
 	public String getInnerCodeByUserId(@Param("userId") Integer userId);
 
 }

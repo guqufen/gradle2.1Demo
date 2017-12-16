@@ -59,15 +59,19 @@ public class ScannedTradeController extends BaseController{
 		Map<String, Object> reqMap = new HashMap<>();
 		if("41".equals(paySubType)){//微信
 			dto = zxyhPaymentService.generateQRCodeWeiXin(userId,txnAmt);
-			reqMap = dto.getData();
-			qrVo.setUrl(reqMap.get("codeUrl").toString());
 		
 		}else if("42".equals(paySubType)){//支付宝
 			dto = zxyhPaymentService.generateQRCodeAliPay(userId,ip,txnAmt);
-			reqMap = dto.getData();
-			qrVo.setUrl(reqMap.get("codeUrl").toString());
 		}
-		return  ResultDTO.success(qrVo);
+		reqMap = dto.getData();
+		qrVo.setUrl((String)reqMap.get("codeUrl"));
+		if("0000".equals(reqMap.get("respCode"))){
+			return ResultDTO.success(qrVo);
+		}else{
+			return  ResultDTO.failForMessage((String)reqMap.get("respMsg"));
+			
+		}
+		
 			
 	}
 	

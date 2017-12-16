@@ -18,6 +18,12 @@ $('#table').bootstrapTable({
     responseHandler:responseHandler,//处理服务器返回数据
     columns: [{
         field: 'id',
+        title: '操作',
+        width:'10%',
+        align: 'center',
+        formatter: operateFormatter
+    },{
+        field: 'id',
         title: '序号',
         width:'10%',
         align: 'center',
@@ -58,19 +64,13 @@ $('#table').bootstrapTable({
         field: 'status',
         title: '进度状态',
         formatter: formatStatus
-    },{
-        field: 'id',
-        title: '操作',
-        width:'10%',
-        align: 'center',
-        formatter: operateFormatter
     }]
 });
 //表格中操作按钮
 function operateFormatter(value, row, index) {
 	return [
         '<a class="redact" href="javascript:editData('+value+');" title="更新">',
-        '<i class="glyphicon glyphicon-file"></i>更新状态',
+        '<i class="glyphicon glyphicon-file"></i>',
         '</a>  '
     ].join('');
 }
