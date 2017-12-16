@@ -404,7 +404,7 @@ public class ZxyhPayMD5Util {
      * 支付宝微信交易查詢
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main___(String[] args) {
     	String url = "/MPay/backTransAction.do";
         Map<String, String> reqMap = new HashMap<String, String>();
         reqMap.put("encoding", "UTF-8"); //
@@ -530,7 +530,7 @@ public class ZxyhPayMD5Util {
      * 微信主扫测试
      * @param args
      */
-    public static void main____(String[] args) {
+    public static void main(String[] args) {
     	String url = "/MPay/backTransAction.do";
         Map<String, String> reqMap = new HashMap<String, String>();
         reqMap.put("encoding", "UTF-8"); //
@@ -545,7 +545,7 @@ public class ZxyhPayMD5Util {
         reqMap.put("secMerId", "999900000010727"); //独立商户号  999900000010724
         reqMap.put("termId", "WEB");
         reqMap.put("termIp", "");
-        reqMap.put("orderId", "fns_wx_001"); //商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
+        reqMap.put("orderId", "fns_wx_006"); //商户系统内部的订单号,32 个字符内、可包含字母, 确保在商户系统唯一
         reqMap.put("orderTime", System.currentTimeMillis() + ""); //订单生成时间，格式 为[yyyyMMddHHmmss] ,如2009年12月25日9点10分10秒 表示为20091225091010
         reqMap.put("productId", "");
         reqMap.put("orderBody", "辣条"); //商品或支付单简要描述

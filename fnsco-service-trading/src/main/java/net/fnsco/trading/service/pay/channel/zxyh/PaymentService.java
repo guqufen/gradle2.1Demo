@@ -152,7 +152,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     	weiXinDTO.init(merId);
     	String url = "/MPay/backTransAction.do"; 
     	weiXinDTO.setEncoding("UTF-8");
-    	weiXinDTO.setBackEndUrl(""); //接收支付网关异步通知回调地址
+    	weiXinDTO.setBackEndUrl(env.getProperty("zxyh.backUrl")); //接收支付网关异步通知回调地址
     	//根据userId获取内部商户号
     	String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
     	if(Strings.isNullOrEmpty(innerCode)){
@@ -160,11 +160,10 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     	}
     	MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
     	if(channel != null){
-    		weiXinDTO.setMerId(channel.getChannelMerId()); //商户编号	M	String(15)	普通商户或平台商户的商户号
+    		weiXinDTO.setSecMerId(channel.getChannelMerId());//分账子商户号 C	String(15)	使用分账功能时上传，是与merId关联的分账子商户号
     		
     	}
-    	weiXinDTO.setSecMerId("");//分账子商户号 C	String(15)	使用分账功能时上传，是与merId关联的分账子商户号
-    	weiXinDTO.setTermId("");//终端编号	C	String(8)	终端编号默认WEB
+    	weiXinDTO.setTermId("WEB");//终端编号	C	String(8)	终端编号默认WEB
     	weiXinDTO.setTermIp("");//终端IP	C	String(16)	APP和网页支付提交用户端ip，主扫支付填调用付API的机器IP
     	
     	weiXinDTO.setOrderId(DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_data")); //商户系统内部的订单号 M ,32 个字符内、可包含字母, 确保在商户系统唯一
@@ -186,7 +185,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
         String aliPayStr = JSON.toJSONString(weiXinDTO);
         Map<String, String> aliPayMap = JSON.parseObject(aliPayStr, Map.class);
         //发送中信报文
-        String respStr = ZxyhPayMD5Util.request(aliPayMap, url,"https://120.27.165.177:8099");  //生产是8092
+        String respStr = ZxyhPayMD5Util.request(aliPayMap, url,env.getProperty("zxyh.pay.url"));  //生产是8092  测试"https://120.27.165.177:8099"
         //解析返回报文
         Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
 //        System.out.println(JSON.toJSON(respMap).toString());
@@ -205,8 +204,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
     	String url = "/MPay/backTransAction.do";
     	
         activeAlipayDTO.setEncoding("UTF-8");
-        activeAlipayDTO.setBackEndUrl(""); //接收支付网关异步通知回调地址
-        String innerCode = "";
+        activeAlipayDTO.setBackEndUrl(env.getProperty("zxyh.backUrl")); //接收支付网关异步通知回调地址
+        String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
         //根据内部商户号获取独立商户号
         MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
         if(channel != null){
