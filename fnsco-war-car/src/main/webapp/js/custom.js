@@ -68,26 +68,32 @@ function getChildBrand(id,boole){
 		contentType:'application/json',
 		data:{'id':id},
 		success:function(data){
-			console.log(data.data);
+			if(boole==true){
+				var headHtml='<header><div class="back" style="display:block" onclick="backBrand();"></div><div class="head-title">选择子型号</div></header>';
+			}else{
+				var headHtml='';
+			}
+			$(".child-brand").append(headHtml);
 			var html='';
 			for(var i=0;i<data.data.length;i++){
 				if(data.data[i].id==id && boole==false){
 					$(".head-title").html(data.data[i].name);
 				}
 				if(data.data[i].level==2){
-					$(".child-brand").html('');
 					html='<div class="title" id="'+data.data[i].id+'">'+data.data[i].name+'</div><ul class="brand-list-list" id="brand-list-list'+data.data[i].id+'"></ul>';
 					$(".child-brand").append(html);
 					if(boole==false){
 						$(".back").show();
 					}
-					for(var j=0;j<data.data.length;j++){
-						if(data.data[j].supperId==data.data[i].id){
-							if(boole==false){
-								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12">'+data.data[j].name+'</div></li>');
-							}else{
-								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12" onclick="hideChildBrand('+data.data[j].id+',\''+data.data[j].name+'\','+data.data[j].model+')">'+data.data[j].name+'</div></li>');
-							}
+				}
+			}
+			for(var i=0;i<data.data.length;i++){
+				for(var j=0;j<data.data.length;j++){
+					if(data.data[j].supperId==data.data[i].id){
+						if(boole==false){
+							$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12">'+data.data[j].name+'</div></li>');
+						}else{
+							$("#brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12" onclick="hideChildBrand('+data.data[j].id+',\''+data.data[j].name+'\','+data.data[j].model+')">'+data.data[j].name+'</div></li>');
 						}
 					}
 				}
@@ -125,6 +131,15 @@ function hideChildBrand(id,name,typeId){
 }
 
 /*
+*
+*/
+function backBrand(){
+	$(".child-brand").hide();
+	$(".brand").show();
+	$(".child-brand").html('');
+}
+
+/*
 *选择品牌进入子类返回事件
 */
 $(".back").click(function(){
@@ -132,6 +147,7 @@ $(".back").click(function(){
 	$(".child-brand").hide();
 	$(".brand").show();
 	$(".back").hide();
+	$(".child-brand").html('');
 })
 
 /*

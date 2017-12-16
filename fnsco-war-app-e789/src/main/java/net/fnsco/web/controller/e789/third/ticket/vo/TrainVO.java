@@ -6,7 +6,7 @@ import net.fnsco.core.base.VO;
 public class TrainVO extends VO {
 
     @ApiModelProperty(value = "价格", example = "价格")
-    private String fare;
+    private String price;
 
     @ApiModelProperty(value = "车票类型", example = "车票类型")
     private String ticketType;
@@ -30,25 +30,25 @@ public class TrainVO extends VO {
     private String endSite;
 
     /**
-     * fare
+     * price
      *
-     * @return  the fare
+     * @return  the price
      * @since   CodingExample Ver 1.0
     */
 
-    public String getFare() {
-        return fare;
+    public String getPrice() {
+        return price;
     }
 
     /**
-     * fare
+     * price
      *
-     * @param   fare    the fare to set
+     * @param   price    the price to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setFare(String fare) {
-        this.fare = fare;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     /**

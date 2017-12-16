@@ -2,6 +2,19 @@ package net.fnsco.trading.service.third.ticket.dto;
 
 import net.fnsco.core.base.DTO;
 
+//{"rwx_price":0,"end_station_name":"北京南","swz_price":1701,"swz_num":"11",
+//"to_station_name":"北京南","ydz_num":"150","yz_num":"--","rw_num":"--",
+//"arrive_days":"0","rz_num":"--","access_byidcard":"1","yz_price":0,
+//"ywz_price":0,"sale_date_time":"1130","dw_price":0,"from_station_code":"HGH",
+//"rz_price":0,"gjrw_num":"--","to_station_code":"VNP","ydz_price":907,
+//"wz_price":0,"tdz_price":0,"run_time":"05:52","dwx_price":0,"yw_num":"--",
+//"distance":0,"edz_price":538.5,"qtxb_price":0,"can_buy_now":"Y",
+//"yw_price":0,"train_type":"G","rw_price":0,"train_code":"G58",
+//"train_no":"5e00000G5832","from_station_name":"杭州东",
+//"run_time_minute":"352","ywx_price":0,"dw_num":"--","gjrws_price":0,
+//"arrive_time":"14:44","start_station_name":"宁波","start_time":"08:52",
+//"wz_num":"--","edz_num":"130","qtxb_num":"--",
+//"train_start_date":"20171226","gjrw_price":0,"tdz_num":"--"}
 public class ticketsAvailableDTO extends DTO {
     private String rwx_price;
     private String end_station_name;

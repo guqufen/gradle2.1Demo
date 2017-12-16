@@ -231,6 +231,12 @@ function MenuTreeGet() {
 				$('#level').val(node[0].level+1);
 
 				layer.close(index);
+				
+				if($('#level').val() >1){
+					$('#isHotDiv').hide();
+				}else if($('#level').val() == 1){
+					$('#isHotDiv').show();
+				}
 
 			} else {
 				layer.msg('请选择父菜单!');
@@ -280,21 +286,25 @@ $('#btn_edit').click(
 				$('#id').val(selectContent[0].id);
 
 				$('#menuName').val(selectContent[0].name);
-				if(selectContent[0].supperId != 0){
+				if (selectContent[0].supperId != 0) {
 					$('#parentId').val(selectContent[0].supperId);
 					$('#parentName').val(selectContent[0].supperName);
-				}else{
+				} else {
 					$('#parentId').val(0);
 					$('#parentName').val("总菜单");
 				}
 
 				$('#model').val(selectContent[0].model);
 				$('#iconImgPath').val(selectContent[0].iconImgPath);
-//				$('#isHot option[value=' + selectContent[0].iconImgPath + ']').attr(
-//						'selected', true);
-				$('#isHot option[value=' + selectContent[0].isHot + ']').attr(
-						'selected', true);
+
 				$('#level').val(selectContent[0].level);
+				if ($('#level').val() == 1) {
+					$('#isHotDiv').show();
+					$('#isHot option[value=' + selectContent[0].isHot + ']')
+							.attr('selected', true);
+				} else if ($('#level').val() > 1) {
+					$('#isHotDiv').hide();
+				}
 			}
 		})
 
@@ -440,6 +450,8 @@ $('#btn_delete').click(function() {
 //导入按钮事件
 function importEvent() {
 	$('#importModal').modal();
+	$('.fileinput-remove').click();
+//	$('#excel_file_risk_inf').fileinput('destroy'); fileinput-remove
 }
 
 $(function() {
