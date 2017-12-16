@@ -67,11 +67,11 @@ public interface AppUserBankDAO {
 	public int unBindBankCard(@Param("bankId") Integer bankId);
 
 	@Results({ @Result(column = "account_no", property = "accountNo"),
-			@Result(column = "bank_name", property = "bankName"), @Result(column = "type", property = "type") })
+			@Result(column = "bank_name", property = "bank_name"), @Result(column = "type", property = "type") })
 	@Select("SELECT account_no,bank_name,type FROM u_app_user_bank WHERE app_user_id = #{userId} and status != 1")
 	public List<AppUserBankDO> getBankList(@Param("userId") String userId);
 
-	@Results({ @Result(column = "type", property = "type"),@Result(column = "bank_name", property = "bankName")})
+	@Results({ @Result(column = "type", property = "type"),@Result(column = "bank_name", property = "bank_name")})
 	@Select(" SELECT type,bank_name FROM sys_bank_card_type WHERE LEFT (#{bankCardNum},card_trim_length) = card_trim_value	AND card_total_length = #{cardTotalLength} ORDER BY card_trim_length DESC;")
 	public BankNameAndTypeDTO queryByCertifyId(@Param("bankCardNum") String bankCardNum,
 			@Param("cardTotalLength") String cardTotalLength);
