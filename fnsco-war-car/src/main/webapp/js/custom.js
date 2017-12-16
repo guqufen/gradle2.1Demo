@@ -22,7 +22,7 @@ function getCarBrand(boole){
 
 				/*循环获取排序列表下的品牌*/
 				for(var j =0; j <data.data[i].body.length; j++){
-					console.log(data.data[i].body[j]);
+					// console.log(data.data[i].body[j]);
 					html='<li class="brand-con mui-row" onclick="getChildBrand('+data.data[i].body[j].id+','+boole+')"><div class="brand-img mui-col-xs-3"><img src="'+data.data[i].body[j].iconImgPath+'"></div><div class="brand-text mui-col-xs-9">'+data.data[i].body[j].name+'</div></li>';
 					$(".brand-list .brand-list-list"+data.data[i].letter).append(html);
 				}
@@ -72,6 +72,7 @@ function getChildBrand(id,boole){
 				var headHtml='<header><div class="back" style="display:block" onclick="backBrand();"></div><div class="head-title">选择子型号</div></header>';
 			}else{
 				var headHtml='';
+				$(".back").show();
 			}
 			$(".child-brand").append(headHtml);
 			var html='';
@@ -82,9 +83,6 @@ function getChildBrand(id,boole){
 				if(data.data[i].level==2){
 					html='<div class="title" id="'+data.data[i].id+'">'+data.data[i].name+'</div><ul class="brand-list-list" id="brand-list-list'+data.data[i].id+'"></ul>';
 					$(".child-brand").append(html);
-					if(boole==false){
-						$(".back").show();
-					}
 				}
 			}
 			for(var i=0;i<data.data.length;i++){
