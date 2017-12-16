@@ -53,20 +53,8 @@
 					type="text" class="form-control" id="search_legalPersonMobile"
 					name="search_legalPersonMobile" placeholder="实体商户" />
 			  </div>
-			  <!-- <div class="col-sm-3">
-				<label class="control-label" for="search_status">状态:</label> <select
-					id="search_status" name="search_status" class="form-control">
-					<option value='2' selected>全部</option>
-					<option value="0">删除</option>
-					<option value="1">正常</option>
-				</select>
-			  </div> -->
 	        </div>
 	        <div class="col-sm-2" style="text-align: right;">
-	           <!-- <button type="button" id="btn_import" class="btn btn-info"
-					onclick="javascript:importEvent();">
-					<span class="glyphicon glyphicon-import"></span>导入
-				</button> -->
 				<button type="button" id="btn_query" class="btn btn-primary"
 					onclick="javascript:queryEvent();">
 					<span class="glyphicon glyphicon-search"></span>查询
@@ -94,6 +82,64 @@
 			</div>
 		</div>
 		<!-- end -->
+		<!-- businessModel详情 start -->
+		<div class="modal " id="businessModal" tabindex="-1" role="dialog"
+			aria-labelledby="businessModalLabel" data-backdrop="static"
+			data-keyboard="false">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="businessModalLabel">实体商户</h4>
+					</div>
+					<div class="modal-body">
+						<form id="businessFormSearch" class="form-horizontal">
+							<div class="form-group" style="margin-top: 15px">
+								<div class="row col-sm-10">
+									<div class="col-sm-6">
+										<label class="control-label" for="search_merName">商户名称：</label>
+										<input type="text" class="form-control" id="search_merName">
+									</div>
+									<div class="col-sm-6">
+										<label class="control-label" for="search_legalPerson">法人姓名：</label>
+										<input type="text" class="form-control" id="search_legalPerson">
+									</div>
+									<div class="col-sm-6">
+										<label class="control-label" for="search_legalPersonMobile">手机号：</label>
+										<input type="text" class="form-control" id="search_legalPersonMobile">
+									</div>
+								</div>
+								<div class="col-sm-2" style="text-align: right;">
+									<button type="button" id="btn_query" class="btn btn-primary"
+										onclick="javascript:queryEvent('businessTable');">
+										<span class="glyphicon glyphicon-search"></span>查询
+									</button>
+									<button type="button" id="btn_reset" class="btn btn-default"
+										onclick="javascript:resetEvent('businessFormSearch','businessTable');">
+										<span class="glyphicon glyphicon-refresh"></span>重置
+									</button>
+								</div>
+							</div>
+						</form>
+						<div id="businessToolbar">
+							<button id="btn_select_business" type="button"
+								class="btn btn-success">
+								<span class="glyphicon glyphicon-file" aria-hidden="true"></span>确定选择
+							</button>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div id="businessTable" style="width: 100%;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- model end -->
 	</div>
   </div>	
   <script src="js/bootstrap/jquery.min.js"></script>

@@ -69,7 +69,7 @@ function getChildBrand(id,boole){
 		data:{'id':id},
 		success:function(data){
 			if(boole==true){
-				var headHtml='<header><div class="back" style="display:block" onclick="backBrand();"></div><div class="head-title">选择子型号</div></header>';
+				var headHtml='<header><div class="back" style="display:block" onclick="backBrand();"></div><div class="head-title">'+data.data[0].name+'</div></header>';
 			}else{
 				var headHtml='';
 				$(".back").show();
@@ -333,30 +333,38 @@ function sendCode(type){
 
 //提交按钮
 function subData(type){
-	for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
-		if(type=='02'){//贷款特殊判断
-			if($(".mui-content #loan-information .mui-input-row").eq(i).find('input[type="text"]').val()==''){
+	if(type=='02'){//贷款特殊判断
+		for(var i=0;i<$(".mui-content #loan-information .mui-input-row").length;i++){
+			if($(".mui-content #loan-information .mui-input-row").eq(i).find('input').val()==''){
 				var title=$(".mui-content #loan-information .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
 			}
-		}else if(type=='021'){
+		}
+		if(istel($(".phone-num").val())==false){ 
+		  mui.alert("请输入正确的手机号"); 
+		  return;
+		}
+	}else if(type=='021'){
+		for(var i=0;i<$(".mui-content #car-info .mui-input-row").length;i++){
 			if($(".mui-content #car-info .mui-input-row").eq(i).find('input').val()==''){
 				var title=$(".mui-content #car-info .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
 			}
-		}else{
-			if($(".mui-content .mui-input-row").eq(i).find('input[type="text"]').val()==''){
+		}
+	}else{
+		for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
+			if($(".mui-content .mui-input-row").eq(i).find('input').val()==''){
 				var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
 			}
 		}
-	}
-	if(istel($(".phone-num").val())==false){ 
-	  mui.alert("请输入正确的手机号"); 
-	  return;
+		if(istel($(".phone-num").val())==false){ 
+		  mui.alert("请输入正确的手机号"); 
+		  return;
+		}
 	}
 
 	//买车
@@ -404,6 +412,7 @@ function subData(type){
 	}
 
 	if(type=='021'){//贷款上传图片
+		alert($("#file0").val());
 		$("#car-info .sub-btn").attr('disabled',true);
         $('#carInfoForm').ajaxSubmit({
             type: 'post', // 提交方式 get/post
