@@ -72,6 +72,7 @@ public class BillContrller extends BaseController {
 		ResultPageDTO<TradeWithdrawDO> datasResult = tradeWithdrawService.page(tradeWithdraw, billJO.getPageNum(), billJO.getPageSize());
 		List<TradeWithdrawDO> datas =  datasResult.getList();
 		Set<String> sets = Sets.newHashSet(); 
+		List<BillVO> data = Lists.newArrayList();
 		for (TradeWithdrawDO tradeWithdrawDO : datas) {
 			String createMonth = formatYYYYMMDate(tradeWithdrawDO.getCreateTime());
 			if(Strings.isNullOrEmpty(createMonth)) {
@@ -81,12 +82,11 @@ public class BillContrller extends BaseController {
 				sets.add(createMonth);
 				BillVO mouthBillVo = new BillVO();
 				mouthBillVo.setBillDate(createMonth);
-				
+				data.add(mouthBillVo);
 			}
-			
 		}
-		List<BillVO> data = Lists.newArrayList();
-        return success(null);
+		
+        return success(data);
     }
 	
 	/**
