@@ -91,16 +91,16 @@ public class BillContrller extends BaseController {
 				mouthBillVo.setBillDate(createMonth);
 				mouthBillVo.setBillDetails(billDetails);
 				data.add(mouthBillVo);
-			}else {
-				BillDayVO billDayVO = new BillDayVO();
-				billDayVO.setAmount(formatRMBNumber(tradeWithdrawDO.getAmount()));
-				if(null != tradeWithdrawDO.getTradeType() && 2==tradeWithdrawDO.getTradeType()) {
-					billDayVO.setBillType("1");
-				}else {
-					billDayVO.setBillType("0");
-				}
-				billDayVO.setBillDayDate(DateUtils.dateFormatToStr(tradeWithdrawDO.getCreateTime()));
 			}
+			BillDayVO billDayVO = new BillDayVO();
+			billDayVO.setAmount(formatRMBNumber(tradeWithdrawDO.getAmount()));
+			if(null != tradeWithdrawDO.getTradeType() && 2==tradeWithdrawDO.getTradeType()) {
+				billDayVO.setBillType("1");
+			}else {
+				billDayVO.setBillType("0");
+			}
+			billDayVO.setBillDayDate(DateUtils.dateFormatToStr(tradeWithdrawDO.getCreateTime()));
+			billDetails.add(billDayVO);
 		}
 		
 		for (BillVO billVO : data) {
@@ -128,8 +128,12 @@ public class BillContrller extends BaseController {
 							}
 						}
 					}
-					
-					
+				}
+				if(Strings.isNullOrEmpty(billVO.getTotalExpenditure())) {
+					billVO.setTotalExpenditure("0.00");
+				}
+				if(Strings.isNullOrEmpty(billVO.getTotalRevenue())) {
+					billVO.setTotalRevenue("0.00");
 				}
 			}
 		}
