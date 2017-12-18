@@ -19,6 +19,7 @@ import net.fnsco.trading.service.third.phoneBill.PrepaidRefillService;
 import net.fnsco.trading.service.third.phoneBill.dto.PhoneChargeDTO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
+import net.fnsco.web.controller.e789.third.ticket.vo.PrepaidRefillVO;
 
 /**
  * 功能：账户页-手机充值的话费充值和流量充值控制器url
@@ -44,7 +45,7 @@ public class PrepaidRefillController extends BaseController {
 
 	@RequestMapping("/prepaidRefill")
 	@ApiOperation(value = "手机号码充值url")
-	public ResultDTO prepaidRefill(@RequestBody FlowChargeJO fl) {
+	public ResultDTO<PrepaidRefillVO> prepaidRefill(@RequestBody FlowChargeJO fl) {
 		// 根据userId获取内部商户号
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(fl.getUserId());
 		if (Strings.isNullOrEmpty(innerCode)) {
@@ -61,7 +62,7 @@ public class PrepaidRefillController extends BaseController {
 
 	@RequestMapping("/flowCharge")
 	@ApiOperation(value = "手机流量充值url")
-	public ResultDTO flowCharge(@RequestBody FlowChargeJO fl) {
+	public ResultDTO<PrepaidRefillVO> flowCharge(@RequestBody FlowChargeJO fl) {
 		// 根据userId获取内部商户号
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(fl.getUserId());
 		if (Strings.isNullOrEmpty(innerCode)) {
