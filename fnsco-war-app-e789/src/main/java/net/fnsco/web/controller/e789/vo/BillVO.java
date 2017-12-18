@@ -32,7 +32,32 @@ public class BillVO extends VO {
 	@ApiModelProperty(value = "账单总收入", name = "totalRevenue", example = "账单总收入")
 	private String totalRevenue;
 	
+	@ApiModelProperty(value = "APP是否显示", name = "display", example = "APP是否显示(true:显示,false:不显示)")
+	private boolean display;
+	
 	private List<BillDayVO> billDetails;
+	
+	/**
+	 * display
+	 *
+	 * @return  the display
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public boolean isDisplay() {
+		return display;
+	}
+
+	/**
+	 * display
+	 *
+	 * @param   display    the display to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setDisplay(boolean display) {
+		this.display = display;
+	}
 
 	/**
 	 * billDate
