@@ -42,9 +42,9 @@ public class ZxyhPayMD5Util {
      * 请求的目标URL
      * 配置在此处仅为演示方便，正式生产代码中，应该做外置可配置处理
      */
-//    private static String         reqUrl               = "https://120.27.165.177:9001";  //入建
+    private static String         reqUrl               = "https://120.27.165.177:9001";  //入建
 //    private static String         reqUrl               = " https://120.27.165.177:8099";  //主扫
-    private static String         reqUrl               = "https://120.27.165.177:8099";  //公众号
+//    private static String         reqUrl               = "https://120.27.165.177:8099";  //公众号
     /**MD5加密方式
      * 用于数据电子签名使用的MD5密钥，由中信银行开商户时自动生成，请妥善保管
      * 配置在此处仅为演示方便，正式生产代码中，商户应该将其外置于安全的地方，且妥善保护该密钥，如有泄露，请第一时间通知我行进行变更！！！
@@ -530,7 +530,7 @@ public class ZxyhPayMD5Util {
      * 微信主扫测试
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main4(String[] args) {
     	String url = "/MPay/backTransAction.do";
         Map<String, String> reqMap = new HashMap<String, String>();
         reqMap.put("encoding", "UTF-8"); //
@@ -601,7 +601,7 @@ public class ZxyhPayMD5Util {
         System.out.println(JSON.toJSON(respMap).toString());
     }
     
-    public static void main4(String[] args){
+    public static void main(String[] args){
         String pid = "2088022294504639";
         String merId = "994400000000009"; 
         String url = "/MPayTransaction/ind/mchtadd.do";
@@ -624,15 +624,15 @@ public class ZxyhPayMD5Util {
         mercDTO.setAddr("信息港");
         /////////////////////
         mercDTO.setWXActive("Y");
-        mercDTO.setMainMchtTp("00");
-        mercDTO.setOlCode1("01|02|06");
+        mercDTO.setMainMchtTp("02");
+        mercDTO.setOlCode1("01|02");
         mercDTO.setqGroupId("01");
         mercDTO.setCategroryId("143");
         mercDTO.setFeeRate("1");
         mercDTO.setSettleCycle("T1");
 
         //////////支付宝//////////////////
-        mercDTO.setZFBActive("Y");
+        mercDTO.setZFBActive("N");
         mercDTO.setCategIdC("2016042200000148");
         mercDTO.setFeeRateA("1");
         mercDTO.setSettleCycleA("D0");//---填写字母，T1一工作日、D1一天、D0

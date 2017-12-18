@@ -72,13 +72,18 @@ public class LoanApplyController extends BaseController {
 		String code = jo.getVerCode();
 		String mobile = jo.getMobile();
 		String suggestCode = jo.getSuggestCode();
-		if(Strings.isNullOrEmpty(code)||Strings.isNullOrEmpty(code)||Strings.isNullOrEmpty(code)){
+		if(Strings.isNullOrEmpty(code)||Strings.isNullOrEmpty(mobile)||Strings.isNullOrEmpty(suggestCode)||jo.getAmount()==null){
 			return ResultDTO.fail(CarConstant.E_PARAMETER_NOT_NULL);
 		}
 		AgentDO agent = agentService.doQueryByCode(suggestCode);
 		if(agent == null){
 			return ResultDTO.fail("推荐码不存在");
 			
+		}
+		BigDecimal b = new BigDecimal("1000");
+		int i = jo.getAmount().compareTo(b);
+		if(i==1){
+			return ResultDTO.fail("金额过大请重新输入");
 		}
 		String type =CarServiceConstant.ApplyType.getNameByType("02");
 		// 获取session中验证码信息
@@ -111,52 +116,51 @@ public class LoanApplyController extends BaseController {
 			return ResultDTO.fail("提交失败");
 		}
 	}
-	
 
-	
 	@ResponseBody
 	@RequestMapping(value = "/fileInfo/upload", produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "上传图片")
-	public String upload( MultipartFile importFile) {
+	public String upload(MultipartFile importFile) {
 		return commImport(request, response, true);
 	}
 
 	@Transactional
 	private String commImport(HttpServletRequest req, HttpServletResponse response, boolean isApp) {
-		response.setHeader("Content-type", "text/html;charset=UTF-8");  
-		response.setCharacterEncoding("UTF-8");  
-		
+		response.setHeader("Content-type", "text/html;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
+
 		String orderId = request.getParameter("orderNo");
-		String carTypeId = request.getParameter("carId");//汽车品牌
-		String carSubTypeId = request.getParameter("carSubTypeId");//汽车型号
-		if(Strings.isNullOrEmpty(orderId)||Strings.isNullOrEmpty(carTypeId)||Strings.isNullOrEmpty(carSubTypeId)){
+		String carTypeId = request.getParameter("carId");// 汽车品牌
+		String carSubTypeId = request.getParameter("carSubTypeId");// 汽车型号
+		if (Strings.isNullOrEmpty(orderId) || Strings.isNullOrEmpty(carTypeId) || Strings.isNullOrEmpty(carSubTypeId)) {
 			try {
-				response.getWriter().write("检查参数");;
+				response.getWriter().write("检查参数");
+				;
 			} catch (IOException e) {
-				
+
 			}
 		}
-		//更新贷款申请表单
+		// 更新贷款申请表单
 		OrderLoanDO orderLoan = new OrderLoanDO();
 		orderLoan.setId(Integer.parseInt(orderId));
 		orderLoan.setCarTypeId(Integer.parseInt(carTypeId));
 		orderLoan.setCarSubTypeId(Integer.parseInt(carSubTypeId));
 		orderLoan.setLastUpdateTime(new Date());
 		orderLoanService.doUpdate(orderLoan, 0);
-		
-		//获取图片信息
+
+		// 获取图片信息
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-		
+
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
 			// 上传文件原名
 			MultipartFile file = entity.getValue();
 			String file_type = entity.getKey();
-			if(StringUtils.equals("xs", file_type)){
+			if (StringUtils.equals("xs", file_type)) {
 				file_type = "0";
-			}else if(StringUtils.equals("dj", file_type)){
+			} else if (StringUtils.equals("dj", file_type)) {
 				file_type = "1";
-			}else if(StringUtils.equals("cl", file_type)){
+			} else if (StringUtils.equals("cl", file_type)) {
 				file_type = "2";
 			}
 			OrderFileDO fileInfo = new OrderFileDO();
@@ -211,8 +215,8 @@ public class LoanApplyController extends BaseController {
 					ResultDTO<Integer> result = orderFileService.doAddToDB(fileInfo);
 					if (result.isSuccess()) {
 						PrintWriter pw = response.getWriter();
-						String data = "true";  
-						pw.write(data); 
+						String data = "true";
+						pw.write(data);
 					} else {
 						logger.error(fileName + "上传失败");
 						throw new RuntimeException();
@@ -231,4 +235,12 @@ public class LoanApplyController extends BaseController {
 
 		return null;
 	}
+
+	@RequestMapping(value = "/getFileUrl", method = RequestMethod.POST)
+	@ApiOperation(value = "demo-获取图片url")
+	public String getFileUrl() {
+		String url = OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), "2017/12/1513399023993.jpg");
+		return url;
+	}
+
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.mysql.jdbc.StringUtils;
 
 import io.swagger.annotations.Api;
@@ -118,15 +119,15 @@ public class BankCardController extends BaseController {
     @RequestMapping(value = "/getBankCardList")
     @ApiOperation(value = "银行卡信息页-银行卡列表查询")
     public ResultDTO<List<BankListVO>> getBankJOList(@RequestBody BankListJO bankListJO) {
-    	List<BankListVO> bankList = new ArrayList<>();
+    	List<BankListVO> bankList = Lists.newArrayList();
     	String userId = bankListJO.getUserId();
     	if(StringUtils.isNullOrEmpty(userId)){
     		return ResultDTO.fail(TradeConstants.E_PARAMETER_NOT_NULL);
     	}
     	List<AppUserBankDO> list = appUserBankService.getBankList(userId);
     	if(list.size()>0){
-    		BankListVO vo = new BankListVO();
     		for (AppUserBankDO appUserBankDO : list) {
+    			BankListVO vo = new BankListVO();
     			int length = appUserBankDO.getAccountNo().length();
     			String transCardNo = appUserBankDO.getAccountNo();
     			if(length>10){
@@ -138,7 +139,8 @@ public class BankCardController extends BaseController {
     			vo.setType(TradeConstants.BankTypeEnum.getNameByCode(appUserBankDO.getType()));
     			bankList.add(vo);
 			}
+    		return ResultDTO.success(bankList);
     	}
-    	return ResultDTO.success(bankList);
+    	return ResultDTO.success();
     }
 }

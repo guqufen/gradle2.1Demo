@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -105,6 +106,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 	private MerchantEntityService merchantEntityService;
 	@Autowired
 	private AreaDAO areaDao;
+	@Autowired
+    private Environment env;
 
 	/**
 	 * @todo 条件分页查询
@@ -780,6 +783,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 			merchantCoreEntityZxyhDTO.setWXActive("Y");
 			// 微信分类编码不足两位前面补0
 			DecimalFormat df = new DecimalFormat("00");
+//			merchantCoreEntityZxyhDTO.setMainMchtTp("02");//微信主商户号类	WXActive=Y时必填00-医疗教育类 01-公共事业类 02-其他类 03-WAP
+
 			merchantCoreEntityZxyhDTO.setqGroupId(df.format(Integer.parseInt(terminalWX.getqGroupId())));
 			merchantCoreEntityZxyhDTO.setCategroryId(terminalWX.getCategroryId());
 			merchantCoreEntityZxyhDTO.setFeeRate(terminalWX.getWechatFee());
@@ -796,7 +801,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		MerchantTerminal terminalZFB = core.getTerminaInfosZFB();
 		if (terminalZFB != null) {
 			merchantCoreEntityZxyhDTO.setZFBActive("Y");
-			// merchantCoreEntityZxyhDTO.setqGroupId(terminalZFB.getqGroupId());
 			merchantCoreEntityZxyhDTO.setCategIdC(terminalZFB.getqGroupId());
 			merchantCoreEntityZxyhDTO.setFeeRateA(terminalZFB.getAlipayFee());
 			merchantCoreEntityZxyhDTO.setSettleCycleA(terminalZFB.getSettleCycle());
@@ -835,7 +839,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
 		merchantCoreEntityZxyhDTO.setThirdMchtNo(core.getInnerCode());// 第三方平台子商户号
 																		// 对应我们内部商户号
-		merchantCoreEntityZxyhDTO.setIsOrNotZxMchtNo("Y");
+		merchantCoreEntityZxyhDTO.setIsOrNotZxMchtNo(env.getProperty("zxyh.isOrNotZxMchtNo"));
 		if (StringUtils.equals("0", merchantBank.getAccountType())) {
 			merchantBank.setAccountType("2");
 		}

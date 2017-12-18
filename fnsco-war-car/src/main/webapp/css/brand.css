@@ -158,6 +158,10 @@
 .child-brand{
 	display: none;
 }
+.child-brand .title{
+	font-size: 0.55rem;
+	font-weight: bold;
+}
 .child-brand.popup{
 	position: absolute;
 	top: 0;

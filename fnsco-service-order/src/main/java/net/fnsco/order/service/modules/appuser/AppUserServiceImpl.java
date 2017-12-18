@@ -96,7 +96,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
         }
         //对比验证码
-        ResultDTO<String> res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 0+appUserDTO.getMobile());
+        ResultDTO<String> res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), appUserDTO.getMobile());
         if (!res.isSuccess()) {
             return res;
         }
@@ -290,7 +290,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         //对比验证码
-        ResultDTO res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 1+appUserDTO.getMobile());
+        ResultDTO res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), appUserDTO.getMobile());
         if (!res.isSuccess()) {
             return res;
         }
@@ -425,11 +425,75 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         map.put("appSettings", settingstatus);
         return ResultDTO.success(map);
     }
-  //e789注册查询是否存在
+  //e789生产验证码 
     @Override
-    public AppUser e789QueryAppUserByMobile(String mobile) {
-    	//根据手机号查询用户实体是否存在
-        return appUserDao.selectAppUserByMobileAndState(mobile, 1);
+    public ResultDTO getE789ValidateCode(AppUserDTO appUserDTO) {
+        String deviceId = appUserDTO.getDeviceId();
+        final String mobile = appUserDTO.getMobile();
+        final Integer type = appUserDTO.getOprationType();
+        //注册需要判断    0表示通过注册流程来获取验证码  1表示通过忘记密码流程来获取验证码
+        if (appUserDTO.getOprationType() != null && appUserDTO.getOprationType() == 0) {
+            AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+            if (user != null) {
+                return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
+            }
+        }
+        // 生成6位验证码
+        final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
+        SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
+        MsgCodeMap.put(type+mobile + deviceId, object);
+        /**
+        * 开启线程发送手机验证码
+        */
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String callback = SmsUtil.Code(mobile, code);
+                    JSONObject callbackJson = (JSONObject) JSONObject.parse(callback);
+                    String resultCode = callbackJson.getString("code");
+                    if ("0".equals(resultCode)) {
+                        logger.warn("验证码" + code + "已经发送至手机号" + mobile + "返回详情" + callback);
+                    } else {
+                        logger.warn("验证码" + code + "未能够发送至手机" + mobile + "错误code" + resultCode + ";错误详情" + callback);
+                    }
+                } catch (Exception e) {
+                    logger.warn("验证码" + code + "未能够发送至手机" + mobile + "错误原因:异常错误");
+                    logger.error("短信发送异常 ", e);
+                }
+            }
+        }).start();
+        return ResultDTO.success();
+    }
+  //根据手机号找回登录密码
+    @Override
+    public ResultDTO e789FindPassword(AppUserDTO appUserDTO) {
+        //非空判断
+        if (Strings.isNullOrEmpty(appUserDTO.getDeviceId())) {
+            return ResultDTO.fail(ApiConstant.E_APP_DEVICEIDNULL);
+        } else if (Strings.isNullOrEmpty(appUserDTO.getPassword())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+        } else if (Strings.isNullOrEmpty(appUserDTO.getCode())) {
+            return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
+        } else if (Strings.isNullOrEmpty(appUserDTO.getMobile())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
+        }
+
+        //判断手机号是否已经注册
+        if (appUserDao.selectAppUserByMobile(appUserDTO.getMobile()) == null) {
+            return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
+        }
+        String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
+        //对比验证码
+        ResultDTO res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 1+appUserDTO.getMobile());
+        if (!res.isSuccess()) {
+            return res;
+        }
+        //密码更新失败
+        if (!appUserDao.updatePasswordByPhone(appUserDTO.getMobile(), password)) {
+            return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
+        }
+        return ResultDTO.success();
     }
     //e789注册
     @Override
@@ -445,7 +509,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
         }
         //对比验证码
-        ResultDTO<String> res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), appUserDTO.getMobile());
+        ResultDTO<String> res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 0+appUserDTO.getMobile());
         if (!res.isSuccess()) {
             return res;
         }
@@ -876,9 +940,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
 	@Override
 	public String getIdAuth(Integer userId) {
-		List<AppUser> list = appUserDao.selectIdAuth(userId);
-		if(list.size()>0){
-			return list.get(0).getIdCardNumber();
+		AppUser appUser = appUserDao.selectIdAuth(userId);
+		if(appUser != null){
+			return appUser.getIdCardNumber();
 		}else{
 			return "";
 		}
