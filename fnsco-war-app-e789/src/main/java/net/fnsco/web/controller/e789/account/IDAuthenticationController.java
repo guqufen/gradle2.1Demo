@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.beust.jcommander.internal.Maps;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -47,16 +49,21 @@ public class IDAuthenticationController extends BaseController {
 	 private Environment           env;
 	@RequestMapping(value = "/auth")
     @ApiOperation(value = "个人信息-身份证认证接口")
-    public ResultDTO idAuth(@RequestBody AccountBalanceJO accountBalanceJO) {
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType="String",paramType="body"),
+		@ApiImplicitParam(name = "file", value = "图片文件流", required = true, dataType="MultipartFile",paramType="body"),
+		@ApiImplicitParam(name = "side", value = "front:正面识别;back:反面识别;", required = true, dataType="String",paramType="body")
+	})
+    public ResultDTO idAuth() {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         IdCardDTO idCard =new IdCardDTO();
-        Integer userId = accountBalanceJO.getUserId();
+        Integer userId = Integer.valueOf(request.getParameter("userId"));
+        String side = request.getParameter("side");
         if (userId == null) {
         	return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-        	String side = entity.getKey();
             // 上传文件原名
             MultipartFile file = entity.getValue();
             String fileName = file.getOriginalFilename();

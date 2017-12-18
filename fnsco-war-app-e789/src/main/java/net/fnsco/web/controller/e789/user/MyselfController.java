@@ -20,6 +20,8 @@ import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
@@ -124,6 +126,10 @@ public class MyselfController extends BaseController {
      */
     @RequestMapping(value = "/uploadImage")
     @ApiOperation(value = "个人信息-上传头像文件")
+    @ApiImplicitParams({
+    		@ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType="String",paramType="body"),
+    		@ApiImplicitParam(name = "file", value = "图片文件流", required = true, dataType="MultipartFile",paramType="body")
+    })
     public ResultDTO<String> uploadImage() {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
