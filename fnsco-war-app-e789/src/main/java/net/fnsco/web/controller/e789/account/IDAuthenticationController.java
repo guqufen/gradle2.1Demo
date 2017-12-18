@@ -51,18 +51,19 @@ public class IDAuthenticationController extends BaseController {
     @ApiOperation(value = "个人信息-身份证认证接口")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType="String",paramType="body"),
-		@ApiImplicitParam(name = "Map<String, MultipartFile>", value = "图片键队key'front'正面'back'反面", required = true, dataType="Map",paramType="body")
+		@ApiImplicitParam(name = "file", value = "图片文件流", required = true, dataType="MultipartFile",paramType="body"),
+		@ApiImplicitParam(name = "side", value = "front:正面识别;back:反面识别;", required = true, dataType="String",paramType="body")
 	})
     public ResultDTO idAuth() {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         IdCardDTO idCard =new IdCardDTO();
         Integer userId = Integer.valueOf(request.getParameter("userId"));
+        String side = request.getParameter("side");
         if (userId == null) {
         	return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-        	String side = entity.getKey();
             // 上传文件原名
             MultipartFile file = entity.getValue();
             String fileName = file.getOriginalFilename();
