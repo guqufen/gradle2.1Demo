@@ -16,6 +16,8 @@ public class FlowChargeJO extends JO {
 	private String phone;
 	@ApiModelProperty(value = "流量套餐ID", example = "流量套餐ID")
 	private String pid;
+	@ApiModelProperty(value="售价金额(取返回的售价金额)",example="售价金额(取返回的售价金额)")
+	private String money;
 	@ApiModelProperty(value = "登录用户id", example = "登录用户id")
 	private Integer userId;
 

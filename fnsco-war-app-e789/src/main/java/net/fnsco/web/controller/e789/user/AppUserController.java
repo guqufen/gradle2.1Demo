@@ -59,6 +59,7 @@ public class AppUserController extends BaseController {
         loginVO.setHeadImagePath(appUserLoginInfoDTO.getHeadImagePath());
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
+        loginVO.setUserName(appUserLoginInfoDTO.getUserName());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
@@ -79,16 +80,11 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/getValidateCode")
     @ApiOperation(value = "获取验证码")
     public ResultDTO getValidateCode(@RequestBody GetValidateCodeJO getValidateCodeJO) {
-    	if(getValidateCodeJO.getType()==0) {
-    		AppUser user = appUserService.e789QueryAppUserByMobile(getValidateCodeJO.getMobile());
-    		if(user != null) {
-    			return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
-    		}
-    	}
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(getValidateCodeJO.getDeviceId());
-    	appUserDTO.setMobile(getValidateCodeJO.getType()+getValidateCodeJO.getMobile());
-        ResultDTO result = appUserService.getValidateCode(appUserDTO);
+    	appUserDTO.setMobile(getValidateCodeJO.getMobile());
+    	appUserDTO.setOprationType(getValidateCodeJO.getType());
+        ResultDTO result = appUserService.getE789ValidateCode(appUserDTO);
         return result;
     }
 
@@ -103,7 +99,7 @@ public class AppUserController extends BaseController {
     	appUserDTO.setDeviceId(findPasswordJO.getDeviceId());
     	appUserDTO.setMobile(findPasswordJO.getMobile());
     	appUserDTO.setPassword(findPasswordJO.getPassword());
-        ResultDTO<String> result = appUserService.findPassword(appUserDTO);
+        ResultDTO<String> result = appUserService.e789FindPassword(appUserDTO);
         if(!result.isSuccess()) {
         	return result.fail(result.getCode());
         }
@@ -112,6 +108,7 @@ public class AppUserController extends BaseController {
         loginVO.setHeadImagePath(appUserLoginInfoDTO.getHeadImagePath());
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
+        loginVO.setUserName(appUserLoginInfoDTO.getUserName());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
