@@ -128,7 +128,7 @@ public class MyselfController extends BaseController {
     @ApiOperation(value = "个人信息-上传头像文件")
     @ApiImplicitParams({
     		@ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType="String",paramType="body"),
-    		@ApiImplicitParam(name = "Map<String, MultipartFile>", value = "图片键队", required = true, dataType="Map",paramType="body")
+    		@ApiImplicitParam(name = "file", value = "图片文件流", required = true, dataType="MultipartFile",paramType="body")
     })
     public ResultDTO<String> uploadImage() {
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;

@@ -37,37 +37,37 @@ public class PrepaidRefillController extends BaseController {
 	@Autowired
 	private AppUserMerchantService appUserMerchantService;
 
-	@RequestMapping("/prepaidRefillCheck")
-	@ApiOperation(value = "手机号码充值套餐资费查询url")
-	public ResultDTO<List<PhoneChargeDTO>> prepaidRefillCheck(@RequestBody FlowPackageCheckJO flowPackageCheckJO) {
-		return prepaidRefillService.prepaidRefillCheck(flowPackageCheckJO.getPhone());
+	@RequestMapping("/prepaidCheck")
+	@ApiOperation(value = "话费/流量套餐资费查询url")
+	public ResultDTO<List<PhoneChargeDTO>> prepaidCheck(@RequestBody FlowPackageCheckJO flowPackageCheckJO){
+		//话费资费查询
+		if(0 == flowPackageCheckJO.getType()){
+			return prepaidRefillService.prepaidRefillCheck(flowPackageCheckJO.getPhone());
+
+			//流量资费查询
+		}else if(1 == flowPackageCheckJO.getType()){
+			return prepaidRefillService.flowPackageCheck(flowPackageCheckJO.getPhone());
+		}else{
+			return ResultDTO.fail("交易类型不匹配");
+		}
 	}
 
-	@RequestMapping("/prepaidRefill")
-	@ApiOperation(value = "手机号码充值url")
-	public ResultDTO<PrepaidRefillVO> prepaidRefill(@RequestBody FlowChargeJO fl) {
+	@RequestMapping("/prepaidCharge")
+	@ApiOperation(value = "话费/流量充值url")
+	public ResultDTO<PrepaidRefillVO> prepaidCharge(@RequestBody FlowChargeJO fl) {
 		// 根据userId获取内部商户号
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(fl.getUserId());
 		if (Strings.isNullOrEmpty(innerCode)) {
 			return ResultDTO.fail("该用户没有绑定内部商户号，请核查后重新交易");
 		}
-		return prepaidRefillService.prepaidRefillCharge(fl.getPhone(), fl.getPid(), innerCode);
-	}
-
-	@RequestMapping("/flowPackageCheck")
-	@ApiOperation(value = "检测手机号支持的流量资费套餐url")
-	public ResultDTO<List<PhoneChargeDTO>> flowPackageCheck(@RequestBody FlowPackageCheckJO flowPackageCheckJO) {
-		return prepaidRefillService.flowPackageCheck(flowPackageCheckJO.getPhone());
-	}
-
-	@RequestMapping("/flowCharge")
-	@ApiOperation(value = "手机流量充值url")
-	public ResultDTO<PrepaidRefillVO> flowCharge(@RequestBody FlowChargeJO fl) {
-		// 根据userId获取内部商户号
-		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(fl.getUserId());
-		if (Strings.isNullOrEmpty(innerCode)) {
-			return ResultDTO.fail("该用户没有绑定内部商户号，请核查后重新交易");
+		if( 0 == fl.getType()){
+			return prepaidRefillService.prepaidRefillCharge(fl.getPhone(), fl.getPid(), innerCode);
+		}else if( 1 ==  fl.getType()){
+			return prepaidRefillService.flowCharge(fl.getPhone(), fl.getPid(), innerCode);
+		}else{
+			return ResultDTO.fail("交易类型不匹配");
 		}
-		return prepaidRefillService.flowCharge(fl.getPhone(), fl.getPid(), innerCode);
+		
 	}
+
 }

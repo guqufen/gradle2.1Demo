@@ -2,10 +2,10 @@
 $('#table').bootstrapTable({
     search: false, //是否启动搜索栏
     sidePagination:'server',
-    url:PROJECT_NAME+'/web/merchantentity/query',
+    url:PROJECT_NAME+'/web/appsuser/query',
     showRefresh: false,//是否显示刷新按钮
     showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
-    toolbar: '#toolbar',  //工具按钮用哪个容器
+    // toolbar: '#toolbar',  //工具按钮用哪个容器
     striped: true,   //是否显示行间隔色
     cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
     pagination: true,   //是否显示分页（*）
@@ -31,23 +31,31 @@ $('#table').bootstrapTable({
         align: 'center',
         formatter: operateFormatter
     },{
-        field: 'mercName',
+        field: 'userName',
         title: '用户名',
     },{
-        field: 'legalPersonMobile',
+        field: 'mobile',
         title: '手机号',
+        class : 'mobile'
     },{
-        field: 'legalPerson',
-        title: '绑定实体商户'
+        field: 'merNames',
+        title: '绑定实体商户',
+        formatter : formatMerNames
     },{
         field: 'cardNum',
         title: '身份证'
     },{
-        field: 'createTimer',
+        field: 'regTime',
         title: '新增时间',
         formatter:formatTime
     }]
 });
+// 绑定店铺
+function formatMerNames(value, row, index) {
+  if (value && '' != value) {
+    return value.substr(0, value.length - 1);
+  }
+}
 //表格中操作按钮
 function operateFormatter(value, row, index) {
 	return [
