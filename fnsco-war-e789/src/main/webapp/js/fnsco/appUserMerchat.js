@@ -135,7 +135,38 @@ function responseDetailHandler(res) {
 }
 
 
+$("#btn_select_business").click(function(){
+   var select_data = $('#businessTable').bootstrapTable('getSelections')[0];
+   var innerCode=select_data.entityInnerCode;
+   var id=$(this).attr('appuserid');
+  if(!select_data){
+    layer.msg('请选择商户!');return
+  }
 
+  $.ajax({
+      url:PROJECT_NAME+'/web/e789/appsuser/bindMerchantEntity',
+      type:'POST',
+      dataType : "json",
+      data:{'appUserId':id,'entityInnerCode':innerCode},
+      success:function(data){
+        if(data.code==2002){
+          layer.msg('新增加绑定成功');
+        }else if(data.code==2001){
+          layer.msg('更新绑定成功');
+        }else{
+          layer.msg('绑定失败');
+        }
+        queryEvent('table');
+        $('#businessModal').modal('hide');
+        $(".entityMerName").removeClass('active');
+      },
+      error:function(e)
+      {
+        layer.msg('系统异常!'+e);
+      }
+    });
+
+})
 /*
 *获取实体商户以及处理选中事件
 */
@@ -145,6 +176,7 @@ function selectBusiness(id){
     $("body").addClass('modal-open-custom');
     $('#businessModal').modal('show');
     $("#businessFormSearch input").val('');
+    $("#btn_select_business").attr('appUserId',id);
 }
 initBusiness();
 function initBusiness(){
@@ -154,7 +186,7 @@ function initBusiness(){
       url:PROJECT_NAME+'/web/merchantentity/query',
       showRefresh: false,//是否显示刷新按钮
       showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
-      //toolbar: '#toolbar',  //工具按钮用哪个容器
+      // toolbar: '#toolbar',  //工具按钮用哪个容器
       striped: true,   //是否显示行间隔色
       cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
       pagination: true,   //是否显示分页（*）
