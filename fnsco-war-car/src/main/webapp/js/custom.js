@@ -482,13 +482,13 @@ $('.refrral-code').bind('input propertychange', function() {
     	$(this).val($(this).val().substr(0,20));
     }
 });
-$('.input-rmbnum').bind('input propertychange', function() {  
-    if($(this).val().length>4){
-    	$(this).val($(this).val().substr(0,4));
-    }
-});
-$('.car-money').bind('input propertychange', function() {  
-    if($(this).val().length>4){
-    	$(this).val($(this).val().substr(0,4));
-    }
-});
+// $('.input-rmbnum').bind('input propertychange', function() {  
+//     if($(this).val().length>4){
+//     	$(this).val($(this).val().substr(0,4));
+//     }
+// });
+// $('.car-money').bind('input propertychange', function() {  
+//     if($(this).val().length>4){
+//     	$(this).val($(this).val().substr(0,4));
+//     }
+// });
