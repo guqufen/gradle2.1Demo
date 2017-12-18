@@ -74,7 +74,7 @@ public class AppUserBandE789Controller {
 			appUserMerchantEntityDAO.update(appUserMerchantEntity);
 		}else {
 			entity.setModefyTime(new Date());
-			appUserMerchantEntityDAO.insert(appUserMerchantEntity);
+			appUserMerchantEntityDAO.insert(entity);
 		}
 		return ResultDTO.successForSubmit();
 	}

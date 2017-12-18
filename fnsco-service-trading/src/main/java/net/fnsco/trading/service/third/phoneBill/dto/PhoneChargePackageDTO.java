@@ -14,7 +14,7 @@ public class PhoneChargePackageDTO extends DTO {
 	private String company;
 	@ApiModelProperty(value = "号码归属地", example = "号码归属地")
 	private String cardArea;
-	@ApiModelProperty(value = "名称售价列表", example = "名称售价列表")
+//	@ApiModelProperty(value = "名称售价列表", example = "名称售价列表")
 	private List<PhoneChargeDTO> list;
 
 	public String getCompany() {

@@ -68,7 +68,7 @@ public class PayFsfController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
-    @ApiOperation(value = "首页-分闪付支付-获取分闪付url，用于生成二维码")
+    @ApiOperation(value = "首页-分闪付支付-获取分闪付url，用于生成二维码",notes = "作者：宋先飞")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         Integer userId = getQRUrlJO.getUserId();
         MerchantEntity merchantEntity = entityService.queryMerInfoByUserId(userId);
