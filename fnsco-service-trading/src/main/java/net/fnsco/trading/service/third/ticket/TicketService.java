@@ -13,6 +13,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.trading.service.third.ticket.comm.TicketConstants;
 import net.fnsco.trading.service.third.ticket.dao.TicketContactDAO;
 import net.fnsco.trading.service.third.ticket.dao.TicketOrderDAO;
@@ -57,6 +58,16 @@ public class TicketService extends BaseService {
 
     public void addOrder(TicketOrderDTO ticketOrderDTO) {
         TicketOrderDO ticketOrder = new TicketOrderDO();
+        ticketOrder.setOrderNo(CodeUtil.generateOrderCode("T"));
+        ticketOrder.setFromStationCode(ticketOrderDTO.getFromStationCode());
+        ticketOrder.setFromStationName(ticketOrderDTO.getFromStationName());
+        ticketOrder.setLastModifyTime(new Date());
+        ticketOrder.setStatus(TicketConstants.OrderStateEnum.INIT.getCode());
+        ticketOrder.setToStationCode(ticketOrderDTO.getToStationCode());
+        ticketOrder.setToStationName(ticketOrderDTO.getFromStationName());
+        ticketOrder.setTrainCode(ticketOrderDTO.getTrainCode());
+        ticketOrder.setTrainDate(ticketOrderDTO.getTrainDate());
+        ticketOrder.setCreateTime(new Date());
         ticketOrderDAO.insert(ticketOrder);
         String passengerId = ticketOrderDTO.getPassengerId();
         String[] passengerIds = passengerId.split(",");
