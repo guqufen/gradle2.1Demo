@@ -77,7 +77,7 @@ public class PrepaidRefillService extends BaseService {
 	 * @param phone
 	 * @return
 	 */
-	public ResultDTO<List<PhoneChargeDTO>> prepaidRefillCheck(String phone) {
+	public ResultDTO<PhoneChargePackageDTO> prepaidRefillCheck(String phone) {
 
 		Integer[] denos = { 10, 20, 30, 50, 100, 200, 300 };
 		String result;
@@ -105,7 +105,7 @@ public class PrepaidRefillService extends BaseService {
 					PhoneChargeDTO phChargeDTO = new PhoneChargeDTO();
 					phChargeDTO.setId(String.valueOf(done));
 					phChargeDTO.setName(done + "元");
-					BigDecimal bigDecimal = (BigDecimal) map.get("inprice");
+					BigDecimal bigDecimal = new BigDecimal(map.get("inprice").toString());
 					phChargeDTO.setInprice(bigDecimal + "");
 					list.add(phChargeDTO);
 					phChargePackageDTO.setCompany(map.get("game_area").toString());
@@ -130,7 +130,7 @@ public class PrepaidRefillService extends BaseService {
 	 * @param phone:手机号码
 	 * @return
 	 */
-	public ResultDTO<List<PhoneChargeDTO>> flowPackageCheck(String phone) {
+	public ResultDTO<PhoneChargePackageDTO> flowPackageCheck(String phone) {
 		String result = null;
 		String url = "http://v.juhe.cn/flow/telcheck";// 请求接口地址
 		PhoneChargePackageDTO phChargePackageDTO = new PhoneChargePackageDTO();

@@ -362,4 +362,73 @@
 	<select id="selectIdAuth" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
 		SELECT id_card_number FROM u_app_user WHERE id = #{id,jdbcType=INTEGER}
 	</select>
+	<!-- 条件分页查询 -->
+	<select id="queryPageListE789" parameterType="net.fnsco.core.base.PageDTO" resultType="net.fnsco.order.api.dto.AppUserMerchantEntityDTO">
+	   SELECT
+			UA.*,
+			MME.merc_name AS merNames
+		FROM
+			(
+				SELECT
+					UAP.id,
+					UAP.user_name AS userName,
+					UAP.reg_time AS regTime,
+					UAP.mobile,
+					UAP.id_card_number AS idCardNumber,
+					AUM.entity_inner_code
+				FROM
+					u_app_user UAP
+				LEFT JOIN u_app_user_merchant_entity AUM ON UAP.id = AUM.app_user_id
+			) UA
+		LEFT JOIN m_merchant_entity MME ON UA.entity_inner_code = MME.entity_inner_code
+		<where>
+			    <if test="condition.mobile != null and condition.mobile !=''">
+					AND mobile LIKE CONCAT('%', #{condition.mobile}, '%') 
+				</if>
+				<if test="condition.merNames != null and condition.merNames != ''" >
+        			AND merNames LIKE CONCAT('%', #{condition.merNames}, '%') 
+      			</if>
+      			<if test="condition.userName != null and condition.userName != ''" >
+        			AND userName LIKE CONCAT('%', #{condition.userName}, '%') 
+      			</if>
+      			<if test="condition.idCardNumber != null and condition.idCardNumber != ''" >
+        			AND idCardNumber LIKE CONCAT('%', #{condition.idCardNumber}, '%') 
+      			</if>
+		</where>
+		ORDER BY regTime DESC	
+	    limit #{startRow},#{perPageSize}		
+	</select>
+	<!-- 条件查询总数 -->
+	<select id="queryTotalByConditionE789" parameterType="net.fnsco.order.api.dto.AppUserMerchantEntityDTO" resultType="java.lang.Integer">
+	 SELECT
+			count(*)
+		FROM
+			(
+				SELECT
+					UAP.id,
+					UAP.user_name AS userName,
+					UAP.reg_time AS regTime,
+					UAP.mobile,
+					UAP.id_card_number AS idCardNumber,
+					AUM.entity_inner_code
+				FROM
+					u_app_user UAP
+				LEFT JOIN u_app_user_merchant_entity AUM ON UAP.id = AUM.app_user_id
+			) UA
+		LEFT JOIN m_merchant_entity MME ON UA.entity_inner_code = MME.entity_inner_code
+		<where>
+			    <if test="mobile != null and mobile !=''">
+					AND mobile LIKE CONCAT('%', #{mobile}, '%') 
+				</if>
+				<if test="merNames != null and merNames != ''" >
+        			AND merNames LIKE CONCAT('%', #{merNames}, '%') 
+      			</if>
+      			<if test="userName != null and userName != ''" >
+        			AND userName LIKE CONCAT('%', #{userName}, '%') 
+      			</if>
+      			<if test="idCardNumber != null and idCardNumber != ''" >
+        			AND idCardNumber LIKE CONCAT('%', #{idCardNumber}, '%') 
+      			</if>
+		</where>
+	</select>
 </mapper>

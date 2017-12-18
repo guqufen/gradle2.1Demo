@@ -16,6 +16,8 @@ public class FlowPackageCheckJO extends JO {
 	private String phone;
 	@ApiModelProperty(value = "登录用户id", example = "登录用户id")
 	private String appUserId;
+	@ApiModelProperty(value = "类型0-话费充值;1-流量充值", example = "类型0-话费充值;1-流量充值")
+	private Integer type;
 
 	public String getPhone() {
 		return phone;
@@ -35,6 +37,14 @@ public class FlowPackageCheckJO extends JO {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 }

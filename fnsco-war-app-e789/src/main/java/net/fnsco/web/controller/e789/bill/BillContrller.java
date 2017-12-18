@@ -1,10 +1,12 @@
 package net.fnsco.web.controller.e789.bill;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +22,13 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
+import net.fnsco.trading.service.withdraw.dto.MonthWithdrawCountDTO;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 import net.fnsco.web.controller.e789.jo.BillJO;
+import net.fnsco.web.controller.e789.vo.BillDayVO;
 import net.fnsco.web.controller.e789.vo.BillVO;
 
 /**
@@ -78,14 +83,60 @@ public class BillContrller extends BaseController {
 			if(Strings.isNullOrEmpty(createMonth)) {
 				continue;
 			}
+			List<BillDayVO> billDetails = null;
 			if(!sets.contains(createMonth)) {
 				sets.add(createMonth);
 				BillVO mouthBillVo = new BillVO();
+				billDetails =  Lists.newArrayList();
 				mouthBillVo.setBillDate(createMonth);
+				mouthBillVo.setBillDetails(billDetails);
 				data.add(mouthBillVo);
 			}
+			BillDayVO billDayVO = new BillDayVO();
+			billDayVO.setAmount(formatRMBNumber(tradeWithdrawDO.getAmount()));
+			if(null != tradeWithdrawDO.getTradeType() && 2==tradeWithdrawDO.getTradeType()) {
+				billDayVO.setBillType("1");
+			}else {
+				billDayVO.setBillType("0");
+			}
+			billDayVO.setBillDayDate(DateUtils.dateFormatToStr(tradeWithdrawDO.getCreateTime()));
+			billDetails.add(billDayVO);
 		}
 		
+		for (BillVO billVO : data) {
+			List<MonthWithdrawCountDTO> countWithdraws = tradeWithdrawService.doQueryTotalAmountGroupByMouth(billJO.getUserId(), billVO.getBillDate(), 3);
+			if(CollectionUtils.isNotEmpty(countWithdraws)) {
+				for (MonthWithdrawCountDTO monthWithdrawCountDTO : countWithdraws) {
+					if(monthWithdrawCountDTO.getTradeType()==2) {
+						billVO.setTotalRevenue(formatRMBNumber(new BigDecimal(monthWithdrawCountDTO.getTotalAmount())));;
+					}else {
+						billVO.setTotalExpenditure(addRMBNumber(billVO.getTotalExpenditure(),formatRMBNumber(monthWithdrawCountDTO.getTotalAmount())));
+					}
+					if(billJO.getPageNum() == 1) {
+						billVO.setDisplay(true);
+					}else {
+						TradeWithdrawDO tradeWithdrawDO = datas.get(0);
+						ResultPageDTO<TradeWithdrawDO> datasResultBack = tradeWithdrawService.page(tradeWithdraw, billJO.getPageNum()-1, billJO.getPageSize());
+						if(CollectionUtils.isNotEmpty(datasResultBack.getList())) {
+							TradeWithdrawDO tradeWithdrawDOBack = datasResultBack.getList().get(datasResultBack.getList().size());
+							String firstMouth = formatYYYYMMDate(tradeWithdrawDO.getCreateTime());
+							String backMouth = formatYYYYMMDate(tradeWithdrawDOBack.getCreateTime());
+							if(firstMouth.equals(backMouth)) {
+								billVO.setDisplay(false);
+							}else {
+								billVO.setDisplay(true);
+							}
+						}
+					}
+				}
+				if(Strings.isNullOrEmpty(billVO.getTotalExpenditure())) {
+					billVO.setTotalExpenditure("0.00");
+				}
+				if(Strings.isNullOrEmpty(billVO.getTotalRevenue())) {
+					billVO.setTotalRevenue("0.00");
+				}
+			}
+		}
         return success(data);
     }
 	
@@ -104,5 +155,42 @@ public class BillContrller extends BaseController {
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 		return sdf.format(date);
+	}
+	
+	/**
+	 * formatRMBNumber:(改为保留两位小数 RMB显示)
+	 *
+	 * @param  @param str
+	 * @param  @return    设定文件
+	 * @return String    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月7日 下午6:09:41
+	 */
+	private String formatRMBNumber(BigDecimal str) {
+		if(str == null) {
+			return String.format("%.2f", 0);
+		}else {
+			return String.format("%.2f", str.divide(new BigDecimal(100)).doubleValue());
+		}
+	}
+	
+	private String formatRMBNumber(String str) {
+		if(str == null) {
+			return String.format("%.2f", 0);
+		}else {
+			return String.format("%.2f", new BigDecimal(str).divide(new BigDecimal(100)).doubleValue());
+		}
+	}
+	private String addRMBNumber(String str,String str2) {
+		if(Strings.isNullOrEmpty(str)) {
+			str = "0";
+		}
+		if(Strings.isNullOrEmpty(str2)) {
+			str2 = "0";
+		}
+		
+		BigDecimal result  = new BigDecimal(str).add(new BigDecimal(str2));
+		
+		return String.format("%.2f", result.doubleValue());
 	}
 }

@@ -9,21 +9,153 @@ public class TicketOrderDTO extends DTO {
     @ApiModelProperty(value = "乘客ID", example = "乘客ID")
     private String  passengerId;
     @ApiModelProperty(value = "车号", example = "车号")
-    private String  carNumber;
+    private String  trainCode;
     @ApiModelProperty(value = "票类型（学生票）", example = "票类型（学生票）")
+
     private String  ticketType;
     @ApiModelProperty(value = "坐席（二等座）", example = "坐席（二等座）")
     private String  seatType;
     @ApiModelProperty(value = "价格", example = "价格")
-    private String price;
-    
+    private String  price;
+    @ApiModelProperty(value = "乘车日期", example = "乘车日期")
+    private String  trainDate;
+    /**
+     * 出发站编号
+     */
+    private String  fromStationCode;
+
+    /**
+     * 出发站名称
+     */
+    private String  fromStationName;
+
+    /**
+     * 到达站编号
+     */
+    private String  toStationCode;
+
+    /**
+     * 到达站名称
+     */
+    private String  toStationName;
+
+    /**
+     * fromStationCode
+     *
+     * @return  the fromStationCode
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getFromStationCode() {
+        return fromStationCode;
+    }
+
+    /**
+     * fromStationCode
+     *
+     * @param   fromStationCode    the fromStationCode to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setFromStationCode(String fromStationCode) {
+        this.fromStationCode = fromStationCode;
+    }
+
+    /**
+     * fromStationName
+     *
+     * @return  the fromStationName
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getFromStationName() {
+        return fromStationName;
+    }
+
+    /**
+     * fromStationName
+     *
+     * @param   fromStationName    the fromStationName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setFromStationName(String fromStationName) {
+        this.fromStationName = fromStationName;
+    }
+
+    /**
+     * toStationCode
+     *
+     * @return  the toStationCode
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getToStationCode() {
+        return toStationCode;
+    }
+
+    /**
+     * toStationCode
+     *
+     * @param   toStationCode    the toStationCode to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setToStationCode(String toStationCode) {
+        this.toStationCode = toStationCode;
+    }
+
+    /**
+     * toStationName
+     *
+     * @return  the toStationName
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getToStationName() {
+        return toStationName;
+    }
+
+    /**
+     * toStationName
+     *
+     * @param   toStationName    the toStationName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setToStationName(String toStationName) {
+        this.toStationName = toStationName;
+    }
+
+    /**
+     * trainDate
+     *
+     * @return  the trainDate
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getTrainDate() {
+        return trainDate;
+    }
+
+    /**
+     * trainDate
+     *
+     * @param   trainDate    the trainDate to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setTrainDate(String trainDate) {
+        this.trainDate = trainDate;
+    }
+
     /**
      * price
      *
      * @return  the price
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getPrice() {
         return price;
     }
@@ -34,7 +166,7 @@ public class TicketOrderDTO extends DTO {
      * @param   price    the price to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setPrice(String price) {
         this.price = price;
     }
@@ -62,25 +194,25 @@ public class TicketOrderDTO extends DTO {
     }
 
     /**
-     * carNumber
+     * trainCode
      *
-     * @return  the carNumber
+     * @return  the trainCode
      * @since   CodingExample Ver 1.0
     */
 
-    public String getCarNumber() {
-        return carNumber;
+    public String getTrainCode() {
+        return trainCode;
     }
 
     /**
-     * carNumber
+     * trainCode
      *
-     * @param   carNumber    the carNumber to set
+     * @param   trainCode    the trainCode to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setCarNumber(String carNumber) {
-        this.carNumber = carNumber;
+    public void setTrainCode(String trainCode) {
+        this.trainCode = trainCode;
     }
 
     /**

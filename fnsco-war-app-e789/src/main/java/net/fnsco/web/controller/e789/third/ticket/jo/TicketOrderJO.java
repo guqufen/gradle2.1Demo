@@ -1,13 +1,9 @@
 package net.fnsco.web.controller.e789.third.ticket.jo;
 
-import java.math.BigDecimal;
-
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 
 public class TicketOrderJO extends CommonJO {
-    @ApiModelProperty(value = "价格", example = "价格")
-    private String price;
     @ApiModelProperty(value = "乘客ID", example = "乘客ID")
     private String passengerId;
     @ApiModelProperty(value = "车号", example = "车号")
@@ -16,6 +12,150 @@ public class TicketOrderJO extends CommonJO {
     private String ticketType;
     @ApiModelProperty(value = "坐席（二等座）", example = "坐席（二等座）")
     private String seatCode;
+    @ApiModelProperty(value = "价格", example = "价格")
+    private String price;
+    @ApiModelProperty(value = "乘车日期", example = "乘车日期")
+    private String trainDate;
+    @ApiModelProperty(value = "出发站编号", example = "出发站编号")
+    private String fromStationCode;
+    @ApiModelProperty(value = "出发站名称", example = "出发站名称")
+    private String fromStationName;
+    @ApiModelProperty(value = "到达站编号", example = "到达站编号")
+    private String toStationCode;
+    @ApiModelProperty(value = "到达站名称", example = "到达站名称")
+    private String toStationName;
+
+    /**
+     * seatCode
+     *
+     * @return  the seatCode
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getSeatCode() {
+        return seatCode;
+    }
+
+    /**
+     * seatCode
+     *
+     * @param   seatCode    the seatCode to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setSeatCode(String seatCode) {
+        this.seatCode = seatCode;
+    }
+
+    /**
+     * trainDate
+     *
+     * @return  the trainDate
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getTrainDate() {
+        return trainDate;
+    }
+
+    /**
+     * trainDate
+     *
+     * @param   trainDate    the trainDate to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setTrainDate(String trainDate) {
+        this.trainDate = trainDate;
+    }
+
+    /**
+     * fromStationCode
+     *
+     * @return  the fromStationCode
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getFromStationCode() {
+        return fromStationCode;
+    }
+
+    /**
+     * fromStationCode
+     *
+     * @param   fromStationCode    the fromStationCode to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setFromStationCode(String fromStationCode) {
+        this.fromStationCode = fromStationCode;
+    }
+
+    /**
+     * fromStationName
+     *
+     * @return  the fromStationName
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getFromStationName() {
+        return fromStationName;
+    }
+
+    /**
+     * fromStationName
+     *
+     * @param   fromStationName    the fromStationName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setFromStationName(String fromStationName) {
+        this.fromStationName = fromStationName;
+    }
+
+    /**
+     * toStationCode
+     *
+     * @return  the toStationCode
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getToStationCode() {
+        return toStationCode;
+    }
+
+    /**
+     * toStationCode
+     *
+     * @param   toStationCode    the toStationCode to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setToStationCode(String toStationCode) {
+        this.toStationCode = toStationCode;
+    }
+
+    /**
+     * toStationName
+     *
+     * @return  the toStationName
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getToStationName() {
+        return toStationName;
+    }
+
+    /**
+     * toStationName
+     *
+     * @param   toStationName    the toStationName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setToStationName(String toStationName) {
+        this.toStationName = toStationName;
+    }
 
     /**
      * price
