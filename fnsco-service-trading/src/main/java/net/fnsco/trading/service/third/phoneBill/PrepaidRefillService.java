@@ -105,7 +105,7 @@ public class PrepaidRefillService extends BaseService {
 					PhoneChargeDTO phChargeDTO = new PhoneChargeDTO();
 					phChargeDTO.setId(String.valueOf(done));
 					phChargeDTO.setName(done + "元");
-					BigDecimal bigDecimal = (BigDecimal) map.get("inprice");
+					BigDecimal bigDecimal = new BigDecimal(map.get("inprice").toString());
 					phChargeDTO.setInprice(bigDecimal + "");
 					list.add(phChargeDTO);
 					phChargePackageDTO.setCompany(map.get("game_area").toString());
