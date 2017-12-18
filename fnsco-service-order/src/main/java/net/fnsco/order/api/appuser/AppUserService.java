@@ -92,5 +92,6 @@ public interface AppUserService {
     List<AppUser> selectAllInviteAppUser();
     boolean updateAppUser(AppUser appUser);
 	String getIdAuth(Integer userId);
-	AppUser e789QueryAppUserByMobile(String mobile);
+	ResultDTO getE789ValidateCode(AppUserDTO appUserDTO);
+	ResultDTO e789FindPassword(AppUserDTO appUserDTO);
 }
