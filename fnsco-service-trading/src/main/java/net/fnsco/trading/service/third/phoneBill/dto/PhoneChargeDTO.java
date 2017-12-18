@@ -6,11 +6,11 @@ import net.fnsco.core.base.DTO;
 public class PhoneChargeDTO extends DTO {
 
 	private static final long serialVersionUID = 1L;
-	@ApiModelProperty(value = "套餐ID,仅限流量资费查询", example = "套餐ID,仅限流量资费查询")
+	@ApiModelProperty(value = "套餐ID/话费充值金额", example = "套餐ID/话费充值金额")
 	private String id;
 	@ApiModelProperty(value = "产品名称:10元/10M", example = "产品名称:10元/10M")
 	private String name;
-	@ApiModelProperty(value = "xx.xx", example = "xx.xx")
+	@ApiModelProperty(value = "售价:xx.xx元", example = "xx.xx")
 	private String inprice;
 
 	public String getName() {
