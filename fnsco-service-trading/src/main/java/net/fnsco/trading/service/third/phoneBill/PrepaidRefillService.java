@@ -43,31 +43,32 @@ import net.fnsco.trading.service.third.phoneBill.dto.PhoneChargeDTO;
 import net.fnsco.trading.service.third.phoneBill.dto.PhoneChargePackageDTO;
 
 @Service
-public class PrepaidRefillService extends BaseService{
+public class PrepaidRefillService extends BaseService {
 
 	@Autowired
-    private SequenceService  sequenceService;
+	private SequenceService sequenceService;
 	@Autowired
-    private TradeOrderService tradeOrderService;
+	private TradeOrderService tradeOrderService;
 
 	private final String DEF_CHATSET = "UTF-8";
-    private final int DEF_CONN_TIMEOUT = 30000;
-    private final int DEF_READ_TIMEOUT = 30000;
-    private String userAgent =  "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36";
+	private final int DEF_CONN_TIMEOUT = 30000;
+	private final int DEF_READ_TIMEOUT = 30000;
+	private String userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36";
 
 	// HttpClient请求的相关设置，可以不用配置，用默认的参数，这里设置连接和超时时长(毫秒)
 	public static RequestConfig config = RequestConfig.custom().setConnectTimeout(30000).setSocketTimeout(30000)
 			.build();
 
-	private final String OpenId="JH284e6d24f2e3f5d89668a64b50c2c886";
+	private final String OpenId = "JH284e6d24f2e3f5d89668a64b50c2c886";
 
-	//配置流量充值
-    private final String APPKEYFLOW ="6121e6e31f9e1eff037d8c416e0ee4fe";
+	// 配置流量充值
+	private final String APPKEYFLOW = "6121e6e31f9e1eff037d8c416e0ee4fe";
 
-    //配置话费充值
-    private final String APPKEYREPAID = "9b9450b3b217f8c0c7dcb2a28eafbbb7";
-    private final String telQueryUrl = "http://op.juhe.cn/ofpay/mobile/telquery?cardnum=*&phoneno=!&key=" + APPKEYREPAID;
-    private final String onlineUrl = "http://op.juhe.cn/ofpay/mobile/onlineorder?key=" + APPKEYREPAID
+	// 配置话费充值
+	private final String APPKEYREPAID = "9b9450b3b217f8c0c7dcb2a28eafbbb7";
+	private final String telQueryUrl = "http://op.juhe.cn/ofpay/mobile/telquery?cardnum=*&phoneno=!&key="
+			+ APPKEYREPAID;
+	private final String onlineUrl = "http://op.juhe.cn/ofpay/mobile/onlineorder?key=" + APPKEYREPAID
 			+ "&phoneno=!&cardnum=*&orderid=@&sign=$";
 
 	/**
@@ -87,17 +88,10 @@ public class PrepaidRefillService extends BaseService{
 
 			try {
 				/**
-				 * 充值资费查询，聚合数据返回
-				 * { 
-				 * "reason": "成功", 
-				 * "result": { 
-				 * 		"cardid": "191404", //卡类ID
-				 * 		"cardname": "江苏电信话费100元直充", //卡类名称 
-				 * 		"inprice": 98.4, //购买价格
-				 * 		"game_area": "江苏苏州电信" //手机号码归属地 
-				 * },
-				 * "error_code": 0 
-				 * }
+				 * 充值资费查询，聚合数据返回 { "reason": "成功", "result": { "cardid":
+				 * "191404", //卡类ID "cardname": "江苏电信话费100元直充", //卡类名称
+				 * "inprice": 98.4, //购买价格 "game_area": "江苏苏州电信" //手机号码归属地 },
+				 * "error_code": 0 }
 				 */
 				result = get(telQueryUrl.replace("*", done + "").replace("!", phone), 0);
 				logger.info(result);
@@ -116,7 +110,7 @@ public class PrepaidRefillService extends BaseService{
 					list.add(phChargeDTO);
 					phChargePackageDTO.setCompany(map.get("game_area").toString());
 					phChargePackageDTO.setCardArea(map.get("game_area").toString());
-					phChargePackageDTO.setType("1");//设置支持类型，1-全国
+					phChargePackageDTO.setType("1");// 设置支持类型，1-全国
 				} else {
 					logger.error("话费充值失败,原因:+" + juhe.getReason());
 					return ResultDTO.fail(juhe.getReason());
@@ -141,42 +135,24 @@ public class PrepaidRefillService extends BaseService{
 		String url = "http://v.juhe.cn/flow/telcheck";// 请求接口地址
 		PhoneChargePackageDTO phChargePackageDTO = new PhoneChargePackageDTO();
 		List<PhoneChargeDTO> list = new ArrayList<>();
-		
+
 		StringBuffer sb = new StringBuffer();
 		String sendData = sb.append("?phone=").append(phone).append("&key=").append(APPKEYFLOW).toString();
 
 		try {
 			/**
-			 * 数据返回格式如下：
-			 * { 
-			 *  "reason": "success", 
-			 *  "result":
-			 *  [ 
-			 * 		{
-			 * 			"city": "全国",			//支持城市
-			 * 			"company": "中国移动", 		//运营商
-			 * 			"companytype": "2", 		//运营商ID
-			 * 			"name": "中国移动全国流量套餐",	//套餐名称
-			 * 			"type": "1", 			//支持类型1：全国 2：城市
-			 * 			"flows": [ 				//流量套餐列表
-			 * 			{ 
-			 * 				"id": "3", 		//套餐ID
-			 * 				"p": "10M", 		//套餐流量名称
-			 * 				"v": "10",			//套餐流量值
-			 * 				"inprice": "2.90" 	//价格
-			 * 			}
-			 * 		] 
-			 * 		} 
-			 * ], 
-			 * "error_code": 0
-			 * }
+			 * 数据返回格式如下： { "reason": "success", "result": [ { "city": "全国",
+			 * //支持城市 "company": "中国移动", //运营商 "companytype": "2", //运营商ID
+			 * "name": "中国移动全国流量套餐", //套餐名称 "type": "1", //支持类型1：全国 2：城市
+			 * "flows": [ //流量套餐列表 { "id": "3", //套餐ID "p": "10M", //套餐流量名称 "v":
+			 * "10", //套餐流量值 "inprice": "2.90" //价格 } ] } ], "error_code": 0 }
 			 */
 			result = net(url, sendData, "GET");
-			JuheDTO juhe =  JSONObject.parseObject(result, JuheDTO.class);
+			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
 
 			// 查询成功
 			if (juhe.getError_code() == 0) {
-//				logger.info(juhe.getResult()+"");
+				// logger.info(juhe.getResult()+"");
 
 				// 获取需要返回的数据域(套餐类型)
 				JSONArray jsonArray = (JSONArray) juhe.getResult();
@@ -191,11 +167,8 @@ public class PrepaidRefillService extends BaseService{
 				List<Map<String, String>> lists = JSONObject.parseObject(map.get("flows").toString(), List.class);
 				for (Map<String, String> map2 : lists) {
 					/**
-					 * 返回的套餐资费list
-					 * id string 套餐ID; 
-					 * p string 套餐流量名称 ;
-					 * v string 套餐流量值 ;
-					 * inprice string 价格;
+					 * 返回的套餐资费list id string 套餐ID; p string 套餐流量名称 ; v string
+					 * 套餐流量值 ; inprice string 价格;
 					 */
 					PhoneChargeDTO phChargeDTO = new PhoneChargeDTO();
 					phChargeDTO.setId(map2.get("id"));
@@ -218,52 +191,55 @@ public class PrepaidRefillService extends BaseService{
 
 	/**
 	 * 流量充值
+	 * 
 	 * @param phone:流量充值手机号
 	 * @param pid:流量充值套餐ID
 	 * @param innerCode:内部商户号，便于插表数据
-	 * @return
-	 * 请求示例：http://v.juhe.cn/flow/recharge?key=您申请的APPKEY&phone=18913513535&pid=8&orderid=a1122111d&sign=721a3f667b0eb63f54517971181e7392
+	 * @return 请求示例：http://v.juhe.cn/flow/recharge?key=您申请的APPKEY&phone=
+	 *         18913513535&pid=8&orderid=a1122111d&sign=
+	 *         721a3f667b0eb63f54517971181e7392
 	 */
 	public ResultDTO flowCharge(String phone, String pid, String innerCode) {
 
 		String result = null;
 		String url = "http://v.juhe.cn/flow/recharge";// 请求接口地址
 		String orderid = DateUtils.getNowYMDOnlyStr() + phone + sequenceService.getOrderSequence("t_trade_order");
+		
 
-		//md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
-		String sign = Md5Util.MD5(OpenId+APPKEYFLOW+phone+pid+orderid).toLowerCase();
+		// md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
+		String sign = Md5Util.MD5(OpenId + APPKEYFLOW + phone + pid + orderid).toLowerCase();
 
 		StringBuffer sb = new StringBuffer();
 		String sendData = sb.append("?key=").append(APPKEYFLOW).append("&phone=").append(phone).append("&pid=")
 				.append(pid).append("&orderid=").append(orderid).append("&sign=").append(sign).toString();
-		
+
 		TradeOrderDO tradeData = new TradeOrderDO();
-		tradeData.setOrderNo(orderid);//设置订单号
-		tradeData.setTxnAmount(new BigDecimal(pid));//设置交易金额
-		tradeData.setChannelType("80");//设置渠道类型，80-法奈昇余额
-		tradeData.setOrderCeateTime(new Date());//设置订单创建时间
-		tradeData.setTxnType(1);//设置交易类型:1-消费
-		tradeData.setTxnSubType(13);//设置交易子类型:13-购买流量
-		tradeData.setPayType("03");//设置支付方式:03-余额
-		tradeData.setPaySubType("04");//设置支付子方式:04-余额
-		tradeData.setInnerCode(innerCode);//设置内部商户号
-		tradeData.setPayMedium("01");//支付媒介:01-app
-		tradeOrderService.doAdd(tradeData);//添加
+		tradeData.setOrderNo(orderid);// 设置订单号
+		tradeData.setTxnAmount(new BigDecimal(pid));// 设置交易金额
+		tradeData.setChannelType("80");// 设置渠道类型，80-法奈昇余额
+		tradeData.setOrderCeateTime(new Date());// 设置订单创建时间
+		tradeData.setTxnType(1);// 设置交易类型:1-消费
+		tradeData.setTxnSubType(13);// 设置交易子类型:13-购买流量
+		tradeData.setPayType("03");// 设置支付方式:03-余额
+		tradeData.setPaySubType("04");// 设置支付子方式:04-余额
+		tradeData.setInnerCode(innerCode);// 设置内部商户号
+		tradeData.setPayMedium("01");// 支付媒介:01-app
+		tradeOrderService.doAdd(tradeData);// 添加
 
 		try {
 			result = net(url, sendData, "GET");
 			logger.info(result);
 			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
 
-			//交易成功
-			if(juhe.getError_code() == 0){
+			// 交易成功
+			if (juhe.getError_code() == 0) {
 
 				Map<String, String> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
-				tradeData.setPayOrderNo(map.get("sporder_id"));//设置渠道订单号
-				tradeData.setTxnAmount(new BigDecimal(map.get("ordercash")));//设置实际消费金额
-				tradeData.setCompleteTime(new Date());//设置交易完成时间
-				tradeData.setRespCode(TradeStateEnum.SUCCESS.getCode());//交易成功
-				tradeData.setRespMsg(juhe.getReason());//设置响应
+				tradeData.setPayOrderNo(map.get("sporder_id"));// 设置渠道订单号
+				tradeData.setTxnAmount(new BigDecimal(map.get("ordercash")));// 设置实际消费金额
+				tradeData.setCompleteTime(new Date());// 设置交易完成时间
+				tradeData.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
+				tradeData.setRespMsg(juhe.getReason());// 设置响应
 				tradeOrderService.doUpdate(tradeData);
 
 				Map<String, String> map2 = new HashMap<>();
@@ -271,18 +247,18 @@ public class PrepaidRefillService extends BaseService{
 				map2.put("respCode", TradeStateEnum.SUCCESS.getCode());
 				map2.put("respMsg", juhe.getReason());
 				return ResultDTO.success(map2);
-			}else if( juhe.getError_code() == 10014){//系统内部异常(调用充值类业务时，请务必联系客服或通过订单查询接口检测订单，避免造成损失)
+			} else if (juhe.getError_code() == 10014) {// 系统内部异常(调用充值类业务时，请务必联系客服或通过订单查询接口检测订单，避免造成损失)
 
-				tradeData.setRespCode("1000");//交易进行中，需要再次调用订单查询接口进行查询
-				tradeData.setRespMsg(juhe.getReason());//设置响应
+				tradeData.setRespCode("1000");// 交易进行中，需要再次调用订单查询接口进行查询
+				tradeData.setRespMsg(juhe.getReason());// 设置响应
 				tradeOrderService.doUpdate(tradeData);
 
-				return ResultDTO.fail(juhe.getReason());
-			}else{
+				return ResultDTO.fail("系统内部异常，请稍后查询");
+			} else {
 
-				tradeData.setRespCode(TradeStateEnum.FAIL.getCode());//交易失败
-				tradeData.setRespMsg(juhe.getReason());//设置响应
-				tradeData.setCompleteTime(new Date());//设置交易完成时间
+				tradeData.setRespCode(TradeStateEnum.FAIL.getCode());// 交易失败
+				tradeData.setRespMsg(juhe.getReason());// 设置响应
+				tradeData.setCompleteTime(new Date());// 设置交易完成时间
 				tradeOrderService.doUpdate(tradeData);
 
 				return ResultDTO.fail(juhe.getReason());
@@ -296,39 +272,65 @@ public class PrepaidRefillService extends BaseService{
 
 	/**
 	 * 话费充值
+	 * 
 	 * @param phone:手机号
 	 * @param pid:套餐id(金额)
 	 * @return
 	 */
-	public ResultDTO prepaidRefillCharge(String phone, String pid, String innerCode){
+	public ResultDTO prepaidRefillCharge(String phone, String pid, String innerCode) {
 
 		String result = null;
+		Map<String, String> map = new HashMap<>();
 		String orderid = DateUtils.getNowYMDOnlyStr() + phone + sequenceService.getOrderSequence("t_trade_order");
 
-		//md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
+		// md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
 		String sign = Md5Util.MD5(OpenId + APPKEYREPAID + phone + pid + orderid);
-		
+
 		TradeOrderDO tradeData = new TradeOrderDO();
-		tradeData.setOrderNo(orderid);//设置订单号
-		tradeData.setTxnAmount(new BigDecimal(pid));//设置交易金额
-		tradeData.setChannelType("80");//设置渠道类型，80-法奈昇余额
-		tradeData.setOrderCeateTime(new Date());//设置订单创建时间
-		tradeData.setTxnType(1);//设置交易类型:1-消费
-		tradeData.setTxnSubType(13);//设置交易子类型:13-购买流量
-		tradeData.setPayType("03");//设置支付方式:03-余额
-		tradeData.setPaySubType("04");//设置支付子方式:04-余额
-		tradeData.setInnerCode(innerCode);//设置内部商户号
-		tradeData.setPayMedium("01");//支付媒介:01-app
-		tradeOrderService.doAdd(tradeData);//添加
-		
+		tradeData.setOrderNo(orderid);// 设置订单号
+		tradeData.setTxnAmount(new BigDecimal(pid));// 设置交易金额
+		tradeData.setChannelType("80");// 设置渠道类型，80-法奈昇余额
+		tradeData.setOrderCeateTime(new Date());// 设置订单创建时间
+		tradeData.setTxnType(1);// 设置交易类型:1-消费
+		tradeData.setTxnSubType(13);// 设置交易子类型:13-购买流量
+		tradeData.setPayType("03");// 设置支付方式:03-余额
+		tradeData.setPaySubType("04");// 设置支付子方式:04-余额
+		tradeData.setInnerCode(innerCode);// 设置内部商户号
+		tradeData.setPayMedium("01");// 支付媒介:01-app
+		tradeOrderService.doAdd(tradeData);// 添加
+
 		try {
-			result = get(onlineUrl.replace("*", pid + "").replace("!", phone).replace("@", orderid).replace("$", sign),0);
+			result = get(onlineUrl.replace("*", pid + "").replace("!", phone).replace("@", orderid).replace("$", sign),
+					0);
 			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
-			if(juhe.getError_code() == 0){
-				Map<String, String> map = new HashMap<>();
+			if (juhe.getError_code() == 0) {
+
+				tradeData.setPayOrderNo(map.get("sporder_id"));// 设置渠道订单号
+				tradeData.setTxnAmount(new BigDecimal(map.get("ordercash")));// 设置实际消费金额
+				tradeData.setCompleteTime(new Date());// 设置交易完成时间
+				tradeData.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
+				tradeData.setRespMsg(juhe.getReason());// 设置响应
+				tradeOrderService.doUpdate(tradeData);
+
+				map.put("respCode", TradeStateEnum.SUCCESS.getCode());
+				map.put("respMsg", juhe.getReason());
 				map.put("orderNo", map.get("orderid"));
+
 				return ResultDTO.success(map);
-			}else{
+			} else if (juhe.getError_code() == 10014) {// 系统内部异常(调用充值类业务时，请务必联系客服或通过订单查询接口检测订单，避免造成损失)
+
+				tradeData.setRespCode("1000");// 交易进行中，需要再次调用订单查询接口进行查询
+				tradeData.setRespMsg(juhe.getReason());// 设置响应
+				tradeOrderService.doUpdate(tradeData);
+
+				return ResultDTO.fail("系统内部异常，请稍后查询");
+			} else {
+
+				tradeData.setRespCode(TradeStateEnum.FAIL.getCode());// 交易失败
+				tradeData.setRespMsg(juhe.getReason());// 设置响应
+				tradeData.setCompleteTime(new Date());// 设置交易完成时间
+				tradeOrderService.doUpdate(tradeData);
+
 				return ResultDTO.fail(juhe.getReason());
 			}
 		} catch (Exception e) {
@@ -338,7 +340,7 @@ public class PrepaidRefillService extends BaseService{
 
 		return ResultDTO.fail();
 	}
-	
+
 	/**
 	 * 
 	 * @param strUrl:提交的url
@@ -419,7 +421,7 @@ public class PrepaidRefillService extends BaseService{
 			if (method == null || method.equals("GET")) {
 				strUrl = strUrl + "?" + urlencode(params);
 			}
-			System.out.println("strUrl = "+strUrl);
+			System.out.println("strUrl = " + strUrl);
 			URL url = new URL(strUrl);
 			conn = (HttpURLConnection) url.openConnection();
 			if (method == null || method.equals("GET")) {
@@ -470,18 +472,18 @@ public class PrepaidRefillService extends BaseService{
 		StringBuilder sb = new StringBuilder();
 		String str = null;
 		for (Map.Entry i : data.entrySet()) {
-				System.out.println("i=["+i+"]");
-				try {
-					sb.append(i.getKey()).append("=").append(URLEncoder.encode(i.getValue() + "", DEF_CHATSET)).append("&");
-					str = sb.toString();
-					str = str.replaceAll("%22", "");
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+			System.out.println("i=[" + i + "]");
+			try {
+				sb.append(i.getKey()).append("=").append(URLEncoder.encode(i.getValue() + "", DEF_CHATSET)).append("&");
+				str = sb.toString();
+				str = str.replaceAll("%22", "");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 		}
-		return str.substring(0, str.length()-1);
+		return str.substring(0, str.length() - 1);
 	}
-	
+
 	/**
 	 * 工具类方法 get 网络请求
 	 * 
