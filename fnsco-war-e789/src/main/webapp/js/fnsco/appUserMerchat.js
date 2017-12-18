@@ -149,8 +149,16 @@ $("#btn_select_business").click(function(){
       dataType : "json",
       data:{'appUserId':id,'entityInnerCode':innerCode},
       success:function(data){
-        console.log(data);
+        if(data.code==2002){
+          layer.msg('新增加绑定成功');
+        }else if(data.code==2001){
+          layer.msg('更新绑定成功');
+        }else{
+          layer.msg('绑定失败');
+        }
         queryEvent('table');
+        $('#businessModal').modal('hide');
+        $(".entityMerName").removeClass('active');
       },
       error:function(e)
       {
