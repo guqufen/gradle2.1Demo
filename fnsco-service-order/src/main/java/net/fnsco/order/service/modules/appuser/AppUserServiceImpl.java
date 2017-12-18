@@ -32,7 +32,6 @@ import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
-import net.fnsco.order.api.appuser.AppUserMerchantService;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
@@ -44,6 +43,7 @@ import net.fnsco.order.api.dto.AppUserInfoDTO;
 import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.order.api.dto.AppUserManageDTO;
 import net.fnsco.order.api.dto.AppUserMerchantDTO;
+import net.fnsco.order.api.dto.AppUserMerchantEntityDTO;
 import net.fnsco.order.api.dto.AppUserSettingDTO;
 import net.fnsco.order.api.dto.BandDto;
 import net.fnsco.order.api.dto.QueryBandDTO;
@@ -946,5 +946,21 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 		}else{
 			return "";
 		}
+	}
+
+	@Override
+	public ResultPageDTO<AppUserMerchantEntityDTO> queryPageList(AppUserMerchantEntityDTO record, int currentPageNum,
+			int perPageSize) {
+		
+		//分页器实例化     实例化当前页和每条显示的记录数 还有传过来的参数  手机号和店铺名等条件称封装到一个实体里面
+        PageDTO<AppUserMerchantEntityDTO> params = new PageDTO<AppUserMerchantEntityDTO>(currentPageNum, perPageSize, record);
+        //调用Dao方法时可以使用上面封装的实体         AppUserManageDTO即使用户返回给用户的实体 也用来传递参数
+        List<AppUserMerchantEntityDTO> data = appUserDao.queryPageListE789(params);
+        //返回根据条件查询的所有记录条数
+        int totalNum = appUserDao.queryTotalByConditionE789(record);
+        //返回给页面总条数和每页查询的数据
+        ResultPageDTO<AppUserMerchantEntityDTO> result = new ResultPageDTO<AppUserMerchantEntityDTO>(totalNum, data);
+        return result;
+		
 	}
 }
