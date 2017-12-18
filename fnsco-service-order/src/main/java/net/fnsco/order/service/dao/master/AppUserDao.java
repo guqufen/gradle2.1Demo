@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.core.base.PageDTO;
 import net.fnsco.order.api.dto.AppUserManageDTO;
+import net.fnsco.order.api.dto.AppUserMerchantEntityDTO;
 import net.fnsco.order.api.dto.QueryBandDTO;
 import net.fnsco.order.service.domain.AppUser;
 
@@ -54,12 +55,17 @@ public interface AppUserDao {
 	 */
     List<AppUserManageDTO> queryPageList(PageDTO<AppUserManageDTO> pages);
     
+    List<AppUserMerchantEntityDTO> queryPageListE789(PageDTO<AppUserMerchantEntityDTO> pages);
+    
     /**
      * 条件查询总数
      * @param pages
      * @return
      */
     int queryTotalByCondition(AppUserManageDTO record);
+    
+    int queryTotalByConditionE789(AppUserMerchantEntityDTO record);
+    
     List<QueryBandDTO> selectBandPeopleByMobile(@Param("mobile")String mobile);
     
     /**

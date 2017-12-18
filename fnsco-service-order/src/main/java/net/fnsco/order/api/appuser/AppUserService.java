@@ -1,7 +1,6 @@
 package net.fnsco.order.api.appuser;
 
 import java.util.List;
-import java.util.Map;
 
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -10,6 +9,7 @@ import net.fnsco.order.api.dto.AppUserInfoDTO;
 import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.order.api.dto.AppUserManageDTO;
 import net.fnsco.order.api.dto.AppUserMerchantDTO;
+import net.fnsco.order.api.dto.AppUserMerchantEntityDTO;
 import net.fnsco.order.api.dto.BandDto;
 import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.order.service.domain.AppUserMerchant;
@@ -52,6 +52,19 @@ public interface AppUserService {
 	 * @since  CodingExample　Ver 1.1
 	 */
 	ResultPageDTO<AppUserManageDTO> queryPageList(AppUserManageDTO record,int currentPageNum, int perPageSize);
+	
+	/**
+	 * queryPageList:(e789后台绑定商户分页查询)
+	 *
+	 * @param  @param record
+	 * @param  @param currentPageNum
+	 * @param  @param perPageSize
+	 * @param  @return    设定文件
+	 * @return ResultPageDTO<AppUserMerchantEntityDTO>    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月18日 下午2:21:34
+	 */
+	ResultPageDTO<AppUserMerchantEntityDTO> queryPageList(AppUserMerchantEntityDTO record,int currentPageNum, int perPageSize);
 	
 	List<AppUserManageDTO> queryAppPageList(AppUserManageDTO record);
 	

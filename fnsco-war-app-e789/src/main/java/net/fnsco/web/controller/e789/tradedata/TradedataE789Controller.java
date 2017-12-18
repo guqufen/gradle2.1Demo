@@ -70,7 +70,11 @@ public class TradedataE789Controller extends BaseController {
 		TradeDataVO resultVO = new TradeDataVO();
 		resultVO.setCurrentPageNum(tradeDataJO.getPageNum());
 		resultVO.setPageSize(tradeDataJO.getPageSize());
-		resultVO.setTotalPage(resultData.getTotal());
+		Integer totalPage = resultData.getTotal()%resultVO.getPageSize();
+		if(totalPage !=0) {
+			totalPage = totalPage+1;
+		}
+		resultVO.setTotalPage(totalPage);
 		List<TradeOrderDO> data = resultData.getList();
 		List<TradeDataListVO> datas = Lists.newArrayList();
 		for (TradeOrderDO tradeOrderDO2 : data) {

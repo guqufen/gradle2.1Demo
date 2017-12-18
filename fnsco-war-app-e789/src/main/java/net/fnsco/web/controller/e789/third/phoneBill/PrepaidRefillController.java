@@ -16,7 +16,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.merchant.AppUserMerchantService;
 import net.fnsco.trading.service.third.phoneBill.PrepaidRefillService;
-import net.fnsco.trading.service.third.phoneBill.dto.PhoneChargeDTO;
+import net.fnsco.trading.service.third.phoneBill.dto.PhoneChargePackageDTO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 import net.fnsco.web.controller.e789.third.ticket.vo.PrepaidRefillVO;
@@ -39,7 +39,7 @@ public class PrepaidRefillController extends BaseController {
 
 	@RequestMapping("/prepaidCheck")
 	@ApiOperation(value = "话费/流量套餐资费查询url")
-	public ResultDTO<List<PhoneChargeDTO>> prepaidCheck(@RequestBody FlowPackageCheckJO flowPackageCheckJO){
+	public ResultDTO<PhoneChargePackageDTO> prepaidCheck(@RequestBody FlowPackageCheckJO flowPackageCheckJO){
 		//话费资费查询
 		if(0 == flowPackageCheckJO.getType()){
 			return prepaidRefillService.prepaidRefillCheck(flowPackageCheckJO.getPhone());
