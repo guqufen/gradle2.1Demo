@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.beust.jcommander.internal.Maps;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
@@ -47,11 +49,15 @@ public class IDAuthenticationController extends BaseController {
 	 private Environment           env;
 	@RequestMapping(value = "/auth")
     @ApiOperation(value = "个人信息-身份证认证接口")
-    public ResultDTO idAuth(@RequestBody AccountBalanceJO accountBalanceJO) {
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType="String",paramType="body"),
+		@ApiImplicitParam(name = "Map<String, MultipartFile>", value = "图片键队key'front'正面'back'反面", required = true, dataType="Map",paramType="body")
+	})
+    public ResultDTO idAuth() {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         IdCardDTO idCard =new IdCardDTO();
-        Integer userId = accountBalanceJO.getUserId();
+        Integer userId = Integer.valueOf(request.getParameter("userId"));
         if (userId == null) {
         	return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }

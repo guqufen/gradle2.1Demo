@@ -53,7 +53,7 @@ public class InsuranceController extends BaseController {
 	@ApiOperation(value = "保险申请-添加申请")
 	private ResultDTO saveSafe(@RequestBody SaveSafeJO saveSafeJO) {
 		if(saveSafeJO.getCarOriginalPrice().compareTo(new BigDecimal(1000))==1) {
-			return ResultDTO.fail("汽车原价大于一千万");
+			return ResultDTO.fail("金额过大请重新输入");
 		}
 		String code = saveSafeJO.getVerCode();
 		String mobile = saveSafeJO.getMobile();
