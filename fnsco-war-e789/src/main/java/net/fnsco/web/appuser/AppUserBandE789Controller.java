@@ -67,7 +67,7 @@ public class AppUserBandE789Controller {
 		if(Strings.isNullOrEmpty(entity.getEntityInnerCode()) || null == entity.getAppUserId()) {
 			return ResultDTO.fail();
 		}
-		AppUserMerchantEntityDO appUserMerchantEntity = appUserMerchantEntityDAO.selectByEntityInnerCode(entity.getEntityInnerCode(), entity.getAppUserId());
+		AppUserMerchantEntityDO appUserMerchantEntity = appUserMerchantEntityDAO.selectByEntityInnerCode(entity.getAppUserId());
 		if(null != appUserMerchantEntity) {
 			appUserMerchantEntity.setModefyTime(new Date());
 			appUserMerchantEntity.setEntityInnerCode(entity.getEntityInnerCode());
