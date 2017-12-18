@@ -515,7 +515,7 @@ public class TradeOrderProvider {
 					WHERE("inner_code=#{tradeOrder.innerCode}");
 				}
 				if (StringUtils.isNotBlank(tradeOrder.getPayMedium())) {
-					SET("pay_medium=#{tradeOrder.payMedium}");
+					WHERE("pay_medium=#{tradeOrder.payMedium}");
 				}
 				if (StringUtils.isNotBlank(tradeOrder.getOrderTop10())
 						|| StringUtils.isNotBlank(tradeOrder.getOrderNoAfter6())) {
