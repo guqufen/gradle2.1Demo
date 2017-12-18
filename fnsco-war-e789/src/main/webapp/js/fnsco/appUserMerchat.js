@@ -2,7 +2,7 @@
 $('#table').bootstrapTable({
     search: false, //是否启动搜索栏
     sidePagination:'server',
-    url:PROJECT_NAME+'/web/appsuser/query',
+    url:PROJECT_NAME+'/web/e789/appsuser/query',
     showRefresh: false,//是否显示刷新按钮
     showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
     // toolbar: '#toolbar',  //工具按钮用哪个容器
@@ -17,14 +17,6 @@ $('#table').bootstrapTable({
     queryParams:queryParams,
     responseHandler:responseHandler,//处理服务器返回数据
     columns: [
-    // {
-    //         field: 'id',
-    //         title: '序号',
-    //         width:'10%',
-    //         align: 'center',
-    //         width: 150,
-    //         formatter:formatindex
-    // },
     {
         field: 'id',
         title: '操作',
@@ -39,10 +31,9 @@ $('#table').bootstrapTable({
         class : 'mobile'
     },{
         field: 'merNames',
-        title: '绑定实体商户',
-        formatter : formatMerNames
+        title: '绑定实体商户'
     },{
-        field: 'cardNum',
+        field: 'idCardNumber',
         title: '身份证'
     },{
         field: 'regTime',
@@ -50,12 +41,7 @@ $('#table').bootstrapTable({
         formatter:formatTime
     }]
 });
-// 绑定店铺
-function formatMerNames(value, row, index) {
-  if (value && '' != value) {
-    return value.substr(0, value.length - 1);
-  }
-}
+
 //表格中操作按钮
 function operateFormatter(value, row, index) {
 	return [
@@ -70,9 +56,10 @@ function queryParams(params)
    var param ={
 	   currentPageNum : this.pageNumber,
 	   pageSize : this.pageSize,
-	   legalPerson:$.trim($('#search_legalPerson').val()),
-	   mercName:$.trim($('#merName').val()),
-	   legalPersonMobile:$.trim($('#search_legalPersonMobile').val()),
+	   userName:$.trim($('#userName').val()),
+	   merNames:$.trim($('#search_merName').val()),
+	   mobile:$.trim($('#search_legalPersonMobile').val()),
+	   idCardNumber:$.trim($('#search_idcardNum').val()),
        // status:$.trim($('#search_status').val())
 	   status:"1"
    }
