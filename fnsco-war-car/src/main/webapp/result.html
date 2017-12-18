@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>申请结果</title>
+	<link href="css/mui.css" rel="stylesheet" type="text/css" media="all">
+	<link href="css/reset.css" rel="stylesheet" type="text/css" media="all">
+	<link href="css/input.css" rel="stylesheet" type="text/css" media="all">
+	<link href="css/brand.css" rel="stylesheet" type="text/css" media="all">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+</head>
+<body class="result">
+	<header>
+		<div class="head-title">申请结果</div>
+	</header>
+	<div class="main">
+		<div class="result-text">
+			<p>您的<span class="result-type"></span>申请已提交！</p>
+			<p>我们的客户经理将尽快与您取得联系！</p>
+			<p>咨询热线:400-1818-823</p>
+		</div>
+		<button class="sub-btn" onclick="returnHome()" type="button">返回首页</button>
+	</div>
+	
+</body>
+<script type="text/javascript" src="js/setWidth.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript">
+	function returnHome(){
+		window.location.href='index.html';
+	}
+	var type=GetQueryString("type");
+	if(type=='01'){
+		$(".result-type").html("买车");
+	}else if(type='021'){
+		$(".result-type").html("贷款");
+	}else if(type='03'){
+		$(".result-type").html("保险");
+	}else if(type='04'){
+		$(".result-type").html("理财");
+	}
+	function GetQueryString(name){
+	     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	     var r = window.location.search.substr(1).match(reg);
+	     if(r!=null)return  unescape(r[2]); return null;
+	}
+</script>
+</html>

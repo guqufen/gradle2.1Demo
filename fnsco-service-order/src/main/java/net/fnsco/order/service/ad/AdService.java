@@ -81,14 +81,14 @@ public class AdService extends BaseService {
 			}
 			if(1 == adDO.getCategory()){
 				AdDTO adDTO = new AdDTO();
-				adDTO.setImgPath(adDO.getImgPath());
+				adDTO.setImgPath(adDO.getImg_path());
 				adDTO.setSummary(adDO.getSummary());
 				adDTO.setTitle(adDO.getTitle());
 				adDTO.setUrl(adDO.getUrl());
 				adList.add(adDTO);
-			}else if(StringUtils.equals("2", adDO.getCategory().toString())){
+			}else if(2 == adDO.getCategory()){
 				AdDTO adDTO = new AdDTO();
-				adDTO.setImgPath(adDO.getImgPath());
+				adDTO.setImgPath(adDO.getImg_path());
 				adDTO.setSummary(adDO.getSummary());
 				adDTO.setTitle(adDO.getTitle());
 				adDTO.setUrl(adDO.getUrl());

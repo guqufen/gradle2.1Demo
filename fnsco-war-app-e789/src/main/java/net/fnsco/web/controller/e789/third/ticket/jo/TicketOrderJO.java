@@ -1,9 +1,13 @@
 package net.fnsco.web.controller.e789.third.ticket.jo;
 
+import java.math.BigDecimal;
+
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 
 public class TicketOrderJO extends CommonJO {
+    @ApiModelProperty(value = "价格", example = "价格")
+    private String price;
     @ApiModelProperty(value = "乘客ID", example = "乘客ID")
     private String passengerId;
     @ApiModelProperty(value = "车号", example = "车号")
@@ -11,7 +15,29 @@ public class TicketOrderJO extends CommonJO {
     @ApiModelProperty(value = "票类型（学生票）", example = "票类型（学生票）")
     private String ticketType;
     @ApiModelProperty(value = "坐席（二等座）", example = "坐席（二等座）")
-    private String seatType;
+    private String seatCode;
+
+    /**
+     * price
+     *
+     * @return  the price
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getPrice() {
+        return price;
+    }
+
+    /**
+     * price
+     *
+     * @param   price    the price to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
 
     /**
      * carNumber
@@ -55,28 +81,6 @@ public class TicketOrderJO extends CommonJO {
 
     public void setTicketType(String ticketType) {
         this.ticketType = ticketType;
-    }
-
-    /**
-     * seatType
-     *
-     * @return  the seatType
-     * @since   CodingExample Ver 1.0
-    */
-
-    public String getSeatType() {
-        return seatType;
-    }
-
-    /**
-     * seatType
-     *
-     * @param   seatType    the seatType to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setSeatType(String seatType) {
-        this.seatType = seatType;
     }
 
     /**

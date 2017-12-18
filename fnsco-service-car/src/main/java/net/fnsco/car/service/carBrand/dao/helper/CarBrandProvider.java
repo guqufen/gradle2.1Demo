@@ -48,7 +48,7 @@ public class CarBrandProvider {
 		        if ( !Strings.isNullOrEmpty(brandDO.getIconImgPath()) ) {
 		        	WHERE("icon_img_path = #{carBrandDO.iconImgPath}");
 				}
-		        if (!Strings.isNullOrEmpty(brandDO.getModal())) {
+		        if (!Strings.isNullOrEmpty(brandDO.getModel())) {
 		        	WHERE("model = #{carBrandDO.model}");
 				}
 		        if (brandDO.getIsHot() != null) {
@@ -81,7 +81,7 @@ public class CarBrandProvider {
 				if (!Strings.isNullOrEmpty(brandDO.getIconImgPath())) {
 					WHERE("icon_img_path = #{carBrandDO.iconImgPath}");
 				}
-				if (!Strings.isNullOrEmpty(brandDO.getModal())) {
+				if (!Strings.isNullOrEmpty(brandDO.getModel())) {
 					WHERE("model = #{carBrandDO.model}");
 				}
 				if (brandDO.getIsHot() != null) {
@@ -113,7 +113,7 @@ public class CarBrandProvider {
 		        if ( !Strings.isNullOrEmpty(brandDO.getIconImgPath()) ) {
 		        	WHERE("icon_img_path = #{carBrandDO.iconImgPath}");
 				}
-		        if (!Strings.isNullOrEmpty(brandDO.getModal())) {
+		        if (!Strings.isNullOrEmpty(brandDO.getModel())) {
 		        	WHERE("model = #{carBrandDO.model}");
 				}
 		        if (brandDO.getIsHot() != null) {
@@ -143,7 +143,7 @@ public class CarBrandProvider {
 		        if ( !Strings.isNullOrEmpty(brandDO.getIconImgPath()) ) {
 		        	SET("icon_img_path = #{carBrandDO.iconImgPath}");
 				}
-		        if (!Strings.isNullOrEmpty(brandDO.getModal())) {
+		        if (!Strings.isNullOrEmpty(brandDO.getModel())) {
 		        	SET("model = #{carBrandDO.model}");
 				}
 		        if (brandDO.getIsHot() != null) {

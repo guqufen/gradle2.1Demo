@@ -22,7 +22,7 @@ function getCarBrand(boole){
 
 				/*循环获取排序列表下的品牌*/
 				for(var j =0; j <data.data[i].body.length; j++){
-					console.log(data.data[i].body[j]);
+					// console.log(data.data[i].body[j]);
 					html='<li class="brand-con mui-row" onclick="getChildBrand('+data.data[i].body[j].id+','+boole+')"><div class="brand-img mui-col-xs-3"><img src="'+data.data[i].body[j].iconImgPath+'"></div><div class="brand-text mui-col-xs-9">'+data.data[i].body[j].name+'</div></li>';
 					$(".brand-list .brand-list-list"+data.data[i].letter).append(html);
 				}
@@ -68,26 +68,30 @@ function getChildBrand(id,boole){
 		contentType:'application/json',
 		data:{'id':id},
 		success:function(data){
-			console.log(data.data);
+			if(boole==true){
+				var headHtml='<header><div class="back" style="display:block" onclick="backBrand();"></div><div class="head-title">'+data.data[0].name+'</div></header>';
+			}else{
+				var headHtml='';
+				$(".back").show();
+			}
+			$(".child-brand").append(headHtml);
 			var html='';
 			for(var i=0;i<data.data.length;i++){
 				if(data.data[i].id==id && boole==false){
 					$(".head-title").html(data.data[i].name);
 				}
 				if(data.data[i].level==2){
-					$(".child-brand").html('');
 					html='<div class="title" id="'+data.data[i].id+'">'+data.data[i].name+'</div><ul class="brand-list-list" id="brand-list-list'+data.data[i].id+'"></ul>';
 					$(".child-brand").append(html);
-					if(boole==false){
-						$(".back").show();
-					}
-					for(var j=0;j<data.data.length;j++){
-						if(data.data[j].supperId==data.data[i].id){
-							if(boole==false){
-								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12">'+data.data[j].name+'</div></li>');
-							}else{
-								$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12" onclick="hideChildBrand('+data.data[j].id+',\''+data.data[j].name+'\','+data.data[j].model+')">'+data.data[j].name+'</div></li>');
-							}
+				}
+			}
+			for(var i=0;i<data.data.length;i++){
+				for(var j=0;j<data.data.length;j++){
+					if(data.data[j].supperId==data.data[i].id){
+						if(boole==false){
+							$(".child-brand #brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12">'+data.data[j].name+'</div></li>');
+						}else{
+							$("#brand-list-list"+data.data[i].id).append('<li class="brand-con mui-row"><div class="brand-text mui-col-xs-12" onclick="hideChildBrand('+data.data[j].id+',\''+data.data[j].name+'\','+data.data[j].model+')">'+data.data[j].name+'</div></li>');
 						}
 					}
 				}
@@ -125,6 +129,15 @@ function hideChildBrand(id,name,typeId){
 }
 
 /*
+*
+*/
+function backBrand(){
+	$(".child-brand").hide();
+	$(".brand").show();
+	$(".child-brand").html('');
+}
+
+/*
 *选择品牌进入子类返回事件
 */
 $(".back").click(function(){
@@ -132,6 +145,7 @@ $(".back").click(function(){
 	$(".child-brand").hide();
 	$(".brand").show();
 	$(".back").hide();
+	$(".child-brand").html('');
 })
 
 /*
@@ -319,31 +333,37 @@ function sendCode(type){
 
 //提交按钮
 function subData(type){
-	for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
-		if(type=='02'){//贷款特殊判断
-			if($(".mui-content #loan-information .mui-input-row").eq(i).find('input[type="text"]').val()==''){
+	if(type=='02'){//贷款特殊判断
+		for(var i=0;i<$(".mui-content #loan-information .mui-input-row").length;i++){
+			if($(".mui-content #loan-information .mui-input-row").eq(i).find('input').val()==''){
 				var title=$(".mui-content #loan-information .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
-			}else if(istel($(".phone-num").val())==false){ 
-			  mui.alert("请输入正确的手机号"); 
-			  return;
 			}
-		}else if(type=='021'){
+		}
+		if(istel($(".phone-num").val())==false){ 
+		  mui.alert("请输入正确的手机号"); 
+		  return;
+		}
+	}else if(type=='021'){
+		for(var i=0;i<$(".mui-content #car-info .mui-input-row").length;i++){
 			if($(".mui-content #car-info .mui-input-row").eq(i).find('input').val()==''){
 				var title=$(".mui-content #car-info .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
 			}
-		}else{
-			if($(".mui-content .mui-input-row").eq(i).find('input[type="text"]').val()==''){
+		}
+	}else{
+		for(var i=0;i<$(".mui-content .mui-input-row").length;i++){
+			if($(".mui-content .mui-input-row").eq(i).find('input').val()==''){
 				var title=$(".mui-content .mui-input-row").eq(i).find('label').html();
 				mui.alert(title+'不能为空');
 				return;
-			}else if(istel($(".phone-num").val())==false){ 
-				  mui.alert("请输入正确的手机号"); 
-				  return;
 			}
+		}
+		if(istel($(".phone-num").val())==false){ 
+		  mui.alert("请输入正确的手机号"); 
+		  return;
 		}
 	}
 
@@ -403,8 +423,9 @@ function subData(type){
                 console.log(data);
                 if(data=='truetruetrue'){
 					$("#car-info .sub-btn").attr('disabled',false);
-                	mui.toast("提交成功!");
                 	$("#carInfoForm").resetForm();
+					window.location.href='result.html?type='+type;
+                	// mui.toast("提交成功!");
                 }
             }
         });
@@ -428,11 +449,9 @@ function subData(type){
 						$("#car-info").addClass('mui-active');
 						$("#orderNo").val(data.data.orderNo);
 					}else{
-						mui.toast("提交成功!");
-						// setInterval(function(){
-						// 	window.location.href='index.html';
-						// },2000)
-						$('input').val('');
+						// mui.toast("提交成功!");
+						window.location.href='result.html?type='+type;
+						// $('input').val('');
 					}
 				}else{
 					mui.toast(data.message);

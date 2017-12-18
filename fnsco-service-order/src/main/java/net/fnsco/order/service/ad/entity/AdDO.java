@@ -19,7 +19,7 @@ public class AdDO {
     /**
      * 图片路径
      */
-    private String imgPath;
+    private String img_path;
     private String url;
 
     /**
@@ -53,8 +53,31 @@ public class AdDO {
     private Integer createUserId;
 
 
+    
 
     /**
+	 * img_path
+	 *
+	 * @return  the img_path
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getImg_path() {
+		return img_path;
+	}
+
+	/**
+	 * img_path
+	 *
+	 * @param   img_path    the img_path to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setImg_path(String img_path) {
+		this.img_path = img_path;
+	}
+
+	/**
 	 * @return the url
 	 */
 	public String getUrl() {
@@ -84,13 +107,6 @@ public class AdDO {
         this.title = title;
     }
 
-    public String getImgPath() {
-        return imgPath;
-    }
-
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
-    }
 
     public Integer getCategory() {
         return category;
@@ -140,10 +156,4 @@ public class AdDO {
         this.createUserId = createUserId;
     }
 
-
-
-    @Override
-    public String toString() {
-        return "[id="+ id + ", title="+ title + ", imgPath="+ imgPath + ", category="+ category + ", summary="+ summary + ", content="+ content + ", createTime="+ createTime + ", updateTime="+ updateTime + ", createUserId="+ createUserId + "]";
-    }
 }

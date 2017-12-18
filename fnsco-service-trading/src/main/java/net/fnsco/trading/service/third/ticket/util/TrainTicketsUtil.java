@@ -1,5 +1,8 @@
 package net.fnsco.trading.service.third.ticket.util;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,5 +60,28 @@ public class TrainTicketsUtil {
             //"train_start_date":"20171226","gjrw_price":0,"tdz_num":"--"}
         }
         return resultList;
+    }
+    
+    /**
+     * 提交订单，对应接口地址：http://www.juhe.cn/docs/api/id/173/aid/581
+     * 这个方法需要传的参数很多，不用慌，一个一个来
+     * @param map
+     * @throws UnsupportedEncodingException 
+     */
+    public static String postIndent(Map map) throws UnsupportedEncodingException{
+        String url="http://op.juhe.cn/trainTickets/submit";
+        String data=HttpUtils.post(url, map);
+        if(data!=null){
+            JSONObject obj=JSONObject.fromObject(data);
+            String error_code=obj.getString("error_code");
+            if("0".equals(error_code)) {
+                String result=obj.getString("result");
+                if(result!=null){
+                    obj=JSONObject.fromObject(result);
+                    return obj.getString("orderid");
+                }
+            }
+        }
+        return null;
     }
 }

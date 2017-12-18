@@ -73,9 +73,13 @@
 .hot .mui-row .mui-col-xs-3{
 	padding:0.5rem 0.7rem;
 }
+.hot-img{
+	text-align: center;
+}
 .hot-img img{
-	width: 60%;
-	margin-left: 20%;
+	width: 1.5rem;
+	height: 1.5rem;
+	margin: 0 auto;
 }
 .hot-text{
 	text-align: center;
@@ -154,15 +158,19 @@
 .child-brand{
 	display: none;
 }
+.child-brand .title{
+	font-size: 0.55rem;
+	font-weight: bold;
+}
 .child-brand.popup{
 	position: absolute;
 	top: 0;
 	width: 100%;
+	min-height: 100%;
 	background: #f4f4f4;
 	z-index: 999;
 	display: none;
 }
-
 .close{
 	position: absolute;
 	right: 0.5rem;

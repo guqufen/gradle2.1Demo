@@ -51,6 +51,8 @@ public class SmsUtil {
     private static String  hbApikey          = "568a854396f8b62157d0e03daeb33cdc";
     //数钱吧APPkey
     private static String  sqbApikey         = "0425f962446c4b2de94e6e08e72120ad";
+    //中融通盛汽车
+    private static String zrtsApikey         ="a3f3ca7d03903c0aa4d789972cac2d21";
 
     public static String Code(String mobile, String code) throws IOException, URISyntaxException {
 
@@ -87,13 +89,13 @@ public class SmsUtil {
     public static String ZRCode(String mobile, String code) throws IOException, URISyntaxException {
 
         //修改为您的apikey.apikey可在官网（http://www.yuanpian.com)登录后获取
-        String apikey = "0425f962446c4b2de94e6e08e72120ad ";
+        String apikey = "a3f3ca7d03903c0aa4d789972cac2d21 ";
 
         //设置模板ID，如使用1号模板:【#company#】您的验证码是#code#
-        long tpl_id = 1;
+        long tpl_id = 2100980;
         //设置对应的模板变量值
 
-        String tpl_value = URLEncoder.encode("#code#", ENCODING) + "=" + URLEncoder.encode(code, ENCODING) + "&" + URLEncoder.encode("#company#", ENCODING) + "=" + URLEncoder.encode("中融通盛", ENCODING);
+        String tpl_value = URLEncoder.encode("#code#", ENCODING) + "=" + URLEncoder.encode(code, ENCODING);// + "&" + URLEncoder.encode("#company#", ENCODING) + "=" + URLEncoder.encode("中融汽车", ENCODING);
 
         String result = tplSendSms(apikey, tpl_id, tpl_value, mobile);
 
