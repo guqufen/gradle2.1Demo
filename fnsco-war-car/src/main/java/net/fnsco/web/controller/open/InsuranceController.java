@@ -52,6 +52,9 @@ public class InsuranceController extends BaseController {
 	@RequestMapping(value = "/saveSafe")
 	@ApiOperation(value = "保险申请-添加申请")
 	private ResultDTO saveSafe(@RequestBody SaveSafeJO saveSafeJO) {
+		if(saveSafeJO.getCarOriginalPrice().compareTo(new BigDecimal(1000))==1) {
+			return ResultDTO.fail("汽车原价大于一千万");
+		}
 		String code = saveSafeJO.getVerCode();
 		String mobile = saveSafeJO.getMobile();
 		String type =CarServiceConstant.ApplyType.getNameByType("03");
