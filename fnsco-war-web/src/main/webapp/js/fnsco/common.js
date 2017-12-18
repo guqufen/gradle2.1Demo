@@ -63,3 +63,11 @@ function loadJSRandom(document,jsUrl) {
 	script.src = jsUrl + "?" + Math.random();
 	document.body.appendChild(script);
 }
+
+//回车事件绑定刷新按钮
+
+$(document).keydown(function(event){ 
+	if(event.keyCode==13){
+		$("#btn_query").click(); 
+	} 
+}); 
