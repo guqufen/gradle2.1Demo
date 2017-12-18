@@ -18,6 +18,7 @@ import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.trading.comm.HeadImageEnum;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.FindPasswordJO;
 import net.fnsco.web.controller.e789.jo.GetValidateCodeJO;
@@ -50,6 +51,7 @@ public class AppUserController extends BaseController {
     	appUserDTO.setDeviceType(registerJO.getDeviceType());
     	appUserDTO.setMobile(registerJO.getMobile());
     	appUserDTO.setPassword(registerJO.getPassword());
+    	appUserDTO.setHeadImagePath(HeadImageEnum.getImage());
         ResultDTO result = appUserService.e789InsertSelective(appUserDTO);
         if(!result.isSuccess()) {
         	return result.fail(result.getCode());
