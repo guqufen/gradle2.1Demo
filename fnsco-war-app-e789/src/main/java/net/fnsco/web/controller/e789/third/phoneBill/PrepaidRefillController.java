@@ -61,8 +61,8 @@ public class PrepaidRefillController extends BaseController {
 	@ApiOperation(value = "话费/流量充值url")
 	public ResultDTO<PrepaidRefillVO> prepaidCharge(@RequestBody FlowChargeJO fl) {
 
-		// 根据userId和待扣金额查询账户是否有足够的钱进行充值交易
-		Boolean isEnough = appAccountBalanceService.doJudgeBalance(fl.getUserId(), new BigDecimal(fl.getInprice()));
+		// 根据userId和待扣金额查询账户是否有足够的钱进行充值交易，并更新
+		Boolean isEnough = appAccountBalanceService.doFrozenBalance(fl.getUserId(), new BigDecimal(fl.getInprice()));
 		if (!isEnough) {
 			return ResultDTO.fail("账户余额不足");
 		}
@@ -74,6 +74,7 @@ public class PrepaidRefillController extends BaseController {
 		}
 
 		if (0 == fl.getType()) {
+			ResultDTO<PrepaidRefillVO> list = prepaidRefillService.prepaidRefillCharge(fl.getPhone(), fl.getPid(), innerCode);
 			return prepaidRefillService.prepaidRefillCharge(fl.getPhone(), fl.getPid(), innerCode);
 		} else if (1 == fl.getType()) {
 			return prepaidRefillService.flowCharge(fl.getPhone(), fl.getPid(), innerCode);

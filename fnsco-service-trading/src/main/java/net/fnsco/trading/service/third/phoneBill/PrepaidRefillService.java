@@ -281,7 +281,7 @@ public class PrepaidRefillService extends BaseService {
 	public ResultDTO prepaidRefillCharge(String phone, String pid, String innerCode) {
 
 		String result = null;
-		Map<String, String> map = new HashMap<>();
+//		Map<String, String> map = new HashMap<>();
 		String orderid = DateUtils.getNowYMDOnlyStr() + phone + sequenceService.getOrderSequence("t_trade_order");
 
 		// md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
@@ -306,6 +306,7 @@ public class PrepaidRefillService extends BaseService {
 			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
 			if (juhe.getError_code() == 0) {
 
+				Map<String, String> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
 				tradeData.setPayOrderNo(map.get("sporder_id"));// 设置渠道订单号
 				tradeData.setTxnAmount(new BigDecimal(map.get("ordercash")));// 设置实际消费金额
 				tradeData.setCompleteTime(new Date());// 设置交易完成时间
