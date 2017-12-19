@@ -1,65 +1,49 @@
-package net.fnsco.web.controller.e789.third.ticket.vo;
+package net.fnsco.trading.service.third.ticket.vo;
 
+import java.util.Date;
 import java.util.List;
 
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
-public class TrainVO extends VO {
+public class TrainOrderListVO extends VO {
 
-    @ApiModelProperty(value = "座位价格列表", example = "座位价格列表")
-    private List<SeatTypeVO> seatTypeList;
-    @ApiModelProperty(value = "出发时间", example = "出发时间")
-    private String           startTime;
+    @ApiModelProperty(value = "订单客户信息列表", example = "订单客户信息列表")
+    private List<OrderContactVO> orderContactList;
 
-    @ApiModelProperty(value = "到达时间", example = "到达时间")
-    private String           endTime;
-
+    // @ApiModelProperty(value = "出发时间", example = "出发时间")
     @ApiModelProperty(value = "车号", example = "车号")
-    private String           trainCode;
-
-    @ApiModelProperty(value = "耗时", example = "耗时")
-    private String           duration;
+    private String               trainCode;
 
     @ApiModelProperty(value = "乘车日期", example = "乘车日期")
-    private String           trainDate;
+    private String               trainDate;
 
     @ApiModelProperty(value = "出发站编号", example = "出发站编号")
-    private String           fromStationCode;
+    private String               fromStationCode;
 
     @ApiModelProperty(value = "出发站名称", example = "出发站名称")
-    private String           fromStationName;
+    private String               fromStationName;
 
     @ApiModelProperty(value = "到达站编号", example = "到达站编号")
-    private String           toStationCode;
+    private String               toStationCode;
 
     @ApiModelProperty(value = "到达站名称", example = "到达站名称")
-    private String           toStationName;
-    
-    @ApiModelProperty(value = "当前是否可以接受预定Y是或N", example = "当前是否可以接受预定Y或N")
-    private String           canBuyNow;
+    private String               toStationName;
 
-    /**
-     * canBuyNow
-     *
-     * @return  the canBuyNow
-     * @since   CodingExample Ver 1.0
-    */
+    @ApiModelProperty(value = "订单唯一标识", example = "订单唯一标识")
+    private Integer              id;
 
-    public String getCanBuyNow() {
-        return canBuyNow;
-    }
+    @ApiModelProperty(value = "订单编号", example = "订单编号")
+    private String               orderNo;
 
-    /**
-     * canBuyNow
-     *
-     * @param   canBuyNow    the canBuyNow to set
-     * @since   CodingExample Ver 1.0
-     */
+    @ApiModelProperty(value = "支付订单ID", example = "支付订单ID")
+    private String               payOrderNo;
 
-    public void setCanBuyNow(String canBuyNow) {
-        this.canBuyNow = canBuyNow;
-    }
+    @ApiModelProperty(value = "状态0未占座1占座中2已占座3占座失败4支付完成5取消订单", example = "状态")
+    private Integer              status;
+
+    @ApiModelProperty(value = "创建时间", example = "创建时间")
+    private Date                 createTime;
 
     /**
      * trainDate
@@ -172,72 +156,6 @@ public class TrainVO extends VO {
     }
 
     /**
-     * seatTypeList
-     *
-     * @return  the seatTypeList
-     * @since   CodingExample Ver 1.0
-    */
-
-    public List<SeatTypeVO> getSeatTypeList() {
-        return seatTypeList;
-    }
-
-    /**
-     * seatTypeList
-     *
-     * @param   seatTypeList    the seatTypeList to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setSeatTypeList(List<SeatTypeVO> seatTypeList) {
-        this.seatTypeList = seatTypeList;
-    }
-
-    /**
-     * startTime
-     *
-     * @return  the startTime
-     * @since   CodingExample Ver 1.0
-    */
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    /**
-     * startTime
-     *
-     * @param   startTime    the startTime to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    /**
-     * endTime
-     *
-     * @return  the endTime
-     * @since   CodingExample Ver 1.0
-    */
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    /**
-     * endTime
-     *
-     * @param   endTime    the endTime to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    /**
      * trainCode
      *
      * @return  the trainCode
@@ -260,25 +178,135 @@ public class TrainVO extends VO {
     }
 
     /**
-     * duration
+     * orderContactList
      *
-     * @return  the duration
+     * @return  the orderContactList
      * @since   CodingExample Ver 1.0
     */
 
-    public String getDuration() {
-        return duration;
+    public List<OrderContactVO> getOrderContactList() {
+        return orderContactList;
     }
 
     /**
-     * duration
+     * orderContactList
      *
-     * @param   duration    the duration to set
+     * @param   orderContactList    the orderContactList to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setDuration(String duration) {
-        this.duration = duration;
+    public void setOrderContactList(List<OrderContactVO> orderContactList) {
+        this.orderContactList = orderContactList;
+    }
+
+    /**
+     * id
+     *
+     * @return  the id
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * id
+     *
+     * @param   id    the id to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * orderNo
+     *
+     * @return  the orderNo
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    /**
+     * orderNo
+     *
+     * @param   orderNo    the orderNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    /**
+     * payOrderNo
+     *
+     * @return  the payOrderNo
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getPayOrderNo() {
+        return payOrderNo;
+    }
+
+    /**
+     * payOrderNo
+     *
+     * @param   payOrderNo    the payOrderNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPayOrderNo(String payOrderNo) {
+        this.payOrderNo = payOrderNo;
+    }
+
+    /**
+     * status
+     *
+     * @return  the status
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    /**
+     * status
+     *
+     * @param   status    the status to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    /**
+     * createTime
+     *
+     * @return  the createTime
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * createTime
+     *
+     * @param   createTime    the createTime to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
 }

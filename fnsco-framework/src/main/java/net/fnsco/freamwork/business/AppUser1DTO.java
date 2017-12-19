@@ -7,6 +7,31 @@ public class AppUser1DTO {
 
     //是否强制退出标志1强0不强
     private Integer forcedLoginOut;
+    //是否同一台机器登录
+    private String  deviceId;
+    
+
+    /**
+     * deviceId
+     *
+     * @return  the deviceId
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    /**
+     * deviceId
+     *
+     * @param   deviceId    the deviceId to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
 
     /**
      * id

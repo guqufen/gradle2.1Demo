@@ -12,37 +12,40 @@ public class TicketOrderDO {
     /**
      * 订单ID
      */
-    private String orderNo;
-
+    private String  orderNo;
+    /**
+     * 支付订单ID
+     */
+    private String  payOrderNo;
     /**
      * 乘车日期
      */
-    private String trainDate;
+    private String  trainDate;
 
     /**
      * 出发站编号
      */
-    private String fromStationCode;
+    private String  fromStationCode;
 
     /**
      * 出发站名称
      */
-    private String fromStationName;
+    private String  fromStationName;
 
     /**
      * 到达站编号
      */
-    private String toStationCode;
+    private String  toStationCode;
 
     /**
      * 到达站名称
      */
-    private String toStationName;
+    private String  toStationName;
 
     /**
      * 车次（G65）
      */
-    private String trainCode;
+    private String  trainCode;
 
     /**
      * 状态 0未执行1执行中2失败3成功
@@ -52,14 +55,34 @@ public class TicketOrderDO {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private Date    createTime;
 
     /**
      * 
      */
-    private Date lastModifyTime;
+    private Date    lastModifyTime;
 
+    /**
+     * payOrderNo
+     *
+     * @return  the payOrderNo
+     * @since   CodingExample Ver 1.0
+    */
 
+    public String getPayOrderNo() {
+        return payOrderNo;
+    }
+
+    /**
+     * payOrderNo
+     *
+     * @param   payOrderNo    the payOrderNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPayOrderNo(String payOrderNo) {
+        this.payOrderNo = payOrderNo;
+    }
 
     public Integer getId() {
         return id;
@@ -149,10 +172,9 @@ public class TicketOrderDO {
         this.lastModifyTime = lastModifyTime;
     }
 
-
-
     @Override
     public String toString() {
-        return "[id="+ id + ", orderNo="+ orderNo + ", trainDate="+ trainDate + ", fromStationCode="+ fromStationCode + ", fromStationName="+ fromStationName + ", toStationCode="+ toStationCode + ", toStationName="+ toStationName + ", trainCode="+ trainCode + ", status="+ status + ", createTime="+ createTime + ", lastModifyTime="+ lastModifyTime + "]";
+        return "[id=" + id + ", orderNo=" + orderNo + ", trainDate=" + trainDate + ", fromStationCode=" + fromStationCode + ", fromStationName=" + fromStationName + ", toStationCode=" + toStationCode
+               + ", toStationName=" + toStationName + ", trainCode=" + trainCode + ", status=" + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
     }
 }

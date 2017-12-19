@@ -1,18 +1,20 @@
 package net.fnsco.trading.service.third.ticket.dto;
 
+import java.util.List;
+
 import net.fnsco.core.base.DTO;
 
 public class TicketOrderSubmitDTO extends DTO {
-    private String key;
-    private String user_orderid;
-    private String train_date;
-    private String from_station_name;
-    private String from_station_code;
-    private String to_station_code;
-    private String to_station_name;
-    private String checi;
+    private String      key;
+    private String      user_orderid;
+    private String      train_date;
+    private String      from_station_name;
+    private String      from_station_code;
+    private String      to_station_code;
+    private String      to_station_name;
+    private String      checi;
     //这里注意，必须是JSONArray格式，即即使只有一个乘客也是以"[{}]"形式存在
-    PassengersDTO  passengers;
+    List<PassengersDTO> passengers;
 
     /**
      * key
@@ -197,7 +199,7 @@ public class TicketOrderSubmitDTO extends DTO {
      * @since   CodingExample Ver 1.0
     */
 
-    public PassengersDTO getPassengers() {
+    public List<PassengersDTO> getPassengers() {
         return passengers;
     }
 
@@ -208,7 +210,7 @@ public class TicketOrderSubmitDTO extends DTO {
      * @since   CodingExample Ver 1.0
      */
 
-    public void setPassengers(PassengersDTO passengers) {
+    public void setPassengers(List<PassengersDTO> passengers) {
         this.passengers = passengers;
     }
 
