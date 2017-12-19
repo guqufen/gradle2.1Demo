@@ -5,7 +5,7 @@ import java.util.List;
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.DTO;
 
-public class PhoneChargePackageDTO extends DTO {
+public class CheckChargePackageDTO extends DTO {
 
 	private static final long serialVersionUID = 1L;
 	@ApiModelProperty(value = "支持类型1：全国 2：城市,仅限流量", example = "支持类型1：全国 2：城市,仅限流量")
@@ -15,7 +15,7 @@ public class PhoneChargePackageDTO extends DTO {
 	@ApiModelProperty(value = "号码归属地", example = "号码归属地")
 	private String cardArea;
 //	@ApiModelProperty(value = "名称售价列表", example = "名称售价列表")
-	private List<PhoneChargeDTO> list;
+	private List<CheckChargeNoDTO> list;
 
 	public String getCompany() {
 		return company;
@@ -37,11 +37,11 @@ public class PhoneChargePackageDTO extends DTO {
 		return serialVersionUID;
 	}
 
-	public List<PhoneChargeDTO> getList() {
+	public List<CheckChargeNoDTO> getList() {
 		return list;
 	}
 
-	public void setList(List<PhoneChargeDTO> list) {
+	public void setList(List<CheckChargeNoDTO> list) {
 		this.list = list;
 	}
 

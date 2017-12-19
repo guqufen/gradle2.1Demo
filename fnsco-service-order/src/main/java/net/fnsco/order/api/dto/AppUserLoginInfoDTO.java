@@ -7,6 +7,7 @@ import net.fnsco.core.base.DTO;
 public class AppUserLoginInfoDTO extends DTO{
 	private Integer userId;
     private String  userName;
+    private String  realName;
     private String moblie;
     private List<Integer> unReadMsgIds;
     private String headImagePath;
@@ -36,6 +37,18 @@ public class AppUserLoginInfoDTO extends DTO{
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	/**
+	 * @return the realName
+	 */
+	public String getRealName() {
+		return realName;
+	}
+	/**
+	 * @param realName the realName to set
+	 */
+	public void setRealName(String realName) {
+		this.realName = realName;
 	}
 	/**
 	 * @return the moblie
