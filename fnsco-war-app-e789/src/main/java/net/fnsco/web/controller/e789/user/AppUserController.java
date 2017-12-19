@@ -62,6 +62,7 @@ public class AppUserController extends BaseController {
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         loginVO.setUserName(appUserLoginInfoDTO.getUserName());
+        loginVO.setRealName(appUserLoginInfoDTO.getRealName());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
@@ -111,6 +112,7 @@ public class AppUserController extends BaseController {
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         loginVO.setUserName(appUserLoginInfoDTO.getUserName());
+        loginVO.setRealName(appUserLoginInfoDTO.getRealName());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
@@ -146,6 +148,7 @@ public class AppUserController extends BaseController {
         loginVO.setHeadImagePath(appUserLoginInfoDTO.getHeadImagePath());
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
         loginVO.setUserName(appUserLoginInfoDTO.getUserName());
+        loginVO.setRealName(appUserLoginInfoDTO.getRealName());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {

@@ -95,10 +95,25 @@ public class IDAuthenticationController extends BaseController {
 
             String yearMonthPath = year + line + month + line;
             String newFileName = userId +"-"+ System.currentTimeMillis() + "." + prefix;
-            String fileKey = year + "/" + month + "/" + newFileName;
+           // String fileKey = year + "/" + month + "/" + newFileName;
             String filepath = yearMonthPath + newFileName;
 
             String fileURL = this.env.getProperty("fileUpload.url") + line + filepath;
+            if (!file.isEmpty()) {
+                try {
+                    byte[] bytes = file.getBytes();
+                    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileURL));
+                    stream.write(bytes);
+                    stream.close();
+                } catch (Exception e) {
+                    logger.error(fileName + "上传失败！" + e);
+                    throw new RuntimeException();
+                }
+            } else {
+                logger.error(fileName + "上传失败");
+                throw new RuntimeException();
+            }
+            
             if("front".equals(side)) {
             	idCard = JuheDemoUtil.idVerification(fileURL,side);
             	if(idCard.getErrorCode()==0) {

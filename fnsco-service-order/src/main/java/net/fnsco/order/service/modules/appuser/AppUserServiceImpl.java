@@ -615,6 +615,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUserLoginInfoDTO.setMoblie(appUser.getMobile());
         appUserLoginInfoDTO.setUserId(appUser.getId());
         appUserLoginInfoDTO.setPayPassword(appUser.getPayPassword());
+        appUserLoginInfoDTO.setRealName(appUser.getRealName());
         //查询用户绑定商户数量 根据用户id查询数量
         int merchantNums = 0;
         MerchantEntity merchantEntity = merchantEntityDao.selectByAppUserId(appUser.getId());
