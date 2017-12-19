@@ -1,6 +1,7 @@
 package net.fnsco.trading.service.account;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -90,5 +91,33 @@ public class AppAccountBalanceService extends BaseService {
 		}
 		
 		return true;
+	}
+	
+	/**
+	 * doFrozenBalance:(这里用一句话描述这个方法的作用)
+	 *
+	 * @param  @param appUserId
+	 * @param  @param fund
+	 * @param  @return    设定文件
+	 * @return boolean    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月19日 上午10:13:53
+	 */
+	public boolean doFrozenBalance(Integer appUserId,BigDecimal fund) {
+		int result = appAccountBalanceDAO.updateFrozenBalance(fund, appUserId,new Date());
+		if(result >0) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean doUpdateFrozenAmount(Integer appUserId,BigDecimal fund) {
+		int result = appAccountBalanceDAO.updateFrozenAmount(fund, appUserId,new Date());
+		if(result >0) {
+			return true;
+		}
+		
+		return false;
 	}
 }
