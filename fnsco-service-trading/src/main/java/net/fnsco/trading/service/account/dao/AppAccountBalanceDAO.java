@@ -64,5 +64,18 @@ public interface AppAccountBalanceDAO {
      */
     @Update("UPDATE u_app_account_balance SET fund = fund - #{fund} WHERE app_user_id = #{appUserId} AND fund = fund - #{fund} >=0")
     public int updateFund(@Param("fund") BigDecimal  fund,@Param("appUserId") int appUserId);
+    
+    /**
+     * judgeBalance:(判断余额是否足够)
+     *
+     * @param  @param fund
+     * @param  @param appUserId
+     * @param  @return    设定文件
+     * @return int    DOM对象
+     * @author tangliang
+     * @date   2017年12月19日 上午9:51:45
+     */
+    @Select("SELECT COUNT(*) FROM u_app_account_balance WHERE app_user_id = #{appUserId} AND fund - #{fund} >0")
+    public int judgeBalance(@Param("fund") BigDecimal  fund,@Param("appUserId") int appUserId);
 
 }
