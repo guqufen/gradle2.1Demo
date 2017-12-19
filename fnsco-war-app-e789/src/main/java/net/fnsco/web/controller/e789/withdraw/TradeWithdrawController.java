@@ -124,7 +124,7 @@ public class TradeWithdrawController extends BaseController {
     	/**
     	 * 减掉余额,利用sql来判断扣除,防止扣除不及时
     	 */
-    	int result = appAccountBalanceDAO.updateFund(new BigDecimal(withdrawCashJO.getCashAccount()), withdrawCashJO.getUserId());
+    	int result = appAccountBalanceDAO.updateFund(new BigDecimal(withdrawCashJO.getCashAccount()), withdrawCashJO.getUserId(),new Date());
     	if(result <= 0) {
     		tradeWithdraw.setStatus(2);
     		tradeWithdrawService.doUpdate(tradeWithdraw, getUserId());

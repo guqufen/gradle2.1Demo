@@ -65,16 +65,17 @@ public class AppUserBandE789Controller {
 	@ResponseBody
 	public ResultDTO<String> bindMerchantEntity(AppUserMerchantEntityDO entity) {
 		if(Strings.isNullOrEmpty(entity.getEntityInnerCode()) || null == entity.getAppUserId()) {
-			return ResultDTO.failForMessage("入参不正确!");
+			return ResultDTO.fail();
 		}
-		AppUserMerchantEntityDO appUserMerchantEntity = appUserMerchantEntityDAO.selectByEntityInnerCode(entity.getEntityInnerCode(), entity.getAppUserId());
+		AppUserMerchantEntityDO appUserMerchantEntity = appUserMerchantEntityDAO.selectByEntityInnerCode(entity.getAppUserId());
 		if(null != appUserMerchantEntity) {
 			appUserMerchantEntity.setModefyTime(new Date());
 			appUserMerchantEntity.setEntityInnerCode(entity.getEntityInnerCode());
 			appUserMerchantEntityDAO.update(appUserMerchantEntity);
+			return ResultDTO.successForSave(null);
 		}else {
 			entity.setModefyTime(new Date());
-			appUserMerchantEntityDAO.insert(appUserMerchantEntity);
+			appUserMerchantEntityDAO.insert(entity);
 		}
 		return ResultDTO.successForSubmit();
 	}
