@@ -17,8 +17,9 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.merchant.AppUserMerchantService;
 import net.fnsco.trading.service.third.phoneBill.PrepaidRefillService;
-import net.fnsco.trading.service.third.phoneBill.dto.PhoneChargePackageDTO;
-import net.fnsco.trading.service.third.phoneBill.dto.PhoneChargeResultDTO;
+import net.fnsco.trading.service.third.phoneBill.dto.CheckChargePackageDTO;
+import net.fnsco.trading.service.third.phoneBill.dto.ChargeDTO;
+import net.fnsco.trading.service.third.phoneBill.dto.ChargeResultDTO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 
@@ -42,7 +43,7 @@ public class PrepaidRefillController extends BaseController {
 
 	@RequestMapping("/prepaidCheck")
 	@ApiOperation(value = "话费/流量套餐资费查询url")
-	public ResultDTO<PhoneChargePackageDTO> prepaidCheck(@RequestBody FlowPackageCheckJO flowPackageCheckJO) {
+	public ResultDTO<CheckChargePackageDTO> prepaidCheck(@RequestBody FlowPackageCheckJO flowPackageCheckJO) {
 
 		// 话费资费查询
 		if (0 == flowPackageCheckJO.getType()) {
@@ -58,9 +59,9 @@ public class PrepaidRefillController extends BaseController {
 
 	@RequestMapping("/prepaidCharge")
 	@ApiOperation(value = "话费/流量充值url")
-	public ResultDTO<PhoneChargeResultDTO> prepaidCharge(@RequestBody FlowChargeJO fl) {
+	public ResultDTO<ChargeResultDTO> prepaidCharge(@RequestBody FlowChargeJO fl) {
 
-		PhoneChargeResultDTO ph = null;
+		ChargeResultDTO ph = null;
 
 		// 根据userId和待扣金额查询账户是否有足够的钱进行充值交易，并更新
 		Boolean isEnough = appAccountBalanceService.doFrozenBalance(fl.getUserId(), new BigDecimal(fl.getInprice()));
@@ -68,23 +69,25 @@ public class PrepaidRefillController extends BaseController {
 			return ResultDTO.fail("账户余额不足");
 		}
 
-		// 根据userId获取内部商户号
-		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(fl.getUserId());
-		if (Strings.isNullOrEmpty(innerCode)) {
-			return ResultDTO.fail("该用户没有绑定内部商户号，请核查后重新交易");
-		}
-		
-		if(fl.getPhone().length() > 11){
+		if (fl.getPhone().length() > 11) {
 			return ResultDTO.fail("手机号长度超过11位(不能带空格)，请核查后重新充值");
 		}
 
+		ChargeDTO chargeDTO = new ChargeDTO();
+		chargeDTO.setPid(fl.getPid());
+		chargeDTO.setInprice(fl.getInprice());
+		chargeDTO.setPhone(fl.getPhone());
+		chargeDTO.setUserId(fl.getUserId());
+		
+		//手机充值
 		if (0 == fl.getType()) {
 
-			ph = prepaidRefillService.prepaidRefillCharge(fl.getPhone(), fl.getPid(), innerCode);
+			ph = prepaidRefillService.prepaidRefillCharge(chargeDTO);
 
+			//话费充值
 		} else if (1 == fl.getType()) {
 
-			ph = prepaidRefillService.flowCharge(fl.getPhone(), fl.getPid(), innerCode);
+			ph = prepaidRefillService.flowCharge(chargeDTO);//fl.getPhone(), fl.getPid(), innerCode);
 
 		} else {
 
