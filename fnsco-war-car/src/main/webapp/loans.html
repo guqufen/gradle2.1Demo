@@ -50,7 +50,7 @@
 				</div>
 				<div class="mui-input-row">
 					<label>推荐码</label>
-					<input class="refrral-code" placeholder="输入推荐码" type="text" maxlength="20">
+					<input class="refrral-code" placeholder="输入推荐码(必填)" type="text" maxlength="20">
 				</div>
 				<button class="sub-btn" onclick="subData('02')">下一步</button>
 			</div>
@@ -145,7 +145,7 @@
 	function selectFileImage(fileObj) { 
 	    var file = fileObj.files['0']; 
 	    console.log(file.size);
-	    if(file.size>1024523){
+	    if(file.size>10485760){
 	    // if(file.size>171574){
 	    	mui.toast('图片不能超过10M，请重新选择');
 	    	fileObj.value='';

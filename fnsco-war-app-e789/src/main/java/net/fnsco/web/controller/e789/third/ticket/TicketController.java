@@ -103,8 +103,24 @@ public class TicketController extends BaseController {
     @RequestMapping(value = "/queryTicketList")
     @ApiOperation(value = "查询火车票列表")
     public ResultDTO<List<TrainVO>> queryTicketList(@RequestBody TrainQueryJO ticketJO) {
-        List<ticketsAvailableDTO> resultList = ticketService.queryTicketList(ticketJO.getStartSite(), ticketJO.getEndSite(), ticketJO.getBuyDate());
-        return success();
+        List<TrainVO> resultList = Lists.newArrayList();
+        List<ticketsAvailableDTO> ticketList = ticketService.queryTicketList(ticketJO.getStartSite(), ticketJO.getEndSite(), ticketJO.getBuyDate());
+        for (ticketsAvailableDTO dto : ticketList) {
+            TrainVO vo = new TrainVO();
+            vo.setDuration(dto.getRun_time());
+            //vo.setEndTime();
+            vo.setFromStationCode(dto.getFrom_station_code());
+            vo.setFromStationName(dto.getFrom_station_name());
+            //vo.setPrice(price);
+            vo.setStartTime(dto.getStart_time());
+            //vo.setTicketType(ticketType);
+            vo.setToStationCode(dto.getTo_station_code());
+            vo.setToStationName(dto.getTo_station_name());
+            vo.setTrainCode(dto.getTrain_code());
+            vo.setTrainDate(dto.getTrain_start_date());
+            resultList.add(vo);
+        }
+        return success(resultList);
     }
 
     /**
