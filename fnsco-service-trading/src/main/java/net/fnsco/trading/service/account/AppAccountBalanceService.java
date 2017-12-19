@@ -91,4 +91,32 @@ public class AppAccountBalanceService extends BaseService {
 		
 		return true;
 	}
+	
+	/**
+	 * doFrozenBalance:(这里用一句话描述这个方法的作用)
+	 *
+	 * @param  @param appUserId
+	 * @param  @param fund
+	 * @param  @return    设定文件
+	 * @return boolean    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月19日 上午10:13:53
+	 */
+	public boolean doFrozenBalance(Integer appUserId,BigDecimal fund) {
+		int result = appAccountBalanceDAO.updateFrozenBalance(fund, appUserId);
+		if(result >0) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean doUpdateFrozenAmount(Integer appUserId,BigDecimal fund) {
+		int result = appAccountBalanceDAO.updateFrozenAmount(fund, appUserId);
+		if(result >0) {
+			return true;
+		}
+		
+		return false;
+	}
 }

@@ -49,7 +49,7 @@ public interface AppAccountBalanceDAO {
      * @date   2017年12月7日 上午9:46:48
      */
     @Results({@Result( column = "app_user_id",property = "appUserId"),@Result( column = "freeze_amount",property = "freezeAmount"),@Result( column = "update_time",property = "updateTime"),@Result( column = "create_time",property = "createTime") })
-    @Select("SELECT * FROM u_app_account_balance WHERE appUserId = #{appUserId} limit 1")
+    @Select("SELECT * FROM u_app_account_balance WHERE app_user_id = #{appUserId} limit 1")
     public AppAccountBalanceDO getByAppUserId(@Param("appUserId") int appUserId);
     
     /**
@@ -77,5 +77,12 @@ public interface AppAccountBalanceDAO {
      */
     @Select("SELECT COUNT(*) FROM u_app_account_balance WHERE app_user_id = #{appUserId} AND fund - #{fund} >=0")
     public int judgeBalance(@Param("fund") BigDecimal  fund,@Param("appUserId") int appUserId);
+    
+    
+    @Update("UPDATE u_app_account_balance SET fund = fund - #{fund},freeze_amount = freeze_amount + #{fund} WHERE app_user_id = #{appUserId} AND fund = fund - #{fund} >=0")
+    public int updateFrozenBalance(@Param("fund") BigDecimal  fund,@Param("appUserId") int appUserId);
+    
+    @Update("UPDATE u_app_account_balance SET freeze_amount - #{fund} WHERE app_user_id = #{appUserId} ")
+    public int updateFrozenAmount(@Param("fund") BigDecimal  fund,@Param("appUserId") int appUserId);
 
 }
