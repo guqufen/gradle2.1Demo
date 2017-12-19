@@ -24,11 +24,36 @@ public class BillDayVO extends VO {
 	@ApiModelProperty(value = "账单类型", name = "billType", example = "账单类型:0交易收入1:交易支出")
 	private String billType;
 	
+	@ApiModelProperty(value = "账单类型名称", name = "billTypeName", example = "账单类型:交易收入,交易支出")
+	private String billTypeName;
+	
 	@ApiModelProperty(value = "账单日期", name = "billDayDate", example = "账单日期")
 	private String billDayDate;
 	
 	@ApiModelProperty(value = "账单金额", name = "billDayDate", example = "账单金额")
 	private String amount;
+	
+	/**
+	 * billTypeName
+	 *
+	 * @return  the billTypeName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getBillTypeName() {
+		return billTypeName;
+	}
+
+	/**
+	 * billTypeName
+	 *
+	 * @param   billTypeName    the billTypeName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setBillTypeName(String billTypeName) {
+		this.billTypeName = billTypeName;
+	}
 
 	/**
 	 * billType

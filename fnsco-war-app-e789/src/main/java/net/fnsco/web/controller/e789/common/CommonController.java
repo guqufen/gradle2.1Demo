@@ -13,11 +13,13 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.ConmmService;
+import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum.AppTypeEnum;
 import net.fnsco.order.api.dto.ProtocolDTO;
 import net.fnsco.order.api.dto.SuggestDTO;
 import net.fnsco.order.api.dto.VersionDTO;
 import net.fnsco.order.api.dto.VersionResultDTO;
+import net.fnsco.web.controller.e789.jo.DiscoveryJO;
 
 @RestController
 @RequestMapping(value = "/app2c/user", method = RequestMethod.POST)
@@ -46,16 +48,16 @@ public class CommonController extends BaseController {
         return result;
     }
 
-//    @RequestMapping(value = "/discovery")
-//    @ApiOperation(value = "发现页面")
-//    @ResponseBody
-//    public ResultDTO discovery(@RequestBody DiscoveryJO discoveryJO) {
-//        // 1.安卓  2.IOS            version版本号 1.0.0
-//        if (discoveryJO.getDeviceType() == 2) {
-//            return success(env.getProperty(ApiConstant.THIS_IOS_URL));
-//        }
-//        return success(env.getProperty(ApiConstant.THIS_ANDROID_URL));
-//    }
+    @RequestMapping(value = "/discovery")
+    @ApiOperation(value = "发现页面")
+    @ResponseBody
+    public ResultDTO discovery(@RequestBody DiscoveryJO discoveryJO) {
+        // 1.安卓  2.IOS            version版本号 1.0.0
+        if (discoveryJO.getDeviceType() == 2) {
+            return success(env.getProperty(ApiConstant.THIS_IOS_URL));
+        }
+        return success(env.getProperty(ApiConstant.THIS_ANDROID_URL));
+    }
 
     //反馈
     @RequestMapping(value = "/suggest")

@@ -265,6 +265,13 @@ public class DateUtils {
         }
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
+    
+    public static String dateFormatToStrs(Date date) {
+        if (null == date) {
+            return "";
+        }
+        return new SimpleDateFormat("MM月dd日 HH:mm").format(date);
+    }
 
     public static Date toParseYmdhms(String source) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

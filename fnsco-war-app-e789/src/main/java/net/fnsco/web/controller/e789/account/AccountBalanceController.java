@@ -46,12 +46,13 @@ public class AccountBalanceController extends BaseController {
  			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
  		}
  		AppAccountBalanceDO appAccountBalanceDO = appAccountBalanceService.doQueryByAppUserId(accountBalanceJO.getUserId());
- 		
+ 		AccountBalanceVO resultVO = new AccountBalanceVO();
  		if(null == appAccountBalanceDO) {
- 			 return success(null);
+ 			 resultVO.setAccountBalance("0.00");
+ 			 return success(resultVO);
  		}
  		
- 		AccountBalanceVO resultVO = new AccountBalanceVO();
+ 		
  		if(null == appAccountBalanceDO.getFund()) {
  			resultVO.setAccountBalance("0.00");
  		}else {

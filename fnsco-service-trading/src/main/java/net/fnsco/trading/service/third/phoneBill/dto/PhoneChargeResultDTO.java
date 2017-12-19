@@ -1,9 +1,9 @@
-package net.fnsco.web.controller.e789.third.ticket.vo;
+package net.fnsco.trading.service.third.phoneBill.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import net.fnsco.core.base.VO;
+import net.fnsco.core.base.DTO;
 
-public class PrepaidRefillVO extends VO {
+public class PhoneChargeResultDTO extends DTO {
 
 	private static final long serialVersionUID = 1L;
 	@ApiModelProperty(value = "应答码", example = "应答码")
@@ -13,6 +13,7 @@ public class PrepaidRefillVO extends VO {
 	@ApiModelProperty(value = "订单号", example = "订单号")
 	private String orderNo;
 
+	
 	public String getRespCode() {
 		return respCode;
 	}

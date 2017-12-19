@@ -42,20 +42,34 @@ public class TimerConfig {
     public void queryZxyhTrade(){
 
     	Date date = DateUtils.getStartDayTime(new Date());
-    	List<TradeOrderDO> tradeList= tradeOrderDAO.queryOnGoing("05", DateUtils.getStartDayTime(new Date()));
-    	for (TradeOrderDO tradeDO : tradeList) {
-    		paymentService.PassivePayResult(tradeDO);
+    	List<String> orderList= tradeOrderDAO.queryOnGoing("05", DateUtils.getStartDayTime(new Date()));
+    	for (String orderNo : orderList) {
+    		paymentService.PassivePayResult(orderNo);
 		}
     }
     
     /**
      * 每隔3秒查询手机充值支付结果(渠道返回系统内部异常需要查询该笔交易结果)
      */
+    @Scheduled(cron = "*/3 * * * * ?")
     public void queryFlowCharge(){
-    	TradeOrderDO tradeOrderDO = new TradeOrderDO();
-    	tradeOrderDO.setChannelType("80");//80-表示余额查询
-    	tradeOrderDO.setTxnSubType(12);//12-表示购买话费
-//    	tradeOrderDO.set
+
+    	List<String> orderList = tradeOrderDAO.queryPhoneCharge(12, DateUtils.getStartDayTime(new Date()));//查询
+    	for (String orderNo : orderList) {
+			
+		}
+    }
+    
+    /**
+     * 每隔3秒查询流量充值支付结果(渠道返回系统内部异常需要查询该笔交易结果)
+     */
+    @Scheduled(cron = "*/3 * * * * ?")
+    public void queryPrepaidCharge(){
+
+    	List<String> orderList = tradeOrderDAO.queryPhoneCharge(12, DateUtils.getStartDayTime(new Date()));//查询
+    	for (String orderNo : orderList) {
+			
+		}
     }
     
     /**

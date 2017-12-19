@@ -96,10 +96,12 @@ public class BillContrller extends BaseController {
 			billDayVO.setAmount(formatRMBNumber(tradeWithdrawDO.getAmount()));
 			if(null != tradeWithdrawDO.getTradeType() && 2==tradeWithdrawDO.getTradeType()) {
 				billDayVO.setBillType("1");
+				billDayVO.setBillTypeName("交易支出");
 			}else {
 				billDayVO.setBillType("0");
+				billDayVO.setBillTypeName("交易收入");
 			}
-			billDayVO.setBillDayDate(DateUtils.dateFormatToStr(tradeWithdrawDO.getCreateTime()));
+			billDayVO.setBillDayDate(DateUtils.dateFormatToStrs(tradeWithdrawDO.getCreateTime()));
 			billDetails.add(billDayVO);
 		}
 		
@@ -153,7 +155,7 @@ public class BillContrller extends BaseController {
 		if(null == date) {
 			return null;
 		}
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
 		return sdf.format(date);
 	}
 	
