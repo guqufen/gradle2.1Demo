@@ -12,6 +12,8 @@ public class LoginVO extends VO {
 	private String mobile; 
 	@ApiModelProperty(value="用户名",name="userName",example="用户名")
 	private String userName; 
+	@ApiModelProperty(value="真实姓名",name="realName",example="真实姓名")
+	private String realName; 
 	@ApiModelProperty(value="头像地址",name="headImagePath",example="头像地址")
 	private String headImagePath;
 	@ApiModelProperty(value="用户权限 true/false",name="loginRights",example="用户权限 true/false")
@@ -55,6 +57,18 @@ public class LoginVO extends VO {
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	/**
+	 * @return the realName
+	 */
+	public String getRealName() {
+		return realName;
+	}
+	/**
+	 * @param realName the realName to set
+	 */
+	public void setRealName(String realName) {
+		this.realName = realName;
 	}
 	/**
 	 * @return the headImagePath

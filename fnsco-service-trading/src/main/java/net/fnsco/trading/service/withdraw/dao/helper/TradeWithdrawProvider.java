@@ -299,7 +299,7 @@ public class TradeWithdrawProvider {
     		SELECT("trade_type AS tradeType,SUM(amount) AS totalAmount");
     		FROM(TABLE_NAME);
     		if(StringUtils.isNotBlank(tradeMonth)) {
-    			WHERE("DATE_FORMAT(create_time,'%Y-%m') = #{tradeMonth}");
+    			WHERE("DATE_FORMAT(create_time,'%Y年%m月') = #{tradeMonth}");
     		}
     		if(null != appUserId) {
     			WHERE("app_user_id = #{appUserId}");
