@@ -1,6 +1,7 @@
 package net.fnsco.trading.service.account;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -103,7 +104,7 @@ public class AppAccountBalanceService extends BaseService {
 	 * @date   2017年12月19日 上午10:13:53
 	 */
 	public boolean doFrozenBalance(Integer appUserId,BigDecimal fund) {
-		int result = appAccountBalanceDAO.updateFrozenBalance(fund, appUserId);
+		int result = appAccountBalanceDAO.updateFrozenBalance(fund, appUserId,new Date());
 		if(result >0) {
 			return true;
 		}
@@ -112,7 +113,7 @@ public class AppAccountBalanceService extends BaseService {
 	}
 	
 	public boolean doUpdateFrozenAmount(Integer appUserId,BigDecimal fund) {
-		int result = appAccountBalanceDAO.updateFrozenAmount(fund, appUserId);
+		int result = appAccountBalanceDAO.updateFrozenAmount(fund, appUserId,new Date());
 		if(result >0) {
 			return true;
 		}
