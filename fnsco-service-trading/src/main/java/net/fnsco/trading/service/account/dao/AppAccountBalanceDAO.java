@@ -75,7 +75,7 @@ public interface AppAccountBalanceDAO {
      * @author tangliang
      * @date   2017年12月19日 上午9:51:45
      */
-    @Select("SELECT COUNT(*) FROM u_app_account_balance WHERE app_user_id = #{appUserId} AND fund - #{fund} >0")
+    @Select("SELECT COUNT(*) FROM u_app_account_balance WHERE app_user_id = #{appUserId} AND fund - #{fund} >=0")
     public int judgeBalance(@Param("fund") BigDecimal  fund,@Param("appUserId") int appUserId);
 
 }
