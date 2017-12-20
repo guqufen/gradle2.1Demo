@@ -8,14 +8,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.beust.jcommander.internal.Maps;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,13 +22,10 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.JuheDemoUtil;
-import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.dto.IdCardDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
-import net.fnsco.web.controller.e789.jo.AccountBalanceJO;
-import net.fnsco.web.controller.e789.vo.AccountBalanceVO;
 
 /**
  * @desc 身份证认证相关功能控制器
@@ -48,7 +43,7 @@ public class IDAuthenticationController extends BaseController {
 	 @Autowired
 	 private Environment           env;
 	@RequestMapping(value = "/auth")
-    @ApiOperation(value = "个人信息-身份证认证接口")
+    @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType="String",paramType="body"),
 		@ApiImplicitParam(name = "file", value = "图片文件流", required = true, dataType="MultipartFile",paramType="body"),
