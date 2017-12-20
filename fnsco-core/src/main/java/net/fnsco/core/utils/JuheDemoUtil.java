@@ -9,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 
 import net.fnsco.core.utils.dto.IdCardDTO;
+import sun.misc.BASE64Encoder;
 
 /**
  * @desc 身份证验证http接口的java代码调用示例
