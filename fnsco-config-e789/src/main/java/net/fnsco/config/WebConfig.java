@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import net.fnsco.freamwork.interceptor.App2cInterceptor;
 import net.fnsco.freamwork.interceptor.AppInterceptor;
 import net.fnsco.freamwork.interceptor.OpenInterceptor;
 import net.fnsco.freamwork.interceptor.WebInterceptor;
@@ -19,8 +20,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    AppInterceptor appInterceptor() {
-        return new AppInterceptor();
+    App2cInterceptor appInterceptor() {
+        return new App2cInterceptor();
     }
 
     @Bean

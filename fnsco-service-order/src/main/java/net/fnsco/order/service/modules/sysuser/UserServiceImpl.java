@@ -35,6 +35,7 @@ public class UserServiceImpl extends BaseService implements AppService {
                 dto.setForcedLoginOut(user.getForcedLoginOut());
                 dto.setUserName(user.getUserName());
                 dto.setId(user.getId());
+                dto.setDeviceId(user.getDeviceId());
             }
         } catch (Exception ex) {
             logger.error("获取用户信息出错" + userId, ex);

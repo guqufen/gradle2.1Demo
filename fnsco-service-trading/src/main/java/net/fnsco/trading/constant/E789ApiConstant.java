@@ -18,7 +18,9 @@ public class E789ApiConstant extends CoreConstants {
     public static String E_SERVER_MAINTENANCE 	   = "210303";                          //服务器维护
     public static String E_PAR_ERROR_ID 		   = "210304";                          //参数异常
     public static String E_NETWORK_ERROR    	   = "210305";                          //网络错误，请重试
-    public static String E__DATA_SOURCE_ERROR      = "210306";                          //数据源错误，具体参照reason
+    public static String E_DATA_SOURCE_ERROR       = "210306";                          //数据源错误，具体参照reason
+    
+    public static String E_IDCARD_OUT_OF_TIME      = "210000";                          //身份证已过期
 
     static {
     	//身份识别证错误信息
@@ -37,7 +39,7 @@ public class E789ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_SERVER_MAINTENANCE, "服务器维护");
         ERROR_MESSGE_MAP.put(E_PAR_ERROR_ID, "参数异常");
         ERROR_MESSGE_MAP.put(E_NETWORK_ERROR, "网络错误，请重试");
-        ERROR_MESSGE_MAP.put(E__DATA_SOURCE_ERROR, "数据源错误，具体参照reason");
+        ERROR_MESSGE_MAP.put(E_DATA_SOURCE_ERROR, "数据源错误，具体参照reason");
     }
 
 }

@@ -3,11 +3,15 @@ package net.fnsco.web.controller.e789.account;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +31,7 @@ import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.trading.constant.E789ApiConstant;
+import net.fnsco.web.controller.e789.jo.IdentifyJO;
 import net.fnsco.web.controller.e789.vo.IdAuthVO;
 
 /**
@@ -157,34 +162,50 @@ public class IDAuthenticationController extends BaseController {
            	 		return ResultDTO.fail(E789ApiConstant.E_DISSUPOPORT_GET);
            	 	}
             	idAuth.setAppUserId(userId);
-            	idAuth.setSide("front");
+            	idAuth.setSide("back");
             	idAuth.setEndTime(idCard.getEnd());
             }
         }
         return ResultDTO.success(idAuth);
 	}
         
-	/*@RequestMapping(value = "/identify")
+	@RequestMapping(value = "/identify")
     @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
-    public ResultDTO identify() {
-            if("front".equals(side)) {
-            	idCard = JuheDemoUtil.valiIdImage(fileURL,side);
-            	if(idCard.getErrorCode()==0) {
-            		return ResultDTO.fail("证件正面扫描失败");
-            	}else if(idCard.getRes()==2) {
-            		return ResultDTO.fail("身份证有误，姓名与身份证号码不匹配");
-            	}
-            }else if("back".equals(side)) {
-            	idCard = JuheDemoUtil.idVerification(fileURL,side);
-            	if(idCard.getErrorCode()==0) {
-            		return ResultDTO.fail("证件反面扫描失败");
-            	}
-            }
+    public ResultDTO identify(@RequestBody IdentifyJO identify) {
+		String endTime = identify.getEndTime();
+		Date nowTime = new Date();
+		Date date =null;
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+		try {
+			date = formatter.parse(endTime);
+		} catch (ParseException e) {
+			logger.info("身份证时间转换错误");
+			e.printStackTrace();
+		} 
+		IdCardDTO idCard =new IdCardDTO();
+        idCard = JuheDemoUtil.valiIdCard(identify.getIdCard(),identify.getRealName());
+        int errorCode = idCard.getErrorCode();
+        if (date.before(nowTime)) {
+        	return ResultDTO.fail(E789ApiConstant.E_IDCARD_OUT_OF_TIME);
+        }
+        if(errorCode==210301) {
+   		 	return ResultDTO.fail(E789ApiConstant.E_NOT_FOUND_PRE);
+   	 	}else if(errorCode==210302) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_SERVER_EXC);
+   	 	}else if(errorCode==210303) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_SERVER_MAINTENANCE);
+   	 	}else if(errorCode==210304) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR_ID);
+   	 	}else if(errorCode==210305) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_NETWORK_ERROR);
+   	 	}else if(errorCode==210306) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_ERROR);
+   	 	}
         AppUserDTO appUserDto = new AppUserDTO();
-        appUserDto.setUserId(userId);
-        appUserDto.setRealName(idCard.getRealname());
-        appUserDto.setIdCardNumber(idCard.getIdcard());
+        appUserDto.setUserId(identify.getAppUserId());
+        appUserDto.setRealName(identify.getRealName());
+        appUserDto.setIdCardNumber(identify.getIdCard());
         appUserService.modifyInfo(appUserDto);
         return ResultDTO.success();
-    }*/
+    }
 }

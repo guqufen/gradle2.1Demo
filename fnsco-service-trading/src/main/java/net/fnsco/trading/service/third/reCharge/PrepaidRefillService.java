@@ -521,7 +521,7 @@ public class PrepaidRefillService extends BaseService {
 					tradeWithdrawDO.setUpdateTime(new Date());// 设置交易完成时间
 					tradeWithdrawDO.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
 					tradeWithdrawDO.setRespMsg("充值成功");// 设置响应
-					Integer ret = tradeWithdrawService.doUpdate(tradeWithdrawDO, tradeWithdrawDO.getAppUserId());// 更新数据
+					Integer ret = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
 					if (ret < 0) {
 						logger.error("充值结果查询成功，原充值交易成功,数据更新失败。time=" + tradeWithdrawDO.getUpdateTime() + "userId="
 								+ tradeWithdrawDO.getAppUserId());
@@ -532,7 +532,7 @@ public class PrepaidRefillService extends BaseService {
 					tradeWithdrawDO.setStatus(2);// 状态为2-失败
 					tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
 					tradeWithdrawDO.setUpdateTime(new Date());// 设置最后更新时间
-					Integer ret = tradeWithdrawService.doUpdate(tradeWithdrawDO, tradeWithdrawDO.getAppUserId());// 更新数据
+					Integer ret = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
 					if (ret < 0) {
 						logger.error("充值结果查询成功，原充值交易失败,数据更新失败。time=" + tradeWithdrawDO.getUpdateTime() + "userId="
 								+ tradeWithdrawDO.getAppUserId());
