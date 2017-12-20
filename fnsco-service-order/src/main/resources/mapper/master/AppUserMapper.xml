@@ -386,7 +386,7 @@
 					AND mobile LIKE CONCAT('%', #{condition.mobile}, '%') 
 				</if>
 				<if test="condition.merNames != null and condition.merNames != ''" >
-        			AND merNames LIKE CONCAT('%', #{condition.merNames}, '%') 
+        			AND MME.merc_name LIKE CONCAT('%', #{condition.merNames}, '%') 
       			</if>
       			<if test="condition.userName != null and condition.userName != ''" >
         			AND userName LIKE CONCAT('%', #{condition.userName}, '%') 
@@ -421,7 +421,7 @@
 					AND mobile LIKE CONCAT('%', #{mobile}, '%') 
 				</if>
 				<if test="merNames != null and merNames != ''" >
-        			AND merNames LIKE CONCAT('%', #{merNames}, '%') 
+        			AND MME.merc_name LIKE CONCAT('%', #{merNames}, '%') 
       			</if>
       			<if test="userName != null and userName != ''" >
         			AND userName LIKE CONCAT('%', #{userName}, '%') 
