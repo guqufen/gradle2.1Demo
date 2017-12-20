@@ -40,6 +40,9 @@ public class TradeWithdrawRedProvider {
         if (tradeWithdrawRed.getTradeType() != null) {
             SET("trade_type=#{tradeWithdrawRed.tradeType}");
         }
+        if (tradeWithdrawRed.getTradeSubType() != null) {
+            SET("trade_sub_type=#{tradeWithdrawRed.tradeSubType}");
+        }
         if (tradeWithdrawRed.getStatus() != null) {
             SET("status=#{tradeWithdrawRed.status}");
         }
@@ -137,6 +140,9 @@ public class TradeWithdrawRedProvider {
         if (tradeWithdrawRed.getTradeType() != null) {
             WHERE("trade_type=#{tradeWithdrawRed.tradeType}");
         }
+        if (tradeWithdrawRed.getTradeSubType() != null) {
+            WHERE("trade_sub_type=#{tradeWithdrawRed.tradeSubType}");
+        }
         if (tradeWithdrawRed.getStatus() != null) {
             WHERE("status=#{tradeWithdrawRed.status}");
         }
@@ -223,6 +229,9 @@ public class TradeWithdrawRedProvider {
         }
         if (tradeWithdrawRed.getTradeType() != null) {
             WHERE("trade_type=#{tradeWithdrawRed.tradeType}");
+        }
+        if (tradeWithdrawRed.getTradeSubType() != null) {
+            WHERE("trade_sub_type=#{tradeWithdrawRed.tradeSubType}");
         }
         if (tradeWithdrawRed.getStatus() != null) {
             WHERE("status=#{tradeWithdrawRed.status}");

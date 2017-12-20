@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
@@ -47,6 +50,10 @@ public class TradeWithdrawService extends BaseService {
         tradeWithdraw.setCreateTime(new Date());
         tradeWithdraw.setUpdateTime(new Date());
         tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
+        if( Strings.isNullOrEmpty(tradeWithdraw.getOrderNo())){
+        	tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
+        }
+    	
         //设置账户金额
         //扣除或增加账户余额
         this.tradeWithdrawDAO.insert(tradeWithdraw);
@@ -97,5 +104,15 @@ public class TradeWithdrawService extends BaseService {
 
     public List<MonthWithdrawCountDTO> doQueryTotalAmountGroupByMouth(Integer appUserId, String tradeMonth, Integer status) {
         return tradeWithdrawDAO.queryTotalAmount(appUserId, tradeMonth, status);
+    }
+    
+    /**
+     * 按交易类型查询正在进行的交易列表，便于定时查询交易状态(按照时间大到小)
+     * @param start：查询开始时间
+     * @param type：交易类型
+     * @return
+     */
+    public List<TradeWithdrawDO> queryOngoing(Date start, Integer type){
+    	return tradeWithdrawDAO.queryOngoing(start, type);
     }
 }

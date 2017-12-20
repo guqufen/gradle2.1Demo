@@ -22,6 +22,8 @@ import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.trading.comm.HeadImageEnum;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
+import net.fnsco.trading.service.bank.AppUserBankService;
+import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.FindPasswordJO;
 import net.fnsco.web.controller.e789.jo.GetValidateCodeJO;
@@ -44,10 +46,11 @@ public class AppUserController extends BaseController {
     private AppUserService        appUserService;
     @Autowired
     private AppAccountBalanceService appAccountBalanceService;
-
+    @Autowired
+    private AppUserBankService    appUserBankService;
    
     @RequestMapping(value = "/register")
-    @ApiOperation(value = "注册页-用户注册")
+    @ApiOperation(value = "注册页-用户注册" ,notes="作者：何金庭")
     @ResponseBody
     public ResultDTO<LoginVO> register(@RequestBody RegisterJO registerJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
@@ -68,6 +71,12 @@ public class AppUserController extends BaseController {
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         loginVO.setUserName(appUserLoginInfoDTO.getUserName());
+        loginVO.setRealName(appUserLoginInfoDTO.getRealName());
+        if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getRealName())) {
+        	loginVO.setIsBindingIdCard(false);
+        }else {
+        	loginVO.setIsBindingIdCard(true);
+        }
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
@@ -79,6 +88,12 @@ public class AppUserController extends BaseController {
         }else {
         	loginVO.setHasPayPassword(true);
         }
+        AppUserBankDO appUserBank = appUserBankService.QueryByAppUserId(appUserLoginInfoDTO.getUserId());
+        if(appUserBank==null) {
+        	loginVO.setIsBindingBankCard(false);
+        }else {
+        	loginVO.setIsBindingBankCard(true);
+        }        
         loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
         
         /**
@@ -97,7 +112,7 @@ public class AppUserController extends BaseController {
     //获取验证码
     @ResponseBody
     @RequestMapping(value = "/getValidateCode")
-    @ApiOperation(value = "获取验证码")
+    @ApiOperation(value = "获取验证码" ,notes="作者：何金庭")
     public ResultDTO getValidateCode(@RequestBody GetValidateCodeJO getValidateCodeJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(getValidateCodeJO.getDeviceId());
@@ -111,7 +126,7 @@ public class AppUserController extends BaseController {
     //根据手机号码找回密码
     @ResponseBody
     @RequestMapping(value = "/findPassword")
-    @ApiOperation(value = "注册页-找回密码")
+    @ApiOperation(value = "注册页-找回密码" ,notes="作者：何金庭")
     public ResultDTO<LoginVO> findPassword(@RequestBody FindPasswordJO findPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setCode(findPasswordJO.getCode());
@@ -128,6 +143,12 @@ public class AppUserController extends BaseController {
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         loginVO.setUserName(appUserLoginInfoDTO.getUserName());
+        loginVO.setRealName(appUserLoginInfoDTO.getRealName());
+        if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getRealName())) {
+        	loginVO.setIsBindingIdCard(false);
+        }else {
+        	loginVO.setIsBindingIdCard(true);
+        }
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
@@ -140,13 +161,19 @@ public class AppUserController extends BaseController {
         	loginVO.setHasPayPassword(true);
         }
         loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
+        AppUserBankDO appUserBank = appUserBankService.QueryByAppUserId(appUserLoginInfoDTO.getUserId());
+        if(appUserBank==null) {
+        	loginVO.setIsBindingBankCard(false);
+        }else {
+        	loginVO.setIsBindingBankCard(true);
+        }        
         return ResultDTO.success(loginVO);
     }
 
     //登录
     @ResponseBody
     @RequestMapping(value = "/login")
-    @ApiOperation(value = "用户登录")
+    @ApiOperation(value = "用户登录" ,notes="作者：何金庭")
     public ResultDTO<LoginVO> login(@RequestBody LoginJO loginJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(loginJO.getDeviceId());
@@ -163,7 +190,13 @@ public class AppUserController extends BaseController {
         loginVO.setHeadImagePath(appUserLoginInfoDTO.getHeadImagePath());
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
         loginVO.setUserName(appUserLoginInfoDTO.getUserName());
+        loginVO.setRealName(appUserLoginInfoDTO.getRealName());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
+        if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getRealName())) {
+        	loginVO.setIsBindingIdCard(false);
+        }else {
+        	loginVO.setIsBindingIdCard(true);
+        }
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
@@ -176,13 +209,19 @@ public class AppUserController extends BaseController {
         	loginVO.setHasPayPassword(true);
         }
         loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
+        AppUserBankDO appUserBank = appUserBankService.QueryByAppUserId(appUserLoginInfoDTO.getUserId());
+        if(appUserBank==null) {
+        	loginVO.setIsBindingBankCard(false);
+        }else {
+        	loginVO.setIsBindingBankCard(true);
+        }        
         return ResultDTO.success(loginVO);
     }
 
     //退出登录
     @ResponseBody
     @RequestMapping(value = "/loginOut")
-    @ApiOperation(value = "退出登录")
+    @ApiOperation(value = "退出登录" ,notes="作者：何金庭")
     public ResultDTO<String> loginOut(@RequestBody CommonJO commonJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(commonJO.getUserId());
