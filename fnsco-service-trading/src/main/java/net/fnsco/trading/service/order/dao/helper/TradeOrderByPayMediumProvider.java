@@ -190,7 +190,7 @@ public class TradeOrderByPayMediumProvider {
      * @date   2017年12月15日 下午4:37:08
      */
     public String countSUMTurnover(Map<String, Object> params) {
-    	TradeOrderByPayMediumDO tradeOrderByPayMedium = (TradeOrderByPayMediumDO) params.get("list");
+    	TradeOrderByPayMediumDO tradeOrderByPayMedium = (TradeOrderByPayMediumDO) params.get("tradeOrderByPayMedium");
     	return new SQL() {{
     		SELECT("SUM(turnover) AS turnover, COUNT(order_num) AS orderNum,pay_medium AS payType");
     		FROM(TABLE_NAME);
@@ -204,7 +204,7 @@ public class TradeOrderByPayMediumProvider {
             	WHERE("trade_date < #{tradeOrderByPayMedium.endTradeDate}");
             }
             if(null != tradeOrderByPayMedium.getUserId()) {
-            	WHERE("inner_code IN (SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{userId})");
+            	WHERE("inner_code IN (SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{tradeOrderByPayMedium.userId})");
             }
     	}}.toString();
     }
