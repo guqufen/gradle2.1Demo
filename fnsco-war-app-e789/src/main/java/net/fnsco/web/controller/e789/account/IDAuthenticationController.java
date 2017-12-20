@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.beust.jcommander.internal.Maps;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -26,12 +27,15 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.JuheDemoUtil;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.dto.IdCardDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.trading.constant.E789ApiConstant;
-import net.fnsco.web.controller.e789.jo.IdentifyJO;
+import net.fnsco.trading.service.userfile.AppUserFileService;
+import net.fnsco.trading.service.userfile.entity.AppUserFileDO;
+import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.vo.IdAuthVO;
 
 /**
@@ -49,6 +53,8 @@ public class IDAuthenticationController extends BaseController {
 	 private AppUserService        appUserService;
 	 @Autowired
 	 private Environment           env;
+	 @Autowired
+	 private AppUserFileService    appUserFileService;
 	@RequestMapping(value = "/auth")
     @ApiOperation(value = "个人信息-身份证上传识别接口" ,notes="作者：何金庭")
 	@ApiImplicitParams({
@@ -56,11 +62,9 @@ public class IDAuthenticationController extends BaseController {
 		@ApiImplicitParam(name = "file", value = "图片文件流", required = true, dataType="MultipartFile",paramType="body"),
 		@ApiImplicitParam(name = "side", value = "front:正面识别;back:反面识别;", required = true, dataType="String",paramType="body")
 	})
-    public ResultDTO idAuth() {
+    public ResultDTO<IdAuthVO> idAuth() {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-        IdCardDTO idCard =new IdCardDTO();
-        IdAuthVO idAuth = new IdAuthVO();
         Integer userId = Integer.valueOf(request.getParameter("userId"));
         String side = request.getParameter("side");
         if (userId == null) {
@@ -98,7 +102,7 @@ public class IDAuthenticationController extends BaseController {
 
             String yearMonthPath = year + line + month + line;
             String newFileName = userId +"-"+ System.currentTimeMillis() + "." + prefix;
-           // String fileKey = year + "/" + month + "/" + newFileName;
+            String fileKey = year + "/" + month + "/" + newFileName;
             String filepath = yearMonthPath + newFileName;
 
             String fileURL = this.env.getProperty("fileUpload.url") + line + filepath;
@@ -108,6 +112,20 @@ public class IDAuthenticationController extends BaseController {
                     BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileURL));
                     stream.write(bytes);
                     stream.close();
+                    //上传阿里云OSS文件服务器
+                    OssLoaclUtil.uploadFile(fileURL, fileKey);
+                    String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+                    AppUserFileDO appUserFile = new AppUserFileDO();
+                    appUserFile.setFilePath(newUrl);
+                    appUserFile.setCreateTime(new Date());
+                    appUserFile.setAppUserId(userId);
+                    appUserFile.setFileName(userId+"的"+side+"身份证");
+                    appUserFile.setFileType(side);
+                    appUserFileService.doAdd(appUserFile);
+                    IdAuthVO idAuth = new IdAuthVO();
+                    String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), fileKey);
+                    idAuth.setImagePath(imageUrl);
+                    return ResultDTO.success(idAuth);
                 } catch (Exception e) {
                     logger.error(fileName + "上传失败！" + e);
                     throw new RuntimeException();
@@ -116,7 +134,10 @@ public class IDAuthenticationController extends BaseController {
                 logger.error(fileName + "上传失败");
                 throw new RuntimeException();
             }
-            if("front".equals(side)) {
+            /*
+                IdCardDTO idCard =new IdCardDTO();
+        		IdAuthVO idAuth = new IdAuthVO();
+                if("front".equals(side)) {
             	idCard = JuheDemoUtil.valiIdImage(fileURL,side);
             	int errorCode = idCard.getErrorCode();
             	if(errorCode==228701) {
@@ -164,15 +185,16 @@ public class IDAuthenticationController extends BaseController {
             	idAuth.setAppUserId(userId);
             	idAuth.setSide("back");
             	idAuth.setEndTime(idCard.getEnd());
-            }
+            }*/
         }
-        return ResultDTO.success(idAuth);
+        return null;
 	}
         
 	@RequestMapping(value = "/identify")
     @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
-    public ResultDTO identify(@RequestBody IdentifyJO identify) {
-		String endTime = identify.getEndTime();
+    public ResultDTO identify(@RequestBody CommonJO commonJO) {
+		//AppUserFileDO appUserFile = appUserFileService.doQueryById(identify.getFrontFileId());
+		/*String endTime = identify.getEndTime();
 		Date nowTime = new Date();
 		Date date =null;
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
@@ -205,7 +227,7 @@ public class IDAuthenticationController extends BaseController {
         appUserDto.setUserId(identify.getAppUserId());
         appUserDto.setRealName(identify.getRealName());
         appUserDto.setIdCardNumber(identify.getIdCard());
-        appUserService.modifyInfo(appUserDto);
+        appUserService.modifyInfo(appUserDto);*/
         return ResultDTO.success();
     }
 }

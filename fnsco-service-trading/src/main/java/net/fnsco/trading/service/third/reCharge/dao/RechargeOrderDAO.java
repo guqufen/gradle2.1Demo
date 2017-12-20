@@ -18,11 +18,22 @@ import java.util.List;;
 
 public interface RechargeOrderDAO {
 
-    @Results({@Result( column = "app_user_id",property = "appUserId"),@Result( column = "order_no",property = "orderNo"),@Result( column = "pay_order_no",property = "payOrderNo"),@Result( column = "resp_code",property = "respCode"),@Result( column = "resp_msg",property = "respMsg"),@Result( column = "create_time",property = "createTime"),@Result( column = "update_time",property = "updateTime") })
+	@Results({@Result( column = "app_user_id",property = "appUserId"),
+    	@Result( column = "order_no",property = "orderNo"),
+    	@Result( column = "pay_order_no",property = "payOrderNo"),
+    	@Result( column = "type",property = "type"),
+    	@Result( column = "type_name",property = "name"),
+    	@Result( column = "mobile",property = "mobile"),
+    	@Result( column = "amount",property = "amt"),
+    	@Result( column = "status",property = "status"),
+    	@Result( column = "resp_code",property = "respCode"),
+    	@Result( column = "resp_msg",property = "respMsg"),
+    	@Result( column = "create_time",property = "createTime"),
+    	@Result( column = "update_time",property = "updateTime") })
     @Select("SELECT * FROM thr_recharge_order WHERE id = #{id}")
     public RechargeOrderDO getById(@Param("id") int id);
 
-    @Insert("INSERT into thr_recharge_order(id,app_user_id,type,order_no,pay_order_no,mobile,pid,name,amt,status,resp_code,resp_msg,create_time,update_time) VALUES (#{id},#{appUserId},#{type},#{orderNo},#{payOrderNo},#{mobile},#{pid},#{name},#{amt},#{status},#{respCode},#{respMsg},#{createTime},#{updateTime})")
+    @Insert("INSERT into thr_recharge_order(id,app_user_id,type,order_no,pay_order_no,mobile,type_name,amount,status,resp_code,resp_msg,create_time,update_time) VALUES (#{id},#{appUserId},#{type},#{orderNo},#{payOrderNo},#{mobile},#{name},#{amt},#{status},#{respCode},#{respMsg},#{createTime},#{updateTime})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(RechargeOrderDO rechargeOrder);
 
@@ -32,14 +43,36 @@ public interface RechargeOrderDAO {
     @UpdateProvider(type = RechargeOrderProvider.class, method = "update")
     public int update(@Param("rechargeOrder") RechargeOrderDO  rechargeOrder);
 
-    @Results({@Result( column = "app_user_id",property = "appUserId"),@Result( column = "order_no",property = "orderNo"),@Result( column = "pay_order_no",property = "payOrderNo"),@Result( column = "resp_code",property = "respCode"),@Result( column = "resp_msg",property = "respMsg"),@Result( column = "create_time",property = "createTime"),@Result( column = "update_time",property = "updateTime") })
+    @Results({@Result( column = "app_user_id",property = "appUserId"),
+    	@Result( column = "order_no",property = "orderNo"),
+    	@Result( column = "pay_order_no",property = "payOrderNo"),
+    	@Result( column = "type",property = "type"),
+    	@Result( column = "type_name",property = "name"),
+    	@Result( column = "mobile",property = "mobile"),
+    	@Result( column = "amount",property = "amt"),
+    	@Result( column = "status",property = "status"),
+    	@Result( column = "resp_code",property = "respCode"),
+    	@Result( column = "resp_msg",property = "respMsg"),
+    	@Result( column = "create_time",property = "createTime"),
+    	@Result( column = "update_time",property = "updateTime") })
     @SelectProvider(type = RechargeOrderProvider.class, method = "pageList")
     public List<RechargeOrderDO> pageList(@Param("rechargeOrder") RechargeOrderDO rechargeOrder, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
     @SelectProvider(type = RechargeOrderProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("rechargeOrder") RechargeOrderDO rechargeOrder);
     
-    @Results({@Result( column = "app_user_id",property = "appUserId"),@Result( column = "order_no",property = "orderNo"),@Result( column = "pay_order_no",property = "payOrderNo"),@Result( column = "resp_code",property = "respCode"),@Result( column = "resp_msg",property = "respMsg"),@Result( column = "create_time",property = "createTime"),@Result( column = "update_time",property = "updateTime") })
+    @Results({@Result( column = "app_user_id",property = "appUserId"),
+    	@Result( column = "order_no",property = "orderNo"),
+    	@Result( column = "pay_order_no",property = "payOrderNo"),
+    	@Result( column = "type",property = "type"),
+    	@Result( column = "type_name",property = "name"),
+    	@Result( column = "mobile",property = "mobile"),
+    	@Result( column = "amount",property = "amt"),
+    	@Result( column = "status",property = "status"),
+    	@Result( column = "resp_code",property = "respCode"),
+    	@Result( column = "resp_msg",property = "respMsg"),
+    	@Result( column = "create_time",property = "createTime"),
+    	@Result( column = "update_time",property = "updateTime") })
     @Select("select * from thr_recharge_order where status=0 and create_time >= startDate")
     public List<RechargeOrderDO> queryPhoneCharge(@Param("startDate") Date startDate);
 
