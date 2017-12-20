@@ -75,7 +75,7 @@ public class BankCardController extends BaseController {
     	//校验银行卡信息
     	
     	//保存银行卡信息
-    	Integer row = appUserBankService.doAppAdd(userId,mobile,bankCardNum,bankCardholder,id_card_num);
+    	Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId),mobile,bankCardNum,bankCardholder,id_card_num);
     	if(row == 1){
     		return ResultDTO.success();
     	}else{
@@ -139,8 +139,7 @@ public class BankCardController extends BaseController {
     			vo.setType(TradeConstants.BankTypeEnum.getNameByCode(appUserBankDO.getType()));
     			bankList.add(vo);
 			}
-    		return ResultDTO.success(bankList);
     	}
-    	return ResultDTO.success();
+    	return ResultDTO.success(bankList);
     }
 }

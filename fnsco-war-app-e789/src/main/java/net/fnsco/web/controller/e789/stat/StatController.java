@@ -27,6 +27,7 @@ import net.fnsco.trading.service.order.dto.OrderPayTypeDTO;
 import net.fnsco.trading.service.order.entity.TradeOrderByPayMediumDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.PayTypeTurnoverJO;
+import net.fnsco.web.controller.e789.vo.Chart7DayDataVO;
 import net.fnsco.web.controller.e789.vo.EveryDayTurnoverVO;
 import net.fnsco.web.controller.e789.vo.PayTypeTurnoverVO;
 import net.fnsco.web.controller.e789.vo.TotalTurnoverVO;
@@ -161,7 +162,7 @@ public class StatController extends BaseController {
 	 */
 	@RequestMapping(value = "/getEveryDayTurnover")
 	@ApiOperation(value = "首页-统计-获取最近7天的订单量和销售额")
-	public ResultDTO<List<EveryDayTurnoverVO>> getEveryDayTurnover(@RequestBody CommonJO commonJO){
+	public ResultDTO<Chart7DayDataVO> getEveryDayTurnover(@RequestBody CommonJO commonJO){
 		if(null == commonJO.getUserId()) {
 			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
 		}
@@ -170,14 +171,23 @@ public class StatController extends BaseController {
 		String endTradeDate = DateUtils.getDateStrByMonth(0,-1);
 		List<OrderDayDTO> datas = tradeOrderByDayDAO.selectTurnoverByCondition(startTradeDate, endTradeDate, commonJO.getUserId());
 		List<EveryDayTurnoverVO> resultData = Lists.newArrayList();
+		Integer totalNum = 0;
+		BigDecimal totalTu = new BigDecimal(0);
 		for (OrderDayDTO orderDayDTO : datas) {
 			EveryDayTurnoverVO vo = new EveryDayTurnoverVO();
 			vo.setOrderNum(orderDayDTO.getOrderNumber());
 			vo.setTurnover(formatRMBNumber(orderDayDTO.getTurnover()));
 			vo.setTurnoverDate(orderDayDTO.getTradeDate());
 			resultData.add(vo);
+			totalNum = totalNum + vo.getOrderNum();
+			totalTu = totalTu.add(new BigDecimal(vo.getTurnover()));
 		}
-		return success(resultData);
+		
+		Chart7DayDataVO result = new Chart7DayDataVO();
+		result.setEveryDayData(resultData);
+		result.setTotalOrderNumber(totalNum);
+		result.setTotalTurnover(formatRMBNumbers(totalTu.toString()));
+		return success(result);
 	}
 	
 	/**
@@ -194,6 +204,14 @@ public class StatController extends BaseController {
 			return String.format("%.2f", 0);
 		}else {
 			return String.format("%.2f", new BigDecimal(str).divide(new BigDecimal(100)).doubleValue());
+		}
+	}
+	
+	private String formatRMBNumbers(String str) {
+		if(Strings.isNullOrEmpty(str)) {
+			return String.format("%.2f", 0);
+		}else {
+			return String.format("%.2f", new BigDecimal(str).doubleValue());
 		}
 	}
 	
