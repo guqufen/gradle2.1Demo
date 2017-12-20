@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.e789.third.phoneBill;
+package net.fnsco.web.controller.e789.third.reCharge;
 
 import java.math.BigDecimal;
 
@@ -8,18 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Strings;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
-import net.fnsco.trading.service.merchant.AppUserMerchantService;
-import net.fnsco.trading.service.third.phoneCharge.PrepaidRefillService;
-import net.fnsco.trading.service.third.phoneCharge.dto.ChargeDTO;
-import net.fnsco.trading.service.third.phoneCharge.dto.ChargeResultDTO;
-import net.fnsco.trading.service.third.phoneCharge.dto.CheckChargePackageDTO;
+import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
+import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
+import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
+import net.fnsco.trading.service.third.reCharge.dto.CheckChargePackageDTO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 
@@ -36,8 +33,6 @@ public class PrepaidRefillController extends BaseController {
 
 	@Autowired
 	private PrepaidRefillService prepaidRefillService;
-	@Autowired
-	private AppUserMerchantService appUserMerchantService;
 	@Autowired
 	private AppAccountBalanceService appAccountBalanceService;
 
@@ -78,6 +73,7 @@ public class PrepaidRefillController extends BaseController {
 		chargeDTO.setInprice(fl.getInprice());
 		chargeDTO.setPhone(fl.getPhone());
 		chargeDTO.setUserId(fl.getUserId());
+		chargeDTO.setType(fl.getType());
 		
 		//手机充值
 		if (0 == fl.getType()) {
@@ -97,19 +93,28 @@ public class PrepaidRefillController extends BaseController {
 		if ("1001".equals(ph.getRespCode())) {
 
 			// 成功，则更新原账户
-			Boolean b = appAccountBalanceService.doUpdateFrozenAmount(fl.getUserId(), new BigDecimal(fl.getInprice()));
+			Boolean b = appAccountBalanceService.doUpdateFrozenAmount(fl.getUserId(), new BigDecimal(fl.getInprice()).multiply(new BigDecimal(100)) );
 			if (!b) {
-				logger.error("充值成功之后，账户扣款更新失败，请联系相关技术人员查看");
+				logger.error("充值成功之后，账户扣款更新失败，请联系相关技术人员查看,orderNo="+ph.getOrderNo());
 			}
 
 			return ResultDTO.success(ph);
 
+			//系统异常，进行中。先扣掉账户金额，待后续定时查询结果用
+		} else if("1000".equals(ph.getRespCode())){
+			Boolean b = appAccountBalanceService.doUpdateFrozenAmount(fl.getUserId(), new BigDecimal(fl.getInprice()).multiply(new BigDecimal(100)) );
+			if (!b) {
+				logger.error("充值交易正在进行中，账户扣款更新失败，请联系相关技术人员查看,orderNo="+ph.getOrderNo());
+			}
+
+			return ResultDTO.fail(ph.getRespMsg());
+			
 			// 失败，更新原账户
-		} else {
+		}else{
 			isEnough = appAccountBalanceService.doFrozenBalance(fl.getUserId(),
-					new BigDecimal(0).subtract(new BigDecimal(fl.getInprice())));
+					new BigDecimal(0).subtract( new BigDecimal(fl.getInprice()).multiply(new BigDecimal(100)) ));
 			if (!isEnough) {
-				logger.error("充值失败之后，账户更新失败，请联系相关技术人员查看");
+				logger.error("充值失败之后，账户更新失败，请联系相关技术人员查看,orderNo="+ph.getOrderNo());
 			}
 			return ResultDTO.fail(ph.getRespMsg());
 		}

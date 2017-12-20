@@ -1,6 +1,11 @@
 package net.fnsco.web.controller.e789.stat;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +95,11 @@ public class StatController extends BaseController {
 		 */
 		String startTradeDate = DateUtils.getMouthStartTime(0);//yyyy-MM
 		String thisMonth =  tradeOrderByDayDAO.selectTotalTurnover(startTradeDate, tradeYesterday, commonJO.getUserId());
-		String thisMouthTru = new BigDecimal(totalToday).add(new BigDecimal(thisMonth)).toString();
+		if(Strings.isNullOrEmpty(thisMonth)) {
+			thisMonth = "0.00";
+		}
+		
+		String thisMouthTru = new BigDecimal(resultVO.getTodayTurnover()).add(new BigDecimal(thisMonth)).toString();
 		resultVO.setThisMonthTurnover(formatRMBNumber(thisMouthTru));
 		
 		return success(resultVO);
@@ -113,8 +122,10 @@ public class StatController extends BaseController {
 			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
 		}
 		
-		formatInputDate(payTypeTurnoverJO);
 		PayTypeTurnoverVO payTypeTurnoverVO = new PayTypeTurnoverVO();
+		payTypeTurnoverVO.setStartDate(payTypeTurnoverJO.getStartDate());
+		payTypeTurnoverVO.setEndDate(payTypeTurnoverJO.getEndDate());
+		formatInputDate(payTypeTurnoverJO);
 		List<OrderPayTypeDTO> datas = tradeOrderByPayTypeDAO.selectByCondition(payTypeTurnoverJO.getStartDate(), payTypeTurnoverJO.getEndDate(), payTypeTurnoverJO.getUserId());
 		Integer orderNum = 0;
 		BigDecimal turnover =  new BigDecimal(0);
@@ -132,6 +143,12 @@ public class StatController extends BaseController {
 				}
 			}
 		}
+		
+		if(null == payTypeTurnoverVO.getFenshanfuNum()) {
+			payTypeTurnoverVO.setFenshanfuNum(0);
+			payTypeTurnoverVO.setFenshanfu(formatRMBNumber("0.00"));
+		}
+		
 		payTypeTurnoverVO.setqRTurnover(formatRMBNumber(turnover.toString()));
 		payTypeTurnoverVO.setqRNum(orderNum);
 		/**
@@ -144,8 +161,13 @@ public class StatController extends BaseController {
 		tradeOrderByPayMedium.setEndTradeDate(DateUtils.getDateStrByStr(payTypeTurnoverJO.getEndDate(),1));
 		List<OrderPayTypeDTO> taikaData = tradeOrderByPayMediumDAO.countSUMTurnover(tradeOrderByPayMedium);
 		if(null != taikaData && taikaData.size() == 1) {
-			payTypeTurnoverVO.setTaiKTurnover(formatRMBNumber(taikaData.get(0).getTurnover().toString()));
-			payTypeTurnoverVO.setTaiKNum(taikaData.get(0).getOrderNum());
+			BigDecimal tu = taikaData.get(0).getTurnover();
+			if(null == tu) {
+				payTypeTurnoverVO.setTaiKTurnover(formatRMBNumber("0.00"));
+			}else {
+				payTypeTurnoverVO.setTaiKTurnover(formatRMBNumber(tu.toString()));
+			}
+			payTypeTurnoverVO.setTaiKNum(taikaData.get(0).getOrderNum()==null?0:taikaData.get(0).getOrderNum());
 		}
 		
 		return success(payTypeTurnoverVO);
@@ -184,11 +206,56 @@ public class StatController extends BaseController {
 		}
 		
 		Chart7DayDataVO result = new Chart7DayDataVO();
-		result.setEveryDayData(resultData);
+		result.setEveryDayData(installTradeDay(startTradeDate, endTradeDate,resultData));
 		result.setTotalOrderNumber(totalNum);
 		result.setTotalTurnover(formatRMBNumbers(totalTu.toString()));
 		return success(result);
 	}
+	
+	
+	private List<EveryDayTurnoverVO> installTradeDay(String startTradeDate, String endTradeDate,List<EveryDayTurnoverVO> tradeDayData) {
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        List<EveryDayTurnoverVO> datas = Lists.newArrayList();
+        Date startDate;
+        try {
+            startDate = format1.parse(startTradeDate);
+            start.setTime(startDate);
+            /**
+             * 不够一周数据的、填充数据
+             */
+            Date endDate = format1.parse(endTradeDate);
+            end.setTime(endDate);
+            boolean flag = true;
+            while (end.compareTo(start) >= 0) {
+                flag = true;
+                String dateTime = format1.format(end.getTime());
+                for (EveryDayTurnoverVO tradeDayDTO : tradeDayData) {
+                    if (dateTime.equals(tradeDayDTO.getTurnoverDate())) {
+                        tradeDayDTO.setTurnoverDate(dateTime);
+                        datas.add(tradeDayDTO);
+                        flag = false;
+                    }
+                }
+                if (flag) {
+                	EveryDayTurnoverVO tempDto = new EveryDayTurnoverVO();
+                    tempDto.setTurnoverDate(format1.format(end.getTime()));
+                    tempDto.setOrderNum(0);
+                    tempDto.setTurnover(formatRMBNumbers("0"));
+                    datas.add(tempDto);
+                }
+
+                //循环，每次天数加1
+                end.set(Calendar.DATE, end.get(Calendar.DATE) - 1);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //反着排序
+        Collections.reverse(datas);
+        return datas;
+    }
 	
 	/**
 	 * formatRMBNumber:(改为保留两位小数 RMB显示)
@@ -201,7 +268,7 @@ public class StatController extends BaseController {
 	 */
 	private String formatRMBNumber(String str) {
 		if(Strings.isNullOrEmpty(str)) {
-			return String.format("%.2f", 0);
+			return String.format("%.2f", 0.00);
 		}else {
 			return String.format("%.2f", new BigDecimal(str).divide(new BigDecimal(100)).doubleValue());
 		}
@@ -209,7 +276,7 @@ public class StatController extends BaseController {
 	
 	private String formatRMBNumbers(String str) {
 		if(Strings.isNullOrEmpty(str)) {
-			return String.format("%.2f", 0);
+			return String.format("%.2f", 0.00);
 		}else {
 			return String.format("%.2f", new BigDecimal(str).doubleValue());
 		}

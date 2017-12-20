@@ -1,8 +1,8 @@
-package net.fnsco.trading.service.third.phoneCharge.dto;
+package net.fnsco.trading.service.third.reCharge.dto;
 
 import java.util.Date;
 
-public class PhoneChargeOrderDO {
+public class RechargeOrderDO {
 
 	/**
 	 * 
@@ -10,14 +10,14 @@ public class PhoneChargeOrderDO {
 	private Integer id;
 
 	/**
-	 * 充值类型0-话费1-流量
-	 */
-	private String type;
-
-	/**
 	 * app用户ID
 	 */
 	private String appUserId;
+
+	/**
+	 * 充值类型0-话费1-流量
+	 */
+	private String type;
 
 	/**
 	 * 订单ID
@@ -32,7 +32,7 @@ public class PhoneChargeOrderDO {
 	/**
 	 * 手机号码
 	 */
-	private String phoneNo;
+	private String mobile;
 
 	/**
 	 * 充值套餐ID
@@ -82,20 +82,20 @@ public class PhoneChargeOrderDO {
 		this.id = id;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public String getAppUserId() {
 		return appUserId;
 	}
 
 	public void setAppUserId(String appUserId) {
 		this.appUserId = appUserId;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getOrderNo() {
@@ -114,12 +114,12 @@ public class PhoneChargeOrderDO {
 		this.payOrderNo = payOrderNo;
 	}
 
-	public String getPhoneNo() {
-		return phoneNo;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setPhoneNo(String phoneNo) {
-		this.phoneNo = phoneNo;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 	public String getPid() {
@@ -188,8 +188,8 @@ public class PhoneChargeOrderDO {
 
 	@Override
 	public String toString() {
-		return "[id=" + id + ", type=" + type + ", appUserId=" + appUserId + ", orderNo=" + orderNo + ", payOrderNo="
-				+ payOrderNo + ", phoneNo=" + phoneNo + ", pid=" + pid + ", name=" + name + ", amt=" + amt + ", status="
+		return "[id=" + id + ", appUserId=" + appUserId + ", type=" + type + ", orderNo=" + orderNo + ", payOrderNo="
+				+ payOrderNo + ", mobile=" + mobile + ", pid=" + pid + ", name=" + name + ", amt=" + amt + ", status="
 				+ status + ", respCode=" + respCode + ", respMsg=" + respMsg + ", createTime=" + createTime
 				+ ", updateTime=" + updateTime + "]";
 	}
