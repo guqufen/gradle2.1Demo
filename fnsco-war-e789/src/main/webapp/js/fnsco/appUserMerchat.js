@@ -257,8 +257,8 @@ function queryBusinessParams(params)
        pageSize : this.pageSize,
        status:'2',
        legalPerson:$.trim($('#search_legalPerson').val()),
-       mercName:$.trim($('#search_merName').val()),
-       legalPersonMobile:$.trim($('#search_legalPersonMobile').val())  
+       mercName:$.trim($('#search_entity_merName').val()),
+       legalPersonMobile:$.trim($('#search_legalPerson_Mobile').val())  
    }
    return param;
 }
