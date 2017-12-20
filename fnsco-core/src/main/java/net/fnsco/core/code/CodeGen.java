@@ -51,7 +51,6 @@ public class CodeGen {
 
 //        auto.init("net.fnsco.trading", "appUserMerchantEntity", "u_app_user_merchant_entity");
         
-        auto.init("net.fnsco.trading", "third.phoneCharge", "thr_recharge_order");
-
+        auto.init("net.fnsco.trading", "userfile", "u_app_user_file");
     }
 }
