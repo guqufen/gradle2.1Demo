@@ -134,9 +134,6 @@ public interface TradeOrderDAO {
     @Select("select order_no from t_trade_order where channel_type=#{channelType} and create_time >= #{startTime} and resp_code = '1000'")
     public List<String> queryOnGoing(@Param("channelType") String channelType,@Param("startTime") Date startTime);
     
-    @Select("select order_no from t_trade_order where channel_type='80' and txn_sub_type = #{type} and create_time >= #{startTime} and resp_code = '1000'")
-    public List<String> queryPhoneCharge(@Param("type") Integer type,@Param("startTime") Date startTime);
-    
     /**
      * queryByCondition:(按照条件查询结果集)
      *
