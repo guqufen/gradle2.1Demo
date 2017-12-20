@@ -14,22 +14,8 @@ public class IdAuthVO extends VO {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@ApiModelProperty(value = "身份证图片保存信息id", name = "fileId", example = "身份证图片保存信息id")
-	private Integer fileId;/*身份证图片保存信息id*/
 	@ApiModelProperty(value="图像地址",name="headImagePath",example="图像地址")
 	private String ImagePath;
-	/**
-	 * @return the fileId
-	 */
-	public Integer getFileId() {
-		return fileId;
-	}
-	/**
-	 * @param fileId the fileId to set
-	 */
-	public void setFileId(Integer fileId) {
-		this.fileId = fileId;
-	}
 	/**
 	 * @return the imagePath
 	 */

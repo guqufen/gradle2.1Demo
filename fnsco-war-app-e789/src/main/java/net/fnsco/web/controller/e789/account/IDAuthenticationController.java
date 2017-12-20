@@ -35,7 +35,7 @@ import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.userfile.AppUserFileService;
 import net.fnsco.trading.service.userfile.entity.AppUserFileDO;
-import net.fnsco.web.controller.e789.jo.IdentifyJO;
+import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.vo.IdAuthVO;
 
 /**
@@ -121,10 +121,9 @@ public class IDAuthenticationController extends BaseController {
                     appUserFile.setAppUserId(userId);
                     appUserFile.setFileName(userId+"的"+side+"身份证");
                     appUserFile.setFileType(side);
-                    appUserFile = appUserFileService.doAdd(appUserFile);
+                    appUserFileService.doAdd(appUserFile);
                     IdAuthVO idAuth = new IdAuthVO();
                     String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), fileKey);
-                    idAuth.setFileId(appUserFile.getId());
                     idAuth.setImagePath(imageUrl);
                     return ResultDTO.success(idAuth);
                 } catch (Exception e) {
@@ -193,7 +192,7 @@ public class IDAuthenticationController extends BaseController {
         
 	@RequestMapping(value = "/identify")
     @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
-    public ResultDTO identify(@RequestBody IdentifyJO identify) {
+    public ResultDTO identify(@RequestBody CommonJO commonJO) {
 		//AppUserFileDO appUserFile = appUserFileService.doQueryById(identify.getFrontFileId());
 		/*String endTime = identify.getEndTime();
 		Date nowTime = new Date();
