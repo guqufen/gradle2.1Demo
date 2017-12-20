@@ -1,5 +1,7 @@
 package net.fnsco.web.controller.e789.account;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,7 +58,7 @@ public class AccountBalanceController extends BaseController {
  		if(null == appAccountBalanceDO.getFund()) {
  			resultVO.setAccountBalance("0.00");
  		}else {
- 			resultVO.setAccountBalance(String.format("%.2f", appAccountBalanceDO.getFund()));
+ 			resultVO.setAccountBalance(String.format("%.2f", appAccountBalanceDO.getFund().divide(new BigDecimal(100)).doubleValue()));
  		}
  		
         return success(resultVO);
