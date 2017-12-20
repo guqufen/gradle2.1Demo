@@ -2,18 +2,20 @@ package net.fnsco.web.controller.e789.withdraw;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.google.common.base.Strings;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.service.dao.master.AppUserDao;
@@ -116,7 +118,8 @@ public class TradeWithdrawController extends BaseController {
     	tradeWithdraw.setBankOpenBankNum(appUserBank.getOpenBankNum());
     	tradeWithdraw.setBankSubBankName(appUserBank.getSubBankName());
     	tradeWithdraw.setStatus(1);
-    	tradeWithdraw.setTradeType(1);
+    	tradeWithdraw.setTradeType(2);
+    	tradeWithdraw.setTradeSubType(20);
     	tradeWithdraw.setFee(new BigDecimal(0));
     	tradeWithdrawService.doAdd(tradeWithdraw);
     	
@@ -127,7 +130,7 @@ public class TradeWithdrawController extends BaseController {
     	int result = appAccountBalanceDAO.updateFund(new BigDecimal(withdrawCashJO.getCashAccount()), withdrawCashJO.getUserId(),new Date());
     	if(result <= 0) {
     		tradeWithdraw.setStatus(2);
-    		tradeWithdrawService.doUpdate(tradeWithdraw, getUserId());
+    		tradeWithdrawService.doUpdate(tradeWithdraw);
     		return ResultDTO.fail(ApiConstant.E_ACCOUNT_BALANCE_NULL);
     	}
     	

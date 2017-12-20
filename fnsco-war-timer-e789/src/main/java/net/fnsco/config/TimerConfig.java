@@ -14,6 +14,10 @@ import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.trading.service.report.ReportStatService;
+import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
+import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
+import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
+import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 
 @EnableScheduling
 public class TimerConfig {
@@ -25,6 +29,12 @@ public class TimerConfig {
     private PaymentService paymentService;
     @Autowired
     private ReportStatService reportStatService;
+    @Autowired
+    private TradeWithdrawService tradeWithdrawService;
+    @Autowired
+    private RechargeOrderService rechargeOrderService;
+    @Autowired
+    private PrepaidRefillService prepaidRefillService;
 
     /**
      * spring boot 定时任务
@@ -48,29 +58,27 @@ public class TimerConfig {
 		}
     }
     
-    /**
-     * 每隔3秒查询手机充值支付结果(渠道返回系统内部异常需要查询该笔交易结果)
-     */
-    @Scheduled(cron = "*/3 * * * * ?")
-    public void queryFlowCharge(){
+	/**
+	 * 每隔3秒查询手机充值支付结果(渠道返回系统内部异常需要查询该笔交易结果)
+	 */
+	@Scheduled(cron = "*/3 * * * * ?")
+	public void queryFlowCharge() {
 
-    	List<String> orderList = tradeOrderDAO.queryPhoneCharge(12, DateUtils.getStartDayTime(new Date()));//查询
-    	for (String orderNo : orderList) {
+		List<RechargeOrderDO> orderList = rechargeOrderService.queryPhoneCharge(DateUtils.getStartDayTime(new Date()));// 查询
+		for (RechargeOrderDO rechargeOrderDO : orderList) {
+			
+			//话费充值
+			if("0".equals(rechargeOrderDO.getType())){
+				
+				prepaidRefillService.orderSta(rechargeOrderDO);
+				//流量充值
+			}else if("1".equals(rechargeOrderDO.getType())){
+
+				prepaidRefillService.queryFlowResult(rechargeOrderDO);
+			}
 			
 		}
-    }
-    
-    /**
-     * 每隔3秒查询流量充值支付结果(渠道返回系统内部异常需要查询该笔交易结果)
-     */
-    @Scheduled(cron = "*/3 * * * * ?")
-    public void queryPrepaidCharge(){
-
-    	List<String> orderList = tradeOrderDAO.queryPhoneCharge(12, DateUtils.getStartDayTime(new Date()));//查询
-    	for (String orderNo : orderList) {
-			
-		}
-    }
+	}
     
     /**
      * buildReportDate:(报表统计生成)

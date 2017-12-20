@@ -22,6 +22,8 @@ public class FlowChargeJO extends JO {
 	private Integer userId;
 	@ApiModelProperty(value = "类型0-话费充值;1-流量充值", example = "类型0-话费充值;1-流量充值")
 	private Integer type;
+	@ApiModelProperty(value = "充值名称:取资费查询返回的name字段", example = "充值名称:取资费查询返回的name字段")
+	private String name;
 
 	public String getPhone() {
 		return phone;
@@ -65,6 +67,14 @@ public class FlowChargeJO extends JO {
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

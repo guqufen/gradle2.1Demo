@@ -120,4 +120,11 @@ public class AppAccountBalanceService extends BaseService {
 		
 		return false;
 	}
+	public boolean updateFund(Integer appUserId,BigDecimal fund) {
+        int result = appAccountBalanceDAO.updateFund(fund, appUserId,new Date());
+        if(result >0) {
+            return true;
+        }
+        return false;
+    }
 }

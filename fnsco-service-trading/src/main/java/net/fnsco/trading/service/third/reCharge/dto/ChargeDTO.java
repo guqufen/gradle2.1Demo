@@ -1,4 +1,4 @@
-package net.fnsco.trading.service.third.phoneCharge.dto;
+package net.fnsco.trading.service.third.reCharge.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.DTO;
@@ -16,6 +16,8 @@ public class ChargeDTO extends DTO {
 	private Integer userId;
 	@ApiModelProperty(value = "类型0-话费充值;1-流量充值", example = "类型0-话费充值;1-话费==流量充值")
 	private Integer type;
+	@ApiModelProperty(value = "充值名称:取资费查询返回的name字段", example = "充值名称:取资费查询返回的name字段")
+	private String name;
 
 	public String getPhone() {
 		return phone;
@@ -59,6 +61,14 @@ public class ChargeDTO extends DTO {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

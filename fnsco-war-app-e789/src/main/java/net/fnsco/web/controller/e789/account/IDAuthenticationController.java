@@ -3,17 +3,22 @@ package net.fnsco.web.controller.e789.account;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.beust.jcommander.internal.Maps;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -22,10 +27,16 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.JuheDemoUtil;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.dto.IdCardDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
+import net.fnsco.trading.constant.E789ApiConstant;
+import net.fnsco.trading.service.userfile.AppUserFileService;
+import net.fnsco.trading.service.userfile.entity.AppUserFileDO;
+import net.fnsco.web.controller.e789.jo.CommonJO;
+import net.fnsco.web.controller.e789.vo.IdAuthVO;
 
 /**
  * @desc 身份证认证相关功能控制器
@@ -42,17 +53,18 @@ public class IDAuthenticationController extends BaseController {
 	 private AppUserService        appUserService;
 	 @Autowired
 	 private Environment           env;
+	 @Autowired
+	 private AppUserFileService    appUserFileService;
 	@RequestMapping(value = "/auth")
-    @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
+    @ApiOperation(value = "个人信息-身份证上传识别接口" ,notes="作者：何金庭")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType="String",paramType="body"),
 		@ApiImplicitParam(name = "file", value = "图片文件流", required = true, dataType="MultipartFile",paramType="body"),
 		@ApiImplicitParam(name = "side", value = "front:正面识别;back:反面识别;", required = true, dataType="String",paramType="body")
 	})
-    public ResultDTO idAuth() {
+    public ResultDTO<IdAuthVO> idAuth() {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-        IdCardDTO idCard =new IdCardDTO();
         Integer userId = Integer.valueOf(request.getParameter("userId"));
         String side = request.getParameter("side");
         if (userId == null) {
@@ -90,7 +102,7 @@ public class IDAuthenticationController extends BaseController {
 
             String yearMonthPath = year + line + month + line;
             String newFileName = userId +"-"+ System.currentTimeMillis() + "." + prefix;
-           // String fileKey = year + "/" + month + "/" + newFileName;
+            String fileKey = year + "/" + month + "/" + newFileName;
             String filepath = yearMonthPath + newFileName;
 
             String fileURL = this.env.getProperty("fileUpload.url") + line + filepath;
@@ -100,6 +112,20 @@ public class IDAuthenticationController extends BaseController {
                     BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(fileURL));
                     stream.write(bytes);
                     stream.close();
+                    //上传阿里云OSS文件服务器
+                    OssLoaclUtil.uploadFile(fileURL, fileKey);
+                    String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+                    AppUserFileDO appUserFile = new AppUserFileDO();
+                    appUserFile.setFilePath(newUrl);
+                    appUserFile.setCreateTime(new Date());
+                    appUserFile.setAppUserId(userId);
+                    appUserFile.setFileName(userId+"的"+side+"身份证");
+                    appUserFile.setFileType(side);
+                    appUserFileService.doAdd(appUserFile);
+                    IdAuthVO idAuth = new IdAuthVO();
+                    String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), fileKey);
+                    idAuth.setImagePath(imageUrl);
+                    return ResultDTO.success(idAuth);
                 } catch (Exception e) {
                     logger.error(fileName + "上传失败！" + e);
                     throw new RuntimeException();
@@ -108,25 +134,105 @@ public class IDAuthenticationController extends BaseController {
                 logger.error(fileName + "上传失败");
                 throw new RuntimeException();
             }
-            
-            if("front".equals(side)) {
-            	idCard = JuheDemoUtil.idVerification(fileURL,side);
-            	if(idCard.getErrorCode()==0) {
-            		return ResultDTO.fail("证件正面扫描失败");
-            	}else if(idCard.getRes()==2) {
-            		return ResultDTO.fail("身份证有误，姓名与身份证号码不匹配");
-            	}
-            }else if("back".equals(side)) {
-            	idCard = JuheDemoUtil.idVerification(fileURL,side);
-            	if(idCard.getErrorCode()==0) {
-            		return ResultDTO.fail("证件反面扫描失败");
-            	}
-            }
         }
+        return ResultDTO.fail(E789ApiConstant.E_UPLOAD_IDCARD_FAIL);
+	}
+        
+	@RequestMapping(value = "/identify")
+    @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
+    public ResultDTO identify(@RequestBody CommonJO commonJO) {
+		Integer userId = commonJO.getUserId();
+		if (userId == null) {
+        	return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+		String realName = null;
+		String cardId = null;
+		String endTime = null;
+		AppUserFileDO appUserFrontFile = appUserFileService.doQueryByUserId(commonJO.getUserId(),"front");
+		if(appUserFrontFile==null) {
+			return ResultDTO.fail(E789ApiConstant.E_FORNT_NOT_FOUND);
+		}else {
+			String imagePath = appUserFrontFile.getFilePath();
+			 String path = imagePath.substring(imagePath.indexOf("^") + 1);
+			String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path);
+			IdCardDTO idCardFront = JuheDemoUtil.valiIdImage(imageUrl,"front");
+        	int errorCode = idCardFront.getErrorCode();
+        	if(errorCode==228701) {
+       		 	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_TIMEOUT);
+       	 	}else if(errorCode==228702) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
+       	 	}else if(errorCode==228703) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_TYPE_ERROR);
+       	 	}else if(errorCode==228704) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_LENGTH_ERROR);
+       	 	}else if(errorCode==228705) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_SIZE_ERROR);
+       	 	}else if(errorCode==228706) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_IDENTIFY_FAILURE);
+       	 	}else if(errorCode==228707) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_OTHER_ERROR);
+       	 	}else if(errorCode==228708) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_DISSUPOPORT_GET);
+       	 	}
+        	realName = idCardFront.getRealname();
+        	cardId = idCardFront.getIdcard();
+		}
+		AppUserFileDO appUserBackFile = appUserFileService.doQueryByUserId(commonJO.getUserId(),"back");
+		if(appUserBackFile==null) {
+			return ResultDTO.fail(E789ApiConstant.E_BACK_NOT_FOUND);
+		}else {
+			String imagePath = appUserFrontFile.getFilePath();
+			 String path = imagePath.substring(imagePath.indexOf("^") + 1);
+			String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path);
+			IdCardDTO idCardBack = JuheDemoUtil.valiIdImage(imageUrl,"back");
+       	int errorCode = idCardBack.getErrorCode();
+       	if(errorCode==210301) {
+      		 	return ResultDTO.fail(E789ApiConstant.E_NOT_FOUND_PRE);
+      	 	}else if(errorCode==210302) {
+      	 		return ResultDTO.fail(E789ApiConstant.E_SERVER_EXC);
+      	 	}else if(errorCode==210303) {
+      	 		return ResultDTO.fail(E789ApiConstant.E_SERVER_MAINTENANCE);
+      	 	}else if(errorCode==210304) {
+      	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR_ID);
+      	 	}else if(errorCode==210305) {
+      	 		return ResultDTO.fail(E789ApiConstant.E_NETWORK_ERROR);
+      	 	}else if(errorCode==210306) {
+      	 		return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_ERROR);
+      	 	}
+       		endTime = idCardBack.getEnd();
+		}
+		Date nowTime = new Date();
+		Date date =null;
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+		try {
+			date = formatter.parse(endTime);
+		} catch (ParseException e) {
+			logger.info("身份证时间转换错误");
+			e.printStackTrace();
+		} 
+		IdCardDTO idCard =new IdCardDTO();
+        idCard = JuheDemoUtil.valiIdCard(cardId,realName);
+        int errorCode = idCard.getErrorCode();
+        if (date.before(nowTime)) {
+        	return ResultDTO.fail(E789ApiConstant.E_IDCARD_OUT_OF_TIME);
+        }
+        if(errorCode==210301) {
+   		 	return ResultDTO.fail(E789ApiConstant.E_NOT_FOUND_PRE);
+   	 	}else if(errorCode==210302) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_SERVER_EXC);
+   	 	}else if(errorCode==210303) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_SERVER_MAINTENANCE);
+   	 	}else if(errorCode==210304) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR_ID);
+   	 	}else if(errorCode==210305) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_NETWORK_ERROR);
+   	 	}else if(errorCode==210306) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_ERROR);
+   	 	}
         AppUserDTO appUserDto = new AppUserDTO();
         appUserDto.setUserId(userId);
-        appUserDto.setRealName(idCard.getRealname());
-        appUserDto.setIdCardNumber(idCard.getIdcard());
+        appUserDto.setRealName(realName);
+        appUserDto.setIdCardNumber(cardId);
         appUserService.modifyInfo(appUserDto);
         return ResultDTO.success();
     }

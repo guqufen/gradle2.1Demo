@@ -81,7 +81,7 @@ public interface AppAccountBalanceDAO {
     public int judgeBalance(@Param("fund") BigDecimal  fund,@Param("appUserId") int appUserId);
     
     
-    @Update("UPDATE u_app_account_balance SET fund = fund - #{fund}, freeze_amount = freeze_amount + #{fund},update_time = #{updateDate} WHERE app_user_id = #{appUserId} AND fund = fund - #{fund} >=0")
+    @Update("UPDATE u_app_account_balance SET fund = fund - #{fund}, freeze_amount = freeze_amount + #{fund},update_time = #{updateDate} WHERE app_user_id = #{appUserId} AND fund - #{fund} >=0")
     public int updateFrozenBalance(@Param("fund") BigDecimal  fund,@Param("appUserId") int appUserId,@Param("updateDate")Date updateDate);
     
     @Update("UPDATE u_app_account_balance SET freeze_amount = freeze_amount - #{fund} ,update_time = #{updateDate} WHERE app_user_id = #{appUserId} ")

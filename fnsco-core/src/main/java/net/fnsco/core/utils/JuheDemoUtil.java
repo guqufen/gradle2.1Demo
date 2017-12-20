@@ -30,19 +30,6 @@ public class JuheDemoUtil {
     //身份证实名认证的http地址
     private static String  URI_ID_CARD      = "http://op.juhe.cn/idcard/query";
     /**
-     * 身份证验证
-     * @param image
-     * @param side
-     * @return
-     */
-    public static IdCardDTO idVerification(String image,String side) {
-    	IdCardDTO idCard = valiIdImage(image, side);
-    	if("front".equals(side)&&idCard.getErrorCode()==0) {
-    		return valiIdCard(idCard.getIdcard(),idCard.getRealname());
-    	}
-    	return idCard;
-    }
-    /**
      * 图片识别
      * @param image
      * @param side
@@ -59,13 +46,20 @@ public class JuheDemoUtil {
     	 JSONObject json = JSONObject.parseObject(resule);
     	 String reason = json.getString("reason");
     	 JSONObject obj = json.getJSONObject("result");
-    	 String realname = obj.getString("realname");
-    	 String idcard = obj.getString("idcard");
-    	 int errorCode = json.getInteger("error_code");
     	 idCard.setReason(reason);
-    	 idCard.setRealname(realname);
-    	 idCard.setIdcard(idcard);
-    	 idCard.setErrorCode(errorCode);
+    	 if("front".equals(side)) {
+    		 String realname = obj.getString("realname");
+    		 String idcard = obj.getString("idcard");
+    		 int errorCode = json.getInteger("error_code");
+    		 idCard.setRealname(realname);
+    		 idCard.setIdcard(idcard);
+    		 idCard.setErrorCode(errorCode);
+    	 }else if("back".equals(side)){
+    		 String end = obj.getString("end");
+    		 int errorCode = json.getInteger("error_code");
+    		 idCard.setErrorCode(errorCode);
+    		 idCard.setEnd(end);
+    	 }
     	return idCard;
     }
     /**

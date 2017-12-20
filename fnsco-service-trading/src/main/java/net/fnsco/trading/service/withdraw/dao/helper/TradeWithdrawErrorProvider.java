@@ -40,6 +40,9 @@ public class TradeWithdrawErrorProvider {
         if (tradeWithdrawError.getTradeType() != null) {
             SET("trade_type=#{tradeWithdrawError.tradeType}");
         }
+        if (tradeWithdrawError.getTradeSubType() != null) {
+            SET("trade_sub_type=#{tradeWithdrawError.tradeSubType}");
+        }
         if (tradeWithdrawError.getStatus() != null) {
             SET("status=#{tradeWithdrawError.status}");
         }
@@ -137,6 +140,9 @@ public class TradeWithdrawErrorProvider {
         if (tradeWithdrawError.getTradeType() != null) {
             WHERE("trade_type=#{tradeWithdrawError.tradeType}");
         }
+        if (tradeWithdrawError.getTradeSubType() != null) {
+            WHERE("trade_sub_type=#{tradeWithdrawError.tradeSubType}");
+        }
         if (tradeWithdrawError.getStatus() != null) {
             WHERE("status=#{tradeWithdrawError.status}");
         }
@@ -223,6 +229,9 @@ public class TradeWithdrawErrorProvider {
         }
         if (tradeWithdrawError.getTradeType() != null) {
             WHERE("trade_type=#{tradeWithdrawError.tradeType}");
+        }
+        if (tradeWithdrawError.getTradeSubType() != null) {
+            WHERE("trade_sub_type=#{tradeWithdrawError.tradeSubType}");
         }
         if (tradeWithdrawError.getStatus() != null) {
             WHERE("status=#{tradeWithdrawError.status}");

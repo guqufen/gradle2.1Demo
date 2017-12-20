@@ -4,13 +4,13 @@ import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 
 public class TicketOrderJO extends CommonJO {
-    @ApiModelProperty(value = "乘客ID", example = "乘客ID")
+    @ApiModelProperty(value = "乘客ID,多个乘客以逗号分隔", example = "乘客ID,多个乘客以逗号分隔")
     private String passengerId;
     @ApiModelProperty(value = "车号", example = "车号")
-    private String carNumber;
+    private String trainCode;
     @ApiModelProperty(value = "票类型（学生票）", example = "票类型（学生票）")
     private String ticketType;
-    @ApiModelProperty(value = "坐席（二等座）", example = "坐席（二等座）")
+    @ApiModelProperty(value = "坐席（坐席 F:动卧(新增),9:商务座,P:特等座,M:一等座,O（大写字母O，不是数字0）:二等座,6:高级软卧, 4:软卧,3:硬卧,2:软座,1:硬座。）", example = "坐席（二等座）")
     private String seatCode;
     @ApiModelProperty(value = "价格", example = "价格")
     private String price;
@@ -180,25 +180,25 @@ public class TicketOrderJO extends CommonJO {
     }
 
     /**
-     * carNumber
+     * trainCode
      *
-     * @return  the carNumber
+     * @return  the trainCode
      * @since   CodingExample Ver 1.0
     */
 
-    public String getCarNumber() {
-        return carNumber;
+    public String getTrainCode() {
+        return trainCode;
     }
 
     /**
-     * carNumber
+     * trainCode
      *
-     * @param   carNumber    the carNumber to set
+     * @param   trainCode    the trainCode to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setCarNumber(String carNumber) {
-        this.carNumber = carNumber;
+    public void setTrainCode(String trainCode) {
+        this.trainCode = trainCode;
     }
 
     /**
