@@ -46,9 +46,14 @@ public class TradeWithdrawDO {
     private BigDecimal fund;
 
     /**
-     * 交易类型 1提现/2收入/3新人红包/4预约提现/5提现手续费
+     * 交易类型 1收入/2消费
      */
     private Integer tradeType;
+    
+    /**
+     * 交易子类型 10充值收入/11新人红包收入20提现/21预约提现//22话费充值23流量充值24火车票购买35提现手续费36收入撤销
+     */
+    private Integer tradeSubType;
 
     /**
      * 状态 0未提现1提现中2失败3成功
@@ -135,9 +140,30 @@ public class TradeWithdrawDO {
      */
     private String channelMerId;
 
+    
+    /**
+	 * tradeSubType
+	 *
+	 * @return  the tradeSubType
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getTradeSubType() {
+		return tradeSubType;
+	}
 
+	/**
+	 * tradeSubType
+	 *
+	 * @param   tradeSubType    the tradeSubType to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setTradeSubType(Integer tradeSubType) {
+		this.tradeSubType = tradeSubType;
+	}
 
-    public Integer getId() {
+	public Integer getId() {
         return id;
     }
 
