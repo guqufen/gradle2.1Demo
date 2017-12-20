@@ -96,12 +96,12 @@ function formatTime(value, row, index){
 	return formatDateUtil(value);
 }
 //条件查询按钮事件
-function queryEvent() {
-	$('#table').bootstrapTable('refresh');
+function queryEvent(id) {
+	$('#'+id).bootstrapTable('refresh');
 }
-function resetEvent() {
-	$('#formSearch')[0].reset();
-	$('#table').bootstrapTable('refresh');
+function resetEvent(id,id1) {
+	$('#'+id)[0].reset();
+	$('#'+id1).bootstrapTable('refresh');
 }
 //表格中序号
 function formatindex(value, row, index) {
@@ -257,8 +257,8 @@ function queryBusinessParams(params)
        pageSize : this.pageSize,
        status:'2',
        legalPerson:$.trim($('#search_legalPerson').val()),
-       mercName:$.trim($('#search_merName').val()),
-       legalPersonMobile:$.trim($('#search_legalPersonMobile').val())  
+       mercName:$.trim($('#search_entity_merName').val()),
+       legalPersonMobile:$.trim($('#search_legalPerson_Mobile').val())  
    }
    return param;
 }
