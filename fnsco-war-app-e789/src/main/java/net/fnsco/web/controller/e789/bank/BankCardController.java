@@ -75,7 +75,7 @@ public class BankCardController extends BaseController {
     	//校验银行卡信息
     	
     	//保存银行卡信息
-    	Integer row = appUserBankService.doAppAdd(userId,mobile,bankCardNum,bankCardholder,id_card_num);
+    	Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId),mobile,bankCardNum,bankCardholder,id_card_num);
     	if(row == 1){
     		return ResultDTO.success();
     	}else{

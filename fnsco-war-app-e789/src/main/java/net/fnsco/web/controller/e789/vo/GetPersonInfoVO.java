@@ -8,11 +8,15 @@ public class GetPersonInfoVO extends VO {
 	private String userName; 
 	@ApiModelProperty(value="头像地址",name="headImagePath",example="头像地址")
 	private String headImagePath;
-	@ApiModelProperty(value="身份认证真实姓名",name="name",example="身份认证真实姓名")
-	private String name;
+	@ApiModelProperty(value="真实姓名",name="realName",example="真实姓名")
+	private String realName; 
+	@ApiModelProperty(value="是否绑定身份证 true/false",name="isBindingIdCard",example="是否绑定身份证 true/false")
+	private boolean isBindingIdCard;
 	@ApiModelProperty(value="手机号",name="name",example="手机号")
 	private String mobile;
-	@ApiModelProperty(value="银行卡是否绑定",name="loginRights",example="银行卡是否绑定")
+	@ApiModelProperty(value="银行卡是否绑定显示",name="loginRights",example="银行卡是否绑定显示")
+	private String isBindingStr;
+	@ApiModelProperty(value="银行卡是否绑定 true/false",name="loginRights",example="银行卡是否绑定 true/false")
 	private boolean bindingBankCard;
 	/**
 	 * @return the userName
@@ -39,16 +43,28 @@ public class GetPersonInfoVO extends VO {
 		this.headImagePath = headImagePath;
 	}
 	/**
-	 * @return the name
+	 * @return the realName
 	 */
-	public String getName() {
-		return name;
+	public String getRealName() {
+		return realName;
 	}
 	/**
-	 * @param name the name to set
+	 * @param realName the realName to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+	/**
+	 * @return the isBindingIdCard
+	 */
+	public boolean getIsBindingIdCard() {
+		return isBindingIdCard;
+	}
+	/**
+	 * @param isBindingIdCard the isBindingIdCard to set
+	 */
+	public void setIsBindingIdCard(boolean isBindingIdCard) {
+		this.isBindingIdCard = isBindingIdCard;
 	}
 	/**
 	 * @return the mobile
@@ -63,15 +79,27 @@ public class GetPersonInfoVO extends VO {
 		this.mobile = mobile;
 	}
 	/**
+	 * @return the isBindingStr
+	 */
+	public String getIsBindingStr() {
+		return isBindingStr;
+	}
+	/**
+	 * @param isBindingStr the isBindingStr to set
+	 */
+	public void setIsBindingStr(String isBindingStr) {
+		this.isBindingStr = isBindingStr;
+	}
+	/**
 	 * @return the bindingBankCard
 	 */
-	public boolean isBindingBankCard() {
+	public boolean getIsBindingBankCard() {
 		return bindingBankCard;
 	}
 	/**
 	 * @param bindingBankCard the bindingBankCard to set
 	 */
-	public void setBindingBankCard(boolean bindingBankCard) {
+	public void setIsBindingBankCard(boolean bindingBankCard) {
 		this.bindingBankCard = bindingBankCard;
 	}
 
