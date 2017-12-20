@@ -36,5 +36,9 @@ public interface AppUserMerchantEntityDAO {
 
     @SelectProvider(type = AppUserMerchantEntityProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("appUserMerchantEntity") AppUserMerchantEntityDO appUserMerchantEntity);
+    
+    @Results({@Result( column = "entity_inner_code",property = "entityInnerCode"),@Result( column = "app_user_id",property = "appUserId"),@Result( column = "shop_inner_code",property = "shopInnerCode"),@Result( column = "role_id",property = "roleId"),@Result( column = "modefy_time",property = "modefyTime") })
+    @Select("SELECT * FROM u_app_user_merchant_entity WHERE app_user_id = #{appUserId} limit 1")
+    public AppUserMerchantEntityDO selectByEntityInnerCode(@Param("appUserId") Integer appUserId);
 
 }

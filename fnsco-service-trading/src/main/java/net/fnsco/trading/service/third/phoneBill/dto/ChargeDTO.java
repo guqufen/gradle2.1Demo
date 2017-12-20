@@ -1,15 +1,9 @@
-package net.fnsco.web.controller.e789.jo;
+package net.fnsco.trading.service.third.phoneBill.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import net.fnsco.core.base.JO;
+import net.fnsco.core.base.DTO;
 
-/**
- * 提交流量充值
- * 
- * @author Administrator
- *
- */
-public class FlowChargeJO extends JO {
+public class ChargeDTO extends DTO {
 
 	private static final long serialVersionUID = 1L;
 	@ApiModelProperty(value = "待充值流量的手机号", example = "待充值流量的手机号")
@@ -39,18 +33,6 @@ public class FlowChargeJO extends JO {
 		this.pid = pid;
 	}
 
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	public String getInprice() {
 		return inprice;
 	}
@@ -59,12 +41,24 @@ public class FlowChargeJO extends JO {
 		this.inprice = inprice;
 	}
 
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
 	public Integer getType() {
 		return type;
 	}
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

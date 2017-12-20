@@ -296,10 +296,10 @@ public class TradeWithdrawProvider {
     	Integer status = (Integer) params.get("status");
     	
     	return new SQL() {{
-    		SELECT("SUM(amount)");
+    		SELECT("trade_type AS tradeType,SUM(amount) AS totalAmount");
     		FROM(TABLE_NAME);
     		if(StringUtils.isNotBlank(tradeMonth)) {
-    			WHERE("DATE_FORMAT(create_time,'%Y-%m') = #{tradeMonth}");
+    			WHERE("DATE_FORMAT(create_time,'%Y年%m月') = #{tradeMonth}");
     		}
     		if(null != appUserId) {
     			WHERE("app_user_id = #{appUserId}");
@@ -307,6 +307,7 @@ public class TradeWithdrawProvider {
     		if(null != status) {
     			WHERE("status = #{status}");
     		}
+    		GROUP_BY("trade_type");
     		
     	}}.toString();
     }

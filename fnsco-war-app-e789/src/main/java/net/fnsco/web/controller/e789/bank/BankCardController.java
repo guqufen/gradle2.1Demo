@@ -139,8 +139,7 @@ public class BankCardController extends BaseController {
     			vo.setType(TradeConstants.BankTypeEnum.getNameByCode(appUserBankDO.getType()));
     			bankList.add(vo);
 			}
-    		return ResultDTO.success(bankList);
     	}
-    	return ResultDTO.success();
+    	return ResultDTO.success(bankList);
     }
 }

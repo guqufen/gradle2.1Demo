@@ -46,11 +46,11 @@
 				</div>
 				<div class="mui-input-row">
 					<label>短信验证码</label>
-					<input class="phone-code" placeholder="输入短信验证码" type="text">
+					<input class="phone-code" placeholder="输入短信验证码" type="text" maxlength="6">
 				</div>
 				<div class="mui-input-row">
 					<label>推荐码</label>
-					<input class="refrral-code" placeholder="输入推荐码" type="text">
+					<input class="refrral-code" placeholder="输入推荐码(必填)" type="text" maxlength="20">
 				</div>
 				<button class="sub-btn" onclick="subData('02')">下一步</button>
 			</div>
@@ -68,14 +68,17 @@
 					</div>
 					<div class="mui-input-row">
 						<label>行驶证</label>
+						<!-- <input type="file" id="file0" name="xs" accept="image/*" />  -->
 						<input type="file" id="file0" name="xs" accept="image/*" onchange="selectFileImage(this);" /> 
 					</div>
 					<div class="mui-input-row">
 						<label>车辆登记证</label>
+						<!-- <input type="file" id="file1" name='dj' accept="image/*" />  -->
 						<input type="file" id="file1" name='dj' accept="image/*" onchange="selectFileImage(this);" /> 
 					</div>
 					<div class="mui-input-row">
 						<label>车辆大本</label>
+						<!-- <input type="file" id="file1" name="cl" accept="image/*" />  -->
 						<input type="file" id="file1" name="cl" accept="image/*" onchange="selectFileImage(this);" /> 
 					</div>
 					<input id="orderNo" type="hidden" name="orderNo" value="">
@@ -139,6 +142,15 @@
 <!-- <script type="text/javascript" src="js/exif.js"></script> -->
 <script type="text/javascript">
 	start(true,false,false,true);
+	function selectFileImage(fileObj) { 
+	    var file = fileObj.files['0']; 
+	    console.log(file.size);
+	    if(file.size>10485760){
+	    // if(file.size>171574){
+	    	mui.toast('图片不能超过10M，请重新选择');
+	    	fileObj.value='';
+	    }
+	}
 </script>
 <!-- <script type="text/javascript">
 	function selectFileImage(fileObj) { 

@@ -36,15 +36,39 @@ public class TimerConfig {
     }
     
     /**
-     * 每隔3秒定时查询查询中信银行扫一扫支付结果
+     * 每隔3秒定时查询中信银行扫一扫支付结果
      */
     @Scheduled(cron = "*/3 * * * * ?")
     public void queryZxyhTrade(){
 
     	Date date = DateUtils.getStartDayTime(new Date());
-    	List<TradeOrderDO> tradeList= tradeOrderDAO.queryOnGoing(DateUtils.getStartDayTime(new Date()));
-    	for (TradeOrderDO tradeDO : tradeList) {
-    		paymentService.PassivePayResult(tradeDO);
+    	List<String> orderList= tradeOrderDAO.queryOnGoing("05", DateUtils.getStartDayTime(new Date()));
+    	for (String orderNo : orderList) {
+    		paymentService.PassivePayResult(orderNo);
+		}
+    }
+    
+    /**
+     * 每隔3秒查询手机充值支付结果(渠道返回系统内部异常需要查询该笔交易结果)
+     */
+    @Scheduled(cron = "*/3 * * * * ?")
+    public void queryFlowCharge(){
+
+    	List<String> orderList = tradeOrderDAO.queryPhoneCharge(12, DateUtils.getStartDayTime(new Date()));//查询
+    	for (String orderNo : orderList) {
+			
+		}
+    }
+    
+    /**
+     * 每隔3秒查询流量充值支付结果(渠道返回系统内部异常需要查询该笔交易结果)
+     */
+    @Scheduled(cron = "*/3 * * * * ?")
+    public void queryPrepaidCharge(){
+
+    	List<String> orderList = tradeOrderDAO.queryPhoneCharge(12, DateUtils.getStartDayTime(new Date()));//查询
+    	for (String orderNo : orderList) {
+			
 		}
     }
     

@@ -15,9 +15,9 @@ public class ModifyInfoJO extends JO {
 
 	@ApiModelProperty(value="APP用户ID")
 	private Integer userId;// APP用户ID
-	@ApiModelProperty(value="修改类型（1修改昵称，2修改图片）")
+	/*@ApiModelProperty(value="修改类型（1修改昵称，2修改图片）")
 	private Integer modifyType;// 修改类型（1修改昵称，2修改图片）
-	@ApiModelProperty(value="修改内容")
+*/	@ApiModelProperty(value="修改内容")
 	private String modifyContent;// 修改内容
 	/**
 	 * @return the userId
@@ -37,18 +37,18 @@ public class ModifyInfoJO extends JO {
 
 	/**
 	 * @return the modifyType
-	 */
+	 *//*
 	public Integer getModifyType() {
 		return modifyType;
 	}
 
 
-	/**
+	*//**
 	 * @param modifyType the modifyType to set
-	 */
+	 *//*
 	public void setModifyType(Integer modifyType) {
 		this.modifyType = modifyType;
-	}
+	}*/
 
 
 	/**

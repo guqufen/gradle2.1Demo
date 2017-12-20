@@ -2,10 +2,10 @@
 $('#table').bootstrapTable({
     search: false, //是否启动搜索栏
     sidePagination:'server',
-    url:PROJECT_NAME+'/web/merchantentity/query',
+    url:PROJECT_NAME+'/web/e789/appsuser/query',
     showRefresh: false,//是否显示刷新按钮
     showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
-    toolbar: '#toolbar',  //工具按钮用哪个容器
+    // toolbar: '#toolbar',  //工具按钮用哪个容器
     striped: true,   //是否显示行间隔色
     cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
     pagination: true,   //是否显示分页（*）
@@ -17,37 +17,31 @@ $('#table').bootstrapTable({
     queryParams:queryParams,
     responseHandler:responseHandler,//处理服务器返回数据
     columns: [
-    // {
-    //         field: 'id',
-    //         title: '序号',
-    //         width:'10%',
-    //         align: 'center',
-    //         width: 150,
-    //         formatter:formatindex
-    // },
     {
         field: 'id',
         title: '操作',
         align: 'center',
         formatter: operateFormatter
     },{
-        field: 'mercName',
+        field: 'userName',
         title: '用户名',
     },{
-        field: 'legalPersonMobile',
+        field: 'mobile',
         title: '手机号',
+        class : 'mobile'
     },{
-        field: 'legalPerson',
+        field: 'merNames',
         title: '绑定实体商户'
     },{
-        field: 'cardNum',
+        field: 'idCardNumber',
         title: '身份证'
     },{
-        field: 'createTimer',
+        field: 'regTime',
         title: '新增时间',
         formatter:formatTime
     }]
 });
+
 //表格中操作按钮
 function operateFormatter(value, row, index) {
 	return [
@@ -62,9 +56,10 @@ function queryParams(params)
    var param ={
 	   currentPageNum : this.pageNumber,
 	   pageSize : this.pageSize,
-	   legalPerson:$.trim($('#search_legalPerson').val()),
-	   mercName:$.trim($('#merName').val()),
-	   legalPersonMobile:$.trim($('#search_legalPersonMobile').val()),
+	   userName:$.trim($('#userName').val()),
+	   merNames:$.trim($('#search_merName').val()),
+	   mobile:$.trim($('#search_legalPersonMobile').val()),
+	   idCardNumber:$.trim($('#search_idcardNum').val()),
        // status:$.trim($('#search_status').val())
 	   status:"1"
    }
@@ -140,7 +135,38 @@ function responseDetailHandler(res) {
 }
 
 
+$("#btn_select_business").click(function(){
+   var select_data = $('#businessTable').bootstrapTable('getSelections')[0];
+   var innerCode=select_data.entityInnerCode;
+   var id=$(this).attr('appuserid');
+  if(!select_data){
+    layer.msg('请选择商户!');return
+  }
 
+  $.ajax({
+      url:PROJECT_NAME+'/web/e789/appsuser/bindMerchantEntity',
+      type:'POST',
+      dataType : "json",
+      data:{'appUserId':id,'entityInnerCode':innerCode},
+      success:function(data){
+        if(data.code==2002){
+          layer.msg('新增加绑定成功');
+        }else if(data.code==2001){
+          layer.msg('更新绑定成功');
+        }else{
+          layer.msg('绑定失败');
+        }
+        queryEvent('table');
+        $('#businessModal').modal('hide');
+        $(".entityMerName").removeClass('active');
+      },
+      error:function(e)
+      {
+        layer.msg('系统异常!'+e);
+      }
+    });
+
+})
 /*
 *获取实体商户以及处理选中事件
 */
@@ -150,6 +176,7 @@ function selectBusiness(id){
     $("body").addClass('modal-open-custom');
     $('#businessModal').modal('show');
     $("#businessFormSearch input").val('');
+    $("#btn_select_business").attr('appUserId',id);
 }
 initBusiness();
 function initBusiness(){
@@ -159,7 +186,7 @@ function initBusiness(){
       url:PROJECT_NAME+'/web/merchantentity/query',
       showRefresh: false,//是否显示刷新按钮
       showPaginationSwitch: false,//是否显示 数据条数选择框(分页是否显示)
-      //toolbar: '#toolbar',  //工具按钮用哪个容器
+      // toolbar: '#toolbar',  //工具按钮用哪个容器
       striped: true,   //是否显示行间隔色
       cache: false,   //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
       pagination: true,   //是否显示分页（*）

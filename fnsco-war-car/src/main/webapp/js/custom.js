@@ -412,7 +412,6 @@ function subData(type){
 	}
 
 	if(type=='021'){//贷款上传图片
-		alert($("#file0").val());
 		$("#car-info .sub-btn").attr('disabled',true);
         $('#carInfoForm').ajaxSubmit({
             type: 'post', // 提交方式 get/post
@@ -463,3 +462,33 @@ function subData(type){
 
 }
 
+
+
+/*
+*手机号码改变事件
+*/
+$('.phone-num').bind('input propertychange', function() {  
+    if($(this).val().length>11){
+    	$(this).val($(this).val().substr(0,11));
+    }
+}); 
+$('.phone-code').bind('input propertychange', function() {  
+    if($(this).val().length>6){
+    	$(this).val($(this).val().substr(0,6));
+    }
+});
+$('.refrral-code').bind('input propertychange', function() {  
+    if($(this).val().length>20){
+    	$(this).val($(this).val().substr(0,20));
+    }
+});
+// $('.input-rmbnum').bind('input propertychange', function() {  
+//     if($(this).val().length>4){
+//     	$(this).val($(this).val().substr(0,4));
+//     }
+// });
+// $('.car-money').bind('input propertychange', function() {  
+//     if($(this).val().length>4){
+//     	$(this).val($(this).val().substr(0,4));
+//     }
+// });

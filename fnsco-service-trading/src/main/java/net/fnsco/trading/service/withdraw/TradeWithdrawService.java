@@ -14,6 +14,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.trading.service.withdraw.dao.TradeWithdrawDAO;
+import net.fnsco.trading.service.withdraw.dto.MonthWithdrawCountDTO;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 
 @Service
@@ -66,5 +67,9 @@ public class TradeWithdrawService extends BaseService {
     public TradeWithdrawDO doQueryById(Integer id) {
         TradeWithdrawDO obj = this.tradeWithdrawDAO.getById(id);
         return obj;
+    }
+    
+    public List<MonthWithdrawCountDTO> doQueryTotalAmountGroupByMouth(Integer appUserId,String tradeMonth,Integer status){
+    	return tradeWithdrawDAO.queryTotalAmount(appUserId, tradeMonth, status);
     }
 }

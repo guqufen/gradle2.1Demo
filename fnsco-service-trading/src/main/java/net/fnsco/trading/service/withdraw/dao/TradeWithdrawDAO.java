@@ -1,19 +1,20 @@
 package net.fnsco.trading.service.withdraw.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Options;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
 import net.fnsco.trading.service.withdraw.dao.helper.TradeWithdrawProvider;
-import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
-
-import java.util.List;;
+import net.fnsco.trading.service.withdraw.dto.MonthWithdrawCountDTO;
+import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;;
 
 public interface TradeWithdrawDAO {
 
@@ -49,6 +50,6 @@ public interface TradeWithdrawDAO {
      * @date   2017年12月7日 上午11:46:23
      */
     @SelectProvider(type = TradeWithdrawProvider.class, method = "queryTotalAmount")
-    public String queryTotalAmount(@Param("appUserId") Integer appUserId,@Param("tradeMonth") String tradeMonth,@Param("status")Integer status);
-
+    public List<MonthWithdrawCountDTO> queryTotalAmount(@Param("appUserId") Integer appUserId,@Param("tradeMonth") String tradeMonth,@Param("status")Integer status);
+    
 }

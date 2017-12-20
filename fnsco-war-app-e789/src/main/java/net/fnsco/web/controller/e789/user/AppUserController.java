@@ -1,5 +1,8 @@
 package net.fnsco.web.controller.e789.user;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +17,11 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
-import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
-import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.trading.comm.HeadImageEnum;
+import net.fnsco.trading.service.account.AppAccountBalanceService;
+import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.FindPasswordJO;
 import net.fnsco.web.controller.e789.jo.GetValidateCodeJO;
@@ -38,7 +42,10 @@ import net.fnsco.web.controller.e789.vo.LoginVO;
 public class AppUserController extends BaseController {
     @Autowired
     private AppUserService        appUserService;
+    @Autowired
+    private AppAccountBalanceService appAccountBalanceService;
 
+   
     @RequestMapping(value = "/register")
     @ApiOperation(value = "注册页-用户注册")
     @ResponseBody
@@ -50,6 +57,7 @@ public class AppUserController extends BaseController {
     	appUserDTO.setDeviceType(registerJO.getDeviceType());
     	appUserDTO.setMobile(registerJO.getMobile());
     	appUserDTO.setPassword(registerJO.getPassword());
+    	appUserDTO.setHeadImagePath(HeadImageEnum.getImage());
         ResultDTO result = appUserService.e789InsertSelective(appUserDTO);
         if(!result.isSuccess()) {
         	return result.fail(result.getCode());
@@ -59,6 +67,8 @@ public class AppUserController extends BaseController {
         loginVO.setHeadImagePath(appUserLoginInfoDTO.getHeadImagePath());
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
+        loginVO.setUserName(appUserLoginInfoDTO.getUserName());
+        loginVO.setRealName(appUserLoginInfoDTO.getRealName());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
@@ -71,6 +81,17 @@ public class AppUserController extends BaseController {
         	loginVO.setHasPayPassword(true);
         }
         loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
+        
+        /**
+         * 插入余额
+         */
+        AppAccountBalanceDO appAccountBalance = new AppAccountBalanceDO();
+        appAccountBalance.setAppUserId(appUserLoginInfoDTO.getUserId());
+        appAccountBalance.setCreateTime(new Date());
+        appAccountBalance.setFreezeAmount(new BigDecimal(0));
+        appAccountBalance.setFund(new BigDecimal(0));
+        appAccountBalance.setUpdateTime(new Date());
+        appAccountBalanceService.doAdd(appAccountBalance, getUserId());
         return ResultDTO.success(loginVO);
     }
 
@@ -79,16 +100,11 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/getValidateCode")
     @ApiOperation(value = "获取验证码")
     public ResultDTO getValidateCode(@RequestBody GetValidateCodeJO getValidateCodeJO) {
-    	if(getValidateCodeJO.getType()==0) {
-    		AppUser user = appUserService.e789QueryAppUserByMobile(getValidateCodeJO.getMobile());
-    		if(user != null) {
-    			return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
-    		}
-    	}
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(getValidateCodeJO.getDeviceId());
-    	appUserDTO.setMobile(getValidateCodeJO.getType()+getValidateCodeJO.getMobile());
-        ResultDTO result = appUserService.getValidateCode(appUserDTO);
+    	appUserDTO.setMobile(getValidateCodeJO.getMobile());
+    	appUserDTO.setOprationType(getValidateCodeJO.getType());
+        ResultDTO result = appUserService.getE789ValidateCode(appUserDTO);
         return result;
     }
 
@@ -103,7 +119,7 @@ public class AppUserController extends BaseController {
     	appUserDTO.setDeviceId(findPasswordJO.getDeviceId());
     	appUserDTO.setMobile(findPasswordJO.getMobile());
     	appUserDTO.setPassword(findPasswordJO.getPassword());
-        ResultDTO<String> result = appUserService.findPassword(appUserDTO);
+        ResultDTO<String> result = appUserService.e789FindPassword(appUserDTO);
         if(!result.isSuccess()) {
         	return result.fail(result.getCode());
         }
@@ -112,6 +128,8 @@ public class AppUserController extends BaseController {
         loginVO.setHeadImagePath(appUserLoginInfoDTO.getHeadImagePath());
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
+        loginVO.setUserName(appUserLoginInfoDTO.getUserName());
+        loginVO.setRealName(appUserLoginInfoDTO.getRealName());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
@@ -147,6 +165,7 @@ public class AppUserController extends BaseController {
         loginVO.setHeadImagePath(appUserLoginInfoDTO.getHeadImagePath());
         loginVO.setUserId(appUserLoginInfoDTO.getUserId());
         loginVO.setUserName(appUserLoginInfoDTO.getUserName());
+        loginVO.setRealName(appUserLoginInfoDTO.getRealName());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
