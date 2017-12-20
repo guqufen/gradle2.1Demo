@@ -92,7 +92,8 @@ public class PayDealFsfController extends BaseController {
                 TradeOrderDO tradeOrderTemp = new TradeOrderDO();
                 tradeOrderTemp.setId(tradeOrderDO.getId());
                 tradeOrderTemp.setHandleNum(1);
-                tradeOrderService.doUpdate(tradeOrderTemp);
+                tradeOrderTemp.setOrderNo(tradeOrderDO.getOrderNo());
+                tradeOrderService.doUpdateForResearch(tradeOrderTemp);
             }
         }
         logger.error("分闪付跳转到聚惠分平台前的url" + url);

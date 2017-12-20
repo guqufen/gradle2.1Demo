@@ -97,8 +97,8 @@ public class TradeWithdrawService extends BaseService {
     }
 
     // 查询
-    public TradeWithdrawDO doQueryByOrderNo(String orderNo) {
-        TradeWithdrawDO obj = this.tradeWithdrawDAO.getByOrderNo(orderNo);
+    public TradeWithdrawDO doQueryByOriginalOrderNo(String orderNo) {
+        TradeWithdrawDO obj = this.tradeWithdrawDAO.getByOriginalOrderNo(orderNo);
         return obj;
     }
 
