@@ -35,11 +35,6 @@ public class RechargeOrderDO {
 	private String mobile;
 
 	/**
-	 * 充值套餐ID
-	 */
-	private String pid;
-
-	/**
 	 * 充值名称
 	 */
 	private String name;
@@ -122,14 +117,6 @@ public class RechargeOrderDO {
 		this.mobile = mobile;
 	}
 
-	public String getPid() {
-		return pid;
-	}
-
-	public void setPid(String pid) {
-		this.pid = pid;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -189,7 +176,7 @@ public class RechargeOrderDO {
 	@Override
 	public String toString() {
 		return "[id=" + id + ", appUserId=" + appUserId + ", type=" + type + ", orderNo=" + orderNo + ", payOrderNo="
-				+ payOrderNo + ", mobile=" + mobile + ", pid=" + pid + ", name=" + name + ", amt=" + amt + ", status="
+				+ payOrderNo + ", mobile=" + mobile + ", name=" + name + ", amt=" + amt + ", status="
 				+ status + ", respCode=" + respCode + ", respMsg=" + respMsg + ", createTime=" + createTime
 				+ ", updateTime=" + updateTime + "]";
 	}
