@@ -63,4 +63,8 @@ public class RechargeOrderService extends BaseService {
  public List<RechargeOrderDO> queryPhoneCharge(Date startDate){
 	 return this.rechargeOrderDAO.queryPhoneCharge(startDate);
  }
+ 
+ public RechargeOrderDO getByOrderNo(String orderNo){
+	 return this.rechargeOrderDAO.getByOrderNo(orderNo);
+ }
 }

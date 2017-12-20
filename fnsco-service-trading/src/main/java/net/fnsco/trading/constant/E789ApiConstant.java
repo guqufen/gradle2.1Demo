@@ -21,6 +21,9 @@ public class E789ApiConstant extends CoreConstants {
     public static String E_DATA_SOURCE_ERROR       = "210306";                          //数据源错误，具体参照reason
     
     public static String E_IDCARD_OUT_OF_TIME      = "210000";                          //身份证已过期
+    public static String E_UPLOAD_IDCARD_FAIL      = "210001";                          //身份证上传失败
+    public static String E_FORNT_NOT_FOUND         = "210002";                          //请上传身份证正面照
+    public static String E_BACK_NOT_FOUND          = "210003";                           //请上传身份证反面照
 
     static {
     	//身份识别证错误信息
@@ -40,6 +43,11 @@ public class E789ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_PAR_ERROR_ID, "参数异常");
         ERROR_MESSGE_MAP.put(E_NETWORK_ERROR, "网络错误，请重试");
         ERROR_MESSGE_MAP.put(E_DATA_SOURCE_ERROR, "数据源错误，具体参照reason");
+        
+        ERROR_MESSGE_MAP.put(E_IDCARD_OUT_OF_TIME, "身份证已过期");
+        ERROR_MESSGE_MAP.put(E_UPLOAD_IDCARD_FAIL, "身份证上传失败");
+        ERROR_MESSGE_MAP.put(E_FORNT_NOT_FOUND, "请上传身份证正面照");
+        ERROR_MESSGE_MAP.put(E_BACK_NOT_FOUND, "请上传身份证反面照");
     }
 
 }

@@ -52,4 +52,10 @@ public class AppUserFileService extends BaseService {
      AppUserFileDO obj = this.appUserFileDAO.getById(id);
      return obj;
  }
+ 
+ //查询
+ public AppUserFileDO doQueryByUserId (Integer appUserId,String fileType) {
+   AppUserFileDO obj = this.appUserFileDAO.getByUserId (appUserId,fileType);
+   return obj;
+ }
 }

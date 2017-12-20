@@ -134,67 +134,73 @@ public class IDAuthenticationController extends BaseController {
                 logger.error(fileName + "上传失败");
                 throw new RuntimeException();
             }
-            /*
-                IdCardDTO idCard =new IdCardDTO();
-        		IdAuthVO idAuth = new IdAuthVO();
-                if("front".equals(side)) {
-            	idCard = JuheDemoUtil.valiIdImage(fileURL,side);
-            	int errorCode = idCard.getErrorCode();
-            	if(errorCode==228701) {
-           		 	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_TIMEOUT);
-           	 	}else if(errorCode==228702) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
-           	 	}else if(errorCode==228703) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_TYPE_ERROR);
-           	 	}else if(errorCode==228704) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_LENGTH_ERROR);
-           	 	}else if(errorCode==228705) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_SIZE_ERROR);
-           	 	}else if(errorCode==228706) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_IDENTIFY_FAILURE);
-           	 	}else if(errorCode==228707) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_OTHER_ERROR);
-           	 	}else if(errorCode==228708) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_DISSUPOPORT_GET);
-           	 	}
-            	idAuth.setAppUserId(userId);
-            	idAuth.setRealName(idCard.getRealname());
-            	idAuth.setIdCard(idCard.getIdcard());
-            	idAuth.setSide("front");
-            	idAuth.setFileURL(fileURL);
-            }else if("back".equals(side)) {
-            	idCard = JuheDemoUtil.valiIdImage(fileURL,side);
-            	int errorCode = idCard.getErrorCode();
-            	if(errorCode==228701) {
-           		 	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_TIMEOUT);
-           	 	}else if(errorCode==228702) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
-           	 	}else if(errorCode==228703) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_TYPE_ERROR);
-           	 	}else if(errorCode==228704) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_LENGTH_ERROR);
-           	 	}else if(errorCode==228705) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_SIZE_ERROR);
-           	 	}else if(errorCode==228706) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_IDENTIFY_FAILURE);
-           	 	}else if(errorCode==228707) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_OTHER_ERROR);
-           	 	}else if(errorCode==228708) {
-           	 		return ResultDTO.fail(E789ApiConstant.E_DISSUPOPORT_GET);
-           	 	}
-            	idAuth.setAppUserId(userId);
-            	idAuth.setSide("back");
-            	idAuth.setEndTime(idCard.getEnd());
-            }*/
         }
-        return null;
+        return ResultDTO.fail(E789ApiConstant.E_UPLOAD_IDCARD_FAIL);
 	}
         
 	@RequestMapping(value = "/identify")
     @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
     public ResultDTO identify(@RequestBody CommonJO commonJO) {
-		//AppUserFileDO appUserFile = appUserFileService.doQueryById(identify.getFrontFileId());
-		/*String endTime = identify.getEndTime();
+		Integer userId = commonJO.getUserId();
+		if (userId == null) {
+        	return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
+        }
+		String realName = null;
+		String cardId = null;
+		String endTime = null;
+		AppUserFileDO appUserFrontFile = appUserFileService.doQueryByUserId(commonJO.getUserId(),"front");
+		if(appUserFrontFile==null) {
+			return ResultDTO.fail(E789ApiConstant.E_FORNT_NOT_FOUND);
+		}else {
+			String imagePath = appUserFrontFile.getFilePath();
+			 String path = imagePath.substring(imagePath.indexOf("^") + 1);
+			String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path);
+			IdCardDTO idCardFront = JuheDemoUtil.valiIdImage(imageUrl,"front");
+        	int errorCode = idCardFront.getErrorCode();
+        	if(errorCode==228701) {
+       		 	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_TIMEOUT);
+       	 	}else if(errorCode==228702) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
+       	 	}else if(errorCode==228703) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_TYPE_ERROR);
+       	 	}else if(errorCode==228704) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_LENGTH_ERROR);
+       	 	}else if(errorCode==228705) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_SIZE_ERROR);
+       	 	}else if(errorCode==228706) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_IDENTIFY_FAILURE);
+       	 	}else if(errorCode==228707) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_OTHER_ERROR);
+       	 	}else if(errorCode==228708) {
+       	 		return ResultDTO.fail(E789ApiConstant.E_DISSUPOPORT_GET);
+       	 	}
+        	realName = idCardFront.getRealname();
+        	cardId = idCardFront.getIdcard();
+		}
+		AppUserFileDO appUserBackFile = appUserFileService.doQueryByUserId(commonJO.getUserId(),"back");
+		if(appUserBackFile==null) {
+			return ResultDTO.fail(E789ApiConstant.E_BACK_NOT_FOUND);
+		}else {
+			String imagePath = appUserFrontFile.getFilePath();
+			 String path = imagePath.substring(imagePath.indexOf("^") + 1);
+			String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path);
+			IdCardDTO idCardBack = JuheDemoUtil.valiIdImage(imageUrl,"back");
+       	int errorCode = idCardBack.getErrorCode();
+       	if(errorCode==210301) {
+      		 	return ResultDTO.fail(E789ApiConstant.E_NOT_FOUND_PRE);
+      	 	}else if(errorCode==210302) {
+      	 		return ResultDTO.fail(E789ApiConstant.E_SERVER_EXC);
+      	 	}else if(errorCode==210303) {
+      	 		return ResultDTO.fail(E789ApiConstant.E_SERVER_MAINTENANCE);
+      	 	}else if(errorCode==210304) {
+      	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR_ID);
+      	 	}else if(errorCode==210305) {
+      	 		return ResultDTO.fail(E789ApiConstant.E_NETWORK_ERROR);
+      	 	}else if(errorCode==210306) {
+      	 		return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_ERROR);
+      	 	}
+       		endTime = idCardBack.getEnd();
+		}
 		Date nowTime = new Date();
 		Date date =null;
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
@@ -205,7 +211,7 @@ public class IDAuthenticationController extends BaseController {
 			e.printStackTrace();
 		} 
 		IdCardDTO idCard =new IdCardDTO();
-        idCard = JuheDemoUtil.valiIdCard(identify.getIdCard(),identify.getRealName());
+        idCard = JuheDemoUtil.valiIdCard(cardId,realName);
         int errorCode = idCard.getErrorCode();
         if (date.before(nowTime)) {
         	return ResultDTO.fail(E789ApiConstant.E_IDCARD_OUT_OF_TIME);
@@ -224,10 +230,10 @@ public class IDAuthenticationController extends BaseController {
    	 		return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_ERROR);
    	 	}
         AppUserDTO appUserDto = new AppUserDTO();
-        appUserDto.setUserId(identify.getAppUserId());
-        appUserDto.setRealName(identify.getRealName());
-        appUserDto.setIdCardNumber(identify.getIdCard());
-        appUserService.modifyInfo(appUserDto);*/
+        appUserDto.setUserId(userId);
+        appUserDto.setRealName(realName);
+        appUserDto.setIdCardNumber(cardId);
+        appUserService.modifyInfo(appUserDto);
         return ResultDTO.success();
     }
 }
