@@ -70,9 +70,10 @@ public class TimerConfig {
 			//话费充值
 			if("0".equals(rechargeOrderDO.getType())){
 				
-				
+				prepaidRefillService.orderSta(rechargeOrderDO);
 				//流量充值
 			}else if("1".equals(rechargeOrderDO.getType())){
+
 				prepaidRefillService.queryFlowResult(rechargeOrderDO);
 			}
 			
