@@ -270,7 +270,7 @@ public class PrepaidRefillService extends BaseService {
 				tradeWithdrawDO.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置交易完成时间
 				tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
-				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO, chargeDTO.getUserId());// 更新数据
+				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
 				if (ret2 < 0) {
 					logger.error("充值返回成功，数据更新失败。time=" + tradeWithdrawDO.getUpdateTime() + "userId="
 							+ chargeDTO.getUserId());
@@ -285,7 +285,7 @@ public class PrepaidRefillService extends BaseService {
 				tradeWithdrawDO.setRespCode("1000");// 交易进行中，需要再次调用订单查询接口进行查询
 				tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置最后更新时间
-				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO, chargeDTO.getUserId());// 更新数据
+				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
 				if (ret2 < 0) {
 					logger.error(
 							"充值失败，数据更新失败。time=" + tradeWithdrawDO.getUpdateTime() + "userId=" + chargeDTO.getUserId());
@@ -307,7 +307,7 @@ public class PrepaidRefillService extends BaseService {
 				tradeWithdrawDO.setStatus(2);// 状态为2-失败
 				tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置最后更新时间
-				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO, chargeDTO.getUserId());// 更新数据
+				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
 				if (ret2 < 0) {
 					logger.error(
 							"充值失败，数据更新失败。time=" + tradeWithdrawDO.getUpdateTime() + "userId=" + chargeDTO.getUserId());
@@ -394,7 +394,7 @@ public class PrepaidRefillService extends BaseService {
 				tradeWithdrawDO.setRespCode("1000");// 交易进行中，需要再次调用订单查询接口进行查询
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置交易完成时间
 				tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
-				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO, chargeDTO.getUserId());// 更新数据
+				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
 				if (ret2 < 0) {
 					logger.error("充值返回成功，数据更新失败。time=" + tradeWithdrawDO.getUpdateTime() + "userId="
 							+ chargeDTO.getUserId());
@@ -417,7 +417,7 @@ public class PrepaidRefillService extends BaseService {
 				tradeWithdrawDO.setRespCode("1000");// 交易进行中，需要再次调用订单查询接口进行查询
 				tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置最后更新时间
-				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO, chargeDTO.getUserId());// 更新数据
+				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
 				if (ret2 < 0) {
 					logger.error(
 							"充值失败，数据更新失败。time=" + tradeWithdrawDO.getUpdateTime() + "userId=" + chargeDTO.getUserId());
@@ -439,7 +439,7 @@ public class PrepaidRefillService extends BaseService {
 				tradeWithdrawDO.setStatus(2);// 状态为2-失败
 				tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置最后更新时间
-				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO, chargeDTO.getUserId());// 更新数据
+				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
 				if (ret2 < 0) {
 					logger.error(
 							"充值失败，数据更新失败。orderNo=" + phoneChargeOrderDO.getOrderNo() + "userId=" + chargeDTO.getUserId());
