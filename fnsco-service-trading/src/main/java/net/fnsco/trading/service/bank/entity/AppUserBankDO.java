@@ -12,7 +12,7 @@ public class AppUserBankDO {
     /**
      * 内部商户号 15位
      */
-    private String appUserId;
+    private Integer appUserId;
 
     /**
      * 账户类型0对私1对公
@@ -193,11 +193,11 @@ public class AppUserBankDO {
         this.id = id;
     }
 
-    public String getAppUserId() {
+    public Integer getAppUserId() {
         return appUserId;
     }
 
-    public void setAppUserId(String appUserId) {
+    public void setAppUserId(Integer appUserId) {
         this.appUserId = appUserId;
     }
 
