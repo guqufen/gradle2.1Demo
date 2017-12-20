@@ -1,5 +1,6 @@
 package net.fnsco.trading.service.withdraw.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
@@ -52,4 +53,13 @@ public interface TradeWithdrawDAO {
     @SelectProvider(type = TradeWithdrawProvider.class, method = "queryTotalAmount")
     public List<MonthWithdrawCountDTO> queryTotalAmount(@Param("appUserId") Integer appUserId,@Param("tradeMonth") String tradeMonth,@Param("status")Integer status);
     
+    /**
+     * 按交易类型查询正在进行的交易列表，便于定时查询交易状态(按照时间大到小)
+     * @param start：查询开始时间
+     * @param type：交易类型
+     * @return
+     */
+    @Results({@Result( column = "order_no",property = "orderNo"),@Result( column = "original_order_no",property = "originalOrderNo"),@Result( column = "app_user_id",property = "appUserId"),@Result( column = "settle_money",property = "settleMoney"),@Result( column = "trade_type",property = "tradeType"),@Result( column = "create_time",property = "createTime"),@Result( column = "update_time",property = "updateTime"),@Result( column = "resp_code",property = "respCode"),@Result( column = "resp_msg",property = "respMsg"),@Result( column = "payment_date",property = "paymentDate"),@Result( column = "succ_time",property = "succTime"),@Result( column = "back_url",property = "backUrl"),@Result( column = "bank_account_type",property = "bankAccountType"),@Result( column = "bank_account_no",property = "bankAccountNo"),@Result( column = "bank_account_name",property = "bankAccountName"),@Result( column = "bank_account_card_id",property = "bankAccountCardId"),@Result( column = "bank_sub_bank_name",property = "bankSubBankName"),@Result( column = "bank_open_bank",property = "bankOpenBank"),@Result( column = "bank_open_bank_num",property = "bankOpenBankNum"),@Result( column = "bank_account_phone",property = "bankAccountPhone"),@Result( column = "channel_mer_id",property = "channelMerId") })
+    @Select("SELECT * FROM t_trade_withdraw WHERE status=1 AND trade_type=#{type} AND create_time >=#{start}")
+    public List<TradeWithdrawDO> queryOngoing(@Param("start") Date start, @Param("type") Integer type);
 }
