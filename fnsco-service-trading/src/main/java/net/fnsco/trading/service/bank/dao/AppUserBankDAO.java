@@ -34,6 +34,10 @@ public interface AppUserBankDAO {
 			@Result(column = "bank_name", property = "bankName"), @Result(column = "type", property = "type") })
 	@Select("SELECT * FROM u_app_user_bank WHERE id = #{id}")
 	public AppUserBankDO getById(@Param("id") int id);
+	
+	@Results({ @Result(column = "id", property = "id")})
+	@Select("SELECT id FROM u_app_user_bank WHERE app_user_id = #{appUserId} LIMIT 1")
+	public int getByAppUserId(@Param("appUserId") int appUserId);
 
 	@Insert("INSERT into u_app_user_bank(id,app_user_id,account_type,account_no,account_name,account_card_id,sub_bank_name,open_bank_prince,open_bank,open_bank_city,open_bank_num,account_phone,create_time,update_time,bank_name,type) VALUES (#{id},#{appUserId},#{accountType},#{accountNo},#{accountName},#{accountCardId},#{subBankName},#{openBankPrince},#{openBank},#{openBankCity},#{openBankNum},#{accountPhone},#{create_time},#{update_time},#{bank_name},#{type})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")

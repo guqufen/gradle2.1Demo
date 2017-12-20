@@ -47,7 +47,7 @@ public class AppUserController extends BaseController {
 
    
     @RequestMapping(value = "/register")
-    @ApiOperation(value = "注册页-用户注册")
+    @ApiOperation(value = "注册页-用户注册" ,notes="作者：何金庭")
     @ResponseBody
     public ResultDTO<LoginVO> register(@RequestBody RegisterJO registerJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
@@ -69,6 +69,11 @@ public class AppUserController extends BaseController {
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         loginVO.setUserName(appUserLoginInfoDTO.getUserName());
         loginVO.setRealName(appUserLoginInfoDTO.getRealName());
+        if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getRealName())) {
+        	loginVO.setIsBindingIdCard(false);
+        }else {
+        	loginVO.setIsBindingIdCard(true);
+        }
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
@@ -98,7 +103,7 @@ public class AppUserController extends BaseController {
     //获取验证码
     @ResponseBody
     @RequestMapping(value = "/getValidateCode")
-    @ApiOperation(value = "获取验证码")
+    @ApiOperation(value = "获取验证码" ,notes="作者：何金庭")
     public ResultDTO getValidateCode(@RequestBody GetValidateCodeJO getValidateCodeJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(getValidateCodeJO.getDeviceId());
@@ -112,7 +117,7 @@ public class AppUserController extends BaseController {
     //根据手机号码找回密码
     @ResponseBody
     @RequestMapping(value = "/findPassword")
-    @ApiOperation(value = "注册页-找回密码")
+    @ApiOperation(value = "注册页-找回密码" ,notes="作者：何金庭")
     public ResultDTO<LoginVO> findPassword(@RequestBody FindPasswordJO findPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setCode(findPasswordJO.getCode());
@@ -130,6 +135,11 @@ public class AppUserController extends BaseController {
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
         loginVO.setUserName(appUserLoginInfoDTO.getUserName());
         loginVO.setRealName(appUserLoginInfoDTO.getRealName());
+        if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getRealName())) {
+        	loginVO.setIsBindingIdCard(false);
+        }else {
+        	loginVO.setIsBindingIdCard(true);
+        }
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
@@ -148,7 +158,7 @@ public class AppUserController extends BaseController {
     //登录
     @ResponseBody
     @RequestMapping(value = "/login")
-    @ApiOperation(value = "用户登录")
+    @ApiOperation(value = "用户登录" ,notes="作者：何金庭")
     public ResultDTO<LoginVO> login(@RequestBody LoginJO loginJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(loginJO.getDeviceId());
@@ -167,6 +177,11 @@ public class AppUserController extends BaseController {
         loginVO.setUserName(appUserLoginInfoDTO.getUserName());
         loginVO.setRealName(appUserLoginInfoDTO.getRealName());
         loginVO.setMobile(appUserLoginInfoDTO.getMoblie());
+        if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getRealName())) {
+        	loginVO.setIsBindingIdCard(false);
+        }else {
+        	loginVO.setIsBindingIdCard(true);
+        }
         int num = appUserLoginInfoDTO.getMerchantNums();
         if(num==0) {
         	loginVO.setIsMerchant(false);
@@ -185,7 +200,7 @@ public class AppUserController extends BaseController {
     //退出登录
     @ResponseBody
     @RequestMapping(value = "/loginOut")
-    @ApiOperation(value = "退出登录")
+    @ApiOperation(value = "退出登录" ,notes="作者：何金庭")
     public ResultDTO<String> loginOut(@RequestBody CommonJO commonJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(commonJO.getUserId());

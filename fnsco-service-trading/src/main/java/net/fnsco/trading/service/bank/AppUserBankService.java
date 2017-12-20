@@ -114,4 +114,13 @@ public class AppUserBankService extends BaseService {
 		Integer row = appUserBankDAO.insert(appUserBankDO);
 		return row;
 	}
+	/**
+	 * 感觉用户id查询是否绑定银行卡
+	 * @param appUserId
+	 * @return
+	 */
+	public Integer QueryByAppUserId(Integer appUserId) {
+		Integer num = this.appUserBankDAO.getByAppUserId(appUserId);
+		return num;
+	}
 }

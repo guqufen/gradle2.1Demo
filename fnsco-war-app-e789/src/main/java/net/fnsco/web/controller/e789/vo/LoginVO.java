@@ -14,6 +14,8 @@ public class LoginVO extends VO {
 	private String userName; 
 	@ApiModelProperty(value="真实姓名",name="realName",example="真实姓名")
 	private String realName; 
+	@ApiModelProperty(value="是否绑定身份证 true/false",name="isBindingIdCard",example="是否绑定身份证 true/false")
+	private boolean isBindingIdCard;
 	@ApiModelProperty(value="头像地址",name="headImagePath",example="头像地址")
 	private String headImagePath;
 	@ApiModelProperty(value="用户权限 true/false",name="loginRights",example="用户权限 true/false")
@@ -69,6 +71,18 @@ public class LoginVO extends VO {
 	 */
 	public void setRealName(String realName) {
 		this.realName = realName;
+	}
+	/**
+	 * @return the isBindingIdCard
+	 */
+	public boolean getIsBindingIdCard() {
+		return isBindingIdCard;
+	}
+	/**
+	 * @param isBindingIdCard the isBindingIdCard to set
+	 */
+	public void setIsBindingIdCard(boolean isBindingIdCard) {
+		this.isBindingIdCard = isBindingIdCard;
 	}
 	/**
 	 * @return the headImagePath

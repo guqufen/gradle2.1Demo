@@ -23,15 +23,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.order.api.appuser.AppUserService;
-import net.fnsco.order.api.appuser.AppUserSettingService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserInfoDTO;
+import net.fnsco.trading.service.bank.AppUserBankService;
 import net.fnsco.web.controller.e789.jo.AddPayPasswordJO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.ModifyInfoJO;
@@ -54,11 +53,12 @@ public class MyselfController extends BaseController {
     private AppUserService        appUserService;
     @Autowired
     private Environment           env;
-
+    @Autowired
+    private AppUserBankService    appUserBankService;
     //修改密码     旧密码和新密码
     @RequestMapping(value = "/modifyPassword")
     @ResponseBody
-    @ApiOperation(value = "设置-修改登录密码")
+    @ApiOperation(value = "设置-修改登录密码" ,notes="作者：何金庭")
     public ResultDTO<String> modifyPassword(@RequestBody ModifyPasswordJO modifyPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(modifyPasswordJO.getUserId());
@@ -72,7 +72,7 @@ public class MyselfController extends BaseController {
   //新增支付密码
     @RequestMapping(value = "/addPayPassword")
     @ResponseBody
-    @ApiOperation(value = "设置-新增支付密码 ")
+    @ApiOperation(value = "设置-新增支付密码 " ,notes="作者：何金庭")
     public ResultDTO<String> addPayPassword(@RequestBody AddPayPasswordJO addPayPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(addPayPasswordJO.getUserId());
@@ -83,7 +83,7 @@ public class MyselfController extends BaseController {
   //修改支付密码     旧密码和新密码
     @RequestMapping(value = "/modifyPayPassword")
     @ResponseBody
-    @ApiOperation(value = "设置-修改支付密码")
+    @ApiOperation(value = "设置-修改支付密码" ,notes="作者：何金庭")
     public ResultDTO<String> modifyPayPassword(@RequestBody ModifyPayPasswordJO modifyPayPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setUserId(modifyPayPasswordJO.getUserId());
@@ -102,7 +102,7 @@ public class MyselfController extends BaseController {
      * @since  CodingExample　Ver 1.1
      */
     @RequestMapping(value = "/modifyInfo")
-    @ApiOperation(value = "个人信息-修改个人信息")
+    @ApiOperation(value = "个人信息-修改个人信息" ,notes="作者：何金庭")
     public ResultDTO modifyInfo(@RequestBody ModifyInfoJO modifyInfoJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     		appUserDTO.setUserId(modifyInfoJO.getUserId());
@@ -125,7 +125,7 @@ public class MyselfController extends BaseController {
      * @since  CodingExample　Ver 1.1
      */
     @RequestMapping(value = "/uploadImage")
-    @ApiOperation(value = "个人信息-上传头像文件")
+    @ApiOperation(value = "个人信息-上传头像文件" ,notes="作者：何金庭")
     @ApiImplicitParams({
     		@ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType="String",paramType="body"),
     		@ApiImplicitParam(name = "file", value = "图片文件流", required = true, dataType="MultipartFile",paramType="body")
@@ -206,12 +206,13 @@ public class MyselfController extends BaseController {
     //获取个人信息
     @ResponseBody
     @RequestMapping(value = "/getUserInfo")
-    @ApiOperation(value = "个人信息页-获取个人信息")
+    @ApiOperation(value = "个人信息页-获取个人信息" ,notes="作者：何金庭")
     public ResultDTO<GetPersonInfoVO> getPersonInfo(@RequestBody CommonJO commonJO) {
-    	if (commonJO.getUserId() == null) {
+    	Integer appUserId = commonJO.getUserId();
+    	if (appUserId == null) {
             return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
-    	AppUserInfoDTO appUserInfoDTO = appUserService.getMyselfInfo(commonJO.getUserId());
+    	AppUserInfoDTO appUserInfoDTO = appUserService.getMyselfInfo(appUserId);
     	if(appUserInfoDTO==null) {
     		return ResultDTO.fail(ApiConstant.E_ACCOUNTLOCKOUT_ERROR);
     	}
@@ -219,8 +220,20 @@ public class MyselfController extends BaseController {
         getPersonInfoVO.setMobile(appUserInfoDTO.getMoblie());
         getPersonInfoVO.setHeadImagePath(appUserInfoDTO.getHeadImagePath());
         getPersonInfoVO.setUserName(appUserInfoDTO.getUserName());
-        getPersonInfoVO.setName(appUserInfoDTO.getRealName());
-       // getPersonInfoVO.setBindingBankCard(bindingBankCard);
+        getPersonInfoVO.setRealName(appUserInfoDTO.getRealName());
+        if(Strings.isNullOrEmpty(appUserInfoDTO.getRealName())) {
+        	getPersonInfoVO.setIsBindingIdCard(false);
+        }else {
+        	getPersonInfoVO.setIsBindingIdCard(true);
+        }
+        Integer userId = appUserBankService.QueryByAppUserId(appUserId);
+        if(userId==null) {
+        	getPersonInfoVO.setIsBindingBankCard(false);
+        	getPersonInfoVO.setIsBindingStr("未绑定");
+        }else {
+        	getPersonInfoVO.setIsBindingBankCard(true);
+        	getPersonInfoVO.setIsBindingStr("已绑定");
+        }
         return ResultDTO.success(getPersonInfoVO);
     }
 
