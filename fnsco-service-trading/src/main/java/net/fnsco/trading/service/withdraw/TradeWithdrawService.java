@@ -49,7 +49,6 @@ public class TradeWithdrawService extends BaseService {
         logger.info("开始添加TradeWithdrawService.add,tradeWithdraw=" + tradeWithdraw.toString());
         tradeWithdraw.setCreateTime(new Date());
         tradeWithdraw.setUpdateTime(new Date());
-        tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
         if( Strings.isNullOrEmpty(tradeWithdraw.getOrderNo())){
         	tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
         }
