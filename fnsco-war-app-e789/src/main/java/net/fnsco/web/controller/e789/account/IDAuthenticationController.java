@@ -26,6 +26,8 @@ import net.fnsco.core.utils.dto.IdCardDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
+import net.fnsco.trading.constant.E789ApiConstant;
+import net.fnsco.web.controller.e789.vo.IdAuthVO;
 
 /**
  * @desc 身份证认证相关功能控制器
@@ -43,7 +45,7 @@ public class IDAuthenticationController extends BaseController {
 	 @Autowired
 	 private Environment           env;
 	@RequestMapping(value = "/auth")
-    @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
+    @ApiOperation(value = "个人信息-身份证上传识别接口" ,notes="作者：何金庭")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType="String",paramType="body"),
 		@ApiImplicitParam(name = "file", value = "图片文件流", required = true, dataType="MultipartFile",paramType="body"),
@@ -53,6 +55,7 @@ public class IDAuthenticationController extends BaseController {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         IdCardDTO idCard =new IdCardDTO();
+        IdAuthVO idAuth = new IdAuthVO();
         Integer userId = Integer.valueOf(request.getParameter("userId"));
         String side = request.getParameter("side");
         if (userId == null) {
@@ -108,9 +111,64 @@ public class IDAuthenticationController extends BaseController {
                 logger.error(fileName + "上传失败");
                 throw new RuntimeException();
             }
-            
             if("front".equals(side)) {
-            	idCard = JuheDemoUtil.idVerification(fileURL,side);
+            	idCard = JuheDemoUtil.valiIdImage(fileURL,side);
+            	int errorCode = idCard.getErrorCode();
+            	if(errorCode==228701) {
+           		 	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_TIMEOUT);
+           	 	}else if(errorCode==228702) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
+           	 	}else if(errorCode==228703) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_TYPE_ERROR);
+           	 	}else if(errorCode==228704) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_LENGTH_ERROR);
+           	 	}else if(errorCode==228705) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_SIZE_ERROR);
+           	 	}else if(errorCode==228706) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_IDENTIFY_FAILURE);
+           	 	}else if(errorCode==228707) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_OTHER_ERROR);
+           	 	}else if(errorCode==228708) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_DISSUPOPORT_GET);
+           	 	}
+            	idAuth.setAppUserId(userId);
+            	idAuth.setRealName(idCard.getRealname());
+            	idAuth.setIdCard(idCard.getIdcard());
+            	idAuth.setSide("front");
+            	idAuth.setFileURL(fileURL);
+            }else if("back".equals(side)) {
+            	idCard = JuheDemoUtil.valiIdImage(fileURL,side);
+            	int errorCode = idCard.getErrorCode();
+            	if(errorCode==228701) {
+           		 	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_TIMEOUT);
+           	 	}else if(errorCode==228702) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
+           	 	}else if(errorCode==228703) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_TYPE_ERROR);
+           	 	}else if(errorCode==228704) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_LENGTH_ERROR);
+           	 	}else if(errorCode==228705) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_SIZE_ERROR);
+           	 	}else if(errorCode==228706) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_IDENTIFY_FAILURE);
+           	 	}else if(errorCode==228707) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_OTHER_ERROR);
+           	 	}else if(errorCode==228708) {
+           	 		return ResultDTO.fail(E789ApiConstant.E_DISSUPOPORT_GET);
+           	 	}
+            	idAuth.setAppUserId(userId);
+            	idAuth.setSide("front");
+            	idAuth.setEndTime(idCard.getEnd());
+            }
+        }
+        return ResultDTO.success(idAuth);
+	}
+        
+	/*@RequestMapping(value = "/identify")
+    @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
+    public ResultDTO identify() {
+            if("front".equals(side)) {
+            	idCard = JuheDemoUtil.valiIdImage(fileURL,side);
             	if(idCard.getErrorCode()==0) {
             		return ResultDTO.fail("证件正面扫描失败");
             	}else if(idCard.getRes()==2) {
@@ -122,12 +180,11 @@ public class IDAuthenticationController extends BaseController {
             		return ResultDTO.fail("证件反面扫描失败");
             	}
             }
-        }
         AppUserDTO appUserDto = new AppUserDTO();
         appUserDto.setUserId(userId);
         appUserDto.setRealName(idCard.getRealname());
         appUserDto.setIdCardNumber(idCard.getIdcard());
         appUserService.modifyInfo(appUserDto);
         return ResultDTO.success();
-    }
+    }*/
 }
