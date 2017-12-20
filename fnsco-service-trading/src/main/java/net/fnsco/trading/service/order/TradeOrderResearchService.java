@@ -99,7 +99,7 @@ public class TradeOrderResearchService extends BaseService {
             }
         }
         //（0 未支付 1支付成功 2支付失败 3已退货）
-        if ("3".equals(order.getOrderStatus()) || "1".equals(order.getSettlementStatus())) {//3已退货
+        if ("3".equals(order.getOrderStatus()) || "1".equals(order.getSettlementStatus())) {//1已结算
             tradeOrderDAO.update(tradeOrderDO);
         } else {
             if (null == tradeOrderDO.getOrderCeateTime() && !Strings.isNullOrEmpty(order.getTime())) {//回调时更新订单创建时间
@@ -108,11 +108,11 @@ public class TradeOrderResearchService extends BaseService {
             tradeOrderDAO.updateOnlyFail(tradeOrderDO);
         }
         if ("1".equals(order.getOrderStatus())) {
-            TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOrderNo(tradeOrderDO.getOrderNo());
+            TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOriginalOrderNo(tradeOrderDO.getOrderNo());
             tradeWithdraw.setStatus(WithdrawStateEnum.SUCCESS.getCode());
             tradeWithdrawService.doUpdateForSuccess(tradeWithdraw);
         } else if ("2".equals(order.getOrderStatus())) {
-            TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOrderNo(tradeOrderDO.getOrderNo());
+            TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOriginalOrderNo(tradeOrderDO.getOrderNo());
             tradeWithdraw.setStatus(WithdrawStateEnum.FAIL.getCode());
             tradeWithdrawService.doUpdate(tradeWithdraw);
         }

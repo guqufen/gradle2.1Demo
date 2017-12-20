@@ -120,7 +120,7 @@ public class TradeOrderService extends BaseService {
         tradeWithdraw.setAmount(tradeOrder.getTxnAmount());
         tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());
         tradeWithdraw.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());
-        tradeWithdraw.setStatus(WithdrawStateEnum.PROCESSING.getCode());
+        tradeWithdraw.setStatus(WithdrawStateEnum.INIT.getCode());
         tradeWithdraw.setFee(BigDecimal.ZERO);
         tradeWithdrawService.doAdd(tradeWithdraw);
         return tradeOrder;
@@ -237,7 +237,7 @@ public class TradeOrderService extends BaseService {
             }
         }
         //（0 未支付 1支付成功 2支付失败 3已退货）
-        if ("3".equals(order.getOrderStatus()) || "1".equals(order.getSettlementStatus())) {//3已退货
+        if ("3".equals(order.getOrderStatus()) || "1".equals(order.getOrderStatus())) {//3已退货
             //先修改为无效订单再添加退货订单
             //TradeOrderDO tradeOrderTemp = queryByOrderId(order.getThirdPayNo());
             //tradeOrderTemp.setSettleStatus(3);
@@ -360,4 +360,20 @@ public class TradeOrderService extends BaseService {
         tradeOrderDAO.update(order);
     }
 
+    // 修改
+    @Transactional
+    public Integer doUpdateForResearch(TradeOrderDO tradeOrder) {
+        logger.info("开始修改TradeOrderService.update,tradeOrder=" + tradeOrder.toString());
+        int rows = this.tradeOrderDAO.update(tradeOrder);
+        TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOriginalOrderNo(tradeOrder.getOrderNo());
+        if (tradeWithdraw == null) {
+            logger.error("TradeWithdrawDO订单不存在" + tradeOrder.getOrderNo());
+        }
+        tradeWithdraw.setStatus(WithdrawStateEnum.PROCESSING.getCode());
+        tradeWithdrawService.doUpdate(tradeWithdraw);
+        if (rows == 0) {
+            logger.error("订单有可能出现问题，未能更新到数据" + JSON.toJSONString(tradeOrder));
+        }
+        return rows;
+    }
 }
