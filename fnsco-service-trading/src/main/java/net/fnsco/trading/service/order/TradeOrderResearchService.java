@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
@@ -51,6 +52,7 @@ public class TradeOrderResearchService extends BaseService {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
+    @Transactional
     public ResultDTO updateResearchOrderInfo(OrderDTO order) {
         TradeOrderDO tradeOrderDO = queryByOrderId(order.getThirdPayNo());
         if (null == tradeOrderDO) {
