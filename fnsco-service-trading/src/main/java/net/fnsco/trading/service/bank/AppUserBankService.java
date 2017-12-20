@@ -119,8 +119,8 @@ public class AppUserBankService extends BaseService {
 	 * @param appUserId
 	 * @return
 	 */
-	public Integer QueryByAppUserId(Integer appUserId) {
-		Integer num = this.appUserBankDAO.getByAppUserId(appUserId);
-		return num;
+	public AppUserBankDO QueryByAppUserId(Integer appUserId) {
+		AppUserBankDO appUserBank = this.appUserBankDAO.getByAppUserId(appUserId);
+		return appUserBank;
 	}
 }

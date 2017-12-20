@@ -31,6 +31,7 @@ import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserInfoDTO;
 import net.fnsco.trading.service.bank.AppUserBankService;
+import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.web.controller.e789.jo.AddPayPasswordJO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.ModifyInfoJO;
@@ -226,8 +227,8 @@ public class MyselfController extends BaseController {
         }else {
         	getPersonInfoVO.setIsBindingIdCard(true);
         }
-        Integer userId = appUserBankService.QueryByAppUserId(appUserId);
-        if(userId==null) {
+        AppUserBankDO appUserBank = appUserBankService.QueryByAppUserId(appUserId);
+        if(appUserBank==null) {
         	getPersonInfoVO.setIsBindingBankCard(false);
         	getPersonInfoVO.setIsBindingStr("未绑定");
         }else {

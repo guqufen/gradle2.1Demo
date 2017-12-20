@@ -16,7 +16,7 @@ public class GetPersonInfoVO extends VO {
 	private String mobile;
 	@ApiModelProperty(value="银行卡是否绑定显示",name="loginRights",example="银行卡是否绑定显示")
 	private String isBindingStr;
-	@ApiModelProperty(value="银行卡是否绑定",name="loginRights",example="银行卡是否绑定")
+	@ApiModelProperty(value="银行卡是否绑定 true/false",name="loginRights",example="银行卡是否绑定 true/false")
 	private boolean bindingBankCard;
 	/**
 	 * @return the userName

@@ -22,6 +22,8 @@ import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.trading.comm.HeadImageEnum;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
+import net.fnsco.trading.service.bank.AppUserBankService;
+import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.FindPasswordJO;
 import net.fnsco.web.controller.e789.jo.GetValidateCodeJO;
@@ -44,7 +46,8 @@ public class AppUserController extends BaseController {
     private AppUserService        appUserService;
     @Autowired
     private AppAccountBalanceService appAccountBalanceService;
-
+    @Autowired
+    private AppUserBankService    appUserBankService;
    
     @RequestMapping(value = "/register")
     @ApiOperation(value = "注册页-用户注册" ,notes="作者：何金庭")
@@ -85,6 +88,12 @@ public class AppUserController extends BaseController {
         }else {
         	loginVO.setHasPayPassword(true);
         }
+        AppUserBankDO appUserBank = appUserBankService.QueryByAppUserId(appUserLoginInfoDTO.getUserId());
+        if(appUserBank==null) {
+        	loginVO.setIsBindingBankCard(false);
+        }else {
+        	loginVO.setIsBindingBankCard(true);
+        }        
         loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
         
         /**
@@ -152,6 +161,12 @@ public class AppUserController extends BaseController {
         	loginVO.setHasPayPassword(true);
         }
         loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
+        AppUserBankDO appUserBank = appUserBankService.QueryByAppUserId(appUserLoginInfoDTO.getUserId());
+        if(appUserBank==null) {
+        	loginVO.setIsBindingBankCard(false);
+        }else {
+        	loginVO.setIsBindingBankCard(true);
+        }        
         return ResultDTO.success(loginVO);
     }
 
@@ -194,6 +209,12 @@ public class AppUserController extends BaseController {
         	loginVO.setHasPayPassword(true);
         }
         loginVO.setUnReadMsgIds(appUserLoginInfoDTO.getUnReadMsgIds());
+        AppUserBankDO appUserBank = appUserBankService.QueryByAppUserId(appUserLoginInfoDTO.getUserId());
+        if(appUserBank==null) {
+        	loginVO.setIsBindingBankCard(false);
+        }else {
+        	loginVO.setIsBindingBankCard(true);
+        }        
         return ResultDTO.success(loginVO);
     }
 
