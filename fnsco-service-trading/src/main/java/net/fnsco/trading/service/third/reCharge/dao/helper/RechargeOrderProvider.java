@@ -36,14 +36,11 @@ public class RechargeOrderProvider {
         if (StringUtils.isNotBlank(rechargeOrder.getMobile())){
             SET("mobile=#{rechargeOrder.mobile}");
         }
-        if (StringUtils.isNotBlank(rechargeOrder.getPid())){
-            SET("pid=#{rechargeOrder.pid}");
-        }
         if (StringUtils.isNotBlank(rechargeOrder.getName())){
-            SET("name=#{rechargeOrder.name}");
+            SET("type_name=#{rechargeOrder.name}");
         }
         if (StringUtils.isNotBlank(rechargeOrder.getAmt())){
-            SET("amt=#{rechargeOrder.amt}");
+            SET("amount=#{rechargeOrder.amt}");
         }
         if (rechargeOrder.getStatus() != null) {
             SET("status=#{rechargeOrder.status}");
@@ -97,14 +94,11 @@ public class RechargeOrderProvider {
         if (StringUtils.isNotBlank(rechargeOrder.getMobile())){
             WHERE("mobile=#{rechargeOrder.mobile}");
         }
-        if (StringUtils.isNotBlank(rechargeOrder.getPid())){
-            WHERE("pid=#{rechargeOrder.pid}");
-        }
         if (StringUtils.isNotBlank(rechargeOrder.getName())){
-            WHERE("name=#{rechargeOrder.name}");
+            WHERE("type_name=#{rechargeOrder.name}");
         }
         if (StringUtils.isNotBlank(rechargeOrder.getAmt())){
-            WHERE("amt=#{rechargeOrder.amt}");
+            WHERE("amount=#{rechargeOrder.amt}");
         }
         if (rechargeOrder.getStatus() != null) {
             WHERE("status=#{rechargeOrder.status}");
@@ -148,14 +142,11 @@ public class RechargeOrderProvider {
         if (StringUtils.isNotBlank(rechargeOrder.getMobile())){
             WHERE("mobile=#{rechargeOrder.mobile}");
         }
-        if (StringUtils.isNotBlank(rechargeOrder.getPid())){
-            WHERE("pid=#{rechargeOrder.pid}");
-        }
         if (StringUtils.isNotBlank(rechargeOrder.getName())){
-            WHERE("name=#{rechargeOrder.name}");
+            WHERE("type_name=#{rechargeOrder.name}");
         }
         if (StringUtils.isNotBlank(rechargeOrder.getAmt())){
-            WHERE("amt=#{rechargeOrder.amt}");
+            WHERE("amount=#{rechargeOrder.amt}");
         }
         if (rechargeOrder.getStatus() != null) {
             WHERE("status=#{rechargeOrder.status}");

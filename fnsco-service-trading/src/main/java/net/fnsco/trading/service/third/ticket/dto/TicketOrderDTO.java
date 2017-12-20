@@ -4,20 +4,19 @@ import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.DTO;
 
 public class TicketOrderDTO extends DTO {
-    @ApiModelProperty(value = "APP登录用户ID", name = "userId", example = "")
+    // APP登录用户ID
     private Integer userId;
-    @ApiModelProperty(value = "乘客ID", example = "乘客ID")
+    //乘客ID 
     private String  passengerId;
-    @ApiModelProperty(value = "车号", example = "车号")
+    //车号 
     private String  trainCode;
-    @ApiModelProperty(value = "票类型（学生票）", example = "票类型（学生票）")
-
+    //票类型（学生票） 
     private String  ticketType;
-    @ApiModelProperty(value = "坐席（二等座）", example = "坐席（二等座）")
-    private String  seatType;
-    @ApiModelProperty(value = "价格", example = "价格")
+    //坐席 F:动卧(新增),9:商务座,P:特等座,M:一等座,O（大写字母O，不是数字0）:二等座,6:高级软卧, 4:软卧,3:硬卧,2:软座,1:硬座。坐席 F:动卧(新增),9:商务座,P:特等座,M:一等座,O（大写字母O，不是数字0）:二等座,6:高级软卧, 4:软卧,3:硬卧,2:软座,1:硬座。 
+    private String  seatCode;
+    //价格 
     private String  price;
-    @ApiModelProperty(value = "乘车日期", example = "乘车日期")
+    //乘车日期 
     private String  trainDate;
     /**
      * 出发站编号
@@ -238,25 +237,25 @@ public class TicketOrderDTO extends DTO {
     }
 
     /**
-     * seatType
+     * seatCode
      *
-     * @return  the seatType
+     * @return  the seatCode
      * @since   CodingExample Ver 1.0
     */
 
-    public String getSeatType() {
-        return seatType;
+    public String getSeatCode() {
+        return seatCode;
     }
 
     /**
-     * seatType
+     * seatCode
      *
-     * @param   seatType    the seatType to set
+     * @param   seatCode    the seatCode to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setSeatType(String seatType) {
-        this.seatType = seatType;
+    public void setSeatCode(String seatCode) {
+        this.seatCode = seatCode;
     }
 
     /**

@@ -127,7 +127,7 @@ public class TradeWithdrawController extends BaseController {
     	int result = appAccountBalanceDAO.updateFund(new BigDecimal(withdrawCashJO.getCashAccount()), withdrawCashJO.getUserId(),new Date());
     	if(result <= 0) {
     		tradeWithdraw.setStatus(2);
-    		tradeWithdrawService.doUpdate(tradeWithdraw, getUserId());
+    		tradeWithdrawService.doUpdate(tradeWithdraw);
     		return ResultDTO.fail(ApiConstant.E_ACCOUNT_BALANCE_NULL);
     	}
     	

@@ -59,7 +59,7 @@ public class PrepaidRefillController extends BaseController {
 		ChargeResultDTO ph = null;
 
 		// 根据userId和待扣金额查询账户是否有足够的钱进行充值交易，并更新
-		Boolean isEnough = appAccountBalanceService.doFrozenBalance(fl.getUserId(), new BigDecimal(fl.getInprice()));
+		Boolean isEnough = appAccountBalanceService.doFrozenBalance(fl.getUserId(), new BigDecimal(fl.getInprice()).multiply(new BigDecimal(100)));
 		if (!isEnough) {
 			return ResultDTO.fail("账户余额不足");
 		}
@@ -69,11 +69,11 @@ public class PrepaidRefillController extends BaseController {
 		}
 
 		ChargeDTO chargeDTO = new ChargeDTO();
-		chargeDTO.setPid(fl.getPid());
+		chargeDTO.setType(fl.getType());
 		chargeDTO.setInprice(fl.getInprice());
 		chargeDTO.setPhone(fl.getPhone());
 		chargeDTO.setUserId(fl.getUserId());
-		chargeDTO.setType(fl.getType());
+		chargeDTO.setName(fl.getName());
 		
 		//手机充值
 		if (0 == fl.getType()) {
@@ -120,4 +120,5 @@ public class PrepaidRefillController extends BaseController {
 		}
 	}
 
+	
 }
