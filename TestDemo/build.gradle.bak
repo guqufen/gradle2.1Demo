@@ -1,0 +1,134 @@
+import java.util.regex.Pattern
+//import com.android.builder.DefaultManifestParser
+import com.android.builder.core.DefaultManifestParser
+
+
+buildscript{
+	repositories{
+		mavenCentral()
+	}
+	dependencies{
+		classpath 'com.android.tools.build:gradle:0.13.+'
+
+	}
+
+	/***
+	tasks.withType(Compile){
+		options.encoding = "UTF-8"
+	}
+	**/
+
+	tasks.withType(JavaCompile) { options.encoding = "UTF-8" }
+}
+
+apply plugin:'android'
+
+dependencies{
+	compile fileTree(dir:"libs",include:'*.jar')
+	compile project(':appcompat_v7')
+}
+
+android{
+	compileSdkVersion 20
+	buildToolsVersion "20"
+	enforceUniquePackageName=false
+	
+	defaultConfig{
+		targetSdkVersion 17;
+	}
+	
+	lintOptions{
+		abortOnError false
+	}
+
+	dexOptions {
+		preDexLibraries = false
+	}
+
+	packagingOptions {
+		exclude 'META-INF/DEPENDENCIES.txt'
+		exclude 'META-INF/LICENSE.txt'
+		exclude 'META-INF/NOTICE.txt'
+		exclude 'META-INF/NOTICE'
+		exclude 'META-INF/LICENSE'
+		exclude 'META-INF/DEPENDENCIES'
+		exclude 'META-INF/notice.txt'
+		exclude 'META-INF/license.txt'
+		exclude 'META-INF/dependencies.txt'
+		exclude 'META-INF/LGPL2.1'
+		exclude 'META-INF/ASL2.0'
+	}
+
+	signingConfigs{
+		myConfig{
+			storeFile file("bluekey")
+			storePassword "blue"
+			keyAlias "blue"
+			keyPassword "blue"
+		}
+	}
+
+	buildTypes{
+		release{
+			
+
+			runProguard true  //打开混淆开关
+			 //proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
+			proguardFile 'proguard.txt.txt'  //配置单个文件这样
+
+			signingConfigs.myConfig
+		}
+	}
+
+	sourceSets{
+		main{
+			manifest.srcFile 'AndroidManifest.xml'
+			java.srcDirs = ['src']
+			resources.srcDirs = ['src']
+			aidl.srcDirs = ['src']
+			//rendersrcDirs = ['src']
+			res.srcDirs = ['res']
+			assets.srcDirs = ['assets']
+		}
+	}
+
+	task copyNativeLibs(type: Copy) {
+        from(new File(project(':appcompat_v7').getProjectDir(), 'libs')) { include '**/*.so' }
+        into new File(buildDir, 'native-libs')
+    }
+
+	
+	tasks.withType(JavaCompile){
+		compileTask -> compileTask.dependsOn copyNativeLibs
+	}
+
+	clean.dependsOn 'cleanCopyNativeLibs'
+
+	tasks.withType( com.android.build.gradle.tasks.PackageApplication){
+		pkgTask -> pkgTask.jniFolders = new HashSet<File>()
+		pkgTask.jniFolders.add(new File(buildDir,'native-libs'))
+	}
+	
+	
+	
+}
+
+build.doLast {
+		def today = new Date().format('yyMMdd');
+		copy{
+			//from('build/apk')
+			from('build/outputs/apk')
+			into('output')
+			include('TestDemo-debug.apk')
+			rename('TestDemo-debug.apk','blue-'+today+'-'+readVersion()+'-demo.apk')
+		}
+}
+	
+/**
+	*从Manifest.xml中读取版本号
+	**/
+	def readVersion(){
+		def manifestParser = new DefaultManifestParser()
+		return manifestParser.getVersionName(android.sourceSets.main.manifest.srcFile);
+	}
+

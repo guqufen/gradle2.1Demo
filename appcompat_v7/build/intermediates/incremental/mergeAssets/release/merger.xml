@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\gradle2.1Demo\appcompat_v7\assets"/></dataSet><dataSet config="release"><source path="D:\gradle2.1Demo\appcompat_v7\src\release\assets"/></dataSet></merger>
