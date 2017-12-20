@@ -1,15 +1,15 @@
-package net.fnsco.web.controller.e789.vo;
+package net.fnsco.web.controller.e789.jo;
 
 import io.swagger.annotations.ApiModelProperty;
-import net.fnsco.core.base.VO;
+import net.fnsco.core.base.JO;
 /**
  * 
- * @desc 身份证识别出参
+ * @desc 身份证实名验证入参
  * @author hjt
  * @version 
- * @Date 2017年12月20日 下午2:03:12
+ * @Date 2017年12月20日 下午2:02:47
  */
-public class IdAuthVO extends VO {
+public class IdentifyJO extends JO {
 	/**
 	 * 
 	 */
@@ -20,8 +20,6 @@ public class IdAuthVO extends VO {
 	private String realName;/*姓名*/
 	@ApiModelProperty(value = "身份证号", name = "idCard", example = "身份证号")
 	private String idCard;/*身份证号*/
-	@ApiModelProperty(value = "front:正面识别;back:反面识别", name = "side", example = "front:正面识别;back:反面识别")
-	private String side;//front:正面识别;back:反面识别;
 	@ApiModelProperty(value = "失效日期", name = "endTime", example = "失效日期")
 	private String endTime;/*失效日期*/
 	@ApiModelProperty(value = "正面照地址", name = "fileURL", example = "正面照地址")
@@ -61,18 +59,6 @@ public class IdAuthVO extends VO {
 	 */
 	public void setIdCard(String idCard) {
 		this.idCard = idCard;
-	}
-	/**
-	 * @return the side
-	 */
-	public String getSide() {
-		return side;
-	}
-	/**
-	 * @param side the side to set
-	 */
-	public void setSide(String side) {
-		this.side = side;
 	}
 	/**
 	 * @return the endTime
