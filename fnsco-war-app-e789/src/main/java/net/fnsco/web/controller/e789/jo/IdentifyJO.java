@@ -14,19 +14,39 @@ public class IdentifyJO extends JO {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@ApiModelProperty(value = "身份证图片保存信息id", name = "fileId", example = "身份证图片保存信息id")
-	private Integer fileId;/*身份证图片保存信息id*/
+	@ApiModelProperty(value = "身份证图片保存信息id正面", name = "fileId", example = "身份证图片保存信息id正面")
+	private Integer frontFileId;/*身份证图片保存信息id正面*/
+	@ApiModelProperty(value = "身份证图片保存信息id反面", name = "fileId", example = "身份证图片保存信息id反面")
+	private Integer backFileId;/*身份证图片保存信息id反面*/
 	/**
-	 * @return the fileId
+	 * @return the frontFileId
 	 */
-	public Integer getFileId() {
-		return fileId;
+	public Integer getFrontFileId() {
+		return frontFileId;
 	}
 	/**
-	 * @param fileId the fileId to set
+	 * @param frontFileId the frontFileId to set
 	 */
-	public void setFileId(Integer fileId) {
-		this.fileId = fileId;
+	public void setFrontFileId(Integer frontFileId) {
+		this.frontFileId = frontFileId;
+	}
+	/**
+	 * @return the backFileId
+	 */
+	public Integer getBackFileId() {
+		return backFileId;
+	}
+	/**
+	 * @param backFileId the backFileId to set
+	 */
+	public void setBackFileId(Integer backFileId) {
+		this.backFileId = backFileId;
+	}
+	/**
+	 * @return the serialversionuid
+	 */
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 }

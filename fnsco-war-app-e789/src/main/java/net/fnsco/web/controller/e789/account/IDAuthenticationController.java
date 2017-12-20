@@ -123,7 +123,9 @@ public class IDAuthenticationController extends BaseController {
                     appUserFile.setFileType(side);
                     appUserFile = appUserFileService.doAdd(appUserFile);
                     IdAuthVO idAuth = new IdAuthVO();
+                    String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), fileKey);
                     idAuth.setFileId(appUserFile.getId());
+                    idAuth.setImagePath(imageUrl);
                     return ResultDTO.success(idAuth);
                 } catch (Exception e) {
                     logger.error(fileName + "上传失败！" + e);
@@ -192,7 +194,7 @@ public class IDAuthenticationController extends BaseController {
 	@RequestMapping(value = "/identify")
     @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
     public ResultDTO identify(@RequestBody IdentifyJO identify) {
-		AppUserFileDO appUserFile = appUserFileService.doQueryById(identify.getFileId());
+		//AppUserFileDO appUserFile = appUserFileService.doQueryById(identify.getFrontFileId());
 		/*String endTime = identify.getEndTime();
 		Date nowTime = new Date();
 		Date date =null;
