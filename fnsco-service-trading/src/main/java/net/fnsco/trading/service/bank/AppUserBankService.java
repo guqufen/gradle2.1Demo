@@ -94,7 +94,7 @@ public class AppUserBankService extends BaseService {
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	public Integer doAppAdd(String userId, String mobile, String bankCardNum, String bankCardholder, String id_card_num) {
+	public Integer doAppAdd(Integer userId, String mobile, String bankCardNum, String bankCardholder, String id_card_num) {
 		// 根据银行卡号获取银行名称和卡类型
 		String cardTotalLength = String.valueOf(bankCardNum.trim().length());
 		BankNameAndTypeDTO dto = appUserBankDAO.queryByCertifyId(bankCardNum, cardTotalLength);

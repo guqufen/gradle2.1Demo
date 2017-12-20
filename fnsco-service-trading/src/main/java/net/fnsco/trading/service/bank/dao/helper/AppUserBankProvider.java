@@ -19,7 +19,7 @@ public class AppUserBankProvider {
         AppUserBankDO appUserBank = (AppUserBankDO) params.get("appUserBank");
         return new SQL() {{
         UPDATE(TABLE_NAME);
-        if (StringUtils.isNotBlank(appUserBank.getAppUserId())){
+        if (appUserBank.getAppUserId()!=null){
             SET("app_user_id=#{appUserBank.appUserId}");
         }
         if (StringUtils.isNotBlank(appUserBank.getAccountType())){
@@ -74,7 +74,7 @@ public class AppUserBankProvider {
         if (appUserBank.getId() != null) {
             WHERE("id=#{appUserBank.id}");
         }
-        if (StringUtils.isNotBlank(appUserBank.getAppUserId())){
+        if (appUserBank.getAppUserId()!=null){
             WHERE("app_user_id=#{appUserBank.appUserId}");
         }
         if (StringUtils.isNotBlank(appUserBank.getAccountType())){
@@ -119,7 +119,7 @@ public class AppUserBankProvider {
         if (appUserBank.getId() != null) {
             WHERE("id=#{appUserBank.id}");
         }
-        if (StringUtils.isNotBlank(appUserBank.getAppUserId())){
+        if (appUserBank.getAppUserId()!=null){
             WHERE("app_user_id=#{appUserBank.appUserId}");
         }
         if (StringUtils.isNotBlank(appUserBank.getAccountType())){
