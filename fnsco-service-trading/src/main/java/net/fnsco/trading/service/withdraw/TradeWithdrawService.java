@@ -1,5 +1,6 @@
 package net.fnsco.trading.service.withdraw;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.CodeUtil;
+import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.withdraw.dao.TradeWithdrawDAO;
 import net.fnsco.trading.service.withdraw.dto.MonthWithdrawCountDTO;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
@@ -20,9 +22,11 @@ import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 @Service
 public class TradeWithdrawService extends BaseService {
 
-    private Logger           logger = LoggerFactory.getLogger(this.getClass());
+    private Logger                   logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
-    private TradeWithdrawDAO tradeWithdrawDAO;
+    private TradeWithdrawDAO         tradeWithdrawDAO;
+    @Autowired
+    private AppAccountBalanceService appAccountBalanceService;
 
     // 分页
     public ResultPageDTO<TradeWithdrawDO> page(TradeWithdrawDO tradeWithdraw, Integer pageNum, Integer pageSize) {
@@ -42,7 +46,7 @@ public class TradeWithdrawService extends BaseService {
         logger.info("开始添加TradeWithdrawService.add,tradeWithdraw=" + tradeWithdraw.toString());
         tradeWithdraw.setCreateTime(new Date());
         tradeWithdraw.setUpdateTime(new Date());
-    	tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
+        tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
         //设置账户金额
         //扣除或增加账户余额
         this.tradeWithdrawDAO.insert(tradeWithdraw);
@@ -50,12 +54,28 @@ public class TradeWithdrawService extends BaseService {
     }
 
     // 修改
-    public Integer doUpdate(TradeWithdrawDO tradeWithdraw, Integer loginUserId) {
+    public Integer doUpdate(TradeWithdrawDO tradeWithdraw) {
         logger.info("开始修改TradeWithdrawService.update,tradeWithdraw=" + tradeWithdraw.toString());
         int rows = this.tradeWithdrawDAO.update(tradeWithdraw);
         return rows;
     }
 
+    public Integer doUpdateForSuccess(TradeWithdrawDO tradeWithdraw) {
+        logger.info("开始修改TradeWithdrawService.update,tradeWithdraw=" + tradeWithdraw.toString());
+        int rows = this.tradeWithdrawDAO.update(tradeWithdraw);
+        BigDecimal fund = BigDecimal.ZERO.subtract(tradeWithdraw.getAmount());
+        appAccountBalanceService.doFrozenBalance(tradeWithdraw.getAppUserId(), fund);
+        return rows;
+    }
+
+    @Transactional
+    public Integer updateFund(TradeWithdrawDO tradeWithdraw) {
+        logger.info("开始修改TradeWithdrawService.update,tradeWithdraw=" + tradeWithdraw.toString());
+        int rows = this.tradeWithdrawDAO.update(tradeWithdraw);
+        BigDecimal fund = BigDecimal.ZERO.subtract(tradeWithdraw.getAmount());
+        appAccountBalanceService.updateFund(tradeWithdraw.getAppUserId(), fund);
+        return rows;
+    }
     // 删除
     public Integer doDelete(TradeWithdrawDO tradeWithdraw, Integer loginUserId) {
         logger.info("开始删除TradeWithdrawService.delete,tradeWithdraw=" + tradeWithdraw.toString());
@@ -68,8 +88,14 @@ public class TradeWithdrawService extends BaseService {
         TradeWithdrawDO obj = this.tradeWithdrawDAO.getById(id);
         return obj;
     }
-    
-    public List<MonthWithdrawCountDTO> doQueryTotalAmountGroupByMouth(Integer appUserId,String tradeMonth,Integer status){
-    	return tradeWithdrawDAO.queryTotalAmount(appUserId, tradeMonth, status);
+
+    // 查询
+    public TradeWithdrawDO doQueryByOrderNo(String orderNo) {
+        TradeWithdrawDO obj = this.tradeWithdrawDAO.getByOrderNo(orderNo);
+        return obj;
+    }
+
+    public List<MonthWithdrawCountDTO> doQueryTotalAmountGroupByMouth(Integer appUserId, String tradeMonth, Integer status) {
+        return tradeWithdrawDAO.queryTotalAmount(appUserId, tradeMonth, status);
     }
 }

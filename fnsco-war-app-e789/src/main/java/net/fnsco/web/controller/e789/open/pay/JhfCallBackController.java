@@ -16,6 +16,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.dby.AESUtil;
+import net.fnsco.trading.service.order.TradeOrderResearchService;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.dto.OrderDTO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
@@ -35,9 +36,11 @@ import net.fnsco.trading.service.order.entity.TradeOrderDO;
 public class JhfCallBackController extends BaseController {
 
     @Autowired
-    private TradeOrderService tradeOrderService;
+    private TradeOrderService         tradeOrderService;
     @Autowired
-    private Environment       env;
+    private TradeOrderResearchService tradeOrderResearchService;
+    @Autowired
+    private Environment               env;
 
     /**
     * 支付完成时的通知，显示我们自己的页面
@@ -102,18 +105,18 @@ public class JhfCallBackController extends BaseController {
     @ApiOperation(value = "充值完成时的通知")
     @ResponseBody
     public ResultDTO rechangePayCompleteNotice(String rspData) {
-        logger.error("聚惠充值完成时的通知密文入参：" + rspData);
+        logger.error("聚惠分充值完成时的通知密文入参：" + rspData);
         String keyStr = env.getProperty("jhf.api.AES.key");
         String result = "处理成功";
         if (!Strings.isNullOrEmpty(rspData)) {
             try {
                 String decodeStr = AESUtil.decode(rspData, keyStr);
-                logger.error("聚惠分支付完成时的通知解密后入参：" + decodeStr);
+                logger.error("聚惠分充值完成时的通知解密后入参：" + decodeStr);
                 //聚惠芬支付完成时的通知解密后入参：{"payCallBackParams":"","settlementStatus":"0","thirdPayNo":"20171102155606073111374535549766","orderStatus":"2","singData":"001AA0CC08241A447BF7250B500C4B83"}
                 OrderDTO order = JSON.parseObject(decodeStr, OrderDTO.class);
-                return tradeOrderService.updateOrderInfo(order);
+                return tradeOrderResearchService.updateResearchOrderInfo(order);
             } catch (Exception ex) {
-                logger.error("聚惠分支付完成时的通知更新出错", ex);
+                logger.error("聚惠分充值完成时的通知更新出错", ex);
                 result = "处理失败，业务处理异常";
             }
         } else {

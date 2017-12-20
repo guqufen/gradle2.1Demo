@@ -120,7 +120,7 @@ public class TradeOrderService extends BaseService {
         tradeWithdraw.setAmount(tradeOrder.getTxnAmount());
         tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());
         tradeWithdraw.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());
-        tradeWithdraw.setStatus(WithdrawStateEnum.INIT.getCode());
+        tradeWithdraw.setStatus(WithdrawStateEnum.PROCESSING.getCode());
         tradeWithdraw.setFee(BigDecimal.ZERO);
         tradeWithdrawService.doAdd(tradeWithdraw);
         return tradeOrder;
@@ -359,4 +359,5 @@ public class TradeOrderService extends BaseService {
         order.setSyncStatus(1);//已同步数据
         tradeOrderDAO.update(order);
     }
+
 }

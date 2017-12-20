@@ -18,8 +18,14 @@ public class TicketOrderProvider {
         TicketOrderDO ticketOrder = (TicketOrderDO) params.get("ticketOrder");
         return new SQL() {{
         UPDATE(TABLE_NAME);
+        if (StringUtils.isNotBlank(ticketOrder.getAppUserId())){
+            SET("app_user_id=#{ticketOrder.appUserId}");
+        }
         if (StringUtils.isNotBlank(ticketOrder.getOrderNo())){
             SET("order_no=#{ticketOrder.orderNo}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getPayOrderNo())){
+            SET("pay_order_no=#{ticketOrder.payOrderNo}");
         }
         if (StringUtils.isNotBlank(ticketOrder.getTrainDate())){
             SET("train_date=#{ticketOrder.trainDate}");
@@ -38,6 +44,21 @@ public class TicketOrderProvider {
         }
         if (StringUtils.isNotBlank(ticketOrder.getTrainCode())){
             SET("train_code=#{ticketOrder.trainCode}");
+        }
+        if (ticketOrder.getOrderAmount() != null) {
+            SET("order_amount=#{ticketOrder.orderAmount}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getTrainOrderNumber())){
+            SET("train_order_number=#{ticketOrder.trainOrderNumber}");
+        }
+        if (ticketOrder.getPayTime() != null) {
+            SET("pay_time=#{ticketOrder.payTime}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getRespMsg())){
+            SET("resp_msg=#{ticketOrder.respMsg}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getRespCode())){
+            SET("resp_code=#{ticketOrder.respCode}");
         }
         if (ticketOrder.getStatus() != null) {
             SET("status=#{ticketOrder.status}");
@@ -70,8 +91,14 @@ public class TicketOrderProvider {
         if (ticketOrder.getId() != null) {
             WHERE("id=#{ticketOrder.id}");
         }
+        if (StringUtils.isNotBlank(ticketOrder.getAppUserId())){
+            WHERE("app_user_id=#{ticketOrder.appUserId}");
+        }
         if (StringUtils.isNotBlank(ticketOrder.getOrderNo())){
             WHERE("order_no=#{ticketOrder.orderNo}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getPayOrderNo())){
+            WHERE("pay_order_no=#{ticketOrder.payOrderNo}");
         }
         if (StringUtils.isNotBlank(ticketOrder.getTrainDate())){
             WHERE("train_date=#{ticketOrder.trainDate}");
@@ -90,6 +117,21 @@ public class TicketOrderProvider {
         }
         if (StringUtils.isNotBlank(ticketOrder.getTrainCode())){
             WHERE("train_code=#{ticketOrder.trainCode}");
+        }
+        if (ticketOrder.getOrderAmount() != null) {
+            WHERE("order_amount=#{ticketOrder.orderAmount}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getTrainOrderNumber())){
+            WHERE("train_order_number=#{ticketOrder.trainOrderNumber}");
+        }
+        if (ticketOrder.getPayTime() != null) {
+            WHERE("pay_time=#{ticketOrder.payTime}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getRespMsg())){
+            WHERE("resp_msg=#{ticketOrder.respMsg}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getRespCode())){
+            WHERE("resp_code=#{ticketOrder.respCode}");
         }
         if (ticketOrder.getStatus() != null) {
             WHERE("status=#{ticketOrder.status}");
@@ -112,8 +154,14 @@ public class TicketOrderProvider {
         if (ticketOrder.getId() != null) {
             WHERE("id=#{ticketOrder.id}");
         }
+        if (StringUtils.isNotBlank(ticketOrder.getAppUserId())){
+            WHERE("app_user_id=#{ticketOrder.appUserId}");
+        }
         if (StringUtils.isNotBlank(ticketOrder.getOrderNo())){
             WHERE("order_no=#{ticketOrder.orderNo}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getPayOrderNo())){
+            WHERE("pay_order_no=#{ticketOrder.payOrderNo}");
         }
         if (StringUtils.isNotBlank(ticketOrder.getTrainDate())){
             WHERE("train_date=#{ticketOrder.trainDate}");
@@ -132,6 +180,21 @@ public class TicketOrderProvider {
         }
         if (StringUtils.isNotBlank(ticketOrder.getTrainCode())){
             WHERE("train_code=#{ticketOrder.trainCode}");
+        }
+        if (ticketOrder.getOrderAmount() != null) {
+            WHERE("order_amount=#{ticketOrder.orderAmount}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getTrainOrderNumber())){
+            WHERE("train_order_number=#{ticketOrder.trainOrderNumber}");
+        }
+        if (ticketOrder.getPayTime() != null) {
+            WHERE("pay_time=#{ticketOrder.payTime}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getRespMsg())){
+            WHERE("resp_msg=#{ticketOrder.respMsg}");
+        }
+        if (StringUtils.isNotBlank(ticketOrder.getRespCode())){
+            WHERE("resp_code=#{ticketOrder.respCode}");
         }
         if (ticketOrder.getStatus() != null) {
             WHERE("status=#{ticketOrder.status}");

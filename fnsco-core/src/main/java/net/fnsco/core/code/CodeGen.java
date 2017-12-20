@@ -37,11 +37,11 @@ public class CodeGen {
         // auto.init("net.fnsco.car", "config", "car_config");
         //auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_site");
         auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_order");
-        auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_order_passenger");
+        //auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_order_passenger");
         //auto.init("net.fnsco.trading", "order", "r_trade_order_by_pay_medium");
-
+        
         //auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_contact");
         //auto.init("net.fnsco.trading", "order", "r_trade_order_by_pay_medium");
-        auto.init("net.fnsco.trading", "appUserMerchantEntity", "u_app_user_merchant_entity");
+        //auto.init("net.fnsco.trading", "appUserMerchantEntity", "u_app_user_merchant_entity");
     }
 }
