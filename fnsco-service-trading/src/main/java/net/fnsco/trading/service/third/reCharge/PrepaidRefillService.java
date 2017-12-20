@@ -39,10 +39,10 @@ import net.fnsco.core.utils.DateUtils;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
-import net.fnsco.trading.service.third.reCharge.dto.CheckChargeNoDTO;
+import net.fnsco.trading.service.third.reCharge.dto.CheckMobileDTO;
 import net.fnsco.trading.service.third.reCharge.dto.CheckChargePackageDTO;
 import net.fnsco.trading.service.third.reCharge.dto.JuheDTO;
-import net.fnsco.trading.service.third.reCharge.dto.RechargeOrderDO;
+import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.trading.service.withdraw.TradeWithdrawErrorService;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
@@ -92,7 +92,7 @@ public class PrepaidRefillService extends BaseService {
 		Integer[] denos = { 10, 20, 30, 50, 100, 200, 300 };
 		String result;
 		CheckChargePackageDTO phChargePackageDTO = new CheckChargePackageDTO();
-		List<CheckChargeNoDTO> list = new ArrayList<>();
+		List<CheckMobileDTO> list = new ArrayList<>();
 
 		for (Integer done : denos) {
 
@@ -112,7 +112,7 @@ public class PrepaidRefillService extends BaseService {
 					System.out.println(juhe.getResult());
 
 					Map<String, Object> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
-					CheckChargeNoDTO phChargeDTO = new CheckChargeNoDTO();
+					CheckMobileDTO phChargeDTO = new CheckMobileDTO();
 					phChargeDTO.setId(String.valueOf(done));
 					phChargeDTO.setName(done + "元");
 					BigDecimal bigDecimal = new BigDecimal(map.get("inprice").toString());
@@ -144,7 +144,7 @@ public class PrepaidRefillService extends BaseService {
 		String result = null;
 		String url = "http://v.juhe.cn/flow/telcheck";// 请求接口地址
 		CheckChargePackageDTO phChargePackageDTO = new CheckChargePackageDTO();
-		List<CheckChargeNoDTO> list = new ArrayList<>();
+		List<CheckMobileDTO> list = new ArrayList<>();
 
 		StringBuffer sb = new StringBuffer();
 		String sendData = sb.append("?phone=").append(phone).append("&key=").append(APPKEYFLOW).toString();
@@ -179,7 +179,7 @@ public class PrepaidRefillService extends BaseService {
 					 * 返回的套餐资费list id string 套餐ID; p string 套餐流量名称 ; v string
 					 * 套餐流量值 ; inprice string 价格;
 					 */
-					CheckChargeNoDTO phChargeDTO = new CheckChargeNoDTO();
+					CheckMobileDTO phChargeDTO = new CheckMobileDTO();
 					phChargeDTO.setId(map2.get("id"));
 					phChargeDTO.setName(map2.get("p"));
 					phChargeDTO.setInprice(map2.get("inprice"));
@@ -487,6 +487,7 @@ public class PrepaidRefillService extends BaseService {
 					rechargeOrderService.doUpdate(rechargeOrderDO);
 				}
 			} else {
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

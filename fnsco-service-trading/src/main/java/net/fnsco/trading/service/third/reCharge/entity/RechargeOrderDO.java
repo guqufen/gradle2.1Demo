@@ -1,4 +1,4 @@
-package net.fnsco.trading.service.third.reCharge.dto;
+package net.fnsco.trading.service.third.reCharge.entity;
 
 import java.util.Date;
 

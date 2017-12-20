@@ -18,7 +18,7 @@ import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
 import net.fnsco.trading.service.third.reCharge.dto.CheckChargePackageDTO;
-import net.fnsco.trading.service.third.reCharge.dto.RechargeOrderDO;
+import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 
