@@ -18,7 +18,7 @@ public class TicketContactProvider {
         TicketContactDO ticketContact = (TicketContactDO) params.get("ticketContact");
         return new SQL() {{
         UPDATE(TABLE_NAME);
-        if (StringUtils.isNotBlank(ticketContact.getAppUserId())){
+        if (null == ticketContact.getAppUserId()){
             SET("app_user_id=#{ticketContact.appUserId}");
         }
         if (StringUtils.isNotBlank(ticketContact.getName())){
@@ -58,7 +58,7 @@ public class TicketContactProvider {
         if (ticketContact.getId() != null) {
             WHERE("id=#{ticketContact.id}");
         }
-        if (StringUtils.isNotBlank(ticketContact.getAppUserId())){
+        if (null == ticketContact.getAppUserId()){
             WHERE("app_user_id=#{ticketContact.appUserId}");
         }
         if (StringUtils.isNotBlank(ticketContact.getName())){
@@ -88,7 +88,7 @@ public class TicketContactProvider {
         if (ticketContact.getId() != null) {
             WHERE("id=#{ticketContact.id}");
         }
-        if (StringUtils.isNotBlank(ticketContact.getAppUserId())){
+        if (null == ticketContact.getAppUserId()){
             WHERE("app_user_id=#{ticketContact.appUserId}");
         }
         if (StringUtils.isNotBlank(ticketContact.getName())){

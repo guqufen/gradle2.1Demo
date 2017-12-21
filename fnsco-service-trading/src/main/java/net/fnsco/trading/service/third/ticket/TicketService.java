@@ -28,6 +28,7 @@ import net.fnsco.trading.service.third.ticket.entity.TicketContactDO;
 import net.fnsco.trading.service.third.ticket.entity.TicketOrderDO;
 import net.fnsco.trading.service.third.ticket.entity.TicketOrderPassengerDO;
 import net.fnsco.trading.service.third.ticket.util.TrainTicketsUtil;
+import net.sf.json.JSONObject;
 
 @Service
 public class TicketService extends BaseService {
@@ -122,8 +123,22 @@ public class TicketService extends BaseService {
         Map paramesMap = JSON.parseObject(JSON.toJSONString(order), Map.class);
         String orderId = "";
         try {
-            orderId = TrainTicketsUtil.postIndent(paramesMap);
+            JSONObject obj = TrainTicketsUtil.postIndent(paramesMap);
             ticketOrder = ticketOrderDAO.getById(ticketOrder.getId());
+            if (null != obj) {
+                String error_code = obj.getString("error_code");
+                ticketOrder.setRespCode(error_code);
+                if ("0".equals(error_code)) {
+                    String result = obj.getString("result");
+                    if (result != null) {
+                        obj = JSONObject.fromObject(result);
+                        orderId =obj.getString("orderid");
+                    }
+                }else{
+                    ticketOrder.setRespMsg(obj.getString("reason"));
+                }
+            }
+            
             if (Strings.isNullOrEmpty(orderId)) {
                 ticketOrder.setStatus(TicketConstants.OrderStateEnum.FAIL.getCode());
             } else {
