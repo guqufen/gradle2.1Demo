@@ -65,4 +65,6 @@ public interface SysConfigService {
      * @return
      */
     List<PermissionsDTO> selectLevelPrivilege();
+    
+    
 }

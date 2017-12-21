@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 public class BankListVO extends VO {
+	@ApiModelProperty(value="银行卡id",name="id",example="1")
+	private Integer id;
 	@ApiModelProperty(value="银行卡号",name="cardNum",example="411****5211")
 	private String cardNum;
 	@ApiModelProperty(value="银行卡名称",name="bankName",example="招商银行")
@@ -11,6 +13,28 @@ public class BankListVO extends VO {
 	@ApiModelProperty(value="卡类型",name="type",example="信用卡/储蓄卡")
 	private String type;
 	
+	
+	
+	/**
+	 * id
+	 *
+	 * @return  the id
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getId() {
+		return id;
+	}
+	/**
+	 * id
+	 *
+	 * @param   id    the id to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	/**
 	 * bankName
 	 *
