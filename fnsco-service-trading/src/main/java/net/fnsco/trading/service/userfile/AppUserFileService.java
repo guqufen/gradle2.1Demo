@@ -58,4 +58,9 @@ public class AppUserFileService extends BaseService {
    AppUserFileDO obj = this.appUserFileDAO.getByUserId (appUserId,fileType);
    return obj;
  }
+ //根据appuserid和正反面删除
+ public Integer deleteByIdAndSide (Integer appUserId,String fileType) {
+   int rows=this.appUserFileDAO.deleteByIdAndSide(appUserId,fileType);
+   return rows;
+}
 }

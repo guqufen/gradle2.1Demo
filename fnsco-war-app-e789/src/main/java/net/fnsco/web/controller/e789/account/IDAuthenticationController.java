@@ -117,6 +117,15 @@ public class IDAuthenticationController extends BaseController {
                     //上传阿里云OSS文件服务器
                     OssLoaclUtil.uploadFile(fileURL, fileKey);
                     String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
+                    AppUserFileDO userFile = appUserFileService.doQueryByUserId(userId,side);
+            		if(userFile!=null) {
+            			String path = userFile.getFilePath();
+            			String deleteFileKey = path.substring(path.indexOf("^") + 1);
+            			OssLoaclUtil.deleteFile(OssLoaclUtil.getHeadBucketName(), deleteFileKey);
+            			File deleteFile = new File(fileURL);  
+            			deleteFile.delete();
+            			appUserFileService.deleteByIdAndSide(userId, side);
+            		}
                     AppUserFileDO appUserFile = new AppUserFileDO();
                     appUserFile.setFilePath(newUrl);
                     appUserFile.setCreateTime(new Date());
@@ -140,7 +149,7 @@ public class IDAuthenticationController extends BaseController {
         return ResultDTO.fail(E789ApiConstant.E_UPLOAD_IDCARD_FAIL);
 	}
         
-	@RequestMapping(value = "/identify")
+	/*@RequestMapping(value = "/identify")
     @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
     public ResultDTO identify(@RequestBody CommonJO commonJO) {
 		Integer userId = commonJO.getUserId();
@@ -252,5 +261,5 @@ public class IDAuthenticationController extends BaseController {
         IdentifyJO identify = new IdentifyJO();
         identify.setRealName(realName);
         return ResultDTO.success(identify);
-    }
+    }*/
 }
