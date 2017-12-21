@@ -1,42 +1,65 @@
 package net.fnsco.web.controller.e789.third.ticket.vo;
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 public class TrainVO extends VO {
 
-    @ApiModelProperty(value = "价格", example = "价格")
-    private String price;
-
-    @ApiModelProperty(value = "车票类型", example = "车票类型")
-    private String ticketType;
-
+    @ApiModelProperty(value = "座位价格列表", example = "座位价格列表")
+    private List<SeatTypeVO> seatTypeList;
     @ApiModelProperty(value = "出发时间", example = "出发时间")
-    private String startTime;
+    private String           startTime;
 
     @ApiModelProperty(value = "到达时间", example = "到达时间")
-    private String endTime;
+    private String           endTime;
 
     @ApiModelProperty(value = "车号", example = "车号")
-    private String trainCode;
+    private String           trainCode;
 
     @ApiModelProperty(value = "耗时", example = "耗时")
-    private String duration;
+    private String           duration;
 
     @ApiModelProperty(value = "乘车日期", example = "乘车日期")
-    private String trainDate;
+    private String           trainDate;
 
     @ApiModelProperty(value = "出发站编号", example = "出发站编号")
-    private String fromStationCode;
+    private String           fromStationCode;
 
     @ApiModelProperty(value = "出发站名称", example = "出发站名称")
-    private String fromStationName;
+    private String           fromStationName;
 
     @ApiModelProperty(value = "到达站编号", example = "到达站编号")
-    private String toStationCode;
+    private String           toStationCode;
 
     @ApiModelProperty(value = "到达站名称", example = "到达站名称")
-    private String toStationName;
+    private String           toStationName;
+    
+    @ApiModelProperty(value = "当前是否可以接受预定Y是或N", example = "当前是否可以接受预定Y或N")
+    private String           canBuyNow;
+
+    /**
+     * canBuyNow
+     *
+     * @return  the canBuyNow
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getCanBuyNow() {
+        return canBuyNow;
+    }
+
+    /**
+     * canBuyNow
+     *
+     * @param   canBuyNow    the canBuyNow to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setCanBuyNow(String canBuyNow) {
+        this.canBuyNow = canBuyNow;
+    }
 
     /**
      * trainDate
@@ -149,47 +172,25 @@ public class TrainVO extends VO {
     }
 
     /**
-     * price
+     * seatTypeList
      *
-     * @return  the price
+     * @return  the seatTypeList
      * @since   CodingExample Ver 1.0
     */
 
-    public String getPrice() {
-        return price;
+    public List<SeatTypeVO> getSeatTypeList() {
+        return seatTypeList;
     }
 
     /**
-     * price
+     * seatTypeList
      *
-     * @param   price    the price to set
+     * @param   seatTypeList    the seatTypeList to set
      * @since   CodingExample Ver 1.0
      */
 
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    /**
-     * ticketType
-     *
-     * @return  the ticketType
-     * @since   CodingExample Ver 1.0
-    */
-
-    public String getTicketType() {
-        return ticketType;
-    }
-
-    /**
-     * ticketType
-     *
-     * @param   ticketType    the ticketType to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setTicketType(String ticketType) {
-        this.ticketType = ticketType;
+    public void setSeatTypeList(List<SeatTypeVO> seatTypeList) {
+        this.seatTypeList = seatTypeList;
     }
 
     /**

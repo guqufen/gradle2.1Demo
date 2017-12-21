@@ -1,5 +1,6 @@
 package net.fnsco.trading.service.third.ticket.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class TicketOrderDO {
@@ -7,59 +8,244 @@ public class TicketOrderDO {
     /**
      * 
      */
-    private Integer id;
+    private Integer    id;
+
+    /**
+     * app用户ID
+     */
+    private String     appUserId;
 
     /**
      * 订单ID
      */
-    private String orderNo;
-
+    private String     orderNo;
+    /**
+     * 聚合数据支付订单ID
+     */
+    private String     payOrderNo;
     /**
      * 乘车日期
      */
-    private String trainDate;
+    private String     trainDate;
 
     /**
      * 出发站编号
      */
-    private String fromStationCode;
+    private String     fromStationCode;
 
     /**
      * 出发站名称
      */
-    private String fromStationName;
+    private String     fromStationName;
 
     /**
      * 到达站编号
      */
-    private String toStationCode;
+    private String     toStationCode;
 
     /**
      * 到达站名称
      */
-    private String toStationName;
+    private String     toStationName;
 
     /**
      * 车次（G65）
      */
-    private String trainCode;
+    private String     trainCode;
 
     /**
-     * 状态 0未执行1执行中2失败3成功
+     * 此订单的总金额
      */
-    private Integer status;
+    private BigDecimal orderAmount;
+
+    /**
+     * 取票订单号，等同于您在12306官网订票时提供的订单编号
+     */
+    private String     trainOrderNumber;
+
+    /**
+     * 支付时间，请求出票（从聚合账户扣款）时间
+     */
+    private Date       payTime;
+
+    /**
+     * 应答信息
+     */
+    private String     respMsg;
+
+    /**
+     * 应答码
+     */
+    private String     respCode;
+
+    /**
+     * 状态 0未占座1占座中2已占座3支付完成4取消订单
+     */
+    private Integer    status;
 
     /**
      * 创建时间
      */
-    private Date createTime;
+    private Date       createTime;
 
     /**
-     * 
+     * 最后更新时间
      */
-    private Date lastModifyTime;
+    private Date       lastModifyTime;
 
+    /**
+     * appUserId
+     *
+     * @return  the appUserId
+     * @since   CodingExample Ver 1.0
+    */
 
+    public String getAppUserId() {
+        return appUserId;
+    }
+
+    /**
+     * appUserId
+     *
+     * @param   appUserId    the appUserId to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setAppUserId(String appUserId) {
+        this.appUserId = appUserId;
+    }
+
+    /**
+     * orderAmount
+     *
+     * @return  the orderAmount
+     * @since   CodingExample Ver 1.0
+    */
+
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
+    }
+
+    /**
+     * orderAmount
+     *
+     * @param   orderAmount    the orderAmount to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    /**
+     * trainOrderNumber
+     *
+     * @return  the trainOrderNumber
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getTrainOrderNumber() {
+        return trainOrderNumber;
+    }
+
+    /**
+     * trainOrderNumber
+     *
+     * @param   trainOrderNumber    the trainOrderNumber to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setTrainOrderNumber(String trainOrderNumber) {
+        this.trainOrderNumber = trainOrderNumber;
+    }
+
+    /**
+     * payTime
+     *
+     * @return  the payTime
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    /**
+     * payTime
+     *
+     * @param   payTime    the payTime to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
+    }
+
+    /**
+     * respMsg
+     *
+     * @return  the respMsg
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getRespMsg() {
+        return respMsg;
+    }
+
+    /**
+     * respMsg
+     *
+     * @param   respMsg    the respMsg to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setRespMsg(String respMsg) {
+        this.respMsg = respMsg;
+    }
+
+    /**
+     * respCode
+     *
+     * @return  the respCode
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getRespCode() {
+        return respCode;
+    }
+
+    /**
+     * respCode
+     *
+     * @param   respCode    the respCode to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setRespCode(String respCode) {
+        this.respCode = respCode;
+    }
+
+    /**
+     * payOrderNo
+     *
+     * @return  the payOrderNo
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getPayOrderNo() {
+        return payOrderNo;
+    }
+
+    /**
+     * payOrderNo
+     *
+     * @param   payOrderNo    the payOrderNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPayOrderNo(String payOrderNo) {
+        this.payOrderNo = payOrderNo;
+    }
 
     public Integer getId() {
         return id;
@@ -149,10 +335,9 @@ public class TicketOrderDO {
         this.lastModifyTime = lastModifyTime;
     }
 
-
-
     @Override
     public String toString() {
-        return "[id="+ id + ", orderNo="+ orderNo + ", trainDate="+ trainDate + ", fromStationCode="+ fromStationCode + ", fromStationName="+ fromStationName + ", toStationCode="+ toStationCode + ", toStationName="+ toStationName + ", trainCode="+ trainCode + ", status="+ status + ", createTime="+ createTime + ", lastModifyTime="+ lastModifyTime + "]";
+        return "[id=" + id + ", orderNo=" + orderNo + ", trainDate=" + trainDate + ", fromStationCode=" + fromStationCode + ", fromStationName=" + fromStationName + ", toStationCode=" + toStationCode
+               + ", toStationName=" + toStationName + ", trainCode=" + trainCode + ", status=" + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
     }
 }

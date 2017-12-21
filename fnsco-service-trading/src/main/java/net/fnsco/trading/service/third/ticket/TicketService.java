@@ -7,12 +7,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.trading.service.third.ticket.comm.TicketConstants;
 import net.fnsco.trading.service.third.ticket.dao.TicketContactDAO;
@@ -56,7 +58,8 @@ public class TicketService extends BaseService {
         return resultList;
     }
 
-    public void addOrder(TicketOrderDTO ticketOrderDTO) {
+    @Transactional
+    public ResultDTO addOrder(TicketOrderDTO ticketOrderDTO) {
         TicketOrderDO ticketOrder = new TicketOrderDO();
         ticketOrder.setOrderNo(CodeUtil.generateOrderCode("T"));
         ticketOrder.setFromStationCode(ticketOrderDTO.getFromStationCode());
@@ -71,6 +74,7 @@ public class TicketService extends BaseService {
         ticketOrderDAO.insert(ticketOrder);
         String passengerId = ticketOrderDTO.getPassengerId();
         String[] passengerIds = passengerId.split(",");
+        List<TicketOrderPassengerDO> passList = Lists.newArrayList();
         for (int i = 0; i < passengerIds.length; i++) {
             TicketContactDO contact = ticketContactDAO.getById(Integer.parseInt(passengerIds[i]));
             TicketOrderPassengerDO ticketOrderPassenger = new TicketOrderPassengerDO();
@@ -80,8 +84,8 @@ public class TicketService extends BaseService {
             ticketOrderPassenger.setCardNum(contact.getCardNum());
             ticketOrderPassenger.setCardTypeId(contact.getCardType());
             ticketOrderPassenger.setCardTypeName(TicketConstants.CardTypeEnum.getTypeName(contact.getCardType()));
-            ticketOrderPassenger.setSeatCode(ticketOrderDTO.getSeatType());
-            ticketOrderPassenger.setSeatName(TicketConstants.SeatTypeEnum.getTypeName(ticketOrderDTO.getSeatType()));
+            ticketOrderPassenger.setSeatCode(ticketOrderDTO.getSeatCode());
+            ticketOrderPassenger.setSeatName(TicketConstants.SeatTypeEnum.getTypeName(ticketOrderDTO.getSeatCode()));
             ticketOrderPassenger.setPrice(new BigDecimal(ticketOrderDTO.getPrice()));
             ticketOrderPassenger.setTicketType(ticketOrderDTO.getTicketType());
             ticketOrderPassenger.setTicketTypeName(TicketConstants.TicketTypeEnum.getTypeName(ticketOrderDTO.getTicketType()));
@@ -89,15 +93,49 @@ public class TicketService extends BaseService {
             ticketOrderPassenger.setCreateTime(new Date());
             ticketOrderPassenger.setLastModifyTime(new Date());
             ticketOrderPassengerDAO.insert(ticketOrderPassenger);
+            passList.add(ticketOrderPassenger);
         }
+        List<PassengersDTO> passDtoList = Lists.newArrayList();
         TicketOrderSubmitDTO order = new TicketOrderSubmitDTO();
-        PassengersDTO passengers = new PassengersDTO();
-        order.setPassengers(passengers);
+        order.setCheci(ticketOrder.getTrainCode());
+        order.setFrom_station_code(ticketOrder.getFromStationCode());
+        order.setFrom_station_name(ticketOrder.getFromStationName());
+        order.setTo_station_code(ticketOrder.getToStationCode());
+        order.setTo_station_name(ticketOrder.getToStationName());
+        order.setTrain_date(ticketOrder.getTrainDate());
+        order.setUser_orderid(ticketOrder.getOrderNo());
+        for (TicketOrderPassengerDO pass : passList) {
+            PassengersDTO passengers = new PassengersDTO();
+            passengers.setPassengerid(String.valueOf(pass.getId()));
+            passengers.setPassengersename(pass.getPassengerName());
+            passengers.setPassportseno(pass.getCardNum());
+            passengers.setPassporttypeseid(pass.getCardTypeId());
+            passengers.setPassporttypeseidname(pass.getCardTypeName());
+            passengers.setPiaotype(pass.getTicketType());
+            passengers.setPiaotypename(pass.getTicketTypeName());
+            passengers.setPrice(pass.getPrice().toString());
+            passengers.setZwcode(pass.getSeatCode());
+            passengers.setZwname(pass.getSeatName());
+            passDtoList.add(passengers);
+        }
+        order.setPassengers(passDtoList);
         Map paramesMap = JSON.parseObject(JSON.toJSONString(order), Map.class);
+        String orderId = "";
         try {
-            String orderId = TrainTicketsUtil.postIndent(paramesMap);
+            orderId = TrainTicketsUtil.postIndent(paramesMap);
+            ticketOrder = ticketOrderDAO.getById(ticketOrder.getId());
+            if (Strings.isNullOrEmpty(orderId)) {
+                ticketOrder.setStatus(TicketConstants.OrderStateEnum.FAIL.getCode());
+            } else {
+                ticketOrder.setPayOrderNo(orderId);
+            }
+            ticketOrder.setLastModifyTime(new Date());
+            ticketOrderDAO.update(ticketOrder);
         } catch (Exception ex) {
             logger.error("火车票提交订单出错" + JSON.toJSONString(paramesMap), ex);
+            return ResultDTO.fail("火车票提交订单出错");
         }
+        return ResultDTO.success(orderId);
     }
+
 }

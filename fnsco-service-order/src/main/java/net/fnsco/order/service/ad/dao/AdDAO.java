@@ -16,29 +16,49 @@ import java.util.List;;
 
 public interface AdDAO {
 
-    @Results({@Result( column = "img_path",property = "imgPath"),@Result( column = "create_time",property = "createTime"),@Result( column = "update_time",property = "updateTime"),@Result( column = "create_user_id",property = "createUserId") })
-    @Select("SELECT * FROM sys_ad WHERE id = #{id}")
-    public AdDO getById(@Param("id") int id);
+	@Results({ @Result(column = "img_path", property = "imgPath"),
+			@Result(column = "create_time", property = "createTime"),
+			@Result(column = "update_time", property = "updateTime"),
+			@Result(column = "create_user_id", property = "createUserId") })
+	@Select("SELECT * FROM sys_ad WHERE id = #{id}")
+	public AdDO getById(@Param("id") int id);
 
-    @Insert("INSERT into sys_ad(id,title,img_path,category,summary,content,create_time,update_time,create_user_id) VALUES (#{id},#{title},#{imgPath},#{category},#{summary},#{content},#{createTime},#{updateTime},#{createUserId})")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    public void insert(AdDO ad);
+	@Insert("INSERT into sys_ad(id,title,img_path,category,summary,content,create_time,update_time,create_user_id,url) VALUES (#{id},#{title},#{img_path},#{category},#{summary},#{content},#{createTime},#{updateTime},#{createUserId},#{url})")
+	@Options(useGeneratedKeys = true, keyProperty = "id")
+	public void insert(AdDO ad);
 
-    @Delete("DELETE FROM sys_ad WHERE id = #{id}")
-    public int deleteById(@Param("id") int id);
+	@Delete("DELETE FROM sys_ad WHERE id = #{id}")
+	public int deleteById(@Param("id") int id);
 
-    @UpdateProvider(type = AdProvider.class, method = "update")
-    public int update(@Param("ad") AdDO  ad);
+	@UpdateProvider(type = AdProvider.class, method = "update")
+	public int update(@Param("ad") AdDO ad);
 
-    @Results({@Result( column = "img_path",property = "imgPath"),@Result( column = "create_time",property = "createTime"),@Result( column = "update_time",property = "updateTime"),@Result( column = "create_user_id",property = "createUserId") })
-    @SelectProvider(type = AdProvider.class, method = "pageList")
-    public List<AdDO> pageList(@Param("ad") AdDO ad, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
+	@Results({ @Result(column = "id", property = "id"),
+			@Result(column = "title", property = "title"),
+			@Result(column = "img_path", property = "img_path"),
+			@Result(column = "url", property = "url"),
+			@Result(column = "category", property = "category"),
+			@Result(column = "summary", property = "summary"),
+			@Result(column = "create_time", property = "createTime"),
+			@Result(column = "update_time", property = "updateTime"),
+			@Result(column = "create_user_id", property = "createUserId")})
+	@SelectProvider(type = AdProvider.class, method = "pageList")
+	public List<AdDO> pageList(@Param("ad") AdDO ad, @Param("pageNum") Integer pageNum,
+			@Param("pageSize") Integer pageSize);
 
-    @SelectProvider(type = AdProvider.class, method = "pageListCount")
-    public Integer pageListCount(@Param("ad") AdDO ad);
-    
-    
-    @Select("SELECT * FROM sys_ad")
+	@SelectProvider(type = AdProvider.class, method = "pageListCount")
+	public Integer pageListCount(@Param("ad") AdDO ad);
+
+	/**
+	 * app接口获取广告资讯 queryAdList:(这里用一句话描述这个方法的作用)
+	 *
+	 * @param @return
+	 *            设定文件
+	 * @return List<AdDO> DOM对象
+	 * @throws @since
+	 *             CodingExample Ver 1.1
+	 */
+	@Select("SELECT * FROM sys_ad")
 	public List<AdDO> queryAdList();
 
 }

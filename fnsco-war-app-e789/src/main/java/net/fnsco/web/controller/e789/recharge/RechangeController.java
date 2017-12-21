@@ -28,7 +28,9 @@ import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.comm.TradeConstants;
+import net.fnsco.trading.service.order.TradeOrderResearchService;
 import net.fnsco.trading.service.order.TradeOrderService;
+import net.fnsco.trading.service.order.dto.OrderDTO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.e789.jo.GetQRUrlJO;
 import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
@@ -47,11 +49,13 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 @Api(value = "/app2c/rechange", tags = { "我的-钱包-充值相关接口" })
 public class RechangeController extends BaseController {
     @Autowired
-    private MerchantService   merchantService;
+    private MerchantService           merchantService;
     @Autowired
-    private TradeOrderService tradeOrderService;
+    private TradeOrderService         tradeOrderService;
     @Autowired
-    private Environment       env;
+    private Environment               env;
+    @Autowired
+    private TradeOrderResearchService tradeOrderResearchService;
 
     /**
      * 获取聚惠分url，不生成二维码，个人充值使用的是固定秘钥
@@ -119,4 +123,15 @@ public class RechangeController extends BaseController {
         return reqData;
     }
 
+    /**
+     * 获取聚惠分url，不生成二维码，个人充值使用的是固定秘钥
+     *
+     * @param userName
+     * @return
+     */
+    @RequestMapping(value = "/test/research", method = RequestMethod.POST)
+    @ApiOperation(value = "我的页面-钱包-分闪付充值保存，返回的url跳转到h5页面")
+    public ResultDTO research(@RequestBody OrderDTO order) {
+        return tradeOrderResearchService.updateResearchOrderInfo(order);
+    }
 }

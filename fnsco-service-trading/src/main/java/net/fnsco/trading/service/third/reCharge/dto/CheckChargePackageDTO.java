@@ -1,4 +1,4 @@
-package net.fnsco.trading.service.third.phoneBill.dto;
+package net.fnsco.trading.service.third.reCharge.dto;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class CheckChargePackageDTO extends DTO {
 	@ApiModelProperty(value = "号码归属地", example = "号码归属地")
 	private String cardArea;
 //	@ApiModelProperty(value = "名称售价列表", example = "名称售价列表")
-	private List<CheckChargeNoDTO> list;
+	private List<CheckMobileDTO> list;
 
 	public String getCompany() {
 		return company;
@@ -37,11 +37,11 @@ public class CheckChargePackageDTO extends DTO {
 		return serialVersionUID;
 	}
 
-	public List<CheckChargeNoDTO> getList() {
+	public List<CheckMobileDTO> getList() {
 		return list;
 	}
 
-	public void setList(List<CheckChargeNoDTO> list) {
+	public void setList(List<CheckMobileDTO> list) {
 		this.list = list;
 	}
 

@@ -1,5 +1,6 @@
 package net.fnsco.trading.service.withdraw.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
@@ -22,6 +23,10 @@ public interface TradeWithdrawDAO {
     @Select("SELECT * FROM t_trade_withdraw WHERE id = #{id}")
     public TradeWithdrawDO getById(@Param("id") int id);
 
+    @Results({@Result( column = "order_no",property = "orderNo"),@Result( column = "original_order_no",property = "originalOrderNo"),@Result( column = "app_user_id",property = "appUserId"),@Result( column = "settle_money",property = "settleMoney"),@Result( column = "trade_type",property = "tradeType"),@Result( column = "create_time",property = "createTime"),@Result( column = "update_time",property = "updateTime"),@Result( column = "resp_code",property = "respCode"),@Result( column = "resp_msg",property = "respMsg"),@Result( column = "payment_date",property = "paymentDate"),@Result( column = "succ_time",property = "succTime"),@Result( column = "back_url",property = "backUrl"),@Result( column = "bank_account_type",property = "bankAccountType"),@Result( column = "bank_account_no",property = "bankAccountNo"),@Result( column = "bank_account_name",property = "bankAccountName"),@Result( column = "bank_account_card_id",property = "bankAccountCardId"),@Result( column = "bank_sub_bank_name",property = "bankSubBankName"),@Result( column = "bank_open_bank",property = "bankOpenBank"),@Result( column = "bank_open_bank_num",property = "bankOpenBankNum"),@Result( column = "bank_account_phone",property = "bankAccountPhone"),@Result( column = "channel_mer_id",property = "channelMerId") })
+    @Select("SELECT * FROM t_trade_withdraw WHERE original_order_no = #{originalOrderNo}")
+    public TradeWithdrawDO getByOriginalOrderNo(@Param("originalOrderNo") String originalOrderNo);
+    
     @Insert("INSERT into t_trade_withdraw(id,order_no,original_order_no,app_user_id,amount,fee,settle_money,fund,trade_type,trade_sub_type,status,create_time,update_time,resp_code,resp_msg,payment_date,succ_time,back_url,bank_account_type,bank_account_no,bank_account_name,bank_account_card_id,bank_sub_bank_name,bank_open_bank,bank_open_bank_num,bank_account_phone,channel_mer_id) VALUES (#{id},#{orderNo},#{originalOrderNo},#{appUserId},#{amount},#{fee},#{settleMoney},#{fund},#{tradeType},#{tradeSubType},#{status},#{createTime},#{updateTime},#{respCode},#{respMsg},#{paymentDate},#{succTime},#{backUrl},#{bankAccountType},#{bankAccountNo},#{bankAccountName},#{bankAccountCardId},#{bankSubBankName},#{bankOpenBank},#{bankOpenBankNum},#{bankAccountPhone},#{channelMerId})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(TradeWithdrawDO tradeWithdraw);
@@ -52,4 +57,13 @@ public interface TradeWithdrawDAO {
     @SelectProvider(type = TradeWithdrawProvider.class, method = "queryTotalAmount")
     public List<MonthWithdrawCountDTO> queryTotalAmount(@Param("appUserId") Integer appUserId,@Param("tradeMonth") String tradeMonth,@Param("status")Integer status);
     
+    /**
+     * 按交易类型查询正在进行的交易列表，便于定时查询交易状态(按照时间大到小)
+     * @param start：查询开始时间
+     * @param type：交易类型
+     * @return
+     */
+    @Results({@Result( column = "order_no",property = "orderNo"),@Result( column = "original_order_no",property = "originalOrderNo"),@Result( column = "app_user_id",property = "appUserId"),@Result( column = "settle_money",property = "settleMoney"),@Result( column = "trade_type",property = "tradeType"),@Result( column = "create_time",property = "createTime"),@Result( column = "update_time",property = "updateTime"),@Result( column = "resp_code",property = "respCode"),@Result( column = "resp_msg",property = "respMsg"),@Result( column = "payment_date",property = "paymentDate"),@Result( column = "succ_time",property = "succTime"),@Result( column = "back_url",property = "backUrl"),@Result( column = "bank_account_type",property = "bankAccountType"),@Result( column = "bank_account_no",property = "bankAccountNo"),@Result( column = "bank_account_name",property = "bankAccountName"),@Result( column = "bank_account_card_id",property = "bankAccountCardId"),@Result( column = "bank_sub_bank_name",property = "bankSubBankName"),@Result( column = "bank_open_bank",property = "bankOpenBank"),@Result( column = "bank_open_bank_num",property = "bankOpenBankNum"),@Result( column = "bank_account_phone",property = "bankAccountPhone"),@Result( column = "channel_mer_id",property = "channelMerId") })
+    @Select("SELECT * FROM t_trade_withdraw WHERE status=1 AND trade_type=#{type} AND create_time >=#{start}")
+    public List<TradeWithdrawDO> queryOngoing(@Param("start") Date start, @Param("type") Integer type);
 }
