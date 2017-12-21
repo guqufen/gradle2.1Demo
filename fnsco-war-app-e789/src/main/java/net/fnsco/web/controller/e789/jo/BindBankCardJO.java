@@ -12,8 +12,56 @@ public class BindBankCardJO extends JO {
     private String mobile;
     @ApiModelProperty(value = "app用户id", name = "userId", example = "22")
     private String userId;
+    @ApiModelProperty(value = "设备id", name = "deviceId")
+    private String deviceId;
+    @ApiModelProperty(value = "验证码", name = "code")
+    private String code;
 
     
+	/**
+	 * code
+	 *
+	 * @return  the code
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * code
+	 *
+	 * @param   code    the code to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	/**
+	 * deviceId
+	 *
+	 * @return  the deviceId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	/**
+	 * deviceId
+	 *
+	 * @param   deviceId    the deviceId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
+	}
+
 	/**
 	 * @return the userId
 	 */

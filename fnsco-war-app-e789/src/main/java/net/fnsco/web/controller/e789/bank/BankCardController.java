@@ -1,6 +1,5 @@
 package net.fnsco.web.controller.e789.bank;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,24 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.mysql.jdbc.StringUtils;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.bigdata.api.merchant.MerchantService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.core.utils.StringUtil;
 import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.service.modules.appuser.AppUserServiceImpl;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.bank.AppUserBankService;
 import net.fnsco.trading.service.bank.entity.AppUserBankDO;
-import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.web.controller.e789.bank.juhedemo.JuheDemo;
 import net.fnsco.web.controller.e789.jo.BankListJO;
 import net.fnsco.web.controller.e789.jo.BindBankCardJO;
@@ -41,12 +36,12 @@ import net.fnsco.web.controller.e789.vo.UnBindBankCardVO;
 import net.fnsco.web.controller.e789.vo.ValidateBankVO;
 
 /**
- * 
- * @desc 聚惠分分期付相关产品功能
- * @author sxf
- * @version
- * @since Ver 1.1
- * @Date 2017年10月27日 上午11:53:16
+ * 银行卡相关接口
+ * @deprecated 
+ * @author   binghui.li
+ * @version  
+ * @since    Ver 1.1
+ * @Date	 2017 2017年12月21日 下午4:47:42
  *
  */
 @RestController
@@ -59,6 +54,8 @@ public class BankCardController extends BaseController {
 	private AppUserService appUserService;
 	@Autowired
 	private Environment env;
+	
+
 
 	@RequestMapping(value = "/validateBank")
 	@ApiOperation(value = "银行卡信息页-校验银行卡")
@@ -73,17 +70,41 @@ public class BankCardController extends BaseController {
 		params.put("realname", jo.getName());// 名字
 		params.put("idcard", idcard);// 身份证
 		params.put("bankcard", jo.getCardNum());// 卡号
-		params.put("mobile", jo.getMobile());// 预留手机号
+		params.put("mobile", jo.getMobile());// 预留手机号\
+		JSONObject jaJsonObject = new JSONObject();
 		try {
 			String result = JuheDemo.net(strUrl, params, method);
-			Map<String, String> resultMap = JSON.parseObject(result, Map.class);
-			JSONObject obj = new JSONObject();
-			vo = obj.getObject(result, ValidateBankVO.class);
+			jaJsonObject = JSONObject.parseObject(result);
+			Integer error_code = jaJsonObject.getInteger("error_code");
+			if(error_code == 0){
+				JSONObject jaJsonObject2 = jaJsonObject.getJSONObject("result");
+				if(jaJsonObject2 != null){
+					vo.setError_code(error_code);
+					vo.setReason(jaJsonObject.getString("reason"));
+					vo.setMessage(jaJsonObject2.getString("message"));
+					vo.setRes(jaJsonObject2.getString("res"));
+					if("1".equals(jaJsonObject2.getString("res"))){
+						return ResultDTO.success(vo); 
+						
+					}else{
+						return ResultDTO.fail(vo);
+					}
+						
+				}else{
+					vo.setError_code(error_code);
+					vo.setReason(jaJsonObject.getString("reason"));
+					return ResultDTO.fail(vo);
+				}
+			}else{
+				vo.setError_code(error_code);
+				vo.setReason(jaJsonObject.getString("reason"));
+				return ResultDTO.fail(vo);
+			}
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return ResultDTO.success(vo);
-
+		return ResultDTO.fail();
 	}
 
 	/**
@@ -109,6 +130,8 @@ public class BankCardController extends BaseController {
 		if (Strings.isNullOrEmpty(id_card_num)) {
 			return ResultDTO.fail(TradeConstants.NOT_ID_AUTH);// 未认证
 		}
+		//验证码校验
+		appUserService.validateCode(jo.getDeviceId(), jo.getCode(), "2"+jo.getMobile());
 		// 保存银行卡信息
 		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,
 				id_card_num);
@@ -128,8 +151,6 @@ public class BankCardController extends BaseController {
 	 */
 	@RequestMapping(value = "/unBindBankCard")
 	@ApiOperation(value = "银行卡信息页-解绑银行卡")
-	// @ApiImplicitParam(name = "xxx", value = "解绑银行卡", required = false,
-	// dataType="Xxx",paramType="body")
 	public ResultDTO<UnBindBankCardVO> deleteBankJO(@RequestBody UnBindBankCardJO jo) {
 		String bankId = jo.getBankID();
 		if (Strings.isNullOrEmpty(bankId)) {
