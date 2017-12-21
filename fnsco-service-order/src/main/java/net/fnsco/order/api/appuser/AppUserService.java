@@ -104,7 +104,18 @@ public interface AppUserService {
     List<AppUserMerchant> getAppUserMerchantByInnerCode(String innerCode);
     List<AppUser> selectAllInviteAppUser();
     boolean updateAppUser(AppUser appUser);
+    /**
+     * 根据用户id获取身份证号
+     * getIdAuth:(这里用一句话描述这个方法的作用)
+     *
+     * @param  @param userId
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
 	String getIdAuth(Integer userId);
 	ResultDTO getE789ValidateCode(AppUserDTO appUserDTO);
 	ResultDTO e789FindPassword(AppUserDTO appUserDTO);
+	
 }
