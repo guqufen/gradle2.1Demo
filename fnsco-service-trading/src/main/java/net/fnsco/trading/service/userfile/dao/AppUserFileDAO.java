@@ -28,6 +28,9 @@ public interface AppUserFileDAO {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(AppUserFileDO appUserFile);
 
+    @Delete("DELETE FROM u_app_user_file WHERE app_user_id = #{appUserId} AND file_type=#{fileType}")
+    public int deleteByIdAndSide(@Param("appUserId") int appUserId ,@Param("fileType") String  fileType);
+    
     @Delete("DELETE FROM u_app_user_file WHERE id = #{id}")
     public int deleteById(@Param("id") int id);
 
