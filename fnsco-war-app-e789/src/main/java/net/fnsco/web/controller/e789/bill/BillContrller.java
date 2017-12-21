@@ -29,6 +29,7 @@ import net.fnsco.trading.service.withdraw.dto.MonthWithdrawCountDTO;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 import net.fnsco.web.controller.e789.jo.BillJO;
 import net.fnsco.web.controller.e789.vo.BillDayVO;
+import net.fnsco.web.controller.e789.vo.BillTotalVO;
 import net.fnsco.web.controller.e789.vo.BillVO;
 
 /**
@@ -57,7 +58,7 @@ public class BillContrller extends BaseController {
 	 */
 	@RequestMapping(value = "/queryBillList")
     @ApiOperation(value = "我的-钱包-我的账单-获取账单列表接口")
-    public ResultDTO<List<BillVO>> queryBillList(@RequestBody BillJO billJO) {
+    public ResultDTO<BillTotalVO> queryBillList(@RequestBody BillJO billJO) {
 		
 		if(null == billJO.getUserId()) {
 			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
@@ -70,6 +71,11 @@ public class BillContrller extends BaseController {
 		if(null == billJO.getPageSize()) {
 			billJO.setPageSize(20);
 		}
+		
+		BillTotalVO resultData = new BillTotalVO();
+		resultData.setCurrentPageNum(billJO.getPageNum());
+		resultData.setPageSize(billJO.getPageSize());
+		
 		
 		TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
 		tradeWithdraw.setAppUserId(billJO.getUserId());
@@ -139,7 +145,16 @@ public class BillContrller extends BaseController {
 				}
 			}
 		}
-        return success(data);
+		
+		Integer totalNum = data.size();
+		resultData.setTotalPage(totalNum/billJO.getPageSize());
+		if(totalNum%billJO.getPageSize() != 0) {
+			resultData.setTotalPage(resultData.getTotalPage()+1);
+		}
+		
+		resultData.setBillListData(data);
+		
+        return success(resultData);
     }
 	
 	/**
