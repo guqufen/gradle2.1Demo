@@ -26,6 +26,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.FileUtils;
 import net.fnsco.core.utils.JuheDemoUtil;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.dto.IdCardDTO;
@@ -36,6 +37,7 @@ import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.userfile.AppUserFileService;
 import net.fnsco.trading.service.userfile.entity.AppUserFileDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
+import net.fnsco.web.controller.e789.jo.IdentifyJO;
 import net.fnsco.web.controller.e789.vo.IdAuthVO;
 
 /**
@@ -151,56 +153,69 @@ public class IDAuthenticationController extends BaseController {
 		AppUserFileDO appUserFrontFile = appUserFileService.doQueryByUserId(commonJO.getUserId(),"front");
 		if(appUserFrontFile==null) {
 			return ResultDTO.fail(E789ApiConstant.E_FORNT_NOT_FOUND);
-		}else {
-			String imagePath = appUserFrontFile.getFilePath();
-			 String path = imagePath.substring(imagePath.indexOf("^") + 1);
-			String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path);
-			IdCardDTO idCardFront = JuheDemoUtil.valiIdImage(imageUrl,"front");
-        	int errorCode = idCardFront.getErrorCode();
-        	if(errorCode==228701) {
-       		 	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_TIMEOUT);
-       	 	}else if(errorCode==228702) {
-       	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
-       	 	}else if(errorCode==228703) {
-       	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_TYPE_ERROR);
-       	 	}else if(errorCode==228704) {
-       	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_LENGTH_ERROR);
-       	 	}else if(errorCode==228705) {
-       	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_SIZE_ERROR);
-       	 	}else if(errorCode==228706) {
-       	 		return ResultDTO.fail(E789ApiConstant.E_IDENTIFY_FAILURE);
-       	 	}else if(errorCode==228707) {
-       	 		return ResultDTO.fail(E789ApiConstant.E_OTHER_ERROR);
-       	 	}else if(errorCode==228708) {
-       	 		return ResultDTO.fail(E789ApiConstant.E_DISSUPOPORT_GET);
-       	 	}
-        	realName = idCardFront.getRealname();
-        	cardId = idCardFront.getIdcard();
 		}
 		AppUserFileDO appUserBackFile = appUserFileService.doQueryByUserId(commonJO.getUserId(),"back");
 		if(appUserBackFile==null) {
 			return ResultDTO.fail(E789ApiConstant.E_BACK_NOT_FOUND);
+		}
+		String imageFrontPath = appUserFrontFile.getFilePath();
+		String pathFront = imageFrontPath.substring(imageFrontPath.indexOf("^") + 1);
+		//String imageUrlFron = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), pathFront);
+		String line = System.getProperty("file.separator");// 文件分割符
+		String fileURLFront = this.env.getProperty("fileUpload.url") + line + pathFront;
+		IdCardDTO idCardFront = new IdCardDTO();
+		if(FileUtils.ifExist(fileURLFront)) {
+			idCardFront = JuheDemoUtil.valiIdImage(fileURLFront,"front");
 		}else {
-			String imagePath = appUserFrontFile.getFilePath();
-			 String path = imagePath.substring(imagePath.indexOf("^") + 1);
-			String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path);
-			IdCardDTO idCardBack = JuheDemoUtil.valiIdImage(imageUrl,"back");
-       	int errorCode = idCardBack.getErrorCode();
-       	if(errorCode==210301) {
+			OssLoaclUtil.getFileToLocal(OssLoaclUtil.getHeadBucketName(), pathFront, fileURLFront);
+			idCardFront = JuheDemoUtil.valiIdImage(fileURLFront,"front");
+		}
+    	int errorCodeFront = idCardFront.getErrorCode();
+    	if(errorCodeFront==228701) {
+   		 	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_TIMEOUT);
+   	 	}else if(errorCodeFront==228702) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
+   	 	}else if(errorCodeFront==228703) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_TYPE_ERROR);
+   	 	}else if(errorCodeFront==228704) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_LENGTH_ERROR);
+   	 	}else if(errorCodeFront==228705) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_IMAGE_SIZE_ERROR);
+   	 	}else if(errorCodeFront==228706) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_IDENTIFY_FAILURE);
+   	 	}else if(errorCodeFront==228707) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_OTHER_ERROR);
+   	 	}else if(errorCodeFront==228708) {
+   	 		return ResultDTO.fail(E789ApiConstant.E_DISSUPOPORT_GET);
+   	 	}
+    	realName = idCardFront.getRealname();
+    	cardId = idCardFront.getIdcard();
+		String imagePathBack = appUserBackFile.getFilePath();
+		String pathBack = imagePathBack.substring(imagePathBack.indexOf("^") + 1);
+		//String imageUrlBack = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), pathBack);
+		String fileURLBack = this.env.getProperty("fileUpload.url") + line + pathBack;
+		IdCardDTO idCardBack = new IdCardDTO();
+		if(FileUtils.ifExist(fileURLBack)) {
+			idCardBack = JuheDemoUtil.valiIdImage(fileURLBack,"back");
+		}else {
+			OssLoaclUtil.getFileToLocal(OssLoaclUtil.getHeadBucketName(), pathBack, fileURLBack);
+			idCardBack = JuheDemoUtil.valiIdImage(fileURLBack,"back");
+		}
+       	int errorCodeBack = idCardBack.getErrorCode();
+       	if(errorCodeBack==210301) {
       		 	return ResultDTO.fail(E789ApiConstant.E_NOT_FOUND_PRE);
-      	 	}else if(errorCode==210302) {
+      	 	}else if(errorCodeBack==210302) {
       	 		return ResultDTO.fail(E789ApiConstant.E_SERVER_EXC);
-      	 	}else if(errorCode==210303) {
+      	 	}else if(errorCodeBack==210303) {
       	 		return ResultDTO.fail(E789ApiConstant.E_SERVER_MAINTENANCE);
-      	 	}else if(errorCode==210304) {
+      	 	}else if(errorCodeBack==210304) {
       	 		return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR_ID);
-      	 	}else if(errorCode==210305) {
+      	 	}else if(errorCodeBack==210305) {
       	 		return ResultDTO.fail(E789ApiConstant.E_NETWORK_ERROR);
-      	 	}else if(errorCode==210306) {
+      	 	}else if(errorCodeBack==210306) {
       	 		return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_ERROR);
       	 	}
        		endTime = idCardBack.getEnd();
-		}
 		Date nowTime = new Date();
 		Date date =null;
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
@@ -234,6 +249,8 @@ public class IDAuthenticationController extends BaseController {
         appUserDto.setRealName(realName);
         appUserDto.setIdCardNumber(cardId);
         appUserService.modifyInfo(appUserDto);
-        return ResultDTO.success();
+        IdentifyJO identify = new IdentifyJO();
+        identify.setRealName(realName);
+        return ResultDTO.success(identify);
     }
 }

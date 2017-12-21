@@ -23,7 +23,7 @@ public class E789ApiConstant extends CoreConstants {
     public static String E_IDCARD_OUT_OF_TIME      = "210000";                          //身份证已过期
     public static String E_UPLOAD_IDCARD_FAIL      = "210001";                          //身份证上传失败
     public static String E_FORNT_NOT_FOUND         = "210002";                          //请上传身份证正面照
-    public static String E_BACK_NOT_FOUND          = "210003";                           //请上传身份证反面照
+    public static String E_BACK_NOT_FOUND          = "210003";                          //请上传身份证反面照
 
     static {
     	//身份识别证错误信息
@@ -32,7 +32,7 @@ public class E789ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_IMAGE_TYPE_ERROR, "图片类型错误");
         ERROR_MESSGE_MAP.put(E_IMAGE_LENGTH_ERROR, "图片长宽错误");
         ERROR_MESSGE_MAP.put(E_IMAGE_SIZE_ERROR, "图片大小错误");
-        ERROR_MESSGE_MAP.put(E_IDENTIFY_FAILURE, "识别失败(计费一次,识别身份证错误，出现此问题的原因一般为：您上传了非身份证图片或您上传的身份证图片不完整)");
+        ERROR_MESSGE_MAP.put(E_IDENTIFY_FAILURE, "识别失败(您上传了非身份证图片或您上传的身份证图片不完整)");
         ERROR_MESSGE_MAP.put(E_OTHER_ERROR, "其他错误,具体参照reason");
         ERROR_MESSGE_MAP.put(E_DISSUPOPORT_GET, "不支持GET请求");
         

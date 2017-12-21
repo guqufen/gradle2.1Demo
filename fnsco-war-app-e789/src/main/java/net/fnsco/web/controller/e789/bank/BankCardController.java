@@ -137,6 +137,7 @@ public class BankCardController extends BaseController {
     			vo.setBankName(appUserBankDO.getBankName());//银行卡名称
     			//转换卡类型
     			vo.setType(TradeConstants.BankTypeEnum.getNameByCode(appUserBankDO.getType()));
+    			vo.setId(appUserBankDO.getId());
     			bankList.add(vo);
 			}
     	}
