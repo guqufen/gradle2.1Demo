@@ -21,8 +21,11 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.constant.ApiConstant;
+import net.fnsco.order.api.dto.SmsCodeDTO;
 import net.fnsco.order.service.modules.appuser.AppUserServiceImpl;
 import net.fnsco.trading.comm.TradeConstants;
+import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.bank.AppUserBankService;
 import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.web.controller.e789.bank.juhedemo.JuheDemo;
@@ -131,10 +134,18 @@ public class BankCardController extends BaseController {
 			return ResultDTO.fail(TradeConstants.NOT_ID_AUTH);// 未认证
 		}
 		//验证码校验
-		appUserService.validateCode(jo.getDeviceId(), jo.getCode(), "2"+jo.getMobile());
-		// 保存银行卡信息
-		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,
-				id_card_num);
+//		ResultDTO result = appUserService.validateCode(jo.getDeviceId(), jo.getCode(), "2"+jo.getMobile());
+//		if(!result.isSuccess()){
+//			return ResultDTO.fail(result.getMessage());
+//		}
+		//判断该用户是否已保存过该银行卡
+		List<String> list = appUserBankService.getByBankNO(bankCardNum);
+		if(list.size()>0){
+			return ResultDTO.fail(E789ApiConstant.E_BANK_IS_EXIST);
+			
+		}
+		
+		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num);
 		if (row == 1) {
 			return ResultDTO.success();
 		} else {
@@ -198,4 +209,6 @@ public class BankCardController extends BaseController {
 		}
 		return ResultDTO.success(bankList);
 	}
+	
+	
 }

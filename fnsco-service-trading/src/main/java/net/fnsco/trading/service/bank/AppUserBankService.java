@@ -123,4 +123,19 @@ public class AppUserBankService extends BaseService {
 		AppUserBankDO appUserBank = this.appUserBankDAO.getByAppUserId(appUserId);
 		return appUserBank;
 	}
+
+	/**
+	 * 判断银行卡号是否存在
+	 * getByBankNO:(这里用一句话描述这个方法的作用)
+	 *
+	 * @param  @param bankCardNum
+	 * @param  @return    设定文件
+	 * @return AppUserBankDO    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public List<String> getByBankNO(String bankCardNum) {
+		return this.appUserBankDAO.getByBankNO(bankCardNum);
+		
+	}
 }

@@ -24,6 +24,8 @@ public class E789ApiConstant extends CoreConstants {
     public static String E_UPLOAD_IDCARD_FAIL      = "210001";                          //身份证上传失败
     public static String E_FORNT_NOT_FOUND         = "210002";                          //请上传身份证正面照
     public static String E_BACK_NOT_FOUND          = "210003";                          //请上传身份证反面照
+    
+    public static String E_BANK_IS_EXIST			="210005";							//银行卡已存在
 
     static {
     	//身份识别证错误信息
@@ -48,6 +50,8 @@ public class E789ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_UPLOAD_IDCARD_FAIL, "身份证上传失败");
         ERROR_MESSGE_MAP.put(E_FORNT_NOT_FOUND, "请上传身份证正面照");
         ERROR_MESSGE_MAP.put(E_BACK_NOT_FOUND, "请上传身份证反面照");
+        
+        ERROR_MESSGE_MAP.put(E_BANK_IS_EXIST, "银行卡已存在");
     }
 
 }
