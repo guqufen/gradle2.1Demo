@@ -177,7 +177,7 @@ public class TicketConstants extends CoreConstants {
      */
     public enum OrderStateEnum {
                                 //状态 状态 0未执行1执行中2失败3成功
-                                INIT(0, "未占座"), PROCESSING(1, "占座中"), SIT_DOWN(2, "已占座"), FAIL(3, "占座失败"), SUCCESS(4, "支付完成"), CANCEL(5, "取消订单");
+                                INIT(0, "未占座"), PROCESSING(1, "占座中"), SIT_DOWN(2, "已占座"), FAIL(3, "占座失败"), PAYING(4, "支付中"), SUCCESS(5, "支付完成"), CANCEL(6, "取消订单");
 
         private Integer code;
         private String  name;

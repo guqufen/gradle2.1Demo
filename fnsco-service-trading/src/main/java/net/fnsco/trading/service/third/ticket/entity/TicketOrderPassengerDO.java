@@ -8,47 +8,47 @@ public class TicketOrderPassengerDO {
     /**
      * 
      */
-    private Integer id;
+    private Integer    id;
 
     /**
      * 订单ID
      */
-    private String orderNo;
+    private String     orderNo;
 
     /**
      * 乘客id
      */
-    private Integer passengerId;
+    private Integer    passengerId;
 
     /**
      * 乘客名称
      */
-    private String passengerName;
+    private String     passengerName;
 
     /**
      * 车票类型
      */
-    private String ticketType;
+    private String     ticketType;
 
     /**
      * 车票类型名称
      */
-    private String ticketTypeName;
+    private String     ticketTypeName;
 
     /**
      * 证件类型id
      */
-    private String cardTypeId;
+    private String     cardTypeId;
 
     /**
      * 证件类型名称
      */
-    private String cardTypeName;
+    private String     cardTypeName;
 
     /**
      * 证件号
      */
-    private String cardNum;
+    private String     cardNum;
 
     /**
      * 票价
@@ -58,29 +58,53 @@ public class TicketOrderPassengerDO {
     /**
      * 座位编号
      */
-    private String seatCode;
+    private String     seatCode;
 
     /**
      * 座位名称
      */
-    private String seatName;
+    private String     seatName;
 
     /**
      * 状态 0未执行1执行中2失败3成功
      */
-    private Integer status;
+    private Integer    status;
 
     /**
      * 创建时间
      */
-    private Date createTime;
+    private Date       createTime;
 
     /**
      * 
      */
-    private Date lastModifyTime;
+    private Date       lastModifyTime;
+    /**
+     * 车票编号，退票时会用到
+     */
+    private String     ticketNo;
 
+    /**
+     * ticketNo
+     *
+     * @return  the ticketNo
+     * @since   CodingExample Ver 1.0
+    */
 
+    public String getTicketNo() {
+        return ticketNo;
+    }
+
+    /**
+     * ticketNo
+     *
+     * @param   ticketNo    the ticketNo to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setTicketNo(String ticketNo) {
+        this.ticketNo = ticketNo;
+    }
 
     public Integer getId() {
         return id;
@@ -202,10 +226,10 @@ public class TicketOrderPassengerDO {
         this.lastModifyTime = lastModifyTime;
     }
 
-
-
     @Override
     public String toString() {
-        return "[id="+ id + ", orderNo="+ orderNo + ", passengerId="+ passengerId + ", passengerName="+ passengerName + ", ticketType="+ ticketType + ", ticketTypeName="+ ticketTypeName + ", cardTypeId="+ cardTypeId + ", cardTypeName="+ cardTypeName + ", cardNum="+ cardNum + ", price="+ price + ", seatCode="+ seatCode + ", seatName="+ seatName + ", status="+ status + ", createTime="+ createTime + ", lastModifyTime="+ lastModifyTime + "]";
+        return "[id=" + id + ", orderNo=" + orderNo + ", passengerId=" + passengerId + ", passengerName=" + passengerName + ", ticketType=" + ticketType + ", ticketTypeName=" + ticketTypeName
+               + ", cardTypeId=" + cardTypeId + ", cardTypeName=" + cardTypeName + ", cardNum=" + cardNum + ", price=" + price + ", seatCode=" + seatCode + ", seatName=" + seatName + ", status="
+               + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
     }
 }

@@ -102,7 +102,7 @@ public class TrainTicketsUtil {
      * @param map
      * @throws UnsupportedEncodingException 
      */
-    public static String postIndent(Map map) throws UnsupportedEncodingException {
+    public static JSONObject postIndent(Map map) throws UnsupportedEncodingException {
         map.put("key", KEY);
         String url = "http://op.juhe.cn/trainTickets/submit";
         logger.error("调用火车票（提交订单开始）" + JSON.toJSONString(map));
@@ -110,14 +110,57 @@ public class TrainTicketsUtil {
         logger.error("调用火车票（提交订单返回）" + data);
         if (data != null) {
             JSONObject obj = JSONObject.fromObject(data);
-            String error_code = obj.getString("error_code");
-            if ("0".equals(error_code)) {
-                String result = obj.getString("result");
-                if (result != null) {
-                    obj = JSONObject.fromObject(result);
-                    return obj.getString("orderid");
-                }
-            }
+        }
+        return null;
+    }
+
+    /**
+     * 订单状态查询，对应接口地址：http://op.juhe.cn/trainTickets/orderStatus?key=您申请到的appkey&orderid=1433243990111
+     * 
+     * @param map
+     * @throws UnsupportedEncodingException 
+     */
+    public static JSONObject getOrderStatus(String orderNo) {
+        String url = "http://op.juhe.cn/trainTickets/orderStatus?key=" + KEY + "&orderid=" + orderNo;
+        logger.error("调用火车票（订单状态查询）" + orderNo);
+        String data = HttpUtils.get(url);
+        logger.error("调用火车票（订单状态查询）" + data);
+        if (data != null) {
+            JSONObject obj = JSONObject.fromObject(data);
+        }
+        return null;
+    }
+
+    /**
+     * 请求出票支付订单，对应接口地址：http://op.juhe.cn/trainTickets/pay?key=您申请到的appkey&orderid=1433231423482
+     * 
+     * @param map
+     * @throws UnsupportedEncodingException 
+     */
+    public static JSONObject pay(String orderNo) {
+        String url = "http://op.juhe.cn/trainTickets/pay?key=" + KEY + "&orderid=" + orderNo;
+        logger.error("调用火车票（请求出票支付订单）" + orderNo);
+        String data = HttpUtils.get(url);
+        logger.error("调用火车票（请求出票支付订单）" + data);
+        if (data != null) {
+            JSONObject obj = JSONObject.fromObject(data);
+        }
+        return null;
+    }
+
+    /**
+     * 取消支付订单，对应接口地址：http://op.juhe.cn/trainTickets/cancel?orderid=1440040885864&key=您申请的appkey
+     * 
+     * @param map
+     * @throws UnsupportedEncodingException 
+     */
+    public static JSONObject cancel(String orderNo) {
+        String url = "http://op.juhe.cn/trainTickets/cancel?key=" + KEY + "&orderid=" + orderNo;
+        logger.error("调用火车票（取消支付订单）" + orderNo);
+        String data = HttpUtils.get(url);
+        logger.error("调用火车票（取消支付订单）" + data);
+        if (data != null) {
+            JSONObject obj = JSONObject.fromObject(data);
         }
         return null;
     }

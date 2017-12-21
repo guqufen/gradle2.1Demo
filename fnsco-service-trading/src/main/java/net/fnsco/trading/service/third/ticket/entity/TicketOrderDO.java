@@ -13,7 +13,7 @@ public class TicketOrderDO {
     /**
      * app用户ID
      */
-    private String     appUserId;
+    private Integer     appUserId;
 
     /**
      * 订单ID
@@ -93,6 +93,31 @@ public class TicketOrderDO {
      */
     private Date       lastModifyTime;
 
+    
+    private Integer[]    statuses;
+    
+    /**
+     * statuses
+     *
+     * @return  the statuses
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public Integer[] getStatuses() {
+        return statuses;
+    }
+
+    /**
+     * statuses
+     *
+     * @param   statuses    the statuses to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStatuses(Integer[] statuses) {
+        this.statuses = statuses;
+    }
+
     /**
      * appUserId
      *
@@ -100,7 +125,7 @@ public class TicketOrderDO {
      * @since   CodingExample Ver 1.0
     */
 
-    public String getAppUserId() {
+    public Integer getAppUserId() {
         return appUserId;
     }
 
@@ -111,7 +136,7 @@ public class TicketOrderDO {
      * @since   CodingExample Ver 1.0
      */
 
-    public void setAppUserId(String appUserId) {
+    public void setAppUserId(Integer appUserId) {
         this.appUserId = appUserId;
     }
 

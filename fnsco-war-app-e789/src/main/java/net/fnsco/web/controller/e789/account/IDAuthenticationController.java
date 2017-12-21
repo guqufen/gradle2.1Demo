@@ -57,14 +57,14 @@ public class IDAuthenticationController extends BaseController {
 	 private Environment           env;
 	 @Autowired
 	 private AppUserFileService    appUserFileService;
-	@RequestMapping(value = "/auth")
+	@RequestMapping(value = "/idauth")
     @ApiOperation(value = "个人信息-身份证上传识别接口" ,notes="作者：何金庭")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType="String",paramType="body"),
 		@ApiImplicitParam(name = "file", value = "图片文件流", required = true, dataType="MultipartFile",paramType="body"),
 		@ApiImplicitParam(name = "side", value = "front:正面识别;back:反面识别;", required = true, dataType="String",paramType="body")
 	})
-    public ResultDTO<IdAuthVO> idAuth() {
+    public ResultDTO<IdAuthVO> idauth() {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         Integer userId = Integer.valueOf(request.getParameter("userId"));
