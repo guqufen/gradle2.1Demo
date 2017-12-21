@@ -3,18 +3,19 @@ package net.fnsco.order.service.ad;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.beust.jcommander.internal.Maps;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.order.service.ad.dao.AdDAO;
 import net.fnsco.order.service.ad.entity.AdDO;
 import net.fnsco.order.service.ad.entity.AdDTO;
@@ -79,16 +80,24 @@ public class AdService extends BaseService {
 			if(adDO.getCategory() == null){
 				continue;
 			}
+			if(adDO.getImg_path().length()<34){
+				continue;
+			}
+			AdDTO adDTO = new AdDTO();
+			//获取图片路径
+			String str1 = adDO.getImg_path().substring(0, 9);
+			String str2 = adDO.getImg_path().substring(10, adDO.getImg_path().length());
+			String url = OssLoaclUtil.getFileUrl(str1, str2);
+			if(!Strings.isNullOrEmpty(url)){
+				adDTO.setImgPath(url);
+				
+			}
 			if(1 == adDO.getCategory()){
-				AdDTO adDTO = new AdDTO();
-				adDTO.setImgPath(adDO.getImg_path());
 				adDTO.setSummary(adDO.getSummary());
 				adDTO.setTitle(adDO.getTitle());
 				adDTO.setUrl(adDO.getUrl());
 				adList.add(adDTO);
 			}else if(2 == adDO.getCategory()){
-				AdDTO adDTO = new AdDTO();
-				adDTO.setImgPath(adDO.getImg_path());
 				adDTO.setSummary(adDO.getSummary());
 				adDTO.setTitle(adDO.getTitle());
 				adDTO.setUrl(adDO.getUrl());
