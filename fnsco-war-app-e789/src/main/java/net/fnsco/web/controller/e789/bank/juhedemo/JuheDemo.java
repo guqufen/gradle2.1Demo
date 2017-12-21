@@ -25,7 +25,7 @@ public class JuheDemo {
     public static String userAgent =  "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36";
  
     //配置您申请的KEY
-    public static final String APPKEY ="*************************";
+    public static final String APPKEY ="b78bfa8fcf9a3e2b5da0a922754b9ce1"; //身份证四要素校验
     
  
  
@@ -34,10 +34,10 @@ public class JuheDemo {
     	String method = "POST";
     	Map<String, String> params = new HashMap<>();
     	params.put("key", APPKEY);
-    	params.put("realname", APPKEY);
-    	params.put("idcard", APPKEY);
-    	params.put("bankcard", APPKEY);
-    	params.put("mobile", APPKEY);
+    	params.put("realname", "谷曲锋");
+    	params.put("idcard", "33032419850524575X");
+    	params.put("bankcard", "6226227703549430");
+    	params.put("mobile", "13777828380");
     	try {
 			net(strUrl,params,method);
 		} catch (Exception e) {

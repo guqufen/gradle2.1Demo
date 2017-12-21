@@ -100,6 +100,15 @@ public interface AppUserDao {
      * @date   2017年11月27日 上午11:20:40
      */
     List<AppUser> selectAllNewUserFormZFT();
-    
+    /**
+     *根据userid获取身份证号
+     * getIdCardByUserID:(这里用一句话描述这个方法的作用)
+     *
+     * @param  @param userId
+     * @param  @return    设定文件
+     * @return String    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
     AppUser selectIdAuth(Integer id);
 }
