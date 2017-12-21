@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,6 @@ public class TradeWithdrawService extends BaseService {
         logger.info("开始添加TradeWithdrawService.add,tradeWithdraw=" + tradeWithdraw.toString());
         tradeWithdraw.setCreateTime(new Date());
         tradeWithdraw.setUpdateTime(new Date());
-        tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
         if( Strings.isNullOrEmpty(tradeWithdraw.getOrderNo())){
         	tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
         }

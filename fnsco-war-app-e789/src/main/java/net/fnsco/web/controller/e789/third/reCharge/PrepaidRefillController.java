@@ -14,9 +14,11 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
+import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
 import net.fnsco.trading.service.third.reCharge.dto.CheckChargePackageDTO;
+import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 
@@ -35,6 +37,8 @@ public class PrepaidRefillController extends BaseController {
 	private PrepaidRefillService prepaidRefillService;
 	@Autowired
 	private AppAccountBalanceService appAccountBalanceService;
+	@Autowired
+	private RechargeOrderService rechargeOrderService;
 
 	@RequestMapping("/prepaidCheck")
 	@ApiOperation(value = "话费/流量套餐资费查询url")
@@ -120,5 +124,14 @@ public class PrepaidRefillController extends BaseController {
 		}
 	}
 
-	
+//	@RequestMapping("/queryFlowResult")
+//	@ApiOperation(value = "话费/流量充值结果查询url")
+//	public void queryFlowResult(@RequestBody String orderNo){
+//		RechargeOrderDO rechargeOrder = rechargeOrderService.getByOrderNo(orderNo);
+//		if("1".equals(rechargeOrder.getType())){
+//			prepaidRefillService.queryFlowResult(rechargeOrder);
+//		}else if("0".equals(rechargeOrder.getType())){
+//			prepaidRefillService.orderSta(rechargeOrder);
+//		}
+//	}
 }

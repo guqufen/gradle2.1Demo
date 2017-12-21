@@ -106,11 +106,11 @@ public class AppUserBankService extends BaseService {
 		appUserBankDO.setAccountCardId(id_card_num);
 		if(dto != null){
 			appUserBankDO.setType(dto.getType());
-			appUserBankDO.setBank_name(dto.getBank_name());
+			appUserBankDO.setBankName(dto.getBank_name());
 			
 		}
-		appUserBankDO.setCreate_time(new Date());
-		appUserBankDO.setUpdate_time(new Date());
+		appUserBankDO.setCreateTime(new Date());
+		appUserBankDO.setUpdateTime(new Date());
 		Integer row = appUserBankDAO.insert(appUserBankDO);
 		return row;
 	}

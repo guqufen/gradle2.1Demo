@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
 import net.fnsco.trading.service.third.reCharge.dao.helper.RechargeOrderProvider;
-import net.fnsco.trading.service.third.reCharge.dto.RechargeOrderDO;
+import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 
 import java.util.Date;
 import java.util.List;;
@@ -76,4 +76,18 @@ public interface RechargeOrderDAO {
     @Select("select * from thr_recharge_order where status=0 and create_time >= startDate")
     public List<RechargeOrderDO> queryPhoneCharge(@Param("startDate") Date startDate);
 
+    @Results({@Result( column = "app_user_id",property = "appUserId"),
+    	@Result( column = "order_no",property = "orderNo"),
+    	@Result( column = "pay_order_no",property = "payOrderNo"),
+    	@Result( column = "type",property = "type"),
+    	@Result( column = "type_name",property = "name"),
+    	@Result( column = "mobile",property = "mobile"),
+    	@Result( column = "amount",property = "amt"),
+    	@Result( column = "status",property = "status"),
+    	@Result( column = "resp_code",property = "respCode"),
+    	@Result( column = "resp_msg",property = "respMsg"),
+    	@Result( column = "create_time",property = "createTime"),
+    	@Result( column = "update_time",property = "updateTime") })
+    @Select("SELECT * FROM thr_recharge_order WHERE order_no = #{orderNo}")
+    public RechargeOrderDO getByOrderNo(@Param("orderNo") String orderNo);
 }

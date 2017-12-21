@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.trading.service.third.reCharge.dao.RechargeOrderDAO;
-import net.fnsco.trading.service.third.reCharge.dto.RechargeOrderDO;
+import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -62,5 +62,9 @@ public class RechargeOrderService extends BaseService {
  
  public List<RechargeOrderDO> queryPhoneCharge(Date startDate){
 	 return this.rechargeOrderDAO.queryPhoneCharge(startDate);
+ }
+ 
+ public RechargeOrderDO getByOrderNo(String orderNo){
+	 return this.rechargeOrderDAO.getByOrderNo(orderNo);
  }
 }

@@ -16,7 +16,7 @@ import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.trading.service.report.ReportStatService;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
 import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
-import net.fnsco.trading.service.third.reCharge.dto.RechargeOrderDO;
+import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 
 @EnableScheduling
@@ -70,9 +70,10 @@ public class TimerConfig {
 			//话费充值
 			if("0".equals(rechargeOrderDO.getType())){
 				
-				
+				prepaidRefillService.orderSta(rechargeOrderDO);
 				//流量充值
 			}else if("1".equals(rechargeOrderDO.getType())){
+
 				prepaidRefillService.queryFlowResult(rechargeOrderDO);
 			}
 			
