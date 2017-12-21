@@ -31,15 +31,15 @@ public class JuheDemoUtil {
     private static String  URI_ID_CARD      = "http://op.juhe.cn/idcard/query";
     /**
      * 图片识别
-     * @param image
+     * @param firstKey
      * @param side
      * @return
      */
-    public static IdCardDTO valiIdImage(String image,String side) {
+    public static IdCardDTO valiIdImage(String filePath, String side) {
     	IdCardDTO idCard = new IdCardDTO();
     	Map<String,String> params = Maps.newHashMap();
     	params.put("key", IMAGE_APPKEY);
-    	String  imgFile = getImageStr(image) ;
+    	String  imgFile = getImageStr(filePath) ;
     	params.put("image", imgFile);
     	params.put("side", side);
     	String resule = HttpClientUtil.doPost(URI_ID_IMAGE, params);
@@ -89,14 +89,20 @@ public class JuheDemoUtil {
     }
     /**
      * BASE64转换
-     * @param imgFile
+     * @param firstKey
      * @return
      */
-    public static String getImageStr(String imgFile) {
+    public static String getImageStr(String filePath) {
+    	//filePath = OssLoaclUtil.getFileToLocal(OssLoaclUtil.getHeadBucketName(), firstKey ,filePath);
         InputStream inputStream = null;
-        byte[] data = null;
+        //byte[] data = new byte[1024];
+        byte[] data =null;
         try {
-            inputStream = new FileInputStream(imgFile);
+        	inputStream = new FileInputStream(filePath);
+            //inputStream = OssLoaclUtil.getFileInputStream(OssLoaclUtil.getHeadBucketName(), firstKey);
+           /* for (int n = 0; n != -1; ) {
+                n = inputStream.read(data, 0, data.length);
+            }*/
             data = new byte[inputStream.available()];
             inputStream.read(data);
             inputStream.close();
