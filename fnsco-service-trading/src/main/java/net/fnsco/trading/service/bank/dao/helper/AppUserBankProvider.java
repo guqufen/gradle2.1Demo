@@ -16,10 +16,10 @@ public class AppUserBankProvider {
     private static final String TABLE_NAME = "u_app_user_bank";
 
     public String update(Map<String, Object> params) {
-        AppUserBankDO appUserBank = (AppUserBankDO) params.get("appUserBank");
+    	AppUserBankDO appUserBank = (AppUserBankDO) params.get("appUserBank");
         return new SQL() {{
         UPDATE(TABLE_NAME);
-        if (appUserBank.getAppUserId()!=null){
+        if (appUserBank.getAppUserId() != null) {
             SET("app_user_id=#{appUserBank.appUserId}");
         }
         if (StringUtils.isNotBlank(appUserBank.getAccountType())){
@@ -52,6 +52,21 @@ public class AppUserBankProvider {
         if (StringUtils.isNotBlank(appUserBank.getAccountPhone())){
             SET("account_phone=#{appUserBank.accountPhone}");
         }
+        if (StringUtils.isNotBlank(appUserBank.getStatus())){
+            SET("status=#{appUserBank.status}");
+        }
+        if (appUserBank.getCreateTime() != null) {
+            SET("create_time=#{appUserBank.createTime}");
+        }
+        if (appUserBank.getUpdateTime() != null) {
+            SET("update_time=#{appUserBank.updateTime}");
+        }
+        if (StringUtils.isNotBlank(appUserBank.getBankName())){
+            SET("bank_name=#{appUserBank.bankName}");
+        }
+        if (StringUtils.isNotBlank(appUserBank.getType())){
+            SET("type=#{appUserBank.type}");
+        }
         WHERE("id = #{appUserBank.id}");
         }}.toString();
     }
@@ -74,7 +89,7 @@ public class AppUserBankProvider {
         if (appUserBank.getId() != null) {
             WHERE("id=#{appUserBank.id}");
         }
-        if (appUserBank.getAppUserId()!=null){
+        if (appUserBank.getAppUserId() != null) {
             WHERE("app_user_id=#{appUserBank.appUserId}");
         }
         if (StringUtils.isNotBlank(appUserBank.getAccountType())){
@@ -106,6 +121,21 @@ public class AppUserBankProvider {
         }
         if (StringUtils.isNotBlank(appUserBank.getAccountPhone())){
             WHERE("account_phone=#{appUserBank.accountPhone}");
+        }
+        if (StringUtils.isNotBlank(appUserBank.getStatus())){
+            WHERE("status=#{appUserBank.status}");
+        }
+        if (appUserBank.getCreateTime() != null) {
+            WHERE("create_time=#{appUserBank.createTime}");
+        }
+        if (appUserBank.getUpdateTime() != null) {
+            WHERE("update_time=#{appUserBank.updateTime}");
+        }
+        if (StringUtils.isNotBlank(appUserBank.getBankName())){
+            WHERE("bank_name=#{appUserBank.bankName}");
+        }
+        if (StringUtils.isNotBlank(appUserBank.getType())){
+            WHERE("type=#{appUserBank.type}");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
@@ -114,45 +144,60 @@ public class AppUserBankProvider {
     public String pageListCount(Map<String, Object> params) {
         AppUserBankDO appUserBank = (AppUserBankDO) params.get("appUserBank");
         return new SQL() {{
-        SELECT("count(1)");
-        FROM(TABLE_NAME);
-        if (appUserBank.getId() != null) {
-            WHERE("id=#{appUserBank.id}");
-        }
-        if (appUserBank.getAppUserId()!=null){
-            WHERE("app_user_id=#{appUserBank.appUserId}");
-        }
-        if (StringUtils.isNotBlank(appUserBank.getAccountType())){
-            WHERE("account_type=#{appUserBank.accountType}");
-        }
-        if (StringUtils.isNotBlank(appUserBank.getAccountNo())){
-            WHERE("account_no=#{appUserBank.accountNo}");
-        }
-        if (StringUtils.isNotBlank(appUserBank.getAccountName())){
-            WHERE("account_name=#{appUserBank.accountName}");
-        }
-        if (StringUtils.isNotBlank(appUserBank.getAccountCardId())){
-            WHERE("account_card_id=#{appUserBank.accountCardId}");
-        }
-        if (StringUtils.isNotBlank(appUserBank.getSubBankName())){
-            WHERE("sub_bank_name=#{appUserBank.subBankName}");
-        }
-        if (StringUtils.isNotBlank(appUserBank.getOpenBankPrince())){
-            WHERE("open_bank_prince=#{appUserBank.openBankPrince}");
-        }
-        if (StringUtils.isNotBlank(appUserBank.getOpenBank())){
-            WHERE("open_bank=#{appUserBank.openBank}");
-        }
-        if (StringUtils.isNotBlank(appUserBank.getOpenBankCity())){
-            WHERE("open_bank_city=#{appUserBank.openBankCity}");
-        }
-        if (StringUtils.isNotBlank(appUserBank.getOpenBankNum())){
-            WHERE("open_bank_num=#{appUserBank.openBankNum}");
-        }
-        if (StringUtils.isNotBlank(appUserBank.getAccountPhone())){
-            WHERE("account_phone=#{appUserBank.accountPhone}");
-        }
-        }}.toString();
+            SELECT("count(1)");
+            FROM(TABLE_NAME);
+            if (appUserBank.getId() != null) {
+                WHERE("id=#{appUserBank.id}");
+            }
+            if (appUserBank.getAppUserId() != null) {
+                WHERE("app_user_id=#{appUserBank.appUserId}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getAccountType())){
+                WHERE("account_type=#{appUserBank.accountType}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getAccountNo())){
+                WHERE("account_no=#{appUserBank.accountNo}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getAccountName())){
+                WHERE("account_name=#{appUserBank.accountName}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getAccountCardId())){
+                WHERE("account_card_id=#{appUserBank.accountCardId}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getSubBankName())){
+                WHERE("sub_bank_name=#{appUserBank.subBankName}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getOpenBankPrince())){
+                WHERE("open_bank_prince=#{appUserBank.openBankPrince}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getOpenBank())){
+                WHERE("open_bank=#{appUserBank.openBank}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getOpenBankCity())){
+                WHERE("open_bank_city=#{appUserBank.openBankCity}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getOpenBankNum())){
+                WHERE("open_bank_num=#{appUserBank.openBankNum}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getAccountPhone())){
+                WHERE("account_phone=#{appUserBank.accountPhone}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getStatus())){
+                WHERE("status=#{appUserBank.status}");
+            }
+            if (appUserBank.getCreateTime() != null) {
+                WHERE("create_time=#{appUserBank.createTime}");
+            }
+            if (appUserBank.getUpdateTime() != null) {
+                WHERE("update_time=#{appUserBank.updateTime}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getBankName())){
+                WHERE("bank_name=#{appUserBank.bankName}");
+            }
+            if (StringUtils.isNotBlank(appUserBank.getType())){
+                WHERE("type=#{appUserBank.type}");
+            }
+            }}.toString();
     }
 }
 

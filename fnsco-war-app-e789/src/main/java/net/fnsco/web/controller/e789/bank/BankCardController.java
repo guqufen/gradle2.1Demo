@@ -134,7 +134,7 @@ public class BankCardController extends BaseController {
     				transCardNo = transCardNo.substring(0, 6)+"******"+transCardNo.substring(length-4);
     			}
     			vo.setCardNum(transCardNo);//卡号
-    			vo.setBankName(appUserBankDO.getBank_name());//银行卡名称
+    			vo.setBankName(appUserBankDO.getBankName());//银行卡名称
     			//转换卡类型
     			vo.setType(TradeConstants.BankTypeEnum.getNameByCode(appUserBankDO.getType()));
     			bankList.add(vo);
