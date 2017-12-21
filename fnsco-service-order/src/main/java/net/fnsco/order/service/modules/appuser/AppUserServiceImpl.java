@@ -237,7 +237,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     }
 
     //验证码对比
-    private ResultDTO validateCode(String deviceId, String code, String mobile) {
+    public ResultDTO validateCode(String deviceId, String code, String mobile) {
         //非空判断
         if (Strings.isNullOrEmpty(deviceId)) {
             return ResultDTO.fail(ApiConstant.E_APP_DEVICETYPE_EMPTY);

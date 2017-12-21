@@ -3,20 +3,34 @@ package net.fnsco.web.controller.e789.vo;
 import io.swagger.annotations.ApiModelProperty;
 
 public class ValidateBankVO {
-	@ApiModelProperty(value="本次查询流水号" ,name="jobid")
-    private String jobid;
-	@ApiModelProperty(value="姓名" ,name="realname")
-    private String realname;
-	@ApiModelProperty(value="银行卡卡号" ,name="bankcard")
-    private String bankcard;
-	@ApiModelProperty(value="身份证号码" ,name="idcard")
-    private String idcard;
-	@ApiModelProperty(value="预留手机号码" ,name="mobile")
-    private String mobile;
+	@ApiModelProperty(value="reason" ,name="reason")
+	private String reason;
 	@ApiModelProperty(value="验证结果，1:匹配 2:不匹配" ,name="res")
     private String res;
 	@ApiModelProperty(value="描述" ,name="message")
     private String message;
+	@ApiModelProperty(value="返回码" ,name="error_code")
+	private Integer error_code;
+	/**
+	 * reason
+	 *
+	 * @return  the reason
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getReason() {
+		return reason;
+	}
+	/**
+	 * reason
+	 *
+	 * @param   reason    the reason to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 	/**
 	 * jobid
 	 *
@@ -24,99 +38,6 @@ public class ValidateBankVO {
 	 * @since   CodingExample Ver 1.0
 	*/
 	
-	public String getJobid() {
-		return jobid;
-	}
-	/**
-	 * jobid
-	 *
-	 * @param   jobid    the jobid to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setJobid(String jobid) {
-		this.jobid = jobid;
-	}
-	/**
-	 * realname
-	 *
-	 * @return  the realname
-	 * @since   CodingExample Ver 1.0
-	*/
-	
-	public String getRealname() {
-		return realname;
-	}
-	/**
-	 * realname
-	 *
-	 * @param   realname    the realname to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setRealname(String realname) {
-		this.realname = realname;
-	}
-	/**
-	 * bankcard
-	 *
-	 * @return  the bankcard
-	 * @since   CodingExample Ver 1.0
-	*/
-	
-	public String getBankcard() {
-		return bankcard;
-	}
-	/**
-	 * bankcard
-	 *
-	 * @param   bankcard    the bankcard to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setBankcard(String bankcard) {
-		this.bankcard = bankcard;
-	}
-	/**
-	 * idcard
-	 *
-	 * @return  the idcard
-	 * @since   CodingExample Ver 1.0
-	*/
-	
-	public String getIdcard() {
-		return idcard;
-	}
-	/**
-	 * idcard
-	 *
-	 * @param   idcard    the idcard to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setIdcard(String idcard) {
-		this.idcard = idcard;
-	}
-	/**
-	 * mobile
-	 *
-	 * @return  the mobile
-	 * @since   CodingExample Ver 1.0
-	*/
-	
-	public String getMobile() {
-		return mobile;
-	}
-	/**
-	 * mobile
-	 *
-	 * @param   mobile    the mobile to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
 	/**
 	 * res
 	 *
@@ -156,6 +77,26 @@ public class ValidateBankVO {
 	
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	/**
+	 * error_code
+	 *
+	 * @return  the error_code
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getError_code() {
+		return error_code;
+	}
+	/**
+	 * error_code
+	 *
+	 * @param   error_code    the error_code to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setError_code(Integer error_code) {
+		this.error_code = error_code;
 	}
 	
 
