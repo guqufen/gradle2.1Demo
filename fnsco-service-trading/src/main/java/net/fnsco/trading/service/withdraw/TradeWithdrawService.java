@@ -65,7 +65,7 @@ public class TradeWithdrawService extends BaseService {
         return rows;
     }
 
-    public Integer doUpdateForSuccess(TradeWithdrawDO tradeWithdraw) {
+    public Integer researchForSuccess(TradeWithdrawDO tradeWithdraw) {
         logger.info("开始修改TradeWithdrawService.update,tradeWithdraw=" + tradeWithdraw.toString());
         int rows = this.tradeWithdrawDAO.update(tradeWithdraw);
         BigDecimal fund = BigDecimal.ZERO.subtract(tradeWithdraw.getAmount());

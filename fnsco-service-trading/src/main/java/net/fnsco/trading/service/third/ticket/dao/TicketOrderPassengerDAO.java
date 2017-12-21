@@ -19,18 +19,28 @@ public interface TicketOrderPassengerDAO {
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "passenger_id", property = "passengerId"), @Result(column = "passenger_name", property = "passengerName"),
                @Result(column = "ticket_type", property = "ticketType"), @Result(column = "ticket_type_name", property = "ticketTypeName"), @Result(column = "card_type_id", property = "cardTypeId"),
                @Result(column = "card_type_name", property = "cardTypeName"), @Result(column = "card_num", property = "cardNum"), @Result(column = "seat_code", property = "seatCode"),
-               @Result(column = "seat_name", property = "seatName"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime") })
+               @Result(column = "seat_name", property = "seatName"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
+               @Result(column = "ticket_no", property = "ticketNo") })
     @Select("SELECT * FROM thr_ticket_order_passenger WHERE id = #{id}")
     public TicketOrderPassengerDO getById(@Param("id") int id);
 
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "passenger_id", property = "passengerId"), @Result(column = "passenger_name", property = "passengerName"),
                @Result(column = "ticket_type", property = "ticketType"), @Result(column = "ticket_type_name", property = "ticketTypeName"), @Result(column = "card_type_id", property = "cardTypeId"),
                @Result(column = "card_type_name", property = "cardTypeName"), @Result(column = "card_num", property = "cardNum"), @Result(column = "seat_code", property = "seatCode"),
-               @Result(column = "seat_name", property = "seatName"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime") })
+               @Result(column = "seat_name", property = "seatName"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
+               @Result(column = "ticket_no", property = "ticketNo") })
+    @Select("SELECT * FROM thr_ticket_order_passenger WHERE passenger_id = #{passengerId}")
+    public TicketOrderPassengerDO getByPassengerId(@Param("passengerId") int passengerId);
+
+    @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "passenger_id", property = "passengerId"), @Result(column = "passenger_name", property = "passengerName"),
+               @Result(column = "ticket_type", property = "ticketType"), @Result(column = "ticket_type_name", property = "ticketTypeName"), @Result(column = "card_type_id", property = "cardTypeId"),
+               @Result(column = "card_type_name", property = "cardTypeName"), @Result(column = "card_num", property = "cardNum"), @Result(column = "seat_code", property = "seatCode"),
+               @Result(column = "seat_name", property = "seatName"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
+               @Result(column = "ticket_no", property = "ticketNo") })
     @Select("SELECT * FROM thr_ticket_order_passenger WHERE order_no = #{orderNo}")
     public List<TicketOrderPassengerDO> getByOrderNo(@Param("orderNo") String orderNo);
 
-    @Insert("INSERT into thr_ticket_order_passenger(id,order_no,passenger_id,passenger_name,ticket_type,ticket_type_name,card_type_id,card_type_name,card_num,price,seat_code,seat_name,status,create_time,last_modify_time) VALUES (#{id},#{orderNo},#{passengerId},#{passengerName},#{ticketType},#{ticketTypeName},#{cardTypeId},#{cardTypeName},#{cardNum},#{price},#{seatCode},#{seatName},#{status},#{createTime},#{lastModifyTime})")
+    @Insert("INSERT into thr_ticket_order_passenger(id,order_no,passenger_id,passenger_name,ticket_type,ticket_type_name,card_type_id,card_type_name,card_num,price,seat_code,seat_name,status,create_time,last_modify_time,ticket_no) VALUES (#{id},#{orderNo},#{passengerId},#{passengerName},#{ticketType},#{ticketTypeName},#{cardTypeId},#{cardTypeName},#{cardNum},#{price},#{seatCode},#{seatName},#{status},#{createTime},#{lastModifyTime},#{ticketNo})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(TicketOrderPassengerDO ticketOrderPassenger);
 
@@ -43,7 +53,8 @@ public interface TicketOrderPassengerDAO {
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "passenger_id", property = "passengerId"), @Result(column = "passenger_name", property = "passengerName"),
                @Result(column = "ticket_type", property = "ticketType"), @Result(column = "ticket_type_name", property = "ticketTypeName"), @Result(column = "card_type_id", property = "cardTypeId"),
                @Result(column = "card_type_name", property = "cardTypeName"), @Result(column = "card_num", property = "cardNum"), @Result(column = "seat_code", property = "seatCode"),
-               @Result(column = "seat_name", property = "seatName"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime") })
+               @Result(column = "seat_name", property = "seatName"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
+               @Result(column = "ticket_no", property = "ticketNo") })
     @SelectProvider(type = TicketOrderPassengerProvider.class, method = "pageList")
     public List<TicketOrderPassengerDO> pageList(@Param("ticketOrderPassenger") TicketOrderPassengerDO ticketOrderPassenger, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 

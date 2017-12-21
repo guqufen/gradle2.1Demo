@@ -38,6 +38,7 @@ import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.trading.service.order.dto.OrderDTO;
 import net.fnsco.trading.service.order.dto.TradeJhfJO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
+import net.fnsco.trading.service.order.entity.TradeOrderExtDO;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 
@@ -55,6 +56,8 @@ public class TradeOrderService extends BaseService {
     private SequenceService      sequenceService;
     @Autowired
     private TradeWithdrawService tradeWithdrawService;
+    @Autowired
+    private TradeOrderExtService tradeOrderExtService;
 
     public String getReqData(TradeOrderDO tradeOrder, String payNotifyUrl, String payCallBackUrl) {
         String keyStr = env.getProperty("jhf.api.AES.key");
@@ -254,6 +257,15 @@ public class TradeOrderService extends BaseService {
                 tradeOrderDO.setOrderCeateTime(DateUtils.toParseYmdhms(order.getTime()));
             }
             tradeOrderDAO.updateOnlyFail(tradeOrderDO);
+        }
+        if (!Strings.isNullOrEmpty(order.getCreditName())) {
+            TradeOrderExtDO tradeOrderExt = new TradeOrderExtDO();
+            tradeOrderExt.setCard(order.getCreditCard());
+            tradeOrderExt.setMobile(order.getUserPhone());
+            tradeOrderExt.setName(order.getCreditName());
+            tradeOrderExt.setOrderNo(order.getThirdPayNo());
+            tradeOrderExt.setCreateTime(new Date());
+            tradeOrderExtService.doAdd(tradeOrderExt);
         }
         return ResultDTO.success();
     }
