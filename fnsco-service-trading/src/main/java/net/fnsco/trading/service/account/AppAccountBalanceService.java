@@ -94,7 +94,7 @@ public class AppAccountBalanceService extends BaseService {
 	}
 	
 	/**
-	 * doFrozenBalance:(这里用一句话描述这个方法的作用)
+	 * doFrozenBalance:(更新余额和对应的冻结金额)
 	 *
 	 * @param  @param appUserId
 	 * @param  @param fund
@@ -111,7 +111,16 @@ public class AppAccountBalanceService extends BaseService {
 		
 		return false;
 	}
-	
+	/**
+	 * doUpdateFrozenAmount:(只更新冻结金额,不更新余额)
+	 *
+	 * @param  @param appUserId
+	 * @param  @param fund
+	 * @param  @return    设定文件
+	 * @return boolean    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月21日 下午1:36:47
+	 */
 	public boolean doUpdateFrozenAmount(Integer appUserId,BigDecimal fund) {
 		int result = appAccountBalanceDAO.updateFrozenAmount(fund, appUserId,new Date());
 		if(result >0) {
@@ -120,6 +129,16 @@ public class AppAccountBalanceService extends BaseService {
 		
 		return false;
 	}
+	/**
+	 * updateFund:(只更新余额，不更新冻结金额)
+	 *
+	 * @param  @param appUserId
+	 * @param  @param fund
+	 * @param  @return    设定文件
+	 * @return boolean    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月21日 下午1:37:10
+	 */
 	public boolean updateFund(Integer appUserId,BigDecimal fund) {
         int result = appAccountBalanceDAO.updateFund(fund, appUserId,new Date());
         if(result >0) {
