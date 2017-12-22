@@ -1,0 +1,86 @@
+/*
+*payCarIndex 买车二级页面
+*/
+.advantage{
+	padding: 0 1rem;
+	background: #fff;
+}
+.advantage .car{
+	text-align: center;
+}
+.advantage .car i{
+	display: block;
+	width: 1.2rem;
+	height: 1.2rem;
+	margin: 0 auto;
+	background:url(../img/car.png) no-repeat center;
+	background-size: contain;
+}
+.advantage .car p{
+	color: #333;
+	font-size: 0.55rem;
+	padding: 0.5rem 0;
+}
+.buy-car-tool{
+	background: #fff;
+    padding: 0 1rem;
+}
+.buy-car-tool div{
+	text-align: center;
+}
+.buy-car-tool button{
+	width: 6rem;
+	height: 1.8rem;
+	margin: 0.5rem auto;
+	border-radius: 0;
+	border-color: #fd6804;
+	font-size: 0.55rem;
+}
+
+.product{
+	margin: 0.25rem 0;
+    border-top: 1px solid #e3e3e3;
+    border-bottom: 1px solid #e3e3e3;
+}
+.product-con{
+	background: #fff;
+	height: 6rem;
+	overflow: hidden;
+}
+	.product-img img{
+		width: 100%;
+	}
+	.product-text{
+		padding: 0 1rem;
+		margin-top: 1.75rem;
+	}
+	.product-title{
+		color: #333;
+		font-weight: bold;
+		font-size: 0.65rem;
+	}
+	.product-txt{
+		color: #999;
+		font-size: 0.55rem;
+		margin-top: 0.5rem;
+		line-height: 1.2;
+	}
+
+.product-btn{
+	height: 1.5rem;
+	text-align: center;
+	background: #f6f6f6;
+}
+	.product-btn a{
+		height: 0.8rem;
+		line-height: 0.8rem;
+		margin: 0.35rem 0;
+		font-size: 0.55rem;
+		color: #999;
+	}
+	.product-btn a.details{
+		border-right: 1px solid #ccc;
+	}
+	.product-btn a.apply{
+		color: #fd6804;
+	}
