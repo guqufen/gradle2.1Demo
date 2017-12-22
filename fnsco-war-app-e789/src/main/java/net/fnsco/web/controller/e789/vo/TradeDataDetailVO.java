@@ -6,6 +6,14 @@ import net.fnsco.core.base.VO;
 public class TradeDataDetailVO extends VO {
 	
 	
+	/**
+	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）
+	 *
+	 * @since Ver 1.1
+	 */
+	
+	private static final long serialVersionUID = -7820667825852264685L;
+
 	@ApiModelProperty(value="流水ID",example="流水ID，可以根据该ID 查询出详情")
 	private String traId;
 	
@@ -15,8 +23,11 @@ public class TradeDataDetailVO extends VO {
 	@ApiModelProperty(value="订单金额",example="订单金额(格式'0.00'，单位:元)")
 	private String orderAmt;
 	
-	@ApiModelProperty(value="交易子类型00刷卡01微信02支付宝03聚惠分",example="交易子类型00刷卡01微信02支付宝03聚惠分")
+	@ApiModelProperty(value="交易子类型00刷卡01微信02支付宝03聚惠分04余额",example="交易子类型00刷卡01微信02支付宝03聚惠分04余额")
 	private String paySubType;
+	
+	@ApiModelProperty(value="交易子类型00刷卡01微信02支付宝03聚惠分04余额",example="交易子类型00刷卡01微信02支付宝03聚惠分04余额")
+	private String paySubTypeName;
 	
 	@ApiModelProperty(value="交易状态:1000处理中1001成功1002失败1003已退货",example="交易状态:1000处理中1001成功1002失败1003已退货")
 	private String tradeStatus;
@@ -40,7 +51,28 @@ public class TradeDataDetailVO extends VO {
 	@ApiModelProperty(value = "交易信息", example = "交易信息")
 	private String respMsg;   // 交易信息
 	
+	/**
+	 * paySubTypeName
+	 *
+	 * @return  the paySubTypeName
+	 * @since   CodingExample Ver 1.0
+	*/
 	
+	public String getPaySubTypeName() {
+		return paySubTypeName;
+	}
+
+	/**
+	 * paySubTypeName
+	 *
+	 * @param   paySubTypeName    the paySubTypeName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setPaySubTypeName(String paySubTypeName) {
+		this.paySubTypeName = paySubTypeName;
+	}
+
 	/**
 	 * respMsg
 	 *

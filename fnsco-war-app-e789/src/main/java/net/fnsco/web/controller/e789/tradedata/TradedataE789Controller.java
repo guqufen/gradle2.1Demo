@@ -140,6 +140,21 @@ public class TradedataE789Controller extends BaseController {
 		}else if("1003".equals(tradeOrderDO.getRespCode())) {
 			vo.setTradeStatusName("已退货");
 		}
+		
+		//返回支付子类型名称
+		if("00".equals(tradeOrderDO.getPaySubType())) {
+			vo.setPaySubTypeName("刷卡支付");
+		}else if("01".equals(tradeOrderDO.getPaySubType())) {
+			vo.setPaySubTypeName("微信支付");
+		}else if("02".equals(tradeOrderDO.getPaySubType())) {
+			vo.setPaySubTypeName("支付宝支付");
+		}else if("03".equals(tradeOrderDO.getPaySubType())) {
+			vo.setPaySubTypeName("分闪付支付");
+		}else if("04".equals(tradeOrderDO.getPaySubType())) {
+			vo.setPaySubTypeName("余额支付");
+		}
+		
+		
 		vo.setRespMsg(tradeOrderDO.getRespMsg());
 		
 		return success(vo);
