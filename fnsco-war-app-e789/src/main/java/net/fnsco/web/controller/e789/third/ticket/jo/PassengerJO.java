@@ -7,9 +7,9 @@ public class PassengerJO extends CommonJO {
 
     @ApiModelProperty(value = "姓名", example = "姓名")
     private String name;
-    @ApiModelProperty(value = "类型", example = "类型")
+    @ApiModelProperty(value = "类型", example = "类型 1成人票2儿童票3学生票4残军票 ")
     private String ticketType;
-    @ApiModelProperty(value = "证件类型", example = "姓名")
+    @ApiModelProperty(value = "证件类型", example = "证件类型1:二代身份证,2:一代身份证,C:港澳通行证,B:护照,G:台湾通行证")
     private String cardType;
     @ApiModelProperty(value = "证件号码", example = "证件号码")
     private String cardNum;

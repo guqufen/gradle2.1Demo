@@ -15,6 +15,71 @@ public class TicketOrderPassengerProvider {
 
     private static final String TABLE_NAME = "thr_ticket_order_passenger";
 
+    public String updateByTC(Map<String, Object> params) {
+        TicketOrderPassengerDO ticketOrderPassenger = (TicketOrderPassengerDO) params.get("ticketOrderPassenger");
+        return new SQL() {
+            {
+                UPDATE(TABLE_NAME);
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getOrderNo())) {
+                    SET("order_no=#{ticketOrderPassenger.orderNo}");
+                }
+                if (ticketOrderPassenger.getPassengerId() != null) {
+                    SET("passenger_id=#{ticketOrderPassenger.passengerId}");
+                }
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getPassengerName())) {
+                    SET("passenger_name=#{ticketOrderPassenger.passengerName}");
+                }
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getTicketType())) {
+                    SET("ticket_type=#{ticketOrderPassenger.ticketType}");
+                }
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getTicketTypeName())) {
+                    SET("ticket_type_name=#{ticketOrderPassenger.ticketTypeName}");
+                }
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getCardTypeId())) {
+                    SET("card_type_id=#{ticketOrderPassenger.cardTypeId}");
+                }
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getCardTypeName())) {
+                    SET("card_type_name=#{ticketOrderPassenger.cardTypeName}");
+                }
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getCardNum())) {
+                    SET("card_num=#{ticketOrderPassenger.cardNum}");
+                }
+                if (ticketOrderPassenger.getPrice() != null) {
+                    SET("price=#{ticketOrderPassenger.price}");
+                }
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getSeatCode())) {
+                    SET("seat_code=#{ticketOrderPassenger.seatCode}");
+                }
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getSeatName())) {
+                    SET("seat_name=#{ticketOrderPassenger.seatName}");
+                }
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getTicketNo())) {
+                    SET("ticket_no=#{ticketOrderPassenger.ticketNo}");
+                }
+
+                if (ticketOrderPassenger.getCreateTime() != null) {
+                    SET("create_time=#{ticketOrderPassenger.createTime}");
+                }
+                if (ticketOrderPassenger.getLastModifyTime() != null) {
+                    SET("last_modify_time=#{ticketOrderPassenger.lastModifyTime}");
+                }
+
+                if (ticketOrderPassenger.getLastModifyTime() != null) {
+                    SET("last_modify_time=#{ticketOrderPassenger.lastModifyTime}");
+                }
+
+                if (ticketOrderPassenger.getLastModifyTime() != null) {
+                    SET("last_modify_time=#{ticketOrderPassenger.lastModifyTime}");
+                }
+
+                if (ticketOrderPassenger.getLastModifyTime() != null) {
+                    SET("last_modify_time=#{ticketOrderPassenger.lastModifyTime}");
+                }
+                WHERE("id = #{ticketOrderPassenger.id}");
+            }
+        }.toString();
+    }
+
     public String update(Map<String, Object> params) {
         TicketOrderPassengerDO ticketOrderPassenger = (TicketOrderPassengerDO) params.get("ticketOrderPassenger");
         return new SQL() {
@@ -56,12 +121,22 @@ public class TicketOrderPassengerProvider {
                 if (StringUtils.isNotBlank(ticketOrderPassenger.getTicketNo())) {
                     SET("ticket_no=#{ticketOrderPassenger.ticketNo}");
                 }
-                if (ticketOrderPassenger.getStatus() != null) {
-                    SET("status=#{ticketOrderPassenger.status}");
-                }
+
                 if (ticketOrderPassenger.getCreateTime() != null) {
                     SET("create_time=#{ticketOrderPassenger.createTime}");
                 }
+                if (ticketOrderPassenger.getLastModifyTime() != null) {
+                    SET("last_modify_time=#{ticketOrderPassenger.lastModifyTime}");
+                }
+
+                if (ticketOrderPassenger.getLastModifyTime() != null) {
+                    SET("last_modify_time=#{ticketOrderPassenger.lastModifyTime}");
+                }
+
+                if (ticketOrderPassenger.getLastModifyTime() != null) {
+                    SET("last_modify_time=#{ticketOrderPassenger.lastModifyTime}");
+                }
+
                 if (ticketOrderPassenger.getLastModifyTime() != null) {
                     SET("last_modify_time=#{ticketOrderPassenger.lastModifyTime}");
                 }
@@ -122,9 +197,7 @@ public class TicketOrderPassengerProvider {
                 if (StringUtils.isNotBlank(ticketOrderPassenger.getSeatName())) {
                     WHERE("seat_name=#{ticketOrderPassenger.seatName}");
                 }
-                if (ticketOrderPassenger.getStatus() != null) {
-                    WHERE("status=#{ticketOrderPassenger.status}");
-                }
+
                 if (ticketOrderPassenger.getCreateTime() != null) {
                     WHERE("create_time=#{ticketOrderPassenger.createTime}");
                 }
@@ -180,9 +253,6 @@ public class TicketOrderPassengerProvider {
                 }
                 if (StringUtils.isNotBlank(ticketOrderPassenger.getSeatName())) {
                     WHERE("seat_name=#{ticketOrderPassenger.seatName}");
-                }
-                if (ticketOrderPassenger.getStatus() != null) {
-                    WHERE("status=#{ticketOrderPassenger.status}");
                 }
                 if (ticketOrderPassenger.getCreateTime() != null) {
                     WHERE("create_time=#{ticketOrderPassenger.createTime}");
