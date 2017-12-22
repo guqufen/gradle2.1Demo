@@ -11,7 +11,7 @@ public class TicketContactDO {
     /**
      * app用户ID
      */
-    private String appUserId;
+    private Integer appUserId;
 
     /**
      * 联系人名
@@ -48,11 +48,11 @@ public class TicketContactDO {
         this.id = id;
     }
 
-    public String getAppUserId() {
+    public Integer getAppUserId() {
         return appUserId;
     }
 
-    public void setAppUserId(String appUserId) {
+    public void setAppUserId(Integer appUserId) {
         this.appUserId = appUserId;
     }
 

@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.util.Calendar;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;

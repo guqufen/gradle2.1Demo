@@ -38,6 +38,7 @@ import com.aliyun.oss.HttpMethod;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.GeneratePresignedUrlRequest;
+import com.aliyun.oss.model.GetObjectRequest;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.OSSObjectSummary;
 import com.aliyun.oss.model.ObjectListing;
@@ -103,6 +104,28 @@ public class OssLoaclUtil {
             e.printStackTrace();
         } finally {
             ossClient.shutdown();
+        }
+    }
+    /**
+     * 下载文件到本地
+     * @param bucketName
+     * @param firstKey
+     * @param filePath
+     * @return
+     */
+    public static void getFileToLocal(String bucketName, String firstKey ,String filePath) {
+
+        try {
+        	// 下载object到文件
+        	ossClient.getObject(new GetObjectRequest(bucketName, firstKey), new File(filePath));
+        } catch (OSSException oe) {
+            oe.printStackTrace();
+        } catch (ClientException ce) {
+            ce.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+       //     ossClient.shutdown();
         }
     }
     /**
