@@ -5,7 +5,7 @@ import net.fnsco.core.constants.CoreConstants;
 public class TicketConstants extends CoreConstants {
     /**
      * 证件类型
-     *  1">二代身份证C 港澳通行证G">台湾通行证B">护照
+     *  1:二代身份证,2:一代身份证,C:港澳通行证,B:护照,G:台湾通行证
      * @author sxf
      * @version $Id: WithdrawPrepStateEnum.java, v 0.1 2017年3月21日 下午6:01:34 sxf Exp $
      */
@@ -52,16 +52,7 @@ public class TicketConstants extends CoreConstants {
 
     /**
     * 座位类型表
-    F:动卧(新增),
-    9:商务座,
-    P:特等座,
-    M:一等座,
-    O（大写字母O，不是数字0）:二等座,
-    6:高级软卧, 
-    4:软卧,
-    3:硬卧,
-    2:软座,
-    1:硬座。
+    F:动卧(新增),9:商务座,P:特等座,M:一等座,O（大写字母O，不是数字0）:二等座,6:高级软卧, 4:软卧,3:硬卧,2:软座,1:硬座。
     * @author sxf
     * @version $Id: WithdrawPrepStateEnum.java, v 0.1 2017年3月21日 下午6:01:34 sxf Exp $
     */
@@ -171,13 +162,14 @@ public class TicketConstants extends CoreConstants {
 
     /**
      * 订单状态表
-     * 状态 0未占座1占座中2已占座3支付完成4取消订单
+     * 状态 0未占座1占座中2已占座3占座失败4支付中5支付完成6取消订单7退票中8退票完成
      * @author sxf
      * @version $Id: WithdrawPrepStateEnum.java, v 0.1 2017年3月21日 下午6:01:34 sxf Exp $
      */
     public enum OrderStateEnum {
                                 //状态 状态 0未执行1执行中2失败3成功
-                                INIT(0, "未占座"), PROCESSING(1, "占座中"), SIT_DOWN(2, "已占座"), FAIL(3, "占座失败"), PAYING(4, "支付中"), SUCCESS(5, "支付完成"), CANCEL(6, "取消订单");
+                                INIT(0, "未占座"), PROCESSING(1, "占座中"), SIT_DOWN(2, "已占座"), FAIL(3, "占座失败"), PAYING(4, "支付中"), SUCCESS(5, "支付完成"), CANCEL(6, "取消订单"), REFUNDING(7, "退票中"), REFUND(8,
+                                                                                                                                                                                                "退票完成");
 
         private Integer code;
         private String  name;

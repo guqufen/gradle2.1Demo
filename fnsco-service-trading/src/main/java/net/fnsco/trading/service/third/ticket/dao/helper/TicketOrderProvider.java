@@ -1,11 +1,12 @@
 package net.fnsco.trading.service.third.ticket.dao.helper;
 
-import org.apache.ibatis.jdbc.SQL;
+import java.util.Arrays;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.lang3.StringUtils;
 
 import net.fnsco.trading.service.third.ticket.entity.TicketOrderDO;
 
@@ -64,9 +65,6 @@ public class TicketOrderProvider {
                 }
                 if (ticketOrder.getStatus() != null) {
                     SET("status=#{ticketOrder.status}");
-                }
-                if (ticketOrder.getStatuses() != null) {
-                    SET("status in (#{ticketOrder.statuses})");
                 }
                 if (ticketOrder.getCreateTime() != null) {
                     SET("create_time=#{ticketOrder.createTime}");
@@ -149,6 +147,11 @@ public class TicketOrderProvider {
                 if (ticketOrder.getLastModifyTime() != null) {
                     WHERE("last_modify_time=#{ticketOrder.lastModifyTime}");
                 }
+                if (ticketOrder.getStatuses() != null) {
+                    String s = Arrays.toString(ticketOrder.getStatuses());
+                    s = s.substring(1, s.length() - 1);
+                    WHERE("status in (" + s + ")");
+                }
                 ORDER_BY("id desc limit " + start + ", " + limit);
             }
         }.toString();
@@ -213,6 +216,11 @@ public class TicketOrderProvider {
                 }
                 if (ticketOrder.getLastModifyTime() != null) {
                     WHERE("last_modify_time=#{ticketOrder.lastModifyTime}");
+                }
+                if (ticketOrder.getStatuses() != null) {
+                    String s = Arrays.toString(ticketOrder.getStatuses());
+                    s = s.substring(1, s.length() - 1);
+                    WHERE("status in (" + s + ")");
                 }
             }
         }.toString();

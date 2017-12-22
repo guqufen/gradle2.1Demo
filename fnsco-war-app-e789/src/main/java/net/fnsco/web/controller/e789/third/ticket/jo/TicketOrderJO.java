@@ -8,9 +8,10 @@ public class TicketOrderJO extends CommonJO {
     private String passengerId;
     @ApiModelProperty(value = "车号", example = "车号")
     private String trainCode;
-    @ApiModelProperty(value = "票类型（学生票）", example = "票类型（学生票）")
-    private String ticketType;
-    @ApiModelProperty(value = "坐席（坐席 F:动卧(新增),9:商务座,P:特等座,M:一等座,O（大写字母O，不是数字0）:二等座,6:高级软卧, 4:软卧,3:硬卧,2:软座,1:硬座。）", example = "坐席（二等座）")
+    //@ApiModelProperty(value = "票类型1 :成人票,2 :儿童票,4 :残军票", example = "票类型1 :成人票,2 :儿童票,4 :残军票")
+    //private String ticketType;
+    @ApiModelProperty(value = "坐席（坐席 F:动卧(新增),9:商务座,P:特等座,M:一等座,O（大写字母O，不是数字0）:二等座,6:高级软卧, 4:软卧,3:硬卧,2:软座,1:硬座。）",
+            example = "坐席（坐席 F:动卧(新增),9:商务座,P:特等座,M:一等座,O（大写字母O，不是数字0）:二等座,6:高级软卧, 4:软卧,3:硬卧,2:软座,1:硬座。）")
     private String seatCode;
     @ApiModelProperty(value = "价格", example = "价格")
     private String price;
@@ -199,28 +200,6 @@ public class TicketOrderJO extends CommonJO {
 
     public void setTrainCode(String trainCode) {
         this.trainCode = trainCode;
-    }
-
-    /**
-     * ticketType
-     *
-     * @return  the ticketType
-     * @since   CodingExample Ver 1.0
-    */
-
-    public String getTicketType() {
-        return ticketType;
-    }
-
-    /**
-     * ticketType
-     *
-     * @param   ticketType    the ticketType to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setTicketType(String ticketType) {
-        this.ticketType = ticketType;
     }
 
     /**
