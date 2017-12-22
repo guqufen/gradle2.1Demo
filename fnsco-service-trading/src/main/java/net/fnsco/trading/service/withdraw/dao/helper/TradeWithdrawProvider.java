@@ -197,7 +197,7 @@ public class TradeWithdrawProvider {
         if (StringUtils.isNotBlank(tradeWithdraw.getChannelMerId())){
             WHERE("channel_mer_id=#{tradeWithdraw.channelMerId}");
         }
-        ORDER_BY("id desc limit " + start + ", " + limit );
+        ORDER_BY("create_time desc limit " + start + ", " + limit );
         }}.toString();
     }
 
@@ -305,7 +305,7 @@ public class TradeWithdrawProvider {
     	Integer status = (Integer) params.get("status");
     	
     	return new SQL() {{
-    		SELECT("trade_sub_type AS tradeType,SUM(amount) AS totalAmount");
+    		SELECT("trade_type AS tradeType,SUM(amount) AS totalAmount");
     		FROM(TABLE_NAME);
     		if(StringUtils.isNotBlank(tradeMonth)) {
     			WHERE("DATE_FORMAT(create_time,'%Y年%m月') = #{tradeMonth}");
@@ -316,7 +316,7 @@ public class TradeWithdrawProvider {
     		if(null != status) {
     			WHERE("status = #{status}");
     		}
-    		GROUP_BY("trade_sub_type");
+    		GROUP_BY("trade_type");
     		
     	}}.toString();
     }
