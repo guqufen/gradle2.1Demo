@@ -108,7 +108,10 @@ public class AppUserBankService extends BaseService {
 			appUserBankDO.setType(dto.getType());
 			appUserBankDO.setBankName(dto.getBank_name());
 			
+		}else{
+			appUserBankDO.setBankName("银联");
 		}
+		appUserBankDO.setStatus("0");
 		appUserBankDO.setCreateTime(new Date());
 		appUserBankDO.setUpdateTime(new Date());
 		Integer row = appUserBankDAO.insert(appUserBankDO);

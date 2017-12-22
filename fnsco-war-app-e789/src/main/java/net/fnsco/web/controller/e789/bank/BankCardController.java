@@ -11,18 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.mysql.jdbc.StringUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.config.SysConfigService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.SmsCodeDTO;
+import net.fnsco.order.service.domain.SysConfig;
 import net.fnsco.order.service.modules.appuser.AppUserServiceImpl;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.constant.E789ApiConstant;
@@ -40,11 +42,12 @@ import net.fnsco.web.controller.e789.vo.ValidateBankVO;
 
 /**
  * 银行卡相关接口
- * @deprecated 
- * @author   binghui.li
- * @version  
- * @since    Ver 1.1
- * @Date	 2017 2017年12月21日 下午4:47:42
+ * 
+ * @deprecated
+ * @author binghui.li
+ * @version
+ * @since Ver 1.1
+ * @Date 2017 2017年12月21日 下午4:47:42
  *
  */
 @RestController
@@ -57,8 +60,9 @@ public class BankCardController extends BaseController {
 	private AppUserService appUserService;
 	@Autowired
 	private Environment env;
+	@Autowired
+	private SysConfigService sysConfigService;
 	
-
 
 	@RequestMapping(value = "/validateBank")
 	@ApiOperation(value = "银行卡信息页-校验银行卡")
@@ -73,37 +77,37 @@ public class BankCardController extends BaseController {
 		params.put("realname", jo.getName());// 名字
 		params.put("idcard", idcard);// 身份证
 		params.put("bankcard", jo.getCardNum());// 卡号
-		params.put("mobile", jo.getMobile());// 预留手机号\
+		params.put("mobile", jo.getMobile());// 预留手机号
 		JSONObject jaJsonObject = new JSONObject();
 		try {
 			String result = JuheDemo.net(strUrl, params, method);
 			jaJsonObject = JSONObject.parseObject(result);
 			Integer error_code = jaJsonObject.getInteger("error_code");
-			if(error_code == 0){
+			if (error_code == 0) {
 				JSONObject jaJsonObject2 = jaJsonObject.getJSONObject("result");
-				if(jaJsonObject2 != null){
+				if (jaJsonObject2 != null) {
 					vo.setError_code(error_code);
 					vo.setReason(jaJsonObject.getString("reason"));
 					vo.setMessage(jaJsonObject2.getString("message"));
 					vo.setRes(jaJsonObject2.getString("res"));
-					if("1".equals(jaJsonObject2.getString("res"))){
-						return ResultDTO.success(vo); 
-						
-					}else{
+					if ("1".equals(jaJsonObject2.getString("res"))) {
+						return ResultDTO.success(vo);
+
+					} else {
 						return ResultDTO.fail(vo);
 					}
-						
-				}else{
+
+				} else {
 					vo.setError_code(error_code);
 					vo.setReason(jaJsonObject.getString("reason"));
 					return ResultDTO.fail(vo);
 				}
-			}else{
+			} else {
 				vo.setError_code(error_code);
 				vo.setReason(jaJsonObject.getString("reason"));
 				return ResultDTO.fail(vo);
 			}
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -133,18 +137,18 @@ public class BankCardController extends BaseController {
 		if (Strings.isNullOrEmpty(id_card_num)) {
 			return ResultDTO.fail(TradeConstants.NOT_ID_AUTH);// 未认证
 		}
-		//验证码校验
-		ResultDTO result = appUserService.validateCode(jo.getDeviceId(), jo.getCode(), "2"+jo.getMobile());
-		if(!result.isSuccess()){
+		// 验证码校验
+		ResultDTO result = appUserService.validateCode(jo.getDeviceId(), jo.getCode(), "2" + jo.getMobile());
+		if (!result.isSuccess()) {
 			return ResultDTO.fail(result.getMessage());
 		}
-		//判断该用户是否已保存过该银行卡
+		// 判断该用户是否已保存过该银行卡
 		List<String> list = appUserBankService.getByBankNO(bankCardNum);
-		if(list.size()>0){
+		if (list.size() > 0) {
 			return ResultDTO.fail(E789ApiConstant.E_BANK_IS_EXIST);
-			
+
 		}
-		
+
 		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num);
 		if (row == 1) {
 			return ResultDTO.success();
@@ -187,13 +191,24 @@ public class BankCardController extends BaseController {
 	public ResultDTO<List<BankListVO>> getBankJOList(@RequestBody BankListJO bankListJO) {
 		List<BankListVO> bankList = Lists.newArrayList();
 		String userId = bankListJO.getUserId();
-		if (StringUtils.isNullOrEmpty(userId)) {
+		if (Strings.isNullOrEmpty(userId)) {
 			return ResultDTO.fail(TradeConstants.E_PARAMETER_NOT_NULL);
 		}
 		List<AppUserBankDO> list = appUserBankService.getBankList(userId);
 		if (list.size() > 0) {
+			//获取银行卡图标
+			SysConfig sysConfig = new SysConfig();
+			sysConfig.setType("12");
 			for (AppUserBankDO appUserBankDO : list) {
 				BankListVO vo = new BankListVO();
+				sysConfig.setRemark(appUserBankDO.getBankName());
+				SysConfig config= sysConfigService.selectByCondition(sysConfig);
+				if(config != null){
+					vo.setUrl(env.getProperty("app.base.url")+config.getKeep2());
+				}else{
+					vo.setUrl(env.getProperty("app.base.url")+"/bank/image/yinlian.png");
+					
+				}
 				int length = appUserBankDO.getAccountNo().length();
 				String transCardNo = appUserBankDO.getAccountNo();
 				if (length > 10) {
@@ -201,7 +216,7 @@ public class BankCardController extends BaseController {
 				}
 				vo.setCardNum(transCardNo);// 卡号
 				vo.setBankName(appUserBankDO.getBankName());// 银行卡名称
-				// 转换卡类型
+				// 转换卡类型 借记卡贷记卡
 				vo.setType(TradeConstants.BankTypeEnum.getNameByCode(appUserBankDO.getType()));
 				vo.setId(appUserBankDO.getId());
 				bankList.add(vo);
@@ -209,6 +224,5 @@ public class BankCardController extends BaseController {
 		}
 		return ResultDTO.success(bankList);
 	}
-	
-	
+
 }
