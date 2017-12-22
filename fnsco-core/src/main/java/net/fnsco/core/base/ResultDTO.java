@@ -70,6 +70,11 @@ public class ResultDTO<T extends Object> extends DTO {
         return result;
     }
     
+    public static ResultDTO fail(String code,String msg) {
+        ResultDTO result = new ResultDTO(false, null, code, msg);
+        return result;
+    }
+    
     public static ResultDTO failForMessage(String message) {
         ResultDTO result = new ResultDTO(false, message, null, message);
         return result;

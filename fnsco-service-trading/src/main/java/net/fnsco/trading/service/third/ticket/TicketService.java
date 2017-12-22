@@ -63,7 +63,7 @@ public class TicketService extends BaseService {
     }
 
     @Transactional
-    public ResultDTO addOrder(TicketOrderDTO ticketOrderDTO) {
+    public ResultDTO<TicketOrderDO> addOrder(TicketOrderDTO ticketOrderDTO) {
         TicketOrderDO ticketOrder = new TicketOrderDO();
         ticketOrder.setOrderNo(CodeUtil.generateOrderCode("T"));
         ticketOrder.setFromStationCode(ticketOrderDTO.getFromStationCode());
@@ -124,8 +124,8 @@ public class TicketService extends BaseService {
         }
         order.setPassengers(passDtoList);
         Map<String, String> paramesMap = JSON.parseObject(JSON.toJSONString(order), Map.class);
-        String orderId = "";
         try {
+            String orderId = "";
             JSONObject obj = TrainTicketsUtil.postIndent(paramesMap);
             ticketOrder = ticketOrderDAO.getById(ticketOrder.getId());
             if (null != obj) {
@@ -156,10 +156,7 @@ public class TicketService extends BaseService {
             ticketOrderDAO.update(ticketOrder);
             return ResultDTO.fail("提交订单出错");
         }
-        if (Strings.isNullOrEmpty(orderId)) {
-            return ResultDTO.fail("提交订单出错了");
-        }
-        return ResultDTO.success((Object)orderId);
+        return ResultDTO.success(ticketOrder);
     }
 
 }
