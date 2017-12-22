@@ -1,16 +1,14 @@
 package net.fnsco.web.appuser;
 
 import java.util.Date;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.google.common.base.Strings;
-
+import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.order.api.appuser.AppUserService;
@@ -27,7 +25,7 @@ import net.fnsco.trading.service.merchantentity.entity.AppUserMerchantEntityDO;
  */
 @Controller
 @RequestMapping(value = "/web/e789/appsuser")
-public class AppUserBandE789Controller {
+public class AppUserBandE789Controller extends BaseController{
 	
 	@Autowired
 	private AppUserService appUserService;

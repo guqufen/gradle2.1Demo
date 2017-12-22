@@ -12,9 +12,31 @@ public class BankListVO extends VO {
 	private String bankName;
 	@ApiModelProperty(value="卡类型",name="type",example="信用卡/储蓄卡")
 	private String type;
+	@ApiModelProperty(value="银行卡图片",name="url")
+	private String url;
 	
 	
 	
+	/**
+	 * url
+	 *
+	 * @return  the url
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getUrl() {
+		return url;
+	}
+	/**
+	 * url
+	 *
+	 * @param   url    the url to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setUrl(String url) {
+		this.url = url;
+	}
 	/**
 	 * id
 	 *
