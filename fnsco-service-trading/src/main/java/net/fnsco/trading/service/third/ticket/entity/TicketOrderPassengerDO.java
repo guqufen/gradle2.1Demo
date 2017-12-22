@@ -85,7 +85,7 @@ public class TicketOrderPassengerDO {
     /**
      * 退款金额
      */
-    private String     returnMoney;
+    private BigDecimal returnMoney;
     /**
      * 失败原因，退票失败时有值
      */
@@ -98,7 +98,7 @@ public class TicketOrderPassengerDO {
      * @since   CodingExample Ver 1.0
     */
 
-    public String getReturnMoney() {
+    public BigDecimal getReturnMoney() {
         return returnMoney;
     }
 
@@ -109,7 +109,7 @@ public class TicketOrderPassengerDO {
      * @since   CodingExample Ver 1.0
      */
 
-    public void setReturnMoney(String returnMoney) {
+    public void setReturnMoney(BigDecimal returnMoney) {
         this.returnMoney = returnMoney;
     }
 

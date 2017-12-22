@@ -69,6 +69,4 @@ public interface TicketOrderPassengerDAO {
     @Select("SELECT * FROM thr_ticket_order_passenger WHERE ticket_no = #{ticketNo} and card_num= #{cardNum}")
     public TicketOrderPassengerDO getByTC(@Param("ticketNo") String ticketNo, @Param("cardNum") String cardNum);
 
-    @UpdateProvider(type = TicketOrderPassengerProvider.class, method = "updateByTC")
-    public int updateByTC(@Param("ticketOrderPassenger") TicketOrderPassengerDO ticketOrderPassenger);
 }

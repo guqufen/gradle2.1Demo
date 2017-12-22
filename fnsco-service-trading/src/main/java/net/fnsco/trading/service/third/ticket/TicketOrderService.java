@@ -120,7 +120,9 @@ public class TicketOrderService extends BaseService {
                                     String passportseno = detail.getString("passportseno");
                                     TicketOrderPassengerDO pass = passengerDAO.getByTC(ticketNo, passportseno);
                                     pass.setReturnFailMsg(returnfailmsg);
-                                    pass.setReturnMoney(returnMoney);
+                                    BigDecimal amountB = new BigDecimal(returnMoney);
+                                    BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
+                                    pass.setReturnMoney(amountBs);
                                     passengerDAO.update(pass);
                                     if ("true".equals(returnsuccess)) {
                                         order.setStatus(TicketConstants.OrderStateEnum.REFUND.getCode());
