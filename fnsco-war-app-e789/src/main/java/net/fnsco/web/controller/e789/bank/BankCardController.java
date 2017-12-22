@@ -134,10 +134,10 @@ public class BankCardController extends BaseController {
 			return ResultDTO.fail(TradeConstants.NOT_ID_AUTH);// 未认证
 		}
 		//验证码校验
-//		ResultDTO result = appUserService.validateCode(jo.getDeviceId(), jo.getCode(), "2"+jo.getMobile());
-//		if(!result.isSuccess()){
-//			return ResultDTO.fail(result.getMessage());
-//		}
+		ResultDTO result = appUserService.validateCode(jo.getDeviceId(), jo.getCode(), "2"+jo.getMobile());
+		if(!result.isSuccess()){
+			return ResultDTO.fail(result.getMessage());
+		}
 		//判断该用户是否已保存过该银行卡
 		List<String> list = appUserBankService.getByBankNO(bankCardNum);
 		if(list.size()>0){
