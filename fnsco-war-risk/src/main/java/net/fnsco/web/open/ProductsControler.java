@@ -54,4 +54,5 @@ public class ProductsControler extends BaseController {
         ResultPageDTO<ProductDO> pager = this.productService.page(productDO, pageNum, pageSize);
         return success(pager);
     }
+    
 }
