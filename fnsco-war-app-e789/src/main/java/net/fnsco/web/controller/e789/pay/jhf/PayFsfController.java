@@ -97,7 +97,7 @@ public class PayFsfController extends BaseController {
         tradeOrder.setPaySubType("03");
         tradeOrder.setTxnType(1);
         //交易子类型10购买消费11充值消费20购买撤销21充值撤销
-        tradeOrder.setTxnSubType(TradeConstants.TxnSubTypeEnum.BUY_CONSUME.getCode());
+        tradeOrder.setTxnSubType(10);
         //00pos机01app02台码
         tradeOrder.setPayMedium(TradeConstants.PayMediumEnum.APP.getCode());
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
