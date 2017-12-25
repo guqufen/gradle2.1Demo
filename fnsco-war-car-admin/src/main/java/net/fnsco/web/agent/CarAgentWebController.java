@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import net.fnsco.car.service.agent.AgentService;
 import net.fnsco.car.service.agent.dao.AgentDAO;
 import net.fnsco.car.service.agent.entity.AgentDO;
-import net.fnsco.car.service.finance.entity.OrderFinanceDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -55,6 +54,49 @@ public class CarAgentWebController extends BaseController {
 		ResultPageDTO<AgentDO> result  = agentService.page(agentDO, currentPageNum, pageSize);
 		return result;
 	}
+	
+	/**
+	 * toAdd:(添加新增功能)
+	 *
+	 * @param  @param agentDO
+	 * @param  @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月25日 下午2:25:04
+	 */
+	@RequestMapping(value = "/toAdd", method = RequestMethod.POST)
+	@ResponseBody
+	@RequiresPermissions(value = { "car:agent:add" })
+	public ResultDTO<String>  toAdd(AgentDO agentDO){
+		logger.info("添加运营商");
+		
+		AgentDO result  = agentService.doAdd(agentDO, getUserId());
+		if(null == result.getId()) {
+			return ResultDTO.failForSave();
+		}
+		return ResultDTO.successForSubmit();
+	}
+	
+	/**
+	 * toDelete:(删除功能)
+	 *
+	 * @param  @param ids
+	 * @param  @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月25日 下午2:35:35
+	 */
+	@RequestMapping(value = "/toDelete", method = RequestMethod.POST)
+	@ResponseBody
+	@RequiresPermissions(value = { "car:agent:Delete" })
+	public ResultDTO<String>  toDelete(int ids[]){
+		logger.info("删除运营商");
+		for (int i : ids) {
+			agentService.doDelete(i);
+		}
+		return ResultDTO.successForSubmit();
+	}
+	
 	
 	/**
 	 * queryAll:(查询所有代理商)

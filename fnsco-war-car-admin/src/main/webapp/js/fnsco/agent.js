@@ -321,7 +321,6 @@ $('#btn_yes1').click(
 			if (id== null) {
 				return;
 			}
-			var roleid=getRoleId("role1");
 			 //获得当前选中的值
 			//var sex = $('#sex1').val();
 			var status = $('#status1').val();
