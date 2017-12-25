@@ -3,11 +3,14 @@ package net.fnsco.car.service.loan;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.base.Strings;
 
 import net.fnsco.car.service.agent.dao.AgentDAO;
 import net.fnsco.car.service.agent.entity.AgentDO;
@@ -24,6 +27,7 @@ import net.fnsco.car.service.loan.entity.OrderLoanDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.OssLoaclUtil;
 
 @Service
 public class OrderLoanService extends BaseService {
@@ -85,6 +89,14 @@ public class OrderLoanService extends BaseService {
 			
 			//查找文件信息
 			List<OrderFileDO> files = orderFileDAO.getByOrderNo(orderLoanDO.getId().toString());
+			if(CollectionUtils.isNotEmpty(files)) {
+				for (OrderFileDO orderFileDO : files) {
+					String filePath = orderFileDO.getFilePath();
+					if(!Strings.isNullOrEmpty(filePath)) {
+						orderFileDO.setFilePath(OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), filePath));
+					}
+				}
+			}
 			orderLoanDO.setOrderFiles(files);
 		}
 		Integer count = this.orderLoanDAO.pageListCount(orderLoan);
