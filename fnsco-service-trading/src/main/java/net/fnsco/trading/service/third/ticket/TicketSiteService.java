@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
@@ -43,10 +44,29 @@ public class TicketSiteService extends BaseService {
     public List<TicketSiteDO> querySiteList(String siteName) {
         TicketSiteDO ticketSite = new TicketSiteDO();
         ticketSite.setNameLike(siteName);
-        ticketSite.setCodeLike(siteName.toUpperCase());
-        ticketSite.setPyNameLike(siteName.toLowerCase());
+        //ticketSite.setCodeLike(siteName.toUpperCase());
+        ticketSite.setPyNameLike(isEnglish(siteName.toLowerCase()));
         List<TicketSiteDO> pageList = this.ticketSiteDAO.pageList(ticketSite, 0, 1000);
         return pageList;
+    }
+
+    private static String isEnglish(String pyName) {
+        String result = "";
+        if(Strings.isNullOrEmpty(pyName)){
+            return result;
+        }
+        for (int i = 0; i < pyName.length(); i++) {
+            String charaString = pyName.substring(i,i+1);
+            if (charaString.matches("^[a-zA-Z]*")) {
+                result += charaString + "%";
+            } else {
+                result += charaString;
+            }
+        }
+        if(result.substring(result.length()-1).equals("%")){
+            result = result.substring(0,result.length()-1);
+        }
+        return result;
     }
 
     // 分页

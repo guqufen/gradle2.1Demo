@@ -71,7 +71,7 @@ public class TicketSiteProvider {
             WHERE("last_modify_time=#{ticketSite.lastModifyTime}");
         }
         if (StringUtils.isNotBlank(ticketSite.getNameLike())){
-            WHERE("( name like CONCAT('%',#{ticketSite.nameLike},'%') or py_name like CONCAT('%',#{ticketSite.pyNameLike},'%') or code like CONCAT('%',#{ticketSite.codeLike},'%'))");
+            WHERE("( name like CONCAT('%',#{ticketSite.nameLike},'%') or py_name like CONCAT(#{ticketSite.pyNameLike},'%') )");
         }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();

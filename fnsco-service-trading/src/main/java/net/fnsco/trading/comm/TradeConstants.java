@@ -357,7 +357,7 @@ public class TradeConstants extends CoreConstants {
             return "";
         }
     }
-
+    //C端客户交易子类型，主要用于个t_trade_withdraw
     // //交易子类型 10充值收入/11新人红包收入20提现/21预约提现//22话费充值23流量充值24火车票购买25提现手续费26收入撤销
     public static enum TxnSubTypeEnum {
                                        INCOME_RESEARCH(10,
