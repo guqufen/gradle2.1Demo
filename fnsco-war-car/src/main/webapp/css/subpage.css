@@ -21,14 +21,15 @@
 	font-size: 0.55rem;
 	padding: 0.5rem 0;
 }
-.buy-car-tool{
+.tool{
 	background: #fff;
     padding: 0 1rem;
+    border-bottom: 1px solid #e3e3e3;
 }
-.buy-car-tool div{
+.tool div{
 	text-align: center;
 }
-.buy-car-tool button{
+.tool button{
 	width: 6rem;
 	height: 1.8rem;
 	margin: 0.5rem auto;
@@ -37,6 +38,9 @@
 	font-size: 0.55rem;
 }
 
+.product-list{
+	margin-top: 0.4rem;
+}
 .product{
 	margin: 0.25rem 0;
     border-top: 1px solid #e3e3e3;
@@ -84,3 +88,30 @@
 	.product-btn a.apply{
 		color: #fd6804;
 	}
+
+
+/*
+*loansIndex 贷款
+*/
+.banner.insurance-banner{
+	height: 5.3rem;
+}
+.insurance-con{
+	background: #fff;
+	padding: 0 0.5rem;
+	margin: 0.25rem 0;
+    border-top: 1px solid #e3e3e3;
+    border-bottom: 1px solid #e3e3e3;
+}
+.insurance-title{
+	padding: 0.4rem 0.2rem;
+	font-size: 0.65rem;
+	font-weight: bold;
+	color: #333;
+}
+.insurance-img{
+	padding: 0 0.2rem 0.4rem 0.2rem;
+}
+.insurance-img img{
+	width: 100%;
+}
