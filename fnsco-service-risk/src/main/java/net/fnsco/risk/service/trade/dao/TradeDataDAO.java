@@ -1,18 +1,15 @@
 package net.fnsco.risk.service.trade.dao;
 
-import org.apache.ibatis.annotations.Insert;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.UpdateProvider;
-import net.fnsco.risk.service.trade.entity.TradeDataDO;
-import net.fnsco.risk.service.trade.dao.helper.TradeDataProvider;
 
-import java.util.List;;
+import net.fnsco.risk.service.trade.dao.helper.TradeDataProvider;
+import net.fnsco.risk.service.trade.entity.TradeDataDO;;
 
 public interface TradeDataDAO {
 
@@ -26,5 +23,18 @@ public interface TradeDataDAO {
 
     @SelectProvider(type = TradeDataProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("tradeData") TradeDataDO tradeData);
+    
+    
+    /**
+	 * 统计某个实体商户一个月实际交易金额总和
+	 * @param startTime
+	 * @param endTime
+	 * @param entityInnerCode
+	 * @param amt
+	 * @return
+	 */
+    @Select("SELECT SUM(amt) FROM t_trade_data WHERE time_stamp >= #{startTime} AND time_stamp &lt; #{endTime} AND inner_code IN (SELECT inner_code FROM m_merchant_core_entity_ref WHERE "
+    		+ "entity_inner_code = #{entityInnerCode} ) AND STATUS = 1 AND amt &lt;= #{amt}")
+	public String queryMerchantMouthSum(@Param("startTime")String startTime,@Param("endTime")String endTime,@Param("entityInnerCode")String entityInnerCode,@Param("amt")String amt);
 
 }
