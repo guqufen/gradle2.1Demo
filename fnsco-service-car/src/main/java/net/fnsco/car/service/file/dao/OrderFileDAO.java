@@ -36,5 +36,18 @@ public interface OrderFileDAO {
 
     @SelectProvider(type = OrderFileProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("orderFile") OrderFileDO orderFile);
+    
+    /**
+     * getByOrderNo:(根据orderNo查找)
+     *
+     * @param  @param orderNo
+     * @param  @return    设定文件
+     * @return List<OrderFileDO>    DOM对象
+     * @author tangliang
+     * @date   2017年12月25日 上午11:35:32
+     */
+    @Results({@Result( column = "order_no",property = "orderNo"),@Result( column = "file_name",property = "fileName"),@Result( column = "file_type",property = "fileType"),@Result( column = "file_path",property = "filePath"),@Result( column = "create_time",property = "createTime") })
+    @Select("SELECT * FROM car_order_file WHERE id = #{id}")
+    public List<OrderFileDO> getByOrderNo(@Param("orderNo") String orderNo);
 
 }

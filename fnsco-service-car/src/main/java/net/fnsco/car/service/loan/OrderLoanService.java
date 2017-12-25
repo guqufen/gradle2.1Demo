@@ -3,7 +3,6 @@ package net.fnsco.car.service.loan;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import net.fnsco.car.service.city.DicCityService;
 import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.customer.CustomerService;
 import net.fnsco.car.service.customer.entity.CustomerDO;
-import net.fnsco.car.service.file.OrderFileService;
+import net.fnsco.car.service.file.dao.OrderFileDAO;
 import net.fnsco.car.service.file.entity.OrderFileDO;
 import net.fnsco.car.service.loan.dao.OrderLoanDAO;
 import net.fnsco.car.service.loan.entity.OrderLoanDO;
@@ -35,11 +34,11 @@ public class OrderLoanService extends BaseService {
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
-	private OrderFileService orderFileService;
-	@Autowired
 	private DicCityService dicCityService;
 	@Autowired
 	private CarBrandService carBrandService;
+	@Autowired
+	private OrderFileDAO orderFileDAO;
 	@Autowired
 	private AgentDAO agentDAO;
 
@@ -83,6 +82,10 @@ public class OrderLoanService extends BaseService {
 					orderLoanDO.setAgentName(agentDO.getName());
 				}
 			}
+			
+			//查找文件信息
+			List<OrderFileDO> files = orderFileDAO.getByOrderNo(orderLoanDO.getId().toString());
+			orderLoanDO.setOrderFiles(files);
 		}
 		Integer count = this.orderLoanDAO.pageListCount(orderLoan);
 		ResultPageDTO<OrderLoanDO> pager = new ResultPageDTO<OrderLoanDO>(count, pageList);
