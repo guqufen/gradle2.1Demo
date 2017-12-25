@@ -133,7 +133,7 @@
 	    color: #999;
 	    font-size: 0.55rem;
 	    display: block;
-	    padding: 0.5rem 0 0.4rem 0;
+	    padding-bottom: 0.5rem;
 	}
 	.amounts p{
 	    font-size: 0.9rem;
@@ -165,3 +165,44 @@
 	}
 	@keyframes textScroll{from {top:1rem;}to {top:-7rem;}}
 	@-webkit-keyframes textScroll{from {top:1rem;}to {top:-7rem;}}
+
+.loans-intro-list{
+	background: #fff;
+	border-top: 1px solid #e3e3e3;
+    border-bottom: 1px solid #e3e3e3;
+    padding:0.5rem 1rem;
+}
+.loans-intro{
+	height: 2rem;
+}
+.loans-intro-img{
+	text-align: center;
+	padding:  0.4rem 0;
+	height: 2rem;
+}
+.loans-intro-img img{
+	height: 100%;
+}
+.loans-intro-title{
+	font-size: 0.55rem;
+	color: #333;
+	height: 1rem;
+	line-height: 1rem;
+	margin-top: 0.1rem;
+}
+.loans-intro-text{
+	font-size: 0.45rem;
+	color: #999;
+}
+.assess{
+	margin: 0 auto;
+	text-align: center;
+}
+button.assess-btn {
+    width: 8rem;
+    height: 1.8rem;
+    margin: 0.5rem auto;
+    border-radius: 0;
+    border-color: #fd6804;
+    font-size: 0.55rem;
+}

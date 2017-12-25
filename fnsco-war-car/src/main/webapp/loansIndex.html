@@ -33,41 +33,56 @@
 				</div>
 			</div>
 		</div>
-		<!-- 工具栏 -->
-		<div class="tool mui-row">
-			<div class="mui-col-xs-6">
-				<button class="choose-car"><i></i>车险推荐</button>
+		<!-- 贷款介绍 -->
+		<div class="loans-intro-list mui-row">
+			<div class="mui-col-xs-6 mui-row loans-intro">
+				<div class="mui-col-xs-4 loans-intro-img">
+					<img src="img/car.png">
+				</div>
+				<div class="mui-col-xs-8">
+					<div class="loans-intro-title">手续简便</div>
+					<div class="loans-intro-text">只需身份证就能贷</div>
+				</div>
 			</div>
-			<div class="mui-col-xs-6">
-				<button class="car-calculator"><i></i>查保单</button>
+			<div class="mui-col-xs-6 mui-row loans-intro">
+				<div class="mui-col-xs-4 loans-intro-img">
+					<img src="img/car.png">
+				</div>
+				<div class="mui-col-xs-8">
+					<div class="loans-intro-title">额度高</div>
+					<div class="loans-intro-text">贷款额度高于同业</div>
+				</div>
+			</div>
+			<div class="mui-col-xs-6 mui-row loans-intro">
+				<div class="mui-col-xs-4 loans-intro-img">
+					<img src="img/car.png">
+				</div>
+				<div class="mui-col-xs-8">
+					<div class="loans-intro-title">放款快</div>
+					<div class="loans-intro-text">2小时内即到帐</div>
+				</div>
+			</div>
+			<div class="mui-col-xs-6 mui-row loans-intro">
+				<div class="mui-col-xs-4 loans-intro-img">
+					<img src="img/car.png">
+				</div>
+				<div class="mui-col-xs-8">
+					<div class="loans-intro-title">产品多</div>
+					<div class="loans-intro-text">多种金融解决方案</div>
+				</div>
 			</div>
 		</div>
-		<!-- 汽车保险 -->
-		<div class="insurance-con mui-row">
-			<div class="insurance-title mui-col-xs-12">汽车保险</div>
-			<div class="insurance-img mui-col-xs-4">
-				<a href="insurance.html">
-					<img src="img/insurance1.jpg">
-				</a>
-			</div>
-			<div class="insurance-img mui-col-xs-4">
-				<a href="insurance.html">
-					<img src="img/insurance2.jpg">
-				</a>
-			</div>
-			<div class="insurance-img mui-col-xs-4">
-				<a href="insurance.html">
-					<img src="img/insurance3.jpg">
-				</a>
-			</div>
+		<!-- 评估车价按钮 -->
+		<div class="assess">
+			<button class="assess-btn"><i></i>评估车价格</button>
 		</div>
-
 		<!-- 产品列表 -->
 		<div class="product-list">
+			<!-- 产品 -->
 			<div class="product">
 				<div class="product-con mui-row">
 					<div class="product-text mui-col-xs-6">
-						<p class="product-title">汽车按揭</p>
+						<p class="product-title">汽车抵质押贷款</p>
 						<p class="product-txt">
 							为车主提供汽车质押借款的金融产品
 						</p>
@@ -80,28 +95,7 @@
 					<a class="mui-col-xs-6 details">
 						查看详情
 					</a>
-					<a href="payCar.html" class="mui-col-xs-6 apply">
-						立即申请
-					</a>
-				</div>
-			</div>
-			<div class="product">
-				<div class="product-con mui-row">
-					<div class="product-text mui-col-xs-6">
-						<p class="product-title">汽车按揭</p>
-						<p class="product-txt">
-							为车主提供汽车质押借款的金融产品
-						</p>
-					</div>
-					<div class="product-img mui-col-xs-6">
-						<img src="img/car-img.png">
-					</div>
-				</div>
-				<div class="product-btn mui-row">
-					<a class="mui-col-xs-6 details">
-						查看详情
-					</a>
-					<a class="mui-col-xs-6 apply">
+					<a href="loans.html" class="mui-col-xs-6 apply">
 						立即申请
 					</a>
 				</div>
@@ -134,7 +128,7 @@
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/mui.js"></script>
 <script type="text/javascript">
-	$(".tool button").click(function(){
+	$(".assess-btn").click(function(){
 		mui.toast("功能正在开发，敬请期待。")
 	})
 </script>
