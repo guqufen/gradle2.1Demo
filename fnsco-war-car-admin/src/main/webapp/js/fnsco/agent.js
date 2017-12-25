@@ -217,65 +217,7 @@ function getUserId() {
 		return select_data[0].id;
 	}
 }
-//部门结构树
-var dept_ztree;
-var dept_setting = {
-	data : {
-		simpleData : {
-			enable : true,
-			idKey : "id",
-			pIdKey : "parentId",
-			rootPId : -1
-		},
-		key : {
-			url : "nourl"
-		}
-	}
-};
-//初始化树方法
-function getDept() {
-	$.ajax({
-		url :json.auth_user_querytree,
-		//type : 'POST',	
-		success : function(data) {
-			dept_ztree = $.fn.zTree.init($("#deptTree"), dept_setting,data.data);
-			// data.data就是所有数据集
-			console.log(data.data);
-			console.log(dept_ztree);
-		},
-		error : function(data) {
-			alert(" 数据加载失败！" + data);
-		}
-	});
-}
 
-
-//部门选择框确认方法
-function dotext(a) {
-	getDept();
-	layer.open({
-		type : 1,
-		offset : '50px',
-		skin : 'layui-layer-molv',
-		title : "选择部门",
-		area : [ '300px', '450px' ],
-		shade : 0,
-		shadeClose : false,
-		content : jQuery("#deptLayer"),
-		btn : [ '确定', '取消' ],
-		btn1 : function(index) {
-			var node = dept_ztree.getSelectedNodes();
-			//选择上级部门
-			name = node[0].name;
-			if(a==1){
-				$("#department").val(name);
-			}else if(a==2){
-				$("#department1").val(name);
-			}	
-			layer.close(index);
-		}
-	});
-}
 //查询条件按钮事件
 function queryEvent(id) {
 	$('#' + id).bootstrapTable('refresh');
@@ -285,42 +227,6 @@ function resetEvent(form, id) {
 	$('#' + form)[0].reset();
 	$('#' + id).bootstrapTable('refresh');
 }
-//角色查询添加拼接
-function showdates(data, id) {
-	$("#"+id).html('');
-	for (i = 0; i < data.length; i++) {
-		html='<div class="col-sm-6"><label><input type="checkbox" name="'+id+'" value="'+data[i].roleId+'"/>'+data[i].roleName+'</label></div>';
-		$("#"+id).append(html);
-	}
-};
-//获取添加的角色id
-function getRoleId(name) {
-	var obj = document.getElementsByName(name);
-    check_val = [];
-    for(k in obj){
-        if(obj[k].checked)
-            check_val.push(obj[k].value);
-    }
-    return check_val;
-};
-//角色查询
-function queryRole(id) {
-	$.ajax({
-		url :json.auth_user_queryRole,
-		type : 'POST',
-		async:false,//同步获取数据
-		success : function(data) {
-			unloginHandler(data);
-			console.log(data);
-			if (data.data == null) {
-				layer.msg('没有任何角色');
-			} else {
-				showdates(data.data,id);
-//				showdates1(data.data);
-			}
-		}
-	});
-};
 //清除所有表单数据
 function clearDate(){
 	$("#username").val(null);
@@ -337,8 +243,6 @@ function clearDate(){
 //新增按钮事件
 $('#btn_add').click(function() {
 	clearDate();
-	requestAgent(null);
-	queryRole("role");
 	$('#addModal').modal();
 	$('#sexhide').hide();
 	$('#agentIdhide').hide();
@@ -346,7 +250,6 @@ $('#btn_add').click(function() {
 });
 //新增确认按钮事件
 $('#btn_yes').click(function() {
-			var roleid=getRoleId("role");
 			 //获得当前选中的值
 //			var sex = $('#sex').val();
 			var type = $('#type').val();
@@ -464,16 +367,6 @@ $('#btn_yes1').click(
 				layer.msg('取消成功');
 			});
 		});
-//部门点击事件
-$('#department').click(function(){ 
-	var a=1;
-	dotext(a);
-});
-//部门点击1事件
-$('#department1').click(function(){ 
-	var a=2;
-	dotext(a);
-});
 //批量删除按钮事件
 $('#btn_delete').click(function(){
   var select_data = $('#table').bootstrapTable('getSelections');  
