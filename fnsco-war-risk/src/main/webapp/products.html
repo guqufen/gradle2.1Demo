@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>风控+</title>
+<title>产品管理</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="风控+页面">
+<meta name="description" content="产品管理">
 <meta name="author" content="">
 <link rel="shortcut icon" href="favicon.ico">
 <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -86,22 +86,13 @@
 		<div class="rightBox" id="rightBox">
 			<!-- 搜索栏 -->
 			<div class="searchBox" id="searchBox">
-				<div class="inputDiv">
-					<label>商户名称</label> <input id="merName" type="text" name="merchants"
-						placeholder="商户名">
-				</div>
-				<div class="inputDiv">
-					<label>商圈</label> <input id="tradingArea" type="text" name="merchants"
-						placeholder="商圈">
-				</div>
-				<div class="inputDiv">
-					<label>营业执照</label> <input id="businessLicenseNum" type="text" name="merchants"
-						placeholder="营业执照">
-				</div>
-				<button class="searchBtn" onclick="javascript:queryEvent();">搜索</button>
+				<button class="searchBtn" onclick="javascript:queryEventAll();">全部</button>
+				<button class="searchBtn" onclick="javascript:queryEventUp();">启用</button>
+				<button class="searchBtn" onclick="javascript:queryEventStop();">停用</button>
 			</div>
 			<!-- 表格块 -->
 			<div class="rightContent" id="rightContent">
+				<button class="searchBtn" onclick="javascript:addProducts();">新增产品</button>
 				<div class="contentTable">
 					<div class="ibox float-e-margins">
 						<div class="ibox-content">
@@ -146,6 +137,39 @@
 						value="修改">
 				</div>
 			</div>
+			<!-- detailsModel详情 start -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModelLabel" data-backdrop="static" data-keyboard="false">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	                <h4 class="modal-title" id="editModalLabel">反馈详情</h4>
+	            </div>
+	            <div class="modal-body">
+	                <div class="tab-content">
+	                        <div class="row">
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="name">产品名称：</label>
+	                                <input type="text" class="form-control" id=name name="name" required="required">
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="userName">姓名：</label>
+	                                <input type="text" class="form-control" id="userName" name="userName">
+	                            </div>
+	                            <div class="col-sm-8">
+	                                <label class="control-label" for="submitTime">反馈时间：</label>
+	                                <input type="text" class="form-control" id="submitTime" name="submitTime">
+	                            </div>
+	                            <div class="col-sm-12">
+	                                <label class="control-label" for="content">内容：</label>
+	                                <textarea id="content" name="content" class="form-control" rows="5"></textarea>	                                
+	                            </div>
+	                        </div>  
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div> 
 		</div>
 </body>
 <script src="js/jquery.min.js"></script>
@@ -161,7 +185,7 @@
 <script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="js/layer/layer.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript" src="js/report.js"></script>
+<script type="text/javascript" src="js/products.js"></script>
 <script src="js/layout.js"></script>
 <script type="text/javascript">
 	$('.logout').attr('href', PROJECT_NAME + "/web/userOuter/logout");
