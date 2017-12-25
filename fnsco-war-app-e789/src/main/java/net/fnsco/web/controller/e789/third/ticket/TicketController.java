@@ -371,12 +371,16 @@ public class TicketController extends BaseController {
         ticketOrderDTO.setTrainCode(ticketOrderJO.getTrainCode());
         ticketOrderDTO.setTrainDate(ticketOrderJO.getTrainDate());
         ticketOrderDTO.setUserId(ticketOrderJO.getUserId());
-        ResultDTO result = ticketService.addOrder(ticketOrderDTO);
+        ResultDTO<TicketOrderDO> result = ticketService.addOrder(ticketOrderDTO);
         if (!result.isSuccess()) {
-            return result;
+            return fail(result.getCode(), result.getMessage());
+        }
+        TicketOrderDO TicketOrderDO = result.getData();
+        if (Strings.isNullOrEmpty(TicketOrderDO.getPayOrderNo())) {
+            return fail("提交订单出错");
         }
         AddTicketOrderVO resultVO = new AddTicketOrderVO();
-        resultVO.setOrderNo((String) result.getData());
+        resultVO.setOrderNo(TicketOrderDO.getOrderNo());
         return success(resultVO);
     }
 
@@ -482,6 +486,7 @@ public class TicketController extends BaseController {
         Integer pageNum = 1;
         Integer pageSize = 20;
         ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
+        ticketOrder.setStatuses(null);
         ResultPageDTO<TrainOrderListVO> resultList = ticketOrderService.getOrderList(ticketOrder, pageNum, pageSize);
         return success(resultList);
     }

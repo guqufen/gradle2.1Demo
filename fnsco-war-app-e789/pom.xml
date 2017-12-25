@@ -99,7 +99,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>e789</finalName>
+		<finalName>app-e789</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

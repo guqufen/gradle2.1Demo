@@ -2,6 +2,7 @@ package net.fnsco.trading.service.third.ticket;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public class TicketOrderService extends BaseService {
 
     @Transactional
     public void updateOrderStatus(TicketOrderDO ticketOrder, Integer pageNum, Integer pageSize) {
-        Integer[] statuses = { 2, 4, 7 };
+        Integer[] statuses = { 1, 4, 7 };
         ticketOrder.setStatuses(statuses);
         List<TicketOrderDO> pageList = this.ticketOrderDAO.pageList(ticketOrder, pageNum, pageSize);
         for (TicketOrderDO order : pageList) {
@@ -75,12 +76,15 @@ public class TicketOrderService extends BaseService {
                         order.setStatus(TicketConstants.OrderStateEnum.FAIL.getCode());
                         order.setRespMsg(obj1.getString("msg"));
                     } else if ("2".equals(status)) {
+                        BigDecimal amountB = new BigDecimal(obj1.getString("orderamount"));
+                        BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
+                        order.setOrderAmount(amountBs);
                         order.setStatus(TicketConstants.OrderStateEnum.SIT_DOWN.getCode());
                         order.setRespMsg(obj1.getString("msg"));
                     } else if ("4".equals(status)) {
                         String ordernumber = obj1.getString("ordernumber");
                         String passengers = obj1.getString("passengers");
-                        String orderamount = obj1.getString("orderamount");
+                        //String orderamount = obj1.getString("orderamount");
 
                         String payTime = obj1.getString("pay_time");
                         JSONArray objArray2 = JSONArray.fromObject(passengers);
@@ -92,11 +96,11 @@ public class TicketOrderService extends BaseService {
                             TicketOrderPassengerDO pass = passengerDAO.getById(Integer.parseInt(passengerid));
                             pass.setTicketNo(ticketNo);
                             pass.setCxin(cxin);
+                            pass.setLastModifyTime(new Date());
                             passengerDAO.update(pass);
                         }
                         order.setTrainOrderNumber(ordernumber);
                         order.setPayTime(DateUtils.toParseYmdhms(payTime));
-                        order.setOrderAmount(new BigDecimal(orderamount));
                         //减去冻结金额
                         if (TicketConstants.OrderStateEnum.PAYING.getCode().equals(order.getStatus())) {
                             appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
@@ -123,14 +127,17 @@ public class TicketOrderService extends BaseService {
                                     BigDecimal amountB = new BigDecimal(returnMoney);
                                     BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
                                     pass.setReturnMoney(amountBs);
+                                    pass.setLastModifyTime(new Date());
                                     passengerDAO.update(pass);
                                     if ("true".equals(returnsuccess)) {
                                         order.setStatus(TicketConstants.OrderStateEnum.REFUND.getCode());
                                     }
+                                    //appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(amountBs));
                                 }
                             }
                         }
                     }
+                    order.setLastModifyTime(new Date());
                     ticketOrderDAO.update(order);
                 }
             }
@@ -225,22 +232,26 @@ public class TicketOrderService extends BaseService {
         if (null == order) {
             return ResultDTO.fail("订单不存在");
         }
-        if (TicketConstants.OrderStateEnum.SIT_DOWN.getCode().equals(order.getStatus())) {
+        if (!TicketConstants.OrderStateEnum.SIT_DOWN.getCode().equals(order.getStatus())) {
             return ResultDTO.fail("订单状态不正常");
         }
-        order.setStatus(TicketConstants.OrderStateEnum.PAYING.getCode());
-        ticketOrderDAO.update(order);
         //冻结余额
         boolean payResult = appAccountBalanceService.doFrozenBalance(order.getAppUserId(), order.getOrderAmount());
         if (!payResult) {
             return ResultDTO.fail("账户余额不足，请充值");
         }
+        order.setStatus(TicketConstants.OrderStateEnum.PAYING.getCode());
+        order.setLastModifyTime(new Date());
+        ticketOrderDAO.update(order);
         JSONObject obj = TrainTicketsUtil.pay(order.getPayOrderNo());
         String error_code = obj.getString("error_code");
         //判断是否调用成功，只有error_code=0的时候表示返回成功
         if (!"0".equals(error_code)) {
             String reason = obj.getString("reason");
             appAccountBalanceService.doFrozenBalance(order.getAppUserId(), BigDecimal.ZERO.subtract(order.getOrderAmount()));
+            order.setStatus(TicketConstants.OrderStateEnum.SIT_DOWN.getCode());
+            order.setLastModifyTime(new Date());
+            ticketOrderDAO.update(order);
             return ResultDTO.fail(reason);
         }
         return ResultDTO.success();
@@ -265,11 +276,13 @@ public class TicketOrderService extends BaseService {
             return ResultDTO.fail("订单状态不正常");
         }
         order.setStatus(TicketConstants.OrderStateEnum.CANCEL.getCode());
+        order.setLastModifyTime(new Date());
         ticketOrderDAO.update(order);
         JSONObject obj = TrainTicketsUtil.cancel(order.getPayOrderNo());
         String error_code = obj.getString("error_code");
         if (!"0".equals(error_code)) {
             order.setStatus(TicketConstants.OrderStateEnum.SIT_DOWN.getCode());
+            order.setLastModifyTime(new Date());
             ticketOrderDAO.update(order);
             return ResultDTO.fail("取消支付失败,请稍后重试");
         }
@@ -295,6 +308,7 @@ public class TicketOrderService extends BaseService {
             return ResultDTO.fail("订单状态不正常");
         }
         order.setStatus(TicketConstants.OrderStateEnum.REFUNDING.getCode());
+        order.setLastModifyTime(new Date());
         ticketOrderDAO.update(order);
 
         List<Tickets> ticketList = Lists.newArrayList();
@@ -320,11 +334,18 @@ public class TicketOrderService extends BaseService {
                 logger.error("调用退票程序出错", reason);
                 order.setStatus(TicketConstants.OrderStateEnum.SUCCESS.getCode());
                 order.setRespMsg("调用退票程序出错" + reason);
+                order.setLastModifyTime(new Date());
                 ticketOrderDAO.update(order);
                 return ResultDTO.fail(reason);
+            }else{
+                String msg = obj.getString("msg");
+                order.setRespMsg(msg);
+                order.setLastModifyTime(new Date());
+                ticketOrderDAO.update(order);
             }
         } catch (UnsupportedEncodingException e) {
             order.setStatus(TicketConstants.OrderStateEnum.SUCCESS.getCode());
+            order.setLastModifyTime(new Date());
             ticketOrderDAO.update(order);
             logger.error("调用退票程序出错", e);
             return ResultDTO.fail("调用退票程序异常");

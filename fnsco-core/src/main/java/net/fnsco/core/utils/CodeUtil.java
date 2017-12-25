@@ -44,17 +44,11 @@ public class CodeUtil {
 
 	// 生成单号
 	public static String generateOrderCode(String prefix) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		int month = calendar.get(Calendar.MONTH) + 1;
-		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		int minute = calendar.get(Calendar.MINUTE);
+		
+		String nowDateStr = DateUtils.getNowDateStr();
 		int value = (int) (Math.random() * (99999999 - 10000000) + 10000000);
 		StringBuilder sb = new StringBuilder();
-		sb.append(prefix).append(StringUtils.leftPad(String.valueOf(month), 2, '0')).append(StringUtils.leftPad(String.valueOf(day), 2, '0'))
-				.append(StringUtils.leftPad(String.valueOf(hour), 2, '0')).append(StringUtils.leftPad(String.valueOf(minute), 2, '0')).append(value);
-
+		sb.append(prefix).append(nowDateStr).append(value);
 		return sb.toString();
 	}
 
