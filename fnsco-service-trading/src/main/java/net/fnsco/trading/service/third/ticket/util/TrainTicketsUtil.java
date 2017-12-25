@@ -2,6 +2,7 @@ package net.fnsco.trading.service.third.ticket.util;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,8 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
 
 import net.fnsco.core.utils.HttpUtils;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 public class TrainTicketsUtil {
@@ -102,21 +105,35 @@ public class TrainTicketsUtil {
      * @param map
      * @throws UnsupportedEncodingException 
      */
-    public static JSONObject postIndent(Map map) throws UnsupportedEncodingException {
-        map.put("key", KEY);
+    public static JSONObject postIndent(Map<String, String> paramesMap) throws UnsupportedEncodingException {
+        paramesMap.put("key", KEY);
+        Map<String, String> paramesMapTemp = Maps.newHashMap();
+        for (Entry<String, String> entry : paramesMap.entrySet()) {
+            String key = entry.getKey();
+            String value = "";
+            Object temp = entry.getValue();
+            if (temp instanceof String) {
+                value = (String) temp;
+            } else if (temp instanceof JSONArray) {
+                value = ((JSONArray) temp).toString();
+            } else {
+                value = String.valueOf(temp);
+            }
+            paramesMapTemp.put(key, value);
+        }
         String url = "http://op.juhe.cn/trainTickets/submit";
-        logger.error("调用火车票（提交订单开始）" + JSON.toJSONString(map));
-        String data = HttpUtils.post(url, map);
+        logger.error("调用火车票（提交订单开始）" + JSON.toJSONString(paramesMapTemp));
+        String data = HttpUtils.post(url, paramesMapTemp);
         logger.error("调用火车票（提交订单返回）" + data);
         if (data != null) {
-            JSONObject obj = JSONObject.fromObject(data);
+            return JSONObject.fromObject(data);
         }
         return null;
     }
 
     /**
      * 订单状态查询，对应接口地址：http://op.juhe.cn/trainTickets/orderStatus?key=您申请到的appkey&orderid=1433243990111
-     * 
+     * {"reason":"查询订单状态成功","result":{"orderid":"JH151390556151688","user_orderid":"T1222091991883349","msg":"在12306未获取到车次[K825]车票预订查询结果。","orderamount":null,"status":"1","passengers":[{"zwcode":"1","passportseno":"","passporttypeseid":"1","passporttypeseidname":"二代身份证","price":"11","passengersename":"宋先飞","zwname":"硬座","passengerid":"154376","piaotype":"1","piaotypename":"成人票"}],"checi":"K825","ordernumber":null,"submit_time":"2017-12-22 09:19:21","deal_time":"2017-12-22 09:19:49","cancel_time":null,"pay_time":null,"finished_time":null,"refund_time":null,"juhe_refund_time":null,"start_time":null,"arrive_time":null,"runtime":null,"train_date":"2017-12-30","from_station_name":"杭州东","from_station_code":"HGH","to_station_name":"海宁","to_station_code":"HNH","refund_money":null},"error_code":0}
      * @param map
      * @throws UnsupportedEncodingException 
      */
@@ -126,9 +143,29 @@ public class TrainTicketsUtil {
         String data = HttpUtils.get(url);
         logger.error("调用火车票（订单状态查询）" + data);
         if (data != null) {
-            JSONObject obj = JSONObject.fromObject(data);
+            return JSONObject.fromObject(data);
         }
         return null;
+        //调用火车票（订单状态查询）{"reason":"查询订单状态成功","result":{"orderid":"JH151390696648081","user_orderid":"T1222094223734791","msg":"线上退票成功","orderamount":"11.00","status":"7",
+        //        "passengers":[{"zwcode":"1","passportseno":"433023198209112817",
+        //            "passporttypeseid":"1","passporttypeseidname":"二代身份证",
+        //            "price":"11.0","passengersename":"宋先飞","zwname":"硬座",
+        //            "passengerid":"154377","piaotype":"1","piaotypename":"成人票",
+        //            "ticket_no":"E6606813191130007","cxin":"13车厢,007座","reason":0,
+        //            "refundTimeline":[{"time":"2017-12-22 10:37:23","msg":"线上申请退票"}
+        //            ,{"time":"2017-12-22 10:37:36","msg":"线上退票成功",
+        //                "detail":{"returnsuccess":true,"returnmoney":"9","returnfailid":"",
+        //                "returnfailmsg":"","returntype":"1","ticket_no":"E6606813191130007",
+        //                "passengername":"宋先飞","passporttypeseid":"1","passportseno":"433023198209112817"}}]
+        //                        ,"returntickets":{"returnsuccess":true,"returnmoney":"9",
+        //            "returntime":"2017-12-22 10:37:35","returnfailid":"","returnfailmsg":"","returntype":"1"}}],
+        //        "checi":"K528","ordernumber":"E660681319","submit_time":"2017-12-22 09:42:46",
+        //        "deal_time":"2017-12-22 09:43:05","cancel_time":null,"pay_time":"2017-12-22 10:01:48",
+        //        "finished_time":"2017-12-22 10:02:04","refund_time":"2017-12-22 10:37:23",
+        //        "juhe_refund_time":"2017-12-22 10:37:36","start_time":"2017-12-30 02:26:00",
+        //        "arrive_time":"2017-12-30 03:02:00","runtime":"00:36","train_date":"2017-12-30",
+        //        "from_station_name":"杭州东","from_station_code":"HGH","to_station_name":"海宁",
+        //        "to_station_code":"HNH","refund_money":"9.00"},"error_code":0}
     }
 
     /**
@@ -143,7 +180,39 @@ public class TrainTicketsUtil {
         String data = HttpUtils.get(url);
         logger.error("调用火车票（请求出票支付订单）" + data);
         if (data != null) {
-            JSONObject obj = JSONObject.fromObject(data);
+            return JSONObject.fromObject(data);
+        }
+        return null;
+    }
+
+    /**
+     * 在线退票，对应接口地址：http://op.juhe.cn/trainTickets/refund?key=您申请的APPKEY&orderid=1440491862863&tickets=[{"ticket_no":"E1190475871081234","passengername":"李四","passporttypeseid":"1","passportseno":"370827195104212345"}]
+     * 这个方法需要传的参数很多，不用慌，一个一个来
+     * @param map
+     * @throws UnsupportedEncodingException 
+     */
+    public static JSONObject refund(Map<String, String> paramesMap) throws UnsupportedEncodingException {
+        paramesMap.put("key", KEY);
+        Map<String, String> paramesMapTemp = Maps.newHashMap();
+        for (Entry<String, String> entry : paramesMap.entrySet()) {
+            String key = entry.getKey();
+            String value = "";
+            Object temp = entry.getValue();
+            if (temp instanceof String) {
+                value = (String) temp;
+            } else if (temp instanceof JSONArray) {
+                value = ((JSONArray) temp).toString();
+            } else {
+                value = String.valueOf(temp);
+            }
+            paramesMapTemp.put(key, value);
+        }
+        String url = "http://op.juhe.cn/trainTickets/refund";
+        logger.error("调用火车票（在线退票）" + JSON.toJSONString(paramesMapTemp));
+        String data = HttpUtils.post(url, paramesMapTemp);
+        logger.error("调用火车票（在线退票）" + data);
+        if (data != null) {
+            return JSONObject.fromObject(data);
         }
         return null;
     }
@@ -160,7 +229,7 @@ public class TrainTicketsUtil {
         String data = HttpUtils.get(url);
         logger.error("调用火车票（取消支付订单）" + data);
         if (data != null) {
-            JSONObject obj = JSONObject.fromObject(data);
+            return JSONObject.fromObject(data);
         }
         return null;
     }

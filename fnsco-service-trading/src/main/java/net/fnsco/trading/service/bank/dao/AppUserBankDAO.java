@@ -39,7 +39,7 @@ public interface AppUserBankDAO {
 	@Select("SELECT id FROM u_app_user_bank WHERE app_user_id = #{appUserId} LIMIT 1")
 	public AppUserBankDO getByAppUserId(@Param("appUserId") int appUserId);
 
-	@Insert("INSERT into u_app_user_bank(id,app_user_id,account_type,account_no,account_name,account_card_id,sub_bank_name,open_bank_prince,open_bank,open_bank_city,open_bank_num,account_phone,create_time,update_time,bank_name,type) VALUES (#{id},#{appUserId},#{accountType},#{accountNo},#{accountName},#{accountCardId},#{subBankName},#{openBankPrince},#{openBank},#{openBankCity},#{openBankNum},#{accountPhone},#{create_time},#{update_time},#{bank_name},#{type})")
+	@Insert("INSERT into u_app_user_bank(id,app_user_id,account_type,account_no,account_name,account_card_id,sub_bank_name,open_bank_prince,open_bank,open_bank_city,open_bank_num,account_phone,create_time,update_time,bank_name,type) VALUES (#{id},#{appUserId},#{accountType},#{accountNo},#{accountName},#{accountCardId},#{subBankName},#{openBankPrince},#{openBank},#{openBankCity},#{openBankNum},#{accountPhone},#{createTime},#{updateTime},#{bankName},#{type})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public Integer insert(AppUserBankDO appUserBank);
 
@@ -79,5 +79,9 @@ public interface AppUserBankDAO {
 	@Select(" SELECT type,bank_name FROM sys_bank_card_type WHERE LEFT (#{bankCardNum},card_trim_length) = card_trim_value	AND card_total_length = #{cardTotalLength} ORDER BY card_trim_length DESC;")
 	public BankNameAndTypeDTO queryByCertifyId(@Param("bankCardNum") String bankCardNum,
 			@Param("cardTotalLength") String cardTotalLength);
+
+	@Results({ @Result(column = "account_no", property = "accountNo")})
+	@Select(" SELECT account_no FROM u_app_user_bank WHERE account_no=#{bankCardNum} ")
+	public List<String> getByBankNO(String bankCardNum);
 
 }

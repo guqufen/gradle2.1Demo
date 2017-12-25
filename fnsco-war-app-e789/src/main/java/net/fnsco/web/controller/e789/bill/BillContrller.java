@@ -84,12 +84,14 @@ public class BillContrller extends BaseController {
 		List<TradeWithdrawDO> datas =  datasResult.getList();
 		Set<String> sets = Sets.newHashSet(); 
 		List<BillVO> data = Lists.newArrayList();
+		List<BillDayVO> billDetails = null;
 		for (TradeWithdrawDO tradeWithdrawDO : datas) {
 			String createMonth = formatYYYYMMDate(tradeWithdrawDO.getCreateTime());
 			if(Strings.isNullOrEmpty(createMonth)) {
+				datasResult.setTotal(datasResult.getTotal()-1);
 				continue;
 			}
-			List<BillDayVO> billDetails = null;
+			
 			if(!sets.contains(createMonth)) {
 				sets.add(createMonth);
 				BillVO mouthBillVo = new BillVO();
@@ -111,42 +113,51 @@ public class BillContrller extends BaseController {
 			billDetails.add(billDayVO);
 		}
 		
+		String backMouth = null;
+		if(billJO.getPageNum() > 1) {
+			ResultPageDTO<TradeWithdrawDO> datasResultBack = tradeWithdrawService.page(tradeWithdraw, billJO.getPageNum()-1, billJO.getPageSize());
+			if(CollectionUtils.isNotEmpty(datasResultBack.getList())) {
+				TradeWithdrawDO tradeWithdrawDOBack = datasResultBack.getList().get(datasResultBack.getList().size()-1);
+				backMouth = formatYYYYMMDate(tradeWithdrawDOBack.getCreateTime());
+			}
+		}
+		
+		
 		for (BillVO billVO : data) {
 			List<MonthWithdrawCountDTO> countWithdraws = tradeWithdrawService.doQueryTotalAmountGroupByMouth(billJO.getUserId(), billVO.getBillDate(), 3);
 			if(CollectionUtils.isNotEmpty(countWithdraws)) {
 				for (MonthWithdrawCountDTO monthWithdrawCountDTO : countWithdraws) {
-					if(monthWithdrawCountDTO.getTradeType()==2) {
+					if(monthWithdrawCountDTO.getTradeType()==1) {
 						billVO.setTotalRevenue(formatRMBNumber(new BigDecimal(monthWithdrawCountDTO.getTotalAmount())));;
 					}else {
 						billVO.setTotalExpenditure(addRMBNumber(billVO.getTotalExpenditure(),formatRMBNumber(monthWithdrawCountDTO.getTotalAmount())));
 					}
+					
 					if(billJO.getPageNum() == 1) {
 						billVO.setDisplay(true);
 					}else {
-						TradeWithdrawDO tradeWithdrawDO = datas.get(0);
-						ResultPageDTO<TradeWithdrawDO> datasResultBack = tradeWithdrawService.page(tradeWithdraw, billJO.getPageNum()-1, billJO.getPageSize());
-						if(CollectionUtils.isNotEmpty(datasResultBack.getList())) {
-							TradeWithdrawDO tradeWithdrawDOBack = datasResultBack.getList().get(datasResultBack.getList().size());
-							String firstMouth = formatYYYYMMDate(tradeWithdrawDO.getCreateTime());
-							String backMouth = formatYYYYMMDate(tradeWithdrawDOBack.getCreateTime());
-							if(firstMouth.equals(backMouth)) {
-								billVO.setDisplay(false);
-							}else {
-								billVO.setDisplay(true);
-							}
+						String firstMouth = billVO.getBillDate();
+						if(firstMouth.equals(backMouth)) {
+							billVO.setDisplay(false);
+						}else {
+							billVO.setDisplay(true);
 						}
 					}
 				}
 				if(Strings.isNullOrEmpty(billVO.getTotalExpenditure())) {
-					billVO.setTotalExpenditure("0.00");
+					billVO.setTotalExpenditure("-0.00");
+				}else {
+					billVO.setTotalExpenditure("-"+billVO.getTotalExpenditure());
 				}
 				if(Strings.isNullOrEmpty(billVO.getTotalRevenue())) {
-					billVO.setTotalRevenue("0.00");
+					billVO.setTotalRevenue("-0.00");
+				}else {
+					billVO.setTotalRevenue("+"+billVO.getTotalRevenue());
 				}
 			}
 		}
 		
-		Integer totalNum = data.size();
+		Integer totalNum = datasResult.getTotal();
 		resultData.setTotalPage(totalNum/billJO.getPageSize());
 		if(totalNum%billJO.getPageSize() != 0) {
 			resultData.setTotalPage(resultData.getTotalPage()+1);

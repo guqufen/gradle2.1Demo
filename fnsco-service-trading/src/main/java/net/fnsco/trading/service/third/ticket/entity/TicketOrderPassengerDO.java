@@ -66,11 +66,6 @@ public class TicketOrderPassengerDO {
     private String     seatName;
 
     /**
-     * 状态 0未执行1执行中2失败3成功
-     */
-    private Integer    status;
-
-    /**
      * 创建时间
      */
     private Date       createTime;
@@ -83,6 +78,84 @@ public class TicketOrderPassengerDO {
      * 车票编号，退票时会用到
      */
     private String     ticketNo;
+    /**
+     * 车厢08车厢,010座
+     */
+    private String     cxin;
+    /**
+     * 退款金额
+     */
+    private BigDecimal returnMoney;
+    /**
+     * 失败原因，退票失败时有值
+     */
+    private String     returnFailMsg;
+
+    /**
+     * returnMoney
+     *
+     * @return  the returnMoney
+     * @since   CodingExample Ver 1.0
+    */
+
+    public BigDecimal getReturnMoney() {
+        return returnMoney;
+    }
+
+    /**
+     * returnMoney
+     *
+     * @param   returnMoney    the returnMoney to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setReturnMoney(BigDecimal returnMoney) {
+        this.returnMoney = returnMoney;
+    }
+
+    /**
+     * returnFailMsg
+     *
+     * @return  the returnFailMsg
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getReturnFailMsg() {
+        return returnFailMsg;
+    }
+
+    /**
+     * returnFailMsg
+     *
+     * @param   returnFailMsg    the returnFailMsg to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setReturnFailMsg(String returnFailMsg) {
+        this.returnFailMsg = returnFailMsg;
+    }
+
+    /**
+     * cxin
+     *
+     * @return  the cxin
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getCxin() {
+        return cxin;
+    }
+
+    /**
+     * cxin
+     *
+     * @param   cxin    the cxin to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setCxin(String cxin) {
+        this.cxin = cxin;
+    }
 
     /**
      * ticketNo
@@ -202,14 +275,6 @@ public class TicketOrderPassengerDO {
         this.seatName = seatName;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -229,7 +294,7 @@ public class TicketOrderPassengerDO {
     @Override
     public String toString() {
         return "[id=" + id + ", orderNo=" + orderNo + ", passengerId=" + passengerId + ", passengerName=" + passengerName + ", ticketType=" + ticketType + ", ticketTypeName=" + ticketTypeName
-               + ", cardTypeId=" + cardTypeId + ", cardTypeName=" + cardTypeName + ", cardNum=" + cardNum + ", price=" + price + ", seatCode=" + seatCode + ", seatName=" + seatName + ", status="
-               + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
+               + ", cardTypeId=" + cardTypeId + ", cardTypeName=" + cardTypeName + ", cardNum=" + cardNum + ", price=" + price + ", seatCode=" + seatCode + ", seatName=" + seatName + ",createTime="
+               + createTime + ", lastModifyTime=" + lastModifyTime + "]";
     }
 }

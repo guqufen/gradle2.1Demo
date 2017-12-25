@@ -10,8 +10,6 @@ public class TicketOrderDTO extends DTO {
     private String  passengerId;
     //车号 
     private String  trainCode;
-    //票类型（学生票） 
-    private String  ticketType;
     //坐席 F:动卧(新增),9:商务座,P:特等座,M:一等座,O（大写字母O，不是数字0）:二等座,6:高级软卧, 4:软卧,3:硬卧,2:软座,1:硬座。坐席 F:动卧(新增),9:商务座,P:特等座,M:一等座,O（大写字母O，不是数字0）:二等座,6:高级软卧, 4:软卧,3:硬卧,2:软座,1:硬座。 
     private String  seatCode;
     //价格 
@@ -212,28 +210,6 @@ public class TicketOrderDTO extends DTO {
 
     public void setTrainCode(String trainCode) {
         this.trainCode = trainCode;
-    }
-
-    /**
-     * ticketType
-     *
-     * @return  the ticketType
-     * @since   CodingExample Ver 1.0
-    */
-
-    public String getTicketType() {
-        return ticketType;
-    }
-
-    /**
-     * ticketType
-     *
-     * @param   ticketType    the ticketType to set
-     * @since   CodingExample Ver 1.0
-     */
-
-    public void setTicketType(String ticketType) {
-        this.ticketType = ticketType;
     }
 
     /**

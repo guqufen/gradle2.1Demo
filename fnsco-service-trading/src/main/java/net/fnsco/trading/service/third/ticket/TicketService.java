@@ -4,12 +4,14 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
+import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
@@ -28,6 +30,7 @@ import net.fnsco.trading.service.third.ticket.entity.TicketContactDO;
 import net.fnsco.trading.service.third.ticket.entity.TicketOrderDO;
 import net.fnsco.trading.service.third.ticket.entity.TicketOrderPassengerDO;
 import net.fnsco.trading.service.third.ticket.util.TrainTicketsUtil;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @Service
@@ -60,7 +63,7 @@ public class TicketService extends BaseService {
     }
 
     @Transactional
-    public ResultDTO addOrder(TicketOrderDTO ticketOrderDTO) {
+    public ResultDTO<TicketOrderDO> addOrder(TicketOrderDTO ticketOrderDTO) {
         TicketOrderDO ticketOrder = new TicketOrderDO();
         ticketOrder.setOrderNo(CodeUtil.generateOrderCode("T"));
         ticketOrder.setFromStationCode(ticketOrderDTO.getFromStationCode());
@@ -72,6 +75,7 @@ public class TicketService extends BaseService {
         ticketOrder.setTrainCode(ticketOrderDTO.getTrainCode());
         ticketOrder.setTrainDate(ticketOrderDTO.getTrainDate());
         ticketOrder.setCreateTime(new Date());
+        ticketOrder.setAppUserId(ticketOrderDTO.getUserId());
         ticketOrderDAO.insert(ticketOrder);
         String passengerId = ticketOrderDTO.getPassengerId();
         String[] passengerIds = passengerId.split(",");
@@ -88,9 +92,8 @@ public class TicketService extends BaseService {
             ticketOrderPassenger.setSeatCode(ticketOrderDTO.getSeatCode());
             ticketOrderPassenger.setSeatName(TicketConstants.SeatTypeEnum.getTypeName(ticketOrderDTO.getSeatCode()));
             ticketOrderPassenger.setPrice(new BigDecimal(ticketOrderDTO.getPrice()));
-            ticketOrderPassenger.setTicketType(ticketOrderDTO.getTicketType());
-            ticketOrderPassenger.setTicketTypeName(TicketConstants.TicketTypeEnum.getTypeName(ticketOrderDTO.getTicketType()));
-            ticketOrderPassenger.setStatus(TicketConstants.OrderStateEnum.INIT.getCode());
+            ticketOrderPassenger.setTicketType(contact.getTicketType());
+            ticketOrderPassenger.setTicketTypeName(TicketConstants.TicketTypeEnum.getTypeName(contact.getTicketType()));
             ticketOrderPassenger.setCreateTime(new Date());
             ticketOrderPassenger.setLastModifyTime(new Date());
             ticketOrderPassengerDAO.insert(ticketOrderPassenger);
@@ -114,15 +117,15 @@ public class TicketService extends BaseService {
             passengers.setPassporttypeseidname(pass.getCardTypeName());
             passengers.setPiaotype(pass.getTicketType());
             passengers.setPiaotypename(pass.getTicketTypeName());
-            passengers.setPrice(pass.getPrice().toString());
+            passengers.setPrice(pass.getPrice().divide(new BigDecimal("100")).toString());
             passengers.setZwcode(pass.getSeatCode());
             passengers.setZwname(pass.getSeatName());
             passDtoList.add(passengers);
         }
         order.setPassengers(passDtoList);
-        Map paramesMap = JSON.parseObject(JSON.toJSONString(order), Map.class);
-        String orderId = "";
+        Map<String, String> paramesMap = JSON.parseObject(JSON.toJSONString(order), Map.class);
         try {
+            String orderId = "";
             JSONObject obj = TrainTicketsUtil.postIndent(paramesMap);
             ticketOrder = ticketOrderDAO.getById(ticketOrder.getId());
             if (null != obj) {
@@ -132,25 +135,28 @@ public class TicketService extends BaseService {
                     String result = obj.getString("result");
                     if (result != null) {
                         obj = JSONObject.fromObject(result);
-                        orderId =obj.getString("orderid");
+                        orderId = obj.getString("orderid");
                     }
-                }else{
+                } else {
                     ticketOrder.setRespMsg(obj.getString("reason"));
                 }
             }
-            
+
             if (Strings.isNullOrEmpty(orderId)) {
                 ticketOrder.setStatus(TicketConstants.OrderStateEnum.FAIL.getCode());
             } else {
+                ticketOrder.setStatus(TicketConstants.OrderStateEnum.PROCESSING.getCode());
                 ticketOrder.setPayOrderNo(orderId);
             }
             ticketOrder.setLastModifyTime(new Date());
             ticketOrderDAO.update(ticketOrder);
         } catch (Exception ex) {
             logger.error("火车票提交订单出错" + JSON.toJSONString(paramesMap), ex);
-            return ResultDTO.fail("火车票提交订单出错");
+            ticketOrder.setStatus(TicketConstants.OrderStateEnum.FAIL.getCode());
+            ticketOrderDAO.update(ticketOrder);
+            return ResultDTO.fail("提交订单出错");
         }
-        return ResultDTO.success(orderId);
+        return ResultDTO.success(ticketOrder);
     }
 
 }

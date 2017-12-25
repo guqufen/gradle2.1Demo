@@ -305,7 +305,7 @@ public class TicketController extends BaseController {
         ticketContact.setAppUserId(passengerJO.getUserId());
         ticketContact.setCardNum(passengerJO.getCardNum());
         ticketContact.setCardType(passengerJO.getCardType());
-        //ticketContact.setMobile(passengerJO.get());
+        ticketContact.setName(passengerJO.getName());
         ticketContact.setTicketType(passengerJO.getTicketType());
         ticketContactService.doAdd(ticketContact);
         return success();
@@ -338,6 +338,20 @@ public class TicketController extends BaseController {
      * @author sxfei
      * @date   2017年12月13日 下午4:07:33
      */
+    /**
+    {
+        "fromStationCode": "HGH",
+        "fromStationName": "杭州东",
+        "passengerId": "6201",
+        "price": "11",
+        "seatCode": "1",
+        "toStationCode": "HNH",
+        "toStationName": "海宁",
+        "trainCode": "K528",
+        "trainDate": "2017-12-30",
+        "userId": 10
+      }
+      */
     @RequestMapping(value = "/addOrder")
     @ApiOperation(value = "提交订单")
     public ResultDTO<AddTicketOrderVO> addOrder(@RequestBody TicketOrderJO ticketOrderJO) {
@@ -352,22 +366,26 @@ public class TicketController extends BaseController {
         BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
         ticketOrderDTO.setPrice(amountBs.toString());
         ticketOrderDTO.setSeatCode(ticketOrderJO.getSeatCode());
-        ticketOrderDTO.setTicketType(ticketOrderJO.getSeatCode());
         ticketOrderDTO.setToStationCode(ticketOrderJO.getToStationCode());
         ticketOrderDTO.setToStationName(ticketOrderJO.getFromStationName());
         ticketOrderDTO.setTrainCode(ticketOrderJO.getTrainCode());
         ticketOrderDTO.setTrainDate(ticketOrderJO.getTrainDate());
-        ResultDTO result = ticketService.addOrder(ticketOrderDTO);
+        ticketOrderDTO.setUserId(ticketOrderJO.getUserId());
+        ResultDTO<TicketOrderDO> result = ticketService.addOrder(ticketOrderDTO);
         if (!result.isSuccess()) {
-            return result;
+            return fail(result.getCode(), result.getMessage());
+        }
+        TicketOrderDO TicketOrderDO = result.getData();
+        if (Strings.isNullOrEmpty(TicketOrderDO.getPayOrderNo())) {
+            return fail("提交订单出错");
         }
         AddTicketOrderVO resultVO = new AddTicketOrderVO();
-        resultVO.setOrderNo((String) result.getData());
+        resultVO.setOrderNo(TicketOrderDO.getOrderNo());
         return success(resultVO);
     }
 
     /**
-     * queryTradeDataDetail:(查询订单列表)
+     * queryTradeDataDetail:(查询待支付的订单列表)
      *
      * @param  @param tradeDataDetailJO
      * @param  @return    设定文件
@@ -375,16 +393,17 @@ public class TicketController extends BaseController {
      * @author sxfei
      * @date   2017年12月13日 下午4:07:33
      */
-    @RequestMapping(value = "/getOrderList")
-    @ApiOperation(value = "查询未支付的订单列表")
-    public ResultDTO<List<TrainOrderListVO>> getOrderList(@RequestBody QueryOrderListJO queryOrderListJO) {
+    @RequestMapping(value = "/getPayOrderList")
+    @ApiOperation(value = "查询待支付订单列表")
+    public ResultDTO<List<TrainOrderListVO>> getPayOrderList(@RequestBody QueryOrderListJO queryOrderListJO) {
         TicketOrderDO ticketOrder = new TicketOrderDO();
         ticketOrder.setOrderNo(queryOrderListJO.getOrderNo());
-        Integer[] statuses = { 0, 1, 2 };
-        ticketOrder.setStatuses(statuses);
+        ticketOrder.setAppUserId(queryOrderListJO.getUserId());
         Integer pageNum = 1;
         Integer pageSize = 20;
         ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
+        Integer[] statuses = { 0, 1, 2 };
+        ticketOrder.setStatuses(statuses);
         ResultPageDTO<TrainOrderListVO> resultList = ticketOrderService.getOrderList(ticketOrder, pageNum, pageSize);
         return success(resultList);
     }
@@ -434,17 +453,59 @@ public class TicketController extends BaseController {
      * @author sxfei
      * @date   2017年12月13日 下午4:07:33
      */
-    @RequestMapping(value = "/getPayOrderList")
+    @RequestMapping(value = "/getPayingOrderList")
     @ApiOperation(value = "查询支付是否成功的订单列表")
-    public ResultDTO<List<TrainOrderListVO>> getPayOrderList(@RequestBody QueryOrderListJO queryOrderListJO) {
+    public ResultDTO<List<TrainOrderListVO>> getPayingOrderList(@RequestBody QueryOrderListJO queryOrderListJO) {
         TicketOrderDO ticketOrder = new TicketOrderDO();
         ticketOrder.setOrderNo(queryOrderListJO.getOrderNo());
-        Integer[] statuses = { 4 };
-        ticketOrder.setStatuses(statuses);
+        ticketOrder.setAppUserId(queryOrderListJO.getUserId());
         Integer pageNum = 1;
         Integer pageSize = 20;
         ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
+        Integer[] statuses = { 4 };
+        ticketOrder.setStatuses(statuses);
         ResultPageDTO<TrainOrderListVO> resultList = ticketOrderService.getOrderList(ticketOrder, pageNum, pageSize);
         return success(resultList);
+    }
+
+    /**
+     * queryTradeDataDetail:(查询订单列表)
+     *
+     * @param  @param tradeDataDetailJO
+     * @param  @return    设定文件
+     * @return ResultDTO<TradeDataDetailVO>    DOM对象
+     * @author sxfei
+     * @date   2017年12月13日 下午4:07:33
+     */
+    @RequestMapping(value = "/getOrderList")
+    @ApiOperation(value = "查询所有订单列表")
+    public ResultDTO<List<TrainOrderListVO>> getOrderList(@RequestBody QueryOrderListJO queryOrderListJO) {
+        TicketOrderDO ticketOrder = new TicketOrderDO();
+        ticketOrder.setOrderNo(queryOrderListJO.getOrderNo());
+        ticketOrder.setAppUserId(queryOrderListJO.getUserId());
+        Integer pageNum = 1;
+        Integer pageSize = 20;
+        ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
+        ticketOrder.setStatuses(null);
+        ResultPageDTO<TrainOrderListVO> resultList = ticketOrderService.getOrderList(ticketOrder, pageNum, pageSize);
+        return success(resultList);
+    }
+
+    /**
+     * queryTradeDataDetail:(退票)
+     *
+     * @param  @param tradeDataDetailJO
+     * @param  @return    设定文件
+     * @return ResultDTO<TradeDataDetailVO>    DOM对象
+     * @author sxfei
+     * @date   2017年12月13日 下午4:07:33
+     */
+    @RequestMapping(value = "/refund")
+    @ApiOperation(value = "退票")
+    public ResultDTO refund(@RequestBody CancelOrderJO payOrderJO) {
+        TicketOrderDO ticketOrder = new TicketOrderDO();
+        ticketOrder.setOrderNo(payOrderJO.getOrderNo());
+        ticketOrder.setAppUserId(payOrderJO.getUserId());
+        return ticketOrderService.refund(ticketOrder);
     }
 }

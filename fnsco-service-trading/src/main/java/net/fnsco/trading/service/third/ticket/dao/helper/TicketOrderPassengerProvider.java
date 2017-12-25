@@ -56,14 +56,24 @@ public class TicketOrderPassengerProvider {
                 if (StringUtils.isNotBlank(ticketOrderPassenger.getTicketNo())) {
                     SET("ticket_no=#{ticketOrderPassenger.ticketNo}");
                 }
-                if (ticketOrderPassenger.getStatus() != null) {
-                    SET("status=#{ticketOrderPassenger.status}");
-                }
+
                 if (ticketOrderPassenger.getCreateTime() != null) {
                     SET("create_time=#{ticketOrderPassenger.createTime}");
                 }
                 if (ticketOrderPassenger.getLastModifyTime() != null) {
                     SET("last_modify_time=#{ticketOrderPassenger.lastModifyTime}");
+                }
+
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getCxin() )) {
+                    SET("cxin=#{ticketOrderPassenger.cxin}");
+                }
+
+                if (StringUtils.isNotBlank(ticketOrderPassenger.getReturnFailMsg())) {
+                    SET("return_fail_msg=#{ticketOrderPassenger.returnFailMsg}");
+                }
+
+                if (ticketOrderPassenger.getReturnMoney() != null) {
+                    SET("return_money=#{ticketOrderPassenger.returnMoney}");
                 }
                 WHERE("id = #{ticketOrderPassenger.id}");
             }
@@ -122,9 +132,7 @@ public class TicketOrderPassengerProvider {
                 if (StringUtils.isNotBlank(ticketOrderPassenger.getSeatName())) {
                     WHERE("seat_name=#{ticketOrderPassenger.seatName}");
                 }
-                if (ticketOrderPassenger.getStatus() != null) {
-                    WHERE("status=#{ticketOrderPassenger.status}");
-                }
+
                 if (ticketOrderPassenger.getCreateTime() != null) {
                     WHERE("create_time=#{ticketOrderPassenger.createTime}");
                 }
@@ -180,9 +188,6 @@ public class TicketOrderPassengerProvider {
                 }
                 if (StringUtils.isNotBlank(ticketOrderPassenger.getSeatName())) {
                     WHERE("seat_name=#{ticketOrderPassenger.seatName}");
-                }
-                if (ticketOrderPassenger.getStatus() != null) {
-                    WHERE("status=#{ticketOrderPassenger.status}");
                 }
                 if (ticketOrderPassenger.getCreateTime() != null) {
                     WHERE("create_time=#{ticketOrderPassenger.createTime}");

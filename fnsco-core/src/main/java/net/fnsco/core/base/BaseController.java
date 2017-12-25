@@ -20,11 +20,10 @@ import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.CookieUtils;
 
 public class BaseController {
-    protected Logger              logger   = LoggerFactory.getLogger(this.getClass());
+    protected Logger              logger = LoggerFactory.getLogger(this.getClass());
     protected HttpServletRequest  request;
     protected HttpServletResponse response;
     protected HttpSession         session;
-
 
     public Map<String, Integer> copyParamsToInteger(String[] params) {
         Map<String, Integer> map = Maps.newHashMap();
@@ -80,6 +79,10 @@ public class BaseController {
 
     public ResultDTO fail(String msgCode) {
         return ResultDTO.fail(msgCode);
+    }
+
+    public ResultDTO fail(String msgCode,String msg) {
+        return ResultDTO.fail(msgCode,msg);
     }
 
     public ResultDTO fail() {
