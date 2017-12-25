@@ -2,16 +2,20 @@ package net.fnsco.web.agent;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import net.fnsco.car.service.agent.AgentService;
 import net.fnsco.car.service.agent.dao.AgentDAO;
 import net.fnsco.car.service.agent.entity.AgentDO;
+import net.fnsco.car.service.finance.entity.OrderFinanceDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.freamwork.business.WebUserDTO;
 
 /**
@@ -27,6 +31,31 @@ public class CarAgentWebController extends BaseController {
 	
 	@Autowired
 	private AgentDAO agentDAO;
+	
+	@Autowired
+	private AgentService agentService;
+	
+	/**
+	 * query:(分页查询)
+	 *
+	 * @param  @param agentDO
+	 * @param  @param currentPageNum
+	 * @param  @param pageSize
+	 * @param  @return    设定文件
+	 * @return ResultPageDTO<AgentDO>    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月25日 下午1:23:08
+	 */
+	@RequestMapping(value = "/queryPage", method = RequestMethod.GET)
+	@ResponseBody
+	@RequiresPermissions(value = { "car:agent:list" })
+	public ResultPageDTO<AgentDO>  query(AgentDO agentDO ,Integer currentPageNum,Integer pageSize){
+		logger.info("查询运营商列表");
+		
+		ResultPageDTO<AgentDO> result  = agentService.page(agentDO, currentPageNum, pageSize);
+		return result;
+	}
+	
 	/**
 	 * queryAll:(查询所有代理商)
 	 *
