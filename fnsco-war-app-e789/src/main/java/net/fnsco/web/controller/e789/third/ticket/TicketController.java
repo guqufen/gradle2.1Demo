@@ -305,7 +305,7 @@ public class TicketController extends BaseController {
      */
     @RequestMapping(value = "/addPassenger")
     @ApiOperation(value = "添加乘客")
-    public ResultDTO addPassenger(@RequestBody PassengerJO passengerJO) {
+    public ResultDTO<TicketContactDO> addPassenger(@RequestBody PassengerJO passengerJO) {
         TicketContactDO ticketContact = new TicketContactDO();
         ticketContact.setAppUserId(passengerJO.getUserId());
         ticketContact.setCardNum(passengerJO.getCardNum());
@@ -313,7 +313,7 @@ public class TicketController extends BaseController {
         ticketContact.setName(passengerJO.getName());
         ticketContact.setTicketType(passengerJO.getTicketType());
         ticketContactService.doAdd(ticketContact);
-        return success();
+        return success(ticketContact);
     }
 
     /**
