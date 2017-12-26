@@ -1,5 +1,6 @@
 package net.fnsco.risk.service.sys.entity;
 
+import java.math.BigDecimal;
 
 public class IndustryDO {
 
@@ -42,10 +43,48 @@ public class IndustryDO {
      * 备注
      */
     private String remark;
+    
+    /**
+     * 行业最大交易金额(单位:分)
+     */
+    private BigDecimal maxPrice;
+    
+    /**
+     * 净利率
+     */
+    private String interestRate;
+    
+    /**
+     * pos机使率
+     */
+    private String posUsage;
+    
+    
+    public BigDecimal getMaxPrice() {
+		return maxPrice;
+	}
 
+	public void setMaxPrice(BigDecimal maxPrice) {
+		this.maxPrice = maxPrice;
+	}
 
+	public String getInterestRate() {
+		return interestRate;
+	}
 
-    public Integer getId() {
+	public void setInterestRate(String interestRate) {
+		this.interestRate = interestRate;
+	}
+
+	public String getPosUsage() {
+		return posUsage;
+	}
+
+	public void setPosUsage(String posUsage) {
+		this.posUsage = posUsage;
+	}
+
+	public Integer getId() {
         return id;
     }
 

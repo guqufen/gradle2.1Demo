@@ -90,4 +90,5 @@ public interface TradeDataDAO {
     Map querySumByCondition(TradeData record);
 
 	String queryByCertifyId(@Param("certifyId") String certifyId,@Param("cardTotalLength") String cardTotalLength);
+	
 }

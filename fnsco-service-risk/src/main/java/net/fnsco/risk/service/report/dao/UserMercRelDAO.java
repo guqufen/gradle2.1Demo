@@ -52,6 +52,13 @@ public interface UserMercRelDAO {
     public List<String> getinnerCodeByAgentid(@Param("agentId") Integer agentId);
     
     /**
+     * 查询所有的商户号
+     * @return
+     */
+    @Select("SELECT DISTINCT entity_inner_code FROM risk_user_merc_rel")
+    public List<String> getAllEntityInnerCode();
+    
+    /**
      * 通过agentId和innerCode移除数据
      */
     @Delete("delete FROM risk_user_merc_rel WHERE agent_id = #{userMercRel.agentId} AND entity_inner_code = #{userMercRel.entityInnerCode}")
