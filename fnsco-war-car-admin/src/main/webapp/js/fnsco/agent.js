@@ -168,6 +168,8 @@ function requestAgent(type){
 function queryById(id) {
 	$.ajax({
 		url :json.auth_user_queryUserById,
+		// url :'../web/agent/querySingle',
+
 		type : 'POST',
 		dataType : "json",
 		data : {
@@ -176,28 +178,20 @@ function queryById(id) {
 		success : function(data) {
 			unloginHandler(data);
 			// data.data就是所有数据集
-			//console.log(data.data);
+			console.log(data);
 			// 基本信息
-			$("#username1").val(data.data.name);
-			$("#realname1").val(data.data.realName);
+			$("#name1").val(data.data.name);
+			$("#type1").val(data.data.type);
+			$("#principal1").val(data.data.principal);
 			$("#mobile1").val(data.data.mobile);
-			$("#sex1").val(data.data.sex);
-			$("#aliasname1").val(data.data.aliasName);
-			$("#department1").val(data.data.department);
-			$("#agentId1").val(data.data.agentId);
-			$("#status1").val(data.data.status);
-			$("#remark1").val(data.data.remark);
-			var list =data.data.roleList;
-			for(var i=0;i<list.length;i++){
-			    var l = list[i];
-			    $("input[type='checkbox'][value="+l+"]").prop('checked','true');
-			}
+			$("#shortName1").val(data.data.shortName);
+			$("#provincename1").val(data.data.provincename);
+			$("#cityname1").val(data.data.cityname);
+			$("#areaname1").val(data.data.areaname);
+			$("#address1").val(data.data.address);
+			$("#suggestCode1").val(data.data.suggestCode);
+
 			$('#editModal').modal();
-			$('#sex1hide').hide();
-			$('#agentId1hide').hide();
-			$('#aliasname1hide').hide();
-			$('#mobile1hide').hide();
-			$('#remark1hide').hide();
 		}
 	});
 }
@@ -310,8 +304,8 @@ $('#btn_edit').click(function() {
 	if (userId == null) {
 		return;
 	}
-	requestAgent($('#agentId1').val());
-	queryRole("role1");
+	// requestAgent($('#agentId1').val());
+	// queryRole("role1");
 	queryById(userId);
 });
 //修改确认按钮事件
