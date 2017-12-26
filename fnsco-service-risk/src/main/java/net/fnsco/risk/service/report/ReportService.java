@@ -38,6 +38,7 @@ import net.fnsco.risk.service.report.dao.ReportInfoDAO;
 import net.fnsco.risk.service.report.dao.ReportRepaymentHistoryDAO;
 import net.fnsco.risk.service.report.entity.ReportBusiness;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
+import net.fnsco.risk.service.report.entity.ReportInfoDO2;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
 import net.fnsco.risk.service.report.entity.YearReportDO;
 import net.fnsco.risk.service.sys.dao.IndustryDAO;
@@ -77,6 +78,19 @@ public class ReportService extends BaseService {
         }
         Integer count = this.reportInfoDAO.pageListMercByConditionCount(reportInfoDO);
         ResultPageDTO<ReportInfoDO> pager = new ResultPageDTO<ReportInfoDO>(count, pageList);
+        return pager;
+    }
+    
+    public ResultPageDTO<ReportInfoDO2> page2(ReportInfoDO2 reportInfoDO, Integer pageNum, Integer pageSize) {
+        WebUserOuterDO userDo = webUserOuterDAO.getById(reportInfoDO.getUserId());
+        reportInfoDO.setAgentId(userDo.getAgentId());
+        List<ReportInfoDO2> pageList = this.reportInfoDAO.pageListMercByCondition2(reportInfoDO, pageNum, pageSize);
+        for (ReportInfoDO2 li : pageList) {
+            li.setIsTrue(1);
+            li.setStatus(1);
+        }
+        Integer count = this.reportInfoDAO.pageListMercByConditionCount2(reportInfoDO);
+        ResultPageDTO<ReportInfoDO2> pager = new ResultPageDTO<ReportInfoDO2>(count, pageList);
         return pager;
     }
 

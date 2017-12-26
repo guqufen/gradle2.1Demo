@@ -16,6 +16,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.risk.service.report.ReportService;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
+import net.fnsco.risk.service.report.entity.ReportInfoDO2;
 
 /**
  * 
@@ -43,6 +44,24 @@ public class ReportOpenController extends BaseController {
         reportInfoDO.setUserId(getUserId());
         reportInfoDO.setStatus(1);//只查审核通过的
         ResultPageDTO<ReportInfoDO> pager = this.reportService.page(reportInfoDO, page, rows);
+        return success(pager);
+    }
+    
+    /**
+     * 根据产品查询商户信息
+     * @param reportInfoDO
+     * @return
+     */
+    @ApiOperation(value = "分页查询", notes = "分页查询")
+    @ResponseBody
+    @RequestMapping(value = "queryMercByProduct", method = RequestMethod.GET)
+    public ResultDTO page2(ReportInfoDO2 reportInfoDO) {
+        Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
+        Integer page = params.get("currentPageNum");
+        Integer rows = params.get("pageSize");
+        reportInfoDO.setUserId(getUserId());
+        reportInfoDO.setStatus(1);//只查审核通过的
+        ResultPageDTO<ReportInfoDO2> pager = this.reportService.page2(reportInfoDO, page, rows);
         return success(pager);
     }
     //历史风控报表查询
