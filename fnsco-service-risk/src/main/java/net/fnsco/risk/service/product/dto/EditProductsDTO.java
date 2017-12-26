@@ -2,12 +2,12 @@ package net.fnsco.risk.service.product.dto;
 
 import net.fnsco.core.base.DTO;
 
-public class AddProductsDTO extends DTO{
+public class EditProductsDTO extends DTO{
 
 	/**
-     * 代理商id
+     * id
      */
-    private Integer agentId;
+    private Integer id;
 
     /**
      * 产品名称
@@ -44,18 +44,19 @@ public class AddProductsDTO extends DTO{
      */
     private String description;
 
+
 	/**
-	 * @return the agentId
+	 * @return the id
 	 */
-	public Integer getAgentId() {
-		return agentId;
+	public Integer getId() {
+		return id;
 	}
 
 	/**
-	 * @param agentId the agentId to set
+	 * @param id the id to set
 	 */
-	public void setAgentId(Integer agentId) {
-		this.agentId = agentId;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {
