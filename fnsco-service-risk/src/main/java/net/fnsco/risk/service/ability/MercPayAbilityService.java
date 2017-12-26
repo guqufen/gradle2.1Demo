@@ -1,7 +1,6 @@
 package net.fnsco.risk.service.ability;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -14,10 +13,11 @@ import com.google.common.base.Strings;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.utils.DateUtils;
 import net.fnsco.risk.service.ability.dao.MercPayAbilityDAO;
 import net.fnsco.risk.service.ability.entity.MercPayAbilityDO;
 import net.fnsco.risk.service.report.dao.UserMercRelDAO;
+import net.fnsco.risk.service.sys.dao.IndustryDAO;
+import net.fnsco.risk.service.sys.entity.IndustryDO;
 import net.fnsco.risk.service.trade.dao.TradeDataDAO;
 
 @Service
@@ -30,6 +30,8 @@ public class MercPayAbilityService extends BaseService {
 	private UserMercRelDAO userMercRelDAO;
 	@Autowired
 	private TradeDataDAO tradeDataDAO;
+	@Autowired
+	private IndustryDAO industryDAO;
 
 	// 分页
 	public ResultPageDTO<MercPayAbilityDO> page(MercPayAbilityDO mercPayAbility, Integer pageNum, Integer pageSize) {
@@ -66,30 +68,62 @@ public class MercPayAbilityService extends BaseService {
 		MercPayAbilityDO obj = this.mercPayAbilityDAO.getById(id);
 		return obj;
 	}
-	
+
 	/**
 	 * 计算各个商家还款能力，每个月计算一次
+	 * 
 	 * @param startTime
 	 * @param endTime
 	 */
-	public void countRepaymentAbility(String startTime,String endTime) {
+	public void countRepaymentAbility(String startTime, String endTime) {
 		/**
 		 * 获取所有需要统计的实体商户商户号
 		 */
 		List<String> allEntityInnerCode = userMercRelDAO.getAllEntityInnerCode();
-		if(CollectionUtils.isNotEmpty(allEntityInnerCode)) {
+		if (CollectionUtils.isNotEmpty(allEntityInnerCode)) {
 			String dateMonthStr = startTime.substring(0, 6);
 			for (String entityInnerCode : allEntityInnerCode) {
-				String totalAmount = tradeDataDAO.queryMerchantMouthSum("", "", entityInnerCode, "");
-				if(!Strings.isNullOrEmpty(totalAmount)) {
-					MercPayAbilityDO mercPayAbility = new MercPayAbilityDO();
-					mercPayAbility.setEntityInnerCode(entityInnerCode);
-					mercPayAbility.setMonth(dateMonthStr);
-					mercPayAbility.setPayAbility(new BigDecimal(totalAmount));
-					mercPayAbilityDAO.insert(mercPayAbility);
+				
+				IndustryDO industryDO = industryDAO.getByEntityInnerCode(entityInnerCode);
+				if (null != industryDO && !Strings.isNullOrEmpty(industryDO.getPosUsage()) &&!Strings.isNullOrEmpty(industryDO.getInterestRate()) ) {
+					BigDecimal maxPrice = industryDO.getMaxPrice();
+					if (null != maxPrice) {
+						// 获取到商户实际交易流水
+						String totalAmount = tradeDataDAO.queryMerchantMouthSum(startTime, endTime, entityInnerCode,
+								maxPrice.toString());
+
+						// 计算预估商户收入=商户实际交易流水/该商户的pos使用率
+						if (!Strings.isNullOrEmpty(totalAmount)) {
+							BigDecimal forecastIncome = new BigDecimal(totalAmount)
+									.divide(new BigDecimal(industryDO.getPosUsage()));
+
+							// 计算商户的还款能力=预估商户收入*净利率
+							BigDecimal payAbility = forecastIncome
+									.multiply(new BigDecimal(industryDO.getInterestRate()));
+							
+							saveDataToDB(entityInnerCode,dateMonthStr,payAbility);
+						}
+					}
 				}
 			}
 		}
-		
+
+	}
+	
+	/**
+	 * 保存入库
+	 * @param mercPayAbility
+	 */
+	private void saveDataToDB(String entityInnerCode,String dateMonthStr,BigDecimal payAbility) {
+		MercPayAbilityDO mercPayAbility = new MercPayAbilityDO();
+		mercPayAbility.setEntityInnerCode(entityInnerCode);
+		mercPayAbility.setMonth(dateMonthStr);
+		int total = mercPayAbilityDAO.pageListCount(mercPayAbility);
+		mercPayAbility.setPayAbility(payAbility);
+		if(total > 0) {
+			mercPayAbilityDAO.update(mercPayAbility);
+		}else {
+			mercPayAbilityDAO.insert(mercPayAbility);
+		}
 	}
 }
