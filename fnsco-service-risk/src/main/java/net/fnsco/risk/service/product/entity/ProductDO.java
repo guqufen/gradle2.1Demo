@@ -48,7 +48,7 @@ public class ProductDO {
     /**
      * 产品说明
      */
-    private String desc;
+    private String description;
 
     /**
      * 还款能力最小值
@@ -135,16 +135,16 @@ public class ProductDO {
     public void setCycle(String cycle) {
         this.cycle = cycle;
     }
+    
+	public String getDescription() {
+		return description;
+	}
 
-    public String getDesc() {
-        return desc;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public BigDecimal getPayAbilityMin() {
+	public BigDecimal getPayAbilityMin() {
         return payAbilityMin;
     }
 
@@ -180,6 +180,6 @@ public class ProductDO {
 
     @Override
     public String toString() {
-        return "[id="+ id + ", agentId="+ agentId + ", name="+ name + ", amountMin="+ amountMin + ", amountMax="+ amountMax + ", rateMin="+ rateMin + ", rateMax="+ rateMax + ", cycle="+ cycle + ", desc="+ desc + ", payAbilityMin="+ payAbilityMin + ", createTime="+ createTime + ", lastModifyTime="+ lastModifyTime + ", status="+ status + "]";
+        return "[id="+ id + ", agentId="+ agentId + ", name="+ name + ", amountMin="+ amountMin + ", amountMax="+ amountMax + ", rateMin="+ rateMin + ", rateMax="+ rateMax + ", cycle="+ cycle + ", description="+ description + ", payAbilityMin="+ payAbilityMin + ", createTime="+ createTime + ", lastModifyTime="+ lastModifyTime + ", status="+ status + "]";
     }
 }

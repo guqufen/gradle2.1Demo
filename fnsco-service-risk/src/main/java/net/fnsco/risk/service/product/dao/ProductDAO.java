@@ -20,7 +20,7 @@ public interface ProductDAO {
     @Select("SELECT * FROM risk_product WHERE id = #{id}")
     public ProductDO getById(@Param("id") int id);
 
-    @Insert("INSERT into risk_product(id,agent_id,name,amount_min,amount_max,rate_min,rate_max,cycle,desc,pay_ability_min,create_time,last_modify_time,status) VALUES (#{id},#{agentId},#{name},#{amountMin},#{amountMax},#{rateMin},#{rateMax},#{cycle},#{desc},#{payAbilityMin},#{createTime},#{lastModifyTime},#{status})")
+    @Insert("INSERT into risk_product(id,agent_id,name,amount_min,amount_max,rate_min,rate_max,cycle,description,pay_ability_min,create_time,last_modify_time,status) VALUES (#{id},#{agentId},#{name},#{amountMin},#{amountMax},#{rateMin},#{rateMax},#{cycle},#{desc},#{payAbilityMin},#{createTime},#{lastModifyTime},#{status})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(ProductDO product);
 
