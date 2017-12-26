@@ -70,7 +70,7 @@ $('#table').bootstrapTable({
         field:'orderFiles',
         title: '车辆登记证',
         formatter: formatField1,
-        width:10
+        align: 'center'
     }]
 });
 //表格中操作按钮
@@ -82,23 +82,25 @@ function operateFormatter(value, row, index) {
     ].join('');
 }
 //
-function formatField0(value){
+function formatField0(value){//行驶证
     for(var i=0;i<value.length;i++){
         if(value[i].fileType=='0'){
             return[
-                '<a class="redact" onclick=showImg("'+value[i].filePath+'") title="行驶证">',
+                '<a class="redact imgFile" id="imgFile'+value[i].id+'" href=javascript:showImg("'+value[i].filePath+'","imgFile'+value[i].id+'") title="行驶证">',
                 '<i class="glyphicon glyphicon-picture"></i>',
+                '<img src="" data-original="'+value[i].filePath+'"/>',
                 '</a>  '
             ].join('');
         }
     }
 }
-function formatField1(value){
+function formatField1(value){//车辆登记证
     for(var i=0;i<value.length;i++){
         if(value[i].fileType=='1'){
             return[
-                '<a class="redact" onclick=showImg("'+value[i].filePath+'") title="车辆登记证">',
+                '<a class="redact imgFile" id="imgFile'+value[i].id+'" href=javascript:showImg("'+value[i].filePath+'","imgFile'+value[i].id+'") title="车辆登记证">',
                 '<i class="glyphicon glyphicon-picture"></i>',
+                '<img src="" data-original="'+value[i].filePath+'"/>',
                 '</a>  '
             ].join('');
         }
@@ -204,6 +206,10 @@ function editData(id){
     });
 }
 
-function showImg(src){
-    alert(src);
+function showImg(src,id){
+    // $('#'+id).viewer({url:'data-original'});
 }
+
+$("#table").on('load-success.bs.table',function(data){
+       $(".imgFile").viewer({url:'data-original'});
+});

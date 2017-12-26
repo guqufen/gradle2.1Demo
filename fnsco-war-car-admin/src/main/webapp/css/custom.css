@@ -35,6 +35,21 @@ table a.remove,table a.redact,table a.details{
     width: 30px;
     display: inline-block;
 }
+table a.imgFile{
+	position: relative;
+}
+table a.imgFile img{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	filter:alpha(opacity=0);   
+	-moz-opacity:0;   
+	-khtml-opacity: 0;   
+	opacity: 0; 
+	z-index: 11;
+}
 table td{
 	text-overflow: ellipsis;
 	white-space: nowrap;
