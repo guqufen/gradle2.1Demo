@@ -47,7 +47,7 @@ public interface OrderFileDAO {
      * @date   2017年12月25日 上午11:35:32
      */
     @Results({@Result( column = "order_no",property = "orderNo"),@Result( column = "file_name",property = "fileName"),@Result( column = "file_type",property = "fileType"),@Result( column = "file_path",property = "filePath"),@Result( column = "create_time",property = "createTime") })
-    @Select("SELECT * FROM car_order_file WHERE id = #{id}")
+    @Select("SELECT * FROM car_order_file WHERE order_no = #{orderNo}")
     public List<OrderFileDO> getByOrderNo(@Param("orderNo") String orderNo);
 
 }

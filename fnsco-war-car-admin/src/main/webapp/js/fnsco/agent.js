@@ -1,7 +1,4 @@
-
-/**
- * 初始化表格的列
- */
+//初始化表格的列
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
@@ -76,128 +73,25 @@ function responseHandler(res) {
 		};
 	}
 }
-
 function formatTime(value, row, index){
 	return formatDateUtil(value);
 }
-//添加确认事件方法
-function add(date) {
-	$.ajax({
-		traditional:true,
-		url : json.auth_user_toAdd,
-		data : date,
-		type : 'POST',
-		success : function(data) {
-			unloginHandler(data);
-			if (data.success) {
-				layer.msg('保存成功');
-				$('#addModal').modal("hide");
-				queryEvent("table");
-				layer.close();
-				return true;
-			} else {
-				layer.msg('保存失败');
-			}
-		}
-	});
-}
-//修改确认事件方法
-function edit(date) {
-	$.ajax({
-		traditional:true,
-		url : json.auth_user_toEdit,
-		data : date,
-		type : 'POST',
-		success : function(data) {
-			unloginHandler(data);
-			if (data.success) {
-				layer.msg('修改成功');
-				$('#editModal').modal("hide");
-				queryEvent("table");
-				layer.close();
-				return true;
-			} else {
-				layer.msg(data.message);
-			}
-		}
-	});
-}
-//查询用户名是否重复
-var isdata;
-function queryByName(name) {
-	$.ajax({
-		url : json.auth_user_queryUserByName,
-		type : 'POST',
-		dataType : "json",
-		async:false,//同步获取数据
-		data : {
-			'name' : name
-		},
-		success : function(data) {
-			unloginHandler(data);
-			isdata=data;
-		}
-	});
-}
-//请求所有代理商数据
-function requestAgent(type){
-	 $.ajax({
-		   url:json.web_merchantinfo_queryAgents,
-		   type:'POST',
-		   success:function(data){
-			   unloginHandler(data);
-			   console.log(data);
-			   var agtS = data.data;
-			   var html_opt = '';
-			   $.each(agtS,function(index,value){
-				   if(type && type == value.id){
-					   html_opt += '<option value="'+value.id+'" selected ="selected">'+value.name+'</option>';
-				   }else{
-					   html_opt += '<option value="'+value.id+'">'+value.name+'</option>';
-				   }
-			   })
-			   $('#agentId').html(html_opt);
-			   $('#agentId1').html(html_opt);
-		   },
-		   error:function(e){
-			   layer.msg('服务器出错');
-		   }
-	   })
-}
-//修改信息查询
-function queryById(id) {
-	$.ajax({
-		url :json.auth_user_queryUserById,
-		// url :'../web/agent/querySingle',
 
-		type : 'POST',
-		dataType : "json",
-		data : {
-			'id' : id
-		},
-		success : function(data) {
-			unloginHandler(data);
-			// data.data就是所有数据集
-			console.log(data);
-			// 基本信息
-			$("#name1").val(data.data.name);
-			$("#type1").val(data.data.type);
-			$("#principal1").val(data.data.principal);
-			$("#mobile1").val(data.data.mobile);
-			$("#shortName1").val(data.data.shortName);
-			$("#provincename1").val(data.data.provincename);
-			$("#cityname1").val(data.data.cityname);
-			$("#areaname1").val(data.data.areaname);
-			$("#address1").val(data.data.address);
-			$("#suggestCode1").val(data.data.suggestCode);
-
-			$('#editModal').modal();
-		}
-	});
+//查询条件按钮事件
+function queryEvent(id) {
+	$('#' + id).bootstrapTable('refresh');
 }
-/*
- * 判断是否选择记录方法
- */
+//重置按钮事件
+function resetEvent(form, id) {
+	$('#' + form)[0].reset();
+	$('#' + id).bootstrapTable('refresh');
+}
+
+//新增按钮事件
+$('#btn_add').click(function() {
+	$('#addModal').modal();
+});
+//修改或者删除判断是否已经选择
 function getUserId() {
 	var select_data = $('#table').bootstrapTable('getSelections');
 	if (select_data.length == 0) {
@@ -211,155 +105,42 @@ function getUserId() {
 		return select_data[0].id;
 	}
 }
-
-//查询条件按钮事件
-function queryEvent(id) {
-	$('#' + id).bootstrapTable('refresh');
-}
-//重置按钮事件
-function resetEvent(form, id) {
-	$('#' + form)[0].reset();
-	$('#' + id).bootstrapTable('refresh');
-}
-//清除所有表单数据
-function clearDate(){
-	$("#username").val(null);
-	$("#password").val(null);
-	$("#realname").val(null);
-	$("#mobile").val(null);
-	$("#sex").val(1);
-	$("#aliasname").val(null);
-	$("#department").val(null);
-	$("#agentId").val(null);
-	$("#status").val(1);
-	$("#remark").val(null);
-}
-//新增按钮事件
-$('#btn_add').click(function() {
-	clearDate();
-	$('#addModal').modal();
-	$('#sexhide').hide();
-	$('#agentIdhide').hide();
-	$('#aliasnamehide').hide();
-});
-//新增确认按钮事件
-$('#btn_yes').click(function() {
-			 //获得当前选中的值
-//			var sex = $('#sex').val();
-			var type = $('#type').val();
-			var status = $('#status').val();
-			var username = $('#username').val();
-			var password = $('#password').val();
-			var mobile = $('#mobile').val();
-			var department = $('#department').val();
-//			var remark =$('#remark').val();
-			var date = {
-					"name" : username,
-					"password" : password,
-					"roleList" : roleid,
-					"mobile" : mobile,
-					"department" : department,
-					'type':type,
-					//"sex" : sex,
-					"status" : status,
-					"realName" : $('#realname').val(),
-					//"aliasName" : $('#aliasname').val(),
-					"agentId" : $('#agentId').val(),
-//					"remark" : remark
-				};
-			if (username == null || username.length == 0) {
-				layer.msg('用户名不能为空!');
-				return false;
-			}
-			queryByName(username);
-			if (isdata == false) {
-				layer.msg('用户名已存在!');
-				return false;
-			}
-			if (password == null || password.length == 0) {
-				layer.msg('密码不能为空!');
-				return false;
-			}
-			if (password.length<6) {
-				layer.msg('密码最少6位');
-				return false;
-			}
-			/*if (mobile == null || mobile.length == 0) {
-				layer.msg('手机号不能为空!');
-				return false;
-			}*/
-			if (department == null || department.length == 0) {
-				layer.msg('所属部门不能为空!');
-				return false;
-			}
-			/*if (remark.length>50) {
-				layer.msg('备注最多50个字!');
-				return false;
-			}*/
-			add(date);
-		});
 //修改按钮事件
 $('#btn_edit').click(function() {
 	var userId = getUserId();
 	if (userId == null) {
 		return;
 	}
-	// requestAgent($('#agentId1').val());
-	// queryRole("role1");
 	queryById(userId);
 });
-//修改确认按钮事件
-$('#btn_yes1').click(
-		function() {
-			var id= getUserId();
-			if (id== null) {
-				return;
-			}
-			 //获得当前选中的值
-			//var sex = $('#sex1').val();
-			var status = $('#status1').val();
-			var username = $('#username1').val();
-			//var mobile = $('#mobile1').val();
-			var department = $('#department1').val();
-			//var remark =$('#remark1').val();
-			var date = {
-					"id" : id,
-					"name" : username,
-					"roleList" : roleid,
-					//"mobile" : mobile,
-					"department" : department,
-					//"sex" : sex,
-					"status" : status,
-					"realName" : $('#realname1').val(),
-					//"aliasName" : $('#aliasname1').val(),
-					//"agentId" : $('#agentId1').val(),
-					//"remark" : remark
-				};
-			/*if (username == null || username.length == 0) {
-				layer.msg('用户名不能为空!');
-				return false;
-			}*/
-			/*if (mobile == null || mobile.length == 0) {
-				layer.msg('手机号不能为空!');
-				return false;
-			}*/
-			if (department == null || department.length == 0) {
-				layer.msg('所属部门不能为空!');
-				return false;
-			}
-			/*if (remark.length>50) {
-				layer.msg('备注最多50个字!');
-				return false;
-			}*/
-			layer.confirm('确定修改选中数据吗？', {
-				time : 20000, //20s后自动关闭
-				btn : [ '确定', '取消' ]
-			}, function() {
-				edit(date);
-			}, function() {
-				layer.msg('取消成功');
-			});
-		});
+//修改查询
+function queryById(id) {
+	$.ajax({
+		url :'web/agent/querySingle',
+		type : 'POST',
+		dataType : "json",
+		data : {
+			'id' : id
+		},
+		success : function(data) {
+			unloginHandler(data);
+			// data.data就是所有数据集
+			console.log(data);
+			// 基本信息
+			$("#name1").val(data.data.name);
+			$("#type1").find("option[value='"+data.data.type+"']").attr('selected',true);
+			$("#principal1").val(data.data.principal);
+			$("#mobile1").val(data.data.mobile);
+			$("#shortName1").val(data.data.shortName);
+			$("#provincename1").val(data.data.provincename);
+			$("#cityname1").val(data.data.cityname);
+			$("#areaname1").val(data.data.areaname);
+			$("#address1").val(data.data.address);
+			$("#suggestCode1").val(data.data.suggestCode);
+			$('#editModal').modal();
+		}
+	});
+}
 //批量删除按钮事件
 $('#btn_delete').click(function(){
   var select_data = $('#table').bootstrapTable('getSelections');  
@@ -376,10 +157,10 @@ $('#btn_delete').click(function(){
         btn: ['确定', '取消']
     }, function(){
       $.ajax({
-        url : json.auth_user_deleteUserById,
+        url : 'web/agent/toDelete',
         type:'POST',
         dataType : "json",
-        data:{'id':dataId},
+        data:{'ids':dataId},
         success:function(data){
           unloginHandler(data);	
           if(data.success)
@@ -400,3 +181,52 @@ $('#btn_delete').click(function(){
       layer.msg('取消成功');
   });  
 });
+
+/*
+* 保存事件
+* btnType判断类型 0==新增 1==修改
+*/
+function subData(btnType){
+	if(btnType==1){
+		var modal=$("#editModal");
+		var inputLen=$("#editModal input").length;
+		var id = getUserId();
+	}else if(btnType==0){
+		var modal=$("#addModal");
+		var inputLen=$("#addModal input").length;
+		var id=null;
+	}
+	for(var i=0;i<inputLen;i++){
+		if(modal.find('input').eq(i).val()==''){
+			var alertTxtLen=modal.find('input').eq(i).siblings('label').html().length;
+			layer.msg(modal.find('input').eq(i).siblings('label').html().substring(0,alertTxtLen-1)+'不能为空！');
+			return false;
+		}
+	}
+	var name=modal.find('input[name="name"]').val();
+	var type=modal.find('select[name="type"]').val();
+	var provincename=modal.find('input[name="provincename"]').val();
+	var cityname=modal.find('input[name="cityname"]').val();
+	var areaname=modal.find('input[name="areaname"]').val();
+	var address=modal.find('input[name="address"]').val();
+	var suggestCode=modal.find('input[name="suggestCode"]').val();
+	var mobile=modal.find('input[name="mobile"]').val();
+	var shortName=modal.find('input[name="shortName"]').val();
+	var principal=modal.find('input[name="principal"]').val();
+	var data={'name':name,'type':type,'provincename':provincename,'cityname':cityname,'areaname':areaname,'address':address,'suggestCode':suggestCode,'mobile':mobile,'shortName':shortName,'principal':principal,'id':id}
+	$.ajax({
+		url:'web/agent/toAddOrUpdate',
+		type:'post',
+		dataType:'json',
+		data: data,
+		success:function(e){
+			if(e.success){
+				layer.msg(e.message);
+				queryEvent("table");
+				modal.modal('hide');
+			}else{
+				layer.msg(e.message);
+			}
+		}
+	})
+}
