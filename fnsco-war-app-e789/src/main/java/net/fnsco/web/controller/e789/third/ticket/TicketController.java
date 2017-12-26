@@ -116,6 +116,11 @@ public class TicketController extends BaseController {
         List<TrainVO> resultList = Lists.newArrayList();
         List<ticketsAvailableDTO> ticketList = ticketService.queryTicketList(ticketJO.getStartSite(), ticketJO.getEndSite(), ticketJO.getBuyDate());
         for (ticketsAvailableDTO dto : ticketList) {
+            if (!Strings.isNullOrEmpty(ticketJO.getTrainCode())) {
+                if (!ticketJO.getTrainCode().equals(dto.getTrain_code())) {
+                    continue;
+                }
+            }
             TrainVO vo = new TrainVO();
             vo.setDuration(dto.getRun_time());
             vo.setEndTime(dto.getArrive_time());
