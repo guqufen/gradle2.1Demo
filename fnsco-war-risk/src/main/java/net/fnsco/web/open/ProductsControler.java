@@ -1,5 +1,7 @@
 package net.fnsco.web.open;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.risk.service.product.ProductService;
 import net.fnsco.risk.service.product.dto.AddProductsDTO;
+import net.fnsco.risk.service.product.dto.EditProductsDTO;
 import net.fnsco.risk.service.product.dto.QueryProductsDTO;
 import net.fnsco.risk.service.product.entity.ProductDO;
 import net.fnsco.risk.service.sys.WebUserOuterService;
@@ -80,12 +83,16 @@ public class ProductsControler extends BaseController {
     	productDO.setAmountMax(addProductsDTO.getAmountMax());
     	productDO.setAmountMin(addProductsDTO.getAmountMin());
     	productDO.setCycle(addProductsDTO.getCycle());
-    	productDO.setDescription(addProductsDTO.getDesc());
+    	productDO.setDescription(addProductsDTO.getDescription());
     	productDO.setRateMax(addProductsDTO.getRateMax());
     	productDO.setRateMin(addProductsDTO.getRateMin());
     	productDO.setStatus("1");
     	productDO.setCreateTime(new Date());
     	productDO.setLastModifyTime(new Date());
+    	String amountMin = addProductsDTO.getAmountMin();
+    	BigDecimal pay = new BigDecimal(amountMin);
+    	BigDecimal paymin = pay.divide(new BigDecimal(15), 2, RoundingMode.HALF_UP);
+    	productDO.setPayAbilityMin(paymin);
     	productService.doAdd(productDO);
     	return success();
     }
@@ -102,8 +109,21 @@ public class ProductsControler extends BaseController {
     @ApiOperation(value = "编辑产品" , notes = "编辑产品")
     @ResponseBody
     @RequestMapping(value = "/editProducts" , method = RequestMethod.POST)
-    public ResultDTO editProducts(ProductDO productDO) {
+    public ResultDTO editProducts(EditProductsDTO editProductsDTO) {
+    	ProductDO productDO = new ProductDO();
+    	productDO.setId(editProductsDTO.getId());
+    	productDO.setName(editProductsDTO.getName());
+    	productDO.setAmountMax(editProductsDTO.getAmountMax());
+    	productDO.setAmountMin(editProductsDTO.getAmountMin());
+    	productDO.setCycle(editProductsDTO.getCycle());
+    	productDO.setDescription(editProductsDTO.getDescription());
+    	productDO.setRateMax(editProductsDTO.getRateMax());
+    	productDO.setRateMin(editProductsDTO.getRateMin());
     	productDO.setLastModifyTime(new Date());
+    	String amountMin = editProductsDTO.getAmountMin();
+    	BigDecimal pay = new BigDecimal(amountMin);
+    	BigDecimal paymin = pay.divide(new BigDecimal(15), 2, RoundingMode.HALF_UP);
+    	productDO.setPayAbilityMin(paymin);
     	productService.doUpdate(productDO);
     	return success();
     }

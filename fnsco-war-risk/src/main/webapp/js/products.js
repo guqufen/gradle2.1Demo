@@ -193,6 +193,13 @@ function queryEventStop() {
 
 //新增按钮事件
 function addProducts() {
+	$('#name').val();
+	$('#amountMin').val();
+	$('#amountMax').val();
+	$('#cycle').val();
+	$('#rateMin').val();
+	$('#rateMax').val();
+	$('#desc').val();
 	$('#addModal').modal();
 }
 
@@ -213,7 +220,7 @@ $("#btn_save").click(function(){
 		"cycle" : cycle,
 		"rateMin" : rateMin,
 		"rateMax" : rateMax,
-		"desc" : desc,
+		"description" : desc,
 	}
 	if (name == null || name.length == 0) {
 		layer.msg('产品名称不能为空!');
@@ -262,6 +269,7 @@ $("#btn_save").click(function(){
 });
 
 //修改按钮事件
+var productiId = "";
 function queryEdit(id) {
 	$.ajax({
 		url : PROJECT_NAME + '/web/products/queryDetail',
@@ -273,13 +281,14 @@ function queryEdit(id) {
 		success : function(data) {
 			unloginHandler(data);
 			if (data.success) {
+				productiId = id;
 				$('#name1').val(data.data.name);
 				$('#amountMin1').val(data.data.amountMin);
 				$('#amountMax1').val(data.data.amountMax);
 				$('#cycle1').val(data.data.cycle);
 				$('#rateMin1').val(data.data.rateMin);
 				$('#rateMax1').val(data.data.rateMax);
-				$('#desc1').val(data.data.desc);
+				$('#desc1').val(data.data.description);
 				$('#editModel').modal();
 			} else if (!data.success) {
 				layer.msg(data.message);
@@ -287,7 +296,71 @@ function queryEdit(id) {
 		}
 	});
 }
-
+//修改保存按钮事件
+$("#btn_save1").click(function(){
+	var name = $('#name1').val();
+	var amountMin = $('#amountMin1').val();
+	var amountMax = $('#amountMax1').val();
+	var cycle = $('#cycle1').val();
+	var rateMin = $('#rateMin1').val();
+	var rateMax = $('#rateMax1').val();
+	var desc =$('#desc1').val();
+	var data = {
+		"id" : productiId,
+		"agentId" : agentId,
+		"name" : name,
+		"amountMin" : amountMin,
+		"amountMax" : amountMax,
+		"cycle" : cycle,
+		"rateMin" : rateMin,
+		"rateMax" : rateMax,
+		"description" : desc,
+	}
+	if (name == null || name.length == 0) {
+		layer.msg('产品名称不能为空!');
+		return false;
+	}
+	if (amountMin == null || amountMin.length == 0) {
+		layer.msg('贷款额度最小值不能为空!');
+		return false;
+	}
+	if (amountMax == null || amountMax.length == 0) {
+		layer.msg('贷款额度最大值不能为空!');
+		return false;
+	}
+	if (cycle == null || cycle.length == 0) {
+		layer.msg('贷款周期不能为空!');
+		return false;
+	}
+	if (rateMin == null || rateMin.length == 0) {
+		layer.msg('最小费率!');
+		return false;
+	}
+	if (rateMax == null || rateMax.length == 0) {
+		layer.msg('最大费率不能为空!');
+		return false;
+	}
+	if (desc == null || desc.length == 0) {
+		layer.msg('产品说明不能为空!');
+		return false;
+	}
+	$.ajax({
+		url : PROJECT_NAME + '/web/products/editProducts',
+		type : "POST",
+		dataType : "json",
+		data : data,
+		success : function(data){
+			unloginHandler(data);
+			if (data.success) {
+				layer.msg('修改成功');
+				$('#editModel').modal("hide");
+				queryEvent("table");
+			} else if (!data.success) {
+				layer.msg(data.message);
+			}	
+		}
+	});
+});
 //详情按钮事件
 function queryDetail(id) {
 	$.ajax({
@@ -306,7 +379,7 @@ function queryDetail(id) {
 				$('#cycle2').val(data.data.cycle);
 				$('#rateMin2').val(data.data.rateMin);
 				$('#rateMax2').val(data.data.rateMax);
-				$('#desc2').val(data.data.desc);
+				$('#desc2').val(data.data.description);
 				// 全部默认不可编辑
 		        $("#detailModel").find('input').attr('disabled',true);
 		        $("#detailModel").find('select').attr('disabled',true);
