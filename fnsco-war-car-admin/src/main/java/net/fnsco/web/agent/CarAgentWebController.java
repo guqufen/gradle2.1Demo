@@ -88,7 +88,7 @@ public class CarAgentWebController extends BaseController {
 	 */
 	@RequestMapping(value = "/toDelete", method = RequestMethod.POST)
 	@ResponseBody
-	@RequiresPermissions(value = { "car:agent:Delete" })
+	@RequiresPermissions(value = { "car:agent:delete" })
 	public ResultDTO<String>  toDelete(@RequestParam(value = "ids[]")Integer[] ids){
 		logger.info("删除运营商");
 		for (int i : ids) {
