@@ -62,6 +62,15 @@ $('#table').bootstrapTable({
         field: 'status',
         title: '进度状态',
         formatter: formatStatus
+    },{
+        field:'orderFiles',
+        title: '行驶证',
+        formatter: formatField0
+    },{
+        field:'orderFiles',
+        title: '车辆登记证',
+        formatter: formatField1,
+        width:10
     }]
 });
 //表格中操作按钮
@@ -71,6 +80,29 @@ function operateFormatter(value, row, index) {
         '<i class="glyphicon glyphicon-file"></i>',
         '</a>  '
     ].join('');
+}
+//
+function formatField0(value){
+    for(var i=0;i<value.length;i++){
+        if(value[i].fileType=='0'){
+            return[
+                '<a class="redact" onclick=showImg("'+value[i].filePath+'") title="行驶证">',
+                '<i class="glyphicon glyphicon-picture"></i>',
+                '</a>  '
+            ].join('');
+        }
+    }
+}
+function formatField1(value){
+    for(var i=0;i<value.length;i++){
+        if(value[i].fileType=='1'){
+            return[
+                '<a class="redact" onclick=showImg("'+value[i].filePath+'") title="车辆登记证">',
+                '<i class="glyphicon glyphicon-picture"></i>',
+                '</a>  '
+            ].join('');
+        }
+    }
 }
 //组装请求参数
 function queryParams(params)
@@ -170,4 +202,8 @@ function editData(id){
       layer.msg('取消成功');
       return false;
     });
+}
+
+function showImg(src){
+    alert(src);
 }
