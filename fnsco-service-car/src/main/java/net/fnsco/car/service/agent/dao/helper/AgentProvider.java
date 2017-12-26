@@ -180,6 +180,9 @@ public class AgentProvider {
         if (agent.getCreateTime()!=null){
         	WHERE("create_time=#{agent.createTime}");
         }
+        if (agent.getFalseId()!=null){
+        	WHERE("id != #{agent.falseId}");
+        }
         }}.toString();
     }
 }

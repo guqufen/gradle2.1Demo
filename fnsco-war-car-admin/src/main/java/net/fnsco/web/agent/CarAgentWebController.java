@@ -69,6 +69,15 @@ public class CarAgentWebController extends BaseController {
 	public ResultDTO<String>  toAdd(AgentDO agentDO){
 		logger.info("添加或修改运营商");
 		
+		AgentDO agentTemp = new AgentDO();
+		agentTemp.setSuggestCode(agentDO.getSuggestCode());
+		agentTemp.setFalseId(agentDO.getId());
+		
+		int total = agentDAO.pageListCount(agentTemp);
+		if(total >0) {
+			return ResultDTO.failForMessage("邀请码有重复，请重新输入!");
+		}
+		
 		if(null == agentDO.getId()) {
 			agentService.doAdd(agentDO, getUserId());
 		}else {
