@@ -1,7 +1,4 @@
-
-/**
- * 初始化表格的列
- */
+//初始化表格的列
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
@@ -76,17 +73,50 @@ function responseHandler(res) {
 		};
 	}
 }
-
 function formatTime(value, row, index){
 	return formatDateUtil(value);
 }
 
+//查询条件按钮事件
+function queryEvent(id) {
+	$('#' + id).bootstrapTable('refresh');
+}
+//重置按钮事件
+function resetEvent(form, id) {
+	$('#' + form)[0].reset();
+	$('#' + id).bootstrapTable('refresh');
+}
+
+//新增按钮事件
+$('#btn_add').click(function() {
+	$('#addModal').modal();
+});
+//修改或者删除判断是否已经选择
+function getUserId() {
+	var select_data = $('#table').bootstrapTable('getSelections');
+	if (select_data.length == 0) {
+		layer.msg('请选择一条记录!');
+		return null;
+	}
+	if (select_data.length > 1) {
+		layer.msg('只能修改一条记录!');
+		return null;
+	} else {
+		return select_data[0].id;
+	}
+}
+//修改按钮事件
+$('#btn_edit').click(function() {
+	var userId = getUserId();
+	if (userId == null) {
+		return;
+	}
+	queryById(userId);
+});
 //修改查询
 function queryById(id) {
 	$.ajax({
-		// url :json.auth_user_queryUserById,
 		url :'web/agent/querySingle',
-
 		type : 'POST',
 		dataType : "json",
 		data : {
@@ -107,48 +137,61 @@ function queryById(id) {
 			$("#areaname1").val(data.data.areaname);
 			$("#address1").val(data.data.address);
 			$("#suggestCode1").val(data.data.suggestCode);
-
 			$('#editModal').modal();
 		}
 	});
 }
-/*
- * 修改或者删除判断是否已经选择
- */
-function getUserId() {
-	var select_data = $('#table').bootstrapTable('getSelections');
-	if (select_data.length == 0) {
-		layer.msg('请选择一条记录!');
-		return null;
-	}
-	if (select_data.length > 1) {
-		layer.msg('只能修改一条记录!');
-		return null;
-	} else {
-		return select_data[0].id;
-	}
-}
-
-//查询条件按钮事件
-function queryEvent(id) {
-	$('#' + id).bootstrapTable('refresh');
-}
-//重置按钮事件
-function resetEvent(form, id) {
-	$('#' + form)[0].reset();
-	$('#' + id).bootstrapTable('refresh');
-}
-//新增按钮事件
-$('#btn_add').click(function() {
-	$('#addModal').modal();
+//批量删除按钮事件
+$('#btn_delete').click(function(){
+  var select_data = $('#table').bootstrapTable('getSelections');  
+  if(select_data.length == 0){
+    layer.msg('请选择一行删除!');
+    return false;
+  };
+  var dataId=[];
+  for(var i=0;i<select_data.length;i++){
+    dataId=dataId.concat(select_data[i].id);
+  }
+  layer.confirm('确定删除选中数据吗？', {
+        time: 20000, //20s后自动关闭
+        btn: ['确定', '取消']
+    }, function(){
+      $.ajax({
+        url : 'web/agent/toDelete',
+        type:'POST',
+        dataType : "json",
+        data:{'ids':dataId},
+        success:function(data){
+          unloginHandler(data);	
+          if(data.success)
+          {
+            layer.msg('删除成功');
+            queryEvent("table");
+          }else
+          {
+            layer.msg(data.message);
+          } 
+        },
+        error:function(e)
+        {
+          layer.msg('系统异常!'+e);
+        }
+      });
+    }, function(){
+      layer.msg('取消成功');
+  });  
 });
-//保存事件
-function subData(id){
-	if(id==1){
+
+/*
+* 保存事件
+* btnType判断类型 0==新增 1==修改
+*/
+function subData(btnType){
+	if(btnType==1){
 		var modal=$("#editModal");
 		var inputLen=$("#editModal input").length;
 		var id = getUserId();
-	}else if(id==0){
+	}else if(btnType==0){
 		var modal=$("#addModal");
 		var inputLen=$("#addModal input").length;
 		var id=null;
@@ -156,7 +199,7 @@ function subData(id){
 	for(var i=0;i<inputLen;i++){
 		if(modal.find('input').eq(i).val()==''){
 			var alertTxtLen=modal.find('input').eq(i).siblings('label').html().length;
-			alert(modal.find('input').eq(i).siblings('label').html().substring(0,alertTxtLen-1)+'不能为空！');
+			layer.msg(modal.find('input').eq(i).siblings('label').html().substring(0,alertTxtLen-1)+'不能为空！');
 			return false;
 		}
 	}
@@ -178,112 +221,12 @@ function subData(id){
 		data: data,
 		success:function(e){
 			if(e.success){
+				layer.msg(e.message);
 				queryEvent("table");
 				modal.modal('hide');
+			}else{
+				layer.msg(e.message);
 			}
 		}
 	})
 }
-
-//修改按钮事件
-$('#btn_edit').click(function() {
-	var userId = getUserId();
-	if (userId == null) {
-		return;
-	}
-	// requestAgent($('#agentId1').val());
-	// queryRole("role1");
-	queryById(userId);
-});
-//修改确认按钮事件
-$('#btn_yes1').click(
-		function() {
-			var id= getUserId();
-			if (id== null) {
-				return;
-			}
-			 //获得当前选中的值
-			//var sex = $('#sex1').val();
-			var status = $('#status1').val();
-			var username = $('#username1').val();
-			//var mobile = $('#mobile1').val();
-			var department = $('#department1').val();
-			//var remark =$('#remark1').val();
-			var date = {
-					"id" : id,
-					"name" : username,
-					"roleList" : roleid,
-					//"mobile" : mobile,
-					"department" : department,
-					//"sex" : sex,
-					"status" : status,
-					"realName" : $('#realname1').val(),
-					//"aliasName" : $('#aliasname1').val(),
-					//"agentId" : $('#agentId1').val(),
-					//"remark" : remark
-				};
-			/*if (username == null || username.length == 0) {
-				layer.msg('用户名不能为空!');
-				return false;
-			}*/
-			/*if (mobile == null || mobile.length == 0) {
-				layer.msg('手机号不能为空!');
-				return false;
-			}*/
-			if (department == null || department.length == 0) {
-				layer.msg('所属部门不能为空!');
-				return false;
-			}
-			/*if (remark.length>50) {
-				layer.msg('备注最多50个字!');
-				return false;
-			}*/
-			layer.confirm('确定修改选中数据吗？', {
-				time : 20000, //20s后自动关闭
-				btn : [ '确定', '取消' ]
-			}, function() {
-				edit(date);
-			}, function() {
-				layer.msg('取消成功');
-			});
-		});
-//批量删除按钮事件
-$('#btn_delete').click(function(){
-  var select_data = $('#table').bootstrapTable('getSelections');  
-  if(select_data.length == 0){
-    layer.msg('请选择一行删除!');
-    return false;
-  };
-  var dataId=[];
-  for(var i=0;i<select_data.length;i++){
-    dataId=dataId.concat(select_data[i].id);
-  }
-  layer.confirm('确定删除选中数据吗？', {
-        time: 20000, //20s后自动关闭
-        btn: ['确定', '取消']
-    }, function(){
-      $.ajax({
-        url : json.auth_user_deleteUserById,
-        type:'POST',
-        dataType : "json",
-        data:{'id':dataId},
-        success:function(data){
-          unloginHandler(data);	
-          if(data.success)
-          {
-            layer.msg('删除成功');
-            queryEvent("table");
-          }else
-          {
-            layer.msg(data.message);
-          } 
-        },
-        error:function(e)
-        {
-          layer.msg('系统异常!'+e);
-        }
-      });
-    }, function(){
-      layer.msg('取消成功');
-  });  
-});
