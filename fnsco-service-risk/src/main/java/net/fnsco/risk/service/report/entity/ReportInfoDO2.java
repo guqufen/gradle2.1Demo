@@ -137,16 +137,18 @@ public class ReportInfoDO2 {
 
 	private String evaluation;
 	
-	//
-	private String name;
+	//产品id
+	private String productId;
 	
 
-	public String getName() {
-		return name;
+	
+
+	public String getProductId() {
+		return productId;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setProductId(String productId) {
+		this.productId = productId;
 	}
 
 	public String getMercName() {
@@ -440,14 +442,20 @@ public class ReportInfoDO2 {
 
 	@Override
 	public String toString() {
-		return "ReportInfoDO [agentId=" + agentId + ", isTrue=" + isTrue + ", decorationLevel=" + decorationLevel
-				+ ", innerCode=" + innerCode + ", customerType=" + customerType + ", webUserOuterId=" + webUserOuterId
-				+ ", id=" + id + ", merName=" + merName + ", businessLicenseNum=" + businessLicenseNum
-				+ ", businessAddress=" + businessAddress + ", businessDueTime=" + businessDueTime + ", industry="
-				+ industry + ", tradingArea=" + tradingArea + ", turnover=" + turnover + ", size=" + size
-				+ ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer + ", riskWarning=" + riskWarning
-				+ ", quota=" + quota + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum=" + merNum
-				+ ", status=" + status + ", createTime=" + createTime + ", lastModifyTime=" + lastModifyTime + "]";
+		return "ReportInfoDO2 [agentId=" + agentId + ", isTrue=" + isTrue + ", userId=" + userId + ", innerCode="
+				+ innerCode + ", entityInnerCode=" + entityInnerCode + ", id=" + id + ", merName=" + merName
+				+ ", mercName=" + mercName + ", businessLicenseNum=" + businessLicenseNum + ", businessAddress="
+				+ businessAddress + ", businessDueTime=" + businessDueTime + ", industry=" + industry
+				+ ", industryName=" + industryName + ", tradingArea=" + tradingArea + ", turnover=" + turnover
+				+ ", size=" + size + ", reportCycle=" + reportCycle + ", reportTimer=" + reportTimer + ", riskWarning="
+				+ riskWarning + ", quota=" + quota + ", feeRate=" + feeRate + ", loanCycle=" + loanCycle + ", merNum="
+				+ merNum + ", status=" + status + ", createTime=" + createTime + ", customerType=" + customerType
+				+ ", lastModifyTime=" + lastModifyTime + ", key=" + key + ", viewNum=" + viewNum + ", lastViewTime="
+				+ lastViewTime + ", decorationLevel=" + decorationLevel + ", lastViewTimeStr=" + lastViewTimeStr
+				+ ", evaluation=" + evaluation + ", productId=" + productId + ", webUserOuterId=" + webUserOuterId
+				+ "]";
 	}
+
+	
 
 }

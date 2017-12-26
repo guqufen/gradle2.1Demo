@@ -9,59 +9,71 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
-<link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css"
+	rel="stylesheet">
 <link href="css/style.min.css" rel="stylesheet">
-<link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">	
+<link
+	href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
 <link href="css/common.css" rel="stylesheet">
 <link href="css/index.css" rel="stylesheet">
 <style>
-	#table tr th div{
-		text-align:center;
-		font-size:14px;
-	}
-	#table tbody tr td{
-		text-align:center;
-		font-size:16px;
-	}
-	.redact{
-	    font-size:16px;
-		padding-left:20px;
-		background:url(img/3.png)no-repeat;
-    	background-size:15%;
-    	background-position:1px 5px;
-    	color: #4d5f84;
-	}
-	.check{
-		font-size:16px;
-		padding-left:20px;
-		background:url(img/2.png)no-repeat;
-    	background-size:15%;
-    	background-position:1px 5px;
-    	color: #4d5f84;	
-	}
-	.generate{
-		font-size:16px;
-		padding-left:20px;
-		background:url(img/1.png)no-repeat;
-    	background-size:15%;
-    	background-position:1px 5px;
-    	color: #4d5f84;	
-	}
-	.generat:hover{
-		color: #4d5f84;	
-	}
-	#table { border-collapse: collapse; padding: 0;}
+#table tr th div {
+	text-align: center;
+	font-size: 14px;
+}
+
+#table tbody tr td {
+	text-align: center;
+	font-size: 16px;
+}
+
+.redact {
+	font-size: 16px;
+	padding-left: 20px;
+	background: url(img/3.png) no-repeat;
+	background-size: 15%;
+	background-position: 1px 5px;
+	color: #4d5f84;
+}
+
+.check {
+	font-size: 16px;
+	padding-left: 20px;
+	background: url(img/2.png) no-repeat;
+	background-size: 15%;
+	background-position: 1px 5px;
+	color: #4d5f84;
+}
+
+.generate {
+	font-size: 16px;
+	padding-left: 20px;
+	background: url(img/1.png) no-repeat;
+	background-size: 15%;
+	background-position: 1px 5px;
+	color: #4d5f84;
+}
+
+.generat:hover {
+	color: #4d5f84;
+}
+
+#table {
+	border-collapse: collapse;
+	padding: 0;
+}
 </style>
 </head>
 <body>
-		<div class="content">
+	<div class="content">
 		<!-- 左侧导航栏 -->
 		<div class="leftNavBar" id="leftContent">
 			<div class="headerIcon">
 				<img class="headerImg" src="img/login/bg1.jpg" alt="">
 				<div class="headNav" id="headNav">
-					<strong class="font-bold indexDepartment">拉卡拉风控+</strong>
-					<strong class="font-bold indexPageUserName">拉卡拉风控+</strong>
+					<strong class="font-bold indexDepartment">拉卡拉风控+</strong> <strong
+						class="font-bold indexPageUserName">拉卡拉风控+</strong>
 					<div class="triangle-down"></div>
 					<ul class="headNav-list" id="headNav-list">
 						<div class="triangle-up"></div>
@@ -72,34 +84,44 @@
 			</div>
 			<!-- 导航列表 -->
 			<ul class="nav">
-				<li class="navList"><a href="index.html"> <i class="icon fk"></i> <span>首页</span>
+				<li class="navList"><a href="index.html"> <i
+						class="icon fk"></i> <span>首页</span>
 				</a></li>
-				<li class="navList"><a href="management.html" class="active"> <i class="icon fk"></i> <span>商户管理</span>
+				<li class="navList"><a href="management.html" class="active">
+						<i class="icon fk"></i> <span>商户管理</span>
 				</a></li>
-				<li class="navList"><a href="risk.html"> <i class="icon fk"></i> <span>风控+</span>
+				<li class="navList"><a href="risk.html"> <i class="icon fk"></i>
+						<span>风控+</span>
 				</a></li>
-				<li class="navList"><a href="products.html"> <i class="icon fk"></i> <span>产品管理</span>
+				<li class="navList"><a href="products.html"> <i
+						class="icon fk"></i> <span>产品管理</span>
 				</a></li>
 			</ul>
 		</div>
 		<!-- 右侧内容区域 -->
 		<div class="rightBox" id="rightBox">
 			<!-- 搜索栏 -->
-			<div class="searchBox" id="searchBox">
-				<div class="inputDiv">
-					<label>搜索：</label> <input id="search" class="long" type="text" name="merchants"
-						placeholder="请输入商户名称/法人姓名/营业执照号">
+			<form id="formSearch" class="form-horizontal">
+				<div class="searchBox" id="searchBox">
+					<div class="inputDiv">
+						<label>搜索：</label> <input id="search" class="long" type="text"
+							name="merchants" placeholder="请输入商户名称/法人姓名/营业执照号">
+					</div>
+					<div class="inputDiv">
+						<label>报告状态:</label> <select id="report_type" name="report_type">
+							<option value="" selected>全部</option>
+							<option value="10">已生成</option>
+							<option value="20">未生成</option>
+						</select>
+					</div>
+					<button class="searchBtn" onclick="javascript:queryEvent();"
+						style="text-align: right;">搜索</button>
+					<button type="button" id="btn_reset" class="btn btn-default"
+						onclick="javascript:resetEvent('formSearch','table');">
+						<span class="glyphicon glyphicon-refresh"></span>重置
+					</button>
 				</div>
-				<div class="inputDiv">
-					<label >报告状态:</label> <select
-								id="report_type" name="report_type" >
-								<option value="" selected>全部</option>
-								<option value="10">已生成</option>
-								<option value="20">未生成</option>
-					</select>
-				</div>
-				<button class="searchBtn" onclick="javascript:queryEvent();" style="text-align: right;">搜索</button>
-			</div>
+			</form>
 			<!-- 表格块 -->
 			<div class="rightContent" id="rightContent">
 				<div class="contentTable">
@@ -116,42 +138,43 @@
 			</div>
 		</div>
 		<!-- 修改密码 -->
-			<div id="tk">
-				<div class="zz"></div>
-				<div class="changePassword">
-					<div class="close" id="changeClose">
-						<img src="img/x.png">
-					</div>
-					<div class="input">
-						<div class="icon">
-							<img src="img/login/Shape.png" alt="旧密码">
-						</div>
-						<input type="password" placeholder="旧密码" class="loginInput"
-							name="account" id="account">
-					</div>
-					<div class="input">
-						<div class="icon">
-							<img src="img/login/Shape.png" alt="新密码">
-						</div>
-						<input type="password" placeholder="新密码" maxlength="12" class="loginInput"
-							name="password" id="password">
-					</div>
-					<div class="input">
-						<div class="icon">
-							<img src="img/login/Shape.png" alt="确认新密码">
-						</div>
-						<input type="password" placeholder="确认新密码" maxlength="12" class="loginInput"
-							name="password1" id="password1">
-					</div>
-					<input id="btn_submit" type="button" name="" class="changeBtn"
-						value="修改">
+		<div id="tk">
+			<div class="zz"></div>
+			<div class="changePassword">
+				<div class="close" id="changeClose">
+					<img src="img/x.png">
 				</div>
+				<div class="input">
+					<div class="icon">
+						<img src="img/login/Shape.png" alt="旧密码">
+					</div>
+					<input type="password" placeholder="旧密码" class="loginInput"
+						name="account" id="account">
+				</div>
+				<div class="input">
+					<div class="icon">
+						<img src="img/login/Shape.png" alt="新密码">
+					</div>
+					<input type="password" placeholder="新密码" maxlength="12"
+						class="loginInput" name="password" id="password">
+				</div>
+				<div class="input">
+					<div class="icon">
+						<img src="img/login/Shape.png" alt="确认新密码">
+					</div>
+					<input type="password" placeholder="确认新密码" maxlength="12"
+						class="loginInput" name="password1" id="password1">
+				</div>
+				<input id="btn_submit" type="button" name="" class="changeBtn"
+					value="修改">
 			</div>
 		</div>
+	</div>
 </body>
 <script src="js/jquery.min.js"></script>
 <script src="js/layer/layer.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script
+	src="https://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
@@ -159,7 +182,8 @@
 <script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
-<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script
+	src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="js/layer/layer.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/management.js"></script>

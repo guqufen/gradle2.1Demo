@@ -611,6 +611,7 @@ public class ReportInfoProvider {
 	 */
 	public String pageListMercByCondition(Map<String, Object> params) {
 		ReportInfoDO reportInfo = (ReportInfoDO) params.get("reportInfo");
+		String mercName = reportInfo.getMercName();
 		Integer pageNum = (Integer) params.get("pageNum");
 		Integer pageSize = (Integer) params.get("pageSize");
 		if (pageNum == null || pageNum == 0) {
@@ -647,8 +648,8 @@ public class ReportInfoProvider {
 				if (reportInfo.getId() != null) {
 					WHERE("report.id=#{reportInfo.id}");
 				}
-				if (StringUtils.isNotBlank(reportInfo.getMercName())) {
-					WHERE("tt.merc_name like CONCAT('%',#{reportInfo.mercName},'%')");
+				if (StringUtils.isNotBlank(reportInfo.getMerName())) {//商户名（必须40个字符）
+					WHERE("tt.merc_name like CONCAT('%',#{reportInfo.merName},'%')");
 				}
 				if (StringUtils.isNotBlank(reportInfo.getBusinessLicenseNum())) {
 					WHERE("tt.business_license_num like CONCAT('%',#{reportInfo.businessLicenseNum},'%')");
@@ -847,19 +848,24 @@ public class ReportInfoProvider {
 		return new SQL() {
 			{
 
-//				String agentWhere = "";
-//				if (null != reportInfo.getAgentId()) {
-//					agentWhere = "and agent_id='" + reportInfo.getAgentId() + "'";
-//				}
+				String agentWhere = "";
+				if (null != reportInfo2.getAgentId()) {
+					agentWhere = "and agent_id='" + reportInfo2.getAgentId() + "'";
+				}
 				SELECT("tt.*,report.id,report.trading_area ,"
 						+ "(select `first` from sys_industry where id = report.industry) industryName ,report.industry,report.size,report.status,report.view_num,report.report_timer "
 						+ " FROM "
-						+ "( SELECT ent.entity_inner_code,ent.legal_person,ent.merc_name,ent.business_license_num FROM m_merchant_entity ent ) tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)order by report_timer desc) report, "
-						+ "risk_product rp,	risk_merc_pay_ability ra");
-				WHERE("tt.entity_inner_code = report.entity_inner_code AND tt.entity_inner_code = ra.entity_inner_code AND report. STATUS = 1 AND rp.pay_ability_min < ra.pay_ability");
+						+ "( SELECT ent.entity_inner_code,ent.legal_person,ent.merc_name,ent.business_license_num FROM m_merchant_entity ent ) tt ,"
+						+ "(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) and status = 1 group by id)order by report_timer desc) report");
+				
+				if (StringUtils.isNotBlank(reportInfo2.getProductId())) {
+					SELECT("risk_product rp, risk_merc_pay_ability ra");
+					WHERE(" tt.entity_inner_code = ra.entity_inner_code  AND rp.pay_ability_min < ra.pay_ability");
+				}
+				WHERE("tt.entity_inner_code = report.entity_inner_code ");
 				// 产品名称
-				if (StringUtils.isNotBlank(reportInfo2.getName())) {
-					WHERE("rp.name=#{reportInfo2.name}");
+				if (StringUtils.isNotBlank(reportInfo2.getProductId())) {
+					WHERE("rp.id=#{reportInfo2.productId}");
 				}
 
 				// 用户权限为审核用户：0-待审核
@@ -870,7 +876,6 @@ public class ReportInfoProvider {
 						WHERE("report.status in (0)");
 					}
 				}
-
 				// 用户权限为编辑用户，2-审核失败；4-提交待编辑
 				if (reportInfo2.getCustomerType() != null && reportInfo2.getCustomerType() == 2) {
 					if (reportInfo2.getStatus() != null) {
@@ -907,12 +912,17 @@ public class ReportInfoProvider {
 					agentWhere = "and agent_id='" + reportInfo2.getAgentId() + "'";
 				}
 				SELECT("count(1) FROM"
-						+ "( SELECT ent.entity_inner_code,ent.legal_person,ent.merc_name,ent.business_license_num FROM m_merchant_entity ent ) tt ,(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) group by id)order by report_timer desc) report, "
-						+ "risk_product rp,	risk_merc_pay_ability ra");
-				WHERE("tt.entity_inner_code = report.entity_inner_code AND tt.entity_inner_code = ra.entity_inner_code AND report. STATUS = 1 AND rp.pay_ability_min < ra.pay_ability");
+						+ "( SELECT ent.entity_inner_code,ent.legal_person,ent.merc_name,ent.business_license_num FROM m_merchant_entity ent ) tt ,"
+						+ "(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) and status = 1 group by id)order by report_timer desc) report");
+						
+				if (StringUtils.isNotBlank(reportInfo2.getProductId())) {
+					SELECT("risk_product rp, risk_merc_pay_ability ra");
+					WHERE(" tt.entity_inner_code = ra.entity_inner_code  AND rp.pay_ability_min < ra.pay_ability");
+				}
+				WHERE("tt.entity_inner_code = report.entity_inner_code ");
 				// 产品名称
-				if (StringUtils.isNotBlank(reportInfo2.getName())) {
-					WHERE("rp.name=#{reportInfo2.name}");
+				if (StringUtils.isNotBlank(reportInfo2.getProductId())) {
+					WHERE("rp.id=#{reportInfo2.productId}");
 				}
 
 				// 审核人员

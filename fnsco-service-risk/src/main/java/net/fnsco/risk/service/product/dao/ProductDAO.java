@@ -37,4 +37,8 @@ public interface ProductDAO {
     @SelectProvider(type = ProductProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("product") ProductDO product);
 
+    @Results({@Result( column = "id",property = "id"),@Result( column = "name",property = "name")})
+    @Select("SELECT id,name FROM risk_product")
+	public List<ProductDO> getProductName();
+
 }
