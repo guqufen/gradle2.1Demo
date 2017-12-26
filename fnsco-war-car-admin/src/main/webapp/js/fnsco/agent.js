@@ -80,95 +80,12 @@ function responseHandler(res) {
 function formatTime(value, row, index){
 	return formatDateUtil(value);
 }
-//添加确认事件方法
-function add(date) {
-	$.ajax({
-		traditional:true,
-		url : json.auth_user_toAdd,
-		data : date,
-		type : 'POST',
-		success : function(data) {
-			unloginHandler(data);
-			if (data.success) {
-				layer.msg('保存成功');
-				$('#addModal').modal("hide");
-				queryEvent("table");
-				layer.close();
-				return true;
-			} else {
-				layer.msg('保存失败');
-			}
-		}
-	});
-}
-//修改确认事件方法
-function edit(date) {
-	$.ajax({
-		traditional:true,
-		url : json.auth_user_toEdit,
-		data : date,
-		type : 'POST',
-		success : function(data) {
-			unloginHandler(data);
-			if (data.success) {
-				layer.msg('修改成功');
-				$('#editModal').modal("hide");
-				queryEvent("table");
-				layer.close();
-				return true;
-			} else {
-				layer.msg(data.message);
-			}
-		}
-	});
-}
-//查询用户名是否重复
-var isdata;
-function queryByName(name) {
-	$.ajax({
-		url : json.auth_user_queryUserByName,
-		type : 'POST',
-		dataType : "json",
-		async:false,//同步获取数据
-		data : {
-			'name' : name
-		},
-		success : function(data) {
-			unloginHandler(data);
-			isdata=data;
-		}
-	});
-}
-//请求所有代理商数据
-function requestAgent(type){
-	 $.ajax({
-		   url:json.web_merchantinfo_queryAgents,
-		   type:'POST',
-		   success:function(data){
-			   unloginHandler(data);
-			   console.log(data);
-			   var agtS = data.data;
-			   var html_opt = '';
-			   $.each(agtS,function(index,value){
-				   if(type && type == value.id){
-					   html_opt += '<option value="'+value.id+'" selected ="selected">'+value.name+'</option>';
-				   }else{
-					   html_opt += '<option value="'+value.id+'">'+value.name+'</option>';
-				   }
-			   })
-			   $('#agentId').html(html_opt);
-			   $('#agentId1').html(html_opt);
-		   },
-		   error:function(e){
-			   layer.msg('服务器出错');
-		   }
-	   })
-}
-//修改信息查询
+
+//修改查询
 function queryById(id) {
 	$.ajax({
-		url :json.auth_user_queryUserById,
-		// url :'../web/agent/querySingle',
+		// url :json.auth_user_queryUserById,
+		url :'web/agent/querySingle',
 
 		type : 'POST',
 		dataType : "json",
@@ -181,7 +98,7 @@ function queryById(id) {
 			console.log(data);
 			// 基本信息
 			$("#name1").val(data.data.name);
-			$("#type1").val(data.data.type);
+			$("#type1").find("option[value='"+data.data.type+"']").attr('selected',true);
 			$("#principal1").val(data.data.principal);
 			$("#mobile1").val(data.data.mobile);
 			$("#shortName1").val(data.data.shortName);
@@ -196,7 +113,7 @@ function queryById(id) {
 	});
 }
 /*
- * 判断是否选择记录方法
+ * 修改或者删除判断是否已经选择
  */
 function getUserId() {
 	var select_data = $('#table').bootstrapTable('getSelections');
@@ -221,83 +138,53 @@ function resetEvent(form, id) {
 	$('#' + form)[0].reset();
 	$('#' + id).bootstrapTable('refresh');
 }
-//清除所有表单数据
-function clearDate(){
-	$("#username").val(null);
-	$("#password").val(null);
-	$("#realname").val(null);
-	$("#mobile").val(null);
-	$("#sex").val(1);
-	$("#aliasname").val(null);
-	$("#department").val(null);
-	$("#agentId").val(null);
-	$("#status").val(1);
-	$("#remark").val(null);
-}
 //新增按钮事件
 $('#btn_add').click(function() {
-	clearDate();
 	$('#addModal').modal();
-	$('#sexhide').hide();
-	$('#agentIdhide').hide();
-	$('#aliasnamehide').hide();
 });
-//新增确认按钮事件
-$('#btn_yes').click(function() {
-			 //获得当前选中的值
-//			var sex = $('#sex').val();
-			var type = $('#type').val();
-			var status = $('#status').val();
-			var username = $('#username').val();
-			var password = $('#password').val();
-			var mobile = $('#mobile').val();
-			var department = $('#department').val();
-//			var remark =$('#remark').val();
-			var date = {
-					"name" : username,
-					"password" : password,
-					"roleList" : roleid,
-					"mobile" : mobile,
-					"department" : department,
-					'type':type,
-					//"sex" : sex,
-					"status" : status,
-					"realName" : $('#realname').val(),
-					//"aliasName" : $('#aliasname').val(),
-					"agentId" : $('#agentId').val(),
-//					"remark" : remark
-				};
-			if (username == null || username.length == 0) {
-				layer.msg('用户名不能为空!');
-				return false;
+//保存事件
+function subData(id){
+	if(id==1){
+		var modal=$("#editModal");
+		var inputLen=$("#editModal input").length;
+		var id = getUserId();
+	}else if(id==0){
+		var modal=$("#addModal");
+		var inputLen=$("#addModal input").length;
+		var id=null;
+	}
+	for(var i=0;i<inputLen;i++){
+		if(modal.find('input').eq(i).val()==''){
+			var alertTxtLen=modal.find('input').eq(i).siblings('label').html().length;
+			alert(modal.find('input').eq(i).siblings('label').html().substring(0,alertTxtLen-1)+'不能为空！');
+			return false;
+		}
+	}
+	var name=modal.find('input[name="name"]').val();
+	var type=modal.find('select[name="type"]').val();
+	var provincename=modal.find('input[name="provincename"]').val();
+	var cityname=modal.find('input[name="cityname"]').val();
+	var areaname=modal.find('input[name="areaname"]').val();
+	var address=modal.find('input[name="address"]').val();
+	var suggestCode=modal.find('input[name="suggestCode"]').val();
+	var mobile=modal.find('input[name="mobile"]').val();
+	var shortName=modal.find('input[name="shortName"]').val();
+	var principal=modal.find('input[name="principal"]').val();
+	var data={'name':name,'type':type,'provincename':provincename,'cityname':cityname,'areaname':areaname,'address':address,'suggestCode':suggestCode,'mobile':mobile,'shortName':shortName,'principal':principal,'id':id}
+	$.ajax({
+		url:'web/agent/toAddOrUpdate',
+		type:'post',
+		dataType:'json',
+		data: data,
+		success:function(e){
+			if(e.success){
+				queryEvent("table");
+				modal.modal('hide');
 			}
-			queryByName(username);
-			if (isdata == false) {
-				layer.msg('用户名已存在!');
-				return false;
-			}
-			if (password == null || password.length == 0) {
-				layer.msg('密码不能为空!');
-				return false;
-			}
-			if (password.length<6) {
-				layer.msg('密码最少6位');
-				return false;
-			}
-			/*if (mobile == null || mobile.length == 0) {
-				layer.msg('手机号不能为空!');
-				return false;
-			}*/
-			if (department == null || department.length == 0) {
-				layer.msg('所属部门不能为空!');
-				return false;
-			}
-			/*if (remark.length>50) {
-				layer.msg('备注最多50个字!');
-				return false;
-			}*/
-			add(date);
-		});
+		}
+	})
+}
+
 //修改按钮事件
 $('#btn_edit').click(function() {
 	var userId = getUserId();

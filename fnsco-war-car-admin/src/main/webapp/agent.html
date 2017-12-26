@@ -61,6 +61,72 @@
 	<!-- end  -->	
    </div>
 </div>
+<!-- 新增 -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModelLabel" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addModalLabel">新增</h4>
+            </div>
+            <div class="modal-body">
+                <div class="tab-content">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label class="control-label" for="name">运营商名称：</label>
+                            <input type="text" class="form-control" id="name0" placeholder="名称" name="name" required="required" >
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label" for="type">运营商类型：</label>
+                            <select name="type" id="type0" class="form-control">
+                              <option value="1">普通运营商</option>
+                              <option value="2">特约运营商</option>
+                              <option value="3">金牌运营商</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label" for="principal">负责人：</label>
+                            <input type="text" class="form-control" id="principal0" placeholder="负责人" name="principal" required="required" >
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label" for="mobile">手机号：</label>
+                            <input type="text" class="form-control" id="mobile0" name="mobile" placeholder="手机号">
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label " for="shortName">商户简称：</label>
+                            <input type="text" class="form-control" id="shortName0" name="shortName" placeholder="商户简称">
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label " for="provincename">省：</label>
+                            <input id="provincename0" name="provincename" class="form-control" placeholder="输入所在省" type="text">
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label " for="cityname">市：</label>
+                            <input id="cityname0" name="cityname" class="form-control" placeholder="输入所在市" type="text">
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label " for="areaname">区/县 ：</label>
+                            <input id="areaname0" name="areaname" class="form-control" placeholder="输入所在区/县" type="text">
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label" for="address">详细地址：</label>
+                            <input type="text" class="form-control" id="address0" placeholder="详细地址" name="address" required="required" >
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label" for="suggestCode">推荐码：</label>
+                            <input type="text" class="form-control" id="suggestCode0" placeholder="推荐码" name="suggestCode" required="required" >
+                        </div>
+                    <div>
+                </div>
+            </div>
+			<button id="btn_yes" type="button" class="btn btn-primary" onclick="subData(0)">
+                <span  aria-hidden="true"></span>确认添加
+            </button>
+        </div>
+    </div>
+</div>
+</div>
+</div>
 <!-- 修改 -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModelLabel" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
@@ -78,7 +144,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label class="control-label" for="type1">运营商类型：</label>
-                            <select name="type1" class="form-control">
+                            <select name="type" id="type1" class="form-control">
                               <option value="1">普通运营商</option>
                               <option value="2">特约运营商</option>
                               <option value="3">金牌运营商</option>
@@ -97,15 +163,15 @@
                             <input type="text" class="form-control" id="shortName1" name="shortName" placeholder="商户简称">
                         </div>
                         <div class="col-sm-4">
-                            <label class="control-label " for="provincename1">省：</label>
-                            <input id="provincename" name="provincename1" class="form-control" placeholder="输入所在省" type="text">
+                            <label class="control-label " for="provincename1">所在省：</label>
+                            <input id="provincename1" name="provincename" class="form-control" placeholder="输入所在省" type="text">
                         </div>
                         <div class="col-sm-4">
-                            <label class="control-label " for="cityname1">市：</label>
+                            <label class="control-label " for="cityname1">所在市：</label>
                             <input id="cityname1" name="cityname" class="form-control" placeholder="输入所在市" type="text">
                         </div>
                         <div class="col-sm-4">
-                            <label class="control-label " for="areaname1">区/县 ：</label>
+                            <label class="control-label " for="areaname1">所在区/县 ：</label>
                             <input id="areaname1" name="areaname" class="form-control" placeholder="输入所在区/县" type="text">
                         </div>
                         <div class="col-sm-4">
@@ -119,8 +185,8 @@
                     <div>
                 </div>
             </div>
-			<button id="btn_yes" type="button" class="btn btn-primary">
-                <span  aria-hidden="true"></span>确认添加
+			<button id="btn_yes" type="button" class="btn btn-primary" onclick="subData(1)">
+                确认修改
             </button>
             </div>
         </div>
@@ -128,73 +194,6 @@
 </div>
 </div>
 </div>
-<!-- 新增 -->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModelLabel" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="addModalLabel">新增</h4>
-            </div>
-            <div class="modal-body">
-                <div class="tab-content">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <label class="control-label" for="name">运营商名称：</label>
-                            <input type="text" class="form-control" id="name" placeholder="名称" name="name" required="required" >
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="control-label" for="type">运营商类型：</label>
-                            <select name="type" class="form-control">
-                              <option value="1">普通运营商</option>
-                              <option value="2">特约运营商</option>
-                              <option value="3">金牌运营商</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="control-label" for="principal">负责人：</label>
-                            <input type="text" class="form-control" id="principal" placeholder="负责人" name="principal" required="required" >
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="control-label" for="mobile">手机号：</label>
-                            <input type="text" class="form-control" id="mobile" name="mobile" placeholder="手机号">
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="control-label " for="shortName">商户简称：</label>
-                            <input type="text" class="form-control" id="shortName" name="shortName" placeholder="商户简称">
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="control-label " for="provincename">省：</label>
-                            <input id="provincename" name="provincename" class="form-control" placeholder="输入所在省" type="text">
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="control-label " for="cityname">市：</label>
-                            <input id="cityname" name="cityname" class="form-control" placeholder="输入所在市" type="text">
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="control-label " for="areaname">区/县 ：</label>
-                            <input id="areaname" name="areaname" class="form-control" placeholder="输入所在区/县" type="text">
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="control-label" for="address">详细地址：</label>
-                            <input type="text" class="form-control" id="address" placeholder="详细地址" name="address" required="required" >
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="control-label" for="suggestCode">推荐码：</label>
-                            <input type="text" class="form-control" id="suggestCode" placeholder="推荐码" name="suggestCode" required="required" >
-                        </div>
-                    <div>
-                </div>
-            </div>
-			<button id="btn_yes" type="button" class="btn btn-primary">
-                <span  aria-hidden="true"></span>确认添加
-            </button>
-        </div>
-    </div>
-</div>
-</div>
-</div>
-
 
 <script src="js/bootstrap/jquery.min.js"></script>
 <script src="js/bootstrap/js/bootstrap.min.js"></script>
