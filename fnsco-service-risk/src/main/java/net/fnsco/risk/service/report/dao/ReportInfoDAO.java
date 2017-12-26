@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
+import net.fnsco.risk.service.report.entity.ReportInfoDO2;
 import net.fnsco.risk.service.report.dao.helper.ReportInfoProvider;
 
 import java.util.List;;
@@ -193,12 +194,36 @@ public interface ReportInfoDAO {
 			@Result(column = "industryName", property = "industryName"),
 			@Result(column = "view_num", property = "viewNum") })
 	@SelectProvider(type = ReportInfoProvider.class, method = "pageListMercByCondition")
-	public List<ReportInfoDO> pageListMercByCondition(@Param("reportInfo") ReportInfoDO reportInfo,
-			@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
+	public List<ReportInfoDO> pageListMercByCondition(@Param("reportInfo") ReportInfoDO reportInfo,	@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 
 	@SelectProvider(type = ReportInfoProvider.class, method = "pageListMercByConditionCount")
 	public Integer pageListMercByConditionCount(@Param("reportInfo") ReportInfoDO reportInfo);
 
+	
+	@Results({ @Result(column = "mer_name", property = "merName"),
+		@Result(column = "business_license_num", property = "businessLicenseNum"),
+		@Result(column = "business_address", property = "businessAddress"),
+		@Result(column = "business_due_time", property = "businessDueTime"),
+		@Result(column = "trading_area", property = "tradingArea"),
+		@Result(column = "report_cycle", property = "reportCycle"),
+		@Result(column = "report_timer", property = "reportTimer"),
+		@Result(column = "risk_warning", property = "riskWarning"),
+		@Result(column = "fee_rate", property = "feeRate"), @Result(column = "loan_cycle", property = "loanCycle"),
+		@Result(column = "mer_num", property = "merNum"), @Result(column = "status", property = "status"),
+		@Result(column = "entity_inner_code", property = "entityInnerCode"),
+		@Result(column = "create_time", property = "createTime"),
+		@Result(column = "last_modify_time", property = "lastModifyTime"),
+		@Result(column = "decoration_level", property = "decorationLevel"),
+		@Result(column = "evaluation", property = "evaluation"),
+		@Result(column = "last_view_time", property = "lastViewTime"),
+		@Result(column = "industry", property = "industry"),
+		@Result(column = "industryName", property = "industryName"),
+		@Result(column = "view_num", property = "viewNum") })
+@SelectProvider(type = ReportInfoProvider.class, method = "pageListMercByCondition2")
+public List<ReportInfoDO2> pageListMercByCondition2(@Param("reportInfo2") ReportInfoDO2 reportInfo2,@Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
+
+@SelectProvider(type = ReportInfoProvider.class, method = "pageListMercByConditionCount2")
+public Integer pageListMercByConditionCount2(@Param("reportInfo2") ReportInfoDO2 reportInfo2);
 	/**
 	 * queryHistoryReportInfo:(查询四条历史报告)
 	 *

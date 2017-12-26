@@ -16,12 +16,11 @@ import java.util.List;;
 
 public interface IndustryDAO {
 
-    @Results({@Result( column = "id",property = "id") ,@Result( column = "code",property = "code") ,@Result( column = "business_form",property = "businessForm"), @Result( column = "first",property = "first"),
-        @Result( column = "third",property = "third"), @Result( column = "fourth",property = "fourth"), @Result( column = "status",property = "status"), @Result( column = "remark",property = "remark")})
+	@Results({@Result( column = "business_form",property = "businessForm"),@Result( column = "max_price",property = "maxPrice"),@Result( column = "interest_rate",property = "interestRate"),@Result( column = "pos_usage",property = "posUsage") })
     @Select("SELECT * FROM sys_industry WHERE id = #{id} limit 1")
     public IndustryDO getById(@Param("id") int id);
 
-    @Insert("INSERT into sys_industry(id,code,business_form,first,third,fourth,status,remark) VALUES (#{id},#{code},#{businessForm},#{first},#{third},#{fourth},#{status},#{remark})")
+	@Insert("INSERT into sys_industry(id,code,business_form,first,third,fourth,status,remark,max_price,interest_rate,pos_usage) VALUES (#{id},#{code},#{businessForm},#{first},#{third},#{fourth},#{status},#{remark},#{maxPrice},#{interestRate},#{posUsage})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(IndustryDO industry);
 
@@ -42,8 +41,7 @@ public interface IndustryDAO {
      * 查找所有的行业数据
      * @return
      */
-    @Results({@Result( column = "id",property = "id") ,@Result( column = "code",property = "code") ,@Result( column = "business_form",property = "businessForm"), @Result( column = "first",property = "first"),
-    	@Result( column = "third",property = "third"), @Result( column = "fourth",property = "fourth"), @Result( column = "status",property = "status"), @Result( column = "remark",property = "remark")})
+    @Results({@Result( column = "business_form",property = "businessForm"),@Result( column = "max_price",property = "maxPrice"),@Result( column = "interest_rate",property = "interestRate"),@Result( column = "pos_usage",property = "posUsage") })
     @Select("select * FROM sys_industry")
     public List<IndustryDO> queryAll();
     
@@ -53,4 +51,22 @@ public interface IndustryDAO {
 
     @SelectProvider(type = IndustryProvider.class, method = "pageNameListCount")
     public Integer pageNameListCount(@Param("industry") IndustryDO industry);
+    
+    /**
+     * 按照code查询行业信息
+     * @param code
+     * @return
+     */
+    @Results({@Result( column = "business_form",property = "businessForm"),@Result( column = "max_price",property = "maxPrice"),@Result( column = "interest_rate",property = "interestRate"),@Result( column = "pos_usage",property = "posUsage") })
+    @Select("SELECT * FROM sys_industry WHERE code = #{code} limit 1")
+    public IndustryDO getByCode(@Param("code") String code);
+    
+    /**
+     * 根据entityInnerCode查询行业信息
+     * @param entityInnerCode
+     * @return
+     */
+    @Results({@Result( column = "business_form",property = "businessForm"),@Result( column = "max_price",property = "maxPrice"),@Result( column = "interest_rate",property = "interestRate"),@Result( column = "pos_usage",property = "posUsage") })
+    @Select("SELECT * FROM sys_industry WHERE `code` = (  SELECT industry_code FROM m_merchant_entity WHERE entity_inner_code= #{entityInnerCode} limit 1)")
+    public IndustryDO getByEntityInnerCode(@Param("entityInnerCode") String entityInnerCode);
 }
