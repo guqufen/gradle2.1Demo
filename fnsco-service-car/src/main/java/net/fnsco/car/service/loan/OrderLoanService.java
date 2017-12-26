@@ -92,6 +92,7 @@ public class OrderLoanService extends BaseService {
 			if(CollectionUtils.isNotEmpty(files)) {
 				for (OrderFileDO orderFileDO : files) {
 					String filePath = orderFileDO.getFilePath();
+					filePath = filePath.substring(filePath.indexOf("^")+1);
 					if(!Strings.isNullOrEmpty(filePath)) {
 						orderFileDO.setFilePath(OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), filePath));
 					}
@@ -103,7 +104,7 @@ public class OrderLoanService extends BaseService {
 		ResultPageDTO<OrderLoanDO> pager = new ResultPageDTO<OrderLoanDO>(count, pageList);
 		return pager;
 	}
-
+	
 	// 添加
 	public OrderLoanDO doAdd(OrderLoanDO orderLoan, int loginUserId) {
 		logger.info("开始添加OrderLoanService.add,orderLoan=" + orderLoan.toString());
