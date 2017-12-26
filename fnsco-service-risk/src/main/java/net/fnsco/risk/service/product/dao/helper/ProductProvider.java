@@ -39,8 +39,8 @@ public class ProductProvider {
         if (StringUtils.isNotBlank(product.getCycle())){
             SET("cycle=#{product.cycle}");
         }
-        if (StringUtils.isNotBlank(product.getDesc())){
-            SET("desc=#{product.desc}");
+        if (StringUtils.isNotBlank(product.getDescription())){
+            SET("description=#{product.description}");
         }
         if (product.getPayAbilityMin() != null) {
             SET("pay_ability_min=#{product.payAbilityMin}");
@@ -97,8 +97,8 @@ public class ProductProvider {
         if (StringUtils.isNotBlank(product.getCycle())){
             WHERE("cycle=#{product.cycle}");
         }
-        if (StringUtils.isNotBlank(product.getDesc())){
-            WHERE("desc=#{product.desc}");
+        if (StringUtils.isNotBlank(product.getDescription())){
+            WHERE("description=#{product.description}");
         }
         if (product.getPayAbilityMin() != null) {
             WHERE("pay_ability_min=#{product.payAbilityMin}");
@@ -145,8 +145,8 @@ public class ProductProvider {
         if (StringUtils.isNotBlank(product.getCycle())){
             WHERE("cycle=#{product.cycle}");
         }
-        if (StringUtils.isNotBlank(product.getDesc())){
-            WHERE("desc=#{product.desc}");
+        if (StringUtils.isNotBlank(product.getDescription())){
+            WHERE("description=#{product.description}");
         }
         if (product.getPayAbilityMin() != null) {
             WHERE("pay_ability_min=#{product.payAbilityMin}");

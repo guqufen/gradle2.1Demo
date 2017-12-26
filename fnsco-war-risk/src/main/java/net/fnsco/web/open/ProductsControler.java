@@ -80,7 +80,7 @@ public class ProductsControler extends BaseController {
     	productDO.setAmountMax(addProductsDTO.getAmountMax());
     	productDO.setAmountMin(addProductsDTO.getAmountMin());
     	productDO.setCycle(addProductsDTO.getCycle());
-    	productDO.setDesc(addProductsDTO.getDesc());
+    	productDO.setDescription(addProductsDTO.getDesc());
     	productDO.setRateMax(addProductsDTO.getRateMax());
     	productDO.setRateMin(addProductsDTO.getRateMin());
     	productDO.setStatus("1");
