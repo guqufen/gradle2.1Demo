@@ -20,7 +20,7 @@ public interface ProductDAO {
     @Select("SELECT * FROM risk_product WHERE id = #{id}")
     public ProductDO getById(@Param("id") int id);
 
-    @Insert("INSERT into risk_product(id,agent_id,name,amount_min,amount_max,rate_min,rate_max,cycle,desc,pay_ability_min,create_time,last_modify_time,status) VALUES (#{id},#{agentId},#{name},#{amountMin},#{amountMax},#{rateMin},#{rateMax},#{cycle},#{desc},#{payAbilityMin},#{createTime},#{lastModifyTime},#{status})")
+    @Insert("INSERT into risk_product(id,agent_id,name,amount_min,amount_max,rate_min,rate_max,cycle,description,pay_ability_min,create_time,last_modify_time,status) VALUES (#{id},#{agentId},#{name},#{amountMin},#{amountMax},#{rateMin},#{rateMax},#{cycle},#{description},#{payAbilityMin},#{createTime},#{lastModifyTime},#{status})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(ProductDO product);
 
@@ -36,5 +36,9 @@ public interface ProductDAO {
 
     @SelectProvider(type = ProductProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("product") ProductDO product);
+
+    @Results({@Result( column = "id",property = "id"),@Result( column = "name",property = "name")})
+    @Select("SELECT id,name FROM risk_product")
+	public List<ProductDO> getProductName();
 
 }

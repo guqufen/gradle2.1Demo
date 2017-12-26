@@ -29,24 +29,45 @@ public class ProductService extends BaseService {
  }
 
  // 添加
- public ProductDO doAdd (ProductDO product,int loginUserId) {
+ public ProductDO doAdd (ProductDO product) {
      logger.info("开始添加ProductService.add,product=" + product.toString());
      this.productDAO.insert(product);
      return product;
  }
 
  // 修改
- public Integer doUpdate (ProductDO product,Integer loginUserId) {
+ public Integer doUpdate (ProductDO product) {
      logger.info("开始修改ProductService.update,product=" + product.toString());
      int rows=this.productDAO.update(product);
      return rows;
  }
 
  // 删除
- public Integer doDelete (ProductDO product,Integer loginUserId) {
+ public Integer doDelete (ProductDO product ,Integer loginUserId) {
      logger.info("开始删除ProductService.delete,product=" + product.toString());
      int rows=this.productDAO.deleteById(product.getId());
      return rows;
+ }
+ 
+ //删除通过id
+ public void deleteById (Integer id) {
+   this.productDAO.deleteById(id);
+ }
+ 
+ //启动通过id
+ public void startById (Integer id) {
+   ProductDO product = new ProductDO();
+   product.setId(id);
+   product.setStatus("1");
+   this.productDAO.update(product);
+ }
+ 
+ //停用通过id
+ public void disuseById (Integer id) {
+   ProductDO product = new ProductDO();
+   product.setId(id);
+   product.setStatus("0");
+   this.productDAO.update(product);
  }
 
  // 查询
@@ -54,4 +75,8 @@ public class ProductService extends BaseService {
      ProductDO obj = this.productDAO.getById(id);
      return obj;
  }
+
+public List<ProductDO> getProductName() {
+	return this.productDAO.getProductName();
+}
 }

@@ -18,6 +18,7 @@ var message = load_val2();
 //console.log(message.id)
 var webUserOuterId = message.id;
 var agentId = message.agentId;
+var productId;
 // 分页查询用户绑定下的商户列表
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
@@ -150,7 +151,8 @@ function queryParams(params) {
 		merName : $.trim($('#merName').val()),
 		tradingArea : $.trim($('#tradingArea').val()),
 		businessLicenseNum : $.trim($('#businessLicenseNum').val()),
-		agentId : agentId
+		agentId : agentId,
+		productId: productId,
 	}
 	return param;
 }
@@ -169,7 +171,8 @@ function responseHandler(res) {
 	}
 }
 
-function queryEvent() {
+function queryEvent(id) {
+	productId=id;
 	$('#table').bootstrapTable('refresh');
 }
 function tipMessage() {
@@ -215,7 +218,23 @@ function reportStatus(merchantId, status) {
 			"status" : status
 		},
 		success : function(data) {
-			
+		
 		}
 	});
 }
+//获取按钮
+$.ajax({
+	url : PROJECT_NAME + '/web/report/getProductName',
+	type : 'POST',
+	dataType : "json",
+	success : function(data) {
+		console.log(data);
+		var html='';
+		for(var i=0;i<data.data.length;i++){
+			html+='<button class="searchBtn" onclick="javascript:queryEvent('+data.data[i].id+');">'+data.data[i].name+'</button>';
+		}
+		console.log();
+		$("#searchBox").append(html);
+	}
+});
+
