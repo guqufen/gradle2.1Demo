@@ -72,8 +72,8 @@ public class MercPayAbilityService extends BaseService {
 	/**
 	 * 计算各个商家还款能力，每个月计算一次
 	 * 
-	 * @param startTime
-	 * @param endTime
+	 * @param startTime 时间格式yyyyMMddHHmmss
+	 * @param endTime 时间格式yyyyMMddHHmmss
 	 */
 	public void countRepaymentAbility(String startTime, String endTime) {
 		/**
