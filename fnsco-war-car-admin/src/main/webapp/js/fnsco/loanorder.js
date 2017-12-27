@@ -211,5 +211,8 @@ function showImg(src,id){
 }
 
 $("#table").on('load-success.bs.table',function(data){
-       $(".imgFile").viewer({url:'data-original'});
+    $(".imgFile").viewer({
+        url:'data-original',
+        navbar: false
+    });
 });
