@@ -39,6 +39,7 @@ import net.fnsco.web.controller.e789.third.ticket.vo.AddTicketOrderVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.PyCommonVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.SeatTypeVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.SiteVO;
+import net.fnsco.web.controller.e789.third.ticket.vo.TetterVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.TrainVO;
 
 /**
@@ -99,7 +100,9 @@ public class TicketController extends BaseController {
             vo.setSitePyName(site.getPyName());
             resultVO.setList(vo);
         }
-        return success(resultVO);
+        List<TetterVO> resultList = Lists.newArrayList();
+        TetterVO.setList(resultList, resultVO);
+        return success(resultList);
     }
 
     /**
