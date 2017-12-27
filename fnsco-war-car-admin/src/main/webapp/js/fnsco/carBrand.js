@@ -247,6 +247,8 @@ function MenuTreeGet() {
 /***** 新增add *******/
 //点击增加按钮事件
 $('#btn_add').click(function() {
+	
+	$('.fileinput-remove').click();
 
 	$('h4').html('新增菜单');
 	
@@ -264,6 +266,8 @@ $('#btn_add').click(function() {
 // 点击修改按钮
 $('#btn_edit').click(
 		function() {
+
+			$('.fileinput-remove').click();
 
 			// 找到当前table选择的行
 			var selectContent = ttable.bootstrapTable('getSelections');// 返回的是数组类型,Array
@@ -455,11 +459,10 @@ $('#btn_delete').click(function() {
 })
 
 //导入按钮事件
-function importEvent() {
-	$('#importModal').modal();
-	$('.fileinput-remove').click();
-//	$('#excel_file_risk_inf').fileinput('destroy'); fileinput-remove
-}
+//function importEvent() {
+//	$('#importModal').modal();
+//	$('.fileinput-remove').click();
+//}
 
 $(function() {
 	//0.初始化fileinput,文件导入初始化
@@ -482,9 +485,10 @@ var FileInput = function() {
 			allowedPreviewTypes: ['image'],
             allowedFileTypes: ['image'],
 			allowedFileExtensions : [ 'jpg', 'png' ],//接收的文件后缀
-			showUpload : true, //是否显示上传按钮
+//			showUpload : true, //是否显示上传按钮
+//			showRemove : true, //显示移除按钮
 			showCaption : false,//是否显示标题
-			browseClass : "btn btn-primary", //按钮样式     
+//			browseClass : "btn btn-primary", //按钮样式
 //			dropZoneEnabled: false,//是否显示拖拽区域
 			//minImageWidth: 50, //图片的最小宽度
 			//minImageHeight: 50,//图片的最小高度
@@ -493,26 +497,33 @@ var FileInput = function() {
 			maxFileSize : 2000,//单位为kb，如果为0表示不限制文件大小
 			//minFileCount: 0,
 			maxFileCount : 1, //表示允许同时上传的最大文件个数
+			dropZoneEnabled: false,//是否显示拖拽区域
 			enctype : 'multipart/form-data',
 			validateInitialCount : true,
 			previewFileIcon : "<i class='glyphicon glyphicon-king'></i>",
 			msgFilesTooMany : "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
 		}).on("fileuploaded", function(event, data) {
 			var resp = data.response;
+			$('.fileinput-upload-button').hide();
+			$('.fileinput-remove-button').hide();
+//			$('.file-preview').hide();
 
 			//成功
 			if (resp.success) {
 				$('#importModal').modal('hide');
-				layer.msg('导入成功');
+				layer.msg('上传成功');
 				$('#iconImgPath').val(resp.data.result);
+				$('.progress-bar-success').val('图片上传完成')
 
 				return;
 			}else{
 				layer.msg(resp.message);
 			}
 
-		});
-		//导入文件上传完成之后的事件,在空白区域显示预览图片
+		}).on("filebatchselected", function(event, files) {
+            $(this).fileinput("upload");
+        });
+
 	}
 	return oFile;
 };
