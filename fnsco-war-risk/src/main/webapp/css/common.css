@@ -130,11 +130,11 @@ body{
 }
 .nav>li>a.active{
 	color: #fff;    
-	background-color: #3b4d5f;
+	background-color: #1e3348;
 }
 .nav>li>a:hover{
 	color: #fff;
-	background-color: #2a3b4c;
+	background-color: #3b4d5f;
 }
 .nav>li>a>span{
 	height: 24px;

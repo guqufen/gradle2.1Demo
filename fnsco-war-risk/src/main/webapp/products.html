@@ -38,9 +38,9 @@
 				</a></li>
 				<li class="navList"><a href="management.html"> <i class="icon fk"></i> <span>商户管理</span>
 				</a></li>
-				<li class="navList"><a href="risk.html" class="active"> <i class="icon fk"></i> <span>风控+</span>
+				<li class="navList"><a href="risk.html"> <i class="icon fk"></i> <span>风控+</span>
 				</a></li>
-				<li class="navList"><a href="products.html"> <i class="icon fk"></i> <span>产品管理</span>
+				<li class="navList"><a href="products.html"  class="active"> <i class="icon fk"></i> <span>产品管理</span>
 				</a></li>
 			</ul>
 		</div>
@@ -99,180 +99,205 @@
 						value="修改">
 				</div>
 			</div>
-			<!-- addModel新增 start -->
-    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="detailsModelLabel" data-backdrop="static" data-keyboard="false">
-	    <div class="modal-dialog  modal-sm" role="document">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	                <h4 class="modal-title" id="addModalLabel">新增产品</h4>
-	            </div>
-	            <div class="modal-body">
-	                <div class="tab-content">
-	                        <div class="row">
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="name">产品名称：</label>
-	                                <input type="text" class="form-control" id="name" name="name" required="required">
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="lines">额度范围：</label>
-	                                <div>
-	                                <div class="col-sm-5">
-	                                	<input type="text" class="form-control" id="amountMin" name="amountMin">
-	                                </div>
-	                                <div class="col-sm-2">
-	                                	——
-	                                </div>
-	                                <div class="col-sm-5">
-	                               	 	<input type="text" class="form-control" id="amountMax" name="amountMax">
-	                                </div>
-	                                </div>
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="cycle">产品周期：</label>
-	                                <input type="text" class="form-control" id="cycle" name="cycle">
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="rate">费率范围：</label>
-	                                <div>
-	                                <div class="col-sm-5">
-	                                	<input type="text" class="form-control" id="rateMin" name="rateMin">
-	                                </div>
-	                                <div class="col-sm-2">
-	                                	——
-	                                </div>
-	                                <div class="col-sm-5">
-	                               	 	<input type="text" class="form-control" id="rateMax" name="rateMax">
-	                                </div>
-	                                </div>
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="desc">产品说明：</label>
-	                                <textarea id="desc" name="desc" class="form-control" rows="5"></textarea>	                                
-	                            </div>
-                                <a class="sunmitBtn btn btn-primary" id="btn_save">确定</a>
-	                        </div>  
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div> 
-	<!-- editModel 修改 start -->
-    <div class="modal fade" id="editModel" tabindex="-1" role="dialog" aria-labelledby="detailsModelLabel" data-backdrop="static" data-keyboard="false">
-	    <div class="modal-dialog  modal-sm" role="document">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	                <h4 class="modal-title" id="editModalLabel">修改产品</h4>
-	            </div>
-	            <div class="modal-body">
-	                <div class="tab-content">
-	                        <div class="row">
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="name1">产品名称：</label>
-	                                <input type="text" class="form-control" id="name1" name="name1" required="required">
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="lines1">额度范围：</label>
-	                                <div>
-	                                <div class="col-sm-5">
-	                                	<input type="text" class="form-control" id="amountMin1" name="amountMin1">
-	                                </div>
-	                                <div class="col-sm-2">
-	                                	——
-	                                </div>
-	                                <div class="col-sm-5">
-	                               	 	<input type="text" class="form-control" id="amountMax1" name="amountMax1">
-	                                </div>
-	                                </div>
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="cycle1">产品周期：</label>
-	                                <input type="text" class="form-control" id="cycle1" name="cycle1">
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="rate1">费率范围：</label>
-	                                <div>
-	                                <div class="col-sm-5">
-	                                	<input type="text" class="form-control" id="rateMin1" name="rateMin1">
-	                                </div>
-	                                <div class="col-sm-2">
-	                                	——
-	                                </div>
-	                                <div class="col-sm-5">
-	                               	 	<input type="text" class="form-control" id="rateMax1" name="rateMax1">
-	                                </div>
-	                                </div>
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="desc1">产品说明：</label>
-	                                <textarea id="desc1" name="desc1" class="form-control" rows="5"></textarea>	                                
-	                            </div>
-                                <a class="sunmitBtn btn btn-primary" id="btn_save1">确定</a>
-	                        </div>  
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div> 
-	<!-- detailModel新增 start -->
-    <div class="modal fade" id="detailModel" tabindex="-1" role="dialog" aria-labelledby="detailsModelLabel" data-backdrop="static" data-keyboard="false">
-	    <div class="modal-dialog  modal-sm" role="document">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	                <h4 class="modal-title" id="detailModelLabel">产品详情</h4>
-	            </div>
-	            <div class="modal-body">
-	                <div class="tab-content">
-	                        <div class="row">
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="name2">产品名称：</label>
-	                                <input type="text" class="form-control" id="name2" name="name2" required="required">
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="lines2">额度范围：</label>
-	                                <div>
-	                                <div class="col-sm-5">
-	                                	<input type="text" class="form-control" id="amountMin2" name="amountMin2">
-	                                </div>
-	                                <div class="col-sm-2">
-	                                	——
-	                                </div>
-	                                <div class="col-sm-5">
-	                               	 	<input type="text" class="form-control" id="amountMax2" name="amountMax2">
-	                                </div>
-	                                </div>
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="cycle2">产品周期：</label>
-	                                <input type="text" class="form-control" id="cycle2" name="cycle2">
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="rate2">费率范围：</label>
-	                                <div>
-	                                <div class="col-sm-5">
-	                                	<input type="text" class="form-control" id="rateMin2" name="rateMin2">
-	                                </div>
-	                                <div class="col-sm-2">
-	                                	——
-	                                </div>
-	                                <div class="col-sm-5">
-	                               	 	<input type="text" class="form-control" id="rateMax2" name="rateMax">
-	                                </div>
-	                                </div>
-	                            </div>
-	                            <div class="col-sm-12">
-	                                <label class="control-label" for="desc2">产品说明：</label>
-	                                <textarea id="desc2" name="desc2" class="form-control" rows="5"></textarea>	                                
-	                            </div>
-	                        </div>  
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	</div> 
 		</div>
+		
+		<!-- addModel新增 start -->
+	    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="detailsModelLabel" data-backdrop="static" data-keyboard="false">
+		    <div class="modal-dialog" role="document">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		                <h4 class="modal-title" id="addModalLabel">新增产品</h4>
+		            </div>
+		            <div class="modal-body">
+		                <div class="tab-content">
+		                        <div class="row">
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="name">产品名称：</label>
+		                                <input type="text" class="form-control" id="name" name="name" required="required">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="cycle">产品周期：</label>
+		                                <input type="text" class="form-control" id="cycle" name="cycle">
+		                            </div>
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="lines">额度范围：</label>
+		                                <div>
+		                                <div class="col-sm-5">
+		                                	<div class="form-group">
+											    <div class="input-group">
+											      <input type="text" class="form-control" name="amountMin" id="amountMin">
+											      <div class="input-group-addon">万</div>
+											    </div>
+										  	</div>
+		                                </div>
+		                                <div class="col-sm-2">
+		                                	——
+		                                </div>
+		                                <div class="col-sm-5">
+		                                	<div class="form-group">
+											    <div class="input-group">
+											      <input type="text" class="form-control" name="amountMax" id="amountMax">
+											      <div class="input-group-addon">万</div>
+											    </div>
+										  	</div>
+		                                </div>
+		                                </div>
+		                            </div>
+		                            
+		                            <div class="col-sm-6">
+		                                <label class="control-label" for="rate">费率范围：</label>
+		                                <div>
+		                                <div class="col-sm-5">
+		                                	<div class="form-group">
+											    <div class="input-group">
+											      <input type="text" class="form-control" name="rateMin" id="rateMin">
+											      <div class="input-group-addon">%</div>
+											    </div>
+										  	</div>
+		                                </div>
+		                                <div class="col-sm-2">
+		                                	——
+		                                </div>
+		                                <div class="col-sm-5">
+		                                	<div class="form-group">
+											    <div class="input-group">
+											      <input type="text" class="form-control" name="rateMax" id="rateMax">
+											      <div class="input-group-addon">%</div>
+											    </div>
+										  	</div>
+		                                </div>
+		                                </div>
+		                            </div>
+		                            <div class="col-sm-12">
+		                                <label class="control-label" for="desc">产品说明：</label>
+		                                <textarea id="desc" name="desc" class="form-control" rows="5"></textarea>	                                
+		                            </div>
+		                            <div class="col-sm-12">
+	                                	<a class="sunmitBtn btn btn-primary" id="btn_save">确定</a>
+	                                </div>
+		                        </div>  
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div> 
+		<!-- editModel 修改 start -->
+	    <div class="modal fade" id="editModel" tabindex="-1" role="dialog" aria-labelledby="detailsModelLabel" data-backdrop="static" data-keyboard="false">
+		    <div class="modal-dialog  modal-sm" role="document">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		                <h4 class="modal-title" id="editModalLabel">修改产品</h4>
+		            </div>
+		            <div class="modal-body">
+		                <div class="tab-content">
+		                        <div class="row">
+		                            <div class="col-sm-12">
+		                                <label class="control-label" for="name1">产品名称：</label>
+		                                <input type="text" class="form-control" id="name1" name="name1" required="required">
+		                            </div>
+		                            <div class="col-sm-12">
+		                                <label class="control-label" for="lines1">额度范围：</label>
+		                                <div>
+		                                <div class="col-sm-5">
+		                                	<input type="text" class="form-control" id="amountMin1" name="amountMin1">
+		                                </div>
+		                                <div class="col-sm-2">
+		                                	——
+		                                </div>
+		                                <div class="col-sm-5">
+		                               	 	<input type="text" class="form-control" id="amountMax1" name="amountMax1">
+		                                </div>
+		                                </div>
+		                            </div>
+		                            <div class="col-sm-12">
+		                                <label class="control-label" for="cycle1">产品周期：</label>
+		                                <input type="text" class="form-control" id="cycle1" name="cycle1">
+		                            </div>
+		                            <div class="col-sm-12">
+		                                <label class="control-label" for="rate1">费率范围：</label>
+		                                <div>
+		                                <div class="col-sm-5">
+		                                	<input type="text" class="form-control" id="rateMin1" name="rateMin1">
+		                                </div>
+		                                <div class="col-sm-2">
+		                                	——
+		                                </div>
+		                                <div class="col-sm-5">
+		                               	 	<input type="text" class="form-control" id="rateMax1" name="rateMax1">
+		                                </div>
+		                                </div>
+		                            </div>
+		                            <div class="col-sm-12">
+		                                <label class="control-label" for="desc1">产品说明：</label>
+		                                <textarea id="desc1" name="desc1" class="form-control" rows="5"></textarea>	                                
+		                            </div>
+	                                <a class="sunmitBtn btn btn-primary" id="btn_save1">确定</a>
+		                        </div>  
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div> 
+		<!-- detailModel新增 start -->
+	    <div class="modal fade" id="detailModel" tabindex="-1" role="dialog" aria-labelledby="detailsModelLabel" data-backdrop="static" data-keyboard="false">
+		    <div class="modal-dialog  modal-sm" role="document">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		                <h4 class="modal-title" id="detailModelLabel">产品详情</h4>
+		            </div>
+		            <div class="modal-body">
+		                <div class="tab-content">
+		                        <div class="row">
+		                            <div class="col-sm-12">
+		                                <label class="control-label" for="name2">产品名称：</label>
+		                                <input type="text" class="form-control" id="name2" name="name2" required="required">
+		                            </div>
+		                            <div class="col-sm-12">
+		                                <label class="control-label" for="lines2">额度范围：</label>
+		                                <div>
+		                                <div class="col-sm-5">
+		                                	<input type="text" class="form-control" id="amountMin2" name="amountMin2">
+		                                </div>
+		                                <div class="col-sm-2">
+		                                	——
+		                                </div>
+		                                <div class="col-sm-5">
+		                               	 	<input type="text" class="form-control" id="amountMax2" name="amountMax2">
+		                                </div>
+		                                </div>
+		                            </div>
+		                            <div class="col-sm-12">
+		                                <label class="control-label" for="cycle2">产品周期：</label>
+		                                <input type="text" class="form-control" id="cycle2" name="cycle2">
+		                            </div>
+		                            <div class="col-sm-12">
+		                                <label class="control-label" for="rate2">费率范围：</label>
+		                                <div>
+		                                <div class="col-sm-5">
+		                                	<input type="text" class="form-control" id="rateMin2" name="rateMin2">
+		                                </div>
+		                                <div class="col-sm-2">
+		                                	——
+		                                </div>
+		                                <div class="col-sm-5">
+		                               	 	<input type="text" class="form-control" id="rateMax2" name="rateMax">
+		                                </div>
+		                                </div>
+		                            </div>
+		                            <div class="col-sm-12">
+		                                <label class="control-label" for="desc2">产品说明：</label>
+		                                <textarea id="desc2" name="desc2" class="form-control" rows="5"></textarea>	                                
+		                            </div>
+		                        </div>  
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div> 
+
 </body>
 <script src="js/jquery.min.js"></script>
 <script src="js/layer/layer.js"></script>
