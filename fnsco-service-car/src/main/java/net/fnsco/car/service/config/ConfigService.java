@@ -26,7 +26,7 @@ public class ConfigService extends BaseService {
 	 return configDAO.getId(name);
  }
  //查询首页总金额以及销售量
- public ConfigDO queryIndex() {
+ public List<ConfigDO> queryIndex() {
 	 return configDAO.getIndex();
  }
  // 分页

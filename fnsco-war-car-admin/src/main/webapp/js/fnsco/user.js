@@ -504,3 +504,13 @@ $('#btn_delete').click(function(){
       layer.msg('取消成功');
   });  
 });
+//帐号类型改变事件
+function changeEvent(obj){
+	var type = $(obj).val();
+	if(type == '2'){
+		$('#aliasnamehide').show();
+	}else{
+		$('#aliasnamehide').hide();
+	}
+	
+}
