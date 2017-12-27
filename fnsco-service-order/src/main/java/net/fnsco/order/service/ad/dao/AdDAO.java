@@ -16,7 +16,7 @@ import java.util.List;;
 
 public interface AdDAO {
 
-	@Results({ @Result(column = "img_path", property = "imgPath"),
+	@Results({ @Result(column = "img_path", property = "img_path"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "update_time", property = "updateTime"),
 			@Result(column = "create_user_id", property = "createUserId") })
@@ -41,7 +41,8 @@ public interface AdDAO {
 			@Result(column = "summary", property = "summary"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "update_time", property = "updateTime"),
-			@Result(column = "create_user_id", property = "createUserId")})
+			@Result(column = "create_user_id", property = "createUserId"),
+			@Result(column = "type", property = "type")})
 	@SelectProvider(type = AdProvider.class, method = "pageList")
 	public List<AdDO> pageList(@Param("ad") AdDO ad, @Param("pageNum") Integer pageNum,
 			@Param("pageSize") Integer pageSize);

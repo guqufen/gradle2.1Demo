@@ -89,6 +89,9 @@ public class AdProvider {
         if (ad.getCreateUserId() != null) {
             WHERE("create_user_id=#{ad.createUserId}");
         }
+        if (ad.getType() != null) {
+            WHERE("type=#{ad.type}");
+        }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -124,6 +127,9 @@ public class AdProvider {
         }
         if (ad.getCreateUserId() != null) {
             WHERE("create_user_id=#{ad.createUserId}");
+        }
+        if (ad.getType() != null) {
+            WHERE("type=#{ad.type}");
         }
         }}.toString();
     }

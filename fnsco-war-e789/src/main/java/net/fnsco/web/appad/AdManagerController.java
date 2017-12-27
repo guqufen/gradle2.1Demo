@@ -37,7 +37,19 @@ public class AdManagerController extends BaseController{
 	@RequiresPermissions(value = { "sys:app:ad:list" })
 	public ResultPageDTO<AdDO> adIndex(AdDO appAdDTO, Integer currentPageNum,
 			Integer pageSize) {
-		return adService.page(appAdDTO, currentPageNum, pageSize);
+		ResultPageDTO<AdDO> result = adService.page(appAdDTO, currentPageNum, pageSize);
+		return result;
+	}
+	
+	@RequestMapping(value = "/queryById", method = RequestMethod.GET)
+	@ResponseBody
+	@RequiresPermissions(value = { "sys:app:ad:list" })
+	public ResultDTO<AdDO> queryById(Integer id) {
+		if(id == null){
+			return ResultDTO.fail();
+		}
+		ResultDTO<AdDO> result = adService.queryById(id);
+		return result;
 	}
 	
 	
@@ -46,7 +58,12 @@ public class AdManagerController extends BaseController{
 	@RequiresPermissions(value = { "sys:app:ad:add" })
 	public void add(AdDO appAdDTO) {
 		Integer userId = this.getUserId();
-		adService.doAdd(appAdDTO,userId);
+		if(appAdDTO.getId() != null){
+			adService.doUpdate(appAdDTO, userId);
+		}else{
+			adService.doAdd(appAdDTO,userId);
+			
+		}
 	}
 
 	
