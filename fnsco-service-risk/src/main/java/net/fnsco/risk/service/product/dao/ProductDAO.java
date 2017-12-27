@@ -38,7 +38,7 @@ public interface ProductDAO {
     public Integer pageListCount(@Param("product") ProductDO product);
 
     @Results({@Result( column = "id",property = "id"),@Result( column = "name",property = "name")})
-    @Select("SELECT id,name FROM risk_product")
+    @Select("SELECT id,name FROM risk_product WHERE status=1")
 	public List<ProductDO> getProductName();
 
 }
