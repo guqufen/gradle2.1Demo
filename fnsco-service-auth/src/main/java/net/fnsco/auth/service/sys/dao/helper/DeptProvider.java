@@ -61,7 +61,7 @@ public class DeptProvider {
             WHERE("order_num=#{dept.orderNum}");
         }
         WHERE("del_flag=0");
-        ORDER_BY("id  desc limit " + start + ", " + limit );
+        ORDER_BY("order_num, id  desc limit " + start + ", " + limit );
         }}.toString();
     }
 
