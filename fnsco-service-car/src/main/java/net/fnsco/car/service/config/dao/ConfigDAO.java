@@ -24,8 +24,8 @@ public interface ConfigDAO {
     @Select("SELECT id FROM car_config WHERE name= #{name}")
     public Integer getId(@Param("name") String name);
     
-    @Results({@Result( column = "id",property = "id"), @Result( column = "order_no",property = "orderNo"), @Result( column = "keep1",property = "keep1") , @Result( column = "modify_time",property = "modifyTime")})
-    @Select("SELECT id,order_no,keep1,modify_time FROM car_config WHERE status=1 AND type='01' ")
+    @Results({@Result( column = "id",property = "id"), @Result( column = "order_no",property = "orderNo"), @Result( column = "value",property = "value") , @Result( column = "modify_time",property = "modifyTime")})
+    @Select("SELECT id,value,order_no,modify_time FROM car_config WHERE status=1 AND type='01' ")
     public List<ConfigDO> getIndex();
     
     @Results({@Result( column = "group_name",property = "groupName"),@Result( column = "order_no",property = "orderNo") })
