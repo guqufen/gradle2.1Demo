@@ -101,7 +101,7 @@ public class MercPayAbilityService extends BaseService {
 							BigDecimal payAbility = forecastIncome
 									.multiply(new BigDecimal(industryDO.getInterestRate()));
 							
-							saveDataToDB(entityInnerCode,dateMonthStr,payAbility);
+							saveDataToDB(entityInnerCode,dateMonthStr,payAbility.divide(new BigDecimal(100)));
 						}
 					}
 				}
