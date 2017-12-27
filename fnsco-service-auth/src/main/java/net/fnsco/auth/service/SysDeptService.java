@@ -13,11 +13,9 @@ import net.fnsco.auth.comm.AuthConstant;
 import net.fnsco.auth.service.sys.dao.DeptDAO;
 import net.fnsco.auth.service.sys.dao.RoleDeptDAO;
 import net.fnsco.auth.service.sys.entity.DeptDO;
-import net.fnsco.auth.service.sys.entity.MenuDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.constants.CoreConstants;
 
 /**
  * 
@@ -120,7 +118,7 @@ public class SysDeptService extends BaseService {
 			DeptDO user = deptDAO.getById(data.getParentId());
 			data.setParentName(user.getName());
 		}else {
-			data.setParentName("杭州法奈昇有限公司");
+			data.setParentName(env.getProperty("web.compony.name"));
 		}
 		return data;
 	}

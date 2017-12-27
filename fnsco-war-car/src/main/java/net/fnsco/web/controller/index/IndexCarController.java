@@ -34,13 +34,17 @@ public class IndexCarController extends BaseController {
 		Integer num = null ;
 		String amtStr = null;
 		Date date = null;
+		Integer numId = null;
+		Integer amtId = null;
 		for(ConfigDO config : configList) {
 			if("1".equals(config.getName())) {
 				num = Integer.valueOf(config.getValue()).intValue(); 
 				date = config.getModifyTime();
+				numId = config.getId();
 			}else {
 				amtStr = config.getValue();
 				date = config.getModifyTime();
+				amtId = config.getId();
 			}
 		}
 		BigDecimal amt =new BigDecimal(amtStr);
@@ -66,11 +70,13 @@ public class IndexCarController extends BaseController {
 		config1.setValue(String.valueOf(num));;
 		config1.setOrderNo(1);
 		config1.setModifyTime(new Date());
+		config1.setId(numId);
 		configService.doUpdate(config1, getUserId());
 		ConfigDO config2 = new ConfigDO();
 		config2.setValue(String.valueOf(amt));;
 		config2.setOrderNo(1);
 		config2.setModifyTime(new Date());
+		config2.setId(amtId);
 		configService.doUpdate(config2, getUserId());
 		return ResultDTO.success(index);
 	}
