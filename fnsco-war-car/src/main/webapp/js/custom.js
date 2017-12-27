@@ -35,7 +35,6 @@ function getCarBrand(boole){
 
 /*
 *获取汽车热门品牌
-*
 */
 function getHotCarBrand(boole){
 	$.ajax({
@@ -421,7 +420,7 @@ function subData(type){
                 // data 保存提交后返回的数据，一般为 json 数据
                 // 此处可对 data 作相关处理
                 console.log(data);
-                if(data=='truetruetrue'){
+                if(data=='truetrue'){
 					$("#car-info .sub-btn").attr('disabled',false);
                 	$("#carInfoForm").resetForm();
 					window.location.href='result.html?type='+type;

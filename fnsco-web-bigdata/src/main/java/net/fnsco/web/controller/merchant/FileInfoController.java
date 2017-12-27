@@ -3,6 +3,8 @@ package net.fnsco.web.controller.merchant;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -24,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONArray;
+import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
@@ -32,6 +35,7 @@ import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileTempDao;
 import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantFileTemp;
+import net.fnsco.bigdata.service.file.FileService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
@@ -43,7 +47,7 @@ import net.fnsco.core.utils.OssUtil;
  * @date 2017年6月21日 上午10:57:41
  */
 @Controller
-@RequestMapping(value = "/web/fileInfo", method = RequestMethod.POST)
+@RequestMapping(value = "/web/fileInfo")
 public class FileInfoController extends BaseController {
 
 	@Autowired
@@ -60,6 +64,9 @@ public class FileInfoController extends BaseController {
 
 	@Autowired
 	private MerchantCoreService merchantCoreService;
+	
+	@Autowired
+	private FileService fileService;
 
 	/**
 	 * 
@@ -350,5 +357,50 @@ public class FileInfoController extends BaseController {
 
 		return null;
 	}
+	
+	/**
+	 * doGetFileStream:(获取文件信息)
+	 *
+	 * @param      设定文件
+	 * @return void    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月27日 下午3:16:30
+	 */
+	@RequestMapping(value="/doGetFileStream")
+	public void doGetFileStream() {
+		String fileRelativePath = request.getParameter("filePath");
+		String fileType = fileRelativePath.substring(fileRelativePath.lastIndexOf(".") + 1).toLowerCase();
+		 try {
+			 byte[] data = fileService.getFileByteArray(fileRelativePath);
+			 OutputStream output = response.getOutputStream();// 得到输出流
+			 response.setContentType(imageContentType.get(fileType));// 设定输出的类型
+			 output.write(data);
+			 output.flush();
+		} catch (IOException e) {
+			logger.error("获取文件异常!",e);
+		}
+	}
+	
+	
+	private static Map<String,String> imageContentType = Maps.newHashMap();
 
+	static {
+
+	imageContentType.put("jpg","image/jpeg");
+
+	imageContentType.put("jpeg","image/jpeg");
+
+	imageContentType.put("png","image/png");
+
+	imageContentType.put("tif","image/tiff");
+
+	imageContentType.put("tiff","image/tiff");
+
+	imageContentType.put("ico","image/x-icon");
+
+	imageContentType.put("bmp","image/bmp");
+
+	imageContentType.put("gif","image/gif");
+
+	}
 }
