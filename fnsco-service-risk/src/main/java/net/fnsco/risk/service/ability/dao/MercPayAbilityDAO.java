@@ -36,5 +36,13 @@ public interface MercPayAbilityDAO {
 
     @SelectProvider(type = MercPayAbilityProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("mercPayAbility") MercPayAbilityDO mercPayAbility);
+    
+    /**
+     * 更新
+     * @param mercPayAbility
+     * @return
+     */
+    @UpdateProvider(type = MercPayAbilityProvider.class, method = "updateByPayAbility")
+    public int updateByPayAbility(@Param("mercPayAbility") MercPayAbilityDO  mercPayAbility);
 
 }
