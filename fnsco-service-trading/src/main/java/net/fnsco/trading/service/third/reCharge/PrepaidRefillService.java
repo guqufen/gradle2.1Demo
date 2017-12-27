@@ -1,28 +1,12 @@
 package net.fnsco.trading.service.third.reCharge;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,14 +19,14 @@ import net.fnsco.bigdata.service.sys.SequenceService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
-import net.fnsco.core.utils.DateUtils;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
-import net.fnsco.trading.service.third.reCharge.dto.CheckMobileDTO;
 import net.fnsco.trading.service.third.reCharge.dto.CheckChargePackageDTO;
+import net.fnsco.trading.service.third.reCharge.dto.CheckMobileDTO;
 import net.fnsco.trading.service.third.reCharge.dto.JuheDTO;
 import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
+import net.fnsco.trading.service.third.reCharge.util.RechargeUtil;
 import net.fnsco.trading.service.withdraw.TradeWithdrawErrorService;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
@@ -51,22 +35,9 @@ import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 public class PrepaidRefillService extends BaseService {
 
 	@Autowired
-	private SequenceService sequenceService;
-	@Autowired
 	private TradeWithdrawService tradeWithdrawService;
 	@Autowired
-	private TradeWithdrawErrorService tradeWithdrawErrorService;
-	@Autowired
 	private RechargeOrderService rechargeOrderService;
-
-	private final String DEF_CHATSET = "UTF-8";
-	private final int DEF_CONN_TIMEOUT = 30000;
-	private final int DEF_READ_TIMEOUT = 30000;
-	private String userAgent = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36";
-
-	// HttpClient请求的相关设置，可以不用配置，用默认的参数，这里设置连接和超时时长(毫秒)
-	public static RequestConfig config = RequestConfig.custom().setConnectTimeout(30000).setSocketTimeout(30000)
-			.build();
 
 	private final String OpenId = "JH284e6d24f2e3f5d89668a64b50c2c886";
 
@@ -103,7 +74,7 @@ public class PrepaidRefillService extends BaseService {
 				 * "inprice": 98.4, //购买价格 "game_area": "江苏苏州电信" //手机号码归属地 },
 				 * "error_code": 0 }
 				 */
-				result = get(telQueryUrl.replace("*", done + "").replace("!", phone), 0);
+				result = RechargeUtil.get(telQueryUrl.replace("*", done + "").replace("!", phone), 0);
 				logger.info(result);
 
 				JuheDTO juhe = JSON.parseObject(result, JuheDTO.class);
@@ -157,7 +128,7 @@ public class PrepaidRefillService extends BaseService {
 			 * "flows": [ //流量套餐列表 { "id": "3", //套餐ID "p": "10M", //套餐流量名称 "v":
 			 * "10", //套餐流量值 "inprice": "2.90" //价格 } ] } ], "error_code": 0 }
 			 */
-			result = net(url, sendData, "GET");
+			result = RechargeUtil.net(url, sendData, "GET");
 			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
 
 			// 查询成功
@@ -225,28 +196,28 @@ public class PrepaidRefillService extends BaseService {
 				.append(sign).toString();
 
 		RechargeOrderDO phoneChargeOrderDO = new RechargeOrderDO();
-		phoneChargeOrderDO.setType(String.valueOf(chargeDTO.getType()));//设置充值类型
-		phoneChargeOrderDO.setAppUserId(String.valueOf(chargeDTO.getUserId()));//设置app用户ID
-		phoneChargeOrderDO.setOrderNo(orderid);//设置商户订单ID
-		phoneChargeOrderDO.setMobile(chargeDTO.getPhone());//设置充值手机号
-		phoneChargeOrderDO.setName(chargeDTO.getName());//设置充值名称
-		phoneChargeOrderDO.setAmt(chargeDTO.getInprice().replace(".", ""));//设置交易金额
-		phoneChargeOrderDO.setStatus(0);//设置交易状态0-进行中
+		phoneChargeOrderDO.setType(String.valueOf(chargeDTO.getType()));// 设置充值类型
+		phoneChargeOrderDO.setAppUserId(String.valueOf(chargeDTO.getUserId()));// 设置app用户ID
+		phoneChargeOrderDO.setOrderNo(orderid);// 设置商户订单ID
+		phoneChargeOrderDO.setMobile(chargeDTO.getPhone());// 设置充值手机号
+		phoneChargeOrderDO.setName(chargeDTO.getName());// 设置充值名称
+		phoneChargeOrderDO.setAmt(chargeDTO.getInprice().replace(".", ""));// 设置交易金额
+		phoneChargeOrderDO.setStatus(0);// 设置交易状态0-进行中
 		rechargeOrderService.doAdd(phoneChargeOrderDO);
-	
+
 		TradeWithdrawDO tradeWithdrawDO = new TradeWithdrawDO();
 		tradeWithdrawDO.setOrderNo(orderid);// 设置订单号
-		tradeWithdrawDO.setOriginalOrderNo(orderid);//设置原订单号(默认等于当前订单号)
+		tradeWithdrawDO.setOriginalOrderNo(orderid);// 设置原订单号(默认等于当前订单号)
 		tradeWithdrawDO.setAmount(new BigDecimal(chargeDTO.getInprice()).multiply(new BigDecimal(100)));// 设置交易金额，优惠金额
 		tradeWithdrawDO.setAppUserId(chargeDTO.getUserId());// 设置帐号ID
 		tradeWithdrawDO.setRespCode("1000");// 交易进行中，需要再次调用订单查询接口进行查询
 		tradeWithdrawDO.setTradeType(2);// 交易类型:2-消费
-		tradeWithdrawDO.setTradeSubType(23); //设置子类型,23流量充值
+		tradeWithdrawDO.setTradeSubType(23); // 设置子类型,23流量充值
 		tradeWithdrawDO.setStatus(1);// 设置交易状态，执行中
 		tradeWithdrawService.doAdd(tradeWithdrawDO);// 更新数据库表
 
 		try {
-			result = net(url, sendData, "GET");
+			result = RechargeUtil.net(url, sendData, "GET");
 			logger.info(result);
 			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
 
@@ -254,9 +225,9 @@ public class PrepaidRefillService extends BaseService {
 			if (juhe.getError_code() == 0) {
 
 				Map<String, String> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
-				
+
 				phoneChargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
-				phoneChargeOrderDO.setAmt(map.get("ordercash").toString().replace(".", ""));//设置实际消费金额
+				phoneChargeOrderDO.setAmt(map.get("ordercash").toString().replace(".", ""));// 设置实际消费金额
 				phoneChargeOrderDO.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
 				phoneChargeOrderDO.setRespMsg(juhe.getReason());// 设置响应
 				int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO);
@@ -266,7 +237,8 @@ public class PrepaidRefillService extends BaseService {
 				}
 
 				tradeWithdrawDO.setOriginalOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
-				tradeWithdrawDO.setAmount(new BigDecimal(map.get("ordercash").toString()).multiply(new BigDecimal(100)));// 设置实际消费金额
+				tradeWithdrawDO
+						.setAmount(new BigDecimal(map.get("ordercash").toString()).multiply(new BigDecimal(100)));// 设置实际消费金额
 				tradeWithdrawDO.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置交易完成时间
 				tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
@@ -290,7 +262,7 @@ public class PrepaidRefillService extends BaseService {
 					logger.error(
 							"充值失败，数据更新失败。time=" + tradeWithdrawDO.getUpdateTime() + "userId=" + chargeDTO.getUserId());
 				}
-				
+
 				phoneChargeOrderDO.setRespCode("1000");// 交易进行失败
 				phoneChargeOrderDO.setRespMsg(juhe.getReason());// 设置响应
 				int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO);
@@ -348,27 +320,27 @@ public class PrepaidRefillService extends BaseService {
 		String sign = Md5Util.MD5(OpenId + APPKEYREPAID + chargeDTO.getPhone() + chargeDTO.getPid() + orderid);
 
 		RechargeOrderDO phoneChargeOrderDO = new RechargeOrderDO();
-		phoneChargeOrderDO.setType(String.valueOf(chargeDTO.getType()));//设置充值类型
-		phoneChargeOrderDO.setAppUserId(String.valueOf(chargeDTO.getUserId()));//设置app用户ID
-		phoneChargeOrderDO.setOrderNo(orderid);//设置商户订单ID
-		phoneChargeOrderDO.setMobile(chargeDTO.getPhone());//设置充值手机号
-		phoneChargeOrderDO.setName(chargeDTO.getName());//设置充值名称:xx元
-		phoneChargeOrderDO.setAmt(chargeDTO.getInprice().replace(".", ""));//设置交易金额
-		phoneChargeOrderDO.setStatus(0);//设置交易状态0-进行中
+		phoneChargeOrderDO.setType(String.valueOf(chargeDTO.getType()));// 设置充值类型
+		phoneChargeOrderDO.setAppUserId(String.valueOf(chargeDTO.getUserId()));// 设置app用户ID
+		phoneChargeOrderDO.setOrderNo(orderid);// 设置商户订单ID
+		phoneChargeOrderDO.setMobile(chargeDTO.getPhone());// 设置充值手机号
+		phoneChargeOrderDO.setName(chargeDTO.getName());// 设置充值名称:xx元
+		phoneChargeOrderDO.setAmt(chargeDTO.getInprice().replace(".", ""));// 设置交易金额
+		phoneChargeOrderDO.setStatus(0);// 设置交易状态0-进行中
 		rechargeOrderService.doAdd(phoneChargeOrderDO);
 
 		TradeWithdrawDO tradeWithdrawDO = new TradeWithdrawDO();
 		tradeWithdrawDO.setOrderNo(orderid);// 设置订单号
-		tradeWithdrawDO.setOriginalOrderNo(orderid);//设置原订单号(默认等于当前订单号)
+		tradeWithdrawDO.setOriginalOrderNo(orderid);// 设置原订单号(默认等于当前订单号)
 		tradeWithdrawDO.setAmount(new BigDecimal(chargeDTO.getInprice()).multiply(new BigDecimal(100)));// 设置交易金额，优惠金额
 		tradeWithdrawDO.setAppUserId(chargeDTO.getUserId());// 设置帐号ID
 		tradeWithdrawDO.setTradeType(2);// 交易类型:2-消费
-		tradeWithdrawDO.setTradeSubType(22);//交易子类型:22话费充值
+		tradeWithdrawDO.setTradeSubType(22);// 交易子类型:22话费充值
 		tradeWithdrawDO.setStatus(1);// 设置交易状态，执行中
 		tradeWithdrawService.doAdd(tradeWithdrawDO);// 更新数据库表
 
 		try {
-			result = get(onlineUrl.replace("*", chargeDTO.getPid() + "").replace("!", chargeDTO.getPhone())
+			result = RechargeUtil.get(onlineUrl.replace("*", chargeDTO.getPid() + "").replace("!", chargeDTO.getPhone())
 					.replace("@", orderid).replace("$", sign), 0);
 			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
 
@@ -376,9 +348,9 @@ public class PrepaidRefillService extends BaseService {
 			if (juhe.getError_code() == 0) {
 
 				Map<String, Object> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
-				
+
 				phoneChargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
-				phoneChargeOrderDO.setAmt(map.get("ordercash").toString().replace(".", ""));//设置实际消费金额
+				phoneChargeOrderDO.setAmt(map.get("ordercash").toString().replace(".", ""));// 设置实际消费金额
 				phoneChargeOrderDO.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
 				phoneChargeOrderDO.setRespMsg(juhe.getReason());// 设置响应
 				int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO);
@@ -386,9 +358,10 @@ public class PrepaidRefillService extends BaseService {
 					logger.error("充值返回成功，数据更新失败。orderNo=" + phoneChargeOrderDO.getOrderNo() + "userId="
 							+ chargeDTO.getUserId());
 				}
-				
+
 				tradeWithdrawDO.setOriginalOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
-				tradeWithdrawDO.setAmount(new BigDecimal(map.get("ordercash").toString()).multiply(new BigDecimal(100)));// 设置实际消费金额
+				tradeWithdrawDO
+						.setAmount(new BigDecimal(map.get("ordercash").toString()).multiply(new BigDecimal(100)));// 设置实际消费金额
 				tradeWithdrawDO.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
 				tradeWithdrawDO.setRespCode("1000");// 交易进行中，需要再次调用订单查询接口进行查询
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置交易完成时间
@@ -412,7 +385,7 @@ public class PrepaidRefillService extends BaseService {
 					logger.error("充值返回失败，数据更新失败。orderNo=" + phoneChargeOrderDO.getOrderNo() + "userId="
 							+ chargeDTO.getUserId());
 				}
-				
+
 				tradeWithdrawDO.setRespCode("1000");// 交易进行中，需要再次调用订单查询接口进行查询
 				tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置最后更新时间
@@ -440,8 +413,8 @@ public class PrepaidRefillService extends BaseService {
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置最后更新时间
 				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
 				if (ret2 < 0) {
-					logger.error(
-							"充值失败，数据更新失败。orderNo=" + phoneChargeOrderDO.getOrderNo() + "userId=" + chargeDTO.getUserId());
+					logger.error("充值失败，数据更新失败。orderNo=" + phoneChargeOrderDO.getOrderNo() + "userId="
+							+ chargeDTO.getUserId());
 				}
 
 				ph.setRespMsg(juhe.getReason());
@@ -467,7 +440,7 @@ public class PrepaidRefillService extends BaseService {
 		params.put("key", APPKEYFLOW);// 应用APPKEY(应用详细页查询)
 
 		try {
-			result = net(url, params, "GET");
+			result = RechargeUtil.net(url, params, "GET");
 			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
 
 			// 查询返回成功，则解析result字串取其中的充值状态
@@ -475,15 +448,15 @@ public class PrepaidRefillService extends BaseService {
 
 				Map<String, String> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
 				if ("1".equals(map.get("game_state"))) {// 成功
-					
+
 					rechargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 					rechargeOrderDO.setAmt(map.get("uordercash").replace(".", ""));// 设置实际消费金额
-					rechargeOrderDO.setStatus(1);//设置交易状态为1-成功
+					rechargeOrderDO.setStatus(1);// 设置交易状态为1-成功
 					rechargeOrderService.doUpdate(rechargeOrderDO);
 
 				} else if ("9".equals(map.get("game_state"))) {// 失败
 
-					rechargeOrderDO.setStatus(2);//设置交易状态为2-失败
+					rechargeOrderDO.setStatus(2);// 设置交易状态为2-失败
 					rechargeOrderService.doUpdate(rechargeOrderDO);
 				}
 			} else {
@@ -496,8 +469,8 @@ public class PrepaidRefillService extends BaseService {
 
 	/**
 	 *  话费充值状态查询
-	 * @param orderid 商家订单号 
-	 *  @return 订单结果
+	 * 
+	 * @param orderid 商家订单号  @return 订单结果
 	 * @throws Exception
 	 * 
 	 * @throws Exception
@@ -507,7 +480,7 @@ public class PrepaidRefillService extends BaseService {
 		String result = null;
 
 		try {
-			result = get(orderstaUrl.replace("!", rechargeOrderDO.getOrderNo()), 0);
+			result = RechargeUtil.get(orderstaUrl.replace("!", rechargeOrderDO.getOrderNo()), 0);
 			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
 
 			// 查询返回成功，则解析result字串取其中的充值状态
@@ -519,7 +492,7 @@ public class PrepaidRefillService extends BaseService {
 
 					rechargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 					rechargeOrderDO.setAmt(map.get("uordercash").replace(".", ""));// 设置实际消费金额
-					rechargeOrderDO.setStatus(1);//设置交易状态为1-成功
+					rechargeOrderDO.setStatus(1);// 设置交易状态为1-成功
 					Integer ret = rechargeOrderService.doUpdate(rechargeOrderDO);
 					if (ret < 0) {
 						logger.error("充值结果查询成功，原充值交易成功,数据更新失败。orderNo=" + rechargeOrderDO.getOrderNo() + "userId="
@@ -527,8 +500,8 @@ public class PrepaidRefillService extends BaseService {
 					}
 				} else if ("9".equals(map.get("game_state"))) {// 失败
 
-					rechargeOrderDO.setStatus(2);//设置交易状态为2-失败
-					Integer ret =  rechargeOrderService.doUpdate(rechargeOrderDO);
+					rechargeOrderDO.setStatus(2);// 设置交易状态为2-失败
+					Integer ret = rechargeOrderService.doUpdate(rechargeOrderDO);
 
 					if (ret < 0) {
 						logger.error("充值结果查询成功，原充值交易失败,数据更新失败。orderNo=" + rechargeOrderDO.getOrderNo() + "userId="
@@ -541,208 +514,5 @@ public class PrepaidRefillService extends BaseService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * 
-	 * @param strUrl:提交的url
-	 * @param params:提交参数,?xxxx=xxxx&格式
-	 * @param method:提交方法:POST/GET
-	 * @return
-	 * @throws Exception
-	 */
-	public String net(String strUrl, String params, String method) throws Exception {
-		HttpURLConnection conn = null;
-		BufferedReader reader = null;
-		String rs = null;
-		try {
-			StringBuffer sb = new StringBuffer();
-
-			System.out.println("strUrl = " + strUrl + params);
-			URL url = new URL(strUrl + params);
-			conn = (HttpURLConnection) url.openConnection();
-			if (method == null || method.equals("GET")) {
-				conn.setRequestMethod("GET");
-			} else {
-				conn.setRequestMethod("POST");
-				conn.setDoOutput(true);
-			}
-
-			conn.setRequestProperty("User-agent", userAgent);
-			conn.setUseCaches(false);
-			conn.setConnectTimeout(DEF_CONN_TIMEOUT);
-			conn.setReadTimeout(DEF_READ_TIMEOUT);
-			conn.setInstanceFollowRedirects(false);
-			conn.connect();
-
-			if (params != null && method.equals("POST")) {
-				try {
-					DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-				} catch (Exception e) {
-
-				}
-			}
-
-			InputStream is = conn.getInputStream();
-			reader = new BufferedReader(new InputStreamReader(is, DEF_CHATSET));
-			String strRead = null;
-			while ((strRead = reader.readLine()) != null) {
-				sb.append(strRead);
-			}
-			rs = sb.toString();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
-			if (conn != null) {
-				conn.disconnect();
-			}
-		}
-		return rs;
-	}
-
-	/**
-	 *
-	 * @param strUrl
-	 *            请求地址
-	 * @param params
-	 *            请求参数
-	 * @param method
-	 *            请求方法
-	 * @return 网络请求字符串
-	 * @throws Exception
-	 */
-	public String net(String strUrl, Map params, String method) throws Exception {
-		HttpURLConnection conn = null;
-		BufferedReader reader = null;
-		String rs = null;
-		try {
-			StringBuffer sb = new StringBuffer();
-			if (method == null || method.equals("GET")) {
-				strUrl = strUrl + "?" + urlencode(params);
-			}
-			System.out.println("strUrl = " + strUrl);
-			URL url = new URL(strUrl);
-			conn = (HttpURLConnection) url.openConnection();
-			if (method == null || method.equals("GET")) {
-				conn.setRequestMethod("GET");
-			} else {
-				conn.setRequestMethod("POST");
-				conn.setDoOutput(true);
-			}
-
-			conn.setRequestProperty("User-agent", userAgent);
-			conn.setUseCaches(false);
-			conn.setConnectTimeout(DEF_CONN_TIMEOUT);
-			conn.setReadTimeout(DEF_READ_TIMEOUT);
-			conn.setInstanceFollowRedirects(false);
-			conn.connect();
-
-			if (params != null && method.equals("POST")) {
-				try {
-					DataOutputStream out = new DataOutputStream(conn.getOutputStream());
-					out.writeBytes(urlencode(params));
-				} catch (Exception e) {
-
-				}
-			}
-
-			InputStream is = conn.getInputStream();
-			reader = new BufferedReader(new InputStreamReader(is, DEF_CHATSET));
-			String strRead = null;
-			while ((strRead = reader.readLine()) != null) {
-				sb.append(strRead);
-			}
-			rs = sb.toString();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (reader != null) {
-				reader.close();
-			}
-			if (conn != null) {
-				conn.disconnect();
-			}
-		}
-		return rs;
-	}
-
-	// 将map型转为请求参数型
-	public String urlencode(Map<String, Object> data) {
-		StringBuilder sb = new StringBuilder();
-		String str = null;
-		for (Map.Entry i : data.entrySet()) {
-			System.out.println("i=[" + i + "]");
-			try {
-				sb.append(i.getKey()).append("=").append(URLEncoder.encode(i.getValue() + "", DEF_CHATSET)).append("&");
-				str = sb.toString();
-				str = str.replaceAll("%22", "");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-		}
-		return str.substring(0, str.length() - 1);
-	}
-
-	/**
-	 * 工具类方法 get 网络请求
-	 * 
-	 * @param url
-	 *            接收请求的网址
-	 * @param tts
-	 *            重试
-	 * @return String类型 返回网络请求数据
-	 * @throws Exception
-	 *             网络异常
-	 */
-	public static String get(String url, int tts) throws Exception {
-		if (tts > 3) {// 重试3次
-			return null;
-		}
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-		CloseableHttpResponse response = null;
-		String result = null;
-		try {
-			HttpGet httpGet = new HttpGet(url);
-			httpGet.setConfig(config);
-			response = httpClient.execute(httpGet);
-			HttpEntity resEntity = response.getEntity();
-			if (resEntity != null) {
-				result = ConvertStreamToString(resEntity.getContent(), "UTF-8");
-			}
-			EntityUtils.consume(resEntity);
-			return result;
-		} catch (IOException e) {
-			return get(url, tts++);
-		} finally {
-			response.close();
-			httpClient.close();
-		}
-		// 得到的是JSON类型的数据需要第三方解析JSON的jar包来解析
-	}
-
-	/**
-	 * 工具类方法 此方法是把传进的字节流转化为相应的字符串并返回，此方法一般在网络请求中用到
-	 * 
-	 * @param is
-	 *            输入流
-	 * @param charset
-	 *            字符格式
-	 * @return String 类型
-	 * @throws Exception
-	 */
-	public static String ConvertStreamToString(InputStream is, String charset) throws Exception {
-		StringBuilder sb = new StringBuilder();
-		try (InputStreamReader inputStreamReader = new InputStreamReader(is, charset)) {
-			try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
-				String line = null;
-				while ((line = reader.readLine()) != null) {
-					sb.append(line).append("\r\n");
-				}
-			}
-		}
-		return sb.toString();
 	}
 }

@@ -155,4 +155,7 @@ public interface TradeOrderDAO {
     @Result(column = "pay_medium", property = "payMedium") })
 	@SelectProvider(type = TradeOrderProvider.class, method = "queryByCondition")
     public List<TradeOrderDO> queryByCondition(@Param("tradeOrder") TradeOrderDO tradeOrder);
+
+    @UpdateProvider(type = TradeOrderProvider.class, method = "updateByOrderId")
+	public int updateByOrderId(TradeOrderDO tradeOrderDO);
 }

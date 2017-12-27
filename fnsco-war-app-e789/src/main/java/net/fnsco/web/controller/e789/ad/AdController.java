@@ -1,4 +1,5 @@
 package net.fnsco.web.controller.e789.ad;
+
 import java.util.List;
 import java.util.Map;
 
@@ -20,36 +21,41 @@ import net.fnsco.web.controller.e789.vo.AppAdVO;
 
 /**
  * @desc 广告资讯控制器
- * @author   tangliang
- * @version  0.0.1-SNAPSHOT
- * @since    Ver 1.1
- * @Date	 2017年12月4日 下午5:01:12
+ * @author tangliang
+ * @version 0.0.1-SNAPSHOT
+ * @since Ver 1.1
+ * @Date 2017年12月4日 下午5:01:12
  */
 @RestController
 @RequestMapping(value = "/app2c/ad", method = RequestMethod.POST)
 @Api(value = "/app2c/ad", tags = { "账户-广告资讯相关功能接口" })
 public class AdController extends BaseController {
-	
+
 	@Autowired
 	private AdService adService;
+
 	/**
 	 * 
 	 * @param accountBalanceJO
 	 * @return
 	 */
- 	@RequestMapping(value = "/queryAd")
-    @ApiOperation(value = "查询广告资讯")
-    public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
- 		AppAdVO vo = new AppAdVO();
- 		ResultDTO<Map<String, List>> result = adService.queryAdList();
- 		if(result.isSuccess()){
- 			vo.setAdList(result.getData().get("ad"));
- 	 		vo.setNewsList(result.getData().get("news"));
- 	 		return ResultDTO.success(vo);
- 		}else{
- 			return ResultDTO.success(result.getData());
- 		}
- 		
-    }
+	@RequestMapping(value = "/queryAd")
+	@ApiOperation(value = "查询广告资讯")
+	public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
+		AppAdVO vo = new AppAdVO();
+		ResultDTO<Map<String, List>> result = adService.queryAdList();
+		if (result.isSuccess() && 1 == appAdJO.getType()) {
+			vo.setAdList(result.getData().get("ad"));
+			vo.setNewsList(result.getData().get("news"));
+			return ResultDTO.success(vo);
+
+		} else if (result.isSuccess() && 2 == appAdJO.getType()) {
+			vo.setAdList(result.getData().get("ad"));
+			return ResultDTO.success(vo);
+		} else {
+			return ResultDTO.success(result.getData());
+		}
+
+	}
 
 }
