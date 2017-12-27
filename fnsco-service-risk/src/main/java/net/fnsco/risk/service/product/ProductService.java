@@ -75,4 +75,8 @@ public class ProductService extends BaseService {
      ProductDO obj = this.productDAO.getById(id);
      return obj;
  }
+
+public List<ProductDO> getProductName() {
+	return this.productDAO.getProductName();
+}
 }

@@ -121,7 +121,7 @@ public class MercPayAbilityService extends BaseService {
 		int total = mercPayAbilityDAO.pageListCount(mercPayAbility);
 		mercPayAbility.setPayAbility(payAbility);
 		if(total > 0) {
-			mercPayAbilityDAO.update(mercPayAbility);
+			mercPayAbilityDAO.updateByPayAbility(mercPayAbility);
 		}else {
 			mercPayAbilityDAO.insert(mercPayAbility);
 		}

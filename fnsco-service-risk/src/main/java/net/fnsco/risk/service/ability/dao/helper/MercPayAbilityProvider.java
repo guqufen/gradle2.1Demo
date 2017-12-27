@@ -81,5 +81,21 @@ public class MercPayAbilityProvider {
         }
         }}.toString();
     }
+    
+    public String updateByPayAbility(Map<String, Object> params) {
+    	MercPayAbilityDO mercPayAbility = (MercPayAbilityDO) params.get("mercPayAbility");
+        return new SQL() {{
+        UPDATE(TABLE_NAME);
+        if (mercPayAbility.getPayAbility() != null) {
+            SET("pay_ability=#{mercPayAbility.payAbility}");
+        }
+        if (StringUtils.isNotBlank(mercPayAbility.getEntityInnerCode())){
+            WHERE("entity_inner_code=#{mercPayAbility.entityInnerCode}");
+        }
+        if (StringUtils.isNotBlank(mercPayAbility.getMonth())){
+            WHERE("month=#{mercPayAbility.month}");
+        }
+        }}.toString();
+    }
 }
 

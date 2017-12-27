@@ -1,5 +1,6 @@
 package net.fnsco.web.open;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
@@ -14,6 +15,8 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.risk.service.product.ProductService;
+import net.fnsco.risk.service.product.entity.ProductDO;
 import net.fnsco.risk.service.report.ReportService;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportInfoDO2;
@@ -32,6 +35,8 @@ import net.fnsco.risk.service.report.entity.ReportInfoDO2;
 public class ReportOpenController extends BaseController {
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private ProductService productService;
 
     //根据用户id分页查询绑定下的商户列表
     @ApiOperation(value = "分页查询", notes = "分页查询")
@@ -127,5 +132,17 @@ public class ReportOpenController extends BaseController {
     public ResultDTO forwordToReport(@RequestParam String merchantId) {
     	reportService.updateViemNum(Integer.valueOf(merchantId));
     	return ResultDTO.success();
+    }
+    
+    /**
+     * 根据后台设置的产品动态生成对应按钮
+     * @return
+     */
+    @RequestMapping("getProductName")
+    @ResponseBody
+    public ResultDTO<List<ProductDO>> getProductName() {
+    	ResultDTO<List<ProductDO>>  result = new ResultDTO();
+        List<ProductDO> list = productService.getProductName();
+        return result.success(list);
     }
 }
