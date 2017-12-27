@@ -47,12 +47,13 @@ public class TimerConfig {
     
     /**
      * 每隔3秒定时查询中信银行扫一扫支付结果
+     * 时间取当前时间的前一天日期
      */
     @Scheduled(cron = "*/3 * * * * ?")
     public void queryZxyhTrade(){
 
     	Date date = DateUtils.getStartDayTime(new Date());
-    	List<String> orderList= tradeOrderDAO.queryOnGoing("05", DateUtils.getStartDayTime(new Date()));
+    	List<String> orderList= tradeOrderDAO.queryOnGoing("05", DateUtils.getTimeYesterday(new Date()));
     	for (String orderNo : orderList) {
     		paymentService.PassivePayResult(orderNo);
 		}
@@ -60,11 +61,12 @@ public class TimerConfig {
     
 	/**
 	 * 每隔3秒查询手机充值支付结果(渠道返回系统内部异常需要查询该笔交易结果)
+	 * 时间取当前时间的前一天日期
 	 */
 	@Scheduled(cron = "*/3 * * * * ?")
 	public void queryFlowCharge() {
 
-		List<RechargeOrderDO> orderList = rechargeOrderService.queryPhoneCharge(DateUtils.getStartDayTime(new Date()));// 查询
+		List<RechargeOrderDO> orderList = rechargeOrderService.queryPhoneCharge(DateUtils.getTimeYesterday(new Date()));// 查询
 		for (RechargeOrderDO rechargeOrderDO : orderList) {
 			
 			//话费充值

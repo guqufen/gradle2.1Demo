@@ -1,5 +1,6 @@
 package net.fnsco.car.service.agent;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ public class AgentService extends BaseService {
 	// 添加
 	public AgentDO doAdd(AgentDO agent, int loginUserId) {
 		logger.info("开始添加AgentService.add,agent=" + agent.toString());
+		agent.setCreateTime(new Date());
 		this.agentDAO.insert(agent);
 		return agent;
 	}

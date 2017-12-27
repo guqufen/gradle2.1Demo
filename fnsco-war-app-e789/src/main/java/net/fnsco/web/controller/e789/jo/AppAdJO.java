@@ -24,8 +24,35 @@ public class AppAdJO extends JO{
 	/**
 	 * APP登录用户ID
 	 */
-	@ApiModelProperty(value = "APP登录用户ID", name = "userId", example = "66")
+	@ApiModelProperty(value = "APP登录用户ID", name = "userId")
 	private Integer userId;
+
+	/**
+	 * 1、账户页；2、火车票页
+	 */
+	@ApiModelProperty(value = "1、账户页；2、火车票页", name = "type")
+	private Integer type;
+	/**
+	 * type
+	 *
+	 * @return  the type
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getType() {
+		return type;
+	}
+
+	/**
+	 * type
+	 *
+	 * @param   type    the type to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
 	/**
 	 * userId

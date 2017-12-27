@@ -44,7 +44,7 @@ public interface DeptDAO {
     public List<DeptDO> pageList(@Param("dept") DeptDO dept, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
     
     @Results({@Result( column = "parent_id",property = "parentId"),@Result( column = "order_num",property = "orderNum"),@Result( column = "del_flag",property = "delFlag") })
-    @Select("SELECT * FROM sys_dept order by order_num")
+    @Select("SELECT * FROM sys_dept where del_flag = 0 order by order_num")
     public List<DeptDO> pageNameList();
 
     @SelectProvider(type = DeptProvider.class, method = "pageListCount")

@@ -13,11 +13,9 @@ import net.fnsco.auth.comm.AuthConstant;
 import net.fnsco.auth.service.sys.dao.DeptDAO;
 import net.fnsco.auth.service.sys.dao.RoleDeptDAO;
 import net.fnsco.auth.service.sys.entity.DeptDO;
-import net.fnsco.auth.service.sys.entity.MenuDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
-import net.fnsco.core.constants.CoreConstants;
 
 /**
  * 
@@ -46,14 +44,14 @@ public class SysDeptService extends BaseService {
 		//long timer = System.currentTimeMillis();
 		List<DeptDO> data = deptDAO.pageList(dept, pageNum, pageSize);
 		//logger.debug(null, System.currentTimeMillis()-timer);
-		/*for (DeptDO temp : data) {
+		for (DeptDO temp : data) {
 			DeptDO tdo = deptDAO.getById(temp.getParentId());
 			if (tdo == null) {
-				temp.setParentName("杭州法奈昇有限公司");
+				temp.setParentName(env.getProperty("web.compony.name"));
 			} else {
 				temp.setParentName(tdo.getName());
 			}
-		}*/
+		}
 		// 返回根据条件查询的所有记录条数
 		int totalNum = deptDAO.pageListCount(dept);
 		// 返回给页面总条数和每页查询的数据
@@ -120,7 +118,7 @@ public class SysDeptService extends BaseService {
 			DeptDO user = deptDAO.getById(data.getParentId());
 			data.setParentName(user.getName());
 		}else {
-			data.setParentName("杭州法奈昇有限公司");
+			data.setParentName(env.getProperty("web.compony.name"));
 		}
 		return data;
 	}

@@ -36,7 +36,8 @@ $('#table').bootstrapTable({
 		field: 'principal'
 	},{
 		title: '代理商类型',
-		field: 'type'
+		field: 'type',
+		formatter:formatType
 	},{
 		title: '地址',
 		field: 'address'
@@ -54,7 +55,7 @@ function queryParams(params) {
 	var param = {
 		currentPageNum : this.pageNumber,
 		pageSize : this.pageSize,
-		name : $('#name').val()
+		name : $.trim($('#name').val())
 	}
 	return param;
 }
@@ -75,6 +76,17 @@ function responseHandler(res) {
 }
 function formatTime(value, row, index){
 	return formatDateUtil(value);
+}
+function formatType(value, row, index){
+	if(value==1){
+		return '普通运营商';
+	}
+	if(value==2){
+		return '特约运营商';
+	}
+	if(value==3){
+		return '金牌运营商';
+	}
 }
 
 //查询条件按钮事件
@@ -224,6 +236,9 @@ function subData(btnType){
 				layer.msg(e.message);
 				queryEvent("table");
 				modal.modal('hide');
+				if(btnType==0){
+					modal.find('input').val('');
+				}
 			}else{
 				layer.msg(e.message);
 			}
