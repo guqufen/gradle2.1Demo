@@ -91,8 +91,9 @@ public class ProductsControler extends BaseController {
     	productDO.setLastModifyTime(new Date());
     	String amountMin = addProductsDTO.getAmountMin();
     	BigDecimal pay = new BigDecimal(amountMin);
-    	BigDecimal paymin = pay.divide(new BigDecimal(15), 2, RoundingMode.HALF_UP);
-    	productDO.setPayAbilityMin(paymin);
+    	BigDecimal paymin = pay.multiply(new BigDecimal(10000));
+    	BigDecimal payAbilityMin = paymin.divide(new BigDecimal(15), 0, RoundingMode.HALF_UP);
+    	productDO.setPayAbilityMin(payAbilityMin);
     	productService.doAdd(productDO);
     	return success();
     }
@@ -122,8 +123,9 @@ public class ProductsControler extends BaseController {
     	productDO.setLastModifyTime(new Date());
     	String amountMin = editProductsDTO.getAmountMin();
     	BigDecimal pay = new BigDecimal(amountMin);
-    	BigDecimal paymin = pay.divide(new BigDecimal(15), 2, RoundingMode.HALF_UP);
-    	productDO.setPayAbilityMin(paymin);
+    	BigDecimal paymin = pay.multiply(new BigDecimal(10000));
+    	BigDecimal payAbilityMin = paymin.divide(new BigDecimal(15), 0, RoundingMode.HALF_UP);
+    	productDO.setPayAbilityMin(payAbilityMin);
     	productService.doUpdate(productDO);
     	return success();
     }
