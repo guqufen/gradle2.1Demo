@@ -858,15 +858,15 @@ public class ReportInfoProvider {
 						+ "( SELECT ent.entity_inner_code,ent.legal_person,ent.merc_name,ent.business_license_num FROM m_merchant_entity ent ) tt ,"
 						+ "(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) and status = 1 group by id)order by report_timer desc) report");
 				
-				if (StringUtils.isNotBlank(reportInfo2.getProductId())) {
-					SELECT("risk_product rp, risk_merc_pay_ability ra");
-					WHERE(" tt.entity_inner_code = ra.entity_inner_code  AND rp.pay_ability_min < ra.pay_ability");
+				if (reportInfo2.getPayAbility() != null) {
+					SELECT("risk_merc_pay_ability ra");
+					WHERE(" tt.entity_inner_code = ra.entity_inner_code ");
+					WHERE(" ra.pay_ability > #{reportInfo2.payAbility}");
+					WHERE(" ra.month = date_format(now(),'%Y%m')");
+					
 				}
 				WHERE("tt.entity_inner_code = report.entity_inner_code ");
-				// 产品名称
-				if (StringUtils.isNotBlank(reportInfo2.getProductId())) {
-					WHERE("rp.id=#{reportInfo2.productId}");
-				}
+				
 
 				// 用户权限为审核用户：0-待审核
 				if (reportInfo2.getCustomerType() != null && reportInfo2.getCustomerType() == 1) {
@@ -915,15 +915,14 @@ public class ReportInfoProvider {
 						+ "( SELECT ent.entity_inner_code,ent.legal_person,ent.merc_name,ent.business_license_num FROM m_merchant_entity ent ) tt ,"
 						+ "(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) and status = 1 group by id)order by report_timer desc) report");
 						
-				if (StringUtils.isNotBlank(reportInfo2.getProductId())) {
-					SELECT("risk_product rp, risk_merc_pay_ability ra");
-					WHERE(" tt.entity_inner_code = ra.entity_inner_code  AND rp.pay_ability_min < ra.pay_ability");
+				if (reportInfo2.getPayAbility() != null) {
+					SELECT("risk_merc_pay_ability ra");
+					WHERE(" tt.entity_inner_code = ra.entity_inner_code ");
+					WHERE(" ra.pay_ability > #{reportInfo2.payAbility}");
+					WHERE(" ra.month = date_format(now(),'%Y%m')");
 				}
 				WHERE("tt.entity_inner_code = report.entity_inner_code ");
-				// 产品名称
-				if (StringUtils.isNotBlank(reportInfo2.getProductId())) {
-					WHERE("rp.id=#{reportInfo2.productId}");
-				}
+				
 
 				// 审核人员
 				if (reportInfo2.getCustomerType() != null && reportInfo2.getCustomerType() == 1) {

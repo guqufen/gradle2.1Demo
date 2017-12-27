@@ -1,5 +1,6 @@
 package net.fnsco.risk.service.report.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ReportInfoDO2 {
@@ -138,16 +139,26 @@ public class ReportInfoDO2 {
 	private String evaluation;
 	
 	//产品id
-	private String productId;
+	private Integer productId;
+	//还款额度
+	private BigDecimal payAbility; 
 	
 
 	
 
-	public String getProductId() {
+	public BigDecimal getPayAbility() {
+		return payAbility;
+	}
+
+	public void setPayAbility(BigDecimal payAbility) {
+		this.payAbility = payAbility;
+	}
+
+	public Integer getProductId() {
 		return productId;
 	}
 
-	public void setProductId(String productId) {
+	public void setProductId(Integer productId) {
 		this.productId = productId;
 	}
 
