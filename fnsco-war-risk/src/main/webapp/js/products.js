@@ -49,19 +49,21 @@ $('#table').bootstrapTable({
 		title : '产品名称'
 	}, {
 		field : 'rateMin',
-		title : '最小费率'
+		title : '最小费率',
+		formatter : formatPercent
 	},{
 		field : 'rateMax',
-		title : '最大费率'
+		title : '最大费率',
+		formatter : formatPercent
 	}, {
 		field : 'cycle',
 		title : '周期'
 	}, {
 		field : 'amountMin',
-		title : '贷款最小额度'
+		title : '贷款最小额度(万)'
 	}, {
 		field : 'amountMax',
-		title : '贷款最大额度'
+		title : '贷款最大额度(万)'
 	},{
 		field : 'createTime',
 		title : '发布时间',
@@ -143,6 +145,10 @@ function formatterIndustry(value, row, index){
 	var val=queryIndustry(value);
 //	console.log(val)
 	return val;
+}
+function formatPercent(value, row, index){
+	value=value+"%";
+	return value;
 }
 // 组装请求参数
 function queryParams(params) {
