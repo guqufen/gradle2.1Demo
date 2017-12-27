@@ -46,14 +46,14 @@ public class SysDeptService extends BaseService {
 		//long timer = System.currentTimeMillis();
 		List<DeptDO> data = deptDAO.pageList(dept, pageNum, pageSize);
 		//logger.debug(null, System.currentTimeMillis()-timer);
-		/*for (DeptDO temp : data) {
+		for (DeptDO temp : data) {
 			DeptDO tdo = deptDAO.getById(temp.getParentId());
 			if (tdo == null) {
-				temp.setParentName("杭州法奈昇有限公司");
+				temp.setParentName(env.getProperty("web.compony.name"));
 			} else {
 				temp.setParentName(tdo.getName());
 			}
-		}*/
+		}
 		// 返回根据条件查询的所有记录条数
 		int totalNum = deptDAO.pageListCount(dept);
 		// 返回给页面总条数和每页查询的数据
