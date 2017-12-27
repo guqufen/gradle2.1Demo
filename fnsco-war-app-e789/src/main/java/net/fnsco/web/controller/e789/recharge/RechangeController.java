@@ -90,7 +90,7 @@ public class RechangeController extends BaseController {
         tradeOrder.setPayMedium(TradeConstants.PayMediumEnum.APP.getCode());
         tradeOrder.setTxnType(1);
         //交易子类型10购买消费11充值消费20购买撤销21充值撤销
-        tradeOrder.setTxnSubType(TradeConstants.TxnSubTypeEnum.RESEARCH_CONSUME.getCode());
+        tradeOrder.setTxnSubType(TradeConstants.TxnSubTypeEnum.INCOME_RESEARCH.getCode());
         tradeOrder.setTxnSubType(11);//交易子类型10购买消费11充值消费20购买撤销21充值撤销
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);

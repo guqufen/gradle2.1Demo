@@ -22,6 +22,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
+import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
 import net.fnsco.trading.service.third.ticket.comm.TicketConstants;
 import net.fnsco.trading.service.third.ticket.dao.TicketOrderDAO;
 import net.fnsco.trading.service.third.ticket.dao.TicketOrderPassengerDAO;
@@ -31,6 +32,7 @@ import net.fnsco.trading.service.third.ticket.entity.TicketOrderPassengerDO;
 import net.fnsco.trading.service.third.ticket.util.TrainTicketsUtil;
 import net.fnsco.trading.service.third.ticket.vo.OrderContactVO;
 import net.fnsco.trading.service.third.ticket.vo.TrainOrderListVO;
+import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -44,6 +46,8 @@ public class TicketOrderService extends BaseService {
     private TicketOrderPassengerDAO  passengerDAO;
     @Autowired
     private AppAccountBalanceService appAccountBalanceService;
+    @Autowired
+    private TradeWithdrawService     tradeWithdrawService;
 
     // 分页
     public ResultPageDTO<TicketOrderDO> page(TicketOrderDO ticketOrder, Integer pageNum, Integer pageSize) {
@@ -235,6 +239,7 @@ public class TicketOrderService extends BaseService {
         if (!TicketConstants.OrderStateEnum.SIT_DOWN.getCode().equals(order.getStatus())) {
             return ResultDTO.fail("订单状态不正常");
         }
+        tradeWithdrawService.doAddForTicket(order);
         //冻结余额
         boolean payResult = appAccountBalanceService.doFrozenBalance(order.getAppUserId(), order.getOrderAmount());
         if (!payResult) {
@@ -337,7 +342,7 @@ public class TicketOrderService extends BaseService {
                 order.setLastModifyTime(new Date());
                 ticketOrderDAO.update(order);
                 return ResultDTO.fail(reason);
-            }else{
+            } else {
                 String msg = obj.getString("msg");
                 order.setRespMsg(msg);
                 order.setLastModifyTime(new Date());

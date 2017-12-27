@@ -64,9 +64,32 @@ public class AgentDO {
     private String principal;
     private Date createTime;
 
-
+    private Integer falseId;
+    
 
     /**
+	 * falseId
+	 *
+	 * @return  the falseId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getFalseId() {
+		return falseId;
+	}
+
+	/**
+	 * falseId
+	 *
+	 * @param   falseId    the falseId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setFalseId(Integer falseId) {
+		this.falseId = falseId;
+	}
+
+	/**
 	 * mobile
 	 *
 	 * @return  the mobile

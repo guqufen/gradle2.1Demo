@@ -12,6 +12,31 @@ public class TrainQueryJO {
     @ApiModelProperty(value = "乘车日期", example = "乘车日期")
     private String buyDate;
 
+    @ApiModelProperty(value = "车次（G65）", example = "车次（G65）")
+    private String trainCode;
+
+    /**
+     * trainCode
+     *
+     * @return  the trainCode
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getTrainCode() {
+        return trainCode;
+    }
+
+    /**
+     * trainCode
+     *
+     * @param   trainCode    the trainCode to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setTrainCode(String trainCode) {
+        this.trainCode = trainCode;
+    }
+
     /**
      * startSite
      *
