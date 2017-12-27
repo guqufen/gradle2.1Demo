@@ -866,7 +866,7 @@ public class ReportInfoProvider {
 					WHERE(" tt.entity_inner_code = rr.entity_inner_code ");
 						    
 				}
-				WHERE("tt.entity_inner_code = report.entity_inner_code AND report.status=1");
+				WHERE("tt.entity_inner_code = report.entity_inner_code ");
 				
 
 				// 用户权限为审核用户：0-待审核
@@ -924,7 +924,7 @@ public class ReportInfoProvider {
 					WHERE(" tt.entity_inner_code = rr.entity_inner_code ");
 						    
 				}
-				WHERE("tt.entity_inner_code = report.entity_inner_code AND report.status=1");
+				WHERE("tt.entity_inner_code = report.entity_inner_code ");
 				
 
 				// 审核人员
