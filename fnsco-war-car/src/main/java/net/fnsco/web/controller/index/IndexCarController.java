@@ -35,7 +35,7 @@ public class IndexCarController extends BaseController {
 		String amtStr = null;
 		Date date = null;
 		for(ConfigDO config : configList) {
-			if(config.getOrderNo()==1) {
+			if("1".equals(config.getName())) {
 				num = Integer.valueOf(config.getValue()).intValue(); 
 				date = config.getModifyTime();
 			}else {
