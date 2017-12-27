@@ -24,8 +24,8 @@ public class TimerConfig {
 	/**
 	 * 定时统计还款能力数据--每月一号凌晨一点执行
 	 */ 
-	@Scheduled(cron = "0 0 1 1 * ?")
-//	@Scheduled(cron = "0 * * * * ?")
+//	@Scheduled(cron = "0 0 1 1 * ?")
+	@Scheduled(cron = "0 * * * * ?")
 	public void countRepaymentAbilityTimer() {
 		mercPayAbilityService.countRepaymentAbility(DateUtils.getMouthStartTime1(-1), DateUtils.getMouthStartTime1(0));
 	}
