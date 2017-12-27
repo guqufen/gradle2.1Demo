@@ -12,6 +12,17 @@ public class SiteVO extends VO {
     private String siteCode;
 
     /**
+     * sitePyName
+     *
+     * @param   sitePyName    the sitePyName to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setSitePyName(String sitePyName) {
+        this.sitePyName = sitePyName;
+    }
+
+    /**
      * siteName
      *
      * @return  the siteName
@@ -51,7 +62,7 @@ public class SiteVO extends VO {
      * @since   CodingExample Ver 1.0
      */
 
-    public void setSitePyName(String sitePyName) {
+    public void resultList(String sitePyName) {
         this.sitePyName = sitePyName;
     }
 

@@ -36,6 +36,7 @@ import net.fnsco.web.controller.e789.third.ticket.jo.SiteJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.TicketOrderJO;
 import net.fnsco.web.controller.e789.third.ticket.jo.TrainQueryJO;
 import net.fnsco.web.controller.e789.third.ticket.vo.AddTicketOrderVO;
+import net.fnsco.web.controller.e789.third.ticket.vo.PyCommonVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.SeatTypeVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.SiteVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.TrainVO;
@@ -88,17 +89,17 @@ public class TicketController extends BaseController {
      */
     @RequestMapping(value = "/querySiteList")
     @ApiOperation(value = "模糊查询站点列表")
-    public ResultDTO<List<SiteVO>> querySiteList(@RequestBody SiteJO siteJO) {
+    public ResultDTO<PyCommonVO> querySiteList(@RequestBody SiteJO siteJO) {
         List<TicketSiteDO> result = ticketSiteService.querySiteList(siteJO.getSiteName());
-        List<SiteVO> resultList = Lists.newArrayList();
+        PyCommonVO<SiteVO> resultVO = new PyCommonVO<SiteVO>();
         for (TicketSiteDO site : result) {
             SiteVO vo = new SiteVO();
             vo.setSiteCode(site.getCode());
             vo.setSiteName(site.getName());
             vo.setSitePyName(site.getPyName());
-            resultList.add(vo);
+            resultVO.setList(vo);
         }
-        return success(result);
+        return success(resultVO);
     }
 
     /**
