@@ -26,7 +26,7 @@ public interface ConfigDAO {
     
     @Results({@Result( column = "id",property = "id"), @Result( column = "order_no",property = "orderNo"), @Result( column = "keep1",property = "keep1") , @Result( column = "modify_time",property = "modifyTime")})
     @Select("SELECT id,order_no,keep1,modify_time FROM car_config WHERE status=1 AND type='01' ")
-    public ConfigDO getIndex();
+    public List<ConfigDO> getIndex();
     
     @Results({@Result( column = "group_name",property = "groupName"),@Result( column = "order_no",property = "orderNo") })
     @Select("SELECT * FROM car_config WHERE id = #{id}")
