@@ -847,11 +847,6 @@ public class ReportInfoProvider {
 		int limit = pageSize;
 		return new SQL() {
 			{
-
-				String agentWhere = "";
-				if (null != reportInfo2.getAgentId()) {
-					agentWhere = "and agent_id='" + reportInfo2.getAgentId() + "'";
-				}
 				SELECT("tt.*,report.id,report.trading_area ,"
 						+ "(select `first` from sys_industry where id = report.industry) industryName ,report.industry,report.size,report.status,report.view_num,report.report_timer "
 						+ " FROM "
@@ -865,7 +860,13 @@ public class ReportInfoProvider {
 					WHERE(" ra.month = date_format(now(),'%Y%m')");
 					
 				}
-				WHERE("tt.entity_inner_code = report.entity_inner_code ");
+				if(null != reportInfo2.getAgentId()){
+					SELECT("risk_user_merc_rel rr");
+					WHERE(" rr.agent_id = #{reportInfo2.agentId} ");
+					WHERE(" tt.entity_inner_code = rr.entity_inner_code ");
+						    
+				}
+				WHERE("tt.entity_inner_code = report.entity_inner_code AND report.status=1");
 				
 
 				// 用户权限为审核用户：0-待审核
@@ -907,10 +908,6 @@ public class ReportInfoProvider {
 		ReportInfoDO2 reportInfo2 = (ReportInfoDO2) params.get("reportInfo2");
 		return new SQL() {
 			{
-				String agentWhere = "";
-				if (null != reportInfo2.getAgentId()) {
-					agentWhere = "and agent_id='" + reportInfo2.getAgentId() + "'";
-				}
 				SELECT("count(1) FROM"
 						+ "( SELECT ent.entity_inner_code,ent.legal_person,ent.merc_name,ent.business_license_num FROM m_merchant_entity ent ) tt ,"
 						+ "(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) and status = 1 group by id)order by report_timer desc) report");
@@ -921,7 +918,13 @@ public class ReportInfoProvider {
 					WHERE(" ra.pay_ability > #{reportInfo2.payAbility}");
 					WHERE(" ra.month = date_format(now(),'%Y%m')");
 				}
-				WHERE("tt.entity_inner_code = report.entity_inner_code ");
+				if(null != reportInfo2.getAgentId()){
+					SELECT("risk_user_merc_rel rr");
+					WHERE(" rr.agent_id = #{reportInfo2.agentId} ");
+					WHERE(" tt.entity_inner_code = rr.entity_inner_code ");
+						    
+				}
+				WHERE("tt.entity_inner_code = report.entity_inner_code AND report.status=1");
 				
 
 				// 审核人员
