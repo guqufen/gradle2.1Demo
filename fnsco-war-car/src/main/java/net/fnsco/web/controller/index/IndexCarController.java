@@ -73,7 +73,7 @@ public class IndexCarController extends BaseController {
 		config1.setId(numId);
 		configService.doUpdate(config1, getUserId());
 		ConfigDO config2 = new ConfigDO();
-		config2.setValue(String.valueOf(amt));;
+		config2.setValue(String.valueOf(numberAmt));;
 		config2.setOrderNo(1);
 		config2.setModifyTime(new Date());
 		config2.setId(amtId);
