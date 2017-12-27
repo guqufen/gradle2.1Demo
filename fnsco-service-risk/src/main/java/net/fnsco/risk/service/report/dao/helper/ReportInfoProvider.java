@@ -512,8 +512,9 @@ public class ReportInfoProvider {
 		return new SQL() {
 			{
 				String agentWhere = "";
-				if (null != reportInfo.getAgentId()) {
-					agentWhere = "and ent.agent_id='" + reportInfo.getAgentId() + "'";
+				if (null != reportInfo.getAgentId()) {//代理ID不为空，则需要查找绑定的实体商户号
+//					agentWhere = "and ent.agent_id='" + reportInfo.getAgentId() + "'";
+					agentWhere = "and ent.entity_inner_code in (select distinct entity_inner_code from risk_user_merc_rel where agent_id ='" + reportInfo.getAgentId() + "'";
 				}
 				SELECT("tt.*,"
 						+ "(select report.trading_area from risk_report_info report where tt.entity_inner_code = report.entity_inner_code order by create_time desc limit 1) trading_area,"
@@ -563,7 +564,8 @@ public class ReportInfoProvider {
 			{
 				String agentWhere = "";
 				if (null != reportInfo.getAgentId()) {
-					agentWhere = "and ent.agent_id='" + reportInfo.getAgentId() + "'";
+//					agentWhere = "and ent.agent_id='" + reportInfo.getAgentId() + "'";
+					agentWhere = "and ent.entity_inner_code in (select distinct entity_inner_code from risk_user_merc_rel where agent_id ='" + reportInfo.getAgentId() + "'";
 				}
 				SELECT("count(1) FROM ( SELECT ent.id,ent.legal_person,ent.entity_inner_code,ent.merc_name,ent.business_license_num, "
 						+ "(SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code in (select distinct inner_code from m_merchant_core_entity_ref ref where ref.entity_inner_code = ent.entity_inner_code) ORDER BY time_stamp desc limit 1 ) as maxTime "
@@ -626,7 +628,8 @@ public class ReportInfoProvider {
 			{
 				String agentWhere = "";
 				if (null != reportInfo.getAgentId()) {
-					agentWhere = "and agent_id='" + reportInfo.getAgentId() + "'";
+//					agentWhere = "and agent_id='" + reportInfo.getAgentId() + "'";
+					agentWhere = "and ent.entity_inner_code in (select distinct entity_inner_code from risk_user_merc_rel where agent_id ='" + reportInfo.getAgentId() + "'";
 				}
 				SELECT("tt.*,report.id,report.trading_area ,"
 						+ "(select `first` from sys_industry where id = report.industry) industryName ,report.industry,report.size,report.status,report.view_num,report.report_timer "
@@ -733,7 +736,8 @@ public class ReportInfoProvider {
 			{
 				String agentWhere = "";
 				if (null != reportInfo.getAgentId()) {
-					agentWhere = "and agent_id='" + reportInfo.getAgentId() + "'";
+//					agentWhere = "and agent_id='" + reportInfo.getAgentId() + "'";
+					agentWhere = "and ent.entity_inner_code in (select distinct entity_inner_code from risk_user_merc_rel where agent_id ='" + reportInfo.getAgentId() + "'";
 				}
 				SELECT("count(1) FROM "
 						+ "( SELECT ent.id,ent.entity_inner_code,ent.merc_name,ent.business_license_num, "
