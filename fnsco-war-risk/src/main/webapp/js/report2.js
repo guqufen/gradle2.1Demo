@@ -15,7 +15,6 @@ function load_val2() {
 	return result;
 }
 var message = load_val2();
-//console.log(message.id)
 var webUserOuterId = message.id;
 var agentId = message.agentId;
 var productId;
@@ -228,12 +227,10 @@ $.ajax({
 	type : 'POST',
 	dataType : "json",
 	success : function(data) {
-		console.log(data);
 		var html='';
 		for(var i=0;i<data.data.length;i++){
 			html+='<button class="searchBtn" onclick="javascript:queryEvent('+data.data[i].id+');">'+data.data[i].name+'</button>';
 		}
-		console.log();
 		$("#searchBox").append(html);
 	}
 });
