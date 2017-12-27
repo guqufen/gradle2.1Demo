@@ -2,6 +2,9 @@ package net.fnsco.car.service.loan.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
+import net.fnsco.car.service.file.entity.OrderFileDO;
 
 public class OrderLoanDO {
 
@@ -84,8 +87,35 @@ public class OrderLoanDO {
     /**
      * 运营商名称
      */
-    private String agentName;
+    private String agentName; 
     
+    /**
+     * 图片文件信息
+     */
+    private List<OrderFileDO> orderFiles;
+    
+	/**
+	 * orderFiles
+	 *
+	 * @return  the orderFiles
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public List<OrderFileDO> getOrderFiles() {
+		return orderFiles;
+	}
+
+	/**
+	 * orderFiles
+	 *
+	 * @param   orderFiles    the orderFiles to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setOrderFiles(List<OrderFileDO> orderFiles) {
+		this.orderFiles = orderFiles;
+	}
+
 	/**
 	 * carTypeId
 	 *

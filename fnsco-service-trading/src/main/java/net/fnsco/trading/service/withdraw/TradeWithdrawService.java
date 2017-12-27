@@ -16,7 +16,10 @@ import com.google.common.base.Strings;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.CodeUtil;
+import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
+import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
+import net.fnsco.trading.service.third.ticket.entity.TicketOrderDO;
 import net.fnsco.trading.service.withdraw.dao.TradeWithdrawDAO;
 import net.fnsco.trading.service.withdraw.dto.MonthWithdrawCountDTO;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
@@ -48,10 +51,10 @@ public class TradeWithdrawService extends BaseService {
         logger.info("开始添加TradeWithdrawService.add,tradeWithdraw=" + tradeWithdraw.toString());
         tradeWithdraw.setCreateTime(new Date());
         tradeWithdraw.setUpdateTime(new Date());
-        if( Strings.isNullOrEmpty(tradeWithdraw.getOrderNo())){
-        	tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
+        if (Strings.isNullOrEmpty(tradeWithdraw.getOrderNo())) {
+            tradeWithdraw.setOrderNo(CodeUtil.generateOrderCode(""));
         }
-    	
+
         //设置账户金额
         //扣除或增加账户余额
         this.tradeWithdrawDAO.insert(tradeWithdraw);
@@ -81,6 +84,7 @@ public class TradeWithdrawService extends BaseService {
         appAccountBalanceService.updateFund(tradeWithdraw.getAppUserId(), fund);
         return rows;
     }
+
     // 删除
     public Integer doDelete(TradeWithdrawDO tradeWithdraw, Integer loginUserId) {
         logger.info("开始删除TradeWithdrawService.delete,tradeWithdraw=" + tradeWithdraw.toString());
@@ -103,14 +107,30 @@ public class TradeWithdrawService extends BaseService {
     public List<MonthWithdrawCountDTO> doQueryTotalAmountGroupByMouth(Integer appUserId, String tradeMonth, Integer status) {
         return tradeWithdrawDAO.queryTotalAmount(appUserId, tradeMonth, status);
     }
-    
+
     /**
      * 按交易类型查询正在进行的交易列表，便于定时查询交易状态(按照时间大到小)
      * @param start：查询开始时间
      * @param type：交易类型
      * @return
      */
-    public List<TradeWithdrawDO> queryOngoing(Date start, Integer type){
-    	return tradeWithdrawDAO.queryOngoing(start, type);
+    public List<TradeWithdrawDO> queryOngoing(Date start, Integer type) {
+        return tradeWithdrawDAO.queryOngoing(start, type);
+    }
+
+    public void doAddForTicket(TicketOrderDO order) {
+        AppAccountBalanceDO appAccountBalance = appAccountBalanceService.doQueryByAppUserId(order.getAppUserId());
+        TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
+        tradeWithdraw.setAmount(order.getOrderAmount());
+        tradeWithdraw.setAppUserId(order.getAppUserId());
+        //tradeWithdraw.setChannelMerId(channelMerId);
+        //tradeWithdraw.setFee(fee);
+        tradeWithdraw.setFund(appAccountBalance.getFund());
+        tradeWithdraw.setStatus(0);
+        tradeWithdraw.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_HCP.getCode());
+        tradeWithdraw.setTradeType(TradeConstants.TradeTypeEnum.WITHDRAW.getCode());
+        tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());
+        //tradeWithdraw.setRespMsg(respMsg);
+        doAdd(tradeWithdraw);
     }
 }

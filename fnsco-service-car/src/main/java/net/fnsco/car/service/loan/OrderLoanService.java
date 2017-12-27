@@ -3,12 +3,14 @@ package net.fnsco.car.service.loan;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.base.Strings;
 
 import net.fnsco.car.service.agent.dao.AgentDAO;
 import net.fnsco.car.service.agent.entity.AgentDO;
@@ -18,13 +20,14 @@ import net.fnsco.car.service.city.DicCityService;
 import net.fnsco.car.service.city.entity.DicCityDO;
 import net.fnsco.car.service.customer.CustomerService;
 import net.fnsco.car.service.customer.entity.CustomerDO;
-import net.fnsco.car.service.file.OrderFileService;
+import net.fnsco.car.service.file.dao.OrderFileDAO;
 import net.fnsco.car.service.file.entity.OrderFileDO;
 import net.fnsco.car.service.loan.dao.OrderLoanDAO;
 import net.fnsco.car.service.loan.entity.OrderLoanDO;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.OssLoaclUtil;
 
 @Service
 public class OrderLoanService extends BaseService {
@@ -35,11 +38,11 @@ public class OrderLoanService extends BaseService {
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
-	private OrderFileService orderFileService;
-	@Autowired
 	private DicCityService dicCityService;
 	@Autowired
 	private CarBrandService carBrandService;
+	@Autowired
+	private OrderFileDAO orderFileDAO;
 	@Autowired
 	private AgentDAO agentDAO;
 
@@ -83,12 +86,25 @@ public class OrderLoanService extends BaseService {
 					orderLoanDO.setAgentName(agentDO.getName());
 				}
 			}
+			
+			//查找文件信息
+			List<OrderFileDO> files = orderFileDAO.getByOrderNo(orderLoanDO.getId().toString());
+			if(CollectionUtils.isNotEmpty(files)) {
+				for (OrderFileDO orderFileDO : files) {
+					String filePath = orderFileDO.getFilePath();
+					filePath = filePath.substring(filePath.indexOf("^")+1);
+					if(!Strings.isNullOrEmpty(filePath)) {
+						orderFileDO.setFilePath(OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), filePath));
+					}
+				}
+			}
+			orderLoanDO.setOrderFiles(files);
 		}
 		Integer count = this.orderLoanDAO.pageListCount(orderLoan);
 		ResultPageDTO<OrderLoanDO> pager = new ResultPageDTO<OrderLoanDO>(count, pageList);
 		return pager;
 	}
-
+	
 	// 添加
 	public OrderLoanDO doAdd(OrderLoanDO orderLoan, int loginUserId) {
 		logger.info("开始添加OrderLoanService.add,orderLoan=" + orderLoan.toString());
