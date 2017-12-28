@@ -29,6 +29,11 @@ public class ConfigService extends BaseService {
  public List<ConfigDO> queryIndex() {
 	 return configDAO.getIndex();
  }
+ 
+//查询首页总金额以及销售量
+public String queryAmt() {
+	 return configDAO.getAmt();
+}
  // 分页
  public ResultPageDTO<ConfigDO> page(ConfigDO config, Integer pageNum, Integer pageSize) {
      logger.info("开始分页查询ConfigService.page, config=" + config.toString());

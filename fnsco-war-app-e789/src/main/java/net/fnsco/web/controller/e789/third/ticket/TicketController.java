@@ -90,7 +90,7 @@ public class TicketController extends BaseController {
      */
     @RequestMapping(value = "/querySiteList")
     @ApiOperation(value = "模糊查询站点列表")
-    public ResultDTO<PyCommonVO> querySiteList(@RequestBody SiteJO siteJO) {
+    public ResultDTO<List<TetterVO>> querySiteList(@RequestBody SiteJO siteJO) {
         List<TicketSiteDO> result = ticketSiteService.querySiteList(siteJO.getSiteName());
         PyCommonVO<SiteVO> resultVO = new PyCommonVO<SiteVO>();
         for (TicketSiteDO site : result) {

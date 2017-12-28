@@ -42,9 +42,9 @@ public class ZxyhPayMD5Util {
      * 请求的目标URL
      * 配置在此处仅为演示方便，正式生产代码中，应该做外置可配置处理
      */
-    private static String         reqUrl               = "https://120.27.165.177:9001";  //入建
+//    private static String         reqUrl               = "https://120.27.165.177:9001";  //入建
 //    private static String         reqUrl               = " https://120.27.165.177:8099";  //主扫
-//    private static String         reqUrl               = "https://120.27.165.177:8099";  //公众号
+    private static String         reqUrl               = "https://120.27.165.177:8099";  //公众号
     /**MD5加密方式
      * 用于数据电子签名使用的MD5密钥，由中信银行开商户时自动生成，请妥善保管
      * 配置在此处仅为演示方便，正式生产代码中，商户应该将其外置于安全的地方，且妥善保护该密钥，如有泄露，请第一时间通知我行进行变更！！！
@@ -399,6 +399,42 @@ public class ZxyhPayMD5Util {
     
     
   
+    /**
+     * h5
+     * @param args
+     */
+    public static void main(String[] args) {
+    	String url = "/MPay/backTransAction.do";
+        Map<String, String> reqMap = new HashMap<String, String>();
+        reqMap.put("encoding", "UTF-8"); //
+        reqMap.put("signMethod", "02"); //
+        reqMap.put("txnType", "01"); //
+        reqMap.put("txnSubType", "010133"); //
+        reqMap.put("channelType", "6002"); //
+       ///////
+        reqMap.put("payAccessType", "02"); //
+        reqMap.put("backEndUrl", "http://www.baidu.cn");
+        
+        ///////
+        reqMap.put("merId", "994400000000009"); //普通商户或平台商户的商户号
+        reqMap.put("secMerId", "999900000010727");//必填
+        
+        reqMap.put("termIp", "192.168.1.163");
+        reqMap.put("orderId", "fns_h5_001");
+        reqMap.put("orderTime", System.currentTimeMillis() + "");
+        reqMap.put("orderBody", "00");
+        reqMap.put("txnAmt", "1");
+        reqMap.put("currencyType", "156");
+        
+        reqMap.put("sceneInfo", "wap_url=http://101.37.254.146:8080/risk-mgmt/login.html&wap_name=风控+后台管理系统&商户自定义参数");//wap_url=https://m.jd.com&wap_name=京东官网&618专版
+        
+        
+        //发送中信报文
+        String respStr = ZxyhPayMD5Util.request(reqMap, url);
+        //解析返回报文
+        Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+        System.out.println(JSON.toJSON(respMap).toString());
+    }
     
     /**
      * 支付宝微信交易查詢
@@ -601,7 +637,7 @@ public class ZxyhPayMD5Util {
         System.out.println(JSON.toJSON(respMap).toString());
     }
     
-    public static void main(String[] args){
+    public static void main10(String[] args){
         String pid = "2088022294504639";
         String merId = "994400000000009"; 
         String url = "/MPayTransaction/ind/mchtadd.do";

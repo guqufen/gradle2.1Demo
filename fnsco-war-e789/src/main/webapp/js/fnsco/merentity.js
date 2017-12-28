@@ -181,7 +181,7 @@ $('.sunmitBtn').click(function(){
         layer.msg('请选择商户所在区县！');
         return false;
     }
-    console.log($('#addForm').serialize());
+//    console.log($('#addForm').serialize());
 	$.ajax({
 		url:PROJECT_NAME+'/web/merchantentity/toAdd',
 		type:'POST',

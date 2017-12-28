@@ -155,7 +155,7 @@ public class CarAgentWebController extends BaseController {
 	@ResponseBody
 	public ResultDTO<AgentDO> getAgentInfo(){
 		WebUserDTO adminUser = (WebUserDTO) getSessionUser();
-		 if(null != adminUser && null != adminUser.getAgentId()) {
+		 if(null != adminUser && null != adminUser.getAgentId() && adminUser.getType() == 2) {
 			 AgentDO agentDO = agentDAO.getById(adminUser.getAgentId());
 			 if(null != agentDO) {
 				 return ResultDTO.success(agentDO);

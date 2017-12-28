@@ -2,6 +2,7 @@ package net.fnsco.web.controller.e789.third.ticket.vo;
 
 import java.util.List;
 
+import io.swagger.annotations.ApiModelProperty;
 import net.fnsco.core.base.VO;
 
 public class TetterVO extends VO {
@@ -108,11 +109,13 @@ public class TetterVO extends VO {
         resultList.add(temp);
         temp = new TetterVO();
         temp.setName("Z");
-        temp.setList(resultVO.getS());
+        temp.setList(resultVO.getZ());
         resultList.add(temp);
     }
 
+    @ApiModelProperty(value = "所属字母", example = "所属字母例如：a，b，c")
     private String       name;
+    @ApiModelProperty(value = "字母下的所有站点", example = "字母下的所有站点")
     private List<SiteVO> list;
 
     /**

@@ -51,11 +51,34 @@ public class AdDO {
      * 
      */
     private Integer createUserId;
+    private Integer type;
 
 
     
 
     /**
+	 * type
+	 *
+	 * @return  the type
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getType() {
+		return type;
+	}
+
+	/**
+	 * type
+	 *
+	 * @param   type    the type to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	/**
 	 * img_path
 	 *
 	 * @return  the img_path
@@ -155,5 +178,19 @@ public class AdDO {
     public void setCreateUserId(Integer createUserId) {
         this.createUserId = createUserId;
     }
+
+	/**
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AdDO [id=" + id + ", title=" + title + ", img_path=" + img_path + ", url=" + url + ", category="
+				+ category + ", summary=" + summary + ", content=" + content + ", createTime=" + createTime
+				+ ", updateTime=" + updateTime + ", createUserId=" + createUserId + ", type=" + type + "]";
+	}
+    
+    
+    
 
 }
