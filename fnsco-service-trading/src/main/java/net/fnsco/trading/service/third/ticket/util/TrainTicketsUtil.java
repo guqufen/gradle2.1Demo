@@ -30,8 +30,10 @@ public class TrainTicketsUtil {
        from_station    string  是   出发站简码，如：BJP
        to_station      string  是   到达站简码，如：SHH
      */
-    public static String getTicketsAvailable(String train_date, String from_station, String to_station) {
-        String url = "http://op.juhe.cn/trainTickets/ticketsAvailable?key=" + KEY + "&train_date=" + train_date
+    public static String getTicketsAvailable(String train_date, String from_station,
+                                             String to_station) {
+        String url = "http://op.juhe.cn/trainTickets/ticketsAvailable?key=" + KEY + "&train_date="
+                     + train_date
 
                      + "&from_station=" + from_station + "&to_station=" + to_station;
         String data = HttpUtils.get(url);
@@ -39,6 +41,7 @@ public class TrainTicketsUtil {
             logger.error("调用火车票查询余票接口返回空");
             return null;
         }
+        logger.error("调用火车票查询余票接口内容" + url + data);
         //{"reason":"成功的返回","result":{"list":[{"rwx_price":0,"end_station_name":"北京南","swz_price":1701,"swz_num":"181","to_station_name":"北京南","ydz_num":"108","yz_num":"--","rw_num":"--","arrive_days":"0","rz_num":"--","access_byidcard":"1","yz_price":0,"ywz_price":0,"sale_date_time":"1130","dw_price":0,"from_station_code":"HGH","rz_price":0,"gjrw_num":"--","to_station_code":"VNP","ydz_price":907,"wz_price":0,"tdz_price":0,"run_time":"05:55","dwx_price":0,"yw_num":"--","distance":0,"edz_price":538.5,"qtxb_price":0,"can_buy_now":"Y","yw_price":0,"train_type":"G","rw_price":0,"train_code":"G34","train_no":"5600000G3472","from_station_name":"杭州东","run_time_minute":"355","ywx_price":0,"dw_num":"--","gjrws_price":0,"arrive_time":"13:05","start_station_name":"杭州东","start_time":"07:10","wz_num":"--","edz_num":"190","qtxb_num":"--","train_start_date":"20171226","gjrw_price":0,"tdz_num":"--"},
         JSONObject obj = JSONObject.fromObject(data);
         String error_code = obj.getString("error_code");
@@ -138,7 +141,8 @@ public class TrainTicketsUtil {
      * @throws UnsupportedEncodingException 
      */
     public static JSONObject getOrderStatus(String orderNo) {
-        String url = "http://op.juhe.cn/trainTickets/orderStatus?key=" + KEY + "&orderid=" + orderNo;
+        String url = "http://op.juhe.cn/trainTickets/orderStatus?key=" + KEY + "&orderid="
+                     + orderNo;
         logger.error("调用火车票（订单状态查询）" + orderNo);
         String data = HttpUtils.get(url);
         logger.error("调用火车票（订单状态查询）" + data);
