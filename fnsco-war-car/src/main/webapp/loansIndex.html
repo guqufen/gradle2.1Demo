@@ -18,18 +18,18 @@
 		<div class="total">
 			<div class="amounts">
 				<span>累计贷款金额（元）</span>
-				<p>289,098,745.00</p>
+				<p>0.00</p>
 			</div>
 			<div class="scroll">
 				<div class="scrool-text">
-					<div class="scrool-text-list">2小时前  上海  133*****3770 贷款 180万</div>
-					<div class="scrool-text-list">8小时前  苏州  183*****7486 贷款 96万</div>
-					<div class="scrool-text-list">16小时前  杭州  136*****8946 贷款 174万</div>
-					<div class="scrool-text-list">21小时前  上海  184*****4888 贷款 486万</div>
-					<div class="scrool-text-list">1天前  杭州  169*****3643 贷款 68万</div>
-					<div class="scrool-text-list">1天前  杭州  163*****6751 贷款 82万</div>
-					<div class="scrool-text-list">1天前  上海  185*****4239 贷款 320万</div>
-					<div class="scrool-text-list">1天前  杭州  166*****5201 贷款 32万</div>
+					<div class="scrool-text-list">2小时前  上海  133*****3770 贷款 18万</div>
+					<div class="scrool-text-list">8小时前  苏州  183*****7486 贷款 9.6万</div>
+					<div class="scrool-text-list">16小时前  杭州  136*****8946 贷款 17万</div>
+					<div class="scrool-text-list">21小时前  上海  184*****4888 贷款 8.6万</div>
+					<div class="scrool-text-list">1天前  杭州  169*****3643 贷款 6.8万</div>
+					<div class="scrool-text-list">1天前  杭州  163*****6751 贷款 8.2万</div>
+					<div class="scrool-text-list">1天前  上海  185*****4239 贷款 32万</div>
+					<div class="scrool-text-list">1天前  杭州  166*****5201 贷款 6万</div>
 				</div>
 			</div>
 		</div>
@@ -132,10 +132,11 @@
 		mui.toast("功能正在开发，敬请期待。")
 	})
 	$.ajax({
-		url:'h5/queryAmt',
+		url:'h5/index/queryAmt',
 		type:'get',
 		success:function(data){
 			console.log(data);
+			$(".amounts p").html(data.data.result);
 		}
 	})
 </script>
