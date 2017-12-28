@@ -28,6 +28,9 @@ public interface ConfigDAO {
     @Select("SELECT id,name,value,modify_time FROM car_config WHERE status=1 AND type='01' ")
     public List<ConfigDO> getIndex();
     
+    @Select("SELECT value FROM car_config WHERE status=1 AND type='01' AND name ='2'")
+    public String getAmt();
+    
     @Results({@Result( column = "group_name",property = "groupName"),@Result( column = "order_no",property = "orderNo") })
     @Select("SELECT * FROM car_config WHERE id = #{id}")
     public ConfigDO getById(@Param("id") int id);

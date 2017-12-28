@@ -73,7 +73,7 @@ public class IndexCarController extends BaseController {
 		config1.setId(numId);
 		configService.doUpdate(config1, getUserId());
 		ConfigDO config2 = new ConfigDO();
-		config2.setValue(String.valueOf(amt));;
+		config2.setValue(String.valueOf(numberAmt));;
 		config2.setOrderNo(1);
 		config2.setModifyTime(new Date());
 		config2.setId(amtId);
@@ -81,4 +81,11 @@ public class IndexCarController extends BaseController {
 		return ResultDTO.success(index);
 	}
 	
+	@RequestMapping(value = "/queryAmt" , method = RequestMethod.GET)
+	@ApiOperation(value = "汽车累计贷款金额")
+	private ResultDTO<String> queryAmt() {
+		String amtStr = configService.queryAmt();
+		String amt = amtStr+".00";
+		return ResultDTO.success(amt);
+	}
 }

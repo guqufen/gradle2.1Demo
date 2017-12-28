@@ -109,7 +109,7 @@ public class TetterVO extends VO {
         resultList.add(temp);
         temp = new TetterVO();
         temp.setName("Z");
-        temp.setList(resultVO.getS());
+        temp.setList(resultVO.getZ());
         resultList.add(temp);
     }
 
