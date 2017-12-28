@@ -14,6 +14,8 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.service.ad.AdService;
+import net.fnsco.order.service.ad.entity.AdDTO;
+import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.web.controller.e789.jo.AccountBalanceJO;
 import net.fnsco.web.controller.e789.jo.AppAdJO;
 import net.fnsco.web.controller.e789.vo.AccountBalanceVO;
@@ -42,16 +44,16 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "/queryAd")
 	@ApiOperation(value = "查询广告资讯")
 	public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
+		if (appAdJO.getType() == null || appAdJO.getUserId() == null) {
+			return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR_ID);
+		}
 		AppAdVO vo = new AppAdVO();
-		ResultDTO<Map<String, List>> result = adService.queryAdList();
-		if (result.isSuccess() && 1 == appAdJO.getType()) {
+		ResultDTO<Map<String, List>> result = adService.queryAdList(appAdJO.getType());
+		if (result.isSuccess()) {
 			vo.setAdList(result.getData().get("ad"));
 			vo.setNewsList(result.getData().get("news"));
 			return ResultDTO.success(vo);
 
-		} else if (result.isSuccess() && 2 == appAdJO.getType()) {
-			vo.setAdList(result.getData().get("ad"));
-			return ResultDTO.success(vo);
 		} else {
 			return ResultDTO.success(result.getData());
 		}

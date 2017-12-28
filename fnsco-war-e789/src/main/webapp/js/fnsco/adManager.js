@@ -36,7 +36,7 @@ $('#table').bootstrapTable({
 		width : '10%'
 	}, {
 		field : 'category',
-		title : '类别',
+		title : '广告类型',
 		formatter : formatCategoryType
 	}, {
 		field : 'summary',
@@ -52,6 +52,10 @@ $('#table').bootstrapTable({
 	}, {
 		field : 'createUserId',
 		title : '创建人'
+	}, {
+		field : 'type',
+		title : '类别',
+		formatter : formatType
 	} ]
 });
 
@@ -67,6 +71,10 @@ function formatDate(date) {
 // 操作格式化
 function operateFormatter(value, row, index) {
 	return [
+			'<a class="redact" href="javascript:editData(' + value
+					+ ');" title="修改">',
+			'<i class="glyphicon glyphicon-file"></i>',
+			'</a>  ',
 			'<a class="redact" href="javascript:querySingle(' + value
 					+ ');" title="详情">',
 			'<i class="glyphicon glyphicon-file"></i>',
@@ -76,7 +84,7 @@ function operateFormatter(value, row, index) {
 			'<i class="glyphicon glyphicon glyphicon-trash"></i>', '</a>' ]
 			.join('');
 }
-// 推送类型格式化
+// 广告类型
 function formatCategoryType(value, row, index) {
 	if (!value) {
 		return '-';
@@ -84,6 +92,18 @@ function formatCategoryType(value, row, index) {
 		return '广告';
 	} else if (value == '2') {
 		return '资讯';
+	} else {
+		return '其他';
+	}
+}
+//类别
+function formatType(value, row, index) {
+	if (!value) {
+		return '-';
+	} else if (value == '1') {
+		return '账户页';
+	} else if (value == '2') {
+		return '火车票页';
 	} else {
 		return '其他';
 	}
@@ -165,54 +185,81 @@ function deleteSingle(id) {
 		return false;
 	});
 }
+//编辑
+function editData(id) {
+
+	$.ajax({
+		url : PROJECT_NAME + '/web/e789/ad/queryById',
+		type : 'GET',
+		data : {
+			'id' : id
+		},
+		success : function(data) {
+			unloginHandler(data);
+			if (data.success) {
+				var ad = data.data;
+				$("#myModal").modal();
+				$("#myModalLabel").html("编辑广告资讯");
+				$("#title").val(ad.title);
+				$("#img_path").val(ad.img_path);
+				$("#url").val(ad.url);
+				$("#id").val(ad.id);
+				$("#category").find("option[value=" + ad.category + "]").attr(
+						"selected", true);
+				$("#summary").val(ad.summary);
+				$("#type").find("option[value=" + ad.type + "]").attr(
+						"selected", true);
+				$(".sunmitBtn").show();
+			} else {
+				layer.msg('系统异常!');
+			}
+
+		},
+		error : function() {
+			layer.msg('系统异常!');
+		}
+	});
+}
 // 详情
 function querySingle(id) {
 	$.ajax({
-		url : PROJECT_NAME + '/web/msg/querySingle',
-		type : 'POST',
+		url : PROJECT_NAME + '/web/e789/ad/queryById',
+		type : 'GET',
 		data : {
 			'id' : id
 		},
 		success : function(data) {
 			if (data.success) {
+				var ad = data.data;
 				$("#myModal").modal();
-				$("#myModalLabel").html("活动推送消息详情");
-				$("#uploadify_file").hide();
-				$("#myModal input").attr("disabled", true);
-				$("#myModal select").attr("disabled", true);
-				$("#pushView").html('');
-				$("#pushView").append('<img src=' + data.data.imageUrl + '>')
-						.show();
-				$("#msgSubject").val(data.data.msgSubject);
-				$("#datetimepicker3").val(data.data.sendTimeStr);
-				$("#detailURL").val(data.data.detailUrl);
-				$("#msgSubtitle").val(data.data.msgSubTitle);
-				$(".remove-icon").hide();
+				$("#myModalLabel").html("广告资讯详情");
+				$("#title").val(ad.title);
+				$("#img_path").val(ad.img_path);
+				$("#url").val(ad.url);
+				$("#id").val(ad.id);
+				$("#category").find("option[value=" + ad.category + "]").attr(
+						"selected", true);
+				$("#summary").val(ad.summary);
+				$("#type").find("option[value=" + ad.type + "]").attr(
+						"selected", true);
 				$(".sunmitBtn").hide();
 			} else {
-				layer.msg('系统异常!' + e);
+				layer.msg('系统异常!');
 			}
 
 		},
 		error : function(e) {
-			layer.msg('系统异常!' + e);
+			layer.msg('系统异常!');
 		}
 	});
 }
-$("#btn_add")
-		.click(
-				function() {
-					$("#myModalLabel").html("新增广告资讯");
-					$("#myModal input").val('').attr("disabled", false);
-					$("#myModal select").attr("disabled", false);
-//					$("#uploadify_file").show();
-					$("#fileQueue").html('').show();
-//					$("#pushView")
-//							.html(
-//									'<div class="remove-icon" onclick="delPushImg()"><span class="glyphicon glyphicon-remove"></span></div>')
-//							.hide();
-					$(".sunmitBtn").show();
-				})
+$("#btn_add").click(function() {
+	$("#myModalLabel").html("新增广告资讯");
+	$("#myModal input").val('').attr("disabled", false);
+	$("#myModal select").attr("disabled", false);
+	$("#fileQueue").html('').show();
+	$(".sunmitBtn").show();
+})
 $('#datetimepicker1').datetimepicker({
 	format : 'yyyy-mm-dd',
 	autoclose : true,
@@ -292,10 +339,7 @@ $('.sunmitBtn')
 				function() {
 					var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
 					var url = $("#url").val();
-//					if (!reg.test(url)) {
-//						layer.msg('请输入正确的url');
-//						return false;
-//					}
+
 					$.ajax({
 						url : PROJECT_NAME + '/web/e789/ad/doAdd',
 						type : 'POST',
@@ -316,9 +360,6 @@ $('.sunmitBtn')
 					});
 				});
 
-
-
-
 //上传文件
 function importEvent() {
 	$('#importModal').modal();
@@ -328,7 +369,8 @@ function importEvent() {
 $(function() {
 	// 0.初始化fileinput,文件导入初始化
 	var oFileInput = new FileInput();
-	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME	+ '/web/e789/ad/doImport');
+	oFileInput.Init("excel_file_risk_inf", PROJECT_NAME
+			+ '/web/e789/ad/doImport');
 });
 
 // 初始化fileinput
