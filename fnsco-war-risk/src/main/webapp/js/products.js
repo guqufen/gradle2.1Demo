@@ -296,6 +296,8 @@ function queryEdit(id) {
 				$('#rateMax1').val(data.data.rateMax);
 				$('#desc1').val(data.data.description);
 				$('#editModel').modal();
+				oldAmtMin1 = data.data.amountMin;
+				oldRateMin1 = data.data.rateMin;
 			} else if (!data.success) {
 				layer.msg(data.message);
 			}	
@@ -586,7 +588,7 @@ $('#amountMin1').bind('input propertychange', function() {
             var decimalPart=amtMin.substring(decimalIndex+1,amtMin.length);   
             if(decimalPart.length>2){   
             	layer.msg('不能超出2位小数');  
-            	$('#amountMin').val(oldAmtMin1);
+            	$('#amountMin1').val(oldAmtMin1);
             }else{     
             	oldAmtMin1 = amtMin;
             	return false;       
@@ -609,9 +611,9 @@ var oldAmtMax1 = "";
 $('#amountMax1').bind('input propertychange', function() {  
 	var amtMax = this.value;
 	if(amtMax!=null&&amtMax!=''){   
-		if(Number(amtMin)>0&&Number(amtMin)<0.1){
+		if(Number(amtMax)>0&&Number(amtMax)<0.1){
 			layer.msg('不能低于1000');
-			$('#amountMin').val(oldAmtMin);
+			$('#amountMax1').val(oldAmtMax1);
 			return false; 
 			}
 		if(Number(amtMax) >= 5000){
