@@ -33,10 +33,10 @@ import net.fnsco.bigdata.service.dao.master.MerchantFileDao;
 import net.fnsco.bigdata.service.dao.master.MerchantFileTempDao;
 import net.fnsco.bigdata.service.domain.MerchantFile;
 import net.fnsco.bigdata.service.domain.MerchantFileTemp;
-import net.fnsco.bigdata.service.file.FileService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.constants.CoreMapConstants;
+import net.fnsco.core.file.FileService;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 
