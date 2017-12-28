@@ -179,8 +179,8 @@ $(function() {
 					$('h1').html( dd.merName+'的"风控+"报告审核页面');
 					$('#riskWarning1').html(dd.riskWarning);// 风险
 					$('#riskWarning1').show();//显示p标签
-					$('#evaluation').html(dd.evaluation);//商家评估
-					$('#evaluation').show();//显示商家评估textarea标签
+					$('#evaluation1').html(dd.evaluation);//商家评估
+					$('#evaluation1').show();//显示商家评估textarea标签
 					$('#btn_auditing').show();//显示审核成功按钮
 					$('#btn_auditingFail').show();//显示审核失败按钮
 					$('input').attr('disabled','disabled');//所有输入不可编辑
