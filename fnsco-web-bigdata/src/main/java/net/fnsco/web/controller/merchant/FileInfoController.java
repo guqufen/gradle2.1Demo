@@ -20,13 +20,11 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.alibaba.fastjson.JSONArray;
-import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
@@ -38,6 +36,7 @@ import net.fnsco.bigdata.service.domain.MerchantFileTemp;
 import net.fnsco.bigdata.service.file.FileService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.constants.CoreMapConstants;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 
@@ -373,7 +372,7 @@ public class FileInfoController extends BaseController {
 		 try {
 			 byte[] data = fileService.getFileByteArray(fileRelativePath);
 			 OutputStream output = response.getOutputStream();// 得到输出流
-			 response.setContentType(imageContentType.get(fileType));// 设定输出的类型
+			 response.setContentType(CoreMapConstants.imageContentType.get(fileType));// 设定输出的类型
 			 output.write(data);
 			 output.flush();
 		} catch (IOException e) {
@@ -382,25 +381,4 @@ public class FileInfoController extends BaseController {
 	}
 	
 	
-	private static Map<String,String> imageContentType = Maps.newHashMap();
-
-	static {
-
-	imageContentType.put("jpg","image/jpeg");
-
-	imageContentType.put("jpeg","image/jpeg");
-
-	imageContentType.put("png","image/png");
-
-	imageContentType.put("tif","image/tiff");
-
-	imageContentType.put("tiff","image/tiff");
-
-	imageContentType.put("ico","image/x-icon");
-
-	imageContentType.put("bmp","image/bmp");
-
-	imageContentType.put("gif","image/gif");
-
-	}
 }

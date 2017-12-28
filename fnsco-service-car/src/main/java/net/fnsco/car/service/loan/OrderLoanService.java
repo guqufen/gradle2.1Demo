@@ -94,7 +94,7 @@ public class OrderLoanService extends BaseService {
 					String filePath = orderFileDO.getFilePath();
 					filePath = filePath.substring(filePath.indexOf("^")+1);
 					if(!Strings.isNullOrEmpty(filePath)) {
-						orderFileDO.setFilePath(OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), filePath));
+						orderFileDO.setFilePath( filePath);
 					}
 				}
 			}
