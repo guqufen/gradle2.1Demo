@@ -66,16 +66,46 @@ public class AdService extends BaseService {
 	/**
 	 * e789获取广告资讯
 	 */
-	public ResultDTO<Map<String, List>> queryAdList() {
+	public ResultDTO<Map<String, List>> queryAdList(Integer type) {
 		List<AdDTO> adList = Lists.newArrayList();
 		List<AdDTO> newsList = Lists.newArrayList();
 		Map<String, List<AdDTO>> map = Maps.newHashMap();
-		List<AdDO> allList = this.adDAO.queryAdList();
+		List<AdDO> allList = this.adDAO.queryAdList(type);
 		if (allList.isEmpty()) {
 			return ResultDTO.failForMessage("未发现相关信息");
 		}
+		if(type == 2){
+			for (AdDO adDO : allList) {
+				if (adDO.getCategory() == null) {
+					continue;
+				}
+				if (adDO.getImg_path() == null) {
+					continue;
+				}
+				if (adDO.getImg_path().length() < 34) {
+					continue;
+				}
+				AdDTO adDTO = new AdDTO();
+				// 获取图片路径
+				String str1 = adDO.getImg_path().substring(0, 9);
+				String str2 = adDO.getImg_path().substring(10, adDO.getImg_path().length());
+				String url = OssLoaclUtil.getFileUrl(str1, str2);
+				if (!Strings.isNullOrEmpty(url)) {
+					adDTO.setImgPath(url);
+				}
+				adDTO.setSummary(adDO.getSummary());
+				adDTO.setTitle(adDO.getTitle());
+				adDTO.setUrl(adDO.getUrl());
+				adList.add(adDTO);
+				map.put("ad", adList);
+				return ResultDTO.success(map);
+			}
+		}
 		for (AdDO adDO : allList) {
 			if (adDO.getCategory() == null) {
+				continue;
+			}
+			if (adDO.getImg_path() == null) {
 				continue;
 			}
 			if (adDO.getImg_path().length() < 34) {
@@ -88,7 +118,6 @@ public class AdService extends BaseService {
 			String url = OssLoaclUtil.getFileUrl(str1, str2);
 			if (!Strings.isNullOrEmpty(url)) {
 				adDTO.setImgPath(url);
-
 			}
 			if (1 == adDO.getCategory()) {
 				adDTO.setSummary(adDO.getSummary());
@@ -101,8 +130,9 @@ public class AdService extends BaseService {
 				adDTO.setUrl(adDO.getUrl());
 				newsList.add(adDTO);
 			}
-			map.put("ad", adList);
-			map.put("news", newsList);
+				map.put("ad", adList);
+				map.put("news", newsList);
+			
 		}
 		return ResultDTO.success(map);
 

@@ -59,7 +59,7 @@ public interface AdDAO {
 	 * @throws @since
 	 *             CodingExample Ver 1.1
 	 */
-	@Select("SELECT * FROM sys_ad")
-	public List<AdDO> queryAdList();
+	@Select("SELECT * FROM sys_ad Where type = #{type}")
+	public List<AdDO> queryAdList(@Param("type")Integer type);
 
 }
