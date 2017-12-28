@@ -48,6 +48,7 @@ import net.fnsco.trading.service.pay.channel.zxyh.dto.ActiveAlipayDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.ActiveWeiXinDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.MerchantZxyhDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
+import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayResultDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.util.SignUtil;
 import net.fnsco.trading.service.pay.channel.zxyh.util.ZxyhPayMD5Util;
 
@@ -294,11 +295,12 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	 * @param reqStr：被扫实体对象
 	 * @return:被扫交易应答JSON字符串
 	 */
-	public ResultDTO PassivePay(Integer userId, PassivePayDTO passivePayDTO) {
+	public ResultDTO<PassivePayResultDTO> PassivePay(Integer userId, PassivePayDTO passivePayDTO) {
 
 		String url = "/MPay/misRequest.do";
 		String merId = env.getProperty("zxyh.merId");
-		Map<String, String> map = new HashMap<>();
+		PassivePayResultDTO passivePayResultDTO = new PassivePayResultDTO();
+//		Map<String, String> map = new HashMap<>();
 		PassivePayDTO passDTO = new PassivePayDTO();
 		passDTO.init(merId);
 
@@ -422,17 +424,25 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO1.setPayOrderNo(passDTO1.getStdrefnum());// 支付订单号(平台流水号，供后续退货或者撤销或对账使用)
 		tradeOrderService.doUpdate(tradeOrderDO1);// 通过主键更新应答数据
 
-		map.put("respCode", tradeOrderDO1.getRespCode());// 应答码
-		map.put("respMsg", tradeOrderDO1.getRespMsg());// 应答信息
-		map.put("orderNo", tradeOrderDO1.getOrderNo());// 商户订单号
-		map.put("begTime", passDTO.getStdbegtime());// 交易起始时间
-		map.put("endTime", passDTO1.getEndTime());// 支付结束时间
-		map.put("amt", passivePayDTO.getStdtranamt());// 交易金额
-		map.put("reciAmt", passDTO1.getStdreciamt());// 实收金额
-		map.put("preAmt", passDTO1.getStdpreamt());// 优惠金额
+		passivePayResultDTO.setRespCode(tradeOrderDO1.getRespCode());// 应答码
+		passivePayResultDTO.setRespMsg(tradeOrderDO1.getRespMsg());// 应答信息
+		passivePayResultDTO.setOrderNo(tradeOrderDO1.getOrderNo());// 商户订单号
+		passivePayResultDTO.setBegTime(passDTO.getStdbegtime());// 交易起始时间
+		passivePayResultDTO.setEndTime(passDTO1.getEndTime());// 支付结束时间
+		passivePayResultDTO.setAmt(passivePayDTO.getStdtranamt());// 交易金额
+		passivePayResultDTO.setReciAmt(passDTO1.getStdreciamt());// 实收金额
+		passivePayResultDTO.setPreAmt(passDTO1.getStdpreamt());// 优惠金额
+//		map.put("respCode", tradeOrderDO1.getRespCode());// 应答码
+//		map.put("respMsg", tradeOrderDO1.getRespMsg());// 应答信息
+//		map.put("orderNo", tradeOrderDO1.getOrderNo());// 商户订单号
+//		map.put("begTime", passDTO.getStdbegtime());// 交易起始时间
+//		map.put("endTime", passDTO1.getEndTime());// 支付结束时间
+//		map.put("amt", passivePayDTO.getStdtranamt());// 交易金额
+//		map.put("reciAmt", passDTO1.getStdreciamt());// 实收金额
+//		map.put("preAmt", passDTO1.getStdpreamt());// 优惠金额
 
 		// return map.toString();
-		return ResultDTO.success(map);
+		return ResultDTO.success(passivePayResultDTO);
 	}
 
 	/**

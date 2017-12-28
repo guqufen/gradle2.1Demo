@@ -1,6 +1,9 @@
 package net.fnsco.web.agent;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,12 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import net.fnsco.car.service.agent.AgentService;
 import net.fnsco.car.service.agent.dao.AgentDAO;
 import net.fnsco.car.service.agent.entity.AgentDO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.constants.CoreMapConstants;
+import net.fnsco.core.file.FileService;
 import net.fnsco.freamwork.business.WebUserDTO;
 
 /**
@@ -32,6 +38,9 @@ public class CarAgentWebController extends BaseController {
 	
 	@Autowired
 	private AgentService agentService;
+	
+	@Autowired
+	private FileService fileService;
 	
 	/**
 	 * query:(分页查询)
@@ -162,5 +171,29 @@ public class CarAgentWebController extends BaseController {
 			 }
 		 }
 		 return ResultDTO.success(new AgentDO());
+	}
+	
+	/**
+	 * getImageStream:(这里用一句话描述这个方法的作用)
+	 *
+	 * @param      设定文件
+	 * @return void    DOM对象
+	 * @author tangliang
+	 * @date   2017年12月28日 上午11:45:46
+	 */
+	@RequestMapping(value = "/getImageStream",method = RequestMethod.GET)
+	@ResponseBody
+	public void getImageStream(){
+		String fileRelativePath = request.getParameter("filePath");
+		String fileType = fileRelativePath.substring(fileRelativePath.lastIndexOf(".") + 1).toLowerCase();
+		 try {
+			 byte[] data = fileService.getFileByteArray(fileRelativePath);
+			 OutputStream output = response.getOutputStream();// 得到输出流
+			 response.setContentType(CoreMapConstants.imageContentType.get(fileType));// 设定输出的类型
+			 output.write(data);
+			 output.flush();
+		} catch (IOException e) {
+			logger.error("获取文件异常!",e);
+		}
 	}
 }

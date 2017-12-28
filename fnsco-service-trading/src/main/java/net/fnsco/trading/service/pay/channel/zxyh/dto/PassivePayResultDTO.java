@@ -1,10 +1,13 @@
-package net.fnsco.web.controller.e789.vo;
+package net.fnsco.trading.service.pay.channel.zxyh.dto;
 
 import io.swagger.annotations.ApiModelProperty;
-import net.fnsco.core.base.VO;
+import net.fnsco.core.base.DTO;
 
-public class PassiveVO extends VO {
+public class PassivePayResultDTO extends DTO {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	@ApiModelProperty(value = "应答码", example = "应答码")
 	private String respCode;
