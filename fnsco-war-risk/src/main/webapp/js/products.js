@@ -199,13 +199,13 @@ function queryEventStop() {
 
 //新增按钮事件
 function addProducts() {
-	$('#name').val();
-	$('#amountMin').val();
-	$('#amountMax').val();
-	$('#cycle').val();
-	$('#rateMin').val();
-	$('#rateMax').val();
-	$('#desc').val();
+	$('#name').val(null);
+	$('#amountMin').val(null);
+	$('#amountMax').val(null);
+	$('#cycle').val(null);
+	$('#rateMin').val(null);
+	$('#rateMax').val(null);
+	$('#desc').val(null);
 	$('#addModal').modal();
 }
 
@@ -476,3 +476,345 @@ function queryDelete(id) {
 		layer.msg('取消成功');
 	});
 }
+
+var oldAmtMin = "";
+$('#amountMin').bind('input propertychange', function() {  
+	var amtMax = $('#amountMax').val();
+	var amtMin = this.value;
+	if(amtMax!=null&&amtMax!=''){  
+		if(Number(amtMin) >= Number(amtMax)){
+		layer.msg('不能超出或等于最大额度');
+		$('#amountMin').val(oldAmtMin);
+		return false; 
+		}
+	}
+	if(amtMin!=null&&amtMin!=''){   
+		if(Number(amtMin)>0&&Number(amtMin)<0.1){
+			layer.msg('不能低于1000');
+			$('#amountMin').val(oldAmtMin);
+			return false; 
+			}
+		if(Number(amtMin) >= 5000){
+			layer.msg('不能超出5000万');
+			$('#amountMin').val(oldAmtMin);
+			return false; 
+			}
+        var decimalIndex=amtMin.indexOf('.');     
+        if(decimalIndex=='-1'){     
+        	oldAmtMin = amtMin;
+        	return false;       
+        }else{     
+            var decimalPart=amtMin.substring(decimalIndex+1,amtMin.length);   
+            if(decimalPart.length>2){   
+            	layer.msg('不能超出2位小数');  
+            	$('#amountMin').val(oldAmtMin);
+            }else{     
+            	oldAmtMin = amtMin;
+            	return false;       
+            }     
+        }     
+    }       
+});
+$("#amountMax").change( function() {
+	var amtMin = $('#amountMin').val();
+	var amtMax = this.value;
+	if(amtMin!=null&&amtMin!=''){  
+		if(Number(amtMin) >= Number(amtMax)){
+		layer.msg('不能小于或等于最低额度');
+		$('#amountMax').val(null);
+		return false; 
+		}
+	}
+	});
+var oldAmtMax = "";
+$('#amountMax').bind('input propertychange', function() {  
+	var amtMax = this.value;
+	if(amtMax!=null&&amtMax!=''){   
+		if(Number(amtMax)>0&&Number(amtMax)<0.1){
+			layer.msg('不能低于1000');
+			$('#amountMax').val(oldAmtMax);
+			return false; 
+			}
+		if(Number(amtMax) >= 5000){
+			layer.msg('不能超出5000万');
+			$('#amountMax').val(oldAmtMax);
+			return false; 
+			}
+        var decimalIndex=amtMax.indexOf('.');     
+        if(decimalIndex=='-1'){     
+        	oldAmtMax = amtMax;
+        	return false;       
+        }else{     
+            var decimalPart=amtMax.substring(decimalIndex+1,amtMax.length);   
+            if(decimalPart.length>2){   
+            	layer.msg('不能超出2位小数');  
+            	$('#amountMax').val(oldAmtMax);
+            }else{     
+            	oldAmtMax = amtMax;
+            	return false;       
+            }     
+        }     
+    }       
+});
+var oldAmtMin1 = "";
+$('#amountMin1').bind('input propertychange', function() {  
+	var amtMax = $('#amountMax1').val();
+	var amtMin = this.value;
+	if(amtMax!=null&&amtMax!=''){  
+		if(Number(amtMin) >= Number(amtMax)){
+		layer.msg('不能超出或等于最大额度');
+		$('#amountMin1').val(oldAmtMin1);
+		return false; 
+		}
+	}
+	if(amtMin!=null&&amtMin!=''){   
+		if(Number(amtMin)>0&&Number(amtMin)<0.1){
+			layer.msg('不能低于1000');
+			$('#amountMin1').val(oldAmtMin1);
+			return false; 
+			}
+		if(Number(amtMin) >= 5000){
+			layer.msg('不能超出5000万');
+			$('#amountMin1').val(oldAmtMin1);
+			return false; 
+			}
+        var decimalIndex=amtMin.indexOf('.');     
+        if(decimalIndex=='-1'){     
+        	oldAmtMin1 = amtMin;
+        	return false;       
+        }else{     
+            var decimalPart=amtMin.substring(decimalIndex+1,amtMin.length);   
+            if(decimalPart.length>2){   
+            	layer.msg('不能超出2位小数');  
+            	$('#amountMin').val(oldAmtMin1);
+            }else{     
+            	oldAmtMin1 = amtMin;
+            	return false;       
+            }     
+        }     
+    }       
+});
+$("#amountMax1").change( function() {
+	var amtMin = $('#amountMin1').val();
+	var amtMax = this.value;
+	if(amtMin!=null&&amtMin!=''){  
+		if(Number(amtMin) >= Number(amtMax)){
+		layer.msg('不能小于或等于最低额度');
+		$('#amountMax1').val(null);
+		return false; 
+		}
+	}
+	});
+var oldAmtMax1 = "";
+$('#amountMax1').bind('input propertychange', function() {  
+	var amtMax = this.value;
+	if(amtMax!=null&&amtMax!=''){   
+		if(Number(amtMin)>0&&Number(amtMin)<0.1){
+			layer.msg('不能低于1000');
+			$('#amountMin').val(oldAmtMin);
+			return false; 
+			}
+		if(Number(amtMax) >= 5000){
+			layer.msg('不能超出5000万');
+			$('#amountMax1').val(oldAmtMax1);
+			return false; 
+			}
+        var decimalIndex=amtMax.indexOf('.');     
+        if(decimalIndex=='-1'){     
+        	oldAmtMax1 = amtMax;
+        	return false;       
+        }else{     
+            var decimalPart=amtMax.substring(decimalIndex+1,amtMax.length);   
+            if(decimalPart.length>2){   
+            	layer.msg('不能超出2位小数');  
+            	$('#amountMax1').val(oldAmtMax1);
+            }else{     
+            	oldAmtMax1 = amtMax;
+            	return false;       
+            }     
+        }     
+    }       
+});
+
+
+
+
+var oldRateMin = "";
+$('#rateMin').bind('input propertychange', function() {  
+	var rateMax = $('#rateMax').val();
+	var rateMin = this.value;
+	if(rateMax!=null&&rateMax!=''){  
+		if(Number(rateMin) >= Number(rateMax)){
+		layer.msg('不能超出或等于最大费率');
+		$('#rateMin').val(oldRateMin);
+		return false; 
+		}
+	}
+	if(rateMin!=null&&rateMin!=''){   
+		if(Number(rateMin)>0&&Number(rateMin)<0.01){
+			layer.msg('不能低于0.01%');
+			$('#rateMin').val(oldRateMin);
+			return false; 
+			}
+		if(Number(rateMin) >= 100){
+			layer.msg('不能超出100%');
+			$('#rateMin').val(oldRateMin);
+			return false; 
+			}
+        var decimalIndex=rateMin.indexOf('.');     
+        if(decimalIndex=='-1'){     
+        	oldRateMin = rateMin;
+        	return false;       
+        }else{     
+            var decimalPart=rateMin.substring(decimalIndex+1,rateMin.length);   
+            if(decimalPart.length>3){   
+            	layer.msg('不能超出3位小数');  
+            	$('#rateMin').val(oldRateMin);
+            }else{     
+            	oldRateMin = rateMin;
+            	return false;       
+            }     
+        }     
+    }       
+});
+$("#rateMax").change( function() {
+	var rateMin = $('#rateMin').val();
+	var rateMax = this.value;
+	if(rateMin!=null&&rateMin!=''){  
+		if(Number(rateMin) >= Number(rateMax)){
+		layer.msg('不能小于或等于最小费率');
+		$('#rateMax').val(null);
+		return false; 
+		}
+	}
+	});
+var oldRateMax = "";
+$('#rateMax').bind('input propertychange', function() {  
+	var rateMax = this.value;
+	if(rateMax!=null&&rateMax!=''){   
+		if(Number(rateMax)>0&&Number(rateMax)<0.1){
+			layer.msg('不能低于0.01%');
+			$('#rateMax').val(oldRateMax);
+			return false; 
+			}
+		if(Number(rateMax) >= 5000){
+			layer.msg('不能超出100%');
+			$('#rateMax').val(oldRateMax);
+			return false; 
+			}
+        var decimalIndex=rateMax.indexOf('.');     
+        if(decimalIndex=='-1'){     
+        	oldRateMax = rateMax;
+        	return false;       
+        }else{     
+            var decimalPart=rateMax.substring(decimalIndex+1,rateMax.length);   
+            if(decimalPart.length>3){   
+            	layer.msg('不能超出3位小数');  
+            	$('#rateMax').val(oldRateMax);
+            }else{     
+            	oldRateMax = rateMax;
+            	return false;       
+            }     
+        }     
+    }       
+});
+var oldRateMin1 = "";
+$('#rateMin1').bind('input propertychange', function() {  
+	var rateMax = $('#rateMax1').val();
+	var rateMin = this.value;
+	if(rateMax!=null&&rateMax!=''){  
+		if(Number(rateMin) >= Number(rateMax)){
+		layer.msg('不能超出或等于最大费率');
+		$('#rateMin1').val(oldRateMin1);
+		return false; 
+		}
+	}
+	if(rateMin!=null&&rateMin!=''){   
+		if(Number(rateMin)>0&&Number(rateMin)<0.01){
+			layer.msg('不能低于0.01%');
+			$('#rateMin1').val(oldRateMin1);
+			return false; 
+			}
+		if(Number(rateMin) >= 100){
+			layer.msg('不能超出100%');
+			$('#rateMin1').val(oldRateMin1);
+			return false; 
+			}
+        var decimalIndex=rateMin.indexOf('.');     
+        if(decimalIndex=='-1'){     
+        	oldRateMin1 = rateMin;
+        	return false;       
+        }else{     
+            var decimalPart=rateMin.substring(decimalIndex+1,rateMin.length);   
+            if(decimalPart.length>3){   
+            	layer.msg('不能超出3位小数');  
+            	$('#rateMin1').val(oldRateMin1);
+            }else{     
+            	oldRateMin1 = rateMin;
+            	return false;       
+            }     
+        }     
+    }       
+});
+$("#rateMax1").change( function() {
+	var rateMin = $('#rateMin1').val();
+	var rateMax = this.value;
+	if(rateMin!=null&&rateMin!=''){  
+		if(Number(rateMin) >= Number(rateMax)){
+		layer.msg('不能小于或等于最小费率');
+		$('#rateMax1').val(null);
+		return false; 
+		}
+	}
+	});
+var oldRateMax1 = "";
+$('#rateMax1').bind('input propertychange', function() {  
+	var rateMax = this.value;
+	if(rateMax!=null&&rateMax!=''){   
+		if(Number(rateMax)>0&&Number(rateMax)<0.1){
+			layer.msg('不能低于0.01%');
+			$('#rateMax1').val(oldRateMax1);
+			return false; 
+			}
+		if(Number(rateMax) >= 5000){
+			layer.msg('不能超出100%');
+			$('#rateMax1').val(oldRateMax1);
+			return false; 
+			}
+        var decimalIndex=rateMax.indexOf('.');     
+        if(decimalIndex=='-1'){     
+        	oldRateMax1 = rateMax;
+        	return false;       
+        }else{     
+            var decimalPart=rateMax.substring(decimalIndex+1,rateMax.length);   
+            if(decimalPart.length>3){   
+            	layer.msg('不能超出3位小数');  
+            	$('#rateMax1').val(oldRateMax1);
+            }else{     
+            	oldRateMax1 = rateMax;
+            	return false;       
+            }     
+        }     
+    }       
+});
+
+var oldName = "";
+$('#name').bind('input propertychange', function() {  
+	var name = this.value;
+	if(name!=null&&name!=''){   
+        var decimalIndex=rateMax.indexOf('.');     
+        if(decimalIndex=='-1'){     
+        	oldName = name;
+        	return false;       
+        }else{     
+            var decimalPart=name.substring(decimalIndex+1,name.length);   
+            if(decimalPart.length>16){   
+            	layer.msg('不能超出16个字');  
+            	$('#rateMax1').val(oldName);
+            }else{     
+            	oldName = name;
+            	return false;       
+            }     
+        }     
+    }       
+});
