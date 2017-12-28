@@ -53,8 +53,8 @@ public class TicketService extends BaseService {
         if (Strings.isNullOrEmpty(buyDate)) {
             return resultList;
         }
-        //Map data = getTicketsAvailable(buyDate, startSite, endSite);
-        String data = TrainTicketsUtil.getTicketsAvailable("2017-12-26", "HGH", "VNP");
+        String data = TrainTicketsUtil.getTicketsAvailable(buyDate, startSite, endSite);
+        //String data = TrainTicketsUtil.getTicketsAvailable("2017-12-26", "HGH", "VNP");
         if (Strings.isNullOrEmpty(data)) {
             return resultList;
         }
