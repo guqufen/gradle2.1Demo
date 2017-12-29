@@ -12,9 +12,8 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
+import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayResultDTO;
 import net.fnsco.web.controller.e789.jo.PassivePayJO;
-import net.fnsco.web.controller.e789.jo.PassiveResultQueryJO;
-import net.fnsco.web.controller.e789.vo.PassiveVO;
 
 @RestController
 @RequestMapping(value = "/app2c/trade/passivePay", method = RequestMethod.POST)
@@ -32,7 +31,7 @@ public class PassivePayController extends BaseController {
 	 */
 	@RequestMapping("/pay")
 	@ApiOperation(value = "扫一扫-支付交易接口url")
-	public ResultDTO<PassiveVO> ZxyhPassivePay(@RequestBody PassivePayJO passivePayJO) {
+	public ResultDTO<PassivePayResultDTO> ZxyhPassivePay(@RequestBody PassivePayJO passivePayJO) {
 
 		PassivePayDTO passivePayDTO = new PassivePayDTO();
 		passivePayDTO.setStdtranamt(passivePayJO.getAmt());// 交易金额
