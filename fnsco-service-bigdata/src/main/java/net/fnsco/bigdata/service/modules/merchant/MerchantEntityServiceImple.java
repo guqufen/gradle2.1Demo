@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
+import net.fnsco.bigdata.api.dto.IndustryDTO;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
@@ -184,6 +185,14 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 			return 1;
 		}
 		return 1;
+	}
+
+	public ResultPageDTO<IndustryDTO> pageNameList(IndustryDTO industryDO, Integer page, Integer rows) {
+		 PageDTO<IndustryDTO> pages = new PageDTO<IndustryDTO>(page, rows, industryDO);
+		List<IndustryDTO> list = merchantEntityDao.pageNameList(pages);
+		Integer total = merchantEntityDao.pageNameListCount(industryDO);
+		ResultPageDTO<IndustryDTO> pager = new ResultPageDTO<>(total, list);
+		return pager;
 	}
 
 }

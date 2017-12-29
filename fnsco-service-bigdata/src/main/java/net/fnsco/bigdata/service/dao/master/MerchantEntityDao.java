@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
+import net.fnsco.bigdata.api.dto.IndustryDTO;
 import net.fnsco.bigdata.api.dto.MerEntityDTO;
 import net.fnsco.bigdata.api.dto.MerchantShopDTO;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
@@ -102,5 +103,10 @@ public interface MerchantEntityDao {
      * @return
      */
     int updateByEntityInnerCode(MerchantEntity record);
+
+    
+    
+	List<IndustryDTO> pageNameList(PageDTO<IndustryDTO> pages);
+	Integer pageNameListCount(IndustryDTO industryDO);
     
 }

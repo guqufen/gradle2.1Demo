@@ -3,6 +3,7 @@ package net.fnsco.web.controller.merentity;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.beust.jcommander.Strings;
 
 import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
+import net.fnsco.bigdata.api.dto.IndustryDTO;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
@@ -170,5 +172,15 @@ public class MerchantEntityController extends BaseController {
 		}
 		logger.info("查询渠道商户实体列表");
 		return merchantEntityService.queryChannelMerPageList(entityInnerCode, currentPageNum, pageSize);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/queryList", method = RequestMethod.GET)
+	public ResultDTO pageList(IndustryDTO industryDO){
+		Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
+        Integer page = params.get("currentPageNum");
+        Integer rows = params.get("pageSize");
+        ResultPageDTO<IndustryDTO> pager = this.merchantEntityService.pageNameList(industryDO, page, rows);
+		return success(pager);
 	}
 }

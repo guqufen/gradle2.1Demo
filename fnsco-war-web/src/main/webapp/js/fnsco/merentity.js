@@ -67,6 +67,98 @@ function operateFormatter(value, row, index) {
         '</a>  '
     ].join('');
 }
+
+///////////////////////////////////////////////////////////////////
+//初始化行业表格
+initIndustryTableData();
+function initIndustryTableData(){
+	  $('#industryTable').bootstrapTable({
+	        sidePagination:'server',
+	        search: false, // 是否启动搜索栏
+	        url:PROJECT_NAME + '/web/merchantentity/queryList',
+	        showRefresh: true,// 是否显示刷新按钮
+	        showPaginationSwitch: false,// 是否显示 数据条数选择框(分页是否显示)
+	        toolbar: '#banksToolbar',  // 工具按钮用哪个容器
+	        striped: true,   // 是否显示行间隔色
+	        cache: false,   // 是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+	        pagination: true,   // 是否显示分页（*）
+	        sortable: true,   // 是否启用排序
+	        sortOrder: "asc",   // 排序方式
+	        pageNumber:1,   // 初始化加载第一页，默认第一页
+	        pageSize: 15,   // 每页的记录行数（*）
+	        pageList: [15, 20, 50, 100], // 可供选择的每页的行数（*）
+	        queryParams:queryParamsIndustry,	
+	        responseHandler:responseIndustryHandler,// 处理服务器返回数据
+	        columns: [{
+	            field: 'state',
+	            radio: true,
+	            rowspan:1,
+	            align: 'center',
+	            valign: 'middle'
+	        },{
+	            field: 'businessForm',
+	            title: '行业分类',
+	            width:'25%'
+	        },{
+	            field: 'first',
+	            title: '一级分类',
+	            width:'25%'
+	        }, {
+	            field: 'third',
+	            title: '二级分类',
+	            width:'25%'
+	        }, {
+	            width:120,
+	            field: 'fourth',
+	            title: '三级分类',
+	            width:'25%'
+	        }]
+	    });
+}
+
+
+//组装请求参数
+function queryParamsIndustry(params)
+{
+   var param ={
+       currentPageNum : this.pageNumber,
+       pageSize : this.pageSize,
+       businessForm :$.trim($('#txt_search_businessForm').val())
+   }
+   return param;
+}
+
+$('#btn_select_industry').click(function(){
+	var select_data = $('#industryTable').bootstrapTable('getSelections')[0];
+	  if(!select_data){
+	    layer.msg('请选择行业!');return
+	  }
+	  var indust = "";
+	  if(select_data.fourth != ""){
+		  indust = select_data.first+'--'+select_data.third+'--'+select_data.fourth;
+		}else if(select_data.third != ""){
+			indust = select_data.first+'--'+select_data.third;
+		}else if(select_data.first != ""){
+			indust = select_data.first;
+		}
+
+	  $('#industryModal').modal('hide');
+	  $("#industry").val(indust);
+	  $("#industryCode").val(select_data.code);
+});
+
+//条件查询按钮事件
+function queryIndustryEvent(id){
+   $('#'+id).bootstrapTable('refresh');
+}
+//重置按钮事件
+function resetEvent(form,id){
+   $('#'+form)[0].reset();
+   $('#'+id).bootstrapTable('refresh');
+}
+
+
+///////////////////////////////////////////////////////////
 //组装请求参数
 function queryParams(params)
 {
@@ -96,6 +188,25 @@ function responseHandler(res) {
         };
     }
 }
+
+//处理后台返回数据
+function responseIndustryHandler(res) { 
+	console.log(res);
+	unloginHandler(res);
+    if (res) {
+        return {
+            "rows" : res.data.list,
+            "total" : res.data.total
+        };
+    } else {
+        return {
+            "rows" : [],
+            "total" : 0
+        };
+    }
+}
+
+
 function formatStatus(value, row, index){
 	if(!value){
 		return '--';
