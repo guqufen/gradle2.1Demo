@@ -494,7 +494,7 @@ public class ReportService extends BaseService {
 	public ResultDTO queryReportDetails(Integer merchantId) {
 		ReportInfoDO reportInfoDO = reportInfoDAO.getById(merchantId);
 		if (!Strings.isNullOrEmpty(reportInfoDO.getIndustry())) {
-			IndustryDO industryDO = industryDAO.getById(Integer.parseInt(reportInfoDO.getIndustry()));
+			IndustryDO industryDO = industryDAO.getByCode(reportInfoDO.getIndustry());
 			if (!Strings.isNullOrEmpty(industryDO.getFourth())) {
 				reportInfoDO.setIndustryName(
 						industryDO.getFirst() + "--" + industryDO.getThird() + "--" + industryDO.getFourth());
