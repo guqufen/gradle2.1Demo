@@ -75,7 +75,7 @@ function initIndustryTableData(){
 	  $('#industryTable').bootstrapTable({
 	        sidePagination:'server',
 	        search: false, // 是否启动搜索栏
-	        url:PROJECT_NAME + '/web/merchantentity/queryList',
+	        url:PROJECT_NAME + '/web/industry/queryList',
 	        showRefresh: true,// 是否显示刷新按钮
 	        showPaginationSwitch: false,// 是否显示 数据条数选择框(分页是否显示)
 	        toolbar: '#banksToolbar',  // 工具按钮用哪个容器
@@ -149,12 +149,12 @@ $('#btn_select_industry').click(function(){
 
 //条件查询按钮事件
 function queryIndustryEvent(id){
-   $('#'+id).bootstrapTable('refresh');
+   $('#industryTable').bootstrapTable('refresh');
 }
 //重置按钮事件
-function resetEvent(form,id){
+function resetIndustryEvent(form,id){
    $('#'+form)[0].reset();
-   $('#'+id).bootstrapTable('refresh');
+   $('#industryTable').bootstrapTable('refresh');
 }
 
 

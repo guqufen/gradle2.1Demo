@@ -106,7 +106,5 @@ public interface MerchantEntityDao {
 
     
     
-	List<IndustryDTO> pageNameList(PageDTO<IndustryDTO> pages);
-	Integer pageNameListCount(IndustryDTO industryDO);
     
 }

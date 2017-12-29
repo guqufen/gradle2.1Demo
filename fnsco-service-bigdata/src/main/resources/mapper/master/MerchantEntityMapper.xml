@@ -26,14 +26,14 @@
     <result column="etps_attr" property="etpsAttr" jdbcType="INTEGER" />
   </resultMap>
   
-    <resultMap id="IndustryResultMap" type="net.fnsco.bigdata.api.dto.IndustryDTO" >
+ <!--    <resultMap id="IndustryResultMap" type="net.fnsco.bigdata.api.dto.IndustryDTO" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="code" property="code" jdbcType="VARCHAR" />
     <result column="business_form" property="businessForm" jdbcType="VARCHAR" />
     <result column="first" property="first" jdbcType="VARCHAR" />
     <result column="third" property="third" jdbcType="VARCHAR" />
     <result column="fourth" property="fourth" jdbcType="VARCHAR" />
-  </resultMap>
+  </resultMap> -->
   
   <sql id="Base_Column_List" >
     id, entity_inner_code, merc_name, legal_person, legal_person_mobile, business_license_num, 
@@ -41,9 +41,9 @@
     last_modefy_user_id,scores,regist_address,regist_province,regist_city,regist_area,regist_address_detail,etps_attr
   </sql>
   
-  <sql id="Industry_Column_List" >
+<!--   <sql id="Industry_Column_List" >
     id, code,business_form,first,third,fourth
-  </sql>
+  </sql> -->
  <!-- 店铺列表结果集 -->
   <resultMap id="MerShopResultMap" type="net.fnsco.bigdata.api.dto.MerchantShopDTO" >
     <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
@@ -558,24 +558,5 @@
   </update>
 
 
-	<!-- 商户实体获取行业code -->
-	<select id="pageNameList" parameterType="net.fnsco.bigdata.api.dto.IndustryDTO" resultMap="IndustryResultMap">
-		select
-		<include refid="Industry_Column_List" />
-		from sys_industry
-		<where>
-
-		</where>
-		ORDER BY id DESC
-		limit #{startRow} , #{perPageSize} 
-	</select>
-  <!-- 条件查询总数 -->
-  <select id="pageNameListCount" parameterType="net.fnsco.bigdata.api.dto.IndustryDTO" resultType="java.lang.Integer">
-     select count(*)  from 
-     		sys_industry
-  	 <where>
-  	 
-  	 </where>
-  </select>
   
 </mapper>

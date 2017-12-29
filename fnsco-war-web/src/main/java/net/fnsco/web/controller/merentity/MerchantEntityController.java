@@ -174,13 +174,5 @@ public class MerchantEntityController extends BaseController {
 		return merchantEntityService.queryChannelMerPageList(entityInnerCode, currentPageNum, pageSize);
 	}
 	
-	@ResponseBody
-	@RequestMapping(value = "/queryList", method = RequestMethod.GET)
-	public ResultDTO pageList(IndustryDTO industryDO){
-		Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
-        Integer page = params.get("currentPageNum");
-        Integer rows = params.get("pageSize");
-        ResultPageDTO<IndustryDTO> pager = this.merchantEntityService.pageNameList(industryDO, page, rows);
-		return success(pager);
-	}
+	
 }

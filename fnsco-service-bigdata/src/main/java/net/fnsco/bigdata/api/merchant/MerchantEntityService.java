@@ -64,5 +64,4 @@ public interface MerchantEntityService {
      */
 	Integer getEtpsTypeByEtpsAttra(int etps_attr);
 
-	ResultPageDTO<IndustryDTO> pageNameList(IndustryDTO industryDO, Integer page, Integer rows);
 }
