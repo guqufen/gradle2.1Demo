@@ -33,8 +33,8 @@ public interface TradeDataDAO {
 	 * @param amt
 	 * @return
 	 */
-    @Select("SELECT SUM(amt) FROM t_trade_data WHERE time_stamp >= #{startTime} AND time_stamp < #{endTime} AND inner_code IN (SELECT inner_code FROM m_merchant_core_entity_ref WHERE "
-    		+ "entity_inner_code = #{entityInnerCode} ) AND STATUS = 1 AND amt <= #{amt}")
+    @Select("SELECT SUM(CAST(amt AS SIGNED)) FROM t_trade_data WHERE time_stamp >= #{startTime} AND time_stamp < #{endTime} AND inner_code IN (SELECT inner_code FROM m_merchant_core_entity_ref WHERE "
+    		+ "entity_inner_code = #{entityInnerCode} ) AND STATUS = 1 AND CAST(amt AS SIGNED) <= #{amt}")
 	public String queryMerchantMouthSum(@Param("startTime")String startTime,@Param("endTime")String endTime,@Param("entityInnerCode")String entityInnerCode,@Param("amt")String amt);
 
 }

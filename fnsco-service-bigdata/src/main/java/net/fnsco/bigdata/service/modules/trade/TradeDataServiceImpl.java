@@ -439,12 +439,6 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
         List<TradeData> datas = tradeListDAO.queryByAllCondition(tradeData);
-        for (TradeData merchantdo : datas) {
-            String id = merchantdo.getTermId();
-            String code = merchantdo.getInnerCode();
-            String sn = merchantTerminalDao.querySnCode(id, code);
-            merchantdo.setSnCode(sn);
-        }
         for (TradeData tradeData2 : datas) {
             if (!Strings.isNullOrEmpty(tradeData2.getInnerCode())) {
                 MerchantCore core = merchantCoreDao.selectByInnerCode(tradeData2.getInnerCode());

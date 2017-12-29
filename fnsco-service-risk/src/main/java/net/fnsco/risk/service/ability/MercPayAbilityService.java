@@ -95,7 +95,7 @@ public class MercPayAbilityService extends BaseService {
 						// 计算预估商户收入=商户实际交易流水/该商户的pos使用率
 						if (!Strings.isNullOrEmpty(totalAmount)) {
 							BigDecimal forecastIncome = new BigDecimal(totalAmount)
-									.divide(new BigDecimal(industryDO.getPosUsage()));
+									.divide(new BigDecimal(industryDO.getPosUsage()),2,BigDecimal.ROUND_HALF_UP);
 
 							// 计算商户的还款能力=预估商户收入*净利率
 							BigDecimal payAbility = forecastIncome

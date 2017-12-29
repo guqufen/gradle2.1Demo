@@ -46,7 +46,7 @@
 	padding-right:20px;
 }
 .page-header span{
-	font-size:16px;
+	font-size:14px;
 	font-weight:bolder;	
 }
 .halfDiv{
@@ -55,7 +55,7 @@
 }
 .halfDiv .panel{
 	margin:10px;
-	font-size:16px;
+	font-size: 14px;
 }
 .wholeDiv{
 	float:left;
@@ -63,14 +63,14 @@
 }
 .wholeDiv .panel{
 	margin:10px;
-	font-size:16px;
+	font-size: 14px;
 }
 .centenTit{
 	padding:50px 0;
 	text-align:center;
 }
 .report-infos{
-	height:150px;
+	height: 140px;
 }
 .report-infos .report-info{
 	padding:12px 10px;
@@ -86,7 +86,7 @@
 	float: right;
 }
 .panel-title{
-	font-size:16px;
+	font-size: 14px;
 }
 .recharge{
 	float:right;
