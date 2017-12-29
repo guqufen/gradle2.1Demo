@@ -902,7 +902,7 @@ function posHtml(num){
 function terminalRatesHtml(num){
         return '<div class="addTerminalRates addTerminalRates'+num+'">'+
         '<div class="remove-icon remove-terminalRatesList'+num+'" editid="'+num+'" onclick="removeTerminalRates('+num+')"><span class="glyphicon glyphicon-remove"></span></div>'+
-        '<div class="col-sm-4"><label class="control-label" for="terminalType'+num+'">支付方式：</label><select id="terminalType'+num+'" name="terminalType'+num+'" class="terminalType form-control" onchange=changeTerminalType('+ num + ')><option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option></select></div>'+
+        '<div class="col-sm-4"><label class="control-label" for="terminalType'+num+'">支付方式：</label><select id="terminalType'+num+'" name="terminalType'+num+'" class="terminalType form-control" onchange=changeTerminalType('+ num + ')><option value="00">刷卡</option><option value="01">扫码</option><option value="02">微信</option><option value="03">支付宝</option><option value="04">微信公众号</option><option value="05">H5</option></select></div>'+
         '<div class="col-sm-4"><label class="control-label" for="terminalCode'+num+'">终端编号：</label><input type="text" class="form-control terminalCode" id="terminalCode'+num+'" name="terminalCode'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="alipayFee'+num+'">支付宝费率：</label><input type="text" class="form-control alipayFee" id="alipayFee'+num+'" name="alipayFee'+num+'" required="required"></div>'+
         '<div class="col-sm-4"><label class="control-label" for="wechatFee'+num+'">微信费率：</label><input type="text" class="form-control wechatFee" id="wechatFee'+num+'" name="wechatFee'+num+'" required="required"></div>'+
@@ -1047,7 +1047,7 @@ function changeTerminalType(num,innerCode,weChat1,weChat2){
     $("#debitCardMaxFee"+num).val('');// 借记卡封顶值
     $("#wechatFee"+num).val('');// 微信费率
     $("#categroryId"+num).html('');// 二级类目
-	}else if(typeVal=='04'){// 微信公众号
+	}else if(typeVal=='04' ){// 微信公众号或H5
 		$("#wechatFee"+num).attr('disabled',false);
 		$("#settleCycle"+num).attr('disabled',false);
 		$("#qGroupId"+num).attr('disabled',false);

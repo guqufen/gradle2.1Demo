@@ -793,9 +793,11 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 			merchantCoreEntityZxyhDTO.setWXActive("N");
 		}
 		// 公众号
+//		merchantCoreEntityZxyhDTO.setSubAppid(terminalWX.getSubAppId());// 关联公众号
+//		merchantCoreEntityZxyhDTO.setJsapiPath(terminalWX.getJsapiPath());
 		MerchantTerminal terminalGZH = core.getTerminaInfosGZH();
 		if (terminalGZH != null) {
-			merchantCoreEntityZxyhDTO.setSubAppid(terminalGZH.getSubAppId().toString());// 关联公众号
+			merchantCoreEntityZxyhDTO.setSubAppid(terminalGZH.getSubAppId());// 关联公众号
 			merchantCoreEntityZxyhDTO.setJsapiPath(terminalGZH.getJsapiPath());
 		}
 		MerchantTerminal terminalZFB = core.getTerminaInfosZFB();
