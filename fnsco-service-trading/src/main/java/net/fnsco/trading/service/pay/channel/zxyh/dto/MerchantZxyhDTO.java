@@ -16,7 +16,7 @@ public class MerchantZxyhDTO {
         //        00-医疗教育类 01-公共事业类 02-其他类 
         //        03-WAP
 
-        this.setOlCode1("01|02");
+        this.setOlCode1("01|02|03");
 //        this.setOlCode1("01|02|03|06");//支付方式编码，可填多个，以“|”分割
         //        01-被扫  
         //        02-主扫  

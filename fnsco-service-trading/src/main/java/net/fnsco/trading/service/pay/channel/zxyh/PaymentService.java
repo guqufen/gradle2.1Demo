@@ -154,7 +154,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		weiXinDTO.init(merId);
 		String url = "/MPay/backTransAction.do";
 		weiXinDTO.setEncoding("UTF-8");
-		weiXinDTO.setBackEndUrl(env.getProperty("zxyh.backUrl")); // 接收支付网关异步通知回调地址
+		weiXinDTO.setBackEndUrl(env.getProperty("zxyh.backUrl.wx")); // 接收支付网关异步通知回调地址
 		// 根据userId获取内部商户号
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
 		if (Strings.isNullOrEmpty(innerCode)) {
@@ -227,7 +227,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		String url = "/MPay/backTransAction.do";
 
 		activeAlipayDTO.setEncoding("UTF-8");
-		activeAlipayDTO.setBackEndUrl(env.getProperty("zxyh.backUrl")); // 接收支付网关异步通知回调地址
+		activeAlipayDTO.setBackEndUrl(env.getProperty("zxyh.backUrl.zfb")); // 接收支付网关异步通知回调地址
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
 		// 根据内部商户号获取独立商户号
 		MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
@@ -646,7 +646,18 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	 * 支付宝主扫回调函数
 	 */
 	public ResultDTO<Object> aliCallBack(String respStr) {
-		TradeAliPayCallBackDTO aliDTO = JSON.parseObject(respStr, TradeAliPayCallBackDTO.class);
+		// 解析返回报文
+		assert respStr.startsWith("sendData=");
+		String respB64Str = respStr.substring(9);
+		// base64解码,并对一些特殊字符进行置换
+		byte[] respJsBs = Base64.decodeBase64(respB64Str);
+		String respJsStr = null;
+		try {
+			respJsStr = new String(respJsBs, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		TradeAliPayCallBackDTO aliDTO = JSON.parseObject(respJsStr, TradeAliPayCallBackDTO.class);
 		if (aliDTO == null) {
 			return ResultDTO.fail("中信返回数据有误");
 		}
@@ -696,7 +707,18 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	 * 微信主扫回调函数
 	 */
 	public ResultDTO<Object> weChatCallBack(String respStr) {
-		TradeWeChatCallBackDTO weChatDTO = JSON.parseObject(respStr, TradeWeChatCallBackDTO.class);
+		// 解析返回报文
+		assert respStr.startsWith("sendData=");
+		String respB64Str = respStr.substring(9);
+		// base64解码,并对一些特殊字符进行置换
+		byte[] respJsBs = Base64.decodeBase64(respB64Str);
+		String respJsStr = null;
+		try {
+			respJsStr = new String(respJsBs, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
+		TradeWeChatCallBackDTO weChatDTO = JSON.parseObject(respJsStr, TradeWeChatCallBackDTO.class);
 		if (weChatDTO == null) {
 			return ResultDTO.fail("中信返回数据有误");
 		}

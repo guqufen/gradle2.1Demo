@@ -59,7 +59,7 @@ public class MerchantTerminal extends DTO{
     private String terminalType;
     
     //新增终端相关字段
-    private Integer subAppId;
+    private String subAppId;
 	private String qGroupId;
     private String categroryId;
     private String settleCycle;
@@ -90,11 +90,11 @@ public class MerchantTerminal extends DTO{
 		this.terminalId = terminalId;
 	}
 
-	public Integer getSubAppId() {
+	public String getSubAppId() {
   		return subAppId;
   	}
 
-  	public void setSubAppId(Integer subAppId) {
+  	public void setSubAppId(String subAppId) {
   		this.subAppId = subAppId;
   	}
 
