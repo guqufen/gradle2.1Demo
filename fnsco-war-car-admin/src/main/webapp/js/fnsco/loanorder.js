@@ -85,10 +85,11 @@ function operateFormatter(value, row, index) {
 function formatField0(value){//行驶证
     for(var i=0;i<value.length;i++){
         if(value[i].fileType=='0'){
+        	var path = PROJECT_PATH+'/web/agent/getImageStream?filePath='+value[i].filePath;
             return[
-                '<a class="redact imgFile" id="imgFile'+value[i].id+'" href=javascript:showImg("'+value[i].filePath+'","imgFile'+value[i].id+'") title="行驶证">',
+                '<a class="redact imgFile" id="imgFile'+value[i].id+'" href=javascript:showImg("'+path+'","imgFile'+value[i].id+'") title="行驶证">',
                 '<i class="glyphicon glyphicon-picture"></i>',
-                '<img src="" data-original="'+value[i].filePath+'"/>',
+                '<img src="" data-original="'+path+'"/>',
                 '</a>  '
             ].join('');
         }
@@ -96,11 +97,12 @@ function formatField0(value){//行驶证
 }
 function formatField1(value){//车辆登记证
     for(var i=0;i<value.length;i++){
+    	var path = PROJECT_PATH+'/web/agent/getImageStream?filePath='+value[i].filePath;
         if(value[i].fileType=='1'){
             return[
-                '<a class="redact imgFile" id="imgFile'+value[i].id+'" href=javascript:showImg("'+value[i].filePath+'","imgFile'+value[i].id+'") title="车辆登记证">',
+                '<a class="redact imgFile" id="imgFile'+value[i].id+'" href=javascript:showImg("'+path+'","imgFile'+value[i].id+'") title="车辆登记证">',
                 '<i class="glyphicon glyphicon-picture"></i>',
-                '<img src="" data-original="'+value[i].filePath+'"/>',
+                '<img src="" data-original="'+path+'"/>',
                 '</a>  '
             ].join('');
         }

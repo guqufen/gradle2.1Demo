@@ -1,4 +1,5 @@
-package net.fnsco.bigdata.service.file;
+package net.fnsco.core.file;
+
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -153,132 +153,152 @@ public class TicketController extends BaseController {
         seatVO1.setSeatName(TicketConstants.SeatTypeEnum.MOBILE_SLEEPER.getName() + "(上)");
         seatVO1.setPrice(dto.getDw_price());
         seatVO1.setNum(dto.getDw_num());
-        seatTypeList.add(seatVO1);
+        if (!"0".equals(dto.getDw_price())) {
+            seatTypeList.add(seatVO1);
+        }
         SeatTypeVO seatVO110 = new SeatTypeVO();
         seatVO110.setSeatCode(TicketConstants.SeatTypeEnum.MOBILE_SLEEPER.getCode());
         seatVO110.setSeatName(TicketConstants.SeatTypeEnum.MOBILE_SLEEPER.getName() + "(下)");
         seatVO110.setPrice(dto.getDwx_price());
         seatVO110.setNum(dto.getDw_num());
-        seatTypeList.add(seatVO110);
+        if (!"0".equals(dto.getDwx_price())) {
+            seatTypeList.add(seatVO110);
+        }
 
         SeatTypeVO seatVO2 = new SeatTypeVO();
         seatVO2.setSeatCode(TicketConstants.SeatTypeEnum.BUSINESS.getCode());
         seatVO2.setSeatName(TicketConstants.SeatTypeEnum.BUSINESS.getName());
         seatVO2.setPrice(dto.getSwz_price());
         seatVO2.setNum(dto.getSwz_num());
-        seatTypeList.add(seatVO2);
+        if (!"0".equals(dto.getSwz_price())) {
+            seatTypeList.add(seatVO2);
+        }
 
         SeatTypeVO seatVO3 = new SeatTypeVO();
         seatVO3.setSeatCode(TicketConstants.SeatTypeEnum.SPECIAL.getCode());
         seatVO3.setSeatName(TicketConstants.SeatTypeEnum.SPECIAL.getName());
         seatVO3.setPrice(dto.getTdz_price());
         seatVO3.setNum(dto.getSwz_num());
-        seatTypeList.add(seatVO3);
+        if (!"0".equals(dto.getTdz_price())) {
+            seatTypeList.add(seatVO3);
+        }
 
         SeatTypeVO seatVO4 = new SeatTypeVO();
         seatVO4.setSeatCode(TicketConstants.SeatTypeEnum.FIRST_CLASS.getCode());
         seatVO4.setSeatName(TicketConstants.SeatTypeEnum.FIRST_CLASS.getName());
         seatVO4.setPrice(dto.getYdz_price());
         seatVO4.setNum(dto.getYdz_num());
-        seatTypeList.add(seatVO4);
+        if (!"0".equals(dto.getYdz_price())) {
+            seatTypeList.add(seatVO4);
+        }
 
         SeatTypeVO seatVO5 = new SeatTypeVO();
         seatVO5.setSeatCode(TicketConstants.SeatTypeEnum.SECOND_CLASS.getCode());
         seatVO5.setSeatName(TicketConstants.SeatTypeEnum.SECOND_CLASS.getName());
         seatVO5.setPrice(dto.getEdz_price());
         seatVO5.setNum(dto.getEdz_num());
-        seatTypeList.add(seatVO5);
+        if (!"0".equals(dto.getEdz_price())) {
+            seatTypeList.add(seatVO5);
+        }
 
         SeatTypeVO seatVO6 = new SeatTypeVO();
         seatVO6.setSeatCode(TicketConstants.SeatTypeEnum.ADVANCED_SOFT.getCode());
         seatVO6.setSeatName(TicketConstants.SeatTypeEnum.ADVANCED_SOFT.getName() + "(下)");
         seatVO6.setPrice(dto.getGjrw_price());
         seatVO6.setNum(dto.getGjrw_num());
-        seatTypeList.add(seatVO6);
+        if (!"0".equals(dto.getGjrw_price())) {
+            seatTypeList.add(seatVO6);
+        }
 
         SeatTypeVO seatVO611 = new SeatTypeVO();
         seatVO611.setSeatCode(TicketConstants.SeatTypeEnum.ADVANCED_SOFT.getCode());
         seatVO611.setSeatName(TicketConstants.SeatTypeEnum.ADVANCED_SOFT.getName() + "(上)");
         seatVO611.setPrice(dto.getGjrws_price());
         seatVO611.setNum(dto.getGjrw_num());
-        seatTypeList.add(seatVO611);
+        if (!"0".equals(dto.getGjrws_price())) {
+            seatTypeList.add(seatVO611);
+        }
 
         SeatTypeVO seatVO7 = new SeatTypeVO();
         seatVO7.setSeatCode(TicketConstants.SeatTypeEnum.SOFT.getCode());
         seatVO7.setSeatName(TicketConstants.SeatTypeEnum.SOFT.getName() + "(上)");
         seatVO7.setPrice(dto.getRw_price());
         seatVO7.setNum(dto.getRw_num());
-        seatTypeList.add(seatVO7);
+        if (!"0".equals(dto.getRw_price())) {
+            seatTypeList.add(seatVO7);
+        }
 
         SeatTypeVO seatVO711 = new SeatTypeVO();
         seatVO711.setSeatCode(TicketConstants.SeatTypeEnum.SOFT.getCode());
         seatVO711.setSeatName(TicketConstants.SeatTypeEnum.SOFT.getName() + "(下)");
         seatVO711.setPrice(dto.getRwx_price());
         seatVO711.setNum(dto.getRw_num());
-        seatTypeList.add(seatVO711);
-
-        SeatTypeVO seatVO8 = new SeatTypeVO();
-        seatVO8.setSeatCode(TicketConstants.SeatTypeEnum.MOBILE_SLEEPER.getCode());
-        seatVO8.setSeatName(TicketConstants.SeatTypeEnum.MOBILE_SLEEPER.getName() + "(上)");
-        seatVO8.setPrice(dto.getDw_price());
-        seatVO8.setNum(dto.getDw_num());
-        seatTypeList.add(seatVO8);
-
-        SeatTypeVO seatVO811 = new SeatTypeVO();
-        seatVO811.setSeatCode(TicketConstants.SeatTypeEnum.MOBILE_SLEEPER.getCode());
-        seatVO811.setSeatName(TicketConstants.SeatTypeEnum.MOBILE_SLEEPER.getName() + "(下)");
-        seatVO811.setPrice(dto.getDwx_price());
-        seatVO811.setNum(dto.getDw_num());
-        seatTypeList.add(seatVO811);
+        if (!"0".equals(dto.getRwx_price())) {
+            seatTypeList.add(seatVO711);
+        }
 
         SeatTypeVO seatVO9 = new SeatTypeVO();
         seatVO9.setSeatCode(TicketConstants.SeatTypeEnum.HARD_SLEEPER.getCode());
         seatVO9.setSeatName(TicketConstants.SeatTypeEnum.HARD_SLEEPER.getName() + "(上)");
         seatVO9.setPrice(dto.getYw_price());
         seatVO9.setNum(dto.getYw_num());
-        seatTypeList.add(seatVO9);
+        if (!"0".equals(dto.getYw_price())) {
+            seatTypeList.add(seatVO9);
+        }
 
         SeatTypeVO seatVO911 = new SeatTypeVO();
         seatVO911.setSeatCode(TicketConstants.SeatTypeEnum.HARD_SLEEPER.getCode());
         seatVO911.setSeatName(TicketConstants.SeatTypeEnum.HARD_SLEEPER.getName() + "(中)");
         seatVO911.setPrice(dto.getYwz_price());
         seatVO911.setNum(dto.getYw_num());
-        seatTypeList.add(seatVO911);
+        if (!"0".equals(dto.getYwz_price())) {
+            seatTypeList.add(seatVO911);
+        }
 
         SeatTypeVO seatVO912 = new SeatTypeVO();
         seatVO912.setSeatCode(TicketConstants.SeatTypeEnum.HARD_SLEEPER.getCode());
         seatVO912.setSeatName(TicketConstants.SeatTypeEnum.HARD_SLEEPER.getName() + "(下)");
         seatVO912.setPrice(dto.getYwx_price());
         seatVO912.setNum(dto.getYw_num());
-        seatTypeList.add(seatVO912);
+        if (!"0".equals(dto.getYwx_price())) {
+            seatTypeList.add(seatVO912);
+        }
 
         SeatTypeVO seatVO10 = new SeatTypeVO();
         seatVO10.setSeatCode(TicketConstants.SeatTypeEnum.SOFT_SEAT.getCode());
         seatVO10.setSeatName(TicketConstants.SeatTypeEnum.SOFT_SEAT.getName());
         seatVO10.setPrice(dto.getRz_price());
         seatVO10.setNum(dto.getRz_num());
-        seatTypeList.add(seatVO10);
+        if (!"0".equals(dto.getRz_price())) {
+            seatTypeList.add(seatVO10);
+        }
 
         SeatTypeVO seatV11 = new SeatTypeVO();
         seatV11.setSeatCode(TicketConstants.SeatTypeEnum.HARD_SEAT.getCode());
         seatV11.setSeatName(TicketConstants.SeatTypeEnum.HARD_SEAT.getName());
         seatV11.setPrice(dto.getYz_price());
         seatV11.setNum(dto.getYz_num());
-        seatTypeList.add(seatV11);
+        if (!"0".equals(dto.getYz_price())) {
+            seatTypeList.add(seatV11);
+        }
 
         SeatTypeVO seatV12 = new SeatTypeVO();
         seatV12.setSeatCode(TicketConstants.SeatTypeEnum.NO_SEAT.getCode());
         seatV12.setSeatName(TicketConstants.SeatTypeEnum.NO_SEAT.getName());
         seatV12.setPrice(dto.getWz_price());
         seatV12.setNum(dto.getWz_num());
-        seatTypeList.add(seatV12);
+        if (!"0".equals(dto.getWz_price())) {
+            seatTypeList.add(seatV12);
+        }
 
         SeatTypeVO seatV13 = new SeatTypeVO();
         seatV13.setSeatCode(TicketConstants.SeatTypeEnum.OTHER_SEAT.getCode());
         seatV13.setSeatName(TicketConstants.SeatTypeEnum.OTHER_SEAT.getName());
         seatV13.setPrice(dto.getQtxb_price());
         seatV13.setNum(dto.getQtxb_num());
-        seatTypeList.add(seatV13);
+        if (!"0".equals(dto.getQtxb_price())) {
+            seatTypeList.add(seatV13);
+        }
 
         return seatTypeList;
     }
