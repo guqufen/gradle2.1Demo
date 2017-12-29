@@ -1236,7 +1236,7 @@
    	 from t_trade_data TD,m_merchant_pos MP
    	 <where>
    	 	(TD.term_id=MP.terminal_code
-		OR TD.term_id = MP.qr_channel_terminal_code) AND TD.inner_code = MP.inner_code
+		OR TD.term_id = MP.qr_channel_terminal_code)<!--  AND TD.inner_code = MP.inner_code -->
    	 <if test="legalPerson != null and legalPerson !=''" >
         AND TD.inner_code in (
            SELECT inner_code FROM m_merchant_core WHERE legal_person = #{legalPerson ,jdbcType=VARCHAR}
