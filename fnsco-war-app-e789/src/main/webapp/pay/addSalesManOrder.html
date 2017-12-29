@@ -63,7 +63,7 @@
 			var param={'innerCode':innerCode,'paymentAmount':paymentAmount,'installmentNum':installmentNum};
 			var params = JSON.stringify(param);
 			$.ajax({
-				url:'../trade/h5Pay/dealPayOrder',
+				url:'../trade/fsf/pay/dealPayOrder',
 				type:'POST',
 				contentType: "application/json",
       			dataType : "json",
