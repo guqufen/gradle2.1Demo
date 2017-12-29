@@ -52,9 +52,9 @@ public interface ReportInfoDAO {
 			@Result(column = "entity_inner_code", property = "entityInnerCode"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "last_modify_time", property = "lastModifyTime"),
+			@Result(column = "industry_code", property = "industry"),
 			@Result(column = "decoration_level", property = "decorationLevel"),
 			@Result(column = "evaluation", property = "evaluation") })
-//	@Select("SELECT r.* FROM risk_report_info r WHERE inner_code = #{reportInfoDO.innerCode}")
 	@SelectProvider(type = ReportInfoProvider.class, method = "getByMercEntityInnerCode")
 	public ReportInfoDO getByMercEntityInnerCode(@Param("reportInfoDO") ReportInfoDO reportInfoDO);
 

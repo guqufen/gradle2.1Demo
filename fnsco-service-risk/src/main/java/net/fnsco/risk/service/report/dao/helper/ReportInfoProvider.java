@@ -632,7 +632,7 @@ public class ReportInfoProvider {
 					agentWhere = "and ent.entity_inner_code in (select distinct entity_inner_code from risk_user_merc_rel where agent_id ='" + reportInfo.getAgentId() + "')";
 				}
 				SELECT("tt.*,report.id,report.trading_area ,"
-						+ "(select `first` from sys_industry where id = report.industry) industryName ,report.industry,report.size,report.status,report.view_num,report.report_timer "
+						+ "(select `first` from sys_industry where code = report.industry) industryName ,report.industry,report.size,report.status,report.view_num,report.report_timer "
 						+ " FROM "
 						+ "( SELECT ent.entity_inner_code,ent.legal_person,ent.merc_name,ent.business_license_num, "
 						+ "( SELECT MAX(time_stamp) FROM t_trade_data t WHERE t.inner_code in (select distinct inner_code from m_merchant_core_entity_ref ref where ref.entity_inner_code = ent.entity_inner_code) ORDER BY time_stamp desc limit 1 ) as maxTime "
@@ -852,7 +852,7 @@ public class ReportInfoProvider {
 		return new SQL() {
 			{
 				SELECT("tt.*,report.id,report.trading_area ,"
-						+ "(select `first` from sys_industry where id = report.industry) industryName ,report.industry,report.size,report.status,report.view_num,report.report_timer "
+						+ "(select `first` from sys_industry where code = report.industry) industryName ,report.industry,report.size,report.status,report.view_num,report.report_timer "
 						+ " FROM "
 						+ "( SELECT ent.entity_inner_code,ent.legal_person,ent.merc_name,ent.business_license_num FROM m_merchant_entity ent ) tt ,"
 						+ "(select * from risk_report_info where id in (select max(id) from risk_report_info where report_timer >= SUBDATE(CURDATE(), INTERVAL 30 DAY) and status = 1 group by id)order by report_timer desc) report");
@@ -996,7 +996,7 @@ public class ReportInfoProvider {
 
 		return new SQL() {
 			{
-				SELECT("ent.entity_inner_code,ent.merc_name,ent.business_license_num, ent.regist_address as business_address "
+				SELECT("ent.entity_inner_code,ent.merc_name,ent.business_license_num, ent.regist_address as business_address,ent.industry_code as industry_code "
 						+ " FROM m_merchant_entity ent");
 				if (StringUtils.isNotBlank(reportInfo.getEntityInnerCode())) {
 					WHERE(" ent.entity_inner_code = #{reportInfoDO.entityInnerCode} ");

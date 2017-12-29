@@ -49,7 +49,6 @@ import net.fnsco.risk.service.sys.dao.WebUserOuterDAO;
 import net.fnsco.risk.service.sys.entity.IndustryDO;
 import net.fnsco.risk.service.sys.entity.WebUserDO;
 import net.fnsco.risk.service.sys.entity.WebUserOuterDO;
-import net.fnsco.risk.service.trade.dao.TradeDataDAO;
 
 @Service
 public class ReportService extends BaseService {
@@ -588,7 +587,7 @@ public class ReportService extends BaseService {
 		ReportInfoDO reportInfo = reportInfoDAO.getById(reportInfoDO.getId());
 
 		if (!Strings.isNullOrEmpty(reportInfo.getIndustry())) {
-			IndustryDO industryDO = industryDAO.getById(Integer.parseInt(reportInfo.getIndustry()));
+			IndustryDO industryDO = industryDAO.getByCode(reportInfo.getIndustry());
 			if (!Strings.isNullOrEmpty(industryDO.getFourth())) {
 				reportInfo.setIndustryName(
 						industryDO.getFirst() + "--" + industryDO.getThird() + "--" + industryDO.getFourth());

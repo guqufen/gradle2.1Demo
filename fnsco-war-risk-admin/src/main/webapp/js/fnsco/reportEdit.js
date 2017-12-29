@@ -146,11 +146,12 @@ $(function() {
 
 				$('#businessAddress').val(dd.businessAddress);// 经营地址
 				$('#businessAddress').attr('disabled','disabled');
-
+				
 				$('#businessDueTime').val(dd.businessDueTime);// 营业期限
 
 //				获取行业数据(option)，放入行业(select)
 				$('#industry').val(dd.industryName);// 行业
+				$('#industry').attr('disabled','disabled');// 行业
 				$('#industryId').val(dd.industry);// 行业
 
 				$('#tradingArea').val(dd.tradingArea);// 商圈
