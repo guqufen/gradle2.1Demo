@@ -1,4 +1,4 @@
-package net.fnsco.web.controller.e789.open.pay;
+package net.fnsco.web.controller.e789.pay.zxyh;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
