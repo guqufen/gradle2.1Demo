@@ -2,9 +2,11 @@ package net.fnsco.bigdata.service.modules.merchant;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
@@ -51,25 +53,25 @@ public class MerchantImportHelper{
         merchantCore.setLegalPerson(dto.getMerLegalPerson());
         merchantCore.setAbbreviation(dto.getChannelMerchant());
         merchantCore.setLegalPersonMobile(dto.getLegalPersonTel());
-        
-        String cardvalidtime = dto.getPaperValidTime();
-        String businesslicensevalidtime = dto.getBusinessLicenseValidTime();
+//        
+//        String cardvalidtime = dto.getPaperValidTime();
+//        String businesslicensevalidtime = dto.getBusinessLicenseValidTime();
         // excel中导出的时间是“EEE MMM dd HH:mm:ss z yyyy”类型的String类，将他转换成"yyyy/MM/dd"
-//        String cardvalidtime = null;
-//        if(!Strings.isNullOrEmpty(dto.getPaperValidTime())){
-//            SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-//            Date date1 = sdf1.parse(dto.getPaperValidTime());
-//            sdf1 = new SimpleDateFormat("yyyy-MM-dd");
-//            cardvalidtime = sdf1.format(date1);
-//            
-//        }
-//        String businesslicensevalidtime = null;
-//        if(!Strings.isNullOrEmpty(dto.getBusinessLicenseValidTime())){
-//            SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-//            Date date2 = sdf2.parse(dto.getBusinessLicenseValidTime());
-//            sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-//            businesslicensevalidtime = sdf2.format(date2);
-//        }
+        String cardvalidtime = null;
+        if(!Strings.isNullOrEmpty(dto.getPaperValidTime())){
+            SimpleDateFormat sdf1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+            Date date1 = sdf1.parse(dto.getPaperValidTime());
+            sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            cardvalidtime = sdf1.format(date1);
+            
+        }
+        String businesslicensevalidtime = null;
+        if(!Strings.isNullOrEmpty(dto.getBusinessLicenseValidTime())){
+            SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
+            Date date2 = sdf2.parse(dto.getBusinessLicenseValidTime());
+            sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+            businesslicensevalidtime = sdf2.format(date2);
+        }
         
         merchantCore.setCardValidTime(cardvalidtime);
         merchantCore.setBusinessLicenseValidTime(businesslicensevalidtime);
@@ -295,7 +297,7 @@ public class MerchantImportHelper{
         merchantTerminal1.setWechatFee(wechatFee);
         
         merchantTerminal1.setCategroryId(dto.getCategroryId());
-        merchantTerminal1.setSubAppId(dto.getSubAppId()==null?null:Integer.valueOf(dto.getSubAppId()));
+        merchantTerminal1.setSubAppId(Strings.isNullOrEmpty(dto.getSubAppId())?null:Integer.valueOf(dto.getSubAppId()));
         merchantTerminal1.setqGroupId(dto.getqGroupId());
         merchantTerminal1.setSettleCycle(dto.getSettleCycle());
         
