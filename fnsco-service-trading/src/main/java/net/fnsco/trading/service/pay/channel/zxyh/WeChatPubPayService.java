@@ -58,6 +58,7 @@ public class WeChatPubPayService extends BaseService {
 			logger.info("该用户没有绑定内部商户号，请核查后重新交易");
 			return ResultDTO.fail("交易失败");
 		}
+
 		// 通过内部商户号查找绑定的中信商户号
 		MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, "05");
 		if (null == merchantChannel) {
@@ -112,17 +113,18 @@ public class WeChatPubPayService extends BaseService {
 			return ResultDTO.fail("交易失败");
 		}
 
-		// 应答成功
-		if ("0000".equals(weChatPubPayDTO1.getRespCode())) {
-			tradeOrderDO1.setRespCode(TradeStateEnum.SUCCESS.getCode());// 设置响应应答码
+		// 交易失败
+		if (!"0000".equals(weChatPubPayDTO1.getRespCode())) {
 
-		} else {
 			tradeOrderDO1.setRespCode(TradeStateEnum.FAIL.getCode());// 设置响应应答码
 			tradeOrderDO1.setRespMsg(weChatPubPayDTO1.getRespMsg());// 设置响应信息
 			tradeOrderDO1.setPayOrderNo(weChatPubPayDTO1.getTxnSeqId());// 支付订单号(平台流水号，供后续退货或者撤销或对账使用)
 			tradeOrderService.doUpdate(tradeOrderDO1);// 通过主键更新应答数据
 			return ResultDTO.fail(weChatPubPayDTO1.getRespMsg());
+
 		}
+
+		tradeOrderDO1.setRespCode(TradeStateEnum.SUCCESS.getCode());// 设置响应应答码
 		tradeOrderDO1.setRespMsg(weChatPubPayDTO1.getRespMsg());// 设置响应信息
 		tradeOrderDO1.setPayOrderNo(weChatPubPayDTO1.getTxnSeqId());// 支付订单号(平台流水号，供后续退货或者撤销或对账使用)
 		tradeOrderService.doUpdate(tradeOrderDO1);// 通过主键更新应答数据
@@ -160,6 +162,7 @@ public class WeChatPubPayService extends BaseService {
 		} else {
 			tradeOrderDO1.setRespCode(TradeStateEnum.FAIL.getCode());
 		}
+
 		tradeOrderDO1.setRespMsg(weChatPayDTO.getRespMsg());// 应答信息
 		tradeOrderDO1.setSettleAmount(new BigDecimal(weChatPayDTO.getSettleAmt()));// 清算金额
 		tradeOrderDO1.setSettleDate(DateUtils.StrToDate(weChatPayDTO.getSettleDate() + "000000"));// 清算日期
