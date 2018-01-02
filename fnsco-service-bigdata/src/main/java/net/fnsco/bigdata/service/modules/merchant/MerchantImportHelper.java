@@ -183,6 +183,9 @@ public class MerchantImportHelper{
         merchantPos.setSnCode(dto.getSnCode());
         merchantPos.setPosAddr(dto.getMerInstallArea());
         merchantPos.setStatus("1");
+        merchantPos.setQrChannelTerminalCode(dto.getQrChannelTerminalCode());
+        merchantPos.setTerminalCode(dto.getChannelTerminalCode());
+        merchantPos.setChannelTerminalCode(dto.getChannelTerminalCode());
         if(Strings.isNullOrEmpty(posName)){
             posName = dto.getSnCode() + "号POS机";
         }
@@ -201,7 +204,7 @@ public class MerchantImportHelper{
      * @date      2017年9月14日 下午4:53:37
      * @return MerchantTerminal    DOM对象
      */
-    public static MerchantTerminal createMerchantTerminal(Integer id,String innerCode,Integer posId,String terminalType,MerchantSynchronizationDTO dto){
+    public static MerchantTerminal createMerchantTerminal(Integer id,String innerCode,String terminalType,MerchantSynchronizationDTO dto){
         
         String xx = dto.getXx();
         String alipayFee = "0.00";
@@ -285,17 +288,16 @@ public class MerchantImportHelper{
             merchantTerminal1.setCreditCardMaxFee(Integer.valueOf(creditCardMaxFee));
         }
         
-//        merchantTerminal1.setPosId(posId);
-        String termName = "扫码";
-        if ("00".equals(terminalType)) {
-            termName = "刷卡";
-        }
-//        merchantTerminal1.setTermName(termName);
         merchantTerminal1.setTerminalType(terminalType);
         merchantTerminal1.setTerminalCode(dto.getInnerTermCode());
         merchantTerminal1.setChannelTerminalCode(dto.getTerminalCode());
         merchantTerminal1.setAlipayFee(alipayFee);
         merchantTerminal1.setWechatFee(wechatFee);
+        
+        merchantTerminal1.setCategroryId(dto.getCategroryId());
+        merchantTerminal1.setSubAppId(dto.getSubAppId()==null?null:Integer.valueOf(dto.getSubAppId()));
+        merchantTerminal1.setqGroupId(dto.getqGroupId());
+        merchantTerminal1.setSettleCycle(dto.getSettleCycle());
         
         return merchantTerminal1;
     }

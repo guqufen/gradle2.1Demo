@@ -280,7 +280,7 @@
   	select 
     <include refid="Base_Column_List" />
     from m_merchant_terminal
-    where inner_code = #{innerCode,jdbcType=VARCHAR} AND terminal_type ='02' LIMIT 1
+    where inner_code = #{innerCode,jdbcType=VARCHAR} AND terminal_type in('02','04') LIMIT 1
   </select>
    <select id="selectByInnerCodeZFB" parameterType="java.lang.String" resultMap="BaseResultMap">
   	select 
@@ -292,7 +292,7 @@
   	select 
     <include refid="Base_Column_List" />
     from m_merchant_terminal
-    where inner_code = #{innerCode,jdbcType=VARCHAR} AND terminal_type ='04' LIMIT 1
+    where inner_code = #{innerCode,jdbcType=VARCHAR} AND terminal_type in('02','04') LIMIT 1
   </select>
   <!-- 根据userId连表查询出终端信息 -->
   <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -304,7 +304,7 @@
 			SELECT
 				*
 			FROM
-				m_merchant_user_rel
+				u_app_user_merchant
 			WHERE
 				app_user_id = #{userId}
 		) REL ON CO.inner_code = REL.inner_code
@@ -379,6 +379,6 @@
   <select id="selectByTerminalType"  resultMap="BaseResultMap">
      select 
     <include refid="Base_Column_List" />
-    from m_merchant_terminal where  inner_code = #{innerCode,jdbcType=VARCHAR} and pos_id = #{posId} and terminal_type = #{terminalType,jdbcType=VARCHAR}
+    from m_merchant_terminal where  inner_code = #{innerCode,jdbcType=VARCHAR} and terminal_code = #{terminalCode} and terminal_type = #{terminalType,jdbcType=VARCHAR}
   </select>
 </mapper>
