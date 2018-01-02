@@ -72,7 +72,7 @@ public class AdService extends BaseService {
 		Map<String, List<AdDTO>> map = Maps.newHashMap();
 		List<AdDO> allList = this.adDAO.queryAdList(type);
 		if (allList.isEmpty()) {
-			return ResultDTO.failForMessage("未发现相关信息");
+			return ResultDTO.success(map);
 		}
 		if(type == 2){
 			for (AdDO adDO : allList) {
