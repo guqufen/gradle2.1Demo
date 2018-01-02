@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
-import net.fnsco.bigdata.comm.ServiceConstant.PayTypeEnum;
-import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.TradeTypeEnum;
 import net.fnsco.bigdata.service.dao.master.AppUserMerchant1Dao;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
@@ -23,6 +21,10 @@ import net.fnsco.bigdata.service.sys.SequenceService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.trading.comm.TradeConstants.PayMediumEnum;
+import net.fnsco.trading.constant.E789ApiConstant;
+import net.fnsco.trading.constant.E789ApiConstant.PayTypeEnum;
+import net.fnsco.trading.constant.E789ApiConstant.ResponCodeEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.WeChatPubPayDTO;
@@ -56,14 +58,14 @@ public class WeChatPubPayService extends BaseService {
 		String innerCode = appUserMerchant1Dao.selectInnerCodeByUserId(h5PayJO.getUserId());
 		if (null == innerCode) {
 			logger.info("该用户没有绑定内部商户号，请核查后重新交易");
-			return ResultDTO.fail("交易失败");
+			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_INNERCODE);
 		}
 
 		// 通过内部商户号查找绑定的中信商户号
 		MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, "05");
 		if (null == merchantChannel) {
 			logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=[" + innerCode + "");
-			return ResultDTO.fail("交易失败");
+			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_CHANNEL_INNERCODE);
 		}
 
 		weChatPubPayDTO.setTxnSubType(h5PayJO.getTxnType());// 交易子类型，010131：微信公众号支付；010134：微信小程序支付；010502：QQ公众号支付
@@ -85,14 +87,15 @@ public class WeChatPubPayService extends BaseService {
 		tradeOrderDO.setChannelType("05");// 设置渠道类型05-中信银行
 		tradeOrderDO.setOrderCeateTime(new Date());// 订单创建时间
 		tradeOrderDO.setTxnType(Integer.parseInt(TradeTypeEnum.CONSUMER.getCode()));// 设置交易类型
-		tradeOrderDO.setPayType(PayTypeEnum.CODE_PAY.getCode());// 设置支付方式，01-二维码
-		tradeOrderDO.setPaySubType("01");// 设置支付子类型，01-微信
+		// tradeOrderDO.setPayType(PayTypeEnum.CODE_PAY.getCode());//
+		// 设置支付方式，01-二维码
+		tradeOrderDO.setPaySubType(PayTypeEnum.PAYBYWX.getCode());// 设置支付子类型，01-微信
 		tradeOrderDO.setSettleStatus(0);// 设置结算状态0-未结算
 		tradeOrderDO.setCreateTime(new Date());// 创建时间
 		tradeOrderDO.setInnerCode(innerCode);// 设置内部商户号
 		tradeOrderDO.setSettleStatus(0);// 设置清算状态0-未清算
 		tradeOrderDO.setSyncStatus(0);// 设置同步状态0-未同步
-		tradeOrderDO.setPayMedium("01");
+		tradeOrderDO.setPayMedium(PayMediumEnum.APP.getCode());// 设置支付媒介，APP
 		tradeOrderService.doAdd(tradeOrderDO);
 
 		String weChatPubPayStr = JSON.toJSONString(weChatPubPayDTO);// 将对象转换为JSON字符串
@@ -116,7 +119,7 @@ public class WeChatPubPayService extends BaseService {
 		// 交易失败
 		if (!"0000".equals(weChatPubPayDTO1.getRespCode())) {
 
-			tradeOrderDO1.setRespCode(TradeStateEnum.FAIL.getCode());// 设置响应应答码
+			tradeOrderDO1.setRespCode(ResponCodeEnum.DEAL_FAIL.getCode());// 设置响应应答码
 			tradeOrderDO1.setRespMsg(weChatPubPayDTO1.getRespMsg());// 设置响应信息
 			tradeOrderDO1.setPayOrderNo(weChatPubPayDTO1.getTxnSeqId());// 支付订单号(平台流水号，供后续退货或者撤销或对账使用)
 			tradeOrderService.doUpdate(tradeOrderDO1);// 通过主键更新应答数据
@@ -124,14 +127,14 @@ public class WeChatPubPayService extends BaseService {
 
 		}
 
-		tradeOrderDO1.setRespCode(TradeStateEnum.SUCCESS.getCode());// 设置响应应答码
+		tradeOrderDO1.setRespCode(ResponCodeEnum.DEAL_SUCCESS.getCode());// 设置响应应答码
 		tradeOrderDO1.setRespMsg(weChatPubPayDTO1.getRespMsg());// 设置响应信息
 		tradeOrderDO1.setPayOrderNo(weChatPubPayDTO1.getTxnSeqId());// 支付订单号(平台流水号，供后续退货或者撤销或对账使用)
 		tradeOrderService.doUpdate(tradeOrderDO1);// 通过主键更新应答数据
 
 		// 设置返回应答数据
 		WeChatPubPayResultDTO weChatPubPayResultDTO = new WeChatPubPayResultDTO();
-		weChatPubPayResultDTO.setRespCode(TradeStateEnum.SUCCESS.getCode());
+		weChatPubPayResultDTO.setRespCode(ResponCodeEnum.DEAL_SUCCESS.getCode());
 		weChatPubPayResultDTO.setRespMsg(weChatPubPayDTO1.getRespMsg());// 设置应答信息
 		weChatPubPayResultDTO.setOrderNo(weChatPubPayDTO.getOrderId());
 		weChatPubPayResultDTO.setAppId(weChatPubPayDTO.getAppId());// 公众号ID，供微信JSAPI调用参数
@@ -158,9 +161,9 @@ public class WeChatPubPayService extends BaseService {
 
 		// 成功
 		if ("0000".equals(weChatPayDTO.getRespCode())) {
-			tradeOrderDO1.setRespCode(TradeStateEnum.SUCCESS.getCode());
+			tradeOrderDO1.setRespCode(ResponCodeEnum.DEAL_SUCCESS.getCode());
 		} else {
-			tradeOrderDO1.setRespCode(TradeStateEnum.FAIL.getCode());
+			tradeOrderDO1.setRespCode(ResponCodeEnum.DEAL_FAIL.getCode());
 		}
 
 		tradeOrderDO1.setRespMsg(weChatPayDTO.getRespMsg());// 应答信息
