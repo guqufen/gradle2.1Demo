@@ -133,13 +133,16 @@ $('#btn_select_industry').click(function(){
 	  if(!select_data){
 	    layer.msg('请选择行业!');return
 	  }
+	  console.log(select_data.businessForm);
 	  var indust = "";
 	  if(select_data.fourth != ""){
-		  indust = select_data.first+'--'+select_data.third+'--'+select_data.fourth;
+		  indust = select_data.businessForm +'--'+ select_data.first+'--'+select_data.third+'--'+select_data.fourth;
 		}else if(select_data.third != ""){
-			indust = select_data.first+'--'+select_data.third;
+			indust = select_data.businessForm +'--'+ select_data.first+'--'+select_data.third;
 		}else if(select_data.first != ""){
-			indust = select_data.first;
+			indust = select_data.businessForm +'--'+ select_data.first;
+		}else{
+			indust = select_data.businessForm; 
 		}
 
 	  $('#industryModal').modal('hide');
