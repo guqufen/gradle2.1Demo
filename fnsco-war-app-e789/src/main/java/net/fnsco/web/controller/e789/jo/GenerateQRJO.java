@@ -19,7 +19,7 @@ public class GenerateQRJO extends JO {
 	/**
      * 交易子类型41微信42支付宝
      */
-	@ApiModelProperty(value = "交易子类型41微信42支付宝", name = "", example = "交易子类型41微信42支付宝")
+	@ApiModelProperty(value = "交易子类型01微信02支付宝", name = "paySubType")
     private String paySubType;
     
     

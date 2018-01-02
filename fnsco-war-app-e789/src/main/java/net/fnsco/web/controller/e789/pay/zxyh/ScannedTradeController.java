@@ -22,6 +22,7 @@ import net.fnsco.bigdata.api.dto.TradeWeChatCallBackDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.dto.TradeReportDTO;
+import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.channel.pfyh.PFOrderPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
@@ -64,20 +65,19 @@ public class ScannedTradeController extends BaseController {
 		}
 		ResultDTO<Map<String, Object>> dto = new ResultDTO<>();
 		Map<String, Object> reqMap = new HashMap<>();
-		if ("41".equals(paySubType)) {// 微信
+		if ("01".equals(paySubType)) {// 微信
 			dto = zxyhPaymentService.generateQRCodeWeiXin(userId, txnAmt);
 
-		} else if ("42".equals(paySubType)) {// 支付宝
+		} else if ("02".equals(paySubType)) {// 支付宝
 			dto = zxyhPaymentService.generateQRCodeAliPay(userId, ip, txnAmt);
+		}else{
+			return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
 		}
 		reqMap = dto.getData();
 		qrVo.setUrl((String) reqMap.getOrDefault("codeUrl", null));
-		if ("0000".equals(reqMap.get("respCode"))) {
-			return ResultDTO.success(qrVo);
-		} else {
-			return ResultDTO.failForMessage((String) reqMap.get("respMsg"));
-
-		}
+		qrVo.setOrderNo((String)reqMap.get("orderId"));
+		qrVo.setRespCode((String)reqMap.get("respCode"));
+		return ResultDTO.success(qrVo);
 
 	}
 
