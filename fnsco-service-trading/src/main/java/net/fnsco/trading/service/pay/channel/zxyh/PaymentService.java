@@ -423,6 +423,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setSettleStatus(0);// 设置清算状态0-未清算
 		tradeOrderDO.setSyncStatus(0);// 设置同步状态0-未同步
 		tradeOrderDO.setPayMedium("01");
+
 		// 设置实体内部商户号
 		MerchantEntityCoreRef mer = merchantEntityCoreRefDao.selectByInnerCodeLimit1(innerCode);
 		if (null != mer) {
@@ -488,18 +489,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		passivePayResultDTO.setAmt(passivePayDTO.getStdtranamt());// 交易金额
 		passivePayResultDTO.setReciAmt(passDTO1.getStdreciamt());// 实收金额
 		passivePayResultDTO.setPreAmt(passDTO1.getStdpreamt());// 优惠金额
-		// map.put("respCode", tradeOrderDO1.getRespCode());// 应答码
-		// map.put("respMsg", tradeOrderDO1.getRespMsg());// 应答信息
-		// map.put("orderNo", tradeOrderDO1.getOrderNo());// 商户订单号
-		// map.put("begTime", passDTO.getStdbegtime());// 交易起始时间
-		// map.put("endTime", passDTO1.getEndTime());// 支付结束时间
-		// map.put("amt", passivePayDTO.getStdtranamt());// 交易金额
-		// map.put("reciAmt", passDTO1.getStdreciamt());// 实收金额
-		// map.put("preAmt", passDTO1.getStdpreamt());// 优惠金额
 
-		// return map.toString();
 		return ResultDTO.success(passivePayResultDTO);
-//		return ResultDTO.fail(tradeOrderDO1.getRespCode());
 	}
 
 	/**
