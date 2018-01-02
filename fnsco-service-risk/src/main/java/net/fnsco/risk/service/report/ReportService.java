@@ -787,4 +787,9 @@ public class ReportService extends BaseService {
 	public ReportInfoDO getByEntityInnerCode(String innerCode) {
 		return reportInfoDAO.getByEntityInnerCode(innerCode);
 	}
+	
+	public ResultDTO queryIndustryByCode(String code) {
+		IndustryDO dto = industryDAO.getByCode(code);
+		return ResultDTO.success(dto);
+	}
 }
