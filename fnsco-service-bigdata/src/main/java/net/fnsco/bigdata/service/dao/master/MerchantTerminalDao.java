@@ -142,6 +142,6 @@ public interface MerchantTerminalDao {
       * @date      2017年9月22日 下午2:32:25
       * @return MerchantTerminal    DOM对象
       */
-     MerchantTerminal selectByTerminalType(@Param("posId")Integer posId,@Param("innerCode")String innerCode,@Param("terminalType")String terminalType);
+     MerchantTerminal selectByTerminalType(@Param("terminalCode")String terminalCode,@Param("innerCode")String innerCode,@Param("terminalType")String terminalType);
      
 }
