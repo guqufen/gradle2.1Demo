@@ -26,6 +26,8 @@ public class E789ApiConstant extends CoreConstants {
     public static String E_BACK_NOT_FOUND          = "210003";                          //请上传身份证反面照
     
     public static String E_BANK_IS_EXIST			="210005";							//银行卡已存在
+    public static String E_NOT_FIND_INNERCODE		="210006";							//未找到对应内部商户号
+    public static String E_NOT_FIND_ENTITY_INNERCODE ="210007";							//未找到对应实体内部商户号
 
     static {
     	//身份识别证错误信息
@@ -52,6 +54,78 @@ public class E789ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_BACK_NOT_FOUND, "请上传身份证反面照");
         
         ERROR_MESSGE_MAP.put(E_BANK_IS_EXIST, "银行卡已存在");
+        ERROR_MESSGE_MAP.put(E_NOT_FIND_INNERCODE, "未找到对应内部商户号");
+        ERROR_MESSGE_MAP.put(E_NOT_FIND_ENTITY_INNERCODE, "未找到对应实体内部商户号");
+    }
+    
+    public static enum ResponCodeEnum{
+    	DEAL_IN_PROGRESS("1000","处理中"),DEAL_SUCCESS("1001","成功"),DEAL_FAIL("1002","失败"),DEAL_SEALS_RETURN("1003","已退货");
+    	
+    	private String code;
+    	private String name;
+    	private ResponCodeEnum(String code,String name){
+    		this.code = code;
+    		this.name= name;
+    	}
+    	 /**
+         * @return the code
+         */
+        public String getCode() {
+            return code;
+        }
+
+        /**
+        * @return the name
+        */
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(String code) {
+            for (PayTypeEnum eopen : PayTypeEnum.values()) {
+                if (eopen.code.equals(code)) {
+                    return eopen.name;
+                }
+            }
+            return "";
+        }
+    	
+    }
+    
+    //交易子类型枚举
+    public static enum PayTypeEnum {
+                                    PAYBYCARD("00", "刷卡"), PAYBYWX("01", "微信"), PAYBYALIPAY("02", "支付宝"),PAYBY_JUHUIFEN("03","聚惠分"), PAYBYOTHER("06", "其他");
+
+        private String code;
+        private String name;
+
+        private PayTypeEnum(String code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        /**
+         * @return the code
+         */
+        public String getCode() {
+            return code;
+        }
+
+        /**
+        * @return the name
+        */
+        public String getName() {
+            return name;
+        }
+
+        public static String getNameByCode(String code) {
+            for (PayTypeEnum eopen : PayTypeEnum.values()) {
+                if (eopen.code.equals(code)) {
+                    return eopen.name;
+                }
+            }
+            return "";
+        }
     }
 
 }
