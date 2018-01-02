@@ -290,7 +290,7 @@ public class MerchantImportHelper{
         
         merchantTerminal1.setTerminalType(terminalType);
         merchantTerminal1.setTerminalCode(dto.getInnerTermCode());
-        merchantTerminal1.setChannelTerminalCode(dto.getTerminalCode());
+        merchantTerminal1.setChannelTerminalCode(dto.getQrChannelTerminalCode() == null ? dto.getChannelTerminalCode():dto.getQrChannelTerminalCode());
         merchantTerminal1.setAlipayFee(alipayFee);
         merchantTerminal1.setWechatFee(wechatFee);
         
