@@ -725,6 +725,7 @@ public class ReportInfoProvider {
 						WHERE("report.status=#{reportInfo.status}");
 					}
 				}
+				
 				ORDER_BY("report.view_num desc limit " + start + ", " + limit);
 			}
 		}.toString();
