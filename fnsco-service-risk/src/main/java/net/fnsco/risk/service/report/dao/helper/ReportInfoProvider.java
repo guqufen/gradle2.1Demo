@@ -862,7 +862,7 @@ public class ReportInfoProvider {
 					SELECT("risk_merc_pay_ability ra");
 					WHERE(" tt.entity_inner_code = ra.entity_inner_code ");
 					WHERE(" ra.pay_ability > #{reportInfo2.payAbility}");
-					WHERE(" ra.month = date_format(now(),'%Y%m')");
+					WHERE(" PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , ra. MONTH ) =1");
 					
 				}
 				if(null != reportInfo2.getAgentId()){
@@ -921,7 +921,7 @@ public class ReportInfoProvider {
 					SELECT("risk_merc_pay_ability ra");
 					WHERE(" tt.entity_inner_code = ra.entity_inner_code ");
 					WHERE(" ra.pay_ability > #{reportInfo2.payAbility}");
-					WHERE(" ra.month = date_format(now(),'%Y%m')");
+					WHERE(" PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , ra. MONTH ) =1");
 				}
 				if(null != reportInfo2.getAgentId()){
 					SELECT("risk_user_merc_rel rr");
