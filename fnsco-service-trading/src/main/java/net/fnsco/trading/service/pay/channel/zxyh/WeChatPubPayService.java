@@ -25,6 +25,7 @@ import net.fnsco.trading.comm.TradeConstants.PayMediumEnum;
 import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.constant.E789ApiConstant.PayTypeEnum;
 import net.fnsco.trading.constant.E789ApiConstant.ResponCodeEnum;
+import net.fnsco.trading.constant.E789ApiConstant.WeChatPayTypeEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.WeChatPubPayDTO;
@@ -48,7 +49,7 @@ public class WeChatPubPayService extends BaseService {
 
 	public ResultDTO<WeChatPubPayResultDTO> weChatPubPay(WeChatPubPayReqDTO h5PayJO) {
 
-		String url = "/MPay/backTransAction.do";// 微信测试
+		String url = "/MPay/backTransAction.do";// URL
 		String merId = env.getProperty("zxyh.merId");
 		WeChatPubPayDTO weChatPubPayDTO = new WeChatPubPayDTO();
 
@@ -68,7 +69,7 @@ public class WeChatPubPayService extends BaseService {
 			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_CHANNEL_INNERCODE);
 		}
 
-		weChatPubPayDTO.setTxnSubType(h5PayJO.getTxnType());// 交易子类型，010131：微信公众号支付；010134：微信小程序支付；010502：QQ公众号支付
+		weChatPubPayDTO.setTxnSubType(WeChatPayTypeEnum.getCodeByType(h5PayJO.getTxnType()));// 交易子类型，010131：微信公众号支付；010134：微信小程序支付；010502：QQ公众号支付
 		weChatPubPayDTO.setBackEndUrl(env.getProperty("zxyh.WeChatPubPay.backUrl"));// 后台通知地址,接收支付网关异步通知回调地址
 		weChatPubPayDTO.setSecMerId(merchantChannel.getChannelMerId());// 分账子商户号,使用分账功能时上传，是与merId关联的分账子商户号
 		// weChatPubPayDTO.setTermIp(h5PayJO.getTermIp());//终端IP,接入商机器IP

@@ -16,7 +16,7 @@ public class WeChatPubPayReqDTO extends DTO {
 	private String amt;// 交易金额
 	@ApiModelProperty(value = "用户在商户公众号的唯一标识", example = "用户在商户公众号的唯一标识")
 	private String orderSubOpenid;// 用户子标识 ，用户在商户公众号的唯一标识（openid），QQ公众号支付非必填
-	@ApiModelProperty(value="交易类型：010131：微信公众号支付 010134：微信小程序支付 010502：QQ公众号支付",example="交易类型：010131：微信公众号支付 010134：微信小程序支付 010502：QQ公众号支付")
+	@ApiModelProperty(value="交易类型：GZH：微信公众号支付/ XCX：微信小程序支付/ QQPAY：QQ公众号支付",example="交易类型：GZH：微信公众号支付/ XCX：微信小程序支付/ QQPAY：QQ公众号支付")
 	private String txnType;
 
 	public Integer getUserId() {
