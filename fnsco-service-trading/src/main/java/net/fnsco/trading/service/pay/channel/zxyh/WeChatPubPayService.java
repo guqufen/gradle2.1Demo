@@ -150,7 +150,7 @@ public class WeChatPubPayService extends BaseService {
 
 		WeChatPubPayDTO weChatPayDTO = JSON.parseObject(respStr, WeChatPubPayDTO.class);
 		if (weChatPayDTO == null) {
-			logger.error("h5通知结果数据有误，解析出来的数据为空！");
+			logger.error("通知结果数据有误，解析出来的数据为空！");
 			return "fail";
 		}
 
