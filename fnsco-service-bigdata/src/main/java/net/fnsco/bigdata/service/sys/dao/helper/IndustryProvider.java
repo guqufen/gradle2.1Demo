@@ -132,7 +132,7 @@ public class IndustryProvider {
         int start = (pageNum - 1) * pageSize;
         int limit = pageSize;
         return new SQL() {{
-        SELECT("*");
+        SELECT("id,`code`,business_form,IFNULL(`first`, \"\") first ,IFNULL(third, '') third,IFNULL(fourth, '') fourth,`status`,max_price,interest_rate,pos_usage");
         FROM(TABLE_NAME);
         if (StringUtils.isNotBlank(industry.getBusinessForm())){
             WHERE("CONCAT_WS(business_form,first,third,fourth) LIKE CONCAT('%', #{industry.businessForm}, '%')");
