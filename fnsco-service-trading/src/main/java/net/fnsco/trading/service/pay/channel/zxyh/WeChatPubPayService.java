@@ -56,13 +56,13 @@ public class WeChatPubPayService extends BaseService {
 		String innerCode = appUserMerchant1Dao.selectInnerCodeByUserId(h5PayJO.getUserId());
 		if (null == innerCode) {
 			logger.info("该用户没有绑定内部商户号，请核查后重新交易");
-			return ResultDTO.fail("1002");
+			return ResultDTO.fail("交易失败");
 		}
 		// 通过内部商户号查找绑定的中信商户号
 		MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, "05");
 		if (null == merchantChannel) {
 			logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=[" + innerCode + "");
-			return ResultDTO.fail("1002");
+			return ResultDTO.fail("交易失败");
 		}
 
 		weChatPubPayDTO.setTxnSubType(h5PayJO.getTxnType());// 交易子类型，010131：微信公众号支付；010134：微信小程序支付；010502：QQ公众号支付
@@ -109,7 +109,7 @@ public class WeChatPubPayService extends BaseService {
 		if (null == tradeOrderDO1) {
 			logger.info("没有找到该交易请求交易,order_no=[" + tradeOrderDO.getOrderNo() + "]");
 
-			return ResultDTO.fail("1002");
+			return ResultDTO.fail("交易失败");
 		}
 
 		// 应答成功
