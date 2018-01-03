@@ -1,6 +1,7 @@
 package net.fnsco.bigdata.api.merchant;
 
 import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
+import net.fnsco.bigdata.api.dto.IndustryDTO;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.ResultPageDTO;
 
@@ -62,4 +63,5 @@ public interface MerchantEntityService {
      * @return
      */
 	Integer getEtpsTypeByEtpsAttra(int etps_attr);
+
 }

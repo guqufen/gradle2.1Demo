@@ -12,13 +12,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.freamwork.comm.Md5Util;
+import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.constant.ApiConstant;
+import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
-import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
 import net.fnsco.trading.service.third.reCharge.dto.CheckChargePackageDTO;
-import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 
@@ -38,11 +41,13 @@ public class PrepaidRefillController extends BaseController {
 	@Autowired
 	private AppAccountBalanceService appAccountBalanceService;
 	@Autowired
-	private RechargeOrderService rechargeOrderService;
+	private AppUserService appUserService;
 
 	@RequestMapping("/prepaidCheck")
 	@ApiOperation(value = "话费/流量套餐资费查询url")
 	public ResultDTO<CheckChargePackageDTO> prepaidCheck(@RequestBody FlowPackageCheckJO flowPackageCheckJO) {
+
+		
 
 		// 话费资费查询
 		if (0 == flowPackageCheckJO.getType()) {
@@ -61,6 +66,17 @@ public class PrepaidRefillController extends BaseController {
 	public ResultDTO<ChargeResultDTO> prepaidCharge(@RequestBody FlowChargeJO fl) {
 
 		ChargeResultDTO ph = null;
+
+		String password = Md5Util.getInstance().md5(fl.getPayPassword());
+		// 根据id查询用户是否存在获取原密码
+		AppUser mAppUser = appUserService.selectAppUserById(Integer.valueOf(fl.getUserId()));
+		if (null == mAppUser) {
+			return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+		}
+		// 查到的密码和原密码做比较
+		if (!password.equals(mAppUser.getPassword())) {
+			return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
+		}
 
 		// 根据userId和待扣金额查询账户是否有足够的钱进行充值交易，并更新
 		Boolean isEnough = appAccountBalanceService.doFrozenBalance(fl.getUserId(), new BigDecimal(fl.getInprice()).multiply(new BigDecimal(100)));

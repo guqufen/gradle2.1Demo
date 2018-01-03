@@ -127,7 +127,7 @@ function queryIndustry(value){
 		type : 'POST',
 		async: false,
 		dataType : "json",
-		data : {"id":value},
+		data : {"code":value},
 		success : function(data){
 			if(data.data.fourth != ""){
 				result = data.data.first+'--'+data.data.third+'--'+data.data.fourth;
@@ -153,6 +153,12 @@ function queryParams(params) {
 		agentId : agentId
 	}
 	return param;
+}
+
+//重置按钮事件
+function resetEvent(form, id) {
+	$('#' + form)[0].reset();
+	$('#' + id).bootstrapTable('refresh');
 }
 // 处理后台返回数据
 function responseHandler(res) {

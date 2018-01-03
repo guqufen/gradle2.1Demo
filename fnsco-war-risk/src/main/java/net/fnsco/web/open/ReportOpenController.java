@@ -1,5 +1,6 @@
 package net.fnsco.web.open;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.math.NumberUtils;
@@ -14,8 +15,11 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.risk.service.product.ProductService;
+import net.fnsco.risk.service.product.entity.ProductDO;
 import net.fnsco.risk.service.report.ReportService;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
+import net.fnsco.risk.service.report.entity.ReportInfoDO2;
 
 /**
  * 
@@ -31,6 +35,8 @@ import net.fnsco.risk.service.report.entity.ReportInfoDO;
 public class ReportOpenController extends BaseController {
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private ProductService productService;
 
     //根据用户id分页查询绑定下的商户列表
     @ApiOperation(value = "分页查询", notes = "分页查询")
@@ -43,6 +49,24 @@ public class ReportOpenController extends BaseController {
         reportInfoDO.setUserId(getUserId());
         reportInfoDO.setStatus(1);//只查审核通过的
         ResultPageDTO<ReportInfoDO> pager = this.reportService.page(reportInfoDO, page, rows);
+        return success(pager);
+    }
+    
+    /**
+     * 根据产品查询商户信息
+     * @param reportInfoDO
+     * @return
+     */
+    @ApiOperation(value = "分页查询", notes = "分页查询")
+    @ResponseBody
+    @RequestMapping(value = "queryMercByProduct", method = RequestMethod.GET)
+    public ResultDTO page2(ReportInfoDO2 reportInfoDO) {
+        Map<String, Integer> params = super.copyParamsToInteger(new String[] { "currentPageNum", "pageSize" });
+        Integer page = params.get("currentPageNum");
+        Integer rows = params.get("pageSize");
+        reportInfoDO.setUserId(getUserId());
+        reportInfoDO.setStatus(1);//只查审核通过的
+        ResultPageDTO<ReportInfoDO2> pager = this.reportService.page2(reportInfoDO, page, rows);
         return success(pager);
     }
     //历史风控报表查询
@@ -85,8 +109,8 @@ public class ReportOpenController extends BaseController {
     //查询行业类别
     @RequestMapping("queryIndustry")
     @ResponseBody
-    public ResultDTO queryIndustry(@RequestParam String id) {
-        return reportService.queryIndustry(NumberUtils.toInt(id));
+    public ResultDTO queryIndustry(@RequestParam String code) {
+        return reportService.queryIndustryByCode(code);
     }
     
     @RequestMapping("queryHistoryReport")
@@ -108,5 +132,17 @@ public class ReportOpenController extends BaseController {
     public ResultDTO forwordToReport(@RequestParam String merchantId) {
     	reportService.updateViemNum(Integer.valueOf(merchantId));
     	return ResultDTO.success();
+    }
+    
+    /**
+     * 根据后台设置的产品动态生成对应按钮
+     * @return
+     */
+    @RequestMapping("getProductName")
+    @ResponseBody
+    public ResultDTO<List<ProductDO>> getProductName() {
+    	ResultDTO<List<ProductDO>>  result = new ResultDTO();
+        List<ProductDO> list = productService.getProductName();
+        return result.success(list);
     }
 }

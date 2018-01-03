@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,13 +28,15 @@ import net.fnsco.core.utils.ReadExcel;
 import net.fnsco.risk.service.report.ReportService;
 import net.fnsco.risk.service.report.entity.ReportInfoDO;
 import net.fnsco.risk.service.report.entity.ReportRepaymentHistoryDO;
+import net.fnsco.risk.service.sys.dao.IndustryDAO;
+import net.fnsco.risk.service.sys.entity.IndustryDO;
 @Controller
 @RequestMapping(value = "/web/admin/report", method = RequestMethod.POST)
 public class ReportAdminController extends BaseController{
     @Autowired
     private ReportService reportService;
     @Autowired
-    private Environment        env;
+	private IndustryDAO industryDAO;
     
     // 分页
     @ApiOperation(value = "分页查询", notes = "分页查询")
@@ -263,7 +264,8 @@ public class ReportAdminController extends BaseController{
         //查询行业类别
         @RequestMapping("queryIndustry")
         @ResponseBody
-        public ResultDTO queryIndustry(@RequestParam String id) {
-            return reportService.queryIndustry(NumberUtils.toInt(id));
+        public ResultDTO queryIndustry(@RequestParam String code) {
+        	IndustryDO data = industryDAO.getByCode(code);
+            return ResultDTO.success(data);
         }
 }
