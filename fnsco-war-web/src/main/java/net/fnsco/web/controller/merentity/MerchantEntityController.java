@@ -159,8 +159,8 @@ public class MerchantEntityController extends BaseController {
 		
 		String str = entity.getIndustryName();
 		if(!com.google.common.base.Strings.isNullOrEmpty(str)) {
-			while (str.endsWith("-") && str.length() > 2) {
-				str = str.substring(0, str.length()-2);
+			while (str.endsWith("-") && str.length() > 1) {
+				str = str.substring(0, str.length()-1);
 			}
 			if("-".equals(str)) {
 				str = null;
@@ -171,7 +171,6 @@ public class MerchantEntityController extends BaseController {
 		
 		return ResultDTO.success(entity);
 	}
-	
 	/**
 	 * @param merchantEntity
 	 * @param currentPageNum
