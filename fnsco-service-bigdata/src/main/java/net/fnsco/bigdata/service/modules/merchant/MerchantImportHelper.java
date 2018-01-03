@@ -297,7 +297,7 @@ public class MerchantImportHelper{
         merchantTerminal1.setWechatFee(wechatFee);
         
         merchantTerminal1.setCategroryId(dto.getCategroryId());
-        merchantTerminal1.setSubAppId(Strings.isNullOrEmpty(dto.getSubAppId())?null:Integer.valueOf(dto.getSubAppId()));
+        merchantTerminal1.setSubAppId(dto.getSubAppId());
         merchantTerminal1.setqGroupId(dto.getqGroupId());
         merchantTerminal1.setSettleCycle(dto.getSettleCycle());
         
