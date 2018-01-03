@@ -16,6 +16,7 @@ import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
@@ -74,7 +75,7 @@ public class PrepaidRefillController extends BaseController {
 		}
 		// 查到的密码和原密码做比较
 		if (!password.equals(mAppUser.getPassword())) {
-			return ResultDTO.fail(ApiConstant.E_OLDPASSWORD_ERROR);
+			return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
 		}
 
 		// 根据userId和待扣金额查询账户是否有足够的钱进行充值交易，并更新
