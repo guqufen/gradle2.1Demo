@@ -80,9 +80,22 @@ public class MercPayAbilityService extends BaseService {
 		 * 获取所有需要统计的实体商户商户号
 		 */
 		List<String> allEntityInnerCode = userMercRelDAO.getAllEntityInnerCode();
-		if (CollectionUtils.isNotEmpty(allEntityInnerCode)) {
+		this.countRepaymentAbility(startTime, endTime, allEntityInnerCode);
+
+	}
+	
+	
+	/**
+	 * 计算传入商家商家还款能力，每个月计算一次
+	 * 
+	 * @param startTime 时间格式yyyyMMddHHmmss
+	 * @param endTime 时间格式yyyyMMddHHmmss
+	 */
+	public void countRepaymentAbility(String startTime, String endTime,List<String> entityInnerCodes) {
+		
+		if (CollectionUtils.isNotEmpty(entityInnerCodes)) {
 			String dateMonthStr = startTime.substring(0, 6);
-			for (String entityInnerCode : allEntityInnerCode) {
+			for (String entityInnerCode : entityInnerCodes) {
 				
 				IndustryDO industryDO = industryDAO.getByEntityInnerCode(entityInnerCode);
 				if (null != industryDO && !Strings.isNullOrEmpty(industryDO.getPosUsage()) &&!Strings.isNullOrEmpty(industryDO.getInterestRate()) ) {
