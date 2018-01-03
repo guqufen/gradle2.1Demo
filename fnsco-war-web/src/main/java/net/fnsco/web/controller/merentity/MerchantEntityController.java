@@ -156,12 +156,27 @@ public class MerchantEntityController extends BaseController {
 		}
 //		MerchantEntity entity = merchantEntityService.selectByPrimaryKey(id);
 		MerchantEntity entity = merchantEntityDao.selectAllByPrimaryKey(id);
-		if("---".equals(entity.getIndustryName())) {
-			entity.setIndustryName(null);
+		
+		String str = entity.getIndustryName();
+		if(!com.google.common.base.Strings.isNullOrEmpty(str)) {
+			while (str.endsWith("-")) {
+				str = str.substring(0, str.length()-2);
+			}
+			entity.setIndustryName(str);
 		}
+		
+		
 		return ResultDTO.success(entity);
 	}
 	
+	public static void main(String[] args) {
+		String str = "---";
+		while (str.endsWith("-")) {
+			str = str.substring(0, str.length()-2);
+			
+		}
+		System.out.println(str);
+	}
 	/**
 	 * @param merchantEntity
 	 * @param currentPageNum
