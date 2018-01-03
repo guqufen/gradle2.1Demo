@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>风控+</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="风控+页面">
+<meta name="author" content="">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">	
+<link href="css/common.css" rel="stylesheet">
+<link href="css/index.css" rel="stylesheet">
+</head>
+<body>
+	<div class="content">
+		<!-- 左侧导航栏 -->
+		<div class="leftNavBar" id="leftContent">
+			<div class="headerIcon">
+				<img class="headerImg" src="img/login/bg1.jpg" alt="">
+				<div class="headNav" id="headNav">
+					<strong class="font-bold indexDepartment">拉卡拉风控+</strong>
+					<strong class="font-bold indexPageUserName">拉卡拉风控+</strong>
+					<div class="triangle-down"></div>
+					<ul class="headNav-list" id="headNav-list">
+						<div class="triangle-up"></div>
+						<a href="javascript:;" id="openChangePassword"><li>修改密码</li></a>
+						<a href="/web/userOuter/logout" class="logout"><li>退出登录</li></a>
+					</ul>
+				</div>
+			</div>
+			<!-- 导航列表 -->
+			<ul class="nav">
+				<li class="navList"><a href="index.html"> <i class="icon fk"></i> <span>首页</span>
+				</a></li>
+				<li class="navList"><a href="management.html"> <i class="icon fk"></i> <span>商户管理</span>
+				</a></li>
+				<li class="navList"><a href="risk.html" class="active"> <i class="icon fk"></i> <span>风控+</span>
+				</a></li>
+				<li class="navList"><a href="products.html"> <i class="icon fk"></i> <span>产品管理</span>
+				</a></li>
+			</ul>
+		</div>
+		<!-- 右侧内容区域 -->
+		<div class="rightBox" id="rightBox">
+			<!-- 搜索栏 -->
+			<div class="searchBox" id="searchBox">
+				<button class="searchBtn" onclick="javascript:queryEvent();">全部</button>
+			</div>
+			<!-- 表格块 -->
+			<div class="rightContent" id="rightContent">
+				<div class="contentTable">
+					<div class="ibox float-e-margins">
+						<div class="ibox-content">
+							<div class="row row-lg">
+								<div class="col-sm-12">
+									<table id="table"></table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 修改密码 -->
+			<div id="tk">
+				<div class="zz"></div>
+				<div class="changePassword">
+					<div class="closeBtn" id="changeClose">
+						<img src="img/x.png">
+					</div>
+					<div class="input">
+						<div class="icon">
+							<img src="img/login/Shape.png" alt="旧密码">
+						</div>
+						<input type="password" placeholder="旧密码" class="loginInput"
+							name="account" id="account">
+					</div>
+					<div class="input">
+						<div class="icon">
+							<img src="img/login/Shape.png" alt="新密码">
+						</div>
+						<input type="password" placeholder="新密码" maxlength="12" class="loginInput"
+							name="password" id="password">
+					</div>
+					<div class="input">
+						<div class="icon">
+							<img src="img/login/Shape.png" alt="确认新密码">
+						</div>
+						<input type="password" placeholder="确认新密码" maxlength="12" class="loginInput"
+							name="password1" id="password1">
+					</div>
+					<input id="btn_submit" type="button" name="" class="changeBtn"
+						value="修改">
+				</div>
+			</div>
+		</div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/layer/layer.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-export.js"></script>
+<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/report2.js"></script>
+<script src="js/layout.js"></script>
+<script type="text/javascript">
+	$('.logout').attr('href', PROJECT_NAME + "/web/userOuter/logout");
+	//获取当前用户,将真实姓名显示出来
+	$(function() {
+		$.ajax({
+			url : PROJECT_NAME + '/web/userOuter/getCurrentUser',
+			dataType : 'json',
+			type : 'POST',
+			success : function(data) {
+				unloginHandler(data);
+				if (!data.success)
+					window.location = 'login.html';
+				$('.indexDepartment').html(data.data.department);
+				$('.indexPageUserName').hide();
+				$('.indexPageUserName').html(data.data.name);
+			}
+		});
+	});
+
+	//修改密码
+	$("#btn_submit").click(function() {
+		if($(".loginInput").val()==''){
+			layer.msg('请输入旧密码');
+			return;
+		}
+		if($("#password").val()==''){
+			layer.msg('请输入新密码');
+			return;
+		}
+		if($("#password").val().length>12 || $("#password").val().length<6){
+			layer.msg('密码长度不能小于6以及不能大于12个');
+			return;
+		}
+		if($("#password1").val()==''){
+			layer.msg('请确认新密码');
+			return;
+		}
+		if($("#password1").val().length>12 || $("#password1").val().length<6){
+			layer.msg('密码长度不能小于6以及不能大于12个');
+			return;
+		}
+		if ($("#password").val() != $("#password1").val()) {
+			layer.msg('两次密码输入不一致,请重新输入');
+			return;
+		}
+		//此处为real_name
+		var data = {
+			"name" : $(".indexPageUserName").html(),
+			"oldPassword" : $("#account").val(),
+			"newPassword" : $("#password").val()
+		};
+		$.ajax({
+			url : PROJECT_NAME + '/web/userOuter/modifyPassword',
+			dataType : 'json',
+			type : 'POST',
+			data : data,
+			success : function(result) {
+				unloginHandler(result);
+				if (result.success) {
+					layer.msg('修改成功，正在跳转登录页');
+					setTimeout(function(){
+						window.location = PROJECT_NAME + "/web/userOuter/logout";
+					},2000)
+				} else {
+					layer.msg('原密码错误,请重新输入');
+				}
+			}
+		});
+
+	})
+
+</script>
+</html>

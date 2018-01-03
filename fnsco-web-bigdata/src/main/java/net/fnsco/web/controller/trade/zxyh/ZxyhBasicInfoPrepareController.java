@@ -1,10 +1,3 @@
-/**
- * 
- */
-/**
- * @author bhl
- *
- */
 package net.fnsco.web.controller.trade.zxyh;
 
 
@@ -19,13 +12,11 @@ import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
-import net.fnsco.bigdata.api.merchant.MerchantChannelService;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.OrderPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
-
 
 @Controller
 @RequestMapping(value = "/web/zxyh")

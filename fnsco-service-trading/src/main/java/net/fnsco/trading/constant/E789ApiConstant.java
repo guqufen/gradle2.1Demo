@@ -29,6 +29,7 @@ public class E789ApiConstant extends CoreConstants {
 	public static String E_NOT_FIND_INNERCODE = "210006"; // 未找到对应内部商户号
 	public static String E_NOT_FIND_ENTITY_INNERCODE = "210007"; // 未找到对应实体内部商户号
 	public static String E_NOT_FIND_CHANNEL_INNERCODE = "210008"; // 未找到对应渠道商户号
+	public static String E_APP_PAY_PASSWORD_ERROR      = "210009"; //支付密码错误
 
 	static {
 		// 身份识别证错误信息
@@ -58,6 +59,7 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(E_NOT_FIND_INNERCODE, "未找到对应内部商户号");
 		ERROR_MESSGE_MAP.put(E_NOT_FIND_ENTITY_INNERCODE, "未找到对应实体内部商户号");
 		ERROR_MESSGE_MAP.put(E_NOT_FIND_CHANNEL_INNERCODE, "未找到对应渠道商户号");
+		ERROR_MESSGE_MAP.put(E_APP_PAY_PASSWORD_ERROR, "支付密码错误");
 	}
 
 	public static enum ResponCodeEnum {

@@ -28,14 +28,14 @@ public class WeChatPubPayController extends BaseController {
 	private WeChatPubPayService weChatPubPayService;
 
 	@RequestMapping("/weChatPubPay")
-	@ApiOperation(value = "公众号/小程序支付函数")
+	@ApiOperation(value = "公众号/小程序支付函数", notes="作者：伯约")
 	public ResultDTO<WeChatPubPayResultDTO> weChatPubPay(@RequestBody WeChatPubPayReqDTO weChatPubPayReqDTO) {
 
 		return weChatPubPayService.weChatPubPay(weChatPubPayReqDTO);
 	}
 
 	@RequestMapping("/callBack")
-	@ApiOperation(value = "公众号/小程序支付回调函数")
+	@ApiOperation(value = "公众号/小程序支付回调函数", notes="作者：伯约")
 	public void callBack(@RequestBody String respStr) {
 		// 解析返回报文
 		assert respStr.startsWith("sendData=");

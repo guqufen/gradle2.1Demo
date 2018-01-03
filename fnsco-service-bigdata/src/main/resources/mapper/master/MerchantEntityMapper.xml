@@ -26,11 +26,24 @@
     <result column="etps_attr" property="etpsAttr" jdbcType="INTEGER" />
   </resultMap>
   
+ <!--    <resultMap id="IndustryResultMap" type="net.fnsco.bigdata.api.dto.IndustryDTO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="business_form" property="businessForm" jdbcType="VARCHAR" />
+    <result column="first" property="first" jdbcType="VARCHAR" />
+    <result column="third" property="third" jdbcType="VARCHAR" />
+    <result column="fourth" property="fourth" jdbcType="VARCHAR" />
+  </resultMap> -->
+  
   <sql id="Base_Column_List" >
     id, entity_inner_code, merc_name, legal_person, legal_person_mobile, business_license_num, 
     card_type, card_num, status, create_timer, create_source, create_user_id, last_modefy_timer, 
     last_modefy_user_id,scores,regist_address,regist_province,regist_city,regist_area,regist_address_detail,etps_attr
   </sql>
+  
+<!--   <sql id="Industry_Column_List" >
+    id, code,business_form,first,third,fourth
+  </sql> -->
  <!-- 店铺列表结果集 -->
   <resultMap id="MerShopResultMap" type="net.fnsco.bigdata.api.dto.MerchantShopDTO" >
     <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
@@ -131,6 +144,9 @@
       <if test="registAddressDetail != null" >
         regist_address_detail,
       </if>
+      <if test="industryCode != null" >
+        industry_code,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -199,6 +215,9 @@
       </if>
       <if test="registAddressDetail != null" >
         #{registAddressDetail,jdbcType=VARCHAR},
+      </if>
+       <if test="industryCode != null" >
+        #{industryCode,jdbcType=VARCHAR},
       </if>
       
     </trim>
@@ -270,6 +289,9 @@
       </if>
       <if test="registAddressDetail != null" >
         regist_address_detail = #{registAddressDetail,jdbcType=DECIMAL},
+      </if>
+      <if test="industryCode != null" >
+        industry_code = #{industryCode,jdbcType=DECIMAL},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}

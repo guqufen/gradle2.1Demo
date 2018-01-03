@@ -54,10 +54,17 @@ public class MerchantEntity {
     private String registProvinceName;  //省名称
     private String registCityName; //市名称
     private String registAreaName; //区名称
+    private String industryCode;//行业代码
 
-	
+    public String getIndustryCode() {
+		return industryCode;
+	}
 
-    public String getRegistCityName() {
+	public void setIndustryCode(String industryCode) {
+		this.industryCode = industryCode;
+	}
+
+	public String getRegistCityName() {
 		return registCityName;
 	}
 
