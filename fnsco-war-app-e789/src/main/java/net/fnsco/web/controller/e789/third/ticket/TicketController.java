@@ -113,6 +113,14 @@ public class TicketController extends BaseController {
      * @return ResultDTO<Object>    DOM对象
      * @author sxfei
      * @date   2017年12月13日 下午4:03:41
+     * {
+          "buyDate": "2018-01-20",
+          "endSite": "HNH",
+          "startSite": "HGH",
+          "trainCode": "K80"
+        }
+     * 
+     * 
      */
     @RequestMapping(value = "/queryTicketList")
     @ApiOperation(value = "查询火车票列表")
@@ -136,7 +144,7 @@ public class TicketController extends BaseController {
             vo.setToStationCode(dto.getTo_station_code());
             vo.setToStationName(dto.getTo_station_name());
             vo.setTrainCode(dto.getTrain_code());
-            vo.setTrainDate(dto.getTrain_start_date());
+            vo.setTrainDate(ticketJO.getBuyDate());
             List<SeatTypeVO> seatTypeList = getSeatType(dto);
             vo.setSeatTypeList(seatTypeList);
             vo.setCanBuyNow(dto.getCan_buy_now());
