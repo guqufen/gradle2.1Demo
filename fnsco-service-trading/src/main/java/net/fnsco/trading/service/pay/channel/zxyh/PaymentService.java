@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
@@ -19,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.api.dto.MercQueryDTO;
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.dto.TradeAliPayCallBackDTO;
 import net.fnsco.bigdata.api.dto.TradeWeChatCallBackDTO;
@@ -65,10 +67,6 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	@Autowired
 	private TradeOrderService tradeOrderService;
 	@Autowired
-	private MerchantChannelService merchantChannelService;
-	@Autowired
-	private MerchantCoreService merchantCoreService;
-	@Autowired
 	private MerchantChannelDao channelDao;
 	@Autowired
 	private SequenceService sequenceService;
@@ -82,6 +80,57 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	private AppUserMerchantService appUserMerchantService;
 	@Autowired
 	private AppUserMerchantEntityService appUserMerchantEntity;
+	@Autowired
+	private MerchantCoreService merchantCoreService;
+
+	public void queryAloneMchtInfoList(List<MercQueryDTO> list) {
+		String merId = env.getProperty("zxyh.merId");
+
+		if (!list.isEmpty()) {
+			for (MercQueryDTO mercQueryDTO : list) {
+				Map<String, Object> map = this.queryAloneMchtInfo(merId, mercQueryDTO.getChannel_mer_id());
+				String respCode = (String) map.get("respCode");
+				String mchtChkStatus = (String) map.get("mchtChkStatus");
+				if ("0000".equals(respCode)) {
+					switch (mchtChkStatus) {
+					case "2":
+						mchtChkStatus="5";
+						break;
+					default:
+						break;
+					}
+					merchantCoreService.updateStatusByInnerCode(mercQueryDTO.getInner_code(), mchtChkStatus);
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * 查询独立商户是否入驻成功接口 queryAloneMchtInfo:(这里用一句话描述这个方法的作用)
+	 *
+	 * @param @param
+	 *            merId
+	 * @param @param
+	 *            secMerId
+	 * @param @return
+	 *            设定文件
+	 * @return Map<String,Object> DOM对象
+	 * @throws @since
+	 *             CodingExample Ver 1.1
+	 */
+	public Map<String, Object> queryAloneMchtInfo(String merId, String secMerId) {
+		String prefix = env.getProperty("zxyh.query.url");
+		String url = "/MPayTransaction/ind/queryAloneMchtInfo.do";
+		Map<String, String> mercMap = Maps.newHashMap();
+		mercMap.put("merId", merId);
+		mercMap.put("secMerId", secMerId);
+		mercMap.put("signMethod", "02");
+		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
+		// 解析返回报文
+		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+		return respMap;
+	}
 
 	/**
 	 * 
@@ -93,7 +142,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	public Map<String, Object> mechAdd(MerchantCoreEntityZxyhDTO core) {
 		String pid = env.getProperty("zxyh.alipay.pid");
 		String merId = env.getProperty("zxyh.merId");
-		String url = ":9001/MPayTransaction/ind/mchtadd.do";
+		String prefix = env.getProperty("zxyh.add.url");
+		String url = "/MPayTransaction/ind/mchtadd.do";
 		MerchantZxyhDTO mercDTO = new MerchantZxyhDTO();
 		mercDTO.init(pid, merId);
 		// 赋值
@@ -143,7 +193,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 
 		String mercStr = JSON.toJSONString(mercDTO);
 		Map<String, String> mercMap = JSON.parseObject(mercStr, Map.class);
-		String respStr = ZxyhPayMD5Util.request(mercMap, url);
+		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
 		return respMap;
@@ -237,11 +287,11 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			respMap.put("orderId", tradeOrderDO.getOrderNo());
 			respMap.put("respCode", tradeOrderDO.getRespCode());
 			return ResultDTO.success(respMap);
-		}else{
+		} else {
 			logger.warn(JSONObject.toJSONString(respMap));
 			return ResultDTO.fail(respMap);
 		}
-		
+
 	}
 
 	/**
@@ -317,7 +367,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			respMap.put("orderId", tradeOrderDO.getOrderNo());
 			respMap.put("respCode", tradeOrderDO.getRespCode());
 			return ResultDTO.success(respMap);
-		}else{
+		} else {
 			logger.warn(JSONObject.toJSONString(respMap));
 			return ResultDTO.fail(respMap);
 		}
@@ -701,8 +751,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setOrderNo(aliDTO.getOrderId());// 商户订单号
 		tradeOrderDO.setPayOrderNo(aliDTO.getTransactionId());// 渠道(扫码)订单号
-//		BigDecimal txnAmount = new BigDecimal(aliDTO.getTxnAmt());
-//		tradeOrderDO.setTxnAmount(txnAmount);// 交易金额
+		// BigDecimal txnAmount = new BigDecimal(aliDTO.getTxnAmt());
+		// tradeOrderDO.setTxnAmount(txnAmount);// 交易金额
 		tradeOrderDO.setRespCode(aliDTO.getRespCode());// 交易返回码
 		tradeOrderDO.setRespMsg(aliDTO.getRespMsg());
 		Date tradeEndTime = DateUtils.formateToDate(aliDTO.getEndTime());
@@ -780,4 +830,5 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			return ResultDTO.fail("微信主扫交易插入失败");
 		}
 	}
+
 }
