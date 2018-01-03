@@ -359,6 +359,7 @@ function editData(id){
                 $("#myModal").modal();
                 $("#myModalLabel").html("编辑商户实体详情");
                 $("#mercName").val(entity.mercName);
+                $('#industry').val(entity.industryName);
                 $("#legalPerson").val(entity.legalPerson);
                 $("#legalPersonMobile").val(entity.legalPersonMobile);
                 $("#cardNum").val(entity.cardNum);
@@ -398,6 +399,7 @@ function detailsData(id){
         		var entity = data.data;
                 $("#myDetailModal").modal();
                 $("#detail_merName").val(entity.mercName);
+                $('#detail_industryName').val(entity.industryName);
                 $("#detail_legalPerson").val(entity.legalPerson);
                 $("#detail_legalPersonMobile").val(entity.legalPersonMobile);
                 $("#detail_cardNum").val(entity.cardNum);

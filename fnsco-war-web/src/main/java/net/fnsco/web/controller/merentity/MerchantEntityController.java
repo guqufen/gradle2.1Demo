@@ -3,7 +3,6 @@ package net.fnsco.web.controller.merentity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.beust.jcommander.Strings;
 
 import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
-import net.fnsco.bigdata.api.dto.IndustryDTO;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
+import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.core.base.BaseController;
@@ -41,6 +40,9 @@ public class MerchantEntityController extends BaseController {
 	
 	@Autowired
 	private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
+	
+	@Autowired
+	private MerchantEntityDao merchantEntityDao;
 	
 
 	/**
@@ -152,7 +154,8 @@ public class MerchantEntityController extends BaseController {
 		if(id== null ) {
 			return ResultDTO.failForMessage("ID为空!无法删除");
 		}
-		MerchantEntity entity = merchantEntityService.selectByPrimaryKey(id);
+//		MerchantEntity entity = merchantEntityService.selectByPrimaryKey(id);
+		MerchantEntity entity = merchantEntityDao.selectAllByPrimaryKey(id);
 		return ResultDTO.success(entity);
 	}
 	
