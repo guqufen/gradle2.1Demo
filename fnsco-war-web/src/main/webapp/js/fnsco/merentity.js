@@ -237,6 +237,7 @@ function resetEvent() {
 $("#btn_add").click(function(){
     $("#myModalLabel").html("新增商户实体");
     $('#addForm')[0].reset();
+    queryIndustryEvent(null);
     merProvince("0");
 })
 $('.sunmitBtn').click(function(){
@@ -353,8 +354,9 @@ function editData(id){
         success:function(data){
         	unloginHandler(data);
         	var entity = data.data;
-            console.log(data);
+            console.log(data);queryIndustryEvent(null);
         	if(data.success){
+        		
         		var entity = data.data;
                 $("#myModal").modal();
                 $("#myModalLabel").html("编辑商户实体详情");
