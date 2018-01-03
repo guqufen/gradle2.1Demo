@@ -375,12 +375,12 @@ public class MerchantInfoImportService extends BaseService {
             merchantPosService.updateByPrimaryKeySelective(merchantPos);
         }
         
-        MerchantTerminal merchantTerminal = merchantTerminalDao.selectByTerminalType(posId, innerCode, terminalType);
+        MerchantTerminal merchantTerminal = merchantTerminalDao.selectByTerminalType(merchantPos.getChannelTerminalCode(), innerCode, terminalType);
         Integer terId = null;
         if (null != merchantTerminal) {
             terId = merchantTerminal.getId();
         }
-        MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(terId, innerCode, posId, terminalType,dto);
+        MerchantTerminal merchantTerminal1 = MerchantImportHelper.createMerchantTerminal(terId, innerCode,terminalType,dto);
         // 把1个终端信息打包成List
         List<MerchantTerminal> terminalList = new ArrayList<MerchantTerminal>();
         terminalList.add(merchantTerminal1);

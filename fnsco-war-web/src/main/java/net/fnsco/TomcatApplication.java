@@ -26,7 +26,6 @@ public class TomcatApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(TomcatApplication.class, args);
-    	  
     }
 
     @Bean

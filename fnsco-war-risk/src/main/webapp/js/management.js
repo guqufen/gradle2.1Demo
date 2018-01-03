@@ -67,6 +67,11 @@ function queryParams(params) {
 	}
 	return param;
 }
+//重置按钮事件
+function resetEvent(form, id) {
+	$('#' + form)[0].reset();
+	$('#' + id).bootstrapTable('refresh');
+}
 // 处理后台返回数据
 function responseHandler(res) {
 	if (res) {

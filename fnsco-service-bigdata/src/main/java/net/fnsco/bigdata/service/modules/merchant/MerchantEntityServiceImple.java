@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.bigdata.api.dto.ChannelMerchantDTO;
+import net.fnsco.bigdata.api.dto.IndustryDTO;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
 import net.fnsco.bigdata.service.dao.master.MerchantEntityDao;
 import net.fnsco.bigdata.service.domain.MerchantEntity;
@@ -185,5 +186,7 @@ public class MerchantEntityServiceImple implements MerchantEntityService {
 		}
 		return 1;
 	}
+
+
 
 }
