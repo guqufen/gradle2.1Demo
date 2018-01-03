@@ -74,7 +74,7 @@
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAllByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-	SELECT MME.*,CONCAT(SIS.business_form,'-',SIS.`first`,'-',SIS.third,'-',SIS.fourth) AS industryName 
+	SELECT MME.*, CONCAT(IFNULL(SIS.business_form,''),'-',IFNULL(SIS.`first`,''),'-',IFNULL(SIS.third,''),'-',IFNULL(SIS.fourth,'')) AS industryName
 	  FROM m_merchant_entity MME LEFT JOIN sys_industry SIS ON MME.industry_code = SIS.`code` WHERE MME.id = #{id,jdbcType=INTEGER}  limit 1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

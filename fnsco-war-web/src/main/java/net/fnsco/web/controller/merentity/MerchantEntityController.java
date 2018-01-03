@@ -156,6 +156,9 @@ public class MerchantEntityController extends BaseController {
 		}
 //		MerchantEntity entity = merchantEntityService.selectByPrimaryKey(id);
 		MerchantEntity entity = merchantEntityDao.selectAllByPrimaryKey(id);
+		if("---".equals(entity.getIndustryName())) {
+			entity.setIndustryName(null);
+		}
 		return ResultDTO.success(entity);
 	}
 	
