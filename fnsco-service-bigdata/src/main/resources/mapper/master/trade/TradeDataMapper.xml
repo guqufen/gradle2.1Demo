@@ -66,6 +66,7 @@
     term_id, batch_no, trace_no, auth_code, order_id_scan, source, md5, send_time, 
     create_time,refer_no,status
   </sql>
+
   <sql id="Base_AllColumn_List" >
      TD.id, TD.inner_code, TD.txn_type, TD.txn_sub_type, TD.currency, TD.pay_time_out, TD.subject, TD.body, TD.customer_info, 
     TD.remark, TD.customer_ip, TD.tn, TD.resp_code, TD.resp_msg, TD.settle_amount, TD.settle_currency, TD.settle_date, 

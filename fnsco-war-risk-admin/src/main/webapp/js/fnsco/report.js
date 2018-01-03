@@ -143,7 +143,7 @@ function queryIndustry(value){
 		type : 'POST',
 		async: false,
 		dataType : "json",
-		data : {"id":value},
+		data : {"code":value},
 		success : function(data){
 			if(data.data.fourth != ""){
 				result = data.data.first+'--'+data.data.third+'--'+data.data.fourth;

@@ -68,6 +68,11 @@
 								name="legal_person" placeholder="请输入需要搜索的法人姓名" />
 						</div>
 						<div class="col-sm-4">
+							<label class="control-label" for="termId">终端号:</label>
+							<input type="text" class="form-control" id="termId"
+								name="termId" placeholder="请输入需要搜索的终端号" />
+						</div>
+						<div class="col-sm-4">
 							<label class="control-label" for="paytype">支付方式:</label> <select
 								id="paytype" name="paytype" class="form-control">
 								<option value="03" selected>全部</option>
@@ -670,6 +675,7 @@
 			startTime : $('#datetimepicker3').val(),
 			endTime : $('#datetimepicker4').val(),
 			legalPerson :  $.trim($('#legal_person').val()),
+			termId : $.trim($('#termId').val()),
 			payType : $('#paytype').val(),
 			respCode : $('#resp_code').val(),
 			channelType : channelType,

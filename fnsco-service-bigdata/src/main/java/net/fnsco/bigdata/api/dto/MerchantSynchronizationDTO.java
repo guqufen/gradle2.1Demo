@@ -70,6 +70,57 @@ public class MerchantSynchronizationDTO {
 	private String innerTermCode;
 	private String innerCode;
 	
+	private String channelTerminalCode;
+	private String qrChannelTerminalCode;
+	private String terminalType;
+	private String subAppId;
+	private String qGroupId;
+	private String categroryId;
+	private String settleCycle;
+	
+	
+	public String getChannelTerminalCode() {
+		return channelTerminalCode;
+	}
+	public void setChannelTerminalCode(String channelTerminalCode) {
+		this.channelTerminalCode = channelTerminalCode;
+	}
+	public String getQrChannelTerminalCode() {
+		return qrChannelTerminalCode;
+	}
+	public void setQrChannelTerminalCode(String qrChannelTerminalCode) {
+		this.qrChannelTerminalCode = qrChannelTerminalCode;
+	}
+	public String getTerminalType() {
+		return terminalType;
+	}
+	public void setTerminalType(String terminalType) {
+		this.terminalType = terminalType;
+	}
+	public String getSubAppId() {
+		return subAppId;
+	}
+	public void setSubAppId(String subAppId) {
+		this.subAppId = subAppId;
+	}
+	public String getqGroupId() {
+		return qGroupId;
+	}
+	public void setqGroupId(String qGroupId) {
+		this.qGroupId = qGroupId;
+	}
+	public String getCategroryId() {
+		return categroryId;
+	}
+	public void setCategroryId(String categroryId) {
+		this.categroryId = categroryId;
+	}
+	public String getSettleCycle() {
+		return settleCycle;
+	}
+	public void setSettleCycle(String settleCycle) {
+		this.settleCycle = settleCycle;
+	}
 	/**
      * innerCode
      *
@@ -592,6 +643,20 @@ public class MerchantSynchronizationDTO {
         dto.setInnerTermCode(StringUtil.valueOf(objs[47]).trim());
         //innerCode
         dto.setInnerCode(StringUtil.valueOf(objs[48]).trim());
+        //channelTerminalCode
+        dto.setChannelTerminalCode(StringUtil.valueOf(objs[49]).trim());
+        //qrChannelTerminalCode
+        dto.setQrChannelTerminalCode(StringUtil.valueOf(objs[50]).trim());
+        //terminalType
+        dto.setTerminalType(StringUtil.valueOf(objs[51]).trim());
+        //subAppId
+        dto.setSubAppId(StringUtil.valueOf(objs[52]).trim());
+        //qGroupId
+        dto.setqGroupId(StringUtil.valueOf(objs[53]).trim());
+        //categroryId
+        dto.setCategroryId(StringUtil.valueOf(objs[54]).trim());
+        //settleCycle
+        dto.setSettleCycle(StringUtil.valueOf(objs[55]).trim());
         
         return dto;
     }

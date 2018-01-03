@@ -9,49 +9,14 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
-<link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<link href="css/plugins/bootstrap-table/bootstrap-table.min.css"
+	rel="stylesheet">
 <link href="css/style.min.css" rel="stylesheet">
-<link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">	
+<link
+	href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css"
+	rel="stylesheet">
 <link href="css/common.css" rel="stylesheet">
 <link href="css/index.css" rel="stylesheet">
-<style>
-	#table tr th div{
-		text-align:center;
-		font-size:14px;
-	}
-	#table tbody tr td{
-		text-align:center;
-		font-size:16px;
-	}
-	.redact{
-	    font-size:16px;
-		padding-left:20px;
-		background:url(img/3.png)no-repeat;
-    	background-size:15%;
-    	background-position:1px 5px;
-    	color: #4d5f84;
-	}
-	.check{
-		font-size:16px;
-		padding-left:20px;
-		background:url(img/2.png)no-repeat;
-    	background-size:15%;
-    	background-position:1px 5px;
-    	color: #4d5f84;	
-	}
-	.generate{
-		font-size:16px;
-		padding-left:20px;
-		background:url(img/1.png)no-repeat;
-    	background-size:15%;
-    	background-position:1px 5px;
-    	color: #4d5f84;	
-	}
-	.generat:hover{
-		color: #4d5f84;	
-	}
-	#table { border-collapse: collapse; padding: 0;}
-</style>
 </head>
 <body>
 	<div class="content">
@@ -60,8 +25,8 @@
 			<div class="headerIcon">
 				<img class="headerImg" src="img/login/bg1.jpg" alt="">
 				<div class="headNav" id="headNav">
-					<strong class="font-bold indexDepartment">拉卡拉风控+</strong>
-					<strong class="font-bold indexPageUserName">拉卡拉风控+</strong>
+					<strong class="font-bold indexDepartment">拉卡拉风控+</strong> <strong
+						class="font-bold indexPageUserName">拉卡拉风控+</strong>
 					<div class="triangle-down"></div>
 					<ul class="headNav-list" id="headNav-list">
 						<div class="triangle-up"></div>
@@ -72,32 +37,43 @@
 			</div>
 			<!-- 导航列表 -->
 			<ul class="nav">
-				<li class="navList"><a href="index.html"> <i class="icon fk"></i> <span>首页</span>
+				<li class="navList"><a href="index.html"> <i
+						class="icon fk"></i> <span>首页</span>
 				</a></li>
-				<li class="navList"><a href="management.html"> <i class="icon fk"></i> <span>商户管理</span>
+				<li class="navList"><a href="management.html"> <i
+						class="icon fk"></i> <span>商户管理</span>
 				</a></li>
-				<li class="navList"><a href="risk.html" class="active"> <i class="icon fk"></i> <span>风控+</span>
+				<li class="navList"><a href="risk.html" class="active"> <i
+						class="icon fk"></i> <span>风控+</span>
+				</a></li>
+				<li class="navList"><a href="products.html"> <i
+						class="icon fk"></i> <span>产品管理</span>
 				</a></li>
 			</ul>
 		</div>
 		<!-- 右侧内容区域 -->
 		<div class="rightBox" id="rightBox">
 			<!-- 搜索栏 -->
-			<div class="searchBox" id="searchBox">
-				<div class="inputDiv">
-					<label>商户名称</label> <input id="merName" type="text" name="merchants"
-						placeholder="商户名">
+			<form id="formSearch" class="form-horizontal">
+				<div class="searchBox" id="searchBox">
+					<div class="inputDiv">
+						<label>商户名称</label> <input id="merName" type="text" name="merName"
+							placeholder="商户名">
+					</div>
+					<div class="inputDiv">
+						<label>商圈</label> <input id="tradingArea" type="text"
+							name="tradingArea" placeholder="商圈">
+					</div>
+					<div class="inputDiv">
+						<label>营业执照</label> <input id="businessLicenseNum" type="text"
+							name="businessLicenseNum" placeholder="营业执照">
+					</div>
+					<!-- <button class="searchBtn" onclick="javascript:queryEvent();">搜索</button> -->
+					<input class="searchBtn" onclick="javascript:queryEvent();" value="搜索"  style="text-align: right;" type="button">
+					<input type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent('formSearch','table');" value="重置">
 				</div>
-				<div class="inputDiv">
-					<label>商圈</label> <input id="tradingArea" type="text" name="merchants"
-						placeholder="商圈">
-				</div>
-				<div class="inputDiv">
-					<label>营业执照</label> <input id="businessLicenseNum" type="text" name="merchants"
-						placeholder="营业执照">
-				</div>
-				<button class="searchBtn" onclick="javascript:queryEvent();">搜索</button>
-			</div>
+			</form>
+			<button class="searchBtn" onclick="javascript:location.href='risk2.html'">切换模式</button>
 			<!-- 表格块 -->
 			<div class="rightContent" id="rightContent">
 				<div class="contentTable">
@@ -116,7 +92,7 @@
 			<div id="tk">
 				<div class="zz"></div>
 				<div class="changePassword">
-					<div class="close" id="changeClose">
+					<div class="closeBtn" id="changeClose">
 						<img src="img/x.png">
 					</div>
 					<div class="input">
@@ -130,15 +106,15 @@
 						<div class="icon">
 							<img src="img/login/Shape.png" alt="新密码">
 						</div>
-						<input type="password" placeholder="新密码" maxlength="12" class="loginInput"
-							name="password" id="password">
+						<input type="password" placeholder="新密码" maxlength="12"
+							class="loginInput" name="password" id="password">
 					</div>
 					<div class="input">
 						<div class="icon">
 							<img src="img/login/Shape.png" alt="确认新密码">
 						</div>
-						<input type="password" placeholder="确认新密码" maxlength="12" class="loginInput"
-							name="password1" id="password1">
+						<input type="password" placeholder="确认新密码" maxlength="12"
+							class="loginInput" name="password1" id="password1">
 					</div>
 					<input id="btn_submit" type="button" name="" class="changeBtn"
 						value="修改">
@@ -156,7 +132,8 @@
 <script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
 <script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
-<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script
+	src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="js/layer/layer.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/report.js"></script>
@@ -181,56 +158,59 @@
 	});
 
 	//修改密码
-	$("#btn_submit").click(function() {
-		if($(".loginInput").val()==''){
-			layer.msg('请输入旧密码');
-			return;
-		}
-		if($("#password").val()==''){
-			layer.msg('请输入新密码');
-			return;
-		}
-		if($("#password").val().length>12 || $("#password").val().length<6){
-			layer.msg('密码长度不能小于6以及不能大于12个');
-			return;
-		}
-		if($("#password1").val()==''){
-			layer.msg('请确认新密码');
-			return;
-		}
-		if($("#password1").val().length>12 || $("#password1").val().length<6){
-			layer.msg('密码长度不能小于6以及不能大于12个');
-			return;
-		}
-		if ($("#password").val() != $("#password1").val()) {
-			layer.msg('两次密码输入不一致,请重新输入');
-			return;
-		}
-		//此处为real_name
-		var data = {
-			"name" : $(".indexPageUserName").html(),
-			"oldPassword" : $("#account").val(),
-			"newPassword" : $("#password").val()
-		};
-		$.ajax({
-			url : PROJECT_NAME + '/web/userOuter/modifyPassword',
-			dataType : 'json',
-			type : 'POST',
-			data : data,
-			success : function(result) {
-				unloginHandler(result);
-				if (result.success) {
-					layer.msg('修改成功，正在跳转登录页');
-					setTimeout(function(){
-						window.location = PROJECT_NAME + "/web/userOuter/logout";
-					},2000)
-				} else {
-					layer.msg('原密码错误,请重新输入');
+	$("#btn_submit").click(
+			function() {
+				if ($(".loginInput").val() == '') {
+					layer.msg('请输入旧密码');
+					return;
 				}
-			}
-		});
+				if ($("#password").val() == '') {
+					layer.msg('请输入新密码');
+					return;
+				}
+				if ($("#password").val().length > 12
+						|| $("#password").val().length < 6) {
+					layer.msg('密码长度不能小于6以及不能大于12个');
+					return;
+				}
+				if ($("#password1").val() == '') {
+					layer.msg('请确认新密码');
+					return;
+				}
+				if ($("#password1").val().length > 12
+						|| $("#password1").val().length < 6) {
+					layer.msg('密码长度不能小于6以及不能大于12个');
+					return;
+				}
+				if ($("#password").val() != $("#password1").val()) {
+					layer.msg('两次密码输入不一致,请重新输入');
+					return;
+				}
+				//此处为real_name
+				var data = {
+					"name" : $(".indexPageUserName").html(),
+					"oldPassword" : $("#account").val(),
+					"newPassword" : $("#password").val()
+				};
+				$.ajax({
+					url : PROJECT_NAME + '/web/userOuter/modifyPassword',
+					dataType : 'json',
+					type : 'POST',
+					data : data,
+					success : function(result) {
+						unloginHandler(result);
+						if (result.success) {
+							layer.msg('修改成功，正在跳转登录页');
+							setTimeout(function() {
+								window.location = PROJECT_NAME
+										+ "/web/userOuter/logout";
+							}, 2000)
+						} else {
+							layer.msg('原密码错误,请重新输入');
+						}
+					}
+				});
 
-	})
-
+			})
 </script>
 </html>
