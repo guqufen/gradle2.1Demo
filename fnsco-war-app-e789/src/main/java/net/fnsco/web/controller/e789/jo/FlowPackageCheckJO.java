@@ -16,7 +16,7 @@ public class FlowPackageCheckJO extends JO {
 	private String phone;
 	@ApiModelProperty(value = "登录用户id", example = "登录用户id")
 	private String userId;
-	@ApiModelProperty(value = "类型0-话费充值;1-流量充值", example = "类型0-话费充值;1-流量充值")
+	@ApiModelProperty(value = "类型0-话费资费查询;1-流量资费查询", example = "类型0-话费资费查询;1-流量资费查询")
 	private Integer type;
 
 	public String getPhone() {
