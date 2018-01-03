@@ -18,6 +18,8 @@ public class ChargeDTO extends DTO {
 	private Integer type;
 	@ApiModelProperty(value = "充值名称:取资费查询返回的name字段", example = "充值名称:取资费查询返回的name字段")
 	private String name;
+	@ApiModelProperty(value = "充值方式:0-余额/1-微信/2-支付宝", example = "充值方式:0-余额/1-微信/2-支付宝")
+	private String payType;
 
 	public String getPhone() {
 		return phone;
@@ -69,6 +71,14 @@ public class ChargeDTO extends DTO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getPayType() {
+		return payType;
+	}
+
+	public void setPayType(String payType) {
+		this.payType = payType;
 	}
 
 }
