@@ -22,6 +22,7 @@ import net.fnsco.bigdata.api.dto.TradeWeChatCallBackDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.dto.TradeReportDTO;
+import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.channel.pfyh.PFOrderPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
@@ -64,20 +65,19 @@ public class ScannedTradeController extends BaseController {
 		}
 		ResultDTO<Map<String, Object>> dto = new ResultDTO<>();
 		Map<String, Object> reqMap = new HashMap<>();
-		if ("41".equals(paySubType)) {// 微信
+		if ("01".equals(paySubType)) {// 微信
 			dto = zxyhPaymentService.generateQRCodeWeiXin(userId, txnAmt);
 
-		} else if ("42".equals(paySubType)) {// 支付宝
+		} else if ("02".equals(paySubType)) {// 支付宝
 			dto = zxyhPaymentService.generateQRCodeAliPay(userId, ip, txnAmt);
+		}else{
+			return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
 		}
 		reqMap = dto.getData();
 		qrVo.setUrl((String) reqMap.getOrDefault("codeUrl", null));
-		if ("0000".equals(reqMap.get("respCode"))) {
-			return ResultDTO.success(qrVo);
-		} else {
-			return ResultDTO.failForMessage((String) reqMap.get("respMsg"));
-
-		}
+		qrVo.setOrderNo((String)reqMap.get("orderId"));
+		qrVo.setRespCode((String)reqMap.get("respCode"));
+		return ResultDTO.success(qrVo);
 
 	}
 
@@ -90,28 +90,28 @@ public class ScannedTradeController extends BaseController {
 	 * @auth binghui.li
 	 * @since CodingExample Ver 1.1
 	 */
-	@RequestMapping(value = "/callBack")
-	@ApiOperation(value = "收款-扫码付款回调函数")
-	public void callBack(@RequestBody String respStr) {
-		// 解析返回报文
-		assert respStr.startsWith("sendData=");
-		String respB64Str = respStr.substring(9);
-		// base64解码,并对一些特殊字符进行置换
-		byte[] respJsBs = Base64.decodeBase64(respB64Str);
-		String respJsStr = null;
-		try {
-			respJsStr = new String(respJsBs, "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
-		JSONObject jsonObj = JSONObject.parseObject(respJsStr);
-		String txnSubType = jsonObj.getString("txnSubType");
-		logger.warn("中信被扫回调函数返回值txnSubType="+"["+ txnSubType +"]");
-		if(StringUtils.equals("010130", txnSubType)){//微信回调
-			zxyhPaymentService.weChatCallBack(respJsStr);
-		}else if(StringUtils.equals("010302", txnSubType)){//微信回调
-			zxyhPaymentService.aliCallBack(respJsStr);
-		}
-	}
+//	@RequestMapping(value = "/callBack")
+//	@ApiOperation(value = "收款-扫码付款回调函数")
+//	public void callBack(@RequestBody String respStr) {
+//		// 解析返回报文
+//		assert respStr.startsWith("sendData=");
+//		String respB64Str = respStr.substring(9);
+//		// base64解码,并对一些特殊字符进行置换
+//		byte[] respJsBs = Base64.decodeBase64(respB64Str);
+//		String respJsStr = null;
+//		try {
+//			respJsStr = new String(respJsBs, "utf-8");
+//		} catch (UnsupportedEncodingException e) {
+//			throw new RuntimeException(e);
+//		}
+//		JSONObject jsonObj = JSONObject.parseObject(respJsStr);
+//		String txnSubType = jsonObj.getString("txnSubType");
+//		logger.warn("中信被扫回调函数返回值txnSubType="+"["+ txnSubType +"]");
+//		if(StringUtils.equals("010130", txnSubType)){//微信回调
+//			zxyhPaymentService.weChatCallBack(respJsStr);
+//		}else if(StringUtils.equals("010302", txnSubType)){//微信回调
+//			zxyhPaymentService.aliCallBack(respJsStr);
+//		}
+//	}
 
 }
