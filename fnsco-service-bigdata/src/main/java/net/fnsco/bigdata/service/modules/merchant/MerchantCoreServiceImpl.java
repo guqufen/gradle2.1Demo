@@ -24,6 +24,7 @@ import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.constant.BigdataConstant;
+import net.fnsco.bigdata.api.dto.MercQueryDTO;
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.merchant.MerchantEntityService;
@@ -108,6 +109,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 	private AreaDAO areaDao;
 	@Autowired
     private Environment env;
+
 
 	/**
 	 * @todo 条件分页查询
@@ -856,7 +858,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 	@Override
 	public void updateInfoByInnerCode(String innerCode, String secMerId) {
 		// 更新渠道商户信息状态
-		this.merchantCoreDao.updateStatusByInnerCode(innerCode);
+		this.merchantCoreDao.updateStatusByInnerCode(innerCode,2);
 
 		// 更新通道信息表
 		MerchantChannel channel = new MerchantChannel();
@@ -865,6 +867,20 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		channel.setModifyTime(new Date());
 		this.merchantChannelDao.updateChannelMercIdByInnerCode(channel);
 
+	}
+
+	@Override
+	public List<MercQueryDTO> getMercList() {
+		//获取入建未审核通过的商户信息
+		 return merchantCoreDao.getMercList();
+		
+	}
+
+	@Override
+	public void updateStatusByInnerCode(String inner_code, String mchtChkStatus) {
+		merchantCoreDao.updateStatusByInnerCode( inner_code, Integer.parseInt(mchtChkStatus));
+	
+		
 	}
 
 }

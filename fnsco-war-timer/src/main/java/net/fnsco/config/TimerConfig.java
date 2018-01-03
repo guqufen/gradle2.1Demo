@@ -1,6 +1,7 @@
 package net.fnsco.config;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import net.fnsco.bigdata.api.dto.MercQueryDTO;
+import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.merchant.IntegralRuleService;
 import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.trade.TradeReportService;
 import net.fnsco.trading.service.order.TradeOrderService;
+import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 
 @EnableScheduling
 public class TimerConfig {
@@ -27,6 +31,10 @@ public class TimerConfig {
     private IntegralRuleService integralRuleService;
     @Autowired
     private TradeOrderService tradeOrderService;
+    @Autowired
+	private MerchantCoreService merchantCoreService;
+    @Autowired
+    private PaymentService paymentService;
     /**
      * spring boot 定时任务
      */
@@ -137,5 +145,17 @@ public class TimerConfig {
     public void syncOrderTradeData() {
         logger.error("同步分期付订单交易数据定时任务启动");
         tradeOrderService.syncOrderTradeData();
+    }
+    
+    /**
+     * 查询入建中信银行商户状态
+     * @return void    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+    @Scheduled(cron="0/5 * *  * * ? ")
+    public void updateMercStatus(){
+    	List<MercQueryDTO> list = this.merchantCoreService.getMercList();
+    	paymentService.queryAloneMchtInfoList(list);
     }
 }
