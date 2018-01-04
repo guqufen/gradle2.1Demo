@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import net.fnsco.bigdata.api.dto.MerChantCoreDTO;
 import net.fnsco.bigdata.api.dto.MerChantCoreDetailDTO;
 import net.fnsco.bigdata.api.dto.MerTerminalsDTO;
+import net.fnsco.bigdata.api.dto.MercQueryDTO;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.core.base.PageDTO;
 /**
@@ -169,7 +170,10 @@ public interface MerchantCoreDao {
 	Integer getEtpsAttrByInnerCode(String innerCode);
 
    
-	int updateStatusByInnerCode(@Param("innerCode") String innerCode);
+	int updateStatusByInnerCode(@Param("innerCode") String innerCode,@Param("status") Integer status);
+	
+	 @Select("SELECT m1.inner_code,m2.channel_mer_id FROM m_merchant_core m1,m_merchant_channel m2 WHERE m1.inner_code=m2.inner_code AND m1.`status`=2")
+	List<MercQueryDTO> getMercList();
 
 	
 

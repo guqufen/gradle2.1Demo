@@ -26,6 +26,8 @@ public class FlowChargeJO extends JO {
 	private String name;
 	@ApiModelProperty(value = "支付密码", example = "支付密码")
 	private String payPassword;
+	@ApiModelProperty(value = "充值方式:0-余额/1-微信/2-支付宝/3-绑定卡代扣", example = "充值方式:0-余额/1-微信/2-支付宝/3-绑定卡代扣")
+	private String payType;
 
 	public String getPhone() {
 		return phone;
@@ -85,6 +87,14 @@ public class FlowChargeJO extends JO {
 
 	public void setPayPassword(String payPassword) {
 		this.payPassword = payPassword;
+	}
+
+	public String getPayType() {
+		return payType;
+	}
+
+	public void setPayType(String payType) {
+		this.payType = payType;
 	}
 
 }

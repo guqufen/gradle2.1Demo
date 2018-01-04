@@ -26,6 +26,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -196,13 +197,20 @@ public class HttpUtils {
             out.flush();
             out.close();
             int responseCode = http.getResponseCode();
-            if (responseCode != 200) {
-
+            if ((responseCode == HttpStatus.SC_MOVED_TEMPORARILY) || (responseCode == HttpStatus.SC_MOVED_PERMANENTLY) || (responseCode == HttpStatus.SC_SEE_OTHER)
+                || (responseCode == HttpStatus.SC_TEMPORARY_REDIRECT)) {
+                //读取新的URL地址   从头中取出转向的地址
+                String locationUrl = http.getHeaderField("Location");
+                http.disconnect();// 关闭连接
+                return againPost(locationUrl, params, headers);
+            } else if (responseCode != 200) {
                 logger.error(url + "调用错，返回状态 Error===" + responseCode + ",输入参数：" + params);
                 return null;
             } else {
                 logger.info("Post Success!");
             }
+            // 服务器返回码
+
             InputStream in = http.getInputStream();
             BufferedReader read = new BufferedReader(new InputStreamReader(in, DEFAULT_CHARSET));
             String valueString = null;
@@ -221,7 +229,51 @@ public class HttpUtils {
             return null;
         }
     }
+    /**
+     * 
+     * @description 功能描述: POST 请求
+     * @return 返回类型:
+     */
+    private static String againPost(String url, String params, Map<String, String> headers) {
+        StringBuffer bufferRes = null;
+        try {
+            HttpURLConnection http = null;
+            if (isHttps(url)) {
+                http = initHttps(url, _POST, headers);
+            } else {
+                http = initHttp(url, _POST, headers);
+            }
+            OutputStream out = http.getOutputStream();
+            out.write(params.getBytes(DEFAULT_CHARSET));
+            out.flush();
+            out.close();
+            int responseCode = http.getResponseCode();
+            if (responseCode != 200) {
+                logger.error(url + "再次调用错，返回状态 Error===" + responseCode + ",输入参数：" + params);
+                return null;
+            } else {
+                logger.info("Post Success!");
+            }
+            // 服务器返回码
 
+            InputStream in = http.getInputStream();
+            BufferedReader read = new BufferedReader(new InputStreamReader(in, DEFAULT_CHARSET));
+            String valueString = null;
+            bufferRes = new StringBuffer();
+            while ((valueString = read.readLine()) != null) {
+                bufferRes.append(valueString);
+            }
+            read.close();
+            in.close();
+            if (http != null) {
+                http.disconnect();// 关闭连接
+            }
+            return bufferRes.toString();
+        } catch (Exception e) {
+            logger.error("http调用报错", e);
+            return null;
+        }
+    }
     /**
      * post map 请求
      * 
@@ -231,7 +283,7 @@ public class HttpUtils {
      * @throws UnsupportedEncodingException
      */
     public static String post(String url, Map<String, String> params) throws UnsupportedEncodingException {
-            return post(url, map2Url(params), null);
+        return post(url, map2Url(params), null);
     }
 
     /**

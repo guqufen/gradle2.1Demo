@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -15,7 +16,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
-import net.fnsco.bigdata.service.sys.SequenceService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
@@ -27,7 +27,6 @@ import net.fnsco.trading.service.third.reCharge.dto.CheckMobileDTO;
 import net.fnsco.trading.service.third.reCharge.dto.JuheDTO;
 import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.trading.service.third.reCharge.util.RechargeUtil;
-import net.fnsco.trading.service.withdraw.TradeWithdrawErrorService;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 
@@ -38,19 +37,8 @@ public class PrepaidRefillService extends BaseService {
 	private TradeWithdrawService tradeWithdrawService;
 	@Autowired
 	private RechargeOrderService rechargeOrderService;
-
-	private final String OpenId = "JH284e6d24f2e3f5d89668a64b50c2c886";
-
-	// 配置流量充值
-	private final String APPKEYFLOW = "6121e6e31f9e1eff037d8c416e0ee4fe";
-
-	// 配置话费充值
-	private final String APPKEYREPAID = "9b9450b3b217f8c0c7dcb2a28eafbbb7";
-	private final String telQueryUrl = "http://op.juhe.cn/ofpay/mobile/telquery?cardnum=*&phoneno=!&key="
-			+ APPKEYREPAID;
-	private final String onlineUrl = "http://op.juhe.cn/ofpay/mobile/onlineorder?key=" + APPKEYREPAID
-			+ "&phoneno=!&cardnum=*&orderid=@&sign=$";
-	public final String orderstaUrl = "http://op.juhe.cn/ofpay/mobile/ordersta?key=" + APPKEYREPAID + "&orderid=!";
+	@Autowired
+	private Environment env;
 
 	/**
 	 * 号码充值套餐优惠资费查询，面额：10，20，30，50，100，200,循环获取各个面额原价与优惠价格
@@ -60,6 +48,8 @@ public class PrepaidRefillService extends BaseService {
 	 */
 	public ResultDTO<CheckChargePackageDTO> prepaidRefillCheck(String phone) {
 
+		String telQueryUrl = "http://op.juhe.cn/ofpay/mobile/telquery?cardnum=*&phoneno=!&key="
+				+ env.getProperty("jh.phone.feekey");
 		Integer[] denos = { 10, 20, 30, 50, 100, 200, 300 };
 		String result;
 		CheckChargePackageDTO phChargePackageDTO = new CheckChargePackageDTO();
@@ -118,7 +108,7 @@ public class PrepaidRefillService extends BaseService {
 		List<CheckMobileDTO> list = new ArrayList<>();
 
 		StringBuffer sb = new StringBuffer();
-		String sendData = sb.append("?phone=").append(phone).append("&key=").append(APPKEYFLOW).toString();
+		String sendData = sb.append("?phone=").append(phone).append("&key=").append(env.getProperty("jh.phone.flowkey")).toString();
 
 		try {
 			/**
@@ -187,11 +177,11 @@ public class PrepaidRefillService extends BaseService {
 		String orderid = CodeUtil.generateOrderCode("");
 
 		// md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
-		String sign = Md5Util.MD5(OpenId + APPKEYFLOW + chargeDTO.getPhone() + chargeDTO.getPid() + orderid)
+		String sign = Md5Util.MD5(env.getProperty("jh.phone.OpenId") + env.getProperty("jh.phone.flowkey") + chargeDTO.getPhone() + chargeDTO.getPid() + orderid)
 				.toLowerCase();
 
 		StringBuffer sb = new StringBuffer();
-		String sendData = sb.append("?key=").append(APPKEYFLOW).append("&phone=").append(chargeDTO.getPhone())
+		String sendData = sb.append("?key=").append(env.getProperty("jh.phone.flowkey")).append("&phone=").append(chargeDTO.getPhone())
 				.append("&pid=").append(chargeDTO.getPid()).append("&orderid=").append(orderid).append("&sign=")
 				.append(sign).toString();
 
@@ -313,11 +303,13 @@ public class PrepaidRefillService extends BaseService {
 	public ChargeResultDTO prepaidRefillCharge(ChargeDTO chargeDTO) {
 
 		String result = null;
+		String onlineUrl = "http://op.juhe.cn/ofpay/mobile/onlineorder?key=" + env.getProperty("jh.phone.feekey")
+		+ "&phoneno=!&cardnum=*&orderid=@&sign=$";
 		ChargeResultDTO ph = new ChargeResultDTO();
 		String orderid = CodeUtil.generateOrderCode("");
 
 		// md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
-		String sign = Md5Util.MD5(OpenId + APPKEYREPAID + chargeDTO.getPhone() + chargeDTO.getPid() + orderid);
+		String sign = Md5Util.MD5(env.getProperty("jh.phone.OpenId") + env.getProperty("jh.phone.feekey") + chargeDTO.getPhone() + chargeDTO.getPid() + orderid);
 
 		RechargeOrderDO phoneChargeOrderDO = new RechargeOrderDO();
 		phoneChargeOrderDO.setType(String.valueOf(chargeDTO.getType()));// 设置充值类型
@@ -437,7 +429,7 @@ public class PrepaidRefillService extends BaseService {
 
 		Map params = new HashMap();// 请求参数
 		params.put("orderid", rechargeOrderDO.getOrderNo());// 用户订单号，多个以英文逗号隔开，最大支持50组
-		params.put("key", APPKEYFLOW);// 应用APPKEY(应用详细页查询)
+		params.put("key", env.getProperty("jh.phone.flowkey"));// 应用APPKEY(应用详细页查询)
 
 		try {
 			result = RechargeUtil.net(url, params, "GET");
@@ -478,6 +470,7 @@ public class PrepaidRefillService extends BaseService {
 	public void orderSta(RechargeOrderDO rechargeOrderDO) {
 
 		String result = null;
+		String orderstaUrl = "http://op.juhe.cn/ofpay/mobile/ordersta?key=" + env.getProperty("jh.phone.feekey") + "&orderid=!";
 
 		try {
 			result = RechargeUtil.get(orderstaUrl.replace("!", rechargeOrderDO.getOrderNo()), 0);

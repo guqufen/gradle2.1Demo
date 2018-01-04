@@ -11,14 +11,13 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import net.fnsco.bigdata.api.merchant.MerchantCoreService;
-import net.fnsco.bigdata.api.merchant.MerchantService;
-import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
+import net.fnsco.trading.service.withdraw.TradeWithdrawService;
+import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 import net.fnsco.web.controller.e789.dto.TradeDTO;
 
 /**
@@ -35,9 +34,11 @@ import net.fnsco.web.controller.e789.dto.TradeDTO;
 @Api(value = "/trade/fsf", tags = { "分闪付支付处理相关接口" })
 public class PayDealFsfController extends BaseController {
     @Autowired
-    private TradeOrderService tradeOrderService;
+    private TradeOrderService    tradeOrderService;
     @Autowired
-    private Environment       env;
+    private Environment          env;
+    @Autowired
+    private TradeWithdrawService tradeWithdrawService;
 
     /**
      * App支付,用户二维码扫描转到聚惠分平台进行支付
@@ -80,21 +81,13 @@ public class PayDealFsfController extends BaseController {
     public String dealPayOrder(@ApiParam(value = "请求数据") String reqData) {
         TradeDTO trade = getReqData(reqData);
         String orderNo = trade.getOrderNo();
-        TradeOrderDO tradeOrderDO = tradeOrderService.queryOneByOrderId(orderNo);
+        TradeWithdrawDO tradeOrderDO = tradeWithdrawService.queryOneByOrderId(orderNo);
         String url = env.getProperty("app.base.url") + "/pay/dealPayFail.html";
         if (null != tradeOrderDO) {
-            Integer handleNum = tradeOrderDO.getHandleNum();
-            if (null == handleNum || handleNum == 0) {
-                url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-                String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/rechange/payCompleteNotice";
-                String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/rechange/payCompleteCallback?orderNo=" + orderNo;
-                url += "?commID=" + tradeOrderDO.getChannelMerId() + "&reqData=" + tradeOrderService.getReqData(tradeOrderDO, payNotifyUrl, payCallBackUrl);
-                TradeOrderDO tradeOrderTemp = new TradeOrderDO();
-                tradeOrderTemp.setId(tradeOrderDO.getId());
-                tradeOrderTemp.setHandleNum(1);
-                tradeOrderTemp.setOrderNo(tradeOrderDO.getOrderNo());
-                tradeOrderService.doUpdateForResearch(tradeOrderTemp);
-            }
+            url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
+            String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/rechange/payCompleteNotice";
+            String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/rechange/payCompleteCallback?orderNo=" + orderNo;
+            url += "?commID=" + tradeOrderDO.getChannelMerId() + "&reqData=" + tradeWithdrawService.getReqData(tradeOrderDO, payNotifyUrl, payCallBackUrl);
         }
         logger.error("分闪付跳转到聚惠分平台前的url" + url);
         return "redirect:" + url;

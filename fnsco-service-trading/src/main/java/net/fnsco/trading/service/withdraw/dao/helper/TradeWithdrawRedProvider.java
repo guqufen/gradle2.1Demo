@@ -1,14 +1,13 @@
 package net.fnsco.trading.service.withdraw.dao.helper;
 
-import org.apache.ibatis.jdbc.SQL;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawRedDO;
-
-import org.apache.commons.lang3.StringUtils;
 public class TradeWithdrawRedProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -96,6 +95,18 @@ public class TradeWithdrawRedProvider {
         }
         if (StringUtils.isNotBlank(tradeWithdrawRed.getChannelMerId())){
             SET("channel_mer_id=#{tradeWithdrawRed.channelMerId}");
+        }
+        if (StringUtils.isNotBlank(tradeWithdrawRed.getChannelType())){
+            SET("channel_type=#{tradeWithdrawRed.channelType}");
+        }
+        if (tradeWithdrawRed.getInstallmentNum() != null) {
+            SET("installment_num=#{tradeWithdrawRed.installmentNum}");
+        }
+        if (tradeWithdrawRed.getOrderAmount() != null) {
+            SET("order_amount=#{tradeWithdrawRed.orderAmount}");
+        }
+        if (tradeWithdrawRed.getEachMoney() != null) {
+            SET("each_money=#{tradeWithdrawRed.eachMoney}");
         }
         WHERE("id = #{tradeWithdrawRed.id}");
         }}.toString();
@@ -197,6 +208,18 @@ public class TradeWithdrawRedProvider {
         if (StringUtils.isNotBlank(tradeWithdrawRed.getChannelMerId())){
             WHERE("channel_mer_id=#{tradeWithdrawRed.channelMerId}");
         }
+        if (StringUtils.isNotBlank(tradeWithdrawRed.getChannelType())){
+            WHERE("channel_type=#{tradeWithdrawRed.channelType}");
+        }
+        if (tradeWithdrawRed.getInstallmentNum() != null) {
+            WHERE("installment_num=#{tradeWithdrawRed.installmentNum}");
+        }
+        if (tradeWithdrawRed.getOrderAmount() != null) {
+            WHERE("order_amount=#{tradeWithdrawRed.orderAmount}");
+        }
+        if (tradeWithdrawRed.getEachMoney() != null) {
+            WHERE("each_money=#{tradeWithdrawRed.eachMoney}");
+        }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -286,6 +309,18 @@ public class TradeWithdrawRedProvider {
         }
         if (StringUtils.isNotBlank(tradeWithdrawRed.getChannelMerId())){
             WHERE("channel_mer_id=#{tradeWithdrawRed.channelMerId}");
+        }
+        if (StringUtils.isNotBlank(tradeWithdrawRed.getChannelType())){
+            WHERE("channel_type=#{tradeWithdrawRed.channelType}");
+        }
+        if (tradeWithdrawRed.getInstallmentNum() != null) {
+            WHERE("installment_num=#{tradeWithdrawRed.installmentNum}");
+        }
+        if (tradeWithdrawRed.getOrderAmount() != null) {
+            WHERE("order_amount=#{tradeWithdrawRed.orderAmount}");
+        }
+        if (tradeWithdrawRed.getEachMoney() != null) {
+            WHERE("each_money=#{tradeWithdrawRed.eachMoney}");
         }
         }}.toString();
     }

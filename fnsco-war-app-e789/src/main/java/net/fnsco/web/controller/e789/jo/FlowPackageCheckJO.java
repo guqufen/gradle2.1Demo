@@ -15,7 +15,7 @@ public class FlowPackageCheckJO extends JO {
 	@ApiModelProperty(value = "待充值流量的手机号", example = "待充值流量的手机号")
 	private String phone;
 	@ApiModelProperty(value = "登录用户id", example = "登录用户id")
-	private String userId;
+	private Integer userId;
 	@ApiModelProperty(value = "类型0-话费资费查询;1-流量资费查询", example = "类型0-话费资费查询;1-流量资费查询")
 	private Integer type;
 
@@ -27,11 +27,11 @@ public class FlowPackageCheckJO extends JO {
 		this.phone = phone;
 	}
 
-	public String getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(String userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 
