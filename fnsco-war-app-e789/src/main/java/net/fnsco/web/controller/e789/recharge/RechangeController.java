@@ -84,6 +84,9 @@ public class RechangeController extends BaseController {
         tradeWithdraw.setFee(BigDecimal.ZERO);
         tradeWithdraw.setChannelMerId(channelMerId);
         tradeWithdraw.setChannelType(TradeConstants.ChannelTypeEnum.JHF_PAY.getCode());
+        tradeWithdraw.setTradeSubType(TradeConstants.TxnSubTypeEnum.INCOME_RESEARCH.getCode());
+        tradeWithdraw.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());
+        tradeWithdraw.setInstallmentNum(getQRUrlJO.getInstallmentNum());
         tradeWithdrawService.doAdd(tradeWithdraw);
 
         String url = env.getProperty("app.base.url") + "/trade/fsf/rechange/dealPayOrder";
