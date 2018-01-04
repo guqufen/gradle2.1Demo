@@ -37,12 +37,6 @@ public class TradeOrderResearchService extends BaseService {
     @Autowired
     private TradeWithdrawService tradeWithdrawService;
 
-    // 查询
-    public TradeOrderDO queryByOrderId(String orderNo) {
-        TradeOrderDO obj = this.tradeOrderDAO.queryByOrderId(orderNo);
-        return obj;
-    }
-
     /**
      * 
      * updateOrderInfo:(充值订单更新)
@@ -54,7 +48,7 @@ public class TradeOrderResearchService extends BaseService {
      */
     @Transactional
     public ResultDTO updateResearchOrderInfo(OrderDTO order) {
-        TradeOrderDO tradeOrderDO = queryByOrderId(order.getThirdPayNo());
+        TradeWithdrawDO tradeOrderDO = tradeWithdrawService.queryOneByOrderId(order.getThirdPayNo());
         if (null == tradeOrderDO) {
             logger.error("订单不存在" + JSON.toJSONString(tradeOrderDO));
             return ResultDTO.fail("订单不存在");
@@ -64,9 +58,9 @@ public class TradeOrderResearchService extends BaseService {
             respCode = tradeOrderDO.getRespCode();
         }
         tradeOrderDO.setRespCode(respCode);
-        tradeOrderDO.setPayOrderNo(order.getSalesOrderNo());
+        tradeOrderDO.setOriginalOrderNo(order.getSalesOrderNo());
         if (!"0".equals(order.getOrderStatus())) {
-            tradeOrderDO.setCompleteTime(new Date());
+            tradeOrderDO.setSuccTime(DateUtils.getNowDateStr());
         }
         //（0 未支付 1支付成功 2支付失败 3已退货）
         if ("1".equals(order.getOrderStatus())) {
@@ -85,44 +79,24 @@ public class TradeOrderResearchService extends BaseService {
             tradeOrderDO.setCardHolderRate(order.getCardHolderRate());
         }
         //结算状态（0 未结算 1已结算   2结算中   3已退款）
-        if (!Strings.isNullOrEmpty(order.getSettlementStatus())) {
-            try {
-                tradeOrderDO.setSettleStatus(Integer.parseInt(order.getSettlementStatus()));
-                if ("1".equals(order.getSettlementStatus())) {
-                    tradeOrderDO.setSettleDate(new Date());
-                    if (null != order.getSettlementAmount()) {//通知接口未返回结算金额
-                        BigDecimal settleAmount = new BigDecimal(order.getSettlementAmount());
-                        settleAmount = settleAmount.multiply(new BigDecimal("100"));
-                        tradeOrderDO.setSettleAmount(settleAmount);
-                    }
-                }
-            } catch (Exception ex) {
-                logger.error("支付完成时回调时结算状态转换为int出错", ex);
-            }
-        }
         //（0 未支付 1支付成功 2支付失败 3已退货）
         if ("3".equals(order.getOrderStatus()) || "1".equals(order.getSettlementStatus())) {//1已结算
-            logger.error("更新分闪付充值状态为失败3已退货或1已结算"+order.getOrderStatus()+order.getSettlementStatus()+JSON.toJSONString(tradeOrderDO));
-            tradeOrderDAO.update(tradeOrderDO);
+            logger.error("更新分闪付充值状态为失败3已退货或1已结算" + order.getOrderStatus() + order.getSettlementStatus() + JSON.toJSONString(tradeOrderDO));
+            tradeWithdrawService.doUpdate(tradeOrderDO);
         } else {
-            if (null == tradeOrderDO.getOrderCeateTime() && !Strings.isNullOrEmpty(order.getTime())) {//回调时更新订单创建时间
-                tradeOrderDO.setOrderCeateTime(DateUtils.toParseYmdhms(order.getTime()));
-            }
-            Integer i = tradeOrderDAO.updateOnlyFail(tradeOrderDO);
+            Integer i = tradeWithdrawService.updateOnlyFail(tradeOrderDO);
             if (i > 0) {
                 if ("1".equals(order.getOrderStatus())) {
                     logger.error("分闪付充值成功" + tradeOrderDO.getOrderNo() + tradeOrderDO.getOrderAmount());
-                    TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOriginalOrderNo(tradeOrderDO.getOrderNo());
-                    tradeWithdraw.setStatus(WithdrawStateEnum.SUCCESS.getCode());
-                    tradeWithdrawService.researchForSuccess(tradeWithdraw);
+                    tradeOrderDO.setStatus(WithdrawStateEnum.SUCCESS.getCode());
+                    tradeWithdrawService.researchForSuccess(tradeOrderDO);
                 }
             }
         }
         if ("2".equals(order.getOrderStatus())) {
-            TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOriginalOrderNo(tradeOrderDO.getOrderNo());
-            tradeWithdraw.setStatus(WithdrawStateEnum.FAIL.getCode());
+            tradeOrderDO.setStatus(WithdrawStateEnum.FAIL.getCode());
             logger.error("更新分闪付充值状态为失败" + tradeOrderDO.getOrderNo());
-            tradeWithdrawService.doUpdate(tradeWithdraw);
+            tradeWithdrawService.doUpdate(tradeOrderDO);
         }
         return ResultDTO.success();
     }
