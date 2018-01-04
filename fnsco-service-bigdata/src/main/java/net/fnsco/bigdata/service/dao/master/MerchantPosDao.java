@@ -135,6 +135,8 @@ public interface MerchantPosDao {
      * @date   2017年11月23日 下午1:53:39
      */
     MerchantPos selectByTerminalCode(@Param("terminalCode") String terminalCode);
+    
+    List<MerchantPos> selectByTermId(String[] termId);
 
     MerchantPos selectOneByTerminalCodeChannelType(@Param("termId") String termId, @Param("channelType") String channelType);
 }
