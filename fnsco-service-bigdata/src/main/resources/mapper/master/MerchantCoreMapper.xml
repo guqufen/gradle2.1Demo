@@ -490,7 +490,7 @@
   <!-- 更新商户状态 -->
   <update id="updateStatusByInnerCode" parameterType="net.fnsco.bigdata.service.domain.MerchantCore" >
     update m_merchant_core
-    set status = 5
+    set status = #{status}
     where inner_code = #{innerCode,jdbcType=VARCHAR}
   </update>
   <!-- 条件分页查询 -->

@@ -17,6 +17,8 @@ import java.util.TreeMap;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
@@ -29,6 +31,9 @@ import net.fnsco.trading.service.pay.channel.zxyh.dto.MerchantZxyhDTO;
  * @version 1.0 20161026
  */
 public class ZxyhPayMD5Util {
+	@Autowired
+	private Environment env;
+	
     private static Logger         logger               = LoggerFactory.getLogger(ZxyhPayMD5Util.class);
     /**
      * 默认的http连接超时时间
@@ -44,7 +49,7 @@ public class ZxyhPayMD5Util {
      */
 //    private static String         reqUrl               = "https://120.27.165.177:9001";  //入建
 //    private static String         reqUrl               = " https://120.27.165.177:8099";  //主扫
-    private static String         reqUrl               = "https://120.27.165.177:8099";  //公众号
+    private static String         reqUrl               = "";  //公众号
     /**MD5加密方式
      * 用于数据电子签名使用的MD5密钥，由中信银行开商户时自动生成，请妥善保管
      * 配置在此处仅为演示方便，正式生产代码中，商户应该将其外置于安全的地方，且妥善保护该密钥，如有泄露，请第一时间通知我行进行变更！！！

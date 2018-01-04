@@ -5,6 +5,7 @@ package net.fnsco.bigdata.api.merchant;
 
 import java.util.List;
 
+import net.fnsco.bigdata.api.dto.MercQueryDTO;
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.service.domain.Agent;
 import net.fnsco.bigdata.service.domain.MerchantBank;
@@ -215,6 +216,10 @@ public interface MerchantCoreService {
 //	void updateStatusByInnerCode(String innerCode);
 
 	void updateInfoByInnerCode(String innerCode, String secMerId);
+
+	List<MercQueryDTO> getMercList();
+
+	void updateStatusByInnerCode(String inner_code, String status);
     
     
 }

@@ -6,21 +6,24 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.api.dto.MercQueryDTO;
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.dto.TradeAliPayCallBackDTO;
+import net.fnsco.bigdata.api.dto.TradeResultZXDTO;
 import net.fnsco.bigdata.api.dto.TradeWeChatCallBackDTO;
 import net.fnsco.bigdata.api.merchant.MerchantChannelService;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
@@ -65,10 +68,6 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	@Autowired
 	private TradeOrderService tradeOrderService;
 	@Autowired
-	private MerchantChannelService merchantChannelService;
-	@Autowired
-	private MerchantCoreService merchantCoreService;
-	@Autowired
 	private MerchantChannelDao channelDao;
 	@Autowired
 	private SequenceService sequenceService;
@@ -82,6 +81,127 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	private AppUserMerchantService appUserMerchantService;
 	@Autowired
 	private AppUserMerchantEntityService appUserMerchantEntity;
+	@Autowired
+	private MerchantCoreService merchantCoreService;
+
+	/**
+	 * 查询交易状态
+	 * 
+	 * @throws @since
+	 *             CodingExample Ver 1.1
+	 */
+	public void getDealStatus(Integer id ,String paySubType,String secMerId,String orderNo,String orderCeateTime) {
+		String merId = env.getProperty("zxyh.merId");
+		String prefix = env.getProperty("zxyh.query.trade.url");
+		String url = "/MPay/backTransAction.do";
+		Map<String, String> mercMap = Maps.newHashMap();
+		TradeResultZXDTO tradeResultZXDTO = new TradeResultZXDTO();
+		// 相同
+		tradeResultZXDTO.init(merId);
+		tradeResultZXDTO.setSecMerId(secMerId);// 是与merId关联的分账子商户号
+		tradeResultZXDTO.setAccountFlag("Y");
+		tradeResultZXDTO.setIndependentTransactionFlag("Y");
+		// 微信
+		if (StringUtils.equals("01", paySubType)) {
+			tradeResultZXDTO.setTxnSubType("383000");
+			tradeResultZXDTO.setPayAccessType("02");
+			tradeResultZXDTO.setOrigOrderId(orderNo);
+			tradeResultZXDTO.setOrigOrderTime(orderCeateTime);
+			tradeResultZXDTO.setOrderTime(orderCeateTime);
+			tradeResultZXDTO.setFetchOrderNo("Y");
+		}
+		// 支付宝
+		if (StringUtils.equals("02", paySubType)) {
+			tradeResultZXDTO.setTxnSubType("381004");
+			tradeResultZXDTO.setSeqId(orderNo); // 原交易中信流水号或原交易商户订单号
+		}
+		String mercStr = JSON.toJSONString(tradeResultZXDTO);
+		mercMap = JSON.parseObject(mercStr, Map.class);
+		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
+		// 解析返回报文
+		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+		TradeOrderDO tradeOrderDO = new TradeOrderDO();
+		tradeOrderDO.setId(id);
+		//微信返回结果
+		if("SUCCESS".equals(respMap.get("origRespCode"))){
+			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_SUCCESS.getCode());
+		}else if("NOTPAY".equals(respMap.get("origRespCode"))){
+			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_UNPAY.getCode());
+		}
+		
+		if("00".equals(respMap.get("txnState"))){//支付宝返回结果
+			//更新交易为已成功
+			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_SUCCESS.getCode());
+		}else if("01".equals(respMap.get("txnState"))){
+			//更新状态为已退货成功
+			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_SEALS_RETURN.getCode());
+			
+		}else if("99".equals(respMap.get("txnState"))){
+			//更新状态为失败
+			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_FAIL.getCode());
+		}else if("02".equals(respMap.get("txnState"))){
+			//订单已关闭
+			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_CLOSED.getCode());
+		}else{
+			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
+		}
+		tradeOrderDO.setPayOrderNo((String)respMap.get("origSeqId")); //对应的中信订单号
+		tradeOrderDO.setRespMsg(E789ApiConstant.ResponCodeEnum.getNameByCode(tradeOrderDO.getRespCode()));
+		tradeOrderService.doUpdate(tradeOrderDO);
+	}
+
+	/**
+	 * 获取未入驻成功的商户信息列表
+	 * 
+	 */
+	public void queryAloneMchtInfoList(List<MercQueryDTO> list) {
+		String merId = env.getProperty("zxyh.merId");
+
+		if (!list.isEmpty()) {
+			for (MercQueryDTO mercQueryDTO : list) {
+				Map<String, Object> map = this.queryAloneMchtInfo(merId, mercQueryDTO.getChannel_mer_id());
+				String respCode = (String) map.get("respCode");
+				String mchtChkStatus = (String) map.get("mchtChkStatus");
+				if ("0000".equals(respCode)) {
+					switch (mchtChkStatus) {
+					case "2":
+						mchtChkStatus = "5";
+						break;
+					default:
+						break;
+					}
+					merchantCoreService.updateStatusByInnerCode(mercQueryDTO.getInner_code(), mchtChkStatus);
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * 查询独立商户是否入驻成功接口 queryAloneMchtInfo:(这里用一句话描述这个方法的作用)
+	 *
+	 * @param @param
+	 *            merId
+	 * @param @param
+	 *            secMerId
+	 * @param @return
+	 *            设定文件
+	 * @return Map<String,Object> DOM对象
+	 * @throws @since
+	 *             CodingExample Ver 1.1
+	 */
+	public Map<String, Object> queryAloneMchtInfo(String merId, String secMerId) {
+		String prefix = env.getProperty("zxyh.query.url");
+		String url = "/MPayTransaction/ind/queryAloneMchtInfo.do";
+		Map<String, String> mercMap = Maps.newHashMap();
+		mercMap.put("merId", merId);
+		mercMap.put("secMerId", secMerId);
+		mercMap.put("signMethod", "02");
+		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
+		// 解析返回报文
+		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+		return respMap;
+	}
 
 	/**
 	 * 
@@ -93,7 +213,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	public Map<String, Object> mechAdd(MerchantCoreEntityZxyhDTO core) {
 		String pid = env.getProperty("zxyh.alipay.pid");
 		String merId = env.getProperty("zxyh.merId");
-		String url = ":9001/MPayTransaction/ind/mchtadd.do";
+		String prefix = env.getProperty("zxyh.add.url");
+		String url = "/MPayTransaction/ind/mchtadd.do";
 		MerchantZxyhDTO mercDTO = new MerchantZxyhDTO();
 		mercDTO.init(pid, merId);
 		// 赋值
@@ -143,7 +264,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 
 		String mercStr = JSON.toJSONString(mercDTO);
 		Map<String, String> mercMap = JSON.parseObject(mercStr, Map.class);
-		String respStr = ZxyhPayMD5Util.request(mercMap, url);
+		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
 		return respMap;
@@ -237,11 +358,11 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			respMap.put("orderId", tradeOrderDO.getOrderNo());
 			respMap.put("respCode", tradeOrderDO.getRespCode());
 			return ResultDTO.success(respMap);
-		}else{
+		} else {
 			logger.warn(JSONObject.toJSONString(respMap));
 			return ResultDTO.fail(respMap);
 		}
-		
+
 	}
 
 	/**
@@ -317,7 +438,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			respMap.put("orderId", tradeOrderDO.getOrderNo());
 			respMap.put("respCode", tradeOrderDO.getRespCode());
 			return ResultDTO.success(respMap);
-		}else{
+		} else {
 			logger.warn(JSONObject.toJSONString(respMap));
 			return ResultDTO.fail(respMap);
 		}
@@ -701,8 +822,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setOrderNo(aliDTO.getOrderId());// 商户订单号
 		tradeOrderDO.setPayOrderNo(aliDTO.getTransactionId());// 渠道(扫码)订单号
-//		BigDecimal txnAmount = new BigDecimal(aliDTO.getTxnAmt());
-//		tradeOrderDO.setTxnAmount(txnAmount);// 交易金额
+		// BigDecimal txnAmount = new BigDecimal(aliDTO.getTxnAmt());
+		// tradeOrderDO.setTxnAmount(txnAmount);// 交易金额
 		tradeOrderDO.setRespCode(aliDTO.getRespCode());// 交易返回码
 		tradeOrderDO.setRespMsg(aliDTO.getRespMsg());
 		Date tradeEndTime = DateUtils.formateToDate(aliDTO.getEndTime());
@@ -780,4 +901,5 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			return ResultDTO.fail("微信主扫交易插入失败");
 		}
 	}
+
 }

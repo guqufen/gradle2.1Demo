@@ -24,6 +24,10 @@ public class FlowChargeJO extends JO {
 	private Integer type;
 	@ApiModelProperty(value = "充值名称:取资费查询返回的name字段", example = "充值名称:取资费查询返回的name字段")
 	private String name;
+	@ApiModelProperty(value = "支付密码", example = "支付密码")
+	private String payPassword;
+	@ApiModelProperty(value = "充值方式:0-余额/1-微信/2-支付宝", example = "充值方式:0-余额/1-微信/2-支付宝")
+	private String payType;
 
 	public String getPhone() {
 		return phone;
@@ -75,6 +79,22 @@ public class FlowChargeJO extends JO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getPayPassword() {
+		return payPassword;
+	}
+
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
+	}
+
+	public String getPayType() {
+		return payType;
+	}
+
+	public void setPayType(String payType) {
+		this.payType = payType;
 	}
 
 }

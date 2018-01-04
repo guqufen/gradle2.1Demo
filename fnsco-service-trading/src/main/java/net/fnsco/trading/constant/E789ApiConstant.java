@@ -29,6 +29,7 @@ public class E789ApiConstant extends CoreConstants {
 	public static String E_NOT_FIND_INNERCODE = "210006"; // 未找到对应内部商户号
 	public static String E_NOT_FIND_ENTITY_INNERCODE = "210007"; // 未找到对应实体内部商户号
 	public static String E_NOT_FIND_CHANNEL_INNERCODE = "210008"; // 未找到对应渠道商户号
+	public static String E_APP_PAY_PASSWORD_ERROR      = "210009"; //支付密码错误
 
 	static {
 		// 身份识别证错误信息
@@ -58,11 +59,12 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(E_NOT_FIND_INNERCODE, "未找到对应内部商户号");
 		ERROR_MESSGE_MAP.put(E_NOT_FIND_ENTITY_INNERCODE, "未找到对应实体内部商户号");
 		ERROR_MESSGE_MAP.put(E_NOT_FIND_CHANNEL_INNERCODE, "未找到对应渠道商户号");
+		ERROR_MESSGE_MAP.put(E_APP_PAY_PASSWORD_ERROR, "支付密码错误");
 	}
 
 	public static enum ResponCodeEnum {
 		DEAL_IN_PROGRESS("1000", "处理中"), DEAL_SUCCESS("1001", "成功"), DEAL_FAIL("1002", "失败"), DEAL_SEALS_RETURN("1003",
-				"已退货");
+				"已退货"),DEAL_UNPAY("1004","订单未支付"),DEAL_CLOSED("1005","订单已关闭");
 
 		private String code;
 		private String name;
@@ -87,7 +89,7 @@ public class E789ApiConstant extends CoreConstants {
 		}
 
 		public static String getNameByCode(String code) {
-			for (PayTypeEnum eopen : PayTypeEnum.values()) {
+			for (ResponCodeEnum eopen : ResponCodeEnum.values()) {
 				if (eopen.code.equals(code)) {
 					return eopen.name;
 				}

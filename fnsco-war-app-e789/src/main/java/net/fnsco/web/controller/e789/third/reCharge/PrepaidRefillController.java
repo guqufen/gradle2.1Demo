@@ -12,13 +12,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.freamwork.comm.Md5Util;
+import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.constant.ApiConstant;
+import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
-import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
 import net.fnsco.trading.service.third.reCharge.dto.CheckChargePackageDTO;
-import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 
@@ -38,7 +41,7 @@ public class PrepaidRefillController extends BaseController {
 	@Autowired
 	private AppAccountBalanceService appAccountBalanceService;
 	@Autowired
-	private RechargeOrderService rechargeOrderService;
+	private AppUserService appUserService;
 
 	@RequestMapping("/prepaidCheck")
 	@ApiOperation(value = "话费/流量套餐资费查询url")
@@ -61,15 +64,36 @@ public class PrepaidRefillController extends BaseController {
 	public ResultDTO<ChargeResultDTO> prepaidCharge(@RequestBody FlowChargeJO fl) {
 
 		ChargeResultDTO ph = null;
+		
+		//非帐户余额支付，暂不支持
+		if( !"0".equals(fl.getPayType())){
+			logger.error("支付方式非法，暂时只支持帐户余额充值方式，请重新选择！！");
+			return ResultDTO.fail("暂时只支持帐户余额充值方式，请重新选择！！");
+		}
+
+		String password = Md5Util.getInstance().md5(fl.getPayPassword());
+		// 根据id查询用户是否存在获取原密码
+		AppUser mAppUser = appUserService.selectAppUserById(fl.getUserId());
+		if (null == mAppUser) {
+			logger.error("用户Id未找到相关信息，appUserId="+fl.getUserId());
+			return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+		}
+		// 查到的密码和原密码做比较
+		if (!password.equals(mAppUser.getPassword())) {
+			logger.error("支付密码错误，请核对后重新输入！！");
+			return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
+		}
 
 		// 根据userId和待扣金额查询账户是否有足够的钱进行充值交易，并更新
 		Boolean isEnough = appAccountBalanceService.doFrozenBalance(fl.getUserId(), new BigDecimal(fl.getInprice()).multiply(new BigDecimal(100)));
 		if (!isEnough) {
-			return ResultDTO.fail("账户余额不足");
+			logger.error("帐户余额不足，请充值！！appUserId="+fl.getUserId());
+			return ResultDTO.fail(ApiConstant.E_ACCOUNT_BALANCE_NULL);
 		}
 
 		if (fl.getPhone().length() > 11) {
-			return ResultDTO.fail("手机号长度超过11位(不能带空格)，请核查后重新充值");
+			logger.error("手机号码非法，请输入11位手机号，不能带空格！！");
+			return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
 		}
 
 		ChargeDTO chargeDTO = new ChargeDTO();

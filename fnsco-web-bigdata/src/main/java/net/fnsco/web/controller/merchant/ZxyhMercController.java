@@ -1,6 +1,6 @@
-package net.fnsco.web.controller.trade.zxyh;
-
-
+ 
+package net.fnsco.web.controller.merchant;
+  
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
+import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.BaseController;
@@ -21,7 +22,7 @@ import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 @Controller
 @RequestMapping(value = "/web/zxyh")
 @Api(value = "/web", tags = { "中信入驻独立商户控制器" })
-public class ZxyhBasicInfoPrepareController extends BaseController {
+public class ZxyhMercController extends BaseController {
 	
 	@Autowired
 	private MerchantCoreService merchantCoreService;
@@ -41,7 +42,7 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 		//根据id获取入驻中信银行商户所需的必须信息
 		MerchantCoreEntityZxyhDTO core = merchantCoreService.queryZXYHInfoById(id);
 		if(core == null){
-			return ResultDTO.failForMessage("进件失败,请联系管理员");
+			return ResultDTO.failForMessage(BigdataConstant.APP_MER_ENTITY_INNERCODE_NULL);
 		}
 		//调用入驻接口将参数传过去-
 		Map<String, Object> map = zxyhPaymentService.mechAdd(core);
@@ -54,7 +55,8 @@ public class ZxyhBasicInfoPrepareController extends BaseController {
 			}
 			return ResultDTO.successForSubmit();
 		}else{
-			return ResultDTO.failForMessage("进件中信商户回调失败");
+			logger.error("入建返回结果"+map.toString());
+			return ResultDTO.failForMessage(BigdataConstant.ZXYH_ADD_FAIL);
 		}
 		
 	}
