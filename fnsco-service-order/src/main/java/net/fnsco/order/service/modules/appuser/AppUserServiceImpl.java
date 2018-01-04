@@ -438,6 +438,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
                 return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
             }
         }
+        if (appUserDTO.getOprationType() != null && appUserDTO.getOprationType() == 1) {
+            AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
+            if (user == null) {
+                return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+            }
+        }
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
         SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
