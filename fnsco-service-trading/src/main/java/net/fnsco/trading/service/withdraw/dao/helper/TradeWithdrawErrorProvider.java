@@ -1,14 +1,13 @@
 package net.fnsco.trading.service.withdraw.dao.helper;
 
-import org.apache.ibatis.jdbc.SQL;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawErrorDO;
-
-import org.apache.commons.lang3.StringUtils;
 public class TradeWithdrawErrorProvider {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -96,6 +95,21 @@ public class TradeWithdrawErrorProvider {
         }
         if (StringUtils.isNotBlank(tradeWithdrawError.getChannelMerId())){
             SET("channel_mer_id=#{tradeWithdrawError.channelMerId}");
+        }
+        if (StringUtils.isNotBlank(tradeWithdrawError.getChannelType())){
+            SET("channel_type=#{tradeWithdrawError.channelType}");
+        }
+        if (tradeWithdrawError.getInstallmentNum() != null) {
+            SET("installment_num=#{tradeWithdrawError.installmentNum}");
+        }
+        if (tradeWithdrawError.getOrderAmount() != null) {
+            SET("order_amount=#{tradeWithdrawError.orderAmount}");
+        }
+        if (tradeWithdrawError.getEachMoney() != null) {
+            SET("each_money=#{tradeWithdrawError.eachMoney}");
+        }
+        if (StringUtils.isNotBlank(tradeWithdrawError.getCardHolderRate())){
+            SET("card_holder_rate=#{tradeWithdrawError.cardHolderRate}");
         }
         WHERE("id = #{tradeWithdrawError.id}");
         }}.toString();
@@ -197,6 +211,21 @@ public class TradeWithdrawErrorProvider {
         if (StringUtils.isNotBlank(tradeWithdrawError.getChannelMerId())){
             WHERE("channel_mer_id=#{tradeWithdrawError.channelMerId}");
         }
+        if (StringUtils.isNotBlank(tradeWithdrawError.getChannelType())){
+            WHERE("channel_type=#{tradeWithdrawError.channelType}");
+        }
+        if (tradeWithdrawError.getInstallmentNum() != null) {
+            WHERE("installment_num=#{tradeWithdrawError.installmentNum}");
+        }
+        if (tradeWithdrawError.getOrderAmount() != null) {
+            WHERE("order_amount=#{tradeWithdrawError.orderAmount}");
+        }
+        if (tradeWithdrawError.getEachMoney() != null) {
+            WHERE("each_money=#{tradeWithdrawError.eachMoney}");
+        }
+        if (StringUtils.isNotBlank(tradeWithdrawError.getCardHolderRate())){
+            WHERE("card_holder_rate=#{tradeWithdrawError.cardHolderRate}");
+        }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -286,6 +315,21 @@ public class TradeWithdrawErrorProvider {
         }
         if (StringUtils.isNotBlank(tradeWithdrawError.getChannelMerId())){
             WHERE("channel_mer_id=#{tradeWithdrawError.channelMerId}");
+        }
+        if (StringUtils.isNotBlank(tradeWithdrawError.getChannelType())){
+            WHERE("channel_type=#{tradeWithdrawError.channelType}");
+        }
+        if (tradeWithdrawError.getInstallmentNum() != null) {
+            WHERE("installment_num=#{tradeWithdrawError.installmentNum}");
+        }
+        if (tradeWithdrawError.getOrderAmount() != null) {
+            WHERE("order_amount=#{tradeWithdrawError.orderAmount}");
+        }
+        if (tradeWithdrawError.getEachMoney() != null) {
+            WHERE("each_money=#{tradeWithdrawError.eachMoney}");
+        }
+        if (StringUtils.isNotBlank(tradeWithdrawError.getCardHolderRate())){
+            WHERE("card_holder_rate=#{tradeWithdrawError.cardHolderRate}");
         }
         }}.toString();
     }
