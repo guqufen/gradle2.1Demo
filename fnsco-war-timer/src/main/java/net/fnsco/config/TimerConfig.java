@@ -153,7 +153,7 @@ public class TimerConfig {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-    @Scheduled(cron="0/5 * *  * * ? ")
+    @Scheduled(cron="0 1 * * * ?") //每个小时的1秒执行，每60分钟执行一次
     public void updateMercStatus(){
     	List<MercQueryDTO> list = this.merchantCoreService.getMercList();
     	paymentService.queryAloneMchtInfoList(list);

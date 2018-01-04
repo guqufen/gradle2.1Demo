@@ -64,7 +64,7 @@ public class E789ApiConstant extends CoreConstants {
 
 	public static enum ResponCodeEnum {
 		DEAL_IN_PROGRESS("1000", "处理中"), DEAL_SUCCESS("1001", "成功"), DEAL_FAIL("1002", "失败"), DEAL_SEALS_RETURN("1003",
-				"已退货");
+				"已退货"),DEAL_UNPAY("1004","订单未支付"),DEAL_CLOSED("1005","订单已关闭");
 
 		private String code;
 		private String name;
@@ -89,7 +89,7 @@ public class E789ApiConstant extends CoreConstants {
 		}
 
 		public static String getNameByCode(String code) {
-			for (PayTypeEnum eopen : PayTypeEnum.values()) {
+			for (ResponCodeEnum eopen : ResponCodeEnum.values()) {
 				if (eopen.code.equals(code)) {
 					return eopen.name;
 				}
