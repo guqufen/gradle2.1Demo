@@ -5,7 +5,8 @@ public class CodeGen {
     public static void main(String[] args) throws Exception {
 
         //AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "fnsco_big_data", "root", "123456");
-        AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "fnsco_risk_data", "root", "123456");
+        //AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "fnsco_risk_data", "root", "123456");
+        AutoCreateCode auto = new AutoCreateCode("192.168.1.110", "fnsco_e789_data", "root", "123456");
         auto.setCreateBiz(false);
         auto.setCreateAction(false);
         auto.setCreateService(true);
@@ -22,7 +23,7 @@ public class CodeGen {
         //auto.init("net.fnsco.order", "trade", "t_trade_data_lkl");
         //auto.init("net.fnsco.risk", "zhimainfo", "rist_data_access_third");
 
-        auto.init("net.fnsco.risk", "product", "risk_product");
+        //auto.init("net.fnsco.risk", "product", "risk_product");
 
         //auto.init("net.fnsco.risk", "trade", "t_trade_data");
         //auto.init("net.fnsco.withhold", "sys", "sys_bank_trade_limit");
@@ -44,8 +45,9 @@ public class CodeGen {
 //        auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_order");
 //        auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_order_passenger");
 
-        auto.init("net.fnsco.trading", "order", "t_trade_order_ext");
-        
+        auto.init("net.fnsco.trading", "order", "t_trade_withdraw");
+        //auto.init("net.fnsco.trading", "order", "t_trade_withdraw_error");
+        //auto.init("net.fnsco.trading", "order", "t_trade_withdraw_red");
         //auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_contact");
         //auto.init("net.fnsco.trading", "order", "r_trade_order_by_pay_medium");
 

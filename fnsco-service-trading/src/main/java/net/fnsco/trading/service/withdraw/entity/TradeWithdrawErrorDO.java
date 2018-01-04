@@ -41,10 +41,10 @@ public class TradeWithdrawErrorDO {
     private BigDecimal fund;
 
     /**
-     *  交易类型 1收入/2消费
+     * 交易类型 1收入/2消费
      */
     private Integer tradeType;
-    
+
     /**
      * 交易子类型 10充值收入/11新人红包收入20提现/21预约提现//22话费充值23流量充值24火车票购买35提现手续费36收入撤销
      */
@@ -141,28 +141,33 @@ public class TradeWithdrawErrorDO {
     private String channelMerId;
 
     /**
-	 * tradeSubType
-	 *
-	 * @return  the tradeSubType
-	 * @since   CodingExample Ver 1.0
-	*/
-	
-	public Integer getTradeSubType() {
-		return tradeSubType;
-	}
+     * 渠道商户号
+     */
+    private String channelType;
 
-	/**
-	 * tradeSubType
-	 *
-	 * @param   tradeSubType    the tradeSubType to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setTradeSubType(Integer tradeSubType) {
-		this.tradeSubType = tradeSubType;
-	}
+    /**
+     * 分期付款数
+     */
+    private Integer installmentNum;
 
-	public Integer getId() {
+    /**
+     * 订单总价格
+     */
+    private BigDecimal orderAmount;
+
+    /**
+     * 每期金额
+     */
+    private BigDecimal eachMoney;
+
+    /**
+     * 持卡人费率
+     */
+    private String cardHolderRate;
+
+
+
+    public Integer getId() {
         return id;
     }
 
@@ -224,6 +229,14 @@ public class TradeWithdrawErrorDO {
 
     public void setTradeType(Integer tradeType) {
         this.tradeType = tradeType;
+    }
+
+    public Integer getTradeSubType() {
+        return tradeSubType;
+    }
+
+    public void setTradeSubType(Integer tradeSubType) {
+        this.tradeSubType = tradeSubType;
     }
 
     public Integer getStatus() {
@@ -370,10 +383,50 @@ public class TradeWithdrawErrorDO {
         this.channelMerId = channelMerId;
     }
 
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
+    }
+
+    public Integer getInstallmentNum() {
+        return installmentNum;
+    }
+
+    public void setInstallmentNum(Integer installmentNum) {
+        this.installmentNum = installmentNum;
+    }
+
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    public BigDecimal getEachMoney() {
+        return eachMoney;
+    }
+
+    public void setEachMoney(BigDecimal eachMoney) {
+        this.eachMoney = eachMoney;
+    }
+
+    public String getCardHolderRate() {
+        return cardHolderRate;
+    }
+
+    public void setCardHolderRate(String cardHolderRate) {
+        this.cardHolderRate = cardHolderRate;
+    }
+
 
 
     @Override
     public String toString() {
-        return "[id="+ id + ", orderNo="+ orderNo + ", originalOrderNo="+ originalOrderNo + ", appUserId="+ appUserId + ", amount="+ amount + ", fee="+ fee + ", fund="+ fund + ", tradeType="+ tradeType + ", status="+ status + ", createTime="+ createTime + ", updateTime="+ updateTime + ", respCode="+ respCode + ", respMsg="+ respMsg + ", succTime="+ succTime + ", settleMoney="+ settleMoney + ", paymentDate="+ paymentDate + ", backurl="+ backurl + ", bankAccountType="+ bankAccountType + ", bankAccountNo="+ bankAccountNo + ", bankAccountName="+ bankAccountName + ", bankAccountCardId="+ bankAccountCardId + ", bankSubBankName="+ bankSubBankName + ", bankOpenBank="+ bankOpenBank + ", bankOpenBankNum="+ bankOpenBankNum + ", bankAccountPhone="+ bankAccountPhone + ", channelMerId="+ channelMerId + "]";
+        return "[id="+ id + ", orderNo="+ orderNo + ", originalOrderNo="+ originalOrderNo + ", appUserId="+ appUserId + ", amount="+ amount + ", fee="+ fee + ", fund="+ fund + ", tradeType="+ tradeType + ", tradeSubType="+ tradeSubType + ", status="+ status + ", createTime="+ createTime + ", updateTime="+ updateTime + ", respCode="+ respCode + ", respMsg="+ respMsg + ", succTime="+ succTime + ", settleMoney="+ settleMoney + ", paymentDate="+ paymentDate + ", backurl="+ backurl + ", bankAccountType="+ bankAccountType + ", bankAccountNo="+ bankAccountNo + ", bankAccountName="+ bankAccountName + ", bankAccountCardId="+ bankAccountCardId + ", bankSubBankName="+ bankSubBankName + ", bankOpenBank="+ bankOpenBank + ", bankOpenBankNum="+ bankOpenBankNum + ", bankAccountPhone="+ bankAccountPhone + ", channelMerId="+ channelMerId + ", channelType="+ channelType + ", installmentNum="+ installmentNum + ", orderAmount="+ orderAmount + ", eachMoney="+ eachMoney + ", cardHolderRate="+ cardHolderRate + "]";
     }
 }
