@@ -726,6 +726,9 @@
       <if test="batchNo != null and batchNo != ''" >
         AND batch_no = #{batchNo,jdbcType=VARCHAR}
       </if>
+      <if test="referNo != null and referNo != ''" >
+        AND refer_no = #{referNo,jdbcType=VARCHAR}
+      </if>
       <if test="traceNo != null and traceNo != ''" >
         AND trace_no = #{traceNo,jdbcType=VARCHAR}
       </if>

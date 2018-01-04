@@ -28,7 +28,6 @@ import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantPosDao;
-import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
 import net.fnsco.bigdata.service.dao.master.MerchantUserRelDao;
 import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
@@ -59,8 +58,6 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Autowired
     private MerchantCoreDao     merchantCoreDao;
     @Autowired
-    private MerchantTerminalDao merchantTerminalDao;
-    @Autowired
     private MerchantPosDao      merchantPosDao;
 
     /**
@@ -72,6 +69,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         if (!Strings.isNullOrEmpty(tradeData.getMd5())) {
             //需要校验
             TradeData temp = tradeListDAO.selectByMd5(tradeData.getMd5());
+            
             if (null != temp) {
                 logger.error("交易流水已存在" + tradeData.getOrderNo() + ",丢弃该交易流水");
                 return true;
@@ -116,6 +114,21 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
                 innerCode = channel.getInnerCode();
             }
         }
+        
+        //插入表之前，需要通过 终端号+金额+日期+渠道内部商户号+参考号+交易类型1消费2撤销  去判断是否已经插入过数据，如果已经插入，则不再插入
+        TradeData tradeDateCondition  = new TradeData();
+        tradeDateCondition.setAmt(tradeData.getAmt());
+        tradeDateCondition.setTermId(tradeData.getTermId());
+        tradeDateCondition.setTimeStamp(tradeData.getTimeStamp());
+        tradeDateCondition.setInnerCode(innerCode);
+        tradeDateCondition.setReferNo(tradeData.getReferNo());
+        tradeDateCondition.setTxnType(tradeData.getTxnType());
+        int totalNum = tradeListDAO.queryTotalByCondition(tradeDateCondition);
+        if(totalNum > 0) {
+        	logger.warn("交易流水已存在!不再操作" + tradeData.getOrderNo());
+        	return true;
+        }
+        
         logger.warn("插入流水，获取商户耗时" + (System.currentTimeMillis() - timer));
         TradeData tradeDataEntity = new TradeData();
         tradeDataEntity.setId(DbUtil.getUuid());

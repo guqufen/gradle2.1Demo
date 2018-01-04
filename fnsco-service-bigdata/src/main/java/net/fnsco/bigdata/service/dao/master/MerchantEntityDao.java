@@ -27,6 +27,8 @@ public interface MerchantEntityDao {
     int insertSelective(MerchantEntity record);
 
     MerchantEntity selectByPrimaryKey(Integer id);
+    
+    MerchantEntity selectAllByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(MerchantEntity record);
 

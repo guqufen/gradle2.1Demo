@@ -1,13 +1,17 @@
 package net.fnsco.risk.service.report;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
+import net.fnsco.risk.service.ability.MercPayAbilityService;
 import net.fnsco.risk.service.report.dao.MercAllocationDAO;
 import net.fnsco.risk.service.report.dao.UserMercRelDAO;
 import net.fnsco.risk.service.report.entity.UserMercRelDO;
@@ -21,6 +25,9 @@ public class MercAllocationService extends BaseService{
 	
 	@Autowired
 	private UserMercRelDAO userMercRelDAO;
+	
+	@Autowired
+	private MercPayAbilityService mercPayAbilityService;
 	
 	
 	public ResultPageDTO getAddMerData(MerAllocationDO merAllocationDO, Integer agentId, Integer pageNum,
@@ -58,6 +65,7 @@ public class MercAllocationService extends BaseService{
 	 * @param innerCode
 	 * @return
 	 */
+	@Transactional
 	public ResultDTO addMerAllo(Integer agentId, String[] innerCode){
 
 		for (int i = 0; i < innerCode.length; i++) {
@@ -66,9 +74,17 @@ public class MercAllocationService extends BaseService{
 			userMercRel.setEntityInnerCode(innerCode[i]);
 			userMercRelDAO.insert(userMercRel);
 		}
+		//计算前三个月的风控数据
+		if(innerCode.length > 0) {
+			List<String> innerCodes = Arrays.asList(innerCode);
+			mercPayAbilityService.countRepaymentAbility(DateUtils.getMouthStartTime1(-1), DateUtils.getMouthStartTime1(0), innerCodes);
+			mercPayAbilityService.countRepaymentAbility(DateUtils.getMouthStartTime1(-2), DateUtils.getMouthStartTime1(-1), innerCodes);
+			mercPayAbilityService.countRepaymentAbility(DateUtils.getMouthStartTime1(-3), DateUtils.getMouthStartTime1(-2), innerCodes);
+		}
+		
 		return ResultDTO.success();
 	}
-	
+
 	/**
 	 * 解除商户和代理商关系
 	 * @param agentId
