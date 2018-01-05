@@ -1,10 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="pragma" content="no -cache">
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+    <meta http-equiv="expires" content="0">
+    <title>交易查询-法奈昇e789平台</title>
+    <meta name="keywords" content="法奈昇e789平台">
+    <meta name="description" content="法奈昇e789平台">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="js/bootstrap/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="css/style.min.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
 </head>
 <body>
-
+<div class="panel-body animated fadeInRight">
+<div class="panel panel-default">
+     <!-- 搜索条件 -->
+     <form id="formSearch" class="form-horizontal">
+         <div class="form-group" style="margin-top:15px">
+             <div class="row col-sm-10">
+             	<div class="col-sm-5 query-time">
+                        <label class="control-label" for="releaseTime">提交时间:</label>
+                        <button type="button" id="btn_" class="btn btn-default" onclick="javascript:queryweek('table');">本周</button>
+                 		<button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:querymonth('table');">本月</button>
+             	 </div>
+                 <div class="col-sm-5 query-time">
+                        <input type="text" value="" class="form-control" id="datetimepicker1" name="startTime"> -
+                        <input type="text" value="" class="form-control" id="datetimepicker2" name="endTime">
+                  </div>
+                 </div>
+             <div class="col-sm-2" style="text-align: right;">
+                 <button type="button" id="btn_query" class="btn btn-primary" onclick="javascript:queryEvent('table');"><span class="glyphicon glyphicon-search"></span>查询</button>
+                 <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent('formSearch');"><span class="glyphicon glyphicon-refresh"></span>重置</button>
+             </div>
+             </div>
+     </form>
+         </div>
+<!-- 表格组件 -->
+     <div class="ibox float-e-margins">
+         <div class="ibox-content">
+             <div class="row row-lg">
+                 <div class="col-sm-12">
+                     <table id="table"></table>
+                 </div>
+             </div>
+         </div>
+     </div>
+      </div>
+<script src="js/bootstrap/jquery.min.js"></script>
+<script src="js/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+<script src="js/plugins/bootstrap-table/tableExport.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-editable.js"></script>
+<script src="js/plugins/bootstrap-table/bootstrap-table-zh-CN.min.js"></script>
+<script src="js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+<script src="js/layer/layer.js"></script>
+<script type="text/javascript" src="js/fnsco/common.js"></script>
+<script type="text/javascript" src="js/fnsco/tradewithdraw.js"></script>
 </body>
 </html>
