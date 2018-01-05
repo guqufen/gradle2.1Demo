@@ -717,6 +717,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Override
     public AppUserInfoDTO getMyselfInfo(Integer id) {
         AppUser appUser = appUserDao.selectAppUserById(id);
+        if(appUser==null) {
+        	return null;
+        }
         AppUserInfoDTO dto = new AppUserInfoDTO();
         dto.setSex(appUser.getSex());
         dto.setUserName(appUser.getUserName());
