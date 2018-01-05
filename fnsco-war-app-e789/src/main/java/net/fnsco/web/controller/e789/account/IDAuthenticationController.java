@@ -149,7 +149,7 @@ public class IDAuthenticationController extends BaseController {
         return ResultDTO.fail(E789ApiConstant.E_UPLOAD_IDCARD_FAIL);
 	}
         
-	/*@RequestMapping(value = "/identify")
+	@RequestMapping(value = "/identify")
     @ApiOperation(value = "个人信息-身份证认证接口" ,notes="作者：何金庭")
     public ResultDTO identify(@RequestBody CommonJO commonJO) {
 		Integer userId = commonJO.getUserId();
@@ -261,5 +261,5 @@ public class IDAuthenticationController extends BaseController {
         IdentifyJO identify = new IdentifyJO();
         identify.setRealName(realName);
         return ResultDTO.success(identify);
-    }*/
+    }
 }
