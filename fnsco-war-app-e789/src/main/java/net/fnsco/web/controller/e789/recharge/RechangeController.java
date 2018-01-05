@@ -72,9 +72,14 @@ public class RechangeController extends BaseController {
     @ApiOperation(value = "我的页面-钱包-分闪付充值保存，返回的url跳转到h5页面")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String channelMerId = env.getProperty("rechange.fsf.channel.merid");
+        if (getQRUrlJO.getPaymentAmount() == null) {
+            return ResultDTO.fail("充值金额不能为空");
+        }
         BigDecimal amountB = new BigDecimal(getQRUrlJO.getPaymentAmount());
         BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
-
+        if (amountBs.compareTo(new BigDecimal("50000")) < 0) {
+            return ResultDTO.fail("充值金额不能低于500元");
+        }
         TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
         tradeWithdraw.setAppUserId(getQRUrlJO.getUserId());
         tradeWithdraw.setAmount(amountBs);
@@ -128,36 +133,36 @@ public class RechangeController extends BaseController {
     public ResultDTO research(@RequestBody OrderDTO order) {
         return tradeOrderResearchService.updateResearchOrderInfo(order);
     }
-    
-    private void get(){
+
+    private void get() {
         //根据用户id获取绑定的分闪付商户信息
-//        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByMerChannelInnerCodeType(innerCode, "04");
-//        if (null == merchantChannelJhf) {
-//            return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
-//        }
-//        TradeOrderDO tradeOrder = new TradeOrderDO();
-//        tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
-//        tradeOrder.setChannelMerId(merchantChannelJhf.getChannelMerId());
-//        tradeOrder.setChannelType("04");
-//        tradeOrder.setInstallmentNum(getQRUrlJO.getInstallmentNum());
-//        tradeOrder.setEntityInnerCode(merchantChannelJhf.getEntityInnerCode());
-//        tradeOrder.setCreateUserId(String.valueOf(getQRUrlJO.getUserId()));
-//        BigDecimal amountB = new BigDecimal(getQRUrlJO.getPaymentAmount());
-//        BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
-//        tradeOrder.setTxnAmount(amountBs);
-//        //支付方式00刷卡01二维码02分期付
-//        tradeOrder.setPayType("02");
-//        //交易子类型00刷卡01微信02支付宝03聚惠分
-//        tradeOrder.setPaySubType("03");
-//        //00pos机01app02台码
-//        tradeOrder.setPayMedium(TradeConstants.PayMediumEnum.APP.getCode());
-//        tradeOrder.setTxnType(1);
-//        //交易子类型10购买消费11充值消费20购买撤销21充值撤销
-//        tradeOrder.setTxnSubType(TradeConstants.TxnSubTypeEnum.INCOME_RESEARCH.getCode());
-//        tradeOrder.setTxnSubType(11);//交易子类型10购买消费11充值消费20购买撤销21充值撤销
-//        tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
-//        tradeOrder.setSyncStatus(0);
+        //        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByMerChannelInnerCodeType(innerCode, "04");
+        //        if (null == merchantChannelJhf) {
+        //            return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
+        //        }
+        //        TradeOrderDO tradeOrder = new TradeOrderDO();
+        //        tradeOrder.setInnerCode(merchantChannelJhf.getInnerCode());
+        //        tradeOrder.setChannelMerId(merchantChannelJhf.getChannelMerId());
+        //        tradeOrder.setChannelType("04");
+        //        tradeOrder.setInstallmentNum(getQRUrlJO.getInstallmentNum());
+        //        tradeOrder.setEntityInnerCode(merchantChannelJhf.getEntityInnerCode());
+        //        tradeOrder.setCreateUserId(String.valueOf(getQRUrlJO.getUserId()));
+        //        BigDecimal amountB = new BigDecimal(getQRUrlJO.getPaymentAmount());
+        //        BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
+        //        tradeOrder.setTxnAmount(amountBs);
+        //        //支付方式00刷卡01二维码02分期付
+        //        tradeOrder.setPayType("02");
+        //        //交易子类型00刷卡01微信02支付宝03聚惠分
+        //        tradeOrder.setPaySubType("03");
+        //        //00pos机01app02台码
+        //        tradeOrder.setPayMedium(TradeConstants.PayMediumEnum.APP.getCode());
+        //        tradeOrder.setTxnType(1);
+        //        //交易子类型10购买消费11充值消费20购买撤销21充值撤销
+        //        tradeOrder.setTxnSubType(TradeConstants.TxnSubTypeEnum.INCOME_RESEARCH.getCode());
+        //        tradeOrder.setTxnSubType(11);//交易子类型10购买消费11充值消费20购买撤销21充值撤销
+        //        tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
+        //        tradeOrder.setSyncStatus(0);
         //tradeOrderService.research(tradeOrder);
-        
+
     }
 }
