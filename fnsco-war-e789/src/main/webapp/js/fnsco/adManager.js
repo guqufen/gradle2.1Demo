@@ -340,7 +340,6 @@ $('.sunmitBtn')
 				function() {
 					var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
 					var url = $("#url").val();
-//alert($('#addForm').serialize());
 					$.ajax({
 						url : PROJECT_NAME + '/web/e789/ad/doAdd',
 						type : 'POST',
