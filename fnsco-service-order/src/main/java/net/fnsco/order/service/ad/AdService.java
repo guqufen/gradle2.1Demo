@@ -1,5 +1,6 @@
 package net.fnsco.order.service.ad;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,9 @@ public class AdService extends BaseService {
 	// 添加
 	public AdDO doAdd(AdDO ad, int loginUserId) {
 		logger.info("开始添加AdService.add,ad=" + ad.toString());
+		ad.setCreateTime(new Date());
+		ad.setUpdateTime(new Date());
+		ad.setCreateUserId(loginUserId);
 		this.adDAO.insert(ad);
 		return ad;
 	}
@@ -46,6 +50,7 @@ public class AdService extends BaseService {
 	// 修改
 	public Integer doUpdate(AdDO ad, Integer loginUserId) {
 		logger.info("开始修改AdService.update,ad=" + ad.toString());
+		ad.setUpdateTime(new Date());
 		int rows = this.adDAO.update(ad);
 		return rows;
 	}

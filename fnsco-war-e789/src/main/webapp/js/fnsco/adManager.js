@@ -73,7 +73,7 @@ function operateFormatter(value, row, index) {
 	return [
 			'<a class="redact" href="javascript:editData(' + value
 					+ ');" title="修改">',
-			'<i class="glyphicon glyphicon-file"></i>',
+			'<i class="glyphicon glyphicon-pencil"></i>',
 			'</a>  ',
 			'<a class="redact" href="javascript:querySingle(' + value
 					+ ');" title="详情">',
@@ -162,8 +162,8 @@ function deleteSingle(id) {
 		btn : [ '确认', '取消' ]
 	}, function() {
 		$.ajax({
-			url : PROJECT_NAME + '/web/msg/delete',
-			type : 'POST',
+			url : PROJECT_NAME + '/web/e789/ad/deleteById',
+			type : 'GET',
 			data : {
 				'id' : id
 			},
@@ -195,6 +195,7 @@ function editData(id) {
 			'id' : id
 		},
 		success : function(data) {
+//			console.log(data.data.img_path+"000");
 			unloginHandler(data);
 			if (data.success) {
 				var ad = data.data;
@@ -339,7 +340,7 @@ $('.sunmitBtn')
 				function() {
 					var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
 					var url = $("#url").val();
-
+//alert($('#addForm').serialize());
 					$.ajax({
 						url : PROJECT_NAME + '/web/e789/ad/doAdd',
 						type : 'POST',

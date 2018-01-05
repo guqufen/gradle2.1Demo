@@ -32,6 +32,26 @@ public class AdManagerController extends BaseController{
 	@Autowired
 	private Environment env;
 	
+	
+	
+	
+	@RequestMapping(value = "/deleteById", method = RequestMethod.GET)
+	@ResponseBody
+	@RequiresPermissions(value = { "sys:app:delete" })
+	public ResultDTO<AdDO> deleteById(Integer id) {
+		AdDO ad= new AdDO();
+		ad.setId(id);
+		Integer loginUserId = this.getUserId();
+		Integer row = adService.doDelete(ad, loginUserId);
+		if(row == 1){
+			return ResultDTO.success();
+		}else{
+			return ResultDTO.fail();
+		}
+	} 
+	
+	
+	
 	@RequestMapping(value = "/query", method = RequestMethod.GET)
 	@ResponseBody
 	@RequiresPermissions(value = { "sys:app:ad:list" })
