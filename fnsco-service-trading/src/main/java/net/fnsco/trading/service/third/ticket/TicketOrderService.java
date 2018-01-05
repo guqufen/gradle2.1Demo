@@ -232,6 +232,8 @@ public class TicketOrderService extends BaseService {
      */
     @Transactional
     public ResultDTO pay(TicketOrderDO ticketOrder) {
+        
+        
         TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getAppUserId(), ticketOrder.getOrderNo());
         if (null == order) {
             return ResultDTO.fail("订单不存在");
