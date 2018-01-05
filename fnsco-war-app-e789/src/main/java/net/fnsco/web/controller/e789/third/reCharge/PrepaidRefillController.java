@@ -71,6 +71,7 @@ public class PrepaidRefillController extends BaseController {
 			return ResultDTO.fail("暂时只支持帐户余额充值方式，请重新选择！！");
 		}
 
+		logger.info("手机充值-输入的支付密码加密前的passwd="+fl.getPayPassword());
 		String password = Md5Util.getInstance().md5(fl.getPayPassword());
 		// 根据id查询用户是否存在获取原密码
 		AppUser mAppUser = appUserService.selectAppUserById(fl.getUserId());
