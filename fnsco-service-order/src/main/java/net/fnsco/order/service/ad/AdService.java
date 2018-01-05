@@ -38,13 +38,13 @@ public class AdService extends BaseService {
 	}
 
 	// 添加
-	public AdDO doAdd(AdDO ad, int loginUserId) {
+	public Integer doAdd(AdDO ad, int loginUserId) {
 		logger.info("开始添加AdService.add,ad=" + ad.toString());
 		ad.setCreateTime(new Date());
 		ad.setUpdateTime(new Date());
 		ad.setCreateUserId(loginUserId);
 		this.adDAO.insert(ad);
-		return ad;
+		return ad.getId();
 	}
 
 	// 修改

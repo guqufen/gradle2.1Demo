@@ -76,14 +76,22 @@ public class AdManagerController extends BaseController{
 	@RequestMapping(value = "/doAdd", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions(value = { "sys:app:ad:add" })
-	public void add(AdDO appAdDTO) {
+	public ResultDTO<String> add(AdDO appAdDTO) {
 		Integer userId = this.getUserId();
+		Integer row = null;
 		if(appAdDTO.getId() != null){
-			adService.doUpdate(appAdDTO, userId);
+			row = adService.doUpdate(appAdDTO, userId);
+			
 		}else{
-			adService.doAdd(appAdDTO,userId);
+			row = adService.doAdd(appAdDTO,userId);
 			
 		}
+		if(row != null && row>0){
+			return ResultDTO.success();
+		}else{
+			return ResultDTO.fail();
+		}
+		
 	}
 
 	
