@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
@@ -52,6 +54,7 @@ public class AdController extends BaseController {
 		if (result.isSuccess()) {
 			vo.setAdList(result.getData().get("ad"));
 			vo.setNewsList(result.getData().get("news"));
+			logger.warn("广告"+JSONObject.toJSON(vo).toString());
 			return ResultDTO.success(vo);
 
 		} else {
