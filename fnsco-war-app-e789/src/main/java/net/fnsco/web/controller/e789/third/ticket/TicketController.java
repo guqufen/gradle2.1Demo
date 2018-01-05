@@ -17,6 +17,11 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.freamwork.comm.Md5Util;
+import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.constant.ApiConstant;
+import net.fnsco.order.service.domain.AppUser;
+import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.third.ticket.TicketContactService;
 import net.fnsco.trading.service.third.ticket.TicketOrderService;
 import net.fnsco.trading.service.third.ticket.TicketService;
@@ -62,6 +67,8 @@ public class TicketController extends BaseController {
     private TicketContactService ticketContactService;
     @Autowired
     private TicketOrderService   ticketOrderService;
+    @Autowired
+    private AppUserService       appUserService;
 
     /**
      * queryTradeDataDetail:(查询交易流水详情)
@@ -478,6 +485,21 @@ public class TicketController extends BaseController {
         TicketOrderDO ticketOrder = new TicketOrderDO();
         ticketOrder.setOrderNo(payOrderJO.getOrderNo());
         ticketOrder.setAppUserId(payOrderJO.getUserId());
+        if (Strings.isNullOrEmpty(payOrderJO.getPayPassword())) {
+            return ResultDTO.fail("支付密码不能为空");
+        }
+        String password = Md5Util.getInstance().md5(payOrderJO.getPayPassword());
+        // 根据id查询用户是否存在获取原密码
+        AppUser mAppUser = appUserService.selectAppUserById(payOrderJO.getUserId());
+        if (null == mAppUser) {
+            logger.error("火车票支付时出错，用户Id未找到相关信息，appUserId=" + payOrderJO.getUserId());
+            return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+        }
+        // 查到的密码和原密码做比较
+        if (!password.equals(mAppUser.getPassword())) {
+            logger.error("支付密码错误，请核对后重新输入！！");
+            return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
+        }
         return ticketOrderService.pay(ticketOrder);
     }
 

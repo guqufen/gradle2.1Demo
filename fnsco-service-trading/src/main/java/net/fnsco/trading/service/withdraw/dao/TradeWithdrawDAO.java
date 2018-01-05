@@ -71,6 +71,9 @@ public interface TradeWithdrawDAO {
     @UpdateProvider(type = TradeWithdrawProvider.class, method = "update")
     public int update(@Param("tradeWithdraw") TradeWithdrawDO tradeWithdraw);
 
+    @UpdateProvider(type = TradeWithdrawProvider.class, method = "updateOnlyFail")
+    public int updateOnlyFail(@Param("tradeWithdraw") TradeWithdrawDO tradeWithdraw);
+    
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "original_order_no", property = "originalOrderNo"), @Result(column = "app_user_id", property = "appUserId"),
                @Result(column = "settle_money", property = "settleMoney"), @Result(column = "trade_type", property = "tradeType"), @Result(column = "trade_sub_type", property = "tradeSubType"),
                @Result(column = "create_time", property = "createTime"), @Result(column = "update_time", property = "updateTime"), @Result(column = "resp_code", property = "respCode"),

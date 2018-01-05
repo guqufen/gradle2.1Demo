@@ -83,7 +83,13 @@ public class TradeWithdrawService extends BaseService {
         int rows = this.tradeWithdrawDAO.update(tradeWithdraw);
         return rows;
     }
-
+    
+    public Integer updateOnlyFail(TradeWithdrawDO tradeWithdraw) {
+        logger.info("开始修改TradeWithdrawService.update,tradeWithdraw=" + tradeWithdraw.toString());
+        int rows = this.tradeWithdrawDAO.updateOnlyFail(tradeWithdraw);
+        return rows;
+    }
+    
     public Integer researchForSuccess(TradeWithdrawDO tradeWithdraw) {
         logger.info("开始修改TradeWithdrawService.update,tradeWithdraw=" + tradeWithdraw.toString());
         int rows = this.tradeWithdrawDAO.update(tradeWithdraw);

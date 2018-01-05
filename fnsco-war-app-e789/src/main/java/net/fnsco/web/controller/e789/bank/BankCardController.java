@@ -70,6 +70,10 @@ public class BankCardController extends BaseController {
 		ValidateBankVO vo = new ValidateBankVO();
 		// 根据userid 获取身份证号
 		String idcard = appUserService.getIdAuth(jo.getUserId());
+		if(Strings.isNullOrEmpty(idcard)){
+			logger.error("用户"+jo.getUserId()+"【身份证号为空】");
+			return ResultDTO.fail(E789ApiConstant.E_NOT_FOUND_PRE);//先进行省份认证
+		}
 		String strUrl = env.getProperty("jh.bank.validate.url");
 		String method = "POST";
 		Map<String, String> params = new HashMap<>();
@@ -79,7 +83,7 @@ public class BankCardController extends BaseController {
 		params.put("bankcard", jo.getCardNum());// 卡号
 		params.put("mobile", jo.getMobile());// 预留手机号
 		JSONObject jaJsonObject = new JSONObject();
-		try {
+		try { 
 			String result = JuheDemo.net(strUrl, params, method);
 			jaJsonObject = JSONObject.parseObject(result);
 			Integer error_code = jaJsonObject.getInteger("error_code");
@@ -128,11 +132,11 @@ public class BankCardController extends BaseController {
 		String mobile = jo.getMobile();
 		String bankCardNum = jo.getBankCardNum();
 		String bankCardholder = jo.getBankCardholder();
-		// 判断是否已进行身份认证
 		if (Strings.isNullOrEmpty(userId) || Strings.isNullOrEmpty(mobile) || Strings.isNullOrEmpty(bankCardNum)
 				|| Strings.isNullOrEmpty(bankCardholder)) {
 			return ResultDTO.fail(TradeConstants.E_PARAMETER_NOT_NULL);
 		}
+		// 判断是否已进行身份认证
 		String id_card_num = appUserService.getIdAuth(Integer.parseInt(userId));
 		if (Strings.isNullOrEmpty(id_card_num)) {
 			return ResultDTO.fail(TradeConstants.NOT_ID_AUTH);// 未认证
