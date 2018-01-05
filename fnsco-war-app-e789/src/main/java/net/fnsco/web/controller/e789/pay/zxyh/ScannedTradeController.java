@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
@@ -49,6 +50,7 @@ public class ScannedTradeController extends BaseController {
 	@ApiOperation(value = "收款-获取付款二维码url")
 	public ResultDTO<GenerateQRVO> generateQRCode(@RequestBody GenerateQRJO qrJO) {
 		GenerateQRVO qrVo = new GenerateQRVO();
+		logger.info("收款参数："+JSONObject.toJSON(qrJO).toString());
 		Integer userId = qrJO.getUserId();
 		String ip = this.getIp();
 		String txnAmt = qrJO.getTxnAmt();
@@ -73,10 +75,12 @@ public class ScannedTradeController extends BaseController {
 		}else{
 			return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
 		}
-		reqMap = dto.getData();
-		qrVo.setUrl((String) reqMap.getOrDefault("codeUrl", null));
-		qrVo.setOrderNo((String)reqMap.get("orderId"));
-		qrVo.setRespCode((String)reqMap.get("respCode"));
+		if(dto.getData() != null){
+			reqMap = dto.getData();
+			qrVo.setUrl((String) reqMap.getOrDefault("codeUrl", null));
+			qrVo.setOrderNo((String)reqMap.get("orderId"));
+			qrVo.setRespCode((String)reqMap.get("respCode"));
+		}
 		return ResultDTO.success(qrVo);
 
 	}
