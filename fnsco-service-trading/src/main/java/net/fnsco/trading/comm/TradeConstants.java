@@ -234,8 +234,14 @@ public class TradeConstants extends CoreConstants {
         }
     }
 
+    //渠道类型00拉卡拉01浦发02爱农03法奈昇04聚惠分05中信银行80法奈昇余额90富友
     public static enum ChannelTypeEnum {
-                                        AN_PAY("00", "爱农渠道"), PF_PAY("01", "浦发渠道");
+                                        LKL_PAY("00", "拉卡拉渠道"), PF_PAY("01", "浦发渠道"), AN_PAY("02", "爱农渠道"), FNS_PAY("03",
+                                                                                                                    "法奈昇渠道"), JHF_PAY("04",
+                                                                                                                                      "聚惠分渠道"), ZXYH_PAY("05",
+                                                                                                                                                         "中信银行渠道"), YE_PAY("80",
+                                                                                                                                                                           "法奈昇余额渠道"), FY_PAY("90",
+                                                                                                                                                                                              "富友渠道");
         private String code;
         private String name;
 
@@ -357,19 +363,20 @@ public class TradeConstants extends CoreConstants {
             return "";
         }
     }
+
     //C端客户交易子类型，主要用于个t_trade_withdraw
     // //交易子类型 10充值收入/11新人红包收入20提现/21预约提现//22话费充值23流量充值24火车票购买25提现手续费26收入撤销
     public static enum TxnSubTypeEnum {
                                        INCOME_RESEARCH(10,
-                                              "充值收入"), INCOME_HB(11,
-                                                                 "新人红包收入"), WITHDRAW(20,
-                                                                                     "提现"), WITHDRAW_PRE(21,
-                                                                                                         "预约提现"), BUY_HF(22,
-                                                                                                                         "话费充值"), BUY_LT(23,
-                                                                                                                                         "流量充值"), BUY_HCP(24,
-                                                                                                                                                          "火车票购买"), FEE(25,
-                                                                                                                                                                        "提现手续费"), RESEARCH_UNDO(26,
-                                                                                                                                                                                                "收入撤销");
+                                                       "充值收入"), INCOME_HB(11,
+                                                                          "新人红包收入"), WITHDRAW(20,
+                                                                                              "提现"), WITHDRAW_PRE(21,
+                                                                                                                  "预约提现"), BUY_HF(22,
+                                                                                                                                  "话费充值"), BUY_LT(23,
+                                                                                                                                                  "流量充值"), BUY_HCP(24,
+                                                                                                                                                                   "火车票购买"), FEE(25,
+                                                                                                                                                                                 "提现手续费"), RESEARCH_UNDO(26,
+                                                                                                                                                                                                         "收入撤销");
 
         private Integer code;
         private String  name;
