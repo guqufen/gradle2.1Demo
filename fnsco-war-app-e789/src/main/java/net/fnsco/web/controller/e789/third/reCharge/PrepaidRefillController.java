@@ -19,9 +19,11 @@ import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
+import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
 import net.fnsco.trading.service.third.reCharge.dto.CheckChargePackageDTO;
+import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
 
@@ -42,6 +44,8 @@ public class PrepaidRefillController extends BaseController {
 	private AppAccountBalanceService appAccountBalanceService;
 	@Autowired
 	private AppUserService appUserService;
+	@Autowired
+	private RechargeOrderService rechargeOrderService;
 
 	@RequestMapping("/prepaidCheck")
 	@ApiOperation(value = "话费/流量套餐资费查询url")
@@ -104,6 +108,7 @@ public class PrepaidRefillController extends BaseController {
 		chargeDTO.setPhone(fl.getPhone());
 		chargeDTO.setUserId(fl.getUserId());
 		chargeDTO.setName(fl.getName());
+		chargeDTO.setPid(fl.getPid());
 
 		// 手机充值
 		if (0 == fl.getType()) {
@@ -154,15 +159,15 @@ public class PrepaidRefillController extends BaseController {
 		}
 	}
 
-	// @RequestMapping("/queryFlowResult")
-	// @ApiOperation(value = "话费/流量充值结果查询url")
-	// public void queryFlowResult(@RequestBody String orderNo){
-	// RechargeOrderDO rechargeOrder =
-	// rechargeOrderService.getByOrderNo(orderNo);
-	// if("1".equals(rechargeOrder.getType())){
-	// prepaidRefillService.queryFlowResult(rechargeOrder);
-	// }else if("0".equals(rechargeOrder.getType())){
-	// prepaidRefillService.orderSta(rechargeOrder);
-	// }
-	// }
+	@RequestMapping("/queryResult")
+	@ApiOperation(value = "话费/流量充值结果查询url")
+	public ResultDTO queryFlowResult(@RequestBody String orderNo) {
+		RechargeOrderDO rechargeOrder = rechargeOrderService.getByOrderNo(orderNo);
+		if ("1".equals(rechargeOrder.getType())) {
+			return prepaidRefillService.queryFlowResult(rechargeOrder);
+		} else if ("0".equals(rechargeOrder.getType())) {
+			return prepaidRefillService.orderSta(rechargeOrder);
+		}
+		return null;
+	}
 }

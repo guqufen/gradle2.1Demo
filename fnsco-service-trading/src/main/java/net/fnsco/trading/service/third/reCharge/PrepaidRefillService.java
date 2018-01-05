@@ -108,7 +108,8 @@ public class PrepaidRefillService extends BaseService {
 		List<CheckMobileDTO> list = new ArrayList<>();
 
 		StringBuffer sb = new StringBuffer();
-		String sendData = sb.append("?phone=").append(phone).append("&key=").append(env.getProperty("jh.phone.flowkey")).toString();
+		String sendData = sb.append("?phone=").append(phone).append("&key=").append(env.getProperty("jh.phone.flowkey"))
+				.toString();
 
 		try {
 			/**
@@ -177,13 +178,13 @@ public class PrepaidRefillService extends BaseService {
 		String orderid = CodeUtil.generateOrderCode("");
 
 		// md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
-		String sign = Md5Util.MD5(env.getProperty("jh.phone.OpenId") + env.getProperty("jh.phone.flowkey") + chargeDTO.getPhone() + chargeDTO.getPid() + orderid)
-				.toLowerCase();
+		String sign = Md5Util.MD5(env.getProperty("jh.phone.OpenId") + env.getProperty("jh.phone.flowkey")
+				+ chargeDTO.getPhone() + chargeDTO.getPid() + orderid).toLowerCase();
 
 		StringBuffer sb = new StringBuffer();
-		String sendData = sb.append("?key=").append(env.getProperty("jh.phone.flowkey")).append("&phone=").append(chargeDTO.getPhone())
-				.append("&pid=").append(chargeDTO.getPid()).append("&orderid=").append(orderid).append("&sign=")
-				.append(sign).toString();
+		String sendData = sb.append("?key=").append(env.getProperty("jh.phone.flowkey")).append("&phone=")
+				.append(chargeDTO.getPhone()).append("&pid=").append(chargeDTO.getPid()).append("&orderid=")
+				.append(orderid).append("&sign=").append(sign).toString();
 
 		RechargeOrderDO phoneChargeOrderDO = new RechargeOrderDO();
 		phoneChargeOrderDO.setType(String.valueOf(chargeDTO.getType()));// 设置充值类型
@@ -218,7 +219,7 @@ public class PrepaidRefillService extends BaseService {
 
 				phoneChargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 				phoneChargeOrderDO.setAmt(map.get("ordercash").toString().replace(".", ""));// 设置实际消费金额
-				phoneChargeOrderDO.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
+				phoneChargeOrderDO.setRespCode("1000");// 订单提交成功，等待充值
 				phoneChargeOrderDO.setRespMsg(juhe.getReason());// 设置响应
 				int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO);
 				if (ret < 0) {
@@ -229,7 +230,7 @@ public class PrepaidRefillService extends BaseService {
 				tradeWithdrawDO.setOriginalOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 				tradeWithdrawDO
 						.setAmount(new BigDecimal(map.get("ordercash").toString()).multiply(new BigDecimal(100)));// 设置实际消费金额
-				tradeWithdrawDO.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
+				tradeWithdrawDO.setRespCode("1000");// 交易成功
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置交易完成时间
 				tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
 				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
@@ -244,7 +245,7 @@ public class PrepaidRefillService extends BaseService {
 
 			} else if (juhe.getError_code() == 10014) {// 系统内部异常(调用充值类业务时，请务必联系客服或通过订单查询接口检测订单，避免造成损失)
 
-				tradeWithdrawDO.setRespCode("1000");// 交易进行中，需要再次调用订单查询接口进行查询
+				tradeWithdrawDO.setRespCode("1000");// 订单提交成功，等待充值需要再次调用订单查询接口进行查询
 				tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置最后更新时间
 				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
@@ -304,12 +305,13 @@ public class PrepaidRefillService extends BaseService {
 
 		String result = null;
 		String onlineUrl = "http://op.juhe.cn/ofpay/mobile/onlineorder?key=" + env.getProperty("jh.phone.feekey")
-		+ "&phoneno=!&cardnum=*&orderid=@&sign=$";
+				+ "&phoneno=!&cardnum=*&orderid=@&sign=$";
 		ChargeResultDTO ph = new ChargeResultDTO();
 		String orderid = CodeUtil.generateOrderCode("");
 
 		// md5,校验值，md5(OpenID+key+phone+pid+orderid)，结果转为小写
-		String sign = Md5Util.MD5(env.getProperty("jh.phone.OpenId") + env.getProperty("jh.phone.feekey") + chargeDTO.getPhone() + chargeDTO.getPid() + orderid);
+		String sign = Md5Util.MD5(env.getProperty("jh.phone.OpenId") + env.getProperty("jh.phone.feekey")
+				+ chargeDTO.getPhone() + chargeDTO.getPid() + orderid);
 
 		RechargeOrderDO phoneChargeOrderDO = new RechargeOrderDO();
 		phoneChargeOrderDO.setType(String.valueOf(chargeDTO.getType()));// 设置充值类型
@@ -343,7 +345,7 @@ public class PrepaidRefillService extends BaseService {
 
 				phoneChargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 				phoneChargeOrderDO.setAmt(map.get("ordercash").toString().replace(".", ""));// 设置实际消费金额
-				phoneChargeOrderDO.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
+				phoneChargeOrderDO.setRespCode("1000");// 订单提交成功，等待充值
 				phoneChargeOrderDO.setRespMsg(juhe.getReason());// 设置响应
 				int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO);
 				if (ret < 0) {
@@ -354,8 +356,9 @@ public class PrepaidRefillService extends BaseService {
 				tradeWithdrawDO.setOriginalOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 				tradeWithdrawDO
 						.setAmount(new BigDecimal(map.get("ordercash").toString()).multiply(new BigDecimal(100)));// 设置实际消费金额
-				tradeWithdrawDO.setRespCode(TradeStateEnum.SUCCESS.getCode());// 交易成功
-				tradeWithdrawDO.setRespCode("1000");// 交易进行中，需要再次调用订单查询接口进行查询
+				// tradeWithdrawDO.setRespCode(TradeStateEnum.SUCCESS.getCode());//
+				// 交易成功
+				tradeWithdrawDO.setRespCode("1000");// 订单提交成功，等待充值需要再次调用订单查询接口进行查询
 				tradeWithdrawDO.setUpdateTime(new Date());// 设置交易完成时间
 				tradeWithdrawDO.setRespMsg(juhe.getReason());// 设置响应
 				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新数据
@@ -423,13 +426,23 @@ public class PrepaidRefillService extends BaseService {
 	 * 
 	 * @param orderNo：原订单号
 	 */
-	public void queryFlowResult(RechargeOrderDO rechargeOrderDO) {
+	public ResultDTO queryFlowResult(RechargeOrderDO rechargeOrderDO) {
 		String result = null;
 		String url = "http://v.juhe.cn/flow/batchquery";// 请求接口地址
 
 		Map params = new HashMap();// 请求参数
 		params.put("orderid", rechargeOrderDO.getOrderNo());// 用户订单号，多个以英文逗号隔开，最大支持50组
 		params.put("key", env.getProperty("jh.phone.flowkey"));// 应用APPKEY(应用详细页查询)
+
+		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(rechargeOrderDO.getOrderNo());
+		if (null == tradeWithdrawDO) {// 如果该条数据为空
+
+		}
+
+		// 如果结果已经明确
+		if (!"1000".equals(tradeWithdrawDO.getRespCode())) {
+			return ResultDTO.success(tradeWithdrawDO.getRespMsg());
+		}
 
 		try {
 			result = RechargeUtil.net(url, params, "GET");
@@ -443,20 +456,38 @@ public class PrepaidRefillService extends BaseService {
 
 					rechargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 					rechargeOrderDO.setAmt(map.get("uordercash").replace(".", ""));// 设置实际消费金额
-					rechargeOrderDO.setStatus(1);// 设置交易状态为1-成功
+					rechargeOrderDO.setStatus(3);// 设置交易状态为1-成功
+					rechargeOrderDO.setRespCode(TradeStateEnum.SUCCESS.getCode());
+					rechargeOrderDO.setRespMsg("充值成功");
 					rechargeOrderService.doUpdate(rechargeOrderDO);
+
+					tradeWithdrawDO.setAmount(new BigDecimal(map.get("uordercash").replace(".", "")));// 设置实际消费金额
+					tradeWithdrawDO.setStatus(3);
+					tradeWithdrawDO.setRespCode(TradeStateEnum.SUCCESS.getCode());
+					tradeWithdrawDO.setRespMsg("充值成功");
+					tradeWithdrawService.doUpdate(tradeWithdrawDO);
+
+					return ResultDTO.success("充值成功");
 
 				} else if ("9".equals(map.get("game_state"))) {// 失败
 
 					rechargeOrderDO.setStatus(2);// 设置交易状态为2-失败
 					rechargeOrderService.doUpdate(rechargeOrderDO);
+
+					tradeWithdrawDO.setStatus(2);
+					tradeWithdrawDO.setRespCode(TradeStateEnum.FAIL.getCode());
+					tradeWithdrawDO.setRespMsg(juhe.getReason());
+					tradeWithdrawService.doUpdate(tradeWithdrawDO);
+
+					return ResultDTO.fail(juhe.getReason());
 				}
 			} else {
-
+				return ResultDTO.fail("支付正在处理，请稍后查询");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	/**
@@ -467,10 +498,21 @@ public class PrepaidRefillService extends BaseService {
 	 * 
 	 * @throws Exception
 	 */
-	public void orderSta(RechargeOrderDO rechargeOrderDO) {
+	public ResultDTO orderSta(RechargeOrderDO rechargeOrderDO) {
 
 		String result = null;
-		String orderstaUrl = "http://op.juhe.cn/ofpay/mobile/ordersta?key=" + env.getProperty("jh.phone.feekey") + "&orderid=!";
+		String orderstaUrl = "http://op.juhe.cn/ofpay/mobile/ordersta?key=" + env.getProperty("jh.phone.feekey")
+				+ "&orderid=!";
+
+		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(rechargeOrderDO.getOrderNo());
+		if (null == tradeWithdrawDO) {// 如果该条数据为空
+
+		}
+
+		// 如果结果已经明确
+		if (!"1000".equals(tradeWithdrawDO.getRespCode())) {
+			return ResultDTO.success(tradeWithdrawDO.getRespMsg());
+		}
 
 		try {
 			result = RechargeUtil.get(orderstaUrl.replace("!", rechargeOrderDO.getOrderNo()), 0);
@@ -485,27 +527,44 @@ public class PrepaidRefillService extends BaseService {
 
 					rechargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 					rechargeOrderDO.setAmt(map.get("uordercash").replace(".", ""));// 设置实际消费金额
-					rechargeOrderDO.setStatus(1);// 设置交易状态为1-成功
+					rechargeOrderDO.setStatus(3);// 设置交易状态为1-成功
+					rechargeOrderDO.setRespCode(TradeStateEnum.SUCCESS.getCode());
+					rechargeOrderDO.setRespMsg("充值成功");
 					Integer ret = rechargeOrderService.doUpdate(rechargeOrderDO);
 					if (ret < 0) {
 						logger.error("充值结果查询成功，原充值交易成功,数据更新失败。orderNo=" + rechargeOrderDO.getOrderNo() + "userId="
 								+ rechargeOrderDO.getAppUserId());
 					}
+
+					tradeWithdrawDO.setAmount(new BigDecimal(map.get("uordercash").replace(".", "")));// 设置实际消费金额
+					tradeWithdrawDO.setStatus(3);
+					tradeWithdrawDO.setRespCode(TradeStateEnum.SUCCESS.getCode());
+					tradeWithdrawDO.setRespMsg("充值成功");
+					tradeWithdrawService.doUpdate(tradeWithdrawDO);
+
+					return ResultDTO.success("充值成功");
 				} else if ("9".equals(map.get("game_state"))) {// 失败
 
 					rechargeOrderDO.setStatus(2);// 设置交易状态为2-失败
 					Integer ret = rechargeOrderService.doUpdate(rechargeOrderDO);
-
 					if (ret < 0) {
 						logger.error("充值结果查询成功，原充值交易失败,数据更新失败。orderNo=" + rechargeOrderDO.getOrderNo() + "userId="
 								+ rechargeOrderDO.getAppUserId());
 					}
+
+					tradeWithdrawDO.setStatus(2);
+					tradeWithdrawDO.setRespCode(TradeStateEnum.FAIL.getCode());
+					tradeWithdrawDO.setRespMsg(juhe.getReason());
+					tradeWithdrawService.doUpdate(tradeWithdrawDO);
+
+					return ResultDTO.fail(juhe.getReason());
 				}
 			} else {
-
+				return ResultDTO.fail("支付正在处理，请稍后查询");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return ResultDTO.fail();
 	}
 }
