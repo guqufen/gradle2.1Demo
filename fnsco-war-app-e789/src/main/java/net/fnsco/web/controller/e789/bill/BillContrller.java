@@ -79,7 +79,7 @@ public class BillContrller extends BaseController {
 		
 		TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
 		tradeWithdraw.setAppUserId(billJO.getUserId());
-		tradeWithdraw.setStatus(3);
+//		tradeWithdraw.setStatus(3);
 		ResultPageDTO<TradeWithdrawDO> datasResult = tradeWithdrawService.page(tradeWithdraw, billJO.getPageNum(), billJO.getPageSize());
 		List<TradeWithdrawDO> datas =  datasResult.getList();
 		Set<String> sets = Sets.newHashSet(); 
