@@ -102,6 +102,7 @@ public class BillContrller extends BaseController {
 			}
 			BillDayVO billDayVO = new BillDayVO();
 			billDayVO.setAmount(formatRMBNumber(tradeWithdrawDO.getAmount()));
+			billDayVO.setStatus(tradeWithdrawDO.getStatus());
 			if(null != tradeWithdrawDO.getTradeType() && 2==tradeWithdrawDO.getTradeType()) {
 				billDayVO.setBillType("1");
 				billDayVO.setBillTypeName("交易支出");
