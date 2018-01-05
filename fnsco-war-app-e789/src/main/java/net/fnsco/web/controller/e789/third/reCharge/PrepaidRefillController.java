@@ -80,7 +80,7 @@ public class PrepaidRefillController extends BaseController {
 		}
 		// 查到的密码和原密码做比较
 		if (!password.equals(mAppUser.getPassword())) {
-			logger.error("支付密码错误，请核对后重新输入！！");
+			logger.error("支付密码错误，请核对后重新输入！！db_passwd="+mAppUser.getPassword()+",password="+password);
 			return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
 		}
 
