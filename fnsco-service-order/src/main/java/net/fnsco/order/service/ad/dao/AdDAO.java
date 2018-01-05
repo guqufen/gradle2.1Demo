@@ -19,11 +19,13 @@ public interface AdDAO {
 	@Results({ @Result(column = "img_path", property = "img_path"),
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "update_time", property = "updateTime"),
-			@Result(column = "create_user_id", property = "createUserId") })
+			@Result(column = "create_user_id", property = "createUserId"),
+			@Result(column = "url", property = "url"),
+			@Result(column = "type", property = "type")})
 	@Select("SELECT * FROM sys_ad WHERE id = #{id}")
 	public AdDO getById(@Param("id") int id);
 
-	@Insert("INSERT into sys_ad(id,title,img_path,category,summary,content,create_time,update_time,create_user_id,url) VALUES (#{id},#{title},#{img_path},#{category},#{summary},#{content},#{createTime},#{updateTime},#{createUserId},#{url})")
+	@Insert("INSERT into sys_ad(id,title,img_path,category,summary,content,create_time,update_time,create_user_id,url,type) VALUES (#{id},#{title},#{img_path},#{category},#{summary},#{content},#{createTime},#{updateTime},#{createUserId},#{url},#{type})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public void insert(AdDO ad);
 
