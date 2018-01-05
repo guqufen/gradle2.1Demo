@@ -354,12 +354,12 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+		logger.info("返回报文="+JSONObject.toJSONString(respMap));
 		if ("0000".equals(respMap.get("respCode"))) {
 			respMap.put("orderId", tradeOrderDO.getOrderNo());
 			respMap.put("respCode", tradeOrderDO.getRespCode());
 			return ResultDTO.success(respMap);
 		} else {
-			logger.warn(JSONObject.toJSONString(respMap));
 			return ResultDTO.fail(respMap);
 		}
 

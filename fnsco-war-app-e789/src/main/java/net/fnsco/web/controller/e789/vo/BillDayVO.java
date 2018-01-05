@@ -33,6 +33,31 @@ public class BillDayVO extends VO {
 	@ApiModelProperty(value = "账单金额", name = "billDayDate", example = "账单金额")
 	private String amount;
 	
+	@ApiModelProperty(value = "账单状态", name = "status", example = "账单状态(0未执行1执行中2失败3成功)")
+	private Integer status;
+	
+	/**
+	 * status
+	 *
+	 * @return  the status
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getStatus() {
+		return status;
+	}
+
+	/**
+	 * status
+	 *
+	 * @param   status    the status to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
 	/**
 	 * billTypeName
 	 *
