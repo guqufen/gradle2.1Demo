@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 
@@ -18,6 +21,9 @@ import sun.misc.BASE64Encoder;
  * @Date 2017年12月12日 下午4:11:30
  */
 public class JuheDemoUtil {
+	
+	protected static Logger              logger = LoggerFactory.getLogger(JuheDemoUtil.class.getClass());
+	
 	//配置您申请的身份证识别KEY
 	public static final String IMAGE_APPKEY ="541432479017131ffa89cd68a5ed561c";
 	
@@ -75,16 +81,21 @@ public class JuheDemoUtil {
     	params.put("idcard", idcard );
     	params.put("realname", realname);
     	String resule = HttpClientUtil.doPost(URI_ID_CARD, params);
+    	logger.info("resule返回值:"+resule);
     	 JSONObject json = JSONObject.parseObject(resule);
+    	 int errorCode = json.getInteger("error_code");
     	 String reason = json.getString("reason");
     	 JSONObject obj = json.getJSONObject("result");
-    	 String name = obj.getString("realname");
-    	 String card = obj.getString("idcard");
-    	 String res = obj.getString("res");
+    	 if(obj!=null) {
+    		 String name = obj.getString("realname");
+        	 String card = obj.getString("idcard");
+        	 int res = obj.getInteger("res");
+        	 idCard.setRealname(name);
+        	 idCard.setIdcard(card);
+        	 idCard.setRes(res); 
+    	 }
+    	 idCard.setErrorCode(errorCode);
     	 idCard.setReason(reason);
-    	 idCard.setRealname(name);
-    	 idCard.setIdcard(card);
-    	 idCard.setRes(Integer.valueOf(res));
     	return idCard;
     }
     /**
