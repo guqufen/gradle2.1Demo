@@ -163,6 +163,16 @@ public class PrepaidRefillController extends BaseController {
 	@ApiOperation(value = "话费/流量充值结果查询url")
 	public ResultDTO queryFlowResult(@RequestBody String orderNo) {
 		RechargeOrderDO rechargeOrder = rechargeOrderService.getByOrderNo(orderNo);
+		if (null == rechargeOrder) {
+			return ResultDTO.fail("此订单号找不到原交易，请核查后重新请求：orderNo=" + orderNo);
+		}
+
+		if ("1".equals(rechargeOrder.getStatus())) {
+			return ResultDTO.success(rechargeOrder.getRespMsg());
+		} else if ("2".equals(rechargeOrder.getStatus())) {
+			return ResultDTO.fail(rechargeOrder.getRespMsg());
+		}
+
 		if ("1".equals(rechargeOrder.getType())) {
 			return prepaidRefillService.queryFlowResult(rechargeOrder);
 		} else if ("0".equals(rechargeOrder.getType())) {
