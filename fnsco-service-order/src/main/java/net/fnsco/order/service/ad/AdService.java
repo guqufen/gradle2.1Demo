@@ -107,17 +107,14 @@ public class AdService extends BaseService {
 			if (adDO.getCategory() == null) {
 				continue;
 			}
-			if (adDO.getImg_path() == null) {
-				continue;
-			}
-			if (adDO.getImg_path().length() < 34) {
+			String img_path = adDO.getImg_path();
+			if (img_path == null) {
 				continue;
 			}
 			AdDTO adDTO = new AdDTO();
 			// 获取图片路径
-			String str1 = adDO.getImg_path().substring(0, 9);
-			String str2 = adDO.getImg_path().substring(10, adDO.getImg_path().length());
-			String url = OssLoaclUtil.getFileUrl(str1, str2);
+			String str2 = img_path.substring(img_path.indexOf("^")+1, img_path.length());
+			String url = OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), str2);
 			if (!Strings.isNullOrEmpty(url)) {
 				adDTO.setImgPath(url);
 			}
