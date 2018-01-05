@@ -49,6 +49,7 @@ public class AdController extends BaseController {
 		if (appAdJO.getType() == null || appAdJO.getUserId() == null) {
 			return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR_ID);
 		}
+		logger.warn("参数"+JSONObject.toJSON(appAdJO).toString());
 		AppAdVO vo = new AppAdVO();
 		ResultDTO<Map<String, List>> result = adService.queryAdList(appAdJO.getType());
 		if (result.isSuccess()) {
