@@ -54,6 +54,14 @@ public class AppAdVO extends VO {
 	public void setNewsList(List<AdDTO> newsList) {
 		this.newsList = newsList;
 	}
+	/**
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "AppAdVO [adList=" + adList + ", newsList=" + newsList + "]";
+	}
 	
 	
 	
