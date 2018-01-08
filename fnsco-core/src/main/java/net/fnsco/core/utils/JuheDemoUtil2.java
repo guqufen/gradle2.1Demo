@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 
 import net.fnsco.core.utils.dto.IdCardDTO;
+import sun.misc.BASE64Encoder;
 
 /**
  * @desc 身份证验证http接口的java代码调用示例
@@ -32,6 +33,9 @@ public class JuheDemoUtil2 {
 	
 	//配置您申请的身份证识别KEY
 	public static final String IMAGE_APPKEY ="nPtxyEXkU30ASqFlUJzIYdhad9BpgJQq  -Ur7FR0EVmOvNlC9Kgv8kI4__HylVyC3";
+	
+	//配置您申请的身份证识别api_secret
+		public static final String IMAGE_APPSECRET ="nPtxyEXkU30ASqFlUJzIYdhad9BpgJQq  -Ur7FR0EVmOvNlC9Kgv8kI4__HylVyC3";
 	
 	//身份证识别的http地址
 	private static String  URI_ID_IMAGE     = "https://api-cn.faceplusplus.com/cardpp/v1/ocridcard";
