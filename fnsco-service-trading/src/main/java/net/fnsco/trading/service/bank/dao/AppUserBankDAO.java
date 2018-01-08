@@ -39,7 +39,7 @@ public interface AppUserBankDAO {
 	@Select("SELECT id FROM u_app_user_bank WHERE app_user_id = #{appUserId} LIMIT 1")
 	public AppUserBankDO getByAppUserId(@Param("appUserId") int appUserId);
 
-	@Insert("INSERT into u_app_user_bank(id,app_user_id,account_type,account_no,account_name,account_card_id,sub_bank_name,open_bank_prince,open_bank,open_bank_city,open_bank_num,account_phone,create_time,update_time,bank_name,type) VALUES (#{id},#{appUserId},#{accountType},#{accountNo},#{accountName},#{accountCardId},#{subBankName},#{openBankPrince},#{openBank},#{openBankCity},#{openBankNum},#{accountPhone},#{createTime},#{updateTime},#{bankName},#{type})")
+	@Insert("INSERT into u_app_user_bank(id,app_user_id,account_type,account_no,account_name,account_card_id,sub_bank_name,open_bank_prince,open_bank,open_bank_city,open_bank_num,account_phone,create_time,update_time,bank_name,type,status) VALUES (#{id},#{appUserId},#{accountType},#{accountNo},#{accountName},#{accountCardId},#{subBankName},#{openBankPrince},#{openBank},#{openBankCity},#{openBankNum},#{accountPhone},#{createTime},#{updateTime},#{bankName},#{type},#{status})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public Integer insert(AppUserBankDO appUserBank);
 
