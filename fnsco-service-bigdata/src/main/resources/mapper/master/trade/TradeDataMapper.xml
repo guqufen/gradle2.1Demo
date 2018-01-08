@@ -54,7 +54,6 @@
     <result column="send_time" property="sendTime" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="VARCHAR"/>
-    <result column="sn_code" property="snCode" jdbcType="VARCHAR"/>
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -65,15 +64,6 @@
     amt, order_no, order_time, order_info, pay_type,pay_sub_type, time_stamp, trade_detail, mer_id, 
     term_id, batch_no, trace_no, auth_code, order_id_scan, source, md5, send_time, 
     create_time,refer_no,status
-  </sql>
-    <sql id="Base_AllColumn_List" >
-     TD.id, TD.inner_code, TD.txn_type, TD.txn_sub_type, TD.currency, TD.pay_time_out, TD.subject, TD.body, TD.customer_info, 
-    TD.remark, TD.customer_ip, TD.tn, TD.resp_code, TD.resp_msg, TD.settle_amount, TD.settle_currency, TD.settle_date, 
-    TD.succ_time, TD.org_mer_order_id, TD.can_ref_amt, TD.ref_cnt, TD.ref_amt, TD.bank_id, TD.pp_flag, TD.purpose, 
-    TD.dc_type, TD.certify_id, TD.msg_dest_id, TD.customer_nm, TD.phone_no, TD.sub_open_id, TD.channel_type, 
-    TD.amt, TD.order_no, TD.order_time, TD.order_info, TD.pay_type,pay_sub_type, TD.time_stamp, TD.trade_detail, TD.mer_id, 
-    TD.term_id, TD.batch_no, TD.trace_no, TD.auth_code, TD.order_id_scan, TD.source, TD.md5, TD.send_time, 
-    TD.create_time,TD.refer_no,TD.status,MP.sn_code
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -736,6 +726,9 @@
       <if test="batchNo != null and batchNo != ''" >
         AND batch_no = #{batchNo,jdbcType=VARCHAR}
       </if>
+      <if test="referNo != null and referNo != ''" >
+        AND refer_no = #{referNo,jdbcType=VARCHAR}
+      </if>
       <if test="traceNo != null and traceNo != ''" >
         AND trace_no = #{traceNo,jdbcType=VARCHAR}
       </if>
@@ -1232,118 +1225,116 @@
   <!-- 所有条件查询 -->
   <select id="queryByAllCondition" parameterType="net.fnsco.bigdata.service.domain.trade.TradeData" resultMap="BaseResultMap">
 		  select 
-     <include refid="Base_AllColumn_List" />
-   	 from t_trade_data TD,m_merchant_pos MP
+     <include refid="Base_Column_List" />
+   	 from t_trade_data
    	 <where>
-   	 	(TD.term_id=MP.terminal_code
-		OR TD.term_id = MP.qr_channel_terminal_code)<!--  AND TD.inner_code = MP.inner_code -->
    	 <if test="legalPerson != null and legalPerson !=''" >
-        AND TD.inner_code in (
+        AND inner_code in (
            SELECT inner_code FROM m_merchant_core WHERE legal_person = #{legalPerson ,jdbcType=VARCHAR}
         )
       </if>
 	  <if test="merName != null and merName !=''" >
-        AND TD.inner_code in (
+        AND inner_code in (
            SELECT inner_code FROM m_merchant_core WHERE mer_name LIKE CONCAT('%',#{merName},'%')
         )
       </if>
    	    <if test="innerCode != null and innerCode !=''" >
-        AND TD.inner_code = #{innerCode,jdbcType=VARCHAR}
+        AND inner_code = #{innerCode,jdbcType=VARCHAR}
       </if>
       <if test="txnType != null and txnType !=''" >
-        AND TD.txn_type = #{txnType,jdbcType=VARCHAR}
+        AND txn_type = #{txnType,jdbcType=VARCHAR}
       </if>
       <if test="txnSubType != null and txnSubType !=''" >
-        AND TD.txn_sub_type = #{txnSubType,jdbcType=VARCHAR}
+        AND txn_sub_type = #{txnSubType,jdbcType=VARCHAR}
       </if>
       <if test="currency != null and currency !=''" >
-        AND TD.currency = #{currency,jdbcType=VARCHAR}
+        AND currency = #{currency,jdbcType=VARCHAR}
       </if>
       <if test="payTimeOut != null and payTimeOut !=''" >
-        AND TD.pay_time_out = #{payTimeOut,jdbcType=VARCHAR}
+        AND pay_time_out = #{payTimeOut,jdbcType=VARCHAR}
       </if>
       <if test="subject != null and subject !=''" >
-        AND TD.subject = #{subject,jdbcType=VARCHAR}
+        AND subject = #{subject,jdbcType=VARCHAR}
       </if>
       <if test="body != null and body !=''" >
-        AND TD.body = #{body,jdbcType=VARCHAR}
+        AND body = #{body,jdbcType=VARCHAR}
       </if>
       <if test="customerInfo != null and customerInfo !=''" >
-        AND TD.customer_info = #{customerInfo,jdbcType=VARCHAR}
+        AND customer_info = #{customerInfo,jdbcType=VARCHAR}
       </if>
       <if test="remark != null and remark !=''" >
-        AND TD.remark = #{remark,jdbcType=VARCHAR}
+        AND remark = #{remark,jdbcType=VARCHAR}
       </if>
       <if test="customerIp != null and customerIp !=''" >
-        AND TD.customer_ip = #{customerIp,jdbcType=VARCHAR}
+        AND customer_ip = #{customerIp,jdbcType=VARCHAR}
       </if>
       <if test="tn != null and tn !=''" >
-        AND TD.tn = #{tn,jdbcType=VARCHAR}
+        AND tn = #{tn,jdbcType=VARCHAR}
       </if>
       <if test="respCode != null and respCode != ''" >
 	      <if test="respCode == '1001'" >
-	        AND TD.resp_code = #{respCode,jdbcType=VARCHAR}
+	        AND resp_code = #{respCode,jdbcType=VARCHAR}
           </if>
           <if test="respCode != '1001'" >
-	        AND TD.resp_code !=1001
+	        AND resp_code !=1001
           </if>
       </if>
       <if test="respMsg != null and respMsg !=''" >
-        AND TD.resp_msg = #{respMsg,jdbcType=VARCHAR}
+        AND resp_msg = #{respMsg,jdbcType=VARCHAR}
       </if>
       <if test="settleAmount != null and settleAmount !=''" >
-        AND TD.settle_amount = #{settleAmount,jdbcType=VARCHAR}
+        AND settle_amount = #{settleAmount,jdbcType=VARCHAR}
       </if>
       <if test="settleCurrency != null and settleCurrency !=''" >
-        AND TD.settle_currency = #{settleCurrency,jdbcType=VARCHAR}
+        AND settle_currency = #{settleCurrency,jdbcType=VARCHAR}
       </if>
       <if test="settleDate != null and settleDate !=''" >
-        AND TD.settle_date = #{settleDate,jdbcType=VARCHAR}
+        AND settle_date = #{settleDate,jdbcType=VARCHAR}
       </if>
       <if test="succTime != null and succTime !=''" >
-        AND TD.succ_time = #{succTime,jdbcType=VARCHAR}
+        AND succ_time = #{succTime,jdbcType=VARCHAR}
       </if>
       <if test="orgMerOrderId != null and orgMerOrderId !=''" >
-        AND TD.org_mer_order_id = #{orgMerOrderId,jdbcType=VARCHAR}
+        AND org_mer_order_id = #{orgMerOrderId,jdbcType=VARCHAR}
       </if>
       <if test="canRefAmt != null and canRefAmt !=''" >
-        AND TD.can_ref_amt = #{canRefAmt,jdbcType=VARCHAR}
+        AND can_ref_amt = #{canRefAmt,jdbcType=VARCHAR}
       </if>
       <if test="refCnt != null and refCnt !=''" >
-        AND TD.ref_cnt = #{refCnt,jdbcType=VARCHAR}
+        AND ref_cnt = #{refCnt,jdbcType=VARCHAR}
       </if>
       <if test="refAmt != null and refAmt !=''" >
-        AND TD.ref_amt = #{refAmt,jdbcType=VARCHAR}
+        AND ref_amt = #{refAmt,jdbcType=VARCHAR}
       </if>
       <if test="bankId != null and bankId !=''" >
-        AND TD.bank_id = #{bankId,jdbcType=VARCHAR}
+        AND bank_id = #{bankId,jdbcType=VARCHAR}
       </if>
       <if test="ppFlag != null and ppFlag !=''" >
-        AND TD.pp_flag = #{ppFlag,jdbcType=VARCHAR}
+        AND pp_flag = #{ppFlag,jdbcType=VARCHAR}
       </if>
       <if test="purpose != null and purpose !=''" >
-        AND TD.purpose = #{purpose,jdbcType=VARCHAR}
+        AND purpose = #{purpose,jdbcType=VARCHAR}
       </if>
       <if test="dcType != null and dcType !=''" >
-       AND  TD.dc_type = #{dcType,jdbcType=VARCHAR}
+       AND  dc_type = #{dcType,jdbcType=VARCHAR}
       </if>
       <if test="certifyId != null and certifyId !=''" >
-        AND TD.certify_id = #{certifyId,jdbcType=VARCHAR}
+        AND certify_id = #{certifyId,jdbcType=VARCHAR}
       </if>
       <if test="msgDestId != null and msgDestId !=''" >
-        AND TD.msg_dest_id = #{msgDestId,jdbcType=VARCHAR}
+        AND msg_dest_id = #{msgDestId,jdbcType=VARCHAR}
       </if>
       <if test="customerNm != null and customerNm !=''" >
-        AND TD.customer_nm = #{customerNm,jdbcType=VARCHAR}
+        AND customer_nm = #{customerNm,jdbcType=VARCHAR}
       </if>
       <if test="phoneNo != null and phoneNo !=''" >
-        AND TD.phone_no = #{phoneNo,jdbcType=VARCHAR}
+        AND phone_no = #{phoneNo,jdbcType=VARCHAR}
       </if>
       <if test="subOpenId != null and subOpenId !=''" >
-        AND TD.sub_open_id = #{subOpenId,jdbcType=VARCHAR}
+        AND sub_open_id = #{subOpenId,jdbcType=VARCHAR}
       </if>
       <if test="channelType != null and channelType !=''" >
-        AND TD.channel_type in (#{channelType,jdbcType=VARCHAR},
+        AND channel_type in (#{channelType,jdbcType=VARCHAR},
         #{channelLkl,jdbcType=VARCHAR},
         #{channelPf,jdbcType=VARCHAR},
         #{channelAn,jdbcType=VARCHAR},
@@ -1351,70 +1342,70 @@
         #{channelJhf,jdbcType=VARCHAR}) 
       </if>
       <if test="amt != null and amt !=''" >
-       AND cast(TD.amt as SIGNED)= #{amt,jdbcType=VARCHAR}
+       AND cast(amt as SIGNED)= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo !=''" >
-       AND  TD.order_no = #{orderNo,jdbcType=VARCHAR}
+       AND  order_no = #{orderNo,jdbcType=VARCHAR}
       </if>
       <if test="orderTime != null and orderTime !=''" >
-        AND TD.order_time = #{orderTime,jdbcType=VARCHAR}
+        AND order_time = #{orderTime,jdbcType=VARCHAR}
       </if>
       <if test="orderInfo != null and orderInfo !=''" >
-       AND  TD.order_info = #{orderInfo,jdbcType=VARCHAR}
+       AND  order_info = #{orderInfo,jdbcType=VARCHAR}
       </if>
       <if test="payType != null and payType !=''" >
-        AND TD.pay_type = #{payType,jdbcType=VARCHAR}
+        AND pay_type = #{payType,jdbcType=VARCHAR}
       </if>
       <if test="timeStamp != null and timeStamp !=''" >
-        AND TD.time_stamp = #{timeStamp,jdbcType=VARCHAR}
+        AND time_stamp = #{timeStamp,jdbcType=VARCHAR}
       </if>
       <if test="tradeDetail != null and tradeDetail !=''" >
-        AND TD.trade_detail = #{tradeDetail,jdbcType=VARCHAR}
+        AND trade_detail = #{tradeDetail,jdbcType=VARCHAR}
       </if>
       <if test="merId != null and merId !=''" >
-       AND  TD.mer_id = #{merId,jdbcType=VARCHAR}
+       AND  mer_id = #{merId,jdbcType=VARCHAR}
       </if>
       <if test="termId != null and termId !=''" >
-       AND  TD.term_id = #{termId,jdbcType=VARCHAR}
+       AND  term_id = #{termId,jdbcType=VARCHAR}
       </if>
       <if test="batchNo != null and batchNo !=''" >
-        AND TD.batch_no = #{batchNo,jdbcType=VARCHAR}
+        AND batch_no = #{batchNo,jdbcType=VARCHAR}
       </if>
       <if test="traceNo != null and traceNo !=''" >
-        AND TD.trace_no = #{traceNo,jdbcType=VARCHAR}
+        AND trace_no = #{traceNo,jdbcType=VARCHAR}
       </if>
       <if test="authCode != null and authCode !=''" >
-        AND TD.auth_code = #{authCode,jdbcType=VARCHAR}
+        AND auth_code = #{authCode,jdbcType=VARCHAR}
       </if>
       <if test="orderIdScan != null and orderIdScan !=''" >
-        AND TD.order_id_scan = #{orderIdScan,jdbcType=VARCHAR}
+        AND order_id_scan = #{orderIdScan,jdbcType=VARCHAR}
       </if>
       <if test="source != null and source !=''" >
-        AND TD.source = #{source,jdbcType=VARCHAR}
+        AND source = #{source,jdbcType=VARCHAR}
       </if>
       <if test="md5 != null and md5 !=''" >
-       AND  TD.md5 = #{md5,jdbcType=VARCHAR}
+       AND md5 = #{md5,jdbcType=VARCHAR}
       </if>
       <if test="startSendTime != null  and startSendTime !='' " >
-       AND  TD.send_time  >= #{startSendTime,jdbcType=VARCHAR}
+       AND  send_time  >= #{startSendTime,jdbcType=VARCHAR}
       </if>
       <if test="endSendTime != null  and endSendTime !='' " >
-       AND  TD.send_time  &lt;= #{endSendTime,jdbcType=VARCHAR}
+       AND  send_time  &lt;= #{endSendTime,jdbcType=VARCHAR}
       </if>
       <if test="createTime != null and createTime !='' " >
-        AND TD.create_time = #{createTime,jdbcType=TIMESTAMP}
+        AND create_time = #{createTime,jdbcType=TIMESTAMP}
       </if>
       <!-- 手工添加 -->
       <if test="startTime != null and startTime !=''" >
-        	AND TD.time_stamp >= #{startTime,jdbcType=VARCHAR}
+        	AND time_stamp >= #{startTime,jdbcType=VARCHAR}
       </if>
       <if test="endTime != null and endTime !=''" >
       	<![CDATA[
-        	AND TD.time_stamp <= #{endTime,jdbcType=VARCHAR}
+        	AND time_stamp <= #{endTime,jdbcType=VARCHAR}
         ]]>
       </if>
    	 </where>
-   	 order by TD.create_time desc
+   	 order by create_time desc
    	 limit 10000
   </select>
 </mapper>
