@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
@@ -710,6 +711,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
 		MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO = new MerchantCoreEntityZxyhDTO();
 		MerchantCore core = merchantCoreDao.queryAllByIdForAddZXMerc(id);
+		logger.error("是否入建参数="+env.getProperty("zxyh.isOrNotZxMchtNo"));
 		// 渠道商戶信息
 		if (core == null) {
 			return null;
@@ -868,12 +870,13 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
 		merchantCoreEntityZxyhDTO.setThirdMchtNo(core.getInnerCode());// 第三方平台子商户号
 																		// 对应我们内部商户号
+		logger.error("isOrNotZxMchtNo="+env.getProperty("zxyh.isOrNotZxMchtNo"));
 		merchantCoreEntityZxyhDTO.setIsOrNotZxMchtNo(env.getProperty("zxyh.isOrNotZxMchtNo"));
 		if (StringUtils.equals("0", merchantBank.getAccountType())) {
 			merchantBank.setAccountType("2");
 		}
 		merchantCoreEntityZxyhDTO.setAcctType(merchantBank.getAccountType());// 账户类型
-
+		logger.error(JSONObject.toJSONString(merchantCoreEntityZxyhDTO));
 		return merchantCoreEntityZxyhDTO;
 
 	}
