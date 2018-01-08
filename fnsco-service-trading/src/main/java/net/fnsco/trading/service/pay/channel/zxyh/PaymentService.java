@@ -288,11 +288,14 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		// 获取实体内部商户号
 		MerchantEntity merchantEntity = this.appUserMerchantEntity.queryMerInfoByUserId(userId);
 		if (merchantEntity == null) {
+			logger.info(E789ApiConstant.E_NOT_FIND_ENTITY_INNERCODE);
 			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_ENTITY_INNERCODE);
 		}
 		// 根据userId获取内部商户号
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
-		if (Strings.isNullOrEmpty(innerCode)) {
+		if (Strings.isNullOrEmpty(innerCode)) 
+		{
+			logger.info(E789ApiConstant.E_ADD_FIRST);
 			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_INNERCODE);
 		}
 		MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
