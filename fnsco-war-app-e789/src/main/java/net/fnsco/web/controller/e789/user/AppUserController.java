@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,7 +49,7 @@ public class AppUserController extends BaseController {
     private AppAccountBalanceService appAccountBalanceService;
     @Autowired
     private AppUserBankService    appUserBankService;
-   
+    
     @RequestMapping(value = "/register")
     @ApiOperation(value = "注册页-用户注册" ,notes="作者：何金庭")
     @ResponseBody
@@ -60,7 +61,8 @@ public class AppUserController extends BaseController {
     	appUserDTO.setDeviceType(registerJO.getDeviceType());
     	appUserDTO.setMobile(registerJO.getMobile());
     	appUserDTO.setPassword(registerJO.getPassword());
-    	appUserDTO.setHeadImagePath(HeadImageEnum.getImage());
+    	String headImage = HeadImageEnum.getImage();
+    	appUserDTO.setHeadImagePath(headImage);
         ResultDTO result = appUserService.e789InsertSelective(appUserDTO);
         if(!result.isSuccess()) {
         	return result.fail(result.getCode());
