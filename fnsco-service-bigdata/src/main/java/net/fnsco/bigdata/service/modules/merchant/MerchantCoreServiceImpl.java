@@ -881,7 +881,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
 	}
 
-	// 进件中信商户后回调函数
+	// 进件中信商户后
 	@Transactional
 	@Override
 	public void updateInfoByInnerCode(String innerCode, String secMerId) {
