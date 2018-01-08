@@ -351,6 +351,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setPaySubType(E789ApiConstant.PayTypeEnum.PAYBYWX.getCode());
 		tradeOrderDO.setCreateTime(new Date());
 		tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
+		logger.info("插入交易数据");
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
@@ -381,11 +382,13 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		// 获取实体内部商户号
 		MerchantEntity merchantEntity = this.appUserMerchantEntity.queryMerInfoByUserId(userId);
 		if (merchantEntity == null) {
+			logger.info(E789ApiConstant.E_NOT_FIND_ENTITY_INNERCODE);
 			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_ENTITY_INNERCODE);
 		}
 		// 根据内部商户号获取独立商户号
 		MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
 		if (channel == null) {
+			logger.info(E789ApiConstant.E_ADD_FIRST);
 			return ResultDTO.fail(E789ApiConstant.E_ADD_FIRST);
 		}
 		activeAlipayDTO.setSecMerId(channel.getChannelMerId());// 独立商户号
@@ -432,9 +435,11 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setPaySubType(E789ApiConstant.PayTypeEnum.PAYBYALIPAY.getCode());
 		tradeOrderDO.setCreateTime(new Date());
 		tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
+		logger.info("插入交易数据");
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+		logger.info("返回报文="+respMap);
 		if ("0000".equals(respMap.get("respCode"))) {
 			respMap.put("orderId", tradeOrderDO.getOrderNo());
 			respMap.put("respCode", tradeOrderDO.getRespCode());
