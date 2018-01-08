@@ -539,7 +539,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         AppUser appUser = new AppUser();
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        appUser.setUserName("sqb" + code);
+        appUser.setUserName("e789" + code);
         appUser.setDeviceId(appUserDTO.getDeviceId());
         appUser.setDeviceToken(appUserDTO.getDeviceToken());
         appUser.setMobile(appUserDTO.getMobile());
