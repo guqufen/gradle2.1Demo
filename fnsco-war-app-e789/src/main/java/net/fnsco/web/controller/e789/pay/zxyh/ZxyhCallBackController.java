@@ -26,13 +26,17 @@ public class ZxyhCallBackController extends BaseController {
     @RequestMapping(value = "/payQueryCallBack")
     @ApiOperation(value = "支付宝主扫回调")
     public void payQueryCallBack(String resultStr) {
+    	logger.info("支付宝主扫回调函数执行开始...");
         zxyhPaymentService.aliCallBack(resultStr);
+        logger.info("支付宝主扫回调函数执行结束...");
     }
 
     @RequestMapping(value = "/weChatCallBack")
     @ApiOperation(value = "微信主扫回调")
     public void weChatCallBack(String resultStr) {
+    	logger.info("微信主扫回调函数执行开始...");
         zxyhPaymentService.weChatCallBack(resultStr);
+        logger.info("微信主扫回调函数执行结束...");
     }
 
 }
