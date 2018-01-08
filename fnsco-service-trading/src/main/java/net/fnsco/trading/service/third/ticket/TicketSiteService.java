@@ -46,7 +46,7 @@ public class TicketSiteService extends BaseService {
         ticketSite.setNameLike(siteName);
         //ticketSite.setCodeLike(siteName.toUpperCase());
         ticketSite.setPyNameLike(isEnglish(siteName.toLowerCase()));
-        List<TicketSiteDO> pageList = this.ticketSiteDAO.pageList(ticketSite, 0, 1000);
+        List<TicketSiteDO> pageList = this.ticketSiteDAO.pageList(ticketSite, 0, 3000);
         return pageList;
     }
 
