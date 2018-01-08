@@ -1,7 +1,6 @@
 package net.fnsco.config;
 
 import java.util.Date;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import net.fnsco.bigdata.api.dto.MercQueryDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.merchant.IntegralRuleService;
@@ -31,10 +29,7 @@ public class TimerConfig {
     private IntegralRuleService integralRuleService;
     @Autowired
     private TradeOrderService tradeOrderService;
-    @Autowired
-	private MerchantCoreService merchantCoreService;
-    @Autowired
-    private PaymentService paymentService;
+
     /**
      * spring boot 定时任务
      */
@@ -147,18 +142,5 @@ public class TimerConfig {
         tradeOrderService.syncOrderTradeData();
     }
     
-    /**
-     * 查询入建中信银行商户状态
-     * @return void    DOM对象
-     * @throws 
-     * @since  CodingExample　Ver 1.1
-     */
-//    @Scheduled(cron="0 1 * * * ?") //每个小时的1秒执行，每60分钟执行一次
-    @Scheduled(cron = "0 * * * * ?") //每一分钟的0秒执行，每分钟执行一次
-    public void updateMercStatus(){
-    	logger.error("查询中信商户是否入建成功...开始...");
-    	List<MercQueryDTO> list = this.merchantCoreService.getMercList();
-    	paymentService.queryAloneMchtInfoList(list);
-    	logger.error("查询中信商户是否入建成功...结束...");
-    }
+  
 }
