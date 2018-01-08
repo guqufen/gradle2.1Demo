@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
@@ -49,6 +50,7 @@ public class ScannedTradeController extends BaseController {
 	@ApiOperation(value = "收款-获取付款二维码url")
 	public ResultDTO<GenerateQRVO> generateQRCode(@RequestBody GenerateQRJO qrJO) {
 		GenerateQRVO qrVo = new GenerateQRVO();
+		logger.info("收款参数："+JSONObject.toJSON(qrJO).toString());
 		Integer userId = qrJO.getUserId();
 		String ip = this.getIp();
 		String txnAmt = qrJO.getTxnAmt();
@@ -73,45 +75,16 @@ public class ScannedTradeController extends BaseController {
 		}else{
 			return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
 		}
-		reqMap = dto.getData();
-		qrVo.setUrl((String) reqMap.getOrDefault("codeUrl", null));
-		qrVo.setOrderNo((String)reqMap.get("orderId"));
-		qrVo.setRespCode((String)reqMap.get("respCode"));
+		if(dto.getData() != null){
+			reqMap = dto.getData();
+			qrVo.setUrl((String) reqMap.getOrDefault("codeUrl", null));
+			qrVo.setOrderNo((String)reqMap.get("orderId"));
+			qrVo.setRespCode((String)reqMap.get("respCode"));
+		}
 		return ResultDTO.success(qrVo);
 
 	}
 
-	/**
-	 * 微信扫码接口回调 更新交易状态 callBack:(这里用一句话描述这个方法的作用)
-	 *
-	 * @param @param
-	 *            respStr 设定文件
-	 * @return void DOM对象
-	 * @auth binghui.li
-	 * @since CodingExample Ver 1.1
-	 */
-//	@RequestMapping(value = "/callBack")
-//	@ApiOperation(value = "收款-扫码付款回调函数")
-//	public void callBack(@RequestBody String respStr) {
-//		// 解析返回报文
-//		assert respStr.startsWith("sendData=");
-//		String respB64Str = respStr.substring(9);
-//		// base64解码,并对一些特殊字符进行置换
-//		byte[] respJsBs = Base64.decodeBase64(respB64Str);
-//		String respJsStr = null;
-//		try {
-//			respJsStr = new String(respJsBs, "utf-8");
-//		} catch (UnsupportedEncodingException e) {
-//			throw new RuntimeException(e);
-//		}
-//		JSONObject jsonObj = JSONObject.parseObject(respJsStr);
-//		String txnSubType = jsonObj.getString("txnSubType");
-//		logger.warn("中信被扫回调函数返回值txnSubType="+"["+ txnSubType +"]");
-//		if(StringUtils.equals("010130", txnSubType)){//微信回调
-//			zxyhPaymentService.weChatCallBack(respJsStr);
-//		}else if(StringUtils.equals("010302", txnSubType)){//微信回调
-//			zxyhPaymentService.aliCallBack(respJsStr);
-//		}
-//	}
+
 
 }

@@ -87,7 +87,7 @@ public class BankCardController extends BaseController {
 			String result = JuheDemo.net(strUrl, params, method);
 			jaJsonObject = JSONObject.parseObject(result);
 			Integer error_code = jaJsonObject.getInteger("error_code");
-			if (error_code == 0) {
+			if (error_code == 0) {//处理成功，1 匹配 2 不匹配
 				JSONObject jaJsonObject2 = jaJsonObject.getJSONObject("result");
 				if (jaJsonObject2 != null) {
 					vo.setError_code(error_code);
@@ -95,6 +95,7 @@ public class BankCardController extends BaseController {
 					vo.setMessage(jaJsonObject2.getString("message"));
 					vo.setRes(jaJsonObject2.getString("res"));
 					if ("1".equals(jaJsonObject2.getString("res"))) {
+						vo.setReason("认证成功！");
 						return ResultDTO.success(vo);
 
 					} else {
@@ -106,7 +107,7 @@ public class BankCardController extends BaseController {
 					vo.setReason(jaJsonObject.getString("reason"));
 					return ResultDTO.fail(vo);
 				}
-			} else {
+			} else {//未处理成功
 				vo.setError_code(error_code);
 				vo.setReason(jaJsonObject.getString("reason"));
 				return ResultDTO.fail(vo);
@@ -216,7 +217,7 @@ public class BankCardController extends BaseController {
 				int length = appUserBankDO.getAccountNo().length();
 				String transCardNo = appUserBankDO.getAccountNo();
 				if (length > 10) {
-					transCardNo = transCardNo.substring(0, 6) + "******" + transCardNo.substring(length - 4);
+					transCardNo = "****  ****  ****" + transCardNo.substring(length - 4);
 				}
 				vo.setCardNum(transCardNo);// 卡号
 				vo.setBankName(appUserBankDO.getBankName());// 银行卡名称

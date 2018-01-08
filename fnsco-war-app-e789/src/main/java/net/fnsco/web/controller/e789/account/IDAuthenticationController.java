@@ -64,7 +64,7 @@ public class IDAuthenticationController extends BaseController {
 		@ApiImplicitParam(name = "file", value = "图片文件流", required = true, dataType="MultipartFile",paramType="body"),
 		@ApiImplicitParam(name = "side", value = "front:正面识别;back:反面识别;", required = true, dataType="String",paramType="body")
 	})
-    public ResultDTO<IdAuthVO> idauth() {
+    public ResultDTO idauth() {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
         Integer userId = Integer.valueOf(request.getParameter("userId"));
@@ -133,10 +133,7 @@ public class IDAuthenticationController extends BaseController {
                     appUserFile.setFileName(userId+"的"+side+"身份证");
                     appUserFile.setFileType(side);
                     appUserFileService.doAdd(appUserFile);
-                    IdAuthVO idAuth = new IdAuthVO();
-                    String imageUrl = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), fileKey);
-                    idAuth.setImagePath(imageUrl);
-                    return ResultDTO.success(idAuth);
+                    return ResultDTO.success();
                 } catch (Exception e) {
                     logger.error(fileName + "上传失败！" + e);
                     throw new RuntimeException();
@@ -260,6 +257,6 @@ public class IDAuthenticationController extends BaseController {
         appUserService.modifyInfo(appUserDto);
         IdentifyJO identify = new IdentifyJO();
         identify.setRealName(realName);
-        return ResultDTO.success(identify);
+        return ResultDTO.successForMessage(identify);
     }
 }

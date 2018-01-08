@@ -124,4 +124,17 @@ public interface TradeWithdrawDAO {
     @Select("SELECT * FROM t_trade_withdraw WHERE status=1 AND trade_type=#{type} AND create_time >=#{start}")
     public List<TradeWithdrawDO> queryOngoing(@Param("start") Date start, @Param("type") Integer type);
 
+    @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "original_order_no", property = "originalOrderNo"), @Result(column = "app_user_id", property = "appUserId"),
+        @Result(column = "settle_money", property = "settleMoney"), @Result(column = "trade_type", property = "tradeType"), @Result(column = "trade_sub_type", property = "tradeSubType"),
+        @Result(column = "create_time", property = "createTime"), @Result(column = "update_time", property = "updateTime"), @Result(column = "resp_code", property = "respCode"),
+        @Result(column = "resp_msg", property = "respMsg"), @Result(column = "payment_date", property = "paymentDate"), @Result(column = "succ_time", property = "succTime"),
+        @Result(column = "back_url", property = "backUrl"), @Result(column = "bank_account_type", property = "bankAccountType"), @Result(column = "bank_account_no", property = "bankAccountNo"),
+        @Result(column = "bank_account_name", property = "bankAccountName"), @Result(column = "bank_account_card_id", property = "bankAccountCardId"),
+        @Result(column = "bank_sub_bank_name", property = "bankSubBankName"), @Result(column = "bank_open_bank", property = "bankOpenBank"),
+        @Result(column = "bank_open_bank_num", property = "bankOpenBankNum"), @Result(column = "bank_account_phone", property = "bankAccountPhone"),
+        @Result(column = "channel_mer_id", property = "channelMerId"), @Result(column = "channel_type", property = "channelType"),
+        @Result(column = "installment_num", property = "installmentNum"), @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"),
+        @Result(column = "card_holder_rate", property = "cardHolderRate") })
+@Select("SELECT * FROM t_trade_withdraw WHERE order_no = #{orderNo}")
+public TradeWithdrawDO getByOrderNo(@Param("orderNo") String orderNo);
 }

@@ -1,5 +1,6 @@
 package net.fnsco.order.service.ad;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -37,15 +38,19 @@ public class AdService extends BaseService {
 	}
 
 	// 添加
-	public AdDO doAdd(AdDO ad, int loginUserId) {
+	public Integer doAdd(AdDO ad, int loginUserId) {
 		logger.info("开始添加AdService.add,ad=" + ad.toString());
+		ad.setCreateTime(new Date());
+		ad.setUpdateTime(new Date());
+		ad.setCreateUserId(loginUserId);
 		this.adDAO.insert(ad);
-		return ad;
+		return ad.getId();
 	}
 
 	// 修改
 	public Integer doUpdate(AdDO ad, Integer loginUserId) {
 		logger.info("开始修改AdService.update,ad=" + ad.toString());
+		ad.setUpdateTime(new Date());
 		int rows = this.adDAO.update(ad);
 		return rows;
 	}
@@ -79,17 +84,14 @@ public class AdService extends BaseService {
 				if (adDO.getCategory() == null) {
 					continue;
 				}
-				if (adDO.getImg_path() == null) {
-					continue;
-				}
-				if (adDO.getImg_path().length() < 34) {
+				String img_path = adDO.getImg_path();
+				if (img_path == null) {
 					continue;
 				}
 				AdDTO adDTO = new AdDTO();
 				// 获取图片路径
-				String str1 = adDO.getImg_path().substring(0, 9);
-				String str2 = adDO.getImg_path().substring(10, adDO.getImg_path().length());
-				String url = OssLoaclUtil.getFileUrl(str1, str2);
+				String str2 = img_path.substring(img_path.indexOf("^")+1, img_path.length());
+				String url = OssLoaclUtil.getFileUrl( OssLoaclUtil.getHeadBucketName(),str2);
 				if (!Strings.isNullOrEmpty(url)) {
 					adDTO.setImgPath(url);
 				}
@@ -105,17 +107,14 @@ public class AdService extends BaseService {
 			if (adDO.getCategory() == null) {
 				continue;
 			}
-			if (adDO.getImg_path() == null) {
-				continue;
-			}
-			if (adDO.getImg_path().length() < 34) {
+			String img_path = adDO.getImg_path();
+			if (img_path == null) {
 				continue;
 			}
 			AdDTO adDTO = new AdDTO();
 			// 获取图片路径
-			String str1 = adDO.getImg_path().substring(0, 9);
-			String str2 = adDO.getImg_path().substring(10, adDO.getImg_path().length());
-			String url = OssLoaclUtil.getFileUrl(str1, str2);
+			String str2 = img_path.substring(img_path.indexOf("^")+1, img_path.length());
+			String url = OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), str2);
 			if (!Strings.isNullOrEmpty(url)) {
 				adDTO.setImgPath(url);
 			}

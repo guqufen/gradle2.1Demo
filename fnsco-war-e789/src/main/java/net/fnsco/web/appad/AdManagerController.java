@@ -32,6 +32,26 @@ public class AdManagerController extends BaseController{
 	@Autowired
 	private Environment env;
 	
+	
+	
+	
+	@RequestMapping(value = "/deleteById", method = RequestMethod.GET)
+	@ResponseBody
+	@RequiresPermissions(value = { "sys:app:delete" })
+	public ResultDTO<AdDO> deleteById(Integer id) {
+		AdDO ad= new AdDO();
+		ad.setId(id);
+		Integer loginUserId = this.getUserId();
+		Integer row = adService.doDelete(ad, loginUserId);
+		if(row == 1){
+			return ResultDTO.success();
+		}else{
+			return ResultDTO.fail();
+		}
+	} 
+	
+	
+	
 	@RequestMapping(value = "/query", method = RequestMethod.GET)
 	@ResponseBody
 	@RequiresPermissions(value = { "sys:app:ad:list" })
@@ -56,14 +76,22 @@ public class AdManagerController extends BaseController{
 	@RequestMapping(value = "/doAdd", method = RequestMethod.POST)
 	@ResponseBody
 	@RequiresPermissions(value = { "sys:app:ad:add" })
-	public void add(AdDO appAdDTO) {
+	public ResultDTO<String> add(AdDO appAdDTO) {
 		Integer userId = this.getUserId();
+		Integer row = null;
 		if(appAdDTO.getId() != null){
-			adService.doUpdate(appAdDTO, userId);
+			row = adService.doUpdate(appAdDTO, userId);
+			
 		}else{
-			adService.doAdd(appAdDTO,userId);
+			row = adService.doAdd(appAdDTO,userId);
 			
 		}
+		if(row != null && row>0){
+			return ResultDTO.success();
+		}else{
+			return ResultDTO.fail();
+		}
+		
 	}
 
 	

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -90,7 +91,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	 * @throws @since
 	 *             CodingExample Ver 1.1
 	 */
-	public void getDealStatus(Integer id ,String paySubType,String secMerId,String orderNo,String orderCeateTime) {
+	public void getDealStatus(Integer id, String paySubType, String secMerId, String orderNo, String orderCeateTime) {
 		String merId = env.getProperty("zxyh.merId");
 		String prefix = env.getProperty("zxyh.query.trade.url");
 		String url = "/MPay/backTransAction.do";
@@ -122,30 +123,30 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setId(id);
-		//微信返回结果
-		if("SUCCESS".equals(respMap.get("origRespCode"))){
+		// 微信返回结果
+		if ("SUCCESS".equals(respMap.get("origRespCode"))) {
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_SUCCESS.getCode());
-		}else if("NOTPAY".equals(respMap.get("origRespCode"))){
+		} else if ("NOTPAY".equals(respMap.get("origRespCode"))) {
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_UNPAY.getCode());
 		}
-		
-		if("00".equals(respMap.get("txnState"))){//支付宝返回结果
-			//更新交易为已成功
+
+		if ("00".equals(respMap.get("txnState"))) {// 支付宝返回结果
+			// 更新交易为已成功
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_SUCCESS.getCode());
-		}else if("01".equals(respMap.get("txnState"))){
-			//更新状态为已退货成功
+		} else if ("01".equals(respMap.get("txnState"))) {
+			// 更新状态为已退货成功
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_SEALS_RETURN.getCode());
-			
-		}else if("99".equals(respMap.get("txnState"))){
-			//更新状态为失败
+
+		} else if ("99".equals(respMap.get("txnState"))) {
+			// 更新状态为失败
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_FAIL.getCode());
-		}else if("02".equals(respMap.get("txnState"))){
-			//订单已关闭
+		} else if ("02".equals(respMap.get("txnState"))) {
+			// 订单已关闭
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_CLOSED.getCode());
-		}else{
+		} else {
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
 		}
-		tradeOrderDO.setPayOrderNo((String)respMap.get("origSeqId")); //对应的中信订单号
+		tradeOrderDO.setPayOrderNo((String) respMap.get("origSeqId")); // 对应的中信订单号
 		tradeOrderDO.setRespMsg(E789ApiConstant.ResponCodeEnum.getNameByCode(tradeOrderDO.getRespCode()));
 		tradeOrderService.doUpdate(tradeOrderDO);
 	}
@@ -197,6 +198,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		mercMap.put("merId", merId);
 		mercMap.put("secMerId", secMerId);
 		mercMap.put("signMethod", "02");
+		logger.error("secMerId="+secMerId);
 		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
@@ -263,6 +265,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		mercDTO.setSettleBankCode(core.getSettleBankCode());
 
 		String mercStr = JSON.toJSONString(mercDTO);
+		logger.info("入建参数="+mercStr);
 		Map<String, String> mercMap = JSON.parseObject(mercStr, Map.class);
 		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
 		// 解析返回报文
@@ -351,15 +354,16 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setPaySubType(E789ApiConstant.PayTypeEnum.PAYBYWX.getCode());
 		tradeOrderDO.setCreateTime(new Date());
 		tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
+		logger.info("插入交易数据");
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+		logger.info("返回报文=" + JSONObject.toJSONString(respMap));
 		if ("0000".equals(respMap.get("respCode"))) {
 			respMap.put("orderId", tradeOrderDO.getOrderNo());
 			respMap.put("respCode", tradeOrderDO.getRespCode());
 			return ResultDTO.success(respMap);
 		} else {
-			logger.warn(JSONObject.toJSONString(respMap));
 			return ResultDTO.fail(respMap);
 		}
 
@@ -381,14 +385,18 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		// 获取实体内部商户号
 		MerchantEntity merchantEntity = this.appUserMerchantEntity.queryMerInfoByUserId(userId);
 		if (merchantEntity == null) {
+			logger.info(E789ApiConstant.E_NOT_FIND_ENTITY_INNERCODE);
 			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_ENTITY_INNERCODE);
 		}
 		// 根据内部商户号获取独立商户号
 		MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
-		if (channel != null) {
-			activeAlipayDTO.setSecMerId(channel.getChannelMerId());// 独立商户号
-
+		logger.info("渠道商户信息"+JSONObject.toJSONString(channel));
+		if (channel == null) {
+			logger.info(E789ApiConstant.E_ADD_FIRST);
+			return ResultDTO.fail(E789ApiConstant.E_ADD_FIRST);
 		}
+		activeAlipayDTO.setSecMerId(channel.getChannelMerId());// 独立商户号
+
 		activeAlipayDTO.setTermIp(ip);// 发起支付的客户端真实IP
 		activeAlipayDTO.setOrderId(
 				DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_order")); // 商户系统内部的订单号,32
@@ -431,9 +439,11 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setPaySubType(E789ApiConstant.PayTypeEnum.PAYBYALIPAY.getCode());
 		tradeOrderDO.setCreateTime(new Date());
 		tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
+		logger.info("插入交易数据");
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+		logger.info("返回报文="+respMap);
 		if ("0000".equals(respMap.get("respCode"))) {
 			respMap.put("orderId", tradeOrderDO.getOrderNo());
 			respMap.put("respCode", tradeOrderDO.getRespCode());

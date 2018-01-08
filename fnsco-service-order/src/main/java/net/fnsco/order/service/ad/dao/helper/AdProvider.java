@@ -23,7 +23,10 @@ public class AdProvider {
             SET("title=#{ad.title}");
         }
         if (StringUtils.isNotBlank(ad.getImg_path())){
-            SET("img_path=#{ad.imgPath}");
+            SET("img_path=#{ad.img_path}");
+        }
+        if (StringUtils.isNotBlank(ad.getUrl())){
+            SET("url=#{ad.url}");
         }
         if (ad.getCategory() != null) {
             SET("category=#{ad.category}");
@@ -43,6 +46,10 @@ public class AdProvider {
         if (ad.getCreateUserId() != null) {
             SET("create_user_id=#{ad.createUserId}");
         }
+        if (ad.getType() != null) {
+            SET("type=#{ad.type}");
+        }
+        
         WHERE("id = #{ad.id}");
         }}.toString();
     }
@@ -69,7 +76,7 @@ public class AdProvider {
             WHERE("title=#{ad.title}");
         }
         if (StringUtils.isNotBlank(ad.getImg_path())){
-            WHERE("img_path=#{ad.imgPath}");
+            WHERE("img_path=#{ad.img_path}");
         }
         if (ad.getCategory() != null) {
             WHERE("category=#{ad.category}");
@@ -108,7 +115,7 @@ public class AdProvider {
             WHERE("title=#{ad.title}");
         }
         if (StringUtils.isNotBlank(ad.getImg_path())){
-            WHERE("img_path=#{ad.imgPath}");
+            WHERE("img_path=#{ad.img_path}");
         }
         if (ad.getCategory() != null) {
             WHERE("category=#{ad.category}");

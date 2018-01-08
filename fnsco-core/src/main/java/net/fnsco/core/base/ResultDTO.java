@@ -54,6 +54,11 @@ public class ResultDTO<T extends Object> extends DTO {
         ResultDTO result = new ResultDTO(true, data, CoreConstants.WEB_SUBMIT_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.WEB_SUBMIT_OK));
         return result;
     }
+    
+    public static ResultDTO successForMessage(Object data) {
+        ResultDTO result = new ResultDTO(true, data,  CoreConstants.ID_CARD_OK, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.ID_CARD_OK));
+        return result;
+    }
 
     public static ResultDTO fail(Object data) {
         ResultDTO result = new ResultDTO(false, data, CoreConstants.E_BANK_VALIDATE_FAIL, CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.E_BANK_VALIDATE_FAIL));

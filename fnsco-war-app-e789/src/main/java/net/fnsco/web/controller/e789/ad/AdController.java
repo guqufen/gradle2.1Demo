@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
@@ -47,11 +49,13 @@ public class AdController extends BaseController {
 		if (appAdJO.getType() == null || appAdJO.getUserId() == null) {
 			return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR_ID);
 		}
+		logger.warn("参数"+JSONObject.toJSON(appAdJO).toString());
 		AppAdVO vo = new AppAdVO();
 		ResultDTO<Map<String, List>> result = adService.queryAdList(appAdJO.getType());
 		if (result.isSuccess()) {
 			vo.setAdList(result.getData().get("ad"));
 			vo.setNewsList(result.getData().get("news"));
+			logger.warn("广告"+JSONObject.toJSON(vo).toString());
 			return ResultDTO.success(vo);
 
 		} else {

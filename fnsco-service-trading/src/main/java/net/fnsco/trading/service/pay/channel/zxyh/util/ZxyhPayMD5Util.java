@@ -205,7 +205,7 @@ public class ZxyhPayMD5Util {
 		try {
 
 			String signAture = MD5Encode(sb.substring(1)).toUpperCase();
-			System.out.println("本地加签后的：" + signAture);
+			logger.error("本地加签后的：" + signAture);
 			// 将签名信息加入原始请求报文map
 			reqMap.put("signAture", signAture);
 		} catch (Exception e) {
@@ -213,7 +213,7 @@ public class ZxyhPayMD5Util {
 		}
 		// 将Map转成Json
 		// Json2 reqJs = Json2.make(reqMap);
-		System.out.println("req=["+reqMap+"]");
+		logger.error("req=["+reqMap+"]");
 		String reqStr = JSON.toJSONString(reqMap);
 		// Map<String,Object> reqJs = JSON.parseObject(mapStr, Map.class);
 		// 生成json字符串
@@ -228,9 +228,10 @@ public class ZxyhPayMD5Util {
 		}
 		// 生成最后的报文
 		String finalB64ReqStr = "sendData=" + b64ReqStr;
-		System.out.println("req :" + finalB64ReqStr);
+		logger.info("req :" + finalB64ReqStr);
 
 		// HTTP POST方式发送报文，并获取返回结果
+		logger.info("HTTP POST方式发送报文请求参数prefix="+prefix+";url="+url);
 		String respStr = postReq(prefix + url, finalB64ReqStr);
 
 		return respStr;
