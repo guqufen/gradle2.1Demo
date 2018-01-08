@@ -264,6 +264,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		mercDTO.setSettleBankCode(core.getSettleBankCode());
 
 		String mercStr = JSON.toJSONString(mercDTO);
+		logger.info("入建参数="+mercStr);
 		Map<String, String> mercMap = JSON.parseObject(mercStr, Map.class);
 		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
 		// 解析返回报文

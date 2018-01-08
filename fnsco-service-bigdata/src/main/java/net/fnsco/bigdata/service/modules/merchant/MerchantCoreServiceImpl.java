@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
@@ -710,6 +711,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
 		MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO = new MerchantCoreEntityZxyhDTO();
 		MerchantCore core = merchantCoreDao.queryAllByIdForAddZXMerc(id);
+		logger.info("是否入建参数="+env.getProperty("zxyh.isOrNotZxMchtNo"));
 		// 渠道商戶信息
 		if (core == null) {
 			return null;
@@ -874,7 +876,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 			merchantBank.setAccountType("2");
 		}
 		merchantCoreEntityZxyhDTO.setAcctType(merchantBank.getAccountType());// 账户类型
-
+		logger.info(JSONObject.toJSONString(merchantCoreEntityZxyhDTO));
 		return merchantCoreEntityZxyhDTO;
 
 	}
