@@ -6,7 +6,7 @@ import net.fnsco.core.base.DTO;
 public class ChargeResultDTO extends DTO {
 
 	private static final long serialVersionUID = 1L;
-	@ApiModelProperty(value = "应答码", example = "应答码")
+	@ApiModelProperty(value = "应答码：1000-进行中；1001-成功；1002-失败", example = "应答码：1000-进行中；1001-成功；1002-失败")
 	private String respCode;
 	@ApiModelProperty(value = "应答信息", example = "应答信息")
 	private String respMsg;
