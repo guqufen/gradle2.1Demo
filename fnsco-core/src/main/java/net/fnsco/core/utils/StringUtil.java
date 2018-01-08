@@ -108,4 +108,41 @@ public class StringUtil {
 			return String.format("%.2f", new BigDecimal(str).divide(new BigDecimal(100)).doubleValue());
 		}
 	}
+	
+	/**
+	 * 固定字符串长度，右补字串
+	 * @param str：待修补字符串
+	 * @param size：固定总大小长度
+	 * @param padChar：修补的字串(右补)
+	 * @return
+	 */
+	public static String formatFixLenRight(String str, int size, String padChar){
+		if(str != null){
+			if(str.length() <= size){
+				return StringUtils.rightPad(str, size, padChar);
+			}else{
+				return StringUtils.rightPad(str.substring(0, size), size, padChar);
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * 固定字符串长度，左补字串
+	 * @param inte：待修补Integer
+	 * @param size：固定总大小长度
+	 * @param padChar:修补的字串，左补
+	 * @return
+	 */
+	public static String formatFixLenLeft(Integer inte, int size, String padChar){
+		if(inte >= 0){
+			String str = inte.toString();
+			if(str.length() <= size){
+				return StringUtils.leftPad(str, size, padChar);
+			}else{
+				return StringUtils.leftPad(str.substring(0, size), size, padChar);
+			}
+		}
+		return null;
+	}
 }
