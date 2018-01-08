@@ -868,6 +868,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
 		merchantCoreEntityZxyhDTO.setThirdMchtNo(core.getInnerCode());// 第三方平台子商户号
 																		// 对应我们内部商户号
+		logger.info("isOrNotZxMchtNo="+env.getProperty("zxyh.isOrNotZxMchtNo"));
 		merchantCoreEntityZxyhDTO.setIsOrNotZxMchtNo(env.getProperty("zxyh.isOrNotZxMchtNo"));
 		if (StringUtils.equals("0", merchantBank.getAccountType())) {
 			merchantBank.setAccountType("2");
