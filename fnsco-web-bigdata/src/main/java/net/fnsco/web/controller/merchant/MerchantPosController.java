@@ -74,7 +74,29 @@ public class MerchantPosController extends BaseController {
 		ResultDTO<String> result = merchantPosService.savePosInfo2(params,getUserId());
 		return result;
 	}
-
+	
+	
+	/**
+	 * toAddTerminal:添加POS信息（pos和终端分离）
+	 * 
+	 * @param posInfos
+	 * @return
+	 * @author bhl
+	 * @date
+	 * @return ResultDTO<String> DOM对象
+	 */
+	@Transactional
+	@RequestMapping(value = "/toAddPosInfosE789", method = RequestMethod.POST)
+	@ResponseBody
+	@RequiresPermissions(value = { "m:merchant:add" })
+	public ResultDTO<String> toAddPosInfosE789(@RequestBody PosJO2 pos) {
+		List<MerchantChannelJO2> posInfos = pos.getPoses();
+		WebUserDTO obj = (WebUserDTO) session.getAttribute(FrameworkConstant.SESSION_USER_KEY);
+		List<WebMerchantPosDTO2> params = MerchantHelper.toPosDTO2(posInfos, pos.getInnerCode(), obj.getId());
+		ResultDTO<String> result = merchantPosService.savePosInfo2(params,getUserId());
+		return result;
+	}
+	
 	/**
 	 * deletePosInfo:(这里用一句话描述这个方法的作用)删除POS机信息
 	 * 
