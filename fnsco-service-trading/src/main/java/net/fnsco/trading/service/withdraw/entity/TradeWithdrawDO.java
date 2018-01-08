@@ -2,6 +2,7 @@ package net.fnsco.trading.service.withdraw.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class TradeWithdrawDO {
 
@@ -164,8 +165,35 @@ public class TradeWithdrawDO {
      * 持卡人费率
      */
     private String     cardHolderRate;
+    /**
+     * 状态集合
+     */
+    private boolean appShowList;
+    
 
-    public Integer getId() {
+	/**
+	 * appShowList
+	 *
+	 * @return  the appShowList
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public boolean isAppShowList() {
+		return appShowList;
+	}
+
+	/**
+	 * appShowList
+	 *
+	 * @param   appShowList    the appShowList to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setAppShowList(boolean appShowList) {
+		this.appShowList = appShowList;
+	}
+
+	public Integer getId() {
         return id;
     }
 

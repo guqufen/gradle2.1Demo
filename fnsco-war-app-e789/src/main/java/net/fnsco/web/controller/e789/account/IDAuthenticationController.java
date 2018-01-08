@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.beust.jcommander.internal.Maps;
+import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -27,9 +28,11 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.FileUtils;
+import net.fnsco.core.utils.JuheDemoFaceUtil;
 import net.fnsco.core.utils.JuheDemoUtil;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.dto.IdCardDTO;
+import net.fnsco.core.utils.dto.IdCardFaceDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
@@ -153,9 +156,6 @@ public class IDAuthenticationController extends BaseController {
 		if (userId == null) {
         	return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
-		String realName = null;
-		String cardId = null;
-		String endTime = null;
 		AppUserFileDO appUserFrontFile = appUserFileService.doQueryByUserId(commonJO.getUserId(),"front");
 		if(appUserFrontFile==null) {
 			return ResultDTO.fail(E789ApiConstant.E_FORNT_NOT_FOUND);
@@ -169,14 +169,22 @@ public class IDAuthenticationController extends BaseController {
 		//String imageUrlFron = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), pathFront);
 		String line = System.getProperty("file.separator");// 文件分割符
 		String fileURLFront = this.env.getProperty("fileUpload.url") + line + pathFront;
-		IdCardDTO idCardFront = new IdCardDTO();
+		//IdCardDTO idCardFront = new IdCardDTO();
+		IdCardFaceDTO idCardFaceFront = new IdCardFaceDTO();
 		if(FileUtils.ifExist(fileURLFront)) {
-			idCardFront = JuheDemoUtil.valiIdImage(fileURLFront,"front");
+			//idCardFront = JuheDemoUtil.valiIdImage(fileURLFront,"front");
+			idCardFaceFront = JuheDemoFaceUtil.valiIdImage(fileURLFront);
 		}else {
 			OssLoaclUtil.getFileToLocal(OssLoaclUtil.getHeadBucketName(), pathFront, fileURLFront);
-			idCardFront = JuheDemoUtil.valiIdImage(fileURLFront,"front");
+			//idCardFront = JuheDemoUtil.valiIdImage(fileURLFront,"front");
+			idCardFaceFront = JuheDemoFaceUtil.valiIdImage(fileURLFront);
 		}
-    	int errorCodeFront = idCardFront.getErrorCode();
+		String errorCodeFront = idCardFaceFront.getError_message();
+		if(!Strings.isNullOrEmpty(errorCodeFront)) {
+			logger.error(errorCodeFront + "正面照识别失败！");
+			return ResultDTO.fail(E789ApiConstant.E_ID_CARD_F_ERROR);
+		}
+    	/*int errorCodeFront = idCardFront.getErrorCode();
     	if(errorCodeFront==228701) {
    		 	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_TIMEOUT);
    	 	}else if(errorCodeFront==228702) {
@@ -195,19 +203,31 @@ public class IDAuthenticationController extends BaseController {
    	 		return ResultDTO.fail(E789ApiConstant.E_DISSUPOPORT_GET);
    	 	}
     	realName = idCardFront.getRealname();
-    	cardId = idCardFront.getIdcard();
+    	cardId = idCardFront.getIdcard();*/
+		String realName = null;
+		String cardId = null;
+		realName = idCardFaceFront.getName();
+    	cardId = idCardFaceFront.getId_card_number();
 		String imagePathBack = appUserBackFile.getFilePath();
 		String pathBack = imagePathBack.substring(imagePathBack.indexOf("^") + 1);
 		//String imageUrlBack = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), pathBack);
 		String fileURLBack = this.env.getProperty("fileUpload.url") + line + pathBack;
-		IdCardDTO idCardBack = new IdCardDTO();
+		//IdCardDTO idCardBack = new IdCardDTO();
+		IdCardFaceDTO idCardFaceBack = new IdCardFaceDTO();
 		if(FileUtils.ifExist(fileURLBack)) {
-			idCardBack = JuheDemoUtil.valiIdImage(fileURLBack,"back");
+			//idCardBack = JuheDemoUtil.valiIdImage(fileURLBack,"back");
+			idCardFaceBack = JuheDemoFaceUtil.valiIdImage(fileURLBack);
 		}else {
 			OssLoaclUtil.getFileToLocal(OssLoaclUtil.getHeadBucketName(), pathBack, fileURLBack);
-			idCardBack = JuheDemoUtil.valiIdImage(fileURLBack,"back");
+			//idCardBack = JuheDemoUtil.valiIdImage(fileURLBack,"back");
+			idCardFaceBack = JuheDemoFaceUtil.valiIdImage(fileURLBack);
 		}
-       	int errorCodeBack = idCardBack.getErrorCode();
+		String errorCodeBack = idCardFaceFront.getError_message();
+		if(!Strings.isNullOrEmpty(errorCodeBack)) {
+			logger.error(errorCodeFront + "反面照识别失败！");
+			return ResultDTO.fail(E789ApiConstant.E_ID_CARD_B_ERROR);
+		}
+       	/*int errorCodeBack = idCardBack.getErrorCode();
        	if(errorCodeBack==210301) {
       		 	return ResultDTO.fail(E789ApiConstant.E_NOT_FOUND_PRE);
       	 	}else if(errorCodeBack==210302) {
@@ -220,11 +240,16 @@ public class IDAuthenticationController extends BaseController {
       	 		return ResultDTO.fail(E789ApiConstant.E_NETWORK_ERROR);
       	 	}else if(errorCodeBack==210306) {
       	 		return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_ERROR);
-      	 	}
-       		endTime = idCardBack.getEnd();
+      	 	}*/
+        //endTime = idCardBack.getEnd();
+		String endTime = null;
+		String time = null;
+		time = idCardFaceBack.getValid_date();
+		endTime = time.substring(time.indexOf("-")+1, time.length());
 		Date nowTime = new Date();
 		Date date =null;
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
+		//SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
 		try {
 			date = formatter.parse(endTime);
 		} catch (ParseException e) {

@@ -1,11 +1,15 @@
 package net.fnsco.trading.service.withdraw.dao.helper;
 
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
 
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 
@@ -296,6 +300,9 @@ public class TradeWithdrawProvider {
                 if (StringUtils.isNotBlank(tradeWithdraw.getChannelType())) {
                     WHERE("channel_type=#{tradeWithdraw.channelType}");
                 }
+                if(tradeWithdraw.isAppShowList()) {
+                	WHERE("status in (2,3)");
+                }
                 ORDER_BY("id desc limit " + start + ", " + limit);
             }
         }.toString();
@@ -391,6 +398,9 @@ public class TradeWithdrawProvider {
                 if (StringUtils.isNotBlank(tradeWithdraw.getChannelType())) {
                     WHERE("channel_type=#{tradeWithdraw.channelType}");
                 }
+                if(tradeWithdraw.isAppShowList()) {
+                	WHERE("status in (2,3)");
+                }
             }
         }.toString();
     }
@@ -407,7 +417,7 @@ public class TradeWithdrawProvider {
     public String queryTotalAmount(Map<String, Object> params) {
         Integer appUserId = (Integer) params.get("appUserId");
         String tradeMonth = (String) params.get("tradeMonth");
-        Integer status = (Integer) params.get("status");
+        List<Integer> status = (List<Integer>) params.get("status");
 
         return new SQL() {
             {
@@ -419,8 +429,13 @@ public class TradeWithdrawProvider {
                 if (null != appUserId) {
                     WHERE("app_user_id = #{appUserId}");
                 }
-                if (null != status) {
-                    WHERE("status = #{status}");
+                if (CollectionUtils.isNotEmpty(status)) {
+                	StringBuffer sb = new StringBuffer();
+                	for (Integer st : status) {
+                		sb.append(st.toString()).append(",");
+					}
+                	String statusStr = sb.toString().substring(0, sb.toString().length()-1);
+                    WHERE("status in ("+statusStr+")");
                 }
                 GROUP_BY("trade_type");
 
