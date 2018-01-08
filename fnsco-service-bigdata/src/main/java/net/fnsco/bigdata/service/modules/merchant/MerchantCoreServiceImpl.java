@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.internal.Lists;
 import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
@@ -710,6 +711,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
 		MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO = new MerchantCoreEntityZxyhDTO();
 		MerchantCore core = merchantCoreDao.queryAllByIdForAddZXMerc(id);
+		logger.error("是否入建参数="+env.getProperty("zxyh.isOrNotZxMchtNo"));
 		// 渠道商戶信息
 		if (core == null) {
 			return null;
@@ -722,6 +724,15 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 				logger.warn("入建中信，商户名简称不能为空");
 				return null;
 			}
+			if(Strings.isNullOrEmpty(core.getLegalPersonMobile())){
+				logger.warn("入建中信，手机号不能为空");
+				return null;
+			}
+			if(Strings.isNullOrEmpty(core.getCardNum())){
+				logger.warn("入建中信，身份证号不能为空");
+				return null;
+			}
+			
 
 			int max = 18;
 			if (StringUtils.trim(core.getLegalPersonMobile()).length() > max) {
@@ -742,6 +753,10 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		if (core.getContacts().size() > 0) {
 			merchantContact = core.getContacts().get(0);// 获取商户联系人信息
 			// 联系人手机
+			if(Strings.isNullOrEmpty(merchantContact.getContactMobile())){
+				logger.warn("入建中信，联系人手机号不能为空");
+				return null;
+			}
 			int mobilMax = 18;
 			if (StringUtils.trim(merchantContact.getContactMobile()).length() > mobilMax) {
 				logger.warn("入建中信，联系人手机有误请重新输入");
@@ -758,6 +773,18 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		if (core.getBanks().size() > 0) {
 			merchantBank = core.getBanks().get(0); // 获取商户的开户行信息
 			// 开户手机号
+			if(Strings.isNullOrEmpty(merchantBank.getAccountPhone())){
+				logger.warn("入建中信，开户行手机号不能为空");
+				return null;
+			}
+			if(Strings.isNullOrEmpty(merchantBank.getAccountCardId())){
+				logger.warn("入建中信，开户行身份证号不能为空");
+				return null;
+			}
+			if(Strings.isNullOrEmpty(merchantBank.getAccountNo())){
+				logger.warn("入建中信，开户账号不能为空");
+				return null;
+			}
 			int max = 11;
 			if (StringUtils.trim(merchantBank.getAccountPhone()).length() > max) {
 				logger.warn("入建中信，手机号不合法，请重新输入");
@@ -843,12 +870,13 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
 		merchantCoreEntityZxyhDTO.setThirdMchtNo(core.getInnerCode());// 第三方平台子商户号
 																		// 对应我们内部商户号
+		logger.error("isOrNotZxMchtNo="+env.getProperty("zxyh.isOrNotZxMchtNo"));
 		merchantCoreEntityZxyhDTO.setIsOrNotZxMchtNo(env.getProperty("zxyh.isOrNotZxMchtNo"));
 		if (StringUtils.equals("0", merchantBank.getAccountType())) {
 			merchantBank.setAccountType("2");
 		}
 		merchantCoreEntityZxyhDTO.setAcctType(merchantBank.getAccountType());// 账户类型
-
+		logger.error(JSONObject.toJSONString(merchantCoreEntityZxyhDTO));
 		return merchantCoreEntityZxyhDTO;
 
 	}

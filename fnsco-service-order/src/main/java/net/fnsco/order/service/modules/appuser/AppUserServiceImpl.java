@@ -455,7 +455,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             @Override
             public void run() {
                 try {
-                    String callback = SmsUtil.Code(mobile, code);
+                    String callback = SmsUtil.E789Code(mobile, code);
                     JSONObject callbackJson = (JSONObject) JSONObject.parse(callback);
                     String resultCode = callbackJson.getString("code");
                     if ("0".equals(resultCode)) {

@@ -1239,7 +1239,7 @@ function removePos(num){
     // layer.msg('保存成功');return ;
     // }
     $.ajax({
-     url:PROJECT_NAME+'/web/merchantpos/toAddPosInfos',
+     url:PROJECT_NAME+'/web/merchantpos/toAddPosInfosE789',
      dataType:"json", 
      type:'POST',
       contentType:"application/json",
