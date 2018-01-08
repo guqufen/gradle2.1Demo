@@ -722,6 +722,15 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 				logger.warn("入建中信，商户名简称不能为空");
 				return null;
 			}
+			if(Strings.isNullOrEmpty(core.getLegalPersonMobile())){
+				logger.warn("入建中信，手机号不能为空");
+				return null;
+			}
+			if(Strings.isNullOrEmpty(core.getCardNum())){
+				logger.warn("入建中信，身份证号不能为空");
+				return null;
+			}
+			
 
 			int max = 18;
 			if (StringUtils.trim(core.getLegalPersonMobile()).length() > max) {
@@ -742,6 +751,10 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		if (core.getContacts().size() > 0) {
 			merchantContact = core.getContacts().get(0);// 获取商户联系人信息
 			// 联系人手机
+			if(Strings.isNullOrEmpty(merchantContact.getContactMobile())){
+				logger.warn("入建中信，联系人手机号不能为空");
+				return null;
+			}
 			int mobilMax = 18;
 			if (StringUtils.trim(merchantContact.getContactMobile()).length() > mobilMax) {
 				logger.warn("入建中信，联系人手机有误请重新输入");
@@ -758,6 +771,18 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		if (core.getBanks().size() > 0) {
 			merchantBank = core.getBanks().get(0); // 获取商户的开户行信息
 			// 开户手机号
+			if(Strings.isNullOrEmpty(merchantBank.getAccountPhone())){
+				logger.warn("入建中信，开户行手机号不能为空");
+				return null;
+			}
+			if(Strings.isNullOrEmpty(merchantBank.getAccountCardId())){
+				logger.warn("入建中信，开户行身份证号不能为空");
+				return null;
+			}
+			if(Strings.isNullOrEmpty(merchantBank.getAccountNo())){
+				logger.warn("入建中信，开户账号不能为空");
+				return null;
+			}
 			int max = 11;
 			if (StringUtils.trim(merchantBank.getAccountPhone()).length() > max) {
 				logger.warn("入建中信，手机号不合法，请重新输入");

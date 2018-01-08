@@ -228,9 +228,10 @@ public class ZxyhPayMD5Util {
 		}
 		// 生成最后的报文
 		String finalB64ReqStr = "sendData=" + b64ReqStr;
-		System.out.println("req :" + finalB64ReqStr);
+		logger.info("req :" + finalB64ReqStr);
 
 		// HTTP POST方式发送报文，并获取返回结果
+		logger.info("HTTP POST方式发送报文请求参数prefix="+prefix+";+url="+url);
 		String respStr = postReq(prefix + url, finalB64ReqStr);
 
 		return respStr;

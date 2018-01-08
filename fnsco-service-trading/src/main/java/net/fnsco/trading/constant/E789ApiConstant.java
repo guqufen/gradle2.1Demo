@@ -30,11 +30,12 @@ public class E789ApiConstant extends CoreConstants {
 	public static String E_NOT_FIND_ENTITY_INNERCODE = "210007"; // 未找到对应实体内部商户号
 	public static String E_NOT_FIND_CHANNEL_INNERCODE = "210008"; // 未找到对应渠道商户号
 	public static String E_APP_PAY_PASSWORD_ERROR      = "210009"; //支付密码错误
+	public static String E_ADD_FIRST      = "210010"; //请先入建中信商户
 
 	static {
 		// 身份识别证错误信息
 		ERROR_MESSGE_MAP.put(E_DATA_SOURCE_TIMEOUT, "数据源超时");
-		ERROR_MESSGE_MAP.put(E_PAR_ERROR, "参数错误");
+		ERROR_MESSGE_MAP.put(E_PAR_ERROR, "身份证识别参数错误");
 		ERROR_MESSGE_MAP.put(E_IMAGE_TYPE_ERROR, "图片类型错误");
 		ERROR_MESSGE_MAP.put(E_IMAGE_LENGTH_ERROR, "图片长宽错误");
 		ERROR_MESSGE_MAP.put(E_IMAGE_SIZE_ERROR, "图片大小错误");
@@ -46,7 +47,7 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(E_NOT_FOUND_PRE, "库中无此身份证记录");
 		ERROR_MESSGE_MAP.put(E_SERVER_EXC, "第三方服务器异常");
 		ERROR_MESSGE_MAP.put(E_SERVER_MAINTENANCE, "服务器维护");
-		ERROR_MESSGE_MAP.put(E_PAR_ERROR_ID, "参数异常");
+		ERROR_MESSGE_MAP.put(E_PAR_ERROR_ID, "实名验证参数异常");
 		ERROR_MESSGE_MAP.put(E_NETWORK_ERROR, "网络错误，请重试");
 		ERROR_MESSGE_MAP.put(E_DATA_SOURCE_ERROR, "数据源错误，具体参照reason");
 
@@ -60,6 +61,7 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(E_NOT_FIND_ENTITY_INNERCODE, "未找到对应实体内部商户号");
 		ERROR_MESSGE_MAP.put(E_NOT_FIND_CHANNEL_INNERCODE, "未找到对应渠道商户号");
 		ERROR_MESSGE_MAP.put(E_APP_PAY_PASSWORD_ERROR, "支付密码错误");
+		ERROR_MESSGE_MAP.put(E_ADD_FIRST, "请先入建中信商户");
 	}
 
 	public static enum ResponCodeEnum {
