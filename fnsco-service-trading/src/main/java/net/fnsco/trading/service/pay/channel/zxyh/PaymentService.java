@@ -90,7 +90,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	 * @throws @since
 	 *             CodingExample Ver 1.1
 	 */
-	public void getDealStatus(Integer id ,String paySubType,String secMerId,String orderNo,String orderCeateTime) {
+	public void getDealStatus(Integer id, String paySubType, String secMerId, String orderNo, String orderCeateTime) {
 		String merId = env.getProperty("zxyh.merId");
 		String prefix = env.getProperty("zxyh.query.trade.url");
 		String url = "/MPay/backTransAction.do";
@@ -122,30 +122,30 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setId(id);
-		//微信返回结果
-		if("SUCCESS".equals(respMap.get("origRespCode"))){
+		// 微信返回结果
+		if ("SUCCESS".equals(respMap.get("origRespCode"))) {
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_SUCCESS.getCode());
-		}else if("NOTPAY".equals(respMap.get("origRespCode"))){
+		} else if ("NOTPAY".equals(respMap.get("origRespCode"))) {
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_UNPAY.getCode());
 		}
-		
-		if("00".equals(respMap.get("txnState"))){//支付宝返回结果
-			//更新交易为已成功
+
+		if ("00".equals(respMap.get("txnState"))) {// 支付宝返回结果
+			// 更新交易为已成功
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_SUCCESS.getCode());
-		}else if("01".equals(respMap.get("txnState"))){
-			//更新状态为已退货成功
+		} else if ("01".equals(respMap.get("txnState"))) {
+			// 更新状态为已退货成功
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_SEALS_RETURN.getCode());
-			
-		}else if("99".equals(respMap.get("txnState"))){
-			//更新状态为失败
+
+		} else if ("99".equals(respMap.get("txnState"))) {
+			// 更新状态为失败
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_FAIL.getCode());
-		}else if("02".equals(respMap.get("txnState"))){
-			//订单已关闭
+		} else if ("02".equals(respMap.get("txnState"))) {
+			// 订单已关闭
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_CLOSED.getCode());
-		}else{
+		} else {
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
 		}
-		tradeOrderDO.setPayOrderNo((String)respMap.get("origSeqId")); //对应的中信订单号
+		tradeOrderDO.setPayOrderNo((String) respMap.get("origSeqId")); // 对应的中信订单号
 		tradeOrderDO.setRespMsg(E789ApiConstant.ResponCodeEnum.getNameByCode(tradeOrderDO.getRespCode()));
 		tradeOrderService.doUpdate(tradeOrderDO);
 	}
@@ -354,7 +354,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
-		logger.info("返回报文="+JSONObject.toJSONString(respMap));
+		logger.info("返回报文=" + JSONObject.toJSONString(respMap));
 		if ("0000".equals(respMap.get("respCode"))) {
 			respMap.put("orderId", tradeOrderDO.getOrderNo());
 			respMap.put("respCode", tradeOrderDO.getRespCode());
@@ -385,10 +385,11 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		}
 		// 根据内部商户号获取独立商户号
 		MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
-		if (channel != null) {
-			activeAlipayDTO.setSecMerId(channel.getChannelMerId());// 独立商户号
-
+		if (channel == null) {
+			return ResultDTO.fail(E789ApiConstant.E_ADD_FIRST);
 		}
+		activeAlipayDTO.setSecMerId(channel.getChannelMerId());// 独立商户号
+
 		activeAlipayDTO.setTermIp(ip);// 发起支付的客户端真实IP
 		activeAlipayDTO.setOrderId(
 				DateUtils.getNowYMDOnlyStr() + innerCode + sequenceService.getOrderSequence("t_trade_order")); // 商户系统内部的订单号,32
