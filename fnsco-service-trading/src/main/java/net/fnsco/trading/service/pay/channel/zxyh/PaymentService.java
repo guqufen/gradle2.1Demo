@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -387,6 +388,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		}
 		// 根据内部商户号获取独立商户号
 		MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
+		logger.info("渠道商户信息"+JSONObject.toJSONString(channel));
 		if (channel == null) {
 			logger.info(E789ApiConstant.E_ADD_FIRST);
 			return ResultDTO.fail(E789ApiConstant.E_ADD_FIRST);
