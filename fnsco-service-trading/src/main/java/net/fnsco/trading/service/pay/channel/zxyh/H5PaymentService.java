@@ -57,7 +57,7 @@ public class H5PaymentService extends BaseService {
 			return ResultDTO.fail("1002");
 		}
 
-		h5PayDTO.setBackEndUrl(env.getProperty("zxyh.h5.backUrl"));// 接收支付网关异步通知回调地址
+		h5PayDTO.setBackEndUrl(env.getProperty("zxyh.h5.backurl"));// 接收支付网关异步通知回调地址
 		h5PayDTO.setSecMerId(merchantChannel.getChannelMerId());// 分账子商户号，使用分账功能时上传，是与merId关联的分账子商户号
 		h5PayDTO.setTermIp(h5PayJO.getTermIp());// 客户端真实IP
 		h5PayDTO.setOrderId(

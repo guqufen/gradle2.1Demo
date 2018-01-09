@@ -21,8 +21,8 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
-import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
 import net.fnsco.trading.service.third.ticket.comm.TicketConstants;
 import net.fnsco.trading.service.third.ticket.dao.TicketOrderDAO;
 import net.fnsco.trading.service.third.ticket.dao.TicketOrderPassengerDAO;
@@ -33,6 +33,7 @@ import net.fnsco.trading.service.third.ticket.util.TrainTicketsUtil;
 import net.fnsco.trading.service.third.ticket.vo.OrderContactVO;
 import net.fnsco.trading.service.third.ticket.vo.TrainOrderListVO;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
+import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -79,6 +80,10 @@ public class TicketOrderService extends BaseService {
                     } else if ("1".equals(status)) {
                         order.setStatus(TicketConstants.OrderStateEnum.FAIL.getCode());
                         order.setRespMsg(obj1.getString("msg"));
+                        TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(order.getOrderNo());
+                        tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
+                        tradeWithdraw.setStatus(2);
+                        tradeWithdrawService.doUpdate(tradeWithdraw);
                     } else if ("2".equals(status)) {
                         BigDecimal amountB = new BigDecimal(obj1.getString("orderamount"));
                         BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
@@ -110,9 +115,15 @@ public class TicketOrderService extends BaseService {
                             appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
                             order.setStatus(TicketConstants.OrderStateEnum.SUCCESS.getCode());
                         }
+                        //更新订单表
+                        TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(order.getOrderNo());
+                        tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.SUCCESS.getCode());
+                        tradeWithdraw.setStatus(3);
+                        tradeWithdrawService.doUpdate(tradeWithdraw);
                     } else if ("7".equals(status)) {//有乘客退票成功
                         String passengers = obj1.getString("passengers");
                         JSONArray objArray2 = JSONArray.fromObject(passengers);
+                        BigDecimal totalAmount = BigDecimal.ZERO;
                         for (int j = 0; j < objArray2.size(); j++) {
                             JSONObject obj11 = objArray2.getJSONObject(j);
                             String refundTimeline = obj11.getString("refundTimeline");
@@ -134,12 +145,22 @@ public class TicketOrderService extends BaseService {
                                     pass.setLastModifyTime(new Date());
                                     passengerDAO.update(pass);
                                     if ("true".equals(returnsuccess)) {
+                                        totalAmount.add(amountBs);
                                         order.setStatus(TicketConstants.OrderStateEnum.REFUND.getCode());
                                     }
                                     //appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(amountBs));
                                 }
                             }
                         }
+                        if (TicketConstants.OrderStateEnum.REFUND.getCode().equals(order.getStatus())) {
+                            //增加退款的钱
+                            appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(totalAmount));
+                        }
+                        TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getUndoByOrderNo(order.getOrderNo());
+                        tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.SUCCESS.getCode());
+                        tradeWithdraw.setStatus(3);
+                        tradeWithdraw.setAmount(totalAmount);
+                        tradeWithdrawService.doUpdate(tradeWithdraw);
                     }
                     order.setLastModifyTime(new Date());
                     ticketOrderDAO.update(order);
@@ -232,8 +253,7 @@ public class TicketOrderService extends BaseService {
      */
     @Transactional
     public ResultDTO pay(TicketOrderDO ticketOrder) {
-        
-        
+
         TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getAppUserId(), ticketOrder.getOrderNo());
         if (null == order) {
             return ResultDTO.fail("订单不存在");
@@ -298,7 +318,7 @@ public class TicketOrderService extends BaseService {
 
     /**
      * 
-     * pay:(支付订单)
+     * refund:(退票)
      *
      * @param ticketOrder
      * @return   ResultDTO    返回Result对象
@@ -328,6 +348,7 @@ public class TicketOrderService extends BaseService {
             tickets.setTicket_no(pass.getTicketNo());
             ticketList.add(tickets);
         }
+        tradeWithdrawService.doRefundForTicket(order);
         Map map = Maps.newHashMap();
         map.put("orderid", order.getPayOrderNo());
         map.put("tickets", JSON.toJSONString(ticketList));

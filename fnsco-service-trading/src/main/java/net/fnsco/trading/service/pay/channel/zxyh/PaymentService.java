@@ -284,7 +284,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		weiXinDTO.init(merId);
 		String url = "/MPay/backTransAction.do";
 		weiXinDTO.setEncoding("UTF-8");
-		weiXinDTO.setBackEndUrl(env.getProperty("zxyh.backUrl.wx")); // 接收支付网关异步通知回调地址
+		weiXinDTO.setBackEndUrl(env.getProperty("zxyh.backurl.wx")); // 接收支付网关异步通知回调地址
 		// 获取实体内部商户号
 		MerchantEntity merchantEntity = this.appUserMerchantEntity.queryMerInfoByUserId(userId);
 		if (merchantEntity == null) {
@@ -380,8 +380,9 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		String url = "/MPay/backTransAction.do";
 
 		activeAlipayDTO.setEncoding("UTF-8");
-		activeAlipayDTO.setBackEndUrl(env.getProperty("zxyh.backUrl.zfb")); // 接收支付网关异步通知回调地址
+		activeAlipayDTO.setBackEndUrl(env.getProperty("zxyh.backurl.zfb")); // 接收支付网关异步通知回调地址
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
+		logger.info("app用户对应渠道内部商户号="+innerCode);
 		// 获取实体内部商户号
 		MerchantEntity merchantEntity = this.appUserMerchantEntity.queryMerInfoByUserId(userId);
 		if (merchantEntity == null) {
