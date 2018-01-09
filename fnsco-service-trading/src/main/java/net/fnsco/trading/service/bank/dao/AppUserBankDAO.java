@@ -72,7 +72,7 @@ public interface AppUserBankDAO {
 
 	@Results({ @Result(column = "account_no", property = "accountNo"),
 			@Result(column = "bank_name", property = "bankName"), @Result(column = "type", property = "type") })
-	@Select("SELECT id, account_no,bank_name,type FROM u_app_user_bank WHERE app_user_id = #{userId} and status != 1")
+	@Select("SELECT id, account_no,bank_name,type FROM u_app_user_bank WHERE app_user_id = #{userId} and status != 1 ORDER BY create_time DESC")
 	public List<AppUserBankDO> getBankList(@Param("userId") String userId);
 
 	@Results({ @Result(column = "type", property = "type"),@Result(column = "bank_name", property = "bank_name")})
