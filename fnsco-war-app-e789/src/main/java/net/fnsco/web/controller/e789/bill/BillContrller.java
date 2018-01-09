@@ -79,7 +79,7 @@ public class BillContrller extends BaseController {
 		
 		TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
 		tradeWithdraw.setAppUserId(billJO.getUserId());
-//		tradeWithdraw.setStatus(3);
+		tradeWithdraw.setAppShowList(true);
 		ResultPageDTO<TradeWithdrawDO> datasResult = tradeWithdrawService.page(tradeWithdraw, billJO.getPageNum(), billJO.getPageSize());
 		List<TradeWithdrawDO> datas =  datasResult.getList();
 		Set<String> sets = Sets.newHashSet(); 
@@ -123,9 +123,10 @@ public class BillContrller extends BaseController {
 			}
 		}
 		
-		
+		List<Integer> statuses = Lists.newArrayList();
+		statuses.add(3);statuses.add(2);
 		for (BillVO billVO : data) {
-			List<MonthWithdrawCountDTO> countWithdraws = tradeWithdrawService.doQueryTotalAmountGroupByMouth(billJO.getUserId(), billVO.getBillDate(), 3);
+			List<MonthWithdrawCountDTO> countWithdraws = tradeWithdrawService.doQueryTotalAmountGroupByMouth(billJO.getUserId(), billVO.getBillDate(), statuses);
 			if(CollectionUtils.isNotEmpty(countWithdraws)) {
 				for (MonthWithdrawCountDTO monthWithdrawCountDTO : countWithdraws) {
 					if(monthWithdrawCountDTO.getTradeType()==1) {
