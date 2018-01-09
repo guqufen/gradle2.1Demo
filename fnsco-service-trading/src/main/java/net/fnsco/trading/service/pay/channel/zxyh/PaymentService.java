@@ -198,6 +198,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		mercMap.put("merId", merId);
 		mercMap.put("secMerId", secMerId);
 		mercMap.put("signMethod", "02");
+		logger.error("secMerId="+secMerId);
 		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);

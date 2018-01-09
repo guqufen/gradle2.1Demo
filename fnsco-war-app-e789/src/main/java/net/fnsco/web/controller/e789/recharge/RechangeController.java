@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
@@ -72,7 +73,7 @@ public class RechangeController extends BaseController {
     @ApiOperation(value = "我的页面-钱包-分闪付充值保存，返回的url跳转到h5页面")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         String channelMerId = env.getProperty("rechange.fsf.channel.merid");
-        if (getQRUrlJO.getPaymentAmount() == null) {
+        if (Strings.isNullOrEmpty(getQRUrlJO.getPaymentAmount())) {
             return ResultDTO.fail("充值金额不能为空");
         }
         BigDecimal amountB = new BigDecimal(getQRUrlJO.getPaymentAmount());
