@@ -36,7 +36,7 @@ public interface AppUserBankDAO {
 	public AppUserBankDO getById(@Param("id") int id);
 	
 	@Results({ @Result(column = "id", property = "id")})
-	@Select("SELECT id FROM u_app_user_bank WHERE app_user_id = #{appUserId} LIMIT 1")
+	@Select("SELECT id FROM u_app_user_bank WHERE app_user_id = #{appUserId} AND status = '0' LIMIT 1")
 	public AppUserBankDO getByAppUserId(@Param("appUserId") int appUserId);
 
 	@Insert("INSERT into u_app_user_bank(id,app_user_id,account_type,account_no,account_name,account_card_id,sub_bank_name,open_bank_prince,open_bank,open_bank_city,open_bank_num,account_phone,create_time,update_time,bank_name,type,status) VALUES (#{id},#{appUserId},#{accountType},#{accountNo},#{accountName},#{accountCardId},#{subBankName},#{openBankPrince},#{openBank},#{openBankCity},#{openBankNum},#{accountPhone},#{createTime},#{updateTime},#{bankName},#{type},#{status})")
