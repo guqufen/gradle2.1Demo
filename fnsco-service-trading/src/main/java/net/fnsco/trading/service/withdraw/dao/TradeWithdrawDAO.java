@@ -102,7 +102,7 @@ public interface TradeWithdrawDAO {
      * @date   2017年12月7日 上午11:46:23
      */
     @SelectProvider(type = TradeWithdrawProvider.class, method = "queryTotalAmount")
-    public List<MonthWithdrawCountDTO> queryTotalAmount(@Param("appUserId") Integer appUserId, @Param("tradeMonth") String tradeMonth, @Param("status") Integer status);
+    public List<MonthWithdrawCountDTO> queryTotalAmount(@Param("appUserId") Integer appUserId, @Param("tradeMonth") String tradeMonth, @Param("status") List<Integer> status);
 
     /**
      * 按交易类型查询正在进行的交易列表，便于定时查询交易状态(按照时间大到小)

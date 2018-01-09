@@ -234,5 +234,5 @@ public class TradeWithdrawService extends BaseService {
     public TradeWithdrawDO getUndoByOrderNo(String orderNo) {
         return tradeWithdrawDAO.getUndoByOrderNo(orderNo);
     }
-
+ 
 }
