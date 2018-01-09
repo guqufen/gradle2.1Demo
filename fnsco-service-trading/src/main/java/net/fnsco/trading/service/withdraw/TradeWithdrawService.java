@@ -126,7 +126,7 @@ public class TradeWithdrawService extends BaseService {
         return obj;
     }
 
-    public List<MonthWithdrawCountDTO> doQueryTotalAmountGroupByMouth(Integer appUserId, String tradeMonth, Integer status) {
+    public List<MonthWithdrawCountDTO> doQueryTotalAmountGroupByMouth(Integer appUserId, String tradeMonth, List<Integer> status) {
         return tradeWithdrawDAO.queryTotalAmount(appUserId, tradeMonth, status);
     }
 
