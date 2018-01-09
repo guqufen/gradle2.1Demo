@@ -99,7 +99,7 @@ public class TradedataE789Controller extends BaseController {
 			} else if ("1003".equals(tradeOrderDO2.getRespCode())) {
 				vo.setTradeStatusName("已退货");
 			}
-			vo.setTradeDate(DateUtils.strToDate(tradeOrderDO2.getCompleteTime()));
+			vo.setTradeDate(DateUtils.strToDate(tradeOrderDO2.getCreateTime()));
 			vo.setTraId(tradeOrderDO2.getId().toString());
 
 			datas.add(vo);

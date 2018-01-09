@@ -217,7 +217,7 @@ public class BankCardController extends BaseController {
 				int length = appUserBankDO.getAccountNo().length();
 				String transCardNo = appUserBankDO.getAccountNo();
 				if (length > 10) {
-					transCardNo = transCardNo.substring(0, 6) + "******" + transCardNo.substring(length - 4);
+					transCardNo = "****  ****  ****" + transCardNo.substring(length - 4);
 				}
 				vo.setCardNum(transCardNo);// 卡号
 				vo.setBankName(appUserBankDO.getBankName());// 银行卡名称
