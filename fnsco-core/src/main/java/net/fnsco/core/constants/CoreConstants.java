@@ -23,6 +23,7 @@ public class CoreConstants extends FrameworkConstant {
     public static String       WEB_PUSH_DATE_ERROR = "5110";            //推送时间错误
     public static String       WEB_SUBMIT_OK       ="2002";             //提交成功
     public static String 	    CODE_EXPIRED        ="2021";
+    public static String       ID_CARD_OK          = "2022";
     
     public static String 		E_BANK_VALIDATE_FAIL = "210004";//银行卡认证失败
     
@@ -35,5 +36,6 @@ public class CoreConstants extends FrameworkConstant {
         ERROR_MESSGE_MAP.put(CODE_EXPIRED, "短信校验码已过期");
         ERROR_MESSGE_MAP.put(NOT_ID_AUTH, "未认证身份信息");
         ERROR_MESSGE_MAP.put(E_BANK_VALIDATE_FAIL, "银行卡认证失败");
+        ERROR_MESSGE_MAP.put(ID_CARD_OK, "认证成功");
     }
 }

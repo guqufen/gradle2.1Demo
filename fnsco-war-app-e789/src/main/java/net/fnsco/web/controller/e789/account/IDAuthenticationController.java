@@ -257,6 +257,6 @@ public class IDAuthenticationController extends BaseController {
         appUserService.modifyInfo(appUserDto);
         IdentifyJO identify = new IdentifyJO();
         identify.setRealName(realName);
-        return ResultDTO.success(identify);
+        return ResultDTO.successForMessage(identify);
     }
 }
