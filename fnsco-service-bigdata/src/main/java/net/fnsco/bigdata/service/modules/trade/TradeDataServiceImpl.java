@@ -66,6 +66,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Transactional
     public boolean saveTradeData(TradeDataDTO tradeData) {
         //ServiceConstant.STR_1.equals(tradeData.getValidate()) && 
+    	logger.error("交易流水:"+tradeData.getOrderNo());
         if (!Strings.isNullOrEmpty(tradeData.getMd5())) {
             //需要校验
             TradeData temp = tradeListDAO.selectByMd5(tradeData.getMd5());
