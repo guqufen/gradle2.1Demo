@@ -100,8 +100,8 @@ public class AdService extends BaseService {
 				adDTO.setUrl(adDO.getUrl());
 				adList.add(adDTO);
 				map.put("ad", adList);
-				return ResultDTO.success(map);
 			}
+			return ResultDTO.success(map);
 		}
 		for (AdDO adDO : allList) {
 			if (adDO.getCategory() == null) {
