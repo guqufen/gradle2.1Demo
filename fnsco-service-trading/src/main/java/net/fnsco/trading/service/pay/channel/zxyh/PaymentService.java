@@ -443,7 +443,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setPaySubType(E789ApiConstant.PayTypeEnum.PAYBYALIPAY.getCode());
 		tradeOrderDO.setCreateTime(new Date());
 		tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
-		logger.info("插入交易数据");
+		tradeOrderDO.setInnerCode(innerCode);
+		logger.info("交易数据订单号="+tradeOrderDO.getOrderNo());
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
