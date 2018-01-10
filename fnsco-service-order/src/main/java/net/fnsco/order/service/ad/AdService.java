@@ -71,11 +71,17 @@ public class AdService extends BaseService {
 	/**
 	 * e789获取广告资讯
 	 */
-	public ResultDTO<Map<String, List>> queryAdList(Integer type) {
+	public ResultDTO<Map<String, List>> queryAdList(Integer type,Integer deviceType) {
 		List<AdDTO> adList = Lists.newArrayList();
 		List<AdDTO> newsList = Lists.newArrayList();
 		Map<String, List<AdDTO>> map = Maps.newHashMap();
-		List<AdDO> allList = this.adDAO.queryAdList(type);
+		Integer count = 1;
+		if(type==2){
+			count = 5;
+		}else if(type == 1){
+			count = 7;
+		}
+		List<AdDO> allList = this.adDAO.queryAdList(type,deviceType,count);
 		if (allList.isEmpty()) {
 			return ResultDTO.success(map);
 		}
@@ -100,8 +106,8 @@ public class AdService extends BaseService {
 				adDTO.setUrl(adDO.getUrl());
 				adList.add(adDTO);
 				map.put("ad", adList);
-				return ResultDTO.success(map);
 			}
+			return ResultDTO.success(map);
 		}
 		for (AdDO adDO : allList) {
 			if (adDO.getCategory() == null) {

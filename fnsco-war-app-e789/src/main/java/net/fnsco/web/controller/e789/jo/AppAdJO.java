@@ -32,6 +32,8 @@ public class AppAdJO extends JO{
 	 */
 	@ApiModelProperty(value = "1、账户页；2、火车票页", name = "type")
 	private Integer type;
+	
+	
 	/**
 	 * type
 	 *

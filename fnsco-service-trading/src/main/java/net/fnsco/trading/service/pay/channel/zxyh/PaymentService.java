@@ -284,15 +284,18 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		weiXinDTO.init(merId);
 		String url = "/MPay/backTransAction.do";
 		weiXinDTO.setEncoding("UTF-8");
-		weiXinDTO.setBackEndUrl(env.getProperty("zxyh.backUrl.wx")); // 接收支付网关异步通知回调地址
+		weiXinDTO.setBackEndUrl(env.getProperty("zxyh.backurl.wx")); // 接收支付网关异步通知回调地址
 		// 获取实体内部商户号
 		MerchantEntity merchantEntity = this.appUserMerchantEntity.queryMerInfoByUserId(userId);
 		if (merchantEntity == null) {
+			logger.info(E789ApiConstant.E_NOT_FIND_ENTITY_INNERCODE);
 			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_ENTITY_INNERCODE);
 		}
 		// 根据userId获取内部商户号
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
-		if (Strings.isNullOrEmpty(innerCode)) {
+		if (Strings.isNullOrEmpty(innerCode)) 
+		{
+			logger.info(E789ApiConstant.E_ADD_FIRST);
 			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_INNERCODE);
 		}
 		MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
@@ -380,8 +383,9 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		String url = "/MPay/backTransAction.do";
 
 		activeAlipayDTO.setEncoding("UTF-8");
-		activeAlipayDTO.setBackEndUrl(env.getProperty("zxyh.backUrl.zfb")); // 接收支付网关异步通知回调地址
+		activeAlipayDTO.setBackEndUrl(env.getProperty("zxyh.backurl.zfb")); // 接收支付网关异步通知回调地址
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
+		logger.info("app用户对应渠道内部商户号="+innerCode);
 		// 获取实体内部商户号
 		MerchantEntity merchantEntity = this.appUserMerchantEntity.queryMerInfoByUserId(userId);
 		if (merchantEntity == null) {
@@ -439,7 +443,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setPaySubType(E789ApiConstant.PayTypeEnum.PAYBYALIPAY.getCode());
 		tradeOrderDO.setCreateTime(new Date());
 		tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
-		logger.info("插入交易数据");
+		tradeOrderDO.setInnerCode(innerCode);
+		logger.info("交易数据订单号="+tradeOrderDO.getOrderNo());
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);

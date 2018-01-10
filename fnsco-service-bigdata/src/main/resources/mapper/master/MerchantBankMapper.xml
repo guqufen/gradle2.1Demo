@@ -207,9 +207,28 @@
 	</delete>
 	<!-- 根据appUserId查询 -->
 	<select id="selectByAppUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-		select 
-	     <include refid="Base_Column_List" />
-	     from m_merchant_bank
-	     where inner_code in (select inner_code from u_app_user_merchant where app_user_id = #{userId}) limit 1
+	     SELECT
+				<include refid="Base_Column_List" />
+			FROM
+				m_merchant_bank
+			WHERE
+				inner_code = (
+					SELECT
+						inner_code
+					FROM
+						m_merchant_core_entity_ref
+					WHERE
+						entity_inner_code = (
+							SELECT
+								entity_inner_code
+							FROM
+								u_app_user_merchant_entity
+							WHERE
+								app_user_id = #{userId} order by modefy_time DESC
+							LIMIT 1
+						)
+					LIMIT 1
+				)
+			LIMIT 1
 	</select>
 </mapper>
