@@ -74,6 +74,7 @@ public class MerchantServiceImpl extends BaseService implements MerchantService 
     private MerchantEntityCoreRefDao entityCoreRefDao;
     
     public static final String TAICODE_BASE_URL = "pf.qr.redrect.url";
+    public static final String OILCARD_BASE_URL = "pf.oilcard.redrect.url";
 
     /**
      * 获取商户渠道信息信息

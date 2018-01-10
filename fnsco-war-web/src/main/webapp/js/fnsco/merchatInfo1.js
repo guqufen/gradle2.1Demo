@@ -311,6 +311,7 @@ window.operateEvents = {
 // 表格中操作按钮
 function operateFormatter(value, row, index) {
   var returnHtml='';
+  var oilcardHtml='';
 	if(row.openFixQr=="1"){
     returnHtml+='<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码"><i class="glyphicon glyphicon-qrcode"></i></a>';
   }else{
@@ -321,6 +322,9 @@ function operateFormatter(value, row, index) {
   }else{
     returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
   }
+  
+  oilcardHtml +=  '<a class="details" href="javascript:showOilCardcode('+value+');" title="油卡二维码"><i class="glyphicon glyphicon-qrcode"></i></a>';
+  
 	return [
     '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
     '<i class="glyphicon glyphicon-pencil"></i>',
@@ -330,7 +334,7 @@ function operateFormatter(value, row, index) {
     '</a>  ',
     '<a class="remove" href="javascript:delete_btn_event('+value+');" title="点击删除">',
     '<i class="glyphicon glyphicon glyphicon-trash"></i>',
-    '</a>'+returnHtml
+    '</a>'+oilcardHtml+returnHtml
   ].join('');
 }
 // 表格中删除按钮事件
@@ -2172,6 +2176,20 @@ function showQrcode(id){
 	    }
 	})
 	$('#showQrcode').modal();
+}
+//
+function showOilCardcode(id){
+	$.ajax({
+	    url:PROJECT_NAME+'/web/pay/getOilCardImage',
+	    type:'get',
+	    dataType : "json",
+	    data:{'id':id},
+	    success:function(data){
+	    	console.log(data.data.result);
+	    	$(".oilcardCode").attr('src',data.data.result)
+	    }
+	})
+	$('#oilCardQrcode').modal();
 }
 
 // 调用中信银行接口入驻独立商户
