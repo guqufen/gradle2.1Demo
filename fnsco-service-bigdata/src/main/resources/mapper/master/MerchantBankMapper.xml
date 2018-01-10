@@ -224,7 +224,7 @@
 							FROM
 								u_app_user_merchant_entity
 							WHERE
-								app_user_id = = #{userId}
+								app_user_id = = #{userId} order by modefy_time DESC
 							LIMIT 1
 						)
 					LIMIT 1
