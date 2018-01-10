@@ -47,7 +47,7 @@ public class AdController extends BaseController {
 	@ApiOperation(value = "查询广告资讯")
 	public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
 		if (appAdJO.getType() == null || appAdJO.getUserId() == null ) {
-			return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR_ID);
+			return ResultDTO.fail(E789ApiConstant.E_PARAMETER_NOT_NULL);
 		}
 		Integer deviceType = 0;
 		String user_agent =  request.getHeader("user-agent");
