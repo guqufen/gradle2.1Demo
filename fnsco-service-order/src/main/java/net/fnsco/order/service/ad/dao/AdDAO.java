@@ -62,7 +62,7 @@ public interface AdDAO {
 	 * @throws @since
 	 *             CodingExample Ver 1.1
 	 */
-	@Select("SELECT * FROM sys_ad Where type = #{type}")
-	public List<AdDO> queryAdList(@Param("type")Integer type);
+	@Select("SELECT * FROM sys_ad Where type = #{type} AND device_type=#{deviceType} ORDER BY create_time DESC LIMIT #{count}")
+	public List<AdDO> queryAdList(@Param("type")Integer type,@Param("deviceType")Integer deviceType,@Param("count")Integer count);
 
 }
