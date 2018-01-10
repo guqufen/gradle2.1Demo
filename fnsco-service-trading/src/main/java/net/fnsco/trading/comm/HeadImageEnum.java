@@ -9,15 +9,15 @@ import net.fnsco.core.constants.CoreConstants;
 public class HeadImageEnum extends CoreConstants{
     public enum HeadImage {
         //注册默认头像
-        NUM1("00", "e789-test^2017/12/1513564502588.jpg"), 
-        NUM2("01", "e789-test^2017/12/1513564502588.jpg"),
-    	NUM3("02", "e789-test^2017/12/1513564502588.jpg"), 
-        NUM4("03", "e789-test^2017/12/1513564502588.jpg"),
-        NUM5("04", "e789-test^2017/12/1513564502588.jpg"), 
-        NUM6("05", "e789-test^2017/12/1513564502588.jpg"),
-        NUM7("06", "e789-test^2017/12/1513564502588.jpg"),
-        NUM8("07", "e789-test^2017/12/1513564502588.jpg"),
-        NUM9("08", "e789-test^2017/12/1513564502588.jpg"); 
+        NUM1("00", "/app/headimage/1.png"), 
+        NUM2("01", "/app/headimage/2.png"),
+    	NUM3("02", "/app/headimage/3.png"), 
+        NUM4("03", "/app/headimage/4.png"),
+        NUM5("04", "/app/headimage/5.png"), 
+        NUM6("05", "/app/headimage/6.png"),
+        NUM7("06", "/app/headimage/7.png"),
+        NUM8("07", "/app/headimage/8.png"),
+        NUM9("08", "/app/headimage/9.png"); 
         private String code;
         private String name;
 

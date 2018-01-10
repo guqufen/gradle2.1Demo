@@ -80,8 +80,11 @@ public class ScannedTradeController extends BaseController {
 			qrVo.setUrl((String) reqMap.getOrDefault("codeUrl", null));
 			qrVo.setOrderNo((String)reqMap.get("orderId"));
 			qrVo.setRespCode((String)reqMap.get("respCode"));
+			return ResultDTO.success(qrVo);
+		}else{
+			return ResultDTO.fail(dto.getCode(), dto.getMessage());
+			 
 		}
-		return ResultDTO.success(qrVo);
 
 	}
 

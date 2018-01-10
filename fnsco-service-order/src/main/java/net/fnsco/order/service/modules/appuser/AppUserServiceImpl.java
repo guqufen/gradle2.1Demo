@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -80,7 +81,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private MerchantPosService             merchantPosService;
     @Autowired
     private MerchantEntityDao         merchantEntityDao;
-
+    @Autowired
+   	private Environment env;
     //注册
     @Override
     @Transactional
@@ -544,6 +546,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUser.setDeviceToken(appUserDTO.getDeviceToken());
         appUser.setMobile(appUserDTO.getMobile());
         appUser.setDeviceType(appUserDTO.getDeviceType());
+        appUser.setHeadImagePath(appUserDTO.getHeadImagePath());
         appUser.setState(1);
         appUser.setRegTime(new Date());
         if(!Strings.isNullOrEmpty(appUserDTO.getEntityInnerCode())){
@@ -611,9 +614,14 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     	AppUser appUser = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
     	String headImagePath = appUser.getHeadImagePath();
         if (!Strings.isNullOrEmpty(headImagePath)) {
-            String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
-            appUserLoginInfoDTO.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
-           // map.put("headImagePath", OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+        	if(headImagePath.indexOf("^")!=-1) {
+        		String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
+                appUserLoginInfoDTO.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+               // map.put("headImagePath", OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+        	}else {
+        		String prefix = env.getProperty("app.base.url");
+        		appUserLoginInfoDTO.setHeadImagePath(prefix+headImagePath);
+        	}
         } else {
         	appUserLoginInfoDTO.setHeadImagePath(null);
         }
@@ -725,8 +733,16 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         dto.setUserName(appUser.getUserName());
         String headImagePath = appUser.getHeadImagePath();
         if (!Strings.isNullOrEmpty(headImagePath)) {
-            String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
-            dto.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+        	if(headImagePath.indexOf("^")!=-1) {
+        		String path = headImagePath.substring(headImagePath.indexOf("^") + 1);
+        		dto.setHeadImagePath(OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+               // map.put("headImagePath", OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), path));
+        	}else {
+        		String prefix = env.getProperty("app.base.url");
+        		dto.setHeadImagePath(prefix+headImagePath);
+        	}
+        } else {
+        	dto.setHeadImagePath(null);
         }
         dto.setMoblie(appUser.getMobile());
         dto.setRealName(appUser.getRealName());
