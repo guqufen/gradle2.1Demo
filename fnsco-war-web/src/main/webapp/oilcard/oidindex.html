@@ -65,6 +65,8 @@
  * 页面加载完之后执行
  */
  var innerCode = '';
+ var pathName=window.document.location.pathname; 
+ var PROJECT_NAME =pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
 function GetRequest() {
 	var url = location.search; //获取url中"?"符后的字串   
 	var theRequest = new Object();
@@ -113,7 +115,7 @@ function GetRequest() {
 
         //发送手机验证码
         $('#codeBtn').click(function(){
-            var ajaxUrl = 'http://localhost:8080/admin/oil/getNote';
+            var ajaxUrl = PROJECT_NAME+'/h5/oil/getNote';
             var m = $('#telNum').val();
             var msg = "";
             if(m == '' || m.length != 11){
@@ -135,23 +137,23 @@ function GetRequest() {
                 data:{'m':m,'sj':sj},
                 dataType:'json',
                 success:function(e){
-                    checkInputStatus();
-                    if (e.code == 200) {
-//                        alert(e.message);
-                    } else  {
-                        alert(e.message);
-                        $('#codeNum').val("");
-                    }
+//                     checkInputStatus();
+//                     if (e.code == 200) {
+// //                        alert(e.message);
+//                     } else  {
+//                         alert(e.message);
+//                         $('#codeNum').val("");
+//                     }
                 },
                 error:function () {
-                    alert("发送验证码失败!");
+//                     alert("发送验证码失败!");
                     checkInputStatus();
                 }
             })
         });
         //提交数据
         $('#subBtn').click(function(){
-            var ajaxUrl = 'http://localhost:8080/admin/oil/next';
+            var ajaxUrl = PROJECT_NAME+'/h5/oil/next';
             var m = $('#telNum').val();// 手机号
             var v = $('#codeNum').val();// 验证码
             var sj = "after";
@@ -194,7 +196,7 @@ function GetRequest() {
                         if(res_data.href) {
                             window.location.href = res_data.href;
                         }else {
-                            window.location.href = 'http://localhost:8080/admin/oil/index?mobile='+res_data.mobile+"&code="+res_data.code
+                            window.location.href = PROJECT_NAME+'/h5/oil/index?mobile='+res_data.mobile+"&code="+res_data.code
                             +"&tkCode=j_500867&pid=02";
                         }
                     } else {
