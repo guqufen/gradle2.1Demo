@@ -11,7 +11,7 @@ public class TicketConstants extends CoreConstants {
      */
     public enum CardTypeEnum {
                               //状态 状态 1二代身份证
-                              ID_CARD("1", "二代身份证"), HONG_KONG_MACAO("C", "港澳通行证"), TAIWAN("G", "台湾通行证"), PASSPORT("B", "护照");
+        ID_CARD1("1", "一代身份证"),ID_CARD("2", "二代身份证"), HONG_KONG_MACAO("C", "港澳通行证"), TAIWAN("G", "台湾通行证"), PASSPORT("B", "护照");
 
         private String code;
         private String name;
