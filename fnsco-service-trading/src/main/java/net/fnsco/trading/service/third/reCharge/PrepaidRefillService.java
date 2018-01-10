@@ -20,7 +20,6 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.freamwork.comm.Md5Util;
-import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
 import net.fnsco.trading.service.third.reCharge.dto.CheckChargePackageDTO;
@@ -431,7 +430,7 @@ public class PrepaidRefillService extends BaseService {
 		String result = null;
 		String url = "http://v.juhe.cn/flow/batchquery";// 请求接口地址
 
-		Map params = new HashMap();// 请求参数
+		Map<String, String> params = new HashMap<String, String>();// 请求参数
 		params.put("orderid", rechargeOrderDO.getOrderNo());// 用户订单号，多个以英文逗号隔开，最大支持50组
 		params.put("key", env.getProperty("jh.phone.flowkey"));// 应用APPKEY(应用详细页查询)
 
