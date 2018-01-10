@@ -82,6 +82,12 @@ public class BankCardController extends BaseController {
 		params.put("idcard", idcard);// 身份证
 		params.put("bankcard", jo.getCardNum());// 卡号
 		params.put("mobile", jo.getMobile());// 预留手机号
+		// 判断该用户是否已保存过该银行卡
+		List<String> list = appUserBankService.getByBankNO(jo.getCardNum());
+		if (list.size() > 0) {
+			return ResultDTO.fail(E789ApiConstant.E_BANK_IS_EXIST);
+
+		}
 		JSONObject jaJsonObject = new JSONObject();
 		try { 
 			String result = JuheDemo.net(strUrl, params, method);
@@ -91,8 +97,7 @@ public class BankCardController extends BaseController {
 				JSONObject jaJsonObject2 = jaJsonObject.getJSONObject("result");
 				if (jaJsonObject2 != null) {
 					vo.setError_code(error_code);
-					vo.setReason(jaJsonObject.getString("reason"));
-					vo.setMessage(jaJsonObject2.getString("message"));
+					vo.setReason(jaJsonObject2.getString("message"));
 					vo.setRes(jaJsonObject2.getString("res"));
 					if ("1".equals(jaJsonObject2.getString("res"))) {
 						vo.setReason("认证成功！");
