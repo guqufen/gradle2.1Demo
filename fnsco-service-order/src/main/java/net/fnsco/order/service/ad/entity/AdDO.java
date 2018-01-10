@@ -52,11 +52,34 @@ public class AdDO {
      */
     private Integer createUserId;
     private Integer type;
+    private Integer deviceType;
 
 
     
 
     /**
+	 * deviceType
+	 *
+	 * @return  the deviceType
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getDeviceType() {
+		return deviceType;
+	}
+
+	/**
+	 * deviceType
+	 *
+	 * @param   deviceType    the deviceType to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setDeviceType(Integer deviceType) {
+		this.deviceType = deviceType;
+	}
+
+	/**
 	 * type
 	 *
 	 * @return  the type
