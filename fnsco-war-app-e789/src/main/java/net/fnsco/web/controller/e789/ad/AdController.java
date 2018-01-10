@@ -46,12 +46,12 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "/queryAd")
 	@ApiOperation(value = "查询广告资讯")
 	public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
-		if (appAdJO.getType() == null || appAdJO.getUserId() == null) {
+		if (appAdJO.getType() == null || appAdJO.getUserId() == null || appAdJO.getDeviceType()==null) {
 			return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR_ID);
 		}
 		logger.warn("参数"+JSONObject.toJSON(appAdJO).toString());
 		AppAdVO vo = new AppAdVO();
-		ResultDTO<Map<String, List>> result = adService.queryAdList(appAdJO.getType());
+		ResultDTO<Map<String, List>> result = adService.queryAdList(appAdJO.getType(),appAdJO.getDeviceType());
 		if (result.isSuccess()) {
 			vo.setAdList(result.getData().get("ad"));
 			vo.setNewsList(result.getData().get("news"));
