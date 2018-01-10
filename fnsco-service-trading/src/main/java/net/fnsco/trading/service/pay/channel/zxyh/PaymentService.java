@@ -198,7 +198,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		mercMap.put("merId", merId);
 		mercMap.put("secMerId", secMerId);
 		mercMap.put("signMethod", "02");
-		logger.error("secMerId="+secMerId);
+		logger.error("secMerId=" + secMerId);
 		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
@@ -265,7 +265,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		mercDTO.setSettleBankCode(core.getSettleBankCode());
 
 		String mercStr = JSON.toJSONString(mercDTO);
-		logger.info("入建参数="+mercStr);
+		logger.info("入建参数=" + mercStr);
 		Map<String, String> mercMap = JSON.parseObject(mercStr, Map.class);
 		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
 		// 解析返回报文
@@ -390,7 +390,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		}
 		// 根据内部商户号获取独立商户号
 		MerchantChannel channel = channelDao.selectByInnerCodeType(innerCode, "05");
-		logger.info("渠道商户信息"+JSONObject.toJSONString(channel));
+		logger.info("渠道商户信息" + JSONObject.toJSONString(channel));
 		if (channel == null) {
 			logger.info(E789ApiConstant.E_ADD_FIRST);
 			return ResultDTO.fail(E789ApiConstant.E_ADD_FIRST);
@@ -443,7 +443,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
-		logger.info("返回报文="+respMap);
+		logger.info("返回报文=" + respMap);
 		if ("0000".equals(respMap.get("respCode"))) {
 			respMap.put("orderId", tradeOrderDO.getOrderNo());
 			respMap.put("respCode", tradeOrderDO.getRespCode());
@@ -485,27 +485,31 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		String innerCode = appUserMerchant1Dao.selectInnerCodeByUserId(userId);
 		if (null == innerCode) {
 			logger.info("该用户没有绑定内部商户号，请核查后重新交易");
-			return ResultDTO.fail("1002");
+			return ResultDTO.fail("该用户没有绑定内部商户号，请核查后重新交易");
 		}
 
 		// 通过内部商户号查找绑定的中信商户号
 		MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, "05");
 		if (null == merchantChannel) {
 			logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=[" + innerCode + "");
-			return ResultDTO.fail("1002");
+			return ResultDTO.fail("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易");
 		}
 		passDTO.setStdmercno2(merchantChannel.getChannelMerId());// 二级商户号，使用分账功能时上传，是与stdmercno关联的分账子商户号
 		passDTO.setStdauthid(passivePayDTO.getStdauthid());// 授权码
 
 		// 校验微信授权码，如果校验成功，则
 		String resp = CheckAuthid(passDTO);
+		logger.info("校验微信授权码,respCode=" + resp);
 
 		// 应答码6002-支付授权已过期，请刷新再试,说明当前的是微信付款码
 		if ("6002".equals(resp)) {
 			logger.info("微信付款码已经过期，请重新扫付款码");
 			// map.put("respCode", "1002");
 			// map.put("respMsg", "付款码已经过期,请重新扫付款码");
-			return ResultDTO.fail("1002");
+			return ResultDTO.fail("付款码已经过期，请重新扫付款码");
+		} else if ("1007".equals(resp)) {// 交易通讯超时（银行系统异常）
+			logger.info("1007=交易通讯超时（银行系统异常）");
+			return ResultDTO.fail("交易失败");
 		}
 
 		// 应答码为0000-成功，表示可以直接用微信进行支付了
@@ -577,7 +581,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		if (null == tradeOrderDO1) {
 			logger.info("没有找到该交易请求交易,order_no=[" + tradeOrderDO.getOrderNo() + "]");
 
-			return ResultDTO.fail("1002");
+			return ResultDTO.fail("系统忙");
 		}
 
 		// 支付成功，则直接更新交易状态
@@ -605,23 +609,25 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			// 6001-进行中,用户支付中，需要输入密码,等待5秒,然后调用交易状态查询确定交易支付结果；0005-交易已受理，请稍后查询交易结果
 		} else if ("6001".equals(passDTO1.getStd400mgid()) || "0005".equals(passDTO1.getStd400mgid())) {
 			tradeOrderDO1.setRespCode("1000");// 设置响应应答码
+			logger.error("交易失败，respCode=[" + passDTO1.getStd400mgid() + "],respMsg=[" + passDTO1.getStdrtninfo() + "]");
 		} else {// 交易失败
-			tradeOrderDO1.setRespCode(TradeStateEnum.FAIL.getCode());// 设置响应应答码
+			tradeOrderDO1.setRespCode("1002");// 设置响应应答码
+			logger.error("交易失败，respCode=[" + passDTO1.getStd400mgid() + "],respMsg=[" + passDTO1.getStdrtninfo() + "]");
 		}
 		tradeOrderDO1.setRespMsg(passDTO1.getStdrtninfo());// 设置响应信息
 		tradeOrderDO1.setPayOrderNo(passDTO1.getStdrefnum());// 支付订单号(平台流水号，供后续退货或者撤销或对账使用)
 		tradeOrderService.doUpdate(tradeOrderDO1);// 通过主键更新应答数据
 
-		passivePayResultDTO.setRespCode(tradeOrderDO1.getRespCode());// 应答码
-		passivePayResultDTO.setRespMsg(tradeOrderDO1.getRespMsg());// 应答信息
-		passivePayResultDTO.setOrderNo(tradeOrderDO1.getOrderNo());// 商户订单号
-		passivePayResultDTO.setBegTime(passDTO.getStdbegtime());// 交易起始时间
-		passivePayResultDTO.setEndTime(passDTO1.getEndTime());// 支付结束时间
-		passivePayResultDTO.setAmt(passivePayDTO.getStdtranamt());// 交易金额
-		passivePayResultDTO.setReciAmt(passDTO1.getStdreciamt());// 实收金额
-		passivePayResultDTO.setPreAmt(passDTO1.getStdpreamt());// 优惠金额
+		// passivePayResultDTO.setRespCode(tradeOrderDO1.getRespCode());// 应答码
+		// passivePayResultDTO.setRespMsg(tradeOrderDO1.getRespMsg());// 应答信息
+		// passivePayResultDTO.setOrderNo(tradeOrderDO1.getOrderNo());// 商户订单号
+		// passivePayResultDTO.setBegTime(passDTO.getStdbegtime());// 交易起始时间
+		// passivePayResultDTO.setEndTime(passDTO1.getEndTime());// 支付结束时间
+		// passivePayResultDTO.setAmt(passivePayDTO.getStdtranamt());// 交易金额
+		// passivePayResultDTO.setReciAmt(passDTO1.getStdreciamt());// 实收金额
+		// passivePayResultDTO.setPreAmt(passDTO1.getStdpreamt());// 优惠金额
 
-		return ResultDTO.success(passivePayResultDTO);
+		return ResultDTO.fail(tradeOrderDO1.getRespMsg());
 	}
 
 	/**
@@ -641,14 +647,14 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		if (null == tradeOrderDO) {
 			logger.info("没有找到该交易请求交易,order_no=[" + orgorderid + "]");
 
-			return ResultDTO.fail(TradeStateEnum.FAIL.getCode());
+			return ResultDTO.fail("交易失败");
 		}
 
 		// 如果原消费交易是非(进行状态的或者应答码为空)的，则可以直接返回应答
 		if (!"1000".equals(tradeOrderDO.getRespCode()) && !Strings.isNullOrEmpty(tradeOrderDO.getRespCode())) {
 			logger.info("该交易为有确定结果的交易,不用再去中信银行那边查询结果,将直接返回。order_no=[" + orgorderid + "]");
 
-			return ResultDTO.success(TradeStateEnum.SUCCESS.getCode());
+			return ResultDTO.success("交易成功");
 		}
 
 		String merId = env.getProperty("zxyh.merId");
@@ -666,7 +672,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		} else {
 			logger.info("该订单号原支付子类型为非微信和支付宝，请核查后重新交易。order_no=[" + orgorderid + "]");
 
-			return ResultDTO.fail(TradeStateEnum.FAIL.getCode());
+			return ResultDTO.fail("交易失败");
 		}
 
 		passDTO.setStdmercno2(tradeOrderDO.getChannelMerId());// 二级商户号，使用分账功能时上传，是与stdmercno关联的分账子商户号
@@ -694,7 +700,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 				tradeOrderDO.setSettleAmount(new BigDecimal(passDTO1.getQstranamt()));// 清算金额
 				tradeOrderDO.setSettleDate(DateUtils.StrToDate(passDTO1.getQs400trdt() + "000000"));// 清算日起
 			} else {
-				tradeOrderDO.setRespCode(TradeStateEnum.FAIL.getCode());// 设置响应码
+				tradeOrderDO.setRespCode("交易失败");// 设置响应码
 			}
 
 			tradeOrderDO.setRespMsg(passDTO1.getStdrtninfo());// 设置响应信息
