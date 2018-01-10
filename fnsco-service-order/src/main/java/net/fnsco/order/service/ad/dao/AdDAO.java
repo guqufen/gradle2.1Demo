@@ -25,7 +25,7 @@ public interface AdDAO {
 	@Select("SELECT * FROM sys_ad WHERE id = #{id}")
 	public AdDO getById(@Param("id") int id);
 
-	@Insert("INSERT into sys_ad(id,title,img_path,category,summary,content,create_time,update_time,create_user_id,url,type) VALUES (#{id},#{title},#{img_path},#{category},#{summary},#{content},#{createTime},#{updateTime},#{createUserId},#{url},#{type})")
+	@Insert("INSERT into sys_ad(id,title,img_path,category,summary,content,create_time,update_time,create_user_id,url,type,device_type) VALUES (#{id},#{title},#{img_path},#{category},#{summary},#{content},#{createTime},#{updateTime},#{createUserId},#{url},#{type},#{deviceType})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public void insert(AdDO ad);
 
@@ -44,7 +44,8 @@ public interface AdDAO {
 			@Result(column = "create_time", property = "createTime"),
 			@Result(column = "update_time", property = "updateTime"),
 			@Result(column = "create_user_id", property = "createUserId"),
-			@Result(column = "type", property = "type")})
+			@Result(column = "type", property = "type"),
+			@Result(column = "device_type", property = "deviceType")})
 	@SelectProvider(type = AdProvider.class, method = "pageList")
 	public List<AdDO> pageList(@Param("ad") AdDO ad, @Param("pageNum") Integer pageNum,
 			@Param("pageSize") Integer pageSize);

@@ -49,6 +49,9 @@ public class AdProvider {
         if (ad.getType() != null) {
             SET("type=#{ad.type}");
         }
+        if (ad.getDeviceType() != null) {
+            SET("device_type=#{ad.deviceType}");
+        }
         
         WHERE("id = #{ad.id}");
         }}.toString();
