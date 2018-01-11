@@ -80,8 +80,8 @@ public class TradeOrderResearchService extends BaseService {
         }
         //结算状态（0 未结算 1已结算   2结算中   3已退款）
         //（0 未支付 1支付成功 2支付失败 3已退货）
-        if ("3".equals(order.getOrderStatus()) || "1".equals(order.getSettlementStatus())) {//1已结算
-            logger.error("更新分闪付充值状态为失败3已退货或1已结算" + order.getOrderStatus() + order.getSettlementStatus() + JSON.toJSONString(tradeOrderDO));
+        if ("3".equals(order.getOrderStatus())) {//1已结算
+            logger.error("更新分闪付充值状态为失败3已退货" + order.getOrderStatus() + order.getSettlementStatus() + JSON.toJSONString(tradeOrderDO));
             tradeWithdrawService.doUpdate(tradeOrderDO);
         } else {
             Integer i = tradeWithdrawService.updateOnlyFail(tradeOrderDO);
@@ -94,9 +94,11 @@ public class TradeOrderResearchService extends BaseService {
             }
         }
         if ("2".equals(order.getOrderStatus())) {
-            tradeOrderDO.setStatus(WithdrawStateEnum.FAIL.getCode());
+            TradeWithdrawDO tradeOrderTemp = new TradeWithdrawDO();
+            tradeOrderTemp.setId(tradeOrderDO.getId());
+            tradeOrderTemp.setStatus(WithdrawStateEnum.FAIL.getCode());
             logger.error("更新分闪付充值状态为失败" + tradeOrderDO.getOrderNo());
-            tradeWithdrawService.doUpdate(tradeOrderDO);
+            tradeWithdrawService.doUpdate(tradeOrderTemp);
         }
         return ResultDTO.success();
     }

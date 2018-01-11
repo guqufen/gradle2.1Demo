@@ -30,10 +30,9 @@ public class TrainTicketsUtil {
        from_station    string  是   出发站简码，如：BJP
        to_station      string  是   到达站简码，如：SHH
      */
-    public static String getTicketsAvailable(String train_date, String from_station,
-                                             String to_station) {
-        String url = "http://op.juhe.cn/trainTickets/ticketsAvailable?key=" + KEY + "&train_date="
-                     + train_date
+    public static String getTicketsAvailable(String train_date, String from_station, String to_station) {
+        long timer = System.currentTimeMillis();
+        String url = "http://op.juhe.cn/trainTickets/ticketsAvailable?key=" + KEY + "&train_date=" + train_date
 
                      + "&from_station=" + from_station + "&to_station=" + to_station;
         String data = HttpUtils.get(url);
@@ -69,6 +68,7 @@ public class TrainTicketsUtil {
             //"wz_num":"--","edz_num":"130","qtxb_num":"--",
             //"train_start_date":"20171226","gjrw_price":0,"tdz_num":"--"}
         }
+        logger.error("调用火车票查询余票接口耗时" + (System.currentTimeMillis() - timer));
         return resultList;
         //        "gjrw_num": "--", /*高级软卧余票数量*/
         //        "gjrws_price":0, /* 高级软卧（上）票价*/
@@ -141,8 +141,7 @@ public class TrainTicketsUtil {
      * @throws UnsupportedEncodingException 
      */
     public static JSONObject getOrderStatus(String orderNo) {
-        String url = "http://op.juhe.cn/trainTickets/orderStatus?key=" + KEY + "&orderid="
-                     + orderNo;
+        String url = "http://op.juhe.cn/trainTickets/orderStatus?key=" + KEY + "&orderid=" + orderNo;
         logger.error("调用火车票（订单状态查询）" + orderNo);
         String data = HttpUtils.get(url);
         logger.error("调用火车票（订单状态查询）" + data);

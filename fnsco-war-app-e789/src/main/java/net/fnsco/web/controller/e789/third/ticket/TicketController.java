@@ -98,7 +98,9 @@ public class TicketController extends BaseController {
     @RequestMapping(value = "/querySiteList")
     @ApiOperation(value = "模糊查询站点列表")
     public ResultDTO<List<TetterVO>> querySiteList(@RequestBody SiteJO siteJO) {
+        long timer = System.currentTimeMillis() ;
         List<TicketSiteDO> result = ticketSiteService.querySiteList(siteJO.getSiteName());
+        logger.error("查询站点列表sql耗时" + (System.currentTimeMillis() - timer));
         PyCommonVO<SiteVO> resultVO = new PyCommonVO<SiteVO>();
         for (TicketSiteDO site : result) {
             SiteVO vo = new SiteVO();

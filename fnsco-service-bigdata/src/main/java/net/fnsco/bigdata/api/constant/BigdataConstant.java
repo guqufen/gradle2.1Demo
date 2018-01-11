@@ -216,9 +216,9 @@ public class BigdataConstant extends CoreConstants {
     public static Map<String, String> RESP_CODE_MAP = Maps.newHashMap();
     static {
         //0 未支付 1支付成功 2支付失败 3已退货
-        //RESP_CODE_MAP.put("0", "1000");
+        RESP_CODE_MAP.put("0", "1000");
         RESP_CODE_MAP.put("1", "1001");
         RESP_CODE_MAP.put("2", "1002");
-        //RESP_CODE_MAP.put("3", "1003");
+        RESP_CODE_MAP.put("3", "1003");
     }
 }
