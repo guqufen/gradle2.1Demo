@@ -126,6 +126,9 @@ public class LklTradeDateSyncController extends BaseController {
         //需要同步到t_trade_data表中
         TradeDataDTO tradeData =  new TradeDataDTO();
         BeanUtils.copyProperties(resu, tradeData);
+        if("0".equals(tradeData.getTxnType())) {
+        	tradeData.setTxnType("2");
+        }
         tradeDataService.saveTradeData(tradeData);
         
         JSONObject jsonObject = new JSONObject();
