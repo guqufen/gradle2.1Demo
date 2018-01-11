@@ -313,7 +313,7 @@ function operateFormatter(value, row, index) {
   var returnHtml='';
   var oilcardHtml='';
 	if(row.openFixQr=="1"){
-    returnHtml+='<a class="details" href="javascript:showQrcode('+value+');" title="生成二维码"><i class="glyphicon glyphicon-qrcode"></i></a>';
+    returnHtml+='<a class="details" href="javascript:showQrcode('+value+');" title="分闪付二维码"><i class="glyphicon glyphicon-qrcode"></i></a>';
   }else{
     returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
   }
@@ -323,7 +323,7 @@ function operateFormatter(value, row, index) {
     returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
   }
   
-  oilcardHtml +=  '<a class="details" href="javascript:showOilCardcode('+value+');" title="油卡二维码"><i class="glyphicon glyphicon-qrcode"></i></a>';
+  oilcardHtml +=  '<a class="details" href="javascript:showOilCardcode('+value+');" title="油卡二维码"><i class="glyphicon glyphicon-picture"></i></a>';
   
 	return [
     '<a class="redact" href="javascript:editData('+value+');" title="点击编辑">',
