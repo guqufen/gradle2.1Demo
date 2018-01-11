@@ -101,21 +101,21 @@ public class BankCardController extends BaseController {
 					vo.setRes(jaJsonObject2.getString("res"));
 					if ("1".equals(jaJsonObject2.getString("res"))) {
 						vo.setReason("认证成功！");
-						return ResultDTO.success(vo);
+						return ResultDTO.success(vo,"认证成功！");
 
 					} else {
-						return ResultDTO.fail(vo);
+						return ResultDTO.fail(vo,jaJsonObject2.getString("message"));
 					}
 
 				} else {
 					vo.setError_code(error_code);
 					vo.setReason(jaJsonObject.getString("reason"));
-					return ResultDTO.fail(vo);
+					return ResultDTO.fail(vo,jaJsonObject2.getString("message"));
 				}
 			} else {//未处理成功
 				vo.setError_code(error_code);
 				vo.setReason(jaJsonObject.getString("reason"));
-				return ResultDTO.fail(vo);
+				return ResultDTO.fail(vo,jaJsonObject.getString("reason"));
 			}
 
 		} catch (Exception e) {
@@ -161,7 +161,7 @@ public class BankCardController extends BaseController {
 
 		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num);
 		if (row == 1) {
-			return ResultDTO.success();
+			return ResultDTO.success(E789ApiConstant.E_BOUND_SUCCESS);
 		} else {
 			return ResultDTO.fail();
 		}
@@ -183,7 +183,7 @@ public class BankCardController extends BaseController {
 		}
 		Integer row = appUserBankService.unBindBankCard(Integer.parseInt(bankId));
 		if (row == 1) {
-			return ResultDTO.success("解绑成功");
+			return ResultDTO.success(null,E789ApiConstant.E_UNBOUND_SUCCESS);
 
 		} else {
 			return ResultDTO.fail("解绑失败");
