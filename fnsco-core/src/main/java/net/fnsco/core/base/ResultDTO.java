@@ -52,6 +52,7 @@ public class ResultDTO<T extends Object> extends DTO {
     	String message =  CoreConstants.ERROR_MESSGE_MAP.get(messageCode);
     	if(Strings.isNullOrEmpty(message)){
     		message = messageCode;
+    		messageCode = CoreConstants.OK;
     	}
         ResultDTO result = new ResultDTO(true, data, messageCode,message);
         return result;

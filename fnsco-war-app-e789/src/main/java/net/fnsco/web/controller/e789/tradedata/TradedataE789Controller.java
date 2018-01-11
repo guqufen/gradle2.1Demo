@@ -123,7 +123,7 @@ public class TradedataE789Controller extends BaseController {
 	@ApiOperation(value = "首页-流水详情-查询交易流水详情")
 	public ResultDTO<TradeDataDetailVO> queryTradeDataDetail(@RequestBody TradeDataDetailJO tradeDataDetailJO){
 		
-		if(Strings.isNullOrEmpty(tradeDataDetailJO.getOrderNo())) {
+		if(Strings.isNullOrEmpty(tradeDataDetailJO.getOrderNo())) { 
 			return ResultDTO.fail(ApiConstant.E_ORDER_NO_NULL);
 		}
 		TradeOrderDO tradeOrderDO =  tradeOrderService.queryByOrderId(tradeDataDetailJO.getOrderNo());
@@ -139,7 +139,7 @@ public class TradedataE789Controller extends BaseController {
 		
 		if("1000".equals(tradeOrderDO.getRespCode())) {
 			vo.setTradeStatusName("处理中");
-			paymentService.getDealStatus(tradeOrderDO.getId(),tradeOrderDO.getPaySubType(),tradeOrderDO.getChannelMerId(),tradeOrderDO.getOrderNo(),tradeOrderDO.getOrderCeateTimeStr());
+			paymentService.getDealStatus(tradeOrderDO.getId(),tradeOrderDO.getPaySubType(),tradeOrderDO.getChannelMerId(),tradeOrderDO.getOrderNo(),tradeOrderDO.getOrderCeateTime());
 		}else if("1001".equals(tradeOrderDO.getRespCode())) {
 			vo.setTradeStatusName("成功");
 		}else if("1002".equals(tradeOrderDO.getRespCode())) {

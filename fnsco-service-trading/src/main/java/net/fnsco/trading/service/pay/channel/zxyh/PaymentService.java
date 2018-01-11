@@ -2,6 +2,7 @@ package net.fnsco.trading.service.pay.channel.zxyh;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,7 +92,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	 * @throws @since
 	 *             CodingExample Ver 1.1
 	 */
-	public void getDealStatus(Integer id, String paySubType, String secMerId, String orderNo, String orderCeateTime) {
+	public void getDealStatus(Integer id, String paySubType, String secMerId, String orderNo, Date orderCeateTime) {
 		String merId = env.getProperty("zxyh.merId");
 		String prefix = env.getProperty("zxyh.query.trade.url");
 		String url = "/MPay/backTransAction.do";
@@ -107,8 +108,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			tradeResultZXDTO.setTxnSubType("383000");
 			tradeResultZXDTO.setPayAccessType("02");
 			tradeResultZXDTO.setOrigOrderId(orderNo);
-			tradeResultZXDTO.setOrigOrderTime(orderCeateTime);
-			tradeResultZXDTO.setOrderTime(orderCeateTime);
+			tradeResultZXDTO.setOrigOrderTime(DateUtils.dateFormat1ToStr(orderCeateTime));
+			tradeResultZXDTO.setOrderTime(DateUtils.dateFormat1ToStr(orderCeateTime));
 			tradeResultZXDTO.setFetchOrderNo("Y");
 		}
 		// 支付宝
@@ -143,11 +144,13 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		} else if ("02".equals(respMap.get("txnState"))) {
 			// 订单已关闭
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_CLOSED.getCode());
-		} else {
-			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
-		}
+		} 
 		tradeOrderDO.setPayOrderNo((String) respMap.get("origSeqId")); // 对应的中信订单号
 		tradeOrderDO.setRespMsg(E789ApiConstant.ResponCodeEnum.getNameByCode(tradeOrderDO.getRespCode()));
+		String endTime = (String)respMap.get("endTime");
+		if(!Strings.isNullOrEmpty(endTime)){
+			tradeOrderDO.setCompleteTime(DateUtils.StrToDate(endTime));//交易完成时间
+		}
 		tradeOrderService.doUpdate(tradeOrderDO);
 	}
 
@@ -164,20 +167,22 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 				String respCode = (String) map.get("respCode");
 				String mchtChkStatus = (String) map.get("mchtChkStatus");
 				if ("0000".equals(respCode)) {
-					switch (mchtChkStatus) {
-					case "2":
-						mchtChkStatus = "5";
-						break;
-					default:
-						break;
+					if(StringUtils.equalsIgnoreCase("0", mchtChkStatus)){
+						continue;
 					}
+					if(StringUtils.equalsIgnoreCase("2", mchtChkStatus)){
+						mchtChkStatus = "5";//审核通过
+					}else if(StringUtils.equalsIgnoreCase("3", mchtChkStatus)){
+						mchtChkStatus = "3";//新增待审核
+					}
+					
+					logger.info("内部商户号="+mercQueryDTO.getInner_code()+"更新状态为"+mchtChkStatus);
 					merchantCoreService.updateStatusByInnerCode(mercQueryDTO.getInner_code(), mchtChkStatus);
 				}
 			}
 		}
 
 	}
-
 	/**
 	 * 查询独立商户是否入驻成功接口 queryAloneMchtInfo:(这里用一句话描述这个方法的作用)
 	 *
@@ -843,8 +848,6 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setOrderNo(aliDTO.getOrderId());// 商户订单号
 		tradeOrderDO.setPayOrderNo(aliDTO.getTransactionId());// 渠道(扫码)订单号
-		// BigDecimal txnAmount = new BigDecimal(aliDTO.getTxnAmt());
-		// tradeOrderDO.setTxnAmount(txnAmount);// 交易金额
 		tradeOrderDO.setRespCode(aliDTO.getRespCode());// 交易返回码
 		tradeOrderDO.setRespMsg(aliDTO.getRespMsg());
 		Date tradeEndTime = DateUtils.formateToDate(aliDTO.getEndTime());
