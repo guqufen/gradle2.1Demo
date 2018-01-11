@@ -33,30 +33,7 @@ public class AppAdJO extends JO{
 	@ApiModelProperty(value = "1、账户页；2、火车票页", name = "type")
 	private Integer type;
 	
-	@ApiModelProperty(value = "1、IOS；2、安卓；3、公用", name = "deviceType")
-	private Integer deviceType;
-	/**
-	 * deviceType
-	 *
-	 * @return  the deviceType
-	 * @since   CodingExample Ver 1.0
-	*/
 	
-	public Integer getDeviceType() {
-		return deviceType;
-	}
-
-	/**
-	 * deviceType
-	 *
-	 * @param   deviceType    the deviceType to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setDeviceType(Integer deviceType) {
-		this.deviceType = deviceType;
-	}
-
 	/**
 	 * type
 	 *
