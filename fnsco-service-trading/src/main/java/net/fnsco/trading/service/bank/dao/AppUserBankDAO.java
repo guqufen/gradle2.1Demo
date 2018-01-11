@@ -81,7 +81,7 @@ public interface AppUserBankDAO {
 			@Param("cardTotalLength") String cardTotalLength);
 
 	@Results({ @Result(column = "account_no", property = "accountNo")})
-	@Select(" SELECT account_no FROM u_app_user_bank WHERE account_no=#{bankCardNum} ")
+	@Select(" SELECT account_no FROM u_app_user_bank WHERE account_no=#{bankCardNum} and status=0")
 	public List<String> getByBankNO(String bankCardNum);
 
 }
