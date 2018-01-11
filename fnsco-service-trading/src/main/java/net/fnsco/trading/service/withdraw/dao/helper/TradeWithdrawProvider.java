@@ -328,6 +328,12 @@ public class TradeWithdrawProvider {
                 if (tradeWithdraw.isAppShowList()) {
                     WHERE("status in (2,3)");
                 }
+                if(tradeWithdraw.getStartCreateTime()!= null) {
+                	WHERE("create_time >= #{tradeWithdraw.startCreateTime}");
+                }
+                if(tradeWithdraw.getEndCreateTime()!= null) {
+                	WHERE("create_time <= #{tradeWithdraw.endCreateTime}");
+                }
                 ORDER_BY("id desc limit " + start + ", " + limit);
             }
         }.toString();
@@ -425,6 +431,12 @@ public class TradeWithdrawProvider {
                 }
                 if (tradeWithdraw.isAppShowList()) {
                     WHERE("status in (2,3)");
+                }
+                if(tradeWithdraw.getStartCreateTime()!= null) {
+                	WHERE("create_time >= #{tradeWithdraw.startCreateTime}");
+                }
+                if(tradeWithdraw.getEndCreateTime()!= null) {
+                	WHERE("create_time <= #{tradeWithdraw.endCreateTime}");
                 }
             }
         }.toString();

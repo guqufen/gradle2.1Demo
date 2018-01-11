@@ -2,7 +2,6 @@ package net.fnsco.trading.service.withdraw.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 public class TradeWithdrawDO {
 
@@ -65,6 +64,11 @@ public class TradeWithdrawDO {
      * 创建时间
      */
     private Date       createTime;
+    private String       startTime;      // 订单交易开始日期 20160510000000
+    private String       endTime;        // 订单交易结束日期 20160510235959
+    private Date         startCreateTime;//开始创建时间
+    private Date         endCreateTime;  //结束创建时间
+
 
     /**
      * 更新时间
@@ -449,7 +453,63 @@ public class TradeWithdrawDO {
         this.cardHolderRate = cardHolderRate;
     }
 
-    @Override
+    /**
+	 * @return the startTime
+	 */
+	public String getStartTime() {
+		return startTime;
+	}
+
+	/**
+	 * @param startTime the startTime to set
+	 */
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	/**
+	 * @return the endTime
+	 */
+	public String getEndTime() {
+		return endTime;
+	}
+
+	/**
+	 * @param endTime the endTime to set
+	 */
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	/**
+	 * @return the startCreateTime
+	 */
+	public Date getStartCreateTime() {
+		return startCreateTime;
+	}
+
+	/**
+	 * @param startCreateTime the startCreateTime to set
+	 */
+	public void setStartCreateTime(Date startCreateTime) {
+		this.startCreateTime = startCreateTime;
+	}
+
+	/**
+	 * @return the endCreateTime
+	 */
+	public Date getEndCreateTime() {
+		return endCreateTime;
+	}
+
+	/**
+	 * @param endCreateTime the endCreateTime to set
+	 */
+	public void setEndCreateTime(Date endCreateTime) {
+		this.endCreateTime = endCreateTime;
+	}
+
+	@Override
     public String toString() {
         return "[id=" + id + ", orderNo=" + orderNo + ", originalOrderNo=" + originalOrderNo + ", appUserId=" + appUserId + ", amount=" + amount + ", fee=" + fee + ", settleMoney=" + settleMoney
                + ", fund=" + fund + ", tradeType=" + tradeType + ", tradeSubType=" + tradeSubType + ", status=" + status + ", createTime=" + createTime + ", updateTime=" + updateTime + ", respCode="

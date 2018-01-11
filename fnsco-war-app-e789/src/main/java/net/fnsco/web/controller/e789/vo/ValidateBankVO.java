@@ -3,12 +3,12 @@ package net.fnsco.web.controller.e789.vo;
 import io.swagger.annotations.ApiModelProperty;
 
 public class ValidateBankVO {
-	@ApiModelProperty(value="reason" ,name="reason")
+	@ApiModelProperty(value="描述" ,name="reason")
 	private String reason;
 	@ApiModelProperty(value="验证结果，1:匹配 2:不匹配" ,name="res")
     private String res;
-	@ApiModelProperty(value="描述" ,name="message")
-    private String message;
+//	@ApiModelProperty(value="描述" ,name="message")
+//    private String message;
 	@ApiModelProperty(value="返回码" ,name="error_code")
 	private Integer error_code;
 	/**
@@ -65,19 +65,19 @@ public class ValidateBankVO {
 	 * @since   CodingExample Ver 1.0
 	*/
 	
-	public String getMessage() {
-		return message;
-	}
-	/**
-	 * message
-	 *
-	 * @param   message    the message to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setMessage(String message) {
-		this.message = message;
-	}
+//	public String getMessage() {
+//		return message;
+//	}
+//	/**
+//	 * message
+//	 *
+//	 * @param   message    the message to set
+//	 * @since   CodingExample Ver 1.0
+//	 */
+//	
+//	public void setMessage(String message) {
+//		this.message = message;
+//	}
 	/**
 	 * error_code
 	 *
