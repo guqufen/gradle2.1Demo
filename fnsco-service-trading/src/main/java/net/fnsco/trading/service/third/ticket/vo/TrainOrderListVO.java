@@ -39,11 +39,36 @@ public class TrainOrderListVO extends VO {
     @ApiModelProperty(value = "支付订单ID", example = "支付订单ID")
     private String               payOrderNo;
 
-    @ApiModelProperty(value = "状态0未占座1占座中2已占座3占座失败4支付完成5取消订单", example = "状态")
+    @ApiModelProperty(value = "状态 0未占座1占座中2已占座3占座失败4支付中5支付完成6取消订单7退票中8退票完成", example = "状态")
     private Integer              status;
-
+    
+    @ApiModelProperty(value = "状态 0未占座1占座中2已占座3占座失败4支付中5支付完成6取消订单7退票中8退票完成", example = "状态")
+    private String              statusName;
+    
     @ApiModelProperty(value = "创建时间", example = "创建时间")
     private Date                 createTime;
+
+    /**
+     * statusName
+     *
+     * @return  the statusName
+     * @since   CodingExample Ver 1.0
+    */
+    
+    public String getStatusName() {
+        return statusName;
+    }
+
+    /**
+     * statusName
+     *
+     * @param   statusName    the statusName to set
+     * @since   CodingExample Ver 1.0
+     */
+    
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
 
     /**
      * trainDate

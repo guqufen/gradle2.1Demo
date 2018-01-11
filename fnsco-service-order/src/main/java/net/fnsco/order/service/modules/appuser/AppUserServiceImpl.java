@@ -607,7 +607,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         return ResultDTO.success();
     }
-  //e789获取登录信息
+    //e789获取登录信息
     @Override
     public AppUserLoginInfoDTO getLoginInfor(AppUserDTO appUserDTO) {
     	AppUserLoginInfoDTO appUserLoginInfoDTO = new AppUserLoginInfoDTO();

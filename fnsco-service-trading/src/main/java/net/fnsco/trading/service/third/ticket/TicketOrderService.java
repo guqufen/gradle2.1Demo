@@ -80,10 +80,12 @@ public class TicketOrderService extends BaseService {
                     } else if ("1".equals(status)) {
                         order.setStatus(TicketConstants.OrderStateEnum.FAIL.getCode());
                         order.setRespMsg(obj1.getString("msg"));
-                        TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(order.getOrderNo());
-                        tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
-                        tradeWithdraw.setStatus(2);
-                        tradeWithdrawService.doUpdate(tradeWithdraw);
+                        TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOriginalOrderNo(order.getOrderNo());
+                        if (null != tradeWithdraw) {//为空表示未点击支付，不用做处理
+                            tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
+                            tradeWithdraw.setStatus(2);
+                            tradeWithdrawService.doUpdate(tradeWithdraw);
+                        }
                     } else if ("2".equals(status)) {
                         BigDecimal amountB = new BigDecimal(obj1.getString("orderamount"));
                         BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
@@ -183,6 +185,7 @@ public class TicketOrderService extends BaseService {
             vo.setOrderNo(order.getOrderNo());
             vo.setPayOrderNo(order.getPayOrderNo());
             vo.setStatus(order.getStatus());
+            vo.setStatusName(TicketConstants.OrderStateEnum.getTypeName(order.getStatus()));
             vo.setToStationCode(order.getToStationCode());
             vo.setToStationName(order.getToStationName());
             vo.setTrainCode(order.getTrainCode());
