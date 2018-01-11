@@ -67,6 +67,9 @@ public class BankCardController extends BaseController {
 	@RequestMapping(value = "/validateBank")
 	@ApiOperation(value = "银行卡信息页-校验银行卡")
 	public ResultDTO<ValidateBankVO> validateBank(@RequestBody ValidateBankJO jo) {
+		if(jo.getUserId()== null){
+			return ResultDTO.fail(E789ApiConstant.E_PARAMETER_NOT_NULL);
+		}
 		ValidateBankVO vo = new ValidateBankVO();
 		// 根据userid 获取身份证号
 		String idcard = appUserService.getIdAuth(jo.getUserId());
@@ -83,8 +86,8 @@ public class BankCardController extends BaseController {
 		params.put("bankcard", jo.getCardNum());// 卡号
 		params.put("mobile", jo.getMobile());// 预留手机号
 		// 判断该用户是否已保存过该银行卡
-		List<String> list = appUserBankService.getByBankNO(jo.getCardNum());
-		if (list.size() > 0) {
+		List<AppUserBankDO> list = appUserBankService.getByBankNO(jo.getUserId(),jo.getCardNum());
+		if (list.size() > 0 &&  StringUtils.equals(list.get(0).getStatus(), "0")) {
 			return ResultDTO.fail(E789ApiConstant.E_BANK_IS_EXIST);
 
 		}
@@ -153,15 +156,15 @@ public class BankCardController extends BaseController {
 			return ResultDTO.fail(result.getMessage());
 		}
 		// 判断该用户是否已保存过该银行卡
-		List<String> list = appUserBankService.getByBankNO(bankCardNum);
-		if (list.size() > 0) {
+		List<AppUserBankDO> list = appUserBankService.getByBankNO(Integer.parseInt(userId),bankCardNum);
+		if (list.size() > 0 && StringUtils.equals("0", list.get(0).getStatus())) {//已绑定该银行卡
 			return ResultDTO.fail(E789ApiConstant.E_BANK_IS_EXIST);
 
 		}
-
-		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num);
+		Integer id = list.get(0).getId();
+		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num,list.get(0).getStatus(),id);
 		if (row == 1) {
-			return ResultDTO.success(E789ApiConstant.E_BOUND_SUCCESS);
+			return ResultDTO.success(null,E789ApiConstant.E_BOUND_SUCCESS);
 		} else {
 			return ResultDTO.fail();
 		}
