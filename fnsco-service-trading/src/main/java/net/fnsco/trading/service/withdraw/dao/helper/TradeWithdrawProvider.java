@@ -300,6 +300,12 @@ public class TradeWithdrawProvider {
                 if (StringUtils.isNotBlank(tradeWithdraw.getChannelType())) {
                     WHERE("channel_type=#{tradeWithdraw.channelType}");
                 }
+                if(tradeWithdraw.getStartCreateTime()!= null) {
+                	WHERE("create_time >= #{tradeWithdraw.startCreateTime}");
+                }
+                if(tradeWithdraw.getEndCreateTime()!= null) {
+                	WHERE("create_time <= #{tradeWithdraw.endCreateTime}");
+                }
                 if(tradeWithdraw.isAppShowList()) {
                 	WHERE("status in (2,3)");
                 }
@@ -397,6 +403,12 @@ public class TradeWithdrawProvider {
                 }
                 if (StringUtils.isNotBlank(tradeWithdraw.getChannelType())) {
                     WHERE("channel_type=#{tradeWithdraw.channelType}");
+                }
+                if(tradeWithdraw.getStartCreateTime()!= null) {
+                	WHERE("create_time >= #{tradeWithdraw.startCreateTime}");
+                }
+                if(tradeWithdraw.getEndCreateTime()!= null) {
+                	WHERE("create_time <= #{tradeWithdraw.endCreateTime}");
                 }
                 if(tradeWithdraw.isAppShowList()) {
                 	WHERE("status in (2,3)");

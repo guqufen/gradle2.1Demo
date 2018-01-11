@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,12 @@ public class TradeWithdrawService extends BaseService {
     // 分页
     public ResultPageDTO<TradeWithdrawDO> page(TradeWithdrawDO tradeWithdraw, Integer pageNum, Integer pageSize) {
         logger.info("开始分页查询TradeWithdrawService.page, tradeWithdraw=" + tradeWithdraw.toString());
+        if (!StringUtils.isEmpty(tradeWithdraw.getStartTime())) {
+        	tradeWithdraw.setStartCreateTime(DateUtils.StrToDate(DateUtils.getDateStartTime(tradeWithdraw.getStartTime())));
+        }
+        if (!StringUtils.isEmpty(tradeWithdraw.getEndTime())) {
+        	tradeWithdraw.setEndCreateTime(DateUtils.StrToDate(DateUtils.getDateEndTime(tradeWithdraw.getEndTime())));
+        }
         List<TradeWithdrawDO> pageList = this.tradeWithdrawDAO.pageList(tradeWithdraw, pageNum, pageSize);
         Integer count = this.tradeWithdrawDAO.pageListCount(tradeWithdraw);
         ResultPageDTO<TradeWithdrawDO> pager = new ResultPageDTO<TradeWithdrawDO>(count, pageList);
