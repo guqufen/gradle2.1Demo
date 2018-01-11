@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.bigdata.service.dao.master.MerchantBankDao;
@@ -55,16 +57,40 @@ public class MerchantInfoE789Controller extends BaseController {
 		if(null != merchantEntity) {
 			resultVO.setBusinessLicenseNum(merchantEntity.getBusinessLicenseNum());
 			resultVO.setLegalPerson(merchantEntity.getLegalPerson());
-			resultVO.setLegalPersonMobile(merchantEntity.getLegalPersonMobile());
+			resultVO.setLegalPersonMobile(replaceString(3,4,merchantEntity.getLegalPersonMobile()));
 			resultVO.setMerName(merchantEntity.getMercName());
-			resultVO.setCardNum(merchantEntity.getCardNum());
+			resultVO.setCardNum(replaceString(4,4,merchantEntity.getCardNum()));
 			
 		}
 		MerchantBank merchantBank = merchantBankDao.selectByAppUserId(commonJO.getUserId());
 		if(null != merchantBank) {
-			resultVO.setOpenBank(merchantBank.getOpenBank());
-			resultVO.setAccountNo(merchantBank.getAccountNo());
+			resultVO.setOpenBank(merchantBank.getSubBankName());
+			String accountNo = merchantBank.getAccountNo();
+			resultVO.setAccountNo(replaceString(0,4,accountNo));
 		}
         return success(resultVO);
     }
+	
+	/**
+	 * replaceString:(字符串处理)
+	 *
+	 * @param  @param start
+	 * @param  @param end
+	 * @param  @param sourceStr
+	 * @param  @return    设定文件
+	 * @return String    DOM对象
+	 * @author tangliang
+	 * @date   2018年1月11日 下午2:56:15
+	 */
+	private String replaceString(int start,int end,String sourceStr) {
+		if(Strings.isNullOrEmpty(sourceStr)) {
+			return null;
+		}
+		
+		String indexStr = sourceStr.substring(0, start);
+		String endStr = sourceStr.substring(sourceStr.length()-end, sourceStr.length());
+		
+		return indexStr + "****" + endStr;
+	}
+	
 }
