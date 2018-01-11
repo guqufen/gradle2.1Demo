@@ -36,4 +36,6 @@ public interface SysUserDao {
      * @return
      */
     SysUser getUserByName(@Param("name") String name);
+
+	String getNameById(@Param("id") Integer id);
 }

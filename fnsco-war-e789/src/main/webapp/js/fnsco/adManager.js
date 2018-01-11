@@ -50,12 +50,16 @@ $('#table').bootstrapTable({
 		title : '更新时间',
 		formatter : formatTime
 	}, {
-		field : 'createUserId',
+		field : 'createUserName',
 		title : '创建人'
 	}, {
 		field : 'type',
 		title : '类别',
 		formatter : formatType
+	}, {
+		field : 'deviceType',
+		title : '所属设备',
+		formatter : formatDeviceType
 	} ]
 });
 
@@ -83,6 +87,18 @@ function operateFormatter(value, row, index) {
 					+ ')" title="删除">',
 			'<i class="glyphicon glyphicon glyphicon-trash"></i>', '</a>' ]
 			.join('');
+}
+//设备类型
+function formatDeviceType(value, row, index) {
+	if (!value) {
+		return '-';
+	} else if (value == '1') {
+		return 'IOS';
+	} else if (value == '2') {
+		return '安卓';
+	} else {
+		return '公用';
+	}
 }
 // 广告类型
 function formatCategoryType(value, row, index) {
@@ -195,7 +211,6 @@ function editData(id) {
 			'id' : id
 		},
 		success : function(data) {
-//			console.log(data.data.img_path+"000");
 			unloginHandler(data);
 			if (data.success) {
 				var ad = data.data;
@@ -209,6 +224,8 @@ function editData(id) {
 						"selected", true);
 				$("#summary").val(ad.summary);
 				$("#type").find("option[value=" + ad.type + "]").attr(
+						"selected", true);
+				$("#deviceType").find("option[value=" + ad.deviceType + "]").attr(
 						"selected", true);
 				$(".sunmitBtn").show();
 			} else {
@@ -242,6 +259,8 @@ function querySingle(id) {
 						"selected", true);
 				$("#summary").val(ad.summary);
 				$("#type").find("option[value=" + ad.type + "]").attr(
+						"selected", true);
+				$("#deviceType").find("option[value=" + ad.deviceType + "]").attr(
 						"selected", true);
 				$(".sunmitBtn").hide();
 			} else {

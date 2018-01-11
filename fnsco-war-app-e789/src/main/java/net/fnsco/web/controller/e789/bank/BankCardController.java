@@ -82,6 +82,12 @@ public class BankCardController extends BaseController {
 		params.put("idcard", idcard);// 身份证
 		params.put("bankcard", jo.getCardNum());// 卡号
 		params.put("mobile", jo.getMobile());// 预留手机号
+		// 判断该用户是否已保存过该银行卡
+		List<String> list = appUserBankService.getByBankNO(jo.getCardNum());
+		if (list.size() > 0) {
+			return ResultDTO.fail(E789ApiConstant.E_BANK_IS_EXIST);
+
+		}
 		JSONObject jaJsonObject = new JSONObject();
 		try { 
 			String result = JuheDemo.net(strUrl, params, method);
@@ -91,26 +97,25 @@ public class BankCardController extends BaseController {
 				JSONObject jaJsonObject2 = jaJsonObject.getJSONObject("result");
 				if (jaJsonObject2 != null) {
 					vo.setError_code(error_code);
-					vo.setReason(jaJsonObject.getString("reason"));
-					vo.setMessage(jaJsonObject2.getString("message"));
+					vo.setReason(jaJsonObject2.getString("message"));
 					vo.setRes(jaJsonObject2.getString("res"));
 					if ("1".equals(jaJsonObject2.getString("res"))) {
 						vo.setReason("认证成功！");
-						return ResultDTO.success(vo);
+						return ResultDTO.success(vo,"认证成功！");
 
 					} else {
-						return ResultDTO.fail(vo);
+						return ResultDTO.fail(vo,jaJsonObject2.getString("message"));
 					}
 
 				} else {
 					vo.setError_code(error_code);
 					vo.setReason(jaJsonObject.getString("reason"));
-					return ResultDTO.fail(vo);
+					return ResultDTO.fail(vo,jaJsonObject2.getString("message"));
 				}
 			} else {//未处理成功
 				vo.setError_code(error_code);
 				vo.setReason(jaJsonObject.getString("reason"));
-				return ResultDTO.fail(vo);
+				return ResultDTO.fail(vo,jaJsonObject.getString("reason"));
 			}
 
 		} catch (Exception e) {
@@ -156,7 +161,7 @@ public class BankCardController extends BaseController {
 
 		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num);
 		if (row == 1) {
-			return ResultDTO.success();
+			return ResultDTO.success(E789ApiConstant.E_BOUND_SUCCESS);
 		} else {
 			return ResultDTO.fail();
 		}
@@ -178,7 +183,7 @@ public class BankCardController extends BaseController {
 		}
 		Integer row = appUserBankService.unBindBankCard(Integer.parseInt(bankId));
 		if (row == 1) {
-			return ResultDTO.success("解绑成功");
+			return ResultDTO.success(null,E789ApiConstant.E_UNBOUND_SUCCESS);
 
 		} else {
 			return ResultDTO.fail("解绑失败");
@@ -217,7 +222,7 @@ public class BankCardController extends BaseController {
 				int length = appUserBankDO.getAccountNo().length();
 				String transCardNo = appUserBankDO.getAccountNo();
 				if (length > 10) {
-					transCardNo = "****  ****  ****" + transCardNo.substring(length - 4);
+					transCardNo = "****  ****  ****  " + transCardNo.substring(length - 4);
 				}
 				vo.setCardNum(transCardNo);// 卡号
 				vo.setBankName(appUserBankDO.getBankName());// 银行卡名称

@@ -35,5 +35,7 @@ public interface SysUserService {
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	SysUser getUserByName(String username); 
+	SysUser getUserByName(String username);
+	
+	String getNameById(Integer id); 
 }

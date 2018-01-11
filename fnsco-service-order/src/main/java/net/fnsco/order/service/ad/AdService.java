@@ -17,6 +17,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.order.api.sysuser.SysUserService;
 import net.fnsco.order.service.ad.dao.AdDAO;
 import net.fnsco.order.service.ad.entity.AdDO;
 import net.fnsco.order.service.ad.entity.AdDTO;
@@ -27,11 +28,20 @@ public class AdService extends BaseService {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private AdDAO adDAO;
+	@Autowired
+	private SysUserService sysUserService;
 
 	// 分页
 	public ResultPageDTO<AdDO> page(AdDO ad, Integer pageNum, Integer pageSize) {
 		logger.info("开始分页查询AdService.page, ad=" + ad.toString());
 		List<AdDO> pageList = this.adDAO.pageList(ad, pageNum, pageSize);
+		for (AdDO adDO : pageList) {
+			if(adDO.getCreateUserId()== null){
+				continue;
+			}
+			String name = this.sysUserService.getNameById(adDO.getCreateUserId());
+			adDO.setCreateUserName(name);
+		}
 		Integer count = this.adDAO.pageListCount(ad);
 		ResultPageDTO<AdDO> pager = new ResultPageDTO<AdDO>(count, pageList);
 		return pager;
@@ -71,11 +81,17 @@ public class AdService extends BaseService {
 	/**
 	 * e789获取广告资讯
 	 */
-	public ResultDTO<Map<String, List>> queryAdList(Integer type) {
+	public ResultDTO<Map<String, List>> queryAdList(Integer type,Integer deviceType) {
 		List<AdDTO> adList = Lists.newArrayList();
 		List<AdDTO> newsList = Lists.newArrayList();
 		Map<String, List<AdDTO>> map = Maps.newHashMap();
-		List<AdDO> allList = this.adDAO.queryAdList(type);
+		Integer count = 1;
+		if(type==2){
+			count = 5;
+		}else if(type == 1){
+			count = 7;
+		}
+		List<AdDO> allList = this.adDAO.queryAdList(type,deviceType,count);
 		if (allList.isEmpty()) {
 			return ResultDTO.success(map);
 		}
@@ -100,8 +116,8 @@ public class AdService extends BaseService {
 				adDTO.setUrl(adDO.getUrl());
 				adList.add(adDTO);
 				map.put("ad", adList);
-				return ResultDTO.success(map);
 			}
+			return ResultDTO.success(map);
 		}
 		for (AdDO adDO : allList) {
 			if (adDO.getCategory() == null) {

@@ -130,7 +130,7 @@ public class TradeWithdrawController extends BaseController {
     	tradeWithdraw.setTradeSubType(20);
     	tradeWithdraw.setFee(new BigDecimal(0));
     	tradeWithdraw.setRespCode("1000");
-    	tradeWithdraw.setRespMsg("提现成功");
+    	tradeWithdraw.setRespMsg("提现记录产生");
     	tradeWithdraw.setSuccTime(DateUtils.dateFormat1ToStr(new Date()));
     	tradeWithdrawService.doAdd(tradeWithdraw);
     	

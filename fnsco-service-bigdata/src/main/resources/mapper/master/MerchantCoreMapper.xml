@@ -569,7 +569,7 @@
         AND CO.modify_time = #{condition.modifyTime,jdbcType=TIMESTAMP}
       </if>
         <!-- AND CO.status = 1 -->
-        AND CO.status in (1,5)
+        AND CO.status in (1,2,5)
       </where>
       ORDER BY CO.modify_time DESC
       limit #{startRow} , #{perPageSize} 

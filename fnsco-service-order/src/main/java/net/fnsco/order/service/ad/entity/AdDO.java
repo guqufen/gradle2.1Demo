@@ -51,12 +51,58 @@ public class AdDO {
      * 
      */
     private Integer createUserId;
-    private Integer type;
+    private String createUserName;
+    /**
+	 * createUserName
+	 *
+	 * @return  the createUserName
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getCreateUserName() {
+		return createUserName;
+	}
+
+	/**
+	 * createUserName
+	 *
+	 * @param   createUserName    the createUserName to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
+	}
+
+	private Integer type;
+    private Integer deviceType;
 
 
     
 
     /**
+	 * deviceType
+	 *
+	 * @return  the deviceType
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getDeviceType() {
+		return deviceType;
+	}
+
+	/**
+	 * deviceType
+	 *
+	 * @param   deviceType    the deviceType to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setDeviceType(Integer deviceType) {
+		this.deviceType = deviceType;
+	}
+
+	/**
 	 * type
 	 *
 	 * @return  the type
@@ -189,6 +235,8 @@ public class AdDO {
 				+ category + ", summary=" + summary + ", content=" + content + ", createTime=" + createTime
 				+ ", updateTime=" + updateTime + ", createUserId=" + createUserId + ", type=" + type + "]";
 	}
+	
+	
     
     
     
