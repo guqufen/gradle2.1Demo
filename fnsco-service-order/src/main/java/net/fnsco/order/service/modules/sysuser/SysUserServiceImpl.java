@@ -76,4 +76,10 @@ public class SysUserServiceImpl extends BaseService implements SysUserService {
         SysUser sysUser = adminUserDao.getUserByName(username);
         return sysUser;
     }
+
+	@Override
+	public String getNameById(Integer id) {
+		return adminUserDao.getNameById(id);
+		
+	}
 }

@@ -35,6 +35,7 @@ public class AdManagerController extends BaseController{
 	
 	
 	
+	
 	@RequestMapping(value = "/deleteById", method = RequestMethod.GET)
 	@ResponseBody
 	@RequiresPermissions(value = { "sys:app:delete" })

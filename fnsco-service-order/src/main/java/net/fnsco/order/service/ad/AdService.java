@@ -17,6 +17,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.order.api.sysuser.SysUserService;
 import net.fnsco.order.service.ad.dao.AdDAO;
 import net.fnsco.order.service.ad.entity.AdDO;
 import net.fnsco.order.service.ad.entity.AdDTO;
@@ -27,11 +28,20 @@ public class AdService extends BaseService {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private AdDAO adDAO;
+	@Autowired
+	private SysUserService sysUserService;
 
 	// 分页
 	public ResultPageDTO<AdDO> page(AdDO ad, Integer pageNum, Integer pageSize) {
 		logger.info("开始分页查询AdService.page, ad=" + ad.toString());
 		List<AdDO> pageList = this.adDAO.pageList(ad, pageNum, pageSize);
+		for (AdDO adDO : pageList) {
+			if(adDO.getCreateUserId()== null){
+				continue;
+			}
+			String name = this.sysUserService.getNameById(adDO.getCreateUserId());
+			adDO.setCreateUserName(name);
+		}
 		Integer count = this.adDAO.pageListCount(ad);
 		ResultPageDTO<AdDO> pager = new ResultPageDTO<AdDO>(count, pageList);
 		return pager;
