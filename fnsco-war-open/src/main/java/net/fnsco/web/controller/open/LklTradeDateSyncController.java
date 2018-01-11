@@ -109,7 +109,8 @@ public class LklTradeDateSyncController extends BaseController {
         tradeDataLkl.setTxnSubType(dataJO.getTrade_type());//交易类型
         tradeDataLkl.setOrderNo(dataJO.getTransaction_id());
         tradeDataLkl.setTimeStamp(dataJO.getTime_end());
-        tradeDataLkl.setPayType(ServiceConstant.PAY_TYPE_MAP.get(dataJO.getPay_type()));
+        tradeDataLkl.setPayType(ServiceConstant.LKL_PAY_TYPE_MAP.get(dataJO.getPay_type()));
+        tradeDataLkl.setPaySubType(ServiceConstant.LKL_PAY_SUB_TYPE_MAP.get(dataJO.getPay_type()));
         tradeDataLkl.setCertifyId(dataJO.getCard_no());
         tradeDataLkl.setBatchNo(dataJO.getBatchbillno());
         tradeDataLkl.setTraceNo(dataJO.getSystraceno());
@@ -129,6 +130,12 @@ public class LklTradeDateSyncController extends BaseController {
         if("0".equals(tradeData.getTxnType())) {
         	tradeData.setTxnType("2");
         }
+        if("00".equals(tradeData.getPayType())) {
+        	tradeData.setDcType("境内贷记卡");
+        }else if("01".equals(tradeData.getPayType())) {
+        	tradeData.setDcType("境内借记卡");
+        }
+        tradeData.setSysTraceNo(tradeDataLkl.getTraceNo());
         tradeDataService.saveTradeData(tradeData);
         
         JSONObject jsonObject = new JSONObject();

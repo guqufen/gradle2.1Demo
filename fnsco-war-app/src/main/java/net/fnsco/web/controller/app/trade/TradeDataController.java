@@ -105,6 +105,12 @@ public class TradeDataController extends BaseController {
         if (Strings.isNullOrEmpty(amount)) {
             return "";
         }
+        try {
+        	Long temp  = Long.valueOf(amount);
+        	amount = temp.toString();
+        }catch (Exception e) {
+			return "";
+		}
         if (amount.length() == 1) {
             amount = "00" + amount;
         } else if (amount.length() == 2) {
