@@ -1012,8 +1012,8 @@ function changeTerminalType(num,innerCode,weChat1,weChat2){
     $("#debitCardMaxFee"+num).val('');// 借记卡封顶值
     $("#alipayFee"+num).val('');// 支付宝费率
     $("#wechatFee"+num).val('');// 微信费率
-    $("#subAppId"+num).val('');// 公众号ID
-    $("#jsapiPath"+num).val('');// 域名
+//    $("#subAppId"+num).val('');// 公众号ID
+//    $("#jsapiPath"+num).val('');// 域名
     $("#qGroupId"+num).html('');// 一级类目
     $("#categroryId"+num).html('');// 二级类目
 	}else if(typeVal=='02'){// 微信
@@ -1029,8 +1029,10 @@ function changeTerminalType(num,innerCode,weChat1,weChat2){
 			getWechat1(num,innerCode,weChat1,weChat2);
 		}
 		$("#categroryId"+num).attr('disabled',false);
-    $("#subAppId"+num).val('');// 公众号ID
-    $("#jsapiPath"+num).val('');// 域名
+		$("#subAppId"+num).attr('disabled',false);
+		$("#jsapiPath"+num).attr('disabled',false);
+//    $("#subAppId"+num).val('');// 公众号ID
+//    $("#jsapiPath"+num).val('');// 域名
     $("#debitCardRate"+num).val('');// 借记卡费率
     $("#creditCardRate"+num).val('');// 贷记卡费率
     $("#debitCardMaxFee"+num).val('');// 借记卡封顶值
@@ -1675,11 +1677,12 @@ function editData(id){
             	$('#terminal-con1 input[name="creditCardRate'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].creditCardRate);
             	$('#terminal-con1 input[name="debitCardMaxFee'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].debitCardMaxFee);
             	$('#terminal-con1 select[name="settleCycle'+data.data.channel[i].terminaInfos[o].id+'"]').find("option[value='"+data.data.channel[i].terminaInfos[o].settleCycle+"']").attr("selected",true);
-            	$('#terminal-con1 input[name="subAppId'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].subAppId);
-            	$('#terminal-con1 input[name="jsapiPath'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].jsapiPath);
+            	
             	var id=data.data.channel[i].terminaInfos[o].id;
             	var innerCode=data.data.innerCode;
             	if(data.data.channel[i].terminaInfos[o].terminalType=='02'||data.data.channel[i].terminaInfos[o].terminalType=='04'){
+            		$('#terminal-con1 input[name="subAppId'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].subAppId);
+                	$('#terminal-con1 input[name="jsapiPath'+data.data.channel[i].terminaInfos[o].id+'"]').val(data.data.channel[i].terminaInfos[o].jsapiPath);
             		changeTerminalType(id,innerCode,data.data.channel[i].terminaInfos[o].qGroupId,data.data.channel[i].terminaInfos[o].categroryId);
             	}
             	if(data.data.channel[i].terminaInfos[o].terminalType=='03'){
