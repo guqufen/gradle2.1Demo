@@ -30,6 +30,7 @@ import net.fnsco.web.controller.e789.jo.FindPasswordJO;
 import net.fnsco.web.controller.e789.jo.GetValidateCodeJO;
 import net.fnsco.web.controller.e789.jo.LoginJO;
 import net.fnsco.web.controller.e789.jo.RegisterJO;
+import net.fnsco.web.controller.e789.jo.ValidateCodeJO;
 import net.fnsco.web.controller.e789.vo.LoginVO;
 
 /**
@@ -49,18 +50,23 @@ public class AppUserController extends BaseController {
     private AppAccountBalanceService appAccountBalanceService;
     @Autowired
     private AppUserBankService    appUserBankService;
-    
+    @RequestMapping(value = "/validateCode")
+    @ApiOperation(value = "注册页-用户注册校验验证码" ,notes="作者：何金庭")
+    @ResponseBody
+    public ResultDTO validateCode(@RequestBody ValidateCodeJO validateCodeJO) {
+    	return appUserService.validateCode(validateCodeJO.getDeviceId(), validateCodeJO.getCode(), 0+validateCodeJO.getMobile());
+    }
     @RequestMapping(value = "/register")
     @ApiOperation(value = "注册页-用户注册" ,notes="作者：何金庭")
     @ResponseBody
     public ResultDTO<LoginVO> register(@RequestBody RegisterJO registerJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
-    	appUserDTO.setCode(registerJO.getCode());
     	appUserDTO.setDeviceId(registerJO.getDeviceId());
     	appUserDTO.setDeviceToken(registerJO.getDeviceToken());
     	appUserDTO.setDeviceType(registerJO.getDeviceType());
     	appUserDTO.setMobile(registerJO.getMobile());
     	appUserDTO.setPassword(registerJO.getPassword());
+    	appUserDTO.setPayPassword(registerJO.getPayPassword());
     	String headImage = HeadImageEnum.getImage();
     	appUserDTO.setHeadImagePath(headImage);
         ResultDTO result = appUserService.e789InsertSelective(appUserDTO);

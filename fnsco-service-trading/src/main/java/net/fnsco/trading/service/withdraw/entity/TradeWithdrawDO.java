@@ -68,7 +68,14 @@ public class TradeWithdrawDO {
     private String       endTime;        // 订单交易结束日期 20160510235959
     private Date         startCreateTime;//开始创建时间
     private Date         endCreateTime;  //结束创建时间
-
+    /**
+     * 用户名
+     */
+    private String     userName;
+    /**
+     * 手机号
+     */
+    private String     mobile;
 
     /**
      * 更新时间
@@ -507,6 +514,34 @@ public class TradeWithdrawDO {
 	 */
 	public void setEndCreateTime(Date endCreateTime) {
 		this.endCreateTime = endCreateTime;
+	}
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
+	/**
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+	 * @return the mobile
+	 */
+	public String getMobile() {
+		return mobile;
+	}
+
+	/**
+	 * @param mobile the mobile to set
+	 */
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 	@Override

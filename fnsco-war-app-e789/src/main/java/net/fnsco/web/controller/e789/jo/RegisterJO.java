@@ -23,8 +23,8 @@ public class RegisterJO extends JO {
 	private Integer deviceType;// 设备类型1:安卓/2: IOS
 	@ApiModelProperty(value="友盟设备号")
 	private String deviceToken;// 友盟设备号
-	@ApiModelProperty(value="手机验证码")
-	private String code;//手机验证码
+	@ApiModelProperty(value="支付密码")
+	private String payPassword;//支付密码
 	public String getMobile() {
 		return mobile;
 	}
@@ -58,11 +58,17 @@ public class RegisterJO extends JO {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public String getCode() {
-		return code;
+	/**
+	 * @return the payPassword
+	 */
+	public String getPayPassword() {
+		return payPassword;
 	}
-	public void setCode(String code) {
-		this.code = code;
+	/**
+	 * @param payPassword the payPassword to set
+	 */
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
 	}
 
 }
