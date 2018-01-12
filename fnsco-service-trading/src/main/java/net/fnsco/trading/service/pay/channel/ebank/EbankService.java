@@ -47,9 +47,10 @@ public class EbankService extends BaseService {
 			// 判断：如果成功，则可以进行付款交易
 			if (e4028ResultDTO.isSuccess()) {
 
-//				for (E4028RespBodyDTO e4028RespBodyDTO : e4028ResultDTO.getE4028RespDTO().getList()) {
-//					System.out.println(e4028RespBodyDTO.toString());
-//				}
+				// for (E4028RespBodyDTO e4028RespBodyDTO :
+				// e4028ResultDTO.getE4028RespDTO().getList()) {
+				// System.out.println(e4028RespBodyDTO.toString());
+				// }
 			}
 			// 判断：如果协议不存在，则发送协议维护(4029)
 
@@ -129,6 +130,14 @@ public class EbankService extends BaseService {
 	 */
 	public ResultDTO E4029Trade(E4029Entity e4029Entity) {
 
+		if (E4029Maintain(e4029Entity)) {
+			return ResultDTO.success();
+		} else {
+			return ResultDTO.fail();
+		}
+	}
+
+	public boolean E4029Maintain(E4029Entity e4029Entity) {
 		// 付款人协议查询
 		try {
 			E4028ResultDTO e4028ResultDTO = E4028Query(e4029Entity.getOppAccNo());
@@ -195,60 +204,6 @@ public class EbankService extends BaseService {
 
 			e1.printStackTrace();
 		}
-
-		Integer inte = 0;
-		String bsnCode = "4029";// 交易码
-
-		E4029ReqDTO e4029ReqDTO = new E4029ReqDTO();
-		e4029ReqDTO.setSrcAccNo(SrcAccNo);// 企业账号 ---后续配置
-		e4029ReqDTO.setSrcAccName(SrcAccName);// 收款人户名 ---后续配置
-		e4029ReqDTO.setAGREE_NO(AGREE_NO);// 协议号 ---后续配置
-		e4029ReqDTO.setBusiType(BusiType);// 费项代码
-		e4029ReqDTO.setTranFlag(e4029Entity.getTranFlag());// "1");//
-															// 操作标志:1-新增；2-修改；3-删除
-
-		// 五要素：账号、户名、证件类型、证件号码、开户预留手机号
-		e4029ReqDTO.setOppAccNo(e4029Entity.getOppAccNo());// ("6222121212120011");//
-															// 付款人帐号
-		e4029ReqDTO.setOppAccName(e4029Entity.getOppAccName());// ("张三");//
-																// 付款人户名
-		e4029ReqDTO.setOppBank(e4029Entity.getOppBank());// ("10002");// 付款人银行
-		e4029ReqDTO.setMobile(e4029Entity.getMobile());// "15555555555");//
-														// 付款人手机号
-		e4029ReqDTO.setCardAcctFlag(e4029Entity.getCardAcctFlag());// "0");//
-																	// 卡折标志:0-借记卡
-		e4029ReqDTO.setIdType(e4029Entity.getIdType());// "1" 证件类型，1-身份证；2-军官证
-		e4029ReqDTO.setIdNo(e4029Entity.getIdNo());// "510703199310052817" 证件号码
-
-		String xmlBody = JaxbUtil.convertToXml(e4029ReqDTO);
-		String packets = EbankUtil.asemblyPackets(yqdm, bsnCode, xmlBody, inte);
-		System.out.println("sendData=[" + packets + "]");
-
-		String serverIp = "localhost";
-		Integer iPort = 7072;
-		try {
-			Packets packetsRP = EbankUtil.send2server(serverIp, iPort, packets, inte);
-
-			byte[] headRP = packetsRP.getHead();
-			int bodyRpLen = packetsRP.getLen();
-			byte[] bodyRP = packetsRP.getBody();
-
-			StringBuilder rcvMsg = new StringBuilder();
-			if (headRP != null) {
-				rcvMsg.append(new String(headRP, EbankUtil.CHARSET));
-			}
-			if (bodyRpLen > 0 && bodyRP != null) {
-				rcvMsg.append(new String(bodyRP, EbankUtil.CHARSET));
-			}
-			// 获取应答信息
-			byte[] res = new byte[100];
-			System.out.println("respCode=[" + rcvMsg.toString().substring(87, 93) + "]");
-			System.arraycopy(rcvMsg.toString().getBytes(), 93, res, 0, 100);
-			System.out.println("respMsg=[" + new String(res) + "]");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	/**
