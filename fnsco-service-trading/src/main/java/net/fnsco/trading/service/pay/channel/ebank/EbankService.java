@@ -18,14 +18,16 @@ import net.fnsco.trading.service.pay.channel.ebank.dto.E4029ReqDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4031DTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4032ReqBodyDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4032ReqDTO;
+import net.fnsco.trading.service.pay.channel.ebank.dto.E4033ResultDTO;
 import net.fnsco.trading.service.pay.channel.ebank.entity.E4029Entity;
+import net.fnsco.trading.service.pay.channel.ebank.entity.E4032Entity;
 
 @Service
 public class EbankService extends BaseService {
 
-	private String yqdm = "00901079800000098000";// 银企代码,外联客户号---后续配置
-	private String AGREE_NO = "Y000128002";// 协议号---后续配置
-	private String SrcAccNo = "11014748658003";// 企业账号---后续配置
+	private String yqdm = "00901079800000088000";// 银企代码,外联客户号---后续配置
+	private String AGREE_NO = "Y000136249";// 协议号---后续配置
+	private String SrcAccNo = "11014727214006";// 企业账号---后续配置
 	private String SrcAccName = "平安测试六零零零四一六零八四九一";// 企业收款户名 ---后续配置
 	private String BusiType = "M8PAK";// 费项代码
 	private String serverIp = "localhost";// ---后续配置
@@ -45,9 +47,9 @@ public class EbankService extends BaseService {
 			// 判断：如果成功，则可以进行付款交易
 			if (e4028ResultDTO.isSuccess()) {
 
-				for (E4028RespBodyDTO e4028RespBodyDTO : e4028ResultDTO.getE4028RespDTO().getList()) {
-					System.out.println(e4028RespBodyDTO.toString());
-				}
+//				for (E4028RespBodyDTO e4028RespBodyDTO : e4028ResultDTO.getE4028RespDTO().getList()) {
+//					System.out.println(e4028RespBodyDTO.toString());
+//				}
 			}
 			// 判断：如果协议不存在，则发送协议维护(4029)
 
@@ -307,10 +309,10 @@ public class EbankService extends BaseService {
 		return ResultDTO.fail();
 	}
 
-	public ResultDTO E4032Trade(String AccNo, BigDecimal amount) {
+	public ResultDTO<E4029Entity> E4032Trade(String AccNo, BigDecimal amount) {
 
-		// E4032ReqDTO e4032ReqDTO;
 		E4028ResultDTO e4028ResultDTO;
+		E4032Entity e4032Entity = new E4032Entity();
 		try {
 			e4028ResultDTO = E4028Query(AccNo);// 先查询付款人协议
 			if (e4028ResultDTO.isSuccess()) {
@@ -380,34 +382,18 @@ public class EbankService extends BaseService {
 							|| "AFE003".equals(respCode) || "AFE004".equals(respCode) || "E00006".equals(respCode)
 							|| "E00007".equals(respCode) || "E00008".equals(respCode) || "YQ9989".equals(respCode)
 							|| "YQ9976".equals(respCode)) {
-						// 需要调用E4033查询交易结果
-						E4032ReqDTO e4032ReqDTO2 = new E4032ReqDTO();
-						e4032ReqDTO2.setThirdVoucher(e4032ReqDTO.getThirdVoucher());// 批次凭证号
-						String bsnCode2 = "4033";// 交易码
-						String xmlBody2 = JaxbUtil.convertToXml(e4032ReqDTO2);
-						String packets2 = EbankUtil.asemblyPackets(yqdm, bsnCode2, xmlBody2, inte);
-						System.out.println("sendData=[" + packets2 + "]");
 
-						Packets packetsRP2 = EbankUtil.send2server(serverIp, iPort, packets, inte);
-
-						byte[] headRP2 = packetsRP2.getHead();
-						int bodyRpLen2 = packetsRP2.getLen();
-						byte[] bodyRP2 = packetsRP2.getBody();
-
-						StringBuilder rcvMsg2 = new StringBuilder();
-						if (headRP2 != null) {
-							rcvMsg2.append(new String(headRP2, EbankUtil.CHARSET));
-						}
-						if (bodyRpLen2 > 0 && bodyRP2 != null) {
-							rcvMsg2.append(new String(bodyRP2, EbankUtil.CHARSET));
-						}
-						// 获取应答信息
-						byte[] res2 = new byte[100];
-						String respCode2 = rcvMsg2.toString().substring(87, 93);
-						System.out.println("respCode=[" + rcvMsg2.toString().substring(87, 93) + "]");
-						System.arraycopy(rcvMsg2.toString().getBytes(), 93, res2, 0, 100);
-						System.out.println("respMsg=[" + new String(res2) + "]");
-						System.out.println("recvData=" + rcvMsg2.toString());
+						e4032Entity.setRespCode("1000");
+						e4032Entity.setRespMsg("交易进行中，请稍候查询结果");
+						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 批次凭证号
+						return ResultDTO.fail(e4032Entity);
+					} else if ("000000".equals(respCode)) {
+						e4032Entity.setRespCode("1001");
+						e4032Entity.setRespMsg("交易成功");
+						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 批次凭证号
+						return ResultDTO.success(e4032Entity);
+					} else {
+						return ResultDTO.fail("交易失败");
 					}
 				}
 			}
@@ -418,7 +404,14 @@ public class EbankService extends BaseService {
 		return ResultDTO.fail(E789ApiConstant.E_AGREEE_NOT_FOUND);
 	}
 
-	public void E4033Result(String orderNo) {
+	/**
+	 * 付款交易结果查询主体方法
+	 * 
+	 * @param orderNo：订单号
+	 * @return
+	 */
+	public E4033ResultDTO E4033ResultQuery(String orderNo) {
+
 		try {
 			Integer inte = 0;
 			// 需要调用E4033查询交易结果
@@ -429,31 +422,63 @@ public class EbankService extends BaseService {
 			String packets = EbankUtil.asemblyPackets(yqdm, bsnCode, xmlBody, inte);
 			System.out.println("sendData=[" + packets + "]");
 
-			Packets packetsRP2;
+			Packets packetsRP;
 
-			packetsRP2 = EbankUtil.send2server(serverIp, iPort, packets, inte);
+			packetsRP = EbankUtil.send2server(serverIp, iPort, packets, inte);
 
-			byte[] headRP2 = packetsRP2.getHead();
-			int bodyRpLen2 = packetsRP2.getLen();
-			byte[] bodyRP2 = packetsRP2.getBody();
+			byte[] headRP = packetsRP.getHead();
+			int bodyRpLen = packetsRP.getLen();
+			byte[] bodyRP = packetsRP.getBody();
+			String recvBody = null;
 
-			StringBuilder rcvMsg2 = new StringBuilder();
-			if (headRP2 != null) {
-				rcvMsg2.append(new String(headRP2, EbankUtil.CHARSET));
+			StringBuilder rcvMsg = new StringBuilder();
+			if (headRP != null) {
+				rcvMsg.append(new String(headRP, EbankUtil.CHARSET));
 			}
-			if (bodyRpLen2 > 0 && bodyRP2 != null) {
-				rcvMsg2.append(new String(bodyRP2, EbankUtil.CHARSET));
+			if (bodyRpLen > 0 && bodyRP != null) {
+				recvBody = new String(bodyRP, EbankUtil.CHARSET);
+				rcvMsg.append(new String(bodyRP, EbankUtil.CHARSET));
 			}
 			// 获取应答信息
-			byte[] res2 = new byte[100];
-			String respCode2 = rcvMsg2.toString().substring(87, 93);
-			System.out.println("respCode=[" + rcvMsg2.toString().substring(87, 93) + "]");
-			System.arraycopy(rcvMsg2.toString().getBytes(), 93, res2, 0, 100);
-			System.out.println("respMsg=[" + new String(res2) + "]");
-			System.out.println("recvData=" + rcvMsg2.toString());
+			byte[] res = new byte[100];
+			String respCode = rcvMsg.toString().substring(87, 93);
+			System.out.println("respCode=[" + rcvMsg.toString().substring(87, 93) + "]");
+			System.arraycopy(rcvMsg.toString().getBytes(), 93, res, 0, 100);
+			System.out.println("respMsg=[" + new String(res) + "]");
+			System.out.println("recvData=" + rcvMsg.toString());
+
+			E4033ResultDTO e4033ResultDTO = new E4033ResultDTO();
+			e4033ResultDTO.setRespCode(respCode);
+			e4033ResultDTO.setRespMsg(new String(res).trim());
+
+			if ("000000".equals(rcvMsg.toString().substring(87, 93))) {
+
+				e4033ResultDTO.setSuccess(true);
+				e4033ResultDTO = JaxbUtil.converyToJavaBean(recvBody, E4033ResultDTO.class);
+				System.out.println(e4033ResultDTO.toString());
+			}
+
+			return e4033ResultDTO;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		return null;
+	}
+
+	/**
+	 * 付款交易结果查询
+	 * 
+	 * @param orderNo：订单号
+	 * @return
+	 */
+	public ResultDTO E4033Trade(String orderNo) {
+
+		E4033ResultDTO e4033ResultDTO = E4033ResultQuery(orderNo);
+
+		if (e4033ResultDTO.isSuccess()) {
+			return ResultDTO.success();
+		}
+		return ResultDTO.fail();
 	}
 }

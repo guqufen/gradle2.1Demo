@@ -12,6 +12,7 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.channel.ebank.EbankService;
 import net.fnsco.trading.service.pay.channel.ebank.entity.E4029Entity;
+import net.fnsco.trading.service.pay.channel.ebank.entity.E4032Entity;
 import net.fnsco.web.controller.e789.pay.ebank.jo.E4028JO;
 import net.fnsco.web.controller.e789.pay.ebank.jo.E4031JO;
 import net.fnsco.web.controller.e789.pay.ebank.jo.E4032JO;
@@ -68,5 +69,17 @@ public class EbankController extends BaseController {
 	@RequestMapping("/ePay")
 	public ResultDTO E4032Trade(@RequestBody E4032JO e4032jo) {
 		return ebankService.E4032Trade(e4032jo.getAcctNo(), e4032jo.getAmount());
+	}
+
+	/**
+	 * 付款交易结果查询
+	 * 
+	 * @param orderNo:订单号
+	 * @return
+	 */
+	@RequestMapping("/ePayResult")
+	public ResultDTO<E4032Entity> E4033Trade(String orderNo) {
+		return ebankService.E4033Trade(orderNo);
+
 	}
 }
