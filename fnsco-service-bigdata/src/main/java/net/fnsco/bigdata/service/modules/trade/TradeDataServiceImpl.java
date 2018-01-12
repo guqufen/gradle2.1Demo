@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
@@ -458,8 +460,8 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
         List<TradeData> datas = tradeListDAO.queryByAllCondition(tradeData);
-        List<String> sqlPos = new ArrayList<String>();
-        List<String> sqlMer = new ArrayList<String>();
+        Set<String> sqlPos = new HashSet<String>();
+        Set<String> sqlMer = new HashSet<String>();
         for (TradeData tradeData2 : datas) {
         	String termId = tradeData2.getTermId();
         	if(!Strings.isNullOrEmpty(termId)) {
@@ -471,22 +473,26 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         	}
         }
         String[] toBeStoredPos = sqlPos.toArray(new String[sqlPos.size()]);    
-        List<MerchantPos> merchantPosList =  merchantPosDao.selectByTermId(toBeStoredPos);
         Map<String,MerchantPos> posMap = Maps.newHashMap();
-        for(MerchantPos pos : merchantPosList) {
-        	if(!Strings.isNullOrEmpty(pos.getChannelTerminalCode())) {
-        		posMap.put(pos.getChannelTerminalCode(), pos);
+        if(toBeStoredPos.length!=0) {
+        	List<MerchantPos> merchantPosList =  merchantPosDao.selectByTermId(toBeStoredPos);
+        	for(MerchantPos pos : merchantPosList) {
+        		if(!Strings.isNullOrEmpty(pos.getChannelTerminalCode())) {
+        			posMap.put(pos.getChannelTerminalCode(), pos);
+        		}
+        		if(!Strings.isNullOrEmpty(pos.getQrChannelTerminalCode())) {
+        			posMap.put(pos.getQrChannelTerminalCode(), pos);
+        		} 
         	}
-        	if(!Strings.isNullOrEmpty(pos.getQrChannelTerminalCode())) {
-        		posMap.put(pos.getQrChannelTerminalCode(), pos);
-        	} 
         }
         String[] toBeStoredMer = sqlMer.toArray(new String[sqlMer.size()]); 
-        List<MerchantCore> coreList = merchantCoreDao.selectListByInnerCode(toBeStoredMer);
         Map<String,String> mercMap = Maps.newHashMap();
-        for(MerchantCore core : coreList) {
-        	String merName = core.getMerName();
-        	mercMap.put(core.getInnerCode(), merName);
+        if(toBeStoredMer.length!=0) {
+        	List<MerchantCore> coreList = merchantCoreDao.selectListByInnerCode(toBeStoredMer);
+        	for(MerchantCore core : coreList) {
+        		String merName = core.getMerName();
+        		mercMap.put(core.getInnerCode(), merName);
+        	}
         }
         for(TradeData tradeData2 : datas) {
         	String term = tradeData2.getTermId();
@@ -496,7 +502,7 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         	}
         	String InnerCode = tradeData2.getInnerCode();
         	String merName = mercMap.get(InnerCode);
-        	if("".equals(merName)) {
+        	if(!Strings.isNullOrEmpty(merName)) {
         		tradeData2.setMerName(merName);
         	}
         }
