@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +46,7 @@ public class TradeWithdrawController extends BaseController{
 	 */
 	@RequestMapping(value = "/query", method = RequestMethod.GET)
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:withdraw:list" })
 	public ResultPageDTO<TradeWithdrawDTO> query(TradeWithdrawDO tradeWithdraw, Integer currentPageNum,Integer pageSize) {
 		tradeWithdraw.setTradeSubType(20);
 		ResultPageDTO<TradeWithdrawDO> page = tradeWithdrawService.page(tradeWithdraw, currentPageNum, pageSize);
@@ -81,6 +83,7 @@ public class TradeWithdrawController extends BaseController{
 	 */
 	@PostMapping(value = "/transferAccounts")
 	@ResponseBody
+	@RequiresPermissions(value = { "sys:withdraw:update" })
 	public ResultDTO<String> transferAccounts(Integer id){
 		TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
 		tradeWithdraw.setId(id);
