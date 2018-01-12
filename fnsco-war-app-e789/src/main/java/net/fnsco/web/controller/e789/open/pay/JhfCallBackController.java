@@ -5,6 +5,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -45,6 +46,7 @@ public class JhfCallBackController extends BaseController {
     private Environment               env;
     @Autowired
     private TradeWithdrawService      tradeWithdrawService;
+
     /**
     * 支付完成时的通知，显示我们自己的页面
     *
@@ -84,7 +86,7 @@ public class JhfCallBackController extends BaseController {
      */
     @RequestMapping(value = "/pay/payCompleteCallback", method = RequestMethod.GET)
     @ApiOperation(value = "支付页面完成时的回调")
-    public String payCompleteCallback(String orderNo) {
+    public String payCompleteCallback(@RequestParam String orderNo) {
         String url = env.getProperty("app.base.url");
         logger.error("聚惠芬支付页面完成时的回调入参：" + orderNo);
         TradeOrderDO order = tradeOrderService.queryOneByOrderId(orderNo);
@@ -137,7 +139,7 @@ public class JhfCallBackController extends BaseController {
      */
     @RequestMapping(value = "/rechange/payCompleteCallback", method = RequestMethod.GET)
     @ApiOperation(value = "充值页面完成时的回调")
-    public String rechangePayCompleteCallback(String orderNo) {
+    public String rechangePayCompleteCallback(@RequestParam String orderNo) {
         String url = env.getProperty("app.base.url");
         logger.error("聚惠芬充值页面完成时的回调入参：" + orderNo);
         TradeWithdrawDO order = tradeWithdrawService.getByOrderNo(orderNo);
