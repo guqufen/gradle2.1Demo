@@ -14,6 +14,7 @@ import net.fnsco.trading.service.pay.channel.ebank.EbankService;
 import net.fnsco.trading.service.pay.channel.ebank.entity.E4029Entity;
 import net.fnsco.web.controller.e789.pay.ebank.jo.E4028JO;
 import net.fnsco.web.controller.e789.pay.ebank.jo.E4031JO;
+import net.fnsco.web.controller.e789.pay.ebank.jo.E4032JO;
 
 @RestController
 @RequestMapping(value = "/app2c/trade/ebank", method = RequestMethod.POST)
@@ -56,5 +57,16 @@ public class EbankController extends BaseController {
 	@RequestMapping("/acctCheck")
 	public ResultDTO E4031Trade(@RequestBody E4031JO e4031jo) {
 		return ebankService.E4031Trade(e4031jo.getOppAccNo(), e4031jo.getMobile());
+	}
+
+	/**
+	 * 付款
+	 * 
+	 * @param e4032jo
+	 * @return
+	 */
+	@RequestMapping("/ePay")
+	public ResultDTO E4032Trade(@RequestBody E4032JO e4032jo) {
+		return ebankService.E4032Trade(e4032jo.getAcctNo(), e4032jo.getAmount());
 	}
 }

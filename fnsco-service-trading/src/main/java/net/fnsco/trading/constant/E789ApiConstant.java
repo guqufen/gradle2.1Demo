@@ -36,6 +36,8 @@ public class E789ApiConstant extends CoreConstants {
 	public static String E_ID_CARD_B_ERROR      = "210021"; //身份证反面识别失败
 	public static String E_UNBOUND_SUCCESS      = "2100022"; //
 	public static String E_BOUND_SUCCESS      = "2100023";
+	
+	public static String E_AGREEE_NOT_FOUND  ="2100030";
 
 	static {
 		// 身份识别证错误信息
@@ -73,6 +75,7 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(E_UNBOUND_SUCCESS, "解绑成功");
 		ERROR_MESSGE_MAP.put(E_BOUND_SUCCESS, "绑定成功");
 		
+		ERROR_MESSGE_MAP.put(E_AGREEE_NOT_FOUND, "委托协议不存在");
 	}
 
 	public static enum ResponCodeEnum {
