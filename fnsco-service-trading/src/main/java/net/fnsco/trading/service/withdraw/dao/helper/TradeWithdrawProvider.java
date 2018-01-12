@@ -241,6 +241,21 @@ public class TradeWithdrawProvider {
             {
                 SELECT("*");
                 FROM(TABLE_NAME);
+                if (StringUtils.isNotBlank(tradeWithdraw.getUserName())) {
+                    WHERE("app_user_id in(SELECT id FROM u_app_user WHERE user_name = #{tradeWithdraw.userName})");
+                }
+                if (StringUtils.isNotBlank(tradeWithdraw.getMobile())) {
+                    WHERE("app_user_id = SELECT id FROM u_app_user WHERE user_name = #{tradeWithdraw.mobile}");
+                }
+                if(tradeWithdraw.getSubTypeIn()!=null) {
+                	if(tradeWithdraw.getSubTypeIn()==1) {
+                		WHERE("trade_sub_type in(22,23,24,25)");
+                	}else if(tradeWithdraw.getSubTypeIn()==2){
+                		WHERE("trade_sub_type in(20)");
+                	}else if(tradeWithdraw.getSubTypeIn()==3) {
+                		WHERE("trade_sub_type in(10)");
+                	}
+                }
                 if (tradeWithdraw.getId() != null) {
                     WHERE("id=#{tradeWithdraw.id}");
                 }
@@ -345,6 +360,21 @@ public class TradeWithdrawProvider {
             {
                 SELECT("count(1)");
                 FROM(TABLE_NAME);
+                if (StringUtils.isNotBlank(tradeWithdraw.getUserName())) {
+                    WHERE("app_user_id in(SELECT id FROM u_app_user WHERE user_name = #{tradeWithdraw.userName})");
+                }
+                if (StringUtils.isNotBlank(tradeWithdraw.getMobile())) {
+                    WHERE("app_user_id = SELECT id FROM u_app_user WHERE user_name = #{tradeWithdraw.mobile}");
+                }
+                if(tradeWithdraw.getSubTypeIn()!=null) {
+                	if(tradeWithdraw.getSubTypeIn()==1) {
+                		WHERE("trade_sub_type in(22,23,24,25)");
+                	}else if(tradeWithdraw.getSubTypeIn()==2){
+                		WHERE("trade_sub_type in(20)");
+                	}else if(tradeWithdraw.getSubTypeIn()==3) {
+                		WHERE("trade_sub_type in(10)");
+                	}
+                }
                 if (tradeWithdraw.getId() != null) {
                     WHERE("id=#{tradeWithdraw.id}");
                 }

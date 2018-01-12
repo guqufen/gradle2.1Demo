@@ -54,6 +54,10 @@ public class TradeWithdrawDO {
      * 交易子类型 10充值收入/11新人红包收入20提现/21预约提现//22话费充值23流量充值24火车票购买25提现手续费26收入撤销
      */
     private Integer    tradeSubType;
+    /**
+     * 交易子类型入参 0/全部1充值/2提现//消费
+     */
+    private Integer    subTypeIn;
 
     /**
      * 状态 0未执行1执行中2失败3成功
@@ -542,6 +546,20 @@ public class TradeWithdrawDO {
 	 */
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+
+	/**
+	 * @return the subTypeIn
+	 */
+	public Integer getSubTypeIn() {
+		return subTypeIn;
+	}
+
+	/**
+	 * @param subTypeIn the subTypeIn to set
+	 */
+	public void setSubTypeIn(Integer subTypeIn) {
+		this.subTypeIn = subTypeIn;
 	}
 
 	@Override

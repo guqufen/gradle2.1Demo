@@ -57,8 +57,10 @@ public class TradeWithdrawController extends BaseController{
         	amount = amount.divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP);
         	TradeWithdrawDTO tradeWithdrawDTO =new TradeWithdrawDTO();
         	tradeWithdrawDTO.setId(trade.getId());
-        	tradeWithdrawDTO.setUserName(appUserInfoDTO.getUserName());
-        	tradeWithdrawDTO.setMobile(appUserInfoDTO.getMoblie());
+        	if(appUserInfoDTO!=null) {
+        		tradeWithdrawDTO.setUserName(appUserInfoDTO.getUserName());
+        		tradeWithdrawDTO.setMobile(appUserInfoDTO.getMoblie());
+        	}
         	tradeWithdrawDTO.setOrderNo(trade.getOrderNo());
         	tradeWithdrawDTO.setAmount(amount);
         	tradeWithdrawDTO.setBankAccountNo(trade.getBankAccountNo());
@@ -74,7 +76,6 @@ public class TradeWithdrawController extends BaseController{
 	@RequestMapping(value = "/queryWithdraw", method = RequestMethod.GET)
 	@ResponseBody
 	public ResultPageDTO<TradeWithdrawDTO> queryWithdraw(TradeWithdrawDO tradeWithdraw, Integer currentPageNum,Integer pageSize) {
-		tradeWithdraw.setTradeSubType(20);
 		ResultPageDTO<TradeWithdrawDO> page = tradeWithdrawService.page(tradeWithdraw, currentPageNum, pageSize);
 		List<TradeWithdrawDO> pageList = page.getList();
 		List<TradeWithdrawDTO> tradeList = new ArrayList<TradeWithdrawDTO>();
@@ -85,8 +86,11 @@ public class TradeWithdrawController extends BaseController{
         	amount = amount.divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP);
         	TradeWithdrawDTO tradeWithdrawDTO =new TradeWithdrawDTO();
         	tradeWithdrawDTO.setId(trade.getId());
-        	tradeWithdrawDTO.setUserName(appUserInfoDTO.getUserName());
-        	tradeWithdrawDTO.setMobile(appUserInfoDTO.getMoblie());
+        	if(appUserInfoDTO!=null) {
+        		tradeWithdrawDTO.setUserName(appUserInfoDTO.getUserName());
+        		tradeWithdrawDTO.setMobile(appUserInfoDTO.getMoblie());
+        	}
+        	tradeWithdrawDTO.setTradeSubType(trade.getTradeSubType());
         	tradeWithdrawDTO.setOrderNo(trade.getOrderNo());
         	tradeWithdrawDTO.setAmount(amount);
         	tradeWithdrawDTO.setBankAccountNo(trade.getBankAccountNo());
