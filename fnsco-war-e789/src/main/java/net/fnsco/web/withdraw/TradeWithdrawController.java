@@ -2,14 +2,18 @@ package net.fnsco.web.withdraw;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import net.fnsco.core.base.BaseController;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.dto.AppUserInfoDTO;
@@ -70,6 +74,7 @@ public class TradeWithdrawController extends BaseController{
 	@RequestMapping(value = "/queryWithdraw", method = RequestMethod.GET)
 	@ResponseBody
 	public ResultPageDTO<TradeWithdrawDTO> queryWithdraw(TradeWithdrawDO tradeWithdraw, Integer currentPageNum,Integer pageSize) {
+		tradeWithdraw.setTradeSubType(20);
 		ResultPageDTO<TradeWithdrawDO> page = tradeWithdrawService.page(tradeWithdraw, currentPageNum, pageSize);
 		List<TradeWithdrawDO> pageList = page.getList();
 		List<TradeWithdrawDTO> tradeList = new ArrayList<TradeWithdrawDTO>();
@@ -91,5 +96,26 @@ public class TradeWithdrawController extends BaseController{
         }
 		ResultPageDTO<TradeWithdrawDTO> pager = new ResultPageDTO<TradeWithdrawDTO>(count, tradeList);
 		return pager;
+	}
+	/**
+	 * transferAccounts:(根据ID 修改状态)
+	 *
+	 * @param  @param id
+	 * @param  @return    设定文件
+	 * @return ResultDTO<String>    DOM对象
+	 * @author tangliang
+	 * @date   2018年1月12日 上午10:21:01
+	 */
+	@PostMapping(value = "/transferAccounts")
+	@ResponseBody
+	@RequiresPermissions(value = { "sys:withdraw:update" })
+	public ResultDTO<String> transferAccounts(Integer id){
+		TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
+		tradeWithdraw.setId(id);
+		tradeWithdraw.setStatus(3);
+		tradeWithdraw.setUpdateTime(new Date());
+		tradeWithdrawService.doUpdate(tradeWithdraw);
+		
+		return ResultDTO.success();
 	}
 }

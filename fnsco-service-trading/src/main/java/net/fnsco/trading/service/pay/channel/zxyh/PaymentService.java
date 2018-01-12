@@ -2,6 +2,7 @@ package net.fnsco.trading.service.pay.channel.zxyh;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,7 +92,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	 * @throws @since
 	 *             CodingExample Ver 1.1
 	 */
-	public void getDealStatus(Integer id, String paySubType, String secMerId, String orderNo, String orderCeateTime) {
+	public void getDealStatus(Integer id, String paySubType, String secMerId, String orderNo, Date orderCeateTime) {
 		String merId = env.getProperty("zxyh.merId");
 		String prefix = env.getProperty("zxyh.query.trade.url");
 		String url = "/MPay/backTransAction.do";
@@ -107,8 +108,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			tradeResultZXDTO.setTxnSubType("383000");
 			tradeResultZXDTO.setPayAccessType("02");
 			tradeResultZXDTO.setOrigOrderId(orderNo);
-			tradeResultZXDTO.setOrigOrderTime(orderCeateTime);
-			tradeResultZXDTO.setOrderTime(orderCeateTime);
+			tradeResultZXDTO.setOrigOrderTime(DateUtils.dateFormat1ToStr(orderCeateTime));
+			tradeResultZXDTO.setOrderTime(DateUtils.dateFormat1ToStr(orderCeateTime));
 			tradeResultZXDTO.setFetchOrderNo("Y");
 		}
 		// 支付宝
@@ -143,11 +144,13 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		} else if ("02".equals(respMap.get("txnState"))) {
 			// 订单已关闭
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_CLOSED.getCode());
-		} else {
-			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
-		}
+		} 
 		tradeOrderDO.setPayOrderNo((String) respMap.get("origSeqId")); // 对应的中信订单号
 		tradeOrderDO.setRespMsg(E789ApiConstant.ResponCodeEnum.getNameByCode(tradeOrderDO.getRespCode()));
+		String endTime = (String)respMap.get("endTime");
+		if(!Strings.isNullOrEmpty(endTime)){
+			tradeOrderDO.setCompleteTime(DateUtils.StrToDate(endTime));//交易完成时间
+		}
 		tradeOrderService.doUpdate(tradeOrderDO);
 	}
 
@@ -164,20 +167,22 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 				String respCode = (String) map.get("respCode");
 				String mchtChkStatus = (String) map.get("mchtChkStatus");
 				if ("0000".equals(respCode)) {
-					switch (mchtChkStatus) {
-					case "2":
-						mchtChkStatus = "5";
-						break;
-					default:
-						break;
+					if(StringUtils.equalsIgnoreCase("0", mchtChkStatus)){
+						continue;
 					}
+					if(StringUtils.equalsIgnoreCase("2", mchtChkStatus)){
+						mchtChkStatus = "5";//审核通过
+					}else if(StringUtils.equalsIgnoreCase("3", mchtChkStatus)){
+						mchtChkStatus = "3";//新增待审核
+					}
+					
+					logger.info("内部商户号="+mercQueryDTO.getInner_code()+"更新状态为"+mchtChkStatus);
 					merchantCoreService.updateStatusByInnerCode(mercQueryDTO.getInner_code(), mchtChkStatus);
 				}
 			}
 		}
 
 	}
-
 	/**
 	 * 查询独立商户是否入驻成功接口 queryAloneMchtInfo:(这里用一句话描述这个方法的作用)
 	 *
@@ -293,8 +298,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		}
 		// 根据userId获取内部商户号
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
-		if (Strings.isNullOrEmpty(innerCode)) 
-		{
+		if (Strings.isNullOrEmpty(innerCode)) {
 			logger.info(E789ApiConstant.E_ADD_FIRST);
 			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_INNERCODE);
 		}
@@ -385,7 +389,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		activeAlipayDTO.setEncoding("UTF-8");
 		activeAlipayDTO.setBackEndUrl(env.getProperty("zxyh.backurl.zfb")); // 接收支付网关异步通知回调地址
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
-		logger.info("app用户对应渠道内部商户号="+innerCode);
+		logger.info("app用户对应渠道内部商户号=" + innerCode);
 		// 获取实体内部商户号
 		MerchantEntity merchantEntity = this.appUserMerchantEntity.queryMerInfoByUserId(userId);
 		if (merchantEntity == null) {
@@ -444,7 +448,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setCreateTime(new Date());
 		tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
 		tradeOrderDO.setInnerCode(innerCode);
-		logger.info("交易数据订单号="+tradeOrderDO.getOrderNo());
+		logger.info("交易数据订单号=" + tradeOrderDO.getOrderNo());
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
@@ -487,14 +491,16 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		PassivePayDTO passDTO = new PassivePayDTO();
 		passDTO.init(merId);
 
-		String innerCode = appUserMerchant1Dao.selectInnerCodeByUserId(userId);
+		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
+		logger.info("app用户对应渠道内部商户号=" + innerCode);
 		if (null == innerCode) {
 			logger.info("该用户没有绑定内部商户号，请核查后重新交易");
-			return ResultDTO.fail("该用户没有绑定内部商户号，请核查后重新交易");
+			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_INNERCODE);
 		}
 
-		// 通过内部商户号查找绑定的中信商户号
-		MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, "05");
+		// 根据内部商户号获取独立商户号
+		MerchantChannel merchantChannel = channelDao.selectByInnerCodeType(innerCode, "05");
+		logger.info("渠道商户信息" + JSONObject.toJSONString(merchantChannel));
 		if (null == merchantChannel) {
 			logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=[" + innerCode + "");
 			return ResultDTO.fail("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易");
@@ -843,8 +849,6 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setOrderNo(aliDTO.getOrderId());// 商户订单号
 		tradeOrderDO.setPayOrderNo(aliDTO.getTransactionId());// 渠道(扫码)订单号
-		// BigDecimal txnAmount = new BigDecimal(aliDTO.getTxnAmt());
-		// tradeOrderDO.setTxnAmount(txnAmount);// 交易金额
 		tradeOrderDO.setRespCode(aliDTO.getRespCode());// 交易返回码
 		tradeOrderDO.setRespMsg(aliDTO.getRespMsg());
 		Date tradeEndTime = DateUtils.formateToDate(aliDTO.getEndTime());

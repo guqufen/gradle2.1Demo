@@ -46,6 +46,7 @@ import net.fnsco.web.controller.e789.third.ticket.vo.SeatTypeVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.SiteVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.TetterVO;
 import net.fnsco.web.controller.e789.third.ticket.vo.TrainVO;
+import net.fnsco.web.controller.e789.vo.TradeDataVO;
 
 /**
  * @desc 火车票功能
@@ -98,7 +99,9 @@ public class TicketController extends BaseController {
     @RequestMapping(value = "/querySiteList")
     @ApiOperation(value = "模糊查询站点列表")
     public ResultDTO<List<TetterVO>> querySiteList(@RequestBody SiteJO siteJO) {
+        long timer = System.currentTimeMillis();
         List<TicketSiteDO> result = ticketSiteService.querySiteList(siteJO.getSiteName());
+        logger.error("查询站点列表sql耗时" + (System.currentTimeMillis() - timer));
         PyCommonVO<SiteVO> resultVO = new PyCommonVO<SiteVO>();
         for (TicketSiteDO site : result) {
             SiteVO vo = new SiteVO();
@@ -366,11 +369,11 @@ public class TicketController extends BaseController {
      */
     @RequestMapping(value = "/queryPassengerList")
     @ApiOperation(value = "查询我的乘客列表")
-    public ResultPageDTO<TicketContactDO> queryPassenger(@RequestBody CommonJO commonJO) {
+    public ResultDTO queryPassenger(@RequestBody CommonJO commonJO) {
         TicketContactDO ticketContact = new TicketContactDO();
         ticketContact.setAppUserId(commonJO.getUserId());
         ResultPageDTO<TicketContactDO> result = ticketContactService.page(ticketContact, 1, 15);
-        return result;
+        return success(result);
     }
 
     /**

@@ -3,6 +3,7 @@ package net.fnsco.trading.service.bank;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,7 @@ public class AppUserBankService extends BaseService {
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	public Integer doAppAdd(Integer userId, String mobile, String bankCardNum, String bankCardholder, String id_card_num) {
+	public Integer doAppAdd(Integer userId, String mobile, String bankCardNum, String bankCardholder, String id_card_num,String status,Integer id) {
 		// 根据银行卡号获取银行名称和卡类型
 		String cardTotalLength = String.valueOf(bankCardNum.trim().length());
 		BankNameAndTypeDTO dto = appUserBankDAO.queryByCertifyId(bankCardNum, cardTotalLength);
@@ -111,10 +112,17 @@ public class AppUserBankService extends BaseService {
 		}else{
 			appUserBankDO.setBankName("银联");
 		}
-		appUserBankDO.setStatus("0");
-		appUserBankDO.setCreateTime(new Date());
 		appUserBankDO.setUpdateTime(new Date());
-		Integer row = appUserBankDAO.insert(appUserBankDO);
+		Integer row = 0;
+		if(id != null){
+			appUserBankDO.setStatus("0");
+			appUserBankDO.setId(id);
+			row = appUserBankDAO.update(appUserBankDO);
+		}else{
+			appUserBankDO.setCreateTime(new Date());
+			row = appUserBankDAO.insert(appUserBankDO);
+		}
+		
 		return row;
 	}
 	/**
@@ -137,8 +145,8 @@ public class AppUserBankService extends BaseService {
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	public List<String> getByBankNO(String bankCardNum) {
-		return this.appUserBankDAO.getByBankNO(bankCardNum);
+	public List<AppUserBankDO> getByBankNO(Integer userId ,String bankCardNum) {
+		return this.appUserBankDAO.getByBankNO(userId,bankCardNum);
 		
 	}
 }

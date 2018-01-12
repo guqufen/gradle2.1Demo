@@ -80,8 +80,8 @@ public interface AppUserBankDAO {
 	public BankNameAndTypeDTO queryByCertifyId(@Param("bankCardNum") String bankCardNum,
 			@Param("cardTotalLength") String cardTotalLength);
 
-	@Results({ @Result(column = "account_no", property = "accountNo")})
-	@Select(" SELECT account_no FROM u_app_user_bank WHERE account_no=#{bankCardNum} ")
-	public List<String> getByBankNO(String bankCardNum);
+	@Results({ @Result(column = "account_no", property = "accountNo"), @Result(column = "status", property = "status"),@Result(column = "id", property = "id")})
+	@Select(" SELECT account_no,status,id FROM u_app_user_bank WHERE account_no=#{bankCardNum} and app_user_id=#{userId} limit 1")
+	public List<AppUserBankDO> getByBankNO(@Param("userId")Integer userId ,@Param("bankCardNum") String bankCardNum);
 
 }
