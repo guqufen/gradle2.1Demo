@@ -65,4 +65,31 @@ public class TradeWithdrawController extends BaseController{
 		ResultPageDTO<TradeWithdrawDTO> pager = new ResultPageDTO<TradeWithdrawDTO>(count, tradeList);
 		return pager;
 	}
+	
+	
+	@RequestMapping(value = "/queryWithdraw", method = RequestMethod.GET)
+	@ResponseBody
+	public ResultPageDTO<TradeWithdrawDTO> queryWithdraw(TradeWithdrawDO tradeWithdraw, Integer currentPageNum,Integer pageSize) {
+		ResultPageDTO<TradeWithdrawDO> page = tradeWithdrawService.page(tradeWithdraw, currentPageNum, pageSize);
+		List<TradeWithdrawDO> pageList = page.getList();
+		List<TradeWithdrawDTO> tradeList = new ArrayList<TradeWithdrawDTO>();
+		Integer count = page.getTotal();
+		for(TradeWithdrawDO trade : pageList) {
+        	AppUserInfoDTO appUserInfoDTO = appUserService.getMyselfInfo(trade.getAppUserId());
+        	BigDecimal amount = trade.getAmount();
+        	amount = amount.divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP);
+        	TradeWithdrawDTO tradeWithdrawDTO =new TradeWithdrawDTO();
+        	tradeWithdrawDTO.setId(trade.getId());
+        	tradeWithdrawDTO.setUserName(appUserInfoDTO.getUserName());
+        	tradeWithdrawDTO.setMobile(appUserInfoDTO.getMoblie());
+        	tradeWithdrawDTO.setOrderNo(trade.getOrderNo());
+        	tradeWithdrawDTO.setAmount(amount);
+        	tradeWithdrawDTO.setBankAccountNo(trade.getBankAccountNo());
+        	tradeWithdrawDTO.setCreateTime(trade.getCreateTime());
+        	tradeWithdrawDTO.setStatus(trade.getStatus());
+        	tradeList.add(tradeWithdrawDTO);
+        }
+		ResultPageDTO<TradeWithdrawDTO> pager = new ResultPageDTO<TradeWithdrawDTO>(count, tradeList);
+		return pager;
+	}
 }
