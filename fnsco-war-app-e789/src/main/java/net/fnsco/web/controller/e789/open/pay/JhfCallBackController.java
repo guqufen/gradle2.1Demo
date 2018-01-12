@@ -20,6 +20,8 @@ import net.fnsco.trading.service.order.TradeOrderResearchService;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.dto.OrderDTO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
+import net.fnsco.trading.service.withdraw.TradeWithdrawService;
+import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 
 /**
  * 
@@ -41,7 +43,8 @@ public class JhfCallBackController extends BaseController {
     private TradeOrderResearchService tradeOrderResearchService;
     @Autowired
     private Environment               env;
-
+    @Autowired
+    private TradeWithdrawService      tradeWithdrawService;
     /**
     * 支付完成时的通知，显示我们自己的页面
     *
@@ -82,7 +85,7 @@ public class JhfCallBackController extends BaseController {
     @RequestMapping(value = "/pay/payCompleteCallback", method = RequestMethod.GET)
     @ApiOperation(value = "支付页面完成时的回调")
     public String payCompleteCallback(String orderNo) {
-        String url = env.getProperty("web.base.url");
+        String url = env.getProperty("app.base.url");
         logger.error("聚惠芬支付页面完成时的回调入参：" + orderNo);
         TradeOrderDO order = tradeOrderService.queryOneByOrderId(orderNo);
         //分期数
@@ -135,16 +138,16 @@ public class JhfCallBackController extends BaseController {
     @RequestMapping(value = "/rechange/payCompleteCallback", method = RequestMethod.GET)
     @ApiOperation(value = "充值页面完成时的回调")
     public String rechangePayCompleteCallback(String orderNo) {
-        String url = env.getProperty("web.base.url");
+        String url = env.getProperty("app.base.url");
         logger.error("聚惠芬充值页面完成时的回调入参：" + orderNo);
-        TradeOrderDO order = tradeOrderService.queryOneByOrderId(orderNo);
+        TradeWithdrawDO order = tradeWithdrawService.getByOrderNo(orderNo);
         //分期数
         //支付总金额
         if (null == order) {
-            order = new TradeOrderDO();
+            order = new TradeWithdrawDO();
         }
         //status = ConstantEnum.RespCodeEnum.getNameByCode(order.getRespCode());
-        return "redirect:" + url + "/pay/jhfPayCallback.html?paymentAmount=" + order.getTxnAmount() + "&installmentNum=" + order.getInstallmentNum() + "&orderDate="
+        return "redirect:" + url + "/pay/jhfPayCallback.html?paymentAmount=" + order.getAmount() + "&installmentNum=" + order.getInstallmentNum() + "&orderDate="
                + DateUtils.dateFormat1ToStr(order.getCreateTime()) + "&status=" + order.getRespCode();
     }
 }
