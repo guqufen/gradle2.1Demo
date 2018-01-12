@@ -54,6 +54,10 @@ public class TradeWithdrawDO {
      * 交易子类型 10充值收入/11新人红包收入20提现/21预约提现//22话费充值23流量充值24火车票购买25提现手续费26收入撤销
      */
     private Integer    tradeSubType;
+    /**
+     * 交易子类型入参 0/全部1充值/2提现//消费
+     */
+    private Integer    subTypeIn;
 
     /**
      * 状态 0未执行1执行中2失败3成功
@@ -68,7 +72,14 @@ public class TradeWithdrawDO {
     private String       endTime;        // 订单交易结束日期 20160510235959
     private Date         startCreateTime;//开始创建时间
     private Date         endCreateTime;  //结束创建时间
-
+    /**
+     * 用户名
+     */
+    private String     userName;
+    /**
+     * 手机号
+     */
+    private String     mobile;
 
     /**
      * 更新时间
@@ -507,6 +518,48 @@ public class TradeWithdrawDO {
 	 */
 	public void setEndCreateTime(Date endCreateTime) {
 		this.endCreateTime = endCreateTime;
+	}
+
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
+	/**
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+	 * @return the mobile
+	 */
+	public String getMobile() {
+		return mobile;
+	}
+
+	/**
+	 * @param mobile the mobile to set
+	 */
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	/**
+	 * @return the subTypeIn
+	 */
+	public Integer getSubTypeIn() {
+		return subTypeIn;
+	}
+
+	/**
+	 * @param subTypeIn the subTypeIn to set
+	 */
+	public void setSubTypeIn(Integer subTypeIn) {
+		this.subTypeIn = subTypeIn;
 	}
 
 	@Override

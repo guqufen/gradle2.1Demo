@@ -144,12 +144,22 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		} else if ("02".equals(respMap.get("txnState"))) {
 			// 订单已关闭
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_CLOSED.getCode());
-		} 
+		} else if ("04".equals(respMap.get("txnState"))||"06".equals(respMap.get("txnState"))||"08".equals(respMap.get("txnState"))||"09".equals(respMap.get("txnState"))) {
+			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
+		}
+//		else if ("06".equals(respMap.get("txnState"))) {
+//			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_UNPAY.getCode());
+//		} else if ("08".equals(respMap.get("txnState"))) {
+//			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_RETURN_SUCCESS.getCode());
+//		} else if ("09".equals(respMap.get("txnState"))) {
+//			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
+//		}
+
 		tradeOrderDO.setPayOrderNo((String) respMap.get("origSeqId")); // 对应的中信订单号
 		tradeOrderDO.setRespMsg(E789ApiConstant.ResponCodeEnum.getNameByCode(tradeOrderDO.getRespCode()));
-		String endTime = (String)respMap.get("endTime");
-		if(!Strings.isNullOrEmpty(endTime)){
-			tradeOrderDO.setCompleteTime(DateUtils.StrToDate(endTime));//交易完成时间
+		String endTime = (String) respMap.get("endTime");
+		if (!Strings.isNullOrEmpty(endTime)) {
+			tradeOrderDO.setCompleteTime(DateUtils.StrToDate(endTime));// 交易完成时间
 		}
 		tradeOrderService.doUpdate(tradeOrderDO);
 	}
@@ -167,22 +177,23 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 				String respCode = (String) map.get("respCode");
 				String mchtChkStatus = (String) map.get("mchtChkStatus");
 				if ("0000".equals(respCode)) {
-					if(StringUtils.equalsIgnoreCase("0", mchtChkStatus)){
+					if (StringUtils.equalsIgnoreCase("0", mchtChkStatus)) {
 						continue;
 					}
-					if(StringUtils.equalsIgnoreCase("2", mchtChkStatus)){
-						mchtChkStatus = "5";//审核通过
-					}else if(StringUtils.equalsIgnoreCase("3", mchtChkStatus)){
-						mchtChkStatus = "3";//新增待审核
+					if (StringUtils.equalsIgnoreCase("2", mchtChkStatus)) {
+						mchtChkStatus = "5";// 审核通过
+					} else if (StringUtils.equalsIgnoreCase("3", mchtChkStatus)) {
+						mchtChkStatus = "3";// 新增待审核
 					}
-					
-					logger.info("内部商户号="+mercQueryDTO.getInner_code()+"更新状态为"+mchtChkStatus);
+
+					logger.info("内部商户号=" + mercQueryDTO.getInner_code() + "更新状态为" + mchtChkStatus);
 					merchantCoreService.updateStatusByInnerCode(mercQueryDTO.getInner_code(), mchtChkStatus);
 				}
 			}
 		}
 
 	}
+
 	/**
 	 * 查询独立商户是否入驻成功接口 queryAloneMchtInfo:(这里用一句话描述这个方法的作用)
 	 *

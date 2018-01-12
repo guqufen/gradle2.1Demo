@@ -161,7 +161,10 @@ public class BankCardController extends BaseController {
 			return ResultDTO.fail(E789ApiConstant.E_BANK_IS_EXIST);
 
 		}
-		Integer id = list.get(0).getId();
+		Integer id = 0;
+		if(list != null){
+			id = list.get(0).getId();
+		}
 		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num,list.get(0).getStatus(),id);
 		if (row == 1) {
 			return ResultDTO.success(null,E789ApiConstant.E_BOUND_SUCCESS);
