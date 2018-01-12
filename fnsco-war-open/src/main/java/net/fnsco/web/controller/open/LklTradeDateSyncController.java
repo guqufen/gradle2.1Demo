@@ -126,9 +126,9 @@ public class LklTradeDateSyncController extends BaseController {
         tradeDataLkl.setChannelType(BigdataConstant.ChannelTypeEnum.LKL.getCode());
         
         if("00".equals(tradeDataLkl.getPayType())) {
-        	tradeDataLkl.setDcType("境内贷记卡");
+        	tradeDataLkl.setDcType("00 境内贷记卡");
         }else if("01".equals(tradeDataLkl.getPayType())) {
-        	tradeDataLkl.setDcType("境内借记卡");
+        	tradeDataLkl.setDcType("01 境内借记卡");
         }
         TradeDataLklDO resu = tradeDataLklService.doAdd(tradeDataLkl);
         
