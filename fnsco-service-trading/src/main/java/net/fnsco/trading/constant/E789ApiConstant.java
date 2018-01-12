@@ -83,10 +83,10 @@ public class E789ApiConstant extends CoreConstants {
 		DEAL_SUCCESS("1001", "成功"), //00
 		DEAL_FAIL("1002", "失败"), //99
 		DEAL_SEALS_RETURN("1003","已退货"),//01
-		DEAL_UNPAY("1004", "订单未支付"),//06
+		DEAL_UNPAY("1000", "订单未支付"),//06
 		DEAL_CLOSED("1005", "交易已关闭"),//02
-		DEAL_ANVANCE_PAYMENT("1006", "预支付交易成功"),//04
-		DEAL_RETURN_SUCCESS("1007", "交易受理成功（退货交易时使用）");//08
+		DEAL_ANVANCE_PAYMENT("1000", "预支付交易成功"),//04
+		DEAL_RETURN_SUCCESS("1001", "交易受理成功（退货交易时使用）");//08
 
 		private String code;
 		private String name;
