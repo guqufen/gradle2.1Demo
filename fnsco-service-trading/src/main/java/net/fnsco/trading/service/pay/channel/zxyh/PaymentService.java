@@ -144,12 +144,22 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		} else if ("02".equals(respMap.get("txnState"))) {
 			// 订单已关闭
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_CLOSED.getCode());
-		} 
+		} else if ("04".equals(respMap.get("txnState"))||"06".equals(respMap.get("txnState"))||"08".equals(respMap.get("txnState"))||"09".equals(respMap.get("txnState"))) {
+			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
+		}
+//		else if ("06".equals(respMap.get("txnState"))) {
+//			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_UNPAY.getCode());
+//		} else if ("08".equals(respMap.get("txnState"))) {
+//			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_RETURN_SUCCESS.getCode());
+//		} else if ("09".equals(respMap.get("txnState"))) {
+//			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
+//		}
+
 		tradeOrderDO.setPayOrderNo((String) respMap.get("origSeqId")); // 对应的中信订单号
 		tradeOrderDO.setRespMsg(E789ApiConstant.ResponCodeEnum.getNameByCode(tradeOrderDO.getRespCode()));
-		String endTime = (String)respMap.get("endTime");
-		if(!Strings.isNullOrEmpty(endTime)){
-			tradeOrderDO.setCompleteTime(DateUtils.StrToDate(endTime));//交易完成时间
+		String endTime = (String) respMap.get("endTime");
+		if (!Strings.isNullOrEmpty(endTime)) {
+			tradeOrderDO.setCompleteTime(DateUtils.StrToDate(endTime));// 交易完成时间
 		}
 		tradeOrderService.doUpdate(tradeOrderDO);
 	}
@@ -167,22 +177,23 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 				String respCode = (String) map.get("respCode");
 				String mchtChkStatus = (String) map.get("mchtChkStatus");
 				if ("0000".equals(respCode)) {
-					if(StringUtils.equalsIgnoreCase("0", mchtChkStatus)){
+					if (StringUtils.equalsIgnoreCase("0", mchtChkStatus)) {
 						continue;
 					}
-					if(StringUtils.equalsIgnoreCase("2", mchtChkStatus)){
-						mchtChkStatus = "5";//审核通过
-					}else if(StringUtils.equalsIgnoreCase("3", mchtChkStatus)){
-						mchtChkStatus = "3";//新增待审核
+					if (StringUtils.equalsIgnoreCase("2", mchtChkStatus)) {
+						mchtChkStatus = "5";// 审核通过
+					} else if (StringUtils.equalsIgnoreCase("3", mchtChkStatus)) {
+						mchtChkStatus = "3";// 新增待审核
 					}
-					
-					logger.info("内部商户号="+mercQueryDTO.getInner_code()+"更新状态为"+mchtChkStatus);
+
+					logger.info("内部商户号=" + mercQueryDTO.getInner_code() + "更新状态为" + mchtChkStatus);
 					merchantCoreService.updateStatusByInnerCode(mercQueryDTO.getInner_code(), mchtChkStatus);
 				}
 			}
 		}
 
 	}
+
 	/**
 	 * 查询独立商户是否入驻成功接口 queryAloneMchtInfo:(这里用一句话描述这个方法的作用)
 	 *
@@ -298,8 +309,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		}
 		// 根据userId获取内部商户号
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
-		if (Strings.isNullOrEmpty(innerCode)) 
-		{
+		if (Strings.isNullOrEmpty(innerCode)) {
 			logger.info(E789ApiConstant.E_ADD_FIRST);
 			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_INNERCODE);
 		}
@@ -390,7 +400,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		activeAlipayDTO.setEncoding("UTF-8");
 		activeAlipayDTO.setBackEndUrl(env.getProperty("zxyh.backurl.zfb")); // 接收支付网关异步通知回调地址
 		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
-		logger.info("app用户对应渠道内部商户号="+innerCode);
+		logger.info("app用户对应渠道内部商户号=" + innerCode);
 		// 获取实体内部商户号
 		MerchantEntity merchantEntity = this.appUserMerchantEntity.queryMerInfoByUserId(userId);
 		if (merchantEntity == null) {
@@ -449,7 +459,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setCreateTime(new Date());
 		tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
 		tradeOrderDO.setInnerCode(innerCode);
-		logger.info("交易数据订单号="+tradeOrderDO.getOrderNo());
+		logger.info("交易数据订单号=" + tradeOrderDO.getOrderNo());
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);

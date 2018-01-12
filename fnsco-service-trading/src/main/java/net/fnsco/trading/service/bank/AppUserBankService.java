@@ -114,7 +114,7 @@ public class AppUserBankService extends BaseService {
 		}
 		appUserBankDO.setUpdateTime(new Date());
 		Integer row = 0;
-		if(id != null){
+		if(id != 0){
 			appUserBankDO.setStatus("0");
 			appUserBankDO.setId(id);
 			row = appUserBankDAO.update(appUserBankDO);
