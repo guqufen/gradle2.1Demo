@@ -65,6 +65,7 @@ public class App2cInterceptor implements HandlerInterceptor {
         String temp = env.getProperty("app.token.md5") + identifier;
         String trueTokenId = Md5Util.getInstance().md5(temp);
         if (!trueTokenId.equals(tokenId)) {
+        	logger.error("获取到的TokenId:"+tokenId+" ,identifier="+identifier+" , temp="+temp);
             logger.error("TokenId不对", "传入id为" + tokenId + "生成后的id为" + trueTokenId);
             OutWriterUtil.outJson(response, FrameworkConstant.E_TOKEN_ERROR);
             return false;

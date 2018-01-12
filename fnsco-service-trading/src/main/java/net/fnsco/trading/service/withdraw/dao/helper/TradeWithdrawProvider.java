@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ public class TradeWithdrawProvider {
     private Logger              logger     = LoggerFactory.getLogger(this.getClass());
 
     private static final String TABLE_NAME = "t_trade_withdraw";
-    
+
     public String updateOnlyFail(Map<String, Object> params) {
         TradeWithdrawDO tradeWithdraw = (TradeWithdrawDO) params.get("tradeWithdraw");
         return new SQL() {
@@ -105,10 +106,22 @@ public class TradeWithdrawProvider {
                 if (StringUtils.isNotBlank(tradeWithdraw.getChannelType())) {
                     SET("channel_type=#{tradeWithdraw.channelType}");
                 }
-                WHERE("id = #{tradeWithdraw.id} and status in (0,1) ");
+                if (tradeWithdraw.getInstallmentNum() != null) {
+                    SET("installment_num=#{tradeWithdraw.installmentNum}");
+                }
+                if (tradeWithdraw.getOrderAmount() != null) {
+                    SET("order_amount=#{tradeWithdraw.orderAmount}");
+                }
+                if (tradeWithdraw.getEachMoney() != null) {
+                    SET("each_money=#{tradeWithdraw.eachMoney}");
+                }
+                if (StringUtils.isNotBlank(tradeWithdraw.getCardHolderRate())) {
+                    SET("card_holder_rate=#{tradeWithdraw.cardHolderRate}");
+                }
             }
         }.toString();
     }
+
     public String update(Map<String, Object> params) {
         TradeWithdrawDO tradeWithdraw = (TradeWithdrawDO) params.get("tradeWithdraw");
         return new SQL() {
@@ -194,6 +207,18 @@ public class TradeWithdrawProvider {
                 }
                 if (StringUtils.isNotBlank(tradeWithdraw.getChannelType())) {
                     SET("channel_type=#{tradeWithdraw.channelType}");
+                }
+                if (tradeWithdraw.getInstallmentNum() != null) {
+                    SET("installment_num=#{tradeWithdraw.installmentNum}");
+                }
+                if (tradeWithdraw.getOrderAmount() != null) {
+                    SET("order_amount=#{tradeWithdraw.orderAmount}");
+                }
+                if (tradeWithdraw.getEachMoney() != null) {
+                    SET("each_money=#{tradeWithdraw.eachMoney}");
+                }
+                if (StringUtils.isNotBlank(tradeWithdraw.getCardHolderRate())) {
+                    SET("card_holder_rate=#{tradeWithdraw.cardHolderRate}");
                 }
                 WHERE("id = #{tradeWithdraw.id}");
             }
@@ -300,8 +325,14 @@ public class TradeWithdrawProvider {
                 if (StringUtils.isNotBlank(tradeWithdraw.getChannelType())) {
                     WHERE("channel_type=#{tradeWithdraw.channelType}");
                 }
-                if(tradeWithdraw.isAppShowList()) {
-                	WHERE("status in (2,3)");
+                if (tradeWithdraw.isAppShowList()) {
+                    WHERE("status in (2,3)");
+                }
+                if(tradeWithdraw.getStartCreateTime()!= null) {
+                	WHERE("create_time >= #{tradeWithdraw.startCreateTime}");
+                }
+                if(tradeWithdraw.getEndCreateTime()!= null) {
+                	WHERE("create_time <= #{tradeWithdraw.endCreateTime}");
                 }
                 ORDER_BY("id desc limit " + start + ", " + limit);
             }
@@ -398,8 +429,14 @@ public class TradeWithdrawProvider {
                 if (StringUtils.isNotBlank(tradeWithdraw.getChannelType())) {
                     WHERE("channel_type=#{tradeWithdraw.channelType}");
                 }
-                if(tradeWithdraw.isAppShowList()) {
-                	WHERE("status in (2,3)");
+                if (tradeWithdraw.isAppShowList()) {
+                    WHERE("status in (2,3)");
+                }
+                if(tradeWithdraw.getStartCreateTime()!= null) {
+                	WHERE("create_time >= #{tradeWithdraw.startCreateTime}");
+                }
+                if(tradeWithdraw.getEndCreateTime()!= null) {
+                	WHERE("create_time <= #{tradeWithdraw.endCreateTime}");
                 }
             }
         }.toString();
@@ -430,12 +467,12 @@ public class TradeWithdrawProvider {
                     WHERE("app_user_id = #{appUserId}");
                 }
                 if (CollectionUtils.isNotEmpty(status)) {
-                	StringBuffer sb = new StringBuffer();
-                	for (Integer st : status) {
-                		sb.append(st.toString()).append(",");
-					}
-                	String statusStr = sb.toString().substring(0, sb.toString().length()-1);
-                    WHERE("status in ("+statusStr+")");
+                    StringBuffer sb = new StringBuffer();
+                    for (Integer st : status) {
+                        sb.append(st.toString()).append(",");
+                    }
+                    String statusStr = sb.toString().substring(0, sb.toString().length() - 1);
+                    WHERE("status in (" + statusStr + ")");
                 }
                 GROUP_BY("trade_type");
 

@@ -67,6 +67,9 @@ public class BankCardController extends BaseController {
 	@RequestMapping(value = "/validateBank")
 	@ApiOperation(value = "银行卡信息页-校验银行卡")
 	public ResultDTO<ValidateBankVO> validateBank(@RequestBody ValidateBankJO jo) {
+		if(jo.getUserId()== null){
+			return ResultDTO.fail(E789ApiConstant.E_PARAMETER_NOT_NULL);
+		}
 		ValidateBankVO vo = new ValidateBankVO();
 		// 根据userid 获取身份证号
 		String idcard = appUserService.getIdAuth(jo.getUserId());
@@ -82,6 +85,12 @@ public class BankCardController extends BaseController {
 		params.put("idcard", idcard);// 身份证
 		params.put("bankcard", jo.getCardNum());// 卡号
 		params.put("mobile", jo.getMobile());// 预留手机号
+		// 判断该用户是否已保存过该银行卡
+		List<AppUserBankDO> list = appUserBankService.getByBankNO(jo.getUserId(),jo.getCardNum());
+		if (list.size() > 0 &&  StringUtils.equals(list.get(0).getStatus(), "0")) {
+			return ResultDTO.fail(E789ApiConstant.E_BANK_IS_EXIST);
+
+		}
 		JSONObject jaJsonObject = new JSONObject();
 		try { 
 			String result = JuheDemo.net(strUrl, params, method);
@@ -91,26 +100,25 @@ public class BankCardController extends BaseController {
 				JSONObject jaJsonObject2 = jaJsonObject.getJSONObject("result");
 				if (jaJsonObject2 != null) {
 					vo.setError_code(error_code);
-					vo.setReason(jaJsonObject.getString("reason"));
-					vo.setMessage(jaJsonObject2.getString("message"));
+					vo.setReason(jaJsonObject2.getString("message"));
 					vo.setRes(jaJsonObject2.getString("res"));
 					if ("1".equals(jaJsonObject2.getString("res"))) {
 						vo.setReason("认证成功！");
-						return ResultDTO.success(vo);
+						return ResultDTO.success(vo,"认证成功！");
 
 					} else {
-						return ResultDTO.fail(vo);
+						return ResultDTO.fail(vo,jaJsonObject2.getString("message"));
 					}
 
 				} else {
 					vo.setError_code(error_code);
 					vo.setReason(jaJsonObject.getString("reason"));
-					return ResultDTO.fail(vo);
+					return ResultDTO.fail(vo,jaJsonObject2.getString("message"));
 				}
 			} else {//未处理成功
 				vo.setError_code(error_code);
 				vo.setReason(jaJsonObject.getString("reason"));
-				return ResultDTO.fail(vo);
+				return ResultDTO.fail(vo,jaJsonObject.getString("reason"));
 			}
 
 		} catch (Exception e) {
@@ -148,15 +156,15 @@ public class BankCardController extends BaseController {
 			return ResultDTO.fail(result.getMessage());
 		}
 		// 判断该用户是否已保存过该银行卡
-		List<String> list = appUserBankService.getByBankNO(bankCardNum);
-		if (list.size() > 0) {
+		List<AppUserBankDO> list = appUserBankService.getByBankNO(Integer.parseInt(userId),bankCardNum);
+		if (list.size() > 0 && StringUtils.equals("0", list.get(0).getStatus())) {//已绑定该银行卡
 			return ResultDTO.fail(E789ApiConstant.E_BANK_IS_EXIST);
 
 		}
-
-		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num);
+		Integer id = list.get(0).getId();
+		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num,list.get(0).getStatus(),id);
 		if (row == 1) {
-			return ResultDTO.success();
+			return ResultDTO.success(null,E789ApiConstant.E_BOUND_SUCCESS);
 		} else {
 			return ResultDTO.fail();
 		}
@@ -178,7 +186,7 @@ public class BankCardController extends BaseController {
 		}
 		Integer row = appUserBankService.unBindBankCard(Integer.parseInt(bankId));
 		if (row == 1) {
-			return ResultDTO.success("解绑成功");
+			return ResultDTO.success(null,E789ApiConstant.E_UNBOUND_SUCCESS);
 
 		} else {
 			return ResultDTO.fail("解绑失败");

@@ -196,4 +196,9 @@
   <select id="getUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
     select <include refid="Base_Column_List" /> from sys_user where name=#{name} 
   </select>
+  
+  <!-- 根据id获取用户名 -->
+  <select id="getNameById" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select name from sys_user where id=#{id}
+  </select>
 </mapper>

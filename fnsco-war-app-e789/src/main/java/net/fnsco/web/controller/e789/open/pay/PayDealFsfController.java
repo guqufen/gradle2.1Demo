@@ -57,8 +57,8 @@ public class PayDealFsfController extends BaseController {
             Integer handleNum = tradeOrderDO.getHandleNum();
             if (null == handleNum || handleNum == 0) {
                 url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-                String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/pay/payCompleteNotice";
-                String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/pay/payCompleteCallback?orderNo=" + orderNo;
+                String payNotifyUrl = env.getProperty("app.base.url") + "/trade/jhf/pay/payCompleteNotice";
+                String payCallBackUrl = env.getProperty("app.base.url") + "/trade/jhf/pay/payCompleteCallback?orderNo=" + orderNo;
                 url += "?commID=" + tradeOrderDO.getChannelMerId() + "&reqData=" + tradeOrderService.getReqData(tradeOrderDO, payNotifyUrl, payCallBackUrl);
                 TradeOrderDO tradeOrderTemp = new TradeOrderDO();
                 tradeOrderTemp.setId(tradeOrderDO.getId());
@@ -85,8 +85,8 @@ public class PayDealFsfController extends BaseController {
         String url = env.getProperty("app.base.url") + "/pay/dealPayFail.html";
         if (null != tradeOrderDO) {
             url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-            String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/rechange/payCompleteNotice";
-            String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/rechange/payCompleteCallback?orderNo=" + orderNo;
+            String payNotifyUrl = env.getProperty("app.base.url") + "/trade/jhf/rechange/payCompleteNotice";
+            String payCallBackUrl = env.getProperty("app.base.url") + "/trade/jhf/rechange/payCompleteCallback?orderNo=" + orderNo;
             url += "?commID=" + tradeOrderDO.getChannelMerId() + "&reqData=" + tradeWithdrawService.getReqData(tradeOrderDO, payNotifyUrl, payCallBackUrl);
         }
         logger.error("分闪付跳转到聚惠分平台前的url" + url);
