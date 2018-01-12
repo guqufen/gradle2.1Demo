@@ -104,8 +104,11 @@ $('#table').bootstrapTable(
     }
 	//操作格式化
 	function operateFormatter(value, row, index) {
+		if('1' != row.status){
+			return '已确认转账';
+		}
 	    return [
-	        '<a class="redact" href="javascript:querySingle('+value+');" title="****">',
+	        '<a class="redact" href="javascript:transferAccounts('+value+');" title="确认转账操作">',
 	        '<i class="glyphicon glyphicon-file"></i>',
 	        '</a>  '
 	    ].join('');
@@ -235,4 +238,36 @@ $('#table').bootstrapTable(
 		}else{
 			status = null;
 		}
+	}
+	
+	//确认转账操作
+	function transferAccounts(value){
+		layer.confirm('确定转账吗？', {
+		      time: 20000, // 20s后自动关闭
+		      btn: ['确定', '取消']
+		  }, function(){
+		    $.ajax({
+		      url:PROJECT_NAME + '/web/e789/withdraw/transferAccounts',
+		      type:'POST',
+		      dataType : "json",
+		      data:{'id':value},
+		      success:function(data){
+		        unloginHandler(data);
+		        if(data.success)
+		        {
+		          layer.msg('转账成功');
+		          queryEvent();
+		        }else
+		        {
+		          layer.msg('转账失败');
+		        } 
+		      },
+		      error:function(e)
+		      {
+		        layer.msg('系统异常!'+e);
+		      }
+		    });
+		  }, function(){
+		    layer.msg('取消成功');
+		  });
 	}
