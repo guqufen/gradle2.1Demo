@@ -124,6 +124,12 @@ public class LklTradeDateSyncController extends BaseController {
         tradeDataLkl.setChannelTermCode(dataJO.getDevice_info());
         tradeDataLkl.setTermId(dataJO.getDevice_info());
         tradeDataLkl.setChannelType(BigdataConstant.ChannelTypeEnum.LKL.getCode());
+        
+        if("00".equals(tradeDataLkl.getPayType())) {
+        	tradeDataLkl.setDcType("境内贷记卡");
+        }else if("01".equals(tradeDataLkl.getPayType())) {
+        	tradeDataLkl.setDcType("境内借记卡");
+        }
         TradeDataLklDO resu = tradeDataLklService.doAdd(tradeDataLkl);
         
         //需要同步到t_trade_data表中
@@ -132,12 +138,9 @@ public class LklTradeDateSyncController extends BaseController {
         if("0".equals(tradeData.getTxnType())) {
         	tradeData.setTxnType("2");
         }
-        if("00".equals(tradeData.getPayType())) {
-        	tradeData.setDcType("境内贷记卡");
-        }else if("01".equals(tradeData.getPayType())) {
-        	tradeData.setDcType("境内借记卡");
-        }
         tradeData.setSysTraceNo(tradeDataLkl.getTraceNo());
+        tradeData.setCardNo(dataJO.getCard_no());
+        tradeData.setCardOrg(tradeDataLkl.getDcType());
         tradeDataService.saveTradeData(tradeData);
         
         JSONObject jsonObject = new JSONObject();
