@@ -502,14 +502,16 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		PassivePayDTO passDTO = new PassivePayDTO();
 		passDTO.init(merId);
 
-		String innerCode = appUserMerchant1Dao.selectInnerCodeByUserId(userId);
+		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(userId);
+		logger.info("app用户对应渠道内部商户号=" + innerCode);
 		if (null == innerCode) {
 			logger.info("该用户没有绑定内部商户号，请核查后重新交易");
-			return ResultDTO.fail("该用户没有绑定内部商户号，请核查后重新交易");
+			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_INNERCODE);
 		}
 
-		// 通过内部商户号查找绑定的中信商户号
-		MerchantChannel merchantChannel = merchantChannelDao.selectByInnerCodeType(innerCode, "05");
+		// 根据内部商户号获取独立商户号
+		MerchantChannel merchantChannel = channelDao.selectByInnerCodeType(innerCode, "05");
+		logger.info("渠道商户信息" + JSONObject.toJSONString(merchantChannel));
 		if (null == merchantChannel) {
 			logger.info("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易,innerCode=[" + innerCode + "");
 			return ResultDTO.fail("该内部商户号没有绑定中信渠道的商户号，请核查后重新交易");

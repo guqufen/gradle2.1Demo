@@ -36,6 +36,10 @@ public class TradeWithdrawDTO extends DTO{
      * 状态 0未执行1执行中2失败3成功
      */
     private Integer    status;
+    /**
+     * 交易子类型 10充值收入/11新人红包收入20提现/21预约提现//22话费充值23流量充值24火车票购买25提现手续费26收入撤销',
+     */
+    private Integer    tradeSubType;
 	/**
 	 * @return the id
 	 */
@@ -132,6 +136,18 @@ public class TradeWithdrawDTO extends DTO{
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	/**
+	 * @return the tradeSubType
+	 */
+	public Integer getTradeSubType() {
+		return tradeSubType;
+	}
+	/**
+	 * @param tradeSubType the tradeSubType to set
+	 */
+	public void setTradeSubType(Integer tradeSubType) {
+		this.tradeSubType = tradeSubType;
 	}
     
 }

@@ -55,7 +55,7 @@ public class MerchantInfoE789Controller extends BaseController {
 		MerchantInfoVO resultVO =  new MerchantInfoVO();
 		MerchantEntity merchantEntity = appUserMerchantEntityService.queryMerInfoByUserId(commonJO.getUserId());
 		if(null != merchantEntity) {
-			resultVO.setBusinessLicenseNum(merchantEntity.getBusinessLicenseNum());
+			resultVO.setBusinessLicenseNum(replaceString(4,4,merchantEntity.getBusinessLicenseNum()));
 			resultVO.setLegalPerson(merchantEntity.getLegalPerson());
 			resultVO.setLegalPersonMobile(replaceString(3,4,merchantEntity.getLegalPersonMobile()));
 			resultVO.setMerName(merchantEntity.getMercName());
