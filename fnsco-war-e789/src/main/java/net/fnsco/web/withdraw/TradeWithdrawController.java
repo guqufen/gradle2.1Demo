@@ -112,7 +112,7 @@ public class TradeWithdrawController extends BaseController{
 	 */
 	@PostMapping(value = "/transferAccounts")
 	@ResponseBody
-	@RequiresPermissions(value = { "sys:withdraw:update" })
+	@RequiresPermissions(value = {"sys:withdraw:update"})
 	public ResultDTO<String> transferAccounts(Integer id){
 		TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
 		tradeWithdraw.setId(id);
