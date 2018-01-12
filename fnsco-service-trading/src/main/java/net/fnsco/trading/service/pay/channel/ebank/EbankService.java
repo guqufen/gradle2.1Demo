@@ -195,7 +195,7 @@ public class EbankService extends BaseService {
 					System.out.println("respCode=[" + rcvMsg.toString().substring(87, 93) + "]");
 					System.arraycopy(rcvMsg.toString().getBytes(), 93, res, 0, 100);
 					System.out.println("respMsg=[" + new String(res) + "]");
-					return null;
+					return true;
 				}
 			} else {
 
@@ -204,6 +204,7 @@ public class EbankService extends BaseService {
 
 			e1.printStackTrace();
 		}
+		return false;
 	}
 
 	/**
