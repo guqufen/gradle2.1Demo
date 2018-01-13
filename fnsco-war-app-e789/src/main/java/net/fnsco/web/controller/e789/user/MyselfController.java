@@ -32,7 +32,6 @@ import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserInfoDTO;
 import net.fnsco.trading.service.bank.AppUserBankService;
 import net.fnsco.trading.service.bank.entity.AppUserBankDO;
-import net.fnsco.web.controller.e789.jo.AddPayPasswordJO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.ModifyInfoJO;
 import net.fnsco.web.controller.e789.jo.ModifyPasswordJO;
@@ -68,17 +67,6 @@ public class MyselfController extends BaseController {
         ResultDTO<String> result = new ResultDTO<>();
         result = appUserService.modifyPassword(appUserDTO);
         return result;
-    }
-    
-  //新增支付密码
-    @RequestMapping(value = "/addPayPassword")
-    @ResponseBody
-    @ApiOperation(value = "设置-新增支付密码 " ,notes="作者：何金庭")
-    public ResultDTO<String> addPayPassword(@RequestBody AddPayPasswordJO addPayPasswordJO) {
-    	AppUserDTO appUserDTO = new AppUserDTO();
-    	appUserDTO.setUserId(addPayPasswordJO.getUserId());
-    	appUserDTO.setPayPassword(addPayPasswordJO.getPassword());
-        return appUserService.addPayPassword(appUserDTO);
     }
     
   //修改支付密码     旧密码和新密码

@@ -26,7 +26,7 @@ $('#table').bootstrapTable(
 			{
 				search : false, //是否启动搜索栏
 				sidePagination : 'server',
-				url : PROJECT_NAME + '/web/e789/withdraw/query',
+				url : PROJECT_NAME + '/web/e789/withdraw/queryWithdraw',
 				showRefresh : false,//是否显示刷新按钮
 				showPaginationSwitch : false,//是否显示 数据条数选择框(分页是否显示)
 				toolbar : '#toolbar', //工具按钮用哪个容器
@@ -46,14 +46,7 @@ $('#table').bootstrapTable(
 			        align: 'center',
 			        width: 80,
 				    formatter: increase
-				},{
-			        field: 'id',
-			        title: '操作',
-			        width:'10%',
-			        align: 'center',
-			        width: 150,
-			        formatter: operateFormatter
-			    }, {
+				}, {
 					field : 'userName',
 					align: 'center',
 					title : '用户名'
@@ -64,21 +57,22 @@ $('#table').bootstrapTable(
 				},{
 					field : 'amount',
 					align: 'right',
-					title : '提现金额'
+					title : '消费金额'
 				}, {
-					field : 'orderNo',
+					field : 'tradeSubType',
 					align: 'center',
-					title : '提现卡号'
+					title : '备注',
+					formatter : formatSubType
 				}, {
 					field : 'createTime',
-					title : '提现时间',
+					title : '消费时间',
 					align: 'center',
 					formatter : formatDate
 				}, {
-					field : 'status',
-					title : '订单状态',
+					field : 'tradeSubType',
+					title : '订单类型',
 					align: 'center',
-					formatter : formatStatus
+					formatter : formatType
 				}]
 			});
 	//状态格式化
@@ -89,6 +83,34 @@ $('#table').bootstrapTable(
 			return '待转账';
 		} else if (value == 3) {
 			return '已转账';
+		}
+	}//备注格式化
+	function formatSubType(value, row, index) {
+		if (!value) {
+			return '-';
+		} else if (value == 10) {
+			return '充值收入';
+		} else if (value == 20) {
+			return '提现';
+		}else if (value == 22) {
+			return '话费充值';
+		} else if (value == 23) {
+			return '流量充值';
+		}else if (value == 24) {
+			return '火车票购买';
+		}else if (value == 25) {
+			return '提现手续费';
+		}
+	}
+	function formatType(value, row, index) {
+		if (!value) {
+			return '-';
+		} else if (value == 22||value == 23||value == 24||value == 25) {
+			return '消费';
+		} else if (value == 20) {
+			return '提现';
+		}else if (value == 10) {
+			return '充值';
 		}
 	}
 	//时间格式化
@@ -102,17 +124,6 @@ $('#table').bootstrapTable(
 	function increase(value, row, index) {
         return index+1;
     }
-	//操作格式化
-	function operateFormatter(value, row, index) {
-		if('1' != row.status){
-			return '已确认转账';
-		}
-	    return [
-	        '<a class="redact" href="javascript:transferAccounts('+value+');" title="确认转账操作">',
-	        '<i class="glyphicon glyphicon-file"></i>',
-	        '</a>  '
-	    ].join('');
-	}
 	//条件查询按钮事件
 	function queryEvent() {
 		$('#table').bootstrapTable('refresh');
@@ -120,23 +131,27 @@ $('#table').bootstrapTable(
 	//重置按钮事件
 	function resetEvent() {
 		$('#formSearch')[0].reset();
-		document.getElementById("btn_all").className = "btn btn-primary";//点击选中变蓝
-		document.getElementById("btn_already").className = "btn btn-default";
-		document.getElementById("btn_not").className = "btn btn-default";
-		channelAll = 1;
-		channelAlready = 0;
-		channelNot = 0;
+		document.getElementById(id).className = "btn btn-primary";//点击选中变蓝
+		document.getElementById("btn_consume").className = "btn btn-default";
+		document.getElementById("btn_withdrawal").className = "btn btn-default";
+		document.getElementById("btn_charge").className = "btn btn-default";
+		var channelAll = 1;
+		var channelConsume = 0;
+		var channeWithdrawal = 0;
+		var channeCharge = 0;
 		queryEvent();
 	}
 
 	//组装请求参数
-	var status=null;
+	var subTypeIn=null;
 	function queryParams(params) {
 		determineJudgment();
 		if(status == "null"){
 			var param = {
 					currentPageNum : this.pageNumber,
 					pageSize : this.pageSize,
+					mobile : $.trim($('#mobile').val()),
+					userName : $.trim($('#userName').val()),
 					startTime : $('#datetimepicker1').val(),
 					endTime : $('#datetimepicker2').val()
 				}
@@ -145,9 +160,11 @@ $('#table').bootstrapTable(
 			var param = {
 					currentPageNum : this.pageNumber,
 					pageSize : this.pageSize,
+					mobile : $.trim($('#mobile').val()),
+					userName : $.trim($('#userName').val()),
 					startTime : $('#datetimepicker1').val(),
 					endTime : $('#datetimepicker2').val(),
-					status : status
+					subTypeIn : subTypeIn
 			}
 			return param;
 		}
@@ -169,17 +186,20 @@ $('#table').bootstrapTable(
 	}
 	//状态选择按钮事件
 	var channelAll = 1;
-	var channelAlready = 0;
-	var channelNot = 0;
-	function querybystatus(id) {
+	var channelConsume = 0;
+	var channeWithdrawal = 0;
+	var channeCharge = 0;
+	function querybyTradeSubType(id) {
 		if(id=="btn_all"){
 			if (channelAll % 2 == 0) {
 				document.getElementById(id).className = "btn btn-primary";//点击选中变蓝
-				document.getElementById("btn_already").className = "btn btn-default";
-				document.getElementById("btn_not").className = "btn btn-default";
+				document.getElementById("btn_consume").className = "btn btn-default";
+				document.getElementById("btn_withdrawal").className = "btn btn-default";
+				document.getElementById("btn_charge").className = "btn btn-default";
 				channelAll = 1;
-				channelAlready = 0;
-				channelNot = 0;
+				channelConsume = 0;
+				channeWithdrawal = 0;
+				channeCharge = 0;
 				return;
 				  }
 			if (channelAll % 2 == 1) {
@@ -187,87 +207,81 @@ $('#table').bootstrapTable(
 				channelAll = 0;
 				  }
 		}
-		if(id=="btn_already"){
-			if (channelAlready % 2 == 0) {
+		if(id=="btn_consume"){
+			if (channelConsume % 2 == 0) {
 				document.getElementById(id).className = "btn btn-primary";//点击选中变蓝
 				document.getElementById("btn_all").className = "btn btn-default";
-				document.getElementById("btn_not").className = "btn btn-default";
+				document.getElementById("btn_withdrawal").className = "btn btn-default";
+				document.getElementById("btn_charge").className = "btn btn-default";
 				channelAll = 0;
-				channelAlready = 1;
-				channelNot = 0;
+				channelConsume = 1;
+				channeWithdrawal = 0;
+				channeCharge = 0;
 				return;
 				  }
-			if (channelAlready % 2 == 1) {
+			if (channelConsume % 2 == 1) {
 				document.getElementById(id).className = "btn btn-default";//不选中变白 
-				channelAlready = 0;
+				channelConsume = 0;
 				  }
 		}
-		if(id=="btn_not"){
-			if (channelNot % 2 == 0) {
+		if(id=="btn_withdrawal"){
+			if (channeWithdrawal % 2 == 0) {
 				document.getElementById(id).className = "btn btn-primary";//点击选中变蓝
+				document.getElementById("btn_consume").className = "btn btn-default";
 				document.getElementById("btn_all").className = "btn btn-default";
-				document.getElementById("btn_already").className = "btn btn-default";
+				document.getElementById("btn_charge").className = "btn btn-default";
 				channelAll = 0;
-				channelAlready = 0;
-				channelNot = 1;
+				channelConsume = 0;
+				channeWithdrawal = 1;
+				channeCharge = 0;
 				return;
 				  }
-			if (channelNot % 2 == 1) {
+			if (channeWithdrawal % 2 == 1) {
 				document.getElementById(id).className = "btn btn-default";//不选中变白 
-				channelNot = 0;
+				channeWithdrawal = 0;
+				  }
+		}
+		if(id=="btn_charge"){
+			if (channeCharge % 2 == 0) {
+				document.getElementById(id).className = "btn btn-primary";//点击选中变蓝
+				document.getElementById("btn_consume").className = "btn btn-default";
+				document.getElementById("btn_withdrawal").className = "btn btn-default";
+				document.getElementById("btn_all").className = "btn btn-default";
+				channelAll = 0;
+				channelConsume = 0;
+				channeWithdrawal = 0;
+				channeCharge = 1;
+				return;
+				  }
+			if (channeCharge % 2 == 1) {
+				document.getElementById(id).className = "btn btn-default";//不选中变白 
+				channeCharge = 0;
 				  }
 		}
 	}
 	//渠道选中按钮条件值判断
 	function determineJudgment() {
 		if(document.getElementById("btn_all").className=="btn btn-primary"){
-			status = null;
+			subTypeIn = null;
 			return;
 		}else{
-			status = null;
+			subTypeIn = null;
 		}
-		if(document.getElementById("btn_already").className=="btn btn-primary"){
-			status = 3;
+		if(document.getElementById("btn_consume").className=="btn btn-primary"){
+			subTypeIn = 1;
 			return;
 		}else{
-			status = null;
+			subTypeIn = null;
 		}
-		if(document.getElementById("btn_not").className=="btn btn-primary"){
-			status = 1;
+		if(document.getElementById("btn_withdrawal").className=="btn btn-primary"){
+			subTypeIn = 2;
 			return;
 		}else{
-			status = null;
+			subTypeIn = null;
+		}if(document.getElementById("btn_charge").className=="btn btn-primary"){
+			subTypeIn = 3;
+			return;
+		}else{
+			subTypeIn = null;
 		}
-	}
-	
-	//确认转账操作
-	function transferAccounts(value){
-		layer.confirm('确定转账吗？', {
-		      time: 20000, // 20s后自动关闭
-		      btn: ['确定', '取消']
-		  }, function(){
-		    $.ajax({
-		      url:PROJECT_NAME + '/web/e789/withdraw/transferAccounts',
-		      type:'POST',
-		      dataType : "json",
-		      data:{'id':value},
-		      success:function(data){
-		        unloginHandler(data);
-		        if(data.success)
-		        {
-		          layer.msg('转账成功');
-		          queryEvent();
-		        }else
-		        {
-		          layer.msg('转账失败');
-		        } 
-		      },
-		      error:function(e)
-		      {
-		        layer.msg('系统异常!'+e);
-		      }
-		    });
-		  }, function(){
-		    layer.msg('取消成功');
-		  });
 	}

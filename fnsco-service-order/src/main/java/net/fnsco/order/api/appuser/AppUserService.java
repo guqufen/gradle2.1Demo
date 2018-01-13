@@ -31,8 +31,6 @@ public interface AppUserService {
 	ResultDTO<String> e789LoginByMoblie(AppUserDTO appUserDTO);
 	//e789查询登录信息
 	AppUserLoginInfoDTO getLoginInfor(AppUserDTO appUserDTO);
-	//e789新增支付密码接口
-	ResultDTO<String> addPayPassword(AppUserDTO appUserDTO);
 	//e789修改支付密码接口  
 	ResultDTO<String> modifyPayPassword(AppUserDTO appUserDTO);
 	//e789获取个人信息接口
@@ -118,5 +116,4 @@ public interface AppUserService {
 	ResultDTO getE789ValidateCode(AppUserDTO appUserDTO);
 	ResultDTO validateCode(String deviceId, String code, String mobile);
 	ResultDTO e789FindPassword(AppUserDTO appUserDTO);
-	
 }

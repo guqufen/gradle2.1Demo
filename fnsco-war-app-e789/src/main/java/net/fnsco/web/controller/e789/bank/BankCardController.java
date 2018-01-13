@@ -157,12 +157,17 @@ public class BankCardController extends BaseController {
 		}
 		// 判断该用户是否已保存过该银行卡
 		List<AppUserBankDO> list = appUserBankService.getByBankNO(Integer.parseInt(userId),bankCardNum);
+		Integer id = null;
 		if (list.size() > 0 && StringUtils.equals("0", list.get(0).getStatus())) {//已绑定该银行卡
 			return ResultDTO.fail(E789ApiConstant.E_BANK_IS_EXIST);
 
+		}else if(list.size() > 0 && StringUtils.equals("1", list.get(0).getStatus())){
+			id = list.get(0).getId();
 		}
-		Integer id = list.get(0).getId();
-		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num,list.get(0).getStatus(),id);
+		
+		
+		
+		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num,id);
 		if (row == 1) {
 			return ResultDTO.success(null,E789ApiConstant.E_BOUND_SUCCESS);
 		} else {

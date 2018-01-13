@@ -516,11 +516,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (Strings.isNullOrEmpty(appUserDTO.getCode())) {
             return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
         }
-        //对比验证码
-        ResultDTO<String> res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 0+appUserDTO.getMobile());
-        if (!res.isSuccess()) {
-            return res;
-        }
         //根据手机号查询用户实体是否存在
         AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
         if (user != null) {
@@ -547,6 +542,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUser.setMobile(appUserDTO.getMobile());
         appUser.setDeviceType(appUserDTO.getDeviceType());
         appUser.setHeadImagePath(appUserDTO.getHeadImagePath());
+        appUser.setPayPassword(appUserDTO.getPayPassword());
         appUser.setState(1);
         appUser.setRegTime(new Date());
         if(!Strings.isNullOrEmpty(appUserDTO.getEntityInnerCode())){
@@ -649,38 +645,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         List<AppUserSettingDTO> settingstatus = appUserSettingService.installSettingStatus(appUserId);
         map.put("appSettings", settingstatus);*/
         return appUserLoginInfoDTO;
-    }
-  //e789新增支付密码
-    @Override
-    public ResultDTO<String> addPayPassword(AppUserDTO appUserDTO) {
-        Integer id = appUserDTO.getUserId();
-        //非空判断
-        if (id == null) {
-            return ResultDTO.fail(ApiConstant.E_APP_ID_EMPTY);
-        }
-        if (Strings.isNullOrEmpty(appUserDTO.getPayPassword())) {
-            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
-        }
-        String payPassword = Md5Util.getInstance().md5(appUserDTO.getPayPassword());
-        AppUser appUser = new AppUser();
-        //根据id查询用户是否存在获取原密码
-        AppUser mAppUser = appUserDao.selectAppUserById(id);
-        if (null == mAppUser) {
-            return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
-        }
-        appUser.setPayPassword(payPassword);
-        appUser.setId(id);
-        if (!appUserDao.updateByPrimaryKeySelective(appUser)) {
-            return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
-        }
-        /*//更新到deviceToken
-        String deviceToken = null;
-        String deviceId = null;
-        Integer deviceType = null;
-        if (!appUserDao.updateDeviceTokenById(id, deviceToken, deviceId, deviceType)) {
-            return ResultDTO.fail(ApiConstant.E_LOGINOUT_ERROR);
-        }*/
-        return ResultDTO.success();
     }
     //e789修改支付密码
     @Override
