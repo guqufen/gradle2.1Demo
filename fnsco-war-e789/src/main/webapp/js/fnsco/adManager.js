@@ -212,6 +212,7 @@ function editData(id) {
 		},
 		success : function(data) {
 			unloginHandler(data);
+			console.log(data.data)
 			if (data.success) {
 				var ad = data.data;
 				$("#myModal").modal();
