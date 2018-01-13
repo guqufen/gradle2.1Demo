@@ -9,7 +9,7 @@ import net.fnsco.core.constants.CoreConstants;
 public class TradeConstants extends CoreConstants {
     public static String E_ENTITY_MERCHANT_NOT_EXIT_ERROR = "6000";
     static {
-        ERROR_MESSGE_MAP.put(E_ENTITY_MERCHANT_NOT_EXIT_ERROR, "该用户还未成为商户");
+        ERROR_MESSGE_MAP.put(E_ENTITY_MERCHANT_NOT_EXIT_ERROR, "该用户还未绑定实体商户");
     }
     // e789个人用户充值和企业用户支付使用秘钥
     public static final String        RECHANGE_AES_KEY = "a8bc3defec5916b469d9c1fa095b5b43";
