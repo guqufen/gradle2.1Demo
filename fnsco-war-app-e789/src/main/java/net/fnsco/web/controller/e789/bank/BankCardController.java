@@ -64,6 +64,22 @@ public class BankCardController extends BaseController {
 	private SysConfigService sysConfigService;
 	
 
+	//调用ebank接口
+	public static void main(String[] args) {
+		Map<String, String> params = new HashMap<>();
+		params.put("OppAccNo", "");// 付款人帐号
+		params.put("OppAccName", "");// 付款人户名
+		params.put("OppBank", "");// 付款人银行号,见附录银行代码
+		params.put("CardAcctFlag", "");// 卡折标志0-借记卡；1-存折；2-对公账号
+		params.put("IdType", "");// 证件类型
+		params.put("IdNo", "");// 证件号码
+		params.put("Mobile", "");// 手机号
+		params.put("TranFlag", "");// 操作标志:1-新增；2-修改；3-删除
+		
+		
+		
+	}
+	
 	@RequestMapping(value = "/validateBank")
 	@ApiOperation(value = "银行卡信息页-校验银行卡")
 	public ResultDTO<ValidateBankVO> validateBank(@RequestBody ValidateBankJO jo) {

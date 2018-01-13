@@ -137,6 +137,8 @@ public class TradedataE789Controller extends BaseController {
 		vo.setTraId(tradeOrderDO.getId().toString());
 		vo.setTradeStatus(tradeOrderDO.getRespCode());
 		
+		logger.info("订单号="+tradeDataDetailJO.getOrderNo()+"交易状态="+tradeOrderDO.getRespCode());
+		
 		if("1000".equals(tradeOrderDO.getRespCode())) {
 			vo.setTradeStatusName("处理中");
 			paymentService.getDealStatus(tradeOrderDO.getId(),tradeOrderDO.getPaySubType(),tradeOrderDO.getChannelMerId(),tradeOrderDO.getOrderNo(),tradeOrderDO.getOrderCeateTime());
