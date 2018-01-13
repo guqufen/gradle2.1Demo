@@ -414,7 +414,7 @@ public class TicketController extends BaseController {
         ticketOrderDTO.setPrice(amountBs.toString());
         ticketOrderDTO.setSeatCode(ticketOrderJO.getSeatCode());
         ticketOrderDTO.setToStationCode(ticketOrderJO.getToStationCode());
-        ticketOrderDTO.setToStationName(ticketOrderJO.getFromStationName());
+        ticketOrderDTO.setToStationName(ticketOrderJO.getToStationName());
         ticketOrderDTO.setTrainCode(ticketOrderJO.getTrainCode());
         ticketOrderDTO.setTrainDate(ticketOrderJO.getTrainDate());
         ticketOrderDTO.setUserId(ticketOrderJO.getUserId());

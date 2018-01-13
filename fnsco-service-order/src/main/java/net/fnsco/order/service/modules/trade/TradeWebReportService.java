@@ -60,7 +60,7 @@ public class TradeWebReportService extends BaseService {
         if (null != tradeResult) {
             BigDecimal tempAmt = new BigDecimal(tradeResult.getAmtTot());
             tempAmt = tempAmt.divide(new BigDecimal("100"));
-            tempAmt = amtTot.add(tempAmt);
+            amtTot = amtTot.add(tempAmt);
             count = count + Long.parseLong(tradeResult.getCount());
         } else {
             tradeResult = new TradeDataResultDTO();
