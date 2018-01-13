@@ -715,7 +715,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 				tradeOrderDO.setSettleAmount(new BigDecimal(passDTO1.getQstranamt()));// 清算金额
 				tradeOrderDO.setSettleDate(DateUtils.StrToDate(passDTO1.getQs400trdt() + "000000"));// 清算日起
 			} else {
-				tradeOrderDO.setRespCode(TradeStateEnum.FAIL.getCode());// 设置响应码
+				//tradeOrderDO.setRespCode(TradeStateEnum.FAIL.getCode());// 设置响应码
 			}
 
 			tradeOrderDO.setRespMsg(passDTO1.getStdrtninfo());// 设置响应信息
@@ -786,7 +786,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 				tradeOrderDO.setSettleAmount(new BigDecimal(passDTO1.getQstranamt()));// 清算金额
 				tradeOrderDO.setSettleDate(DateUtils.StrToDate(passDTO1.getQs400trdt() + "000000"));// 清算日起
 			} else {
-				tradeOrderDO.setRespCode(TradeStateEnum.FAIL.getCode());// 设置响应码
+				//tradeOrderDO.setRespCode(TradeStateEnum.FAIL.getCode());// 设置响应码
 			}
 
 			tradeOrderDO.setRespMsg(passDTO1.getStdrtninfo());// 设置响应信息
