@@ -46,7 +46,7 @@ public class TrainOrderListVO extends VO {
     private String              statusName;
     
     @ApiModelProperty(value = "创建时间", example = "创建时间")
-    private Date                 createTime;
+    private String                 createTime;
 
     /**
      * statusName
@@ -319,7 +319,7 @@ public class TrainOrderListVO extends VO {
      * @since   CodingExample Ver 1.0
     */
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
@@ -330,7 +330,7 @@ public class TrainOrderListVO extends VO {
      * @since   CodingExample Ver 1.0
      */
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

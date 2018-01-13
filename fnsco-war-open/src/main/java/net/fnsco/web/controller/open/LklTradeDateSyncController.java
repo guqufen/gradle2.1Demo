@@ -7,12 +7,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -20,6 +18,8 @@ import com.lakala.sign.LKLSignature;
 
 import io.swagger.annotations.Api;
 import net.fnsco.bigdata.api.constant.BigdataConstant;
+import net.fnsco.bigdata.api.dto.TradeDataDTO;
+import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.comm.ServiceConstant;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.order.service.trade.TradeDataLklService;
@@ -35,7 +35,7 @@ public class LklTradeDateSyncController extends BaseController {
     @Autowired
     private TradeDataLklService tradeDataLklService;
     @Autowired
-    private Environment         env;
+    private TradeDataService   tradeDataService;
     private final static String publickeyFile = "rsa_public_key.pem";
     private final static String charset       = "UTF-8";
 
@@ -109,7 +109,8 @@ public class LklTradeDateSyncController extends BaseController {
         tradeDataLkl.setTxnSubType(dataJO.getTrade_type());//交易类型
         tradeDataLkl.setOrderNo(dataJO.getTransaction_id());
         tradeDataLkl.setTimeStamp(dataJO.getTime_end());
-        tradeDataLkl.setPayType(ServiceConstant.PAY_TYPE_MAP.get(dataJO.getPay_type()));
+        tradeDataLkl.setPayType(ServiceConstant.LKL_PAY_TYPE_MAP.get(dataJO.getPay_type()));
+        tradeDataLkl.setPaySubType(ServiceConstant.LKL_PAY_SUB_TYPE_MAP.get(dataJO.getPay_type()));
         tradeDataLkl.setCertifyId(dataJO.getCard_no());
         tradeDataLkl.setBatchNo(dataJO.getBatchbillno());
         tradeDataLkl.setTraceNo(dataJO.getSystraceno());
@@ -117,11 +118,31 @@ public class LklTradeDateSyncController extends BaseController {
         tradeDataLkl.setReferNo(dataJO.getRefernumber());
         tradeDataLkl.setBankId(dataJO.getBank_type());//付款银行
         tradeDataLkl.setSource("06");
+        tradeDataLkl.setTradeDetail(data);
+        tradeDataLkl.setOrderTime(dataJO.getTime_end());
         tradeDataLkl.setPayMedium(BigdataConstant.PayMediumEnum.POS.getCode());
         tradeDataLkl.setChannelTermCode(dataJO.getDevice_info());
         tradeDataLkl.setTermId(dataJO.getDevice_info());
         tradeDataLkl.setChannelType(BigdataConstant.ChannelTypeEnum.LKL.getCode());
-        tradeDataLklService.doAdd(tradeDataLkl);
+        
+        if("00".equals(dataJO.getPay_type())) {
+        	tradeDataLkl.setDcType("00 境内借记卡");
+        }else if("01".equals(dataJO.getPay_type())) {
+        	tradeDataLkl.setDcType("01 境内贷记卡");
+        }
+        TradeDataLklDO resu = tradeDataLklService.doAdd(tradeDataLkl);
+        
+        //需要同步到t_trade_data表中
+        TradeDataDTO tradeData =  new TradeDataDTO();
+        BeanUtils.copyProperties(resu, tradeData);
+        if("0".equals(tradeData.getTxnType())) {
+        	tradeData.setTxnType("2");
+        }
+        tradeData.setSysTraceNo(tradeDataLkl.getTraceNo());
+        tradeData.setCardNo(dataJO.getCard_no());
+        tradeData.setCardOrg(tradeDataLkl.getDcType());
+        tradeDataService.saveTradeData(tradeData);
+        
         JSONObject jsonObject = new JSONObject();
         if (!unsignReslut) {
             //验签失败，返回FAIL，会执行重发

@@ -78,11 +78,11 @@ public class RechangeController extends BaseController {
         }
         BigDecimal amountB = new BigDecimal(getQRUrlJO.getPaymentAmount());
         BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
-        if (amountBs.compareTo(new BigDecimal("80000")) < 0) {
-            return ResultDTO.fail("充值金额不能低于800元");
+        if (amountBs.compareTo(new BigDecimal("65000")) < 0) {
+            return ResultDTO.fail("充值金额不能低于650元");
         }
-        if (amountBs.compareTo(new BigDecimal("5000000")) > 0) {
-            return ResultDTO.fail("充值金额不能高于50000元");
+        if (amountBs.compareTo(new BigDecimal("4000000")) > 0) {
+            return ResultDTO.fail("充值金额不能高于40000元");
         }
         TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
         tradeWithdraw.setAppUserId(getQRUrlJO.getUserId());

@@ -95,7 +95,7 @@ public class AppUserBankService extends BaseService {
 	 * @throws 
 	 * @since  CodingExample　Ver 1.1
 	 */
-	public Integer doAppAdd(Integer userId, String mobile, String bankCardNum, String bankCardholder, String id_card_num,String status,Integer id) {
+	public Integer doAppAdd(Integer userId, String mobile, String bankCardNum, String bankCardholder, String id_card_num,Integer id) {
 		// 根据银行卡号获取银行名称和卡类型
 		String cardTotalLength = String.valueOf(bankCardNum.trim().length());
 		BankNameAndTypeDTO dto = appUserBankDAO.queryByCertifyId(bankCardNum, cardTotalLength);
@@ -114,8 +114,8 @@ public class AppUserBankService extends BaseService {
 		}
 		appUserBankDO.setUpdateTime(new Date());
 		Integer row = 0;
-		if(id != 0){
-			appUserBankDO.setStatus("0");
+		appUserBankDO.setStatus("0");
+		if(id != null){
 			appUserBankDO.setId(id);
 			row = appUserBankDAO.update(appUserBankDO);
 		}else{

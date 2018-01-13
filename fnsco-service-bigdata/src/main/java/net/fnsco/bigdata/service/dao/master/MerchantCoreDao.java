@@ -153,6 +153,8 @@ public interface MerchantCoreDao {
      */
     MerchantCore selectByInnerCode(@Param("innerCode") String innerCode);
     
+    List<MerchantCore> selectListByInnerCode(String[] innerCode);
+    
     /**
      * selectUniqueMer:(身份证+银行卡+通道类型+通道商户号)
      * @param cardNum

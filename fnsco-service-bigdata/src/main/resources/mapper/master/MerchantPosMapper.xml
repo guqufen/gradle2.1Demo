@@ -67,6 +67,19 @@
     from m_merchant_pos
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByTermId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from m_merchant_pos
+    where terminal_code IN 
+    <foreach item="item" collection="array" open="(" separator="," close=")">
+	       #{item}
+	 </foreach>
+    OR qr_channel_terminal_code IN 
+    <foreach item="item" collection="array" open="(" separator="," close=")">
+	       #{item}
+	 </foreach>
+  </select>
   <select id="selectBySnCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

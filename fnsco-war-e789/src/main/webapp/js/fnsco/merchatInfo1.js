@@ -759,6 +759,9 @@ function saveBankCardParams(conId){
   for (var i=0;i<listLen;i++){
     var accountType=$("#"+conId+" .bankCard-list").eq(i).find($('.accountType')).val();
     var accountNo=$("#"+conId+" .bankCard-list").eq(i).find($('.accountNo')).val();
+    if(accountNo != null && accountNo.length>10){
+    	layer.msg('输入正确银行卡号!');return;
+    }
     var accountName=$("#"+conId+" .bankCard-list").eq(i).find($('.accountName')).val();
     var accountCardId=$("#"+conId+" .bankCard-list").eq(i).find($('.accountCardId')).val();
     var accountPhone=$("#"+conId+" .bankCard-list").eq(i).find($('.accountPhone')).val();
@@ -2185,8 +2188,12 @@ function zxyhChannel(id){
 	    dataType : "json",
 	    data:{'id':id},
 	    success:function(data){
-	    	console.log(data.data.result);
-	    	$(".qrcode").attr('src',data.data.result)
+	    	unloginHandler(data);  
+	          if(data.success){
+	             layer.msg('入建成功');
+	          }else{
+	        	  layer.msg(data.data.respMsg);
+	          }
 	    }
 	})
 	$('#zxyhChannel').modal();
