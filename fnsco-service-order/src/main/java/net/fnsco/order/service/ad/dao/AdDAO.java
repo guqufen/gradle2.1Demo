@@ -22,7 +22,7 @@ public interface AdDAO {
 			@Result(column = "create_user_id", property = "createUserId"),
 			@Result(column = "url", property = "url"),
 			@Result(column = "type", property = "type"),
-			@Result(column = "deviceType", property = "deviceType")})
+			@Result(column = "device_type", property = "deviceType")})
 	@Select("SELECT * FROM sys_ad WHERE id = #{id}")
 	public AdDO getById(@Param("id") int id);
 

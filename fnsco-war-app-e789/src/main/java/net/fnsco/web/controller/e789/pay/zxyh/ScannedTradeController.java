@@ -65,6 +65,12 @@ public class ScannedTradeController extends BaseController {
 		if (Strings.isNullOrEmpty(paySubType)) {
 			return ResultDTO.fail("交易子类型为空");
 		}
+		//判断商户是否已通过审核
+		Integer mercStatus = zxyhPaymentService.getAddStatus(userId);
+		if(mercStatus != 5){
+			return ResultDTO.fail(E789ApiConstant.E_NOT_CHECK);
+		}
+		
 		ResultDTO<Map<String, Object>> dto = new ResultDTO<>();
 		Map<String, Object> reqMap = new HashMap<>();
 		if ("01".equals(paySubType)) {// 微信

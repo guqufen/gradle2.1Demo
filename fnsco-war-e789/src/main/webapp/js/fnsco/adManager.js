@@ -1,3 +1,8 @@
+// 给静态框的关闭按钮增加事件
+$('.close').click(function(){
+	queryEvent("table");
+});
+
 //初始化表格
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
@@ -124,6 +129,8 @@ function formatType(value, row, index) {
 		return '其他';
 	}
 }
+
+
 
 // 条件查询按钮事件
 function queryEvent() {
