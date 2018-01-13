@@ -158,4 +158,7 @@ public interface TradeOrderDAO {
 
     @UpdateProvider(type = TradeOrderProvider.class, method = "updateByOrderId")
 	public int updateByOrderId(TradeOrderDO tradeOrderDO);
+
+    @Select("SELECT STATUS FROM m_merchant_core WHERE inner_code IN ( SELECT inner_code FROM m_merchant_core_entity_ref WHERE entity_inner_code IN (SELECT ue.entity_inner_code FROM u_app_user uu,u_app_user_merchant_entity ue WHERE uu.id = ue.app_user_id 	AND uu.id = #{userId}))")
+	public Integer getAddStatus(@Param("userId")Integer userId);
 }

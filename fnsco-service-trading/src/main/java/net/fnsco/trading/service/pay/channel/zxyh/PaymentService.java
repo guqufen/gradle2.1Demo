@@ -921,4 +921,11 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		}
 	}
 
+	public Integer getAddStatus(Integer userId) {
+		
+		Integer status = orderDAO.getAddStatus(userId);
+		return status;
+		
+	}
+
 }
