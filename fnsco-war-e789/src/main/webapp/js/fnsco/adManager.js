@@ -1,3 +1,8 @@
+// 给静态框的关闭按钮增加事件
+$('.close').click(function(){
+	queryEvent("table");
+});
+
 //初始化表格
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
@@ -125,6 +130,8 @@ function formatType(value, row, index) {
 	}
 }
 
+
+
 // 条件查询按钮事件
 function queryEvent() {
 	$('#table').bootstrapTable('refresh');
@@ -212,6 +219,7 @@ function editData(id) {
 		},
 		success : function(data) {
 			unloginHandler(data);
+			console.log(data.data)
 			if (data.success) {
 				var ad = data.data;
 				$("#myModal").modal();
