@@ -467,20 +467,6 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		}
 	}
 
-	public void test() {
-		Map<String, String> parameterMap = Maps.newHashMap();
-		String signAture = SignUtil.zxyhSign(parameterMap);
-		String sendData = "";
-		Map<String, String> params = Maps.newHashMap();
-		params.put("sendData", sendData);
-		String url = "";
-		try {
-			String resultJson = HttpUtils.post(url, params);
-		} catch (UnsupportedEncodingException e) {
-			logger.error("调用中信银行接口出错", e);
-		}
-	}
-
 	/**
 	 * 被扫-交易处理,测试环境：https://120.27.165.177:8099/MPay/misRequest.do
 	 * 
