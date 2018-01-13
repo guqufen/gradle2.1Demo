@@ -621,7 +621,7 @@ public class TradeOrderProvider {
 					WHERE("order_no like CONCAT(#{tradeOrder.orderTop10},'%',#{tradeOrder.orderNoAfter6})");
 				}
 				if (null != tradeOrder.getUserId()) {
-					WHERE("inner_code  in (select inner_code from u_app_user_merchant where app_user_id = #{tradeOrder.userId})");
+					WHERE("inner_code  in (SELECT inner_code FROM m_merchant_core_entity_ref WHERE entity_inner_code IN (SELECT entity_inner_code FROM u_app_user_merchant_entity WHERE app_user_id =#{tradeOrder.userId}))");
 				}
 				if(null != tradeOrder.getStartCreateDate()) {
 					WHERE("create_time >= #{tradeOrder.startCreateDate}");
