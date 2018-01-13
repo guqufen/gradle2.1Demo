@@ -447,7 +447,7 @@ public class TicketController extends BaseController {
         ticketOrder.setOrderNo(queryOrderListJO.getOrderNo());
         ticketOrder.setAppUserId(queryOrderListJO.getUserId());
         Integer pageNum = 1;
-        Integer pageSize = 20;
+        Integer pageSize = 40;
         ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
         Integer[] statuses = { 0, 1, 2 };
         ticketOrder.setStatuses(statuses);

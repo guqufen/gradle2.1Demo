@@ -179,7 +179,7 @@ public class TicketOrderService extends BaseService {
         for (TicketOrderDO order : pageList) {
             TrainOrderListVO vo = new TrainOrderListVO();
             vo.setFromStationCode(order.getFromStationCode());
-            vo.setCreateTime(order.getCreateTime());
+            vo.setCreateTime(DateUtils.dateFormatToStr(order.getCreateTime()));
             vo.setFromStationName(order.getFromStationName());
             vo.setId(order.getId());
             vo.setOrderNo(order.getOrderNo());
