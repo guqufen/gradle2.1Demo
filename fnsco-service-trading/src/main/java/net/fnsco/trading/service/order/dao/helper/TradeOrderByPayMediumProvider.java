@@ -204,7 +204,7 @@ public class TradeOrderByPayMediumProvider {
             	WHERE("trade_date < #{tradeOrderByPayMedium.endTradeDate}");
             }
             if(null != tradeOrderByPayMedium.getUserId()) {
-            	WHERE("inner_code IN (SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{tradeOrderByPayMedium.userId})");
+            	WHERE("inner_code IN (SELECT inner_code FROM m_merchant_core_entity_ref WHERE entity_inner_code IN (SELECT entity_inner_code FROM u_app_user_merchant_entity WHERE app_user_id =#{tradeOrderByPayMedium.userId}))");
             }
     	}}.toString();
     }

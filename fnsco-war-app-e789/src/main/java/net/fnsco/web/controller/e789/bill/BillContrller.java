@@ -152,7 +152,7 @@ public class BillContrller extends BaseController {
 					billVO.setTotalExpenditure("-"+billVO.getTotalExpenditure());
 				}
 				if(Strings.isNullOrEmpty(billVO.getTotalRevenue())) {
-					billVO.setTotalRevenue("-0.00");
+					billVO.setTotalRevenue("+0.00");
 				}else {
 					billVO.setTotalRevenue("+"+billVO.getTotalRevenue());
 				}

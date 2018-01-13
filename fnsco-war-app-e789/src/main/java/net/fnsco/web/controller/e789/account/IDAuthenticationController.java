@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
@@ -41,7 +40,6 @@ import net.fnsco.trading.service.userfile.AppUserFileService;
 import net.fnsco.trading.service.userfile.entity.AppUserFileDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.IdentifyJO;
-import net.fnsco.web.controller.e789.vo.IdAuthVO;
 
 /**
  * @desc 身份证认证相关功能控制器

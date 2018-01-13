@@ -98,8 +98,10 @@ public class StatController extends BaseController {
 		if(Strings.isNullOrEmpty(thisMonth)) {
 			thisMonth = "0.00";
 		}
-		
-		String thisMouthTru = new BigDecimal(resultVO.getTodayTurnover()).add(new BigDecimal(thisMonth)).toString();
+		if(Strings.isNullOrEmpty(totalToday)) {
+			totalToday = "0.00";
+		}
+		String thisMouthTru = new BigDecimal(totalToday).add(new BigDecimal(thisMonth)).toString();
 		resultVO.setThisMonthTurnover(formatRMBNumber(thisMouthTru));
 		
 		return success(resultVO);
@@ -189,7 +191,7 @@ public class StatController extends BaseController {
 			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
 		}
 		
-		String startTradeDate = DateUtils.getDateStrByMonth(0,-8);//yyyy-MM-dd;
+		String startTradeDate = DateUtils.getDateStrByMonth(0,-7);//yyyy-MM-dd;
 		String endTradeDate = DateUtils.getDateStrByMonth(0,-1);
 		List<OrderDayDTO> datas = tradeOrderByDayDAO.selectTurnoverByCondition(startTradeDate, endTradeDate, commonJO.getUserId());
 		List<EveryDayTurnoverVO> resultData = Lists.newArrayList();
@@ -211,7 +213,6 @@ public class StatController extends BaseController {
 		result.setTotalTurnover(formatRMBNumbers(totalTu.toString()));
 		return success(result);
 	}
-	
 	
 	private List<EveryDayTurnoverVO> installTradeDay(String startTradeDate, String endTradeDate,List<EveryDayTurnoverVO> tradeDayData) {
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
