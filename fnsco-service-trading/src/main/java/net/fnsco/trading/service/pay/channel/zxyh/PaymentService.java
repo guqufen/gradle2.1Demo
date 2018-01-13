@@ -92,7 +92,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	 * @throws @since
 	 *             CodingExample Ver 1.1
 	 */
-	public void getDealStatus(Integer id, String paySubType, String secMerId, String orderNo, Date orderCeateTime) {
+	public Integer getDealStatus(Integer id, String paySubType, String secMerId, String orderNo, Date orderCeateTime) {
 		String merId = env.getProperty("zxyh.merId");
 		String prefix = env.getProperty("zxyh.query.trade.url");
 		String url = "/MPay/backTransAction.do";
@@ -111,11 +111,11 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			tradeResultZXDTO.setOrigOrderTime(DateUtils.dateFormat1ToStr(orderCeateTime));
 			tradeResultZXDTO.setOrderTime(DateUtils.dateFormat1ToStr(orderCeateTime));
 			tradeResultZXDTO.setFetchOrderNo("Y");
-		}
-		// 支付宝
-		if (StringUtils.equals("02", paySubType)) {
+		}else if (StringUtils.equals("02", paySubType)) {// 支付宝
 			tradeResultZXDTO.setTxnSubType("381004");
 			tradeResultZXDTO.setSeqId(orderNo); // 原交易中信流水号或原交易商户订单号
+		}else {
+			return 0;
 		}
 		String mercStr = JSON.toJSONString(tradeResultZXDTO);
 		mercMap = JSON.parseObject(mercStr, Map.class);
@@ -147,6 +147,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_CLOSED.getCode());
 		} else if ("04".equals(respMap.get("txnState"))||"06".equals(respMap.get("txnState"))||"08".equals(respMap.get("txnState"))||"09".equals(respMap.get("txnState"))) {
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
+			return 0;
 		}
 		tradeOrderDO.setPayOrderNo((String) respMap.get("origSeqId")); // 对应的中信订单号
 		tradeOrderDO.setRespMsg(E789ApiConstant.ResponCodeEnum.getNameByCode(tradeOrderDO.getRespCode()));
@@ -154,7 +155,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		if (!Strings.isNullOrEmpty(endTime)) {
 			tradeOrderDO.setCompleteTime(DateUtils.StrToDate(endTime));// 交易完成时间
 		}
-		tradeOrderService.doUpdate(tradeOrderDO);
+		Integer row = tradeOrderService.doUpdate(tradeOrderDO);
+		return row;
 	}
 
 	/**
