@@ -122,6 +122,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+		logger.info("查询交易状态返回报文="+respMap.toString());
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setId(id);
 		// 微信返回结果
