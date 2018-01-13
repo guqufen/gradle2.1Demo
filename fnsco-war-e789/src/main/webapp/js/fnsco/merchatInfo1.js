@@ -2188,8 +2188,12 @@ function zxyhChannel(id){
 	    dataType : "json",
 	    data:{'id':id},
 	    success:function(data){
-	    	console.log(data.data.result);
-	    	$(".qrcode").attr('src',data.data.result)
+	    	unloginHandler(data);  
+	          if(data.success){
+	             layer.msg('入建成功');
+	          }else{
+	        	  layer.msg(data.data.respMsg);
+	          }
 	    }
 	})
 	$('#zxyhChannel').modal();
