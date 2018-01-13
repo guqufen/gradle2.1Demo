@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
+import net.fnsco.bigdata.api.constant.BigdataConstant;
 import net.fnsco.bigdata.api.dto.MercQueryDTO;
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.dto.TradeAliPayCallBackDTO;
@@ -367,6 +368,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setPaySubType(E789ApiConstant.PayTypeEnum.PAYBYWX.getCode());
 		tradeOrderDO.setCreateTime(new Date());
 		tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
+		tradeOrderDO.setPayMedium(BigdataConstant.PayMediumEnum.APP.getCode());
+		tradeOrderDO.setSyncStatus(0);
 		logger.info("插入交易数据");
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
@@ -454,6 +457,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setCreateTime(new Date());
 		tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
 		tradeOrderDO.setInnerCode(innerCode);
+		tradeOrderDO.setPayMedium(BigdataConstant.PayMediumEnum.APP.getCode());
+		tradeOrderDO.setSyncStatus(0);
 		logger.info("交易数据订单号=" + tradeOrderDO.getOrderNo());
 		tradeOrderService.doAdd(tradeOrderDO);
 		// 解析返回报文
