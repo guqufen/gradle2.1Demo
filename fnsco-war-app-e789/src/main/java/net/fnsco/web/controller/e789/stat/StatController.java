@@ -98,8 +98,10 @@ public class StatController extends BaseController {
 		if(Strings.isNullOrEmpty(thisMonth)) {
 			thisMonth = "0.00";
 		}
-		
-		String thisMouthTru = new BigDecimal(resultVO.getTodayTurnover()).add(new BigDecimal(thisMonth)).toString();
+		if(Strings.isNullOrEmpty(totalToday)) {
+			totalToday = "0.00";
+		}
+		String thisMouthTru = new BigDecimal(totalToday).add(new BigDecimal(thisMonth)).toString();
 		resultVO.setThisMonthTurnover(formatRMBNumber(thisMouthTru));
 		
 		return success(resultVO);
