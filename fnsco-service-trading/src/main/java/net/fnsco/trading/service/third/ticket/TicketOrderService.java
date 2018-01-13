@@ -118,7 +118,7 @@ public class TicketOrderService extends BaseService {
                             order.setStatus(TicketConstants.OrderStateEnum.SUCCESS.getCode());
                         }
                         //更新订单表
-                        TradeWithdrawDO tradeWithdraw = tradeWithdrawService.getByOrderNo(order.getOrderNo());
+                        TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOriginalOrderNo(order.getOrderNo());
                         tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.SUCCESS.getCode());
                         tradeWithdraw.setStatus(3);
                         tradeWithdrawService.doUpdate(tradeWithdraw);
