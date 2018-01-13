@@ -148,14 +148,6 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		} else if ("04".equals(respMap.get("txnState"))||"06".equals(respMap.get("txnState"))||"08".equals(respMap.get("txnState"))||"09".equals(respMap.get("txnState"))) {
 			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
 		}
-//		else if ("06".equals(respMap.get("txnState"))) {
-//			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_UNPAY.getCode());
-//		} else if ("08".equals(respMap.get("txnState"))) {
-//			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_RETURN_SUCCESS.getCode());
-//		} else if ("09".equals(respMap.get("txnState"))) {
-//			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_IN_PROGRESS.getCode());
-//		}
-
 		tradeOrderDO.setPayOrderNo((String) respMap.get("origSeqId")); // 对应的中信订单号
 		tradeOrderDO.setRespMsg(E789ApiConstant.ResponCodeEnum.getNameByCode(tradeOrderDO.getRespCode()));
 		String endTime = (String) respMap.get("endTime");
@@ -858,6 +850,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		if (aliDTO == null) {
 			return ResultDTO.fail("中信返回数据有误");
 		}
+		logger.error("支付宝回调函数返回=respCode="+aliDTO.getRespCode()+"&respMsg"+aliDTO.getRespMsg());
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setOrderNo(aliDTO.getOrderId());// 商户订单号
 		tradeOrderDO.setPayOrderNo(aliDTO.getTransactionId());// 渠道(扫码)订单号
@@ -908,6 +901,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		if (weChatDTO == null) {
 			return ResultDTO.fail("中信返回数据有误");
 		}
+		logger.error("微信回调函数返回=respCode="+weChatDTO.getRespCode()+"&weChatDTO"+weChatDTO.getRespMsg());
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setOrderNo(weChatDTO.getOrderId());// 商户订单号
 		tradeOrderDO.setPayOrderNo(weChatDTO.getTransactionId());// 渠道(扫码)订单号
