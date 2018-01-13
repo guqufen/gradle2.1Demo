@@ -25,7 +25,7 @@ public class TradeConstants extends CoreConstants {
         TXT_TYPE_MAP.put("012007", "1");// 风险信息上送交易
         TXT_TYPE_MAP.put("012008", "1");// 调账交易
         TXT_TYPE_MAP.put("012009", "1");// 脱机消费交易
-        TXT_TYPE_MAP.put("012010", "1");// 消费冲正交易
+        TXT_TYPE_MAP.put("012010", "2");// 消费冲正交易
         TXT_TYPE_MAP.put("012011", "1");// 消费撤销冲正交易
         TXT_TYPE_MAP.put("012012", "1");// 预授权冲正交易
         TXT_TYPE_MAP.put("012013", "1");// 预授权撤销冲正交易

@@ -855,6 +855,16 @@ WHERE
     and status=1
     limit 1
   </select>
+  <select id="selectListByInnerCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	 select 
+    <include refid="Base_Column_List" />
+    from m_merchant_core
+    where inner_code in 
+    <foreach item="item" collection="array" open="(" separator="," close=")">
+	       #{item}
+	 </foreach> 
+    and status=1
+  </select>
   <!--根据手机号查询inner_code-->
   <select id="innerCodeByMobile" resultMap="BaseResultMap">
   	select 

@@ -1,6 +1,5 @@
 package net.fnsco.bigdata.comm;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -11,6 +10,11 @@ public class ServiceConstant {
 
     //支付类型
     public static Map<String, String> PAY_TYPE_MAP     = Maps.newHashMap();
+    
+    public static Map<String, String> LKL_PAY_TYPE_MAP     = Maps.newHashMap();
+    
+    public static Map<String, String> LKL_PAY_SUB_TYPE_MAP     = Maps.newHashMap();
+    
     //支付子类型
     public static Map<String, String> PAY_SUB_TYPE_MAP = Maps.newHashMap();
     /*0-刷卡
@@ -35,6 +39,33 @@ public class ServiceConstant {
         PAY_SUB_TYPE_MAP.put("4", "04");
         PAY_SUB_TYPE_MAP.put("5", "05");
         PAY_SUB_TYPE_MAP.put("6", "06");
+        /**
+         *	00 借记卡
+			01 贷记卡
+			91 微信
+			92 支付宝
+			93 百度钱包
+			96 拉卡拉钱包
+			04 未知卡类型
+
+         */
+        LKL_PAY_TYPE_MAP.put("00", "00");
+        LKL_PAY_TYPE_MAP.put("01", "00");
+        LKL_PAY_TYPE_MAP.put("91", "01");
+        LKL_PAY_TYPE_MAP.put("92", "01");
+        LKL_PAY_TYPE_MAP.put("93", "01");
+        LKL_PAY_TYPE_MAP.put("96", "01");
+        LKL_PAY_TYPE_MAP.put("04", "01");
+        
+        
+        LKL_PAY_SUB_TYPE_MAP.put("00", "00");
+        LKL_PAY_SUB_TYPE_MAP.put("01", "00");
+        LKL_PAY_SUB_TYPE_MAP.put("91", "01");
+        LKL_PAY_SUB_TYPE_MAP.put("92", "02");
+        LKL_PAY_SUB_TYPE_MAP.put("93", "09");
+        LKL_PAY_SUB_TYPE_MAP.put("96", "09");
+        LKL_PAY_SUB_TYPE_MAP.put("04", "09");
+        
     }
 
     public static enum PayTypeEnum {

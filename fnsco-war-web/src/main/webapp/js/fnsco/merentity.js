@@ -237,6 +237,7 @@ function resetEvent() {
 $("#btn_add").click(function(){
     $("#myModalLabel").html("新增商户实体");
     $('#addForm')[0].reset();
+    queryIndustryEvent(null);
     merProvince("0");
 })
 $('.sunmitBtn').click(function(){
@@ -353,12 +354,14 @@ function editData(id){
         success:function(data){
         	unloginHandler(data);
         	var entity = data.data;
-            console.log(data);
+            console.log(data);queryIndustryEvent(null);
         	if(data.success){
+        		
         		var entity = data.data;
                 $("#myModal").modal();
                 $("#myModalLabel").html("编辑商户实体详情");
                 $("#mercName").val(entity.mercName);
+                $('#industry').val(entity.industryName);
                 $("#legalPerson").val(entity.legalPerson);
                 $("#legalPersonMobile").val(entity.legalPersonMobile);
                 $("#cardNum").val(entity.cardNum);
@@ -398,6 +401,7 @@ function detailsData(id){
         		var entity = data.data;
                 $("#myDetailModal").modal();
                 $("#detail_merName").val(entity.mercName);
+                $('#detail_industryName').val(entity.industryName);
                 $("#detail_legalPerson").val(entity.legalPerson);
                 $("#detail_legalPersonMobile").val(entity.legalPersonMobile);
                 $("#detail_cardNum").val(entity.cardNum);

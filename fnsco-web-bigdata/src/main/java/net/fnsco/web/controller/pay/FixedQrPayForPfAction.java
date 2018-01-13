@@ -31,5 +31,12 @@ public class FixedQrPayForPfAction extends BaseController {
     public ResultDTO getQrImage(@RequestParam("id") Integer id) {
         return fixedQrPaymentService.getQrImage(id, request);
     }
+    
+    //油卡生成
+    @RequestMapping("/getOilCardImage")
+    @ResponseBody
+    public ResultDTO getOilCardImage(@RequestParam("id") Integer id) {
+        return fixedQrPaymentService.getOidCardImage(id, request);
+    }
 
 }
