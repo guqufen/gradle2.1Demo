@@ -2,6 +2,7 @@ package net.fnsco.web.controller.e789.tradedata;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -138,10 +139,13 @@ public class TradedataE789Controller extends BaseController {
 		vo.setTradeStatus(tradeOrderDO.getRespCode());
 		
 		logger.info("订单号="+tradeDataDetailJO.getOrderNo()+"交易状态="+tradeOrderDO.getRespCode());
-		
+		//查询中信交易状态
+		if(StringUtils.equals("05", tradeOrderDO.getChannelType())||"1000".equals(tradeOrderDO.getRespCode())){
+			paymentService.getDealStatus(tradeOrderDO.getId(),tradeOrderDO.getPaySubType(),tradeOrderDO.getChannelMerId(),tradeOrderDO.getOrderNo(),tradeOrderDO.getOrderCeateTime());
+			
+		}
 		if("1000".equals(tradeOrderDO.getRespCode())) {
 			vo.setTradeStatusName("处理中");
-			paymentService.getDealStatus(tradeOrderDO.getId(),tradeOrderDO.getPaySubType(),tradeOrderDO.getChannelMerId(),tradeOrderDO.getOrderNo(),tradeOrderDO.getOrderCeateTime());
 		}else if("1001".equals(tradeOrderDO.getRespCode())) {
 			vo.setTradeStatusName("成功");
 		}else if("1002".equals(tradeOrderDO.getRespCode())) {
