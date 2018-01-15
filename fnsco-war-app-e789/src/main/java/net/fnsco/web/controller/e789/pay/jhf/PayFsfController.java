@@ -90,6 +90,12 @@ public class PayFsfController extends BaseController {
         tradeOrder.setCreateUserId(String.valueOf(getQRUrlJO.getUserId()));
         BigDecimal amountB = new BigDecimal(getQRUrlJO.getPaymentAmount());
         BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
+        if (amountBs.compareTo(new BigDecimal("65000")) < 0) {
+            return ResultDTO.fail("充值金额不能低于650元");
+        }
+        if (amountBs.compareTo(new BigDecimal("4000000")) > 0) {
+            return ResultDTO.fail("充值金额不能高于40000元");
+        }
         tradeOrder.setTxnAmount(amountBs);
         //支付方式00刷卡01二维码02分期付
         tradeOrder.setPayType("02");

@@ -17,6 +17,7 @@ import net.fnsco.bigdata.api.dto.TradeDataDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.comm.ServiceConstant;
+import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
 import net.fnsco.bigdata.service.modules.merchant.MerchantServiceImpl;
@@ -37,7 +38,8 @@ public class FixedQrPaymentService extends BaseService {
     private MerchantCoreService merchantCoreService;
     @Autowired
     private TradeDataService    tradeDataService;
-
+    @Autowired
+    private MerchantCoreDao     merchantCoreDao;
     @Autowired
     private Environment         env;
 
@@ -133,6 +135,44 @@ public class FixedQrPaymentService extends BaseService {
          
         
         
+        String filePath = env.getProperty("qr.filePath");
+        if (Strings.isNullOrEmpty(filePath)) {
+            filePath = request.getSession().getServletContext().getRealPath("") + "/qr/";
+        }
+        String fileUrl = env.getProperty("qr.fileUrl");
+        File f = new File(filePath + fileName);
+        if (f.exists()) {
+            ResultDTO.success(fileUrl + fileName);
+        }
+        QrDTO qrDTO = new QrDTO();
+        qrDTO.setFileName(fileName);
+        qrDTO.setContent(content + "?innerCode=" + innerCode);
+        qrDTO.setFilePath(filePath);
+        qrDTO.setHeight(Integer.parseInt(env.getProperty("qr.height")));
+        qrDTO.setFormat(format);
+        qrDTO.setWidth(Integer.parseInt(env.getProperty("qr.width")));
+        try {
+            QrUtil.createImage(qrDTO);
+        } catch (Exception ex) {
+            logger.error("生成二维码出错", ex);
+            return ResultDTO.fail("生成二维码出错");
+        }
+        return ResultDTO.success(fileUrl + fileName);
+    }
+    
+    
+    public ResultDTO getOidCardImage(Integer id, HttpServletRequest request) {
+        MerchantCore core = merchantCoreDao.selectByPrimaryKey(id);
+        if (null == core) {
+            return ResultDTO.fail("商户不存在" + id);
+        }
+        String innerCode = core.getInnerCode();
+        String content = "";
+        String format = env.getProperty("qr.format");
+        String fileName = innerCode + "." + format;
+        content = env.getProperty(MerchantServiceImpl.OILCARD_BASE_URL);
+        fileName = "pf"+innerCode + "." + format;
+          
         String filePath = env.getProperty("qr.filePath");
         if (Strings.isNullOrEmpty(filePath)) {
             filePath = request.getSession().getServletContext().getRealPath("") + "/qr/";

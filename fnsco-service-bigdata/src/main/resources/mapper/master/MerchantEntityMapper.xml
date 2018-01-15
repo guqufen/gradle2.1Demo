@@ -26,14 +26,31 @@
     <result column="etps_attr" property="etpsAttr" jdbcType="INTEGER" />
   </resultMap>
   
- <!--    <resultMap id="IndustryResultMap" type="net.fnsco.bigdata.api.dto.IndustryDTO" >
+   <resultMap id="IndustryResultMap" type="net.fnsco.bigdata.service.domain.MerchantEntity" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="code" property="code" jdbcType="VARCHAR" />
-    <result column="business_form" property="businessForm" jdbcType="VARCHAR" />
-    <result column="first" property="first" jdbcType="VARCHAR" />
-    <result column="third" property="third" jdbcType="VARCHAR" />
-    <result column="fourth" property="fourth" jdbcType="VARCHAR" />
-  </resultMap> -->
+    <result column="entity_inner_code" property="entityInnerCode" jdbcType="VARCHAR" />
+    <result column="merc_name" property="mercName" jdbcType="VARCHAR" />
+    <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+    <result column="legal_person_mobile" property="legalPersonMobile" jdbcType="VARCHAR" />
+    <result column="business_license_num" property="businessLicenseNum" jdbcType="VARCHAR" />
+    <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+    <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_timer" property="createTimer" jdbcType="TIMESTAMP" />
+    <result column="create_source" property="createSource" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="last_modefy_timer" property="lastModefyTimer" jdbcType="TIMESTAMP" />
+    <result column="last_modefy_user_id" property="lastModefyUserId" jdbcType="INTEGER" />
+    <result column="scores" property="scores" jdbcType="DECIMAL" />
+    <result column="regist_address" property="registAddress" jdbcType="VARCHAR" />
+    <result column="regist_province" property="registProvince" jdbcType="INTEGER" />
+    <result column="regist_city" property="registCity" jdbcType="INTEGER" />
+    <result column="regist_area" property="registArea" jdbcType="INTEGER" />
+    <result column="regist_address_detail" property="registAddressDetail" jdbcType="VARCHAR" />
+    <result column="etps_tp" property="etpsTp" jdbcType="INTEGER" />
+    <result column="etps_attr" property="etpsAttr" jdbcType="INTEGER" />
+    <result column="industryName" property="industryName" jdbcType="VARCHAR" />
+  </resultMap> 
   
   <sql id="Base_Column_List" >
     id, entity_inner_code, merc_name, legal_person, legal_person_mobile, business_license_num, 
@@ -55,6 +72,10 @@
     <include refid="Base_Column_List" />
     from m_merchant_entity
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+	SELECT MME.*, CONCAT(IFNULL(SIS.business_form,''),'-',IFNULL(SIS.`first`,''),'-',IFNULL(SIS.third,''),'-',IFNULL(SIS.fourth,'')) AS industryName
+	  FROM m_merchant_entity MME LEFT JOIN sys_industry SIS ON MME.industry_code = SIS.`code` WHERE MME.id = #{id,jdbcType=INTEGER}  limit 1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from m_merchant_entity

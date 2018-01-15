@@ -1,7 +1,10 @@
 package net.fnsco.bigdata.service.modules.trade;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
+import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.dto.TradeDataDTO;
@@ -17,7 +21,6 @@ import net.fnsco.bigdata.api.trade.TradeDataService;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
 import net.fnsco.bigdata.service.dao.master.MerchantCoreDao;
 import net.fnsco.bigdata.service.dao.master.MerchantPosDao;
-import net.fnsco.bigdata.service.dao.master.MerchantTerminalDao;
 import net.fnsco.bigdata.service.dao.master.trade.TradeDataDAO;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantCore;
@@ -44,8 +47,6 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Autowired
     private MerchantCoreDao     merchantCoreDao;
     @Autowired
-    private MerchantTerminalDao merchantTerminalDao;
-    @Autowired
     private MerchantPosDao      merchantPosDao;
 
     /**
@@ -54,9 +55,11 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
     @Transactional
     public boolean saveTradeData(TradeDataDTO tradeData) {
         //ServiceConstant.STR_1.equals(tradeData.getValidate()) && 
+    	logger.error("交易流水:"+tradeData.getOrderNo());
         if (!Strings.isNullOrEmpty(tradeData.getMd5())) {
             //需要校验
             TradeData temp = tradeListDAO.selectByMd5(tradeData.getMd5());
+            
             if (null != temp) {
                 logger.error("交易流水已存在" + tradeData.getOrderNo() + ",丢弃该交易流水");
                 return true;
@@ -101,6 +104,21 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
                 innerCode = channel.getInnerCode();
             }
         }
+        
+        //插入表之前，需要通过 终端号+金额+日期+渠道内部商户号+参考号+交易类型1消费2撤销  去判断是否已经插入过数据，如果已经插入，则不再插入
+        TradeData tradeDateCondition  = new TradeData();
+        tradeDateCondition.setAmt(tradeData.getAmt());
+        tradeDateCondition.setTermId(tradeData.getTermId());
+        tradeDateCondition.setTimeStamp(tradeData.getTimeStamp());
+        tradeDateCondition.setInnerCode(innerCode);
+        tradeDateCondition.setReferNo(tradeData.getReferNo());
+        tradeDateCondition.setTxnType(tradeData.getTxnType());
+        int totalNum = tradeListDAO.queryTotalByCondition(tradeDateCondition);
+        if(totalNum > 0) {
+        	logger.warn("交易流水已存在!不再操作" + tradeData.getOrderNo());
+        	return true;
+        }
+        
         logger.warn("插入流水，获取商户耗时" + (System.currentTimeMillis() - timer));
         TradeData tradeDataEntity = new TradeData();
         tradeDataEntity.setId(DbUtil.getUuid());
@@ -333,14 +351,53 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         }
         BeanUtils.copyProperties(tradeDataDTO, tradeData);
         List<TradeData> datas = tradeListDAO.queryByAllCondition(tradeData);
+        Set<String> sqlPos = new HashSet<String>();
+        Set<String> sqlMer = new HashSet<String>();
         for (TradeData tradeData2 : datas) {
-            if (!Strings.isNullOrEmpty(tradeData2.getInnerCode())) {
-                MerchantCore core = merchantCoreDao.selectByInnerCode(tradeData2.getInnerCode());
-                if (null != core) {
-                    tradeData2.setMerName(core.getMerName());
-                }
-            }
+        	String termId = tradeData2.getTermId();
+        	if(!Strings.isNullOrEmpty(termId)) {
+        		sqlPos.add(termId);
+        	}
+        	String InnerCode = tradeData2.getInnerCode();
+        	if(!Strings.isNullOrEmpty(InnerCode)) {
+        		sqlMer.add(InnerCode);
+        	}
         }
+        String[] toBeStoredPos = sqlPos.toArray(new String[sqlPos.size()]);    
+        Map<String,MerchantPos> posMap = Maps.newHashMap();
+        if(toBeStoredPos.length!=0) {
+        	List<MerchantPos> merchantPosList =  merchantPosDao.selectByTermId(toBeStoredPos);
+        	for(MerchantPos pos : merchantPosList) {
+        		if(!Strings.isNullOrEmpty(pos.getChannelTerminalCode())) {
+        			posMap.put(pos.getChannelTerminalCode(), pos);
+        		}
+        		if(!Strings.isNullOrEmpty(pos.getQrChannelTerminalCode())) {
+        			posMap.put(pos.getQrChannelTerminalCode(), pos);
+        		} 
+        	}
+        }
+        String[] toBeStoredMer = sqlMer.toArray(new String[sqlMer.size()]); 
+        Map<String,String> mercMap = Maps.newHashMap();
+        if(toBeStoredMer.length!=0) {
+        	List<MerchantCore> coreList = merchantCoreDao.selectListByInnerCode(toBeStoredMer);
+        	for(MerchantCore core : coreList) {
+        		String merName = core.getMerName();
+        		mercMap.put(core.getInnerCode(), merName);
+        	}
+        }
+        for(TradeData tradeData2 : datas) {
+        	String term = tradeData2.getTermId();
+        	MerchantPos pos = posMap.get(term);
+        	if(pos!=null) {
+        		tradeData2.setSnCode(pos.getSnCode());
+        	}
+        	String InnerCode = tradeData2.getInnerCode();
+        	String merName = mercMap.get(InnerCode);
+        	if(!Strings.isNullOrEmpty(merName)) {
+        		tradeData2.setMerName(merName);
+        	}
+        }
+        
         return datas;
     }
 

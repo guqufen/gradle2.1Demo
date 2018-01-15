@@ -21,7 +21,8 @@ public interface AdDAO {
 			@Result(column = "update_time", property = "updateTime"),
 			@Result(column = "create_user_id", property = "createUserId"),
 			@Result(column = "url", property = "url"),
-			@Result(column = "type", property = "type")})
+			@Result(column = "type", property = "type"),
+			@Result(column = "device_type", property = "deviceType")})
 	@Select("SELECT * FROM sys_ad WHERE id = #{id}")
 	public AdDO getById(@Param("id") int id);
 

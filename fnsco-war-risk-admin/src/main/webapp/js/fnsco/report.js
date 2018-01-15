@@ -93,6 +93,11 @@ function formatterIndex(value, row, index){
 }
 
 function formatterOperation(value, row, index) {
+	console.log('row: '+row.industry);
+	var industry = row.industry;
+	if(industry == null || industry == '' ||industry == 'null'){
+		return '<span>未绑定行业,不能操作</span>';
+	}
 	//2、4待编辑
 	if (row.status == 2 ||  row.status == 4 ||  row.status == 3) {
 		return [ '<a class="redact btn btn-success" style="padding: 3px 6px;color:white;" href="reportEdit.html?merchantId='+ row.id +' &entityInnerCode='+row.entityInnerCode+'" >编辑报告</a>' ].join('');

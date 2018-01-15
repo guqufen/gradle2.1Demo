@@ -36,6 +36,9 @@ public class E789ApiConstant extends CoreConstants {
 	public static String E_ID_CARD_B_ERROR      = "210021"; //身份证反面识别失败
 	public static String E_UNBOUND_SUCCESS      = "2100022"; //
 	public static String E_BOUND_SUCCESS      = "2100023";
+	public static String E_NOT_CHECK      = "2100024";//入建中信未通过审核
+	
+	public static String E_AGREEE_NOT_FOUND  ="2100030";
 
 	static {
 		// 身份识别证错误信息
@@ -72,12 +75,20 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(E_ID_CARD_B_ERROR, "身份证反面识别失败");
 		ERROR_MESSGE_MAP.put(E_UNBOUND_SUCCESS, "解绑成功");
 		ERROR_MESSGE_MAP.put(E_BOUND_SUCCESS, "绑定成功");
+		ERROR_MESSGE_MAP.put(E_NOT_CHECK, "商户信息未通过审核");
 		
+		ERROR_MESSGE_MAP.put(E_AGREEE_NOT_FOUND, "委托协议不存在");
 	}
 
 	public static enum ResponCodeEnum {
-		DEAL_IN_PROGRESS("1000", "处理中"), DEAL_SUCCESS("1001", "成功"), DEAL_FAIL("1002", "失败"), DEAL_SEALS_RETURN("1003",
-				"已退货"),DEAL_UNPAY("1004","订单未支付"),DEAL_CLOSED("1005","订单已关闭");
+		DEAL_IN_PROGRESS("1000", "处理中"), //09
+		DEAL_SUCCESS("1001", "成功"), //00
+		DEAL_FAIL("1002", "失败"), //99
+		DEAL_SEALS_RETURN("1003","已退货"),//01
+		DEAL_UNPAY("1000", "订单未支付"),//06
+		DEAL_CLOSED("1005", "交易已关闭"),//02
+		DEAL_ANVANCE_PAYMENT("1000", "预支付交易成功"),//04
+		DEAL_RETURN_SUCCESS("1001", "交易受理成功（退货交易时使用）");//08
 
 		private String code;
 		private String name;

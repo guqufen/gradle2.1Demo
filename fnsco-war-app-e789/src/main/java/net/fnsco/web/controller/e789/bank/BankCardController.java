@@ -64,6 +64,22 @@ public class BankCardController extends BaseController {
 	private SysConfigService sysConfigService;
 	
 
+	//调用ebank接口
+	public static void main(String[] args) {
+		Map<String, String> params = new HashMap<>();
+		params.put("OppAccNo", "");// 付款人帐号
+		params.put("OppAccName", "");// 付款人户名
+		params.put("OppBank", "");// 付款人银行号,见附录银行代码
+		params.put("CardAcctFlag", "");// 卡折标志0-借记卡；1-存折；2-对公账号
+		params.put("IdType", "");// 证件类型
+		params.put("IdNo", "");// 证件号码
+		params.put("Mobile", "");// 手机号
+		params.put("TranFlag", "");// 操作标志:1-新增；2-修改；3-删除
+		
+		
+		
+	}
+	
 	@RequestMapping(value = "/validateBank")
 	@ApiOperation(value = "银行卡信息页-校验银行卡")
 	public ResultDTO<ValidateBankVO> validateBank(@RequestBody ValidateBankJO jo) {
@@ -157,12 +173,17 @@ public class BankCardController extends BaseController {
 		}
 		// 判断该用户是否已保存过该银行卡
 		List<AppUserBankDO> list = appUserBankService.getByBankNO(Integer.parseInt(userId),bankCardNum);
+		Integer id = null;
 		if (list.size() > 0 && StringUtils.equals("0", list.get(0).getStatus())) {//已绑定该银行卡
 			return ResultDTO.fail(E789ApiConstant.E_BANK_IS_EXIST);
 
+		}else if(list.size() > 0 && StringUtils.equals("1", list.get(0).getStatus())){
+			id = list.get(0).getId();
 		}
-		Integer id = list.get(0).getId();
-		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num,list.get(0).getStatus(),id);
+		
+		
+		
+		Integer row = appUserBankService.doAppAdd(Integer.parseInt(userId), mobile, bankCardNum, bankCardholder,id_card_num,id);
 		if (row == 1) {
 			return ResultDTO.success(null,E789ApiConstant.E_BOUND_SUCCESS);
 		} else {
