@@ -21,7 +21,7 @@ public class TicketOrderProvider {
         return new SQL() {
             {
                 UPDATE(TABLE_NAME);
-                if (null == ticketOrder.getAppUserId()) {
+                if (null != ticketOrder.getAppUserId()) {
                     SET("app_user_id=#{ticketOrder.appUserId}");
                 }
                 if (StringUtils.isNotBlank(ticketOrder.getOrderNo())) {
@@ -96,7 +96,7 @@ public class TicketOrderProvider {
                 if (ticketOrder.getId() != null) {
                     WHERE("id=#{ticketOrder.id}");
                 }
-                if (ticketOrder.getAppUserId() == null) {
+                if (ticketOrder.getAppUserId() != null) {
                     WHERE("app_user_id=#{ticketOrder.appUserId}");
                 }
                 if (StringUtils.isNotBlank(ticketOrder.getOrderNo())) {
@@ -166,7 +166,7 @@ public class TicketOrderProvider {
                 if (ticketOrder.getId() != null) {
                     WHERE("id=#{ticketOrder.id}");
                 }
-                if (ticketOrder.getAppUserId() == null) {
+                if (ticketOrder.getAppUserId() != null) {
                     WHERE("app_user_id=#{ticketOrder.appUserId}");
                 }
                 if (StringUtils.isNotBlank(ticketOrder.getOrderNo())) {

@@ -54,7 +54,7 @@ public interface TradeOrderByPayTypeDAO {
      */
     @Results({@Result( column = "pay_type",property = "payType"),@Result( column = "order_num",property = "orderNum"),@Result( column = "turnover",property = "turnover")})
     @Select("SELECT SUM(turnover) AS turnover , SUM(order_num) AS orderNum,pay_type AS payType FROM r_trade_order_by_pay_type WHERE inner_code IN "
-    		+ "(SELECT inner_code FROM u_app_user_merchant WHERE app_user_id = #{userId}) AND trade_date >= #{startTradeDate} AND trade_date <= #{endTradeDate} GROUP BY pay_type")
+    		+ "(SELECT inner_code FROM m_merchant_core_entity_ref WHERE entity_inner_code IN (SELECT entity_inner_code FROM u_app_user_merchant_entity WHERE app_user_id =#{userId})) AND trade_date >= #{startTradeDate} AND trade_date <= #{endTradeDate} GROUP BY pay_type")
     public List<OrderPayTypeDTO> selectByCondition(@Param("startTradeDate") String startTradeDate,@Param("endTradeDate") String endTradeDate,@Param("userId")Integer userId);
     
     /**

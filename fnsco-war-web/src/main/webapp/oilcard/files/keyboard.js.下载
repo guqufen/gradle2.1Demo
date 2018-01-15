@@ -1,0 +1,168 @@
+//var newDiv = document.createElement("div"); 
+//newDiv.className="maskLayer1";
+//document.body.appendChild(newDiv);
+/*//输入油枪、电话号码、密码*/
+(function(exports1) {                                  
+    var KeyBoard1 = function(input, options) {
+        var body = document.getElementsByTagName('body')[0]
+        var DIV_ID = options && options.divId || 'keyboard';
+        if (document.getElementById(DIV_ID)) {
+            body.removeChild(document.getElementById(DIV_ID));
+        }
+        this.input = input;
+        this.el = document.createElement('div');
+        var self = this;
+        var zIndex = options && options.zIndex || 1000;
+        var width = options && options.width || '100%';
+        var height = options && options.height || 'auto';
+        var fontSize = options && options.fontSize || '22px';
+        var backgroundColor = options && options.backgroundColor || '#f5f5f5';
+        var TABLE_ID = options && options.table_id || 'keyboardTable';
+        var mobile = typeof orientation !== 'undefined';
+        this.el.id = DIV_ID;
+        //样式 
+        var cssStr = '<style type="text/css">';
+        cssStr += '#' + TABLE_ID + ' td{width:25%;}';
+        cssStr += '</style>';
+        var tableStr = '<table id="' + TABLE_ID + '" border="0" cellspacing="0" cellpadding="0">';
+        tableStr += '<tr><td>1</td><td>2</td><td>3</td><td style=" background:url(images/del.png) no-repeat; background-size:55% auto; background-position:center; color:#fff; font-size:0px ">删除</td></tr>';
+        tableStr += '<tr><td>4</td><td>5</td><td>6</td><td>.</td></tr>';
+        tableStr += '<tr><td>7</td><td>8</td><td>9</td><td rowspan="2" class="hideKeyboard" ><div style="width:100%; height:110px;line-height:110px; font-size:22px" >完成</div></td></tr>';
+        tableStr += '<tr><td colspan="3">0</td></tr>';
+        tableStr += '</table>';
+        this.el.innerHTML = cssStr + tableStr;
+        function addEvent(e) {
+            var ev = e || window.event;
+            var clickEl = ev.element || ev.target;
+            var value = clickEl.textContent || clickEl.innerText;
+            if (clickEl.tagName.toLocaleLowerCase() === 'td' && value !== "删除" && value !== ".") {
+                if (self.input) {
+                    self.input.value += value;
+                }
+            } else if (clickEl.tagName.toLocaleLowerCase() === 'div' && value === "完成") {
+                body.removeChild(self.el);
+               // $("#keybaard").hide();
+                $("body").css("height", "0px"); 
+                //$(".maskLayer1").hide(100);
+
+                //键盘完成按钮与是否需要发票冲突
+                $('#keyboardboxtable').fadeOut(700);
+
+            } else if (clickEl.tagName.toLocaleLowerCase() === 'div' && value === "关闭") {
+                body.removeChild(self.el);
+            //  $("#keybaard").hide();
+              $("body").css("height", "0px");
+              //$(".maskLayer1").hide(100);
+                
+
+            } else if (clickEl.tagName.toLocaleLowerCase() === 'td' && value === "删除") {
+                var num = self.input.value;
+                if (num) {
+                    var newNum = num.substr(0, num.length - 1);
+                    self.input.value = newNum;
+                        $(".maskLayer1").hide();
+                }
+            }
+        }
+
+        if (mobile) {
+            this.el.ontouchstart = addEvent;
+        } else {
+            this.el.onclick = addEvent;
+        }
+        body.appendChild(this.el);
+    }
+    exports1.KeyBoard1 = KeyBoard1;
+})(window);
+
+//输入金钱的时候
+(function(exports) {
+    var KeyBoard = function(input, options) {
+        var body = document.getElementsByTagName('body')[0];
+        var DIV_ID = options && options.divId || 'keyboard';
+        if (document.getElementById(DIV_ID)) {
+            body.removeChild(document.getElementById(DIV_ID));
+        }
+        this.input = input;
+        this.el = document.createElement('div');
+        var self = this;
+        var zIndex = options && options.zIndex || 1000;
+        var width = options && options.width || '100%';
+        var height = options && options.height || 'auto';
+        var fontSize = options && options.fontSize || '22px';
+        var backgroundColor = options && options.backgroundColor || '#fff';
+        var TABLE_ID = options && options.table_id || 'keyboardTable';
+        var mobile = typeof orientation !== 'undefined';
+        this.el.id = DIV_ID;
+        //样式
+        var cssStr = '<style type="text/css">';
+         cssStr += '#' + TABLE_ID + ' td{width:20%;}';
+        cssStr += '</style>';
+        var tableStr = '<table id="' + TABLE_ID + '" border="0" cellspacing="0" cellpadding="0">';
+        tableStr += '<tr><td style="color:red">100</td><td>1</td><td>2</td><td>3</td><td style=" background:url(images/del.png) no-repeat; background-size:55% auto; background-position:center; color:#fff; font-size:0px ">删除</td></tr>';
+        tableStr += '<tr><td style="color:red">200</td><td>4</td><td>5</td><td>6</td><td>.</td></tr>';
+        tableStr += '<tr><td style="color:red">300</td><td>7</td><td>8</td><td>9</td><td   rowspan="2" class="hideKeyboard" ><div style="width:100%; height:110px;line-height:110px; ">完成</div></td></tr>';
+        tableStr += '<tr><td style="color:red">400</td><td colspan="3">0</td></tr>';
+        tableStr += '</table>';
+        this.el.innerHTML = cssStr + tableStr;
+        function addEvent(e) {
+            var ev = e || window.event;
+            var clickEl = ev.element || ev.target;
+            var value = clickEl.textContent || clickEl.innerText;
+            if (clickEl.tagName.toLocaleLowerCase() === 'td' && value !== "删除") {
+
+                if (self.input) {
+                    if(value === "100" || value === "200" || value === "300" || value === "400"){
+                         self.input.value = value;
+                        }
+                    else{
+                    self.input.value += value;}
+
+                }
+            } else if (clickEl.tagName.toLocaleLowerCase() === 'div' && value === "完成") {
+                body.removeChild(self.el);
+                $("body").css("height", "auto");
+
+                //键盘完成按钮与是否需要发票冲突
+                $('#keyboardboxtable').fadeOut(700);
+               // $(".maskLayer1").hide(100);
+            } else if (clickEl.tagName.toLocaleLowerCase() === 'div' && value === "关闭") {
+                body.removeChild(self.el);
+                $("body").css("height", "0px");
+               // $(".maskLayer1").hide(100);
+
+            }
+
+            else if (clickEl.tagName.toLocaleLowerCase() === 'td' && value === "删除") {
+                var num = self.input.value;
+                if (num) {
+                    var newNum = num.substr(0, num.length - 1);
+                    self.input.value = newNum;
+                }
+            }
+            // else if (e.target != $ ('#keyboard')[0] && e.target != $ ('#maskLayer1')[0])
+            // {
+            // $ ('#keyboard').hide (100);
+            // $ ('#maskLayer1').hide ();
+            // }
+            
+        }
+
+        if (mobile) {
+            this.el.ontouchstart = addEvent;
+        } else {
+            this.el.onclick = addEvent;
+        }
+        body.appendChild(this.el);
+    }
+    exports.KeyBoard = KeyBoard;
+})(window);
+
+//
+//$(document).ready(function() {})
+//.click(function(e) {
+//    e = e || window.event;
+//    if (e.target != $('#keyboard')[0]) {
+//        $('#keyboard').hide();
+//    }
+//});

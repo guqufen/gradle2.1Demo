@@ -35,7 +35,7 @@ public class ZxyhMercController extends BaseController {
 	 */
 	@RequestMapping("/enterMerc")
     @ResponseBody
-	public ResultDTO<String> enterMerc(Integer id){
+	public ResultDTO<Map<String,String>> enterMerc(Integer id){
 		if(null == id){
 			return ResultDTO.fail();
 		}
@@ -56,7 +56,7 @@ public class ZxyhMercController extends BaseController {
 			return ResultDTO.successForSubmit();
 		}else{
 			logger.error("入建返回结果"+map.toString());
-			return ResultDTO.failForMessage(BigdataConstant.ZXYH_ADD_FAIL);
+			return ResultDTO.fail(map);
 		}
 		
 	}
