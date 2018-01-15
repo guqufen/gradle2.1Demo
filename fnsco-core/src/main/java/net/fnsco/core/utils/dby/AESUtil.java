@@ -1,12 +1,21 @@
 package net.fnsco.core.utils.dby;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.Key;
+import java.util.Date;
+import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
+
+import net.fnsco.core.utils.DateUtils;
 
 public class AESUtil {
     private static final String AESTYPE = "AES/ECB/PKCS5Padding";
@@ -56,6 +65,26 @@ public class AESUtil {
             throw e;
         }
 
+    }
+
+    public static String getReqData(String innerCode, String orderNo, String rechangeAesKey) {
+        String reqData = "";
+        String transTime = DateUtils.dateFormat1ToStr(new Date());
+        Map<String, String> result = Maps.newHashMap();
+        result.put("innerCode", innerCode);
+        result.put("orderNo", orderNo);
+        result.put("transTime", transTime);
+        String singDataStr = innerCode + orderNo + transTime;
+        logger.error("签名前数据" + singDataStr);
+        String singData = JHFMd5Util.encode32(singDataStr);
+        result.put("singData", singData);
+        String dateTemp = JSON.toJSONString(result);
+        try {
+            reqData = URLEncoder.encode(AESUtil.encode(dateTemp, rechangeAesKey), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            logger.error("生成分期付url时AES加密出错", e);
+        }
+        return reqData;
     }
 
     public static void main(String[] args) {
