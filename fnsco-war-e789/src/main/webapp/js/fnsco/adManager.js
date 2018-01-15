@@ -1,9 +1,9 @@
 // 给静态框的关闭按钮增加事件
-$('.close').click(function(){
+$('.close').click(function() {
 	queryEvent("table");
 });
 
-//初始化表格
+// 初始化表格
 $('#table').bootstrapTable({
 	search : false, // 是否启动搜索栏
 	sidePagination : 'server',
@@ -93,7 +93,7 @@ function operateFormatter(value, row, index) {
 			'<i class="glyphicon glyphicon glyphicon-trash"></i>', '</a>' ]
 			.join('');
 }
-//设备类型
+// 设备类型
 function formatDeviceType(value, row, index) {
 	if (!value) {
 		return '-';
@@ -117,7 +117,7 @@ function formatCategoryType(value, row, index) {
 		return '其他';
 	}
 }
-//类别
+// 类别
 function formatType(value, row, index) {
 	if (!value) {
 		return '-';
@@ -129,8 +129,6 @@ function formatType(value, row, index) {
 		return '其他';
 	}
 }
-
-
 
 // 条件查询按钮事件
 function queryEvent() {
@@ -208,7 +206,7 @@ function deleteSingle(id) {
 		return false;
 	});
 }
-//编辑
+// 编辑
 function editData(id) {
 
 	$.ajax({
@@ -228,13 +226,13 @@ function editData(id) {
 				$("#img_path").val(ad.img_path);
 				$("#url").val(ad.url);
 				$("#id").val(ad.id);
-				$("#category").find("option[value=" + ad.category + "]").attr(
+				$("#category").find("option[value=" + ad.category + "]").prop(
 						"selected", true);
 				$("#summary").val(ad.summary);
-				$("#type").find("option[value=" + ad.type + "]").attr(
+				$("#type").find("option[value=" + ad.type + "]").prop(
 						"selected", true);
-				$("#deviceType").find("option[value=" + ad.deviceType + "]").attr(
-						"selected", true);
+				$("#deviceType").find("option[value=" + ad.deviceType + "]")
+						.prop("selected", true);
 				$(".sunmitBtn").show();
 			} else {
 				layer.msg('系统异常!');
@@ -256,6 +254,12 @@ function querySingle(id) {
 		},
 		success : function(data) {
 			if (data.success) {
+				$("#myModal input").each(function() {
+					$(this).attr("disabled", "true");
+				});
+				$("#myModal select").each(function() {
+					$(this).attr("disabled", "true");
+				});
 				var ad = data.data;
 				$("#myModal").modal();
 				$("#myModalLabel").html("广告资讯详情");
@@ -263,13 +267,13 @@ function querySingle(id) {
 				$("#img_path").val(ad.img_path);
 				$("#url").val(ad.url);
 				$("#id").val(ad.id);
-				$("#category").find("option[value=" + ad.category + "]").attr(
+				$("#category").find("option[value=" + ad.category + "]").prop(
 						"selected", true);
 				$("#summary").val(ad.summary);
-				$("#type").find("option[value=" + ad.type + "]").attr(
+				$("#type").find("option[value=" + ad.type + "]").prop(
 						"selected", true);
-				$("#deviceType").find("option[value=" + ad.deviceType + "]").attr(
-						"selected", true);
+				$("#deviceType").find("option[value=" + ad.deviceType + "]")
+						.prop("selected", true);
 				$(".sunmitBtn").hide();
 			} else {
 				layer.msg('系统异常!');
@@ -387,7 +391,7 @@ $('.sunmitBtn')
 					});
 				});
 
-//上传文件
+// 上传文件
 function importEvent() {
 	$('#importModal').modal();
 	$('.fileinput-remove').click();

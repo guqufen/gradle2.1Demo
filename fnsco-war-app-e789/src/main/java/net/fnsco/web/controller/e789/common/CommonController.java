@@ -43,7 +43,7 @@ public class CommonController extends BaseController {
     @ApiOperation(value = "我的-设置-关于我们-版本更新")
     @ResponseBody
     public ResultDTO<VersionResultDTO> checkUpdate(@RequestBody VersionDTO sysVersionDTO) {
-        String appCode = AppTypeEnum.SQB.getCode();
+        String appCode = AppTypeEnum.E789.getCode();
         sysVersionDTO.setAppCode(appCode);
         ResultDTO<VersionResultDTO> result = conmmService.queryLastVersionInfo(sysVersionDTO);
         return result;
