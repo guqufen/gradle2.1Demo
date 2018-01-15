@@ -415,18 +415,10 @@ public class ZxyhPayMD5Util {
         
         ///////
         reqMap.put("merId", "994400000000009"); //普通商户或平台商户的商户号
-//        reqMap.put("secMerId", "999900000010727");//必填
-        
-        reqMap.put("seqId", "192.168.1.163");//原交易中信订单号
-        reqMap.put("orderId", "fns_h5_001");
+        reqMap.put("seqId", "");//原交易中信订单号
+        reqMap.put("orderId", "");
         reqMap.put("orderTime", System.currentTimeMillis() + "");
-        reqMap.put("orderBody", "00");
-        reqMap.put("txnAmt", "1");
         reqMap.put("currencyType", "156");
-        
-        reqMap.put("sceneInfo", "wap_url=http://101.37.254.146:8080/risk-mgmt/login.html&wap_name=风控+后台管理系统&商户自定义参数");//wap_url=https://m.jd.com&wap_name=京东官网&618专版
-        
-        
         //发送中信报文
         String respStr = ZxyhPayMD5Util.request(reqMap, url);
         //解析返回报文
