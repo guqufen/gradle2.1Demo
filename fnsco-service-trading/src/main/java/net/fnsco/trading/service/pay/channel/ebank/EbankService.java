@@ -21,7 +21,7 @@ import net.fnsco.trading.service.pay.channel.ebank.dto.E4032ReqBodyDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4032ReqDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4033ResultDTO;
 import net.fnsco.trading.service.pay.channel.ebank.entity.E4029Entity;
-import net.fnsco.trading.service.pay.channel.ebank.entity.E4032Entity;
+import net.fnsco.trading.service.pay.channel.ebank.entity.EPayResultEntity;
 
 @Service
 public class EbankService extends BaseService {
@@ -277,10 +277,10 @@ public class EbankService extends BaseService {
 	 * @param amount
 	 * @return
 	 */
-	public ResultDTO<E4032Entity> E4032Trade(String AccNo, BigDecimal amount) {
+	public ResultDTO<EPayResultEntity> E4032Trade(String AccNo, BigDecimal amount) {
 
 		E4028ResultDTO e4028ResultDTO;
-		E4032Entity e4032Entity = new E4032Entity();
+		EPayResultEntity e4032Entity = new EPayResultEntity();
 		try {
 			e4028ResultDTO = E4028Query(AccNo);// 先查询付款人协议
 			if (e4028ResultDTO.isSuccess()) {
