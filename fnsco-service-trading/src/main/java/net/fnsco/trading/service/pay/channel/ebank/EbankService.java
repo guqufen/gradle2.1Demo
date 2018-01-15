@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
+import net.fnsco.core.utils.StringUtil;
 import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4028ReqDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4028RespBodyDTO;
@@ -195,7 +196,11 @@ public class EbankService extends BaseService {
 					System.out.println("respCode=[" + rcvMsg.toString().substring(87, 93) + "]");
 					System.arraycopy(rcvMsg.toString().getBytes(), 93, res, 0, 100);
 					System.out.println("respMsg=[" + new String(res) + "]");
-					return true;
+
+					// 判断：如果维护返回正常(000000)，则返回成功true
+					if ("000000".equals(rcvMsg.toString().substring(87, 93))) {
+						return true;
+					}
 				}
 			} else {
 
@@ -265,7 +270,14 @@ public class EbankService extends BaseService {
 		return ResultDTO.fail();
 	}
 
-	public ResultDTO<E4029Entity> E4032Trade(String AccNo, BigDecimal amount) {
+	/**
+	 * 付款
+	 * 
+	 * @param AccNo
+	 * @param amount
+	 * @return
+	 */
+	public ResultDTO<E4032Entity> E4032Trade(String AccNo, BigDecimal amount) {
 
 		E4028ResultDTO e4028ResultDTO;
 		E4032Entity e4032Entity = new E4032Entity();
@@ -292,7 +304,8 @@ public class EbankService extends BaseService {
 
 					E4032ReqBodyDTO e4032ReqBodyDTO = new E4032ReqBodyDTO();
 					e4032ReqBodyDTO.setSThirdVoucher(e4032ReqDTO.getThirdVoucher() + "ST01");// 单笔凭证号
-					e4032ReqBodyDTO.setCstInnerFlowNo(CodeUtil.generateOrderCode("e"));// 自定义流水号,此字段为订单号，需保持唯一
+					e4032ReqBodyDTO.setCstInnerFlowNo(
+							StringUtil.formatStrFixLenLeft(CodeUtil.generateOrderCode("e"), 20, " "));// 自定义流水号,此字段为订单号，需保持唯一
 					e4032ReqBodyDTO.setOppAccNo(e4028RespBodyDTO.getOppAccNo());// 付款人帐号
 					e4032ReqBodyDTO.setOppAccName(e4028RespBodyDTO.getOppAccName());// 付款人姓名
 					e4032ReqBodyDTO.setOppBank(e4028RespBodyDTO.getOppBank());// 付款人银行

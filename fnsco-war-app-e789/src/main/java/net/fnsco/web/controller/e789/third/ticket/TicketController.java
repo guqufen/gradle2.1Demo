@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Strings;
 
+import ch.qos.logback.core.status.Status;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
@@ -545,10 +546,21 @@ public class TicketController extends BaseController {
         TicketOrderDO ticketOrder = new TicketOrderDO();
         ticketOrder.setOrderNo(queryOrderListJO.getOrderNo());
         ticketOrder.setAppUserId(queryOrderListJO.getUserId());
+        String status = queryOrderListJO.getStatus();
+        Integer[] statusIntes = null;
+        if (!Strings.isNullOrEmpty(status)) {
+            String[] statuses = status.split(",");
+            statusIntes = new Integer[statuses.length];
+            for (int i = 0; i < statuses.length; i++) {
+                statusIntes[i] = Integer.parseInt(statuses[i]);
+            }
+            
+        }
+
         Integer pageNum = 1;
-        Integer pageSize = 20;
+        Integer pageSize = 40;
         ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
-        ticketOrder.setStatuses(null);
+        ticketOrder.setStatuses(statusIntes);
         ResultPageDTO<TrainOrderListVO> resultList = ticketOrderService.getOrderList(ticketOrder, pageNum, pageSize);
         return success(resultList);
     }
