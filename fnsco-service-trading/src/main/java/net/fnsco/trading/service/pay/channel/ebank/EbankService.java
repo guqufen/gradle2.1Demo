@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
+import net.fnsco.core.utils.StringUtil;
 import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4028ReqDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4028RespBodyDTO;
@@ -20,7 +21,7 @@ import net.fnsco.trading.service.pay.channel.ebank.dto.E4032ReqBodyDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4032ReqDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4033ResultDTO;
 import net.fnsco.trading.service.pay.channel.ebank.entity.E4029Entity;
-import net.fnsco.trading.service.pay.channel.ebank.entity.E4032Entity;
+import net.fnsco.trading.service.pay.channel.ebank.entity.EPayResultEntity;
 
 @Service
 public class EbankService extends BaseService {
@@ -28,7 +29,7 @@ public class EbankService extends BaseService {
 	private String yqdm = "00901079800000088000";// 银企代码,外联客户号---后续配置
 	private String AGREE_NO = "Y000136249";// 协议号---后续配置
 	private String SrcAccNo = "11014727214006";// 企业账号---后续配置
-	private String SrcAccName = "平安测试六零零零四一六零八四九一";// 企业收款户名 ---后续配置
+	private String SrcAccName = "平安测试";// 企业收款户名 ---后续配置
 	private String BusiType = "M8PAK";// 费项代码
 	private String serverIp = "localhost";// ---后续配置
 	private Integer iPort = 7072;
@@ -195,7 +196,11 @@ public class EbankService extends BaseService {
 					System.out.println("respCode=[" + rcvMsg.toString().substring(87, 93) + "]");
 					System.arraycopy(rcvMsg.toString().getBytes(), 93, res, 0, 100);
 					System.out.println("respMsg=[" + new String(res) + "]");
-					return true;
+
+					// 判断：如果维护返回正常(000000)，则返回成功true
+					if ("000000".equals(rcvMsg.toString().substring(87, 93))) {
+						return true;
+					}
 				}
 			} else {
 
@@ -265,10 +270,17 @@ public class EbankService extends BaseService {
 		return ResultDTO.fail();
 	}
 
-	public ResultDTO<E4029Entity> E4032Trade(String AccNo, BigDecimal amount) {
+	/**
+	 * 付款
+	 * 
+	 * @param AccNo
+	 * @param amount
+	 * @return
+	 */
+	public ResultDTO<EPayResultEntity> E4032Trade(String AccNo, BigDecimal amount) {
 
 		E4028ResultDTO e4028ResultDTO;
-		E4032Entity e4032Entity = new E4032Entity();
+		EPayResultEntity e4032Entity = new EPayResultEntity();
 		try {
 			e4028ResultDTO = E4028Query(AccNo);// 先查询付款人协议
 			if (e4028ResultDTO.isSuccess()) {
@@ -292,7 +304,8 @@ public class EbankService extends BaseService {
 
 					E4032ReqBodyDTO e4032ReqBodyDTO = new E4032ReqBodyDTO();
 					e4032ReqBodyDTO.setSThirdVoucher(e4032ReqDTO.getThirdVoucher() + "ST01");// 单笔凭证号
-					e4032ReqBodyDTO.setCstInnerFlowNo(CodeUtil.generateOrderCode("e"));// 自定义流水号,此字段为订单号，需保持唯一
+					e4032ReqBodyDTO.setCstInnerFlowNo(
+							StringUtil.formatStrFixLenLeft(CodeUtil.generateOrderCode("e"), 20, " "));// 自定义流水号,此字段为订单号，需保持唯一
 					e4032ReqBodyDTO.setOppAccNo(e4028RespBodyDTO.getOppAccNo());// 付款人帐号
 					e4032ReqBodyDTO.setOppAccName(e4028RespBodyDTO.getOppAccName());// 付款人姓名
 					e4032ReqBodyDTO.setOppBank(e4028RespBodyDTO.getOppBank());// 付款人银行
@@ -341,12 +354,12 @@ public class EbankService extends BaseService {
 
 						e4032Entity.setRespCode("1000");
 						e4032Entity.setRespMsg("交易进行中，请稍候查询结果");
-						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 批次凭证号
+						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 单笔流水号
 						return ResultDTO.fail(e4032Entity);
 					} else if ("000000".equals(respCode)) {
 						e4032Entity.setRespCode("1001");
 						e4032Entity.setRespMsg("交易成功");
-						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 批次凭证号
+						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 单笔流水号
 						return ResultDTO.success(e4032Entity);
 					} else {
 						return ResultDTO.fail("交易失败");

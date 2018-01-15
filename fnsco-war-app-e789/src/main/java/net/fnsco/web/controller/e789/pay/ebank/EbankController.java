@@ -12,10 +12,8 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.channel.ebank.EbankService;
 import net.fnsco.trading.service.pay.channel.ebank.entity.E4029Entity;
-import net.fnsco.trading.service.pay.channel.ebank.entity.E4032Entity;
-import net.fnsco.web.controller.e789.pay.ebank.jo.E4028JO;
-import net.fnsco.web.controller.e789.pay.ebank.jo.E4031JO;
-import net.fnsco.web.controller.e789.pay.ebank.jo.E4032JO;
+import net.fnsco.trading.service.pay.channel.ebank.entity.EPayResultEntity;
+import net.fnsco.web.controller.e789.pay.ebank.jo.EbankAcctJO;
 
 @RestController
 @RequestMapping(value = "/app2c/trade/ebank", method = RequestMethod.POST)
@@ -33,8 +31,8 @@ public class EbankController extends BaseController {
 	 */
 	@RequestMapping("/acctQuery")
 	@ApiOperation(value = "付款人账户协议查询")
-	public ResultDTO E4028Trade(@RequestBody E4028JO e4028jo) {
-		return ebankService.E4028Trade(e4028jo.getAcctNo());
+	public ResultDTO E4028Trade(@RequestBody EbankAcctJO ebankAcctJO) {
+		return ebankService.E4028Trade(ebankAcctJO.getOppAccNo());
 	}
 
 	/**
@@ -56,8 +54,8 @@ public class EbankController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/acctCheck")
-	public ResultDTO E4031Trade(@RequestBody E4031JO e4031jo) {
-		return ebankService.E4031Trade(e4031jo.getOppAccNo(), e4031jo.getMobile());
+	public ResultDTO E4031Trade(@RequestBody EbankAcctJO ebankAcctJO) {
+		return ebankService.E4031Trade(ebankAcctJO.getOppAccNo(), ebankAcctJO.getMobile());
 	}
 
 	/**
@@ -67,8 +65,8 @@ public class EbankController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/ePay")
-	public ResultDTO E4032Trade(@RequestBody E4032JO e4032jo) {
-		return ebankService.E4032Trade(e4032jo.getAcctNo(), e4032jo.getAmount());
+	public ResultDTO E4032Trade(@RequestBody EbankAcctJO ebankAcctJO) {
+		return ebankService.E4032Trade(ebankAcctJO.getOppAccNo(), ebankAcctJO.getAmount());
 	}
 
 	/**
@@ -78,8 +76,7 @@ public class EbankController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/ePayResult")
-	public ResultDTO<E4032Entity> E4033Trade(String orderNo) {
+	public ResultDTO<EPayResultEntity> E4033Trade(String orderNo) {
 		return ebankService.E4033Trade(orderNo);
-
 	}
 }

@@ -1,13 +1,9 @@
 package net.fnsco.order.api.constant;
 
-import java.util.Map;
-
-import com.beust.jcommander.internal.Maps;
-
 public class ConstantEnum {
 
     public static enum AppTypeEnum {
-                                    SQB("SQB", "数钱吧"), LKL("LKL", "拉卡拉");
+                                    SQB("SQB", "数钱吧"), LKL("LKL", "拉卡拉"),E789("e789","e789");
         private String code;
         private String name;
 
