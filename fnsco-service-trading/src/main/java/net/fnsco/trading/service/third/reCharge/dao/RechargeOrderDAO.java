@@ -88,6 +88,6 @@ public interface RechargeOrderDAO {
     	@Result( column = "resp_msg",property = "respMsg"),
     	@Result( column = "create_time",property = "createTime"),
     	@Result( column = "update_time",property = "updateTime") })
-    @Select("SELECT * FROM thr_recharge_order WHERE order_no = #{orderNo}")
+    @Select("SELECT * FROM thr_recharge_order WHERE order_no = #{orderNo} order by id desc limit 1")
     public RechargeOrderDO getByOrderNo(@Param("orderNo") String orderNo);
 }
