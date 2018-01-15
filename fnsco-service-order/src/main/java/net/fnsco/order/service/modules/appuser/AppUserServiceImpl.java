@@ -513,9 +513,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         } else if (Strings.isNullOrEmpty(appUserDTO.getPassword())) {
             return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
         }
-        if (Strings.isNullOrEmpty(appUserDTO.getCode())) {
-            return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
-        }
         //根据手机号查询用户实体是否存在
         AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
         if (user != null) {
