@@ -48,20 +48,22 @@ public class EbankService extends BaseService {
 			// 判断：如果成功，则可以进行付款交易
 			if (e4028ResultDTO.isSuccess()) {
 
-				// for (E4028RespBodyDTO e4028RespBodyDTO :
-				// e4028ResultDTO.getE4028RespDTO().getList()) {
-				// System.out.println(e4028RespBodyDTO.toString());
-				// }
-			}
-			// 判断：如果协议不存在，则发送协议维护(4029)
+				E4028RespDTO e4028RespDTO = e4028ResultDTO.getE4028RespDTO();
 
-			// 如果协议状态为待认证或停用，则发起认证(4031)
+				if ("0".equals(e4028RespDTO.getList().get(0).getStatus())) {
+
+					return ResultDTO.success("账户协议正常");
+				} else {
+
+					return ResultDTO.fail("账户信息协议需请重新认证");
+				}
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return null;
+		return ResultDTO.fail("付款人协议不存在，请先维护后再查询");
 	}
 
 	/**
@@ -139,14 +141,18 @@ public class EbankService extends BaseService {
 	}
 
 	public boolean E4029Maintain(E4029Entity e4029Entity) {
+
 		// 付款人协议查询
 		try {
+
 			E4028ResultDTO e4028ResultDTO = E4028Query(e4029Entity.getOppAccNo());
+
 			// 查询成功说明协议已经建立，此时不需要进行新增处理
 			if (e4028ResultDTO.isSuccess()) {
 
 				// 如果不是新增操作,则直接进行修改或者删除
 				if (!"1".equals(e4029Entity.getTranFlag())) {
+
 					Integer inte = 0;
 					String bsnCode = "4029";// 交易码
 
@@ -191,6 +197,7 @@ public class EbankService extends BaseService {
 					if (bodyRpLen > 0 && bodyRP != null) {
 						rcvMsg.append(new String(bodyRP, EbankUtil.CHARSET));
 					}
+
 					// 获取应答信息
 					byte[] res = new byte[100];
 					System.out.println("respCode=[" + rcvMsg.toString().substring(87, 93) + "]");
@@ -222,10 +229,14 @@ public class EbankService extends BaseService {
 	public ResultDTO E4031Trade(String acctNo, String mobile) {
 
 		E4028ResultDTO e4028ResultDTO;
+
 		try {
+
 			e4028ResultDTO = E4028Query(acctNo);
+
 			// 认证功能要求必须付款人先建立有协议，但是协议状态为1-停用或者为2-待认证，才去发起认证
 			if (e4028ResultDTO.isSuccess()) {
+
 				Integer inte = 0;
 				String bsnCode = "4031";// 交易码
 
@@ -262,8 +273,9 @@ public class EbankService extends BaseService {
 				System.out.println("respMsg=[" + new String(res) + "]");
 				System.out.println("recvData=" + rcvMsg.toString());
 			}
+
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
+
 			e1.printStackTrace();
 		}
 
@@ -281,7 +293,9 @@ public class EbankService extends BaseService {
 
 		E4028ResultDTO e4028ResultDTO;
 		EPayResultEntity e4032Entity = new EPayResultEntity();
+
 		try {
+
 			e4028ResultDTO = E4028Query(AccNo);// 先查询付款人协议
 			if (e4028ResultDTO.isSuccess()) {
 
@@ -289,6 +303,7 @@ public class EbankService extends BaseService {
 
 				// 状态正常，才能进行代扣
 				if ("0".equals(e4028RespBodyDTO.getStatus())) {
+
 					Integer inte = 0;
 					String bsnCode = "4032";// 交易码
 
@@ -382,6 +397,7 @@ public class EbankService extends BaseService {
 	public E4033ResultDTO E4033ResultQuery(String orderNo) {
 
 		try {
+
 			Integer inte = 0;
 			// 需要调用E4033查询交易结果
 			E4032ReqDTO e4032ReqDTO = new E4032ReqDTO();
