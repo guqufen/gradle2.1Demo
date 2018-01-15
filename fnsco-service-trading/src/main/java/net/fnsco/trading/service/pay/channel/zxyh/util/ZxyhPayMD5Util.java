@@ -404,12 +404,42 @@ public class ZxyhPayMD5Util {
     }
     
     
+    public static void main(String[] args) {
+    	String url = "/MPay/backTransAction.do";
+        Map<String, String> reqMap = new HashMap<String, String>();
+        reqMap.put("encoding", "UTF-8"); //
+        reqMap.put("signMethod", "02"); //
+        reqMap.put("txnType", "04"); //
+        reqMap.put("txnSubType", "040303"); //
+        reqMap.put("channelType", "6002"); //
+        
+        ///////
+        reqMap.put("merId", "994400000000009"); //普通商户或平台商户的商户号
+//        reqMap.put("secMerId", "999900000010727");//必填
+        
+        reqMap.put("seqId", "192.168.1.163");//原交易中信订单号
+        reqMap.put("orderId", "fns_h5_001");
+        reqMap.put("orderTime", System.currentTimeMillis() + "");
+        reqMap.put("orderBody", "00");
+        reqMap.put("txnAmt", "1");
+        reqMap.put("currencyType", "156");
+        
+        reqMap.put("sceneInfo", "wap_url=http://101.37.254.146:8080/risk-mgmt/login.html&wap_name=风控+后台管理系统&商户自定义参数");//wap_url=https://m.jd.com&wap_name=京东官网&618专版
+        
+        
+        //发送中信报文
+        String respStr = ZxyhPayMD5Util.request(reqMap, url);
+        //解析返回报文
+        Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+        System.out.println(JSON.toJSON(respMap).toString());
+	}
+    
   
     /**
      * h5
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main11(String[] args) {
     	String url = "/MPay/backTransAction.do";
         Map<String, String> reqMap = new HashMap<String, String>();
         reqMap.put("encoding", "UTF-8"); //
