@@ -146,7 +146,7 @@ public class PrepaidRefillController extends BaseController {
 				logger.error("手机充值-充值交易正在进行中，账户扣款更新失败，请联系相关技术人员查看,orderNo=" + ph.getOrderNo());
 			}
 
-			return ResultDTO.fail(ph.getRespMsg());
+			return ResultDTO.success(ph.getRespMsg());
 
 			// 失败，更新原账户
 		} else {
@@ -164,6 +164,7 @@ public class PrepaidRefillController extends BaseController {
 	public ResultDTO queryFlowResult(@RequestBody String orderNo) {
 		RechargeOrderDO rechargeOrder = rechargeOrderService.getByOrderNo(orderNo);
 		if (null == rechargeOrder) {
+			logger.error("此订单号找不到原交易，请核查后重新请求：orderNo=" + orderNo);
 			return ResultDTO.fail("此订单号找不到原交易，请核查后重新请求：orderNo=" + orderNo);
 		}
 
