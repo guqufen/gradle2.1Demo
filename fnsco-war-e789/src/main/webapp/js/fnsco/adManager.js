@@ -228,12 +228,12 @@ function editData(id) {
 				$("#img_path").val(ad.img_path);
 				$("#url").val(ad.url);
 				$("#id").val(ad.id);
-				$("#category").find("option[value=" + ad.category + "]").attr(
+				$("#category").find("option[value=" + ad.category + "]").prop(
 						"selected", true);
 				$("#summary").val(ad.summary);
-				$("#type").find("option[value=" + ad.type + "]").attr(
+				$("#type").find("option[value=" + ad.type + "]").prop(
 						"selected", true);
-				$("#deviceType").find("option[value=" + ad.deviceType + "]").attr(
+				$("#deviceType").find("option[value=" + ad.deviceType + "]").prop(
 						"selected", true);
 				$(".sunmitBtn").show();
 			} else {
@@ -263,13 +263,17 @@ function querySingle(id) {
 				$("#img_path").val(ad.img_path);
 				$("#url").val(ad.url);
 				$("#id").val(ad.id);
-				$("#category").find("option[value=" + ad.category + "]").attr(
+				$("#category").find("option[value=" + ad.category + "]").prop(
 						"selected", true);
 				$("#summary").val(ad.summary);
-				$("#type").find("option[value=" + ad.type + "]").attr(
+				$("#type").find("option[value=" + ad.type + "]").prop(
 						"selected", true);
-				$("#deviceType").find("option[value=" + ad.deviceType + "]").attr(
+				
+				$("#deviceType").find("option[value=" + ad.deviceType + "]").prop(
 						"selected", true);
+				
+				
+				
 				$(".sunmitBtn").hide();
 			} else {
 				layer.msg('系统异常!');
