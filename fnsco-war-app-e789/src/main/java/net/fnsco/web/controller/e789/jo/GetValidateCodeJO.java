@@ -17,8 +17,8 @@ public class GetValidateCodeJO extends JO {
 	private String mobile;// 手机号码
 	@ApiModelProperty(value="设备号")
 	private String deviceId;// 设备号
-	@ApiModelProperty(value="验证码类型（0注册，1找回登录密码，2绑定银行卡）")
-	private Integer type;// 验证码类型（0注册，1找回登录密码，2绑定银行卡）
+	@ApiModelProperty(value="验证码类型（0注册，1找回登录密码，2绑定银行卡,3忘记支付密码）")
+	private Integer type;// 验证码类型（0注册，1找回登录密码，2绑定银行卡,3忘记支付密码）
 	public String getMobile() {
 		return mobile;
 	}

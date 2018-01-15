@@ -116,4 +116,5 @@ public interface AppUserService {
 	ResultDTO getE789ValidateCode(AppUserDTO appUserDTO);
 	ResultDTO validateCode(String deviceId, String code, String mobile);
 	ResultDTO e789FindPassword(AppUserDTO appUserDTO);
+	ResultDTO e789FindPayPassword(AppUserDTO appUserDTO);
 }
