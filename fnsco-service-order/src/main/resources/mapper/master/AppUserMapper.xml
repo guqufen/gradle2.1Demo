@@ -61,6 +61,11 @@
 		update u_app_user set password = #{password,jdbcType=VARCHAR} where mobile =
 		#{mobile,jdbcType=VARCHAR}
 	</update>
+	<!-- 根据手机号更新用户支付密码 -->
+	<update id="updatePayPasswordByPhone" parameterType="java.lang.String">
+		update u_app_user set pay_password = #{password,jdbcType=VARCHAR} where mobile =
+		#{mobile,jdbcType=VARCHAR}
+	</update>
 	<!-- 根据手机号查询用户实体 -->
 	<select id="selectAppUserByMobile" resultMap="BaseResultMap"
 		parameterType="java.lang.String">

@@ -473,7 +473,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }).start();
         return ResultDTO.success();
     }
-  //根据手机号找回登录密码
+    //根据手机号找回登录密码
     @Override
     public ResultDTO e789FindPassword(AppUserDTO appUserDTO) {
         //非空判断
@@ -499,6 +499,31 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         //密码更新失败
         if (!appUserDao.updatePasswordByPhone(appUserDTO.getMobile(), password)) {
+            return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
+        }
+        return ResultDTO.success();
+    }
+    //根据手机号找回支付密码
+    @Override
+    public ResultDTO e789FindPayPassword(AppUserDTO appUserDTO) {
+        //非空判断
+        if (Strings.isNullOrEmpty(appUserDTO.getDeviceId())) {
+            return ResultDTO.fail(ApiConstant.E_APP_DEVICEIDNULL);
+        } else if (Strings.isNullOrEmpty(appUserDTO.getPassword())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+        } else if (Strings.isNullOrEmpty(appUserDTO.getCode())) {
+            return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
+        } else if (Strings.isNullOrEmpty(appUserDTO.getMobile())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
+        }
+        String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
+        //对比验证码
+        ResultDTO res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 3+appUserDTO.getMobile());
+        if (!res.isSuccess()) {
+            return res;
+        }
+        //密码更新失败
+        if (!appUserDao.updatePayPasswordByPhone(appUserDTO.getMobile(), password)) {
             return ResultDTO.fail(ApiConstant.E_UPDATEPASSWORD_ERROR);
         }
         return ResultDTO.success();
