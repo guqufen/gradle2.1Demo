@@ -4,7 +4,13 @@ import java.math.BigDecimal;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class E4032Entity {
+/**
+ * 付款交易返回结果entity
+ * 
+ * @author 伯约
+ *
+ */
+public class EPayResultEntity {
 
 	@ApiModelProperty(name = "应答码", example = "应答码")
 	private String respCode;

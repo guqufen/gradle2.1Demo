@@ -553,7 +553,9 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setChannelType("05");// 设置渠道类型05-中信银行
 		tradeOrderDO.setOrderCeateTime(new Date());// 订单创建时间
 		tradeOrderDO.setTxnType(Integer.parseInt(TradeTypeEnum.CONSUMER.getCode()));// 设置交易类型
+		tradeOrderDO.setTxnSubType(12);//设置交易子类型，12-扫一扫消费
 		tradeOrderDO.setPayType(PayTypeEnum.CODE_PAY.getCode());// 设置支付方式，01-二维码
+		
 		// 设置支付子类型，01-微信；02-支付宝
 		if (ZxyhPassivePayCode.ZFB_BS_PAY.getCode().equals(passDTO.getStdprocode())) {
 			tradeOrderDO.setPaySubType(PaySubTypeAllEnum.ZFB_PAY.getCode());
@@ -843,11 +845,15 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		if (aliDTO == null) {
 			return ResultDTO.fail("中信返回数据有误");
 		}
-		logger.error("支付宝回调函数返回=respCode="+aliDTO.getRespCode()+"&respMsg"+aliDTO.getRespMsg());
+		logger.error("支付宝回调返回数据="+aliDTO.toString());
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setOrderNo(aliDTO.getOrderId());// 商户订单号
 		tradeOrderDO.setPayOrderNo(aliDTO.getTransactionId());// 渠道(扫码)订单号
-		tradeOrderDO.setRespCode(aliDTO.getRespCode());// 交易返回码
+		if("0000".equals(aliDTO.getRespCode())){ //应答成功
+			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_SUCCESS.getCode());// 交易返回码
+		}else{
+			return ResultDTO.fail("回调失败");
+		}
 		tradeOrderDO.setRespMsg(aliDTO.getRespMsg());
 		Date tradeEndTime = DateUtils.formateToDate(aliDTO.getEndTime());
 		tradeOrderDO.setCompleteTime(tradeEndTime);// 交易完成时间
@@ -894,10 +900,15 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		if (weChatDTO == null) {
 			return ResultDTO.fail("中信返回数据有误");
 		}
-		logger.error("微信回调函数返回=respCode="+weChatDTO.getRespCode()+"&weChatDTO"+weChatDTO.getRespMsg());
+		logger.error("微信回调函数返回"+weChatDTO.toString());
 		TradeOrderDO tradeOrderDO = new TradeOrderDO();
 		tradeOrderDO.setOrderNo(weChatDTO.getOrderId());// 商户订单号
 		tradeOrderDO.setPayOrderNo(weChatDTO.getTransactionId());// 渠道(扫码)订单号
+		if("0000".equals(weChatDTO.getRespCode())){ //应答成功
+			tradeOrderDO.setRespCode(E789ApiConstant.ResponCodeEnum.DEAL_SUCCESS.getCode());// 交易返回码
+		}else{
+			return ResultDTO.fail("回调失败");
+		}
 		tradeOrderDO.setRespCode(weChatDTO.getRespCode());// 交易返回码
 		tradeOrderDO.setRespMsg(weChatDTO.getRespMsg());
 		Date tradeEndTime = DateUtils.formateToDate(weChatDTO.getEndTime());

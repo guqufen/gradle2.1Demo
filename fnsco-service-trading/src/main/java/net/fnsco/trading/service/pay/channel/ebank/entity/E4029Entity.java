@@ -2,6 +2,12 @@ package net.fnsco.trading.service.pay.channel.ebank.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * 付款人协议维护入参entity：五要素，账号、户名、证件类型、证件号码、开户预留手机号，注意 五要素全部与账户的开户行留存信息一致。
+ * 
+ * @author 伯约
+ *
+ */
 public class E4029Entity {
 
 	@ApiModelProperty(name = "付款人帐号", example = "付款人帐号")

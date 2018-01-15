@@ -135,7 +135,7 @@ public interface TradeWithdrawDAO {
                @Result(column = "channel_mer_id", property = "channelMerId"), @Result(column = "channel_type", property = "channelType"),
                @Result(column = "installment_num", property = "installmentNum"), @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"),
                @Result(column = "card_holder_rate", property = "cardHolderRate") })
-    @Select("SELECT * FROM t_trade_withdraw WHERE order_no = #{orderNo} order by id limit 1 ")
+    @Select("SELECT * FROM t_trade_withdraw WHERE order_no = #{orderNo} order by id desc limit 1 ")
     public TradeWithdrawDO getByOrderNo(@Param("orderNo") String orderNo);
 
     @Results({ @Result(column = "order_no", property = "orderNo"), @Result(column = "original_order_no", property = "originalOrderNo"), @Result(column = "app_user_id", property = "appUserId"),

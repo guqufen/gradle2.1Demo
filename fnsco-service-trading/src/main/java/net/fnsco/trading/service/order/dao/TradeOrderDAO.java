@@ -131,7 +131,7 @@ public interface TradeOrderDAO {
 //        @Result(column = "create_time", property = "createTime"), @Result(column = "sync_status", property = "syncStatus"), @Result(column = "inner_code", property = "innerCode"),
 //        @Result(column = "order_amount", property = "orderAmount"), @Result(column = "each_money", property = "eachMoney"), @Result(column = "card_holder_rate", property = "cardHolderRate"),
 //        @Result(column = "pay_medium", property = "payMedium") })
-    @Select("select order_no from t_trade_order where channel_type=#{channelType} and create_time >= #{startTime} and resp_code = '1000'")
+    @Select("select order_no from t_trade_order where channel_type=#{channelType} and txn_sub_type=12 and create_time >= #{startTime} and resp_code = '1000'")
     public List<String> queryOnGoing(@Param("channelType") String channelType,@Param("startTime") Date startTime);
     
     /**

@@ -61,7 +61,7 @@ public class TicketOrderService extends BaseService {
 
     @Transactional
     public void updateOrderStatus(TicketOrderDO ticketOrder, Integer pageNum, Integer pageSize) {
-        Integer[] statuses = { 1, 4, 7 };
+        Integer[] statuses = { 1, 2, 4, 7 };
         ticketOrder.setStatuses(statuses);
         List<TicketOrderDO> pageList = this.ticketOrderDAO.pageList(ticketOrder, pageNum, pageSize);
         for (TicketOrderDO order : pageList) {
@@ -310,6 +310,9 @@ public class TicketOrderService extends BaseService {
         ticketOrderDAO.update(order);
         JSONObject obj = TrainTicketsUtil.cancel(order.getPayOrderNo());
         String error_code = obj.getString("error_code");
+        if ("217304".equals(error_code)) {
+            return ResultDTO.success();
+        }
         if (!"0".equals(error_code)) {
             order.setStatus(TicketConstants.OrderStateEnum.SIT_DOWN.getCode());
             order.setLastModifyTime(new Date());

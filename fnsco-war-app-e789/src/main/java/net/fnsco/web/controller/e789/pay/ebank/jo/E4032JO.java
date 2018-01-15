@@ -8,17 +8,17 @@ import net.fnsco.core.base.JO;
 public class E4032JO extends JO {
 
 	private static final long serialVersionUID = 1L;
-	@ApiModelProperty(name="银行卡号",example="银行卡号")
-	private String acctNo;// 银行卡号
-	@ApiModelProperty(name="交易金额",example="交易金额")
+	@ApiModelProperty(name = "付款人银行卡号", example = "付款人银行卡号")
+	private String oppAccNo;// 付款人帐号
+	@ApiModelProperty(name = "交易金额", example = "交易金额")
 	private BigDecimal amount;// 交易金额
 
-	public String getAcctNo() {
-		return acctNo;
+	public String getOppAccNo() {
+		return oppAccNo;
 	}
 
-	public void setAcctNo(String acctNo) {
-		this.acctNo = acctNo;
+	public void setOppAccNo(String oppAccNo) {
+		this.oppAccNo = oppAccNo;
 	}
 
 	public BigDecimal getAmount() {

@@ -404,12 +404,34 @@ public class ZxyhPayMD5Util {
     }
     
     
+    public static void main(String[] args) {
+    	String url = "/MPay/backTransAction.do";
+        Map<String, String> reqMap = new HashMap<String, String>();
+        reqMap.put("encoding", "UTF-8"); //
+        reqMap.put("signMethod", "02"); //
+        reqMap.put("txnType", "04"); //
+        reqMap.put("txnSubType", "040303"); //
+        reqMap.put("channelType", "6002"); //
+        
+        ///////
+        reqMap.put("merId", "994400000000009"); //普通商户或平台商户的商户号
+        reqMap.put("seqId", "");//原交易中信订单号
+        reqMap.put("orderId", "");
+        reqMap.put("orderTime", System.currentTimeMillis() + "");
+        reqMap.put("currencyType", "156");
+        //发送中信报文
+        String respStr = ZxyhPayMD5Util.request(reqMap, url);
+        //解析返回报文
+        Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
+        System.out.println(JSON.toJSON(respMap).toString());
+	}
+    
   
     /**
      * h5
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main11(String[] args) {
     	String url = "/MPay/backTransAction.do";
         Map<String, String> reqMap = new HashMap<String, String>();
         reqMap.put("encoding", "UTF-8"); //

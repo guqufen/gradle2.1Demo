@@ -12,10 +12,11 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.channel.ebank.EbankService;
 import net.fnsco.trading.service.pay.channel.ebank.entity.E4029Entity;
-import net.fnsco.trading.service.pay.channel.ebank.entity.E4032Entity;
+import net.fnsco.trading.service.pay.channel.ebank.entity.EPayResultEntity;
 import net.fnsco.web.controller.e789.pay.ebank.jo.E4028JO;
 import net.fnsco.web.controller.e789.pay.ebank.jo.E4031JO;
 import net.fnsco.web.controller.e789.pay.ebank.jo.E4032JO;
+import net.fnsco.web.controller.e789.pay.ebank.jo.E4033JO;
 
 @RestController
 @RequestMapping(value = "/app2c/trade/ebank", method = RequestMethod.POST)
@@ -34,7 +35,7 @@ public class EbankController extends BaseController {
 	@RequestMapping("/acctQuery")
 	@ApiOperation(value = "付款人账户协议查询")
 	public ResultDTO E4028Trade(@RequestBody E4028JO e4028jo) {
-		return ebankService.E4028Trade(e4028jo.getAcctNo());
+		return ebankService.E4028Trade(e4028jo.getOppAccNo());
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class EbankController extends BaseController {
 	 */
 	@RequestMapping("/ePay")
 	public ResultDTO E4032Trade(@RequestBody E4032JO e4032jo) {
-		return ebankService.E4032Trade(e4032jo.getAcctNo(), e4032jo.getAmount());
+		return ebankService.E4032Trade(e4032jo.getOppAccNo(), e4032jo.getAmount());
 	}
 
 	/**
@@ -78,8 +79,7 @@ public class EbankController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/ePayResult")
-	public ResultDTO<E4032Entity> E4033Trade(String orderNo) {
-		return ebankService.E4033Trade(orderNo);
-
+	public ResultDTO<EPayResultEntity> E4033Trade(@RequestBody E4033JO e4033jo) {
+		return ebankService.E4033Trade(e4033jo.getOrderNo());
 	}
 }
