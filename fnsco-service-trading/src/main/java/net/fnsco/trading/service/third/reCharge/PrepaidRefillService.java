@@ -144,7 +144,8 @@ public class PrepaidRefillService extends BaseService {
 					CheckMobileDTO phChargeDTO = new CheckMobileDTO();
 					phChargeDTO.setId(map2.get("id"));
 					phChargeDTO.setName(map2.get("p"));
-					phChargeDTO.setInprice((new BigDecimal(map2.get("inprice")).setScale(2, BigDecimal.ROUND_HALF_UP)).toString());
+					phChargeDTO.setInprice(
+							(new BigDecimal(map2.get("inprice")).setScale(2, BigDecimal.ROUND_HALF_UP)).toString());
 					list.add(phChargeDTO);
 				}
 				phChargePackageDTO.setList(list);
@@ -430,19 +431,16 @@ public class PrepaidRefillService extends BaseService {
 		String result = null;
 		String url = "http://v.juhe.cn/flow/batchquery";// 请求接口地址
 
-		Map<String, String> params = new HashMap<String, String>();// 请求参数
-		params.put("orderid", rechargeOrderDO.getOrderNo());// 用户订单号，多个以英文逗号隔开，最大支持50组
-		params.put("key", env.getProperty("jh.phone.flowkey"));// 应用APPKEY(应用详细页查询)
-
 		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(rechargeOrderDO.getOrderNo());
 		if (null == tradeWithdrawDO) {// 如果该条数据为空
-
+			logger.info("流量充值订单查询-该条数据为空oderNo=" + tradeWithdrawDO.getOrderNo());
+			return ResultDTO.fail();
 		}
 
 		// 如果结果已经明确
 		if ("1001".equals(tradeWithdrawDO.getRespCode())) {
 
-			logger.info("手机充值-结果查询：该订单已经在tradeWith表中更新为确定状态，不必再去聚合查询支付结果orderNo=" + rechargeOrderDO.getOrderNo());
+			logger.info("流量充值-结果查询：该订单已经在tradeWith表中更新为确定状态，不必再去聚合查询支付结果orderNo=" + rechargeOrderDO.getOrderNo());
 			rechargeOrderDO.setPayOrderNo(tradeWithdrawDO.getOriginalOrderNo());// 设置渠道订单号
 			rechargeOrderDO.setAmt(tradeWithdrawDO.getAmount().toString());// 设置实际消费金额
 			rechargeOrderDO.setStatus(1);// 设置交易状态为1-成功
@@ -453,7 +451,7 @@ public class PrepaidRefillService extends BaseService {
 			return ResultDTO.success(tradeWithdrawDO.getRespMsg());
 		} else if ("1002".equals(tradeWithdrawDO.getRespCode())) {
 
-			logger.info("手机充值-结果查询：该订单已经在tradeWith表中更新为确定状态，不必再去聚合查询支付结果orderNo=" + rechargeOrderDO.getOrderNo());
+			logger.info("流量充值-结果查询：该订单已经在tradeWith表中更新为确定状态，不必再去聚合查询支付结果orderNo=" + rechargeOrderDO.getOrderNo());
 			rechargeOrderDO.setStatus(2);// 设置交易状态为2-失败
 			rechargeOrderDO.setRespMsg(tradeWithdrawDO.getRespMsg());
 			rechargeOrderService.doUpdate(rechargeOrderDO);
@@ -461,7 +459,11 @@ public class PrepaidRefillService extends BaseService {
 			return ResultDTO.fail(tradeWithdrawDO.getRespMsg());
 		}
 
+		//查询主体
 		try {
+			Map<String, String> params = new HashMap<String, String>();// 请求参数
+			params.put("orderid", rechargeOrderDO.getOrderNo());// 用户订单号，多个以英文逗号隔开，最大支持50组
+			params.put("key", env.getProperty("jh.phone.flowkey"));// 应用APPKEY(应用详细页查询)
 			result = RechargeUtil.net(url, params, "GET");
 			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
 
@@ -470,7 +472,7 @@ public class PrepaidRefillService extends BaseService {
 
 				Map<String, String> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
 				if ("1".equals(map.get("game_state"))) {// 成功
-					logger.info("手机充值-查询结果:充值成功");
+					logger.info("流量充值-查询结果:充值成功");
 					rechargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 					rechargeOrderDO.setAmt(map.get("uordercash").replace(".", ""));// 设置实际消费金额
 					rechargeOrderDO.setStatus(1);// 设置交易状态为1-成功
@@ -488,7 +490,7 @@ public class PrepaidRefillService extends BaseService {
 
 				} else if ("9".equals(map.get("game_state"))) {// 失败
 
-					logger.info("手机充值-查询结果:充值失败，需要将原用户账户资金还原");
+					logger.info("流量充值-查询结果:充值失败，需要将原用户账户资金还原");
 					rechargeOrderDO.setStatus(2);// 设置交易状态为2-失败
 					rechargeOrderService.doUpdate(rechargeOrderDO);
 
@@ -500,7 +502,7 @@ public class PrepaidRefillService extends BaseService {
 					return ResultDTO.fail(juhe.getReason());
 				}
 			} else {
-				logger.info("手机充值-支付结果未知，需要继续进行结果查询");
+				logger.info("流量充值-支付结果未知，需要继续进行结果查询");
 				return ResultDTO.fail("支付正在处理，请稍后查询");
 			}
 		} catch (Exception e) {
@@ -525,13 +527,14 @@ public class PrepaidRefillService extends BaseService {
 
 		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(rechargeOrderDO.getOrderNo());
 		if (null == tradeWithdrawDO) {// 如果该条数据为空
-
+			logger.info("话费充值订单查询-该条数据为空oderNo=" + tradeWithdrawDO.getOrderNo());
+			return ResultDTO.fail();
 		}
 
 		// 如果结果已经明确
 		if ("1001".equals(tradeWithdrawDO.getRespCode())) {
 
-			logger.info("手机充值-结果查询：该订单已经在tradeWith表中更新为确定状态，不必再去聚合查询支付结果orderNo=" + rechargeOrderDO.getOrderNo());
+			logger.info("话费充值-结果查询：该订单已经在tradeWith表中更新为确定状态，不必再去聚合查询支付结果orderNo=" + rechargeOrderDO.getOrderNo());
 			rechargeOrderDO.setPayOrderNo(tradeWithdrawDO.getOriginalOrderNo());// 设置渠道订单号
 			rechargeOrderDO.setAmt(tradeWithdrawDO.getAmount().toString());// 设置实际消费金额
 			rechargeOrderDO.setStatus(1);// 设置交易状态为1-成功

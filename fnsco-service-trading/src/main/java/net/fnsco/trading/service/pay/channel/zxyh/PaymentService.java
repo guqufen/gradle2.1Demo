@@ -553,7 +553,9 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeOrderDO.setChannelType("05");// 设置渠道类型05-中信银行
 		tradeOrderDO.setOrderCeateTime(new Date());// 订单创建时间
 		tradeOrderDO.setTxnType(Integer.parseInt(TradeTypeEnum.CONSUMER.getCode()));// 设置交易类型
+		tradeOrderDO.setTxnSubType(31);//设置交易子类型，31-扫一扫支付
 		tradeOrderDO.setPayType(PayTypeEnum.CODE_PAY.getCode());// 设置支付方式，01-二维码
+		
 		// 设置支付子类型，01-微信；02-支付宝
 		if (ZxyhPassivePayCode.ZFB_BS_PAY.getCode().equals(passDTO.getStdprocode())) {
 			tradeOrderDO.setPaySubType(PaySubTypeAllEnum.ZFB_PAY.getCode());

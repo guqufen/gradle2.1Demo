@@ -21,7 +21,7 @@ import net.fnsco.trading.service.pay.channel.ebank.dto.E4032ReqBodyDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4032ReqDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4033ResultDTO;
 import net.fnsco.trading.service.pay.channel.ebank.entity.E4029Entity;
-import net.fnsco.trading.service.pay.channel.ebank.entity.E4032Entity;
+import net.fnsco.trading.service.pay.channel.ebank.entity.EPayResultEntity;
 
 @Service
 public class EbankService extends BaseService {
@@ -29,7 +29,7 @@ public class EbankService extends BaseService {
 	private String yqdm = "00901079800000088000";// 银企代码,外联客户号---后续配置
 	private String AGREE_NO = "Y000136249";// 协议号---后续配置
 	private String SrcAccNo = "11014727214006";// 企业账号---后续配置
-	private String SrcAccName = "平安测试六零零零四一六零八四九一";// 企业收款户名 ---后续配置
+	private String SrcAccName = "平安测试";// 企业收款户名 ---后续配置
 	private String BusiType = "M8PAK";// 费项代码
 	private String serverIp = "localhost";// ---后续配置
 	private Integer iPort = 7072;
@@ -277,10 +277,10 @@ public class EbankService extends BaseService {
 	 * @param amount
 	 * @return
 	 */
-	public ResultDTO<E4032Entity> E4032Trade(String AccNo, BigDecimal amount) {
+	public ResultDTO<EPayResultEntity> E4032Trade(String AccNo, BigDecimal amount) {
 
 		E4028ResultDTO e4028ResultDTO;
-		E4032Entity e4032Entity = new E4032Entity();
+		EPayResultEntity e4032Entity = new EPayResultEntity();
 		try {
 			e4028ResultDTO = E4028Query(AccNo);// 先查询付款人协议
 			if (e4028ResultDTO.isSuccess()) {
@@ -354,12 +354,12 @@ public class EbankService extends BaseService {
 
 						e4032Entity.setRespCode("1000");
 						e4032Entity.setRespMsg("交易进行中，请稍候查询结果");
-						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 批次凭证号
+						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 单笔流水号
 						return ResultDTO.fail(e4032Entity);
 					} else if ("000000".equals(respCode)) {
 						e4032Entity.setRespCode("1001");
 						e4032Entity.setRespMsg("交易成功");
-						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 批次凭证号
+						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 单笔流水号
 						return ResultDTO.success(e4032Entity);
 					} else {
 						return ResultDTO.fail("交易失败");
