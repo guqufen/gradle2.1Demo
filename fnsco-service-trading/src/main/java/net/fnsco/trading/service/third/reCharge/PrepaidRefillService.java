@@ -220,9 +220,9 @@ public class PrepaidRefillService extends BaseService {
 				Map<String, String> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
 
 				phoneChargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
-				// 实际消费金额，先取两位小数再乘以100
-				phoneChargeOrderDO.setAmt(new BigDecimal(map.get("ordercash")).setScale(2, BigDecimal.ROUND_HALF_UP)
-						.multiply(new BigDecimal(100)).toString());// 设置实际消费金额
+				// 实际消费金额，先取两位小数再乘以100，再去掉小数位，再变成String
+				String amtStr = new BigDecimal(map.get("ordercash").toString()).setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
+				phoneChargeOrderDO.setAmt(amtStr);// 设置实际消费金额
 				phoneChargeOrderDO.setRespCode("1000");// 订单提交成功，等待充值
 				phoneChargeOrderDO.setRespMsg(juhe.getReason());// 设置响应
 				int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO);
@@ -350,8 +350,8 @@ public class PrepaidRefillService extends BaseService {
 				Map<String, Object> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
 
 				phoneChargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
-				phoneChargeOrderDO.setAmt(new BigDecimal(map.get("ordercash").toString())
-						.setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).toString());// 设置实际消费金额
+				String amtStr = new BigDecimal(map.get("ordercash").toString()).setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
+				phoneChargeOrderDO.setAmt(amtStr);// 设置实际消费金额
 				phoneChargeOrderDO.setRespCode("1000");// 订单提交成功，等待充值
 				phoneChargeOrderDO.setRespMsg(juhe.getReason());// 设置响应
 				int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO);
