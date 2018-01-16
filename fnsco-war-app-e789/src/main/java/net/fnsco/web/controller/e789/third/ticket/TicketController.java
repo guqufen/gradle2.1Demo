@@ -419,6 +419,9 @@ public class TicketController extends BaseController {
         ticketOrderDTO.setTrainCode(ticketOrderJO.getTrainCode());
         ticketOrderDTO.setTrainDate(ticketOrderJO.getTrainDate());
         ticketOrderDTO.setUserId(ticketOrderJO.getUserId());
+        ticketOrderDTO.setArriveTime(ticketOrderJO.getArriveTime());
+        ticketOrderDTO.setRunTime(ticketOrderJO.getRunTime());
+        ticketOrderDTO.setStartTime(ticketOrderJO.getStartTime());
         ResultDTO<TicketOrderDO> result = ticketService.addOrder(ticketOrderDTO);
         if (!result.isSuccess()) {
             return fail(result.getCode(), result.getMessage());
