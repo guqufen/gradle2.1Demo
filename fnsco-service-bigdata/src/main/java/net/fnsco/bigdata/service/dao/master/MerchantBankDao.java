@@ -123,5 +123,5 @@ public interface MerchantBankDao {
      */
     MerchantBank selectByAppUserId(@Param("userId") Integer userId);
 
-    BankCardTypeDTO queryByCertifyId(String accountNo, int length);
+    BankCardTypeDTO queryByCertifyId(@Param("bankCardNum") String bankCardNum,@Param("cardTotalLength")  String cardTotalLength);
 }

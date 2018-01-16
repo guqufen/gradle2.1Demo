@@ -870,7 +870,9 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
 		merchantCoreEntityZxyhDTO.setThirdMchtNo(core.getInnerCode());// 第三方平台子商户号	// 对应我们内部商户号
 		//根据银行卡号判断是否中信商户
-		BankCardTypeDTO banktypeDTO = merchantBankDao.queryByCertifyId(merchantBank.getAccountNo(),merchantBank.getAccountNo().length());
+		String bankCardNum = merchantBank.getAccountNo();
+		String cardTotalLength = merchantBank.getAccountNo().length()+"";
+		BankCardTypeDTO banktypeDTO = merchantBankDao.queryByCertifyId(bankCardNum,cardTotalLength);
 		logger.error("isOrNotZxMchtNo="+banktypeDTO.getBank_name());
 		if(banktypeDTO==null || !StringUtils.equals("中信银行", banktypeDTO.getBank_name())){
 			merchantCoreEntityZxyhDTO.setIsOrNotZxMchtNo("N");
