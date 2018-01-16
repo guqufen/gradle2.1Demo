@@ -86,14 +86,14 @@ public class StatController extends BaseController {
 		/**
 		 * 昨天
 		 */
-		String tradeYesterday = DateUtils.getDateStrByDay(-1);//yyyy-MM-dd
+		String tradeYesterday = DateUtils.getDateStrByDay(-1);//yyyyMMdd
 		String  totalTesterday = tradeOrderByDayDAO.selectDayTurnover(tradeYesterday, commonJO.getUserId());
 		resultVO.setYesterdayTurnover(formatRMBNumber(totalTesterday));
 		
 		/**
 		 * 本月
 		 */
-		String startTradeDate = DateUtils.getMouthStartTime(0);//yyyy-MM
+		String startTradeDate = DateUtils.getMouthStartTimeStr(0);//yyyyMM
 		String thisMonth =  tradeOrderByDayDAO.selectTotalTurnover(startTradeDate, tradeYesterday, commonJO.getUserId());
 		if(Strings.isNullOrEmpty(thisMonth)) {
 			thisMonth = "0.00";
@@ -190,17 +190,17 @@ public class StatController extends BaseController {
 			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
 		}
 		
-		String startTradeDate = DateUtils.getDateStrByMonth(0,-7);//yyyy-MM-dd;
-		String endTradeDate = DateUtils.getDateStrByMonth(0,-1);
+		String startTradeDate = DateUtils.getDateStrByDay(-7);//yyyyMMdd;
+		String endTradeDate = DateUtils.getDateStrByDay(-1);
 		List<OrderDayDTO> datas = tradeOrderByDayDAO.selectTurnoverByCondition(startTradeDate, endTradeDate, commonJO.getUserId());
 		List<EveryDayTurnoverVO> resultData = Lists.newArrayList();
 		Integer totalNum = 0;
 		BigDecimal totalTu = new BigDecimal(0);
 		for (OrderDayDTO orderDayDTO : datas) {
 			EveryDayTurnoverVO vo = new EveryDayTurnoverVO();
-			vo.setOrderNum(orderDayDTO.getOrderNumber());
+			vo.setOrderNum(orderDayDTO.getOrderNum());
 			vo.setTurnover(formatRMBNumber(orderDayDTO.getTurnover()));
-			vo.setTurnoverDate(orderDayDTO.getTradeDate());
+			vo.setTurnoverDate(DateUtils.formatDateStrOutput(orderDayDTO.getTradeDate()));
 			resultData.add(vo);
 			totalNum = totalNum + vo.getOrderNum();
 			totalTu = totalTu.add(new BigDecimal(vo.getTurnover()));
@@ -214,7 +214,8 @@ public class StatController extends BaseController {
 	}
 	
 	private List<EveryDayTurnoverVO> installTradeDay(String startTradeDate, String endTradeDate,List<EveryDayTurnoverVO> tradeDayData) {
-        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
         Calendar start = Calendar.getInstance();
         Calendar end = Calendar.getInstance();
         List<EveryDayTurnoverVO> datas = Lists.newArrayList();
@@ -230,7 +231,7 @@ public class StatController extends BaseController {
             boolean flag = true;
             while (end.compareTo(start) >= 0) {
                 flag = true;
-                String dateTime = format1.format(end.getTime());
+                String dateTime = format2.format(end.getTime());
                 for (EveryDayTurnoverVO tradeDayDTO : tradeDayData) {
                     if (dateTime.equals(tradeDayDTO.getTurnoverDate())) {
                         tradeDayDTO.setTurnoverDate(dateTime);
@@ -240,7 +241,7 @@ public class StatController extends BaseController {
                 }
                 if (flag) {
                 	EveryDayTurnoverVO tempDto = new EveryDayTurnoverVO();
-                    tempDto.setTurnoverDate(format1.format(end.getTime()));
+                    tempDto.setTurnoverDate(format2.format(end.getTime()));
                     tempDto.setOrderNum(0);
                     tempDto.setTurnover(formatRMBNumbers("0"));
                     datas.add(tempDto);
