@@ -21,6 +21,7 @@ public class E4034RespDTO extends DTO {
 	private String SettleType;// 实时入账标志，0-实时；1-T1入账
 	private String BStt;// 批次状态，20-处理成功；30-失败
 	private String BatchInfo;// 批次消息
+	private String BussSeqNo;// 业务流水号
 	@XmlElement(name = "list")
 	private List<E4033RespBodyDTO> list;
 
@@ -88,11 +89,23 @@ public class E4034RespDTO extends DTO {
 		this.list = list;
 	}
 
+	public String getBussSeqNo() {
+		return BussSeqNo;
+	}
+
+	public void setBussSeqNo(String bussSeqNo) {
+		BussSeqNo = bussSeqNo;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
 	public String toString() {
 		return "E4034RespDTO [ThirdVoucher=" + ThirdVoucher + ", BusiType=" + BusiType + ", Currency=" + Currency
 				+ ", SrcAccNo=" + SrcAccNo + ", SettleType=" + SettleType + ", BStt=" + BStt + ", BatchInfo="
-				+ BatchInfo + ", list=" + list + "]";
+				+ BatchInfo + ", BussSeqNo=" + BussSeqNo + ", list=" + list + "]";
 	}
 
 }

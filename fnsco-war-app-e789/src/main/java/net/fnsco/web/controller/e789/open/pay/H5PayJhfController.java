@@ -40,7 +40,7 @@ import net.fnsco.web.controller.e789.jo.TradeJO;
  *
  */
 @Controller
-@RequestMapping(value = "/trade/h5Pay", method = RequestMethod.POST)
+@RequestMapping(value = "/trade/fsf", method = RequestMethod.POST)
 @Api(value = "/trade/h5Pay", tags = { "聚惠分相关功能接口" })
 public class H5PayJhfController extends BaseController {
     @Autowired
@@ -58,7 +58,7 @@ public class H5PayJhfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/dealPayOrder")
+    @RequestMapping(value = "/h5Pay/dealPayOrder")
     @ApiOperation(value = "第三方接入获取聚惠分二维码url")
     @ResponseBody
     public ResultDTO dealPayOrder(@RequestBody TradeJO tradeJO) {

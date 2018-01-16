@@ -2,8 +2,10 @@ package net.fnsco.trading.service.pay.channel.ebank;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.fnsco.core.base.BaseService;
@@ -19,9 +21,13 @@ import net.fnsco.trading.service.pay.channel.ebank.dto.E4029ReqDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4031DTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4032ReqBodyDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4032ReqDTO;
+import net.fnsco.trading.service.pay.channel.ebank.dto.E4032RespDTO;
 import net.fnsco.trading.service.pay.channel.ebank.dto.E4033ResultDTO;
+import net.fnsco.trading.service.pay.channel.ebank.dto.E4034RespDTO;
 import net.fnsco.trading.service.pay.channel.ebank.entity.E4029Entity;
 import net.fnsco.trading.service.pay.channel.ebank.entity.EPayResultEntity;
+import net.fnsco.trading.service.withdraw.TradeWithdrawService;
+import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
 
 @Service
 public class EbankService extends BaseService {
@@ -33,6 +39,9 @@ public class EbankService extends BaseService {
 	private String BusiType = "M8PAK";// 费项代码
 	private String serverIp = "localhost";// ---后续配置
 	private Integer iPort = 7072;
+
+	@Autowired
+	private TradeWithdrawService tradeWithdrawService;
 
 	/**
 	 * 付款人协议查询
@@ -293,6 +302,7 @@ public class EbankService extends BaseService {
 
 		E4028ResultDTO e4028ResultDTO;
 		EPayResultEntity e4032Entity = new EPayResultEntity();
+		TradeWithdrawDO tradeWithdrawDO = new TradeWithdrawDO();
 
 		try {
 
@@ -341,6 +351,16 @@ public class EbankService extends BaseService {
 					String serverIp = "localhost";
 					Integer iPort = 7072;
 
+					tradeWithdrawDO.setOrderNo(e4032ReqDTO.getThirdVoucher());// 批次凭证号
+					tradeWithdrawDO.setAmount(amount.multiply(new BigDecimal(100)));// 交易金额(分),需要乘以100
+					tradeWithdrawDO.setTradeType(2);// 交易类型1-收入;2-消费
+					tradeWithdrawDO.setTradeSubType(27);// 27-平安银行代扣
+					tradeWithdrawDO.setStatus(0);// 状态:0-未执行
+					tradeWithdrawDO.setCreateTime(new Date());// 创建时间
+					tradeWithdrawDO.setUpdateTime(new Date());// 更新时间
+					tradeWithdrawDO.setChannelType("06");// 渠道类型:06-平安银行代扣
+					tradeWithdrawService.doAdd(tradeWithdrawDO);
+
 					Packets packetsRP = EbankUtil.send2server(serverIp, iPort, packets, inte);
 
 					byte[] headRP = packetsRP.getHead();
@@ -348,15 +368,21 @@ public class EbankService extends BaseService {
 					byte[] bodyRP = packetsRP.getBody();
 
 					StringBuilder rcvMsg = new StringBuilder();
+					String recvBody = null;
+
 					if (headRP != null) {
+
 						rcvMsg.append(new String(headRP, EbankUtil.CHARSET));
 					}
+
 					if (bodyRpLen > 0 && bodyRP != null) {
+
+						recvBody = new String(bodyRP, EbankUtil.CHARSET);
 						rcvMsg.append(new String(bodyRP, EbankUtil.CHARSET));
 					}
 					// 获取应答信息
 					byte[] res = new byte[100];
-					String respCode = rcvMsg.toString().substring(87, 93);
+					String respCode = rcvMsg.toString().substring(87, 93).trim();
 					System.out.println("respCode=[" + rcvMsg.toString().substring(87, 93) + "]");
 					System.arraycopy(rcvMsg.toString().getBytes(), 93, res, 0, 100);
 					System.out.println("respMsg=[" + new String(res) + "]");
@@ -365,18 +391,44 @@ public class EbankService extends BaseService {
 					if ("YQ9999".equals(respCode) || "GW3002".equals(respCode) || "EBLN00".equals(respCode)
 							|| "AFE003".equals(respCode) || "AFE004".equals(respCode) || "E00006".equals(respCode)
 							|| "E00007".equals(respCode) || "E00008".equals(respCode) || "YQ9989".equals(respCode)
-							|| "YQ9976".equals(respCode)) {
+							|| "YQ9976".equals(respCode) || "9001".equals(respCode) || "1029".equals(respCode)) {
 
 						e4032Entity.setRespCode("1000");
 						e4032Entity.setRespMsg("交易进行中，请稍候查询结果");
+						e4032Entity.setAmount(amount);// 交易金额
 						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 单笔流水号
+
+						tradeWithdrawDO.setUpdateTime(new Date());// 记录更新时间
+						tradeWithdrawDO.setStatus(1);// 状态为执行中
+						tradeWithdrawDO.setRespCode(respCode);// 应答码，进行中
+						tradeWithdrawDO.setRespMsg(new String(res).trim());// 应答信息
+						tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
+
 						return ResultDTO.fail(e4032Entity);
 					} else if ("000000".equals(respCode)) {
+
 						e4032Entity.setRespCode("1001");
 						e4032Entity.setRespMsg("交易成功");
+						e4032Entity.setAmount(amount);// 交易金额
 						e4032Entity.setOrderNo(e4032ReqDTO.getThirdVoucher());// 单笔流水号
+						E4032RespDTO e4032RespDTO = JaxbUtil.converyToJavaBean(recvBody, E4032RespDTO.class);
+
+						tradeWithdrawDO.setUpdateTime(new Date());// 记录更新时间
+						tradeWithdrawDO.setStatus(2);// 状态为成功
+						tradeWithdrawDO.setRespCode("1001");// 应答码成功
+						tradeWithdrawDO.setOriginalOrderNo(e4032RespDTO.getBussSeqNo());// 渠道返回的业务流水号
+						tradeWithdrawDO.setRespMsg(new String(res).trim());// 应答信息
+						tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
+
 						return ResultDTO.success(e4032Entity);
 					} else {
+
+						tradeWithdrawDO.setUpdateTime(new Date());// 记录更新时间
+						tradeWithdrawDO.setStatus(3);// 状态为失败
+						tradeWithdrawDO.setRespCode("1002");// 应答码失败
+						tradeWithdrawDO.setRespMsg(new String(res).trim());// 应答信息
+						tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
+
 						return ResultDTO.fail("交易失败");
 					}
 				}
@@ -395,6 +447,15 @@ public class EbankService extends BaseService {
 	 * @return
 	 */
 	public E4033ResultDTO E4033ResultQuery(String orderNo) {
+
+		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(orderNo);// 通过订单号查找原交易
+		if (null == tradeWithdrawDO) {
+			logger.info("订单号查找不到原交易orderNo=" + orderNo);
+			E4033ResultDTO e4033ResultDTO = new E4033ResultDTO();
+			e4033ResultDTO.setSuccess(false);
+			e4033ResultDTO.setRespMsg("订单号查找不到原交易orderNo=" + orderNo);
+			return e4033ResultDTO;
+		}
 
 		try {
 
@@ -439,8 +500,16 @@ public class EbankService extends BaseService {
 			if ("000000".equals(rcvMsg.toString().substring(87, 93))) {
 
 				e4033ResultDTO.setSuccess(true);
-				e4033ResultDTO = JaxbUtil.converyToJavaBean(recvBody, E4033ResultDTO.class);
+				E4034RespDTO e4034RespDTO = JaxbUtil.converyToJavaBean(recvBody, E4034RespDTO.class);
+				e4033ResultDTO.setE4034RespDTO(e4034RespDTO);
 				System.out.println(e4033ResultDTO.toString());
+				
+				tradeWithdrawDO.setUpdateTime(new Date());// 记录更新时间
+				tradeWithdrawDO.setStatus(2);// 状态为成功
+				tradeWithdrawDO.setRespCode("1001");// 应答码成功
+				tradeWithdrawDO.setOriginalOrderNo(e4034RespDTO.getBussSeqNo());// 渠道返回的业务流水号
+				tradeWithdrawDO.setRespMsg(new String(res).trim());// 应答信息
+				tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
 			}
 
 			return e4033ResultDTO;
@@ -462,8 +531,8 @@ public class EbankService extends BaseService {
 		E4033ResultDTO e4033ResultDTO = E4033ResultQuery(orderNo);
 
 		if (e4033ResultDTO.isSuccess()) {
-			return ResultDTO.success();
+			return ResultDTO.success(e4033ResultDTO.getE4034RespDTO().getList().get(0));
 		}
-		return ResultDTO.fail();
+		return ResultDTO.fail(e4033ResultDTO.getE4034RespDTO().getList().get(0));
 	}
 }

@@ -26,6 +26,7 @@ import net.fnsco.trading.service.third.reCharge.dto.CheckChargePackageDTO;
 import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
 import net.fnsco.web.controller.e789.jo.FlowChargeJO;
 import net.fnsco.web.controller.e789.jo.FlowPackageCheckJO;
+import net.fnsco.web.controller.e789.third.ticket.jo.ThrRechargeJO;
 
 /**
  * 功能：账户页-手机充值的话费充值和流量充值控制器url
@@ -146,7 +147,7 @@ public class PrepaidRefillController extends BaseController {
 				logger.error("手机充值-充值交易正在进行中，账户扣款更新失败，请联系相关技术人员查看,orderNo=" + ph.getOrderNo());
 			}
 
-			return ResultDTO.fail(ph.getRespMsg());
+			return ResultDTO.success(ph);
 
 			// 失败，更新原账户
 		} else {
@@ -161,20 +162,24 @@ public class PrepaidRefillController extends BaseController {
 
 	@RequestMapping("/queryResult")
 	@ApiOperation(value = "话费/流量充值结果查询url")
-	public ResultDTO queryFlowResult(@RequestBody String orderNo) {
+	public ResultDTO queryFlowResult(@RequestBody ThrRechargeJO re) {
+
+		String orderNo = re.getOrderNo();
+
 		RechargeOrderDO rechargeOrder = rechargeOrderService.getByOrderNo(orderNo);
 		if (null == rechargeOrder) {
+			logger.error("此订单号找不到原交易，请核查后重新请求：orderNo=" + orderNo);
 			return ResultDTO.fail("此订单号找不到原交易，请核查后重新请求：orderNo=" + orderNo);
 		}
 
-		//如果该订单已经有确定状态，则直接返回结果
+		// 如果该订单已经有确定状态，则直接返回结果
 		if ("1".equals(rechargeOrder.getStatus())) {
 			return ResultDTO.success(rechargeOrder.getRespMsg());
 		} else if ("2".equals(rechargeOrder.getStatus())) {
 			return ResultDTO.fail(rechargeOrder.getRespMsg());
 		}
 
-		//根据充值类型，确定执行话费充值结果查询/流量充值查询
+		// 根据充值类型，确定执行话费充值结果查询/流量充值查询
 		if ("1".equals(rechargeOrder.getType())) {
 			return prepaidRefillService.queryFlowResult(rechargeOrder);
 		} else if ("0".equals(rechargeOrder.getType())) {
