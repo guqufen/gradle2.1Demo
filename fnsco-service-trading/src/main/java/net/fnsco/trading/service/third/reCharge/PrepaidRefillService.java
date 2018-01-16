@@ -431,14 +431,19 @@ public class PrepaidRefillService extends BaseService {
 	 * 
 	 * @param orderNo：原订单号
 	 */
-	public ResultDTO queryFlowResult(RechargeOrderDO rechargeOrderDO) {
+	@SuppressWarnings({ "unchecked" })
+	public ResultDTO<ChargeResultDTO> queryFlowResult(RechargeOrderDO rechargeOrderDO) {
 		String result = null;
 		String url = "http://v.juhe.cn/flow/ordersta";// 请求接口地址
+		ChargeResultDTO ph = new ChargeResultDTO();
 
 		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(rechargeOrderDO.getOrderNo());
 		if (null == tradeWithdrawDO) {// 如果该条数据为空
-			logger.info("流量充值订单查询-该条数据为空oderNo=" + tradeWithdrawDO.getOrderNo());
-			return ResultDTO.fail();
+
+			logger.info("流量充值订单查询-该条数据为空oderNo=" + rechargeOrderDO.getOrderNo());
+			ph.setRespCode("1002");
+			ph.setRespMsg("该订单号未查到相关数据数据为空");
+			return ResultDTO.fail(ph);
 		}
 
 		// 如果结果已经明确
@@ -452,7 +457,10 @@ public class PrepaidRefillService extends BaseService {
 			rechargeOrderDO.setRespMsg("充值成功");
 			rechargeOrderService.doUpdate(rechargeOrderDO);
 
-			return ResultDTO.success(tradeWithdrawDO.getRespMsg());
+			ph.setRespCode(rechargeOrderDO.getRespCode());
+			ph.setOrderNo(rechargeOrderDO.getOrderNo());
+			ph.setRespMsg(tradeWithdrawDO.getRespMsg());
+			return ResultDTO.success(ph);
 		} else if ("1002".equals(tradeWithdrawDO.getRespCode())) {
 
 			logger.info("流量充值-结果查询：该订单已经在tradeWith表中更新为确定状态，不必再去聚合查询支付结果orderNo=" + rechargeOrderDO.getOrderNo());
@@ -460,7 +468,9 @@ public class PrepaidRefillService extends BaseService {
 			rechargeOrderDO.setRespMsg(tradeWithdrawDO.getRespMsg());
 			rechargeOrderService.doUpdate(rechargeOrderDO);
 
-			return ResultDTO.fail(tradeWithdrawDO.getRespMsg());
+			ph.setRespCode(rechargeOrderDO.getRespCode());
+			ph.setRespMsg(tradeWithdrawDO.getRespMsg());
+			return ResultDTO.fail(ph);
 		}
 
 		// 查询主体
@@ -476,6 +486,7 @@ public class PrepaidRefillService extends BaseService {
 
 				Map<String, String> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
 				if ("1".equals(map.get("game_state"))) {// 成功
+
 					logger.info("流量充值-查询结果:充值成功");
 					rechargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 					rechargeOrderDO.setAmt(map.get("uordercash").replace(".", ""));// 设置实际消费金额
@@ -490,7 +501,10 @@ public class PrepaidRefillService extends BaseService {
 					tradeWithdrawDO.setRespMsg("充值成功");
 					tradeWithdrawService.doUpdate(tradeWithdrawDO);
 
-					return ResultDTO.success("充值成功");
+					ph.setRespCode(tradeWithdrawDO.getRespCode());
+					ph.setOrderNo(tradeWithdrawDO.getOrderNo());
+					ph.setRespMsg(tradeWithdrawDO.getRespMsg());
+					return ResultDTO.success(ph);
 
 				} else if ("9".equals(map.get("game_state"))) {// 失败
 
@@ -503,10 +517,22 @@ public class PrepaidRefillService extends BaseService {
 					tradeWithdrawDO.setRespMsg(juhe.getReason());
 					tradeWithdrawService.doUpdate(tradeWithdrawDO);
 
-					return ResultDTO.fail(juhe.getReason());
+					ph.setRespCode(tradeWithdrawDO.getRespCode());
+					ph.setRespMsg(juhe.getReason());
+					return ResultDTO.fail(ph);
+				} else if ("0".equals(map.get("game_state"))) {// 失败
+
+					logger.info("流量充值-支付结果未知，需要继续进行结果查询");
+					ph.setRespCode("1000");
+					ph.setRespMsg("支付正在处理，请稍后查询");
+					return ResultDTO.fail(ph);
 				}
+
 			} else {
+
 				logger.info("流量充值-支付结果未知，需要继续进行结果查询");
+				ph.setRespCode("1000");
+				ph.setRespMsg("支付正在处理，请稍后查询");
 				return ResultDTO.fail("支付正在处理，请稍后查询");
 			}
 		} catch (Exception e) {
@@ -523,16 +549,21 @@ public class PrepaidRefillService extends BaseService {
 	 * 
 	 * @throws Exception
 	 */
-	public ResultDTO orderSta(RechargeOrderDO rechargeOrderDO) {
+	@SuppressWarnings("unchecked")
+	public ResultDTO<ChargeResultDTO> orderSta(RechargeOrderDO rechargeOrderDO) {
 
 		String result = null;
 		String orderstaUrl = "http://op.juhe.cn/ofpay/mobile/ordersta?key=" + env.getProperty("jh.phone.feekey")
 				+ "&orderid=!";
+		ChargeResultDTO ph = new ChargeResultDTO();
 
 		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(rechargeOrderDO.getOrderNo());
 		if (null == tradeWithdrawDO) {// 如果该条数据为空
-			logger.info("话费充值订单查询-该条数据为空oderNo=" + tradeWithdrawDO.getOrderNo());
-			return ResultDTO.fail();
+
+			logger.info("话费充值订单查询-该条数据为空oderNo=" + rechargeOrderDO.getOrderNo());
+			ph.setRespCode("1002");
+			ph.setRespMsg("该订单号未查到相关数据数据为空");
+			return ResultDTO.fail(ph);
 		}
 
 		// 如果结果已经明确
@@ -546,7 +577,10 @@ public class PrepaidRefillService extends BaseService {
 			rechargeOrderDO.setRespMsg("充值成功");
 			rechargeOrderService.doUpdate(rechargeOrderDO);
 
-			return ResultDTO.success(tradeWithdrawDO.getRespMsg());
+			ph.setRespCode("1001");
+			ph.setOrderNo(rechargeOrderDO.getOrderNo());
+			ph.setRespMsg(rechargeOrderDO.getRespMsg());
+			return ResultDTO.success(ph);
 		} else if ("1002".equals(tradeWithdrawDO.getRespCode())) {
 
 			logger.info("手机充值-结果查询：该订单已经在tradeWith表中更新为确定状态，不必再去聚合查询支付结果orderNo=" + rechargeOrderDO.getOrderNo());
@@ -554,7 +588,9 @@ public class PrepaidRefillService extends BaseService {
 			rechargeOrderDO.setRespMsg(tradeWithdrawDO.getRespMsg());
 			rechargeOrderService.doUpdate(rechargeOrderDO);
 
-			return ResultDTO.fail(tradeWithdrawDO.getRespMsg());
+			ph.setRespCode("1002");
+			ph.setRespMsg(rechargeOrderDO.getRespMsg());
+			return ResultDTO.fail(ph);
 		}
 
 		try {
@@ -586,7 +622,10 @@ public class PrepaidRefillService extends BaseService {
 					tradeWithdrawDO.setRespMsg("充值成功");
 					tradeWithdrawService.doUpdate(tradeWithdrawDO);
 
-					return ResultDTO.success("充值成功");
+					ph.setRespCode("1001");
+					ph.setOrderNo(tradeWithdrawDO.getOrderNo());
+					ph.setRespMsg(rechargeOrderDO.getRespMsg());
+					return ResultDTO.success(ph);
 				} else if ("9".equals(map.get("game_state"))) {// 失败
 
 					logger.info("手机充值-查询结果:充值失败，需要将原用户账户资金还原");
@@ -602,11 +641,18 @@ public class PrepaidRefillService extends BaseService {
 					tradeWithdrawDO.setRespMsg(juhe.getReason());
 					tradeWithdrawService.doUpdate(tradeWithdrawDO);
 
-					return ResultDTO.fail(juhe.getReason());
+					ph.setRespCode("1002");
+					ph.setRespMsg(juhe.getReason());
+
+					return ResultDTO.fail(ph);
 				}
 			} else {
+
 				logger.info("手机充值-支付结果未知，需要继续进行结果查询");
-				return ResultDTO.fail("支付正在处理，请稍后查询");
+				ph.setRespCode("1000");
+				ph.setRespMsg("支付正在处理，请稍后查询");
+
+				return ResultDTO.fail(ph);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

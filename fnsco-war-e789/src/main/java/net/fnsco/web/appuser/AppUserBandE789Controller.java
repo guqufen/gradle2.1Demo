@@ -13,6 +13,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.dto.AppUserMerchantEntityDTO;
+import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.trading.service.merchantentity.dao.AppUserMerchantEntityDAO;
 import net.fnsco.trading.service.merchantentity.entity.AppUserMerchantEntityDO;
 
@@ -66,7 +67,9 @@ public class AppUserBandE789Controller extends BaseController{
 			return ResultDTO.fail();
 		}
 		AppUserMerchantEntityDO appUserMerchantEntity = appUserMerchantEntityDAO.selectByEntityInnerCode(entity.getAppUserId());
+		Integer userId = entity.getAppUserId();
 		if(null != appUserMerchantEntity) {
+			userId = appUserMerchantEntity.getAppUserId();
 			appUserMerchantEntity.setModefyTime(new Date());
 			appUserMerchantEntity.setEntityInnerCode(entity.getEntityInnerCode());
 			appUserMerchantEntityDAO.update(appUserMerchantEntity);
@@ -75,6 +78,13 @@ public class AppUserBandE789Controller extends BaseController{
 			entity.setModefyTime(new Date());
 			appUserMerchantEntityDAO.insert(entity);
 		}
+		//更新APP用户强制退出状态
+		AppUser appUser = new AppUser();
+		appUser.setId(userId);
+		appUser.setForcedLoginOut(1);
+		appUser.setModifyTime(new Date());
+		appUserService.updateAppUser(appUser);
+		
 		return ResultDTO.successForSubmit();
 	}
 }
