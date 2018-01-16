@@ -1,234 +1,265 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantBankDao" >
-  <resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantBank" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
-    <result column="account_type" property="accountType" jdbcType="VARCHAR" />
-    <result column="account_no" property="accountNo" jdbcType="VARCHAR" />
-    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
-    <result column="account_card_id" property="accountCardId" jdbcType="VARCHAR" />
-    <result column="sub_bank_name" property="subBankName" jdbcType="VARCHAR" />
-    <result column="open_bank_prince" property="openBankPrince" jdbcType="VARCHAR" />
-    <result column="open_bank" property="openBank" jdbcType="VARCHAR" />
-    <result column="open_bank_city" property="openBankCity" jdbcType="VARCHAR" />
-    <result column="open_bank_num" property="openBankNum" jdbcType="VARCHAR" />
-    <result column="account_phone" property="accountPhone" jdbcType="VARCHAR" />
-  </resultMap>
-  <!-- APP银行卡显示信息 -->
-  <resultMap id="MerResultMap" type="net.fnsco.bigdata.api.dto.MerChantBankDTO" >
-     <result column="account_no" property="accountNo" jdbcType="VARCHAR" />
-     <result column="open_bank" property="openBank" jdbcType="VARCHAR" />
-     <result column="open_bank_num" property="openBankNum" jdbcType="VARCHAR" />
-  </resultMap>
-  <sql id="Base_Column_List" >
-    id, inner_code,account_type, account_no, account_name, account_card_id, sub_bank_name, open_bank_prince, 
-    open_bank, open_bank_city, open_bank_num,account_phone
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from m_merchant_bank
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from m_merchant_bank
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantBank" >
-    insert into m_merchant_bank (id, inner_code,account_type, account_no, 
-      account_name, account_card_id, sub_bank_name, 
-      open_bank_prince, open_bank, open_bank_city, 
-      open_bank_num)
-    values (#{id,jdbcType=INTEGER}, #{innerCode,jdbcType=VARCHAR},#{accountType,jdbcType=VARCHAR}, #{accountNo,jdbcType=VARCHAR}, 
-      #{accountName,jdbcType=VARCHAR}, #{accountCardId,jdbcType=VARCHAR}, #{subBankName,jdbcType=VARCHAR}, 
-      #{openBankPrince,jdbcType=VARCHAR}, #{openBank,jdbcType=VARCHAR}, #{openBankCity,jdbcType=VARCHAR}, 
-      #{openBankNum,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantBank" keyProperty="id" useGeneratedKeys="true">
-    insert into m_merchant_bank
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="innerCode != null" >
-        inner_code,
-      </if>
-      <if test="accountType != null" >
-        account_type,
-      </if>
-      <if test="accountNo != null" >
-        account_no,
-      </if>
-      <if test="accountName != null" >
-        account_name,
-      </if>
-      <if test="accountCardId != null" >
-        account_card_id,
-      </if>
-      <if test="subBankName != null" >
-        sub_bank_name,
-      </if>
-      <if test="openBankPrince != null" >
-        open_bank_prince,
-      </if>
-      <if test="openBank != null" >
-        open_bank,
-      </if>
-      <if test="openBankCity != null" >
-        open_bank_city,
-      </if>
-      <if test="openBankNum != null" >
-        open_bank_num,
-      </if>
-      <if test="accountPhone != null" >
-        account_phone,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="innerCode != null" >
-        #{innerCode,jdbcType=VARCHAR},
-      </if>
-      <if test="accountType != null" >
-        #{accountType,jdbcType=VARCHAR},
-      </if>
-      <if test="accountNo != null" >
-        #{accountNo,jdbcType=VARCHAR},
-      </if>
-      <if test="accountName != null" >
-        #{accountName,jdbcType=VARCHAR},
-      </if>
-      <if test="accountCardId != null" >
-        #{accountCardId,jdbcType=VARCHAR},
-      </if>
-      <if test="subBankName != null" >
-        #{subBankName,jdbcType=VARCHAR},
-      </if>
-      <if test="openBankPrince != null" >
-        #{openBankPrince,jdbcType=VARCHAR},
-      </if>
-      <if test="openBank != null" >
-        #{openBank,jdbcType=VARCHAR},
-      </if>
-      <if test="openBankCity != null" >
-        #{openBankCity,jdbcType=VARCHAR},
-      </if>
-      <if test="openBankNum != null" >
-        #{openBankNum,jdbcType=VARCHAR},
-      </if>
-      <if test="accountPhone != null" >
-        #{accountPhone,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantBank" >
-    update m_merchant_bank
-    <set >
-      <if test="innerCode != null" >
-        inner_code = #{innerCode,jdbcType=VARCHAR},
-      </if>
-      <if test="accountType != null" >
-        account_type = #{accountType,jdbcType=VARCHAR},
-      </if>
-      <if test="accountNo != null" >
-        account_no = #{accountNo,jdbcType=VARCHAR},
-      </if>
-      <if test="accountName != null" >
-        account_name = #{accountName,jdbcType=VARCHAR},
-      </if>
-      <if test="accountCardId != null" >
-        account_card_id = #{accountCardId,jdbcType=VARCHAR},
-      </if>
-      <if test="subBankName != null" >
-        sub_bank_name = #{subBankName,jdbcType=VARCHAR},
-      </if>
-      <if test="openBankPrince != null" >
-        open_bank_prince = #{openBankPrince,jdbcType=VARCHAR},
-      </if>
-      <if test="openBank != null" >
-        open_bank = #{openBank,jdbcType=VARCHAR},
-      </if>
-      <if test="openBankCity != null" >
-        open_bank_city = #{openBankCity,jdbcType=VARCHAR},
-      </if>
-      <if test="openBankNum != null" >
-        open_bank_num = #{openBankNum,jdbcType=VARCHAR},
-      </if>
-       <if test="accountPhone != null" >
-        account_phone = #{accountPhone,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantBank" >
-    update m_merchant_bank
-    set account_type = #{accountType,jdbcType=VARCHAR},
-      inner_code = #{innerCode,jdbcType=VARCHAR},
-      account_no = #{accountNo,jdbcType=VARCHAR},
-      account_name = #{accountName,jdbcType=VARCHAR},
-      account_card_id = #{accountCardId,jdbcType=VARCHAR},
-      sub_bank_name = #{subBankName,jdbcType=VARCHAR},
-      open_bank_prince = #{openBankPrince,jdbcType=VARCHAR},
-      open_bank = #{openBank,jdbcType=VARCHAR},
-      open_bank_city = #{openBankCity,jdbcType=VARCHAR},
-      open_bank_num = #{openBankNum,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <!-- 根据innercode查询银行卡信息 -->
-  <select id="queryByInnerCode" parameterType="java.lang.String" resultMap="MerResultMap">
-     select account_no,open_bank,open_bank_num from m_merchant_bank where inner_code = #{innerCode}
-  </select>
-  <!-- 根据innerCode查询所有银行卡信息 -->
-  <select id="queryWebByInnerCode" parameterType="java.lang.String" resultMap="BaseResultMap">
-     select 
-     <include refid="Base_Column_List" />
-     from m_merchant_bank
-     where inner_code = #{innerCode}
-  </select>
-    <!-- 根据商家ID删除关联数据 -->
+<mapper namespace="net.fnsco.bigdata.service.dao.master.MerchantBankDao">
+	<resultMap id="BaseResultMap" type="net.fnsco.bigdata.service.domain.MerchantBank">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="inner_code" property="innerCode" jdbcType="VARCHAR" />
+		<result column="account_type" property="accountType" jdbcType="VARCHAR" />
+		<result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+		<result column="account_name" property="accountName" jdbcType="VARCHAR" />
+		<result column="account_card_id" property="accountCardId"
+			jdbcType="VARCHAR" />
+		<result column="sub_bank_name" property="subBankName" jdbcType="VARCHAR" />
+		<result column="open_bank_prince" property="openBankPrince"
+			jdbcType="VARCHAR" />
+		<result column="open_bank" property="openBank" jdbcType="VARCHAR" />
+		<result column="open_bank_city" property="openBankCity"
+			jdbcType="VARCHAR" />
+		<result column="open_bank_num" property="openBankNum" jdbcType="VARCHAR" />
+		<result column="account_phone" property="accountPhone"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- APP银行卡显示信息 -->
+	<resultMap id="MerResultMap" type="net.fnsco.bigdata.api.dto.MerChantBankDTO">
+		<result column="account_no" property="accountNo" jdbcType="VARCHAR" />
+		<result column="open_bank" property="openBank" jdbcType="VARCHAR" />
+		<result column="open_bank_num" property="openBankNum" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- 返回银行名称、类型 -->
+	<resultMap id="BankTypeMap" type="net.fnsco.bigdata.api.dto.BankCardTypeDTO">
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="bank_name" property="bank_name" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, inner_code,account_type, account_no, account_name, account_card_id,
+		sub_bank_name, open_bank_prince,
+		open_bank, open_bank_city, open_bank_num,account_phone
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from m_merchant_bank
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from m_merchant_bank
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="net.fnsco.bigdata.service.domain.MerchantBank">
+		insert into m_merchant_bank (id, inner_code,account_type, account_no,
+		account_name, account_card_id, sub_bank_name,
+		open_bank_prince, open_bank, open_bank_city,
+		open_bank_num)
+		values (#{id,jdbcType=INTEGER},
+		#{innerCode,jdbcType=VARCHAR},#{accountType,jdbcType=VARCHAR},
+		#{accountNo,jdbcType=VARCHAR},
+		#{accountName,jdbcType=VARCHAR}, #{accountCardId,jdbcType=VARCHAR}, #{subBankName,jdbcType=VARCHAR},
+		#{openBankPrince,jdbcType=VARCHAR}, #{openBank,jdbcType=VARCHAR},
+		#{openBankCity,jdbcType=VARCHAR},
+		#{openBankNum,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="net.fnsco.bigdata.service.domain.MerchantBank"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into m_merchant_bank
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="innerCode != null">
+				inner_code,
+			</if>
+			<if test="accountType != null">
+				account_type,
+			</if>
+			<if test="accountNo != null">
+				account_no,
+			</if>
+			<if test="accountName != null">
+				account_name,
+			</if>
+			<if test="accountCardId != null">
+				account_card_id,
+			</if>
+			<if test="subBankName != null">
+				sub_bank_name,
+			</if>
+			<if test="openBankPrince != null">
+				open_bank_prince,
+			</if>
+			<if test="openBank != null">
+				open_bank,
+			</if>
+			<if test="openBankCity != null">
+				open_bank_city,
+			</if>
+			<if test="openBankNum != null">
+				open_bank_num,
+			</if>
+			<if test="accountPhone != null">
+				account_phone,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="innerCode != null">
+				#{innerCode,jdbcType=VARCHAR},
+			</if>
+			<if test="accountType != null">
+				#{accountType,jdbcType=VARCHAR},
+			</if>
+			<if test="accountNo != null">
+				#{accountNo,jdbcType=VARCHAR},
+			</if>
+			<if test="accountName != null">
+				#{accountName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountCardId != null">
+				#{accountCardId,jdbcType=VARCHAR},
+			</if>
+			<if test="subBankName != null">
+				#{subBankName,jdbcType=VARCHAR},
+			</if>
+			<if test="openBankPrince != null">
+				#{openBankPrince,jdbcType=VARCHAR},
+			</if>
+			<if test="openBank != null">
+				#{openBank,jdbcType=VARCHAR},
+			</if>
+			<if test="openBankCity != null">
+				#{openBankCity,jdbcType=VARCHAR},
+			</if>
+			<if test="openBankNum != null">
+				#{openBankNum,jdbcType=VARCHAR},
+			</if>
+			<if test="accountPhone != null">
+				#{accountPhone,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="net.fnsco.bigdata.service.domain.MerchantBank">
+		update m_merchant_bank
+		<set>
+			<if test="innerCode != null">
+				inner_code = #{innerCode,jdbcType=VARCHAR},
+			</if>
+			<if test="accountType != null">
+				account_type = #{accountType,jdbcType=VARCHAR},
+			</if>
+			<if test="accountNo != null">
+				account_no = #{accountNo,jdbcType=VARCHAR},
+			</if>
+			<if test="accountName != null">
+				account_name = #{accountName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountCardId != null">
+				account_card_id = #{accountCardId,jdbcType=VARCHAR},
+			</if>
+			<if test="subBankName != null">
+				sub_bank_name = #{subBankName,jdbcType=VARCHAR},
+			</if>
+			<if test="openBankPrince != null">
+				open_bank_prince = #{openBankPrince,jdbcType=VARCHAR},
+			</if>
+			<if test="openBank != null">
+				open_bank = #{openBank,jdbcType=VARCHAR},
+			</if>
+			<if test="openBankCity != null">
+				open_bank_city = #{openBankCity,jdbcType=VARCHAR},
+			</if>
+			<if test="openBankNum != null">
+				open_bank_num = #{openBankNum,jdbcType=VARCHAR},
+			</if>
+			<if test="accountPhone != null">
+				account_phone = #{accountPhone,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="net.fnsco.bigdata.service.domain.MerchantBank">
+		update m_merchant_bank
+		set account_type = #{accountType,jdbcType=VARCHAR},
+		inner_code = #{innerCode,jdbcType=VARCHAR},
+		account_no = #{accountNo,jdbcType=VARCHAR},
+		account_name = #{accountName,jdbcType=VARCHAR},
+		account_card_id = #{accountCardId,jdbcType=VARCHAR},
+		sub_bank_name = #{subBankName,jdbcType=VARCHAR},
+		open_bank_prince = #{openBankPrince,jdbcType=VARCHAR},
+		open_bank = #{openBank,jdbcType=VARCHAR},
+		open_bank_city = #{openBankCity,jdbcType=VARCHAR},
+		open_bank_num = #{openBankNum,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 根据innercode查询银行卡信息 -->
+	<select id="queryByInnerCode" parameterType="java.lang.String"
+		resultMap="MerResultMap">
+		select account_no,open_bank,open_bank_num from m_merchant_bank where
+		inner_code = #{innerCode}
+	</select>
+	<!-- 根据innerCode查询所有银行卡信息 -->
+	<select id="queryWebByInnerCode" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from m_merchant_bank
+		where inner_code = #{innerCode}
+	</select>
+	<!-- 根据商家ID删除关联数据 -->
 	<delete id="deleteByMerCoreIds" parameterType="java.lang.Integer">
-	   DELETE   FROM m_merchant_bank WHERE inner_code in (
-		 SELECT inner_code FROM m_merchant_core WHERE id in 
-		  <foreach item="item" collection="array" open="(" separator="," close=")">
-	       #{item}
-	     </foreach>
+		DELETE FROM m_merchant_bank WHERE inner_code in (
+		SELECT inner_code FROM m_merchant_core WHERE id in
+		<foreach item="item" collection="array" open="(" separator=","
+			close=")">
+			#{item}
+		</foreach>
 		)
 	</delete>
 	<!-- 根据innerCode和accountNo获取张数 -->
-	<select id="countBanksByInnerCodeAndAccountNo" parameterType="java.lang.String" resultType="java.lang.Integer">
-	  select count(*) from m_merchant_bank where inner_code = #{innerCode} and account_no = #{accountNo,jdbcType=VARCHAR}
+	<select id="countBanksByInnerCodeAndAccountNo" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select count(*) from m_merchant_bank where inner_code = #{innerCode} and
+		account_no = #{accountNo,jdbcType=VARCHAR}
 	</select>
 	<!-- 根据innercode删除数据 -->
 	<delete id="deleteByInnerCode" parameterType="java.lang.String">
-	  DELETE FROM m_merchant_bank WHERE inner_code = #{innerCode}
+		DELETE FROM m_merchant_bank WHERE inner_code = #{innerCode}
 	</delete>
 	<!-- 根据appUserId查询 -->
-	<select id="selectByAppUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-	     SELECT
-				<include refid="Base_Column_List" />
-			FROM
-				m_merchant_bank
-			WHERE
-				inner_code = (
-					SELECT
-						inner_code
-					FROM
-						m_merchant_core_entity_ref
-					WHERE
-						entity_inner_code = (
-							SELECT
-								entity_inner_code
-							FROM
-								u_app_user_merchant_entity
-							WHERE
-								app_user_id = #{userId} order by modefy_time DESC
-							LIMIT 1
-						)
-					LIMIT 1
-				)
-			LIMIT 1
+	<select id="selectByAppUserId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		m_merchant_bank
+		WHERE
+		inner_code = (
+		SELECT
+		inner_code
+		FROM
+		m_merchant_core_entity_ref
+		WHERE
+		entity_inner_code = (
+		SELECT
+		entity_inner_code
+		FROM
+		u_app_user_merchant_entity
+		WHERE
+		app_user_id = #{userId} order by modefy_time DESC
+		LIMIT 1
+		)
+		LIMIT 1
+		)
+		LIMIT 1
+	</select>
+
+	<!--根据银行卡号判断入建商户是否为中信商户 -->
+	<select id="queryByCertifyId" parameterType="net.fnsco.bigdata.api.dto.BankCardTypeDTO"	resultMap="BankTypeMap">
+		SELECT
+		type,bank_name
+		FROM sys_bank_card_type WHERE LEFT (#{bankCardNum},card_trim_length) =
+		card_trim_value AND card_total_length = #{cardTotalLength} ORDER BY
+		card_trim_length DESC;
 	</select>
 </mapper>
