@@ -37,7 +37,7 @@ public class EbankService extends BaseService {
 	private String SrcAccNo = "11014727214006";// 企业账号---后续配置
 	private String SrcAccName = "平安测试";// 企业收款户名 ---后续配置
 	private String BusiType = "M8PAK";// 费项代码
-	private String serverIp = "localhost";// ---后续配置
+	private String serverIp = "192.168.1.100";// ---后续配置
 	private Integer iPort = 7072;
 
 	@Autowired

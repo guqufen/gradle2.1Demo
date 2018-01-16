@@ -80,6 +80,23 @@ public class BankCardController extends BaseController {
 		
 	}
 	
+	@RequestMapping(value = "/validateBank2")
+	@ApiOperation(value = "银行卡信息页-校验银行卡")
+	public ResultDTO<ValidateBankVO> validateBank2(@RequestBody ValidateBankJO jo) {
+		String oppAccNo = jo.getCardNum();//"6226227703549430";
+		String oppAccName = jo.getName();//"谷曲锋";
+		String mobile = jo.getMobile();//"13777828380";
+//		String idNo = "33032419850524575X";
+		Integer userId = jo.getUserId();
+		if (Strings.isNullOrEmpty(oppAccNo) || Strings.isNullOrEmpty(oppAccName) || Strings.isNullOrEmpty(mobile)
+				|| userId == null) {
+			return ResultDTO.fail(TradeConstants.E_PARAMETER_NOT_NULL);
+		}
+		String id_card_num = appUserService.getIdAuth(jo.getUserId());//身份证号
+		appUserBankService.validateBank2(oppAccNo,oppAccName,mobile,id_card_num);
+		return null;
+	}
+	
 	@RequestMapping(value = "/validateBank")
 	@ApiOperation(value = "银行卡信息页-校验银行卡")
 	public ResultDTO<ValidateBankVO> validateBank(@RequestBody ValidateBankJO jo) {
