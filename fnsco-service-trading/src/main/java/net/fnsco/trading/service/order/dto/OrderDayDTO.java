@@ -22,7 +22,7 @@ public class OrderDayDTO extends DTO {
 	
 	private String tradeDate;
 	
-	private Integer orderNumber;
+	private Integer orderNum;
 	
 	private String turnover;
 
@@ -49,25 +49,25 @@ public class OrderDayDTO extends DTO {
 	}
 
 	/**
-	 * orderNumber
+	 * orderNum
 	 *
-	 * @return  the orderNumber
+	 * @return  the orderNum
 	 * @since   CodingExample Ver 1.0
 	*/
 	
-	public Integer getOrderNumber() {
-		return orderNumber;
+	public Integer getOrderNum() {
+		return orderNum;
 	}
 
 	/**
-	 * orderNumber
+	 * orderNum
 	 *
-	 * @param   orderNumber    the orderNumber to set
+	 * @param   orderNum    the orderNum to set
 	 * @since   CodingExample Ver 1.0
 	 */
 	
-	public void setOrderNumber(Integer orderNumber) {
-		this.orderNumber = orderNumber;
+	public void setOrderNum(Integer orderNum) {
+		this.orderNum = orderNum;
 	}
 
 	/**
