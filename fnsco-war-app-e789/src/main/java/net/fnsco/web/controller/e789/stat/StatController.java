@@ -86,14 +86,14 @@ public class StatController extends BaseController {
 		/**
 		 * 昨天
 		 */
-		String tradeYesterday = DateUtils.getDateStrByDay(-1);//yyyy-MM-dd
+		String tradeYesterday = DateUtils.getDateStrByDay(-1);//yyyyMMdd
 		String  totalTesterday = tradeOrderByDayDAO.selectDayTurnover(tradeYesterday, commonJO.getUserId());
 		resultVO.setYesterdayTurnover(formatRMBNumber(totalTesterday));
 		
 		/**
 		 * 本月
 		 */
-		String startTradeDate = DateUtils.getMouthStartTime(0);//yyyy-MM
+		String startTradeDate = DateUtils.getMouthStartTimeStr(0);//yyyyMM
 		String thisMonth =  tradeOrderByDayDAO.selectTotalTurnover(startTradeDate, tradeYesterday, commonJO.getUserId());
 		if(Strings.isNullOrEmpty(thisMonth)) {
 			thisMonth = "0.00";
@@ -190,8 +190,8 @@ public class StatController extends BaseController {
 			return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
 		}
 		
-		String startTradeDate = DateUtils.getDateStrByMonth(0,-7);//yyyy-MM-dd;
-		String endTradeDate = DateUtils.getDateStrByMonth(0,-1);
+		String startTradeDate = DateUtils.getDateStrByDay(-7);//yyyyMMdd;
+		String endTradeDate = DateUtils.getDateStrByDay(-1);
 		List<OrderDayDTO> datas = tradeOrderByDayDAO.selectTurnoverByCondition(startTradeDate, endTradeDate, commonJO.getUserId());
 		List<EveryDayTurnoverVO> resultData = Lists.newArrayList();
 		Integer totalNum = 0;
