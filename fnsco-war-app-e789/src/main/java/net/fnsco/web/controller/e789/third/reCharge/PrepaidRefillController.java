@@ -60,7 +60,7 @@ public class PrepaidRefillController extends BaseController {
 		} else if (1 == flowPackageCheckJO.getType()) {
 			return prepaidRefillService.flowPackageCheck(flowPackageCheckJO.getPhone());
 		} else {
-			return ResultDTO.fail("手机充值资费查询-交易类型不匹配");
+			return ResultDTO.success("手机充值资费查询-交易类型不匹配");
 		}
 	}
 
@@ -73,7 +73,7 @@ public class PrepaidRefillController extends BaseController {
 		// 非帐户余额支付，暂不支持
 		if (!"0".equals(fl.getPayType())) {
 			logger.error("手机充值-支付方式非法，暂时只支持帐户余额充值方式，请重新选择！！");
-			return ResultDTO.fail("暂时只支持帐户余额充值方式，请重新选择！！");
+			return ResultDTO.success("暂时只支持帐户余额充值方式，请重新选择！！");
 		}
 
 		logger.info("手机充值-输入的支付密码加密前的passwd=" + fl.getPayPassword());
@@ -82,12 +82,12 @@ public class PrepaidRefillController extends BaseController {
 		AppUser mAppUser = appUserService.selectAppUserById(fl.getUserId());
 		if (null == mAppUser) {
 			logger.error("手机充值-用户Id未找到相关信息，appUserId=" + fl.getUserId());
-			return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+			return ResultDTO.success(ApiConstant.E_NOREGISTER_LOGIN);
 		}
 		// 查到的密码和原密码做比较
 		if (!password.equals(mAppUser.getPayPassword())) {
 			logger.error("手机充值-支付密码错误，请核对后重新输入！！db_passwd=" + mAppUser.getPayPassword() + ",password=" + password);
-			return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
+			return ResultDTO.success(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
 		}
 
 		// 根据userId和待扣金额查询账户是否有足够的钱进行充值交易，并更新
@@ -95,12 +95,12 @@ public class PrepaidRefillController extends BaseController {
 				new BigDecimal(fl.getInprice()).multiply(new BigDecimal(100)));
 		if (!isEnough) {
 			logger.error("手机充值-帐户余额不足，请充值！！appUserId=" + fl.getUserId());
-			return ResultDTO.fail(ApiConstant.E_ACCOUNT_BALANCE_NULL);
+			return ResultDTO.success(ApiConstant.E_ACCOUNT_BALANCE_NULL);
 		}
 
 		if (fl.getPhone().length() > 11) {
 			logger.error("手机充值-手机号码非法，请输入11位手机号，不能带空格！！");
-			return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
+			return ResultDTO.success(ApiConstant.E_APP_PHONE_ERROR);
 		}
 
 		ChargeDTO chargeDTO = new ChargeDTO();
@@ -125,7 +125,7 @@ public class PrepaidRefillController extends BaseController {
 
 		} else {
 
-			return ResultDTO.fail("手机充值-交易类型不匹配");
+			return ResultDTO.success("手机充值-交易类型不匹配");
 		}
 
 		if ("1001".equals(ph.getRespCode())) {
@@ -152,11 +152,11 @@ public class PrepaidRefillController extends BaseController {
 			// 失败，更新原账户
 		} else {
 			isEnough = appAccountBalanceService.doFrozenBalance(fl.getUserId(),
-					new BigDecimal(0).subtract(new BigDecimal(fl.getInprice()).multiply(new BigDecimal(100))));
+					new BigDecimal(0).subtract(new BigDecimal(fl.getInprice()).setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100))));
 			if (!isEnough) {
 				logger.error("手机充值-充值失败之后，账户更新失败，请联系相关技术人员查看,orderNo=" + ph.getOrderNo());
 			}
-			return ResultDTO.fail(ph.getRespMsg());
+			return ResultDTO.success(ph.getRespMsg());
 		}
 	}
 
@@ -169,14 +169,14 @@ public class PrepaidRefillController extends BaseController {
 		RechargeOrderDO rechargeOrder = rechargeOrderService.getByOrderNo(orderNo);
 		if (null == rechargeOrder) {
 			logger.error("此订单号找不到原交易，请核查后重新请求：orderNo=" + orderNo);
-			return ResultDTO.fail("此订单号找不到原交易，请核查后重新请求：orderNo=" + orderNo);
+			return ResultDTO.success("此订单号找不到原交易，请核查后重新请求：orderNo=" + orderNo);
 		}
 
 		// 如果该订单已经有确定状态，则直接返回结果
 		if ("1".equals(rechargeOrder.getStatus())) {
 			return ResultDTO.success(rechargeOrder.getRespMsg());
 		} else if ("2".equals(rechargeOrder.getStatus())) {
-			return ResultDTO.fail(rechargeOrder.getRespMsg());
+			return ResultDTO.success(rechargeOrder.getRespMsg());
 		}
 
 		// 根据充值类型，确定执行话费充值结果查询/流量充值查询
