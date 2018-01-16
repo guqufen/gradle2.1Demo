@@ -492,12 +492,9 @@ public class PrepaidRefillService extends BaseService {
 
 					logger.info("流量充值-查询结果:充值成功");
 					rechargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
-					// new
-					// BigDecimal(map.get("ordercash").toString()).setScale(2,
-					// BigDecimal.ROUND_HALF_UP).multiply(new
-					// BigDecimal(100)).toString()
-					rechargeOrderDO.setAmt(new BigDecimal(map.get("uordercash")).setScale(2, BigDecimal.ROUND_HALF_UP)
-							.multiply(new BigDecimal(100)).toString());// 设置实际消费金额
+
+					String amtStr = new BigDecimal(map.get("uordercash")).setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
+					rechargeOrderDO.setAmt(amtStr);// 设置实际消费金额
 					rechargeOrderDO.setStatus(1);// 设置交易状态为1-成功
 					rechargeOrderDO.setRespCode(TradeStateEnum.SUCCESS.getCode());
 					rechargeOrderDO.setRespMsg("充值成功");
@@ -615,8 +612,8 @@ public class PrepaidRefillService extends BaseService {
 					logger.info("手机充值-查询结果:充值成功");
 					rechargeOrderDO.setPayOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 
-					rechargeOrderDO.setAmt(new BigDecimal(map.get("uordercash")).setScale(2, BigDecimal.ROUND_HALF_UP)
-							.multiply(new BigDecimal(100)).toString());// 设置实际消费金额
+					String amtStr = new BigDecimal(map.get("uordercash")).setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(0, BigDecimal.ROUND_HALF_UP).toString();
+					rechargeOrderDO.setAmt(amtStr);// 设置实际消费金额
 					rechargeOrderDO.setStatus(1);// 设置交易状态为1-成功
 					rechargeOrderDO.setRespCode(TradeStateEnum.SUCCESS.getCode());
 					rechargeOrderDO.setRespMsg("充值成功");

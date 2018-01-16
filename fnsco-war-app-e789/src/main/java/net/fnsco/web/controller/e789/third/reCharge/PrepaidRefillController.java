@@ -68,12 +68,13 @@ public class PrepaidRefillController extends BaseController {
 	@ApiOperation(value = "话费/流量充值url")
 	public ResultDTO<ChargeResultDTO> prepaidCharge(@RequestBody FlowChargeJO fl) {
 
-		ChargeResultDTO ph = null;
+		ChargeResultDTO ph = new ChargeResultDTO();
 
 		// 非帐户余额支付，暂不支持
 		if (!"0".equals(fl.getPayType())) {
+
 			logger.error("手机充值-支付方式非法，暂时只支持帐户余额充值方式，请重新选择！！");
-			return ResultDTO.success("暂时只支持帐户余额充值方式，请重新选择！！");
+			return ResultDTO.fail("暂时只支持帐户余额充值方式，请重新选择！！");
 		}
 
 		logger.info("手机充值-输入的支付密码加密前的passwd=" + fl.getPayPassword());
@@ -81,11 +82,14 @@ public class PrepaidRefillController extends BaseController {
 		// 根据id查询用户是否存在获取原密码
 		AppUser mAppUser = appUserService.selectAppUserById(fl.getUserId());
 		if (null == mAppUser) {
+
 			logger.error("手机充值-用户Id未找到相关信息，appUserId=" + fl.getUserId());
-			return ResultDTO.success(ApiConstant.E_NOREGISTER_LOGIN);
+			return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
 		}
+
 		// 查到的密码和原密码做比较
 		if (!password.equals(mAppUser.getPayPassword())) {
+
 			logger.error("手机充值-支付密码错误，请核对后重新输入！！db_passwd=" + mAppUser.getPayPassword() + ",password=" + password);
 			return ResultDTO.success(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
 		}
@@ -94,11 +98,13 @@ public class PrepaidRefillController extends BaseController {
 		Boolean isEnough = appAccountBalanceService.doFrozenBalance(fl.getUserId(),
 				new BigDecimal(fl.getInprice()).multiply(new BigDecimal(100)));
 		if (!isEnough) {
+
 			logger.error("手机充值-帐户余额不足，请充值！！appUserId=" + fl.getUserId());
 			return ResultDTO.success(ApiConstant.E_ACCOUNT_BALANCE_NULL);
 		}
 
 		if (fl.getPhone().length() > 11) {
+
 			logger.error("手机充值-手机号码非法，请输入11位手机号，不能带空格！！");
 			return ResultDTO.success(ApiConstant.E_APP_PHONE_ERROR);
 		}
@@ -125,7 +131,7 @@ public class PrepaidRefillController extends BaseController {
 
 		} else {
 
-			return ResultDTO.success("手机充值-交易类型不匹配");
+			return ResultDTO.fail("手机充值-交易类型不匹配");
 		}
 
 		if ("1001".equals(ph.getRespCode())) {
@@ -152,11 +158,12 @@ public class PrepaidRefillController extends BaseController {
 			// 失败，更新原账户
 		} else {
 			isEnough = appAccountBalanceService.doFrozenBalance(fl.getUserId(),
-					new BigDecimal(0).subtract(new BigDecimal(fl.getInprice()).setScale(2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100))));
+					new BigDecimal(0).subtract(new BigDecimal(fl.getInprice()).setScale(2, BigDecimal.ROUND_HALF_UP)
+							.multiply(new BigDecimal(100))));
 			if (!isEnough) {
 				logger.error("手机充值-充值失败之后，账户更新失败，请联系相关技术人员查看,orderNo=" + ph.getOrderNo());
 			}
-			return ResultDTO.success(ph.getRespMsg());
+			return ResultDTO.fail(ph.getRespMsg());
 		}
 	}
 

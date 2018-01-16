@@ -11,8 +11,9 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.channel.ebank.EbankService;
+import net.fnsco.trading.service.pay.channel.ebank.dto.E4033ResultDTO;
 import net.fnsco.trading.service.pay.channel.ebank.entity.E4029Entity;
-import net.fnsco.trading.service.pay.channel.ebank.entity.EPayResultEntity;
+import net.fnsco.trading.service.pay.channel.ebank.entity.EMaintainResultEntity;
 import net.fnsco.web.controller.e789.pay.ebank.jo.E4028JO;
 import net.fnsco.web.controller.e789.pay.ebank.jo.E4031JO;
 import net.fnsco.web.controller.e789.pay.ebank.jo.E4032JO;
@@ -57,7 +58,7 @@ public class EbankController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/acctCheck")
-	public ResultDTO E4031Trade(@RequestBody E4031JO e4031jo) {
+	public ResultDTO<EMaintainResultEntity> E4031Trade(@RequestBody E4031JO e4031jo) {
 		return ebankService.E4031Trade(e4031jo.getOppAccNo(), e4031jo.getMobile());
 	}
 
@@ -79,7 +80,7 @@ public class EbankController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("/ePayResult")
-	public ResultDTO<EPayResultEntity> E4033Trade(@RequestBody E4033JO e4033jo) {
+	public ResultDTO<E4033ResultDTO> E4033Trade(@RequestBody E4033JO e4033jo) {
 		return ebankService.E4033Trade(e4033jo.getOrderNo());
 	}
 }
