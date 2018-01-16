@@ -448,8 +448,8 @@ public class EbankService extends BaseService {
 	 */
 	public E4033ResultDTO E4033ResultQuery(String orderNo) {
 
-		TradeWithdrawDO tradWithdrawDO = tradeWithdrawService.getByOrderNo(orderNo);// 通过订单号查找原交易
-		if (null == tradWithdrawDO) {
+		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(orderNo);// 通过订单号查找原交易
+		if (null == tradeWithdrawDO) {
 			logger.info("订单号查找不到原交易orderNo=" + orderNo);
 			E4033ResultDTO e4033ResultDTO = new E4033ResultDTO();
 			e4033ResultDTO.setSuccess(false);
@@ -503,6 +503,13 @@ public class EbankService extends BaseService {
 				E4034RespDTO e4034RespDTO = JaxbUtil.converyToJavaBean(recvBody, E4034RespDTO.class);
 				e4033ResultDTO.setE4034RespDTO(e4034RespDTO);
 				System.out.println(e4033ResultDTO.toString());
+				
+				tradeWithdrawDO.setUpdateTime(new Date());// 记录更新时间
+				tradeWithdrawDO.setStatus(2);// 状态为成功
+				tradeWithdrawDO.setRespCode("1001");// 应答码成功
+				tradeWithdrawDO.setOriginalOrderNo(e4034RespDTO.getBussSeqNo());// 渠道返回的业务流水号
+				tradeWithdrawDO.setRespMsg(new String(res).trim());// 应答信息
+				tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
 			}
 
 			return e4033ResultDTO;

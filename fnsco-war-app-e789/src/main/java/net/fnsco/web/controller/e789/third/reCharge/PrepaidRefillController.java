@@ -146,7 +146,7 @@ public class PrepaidRefillController extends BaseController {
 				logger.error("手机充值-充值交易正在进行中，账户扣款更新失败，请联系相关技术人员查看,orderNo=" + ph.getOrderNo());
 			}
 
-			return ResultDTO.success(ph.getRespMsg());
+			return ResultDTO.success(ph);
 
 			// 失败，更新原账户
 		} else {
