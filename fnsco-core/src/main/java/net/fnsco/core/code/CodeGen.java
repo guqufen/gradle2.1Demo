@@ -28,7 +28,7 @@ public class CodeGen {
 
         //auto.init("net.fnsco.risk", "product", "risk_product");
 
-        auto.init("net.fnsco.trading", "oilcard", "act_oil_card_apply");
+        //auto.init("net.fnsco.trading", "oilcard", "act_oil_card_apply");
 
         //auto.init("net.fnsco.risk", "trade", "t_trade_data");
         //auto.init("net.fnsco.withhold", "sys", "sys_bank_trade_limit");
@@ -47,10 +47,10 @@ public class CodeGen {
 
         //auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_order");
         //auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_order_passenger");
-//        auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_order");
+          auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_order");
 //        auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_order_passenger");
 
-        auto.init("net.fnsco.trading", "order", "t_trade_withdraw");
+        //auto.init("net.fnsco.trading", "order", "t_trade_withdraw");
         //auto.init("net.fnsco.trading", "order", "t_trade_withdraw_error");
         //auto.init("net.fnsco.trading", "order", "t_trade_withdraw_red");
         //auto.init("net.fnsco.trading", "third.ticket", "thr_ticket_contact");

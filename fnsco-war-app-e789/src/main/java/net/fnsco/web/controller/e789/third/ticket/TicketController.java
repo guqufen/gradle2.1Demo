@@ -419,13 +419,16 @@ public class TicketController extends BaseController {
         ticketOrderDTO.setTrainCode(ticketOrderJO.getTrainCode());
         ticketOrderDTO.setTrainDate(ticketOrderJO.getTrainDate());
         ticketOrderDTO.setUserId(ticketOrderJO.getUserId());
+        ticketOrderDTO.setArriveTime(ticketOrderJO.getArriveTime());
+        ticketOrderDTO.setRunTime(ticketOrderJO.getRunTime());
+        ticketOrderDTO.setStartTime(ticketOrderJO.getStartTime());
         ResultDTO<TicketOrderDO> result = ticketService.addOrder(ticketOrderDTO);
         if (!result.isSuccess()) {
             return fail(result.getCode(), result.getMessage());
         }
         TicketOrderDO TicketOrderDO = result.getData();
         if (Strings.isNullOrEmpty(TicketOrderDO.getPayOrderNo())) {
-            return fail("提交订单出错");
+            return fail(TicketOrderDO.getRespMsg());
         }
         AddTicketOrderVO resultVO = new AddTicketOrderVO();
         resultVO.setOrderNo(TicketOrderDO.getOrderNo());

@@ -69,7 +69,7 @@ public class EbankController extends BaseController {
 	 */
 	@RequestMapping("/ePay")
 	public ResultDTO E4032Trade(@RequestBody E4032JO e4032jo) {
-		return ebankService.E4032Trade(e4032jo.getOppAccNo(), e4032jo.getAmount());
+		return ebankService.E4032Trade(e4032jo.getOppAccNo(), e4032jo.getAmount(), e4032jo.getUserId());
 	}
 
 	/**
