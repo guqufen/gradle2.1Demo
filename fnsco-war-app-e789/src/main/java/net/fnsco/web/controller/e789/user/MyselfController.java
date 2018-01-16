@@ -30,13 +30,16 @@ import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserInfoDTO;
+import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
 import net.fnsco.trading.service.bank.AppUserBankService;
 import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.web.controller.e789.jo.CommonJO;
+import net.fnsco.web.controller.e789.jo.FindPasswordJO;
 import net.fnsco.web.controller.e789.jo.ModifyInfoJO;
 import net.fnsco.web.controller.e789.jo.ModifyPasswordJO;
 import net.fnsco.web.controller.e789.jo.ModifyPayPasswordJO;
 import net.fnsco.web.controller.e789.vo.GetPersonInfoVO;
+import net.fnsco.web.controller.e789.vo.LoginVO;
 
 /**
  * @author   hjt
@@ -80,7 +83,18 @@ public class MyselfController extends BaseController {
     	appUserDTO.setOldPassword(modifyPayPasswordJO.getOldPayPassword());
         return appUserService.modifyPayPassword(appUserDTO);
     }
-    
+  
+    @ResponseBody
+    @RequestMapping(value = "/findPayPassword")
+    @ApiOperation(value = "设置-找回支付密码" ,notes="作者：何金庭")
+    public ResultDTO<LoginVO> findPayPassword(@RequestBody FindPasswordJO findPasswordJO) {
+    	AppUserDTO appUserDTO = new AppUserDTO();
+    	appUserDTO.setCode(findPasswordJO.getCode());
+    	appUserDTO.setDeviceId(findPasswordJO.getDeviceId());
+    	appUserDTO.setMobile(findPasswordJO.getMobile());
+    	appUserDTO.setPassword(findPasswordJO.getPassword());
+    	return appUserService.e789FindPayPassword(appUserDTO);
+    }
     /**
      * modifyInfo:(这里用一句话描述这个方法的作用)修改个人信息
      *
