@@ -382,7 +382,7 @@ public class EbankService extends BaseService {
 					}
 					// 获取应答信息
 					byte[] res = new byte[100];
-					String respCode = rcvMsg.toString().substring(87, 93);
+					String respCode = rcvMsg.toString().substring(87, 93).trim();
 					System.out.println("respCode=[" + rcvMsg.toString().substring(87, 93) + "]");
 					System.arraycopy(rcvMsg.toString().getBytes(), 93, res, 0, 100);
 					System.out.println("respMsg=[" + new String(res) + "]");
@@ -391,7 +391,7 @@ public class EbankService extends BaseService {
 					if ("YQ9999".equals(respCode) || "GW3002".equals(respCode) || "EBLN00".equals(respCode)
 							|| "AFE003".equals(respCode) || "AFE004".equals(respCode) || "E00006".equals(respCode)
 							|| "E00007".equals(respCode) || "E00008".equals(respCode) || "YQ9989".equals(respCode)
-							|| "YQ9976".equals(respCode)) {
+							|| "YQ9976".equals(respCode) || "9001".equals(respCode) || "1029".equals(respCode)) {
 
 						e4032Entity.setRespCode("1000");
 						e4032Entity.setRespMsg("交易进行中，请稍候查询结果");
@@ -400,7 +400,8 @@ public class EbankService extends BaseService {
 
 						tradeWithdrawDO.setUpdateTime(new Date());// 记录更新时间
 						tradeWithdrawDO.setStatus(1);// 状态为执行中
-						tradeWithdrawDO.setRespCode("1000");// 应答码，进行中
+						tradeWithdrawDO.setRespCode(respCode);// 应答码，进行中
+						tradeWithdrawDO.setRespMsg(new String(res).trim());// 应答信息
 						tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
 
 						return ResultDTO.fail(e4032Entity);
@@ -416,7 +417,7 @@ public class EbankService extends BaseService {
 						tradeWithdrawDO.setStatus(2);// 状态为成功
 						tradeWithdrawDO.setRespCode("1001");// 应答码成功
 						tradeWithdrawDO.setOriginalOrderNo(e4032RespDTO.getBussSeqNo());// 渠道返回的业务流水号
-						tradeWithdrawDO.setRespMsg(new String(res));// 应答信息
+						tradeWithdrawDO.setRespMsg(new String(res).trim());// 应答信息
 						tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
 
 						return ResultDTO.success(e4032Entity);
@@ -425,7 +426,7 @@ public class EbankService extends BaseService {
 						tradeWithdrawDO.setUpdateTime(new Date());// 记录更新时间
 						tradeWithdrawDO.setStatus(3);// 状态为失败
 						tradeWithdrawDO.setRespCode("1002");// 应答码失败
-						tradeWithdrawDO.setRespMsg(new String(res));// 应答信息
+						tradeWithdrawDO.setRespMsg(new String(res).trim());// 应答信息
 						tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
 
 						return ResultDTO.fail("交易失败");
@@ -523,8 +524,8 @@ public class EbankService extends BaseService {
 		E4033ResultDTO e4033ResultDTO = E4033ResultQuery(orderNo);
 
 		if (e4033ResultDTO.isSuccess()) {
-			return ResultDTO.success();
+			return ResultDTO.success(e4033ResultDTO.getE4034RespDTO().getList().get(0));
 		}
-		return ResultDTO.fail(e4033ResultDTO);
+		return ResultDTO.fail(e4033ResultDTO.getE4034RespDTO().getList().get(0));
 	}
 }
