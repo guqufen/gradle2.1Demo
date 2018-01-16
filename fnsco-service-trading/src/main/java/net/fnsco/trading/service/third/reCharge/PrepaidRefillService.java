@@ -213,7 +213,7 @@ public class PrepaidRefillService extends BaseService {
 			logger.info(result);
 			JuheDTO juhe = JSONObject.parseObject(result, JuheDTO.class);
 
-			// 交易成功
+			// 交易成功,订单提交成功，等待充值(实际上是充值进行中)
 			if (juhe.getError_code() == 0) {
 
 				Map<String, String> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
@@ -240,7 +240,7 @@ public class PrepaidRefillService extends BaseService {
 							+ chargeDTO.getUserId());
 				}
 
-				ph.setRespCode(TradeStateEnum.SUCCESS.getCode());
+				ph.setRespCode("1000");
 				ph.setRespMsg(juhe.getReason());
 				ph.setOrderNo(orderid);
 
@@ -263,6 +263,7 @@ public class PrepaidRefillService extends BaseService {
 							+ chargeDTO.getUserId());
 				}
 
+				ph.setRespCode("1000");
 				ph.setRespMsg("交易正在处理中，请稍后查询");
 
 			} else {
@@ -286,6 +287,7 @@ public class PrepaidRefillService extends BaseService {
 							+ chargeDTO.getUserId());
 				}
 
+				ph.setRespCode("1002");
 				ph.setRespMsg(juhe.getReason());
 			}
 
@@ -368,7 +370,7 @@ public class PrepaidRefillService extends BaseService {
 							+ chargeDTO.getUserId());
 				}
 
-				ph.setRespCode(TradeStateEnum.SUCCESS.getCode());
+				ph.setRespCode("1000");
 				ph.setRespMsg(juhe.getReason());
 				ph.setOrderNo(orderid);
 
@@ -391,6 +393,7 @@ public class PrepaidRefillService extends BaseService {
 							"充值失败，数据更新失败。time=" + tradeWithdrawDO.getUpdateTime() + "userId=" + chargeDTO.getUserId());
 				}
 
+				ph.setRespCode("1000");
 				ph.setRespMsg("交易正在处理中，请稍后查询");
 			} else {
 
@@ -413,6 +416,7 @@ public class PrepaidRefillService extends BaseService {
 							+ chargeDTO.getUserId());
 				}
 
+				ph.setRespCode("1002");
 				ph.setRespMsg(juhe.getReason());
 			}
 		} catch (Exception e) {
@@ -459,7 +463,7 @@ public class PrepaidRefillService extends BaseService {
 			return ResultDTO.fail(tradeWithdrawDO.getRespMsg());
 		}
 
-		//查询主体
+		// 查询主体
 		try {
 			Map<String, String> params = new HashMap<String, String>();// 请求参数
 			params.put("orderid", rechargeOrderDO.getOrderNo());// 用户订单号，多个以英文逗号隔开，最大支持50组
