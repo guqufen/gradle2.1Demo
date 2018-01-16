@@ -428,7 +428,7 @@ public class TicketController extends BaseController {
         }
         TicketOrderDO TicketOrderDO = result.getData();
         if (Strings.isNullOrEmpty(TicketOrderDO.getPayOrderNo())) {
-            return fail("提交订单出错");
+            return fail(TicketOrderDO.getRespMsg());
         }
         AddTicketOrderVO resultVO = new AddTicketOrderVO();
         resultVO.setOrderNo(TicketOrderDO.getOrderNo());
