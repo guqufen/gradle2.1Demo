@@ -104,6 +104,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		tradeResultZXDTO.setSecMerId(secMerId);// 是与merId关联的分账子商户号
 		tradeResultZXDTO.setAccountFlag("Y");
 		tradeResultZXDTO.setIndependentTransactionFlag("Y");
+		tradeResultZXDTO.setFetchOrderNo("Y");
 		// 微信
 		if (StringUtils.equals("01", paySubType)) {
 			tradeResultZXDTO.setTxnSubType("383000");
@@ -111,7 +112,6 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			tradeResultZXDTO.setOrigOrderId(orderNo);
 			tradeResultZXDTO.setOrigOrderTime(DateUtils.dateFormat1ToStr(orderCeateTime));
 			tradeResultZXDTO.setOrderTime(DateUtils.dateFormat1ToStr(orderCeateTime));
-			tradeResultZXDTO.setFetchOrderNo("Y");
 		}else if (StringUtils.equals("02", paySubType)) {// 支付宝
 			tradeResultZXDTO.setTxnSubType("381004");
 			tradeResultZXDTO.setSeqId(orderNo); // 原交易中信流水号或原交易商户订单号
