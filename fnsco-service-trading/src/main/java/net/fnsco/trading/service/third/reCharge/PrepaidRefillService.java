@@ -433,7 +433,7 @@ public class PrepaidRefillService extends BaseService {
 	 */
 	public ResultDTO queryFlowResult(RechargeOrderDO rechargeOrderDO) {
 		String result = null;
-		String url = "http://v.juhe.cn/flow/batchquery";// 请求接口地址
+		String url = "http://v.juhe.cn/flow/ordersta";// 请求接口地址
 
 		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(rechargeOrderDO.getOrderNo());
 		if (null == tradeWithdrawDO) {// 如果该条数据为空
@@ -512,7 +512,7 @@ public class PrepaidRefillService extends BaseService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return ResultDTO.fail();
 	}
 
 	/**

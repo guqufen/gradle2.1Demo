@@ -592,6 +592,19 @@ public class DateUtils {
         return startTime;
     }
     
+    /**
+     * 获取月第一天
+     * @return
+     */
+    public static String getMouthStartTimeStr(int mouth) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        //获取前月的第一天
+        Calendar cal_1 = Calendar.getInstance();//获取当前日期 
+        cal_1.add(Calendar.MONTH, mouth);
+        cal_1.set(Calendar.DAY_OF_MONTH, 1);//设置为1号,当前日期既为该月第一天 
+        String startTime = format.format(cal_1.getTime());
+        return startTime;
+    }
     
     /**
      * 获取月第一天

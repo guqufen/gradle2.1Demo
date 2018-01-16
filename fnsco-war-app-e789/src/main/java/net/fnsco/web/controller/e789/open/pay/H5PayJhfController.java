@@ -89,6 +89,7 @@ public class H5PayJhfController extends BaseController {
         tradeOrder.setTxnType(1);
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
+        tradeOrder.setPayMedium("02");
         tradeOrderService.doAdd(tradeOrder);
 
         String url = env.getProperty("app.base.url") + "/trade/fsf/pay/dealPayOrder";

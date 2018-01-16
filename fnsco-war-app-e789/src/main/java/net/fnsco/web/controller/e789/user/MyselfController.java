@@ -87,7 +87,7 @@ public class MyselfController extends BaseController {
     @ResponseBody
     @RequestMapping(value = "/findPayPassword")
     @ApiOperation(value = "设置-找回支付密码" ,notes="作者：何金庭")
-    public ResultDTO<LoginVO> findPayPassword(@RequestBody FindPasswordJO findPasswordJO) {
+    public ResultDTO findPayPassword(@RequestBody FindPasswordJO findPasswordJO) {
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setCode(findPasswordJO.getCode());
     	appUserDTO.setDeviceId(findPasswordJO.getDeviceId());

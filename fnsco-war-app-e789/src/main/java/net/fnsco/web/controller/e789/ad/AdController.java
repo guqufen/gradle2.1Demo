@@ -47,11 +47,11 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "/queryAd")
 	@ApiOperation(value = "查询广告资讯")
 	public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
-		if (appAdJO.getType() == null || appAdJO.getUserId() == null ||StringUtils.isNullOrEmpty( request.getParameter("type"))) {
+		logger.error("设备类型="+request.getHeader("type"));
+		if (appAdJO.getType() == null || appAdJO.getUserId() == null ||StringUtils.isNullOrEmpty( request.getHeader("type"))) {
 			return ResultDTO.fail(E789ApiConstant.E_PARAMETER_NOT_NULL);
 		}
-		String type =  request.getParameter("type");
-		logger.info("设备类型信息【"+type+"】");
+		String type =  request.getHeader("type");
 		Integer deviceType = Integer.parseInt(type);
 		if(deviceType != 1 && deviceType != 2){
 			deviceType = 3;
