@@ -512,7 +512,7 @@ public class PrepaidRefillService extends BaseService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return ResultDTO.fail();
 	}
 
 	/**
