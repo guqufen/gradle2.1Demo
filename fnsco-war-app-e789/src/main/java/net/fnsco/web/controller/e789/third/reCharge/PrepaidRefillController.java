@@ -162,9 +162,9 @@ public class PrepaidRefillController extends BaseController {
 
 	@RequestMapping("/queryResult")
 	@ApiOperation(value = "话费/流量充值结果查询url")
-	public ResultDTO queryFlowResult(@RequestBody ThrRechargeJO re) {
+	public ResultDTO queryFlowResult(@RequestBody ThrRechargeJO thrRechargeJO) {
 
-		String orderNo = re.getOrderNo();
+		String orderNo = thrRechargeJO.getOrderNo();
 
 		RechargeOrderDO rechargeOrder = rechargeOrderService.getByOrderNo(orderNo);
 		if (null == rechargeOrder) {
