@@ -92,8 +92,88 @@ public class TicketOrderDO {
      * 最后更新时间
      */
     private Date       lastModifyTime;
+    /**
+     * 到达时刻 "12:37"
+     */
+    private String     arriveTime;
+
+    /**
+     * 当前站出发时刻07:00
+     */
+    private String     startTime;
+
+    /**
+     * 历时（出发站到目的站） "05:37"
+     */
+    private String     runTime;
 
     private Integer[]  statuses;
+
+    /**
+     * arriveTime
+     *
+     * @return  the arriveTime
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getArriveTime() {
+        return arriveTime;
+    }
+
+    /**
+     * arriveTime
+     *
+     * @param   arriveTime    the arriveTime to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setArriveTime(String arriveTime) {
+        this.arriveTime = arriveTime;
+    }
+
+    /**
+     * startTime
+     *
+     * @return  the startTime
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * startTime
+     *
+     * @param   startTime    the startTime to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    /**
+     * runTime
+     *
+     * @return  the runTime
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getRunTime() {
+        return runTime;
+    }
+
+    /**
+     * runTime
+     *
+     * @param   runTime    the runTime to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setRunTime(String runTime) {
+        this.runTime = runTime;
+    }
 
     /**
      * statuses

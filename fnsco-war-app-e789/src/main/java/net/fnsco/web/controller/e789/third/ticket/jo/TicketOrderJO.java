@@ -26,6 +26,79 @@ public class TicketOrderJO extends CommonJO {
     @ApiModelProperty(value = "到达站名称", example = "到达站名称")
     private String toStationName;
 
+    @ApiModelProperty(value = "出发时间", example = "出发时间")
+    private String startTime;
+    @ApiModelProperty(value = "到达时间", example = "到达时间")
+    private String arriveTime;
+    @ApiModelProperty(value = "耗时", example = "耗时")
+    private String runTime;
+
+    /**
+     * startTime
+     *
+     * @return  the startTime
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * startTime
+     *
+     * @param   startTime    the startTime to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    /**
+     * arriveTime
+     *
+     * @return  the arriveTime
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getArriveTime() {
+        return arriveTime;
+    }
+
+    /**
+     * arriveTime
+     *
+     * @param   arriveTime    the arriveTime to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setArriveTime(String arriveTime) {
+        this.arriveTime = arriveTime;
+    }
+
+    /**
+     * runTime
+     *
+     * @return  the runTime
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getRunTime() {
+        return runTime;
+    }
+
+    /**
+     * runTime
+     *
+     * @param   runTime    the runTime to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setRunTime(String runTime) {
+        this.runTime = runTime;
+    }
+
     /**
      * seatCode
      *
