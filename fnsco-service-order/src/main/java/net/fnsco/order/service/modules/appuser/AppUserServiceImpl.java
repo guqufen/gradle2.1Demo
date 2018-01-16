@@ -564,7 +564,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUser.setMobile(appUserDTO.getMobile());
         appUser.setDeviceType(appUserDTO.getDeviceType());
         appUser.setHeadImagePath(appUserDTO.getHeadImagePath());
-        appUser.setPayPassword(appUserDTO.getPayPassword());
+        String payPassword = Md5Util.getInstance().md5(appUserDTO.getPayPassword());
+        appUser.setPayPassword(payPassword);
         appUser.setState(1);
         appUser.setRegTime(new Date());
         if(!Strings.isNullOrEmpty(appUserDTO.getEntityInnerCode())){
