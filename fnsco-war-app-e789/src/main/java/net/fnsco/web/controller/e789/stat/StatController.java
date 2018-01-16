@@ -79,14 +79,14 @@ public class StatController extends BaseController {
 		 * 今日
 		 */
 		TotalTurnoverVO resultVO =  new TotalTurnoverVO();
-		String tradeToday = DateUtils.getDateStrByMonth(0,0);//yyyy-MM-dd
+		String tradeToday = DateUtils.getDateStrByDay(0);//yyyyMMdd
 		String totalToday = tradeOrderDAO.queryTotalAmount(tradeToday, commonJO.getUserId());
 		resultVO.setTodayTurnover(formatRMBNumber(totalToday));
 		
 		/**
 		 * 昨天
 		 */
-		String tradeYesterday = DateUtils.getDateStrByMonth(0,-1);//yyyy-MM-dd
+		String tradeYesterday = DateUtils.getDateStrByDay(-1);//yyyy-MM-dd
 		String  totalTesterday = tradeOrderByDayDAO.selectDayTurnover(tradeYesterday, commonJO.getUserId());
 		resultVO.setYesterdayTurnover(formatRMBNumber(totalTesterday));
 		
@@ -106,7 +106,6 @@ public class StatController extends BaseController {
 		
 		return success(resultVO);
 	}
-	
 	/**
 	 * getTurnoverByPayType:(按照交易类型来获取交易数据)
 	 *
