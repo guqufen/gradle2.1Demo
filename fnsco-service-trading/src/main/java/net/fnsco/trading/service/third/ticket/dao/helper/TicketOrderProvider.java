@@ -72,6 +72,15 @@ public class TicketOrderProvider {
                 if (ticketOrder.getLastModifyTime() != null) {
                     SET("last_modify_time=#{ticketOrder.lastModifyTime}");
                 }
+                if (StringUtils.isNotBlank(ticketOrder.getArriveTime())){
+                    SET("arrive_time=#{ticketOrder.arriveTime}");
+                }
+                if (StringUtils.isNotBlank(ticketOrder.getStartTime())){
+                    SET("start_time=#{ticketOrder.startTime}");
+                }
+                if (StringUtils.isNotBlank(ticketOrder.getRunTime())){
+                    SET("run_time=#{ticketOrder.runTime}");
+                }
                 WHERE("id = #{ticketOrder.id}");
             }
         }.toString();
@@ -147,6 +156,15 @@ public class TicketOrderProvider {
                 if (ticketOrder.getLastModifyTime() != null) {
                     WHERE("last_modify_time=#{ticketOrder.lastModifyTime}");
                 }
+                if (StringUtils.isNotBlank(ticketOrder.getArriveTime())){
+                    WHERE("arrive_time=#{ticketOrder.arriveTime}");
+                }
+                if (StringUtils.isNotBlank(ticketOrder.getStartTime())){
+                    WHERE("start_time=#{ticketOrder.startTime}");
+                }
+                if (StringUtils.isNotBlank(ticketOrder.getRunTime())){
+                    WHERE("run_time=#{ticketOrder.runTime}");
+                }
                 if (ticketOrder.getStatuses() != null) {
                     String s = Arrays.toString(ticketOrder.getStatuses());
                     s = s.substring(1, s.length() - 1);
@@ -216,6 +234,15 @@ public class TicketOrderProvider {
                 }
                 if (ticketOrder.getLastModifyTime() != null) {
                     WHERE("last_modify_time=#{ticketOrder.lastModifyTime}");
+                }
+                if (StringUtils.isNotBlank(ticketOrder.getArriveTime())){
+                    WHERE("arrive_time=#{ticketOrder.arriveTime}");
+                }
+                if (StringUtils.isNotBlank(ticketOrder.getStartTime())){
+                    WHERE("start_time=#{ticketOrder.startTime}");
+                }
+                if (StringUtils.isNotBlank(ticketOrder.getRunTime())){
+                    WHERE("run_time=#{ticketOrder.runTime}");
                 }
                 if (ticketOrder.getStatuses() != null) {
                     String s = Arrays.toString(ticketOrder.getStatuses());

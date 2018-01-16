@@ -3,17 +3,21 @@ package net.fnsco.trading.service.bank;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Strings;
+
 import net.fnsco.core.base.BaseService;
+import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.trading.service.bank.dao.AppUserBankDAO;
 import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.trading.service.bank.entity.BankNameAndTypeDTO;
+import net.fnsco.trading.service.pay.channel.ebank.EbankService;
+import net.fnsco.trading.service.pay.channel.ebank.entity.E4029Entity;
 
 @Service
 public class AppUserBankService extends BaseService {
@@ -21,6 +25,8 @@ public class AppUserBankService extends BaseService {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private AppUserBankDAO appUserBankDAO;
+	@Autowired
+	private EbankService ebankService;
 
 	// 分页
 	public ResultPageDTO<AppUserBankDO> page(AppUserBankDO appUserBank, Integer pageNum, Integer pageSize) {
@@ -147,6 +153,46 @@ public class AppUserBankService extends BaseService {
 	 */
 	public List<AppUserBankDO> getByBankNO(Integer userId ,String bankCardNum) {
 		return this.appUserBankDAO.getByBankNO(userId,bankCardNum);
+		
+	}
+
+	/**
+	 * 调用平安接口校验银行卡
+	 * @param  @param oppAccNo 银行卡号
+	 * @param  @param oppAccName  户名
+	 * @param  @param mobile
+	 * @param  @param idNo    设定文件
+	 * @return void    DOM对象
+	 * @throws 
+	 * @since  CodingExample　Ver 1.1
+	 */
+	public ResultDTO validateBank2(String oppAccNo, String oppAccName, String mobile, String idNo) {
+		//根据银行卡号获取卡类型和平安编号
+		BankNameAndTypeDTO dto = appUserBankDAO.queryByCertifyId(oppAccNo, oppAccNo.length()+"");
+		if(dto==null){
+			return ResultDTO.fail();//未找到对应卡类型信息，请联系管理员
+		}
+		if(Strings.isNullOrEmpty(dto.getPaCode())){
+			return ResultDTO.fail();//对应平安编号为空，请联系管理员
+			
+		}
+		logger.error("平安编号="+dto.getPaCode());
+		E4029Entity e4029Entity = new E4029Entity();
+		e4029Entity.setOppAccNo(oppAccNo);
+		e4029Entity.setOppAccName(oppAccName);
+		e4029Entity.setOppBank(dto.getPaCode());
+		if("DC".equals(dto.getType())){
+			e4029Entity.setCardAcctFlag("0");
+			
+		}
+		e4029Entity.setIdType("1");//身份证
+		e4029Entity.setIdNo(idNo);
+		e4029Entity.setMobile(mobile);
+		e4029Entity.setTranFlag("1");//新增
+		
+		ebankService.E4029Trade(e4029Entity);
+		
+		return null;
 		
 	}
 }

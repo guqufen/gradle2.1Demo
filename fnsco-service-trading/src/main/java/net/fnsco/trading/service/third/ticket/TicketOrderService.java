@@ -190,6 +190,9 @@ public class TicketOrderService extends BaseService {
             vo.setToStationName(order.getToStationName());
             vo.setTrainCode(order.getTrainCode());
             vo.setTrainDate(order.getTrainDate());
+            vo.setArriveTime(order.getArriveTime());
+            vo.setStartTime(order.getStartTime());
+            vo.setRunTime(order.getRunTime());
             List<TicketOrderPassengerDO> passList = passengerDAO.getByOrderNo(order.getOrderNo());
             List<OrderContactVO> orderContactList = Lists.newArrayList();
             for (TicketOrderPassengerDO pass : passList) {

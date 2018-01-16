@@ -76,6 +76,9 @@ public class TicketService extends BaseService {
         ticketOrder.setTrainDate(ticketOrderDTO.getTrainDate());
         ticketOrder.setCreateTime(new Date());
         ticketOrder.setAppUserId(ticketOrderDTO.getUserId());
+        ticketOrder.setArriveTime(ticketOrderDTO.getArriveTime());
+        ticketOrder.setStartTime(ticketOrderDTO.getStartTime());
+        ticketOrder.setRunTime(ticketOrderDTO.getRunTime());
         ticketOrderDAO.insert(ticketOrder);
         String passengerId = ticketOrderDTO.getPassengerId();
         String[] passengerIds = passengerId.split(",");
