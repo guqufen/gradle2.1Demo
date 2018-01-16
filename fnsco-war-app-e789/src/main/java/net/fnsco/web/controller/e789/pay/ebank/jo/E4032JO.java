@@ -12,6 +12,11 @@ public class E4032JO extends JO {
 	private String oppAccNo;// 付款人帐号
 	@ApiModelProperty(name = "交易金额", example = "交易金额")
 	private BigDecimal amount;// 交易金额
+	/**
+	 * APP登录用户ID
+	 */
+	@ApiModelProperty(value = "APP登录用户ID", name = "userId", example = "")
+	private Integer userId;
 
 	public String getOppAccNo() {
 		return oppAccNo;
@@ -31,6 +36,14 @@ public class E4032JO extends JO {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
 }

@@ -759,9 +759,9 @@ function saveBankCardParams(conId){
   for (var i=0;i<listLen;i++){
     var accountType=$("#"+conId+" .bankCard-list").eq(i).find($('.accountType')).val();
     var accountNo=$("#"+conId+" .bankCard-list").eq(i).find($('.accountNo')).val();
-    if(accountNo != null && accountNo.length<10){
-    	layer.msg('输入正确银行卡号!');return;
-    }
+//    if(accountNo != null && accountNo.length<10){
+//    	layer.msg('输入正确银行卡号!');return;
+//    }
     var accountName=$("#"+conId+" .bankCard-list").eq(i).find($('.accountName')).val();
     var accountCardId=$("#"+conId+" .bankCard-list").eq(i).find($('.accountCardId')).val();
     var accountPhone=$("#"+conId+" .bankCard-list").eq(i).find($('.accountPhone')).val();

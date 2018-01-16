@@ -68,7 +68,7 @@ public class PayFsfController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
-    @ApiOperation(value = "首页-分闪付支付-获取分闪付url，用于生成二维码",notes = "作者：宋先飞")
+    @ApiOperation(value = "首页-分闪付支付-获取分闪付url，用于生成二维码", notes = "作者：宋先飞")
     public ResultDTO<GetQRUrlResultVO> getQRUrl(@RequestBody GetQRUrlJO getQRUrlJO) {
         Integer userId = getQRUrlJO.getUserId();
         MerchantEntity merchantEntity = entityService.queryMerInfoByUserId(userId);
@@ -110,7 +110,7 @@ public class PayFsfController extends BaseController {
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
         String url = env.getProperty("app.base.url") + "/trade/fsf/pay/dealPayOrder";
-        url += "?" + "&commID=" + innerCode + "&reqData=" + getReqData(innerCode, tradeOrder.getOrderNo());
+        url += "?" + "&commID=" + innerCode + "&reqData=" + AESUtil.getReqData(innerCode, tradeOrder.getOrderNo(), TradeConstants.RECHANGE_AES_KEY);
         GetQRUrlResultVO result = new GetQRUrlResultVO();
         result.setUrl(url);
         result.setOrderNo(tradeOrder.getOrderNo());
@@ -141,27 +141,4 @@ public class PayFsfController extends BaseController {
         return success(result);
     }
 
-    private String getReqData(String innerCode, String orderNo) {
-        String reqData = "";
-        MerchantChannel merchantChannelJhf = merchantService.getMerChannelByMerChannelInnerCodeType(innerCode, "04");
-        if (null == merchantChannelJhf) {
-            return reqData;
-        }
-        String transTime = DateUtils.dateFormat1ToStr(new Date());
-        Map<String, String> result = Maps.newHashMap();
-        result.put("innerCode", innerCode);
-        result.put("orderNo", orderNo);
-        result.put("transTime", transTime);
-        String singDataStr = innerCode + orderNo + transTime;
-        logger.error("签名前数据" + singDataStr);
-        String singData = JHFMd5Util.encode32(singDataStr);
-        result.put("singData", singData);
-        String dateTemp = JSON.toJSONString(result);
-        try {
-            reqData = URLEncoder.encode(AESUtil.encode(dateTemp, TradeConstants.RECHANGE_AES_KEY), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            logger.error("生成分期付url时AES加密出错", e);
-        }
-        return reqData;
-    }
 }

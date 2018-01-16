@@ -22,8 +22,10 @@ import net.fnsco.bigdata.service.domain.MerchantChannel;
 import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
+import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.e789.jo.TradeJO;
@@ -38,7 +40,7 @@ import net.fnsco.web.controller.e789.jo.TradeJO;
  *
  */
 @Controller
-@RequestMapping(value = "/trade/h5Pay", method = RequestMethod.POST)
+@RequestMapping(value = "/trade/fsf", method = RequestMethod.POST)
 @Api(value = "/trade/h5Pay", tags = { "聚惠分相关功能接口" })
 public class H5PayJhfController extends BaseController {
     @Autowired
@@ -56,7 +58,7 @@ public class H5PayJhfController extends BaseController {
      * @param userName
      * @return
      */
-    @RequestMapping(value = "/dealPayOrder")
+    @RequestMapping(value = "/h5Pay/dealPayOrder")
     @ApiOperation(value = "第三方接入获取聚惠分二维码url")
     @ResponseBody
     public ResultDTO dealPayOrder(@RequestBody TradeJO tradeJO) {
@@ -88,12 +90,10 @@ public class H5PayJhfController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrderService.doAdd(tradeOrder);
-        String payNotifyUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteNotice";
-        String payCallBackUrl = env.getProperty("open.base.url") + "/trade/jhf/payCompleteCallback?orderNo=" + tradeOrder.getOrderNo();
-        
-        String rspData = tradeOrderService.getReqData(tradeOrder,payNotifyUrl,payCallBackUrl);
-        String url = env.getProperty("jhf.open.api.url") + "/api/thirdPay/dealPayOrder";
-        url += "?commID=" + tradeOrder.getChannelMerId() + "&reqData=" + rspData;
+
+        String url = env.getProperty("app.base.url") + "/trade/fsf/pay/dealPayOrder";
+        url += "?" + "&commID=" + tradeJO.getInnerCode() + "&reqData=" + AESUtil.getReqData(tradeJO.getInnerCode(), tradeOrder.getOrderNo(), TradeConstants.RECHANGE_AES_KEY);
+
         Map<String, Object> resultMap = Maps.newHashMap();
         resultMap.put("url", url);
         resultMap.put("orderNo", tradeOrder.getOrderNo());

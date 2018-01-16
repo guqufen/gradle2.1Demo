@@ -44,6 +44,29 @@ public class TradeResultZXDTO {
 
 	////////////////////// 支付宝////////////////////////////////////////////////////
 	private String seqId; // M String(32) 该字段填原交易中信流水号或原交易商户订单号
+	private String origSeqId;//中信流水号	origSeqId	R	请求报文fetchOrderNo字段为Y时返回，原样返回请求报文中的seqId
+
+	/**
+	 * origSeqId
+	 *
+	 * @return  the origSeqId
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getOrigSeqId() {
+		return origSeqId;
+	}
+
+	/**
+	 * origSeqId
+	 *
+	 * @param   origSeqId    the origSeqId to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setOrigSeqId(String origSeqId) {
+		this.origSeqId = origSeqId;
+	}
 
 	/**
 	 * encoding

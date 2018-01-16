@@ -49,7 +49,7 @@ public class ZxyhPayMD5Util {
      */
 //    private static String         reqUrl               = "https://120.27.165.177:9001";  //入建
 //    private static String         reqUrl               = " https://120.27.165.177:8099";  //主扫
-    private static String         reqUrl               = "";  //公众号
+    private static String         reqUrl               = "https://120.27.165.177:8099";  //退款
     /**MD5加密方式
      * 用于数据电子签名使用的MD5密钥，由中信银行开商户时自动生成，请妥善保管
      * 配置在此处仅为演示方便，正式生产代码中，商户应该将其外置于安全的地方，且妥善保护该密钥，如有泄露，请第一时间通知我行进行变更！！！
@@ -154,10 +154,6 @@ public class ZxyhPayMD5Util {
         //将Map转成Json
         //Json2 reqJs = Json2.make(reqMap);
         String reqStr = JSON.toJSONString(reqMap);
-        //Map<String,Object> reqJs = JSON.parseObject(mapStr, Map.class);
-        //生成json字符串
-        //String reqStr = reqJs.toString();
-        //System.out.println(reqStr);
         //再将json字符串用base64编码,并对一些特殊字符进行置换
         String b64ReqStr = null;
         try {
@@ -405,20 +401,30 @@ public class ZxyhPayMD5Util {
     
     
     public static void main(String[] args) {
-    	String url = "/MPay/backTransAction.do";
+    	String url = "/MPay/backTransAction.do";  
         Map<String, String> reqMap = new HashMap<String, String>();
         reqMap.put("encoding", "UTF-8"); //
         reqMap.put("signMethod", "02"); //
         reqMap.put("txnType", "04"); //
-        reqMap.put("txnSubType", "040303"); //
+        reqMap.put("txnSubType", "040441"); //微信和支付宝不一样
         reqMap.put("channelType", "6002"); //
+        reqMap.put("payAccessType", "02");//接口支付
+        
         
         ///////
         reqMap.put("merId", "994400000000009"); //普通商户或平台商户的商户号
-        reqMap.put("seqId", "");//原交易中信订单号
-        reqMap.put("orderId", "");
+        reqMap.put("secMerId", "999900000011289");
+        
+//        reqMap.put("seqId", "9012018011516242117921789");//原交易中信订单号
+        reqMap.put("origTxnSeqId", "20180115011115722286591100474");
+        reqMap.put("origSettleDate", "20180115");
+        reqMap.put("orderId", System.currentTimeMillis() + "");
+        
         reqMap.put("orderTime", System.currentTimeMillis() + "");
+        reqMap.put("txnAmt", "1");
         reqMap.put("currencyType", "156");
+        reqMap.put("accountFlag", "Y");
+        reqMap.put("independentTransactionFlag", "Y");
         //发送中信报文
         String respStr = ZxyhPayMD5Util.request(reqMap, url);
         //解析返回报文
