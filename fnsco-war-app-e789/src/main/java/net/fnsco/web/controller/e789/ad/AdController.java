@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mysql.jdbc.StringUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,17 +47,13 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "/queryAd")
 	@ApiOperation(value = "查询广告资讯")
 	public ResultDTO<AppAdVO> queryAdList(@RequestBody AppAdJO appAdJO) {
-		if (appAdJO.getType() == null || appAdJO.getUserId() == null ) {
+		if (appAdJO.getType() == null || appAdJO.getUserId() == null ||StringUtils.isNullOrEmpty( request.getParameter("type"))) {
 			return ResultDTO.fail(E789ApiConstant.E_PARAMETER_NOT_NULL);
 		}
-		Integer deviceType = 0;
-		String user_agent =  request.getHeader("user-agent");
-		logger.info("设备类型信息【"+user_agent+"】");
-		if(user_agent.contains("ios")){
-			deviceType = 1;
-		}else if (user_agent.contains("Android")){
-			deviceType = 2;
-		}else{
+		String type =  request.getParameter("type");
+		logger.info("设备类型信息【"+type+"】");
+		Integer deviceType = Integer.parseInt(type);
+		if(deviceType != 1 && deviceType != 2){
 			deviceType = 3;
 		}
 		logger.warn("参数"+JSONObject.toJSON(appAdJO).toString());
