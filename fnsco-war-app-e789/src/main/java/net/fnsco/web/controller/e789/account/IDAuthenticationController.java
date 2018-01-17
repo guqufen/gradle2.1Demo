@@ -177,9 +177,16 @@ public class IDAuthenticationController extends BaseController {
 			//idCardFront = JuheDemoUtil.valiIdImage(fileURLFront,"front");
 			idCardFaceFront = JuheDemoFaceUtil.valiIdImage(fileURLFront);
 		}
-		String errorCodeFront = idCardFaceFront.getError_message();
+		String errorCodeFront = idCardFaceFront.getErrorMessage();
 		if(!Strings.isNullOrEmpty(errorCodeFront)) {
 			logger.error(errorCodeFront + "正面照识别失败！");
+			if(errorCodeFront.indexOf("INVALID_IMAGE_SIZE")!=-1) {
+				return ResultDTO.fail(E789ApiConstant.INVALID_IMAGE_SIZE);
+			}else if(errorCodeFront.indexOf("IMAGE_FILE_TOO_LARGE")!=-1) {
+				return ResultDTO.fail(E789ApiConstant.IMAGE_FILE_TOO_LARGE);
+			}else if("2100033".equals(errorCodeFront)) {
+				return ResultDTO.fail(E789ApiConstant.E_ID_CARD_ERROR);
+			}
 			return ResultDTO.fail(E789ApiConstant.E_ID_CARD_F_ERROR);
 		}
     	/*int errorCodeFront = idCardFront.getErrorCode();
@@ -220,10 +227,17 @@ public class IDAuthenticationController extends BaseController {
 			//idCardBack = JuheDemoUtil.valiIdImage(fileURLBack,"back");
 			idCardFaceBack = JuheDemoFaceUtil.valiIdImage(fileURLBack);
 		}
-		String errorCodeBack = idCardFaceFront.getError_message();
+		String errorCodeBack = idCardFaceBack.getErrorMessage();
 		if(!Strings.isNullOrEmpty(errorCodeBack)) {
-			logger.error(errorCodeFront + "反面照识别失败！");
-			return ResultDTO.fail(E789ApiConstant.E_ID_CARD_B_ERROR);
+			logger.error(errorCodeBack + "反面照识别失败！");
+			if(errorCodeBack.indexOf("INVALID_IMAGE_SIZE")!=-1) {
+				return ResultDTO.fail(E789ApiConstant.INVALID_IMAGE_SIZE);
+			}else if(errorCodeBack.indexOf("IMAGE_FILE_TOO_LARGE")!=-1) {
+				return ResultDTO.fail(E789ApiConstant.IMAGE_FILE_TOO_LARGE);
+			}else if("2100033".equals(errorCodeBack)) {
+				return ResultDTO.fail(E789ApiConstant.E_ID_CARD_ERROR);
+			}
+			return ResultDTO.fail(E789ApiConstant.E_ID_CARD_F_ERROR);
 		}
        	/*int errorCodeBack = idCardBack.getErrorCode();
        	if(errorCodeBack==210301) {
@@ -242,7 +256,7 @@ public class IDAuthenticationController extends BaseController {
         //endTime = idCardBack.getEnd();
 		String endTime = null;
 		String time = null;
-		time = idCardFaceBack.getValid_date();
+		time = idCardFaceBack.getValidDate();
 		endTime = time.substring(time.indexOf("-")+1, time.length());
 		Date nowTime = new Date();
 		Date date =null;

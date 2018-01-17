@@ -29,17 +29,22 @@ public class E789ApiConstant extends CoreConstants {
 	public static String E_NOT_FIND_INNERCODE = "210006"; // 未找到对应内部商户号
 	public static String E_NOT_FIND_ENTITY_INNERCODE = "210007"; // 未找到对应实体内部商户号
 	public static String E_NOT_FIND_CHANNEL_INNERCODE = "210008"; // 未找到对应渠道商户号
-	public static String E_APP_PAY_PASSWORD_ERROR = "210009"; // 支付密码错误
-	public static String E_ADD_FIRST = "210010"; // 请先入建中信商户
-
-	public static String E_ID_CARD_F_ERROR = "2100020"; // 身份证正面识别失败
-	public static String E_ID_CARD_B_ERROR = "210021"; // 身份证反面识别失败
-	public static String E_UNBOUND_SUCCESS = "2100022"; //
-	public static String E_BOUND_SUCCESS = "2100023";
-	public static String E_NOT_CHECK = "2100024";// 入建中信未通过审核
-
-	public static String E_AGREEE_NOT_FOUND = "2100030";
-
+	public static String E_APP_PAY_PASSWORD_ERROR      = "210009"; //支付密码错误
+	public static String E_ADD_FIRST      = "210010"; //请先入建中信商户
+	
+	public static String E_ID_CARD_F_ERROR      = "2100020"; //身份证正面识别失败
+	public static String E_ID_CARD_B_ERROR      = "210021"; //身份证反面识别失败
+	//face++报错
+	public static String IMAGE_FILE_TOO_LARGE = "228731"; // 客户上传的图像文件太大
+	public static String INVALID_IMAGE_SIZE = "228732"; // 客户上传的图像像素尺寸太大或太小
+	public static String E_ID_CARD_ERROR      = "2100033"; //无法扫描出该图片
+	
+	public static String E_UNBOUND_SUCCESS      = "2100022"; //
+	public static String E_BOUND_SUCCESS      = "2100023";
+	public static String E_NOT_CHECK      = "2100024";//入建中信未通过审核
+	
+	public static String E_AGREEE_NOT_FOUND  ="2100030";
+	
 	static {
 		// 身份识别证错误信息
 		ERROR_MESSGE_MAP.put(E_DATA_SOURCE_TIMEOUT, "数据源超时");
@@ -73,6 +78,11 @@ public class E789ApiConstant extends CoreConstants {
 
 		ERROR_MESSGE_MAP.put(E_ID_CARD_F_ERROR, "身份证正面识别失败");
 		ERROR_MESSGE_MAP.put(E_ID_CARD_B_ERROR, "身份证反面识别失败");
+		ERROR_MESSGE_MAP.put(IMAGE_FILE_TOO_LARGE, "上传的图像文件太大");
+		ERROR_MESSGE_MAP.put(INVALID_IMAGE_SIZE, "上传的图像像素尺寸太大或太小");
+		ERROR_MESSGE_MAP.put(E_ID_CARD_ERROR, "无法扫描出该图片");
+		
+		
 		ERROR_MESSGE_MAP.put(E_UNBOUND_SUCCESS, "解绑成功");
 		ERROR_MESSGE_MAP.put(E_BOUND_SUCCESS, "绑定成功");
 		ERROR_MESSGE_MAP.put(E_NOT_CHECK, "商户信息未通过审核");
