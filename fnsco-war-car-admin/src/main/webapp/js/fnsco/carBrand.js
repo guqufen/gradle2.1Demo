@@ -189,7 +189,7 @@ function getMenuTree(id){
 					var node = dd_ztree.getNodeByParam("id", id);
 					if( node != null){
 						dd_ztree.selectNode(node, true);// 指定选中ID的节点
-//						dd_ztree.expandNode(node, true, false);// 指定选中ID节点展开
+//						dd_ztree.expandNode(node, true, true);// 指定选中ID节点展开
 					}
 				}
 
@@ -210,6 +210,7 @@ function MenuTreeGet() {
 
 	// 获取菜单树操作对象
 	var add_deptTree = $.fn.zTree.getZTreeObj('upMenuTree');
+	add_deptTree.expandAll(false);
 
 	layer.open({
 		type : 1,
