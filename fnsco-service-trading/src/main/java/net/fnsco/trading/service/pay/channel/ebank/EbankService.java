@@ -489,6 +489,7 @@ public class EbankService extends BaseService {
 				e4033ResultDTO.setSuccess(false);
 			}
 
+			e4033ResultDTO.setRespCode(tradeWithdrawDO.getRespCode());
 			e4033ResultDTO.setRespMsg(tradeWithdrawDO.getRespMsg());
 			return e4033ResultDTO;
 		}

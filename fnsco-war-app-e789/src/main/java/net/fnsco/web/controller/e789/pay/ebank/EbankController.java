@@ -102,7 +102,7 @@ public class EbankController extends BaseController {
 		if (!password.equals(mAppUser.getPayPassword())) {
 
 			logger.error("手机充值-支付密码错误，请核对后重新输入！！db_passwd=" + mAppUser.getPayPassword() + ",password=" + password);
-			return ResultDTO.success(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
+			return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
 		}
 
 		return ebankService.E4032Trade(e4032jo.getOppAccNo(), e4032jo.getAmount(), e4032jo.getUserId());
