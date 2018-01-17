@@ -143,11 +143,11 @@ public class EbankService extends BaseService {
 	 */
 	public ResultDTO<EMaintainResultEntity> E4029Trade(E4029Entity e4029Entity) {
 
-//		if (E4029Maintain(e4029Entity).isSuccess()) {
-//			return ResultDTO.success();
-//		} else {
-//			return ResultDTO.fail();
-//		}
+		// if (E4029Maintain(e4029Entity).isSuccess()) {
+		// return ResultDTO.success();
+		// } else {
+		// return ResultDTO.fail();
+		// }
 		return ResultDTO.success(E4029Maintain(e4029Entity));
 	}
 
@@ -369,6 +369,11 @@ public class EbankService extends BaseService {
 					tradeWithdrawDO.setStatus(0);// 状态:0-未执行
 					tradeWithdrawDO.setCreateTime(new Date());// 创建时间
 					tradeWithdrawDO.setUpdateTime(new Date());// 更新时间
+					tradeWithdrawDO.setBankAccountNo(e4028RespBodyDTO.getOppAccNo().substring(0, 4) + "****"
+							+ e4028RespBodyDTO.getOppAccNo().substring(-4));// 开户账号
+					tradeWithdrawDO.setBankAccountName(e4028RespBodyDTO.getOppAccName());// 账户开户名
+					tradeWithdrawDO.setBankAccountCardId(e4028RespBodyDTO.getIdNo().substring(0, 6) + "****"
+							+ e4028RespBodyDTO.getIdNo().substring(-4));// 开户人身份证号
 					tradeWithdrawDO.setChannelType("06");// 渠道类型:06-平安银行代扣
 					tradeWithdrawService.doAdd(tradeWithdrawDO);
 
