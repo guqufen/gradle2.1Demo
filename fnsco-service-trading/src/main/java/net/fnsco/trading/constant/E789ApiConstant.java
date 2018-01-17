@@ -29,16 +29,24 @@ public class E789ApiConstant extends CoreConstants {
 	public static String E_NOT_FIND_INNERCODE = "210006"; // 未找到对应内部商户号
 	public static String E_NOT_FIND_ENTITY_INNERCODE = "210007"; // 未找到对应实体内部商户号
 	public static String E_NOT_FIND_CHANNEL_INNERCODE = "210008"; // 未找到对应渠道商户号
-	public static String E_APP_PAY_PASSWORD_ERROR = "210009"; // 支付密码错误
-	public static String E_ADD_FIRST = "210010"; // 请先入建中信商户
-
-	public static String E_ID_CARD_F_ERROR = "2100020"; // 身份证正面识别失败
-	public static String E_ID_CARD_B_ERROR = "210021"; // 身份证反面识别失败
-	public static String E_UNBOUND_SUCCESS = "2100022"; //
-	public static String E_BOUND_SUCCESS = "2100023";
-	public static String E_NOT_CHECK = "2100024";// 入建中信未通过审核
-
-	public static String E_AGREEE_NOT_FOUND = "2100030";
+	public static String E_APP_PAY_PASSWORD_ERROR      = "210009"; //支付密码错误
+	public static String E_ADD_FIRST      = "210010"; //请先入建中信商户
+	
+	public static String E_ID_CARD_F_ERROR      = "2100020"; //身份证正面识别失败
+	public static String E_ID_CARD_B_ERROR      = "210021"; //身份证反面识别失败
+	//face++报错
+	public static String IMAGE_FILE_TOO_LARGE = "228731"; // 客户上传的图像文件太大
+	public static String INVALID_IMAGE_SIZE = "228732"; // 客户上传的图像像素尺寸太大或太小
+	public static String E_ID_CARD_ERROR      = "2100033"; //无法扫描出该图片
+	
+	public static String E_UNBOUND_SUCCESS      = "2100022"; //
+	public static String E_BOUND_SUCCESS      = "2100023";
+	public static String E_NOT_CHECK      = "2100024";//入建中信未通过审核
+	
+	public static String E_AGREEE_NOT_FOUND  ="2100030";
+	
+	
+	
 
 	static {
 		// 身份识别证错误信息
@@ -70,25 +78,30 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(E_NOT_FIND_CHANNEL_INNERCODE, "未找到对应渠道商户号");
 		ERROR_MESSGE_MAP.put(E_APP_PAY_PASSWORD_ERROR, "支付密码错误");
 		ERROR_MESSGE_MAP.put(E_ADD_FIRST, "请先入建中信商户");
-
+		
 		ERROR_MESSGE_MAP.put(E_ID_CARD_F_ERROR, "身份证正面识别失败");
 		ERROR_MESSGE_MAP.put(E_ID_CARD_B_ERROR, "身份证反面识别失败");
+		ERROR_MESSGE_MAP.put(IMAGE_FILE_TOO_LARGE, "上传的图像文件太大");
+		ERROR_MESSGE_MAP.put(INVALID_IMAGE_SIZE, "上传的图像像素尺寸太大或太小");
+		ERROR_MESSGE_MAP.put(E_ID_CARD_ERROR, "无法扫描出该图片");
+		
+		
 		ERROR_MESSGE_MAP.put(E_UNBOUND_SUCCESS, "解绑成功");
 		ERROR_MESSGE_MAP.put(E_BOUND_SUCCESS, "绑定成功");
 		ERROR_MESSGE_MAP.put(E_NOT_CHECK, "商户信息未通过审核");
-
+		
 		ERROR_MESSGE_MAP.put(E_AGREEE_NOT_FOUND, "委托协议不存在");
 	}
 
 	public static enum ResponCodeEnum {
-		DEAL_IN_PROGRESS("1000", "处理中"), // 09
-		DEAL_SUCCESS("1001", "成功"), // 00
-		DEAL_FAIL("1002", "失败"), // 99
-		DEAL_SEALS_RETURN("1003", "已退货"), // 01
-		DEAL_UNPAY("1000", "订单未支付"), // 06
-		DEAL_CLOSED("1005", "交易已关闭"), // 02
-		DEAL_ANVANCE_PAYMENT("1000", "预支付交易成功"), // 04
-		DEAL_RETURN_SUCCESS("1001", "交易受理成功（退货交易时使用）");// 08
+		DEAL_IN_PROGRESS("1000", "处理中"), //09
+		DEAL_SUCCESS("1001", "成功"), //00
+		DEAL_FAIL("1002", "失败"), //99
+		DEAL_SEALS_RETURN("1003","已退货"),//01
+		DEAL_UNPAY("1000", "订单未支付"),//06
+		DEAL_CLOSED("1005", "交易已关闭"),//02
+		DEAL_ANVANCE_PAYMENT("1000", "预支付交易成功"),//04
+		DEAL_RETURN_SUCCESS("1001", "交易受理成功（退货交易时使用）");//08
 
 		private String code;
 		private String name;
@@ -195,47 +208,6 @@ public class E789ApiConstant extends CoreConstants {
 				}
 			}
 			return GZH.code;// 默认微信公众号
-		}
-	}
-
-	// 橙e平安银行卡，账户状态
-	public static enum EBankAcctStatus {
-		NOMAL("0", "正常"), // 正常
-		STOP("1", "停用"), // 停用
-		TOBECER("2", "待认证"), // 待认证
-		GOING("3", "认证中");// 认证中
-
-		private String code;
-		private String name;
-
-		private EBankAcctStatus(String code, String name) {
-			this.code = code;
-			this.name = name;
-		}
-
-		public String getCode() {
-			return code;
-		}
-
-		public void setCode(String code) {
-			this.code = code;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public static String getNameByCode(String code) {
-			for (EBankAcctStatus eopen : EBankAcctStatus.values()) {
-				if (eopen.code.equals(code)) {
-					return eopen.name;
-				}
-			}
-			return null;// 默认空
 		}
 	}
 }

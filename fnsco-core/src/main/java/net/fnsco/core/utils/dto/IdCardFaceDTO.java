@@ -16,10 +16,10 @@ public class IdCardFaceDTO {
 	 private String name;/*姓名*/
 	 private String race;/*民族（汉字）*/
 	 private String side;/*表示身份证的国徽面或人像面。返回值为：front: 人像面back: 国徽面*/
-	 private String issued_by;/*签发机关*/
-	 private String valid_date;/*有效日期，返回值有两种格式：一个16位长度的字符串：YYYY.MM.DD-YYYY.MM.DD或是：YYYY.MM.DD-长期*/
-	 private String error_message;/*当请求失败时才会返回此字符串，具体返回内容见后续错误信息章节。否则此字段不存在。*/
-	 private int time_used;/*整个请求所花费的时间，单位为毫秒。*/
+	 private String issuedBy;/*签发机关*/
+	 private String validDate;/*有效日期，返回值有两种格式：一个16位长度的字符串：YYYY.MM.DD-YYYY.MM.DD或是：YYYY.MM.DD-长期*/
+	 private String errorMessage;/*当请求失败时才会返回此字符串，具体返回内容见后续错误信息章节。否则此字段不存在。*/
+	 private int timeUsed;/*整个请求所花费的时间，单位为毫秒。*/
 	 /**
 	 * @return the type
 	 */
@@ -117,53 +117,51 @@ public class IdCardFaceDTO {
 		this.side = side;
 	}
 	/**
-	 * @return the issued_by
+	 * @return the issuedBy
 	 */
-	public String getIssued_by() {
-		return issued_by;
+	public String getIssuedBy() {
+		return issuedBy;
 	}
 	/**
-	 * @param issued_by the issued_by to set
+	 * @param issuedBy the issuedBy to set
 	 */
-	public void setIssued_by(String issued_by) {
-		this.issued_by = issued_by;
+	public void setIssuedBy(String issuedBy) {
+		this.issuedBy = issuedBy;
 	}
 	/**
-	 * @return the valid_date
+	 * @return the validDate
 	 */
-	public String getValid_date() {
-		return valid_date;
+	public String getValidDate() {
+		return validDate;
 	}
 	/**
-	 * @param valid_date the valid_date to set
+	 * @param validDate the validDate to set
 	 */
-	public void setValid_date(String valid_date) {
-		this.valid_date = valid_date;
+	public void setValidDate(String validDate) {
+		this.validDate = validDate;
 	}
 	/**
-	 * @return the error_message
+	 * @return the errorMessage
 	 */
-	public String getError_message() {
-		return error_message;
+	public String getErrorMessage() {
+		return errorMessage;
 	}
 	/**
-	 * @param error_message the error_message to set
+	 * @param errorMessage the errorMessage to set
 	 */
-	public void setError_message(String error_message) {
-		this.error_message = error_message;
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 	/**
-	 * @return the time_used
+	 * @return the timeUsed
 	 */
-	public int getTime_used() {
-		return time_used;
+	public int getTimeUsed() {
+		return timeUsed;
 	}
 	/**
-	 * @param time_used the time_used to set
+	 * @param timeUsed the timeUsed to set
 	 */
-	public void setTime_used(int time_used) {
-		this.time_used = time_used;
+	public void setTimeUsed(int timeUsed) {
+		this.timeUsed = timeUsed;
 	}
-	
-    
 }
