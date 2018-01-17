@@ -122,6 +122,14 @@ public class TicketOrderService extends BaseService {
                         tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.SUCCESS.getCode());
                         tradeWithdraw.setStatus(3);
                         tradeWithdrawService.doUpdate(tradeWithdraw);
+                    } else if ("5".equals(status)) {//出票失败
+                        if (!TicketConstants.OrderStateEnum.PAY_FAIL.getCode().equals(order.getStatus())) {
+                            boolean flug = appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
+                            if (flug) {
+                                appAccountBalanceService.updateFund(order.getAppUserId(), BigDecimal.ZERO.subtract(order.getOrderAmount()));
+                            }
+                        }
+                        order.setStatus(TicketConstants.OrderStateEnum.PAY_FAIL.getCode());
                     } else if ("7".equals(status)) {//有乘客退票成功
                         String passengers = obj1.getString("passengers");
                         JSONArray objArray2 = JSONArray.fromObject(passengers);
@@ -163,12 +171,15 @@ public class TicketOrderService extends BaseService {
                         tradeWithdraw.setStatus(3);
                         tradeWithdraw.setAmount(totalAmount);
                         tradeWithdrawService.doUpdate(tradeWithdraw);
+                    } else if ("8".equals(status)) {//有乘客退票失败
+                        order.setStatus(TicketConstants.OrderStateEnum.REFUND_FAIL.getCode());
                     }
                     order.setLastModifyTime(new Date());
                     ticketOrderDAO.update(order);
                 }
             }
         }
+
     }
 
     // 分页
