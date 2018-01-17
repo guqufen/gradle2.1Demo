@@ -19,6 +19,7 @@ public class E789ApiConstant extends CoreConstants {
 	public static String E_PAR_ERROR_ID = "210304"; // 参数异常
 	public static String E_NETWORK_ERROR = "210305"; // 网络错误，请重试
 	public static String E_DATA_SOURCE_ERROR = "210306"; // 数据源错误，具体参照reason
+	public static String E_CARD_NOT_MATCH_NAME = "210307"; // 身份证号和姓名不匹配
 
 	public static String E_IDCARD_OUT_OF_TIME = "210000"; // 身份证已过期
 	public static String E_UPLOAD_IDCARD_FAIL = "210001"; // 身份证上传失败
@@ -38,6 +39,9 @@ public class E789ApiConstant extends CoreConstants {
 	public static String IMAGE_FILE_TOO_LARGE = "228731"; // 客户上传的图像文件太大
 	public static String INVALID_IMAGE_SIZE = "228732"; // 客户上传的图像像素尺寸太大或太小
 	public static String E_ID_CARD_ERROR      = "2100033"; //无法扫描出该图片
+	
+	public static String IS_NO_FRONT 		= "228734"; // 请上传正确的正面照
+	public static String IS_NO_BACK      	= "2100035"; //请上传正确的反面照
 	
 	public static String E_UNBOUND_SUCCESS      = "2100022"; //
 	public static String E_BOUND_SUCCESS      = "2100023";
@@ -63,6 +67,7 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(E_PAR_ERROR_ID, "实名验证参数异常");
 		ERROR_MESSGE_MAP.put(E_NETWORK_ERROR, "网络错误，请重试");
 		ERROR_MESSGE_MAP.put(E_DATA_SOURCE_ERROR, "数据源错误，具体参照reason");
+		ERROR_MESSGE_MAP.put(E_CARD_NOT_MATCH_NAME, "身份证号和姓名不匹配");
 
 		ERROR_MESSGE_MAP.put(E_IDCARD_OUT_OF_TIME, "身份证已过期");
 		ERROR_MESSGE_MAP.put(E_UPLOAD_IDCARD_FAIL, "身份证上传失败");
@@ -81,6 +86,8 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(IMAGE_FILE_TOO_LARGE, "上传的图像文件太大");
 		ERROR_MESSGE_MAP.put(INVALID_IMAGE_SIZE, "上传的图像像素尺寸太大或太小");
 		ERROR_MESSGE_MAP.put(E_ID_CARD_ERROR, "无法扫描出该图片");
+		ERROR_MESSGE_MAP.put(IS_NO_FRONT, "请上传正确的正面照");
+		ERROR_MESSGE_MAP.put(IS_NO_BACK, "请上传正确的反面照");
 		
 		
 		ERROR_MESSGE_MAP.put(E_UNBOUND_SUCCESS, "解绑成功");

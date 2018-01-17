@@ -94,7 +94,7 @@ public class EbankService extends BaseService {
 		e4028ReqDTO.setPageNo("1");
 		String xmlBody = JaxbUtil.convertToXml(e4028ReqDTO);
 		String packets = EbankUtil.asemblyPackets(yqdm, bsnCode, xmlBody, inte);
-		System.out.println("sendData=[" + packets + "]");
+		logger.debug("e代扣-付款账户协议查询:sendData=[" + packets + "]");
 
 		Packets packetsRP = EbankUtil.send2server(serverIp, iPort, packets, inte);
 
@@ -113,11 +113,10 @@ public class EbankService extends BaseService {
 		}
 		// 获取应答信息
 		byte[] res = new byte[100];
-
-		System.out.println("respCode=[" + rcvMsg.toString().substring(87, 93) + "]");
+		String respCode = rcvMsg.toString().substring(87, 93).trim();
 		System.arraycopy(rcvMsg.toString().getBytes(), 93, res, 0, 100);
-		System.out.println("respMsg=[" + new String(res) + "]");
-		System.out.println("recvData=[" + rcvMsg.toString() + "]");
+		String respMsg = new String(res).trim();
+		logger.debug("e代扣-付款账户协议查询返回结果:respCode=[" + respCode + "],respMsg=[" + respMsg + "]");
 
 		E4028ResultDTO e4028ResultDTO = new E4028ResultDTO();
 		e4028ResultDTO.setRespCode(rcvMsg.toString().substring(87, 93).trim());
@@ -127,8 +126,10 @@ public class EbankService extends BaseService {
 			e4028ResultDTO.setSuccess(true);
 			E4028RespDTO e4028RespDTO = JaxbUtil.converyToJavaBean(recvBody, E4028RespDTO.class);
 			e4028ResultDTO.setE4028RespDTO(e4028RespDTO);
+
 			for (E4028RespBodyDTO e4028RespBodyDTO : e4028RespDTO.getList()) {
-				System.out.println(e4028RespBodyDTO.toString());
+
+				logger.debug("付款账户协议查询结果:" + e4028RespBodyDTO.toString());
 			}
 		}
 
@@ -151,13 +152,19 @@ public class EbankService extends BaseService {
 		return ResultDTO.success(E4029Maintain(e4029Entity));
 	}
 
+	/**
+	 * 付款人协议维护(五要素齐全)
+	 * 
+	 * @param e4029Entity
+	 * @return
+	 */
 	public EMaintainResultEntity E4029Maintain(E4029Entity e4029Entity) {
 
 		EMaintainResultEntity eMaintainResultEntity = new EMaintainResultEntity();
-		// 付款人协议查询
+
 		try {
 
-			E4028ResultDTO e4028ResultDTO = E4028Query(e4029Entity.getOppAccNo());
+			E4028ResultDTO e4028ResultDTO = E4028Query(e4029Entity.getOppAccNo());// 付款人协议查询
 
 			// 查询成功说明协议已经建立，此时不需要进行新增处理
 			if (e4028ResultDTO.isSuccess()) {
@@ -176,25 +183,18 @@ public class EbankService extends BaseService {
 					e4029ReqDTO.setTranFlag(e4029Entity.getTranFlag());// 操作标志:1-新增；2-修改；3-删除
 
 					// 五要素：账号、户名、证件类型、证件号码、开户预留手机号
-					e4029ReqDTO.setOppAccNo(e4029Entity.getOppAccNo());// ("6222121212120011"付款人帐号
-					e4029ReqDTO.setOppAccName(e4029Entity.getOppAccName());// "张三"
-																			// 付款人户名
-					e4029ReqDTO.setOppBank(e4029Entity.getOppBank());// "10002"
-																		// 付款人银行
-					e4029ReqDTO.setMobile(e4029Entity.getMobile());// "15555555555"
-																	// 付款人手机号
-					e4029ReqDTO.setCardAcctFlag(e4029Entity.getCardAcctFlag());// "0"
-																				// 卡折标志:0-借记卡
-					e4029ReqDTO.setIdType(e4029Entity.getIdType());// "1"
-																	// 证件类型，1-身份证；2-军官证
-					e4029ReqDTO.setIdNo(e4029Entity.getIdNo());// "510703199310052817"
-																// 证件号码
+					e4029ReqDTO.setOppAccNo(e4029Entity.getOppAccNo());// 付款人帐号
+					e4029ReqDTO.setOppAccName(e4029Entity.getOppAccName());// 付款人户名
+					e4029ReqDTO.setOppBank(e4029Entity.getOppBank());// 付款人银行
+					e4029ReqDTO.setMobile(e4029Entity.getMobile());// 付款人手机号
+					e4029ReqDTO.setCardAcctFlag(e4029Entity.getCardAcctFlag());// 卡折标志:0-借记卡
+					e4029ReqDTO.setIdType(e4029Entity.getIdType());// 证件类型，1-身份证；2-军官证
+					e4029ReqDTO.setIdNo(e4029Entity.getIdNo());// 证件号码
 
 					e4029ReqDTO.setDetailNo(e4028ResultDTO.getE4028RespDTO().getList().get(0).getDetailNo());// 明细序号,需要查询返回的结果
 
 					String xmlBody = JaxbUtil.convertToXml(e4029ReqDTO);
 					String packets = EbankUtil.asemblyPackets(yqdm, bsnCode, xmlBody, inte);
-					System.out.println("sendData=[" + packets + "]");
 					logger.debug("e代扣-付款账户维护接口:sendData=[" + packets + "]");
 
 					Packets packetsRP = EbankUtil.send2server(serverIp, iPort, packets, inte);
@@ -220,9 +220,11 @@ public class EbankService extends BaseService {
 
 					// 判断：如果维护返回正常(000000)，则返回成功true
 					if ("000000".equals(rcvMsg.toString().substring(87, 93))) {
+
 						eMaintainResultEntity.setSuccess(true);
 						return eMaintainResultEntity;
 					} else {
+
 						eMaintainResultEntity.setSuccess(false);
 					}
 				}
@@ -277,11 +279,14 @@ public class EbankService extends BaseService {
 
 				StringBuilder rcvMsg = new StringBuilder();
 				if (headRP != null) {
+
 					rcvMsg.append(new String(headRP, EbankUtil.CHARSET));
 				}
 				if (bodyRpLen > 0 && bodyRP != null) {
+
 					rcvMsg.append(new String(bodyRP, EbankUtil.CHARSET));
 				}
+
 				// 获取应答信息
 				byte[] res = new byte[100];
 				String respCode = rcvMsg.toString().substring(87, 93).trim();
@@ -359,7 +364,8 @@ public class EbankService extends BaseService {
 
 					String xmlBody = JaxbUtil.convertToXml(e4032ReqDTO);
 					String packets = EbankUtil.asemblyPackets(yqdm, bsnCode, xmlBody, inte);
-					System.out.println("sendData=[" + packets + "]");
+					logger.debug("e代扣-付款交易:sendData=[" + packets.substring(0, 222) + "]");
+					// System.out.println("sendData=[" + packets + "]");
 
 					tradeWithdrawDO.setOrderNo(e4032ReqDTO.getThirdVoucher());// 批次凭证号
 					tradeWithdrawDO.setAmount(amount.multiply(new BigDecimal(100)));// 交易金额(分),需要乘以100
@@ -369,11 +375,6 @@ public class EbankService extends BaseService {
 					tradeWithdrawDO.setStatus(0);// 状态:0-未执行
 					tradeWithdrawDO.setCreateTime(new Date());// 创建时间
 					tradeWithdrawDO.setUpdateTime(new Date());// 更新时间
-					tradeWithdrawDO.setBankAccountNo(e4028RespBodyDTO.getOppAccNo().substring(0, 4) + "****"
-							+ e4028RespBodyDTO.getOppAccNo().substring(-4));// 开户账号
-					tradeWithdrawDO.setBankAccountName(e4028RespBodyDTO.getOppAccName());// 账户开户名
-					tradeWithdrawDO.setBankAccountCardId(e4028RespBodyDTO.getIdNo().substring(0, 6) + "****"
-							+ e4028RespBodyDTO.getIdNo().substring(-4));// 开户人身份证号
 					tradeWithdrawDO.setChannelType("06");// 渠道类型:06-平安银行代扣
 					tradeWithdrawService.doAdd(tradeWithdrawDO);
 
@@ -466,10 +467,11 @@ public class EbankService extends BaseService {
 	public E4033ResultDTO E4033ResultQuery(String orderNo) {
 
 		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(orderNo);// 通过订单号查找原交易
+		E4033ResultDTO e4033ResultDTO = new E4033ResultDTO();
 		if (null == tradeWithdrawDO) {
 
 			logger.info("订单号查找不到原交易orderNo=" + orderNo);
-			E4033ResultDTO e4033ResultDTO = new E4033ResultDTO();
+			
 			e4033ResultDTO.setSuccess(false);
 			e4033ResultDTO.setRespMsg("订单号查找不到原交易orderNo=" + orderNo);
 			return e4033ResultDTO;
@@ -478,7 +480,7 @@ public class EbankService extends BaseService {
 		if (!"1000".equals(tradeWithdrawDO.getRespCode()) && !"1".equals(tradeWithdrawDO.getStatus())) {
 
 			logger.info("原交易状态已经为确定状态,无需再去调用平安银行接口查询.orderNo=" + orderNo);
-			E4033ResultDTO e4033ResultDTO = new E4033ResultDTO();
+//			E4033ResultDTO e4033ResultDTO = new E4033ResultDTO();
 			if ("1001".equals(tradeWithdrawDO.getRespCode())) {
 
 				e4033ResultDTO.setSuccess(true);
@@ -487,7 +489,7 @@ public class EbankService extends BaseService {
 				e4033ResultDTO.setSuccess(false);
 			}
 
-			e4033ResultDTO.setRespMsg(e4033ResultDTO.getRespMsg());
+			e4033ResultDTO.setRespMsg(tradeWithdrawDO.getRespMsg());
 			return e4033ResultDTO;
 		}
 
@@ -528,7 +530,6 @@ public class EbankService extends BaseService {
 			String respMsg = new String(res).trim();
 			logger.debug("e代扣-交易结果查询返回结果:respCode=[" + respCode + "],respMsg=[" + respMsg + "]");
 
-			E4033ResultDTO e4033ResultDTO = new E4033ResultDTO();
 			e4033ResultDTO.setRespCode(respCode);
 			e4033ResultDTO.setRespMsg(new String(res).trim());
 
