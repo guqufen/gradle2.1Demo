@@ -873,7 +873,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		String bankCardNum = merchantBank.getAccountNo();
 		String cardTotalLength = merchantBank.getAccountNo().length()+"";
 		BankCardTypeDTO banktypeDTO = merchantBankDao.queryByCertifyId(bankCardNum,cardTotalLength);
-		logger.error("isOrNotZxMchtNo="+banktypeDTO.getBank_name());
 		if(banktypeDTO==null || !StringUtils.equals("中信银行", banktypeDTO.getBank_name())){
 			merchantCoreEntityZxyhDTO.setIsOrNotZxMchtNo("N");
 		}else {

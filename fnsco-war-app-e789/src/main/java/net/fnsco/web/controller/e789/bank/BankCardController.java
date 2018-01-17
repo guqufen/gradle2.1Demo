@@ -81,7 +81,7 @@ public class BankCardController extends BaseController {
 	}
 	
 	@RequestMapping(value = "/validateBank2")
-	@ApiOperation(value = "银行卡信息页-校验银行卡")
+	@ApiOperation(value = "平安银行接口银行卡信息页-校验银行卡-暂不用")
 	public ResultDTO<ValidateBankVO> validateBank2(@RequestBody ValidateBankJO jo) {
 		String oppAccNo = jo.getCardNum();//"6226227703549430";
 		String oppAccName = jo.getName();//"谷曲锋";
