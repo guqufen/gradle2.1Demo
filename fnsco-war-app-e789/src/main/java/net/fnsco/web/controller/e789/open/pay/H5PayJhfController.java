@@ -90,7 +90,7 @@ public class H5PayJhfController extends BaseController {
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
         tradeOrder.setSyncStatus(0);
         tradeOrder.setPayMedium("02");
-        tradeOrder.setCreateUserId(String.valueOf(getUserId()));
+//        tradeOrder.setCreateUserId(String.valueOf(getUserId()));
         tradeOrder.setTxnSubType(10);
         tradeOrderService.doAdd(tradeOrder);
 
