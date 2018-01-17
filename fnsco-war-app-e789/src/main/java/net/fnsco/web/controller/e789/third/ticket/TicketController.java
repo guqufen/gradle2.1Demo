@@ -419,13 +419,16 @@ public class TicketController extends BaseController {
         ticketOrderDTO.setTrainCode(ticketOrderJO.getTrainCode());
         ticketOrderDTO.setTrainDate(ticketOrderJO.getTrainDate());
         ticketOrderDTO.setUserId(ticketOrderJO.getUserId());
+        ticketOrderDTO.setArriveTime(ticketOrderJO.getArriveTime());
+        ticketOrderDTO.setRunTime(ticketOrderJO.getRunTime());
+        ticketOrderDTO.setStartTime(ticketOrderJO.getStartTime());
         ResultDTO<TicketOrderDO> result = ticketService.addOrder(ticketOrderDTO);
         if (!result.isSuccess()) {
             return fail(result.getCode(), result.getMessage());
         }
         TicketOrderDO TicketOrderDO = result.getData();
         if (Strings.isNullOrEmpty(TicketOrderDO.getPayOrderNo())) {
-            return fail("提交订单出错");
+            return fail(TicketOrderDO.getRespMsg());
         }
         AddTicketOrderVO resultVO = new AddTicketOrderVO();
         resultVO.setOrderNo(TicketOrderDO.getOrderNo());
@@ -500,7 +503,7 @@ public class TicketController extends BaseController {
             return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
         }
         // 查到的密码和原密码做比较
-        if (!password.equals(mAppUser.getPassword())) {
+        if (!password.equals(mAppUser.getPayPassword())) {
             logger.error("支付密码错误，请核对后重新输入！！");
             return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
         }

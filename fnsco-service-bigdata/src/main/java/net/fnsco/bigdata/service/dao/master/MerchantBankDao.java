@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import net.fnsco.bigdata.api.dto.BankCardTypeDTO;
 import net.fnsco.bigdata.api.dto.MerChantBankDTO;
 import net.fnsco.bigdata.service.domain.MerchantBank;
 /**
@@ -121,4 +122,6 @@ public interface MerchantBankDao {
      * @date   2017年12月7日 下午2:23:59
      */
     MerchantBank selectByAppUserId(@Param("userId") Integer userId);
+
+    BankCardTypeDTO queryByCertifyId(@Param("bankCardNum") String bankCardNum,@Param("cardTotalLength")  String cardTotalLength);
 }

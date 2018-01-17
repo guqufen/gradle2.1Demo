@@ -6,7 +6,7 @@ import net.fnsco.core.base.JO;
 public class ThrRechargeJO extends JO {
 
 	private static final long serialVersionUID = 1L;
-	@ApiModelProperty(name = "订单号", example = "订单号")
+	@ApiModelProperty(value = "订单号", example = "订单号")
 	private String orderNo;// 订单号
 
 	public String getOrderNo() {

@@ -241,7 +241,7 @@ public class StatController extends BaseController {
                 }
                 if (flag) {
                 	EveryDayTurnoverVO tempDto = new EveryDayTurnoverVO();
-                    tempDto.setTurnoverDate(format1.format(end.getTime()));
+                    tempDto.setTurnoverDate(format2.format(end.getTime()));
                     tempDto.setOrderNum(0);
                     tempDto.setTurnover(formatRMBNumbers("0"));
                     datas.add(tempDto);

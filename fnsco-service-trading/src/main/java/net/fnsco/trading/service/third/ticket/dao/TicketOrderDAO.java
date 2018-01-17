@@ -21,7 +21,8 @@ public interface TicketOrderDAO {
                @Result(column = "from_station_name", property = "fromStationName"), @Result(column = "to_station_code", property = "toStationCode"),
                @Result(column = "to_station_name", property = "toStationName"), @Result(column = "train_code", property = "trainCode"), @Result(column = "order_amount", property = "orderAmount"),
                @Result(column = "train_order_number", property = "trainOrderNumber"), @Result(column = "pay_time", property = "payTime"), @Result(column = "resp_msg", property = "respMsg"),
-               @Result(column = "resp_code", property = "respCode"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime") })
+               @Result(column = "resp_code", property = "respCode"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
+               @Result(column = "arrive_time", property = "arriveTime"), @Result(column = "start_time", property = "startTime"), @Result(column = "run_time", property = "runTime") })
     @Select("SELECT * FROM thr_ticket_order WHERE id = #{id}")
     public TicketOrderDO getById(@Param("id") int id);
 
@@ -30,11 +31,12 @@ public interface TicketOrderDAO {
                @Result(column = "from_station_name", property = "fromStationName"), @Result(column = "to_station_code", property = "toStationCode"),
                @Result(column = "to_station_name", property = "toStationName"), @Result(column = "train_code", property = "trainCode"), @Result(column = "order_amount", property = "orderAmount"),
                @Result(column = "train_order_number", property = "trainOrderNumber"), @Result(column = "pay_time", property = "payTime"), @Result(column = "resp_msg", property = "respMsg"),
-               @Result(column = "resp_code", property = "respCode"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime") })
+               @Result(column = "resp_code", property = "respCode"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
+               @Result(column = "arrive_time", property = "arriveTime"), @Result(column = "start_time", property = "startTime"), @Result(column = "run_time", property = "runTime") })
     @Select("SELECT * FROM thr_ticket_order WHERE app_user_id = #{appUserId} and order_no = #{orderNo}")
     public TicketOrderDO getByUserIdOrderNo(@Param("appUserId") int appUserId, @Param("orderNo") String orderNo);
 
-    @Insert("INSERT into thr_ticket_order(id,app_user_id,order_no,pay_order_no,train_date,from_station_code,from_station_name,to_station_code,to_station_name,train_code,order_amount,train_order_number,pay_time,resp_msg,resp_code,status,create_time,last_modify_time) VALUES (#{id},#{appUserId},#{orderNo},#{payOrderNo},#{trainDate},#{fromStationCode},#{fromStationName},#{toStationCode},#{toStationName},#{trainCode},#{orderAmount},#{trainOrderNumber},#{payTime},#{respMsg},#{respCode},#{status},#{createTime},#{lastModifyTime})")
+    @Insert("INSERT into thr_ticket_order(id,app_user_id,order_no,pay_order_no,train_date,from_station_code,from_station_name,to_station_code,to_station_name,train_code,order_amount,train_order_number,pay_time,resp_msg,resp_code,status,create_time,last_modify_time,arrive_time,start_time,run_time) VALUES (#{id},#{appUserId},#{orderNo},#{payOrderNo},#{trainDate},#{fromStationCode},#{fromStationName},#{toStationCode},#{toStationName},#{trainCode},#{orderAmount},#{trainOrderNumber},#{payTime},#{respMsg},#{respCode},#{status},#{createTime},#{lastModifyTime},#{arriveTime},#{startTime},#{runTime})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     public void insert(TicketOrderDO ticketOrder);
 
@@ -49,7 +51,8 @@ public interface TicketOrderDAO {
                @Result(column = "from_station_name", property = "fromStationName"), @Result(column = "to_station_code", property = "toStationCode"),
                @Result(column = "to_station_name", property = "toStationName"), @Result(column = "train_code", property = "trainCode"), @Result(column = "order_amount", property = "orderAmount"),
                @Result(column = "train_order_number", property = "trainOrderNumber"), @Result(column = "pay_time", property = "payTime"), @Result(column = "resp_msg", property = "respMsg"),
-               @Result(column = "resp_code", property = "respCode"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime") })
+               @Result(column = "resp_code", property = "respCode"), @Result(column = "create_time", property = "createTime"), @Result(column = "last_modify_time", property = "lastModifyTime"),
+               @Result(column = "arrive_time", property = "arriveTime"), @Result(column = "start_time", property = "startTime"), @Result(column = "run_time", property = "runTime") })
     @SelectProvider(type = TicketOrderProvider.class, method = "pageList")
     public List<TicketOrderDO> pageList(@Param("ticketOrder") TicketOrderDO ticketOrder, @Param("pageNum") Integer pageNum, @Param("pageSize") Integer pageSize);
 

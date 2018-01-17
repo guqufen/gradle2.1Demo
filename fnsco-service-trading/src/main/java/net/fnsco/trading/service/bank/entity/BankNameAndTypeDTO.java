@@ -5,6 +5,27 @@ import java.util.Date;
 public class BankNameAndTypeDTO {
 	private String type;
 	private String bank_name;
+	private String paCode;
+	/**
+	 * paCode
+	 *
+	 * @return  the paCode
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getPaCode() {
+		return paCode;
+	}
+	/**
+	 * paCode
+	 *
+	 * @param   paCode    the paCode to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setPaCode(String paCode) {
+		this.paCode = paCode;
+	}
 	/**
 	 * type
 	 *
