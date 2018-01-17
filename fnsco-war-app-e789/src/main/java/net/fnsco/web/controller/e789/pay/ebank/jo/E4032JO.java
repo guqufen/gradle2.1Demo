@@ -17,6 +17,8 @@ public class E4032JO extends JO {
 	 */
 	@ApiModelProperty(value = "APP登录用户ID", name = "userId", example = "")
 	private Integer userId;
+	@ApiModelProperty(value = "支付密码", example = "支付密码")
+	private String payPassword;
 
 	public String getOppAccNo() {
 		return oppAccNo;
@@ -44,6 +46,14 @@ public class E4032JO extends JO {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
+	}
+
+	public String getPayPassword() {
+		return payPassword;
+	}
+
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
 	}
 
 }
