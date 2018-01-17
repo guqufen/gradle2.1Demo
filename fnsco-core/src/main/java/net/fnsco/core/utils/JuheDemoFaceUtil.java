@@ -60,7 +60,11 @@ public class JuheDemoFaceUtil {
     	 String error_message = json.getString("error_message");
     	 int time_used = json.getIntValue("time_used");
     	 JSONArray cards = json.getJSONArray("cards");
-    	 if(cards!=null) {
+    	 if(cards.size()==0) {
+    		 idCardFace.setErrorMessage("2100033");
+        	 idCardFace.setTimeUsed(time_used);
+        	return idCardFace;
+    	 }
     		//取出数组第一个元素  
     	    JSONObject reason = cards.getJSONObject(0);  
     	    String side = reason.getString("side");
@@ -83,12 +87,12 @@ public class JuheDemoFaceUtil {
     	    }else if("back".equals(side)) {
     	    	String issued_by = reason.getString("issued_by");
     	    	String valid_date = reason.getString("valid_date");
-    	    	idCardFace.setIssued_by(issued_by);
-    	    	idCardFace.setValid_date(valid_date);
+    	    	idCardFace.setIssuedBy(issued_by);
+    	    	idCardFace.setValidDate(valid_date);
     	    }
-    	 }
-    	 idCardFace.setError_message(error_message);
-    	 idCardFace.setTime_used(time_used);
+    	 
+    	 idCardFace.setErrorMessage(error_message);
+    	 idCardFace.setTimeUsed(time_used);
     	return idCardFace;
     }
     /**
