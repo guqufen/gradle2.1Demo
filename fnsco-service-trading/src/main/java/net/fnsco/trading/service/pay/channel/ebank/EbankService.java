@@ -141,13 +141,14 @@ public class EbankService extends BaseService {
 	 * @param AccNo
 	 * @return
 	 */
-	public ResultDTO E4029Trade(E4029Entity e4029Entity) {
+	public ResultDTO<EMaintainResultEntity> E4029Trade(E4029Entity e4029Entity) {
 
-		if (E4029Maintain(e4029Entity).isSuccess()) {
-			return ResultDTO.success();
-		} else {
-			return ResultDTO.fail();
-		}
+//		if (E4029Maintain(e4029Entity).isSuccess()) {
+//			return ResultDTO.success();
+//		} else {
+//			return ResultDTO.fail();
+//		}
+		return ResultDTO.success(E4029Maintain(e4029Entity));
 	}
 
 	public EMaintainResultEntity E4029Maintain(E4029Entity e4029Entity) {
@@ -221,7 +222,7 @@ public class EbankService extends BaseService {
 					if ("000000".equals(rcvMsg.toString().substring(87, 93))) {
 						eMaintainResultEntity.setSuccess(true);
 						return eMaintainResultEntity;
-					}else{
+					} else {
 						eMaintainResultEntity.setSuccess(false);
 					}
 				}
@@ -242,9 +243,10 @@ public class EbankService extends BaseService {
 	 * @param mobile：付款人帐号对于银行预留手机号
 	 * @return
 	 */
-	public ResultDTO E4031Trade(String acctNo, String mobile) {
+	public ResultDTO<EMaintainResultEntity> E4031Trade(String acctNo, String mobile) {
 
 		E4028ResultDTO e4028ResultDTO;
+		EMaintainResultEntity eMaintainResultEntity = new EMaintainResultEntity();
 
 		try {
 
@@ -287,6 +289,9 @@ public class EbankService extends BaseService {
 				String respMsg = new String(res).trim();
 
 				logger.debug("e代扣-付款账户维护返回结果:respCode=[" + respCode + "],respMsg=[" + respMsg + "]");
+				eMaintainResultEntity.setRespCode(respCode);
+				eMaintainResultEntity.setRespMsg(respMsg);
+				return ResultDTO.success(eMaintainResultEntity);
 			}
 
 		} catch (Exception e1) {
@@ -319,7 +324,7 @@ public class EbankService extends BaseService {
 				E4028RespBodyDTO e4028RespBodyDTO = e4028ResultDTO.getE4028RespDTO().getList().get(0);
 
 				// 状态正常，才能进行代扣
-				if ("0".equals(e4028RespBodyDTO.getStatus())) {
+				if (E789ApiConstant.EBankAcctStatus.NOMAL.getCode().equals(e4028RespBodyDTO.getStatus())) {
 
 					Integer inte = 0;
 					String bsnCode = "4032";// 交易码
@@ -408,9 +413,7 @@ public class EbankService extends BaseService {
 						tradeWithdrawDO.setStatus(1);// 状态为执行中
 						tradeWithdrawDO.setRespCode(respCode);// 应答码，进行中
 						tradeWithdrawDO.setRespMsg(new String(res).trim());// 应答信息
-						tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
 
-						return ResultDTO.fail(e4032Entity);
 					} else if ("000000".equals(respCode)) {
 
 						e4032Entity.setRespCode("1001");
@@ -424,26 +427,29 @@ public class EbankService extends BaseService {
 						tradeWithdrawDO.setRespCode("1001");// 应答码成功
 						tradeWithdrawDO.setOriginalOrderNo(e4032RespDTO.getBussSeqNo());// 渠道返回的业务流水号
 						tradeWithdrawDO.setRespMsg(new String(res).trim());// 应答信息
-						tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
 
-						return ResultDTO.success(e4032Entity);
 					} else {
 
 						tradeWithdrawDO.setUpdateTime(new Date());// 记录更新时间
 						tradeWithdrawDO.setStatus(3);// 状态为失败
 						tradeWithdrawDO.setRespCode("1002");// 应答码失败
 						tradeWithdrawDO.setRespMsg(new String(res).trim());// 应答信息
-						tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
 
-						return ResultDTO.fail("交易失败");
 					}
+					tradeWithdrawService.doUpdate(tradeWithdrawDO);// 更新交易
+
+				} else {
+
+					e4032Entity.setRespCode("1002");
+					e4032Entity.setRespMsg(E789ApiConstant.EBankAcctStatus.getNameByCode(e4028RespBodyDTO.getStatus()));
 				}
+				return ResultDTO.success(e4032Entity);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return ResultDTO.fail(E789ApiConstant.E_AGREEE_NOT_FOUND);
+		return ResultDTO.success(E789ApiConstant.E_AGREEE_NOT_FOUND);
 	}
 
 	/**
@@ -456,7 +462,7 @@ public class EbankService extends BaseService {
 
 		TradeWithdrawDO tradeWithdrawDO = tradeWithdrawService.getByOrderNo(orderNo);// 通过订单号查找原交易
 		if (null == tradeWithdrawDO) {
-			
+
 			logger.info("订单号查找不到原交易orderNo=" + orderNo);
 			E4033ResultDTO e4033ResultDTO = new E4033ResultDTO();
 			e4033ResultDTO.setSuccess(false);
@@ -465,14 +471,14 @@ public class EbankService extends BaseService {
 		}
 
 		if (!"1000".equals(tradeWithdrawDO.getRespCode()) && !"1".equals(tradeWithdrawDO.getStatus())) {
-			
+
 			logger.info("原交易状态已经为确定状态,无需再去调用平安银行接口查询.orderNo=" + orderNo);
 			E4033ResultDTO e4033ResultDTO = new E4033ResultDTO();
 			if ("1001".equals(tradeWithdrawDO.getRespCode())) {
-				
+
 				e4033ResultDTO.setSuccess(true);
 			} else {
-				
+
 				e4033ResultDTO.setSuccess(false);
 			}
 
@@ -502,11 +508,11 @@ public class EbankService extends BaseService {
 
 			StringBuilder rcvMsg = new StringBuilder();
 			if (headRP != null) {
-				
+
 				rcvMsg.append(new String(headRP, EbankUtil.CHARSET));
 			}
 			if (bodyRpLen > 0 && bodyRP != null) {
-				
+
 				recvBody = new String(bodyRP, EbankUtil.CHARSET);
 				rcvMsg.append(new String(bodyRP, EbankUtil.CHARSET));
 			}
@@ -568,13 +574,10 @@ public class EbankService extends BaseService {
 	 * @param orderNo：订单号
 	 * @return
 	 */
-	public ResultDTO E4033Trade(String orderNo) {
+	public ResultDTO<E4033ResultDTO> E4033Trade(String orderNo) {
 
 		E4033ResultDTO e4033ResultDTO = E4033ResultQuery(orderNo);
 
-		if (e4033ResultDTO.isSuccess()) {
-			return ResultDTO.success(e4033ResultDTO);
-		}
-		return ResultDTO.fail(e4033ResultDTO);
+		return ResultDTO.success(e4033ResultDTO);
 	}
 }

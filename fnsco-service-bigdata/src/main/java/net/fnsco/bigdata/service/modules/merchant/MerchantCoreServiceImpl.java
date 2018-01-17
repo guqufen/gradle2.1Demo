@@ -25,6 +25,7 @@ import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import net.fnsco.bigdata.api.constant.BigdataConstant;
+import net.fnsco.bigdata.api.dto.BankCardTypeDTO;
 import net.fnsco.bigdata.api.dto.MercQueryDTO;
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
@@ -711,7 +712,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
 		MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO = new MerchantCoreEntityZxyhDTO();
 		MerchantCore core = merchantCoreDao.queryAllByIdForAddZXMerc(id);
-		logger.error("是否入建参数="+env.getProperty("zxyh.is.or.not.merc"));
 		// 渠道商戶信息
 		if (core == null) {
 			return null;
@@ -868,10 +868,18 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		merchantCoreEntityZxyhDTO.setSettleBankAllName(merchantBank.getOpenBank());// 收款银行全称
 		merchantCoreEntityZxyhDTO.setSettleBankCode(merchantBank.getOpenBankNum());// 开户行行号
 
-		merchantCoreEntityZxyhDTO.setThirdMchtNo(core.getInnerCode());// 第三方平台子商户号
-																		// 对应我们内部商户号
-		logger.error("isOrNotZxMchtNo="+env.getProperty("zxyh.is.or.not.merc"));
-		merchantCoreEntityZxyhDTO.setIsOrNotZxMchtNo(env.getProperty("zxyh.is.or.not.merc"));
+		merchantCoreEntityZxyhDTO.setThirdMchtNo(core.getInnerCode());// 第三方平台子商户号	// 对应我们内部商户号
+		//根据银行卡号判断是否中信商户
+		String bankCardNum = merchantBank.getAccountNo();
+		String cardTotalLength = merchantBank.getAccountNo().length()+"";
+		BankCardTypeDTO banktypeDTO = merchantBankDao.queryByCertifyId(bankCardNum,cardTotalLength);
+		logger.error("isOrNotZxMchtNo="+banktypeDTO.getBank_name());
+		if(banktypeDTO==null || !StringUtils.equals("中信银行", banktypeDTO.getBank_name())){
+			merchantCoreEntityZxyhDTO.setIsOrNotZxMchtNo("N");
+		}else {
+			merchantCoreEntityZxyhDTO.setIsOrNotZxMchtNo("Y");
+		}
+			
 		if (StringUtils.equals("0", merchantBank.getAccountType())) {
 			merchantBank.setAccountType("2");
 		}
