@@ -262,6 +262,8 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
                 sb.append("").append(FileUtils.separator);
                 sb.append("15.1本协议之效力、解释、变更、执行与争议解决均适用中华人民共和国法律。因本协议产生之争议，均应依照中华人民共和国法律予以处理，并由被告住所地人民法院管辖。").append(FileUtils.separator);
                 map.put("content", sb.toString());
+            }else if (protocolDTO.getProtocol() == 2) {
+            	map = getTrainTicketsProtocol(map);
             }
             return ResultDTO.success(map);
         } catch (Exception e) {
@@ -269,6 +271,46 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
             return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
         }
 
+    }
+    
+    /**
+     * getTrainTicketsProtocol:(获取火车票代购协议)
+     *
+     * @param  @param maps
+     * @param  @return    设定文件
+     * @return Map<String,String>    DOM对象
+     * @author tangliang
+     * @date   2018年1月17日 下午3:54:06
+     */
+    public Map<String,String> getTrainTicketsProtocol(Map<String,String> map){
+    	map.put("title", "火车票代购协议");
+        StringBuilder sb = new StringBuilder();
+        sb.append("").append(FileUtils.separator);
+        sb.append("一、购票说明").append(FileUtils.separator);
+        sb.append("").append(FileUtils.separator);
+        sb.append("1.1我司通过铁路官方网站或授权代售点为您提供火车票代购服务；").append(FileUtils.separator);
+        sb.append("1.2因全国各铁路局规定与要求不同，代购服务不保证100%代购成功，若代购失败，我司会发起退款，订单金额将原渠道退款到您支付的账户，1-7个工作日到账；").append(FileUtils.separator);
+        sb.append("1.3由于火车票票价经常调整，卧铺上中下价格不同，铁路官方随机出票，因此我们在部分席位的代购中，会按照最高价预先收取票款，出票后根据实际票价退还差额；").append(FileUtils.separator);
+        sb.append("1.4我们会在火车票开售后，以短信（或微信、邮件等）通知您是否代购成功，由于短信通知有极少数无法及时收到，请及时查看订单状态，以免耽误行程。").append(FileUtils.separator);
+        sb.append("1.5火车票代购是人工服务，有时因为网络/人工等问题代购时间可能较长，最迟当前工作日内22:00点前通知代购结果。").append(FileUtils.separator);
+        sb.append("").append(FileUtils.separator);
+        sb.append("二、退款说明").append(FileUtils.separator);
+        sb.append("").append(FileUtils.separator);
+        sb.append("2.1产品代购失败退款：我司将在确认失败后当日退款至客户原支付渠道。").append(FileUtils.separator);
+        sb.append("2.2产品差价退款：如果订单内含有的车票的实际票价低于您所支付的票价，我司将在确认实际票价后将差额退款至原支付渠道。").append(FileUtils.separator);
+        sb.append("2.3退款方式：以上产品退款一律按客户订单支付时的原支付渠道退回。如使用支付宝余额进行支付的，退款实时到帐。如果使用银行卡支付，根据银行的不同，预计借记卡1-7个工作日到帐，信用卡1-15个工作日到账，退款到账日期以银行为准，如超7个工作日未到帐，请致电您的银行卡发卡行客服查询。").append(FileUtils.separator);
+        sb.append("").append(FileUtils.separator);
+        sb.append("三、免责声明").append(FileUtils.separator);
+        sb.append("").append(FileUtils.separator);
+        sb.append("3.1我司提供的是火车票代购服务，您接受本协议，意味着您同意我司及合作商家使用您填写的乘客信息进行代购，包括但不限于授权使用您的乘客信息执行查询、代购、退票、改签、注册等操作，同时您必须遵守12306购票规定的服务条款(https://kyfw.12306.cn/otn/regist/rule)；").append(FileUtils.separator);
+        sb.append("3.2我司不对因（1）铁路部门调整车次、票价、坐席等信息（2）铁路部门调整退票规则、改签规则、售票时间（3）客户提供错误的订单信息（包括但不限于姓名、身份证号码、日期、车次、坐席）而造成的用户损失承担任何责任；因上述原因、客户自身原因或其他不可抗力发生的退款或差额以铁路部门实退或实收为准；").append(FileUtils.separator);
+        sb.append("3.3由于全国各铁路局会随时调整火车票信息（如车次、票价、坐席、余票），故本网显示产品信息，以及因网络传输问题，我司提供的此类信息可能并非最新或存在误差，因此仅供旅客作为一般参考，任何公司或个人不能将此作为我司做出任何承诺或做出任何保证的依据。").append(FileUtils.separator);
+        sb.append("3.4票源紧张，严禁利用本网站进行囤票、占票、倒票，我司有权要求客户提供乘客身份证复印件以核实购票人身份的真实性，否则我司可不提供售后服务，若行为严重到违反铁路机关相关规定的，我司将主动配合公安机关进行查处。").append(FileUtils.separator);
+        sb.append("").append(FileUtils.separator);
+        sb.append("四、解决争议适用法律法规约定").append(FileUtils.separator);
+        sb.append("").append(FileUtils.separator);
+        sb.append("4.1在您的预订生效后，如果在本须知或订单约定内容履行过程中，对相关事宜的履行发生争议，您同意按照中华人民共和国颁布的相关法律法规来解决争议，并同意接受北京市海淀区人民法院的管辖。").append(FileUtils.separator);
+        return map;
     }
     //建议
     @Override

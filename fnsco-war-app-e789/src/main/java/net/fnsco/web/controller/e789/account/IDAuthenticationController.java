@@ -189,6 +189,10 @@ public class IDAuthenticationController extends BaseController {
 			}
 			return ResultDTO.fail(E789ApiConstant.E_ID_CARD_F_ERROR);
 		}
+		String sideFront = idCardFaceFront.getSide();
+		if(!"front".equals(sideFront)) {
+			return ResultDTO.fail(E789ApiConstant.IS_NO_FRONT);
+		}
     	/*int errorCodeFront = idCardFront.getErrorCode();
     	if(errorCodeFront==228701) {
    		 	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_TIMEOUT);
@@ -239,6 +243,10 @@ public class IDAuthenticationController extends BaseController {
 			}
 			return ResultDTO.fail(E789ApiConstant.E_ID_CARD_F_ERROR);
 		}
+		String sideBack= idCardFaceBack.getSide();
+		if(!"back".equals(sideBack)) {
+			return ResultDTO.fail(E789ApiConstant.IS_NO_BACK);
+		}
        	/*int errorCodeBack = idCardBack.getErrorCode();
        	if(errorCodeBack==210301) {
       		 	return ResultDTO.fail(E789ApiConstant.E_NOT_FOUND_PRE);
@@ -287,6 +295,9 @@ public class IDAuthenticationController extends BaseController {
    	 	}else if(errorCode==210306) {
    	 		return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_ERROR);
    	 	}
+        if(idCard.getRes()==2) {
+        	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_ERROR);
+        }
         AppUserDTO appUserDto = new AppUserDTO();
         appUserDto.setUserId(userId);
         appUserDto.setRealName(realName);
