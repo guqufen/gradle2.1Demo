@@ -227,9 +227,9 @@ public class IDAuthenticationController extends BaseController {
 			//idCardBack = JuheDemoUtil.valiIdImage(fileURLBack,"back");
 			idCardFaceBack = JuheDemoFaceUtil.valiIdImage(fileURLBack);
 		}
-		String errorCodeBack = idCardFaceFront.getErrorMessage();
+		String errorCodeBack = idCardFaceBack.getErrorMessage();
 		if(!Strings.isNullOrEmpty(errorCodeBack)) {
-			logger.error(errorCodeBack + "正面照识别失败！");
+			logger.error(errorCodeBack + "反面照识别失败！");
 			if(errorCodeBack.indexOf("INVALID_IMAGE_SIZE")!=-1) {
 				return ResultDTO.fail(E789ApiConstant.INVALID_IMAGE_SIZE);
 			}else if(errorCodeBack.indexOf("IMAGE_FILE_TOO_LARGE")!=-1) {
