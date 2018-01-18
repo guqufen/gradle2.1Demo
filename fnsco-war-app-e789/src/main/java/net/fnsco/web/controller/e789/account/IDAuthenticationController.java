@@ -189,6 +189,10 @@ public class IDAuthenticationController extends BaseController {
 			}
 			return ResultDTO.fail(E789ApiConstant.E_ID_CARD_F_ERROR);
 		}
+		String sideFront = idCardFaceFront.getSide();
+		if(!"front".equals(sideFront)) {
+			return ResultDTO.fail(E789ApiConstant.IS_NO_FRONT);
+		}
     	/*int errorCodeFront = idCardFront.getErrorCode();
     	if(errorCodeFront==228701) {
    		 	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_TIMEOUT);
@@ -227,9 +231,9 @@ public class IDAuthenticationController extends BaseController {
 			//idCardBack = JuheDemoUtil.valiIdImage(fileURLBack,"back");
 			idCardFaceBack = JuheDemoFaceUtil.valiIdImage(fileURLBack);
 		}
-		String errorCodeBack = idCardFaceFront.getErrorMessage();
+		String errorCodeBack = idCardFaceBack.getErrorMessage();
 		if(!Strings.isNullOrEmpty(errorCodeBack)) {
-			logger.error(errorCodeBack + "正面照识别失败！");
+			logger.error(errorCodeBack + "反面照识别失败！");
 			if(errorCodeBack.indexOf("INVALID_IMAGE_SIZE")!=-1) {
 				return ResultDTO.fail(E789ApiConstant.INVALID_IMAGE_SIZE);
 			}else if(errorCodeBack.indexOf("IMAGE_FILE_TOO_LARGE")!=-1) {
@@ -238,6 +242,10 @@ public class IDAuthenticationController extends BaseController {
 				return ResultDTO.fail(E789ApiConstant.E_ID_CARD_ERROR);
 			}
 			return ResultDTO.fail(E789ApiConstant.E_ID_CARD_F_ERROR);
+		}
+		String sideBack= idCardFaceBack.getSide();
+		if(!"back".equals(sideBack)) {
+			return ResultDTO.fail(E789ApiConstant.IS_NO_BACK);
 		}
        	/*int errorCodeBack = idCardBack.getErrorCode();
        	if(errorCodeBack==210301) {
@@ -287,6 +295,9 @@ public class IDAuthenticationController extends BaseController {
    	 	}else if(errorCode==210306) {
    	 		return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_ERROR);
    	 	}
+        if(idCard.getRes()==2) {
+        	return ResultDTO.fail(E789ApiConstant.E_DATA_SOURCE_ERROR);
+        }
         AppUserDTO appUserDto = new AppUserDTO();
         appUserDto.setUserId(userId);
         appUserDto.setRealName(realName);
