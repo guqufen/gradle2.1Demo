@@ -97,9 +97,9 @@ function operateFormatter(value, row, index) {
 function formatDeviceType(value, row, index) {
 	if (!value) {
 		return '-';
-	} else if (value == '1') {
-		return 'IOS';
 	} else if (value == '2') {
+		return 'IOS';
+	} else if (value == '1') {
 		return '安卓';
 	} else {
 		return '公用';
