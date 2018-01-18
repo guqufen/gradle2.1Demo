@@ -60,6 +60,11 @@ public class JuheDemoFaceUtil {
     	 String error_message = json.getString("error_message");
     	 int time_used = json.getIntValue("time_used");
     	 JSONArray cards = json.getJSONArray("cards");
+    	 if(cards==null) {
+    		 idCardFace.setErrorMessage("2100033");
+        	 idCardFace.setTimeUsed(time_used);
+        	return idCardFace;
+    	 }
     	 if(cards.size()==0) {
     		 idCardFace.setErrorMessage("2100033");
         	 idCardFace.setTimeUsed(time_used);
