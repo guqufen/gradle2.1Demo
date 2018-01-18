@@ -92,6 +92,36 @@ public class TicketOrderService extends BaseService {
                         order.setOrderAmount(amountBs);
                         order.setStatus(TicketConstants.OrderStateEnum.SIT_DOWN.getCode());
                         order.setRespMsg(obj1.getString("msg"));
+                    } else if ("3".equals(status)) {//支付成功待出票；
+                        if (TicketConstants.OrderStateEnum.SIT_DOWN.getCode().equals(order.getStatus())) {
+                            String ordernumber = obj1.getString("ordernumber");
+                            String passengers = obj1.getString("passengers");
+                            //String orderamount = obj1.getString("orderamount");
+
+                            String payTime = obj1.getString("pay_time");
+                            JSONArray objArray2 = JSONArray.fromObject(passengers);
+                            for (int i = 0; i < objArray2.size(); i++) {
+                                JSONObject obj2 = objArray2.getJSONObject(i);
+                                String ticketNo = obj2.getString("ticket_no");
+                                String passengerid = obj2.getString("passengerid");
+                                String cxin = obj2.getString("cxin");
+                                TicketOrderPassengerDO pass = passengerDAO.getById(Integer.parseInt(passengerid));
+                                pass.setTicketNo(ticketNo);
+                                pass.setCxin(cxin);
+                                pass.setLastModifyTime(new Date());
+                                passengerDAO.update(pass);
+                            }
+                            order.setTrainOrderNumber(ordernumber);
+                            order.setPayTime(DateUtils.toParseYmdhms(payTime));
+                            //减去冻结金额
+                            appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
+                            order.setStatus(TicketConstants.OrderStateEnum.SUCCESS.getCode());
+                            //更新订单表
+                            TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOriginalOrderNo(order.getOrderNo());
+                            tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.SUCCESS.getCode());
+                            tradeWithdraw.setStatus(3);
+                            tradeWithdrawService.doUpdate(tradeWithdraw);
+                        }
                     } else if ("4".equals(status)) {
                         String ordernumber = obj1.getString("ordernumber");
                         String passengers = obj1.getString("passengers");
