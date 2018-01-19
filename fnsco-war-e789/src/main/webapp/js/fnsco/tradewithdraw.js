@@ -66,7 +66,7 @@ $('#table').bootstrapTable(
 					align: 'right',
 					title : '提现金额'
 				}, {
-					field : 'orderNo',
+					field : 'bankAccountNo',
 					align: 'center',
 					title : '提现卡号'
 				}, {
