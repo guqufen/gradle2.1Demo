@@ -100,11 +100,6 @@ public class SysAppMsgController extends BaseController {
             return ResultDTO.fail();
         }
         SysAppMessage message = sysAppMsgService.selectByPrimaryKey(id);
-        if(StringUtils.isNotEmpty(message.getImageUrl())){
-            String path = message.getImageUrl().substring(message.getImageUrl().indexOf("^")+1);
-            String imageURL =  OssLoaclUtil.getFileUrl(OssLoaclUtil.getHeadBucketName(), path);
-            message.setImageUrl(imageURL);
-        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         message.setSendTimeStr(sdf.format(message.getSendTime()));
         return ResultDTO.success(message);

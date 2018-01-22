@@ -368,6 +368,9 @@ public class FileInfoController extends BaseController {
 	@RequestMapping(value="/doGetFileStream")
 	public void doGetFileStream() {
 		String fileRelativePath = request.getParameter("filePath");
+		if(!Strings.isNullOrEmpty(fileRelativePath)){
+			fileRelativePath = fileRelativePath.substring(fileRelativePath.indexOf("^")+1);
+	    }
 		String fileType = fileRelativePath.substring(fileRelativePath.lastIndexOf(".") + 1).toLowerCase();
 		 try {
 			 byte[] data = fileService.getFileByteArray(fileRelativePath);
