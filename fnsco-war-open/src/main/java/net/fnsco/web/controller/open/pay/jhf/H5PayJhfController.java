@@ -67,7 +67,7 @@ public class H5PayJhfController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/dealPayOrder")
-    @ApiOperation(value = "第三方接入获取聚惠分二维码url")
+    @ApiOperation(value = "第三方接入获取分闪付二维码url")
     @ResponseBody
     public ResultDTO dealPayOrder(@RequestBody TradeJO tradeJO) {
         MerchantChannel merchantChannelJhf = merchantService.getMerChannelByMerChannelInnerCodeType(tradeJO.getInnerCode(), "04");
