@@ -205,9 +205,16 @@ function formatStatus(value, row, index){
   if(value == 0)
   {
     return '删除';
-  }else{
+  }else if(value == 1){
     return '正常';
-  } 
+  } else if(value == 2){
+	  return '中信新增待审核';
+  }else if(value == 3){
+	  return '审核拒绝';
+  }else if(value == 5){
+	  return '入件中信审核通过';
+  }
+  
 }
 // 判断渠道类型
 function channelTypeFormatter(value, row, index){
@@ -317,7 +324,7 @@ function operateFormatter(value, row, index) {
     returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
   }
   if(row.channelType=="05" && row.status=="1"){
-    returnHtml+='<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行入建"><i class="glyphicon glyphicon-import"></i></a>';  
+    returnHtml+='<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行入件"><i class="glyphicon glyphicon-import"></i></a>';  
   }else{
     returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
   }
@@ -2190,7 +2197,7 @@ function zxyhChannel(id){
 	    success:function(data){
 	    	unloginHandler(data);  
 	          if(data.success){
-	             layer.msg('入建成功');
+	             layer.msg('入件成功');
 	          }else{
 	        	  layer.msg(data.data.respMsg);
 	          }

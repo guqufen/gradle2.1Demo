@@ -55,7 +55,7 @@ public class ZxyhMercController extends BaseController {
 			}
 			return ResultDTO.successForSubmit();
 		}else{
-			logger.error("入建返回结果"+map.toString());
+			logger.error("入件返回结果"+map.toString());
 			return ResultDTO.fail(map);
 		}
 		

@@ -82,7 +82,7 @@ public interface MerchantCoreDao {
     MerchantCore queryAllById(Integer id);
     
     /**
-     * 根据id查询出入建中信商户所需的数据
+     * 根据id查询出入件中信商户所需的数据
      * @param id
      * @return
      */
