@@ -646,20 +646,10 @@ function seeImage(fileName,divId){
   window.onresize=function(){ 
     changeViewerSize();  
   }  
-	$.ajax({
-	      url:PROJECT_NAME+'/web/fileInfo/getImagePath',
-	      data: {'url':fileName},
-	      type:'POST',
-	      success:function(data){
-	    	unloginHandler(data);
-	        if(data){
-	           console.log(data);
-               $("#"+divId+" img").attr('data-original',data);
-	        }else{
-	           layer.msg('获取失败');
-	        }
-	      }
-	  });
+  fileName = escape(fileName);
+  var path = PROJECT_NAME+'/web/fileInfo/doGetFileStream?filePath='+fileName;
+  $("#"+divId+" img").attr('data-original',path);
+  
 }
 
 // 保存商户基本信息下一步按钮

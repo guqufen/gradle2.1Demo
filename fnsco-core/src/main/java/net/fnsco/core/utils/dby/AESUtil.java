@@ -90,14 +90,15 @@ public class AESUtil {
     public static void main(String[] args) {
 
         //String keyStr = "UITN25LMUQC436IM";
-        String keyStr = "F8BE3EFBEC5916B469D9C1FA095B5B43";
+        String keyStr = "a8bc3defec6026b469d8c1fa095b5b43";
         // String content = "{\"area_city\":\"杭州\",\"hear_money\":\"50万到100万\",\"other_phone\":\"12345678912\",\"cmobile\":\"13758154074\",\"clientflag\":\"locan_submit\",\"exCode\":\"crm_reg\"}";
-        String content = "{\"rspCode\":\"000000\",\"policyId\":1,\"rspMsg\":\"成功\",\"xb_reqreflex\":\"MsgAppPolicyInfo\"}";
+        //String content = "{\"rspCode\":\"000000\",\"policyId\":1,\"rspMsg\":\"成功\",\"xb_reqreflex\":\"MsgAppPolicyInfo\"}";
+        String content = "{\"innerCode\":\"110319624699094\",\"orderNo\":\"2018012211370033\",\"payAmount\":\"100\",\"periodNum\":\"12\",\"singData\":\"88B02EFF5C24E6AC5E84955EF646A481\",\"transTime\":\"20180122113700\"}";
         System.out.println("加密前：" + content);
         String xx = encode(content, keyStr);
         System.out.println("加密：" + xx);
         // String sss = "H7hpIdakzJm0kkAtLs6qopqb7u8cpdPMKNMtR82JL4O%2Fn1gblgI1giWGnUnLFnf34c7WHMxhVOonI4vT3NPXEVr5uYyu%2Bsbjun7pNV%2BLlIMVvFkLHx0TaEA9wZ40lWZJW1r7dlXZxQf6JyvuOt%2FUSw5sPX7KMESLmj%2BU81obgZp24znjkbZaZQV5hFpS8D4l9sq2cSzDOFzzh%2FkUf8sRYTCyCAHJwanLuphLMUZ62L4bE6BEaDUntursj1JNdn%2Fb%2BZwXZtDzCXyBta0WOAHEIu1MLVBZaNOxHV7396sOqtATSnPckMs2VZdWhB04%2BLV5oRF5OFaae5dOIH3Atjf5azHAL3XQJWwvpSCMhDuWu%2B513jRcRBisDv9AFIfOEQ%2FWX6LjMoSqNPf0%2B0EHz5EHVg%3D%3D";
-        String decString = decode("EdWTGfwobxSfU96Sge2NHc1l0OKhw2tcRgXXeT9f+MjZiSHSbcY6kk+FpFur7jgaxJdl0IWMB0Hq\r\niOQiU9YcUmvC8lkJkVfmuf5oKd+y8yA=", keyStr);
+        String decString = decode("n3ap/ygk879UR9LwXXJxuLVhtV+JWEc7S6M2GZ9lGioaQGdmBZGbnuBD2+lVH6UnYg4HeadlhIWHI6ktATeU5KuYUVXs8gLXwMlI/ukOJlCP+/evCMKdxXdJRAP3RLdoCdq9UHq+Yo7ZIGphaJPbnR1OMkZbG6+IscmWso04w/71b4dzuqoNO/sq6VuMaS25VvrYY8UCDwCkrCsM9lQ9d2vGoS8vaxXU2WkJovDKFwY=", keyStr);
 
         System.out.println("解密：" + decString);
 

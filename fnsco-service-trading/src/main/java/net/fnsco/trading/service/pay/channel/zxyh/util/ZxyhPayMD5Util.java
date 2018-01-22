@@ -321,14 +321,14 @@ public class ZxyhPayMD5Util {
 
         //尾部加上md5key签名		
         sb.append("&key=").append(md5key);
-        logger.info("加签报文：" + sb.substring(1));
+        logger.info("getResp --> 加签报文：" + sb.substring(1));
 
         try {
 
             String signAture = MD5Encode(sb.substring(1)).toUpperCase();
-            logger.info("本地加签后的：" + signAture);
+            logger.info("getResp -->本地加签后的：" + signAture);
             String respSign = (String) respJs.get("signAture");
-            logger.info("接收报文中的：" + respSign);
+            logger.info("getResp -->接收报文中的：" + respSign);
 
             if (signAture.equals(respSign)) {
                 logger.info("md5 OK!");

@@ -148,7 +148,7 @@ public class ApiConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(E_SUGGESTEMPTY_ERROR, "反馈内容不能为空");
         ERROR_MESSGE_MAP.put(E_SUGGESTEMPTYNULL_ERROR, "您未绑定店铺,请关联店铺");
         ERROR_MESSGE_MAP.put(APP_DELETE_SUCCESS, "解绑成功");
-        ERROR_MESSGE_MAP.put(E_PAY_NOT_EXIT_ERROR,"聚惠分渠道信息不存在");
+        ERROR_MESSGE_MAP.put(E_PAY_NOT_EXIT_ERROR,"分闪付商户未进件");
     }
 
 }

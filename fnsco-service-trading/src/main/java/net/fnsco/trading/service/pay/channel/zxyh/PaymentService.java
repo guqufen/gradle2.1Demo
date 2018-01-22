@@ -764,7 +764,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 
 		String passiveStr = JSON.toJSONString(passDTO);// 将对象转换为JSON字符串
 		Map<String, String> passiveMap = JSON.parseObject(passiveStr, Map.class);// 将JSON字符串转换为map
-		String respStr = ZxyhPayMD5Util.request(passiveMap, url, "https://120.27.165.177:8099");
+		String respStr = ZxyhPayMD5Util.request(passiveMap, url, env.getProperty("zxyh.pay.url"));
 
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
@@ -815,13 +815,15 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 
 		String passiveStr = JSON.toJSONString(passDTO);// 将对象转换为JSON字符串
 		Map<String, String> passiveMap = JSON.parseObject(passiveStr, Map.class);// 将JSON字符串转换为map
-		String respStr = ZxyhPayMD5Util.request(passiveMap, url, "https://120.27.165.177:8099");
+		String respStr = ZxyhPayMD5Util.request(passiveMap, url, env.getProperty("zxyh.pay.url"));
 
 		// 解析返回报文
 		Map<String, Object> respMap = ZxyhPayMD5Util.getResp(respStr);
 		System.out.println(respMap);
 		String json = JSON.toJSONString(respMap);
 		PassivePayDTO passDTO1 = JSON.parseObject(json, PassivePayDTO.class);
+		logger.info("校验微信授权码:二级商户号=["+passivePayDTO.getStdmercno2());
+		logger.info("校验微信授权码：返回respCode=["+passDTO1.getStd400mgid());
 
 		return passDTO1.getStd400mgid();
 	}

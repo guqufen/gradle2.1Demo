@@ -19,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -78,7 +80,7 @@ public class FileInfoController extends BaseController {
 	 * @return String DOM对象
 	 */
 	@ResponseBody
-	@RequestMapping("/getInnoCode")
+	@RequestMapping(value = "/getInnoCode",method = RequestMethod.POST)
 	public String getInnoCode() {
 
 		String innerCode = merchantCoreService.getInnerCode();
@@ -96,7 +98,7 @@ public class FileInfoController extends BaseController {
 	 *             CodingExample Ver 1.1
 	 */
 	@ResponseBody
-	@RequestMapping("/savefiles")
+	@RequestMapping(value = "/savefiles",method = RequestMethod.POST)
 	@Transactional
 	public String saveFiles(String fileIds) {
 		if (!StringUtils.isEmpty(fileIds)) {
@@ -215,7 +217,7 @@ public class FileInfoController extends BaseController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping("/delete")
+	@RequestMapping(value = "/delete",method = RequestMethod.POST)
 	@ResponseBody
 	public String deleteImger(Integer id, String url) {
 		// 删除服务器已经保存的对应图片
@@ -235,7 +237,7 @@ public class FileInfoController extends BaseController {
 	 * @throws @since
 	 *             CodingExample Ver 1.1
 	 */
-	@RequestMapping("/deleteOssFile")
+	@RequestMapping(value = "/deleteOssFile",method = RequestMethod.POST)
 	@ResponseBody
 	public String deleteOssFile(String url) {
 		String fileKey = url.substring(url.lastIndexOf("^") + 1);
@@ -252,7 +254,7 @@ public class FileInfoController extends BaseController {
 	 * @throws @since
 	 *             CodingExample Ver 1.1
 	 */
-	@RequestMapping("/getImagePath")
+	@RequestMapping(value = "/getImagePath",method = RequestMethod.POST)
 	@ResponseBody
 	public String getImagePath(String url) {
 		if (!Strings.isNullOrEmpty(url)) {
@@ -365,9 +367,12 @@ public class FileInfoController extends BaseController {
 	 * @author tangliang
 	 * @date   2017年12月27日 下午3:16:30
 	 */
-	@RequestMapping(value="/doGetFileStream")
+	@GetMapping(value="/doGetFileStream")
 	public void doGetFileStream() {
 		String fileRelativePath = request.getParameter("filePath");
+		if(!Strings.isNullOrEmpty(fileRelativePath)){
+			fileRelativePath = fileRelativePath.substring(fileRelativePath.indexOf("^")+1);
+	    }
 		String fileType = fileRelativePath.substring(fileRelativePath.lastIndexOf(".") + 1).toLowerCase();
 		 try {
 			 byte[] data = fileService.getFileByteArray(fileRelativePath);

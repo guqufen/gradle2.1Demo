@@ -8,6 +8,8 @@ public class TradeJO extends JO {
     private String  snCode;
     //分期数
     private Integer installmentNum;
+    //分期数
+    private Integer periodNum;
     //支付总金额
     private String  paymentAmount;
     //内部商务号
@@ -16,15 +18,37 @@ public class TradeJO extends JO {
     private String  orderNo;
     private Integer pageNum;
     private Integer pageSize;
-    private String channelMerId;
-    
+    private String  channelMerId;
+
+    /**
+     * periodNum
+     *
+     * @return  the periodNum
+     * @since   CodingExample Ver 1.0
+    */
+
+    public Integer getPeriodNum() {
+        return periodNum;
+    }
+
+    /**
+     * periodNum
+     *
+     * @param   periodNum    the periodNum to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setPeriodNum(Integer periodNum) {
+        this.periodNum = periodNum;
+    }
+
     /**
      * channelMerId
      *
      * @return  the channelMerId
      * @since   CodingExample Ver 1.0
     */
-    
+
     public String getChannelMerId() {
         return channelMerId;
     }
@@ -35,7 +59,7 @@ public class TradeJO extends JO {
      * @param   channelMerId    the channelMerId to set
      * @since   CodingExample Ver 1.0
      */
-    
+
     public void setChannelMerId(String channelMerId) {
         this.channelMerId = channelMerId;
     }
