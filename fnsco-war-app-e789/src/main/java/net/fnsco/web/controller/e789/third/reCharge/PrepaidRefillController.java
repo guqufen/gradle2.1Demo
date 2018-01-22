@@ -55,7 +55,7 @@ public class PrepaidRefillController extends BaseController {
 		if (flowPackageCheckJO.getPhone().trim().length() > 11) {
 
 			logger.error("手机充值-手机号码非法，请输入11位手机号，不能带空格！！");
-			return ResultDTO.success(ApiConstant.E_APP_PHONE_ERROR);
+			return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
 		}
 
 		// 话费资费查询
@@ -66,7 +66,7 @@ public class PrepaidRefillController extends BaseController {
 		} else if (1 == flowPackageCheckJO.getType()) {
 			return prepaidRefillService.flowPackageCheck(flowPackageCheckJO.getPhone().trim());
 		} else {
-			return ResultDTO.success("手机充值资费查询-交易类型不匹配");
+			return ResultDTO.fail("手机充值资费查询-交易类型不匹配");
 		}
 	}
 
@@ -97,7 +97,7 @@ public class PrepaidRefillController extends BaseController {
 		if (!password.equals(mAppUser.getPayPassword())) {
 
 			logger.error("手机充值-支付密码错误，请核对后重新输入！！db_passwd=" + mAppUser.getPayPassword() + ",password=" + password);
-			return ResultDTO.success(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
+			return ResultDTO.fail(E789ApiConstant.E_APP_PAY_PASSWORD_ERROR);
 		}
 
 		// 根据userId和待扣金额查询账户是否有足够的钱进行充值交易，并更新
@@ -106,13 +106,13 @@ public class PrepaidRefillController extends BaseController {
 		if (!isEnough) {
 
 			logger.error("手机充值-帐户余额不足，请充值！！appUserId=" + fl.getUserId());
-			return ResultDTO.success(ApiConstant.E_ACCOUNT_BALANCE_NULL);
+			return ResultDTO.fail(ApiConstant.E_ACCOUNT_BALANCE_NULL);
 		}
 
 		if (fl.getPhone().length() > 11) {
 
 			logger.error("手机充值-手机号码非法，请输入11位手机号，不能带空格！！");
-			return ResultDTO.success(ApiConstant.E_APP_PHONE_ERROR);
+			return ResultDTO.fail(ApiConstant.E_APP_PHONE_ERROR);
 		}
 
 		ChargeDTO chargeDTO = new ChargeDTO();
@@ -182,7 +182,7 @@ public class PrepaidRefillController extends BaseController {
 		RechargeOrderDO rechargeOrder = rechargeOrderService.getByOrderNo(orderNo);
 		if (null == rechargeOrder) {
 			logger.error("此订单号找不到原交易，请核查后重新请求：orderNo=" + orderNo);
-			return ResultDTO.success("此订单号找不到原交易，请核查后重新请求：orderNo=" + orderNo);
+			return ResultDTO.fail("此订单号找不到原交易，请核查后重新请求：orderNo=" + orderNo);
 		}
 
 		// 如果该订单已经有确定状态，则直接返回结果
