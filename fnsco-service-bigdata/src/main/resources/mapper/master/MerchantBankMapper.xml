@@ -254,7 +254,7 @@
 		LIMIT 1
 	</select>
 
-	<!--根据银行卡号判断入建商户是否为中信商户 -->
+	<!--根据银行卡号判断入件商户是否为中信商户 -->
 	<select id="queryByCertifyId" parameterType="net.fnsco.bigdata.api.dto.BankCardTypeDTO"	resultMap="BankTypeMap">
 		SELECT
 		type,bank_name

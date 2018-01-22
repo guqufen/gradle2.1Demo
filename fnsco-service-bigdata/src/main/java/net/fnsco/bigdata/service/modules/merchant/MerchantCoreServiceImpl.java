@@ -717,31 +717,31 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 			return null;
 		} else {
 			if (Strings.isNullOrEmpty(core.getMerName())) {
-				logger.warn("入建中信，商户名不能为空");
+				logger.warn("入件中信，商户名不能为空");
 				return null;
 			}
 			if (Strings.isNullOrEmpty(core.getAbbreviation())) {
-				logger.warn("入建中信，商户名简称不能为空");
+				logger.warn("入件中信，商户名简称不能为空");
 				return null;
 			}
 			if(Strings.isNullOrEmpty(core.getLegalPersonMobile())){
-				logger.warn("入建中信，手机号不能为空");
+				logger.warn("入件中信，手机号不能为空");
 				return null;
 			}
 			if(Strings.isNullOrEmpty(core.getCardNum())){
-				logger.warn("入建中信，身份证号不能为空");
+				logger.warn("入件中信，身份证号不能为空");
 				return null;
 			}
 			
 
 			int max = 18;
 			if (StringUtils.trim(core.getLegalPersonMobile()).length() > max) {
-				logger.warn("入建中信，手机号不合法");
+				logger.warn("入件中信，手机号不合法");
 				return null;
 			}
 			boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", core.getCardNum());
 			if (b == false) {
-				logger.warn("入建中信，身份证格式不正确");
+				logger.warn("入件中信，身份证格式不正确");
 				return null;
 			}
 
@@ -754,18 +754,18 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 			merchantContact = core.getContacts().get(0);// 获取商户联系人信息
 			// 联系人手机
 			if(Strings.isNullOrEmpty(merchantContact.getContactMobile())){
-				logger.warn("入建中信，联系人手机号不能为空");
+				logger.warn("入件中信，联系人手机号不能为空");
 				return null;
 			}
 			int mobilMax = 18;
 			if (StringUtils.trim(merchantContact.getContactMobile()).length() > mobilMax) {
-				logger.warn("入建中信，联系人手机有误请重新输入");
+				logger.warn("入件中信，联系人手机有误请重新输入");
 				return null;
 			}
 			// 校验邮箱
 			boolean email = checkEmail(merchantContact.getContactEmail());
 			if (email == false) {
-				logger.warn("入建中信，邮箱输入有误请重新输入");
+				logger.warn("入件中信，邮箱输入有误请重新输入");
 				return null;
 			}
 		}
@@ -774,33 +774,33 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 			merchantBank = core.getBanks().get(0); // 获取商户的开户行信息
 			// 开户手机号
 			if(Strings.isNullOrEmpty(merchantBank.getAccountPhone())){
-				logger.warn("入建中信，开户行手机号不能为空");
+				logger.warn("入件中信，开户行手机号不能为空");
 				return null;
 			}
 			if(Strings.isNullOrEmpty(merchantBank.getAccountCardId())){
-				logger.warn("入建中信，开户行身份证号不能为空");
+				logger.warn("入件中信，开户行身份证号不能为空");
 				return null;
 			}
 			if(Strings.isNullOrEmpty(merchantBank.getAccountNo())){
-				logger.warn("入建中信，开户账号不能为空");
+				logger.warn("入件中信，开户账号不能为空");
 				return null;
 			}
 			int max = 11;
 			if (StringUtils.trim(merchantBank.getAccountPhone()).length() > max) {
-				logger.warn("入建中信，手机号不合法，请重新输入");
+				logger.warn("入件中信，手机号不合法，请重新输入");
 				return null;
 			}
 
 			// 开户身份证
 			boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", merchantBank.getAccountCardId());
 			if (b == false) {
-				logger.warn("入建中信，身份证格式不正确请重新输入");
+				logger.warn("入件中信，身份证格式不正确请重新输入");
 				return null;
 			}
 			// 开户账号40位以内
 			int accountMax = 40;
 			if (StringUtils.trim(merchantBank.getAccountNo()).length() > accountMax) {
-				logger.warn("入建中信，开户账号有误，请重新输入");
+				logger.warn("入件中信，开户账号有误，请重新输入");
 				return null;
 			}
 		}
@@ -906,7 +906,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 
 	@Override
 	public List<MercQueryDTO> getMercList() {
-		//获取入建未审核通过的商户信息
+		//获取入件未审核通过的商户信息
 		 return merchantCoreDao.getMercList();
 		
 	}

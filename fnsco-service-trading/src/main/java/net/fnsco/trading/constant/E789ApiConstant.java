@@ -31,7 +31,7 @@ public class E789ApiConstant extends CoreConstants {
 	public static String E_NOT_FIND_ENTITY_INNERCODE = "210007"; // 未找到对应实体内部商户号
 	public static String E_NOT_FIND_CHANNEL_INNERCODE = "210008"; // 未找到对应渠道商户号
 	public static String E_APP_PAY_PASSWORD_ERROR      = "210009"; //支付密码错误
-	public static String E_ADD_FIRST      = "210010"; //请先入建中信商户
+	public static String E_ADD_FIRST      = "210010"; //请先入件中信商户
 	
 	public static String E_ID_CARD_F_ERROR      = "2100020"; //身份证正面识别失败
 	public static String E_ID_CARD_B_ERROR      = "210021"; //身份证反面识别失败
@@ -45,8 +45,8 @@ public class E789ApiConstant extends CoreConstants {
 	
 	public static String E_UNBOUND_SUCCESS      = "2100022"; //
 	public static String E_BOUND_SUCCESS      = "2100023";
-	public static String E_NOT_CHECK      = "2100024";//入建中信未通过审核
-	
+	public static String E_NOT_CHECK      = "2100024";//入件中信未通过审核
+	public static String E_NOT_BOUND_MERC      = "2100025";
 	public static String E_AGREEE_NOT_FOUND  ="2100030";
 	
 	static {
@@ -79,7 +79,7 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(E_NOT_FIND_ENTITY_INNERCODE, "未找到对应实体内部商户号");
 		ERROR_MESSGE_MAP.put(E_NOT_FIND_CHANNEL_INNERCODE, "未找到对应渠道商户号");
 		ERROR_MESSGE_MAP.put(E_APP_PAY_PASSWORD_ERROR, "支付密码错误");
-		ERROR_MESSGE_MAP.put(E_ADD_FIRST, "请先入建中信商户");
+		ERROR_MESSGE_MAP.put(E_ADD_FIRST, "请先入件中信商户");
 
 		ERROR_MESSGE_MAP.put(E_ID_CARD_F_ERROR, "身份证正面识别失败");
 		ERROR_MESSGE_MAP.put(E_ID_CARD_B_ERROR, "身份证反面识别失败");
@@ -93,6 +93,8 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(E_UNBOUND_SUCCESS, "解绑成功");
 		ERROR_MESSGE_MAP.put(E_BOUND_SUCCESS, "绑定成功");
 		ERROR_MESSGE_MAP.put(E_NOT_CHECK, "商户信息未通过审核");
+		ERROR_MESSGE_MAP.put(E_NOT_BOUND_MERC, "请先绑定商户");
+		
 
 		ERROR_MESSGE_MAP.put(E_AGREEE_NOT_FOUND, "委托协议不存在");
 	}

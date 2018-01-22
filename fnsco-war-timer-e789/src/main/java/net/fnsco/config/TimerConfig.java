@@ -99,7 +99,7 @@ public class TimerConfig {
     
     
     /**
-     * 查询入建中信银行商户状态
+     * 查询入件中信银行商户状态
      * @return void    DOM对象
      * @throws 
      * @since  CodingExample　Ver 1.1
@@ -107,9 +107,9 @@ public class TimerConfig {
 //    @Scheduled(cron="0 1 * * * ?") //每个小时的1秒执行，每60分钟执行一次
     @Scheduled(cron = "0 * * * * ?") //每一分钟的0秒执行，每分钟执行一次
     public void updateMercStatus(){
-    	logger.error("查询中信商户是否入建成功...开始...");
+    	logger.error("查询中信商户是否入件成功...开始...");
     	List<MercQueryDTO> list = this.merchantCoreService.getMercList();
     	paymentService.queryAloneMchtInfoList(list);
-    	logger.error("查询中信商户是否入建成功...结束...");
+    	logger.error("查询中信商户是否入件成功...结束...");
     }
 }

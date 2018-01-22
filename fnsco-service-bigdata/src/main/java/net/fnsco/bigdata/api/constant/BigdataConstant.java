@@ -14,7 +14,7 @@ public class BigdataConstant extends CoreConstants {
     public static String WEB_MER_BANKNO_UNIQUE     = "5903"; //银行卡号唯一
     public static String APP_MER_ENTITY_INNERCODE_NULL     = "5904"; //实体商户号为空
     public static String APP_MER_SHOP_INNERCODE_NULL       = "5905"; //店铺商户号为空
-    public static String ZXYH_ADD_FAIL        = "5906"; //入建中信失败
+    public static String ZXYH_ADD_FAIL        = "5906"; //入件中信失败
     static {
         ERROR_MESSGE_MAP.put(WEB_MER_CHANNEL_NOTUNIQUE, "渠道商户号和渠道类型组合需要唯一");
         ERROR_MESSGE_MAP.put(E_USERID_NULL, "入参ID为null");
@@ -22,7 +22,7 @@ public class BigdataConstant extends CoreConstants {
         ERROR_MESSGE_MAP.put(WEB_MER_BANKNO_UNIQUE, "商户银行卡号录入重复");
         ERROR_MESSGE_MAP.put(APP_MER_ENTITY_INNERCODE_NULL, "实体商户号为空");
         ERROR_MESSGE_MAP.put(APP_MER_SHOP_INNERCODE_NULL, "店铺商户号为空");
-        ERROR_MESSGE_MAP.put(ZXYH_ADD_FAIL, "入建中信失败");
+        ERROR_MESSGE_MAP.put(ZXYH_ADD_FAIL, "入件中信失败");
     }
 
     /**

@@ -53,6 +53,32 @@ public class TrainOrderListVO extends VO {
     private String               arriveTime;
     @ApiModelProperty(value = "耗时", example = "耗时")
     private String               runTime;
+    /**
+     * 应答信息
+     */
+    private String               respMsg;
+
+    /**
+     * respMsg
+     *
+     * @return  the respMsg
+     * @since   CodingExample Ver 1.0
+    */
+
+    public String getRespMsg() {
+        return respMsg;
+    }
+
+    /**
+     * respMsg
+     *
+     * @param   respMsg    the respMsg to set
+     * @since   CodingExample Ver 1.0
+     */
+
+    public void setRespMsg(String respMsg) {
+        this.respMsg = respMsg;
+    }
 
     /**
      * startTime

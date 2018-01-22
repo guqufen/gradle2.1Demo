@@ -310,6 +310,7 @@ public class ConmmServiceImpl extends BaseService implements ConmmService {
         sb.append("四、解决争议适用法律法规约定").append(FileUtils.separator);
         sb.append("").append(FileUtils.separator);
         sb.append("4.1在您的预订生效后，如果在本须知或订单约定内容履行过程中，对相关事宜的履行发生争议，您同意按照中华人民共和国颁布的相关法律法规来解决争议，并同意接受北京市海淀区人民法院的管辖。").append(FileUtils.separator);
+        map.put("content", sb.toString());
         return map;
     }
     //建议
