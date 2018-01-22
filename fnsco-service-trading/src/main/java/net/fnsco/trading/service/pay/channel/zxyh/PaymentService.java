@@ -277,7 +277,7 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		mercDTO.setSettleBankCode(core.getSettleBankCode());
 
 		String mercStr = JSON.toJSONString(mercDTO);
-		logger.info("入建参数=" + mercStr);
+		logger.info("入件参数=" + mercStr);
 		Map<String, String> mercMap = JSON.parseObject(mercStr, Map.class);
 		String respStr = ZxyhPayMD5Util.request(mercMap, url, prefix);
 		// 解析返回报文
@@ -822,6 +822,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		System.out.println(respMap);
 		String json = JSON.toJSONString(respMap);
 		PassivePayDTO passDTO1 = JSON.parseObject(json, PassivePayDTO.class);
+		logger.info("校验微信授权码:二级商户号=["+passivePayDTO.getStdmercno2());
+		logger.info("校验微信授权码：返回respCode=["+passDTO1.getStd400mgid());
 
 		return passDTO1.getStd400mgid();
 	}

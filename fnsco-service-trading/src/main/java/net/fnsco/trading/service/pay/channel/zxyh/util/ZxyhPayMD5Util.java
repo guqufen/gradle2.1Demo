@@ -47,7 +47,7 @@ public class ZxyhPayMD5Util {
      * 请求的目标URL
      * 配置在此处仅为演示方便，正式生产代码中，应该做外置可配置处理
      */
-//    private static String         reqUrl               = "https://120.27.165.177:9001";  //入建
+//    private static String         reqUrl               = "https://120.27.165.177:9001";  //入件
 //    private static String         reqUrl               = " https://120.27.165.177:8099";  //主扫
     private static String         reqUrl               = "https://120.27.165.177:8099";  //退款
     /**MD5加密方式
@@ -60,6 +60,7 @@ public class ZxyhPayMD5Util {
 
     public static void init(String md5key, String reqUrl) {
         ZxyhPayMD5Util.reqUrl = reqUrl;
+        
         ZxyhPayMD5Util.md5key = md5key;
     }
 

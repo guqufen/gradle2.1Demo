@@ -64,13 +64,14 @@ public class PrepaidRefillService extends BaseService {
 				 * "inprice": 98.4, //购买价格 "game_area": "江苏苏州电信" //手机号码归属地 },
 				 * "error_code": 0 }
 				 */
-				result = RechargeUtil.get(telQueryUrl.replace("*", done + "").replace("!", phone), 0);
+				String url = telQueryUrl.replace("*", done + "").replace("!", phone);
+				result = RechargeUtil.get(url, 0);
 				logger.info(result);
 
 				JuheDTO juhe = JSON.parseObject(result, JuheDTO.class);
 				if (juhe.getError_code() == 0) {
 
-					System.out.println(juhe.getResult());
+					logger.info(""+juhe.getResult());
 
 					Map<String, Object> map = JSONObject.parseObject(juhe.getResult().toString(), Map.class);
 					CheckMobileDTO phChargeDTO = new CheckMobileDTO();
@@ -153,7 +154,7 @@ public class PrepaidRefillService extends BaseService {
 
 				return ResultDTO.success(phChargePackageDTO);
 			} else {
-				System.out.println(juhe.getError_code() + ":" + juhe.getReason());
+				logger.error("流量资费查询出错:"+juhe.getError_code() + ":" + juhe.getReason());
 				return ResultDTO.fail(juhe.getReason());
 			}
 		} catch (Exception e) {

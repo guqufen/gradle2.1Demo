@@ -52,13 +52,19 @@ public class PrepaidRefillController extends BaseController {
 	@ApiOperation(value = "话费/流量套餐资费查询url")
 	public ResultDTO<CheckChargePackageDTO> prepaidCheck(@RequestBody FlowPackageCheckJO flowPackageCheckJO) {
 
+		if (flowPackageCheckJO.getPhone().trim().length() > 11) {
+
+			logger.error("手机充值-手机号码非法，请输入11位手机号，不能带空格！！");
+			return ResultDTO.success(ApiConstant.E_APP_PHONE_ERROR);
+		}
+
 		// 话费资费查询
 		if (0 == flowPackageCheckJO.getType()) {
-			return prepaidRefillService.prepaidRefillCheck(flowPackageCheckJO.getPhone());
+			return prepaidRefillService.prepaidRefillCheck(flowPackageCheckJO.getPhone().trim());
 
 			// 流量资费查询
 		} else if (1 == flowPackageCheckJO.getType()) {
-			return prepaidRefillService.flowPackageCheck(flowPackageCheckJO.getPhone());
+			return prepaidRefillService.flowPackageCheck(flowPackageCheckJO.getPhone().trim());
 		} else {
 			return ResultDTO.success("手机充值资费查询-交易类型不匹配");
 		}

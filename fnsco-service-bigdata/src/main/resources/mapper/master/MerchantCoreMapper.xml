@@ -743,7 +743,7 @@
     from m_merchant_core
     where id = #{id,jdbcType=INTEGER}
   </select>
-   <!-- 根据ID查询出所有商户关联的数据 入建中信商户 -->
+   <!-- 根据ID查询出所有商户关联的数据 入件中信商户 -->
   <select id="queryAllByIdForAddZXMerc" parameterType="java.lang.Integer" resultMap="AllResultMapZX">
   	 select 
     <include refid="Base_Column_List" />

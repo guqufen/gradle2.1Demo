@@ -24,6 +24,8 @@ import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.dto.TradeReportDTO;
 import net.fnsco.trading.constant.E789ApiConstant;
+import net.fnsco.trading.service.merchantentity.dao.AppUserMerchantEntityDAO;
+import net.fnsco.trading.service.merchantentity.entity.AppUserMerchantEntityDO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.channel.pfyh.PFOrderPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
@@ -45,6 +47,8 @@ public class ScannedTradeController extends BaseController {
 	private PaymentService zxyhPaymentService;
 	@Autowired
 	private PFOrderPaymentService pfOrderPaymentService;
+	@Autowired
+	private AppUserMerchantEntityDAO appUserMerchantEntityDAO;
 
 	@RequestMapping(value = "/getQRUrl")
 	@ApiOperation(value = "收款-获取付款二维码url")
@@ -65,6 +69,12 @@ public class ScannedTradeController extends BaseController {
 		if (Strings.isNullOrEmpty(paySubType)) {
 			return ResultDTO.fail("交易子类型为空");
 		}
+		//判断该app用户是否已绑定商户
+		AppUserMerchantEntityDO appUserMerchantEntity = appUserMerchantEntityDAO.selectByEntityInnerCode(userId);
+		if(null == appUserMerchantEntity){
+			return ResultDTO.fail(E789ApiConstant.E_NOT_BOUND_MERC);
+		}	
+		
 		//判断商户是否已通过审核
 		Integer mercStatus = zxyhPaymentService.getAddStatus(userId);
 		if(mercStatus != 5){

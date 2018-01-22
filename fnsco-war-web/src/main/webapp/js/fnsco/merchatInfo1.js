@@ -318,7 +318,7 @@ function operateFormatter(value, row, index) {
     returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
   }
   if(row.channelType=="05" && row.status=="1"){
-    returnHtml+='<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行入建"><i class="glyphicon glyphicon-import"></i></a>';  
+    returnHtml+='<a class="details" href="javascript:zxyhChannel('+value+');" title="中信银行入件"><i class="glyphicon glyphicon-import"></i></a>';  
   }else{
     returnHtml+='<a class="details" href="javascript:;"><i class="glyphicon"></i></a>';
   }
