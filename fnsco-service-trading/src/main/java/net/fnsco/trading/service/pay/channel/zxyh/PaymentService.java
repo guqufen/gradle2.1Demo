@@ -822,6 +822,8 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 		System.out.println(respMap);
 		String json = JSON.toJSONString(respMap);
 		PassivePayDTO passDTO1 = JSON.parseObject(json, PassivePayDTO.class);
+		logger.info("校验微信授权码:二级商户号=["+passivePayDTO.getStdmercno2());
+		logger.info("校验微信授权码：返回respCode=["+passDTO1.getStd400mgid());
 
 		return passDTO1.getStd400mgid();
 	}

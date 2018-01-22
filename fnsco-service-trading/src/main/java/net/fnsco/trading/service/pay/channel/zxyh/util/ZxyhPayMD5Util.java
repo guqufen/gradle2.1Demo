@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.base.Strings;
 
 import net.fnsco.trading.service.pay.channel.zxyh.dto.MerchantZxyhDTO;
 
@@ -32,7 +31,7 @@ import net.fnsco.trading.service.pay.channel.zxyh.dto.MerchantZxyhDTO;
  */
 public class ZxyhPayMD5Util {
 	@Autowired
-	private Environment env;
+	private static Environment env;
 	
     private static Logger         logger               = LoggerFactory.getLogger(ZxyhPayMD5Util.class);
     /**
@@ -54,13 +53,14 @@ public class ZxyhPayMD5Util {
      * 用于数据电子签名使用的MD5密钥，由中信银行开商户时自动生成，请妥善保管
      * 配置在此处仅为演示方便，正式生产代码中，商户应该将其外置于安全的地方，且妥善保护该密钥，如有泄露，请第一时间通知我行进行变更！！！
      */
-    private static String         md5key               = "83091094209057371094820737983886";
+    private static String         md5key               = "";//"83091094209057371094820737983886";
 
     private final static String[] hexDigits            = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
 
     public static void init(String md5key, String reqUrl) {
         ZxyhPayMD5Util.reqUrl = reqUrl;
-        ZxyhPayMD5Util.md5key = md5key;
+//        ZxyhPayMD5Util.md5key = md5key;
+        ZxyhPayMD5Util.md5key =  env.getProperty("zxyh.pay.md5");
     }
 
     /**
