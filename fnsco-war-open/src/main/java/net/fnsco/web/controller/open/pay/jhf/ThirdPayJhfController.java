@@ -127,7 +127,7 @@ public class ThirdPayJhfController extends BaseController {
             logger.error("第三方接入获取二维码url解密后入参：" + decodeStr);
             //聚惠芬支付完成时的通知解密后入参：{"payCallBackParams":"","settlementStatus":"0","thirdPayNo":"20171102155606073111374535549766","orderStatus":"2","singData":"001AA0CC08241A447BF7250B500C4B83"}
             tradeJO = JSON.parseObject(decodeStr, TradeJO.class);
-            tradeJO.setChannelMerId(tradeJO.getChannelMerId());
+            tradeJO.setChannelMerId(merchantChannelJhf.getChannelMerId());
         } catch (Exception ex) {
             logger.error("第三方接入获取二维码url出错", ex);
             return null;

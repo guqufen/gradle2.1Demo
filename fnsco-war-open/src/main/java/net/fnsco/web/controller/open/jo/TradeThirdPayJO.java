@@ -78,6 +78,7 @@ public class TradeThirdPayJO {
      * 内部商户号 15位
      */
     private String     innerCode;
+    private String     mercName;
 
     /**
      * innerCode
@@ -100,8 +101,6 @@ public class TradeThirdPayJO {
     public void setInnerCode(String innerCode) {
         this.innerCode = innerCode;
     }
-
-    private String mercName;
 
     /**
      * mercName
