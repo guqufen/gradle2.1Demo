@@ -96,7 +96,7 @@ public class JhfCallBackController extends BaseController {
             order = new TradeOrderDO();
         }
         //status = ConstantEnum.RespCodeEnum.getNameByCode(order.getRespCode());
-        return "redirect:" + url + "/pay/jhfPayCallback.html?paymentAmount=" + order.getTxnAmount() + "&installmentNum=" + order.getInstallmentNum() + "&orderDate="
+        return "redirect:" + url + "/pay/jhfPayCallback.html?orderNo="+orderNo+"&paymentAmount=" + order.getTxnAmount() + "&installmentNum=" + order.getInstallmentNum() + "&orderDate="
                + DateUtils.dateFormat1ToStr(order.getCreateTime()) + "&status=" + order.getRespCode();
     }
 

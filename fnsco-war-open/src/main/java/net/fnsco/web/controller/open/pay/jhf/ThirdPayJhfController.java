@@ -41,7 +41,7 @@ import net.fnsco.web.controller.open.jo.TradeJO;
 
 /**
  * 
- * @desc 聚惠分分期付第三方调用接口相关功能
+ * @desc 分闪付分期付第三方调用接口相关功能
  * @author   sxf
  * @version  
  * @since    Ver 1.1
@@ -50,7 +50,7 @@ import net.fnsco.web.controller.open.jo.TradeJO;
  */
 @Controller
 @RequestMapping(value = "/trade/thirdPay")
-@Api(value = "/trade/thirdPay", tags = { "聚惠分第三方调用相关功能接口" })
+@Api(value = "/trade/thirdPay", tags = { "分闪付第三方调用相关功能接口" })
 public class ThirdPayJhfController extends BaseController {
     @Autowired
     private MerchantService     merchantService;
@@ -62,18 +62,23 @@ public class ThirdPayJhfController extends BaseController {
     private Environment         env;
 
     /**
-     * 收银台获取聚惠分二维码url获取，入参为渠道商户号
+     * 收银台获取分闪付二维码url获取，入参为渠道商户号
      *
      * @param userName
      * @return
      */
     @RequestMapping(value = "/getQRUrl", method = RequestMethod.POST)
-    @ApiOperation(value = "第三方接入获取聚惠分二维码url")
+    @ApiOperation(value = "第三方接入获取分闪付二维码url")
     @ResponseBody
     public ResultDTO getQRUrl(String innerCode, String reqData) {
+        logger.error(innerCode + "第三方接入获取二维码url密文入参为" + reqData);
         if (Strings.isNullOrEmpty(reqData)) {
             logger.error("第三方接入获取二维码url密文入参为空");
-            fail("失败，rspData入参为空");
+            return fail("失败，rspData入参为空");
+        }
+        if (Strings.isNullOrEmpty(innerCode)) {
+            logger.error("第三方接入获取二维码url中innerCode入参为空");
+            return fail("失败，innerCode入参为空");
         }
         TradeJO tradeJO = getReqData(innerCode, reqData);
         if (null == tradeJO) {
@@ -97,7 +102,7 @@ public class ThirdPayJhfController extends BaseController {
         tradeOrder.setTxnAmount(amountBs);
         //支付方式00刷卡01二维码02分期付
         tradeOrder.setPayType("02");
-        //交易子类型00刷卡01微信02支付宝03聚惠分
+        //交易子类型00刷卡01微信02支付宝03分闪付
         tradeOrder.setPaySubType("03");
         tradeOrder.setTxnType(1);
         tradeOrder.setRespCode(ConstantEnum.RespCodeEnum.HANDLING.getCode());
@@ -159,23 +164,24 @@ public class ThirdPayJhfController extends BaseController {
     }
 
     /**
-     * 单条订单查询
+     * 订单列表查询
      *
      * @param userName
      * @return
      */
     @RequestMapping(value = "/getOrderList", method = RequestMethod.POST)
-    @ApiOperation(value = "获取商户编号")
-    public ResultDTO<TradeOrderDO> getOrderList(String innerCode, String reqData) {
+    @ApiOperation(value = "订单列表查询")
+    @ResponseBody
+    public ResultDTO getOrderList(String innerCode, String reqData) {
         TradeJO tradeJO = getReqData(innerCode, reqData);
         if (null == tradeJO) {
             return ResultDTO.fail(ApiConstant.E_PAY_NOT_EXIT_ERROR);
         }
         TradeOrderDO tradeOrder = new TradeOrderDO();
-        tradeOrder.setOrderNoAfter6(tradeJO.getOrderNo());
+        tradeOrder.setOrderNo(tradeJO.getOrderNo());
         tradeOrder.setOrderTop10(tradeJO.getDate());
         tradeOrder.setInnerCode(tradeJO.getInnerCode());
-        tradeOrder.setRespCode("1001");
+        //tradeOrder.setRespCode("1001");
         //tradeOrder.setSettleStatus(4);
         ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder, tradeJO.getPageNum(), tradeJO.getPageSize());
         List<TradeOrderDO> resultList = resultDTO.getList();
@@ -183,20 +189,20 @@ public class ThirdPayJhfController extends BaseController {
             tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
             tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
             tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
-            //            BigDecimal eachMoney = tradeOrderDO.getEachMoney();
-            //            if (null != eachMoney) {
-            //                eachMoney = eachMoney.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-            //                tradeOrderDO.setEachMoney(eachMoney);
-            //            }
-            //            BigDecimal orderAmount = tradeOrderDO.getOrderAmount();
-            //            if (null != orderAmount) {
-            //                orderAmount = orderAmount.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-            //                tradeOrderDO.setOrderAmount(orderAmount);
-            //            }
-            //MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
-            //if (null != merChantCore) {
-            //    tradeOrderDO.setMercName(merChantCore.getMerName());
-            //}
+            BigDecimal eachMoney = tradeOrderDO.getEachMoney();
+            if (null != eachMoney) {
+                eachMoney = eachMoney.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+                tradeOrderDO.setEachMoney(eachMoney);
+            }
+            BigDecimal orderAmount = tradeOrderDO.getOrderAmount();
+            if (null != orderAmount) {
+                orderAmount = orderAmount.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
+                tradeOrderDO.setOrderAmount(orderAmount);
+            }
+            MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
+            if (null != merChantCore) {
+                tradeOrderDO.setMercName(merChantCore.getMerName());
+            }
         }
         return success(resultDTO);
     }
