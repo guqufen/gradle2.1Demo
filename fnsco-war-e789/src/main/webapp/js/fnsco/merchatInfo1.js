@@ -2185,11 +2185,13 @@ function zxyhChannel(id){
 	    data:{'id':id},
 	    success:function(data){
 	    	unloginHandler(data);  
-	          if(data.success){
-	             layer.msg('入件成功');
-	          }else{
-	        	  layer.msg(data.data.respMsg);
-	          }
+	    	console.log(data)
+	    	if(data.success == false){
+	    		layer.msg(data.message);
+	    	}else if(data.success == true){
+	    		layer.msg('入件成功');
+	    	}
+	        
 	    }
 	})
 	$('#zxyhChannel').modal();
