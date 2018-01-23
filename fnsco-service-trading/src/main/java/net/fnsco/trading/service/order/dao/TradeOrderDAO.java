@@ -113,7 +113,7 @@ public interface TradeOrderDAO {
     @SelectProvider(type = TradeOrderProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("tradeOrder") TradeOrderDO tradeOrder);
 
-    @Select("SELECT SUM(txn_amount) FROM t_trade_order WHERE DATE_FORMAT(complete_time,'%Y-%m-%d') = #{tradeDate} AND inner_code IN (SELECT inner_code FROM m_merchant_core_entity_ref WHERE entity_inner_code IN (SELECT entity_inner_code FROM u_app_user_merchant_entity WHERE app_user_id =#{userId}))")
+    @Select("SELECT SUM(txn_amount) FROM t_trade_order WHERE DATE_FORMAT(complete_time,'%Y%m%d') = #{tradeDate} AND inner_code IN (SELECT inner_code FROM m_merchant_core_entity_ref WHERE entity_inner_code IN (SELECT entity_inner_code FROM u_app_user_merchant_entity WHERE app_user_id =#{userId}))")
     public String queryTotalAmount(@Param("tradeDate") String tradeDate, @Param("userId") Integer userId);
     
     /**

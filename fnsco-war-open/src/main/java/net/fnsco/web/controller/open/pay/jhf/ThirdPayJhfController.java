@@ -1,22 +1,19 @@
 package net.fnsco.web.controller.open.pay.jhf;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
@@ -31,13 +28,12 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.dby.AESUtil;
-import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.service.order.TradeOrderService;
-import net.fnsco.trading.service.order.dto.TradeJhfJO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.web.controller.open.jo.TradeJO;
+import net.fnsco.web.controller.open.jo.TradeThirdPayJO;
 
 /**
  * 
@@ -94,9 +90,9 @@ public class ThirdPayJhfController extends BaseController {
         tradeOrder.setInnerCode(tradeJO.getInnerCode());
         tradeOrder.setChannelMerId(tradeJO.getChannelMerId());
         tradeOrder.setChannelType("04");
-        tradeOrder.setInstallmentNum(tradeJO.getInstallmentNum());
+        tradeOrder.setInstallmentNum(tradeJO.getPeriodNum());
         tradeOrder.setEntityInnerCode(entityInnerCode);
-        tradeOrder.setCreateUserId(tradeJO.getSnCode());
+        //tradeOrder.setCreateUserId(tradeJO.getSnCode());
         BigDecimal amountB = new BigDecimal(tradeJO.getPaymentAmount());
         BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
         tradeOrder.setTxnAmount(amountBs);
@@ -131,6 +127,7 @@ public class ThirdPayJhfController extends BaseController {
             logger.error("第三方接入获取二维码url解密后入参：" + decodeStr);
             //聚惠芬支付完成时的通知解密后入参：{"payCallBackParams":"","settlementStatus":"0","thirdPayNo":"20171102155606073111374535549766","orderStatus":"2","singData":"001AA0CC08241A447BF7250B500C4B83"}
             tradeJO = JSON.parseObject(decodeStr, TradeJO.class);
+            tradeJO.setChannelMerId(merchantChannelJhf.getChannelMerId());
         } catch (Exception ex) {
             logger.error("第三方接入获取二维码url出错", ex);
             return null;
@@ -184,26 +181,35 @@ public class ThirdPayJhfController extends BaseController {
         //tradeOrder.setRespCode("1001");
         //tradeOrder.setSettleStatus(4);
         ResultPageDTO<TradeOrderDO> resultDTO = tradeOrderService.page(tradeOrder, tradeJO.getPageNum(), tradeJO.getPageSize());
-        List<TradeOrderDO> resultList = resultDTO.getList();
-        for (TradeOrderDO tradeOrderDO : resultList) {
-            tradeOrderDO.setCompleteTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
-            tradeOrderDO.setCreateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
-            tradeOrderDO.setOrderCeateTimeStr(DateUtils.dateFormatToStr(tradeOrderDO.getOrderCeateTime()));
+        List<TradeOrderDO> tradeOrderList = resultDTO.getList();
+        List<TradeThirdPayJO> resultList = Lists.newArrayList();
+        for (TradeOrderDO tradeOrderDO : tradeOrderList) {
+            TradeThirdPayJO tradeOrderJO = new TradeThirdPayJO();
+            tradeOrderJO.setId(tradeOrderDO.getId());
+            tradeOrderJO.setOrderNo(tradeOrderDO.getOrderNo());
+            tradeOrderJO.setInstallmentNum(tradeOrderDO.getInstallmentNum());
+            tradeOrderJO.setCompleteTime(DateUtils.dateFormatToStr(tradeOrderDO.getCompleteTime()));
+            tradeOrderJO.setCreateTime(DateUtils.dateFormatToStr(tradeOrderDO.getCreateTime()));
+            tradeOrderJO.setTxnAmount(tradeOrderDO.getTxnAmount());
+            tradeOrderJO.setRespCode(tradeOrderDO.getRespCode());
+            tradeOrderJO.setRespMsg(tradeOrderDO.getRespCode());
+            tradeOrderJO.setInnerCode(tradeOrderDO.getInnerCode());
             BigDecimal eachMoney = tradeOrderDO.getEachMoney();
             if (null != eachMoney) {
                 eachMoney = eachMoney.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-                tradeOrderDO.setEachMoney(eachMoney);
+                tradeOrderJO.setEachMoney(eachMoney);
             }
             BigDecimal orderAmount = tradeOrderDO.getOrderAmount();
             if (null != orderAmount) {
                 orderAmount = orderAmount.divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
-                tradeOrderDO.setOrderAmount(orderAmount);
+                tradeOrderJO.setOrderAmount(orderAmount);
             }
             MerchantCore merChantCore = merchantService.getMerChantCoreByInnerCode(tradeOrderDO.getInnerCode());
             if (null != merChantCore) {
-                tradeOrderDO.setMercName(merChantCore.getMerName());
+                tradeOrderJO.setMercName(merChantCore.getMerName());
             }
+            resultList.add(tradeOrderJO);
         }
-        return success(resultDTO);
+        return success(resultList);
     }
 }
