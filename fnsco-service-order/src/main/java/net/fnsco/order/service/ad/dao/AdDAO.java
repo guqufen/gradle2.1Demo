@@ -22,11 +22,12 @@ public interface AdDAO {
 			@Result(column = "create_user_id", property = "createUserId"),
 			@Result(column = "url", property = "url"),
 			@Result(column = "type", property = "type"),
-			@Result(column = "device_type", property = "deviceType")})
+			@Result(column = "device_type", property = "deviceType"),
+			@Result(column = "priority", property = "priority")})
 	@Select("SELECT * FROM sys_ad WHERE id = #{id}")
 	public AdDO getById(@Param("id") int id);
 
-	@Insert("INSERT into sys_ad(id,title,img_path,category,summary,content,create_time,update_time,create_user_id,url,type,device_type) VALUES (#{id},#{title},#{img_path},#{category},#{summary},#{content},#{createTime},#{updateTime},#{createUserId},#{url},#{type},#{deviceType})")
+	@Insert("INSERT into sys_ad(id,title,img_path,category,summary,content,create_time,update_time,create_user_id,url,type,device_type,priority) VALUES (#{id},#{title},#{img_path},#{category},#{summary},#{content},#{createTime},#{updateTime},#{createUserId},#{url},#{type},#{deviceType},#{priority})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public void insert(AdDO ad);
 
@@ -46,7 +47,8 @@ public interface AdDAO {
 			@Result(column = "update_time", property = "updateTime"),
 			@Result(column = "create_user_id", property = "createUserId"),
 			@Result(column = "type", property = "type"),
-			@Result(column = "device_type", property = "deviceType")})
+			@Result(column = "device_type", property = "deviceType"),
+			@Result(column = "priority", property = "priority")})
 	@SelectProvider(type = AdProvider.class, method = "pageList")
 	public List<AdDO> pageList(@Param("ad") AdDO ad, @Param("pageNum") Integer pageNum,
 			@Param("pageSize") Integer pageSize);
@@ -63,7 +65,7 @@ public interface AdDAO {
 	 * @throws @since
 	 *             CodingExample Ver 1.1
 	 */
-	@Select("SELECT * FROM sys_ad Where type = #{type} AND device_type in (#{deviceType},3) ORDER BY create_time DESC LIMIT #{count}")
+	@Select("SELECT * FROM sys_ad Where type = #{type} AND device_type in (#{deviceType},3) ORDER BY priority ASC LIMIT #{count}")
 	public List<AdDO> queryAdList(@Param("type")Integer type,@Param("deviceType")Integer deviceType,@Param("count")Integer count);
 
 }
