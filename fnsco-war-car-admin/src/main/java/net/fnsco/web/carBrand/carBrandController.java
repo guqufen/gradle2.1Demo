@@ -57,14 +57,13 @@ public class carBrandController extends BaseController{
 
 		return carBrandService.update(carBrandDO);
 	}
-	
-	@RequestMapping(value = "/delete")
-	public ResultDTO delete(CarBrandDO carBrandDO) {
 
-//		carBrandService.delete(carBrandDO);
-		return carBrandService.delete(carBrandDO);
+	@RequestMapping(value = "/delete")
+	public ResultDTO delete(Integer[] ids) {	
+		
+		return carBrandService.delete(ids);
 	}
-	
+
 	/**
 	 * 图片上传(导入),上传到oss服务器
 	 * @param id
