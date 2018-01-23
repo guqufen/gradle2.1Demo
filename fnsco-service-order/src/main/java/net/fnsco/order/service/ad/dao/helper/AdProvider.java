@@ -52,6 +52,9 @@ public class AdProvider {
         if (ad.getDeviceType() != null) {
             SET("device_type=#{ad.deviceType}");
         }
+        if (ad.getPriority() != null) {
+            SET("priority=#{ad.priority}");
+        }
         
         WHERE("id = #{ad.id}");
         }}.toString();
@@ -102,6 +105,9 @@ public class AdProvider {
         if (ad.getType() != null) {
             WHERE("type=#{ad.type}");
         }
+        if (ad.getPriority() != null) {
+        	WHERE("priority=#{ad.priority}");
+        }
         ORDER_BY("id desc limit " + start + ", " + limit );
         }}.toString();
     }
@@ -140,6 +146,9 @@ public class AdProvider {
         }
         if (ad.getType() != null) {
             WHERE("type=#{ad.type}");
+        }
+        if (ad.getPriority() != null) {
+        	WHERE("priority=#{ad.priority}");
         }
         }}.toString();
     }

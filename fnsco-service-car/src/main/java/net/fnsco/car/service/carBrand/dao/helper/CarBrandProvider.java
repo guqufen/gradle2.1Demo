@@ -121,6 +121,8 @@ public class CarBrandProvider {
 				}
 		        if( limit != null){
 		        	ORDER_BY("id desc limit 8" );
+		        }else{
+		        	ORDER_BY("case when (level=1) then 0 else 1 end, CONVERT(name USING gbk) asc" );
 		        }
 			}
 		}.toString();

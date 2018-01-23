@@ -52,7 +52,31 @@ public class AdDO {
      */
     private Integer createUserId;
     private String createUserName;
+    private Integer priority;
+    
     /**
+	 * priority
+	 *
+	 * @return  the priority
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public Integer getPriority() {
+		return priority;
+	}
+
+	/**
+	 * priority
+	 *
+	 * @param   priority    the priority to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
+
+	/**
 	 * createUserName
 	 *
 	 * @return  the createUserName
