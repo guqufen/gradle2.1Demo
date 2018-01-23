@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.alibaba.fastjson.JSONObject;
+
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -78,6 +80,7 @@ public class AdManagerController extends BaseController{
 	@ResponseBody
 	@RequiresPermissions(value = { "sys:app:ad:add" })
 	public ResultDTO<String> add(AdDO appAdDTO) {
+		logger.error("广告信息="+JSONObject.toJSONString(appAdDTO));
 		Integer userId = this.getUserId();
 		Integer row = null;
 		if(appAdDTO.getId() != null){
