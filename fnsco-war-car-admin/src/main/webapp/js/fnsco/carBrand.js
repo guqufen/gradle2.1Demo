@@ -112,6 +112,12 @@ function formatModel(value, row, index) {
 		return '三厢';
 	}else if(value ==5){
 		return '两厢';
+	}else if(value ==6){
+		return '货车';
+	}else if(value ==7){
+		return '客车';
+	}else if(value ==8){
+		return '特种车';
 	}
 }
 
