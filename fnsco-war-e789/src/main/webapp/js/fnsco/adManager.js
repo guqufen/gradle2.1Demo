@@ -65,6 +65,9 @@ $('#table').bootstrapTable({
 		field : 'deviceType',
 		title : '所属设备',
 		formatter : formatDeviceType
+	} , {
+		field : 'priority',
+		title : 'app显示优先级'
 	} ]
 });
 
@@ -233,6 +236,7 @@ function editData(id) {
 						"selected", true);
 				$("#deviceType").find("option[value=" + ad.deviceType + "]")
 						.prop("selected", true);
+				$("#priority").val(ad.priority);
 				$(".sunmitBtn").show();
 			} else {
 				layer.msg('系统异常!');
