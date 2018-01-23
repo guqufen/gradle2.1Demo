@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -109,8 +108,6 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 	private MerchantEntityService merchantEntityService;
 	@Autowired
 	private AreaDAO areaDao;
-	@Autowired
-    private Environment env;
 
 
 	/**
@@ -335,7 +332,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		if (!Strings.isNullOrEmpty(merchantCore.getRegistAddressDetail())) {
 			sb.append(merchantCore.getRegistAddressDetail());
 		}
-		if (sb.toString().length() > 20) {
+		if (sb.toString().length() > 150) {
 			return ResultDTO.failForMessage("详细地址超长");
 		}
 		if (!Strings.isNullOrEmpty(sb.toString())) {

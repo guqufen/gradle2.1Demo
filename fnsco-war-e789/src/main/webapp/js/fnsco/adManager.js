@@ -369,7 +369,8 @@ function delPushImg() {
 $('.sunmitBtn')
 		.click(
 				function() {
-					var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
+//					var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
+					$("#img_path").removeAttr("disabled");
 					var url = $("#url").val();
 					$.ajax({
 						url : PROJECT_NAME + '/web/e789/ad/doAdd',
