@@ -97,19 +97,24 @@ public class CarBrandService extends BaseService {
 	 * 
 	 * @param carBrandDO
 	 */
-	public ResultDTO<Object> delete(CarBrandDO carBrandDO) {
+	public ResultDTO<Object> delete(Integer[] ids) {
 
-		CarBrandDO carBrandDO2 = new CarBrandDO();
-		carBrandDO2.setSupperId(carBrandDO.getId());
-		List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO2, null);
+		for (Integer id : ids) {
+			CarBrandDO carBrandDO2 = new CarBrandDO();
+			carBrandDO2.setSupperId(id);
+			List<CarBrandDO> list = carBrandDAO.selectByCondition(carBrandDO2, null);
 
-		// 如果下级菜单等于1，且父ID等于当前ID，则可以直接删除
-		if (list.size() > 0) {
+			// 如果下级菜单等于1，且父ID等于当前ID，则可以直接删除
+			if (list.size() > 0) {
 
-			return ResultDTO.fail("有下级菜单，请先处理好下级菜单再执行本次删除,本次删除无效");
+				return ResultDTO.fail("汽车名称["+list.get(0).getSupperName()+"]有下级菜单，请先处理好下级菜单再删除");
+			}
+
+			CarBrandDO carBrandDO = new CarBrandDO();
+			carBrandDO.setId(id);
+			carBrandDAO.delete(carBrandDO);
 		}
 
-		carBrandDAO.delete(carBrandDO);
 		return ResultDTO.success();
 	}
 

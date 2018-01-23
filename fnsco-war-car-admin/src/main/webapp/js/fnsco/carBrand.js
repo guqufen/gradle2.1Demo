@@ -15,15 +15,17 @@ function initTableData() {
 		sortable : true, // 是否启用排序
 		uniqueId : 'roleId', // 将index列设为唯一索引
 		sortOrder : "asc", // 排序方式
-		singleSelect : true,// 单选
+		singleSelect : false,// 单选
 		pageNumber : 1, // 初始化加载第一页，默认第一页
 		pageSize : 15, // 每页的记录行数（*）
 		pageList : [ 15, 20, 50, 100 ], // 可供选择的每页的行数（*）
 		queryParams : queryParams,
 		responseHandler : responseHandler,// 处理服务器返回数据
 		columns : [ {
-			field : 'state',
-			radio: 'true',//单选框
+			field: 'state',
+			checkbox: true,
+//			field : 'state',
+//			radio: 'true',//单选框
 			rowspan : 1,
 			align : 'center',
 			width : 20,
@@ -280,8 +282,8 @@ $('#btn_edit').click(
 			var selectContent = ttable.bootstrapTable('getSelections');// 返回的是数组类型,Array
 
 			// 判断当前选择的数据行，若为0代表没有选择，提示请选择一列数据
-			if (selectContent.length == 0) {
-				layer.msg('请选择一条数据!');
+			if (selectContent.length != 1){
+				layer.msg('请选择一条数据进行修改!');
 				return false;
 			} else {
 
@@ -420,27 +422,32 @@ $('#btn_delete').click(function() {
 	if (selectContent.length == 0) {
 		layer.msg('请选择一条数据!');
 		return false;
-	} else {
+	}
 
+	var dataId=[];
+	  for(var i=0;i<selectContent.length;i++){
+	    dataId=dataId.concat(selectContent[i].id);
+	  }
 		layer.confirm('确定删除选中数据吗？', {
 			time : 20000, // 20s后自动关闭
 			btn : [ '确定', '取消' ]
 		}, function() {
 
 			// 获取table选中数据的菜单ID和菜单类型
-			var id = selectContent[0].id;
-			var type = selectContent[0].level;
-
-			var param = {
-				'id' : id,
-				'level' : type
-			}
+//			var id = selectContent[0].id;
+//			var type = selectContent[0].level;
+//
+//			var param = {
+//				'id' : id,
+//				'level' : type
+//			}
 
 			// 组包发给后台
 			$.ajax({
 				type : 'POST',
 				url : PROJECT_NAME + "/web/carBrand/delete",
-				data : param,
+				dataType : "json",
+				data : {'ids':dataId},
 				traditional : true,
 				success : function(data) {
 					unloginHandler(data);
@@ -462,7 +469,7 @@ $('#btn_delete').click(function() {
 		}, function() {
 			layer.msg('取消成功');
 		});
-	}
+	
 })
 
 //导入按钮事件
