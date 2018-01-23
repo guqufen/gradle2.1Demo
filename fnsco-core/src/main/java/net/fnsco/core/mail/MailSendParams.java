@@ -144,7 +144,7 @@ public class MailSendParams {
 	public int hashCode() {
 		
 		// TODO Auto-generated method stub
-		return formAddress.hashCode()+toAddress.hashCode();
+		return toTarget.hashCode()+toAddress.hashCode();
 		
 	}
 }
