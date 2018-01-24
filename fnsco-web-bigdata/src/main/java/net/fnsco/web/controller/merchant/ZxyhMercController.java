@@ -41,8 +41,8 @@ public class ZxyhMercController extends BaseController {
 			return ResultDTO.fail();
 		}
 		//根据id获取入驻中信银行商户所需的必须信息
+		logger.info("id="+id);
 		ResultDTO<MerchantCoreEntityZxyhDTO> result = merchantCoreService.queryZXYHInfoById(id);
-//		Map<String, Object> map = new HashMap<>();
 		MerchantCoreEntityZxyhDTO core = null;
 		if(result.isSuccess()){
 			core = result.getData();
