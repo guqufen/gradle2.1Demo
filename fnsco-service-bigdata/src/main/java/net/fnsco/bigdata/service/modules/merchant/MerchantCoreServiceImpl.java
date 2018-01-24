@@ -59,6 +59,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.CodeUtil;
+import net.fnsco.core.utils.StringUtil;
 
 /**
  * @desc 商家基本信息 实现类
@@ -715,7 +716,8 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		if (core == null) {
 			return ResultDTO.fail("未找到对应渠道商户信息");
 		} else {
-			if (Strings.isNullOrEmpty(core.getMerName())) {
+			logger.error("商户名="+core.getMerName());
+			if (com.alibaba.druid.util.StringUtils.isEmpty(core.getMerName())) {
 				logger.error("入件中信，商户名不能为空");
 				return ResultDTO.fail("入件中信，商户名不能为空");
 			}
