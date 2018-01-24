@@ -21,6 +21,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.third.ticket.comm.TicketConstants;
@@ -68,6 +69,7 @@ public class TicketOrderService extends BaseService {
             if (Strings.isNullOrEmpty(order.getPayOrderNo())) {
                 continue;
             }
+            Integer appUserId = order.getAppUserId();
             JSONObject obj = TrainTicketsUtil.getOrderStatus(order.getPayOrderNo());
             if (null != obj) {
                 //0占座中1失败2成功4购买成功
@@ -147,6 +149,7 @@ public class TicketOrderService extends BaseService {
                             appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
                             order.setStatus(TicketConstants.OrderStateEnum.SUCCESS.getCode());
                         }
+                        //发送成功短信
                         //更新订单表
                         TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOriginalOrderNo(order.getOrderNo());
                         tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.SUCCESS.getCode());
