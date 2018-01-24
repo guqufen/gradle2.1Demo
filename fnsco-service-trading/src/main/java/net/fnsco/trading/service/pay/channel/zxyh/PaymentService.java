@@ -380,7 +380,9 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 			respMap.put("respCode", tradeOrderDO.getRespCode());
 			return ResultDTO.success(respMap);
 		} else {
-			return ResultDTO.fail(respMap);
+			respMap.put("orderId", tradeOrderDO.getOrderNo());
+			respMap.put("respCode", tradeOrderDO.getRespCode());
+			return ResultDTO.fail(respMap,(String)respMap.get("respMsg"));
 		}
 
 	}
