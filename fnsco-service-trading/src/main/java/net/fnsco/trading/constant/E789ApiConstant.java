@@ -47,6 +47,7 @@ public class E789ApiConstant extends CoreConstants {
 	public static String E_BOUND_SUCCESS      = "2100023";
 	public static String E_NOT_CHECK      = "2100024";//入件中信未通过审核
 	public static String E_NOT_BOUND_MERC      = "2100025";
+	public static String E_NOT_BUILD ="2100026";
 	public static String E_AGREEE_NOT_FOUND  ="2100030";
 	
 	static {
@@ -94,6 +95,7 @@ public class E789ApiConstant extends CoreConstants {
 		ERROR_MESSGE_MAP.put(E_BOUND_SUCCESS, "绑定成功");
 		ERROR_MESSGE_MAP.put(E_NOT_CHECK, "商户信息未通过审核");
 		ERROR_MESSGE_MAP.put(E_NOT_BOUND_MERC, "请先绑定商户");
+		ERROR_MESSGE_MAP.put(E_NOT_BUILD, "请先入件");
 		
 
 		ERROR_MESSGE_MAP.put(E_AGREEE_NOT_FOUND, "委托协议不存在");

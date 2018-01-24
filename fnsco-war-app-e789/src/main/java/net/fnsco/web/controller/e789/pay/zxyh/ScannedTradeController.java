@@ -77,7 +77,12 @@ public class ScannedTradeController extends BaseController {
 		
 		//判断商户是否已通过审核
 		Integer mercStatus = zxyhPaymentService.getAddStatus(userId);
-		if(mercStatus != 5){
+		if(mercStatus  == null){
+			return ResultDTO.fail();
+		}
+		if(mercStatus == 1){
+			return ResultDTO.fail(E789ApiConstant.E_NOT_BUILD);
+		}else if(mercStatus == 2){
 			return ResultDTO.fail(E789ApiConstant.E_NOT_CHECK);
 		}
 		
@@ -96,6 +101,8 @@ public class ScannedTradeController extends BaseController {
 			qrVo.setUrl((String) reqMap.getOrDefault("codeUrl", null));
 			qrVo.setOrderNo((String)reqMap.get("orderId"));
 			qrVo.setRespCode((String)reqMap.get("respCode"));
+		}
+		if(dto.isSuccess()){
 			return ResultDTO.success(qrVo);
 		}else{
 			return ResultDTO.fail(dto.getCode(), dto.getMessage());
