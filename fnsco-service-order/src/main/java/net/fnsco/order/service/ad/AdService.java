@@ -114,6 +114,7 @@ public class AdService extends BaseService {
 				adDTO.setSummary(adDO.getSummary());
 				adDTO.setTitle(adDO.getTitle());
 				adDTO.setUrl(adDO.getUrl());
+				adDTO.setPriority(adDO.getPriority());
 				adList.add(adDTO);
 				map.put("ad", adList);
 			}
@@ -138,11 +139,13 @@ public class AdService extends BaseService {
 				adDTO.setSummary(adDO.getSummary());
 				adDTO.setTitle(adDO.getTitle());
 				adDTO.setUrl(adDO.getUrl());
+				adDTO.setPriority(adDO.getPriority());
 				adList.add(adDTO);
 			} else if (2 == adDO.getCategory()) {
 				adDTO.setSummary(adDO.getSummary());
 				adDTO.setTitle(adDO.getTitle());
 				adDTO.setUrl(adDO.getUrl());
+				adDTO.setPriority(adDO.getPriority());
 				newsList.add(adDTO);
 			}
 				map.put("ad", adList);

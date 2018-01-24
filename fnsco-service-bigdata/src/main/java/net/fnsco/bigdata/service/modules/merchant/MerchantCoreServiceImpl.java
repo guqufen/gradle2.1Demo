@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -58,6 +59,7 @@ import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.constants.CoreConstants;
 import net.fnsco.core.utils.CodeUtil;
+import net.fnsco.core.utils.StringUtil;
 
 /**
  * @desc 商家基本信息 实现类
@@ -705,41 +707,43 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 	 * 入驻中信的商户信息
 	 */
 	@Override
-	public MerchantCoreEntityZxyhDTO queryZXYHInfoById(Integer id) {
-		ResultDTO<MerchantCore> result = new ResultDTO<MerchantCore>();
+	public ResultDTO<MerchantCoreEntityZxyhDTO> queryZXYHInfoById(Integer id) {
+		ResultDTO<MerchantCoreEntityZxyhDTO> result = new ResultDTO<MerchantCoreEntityZxyhDTO>();
 		MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO = new MerchantCoreEntityZxyhDTO();
 		MerchantCore core = merchantCoreDao.queryAllByIdForAddZXMerc(id);
+		logger.error("渠道商户信息="+JSONObject.toJSONString(core));
 		// 渠道商戶信息
 		if (core == null) {
-			return null;
+			return ResultDTO.fail("未找到对应渠道商户信息");
 		} else {
-			if (Strings.isNullOrEmpty(core.getMerName())) {
-				logger.warn("入件中信，商户名不能为空");
-				return null;
+			logger.error("商户名="+core.getMerName());
+			if (com.alibaba.druid.util.StringUtils.isEmpty(core.getMerName())) {
+				logger.error("入件中信，商户名不能为空");
+				return ResultDTO.fail("入件中信，商户名不能为空");
 			}
 			if (Strings.isNullOrEmpty(core.getAbbreviation())) {
-				logger.warn("入件中信，商户名简称不能为空");
-				return null;
+				logger.error("入件中信，商户名简称不能为空");
+				return ResultDTO.fail("入件中信，商户名简称不能为空");
 			}
 			if(Strings.isNullOrEmpty(core.getLegalPersonMobile())){
-				logger.warn("入件中信，手机号不能为空");
-				return null;
+				logger.error("入件中信，手机号不能为空");
+				return ResultDTO.fail("入件中信，手机号不能为空");
 			}
 			if(Strings.isNullOrEmpty(core.getCardNum())){
-				logger.warn("入件中信，身份证号不能为空");
-				return null;
+				logger.error("入件中信，身份证号不能为空");
+				return ResultDTO.fail("入件中信，身份证号不能为空");
 			}
 			
 
 			int max = 18;
 			if (StringUtils.trim(core.getLegalPersonMobile()).length() > max) {
-				logger.warn("入件中信，手机号不合法");
-				return null;
+				logger.error("入件中信，手机号不合法");
+				return ResultDTO.fail("入件中信，手机号不合法");
 			}
 			boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", core.getCardNum());
 			if (b == false) {
-				logger.warn("入件中信，身份证格式不正确");
-				return null;
+				logger.error("入件中信，身份证格式不正确");
+				return ResultDTO.fail("入件中信，身份证格式不正确");
 			}
 
 		}
@@ -751,19 +755,19 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 			merchantContact = core.getContacts().get(0);// 获取商户联系人信息
 			// 联系人手机
 			if(Strings.isNullOrEmpty(merchantContact.getContactMobile())){
-				logger.warn("入件中信，联系人手机号不能为空");
-				return null;
+				logger.error("入件中信，联系人手机号不能为空");
+				return ResultDTO.fail("入件中信，联系人手机号不能为空");
 			}
 			int mobilMax = 18;
 			if (StringUtils.trim(merchantContact.getContactMobile()).length() > mobilMax) {
-				logger.warn("入件中信，联系人手机有误请重新输入");
-				return null;
+				logger.error("入件中信，联系人手机有误请重新输入");
+				return ResultDTO.fail("入件中信，联系人手机有误请重新输入");
 			}
 			// 校验邮箱
 			boolean email = checkEmail(merchantContact.getContactEmail());
 			if (email == false) {
-				logger.warn("入件中信，邮箱输入有误请重新输入");
-				return null;
+				logger.error("入件中信，邮箱输入有误请重新输入");
+				return ResultDTO.fail("入件中信，邮箱输入有误请重新输入");
 			}
 		}
 		// 开户行信息
@@ -771,38 +775,38 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 			merchantBank = core.getBanks().get(0); // 获取商户的开户行信息
 			// 开户手机号
 			if(Strings.isNullOrEmpty(merchantBank.getAccountPhone())){
-				logger.warn("入件中信，开户行手机号不能为空");
-				return null;
+				logger.error("入件中信，开户行手机号不能为空");
+				return ResultDTO.fail("入件中信，开户行手机号不能为空");
 			}
 			if(Strings.isNullOrEmpty(merchantBank.getAccountCardId())){
-				logger.warn("入件中信，开户行身份证号不能为空");
-				return null;
+				logger.error("入件中信，开户行身份证号不能为空");
+				return ResultDTO.fail("入件中信，开户行身份证号不能为空");
 			}
 			if(Strings.isNullOrEmpty(merchantBank.getAccountNo())){
-				logger.warn("入件中信，开户账号不能为空");
-				return null;
+				logger.error("入件中信，开户账号不能为空");
+				return ResultDTO.fail("入件中信，开户账号不能为空");
 			}
 			int max = 11;
 			if (StringUtils.trim(merchantBank.getAccountPhone()).length() > max) {
-				logger.warn("入件中信，手机号不合法，请重新输入");
-				return null;
+				logger.error("入件中信，手机号不合法，请重新输入");
+				return ResultDTO.fail("入件中信，手机号不合法，请重新输入");
 			}
 
 			// 开户身份证
 			boolean b = Pattern.matches("^([0-9]{17}[0-9Xx])|([0-9]{15})$", merchantBank.getAccountCardId());
 			if (b == false) {
-				logger.warn("入件中信，身份证格式不正确请重新输入");
-				return null;
+				logger.error("入件中信，身份证格式不正确请重新输入");
+				return ResultDTO.fail("入件中信，身份证格式不正确请重新输入");
 			}
 			// 开户账号40位以内
 			int accountMax = 40;
 			if (StringUtils.trim(merchantBank.getAccountNo()).length() > accountMax) {
-				logger.warn("入件中信，开户账号有误，请重新输入");
-				return null;
+				logger.error("入件中信，开户账号有误，请重新输入");
+				return ResultDTO.fail("入件中信，开户账号有误，请重新输入");
 			}
 		}
 		if (merchantContact == null || merchantBank == null) {
-			return null;
+			return ResultDTO.fail("入件中信，商户名不能为空");
 		}
 		MerchantTerminal terminalWX = core.getTerminaInfosWX();
 		if (terminalWX != null) {
@@ -881,7 +885,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		}
 		merchantCoreEntityZxyhDTO.setAcctType(merchantBank.getAccountType());// 账户类型
 		logger.error(JSONObject.toJSONString(merchantCoreEntityZxyhDTO));
-		return merchantCoreEntityZxyhDTO;
+		return result.success(merchantCoreEntityZxyhDTO);
 
 	}
 

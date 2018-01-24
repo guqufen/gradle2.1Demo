@@ -1,6 +1,7 @@
  
 package net.fnsco.web.controller.merchant;
   
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,14 @@ public class ZxyhMercController extends BaseController {
 			return ResultDTO.fail();
 		}
 		//根据id获取入驻中信银行商户所需的必须信息
-		MerchantCoreEntityZxyhDTO core = merchantCoreService.queryZXYHInfoById(id);
+		logger.info("id="+id);
+		ResultDTO<MerchantCoreEntityZxyhDTO> result = merchantCoreService.queryZXYHInfoById(id);
+		MerchantCoreEntityZxyhDTO core = null;
+		if(result.isSuccess()){
+			core = result.getData();
+		}else{
+			return ResultDTO.fail(result.getMessage());
+		}
 		if(core == null){
 			return ResultDTO.failForMessage(BigdataConstant.APP_MER_ENTITY_INNERCODE_NULL);
 		}
@@ -56,7 +64,7 @@ public class ZxyhMercController extends BaseController {
 			return ResultDTO.successForSubmit();
 		}else{
 			logger.error("入件返回结果"+map.toString());
-			return ResultDTO.fail(map);
+			return ResultDTO.fail(map,map.get("respMsg")+"");
 		}
 		
 	}

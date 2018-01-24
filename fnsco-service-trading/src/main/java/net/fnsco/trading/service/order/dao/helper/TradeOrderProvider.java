@@ -206,6 +206,9 @@ public class TradeOrderProvider {
 		return new SQL() {
 			{
 				UPDATE(TABLE_NAME);
+				if(tradeOrder.getId() != null){
+					SET("id = #{tradeOrder.id}");
+				}
 				if (StringUtils.isNotBlank(tradeOrder.getOrderNo())) {
 					SET("order_no=#{tradeOrder.orderNo}");
 				}
