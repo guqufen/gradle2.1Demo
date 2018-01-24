@@ -85,8 +85,7 @@ public class ResultDTO<T extends Object> extends DTO {
 		return result;
 	}
 	public static ResultDTO fail(Object data) {
-		ResultDTO result = new ResultDTO(false, data, CoreConstants.E_BANK_VALIDATE_FAIL,
-				CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.E_BANK_VALIDATE_FAIL));
+		ResultDTO result = new ResultDTO(false, data, CoreConstants.E_BANK_VALIDATE_FAIL,CoreConstants.ERROR_MESSGE_MAP.get(CoreConstants.E_BANK_VALIDATE_FAIL));
 		return result;
 	}
 
