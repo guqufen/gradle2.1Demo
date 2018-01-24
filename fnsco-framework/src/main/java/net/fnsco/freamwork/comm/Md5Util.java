@@ -39,8 +39,13 @@ public class Md5Util {
     }
 
     public String md5(String str) {
-
-        byte[] array = md5.digest(str.getBytes());
+    	MessageDigest  md51 = null ;
+    	try {
+            md51 = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("Md5Util.getInstance NoSuchAlgorithmException", e);
+        }
+        byte[] array = md51.digest(str.getBytes());
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < array.length; ++i) {
             sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
