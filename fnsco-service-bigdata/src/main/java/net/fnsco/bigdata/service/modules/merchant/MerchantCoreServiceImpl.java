@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -709,6 +710,7 @@ public class MerchantCoreServiceImpl implements MerchantCoreService {
 		ResultDTO<MerchantCoreEntityZxyhDTO> result = new ResultDTO<MerchantCoreEntityZxyhDTO>();
 		MerchantCoreEntityZxyhDTO merchantCoreEntityZxyhDTO = new MerchantCoreEntityZxyhDTO();
 		MerchantCore core = merchantCoreDao.queryAllByIdForAddZXMerc(id);
+		logger.error("渠道商户信息="+JSONObject.toJSONString(core));
 		// 渠道商戶信息
 		if (core == null) {
 			return ResultDTO.fail("未找到对应渠道商户信息");
