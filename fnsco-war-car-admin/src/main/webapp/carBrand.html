@@ -30,7 +30,28 @@ textarea {
 <body class="gray-bg">
 	<div class="panel-body animated fadeInRight">
 		<div class="panel panel-default">
-
+		<!-- 搜索条件 -->
+     <form id="formSearch" class="form-horizontal">
+            <div class="form-group" style="margin-top:15px">
+                <div class="row col-sm-10">
+                    <div class="col-sm-4">
+                        <label class="control-label" for="nameSerch">汽车品牌名称：</label>
+                        <input type="text" class="form-control" id="nameSerch" />
+                    </div>
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-4">
+                   	 	<label class="control-label" for="supperNameSerch">上级品牌名称：</label>
+                        <input type="text" class="form-control" id="supperNameSerch" />
+                       <!--  <label class="control-label" for="supperNameSerch">上级汽车品牌名称：</label>
+                        <input type="text" class="form-control" id="supperNameSerch" /> -->
+                    </div>
+                </div>
+                <div class="col-sm-2" style="text-align: right;">
+                    <button type="button" id="btn_query" class="btn btn-primary" onclick="javascript:queryEvent('table');"><span class="glyphicon glyphicon-search"></span>查询</button>
+                    <button type="button" id="btn_reset" class="btn btn-default" onclick="javascript:resetEvent('formSearch','table');"><span class="glyphicon glyphicon-refresh"></span>重置</button>
+                </div>
+            </div>
+        </form>
 			<!-- start -->
 			<div class="ibox float-e-margins">
 				<div class="ibox-content">
@@ -126,6 +147,7 @@ textarea {
 													<option value="6">货车</option>
 													<option value="7">客车</option>
 													<option value="5">两厢</option>
+													<option value="9">其他车型</option>
 													<option value="4">三厢</option>
 													<option value="3">商务中级车</option>
 													<option value="1">SUV</option>

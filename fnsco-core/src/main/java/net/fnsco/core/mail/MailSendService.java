@@ -5,6 +5,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,7 @@ import net.fnsco.core.utils.TaskUtils;
 public class MailSendService extends BaseService{
 	
 	@Autowired
-	private JavaMailSender mailSender;
-	
+	private Environment env;
 	/**
 	 * sendSystemMail:(发送系统邮件，发送方为公司)
 	 *
@@ -35,10 +35,9 @@ public class MailSendService extends BaseService{
 	 * @author tangliang
 	 * @date   2018年1月23日 下午4:26:16
 	 */
-	public void sendSystemMail(MailSendParams params) {
+	public void sendSystemMail(MailSendParams params,JavaMailSender mailSender) {
 		params.setNick("杭州法奈昇科技有限公司");
-//		params.setFormAddress("");
-		sendMail(params);
+		sendMail(params,mailSender);
 	}
 	
 	/**
@@ -49,9 +48,9 @@ public class MailSendService extends BaseService{
 	 * @author tangliang
 	 * @date   2018年1月23日 下午4:22:11
 	 */
-	public void sendMail(MailSendParams params) {
+	public void sendMail(MailSendParams params,JavaMailSender mailSender) {
 		
-		if(Strings.isNullOrEmpty(params.getToTarget())||Strings.isNullOrEmpty(params.getToAddress())) {
+		if(Strings.isNullOrEmpty(params.getToAddress())) {
 			logger.error("发送邮件参数错误!"+params);
 			return ;
 		}
@@ -74,7 +73,7 @@ public class MailSendService extends BaseService{
 				try {
 					message = mailSender.createMimeMessage();
 					MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-					helper.setFrom(new InternetAddress(nick + " <" + params.getToTarget() + ">"));
+					helper.setFrom(new InternetAddress(nick + " <" + env.getProperty("spring.mail.username") + ">"));
 					helper.setTo(params.getToAddress());
 					helper.setSubject(params.getSendSubject());
 					helper.setText(params.getSendText(), true);
@@ -82,6 +81,7 @@ public class MailSendService extends BaseService{
 					logger.error("邮件发送失败");
 				}
 				mailSender.send(message);
+				logger.info("邮件发送成功!发送内容:"+params.toString());
 			}
 		});
     }

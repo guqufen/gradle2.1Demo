@@ -14,8 +14,6 @@ public class MailSendParams {
 	
 	private String nick;//发送者称呼
 	
-	private String toTarget;//收件人
-	
 	private String toAddress;//发送目标邮箱地址
 	
 	private String sendText;//发送内容
@@ -64,28 +62,6 @@ public class MailSendParams {
 	
 	public void setNick(String nick) {
 		this.nick = nick;
-	}
-
-	/**
-	 * toTarget
-	 *
-	 * @return  the toTarget
-	 * @since   CodingExample Ver 1.0
-	*/
-	
-	public String getToTarget() {
-		return toTarget;
-	}
-
-	/**
-	 * toTarget
-	 *
-	 * @param   toTarget    the toTarget to set
-	 * @since   CodingExample Ver 1.0
-	 */
-	
-	public void setToTarget(String toTarget) {
-		this.toTarget = toTarget;
 	}
 
 	/**
@@ -144,7 +120,7 @@ public class MailSendParams {
 	public int hashCode() {
 		
 		// TODO Auto-generated method stub
-		return toTarget.hashCode()+toAddress.hashCode();
+		return toAddress.hashCode();
 		
 	}
 }
