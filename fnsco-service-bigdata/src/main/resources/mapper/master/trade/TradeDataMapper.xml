@@ -725,6 +725,9 @@
       <if test="timeStamp != null and timeStamp != ''" >
         AND time_stamp = #{timeStamp,jdbcType=VARCHAR}
       </if>
+      <if test="timeStampBack != null and timeStampBack != ''" >
+        AND time_stamp LIKE CONCAT(#{timeStampBack},'%')
+      </if>
       <if test="tradeDetail != null and tradeDetail != ''" >
         AND trade_detail = #{tradeDetail,jdbcType=VARCHAR}
       </if>
