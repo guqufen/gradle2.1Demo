@@ -17,7 +17,9 @@ public class CarBrandProvider {
 	private static final String TABLE_NAME = "car_dic_type";
 
 	public String pageList(Map<String, Object> params) {
+		
 		CarBrandDO brandDO = (CarBrandDO) params.get("carBrandDO");
+		
 		Integer pageNum = (Integer) params.get("pageNum");
 		Integer pageSize = (Integer) params.get("pageSize");
 		if (pageNum == null || pageNum == 0) {
@@ -37,7 +39,7 @@ public class CarBrandProvider {
 		        	WHERE("id = #{carBrandDO.id}");
 		        }
 		        if ( !Strings.isNullOrEmpty(brandDO.getName()) ) {
-		        	WHERE("name = #{carBrandDO.name}");
+		        	WHERE("name like CONCAT('%',#{carBrandDO.name},'%')");
 				}
 		        if (brandDO.getSupperId() != null) {
 		        	WHERE("supper_id = #{carBrandDO.supperId}");
@@ -54,6 +56,15 @@ public class CarBrandProvider {
 		        if (brandDO.getIsHot() != null) {
 		        	WHERE("is_hot = #{carBrandDO.isHot}");
 				}
+		        if (!Strings.isNullOrEmpty(brandDO.getSupperName())) {
+		        	String sql = "SELECT DISTINCT id FROM car_dic_type WHERE name like CONCAT('%',#{carBrandDO.supperName},'%') AND supper_id = 0";
+		        	WHERE("id IN ( "+sql+" )"+//1
+		        			"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( "+sql+" ) )"+//2
+		        			"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( "+sql+" ) ) )"+//3
+		        			"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type "+
+		        			"WHERE supper_id IN ( "+sql+" ) ) ) )"//4
+						);
+				}
 		        ORDER_BY("id asc limit " + start + ", " + limit );
 			}
 		}.toString();
@@ -61,7 +72,9 @@ public class CarBrandProvider {
 	
 	public String pageListCount(Map<String, Object> params) {
 
+		
 		CarBrandDO brandDO = (CarBrandDO) params.get("carBrandDO");
+		
 		return new SQL() {
 			{
 				SELECT("count(*)");
@@ -70,7 +83,7 @@ public class CarBrandProvider {
 					WHERE("id = #{carBrandDO.id}");
 				}
 				if (!Strings.isNullOrEmpty(brandDO.getName())) {
-					WHERE("name = #{carBrandDO.name}");
+					WHERE("name like CONCAT('%',#{carBrandDO.name},'%')");
 				}
 				if (brandDO.getSupperId() != null) {
 					WHERE("supper_id = #{carBrandDO.supperId}");
@@ -86,6 +99,15 @@ public class CarBrandProvider {
 				}
 				if (brandDO.getIsHot() != null) {
 					WHERE("is_hot = #{carBrandDO.isHot}");
+				}
+				if (!Strings.isNullOrEmpty(brandDO.getSupperName())) {
+					String sql = "SELECT DISTINCT id FROM car_dic_type WHERE name like CONCAT('%',#{carBrandDO.supperName},'%') AND supper_id = 0";
+		        	WHERE("id IN ( "+sql+" )"+//1
+		        			"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( "+sql+" ) )"+//2
+		        			"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( "+sql+" ) ) )"+//3
+		        			"OR id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type WHERE supper_id IN ( SELECT DISTINCT id FROM car_dic_type "+
+		        			"WHERE supper_id IN ( "+sql+" ) ) ) )"//4
+						);
 				}
 			}
 		}.toString();
