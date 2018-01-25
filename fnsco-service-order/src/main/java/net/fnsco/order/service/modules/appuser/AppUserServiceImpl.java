@@ -31,6 +31,7 @@ import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
+import net.fnsco.core.utils.RedisUtils;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.appuser.AppUserService;
@@ -213,7 +214,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
         SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
-        MsgCodeMap.put(mobile + deviceId, object);
+//        MsgCodeMap.put(mobile + deviceId, object);
+        RedisUtils.setString(mobile + deviceId,RedisUtils.EXRP_HOUR , code);
         /**
         * 开启线程发送手机验证码
         */
@@ -249,27 +251,38 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (Strings.isNullOrEmpty(mobile)) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
         }
-        if (MsgCodeMap.get(mobile + deviceId) == null) {
-            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
-        }
+//        if (MsgCodeMap.get(mobile + deviceId) == null) {
+//            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
+//        }
         //从Map中根据手机号取到存入的验证码
-        SmsCodeDTO codeDto = MsgCodeMap.get(mobile + deviceId);
-        if (null == codeDto) {
-            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
+        String value = RedisUtils.getString(mobile + deviceId);
+        if(Strings.isNullOrEmpty(value)){
+        	return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);//已超时
         }
-        //时间
-        long newTime = System.currentTimeMillis();
-        //验证码超过30分钟
-        if ((newTime - codeDto.getTime()) / 1000 / 60 > 30) {
-            MsgCodeMap.remove(mobile + deviceId);
-            return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);
+        if(code.equals(value)){
+        	RedisUtils.delString(mobile + deviceId);//匹配
+        	return ResultDTO.success();
+        }else{
+        	return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);//不匹配
         }
-        //验证码正确
-        if (code.equals(codeDto.getCode())) {
-            MsgCodeMap.remove(mobile + deviceId);
-            return ResultDTO.success();
-        }
-        return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
+        /////////////////原用map代码///////////////////////////
+//        SmsCodeDTO codeDto = MsgCodeMap.get(mobile + deviceId);
+//        if (null == codeDto) {
+//            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
+//        }
+//        //时间
+//        long newTime = System.currentTimeMillis();
+//        //验证码超过30分钟
+//        if ((newTime - codeDto.getTime()) / 1000 / 60 > 30) {
+//            MsgCodeMap.remove(mobile + deviceId);
+//            return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);
+//        }
+//        //验证码正确
+//        if (code.equals(codeDto.getCode())) {
+//            MsgCodeMap.remove(mobile + deviceId);
+//            return ResultDTO.success();
+//        }
+//        return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
     }
 
     //根据手机号找回登录密码
@@ -449,7 +462,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
         SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
-        MsgCodeMap.put(type+mobile + deviceId, object);
+//        MsgCodeMap.put(type+mobile + deviceId, object);
+        RedisUtils.setString(type+mobile + deviceId,RedisUtils.EXRP_HOUR , code);
         /**
         * 开启线程发送手机验证码
         */
