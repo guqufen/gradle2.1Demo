@@ -5,6 +5,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import com.alibaba.druid.util.StringUtils;
 
@@ -62,20 +64,20 @@ public class RedisUtils {
 			config.setMaxIdle(MAX_IDLE);
 			config.setMaxWaitMillis(MAX_WAIT);
 			config.setTestOnBorrow(TEST_ON_BORROW);
-			jedisPool = new JedisPool(config, ADDR_ARRAY.split(",")[0], PORT, TIMEOUT, AUTH);
+			jedisPool = new JedisPool(config, ADDR_ARRAY, PORT, TIMEOUT, AUTH);
 		} catch (Exception e) {
 			logger.error("First create JedisPool error : " + e);
-			try {
-				// 如果第一个IP异常，则访问第二个IP
-				JedisPoolConfig config = new JedisPoolConfig();
-				config.setMaxTotal(MAX_ACTIVE);
-				config.setMaxIdle(MAX_IDLE);
-				config.setMaxWaitMillis(MAX_WAIT);
-				config.setTestOnBorrow(TEST_ON_BORROW);
-				jedisPool = new JedisPool(config, ADDR_ARRAY.split(",")[1], PORT, TIMEOUT, AUTH);
-			} catch (Exception e2) {
-				logger.error("Second create JedisPool error : " + e2);
-			}
+//			try {
+//				// 如果第一个IP异常，则访问第二个IP
+//				JedisPoolConfig config = new JedisPoolConfig();
+//				config.setMaxTotal(MAX_ACTIVE);
+//				config.setMaxIdle(MAX_IDLE);
+//				config.setMaxWaitMillis(MAX_WAIT);
+//				config.setTestOnBorrow(TEST_ON_BORROW);
+//				jedisPool = new JedisPool(config, ADDR_ARRAY.split(",")[1], PORT, TIMEOUT, AUTH);
+//			} catch (Exception e2) {
+//				logger.error("Second create JedisPool error : " + e2);
+//			}
 		}
 	}
 
@@ -170,4 +172,15 @@ public class RedisUtils {
 		return getJedis().get(key);
 	}
 
+	/**
+	 * 删除String值
+	 * 
+	 * @param key
+	 * @return value
+	 */
+	public synchronized static void delString(String key){
+		if(getJedis().exists(key)){
+			getJedis().del(key); 
+		}
+	}
 }
