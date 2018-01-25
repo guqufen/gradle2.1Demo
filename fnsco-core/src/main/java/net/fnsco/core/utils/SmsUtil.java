@@ -86,6 +86,21 @@ public class SmsUtil {
         return result;
     }
     
+    public static String e789TicketPay(String mobile, String name,String desc) throws IOException, URISyntaxException {
+
+        //修改为您的apikey.apikey可在官网（http://www.yuanpian.com)登录后获取
+        String apikey = "0425f962446c4b2de94e6e08e72120ad ";
+
+        //设置模板ID，如使用1号模板:【#company#】您的验证码是#code#
+        long tpl_id = 2164986;
+        //设置对应的模板变量值
+
+        String tpl_value = URLEncoder.encode("#name#", ENCODING) + "=" + URLEncoder.encode(name, ENCODING) + "&" + URLEncoder.encode("#desc#", ENCODING) + "=" + URLEncoder.encode(desc, ENCODING);
+
+        String result = tplSendSms(apikey, tpl_id, tpl_value, mobile);
+
+        return result;
+    }
     public static String ZRCode(String mobile, String code) throws IOException, URISyntaxException {
 
         //修改为您的apikey.apikey可在官网（http://www.yuanpian.com)登录后获取

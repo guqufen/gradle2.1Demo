@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Strings;
 
@@ -18,6 +19,8 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
+import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
@@ -452,7 +455,8 @@ public class TicketController extends BaseController {
         ticketOrder.setAppUserId(queryOrderListJO.getUserId());
         Integer pageNum = 1;
         Integer pageSize = 40;
-        ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
+        final List<TicketOrderDO> userIdList = ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
+        sendSms(userIdList);
         Integer[] statuses = { 0, 1, 2 };
         ticketOrder.setStatuses(statuses);
         ResultPageDTO<TrainOrderListVO> resultList = ticketOrderService.getOrderList(ticketOrder, pageNum, pageSize);
@@ -527,11 +531,45 @@ public class TicketController extends BaseController {
         ticketOrder.setAppUserId(queryOrderListJO.getUserId());
         Integer pageNum = 1;
         Integer pageSize = 20;
-        ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
+        final List<TicketOrderDO> userIdList = ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
+        sendSms(userIdList);
         Integer[] statuses = { 4 };
         ticketOrder.setStatuses(statuses);
         ResultPageDTO<TrainOrderListVO> resultList = ticketOrderService.getOrderList(ticketOrder, pageNum, pageSize);
         return success(resultList);
+    }
+
+    private void sendSms(final List<TicketOrderDO> userIdList) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (TicketOrderDO order : userIdList) {
+                    //邱您已购买1月20日G1362次4车12B号，长沙南站13：25开 。【E789】
+                    AppUser mAppUser = appUserService.selectAppUserById(order.getAppUserId());
+                    String mobile = mAppUser.getMobile();
+                    String name = mAppUser.getUserName();
+                    String trainDate = order.getTrainDate();
+                    String trainCode = order.getTrainCode();
+                    String fromStationName = order.getFromStationName();
+                    String startTime = order.getStartTime();
+                    String desc = name + "您已购买" + DateUtils.strToChina(trainDate) + trainCode + "次车票" + "," + fromStationName + "站" + startTime + "开。";
+                    try {
+                        String callback = SmsUtil.e789TicketPay(mobile, name, desc);
+                        JSONObject callbackJson = (JSONObject) JSONObject.parse(callback);
+                        String resultCode = callbackJson.getString("code");
+                        if ("0".equals(resultCode)) {
+                            logger.warn("已发送至手机号" + mobile + "返回详情" + callback);
+                        } else {
+                            logger.error("未能够发送至手机" + mobile + "错误code" + resultCode + ";错误详情" + callback);
+                        }
+                    } catch (Exception e) {
+                        logger.error("未能够发送至手机" + mobile + "错误原因:异常错误");
+                        logger.error("短信发送异常 ", e);
+                    }
+                }
+            }
+        }).start();
     }
 
     /**
@@ -557,12 +595,13 @@ public class TicketController extends BaseController {
             for (int i = 0; i < statuses.length; i++) {
                 statusIntes[i] = Integer.parseInt(statuses[i]);
             }
-            
+
         }
 
         Integer pageNum = 1;
         Integer pageSize = 40;
-        ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
+        final List<TicketOrderDO> userIdList = ticketOrderService.updateOrderStatus(ticketOrder, pageNum, pageSize);
+        sendSms(userIdList);
         ticketOrder.setStatuses(statusIntes);
         ResultPageDTO<TrainOrderListVO> resultList = ticketOrderService.getOrderList(ticketOrder, pageNum, pageSize);
         return success(resultList);

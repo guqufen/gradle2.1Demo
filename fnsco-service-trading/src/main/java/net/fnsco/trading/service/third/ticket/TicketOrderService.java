@@ -61,7 +61,8 @@ public class TicketOrderService extends BaseService {
     }
 
     @Transactional
-    public void updateOrderStatus(TicketOrderDO ticketOrder, Integer pageNum, Integer pageSize) {
+    public List<TicketOrderDO> updateOrderStatus(TicketOrderDO ticketOrder, Integer pageNum, Integer pageSize) {
+        List<TicketOrderDO> userIdList = Lists.newArrayList();
         Integer[] statuses = { 1, 2, 4, 7 };
         ticketOrder.setStatuses(statuses);
         List<TicketOrderDO> pageList = this.ticketOrderDAO.pageList(ticketOrder, pageNum, pageSize);
@@ -69,7 +70,6 @@ public class TicketOrderService extends BaseService {
             if (Strings.isNullOrEmpty(order.getPayOrderNo())) {
                 continue;
             }
-            Integer appUserId = order.getAppUserId();
             JSONObject obj = TrainTicketsUtil.getOrderStatus(order.getPayOrderNo());
             if (null != obj) {
                 //0占座中1失败2成功4购买成功
@@ -148,8 +148,10 @@ public class TicketOrderService extends BaseService {
                         if (TicketConstants.OrderStateEnum.PAYING.getCode().equals(order.getStatus())) {
                             appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
                             order.setStatus(TicketConstants.OrderStateEnum.SUCCESS.getCode());
+                            //发送成功短信
+                            userIdList.add(order);
                         }
-                        //发送成功短信
+                        
                         //更新订单表
                         TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOriginalOrderNo(order.getOrderNo());
                         tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.SUCCESS.getCode());
@@ -212,7 +214,7 @@ public class TicketOrderService extends BaseService {
                 }
             }
         }
-
+        return userIdList;
     }
 
     // 分页
