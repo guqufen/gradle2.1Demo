@@ -138,8 +138,32 @@ public class TradeData {
     private String       createTimeStr;
     
     private String  legalPerson;
+  //POS发送流水数据校验使用到该字段
+    private String  timeStampBack;
     
     /**
+	 * timeStampBack
+	 *
+	 * @return  the timeStampBack
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public String getTimeStampBack() {
+		return timeStampBack;
+	}
+
+	/**
+	 * timeStampBack
+	 *
+	 * @param   timeStampBack    the timeStampBack to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public void setTimeStampBack(String timeStampBack) {
+		this.timeStampBack = timeStampBack;
+	}
+
+	/**
 	 * startCreateTime
 	 *
 	 * @return  the startCreateTime

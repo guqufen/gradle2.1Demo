@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Strings;
 import com.lakala.sign.LKLSignature;
 
 import io.swagger.annotations.Api;
@@ -82,6 +83,7 @@ public class LklTradeDateSyncController extends BaseController {
     @ResponseBody
     public Object transtradeSave(String sign, String data) {
         logger.error("拉卡拉同步数据输入参数：" + data);
+        JSONObject jsonObject = new JSONObject();
         LklTradeDataJO dataJO = JSON.parseObject(data, LklTradeDataJO.class);
         Map<String, String> dataMap = toLinkedHashMap(data);
         String path = request.getServletContext().getRealPath("WEB-INF/" + publickeyFile);
@@ -95,6 +97,13 @@ public class LklTradeDateSyncController extends BaseController {
             unsignReslut = LKLSignature.rsaCheckV1(dataMap, publicKey, charset);
         } catch (Exception e) {
             logger.error("拉卡拉同步数据验签异常", e);
+        }
+      //txnSubType=012412 都不同步
+        if(!Strings.isNullOrEmpty(dataJO.getTrade_type()) && "012412".equals(dataJO.getTrade_type())) {
+        	logger.error("该数据不需要同步!data ="+data);
+        	jsonObject.element("return_code", "FAIL");
+            jsonObject.element("return_msg", "不需要同步");
+            return jsonObject;
         }
         TradeDataLklDO tradeDataLkl = new TradeDataLklDO();
         tradeDataLkl.setMerId(dataJO.getMch_id());
@@ -143,7 +152,6 @@ public class LklTradeDateSyncController extends BaseController {
         tradeData.setCardOrg(tradeDataLkl.getDcType());
         tradeDataService.saveTradeData(tradeData);
         
-        JSONObject jsonObject = new JSONObject();
         if (!unsignReslut) {
             //验签失败，返回FAIL，会执行重发
             jsonObject.element("return_code", "FAIL");

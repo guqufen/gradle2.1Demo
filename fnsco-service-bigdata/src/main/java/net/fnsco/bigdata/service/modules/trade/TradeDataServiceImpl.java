@@ -109,7 +109,10 @@ public class TradeDataServiceImpl extends BaseService implements TradeDataServic
         TradeData tradeDateCondition  = new TradeData();
         tradeDateCondition.setAmt(tradeData.getAmt());
         tradeDateCondition.setTermId(tradeData.getTermId());
-        tradeDateCondition.setTimeStamp(tradeData.getTimeStamp());
+        String timeStamp = tradeData.getTimeStamp();
+		if(!Strings.isNullOrEmpty(timeStamp) && timeStamp.length()>7) {
+        	tradeDateCondition.setTimeStampBack(timeStamp.substring(0, 8));//年月日相同就可以
+        }
         tradeDateCondition.setInnerCode(innerCode);
         tradeDateCondition.setReferNo(tradeData.getReferNo());
         tradeDateCondition.setTxnType(tradeData.getTxnType());
