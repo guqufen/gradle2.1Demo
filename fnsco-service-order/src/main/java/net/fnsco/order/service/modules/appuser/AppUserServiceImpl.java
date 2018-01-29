@@ -239,10 +239,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }).start();
         return ResultDTO.success();
     }
-
     //验证码对比
     public ResultDTO validateCode(String deviceId, String code, String mobile) {
-        //非空判断
+    	//非空判断
         if (Strings.isNullOrEmpty(deviceId)) {
             return ResultDTO.fail(ApiConstant.E_APP_DEVICETYPE_EMPTY);
         } else if (Strings.isNullOrEmpty(code)) {
@@ -251,6 +250,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (Strings.isNullOrEmpty(mobile)) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
         }
+        
 //        if (MsgCodeMap.get(mobile + deviceId) == null) {
 //            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
 //        }
@@ -551,11 +551,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
         } else if (Strings.isNullOrEmpty(appUserDTO.getPassword())) {
             return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
-        }
-        //根据手机号查询用户实体是否存在
-        AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
-        if (user != null) {
-            return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
         }
         //根据deviceToken查找记录 如果存在就清空
         List<AppUser> items = appUserDao.queryBydeviceToken(appUserDTO.getDeviceToken());
