@@ -1,34 +1,37 @@
 package net.fnsco.core.utils;
 
-import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import com.alibaba.druid.util.StringUtils;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-
+@Component
 public class RedisUtils {
 
 	protected static ReentrantLock lockPool = new ReentrantLock();
 	protected static ReentrantLock lockJedis = new ReentrantLock();
-
+	
+	@Autowired
+	private Environment env;
+	
 	protected static Logger logger = LoggerFactory.getLogger(RedisUtils.class);
 
 	// Redis服务器IP
-	private static String ADDR_ARRAY = "192.168.1.88";
+	private static String ADDR_ARRAY = "spring.redis.host";
 
 	// Redis的端口号
-	private static int PORT = 6379;
+	private static String PORT = "spring.redis.port";
 
 	// 访问密码
-	private static String AUTH = "FnsRedis124";
+	private static String AUTH = "spring.redis.password";
 	// 可用连接实例的最大数目，默认值为8；
 	// 如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)。
 	private static int MAX_ACTIVE = 8;
@@ -57,14 +60,14 @@ public class RedisUtils {
 	/**
 	 * 初始化Redis连接池
 	 */
-	private static void initialPool() {
+	private  void initialPool() {
 		try {
 			JedisPoolConfig config = new JedisPoolConfig();
 			config.setMaxTotal(MAX_ACTIVE);
 			config.setMaxIdle(MAX_IDLE);
 			config.setMaxWaitMillis(MAX_WAIT);
 			config.setTestOnBorrow(TEST_ON_BORROW);
-			jedisPool = new JedisPool(config, ADDR_ARRAY, PORT, TIMEOUT, AUTH);
+			jedisPool = new JedisPool(config, env.getProperty(ADDR_ARRAY), Integer.valueOf(env.getProperty(PORT)), TIMEOUT, env.getProperty(AUTH));
 		} catch (Exception e) {
 			logger.error("First create JedisPool error : " + e);
 //			try {
@@ -84,7 +87,7 @@ public class RedisUtils {
 	/**
 	 * 在多线程环境同步初始化
 	 */
-	private static void poolInit() {
+	private  void poolInit() {
 		lockPool.lock();
 		try {
 			if (jedisPool == null) {
@@ -97,7 +100,7 @@ public class RedisUtils {
 		}
 	}
 
-	public static Jedis getJedis() {
+	public  Jedis getJedis() {
 		lockJedis.lock();
 		if (jedisPool == null) {
 			poolInit();
@@ -121,7 +124,7 @@ public class RedisUtils {
 	 * 
 	 * @param jedis
 	 */
-	public static void returnResource(final Jedis jedis) {
+	public  void returnResource(final Jedis jedis) {
 		if (jedis != null && jedisPool != null) {
 			jedisPool.returnResource(jedis);
 		}
@@ -133,7 +136,7 @@ public class RedisUtils {
 	 * @param key
 	 * @param value
 	 */
-	public synchronized static void setString(String key, String value) {
+	public synchronized  void setString(String key, String value) {
 		try {
 			value = StringUtils.isEmpty(value) ? "" : value;
 			getJedis().set(key, value);
@@ -150,7 +153,7 @@ public class RedisUtils {
 	 *            以秒为单位
 	 * @param value
 	 */
-	public synchronized static void setString(String key, int seconds, String value) {
+	public synchronized  void setString(String key, int seconds, String value) {
 		try {
 			value = StringUtils.isEmpty(value) ? "" : value;
 			getJedis().setex(key, seconds, value);
@@ -165,7 +168,7 @@ public class RedisUtils {
 	 * @param key
 	 * @return value
 	 */
-	public synchronized static String getString(String key) {
+	public synchronized  String getString(String key) {
 		if (getJedis() == null || !getJedis().exists(key)) {
 			return null;
 		}
@@ -178,7 +181,7 @@ public class RedisUtils {
 	 * @param key
 	 * @return value
 	 */
-	public synchronized static void delString(String key){
+	public synchronized  void delString(String key){
 		if(getJedis().exists(key)){
 			getJedis().del(key); 
 		}

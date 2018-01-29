@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -84,6 +86,10 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private MerchantEntityDao         merchantEntityDao;
     @Autowired
    	private Environment env;
+    
+    @Autowired
+    private RedisUtils redisUtils;
+
     //注册
     @Override
     @Transactional
@@ -215,7 +221,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
         SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
 //        MsgCodeMap.put(mobile + deviceId, object);
-        RedisUtils.setString(mobile + deviceId,RedisUtils.EXRP_HOUR , code);
+        redisUtils.setString(mobile + deviceId,RedisUtils.EXRP_HOUR , code);
         /**
         * 开启线程发送手机验证码
         */
@@ -255,12 +261,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 //            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
 //        }
         //从Map中根据手机号取到存入的验证码
-        String value = RedisUtils.getString(mobile + deviceId);
+        String value = redisUtils.getString(mobile + deviceId);
         if(Strings.isNullOrEmpty(value)){
         	return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);//已超时
         }
         if(code.equals(value)){
-        	RedisUtils.delString(mobile + deviceId);//匹配
+        	redisUtils.delString(mobile + deviceId);//匹配
         	return ResultDTO.success();
         }else{
         	return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);//不匹配
@@ -463,7 +469,11 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
         SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
 //        MsgCodeMap.put(type+mobile + deviceId, object);
-        RedisUtils.setString(type+mobile + deviceId,RedisUtils.EXRP_HOUR , code);
+//        ValueOperations<String, String> valOpsStr = stringRedisTemplate.opsForValue();
+//        valOpsStr.set(mobile + deviceId,code);
+       
+        redisUtils.setString(type+mobile + deviceId,RedisUtils.EXRP_HOUR , code);
+        System.out.println("获取:"+redisUtils.getString(type+mobile + deviceId));
         /**
         * 开启线程发送手机验证码
         */
