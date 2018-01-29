@@ -6,12 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +35,6 @@ import net.fnsco.core.base.PageDTO;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.OssLoaclUtil;
-import net.fnsco.core.utils.RedisUtils;
 import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.freamwork.comm.Md5Util;
 import net.fnsco.order.api.appuser.AppUserService;
@@ -51,7 +52,6 @@ import net.fnsco.order.api.dto.AppUserMerchantEntityDTO;
 import net.fnsco.order.api.dto.AppUserSettingDTO;
 import net.fnsco.order.api.dto.BandDto;
 import net.fnsco.order.api.dto.QueryBandDTO;
-import net.fnsco.order.api.dto.SmsCodeDTO;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
 import net.fnsco.order.service.dao.master.AppUserDao;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
@@ -64,9 +64,6 @@ import net.fnsco.order.service.domain.SysMsgAppSucc;
 public class AppUserServiceImpl extends BaseService implements AppUserService {
 
     private static final Logger            logger     = LoggerFactory.getLogger(AppUserServiceImpl.class);
-
-    private static Map<String, SmsCodeDTO> MsgCodeMap = new HashMap<>();                                  //存放验证码的
-    //private static Map<String,Integer> LoginTimeMap=new HashMap<>();//存放登录次数的
 
     @Autowired
     private AppUserDao                     appUserDao;
@@ -88,7 +85,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
    	private Environment env;
     
     @Autowired
-    private RedisUtils redisUtils;
+    StringRedisTemplate stringRedisTemplate;
+    @Resource(name = "stringRedisTemplate")
+    ValueOperations<String, String> valOpsStr;
 
     //注册
     @Override
@@ -182,11 +181,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     }
 
     private void insertRel(String innerCode, AppUser appUser, String roleId) {
-//        MerchantUserRel rel = new MerchantUserRel();
-//        rel.setAppUserId(appUser.getId());
-//        rel.setInnerCode(innerCode);
-//        rel.setModefyTime(new Date());
-//        merchantUserRelDao.insertSelective(rel);
         AppUserMerchant dto = new AppUserMerchant();
         dto.setAppUserId(appUser.getId());
         dto.setInnerCode(innerCode);
@@ -219,9 +213,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
-//        MsgCodeMap.put(mobile + deviceId, object);
-        redisUtils.setString(mobile + deviceId,RedisUtils.EXRP_HOUR , code);
+        valOpsStr.set(mobile + deviceId,code);
         /**
         * 开启线程发送手机验证码
         */
@@ -257,38 +249,16 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
         }
         
-//        if (MsgCodeMap.get(mobile + deviceId) == null) {
-//            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
-//        }
-        //从Map中根据手机号取到存入的验证码
-        String value = redisUtils.getString(mobile + deviceId);
+        String value = valOpsStr.get(mobile + deviceId);
         if(Strings.isNullOrEmpty(value)){
         	return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);//已超时
         }
         if(code.equals(value)){
-        	redisUtils.delString(mobile + deviceId);//匹配
+        	stringRedisTemplate.delete(mobile + deviceId);//匹配
         	return ResultDTO.success();
         }else{
         	return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);//不匹配
         }
-        /////////////////原用map代码///////////////////////////
-//        SmsCodeDTO codeDto = MsgCodeMap.get(mobile + deviceId);
-//        if (null == codeDto) {
-//            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
-//        }
-//        //时间
-//        long newTime = System.currentTimeMillis();
-//        //验证码超过30分钟
-//        if ((newTime - codeDto.getTime()) / 1000 / 60 > 30) {
-//            MsgCodeMap.remove(mobile + deviceId);
-//            return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);
-//        }
-//        //验证码正确
-//        if (code.equals(codeDto.getCode())) {
-//            MsgCodeMap.remove(mobile + deviceId);
-//            return ResultDTO.success();
-//        }
-//        return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
     }
 
     //根据手机号找回登录密码
@@ -467,13 +437,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
-//        MsgCodeMap.put(type+mobile + deviceId, object);
-//        ValueOperations<String, String> valOpsStr = stringRedisTemplate.opsForValue();
-//        valOpsStr.set(mobile + deviceId,code);
+        valOpsStr.set(type+mobile + deviceId,code);
        
-        redisUtils.setString(type+mobile + deviceId,RedisUtils.EXRP_HOUR , code);
-        System.out.println("获取:"+redisUtils.getString(type+mobile + deviceId));
         /**
         * 开启线程发送手机验证码
         */
