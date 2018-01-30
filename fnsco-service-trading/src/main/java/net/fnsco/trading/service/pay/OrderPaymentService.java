@@ -17,9 +17,9 @@ public interface OrderPaymentService {
      */
 	public ResultDTO<Object> aliCallBack(String resultStr);
 	
-	public ResultDTO<Map<String, Object>> generateQRCodeWeiXin(Integer userId,String txnAmt);
+	public ResultDTO<Map<String, Object>> generateQRCodeWeiXin(Integer userId,String txnAmt,String entityInnerCode,String innerCode);
 	
-	public ResultDTO<Map<String, Object>> generateQRCodeAliPay(Integer userId,String ip,String txnAmt);
+	public ResultDTO<Map<String, Object>> generateQRCodeAliPay(Integer userId,String ip,String txnAmt,String entityInnerCode,String innerCode);
 	
     public Map<String, Object> mechAdd(MerchantCoreEntityZxyhDTO core);
     

@@ -37,7 +37,8 @@ public class PassivePayController extends BaseController {
 		passivePayDTO.setStdtranamt(passivePayJO.getAmt());// 交易金额
 		passivePayDTO.setStd400memo("扫码支付");// 商品描述
 		passivePayDTO.setStdauthid(passivePayJO.getAuthId());// 授权码
-
+		
+		
 		return PaymentService.PassivePay(passivePayJO.getUserId(), passivePayDTO);
 	}
 

@@ -38,7 +38,7 @@ public interface AppUserMerchantDAO {
     @SelectProvider(type = AppUserMerchantProvider.class, method = "pageListCount")
     public Integer pageListCount(@Param("appUserMerchant") AppUserMerchantDO appUserMerchant);
 
-    @Select("SELECT ucr.inner_code FROM u_app_user_merchant_entity ue,m_merchant_core_entity_ref ucr WHERE ue.entity_inner_code = ucr.entity_inner_code and  ue.app_user_id = #{userId} limit 1")
-	public String getInnerCodeByUserId(@Param("userId") Integer userId);
+    @Select("SELECT inner_code FROM m_merchant_channel WHERE inner_code in (SELECT inner_code FROM m_merchant_core_entity_ref WHERE entity_inner_code=#{entityInnerCode}) and channel_type='05' LIMIT 1 ")
+	public String getInnerCodeByUserId(@Param("entityInnerCode") String entityInnerCode);
 
 }

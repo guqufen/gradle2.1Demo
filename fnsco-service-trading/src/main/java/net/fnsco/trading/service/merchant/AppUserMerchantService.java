@@ -56,8 +56,8 @@ public class AppUserMerchantService extends BaseService {
      return obj;
  }
 
-public String getInnerCodeByUserId(Integer userId) {
-	String innerCode = this.appUserMerchantDAO.getInnerCodeByUserId(userId);
+public String getInnerCodeByUserId(String entityInnerCode) {
+	String innerCode = this.appUserMerchantDAO.getInnerCodeByUserId(entityInnerCode);
 	return innerCode;
 }
 }

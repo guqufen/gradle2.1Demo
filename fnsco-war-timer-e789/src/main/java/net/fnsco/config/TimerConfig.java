@@ -108,6 +108,7 @@ public class TimerConfig {
     @Scheduled(cron = "0 * * * * ?") //每一分钟的0秒执行，每分钟执行一次
     public void updateMercStatus(){
     	logger.error("查询中信商户是否入件成功...开始...");
+    	//获取所有新增待审核的渠道商户信息
     	List<MercQueryDTO> list = this.merchantCoreService.getMercList();
     	paymentService.queryAloneMchtInfoList(list);
     	logger.error("查询中信商户是否入件成功...结束...");
