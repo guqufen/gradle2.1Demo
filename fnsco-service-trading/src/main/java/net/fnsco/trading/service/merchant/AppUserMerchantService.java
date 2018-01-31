@@ -50,6 +50,15 @@ public class AppUserMerchantService extends BaseService {
      return rows;
  }
 
+ //查询
+ public Integer queryMerchantByUserId (Integer appUserId) {
+	 AppUserMerchantDO appUserMerchant =  appUserMerchantDAO.getByAppUserId(appUserId);
+	 if(appUserMerchant!=null) {
+		 return 1;
+	 }
+	 return 0;
+ }
+ 
  // 查询
  public AppUserMerchantDO doQueryById (Integer id) {
      AppUserMerchantDO obj = this.appUserMerchantDAO.getById(id);

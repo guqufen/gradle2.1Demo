@@ -196,11 +196,9 @@ public class MyselfController extends BaseController {
                     return ResultDTO.success(datas);
                 } catch (Exception e) {
                     logger.error(fileName + "上传失败！" + e);
-                    throw new RuntimeException();
                 }
             } else {
                 logger.error(fileName + "上传失败");
-                throw new RuntimeException();
             }
         }
         return null;

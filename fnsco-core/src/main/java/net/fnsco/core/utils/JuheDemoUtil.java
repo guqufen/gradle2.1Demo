@@ -99,8 +99,10 @@ public class JuheDemoUtil {
 		}*/
     	params.put("realname", realname);
     	String resule = null;
+    	logger.info("实名认证参数："+params.toString());
 		try {
 			resule = net(URI_ID_CARD, params,"GET");
+			logger.info("实名认证返回值："+resule.toString());
 		} catch (Exception e) {
 			logger.info("实名认证验证失败");
 			e.printStackTrace();

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
@@ -237,6 +238,29 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }).start();
         return ResultDTO.success();
     }
+  //验证码对比
+    public ResultDTO validateCode(Integer type,String deviceId, String code, String mobile) {
+    	//非空判断
+        if (Strings.isNullOrEmpty(deviceId)) {
+            return ResultDTO.fail(ApiConstant.E_APP_DEVICETYPE_EMPTY);
+        } else if (Strings.isNullOrEmpty(code)) {
+            return ResultDTO.fail(ApiConstant.E_APP_CODE_EMPTY);
+        }
+        if (Strings.isNullOrEmpty(mobile)) {
+            return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
+        }
+        
+        String value = valOpsStr.get(type + mobile + deviceId);
+        if(Strings.isNullOrEmpty(value)){
+        	return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);//已超时
+        }
+        if(code.equals(value)){
+        	stringRedisTemplate.delete(type + mobile + deviceId);//匹配
+        	return ResultDTO.success();
+        }else{
+        	return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);//不匹配
+        }
+    }
     //验证码对比
     public ResultDTO validateCode(String deviceId, String code, String mobile) {
     	//非空判断
@@ -416,29 +440,20 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         map.put("appSettings", settingstatus);
         return ResultDTO.success(map);
     }
+    //e789生产验证码 前手机号判断
+	@Override
+	public AppUser selectAppUserByMobile(String mobile) {
+		return appUserDao.selectAppUserByMobileAndState(mobile, 1);
+	}
   //e789生产验证码 
     @Override
     public ResultDTO getE789ValidateCode(AppUserDTO appUserDTO) {
         String deviceId = appUserDTO.getDeviceId();
         final String mobile = appUserDTO.getMobile();
         final Integer type = appUserDTO.getOprationType();
-        //注册需要判断    0表示通过注册流程来获取验证码  1表示通过忘记密码流程来获取验证码
-        if (appUserDTO.getOprationType() != null && appUserDTO.getOprationType() == 0) {
-            AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
-            if (user != null) {
-                return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
-            }
-        }
-        if (appUserDTO.getOprationType() != null && appUserDTO.getOprationType() == 1) {
-            AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
-            if (user == null) {
-                return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
-            }
-        }
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        valOpsStr.set(type+mobile + deviceId,code);
-       
+        valOpsStr.set(type+mobile + deviceId,code,30,TimeUnit.MINUTES);
         /**
         * 开启线程发送手机验证码
         */
@@ -482,7 +497,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         //对比验证码
-        ResultDTO res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 1+appUserDTO.getMobile());
+        ResultDTO res = validateCode(1, appUserDTO.getDeviceId(), appUserDTO.getCode(), appUserDTO.getMobile());
         if (!res.isSuccess()) {
             return res;
         }
@@ -507,7 +522,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         String password = Md5Util.getInstance().md5(appUserDTO.getPassword());
         //对比验证码
-        ResultDTO res = validateCode(appUserDTO.getDeviceId(), appUserDTO.getCode(), 3+appUserDTO.getMobile());
+        ResultDTO res = validateCode(3 ,appUserDTO.getDeviceId(), appUserDTO.getCode(), appUserDTO.getMobile());
         if (!res.isSuccess()) {
             return res;
         }
@@ -521,12 +536,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     @Override
     @Transactional
     public ResultDTO e789InsertSelective(AppUserDTO appUserDTO) {
-        //非空判断
-        if (Strings.isNullOrEmpty(appUserDTO.getMobile())) {
-            return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
-        } else if (Strings.isNullOrEmpty(appUserDTO.getPassword())) {
-            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
-        }
         //根据deviceToken查找记录 如果存在就清空
         List<AppUser> items = appUserDao.queryBydeviceToken(appUserDTO.getDeviceToken());
         if (items.isEmpty()) {
@@ -633,13 +642,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         appUserLoginInfoDTO.setUserId(appUser.getId());
         appUserLoginInfoDTO.setPayPassword(appUser.getPayPassword());
         appUserLoginInfoDTO.setRealName(appUser.getRealName());
-        //查询用户绑定商户数量 根据用户id查询数量
-        int merchantNums = 0;
-        MerchantEntity merchantEntity = merchantEntityDao.selectByAppUserId(appUser.getId());
-        if (!(merchantEntity==null)) {
-            merchantNums = 1;
-        }
-        appUserLoginInfoDTO.setMerchantNums(merchantNums);
         Integer appUserId = appUser.getId();
         //登录获取未读消息信息
         List<SysMsgAppSucc> unReadInfo = sysMsgAppSuccDao.selectTotalUnread(appUserId);
