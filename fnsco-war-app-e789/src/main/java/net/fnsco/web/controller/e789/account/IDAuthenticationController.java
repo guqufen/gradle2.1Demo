@@ -137,11 +137,9 @@ public class IDAuthenticationController extends BaseController {
                     return ResultDTO.success();
                 } catch (Exception e) {
                     logger.error(fileName + "上传失败！" + e);
-                    throw new RuntimeException();
                 }
             } else {
                 logger.error(fileName + "上传失败");
-                throw new RuntimeException();
             }
         }
         return ResultDTO.fail(E789ApiConstant.E_UPLOAD_IDCARD_FAIL);
@@ -274,7 +272,6 @@ public class IDAuthenticationController extends BaseController {
 			date = formatter.parse(endTime);
 		} catch (ParseException e) {
 			logger.info("身份证时间转换错误");
-			e.printStackTrace();
 		} 
 		IdCardDTO idCard =new IdCardDTO();
         idCard = JuheDemoUtil.valiIdCard(cardId,realName);

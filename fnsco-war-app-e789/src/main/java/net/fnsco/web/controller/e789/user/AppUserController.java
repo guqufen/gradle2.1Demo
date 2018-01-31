@@ -15,16 +15,20 @@ import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.bigdata.service.domain.MerchantEntity;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.order.api.appuser.AppUserService;
+import net.fnsco.order.api.constant.ApiConstant;
 import net.fnsco.order.api.dto.AppUserDTO;
 import net.fnsco.order.api.dto.AppUserLoginInfoDTO;
+import net.fnsco.order.service.domain.AppUser;
 import net.fnsco.trading.comm.HeadImageEnum;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
 import net.fnsco.trading.service.bank.AppUserBankService;
 import net.fnsco.trading.service.bank.entity.AppUserBankDO;
+import net.fnsco.trading.service.merchant.AppUserMerchantService;
 import net.fnsco.web.controller.e789.jo.CommonJO;
 import net.fnsco.web.controller.e789.jo.FindPasswordJO;
 import net.fnsco.web.controller.e789.jo.GetValidateCodeJO;
@@ -50,16 +54,24 @@ public class AppUserController extends BaseController {
     private AppAccountBalanceService appAccountBalanceService;
     @Autowired
     private AppUserBankService    appUserBankService;
+    @Autowired
+    private AppUserMerchantService appUserMerchantService;
     @RequestMapping(value = "/validateCode")
     @ApiOperation(value = "注册页-用户注册校验验证码" ,notes="作者：何金庭")
     @ResponseBody
     public ResultDTO validateCode(@RequestBody ValidateCodeJO validateCodeJO) {
-    	return appUserService.validateCode(validateCodeJO.getDeviceId(), validateCodeJO.getCode(), 0+validateCodeJO.getMobile());
+    	return appUserService.validateCode(0 ,validateCodeJO.getDeviceId(), validateCodeJO.getCode(), validateCodeJO.getMobile());
     }
     @RequestMapping(value = "/register")
     @ApiOperation(value = "注册页-用户注册" ,notes="作者：何金庭")
     @ResponseBody
     public ResultDTO<LoginVO> register(@RequestBody RegisterJO registerJO) {
+    	 //非空判断
+        if (Strings.isNullOrEmpty(registerJO.getMobile())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
+        } else if (Strings.isNullOrEmpty(registerJO.getPassword())) {
+            return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
+        }
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(registerJO.getDeviceId());
     	appUserDTO.setDeviceToken(registerJO.getDeviceToken());
@@ -85,12 +97,16 @@ public class AppUserController extends BaseController {
         }else {
         	loginVO.setIsBindingIdCard(true);
         }
-        int num = appUserLoginInfoDTO.getMerchantNums();
+        
+        //查询用户绑定商户数量 根据用户id查询数量
+        int num  = appUserMerchantService.queryMerchantByUserId(appUserLoginInfoDTO.getUserId());
         if(num==0) {
         	loginVO.setIsMerchant(false);
         }else {
         	loginVO.setIsMerchant(true);
         }
+        
+        
         if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getPayPassword())) {
         	loginVO.setHasPayPassword(false);
         }else {
@@ -122,6 +138,19 @@ public class AppUserController extends BaseController {
     @RequestMapping(value = "/getValidateCode")
     @ApiOperation(value = "获取验证码" ,notes="作者：何金庭")
     public ResultDTO getValidateCode(@RequestBody GetValidateCodeJO getValidateCodeJO) {
+    	//注册需要判断    0表示通过注册流程来获取验证码  1表示通过忘记密码流程来获取验证码
+        if (getValidateCodeJO.getType() != null && getValidateCodeJO.getType() == 0) {
+            AppUser user = appUserService.selectAppUserByMobile(getValidateCodeJO.getMobile());
+            if (user != null) {
+                return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
+            }
+        }
+        if (getValidateCodeJO.getType() != null && getValidateCodeJO.getType() == 1) {
+            AppUser user = appUserService.selectAppUserByMobile(getValidateCodeJO.getMobile());
+            if (user == null) {
+                return ResultDTO.fail(ApiConstant.E_NOREGISTER_LOGIN);
+            }
+        }
     	AppUserDTO appUserDTO = new AppUserDTO();
     	appUserDTO.setDeviceId(getValidateCodeJO.getDeviceId());
     	appUserDTO.setMobile(getValidateCodeJO.getMobile());
@@ -157,12 +186,15 @@ public class AppUserController extends BaseController {
         }else {
         	loginVO.setIsBindingIdCard(true);
         }
-        int num = appUserLoginInfoDTO.getMerchantNums();
+
+      //查询用户绑定商户数量 根据用户id查询数量
+        int num  = appUserMerchantService.queryMerchantByUserId(appUserLoginInfoDTO.getUserId());
         if(num==0) {
         	loginVO.setIsMerchant(false);
         }else {
         	loginVO.setIsMerchant(true);
         }
+        
         if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getPayPassword())) {
         	loginVO.setHasPayPassword(false);
         }else {
@@ -205,12 +237,15 @@ public class AppUserController extends BaseController {
         }else {
         	loginVO.setIsBindingIdCard(true);
         }
-        int num = appUserLoginInfoDTO.getMerchantNums();
+
+        //查询用户绑定商户数量 根据用户id查询数量
+        int num  = appUserMerchantService.queryMerchantByUserId(appUserLoginInfoDTO.getUserId());
         if(num==0) {
         	loginVO.setIsMerchant(false);
         }else {
         	loginVO.setIsMerchant(true);
         }
+        
         if(Strings.isNullOrEmpty(appUserLoginInfoDTO.getPayPassword())) {
         	loginVO.setHasPayPassword(false);
         }else {

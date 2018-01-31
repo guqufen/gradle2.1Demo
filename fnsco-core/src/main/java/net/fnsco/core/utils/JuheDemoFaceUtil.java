@@ -55,7 +55,9 @@ public class JuheDemoFaceUtil {
     	params.put("api_secret", IMAGE_APPSECRET);
     	String  imgFile = getImageStr(filePath) ;
     	params.put("image_base64", imgFile);
+    	logger.error(filePath + "调用图片识别接口！");
     	String resule = HttpClientUtil.doPost(URI_ID_IMAGE, params);
+    	logger.error( "返回参数：" + resule.toString());
     	 JSONObject json = JSONObject.parseObject(resule);
     	 String error_message = json.getString("error_message");
     	 int time_used = json.getIntValue("time_used");
