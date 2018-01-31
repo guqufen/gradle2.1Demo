@@ -196,7 +196,7 @@ public class ZxyhPayMD5Util {
 		// 尾部加上md5key签名
 		sb.append("&key=").append(md5key);
 
-		System.out.println("加签报文：" + sb.substring(1));
+		//System.out.println("加签报文：" + sb.substring(1));
 
 		try {
 
