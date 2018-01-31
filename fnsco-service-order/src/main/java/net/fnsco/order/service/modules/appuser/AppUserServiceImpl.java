@@ -5,12 +5,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -48,7 +53,6 @@ import net.fnsco.order.api.dto.AppUserMerchantEntityDTO;
 import net.fnsco.order.api.dto.AppUserSettingDTO;
 import net.fnsco.order.api.dto.BandDto;
 import net.fnsco.order.api.dto.QueryBandDTO;
-import net.fnsco.order.api.dto.SmsCodeDTO;
 import net.fnsco.order.api.sysappmsg.SysAppMsgService;
 import net.fnsco.order.service.dao.master.AppUserDao;
 import net.fnsco.order.service.dao.master.AppUserMerchantDao;
@@ -61,9 +65,6 @@ import net.fnsco.order.service.domain.SysMsgAppSucc;
 public class AppUserServiceImpl extends BaseService implements AppUserService {
 
     private static final Logger            logger     = LoggerFactory.getLogger(AppUserServiceImpl.class);
-
-    private static Map<String, SmsCodeDTO> MsgCodeMap = new HashMap<>();                                  //存放验证码的
-    //private static Map<String,Integer> LoginTimeMap=new HashMap<>();//存放登录次数的
 
     @Autowired
     private AppUserDao                     appUserDao;
@@ -83,6 +84,12 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     private MerchantEntityDao         merchantEntityDao;
     @Autowired
    	private Environment env;
+    
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
+    @Resource(name = "stringRedisTemplate")
+    ValueOperations<String, String> valOpsStr;
+
     //注册
     @Override
     @Transactional
@@ -175,11 +182,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
     }
 
     private void insertRel(String innerCode, AppUser appUser, String roleId) {
-//        MerchantUserRel rel = new MerchantUserRel();
-//        rel.setAppUserId(appUser.getId());
-//        rel.setInnerCode(innerCode);
-//        rel.setModefyTime(new Date());
-//        merchantUserRelDao.insertSelective(rel);
         AppUserMerchant dto = new AppUserMerchant();
         dto.setAppUserId(appUser.getId());
         dto.setInnerCode(innerCode);
@@ -212,8 +214,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
-        MsgCodeMap.put(mobile + deviceId, object);
+        valOpsStr.set(mobile + deviceId,code,30,TimeUnit.MINUTES);
         /**
         * 开启线程发送手机验证码
         */
@@ -237,10 +238,9 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }).start();
         return ResultDTO.success();
     }
-
     //验证码对比
     public ResultDTO validateCode(String deviceId, String code, String mobile) {
-        //非空判断
+    	//非空判断
         if (Strings.isNullOrEmpty(deviceId)) {
             return ResultDTO.fail(ApiConstant.E_APP_DEVICETYPE_EMPTY);
         } else if (Strings.isNullOrEmpty(code)) {
@@ -249,27 +249,17 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         if (Strings.isNullOrEmpty(mobile)) {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
         }
-        if (MsgCodeMap.get(mobile + deviceId) == null) {
-            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
+        
+        String value = valOpsStr.get(mobile + deviceId);
+        if(Strings.isNullOrEmpty(value)){
+        	return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);//已超时
         }
-        //从Map中根据手机号取到存入的验证码
-        SmsCodeDTO codeDto = MsgCodeMap.get(mobile + deviceId);
-        if (null == codeDto) {
-            return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
+        if(code.equals(value)){
+        	stringRedisTemplate.delete(mobile + deviceId);//匹配
+        	return ResultDTO.success();
+        }else{
+        	return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);//不匹配
         }
-        //时间
-        long newTime = System.currentTimeMillis();
-        //验证码超过30分钟
-        if ((newTime - codeDto.getTime()) / 1000 / 60 > 30) {
-            MsgCodeMap.remove(mobile + deviceId);
-            return ResultDTO.fail(ApiConstant.E_CODEOVERTIME_ERROR);
-        }
-        //验证码正确
-        if (code.equals(codeDto.getCode())) {
-            MsgCodeMap.remove(mobile + deviceId);
-            return ResultDTO.success();
-        }
-        return ResultDTO.fail(ApiConstant.E_APP_CODE_ERROR);
     }
 
     //根据手机号找回登录密码
@@ -448,8 +438,8 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        SmsCodeDTO object = new SmsCodeDTO(code, System.currentTimeMillis());
-        MsgCodeMap.put(type+mobile + deviceId, object);
+        valOpsStr.set(type+mobile + deviceId,code,30,TimeUnit.MINUTES);
+       
         /**
         * 开启线程发送手机验证码
         */
@@ -537,11 +527,6 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
             return ResultDTO.fail(ApiConstant.E_APP_PHONE_EMPTY);
         } else if (Strings.isNullOrEmpty(appUserDTO.getPassword())) {
             return ResultDTO.fail(ApiConstant.E_APP_PASSWORD_EMPTY);
-        }
-        //根据手机号查询用户实体是否存在
-        AppUser user = appUserDao.selectAppUserByMobileAndState(appUserDTO.getMobile(), 1);
-        if (user != null) {
-            return ResultDTO.fail(ApiConstant.E_ALREADY_LOGIN);
         }
         //根据deviceToken查找记录 如果存在就清空
         List<AppUser> items = appUserDao.queryBydeviceToken(appUserDTO.getDeviceToken());

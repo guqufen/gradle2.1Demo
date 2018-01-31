@@ -54,7 +54,7 @@ public interface TradeOrderByDayDAO {
 	@Select("SELECT SUM(turnover) FROM r_trade_order_by_day WHERE trade_date = #{tradeDate} AND inner_code IN (SELECT inner_code FROM m_merchant_core_entity_ref WHERE entity_inner_code IN (SELECT entity_inner_code FROM u_app_user_merchant_entity WHERE app_user_id =#{userId}))")
 	public String selectDayTurnover(@Param("tradeDate") String tradeDate, @Param("userId") Integer userId);
 
-	@Select("SELECT SUM(turnover) FROM r_trade_order_by_day WHERE trade_date >= #{startTradeDate}  AND trade_date >= #{endTradeDate} AND inner_code IN (SELECT inner_code FROM m_merchant_core_entity_ref WHERE entity_inner_code IN (SELECT entity_inner_code FROM u_app_user_merchant_entity WHERE app_user_id =#{userId}))")
+	@Select("SELECT SUM(turnover) FROM r_trade_order_by_day WHERE trade_date >= #{startTradeDate}  AND trade_date <= #{endTradeDate} AND inner_code IN (SELECT inner_code FROM m_merchant_core_entity_ref WHERE entity_inner_code IN (SELECT entity_inner_code FROM u_app_user_merchant_entity WHERE app_user_id =#{userId}))")
 	public String selectTotalTurnover(@Param("startTradeDate") String startTradeDate,
 			@Param("endTradeDate") String endTradeDate, @Param("userId") Integer userId);
 

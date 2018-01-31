@@ -93,7 +93,8 @@ public class AESUtil {
         String keyStr = "a8bc3defec6026b469d8c1fa095b5b43";
         // String content = "{\"area_city\":\"杭州\",\"hear_money\":\"50万到100万\",\"other_phone\":\"12345678912\",\"cmobile\":\"13758154074\",\"clientflag\":\"locan_submit\",\"exCode\":\"crm_reg\"}";
         //String content = "{\"rspCode\":\"000000\",\"policyId\":1,\"rspMsg\":\"成功\",\"xb_reqreflex\":\"MsgAppPolicyInfo\"}";
-        String content = "{\"innerCode\":\"110319624699094\",\"orderNo\":\"2018012211370033\",\"payAmount\":\"100\",\"periodNum\":\"12\",\"singData\":\"88B02EFF5C24E6AC5E84955EF646A481\",\"transTime\":\"20180122113700\"}";
+        //String content = "{\"innerCode\":\"110319624699094\",\"orderNo\":\"2018012211370033\",\"payAmount\":\"100\",\"periodNum\":\"12\",\"singData\":\"88B02EFF5C24E6AC5E84955EF646A481\",\"transTime\":\"20180122113700\"}";
+        String content = "{\"innerCode\":\"110319624699094\",\"orderNo\":\"2018012317180018\",\"paymentAmount\":\"656.7\",\"periodNum\":\"6\",\"singData\":\"62C1B2EF93BE9D7A8EE64EABEC6EB381\",\"transTime\":\"20180123171800\"}";
         System.out.println("加密前：" + content);
         String xx = encode(content, keyStr);
         System.out.println("加密：" + xx);

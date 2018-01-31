@@ -490,9 +490,8 @@
         #{condition.channelFns,jdbcType=VARCHAR},
         #{condition.channelJhf,jdbcType=VARCHAR}) 
       </if>
-      <if test="condition.amt != null and condition.amt !=''" >
-       AND  amt &gt;= #{condition.amt,jdbcType=VARCHAR}
-       AND  amt &lt;= #{condition.amt,jdbcType=VARCHAR}
+     <if test="condition.amt != null and condition.amt !=''" >
+       AND  cast(amt as SIGNED)= #{condition.amt,jdbcType=VARCHAR}
       </if>
       <if test="condition.orderNo != null and condition.orderNo !=''" >
        AND  order_no = #{condition.orderNo,jdbcType=VARCHAR}
@@ -699,8 +698,7 @@
         #{channelJhf,jdbcType=VARCHAR}) 
       </if>
       <if test="amt != null and amt != ''" >
-        AND  amt &gt;= #{amt,jdbcType=VARCHAR}
-       AND  amt &lt;= #{amt,jdbcType=VARCHAR}
+       AND  cast(amt as SIGNED)= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo != ''" >
        AND  order_no = #{orderNo,jdbcType=VARCHAR}
@@ -905,8 +903,7 @@
         #{channelJhf,jdbcType=VARCHAR}) 
       </if>
       <if test="amt != null and amt != ''" >
-       AND  amt &gt;= #{amt,jdbcType=VARCHAR}
-       AND  amt &lt;= #{amt,jdbcType=VARCHAR}
+       AND  cast(amt as SIGNED)= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo != ''" >
        AND  order_no = #{orderNo,jdbcType=VARCHAR}
@@ -1137,8 +1134,7 @@
         AND channel_type = #{channelType,jdbcType=VARCHAR}
       </if>
       <if test="amt != null and amt != ''" >
-       AND  amt &gt;= #{amt,jdbcType=VARCHAR}
-       AND  amt &lt;= #{amt,jdbcType=VARCHAR}
+      AND  cast(amt as SIGNED)= #{amt,jdbcType=VARCHAR}
       </if>
       <if test="orderNo != null and orderNo != ''" >
        AND  order_no = #{orderNo,jdbcType=VARCHAR}

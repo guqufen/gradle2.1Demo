@@ -71,7 +71,7 @@
 	        <onMismatch>DENY</onMismatch>  
 		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<FileNamePattern>${LOG_PATH}/app/error.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<FileNamePattern>${LOG_PATH}/app_e789/error.%d{yyyy-MM-dd}.log</FileNamePattern>
 			<MaxHistory>300</MaxHistory>
 		</rollingPolicy>
 		<encoder charset="UTF-8">

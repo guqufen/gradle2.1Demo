@@ -21,6 +21,7 @@ import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.core.utils.SmsUtil;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.third.ticket.comm.TicketConstants;
@@ -60,7 +61,8 @@ public class TicketOrderService extends BaseService {
     }
 
     @Transactional
-    public void updateOrderStatus(TicketOrderDO ticketOrder, Integer pageNum, Integer pageSize) {
+    public List<TicketOrderDO> updateOrderStatus(TicketOrderDO ticketOrder, Integer pageNum, Integer pageSize) {
+        List<TicketOrderDO> userIdList = Lists.newArrayList();
         Integer[] statuses = { 1, 2, 4, 7 };
         ticketOrder.setStatuses(statuses);
         List<TicketOrderDO> pageList = this.ticketOrderDAO.pageList(ticketOrder, pageNum, pageSize);
@@ -146,7 +148,10 @@ public class TicketOrderService extends BaseService {
                         if (TicketConstants.OrderStateEnum.PAYING.getCode().equals(order.getStatus())) {
                             appAccountBalanceService.doUpdateFrozenAmount(order.getAppUserId(), order.getOrderAmount());
                             order.setStatus(TicketConstants.OrderStateEnum.SUCCESS.getCode());
+                            //发送成功短信
+                            userIdList.add(order);
                         }
+                        
                         //更新订单表
                         TradeWithdrawDO tradeWithdraw = tradeWithdrawService.doQueryByOriginalOrderNo(order.getOrderNo());
                         tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.SUCCESS.getCode());
@@ -209,7 +214,7 @@ public class TicketOrderService extends BaseService {
                 }
             }
         }
-
+        return userIdList;
     }
 
     // 分页

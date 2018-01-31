@@ -174,7 +174,7 @@ public class DateUtils {
         result = sf.format(new Date());
         return result;
     }
-    
+
     public static String getDateMonthStr(Date date) {
         String result = "";
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM");
@@ -272,7 +272,7 @@ public class DateUtils {
         }
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
-    
+
     public static String dateFormatToStrs(Date date) {
         if (null == date) {
             return "";
@@ -466,7 +466,7 @@ public class DateUtils {
         }
         return null;
     }
-    
+
     public static String getDateStrByStr(String dateStr, int day) {
         SimpleDateFormat sf1 = new SimpleDateFormat("yyyyMMdd");
         Date date;
@@ -591,7 +591,7 @@ public class DateUtils {
         String startTime = format.format(cal_1.getTime());
         return startTime;
     }
-    
+
     /**
      * 获取月第一天
      * @return
@@ -605,21 +605,21 @@ public class DateUtils {
         String startTime = format.format(cal_1.getTime());
         return startTime;
     }
-    
+
     /**
      * 获取月第一天
      * @return
      */
     public static String getMouthStartTime1(int mouth) {
         //获取前月的第一天
-    	SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         Calendar cal_1 = Calendar.getInstance();//获取当前日期 
         cal_1.add(Calendar.MONTH, mouth);
         cal_1.set(Calendar.DAY_OF_MONTH, 1);//设置为1号,当前日期既为该月第一天 
         String dateStr = format.format(cal_1.getTime());
-        return dateStr+"000000";
+        return dateStr + "000000";
     }
-    
+
     /**
      * 获取月最后一天
      * @return
@@ -713,13 +713,25 @@ public class DateUtils {
         }
         return date;
     }
-    
-    public static Date getTimeYesterday(Date date){
-    	Date dBefore = new Date();
-		Calendar calendar = Calendar.getInstance(); //得到日历
-		calendar.setTime(date);//把当前时间赋给日历
-		calendar.add(Calendar.DAY_OF_MONTH, -1);  //设置为前一天
-		dBefore = calendar.getTime();   //得到前一天的时间
-		return dBefore;
+
+    public static Date getTimeYesterday(Date date) {
+        Date dBefore = new Date();
+        Calendar calendar = Calendar.getInstance(); //得到日历
+        calendar.setTime(date);//把当前时间赋给日历
+        calendar.add(Calendar.DAY_OF_MONTH, -1); //设置为前一天
+        dBefore = calendar.getTime(); //得到前一天的时间
+        return dBefore;
+    }
+
+    public static String strToChina(String trainDate) {
+        String result = "";
+        try {
+            String month = trainDate.substring(5, 7);
+            String day = trainDate.substring(8, 10);
+            result = Integer.parseInt(month) + "月" + Integer.parseInt(day) + "日";
+        } catch (Exception e) {
+            logger.error("DateUtils.strToChina()日期截取出错", e);
+        }
+        return result;
     }
 }
