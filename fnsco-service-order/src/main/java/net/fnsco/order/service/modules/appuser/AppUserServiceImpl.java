@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
@@ -213,7 +214,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
 
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        valOpsStr.set(mobile + deviceId,code);
+        valOpsStr.set(mobile + deviceId,code,30,TimeUnit.MINUTES);
         /**
         * 开启线程发送手机验证码
         */
@@ -437,7 +438,7 @@ public class AppUserServiceImpl extends BaseService implements AppUserService {
         }
         // 生成6位验证码
         final String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        valOpsStr.set(type+mobile + deviceId,code);
+        valOpsStr.set(type+mobile + deviceId,code,30,TimeUnit.MINUTES);
        
         /**
         * 开启线程发送手机验证码
