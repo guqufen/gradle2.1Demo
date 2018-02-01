@@ -211,9 +211,7 @@
         {"amt": "273", "payType": "微信支付", "createTime": "2018-02-01 10:11:46", "termId": "28504831"},
         {"amt": "17000", "payType": "刷卡支付", "createTime": "2018-02-01 10:08:59", "termId": "28504906"},
         {"amt": "2000", "payType": "刷卡支付", "createTime": "2018-02-01 10:07:07", "termId": "28266585"},
-        {"amt": "385", "payType": "微信支付", "createTime": "2018-02-01 10:11:46", "termId": "28504831"},
-        {"amt": "12000", "payType": "刷卡支付", "createTime": "2018-02-01 10:08:59", "termId": "28504906"},
-        {"amt": "1060", "payType": "刷卡支付", "createTime": "2018-02-01 10:07:07", "termId": "28266585"}
+        {"amt": "1580", "payType": "刷卡支付", "createTime": "2018-02-01 10:12:45", "termId": "28504831"},
     ];
 
     function getList(date, size) {
@@ -224,12 +222,21 @@
             data: {'startDate': dateTime, 'pageSize': size},
             success: function (result) {
                 var dataList = result.data;
-                mockList = mockList.concat(dataList);
-                for (var i = 0; i < mockList.length; i++) {
-                    $("#scroll-ul").append('<li><div class="card-num">' + mockList[i].payType + '</div>' +
-                        '<div class="trading"><span class="trading-title">￥</span>' +
-                        '<span class="trading-num">' + mockList[i].amt + '</span></div></li>');
+                if(dataList.length<32){
+                    mockList = mockList.concat(dataList);
+                    for (var i = 0; i < mockList.length; i++) {
+                        $("#scroll-ul").append('<li><div class="card-num">' + mockList[i].payType + '</div>' +
+                            '<div class="trading"><span class="trading-title">￥</span>' +
+                            '<span class="trading-num">' + mockList[i].amt + '</span></div></li>');
+                    }
+                }else{
+                    for (var j = 0; j < dataList.length; j++) {
+                        $("#scroll-ul").append('<li><div class="card-num">' + dataList[j].payType + '</div>' +
+                            '<div class="trading"><span class="trading-title">￥</span>' +
+                            '<span class="trading-num">' + dataList[j].amt + '</span></div></li>');
+                    }
                 }
+
             }
         })
     }
@@ -250,7 +257,7 @@
     setInterval(function () {
         // console.log("重新刷新了");
         getValue("0");
-        getList(time, 24);
+        getList(time, 32);
         // $("#scrollDiv").textSlider({line:1,speed:800,timer:3000});
     }, 72000)
     // $('#carousel-example-generic').carousel(
