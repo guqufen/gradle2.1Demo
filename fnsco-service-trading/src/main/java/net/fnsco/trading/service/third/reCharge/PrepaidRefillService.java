@@ -15,8 +15,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
-import net.fnsco.core.alipay.AlipayClientUtil;
-import net.fnsco.core.alipay.AlipayRequestParams;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
