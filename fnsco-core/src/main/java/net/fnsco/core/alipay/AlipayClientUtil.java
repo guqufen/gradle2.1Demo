@@ -13,9 +13,12 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.beust.jcommander.internal.Maps;
 
 /**
@@ -51,7 +54,7 @@ public class AlipayClientUtil {
 	 * @author tangliang
 	 * @date 2018年1月31日 下午4:39:52
 	 */
-	public static String createPayOrderParams(AlipayRequestParams requestParams) {
+	public static String createPayOrderParams(AlipayAppPayRequestParams requestParams) {
 		// 实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
 		AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
 		// SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
@@ -73,6 +76,26 @@ public class AlipayClientUtil {
 			logger.error("发起支付宝支付报错!", e);
 		}
 
+		return response.getBody();
+	}
+	
+	public static String createTradeReturnOrderParams() {
+		AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
+		
+		AlipayTradeRefundModel model = new AlipayTradeRefundModel();
+//		model.set
+		request.setBizModel(model);
+		request.setNotifyUrl("");
+		AlipayTradeRefundResponse response = null;
+		try {
+			response = alipayClient.sdkExecute(request);
+		} catch (AlipayApiException e) {
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
 		return response.getBody();
 	}
 	
