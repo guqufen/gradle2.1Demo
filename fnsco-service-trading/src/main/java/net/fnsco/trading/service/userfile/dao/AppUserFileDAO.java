@@ -21,8 +21,12 @@ public interface AppUserFileDAO {
     public AppUserFileDO getById(@Param("id") int id);
     
     @Results({@Result( column = "app_user_id",property = "appUserId"),@Result( column = "file_name",property = "fileName"),@Result( column = "file_type",property = "fileType"),@Result( column = "file_path",property = "filePath"),@Result( column = "create_time",property = "createTime") })
-    @Select("SELECT * FROM u_app_user_file WHERE app_user_id = #{appUserId} AND file_type=#{fileType}")
-    public AppUserFileDO getByUserId(@Param("appUserId") int appUserId ,@Param("fileType") String  fileType);
+    @Select("SELECT * FROM u_app_user_file WHERE app_user_id = #{appUserId}")
+    public List<AppUserFileDO> getByUserId(@Param("appUserId") int appUserId);
+    
+    @Results({@Result( column = "app_user_id",property = "appUserId"),@Result( column = "file_name",property = "fileName"),@Result( column = "file_type",property = "fileType"),@Result( column = "file_path",property = "filePath"),@Result( column = "create_time",property = "createTime") })
+    @Select("SELECT * FROM u_app_user_file WHERE app_user_id = #{appUserId} AND file_type = #{side} LIMIT 1")
+    public AppUserFileDO getByUserIdAndSide(@Param("appUserId") int appUserId,@Param("side") String side );
 
     @Insert("INSERT into u_app_user_file(id,app_user_id,file_name,file_type,file_path,create_time) VALUES (#{id},#{appUserId},#{fileName},#{fileType},#{filePath},#{createTime})")
     @Options(useGeneratedKeys = true, keyProperty = "id")

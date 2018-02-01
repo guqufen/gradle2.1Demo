@@ -1,33 +1,25 @@
 package net.fnsco.web.controller.e789.pay.zxyh;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.bigdata.api.dto.TradeWeChatCallBackDTO;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.order.api.dto.TradeReportDTO;
 import net.fnsco.trading.constant.E789ApiConstant;
+import net.fnsco.trading.service.merchant.AppUserMerchantService;
 import net.fnsco.trading.service.merchantentity.dao.AppUserMerchantEntityDAO;
 import net.fnsco.trading.service.merchantentity.entity.AppUserMerchantEntityDO;
-import net.fnsco.trading.service.order.entity.TradeOrderDO;
-import net.fnsco.trading.service.pay.channel.pfyh.PFOrderPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.web.controller.e789.jo.GenerateQRJO;
 import net.fnsco.web.controller.e789.vo.GenerateQRVO;
@@ -46,15 +38,15 @@ public class ScannedTradeController extends BaseController {
 	@Autowired
 	private PaymentService zxyhPaymentService;
 	@Autowired
-	private PFOrderPaymentService pfOrderPaymentService;
-	@Autowired
 	private AppUserMerchantEntityDAO appUserMerchantEntityDAO;
+	@Autowired
+	private AppUserMerchantService appUserMerchantService;
 
 	@RequestMapping(value = "/getQRUrl")
 	@ApiOperation(value = "收款-获取付款二维码url")
 	public ResultDTO<GenerateQRVO> generateQRCode(@RequestBody GenerateQRJO qrJO) {
 		GenerateQRVO qrVo = new GenerateQRVO();
-		logger.info("收款参数："+JSONObject.toJSON(qrJO).toString());
+		logger.info("收款参数：" + JSONObject.toJSON(qrJO).toString());
 		Integer userId = qrJO.getUserId();
 		String ip = this.getIp();
 		String txnAmt = qrJO.getTxnAmt();
@@ -69,48 +61,52 @@ public class ScannedTradeController extends BaseController {
 		if (Strings.isNullOrEmpty(paySubType)) {
 			return ResultDTO.fail("交易子类型为空");
 		}
-		//判断该app用户是否已绑定商户
+		// 判断该app用户是否已绑定商户
 		AppUserMerchantEntityDO appUserMerchantEntity = appUserMerchantEntityDAO.selectByEntityInnerCode(userId);
-		if(null == appUserMerchantEntity){
+		if (null == appUserMerchantEntity) {
 			return ResultDTO.fail(E789ApiConstant.E_NOT_BOUND_MERC);
-		}	
-		
-		//判断商户是否已通过审核
-		Integer mercStatus = zxyhPaymentService.getAddStatus(userId);
-		if(mercStatus  == null){
+		}
+		String entityInnerCode = appUserMerchantEntity.getEntityInnerCode();
+		// 根据实体商户号获取内部商户号
+		String innerCode = this.appUserMerchantService.getInnerCodeByUserId(entityInnerCode);
+		if (Strings.isNullOrEmpty(innerCode)) {
+			logger.info(E789ApiConstant.E_ADD_FIRST);
+			return ResultDTO.fail(E789ApiConstant.E_NOT_FIND_INNERCODE);
+		}
+		// 判断商户是否已通过审核
+		Integer mercStatus = zxyhPaymentService.getCheckStatus(innerCode);
+		if (mercStatus == null) {
 			return ResultDTO.fail();
 		}
-		if(mercStatus == 1){
+		if (mercStatus == 1) {
 			return ResultDTO.fail(E789ApiConstant.E_NOT_BUILD);
-		}else if(mercStatus == 2){
+		} else if (mercStatus == 2) {
 			return ResultDTO.fail(E789ApiConstant.E_NOT_CHECK);
 		}
-		
+
 		ResultDTO<Map<String, Object>> dto = new ResultDTO<>();
 		Map<String, Object> reqMap = new HashMap<>();
 		if ("01".equals(paySubType)) {// 微信
-			dto = zxyhPaymentService.generateQRCodeWeiXin(userId, txnAmt);
+			dto = zxyhPaymentService.generateQRCodeWeiXin(userId, txnAmt, entityInnerCode,innerCode);
 
 		} else if ("02".equals(paySubType)) {// 支付宝
-			dto = zxyhPaymentService.generateQRCodeAliPay(userId, ip, txnAmt);
-		}else{
+			dto = zxyhPaymentService.generateQRCodeAliPay(userId, ip, txnAmt,entityInnerCode,innerCode);
+		} else {
 			return ResultDTO.fail(E789ApiConstant.E_PAR_ERROR);
 		}
-		if(dto.getData() != null){
+		if (dto.getData() != null) {
 			reqMap = dto.getData();
 			qrVo.setUrl((String) reqMap.getOrDefault("codeUrl", null));
-			qrVo.setOrderNo((String)reqMap.get("orderId"));
-			qrVo.setRespCode((String)reqMap.get("respCode"));
+			qrVo.setOrderNo((String) reqMap.get("orderId"));
+			qrVo.setRespCode((String) reqMap.get("respCode"));
 		}
-		if(dto.isSuccess()){
+		if (dto.isSuccess()) {
 			return ResultDTO.success(qrVo);
-		}else{
+		} else {
 			return ResultDTO.fail(dto.getCode(), dto.getMessage());
-			 
+
 		}
 
 	}
-
-
 
 }

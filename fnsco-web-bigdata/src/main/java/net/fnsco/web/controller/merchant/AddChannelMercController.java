@@ -17,13 +17,12 @@ import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.trading.service.pay.OrderPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 
 @Controller
-@RequestMapping(value = "/web/zxyh")
+@RequestMapping(value = "/web")
 @Api(value = "/web", tags = { "中信入驻独立商户控制器" })
-public class ZxyhMercController extends BaseController {
+public class AddChannelMercController extends BaseController {
 	
 	@Autowired
 	private MerchantCoreService merchantCoreService;
@@ -34,7 +33,7 @@ public class ZxyhMercController extends BaseController {
 	 * 入驻中信银行的controller
 	 * @return
 	 */
-	@RequestMapping("/enterMerc")
+	@RequestMapping("/zxyh/enterMerc")
     @ResponseBody
 	public ResultDTO<Map<String,String>> enterMerc(Integer id){
 		if(null == id){
