@@ -3,10 +3,12 @@ package net.fnsco.trading.service.pay;
 
 import java.util.Map;
 
+import org.springframework.cache.annotation.EnableCaching;
+
 import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.core.base.ResultDTO;
 
-
+@EnableCaching(proxyTargetClass=true)
 public interface OrderPaymentService {
     /**
      * 

@@ -51,7 +51,6 @@ import net.fnsco.trading.comm.TradeConstants.ZxyhPassivePayCode;
 import net.fnsco.trading.comm.TradeConstants.ZxyhPassivePayType;
 import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.merchant.AppUserMerchantService;
-import net.fnsco.trading.service.merchantentity.AppUserMerchantEntityService;
 import net.fnsco.trading.service.merchantentity.dao.AppUserMerchantEntityDAO;
 import net.fnsco.trading.service.merchantentity.entity.AppUserMerchantEntityDO;
 import net.fnsco.trading.service.order.TradeOrderService;

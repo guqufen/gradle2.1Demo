@@ -14,13 +14,11 @@ import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.order.dao.TradeOrderDAO;
-import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.trading.service.report.ReportStatService;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
 import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
 import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
-import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 
 @EnableScheduling
 public class TimerConfig {

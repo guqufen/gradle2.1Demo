@@ -8,13 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.order.api.merchant.IntegralRuleService;
 import net.fnsco.order.api.push.AppPushService;
 import net.fnsco.order.api.trade.TradeReportService;
 import net.fnsco.trading.service.order.TradeOrderService;
-import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 
 @EnableScheduling
 public class TimerConfig {
