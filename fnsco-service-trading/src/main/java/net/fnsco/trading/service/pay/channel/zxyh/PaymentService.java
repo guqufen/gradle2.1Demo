@@ -76,8 +76,6 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	@Autowired
 	private SequenceService sequenceService;
 	@Autowired
-	private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
-	@Autowired
 	private TradeOrderDAO orderDAO;
 	@Autowired
 	private AppUserMerchantService appUserMerchantService;
