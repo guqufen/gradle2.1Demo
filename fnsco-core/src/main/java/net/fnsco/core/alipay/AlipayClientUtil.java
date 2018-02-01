@@ -35,6 +35,7 @@ public class AlipayClientUtil {
 	private static String appId = "";
 	private static String appPrivateKey = "";
 	private static String alipayPublicKey = "";
+	private static String alipayAppPublicKey = "";
 
 	private static AlipayClient alipayClient = null;
 
@@ -79,21 +80,26 @@ public class AlipayClientUtil {
 		return response.getBody();
 	}
 	
-	public static String createTradeReturnOrderParams() {
+	/**
+	 * createTradeReturnOrderParams:(本方法为支付宝退款接口，详情说明:当交易发生之后一段时间内，由于买家或者卖家的原因需要退款时，卖家可以通过退款接口将支付款退还给买家，支付宝将在收到退款请求并且验证成功之后，按照退款规则将支付款按原路退到买家帐号上。 交易超过约定时间（签约时设置的可退款时间）的订单无法进行退款 支付宝退款支持单笔交易分多次退款，多次退款需要提交原支付订单的商户订单号和设置不同的退款单号。一笔退款失败后重新提交，要采用原来的退款单号。总退款金额不能超过用户实际支付金额)
+	 * 
+	 * @param  @param requestParams
+	 * @param  @return    设定文件
+	 * @return String    DOM对象
+	 * @author tangliang
+	 * @date   2018年2月1日 下午4:29:53
+	 */
+	public static String createTradeReturnOrderParams(AlipayRefundRequestParams requestParams) {
 		AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
 		
 		AlipayTradeRefundModel model = new AlipayTradeRefundModel();
-//		model.set
 		request.setBizModel(model);
-		request.setNotifyUrl("");
+		request.setNotifyUrl(requestParams.getNotifyUrl());
 		AlipayTradeRefundResponse response = null;
 		try {
 			response = alipayClient.sdkExecute(request);
 		} catch (AlipayApiException e) {
-			
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
+			logger.error("发起支付宝退款接口报错!", e);
 		}
 		
 		return response.getBody();
@@ -128,7 +134,7 @@ public class AlipayClientUtil {
 		
 		boolean flag = false;
 		try {
-			flag = AlipaySignature.rsaCheckV1(params, alipayPublicKey, AlipayConstants.CHARSET,
+			flag = AlipaySignature.rsaCheckV1(params, alipayAppPublicKey, AlipayConstants.CHARSET,
 					"RSA2");
 		} catch (AlipayApiException e) {
 			logger.error("校验签名异常!", e);
@@ -159,6 +165,28 @@ public class AlipayClientUtil {
 		return false;
 	}
 	
+	/**
+	 * alipayAppPublicKey
+	 *
+	 * @return  the alipayAppPublicKey
+	 * @since   CodingExample Ver 1.0
+	*/
+	
+	public static String getAlipayAppPublicKey() {
+		return alipayAppPublicKey;
+	}
+
+	/**
+	 * alipayAppPublicKey
+	 *
+	 * @param   alipayAppPublicKey    the alipayAppPublicKey to set
+	 * @since   CodingExample Ver 1.0
+	 */
+	
+	public static void setAlipayAppPublicKey(String alipayAppPublicKey) {
+		AlipayClientUtil.alipayAppPublicKey = alipayAppPublicKey;
+	}
+
 	/**
 	 * appId
 	 *
