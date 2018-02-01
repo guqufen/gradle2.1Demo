@@ -180,24 +180,6 @@
         return fmt;
     };
 
-    //    var payTypeList = ['刷卡支付','微信支付','支付宝支付'];
-    //    var payType;
-    //    var mockList;
-    //    var amt = 100;
-    //    setInterval(function () {
-    //        amt = amt+3;
-    //        list = [];
-    //        for (var i = 0; i < payTypeList.length; i++) {
-    //            payType = payTypeList[i];
-    //            mockList = {"amt":+amt+"","payType":+payType+"","createTime":"2018-"+month+"-01 10:"+seconds+":24","termId":"28504880"};
-    //        }
-    //        addMockList();
-    //    }, 1000);
-    //    var list = [];
-    //    function addMockList(){
-    //        //mockList.createTime = new Date().Format("yyyy-MM-dd hh:mm:ss");
-    //       list.push(mockList)
-    //    }
     var mockList = [
         {"amt": "25", "payType": "微信支付", "createTime": "2018-02-01 11:45:27", "termId": "28644056"},
         {"amt": "120", "payType": "支付宝支付", "createTime": "2018-02-01 11:44:56", "termId": "28644055"},
@@ -222,9 +204,17 @@
         {"amt": "60", "payType": "微信支付", "createTime": "2018-02-01 10:12:45", "termId": "28504831"},
         {"amt": "289", "payType": "微信支付", "createTime": "2018-02-01 10:11:46", "termId": "28504831"},
         {"amt": "15000", "payType": "刷卡支付", "createTime": "2018-02-01 10:08:59", "termId": "28504906"},
-        {"amt": "3000", "payType": "刷卡支付", "createTime": "2018-02-01 10:07:07", "termId": "28266585"}
+        {"amt": "3000", "payType": "刷卡支付", "createTime": "2018-02-01 10:07:07", "termId": "28266585"},
+        {"amt": "10000", "payType": "刷卡支付", "createTime": "2018-02-01 10:19:57", "termId": "28542726"},
+        {"amt": "85", "payType": "微信支付", "createTime": "2018-02-01 10:19:55", "termId": "28504850"},
+        {"amt": "70", "payType": "微信支付", "createTime": "2018-02-01 10:12:45", "termId": "28504831"},
+        {"amt": "273", "payType": "微信支付", "createTime": "2018-02-01 10:11:46", "termId": "28504831"},
+        {"amt": "17000", "payType": "刷卡支付", "createTime": "2018-02-01 10:08:59", "termId": "28504906"},
+        {"amt": "2000", "payType": "刷卡支付", "createTime": "2018-02-01 10:07:07", "termId": "28266585"},
+        {"amt": "385", "payType": "微信支付", "createTime": "2018-02-01 10:11:46", "termId": "28504831"},
+        {"amt": "12000", "payType": "刷卡支付", "createTime": "2018-02-01 10:08:59", "termId": "28504906"},
+        {"amt": "1060", "payType": "刷卡支付", "createTime": "2018-02-01 10:07:07", "termId": "28266585"}
     ];
-
 
     function getList(date, size) {
         dateTime = date + '-01 00:00:00';
