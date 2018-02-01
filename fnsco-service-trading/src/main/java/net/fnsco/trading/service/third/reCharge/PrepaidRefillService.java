@@ -15,6 +15,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
+import net.fnsco.core.alipay.AlipayClientUtil;
+import net.fnsco.core.alipay.AlipayRequestParams;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
@@ -74,7 +76,7 @@ public class PrepaidRefillService extends BaseService {
 				if (juhe.getError_code() != 0) {
 					logger.error("话费资费查询失败,原因:+" + juhe.getReason());
 					return ResultDTO.fail(juhe.getReason());
-					
+
 				} else {
 					logger.info("" + juhe.getResult());
 
@@ -90,7 +92,7 @@ public class PrepaidRefillService extends BaseService {
 					phChargePackageDTO.setType("1");// 设置支持类型，1-全国
 				}
 			} catch (Exception e) {
-				logger.error("话费资费查询出现异常，prepaidRefillCheck,",e);
+				logger.error("话费资费查询出现异常，prepaidRefillCheck,", e);
 			}
 		}
 
@@ -161,7 +163,7 @@ public class PrepaidRefillService extends BaseService {
 				return ResultDTO.success(phChargePackageDTO);
 			}
 		} catch (Exception e) {
-			logger.error("流量资费套餐查询异常，flowPackageCheck,",e);
+			logger.error("流量资费套餐查询异常，flowPackageCheck,", e);
 		}
 		return ResultDTO.fail();
 	}
@@ -362,7 +364,7 @@ public class PrepaidRefillService extends BaseService {
 			}
 
 		} catch (Exception e) {
-			logger.error("流量充值-异常:flowCharge",e);
+			logger.error("流量充值-异常:flowCharge", e);
 		}
 		return ResultDTO.success(ph);
 	}
@@ -685,7 +687,7 @@ public class PrepaidRefillService extends BaseService {
 				return ResultDTO.success("支付正在处理，请稍后查询");
 			}
 		} catch (Exception e) {
-			logger.error("流量充值结果查询-异常",e);
+			logger.error("流量充值结果查询-异常", e);
 		}
 		return ResultDTO.fail();
 	}
@@ -814,8 +816,24 @@ public class PrepaidRefillService extends BaseService {
 				return ResultDTO.success(ph);
 			}
 		} catch (Exception e) {
-			logger.error("话费充值结果查询-异常",e);
+			logger.error("话费充值结果查询-异常", e);
 		}
 		return ResultDTO.fail();
+	}
+
+	/**
+	 * 支付宝支付下单
+	 * 
+	 * @param alipayRequestParams
+	 * @return
+	 */
+	public ResultDTO<String> aliPay(AlipayRequestParams requestParams) {
+
+		String body = AlipayClientUtil.createPayOrderParams(requestParams);
+		
+		TradeWithdrawDO tradeWithdrawDO = new TradeWithdrawDO();
+//		tradeWithdrawDO.setAppUserId(requestParams.get);
+		
+		return ResultDTO.success(body);
 	}
 }
