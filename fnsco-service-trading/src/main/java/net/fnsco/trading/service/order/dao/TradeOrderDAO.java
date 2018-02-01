@@ -159,6 +159,6 @@ public interface TradeOrderDAO {
     @UpdateProvider(type = TradeOrderProvider.class, method = "updateByOrderId")
 	public int updateByOrderId(TradeOrderDO tradeOrderDO);
 
-    @Select("SELECT t4.`status` FROM u_app_user_merchant_entity t1,m_merchant_core_entity_ref t2,m_merchant_channel t3,m_merchant_core t4 WHERE t1.entity_inner_code=t2.entity_inner_code AND t2.inner_code=t3.inner_code AND t3.inner_code=t4.inner_code AND t3.channel_type='05' AND t1.app_user_id=#{userId} limit 1")
-	public Integer getAddStatus(@Param("userId")Integer userId);
+    @Select("SELECT status FROM m_merchant_core WHERE inner_code=#{innerCode}")
+	public Integer getCheckStatus(@Param("innerCode") String innerCode);
 }

@@ -83,33 +83,36 @@ public class TimerConfig {
 
 		}
 	}
+    
+    /**
+     * buildReportDate:(报表统计生成)
+     *
+     * @param      设定文件
+     * @return void    DOM对象
+     * @author tangliang
+     * @date   2017年12月14日 下午4:35:13
+     */
+    @Scheduled(cron = "1 0 0 * * ?") //每天凌晨00:00:01秒执行一次
+    public void buildReportDate() {
+    	reportStatService.createReportData(DateUtils.getDayStartTime(-1), DateUtils.getDayStartTime(0));
+    }
+    
+    
+    /**
+     * 查询入件中信银行商户状态
+     * @return void    DOM对象
+     * @throws 
+     * @since  CodingExample　Ver 1.1
+     */
+//    @Scheduled(cron="0 1 * * * ?") //每个小时的1秒执行，每60分钟执行一次
+    @Scheduled(cron = "0 * * * * ?") //每一分钟的0秒执行，每分钟执行一次
+    public void updateMercStatus(){
+    	logger.error("查询中信商户是否入件成功...开始...");
+    	//获取所有新增待审核的渠道商户信息
+    	List<MercQueryDTO> list = this.merchantCoreService.getMercList();
+    	paymentService.queryAloneMchtInfoList(list);
+    	logger.error("查询中信商户是否入件成功...结束...");
+    }
 
-	/**
-	 * buildReportDate:(报表统计生成)
-	 *
-	 * @param 设定文件
-	 * @return void DOM对象
-	 * @author tangliang
-	 * @date 2017年12月14日 下午4:35:13
-	 */
-	@Scheduled(cron = "1 0 0 * * ?") // 每天凌晨00:00:01秒执行一次
-	public void buildReportDate() {
-		reportStatService.createReportData(DateUtils.getDayStartTime(-1), DateUtils.getDayStartTime(0));
-	}
 
-	/**
-	 * 查询入件中信银行商户状态
-	 * 
-	 * @return void DOM对象
-	 * @throws @since
-	 *             CodingExample Ver 1.1
-	 */
-	// @Scheduled(cron="0 1 * * * ?") //每个小时的1秒执行，每60分钟执行一次
-	@Scheduled(cron = "0 * * * * ?") // 每一分钟的0秒执行，每分钟执行一次
-	public void updateMercStatus() {
-		logger.error("查询中信商户是否入件成功...开始...");
-		List<MercQueryDTO> list = this.merchantCoreService.getMercList();
-		paymentService.queryAloneMchtInfoList(list);
-		logger.error("查询中信商户是否入件成功...结束...");
-	}
 }

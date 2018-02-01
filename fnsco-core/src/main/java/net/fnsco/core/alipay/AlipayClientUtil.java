@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
@@ -19,8 +18,6 @@ import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.beust.jcommander.internal.Maps;
 
-import net.fnsco.core.base.ResultDTO;
-
 /**
  * @desc 支付宝支付下单工具类
  * @author tangliang
@@ -28,7 +25,6 @@ import net.fnsco.core.base.ResultDTO;
  * @since Ver 1.1
  * @Date 2018年1月31日 下午2:40:52
  */
-@Service
 public class AlipayClientUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(AlipayClientUtil.class);
@@ -119,7 +115,27 @@ public class AlipayClientUtil {
 		
 		return resultMap;
 	}
-
+	
+	/**
+	 * checkTradeStatue:(根据支付宝POST返回的数据集合判断交易状态，只有为交易成功或交易完成才能是成功)
+	 * 状态说明:TRADE_FINISHED --交易完成,触发条件是商户签约的产品不支持退款功能的前提下，买家付款成功；或者，商户签约的产品支持退款功能的前提下，交易已经成功并且已经超过可退款期限。  
+	 * 状态说明:TRADE_SUCCESS  --支付成功,触发条件是商户签约的产品支持退款功能的前提下，买家付款成功； 
+	 * @param  @param params
+	 * @param  @return    设定文件
+	 * @return boolean    DOM对象
+	 * @author tangliang
+	 * @date   2018年2月1日 上午11:38:42
+	 */
+	public static boolean checkTradeStatue(Map<String,String> params) {
+		if(params != null && params.get("trade_status") != null) {
+			if("TRADE_SUCCESS".equals(params.get("trade_status")) || "TRADE_FINISHED".equals(params.get("trade_status"))) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * appId
 	 *
