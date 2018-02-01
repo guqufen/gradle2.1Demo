@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.CreateFileUtils;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.order.api.appuser.AppUserService;
 import net.fnsco.order.api.constant.ApiConstant;
@@ -141,42 +142,12 @@ public class MyselfController extends BaseController {
             if (Strings.isNullOrEmpty(userId)) {
                 return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
             }
-            // 上传文件原名
+         // 上传文件原名
             MultipartFile file = entity.getValue();
             String fileName = file.getOriginalFilename();
-            String line = System.getProperty("file.separator");// 文件分割符
-            // 保存文件的路径
-            String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
-            // 数据库存的路径
-            Calendar cal = Calendar.getInstance();
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH) + 1;
-            String stry = this.env.getProperty("fileUpload.url") + line + year;// +"\\"+month+"\\";
-            File yearPath = new File(stry);
-            // 如果文件夹不存在则创建
-            if (!yearPath.exists()) {
-                logger.info("年份目录不存在");
-                yearPath.mkdirs();
-            } else {
-                logger.info("年份目录已存在");
-            }
-
-            String strm = this.env.getProperty("fileUpload.url") + line + year + line + month + line;
-            File monthPath = new File(strm);
-            if (!monthPath.exists()) {
-                logger.info("月份目录不存在");
-                monthPath.mkdirs();
-            } else {
-                logger.info("月份目录已存在");
-            }
-
-            String yearMonthPath = year + line + month + line;
-            String newFileName = System.currentTimeMillis() + "." + prefix;
-            String fileKey = year + "/" + month + "/" + newFileName;
-            String filepath = yearMonthPath + newFileName;
-
-            String fileURL = this.env.getProperty("fileUpload.url") + line + filepath;
-
+            Map<String,String>  map =  CreateFileUtils.filePath(file,fileName,env);
+            String fileURL = map.get("fileURL");
+            String fileKey = map.get("fileKey");
             if (!file.isEmpty()) {
                 try {
                     byte[] bytes = file.getBytes();
