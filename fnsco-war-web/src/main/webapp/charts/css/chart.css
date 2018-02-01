@@ -131,3 +131,6 @@ body{
 	height: 50px;
 	line-height: 50px;
 }
+.carousel-inner{
+	overflow: scroll!important;
+}

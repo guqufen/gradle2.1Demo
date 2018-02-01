@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
+import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayReqDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayResultDTO;
 
@@ -32,7 +33,13 @@ public class PassivePayController extends BaseController {
 	@ApiOperation(value = "扫一扫-支付交易接口url")
 	public ResultDTO<PassivePayResultDTO> zxyhPassivePay(@RequestBody PassivePayReqDTO passivePayReqDTO) {
 
-		logger.info("请求参数：" + passivePayReqDTO.toString());
+//		PassivePayDTO passivePayDTO = new PassivePayDTO();
+//		passivePayDTO.setStdtranamt(passivePayJO.getAmt());// 交易金额
+//		passivePayDTO.setStd400memo("扫码支付");// 商品描述
+//		passivePayDTO.setStdauthid(passivePayJO.getAuthId());// 授权码
+//		
+//		
+//		return PaymentService.PassivePay(passivePayJO.getUserId(), passivePayDTO);
 
 		//判断APP用户ID是否合法
 		Integer id = getUserId();
@@ -46,6 +53,7 @@ public class PassivePayController extends BaseController {
 		// passivePayDTO.setStd400memo("扫码支付");// 商品描述
 		// passivePayDTO.setStdauthid(passivePayJO.getAuthId());// 授权码
 
+		logger.info("请求参数：" + passivePayReqDTO.toString());
 		return paymentService.passivePay(passivePayReqDTO);
 	}
 

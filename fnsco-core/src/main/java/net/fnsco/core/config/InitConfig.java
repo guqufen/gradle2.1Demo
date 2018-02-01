@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
+import net.fnsco.core.alipay.AlipayClientUtil;
+import net.fnsco.core.alipay.AlipayConstants;
 import net.fnsco.core.utils.OssLoaclUtil;
 import net.fnsco.core.utils.OssUtil;
 
@@ -30,6 +32,16 @@ public class InitConfig {
         if (null != env.getProperty("aliyun.oss.local.endpoint")) {
             OssLoaclUtil.initOssClient();
         }
+        return 1;
+    }
+    
+    @Bean
+    public int alipayConf() {
+        AlipayClientUtil.setAppId(env.getProperty(AlipayConstants.APP_ID));
+        AlipayClientUtil.setAlipayPublicKey(env.getProperty(AlipayConstants.ALIPAY_PUBLIC_KEY));
+        AlipayClientUtil.setAppPrivateKey(env.getProperty(AlipayConstants.APP_PRIVATE_KEY));
+        
+        AlipayClientUtil.initAlipayClient();
         return 1;
     }
 }

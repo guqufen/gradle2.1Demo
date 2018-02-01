@@ -29,6 +29,59 @@ public class FlowChargeJO extends JO {
 	@ApiModelProperty(value = "充值方式:0-余额/1-支付宝/2-微信/3-银行卡支付", example = "充值方式:0-余额/1-支付宝/2-微信/3-银行卡支付")
 	private String payType;
 
+	// 以下主要针对支付宝方式交易参数
+	/**
+	 * 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。示例值:Iphone6 16G
+	 */
+	private String body;
+
+	/**
+	 * 商品的标题/交易标题/订单标题/订单关键字等。示例值:大乐透
+	 */
+	private String subject;
+
+	/**
+	 * 商户网站唯一订单号。示例值:70501111111S001111119
+	 */
+	private String outTradeNo;
+
+	/**
+	 * 回调地址
+	 */
+	private String notifyUrl;
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getOutTradeNo() {
+		return outTradeNo;
+	}
+
+	public void setOutTradeNo(String outTradeNo) {
+		this.outTradeNo = outTradeNo;
+	}
+
+	public String getNotifyUrl() {
+		return notifyUrl;
+	}
+
+	public void setNotifyUrl(String notifyUrl) {
+		this.notifyUrl = notifyUrl;
+	}
+
 	public String getPhone() {
 		return phone;
 	}
