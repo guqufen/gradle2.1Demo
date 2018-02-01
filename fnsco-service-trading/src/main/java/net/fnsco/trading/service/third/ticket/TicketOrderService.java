@@ -20,8 +20,8 @@ import com.beust.jcommander.internal.Maps;
 import com.google.common.base.Strings;
 
 import io.swagger.annotations.ApiOperation;
+import net.fnsco.core.alipay.AlipayAppPayRequestParams;
 import net.fnsco.core.alipay.AlipayClientUtil;
-import net.fnsco.core.alipay.AlipayRequestParams;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.base.ResultPageDTO;
@@ -307,8 +307,8 @@ public class TicketOrderService extends BaseService {
      * @return
      */
     @Transactional
-    public ResultDTO payByZFBNotify() {
-    	TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(ticketOrder.getAppUserId(), ticketOrder.getOrderNo());
+    public ResultDTO payByZFBNotify(TradeWithdrawDO tradeWithdraw) {
+    	TicketOrderDO order = this.ticketOrderDAO.getByUserIdOrderNo(tradeWithdraw.getAppUserId(), tradeWithdraw.getOrderNo());
     	order.setStatus(TicketConstants.OrderStateEnum.PAYING.getCode());
         order.setLastModifyTime(new Date());
         ticketOrderDAO.update(order);
@@ -345,11 +345,11 @@ public class TicketOrderService extends BaseService {
             return ResultDTO.fail("订单状态不正常");
         }
         
-        AlipayRequestParams requestParams = new AlipayRequestParams();
+        AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
         requestParams.setBody("e789火车票购买");
         requestParams.setSubject("火车票购买");
         requestParams.setTotalAmount(String.format("%.2f", order.getOrderAmount()));
-        requestParams.setOutTradeNo(CodeUtil.generateOrderCode(""));
+        requestParams.setOutTradeNo(order.getOrderNo());
         String notifyUrl = env.getProperty("alipay.notify_url");
         requestParams.setNotifyUrl(notifyUrl);
         String body =  AlipayClientUtil.createPayOrderParams(requestParams);

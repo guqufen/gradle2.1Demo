@@ -483,28 +483,6 @@ public class TicketController extends BaseController {
         return ticketOrderService.cancelOrder(ticketOrder);
     }
     /**
-     * 火车票购买支付宝支付回调
-     * @return
-     */
-    @RequestMapping(value = "/payNotify")
-	@ApiOperation(value = "支付宝APP火车票支付异步通知接口，仅支付宝方调用")
-    public ResultDTO payNotify() {
-    	Map<String,Object> rsaMap = AlipayClientUtil.rsaCheckV1(request);
-		boolean flag = (boolean) rsaMap.get("signature");
-		/**
-		 * 先对来源数据认证，如果不是支付宝方调用，则舍弃
-		 */
-		if(!flag) {
-			logger.error("本次调用非正常调用!");
-			return ResultDTO.fail();
-		}
-		/**
-		 * 在认证是支付宝发来的数据后，接下来处理业务
-		 */
-    	return ticketOrderService.payByZFBNotify();
-    }
-    
-    /**
      * queryTradeDataDetail:(确认支付)
      *
      * @param  @param tradeDataDetailJO
