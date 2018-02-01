@@ -95,10 +95,10 @@
     var addCount = new Number();
 
     var data = new Date();
-    var month = data.getMonth()+1;
+    var month = data.getMonth() + 1;
     var seconds = data.getSeconds();
     var time = data.getFullYear() + '-' + (data.getMonth() + 1);
-    console.log(data.getFullYear(), data.getMonth() + 1, time,seconds);
+    console.log(data.getFullYear(), data.getMonth() + 1, time, seconds);
 
     function changeValue(target, startVal, endVal, decimals, duration, options) {
         var options = {
@@ -180,50 +180,50 @@
         return fmt;
     };
 
-//    var payTypeList = ['刷卡支付','微信支付','支付宝支付'];
-//    var payType;
-//    var mockList;
-//    var amt = 100;
-//    setInterval(function () {
-//        amt = amt+3;
-//        list = [];
-//        for (var i = 0; i < payTypeList.length; i++) {
-//            payType = payTypeList[i];
-//            mockList = {"amt":+amt+"","payType":+payType+"","createTime":"2018-"+month+"-01 10:"+seconds+":24","termId":"28504880"};
-//        }
-//        addMockList();
-//    }, 1000);
-//    var list = [];
-//    function addMockList(){
-//        //mockList.createTime = new Date().Format("yyyy-MM-dd hh:mm:ss");
-//       list.push(mockList)
-//    }
-     var mockList = [
-         {"amt":"25","payType":"微信支付","createTime":"2018-02-01 11:45:27","termId":"28644056"},
-         {"amt":"120","payType":"支付宝支付","createTime":"2018-02-01 11:44:56","termId":"28644055"},
-         {"amt":"20","payType":"微信支付","createTime":"2018-02-01 11:44:10","termId":"28644056"},
-         {"amt":"59","payType":"刷卡支付","createTime":"2018-02-01 11:32:42","termId":"26715796"},
-         {"amt":"1200","payType":"刷卡支付","createTime":"2018-02-01 11:32:05","termId":"26715796"},
-         {"amt":"25","payType":"支付宝支付","createTime":"2018-02-01 11:28:49","termId":"28644055"},
-         {"amt":"2670","payType":"刷卡支付","createTime":"2018-02-01 11:08:21","termId":"26338093"},
-         {"amt":"1880","payType":"刷卡支付","createTime":"2018-02-01 10:55:24","termId":"26338093"},
-         {"amt":"1880","payType":"刷卡支付","createTime":"2018-02-01 10:54:31","termId":"26338093"},
-         {"amt":"8500","payType":"刷卡支付","createTime":"2018-02-01 10:52:44","termId":"26673416"},
-         {"amt":"110","payType":"支付宝支付","createTime":"2018-02-01 10:47:41","termId":"28504828"},
-         {"amt":"6000","payType":"刷卡支付","createTime":"2018-02-01 10:44:06","termId":"28504865"},
-         {"amt":"264","payType":"微信支付","createTime":"2018-02-01 10:40:06","termId":"28504831"},
-         {"amt":"45","payType":"支付宝支付","createTime":"2018-02-01 10:39:33","termId":"28504831"},
-         {"amt":"450","payType":"刷卡支付","createTime":"2018-02-01 10:37:09","termId":"28488905"},
-         {"amt":"1080","payType":"刷卡支付","createTime":"2018-02-01 10:30:24","termId":"28504880"},
-         {"amt":"60","payType":"支付宝支付","createTime":"2018-02-01 10:25:04","termId":"28504831"},
-         {"amt":"0.03","payType":"微信支付","createTime":"2018-02-01 10:24:15","termId":"94304764"},
-         {"amt":"20000","payType":"刷卡支付","createTime":"2018-02-01 10:19:57","termId":"28542726"},
-         {"amt":"25","payType":"微信支付","createTime":"2018-02-01 10:19:55","termId":"28504850"},
-         {"amt":"60","payType":"微信支付","createTime":"2018-02-01 10:12:45","termId":"28504831"},
-         {"amt":"289","payType":"微信支付","createTime":"2018-02-01 10:11:46","termId":"28504831"},
-         {"amt":"15000","payType":"刷卡支付","createTime":"2018-02-01 10:08:59","termId":"28504906"},
-         {"amt":"3000","payType":"刷卡支付","createTime":"2018-02-01 10:07:07","termId":"28266585"}
-     ];
+    //    var payTypeList = ['刷卡支付','微信支付','支付宝支付'];
+    //    var payType;
+    //    var mockList;
+    //    var amt = 100;
+    //    setInterval(function () {
+    //        amt = amt+3;
+    //        list = [];
+    //        for (var i = 0; i < payTypeList.length; i++) {
+    //            payType = payTypeList[i];
+    //            mockList = {"amt":+amt+"","payType":+payType+"","createTime":"2018-"+month+"-01 10:"+seconds+":24","termId":"28504880"};
+    //        }
+    //        addMockList();
+    //    }, 1000);
+    //    var list = [];
+    //    function addMockList(){
+    //        //mockList.createTime = new Date().Format("yyyy-MM-dd hh:mm:ss");
+    //       list.push(mockList)
+    //    }
+    var mockList = [
+        {"amt": "25", "payType": "微信支付", "createTime": "2018-02-01 11:45:27", "termId": "28644056"},
+        {"amt": "120", "payType": "支付宝支付", "createTime": "2018-02-01 11:44:56", "termId": "28644055"},
+        {"amt": "20", "payType": "微信支付", "createTime": "2018-02-01 11:44:10", "termId": "28644056"},
+        {"amt": "59", "payType": "刷卡支付", "createTime": "2018-02-01 11:32:42", "termId": "26715796"},
+        {"amt": "1200", "payType": "刷卡支付", "createTime": "2018-02-01 11:32:05", "termId": "26715796"},
+        {"amt": "25", "payType": "支付宝支付", "createTime": "2018-02-01 11:28:49", "termId": "28644055"},
+        {"amt": "2670", "payType": "刷卡支付", "createTime": "2018-02-01 11:08:21", "termId": "26338093"},
+        {"amt": "1880", "payType": "刷卡支付", "createTime": "2018-02-01 10:55:24", "termId": "26338093"},
+        {"amt": "1880", "payType": "刷卡支付", "createTime": "2018-02-01 10:54:31", "termId": "26338093"},
+        {"amt": "8500", "payType": "刷卡支付", "createTime": "2018-02-01 10:52:44", "termId": "26673416"},
+        {"amt": "110", "payType": "支付宝支付", "createTime": "2018-02-01 10:47:41", "termId": "28504828"},
+        {"amt": "6000", "payType": "刷卡支付", "createTime": "2018-02-01 10:44:06", "termId": "28504865"},
+        {"amt": "264", "payType": "微信支付", "createTime": "2018-02-01 10:40:06", "termId": "28504831"},
+        {"amt": "45", "payType": "支付宝支付", "createTime": "2018-02-01 10:39:33", "termId": "28504831"},
+        {"amt": "450", "payType": "刷卡支付", "createTime": "2018-02-01 10:37:09", "termId": "28488905"},
+        {"amt": "1080", "payType": "刷卡支付", "createTime": "2018-02-01 10:30:24", "termId": "28504880"},
+        {"amt": "60", "payType": "支付宝支付", "createTime": "2018-02-01 10:25:04", "termId": "28504831"},
+        {"amt": "0.03", "payType": "微信支付", "createTime": "2018-02-01 10:24:15", "termId": "94304764"},
+        {"amt": "20000", "payType": "刷卡支付", "createTime": "2018-02-01 10:19:57", "termId": "28542726"},
+        {"amt": "25", "payType": "微信支付", "createTime": "2018-02-01 10:19:55", "termId": "28504850"},
+        {"amt": "60", "payType": "微信支付", "createTime": "2018-02-01 10:12:45", "termId": "28504831"},
+        {"amt": "289", "payType": "微信支付", "createTime": "2018-02-01 10:11:46", "termId": "28504831"},
+        {"amt": "15000", "payType": "刷卡支付", "createTime": "2018-02-01 10:08:59", "termId": "28504906"},
+        {"amt": "3000", "payType": "刷卡支付", "createTime": "2018-02-01 10:07:07", "termId": "28266585"}
+    ];
 
 
     function getList(date, size) {
@@ -234,13 +234,11 @@
             data: {'startDate': dateTime, 'pageSize': size},
             success: function (result) {
                 var dataList = result.data;
-                if(dataList.length<1000){
-                    mockList = mockList.concat(dataList);
-                    for (var i = 0; i < mockList.length; i++) {
-                        $("#scroll-ul").append('<li><div class="card-num">' + mockList[i].payType + '</div>' +
-                            '<div class="trading"><span class="trading-title">￥</span>' +
-                            '<span class="trading-num">' + mockList[i].amt + '</span></div></li>');
-                    }
+                mockList = mockList.concat(dataList);
+                for (var i = 0; i < mockList.length; i++) {
+                    $("#scroll-ul").append('<li><div class="card-num">' + mockList[i].payType + '</div>' +
+                        '<div class="trading"><span class="trading-title">￥</span>' +
+                        '<span class="trading-num">' + mockList[i].amt + '</span></div></li>');
                 }
             }
         })
