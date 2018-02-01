@@ -820,20 +820,4 @@ public class PrepaidRefillService extends BaseService {
 		}
 		return ResultDTO.fail();
 	}
-
-	/**
-	 * 支付宝支付下单
-	 * 
-	 * @param alipayRequestParams
-	 * @return
-	 */
-	public ResultDTO<String> aliPay(AlipayRequestParams requestParams) {
-
-		String body = AlipayClientUtil.createPayOrderParams(requestParams);
-		
-		TradeWithdrawDO tradeWithdrawDO = new TradeWithdrawDO();
-//		tradeWithdrawDO.setAppUserId(requestParams.get);
-		
-		return ResultDTO.success(body);
-	}
 }
