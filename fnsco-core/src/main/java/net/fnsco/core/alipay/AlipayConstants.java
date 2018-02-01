@@ -18,6 +18,8 @@ public class AlipayConstants {
 	
 	public static final String ALIPAY_PUBLIC_KEY = "alipay.rsa.public.key";
 	
+	public static final String ALIPAY_APP_PUBLIC_KEY = "alipay.app.public.key";
+	
 	public static final String SERVER_URL = "https://openapi.alipay.com/gateway.do";
 	
 	public static final String NOTIFY_URL = "alipay.notify_url";

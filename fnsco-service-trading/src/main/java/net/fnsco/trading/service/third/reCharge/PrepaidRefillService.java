@@ -15,13 +15,16 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
+import net.fnsco.core.alipay.AlipayAppPayRequestParams;
 import net.fnsco.core.alipay.AlipayClientUtil;
-import net.fnsco.core.alipay.AlipayRequestParams;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
 import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.freamwork.comm.Md5Util;
+import net.fnsco.trading.comm.TradeConstants;
+import net.fnsco.trading.comm.TradeConstants.TradeTypeEnum;
+import net.fnsco.trading.comm.TradeConstants.WithdrawStateEnum;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeDTO;
 import net.fnsco.trading.service.third.reCharge.dto.ChargeResultDTO;
@@ -200,8 +203,9 @@ public class PrepaidRefillService extends BaseService {
 		phoneChargeOrderDO.setOrderNo(orderid);// 设置商户订单ID
 		phoneChargeOrderDO.setMobile(chargeDTO.getPhone());// 设置充值手机号
 		phoneChargeOrderDO.setName(chargeDTO.getName());// 设置充值名称
+		phoneChargeOrderDO.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());
 		phoneChargeOrderDO.setAmt(chargeDTO.getInprice().replace(".", ""));// 设置交易金额
-		phoneChargeOrderDO.setStatus(0);// 设置交易状态0-进行中
+		phoneChargeOrderDO.setStatus(WithdrawStateEnum.INIT.getCode());// 设置交易状态0-进行中
 		rechargeOrderService.doAdd(phoneChargeOrderDO);
 
 		TradeWithdrawDO tradeWithdrawDO = new TradeWithdrawDO();
@@ -209,10 +213,10 @@ public class PrepaidRefillService extends BaseService {
 		tradeWithdrawDO.setOriginalOrderNo(orderid);// 设置原订单号(默认等于当前订单号)
 		tradeWithdrawDO.setAmount(new BigDecimal(chargeDTO.getInprice()).multiply(new BigDecimal(100)));// 设置交易金额，优惠金额
 		tradeWithdrawDO.setAppUserId(chargeDTO.getUserId());// 设置帐号ID
-		tradeWithdrawDO.setRespCode("1000");// 交易进行中，需要再次调用订单查询接口进行查询
-		tradeWithdrawDO.setTradeType(2);// 交易类型:2-消费
-		tradeWithdrawDO.setTradeSubType(23); // 设置子类型,23流量充值
-		tradeWithdrawDO.setStatus(1);// 设置交易状态，执行中
+		tradeWithdrawDO.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 交易进行中，需要再次调用订单查询接口进行查询
+		tradeWithdrawDO.setTradeType(TradeTypeEnum.WITHDRAW.getCode());// 交易类型:2-消费
+		tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.BUY_LT.getCode()); // 设置子类型,23流量充值
+		tradeWithdrawDO.setStatus(WithdrawStateEnum.PROCESSING.getCode());// 设置交易状态，1-执行中
 		tradeWithdrawService.doAdd(tradeWithdrawDO);// 更新数据库表
 
 		TradeWithdrawDO tradeWithdrawDO1 = new TradeWithdrawDO();
@@ -229,8 +233,8 @@ public class PrepaidRefillService extends BaseService {
 
 			logger.error("流量充值-帐户余额冻结失败，帐户余额不足！！appUserId=" + chargeDTO.getUserId());
 
-			tradeWithdrawDO1.setRespCode(TradeStateEnum.FAIL.getCode());// 交易进行中，需要再次调用订单查询接口进行查询
-			tradeWithdrawDO1.setStatus(2);// 状态为2-失败
+			tradeWithdrawDO1.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());// 交易进行中，需要再次调用订单查询接口进行查询
+			tradeWithdrawDO1.setStatus(WithdrawStateEnum.FAIL.getCode());// 状态为2-失败
 			tradeWithdrawDO1.setRespMsg("帐户余额冻结失败,帐户余额不足.");// 设置响应
 			tradeWithdrawDO1.setUpdateTime(new Date());// 设置最后更新时间
 			Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO1);// 更新数据
@@ -239,7 +243,7 @@ public class PrepaidRefillService extends BaseService {
 						"流量充值失败，数据更新失败。time=" + tradeWithdrawDO1.getUpdateTime() + "userId=" + chargeDTO.getUserId());
 			}
 
-			phoneChargeOrderDO1.setRespCode(TradeStateEnum.FAIL.getCode());// 账户冻结失败，更新数据
+			phoneChargeOrderDO1.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());// 账户冻结失败，更新数据
 			phoneChargeOrderDO1.setRespMsg("帐户余额冻结失败,帐户余额不足.");// 设置响应
 			int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO1);
 			if (ret < 0) {
@@ -269,7 +273,7 @@ public class PrepaidRefillService extends BaseService {
 
 				String amtStr = realInprice.toString();
 				phoneChargeOrderDO1.setAmt(amtStr);// 设置实际消费金额
-				phoneChargeOrderDO1.setRespCode("1000");// 订单提交成功，等待充值
+				phoneChargeOrderDO1.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 订单提交成功，等待充值
 				phoneChargeOrderDO1.setRespMsg(juhe.getReason());// 设置响应
 				int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO1);
 				if (ret < 0) {
@@ -280,7 +284,7 @@ public class PrepaidRefillService extends BaseService {
 				tradeWithdrawDO1.setOriginalOrderNo(map.get("sporder_id").toString());// 设置渠道订单号
 				// 实际消费金额，先取两位小数再乘以100
 				tradeWithdrawDO1.setAmount(realInprice);// 设置实际消费金额
-				tradeWithdrawDO1.setRespCode("1000");// 交易成功
+				tradeWithdrawDO1.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 交易成功
 				tradeWithdrawDO1.setUpdateTime(new Date());// 设置交易完成时间
 				tradeWithdrawDO1.setRespMsg(juhe.getReason());// 设置响应
 				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO1);// 更新数据
@@ -289,7 +293,7 @@ public class PrepaidRefillService extends BaseService {
 							+ chargeDTO.getUserId());
 				}
 
-				ph.setRespCode("1000");
+				ph.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());
 				ph.setRespMsg(juhe.getReason());
 				ph.setOrderNo(orderid);
 
@@ -309,7 +313,7 @@ public class PrepaidRefillService extends BaseService {
 
 			} else if (juhe.getError_code() == 10014) {// 系统内部异常(调用充值类业务时，请务必联系客服或通过订单查询接口检测订单，避免造成损失)
 
-				tradeWithdrawDO1.setRespCode("1000");// 订单提交成功，等待充值需要再次调用订单查询接口进行查询
+				tradeWithdrawDO1.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 订单提交成功，等待充值需要再次调用订单查询接口进行查询
 				tradeWithdrawDO1.setRespMsg(juhe.getReason());// 设置响应
 				tradeWithdrawDO1.setUpdateTime(new Date());// 设置最后更新时间
 				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO1);// 更新数据
@@ -318,7 +322,7 @@ public class PrepaidRefillService extends BaseService {
 							+ chargeDTO.getUserId());
 				}
 
-				phoneChargeOrderDO1.setRespCode("1000");// 交易进行失败
+				phoneChargeOrderDO1.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 交易进行失败
 				phoneChargeOrderDO1.setRespMsg(juhe.getReason());// 设置响应
 				int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO1);
 				if (ret < 0) {
@@ -326,13 +330,13 @@ public class PrepaidRefillService extends BaseService {
 							+ "userId=" + chargeDTO.getUserId());
 				}
 
-				ph.setRespCode("1000");
+				ph.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());
 				ph.setRespMsg("交易正在处理中，请稍后查询");
 
 			} else {
 
 				tradeWithdrawDO1.setRespCode(TradeStateEnum.FAIL.getCode());// 交易进行中，需要再次调用订单查询接口进行查询
-				tradeWithdrawDO1.setStatus(2);// 状态为2-失败
+				tradeWithdrawDO1.setStatus(WithdrawStateEnum.FAIL.getCode());// 状态为2-失败
 				tradeWithdrawDO1.setRespMsg(juhe.getReason());// 设置响应
 				tradeWithdrawDO1.setUpdateTime(new Date());// 设置最后更新时间
 				Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO1);// 更新数据
@@ -341,16 +345,16 @@ public class PrepaidRefillService extends BaseService {
 							+ chargeDTO.getUserId());
 				}
 
-				phoneChargeOrderDO1.setRespCode(TradeStateEnum.FAIL.getCode());// 交易失败
+				phoneChargeOrderDO1.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());// 交易失败
 				phoneChargeOrderDO1.setRespMsg(juhe.getReason());// 设置响应
-				phoneChargeOrderDO1.setStatus(2);// 状态为2-失败
+				phoneChargeOrderDO1.setStatus(WithdrawStateEnum.FAIL.getCode());// 状态为2-失败
 				int ret = rechargeOrderService.doUpdate(phoneChargeOrderDO1);
 				if (ret < 0) {
 					logger.error("流量充值失败，phoneChargeOrder数据更新失败。orderNo=" + phoneChargeOrderDO1.getOrderNo() + "userId="
 							+ chargeDTO.getUserId());
 				}
 
-				ph.setRespCode("1002");
+				ph.setRespCode(TradeConstants.RespCodeEnum.FAIL.getCode());
 				ph.setRespMsg(juhe.getReason());
 
 				// 还原APP账户余额
@@ -395,7 +399,7 @@ public class PrepaidRefillService extends BaseService {
 		phoneChargeOrderDO.setMobile(chargeDTO.getPhone());// 设置充值手机号
 		phoneChargeOrderDO.setName(chargeDTO.getName());// 设置充值名称:xx元
 		phoneChargeOrderDO.setAmt(chargeDTO.getInprice().replace(".", ""));// 设置交易金额
-		phoneChargeOrderDO.setStatus(0);// 设置交易状态0-进行中
+		phoneChargeOrderDO.setStatus(WithdrawStateEnum.INIT.getCode());// 设置交易状态0-进行中
 		rechargeOrderService.doAdd(phoneChargeOrderDO);
 
 		TradeWithdrawDO tradeWithdrawDO = new TradeWithdrawDO();
@@ -405,7 +409,7 @@ public class PrepaidRefillService extends BaseService {
 		tradeWithdrawDO.setAppUserId(chargeDTO.getUserId());// 设置帐号ID
 		tradeWithdrawDO.setTradeType(2);// 交易类型:2-消费
 		tradeWithdrawDO.setTradeSubType(22);// 交易子类型:22话费充值
-		tradeWithdrawDO.setStatus(1);// 设置交易状态，执行中
+		tradeWithdrawDO.setStatus(WithdrawStateEnum.PROCESSING.getCode());// 设置交易状态，1-执行中
 		tradeWithdrawService.doAdd(tradeWithdrawDO);// 更新数据库表
 
 		TradeWithdrawDO tradeWithdrawDO1 = new TradeWithdrawDO();
@@ -423,7 +427,7 @@ public class PrepaidRefillService extends BaseService {
 
 			logger.error("话费充值-帐户余额冻结失败！！appUserId=" + chargeDTO.getUserId());
 			tradeWithdrawDO1.setRespCode(TradeStateEnum.FAIL.getCode());// 交易进行中，需要再次调用订单查询接口进行查询
-			tradeWithdrawDO1.setStatus(2);// 状态为2-失败
+			tradeWithdrawDO1.setStatus(WithdrawStateEnum.FAIL.getCode());// 状态为2-失败
 			tradeWithdrawDO1.setRespMsg("帐户余额冻结失败,帐户余额不足.");// 设置响应
 			tradeWithdrawDO1.setUpdateTime(new Date());// 设置最后更新时间
 			Integer ret2 = tradeWithdrawService.doUpdate(tradeWithdrawDO1);// 更新数据
@@ -827,13 +831,35 @@ public class PrepaidRefillService extends BaseService {
 	 * @param alipayRequestParams
 	 * @return
 	 */
-	public ResultDTO<String> aliPay(AlipayRequestParams requestParams) {
+	public ResultDTO aliPay(ChargeDTO chargeDTO) {
 
-		String body = AlipayClientUtil.createPayOrderParams(requestParams);
-		
+		AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
+		String orderid = CodeUtil.generateOrderCode("");
+
+		// 更新余额和对应的冻结金额(账户扣款)
+		BigDecimal inprice = new BigDecimal(chargeDTO.getInprice()).multiply(new BigDecimal(100)).setScale(0,
+				BigDecimal.ROUND_HALF_UP);
+
 		TradeWithdrawDO tradeWithdrawDO = new TradeWithdrawDO();
-//		tradeWithdrawDO.setAppUserId(requestParams.get);
-		
+		tradeWithdrawDO.setAppUserId(chargeDTO.getUserId());
+		tradeWithdrawDO.setAmount(inprice);
+		tradeWithdrawDO.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());// 应答码；处理中
+																					// 1000
+		tradeWithdrawDO.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());// 交易类型；收入、支出
+		tradeWithdrawDO.setStatus(WithdrawStateEnum.INIT.getCode());// 状态
+		tradeWithdrawDO.setFee(BigDecimal.ZERO);
+		tradeWithdrawDO.setChannelType(TradeConstants.ChannelTypeEnum.JHF_PAY.getCode());// 渠道
+		tradeWithdrawDO.setTradeSubType(TradeConstants.TxnSubTypeEnum.INCOME_RESEARCH.getCode());
+		tradeWithdrawService.doAdd(tradeWithdrawDO);// 新增
+
+		requestParams.setBody(chargeDTO.getBody());// 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。示例值:Iphone6
+		requestParams.setSubject(chargeDTO.getSubject());// 商品的标题/交易标题/订单标题/订单关键字等。示例值:大乐透
+		requestParams.setOutTradeNo(orderid);// 商户订单号
+		requestParams.setTotalAmount(chargeDTO.getInprice());// 付款价格
+		requestParams.setNotifyUrl("");// 回调地址
+		String body = AlipayClientUtil.createPayOrderParams(requestParams);
+
 		return ResultDTO.success(body);
 	}
+
 }

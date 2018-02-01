@@ -2,17 +2,14 @@ package net.fnsco.trading.service.pay.channel.zxyh;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,35 +26,27 @@ import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.dto.TradeAliPayCallBackDTO;
 import net.fnsco.bigdata.api.dto.TradeResultZXDTO;
 import net.fnsco.bigdata.api.dto.TradeWeChatCallBackDTO;
-import net.fnsco.bigdata.api.merchant.MerchantChannelService;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.bigdata.comm.ServiceConstant.PaySubTypeAllEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.PayTypeEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
 import net.fnsco.bigdata.comm.ServiceConstant.TradeTypeEnum;
-import net.fnsco.bigdata.service.dao.master.AppUserMerchant1Dao;
 import net.fnsco.bigdata.service.dao.master.MerchantChannelDao;
-import net.fnsco.bigdata.service.dao.master.MerchantEntityCoreRefDao;
 import net.fnsco.bigdata.service.domain.MerchantChannel;
-import net.fnsco.bigdata.service.domain.MerchantEntity;
-import net.fnsco.bigdata.service.domain.MerchantEntityCoreRef;
 import net.fnsco.bigdata.service.sys.SequenceService;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
-import net.fnsco.core.utils.HttpUtils;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.comm.TradeConstants.ZxyhPassivePayCode;
 import net.fnsco.trading.comm.TradeConstants.ZxyhPassivePayType;
 import net.fnsco.trading.constant.E789ApiConstant;
 import net.fnsco.trading.service.merchant.AppUserMerchantService;
-import net.fnsco.trading.service.merchantentity.AppUserMerchantEntityService;
 import net.fnsco.trading.service.merchantentity.dao.AppUserMerchantEntityDAO;
 import net.fnsco.trading.service.merchantentity.entity.AppUserMerchantEntityDO;
 import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
-import net.fnsco.trading.service.pay.OrderPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.ActiveAlipayDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.ActiveWeiXinDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.MerchantZxyhDTO;
@@ -67,7 +56,7 @@ import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayResultDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.util.ZxyhPayMD5Util;
 
 @Service
-public class PaymentService extends BaseService implements OrderPaymentService {
+public class PaymentService extends BaseService  {
 	@Autowired
 	private Environment env;
 	@Autowired
@@ -76,8 +65,6 @@ public class PaymentService extends BaseService implements OrderPaymentService {
 	private MerchantChannelDao channelDao;
 	@Autowired
 	private SequenceService sequenceService;
-	@Autowired
-	private MerchantEntityCoreRefDao merchantEntityCoreRefDao;
 	@Autowired
 	private TradeOrderDAO orderDAO;
 	@Autowired

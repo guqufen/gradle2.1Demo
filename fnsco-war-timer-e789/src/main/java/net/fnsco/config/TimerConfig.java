@@ -14,13 +14,11 @@ import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.order.dao.TradeOrderDAO;
-import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 import net.fnsco.trading.service.report.ReportStatService;
 import net.fnsco.trading.service.third.reCharge.PrepaidRefillService;
 import net.fnsco.trading.service.third.reCharge.RechargeOrderService;
 import net.fnsco.trading.service.third.reCharge.entity.RechargeOrderDO;
-import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 
 @EnableScheduling
 public class TimerConfig {
@@ -104,8 +102,8 @@ public class TimerConfig {
      * @throws 
      * @since  CodingExample　Ver 1.1
      */
-//    @Scheduled(cron="0 1 * * * ?") //每个小时的1秒执行，每60分钟执行一次
-    @Scheduled(cron = "0 * * * * ?") //每一分钟的0秒执行，每分钟执行一次
+    @Scheduled(cron="0 1 * * * ?") //每个小时的1秒执行，每60分钟执行一次
+//    @Scheduled(cron = "0 * * * * ?") //每一分钟的0秒执行，每分钟执行一次
     public void updateMercStatus(){
     	logger.error("查询中信商户是否入件成功...开始...");
     	//获取所有新增待审核的渠道商户信息

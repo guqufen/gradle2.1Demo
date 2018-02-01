@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
-import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayReqDTO;
 import net.fnsco.trading.service.pay.channel.zxyh.dto.PassivePayResultDTO;
 

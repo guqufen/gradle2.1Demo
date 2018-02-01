@@ -17,7 +17,6 @@ import net.fnsco.bigdata.api.dto.MerchantCoreEntityZxyhDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
-import net.fnsco.trading.service.pay.OrderPaymentService;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
 
 @Controller

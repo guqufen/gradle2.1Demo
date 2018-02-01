@@ -10,7 +10,7 @@ import com.alibaba.fastjson.JSON;
  * @since    Ver 1.1
  * @Date	 2018年1月31日 下午4:31:09
  */
-public class AlipayRequestParams implements Serializable{
+public class AlipayAppPayRequestParams implements Serializable{
 
 	/**
 	 * serialVersionUID:TODO（用一句话描述这个变量表示什么）
