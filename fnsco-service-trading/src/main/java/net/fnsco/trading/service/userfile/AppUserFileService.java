@@ -54,10 +54,15 @@ public class AppUserFileService extends BaseService {
  }
  
  //查询
- public AppUserFileDO doQueryByUserId (Integer appUserId,String fileType) {
-   AppUserFileDO obj = this.appUserFileDAO.getByUserId (appUserId,fileType);
+ public List<AppUserFileDO> doQueryByUserId (Integer appUserId) {
+	 List<AppUserFileDO> obj = this.appUserFileDAO.getByUserId (appUserId);
    return obj;
  }
+//查询
+public AppUserFileDO doQueryByUserIdAndSide (Integer appUserId,String side) {
+	AppUserFileDO obj = this.appUserFileDAO.getByUserIdAndSide (appUserId,side);
+  return obj;
+}
  //根据appuserid和正反面删除
  public Integer deleteByIdAndSide (Integer appUserId,String fileType) {
    int rows=this.appUserFileDAO.deleteByIdAndSide(appUserId,fileType);

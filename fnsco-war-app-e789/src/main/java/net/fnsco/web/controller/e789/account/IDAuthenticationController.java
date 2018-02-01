@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
+import net.fnsco.core.utils.CreateFileUtils;
 import net.fnsco.core.utils.FileUtils;
 import net.fnsco.core.utils.JuheDemoFaceUtil;
 import net.fnsco.core.utils.JuheDemoUtil;
@@ -74,41 +77,12 @@ public class IDAuthenticationController extends BaseController {
         	return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
         for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
-            // 上传文件原名
+        	// 上传文件原名
             MultipartFile file = entity.getValue();
             String fileName = file.getOriginalFilename();
-            String line = System.getProperty("file.separator");// 文件分割符
-            // 保存文件的路径
-            String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
-            // 数据库存的路径
-            Calendar cal = Calendar.getInstance();
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH) + 1;
-            String stry = this.env.getProperty("fileUpload.url") + line + year;// +"\\"+month+"\\";
-            File yearPath = new File(stry);
-            // 如果文件夹不存在则创建
-            if (!yearPath.exists()) {
-                logger.info("年份目录不存在");
-                yearPath.mkdirs();
-            } else {
-                logger.info("年份目录已存在");
-            }
-
-            String strm = this.env.getProperty("fileUpload.url") + line + year + line + month + line;
-            File monthPath = new File(strm);
-            if (!monthPath.exists()) {
-                logger.info("月份目录不存在");
-                monthPath.mkdirs();
-            } else {
-                logger.info("月份目录已存在");
-            }
-
-            String yearMonthPath = year + line + month + line;
-            String newFileName = userId +"-"+ System.currentTimeMillis() + "." + prefix;
-            String fileKey = year + "/" + month + "/" + newFileName;
-            String filepath = yearMonthPath + newFileName;
-
-            String fileURL = this.env.getProperty("fileUpload.url") + line + filepath;
+            Map<String,String>  map =  CreateFileUtils.filePath(file,fileName,env);
+            String fileURL = map.get("fileURL");
+            String fileKey = map.get("fileKey");
             if (!file.isEmpty()) {
                 try {
                     byte[] bytes = file.getBytes();
@@ -118,7 +92,7 @@ public class IDAuthenticationController extends BaseController {
                     //上传阿里云OSS文件服务器
                     OssLoaclUtil.uploadFile(fileURL, fileKey);
                     String newUrl = OssLoaclUtil.getHeadBucketName() + "^" + fileKey;
-                    AppUserFileDO userFile = appUserFileService.doQueryByUserId(userId,side);
+                    AppUserFileDO userFile = appUserFileService.doQueryByUserIdAndSide(userId,side);
             		if(userFile!=null) {
             			String path = userFile.getFilePath();
             			String deleteFileKey = path.substring(path.indexOf("^") + 1);
@@ -152,15 +126,24 @@ public class IDAuthenticationController extends BaseController {
 		if (userId == null) {
         	return ResultDTO.fail(ApiConstant.E_USER_ID_NULL);
         }
-		AppUserFileDO appUserFrontFile = appUserFileService.doQueryByUserId(commonJO.getUserId(),"front");
-		if(appUserFrontFile==null) {
+		List<AppUserFileDO> appUserFileList  = appUserFileService.doQueryByUserId(commonJO.getUserId());
+		String imageFrontPath = null;
+		String imagePathBack = null;
+		for(AppUserFileDO appUserFile : appUserFileList) {
+			String side =  appUserFile.getFileType();
+			if(side.equals("back")) {
+				imagePathBack = appUserFile.getFilePath();
+			}else if(side.equals("front")) {
+				imageFrontPath = appUserFile.getFilePath();
+			}
+		}
+		if(Strings.isNullOrEmpty(imageFrontPath)) {
 			return ResultDTO.fail(E789ApiConstant.E_FORNT_NOT_FOUND);
 		}
-		AppUserFileDO appUserBackFile = appUserFileService.doQueryByUserId(commonJO.getUserId(),"back");
-		if(appUserBackFile==null) {
+		if(Strings.isNullOrEmpty(imagePathBack)) {
 			return ResultDTO.fail(E789ApiConstant.E_BACK_NOT_FOUND);
 		}
-		String imageFrontPath = appUserFrontFile.getFilePath();
+		
 		String pathFront = imageFrontPath.substring(imageFrontPath.indexOf("^") + 1);
 		//String imageUrlFron = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), pathFront);
 		String line = System.getProperty("file.separator");// 文件分割符
@@ -215,7 +198,6 @@ public class IDAuthenticationController extends BaseController {
 		String cardId = null;
 		realName = idCardFaceFront.getName();
     	cardId = idCardFaceFront.getId_card_number();
-		String imagePathBack = appUserBackFile.getFilePath();
 		String pathBack = imagePathBack.substring(imagePathBack.indexOf("^") + 1);
 		//String imageUrlBack = OssLoaclUtil.getForeverFileUrl(OssLoaclUtil.getHeadBucketName(), pathBack);
 		String fileURLBack = this.env.getProperty("fileUpload.url") + line + pathBack;
