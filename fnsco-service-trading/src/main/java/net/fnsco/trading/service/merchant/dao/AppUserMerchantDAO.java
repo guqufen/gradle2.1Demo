@@ -20,6 +20,10 @@ public interface AppUserMerchantDAO {
 	@Results({@Result( column = "app_user_id",property = "appUserId"),@Result( column = "account_type",property = "accountType"),@Result( column = "account_no",property = "accountNo"),@Result( column = "account_name",property = "accountName"),@Result( column = "account_card_id",property = "accountCardId"),@Result( column = "sub_bank_name",property = "subBankName"),@Result( column = "open_bank_prince",property = "openBankPrince"),@Result( column = "open_bank",property = "openBank"),@Result( column = "open_bank_city",property = "openBankCity"),@Result( column = "open_bank_num",property = "openBankNum"),@Result( column = "account_phone",property = "accountPhone"),@Result( column = "create_time",property = "createTime"),@Result( column = "update_time",property = "updateTime"),@Result( column = "bank_name",property = "bankName") })
     @Select("SELECT * FROM u_app_user_merchant WHERE id = #{id}")
     public AppUserMerchantDO getById(@Param("id") int id);
+	
+	@Results({@Result( column = "id",property = "id")})
+    @Select("SELECT * FROM u_app_user_merchant WHERE app_user_id = #{appUserId} LIMIT 1")
+    public AppUserMerchantDO getByAppUserId(@Param("appUserId") int AppUserId);
 
 	@Insert("INSERT into u_app_user_bank(id,app_user_id,account_type,account_no,account_name,account_card_id,sub_bank_name,open_bank_prince,open_bank,open_bank_city,open_bank_num,account_phone,status,create_time,update_time,bank_name,type) VALUES (#{id},#{appUserId},#{accountType},#{accountNo},#{accountName},#{accountCardId},#{subBankName},#{openBankPrince},#{openBank},#{openBankCity},#{openBankNum},#{accountPhone},#{status},#{createTime},#{updateTime},#{bankName},#{type})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
