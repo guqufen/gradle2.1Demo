@@ -102,6 +102,7 @@ public interface AppUserService {
     List<AppUserMerchant> getAppUserMerchantByInnerCode(String innerCode);
     List<AppUser> selectAllInviteAppUser();
     boolean updateAppUser(AppUser appUser);
+    AppUser selectAppUserByMobile(String mobile);
     /**
      * 根据用户id获取身份证号
      * getIdAuth:(这里用一句话描述这个方法的作用)
@@ -114,6 +115,7 @@ public interface AppUserService {
      */
 	String getIdAuth(Integer userId);
 	ResultDTO getE789ValidateCode(AppUserDTO appUserDTO);
+	ResultDTO validateCode(Integer type , String deviceId, String code, String mobile);
 	ResultDTO validateCode(String deviceId, String code, String mobile);
 	ResultDTO e789FindPassword(AppUserDTO appUserDTO);
 	ResultDTO e789FindPayPassword(AppUserDTO appUserDTO);

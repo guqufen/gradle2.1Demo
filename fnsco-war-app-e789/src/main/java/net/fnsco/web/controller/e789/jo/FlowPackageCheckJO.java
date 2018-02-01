@@ -47,4 +47,17 @@ public class FlowPackageCheckJO extends JO {
 		this.type = type;
 	}
 
+	@Override
+	public String toString() {
+		String ss = null;
+		if (0 == type) {
+			ss = "0-话费资费查询";
+		} else if (1 == type) {
+			ss = "1-流量资费查询";
+		} else {
+			ss = type + "-未知类型";
+		}
+		return "FlowPackageCheckJO [phone=" + phone + ", userId=" + userId + ", type=" + ss + "]";
+	}
+
 }

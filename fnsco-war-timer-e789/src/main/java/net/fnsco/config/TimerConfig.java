@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import net.fnsco.bigdata.api.dto.MercQueryDTO;
 import net.fnsco.bigdata.api.merchant.MerchantCoreService;
 import net.fnsco.core.utils.DateUtils;
+import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.order.dao.TradeOrderDAO;
 import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.pay.channel.zxyh.PaymentService;
@@ -24,63 +25,62 @@ import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 @EnableScheduling
 public class TimerConfig {
 
-    public Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    private TradeOrderDAO tradeOrderDAO;
-    @Autowired
-    private PaymentService paymentService;
-    @Autowired
-    private ReportStatService reportStatService;
-    @Autowired
-    private RechargeOrderService rechargeOrderService;
-    @Autowired
-    private PrepaidRefillService prepaidRefillService;
-    @Autowired
+	public Logger logger = LoggerFactory.getLogger(this.getClass());
+	@Autowired
+	private TradeOrderDAO tradeOrderDAO;
+	@Autowired
+	private PaymentService paymentService;
+	@Autowired
+	private ReportStatService reportStatService;
+	@Autowired
+	private RechargeOrderService rechargeOrderService;
+	@Autowired
+	private PrepaidRefillService prepaidRefillService;
+	@Autowired
 	private MerchantCoreService merchantCoreService;
 
-    /**
-     * spring boot 定时任务
-     */
-//        @Scheduled(cron = "0 * * * * ?")
-    public void reportCurrentTime() {
-        System.out.println("定时任务执行");
-        reportStatService.createReportData(DateUtils.getDayStartTime(-3), DateUtils.getDayStartTime(0));
-    }
-    
-    /**
-     * 每隔3秒定时查询中信银行扫一扫支付结果
-     * 时间取当前时间的前一天日期
-     */
-    @Scheduled(cron = "*/3 * * * * ?")
-    public void queryZxyhTrade(){
-
-    	Date date = DateUtils.getStartDayTime(new Date());
-    	List<String> orderList= tradeOrderDAO.queryOnGoing("05", DateUtils.getTimeYesterday(new Date()));
-    	for (String orderNo : orderList) {
-    		paymentService.PassivePayResult(orderNo);
-		}
-    }
-    
 	/**
-	 * 每隔3秒查询手机充值支付结果(渠道返回系统内部异常需要查询该笔交易结果)
-	 * 时间取当前时间的前一天日期
+	 * spring boot 定时任务
+	 */
+	// @Scheduled(cron = "0 * * * * ?")
+	public void reportCurrentTime() {
+		System.out.println("定时任务执行");
+		reportStatService.createReportData(DateUtils.getDayStartTime(-3), DateUtils.getDayStartTime(0));
+	}
+
+	/**
+	 * 每隔3秒定时查询中信银行扫一扫支付结果 时间取当前时间的前一天日期
+	 */
+	@Scheduled(cron = "*/3 * * * * ?")
+	public void queryZxyhTrade() {
+
+		// Date date = DateUtils.getStartDayTime(new Date());
+		List<String> orderList = tradeOrderDAO.queryOnGoing(TradeConstants.ChannelTypeEnum.ZXYH_PAY.getCode(),
+				DateUtils.getTimeYesterday(new Date()));
+		for (String orderNo : orderList) {
+			paymentService.passivePayResult(orderNo);
+		}
+	}
+
+	/**
+	 * 每隔3秒查询手机充值支付结果(渠道返回系统内部异常需要查询该笔交易结果) 时间取当前时间的前一天日期
 	 */
 	@Scheduled(cron = "*/3 * * * * ?")
 	public void queryFlowCharge() {
 
 		List<RechargeOrderDO> orderList = rechargeOrderService.queryPhoneCharge(DateUtils.getTimeYesterday(new Date()));// 查询
 		for (RechargeOrderDO rechargeOrderDO : orderList) {
-			
-			//话费充值
-			if("0".equals(rechargeOrderDO.getType())){
-				
+
+			// 话费充值
+			if ("0".equals(rechargeOrderDO.getType())) {
+
 				prepaidRefillService.orderSta(rechargeOrderDO);
-				//流量充值
-			}else if("1".equals(rechargeOrderDO.getType())){
+				// 流量充值
+			} else if ("1".equals(rechargeOrderDO.getType())) {
 
 				prepaidRefillService.queryFlowResult(rechargeOrderDO);
 			}
-			
+
 		}
 	}
     
@@ -113,4 +113,6 @@ public class TimerConfig {
     	paymentService.queryAloneMchtInfoList(list);
     	logger.error("查询中信商户是否入件成功...结束...");
     }
+
+
 }
