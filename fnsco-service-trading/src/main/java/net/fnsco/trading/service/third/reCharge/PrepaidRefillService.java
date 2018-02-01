@@ -15,8 +15,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import net.fnsco.bigdata.comm.ServiceConstant.TradeStateEnum;
+import net.fnsco.core.alipay.AlipayAppPayRequestParams;
 import net.fnsco.core.alipay.AlipayClientUtil;
-import net.fnsco.core.alipay.AlipayRequestParams;
 import net.fnsco.core.base.BaseService;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.CodeUtil;
@@ -833,7 +833,7 @@ public class PrepaidRefillService extends BaseService {
 	 */
 	public ResultDTO aliPay(ChargeDTO chargeDTO) {
 
-		AlipayRequestParams requestParams = new AlipayRequestParams();
+		AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
 		String orderid = CodeUtil.generateOrderCode("");
 
 		// 更新余额和对应的冻结金额(账户扣款)
@@ -861,4 +861,5 @@ public class PrepaidRefillService extends BaseService {
 
 		return ResultDTO.success(body);
 	}
+
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,24 +20,22 @@ import com.google.common.collect.Maps;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.fnsco.bigdata.api.merchant.MerchantService;
-import net.fnsco.bigdata.service.domain.MerchantChannel;
+import net.fnsco.core.alipay.AlipayClientUtil;
+import net.fnsco.core.alipay.AlipayAppPayRequestParams;
 import net.fnsco.core.base.BaseController;
 import net.fnsco.core.base.ResultDTO;
 import net.fnsco.core.utils.DateUtils;
 import net.fnsco.core.utils.dby.AESUtil;
 import net.fnsco.core.utils.dby.JHFMd5Util;
-import net.fnsco.order.api.constant.ApiConstant;
-import net.fnsco.order.api.constant.ConstantEnum;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.comm.TradeConstants.WithdrawStateEnum;
 import net.fnsco.trading.service.order.TradeOrderResearchService;
-import net.fnsco.trading.service.order.TradeOrderService;
 import net.fnsco.trading.service.order.dto.OrderDTO;
-import net.fnsco.trading.service.order.entity.TradeOrderDO;
 import net.fnsco.trading.service.withdraw.TradeWithdrawService;
 import net.fnsco.trading.service.withdraw.entity.TradeWithdrawDO;
+import net.fnsco.web.controller.e789.jo.AlipayRechargeJO;
 import net.fnsco.web.controller.e789.jo.GetQRUrlJO;
+import net.fnsco.web.controller.e789.vo.AlipayAppPayParamsVO;
 import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 
 /**
@@ -52,10 +51,7 @@ import net.fnsco.web.controller.e789.vo.GetQRUrlResultVO;
 @RequestMapping(value = "/app2c/rechange")
 @Api(value = "/app2c/rechange", tags = { "我的-钱包-充值相关接口" })
 public class RechangeController extends BaseController {
-    @Autowired
-    private MerchantService           merchantService;
-    @Autowired
-    private TradeOrderService         tradeOrderService;
+	
     @Autowired
     private Environment               env;
     @Autowired
@@ -168,5 +164,63 @@ public class RechangeController extends BaseController {
         //        tradeOrder.setSyncStatus(0);
         //tradeOrderService.research(tradeOrder);
 
+    }
+    
+    /**
+     * alipayPayMent:(支付宝充值)
+     *
+     * @param  @param alipayRechargeJO
+     * @param  @return    设定文件
+     * @return ResultDTO<String>    DOM对象
+     * @author tangliang
+     * @date   2018年2月1日 下午3:16:09
+     */
+    @PostMapping(value = "/alipay")
+    @ApiOperation(value = "支付宝支付",notes = "tangliang")
+    public ResultDTO<String> alipayPayMent(AlipayRechargeJO alipayRechargeJO){
+    	
+    	if (Strings.isNullOrEmpty(alipayRechargeJO.getPaymentAmount())) {
+            return ResultDTO.fail("充值金额不能为空");
+        }
+        BigDecimal amountB = new BigDecimal(alipayRechargeJO.getPaymentAmount());
+        BigDecimal amountBs = amountB.multiply(new BigDecimal("100"));
+        if (amountBs.compareTo(new BigDecimal("0")) < 0) {
+            return ResultDTO.fail("充值金额不能低于0元");
+        }
+    	
+        /**
+         * 保存订单情况
+         */
+        String notifyUrl = env.getProperty("alipay.rechange.notify_url");
+        TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
+        tradeWithdraw.setAppUserId(alipayRechargeJO.getUserId());
+        tradeWithdraw.setAmount(amountBs);
+        tradeWithdraw.setRespCode(TradeConstants.RespCodeEnum.HANDLING.getCode());
+        tradeWithdraw.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());
+        tradeWithdraw.setStatus(WithdrawStateEnum.INIT.getCode());
+        tradeWithdraw.setFee(BigDecimal.ZERO);
+        tradeWithdraw.setBackUrl(notifyUrl);
+        tradeWithdraw.setChannelType(TradeConstants.ChannelTypeEnum.ALI_PAY.getCode());
+        tradeWithdraw.setTradeSubType(TradeConstants.TxnSubTypeEnum.INCOME_RESEARCH.getCode());
+        tradeWithdraw.setTradeType(TradeConstants.TradeTypeEnum.INCOME.getCode());
+        tradeWithdraw.setCreateTime(new Date());
+        tradeWithdraw.setOrderAmount(amountBs);
+        tradeWithdrawService.doAdd(tradeWithdraw);
+
+        
+        /**
+         * 支付宝下单，将参数返回给app端
+         */
+        AlipayAppPayRequestParams requestParams = new AlipayAppPayRequestParams();
+        requestParams.setBody("e789帐号充值");
+        requestParams.setSubject("充值");
+        requestParams.setTotalAmount(String.format("%.2f", amountB.doubleValue()));
+        requestParams.setOutTradeNo(tradeWithdraw.getOrderNo());
+        requestParams.setNotifyUrl(notifyUrl);
+        String body = AlipayClientUtil.createPayOrderParams(requestParams);
+        
+        AlipayAppPayParamsVO param = new AlipayAppPayParamsVO();
+        param.setParams(body);
+    	return ResultDTO.success(param);
     }
 }

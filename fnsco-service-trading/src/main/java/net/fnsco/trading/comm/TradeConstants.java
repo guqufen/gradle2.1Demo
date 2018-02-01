@@ -236,12 +236,9 @@ public class TradeConstants extends CoreConstants {
 
     //渠道类型00拉卡拉01浦发02爱农03法奈昇04聚惠分05中信银行80法奈昇余额90富友
     public static enum ChannelTypeEnum {
-                                        LKL_PAY("00", "拉卡拉渠道"), PF_PAY("01", "浦发渠道"), AN_PAY("02", "爱农渠道"), FNS_PAY("03",
-                                                                                                                    "法奈昇渠道"), JHF_PAY("04",
-                                                                                                                                      "聚惠分渠道"), ZXYH_PAY("05",
-                                                                                                                                                         "中信银行渠道"), YE_PAY("80",
-                                                                                                                                                                           "法奈昇余额渠道"), FY_PAY("90",
-                                                                                                                                                                                              "富友渠道");
+                                        LKL_PAY("00", "拉卡拉渠道"), PF_PAY("01", "浦发渠道"), AN_PAY("02", "爱农渠道"), FNS_PAY("03","法奈昇渠道"), 
+                                        JHF_PAY("04","聚惠分渠道"), ZXYH_PAY("05","中信银行渠道"), YE_PAY("80","法奈昇余额渠道"), FY_PAY("90","富友渠道"),
+                                        ALI_PAY("06","支付宝");
         private String code;
         private String name;
 
