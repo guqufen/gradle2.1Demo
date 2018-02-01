@@ -16,7 +16,7 @@ public class CreateFileUtils {
 
 	 protected static Logger              logger = LoggerFactory.getLogger(CreateFileUtils.class.getClass());
 
-    public static Map<String ,String> filePath(MultipartFile file, String fileName,Environment env) {
+    public static Map<String ,String> filePath(MultipartFile file, String fileName,String url) {
         String line = System.getProperty("file.separator");// 文件分割符
         // 保存文件的路径
         String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -24,7 +24,7 @@ public class CreateFileUtils {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
-        String stry = env.getProperty("fileUpload.url") + line + year;// +"\\"+month+"\\";
+        String stry = url + line + year;// +"\\"+month+"\\";
         File yearPath = new File(stry);
         // 如果文件夹不存在则创建
         if (!yearPath.exists()) {
@@ -34,7 +34,7 @@ public class CreateFileUtils {
             logger.info("年份目录已存在");
         }
 
-        String strm = env.getProperty("fileUpload.url") + line + year + line + month + line;
+        String strm = url + line + year + line + month + line;
         File monthPath = new File(strm);
         if (!monthPath.exists()) {
             logger.info("月份目录不存在");
@@ -47,7 +47,7 @@ public class CreateFileUtils {
         String newFileName =System.currentTimeMillis() + "." + prefix;
         String fileKey = year + "/" + month + "/" + newFileName;
         String filepath = yearMonthPath + newFileName;
-        String fileURL = env.getProperty("fileUpload.url") + line + filepath;
+        String fileURL = url + line + filepath;
         Map<String ,String> map = new HashMap<String ,String>();
         map.put("fileKey", fileKey);
         map.put("fileURL", fileURL);

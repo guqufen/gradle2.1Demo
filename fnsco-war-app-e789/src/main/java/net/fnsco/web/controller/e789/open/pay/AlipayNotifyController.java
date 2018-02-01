@@ -53,4 +53,5 @@ public class AlipayNotifyController extends BaseController{
 		
 		return "success";
 	}
+	
 }
