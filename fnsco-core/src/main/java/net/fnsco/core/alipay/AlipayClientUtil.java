@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -70,9 +71,10 @@ public class AlipayClientUtil {
 		request.setNotifyUrl(requestParams.getNotifyUrl());
 		AlipayTradeAppPayResponse response = null;
 		try {
+			logger.error("支付宝支付请求参数:"+JSON.toJSONString(request));
 			// 这里和普通的接口调用不同，使用的是sdkExecute
 			response = alipayClient.sdkExecute(request);
-			logger.error(response.getBody());// 就是orderString 可以直接给客户端请求，无需再做处理。
+			logger.error("返回给APP支付宝支付的数据:"+response.getBody());// 就是orderString 可以直接给客户端请求，无需再做处理。
 		} catch (AlipayApiException e) {
 			logger.error("发起支付宝支付报错!", e);
 		}

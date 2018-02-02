@@ -145,4 +145,27 @@ public class StringUtil {
 		}
 		return null;
 	}
+	
+	/**
+	 * replaceString:(字符串处理)
+	 *
+	 * @param  @param start
+	 * @param  @param end
+	 * @param  @param sourceStr
+	 * @param  @return    设定文件
+	 * @return String    DOM对象
+	 * @author tangliang
+	 * @date   2018年1月11日 下午2:56:15
+	 */
+	public static String replaceString(int start,int end,String sourceStr) {
+		if(Strings.isNullOrEmpty(sourceStr)) {
+			return null;
+		}
+		
+		String indexStr = sourceStr.substring(0, start);
+		String endStr = sourceStr.substring(sourceStr.length()-end, sourceStr.length());
+		
+		return indexStr + "****" + endStr;
+	}
+	
 }

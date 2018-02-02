@@ -27,6 +27,7 @@ import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
+import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.trading.service.order.dto.TradeJhfJO;
 import net.fnsco.trading.service.third.ticket.entity.TicketOrderDO;
 import net.fnsco.trading.service.withdraw.dao.TradeWithdrawDAO;
@@ -103,12 +104,68 @@ public class TradeWithdrawService extends BaseService {
         /**
          * 先判断是否有余额信息数据，如果没有则添加
          */
-        appAccountBalanceService.initialiseAccountBalance(tradeWithdraw.getAppUserId());
+        appAccountBalanceService.doQueryById(tradeWithdraw.getAppUserId());
         BigDecimal fund = BigDecimal.ZERO.subtract(tradeWithdraw.getAmount());
         appAccountBalanceService.doFrozenBalance(tradeWithdraw.getAppUserId(), fund);
         return rows;
     }
-
+    
+    /**
+     * doAccountBalanceWithdrawals:(余额提现)
+     *
+     * @param  @param appUserId
+     * @param  @param cashAccount
+     * @param  @param appUserBank
+     * @param  @return    设定文件
+     * @return boolean    DOM对象
+     * @author tangliang
+     * @date   2018年2月2日 下午2:00:05
+     */
+    @Transactional
+    public boolean doAccountBalanceWithdrawals(Integer appUserId,String cashAccount,AppUserBankDO appUserBank) {
+    	/**
+    	 * 余额大于提现余额、支付密码正确，开始提现操作
+    	 */
+    	TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
+    	tradeWithdraw.setAmount(new BigDecimal(cashAccount));
+    	tradeWithdraw.setAppUserId(appUserId);
+    	tradeWithdraw.setBankAccountCardId(appUserBank.getAccountCardId());
+    	tradeWithdraw.setBankAccountName(appUserBank.getAccountName());
+    	tradeWithdraw.setBankAccountNo(appUserBank.getAccountNo());
+    	tradeWithdraw.setBankAccountPhone(appUserBank.getAccountPhone());
+    	tradeWithdraw.setBankAccountType(appUserBank.getAccountType());
+    	tradeWithdraw.setBankOpenBank(appUserBank.getOpenBank());
+    	tradeWithdraw.setBankOpenBankNum(appUserBank.getOpenBankNum());
+    	tradeWithdraw.setBankSubBankName(appUserBank.getSubBankName());
+    	tradeWithdraw.setStatus(0);
+    	tradeWithdraw.setTradeType(2);
+    	tradeWithdraw.setTradeSubType(20);
+    	tradeWithdraw.setFee(new BigDecimal(0));
+    	tradeWithdraw.setRespCode("1000");
+    	tradeWithdraw.setRespMsg("提现记录产生");
+    	tradeWithdraw.setSuccTime(DateUtils.dateFormat1ToStr(new Date()));
+    	this.doAdd(tradeWithdraw);
+    	
+    	
+    	/**
+    	 * 减掉余额,利用sql来判断扣除,防止扣除不及时
+    	 */
+    	boolean result = appAccountBalanceService.updateFund(appUserId,new BigDecimal(cashAccount));
+    	if(!result) {
+    		tradeWithdraw.setStatus(2);
+    		tradeWithdraw.setRespCode("1002");
+        	tradeWithdraw.setRespMsg("提现失败");
+    		this.doUpdate(tradeWithdraw);
+    		return false;
+    	}else {
+    		tradeWithdraw.setStatus(1);
+    		tradeWithdraw.setRespMsg("提现进行中");
+    		this.doUpdate(tradeWithdraw);
+    	}
+    	
+    	return true;
+    }
+    
     @Transactional
     public Integer updateFund(TradeWithdrawDO tradeWithdraw) {
         logger.info("开始修改TradeWithdrawService.update,tradeWithdraw=" + tradeWithdraw.toString());
