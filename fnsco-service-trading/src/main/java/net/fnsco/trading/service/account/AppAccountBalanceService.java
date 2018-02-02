@@ -70,8 +70,17 @@ public class AppAccountBalanceService extends BaseService {
 	 * @date 2017年12月7日 上午9:53:07
 	 */
 	public AppAccountBalanceDO doQueryByAppUserId(Integer appUserId) {
-		AppAccountBalanceDO obj = this.appAccountBalanceDAO.getByAppUserId(appUserId);
-		return obj;
+		AppAccountBalanceDO accountBalance = this.appAccountBalanceDAO.getByAppUserId(appUserId);
+		if(null == accountBalance) {
+            AppAccountBalanceDO appAccountBalance = new AppAccountBalanceDO();
+            appAccountBalance.setAppUserId(appUserId);
+            appAccountBalance.setCreateTime(new Date());
+            appAccountBalance.setFreezeAmount(new BigDecimal(0));
+            appAccountBalance.setFund(new BigDecimal(0));
+            appAccountBalance.setUpdateTime(new Date());
+            appAccountBalance = this.doAdd(appAccountBalance, 0);
+        }
+		return accountBalance;
 	}
 	
 	/**
@@ -146,4 +155,5 @@ public class AppAccountBalanceService extends BaseService {
         }
         return false;
     }
+	
 }

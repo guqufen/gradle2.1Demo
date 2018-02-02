@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ import net.fnsco.core.utils.dby.JHFMd5Util;
 import net.fnsco.trading.comm.TradeConstants;
 import net.fnsco.trading.service.account.AppAccountBalanceService;
 import net.fnsco.trading.service.account.entity.AppAccountBalanceDO;
+import net.fnsco.trading.service.bank.entity.AppUserBankDO;
 import net.fnsco.trading.service.order.dto.TradeJhfJO;
 import net.fnsco.trading.service.third.ticket.entity.TicketOrderDO;
 import net.fnsco.trading.service.withdraw.dao.TradeWithdrawDAO;
@@ -100,11 +102,71 @@ public class TradeWithdrawService extends BaseService {
     public Integer researchForSuccess(TradeWithdrawDO tradeWithdraw) {
         logger.info("开始修改TradeWithdrawService.update,tradeWithdraw=" + tradeWithdraw.toString());
         int rows = this.tradeWithdrawDAO.update(tradeWithdraw);
+        /**
+         * 先判断是否有余额信息数据，如果没有则添加
+         */
+        appAccountBalanceService.doQueryById(tradeWithdraw.getAppUserId());
         BigDecimal fund = BigDecimal.ZERO.subtract(tradeWithdraw.getAmount());
         appAccountBalanceService.doFrozenBalance(tradeWithdraw.getAppUserId(), fund);
         return rows;
     }
-
+    
+    /**
+     * doAccountBalanceWithdrawals:(余额提现)
+     *
+     * @param  @param appUserId
+     * @param  @param cashAccount
+     * @param  @param appUserBank
+     * @param  @return    设定文件
+     * @return boolean    DOM对象
+     * @author tangliang
+     * @date   2018年2月2日 下午2:00:05
+     */
+    @Transactional
+    public boolean doAccountBalanceWithdrawals(Integer appUserId,String cashAccount,AppUserBankDO appUserBank) {
+    	/**
+    	 * 余额大于提现余额、支付密码正确，开始提现操作
+    	 */
+    	TradeWithdrawDO tradeWithdraw = new TradeWithdrawDO();
+    	tradeWithdraw.setAmount(new BigDecimal(cashAccount));
+    	tradeWithdraw.setAppUserId(appUserId);
+    	tradeWithdraw.setBankAccountCardId(appUserBank.getAccountCardId());
+    	tradeWithdraw.setBankAccountName(appUserBank.getAccountName());
+    	tradeWithdraw.setBankAccountNo(appUserBank.getAccountNo());
+    	tradeWithdraw.setBankAccountPhone(appUserBank.getAccountPhone());
+    	tradeWithdraw.setBankAccountType(appUserBank.getAccountType());
+    	tradeWithdraw.setBankOpenBank(appUserBank.getOpenBank());
+    	tradeWithdraw.setBankOpenBankNum(appUserBank.getOpenBankNum());
+    	tradeWithdraw.setBankSubBankName(appUserBank.getSubBankName());
+    	tradeWithdraw.setStatus(0);
+    	tradeWithdraw.setTradeType(2);
+    	tradeWithdraw.setTradeSubType(20);
+    	tradeWithdraw.setFee(new BigDecimal(0));
+    	tradeWithdraw.setRespCode("1000");
+    	tradeWithdraw.setRespMsg("提现记录产生");
+    	tradeWithdraw.setSuccTime(DateUtils.dateFormat1ToStr(new Date()));
+    	this.doAdd(tradeWithdraw);
+    	
+    	
+    	/**
+    	 * 减掉余额,利用sql来判断扣除,防止扣除不及时
+    	 */
+    	boolean result = appAccountBalanceService.updateFund(appUserId,new BigDecimal(cashAccount));
+    	if(!result) {
+    		tradeWithdraw.setStatus(2);
+    		tradeWithdraw.setRespCode("1002");
+        	tradeWithdraw.setRespMsg("提现失败");
+    		this.doUpdate(tradeWithdraw);
+    		return false;
+    	}else {
+    		tradeWithdraw.setStatus(1);
+    		tradeWithdraw.setRespMsg("提现进行中");
+    		this.doUpdate(tradeWithdraw);
+    	}
+    	
+    	return true;
+    }
+    
     @Transactional
     public Integer updateFund(TradeWithdrawDO tradeWithdraw) {
         logger.info("开始修改TradeWithdrawService.update,tradeWithdraw=" + tradeWithdraw.toString());
@@ -241,6 +303,50 @@ public class TradeWithdrawService extends BaseService {
      */
     public TradeWithdrawDO getUndoByOrderNo(String orderNo) {
         return tradeWithdrawDAO.getUndoByOrderNo(orderNo);
+    }
+    
+    /**
+     * doAlipayRechangeNotify:(处理支付宝充值回调订单状态)
+     *
+     * @param  @param params
+     * @param  @param isPaySuccess    设定文件
+     * @return void    DOM对象
+     * @author tangliang
+     * @date   2018年2月2日 下午2:27:32
+     */
+    @Transactional
+    public void doAlipayRechangeNotify(Map<String, String> params,boolean isPaySuccess,TradeWithdrawDO tradeWithdraw) {
+		//失败
+		if(!isPaySuccess) {
+			tradeWithdraw.setStatus(2);
+			tradeWithdraw.setRespCode("1002");
+			tradeWithdraw.setUpdateTime(new Date());
+			tradeWithdraw.setOriginalOrderNo(params.get("trade_no"));//支付宝交易凭证号
+			tradeWithdraw.setAmount(new BigDecimal(params.get("total_amount")).multiply(new BigDecimal(100)));
+			tradeWithdraw.setOrderAmount(tradeWithdraw.getAmount());
+			tradeWithdraw.setSuccTime(DateUtils.dateFormat1ToStr(new Date()));
+			tradeWithdraw.setRespMsg("支付宝充值失败!未付款或关闭");
+			this.doUpdate(tradeWithdraw);
+		}else {
+			/**
+			 * 充值成功后，需要在帐号上增加余额
+			 */
+			Integer appUserId = tradeWithdraw.getAppUserId();
+			BigDecimal fund = new BigDecimal(params.get("total_amount")).multiply(new BigDecimal(100));
+			appAccountBalanceService.doQueryByAppUserId(appUserId);
+			appAccountBalanceService.updateFund(appUserId,BigDecimal.ZERO.subtract(fund));
+			
+			/**
+			 * 更新订单信息
+			 */
+			tradeWithdraw.setStatus(3);
+			tradeWithdraw.setRespCode("1001");
+			tradeWithdraw.setUpdateTime(new Date());
+			tradeWithdraw.setOriginalOrderNo(params.get("trade_no"));//支付宝交易凭证号
+			tradeWithdraw.setSuccTime(DateUtils.dateFormat1ToStr(new Date()));
+			tradeWithdraw.setRespMsg("支付宝充值成功");
+			this.doUpdate(tradeWithdraw);
+		}
     }
  
 }

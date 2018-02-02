@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.fnsco.core.base.BaseController;
@@ -49,11 +50,6 @@ public class AccountBalanceController extends BaseController {
  		}
  		AppAccountBalanceDO appAccountBalanceDO = appAccountBalanceService.doQueryByAppUserId(accountBalanceJO.getUserId());
  		AccountBalanceVO resultVO = new AccountBalanceVO();
- 		if(null == appAccountBalanceDO) {
- 			 resultVO.setAccountBalance("0.00");
- 			 return success(resultVO);
- 		}
- 		
  		
  		if(null == appAccountBalanceDO.getFund()) {
  			resultVO.setAccountBalance("0.00");
